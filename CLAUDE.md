@@ -68,7 +68,7 @@ Claude Code builds it; the owner (Pani Digital Services, LLC) is product owner a
 ## Safety
 - **No secrets in the repo.** Use `.env.example` names only; real values live in Doppler or cloud-environment credentials.
 - **No production credentials, production data or production writes.** Development uses masked snapshots only. Production actions go through reviewed runbook scripts that the owner runs or approves step by step.
-- The legacy code (`legacy/` locally, `yayatoh-legacy` on GitHub) is **reference only**. Eventmie Pro is commercially licensed: read it to write specs and test vectors, never copy its code, templates or assets.
+- The legacy code (`legacy/` locally, `heywebbuddy/yayatoh-legacy` on GitHub) is **reference only**. Eventmie Pro is commercially licensed: read it to write specs and test vectors, never copy its code, templates or assets.
 - Migrations: expand/contract only, `lock_timeout`, concurrent indexes. The owner approves destructive steps.
 - Never weaken or skip a test or CI gate to get green.
 
