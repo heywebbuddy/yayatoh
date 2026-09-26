@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(vercel --prod:*)",
+      "Bash(vercel deploy --prod:*)",
+      "Bash(drizzle-kit push:*)",
+      "Bash(pnpm drizzle-kit push:*)",
+      "Bash(doppler run --config prd:*)",
+      "Bash(doppler secrets --config prd:*)",
+      "Read(./.env.production)",
+      "Read(./.env.production.*)",
+      "Read(./legacy/**/.env)"
+    ]
+  }
+}

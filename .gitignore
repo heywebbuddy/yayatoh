@@ -1,0 +1,37 @@
+# Legacy code and data never enter this repo (reference lives in the private yayatoh-legacy repo)
+legacy/
+*.sql
+*.sql.gz
+*.dump
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.p8
+*.key
+service-account*.json
+
+# Node / build
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+dist/
+build/
+out/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code local settings
+.claude/settings.local.json
