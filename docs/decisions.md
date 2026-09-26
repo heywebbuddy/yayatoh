@@ -4,6 +4,7 @@ Owner decisions override everything else (see CLAUDE.md precedence). Newest firs
 
 | Date | Decision | Detail | Roadmap |
 |---|---|---|---|
+| 2026-09-26 | **Design system: Superpower style** | Superpower.com visual language for the whole app: zinc neutrals, vermillion `#FC5F2B`, pill buttons, light tight headings, mono labels. Geist stands in for the commercial NB International Pro. See ADR 0018 | §3.1, ADR 0018 |
 | 2026-09-26 | **Build in Claude Code cloud sessions** | GitHub repo `Pani-Digital-Services-LLC/yayatoh`; legacy mirrored to `yayatoh-legacy`; cloud environment per `docs/cloud-environment.md` | §9 |
 | 2026-09-26 | **Mobile apps planned, not built in this build** | Current store apps keep working through the `/api/v2` facade with no sunset. Staff features go in the Scan PWA; guest features in mobile-first web plus Wallet passes | §8.3 |
 | 2026-09-26 | **Legacy security holes fixed by the owner's current developer** | Claude Code provides the fix list (`docs/legacy/M0.0-security-hotfix.md`) and re-audits the result | M0.0 |

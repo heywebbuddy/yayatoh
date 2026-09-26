@@ -11,6 +11,9 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Install the Claude GitHub App** on `Pani-Digital-Services-LLC`, for the `yayatoh` and `yayatoh-legacy` repos only. See `docs/cloud-environment.md` §1.
 - [ ] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
+## Design
+- [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
+
 ## Phase 0 (M0.1–M0.4)
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.
