@@ -265,6 +265,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../../packages/modules/events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -290,9 +293,6 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@yayatoh/events':
-        specifier: workspace:*
-        version: link:../../packages/modules/events
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../../packages/testing

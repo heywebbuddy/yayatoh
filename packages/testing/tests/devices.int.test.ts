@@ -1,4 +1,5 @@
 import {
+  checkinStatusQuery,
   deviceContext,
   deviceManifestQuery,
   enrollDeviceCommand,
@@ -207,6 +208,11 @@ describe('scanner devices and offline sync', () => {
       ),
     );
     expect(alerts?.n).toBe(4);
+
+    // The door screen lists them as alerts (who, which ticket).
+    const status = await executeQuery(checkinStatusQuery, { eventId }, a.ctx({ now: t(61) }), ports);
+    expect(status.alerts).toHaveLength(4);
+    expect(status.alerts[0]?.holderName).toBe('Doris');
 
     // Re-sending a batch is idempotent (same scan ids).
     const again = await sync(0);

@@ -573,7 +573,9 @@
       "duplicate_offline": "Check-in già effettuato su un altro dispositivo",
       "superseded": "Codice vecchio di un biglietto riemesso",
       "provisional": "Ingresso offline, da confermare"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# biglietto è stato accettato due volte offline} other {# biglietti sono stati accettati due volte offline}}",
+    "alertsHint": "Due scanner hanno accettato lo stesso biglietto prima di potersi sincronizzare. Verifica questi ospiti all’ingresso."
   },
   "devices": {
     "title": "Dispositivi di scansione",

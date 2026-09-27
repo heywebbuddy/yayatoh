@@ -573,7 +573,9 @@
       "duplicate_offline": "Checked in on another device first",
       "superseded": "An older code for a reissued ticket",
       "provisional": "Let in offline — to be confirmed"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# ticket was let in twice while offline} other {# tickets were let in twice while offline}}",
+    "alertsHint": "Two scanners admitted the same ticket before they could sync. Check these guests at the door."
   },
   "devices": {
     "title": "Scanner devices",

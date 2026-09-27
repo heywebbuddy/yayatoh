@@ -45,8 +45,8 @@ export async function scanAction(
 }
 
 export async function undoAction(org: string, event: string, admissionId: string): Promise<void> {
-  const { data } = await loadEvent(org, event);
-  await executeCommand(undoAdmissionCommand, { admissionId }, data.ctx, ports);
+  const { data, event: ev } = await loadEvent(org, event);
+  await executeCommand(undoAdmissionCommand, { eventId: ev.id, admissionId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/onsite`);
 }
 

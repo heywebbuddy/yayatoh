@@ -1,10 +1,10 @@
-import { type TenantTx, withoutTenant } from '@yayatoh/db';
-import { DomainError } from '@yayatoh/kernel';
+import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
+import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
-import { events } from './schema.ts';
+import { eventRoleAssignments, events } from './schema.ts';
 
 export const listEventsQuery = tenantQuery({
   name: 'events.listEvents',
@@ -71,4 +71,23 @@ export async function checkoutTarget(slug: string): Promise<{ orgId: string; eve
   );
   const r = rows[0];
   return r ? { orgId: r.org_id, eventId: r.event_id } : null;
+}
+
+/** The signed-in actor's live event-scoped roles for one event (the tenancy authorizer's port). */
+export async function eventRolesOf(ctx: Ctx, eventId: string): Promise<string[]> {
+  if (ctx.actor.type !== 'user') return [];
+  const userId = ctx.actor.userId;
+  const rows = await withTenant(ctx, (tx) =>
+    tx
+      .select({ role: eventRoleAssignments.role })
+      .from(eventRoleAssignments)
+      .where(
+        and(
+          eq(eventRoleAssignments.eventId, eventId),
+          eq(eventRoleAssignments.userId, userId),
+          or(isNull(eventRoleAssignments.expiresAt), gt(eventRoleAssignments.expiresAt, ctx.now)),
+        ),
+      ),
+  );
+  return rows.map((r) => r.role);
 }

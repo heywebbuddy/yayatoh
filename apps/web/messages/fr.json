@@ -573,7 +573,9 @@
       "duplicate_offline": "Déjà enregistré sur un autre appareil",
       "superseded": "Ancien code d’un billet réémis",
       "provisional": "Entrée hors ligne — à confirmer"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# billet a été accepté deux fois hors ligne} other {# billets ont été acceptés deux fois hors ligne}}",
+    "alertsHint": "Deux scanners ont accepté le même billet avant d’avoir pu se synchroniser. Vérifiez ces invités à l’entrée."
   },
   "devices": {
     "title": "Appareils de scan",

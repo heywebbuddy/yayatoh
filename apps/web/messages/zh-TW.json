@@ -573,7 +573,9 @@
       "duplicate_offline": "已先在其他裝置上報到",
       "superseded": "已重新發行票券的舊代碼",
       "provisional": "離線放行，待確認"
-    }
+    },
+    "alertsTitle": "{count, plural, other {離線期間有 # 張票被重複放行}}",
+    "alertsHint": "兩台掃描裝置在同步前放行了同一張票。請在入口核查這些賓客。"
   },
   "devices": {
     "title": "掃描裝置",

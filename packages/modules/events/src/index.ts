@@ -8,6 +8,7 @@ export { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from
 export * from './dto.ts';
 export {
   checkoutTarget,
+  eventRolesOf,
   findEventTx,
   getEventBySlugQuery,
   listEventsQuery,

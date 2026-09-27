@@ -573,7 +573,9 @@
       "duplicate_offline": "Check-in realizado antes en otro dispositivo",
       "superseded": "Código antiguo de una entrada reemitida",
       "provisional": "Acceso sin conexión, pendiente de confirmar"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# entrada se aceptó dos veces sin conexión} other {# entradas se aceptaron dos veces sin conexión}}",
+    "alertsHint": "Dos escáneres aceptaron la misma entrada antes de poder sincronizarse. Revisa a estos invitados en la puerta."
   },
   "devices": {
     "title": "Dispositivos de escaneo",

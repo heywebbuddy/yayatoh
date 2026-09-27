@@ -1,12 +1,19 @@
-import { checkinStatusQuery, scanTicketCommand, undoAdmissionCommand } from '@yayatoh/checkin';
+import {
+  checkinStatusQuery,
+  enrollDeviceCommand,
+  scanTicketCommand,
+  undoAdmissionCommand,
+} from '@yayatoh/checkin';
+import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
 import { addMemberCommand } from '@yayatoh/tenancy';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
+import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { type OrgFixture, ports, twoOrgs, userCtx } from '../src/index.ts';
+import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 
 let a: OrgFixture;
 let b: OrgFixture;
@@ -135,9 +142,19 @@ describe('check-in', () => {
   it('undo reopens the ticket for admission; status counts live admissions', async () => {
     const t = pick(tickets, 0);
     const dup = await scan(t.code);
-    await executeCommand(undoAdmissionCommand, { admissionId: dup.admissionId as string }, a.ctx(), ports);
+    await executeCommand(
+      undoAdmissionCommand,
+      { eventId, admissionId: dup.admissionId as string },
+      a.ctx(),
+      ports,
+    );
     await expect(
-      executeCommand(undoAdmissionCommand, { admissionId: dup.admissionId as string }, a.ctx(), ports),
+      executeCommand(
+        undoAdmissionCommand,
+        { eventId, admissionId: dup.admissionId as string },
+        a.ctx(),
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'not_found' });
     expect((await scan(t.code, new Date(DURING.getTime() + 120_000))).result).toBe('admitted');
     const status = await executeQuery(checkinStatusQuery, { eventId }, a.ctx({ now: DURING }), ports);
@@ -164,5 +181,28 @@ describe('check-in', () => {
     await expect(
       executeCommand(scanTicketCommand, { eventId, code: t.code }, b.ctx({ now: DURING }), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
+  });
+
+  it('event-scoped door staff can scan their event only, and only while the assignment lasts', async () => {
+    // The fixture made the viewer door_staff on the fixture event (not on this file's events).
+    const viewer = (now?: Date) => userCtx(a.viewerId, a.org.id, now ? { now } : {});
+    await expect(
+      executeCommand(scanTicketCommand, { eventId: a.event.id, code: 'ZZZZZZZZ' }, viewer(), ports),
+    ).resolves.toMatchObject({ result: 'invalid' });
+    await expect(
+      executeCommand(scanTicketCommand, { eventId, code: 'ZZZZZZZZ' }, viewer(), ports),
+    ).rejects.toMatchObject({ code: 'forbidden' });
+    // Org-level device management is not part of door staff.
+    await expect(
+      executeCommand(enrollDeviceCommand, { label: 'Nope' }, viewer(), ports),
+    ).rejects.toMatchObject({ code: 'forbidden' });
+    await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute(
+        sql`update events.event_role_assignments set expires_at = now() - interval '1 minute' where user_id = ${a.viewerId}`,
+      ),
+    );
+    await expect(
+      executeCommand(scanTicketCommand, { eventId: a.event.id, code: 'ZZZZZZZZ' }, viewer(), ports),
+    ).rejects.toMatchObject({ code: 'forbidden' });
   });
 });

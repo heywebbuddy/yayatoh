@@ -49,3 +49,17 @@ export const PLATFORM_PERMISSIONS = ['platform:org.create', 'platform:entitlemen
 export function roleCan(role: OrgRole, permission: string): boolean {
   return (ROLE_PERMISSIONS[role] as readonly string[]).includes(permission);
 }
+
+/**
+ * What an event-scoped role (events.event_role_assignments) adds, for that one event only. It
+ * applies on top of the member's org role; it never reaches other events or org-level actions.
+ */
+export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
+  event_manager: ['events:read', 'events:write', 'orders:read', 'attendees:read', 'checkin:scan'],
+  door_staff: ['events:read', 'checkin:scan'],
+  session_scanner: ['checkin:scan'],
+};
+
+export function eventRoleCan(roles: readonly string[], permission: string): boolean {
+  return roles.some((r) => EVENT_ROLE_PERMISSIONS[r]?.includes(permission) ?? false);
+}

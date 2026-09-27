@@ -1,4 +1,4 @@
-export { memberRole, orgAuthorizer } from './authorizer.ts';
+export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
   acceptInvitation,
   inviteMemberCommand,
@@ -13,6 +13,8 @@ export {
 } from './commands/organizations.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {
+  EVENT_ROLE_PERMISSIONS,
+  eventRoleCan,
   type OrgRole,
   PERMISSIONS,
   type Permission,

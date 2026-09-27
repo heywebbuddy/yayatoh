@@ -147,7 +147,8 @@ export const scanTicketCommand = tenantCommand({
 
 export const undoAdmissionCommand = tenantCommand({
   name: 'checkin.undoAdmission',
-  input: z.object({ admissionId: z.uuid() }),
+  // The event scopes the permission (event door staff) and must own the admission.
+  input: z.object({ eventId: z.uuid(), admissionId: z.uuid() }),
   output: z.object({ undone: z.boolean() }),
   entitlement: 'checkin',
   permission: 'checkin:scan',
@@ -159,7 +160,13 @@ export const undoAdmissionCommand = tenantCommand({
         undoneBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
         updatedAt: ctx.now,
       })
-      .where(and(eq(admissions.id, input.admissionId), isNull(admissions.undoneAt)))
+      .where(
+        and(
+          eq(admissions.id, input.admissionId),
+          eq(admissions.eventId, input.eventId),
+          isNull(admissions.undoneAt),
+        ),
+      )
       .returning({ id: admissions.id });
     if (rows.length === 0) throw new DomainError('not_found', 'Admission not found or already undone');
     return { undone: true };
@@ -170,6 +177,10 @@ export const undoAdmissionCommand = tenantCommand({
 export const CheckinStatusDto = z.object({
   issued: z.int(),
   admittedToday: z.int(),
+  /** Tickets let in by two devices while offline (checkin.duplicate_offline), newest first. */
+  alerts: z.array(
+    z.object({ at: z.date(), holderName: z.string().nullable(), shortCode: z.string().nullable() }),
+  ),
   recent: z.array(
     z.object({
       at: z.date(),
@@ -226,7 +237,19 @@ export const checkinStatusQuery = tenantQuery({
           ).map((r) => r.id)
         : [],
     );
+    const dupes = await tx
+      .select({ at: scans.scannedAt, ticketId: scans.ticketId })
+      .from(scans)
+      .where(and(eq(scans.eventId, event.id), eq(scans.result, 'duplicate_offline')))
+      .orderBy(desc(scans.scannedAt), desc(scans.id))
+      .limit(20);
+    const alerts = [];
+    for (const d of dupes) {
+      const t = d.ticketId ? await ticketForScanTx(tx, { id: d.ticketId }) : null;
+      alerts.push({ at: d.at, holderName: t?.holderName ?? null, shortCode: t?.shortCode ?? null });
+    }
     return {
+      alerts,
       issued: await activeTicketCountTx(tx, event.id),
       admittedToday: adm?.n ?? 0,
       recent: recent.map((r) => ({

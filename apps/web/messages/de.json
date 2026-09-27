@@ -573,7 +573,9 @@
       "duplicate_offline": "Zuerst auf einem anderen Gerät eingecheckt",
       "superseded": "Alter Code eines neu ausgestellten Tickets",
       "provisional": "Offline eingelassen – wird noch bestätigt"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# Ticket wurde offline doppelt eingelassen} other {# Tickets wurden offline doppelt eingelassen}}",
+    "alertsHint": "Zwei Scanner haben dasselbe Ticket eingelassen, bevor sie synchronisieren konnten. Prüfe diese Gäste am Einlass."
   },
   "devices": {
     "title": "Scan-Geräte",

@@ -573,7 +573,9 @@
       "duplicate_offline": "Eerst ingecheckt op een ander apparaat",
       "superseded": "Oude code van een opnieuw uitgegeven ticket",
       "provisional": "Offline binnengelaten, nog te bevestigen"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# ticket is offline twee keer binnengelaten} other {# tickets zijn offline twee keer binnengelaten}}",
+    "alertsHint": "Twee scanners lieten hetzelfde ticket binnen voordat ze konden synchroniseren. Controleer deze gasten bij de deur."
   },
   "devices": {
     "title": "Scanapparaten",

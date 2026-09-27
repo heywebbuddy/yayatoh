@@ -573,7 +573,9 @@
       "duplicate_offline": "已先在其他设备上签到",
       "superseded": "已重新签发门票的旧代码",
       "provisional": "离线放行，待确认"
-    }
+    },
+    "alertsTitle": "{count, plural, other {离线期间有 # 张票被重复放行}}",
+    "alertsHint": "两台扫描设备在同步前放行了同一张票。请在入口核查这些宾客。"
   },
   "devices": {
     "title": "扫描设备",

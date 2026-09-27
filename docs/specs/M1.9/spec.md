@@ -99,11 +99,29 @@ Roadmap: M1.9 (Scan PWA). ADR 0011 (QR format and offline check-in). This milest
 
 Manual, per release: install the PWA on a phone, open it in airplane mode (service worker shell), and scan with the camera.
 
+## M1.9c1 — event-scoped door staff, live door screen, offline-duplicate alerts (done)
+- **Event-scoped roles in the authorizer:**
+  - `createOrgAuthorizer({ eventRoles })`: when a member's org role doesn't grant a permission, and the command is about one event (`input.eventId`), their live event roles for that event are checked (`EVENT_ROLE_PERMISSIONS`: `door_staff` and `session_scanner` → `checkin:scan`; `event_manager` → read/write, orders, attendees, check-in).
+  - Expired assignments grant nothing.
+  - The resolver is a port implemented by `events.eventRolesOf` (tenancy is tier 1 and can't read tier 2), composed in web, api and tests.
+- **Door staff** scan and undo on their event only. Device management stays org-level. `undoAdmission` now takes `eventId`, which must own the admission.
+- **Door screen:**
+  - Refreshes every 10 s while visible (the polling fallback until Ably, §6.4).
+  - Shows an alert panel with the tickets two devices let in while offline (`duplicate_offline`): time, holder, short code.
+  - Strings are in 13 locales.
+- Door staff are members (e.g. viewers) with an event role. Non-member event staff arrive with the invitation flow for event roles (M1.8).
+
+### Acceptance (M1.9c1)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A viewer who is door staff on event A can scan A, can't scan event B, can't enroll devices, and loses access when the assignment expires | `packages/testing/tests/checkin.int.test.ts` |
+| AC2 | Offline duplicates from the drill appear as door-screen alerts with the holder | `packages/testing/tests/devices.int.test.ts` |
+
 ## Remaining M1.9 increments
-- **M1.9c:**
-  - the zxing-wasm camera fallback
-  - event-scoped door staff and checkpoints/entrances
-  - legacy QR payloads
-  - the scanner dashboard with live counts (Ably)
-  - fraud signals and alerts, fed by `checkin.duplicate_offline@1`
-  - the full 3-device / 300-scan offline drill on real devices
+- **M1.9c2:**
+  - the zxing-wasm camera fallback (iOS Safari)
+  - checkpoints and entrances
+  - legacy QR payloads (needs the legacy corpus from the owner's data access)
+  - Ably realtime (owner account)
+  - fraud signals beyond offline duplicates: invalid bursts, the same ticket at two entrances, device velocity
+  - the 3-device / 300-scan drill on real hardware

@@ -1,7 +1,7 @@
 import { withTenant } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import { and, eq } from 'drizzle-orm';
-import { type OrgRole, roleCan } from './domain/permissions.ts';
+import { eventRoleCan, type OrgRole, roleCan } from './domain/permissions.ts';
 import { memberships } from './schema.ts';
 
 /** The actor's role in the context org, or null. Read under the tenant's RLS. */
@@ -18,20 +18,41 @@ export async function memberRole(ctx: Ctx): Promise<OrgRole | null> {
   return (row?.role as OrgRole | undefined) ?? null;
 }
 
+/** Event roles of the actor for one event; implemented by the events module (a port: tier 1 can't read tier 2). */
+export type EventRoleResolver = (ctx: Ctx, eventId: string) => Promise<readonly string[]>;
+
+const eventIdOf = (input: unknown): string | null => {
+  const id = (input as { eventId?: unknown } | null)?.eventId;
+  return typeof id === 'string' ? id : null;
+};
+
 /**
  * Org authorizer. Platform permissions (`platform:*`) need a signed-in user for org creation
- * or a system actor; everything else needs a membership whose role grants the permission.
+ * or a system actor; everything else needs a membership whose role grants the permission, or,
+ * for a command about one event (`input.eventId`), a member's event-scoped role that grants it.
  */
-export const orgAuthorizer: CommandPorts<unknown>['authorizer'] = {
-  async can(ctx, permission) {
-    if (permission === 'platform:org.create') return ctx.actor.type === 'user' || ctx.actor.type === 'system';
-    // Accepting is checked in the handler (token + verified email match), not by an org role.
-    if (permission === 'invitation:accept') return ctx.actor.type === 'user';
-    // Public commands (checkout) are open to anyone; the command itself enforces what may be bought.
-    if (permission.startsWith('public:')) return true;
-    if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
-    if (ctx.actor.type === 'system') return true;
-    const role = await memberRole(ctx);
-    return role !== null && roleCan(role, permission);
-  },
-};
+export function createOrgAuthorizer(
+  deps: { eventRoles?: EventRoleResolver } = {},
+): CommandPorts<unknown>['authorizer'] {
+  return {
+    async can(ctx, permission, input) {
+      if (permission === 'platform:org.create')
+        return ctx.actor.type === 'user' || ctx.actor.type === 'system';
+      // Accepting is checked in the handler (token + verified email match), not by an org role.
+      if (permission === 'invitation:accept') return ctx.actor.type === 'user';
+      // Public commands (checkout) are open to anyone; the command itself enforces what may be bought.
+      if (permission.startsWith('public:')) return true;
+      if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
+      if (ctx.actor.type === 'system') return true;
+      const role = await memberRole(ctx);
+      if (role === null) return false;
+      if (roleCan(role, permission)) return true;
+      const eventId = eventIdOf(input);
+      if (!eventId || !deps.eventRoles) return false;
+      return eventRoleCan(await deps.eventRoles(ctx, eventId), permission);
+    },
+  };
+}
+
+/** The org-role-only authorizer (no event-scoped roles). */
+export const orgAuthorizer = createOrgAuthorizer();

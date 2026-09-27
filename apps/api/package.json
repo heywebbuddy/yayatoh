@@ -19,6 +19,7 @@
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",

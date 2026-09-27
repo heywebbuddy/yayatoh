@@ -573,7 +573,9 @@
       "duplicate_offline": "Check-in feito antes em outro dispositivo",
       "superseded": "Código antigo de um ingresso reemitido",
       "provisional": "Entrada offline — a confirmar"
-    }
+    },
+    "alertsTitle": "{count, plural, one {# ingresso foi aceito duas vezes offline} other {# ingressos foram aceitos duas vezes offline}}",
+    "alertsHint": "Dois leitores aceitaram o mesmo ingresso antes de conseguirem sincronizar. Confira esses convidados na entrada."
   },
   "devices": {
     "title": "Dispositivos de leitura",
