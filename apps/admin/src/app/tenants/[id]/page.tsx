@@ -1,6 +1,6 @@
 import { feeScheduleQuery, getEntitlementsQuery } from '@yayatoh/billing';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { ledgerBalancesQuery, payoutAccountQuery } from '@yayatoh/payments';
+import { disputesQuery, ledgerBalancesQuery, payoutAccountQuery } from '@yayatoh/payments';
 import { MODULE_KEYS } from '@yayatoh/platform';
 import {
   getOrganizationQuery,
@@ -18,7 +18,13 @@ import { z } from 'zod';
 import { Shell } from '@/components/shell.tsx';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
-import { entitlementAction, feeOverrideAction, payoutHoldAction, suspensionAction } from './actions.ts';
+import {
+  entitlementAction,
+  feeOverrideAction,
+  payoutHoldAction,
+  submitEvidenceAction,
+  suspensionAction,
+} from './actions.ts';
 
 const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
 
@@ -64,7 +70,7 @@ export default async function TenantPage({
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
-  const [members, pauses, payout, entitlements, fee, domains, ledger] = await Promise.all([
+  const [members, pauses, payout, entitlements, fee, domains, ledger, disputes] = await Promise.all([
     executeQuery(listMembersQuery, {}, ctx, ports),
     executeQuery(suspensionHistoryQuery, {}, ctx, ports),
     executeQuery(payoutAccountQuery, {}, ctx, ports),
@@ -72,6 +78,7 @@ export default async function TenantPage({
     executeQuery(feeScheduleQuery, { currency: org.currency }, ctx, ports),
     executeQuery(listDomainsQuery, {}, ctx, ports),
     executeQuery(ledgerBalancesQuery, {}, ctx, ports),
+    executeQuery(disputesQuery, {}, ctx, ports),
   ]);
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
@@ -178,6 +185,67 @@ export default async function TenantPage({
             ) : null}
           </form>
         ) : null}
+      </Section>
+
+      <Section id="disputes" title={t('disputes.title')}>
+        {disputes.length === 0 ? (
+          <p className="text-body text-zinc-600">{t('disputes.empty')}</p>
+        ) : (
+          <ul className="flex list-none flex-col gap-4 p-0">
+            {disputes.map((d) => (
+              <li
+                key={d.id}
+                className="flex flex-col gap-2 border-t border-zinc-100 pt-3 first:border-0 first:pt-0"
+              >
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-body">
+                  <StatusDot
+                    status={d.status === 'won' ? 'success' : d.status === 'lost' ? 'danger' : 'warning'}
+                    label={t(`disputes.status.${d.status}`)}
+                  />
+                  <span className="font-mono">
+                    {d.currency} {d.amountMinor}
+                  </span>
+                  <span className="text-caption text-zinc-600">{d.reason}</span>
+                  <span className="text-caption text-zinc-600">{d.fundsFlow}</span>
+                  {d.evidenceDueBy ? (
+                    <span className="text-caption text-zinc-600">
+                      {t('disputes.due', { date: when.format(d.evidenceDueBy) })}
+                    </span>
+                  ) : null}
+                  <a href={`/tenants/${id}/disputes/${d.id}/evidence`} className="text-caption underline">
+                    {t('disputes.packet')}
+                  </a>
+                </div>
+                {d.status === 'open' && d.fundsFlow === 'platform_mor' && staff.can('payouts') ? (
+                  <form
+                    action={submitEvidenceAction.bind(null, id, d.id, d.providerDisputeId)}
+                    className="flex flex-col gap-2"
+                  >
+                    <label htmlFor={`summary-${d.id}`} className="text-caption text-zinc-600">
+                      {t('disputes.summary')}
+                    </label>
+                    <textarea
+                      id={`summary-${d.id}`}
+                      name="summary"
+                      required
+                      minLength={20}
+                      maxLength={5000}
+                      rows={3}
+                      className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                    />
+                    <label className="flex min-h-6 items-center gap-2 text-body">
+                      <input type="checkbox" name="reviewed" value="yes" required className="size-5" />
+                      {t('disputes.reviewed')}
+                    </label>
+                    <Button type="submit" className="self-start">
+                      {t('disputes.submit')}
+                    </Button>
+                  </form>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
       </Section>
 
       <Section id="ledger" title={t('ledger.title')}>

@@ -2,6 +2,7 @@ import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import type {
   AccountEvent,
   CreatePaymentInput,
+  DisputeEvent,
   PaymentProvider,
   ProviderEvent,
   WebhookEvent,
@@ -61,6 +62,9 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
       // Reversals above 100,000 minor units fail, as if the organizer's balance were empty (tests).
       return { reversalId, status: i.amount.amount > 100_000 ? 'failed' : 'succeeded' };
     },
+    async submitDisputeEvidence(i) {
+      return { status: i.summary.trim() ? 'submitted' : 'failed' };
+    },
     async registerPaymentMethodDomain(i) {
       const key = `pmd:${i.hostname}:${i.accountId ?? 'platform'}`;
       return { id: `fakepmd_${createHmac('sha256', opts.secret).update(key).digest('hex').slice(0, 16)}` };
@@ -106,5 +110,14 @@ export function signFakeAccountWebhook(
     ...e,
     provider: 'fake',
   });
+  return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };
+}
+
+/** Build and sign a fake dispute webhook (tests and dev tools). */
+export function signFakeDisputeWebhook(
+  secret: string,
+  e: Omit<DisputeEvent, 'provider' | 'id'> & { id?: string },
+): { body: string; signature: string } {
+  const body = JSON.stringify({ id: e.id ?? `fakeevt_${randomUUID()}`, ...e, provider: 'fake' });
   return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };
 }

@@ -1,5 +1,6 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
+import { disputesQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -34,6 +35,9 @@ export default async function OrderPage({
   }
   if (order.eventId !== ev.id) notFound();
   const refunds = await executeQuery(orderRefundsQuery, { orderId }, data.ctx, ports);
+  const disputes = roleCan(data.role, 'finance:read')
+    ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
+    : [];
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
@@ -141,6 +145,40 @@ export default async function OrderPage({
               },
             ]}
           />
+        </section>
+      ) : null}
+
+      {disputes.length > 0 ? (
+        <section aria-labelledby="disputes-heading" className="flex flex-col gap-3">
+          <h2 id="disputes-heading" className="text-section">
+            {t('disputes.title')}
+          </h2>
+          <p className="text-body text-zinc-600">{t(`disputes.explain.${order.fundsFlow}`)}</p>
+          <ul className="flex list-none flex-col gap-2 p-0">
+            {disputes.map((d) => (
+              <li key={d.id}>
+                <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <StatusDot
+                    status={d.status === 'won' ? 'success' : d.status === 'lost' ? 'danger' : 'warning'}
+                    label={t(`disputes.status.${d.status}`)}
+                  />
+                  <span className="font-mono tabular-nums">{fmt(d.amountMinor)}</span>
+                  <span className="text-caption text-zinc-600">{d.reason}</span>
+                  {d.evidenceDueBy ? (
+                    <span className="text-caption text-zinc-600">
+                      {t('disputes.dueBy', { date: when.format(d.evidenceDueBy) })}
+                    </span>
+                  ) : null}
+                  <a
+                    href={`/o/${org}/e/${event}/orders/${orderId}/disputes/${d.id}/evidence`}
+                    className="text-caption underline underline-offset-2"
+                  >
+                    {t('disputes.evidence')}
+                  </a>
+                </Card>
+              </li>
+            ))}
+          </ul>
         </section>
       ) : null}
 

@@ -1105,5 +1105,63 @@
     "failed": "決済代行会社がこの返金を拒否しました。変更は行われていません。",
     "exceedsRefundable": "この注文で返金できる残額を超えています。",
     "ticketRefunded": "これらのチケットのいずれかは、すでに返金済みか返金処理中です。"
+  },
+  "disputes": {
+    "title": "チャージバック",
+    "explain": {
+      "platform_mor": "購入者の銀行がこの支払いに異議を申し立てています。異議申し立てが終了するまで、この金額はあなたの入金から保留されます。Yayatoh のサポートが証拠資料を確認し、あなたに代わって銀行に回答します。",
+      "organizer_mor": "購入者の銀行が、あなたの入金用アカウントでのこの支払いに異議を申し立てています。証拠資料をダウンロードし、期限までに Stripe ダッシュボードで異議申し立てに回答してください。"
+    },
+    "status": {
+      "open": "対応中",
+      "evidence_submitted": "証拠を提出済み",
+      "won": "勝訴",
+      "lost": "敗訴"
+    },
+    "dueBy": "証拠の提出期限：{date}",
+    "evidence": "証拠資料（PDF）"
+  },
+  "evidence": {
+    "title": "異議申し立ての証拠 · {id}",
+    "subtitle": "{seller} と Yayatoh がカードネットワーク向けに作成",
+    "footer": "Yayatoh の記録（注文、チケット、チェックインのスキャン）から生成。提出前に担当者が確認しています。",
+    "dispute": "異議申し立て",
+    "reason": "理由",
+    "amount": "金額",
+    "opened": "申し立て日",
+    "dueBy": "証拠の提出期限",
+    "seller": "販売者",
+    "sellerName": "主催者",
+    "soldBy": "販売責任者（Merchant of Record）",
+    "soldByOrganizer": "主催者（主催者のアカウントで決済）",
+    "soldByPlatform": "Pani Digital Services, LLC（Yayatoh）が主催者に代わって販売",
+    "event": "イベント",
+    "eventName": "名称",
+    "starts": "開始",
+    "ends": "終了",
+    "venue": "会場",
+    "order": "注文",
+    "orderId": "注文番号",
+    "placed": "注文日時",
+    "paid": "支払日時",
+    "buyer": "購入者",
+    "total": "請求総額",
+    "fees": "うち手数料",
+    "status": "ステータス",
+    "items": "品目",
+    "qty": "数量",
+    "price": "単価",
+    "tickets": "チケットとチェックイン",
+    "serial": "チケット",
+    "code": "コード",
+    "holder": "名義人",
+    "admitted": "入場済み",
+    "notAdmitted": "未スキャン",
+    "omitted": "ほか {n} 枚のチケットは記載を省略",
+    "refunds": "返金",
+    "noRefunds": "この注文について返金の依頼はありません。",
+    "refundPolicy": "購入者に表示された返金ポリシー",
+    "noPolicy": "主催者は返金ポリシーを公開していません。",
+    "policyUpdated": "最終更新：{date}"
   }
 }

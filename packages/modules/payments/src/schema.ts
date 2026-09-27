@@ -171,3 +171,38 @@ export const settlements = tenantTable(
     ),
   ],
 );
+
+export const DISPUTE_STATUSES = ['open', 'evidence_submitted', 'won', 'lost'] as const;
+
+/**
+ * Disputes (chargebacks, M1.6d). On a platform charge the disputed amount is held from the
+ * organizer's funds (the event's held funds, then its reserve, then a receivable) until it closes.
+ */
+export const disputes = tenantTable(
+  paymentsSchema,
+  'disputes',
+  {
+    orderId: uuid('order_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    fundsFlow: text('funds_flow').notNull(),
+    provider: text('provider').notNull(),
+    providerDisputeId: text('provider_dispute_id').notNull(),
+    status: text('status').notNull().default('open'),
+    reason: text('reason').notNull(),
+    amountMinor: bigint('amount_minor', { mode: 'number' }).notNull(),
+    currency: text('currency').notNull(),
+    evidenceDueBy: timestamp('evidence_due_by', { withTimezone: true }),
+    evidenceSubmittedAt: timestamp('evidence_submitted_at', { withTimezone: true }),
+    evidenceSubmittedBy: text('evidence_submitted_by'),
+    closedAt: timestamp('closed_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('disputes_org_provider_key').on(t.orgId, t.provider, t.providerDisputeId),
+    index('disputes_org_order_idx').on(t.orgId, t.orderId),
+    check(
+      'disputes_status_check',
+      sql.raw(`status in (${DISPUTE_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('disputes_amount_check', sql`amount_minor > 0`),
+  ],
+);

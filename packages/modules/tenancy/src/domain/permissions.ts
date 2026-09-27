@@ -66,6 +66,7 @@ export const PLATFORM_PERMISSIONS = [
   'platform:org.suspend',
   'platform:payouts.hold',
   'platform:payouts.release',
+  'platform:disputes.submit',
 ] as const;
 
 export function roleCan(role: OrgRole, permission: string): boolean {

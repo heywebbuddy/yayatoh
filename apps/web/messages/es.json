@@ -1105,5 +1105,63 @@
     "failed": "El proveedor de pagos rechazó este reembolso. No se cambió nada.",
     "exceedsRefundable": "Eso supera lo que queda por reembolsar en este pedido.",
     "ticketRefunded": "Una de esas entradas ya está reembolsada o se está reembolsando."
+  },
+  "disputes": {
+    "title": "Disputas",
+    "explain": {
+      "platform_mor": "El banco del comprador está disputando este pago. El importe se retiene de tus pagos recibidos hasta que se cierre la disputa. El equipo de soporte de Yayatoh revisa el paquete de pruebas y responde al banco por ti.",
+      "organizer_mor": "El banco del comprador está disputando este pago en tu cuenta de pagos. Descarga el paquete de pruebas y responde a la disputa en tu panel de Stripe antes de la fecha límite."
+    },
+    "status": {
+      "open": "Abierta",
+      "evidence_submitted": "Pruebas enviadas",
+      "won": "Ganada",
+      "lost": "Perdida"
+    },
+    "dueBy": "Pruebas antes del {date}",
+    "evidence": "Paquete de pruebas (PDF)"
+  },
+  "evidence": {
+    "title": "Pruebas de la disputa · {id}",
+    "subtitle": "Preparado para la red de tarjetas por {seller} y Yayatoh",
+    "footer": "Generado a partir de los registros de Yayatoh: pedidos, entradas y escaneos de check-in. Revisado por una persona antes del envío.",
+    "dispute": "Disputa",
+    "reason": "Motivo",
+    "amount": "Importe",
+    "opened": "Abierta",
+    "dueBy": "Pruebas antes del",
+    "seller": "Vendedor",
+    "sellerName": "Organizador",
+    "soldBy": "Comerciante registrado",
+    "soldByOrganizer": "El organizador (cobrado en su cuenta)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), en nombre del organizador",
+    "event": "Evento",
+    "eventName": "Nombre",
+    "starts": "Inicio",
+    "ends": "Fin",
+    "venue": "Lugar",
+    "order": "Pedido",
+    "orderId": "Número de pedido",
+    "placed": "Realizado",
+    "paid": "Pagado",
+    "buyer": "Comprador",
+    "total": "Total cobrado",
+    "fees": "De lo cual, tarifas",
+    "status": "Estado",
+    "items": "Artículo",
+    "qty": "Cant.",
+    "price": "Precio unitario",
+    "tickets": "Entradas y check-in",
+    "serial": "Entrada",
+    "code": "Código",
+    "holder": "Titular",
+    "admitted": "Admitido en la puerta",
+    "notAdmitted": "No escaneada",
+    "omitted": "{n} entradas más no listadas",
+    "refunds": "Reembolsos",
+    "noRefunds": "No se solicitaron reembolsos para este pedido.",
+    "refundPolicy": "Política de reembolso mostrada a los compradores",
+    "noPolicy": "El organizador no ha publicado una política de reembolso.",
+    "policyUpdated": "Última actualización: {date}"
   }
 }

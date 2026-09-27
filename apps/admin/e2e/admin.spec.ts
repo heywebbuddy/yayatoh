@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page, test } from '@playwright/test';
+import { signFakeDisputeWebhook } from '@yayatoh/payments';
 
 const WEB = `http://localhost:${process.env.E2E_PORT ?? 3100}`;
 const STAFF = 'omar@yayatoh.test';
@@ -73,5 +74,61 @@ test('staff pause ticket sales for a tenant; the public page shows it at once; r
   await expect(
     page.getByRole('cell', { name: 'staff console: search tenants "lakeside"' }).first(),
   ).toBeVisible();
+  await expectAccessible(page);
+});
+
+test('staff see a tenant dispute and open its evidence packet', async ({ page, browser }) => {
+  const secret = process.env.FAKE_PAYMENTS_SECRET;
+  test.skip(!secret, 'needs FAKE_PAYMENTS_SECRET to sign provider webhooks');
+  const stamp = Date.now();
+  // An organizer adds a pass on the web app and a guest buys it.
+  const web = await browser.newContext({ baseURL: WEB });
+  const org = await web.newPage();
+  const login = await org.request.post('/api/dev/login', {
+    form: { email: NOT_STAFF, locale: 'en' },
+    maxRedirects: 0,
+  });
+  expect(login.status()).toBe(303);
+  await org.goto('/o/lakeside-events/e/lakeside-open-house/tickets-orders');
+  await org.getByLabel('Name', { exact: true }).fill(`Staff dispute ${stamp}`);
+  await org.getByLabel('Price (USD)').fill('20');
+  await org.getByLabel('Quantity available').fill('5');
+  await org.getByRole('button', { name: 'Add ticket type' }).click();
+  await expect(org.getByRole('row').filter({ hasText: `Staff dispute ${stamp}` })).toBeVisible();
+  const guest = await (await browser.newContext({ baseURL: WEB })).newPage();
+  await guest.goto('/events/lakeside-open-house');
+  await guest.getByLabel(`Quantity — Staff dispute ${stamp}`).selectOption('1');
+  await guest.getByLabel('Full name').fill('Stella Staff');
+  await guest.getByLabel('Email for your tickets').fill(`stella+${stamp}@example.test`);
+  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await expect(guest).toHaveURL(/\/checkout\/fake\?/);
+  const fake = new URL(guest.url());
+  await guest.getByRole('button', { name: /^Pay/ }).click();
+  await expect(guest).toHaveURL(/\/orders\//);
+  const { body, signature } = signFakeDisputeWebhook(secret ?? '', {
+    type: 'dispute.created',
+    orgId: fake.searchParams.get('org') ?? '',
+    providerPaymentId: fake.searchParams.get('pi') ?? '',
+    providerDisputeId: `fakedp_staff_${stamp}`,
+    amountMinor: Number(fake.searchParams.get('amount')),
+    currency: fake.searchParams.get('currency') ?? 'USD',
+    reason: 'product_not_received',
+  });
+  const res = await guest.request.post('/api/webhooks/fake', {
+    data: body,
+    headers: { 'content-type': 'application/json', 'x-fake-signature': signature },
+  });
+  expect(res.status()).toBe(200);
+
+  await signIn(page, STAFF);
+  await page.getByLabel('Search by name or address').fill('lakeside');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  const disputes = page.getByRole('region', { name: 'Disputes' });
+  const item = disputes.getByRole('listitem').filter({ hasText: 'product_not_received' }).first();
+  await expect(item).toBeVisible();
+  const href = await item.getByRole('link', { name: 'Evidence packet' }).getAttribute('href');
+  const packet = await page.request.get(href ?? '');
+  expect(packet.status()).toBe(200);
   await expectAccessible(page);
 });

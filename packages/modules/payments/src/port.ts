@@ -58,8 +58,26 @@ export interface AccountEvent {
   readonly account: ConnectAccountState;
 }
 
-export type WebhookEvent = ProviderEvent | AccountEvent;
+/** A verified dispute (chargeback) notification (M1.6d). */
+export interface DisputeEvent {
+  readonly provider: 'fake' | 'stripe';
+  readonly id: string;
+  readonly type: 'dispute.created' | 'dispute.closed';
+  readonly orgId: string;
+  readonly providerPaymentId: string;
+  readonly providerDisputeId: string;
+  readonly amountMinor: number;
+  readonly currency: string;
+  readonly reason: string;
+  /** dispute.closed only. */
+  readonly outcome?: 'won' | 'lost';
+  readonly evidenceDueBy?: string;
+}
+
+export type WebhookEvent = ProviderEvent | AccountEvent | DisputeEvent;
 export const isAccountEvent = (e: WebhookEvent): e is AccountEvent => e.type === 'account.updated';
+export const isDisputeEvent = (e: WebhookEvent): e is DisputeEvent =>
+  e.type === 'dispute.created' || e.type === 'dispute.closed';
 
 export interface PaymentProvider {
   readonly name: 'fake' | 'stripe';
@@ -115,6 +133,13 @@ export interface PaymentProvider {
     amount: Money;
     idempotencyKey: string;
   }): Promise<{ reversalId: string; status: 'succeeded' | 'failed' }>;
+  /** Submit a reviewed evidence packet for a dispute on the platform account (platform_mor). */
+  submitDisputeEvidence(input: {
+    providerDisputeId: string;
+    /** Plain-text summary; the packet PDF is attached by the Stripe adapter (file upload). */
+    summary: string;
+    idempotencyKey: string;
+  }): Promise<{ status: 'submitted' | 'failed' }>;
 }
 
 export interface RefundInput {

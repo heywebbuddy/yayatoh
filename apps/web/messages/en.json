@@ -1105,5 +1105,63 @@
     "failed": "The payment provider declined this refund. Nothing was changed.",
     "exceedsRefundable": "That is more than is left to refund on this order.",
     "ticketRefunded": "One of those tickets is already refunded or being refunded."
+  },
+  "disputes": {
+    "title": "Disputes",
+    "explain": {
+      "platform_mor": "The buyer's bank is disputing this payment. The amount is held from your payouts until the dispute closes. Yayatoh support reviews the evidence packet and answers the bank for you.",
+      "organizer_mor": "The buyer's bank is disputing this payment on your payout account. Download the evidence packet and answer the dispute in your Stripe dashboard before the deadline."
+    },
+    "status": {
+      "open": "Open",
+      "evidence_submitted": "Evidence sent",
+      "won": "Won",
+      "lost": "Lost"
+    },
+    "dueBy": "Evidence due {date}",
+    "evidence": "Evidence packet (PDF)"
+  },
+  "evidence": {
+    "title": "Dispute evidence · {id}",
+    "subtitle": "Prepared for the card network by {seller} and Yayatoh",
+    "footer": "Generated from Yayatoh records: orders, tickets and check-in scans. Reviewed by a person before submission.",
+    "dispute": "Dispute",
+    "reason": "Reason",
+    "amount": "Amount",
+    "opened": "Opened",
+    "dueBy": "Evidence due",
+    "seller": "Seller",
+    "sellerName": "Organizer",
+    "soldBy": "Merchant of record",
+    "soldByOrganizer": "The organizer (charged on their account)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), on behalf of the organizer",
+    "event": "Event",
+    "eventName": "Name",
+    "starts": "Starts",
+    "ends": "Ends",
+    "venue": "Venue",
+    "order": "Order",
+    "orderId": "Order number",
+    "placed": "Placed",
+    "paid": "Paid",
+    "buyer": "Buyer",
+    "total": "Total charged",
+    "fees": "Of which fees",
+    "status": "Status",
+    "items": "Item",
+    "qty": "Qty",
+    "price": "Price each",
+    "tickets": "Tickets and check-in",
+    "serial": "Ticket",
+    "code": "Code",
+    "holder": "Holder",
+    "admitted": "Admitted at the door",
+    "notAdmitted": "Not scanned",
+    "omitted": "{n} more tickets not listed",
+    "refunds": "Refunds",
+    "noRefunds": "No refunds were requested for this order.",
+    "refundPolicy": "Refund policy shown to buyers",
+    "noPolicy": "The organizer has not published a refund policy.",
+    "policyUpdated": "Last updated {date}"
   }
 }

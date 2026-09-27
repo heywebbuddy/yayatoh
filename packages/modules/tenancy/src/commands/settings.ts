@@ -69,6 +69,18 @@ export const legalPagesQuery = tenantQuery({
 });
 
 /** A public legal page by org slug (active orgs only); null when the org has not written one. */
+/** One of the org's legal pages inside the caller's transaction (evidence packets, receipts). */
+export async function legalPageTx(
+  tx: TenantTx,
+  kind: LegalPageKind,
+): Promise<{ body: string; updatedAt: Date } | null> {
+  const [page] = await tx
+    .select({ body: legalPages.body, updatedAt: legalPages.updatedAt })
+    .from(legalPages)
+    .where(eq(legalPages.kind, kind));
+  return page ?? null;
+}
+
 export async function publicLegalPage(
   orgSlug: string,
   kind: LegalPageKind,

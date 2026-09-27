@@ -35,6 +35,7 @@ export {
   hasAcceptedTermsTx,
   LegalPageDto,
   legalPagesQuery,
+  legalPageTx,
   publicLegalPage,
   publicOrgProfile,
   setLegalPageCommand,

@@ -74,3 +74,22 @@ Live money stays gated on the counsel items in roadmap §5.3 and owner decision 
 | AC3 | A refund after transfer draws on the event's reserve, then a receivable, and asks for a reversal; a failed reversal leaves the receivable; the next release nets it | `settlements.int.test.ts` |
 | AC4 | Reserves come back after the window (what refunds left); a staff hold stops releases; the books sum to zero; settlements are finance-only and per org | `settlements.int.test.ts` |
 | AC5 | The worker job transfers a waiting settlement once payouts are enabled, exactly once, audited | `apps/worker/tests/settlements.int.test.ts` |
+
+## M1.6d — disputes (done)
+
+- **Webhooks.** `dispute.created` / `dispute.closed` (won or lost) arrive through the payments port (verified on the raw body, deduplicated by provider event id) and are applied by `orders.applyDisputeEvent` (system only). The order is found by its provider payment; the dispute must match its currency and not exceed its total. A close for an unknown dispute is refused (the provider retries).
+- **The hold** (roadmap acceptance "a dispute places the hold"). `platform_mor`: the provider takes the disputed amount from the platform balance at once, so the same amount is held back from the organizer: the event's held funds first, then the event's reserve, then a receivable (netted from the next release). The organizer carries the whole disputed amount while the dispute is open. `organizer_mor`: the dispute is on the organizer's own account; the platform books nothing.
+- **Won:** the hold journal is reversed exactly. **Lost:** the buyer keeps the money; the order's remaining tickets are voided (`dispute_lost`) and the order counts as refunded.
+- **Evidence packet** (`reports.disputeEvidence`, `finance:read`): the dispute, the seller and merchant of record, the event (times in its timezone, with the zone), the order and items, every ticket with its door admissions, refunds, and the organizer's refund policy. It is rendered as an A4 PDF through the ADR 0017 renderer (HTML when no renderer is configured), in English because it goes to the card network, and bounded to 60 tickets and 6,000 characters of policy (the networks accept 4.5 MB / 19 pages).
+- **Who answers.** `platform_mor`: Yayatoh is the merchant, so **staff** answer: the staff console lists the tenant's disputes, opens the packet, and submits evidence only after ticking "I reviewed the evidence packet" (`PaymentProvider.submitDisputeEvidence`, then `payments.markEvidenceSubmitted`, platform only). `organizer_mor`: the organizer downloads the packet from the order page and answers in their Stripe dashboard.
+- **Organizer view.** The order page lists disputes (status, amount, reason, evidence deadline) with the packet link, for owner, admin and finance.
+- **Later:** the dispute-ratio alert (roadmap risk 3), dispute fees, attaching the PDF file to the Stripe submission (Stripe adapter), messages sent to the buyer in the packet.
+
+### Acceptance (M1.6d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | **A dispute places the hold** (held funds, then a receivable); redelivery changes nothing | `packages/testing/tests/disputes.int.test.ts` |
+| AC2 | The evidence packet has the order, event, admissions and refund policy, escaped in the document | `disputes.int.test.ts` |
+| AC3 | Only staff submit evidence, once; won undoes the hold exactly; lost voids the tickets and refunds the order; the books sum to zero | `disputes.int.test.ts` |
+| AC4 | Unknown disputes are refused; disputes are finance-only and per org; fixture rows for isolation | `disputes.int.test.ts`, `isolation.int.test.ts` |
+| AC5 | In the browser: a signed dispute webhook shows on the order with a downloadable packet; staff see it on the tenant page and open the packet; axe passes | `apps/web/e2e/disputes.spec.ts`, `apps/admin/e2e/admin.spec.ts` |

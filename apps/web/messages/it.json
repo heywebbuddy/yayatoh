@@ -1105,5 +1105,63 @@
     "failed": "Il fornitore di pagamenti ha rifiutato questo rimborso. Non è stato modificato nulla.",
     "exceedsRefundable": "È più di quanto resta da rimborsare su questo ordine.",
     "ticketRefunded": "Uno di questi biglietti è già rimborsato o in fase di rimborso."
+  },
+  "disputes": {
+    "title": "Contestazioni",
+    "explain": {
+      "platform_mor": "La banca dell’acquirente sta contestando questo pagamento. L’importo viene trattenuto dai tuoi accrediti fino alla chiusura della contestazione. L’assistenza Yayatoh esamina il fascicolo di prove e risponde alla banca per tuo conto.",
+      "organizer_mor": "La banca dell’acquirente sta contestando questo pagamento sul tuo conto per gli accrediti. Scarica il fascicolo di prove e rispondi alla contestazione nella tua dashboard Stripe entro la scadenza."
+    },
+    "status": {
+      "open": "Aperta",
+      "evidence_submitted": "Prove inviate",
+      "won": "Vinta",
+      "lost": "Persa"
+    },
+    "dueBy": "Prove entro il {date}",
+    "evidence": "Fascicolo di prove (PDF)"
+  },
+  "evidence": {
+    "title": "Prove della contestazione · {id}",
+    "subtitle": "Preparato per il circuito della carta da {seller} e Yayatoh",
+    "footer": "Generato dai dati di Yayatoh: ordini, biglietti e scansioni del check-in. Verificato da una persona prima dell’invio.",
+    "dispute": "Contestazione",
+    "reason": "Motivo",
+    "amount": "Importo",
+    "opened": "Aperta il",
+    "dueBy": "Prove entro il",
+    "seller": "Venditore",
+    "sellerName": "Organizzatore",
+    "soldBy": "Esercente responsabile (merchant of record)",
+    "soldByOrganizer": "L’organizzatore (addebitato sul suo conto)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), per conto dell’organizzatore",
+    "event": "Evento",
+    "eventName": "Nome",
+    "starts": "Inizio",
+    "ends": "Fine",
+    "venue": "Luogo",
+    "order": "Ordine",
+    "orderId": "Numero d’ordine",
+    "placed": "Effettuato il",
+    "paid": "Pagato il",
+    "buyer": "Acquirente",
+    "total": "Totale addebitato",
+    "fees": "Di cui commissioni",
+    "status": "Stato",
+    "items": "Articolo",
+    "qty": "Qtà",
+    "price": "Prezzo unitario",
+    "tickets": "Biglietti e check-in",
+    "serial": "Biglietto",
+    "code": "Codice",
+    "holder": "Intestatario",
+    "admitted": "Ammesso all’ingresso",
+    "notAdmitted": "Non scansionato",
+    "omitted": "Altri {n} biglietti non elencati",
+    "refunds": "Rimborsi",
+    "noRefunds": "Non sono stati richiesti rimborsi per questo ordine.",
+    "refundPolicy": "Politica di rimborso mostrata agli acquirenti",
+    "noPolicy": "L’organizzatore non ha pubblicato una politica di rimborso.",
+    "policyUpdated": "Ultimo aggiornamento: {date}"
   }
 }

@@ -268,9 +268,15 @@ importers:
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../../packages/modules/payments
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../packages/pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
+      '@yayatoh/reports':
+        specifier: workspace:*
+        version: link:../../packages/modules/reports
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../../packages/modules/tenancy
@@ -1019,9 +1025,15 @@ importers:
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
+      '@yayatoh/payments':
+        specifier: workspace:*
+        version: link:../payments
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../ticketing
@@ -1207,6 +1219,9 @@ importers:
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../modules/payments
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../platform

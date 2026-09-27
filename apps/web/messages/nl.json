@@ -1105,5 +1105,63 @@
     "failed": "De betaalprovider heeft deze terugbetaling geweigerd. Er is niets gewijzigd.",
     "exceedsRefundable": "Dat is meer dan er op deze bestelling nog terug te betalen is.",
     "ticketRefunded": "Een van die tickets is al terugbetaald of wordt terugbetaald."
+  },
+  "disputes": {
+    "title": "Betwistingen",
+    "explain": {
+      "platform_mor": "De bank van de koper betwist deze betaling. Het bedrag wordt ingehouden op je uitbetalingen tot de betwisting is afgesloten. De support van Yayatoh bekijkt het bewijspakket en antwoordt de bank namens jou.",
+      "organizer_mor": "De bank van de koper betwist deze betaling op je uitbetalingsaccount. Download het bewijspakket en reageer vóór de deadline op de betwisting in je Stripe-dashboard."
+    },
+    "status": {
+      "open": "Open",
+      "evidence_submitted": "Bewijs verstuurd",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    },
+    "dueBy": "Bewijs uiterlijk {date}",
+    "evidence": "Bewijspakket (pdf)"
+  },
+  "evidence": {
+    "title": "Bewijs bij betwisting · {id}",
+    "subtitle": "Voor het kaartnetwerk opgesteld door {seller} en Yayatoh",
+    "footer": "Gegenereerd uit gegevens van Yayatoh: bestellingen, tickets en check-inscans. Vóór indiening door een persoon gecontroleerd.",
+    "dispute": "Betwisting",
+    "reason": "Reden",
+    "amount": "Bedrag",
+    "opened": "Geopend",
+    "dueBy": "Bewijs uiterlijk",
+    "seller": "Verkoper",
+    "sellerName": "Organisator",
+    "soldBy": "Verantwoordelijke verkoper (merchant of record)",
+    "soldByOrganizer": "De organisator (afgerekend via diens account)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), namens de organisator",
+    "event": "Evenement",
+    "eventName": "Naam",
+    "starts": "Begint",
+    "ends": "Eindigt",
+    "venue": "Locatie",
+    "order": "Bestelling",
+    "orderId": "Bestelnummer",
+    "placed": "Geplaatst",
+    "paid": "Betaald",
+    "buyer": "Koper",
+    "total": "Totaal afgeschreven",
+    "fees": "Waarvan kosten",
+    "status": "Status",
+    "items": "Artikel",
+    "qty": "Aantal",
+    "price": "Prijs per stuk",
+    "tickets": "Tickets en check-in",
+    "serial": "Ticket",
+    "code": "Code",
+    "holder": "Houder",
+    "admitted": "Toegelaten bij de ingang",
+    "notAdmitted": "Niet gescand",
+    "omitted": "Nog {n} tickets niet vermeld",
+    "refunds": "Terugbetalingen",
+    "noRefunds": "Voor deze bestelling zijn geen terugbetalingen aangevraagd.",
+    "refundPolicy": "Terugbetalingsbeleid zoals getoond aan kopers",
+    "noPolicy": "De organisator heeft geen terugbetalingsbeleid gepubliceerd.",
+    "policyUpdated": "Laatst bijgewerkt {date}"
   }
 }

@@ -16,6 +16,7 @@ import {
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import {
+  applyDisputeEventCommand,
   applyProviderEventCommand,
   attachPaymentCommand,
   completeRefundCommand,
@@ -204,6 +205,28 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
+  for (const [type, outcome] of [
+    ['dispute.created', undefined],
+    ['dispute.closed', 'won'],
+  ] as const)
+    await executeCommand(
+      applyDisputeEventCommand,
+      {
+        provider: 'fake',
+        id: `fakeevt_dp_${type}_${slug}`,
+        type,
+        orgId: org.id,
+        providerPaymentId: `fakepi_${slug}`,
+        providerDisputeId: `fakedp_${slug}`,
+        amountMinor: checkout.order.totalMinor,
+        currency: checkout.order.currency,
+        reason: 'fraudulent',
+        ...(outcome ? { outcome } : {}),
+      },
+      systemCtx(org.id),
+      ports,
+    );
   // The release job after the event (a settlement waiting for a payout account; isolation).
   await executeCommand(
     releaseDueSettlementsCommand,

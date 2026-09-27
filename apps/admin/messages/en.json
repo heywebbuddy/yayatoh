@@ -71,7 +71,8 @@
       "held": "Payouts are on hold.",
       "released": "Payout hold released.",
       "fee": "Fee override saved.",
-      "entitlement": "Entitlement override saved."
+      "entitlement": "Entitlement override saved.",
+      "evidence": "Evidence submitted."
     },
     "field": {
       "status": "Status",
@@ -144,6 +145,21 @@
       "account": "Account",
       "balance": "Balance (minor units)",
       "note": "Debits are positive. Organizer payables are negative: money owed to the organizer."
+    },
+    "disputes": {
+      "title": "Disputes",
+      "empty": "No disputes.",
+      "status": {
+        "open": "Open",
+        "evidence_submitted": "Evidence submitted",
+        "won": "Won",
+        "lost": "Lost"
+      },
+      "due": "Evidence due {date}",
+      "packet": "Evidence packet",
+      "summary": "Summary for the card network (what was bought, that it was delivered or used)",
+      "reviewed": "I reviewed the evidence packet",
+      "submit": "Submit evidence"
     }
   },
   "accessLog": {
@@ -152,5 +168,48 @@
     "at": "When (UTC)",
     "actor": "Who",
     "reason": "Why"
+  },
+  "evidence": {
+    "title": "Dispute evidence · {id}",
+    "subtitle": "Prepared for the card network by {seller} and Yayatoh",
+    "footer": "Generated from Yayatoh records: orders, tickets and check-in scans. Reviewed by a person before submission.",
+    "dispute": "Dispute",
+    "reason": "Reason",
+    "amount": "Amount",
+    "opened": "Opened",
+    "dueBy": "Evidence due",
+    "seller": "Seller",
+    "sellerName": "Organizer",
+    "soldBy": "Merchant of record",
+    "soldByOrganizer": "The organizer (charged on their account)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), on behalf of the organizer",
+    "event": "Event",
+    "eventName": "Name",
+    "starts": "Starts",
+    "ends": "Ends",
+    "venue": "Venue",
+    "order": "Order",
+    "orderId": "Order number",
+    "placed": "Placed",
+    "paid": "Paid",
+    "buyer": "Buyer",
+    "total": "Total charged",
+    "fees": "Of which fees",
+    "status": "Status",
+    "items": "Item",
+    "qty": "Qty",
+    "price": "Price each",
+    "tickets": "Tickets and check-in",
+    "serial": "Ticket",
+    "code": "Code",
+    "holder": "Holder",
+    "admitted": "Admitted at the door",
+    "notAdmitted": "Not scanned",
+    "omitted": "{n} more tickets not listed",
+    "refunds": "Refunds",
+    "noRefunds": "No refunds were requested for this order.",
+    "refundPolicy": "Refund policy shown to buyers",
+    "noPolicy": "The organizer has not published a refund policy.",
+    "policyUpdated": "Last updated {date}"
   }
 }

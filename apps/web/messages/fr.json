@@ -1105,5 +1105,63 @@
     "failed": "Le prestataire de paiement a refusé ce remboursement. Rien n’a été modifié.",
     "exceedsRefundable": "C’est plus que le montant restant à rembourser sur cette commande.",
     "ticketRefunded": "L’un de ces billets est déjà remboursé ou en cours de remboursement."
+  },
+  "disputes": {
+    "title": "Litiges",
+    "explain": {
+      "platform_mor": "La banque de l’acheteur conteste ce paiement. Le montant est retenu sur vos versements jusqu’à la clôture du litige. L’assistance Yayatoh examine le dossier de preuves et répond à la banque pour vous.",
+      "organizer_mor": "La banque de l’acheteur conteste ce paiement sur votre compte de versement. Téléchargez le dossier de preuves et répondez au litige dans votre tableau de bord Stripe avant la date limite."
+    },
+    "status": {
+      "open": "Ouvert",
+      "evidence_submitted": "Preuves envoyées",
+      "won": "Gagné",
+      "lost": "Perdu"
+    },
+    "dueBy": "Preuves à fournir avant le {date}",
+    "evidence": "Dossier de preuves (PDF)"
+  },
+  "evidence": {
+    "title": "Preuves du litige · {id}",
+    "subtitle": "Préparé pour le réseau de cartes par {seller} et Yayatoh",
+    "footer": "Généré à partir des données Yayatoh : commandes, billets et scans de check-in. Vérifié par une personne avant l’envoi.",
+    "dispute": "Litige",
+    "reason": "Motif",
+    "amount": "Montant",
+    "opened": "Ouvert le",
+    "dueBy": "Preuves à fournir avant le",
+    "seller": "Vendeur",
+    "sellerName": "Organisateur",
+    "soldBy": "Commerçant officiel",
+    "soldByOrganizer": "L’organisateur (encaissé sur son compte)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), pour le compte de l’organisateur",
+    "event": "Événement",
+    "eventName": "Nom",
+    "starts": "Début",
+    "ends": "Fin",
+    "venue": "Lieu",
+    "order": "Commande",
+    "orderId": "Numéro de commande",
+    "placed": "Passée le",
+    "paid": "Payée le",
+    "buyer": "Acheteur",
+    "total": "Total débité",
+    "fees": "Dont frais",
+    "status": "Statut",
+    "items": "Article",
+    "qty": "Qté",
+    "price": "Prix unitaire",
+    "tickets": "Billets et check-in",
+    "serial": "Billet",
+    "code": "Code",
+    "holder": "Titulaire",
+    "admitted": "Admis à l’entrée",
+    "notAdmitted": "Non scanné",
+    "omitted": "{n} autres billets non listés",
+    "refunds": "Remboursements",
+    "noRefunds": "Aucun remboursement n’a été demandé pour cette commande.",
+    "refundPolicy": "Politique de remboursement affichée aux acheteurs",
+    "noPolicy": "L’organisateur n’a pas publié de politique de remboursement.",
+    "policyUpdated": "Dernière mise à jour le {date}"
   }
 }

@@ -11,7 +11,20 @@ export {
   setPayoutHoldCommand,
 } from './accounts.ts';
 export { claimProviderEventTx } from './dedupe.ts';
-export { fakePaymentProvider, signFakeAccountWebhook, signFakeWebhook } from './fake.ts';
+export {
+  closeDisputeTx,
+  DisputeDto,
+  disputesQuery,
+  disputeTx,
+  markEvidenceSubmittedCommand,
+  openDisputeTx,
+} from './disputes.ts';
+export {
+  fakePaymentProvider,
+  signFakeAccountWebhook,
+  signFakeDisputeWebhook,
+  signFakeWebhook,
+} from './fake.ts';
 export {
   balanceTx,
   type JournalInput,
@@ -28,14 +41,15 @@ export type {
   ConnectAccountState,
   CreatePaymentInput,
   CreatePaymentResult,
+  DisputeEvent,
   FundsFlow,
   PaymentProvider,
   ProviderEvent,
   RefundInput,
   WebhookEvent,
 } from './port.ts';
-export { isAccountEvent } from './port.ts';
-export { LEDGER_ACCOUNTS, type LedgerAccount, SETTLEMENT_STATUSES } from './schema.ts';
+export { isAccountEvent, isDisputeEvent } from './port.ts';
+export { DISPUTE_STATUSES, LEDGER_ACCOUNTS, type LedgerAccount, SETTLEMENT_STATUSES } from './schema.ts';
 export {
   addBusinessDays,
   eventTransferTx,

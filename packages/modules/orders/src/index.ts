@@ -5,6 +5,7 @@ export {
   hashManageToken,
   startCheckoutCommand,
 } from './commands/checkout.ts';
+export { applyDisputeEventCommand } from './commands/disputes.ts';
 export {
   completeRefundCommand,
   orderRefundsQuery,

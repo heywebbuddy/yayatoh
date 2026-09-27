@@ -2,11 +2,12 @@
 
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import { type Ctx, executeCommand, isDomainError } from '@yayatoh/kernel';
-import { setPayoutHoldCommand } from '@yayatoh/payments';
+import { markEvidenceSubmittedCommand, setPayoutHoldCommand } from '@yayatoh/payments';
 import { SUSPENSION_KINDS, type SuspensionKind, setSuspensionCommand } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff, type StaffAction } from '@/server/staff.ts';
 
@@ -71,4 +72,27 @@ export async function entitlementAction(orgId: string, form: FormData) {
       ports,
     ),
   );
+}
+
+/**
+ * Submit a dispute's evidence after a person reviewed the packet (platform_mor: Yayatoh is the
+ * merchant). The reviewer confirms they read it; the summary goes to the provider with the packet.
+ */
+export async function submitEvidenceAction(
+  orgId: string,
+  disputeId: string,
+  providerDisputeId: string,
+  form: FormData,
+) {
+  if (form.get('reviewed') !== 'yes') redirect(`/tenants/${orgId}?error=not_reviewed`);
+  const summary = String(form.get('summary') ?? '').trim();
+  await run(orgId, 'payouts', 'evidence', async (ctx) => {
+    const r = await getPaymentProvider().submitDisputeEvidence({
+      providerDisputeId,
+      summary,
+      idempotencyKey: `evidence:${disputeId}`,
+    });
+    if (r.status !== 'submitted') throw new Error('The provider did not accept the evidence');
+    return executeCommand(markEvidenceSubmittedCommand, { disputeId }, ctx, ports);
+  });
 }

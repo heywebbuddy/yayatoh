@@ -1105,5 +1105,63 @@
     "failed": "Der Zahlungsanbieter hat diese Erstattung abgelehnt. Es wurde nichts geändert.",
     "exceedsRefundable": "Das ist mehr, als bei dieser Bestellung noch erstattet werden kann.",
     "ticketRefunded": "Eines dieser Tickets ist bereits erstattet oder wird gerade erstattet."
+  },
+  "disputes": {
+    "title": "Rückbuchungen",
+    "explain": {
+      "platform_mor": "Die Bank des Käufers widerspricht dieser Zahlung. Der Betrag wird von deinen Auszahlungen einbehalten, bis die Rückbuchung abgeschlossen ist. Der Yayatoh-Support prüft das Beweispaket und antwortet der Bank für dich.",
+      "organizer_mor": "Die Bank des Käufers widerspricht dieser Zahlung auf deinem Auszahlungskonto. Lade das Beweispaket herunter und beantworte die Rückbuchung vor Ablauf der Frist in deinem Stripe-Dashboard."
+    },
+    "status": {
+      "open": "Offen",
+      "evidence_submitted": "Nachweise gesendet",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    },
+    "dueBy": "Nachweise fällig am {date}",
+    "evidence": "Beweispaket (PDF)"
+  },
+  "evidence": {
+    "title": "Nachweise zur Rückbuchung · {id}",
+    "subtitle": "Für das Kartennetzwerk erstellt von {seller} und Yayatoh",
+    "footer": "Erstellt aus Yayatoh-Daten: Bestellungen, Tickets und Check-in-Scans. Vor dem Einreichen von einer Person geprüft.",
+    "dispute": "Rückbuchung",
+    "reason": "Grund",
+    "amount": "Betrag",
+    "opened": "Eröffnet",
+    "dueBy": "Nachweise fällig",
+    "seller": "Verkäufer",
+    "sellerName": "Veranstalter",
+    "soldBy": "Händler (Merchant of Record)",
+    "soldByOrganizer": "Der Veranstalter (über sein Konto abgerechnet)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), im Auftrag des Veranstalters",
+    "event": "Veranstaltung",
+    "eventName": "Name",
+    "starts": "Beginn",
+    "ends": "Ende",
+    "venue": "Veranstaltungsort",
+    "order": "Bestellung",
+    "orderId": "Bestellnummer",
+    "placed": "Aufgegeben",
+    "paid": "Bezahlt",
+    "buyer": "Käufer",
+    "total": "Belasteter Gesamtbetrag",
+    "fees": "Davon Gebühren",
+    "status": "Status",
+    "items": "Artikel",
+    "qty": "Anz.",
+    "price": "Einzelpreis",
+    "tickets": "Tickets und Check-in",
+    "serial": "Ticket",
+    "code": "Code",
+    "holder": "Inhaber",
+    "admitted": "Am Einlass eingelassen",
+    "notAdmitted": "Nicht gescannt",
+    "omitted": "{n} weitere Tickets nicht aufgeführt",
+    "refunds": "Erstattungen",
+    "noRefunds": "Für diese Bestellung wurden keine Erstattungen beantragt.",
+    "refundPolicy": "Den Käufern angezeigte Erstattungsrichtlinie",
+    "noPolicy": "Der Veranstalter hat keine Erstattungsrichtlinie veröffentlicht.",
+    "policyUpdated": "Zuletzt aktualisiert am {date}"
   }
 }

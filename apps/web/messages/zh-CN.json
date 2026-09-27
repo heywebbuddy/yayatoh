@@ -1105,5 +1105,63 @@
     "failed": "支付服务商拒绝了此退款。未做任何更改。",
     "exceedsRefundable": "超出了此订单剩余可退金额。",
     "ticketRefunded": "其中一张门票已退款或正在退款。"
+  },
+  "disputes": {
+    "title": "拒付争议",
+    "explain": {
+      "platform_mor": "买家的银行正在对这笔付款提出争议。在争议结束前，这笔金额会从你的收款中暂扣。Yayatoh 支持团队会审核证据包并代你回复银行。",
+      "organizer_mor": "买家的银行正在对你收款账户中的这笔付款提出争议。请下载证据包，并在截止日期前在你的 Stripe 控制台中回应该争议。"
+    },
+    "status": {
+      "open": "处理中",
+      "evidence_submitted": "证据已提交",
+      "won": "胜诉",
+      "lost": "败诉"
+    },
+    "dueBy": "证据截止日期：{date}",
+    "evidence": "证据包（PDF）"
+  },
+  "evidence": {
+    "title": "争议证据 · {id}",
+    "subtitle": "由 {seller} 和 Yayatoh 为卡组织准备",
+    "footer": "根据 Yayatoh 记录生成：订单、门票和签到扫描。提交前经人工审核。",
+    "dispute": "争议",
+    "reason": "原因",
+    "amount": "金额",
+    "opened": "发起日期",
+    "dueBy": "证据截止日期",
+    "seller": "卖家",
+    "sellerName": "主办方",
+    "soldBy": "登记商户（Merchant of Record）",
+    "soldByOrganizer": "主办方（通过其账户收款）",
+    "soldByPlatform": "Pani Digital Services, LLC（Yayatoh），代表主办方",
+    "event": "活动",
+    "eventName": "名称",
+    "starts": "开始",
+    "ends": "结束",
+    "venue": "场地",
+    "order": "订单",
+    "orderId": "订单号",
+    "placed": "下单时间",
+    "paid": "付款时间",
+    "buyer": "买家",
+    "total": "扣款总额",
+    "fees": "其中费用",
+    "status": "状态",
+    "items": "项目",
+    "qty": "数量",
+    "price": "单价",
+    "tickets": "门票与签到",
+    "serial": "门票",
+    "code": "验证码",
+    "holder": "持票人",
+    "admitted": "已在入口入场",
+    "notAdmitted": "未扫描",
+    "omitted": "另有 {n} 张门票未列出",
+    "refunds": "退款",
+    "noRefunds": "此订单未申请任何退款。",
+    "refundPolicy": "向买家展示的退款政策",
+    "noPolicy": "主办方尚未发布退款政策。",
+    "policyUpdated": "最后更新：{date}"
   }
 }
