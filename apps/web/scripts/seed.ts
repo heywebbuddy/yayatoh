@@ -16,6 +16,7 @@ import {
   resolveOrgSlug,
 } from '@yayatoh/tenancy';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
+import { createVenueCommand, listVenuesQuery } from '@yayatoh/venues';
 import { DEMO_EVENTS } from '../src/demo/events.ts';
 import { getAuth } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
@@ -204,6 +205,41 @@ for (const d of DEMO_EVENTS) {
       await executeCommand(publishEventLayoutCommand, { eventId: e.id }, ctx, ports);
       await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
       console.info(`seed: event ${slug}`);
+    }
+  }
+}
+// A directory venue (M1.4c) so /venues has something to show; not attached to any seeded event.
+{
+  const owner = PERSONAS.find((p) => p.orgSlug === 'lakeside-events' && p.role === 'owner');
+  const ownerId = owner && ids.get(owner.email);
+  const org = await resolveOrgSlug('lakeside-events');
+  if (ownerId && org) {
+    const ctx = createCtx({ orgId: org.orgId, actor: { type: 'user', userId: ownerId } });
+    const name = 'Lakeside Pavilion';
+    const venues = await executeQuery(listVenuesQuery, { includeArchived: true }, ctx, ports);
+    if (!venues.some((v) => v.name === name)) {
+      await executeCommand(
+        createVenueCommand,
+        {
+          name,
+          addressLine1: '1600 N Lake Shore Dr',
+          city: 'Chicago',
+          region: 'IL',
+          postalCode: '60613',
+          country: 'US',
+          latitude: 41.9116,
+          longitude: -87.6264,
+          timezone: 'America/Chicago',
+          capacity: 450,
+          accessibilityNotes:
+            'Step-free entrance from the lakefront path; accessible restrooms on the ground floor.',
+          mapUrl: 'https://www.openstreetmap.org/?mlat=41.9116&mlon=-87.6264',
+          directoryListed: true,
+        },
+        ctx,
+        ports,
+      );
+      console.info(`seed: venue ${name}`);
     }
   }
 }

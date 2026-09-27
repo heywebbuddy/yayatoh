@@ -170,18 +170,39 @@ export async function requestHolderLinkAction(
 
 /**
  * Public: try an access code (M1.4d). A success is remembered in a signed, httpOnly cookie for this
- * event and the page re-renders with what it unlocked. Wrong, expired and used-up codes get one
- * answer; repeated failures from one device are rate-limited by the command.
+ * event and the page re-renders with what it unlocked. Wrong, expired and used-up codes, and slugs
+ * with no live event, all get one answer (a private event's existence is never revealed); repeated
+ * failures from one device are rate-limited by the command.
  */
 export async function redeemAccessCodeAction(
   slug: string,
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const target = await accessTarget(slug);
-  if (!target) return { ok: false, code: 'not_found' };
+  const result = await redeem(slug, form);
+  if (result.ok) refresh();
+  return result;
+}
+
+/** The unlock page (`/events/{slug}/unlock`): on success, go to the event page. */
+export async function unlockEventAction(slug: string, _prev: FormState, form: FormData): Promise<FormState> {
+  const result = await redeem(slug, form);
+  if (result.ok) redirect({ href: `/events/${slug}`, locale: await getLocale() });
+  return result;
+}
+
+const invalidCode: FormState = {
+  ok: false,
+  code: 'validation_failed',
+  fields: ['accessCode'],
+  reason: 'invalid_code',
+};
+
+async function redeem(slug: string, form: FormData): Promise<FormState> {
   const code = String(form.get('accessCode') ?? '').trim();
   if (!code) return { ok: false, code: 'validation_failed', fields: ['accessCode'], reason: 'empty' };
+  const target = await accessTarget(slug);
+  if (!target) return invalidCode;
   try {
     const result = await executeCommand(
       redeemAccessCodeCommand,
@@ -189,13 +210,11 @@ export async function redeemAccessCodeAction(
       createCtx({ orgId: target.orgId, locale: await getLocale() }),
       ports,
     );
-    if (!result.ok)
-      return { ok: false, code: 'validation_failed', fields: ['accessCode'], reason: 'invalid_code' };
+    if (!result.ok) return invalidCode;
     await rememberAccess(target.eventId, result.grant);
   } catch (err) {
     if (isDomainError(err)) return failure(err);
     throw err;
   }
-  refresh();
   return { ok: true, code: null, stamp: Date.now() };
 }

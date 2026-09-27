@@ -1843,7 +1843,6 @@
     "invalid": "Dieser Code ist für dieses Event nicht gültig oder abgelaufen.",
     "empty": "Gib deinen Zugangscode ein.",
     "rateLimited": "Zu viele Versuche. Bitte warte 15 Minuten und versuche es dann erneut.",
-    "gateTitle": "Dieses Event ist privat",
     "gateDescription": "Gib den Zugangscode aus deiner Einladung ein, um das Event zu sehen."
   },
   "access": {
@@ -1904,6 +1903,7 @@
     "deactivate": "{code} deaktivieren",
     "new": "Neuer Zugangscode",
     "create": "Code erstellen",
-    "created": "Zugangscode erstellt."
+    "created": "Zugangscode erstellt.",
+    "unlockLink": "Eingeladene Gäste öffnen {url} und geben ihren Code ein."
   }
 }

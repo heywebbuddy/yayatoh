@@ -1843,7 +1843,6 @@
     "invalid": "Die code is niet geldig voor dit evenement of is verlopen.",
     "empty": "Vul je toegangscode in.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het opnieuw.",
-    "gateTitle": "Dit evenement is privé",
     "gateDescription": "Vul de toegangscode uit je uitnodiging in om het evenement te bekijken."
   },
   "access": {
@@ -1904,6 +1903,7 @@
     "deactivate": "{code} deactiveren",
     "new": "Nieuwe toegangscode",
     "create": "Code maken",
-    "created": "Toegangscode gemaakt."
+    "created": "Toegangscode gemaakt.",
+    "unlockLink": "Genodigden openen {url} en vullen hun code in."
   }
 }

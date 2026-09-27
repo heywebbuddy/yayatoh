@@ -85,18 +85,6 @@ function eventJsonLd(ev: PublicEventDto, url: string) {
   };
 }
 
-/** A private event's page before a code opened it: nothing about the event, just the code form. */
-async function AccessGate({ slug }: { slug: string }) {
-  const t = await getTranslations('accessEntry');
-  return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col justify-center gap-6 px-6 py-16">
-      <h1 className="text-[32px] leading-tight font-light tracking-[-0.04em]">{t('gateTitle')}</h1>
-      <p className="text-body text-zinc-500">{t('gateDescription')}</p>
-      <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} idPrefix="gate" />
-    </main>
-  );
-}
-
 export default async function PublicEventPage({
   params,
 }: {
@@ -109,8 +97,8 @@ export default async function PublicEventPage({
   const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
   let pub = await publicEventBySlug(slug);
   if (!pub) {
-    if (live?.visibility !== 'private') notFound();
-    if (!grant?.unlocksEvent) return <AccessGate slug={slug} />;
+    // Private events are a 404 until a code opened them (codes are entered at /events/{slug}/unlock).
+    if (live?.visibility !== 'private' || !grant?.unlocksEvent) notFound();
     pub = await publicEventBySlug(slug, { includePrivate: true });
     if (!pub) notFound();
   }

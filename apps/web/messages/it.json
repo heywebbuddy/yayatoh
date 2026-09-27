@@ -1843,7 +1843,6 @@
     "invalid": "Questo codice non è valido per questo evento oppure è scaduto.",
     "empty": "Inserisci il tuo codice di accesso.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti e riprova.",
-    "gateTitle": "Questo evento è privato",
     "gateDescription": "Inserisci il codice di accesso del tuo invito per vedere l’evento."
   },
   "access": {
@@ -1904,6 +1903,7 @@
     "deactivate": "Disattiva {code}",
     "new": "Nuovo codice di accesso",
     "create": "Crea codice",
-    "created": "Codice di accesso creato."
+    "created": "Codice di accesso creato.",
+    "unlockLink": "Gli invitati aprono {url} e inseriscono il loro codice."
   }
 }

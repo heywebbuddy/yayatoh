@@ -1843,7 +1843,6 @@
     "invalid": "此存取碼不適用於本活動，或已過期。",
     "empty": "請輸入你的存取碼。",
     "rateLimited": "嘗試次數過多，請等候 15 分鐘後再試。",
-    "gateTitle": "這是私人活動",
     "gateDescription": "請輸入邀請函中的存取碼以查看活動。"
   },
   "access": {
@@ -1904,6 +1903,7 @@
     "deactivate": "停用{code}",
     "new": "新增存取碼",
     "create": "建立存取碼",
-    "created": "已建立存取碼。"
+    "created": "已建立存取碼。",
+    "unlockLink": "受邀賓客開啟 {url} 並輸入存取碼。"
   }
 }

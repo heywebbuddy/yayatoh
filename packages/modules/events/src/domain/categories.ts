@@ -55,7 +55,9 @@ export function parseTags(raw: string | readonly string[]): string[] {
 }
 
 export class TagError extends Error {
-  constructor(readonly reason: 'tag_too_long' | 'too_many_tags') {
+  readonly reason: 'tag_too_long' | 'too_many_tags';
+  constructor(reason: 'tag_too_long' | 'too_many_tags') {
     super(reason);
+    this.reason = reason;
   }
 }

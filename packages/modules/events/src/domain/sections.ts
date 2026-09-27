@@ -84,12 +84,20 @@ export type SectionBody = z.infer<typeof SectionBody>;
  * - Links: one line per link, `Label | https://…`.
  * A problem names the 1-based line (FAQ: block) so the form can point at it.
  */
+export type SectionTextProblem =
+  | 'faq_answer_missing'
+  | 'schedule_line'
+  | 'schedule_time'
+  | 'links_line'
+  | 'links_url';
+
 export class SectionTextError extends Error {
-  constructor(
-    readonly reason: 'faq_answer_missing' | 'schedule_line' | 'schedule_time' | 'links_line' | 'links_url',
-    readonly line: number,
-  ) {
+  readonly reason: SectionTextProblem;
+  readonly line: number;
+  constructor(reason: SectionTextProblem, line: number) {
     super(`${reason} at ${line}`);
+    this.reason = reason;
+    this.line = line;
   }
 }
 

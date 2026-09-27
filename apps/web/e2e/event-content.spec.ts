@@ -399,7 +399,10 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expectAccessible(prober);
   });
 
-  test('a private event shows only a code gate until a code opens it', async ({ page, browser }) => {
+  test('a private event is a 404 until a code entered on its unlock page opens it', async ({
+    page,
+    browser,
+  }) => {
     const s = stamp();
     await signIn(page);
     const { base, slug } = await createEvent(page, `Secret Supper ${s}`);
@@ -409,6 +412,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await page.getByRole('button', { name: 'Save details' }).click();
     await expect(page.getByText('Details saved.')).toBeVisible();
     await page.goto(`${base}/access`);
+    await expect(page.getByTestId('unlock-link')).toContainText(`/events/${slug}/unlock`);
     const codes = page.getByRole('region', { name: 'Access codes' });
     await expect(codes.getByLabel('The event page (for a private event)')).toBeChecked();
     await codes.getByLabel('Label').fill('Invitations');
@@ -426,9 +430,15 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     expect(generated).toMatch(/^[A-Z0-9]{8}$/);
 
     const guest = await guestPage(browser);
-    await guest.goto(`/events/${slug}`);
-    await expect(guest.getByRole('heading', { name: 'This event is private', level: 1 })).toBeVisible();
-    await expect(guest.getByText(`Secret Supper ${s}`)).toHaveCount(0);
+    // The event's address reveals nothing: a plain 404.
+    expect((await guest.goto(`/events/${slug}`))?.status()).toBe(404);
+    // The unlock page looks the same for any address, real or not.
+    await guest.goto(`/events/no-such-event-${s}/unlock`);
+    await guest.getByRole('textbox', { name: 'Access code' }).fill(generated);
+    await guest.getByRole('button', { name: 'Apply code' }).click();
+    await expect(guest.getByText("That code isn't valid for this event, or it has expired.")).toBeVisible();
+    await guest.goto(`/events/${slug}/unlock`);
+    await expect(guest.getByRole('heading', { name: 'Have an access code?', level: 1 })).toBeVisible();
     expect(await guest.content()).not.toContain(`Secret Supper ${s}`);
     await expectAccessible(guest);
     await noHorizontalScroll(guest);
@@ -437,6 +447,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(guest.getByText("That code isn't valid for this event, or it has expired.")).toBeVisible();
     await guest.getByRole('textbox', { name: 'Access code' }).fill(generated.toLowerCase());
     await guest.getByRole('button', { name: 'Apply code' }).click();
+    await expect(guest).toHaveURL(new RegExp(`/events/${slug}$`));
     await expect(guest.getByRole('heading', { name: `Secret Supper ${s}`, level: 1 })).toBeVisible();
     await expect(guest.getByText('Your access code is applied.')).toBeVisible();
     // No JSON-LD or search indexing for a private event.

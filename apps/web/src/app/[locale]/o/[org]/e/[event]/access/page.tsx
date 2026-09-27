@@ -47,6 +47,7 @@ export default async function AccessPage({
     timeZone: ev.timezone,
   });
   const now = new Date();
+  const origin = (process.env.BETTER_AUTH_URL ?? 'http://localhost:3000').replace(/\/$/, '');
   return (
     <>
       {title}
@@ -69,6 +70,11 @@ export default async function AccessPage({
             {t('accessCodes.heading')}
           </h2>
           <p className="text-body text-zinc-500">{t('accessCodes.explainer')}</p>
+          {ev.visibility === 'private' ? (
+            <p className="text-body break-all" data-testid="unlock-link">
+              {t('accessCodes.unlockLink', { url: `${origin}/events/${ev.slug}/unlock` })}
+            </p>
+          ) : null}
           {codes.length === 0 ? (
             <EmptyState title={t('accessCodes.emptyTitle')} description={t('accessCodes.emptyDescription')} />
           ) : (

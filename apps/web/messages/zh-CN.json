@@ -1843,7 +1843,6 @@
     "invalid": "该访问码不适用于此活动，或已过期。",
     "empty": "请输入你的访问码。",
     "rateLimited": "尝试次数过多，请等待 15 分钟后再试。",
-    "gateTitle": "这是一场私密活动",
     "gateDescription": "请输入邀请函中的访问码以查看活动。"
   },
   "access": {
@@ -1904,6 +1903,7 @@
     "deactivate": "停用{code}",
     "new": "新建访问码",
     "create": "创建访问码",
-    "created": "已创建访问码。"
+    "created": "已创建访问码。",
+    "unlockLink": "受邀嘉宾打开 {url} 并输入访问码。"
   }
 }
