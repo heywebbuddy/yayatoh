@@ -30,7 +30,116 @@
     "open": "通知",
     "title": "通知",
     "emptyTitle": "新しい通知はありません",
-    "emptyDescription": "販売、座席、チェックインに関するお知らせがここに表示されます。"
+    "emptyDescription": "販売、座席、チェックインに関するお知らせがここに表示されます。",
+    "openWithCount": "通知、{count, plural, other {未読 # 件}}",
+    "unreadAnnouncement": "{count, plural, other {未読の通知が # 件あります}}",
+    "markRead": "既読にする",
+    "markReadItem": "「{title}」を既読にする",
+    "markAllRead": "すべて既読にする",
+    "viewAll": "すべての通知",
+    "settings": "通知設定",
+    "unread": "未読",
+    "loadMore": "以前の通知を表示",
+    "pageTitle": "通知",
+    "pageDescription": "この組織でのあなた宛てのお知らせ：新しい注文とメッセージ。",
+    "allRead": "すべての通知が既読です。",
+    "items": {
+      "sales": {
+        "order_paid": "新しい注文：{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）"
+      },
+      "messaging": {
+        "contact_replied": "{name} さんから {eventName} についてメッセージが届きました"
+      },
+      "notifications": {
+        "test": "テスト通知：通知は正常に動作しています"
+      },
+      "other": "通知"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "チケット",
+        "refund": "返金"
+      },
+      "events": {
+        "reminder": "イベントのリマインダー"
+      },
+      "tenancy": {
+        "invitation": "チームへの招待"
+      },
+      "ticketing": {
+        "claim-link": "チケット受け取りリンク",
+        "holder-link": "チケットへのリンク"
+      },
+      "attendees": {
+        "message": "主催者からのメッセージ"
+      },
+      "messaging": {
+        "announcement": "お知らせ",
+        "reply": "返信",
+        "contact_replied": "新しいメッセージ"
+      },
+      "sales": {
+        "order_paid": "新規注文のお知らせ"
+      },
+      "notifications": {
+        "test": "テスト通知"
+      }
+    },
+    "status": {
+      "queued": "送信中",
+      "scheduled": "予約済み",
+      "sent": "送信済み",
+      "suppressed": "未送信",
+      "failed": "失敗",
+      "canceled": "キャンセル"
+    },
+    "reasons": {
+      "quiet_hours": "静かな時間帯のため保留中（受信者の 21 時〜8 時）",
+      "messaging_paused": "Yayatoh サポートが配信を一時停止しています",
+      "unsubscribed": "受信者が配信を停止しました",
+      "preference": "受信者の設定でオフになっています",
+      "no_device": "プッシュ先の端末がありません",
+      "no_address": "アドレスがありません",
+      "provider_error": "メール配信サービスに拒否されました",
+      "retrying": "エラーのため再試行中"
+    },
+    "channels": {
+      "email": "メール",
+      "sms": "SMS",
+      "push": "プッシュ",
+      "in_app": "アプリ内"
+    },
+    "log": {
+      "title": "メッセージ",
+      "empty": "この注文に関するメッセージはまだありません。",
+      "when": "日時",
+      "message": "メッセージ",
+      "to": "宛先",
+      "channel": "チャネル"
+    },
+    "preferences": {
+      "title": "通知設定",
+      "description": "{org} の最新情報の受け取り方を選びます。設定はあなたにのみ適用されます。",
+      "categories": {
+        "sales": {
+          "name": "販売",
+          "hint": "新しい注文が支払われたとき。"
+        },
+        "messages": {
+          "name": "メッセージ",
+          "hint": "お客様が組織に連絡したとき。"
+        },
+        "marketing": {
+          "name": "Yayatoh からのお知らせ",
+          "hint": "新機能やヒント。オンにしない限りオフです。"
+        }
+      },
+      "save": "設定を保存",
+      "saved": "通知設定を保存しました。",
+      "test": "テスト通知を送信",
+      "testSent": "テスト通知を送信しました。ベルを確認してください。",
+      "required": "チケット、領収書、セキュリティに関するメールは常に届きます。"
+    }
   },
   "nav": {
     "home": "ホーム",
@@ -529,7 +638,12 @@
     },
     "collectedBy": "支払いの受領者: {org}",
     "seat": "座席",
-    "seatLabel": "座席：{seat}"
+    "seatLabel": "座席：{seat}",
+    "emailsSent": "送信済みメール",
+    "emailsNone": "メールはまだありません。",
+    "emailSentAt": "{when} に送信",
+    "emailScheduled": "{when} に送信予定",
+    "emailQueued": "送信中"
   },
   "orders": {
     "title": "最近の注文",
@@ -1527,5 +1641,42 @@
       "emptyTitle": "この期間の売上はありません",
       "emptyDescription": "期間を長くするか、イベントページを共有して販売を始めましょう。"
     }
+  },
+  "unsubscribe": {
+    "metaTitle": "配信停止",
+    "eyebrow": "メール設定",
+    "title": "{org} からのメール",
+    "category": {
+      "reminders": "チケットをお持ちのイベント前のリマインダー。",
+      "event_updates": "参加するイベントについての主催者からのお知らせとメッセージ。",
+      "marketing": "主催者からのお知らせと特典。",
+      "sales": "新しい注文のお知らせ。",
+      "messages": "新しいメッセージのお知らせ。"
+    },
+    "categoryName": {
+      "reminders": "イベントのリマインダー",
+      "event_updates": "イベントのお知らせ",
+      "marketing": "お知らせと特典",
+      "sales": "注文のお知らせ",
+      "messages": "メッセージのお知らせ"
+    },
+    "address": "アドレス：{email}",
+    "question": "このアドレスで {org} からの{what}の受信を停止しますか？",
+    "confirm": "配信停止",
+    "done": "{org} からの{what}の配信を停止しました。",
+    "resubscribe": "再度購読する",
+    "transactionalNote": "チケット、領収書、返金など必要なメールは引き続き届きます。"
+  },
+  "devMailbox": {
+    "eyebrow": "開発",
+    "title": "開発用メールボックス",
+    "description": "開発中にプラットフォームが送信したメッセージです。このマシンの外には送信されていません。",
+    "filter": "受信者",
+    "apply": "絞り込む",
+    "emptyTitle": "メッセージはまだありません",
+    "emptyDescription": "開発中に送信されたメール、SMS、プッシュ通知がここに表示されます。",
+    "meta": "{channel}・宛先 {to}・{at}",
+    "show": "メッセージを表示",
+    "preview": "メールのプレビュー：{subject}"
   }
 }

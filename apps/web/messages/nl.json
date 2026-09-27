@@ -30,7 +30,116 @@
     "open": "Meldingen",
     "title": "Meldingen",
     "emptyTitle": "Je bent helemaal bij",
-    "emptyDescription": "Meldingen over verkoop, plaatsen en check-in verschijnen hier."
+    "emptyDescription": "Meldingen over verkoop, plaatsen en check-in verschijnen hier.",
+    "openWithCount": "Meldingen, {count, plural, =0 {geen ongelezen} one {# ongelezen} other {# ongelezen}}",
+    "unreadAnnouncement": "{count, plural, =0 {Geen ongelezen meldingen} one {Je hebt # ongelezen melding} other {Je hebt # ongelezen meldingen}}",
+    "markRead": "Markeren als gelezen",
+    "markReadItem": "“{title}” markeren als gelezen",
+    "markAllRead": "Alles markeren als gelezen",
+    "viewAll": "Alle meldingen",
+    "settings": "Meldingsinstellingen",
+    "unread": "Ongelezen",
+    "loadMore": "Oudere tonen",
+    "pageTitle": "Meldingen",
+    "pageDescription": "Meldingen voor jou in deze organisatie: nieuwe bestellingen en berichten.",
+    "allRead": "Alle meldingen zijn gelezen.",
+    "items": {
+      "sales": {
+        "order_paid": "Nieuwe bestelling: {name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} stuurde je een bericht over {eventName}"
+      },
+      "notifications": {
+        "test": "Testmelding: meldingen werken"
+      },
+      "other": "Melding"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Tickets",
+        "refund": "Terugbetaling"
+      },
+      "events": {
+        "reminder": "Herinnering evenement"
+      },
+      "tenancy": {
+        "invitation": "Teamuitnodiging"
+      },
+      "ticketing": {
+        "claim-link": "Link om ticket te claimen",
+        "holder-link": "Link naar tickets"
+      },
+      "attendees": {
+        "message": "Bericht van de organisator"
+      },
+      "messaging": {
+        "announcement": "Aankondiging",
+        "reply": "Antwoord",
+        "contact_replied": "Nieuw bericht"
+      },
+      "sales": {
+        "order_paid": "Melding nieuwe bestelling"
+      },
+      "notifications": {
+        "test": "Testmelding"
+      }
+    },
+    "status": {
+      "queued": "Wordt verzonden",
+      "scheduled": "Gepland",
+      "sent": "Verzonden",
+      "suppressed": "Niet verzonden",
+      "failed": "Mislukt",
+      "canceled": "Geannuleerd"
+    },
+    "reasons": {
+      "quiet_hours": "Wacht op het einde van de stille uren (21–8 uur bij de ontvanger)",
+      "messaging_paused": "Berichten zijn gepauzeerd door Yayatoh-support",
+      "unsubscribed": "De ontvanger heeft zich afgemeld",
+      "preference": "Uitgeschakeld in de instellingen van de ontvanger",
+      "no_device": "Geen apparaat voor push",
+      "no_address": "Geen adres",
+      "provider_error": "De e-mailprovider weigerde het",
+      "retrying": "Opnieuw proberen na een fout"
+    },
+    "channels": {
+      "email": "E-mail",
+      "sms": "Sms",
+      "push": "Push",
+      "in_app": "In de app"
+    },
+    "log": {
+      "title": "Berichten",
+      "empty": "Nog geen berichten over deze bestelling.",
+      "when": "Wanneer",
+      "message": "Bericht",
+      "to": "Aan",
+      "channel": "Kanaal"
+    },
+    "preferences": {
+      "title": "Meldingsinstellingen",
+      "description": "Kies hoe je hoort wat er gebeurt bij {org}. Je keuzes gelden alleen voor jou.",
+      "categories": {
+        "sales": {
+          "name": "Verkoop",
+          "hint": "Een nieuwe bestelling is betaald."
+        },
+        "messages": {
+          "name": "Berichten",
+          "hint": "Een klant schrijft je organisatie."
+        },
+        "marketing": {
+          "name": "Nieuws van Yayatoh",
+          "hint": "Productnieuws en tips. Uit, tenzij je het aanzet."
+        }
+      },
+      "save": "Instellingen opslaan",
+      "saved": "Je meldingsinstellingen zijn opgeslagen.",
+      "test": "Stuur me een testmelding",
+      "testSent": "Testmelding verstuurd. Kijk bij de bel.",
+      "required": "Tickets, bonnen en beveiligingsmails krijg je altijd."
+    }
   },
   "nav": {
     "home": "Start",
@@ -529,7 +638,12 @@
     },
     "collectedBy": "Betaling ontvangen door {org}",
     "seat": "Plaats",
-    "seatLabel": "Plaats: {seat}"
+    "seatLabel": "Plaats: {seat}",
+    "emailsSent": "Verzonden e-mails",
+    "emailsNone": "Nog geen e-mails.",
+    "emailSentAt": "Verzonden {when}",
+    "emailScheduled": "Gepland voor {when}",
+    "emailQueued": "Wordt verzonden"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -1527,5 +1641,42 @@
       "emptyTitle": "Geen verkopen in deze periode",
       "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
     }
+  },
+  "unsubscribe": {
+    "metaTitle": "Afmelden",
+    "eyebrow": "E-mailinstellingen",
+    "title": "E-mails van {org}",
+    "category": {
+      "reminders": "Herinneringen voor evenementen waarvoor je tickets hebt.",
+      "event_updates": "Nieuws en berichten van de organisator over evenementen die je bezoekt.",
+      "marketing": "Nieuws en aanbiedingen van de organisator.",
+      "sales": "Meldingen over nieuwe bestellingen.",
+      "messages": "Meldingen over nieuwe berichten."
+    },
+    "categoryName": {
+      "reminders": "evenementherinneringen",
+      "event_updates": "evenementnieuws",
+      "marketing": "nieuws en aanbiedingen",
+      "sales": "bestelmeldingen",
+      "messages": "berichtmeldingen"
+    },
+    "address": "Adres: {email}",
+    "question": "Geen {what} van {org} meer ontvangen op dit adres?",
+    "confirm": "Afmelden",
+    "done": "Je ontvangt geen {what} van {org} meer.",
+    "resubscribe": "Opnieuw aanmelden",
+    "transactionalNote": "Je blijft de e-mails krijgen die je nodig hebt, zoals tickets, bonnen en terugbetalingen."
+  },
+  "devMailbox": {
+    "eyebrow": "Ontwikkeling",
+    "title": "Ontwikkelpostvak",
+    "description": "Berichten die het platform tijdens ontwikkeling verstuurde. Niets hiervan heeft deze machine verlaten.",
+    "filter": "Ontvanger",
+    "apply": "Filteren",
+    "emptyTitle": "Nog geen berichten",
+    "emptyDescription": "E-mails, sms’jes en pushmeldingen uit de ontwikkelomgeving verschijnen hier.",
+    "meta": "{channel} aan {to} · {at}",
+    "show": "Bericht tonen",
+    "preview": "E-mailvoorbeeld: {subject}"
   }
 }

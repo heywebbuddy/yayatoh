@@ -429,6 +429,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../../packages/modules/notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders

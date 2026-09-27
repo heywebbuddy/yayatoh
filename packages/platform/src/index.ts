@@ -31,6 +31,7 @@ export {
   emitEvents,
   eventKey,
   type PublishedEvent,
+  recentEventsTx,
   type Subscriber,
 } from './outbox/outbox.ts';
 export {

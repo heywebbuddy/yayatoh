@@ -30,7 +30,116 @@
     "open": "Notifications",
     "title": "Notifications",
     "emptyTitle": "You're all caught up",
-    "emptyDescription": "Alerts about sales, seating and check-in will appear here."
+    "emptyDescription": "Alerts about sales, seating and check-in will appear here.",
+    "openWithCount": "Notifications, {count, plural, =0 {none unread} one {# unread} other {# unread}}",
+    "unreadAnnouncement": "{count, plural, =0 {No unread notifications} one {You have # unread notification} other {You have # unread notifications}}",
+    "markRead": "Mark as read",
+    "markReadItem": "Mark “{title}” as read",
+    "markAllRead": "Mark all as read",
+    "viewAll": "All notifications",
+    "settings": "Notification settings",
+    "unread": "Unread",
+    "loadMore": "Show older",
+    "pageTitle": "Notifications",
+    "pageDescription": "Alerts for you in this organization: new orders and messages.",
+    "allRead": "All notifications are marked as read.",
+    "items": {
+      "sales": {
+        "order_paid": "New order: {name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} sent you a message about {eventName}"
+      },
+      "notifications": {
+        "test": "Test notification: notifications are working"
+      },
+      "other": "Notification"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Tickets",
+        "refund": "Refund"
+      },
+      "events": {
+        "reminder": "Event reminder"
+      },
+      "tenancy": {
+        "invitation": "Team invitation"
+      },
+      "ticketing": {
+        "claim-link": "Ticket claim link",
+        "holder-link": "Link to tickets"
+      },
+      "attendees": {
+        "message": "Message from the organizer"
+      },
+      "messaging": {
+        "announcement": "Announcement",
+        "reply": "Reply",
+        "contact_replied": "New message"
+      },
+      "sales": {
+        "order_paid": "New order alert"
+      },
+      "notifications": {
+        "test": "Test notification"
+      }
+    },
+    "status": {
+      "queued": "Sending",
+      "scheduled": "Scheduled",
+      "sent": "Sent",
+      "suppressed": "Not sent",
+      "failed": "Failed",
+      "canceled": "Canceled"
+    },
+    "reasons": {
+      "quiet_hours": "Held for quiet hours (9 PM–8 AM for the recipient)",
+      "messaging_paused": "Messaging is paused by Yayatoh support",
+      "unsubscribed": "The recipient unsubscribed",
+      "preference": "Turned off in the recipient's settings",
+      "no_device": "No device to push to",
+      "no_address": "No address",
+      "provider_error": "The email provider refused it",
+      "retrying": "Retrying after an error"
+    },
+    "channels": {
+      "email": "Email",
+      "sms": "SMS",
+      "push": "Push",
+      "in_app": "In the app"
+    },
+    "log": {
+      "title": "Messages",
+      "empty": "No messages about this order yet.",
+      "when": "When",
+      "message": "Message",
+      "to": "To",
+      "channel": "Channel"
+    },
+    "preferences": {
+      "title": "Notification settings",
+      "description": "Choose how you hear about things in {org}. Your choices only affect you.",
+      "categories": {
+        "sales": {
+          "name": "Sales",
+          "hint": "A new order is paid."
+        },
+        "messages": {
+          "name": "Messages",
+          "hint": "A customer writes to your organization."
+        },
+        "marketing": {
+          "name": "News from Yayatoh",
+          "hint": "Product news and tips. Off unless you turn it on."
+        }
+      },
+      "save": "Save settings",
+      "saved": "Your notification settings are saved.",
+      "test": "Send me a test notification",
+      "testSent": "Test notification sent. Check the bell.",
+      "required": "Tickets, receipts and security emails always reach you."
+    }
   },
   "nav": {
     "home": "Home",
@@ -529,7 +638,12 @@
     },
     "collectedBy": "Payment collected by {org}",
     "seat": "Seat",
-    "seatLabel": "Seat: {seat}"
+    "seatLabel": "Seat: {seat}",
+    "emailsSent": "Emails sent",
+    "emailsNone": "No emails yet.",
+    "emailSentAt": "Sent {when}",
+    "emailScheduled": "Scheduled for {when}",
+    "emailQueued": "Sending"
   },
   "orders": {
     "title": "Recent orders",
@@ -1527,5 +1641,42 @@
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
     }
+  },
+  "unsubscribe": {
+    "metaTitle": "Unsubscribe",
+    "eyebrow": "Email settings",
+    "title": "Emails from {org}",
+    "category": {
+      "reminders": "Reminders before events you have tickets for.",
+      "event_updates": "Updates and messages from the organizer about events you're attending.",
+      "marketing": "News and offers from the organizer.",
+      "sales": "Alerts about new orders.",
+      "messages": "Alerts about new messages."
+    },
+    "categoryName": {
+      "reminders": "event reminders",
+      "event_updates": "event updates",
+      "marketing": "news and offers",
+      "sales": "order alerts",
+      "messages": "message alerts"
+    },
+    "address": "Address: {email}",
+    "question": "Stop receiving {what} from {org} at this address?",
+    "confirm": "Unsubscribe",
+    "done": "You're unsubscribed from {what} from {org}.",
+    "resubscribe": "Subscribe again",
+    "transactionalNote": "You'll still get the emails you need, like tickets, receipts and refunds."
+  },
+  "devMailbox": {
+    "eyebrow": "Development",
+    "title": "Dev mailbox",
+    "description": "Messages the platform sent in development. Nothing here left this machine.",
+    "filter": "Recipient",
+    "apply": "Filter",
+    "emptyTitle": "No messages yet",
+    "emptyDescription": "Emails, SMS and push notifications sent in development appear here.",
+    "meta": "{channel} to {to} · {at}",
+    "show": "Show message",
+    "preview": "Email preview: {subject}"
   }
 }

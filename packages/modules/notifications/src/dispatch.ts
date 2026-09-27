@@ -9,7 +9,7 @@ import { decryptParams } from './notifier.ts';
 import { preferenceEnabledTx } from './preferences.ts';
 import { isValidTimeZone, quietHoursRelease } from './quiet-hours.ts';
 import { messages, pushTokens, suppressions, templateOverrides } from './schema.ts';
-import { renderMessage } from './templates/render.ts';
+import { emailLocale, renderMessage } from './templates/render.ts';
 import { PLATFORM_SENDER, type Transports } from './transports.ts';
 
 export const UNSUBSCRIBE_PURPOSE = 'notifications.unsubscribe';
@@ -33,9 +33,15 @@ export interface DispatchResult {
   failed: number;
 }
 
-export function unsubscribeUrls(appOrigin: string, messageId: string) {
+/** The page link (in the recipient's language) and the RFC 8058 one-click endpoint. */
+export function unsubscribeUrls(appOrigin: string, messageId: string, locale = 'en') {
   const token = signLinkToken(UNSUBSCRIBE_PURPOSE, messageId);
-  return { page: `${appOrigin}/unsubscribe/${token}`, oneClick: `${appOrigin}/api/unsubscribe/${token}` };
+  const prefix = locale !== 'en' && /^[a-z]{2}(-[A-Z]{2})?$/.test(locale) ? `/${locale}` : '';
+  return {
+    token,
+    page: `${appOrigin}${prefix}/unsubscribe/${token}`,
+    oneClick: `${appOrigin}/api/unsubscribe/${token}`,
+  };
 }
 
 type Row = typeof messages.$inferSelect;
@@ -133,7 +139,7 @@ export async function dispatchDueTx(
         .select({ subject: templateOverrides.subject, intro: templateOverrides.intro })
         .from(templateOverrides)
         .where(and(eq(templateOverrides.kind, row.kind), eq(templateOverrides.locale, row.locale)));
-      const unsub = optional ? unsubscribeUrls(deps.appOrigin, row.id) : null;
+      const unsub = optional ? unsubscribeUrls(deps.appOrigin, row.id, emailLocale(row.locale)) : null;
       const href = typeof params._href === 'string' && params._href ? params._href : null;
       const rendered = renderMessage({
         kind: row.kind as MessageKind,

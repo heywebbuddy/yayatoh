@@ -1,4 +1,5 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
+import { orderMessagesQuery } from '@yayatoh/notifications';
 import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
@@ -35,6 +36,7 @@ export default async function OrderPage({
   }
   if (order.eventId !== ev.id) notFound();
   const refunds = await executeQuery(orderRefundsQuery, { orderId }, data.ctx, ports);
+  const messages = await executeQuery(orderMessagesQuery, { orderId }, data.ctx, ports);
   const disputes = roleCan(data.role, 'finance:read')
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
     : [];
@@ -197,6 +199,67 @@ export default async function OrderPage({
           </ul>
         </section>
       ) : null}
+
+      <section aria-labelledby="messages-heading" className="flex flex-col gap-3">
+        <h2 id="messages-heading" className="text-section">
+          {t('notifications.log.title')}
+        </h2>
+        {messages.length === 0 ? (
+          <p className="text-body text-zinc-600">{t('notifications.log.empty')}</p>
+        ) : (
+          <Table
+            caption={t('notifications.log.title')}
+            rowKey={(m) => m.id}
+            rows={messages}
+            columns={[
+              { key: 'when', header: t('notifications.log.when'), cell: (m) => when.format(m.at) },
+              {
+                key: 'kind',
+                header: t('notifications.log.message'),
+                cell: (m) => (
+                  <span className="flex flex-col">
+                    <span>{t(`notifications.kinds.${m.kind}`)}</span>
+                    {m.subject ? <span className="text-caption text-zinc-500">{m.subject}</span> : null}
+                  </span>
+                ),
+              },
+              { key: 'to', header: t('notifications.log.to'), cell: (m) => m.recipient ?? '' },
+              {
+                key: 'channel',
+                header: t('notifications.log.channel'),
+                cell: (m) => t(`notifications.channels.${m.channel}`),
+              },
+              {
+                key: 'status',
+                header: t('orders.status'),
+                cell: (m) => (
+                  <span className="flex flex-col">
+                    <StatusDot
+                      status={
+                        m.status === 'sent'
+                          ? 'success'
+                          : m.status === 'failed'
+                            ? 'danger'
+                            : m.status === 'suppressed'
+                              ? 'neutral'
+                              : 'info'
+                      }
+                      label={t(`notifications.status.${m.status}`)}
+                    />
+                    {m.reason && m.status !== 'sent' ? (
+                      <span className="text-caption text-zinc-500">
+                        {t.has(`notifications.reasons.${m.reason}`)
+                          ? t(`notifications.reasons.${m.reason}`)
+                          : m.reason}
+                      </span>
+                    ) : null}
+                  </span>
+                ),
+              },
+            ]}
+          />
+        )}
+      </section>
 
       {canRefund ? (
         <section aria-labelledby="refund-heading" className="flex flex-col gap-3">

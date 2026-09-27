@@ -30,7 +30,116 @@
     "open": "Notificaciones",
     "title": "Notificaciones",
     "emptyTitle": "Estás al día",
-    "emptyDescription": "Aquí aparecerán las alertas sobre ventas, asientos y check-in."
+    "emptyDescription": "Aquí aparecerán las alertas sobre ventas, asientos y check-in.",
+    "openWithCount": "Notificaciones, {count, plural, =0 {ninguna sin leer} one {# sin leer} other {# sin leer}}",
+    "unreadAnnouncement": "{count, plural, =0 {No hay notificaciones sin leer} one {Tienes # notificación sin leer} other {Tienes # notificaciones sin leer}}",
+    "markRead": "Marcar como leída",
+    "markReadItem": "Marcar «{title}» como leída",
+    "markAllRead": "Marcar todas como leídas",
+    "viewAll": "Todas las notificaciones",
+    "settings": "Ajustes de notificaciones",
+    "unread": "Sin leer",
+    "loadMore": "Ver anteriores",
+    "pageTitle": "Notificaciones",
+    "pageDescription": "Avisos para ti en esta organización: pedidos nuevos y mensajes.",
+    "allRead": "Todas las notificaciones están marcadas como leídas.",
+    "items": {
+      "sales": {
+        "order_paid": "Nuevo pedido: {name} compró {count, plural, one {# entrada} other {# entradas}} para {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} te envió un mensaje sobre {eventName}"
+      },
+      "notifications": {
+        "test": "Notificación de prueba: las notificaciones funcionan"
+      },
+      "other": "Notificación"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Entradas",
+        "refund": "Reembolso"
+      },
+      "events": {
+        "reminder": "Recordatorio del evento"
+      },
+      "tenancy": {
+        "invitation": "Invitación al equipo"
+      },
+      "ticketing": {
+        "claim-link": "Enlace para reclamar entrada",
+        "holder-link": "Enlace a las entradas"
+      },
+      "attendees": {
+        "message": "Mensaje del organizador"
+      },
+      "messaging": {
+        "announcement": "Anuncio",
+        "reply": "Respuesta",
+        "contact_replied": "Mensaje nuevo"
+      },
+      "sales": {
+        "order_paid": "Aviso de pedido nuevo"
+      },
+      "notifications": {
+        "test": "Notificación de prueba"
+      }
+    },
+    "status": {
+      "queued": "Enviando",
+      "scheduled": "Programado",
+      "sent": "Enviado",
+      "suppressed": "No enviado",
+      "failed": "Falló",
+      "canceled": "Cancelado"
+    },
+    "reasons": {
+      "quiet_hours": "En espera por horario de descanso (21:00–8:00 del destinatario)",
+      "messaging_paused": "El soporte de Yayatoh pausó los mensajes",
+      "unsubscribed": "El destinatario canceló la suscripción",
+      "preference": "Desactivado en los ajustes del destinatario",
+      "no_device": "No hay dispositivo para enviar",
+      "no_address": "Sin dirección",
+      "provider_error": "El proveedor de correo lo rechazó",
+      "retrying": "Reintentando tras un error"
+    },
+    "channels": {
+      "email": "Correo",
+      "sms": "SMS",
+      "push": "Push",
+      "in_app": "En la aplicación"
+    },
+    "log": {
+      "title": "Mensajes",
+      "empty": "Aún no hay mensajes sobre este pedido.",
+      "when": "Cuándo",
+      "message": "Mensaje",
+      "to": "Para",
+      "channel": "Canal"
+    },
+    "preferences": {
+      "title": "Ajustes de notificaciones",
+      "description": "Elige cómo te enteras de lo que pasa en {org}. Tus opciones solo te afectan a ti.",
+      "categories": {
+        "sales": {
+          "name": "Ventas",
+          "hint": "Se paga un pedido nuevo."
+        },
+        "messages": {
+          "name": "Mensajes",
+          "hint": "Un cliente escribe a tu organización."
+        },
+        "marketing": {
+          "name": "Novedades de Yayatoh",
+          "hint": "Novedades y consejos. Desactivado salvo que lo actives."
+        }
+      },
+      "save": "Guardar ajustes",
+      "saved": "Tus ajustes de notificaciones se guardaron.",
+      "test": "Enviarme una notificación de prueba",
+      "testSent": "Notificación de prueba enviada. Revisa la campana.",
+      "required": "Las entradas, los recibos y los correos de seguridad siempre te llegan."
+    }
   },
   "nav": {
     "home": "Inicio",
@@ -529,7 +638,12 @@
     },
     "collectedBy": "Pago cobrado por {org}",
     "seat": "Asiento",
-    "seatLabel": "Asiento: {seat}"
+    "seatLabel": "Asiento: {seat}",
+    "emailsSent": "Correos enviados",
+    "emailsNone": "Aún no hay correos.",
+    "emailSentAt": "Enviado {when}",
+    "emailScheduled": "Programado para {when}",
+    "emailQueued": "Enviando"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -1527,5 +1641,42 @@
       "emptyTitle": "No hay ventas en este periodo",
       "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
     }
+  },
+  "unsubscribe": {
+    "metaTitle": "Cancelar suscripción",
+    "eyebrow": "Ajustes de correo",
+    "title": "Correos de {org}",
+    "category": {
+      "reminders": "Recordatorios antes de los eventos para los que tienes entradas.",
+      "event_updates": "Novedades y mensajes del organizador sobre eventos a los que asistes.",
+      "marketing": "Novedades y ofertas del organizador.",
+      "sales": "Avisos de pedidos nuevos.",
+      "messages": "Avisos de mensajes nuevos."
+    },
+    "categoryName": {
+      "reminders": "recordatorios de eventos",
+      "event_updates": "novedades de eventos",
+      "marketing": "novedades y ofertas",
+      "sales": "avisos de pedidos",
+      "messages": "avisos de mensajes"
+    },
+    "address": "Dirección: {email}",
+    "question": "¿Dejar de recibir {what} de {org} en esta dirección?",
+    "confirm": "Cancelar suscripción",
+    "done": "Ya no recibirás {what} de {org}.",
+    "resubscribe": "Volver a suscribirme",
+    "transactionalNote": "Seguirás recibiendo los correos necesarios, como entradas, recibos y reembolsos."
+  },
+  "devMailbox": {
+    "eyebrow": "Desarrollo",
+    "title": "Buzón de desarrollo",
+    "description": "Mensajes que la plataforma envió en desarrollo. Nada de esto salió de esta máquina.",
+    "filter": "Destinatario",
+    "apply": "Filtrar",
+    "emptyTitle": "Aún no hay mensajes",
+    "emptyDescription": "Aquí aparecen los correos, SMS y notificaciones push enviados en desarrollo.",
+    "meta": "{channel} para {to} · {at}",
+    "show": "Mostrar mensaje",
+    "preview": "Vista previa del correo: {subject}"
   }
 }
