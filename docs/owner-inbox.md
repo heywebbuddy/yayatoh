@@ -8,6 +8,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Rotate the secrets committed in the legacy repo:** `APP_KEY`, Pusher key/secret/app ID, the staging DB credentials, and the Flutterwave sandbox keys.
 - [ ] **Review damage after the fixes.** Check for forged-payment bookings, unexpected email or role changes, and scraping in the access logs.
 - [ ] **Tell ABC** to change the venue Wi-Fi password and parking codes exposed through `private_info`.
+- [ ] **Delete merged agent branches on GitHub** (housekeeping; Claude Code's sessions may push only to their own branches and cannot delete). Already merged into `m0.5-foundation-ey5gqp`: `agent/m1.10`, `agent/m1.11`, `agent/m1.13`, `agent/m1.4b`, `agent/m1.4cd`, `agent/m1.14`. Delete them from the repo's Branches page; nothing is lost.
 - [x] **Install the Claude GitHub App** on `Pani-Digital-Services-LLC`, for the `yayatoh` and `yayatoh-legacy` repos only. See `docs/cloud-environment.md` §1.
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
