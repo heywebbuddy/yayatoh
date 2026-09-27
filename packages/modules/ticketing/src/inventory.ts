@@ -2,6 +2,7 @@ import { type FeeSchedule, feeScheduleTx, priceBreakdown } from '@yayatoh/billin
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError, money } from '@yayatoh/kernel';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { type PromoRow, promoDiscountMinor } from './promo.ts';
 import { ticketTypes } from './schema.ts';
 
 export interface LineRequest {
@@ -13,7 +14,10 @@ export interface QuotedLine {
   readonly ticketTypeId: string;
   readonly name: string;
   readonly quantity: number;
+  /** List price per ticket. */
   readonly unitFaceMinor: number;
+  /** Promo discount per ticket, off the face price before fees. */
+  readonly unitDiscountMinor: number;
   readonly unitFeeMinor: number;
   readonly unitAllInMinor: number;
   readonly unitOrganizerNetMinor: number;
@@ -22,9 +26,12 @@ export interface QuotedLine {
 export interface Quote {
   readonly currency: string;
   readonly lines: readonly QuotedLine[];
+  /** Face prices after discounts. */
   readonly subtotalMinor: number;
+  readonly discountMinor: number;
   readonly feeMinor: number;
   readonly totalMinor: number;
+  readonly promoCodeId: string | null;
   /** Frozen with the order (roadmap: "each order snapshots its fee schedule"). */
   readonly feeSchedule: FeeSchedule;
 }
@@ -37,7 +44,7 @@ export async function quoteTx(
   tx: TenantTx,
   eventId: string,
   requests: readonly LineRequest[],
-  opts: { now: Date; includeHidden: boolean },
+  opts: { now: Date; includeHidden: boolean; promo?: PromoRow | null },
 ): Promise<Quote> {
   const merged = new Map<string, number>();
   for (const r of requests) {
@@ -75,12 +82,18 @@ export async function quoteTx(
         max: r.maxPerOrder,
       });
     }
-    const p = priceBreakdown(money(r.priceMinor, r.currency), schedule, r.feeMode as 'pass_on' | 'absorb');
+    const discount = opts.promo ? promoDiscountMinor(opts.promo, r.id, r.priceMinor, r.currency) : 0;
+    const p = priceBreakdown(
+      money(r.priceMinor - discount, r.currency),
+      schedule,
+      r.feeMode as 'pass_on' | 'absorb',
+    );
     lines.push({
       ticketTypeId: r.id,
       name: r.name,
       quantity,
-      unitFaceMinor: p.face.amount,
+      unitFaceMinor: r.priceMinor,
+      unitDiscountMinor: discount,
       unitFeeMinor: p.fee.amount,
       unitAllInMinor: p.allIn.amount,
       unitOrganizerNetMinor: p.organizerNet.amount,
@@ -88,13 +101,19 @@ export async function quoteTx(
   }
   const totalMinor = lines.reduce((a, l) => a + l.unitAllInMinor * l.quantity, 0);
   const feeMinor = lines.reduce((a, l) => a + l.unitFeeMinor * l.quantity, 0);
+  const discountMinor = lines.reduce((a, l) => a + l.unitDiscountMinor * l.quantity, 0);
+  // A code that takes nothing off this cart is not applied (and not counted as used).
+  if (opts.promo && discountMinor === 0)
+    throw new DomainError('validation_failed', 'Promo code not valid', { reason: 'promo_invalid' });
   return {
     currency,
     lines,
     subtotalMinor: totalMinor - feeMinor,
+    discountMinor,
     feeMinor,
     totalMinor,
     feeSchedule: schedule,
+    promoCodeId: opts.promo?.id ?? null,
   };
 }
 

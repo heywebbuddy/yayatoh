@@ -44,6 +44,11 @@ export const orders = tenantTable(
     locale: text('locale').notNull().default('en'),
     currency: text('currency').notNull(),
     subtotalMinor: minor('subtotal_minor').notNull(),
+    /** Promo discount already taken off the subtotal (reporting; the subtotal is after it). */
+    discountMinor: minor('discount_minor').notNull().default(0),
+    /** `ticketing.promo_codes` (hand-written FK) and the code as the buyer typed it, normalized. */
+    promoCodeId: uuid('promo_code_id'),
+    promoCode: text('promo_code'),
     feeMinor: minor('fee_minor').notNull(),
     totalMinor: minor('total_minor').notNull(),
     fundsFlow: text('funds_flow').notNull(),
@@ -68,6 +73,7 @@ export const orders = tenantTable(
       'orders_totals_check',
       sql`subtotal_minor >= 0 and fee_minor >= 0 and total_minor = subtotal_minor + fee_minor`,
     ),
+    check('orders_discount_check', sql`discount_minor >= 0`),
     check('orders_funds_flow_check', sql`funds_flow in ('organizer_mor', 'platform_mor')`),
     check('orders_email_lower_check', sql`buyer_email = lower(buyer_email)`),
   ],
@@ -82,6 +88,7 @@ export const orderItems = tenantTable(
     name: text('name').notNull(),
     quantity: integer('quantity').notNull(),
     unitFaceMinor: minor('unit_face_minor').notNull(),
+    unitDiscountMinor: minor('unit_discount_minor').notNull().default(0),
     unitFeeMinor: minor('unit_fee_minor').notNull(),
     unitAllInMinor: minor('unit_all_in_minor').notNull(),
     unitOrganizerNetMinor: minor('unit_organizer_net_minor').notNull(),
@@ -94,5 +101,6 @@ export const orderItems = tenantTable(
       foreignColumns: [orders.orgId, orders.id],
     }).onDelete('cascade'),
     check('order_items_quantity_check', sql`quantity >= 1`),
+    check('order_items_discount_check', sql`unit_discount_minor between 0 and unit_face_minor`),
   ],
 );

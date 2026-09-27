@@ -40,7 +40,9 @@ export function CheckoutForm({
         ? t('checkout.soldOut')
         : state.reason === 'empty'
           ? t('checkout.chooseTickets')
-          : t(errorMessageKey(state.code));
+          : state.reason === 'promo_invalid'
+            ? t('checkout.promoInvalid')
+            : t(errorMessageKey(state.code));
   return (
     <form action={formAction} className="flex min-w-0 flex-1 flex-col gap-4">
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -112,6 +114,16 @@ export function CheckoutForm({
             </div>
             <div className="flex-1">
               <Input name="email" type="email" required autoComplete="email" label={t('checkout.email')} />
+            </div>
+            <div className="md:w-44">
+              <Input
+                name="promoCode"
+                maxLength={32}
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellCheck={false}
+                label={t('checkout.promoCode')}
+              />
             </div>
             <Button type="submit" disabled={pending}>
               {t('checkout.continue')}

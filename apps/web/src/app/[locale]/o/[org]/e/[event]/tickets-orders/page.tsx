@@ -1,14 +1,20 @@
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { listOrdersQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
-import { listTicketTypesQuery } from '@yayatoh/ticketing';
+import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { archiveTicketTypeAction, createTicketTypeAction } from './actions.ts';
+import {
+  archiveTicketTypeAction,
+  createPromoCodeAction,
+  createTicketTypeAction,
+  setPromoCodeActiveAction,
+} from './actions.ts';
 
 export default async function TicketsPage({
   params,
@@ -24,7 +30,10 @@ export default async function TicketsPage({
   const orders = roleCan(data.role, 'orders:read')
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
     : null;
+  const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
   const fmt = (minor: number) => formatMoney(money(minor, ev.currency), locale);
+  const pct = (bps: number) =>
+    new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(bps / 10_000);
   return (
     <>
       <PageHeader title={t('nav.ticketsOrders')} description={t('tickets.subtitle')} />
@@ -169,6 +178,80 @@ export default async function TicketsPage({
           )}
         </section>
       ) : null}
+      <section aria-labelledby="promo-heading" className="flex flex-col gap-3">
+        <h2 id="promo-heading" className="text-section">
+          {t('promo.title')}
+        </h2>
+        {promos.length === 0 ? (
+          <EmptyState title={t('promo.emptyTitle')} description={t('promo.emptyDescription')} />
+        ) : (
+          <Table
+            caption={t('promo.title')}
+            rowKey={(p) => p.id}
+            rows={promos}
+            columns={[
+              { key: 'code', header: t('promo.code'), cell: (p) => p.code, mono: true },
+              {
+                key: 'discount',
+                header: t('promo.discount'),
+                cell: (p) =>
+                  p.kind === 'percent'
+                    ? t('promo.percentOff', { value: pct(p.percentBps ?? 0) })
+                    : t('promo.amountOff', { amount: fmt(p.amountMinor ?? 0) }),
+              },
+              {
+                key: 'uses',
+                header: t('promo.uses'),
+                cell: (p) =>
+                  p.maxRedemptions === null
+                    ? formatNumber(p.redeemedCount, locale)
+                    : `${formatNumber(p.redeemedCount, locale)} / ${formatNumber(p.maxRedemptions, locale)}`,
+                mono: true,
+                align: 'end',
+              },
+              {
+                key: 'status',
+                header: t('promo.status'),
+                cell: (p) =>
+                  p.active ? (
+                    <StatusDot status="success" label={t('promo.active')} />
+                  ) : (
+                    <StatusDot status="neutral" label={t('promo.paused')} />
+                  ),
+              },
+              ...(canWrite
+                ? [
+                    {
+                      key: 'actions',
+                      header: t('tickets.actions'),
+                      align: 'end' as const,
+                      cell: (p: (typeof promos)[number]) => (
+                        <form action={setPromoCodeActiveAction.bind(null, org, event, p.id, !p.active)}>
+                          <Button
+                            type="submit"
+                            variant="ghost"
+                            size="sm"
+                            aria-label={t(p.active ? 'promo.pauseCode' : 'promo.resumeCode', {
+                              code: p.code,
+                            })}
+                          >
+                            {t(p.active ? 'promo.pause' : 'promo.resume')}
+                          </Button>
+                        </form>
+                      ),
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        )}
+        {canWrite ? (
+          <Card className="flex flex-col gap-3">
+            <h3 className="text-section">{t('promo.addTitle')}</h3>
+            <PromoCodeForm currency={ev.currency} action={createPromoCodeAction.bind(null, org, event)} />
+          </Card>
+        ) : null}
+      </section>
       {canWrite ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{t('tickets.addTitle')}</h2>

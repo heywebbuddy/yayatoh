@@ -5,7 +5,16 @@ import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { claimProviderEventTx, type ProviderEvent } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
-import { holdInventoryTx, issueTicketsTx, quoteTx, releaseHoldTx, sellHeldTx } from '@yayatoh/ticketing';
+import {
+  claimPromoTx,
+  holdInventoryTx,
+  issueTicketsTx,
+  quoteTx,
+  releaseHoldTx,
+  releasePromoTx,
+  resolvePromoTx,
+  sellHeldTx,
+} from '@yayatoh/ticketing';
 import { and, eq, inArray, lte } from 'drizzle-orm';
 import { z } from 'zod';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
@@ -70,8 +79,11 @@ export const startCheckoutCommand = tenantCommand({
     if (event?.status !== 'published' || event.visibility === 'private') {
       throw new DomainError('not_found', 'Event not found');
     }
-    const quote = await quoteTx(tx, event.id, input.items, { now: ctx.now, includeHidden: false });
+    const promo = input.promoCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
+    const quote = await quoteTx(tx, event.id, input.items, { now: ctx.now, includeHidden: false, promo });
     await holdInventoryTx(tx, lines([...quote.lines]));
+    // Counted with the hold, returned if the hold lapses.
+    if (promo) await claimPromoTx(tx, promo.id);
     const manageToken = randomBytes(32).toString('base64url');
     const free = quote.totalMinor === 0;
     const contact = await upsertContactTx(tx, ctx, {
@@ -101,6 +113,9 @@ export const startCheckoutCommand = tenantCommand({
         locale: input.locale,
         currency: quote.currency,
         subtotalMinor: quote.subtotalMinor,
+        discountMinor: quote.discountMinor,
+        promoCodeId: quote.promoCodeId,
+        promoCode: promo?.code ?? null,
         feeMinor: quote.feeMinor,
         totalMinor: quote.totalMinor,
         // Connected (organizer MoR) accounts arrive with Stripe Connect (M1.5e); until then all
@@ -231,6 +246,8 @@ export const applyProviderEventCommand = tenantCommand({
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       try {
         await holdInventoryTx(tx, lines(order.items));
+        // The buyer paid the discounted price, so the use counts again if there is one left.
+        if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);
       } catch {
         emit({
           type: 'order.payment_orphaned',
@@ -286,6 +303,7 @@ export const expireOrdersCommand = tenantCommand({
     for (const { id } of due) {
       const order = await loadOrderTx(tx, id);
       await releaseHoldTx(tx, lines(order.items));
+      if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
       await setStatus(tx, order, 'expire', ctx.now);
       emit({
         type: 'order.expired',

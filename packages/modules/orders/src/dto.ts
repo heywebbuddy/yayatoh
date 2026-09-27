@@ -17,6 +17,8 @@ export const OrderDto = z.object({
   buyerName: z.string(),
   currency: z.string(),
   subtotalMinor: z.int(),
+  discountMinor: z.int(),
+  promoCode: z.string().nullable(),
   feeMinor: z.int(),
   totalMinor: z.int(),
   expiresAt: z.date().nullable(),
@@ -75,5 +77,6 @@ export const StartCheckoutInput = z.object({
   }),
   /** An explicit, unticked-by-default checkbox; buying is never consent to marketing. */
   marketingOptIn: z.boolean().default(false),
+  promoCode: z.string().trim().max(64).optional(),
   locale: z.string().max(10).default('en'),
 });

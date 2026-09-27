@@ -16,7 +16,7 @@ import {
   type OrganizationDto,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
-import { createTicketTypeCommand } from '@yayatoh/ticketing';
+import { createPromoCodeCommand, createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { ports } from './ports.ts';
 
@@ -102,6 +102,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   const ga = await executeCommand(
     createTicketTypeCommand,
     { eventId: event.id, name: 'General Admission', priceMinor: 2500, quantityTotal: 100 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createPromoCodeCommand,
+    { eventId: event.id, code: 'FIXTURE10', kind: 'percent', percentBps: 1000 },
     ctx(),
     ports,
   );

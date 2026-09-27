@@ -46,6 +46,7 @@ export async function checkoutAction(
         items,
         buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
         marketingOptIn: form.get('marketingOptIn') === '1',
+        promoCode: String(form.get('promoCode') ?? '').trim() || undefined,
         locale,
       },
       ctx,

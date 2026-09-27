@@ -132,3 +132,44 @@ export const ticketBarcodes = tenantTable(
     check('ticket_barcodes_format_check', sql`format in ('yy1', 'legacy_eventmie')`),
   ],
 );
+
+export const PROMO_KINDS = ['percent', 'amount'] as const;
+
+/**
+ * Event promo codes: a percentage (basis points) or a fixed amount off each ticket's face price,
+ * before fees. Uses are claimed with a conditional UPDATE, so `max_redemptions` is never exceeded.
+ */
+export const promoCodes = tenantTable(
+  ticketingSchema,
+  'promo_codes',
+  {
+    eventId: uuid('event_id').notNull(),
+    code: text('code').notNull(),
+    kind: text('kind').notNull(),
+    percentBps: integer('percent_bps'),
+    amountMinor: bigint('amount_minor', { mode: 'number' }),
+    currency: text('currency').notNull(),
+    /** Empty = every ticket type of the event. */
+    ticketTypeIds: uuid('ticket_type_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    maxRedemptions: integer('max_redemptions'),
+    redeemedCount: integer('redeemed_count').notNull().default(0),
+    startsAt: ts('starts_at'),
+    endsAt: ts('ends_at'),
+    active: boolean('active').notNull().default(true),
+  },
+  (t) => [
+    uniqueIndex('promo_codes_org_event_code_key').on(t.orgId, t.eventId, t.code),
+    check('promo_codes_code_check', sql`code ~ '^[A-Z0-9_-]{3,32}$'`),
+    check('promo_codes_kind_check', sql`kind in ('percent', 'amount')`),
+    check(
+      'promo_codes_value_check',
+      sql`(kind = 'percent' and percent_bps between 1 and 10000 and amount_minor is null) or (kind = 'amount' and amount_minor > 0 and percent_bps is null)`,
+    ),
+    check(
+      'promo_codes_redemptions_check',
+      sql`redeemed_count >= 0 and (max_redemptions is null or (max_redemptions >= 1 and redeemed_count <= max_redemptions))`,
+    ),
+    check('promo_codes_window_check', sql`ends_at is null or starts_at is null or ends_at > starts_at`),
+    check('promo_codes_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+  ],
+);

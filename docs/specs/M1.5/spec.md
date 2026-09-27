@@ -143,6 +143,31 @@
 | AC2 | The adapter posts tagged-PDF HTML to Gotenberg | `packages/pdf/tests/tickets.test.ts` |
 | AC3 | A guest downloads their tickets PDF by manage token (application/pdf, no-store); an unknown token gets 404 | `e2e/checkout.spec.ts` |
 
+## M1.5d1 — promo codes (done)
+- **`ticketing.promo_codes`:**
+  - Event-scoped and upper-case, unique per event.
+  - `percent` (basis points) or `amount` (minor units) off **each ticket's face price, before fees**, so fees are charged on the discounted price and the all-in total stays honest.
+  - Optionally limited to some ticket types, with an optional window, maximum uses and on/off switch.
+- **Checkout:**
+  - `resolvePromoTx` reports every failure (unknown, paused, outside its window, used up, or nothing to discount in this cart) as the same `promo_invalid`, so codes can't be probed one condition at a time.
+  - A use is claimed with a conditional UPDATE in the checkout transaction and returned when the hold expires. If the buyer pays after expiry, the use is re-counted when one is left.
+- **Orders:** snapshot `discount_minor`, `promo_code_id`/`promo_code`, and per-item `unit_discount_minor`. Migration 0014 is additive; new CHECKs on existing tables use `NOT VALID` + `VALIDATE`, and the FK to `ticketing.promo_codes` is hand-written.
+- **Web:**
+  - The Tickets & Orders page gets a promo code list (uses, pause/resume) and an add form.
+  - Checkout gets an optional promo code field.
+  - The order page notes "Includes {amount} off with {code}".
+  - Strings are in 13 locales.
+
+### Acceptance (M1.5d1)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The discount comes off the face price before fees; codes are case-insensitive | `packages/testing/tests/promo.int.test.ts` |
+| AC2 | Amounts are capped at the face price; codes limited to some passes don't apply to others; a code that discounts nothing is refused | `promo.int.test.ts` |
+| AC3 | Unknown, paused, not-yet-started and ended codes are all just "not valid" | `promo.int.test.ts` |
+| AC4 | 50 concurrent checkouts never use a 5-use code more than 5 times; an expired hold returns its use | `promo.int.test.ts` |
+| AC5 | Viewers can't create codes; another org sees none; the fixture covers the table | `promo.int.test.ts`, `isolation.int.test.ts` |
+| AC6 | End to end: an organizer adds a one-use code, the first guest saves 25%, and the second is told it's not valid | `e2e/promo.spec.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5d:** promo codes, early-bird tiers, donation tickets, `access_dates`, forms engine v1 (checkout questions).
+- **M1.5d2:** early-bird tiers (price steps by date or quantity), donation tickets (buyer-chosen price with a minimum), `access_dates`, forms engine v1 (checkout questions).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

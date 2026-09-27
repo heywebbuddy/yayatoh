@@ -1,7 +1,12 @@
 'use server';
 
 import { executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
-import { archiveTicketTypeCommand, createTicketTypeCommand } from '@yayatoh/ticketing';
+import {
+  archiveTicketTypeCommand,
+  createPromoCodeCommand,
+  createTicketTypeCommand,
+  setPromoCodeActiveCommand,
+} from '@yayatoh/ticketing';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -48,5 +53,48 @@ export async function archiveTicketTypeAction(
 ): Promise<void> {
   const { data } = await loadEvent(org, event);
   await executeCommand(archiveTicketTypeCommand, { ticketTypeId }, data.ctx, ports);
+  revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
+}
+
+export async function createPromoCodeAction(
+  org: string,
+  event: string,
+  _prev: TicketFormState,
+  form: FormData,
+): Promise<TicketFormState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const get = (k: string) => String(form.get(k) ?? '').trim();
+  const kind = get('kind') === 'amount' ? 'amount' : 'percent';
+  const value = get('value').replace(',', '.');
+  try {
+    await executeCommand(
+      createPromoCodeCommand,
+      {
+        eventId: ev.id,
+        code: get('code'),
+        kind,
+        // "12.5" % → 1250 basis points; amounts use the event currency's minor units.
+        percentBps: kind === 'percent' ? Math.round(Number(value) * 100) : null,
+        amountMinor: kind === 'amount' ? moneyFromDecimal(value || '0', ev.currency).amount : null,
+        maxRedemptions: get('maxUses') ? Number(get('maxUses')) : null,
+      },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return { ok: false, code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
+  return { ok: true, code: null };
+}
+
+export async function setPromoCodeActiveAction(
+  org: string,
+  event: string,
+  promoCodeId: string,
+  active: boolean,
+): Promise<void> {
+  const { data } = await loadEvent(org, event);
+  await executeCommand(setPromoCodeActiveCommand, { promoCodeId, active }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
 }

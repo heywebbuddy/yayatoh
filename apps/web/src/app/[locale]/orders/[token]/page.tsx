@@ -50,6 +50,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
         </div>
         <p className="text-caption text-zinc-500">{t('order.feesIncluded', { fees: fmt(order.feeMinor) })}</p>
+        {order.discountMinor > 0 ? (
+          <p className="text-caption text-zinc-500">
+            {t('order.discountApplied', { amount: fmt(order.discountMinor), code: order.promoCode ?? '' })}
+          </p>
+        ) : null}
       </Card>
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
