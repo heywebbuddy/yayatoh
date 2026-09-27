@@ -589,6 +589,28 @@
     "wipe": "Apagar",
     "wipeFor": "Apagar {label}",
     "revoke": "Revogar",
-    "revokeFor": "Revogar {label}"
+    "revokeFor": "Revogar {label}",
+    "linkHint": "Ou abra este link no dispositivo: ele configura o leitor para este evento.",
+    "openScanner": "Abrir o leitor neste dispositivo"
+  },
+  "scan": {
+    "title": "Leitor",
+    "setupTitle": "Configurar este leitor",
+    "setupHint": "Use o link ou a chave de Check-in → Dispositivos de leitura. A lista de convidados é baixada uma vez e depois as leituras funcionam sem conexão.",
+    "eventId": "ID do evento",
+    "deviceKey": "Chave do dispositivo",
+    "start": "Começar a ler",
+    "firstSyncFailed": "Não foi possível baixar a lista de convidados. Verifique a chave e a conexão e tente de novo.",
+    "online": "Online",
+    "offline": "Offline — as leituras ficam salvas e serão sincronizadas",
+    "tickets": "{count, plural, one {# ingresso neste dispositivo} other {# ingressos neste dispositivo}}",
+    "queued": "{count, plural, =0 {Todas as leituras sincronizadas} one {# leitura aguardando sincronização} other {# leituras aguardando sincronização}}",
+    "lastSync": "Atualizado às {time}",
+    "camera": "Usar câmera",
+    "stopCamera": "Parar câmera",
+    "confirmed": "Confirmado pelo servidor",
+    "pending": "Verificado neste dispositivo — será confirmado ao sincronizar",
+    "wipedTitle": "Este leitor foi apagado",
+    "wipedDescription": "A lista de convidados e a chave foram removidas. Peça a um organizador um novo link de dispositivo para voltar a ler."
   }
 }

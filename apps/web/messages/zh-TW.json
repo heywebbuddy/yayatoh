@@ -589,6 +589,28 @@
     "wipe": "清除",
     "wipeFor": "清除 {label}",
     "revoke": "撤銷",
-    "revokeFor": "撤銷 {label}"
+    "revokeFor": "撤銷 {label}",
+    "linkHint": "或在裝置上開啟此連結：它會為本活動設定好掃描器。",
+    "openScanner": "在此裝置上開啟掃描器"
+  },
+  "scan": {
+    "title": "掃描器",
+    "setupTitle": "設定此掃描器",
+    "setupHint": "使用「報到 → 掃描裝置」中的連結或金鑰。賓客名單只需下載一次，之後無需連線即可掃描。",
+    "eventId": "活動 ID",
+    "deviceKey": "裝置金鑰",
+    "start": "開始掃描",
+    "firstSyncFailed": "無法下載賓客名單。請檢查金鑰和網路連線，然後再試一次。",
+    "online": "在線",
+    "offline": "離線，掃描已儲存，稍後同步",
+    "tickets": "{count, plural, other {此裝置上有 # 張票}}",
+    "queued": "{count, plural, =0 {所有掃描皆已同步} other {# 筆掃描待同步}}",
+    "lastSync": "更新於 {time}",
+    "camera": "使用相機",
+    "stopCamera": "停止相機",
+    "confirmed": "已由伺服器確認",
+    "pending": "已在此裝置上核驗，同步後確認",
+    "wipedTitle": "此掃描器已被清除",
+    "wipedDescription": "其賓客名單和金鑰已被刪除。請向主辦單位索取新的裝置連結以繼續掃描。"
   }
 }

@@ -589,6 +589,28 @@
     "wipe": "Cancella",
     "wipeFor": "Cancella {label}",
     "revoke": "Revoca",
-    "revokeFor": "Revoca {label}"
+    "revokeFor": "Revoca {label}",
+    "linkHint": "Oppure apri questo link sul dispositivo: configura lo scanner per questo evento.",
+    "openScanner": "Apri lo scanner su questo dispositivo"
+  },
+  "scan": {
+    "title": "Scanner",
+    "setupTitle": "Configura questo scanner",
+    "setupHint": "Usa il link o la chiave da Check-in → Dispositivi di scansione. La lista ospiti viene scaricata una volta, poi la scansione funziona senza connessione.",
+    "eventId": "ID evento",
+    "deviceKey": "Chiave del dispositivo",
+    "start": "Inizia a scansionare",
+    "firstSyncFailed": "Impossibile scaricare la lista ospiti. Controlla la chiave e la connessione, poi riprova.",
+    "online": "Online",
+    "offline": "Offline: le scansioni vengono salvate e saranno sincronizzate",
+    "tickets": "{count, plural, one {# biglietto su questo dispositivo} other {# biglietti su questo dispositivo}}",
+    "queued": "{count, plural, =0 {Tutte le scansioni sincronizzate} one {# scansione in attesa di sincronizzazione} other {# scansioni in attesa di sincronizzazione}}",
+    "lastSync": "Aggiornato alle {time}",
+    "camera": "Usa la fotocamera",
+    "stopCamera": "Ferma la fotocamera",
+    "confirmed": "Confermato dal server",
+    "pending": "Verificato su questo dispositivo: sarà confermato dopo la sincronizzazione",
+    "wipedTitle": "Questo scanner è stato cancellato",
+    "wipedDescription": "La lista ospiti e la chiave sono state rimosse. Chiedi a un organizzatore un nuovo link del dispositivo per tornare a scansionare."
   }
 }

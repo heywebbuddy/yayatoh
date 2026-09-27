@@ -589,6 +589,28 @@
     "wipe": "消去",
     "wipeFor": "{label}を消去",
     "revoke": "取り消す",
-    "revokeFor": "{label}を取り消す"
+    "revokeFor": "{label}を取り消す",
+    "linkHint": "または端末でこのリンクを開いてください。このイベント用にスキャナーが設定されます。",
+    "openScanner": "この端末でスキャナーを開く"
+  },
+  "scan": {
+    "title": "スキャナー",
+    "setupTitle": "このスキャナーを設定",
+    "setupHint": "チェックイン → スキャン端末のリンクまたはキーを使用してください。ゲストリストは一度だけダウンロードされ、その後は接続なしでスキャンできます。",
+    "eventId": "イベントID",
+    "deviceKey": "端末キー",
+    "start": "スキャンを開始",
+    "firstSyncFailed": "ゲストリストをダウンロードできませんでした。キーと接続を確認して、もう一度お試しください。",
+    "online": "オンライン",
+    "offline": "オフライン（スキャンは保存され、後で同期されます）",
+    "tickets": "{count, plural, other {この端末のチケット #枚}}",
+    "queued": "{count, plural, =0 {すべてのスキャンを同期済み} other {同期待ちのスキャン #件}}",
+    "lastSync": "{time}に更新",
+    "camera": "カメラを使う",
+    "stopCamera": "カメラを停止",
+    "confirmed": "サーバーで確認済み",
+    "pending": "この端末で確認済み（同期後に確定）",
+    "wipedTitle": "このスキャナーは消去されました",
+    "wipedDescription": "ゲストリストとキーは削除されました。再度スキャンするには、主催者に新しい端末リンクを依頼してください。"
   }
 }

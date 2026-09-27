@@ -589,6 +589,28 @@
     "wipe": "Effacer",
     "wipeFor": "Effacer {label}",
     "revoke": "Révoquer",
-    "revokeFor": "Révoquer {label}"
+    "revokeFor": "Révoquer {label}",
+    "linkHint": "Ou ouvrez ce lien sur l’appareil : il configure le scanner pour cet événement.",
+    "openScanner": "Ouvrir le scanner sur cet appareil"
+  },
+  "scan": {
+    "title": "Scanner",
+    "setupTitle": "Configurer ce scanner",
+    "setupHint": "Utilisez le lien ou la clé de Check-in → Appareils de scan. La liste d’invités est téléchargée une fois, puis le scan fonctionne sans connexion.",
+    "eventId": "ID de l’événement",
+    "deviceKey": "Clé de l’appareil",
+    "start": "Commencer le scan",
+    "firstSyncFailed": "Impossible de télécharger la liste d’invités. Vérifiez la clé et la connexion, puis réessayez.",
+    "online": "En ligne",
+    "offline": "Hors ligne — les scans sont enregistrés et seront synchronisés",
+    "tickets": "{count, plural, one {# billet sur cet appareil} other {# billets sur cet appareil}}",
+    "queued": "{count, plural, =0 {Tous les scans sont synchronisés} one {# scan en attente de synchronisation} other {# scans en attente de synchronisation}}",
+    "lastSync": "Mis à jour à {time}",
+    "camera": "Utiliser la caméra",
+    "stopCamera": "Arrêter la caméra",
+    "confirmed": "Confirmé par le serveur",
+    "pending": "Vérifié sur cet appareil — sera confirmé après synchronisation",
+    "wipedTitle": "Ce scanner a été effacé",
+    "wipedDescription": "Sa liste d’invités et sa clé ont été supprimées. Demandez à un organisateur un nouveau lien d’appareil pour scanner à nouveau."
   }
 }

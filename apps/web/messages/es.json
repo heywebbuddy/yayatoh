@@ -589,6 +589,28 @@
     "wipe": "Borrar",
     "wipeFor": "Borrar {label}",
     "revoke": "Revocar",
-    "revokeFor": "Revocar {label}"
+    "revokeFor": "Revocar {label}",
+    "linkHint": "O abre este enlace en el dispositivo: configura el escáner para este evento.",
+    "openScanner": "Abrir el escáner en este dispositivo"
+  },
+  "scan": {
+    "title": "Escáner",
+    "setupTitle": "Configura este escáner",
+    "setupHint": "Usa el enlace o la clave de Check-in → Dispositivos de escaneo. La lista de invitados se descarga una vez y después se puede escanear sin conexión.",
+    "eventId": "ID del evento",
+    "deviceKey": "Clave del dispositivo",
+    "start": "Empezar a escanear",
+    "firstSyncFailed": "No se pudo descargar la lista de invitados. Comprueba la clave y la conexión, y vuelve a intentarlo.",
+    "online": "En línea",
+    "offline": "Sin conexión: los escaneos se guardan y se sincronizarán",
+    "tickets": "{count, plural, one {# entrada en este dispositivo} other {# entradas en este dispositivo}}",
+    "queued": "{count, plural, =0 {Todos los escaneos sincronizados} one {# escaneo pendiente de sincronizar} other {# escaneos pendientes de sincronizar}}",
+    "lastSync": "Actualizado {time}",
+    "camera": "Usar cámara",
+    "stopCamera": "Detener cámara",
+    "confirmed": "Confirmado por el servidor",
+    "pending": "Comprobado en este dispositivo: se confirmará al sincronizar",
+    "wipedTitle": "Este escáner se ha borrado",
+    "wipedDescription": "Se eliminaron su lista de invitados y su clave. Pide a un organizador un nuevo enlace de dispositivo para volver a escanear."
   }
 }

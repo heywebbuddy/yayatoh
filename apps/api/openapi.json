@@ -133,6 +133,9 @@
                               "type": "string",
                               "format": "uuid"
                             },
+                            "name": {
+                              "type": "string"
+                            },
                             "startsAt": {
                               "type": "string"
                             },
@@ -145,6 +148,7 @@
                           },
                           "required": [
                             "id",
+                            "name",
                             "startsAt",
                             "endsAt",
                             "timezone"

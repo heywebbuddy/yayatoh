@@ -589,6 +589,28 @@
     "wipe": "清除",
     "wipeFor": "清除 {label}",
     "revoke": "撤销",
-    "revokeFor": "撤销 {label}"
+    "revokeFor": "撤销 {label}",
+    "linkHint": "或在设备上打开此链接：它会为本活动设置好扫描器。",
+    "openScanner": "在此设备上打开扫描器"
+  },
+  "scan": {
+    "title": "扫描器",
+    "setupTitle": "设置此扫描器",
+    "setupHint": "使用“签到 → 扫描设备”中的链接或密钥。宾客名单只需下载一次，之后无需联网即可扫描。",
+    "eventId": "活动 ID",
+    "deviceKey": "设备密钥",
+    "start": "开始扫描",
+    "firstSyncFailed": "无法下载宾客名单。请检查密钥和网络连接，然后重试。",
+    "online": "在线",
+    "offline": "离线，扫描已保存，稍后同步",
+    "tickets": "{count, plural, other {此设备上有 # 张票}}",
+    "queued": "{count, plural, =0 {所有扫描均已同步} other {# 条扫描待同步}}",
+    "lastSync": "更新于 {time}",
+    "camera": "使用摄像头",
+    "stopCamera": "停止摄像头",
+    "confirmed": "已由服务器确认",
+    "pending": "已在此设备上核验，同步后确认",
+    "wipedTitle": "此扫描器已被清除",
+    "wipedDescription": "其宾客名单和密钥已被删除。请向主办方索取新的设备链接以继续扫描。"
   }
 }

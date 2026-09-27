@@ -589,6 +589,28 @@
     "wipe": "Löschen",
     "wipeFor": "{label} löschen",
     "revoke": "Widerrufen",
-    "revokeFor": "{label} widerrufen"
+    "revokeFor": "{label} widerrufen",
+    "linkHint": "Oder öffne diesen Link auf dem Gerät: Er richtet den Scanner für dieses Event ein.",
+    "openScanner": "Scanner auf diesem Gerät öffnen"
+  },
+  "scan": {
+    "title": "Scanner",
+    "setupTitle": "Diesen Scanner einrichten",
+    "setupHint": "Nutze den Link oder Schlüssel aus Check-in → Scan-Geräte. Die Gästeliste wird einmal heruntergeladen, danach funktioniert das Scannen ohne Verbindung.",
+    "eventId": "Event-ID",
+    "deviceKey": "Geräteschlüssel",
+    "start": "Scannen starten",
+    "firstSyncFailed": "Die Gästeliste konnte nicht heruntergeladen werden. Prüfe den Schlüssel und die Verbindung und versuche es erneut.",
+    "online": "Online",
+    "offline": "Offline – Scans werden gespeichert und später synchronisiert",
+    "tickets": "{count, plural, one {# Ticket auf diesem Gerät} other {# Tickets auf diesem Gerät}}",
+    "queued": "{count, plural, =0 {Alle Scans synchronisiert} one {# Scan wartet auf Synchronisierung} other {# Scans warten auf Synchronisierung}}",
+    "lastSync": "Aktualisiert {time}",
+    "camera": "Kamera verwenden",
+    "stopCamera": "Kamera stoppen",
+    "confirmed": "Vom Server bestätigt",
+    "pending": "Auf diesem Gerät geprüft – wird nach der Synchronisierung bestätigt",
+    "wipedTitle": "Dieser Scanner wurde gelöscht",
+    "wipedDescription": "Gästeliste und Schlüssel wurden entfernt. Bitte einen Veranstalter um einen neuen Gerätelink, um wieder zu scannen."
   }
 }

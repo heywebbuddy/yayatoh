@@ -589,6 +589,28 @@
     "wipe": "Wissen",
     "wipeFor": "{label} wissen",
     "revoke": "Intrekken",
-    "revokeFor": "{label} intrekken"
+    "revokeFor": "{label} intrekken",
+    "linkHint": "Of open deze link op het apparaat: hij stelt de scanner in voor dit evenement.",
+    "openScanner": "Scanner openen op dit apparaat"
+  },
+  "scan": {
+    "title": "Scanner",
+    "setupTitle": "Deze scanner instellen",
+    "setupHint": "Gebruik de link of sleutel uit Check-in → Scanapparaten. De gastenlijst wordt één keer gedownload, daarna werkt scannen zonder verbinding.",
+    "eventId": "Evenement-ID",
+    "deviceKey": "Apparaatsleutel",
+    "start": "Beginnen met scannen",
+    "firstSyncFailed": "Kan de gastenlijst niet downloaden. Controleer de sleutel en de verbinding en probeer het opnieuw.",
+    "online": "Online",
+    "offline": "Offline: scans worden bewaard en later gesynchroniseerd",
+    "tickets": "{count, plural, one {# ticket op dit apparaat} other {# tickets op dit apparaat}}",
+    "queued": "{count, plural, =0 {Alle scans gesynchroniseerd} one {# scan wacht op synchronisatie} other {# scans wachten op synchronisatie}}",
+    "lastSync": "Bijgewerkt om {time}",
+    "camera": "Camera gebruiken",
+    "stopCamera": "Camera stoppen",
+    "confirmed": "Bevestigd door de server",
+    "pending": "Gecontroleerd op dit apparaat: wordt bevestigd na synchronisatie",
+    "wipedTitle": "Deze scanner is gewist",
+    "wipedDescription": "De gastenlijst en sleutel zijn verwijderd. Vraag een organisator om een nieuwe apparaatlink om weer te scannen."
   }
 }
