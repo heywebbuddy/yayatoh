@@ -4,7 +4,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
-import { claimProviderEventTx, fundsFlowTx, type ProviderEvent } from '@yayatoh/payments';
+import { claimProviderEventTx, fundsFlowTx, type ProviderEvent, postSaleTx } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import {
@@ -284,6 +284,14 @@ export const applyProviderEventCommand = tenantCommand({
     await sellHeldTx(tx, lines(order.items));
     const row = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
     await issueFor(tx, ctx, row, order.items);
+    // The ledger records the sale in the same transaction (roadmap §5.3).
+    await postSaleTx(tx, ctx, {
+      orderId: order.id,
+      fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor',
+      totalMinor: order.totalMinor,
+      feeMinor: order.feeMinor,
+      currency: order.currency,
+    });
     emit({
       type: 'order.paid',
       version: 1,

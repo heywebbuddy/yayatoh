@@ -30,6 +30,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Tenant domain** (M0.1): buy the tenant apex (e.g. `yayatoh.events`, availability unverified) and submit it to the Public Suffix List.
   Custom domains (M1.3d) run on a fake hosting provider until then: the Vercel adapter needs a Vercel API token scoped to the web project, the project id, and wildcard DNS for the tenant apex (`*.{apex}` → Vercel). Set `TENANT_APEX` once the name is bought. Label: `infra`.
 - [ ] **Platform Terms of Service and DPA texts** (M1.3a): the click-wrap records acceptances of versioned *draft* texts (`apps/web/src/content/platform-legal.ts`). Counsel provides the final wording (and translations if wanted); bumping the version in `PLATFORM_AGREEMENTS` asks every org to accept again. Label: `legal-copy`.
+- [ ] **Ledger role in production** (M1.6a): the production role runbook must create the NOLOGIN role `ledger_writer` and grant it to `migrator` (as `pnpm db:bootstrap` does locally), before the M1.6 migrations run. Label: `db-migration`, `payments`.
 - [ ] **Counsel and Stripe questions** (M0.1):
   - Hybrid payments model.
   - Sales and admissions tax for platform-charged orders.

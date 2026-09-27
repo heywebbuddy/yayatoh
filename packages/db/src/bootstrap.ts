@@ -31,6 +31,10 @@ export async function bootstrapRoles(
       `${exists ? 'ALTER' : 'CREATE'} ROLE ${ident(name)} WITH ${attrs} PASSWORD ${lit(password)}`,
     );
   }
+  // The ledger owner never logs in; the migrator must be a member to hand it the function.
+  const [lw] = await admin`select 1 from pg_roles where rolname = ${ROLE.ledgerWriter}`;
+  if (!lw) await admin.unsafe(`CREATE ROLE ${ident(ROLE.ledgerWriter)} NOLOGIN NOSUPERUSER NOBYPASSRLS`);
+  await admin.unsafe(`GRANT ${ident(ROLE.ledgerWriter)} TO ${ident(ROLE.migrator)}`);
   const db = ident(database);
   await admin.unsafe(`GRANT CONNECT, CREATE, TEMPORARY ON DATABASE ${db} TO ${ROLE.migrator}`);
   await admin.unsafe(`GRANT CONNECT ON DATABASE ${db} TO ${ROLE.appUser}, ${ROLE.platformReader}`);

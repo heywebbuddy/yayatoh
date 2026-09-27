@@ -137,6 +137,13 @@
       "title": "Domains",
       "primary": "primary",
       "wallets": "wallets ready"
+    },
+    "ledger": {
+      "title": "Ledger",
+      "empty": "No journals yet.",
+      "account": "Account",
+      "balance": "Balance (minor units)",
+      "note": "Debits are positive. Organizer payables are negative: money owed to the organizer."
     }
   },
   "accessLog": {

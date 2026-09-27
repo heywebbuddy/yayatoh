@@ -1,6 +1,6 @@
 import { feeScheduleQuery, getEntitlementsQuery } from '@yayatoh/billing';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { payoutAccountQuery } from '@yayatoh/payments';
+import { ledgerBalancesQuery, payoutAccountQuery } from '@yayatoh/payments';
 import { MODULE_KEYS } from '@yayatoh/platform';
 import {
   getOrganizationQuery,
@@ -64,13 +64,14 @@ export default async function TenantPage({
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
-  const [members, pauses, payout, entitlements, fee, domains] = await Promise.all([
+  const [members, pauses, payout, entitlements, fee, domains, ledger] = await Promise.all([
     executeQuery(listMembersQuery, {}, ctx, ports),
     executeQuery(suspensionHistoryQuery, {}, ctx, ports),
     executeQuery(payoutAccountQuery, {}, ctx, ports),
     executeQuery(getEntitlementsQuery, {}, ctx, ports),
     executeQuery(feeScheduleQuery, { currency: org.currency }, ctx, ports),
     executeQuery(listDomainsQuery, {}, ctx, ports),
+    executeQuery(ledgerBalancesQuery, {}, ctx, ports),
   ]);
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
@@ -177,6 +178,37 @@ export default async function TenantPage({
             ) : null}
           </form>
         ) : null}
+      </Section>
+
+      <Section id="ledger" title={t('ledger.title')}>
+        {ledger.length === 0 ? (
+          <p className="text-body text-zinc-600">{t('ledger.empty')}</p>
+        ) : (
+          <table className="w-full text-start text-body">
+            <caption className="sr-only">{t('ledger.title')}</caption>
+            <thead className="text-caption text-zinc-500">
+              <tr>
+                <th scope="col" className="py-1 pe-4 text-start font-normal">
+                  {t('ledger.account')}
+                </th>
+                <th scope="col" className="py-1 text-end font-normal">
+                  {t('ledger.balance')}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {ledger.map((l) => (
+                <tr key={`${l.account}:${l.currency}`} className="border-t border-zinc-100">
+                  <td className="py-1.5 pe-4 font-mono text-caption">{l.account}</td>
+                  <td className="py-1.5 text-end font-mono tabular-nums">
+                    {l.currency} {l.balanceMinor}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <p className="text-caption text-zinc-500">{t('ledger.note')}</p>
       </Section>
 
       <Section id="fees" title={t('fees.title')}>
