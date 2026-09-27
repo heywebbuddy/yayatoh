@@ -43,6 +43,7 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Red
 - `packages/platform` (tier 0): outbox + subscribers, command ports (`createCommandPorts`), `tenantCommand`/`tenantQuery`, module keys, profiles registry + `composeNav`.
 - `packages/modules/*`: one package per bounded context with a `MODULE.md` (invariants) and `yayatoh.tier` in package.json. `tenancy` and `billing` are tier 1.
 - `packages/testing`: `twoOrgs()` fixture, the composed `ports`, the isolation suite. **Every new tenant table must get rows for both orgs in `createOrgFixture`** — the isolation suite fails otherwise.
+- `packages/api-v1`: the `/v1` router (`createV1`), mounted by `apps/api` at `/v1` and by the web at `/api/v1`. Org resources under `/v1/orgs/{org}`; wire allowlists in `src/resources.ts`. `packages/sdk`: the generated TypeScript client (`pnpm --filter @yayatoh/sdk generate` after `/v1` changes).
 - `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss + the single-leader outbox relay), `tools/check-modules` (with gate canaries).
 
 **Recipes**
