@@ -207,6 +207,41 @@
                               "ticketTypeIds"
                             ]
                           }
+                        },
+                        "version": {
+                          "type": "integer"
+                        },
+                        "scope": {
+                          "type": "object",
+                          "properties": {
+                            "eventId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "deviceId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "checkpointIds": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "string",
+                                "format": "uuid"
+                              }
+                            },
+                            "signature": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "eventId",
+                            "deviceId",
+                            "checkpointIds",
+                            "signature"
+                          ]
                         }
                       },
                       "required": [
@@ -215,7 +250,9 @@
                         "salt",
                         "serverTime",
                         "unknownPolicy",
-                        "checkpoints"
+                        "checkpoints",
+                        "version",
+                        "scope"
                       ]
                     },
                     "rows": {
@@ -311,6 +348,43 @@
           },
           "401": {
             "description": "Missing or unknown device token",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The device is handed to a member with no role at this event",
             "content": {
               "application/problem+json": {
                 "schema": {
