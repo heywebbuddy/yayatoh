@@ -1,7 +1,12 @@
 import type { HostKind } from '../hosts.ts';
 
-/** Private areas never crawled on any public host (buyer, holder and organizer pages). */
+/**
+ * Private areas never crawled on any public host (buyer, holder and organizer pages; M1.14a):
+ * secret-link pages, checkout, the scanner, sign-in and the console below `/o/{slug}` (the org's
+ * own public page, `/o/{slug}`, stays crawlable on the marketplace).
+ */
 export const PRIVATE_PATHS = [
+  '/o/*/',
   '/api/',
   '/checkout/',
   '/orders/',

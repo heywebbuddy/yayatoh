@@ -34,6 +34,7 @@ function directives(header: string | undefined): Map<string, string[]> {
 const testIp = () => `203.0.113.${1 + Math.floor(Math.random() * 254)}`;
 const ipContext = (browser: Browser) => browser.newContext({ extraHTTPHeaders: { 'x-real-ip': testIp() } });
 
+const MARKET = `http://yayatoh.localhost:${Number(process.env.E2E_PORT ?? 3100)}`;
 const unique = () => `${test.info().project.name}-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
 
 test.describe('security headers and CSP', () => {
@@ -97,11 +98,15 @@ test.describe('security headers and CSP', () => {
   });
 
   test('robots.txt keeps crawlers out of the console and secret-link pages', async ({ request }) => {
-    const res = await request.get('/robots.txt');
+    // robots.txt is per host (M1.11b). Public hosts (here the marketplace) list the private areas;
+    // the console below /o/{slug} is excluded while the org's public page stays crawlable.
+    const res = await request.get(`${MARKET}/robots.txt`);
     expect(res.status()).toBe(200);
     const body = await res.text();
-    for (const p of ['/o/', '/orders/', '/my-tickets/', '/claim/', '/invite/', '/api/'])
+    for (const p of ['/o/*/', '/orders/', '/my-tickets/', '/claim/', '/invite/', '/api/'])
       expect(body).toContain(`Disallow: ${p}`);
+    // Dev and preview hosts are never crawled at all.
+    expect(await (await request.get('/robots.txt')).text()).toBe('User-agent: *\nDisallow: /\n');
   });
 
   test('a 404 for an unknown file path is still under the CSP and runs no unapproved script', async ({

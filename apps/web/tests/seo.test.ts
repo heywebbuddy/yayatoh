@@ -85,6 +85,10 @@ describe('sitemaps and robots (M1.11b)', () => {
     const pub = robotsTxt('tenant', 'https://x.yayatoh.events');
     expect(pub).toContain('Allow: /');
     expect(pub).toContain('Disallow: /checkout/');
+    // The console and secret-link pages (M1.14a), but not the public org page `/o/{slug}`.
+    for (const p of ['/o/*/', '/orders/', '/my-tickets/', '/claim/', '/invite/', '/api/'])
+      expect(pub).toContain(`Disallow: ${p}\n`);
+    expect(pub).not.toContain('Disallow: /o/\n');
     expect(pub).toContain('Sitemap: https://x.yayatoh.events/sitemap.xml');
     expect(robotsTxt('app', 'https://app.yayatoh.com')).toBe('User-agent: *\nDisallow: /\n');
     expect(robotsTxt('dev', 'http://localhost:3000')).toContain('Disallow: /');
