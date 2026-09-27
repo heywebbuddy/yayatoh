@@ -11,7 +11,8 @@
     "start": "node src/main.ts",
     "typecheck": "tsc --noEmit",
     "signup-code": "node scripts/signup-code.ts",
-    "staff": "node scripts/staff.ts"
+    "staff": "node scripts/staff.ts",
+    "retention": "node scripts/retention.ts"
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
@@ -22,6 +23,7 @@
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/privacy": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",

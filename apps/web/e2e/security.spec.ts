@@ -128,6 +128,8 @@ test.describe('no CSP violations on key pages', () => {
     `${OPEN_HOUSE}/tickets-orders`,
     '/ar/o/lakeside-events',
     '/scan',
+    '/o/lakeside-events/activity',
+    '/o/lakeside-events/privacy',
   ];
   for (const path of consolePages) {
     test(`console ${path}`, async ({ page }) => {
@@ -141,7 +143,14 @@ test.describe('no CSP violations on key pages', () => {
     });
   }
 
-  const publicPages = ['/', '/sign-in', '/events/lakeside-open-house', '/ar/events/lakeside-open-house'];
+  const publicPages = [
+    '/',
+    '/sign-in',
+    '/events/lakeside-open-house',
+    '/ar/events/lakeside-open-house',
+    '/privacy',
+    '/sub-processors',
+  ];
   for (const path of publicPages) {
     test(`public ${path}`, async ({ page }) => {
       const violations = await watchCsp(page);

@@ -510,6 +510,15 @@ export async function bulkOperationParamsTx(tx: TenantTx, operationId: string): 
   return op?.params ?? null;
 }
 
+/** Who started an operation (runners act as a system actor). */
+export async function bulkOperationRequesterTx(tx: TenantTx, operationId: string): Promise<string | null> {
+  const [op] = await tx
+    .select({ by: bulkOperations.requestedBy })
+    .from(bulkOperations)
+    .where(eq(bulkOperations.id, operationId));
+  return op?.by ?? null;
+}
+
 /** Recent operations for one event (the console's "recent bulk actions"); no file content. */
 export const listBulkOperationsQuery = tenantQuery({
   name: 'platform.listBulkOperations',

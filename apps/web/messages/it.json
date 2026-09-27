@@ -13,7 +13,9 @@
     "demoCta": "Apri la console demo",
     "eventCta": "Vedi una pagina evento pubblica",
     "statusLabel": "Piattaforma",
-    "statusOk": "Tutti i sistemi funzionano regolarmente"
+    "statusOk": "Tutti i sistemi funzionano regolarmente",
+    "privacyLink": "Informativa privacy",
+    "subProcessorsLink": "Sub-responsabili del trattamento"
   },
   "shell": {
     "navigation": "Navigazione principale",
@@ -1582,5 +1584,150 @@
     "pagination": "Pagine attività",
     "newest": "Più recenti",
     "older": "Voci precedenti"
+  },
+  "privacy": {
+    "title": "Richieste privacy",
+    "description": "Rispondi a chi chiede quali dati conservi su di lui o chiede di essere dimenticato. Ogni richiesta viene registrata.",
+    "noticeLink": "Informativa privacy di Yayatoh",
+    "noAccessTitle": "Solo proprietari e amministratori possono gestire le richieste privacy",
+    "noAccessDescription": "Chiedi a un proprietario o amministratore di questa organizzazione di gestire una richiesta sui dati di qualcuno.",
+    "find": {
+      "title": "Trova una persona",
+      "hint": "Cerca per email in contatti, ordini, biglietti, liste ospiti, risposte e check-in.",
+      "email": "Indirizzo email",
+      "submit": "Cerca"
+    },
+    "result": {
+      "title": "Cosa conserva questa organizzazione su {email}",
+      "noneTitle": "Nessun risultato per questa email",
+      "noneDescription": "Nessun contatto, ordine, biglietto o ospite usa questo indirizzo in questa organizzazione."
+    },
+    "categories": {
+      "contacts": "Schede contatto",
+      "consents": "Registri di consenso",
+      "orders": "Ordini",
+      "paidOrders": "Ordini pagati (conservati per la contabilità)",
+      "tickets": "Biglietti",
+      "activeTickets": "Biglietti validi",
+      "claims": "Link di trasferimento biglietti",
+      "holderLinks": "Link di accesso ai biglietti",
+      "attendees": "Voci nelle liste ospiti",
+      "answers": "Risposte al checkout",
+      "admissions": "Check-in"
+    },
+    "export": {
+      "title": "Esporta i suoi dati",
+      "hint": "Un file JSON con tutto quanto sopra, da inviare alla persona. Viene eliminato dopo 7 giorni.",
+      "submit": "Esporta dati (JSON)",
+      "download": "Scarica il file",
+      "running": "Preparazione del file… ricarica la pagina tra poco."
+    },
+    "erase": {
+      "title": "Cancella questa persona",
+      "what": "Nome, email, telefono, risposte e link vengono rimossi da contatti, ordini, biglietti e liste ospiti, e i file esportati che li menzionano vengono eliminati.",
+      "holds": "{paid, plural, =0 {Nessun ordine pagato da conservare.} one {# ordine pagato viene conservato per fisco e contabilità, senza nome né email.} other {# ordini pagati vengono conservati per fisco e contabilità, senza nome né email.}}",
+      "tickets": "{active, plural, =0 {Non ha biglietti validi.} one {# biglietto valido resta valido, senza nome.} other {# biglietti validi restano validi, senza nome.}}",
+      "final": "Non si può annullare.",
+      "confirm": "Digita {email} per confermare",
+      "submit": "Cancella i dati personali",
+      "done": "Cancellato. {records, plural, one {# record è stato oscurato o eliminato} other {# record sono stati oscurati o eliminati}}; {kept, plural, =0 {nessun ordine pagato conservato} one {# ordine pagato conservato senza dati personali} other {# ordini pagati conservati senza dati personali}}."
+    },
+    "errors": {
+      "invalidEmail": "Inserisci un indirizzo email valido.",
+      "confirmMismatch": "Non corrisponde. Digita lo stesso indirizzo email per confermare.",
+      "nothingHeld": "Non è più conservato nulla su questa email."
+    },
+    "history": {
+      "title": "Richieste precedenti",
+      "caption": "Richieste privacy, dalla più recente",
+      "empty": "Ancora nessuna richiesta.",
+      "when": "Quando",
+      "kind": "Richiesta",
+      "subject": "Persona",
+      "by": "Gestita da",
+      "records": "Record"
+    },
+    "kinds": {
+      "access": "Accesso (esportazione)",
+      "erasure": "Cancellazione"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Informativa sulla privacy",
+    "updated": "Ultimo aggiornamento: {date}",
+    "draft": "BOZZA per revisione legale: non è ancora il testo definitivo.",
+    "intro": "Questa informativa spiega come Yayatoh tratta i dati personali quando usi la piattaforma per organizzare eventi o per acquistare biglietti e parteciparvi.",
+    "subProcessorsLink": "Vedi l’elenco dei sub-responsabili",
+    "sections": {
+      "roles": {
+        "title": "Chi è responsabile",
+        "body": "L’organizzatore di un evento decide come usare i dati dei partecipanti ed è il titolare del trattamento; Yayatoh tratta tali dati per conto dell’organizzatore in base a un accordo sul trattamento dei dati. Yayatoh è titolare per gli account di organizzatori e staff, il marketplace pubblico degli eventi e la prevenzione delle frodi."
+      },
+      "data": {
+        "title": "Quali dati raccogliamo",
+        "body": "Dati dell’account (nome, email, password o codici di accesso); dati di acquirenti e partecipanti forniti al checkout (nome, email, risposte alle domande dell’organizzatore); biglietti, ordini e check-in; e dati tecnici come i log di dispositivi e richieste. I dati delle carte sono gestiti da Stripe e non arrivano mai a Yayatoh."
+      },
+      "purposes": {
+        "title": "Perché li usiamo",
+        "body": "Per vendere e consegnare biglietti, gestire gli ingressi, inviare i messaggi richiesti, pagare gli organizzatori, prevenire frodi e abusi, mantenere sicuro il servizio e rispettare gli obblighi di legge. I messaggi di marketing vengono inviati solo con il tuo consenso e i segnali Global Privacy Control sono rispettati."
+      },
+      "sharing": {
+        "title": "Con chi li condividiamo",
+        "body": "Con l’organizzatore dell’evento che prenoti, con i sub-responsabili del nostro elenco e con le autorità quando la legge lo richiede. Non vendiamo dati personali."
+      },
+      "retention": {
+        "title": "Per quanto tempo li conserviamo",
+        "body": "I dati dei partecipanti vengono rimossi 24 mesi dopo l’evento e i log degli ingressi dopo 12 mesi. I dati dei pagamenti sono conservati 7 anni per fini fiscali e contabili. I checkout mai pagati perdono i dati personali dopo 30 giorni."
+      },
+      "security": {
+        "title": "Come li proteggiamo",
+        "body": "I dati di ogni organizzatore sono separati da quelli degli altri; le risposte sensibili e le chiavi sono cifrate; l’accesso del personale Yayatoh è limitato e registrato."
+      },
+      "rights": {
+        "title": "I tuoi diritti",
+        "body": "Puoi chiedere una copia dei tuoi dati, la loro rettifica o cancellazione. Per un evento, rivolgiti all’organizzatore, che può esportare o cancellare i tuoi dati dalla sua console Yayatoh; puoi anche scriverci e inoltreremo la richiesta. I dati che la legge ci impone di conservare (come gli ordini pagati) vengono conservati senza elementi che ti identifichino."
+      },
+      "contact": {
+        "title": "Contatti",
+        "body": "Yayatoh è gestito da Pani Digital Services, LLC. I recapiti per le richieste privacy saranno pubblicati qui con il testo definitivo."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Sub-responsabili del trattamento",
+    "updated": "Ultimo aggiornamento: {date}",
+    "draft": "BOZZA per revisione legale: l’elenco segue l’hosting previsto e può cambiare prima del lancio.",
+    "intro": "Queste aziende trattano dati personali per conto di Yayatoh per far funzionare il servizio.",
+    "caption": "Sub-responsabili del trattamento",
+    "columns": {
+      "name": "Azienda",
+      "purpose": "Cosa fa",
+      "data": "Dati",
+      "location": "Sede"
+    },
+    "notice": "Avvisiamo gli organizzatori con 30 giorni di anticipo prima di aggiungere o sostituire un sub-responsabile.",
+    "privacyLink": "Leggi l’informativa sulla privacy",
+    "purposes": {
+      "vercel": "Hosting web e distribuzione",
+      "neon": "Hosting del database",
+      "fly": "Attività in background",
+      "upstash": "Limitazione delle richieste e cache",
+      "cloudflare": "Archiviazione file e distribuzione dei contenuti",
+      "aws": "Invio email e gestione delle chiavi",
+      "stripe": "Pagamenti e accrediti",
+      "twilio": "SMS",
+      "ably": "Aggiornamenti in tempo reale",
+      "sentry": "Monitoraggio degli errori",
+      "axiom": "Log"
+    },
+    "data": {
+      "traffic": "Dati di richieste e tecnici",
+      "all": "Tutti i dati di account ed eventi",
+      "files": "File esportati e immagini",
+      "contact": "Nomi, indirizzi email e numeri di telefono",
+      "payment": "Dati di pagamento e conti di accredito"
+    }
   }
 }

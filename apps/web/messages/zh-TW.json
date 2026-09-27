@@ -13,7 +13,9 @@
     "demoCta": "開啟示範主控台",
     "eventCta": "查看公開活動頁面",
     "statusLabel": "平台",
-    "statusOk": "所有系統運作正常"
+    "statusOk": "所有系統運作正常",
+    "privacyLink": "隱私權聲明",
+    "subProcessorsLink": "複委託處理者"
   },
   "shell": {
     "navigation": "主要導覽",
@@ -1582,5 +1584,150 @@
     "pagination": "活動分頁",
     "newest": "最新",
     "older": "更早的紀錄"
+  },
+  "privacy": {
+    "title": "隱私請求",
+    "description": "回應詢問您持有其哪些資料或要求被遺忘的人。每個請求都會被記錄。",
+    "noticeLink": "Yayatoh 隱私權聲明",
+    "noAccessTitle": "只有擁有者和管理員可以處理隱私請求",
+    "noAccessDescription": "請此組織的擁有者或管理員協助處理有關某人資料的請求。",
+    "find": {
+      "title": "尋找某人",
+      "hint": "依電子郵件在聯絡人、訂單、票券、賓客名單、回答和報到紀錄中搜尋。",
+      "email": "電子郵件地址",
+      "submit": "搜尋"
+    },
+    "result": {
+      "title": "此組織持有的關於 {email} 的資料",
+      "noneTitle": "找不到此電子郵件的資料",
+      "noneDescription": "此組織中沒有任何聯絡人、訂單、票券或賓客紀錄使用該地址。"
+    },
+    "categories": {
+      "contacts": "聯絡人紀錄",
+      "consents": "同意紀錄",
+      "orders": "訂單",
+      "paidOrders": "已付款訂單（為會計保留）",
+      "tickets": "票券",
+      "activeTickets": "有效票券",
+      "claims": "票券轉讓連結",
+      "holderLinks": "票券存取連結",
+      "attendees": "賓客名單項目",
+      "answers": "結帳時的回答",
+      "admissions": "報到"
+    },
+    "export": {
+      "title": "匯出其資料",
+      "hint": "包含以上所有內容的 JSON 檔案，供您寄給本人。7 天後刪除。",
+      "submit": "匯出資料（JSON）",
+      "download": "下載檔案",
+      "running": "正在準備檔案……請稍後重新整理頁面。"
+    },
+    "erase": {
+      "title": "抹除此人",
+      "what": "其姓名、電子郵件、電話、回答和連結將從聯絡人、訂單、票券和賓客名單中移除，提及此人的匯出檔案也會被刪除。",
+      "holds": "{paid, plural, =0 {沒有需要保留的已付款訂單。} other {# 筆已付款訂單將為稅務和會計保留，但不含姓名和電子郵件。}}",
+      "tickets": "{active, plural, =0 {沒有有效票券。} other {# 張有效票券仍然有效，但不含姓名。}}",
+      "final": "此操作無法復原。",
+      "confirm": "輸入 {email} 以確認",
+      "submit": "抹除個人資料",
+      "done": "已抹除。{records, plural, other {# 筆紀錄}}已去識別化或刪除；{kept, plural, =0 {未保留已付款訂單} other {已保留 # 筆不含個人資料的已付款訂單}}。"
+    },
+    "errors": {
+      "invalidEmail": "請輸入有效的電子郵件地址。",
+      "confirmMismatch": "不相符。請輸入相同的電子郵件地址以確認。",
+      "nothingHeld": "已不再持有此電子郵件的任何資料。"
+    },
+    "history": {
+      "title": "過往請求",
+      "caption": "隱私請求，最新在前",
+      "empty": "尚無請求。",
+      "when": "時間",
+      "kind": "請求",
+      "subject": "對象",
+      "by": "處理人",
+      "records": "紀錄數"
+    },
+    "kinds": {
+      "access": "存取（匯出）",
+      "erasure": "抹除"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "隱私權聲明",
+    "updated": "最後更新於 {date}",
+    "draft": "供法律審閱的草稿——尚非最終文本。",
+    "intro": "本聲明說明當您使用本平台舉辦活動、購買票券並參加活動時，Yayatoh 如何處理個人資料。",
+    "subProcessorsLink": "查看複委託處理者清單",
+    "sections": {
+      "roles": {
+        "title": "由誰負責",
+        "body": "活動的主辦方決定如何使用參加者資料，是其控制者；Yayatoh 依據資料處理協議代表主辦方處理這些資料。對於主辦方和員工帳戶、公開活動市集以及防詐騙，Yayatoh 是控制者。"
+      },
+      "data": {
+        "title": "我們收集什麼",
+        "body": "帳戶資料（姓名、電子郵件、密碼或登入驗證碼）；結帳時提供的購買者與參加者資料（姓名、電子郵件、對主辦方問題的回答）；票券、訂單與報到紀錄；以及裝置和請求日誌等技術資料。信用卡資料由 Stripe 處理，從不會傳到 Yayatoh。"
+      },
+      "purposes": {
+        "title": "我們為何使用",
+        "body": "用於銷售與交付票券、辦理報到、傳送您要求的訊息、向主辦方付款、防止詐騙與濫用、保障服務安全以及履行法律義務。行銷訊息僅在取得您同意後傳送，並尊重 Global Privacy Control 訊號。"
+      },
+      "sharing": {
+        "title": "我們與誰分享",
+        "body": "與您預訂活動的主辦方、我們複委託處理者清單中的公司，以及在法律要求時與主管機關分享。我們不出售個人資料。"
+      },
+      "retention": {
+        "title": "我們保留多久",
+        "body": "參加者資料在活動結束 24 個月後刪除，報到日誌在 12 個月後刪除。付款紀錄因稅務和會計需要保留 7 年。從未付款的結帳會在 30 天後刪除個人資料。"
+      },
+      "security": {
+        "title": "我們如何保護",
+        "body": "每個主辦方的資料都與其他主辦方隔離；敏感回答和金鑰均已加密；Yayatoh 員工的存取受到限制並被記錄。"
+      },
+      "rights": {
+        "title": "您的權利",
+        "body": "您可以要求取得資料副本、更正資料或刪除資料。對於某個活動，請聯絡其主辦方，主辦方可在 Yayatoh 控制台中匯出或刪除您的資料；您也可以聯絡我們，我們會轉交請求。法律要求我們保留的資料（如已付款訂單）將在移除可識別您身分的資訊後保留。"
+      },
+      "contact": {
+        "title": "聯絡方式",
+        "body": "Yayatoh 由 Pani Digital Services, LLC 營運。隱私請求的聯絡方式將隨最終文本在此公布。"
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "複委託處理者",
+    "updated": "最後更新於 {date}",
+    "draft": "供法律審閱的草稿：清單依據規劃中的託管方案，上線前可能變更。",
+    "intro": "這些公司代表 Yayatoh 處理個人資料以運作服務。",
+    "caption": "複委託處理者",
+    "columns": {
+      "name": "公司",
+      "purpose": "用途",
+      "data": "資料",
+      "location": "所在地"
+    },
+    "notice": "在新增或更換複委託處理者前，我們會提前 30 天通知主辦方。",
+    "privacyLink": "閱讀隱私權聲明",
+    "purposes": {
+      "vercel": "網站託管與傳遞",
+      "neon": "資料庫託管",
+      "fly": "背景作業",
+      "upstash": "限流與快取",
+      "cloudflare": "檔案儲存與內容傳遞",
+      "aws": "電子郵件傳送與金鑰管理",
+      "stripe": "付款與撥款",
+      "twilio": "簡訊",
+      "ably": "即時更新",
+      "sentry": "錯誤監控",
+      "axiom": "日誌"
+    },
+    "data": {
+      "traffic": "請求與技術資料",
+      "all": "所有帳戶與活動資料",
+      "files": "匯出的檔案與圖片",
+      "contact": "姓名、電子郵件地址和電話號碼",
+      "payment": "付款資料與收款帳戶"
+    }
   }
 }

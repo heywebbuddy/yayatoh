@@ -441,6 +441,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
+      '@yayatoh/privacy':
+        specifier: workspace:*
+        version: link:../../packages/modules/privacy
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
@@ -547,6 +550,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
+      '@yayatoh/privacy':
+        specifier: workspace:*
+        version: link:../../packages/modules/privacy
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
@@ -1366,6 +1372,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../platform
+      '@yayatoh/privacy':
+        specifier: workspace:*
+        version: link:../modules/privacy
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../modules/reports

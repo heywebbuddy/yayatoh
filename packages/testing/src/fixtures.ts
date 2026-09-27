@@ -26,6 +26,7 @@ import {
 } from '@yayatoh/orders';
 import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
+import { dsarExportBulk } from '@yayatoh/privacy';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
   assignSeatsCommand,
@@ -401,6 +402,17 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // A data-subject access request for the imported guest (M1.14c, isolation coverage).
+  const dsar = await executeCommand(
+    dsarExportBulk.start,
+    {
+      selection: { filter: { email: `imported-${slug}@example.test` } },
+      params: { email: `imported-${slug}@example.test`, orgName: name },
+    },
+    ctx(),
+    ports,
+  );
+  await runBulk(org.id, dsar.operationId);
   return { org, ownerId, viewerId, event, ctx };
 }
 

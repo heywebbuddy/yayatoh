@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
-import { asc, inArray, or, sql } from 'drizzle-orm';
+import { and, asc, inArray, ne, or, sql } from 'drizzle-orm';
 import { attendees, importRows } from './schema.ts';
 
 const matches = (emailNorm: string, contactIds: readonly string[]) =>
@@ -49,4 +49,16 @@ export async function eraseAttendeesDsarTx(
     .where(sql`exists (select 1 from unnest(${importRows.cells}) c where lower(btrim(c)) = ${emailNorm})`)
     .returning({ id: importRows.id });
   return { erased: erased.length, importRowsDeleted: rows.length };
+}
+
+/** Retention: attendees of long-past events lose name, email and labels (records stay counted). */
+export async function redactAttendeesForEventsTx(tx: TenantTx, eventIds: readonly string[], now: Date) {
+  if (eventIds.length === 0) return 0;
+  return (
+    await tx
+      .update(attendees)
+      .set({ name: ERASED_NAME, email: ERASED_EMAIL, labels: [], updatedAt: now })
+      .where(and(inArray(attendees.eventId, [...eventIds]), ne(attendees.email, ERASED_EMAIL)))
+      .returning({ id: attendees.id })
+  ).length;
 }

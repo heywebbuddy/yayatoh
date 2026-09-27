@@ -13,7 +13,9 @@
     "demoCta": "Ouvrir la console de démo",
     "eventCta": "Voir une page d’événement publique",
     "statusLabel": "Plateforme",
-    "statusOk": "Tous les systèmes fonctionnent normalement"
+    "statusOk": "Tous les systèmes fonctionnent normalement",
+    "privacyLink": "Avis de confidentialité",
+    "subProcessorsLink": "Sous-traitants ultérieurs"
   },
   "shell": {
     "navigation": "Navigation principale",
@@ -1582,5 +1584,150 @@
     "pagination": "Pages d’activité",
     "newest": "Plus récentes",
     "older": "Entrées plus anciennes"
+  },
+  "privacy": {
+    "title": "Demandes de confidentialité",
+    "description": "Répondez aux personnes qui demandent quelles données vous détenez sur elles ou qui demandent à être oubliées. Chaque demande est enregistrée.",
+    "noticeLink": "Avis de confidentialité de Yayatoh",
+    "noAccessTitle": "Seuls les propriétaires et administrateurs peuvent traiter les demandes de confidentialité",
+    "noAccessDescription": "Demandez à un propriétaire ou administrateur de cette organisation de traiter une demande concernant les données d’une personne.",
+    "find": {
+      "title": "Trouver une personne",
+      "hint": "Recherchez par e-mail dans les contacts, commandes, billets, listes d’invités, réponses et contrôles d’entrée.",
+      "email": "Adresse e-mail",
+      "submit": "Rechercher"
+    },
+    "result": {
+      "title": "Ce que cette organisation détient sur {email}",
+      "noneTitle": "Rien trouvé pour cette adresse",
+      "noneDescription": "Aucun contact, commande, billet ou invité n’utilise cette adresse dans cette organisation."
+    },
+    "categories": {
+      "contacts": "Fiches de contact",
+      "consents": "Consentements enregistrés",
+      "orders": "Commandes",
+      "paidOrders": "Commandes payées (conservées pour la comptabilité)",
+      "tickets": "Billets",
+      "activeTickets": "Billets valides",
+      "claims": "Liens de transfert de billets",
+      "holderLinks": "Liens d’accès aux billets",
+      "attendees": "Entrées de listes d’invités",
+      "answers": "Réponses au paiement",
+      "admissions": "Contrôles d’entrée"
+    },
+    "export": {
+      "title": "Exporter ses données",
+      "hint": "Un fichier JSON avec tout ce qui précède, à envoyer à la personne. Il est supprimé après 7 jours.",
+      "submit": "Exporter les données (JSON)",
+      "download": "Télécharger le fichier",
+      "running": "Préparation du fichier… rechargez la page dans un instant."
+    },
+    "erase": {
+      "title": "Effacer cette personne",
+      "what": "Son nom, son e-mail, son téléphone, ses réponses et ses liens sont retirés des contacts, commandes, billets et listes d’invités, et les fichiers exportés qui le mentionnent sont supprimés.",
+      "holds": "{paid, plural, =0 {Aucune commande payée à conserver.} one {# commande payée est conservée pour les impôts et la comptabilité, sans nom ni e-mail.} other {# commandes payées sont conservées pour les impôts et la comptabilité, sans nom ni e-mail.}}",
+      "tickets": "{active, plural, =0 {Aucun billet valide.} one {# billet valide reste valide, sans nom.} other {# billets valides restent valides, sans nom.}}",
+      "final": "Cette action est irréversible.",
+      "confirm": "Saisissez {email} pour confirmer",
+      "submit": "Effacer les données personnelles",
+      "done": "Effacé. {records, plural, one {# enregistrement a été anonymisé ou supprimé} other {# enregistrements ont été anonymisés ou supprimés}} ; {kept, plural, =0 {aucune commande payée conservée} one {# commande payée conservée sans données personnelles} other {# commandes payées conservées sans données personnelles}}."
+    },
+    "errors": {
+      "invalidEmail": "Saisissez une adresse e-mail valide.",
+      "confirmMismatch": "Cela ne correspond pas. Saisissez la même adresse e-mail pour confirmer.",
+      "nothingHeld": "Plus aucune donnée n’est conservée pour cette adresse."
+    },
+    "history": {
+      "title": "Demandes précédentes",
+      "caption": "Demandes de confidentialité, des plus récentes aux plus anciennes",
+      "empty": "Aucune demande pour l’instant.",
+      "when": "Quand",
+      "kind": "Demande",
+      "subject": "Personne",
+      "by": "Traitée par",
+      "records": "Enregistrements"
+    },
+    "kinds": {
+      "access": "Accès (export)",
+      "erasure": "Effacement"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Avis de confidentialité",
+    "updated": "Dernière mise à jour : {date}",
+    "draft": "BROUILLON pour relecture juridique — ce n’est pas encore le texte définitif.",
+    "intro": "Cet avis explique comment Yayatoh traite les données personnelles lorsque vous utilisez la plateforme pour organiser des événements, ou pour acheter des billets et y assister.",
+    "subProcessorsLink": "Voir la liste des sous-traitants ultérieurs",
+    "sections": {
+      "roles": {
+        "title": "Qui est responsable",
+        "body": "L’organisateur d’un événement décide de l’usage des données des participants et en est le responsable du traitement ; Yayatoh traite ces données pour son compte dans le cadre d’un accord de traitement des données. Yayatoh est responsable du traitement pour les comptes des organisateurs et de leur personnel, la place de marché publique et la prévention de la fraude."
+      },
+      "data": {
+        "title": "Les données que nous collectons",
+        "body": "Données de compte (nom, e-mail, mot de passe ou codes de connexion) ; informations des acheteurs et participants fournies lors du paiement (nom, e-mail, réponses aux questions de l’organisateur) ; billets, commandes et contrôles d’entrée ; et données techniques telles que les journaux d’appareils et de requêtes. Les données de carte sont traitées par Stripe et ne parviennent jamais à Yayatoh."
+      },
+      "purposes": {
+        "title": "Pourquoi nous les utilisons",
+        "body": "Pour vendre et délivrer des billets, gérer les entrées, envoyer les messages que vous avez demandés, payer les organisateurs, prévenir la fraude et les abus, sécuriser le service et respecter nos obligations légales. Les messages marketing ne sont envoyés qu’avec votre consentement, et les signaux Global Privacy Control sont respectés."
+      },
+      "sharing": {
+        "title": "Avec qui nous les partageons",
+        "body": "Avec l’organisateur de l’événement que vous réservez, avec les sous-traitants ultérieurs de notre liste et avec les autorités lorsque la loi l’exige. Nous ne vendons pas de données personnelles."
+      },
+      "retention": {
+        "title": "Combien de temps nous les conservons",
+        "body": "Les informations des participants sont supprimées 24 mois après l’événement et les journaux d’entrée après 12 mois. Les enregistrements de paiement sont conservés 7 ans pour les impôts et la comptabilité. Les paiements jamais finalisés perdent leurs données personnelles après 30 jours."
+      },
+      "security": {
+        "title": "Comment nous les protégeons",
+        "body": "Les données de chaque organisateur sont séparées de celles des autres ; les réponses sensibles et les clés sont chiffrées ; l’accès du personnel de Yayatoh est limité et journalisé."
+      },
+      "rights": {
+        "title": "Vos droits",
+        "body": "Vous pouvez demander une copie de vos données, leur rectification ou leur effacement. Pour un événement, adressez-vous à son organisateur, qui peut exporter ou effacer vos données depuis sa console Yayatoh ; vous pouvez aussi nous écrire et nous transmettrons la demande. Les données que la loi nous oblige à conserver (comme les commandes payées) sont conservées sans éléments permettant de vous identifier."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "Yayatoh est exploité par Pani Digital Services, LLC. Les coordonnées pour les demandes de confidentialité seront publiées ici avec le texte définitif."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Sous-traitants ultérieurs",
+    "updated": "Dernière mise à jour : {date}",
+    "draft": "BROUILLON pour relecture juridique : la liste suit l’hébergement prévu et peut changer avant le lancement.",
+    "intro": "Ces entreprises traitent des données personnelles pour le compte de Yayatoh afin de faire fonctionner le service.",
+    "caption": "Sous-traitants ultérieurs",
+    "columns": {
+      "name": "Entreprise",
+      "purpose": "Rôle",
+      "data": "Données",
+      "location": "Localisation"
+    },
+    "notice": "Nous prévenons les organisateurs 30 jours avant d’ajouter ou de remplacer un sous-traitant ultérieur.",
+    "privacyLink": "Lire l’avis de confidentialité",
+    "purposes": {
+      "vercel": "Hébergement web et diffusion",
+      "neon": "Hébergement de base de données",
+      "fly": "Tâches en arrière-plan",
+      "upstash": "Limitation du débit et mise en cache",
+      "cloudflare": "Stockage de fichiers et diffusion de contenu",
+      "aws": "Envoi d’e-mails et gestion des clés",
+      "stripe": "Paiements et versements",
+      "twilio": "SMS",
+      "ably": "Mises à jour en direct",
+      "sentry": "Surveillance des erreurs",
+      "axiom": "Journaux"
+    },
+    "data": {
+      "traffic": "Données de requêtes et techniques",
+      "all": "Toutes les données des comptes et des événements",
+      "files": "Fichiers exportés et images",
+      "contact": "Noms, adresses e-mail et numéros de téléphone",
+      "payment": "Données de paiement et comptes de versement"
+    }
   }
 }

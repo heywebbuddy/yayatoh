@@ -13,7 +13,9 @@
     "demoCta": "打开演示控制台",
     "eventCta": "查看公开活动页面",
     "statusLabel": "平台",
-    "statusOk": "所有系统运行正常"
+    "statusOk": "所有系统运行正常",
+    "privacyLink": "隐私声明",
+    "subProcessorsLink": "子处理者"
   },
   "shell": {
     "navigation": "主导航",
@@ -1582,5 +1584,150 @@
     "pagination": "活动分页",
     "newest": "最新",
     "older": "更早的记录"
+  },
+  "privacy": {
+    "title": "隐私请求",
+    "description": "回应询问您持有其哪些数据或要求被遗忘的人。每个请求都会被记录。",
+    "noticeLink": "Yayatoh 隐私声明",
+    "noAccessTitle": "只有所有者和管理员可以处理隐私请求",
+    "noAccessDescription": "请此组织的所有者或管理员协助处理有关某人数据的请求。",
+    "find": {
+      "title": "查找某人",
+      "hint": "按邮箱在联系人、订单、门票、宾客名单、回答和签到记录中搜索。",
+      "email": "邮箱地址",
+      "submit": "查找"
+    },
+    "result": {
+      "title": "此组织持有的关于 {email} 的数据",
+      "noneTitle": "未找到此邮箱的数据",
+      "noneDescription": "此组织中没有任何联系人、订单、门票或宾客记录使用该地址。"
+    },
+    "categories": {
+      "contacts": "联系人记录",
+      "consents": "同意记录",
+      "orders": "订单",
+      "paidOrders": "已付款订单（为会计保留）",
+      "tickets": "门票",
+      "activeTickets": "有效门票",
+      "claims": "门票转让链接",
+      "holderLinks": "门票访问链接",
+      "attendees": "宾客名单条目",
+      "answers": "结账时的回答",
+      "admissions": "签到"
+    },
+    "export": {
+      "title": "导出其数据",
+      "hint": "包含以上全部内容的 JSON 文件，供您发送给本人。7 天后删除。",
+      "submit": "导出数据（JSON）",
+      "download": "下载文件",
+      "running": "正在准备文件……请稍后刷新页面。"
+    },
+    "erase": {
+      "title": "抹除此人",
+      "what": "其姓名、邮箱、电话、回答和链接将从联系人、订单、门票和宾客名单中移除，提及此人的导出文件也会被删除。",
+      "holds": "{paid, plural, =0 {没有需要保留的已付款订单。} other {# 个已付款订单将为税务和会计保留，但不含姓名和邮箱。}}",
+      "tickets": "{active, plural, =0 {没有有效门票。} other {# 张有效门票仍然有效，但不含姓名。}}",
+      "final": "此操作无法撤销。",
+      "confirm": "输入 {email} 以确认",
+      "submit": "抹除个人数据",
+      "done": "已抹除。{records, plural, other {# 条记录}}已脱敏或删除；{kept, plural, =0 {未保留已付款订单} other {已保留 # 个不含个人数据的已付款订单}}。"
+    },
+    "errors": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "confirmMismatch": "不匹配。请输入相同的邮箱地址以确认。",
+      "nothingHeld": "已不再持有此邮箱的任何数据。"
+    },
+    "history": {
+      "title": "过往请求",
+      "caption": "隐私请求，最新在前",
+      "empty": "暂无请求。",
+      "when": "时间",
+      "kind": "请求",
+      "subject": "对象",
+      "by": "处理人",
+      "records": "记录数"
+    },
+    "kinds": {
+      "access": "访问（导出）",
+      "erasure": "抹除"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "隐私声明",
+    "updated": "最后更新于 {date}",
+    "draft": "供法律审阅的草稿——尚非最终文本。",
+    "intro": "本声明说明当您使用本平台举办活动、购买门票并参加活动时，Yayatoh 如何处理个人数据。",
+    "subProcessorsLink": "查看子处理者列表",
+    "sections": {
+      "roles": {
+        "title": "谁负责",
+        "body": "活动的主办方决定如何使用参会者数据，是其控制者；Yayatoh 根据数据处理协议代表主办方处理这些数据。对于主办方和员工账户、公开活动市场以及防欺诈，Yayatoh 是控制者。"
+      },
+      "data": {
+        "title": "我们收集什么",
+        "body": "账户信息（姓名、邮箱、密码或登录验证码）；结账时提供的购买者和参会者信息（姓名、邮箱、对主办方问题的回答）；门票、订单和签到记录；以及设备和请求日志等技术数据。银行卡信息由 Stripe 处理，从不会到达 Yayatoh。"
+      },
+      "purposes": {
+        "title": "我们为何使用",
+        "body": "用于销售和交付门票、办理签到、发送您要求的消息、向主办方付款、防止欺诈和滥用、保障服务安全以及履行法律义务。营销消息仅在获得您同意后发送，并尊重 Global Privacy Control 信号。"
+      },
+      "sharing": {
+        "title": "我们与谁共享",
+        "body": "与您预订活动的主办方、我们子处理者列表中的公司，以及在法律要求时与主管机关共享。我们不出售个人数据。"
+      },
+      "retention": {
+        "title": "我们保留多久",
+        "body": "参会者信息在活动结束 24 个月后删除，签到日志在 12 个月后删除。付款记录因税务和会计需要保留 7 年。从未付款的结账会在 30 天后删除个人信息。"
+      },
+      "security": {
+        "title": "我们如何保护",
+        "body": "每个主办方的数据都与其他主办方隔离；敏感回答和密钥均已加密；Yayatoh 员工的访问受到限制并被记录。"
+      },
+      "rights": {
+        "title": "您的权利",
+        "body": "您可以要求获取数据副本、更正数据或删除数据。对于某个活动，请联系其主办方，主办方可在 Yayatoh 控制台中导出或删除您的数据；您也可以联系我们，我们会转交请求。法律要求我们保留的数据（如已付款订单）将在去除可识别您身份的信息后保留。"
+      },
+      "contact": {
+        "title": "联系方式",
+        "body": "Yayatoh 由 Pani Digital Services, LLC 运营。隐私请求的联系方式将随最终文本在此公布。"
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "子处理者",
+    "updated": "最后更新于 {date}",
+    "draft": "供法律审阅的草稿：列表依据计划中的托管方案，发布前可能变更。",
+    "intro": "这些公司代表 Yayatoh 处理个人数据以运行服务。",
+    "caption": "子处理者",
+    "columns": {
+      "name": "公司",
+      "purpose": "用途",
+      "data": "数据",
+      "location": "所在地"
+    },
+    "notice": "在新增或更换子处理者前，我们会提前 30 天通知主办方。",
+    "privacyLink": "阅读隐私声明",
+    "purposes": {
+      "vercel": "网站托管与分发",
+      "neon": "数据库托管",
+      "fly": "后台任务",
+      "upstash": "限流与缓存",
+      "cloudflare": "文件存储与内容分发",
+      "aws": "邮件发送与密钥管理",
+      "stripe": "支付与打款",
+      "twilio": "短信",
+      "ably": "实时更新",
+      "sentry": "错误监控",
+      "axiom": "日志"
+    },
+    "data": {
+      "traffic": "请求与技术数据",
+      "all": "所有账户与活动数据",
+      "files": "导出的文件与图片",
+      "contact": "姓名、邮箱地址和电话号码",
+      "payment": "支付信息与收款账户"
+    }
   }
 }

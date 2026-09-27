@@ -13,7 +13,9 @@
     "demoCta": "Open de democonsole",
     "eventCta": "Bekijk een openbare evenementpagina",
     "statusLabel": "Platform",
-    "statusOk": "Alle systemen werken normaal"
+    "statusOk": "Alle systemen werken normaal",
+    "privacyLink": "Privacyverklaring",
+    "subProcessorsLink": "Subverwerkers"
   },
   "shell": {
     "navigation": "Hoofdnavigatie",
@@ -1582,5 +1584,150 @@
     "pagination": "Activiteitspagina’s",
     "newest": "Nieuwste",
     "older": "Oudere vermeldingen"
+  },
+  "privacy": {
+    "title": "Privacyverzoeken",
+    "description": "Beantwoord mensen die vragen wat je over hen bewaart, of die vergeten willen worden. Elk verzoek wordt vastgelegd.",
+    "noticeLink": "Privacyverklaring van Yayatoh",
+    "noAccessTitle": "Alleen eigenaren en beheerders kunnen privacyverzoeken afhandelen",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om te helpen met een verzoek over iemands gegevens.",
+    "find": {
+      "title": "Een persoon zoeken",
+      "hint": "Zoek op e-mail in contacten, bestellingen, tickets, gastenlijsten, antwoorden en check-ins.",
+      "email": "E-mailadres",
+      "submit": "Zoeken"
+    },
+    "result": {
+      "title": "Wat deze organisatie over {email} bewaart",
+      "noneTitle": "Niets gevonden voor dit e-mailadres",
+      "noneDescription": "Geen contact, bestelling, ticket of gast gebruikt dit adres in deze organisatie."
+    },
+    "categories": {
+      "contacts": "Contactgegevens",
+      "consents": "Toestemmingen",
+      "orders": "Bestellingen",
+      "paidOrders": "Betaalde bestellingen (bewaard voor de boekhouding)",
+      "tickets": "Tickets",
+      "activeTickets": "Geldige tickets",
+      "claims": "Links voor ticketoverdracht",
+      "holderLinks": "Toegangslinks voor tickets",
+      "attendees": "Vermeldingen op gastenlijsten",
+      "answers": "Antwoorden bij het afrekenen",
+      "admissions": "Check-ins"
+    },
+    "export": {
+      "title": "Gegevens exporteren",
+      "hint": "Een JSON-bestand met alles hierboven, om naar de persoon te sturen. Het wordt na 7 dagen verwijderd.",
+      "submit": "Gegevens exporteren (JSON)",
+      "download": "Bestand downloaden",
+      "running": "Het bestand wordt voorbereid… laad de pagina zo opnieuw."
+    },
+    "erase": {
+      "title": "Deze persoon wissen",
+      "what": "Naam, e-mail, telefoon, antwoorden en links worden verwijderd uit contacten, bestellingen, tickets en gastenlijsten, en exportbestanden waarin de persoon voorkomt worden gewist.",
+      "holds": "{paid, plural, =0 {Er hoeven geen betaalde bestellingen bewaard te worden.} one {# betaalde bestelling wordt bewaard voor belasting en boekhouding, zonder naam of e-mail.} other {# betaalde bestellingen worden bewaard voor belasting en boekhouding, zonder naam of e-mail.}}",
+      "tickets": "{active, plural, =0 {Er zijn geen geldige tickets.} one {# geldig ticket blijft geldig, zonder naam.} other {# geldige tickets blijven geldig, zonder naam.}}",
+      "final": "Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Typ {email} om te bevestigen",
+      "submit": "Persoonsgegevens wissen",
+      "done": "Gewist. {records, plural, one {# record is} other {# records zijn}} geanonimiseerd of verwijderd; {kept, plural, =0 {geen betaalde bestellingen bewaard} one {# betaalde bestelling bewaard zonder persoonsgegevens} other {# betaalde bestellingen bewaard zonder persoonsgegevens}}."
+    },
+    "errors": {
+      "invalidEmail": "Voer een geldig e-mailadres in.",
+      "confirmMismatch": "Dat komt niet overeen. Typ hetzelfde e-mailadres om te bevestigen.",
+      "nothingHeld": "Er wordt niets meer over dit e-mailadres bewaard."
+    },
+    "history": {
+      "title": "Eerdere verzoeken",
+      "caption": "Privacyverzoeken, nieuwste eerst",
+      "empty": "Nog geen verzoeken.",
+      "when": "Wanneer",
+      "kind": "Verzoek",
+      "subject": "Persoon",
+      "by": "Afgehandeld door",
+      "records": "Records"
+    },
+    "kinds": {
+      "access": "Inzage (export)",
+      "erasure": "Wissing"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Privacyverklaring",
+    "updated": "Laatst bijgewerkt op {date}",
+    "draft": "CONCEPT voor juridische controle — nog niet de definitieve tekst.",
+    "intro": "Deze verklaring legt uit hoe Yayatoh met persoonsgegevens omgaat wanneer je het platform gebruikt om evenementen te organiseren, of om tickets te kopen en evenementen bij te wonen.",
+    "subProcessorsLink": "Bekijk de lijst met subverwerkers",
+    "sections": {
+      "roles": {
+        "title": "Wie verantwoordelijk is",
+        "body": "De organisator van een evenement bepaalt hoe deelnemersgegevens worden gebruikt en is de verwerkingsverantwoordelijke; Yayatoh verwerkt die gegevens namens de organisator op basis van een verwerkersovereenkomst. Voor organisator- en medewerkersaccounts, de openbare evenementenmarktplaats en fraudepreventie is Yayatoh verwerkingsverantwoordelijke."
+      },
+      "data": {
+        "title": "Welke gegevens we verzamelen",
+        "body": "Accountgegevens (naam, e-mail, wachtwoord of inlogcodes); gegevens van kopers en deelnemers bij het afrekenen (naam, e-mail, antwoorden op vragen van de organisator); tickets, bestellingen en check-ins; en technische gegevens zoals apparaat- en verzoeklogs. Kaartgegevens worden door Stripe verwerkt en komen nooit bij Yayatoh."
+      },
+      "purposes": {
+        "title": "Waarvoor we ze gebruiken",
+        "body": "Om tickets te verkopen en te leveren, check-in te regelen, gevraagde berichten te sturen, organisatoren uit te betalen, fraude en misbruik te voorkomen, de dienst veilig te houden en wettelijke plichten na te komen. Marketingberichten sturen we alleen met je toestemming, en Global Privacy Control-signalen worden gerespecteerd."
+      },
+      "sharing": {
+        "title": "Met wie we ze delen",
+        "body": "Met de organisator van het evenement dat je boekt, met de subverwerkers op onze lijst en met autoriteiten als de wet dat vereist. We verkopen geen persoonsgegevens."
+      },
+      "retention": {
+        "title": "Hoe lang we ze bewaren",
+        "body": "Deelnemersgegevens worden 24 maanden na het evenement verwijderd en check-inlogs na 12 maanden. Betalingsgegevens bewaren we 7 jaar voor belasting en boekhouding. Afrekeningen die nooit zijn betaald verliezen hun persoonsgegevens na 30 dagen."
+      },
+      "security": {
+        "title": "Hoe we ze beschermen",
+        "body": "De gegevens van elke organisator staan los van die van andere organisatoren; gevoelige antwoorden en sleutels zijn versleuteld; toegang door Yayatoh-medewerkers is beperkt en wordt gelogd."
+      },
+      "rights": {
+        "title": "Je rechten",
+        "body": "Je kunt een kopie van je gegevens vragen, ze laten corrigeren of laten wissen. Vraag het bij een evenement aan de organisator, die je gegevens vanuit de Yayatoh-console kan exporteren of wissen; je kunt ons ook schrijven en wij geven het verzoek door. Gegevens die we wettelijk moeten bewaren (zoals betaalde bestellingen) worden bewaard zonder gegevens die jou identificeren."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "Yayatoh wordt beheerd door Pani Digital Services, LLC. Contactgegevens voor privacyverzoeken worden hier met de definitieve tekst gepubliceerd."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Subverwerkers",
+    "updated": "Laatst bijgewerkt op {date}",
+    "draft": "CONCEPT voor juridische controle: de lijst volgt de geplande hosting en kan vóór de lancering veranderen.",
+    "intro": "Deze bedrijven verwerken persoonsgegevens namens Yayatoh om de dienst te laten werken.",
+    "caption": "Subverwerkers",
+    "columns": {
+      "name": "Bedrijf",
+      "purpose": "Wat ze doen",
+      "data": "Gegevens",
+      "location": "Locatie"
+    },
+    "notice": "We laten organisatoren 30 dagen van tevoren weten dat we een subverwerker toevoegen of vervangen.",
+    "privacyLink": "Lees de privacyverklaring",
+    "purposes": {
+      "vercel": "Webhosting en levering",
+      "neon": "Databasehosting",
+      "fly": "Achtergrondtaken",
+      "upstash": "Snelheidsbeperking en caching",
+      "cloudflare": "Bestandsopslag en contentlevering",
+      "aws": "E-mailbezorging en sleutelbeheer",
+      "stripe": "Betalingen en uitbetalingen",
+      "twilio": "Sms-berichten",
+      "ably": "Live-updates",
+      "sentry": "Foutbewaking",
+      "axiom": "Logs"
+    },
+    "data": {
+      "traffic": "Verzoek- en technische gegevens",
+      "all": "Alle account- en evenementgegevens",
+      "files": "Geëxporteerde bestanden en afbeeldingen",
+      "contact": "Namen, e-mailadressen en telefoonnummers",
+      "payment": "Betaalgegevens en uitbetalingsrekeningen"
+    }
   }
 }

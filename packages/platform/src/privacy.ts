@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { and, inArray, isNotNull, lt, sql } from 'drizzle-orm';
-import { bulkOperations, fileParts, files } from './schema.ts';
+import { bulkOperations, fileParts, files, idempotencyKeys } from './schema.ts';
 
 /**
  * Shared pieces for data-subject requests and retention (M1.14c). Modules redact a person's
@@ -68,4 +68,14 @@ export async function clearFinishedBulkParamsTx(
     )
     .returning({ id: bulkOperations.id });
   return rows.length;
+}
+
+/** Retention: idempotency records a day past their expiry. */
+export async function purgeExpiredIdempotencyKeysTx(tx: TenantTx, before: Date): Promise<number> {
+  return (
+    await tx
+      .delete(idempotencyKeys)
+      .where(lt(idempotencyKeys.expiresAt, before))
+      .returning({ id: idempotencyKeys.id })
+  ).length;
 }

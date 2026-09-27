@@ -1,7 +1,7 @@
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, gt, isNull, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { eventRoleAssignments, events } from './schema.ts';
@@ -90,4 +90,10 @@ export async function eventRolesOf(ctx: Ctx, eventId: string): Promise<string[]>
       ),
   );
   return rows.map((r) => r.role);
+}
+
+/** Events of this org that ended before `before` (retention: attendee data after the event). */
+export async function eventIdsEndedBeforeTx(tx: TenantTx, before: Date): Promise<string[]> {
+  const rows = await tx.select({ id: events.id }).from(events).where(lt(events.endsAt, before));
+  return rows.map((r) => r.id);
 }

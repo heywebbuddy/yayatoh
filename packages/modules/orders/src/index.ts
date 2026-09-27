@@ -27,7 +27,7 @@ export {
 } from './commands/refunds.ts';
 export { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from './domain/lifecycle.ts';
 export { type RefundReason, refundsFee } from './domain/refund-policy.ts';
-export { eraseOrdersDsarTx, ordersDsarTx } from './dsar.ts';
+export { eraseOrdersDsarTx, ordersDsarTx, redactAbandonedOrdersTx } from './dsar.ts';
 export * from './dto.ts';
 export {
   type DaySalesFact,

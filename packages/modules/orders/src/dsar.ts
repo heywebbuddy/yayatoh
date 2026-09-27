@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
-import { and, asc, eq, inArray, isNotNull } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, lt, ne } from 'drizzle-orm';
 import { orderItems, orders, refunds } from './schema.ts';
 
 /** Orders that were ever paid: kept for tax and accounting (legal hold), only redacted. */
@@ -66,4 +66,30 @@ export async function eraseOrdersDsarTx(tx: TenantTx, emailNorm: string, now: Da
     erased: rows.length,
     legalHold: rows.filter((r) => (SOLD as readonly string[]).includes(r.status)).length,
   };
+}
+
+/**
+ * Retention: checkouts that were never paid (expired or cancelled) keep no personal data after
+ * `before`. Amounts and status stay for reporting (failed-payment counts).
+ */
+export async function redactAbandonedOrdersTx(tx: TenantTx, before: Date, now: Date): Promise<string[]> {
+  const rows = await tx
+    .update(orders)
+    .set({
+      buyerName: ERASED_NAME,
+      buyerEmail: ERASED_EMAIL,
+      buyerUserId: null,
+      manageTokenCiphertext: null,
+      paymentReference: null,
+      updatedAt: now,
+    })
+    .where(
+      and(
+        inArray(orders.status, ['expired', 'cancelled']),
+        lt(orders.createdAt, before),
+        ne(orders.buyerEmail, ERASED_EMAIL),
+      ),
+    )
+    .returning({ id: orders.id });
+  return rows.map((r) => r.id);
 }

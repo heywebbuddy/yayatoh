@@ -19,6 +19,7 @@ export {
   BulkOperationDto,
   bulkCommands,
   bulkOperationParamsTx,
+  bulkOperationRequesterTx,
   bulkStepCommand,
   defineBulkAction,
   listBulkOperationsQuery,
@@ -44,6 +45,7 @@ export {
   ERASED_EMAIL,
   ERASED_NAME,
   purgeExpiredFilesTx,
+  purgeExpiredIdempotencyKeysTx,
   purgeFilesMentioningTx,
 } from './privacy.ts';
 export {

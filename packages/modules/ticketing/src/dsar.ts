@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
-import { asc, eq, inArray, or, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, isNull, lt, ne, or, sql } from 'drizzle-orm';
 import { holderLinks, ticketClaims, tickets } from './schema.ts';
 
 const holderIs = (emailNorm: string) => sql`lower(btrim(${tickets.holderEmail})) = ${emailNorm}`;
@@ -65,7 +65,7 @@ export async function eraseTicketsDsarTx(tx: TenantTx, emailNorm: string, now: D
     .update(ticketClaims)
     .set({
       recipientEmail: null,
-      revokedAt: sql`coalesce(${ticketClaims.revokedAt}, case when ${ticketClaims.claimedAt} is null then ${now} end)`,
+      revokedAt: sql`coalesce(${ticketClaims.revokedAt}, case when ${ticketClaims.claimedAt} is null then ${now.toISOString()}::timestamptz end)`,
       updatedAt: now,
     })
     .where(sql`lower(${ticketClaims.recipientEmail}) = ${emailNorm}`)
@@ -85,4 +85,55 @@ export async function eraseTicketsDsarTx(tx: TenantTx, emailNorm: string, now: D
     claims: recipient.length + claimed.length,
     holderLinksDeleted: links.length,
   };
+}
+
+/** Retention: holder magic links are deleted a while after they expire. */
+export async function purgeHolderLinksTx(tx: TenantTx, expiredBefore: Date): Promise<number> {
+  return (
+    await tx
+      .delete(holderLinks)
+      .where(lt(holderLinks.expiresAt, expiredBefore))
+      .returning({ id: holderLinks.id })
+  ).length;
+}
+
+/** Retention: unclaimed links that expired long ago lose the recipient's address. */
+export async function redactStaleClaimsTx(tx: TenantTx, expiredBefore: Date, now: Date): Promise<number> {
+  return (
+    await tx
+      .update(ticketClaims)
+      .set({ recipientEmail: null, updatedAt: now })
+      .where(
+        and(
+          lt(ticketClaims.expiresAt, expiredBefore),
+          isNull(ticketClaims.claimedAt),
+          isNotNull(ticketClaims.recipientEmail),
+        ),
+      )
+      .returning({ id: ticketClaims.id })
+  ).length;
+}
+
+/** Retention: ticket holders of long-past events lose name and email (tickets stay counted). */
+export async function redactHoldersForEventsTx(tx: TenantTx, eventIds: readonly string[], now: Date) {
+  if (eventIds.length === 0) return 0;
+  const rows = await tx
+    .update(tickets)
+    .set({ holderName: ERASED_NAME, holderEmail: ERASED_EMAIL, updatedAt: now })
+    .where(and(inArray(tickets.eventId, [...eventIds]), ne(tickets.holderEmail, ERASED_EMAIL)))
+    .returning({ id: tickets.id });
+  if (rows.length)
+    await tx
+      .update(ticketClaims)
+      .set({ recipientEmail: null, claimedByEmail: null, updatedAt: now })
+      .where(
+        and(
+          inArray(
+            ticketClaims.ticketId,
+            rows.map((r) => r.id),
+          ),
+          or(isNotNull(ticketClaims.recipientEmail), isNotNull(ticketClaims.claimedByEmail)),
+        ),
+      );
+  return rows.length;
 }

@@ -185,3 +185,22 @@ REVOKE ALL ON FUNCTION platform.purge_rate_limits() FROM PUBLIC;
 --> statement-breakpoint
 GRANT EXECUTE ON FUNCTION platform.purge_rate_limits() TO app_user, platform_reader;
 -- hand-written: end
+--> statement-breakpoint
+-- hand-written: begin (M1.14c retention of the platform access log; run only after archiving)
+CREATE FUNCTION platform.purge_access_log(p_before timestamptz) RETURNS integer
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog AS $$
+DECLARE n integer;
+BEGIN
+  -- Never less than 12 months hot (roadmap §10: audit log 12 months hot + 7 years WORM).
+  IF p_before > now() - interval '12 months' THEN
+    RAISE EXCEPTION 'purge_access_log: keep at least 12 months' USING ERRCODE = '22023';
+  END IF;
+  DELETE FROM platform.access_log WHERE at < p_before;
+  GET DIAGNOSTICS n = ROW_COUNT;
+  RETURN n;
+END $$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION platform.purge_access_log(timestamptz) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION platform.purge_access_log(timestamptz) TO platform_reader;
+-- hand-written: end

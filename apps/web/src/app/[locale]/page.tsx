@@ -28,6 +28,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <CardLabel>{t('statusLabel')}</CardLabel>
         <StatusDot status="success" label={t('statusOk')} />
       </Card>
+      <footer className="flex flex-wrap gap-4 text-caption text-zinc-600">
+        <Link href="/privacy" className="underline underline-offset-2">
+          {t('privacyLink')}
+        </Link>
+        <Link href="/sub-processors" className="underline underline-offset-2">
+          {t('subProcessorsLink')}
+        </Link>
+      </footer>
     </main>
   );
 }
