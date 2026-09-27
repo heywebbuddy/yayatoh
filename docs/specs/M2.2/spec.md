@@ -237,9 +237,21 @@ Roadmap §7.5 (pipeline, ids, T1–T9, time, legacy QR, Stripe, audit-derived sp
 
 ### Idempotence and time
 - A rerun on the same dump produces identical ids and no duplicates (integration test).
-- Measured on the `large` synthetic dataset (4,936 events, 296,065 booking rows, 78,981 users, 302,035 attendees, 127,162 check-ins), with Postgres 18 in Docker on the 4-vCPU cloud container: see the timing table below. That is well inside the roadmap's ≤ 60 min for production size.
+- Measured on the `large` synthetic dataset: 4,936 events, 295,863 booking rows (about 300,000 tickets), 78,981 users, 301,857 attendee rows, 264,353 commissions and 125,868 check-ins, 1.19 M legacy rows in all. It ran on Postgres 18 in Docker (`shm_size` 256 MB) in the 4-vCPU, 15 GB cloud container. Both instances took **8 min 19 s** end to end (below), well inside the roadmap's ≤ 60 min for production size.
 
-@@PERF@@
+| Stage (seconds) | yay (942,062 rows) | abc (249,694 rows) |
+|---|---|---|
+| Load (stream + COPY + indexes) | 42.6 | 13.6 |
+| T1 identity | 7.7 | 3.2 |
+| T2 orgs | 4.7 | 1.6 |
+| T3 catalog | 11.0 | 5.5 |
+| T4 commerce | 155.5 | 43.6 |
+| T5 check-ins | 17.6 | 4.9 |
+| Codes and links (Ed25519 signing, legacy QR, manage tokens) | 119.0 | 29.9 |
+| Analyze + validation | 20.7 | 17.7 |
+| **Total** | **379.0 (6 min 19 s)** | **120.2 (2 min 0 s)** |
+
+Temporary working tables are analyzed explicitly, because autovacuum never analyzes temp tables and the first timed run stalled on bad plans. `LEGACY_TRACE=1` logs every statement slower than 0.5 s. The slowest single statements are about 13 s: contacts, tickets and short codes at 240k rows.
 
 ### Browser e2e (`apps/web/e2e/legacy-migration.spec.ts`; the global setup runs `migrate:legacy:demo`)
 - The migrated organizer signs in through the real form, keyboard only, with the legacy bcrypt password. They land in the migrated org and find its migrated events, and the session survives a reload.

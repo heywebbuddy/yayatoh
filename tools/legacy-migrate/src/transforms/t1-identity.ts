@@ -35,6 +35,7 @@ export async function t1Identity(ctx: StepContext): Promise<void> {
                      and coalesce(b.booking_cancel, 0) < 2) as has_paid
     from {s}.users u;
     create index on t1_src (norm);
+    analyze t1_src;
 
     insert into legacy.exceptions (run_id, instance, kind, legacy_table, legacy_id, detail)
     select {run}, {inst}, case when deleted_at is not null then 'user_deleted_skipped' else 'user_invalid_email' end,

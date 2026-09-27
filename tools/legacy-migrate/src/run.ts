@@ -157,6 +157,10 @@ export async function runMigration(opts: RunOptions): Promise<RunResult> {
       conn.release();
     }
 
+    // Fresh statistics for the tables the stages just filled (validation joins them all).
+    const ta = Date.now();
+    await sql.unsafe('analyze');
+    timings.analyze = Date.now() - ta;
     const t = Date.now();
     const report = await validate(sql, opts.instance, runId, { platformTz: settings.platformTz, eventClock });
     timings.validate = Date.now() - t;

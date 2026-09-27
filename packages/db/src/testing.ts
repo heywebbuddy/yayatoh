@@ -1,7 +1,7 @@
 // Test-only helpers. Imported from tests, never from application code (check-modules enforces).
 export { bootstrapRoles, grantSchemaUsage } from './bootstrap.ts';
 export { closePools } from './client.ts';
-export { roleGuard, schemaGuard } from './guard.ts';
+export { isMigrationSchema, roleGuard, schemaGuard } from './guard.ts';
 export { runMigrations } from './migrate.ts';
 export { forceRowLevelSecurity } from './rls-migration.ts';
 

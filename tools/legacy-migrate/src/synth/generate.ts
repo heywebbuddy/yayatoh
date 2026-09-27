@@ -833,7 +833,9 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
   let checkinId = 0;
   const orderNumbers: string[] = [];
   const counter = { n: 0 };
-  const uniqueNumber = (ms: number) => `${Math.floor(ms / 1000)}${pad(++counter.n % 100000, 5)}`;
+  // `time()` plus a sequence (the legacy app appended 5 random digits; a sequence keeps the planted
+  // duplicates the only ones).
+  const uniqueNumber = (ms: number) => `${Math.floor(ms / 1000)}${pad(++counter.n, 5)}`;
   const buyerPool = customers.filter((c) => !hijackable.has(c.id));
   let guestCount = 0;
   const commissionPct = (ev: EventRow) => ev.commissionBps ?? (inst === 'yay' ? 800 : 600);
@@ -1177,7 +1179,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
           ? daysAgo(60 - k)
           : Math.min(
               Date.parse(`${ev.startDate}T12:00:00Z`) - rng.int(1, 60) * 86_400_000,
-              anchorMs - 3_600_000,
+              anchorMs - rng.int(60, 2000) * 60_000,
             ),
         occurrence: isDemo && ev.repetitive ? '2026-06-02' : occurrence,
         gateway,

@@ -127,7 +127,9 @@ export async function validate(
                              where distributed_from_booking_id is null and booking_cancel = 3 and net_price > 0) x) as legacy_refunded_orders,
       (select count(*) from orders.refunds f join legacy.ref r on r.new_id = f.order_id and r.instance = $1 and r.entity = 'orders') as refunds,
       (select count(*) from {s}.commissions) as legacy_commissions,
-      (select coalesce(sum(source_rows), 0) from payments.legacy_settlements where instance = $1 and kind = 'event_statement') as commission_rows,
+      (select coalesce(sum(s.source_rows), 0) from payments.legacy_settlements s
+         join legacy.ref r on r.new_id = s.event_id and r.instance = $1 and r.entity = 'events'
+        where s.kind = 'event_statement') as commission_rows,
       (select count(*) from live where distributed_from_booking_id is not null) as legacy_hand_ons,
       (select count(*) from legacy.ref r join {s}.bookings b on b.id::text = r.legacy_id
          where r.instance = $1 and r.entity = 'bookings' and b.distributed_from_booking_id is not null) as hand_ons

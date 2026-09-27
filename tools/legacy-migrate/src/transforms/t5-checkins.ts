@@ -25,18 +25,22 @@ export async function t5Checkins(ctx: StepContext): Promise<void> {
 
     -- The tickets each legacy booking admits: its units (minus units handed on), or for a
     -- hand-on row its one ticket.
+    analyze legacy.ref;
+    drop table if exists t5_handed;
+    create temp table t5_handed as
+    select h.legacy_id::bigint as booking_id, h.new_id as ticket_id
+    from legacy.ref h join {s}.bookings hb on hb.id::text = h.legacy_id and hb.distributed_from_booking_id is not null
+    where h.instance = {inst} and h.entity = 'bookings';
     drop table if exists t5_map;
     create temp table t5_map as
     select split_part(u.legacy_id, ':', 1)::bigint as booking_id, u.new_id as ticket_id
     from legacy.ref u
-    where u.instance = {inst} and u.entity = 'booking_units'
-      and not exists (select 1 from legacy.ref h where h.instance = {inst} and h.entity = 'bookings'
-                      and h.new_id = u.new_id and h.legacy_id <> split_part(u.legacy_id, ':', 1))
+    left join t5_handed x on x.ticket_id = u.new_id
+    where u.instance = {inst} and u.entity = 'booking_units' and x.ticket_id is null
     union all
-    select h.legacy_id::bigint, h.new_id
-    from legacy.ref h join {s}.bookings hb on hb.id::text = h.legacy_id and hb.distributed_from_booking_id is not null
-    where h.instance = {inst} and h.entity = 'bookings';
+    select booking_id, ticket_id from t5_handed;
     create index on t5_map (booking_id);
+    analyze t5_map; analyze t5_src;
 
     insert into legacy.quarantine (run_id, instance, table_name, legacy_id, column_name, reason, detail)
     select {run}, {inst}, 'checkins', s.legacy_id::text, 'booking_id', 'orphan', 'booking ' || s.booking_id

@@ -57,6 +57,7 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     left join legacy.ref tt on tt.instance = {inst} and tt.entity = 'tickets' and tt.legacy_id = b.ticket_id::text;
     create index on t4_b (legacy_id);
     create index on t4_b (parent_legacy_id);
+    analyze t4_b;
 
     -- Money/ticket rows that cannot be migrated exactly: quarantined (the run then fails).
     drop table if exists t4_bad;
@@ -126,6 +127,7 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     from g join t4_b f on f.legacy_id = g.first_row
     join events.events e on e.id = g.event_id;
     create index on t4_orders (order_key);
+    analyze t4_orders;
     update t4_b b set order_id = o.id from t4_orders o where o.order_key = b.order_key;
 
     -- Buyers: the booking's email when valid, else the account's, else a placeholder (listed).
@@ -189,6 +191,7 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     from t4_b b cross join lateral generate_series(1, b.qty) u
     where b.parent_legacy_id is null;
     create index on t4_units (legacy_id, u);
+    analyze t4_units;
 
     -- Holders: a hand-on takes a unit from the end; the row's own attendees fill from the start.
     alter table t4_units add column holder_name text, add column holder_email text, add column hand_on_legacy_id bigint;
@@ -283,6 +286,7 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
            1, p - pf * (qty - 1), r - rf * (qty - 1), fee - ff * (qty - 1), n - nf * (qty - 1), onet - of_ * (qty - 1)
     from even where not divides;
     create index on t4_parts (legacy_id, part);
+    analyze t4_parts;
 
     drop table if exists t4_items;
     create temp table t4_items as
@@ -293,6 +297,7 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     from t4_parts
     group by order_id, org_id, ticket_type_id, face, disc, fee, allin, onet;
     create index on t4_items (order_id, ticket_type_id, face, disc, fee, allin, onet);
+    analyze t4_items;
 
     insert into orders.order_items (id, org_id, order_id, ticket_type_id, name, quantity, unit_face_minor, unit_discount_minor,
                                     unit_fee_minor, unit_all_in_minor, unit_organizer_net_minor, created_at, updated_at)
@@ -372,15 +377,19 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     select {inst}, 'bookings', hand_on_legacy_id::text, ticket_id, org_id, hand_on_legacy_id from t4_units where hand_on_legacy_id is not null
     on conflict (instance, entity, legacy_id) do update set new_id = excluded.new_id, org_id = excluded.org_id;
 
+    analyze legacy.ref;
+
     -- Refunds (succeeded; the money already went back in the legacy app).
     insert into orders.refunds (id, org_id, order_id, status, reason, amount_minor, fee_refunded_minor, currency, ticket_ids,
                                 requested_by, completed_at, created_at, updated_at)
     select legacy.det_uuid(o.updated, {inst} || '|refunds|' || o.order_key), o.org_id, o.id, 'succeeded', 'requested_by_customer',
            o.refunded, least(coalesce(o.fee_refunded, 0), o.refunded), o.currency,
-           coalesce((select array_agg(t.ticket_id order by t.serial) from t4_units t join t4_b b on b.legacy_id = t.legacy_id
-                     where t.order_id = o.id and b.cancel = 3), '{}'::uuid[]),
+           coalesce(rt.ticket_ids, '{}'::uuid[]),
            'legacy:' || {inst}, o.updated, o.updated, o.updated
-    from t4_orders o where coalesce(o.refunded, 0) > 0
+    from t4_orders o
+    left join (select t.order_id, array_agg(t.ticket_id order by t.serial) as ticket_ids
+               from t4_units t where t.cancel = 3 group by t.order_id) rt on rt.order_id = o.id
+    where coalesce(o.refunded, 0) > 0
     on conflict (id) do nothing;
 
     -- Inventory: sold = migrated active tickets (capacity raised if the legacy data oversold).

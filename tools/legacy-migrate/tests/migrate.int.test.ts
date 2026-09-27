@@ -2,8 +2,9 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { scanTicketCommand } from '@yayatoh/checkin';
-import { closePools } from '@yayatoh/db';
+import { closePools, GLOBAL_TABLES } from '@yayatoh/db';
 import { migratorSql } from '@yayatoh/db/migration';
+import { adminClient, schemaGuard } from '@yayatoh/db/testing';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { orderByManageToken } from '@yayatoh/orders';
 import { ports } from '@yayatoh/testing';
@@ -108,6 +109,19 @@ describe('legacy migration — runs and reports', () => {
                has_schema_privilege('app_user', 'legacy', 'usage') as app_legacy`,
     );
     expect(r).toEqual({ app: false, reader: false, app_legacy: false });
+    // The schema guard exempts these schemas from the tenant-table rules only while no runtime role
+    // can reach them.
+    const admin = adminClient();
+    try {
+      expect(await schemaGuard(admin, GLOBAL_TABLES)).toEqual([]);
+      await admin.unsafe('grant usage on schema legacy_abc to app_user');
+      expect(await schemaGuard(admin, GLOBAL_TABLES)).toEqual([
+        { table: 'legacy_abc.*', problem: 'migration schema is visible to a runtime role' },
+      ]);
+    } finally {
+      await admin.unsafe('revoke usage on schema legacy_abc from app_user');
+      await admin.end();
+    }
     expect(check(first.yay, 'V11')?.details).toMatchObject({
       notForced: [],
       probe: { staging: 'denied', control: 'denied', other: 0 },
@@ -379,7 +393,8 @@ describe('T3/T4 catalog and commerce', () => {
                count(*) filter (where kind = 'opening_balance' and status = 'pending_signoff')::int as pending,
                sum(open_minor) filter (where kind = 'event_statement')::text as open_sum,
                sum(open_minor) filter (where kind = 'opening_balance')::text as opening_sum
-        from payments.legacy_settlements`,
+        from payments.legacy_settlements
+        where org_id in (select org_id from legacy.ref where entity = 'organizers')`,
     );
     expect(r.statements).toBeGreaterThan(0);
     expect(r.openings).toBe(r.pending);
