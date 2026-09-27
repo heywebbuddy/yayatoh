@@ -411,7 +411,9 @@
     "continue": "Continue to payment",
     "soldOut": "Sorry — those tickets just sold out. Try a smaller quantity or another pass.",
     "chooseTickets": "Choose at least one ticket.",
-    "marketingOptIn": "Email me news and offers from {org}. Optional; unsubscribe any time."
+    "marketingOptIn": "Email me news and offers from {org}. Optional; unsubscribe any time.",
+    "promoCode": "Promo code",
+    "promoInvalid": "That promo code isn't valid for these tickets."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -451,7 +453,8 @@
     "qrLabel": "QR code for ticket number {serial}",
     "shortCode": "Code",
     "holder": "Ticket holder",
-    "downloadPdf": "Download tickets (PDF)"
+    "downloadPdf": "Download tickets (PDF)",
+    "discountApplied": "Includes {amount} off with {code}"
   },
   "orders": {
     "title": "Recent orders",
@@ -461,5 +464,32 @@
     "items": "Tickets",
     "total": "Total",
     "status": "Status"
+  },
+  "promo": {
+    "title": "Promo codes",
+    "emptyTitle": "No promo codes yet",
+    "emptyDescription": "A code takes a percentage or an amount off each ticket's price, before fees.",
+    "code": "Code",
+    "codeHint": "3–32 letters, digits, - or _. Buyers can type it in any case.",
+    "kind": "Discount type",
+    "percent": "Percentage off",
+    "amount": "Amount off ({currency})",
+    "value": "Discount",
+    "valueHint": "For example 20 for 20%, or 5 for 5.00 off each ticket.",
+    "maxUses": "Maximum uses (optional)",
+    "discount": "Discount",
+    "percentOff": "{value} off",
+    "amountOff": "{amount} off each ticket",
+    "uses": "Uses",
+    "status": "Status",
+    "active": "Active",
+    "paused": "Paused",
+    "pause": "Pause",
+    "resume": "Resume",
+    "pauseCode": "Pause {code}",
+    "resumeCode": "Resume {code}",
+    "addTitle": "Add a promo code",
+    "add": "Add code",
+    "added": "Promo code added."
   }
 }
