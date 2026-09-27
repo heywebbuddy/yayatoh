@@ -48,7 +48,9 @@ test.describe('promo codes', () => {
     await expect(first.getByText(`Includes $5.00 off with ${code}`)).toBeVisible();
 
     const second = await buy('Dorothy');
-    await expect(second.getByRole('alert')).toContainText("That promo code isn't valid for these tickets.");
+    await expect(second.getByRole('region', { name: 'Choose your pass' }).getByRole('alert')).toContainText(
+      "That promo code isn't valid for these tickets.",
+    );
 
     await page.reload();
     await expect(page.getByRole('row').filter({ hasText: code })).toContainText('1 / 1');

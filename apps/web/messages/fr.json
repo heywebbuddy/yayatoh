@@ -411,7 +411,9 @@
     "continue": "Continuer vers le paiement",
     "soldOut": "Désolé, ces billets viennent d’être épuisés. Essayez une quantité plus petite ou un autre pass.",
     "chooseTickets": "Choisissez au moins un billet.",
-    "marketingOptIn": "Je souhaite recevoir par e-mail les actualités et offres de {org}. Facultatif, vous pouvez vous désabonner à tout moment."
+    "marketingOptIn": "Je souhaite recevoir par e-mail les actualités et offres de {org}. Facultatif, vous pouvez vous désabonner à tout moment.",
+    "promoCode": "Code promo",
+    "promoInvalid": "Ce code promo n’est pas valable pour ces billets."
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -451,7 +453,8 @@
     "qrLabel": "QR code du billet numéro {serial}",
     "shortCode": "Code",
     "holder": "Titulaire du billet",
-    "downloadPdf": "Télécharger les billets (PDF)"
+    "downloadPdf": "Télécharger les billets (PDF)",
+    "discountApplied": "Dont {amount} de réduction avec {code}"
   },
   "orders": {
     "title": "Commandes récentes",
@@ -461,5 +464,32 @@
     "items": "Billets",
     "total": "Total",
     "status": "Statut"
+  },
+  "promo": {
+    "title": "Codes promo",
+    "emptyTitle": "Aucun code promo pour l’instant",
+    "emptyDescription": "Un code retire un pourcentage ou un montant du prix de chaque billet, avant frais.",
+    "code": "Code",
+    "codeHint": "3–32 lettres, chiffres, - ou _. Les acheteurs peuvent le saisir en majuscules ou en minuscules.",
+    "kind": "Type de réduction",
+    "percent": "Pourcentage de réduction",
+    "amount": "Montant de réduction ({currency})",
+    "value": "Réduction",
+    "valueHint": "Par exemple 20 pour 20%, ou 5 pour 5.00 de réduction sur chaque billet.",
+    "maxUses": "Nombre maximal d’utilisations (facultatif)",
+    "discount": "Réduction",
+    "percentOff": "{value} de réduction",
+    "amountOff": "{amount} de réduction par billet",
+    "uses": "Utilisations",
+    "status": "Statut",
+    "active": "Actif",
+    "paused": "En pause",
+    "pause": "Mettre en pause",
+    "resume": "Réactiver",
+    "pauseCode": "Mettre {code} en pause",
+    "resumeCode": "Réactiver {code}",
+    "addTitle": "Ajouter un code promo",
+    "add": "Ajouter le code",
+    "added": "Code promo ajouté."
   }
 }

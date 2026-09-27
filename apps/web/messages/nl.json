@@ -411,7 +411,9 @@
     "continue": "Door naar betalen",
     "soldOut": "Sorry, die tickets zijn net uitverkocht. Probeer een kleiner aantal of een andere pas.",
     "chooseTickets": "Kies minstens één ticket.",
-    "marketingOptIn": "Ik wil nieuws en aanbiedingen van {org} per e-mail ontvangen. Optioneel; je kunt je altijd afmelden."
+    "marketingOptIn": "Ik wil nieuws en aanbiedingen van {org} per e-mail ontvangen. Optioneel; je kunt je altijd afmelden.",
+    "promoCode": "Kortingscode",
+    "promoInvalid": "Die kortingscode is niet geldig voor deze tickets."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -451,7 +453,8 @@
     "qrLabel": "QR-code voor ticketnummer {serial}",
     "shortCode": "Code",
     "holder": "Tickethouder",
-    "downloadPdf": "Tickets downloaden (PDF)"
+    "downloadPdf": "Tickets downloaden (PDF)",
+    "discountApplied": "Inclusief {amount} korting met {code}"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -461,5 +464,32 @@
     "items": "Tickets",
     "total": "Totaal",
     "status": "Status"
+  },
+  "promo": {
+    "title": "Kortingscodes",
+    "emptyTitle": "Nog geen kortingscodes",
+    "emptyDescription": "Een code haalt een percentage of een bedrag van de prijs van elk ticket af, vóór kosten.",
+    "code": "Code",
+    "codeHint": "3–32 letters, cijfers, - of _. Kopers kunnen hem in hoofd- of kleine letters typen.",
+    "kind": "Soort korting",
+    "percent": "Percentage korting",
+    "amount": "Bedrag korting ({currency})",
+    "value": "Korting",
+    "valueHint": "Bijvoorbeeld 20 voor 20%, of 5 voor 5.00 korting per ticket.",
+    "maxUses": "Maximaal aantal keer te gebruiken (optioneel)",
+    "discount": "Korting",
+    "percentOff": "{value} korting",
+    "amountOff": "{amount} korting per ticket",
+    "uses": "Gebruikt",
+    "status": "Status",
+    "active": "Actief",
+    "paused": "Gepauzeerd",
+    "pause": "Pauzeren",
+    "resume": "Hervatten",
+    "pauseCode": "{code} pauzeren",
+    "resumeCode": "{code} hervatten",
+    "addTitle": "Kortingscode toevoegen",
+    "add": "Code toevoegen",
+    "added": "Kortingscode toegevoegd."
   }
 }

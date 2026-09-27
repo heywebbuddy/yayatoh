@@ -411,7 +411,9 @@
     "continue": "Continua al pagamento",
     "soldOut": "Spiacenti, quei biglietti sono appena esauriti. Prova con una quantità minore o un altro pass.",
     "chooseTickets": "Scegli almeno un biglietto.",
-    "marketingOptIn": "Voglio ricevere via email novità e offerte da {org}. Facoltativo; puoi annullare l’iscrizione in qualsiasi momento."
+    "marketingOptIn": "Voglio ricevere via email novità e offerte da {org}. Facoltativo; puoi annullare l’iscrizione in qualsiasi momento.",
+    "promoCode": "Codice promozionale",
+    "promoInvalid": "Quel codice promozionale non è valido per questi biglietti."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -451,7 +453,8 @@
     "qrLabel": "Codice QR del biglietto numero {serial}",
     "shortCode": "Codice",
     "holder": "Intestatario del biglietto",
-    "downloadPdf": "Scarica i biglietti (PDF)"
+    "downloadPdf": "Scarica i biglietti (PDF)",
+    "discountApplied": "Include {amount} di sconto con {code}"
   },
   "orders": {
     "title": "Ordini recenti",
@@ -461,5 +464,32 @@
     "items": "Biglietti",
     "total": "Totale",
     "status": "Stato"
+  },
+  "promo": {
+    "title": "Codici promozionali",
+    "emptyTitle": "Ancora nessun codice promozionale",
+    "emptyDescription": "Un codice toglie una percentuale o un importo dal prezzo di ogni biglietto, prima delle commissioni.",
+    "code": "Codice",
+    "codeHint": "3–32 lettere, cifre, - o _. Gli acquirenti possono digitarlo in maiuscolo o minuscolo.",
+    "kind": "Tipo di sconto",
+    "percent": "Sconto percentuale",
+    "amount": "Sconto in importo ({currency})",
+    "value": "Sconto",
+    "valueHint": "Ad esempio 20 per il 20%, o 5 per 5.00 di sconto su ogni biglietto.",
+    "maxUses": "Utilizzi massimi (facoltativo)",
+    "discount": "Sconto",
+    "percentOff": "{value} di sconto",
+    "amountOff": "{amount} di sconto su ogni biglietto",
+    "uses": "Utilizzi",
+    "status": "Stato",
+    "active": "Attivo",
+    "paused": "In pausa",
+    "pause": "Metti in pausa",
+    "resume": "Riattiva",
+    "pauseCode": "Metti in pausa {code}",
+    "resumeCode": "Riattiva {code}",
+    "addTitle": "Aggiungi un codice promozionale",
+    "add": "Aggiungi codice",
+    "added": "Codice promozionale aggiunto."
   }
 }

@@ -411,7 +411,9 @@
     "continue": "继续付款",
     "soldOut": "抱歉，这些门票刚刚售罄。请减少数量或选择其他通行证。",
     "chooseTickets": "请至少选择一张门票。",
-    "marketingOptIn": "我希望通过电子邮件接收{org}的新闻和优惠信息。（可选，可随时退订）"
+    "marketingOptIn": "我希望通过电子邮件接收{org}的新闻和优惠信息。（可选，可随时退订）",
+    "promoCode": "优惠码",
+    "promoInvalid": "该优惠码不适用于这些门票。"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -451,7 +453,8 @@
     "qrLabel": "票号 {serial} 的二维码",
     "shortCode": "验证码",
     "holder": "持票人",
-    "downloadPdf": "下载门票（PDF）"
+    "downloadPdf": "下载门票（PDF）",
+    "discountApplied": "含优惠码 {code} 减免的 {amount}"
   },
   "orders": {
     "title": "最近订单",
@@ -461,5 +464,32 @@
     "items": "门票",
     "total": "合计",
     "status": "状态"
+  },
+  "promo": {
+    "title": "优惠码",
+    "emptyTitle": "暂无优惠码",
+    "emptyDescription": "优惠码可按百分比或固定金额减免每张门票的价格，在计算费用之前生效。",
+    "code": "代码",
+    "codeHint": "3–32 个字母、数字、- 或 _。买家输入时不区分大小写。",
+    "kind": "折扣类型",
+    "percent": "按百分比减免",
+    "amount": "按金额减免（{currency}）",
+    "value": "折扣",
+    "valueHint": "例如：填 20 表示减免 20%，填 5 表示每张门票减免 5.00。",
+    "maxUses": "最多使用次数（可选）",
+    "discount": "折扣",
+    "percentOff": "优惠 {value}",
+    "amountOff": "每张门票优惠 {amount}",
+    "uses": "使用次数",
+    "status": "状态",
+    "active": "有效",
+    "paused": "已暂停",
+    "pause": "暂停",
+    "resume": "恢复",
+    "pauseCode": "暂停{code}",
+    "resumeCode": "恢复{code}",
+    "addTitle": "添加优惠码",
+    "add": "添加优惠码",
+    "added": "已添加优惠码。"
   }
 }

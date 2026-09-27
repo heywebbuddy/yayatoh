@@ -411,7 +411,9 @@
     "continue": "Continuar al pago",
     "soldOut": "Lo sentimos: esas entradas se acaban de agotar. Prueba con una cantidad menor u otro pase.",
     "chooseTickets": "Elige al menos una entrada.",
-    "marketingOptIn": "Quiero recibir novedades y ofertas de {org} por correo. Opcional; puedes darte de baja cuando quieras."
+    "marketingOptIn": "Quiero recibir novedades y ofertas de {org} por correo. Opcional; puedes darte de baja cuando quieras.",
+    "promoCode": "Código promocional",
+    "promoInvalid": "Ese código promocional no es válido para estas entradas."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -451,7 +453,8 @@
     "qrLabel": "Código QR de la entrada número {serial}",
     "shortCode": "Código",
     "holder": "Titular de la entrada",
-    "downloadPdf": "Descargar entradas (PDF)"
+    "downloadPdf": "Descargar entradas (PDF)",
+    "discountApplied": "Incluye {amount} de descuento con {code}"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -461,5 +464,32 @@
     "items": "Entradas",
     "total": "Total",
     "status": "Estado"
+  },
+  "promo": {
+    "title": "Códigos promocionales",
+    "emptyTitle": "Aún no hay códigos promocionales",
+    "emptyDescription": "Un código descuenta un porcentaje o un importe del precio de cada entrada, antes de tarifas.",
+    "code": "Código",
+    "codeHint": "3–32 letras, dígitos, - o _. Los compradores pueden escribirlo en mayúsculas o minúsculas.",
+    "kind": "Tipo de descuento",
+    "percent": "Porcentaje de descuento",
+    "amount": "Importe de descuento ({currency})",
+    "value": "Descuento",
+    "valueHint": "Por ejemplo, 20 para un 20%, o 5 para 5.00 de descuento en cada entrada.",
+    "maxUses": "Usos máximos (opcional)",
+    "discount": "Descuento",
+    "percentOff": "{value} de descuento",
+    "amountOff": "{amount} de descuento en cada entrada",
+    "uses": "Usos",
+    "status": "Estado",
+    "active": "Activo",
+    "paused": "En pausa",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "pauseCode": "Pausar {code}",
+    "resumeCode": "Reanudar {code}",
+    "addTitle": "Añadir un código promocional",
+    "add": "Añadir código",
+    "added": "Código promocional añadido."
   }
 }

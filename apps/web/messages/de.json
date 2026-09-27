@@ -411,7 +411,9 @@
     "continue": "Weiter zur Zahlung",
     "soldOut": "Leider sind diese Tickets gerade ausverkauft. Versuche eine kleinere Anzahl oder einen anderen Pass.",
     "chooseTickets": "Wähle mindestens ein Ticket.",
-    "marketingOptIn": "Ich möchte Neuigkeiten und Angebote von {org} per E-Mail erhalten. Optional; du kannst dich jederzeit abmelden."
+    "marketingOptIn": "Ich möchte Neuigkeiten und Angebote von {org} per E-Mail erhalten. Optional; du kannst dich jederzeit abmelden.",
+    "promoCode": "Rabattcode",
+    "promoInvalid": "Dieser Rabattcode gilt nicht für diese Tickets."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -451,7 +453,8 @@
     "qrLabel": "QR-Code für Ticket Nr. {serial}",
     "shortCode": "Code",
     "holder": "Ticketinhaber",
-    "downloadPdf": "Tickets herunterladen (PDF)"
+    "downloadPdf": "Tickets herunterladen (PDF)",
+    "discountApplied": "Enthält {amount} Rabatt mit {code}"
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -461,5 +464,32 @@
     "items": "Tickets",
     "total": "Gesamt",
     "status": "Status"
+  },
+  "promo": {
+    "title": "Rabattcodes",
+    "emptyTitle": "Noch keine Rabattcodes",
+    "emptyDescription": "Ein Code zieht einen Prozentsatz oder einen Betrag vom Preis jedes Tickets ab, vor Gebühren.",
+    "code": "Code",
+    "codeHint": "3–32 Buchstaben, Ziffern, - oder _. Käufer können ihn in beliebiger Groß- und Kleinschreibung eingeben.",
+    "kind": "Rabattart",
+    "percent": "Prozentrabatt",
+    "amount": "Betragsrabatt ({currency})",
+    "value": "Rabatt",
+    "valueHint": "Zum Beispiel 20 für 20% oder 5 für 5.00 Rabatt pro Ticket.",
+    "maxUses": "Maximale Einlösungen (optional)",
+    "discount": "Rabatt",
+    "percentOff": "{value} Rabatt",
+    "amountOff": "{amount} Rabatt pro Ticket",
+    "uses": "Einlösungen",
+    "status": "Status",
+    "active": "Aktiv",
+    "paused": "Pausiert",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "pauseCode": "{code} pausieren",
+    "resumeCode": "{code} fortsetzen",
+    "addTitle": "Rabattcode hinzufügen",
+    "add": "Code hinzufügen",
+    "added": "Rabattcode hinzugefügt."
   }
 }

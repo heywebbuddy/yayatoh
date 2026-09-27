@@ -411,7 +411,9 @@
     "continue": "繼續付款",
     "soldOut": "抱歉，這些票券剛剛售完。請減少數量或選擇其他通行證。",
     "chooseTickets": "請至少選擇一張票券。",
-    "marketingOptIn": "我希望透過電子郵件接收{org}的最新消息與優惠資訊。（選填，可隨時取消訂閱）"
+    "marketingOptIn": "我希望透過電子郵件接收{org}的最新消息與優惠資訊。（選填，可隨時取消訂閱）",
+    "promoCode": "優惠碼",
+    "promoInvalid": "此優惠碼不適用於這些票券。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -451,7 +453,8 @@
     "qrLabel": "票號 {serial} 的 QR 碼",
     "shortCode": "驗證碼",
     "holder": "持票人",
-    "downloadPdf": "下載票券（PDF）"
+    "downloadPdf": "下載票券（PDF）",
+    "discountApplied": "含優惠碼 {code} 折抵的 {amount}"
   },
   "orders": {
     "title": "最近訂單",
@@ -461,5 +464,32 @@
     "items": "票券",
     "total": "總計",
     "status": "狀態"
+  },
+  "promo": {
+    "title": "優惠碼",
+    "emptyTitle": "尚無優惠碼",
+    "emptyDescription": "優惠碼可按百分比或固定金額折抵每張票券的價格，於計算費用前套用。",
+    "code": "代碼",
+    "codeHint": "3–32 個字母、數字、- 或 _。買家輸入時不分大小寫。",
+    "kind": "折扣類型",
+    "percent": "按百分比折抵",
+    "amount": "按金額折抵（{currency}）",
+    "value": "折扣",
+    "valueHint": "例如：輸入 20 代表折抵 20%，輸入 5 代表每張票券折抵 5.00。",
+    "maxUses": "使用次數上限（選填）",
+    "discount": "折扣",
+    "percentOff": "折抵 {value}",
+    "amountOff": "每張票券折抵 {amount}",
+    "uses": "使用次數",
+    "status": "狀態",
+    "active": "啟用中",
+    "paused": "已暫停",
+    "pause": "暫停",
+    "resume": "恢復",
+    "pauseCode": "暫停{code}",
+    "resumeCode": "恢復{code}",
+    "addTitle": "新增優惠碼",
+    "add": "新增優惠碼",
+    "added": "已新增優惠碼。"
   }
 }
