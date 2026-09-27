@@ -35,6 +35,9 @@ test.afterAll(async () => {
   await closePools();
 });
 
+/** Seeded Harbor Arts events (no other test creates events for that org). */
+const HARBOR_EVENTS = ['Harbor Spring Concert', 'Harbor Film Night', 'Harbor Autumn Gala'];
+
 test.describe('marketplace home and search (M1.11a)', () => {
   test('the home page lists upcoming public events, never drafts, cancelled or weddings', async ({
     page,
@@ -42,11 +45,22 @@ test.describe('marketplace home and search (M1.11a)', () => {
     const res = await page.goto('/');
     expect(res?.status()).toBe(200);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find your next event.');
+    // The home shows the six soonest public events. Other tests publish events happening today in
+    // parallel, so which six is not fixed: check the rules, then find the seeded ones by search.
     const list = page.getByRole('list', { name: 'Upcoming events' });
-    await expect(list.getByRole('link', { name: 'Harbor Spring Concert' })).toBeVisible();
-    await expect(list.getByRole('link', { name: 'Lakeside Open House' })).toBeVisible();
+    const shown = await list.getByRole('listitem').count();
+    expect(shown).toBeGreaterThan(0);
+    expect(shown).toBeLessThanOrEqual(6);
     await expect(page.getByRole('link', { name: 'Harbor Winter Show' })).toHaveCount(0);
     await expect(page.getByRole('link', { name: /Harper/ })).toHaveCount(0);
+    for (const name of ['Harbor Spring Concert', 'Lakeside Open House']) {
+      await page.goto(`/events?q=${encodeURIComponent(name)}`);
+      await expect(page.getByRole('link', { name, exact: true })).toBeVisible();
+    }
+    // Drafts, cancelled events and weddings are never found, not even by name.
+    await page.goto('/events?q=Harbor+Winter+Show');
+    await expect(page.getByRole('link', { name: 'Harbor Winter Show' })).toHaveCount(0);
+    await page.goto('/');
     // The postponed gala is still listed, marked postponed.
     await page.goto('/events?q=Autumn+Gala');
     const gala = page.getByRole('listitem').filter({ hasText: 'Harbor Autumn Gala' });
@@ -224,13 +238,15 @@ test.describe('tenant sites (M1.11a)', () => {
 
   test('cache guard: the same route on two tenant hosts never shows the other org', async ({ page }) => {
     for (let i = 0; i < 2; i += 1) {
+      // Lakeside's list changes as other tests publish events in parallel; Harbor's never does.
       await page.goto(`${LAKESIDE}/`);
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lakeside Events');
-      await expect(page.getByRole('link', { name: 'Lakeside Open House' })).toBeVisible();
-      await expect(page.getByRole('link', { name: /^Harbor/ })).toHaveCount(0);
+      await expect(page.getByRole('main').getByRole('link').first()).toBeVisible();
+      for (const name of HARBOR_EVENTS) await expect(page.getByRole('link', { name })).toHaveCount(0);
       await page.goto(`${HARBOR}/`);
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Harbor Arts Collective');
-      await expect(page.getByRole('link', { name: 'Lakeside Open House' })).toHaveCount(0);
+      await expect(page.getByRole('link', { name: 'Harbor Film Night' })).toBeVisible();
+      await expect(page.getByRole('link', { name: /Lakeside/ })).toHaveCount(0);
     }
   });
 

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { expectAccessible, expectHtmlAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 interface Captured {
   subject: string;
@@ -99,6 +99,8 @@ test.describe('messaging: announcements and conversations', () => {
     await expect(sentRow).toContainText('1 sent');
     const [mail] = await mailbox(page, email);
     expect(mail?.subject).toBe(`Parking ${stamp}`);
+    // The email itself (what the preview frame shows) passes axe on its own.
+    await expectHtmlAccessible(page, mail?.html ?? '');
     const replyLink = /href="(https?:\/\/[^"]+\/messages\/[^"]+)"/.exec(mail?.html ?? '')?.[1] ?? '';
     expect(replyLink).toMatch(/\/messages\/[0-9a-f-]{36}~/);
 
