@@ -569,7 +569,26 @@
       "void": "Este ingresso foi cancelado",
       "wrong_event": "Este ingresso é de outro evento",
       "not_today": "Este passe não é válido hoje",
-      "outside_window": "O check-in não está aberto agora"
+      "outside_window": "O check-in não está aberto agora",
+      "duplicate_offline": "Check-in feito antes em outro dispositivo",
+      "superseded": "Código antigo de um ingresso reemitido",
+      "provisional": "Entrada offline — a confirmar"
     }
+  },
+  "devices": {
+    "title": "Dispositivos de leitura",
+    "description": "Celulares e tablets que fazem leituras offline. Cada um tem sua própria chave; revogue um dispositivo perdido ou apague a lista de convidados baixada nele.",
+    "label": "Nome do dispositivo",
+    "labelHint": "Por exemplo, iPad portão norte.",
+    "add": "Adicionar dispositivo",
+    "tokenOnce": "Digite esta chave em {label}. Ela é mostrada só uma vez.",
+    "lastSeen": "Última conexão {when} · bateria {battery}% · {queue} leituras na fila",
+    "neverSeen": "Ainda não conectado",
+    "wipePending": "Apagamento solicitado — aguardando a conexão do dispositivo",
+    "revoked": "Revogado",
+    "wipe": "Apagar",
+    "wipeFor": "Apagar {label}",
+    "revoke": "Revogar",
+    "revokeFor": "Revogar {label}"
   }
 }

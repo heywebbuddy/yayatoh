@@ -14,6 +14,9 @@ const TONE = {
   invalid: 'border-pink-700 bg-pink-50 text-pink-700',
   void: 'border-pink-700 bg-pink-50 text-pink-700',
   wrong_event: 'border-pink-700 bg-pink-50 text-pink-700',
+  duplicate_offline: 'border-pink-700 bg-pink-50 text-pink-700',
+  superseded: 'border-pink-700 bg-pink-50 text-pink-700',
+  provisional: 'border-accent-700 bg-accent-50 text-accent-text',
 } as const;
 
 const newScanId = () => `web:${crypto.randomUUID()}`;

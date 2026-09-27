@@ -13,6 +13,7 @@
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",

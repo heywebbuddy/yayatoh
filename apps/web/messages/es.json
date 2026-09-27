@@ -569,7 +569,26 @@
       "void": "Esta entrada fue cancelada",
       "wrong_event": "Esta entrada es para otro evento",
       "not_today": "Este pase no es válido hoy",
-      "outside_window": "El check-in no está abierto ahora"
+      "outside_window": "El check-in no está abierto ahora",
+      "duplicate_offline": "Check-in realizado antes en otro dispositivo",
+      "superseded": "Código antiguo de una entrada reemitida",
+      "provisional": "Acceso sin conexión, pendiente de confirmar"
     }
+  },
+  "devices": {
+    "title": "Dispositivos de escaneo",
+    "description": "Teléfonos y tabletas que escanean sin conexión. Cada uno tiene su propia clave; revoca un dispositivo perdido o borra la lista de invitados que descargó.",
+    "label": "Nombre del dispositivo",
+    "labelHint": "Por ejemplo, iPad puerta norte.",
+    "add": "Añadir dispositivo",
+    "tokenOnce": "Introduce esta clave en {label}. Solo se muestra una vez.",
+    "lastSeen": "Última conexión {when} · batería {battery} % · {queue} escaneos pendientes",
+    "neverSeen": "Aún no se ha conectado",
+    "wipePending": "Borrado solicitado: esperando a que el dispositivo se conecte",
+    "revoked": "Revocado",
+    "wipe": "Borrar",
+    "wipeFor": "Borrar {label}",
+    "revoke": "Revocar",
+    "revokeFor": "Revocar {label}"
   }
 }

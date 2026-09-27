@@ -1,0 +1,1 @@
+CREATE INDEX "tickets_org_event_updated_idx" ON "ticketing"."tickets" USING btree ("org_id","event_id","updated_at","id");

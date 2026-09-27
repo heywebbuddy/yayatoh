@@ -569,7 +569,26 @@
       "void": "Questo biglietto è stato annullato",
       "wrong_event": "Questo biglietto è per un altro evento",
       "not_today": "Questo pass non è valido oggi",
-      "outside_window": "Il check-in non è aperto in questo momento"
+      "outside_window": "Il check-in non è aperto in questo momento",
+      "duplicate_offline": "Check-in già effettuato su un altro dispositivo",
+      "superseded": "Codice vecchio di un biglietto riemesso",
+      "provisional": "Ingresso offline, da confermare"
     }
+  },
+  "devices": {
+    "title": "Dispositivi di scansione",
+    "description": "Telefoni e tablet che scansionano offline. Ognuno ha la propria chiave; revoca un dispositivo smarrito o cancella la lista ospiti scaricata.",
+    "label": "Nome del dispositivo",
+    "labelHint": "Ad esempio iPad ingresso nord.",
+    "add": "Aggiungi dispositivo",
+    "tokenOnce": "Inserisci questa chiave su {label}. Viene mostrata una sola volta.",
+    "lastSeen": "Ultima connessione {when} · batteria {battery}% · {queue} scansioni in attesa",
+    "neverSeen": "Non ancora connesso",
+    "wipePending": "Cancellazione richiesta: in attesa che il dispositivo si connetta",
+    "revoked": "Revocato",
+    "wipe": "Cancella",
+    "wipeFor": "Cancella {label}",
+    "revoke": "Revoca",
+    "revokeFor": "Revoca {label}"
   }
 }

@@ -82,4 +82,33 @@ describe('ticket PDF template', () => {
     expect(seen?.get('generateTaggedPdf')).toBe('true');
     expect(seen?.get('files')).toBeInstanceOf(Blob);
   });
+
+  it('the adapter retries once after a timeout or 5xx, then gives up', async () => {
+    let calls = 0;
+    const flaky = gotenbergRenderer({
+      url: 'http://g:3000',
+      fetch: (async () => {
+        calls++;
+        if (calls === 1) return new Response('busy', { status: 503 });
+        return new Response(new Uint8Array([37, 80, 68, 70]));
+      }) as unknown as typeof fetch,
+    });
+    expect(new TextDecoder().decode(await flaky.render({ html: '' }))).toBe('%PDF');
+    expect(calls).toBe(2);
+    let down = 0;
+    const dead = gotenbergRenderer({
+      url: 'http://g:3000',
+      fetch: (async () => {
+        down++;
+        return new Response('nope', { status: 500 });
+      }) as unknown as typeof fetch,
+    });
+    await expect(dead.render({ html: '' })).rejects.toThrow(/gotenberg: 500/);
+    expect(down).toBe(2);
+    const bad = gotenbergRenderer({
+      url: 'http://g:3000',
+      fetch: (async () => new Response('bad html', { status: 400 })) as unknown as typeof fetch,
+    });
+    await expect(bad.render({ html: '' })).rejects.toThrow(/gotenberg: 400/);
+  });
 });

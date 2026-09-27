@@ -569,7 +569,26 @@
       "void": "此票券已取消",
       "wrong_event": "此票券屬於其他活動",
       "not_today": "此通行證今日無效",
-      "outside_window": "目前未開放報到"
+      "outside_window": "目前未開放報到",
+      "duplicate_offline": "已先在其他裝置上報到",
+      "superseded": "已重新發行票券的舊代碼",
+      "provisional": "離線放行，待確認"
     }
+  },
+  "devices": {
+    "title": "掃描裝置",
+    "description": "可離線掃描的手機和平板。每台裝置都有專屬金鑰；可撤銷遺失的裝置，或清除其已下載的賓客名單。",
+    "label": "裝置名稱",
+    "labelHint": "例如：北門 iPad。",
+    "add": "新增裝置",
+    "tokenOnce": "請在 {label} 上輸入此金鑰。它只會顯示一次。",
+    "lastSeen": "最後連線 {when} · 電量 {battery}% · {queue} 筆掃描待上傳",
+    "neverSeen": "尚未連線",
+    "wipePending": "已要求清除，等待裝置連線",
+    "revoked": "已撤銷",
+    "wipe": "清除",
+    "wipeFor": "清除 {label}",
+    "revoke": "撤銷",
+    "revokeFor": "撤銷 {label}"
   }
 }

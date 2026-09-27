@@ -1,0 +1,434 @@
+import { createHash, randomBytes } from 'node:crypto';
+import {
+  eventDay,
+  lookupHash,
+  type ManifestHeader,
+  type ManifestRow,
+  ruleResult,
+} from '@yayatoh/checkin-engine';
+import { withoutTenant } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
+import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
+import { manifestTicketsTx, publicKeysTx, ticketForScanTx } from '@yayatoh/ticketing';
+import { and, eq, isNull, sql } from 'drizzle-orm';
+import { z } from 'zod';
+import { admissions, devices, type ScanResult, scans } from './schema.ts';
+
+const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
+/** Devices act as a system actor named after the device; authorization happened at the token. */
+const DEVICE_ACTOR = /^device:([0-9a-f-]{36})$/;
+
+export function deviceIdOf(ctx: Ctx): string {
+  const m = ctx.actor.type === 'system' ? DEVICE_ACTOR.exec(ctx.actor.name) : null;
+  if (!m?.[1]) throw new DomainError('forbidden', 'Device credentials required');
+  return m[1];
+}
+
+/**
+ * Resolve a device bearer token to a device context (org from the token, never from headers).
+ * Revoked devices, and devices of suspended orgs, resolve to null.
+ */
+export async function deviceContext(token: string): Promise<{ ctx: Ctx; wipe: boolean } | null> {
+  if (!/^yyd_[A-Za-z0-9_-]{43}$/.test(token)) return null;
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string; device_id: string; wipe_requested: boolean }>(
+      sql`select org_id, device_id, wipe_requested from checkin.device_by_token(${hashToken(token)})`,
+    ),
+  );
+  const r = rows[0];
+  if (!r) return null;
+  return {
+    ctx: createCtx({ orgId: r.org_id, actor: { type: 'system', name: `device:${r.device_id}` } }),
+    wipe: r.wipe_requested,
+  };
+}
+
+export const enrollDeviceCommand = tenantCommand({
+  name: 'checkin.enrollDevice',
+  input: z.object({ label: z.string().trim().min(1).max(60) }),
+  // The token is returned exactly once; only its hash is stored.
+  output: z.object({ deviceId: z.uuid(), token: z.string() }),
+  entitlement: 'checkin',
+  permission: 'checkin:scan',
+  handler: async ({ input, ctx, tx }) => {
+    const token = `yyd_${randomBytes(32).toString('base64url')}`;
+    const [d] = await tx
+      .insert(devices)
+      .values({
+        orgId: requireOrg(ctx),
+        label: input.label,
+        tokenHash: hashToken(token),
+        enrolledBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+      })
+      .returning({ id: devices.id });
+    if (!d) throw new DomainError('internal');
+    return { deviceId: d.id, token };
+  },
+  audit: (input, r) => ({
+    action: 'device.enroll',
+    targetType: 'device',
+    targetId: r?.deviceId ?? null,
+    data: input,
+  }),
+});
+
+export const setDeviceStateCommand = tenantCommand({
+  name: 'checkin.setDeviceState',
+  input: z.object({ deviceId: z.uuid(), action: z.enum(['revoke', 'wipe']) }),
+  output: z.object({ ok: z.boolean() }),
+  entitlement: 'checkin',
+  permission: 'checkin:scan',
+  handler: async ({ input, ctx, tx }) => {
+    const rows = await tx
+      .update(devices)
+      .set(
+        input.action === 'revoke'
+          ? { revokedAt: ctx.now, updatedAt: ctx.now }
+          : { wipeRequestedAt: ctx.now, updatedAt: ctx.now },
+      )
+      .where(eq(devices.id, input.deviceId))
+      .returning({ id: devices.id });
+    if (rows.length === 0) throw new DomainError('not_found');
+    return { ok: true };
+  },
+  audit: (input) => ({ action: `device.${input.action}`, targetType: 'device', targetId: input.deviceId }),
+});
+
+export const heartbeatCommand = tenantCommand({
+  name: 'checkin.heartbeat',
+  input: z.object({
+    batteryPct: z.int().min(0).max(100).nullable().default(null),
+    queueDepth: z.int().min(0).max(1_000_000),
+    clockOffsetMs: z.int().min(-86_400_000).max(86_400_000),
+  }),
+  output: z.object({ serverTime: z.date(), commands: z.array(z.enum(['wipe'])) }),
+  entitlement: 'checkin',
+  permission: 'checkin:device',
+  handler: async ({ input, ctx, tx }) => {
+    const [d] = await tx
+      .update(devices)
+      .set({ ...input, lastSeenAt: ctx.now, updatedAt: ctx.now })
+      .where(and(eq(devices.id, deviceIdOf(ctx)), isNull(devices.revokedAt)))
+      .returning({ wipe: devices.wipeRequestedAt });
+    if (!d) throw new DomainError('forbidden', 'Device revoked');
+    return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [] };
+  },
+});
+
+const ManifestRowDto = z.object({
+  ticketId: z.uuid(),
+  shortCode: z.string(),
+  rev: z.int(),
+  status: z.enum(['active', 'void']),
+  typeName: z.string(),
+  accessDates: z.array(z.object({ date: z.string(), name: z.string() })),
+  holderName: z.string(),
+  emailHash: z.string(),
+  issuedAt: z.string(),
+});
+
+export const ManifestPageDto = z.object({
+  header: z.object({
+    event: z.object({ id: z.uuid(), startsAt: z.string(), endsAt: z.string(), timezone: z.string() }),
+    publicKeys: z.record(z.string(), z.string()),
+    salt: z.string(),
+    serverTime: z.string(),
+    unknownPolicy: z.enum(['provisional', 'reject']),
+  }),
+  rows: z.array(ManifestRowDto),
+  /** Pass back as `cursor` for the next page / next sync. */
+  cursor: z.string().nullable(),
+  complete: z.boolean(),
+});
+
+/** Rows re-sent before the cursor, so a change committed out of timestamp order is not missed. */
+const CURSOR_OVERLAP_MS = 60_000;
+
+const encodeCursor = (updatedAt: Date, id: string) => `${updatedAt.toISOString()}|${id}`;
+function decodeCursor(c: string | undefined, overlap: boolean) {
+  if (!c) return null;
+  const [at, id] = c.split('|');
+  const d = at ? new Date(at) : null;
+  if (!d || Number.isNaN(d.getTime()) || !id || !/^[0-9a-f-]{36}$/.test(id))
+    throw new DomainError('validation_failed', 'Bad cursor');
+  return overlap
+    ? { updatedAt: new Date(d.getTime() - CURSOR_OVERLAP_MS), id: '00000000-0000-0000-0000-000000000000' }
+    : { updatedAt: d, id };
+}
+
+/**
+ * Offline manifest (roadmap §5.4), paged. Contact details leave only as per-event salted hashes;
+ * the header carries the public keys, the event window and the unknown-ticket policy.
+ */
+export const deviceManifestQuery = tenantQuery({
+  name: 'checkin.deviceManifest',
+  input: z.object({
+    eventId: z.uuid(),
+    cursor: z.string().max(100).optional(),
+    /** First page of a new sync: re-send the last minute before the cursor (dedupe by ticketId). */
+    overlap: z.boolean().default(false),
+    limit: z.int().min(1).max(2000).default(1000),
+  }),
+  output: ManifestPageDto,
+  entitlement: 'checkin',
+  permission: 'checkin:device',
+  handler: async ({ input, ctx, tx }) => {
+    deviceIdOf(ctx);
+    const event = await findEventTx(tx, input.eventId);
+    if (!event) throw new DomainError('not_found', 'Event not found');
+    const keys = await publicKeysTx(tx);
+    const salt = `yy-manifest:${event.id}`;
+    const page = await manifestTicketsTx(
+      tx,
+      event.id,
+      decodeCursor(input.cursor, input.overlap),
+      input.limit,
+    );
+    const rows: ManifestRow[] = [];
+    for (const t of page) {
+      rows.push({
+        ticketId: t.id,
+        shortCode: t.shortCode,
+        rev: t.rev,
+        status: t.status,
+        typeName: t.typeName,
+        accessDates: t.accessDates,
+        holderName: t.holderName,
+        emailHash: await lookupHash(salt, t.holderEmail),
+        issuedAt: t.createdAt.toISOString(),
+      });
+    }
+    const last = page.at(-1);
+    const header: ManifestHeader = {
+      event: {
+        id: event.id,
+        startsAt: event.startsAt.toISOString(),
+        endsAt: event.endsAt.toISOString(),
+        timezone: event.timezone,
+      },
+      publicKeys: Object.fromEntries(
+        [...keys].map(([kid, k]) => [String(kid), Buffer.from(k).toString('base64')]),
+      ),
+      salt,
+      serverTime: ctx.now.toISOString(),
+      unknownPolicy: 'provisional',
+    };
+    return {
+      header,
+      rows,
+      cursor: last ? encodeCursor(last.updatedAt, last.id) : (input.cursor ?? null),
+      complete: page.length < input.limit,
+    };
+  },
+});
+
+const DEVICE_VERDICTS = [
+  'admit',
+  'provisional',
+  'duplicate',
+  'superseded',
+  'invalid',
+  'void',
+  'wrong_event',
+  'outside_window',
+  'not_today',
+] as const;
+
+export const SyncResultDto = z.object({
+  results: z.array(z.object({ scanId: z.uuid(), result: z.string(), stored: z.boolean() })),
+  duplicatesOffline: z.int(),
+});
+
+/**
+ * Offline scans, reconciled (ADR 0011): up to 500 per batch, idempotent by `scanId`. Admissions
+ * are first-wins by corrected device time; a scan that loses becomes `duplicate_offline` and a
+ * `checkin.duplicate_offline@1` alert event is emitted in the same transaction.
+ */
+export const syncScansCommand = tenantCommand({
+  name: 'checkin.syncScans',
+  input: z.object({
+    eventId: z.uuid(),
+    scans: z
+      .array(
+        z.object({
+          scanId: z.uuid(),
+          code: z.string().trim().min(1).max(400),
+          deviceTs: z.coerce.date(),
+          clockOffsetMs: z.int().min(-86_400_000).max(86_400_000),
+          verdict: z.enum(DEVICE_VERDICTS),
+        }),
+      )
+      .min(1)
+      .max(500),
+  }),
+  output: SyncResultDto,
+  entitlement: 'checkin',
+  permission: 'checkin:device',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const orgId = requireOrg(ctx);
+    const deviceId = deviceIdOf(ctx);
+    const event = await findEventTx(tx, input.eventId);
+    if (!event) throw new DomainError('not_found', 'Event not found');
+    const keys = await publicKeysTx(tx);
+    const corrected = (s: { deviceTs: Date; clockOffsetMs: number }) =>
+      new Date(s.deviceTs.getTime() + s.clockOffsetMs);
+    const ordered = [...input.scans].sort((a, b) => corrected(a).getTime() - corrected(b).getTime());
+    const results: z.infer<typeof SyncResultDto>['results'] = [];
+    let duplicatesOffline = 0;
+
+    for (const s of ordered) {
+      const at = corrected(s);
+      const [prior] = await tx
+        .select({ result: scans.result })
+        .from(scans)
+        .where(eq(scans.clientScanId, s.scanId));
+      if (prior) {
+        results.push({ scanId: s.scanId, result: prior.result, stored: false });
+        continue;
+      }
+      // Server truth for the code (same rules as online), at the corrected scan time.
+      const code = s.code.toUpperCase();
+      let ticket = null;
+      let superseded = false;
+      if (code.startsWith(CODE_PREFIX)) {
+        const v = await verifyTicketCode(code, keys);
+        if (v.ok) {
+          ticket = await ticketForScanTx(tx, { id: v.ticketId });
+          if (ticket && v.rev < ticket.rev) superseded = true;
+        }
+      } else {
+        ticket = await ticketForScanTx(tx, { shortCode: code });
+      }
+      const rule = superseded ? 'superseded' : ruleResult({ now: at, event, ticket });
+      let result: ScanResult = rule === 'ok' ? 'admitted' : rule;
+      let admissionId: string | null = null;
+      if (rule === 'ok' && ticket) {
+        const day = eventDay(at, event.timezone);
+        const [adm] = await tx
+          .insert(admissions)
+          .values({ orgId, eventId: event.id, ticketId: ticket.id, day, admittedAt: at, deviceId })
+          .onConflictDoNothing()
+          .returning({ id: admissions.id });
+        if (adm) {
+          admissionId = adm.id;
+        } else {
+          const [live] = await tx
+            .select()
+            .from(admissions)
+            .where(
+              and(eq(admissions.ticketId, ticket.id), eq(admissions.day, day), isNull(admissions.undoneAt)),
+            );
+          if (live && live.admittedAt.getTime() > at.getTime()) {
+            // This scan was earlier: it wins; the previous winner's scans become offline duplicates.
+            await tx
+              .update(admissions)
+              .set({ admittedAt: at, deviceId, admittedBy: null, updatedAt: ctx.now })
+              .where(eq(admissions.id, live.id));
+            const flipped = await tx
+              .update(scans)
+              .set({ result: 'duplicate_offline', updatedAt: ctx.now })
+              .where(and(eq(scans.admissionId, live.id), eq(scans.result, 'admitted')))
+              .returning({ id: scans.id });
+            duplicatesOffline += flipped.length;
+            admissionId = live.id;
+            if (flipped.length) {
+              emit({
+                type: 'checkin.duplicate_offline',
+                version: 1,
+                aggregateType: 'ticket',
+                aggregateId: ticket.id,
+                payload: { orgId, eventId: event.id, ticketId: ticket.id, admissionId: live.id, day },
+              });
+            }
+          } else {
+            // Someone was admitted first. If this device let the person in, that's an offline duplicate.
+            admissionId = live?.id ?? null;
+            if (s.verdict === 'admit' || s.verdict === 'provisional') {
+              result = 'duplicate_offline';
+              duplicatesOffline += 1;
+              emit({
+                type: 'checkin.duplicate_offline',
+                version: 1,
+                aggregateType: 'ticket',
+                aggregateId: ticket.id,
+                payload: {
+                  orgId,
+                  eventId: event.id,
+                  ticketId: ticket.id,
+                  admissionId: live?.id ?? null,
+                  day,
+                },
+              });
+            } else {
+              result = 'duplicate';
+            }
+          }
+        }
+      }
+      await tx
+        .insert(scans)
+        .values({
+          orgId,
+          eventId: event.id,
+          ticketId: ticket?.id ?? null,
+          admissionId,
+          result,
+          codeKind: code.startsWith(CODE_PREFIX)
+            ? 'yy1'
+            : /^[2-9A-HJKMNP-TV-Z]{8}$/.test(code)
+              ? 'short'
+              : 'unknown',
+          clientScanId: s.scanId,
+          scannedAt: at,
+          deviceId,
+          deviceTs: s.deviceTs,
+          clockOffsetMs: s.clockOffsetMs,
+          offline: true,
+        })
+        .onConflictDoNothing();
+      results.push({ scanId: s.scanId, result, stored: true });
+    }
+    // Answer in the device's order.
+    const order = new Map(input.scans.map((s, i) => [s.scanId, i]));
+    results.sort((a, b) => (order.get(a.scanId) ?? 0) - (order.get(b.scanId) ?? 0));
+    return { results, duplicatesOffline };
+  },
+  audit: (input, r) => ({
+    action: 'checkin.sync',
+    targetType: 'event',
+    targetId: input.eventId,
+    data: { scans: input.scans.length, duplicatesOffline: r?.duplicatesOffline },
+  }),
+});
+
+export const DeviceDto = z.object({
+  id: z.uuid(),
+  label: z.string(),
+  lastSeenAt: z.date().nullable(),
+  batteryPct: z.int().nullable(),
+  queueDepth: z.int().nullable(),
+  clockOffsetMs: z.int().nullable(),
+  wipeRequested: z.boolean(),
+  revoked: z.boolean(),
+});
+
+export const listDevicesQuery = tenantQuery({
+  name: 'checkin.listDevices',
+  input: z.object({}),
+  output: z.array(DeviceDto),
+  entitlement: 'checkin',
+  permission: 'checkin:scan',
+  handler: async ({ tx }) =>
+    (await tx.select().from(devices).orderBy(devices.createdAt)).map((d) => ({
+      id: d.id,
+      label: d.label,
+      lastSeenAt: d.lastSeenAt,
+      batteryPct: d.batteryPct,
+      queueDepth: d.queueDepth,
+      clockOffsetMs: d.clockOffsetMs,
+      wipeRequested: d.wipeRequestedAt !== null,
+      revoked: d.revokedAt !== null,
+    })),
+});

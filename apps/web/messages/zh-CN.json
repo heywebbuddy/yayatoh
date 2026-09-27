@@ -569,7 +569,26 @@
       "void": "此门票已取消",
       "wrong_event": "此门票属于其他活动",
       "not_today": "此通行证今日无效",
-      "outside_window": "当前未开放签到"
+      "outside_window": "当前未开放签到",
+      "duplicate_offline": "已先在其他设备上签到",
+      "superseded": "已重新签发门票的旧代码",
+      "provisional": "离线放行，待确认"
     }
+  },
+  "devices": {
+    "title": "扫描设备",
+    "description": "可离线扫描的手机和平板。每台设备都有独立的密钥；可撤销丢失的设备，或清除其已下载的宾客名单。",
+    "label": "设备名称",
+    "labelHint": "例如：北门 iPad。",
+    "add": "添加设备",
+    "tokenOnce": "请在 {label} 上输入此密钥。它只会显示一次。",
+    "lastSeen": "最后连接 {when} · 电量 {battery}% · {queue} 条扫描待上传",
+    "neverSeen": "尚未连接",
+    "wipePending": "已请求清除，等待设备连接",
+    "revoked": "已撤销",
+    "wipe": "清除",
+    "wipeFor": "清除 {label}",
+    "revoke": "撤销",
+    "revokeFor": "撤销 {label}"
   }
 }

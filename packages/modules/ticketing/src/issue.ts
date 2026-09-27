@@ -237,3 +237,55 @@ export async function activeTicketCountTx(tx: TenantTx, eventId: string): Promis
     .where(and(eq(tickets.eventId, eventId), eq(tickets.status, 'active')));
   return r?.n ?? 0;
 }
+
+export interface ManifestTicket {
+  readonly id: string;
+  readonly shortCode: string;
+  readonly rev: number;
+  readonly status: (typeof TICKET_STATUSES)[number];
+  readonly typeName: string;
+  readonly accessDates: readonly { readonly date: string; readonly name: string }[];
+  readonly holderName: string;
+  readonly holderEmail: string;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+}
+
+/**
+ * One page of an event's tickets for scanner manifests, in (updated_at, id) order after the
+ * cursor. Voided and reissued tickets come back with their new status/rev when they change.
+ */
+export async function manifestTicketsTx(
+  tx: TenantTx,
+  eventId: string,
+  after: { readonly updatedAt: Date; readonly id: string } | null,
+  limit: number,
+): Promise<ManifestTicket[]> {
+  const rows = await tx
+    .select({
+      id: tickets.id,
+      shortCode: tickets.shortCode,
+      rev: tickets.rev,
+      status: tickets.status,
+      typeName: ticketTypes.name,
+      accessDates: ticketTypes.accessDates,
+      holderName: tickets.holderName,
+      holderEmail: tickets.holderEmail,
+      createdAt: tickets.createdAt,
+      updatedAt: tickets.updatedAt,
+    })
+    .from(tickets)
+    .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
+    .where(
+      and(
+        eq(tickets.eventId, eventId),
+        after
+          ? // Millisecond precision: cursors travel as JS dates, Postgres keeps microseconds.
+            sql`(date_trunc('milliseconds', ${tickets.updatedAt}), ${tickets.id}) > (${after.updatedAt.toISOString()}::timestamptz, ${after.id}::uuid)`
+          : undefined,
+      ),
+    )
+    .orderBy(sql`date_trunc('milliseconds', ${tickets.updatedAt})`, tickets.id)
+    .limit(limit);
+  return rows.map((r) => ({ ...r, status: r.status as ManifestTicket['status'] }));
+}

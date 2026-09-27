@@ -1,3 +1,4 @@
+import { eventDay, ruleResult } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
@@ -6,7 +7,6 @@ import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { activeTicketCountTx, publicKeysTx, type ScannableTicket, ticketForScanTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { eventDay, ruleResult } from './rules.ts';
 import { admissions, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
 
 const SHORT_CODE = /^[2-9A-HJKMNP-TV-Z]{8}$/;

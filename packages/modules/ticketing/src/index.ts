@@ -20,6 +20,8 @@ export {
   type IssuedTicket,
   type IssueRequest,
   issueTicketsTx,
+  type ManifestTicket,
+  manifestTicketsTx,
   publicKeysTx,
   type ScannableTicket,
   ticketForScanTx,

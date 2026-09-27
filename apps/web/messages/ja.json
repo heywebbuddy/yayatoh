@@ -569,7 +569,26 @@
       "void": "このチケットはキャンセルされています",
       "wrong_event": "別のイベントのチケットです",
       "not_today": "このパスは本日無効です",
-      "outside_window": "現在チェックインは受け付けていません"
+      "outside_window": "現在チェックインは受け付けていません",
+      "duplicate_offline": "別の端末で先にチェックイン済み",
+      "superseded": "再発行されたチケットの旧コードです",
+      "provisional": "オフラインで入場済み（確認待ち）"
     }
+  },
+  "devices": {
+    "title": "スキャン端末",
+    "description": "オフラインでスキャンするスマートフォンやタブレットです。端末ごとに専用のキーが発行されます。紛失した端末は取り消すか、ダウンロード済みのゲストリストを消去できます。",
+    "label": "端末名",
+    "labelHint": "例：北ゲートのiPad",
+    "add": "端末を追加",
+    "tokenOnce": "このキーを{label}に入力してください。表示されるのは一度だけです。",
+    "lastSeen": "最終接続 {when} · バッテリー {battery}% · 未送信のスキャン {queue}件",
+    "neverSeen": "まだ接続されていません",
+    "wipePending": "消去をリクエスト済み（端末の接続待ち）",
+    "revoked": "取り消し済み",
+    "wipe": "消去",
+    "wipeFor": "{label}を消去",
+    "revoke": "取り消す",
+    "revokeFor": "{label}を取り消す"
   }
 }

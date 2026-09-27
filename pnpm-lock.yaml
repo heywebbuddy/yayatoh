@@ -256,12 +256,24 @@ importers:
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 1.6.3(hono@4.13.9)(zod@4.6.5)
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../../packages/modules/billing
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../../packages/modules/checkin
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../../packages/modules/tenancy
       hono:
         specifier: 'catalog:'
         version: 4.13.9
@@ -275,6 +287,15 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../../packages/modules/events
+      '@yayatoh/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -468,6 +489,25 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/checkin-engine:
+    dependencies:
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../kernel
+      '@yayatoh/ticket-crypto':
+        specifier: workspace:*
+        version: link:../ticket-crypto
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/config: {}
 
   packages/contracts:
@@ -594,6 +634,9 @@ importers:
 
   packages/modules/checkin:
     dependencies:
+      '@yayatoh/checkin-engine':
+        specifier: workspace:*
+        version: link:../../checkin-engine
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
@@ -940,6 +983,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../modules/checkin
+      '@yayatoh/checkin-engine':
+        specifier: workspace:*
+        version: link:../checkin-engine
       '@yayatoh/crm':
         specifier: workspace:*
         version: link:../modules/crm

@@ -569,7 +569,26 @@
       "void": "Dieses Ticket wurde storniert",
       "wrong_event": "Dieses Ticket gilt für ein anderes Event",
       "not_today": "Dieser Pass gilt heute nicht",
-      "outside_window": "Check-in ist gerade nicht geöffnet"
+      "outside_window": "Check-in ist gerade nicht geöffnet",
+      "duplicate_offline": "Zuerst auf einem anderen Gerät eingecheckt",
+      "superseded": "Alter Code eines neu ausgestellten Tickets",
+      "provisional": "Offline eingelassen – wird noch bestätigt"
     }
+  },
+  "devices": {
+    "title": "Scan-Geräte",
+    "description": "Smartphones und Tablets, die offline scannen. Jedes bekommt einen eigenen Schlüssel; widerrufe ein verlorenes Gerät oder lösche seine heruntergeladene Gästeliste.",
+    "label": "Gerätename",
+    "labelHint": "Zum Beispiel iPad Nordeingang.",
+    "add": "Gerät hinzufügen",
+    "tokenOnce": "Gib diesen Schlüssel auf {label} ein. Er wird nur einmal angezeigt.",
+    "lastSeen": "Zuletzt verbunden {when} · Akku {battery} % · {queue} Scans ausstehend",
+    "neverSeen": "Noch nicht verbunden",
+    "wipePending": "Löschen angefordert – wartet, bis sich das Gerät verbindet",
+    "revoked": "Widerrufen",
+    "wipe": "Löschen",
+    "wipeFor": "{label} löschen",
+    "revoke": "Widerrufen",
+    "revokeFor": "{label} widerrufen"
   }
 }

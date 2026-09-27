@@ -16,14 +16,21 @@
   "dependencies": {
     "@hono/node-server": "catalog:",
     "@hono/zod-openapi": "catalog:",
+    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
     "hono": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"
   }
 }

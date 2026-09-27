@@ -77,5 +77,14 @@ test.describe('check-in', () => {
     await field.fill('NOT-A-TICKET');
     await field.press('Enter');
     await expect(result).toContainText('Not a valid ticket');
+
+    // Offline scanner devices: the key is shown once; a lost device can be revoked.
+    await page.getByLabel('Device name').fill(`Gate ${stamp}`);
+    await page.getByRole('button', { name: 'Add device' }).click();
+    await expect(page.getByText(`Enter this key on Gate ${stamp}. It is shown only once.`)).toBeVisible();
+    await expect(page.locator('code').filter({ hasText: /^yyd_/ })).toBeVisible();
+    await page.getByRole('button', { name: `Revoke Gate ${stamp}` }).click();
+    await expect(page.getByRole('listitem').filter({ hasText: `Gate ${stamp}` })).toContainText('Revoked');
+    await expectAccessible(page);
   });
 });

@@ -1,6 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { secureHeaders } from 'hono/secure-headers';
 import { notFound, onError, validationFailed } from './errors.ts';
+import { scanner } from './routes/devices.ts';
 import { API_VERSION, health } from './routes/health.ts';
 
 export const OPENAPI_INFO = {
@@ -21,6 +22,12 @@ export function createApp() {
     },
   });
   v1.route('/', health);
+  v1.route('/', scanner);
+  v1.openAPIRegistry.registerComponent('securitySchemes', 'deviceToken', {
+    type: 'http',
+    scheme: 'bearer',
+    description: 'Scanner device token (`yyd_…`), issued once at enrollment.',
+  });
 
   const app = new OpenAPIHono();
   app.use('*', secureHeaders());

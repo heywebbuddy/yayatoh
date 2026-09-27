@@ -569,7 +569,26 @@
       "void": "Dit ticket is geannuleerd",
       "wrong_event": "Dit ticket is voor een ander evenement",
       "not_today": "Deze pas is vandaag niet geldig",
-      "outside_window": "Check-in is nu niet geopend"
+      "outside_window": "Check-in is nu niet geopend",
+      "duplicate_offline": "Eerst ingecheckt op een ander apparaat",
+      "superseded": "Oude code van een opnieuw uitgegeven ticket",
+      "provisional": "Offline binnengelaten, nog te bevestigen"
     }
+  },
+  "devices": {
+    "title": "Scanapparaten",
+    "description": "Telefoons en tablets die offline scannen. Elk krijgt een eigen sleutel; trek een verloren apparaat in of wis de gedownloade gastenlijst.",
+    "label": "Apparaatnaam",
+    "labelHint": "Bijvoorbeeld iPad noordingang.",
+    "add": "Apparaat toevoegen",
+    "tokenOnce": "Voer deze sleutel in op {label}. Hij wordt maar één keer getoond.",
+    "lastSeen": "Laatst verbonden {when} · batterij {battery}% · {queue} scans in de wachtrij",
+    "neverSeen": "Nog niet verbonden",
+    "wipePending": "Wissen aangevraagd: wacht tot het apparaat verbinding maakt",
+    "revoked": "Ingetrokken",
+    "wipe": "Wissen",
+    "wipeFor": "{label} wissen",
+    "revoke": "Intrekken",
+    "revokeFor": "{label} intrekken"
   }
 }

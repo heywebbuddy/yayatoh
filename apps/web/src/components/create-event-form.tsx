@@ -2,7 +2,7 @@
 
 import { Alert, Button, Card, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
@@ -32,6 +32,8 @@ export function CreateEventForm({
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
+  // One key per form: a double submit returns the same event instead of "name already taken".
+  const [requestKey] = useState(() => `create-event:${crypto.randomUUID()}`);
   const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
     ? ZONES
     : [defaults.timezone, ...ZONES];
@@ -39,6 +41,7 @@ export function CreateEventForm({
   return (
     <Card size="panel" className="max-w-2xl">
       <form action={formAction} className="flex flex-col gap-4">
+        <input type="hidden" name="requestKey" value={requestKey} />
         {state.code ? (
           <Alert title={state.field === 'slug' ? t('newEvent.slugTaken') : t(errorMessageKey(state.code))} />
         ) : null}

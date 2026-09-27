@@ -16,20 +16,33 @@ export function gotenbergRenderer(opts: {
   const endpoint = new URL('/forms/chromium/convert/html', opts.url).toString();
   return {
     async render({ html }) {
-      const form = new FormData();
-      form.append('files', new Blob([html], { type: 'text/html' }), 'index.html');
-      form.append('generateTaggedPdf', 'true');
-      form.append('preferCssPageSize', 'true');
-      form.append('printBackground', 'true');
-      // Chromium must not fetch anything: the template is self-contained.
-      form.append('skipNetworkIdleEvent', 'true');
-      const res = await doFetch(endpoint, {
-        method: 'POST',
-        body: form,
-        signal: AbortSignal.timeout(opts.timeoutMs ?? 20_000),
-      });
-      if (!res.ok) throw new Error(`gotenberg: ${res.status} ${(await res.text()).slice(0, 200)}`);
-      return new Uint8Array(await res.arrayBuffer());
+      // One retry on a timeout or 5xx: a cold Chromium (after a Gotenberg restart) can be slow.
+      for (let attempt = 1; ; attempt++) {
+        const form = new FormData();
+        form.append('files', new Blob([html], { type: 'text/html' }), 'index.html');
+        form.append('generateTaggedPdf', 'true');
+        form.append('preferCssPageSize', 'true');
+        form.append('printBackground', 'true');
+        // Chromium must not fetch anything: the template is self-contained.
+        form.append('skipNetworkIdleEvent', 'true');
+        try {
+          const res = await doFetch(endpoint, {
+            method: 'POST',
+            body: form,
+            signal: AbortSignal.timeout(opts.timeoutMs ?? 20_000),
+          });
+          if (res.ok) return new Uint8Array(await res.arrayBuffer());
+          const err = new Error(`gotenberg: ${res.status} ${(await res.text()).slice(0, 200)}`);
+          if (res.status < 500 || attempt >= 2) throw err;
+        } catch (err) {
+          const retryable =
+            err instanceof Error &&
+            (err.name === 'TimeoutError' ||
+              err.name === 'AbortError' ||
+              /gotenberg: 5\d\d/.test(err.message));
+          if (!retryable || attempt >= 2) throw err;
+        }
+      }
     },
   };
 }

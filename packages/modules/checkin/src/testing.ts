@@ -1,1 +1,1 @@
-export { admissions, scans } from './schema.ts';
+export { admissions, devices, scans } from './schema.ts';

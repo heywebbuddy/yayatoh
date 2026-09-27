@@ -118,6 +118,7 @@ export const tickets = tenantTable(
     uniqueIndex('tickets_org_event_serial_key').on(t.orgId, t.eventId, t.serial),
     uniqueIndex('tickets_org_short_code_key').on(t.orgId, t.shortCode),
     index('tickets_org_order_idx').on(t.orgId, t.orderId),
+    index('tickets_org_event_updated_idx').on(t.orgId, t.eventId, t.updatedAt, t.id),
     foreignKey({
       name: 'tickets_ticket_type_fk',
       columns: [t.orgId, t.ticketTypeId],

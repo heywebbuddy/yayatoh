@@ -569,7 +569,26 @@
       "void": "This ticket was cancelled",
       "wrong_event": "This ticket is for another event",
       "not_today": "This pass isn't valid today",
-      "outside_window": "Check-in isn't open right now"
+      "outside_window": "Check-in isn't open right now",
+      "duplicate_offline": "Checked in on another device first",
+      "superseded": "An older code for a reissued ticket",
+      "provisional": "Let in offline — to be confirmed"
     }
+  },
+  "devices": {
+    "title": "Scanner devices",
+    "description": "Phones and tablets that scan offline. Each gets its own key; revoke a lost device, or wipe its downloaded guest list.",
+    "label": "Device name",
+    "labelHint": "For example North gate iPad.",
+    "add": "Add device",
+    "tokenOnce": "Enter this key on {label}. It is shown only once.",
+    "lastSeen": "Last seen {when} · battery {battery}% · {queue} scans waiting",
+    "neverSeen": "Not connected yet",
+    "wipePending": "Wipe requested — waiting for the device to connect",
+    "revoked": "Revoked",
+    "wipe": "Wipe",
+    "wipeFor": "Wipe {label}",
+    "revoke": "Revoke",
+    "revokeFor": "Revoke {label}"
   }
 }

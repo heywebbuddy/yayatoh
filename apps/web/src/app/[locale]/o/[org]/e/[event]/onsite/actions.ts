@@ -1,6 +1,12 @@
 'use server';
 
-import { type ScanOutcomeDto, scanTicketCommand, undoAdmissionCommand } from '@yayatoh/checkin';
+import {
+  enrollDeviceCommand,
+  type ScanOutcomeDto,
+  scanTicketCommand,
+  setDeviceStateCommand,
+  undoAdmissionCommand,
+} from '@yayatoh/checkin';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
@@ -41,5 +47,39 @@ export async function scanAction(
 export async function undoAction(org: string, event: string, admissionId: string): Promise<void> {
   const { data } = await loadEvent(org, event);
   await executeCommand(undoAdmissionCommand, { admissionId }, data.ctx, ports);
+  revalidatePath(`/o/${org}/e/${event}/onsite`);
+}
+
+export type EnrollState =
+  | { readonly kind: 'idle' }
+  | { readonly kind: 'enrolled'; readonly label: string; readonly token: string }
+  | { readonly kind: 'error'; readonly code: string };
+
+/** The token is shown once, here; only its hash is stored. */
+export async function enrollDeviceAction(
+  org: string,
+  event: string,
+  _prev: EnrollState,
+  form: FormData,
+): Promise<EnrollState> {
+  const { data } = await loadEvent(org, event);
+  const label = String(form.get('label') ?? '').trim();
+  try {
+    const r = await executeCommand(enrollDeviceCommand, { label }, data.ctx, ports);
+    revalidatePath(`/o/${org}/e/${event}/onsite`);
+    return { kind: 'enrolled', label, token: r.token };
+  } catch (err) {
+    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal' };
+  }
+}
+
+export async function deviceStateAction(
+  org: string,
+  event: string,
+  deviceId: string,
+  action: 'revoke' | 'wipe',
+): Promise<void> {
+  const { data } = await loadEvent(org, event);
+  await executeCommand(setDeviceStateCommand, { deviceId, action }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/onsite`);
 }

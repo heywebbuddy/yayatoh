@@ -15,33 +15,43 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
   if (!renderer || !order || order.tickets.length === 0) return new Response('Not found', { status: 404 });
   const t = await getTranslations({ locale });
   const ev = order.event;
-  const pdf = await renderer.render({
-    html: ticketsHtml({
-      lang: locale,
-      dir: RTL_LOCALES.has(locale) ? 'rtl' : 'ltr',
-      eventName: ev.name,
-      when: formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), {
-        locale,
-        currency: order.currency,
-        timeZone: ev.timezone,
+  let pdf: Uint8Array;
+  try {
+    pdf = await renderer.render({
+      html: ticketsHtml({
+        lang: locale,
+        dir: RTL_LOCALES.has(locale) ? 'rtl' : 'ltr',
+        eventName: ev.name,
+        when: formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), {
+          locale,
+          currency: order.currency,
+          timeZone: ev.timezone,
+        }),
+        where: [ev.venueName, ev.city].filter(Boolean).join(', ') || null,
+        organizer: ev.organizerName,
+        tickets: order.tickets.map((tk) => ({
+          typeName: order.items.find((i) => i.ticketTypeId === tk.ticketTypeId)?.name ?? '',
+          serialLabel: t('order.serial', { serial: tk.serial }),
+          shortCode: tk.shortCode,
+          holderName: tk.holderName,
+          code: tk.code,
+          qrLabel: t('order.qrLabel', { serial: tk.serial }),
+        })),
+        labels: {
+          code: t('order.shortCode'),
+          holder: t('order.holder'),
+          footer: t('order.ticketsHint'),
+        },
       }),
-      where: [ev.venueName, ev.city].filter(Boolean).join(', ') || null,
-      organizer: ev.organizerName,
-      tickets: order.tickets.map((tk) => ({
-        typeName: order.items.find((i) => i.ticketTypeId === tk.ticketTypeId)?.name ?? '',
-        serialLabel: t('order.serial', { serial: tk.serial }),
-        shortCode: tk.shortCode,
-        holderName: tk.holderName,
-        code: tk.code,
-        qrLabel: t('order.qrLabel', { serial: tk.serial }),
-      })),
-      labels: {
-        code: t('order.shortCode'),
-        holder: t('order.holder'),
-        footer: t('order.ticketsHint'),
-      },
-    }),
-  });
+    });
+  } catch (err) {
+    // The renderer is a separate service: when it is down or cold, ask the buyer to retry.
+    console.error('ticket pdf', err);
+    return new Response('The PDF is temporarily unavailable. Please try again in a moment.', {
+      status: 503,
+      headers: { 'retry-after': '5', 'cache-control': 'no-store' },
+    });
+  }
   return new Response(new Uint8Array(pdf), {
     headers: {
       'content-type': 'application/pdf',

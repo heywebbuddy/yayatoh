@@ -127,6 +127,20 @@
       "when": 1790488712226,
       "tag": "0017_curved_firebrand",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1790492454524,
+      "tag": "0018_wet_boomerang",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1790492600381,
+      "tag": "0019_zippy_hedge_knight",
+      "breakpoints": true
     }
   ]
 }

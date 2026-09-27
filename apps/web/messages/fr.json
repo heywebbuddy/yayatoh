@@ -569,7 +569,26 @@
       "void": "Ce billet a été annulé",
       "wrong_event": "Ce billet est pour un autre événement",
       "not_today": "Ce pass n’est pas valable aujourd’hui",
-      "outside_window": "Le check-in n’est pas ouvert pour le moment"
+      "outside_window": "Le check-in n’est pas ouvert pour le moment",
+      "duplicate_offline": "Déjà enregistré sur un autre appareil",
+      "superseded": "Ancien code d’un billet réémis",
+      "provisional": "Entrée hors ligne — à confirmer"
     }
+  },
+  "devices": {
+    "title": "Appareils de scan",
+    "description": "Téléphones et tablettes qui scannent hors ligne. Chacun a sa propre clé ; révoquez un appareil perdu ou effacez sa liste d’invités téléchargée.",
+    "label": "Nom de l’appareil",
+    "labelHint": "Par exemple : iPad porte Nord.",
+    "add": "Ajouter un appareil",
+    "tokenOnce": "Saisissez cette clé sur {label}. Elle ne s’affiche qu’une seule fois.",
+    "lastSeen": "Dernière connexion {when} · batterie {battery} % · {queue} scans en attente",
+    "neverSeen": "Pas encore connecté",
+    "wipePending": "Effacement demandé — en attente de la connexion de l’appareil",
+    "revoked": "Révoqué",
+    "wipe": "Effacer",
+    "wipeFor": "Effacer {label}",
+    "revoke": "Révoquer",
+    "revokeFor": "Révoquer {label}"
   }
 }
