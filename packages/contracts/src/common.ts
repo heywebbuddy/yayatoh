@@ -50,3 +50,10 @@ export const ProblemDto = z.object({
 });
 export type ProblemDto = z.infer<typeof ProblemDto>;
 export const PROBLEM_TYPE_BASE = 'https://docs.yayatoh.com/problems/';
+
+/**
+ * A keyset position for cursor pagination: the sort timestamp (millisecond precision, as JS
+ * dates carry it) and the row id of the last row seen. /v1 wraps it in an opaque cursor.
+ */
+export const KeysetAfter = z.object({ at: z.coerce.date(), id: z.uuid() });
+export type KeysetAfter = z.output<typeof KeysetAfter>;

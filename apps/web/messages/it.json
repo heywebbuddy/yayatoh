@@ -56,7 +56,8 @@
     "team": "Team",
     "settings": "Impostazioni",
     "payouts": "Accrediti",
-    "domains": "Domini"
+    "domains": "Domini",
+    "apiKeys": "Chiavi API"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -1526,6 +1527,46 @@
       "event": "Evento",
       "emptyTitle": "Nessuna vendita in questo periodo",
       "emptyDescription": "Scegli un periodo più lungo o condividi la pagina di un evento per iniziare a vendere."
+    }
+  },
+  "apiKeys": {
+    "title": "Chiavi API",
+    "subtitle": "Consenti ad altri software di accedere alla tua organizzazione tramite l’API di Yayatoh. Ogni chiave viene mostrata una sola volta.",
+    "docs": "Riferimento API",
+    "noAccessTitle": "Solo proprietari e amministratori gestiscono le chiavi API",
+    "noAccessDescription": "Chiedi a un proprietario o amministratore di questa organizzazione di creare una chiave per te.",
+    "createTitle": "Crea una chiave",
+    "name": "Nome",
+    "nameHint": "Dove verrà usata la chiave, ad es. «Zapier» o «Sincronizzazione biglietteria».",
+    "nameRequired": "Dai un nome alla chiave.",
+    "scopes": "Permessi",
+    "scopesHint": "Una chiave può fare solo ciò che i suoi permessi consentono, e solo in questa organizzazione.",
+    "scopesRequired": "Scegli almeno un permesso.",
+    "create": "Crea chiave",
+    "created": "Chiave «{name}» creata.",
+    "shownOnce": "Copiala ora e conservala in un luogo sicuro: non verrà più mostrata.",
+    "copy": "Copia chiave",
+    "copied": "Copiata negli appunti.",
+    "listTitle": "Le tue chiavi",
+    "empty": "Nessuna chiave API.",
+    "key": "Chiave",
+    "createdAt": "Creata",
+    "lastUsed": "Ultimo utilizzo",
+    "never": "Mai",
+    "status": "Stato",
+    "active": "Attiva",
+    "revoked": "Revocata",
+    "actions": "Azioni",
+    "revoke": "Revoca",
+    "revokeNamed": "Revoca la chiave {name}",
+    "scope": {
+      "org_read": "Leggere l’organizzazione",
+      "events_read": "Leggere eventi e tipi di biglietto",
+      "events_write": "Creare e modificare eventi",
+      "orders_read": "Leggere gli ordini",
+      "orders_refund": "Rimborsare gli ordini",
+      "attendees_read": "Leggere i partecipanti",
+      "checkin_scan": "Scansionare i biglietti"
     }
   }
 }

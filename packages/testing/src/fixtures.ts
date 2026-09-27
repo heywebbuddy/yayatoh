@@ -36,12 +36,15 @@ import {
 } from '@yayatoh/seating';
 import {
   AGREEMENT_DOCUMENTS,
+  API_KEY_SCOPES,
   acceptAgreementCommand,
   addMemberCommand,
+  createApiKeyCommand,
   createOrganization,
   inviteMemberCommand,
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
+  revokeApiKeyCommand,
   setLegalPageCommand,
   setSuspensionCommand,
   updateOrganizationCommand,
@@ -60,6 +63,8 @@ export interface OrgFixture {
   readonly ownerId: string;
   readonly viewerId: string;
   readonly event: EventDto;
+  /** A live org API key with every scope (the /v1 tests' credential). */
+  readonly apiKey: string;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
 }
@@ -261,6 +266,20 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
+  // Org API keys: one live with every scope, one revoked (isolation coverage).
+  const { key: apiKey } = await executeCommand(
+    createApiKeyCommand,
+    { name: `Fixture ${slug}`, scopes: [...API_KEY_SCOPES] },
+    ctx(),
+    ports,
+  );
+  const retired = await executeCommand(
+    createApiKeyCommand,
+    { name: `Retired ${slug}`, scopes: ['events:read'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(revokeApiKeyCommand, { apiKeyId: retired.id }, ctx(), ports);
   // One admission (and its scan) at event time, so the check-in tables are covered.
   const [issued] = await withTenant(systemCtx(org.id), (tx) =>
     tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
@@ -401,7 +420,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  return { org, ownerId, viewerId, event, ctx };
+  return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

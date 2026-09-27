@@ -56,7 +56,8 @@
     "team": "Team",
     "settings": "Instellingen",
     "payouts": "Uitbetalingen",
-    "domains": "Domeinen"
+    "domains": "Domeinen",
+    "apiKeys": "API-sleutels"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -1526,6 +1527,46 @@
       "event": "Evenement",
       "emptyTitle": "Geen verkopen in deze periode",
       "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
+    }
+  },
+  "apiKeys": {
+    "title": "API-sleutels",
+    "subtitle": "Laat andere software via de Yayatoh-API bij je organisatie. Elke sleutel wordt één keer getoond.",
+    "docs": "API-referentie",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren API-sleutels",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om een sleutel voor je te maken.",
+    "createTitle": "Sleutel maken",
+    "name": "Naam",
+    "nameHint": "Waar de sleutel gebruikt wordt, bijv. ‘Zapier’ of ‘Kassa-sync’.",
+    "nameRequired": "Geef de sleutel een naam.",
+    "scopes": "Rechten",
+    "scopesHint": "Een sleutel kan alleen wat zijn rechten toestaan, en alleen in deze organisatie.",
+    "scopesRequired": "Kies minstens één recht.",
+    "create": "Sleutel maken",
+    "created": "Sleutel ‘{name}’ gemaakt.",
+    "shownOnce": "Kopieer hem nu en bewaar hem veilig: hij wordt niet opnieuw getoond.",
+    "copy": "Sleutel kopiëren",
+    "copied": "Gekopieerd naar het klembord.",
+    "listTitle": "Je sleutels",
+    "empty": "Nog geen API-sleutels.",
+    "key": "Sleutel",
+    "createdAt": "Gemaakt",
+    "lastUsed": "Laatst gebruikt",
+    "never": "Nooit",
+    "status": "Status",
+    "active": "Actief",
+    "revoked": "Ingetrokken",
+    "actions": "Acties",
+    "revoke": "Intrekken",
+    "revokeNamed": "Sleutel {name} intrekken",
+    "scope": {
+      "org_read": "Organisatie lezen",
+      "events_read": "Evenementen en tickettypen lezen",
+      "events_write": "Evenementen maken en wijzigen",
+      "orders_read": "Bestellingen lezen",
+      "orders_refund": "Bestellingen terugbetalen",
+      "attendees_read": "Deelnemers lezen",
+      "checkin_scan": "Tickets scannen"
     }
   }
 }

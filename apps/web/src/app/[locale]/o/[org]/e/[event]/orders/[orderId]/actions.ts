@@ -1,25 +1,15 @@
 'use server';
 
-import { executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
-import {
-  completeRefundCommand,
-  REFUND_REASONS,
-  type RefundReason,
-  startRefundCommand,
-} from '@yayatoh/orders';
-import { recordTransferReversalCommand } from '@yayatoh/payments';
+import { isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import { REFUND_REASONS, type RefundOutcome, type RefundReason, refundOrder } from '@yayatoh/orders';
 import { revalidatePath } from 'next/cache';
-import type { z } from 'zod';
 import { loadEvent } from '@/server/console.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 
 export type RefundState = { readonly ok: boolean; readonly code: string | null; readonly reason?: string };
 
-/**
- * Refund tickets or an amount: the command records it with the policy's amounts, the provider
- * refunds on the right account (outside the transaction), and the answer is recorded.
- */
+/** Refund tickets or an amount through the shared refund flow (the same one /v1 uses). */
 export async function refundAction(
   org: string,
   event: string,
@@ -31,10 +21,9 @@ export async function refundAction(
   const reason = String(form.get('reason') ?? '') as RefundReason;
   if (!REFUND_REASONS.includes(reason)) return { ok: false, code: 'validation_failed' };
   const mode = form.get('mode') === 'amount' ? 'amount' : 'tickets';
-  let started: z.output<typeof startRefundCommand.output>;
+  let done: RefundOutcome;
   try {
-    started = await executeCommand(
-      startRefundCommand,
+    done = await refundOrder(
       mode === 'tickets'
         ? {
             orderId,
@@ -50,6 +39,7 @@ export async function refundAction(
           },
       data.ctx,
       ports,
+      getPaymentProvider(),
     );
   } catch (err) {
     return {
@@ -57,46 +47,6 @@ export async function refundAction(
       code: isDomainError(err) ? err.code : 'internal',
       reason: isDomainError(err) ? String(err.details?.reason ?? '') : undefined,
     };
-  }
-  const provider = getPaymentProvider();
-  const res = await provider.refund({
-    providerPaymentId: started.provider.providerPaymentId,
-    amount: { amount: started.amountMinor, currency: started.currency },
-    connectedAccountId: started.provider.connectedAccountId,
-    refundApplicationFee: {
-      amount: started.provider.fundsFlow === 'organizer_mor' ? started.feeRefundedMinor : 0,
-      currency: started.currency,
-    },
-    idempotencyKey: `refund:${started.refundId}`,
-  });
-  const done = await executeCommand(
-    completeRefundCommand,
-    { refundId: started.refundId, outcome: res.status, providerRefundId: res.refundId },
-    data.ctx,
-    ports,
-  );
-  // Refunded after the event was paid out: take the organizer's share back from the transfer
-  // (explicit reversal). If that fails it stays a receivable, netted from the next release.
-  if (done.reversal) {
-    const rev = await provider.reverseTransfer({
-      transferId: done.reversal.transferId,
-      amount: { amount: done.reversal.amountMinor, currency: done.reversal.currency },
-      idempotencyKey: `reversal:${started.refundId}`,
-    });
-    await executeCommand(
-      recordTransferReversalCommand,
-      {
-        refundId: started.refundId,
-        orderId: done.reversal.orderId,
-        eventId: done.reversal.eventId,
-        outcome: rev.status,
-        reversalId: rev.reversalId,
-        amountMinor: done.reversal.amountMinor,
-        currency: done.reversal.currency,
-      },
-      data.ctx,
-      ports,
-    );
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
   return done.status === 'failed' ? { ok: false, code: 'refund_failed' } : { ok: true, code: null };

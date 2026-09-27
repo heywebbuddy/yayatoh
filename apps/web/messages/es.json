@@ -56,7 +56,8 @@
     "team": "Equipo",
     "settings": "Configuración",
     "payouts": "Pagos recibidos",
-    "domains": "Dominios"
+    "domains": "Dominios",
+    "apiKeys": "Claves de API"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -1526,6 +1527,46 @@
       "event": "Evento",
       "emptyTitle": "No hay ventas en este periodo",
       "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
+    }
+  },
+  "apiKeys": {
+    "title": "Claves de API",
+    "subtitle": "Permite que otro software acceda a tu organización mediante la API de Yayatoh. Cada clave se muestra una sola vez.",
+    "docs": "Referencia de la API",
+    "noAccessTitle": "Solo propietarios y administradores gestionan las claves de API",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que cree una clave para ti.",
+    "createTitle": "Crear una clave",
+    "name": "Nombre",
+    "nameHint": "Dónde se usará la clave, p. ej., «Zapier» o «Sincronización de taquilla».",
+    "nameRequired": "Ponle un nombre a la clave.",
+    "scopes": "Permisos",
+    "scopesHint": "Una clave solo puede hacer lo que permiten sus permisos, y solo en esta organización.",
+    "scopesRequired": "Elige al menos un permiso.",
+    "create": "Crear clave",
+    "created": "Clave «{name}» creada.",
+    "shownOnce": "Cópiala ahora y guárdala en un lugar seguro: no se volverá a mostrar.",
+    "copy": "Copiar clave",
+    "copied": "Copiada al portapapeles.",
+    "listTitle": "Tus claves",
+    "empty": "Aún no hay claves de API.",
+    "key": "Clave",
+    "createdAt": "Creada",
+    "lastUsed": "Último uso",
+    "never": "Nunca",
+    "status": "Estado",
+    "active": "Activa",
+    "revoked": "Revocada",
+    "actions": "Acciones",
+    "revoke": "Revocar",
+    "revokeNamed": "Revocar la clave {name}",
+    "scope": {
+      "org_read": "Leer la organización",
+      "events_read": "Leer eventos y tipos de entrada",
+      "events_write": "Crear y modificar eventos",
+      "orders_read": "Leer pedidos",
+      "orders_refund": "Reembolsar pedidos",
+      "attendees_read": "Leer asistentes",
+      "checkin_scan": "Escanear entradas"
     }
   }
 }

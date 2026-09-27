@@ -56,7 +56,8 @@
     "team": "团队",
     "settings": "设置",
     "payouts": "收款",
-    "domains": "域名"
+    "domains": "域名",
+    "apiKeys": "API 密钥"
   },
   "vocab": {
     "attendee": "参会者",
@@ -1526,6 +1527,46 @@
       "event": "活动",
       "emptyTitle": "此时间段内没有销售",
       "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。"
+    }
+  },
+  "apiKeys": {
+    "title": "API 密钥",
+    "subtitle": "允许其他软件通过 Yayatoh API 访问你的组织。每个密钥只显示一次。",
+    "docs": "API 参考",
+    "noAccessTitle": "只有所有者和管理员可以管理 API 密钥",
+    "noAccessDescription": "请让此组织的所有者或管理员为你创建密钥。",
+    "createTitle": "创建密钥",
+    "name": "名称",
+    "nameHint": "密钥的用途，例如“Zapier”或“售票处同步”。",
+    "nameRequired": "请为密钥命名。",
+    "scopes": "权限",
+    "scopesHint": "密钥只能在本组织内执行其权限允许的操作。",
+    "scopesRequired": "请至少选择一项权限。",
+    "create": "创建密钥",
+    "created": "已创建密钥“{name}”。",
+    "shownOnce": "请立即复制并妥善保存：它不会再次显示。",
+    "copy": "复制密钥",
+    "copied": "已复制到剪贴板。",
+    "listTitle": "你的密钥",
+    "empty": "还没有 API 密钥。",
+    "key": "密钥",
+    "createdAt": "创建时间",
+    "lastUsed": "上次使用",
+    "never": "从未",
+    "status": "状态",
+    "active": "有效",
+    "revoked": "已撤销",
+    "actions": "操作",
+    "revoke": "撤销",
+    "revokeNamed": "撤销密钥 {name}",
+    "scope": {
+      "org_read": "读取组织",
+      "events_read": "读取活动和票种",
+      "events_write": "创建和修改活动",
+      "orders_read": "读取订单",
+      "orders_refund": "订单退款",
+      "attendees_read": "读取参会者",
+      "checkin_scan": "扫描门票"
     }
   }
 }

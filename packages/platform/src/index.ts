@@ -1,3 +1,4 @@
+export { recordApiUsage } from './api-usage.ts';
 export {
   type AnyBulkAction,
   type BulkAction,

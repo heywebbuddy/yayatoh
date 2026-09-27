@@ -56,7 +56,8 @@
     "team": "Équipe",
     "settings": "Paramètres",
     "payouts": "Versements",
-    "domains": "Domaines"
+    "domains": "Domaines",
+    "apiKeys": "Clés d’API"
   },
   "vocab": {
     "attendee": "Participant",
@@ -1526,6 +1527,46 @@
       "event": "Événement",
       "emptyTitle": "Aucune vente sur cette période",
       "emptyDescription": "Choisissez une période plus longue ou partagez la page d’un événement pour commencer à vendre."
+    }
+  },
+  "apiKeys": {
+    "title": "Clés d’API",
+    "subtitle": "Permettez à d’autres logiciels d’accéder à votre organisation via l’API Yayatoh. Chaque clé n’est affichée qu’une fois.",
+    "docs": "Référence de l’API",
+    "noAccessTitle": "Seuls les propriétaires et les admins gèrent les clés d’API",
+    "noAccessDescription": "Demandez à un propriétaire ou un admin de cette organisation de créer une clé pour vous.",
+    "createTitle": "Créer une clé",
+    "name": "Nom",
+    "nameHint": "Où la clé sera utilisée, par ex. « Zapier » ou « Synchro billetterie ».",
+    "nameRequired": "Donnez un nom à la clé.",
+    "scopes": "Autorisations",
+    "scopesHint": "Une clé ne peut faire que ce que ses autorisations permettent, et seulement dans cette organisation.",
+    "scopesRequired": "Choisissez au moins une autorisation.",
+    "create": "Créer la clé",
+    "created": "Clé « {name} » créée.",
+    "shownOnce": "Copiez-la maintenant et conservez-la en lieu sûr : elle ne sera plus affichée.",
+    "copy": "Copier la clé",
+    "copied": "Copiée dans le presse-papiers.",
+    "listTitle": "Vos clés",
+    "empty": "Aucune clé d’API pour l’instant.",
+    "key": "Clé",
+    "createdAt": "Créée",
+    "lastUsed": "Dernière utilisation",
+    "never": "Jamais",
+    "status": "Statut",
+    "active": "Active",
+    "revoked": "Révoquée",
+    "actions": "Actions",
+    "revoke": "Révoquer",
+    "revokeNamed": "Révoquer la clé {name}",
+    "scope": {
+      "org_read": "Lire l’organisation",
+      "events_read": "Lire les événements et types de billets",
+      "events_write": "Créer et modifier des événements",
+      "orders_read": "Lire les commandes",
+      "orders_refund": "Rembourser les commandes",
+      "attendees_read": "Lire les participants",
+      "checkin_scan": "Scanner les billets"
     }
   }
 }

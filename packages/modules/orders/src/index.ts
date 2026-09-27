@@ -55,5 +55,6 @@ export {
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';
+export { type RefundOutcome, refundOrder } from './refund-flow.ts';
 export { ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
 export { ticketMailer } from './subscribers.ts';

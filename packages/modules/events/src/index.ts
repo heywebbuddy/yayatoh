@@ -11,6 +11,7 @@ export {
   eventRolesOf,
   findEventTx,
   getEventBySlugQuery,
+  getEventQuery,
   listEventsQuery,
   publicEventBySlug,
 } from './queries.ts';

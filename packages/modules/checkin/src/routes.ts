@@ -11,6 +11,8 @@ import {
   SyncResultDto,
   syncScansCommand,
 } from './devices.ts';
+import { scanTicketCommand } from './scan.ts';
+import { SCAN_RESULTS } from './schema.ts';
 
 type Env = { Variables: { device: Ctx } };
 
@@ -99,6 +101,42 @@ const heartbeat = createRoute({
   },
 });
 
+const CheckinBody = z.object({
+  eventId: z.uuid(),
+  code: z.string().min(1).max(400),
+  checkpointId: z.uuid().optional(),
+});
+const CheckinVerdict = z.object({
+  result: z.enum(SCAN_RESULTS),
+  ticket: z
+    .object({
+      holderName: z.string().nullable(),
+      typeName: z.string(),
+      serial: z.int(),
+      shortCode: z.string(),
+    })
+    .nullable(),
+  admissionId: z.uuid().nullable(),
+  firstAdmittedAt: z.iso.datetime({ offset: true }).nullable(),
+});
+
+const checkin = createRoute({
+  method: 'post',
+  path: '/checkins',
+  tags: ['scanner'],
+  summary: 'Scan one ticket online and get the door verdict',
+  description: 'Retrying with the same Idempotency-Key returns the first verdict instead of a duplicate.',
+  security,
+  request: {
+    headers: z.object({ 'idempotency-key': z.string().regex(/^[\x21-\x7e]{8,80}$/) }),
+    body: { content: { 'application/json': { schema: CheckinBody } }, required: true },
+  },
+  responses: {
+    200: { description: 'The verdict', content: { 'application/json': { schema: CheckinVerdict } } },
+    ...problems,
+  },
+});
+
 /**
  * Scanner endpoints (roadmap §6.1) as a router any host can mount: `apps/api` at `/v1`, and the
  * web app at `/api/v1` so the Scan PWA calls its own origin. Errors are thrown as DomainErrors;
@@ -121,6 +159,7 @@ export function scannerRoutes(ports: CommandPorts<TenantTx>) {
   scanner.use('/events/*', authenticate);
   scanner.use('/scans/*', authenticate);
   scanner.use('/devices/*', authenticate);
+  scanner.use('/checkins', authenticate);
 
   return scanner
     .openapi(manifest, async (c) => {
@@ -145,6 +184,18 @@ export function scannerRoutes(ports: CommandPorts<TenantTx>) {
     .openapi(heartbeat, async (c) => {
       const r = await executeCommand(heartbeatCommand, c.req.valid('json'), c.get('device'), ports);
       return c.json({ serverTime: r.serverTime.toISOString(), commands: r.commands }, 200);
+    })
+    .openapi(checkin, async (c) => {
+      const v = await executeCommand(
+        scanTicketCommand,
+        { ...c.req.valid('json'), clientScanId: c.req.valid('header')['idempotency-key'] },
+        c.get('device'),
+        ports,
+      );
+      return c.json(
+        CheckinVerdict.parse({ ...v, firstAdmittedAt: v.firstAdmittedAt?.toISOString() ?? null }),
+        200,
+      );
     });
 }
 
