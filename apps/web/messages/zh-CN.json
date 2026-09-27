@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "座位视图",
       "plan": "座位图",
-      "assign": "安排宾客"
+      "assign": "安排宾客",
+      "finder": "座位查询"
     },
     "assign": {
       "title": "安排宾客",
@@ -1368,6 +1369,142 @@
         "remove": "移除",
         "removeLabel": "将 {name} 从{item}移除"
       }
+    },
+    "finder": {
+      "title": "座位查询",
+      "description": "宾客可以在手机上查找座位并查看场地地图。打印带二维码的海报放在入口处。",
+      "noPlan": "此活动还没有座位图。请先创建一个，宾客将在上面查找自己的座位。",
+      "open": "已向宾客开放",
+      "closed": "未向宾客开放",
+      "modeNow": "查询方式：{mode}",
+      "modeShort": {
+        "code": "邮箱验证码",
+        "name": "全名"
+      },
+      "notPublic": "活动尚未发布（或为私密活动），宾客暂时无法打开座位查询。",
+      "settingsTitle": "宾客",
+      "save": "保存",
+      "saved": "座位查询设置已保存。",
+      "publicMap": "向宾客显示场地地图和座位查询",
+      "publicMapHint": "地图显示舞台、入口、吧台和桌子，但绝不显示谁坐在哪里。",
+      "mode": "宾客如何查找座位",
+      "modeOption": {
+        "code": "通过发送到邮箱的验证码（推荐）",
+        "name": "输入全名，立即查看"
+      },
+      "modeHint": {
+        "code": "只有能读取宾客邮件的人才能看到其座位，也没有人能知道名单上有谁。",
+        "name": "入场更快，但任何知道宾客全名的人都能看到其座位。"
+      },
+      "readOnly": "你可以查看这些设置，但不能修改。",
+      "shareTitle": "分享",
+      "address": "座位查询地址",
+      "openPublic": "打开座位查询",
+      "poster": "打印座位查询海报",
+      "closedNote": "座位查询已关闭。扫描海报的宾客会被提示稍后再来。"
     }
+  },
+  "venueMap": {
+    "title": "场地地图",
+    "description": "舞台、入口、吧台和桌子的位置。",
+    "findSeat": "查找我的座位",
+    "tools": "地图控制",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "reset": "整个场地",
+    "zoom": "缩放 {percent}%",
+    "region": "场地地图",
+    "keys": "选中地图时：按 + 和 − 缩放，方向键移动，0 显示整个场地。地图上的所有内容也都列在场地指南中。",
+    "guide": "场地指南",
+    "guideHint": "地图上的所有内容及其位置。",
+    "object": {
+      "stage": "舞台",
+      "booth": "展位",
+      "entrance": "入口",
+      "exit": "出口",
+      "dance_floor": "舞池",
+      "bar": "吧台",
+      "custom": "其他"
+    },
+    "named": "{type}：{label}",
+    "table": "{label} 号桌",
+    "row": "{label} 排",
+    "seats": "{count, plural, other {# 个座位}}",
+    "area": {
+      "top-left": "地图左上方",
+      "top": "地图上方",
+      "top-right": "地图右上方",
+      "left": "地图左侧",
+      "centre": "地图中央",
+      "right": "地图右侧",
+      "bottom-left": "地图左下方",
+      "bottom": "地图下方",
+      "bottom-right": "地图右下方"
+    },
+    "yours": "{count, plural, other {你的座位：{seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "座位查询",
+    "title": "查找你的座位",
+    "closedTitle": "座位查询尚未开放",
+    "closedDescription": "主办方尚未为此活动开放座位查询。请在活动临近时再来查看，或询问现场工作人员。",
+    "toEvent": "返回活动",
+    "lookupTitle": "查找你的座位",
+    "codeIntro": "请输入接收邀请或门票的电子邮箱。我们会向你发送一个验证码，用于查看你的座位。",
+    "email": "电子邮箱",
+    "sendCode": "给我发送验证码",
+    "sending": "正在发送…",
+    "codeTitle": "输入验证码",
+    "sent": "如果你在宾客名单上，我们已向你发送了一个 6 位验证码，10 分钟内有效。",
+    "codeHint": "请输入邮件中的 6 位验证码。",
+    "code": "6 位验证码",
+    "verify": "显示我的座位",
+    "checking": "正在验证…",
+    "otherEmail": "使用其他邮箱",
+    "nameIntro": "请输入与邀请函上一致的全名。",
+    "name": "全名",
+    "findByName": "查找我的座位",
+    "resultTitle": "{count, plural, other {你的座位}}",
+    "noSeatTitle": "你在名单上",
+    "notFoundTitle": "未找到",
+    "noSeat": "你暂时还没有座位。主办方会通知你，你也可以询问现场工作人员。",
+    "notFound": "未找到这个名字。请检查拼写，或询问现场工作人员。",
+    "seatAt": {
+      "table": "{item} 号桌 · {seat} 号座",
+      "row": "{item} 排 · {seat} 号座"
+    },
+    "nearest": "最近的入口：{name}",
+    "someUnseated": "{count, plural, other {你们一行中有 # 人还没有座位。}}",
+    "again": "查找其他人",
+    "challengeTitle": "请确认你是真人",
+    "challengeHint": "此设备的查询次数过多。请完成验证后再次提交。",
+    "fakeChallenge": "我是真人（测试验证）",
+    "mapTitle": "场地地图",
+    "errors": {
+      "wrong": "{left, plural, other {验证码不正确。你还可以尝试 # 次。}}",
+      "locked": "错误次数过多。请重新获取验证码。",
+      "expired": "此验证码已过期。请重新获取。",
+      "used": "此验证码已被使用。请重新获取。",
+      "invalidCode": "请输入邮件中的 6 位数字。",
+      "invalidEmail": "请输入有效的电子邮箱。",
+      "invalidName": "请输入你的全名。",
+      "challengeFailed": "验证未通过。请重试。",
+      "challengeUnavailable": "此设备的查询次数过多。请稍等一分钟后重试。",
+      "closed": "此活动的座位查询未开放。",
+      "internal": "我们这边出了点问题。"
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "座位查询海报",
+    "title": "查找你的座位",
+    "back": "返回座位查询",
+    "print": "打印海报",
+    "closedNote": "座位查询已关闭。扫描此海报的宾客会被提示稍后再来——请在“座位”页面开放。",
+    "qrLabel": "座位查询二维码：{url}",
+    "step1": "用手机相机扫描二维码。",
+    "step2Code": "输入你的邮箱，我们会发送验证码给你。",
+    "step2Name": "输入你的全名。",
+    "step3": "在场地地图上查看你的桌号和座位。",
+    "orVisit": "或访问"
   }
 }

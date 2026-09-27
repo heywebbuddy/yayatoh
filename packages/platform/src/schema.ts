@@ -88,6 +88,26 @@ export const idempotencyKeys = tenantTable(
 
 const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
+/**
+ * Fixed-window request counters for abuse limits (roadmap §6.1 rate-limit table), e.g. the
+ * seat finder's per device + event budget. One row per bucket per window; old windows are
+ * pruned as new ones are counted. Upstash token buckets may replace this for hot paths later.
+ */
+export const rateLimits = tenantTable(
+  platform,
+  'rate_limits',
+  {
+    bucket: text('bucket').notNull(),
+    windowStart: tsz('window_start').notNull(),
+    hits: integer('hits').notNull().default(0),
+  },
+  (t) => [
+    uniqueIndex('rate_limits_org_bucket_window_key').on(t.orgId, t.bucket, t.windowStart),
+    index('rate_limits_org_window_idx').on(t.orgId, t.windowStart),
+    check('rate_limits_bucket_length', sql`length(${t.bucket}) between 1 and 200`),
+  ],
+);
+
 export const BULK_STATUSES = ['queued', 'running', 'done', 'failed', 'undoing', 'undone'] as const;
 export type BulkStatus = (typeof BULK_STATUSES)[number];
 

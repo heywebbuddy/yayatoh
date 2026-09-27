@@ -10,9 +10,12 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
+import { VenueGuide } from '@/components/venue-guide.tsx';
+import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
+import { openVenueMap } from '@/server/seat-finder.ts';
 import { checkoutAction, requestHolderLinkAction } from './actions.ts';
 
 export default async function PublicEventPage({
@@ -30,6 +33,8 @@ export default async function PublicEventPage({
   const target = await checkoutTarget(slug);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
+  // The venue map and seat finder, once the organizer opened them (M1.7e).
+  const venue = target ? await openVenueMap(target.orgId, target.eventId) : null;
   const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
   const questions = target
     ? ((
@@ -192,6 +197,28 @@ export default async function PublicEventPage({
           />
         )}
       </section>
+
+      {venue ? (
+        <section
+          id="venue"
+          aria-labelledby="venue-heading"
+          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+        >
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="flex flex-col gap-1">
+              <h2 id="venue-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+                {t('venueMap.title')}
+              </h2>
+              <p className="text-body text-zinc-600">{t('venueMap.description')}</p>
+            </div>
+            <Link href={`/events/${slug}/seat-finder`} className={buttonClass('primary')}>
+              {t('venueMap.findSeat')}
+            </Link>
+          </div>
+          <VenueMap doc={venue.doc} />
+          <VenueGuide doc={venue.doc} />
+        </section>
+      ) : null}
 
       {target ? (
         <section aria-labelledby="have-tickets-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">

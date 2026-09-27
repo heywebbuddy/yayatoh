@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Vistas de asientos",
       "plan": "Plano",
-      "assign": "Asignar invitados"
+      "assign": "Asignar invitados",
+      "finder": "Buscador de asientos"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -1368,6 +1369,142 @@
         "remove": "Quitar",
         "removeLabel": "Quitar a {name} de {item}"
       }
+    },
+    "finder": {
+      "title": "Buscador de asientos",
+      "description": "Los invitados encuentran su asiento en el móvil y ven el plano del lugar. Imprime un cartel con un código QR para la entrada.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero; en él los invitados encontrarán su asiento.",
+      "open": "Abierto a los invitados",
+      "closed": "Cerrado a los invitados",
+      "modeNow": "Búsqueda: {mode}",
+      "modeShort": {
+        "code": "código por correo",
+        "name": "nombre completo"
+      },
+      "notPublic": "El evento no está publicado (o es privado), así que los invitados aún no pueden abrir el buscador.",
+      "settingsTitle": "Invitados",
+      "save": "Guardar",
+      "saved": "Ajustes del buscador guardados.",
+      "publicMap": "Mostrar a los invitados el plano y el buscador de asientos",
+      "publicMapHint": "El plano muestra el escenario, las entradas, las barras y las mesas, nunca quién se sienta dónde.",
+      "mode": "Cómo buscan los invitados su asiento",
+      "modeOption": {
+        "code": "Con un código enviado a su correo (recomendado)",
+        "name": "Al instante, por nombre completo"
+      },
+      "modeHint": {
+        "code": "Solo quien puede leer el correo del invitado ve su asiento, y nadie puede averiguar quién está en la lista.",
+        "name": "Más rápido en la entrada, pero cualquiera que sepa el nombre completo de un invitado puede ver dónde se sienta."
+      },
+      "readOnly": "Puedes ver estos ajustes, pero no cambiarlos.",
+      "shareTitle": "Compártelo",
+      "address": "Dirección del buscador de asientos",
+      "openPublic": "Abrir el buscador de asientos",
+      "poster": "Imprimir cartel del buscador",
+      "closedNote": "El buscador de asientos está cerrado. A quien escanee el cartel se le pedirá que vuelva más tarde."
     }
+  },
+  "venueMap": {
+    "title": "Plano del lugar",
+    "description": "Dónde están el escenario, las entradas, las barras y las mesas.",
+    "findSeat": "Encontrar mi asiento",
+    "tools": "Controles del plano",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "reset": "Toda la sala",
+    "zoom": "Zoom {percent} %",
+    "region": "Plano del lugar",
+    "keys": "Con el plano seleccionado: + y − acercan y alejan, las flechas lo desplazan y 0 muestra toda la sala. Todo lo del plano aparece también en la guía del lugar.",
+    "guide": "Guía del lugar",
+    "guideHint": "Todo lo que hay en el plano y dónde está.",
+    "object": {
+      "stage": "Escenario",
+      "booth": "Stand",
+      "entrance": "Entrada",
+      "exit": "Salida",
+      "dance_floor": "Pista de baile",
+      "bar": "Barra",
+      "custom": "Otro"
+    },
+    "named": "{type}: {label}",
+    "table": "Mesa {label}",
+    "row": "Fila {label}",
+    "seats": "{count, plural, one {# asiento} other {# asientos}}",
+    "area": {
+      "top-left": "Arriba a la izquierda del plano",
+      "top": "Arriba en el plano",
+      "top-right": "Arriba a la derecha del plano",
+      "left": "Lado izquierdo del plano",
+      "centre": "Centro del plano",
+      "right": "Lado derecho del plano",
+      "bottom-left": "Abajo a la izquierda del plano",
+      "bottom": "Abajo en el plano",
+      "bottom-right": "Abajo a la derecha del plano"
+    },
+    "yours": "{count, plural, one {Tu asiento: {seats}} other {Tus asientos: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Buscador de asientos",
+    "title": "Encuentra tu asiento",
+    "closedTitle": "El buscador de asientos aún no está abierto",
+    "closedDescription": "El organizador todavía no ha abierto el buscador de asientos para este evento. Vuelve más cerca de la fecha o pregunta al personal.",
+    "toEvent": "Volver al evento",
+    "lookupTitle": "Encuentra tu asiento",
+    "codeIntro": "Escribe el correo al que se envió tu invitación o tus entradas. Te enviaremos un código para ver tu asiento.",
+    "email": "Correo electrónico",
+    "sendCode": "Enviarme un código",
+    "sending": "Enviando…",
+    "codeTitle": "Escribe tu código",
+    "sent": "Si estás en la lista de invitados, te hemos enviado un código de 6 dígitos. Es válido durante 10 minutos.",
+    "codeHint": "Escribe el código de 6 dígitos que te enviamos.",
+    "code": "Código de 6 dígitos",
+    "verify": "Ver mi asiento",
+    "checking": "Comprobando…",
+    "otherEmail": "Usar otro correo",
+    "nameIntro": "Escribe tu nombre completo tal como aparece en tu invitación.",
+    "name": "Nombre completo",
+    "findByName": "Encontrar mi asiento",
+    "resultTitle": "{count, plural, one {Tu asiento} other {Tus asientos}}",
+    "noSeatTitle": "Estás en la lista",
+    "notFoundTitle": "No se encontró a nadie",
+    "noSeat": "Aún no tienes asiento. El organizador te avisará; también puedes preguntar al personal.",
+    "notFound": "No encontramos ese nombre. Revisa cómo está escrito o pregunta al personal.",
+    "seatAt": {
+      "table": "Mesa {item} · Asiento {seat}",
+      "row": "Fila {item} · Asiento {seat}"
+    },
+    "nearest": "Entrada más cercana: {name}",
+    "someUnseated": "{count, plural, one {# persona de tu grupo aún no tiene asiento.} other {# personas de tu grupo aún no tienen asiento.}}",
+    "again": "Buscar a otra persona",
+    "challengeTitle": "Confirma que eres una persona",
+    "challengeHint": "Ha habido muchas búsquedas desde este dispositivo. Completa la comprobación y vuelve a enviar.",
+    "fakeChallenge": "Soy una persona (comprobación de prueba)",
+    "mapTitle": "Plano del lugar",
+    "errors": {
+      "wrong": "{left, plural, one {Ese código no es correcto. Te queda # intento.} other {Ese código no es correcto. Te quedan # intentos.}}",
+      "locked": "Demasiados códigos incorrectos. Pide un código nuevo.",
+      "expired": "Este código ha caducado. Pide uno nuevo.",
+      "used": "Este código ya se ha usado. Pide uno nuevo.",
+      "invalidCode": "Escribe los 6 dígitos del correo.",
+      "invalidEmail": "Escribe un correo electrónico válido.",
+      "invalidName": "Escribe tu nombre completo.",
+      "challengeFailed": "La comprobación no se superó. Inténtalo de nuevo.",
+      "challengeUnavailable": "Demasiadas búsquedas desde este dispositivo. Espera un minuto e inténtalo de nuevo.",
+      "closed": "El buscador de asientos no está abierto para este evento.",
+      "internal": "Algo ha fallado por nuestra parte."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Cartel del buscador de asientos",
+    "title": "Encuentra tu asiento",
+    "back": "Volver al buscador de asientos",
+    "print": "Imprimir cartel",
+    "closedNote": "El buscador de asientos está cerrado. A quien escanee este cartel se le pedirá que vuelva más tarde; ábrelo en la página Asientos.",
+    "qrLabel": "Código QR al buscador de asientos: {url}",
+    "step1": "Escanea el código con la cámara del móvil.",
+    "step2Code": "Escribe tu correo y te enviaremos un código.",
+    "step2Name": "Escribe tu nombre completo.",
+    "step3": "Mira tu mesa y tu asiento en el plano.",
+    "orVisit": "O entra en"
   }
 }

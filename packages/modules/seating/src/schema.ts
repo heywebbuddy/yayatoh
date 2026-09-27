@@ -17,6 +17,11 @@ import { SEAT_STATUSES } from './domain/seat-state.ts';
 export const seatingSchema = pgSchema('seating');
 
 export const EVENT_LAYOUT_STATUSES = ['draft', 'published', 'locked'] as const;
+/**
+ * How guests look themselves up in the public seat finder (M1.7e): `code` = a one-time code
+ * emailed to an address on the list (no enumeration); `name` = instant, by exact full name.
+ */
+export const FINDER_MODES = ['code', 'name'] as const;
 /** Reasons an organizer blocks seats by hand. */
 export const BLOCK_REASONS = ['channel', 'ada', 'kill'] as const;
 /** Every block reason a seat can carry: `assigned` = a guest was given this seat (M1.7d). */
@@ -52,12 +57,19 @@ export const eventLayouts = tenantTable(
     seatCount: integer('seat_count').notNull(),
     status: text('status').notNull().default('draft'),
     lockedAt: timestamp('locked_at', { withTimezone: true }),
+    /** The organizer shows guests the venue map and the seat finder (M1.7e). */
+    publicMap: boolean('public_map').notNull().default(false),
+    finderMode: text('finder_mode').notNull().default('code'),
   },
   (t) => [
     uniqueIndex('event_layouts_org_event_key').on(t.orgId, t.eventId),
     check(
       'event_layouts_status_check',
       sql.raw(`status in (${EVENT_LAYOUT_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'event_layouts_finder_mode_check',
+      sql.raw(`finder_mode in (${FINDER_MODES.map((s) => `'${s}'`).join(', ')})`),
     ),
   ],
 );
@@ -132,5 +144,32 @@ export const seatAssignments = tenantTable(
       'seat_assignments_prior_block_check',
       sql.raw(`prior_block is null or prior_block in (${ASSIGNABLE_BLOCKS.map((s) => `'${s}'`).join(', ')})`),
     ),
+  ],
+);
+
+/**
+ * Seat finder one-time codes (M1.7e). A row is written for every lookup, whether or not the email
+ * is on the list, so the answer and the work done never reveal who is invited. `email` is kept
+ * only for addresses on the list (the mailer needs it); `email_hash` (HMAC) counts codes per
+ * address. The code itself is never stored: it is derived from the row id under the app secret
+ * for the email, and only its HMAC (`code_hash`) is kept. Five wrong tries lock a code; a code
+ * works once and for ten minutes.
+ */
+export const finderCodes = tenantTable(
+  seatingSchema,
+  'finder_codes',
+  {
+    eventId: uuid('event_id').notNull(),
+    emailHash: text('email_hash').notNull(),
+    email: text('email'),
+    codeHash: text('code_hash').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    usedAt: timestamp('used_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('finder_codes_org_event_email_idx').on(t.orgId, t.eventId, t.emailHash, t.createdAt),
+    index('finder_codes_org_expires_idx').on(t.orgId, t.expiresAt),
+    check('finder_codes_attempts_check', sql`attempts between 0 and 5`),
   ],
 );

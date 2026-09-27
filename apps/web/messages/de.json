@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Sitzplan-Ansichten",
       "plan": "Plan",
-      "assign": "Gäste platzieren"
+      "assign": "Gäste platzieren",
+      "finder": "Platzfinder"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -1368,6 +1369,142 @@
         "remove": "Entfernen",
         "removeLabel": "{name} von {item} entfernen"
       }
+    },
+    "finder": {
+      "title": "Platzfinder",
+      "description": "Gäste finden ihren Platz auf dem Handy und sehen den Lageplan. Drucken Sie ein Plakat mit QR-Code für den Eingang.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Sitzplan. Erstellen Sie zuerst einen; darauf finden Gäste dann ihre Plätze.",
+      "open": "Für Gäste geöffnet",
+      "closed": "Für Gäste geschlossen",
+      "modeNow": "Suche: {mode}",
+      "modeShort": {
+        "code": "Code per E-Mail",
+        "name": "vollständiger Name"
+      },
+      "notPublic": "Die Veranstaltung ist nicht veröffentlicht (oder privat), daher können Gäste den Platzfinder noch nicht öffnen.",
+      "settingsTitle": "Gäste",
+      "save": "Speichern",
+      "saved": "Einstellungen des Platzfinders gespeichert.",
+      "publicMap": "Gästen den Lageplan und den Platzfinder zeigen",
+      "publicMapHint": "Der Plan zeigt Bühne, Eingänge, Bars und Tische – nie, wer wo sitzt.",
+      "mode": "Wie Gäste ihren Platz suchen",
+      "modeOption": {
+        "code": "Mit einem Code per E-Mail (empfohlen)",
+        "name": "Sofort, mit dem vollständigen Namen"
+      },
+      "modeHint": {
+        "code": "Nur wer die E-Mails des Gastes lesen kann, sieht seinen Platz, und niemand kann herausfinden, wer auf der Liste steht.",
+        "name": "Schneller am Eingang, aber jeder, der den vollständigen Namen eines Gastes kennt, sieht, wo er sitzt."
+      },
+      "readOnly": "Sie können diese Einstellungen sehen, aber nicht ändern.",
+      "shareTitle": "Teilen",
+      "address": "Adresse des Platzfinders",
+      "openPublic": "Platzfinder öffnen",
+      "poster": "Platzfinder-Plakat drucken",
+      "closedNote": "Der Platzfinder ist geschlossen. Gäste, die das Plakat scannen, werden gebeten, später wiederzukommen."
     }
+  },
+  "venueMap": {
+    "title": "Lageplan",
+    "description": "Wo Bühne, Eingänge, Bars und Tische sind.",
+    "findSeat": "Meinen Platz finden",
+    "tools": "Kartensteuerung",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "reset": "Ganzer Raum",
+    "zoom": "Zoom {percent} %",
+    "region": "Lageplan",
+    "keys": "Bei ausgewähltem Plan: + und − zoomen, die Pfeiltasten verschieben, 0 zeigt den ganzen Raum. Alles auf dem Plan steht auch im Raumführer.",
+    "guide": "Raumführer",
+    "guideHint": "Alles auf dem Plan und wo es sich befindet.",
+    "object": {
+      "stage": "Bühne",
+      "booth": "Stand",
+      "entrance": "Eingang",
+      "exit": "Ausgang",
+      "dance_floor": "Tanzfläche",
+      "bar": "Bar",
+      "custom": "Sonstiges"
+    },
+    "named": "{type}: {label}",
+    "table": "Tisch {label}",
+    "row": "Reihe {label}",
+    "seats": "{count, plural, one {# Platz} other {# Plätze}}",
+    "area": {
+      "top-left": "Oben links auf dem Plan",
+      "top": "Oben auf dem Plan",
+      "top-right": "Oben rechts auf dem Plan",
+      "left": "Linke Seite des Plans",
+      "centre": "Mitte des Plans",
+      "right": "Rechte Seite des Plans",
+      "bottom-left": "Unten links auf dem Plan",
+      "bottom": "Unten auf dem Plan",
+      "bottom-right": "Unten rechts auf dem Plan"
+    },
+    "yours": "{count, plural, one {Ihr Platz: {seats}} other {Ihre Plätze: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Platzfinder",
+    "title": "Ihren Platz finden",
+    "closedTitle": "Der Platzfinder ist noch nicht geöffnet",
+    "closedDescription": "Der Veranstalter hat den Platzfinder für diese Veranstaltung noch nicht geöffnet. Schauen Sie kurz vor dem Termin wieder vorbei oder fragen Sie das Personal.",
+    "toEvent": "Zurück zur Veranstaltung",
+    "lookupTitle": "Ihren Platz finden",
+    "codeIntro": "Geben Sie die E-Mail-Adresse ein, an die Ihre Einladung oder Tickets geschickt wurden. Wir senden Ihnen einen Code, mit dem Sie Ihren Platz sehen.",
+    "email": "E-Mail",
+    "sendCode": "Code per E-Mail senden",
+    "sending": "Wird gesendet …",
+    "codeTitle": "Code eingeben",
+    "sent": "Wenn Sie auf der Gästeliste stehen, haben wir Ihnen einen 6-stelligen Code geschickt. Er gilt 10 Minuten.",
+    "codeHint": "Geben Sie den 6-stelligen Code aus unserer E-Mail ein.",
+    "code": "6-stelliger Code",
+    "verify": "Meinen Platz zeigen",
+    "checking": "Wird geprüft …",
+    "otherEmail": "Andere E-Mail-Adresse verwenden",
+    "nameIntro": "Geben Sie Ihren vollständigen Namen so ein, wie er auf Ihrer Einladung steht.",
+    "name": "Vollständiger Name",
+    "findByName": "Meinen Platz finden",
+    "resultTitle": "{count, plural, one {Ihr Platz} other {Ihre Plätze}}",
+    "noSeatTitle": "Sie stehen auf der Liste",
+    "notFoundTitle": "Niemanden gefunden",
+    "noSeat": "Sie haben noch keinen Platz. Der Veranstalter informiert Sie, oder fragen Sie das Personal.",
+    "notFound": "Diesen Namen haben wir nicht gefunden. Prüfen Sie die Schreibweise oder fragen Sie das Personal.",
+    "seatAt": {
+      "table": "Tisch {item} · Platz {seat}",
+      "row": "Reihe {item} · Platz {seat}"
+    },
+    "nearest": "Nächster Eingang: {name}",
+    "someUnseated": "{count, plural, one {# Person Ihrer Gruppe hat noch keinen Platz.} other {# Personen Ihrer Gruppe haben noch keinen Platz.}}",
+    "again": "Jemand anderen suchen",
+    "challengeTitle": "Bitte bestätigen Sie, dass Sie ein Mensch sind",
+    "challengeHint": "Von diesem Gerät kamen viele Anfragen. Schließen Sie die Prüfung ab und senden Sie dann erneut.",
+    "fakeChallenge": "Ich bin ein Mensch (Testprüfung)",
+    "mapTitle": "Lageplan",
+    "errors": {
+      "wrong": "{left, plural, one {Dieser Code stimmt nicht. Sie haben noch # Versuch.} other {Dieser Code stimmt nicht. Sie haben noch # Versuche.}}",
+      "locked": "Zu viele falsche Codes. Fordern Sie einen neuen Code an.",
+      "expired": "Dieser Code ist abgelaufen. Fordern Sie einen neuen an.",
+      "used": "Dieser Code wurde bereits verwendet. Fordern Sie einen neuen an.",
+      "invalidCode": "Geben Sie die 6 Ziffern aus der E-Mail ein.",
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "invalidName": "Geben Sie Ihren vollständigen Namen ein.",
+      "challengeFailed": "Die Prüfung war nicht erfolgreich. Bitte versuchen Sie es erneut.",
+      "challengeUnavailable": "Zu viele Anfragen von diesem Gerät. Bitte warten Sie eine Minute und versuchen Sie es erneut.",
+      "closed": "Der Platzfinder ist für diese Veranstaltung nicht geöffnet.",
+      "internal": "Bei uns ist etwas schiefgelaufen."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Platzfinder-Plakat",
+    "title": "Finden Sie Ihren Platz",
+    "back": "Zurück zum Platzfinder",
+    "print": "Plakat drucken",
+    "closedNote": "Der Platzfinder ist geschlossen. Gäste, die dieses Plakat scannen, werden gebeten, später wiederzukommen – öffnen Sie ihn auf der Seite „Sitzplätze“.",
+    "qrLabel": "QR-Code zum Platzfinder: {url}",
+    "step1": "Scannen Sie den Code mit der Handykamera.",
+    "step2Code": "Geben Sie Ihre E-Mail-Adresse ein – wir senden Ihnen einen Code.",
+    "step2Name": "Geben Sie Ihren vollständigen Namen ein.",
+    "step3": "Sehen Sie Ihren Tisch und Platz auf dem Lageplan.",
+    "orVisit": "Oder öffnen Sie"
   }
 }

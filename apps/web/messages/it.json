@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Viste dei posti",
       "plan": "Piantina",
-      "assign": "Assegna ospiti"
+      "assign": "Assegna ospiti",
+      "finder": "Trova posto"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -1368,6 +1369,142 @@
         "remove": "Rimuovi",
         "removeLabel": "Rimuovi {name} da {item}"
       }
+    },
+    "finder": {
+      "title": "Trova posto",
+      "description": "Gli invitati trovano il loro posto sul telefono e vedono la mappa della sala. Stampa un poster con un codice QR per l'ingresso.",
+      "noPlan": "Questo evento non ha ancora una piantina dei posti. Creane prima una: gli invitati troveranno lì il loro posto.",
+      "open": "Aperto agli invitati",
+      "closed": "Chiuso agli invitati",
+      "modeNow": "Ricerca: {mode}",
+      "modeShort": {
+        "code": "codice via email",
+        "name": "nome completo"
+      },
+      "notPublic": "L'evento non è pubblicato (o è privato), quindi gli invitati non possono ancora aprire la ricerca del posto.",
+      "settingsTitle": "Invitati",
+      "save": "Salva",
+      "saved": "Impostazioni della ricerca del posto salvate.",
+      "publicMap": "Mostra agli invitati la mappa della sala e la ricerca del posto",
+      "publicMapHint": "La mappa mostra palco, ingressi, bar e tavoli, mai chi siede dove.",
+      "mode": "Come gli invitati cercano il loro posto",
+      "modeOption": {
+        "code": "Con un codice inviato alla loro email (consigliato)",
+        "name": "Subito, con il nome completo"
+      },
+      "modeHint": {
+        "code": "Solo chi legge l'email dell'invitato vede il suo posto, e nessuno può scoprire chi è in lista.",
+        "name": "Più veloce all'ingresso, ma chiunque conosca il nome completo di un invitato può vedere dove siede."
+      },
+      "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
+      "shareTitle": "Condividi",
+      "address": "Indirizzo della ricerca del posto",
+      "openPublic": "Apri la ricerca del posto",
+      "poster": "Stampa il poster per trovare il posto",
+      "closedNote": "La ricerca del posto è chiusa. Chi scansiona il poster verrà invitato a tornare più tardi."
     }
+  },
+  "venueMap": {
+    "title": "Mappa della sala",
+    "description": "Dove si trovano palco, ingressi, bar e tavoli.",
+    "findSeat": "Trova il mio posto",
+    "tools": "Controlli della mappa",
+    "zoomIn": "Ingrandisci",
+    "zoomOut": "Riduci",
+    "reset": "Tutta la sala",
+    "zoom": "Zoom {percent}%",
+    "region": "Mappa della sala",
+    "keys": "Con la mappa selezionata: + e − ingrandiscono e riducono, le frecce spostano la vista, 0 mostra tutta la sala. Tutto ciò che è sulla mappa è elencato anche nella guida della sala.",
+    "guide": "Guida della sala",
+    "guideHint": "Tutto ciò che c'è sulla mappa e dove si trova.",
+    "object": {
+      "stage": "Palco",
+      "booth": "Stand",
+      "entrance": "Ingresso",
+      "exit": "Uscita",
+      "dance_floor": "Pista da ballo",
+      "bar": "Bar",
+      "custom": "Altro"
+    },
+    "named": "{type}: {label}",
+    "table": "Tavolo {label}",
+    "row": "Fila {label}",
+    "seats": "{count, plural, one {# posto} other {# posti}}",
+    "area": {
+      "top-left": "In alto a sinistra sulla mappa",
+      "top": "In alto sulla mappa",
+      "top-right": "In alto a destra sulla mappa",
+      "left": "Lato sinistro della mappa",
+      "centre": "Al centro della mappa",
+      "right": "Lato destro della mappa",
+      "bottom-left": "In basso a sinistra sulla mappa",
+      "bottom": "In basso sulla mappa",
+      "bottom-right": "In basso a destra sulla mappa"
+    },
+    "yours": "{count, plural, one {Il tuo posto: {seats}} other {I tuoi posti: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Trova posto",
+    "title": "Trova il tuo posto",
+    "closedTitle": "La ricerca del posto non è ancora aperta",
+    "closedDescription": "L'organizzatore non ha ancora aperto la ricerca del posto per questo evento. Ricontrolla più vicino alla data o chiedi allo staff.",
+    "toEvent": "Torna all'evento",
+    "lookupTitle": "Trova il tuo posto",
+    "codeIntro": "Inserisci l'indirizzo email a cui sono stati inviati l'invito o i biglietti. Ti invieremo un codice per vedere il tuo posto.",
+    "email": "Email",
+    "sendCode": "Inviami un codice",
+    "sending": "Invio in corso…",
+    "codeTitle": "Inserisci il codice",
+    "sent": "Se sei nella lista degli invitati, ti abbiamo inviato un codice di 6 cifre. È valido per 10 minuti.",
+    "codeHint": "Inserisci il codice di 6 cifre che ti abbiamo inviato.",
+    "code": "Codice di 6 cifre",
+    "verify": "Mostra il mio posto",
+    "checking": "Verifica in corso…",
+    "otherEmail": "Usa un'altra email",
+    "nameIntro": "Inserisci il tuo nome completo come appare sull'invito.",
+    "name": "Nome completo",
+    "findByName": "Trova il mio posto",
+    "resultTitle": "{count, plural, one {Il tuo posto} other {I tuoi posti}}",
+    "noSeatTitle": "Sei nella lista",
+    "notFoundTitle": "Nessuno trovato",
+    "noSeat": "Non hai ancora un posto. L'organizzatore ti avviserà, oppure chiedi allo staff.",
+    "notFound": "Non abbiamo trovato questo nome. Controlla come è scritto o chiedi allo staff.",
+    "seatAt": {
+      "table": "Tavolo {item} · Posto {seat}",
+      "row": "Fila {item} · Posto {seat}"
+    },
+    "nearest": "Ingresso più vicino: {name}",
+    "someUnseated": "{count, plural, one {# persona del tuo gruppo non ha ancora un posto.} other {# persone del tuo gruppo non hanno ancora un posto.}}",
+    "again": "Cerca un'altra persona",
+    "challengeTitle": "Conferma di essere una persona",
+    "challengeHint": "Da questo dispositivo sono arrivate molte ricerche. Completa la verifica e invia di nuovo.",
+    "fakeChallenge": "Sono una persona (verifica di prova)",
+    "mapTitle": "Mappa della sala",
+    "errors": {
+      "wrong": "{left, plural, one {Il codice non è corretto. Ti resta # tentativo.} other {Il codice non è corretto. Ti restano # tentativi.}}",
+      "locked": "Troppi codici errati. Chiedi un nuovo codice.",
+      "expired": "Questo codice è scaduto. Chiedine uno nuovo.",
+      "used": "Questo codice è già stato usato. Chiedine uno nuovo.",
+      "invalidCode": "Inserisci le 6 cifre dell'email.",
+      "invalidEmail": "Inserisci un indirizzo email valido.",
+      "invalidName": "Inserisci il tuo nome completo.",
+      "challengeFailed": "La verifica non è riuscita. Riprova.",
+      "challengeUnavailable": "Troppe ricerche da questo dispositivo. Attendi un minuto e riprova.",
+      "closed": "La ricerca del posto non è aperta per questo evento.",
+      "internal": "Si è verificato un problema da parte nostra."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Poster per trovare il posto",
+    "title": "Trova il tuo posto",
+    "back": "Torna alla ricerca del posto",
+    "print": "Stampa il poster",
+    "closedNote": "La ricerca del posto è chiusa. Chi scansiona questo poster verrà invitato a tornare più tardi: aprila dalla pagina Posti a sedere.",
+    "qrLabel": "Codice QR per la ricerca del posto: {url}",
+    "step1": "Inquadra il codice con la fotocamera del telefono.",
+    "step2Code": "Inserisci la tua email: ti invieremo un codice.",
+    "step2Name": "Inserisci il tuo nome completo.",
+    "step3": "Guarda il tuo tavolo e il tuo posto sulla mappa.",
+    "orVisit": "Oppure vai su"
   }
 }
