@@ -42,6 +42,7 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Red
 - `packages/ui`: ADR 0018 tokens (`tokens.ts` + `styles.css`) and components.
 - `packages/platform` (tier 0): outbox + subscribers, command ports (`createCommandPorts`), `tenantCommand`/`tenantQuery`, module keys, profiles registry + `composeNav`.
 - `packages/modules/*`: one package per bounded context with a `MODULE.md` (invariants) and `yayatoh.tier` in package.json. `tenancy` and `billing` are tier 1.
+- `packages/modules/marketplace` (tier 6): the `public_listings` projection (fed by the outbox), site settings (enrollment, tenant site, widget origins), `legacy_redirects`. Public caching only through `apps/web/src/server/public-cache.ts` (org-scoped keys and tags; check-modules `cache-scope`).
 - `packages/testing`: `twoOrgs()` fixture, the composed `ports`, the isolation suite. **Every new tenant table must get rows for both orgs in `createOrgFixture`** — the isolation suite fails otherwise.
 - `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss + the single-leader outbox relay), `tools/check-modules` (with gate canaries).
 
