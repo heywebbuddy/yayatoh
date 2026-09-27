@@ -26,6 +26,8 @@ export const PERMISSIONS = [
   'payouts:manage',
   'marketing:write',
   'checkin:scan',
+  /** Create and revoke org API keys (/v1). */
+  'api_keys:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 

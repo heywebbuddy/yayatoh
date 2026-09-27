@@ -88,6 +88,34 @@ export function stableStringify(value: unknown): string {
 }
 
 /**
+ * A stored idempotent result, parsed again with the command's output schema. The store keeps
+ * JSON, so dates come back as ISO strings: exactly the fields the schema reports as expecting a
+ * date are turned back into Dates, and nothing else is touched.
+ */
+export function replayOutput<O>(schema: z.ZodType<O>, stored: unknown): O {
+  let value = stored;
+  for (let round = 0; round < 3; round++) {
+    const r = schema.safeParse(value);
+    if (r.success) return r.data;
+    const dates = r.error.issues.filter((i) => i.code === 'invalid_type' && i.expected === 'date');
+    if (dates.length === 0) break;
+    value = structuredClone(value);
+    for (const issue of dates) reviveAt(value, issue.path);
+  }
+  return schema.parse(value);
+}
+
+function reviveAt(root: unknown, path: readonly PropertyKey[]): void {
+  let node = root as Record<PropertyKey, unknown>;
+  for (const key of path.slice(0, -1)) node = node?.[key] as Record<PropertyKey, unknown>;
+  const last = path[path.length - 1];
+  if (node && last !== undefined && typeof node[last] === 'string') {
+    const d = new Date(node[last] as string);
+    if (!Number.isNaN(d.getTime())) node[last] = d;
+  }
+}
+
+/**
  * The single write pipeline. Steps run in this order, always:
  * 1 validate · 2 entitlement · 3 authorize · 4 step-up · 5 idempotency ·
  * 6 tenant transaction · 7 handler · 8 outbox · 9 audit · 10 serialize.
@@ -133,7 +161,7 @@ export async function executeCommand<I, O, R, Tx>(
     if (!ctx.idempotencyKey) throw new DomainError('validation_failed', 'Idempotency-Key is required');
     fingerprint = stableStringify({ command: command.name, input });
     const prior = await ports.idempotency.lookup(ctx, command.name, ctx.idempotencyKey, fingerprint);
-    if (prior) return command.output.parse(prior.output);
+    if (prior) return replayOutput(command.output, prior.output);
   }
 
   // 6. Tenant transaction

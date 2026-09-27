@@ -57,6 +57,7 @@
     "settings": "Configurações",
     "payouts": "Repasses",
     "domains": "Domínios",
+    "apiKeys": "Chaves de API",
     "publicSite": "Site público"
   },
   "vocab": {
@@ -1664,6 +1665,46 @@
       "event": "Evento",
       "emptyTitle": "Sem vendas neste período",
       "emptyDescription": "Escolha um período mais longo ou compartilhe a página de um evento para começar a vender."
+    }
+  },
+  "apiKeys": {
+    "title": "Chaves de API",
+    "subtitle": "Permita que outros softwares acessem sua organização pela API da Yayatoh. Cada chave é mostrada uma única vez.",
+    "docs": "Referência da API",
+    "noAccessTitle": "Somente proprietários e administradores gerenciam chaves de API",
+    "noAccessDescription": "Peça a um proprietário ou administrador desta organização para criar uma chave para você.",
+    "createTitle": "Criar uma chave",
+    "name": "Nome",
+    "nameHint": "Onde a chave será usada, por ex. “Zapier” ou “Sincronização da bilheteria”.",
+    "nameRequired": "Dê um nome à chave.",
+    "scopes": "Permissões",
+    "scopesHint": "Uma chave só pode fazer o que suas permissões permitem, e somente nesta organização.",
+    "scopesRequired": "Escolha pelo menos uma permissão.",
+    "create": "Criar chave",
+    "created": "Chave “{name}” criada.",
+    "shownOnce": "Copie agora e guarde em local seguro: ela não será mostrada novamente.",
+    "copy": "Copiar chave",
+    "copied": "Copiada para a área de transferência.",
+    "listTitle": "Suas chaves",
+    "empty": "Nenhuma chave de API ainda.",
+    "key": "Chave",
+    "createdAt": "Criada",
+    "lastUsed": "Último uso",
+    "never": "Nunca",
+    "status": "Status",
+    "active": "Ativa",
+    "revoked": "Revogada",
+    "actions": "Ações",
+    "revoke": "Revogar",
+    "revokeNamed": "Revogar a chave {name}",
+    "scope": {
+      "org_read": "Ler a organização",
+      "events_read": "Ler eventos e tipos de ingresso",
+      "events_write": "Criar e alterar eventos",
+      "orders_read": "Ler pedidos",
+      "orders_refund": "Reembolsar pedidos",
+      "attendees_read": "Ler participantes",
+      "checkin_scan": "Escanear ingressos"
     }
   },
   "market": {

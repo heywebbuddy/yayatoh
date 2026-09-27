@@ -28,7 +28,8 @@
       "support": "Support",
       "finance": "Finance"
     },
-    "commission": "Commission"
+    "commission": "Commission",
+    "apiUsage": "API usage"
   },
   "tenants": {
     "title": "Tenants",
@@ -233,5 +234,16 @@
       "net": "Net commission"
     },
     "empty": "No platform fees in this period."
+  },
+  "apiUsage": {
+    "title": "API usage by app version",
+    "description": "Requests to /v1 per route, client and app version over the last 7 days (UTC). No organization or person is recorded.",
+    "summary": "{versions, plural, =0 {No client versions seen yet.} one {# client version seen.} other {# client versions seen.}}",
+    "route": "Route",
+    "client": "Client",
+    "version": "App version",
+    "requests": "Requests",
+    "lastDay": "Last seen (UTC)",
+    "empty": "No /v1 requests recorded in the last 7 days."
   }
 }

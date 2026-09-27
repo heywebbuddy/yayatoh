@@ -57,6 +57,7 @@
     "settings": "設定",
     "payouts": "入金",
     "domains": "ドメイン",
+    "apiKeys": "API キー",
     "publicSite": "公開サイト"
   },
   "vocab": {
@@ -1664,6 +1665,46 @@
       "event": "イベント",
       "emptyTitle": "この期間の売上はありません",
       "emptyDescription": "期間を長くするか、イベントページを共有して販売を始めましょう。"
+    }
+  },
+  "apiKeys": {
+    "title": "API キー",
+    "subtitle": "Yayatoh API を通じて、他のソフトウェアが組織にアクセスできるようにします。各キーは一度だけ表示されます。",
+    "docs": "API リファレンス",
+    "noAccessTitle": "API キーを管理できるのはオーナーと管理者のみです",
+    "noAccessDescription": "この組織のオーナーまたは管理者にキーの作成を依頼してください。",
+    "createTitle": "キーを作成",
+    "name": "名前",
+    "nameHint": "キーの用途（例：「Zapier」「窓口の同期」）。",
+    "nameRequired": "キーに名前を付けてください。",
+    "scopes": "権限",
+    "scopesHint": "キーは、この組織内で、権限で許可された操作のみ行えます。",
+    "scopesRequired": "権限を 1 つ以上選んでください。",
+    "create": "キーを作成",
+    "created": "キー「{name}」を作成しました。",
+    "shownOnce": "今すぐコピーして安全な場所に保管してください。再表示はされません。",
+    "copy": "キーをコピー",
+    "copied": "クリップボードにコピーしました。",
+    "listTitle": "キー一覧",
+    "empty": "API キーはまだありません。",
+    "key": "キー",
+    "createdAt": "作成日",
+    "lastUsed": "最終使用",
+    "never": "なし",
+    "status": "ステータス",
+    "active": "有効",
+    "revoked": "取り消し済み",
+    "actions": "操作",
+    "revoke": "取り消す",
+    "revokeNamed": "キー {name} を取り消す",
+    "scope": {
+      "org_read": "組織の閲覧",
+      "events_read": "イベントとチケット種別の閲覧",
+      "events_write": "イベントの作成と変更",
+      "orders_read": "注文の閲覧",
+      "orders_refund": "注文の返金",
+      "attendees_read": "参加者の閲覧",
+      "checkin_scan": "チケットのスキャン"
     }
   },
   "market": {

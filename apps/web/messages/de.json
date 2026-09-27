@@ -57,6 +57,7 @@
     "settings": "Einstellungen",
     "payouts": "Auszahlungen",
     "domains": "Domains",
+    "apiKeys": "API-Schlüssel",
     "publicSite": "Öffentliche Seite"
   },
   "vocab": {
@@ -1664,6 +1665,46 @@
       "event": "Veranstaltung",
       "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
       "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
+    }
+  },
+  "apiKeys": {
+    "title": "API-Schlüssel",
+    "subtitle": "Lassen Sie andere Software über die Yayatoh-API auf Ihre Organisation zugreifen. Jeder Schlüssel wird nur einmal angezeigt.",
+    "docs": "API-Referenz",
+    "noAccessTitle": "Nur Inhaber und Admins verwalten API-Schlüssel",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation, einen Schlüssel für Sie zu erstellen.",
+    "createTitle": "Schlüssel erstellen",
+    "name": "Name",
+    "nameHint": "Wo der Schlüssel verwendet wird, z. B. „Zapier“ oder „Kassen-Sync“.",
+    "nameRequired": "Geben Sie dem Schlüssel einen Namen.",
+    "scopes": "Berechtigungen",
+    "scopesHint": "Ein Schlüssel kann nur, was seine Berechtigungen erlauben – und nur in dieser Organisation.",
+    "scopesRequired": "Wählen Sie mindestens eine Berechtigung.",
+    "create": "Schlüssel erstellen",
+    "created": "Schlüssel „{name}“ erstellt.",
+    "shownOnce": "Kopieren Sie ihn jetzt und bewahren Sie ihn sicher auf: Er wird nicht erneut angezeigt.",
+    "copy": "Schlüssel kopieren",
+    "copied": "In die Zwischenablage kopiert.",
+    "listTitle": "Ihre Schlüssel",
+    "empty": "Noch keine API-Schlüssel.",
+    "key": "Schlüssel",
+    "createdAt": "Erstellt",
+    "lastUsed": "Zuletzt verwendet",
+    "never": "Nie",
+    "status": "Status",
+    "active": "Aktiv",
+    "revoked": "Widerrufen",
+    "actions": "Aktionen",
+    "revoke": "Widerrufen",
+    "revokeNamed": "Schlüssel {name} widerrufen",
+    "scope": {
+      "org_read": "Organisation lesen",
+      "events_read": "Veranstaltungen und Tickettypen lesen",
+      "events_write": "Veranstaltungen erstellen und ändern",
+      "orders_read": "Bestellungen lesen",
+      "orders_refund": "Bestellungen erstatten",
+      "attendees_read": "Teilnehmende lesen",
+      "checkin_scan": "Tickets scannen"
     }
   },
   "market": {

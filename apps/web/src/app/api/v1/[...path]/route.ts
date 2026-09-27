@@ -1,22 +1,26 @@
-import { scannerRoutes } from '@yayatoh/checkin/routes';
-import { problem, problemFor, problemResponse } from '@yayatoh/platform/http';
+import { createV1 } from '@yayatoh/api-v1';
+import { bearerSessions } from '@yayatoh/auth';
 import { Hono } from 'hono';
+import { getAuth } from '@/server/auth.ts';
+import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 
 /**
- * The `/v1` scanner endpoints, same-origin for the Scan PWA. The router is the one `apps/api`
- * serves at `api.yayatoh.com/v1`; only the mount point differs.
+ * `/v1` on the web app's own origin (the Scan PWA, and API clients during development). The
+ * router is the one `apps/api` serves at `api.yayatoh.com/v1`; only the mount point differs.
+ * No cookies are read here: API keys, bearer sessions and device tokens only.
  */
-const app = new Hono()
-  .basePath('/api/v1')
-  .route('/', scannerRoutes(ports))
-  .onError((err) => {
-    const p = problemFor(err);
-    if (p.code === 'internal') console.error(err);
-    return problemResponse(p);
-  })
-  .notFound(() => problemResponse(problem('not_found')));
+const app = new Hono().route(
+  '/api/v1',
+  createV1({
+    ports,
+    sessions: () => bearerSessions(getAuth()),
+    payments: getPaymentProvider,
+    basePath: '/api/v1',
+  }),
+);
 
 const handle = (req: Request) => app.fetch(req);
 export const GET = handle;
 export const POST = handle;
+export const PATCH = handle;

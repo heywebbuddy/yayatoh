@@ -11,6 +11,7 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'publicSite', path: 'site', group: 'build', module: 'core', icon: 'store' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
+  { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
 ];
 
 export default async function OrgLayout({

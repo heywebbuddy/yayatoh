@@ -4,11 +4,13 @@ import {
   bigint,
   boolean,
   check,
+  date,
   foreignKey,
   index,
   integer,
   jsonb,
   pgSchema,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -262,4 +264,28 @@ export const accessLog = platform.table(
     at: tsz('at').notNull().defaultNow(),
   },
   (t) => [index('access_log_at_idx').on(t.at)],
+);
+
+/**
+ * App-version telemetry for /v1 (roadmap M1.15): request counts per day × route × client × app
+ * version. No tenant, user or IP is recorded. app_user has no privileges: requests increment it
+ * through the SECURITY DEFINER `platform.record_api_usage`, and staff read it (platform_reader).
+ */
+export const apiUsage = platform.table(
+  'api_usage',
+  {
+    day: date('day', { mode: 'string' }).notNull(),
+    route: text('route').notNull(),
+    method: text('method').notNull(),
+    client: text('client').notNull(),
+    appVersion: text('app_version').notNull(),
+    count: bigint('count', { mode: 'number' }).notNull().default(0),
+  },
+  (t) => [
+    primaryKey({ name: 'api_usage_pkey', columns: [t.day, t.route, t.method, t.client, t.appVersion] }),
+    check(
+      'api_usage_lengths',
+      sql`length(route) <= 200 and length(client) <= 40 and length(app_version) <= 40`,
+    ),
+  ],
 );

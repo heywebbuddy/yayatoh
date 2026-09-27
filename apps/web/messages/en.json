@@ -57,6 +57,7 @@
     "settings": "Settings",
     "payouts": "Payouts",
     "domains": "Domains",
+    "apiKeys": "API keys",
     "publicSite": "Public site"
   },
   "vocab": {
@@ -1664,6 +1665,46 @@
       "event": "Event",
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
+    }
+  },
+  "apiKeys": {
+    "title": "API keys",
+    "subtitle": "Let other software reach your organization through the Yayatoh API. Each key is shown once.",
+    "docs": "API reference",
+    "noAccessTitle": "Only owners and admins manage API keys",
+    "noAccessDescription": "Ask an owner or admin of this organization to create a key for you.",
+    "createTitle": "Create a key",
+    "name": "Name",
+    "nameHint": "Where the key will be used, e.g. “Zapier” or “Box office sync”.",
+    "nameRequired": "Give the key a name.",
+    "scopes": "Scopes",
+    "scopesHint": "A key can do only what its scopes allow, in this organization only.",
+    "scopesRequired": "Choose at least one scope.",
+    "create": "Create key",
+    "created": "Key “{name}” created.",
+    "shownOnce": "Copy it now and store it somewhere safe: it will not be shown again.",
+    "copy": "Copy key",
+    "copied": "Copied to the clipboard.",
+    "listTitle": "Your keys",
+    "empty": "No API keys yet.",
+    "key": "Key",
+    "createdAt": "Created",
+    "lastUsed": "Last used",
+    "never": "Never",
+    "status": "Status",
+    "active": "Active",
+    "revoked": "Revoked",
+    "actions": "Actions",
+    "revoke": "Revoke",
+    "revokeNamed": "Revoke key {name}",
+    "scope": {
+      "org_read": "Read the organization",
+      "events_read": "Read events and ticket types",
+      "events_write": "Create and change events",
+      "orders_read": "Read orders",
+      "orders_refund": "Refund orders",
+      "attendees_read": "Read attendees",
+      "checkin_scan": "Scan tickets"
     }
   },
   "market": {

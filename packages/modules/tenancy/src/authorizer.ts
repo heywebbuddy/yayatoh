@@ -1,6 +1,7 @@
 import { withTenant } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import { and, eq } from 'drizzle-orm';
+import { apiKeyScopes } from './commands/api-keys.ts';
 import { eventRoleCan, type OrgRole, roleCan } from './domain/permissions.ts';
 import { memberships } from './schema.ts';
 
@@ -44,6 +45,9 @@ export function createOrgAuthorizer(
       if (permission.startsWith('public:')) return true;
       if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
       if (ctx.actor.type === 'system') return true;
+      // An org API key may do exactly what its live scopes list, in its own org only.
+      if (ctx.actor.type === 'api_key')
+        return (await apiKeyScopes(ctx, ctx.actor.keyId)).includes(permission);
       const role = await memberRole(ctx);
       if (role === null) return false;
       if (roleCan(role, permission)) return true;

@@ -57,6 +57,7 @@
     "settings": "設定",
     "payouts": "收款",
     "domains": "網域",
+    "apiKeys": "API 金鑰",
     "publicSite": "公開網站"
   },
   "vocab": {
@@ -1664,6 +1665,46 @@
       "event": "活動",
       "emptyTitle": "此期間沒有銷售",
       "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
+    }
+  },
+  "apiKeys": {
+    "title": "API 金鑰",
+    "subtitle": "允許其他軟體透過 Yayatoh API 存取你的組織。每把金鑰只會顯示一次。",
+    "docs": "API 參考",
+    "noAccessTitle": "只有擁有者和管理員可以管理 API 金鑰",
+    "noAccessDescription": "請此組織的擁有者或管理員為你建立金鑰。",
+    "createTitle": "建立金鑰",
+    "name": "名稱",
+    "nameHint": "金鑰的用途，例如「Zapier」或「售票處同步」。",
+    "nameRequired": "請為金鑰命名。",
+    "scopes": "權限",
+    "scopesHint": "金鑰只能在本組織內執行其權限允許的操作。",
+    "scopesRequired": "請至少選擇一項權限。",
+    "create": "建立金鑰",
+    "created": "已建立金鑰「{name}」。",
+    "shownOnce": "請立即複製並妥善保存：它不會再次顯示。",
+    "copy": "複製金鑰",
+    "copied": "已複製到剪貼簿。",
+    "listTitle": "你的金鑰",
+    "empty": "尚無 API 金鑰。",
+    "key": "金鑰",
+    "createdAt": "建立時間",
+    "lastUsed": "上次使用",
+    "never": "從未",
+    "status": "狀態",
+    "active": "有效",
+    "revoked": "已撤銷",
+    "actions": "操作",
+    "revoke": "撤銷",
+    "revokeNamed": "撤銷金鑰 {name}",
+    "scope": {
+      "org_read": "讀取組織",
+      "events_read": "讀取活動和票種",
+      "events_write": "建立和修改活動",
+      "orders_read": "讀取訂單",
+      "orders_refund": "訂單退款",
+      "attendees_read": "讀取參加者",
+      "checkin_scan": "掃描門票"
     }
   },
   "market": {

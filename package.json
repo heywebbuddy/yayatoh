@@ -20,7 +20,7 @@
     "db:generate": "pnpm --filter @yayatoh/db generate",
     "db:migrate": "pnpm --filter @yayatoh/db migrate",
     "seed": "pnpm --filter @yayatoh/web seed",
-    "contracts:check": "pnpm --filter @yayatoh/api openapi:check",
+    "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/sdk generate:check",
     "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
   },
   "devDependencies": {
