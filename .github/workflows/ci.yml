@@ -114,9 +114,15 @@ jobs:
       - run: pnpm build
 
   e2e:
-    name: e2e + axe (375/768/1280, en + ar)
+    # Sharded: the suite outgrew one 20-minute runner (M1.11). Each shard gets its own database
+    # and seed, so shards never share state.
+    name: e2e + axe · shard ${{ matrix.shard }}/3
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     services:
       postgres:
         image: postgres:18
@@ -168,9 +174,11 @@ jobs:
           pnpm db:bootstrap && pnpm db:migrate && pnpm seed
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
-      - run: pnpm --filter @yayatoh/web e2e
-      # Staff console (M1.3e): after the web suite, because it pauses checkout on a seed org.
+      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/3
+      # Staff console (M1.3e): after the web tests on the same runner, because it pauses checkout
+      # on a seed org of that runner's database.
       - name: Staff console e2e
+        if: matrix.shard == 3
         run: |
           pnpm --filter @yayatoh/worker staff -- --email omar@yayatoh.test --role admin
           pnpm --filter @yayatoh/admin build
@@ -178,13 +186,26 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-report
+          name: e2e-report-${{ matrix.shard }}
           path: |
             apps/web/playwright-report
             apps/web/test-results
             apps/admin/playwright-report
             apps/admin/test-results
           retention-days: 14
+
+  e2e-all:
+    # The check name branch protection and reviewers know: green only when every shard is green.
+    name: e2e + axe (375/768/1280, en + ar)
+    needs: e2e
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: All e2e shards passed
+        run: |
+          if [ "${{ needs.e2e.result }}" != "success" ]; then
+            echo "::error::e2e shards: ${{ needs.e2e.result }}"; exit 1
+          fi
 
   openapi-breaking:
     name: oasdiff (/v1 additive only)
