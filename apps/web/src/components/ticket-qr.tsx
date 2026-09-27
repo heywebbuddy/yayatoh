@@ -1,20 +1,11 @@
-import QRCode from 'qrcode';
+import { qrPath } from '@yayatoh/pdf';
 
 /**
  * Server-rendered QR for a signed yy1 ticket code: one SVG path, no client JS, no innerHTML.
- * Error correction M (ADR 0011); dark modules use currentColor so the colour comes from tokens.
+ * The same path renders in ticket PDFs; dark modules use currentColor so colour comes from tokens.
  */
 export function TicketQr({ code, label, className }: { code: string; label: string; className?: string }) {
-  const { modules } = QRCode.create(code, { errorCorrectionLevel: 'M' });
-  const n = modules.size;
-  const quiet = 4;
-  let d = '';
-  for (let y = 0; y < n; y++) {
-    for (let x = 0; x < n; x++) {
-      if (modules.get(y, x)) d += `M${x + quiet} ${y + quiet}h1v1h-1z`;
-    }
-  }
-  const size = n + quiet * 2;
+  const { size, d } = qrPath(code);
   return (
     <svg
       role="img"

@@ -449,7 +449,9 @@
     "ticketsHint": "入場時出示此 QR 碼。截圖也可以，即使離線也能掃描。",
     "serial": "編號 {serial}",
     "qrLabel": "票號 {serial} 的 QR 碼",
-    "shortCode": "驗證碼"
+    "shortCode": "驗證碼",
+    "holder": "持票人",
+    "downloadPdf": "下載票券（PDF）"
   },
   "orders": {
     "title": "最近訂單",

@@ -449,7 +449,9 @@
     "ticketsHint": "Muestra este código en la entrada. También sirven las capturas de pantalla, así se escanea incluso sin conexión.",
     "serial": "N.º {serial}",
     "qrLabel": "Código QR de la entrada número {serial}",
-    "shortCode": "Código"
+    "shortCode": "Código",
+    "holder": "Titular de la entrada",
+    "downloadPdf": "Descargar entradas (PDF)"
   },
   "orders": {
     "title": "Pedidos recientes",

@@ -99,10 +99,15 @@ jobs:
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+      gotenberg:
+        # Ticket PDFs (ADR 0017); same pinned image as docker-compose.yml.
+        image: gotenberg/gotenberg:8.37.0
+        ports: ["3300:3000"]
     env:
       # CI-only throwaway database; role passwords are generated per run.
       ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
       YAYATOH_DEV_AUTH: "1"
+      GOTENBERG_URL: http://localhost:3300
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4

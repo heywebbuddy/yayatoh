@@ -449,7 +449,9 @@
     "ticketsHint": "入場時にこのコードを提示してください。スクリーンショットでも使えるので、オフラインでも読み取れます。",
     "serial": "No. {serial}",
     "qrLabel": "チケット番号 {serial} のQRコード",
-    "shortCode": "コード"
+    "shortCode": "コード",
+    "holder": "チケット名義人",
+    "downloadPdf": "チケットをダウンロード（PDF）"
   },
   "orders": {
     "title": "最近の注文",

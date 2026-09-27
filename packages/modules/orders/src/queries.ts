@@ -1,6 +1,8 @@
 import { withoutTenant, withTenant } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
+import { organizationNameTx } from '@yayatoh/tenancy';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -51,10 +53,16 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
   if (!ref) return null;
   const ctx = createCtx({ orgId: ref.org_id, actor: { type: 'system', name: 'orders.manage-link' } });
   try {
-    const order = await withTenant(ctx, async (tx) => ({
-      ...(await loadOrderTx(tx, ref.order_id)),
-      tickets: await ticketsForOrderTx(tx, ref.order_id),
-    }));
+    const order = await withTenant(ctx, async (tx) => {
+      const o = await loadOrderTx(tx, ref.order_id);
+      const ev = await findEventTx(tx, o.eventId);
+      if (!ev) throw new DomainError('not_found');
+      return {
+        ...o,
+        tickets: await ticketsForOrderTx(tx, ref.order_id),
+        event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
+      };
+    });
     return publicOrderSerializer.serialize(order);
   } catch (err) {
     if (err instanceof DomainError && err.code === 'not_found') return null;

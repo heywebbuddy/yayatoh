@@ -449,7 +449,9 @@
     "ticketsHint": "入场时出示此二维码。截图也可以，即使离线也能扫描。",
     "serial": "编号 {serial}",
     "qrLabel": "票号 {serial} 的二维码",
-    "shortCode": "验证码"
+    "shortCode": "验证码",
+    "holder": "持票人",
+    "downloadPdf": "下载门票（PDF）"
   },
   "orders": {
     "title": "最近订单",

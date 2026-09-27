@@ -22,6 +22,7 @@
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"

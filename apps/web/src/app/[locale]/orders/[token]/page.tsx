@@ -1,9 +1,10 @@
 import { formatMoney, money } from '@yayatoh/kernel';
 import { orderByManageToken } from '@yayatoh/orders';
-import { Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
+import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { TicketQr } from '@/components/ticket-qr.tsx';
+import { getPdfRenderer } from '@/server/pdf.ts';
 
 const DOT = {
   paid: 'success',
@@ -56,6 +57,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             {t('order.tickets', { count: order.tickets.length })}
           </h2>
           <p className="text-caption text-zinc-500">{t('order.ticketsHint')}</p>
+          {getPdfRenderer() ? (
+            // A plain link: the PDF route is not a page, so it bypasses client navigation.
+            <a
+              href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf`}
+              className={buttonClass('secondary', 'md', 'self-start')}
+            >
+              {t('order.downloadPdf')}
+            </a>
+          ) : null}
           <ul className="flex list-none flex-col gap-4 p-0">
             {order.tickets.map((tk) => (
               <li key={tk.id}>

@@ -25,6 +25,7 @@ export {
   listInvitationsQuery,
   listMembersQuery,
   myOrganizations,
+  organizationNameTx,
   resolveOrgSlug,
 } from './queries.ts';
 export { ORG_KINDS, ORG_ROLES, ORG_STATUSES } from './schema.ts';

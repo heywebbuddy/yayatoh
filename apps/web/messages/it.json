@@ -449,7 +449,9 @@
     "ticketsHint": "Mostra questo codice all’ingresso. Vanno bene anche gli screenshot, così si scansiona anche offline.",
     "serial": "N. {serial}",
     "qrLabel": "Codice QR del biglietto numero {serial}",
-    "shortCode": "Codice"
+    "shortCode": "Codice",
+    "holder": "Intestatario del biglietto",
+    "downloadPdf": "Scarica i biglietti (PDF)"
   },
   "orders": {
     "title": "Ordini recenti",

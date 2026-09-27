@@ -36,6 +36,13 @@ test.describe('checkout', () => {
     await expect(guest.getByRole('heading', { name: 'Your ticket' })).toBeVisible();
     await expect(guest.getByRole('img', { name: /^QR code for ticket number \d+$/ })).toHaveCount(1);
     await expectAccessible(guest);
+    // The tickets PDF (Gotenberg, ADR 0017) is reached with the same manage token.
+    const pdfHref = await guest.getByRole('link', { name: 'Download tickets (PDF)' }).getAttribute('href');
+    const pdf = await guest.request.get(pdfHref ?? '');
+    expect(pdf.status()).toBe(200);
+    expect(pdf.headers()['content-type']).toBe('application/pdf');
+    expect(pdf.headers()['cache-control']).toContain('no-store');
+    expect((await pdf.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
     await guest.goto('/events/lakeside-open-house');
     await guest.getByLabel(`Quantity — Paid pass ${stamp}`).selectOption('2');
@@ -68,6 +75,11 @@ test.describe('checkout', () => {
         .first(),
     ).toContainText(`Paid pass ${stamp}`);
     await expectAccessible(page);
+  });
+
+  test('an unknown order token gets no PDF', async ({ request }) => {
+    const res = await request.get(`/orders/${'x'.repeat(43)}/pdf`);
+    expect(res.status()).toBe(404);
   });
 
   test('a forged webhook is rejected', async ({ request }) => {

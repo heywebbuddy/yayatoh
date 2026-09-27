@@ -45,7 +45,21 @@ export const HolderTicketDto = z.object({
 });
 
 /** What a guest sees on the order page (reached by the manage token, which is the credential). */
-export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({ tickets: z.array(HolderTicketDto) });
+/** The event as its ticket holder sees it (name, times in its timezone, place, organizer). */
+export const HolderEventDto = z.object({
+  name: z.string(),
+  startsAt: z.date(),
+  endsAt: z.date(),
+  timezone: z.string(),
+  venueName: z.string().nullable(),
+  city: z.string().nullable(),
+  organizerName: z.string(),
+});
+
+export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
+  tickets: z.array(HolderTicketDto),
+  event: HolderEventDto,
+});
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);
 

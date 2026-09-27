@@ -1,4 +1,4 @@
-import { withoutTenant } from '@yayatoh/db';
+import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
@@ -79,4 +79,13 @@ export async function myOrganizations(userId: string): Promise<MyOrganizationDto
     ),
   );
   return rows.map((r) => MyOrgSchema.parse({ orgId: r.org_id, slug: r.slug, name: r.name, role: r.role }));
+}
+
+/** The current org's display name, inside the caller's tenant transaction (buyer-facing pages, PDFs). */
+export async function organizationNameTx(tx: TenantTx, orgId: string): Promise<string | null> {
+  const [row] = await tx
+    .select({ name: organizations.name })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row?.name ?? null;
 }

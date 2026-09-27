@@ -47,6 +47,15 @@ describe('tickets', () => {
     const r = await buy(3, 'holder');
     const page = await orderByManageToken(r.manageToken);
     expect(page?.tickets).toHaveLength(3);
+    expect(page?.event).toEqual({
+      name: 'Tickets',
+      startsAt: new Date('2027-12-01T18:00:00Z'),
+      endsAt: new Date('2027-12-01T23:00:00Z'),
+      timezone: 'UTC',
+      venueName: null,
+      city: null,
+      organizerName: 'Alpha Events',
+    });
     const serials = page?.tickets.map((t) => t.serial) ?? [];
     expect(serials).toEqual([serials[0], (serials[0] ?? 0) + 1, (serials[0] ?? 0) + 2]);
     for (const t of page?.tickets ?? []) {

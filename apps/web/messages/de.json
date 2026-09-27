@@ -449,7 +449,9 @@
     "ticketsHint": "Zeig diesen Code am Einlass. Screenshots funktionieren auch, so lässt er sich sogar offline scannen.",
     "serial": "Nr. {serial}",
     "qrLabel": "QR-Code für Ticket Nr. {serial}",
-    "shortCode": "Code"
+    "shortCode": "Code",
+    "holder": "Ticketinhaber",
+    "downloadPdf": "Tickets herunterladen (PDF)"
   },
   "orders": {
     "title": "Neueste Bestellungen",

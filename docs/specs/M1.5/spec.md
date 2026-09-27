@@ -124,7 +124,25 @@
 |---|---|---|
 | AC1 | A paid order emails one tickets link that opens the order; the token isn't in the event payload or stored in clear | `packages/testing/tests/tickets.int.test.ts` |
 
+## M1.5c4 — ticket PDF (done)
+- **ADR 0017 accepted:** Gotenberg (Chromium). The spike found react-pdf's Arabic shaping broken and no tagged-PDF support, while Gotenberg was correct for Arabic, Hindi and Japanese and produced tagged output with `/Lang`.
+- **`packages/pdf`:**
+  - The `PdfRenderer` port and the Gotenberg adapter.
+  - The `ticketsHtml` template: one A6 page per ticket, logical CSS, system Noto fonts, every value escaped, no remote assets.
+  - `qrPath`, which the web order page reuses.
+- **Web:**
+  - `GET /{locale}/orders/{token}/pdf` returns the buyer's tickets as a PDF (`private, no-store`, `noindex`); an unknown token gets 404.
+  - The order page shows "Download tickets (PDF)" only when `GOTENBERG_URL` is set.
+  - The public order now includes an allowlisted event summary: name, times, timezone, place and organizer.
+- **Ops:** Gotenberg 8.37.0 in `docker-compose.yml` and as a CI e2e service container. Production runs it on Fly (ADR 0004); that waits on the owner's Fly account, already in the inbox.
+
+### Acceptance (M1.5c4)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The template sets `lang`/`dir`, renders one page per ticket with its QR, escapes all values and loads nothing remote | `packages/pdf/tests/tickets.test.ts` |
+| AC2 | The adapter posts tagged-PDF HTML to Gotenberg | `packages/pdf/tests/tickets.test.ts` |
+| AC3 | A guest downloads their tickets PDF by manage token (application/pdf, no-store); an unknown token gets 404 | `e2e/checkout.spec.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5c4:** PDF ticket (ADR 0017 spike: react-pdf vs Gotenberg).
 - **M1.5d:** promo codes, early-bird tiers, donation tickets, `access_dates`, forms engine v1 (checkout questions).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

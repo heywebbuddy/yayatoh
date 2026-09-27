@@ -449,7 +449,9 @@
     "ticketsHint": "Show this code at the door. Screenshots work too, so it scans even offline.",
     "serial": "No. {serial}",
     "qrLabel": "QR code for ticket number {serial}",
-    "shortCode": "Code"
+    "shortCode": "Code",
+    "holder": "Ticket holder",
+    "downloadPdf": "Download tickets (PDF)"
   },
   "orders": {
     "title": "Recent orders",

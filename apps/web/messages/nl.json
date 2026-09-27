@@ -449,7 +449,9 @@
     "ticketsHint": "Laat deze code zien bij de ingang. Een screenshot werkt ook, dus hij scant zelfs offline.",
     "serial": "Nr. {serial}",
     "qrLabel": "QR-code voor ticketnummer {serial}",
-    "shortCode": "Code"
+    "shortCode": "Code",
+    "holder": "Tickethouder",
+    "downloadPdf": "Tickets downloaden (PDF)"
   },
   "orders": {
     "title": "Recente bestellingen",

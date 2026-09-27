@@ -23,6 +23,6 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0014](0014-public-output-allowlists.md) | Public output as allowlists: serializers, taint, canary leak tests | §2 (13), §9 |
 | [0015](0015-timezone-rules.md) | Timezone rules | §9 (Time), M0.4 |
 | [0016](0016-i18n-and-accessibility-gates.md) | i18n (13 locales, RTL) and accessibility gates | §3.1, §10 |
-| [0017](0017-pdf-engine.md) | PDF engine (after the M0.5 spike: react-pdf vs Gotenberg) | §3.1 |
+| [0017](0017-pdf-engine.md) | PDF engine: Gotenberg (Chromium) behind `packages/pdf` (spike done) | §3.1 |
 | [0018](0018-design-system-superpower-style.md) | Design system: Superpower style | §3.1 |
 | [0019](0019-typescript-6-until-tooling-supports-7.md) | TypeScript 6.0 until tooling supports 7 | §3.1 |

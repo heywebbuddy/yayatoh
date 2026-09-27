@@ -308,6 +308,9 @@ importers:
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../../packages/modules/payments
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../packages/pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
@@ -332,9 +335,6 @@ importers:
       next-intl:
         specifier: 'catalog:'
         version: 4.14.7(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.3.6(@playwright/test@1.63.0)(@types/node@24.19.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
-      qrcode:
-        specifier: 1.5.4
-        version: 1.5.4
       react:
         specifier: 'catalog:'
         version: 19.3.0
@@ -360,9 +360,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
-      '@types/qrcode':
-        specifier: 1.5.6
-        version: 1.5.6
       '@types/react':
         specifier: 'catalog:'
         version: 19.3.0
@@ -677,6 +674,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../ticketing
@@ -801,6 +801,25 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/pdf:
+    dependencies:
+      qrcode:
+        specifier: 1.5.4
+        version: 1.5.4
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@types/qrcode':
+        specifier: 1.5.6
+        version: 1.5.6
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../config
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

@@ -15,6 +15,10 @@ services:
   redis:
     image: redis:7
     ports: ["6379:6379"]
+  gotenberg:
+    # PDF rendering (ADR 0017). Set GOTENBERG_URL=http://localhost:3300 to enable ticket PDFs.
+    image: gotenberg/gotenberg:8.37.0
+    ports: ["3300:3000"]
   mailpit:
     image: axllent/mailpit:latest
     ports: ["1025:1025", "8025:8025"]
