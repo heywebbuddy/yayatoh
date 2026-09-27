@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Yayatoh",
+    "description": "活動作業系統"
+  },
+  "home": {
+    "eyebrow": "Yayatoh 2.0",
+    "title": "每一場活動，一個作業系統。",
+    "lede": "為音樂會、晚宴、婚禮和會議提供票務、賓客、座位、報到和行銷。",
+    "primaryCta": "查看平台狀態",
+    "statusLabel": "平台",
+    "statusOk": "所有系統運作正常"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Yayatoh",
+    "description": "Le système d’exploitation des événements"
+  },
+  "home": {
+    "eyebrow": "Yayatoh 2.0",
+    "title": "Chaque événement, un seul système.",
+    "lede": "Billets, invités, placement, contrôle d’accès et marketing pour concerts, galas, mariages et conférences.",
+    "primaryCta": "Voir l’état de la plateforme",
+    "statusLabel": "Plateforme",
+    "statusOk": "Tous les systèmes sont opérationnels"
+  }
+}

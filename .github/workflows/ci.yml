@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  merge_group:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: lint · boundaries · typecheck · unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm check:modules
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: OpenAPI spec is up to date
+        run: pnpm contracts:check
+
+  gate-canaries:
+    name: gate self-test (canaries must fail)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+      - name: Each canary must be rejected by check-modules
+        run: |
+          set +e
+          for c in tools/check-modules/canaries/*/; do
+            node tools/check-modules/cli.ts --root "$c" > /dev/null 2>&1
+            if [ $? -eq 0 ]; then echo "::error::canary $c was NOT rejected"; exit 1; fi
+            echo "ok: $c rejected"
+          done
+
+  integration:
+    name: integration + isolation (Postgres 18)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+    env:
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:int
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+  openapi-breaking:
+    name: oasdiff (/v1 additive only)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Base spec
+        run: |
+          git show "origin/${{ github.base_ref }}:apps/api/openapi.json" > /tmp/base.json 2>/dev/null \
+            || echo '{"openapi":"3.1.0","info":{"title":"base","version":"0"},"paths":{}}' > /tmp/base.json
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.21
+        with:
+          base: /tmp/base.json
+          revision: apps/api/openapi.json
+          fail-on: ERR
+
+  secrets:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Scan history for secrets
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.28.0 git /repo --redact --no-banner -v

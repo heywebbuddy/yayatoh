@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Yayatoh",
+    "description": "Het besturingssysteem voor evenementen"
+  },
+  "home": {
+    "eyebrow": "Yayatoh 2.0",
+    "title": "Elk evenement, één besturingssysteem.",
+    "lede": "Tickets, gasten, zitplaatsen, check-in en marketing voor concerten, gala’s, bruiloften en congressen.",
+    "primaryCta": "Platformstatus bekijken",
+    "statusLabel": "Platform",
+    "statusOk": "Alle systemen werken normaal"
+  }
+}

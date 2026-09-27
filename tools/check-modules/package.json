@@ -1,0 +1,20 @@
+{
+  "name": "@yayatoh/check-modules",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "check-modules": "./cli.ts"
+  },
+  "exports": {
+    ".": "./src/check.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

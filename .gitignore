@@ -1,6 +1,7 @@
 # Legacy code and data never enter this repo (reference lives in the private yayatoh-legacy repo)
 legacy/
 *.sql
+!packages/db/drizzle/*.sql
 *.sql.gz
 *.dump
 
@@ -35,3 +36,4 @@ test-results/
 
 # Claude Code local settings
 .claude/settings.local.json
+next-env.d.ts

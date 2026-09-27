@@ -1,0 +1,12 @@
+{
+  "name": "@yayatoh/ticketing",
+  "yayatoh": {
+    "tier": 3
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@yayatoh/events": "workspace:*"
+  }
+}

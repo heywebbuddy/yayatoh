@@ -1,0 +1,38 @@
+packages:
+  - apps/*
+  - packages/*
+  - packages/modules/*
+  - tools/*
+
+catalog:
+  "@biomejs/biome": 2.5.14
+  "@hono/node-server": 2.1.1
+  "@hono/zod-openapi": 1.6.3
+  "@tailwindcss/postcss": 4.3.3
+  "@types/node": ^24.0.0
+  "@types/react": 19.3.0
+  "@types/react-dom": 19.3.0
+  drizzle-kit: 0.31.11
+  drizzle-orm: 0.45.3
+  hono: 4.13.9
+  next: 16.3.6
+  next-intl: 4.14.7
+  pg-boss: 12.35.0
+  postgres: 3.4.9
+  react: 19.3.0
+  react-dom: 19.3.0
+  tailwindcss: 4.3.3
+  turbo: 2.11.4
+  typescript: 6.0.3
+  vitest: 5.0.2
+  zod: 4.6.5
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  "@biomejs/biome": true
+  '@parcel/watcher': set this to true or false
+  '@swc/core': set this to true or false
+
+minimumReleaseAgeExclude:
+  - pg-boss@12.35.0

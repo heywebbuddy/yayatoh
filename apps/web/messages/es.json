@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Yayatoh",
+    "description": "El sistema operativo para eventos"
+  },
+  "home": {
+    "eyebrow": "Yayatoh 2.0",
+    "title": "Cada evento, un solo sistema operativo.",
+    "lede": "Entradas, invitados, asientos, check-in y marketing para conciertos, galas, bodas y congresos.",
+    "primaryCta": "Ver estado de la plataforma",
+    "statusLabel": "Plataforma",
+    "statusOk": "Todos los sistemas funcionan con normalidad"
+  }
+}

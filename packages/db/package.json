@@ -1,0 +1,30 @@
+{
+  "name": "@yayatoh/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./platform": "./src/platform.ts",
+    "./guard": "./src/guard.ts",
+    "./testing": "./src/testing.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "bootstrap": "node scripts/bootstrap.ts",
+    "generate": "drizzle-kit generate && node scripts/force-rls.ts",
+    "migrate": "node scripts/migrate.ts",
+    "seed": "node scripts/seed.ts"
+  },
+  "dependencies": {
+    "@yayatoh/kernel": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "postgres": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "drizzle-kit": "catalog:",
+    "typescript": "catalog:"
+  }
+}

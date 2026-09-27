@@ -14,7 +14,33 @@ Claude Code builds it; the owner (Pani Digital Services, LLC) is product owner a
 **Precedence when documents disagree:** owner decisions (`docs/decisions.md`, roadmap §1.4) > accepted ADRs (`docs/adr/`) > `docs/roadmap.md` > `docs/research/`.
 
 ## Current phase
-**Phase 0 — Discovery and foundations.** The repo currently holds docs only. M0.5 bootstraps the monorepo (Turborepo + pnpm, `apps/*`, `packages/*`, CI gates), and this file gains a **Commands** section at that point.
+**Phase 0 — Discovery and foundations.** M0.5 bootstrapped the monorepo (Turborepo + pnpm 12, Node 24, TypeScript 6.0 per ADR 0019).
+
+## Commands
+Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Redis 7, Mailpit). Setup: `docs/local-development.md`.
+
+| Command | What it does |
+|---|---|
+| `pnpm verify` | **The local gate.** lint → check:modules → typecheck → unit → integration. Run before every PR. |
+| `pnpm dev` | All apps in watch mode (web :3000, api :4000, worker) |
+| `pnpm lint` / `pnpm format` | Biome check / Biome autofix |
+| `pnpm check:modules` | Boundary gate: public exports only, no raw DB client outside `packages/db`, `platform_reader` only in admin/worker, tables only via `tenantTable()`, tiers, raw colours |
+| `pnpm typecheck` | `tsc --noEmit` in every package (turbo) |
+| `pnpm test` | Unit tests (`*.test.ts`) |
+| `pnpm test:int` | Integration + isolation on real Postgres 18 (`*.int.test.ts`). Creates `yayatoh_test` from zero with random role passwords. Needs `ADMIN_DATABASE_URL` (local superuser; defaults to the compose service) |
+| `pnpm test:isolation` | Only the isolation tests |
+| `pnpm build` | Build every app |
+| `pnpm db:generate` | drizzle-kit generate + FORCE RLS post-step. **Never `drizzle-kit push`.** |
+| `pnpm db:bootstrap` / `pnpm db:migrate` | Create roles (local/CI only) / apply migrations as `migrator` |
+| `pnpm seed` | Deterministic seed data |
+| `pnpm contracts:check` | `apps/api/openapi.json` is current (CI also runs oasdiff against the base branch) |
+
+**Where things live**
+- `packages/kernel`: `Ctx`, `DomainError`, `Money`, `defineCommand` / `executeCommand` (universal: no `node:*`).
+- `packages/db`: the only place with raw clients. `tenantTable()`, `withTenant()`, roles, the schema guard. `@yayatoh/db/platform` is admin/worker only.
+- `packages/contracts`: Zod DTOs and `defineSerializer` (allowlists).
+- `packages/ui`: ADR 0018 tokens (`tokens.ts` + `styles.css`) and components.
+- `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss), `tools/check-modules` (with gate canaries).
 
 ## Non-negotiable rules (all phases)
 

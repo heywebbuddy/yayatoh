@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "title": "Yayatoh",
+    "description": "Das Betriebssystem für Events"
+  },
+  "home": {
+    "eyebrow": "Yayatoh 2.0",
+    "title": "Jedes Event, ein Betriebssystem.",
+    "lede": "Tickets, Gäste, Sitzpläne, Check-in und Marketing für Konzerte, Galas, Hochzeiten und Konferenzen.",
+    "primaryCta": "Plattformstatus ansehen",
+    "statusLabel": "Plattform",
+    "statusOk": "Alle Systeme normal"
+  }
+}
