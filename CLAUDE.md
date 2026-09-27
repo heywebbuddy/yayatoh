@@ -40,7 +40,15 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Red
 - `packages/db`: the only place with raw clients. `tenantTable()`, `withTenant()`, roles, the schema guard. `@yayatoh/db/platform` is admin/worker only.
 - `packages/contracts`: Zod DTOs and `defineSerializer` (allowlists).
 - `packages/ui`: ADR 0018 tokens (`tokens.ts` + `styles.css`) and components.
-- `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss), `tools/check-modules` (with gate canaries).
+- `packages/platform` (tier 0): outbox + subscribers, command ports (`createCommandPorts`), `tenantCommand`/`tenantQuery`, module keys, profiles registry + `composeNav`.
+- `packages/modules/*`: one package per bounded context with a `MODULE.md` (invariants) and `yayatoh.tier` in package.json. `tenancy` and `billing` are tier 1.
+- `packages/testing`: `twoOrgs()` fixture, the composed `ports`, the isolation suite. **Every new tenant table must get rows for both orgs in `createOrgFixture`** — the isolation suite fails otherwise.
+- `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss + the single-leader outbox relay), `tools/check-modules` (with gate canaries).
+
+**Recipes**
+- New tenant table: `tenantTable(schema, name, cols, extra)` in the module's `src/schema.ts` → `pnpm db:generate` → add fixture rows → `pnpm test:int`.
+- Cross-tenant reads (slug → org, "my orgs") only through SECURITY DEFINER functions granted in a migration; they return allowlisted columns.
+- New command: `tenantCommand({ name, input, output, entitlement, permission, handler, audit })`; run with `executeCommand(cmd, input, ctx, ports)`.
 
 ## Non-negotiable rules (all phases)
 

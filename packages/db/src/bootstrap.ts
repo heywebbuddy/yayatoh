@@ -40,8 +40,9 @@ export async function bootstrapRoles(
   await admin.unsafe(
     `ALTER DEFAULT PRIVILEGES FOR ROLE ${ROLE.migrator} GRANT USAGE, SELECT ON SEQUENCES TO ${ROLE.appUser}`,
   );
+  // Functions are private by default; migrations grant EXECUTE per function.
   await admin.unsafe(
-    `ALTER DEFAULT PRIVILEGES FOR ROLE ${ROLE.migrator} GRANT EXECUTE ON FUNCTIONS TO ${ROLE.appUser}`,
+    `ALTER DEFAULT PRIVILEGES FOR ROLE ${ROLE.migrator} REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC`,
   );
   await admin.unsafe(
     `ALTER DEFAULT PRIVILEGES FOR ROLE ${ROLE.migrator} GRANT SELECT ON TABLES TO ${ROLE.platformReader}`,

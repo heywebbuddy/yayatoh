@@ -1,3 +1,4 @@
+import type { Subscriber } from '@yayatoh/platform';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
 
@@ -8,5 +9,6 @@ export const heartbeat = defineJob({
   handler: async () => {},
 });
 
-/** Composition root for jobs. Modules register theirs here as they land. */
+/** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
 export const JOBS = [heartbeat] as const;
+export const SUBSCRIBERS: readonly Subscriber[] = [];

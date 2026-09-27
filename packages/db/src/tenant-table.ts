@@ -1,9 +1,10 @@
-import { sql } from 'drizzle-orm';
+import { type BuildExtraConfigColumns, sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,
   index,
   type PgColumnBuilderBase,
   type PgSchema,
+  type PgTableExtraConfigValue,
   pgPolicy,
   timestamp,
   unique,
@@ -39,13 +40,13 @@ export function tenantTable<TName extends string, TColumns extends Record<string
   schema: PgSchema,
   name: TName,
   columns: TColumns,
-  extra?: Parameters<typeof schema.table<TName, Base & TColumns>>[2],
+  extra?: (t: BuildExtraConfigColumns<TName, Base & TColumns, 'pg'>) => PgTableExtraConfigValue[],
 ) {
   const all = { ...tenantBaseColumns(), ...columns } as Base & TColumns;
   return schema
     .table(name, all, (t) => {
       const cols = t as unknown as { orgId: AnyPgColumn; id: AnyPgColumn };
-      const extras = typeof extra === 'function' ? extra(t) : [];
+      const extras = extra ? extra(t) : [];
       return [
         unique(`${name}_org_id_id_key`).on(cols.orgId, cols.id),
         index(`${name}_org_id_idx`).on(cols.orgId),
@@ -56,7 +57,7 @@ export function tenantTable<TName extends string, TColumns extends Record<string
           using: TENANT_PREDICATE,
           withCheck: TENANT_PREDICATE,
         }),
-        ...(Array.isArray(extras) ? extras : Object.values(extras ?? {})),
+        ...extras,
       ];
     })
     .enableRLS();

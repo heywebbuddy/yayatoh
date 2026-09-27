@@ -14,3 +14,5 @@
 Integration tests don't need step 4: they create a throwaway `yayatoh_test` database with random role passwords from `ADMIN_DATABASE_URL`, which defaults to the compose service. They refuse to run against any host other than `localhost` or `postgres`.
 
 **Never** point any variable at production. Development uses masked snapshots only (CLAUDE.md → Safety).
+
+**Note:** database roles are cluster-wide. `pnpm test:int` resets the role passwords to random values, so run `pnpm db:bootstrap` again before `pnpm dev` afterwards. The alternative is a second Postgres container for tests (`ADMIN_DATABASE_URL` pointing at it).

@@ -330,9 +330,18 @@ importers:
 
   apps/worker:
     dependencies:
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(pg@8.23.0)(postgres@3.4.9)
       pg-boss:
         specifier: 'catalog:'
         version: 12.35.0
@@ -346,6 +355,12 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../../packages/modules/tenancy
+      '@yayatoh/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -398,6 +413,124 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/billing:
+    dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/tenancy:
+    dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/platform:
+    dependencies:
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../kernel
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/testing:
+    dependencies:
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../modules/billing
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../modules/tenancy
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(pg@8.23.0)(postgres@3.4.9)
     devDependencies:
       '@types/node':
         specifier: 'catalog:'

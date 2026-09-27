@@ -12,13 +12,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/db": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "drizzle-orm": "catalog:",
     "pg-boss": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"
   }
 }
