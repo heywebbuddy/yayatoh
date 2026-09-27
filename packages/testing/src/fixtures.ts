@@ -1,4 +1,5 @@
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
+import { scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import {
   assignEventRoleCommand,
@@ -162,6 +163,16 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       orderId: checkout.order.id,
     },
     systemCtx(org.id),
+    ports,
+  );
+  // One admission (and its scan) at event time, so the check-in tables are covered.
+  const [issued] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
+  );
+  await executeCommand(
+    scanTicketCommand,
+    { eventId: event.id, code: issued?.short_code ?? '' },
+    ctx({ now: new Date('2027-10-14T15:00:00Z') }),
     ports,
   );
   await executeCommand(

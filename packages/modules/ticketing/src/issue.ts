@@ -193,3 +193,47 @@ export const ticketSummariesQuery = tenantQuery({
     return rows.map((r) => ({ ...r, status: r.status as (typeof TICKET_STATUSES)[number] }));
   },
 });
+
+export interface ScannableTicket {
+  readonly id: string;
+  readonly eventId: string;
+  readonly status: (typeof TICKET_STATUSES)[number];
+  readonly rev: number;
+  readonly serial: number;
+  readonly shortCode: string;
+  readonly holderName: string;
+  readonly typeName: string;
+  readonly accessDates: readonly { readonly date: string; readonly name: string }[];
+}
+
+/** A ticket for the check-in engine, by id (from a verified code) or by its short code. */
+export async function ticketForScanTx(
+  tx: TenantTx,
+  by: { readonly id: string } | { readonly shortCode: string },
+): Promise<ScannableTicket | null> {
+  const [row] = await tx
+    .select({
+      id: tickets.id,
+      eventId: tickets.eventId,
+      status: tickets.status,
+      rev: tickets.rev,
+      serial: tickets.serial,
+      shortCode: tickets.shortCode,
+      holderName: tickets.holderName,
+      typeName: ticketTypes.name,
+      accessDates: ticketTypes.accessDates,
+    })
+    .from(tickets)
+    .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
+    .where('id' in by ? eq(tickets.id, by.id) : eq(tickets.shortCode, by.shortCode.trim().toUpperCase()));
+  return row ? { ...row, status: row.status as ScannableTicket['status'] } : null;
+}
+
+/** Tickets issued (and not void) for an event: the check-in progress denominator. */
+export async function activeTicketCountTx(tx: TenantTx, eventId: string): Promise<number> {
+  const [r] = await tx
+    .select({ n: sql<number>`count(*)::int` })
+    .from(tickets)
+    .where(and(eq(tickets.eventId, eventId), eq(tickets.status, 'active')));
+  return r?.n ?? 0;
+}

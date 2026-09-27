@@ -16,10 +16,13 @@ export {
   sellHeldTx,
 } from './inventory.ts';
 export {
+  activeTicketCountTx,
   type IssuedTicket,
   type IssueRequest,
   issueTicketsTx,
   publicKeysTx,
+  type ScannableTicket,
+  ticketForScanTx,
   ticketSummariesQuery,
   ticketsForOrderTx,
 } from './issue.ts';

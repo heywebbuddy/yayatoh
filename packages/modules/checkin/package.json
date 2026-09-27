@@ -1,30 +1,28 @@
 {
-  "name": "@yayatoh/testing",
+  "name": "@yayatoh/checkin",
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "yayatoh": {
+    "tier": 4
+  },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@yayatoh/attendees": "workspace:*",
-    "@yayatoh/billing": "workspace:*",
-    "@yayatoh/checkin": "workspace:*",
-    "@yayatoh/crm": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
-    "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
-    "@yayatoh/orders": "workspace:*",
-    "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
-    "drizzle-orm": "catalog:"
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",

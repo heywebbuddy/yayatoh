@@ -545,5 +545,31 @@
     "moveDown": "Move {label} down",
     "remove": "Remove {label}",
     "answers": "Answers"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "{admitted} of {issued} tickets checked in today",
+    "codeLabel": "Ticket code",
+    "codeHint": "Scan the QR code, or type the 8-character code printed under it.",
+    "check": "Check in",
+    "who": "{name} · {pass} · No. {serial}",
+    "firstAt": "Already checked in at {time}",
+    "recent": "Recent scans",
+    "noScansTitle": "No scans yet",
+    "noScansDescription": "Scans appear here as guests arrive.",
+    "undo": "Undo",
+    "undoFor": "Undo check-in for {name}",
+    "undone": "Undone",
+    "noAccessTitle": "Check-in isn't part of your role",
+    "noAccessDescription": "Ask an organizer to give you a scanner or box office role.",
+    "result": {
+      "admitted": "Welcome in",
+      "duplicate": "Already checked in",
+      "invalid": "Not a valid ticket",
+      "void": "This ticket was cancelled",
+      "wrong_event": "This ticket is for another event",
+      "not_today": "This pass isn't valid today",
+      "outside_window": "Check-in isn't open right now"
+    }
   }
 }

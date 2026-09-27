@@ -120,6 +120,13 @@
       "when": 1790487887254,
       "tag": "0016_smiling_corsair",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1790488712226,
+      "tag": "0017_curved_firebrand",
+      "breakpoints": true
     }
   ]
 }
