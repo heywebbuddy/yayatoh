@@ -314,6 +314,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
+      '@yayatoh/checkin-engine':
+        specifier: workspace:*
+        version: link:../../packages/checkin-engine
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
@@ -353,6 +356,9 @@ importers:
       geist:
         specifier: 1.7.2
         version: 1.7.2(next@16.3.6(@playwright/test@1.63.0)(@types/node@24.19.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+      hono:
+        specifier: 'catalog:'
+        version: 4.13.9
       lucide-react:
         specifier: 1.48.0
         version: 1.48.0(react@19.3.0)
@@ -634,6 +640,9 @@ importers:
 
   packages/modules/checkin:
     dependencies:
+      '@hono/zod-openapi':
+        specifier: 'catalog:'
+        version: 1.6.3(hono@4.13.9)(zod@4.6.5)
       '@yayatoh/checkin-engine':
         specifier: workspace:*
         version: link:../../checkin-engine
@@ -661,6 +670,9 @@ importers:
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      hono:
+        specifier: 'catalog:'
+        version: 4.13.9
       zod:
         specifier: 'catalog:'
         version: 4.6.5
@@ -949,6 +961,9 @@ importers:
 
   packages/platform:
     dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../db

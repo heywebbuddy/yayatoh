@@ -8,12 +8,14 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./testing": "./src/testing.ts"
+    "./testing": "./src/testing.ts",
+    "./routes": "./src/routes.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@hono/zod-openapi": "catalog:",
     "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
@@ -23,6 +25,7 @@
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
+    "hono": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

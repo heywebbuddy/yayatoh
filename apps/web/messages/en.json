@@ -589,6 +589,28 @@
     "wipe": "Wipe",
     "wipeFor": "Wipe {label}",
     "revoke": "Revoke",
-    "revokeFor": "Revoke {label}"
+    "revokeFor": "Revoke {label}",
+    "linkHint": "Or open this link on the device: it sets the scanner up for this event.",
+    "openScanner": "Open the scanner on this device"
+  },
+  "scan": {
+    "title": "Scanner",
+    "setupTitle": "Set up this scanner",
+    "setupHint": "Use the link or key from Check-in → Scanner devices. The guest list downloads once, then scanning works without a connection.",
+    "eventId": "Event ID",
+    "deviceKey": "Device key",
+    "start": "Start scanning",
+    "firstSyncFailed": "Couldn't download the guest list. Check the key and the connection, then try again.",
+    "online": "Online",
+    "offline": "Offline — scans are saved and will sync",
+    "tickets": "{count, plural, one {# ticket on this device} other {# tickets on this device}}",
+    "queued": "{count, plural, =0 {All scans synced} one {# scan waiting to sync} other {# scans waiting to sync}}",
+    "lastSync": "Updated {time}",
+    "camera": "Use camera",
+    "stopCamera": "Stop camera",
+    "confirmed": "Confirmed by the server",
+    "pending": "Checked on this device — will be confirmed when synced",
+    "wipedTitle": "This scanner was wiped",
+    "wipedDescription": "Its guest list and key were removed. Ask an organizer for a new device link to scan again."
   }
 }

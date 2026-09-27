@@ -131,7 +131,13 @@ const ManifestRowDto = z.object({
 
 export const ManifestPageDto = z.object({
   header: z.object({
-    event: z.object({ id: z.uuid(), startsAt: z.string(), endsAt: z.string(), timezone: z.string() }),
+    event: z.object({
+      id: z.uuid(),
+      name: z.string(),
+      startsAt: z.string(),
+      endsAt: z.string(),
+      timezone: z.string(),
+    }),
     publicKeys: z.record(z.string(), z.string()),
     salt: z.string(),
     serverTime: z.string(),
@@ -204,6 +210,7 @@ export const deviceManifestQuery = tenantQuery({
     const header: ManifestHeader = {
       event: {
         id: event.id,
+        name: event.name,
         startsAt: event.startsAt.toISOString(),
         endsAt: event.endsAt.toISOString(),
         timezone: event.timezone,

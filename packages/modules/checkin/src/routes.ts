@@ -1,4 +1,8 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { ProblemDto } from '@yayatoh/contracts';
+import type { TenantTx } from '@yayatoh/db';
+import { type CommandPorts, type Ctx, DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
+import { createMiddleware } from 'hono/factory';
 import {
   deviceContext,
   deviceManifestQuery,
@@ -6,11 +10,7 @@ import {
   ManifestPageDto,
   SyncResultDto,
   syncScansCommand,
-} from '@yayatoh/checkin';
-import { ProblemDto } from '@yayatoh/contracts';
-import { type Ctx, DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
-import { createMiddleware } from 'hono/factory';
-import { ports } from '../ports.ts';
+} from './devices.ts';
 
 type Env = { Variables: { device: Ctx } };
 
@@ -98,42 +98,58 @@ const heartbeat = createRoute({
   },
 });
 
-export const scanner = new OpenAPIHono<Env>();
-
-// Device bearer token → device context. The org comes from the token, never from a header.
-const authenticate = createMiddleware<Env>(async (c, next) => {
-  const m = /^Bearer (\S+)$/.exec(c.req.header('authorization') ?? '');
-  const dc = m?.[1] ? await deviceContext(m[1]) : null;
-  if (!dc) throw new DomainError('unauthenticated', 'Device token required');
-  c.set('device', dc.ctx);
-  await next();
-});
-scanner.use('/events/*', authenticate);
-scanner.use('/scans/*', authenticate);
-scanner.use('/devices/*', authenticate);
-
-scanner
-  .openapi(manifest, async (c) => {
-    const q = c.req.valid('query');
-    const page = await executeQuery(
-      deviceManifestQuery,
-      {
-        eventId: c.req.valid('param').eventId,
-        cursor: q.cursor,
-        overlap: q.overlap === 'true',
-        limit: q.limit,
-      },
-      c.get('device'),
-      ports,
-    );
-    return c.json(page, 200);
-  })
-  .openapi(batch, async (c) => {
-    const body = c.req.valid('json');
-    const r = await executeCommand(syncScansCommand, body, c.get('device'), ports);
-    return c.json(r, 200);
-  })
-  .openapi(heartbeat, async (c) => {
-    const r = await executeCommand(heartbeatCommand, c.req.valid('json'), c.get('device'), ports);
-    return c.json({ serverTime: r.serverTime.toISOString(), commands: r.commands }, 200);
+/**
+ * Scanner endpoints (roadmap §6.1) as a router any host can mount: `apps/api` at `/v1`, and the
+ * web app at `/api/v1` so the Scan PWA calls its own origin. Errors are thrown as DomainErrors;
+ * the host turns them into problem+json.
+ */
+export function scannerRoutes(ports: CommandPorts<TenantTx>) {
+  const scanner = new OpenAPIHono<Env>({
+    defaultHook: (result) => {
+      if (!result.success) throw new DomainError('validation_failed', 'Invalid request');
+    },
   });
+  // Device bearer token → device context. The org comes from the token, never from a header.
+  const authenticate = createMiddleware<Env>(async (c, next) => {
+    const m = /^Bearer (\S+)$/.exec(c.req.header('authorization') ?? '');
+    const dc = m?.[1] ? await deviceContext(m[1]) : null;
+    if (!dc) throw new DomainError('unauthenticated', 'Device token required');
+    c.set('device', dc.ctx);
+    await next();
+  });
+  scanner.use('/events/*', authenticate);
+  scanner.use('/scans/*', authenticate);
+  scanner.use('/devices/*', authenticate);
+
+  return scanner
+    .openapi(manifest, async (c) => {
+      const q = c.req.valid('query');
+      const page = await executeQuery(
+        deviceManifestQuery,
+        {
+          eventId: c.req.valid('param').eventId,
+          cursor: q.cursor,
+          overlap: q.overlap === 'true',
+          limit: q.limit,
+        },
+        c.get('device'),
+        ports,
+      );
+      return c.json(page, 200);
+    })
+    .openapi(batch, async (c) => {
+      const r = await executeCommand(syncScansCommand, c.req.valid('json'), c.get('device'), ports);
+      return c.json(r, 200);
+    })
+    .openapi(heartbeat, async (c) => {
+      const r = await executeCommand(heartbeatCommand, c.req.valid('json'), c.get('device'), ports);
+      return c.json({ serverTime: r.serverTime.toISOString(), commands: r.commands }, 200);
+    });
+}
+
+/** Register the device bearer scheme on the host's OpenAPI document. */
+export const DEVICE_TOKEN_SCHEME = {
+  type: 'http',
+  scheme: 'bearer',
+  description: 'Scanner device token (`yyd_…`), issued once at enrollment.',
+} as const;

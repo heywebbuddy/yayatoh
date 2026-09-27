@@ -50,6 +50,7 @@ function state(admitted: string[] = [], policy: 'provisional' | 'reject' = 'prov
     header: {
       event: {
         id: 'e1',
+        name: 'Offline test',
         startsAt: '2027-12-01T15:00:00Z',
         endsAt: '2027-12-03T04:00:00Z',
         timezone: 'America/Chicago',

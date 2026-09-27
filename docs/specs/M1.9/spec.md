@@ -73,6 +73,37 @@ Roadmap: M1.9 (Scan PWA). ADR 0011 (QR format and offline check-in). This milest
 | AC5 | `/v1` needs a device token (problem+json 401, whatever org header is sent); batch sync is idempotent over HTTP | `apps/api/tests/scanner.int.test.ts` |
 | AC6 | End to end: add a device (key shown once) and revoke it from the door screen | `e2e/checkin.spec.ts` |
 
+## M1.9b2 — Scan PWA (done)
+- **One router, two mounts:** the scanner endpoints now live in `@yayatoh/checkin/routes` (a module's `./routes` surface). `apps/api` serves them at `/v1`, and the web app at `/api/v1`, so the PWA calls its own origin. Problem+json formatting is shared in `@yayatoh/platform/http`.
+- **`/scan` (web):**
+  - Set up from the link shown at enrollment (`/scan#e=<event>&k=<key>`). The key rides in the URL fragment, so it never reaches a server log, and it leaves the address bar once stored.
+  - IndexedDB keeps the config, the scan queue and the manifest. The manifest is AES-GCM sealed with a key derived from the device token: obfuscation only, as §5.4 accepts for a PWA.
+  - The manifest expires 24 h after the event ends.
+- **Scanning:**
+  - Every scan gets an instant local verdict from `checkin-engine` (the same rules as the server) and goes into the queue.
+  - When online the queue flushes immediately, so the server's answer, including cross-device first-wins, replaces the local one: "Confirmed by the server".
+  - Offline, scans wait ("n scans waiting to sync") and flush on the browser's `online` event. The header shows online/offline, tickets on the device, the queue and the last update.
+- **Heartbeat** every 30 s reports battery, queue depth and clock offset. A server `wipe` command, or a revoked key (401), deletes the whole local database.
+- **Camera:** uses `BarcodeDetector` where the browser has it (Chrome/Android). The zxing-wasm fallback for iOS Safari is M1.9c.
+- **Service worker** (`/scan-sw.js`) caches only `/scan` pages (network first) and Next's hashed static assets (cache first), so the scanner reopens without a network. Everything else passes through. A web app manifest makes the PWA installable.
+- **Strings** are in 13 locales.
+
+### Acceptance (M1.9b2)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A device set up from its link downloads the event's tickets, and the key leaves the address bar | `e2e/scan-pwa.spec.ts` |
+| AC2 | Online scans are admitted and confirmed by the server | `e2e/scan-pwa.spec.ts` |
+| AC3 | Offline, scanning continues from the local list, repeats are local duplicates, and scans queue | `e2e/scan-pwa.spec.ts` |
+| AC4 | On reconnect the queue drains, and the door screen counts the offline admission | `e2e/scan-pwa.spec.ts` |
+| AC5 | The shared router behaves identically on both mounts (401 problem+json, manifest, idempotent batch) | `apps/api/tests/scanner.int.test.ts` |
+
+Manual, per release: install the PWA on a phone, open it in airplane mode (service worker shell), and scan with the camera.
+
 ## Remaining M1.9 increments
-- **M1.9b2:** the Scan PWA: service worker, IndexedDB manifest and queue (obfuscated at rest; 24 h expiry), camera (BarcodeDetector / zxing-wasm), online-first with offline fallback, heartbeat loop, wipe handling. Event-scoped door staff and checkpoints.
-- **M1.9c:** legacy QR payloads, the scanner dashboard with live counts (Ably), fraud signals and alerts, and the full 3-device / 300-scan offline drill on real devices.
+- **M1.9c:**
+  - the zxing-wasm camera fallback
+  - event-scoped door staff and checkpoints/entrances
+  - legacy QR payloads
+  - the scanner dashboard with live counts (Ably)
+  - fraud signals and alerts, fed by `checkin.duplicate_offline@1`
+  - the full 3-device / 300-scan offline drill on real devices

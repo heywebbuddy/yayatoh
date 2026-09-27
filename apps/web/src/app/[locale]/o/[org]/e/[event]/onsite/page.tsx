@@ -156,7 +156,7 @@ export default async function OnsitePage({
             </ul>
           </Card>
         ) : null}
-        <DeviceEnrollForm action={enrollDeviceAction.bind(null, org, event)} />
+        <DeviceEnrollForm eventId={ev.id} action={enrollDeviceAction.bind(null, org, event)} />
       </section>
     </>
   );

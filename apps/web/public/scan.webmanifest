@@ -1,0 +1,10 @@
+{
+  "name": "Yayatoh Scan",
+  "short_name": "Scan",
+  "start_url": "/scan",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "icons": [{ "src": "/scan-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

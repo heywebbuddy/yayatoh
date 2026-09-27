@@ -17,6 +17,7 @@ export interface ManifestRow {
 export interface ManifestHeader {
   readonly event: {
     readonly id: string;
+    readonly name: string;
     readonly startsAt: string;
     readonly endsAt: string;
     readonly timezone: string;

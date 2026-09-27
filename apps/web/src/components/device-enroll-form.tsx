@@ -1,17 +1,23 @@
 'use client';
 
 import { Alert, Button, Card, Input } from '@yayatoh/ui';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { EnrollState } from '@/app/[locale]/o/[org]/e/[event]/onsite/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 export function DeviceEnrollForm({
+  eventId,
   action,
 }: {
+  eventId: string;
   action: (prev: EnrollState, form: FormData) => Promise<EnrollState>;
 }) {
   const t = useTranslations();
+  const locale = useLocale();
+  // The key rides in the fragment (#…): browsers never send it to a server or a log.
+  const setupLink = (token: string) =>
+    `${window.location.origin}${locale === 'en' ? '' : `/${locale}`}/scan#e=${eventId}&k=${encodeURIComponent(token)}`;
   const [state, formAction, pending] = useActionState(action, { kind: 'idle' });
   return (
     <Card className="flex flex-col gap-3">
@@ -36,6 +42,14 @@ export function DeviceEnrollForm({
             <code className="break-all rounded-card bg-white px-3 py-2 font-mono text-caption">
               {state.token}
             </code>
+            <p className="text-body">{t('devices.linkHint')}</p>
+            <a
+              href={setupLink(state.token)}
+              className="break-all text-caption underline"
+              data-testid="scan-link"
+            >
+              {t('devices.openScanner')}
+            </a>
           </div>
         ) : state.kind === 'error' ? (
           <Alert title={t(errorMessageKey(state.code))} />
