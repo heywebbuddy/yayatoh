@@ -112,7 +112,7 @@ describe('scanner devices and offline sync', () => {
     expect(row?.token_hash).not.toContain(d.token.slice(4, 20));
     await executeCommand(setDeviceStateCommand, { deviceId: d.deviceId, action: 'revoke' }, a.ctx(), ports);
     expect(await deviceContext(d.token)).toBeNull();
-    expect(await deviceContext('yyd_' + 'x'.repeat(43))).toBeNull();
+    expect(await deviceContext(`yyd_${'x'.repeat(43)}`)).toBeNull();
   });
 
   it('pages the manifest; contact details leave only as salted hashes', async () => {

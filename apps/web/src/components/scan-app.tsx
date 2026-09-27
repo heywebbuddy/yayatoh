@@ -274,7 +274,6 @@ export function ScanApp() {
         ) : null}
       </form>
       {camera ? (
-        // biome-ignore lint/a11y/useMediaCaption: a live camera preview has no audio or captions.
         <video ref={video} className="aspect-video w-full max-w-md rounded-card bg-black" playsInline muted />
       ) : null}
       <div role="status" aria-live="polite" aria-atomic="true">
