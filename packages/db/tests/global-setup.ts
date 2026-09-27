@@ -56,6 +56,8 @@ export default async function setup(project: TestProject): Promise<void> {
       MIGRATOR_DATABASE_URL: url('migrator', pw.migrator),
       PLATFORM_READER_DATABASE_URL: url('platform_reader', pw.platformReader),
       ADMIN_DATABASE_URL: adminTestDb.toString(),
+      // Per-run signing secret for invitation tokens in tests.
+      APP_TOKEN_SECRET: randomBytes(32).toString('hex'),
     };
     await runMigrations(urls.MIGRATOR_DATABASE_URL);
     project.provide('dbUrls', urls);

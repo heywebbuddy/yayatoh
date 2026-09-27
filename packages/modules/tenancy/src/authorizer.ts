@@ -25,6 +25,8 @@ export async function memberRole(ctx: Ctx): Promise<OrgRole | null> {
 export const orgAuthorizer: CommandPorts<unknown>['authorizer'] = {
   async can(ctx, permission) {
     if (permission === 'platform:org.create') return ctx.actor.type === 'user' || ctx.actor.type === 'system';
+    // Accepting is checked in the handler (token + verified email match), not by an org role.
+    if (permission === 'invitation:accept') return ctx.actor.type === 'user';
     if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
     if (ctx.actor.type === 'system') return true;
     const role = await memberRole(ctx);

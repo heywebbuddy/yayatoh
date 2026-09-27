@@ -111,7 +111,14 @@
     "empty": "メンバーはまだいません",
     "name": "名前",
     "role": "役割",
-    "since": "参加日"
+    "since": "参加日",
+    "inviteTitle": "チームメンバーを招待",
+    "inviteEmail": "メールアドレス",
+    "invite": "招待を送信",
+    "invited": "招待を送信しました。",
+    "pending": "保留中の招待",
+    "expires": "有効期限：{date}",
+    "revoke": "取り消す"
   },
   "dashboard": {
     "previewPage": "ページをプレビュー",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "まだどの組織にも所属していません",
     "emptyDescription": "オーナーに招待を依頼するか、招待メールが届くまでお待ちください。"
+  },
+  "invite": {
+    "eyebrow": "招待",
+    "title": "Yayatoh で {org} に参加",
+    "invalidTitle": "招待が見つかりません",
+    "signInFirst": "承諾するには {email} でサインインしてください。初めての方は、サインインページで「メールでコードを受け取る」を選択してください。",
+    "signIn": "サインインして承諾",
+    "wrongAccount": "この招待は {email} 宛てです。サインアウトして、このアドレスでサインインしてください。",
+    "join": "{role}として参加します。",
+    "accept": "招待を承諾",
+    "status": {
+      "invalid": "この招待リンクは無効です。",
+      "accepted": "この招待はすでに使用されています。",
+      "revoked": "この招待は取り消されました。",
+      "expired": "この招待は有効期限が切れています。新しい招待を依頼してください。",
+      "unavailable": "この組織は現在利用できません。"
+    }
   }
 }

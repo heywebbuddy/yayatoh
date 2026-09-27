@@ -1,5 +1,6 @@
 export { tenantCommand, tenantQuery } from './commands/define.ts';
 export { createCommandPorts, type PolicyPorts, recentStepUp } from './commands/ports.ts';
+export { consoleMailer, type Mailer, type MailMessage, memoryMailer } from './mailer.ts';
 export { isModuleKey, MODULE_KEYS, type ModuleKey } from './modules.ts';
 export { consumeEvent } from './outbox/consume.ts';
 export {

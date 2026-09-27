@@ -40,8 +40,20 @@ M1.2 is split into increments. **M1.2a (this change)** adds the identity core an
 | AC4 | Email + password and email-code sign-in work; a wrong password shows a localized error and creates no session | `auth.int.test.ts`, `apps/web/e2e/auth.spec.ts` |
 | AC5 | Signed-out users are sent to `/sign-in`; non-members get 404 | `e2e/console.spec.ts` |
 
+## M1.2b — invitations (done)
+- `tenancy.invitations` (tenant table, one pending invitation per org × email, 7-day expiry). Commands: invite, revoke, accept; query: list pending.
+- **No secret is stored.** The emailed token is `<invitationId>~HMAC(APP_TOKEN_SECRET)`; the outbox event carries only the id, and the worker's `tenancy.invitation-mailer` subscriber derives the link. Accepting or revoking the row kills the token.
+- **Accept rules:** the token decides the org (never a form field); the signed-in account's **verified** email must match the invitation. Accepting is single-use. Only an owner can invite an owner.
+- **Cross-tenant lookup** goes through `tenancy.invitation_status(id)` (SECURITY DEFINER, allowlisted columns).
+- **UI:**
+  - Team page: an invite form (Server Action through the same command pipeline), a pending list with revoke, and a real-name member list.
+  - `/invite/[token]` accept page.
+  - New invitees sign in with an email code, which verifies their address.
+- **Mail:** a platform `Mailer` port with an idempotency key per message. It is the console adapter until SES (M1.10).
+- **Tests:** `packages/testing/tests/invitations.int.test.ts`, `tenancy/tests/invitation-token.test.ts`, `apps/web/e2e/team.spec.ts`. The isolation fixture covers invitations.
+- **Moved:** event-scoped roles and `scopeFilter()` move to M1.4, because they need the events table.
+
 ## Remaining increments
-- **M1.2b** — invitations (email → accept → membership), plus event-scoped roles and the `scopeFilter()` authorization evaluator.
 - **M1.2c** — TOTP enrolment UI, required for owner/admin/finance; step-up UI (the fresh-session check is already in the command pipeline).
 - **M1.2d** — central login on `app.yayatoh.com` with 60-second single-use handoff codes for tenant hosts.
 - **M1.2e** — impersonation: platform staff only, audited, 1 h, and it blocks money, export and delete.

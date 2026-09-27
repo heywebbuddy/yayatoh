@@ -1,1 +1,1 @@
-export { memberships, organizations } from './schema.ts';
+export { invitations, memberships, organizations } from './schema.ts';

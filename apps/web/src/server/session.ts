@@ -20,7 +20,10 @@ export interface Session {
  * the session here; it comes from the route's org param and is checked against membership.
  */
 export const getSession = cache(async (): Promise<Session | null> => {
-  const s = await getAuth().api.getSession({ headers: await headers() });
+  // Read request headers first: it marks the route dynamic before auth is initialised, so builds
+  // never need BETTER_AUTH_SECRET.
+  const h = await headers();
+  const s = await getAuth().api.getSession({ headers: h });
   if (!s) return null;
   return { userId: s.user.id, name: s.user.name, initials: initialsOf(s.user.name) };
 });

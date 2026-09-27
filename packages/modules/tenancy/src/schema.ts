@@ -1,6 +1,15 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
-import { boolean, check, foreignKey, pgSchema, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  check,
+  foreignKey,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 export const tenancy = pgSchema('tenancy');
 
@@ -60,5 +69,35 @@ export const memberships = tenantTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     check('memberships_role_check', inList('role', ORG_ROLES)),
+  ],
+);
+
+/**
+ * Pending invitations. No token is stored: the emailed token is an HMAC of the invitation id
+ * (domain/invitation-token.ts), so the database and the outbox hold nothing that grants access.
+ */
+export const invitations = tenantTable(
+  tenancy,
+  'invitations',
+  {
+    email: text('email').notNull(),
+    role: text('role').notNull(),
+    invitedBy: uuid('invited_by').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    acceptedAt: timestamp('accepted_at', { withTimezone: true }),
+    acceptedBy: uuid('accepted_by'),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('invitations_org_email_pending_key')
+      .on(t.orgId, t.email)
+      .where(sql`accepted_at is null and revoked_at is null`),
+    foreignKey({
+      name: 'invitations_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('invitations_role_check', inList('role', ORG_ROLES)),
+    check('invitations_email_lower_check', sql`email = lower(email)`),
   ],
 );

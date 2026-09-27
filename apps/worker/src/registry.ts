@@ -1,4 +1,5 @@
-import type { Subscriber } from '@yayatoh/platform';
+import { consoleMailer, type Subscriber } from '@yayatoh/platform';
+import { invitationMailer } from '@yayatoh/tenancy';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
 
@@ -11,4 +12,11 @@ export const heartbeat = defineJob({
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
 export const JOBS = [heartbeat] as const;
-export const SUBSCRIBERS: readonly Subscriber[] = [];
+export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
+  const secret = env.APP_TOKEN_SECRET;
+  const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
+  if (!secret || !appOrigin)
+    throw new Error('APP_TOKEN_SECRET and NEXT_PUBLIC_APP_ORIGIN are required by the worker');
+  // consoleMailer until SES exists (M1.10, owner account pending).
+  return [invitationMailer({ mailer: consoleMailer, appOrigin, secret })];
+}

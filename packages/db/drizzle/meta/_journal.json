@@ -22,6 +22,20 @@
       "when": 1790479372554,
       "tag": "0002_lush_white_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790479993893,
+      "tag": "0003_rapid_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790479995426,
+      "tag": "0004_invitation_status",
+      "breakpoints": true
     }
   ]
 }

@@ -111,7 +111,14 @@
     "empty": "No members yet",
     "name": "Name",
     "role": "Role",
-    "since": "Member since"
+    "since": "Member since",
+    "inviteTitle": "Invite a teammate",
+    "inviteEmail": "Email address",
+    "invite": "Send invitation",
+    "invited": "Invitation sent.",
+    "pending": "Pending invitations",
+    "expires": "Expires {date}",
+    "revoke": "Revoke"
   },
   "dashboard": {
     "previewPage": "Preview page",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "You're not in an organization yet",
     "emptyDescription": "Ask an owner to invite you, or wait for your invitation email."
+  },
+  "invite": {
+    "eyebrow": "Invitation",
+    "title": "Join {org} on Yayatoh",
+    "invalidTitle": "Invitation not found",
+    "signInFirst": "Sign in as {email} to accept. If you're new, choose “Email me a code” on the sign-in page.",
+    "signIn": "Sign in to accept",
+    "wrongAccount": "This invitation is for {email}. Sign out and sign in with that address.",
+    "join": "You'll join as {role}.",
+    "accept": "Accept invitation",
+    "status": {
+      "invalid": "This invitation link isn't valid.",
+      "accepted": "This invitation has already been used.",
+      "revoked": "This invitation was withdrawn.",
+      "expired": "This invitation has expired. Ask for a new one.",
+      "unavailable": "This organization isn't available right now."
+    }
   }
 }

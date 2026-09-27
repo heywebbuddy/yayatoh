@@ -15,6 +15,7 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
     "drizzle-orm": "catalog:",
     "pg-boss": "catalog:",
     "zod": "catalog:"
@@ -22,7 +23,6 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@yayatoh/config": "workspace:*",
-    "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"
   }

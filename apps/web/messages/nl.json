@@ -111,7 +111,14 @@
     "empty": "Nog geen leden",
     "name": "Naam",
     "role": "Rol",
-    "since": "Lid sinds"
+    "since": "Lid sinds",
+    "inviteTitle": "Teamlid uitnodigen",
+    "inviteEmail": "E-mailadres",
+    "invite": "Uitnodiging versturen",
+    "invited": "Uitnodiging verstuurd.",
+    "pending": "Openstaande uitnodigingen",
+    "expires": "Verloopt op {date}",
+    "revoke": "Intrekken"
   },
   "dashboard": {
     "previewPage": "Voorbeeld pagina",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "Je bent nog geen lid van een organisatie",
     "emptyDescription": "Vraag een eigenaar om je uit te nodigen, of wacht op je uitnodigingsmail."
+  },
+  "invite": {
+    "eyebrow": "Uitnodiging",
+    "title": "Word lid van {org} op Yayatoh",
+    "invalidTitle": "Uitnodiging niet gevonden",
+    "signInFirst": "Log in als {email} om te accepteren. Ben je nieuw? Kies dan ‘Stuur me een code per e-mail’ op de inlogpagina.",
+    "signIn": "Inloggen om te accepteren",
+    "wrongAccount": "Deze uitnodiging is voor {email}. Log uit en log in met dat adres.",
+    "join": "Je wordt lid als {role}.",
+    "accept": "Uitnodiging accepteren",
+    "status": {
+      "invalid": "Deze uitnodigingslink is ongeldig.",
+      "accepted": "Deze uitnodiging is al gebruikt.",
+      "revoked": "Deze uitnodiging is ingetrokken.",
+      "expired": "Deze uitnodiging is verlopen. Vraag om een nieuwe.",
+      "unavailable": "Deze organisatie is momenteel niet beschikbaar."
+    }
   }
 }

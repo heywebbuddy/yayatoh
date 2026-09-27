@@ -1,10 +1,17 @@
 export { memberRole, orgAuthorizer } from './authorizer.ts';
+export {
+  acceptInvitation,
+  inviteMemberCommand,
+  lookupInvitation,
+  revokeInvitationCommand,
+} from './commands/invitations.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
 export {
   createOrganization,
   createOrganizationCommand,
   updateOrganizationCommand,
 } from './commands/organizations.ts';
+export { signInvitation } from './domain/invitation-token.ts';
 export {
   type OrgRole,
   PERMISSIONS,
@@ -13,5 +20,12 @@ export {
   roleCan,
 } from './domain/permissions.ts';
 export * from './dto.ts';
-export { getOrganizationQuery, listMembersQuery, myOrganizations, resolveOrgSlug } from './queries.ts';
+export {
+  getOrganizationQuery,
+  listInvitationsQuery,
+  listMembersQuery,
+  myOrganizations,
+  resolveOrgSlug,
+} from './queries.ts';
 export { ORG_KINDS, ORG_ROLES, ORG_STATUSES } from './schema.ts';
+export { invitationMailer } from './subscribers.ts';

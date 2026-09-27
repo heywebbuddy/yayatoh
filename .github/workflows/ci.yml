@@ -118,6 +118,7 @@ jobs:
           {
             echo "BETTER_AUTH_SECRET=$SECRET"
             echo "BETTER_AUTH_URL=http://localhost:3100"
+            echo "APP_TOKEN_SECRET=$(openssl rand -hex 32)"
             echo "DEV_PERSONA_PASSWORD=$PERSONA"
             echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
             echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"

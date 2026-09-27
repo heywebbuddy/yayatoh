@@ -111,7 +111,14 @@
     "empty": "Noch keine Mitglieder",
     "name": "Name",
     "role": "Rolle",
-    "since": "Mitglied seit"
+    "since": "Mitglied seit",
+    "inviteTitle": "Teammitglied einladen",
+    "inviteEmail": "E-Mail-Adresse",
+    "invite": "Einladung senden",
+    "invited": "Einladung gesendet.",
+    "pending": "Offene Einladungen",
+    "expires": "Läuft am {date} ab",
+    "revoke": "Widerrufen"
   },
   "dashboard": {
     "previewPage": "Seitenvorschau",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "Du bist noch in keiner Organisation",
     "emptyDescription": "Bitte eine Inhaberin oder einen Inhaber, dich einzuladen, oder warte auf deine Einladungs-E-Mail."
+  },
+  "invite": {
+    "eyebrow": "Einladung",
+    "title": "Tritt {org} auf Yayatoh bei",
+    "invalidTitle": "Einladung nicht gefunden",
+    "signInFirst": "Melde dich als {email} an, um die Einladung anzunehmen. Wenn du neu bist, wähle auf der Anmeldeseite „Code per E-Mail senden“.",
+    "signIn": "Anmelden und annehmen",
+    "wrongAccount": "Diese Einladung gilt für {email}. Melde dich ab und mit dieser Adresse wieder an.",
+    "join": "Du trittst als {role} bei.",
+    "accept": "Einladung annehmen",
+    "status": {
+      "invalid": "Dieser Einladungslink ist ungültig.",
+      "accepted": "Diese Einladung wurde bereits verwendet.",
+      "revoked": "Diese Einladung wurde zurückgezogen.",
+      "expired": "Diese Einladung ist abgelaufen. Bitte um eine neue.",
+      "unavailable": "Diese Organisation ist derzeit nicht verfügbar."
+    }
   }
 }

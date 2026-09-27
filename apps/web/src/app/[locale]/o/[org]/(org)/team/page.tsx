@@ -1,12 +1,14 @@
 import { getUsersByIds } from '@yayatoh/auth';
 import { executeQuery } from '@yayatoh/kernel';
-import { listMembersQuery } from '@yayatoh/tenancy';
-import { Avatar, PageHeader, Table } from '@yayatoh/ui';
+import { listInvitationsQuery, listMembersQuery, roleCan } from '@yayatoh/tenancy';
+import { Avatar, Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { InviteForm } from '@/components/invite-form.tsx';
 import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
 import { initialsOf } from '@/server/personas.ts';
 import { ports } from '@/server/ports.ts';
+import { inviteAction, revokeAction } from './actions.ts';
 
 export default async function TeamPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
   const { locale, org } = await params;
@@ -20,9 +22,17 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
     const name = people.get(m.userId)?.name ?? t('team.unknownUser');
     return { ...m, name, initials: initialsOf(name) };
   });
+  const canManage = roleCan(data.role, 'members:manage');
+  const invitations = canManage ? await executeQuery(listInvitationsQuery, {}, data.ctx, ports) : [];
   return (
     <>
       <PageHeader title={t('nav.team')} description={t('team.subtitle', { count: rows.length })} />
+      {canManage ? (
+        <Card className="flex flex-col gap-3">
+          <h2 className="text-section">{t('team.inviteTitle')}</h2>
+          <InviteForm action={inviteAction.bind(null, org)} />
+        </Card>
+      ) : null}
       <Table
         caption={t('nav.team')}
         rowKey={(r) => r.userId}
@@ -50,6 +60,30 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
           },
         ]}
       />
+      {invitations.length > 0 ? (
+        <section aria-labelledby="pending-heading" className="flex flex-col gap-3">
+          <h2 id="pending-heading" className="text-section">
+            {t('team.pending')}
+          </h2>
+          <ul className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 bg-white p-0">
+            {invitations.map((i) => (
+              <li key={i.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                <span className="min-w-0 flex-1 truncate">{i.email}</span>
+                <span className="text-caption text-zinc-600">{t(`roles.${i.role}`)}</span>
+                <StatusDot
+                  status="warning"
+                  label={t('team.expires', { date: formatDate(i.expiresAt.toISOString(), f) })}
+                />
+                <form action={revokeAction.bind(null, org, i.id)}>
+                  <Button type="submit" variant="secondary" size="sm">
+                    {t('team.revoke')}
+                  </Button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </>
   );
 }

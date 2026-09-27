@@ -111,7 +111,14 @@
     "empty": "Nenhum membro ainda",
     "name": "Nome",
     "role": "Função",
-    "since": "Membro desde"
+    "since": "Membro desde",
+    "inviteTitle": "Convidar um colega de equipe",
+    "inviteEmail": "Endereço de e-mail",
+    "invite": "Enviar convite",
+    "invited": "Convite enviado.",
+    "pending": "Convites pendentes",
+    "expires": "Expira em {date}",
+    "revoke": "Revogar"
   },
   "dashboard": {
     "previewPage": "Visualizar página",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "Você ainda não faz parte de uma organização",
     "emptyDescription": "Peça a um proprietário para convidar você ou aguarde seu e-mail de convite."
+  },
+  "invite": {
+    "eyebrow": "Convite",
+    "title": "Participe de {org} no Yayatoh",
+    "invalidTitle": "Convite não encontrado",
+    "signInFirst": "Entre como {email} para aceitar. Se você é novo por aqui, escolha “Enviar um código por e-mail” na página de login.",
+    "signIn": "Entrar para aceitar",
+    "wrongAccount": "Este convite é para {email}. Saia e entre com esse endereço.",
+    "join": "Você vai participar como {role}.",
+    "accept": "Aceitar convite",
+    "status": {
+      "invalid": "Este link de convite não é válido.",
+      "accepted": "Este convite já foi usado.",
+      "revoked": "Este convite foi cancelado.",
+      "expired": "Este convite expirou. Peça um novo.",
+      "unavailable": "Esta organização não está disponível no momento."
+    }
   }
 }

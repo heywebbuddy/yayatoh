@@ -5,6 +5,7 @@ import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import {
   addMemberCommand,
   createOrganization,
+  inviteMemberCommand,
   type OrganizationDto,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
@@ -39,6 +40,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     updateOrganizationCommand,
     { timezone: 'America/Chicago' },
     ctx({ idempotencyKey: `fixture-${slug}` }),
+    ports,
+  );
+  await executeCommand(
+    inviteMemberCommand,
+    { email: `invitee+${slug}@example.test`, role: 'manager' },
+    ctx(),
     ports,
   );
   await executeCommand(

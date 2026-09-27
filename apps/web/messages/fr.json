@@ -111,7 +111,14 @@
     "empty": "Aucun membre pour l’instant",
     "name": "Nom",
     "role": "Rôle",
-    "since": "Membre depuis"
+    "since": "Membre depuis",
+    "inviteTitle": "Inviter un membre de l’équipe",
+    "inviteEmail": "Adresse e-mail",
+    "invite": "Envoyer l’invitation",
+    "invited": "Invitation envoyée.",
+    "pending": "Invitations en attente",
+    "expires": "Expire le {date}",
+    "revoke": "Révoquer"
   },
   "dashboard": {
     "previewPage": "Aperçu de la page",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "Vous ne faites encore partie d’aucune organisation",
     "emptyDescription": "Demandez à un propriétaire de vous inviter, ou attendez votre e-mail d’invitation."
+  },
+  "invite": {
+    "eyebrow": "Invitation",
+    "title": "Rejoignez {org} sur Yayatoh",
+    "invalidTitle": "Invitation introuvable",
+    "signInFirst": "Connectez-vous en tant que {email} pour accepter. Si vous êtes nouveau, choisissez « Recevoir un code par e-mail » sur la page de connexion.",
+    "signIn": "Se connecter pour accepter",
+    "wrongAccount": "Cette invitation est destinée à {email}. Déconnectez-vous, puis connectez-vous avec cette adresse.",
+    "join": "Vous rejoindrez l’organisation en tant que {role}.",
+    "accept": "Accepter l’invitation",
+    "status": {
+      "invalid": "Ce lien d’invitation n’est pas valide.",
+      "accepted": "Cette invitation a déjà été utilisée.",
+      "revoked": "Cette invitation a été retirée.",
+      "expired": "Cette invitation a expiré. Demandez-en une nouvelle.",
+      "unavailable": "Cette organisation n’est pas disponible pour le moment."
+    }
   }
 }

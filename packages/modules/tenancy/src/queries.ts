@@ -1,15 +1,16 @@
 import { withoutTenant } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
+  InvitationDto,
   MembershipDto,
   type MyOrganizationDto,
   MyOrganizationDto as MyOrgSchema,
   OrganizationDto,
 } from './dto.ts';
-import { memberships, organizations } from './schema.ts';
+import { invitations, memberships, organizations } from './schema.ts';
 
 export const getOrganizationQuery = tenantQuery({
   name: 'tenancy.getOrganization',
@@ -34,6 +35,26 @@ export const listMembersQuery = tenantQuery({
   entitlement: 'core',
   permission: 'members:read',
   handler: ({ tx }) => tx.select().from(memberships).orderBy(asc(memberships.createdAt)),
+});
+
+export const listInvitationsQuery = tenantQuery({
+  name: 'tenancy.listInvitations',
+  input: z.object({}),
+  output: z.array(InvitationDto),
+  entitlement: 'core',
+  permission: 'members:read',
+  handler: ({ tx, ctx }) =>
+    tx
+      .select()
+      .from(invitations)
+      .where(
+        and(
+          isNull(invitations.acceptedAt),
+          isNull(invitations.revokedAt),
+          gt(invitations.expiresAt, ctx.now),
+        ),
+      )
+      .orderBy(asc(invitations.createdAt)),
 });
 
 /**

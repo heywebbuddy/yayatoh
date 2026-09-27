@@ -111,7 +111,14 @@
     "empty": "暂无成员",
     "name": "姓名",
     "role": "角色",
-    "since": "加入时间"
+    "since": "加入时间",
+    "inviteTitle": "邀请团队成员",
+    "inviteEmail": "电子邮箱地址",
+    "invite": "发送邀请",
+    "invited": "邀请已发送。",
+    "pending": "待处理的邀请",
+    "expires": "{date} 到期",
+    "revoke": "撤销"
   },
   "dashboard": {
     "previewPage": "预览页面",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "你还没有加入任何组织",
     "emptyDescription": "请让所有者邀请你，或等待邀请邮件。"
+  },
+  "invite": {
+    "eyebrow": "邀请",
+    "title": "在 Yayatoh 上加入 {org}",
+    "invalidTitle": "未找到邀请",
+    "signInFirst": "请以 {email} 登录以接受邀请。如果你是新用户，请在登录页面选择“通过邮件发送验证码”。",
+    "signIn": "登录以接受邀请",
+    "wrongAccount": "此邀请发送给 {email}。请退出登录，然后使用该邮箱登录。",
+    "join": "你将以{role}身份加入。",
+    "accept": "接受邀请",
+    "status": {
+      "invalid": "此邀请链接无效。",
+      "accepted": "此邀请已被使用。",
+      "revoked": "此邀请已被撤回。",
+      "expired": "此邀请已过期，请申请新的邀请。",
+      "unavailable": "该组织目前不可用。"
+    }
   }
 }

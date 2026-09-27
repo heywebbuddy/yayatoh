@@ -1,5 +1,5 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
-import { JOBS, SUBSCRIBERS } from './registry.ts';
+import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { startWorker } from './worker.ts';
 
@@ -21,6 +21,7 @@ setInterval(() => {
   counts.clear();
 }, 60_000).unref();
 
+const SUBSCRIBERS = subscribers();
 const boss = await startWorker({ connectionString, jobs: JOBS, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${JOBS.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 

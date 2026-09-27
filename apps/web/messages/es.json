@@ -111,7 +111,14 @@
     "empty": "Aún no hay miembros",
     "name": "Nombre",
     "role": "Rol",
-    "since": "Miembro desde"
+    "since": "Miembro desde",
+    "inviteTitle": "Invitar a un compañero",
+    "inviteEmail": "Correo electrónico",
+    "invite": "Enviar invitación",
+    "invited": "Invitación enviada.",
+    "pending": "Invitaciones pendientes",
+    "expires": "Caduca el {date}",
+    "revoke": "Revocar"
   },
   "dashboard": {
     "previewPage": "Vista previa de la página",
@@ -300,5 +307,22 @@
   "orgPicker": {
     "emptyTitle": "Aún no perteneces a ninguna organización",
     "emptyDescription": "Pide a un propietario que te invite o espera tu correo de invitación."
+  },
+  "invite": {
+    "eyebrow": "Invitación",
+    "title": "Únete a {org} en Yayatoh",
+    "invalidTitle": "Invitación no encontrada",
+    "signInFirst": "Inicia sesión como {email} para aceptar. Si eres nuevo, elige «Envíame un código por correo» en la página de inicio de sesión.",
+    "signIn": "Inicia sesión para aceptar",
+    "wrongAccount": "Esta invitación es para {email}. Cierra sesión e inicia sesión con esa dirección.",
+    "join": "Te unirás como {role}.",
+    "accept": "Aceptar invitación",
+    "status": {
+      "invalid": "Este enlace de invitación no es válido.",
+      "accepted": "Esta invitación ya se ha usado.",
+      "revoked": "Esta invitación fue retirada.",
+      "expired": "Esta invitación ha caducado. Pide una nueva.",
+      "unavailable": "Esta organización no está disponible en este momento."
+    }
   }
 }

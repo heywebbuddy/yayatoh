@@ -62,3 +62,14 @@ export const UpdateOrganizationInput = CreateOrganizationInput.pick({
 export const AddMemberInput = z.object({ userId: z.uuid(), role: z.enum(ORG_ROLES) });
 export const ChangeMemberRoleInput = AddMemberInput;
 export const RemoveMemberInput = z.object({ userId: z.uuid() });
+
+export const InvitationDto = z.object({
+  id: z.uuid(),
+  email: z.string(),
+  role: z.enum(ORG_ROLES),
+  expiresAt: z.date(),
+  acceptedAt: z.date().nullable(),
+  revokedAt: z.date().nullable(),
+  createdAt: z.date(),
+});
+export type InvitationDto = z.infer<typeof InvitationDto>;
