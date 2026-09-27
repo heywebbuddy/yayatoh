@@ -61,12 +61,24 @@ const seating = item('seating', 'build', 'seating', 'armchair');
 const marketing = item('marketing', 'build', 'marketing', 'megaphone');
 const onsite = item('onsite', 'run', 'checkin', 'scan');
 const libraries = item('libraries', 'run', 'core', 'library');
+// M1.4c/d: venue, category, tags and short links; page content and announcements; private info
+// and access codes. Every profile has them, after its own build items.
+const EVENT_CONTENT: readonly NavItem[] = [
+  item('details', 'build', 'core', 'map-pin'),
+  item('content', 'build', 'core', 'file-text'),
+  item('access', 'build', 'core', 'lock'),
+];
+function withContent(nav: readonly NavItem[]): readonly NavItem[] {
+  const run = nav.findIndex((i) => i.group === 'run');
+  const at = run < 0 ? nav.length : run;
+  return [...nav.slice(0, at), ...EVENT_CONTENT, ...nav.slice(at)];
+}
 
 export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
   wedding: {
     key: 'wedding',
     defaultModules: ['core', 'guests', 'rsvp', 'seating', 'seat_finder', 'gallery', 'website', 'messaging'],
-    nav: [
+    nav: withContent([
       home,
       setupGuide,
       item('guests', 'build', 'guests', 'users'),
@@ -77,7 +89,7 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('gallery', 'build', 'gallery', 'image'),
       item('messages', 'build', 'messaging', 'message'),
       item('dayOf', 'run', 'checkin', 'calendar-check'),
-    ],
+    ]),
     vocabulary: { attendee: 'guest', attendees: 'guests', registration: 'rsvp' },
   },
   gala: {
@@ -92,7 +104,7 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       'donations',
       'marketing',
     ],
-    nav: [
+    nav: withContent([
       home,
       analysis,
       setupGuide,
@@ -103,13 +115,13 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('donations', 'build', 'donations', 'heart'),
       marketing,
       onsite,
-    ],
+    ]),
     vocabulary: { attendee: 'guest', attendees: 'guests' },
   },
   concert: {
     key: 'concert',
     defaultModules: ['core', 'ticketing', 'orders', 'attendees', 'checkin', 'marketing', 'reports'],
-    nav: [home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite],
+    nav: withContent([home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite]),
     vocabulary: { attendee: 'fan', attendees: 'fans' },
   },
   conference: {
@@ -125,7 +137,7 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       'checkin',
       'reports',
     ],
-    nav: [
+    nav: withContent([
       home,
       analysis,
       setupGuide,
@@ -139,7 +151,7 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       marketing,
       onsite,
       libraries,
-    ],
+    ]),
     vocabulary: {},
   },
   community: {
@@ -155,7 +167,7 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       'checkin',
       'reports',
     ],
-    nav: [
+    nav: withContent([
       home,
       analysis,
       setupGuide,
@@ -164,19 +176,19 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('communications', 'build', 'messaging', 'message'),
       item('donations', 'build', 'donations', 'heart'),
       onsite,
-    ],
+    ]),
     vocabulary: { attendee: 'member', attendees: 'members' },
   },
   agency: {
     key: 'agency',
     defaultModules: ['core', 'events', 'marketing', 'reports'],
-    nav: [home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite],
+    nav: withContent([home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite]),
     vocabulary: {},
   },
   other: {
     key: 'other',
     defaultModules: ['core', 'events', 'ticketing', 'orders', 'attendees', 'checkin', 'reports'],
-    nav: [home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite],
+    nav: withContent([home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite]),
     vocabulary: {},
   },
 };

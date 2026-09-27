@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from '../domain/lifecycle.ts';
 import { CreateEventInput, EventDto, EventRoleDto, UpdateEventInput } from '../dto.ts';
 import { EVENT_ROLES, eventRoleAssignments, events } from '../schema.ts';
+import { ensureAutoShortLinkTx } from './short-links.ts';
 
 const PAST_TENSE: Record<EventTransition, string> = {
   publish: 'published',
@@ -39,6 +40,8 @@ export const createEventCommand = tenantCommand({
         .values({ ...input, slug, orgId })
         .returning();
       if (!row) throw new DomainError('internal');
+      // M1.4d: every event gets its automatic `/e/{code}` short link.
+      await ensureAutoShortLinkTx(tx, orgId, row.id);
       emit({
         type: 'event.created',
         version: 1,

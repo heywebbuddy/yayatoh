@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { recordConsentTx, upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { accessGrantTx, findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { claimProviderEventTx, fundsFlowTx, type ProviderEvent, postSaleTx } from '@yayatoh/payments';
@@ -112,7 +112,9 @@ export const startCheckoutCommand = tenantCommand({
     // Staff kill switch (M1.3e): applies from the next checkout after it is set.
     await assertNotPausedTx(tx, 'pause_checkout');
     const event = await findEventTx(tx, input.eventId);
-    if (event?.status !== 'published' || event.visibility === 'private') {
+    const grant =
+      event && input.accessCodeId ? await accessGrantTx(tx, event.id, input.accessCodeId, ctx.now) : null;
+    if (event?.status !== 'published' || (event.visibility === 'private' && !grant?.unlocksEvent)) {
       throw new DomainError('not_found', 'Event not found');
     }
     const promo = input.promoCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
@@ -151,7 +153,7 @@ export const startCheckoutCommand = tenantCommand({
     });
     const quote = await quoteTx(tx, event.id, wanted, {
       now: ctx.now,
-      includeHidden: false,
+      includeHidden: new Set(grant?.ticketTypeIds ?? []),
       promo,
       occurrenceId,
     });

@@ -60,6 +60,8 @@ export async function createTicketTypeAction(
         // A wall-clock time in the event's timezone.
         earlyEndsAt: get('earlyEndsAt') ? zonedTimeToUtc(get('earlyEndsAt'), ev.timezone) : null,
         isDonation: form.get('isDonation') === '1',
+        // M1.4d: a hidden pass is only offered to visitors whose access code unlocks it.
+        visibility: form.get('hidden') === '1' ? 'hidden' : 'public',
         accessDates: parseAccessDates(get('accessDates')),
         // Multi-date events: none ticked = every date.
         occurrenceIds: form.getAll('occurrenceIds').map(String),

@@ -62,6 +62,8 @@ export const PublicTicketTypeDto = z.object({
   fewLeft: z.boolean(),
   minPerOrder: z.int(),
   maxPerOrder: z.int(),
+  /** M1.4d: a hidden pass shown because the visitor's access code unlocked it. */
+  unlocked: z.boolean(),
 });
 export type PublicTicketTypeDto = z.infer<typeof PublicTicketTypeDto>;
 export const publicTicketTypeSerializer = defineSerializer('ticketing.publicTicketType', PublicTicketTypeDto);

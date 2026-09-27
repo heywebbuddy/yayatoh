@@ -11,6 +11,8 @@ export interface JsonLdEventInput {
   readonly city: string | null;
   /** ISO 3166-1 alpha-2 (the legacy page emitted a numeric id; roadmap §1 known defects). */
   readonly country: string | null;
+  /** In person (default), online or hybrid (M1.4c): online events get a VirtualLocation. */
+  readonly attendanceMode?: 'in_person' | 'online' | 'hybrid';
   readonly url: string;
   readonly image: string;
   readonly organizer: { readonly name: string; readonly url: string };
@@ -28,6 +30,11 @@ const STATUS: Record<string, string> = {
   postponed: 'https://schema.org/EventPostponed',
   cancelled: 'https://schema.org/EventCancelled',
 };
+const MODE = {
+  in_person: 'https://schema.org/OfflineEventAttendanceMode',
+  online: 'https://schema.org/OnlineEventAttendanceMode',
+  hybrid: 'https://schema.org/MixedEventAttendanceMode',
+} as const;
 const AVAILABILITY = {
   available: 'https://schema.org/InStock',
   sold_out: 'https://schema.org/SoldOut',
@@ -48,7 +55,18 @@ export function decimalPrice(minor: number, currency: string): string {
 
 /** schema.org `Event` for the public event page (Rich Results). Absolute URLs only. */
 export function eventJsonLd(e: JsonLdEventInput) {
-  const place = e.venueName ?? e.city ?? e.name;
+  const mode = e.attendanceMode ?? 'in_person';
+  const place = {
+    '@type': 'Place' as const,
+    name: e.venueName ?? e.city ?? e.name,
+    address: {
+      '@type': 'PostalAddress' as const,
+      ...(e.city ? { addressLocality: e.city } : {}),
+      ...(e.country ? { addressCountry: e.country } : {}),
+    },
+  };
+  // The page URL, never the join link (that is private to ticket holders).
+  const virtual = { '@type': 'VirtualLocation' as const, url: e.url };
   return {
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -57,16 +75,8 @@ export function eventJsonLd(e: JsonLdEventInput) {
     startDate: e.startsAt.toISOString(),
     endDate: e.endsAt.toISOString(),
     eventStatus: STATUS[e.status] ?? 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    location: {
-      '@type': 'Place',
-      name: place,
-      address: {
-        '@type': 'PostalAddress',
-        ...(e.city ? { addressLocality: e.city } : {}),
-        ...(e.country ? { addressCountry: e.country } : {}),
-      },
-    },
+    eventAttendanceMode: MODE[mode],
+    location: mode === 'online' ? virtual : mode === 'hybrid' ? [place, virtual] : place,
     image: [e.image],
     url: e.url,
     organizer: { '@type': 'Organization', name: e.organizer.name, url: e.organizer.url },
@@ -89,6 +99,19 @@ export function eventJsonLd(e: JsonLdEventInput) {
 export const jsonLdScript = (data: unknown) => JSON.stringify(data).replace(/</g, '\\u003c');
 
 const absolute = z.url().refine((u) => /^https?:\/\//.test(u), 'absolute http(s) URL');
+const PlaceSchema = z.object({
+  '@type': z.literal('Place'),
+  name: z.string().min(1),
+  address: z.object({
+    '@type': z.literal('PostalAddress'),
+    addressLocality: z.string().optional(),
+    addressCountry: z
+      .string()
+      .regex(/^[A-Z]{2}$/)
+      .optional(),
+  }),
+});
+const VirtualLocationSchema = z.object({ '@type': z.literal('VirtualLocation'), url: absolute });
 /**
  * The shape the Rich Results "Event" check requires (name, startDate, location with an address,
  * absolute URLs, ISO country codes, valid offers). Tests validate every emitted block with it.
@@ -105,19 +128,8 @@ export const EventJsonLdSchema = z.object({
     'https://schema.org/EventPostponed',
     'https://schema.org/EventCancelled',
   ]),
-  eventAttendanceMode: z.literal('https://schema.org/OfflineEventAttendanceMode'),
-  location: z.object({
-    '@type': z.literal('Place'),
-    name: z.string().min(1),
-    address: z.object({
-      '@type': z.literal('PostalAddress'),
-      addressLocality: z.string().optional(),
-      addressCountry: z
-        .string()
-        .regex(/^[A-Z]{2}$/)
-        .optional(),
-    }),
-  }),
+  eventAttendanceMode: z.enum(Object.values(MODE)),
+  location: z.union([PlaceSchema, VirtualLocationSchema, z.tuple([PlaceSchema, VirtualLocationSchema])]),
   image: z.array(absolute).min(1),
   url: absolute,
   organizer: z.object({ '@type': z.literal('Organization'), name: z.string().min(1), url: absolute }),

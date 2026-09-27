@@ -1,17 +1,32 @@
-import { checkoutTarget, publicEventBySlug, publicOccurrences } from '@yayatoh/events';
+import {
+  accessTarget,
+  checkoutTarget,
+  type PublicEventContentDto,
+  pageTarget,
+  publicEventBySlug,
+  publicEventContent,
+  publicOccurrences,
+} from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
-import { brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
+import { Alert, brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { checkoutAction, requestHolderLinkAction } from '@/app/[locale]/events/[slug]/actions.ts';
+import {
+  checkoutAction,
+  redeemAccessCodeAction,
+  requestHolderLinkAction,
+} from '@/app/[locale]/events/[slug]/actions.ts';
+import { AccessCodeEntry } from '@/components/access-code-entry.tsx';
+import { Announcements } from '@/components/announcements.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
+import { EventSections } from '@/components/event-sections.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
@@ -23,6 +38,7 @@ import { publicDemoOverlay } from '@/server/demo.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { openVenueMap } from '@/server/seat-finder.ts';
 import { apexOrigin, eventOrigin } from '@/server/seo.ts';
+import { currentAccess } from '@/server/visitor.ts';
 
 /**
  * The public event page, shared by the marketplace (`/events/{slug}`) and tenant sites
@@ -44,21 +60,37 @@ export async function PublicEventView({
   /** The ticket widget (M1.11c): passes and checkout only. */
   embedded?: boolean;
 }) {
-  const pub = await publicEventBySlug(slug);
-  if (!pub) notFound();
+  // M1.4d: an access code (signed cookie, re-checked here) may open a private event and hidden
+  // passes. The ticket widget is a third-party frame without the visitor's cookie: public only.
+  const live = embedded ? null : await accessTarget(slug);
+  const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
+  let pub = await publicEventBySlug(slug);
+  if (!pub) {
+    // Private events are a 404 until a code opened them (codes are entered at /events/{slug}/unlock).
+    if (live?.visibility !== 'private' || !grant?.unlocksEvent) notFound();
+    pub = await publicEventBySlug(slug, { includePrivate: true });
+    if (!pub) notFound();
+  }
+  const unlockedPrivate = pub.visibility === 'private';
   // Passes, stats and agenda arrive with ticketing and sessions; showcase events get a dev overlay.
   const demo = publicDemoOverlay(slug);
+  const access = { unlocked: grant?.ticketTypeIds ?? [], privateOk: grant?.unlocksEvent === true };
   // Multi-date events (M1.4b): the buyer picks a date first; passes are those valid for it.
   const now = new Date();
-  const dates = await publicOccurrences(slug);
+  const dates = await publicOccurrences(slug, { includePrivate: access.privateOk });
   const chosen =
     dates.find((d) => d.id === date && d.status === 'scheduled' && !d.soldOut && d.endsAt > now) ?? null;
-  const real = (await publicTicketTypes(slug)).filter(
+  const real = (await publicTicketTypes(slug, now, access)).filter(
     (p) => !chosen || p.occurrenceIds.length === 0 || p.occurrenceIds.includes(chosen.id),
   );
   const needsDate = dates.length > 0 && !chosen;
-  const target = await checkoutTarget(slug);
+  const target = (await checkoutTarget(slug)) ?? (unlockedPrivate && live ? live : null);
   if (orgId && target?.orgId !== orgId) notFound();
+  const contentTarget = (await pageTarget(slug)) ?? (unlockedPrivate && live ? live : null);
+  const content: PublicEventContentDto = contentTarget
+    ? await publicEventContent(contentTarget)
+    : { sections: [], announcements: [] };
+  const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
   // The venue map and seat finder, once the organizer opened them (M1.7e).
@@ -256,6 +288,7 @@ export async function PublicEventView({
     venueName: ev.venueName,
     city: ev.city,
     country: listing?.country ?? null,
+    attendanceMode: ev.attendanceMode,
     url: canonical,
     image: `${req.origin}/api/og/event/${slug}`,
     organizer: {
@@ -271,11 +304,13 @@ export async function PublicEventView({
   });
   return (
     <div className="min-h-dvh bg-white">
-      <script
-        type="application/ld+json"
-        // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
-      />
+      {ev.visibility === 'public' ? (
+        <script
+          type="application/ld+json"
+          // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
+        />
+      ) : null}
       <section className="relative m-2 overflow-hidden rounded-panel bg-black px-6 pt-28 pb-10 text-white md:px-16 md:pt-32">
         <div
           aria-hidden="true"
@@ -304,6 +339,31 @@ export async function PublicEventView({
             {ev.name}
           </h1>
           {ev.tagline ? <p className="text-[16px] leading-6 text-white/80">{ev.tagline}</p> : null}
+          {ev.category || ev.attendanceMode !== 'in_person' || ev.venueSlug ? (
+            <ul
+              aria-label={t('publicEvent.facts')}
+              className="flex list-none flex-wrap gap-2 p-0 text-caption"
+            >
+              {ev.category ? (
+                <li className="rounded-pill bg-glass px-3 py-1">{t(`categories.${ev.category}`)}</li>
+              ) : null}
+              {ev.attendanceMode !== 'in_person' ? (
+                <li className="rounded-pill bg-glass px-3 py-1">
+                  {t(`publicEvent.mode.${ev.attendanceMode}`)}
+                </li>
+              ) : null}
+              {ev.venueSlug && ev.venueName ? (
+                <li>
+                  <Link
+                    href={`/venues/${ev.venueSlug}`}
+                    className="inline-flex min-h-6 items-center rounded-pill bg-glass px-3 py-1 text-white underline underline-offset-2"
+                  >
+                    {ev.venueName}
+                  </Link>
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
           {ev.status !== 'published' ? (
             <p className="inline-flex self-start rounded-pill bg-glass px-3 py-1 text-caption">
               {t(`eventStatus.${ev.status}`)}
@@ -334,6 +394,15 @@ export async function PublicEventView({
         ) : null}
       </section>
 
+      {content.announcements.length > 0 ? (
+        <section aria-labelledby="announcements-heading" className="flex flex-col gap-4 px-6 pt-10 md:px-16">
+          <h2 id="announcements-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+            {t('publicEvent.announcements')}
+          </h2>
+          <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
+        </section>
+      ) : null}
+
       {dates.length > 0 ? (
         <section className="px-6 pt-10 md:px-16">
           <DatePicker
@@ -347,6 +416,22 @@ export async function PublicEventView({
         </section>
       ) : null}
       {passesSection}
+
+      {live ? (
+        <section aria-labelledby="access-code-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">
+          <h2 id="access-code-heading" className="text-section">
+            {t('accessEntry.title')}
+          </h2>
+          {unlockedPasses || unlockedPrivate ? (
+            <Alert tone="info" title={t('accessEntry.active')} />
+          ) : (
+            <p className="text-body text-zinc-500">{t('accessEntry.hint')}</p>
+          )}
+          <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
+        </section>
+      ) : null}
+
+      <EventSections sections={content.sections} />
 
       {venue ? (
         <section

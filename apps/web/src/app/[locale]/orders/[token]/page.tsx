@@ -1,8 +1,9 @@
 import { formatMoney, money } from '@yayatoh/kernel';
-import { orderByManageToken } from '@yayatoh/orders';
+import { orderByManageToken, orderHolderTarget } from '@yayatoh/orders';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { HolderContent } from '@/components/holder-content.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { getPdfRenderer } from '@/server/pdf.ts';
 
@@ -42,6 +43,8 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
     hour: 'numeric',
     minute: '2-digit',
   });
+  // M1.4d: the manage link proves ticket holding; holder-only content needs a live ticket.
+  const holderTarget = await orderHolderTarget(token);
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
       <PageHeader
@@ -126,6 +129,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             ))}
           </ul>
         </section>
+      ) : null}
+      {holderTarget ? (
+        <HolderContent target={holderTarget} locale={locale} timeZone={order.event.timezone} />
       ) : null}
       <section aria-labelledby="emails-heading" className="flex flex-col gap-3">
         <h2 id="emails-heading" className="text-section">

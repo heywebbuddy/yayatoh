@@ -90,7 +90,11 @@ test.describe('canonical, hreflang, JSON-LD and share images (M1.11b)', () => {
     await page.goto(`${MARKET}/events/harbor-film-night`);
     const ld = await jsonLd(page);
     expect(ld.name).toBe('Harbor Film Night');
-    expect(ld.location.address.addressCountry).toBe('FR');
+    // An in-person event: one Place with a PostalAddress (online events get a VirtualLocation).
+    expect(ld.eventAttendanceMode).toBe('https://schema.org/OfflineEventAttendanceMode');
+    expect(
+      !Array.isArray(ld.location) && 'address' in ld.location && ld.location.address.addressCountry,
+    ).toBe('FR');
     expect(ld.eventStatus).toBe('https://schema.org/EventScheduled');
     expect(ld.url).toBe(`${HARBOR}/events/harbor-film-night`);
     expect(ld.organizer.url).toBe(`${MARKET}/o/harbor-arts`);

@@ -8,7 +8,8 @@ import { eventOrigin, publicMetadata } from './seo.ts';
 /** Metadata of a public event page on any host: canonical home URL, hreflang, absolute og:image. */
 export async function eventMetadata(locale: string, slug: string): Promise<Metadata> {
   const pub = await publicEventBySlug(slug);
-  if (!pub) return {};
+  // A private event (M1.4d) has no public payload, even once a code opened it: no metadata, no index.
+  if (!pub) return { robots: { index: false, follow: false } };
   const listing = await listingBySlug(slug);
   const req = await requestHost();
   return publicMetadata({

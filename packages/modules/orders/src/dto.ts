@@ -108,6 +108,11 @@ export const StartCheckoutInput = z.object({
   /** An explicit, unticked-by-default checkbox; buying is never consent to marketing. */
   marketingOptIn: z.boolean().default(false),
   promoCode: z.string().trim().max(64).optional(),
+  /**
+   * M1.4d: the access code the visitor redeemed (its id, from their signed cookie). Re-checked
+   * here: it may open a private event and hidden passes while it is active and unexpired.
+   */
+  accessCodeId: z.uuid().optional(),
   /** Answers to the event's checkout questions (forms module), validated server-side. */
   answers: z.record(z.string().max(40), z.unknown()).default({}),
   locale: z.string().max(10).default('en'),

@@ -109,6 +109,13 @@ export function TicketTypeForm({
           <span className="block text-caption text-zinc-500">{t('tickets.isDonationHint')}</span>
         </span>
       </label>
+      <label className="flex min-h-6 items-start gap-2.5 text-body md:col-span-2">
+        <input type="checkbox" name="hidden" value="1" className="mt-0.5 size-5 shrink-0 accent-ink" />
+        <span>
+          {t('tickets.hiddenOption')}
+          <span className="block text-caption text-zinc-500">{t('tickets.hiddenOptionHint')}</span>
+        </span>
+      </label>
       <div className="flex flex-col gap-2 md:col-span-2">
         <div aria-live="polite">
           {state.ok ? <Alert tone="info" title={t('tickets.added')} /> : null}

@@ -8,6 +8,7 @@ export default defineConfig({
     '../auth/src/schema.ts',
     '../platform/src/**/schema.ts',
     '../modules/*/src/schema.ts',
+    '../modules/*/src/schema-*.ts',
   ],
   out: './drizzle',
   entities: { roles: false },

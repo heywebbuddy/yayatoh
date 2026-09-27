@@ -171,6 +171,31 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
   }
 }
 
+/**
+ * M1.4d: the event a manage-token link proves ticket holding for (the buyer still holds at least
+ * one live ticket), so the order page can show holder-only content. Server-side only.
+ */
+export async function orderHolderTarget(token: string): Promise<{ orgId: string; eventId: string } | null> {
+  if (!/^[A-Za-z0-9_-]{40,60}$/.test(token)) return null;
+  const refs = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string; order_id: string }>(
+      sql`select org_id, order_id from orders.order_ref_by_token(${hashManageToken(token)})`,
+    ),
+  );
+  const ref = refs[0];
+  if (!ref) return null;
+  const ctx = createCtx({ orgId: ref.org_id, actor: { type: 'system', name: 'orders.manage-link' } });
+  return withTenant(ctx, async (tx) => {
+    const o = await loadOrderTx(tx, ref.order_id).catch(() => null);
+    if (!o) return null;
+    const buyer = o.buyerEmail.trim().toLowerCase();
+    const holds = (await ticketsForOrderTx(tx, ref.order_id)).some(
+      (t) => t.status === 'active' && t.holderEmail.trim().toLowerCase() === buyer,
+    );
+    return holds ? { orgId: ref.org_id, eventId: o.eventId } : null;
+  });
+}
+
 export const OrganizerTicketDto = z.object({
   id: z.uuid(),
   serial: z.int(),

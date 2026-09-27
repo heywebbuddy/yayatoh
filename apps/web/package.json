@@ -37,6 +37,7 @@
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/ui": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
     "geist": "1.7.2",
     "hono": "catalog:",
     "konva": "10.7.0",

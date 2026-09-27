@@ -1,12 +1,14 @@
 import {
   Armchair,
   Bell,
+  Building2,
   Calendar,
   CalendarCheck,
   CalendarRange,
   ChartLine,
   ClipboardList,
   Copy,
+  FileText,
   Globe,
   Heart,
   House,
@@ -16,8 +18,10 @@ import {
   Layers,
   Library,
   ListChecks,
+  Lock,
   type LucideIcon,
   MailCheck,
+  MapPin,
   Megaphone,
   MessageSquare,
   Palette,
@@ -58,6 +62,10 @@ const ICONS: Record<string, LucideIcon> = {
   'calendar-range': CalendarRange,
   layers: Layers,
   copy: Copy,
+  'map-pin': MapPin,
+  'file-text': FileText,
+  lock: Lock,
+  building: Building2,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

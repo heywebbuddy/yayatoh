@@ -23,20 +23,27 @@ type Row = {
   early_ends_at: string | null;
   is_donation: boolean;
   access_dates: { date: string; name: string }[];
+  unlocked: boolean;
 };
 
 /**
  * Public passes for an event page (cross-tenant by slug, SECURITY DEFINER). Every price is
- * all-in; inventory is reduced to an availability state plus a "few left" hint.
+ * all-in; inventory is reduced to an availability state plus a "few left" hint. `access` is what a
+ * verified access code grants (M1.4d): hidden passes it unlocked, and a private event it opened.
  */
 export async function publicTicketTypes(
   eventSlug: string,
   now: Date = new Date(),
+  access: { readonly unlocked?: readonly string[]; readonly privateOk?: boolean } = {},
 ): Promise<PublicTicketTypeDto[]> {
+  const unlocked = `{${(access.unlocked ?? []).filter((id) => /^[0-9a-f-]{36}$/i.test(id)).join(',')}}`;
+  const privateOk = access.privateOk === true;
   const [rows, dates] = await withoutTenant(async (tx) => [
-    await tx.execute<Row>(sql`select * from ticketing.public_ticket_types_v2(${eventSlug})`),
+    await tx.execute<Row>(
+      sql`select * from ticketing.public_ticket_types_v3(${eventSlug}, ${unlocked}::uuid[], ${privateOk})`,
+    ),
     await tx.execute<{ id: string; occurrence_ids: string[] }>(
-      sql`select * from ticketing.public_ticket_type_occurrences(${eventSlug})`,
+      sql`select * from ticketing.public_ticket_type_occurrences_v2(${eventSlug}, ${unlocked}::uuid[], ${privateOk})`,
     ),
   ]);
   const occurrenceIds = new Map(dates.map((d) => [d.id, d.occurrence_ids]));
@@ -80,6 +87,7 @@ export async function publicTicketTypes(
       fewLeft: availability === 'available' && r.remaining <= 10,
       minPerOrder: r.min_per_order,
       maxPerOrder: r.max_per_order,
+      unlocked: r.unlocked,
     });
   });
 }

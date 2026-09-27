@@ -109,7 +109,9 @@ describe('JSON-LD Event (M1.11b)', () => {
 
   it('is valid, with a PostalAddress country code, absolute URLs and decimal prices', () => {
     const ld = EventJsonLdSchema.parse(eventJsonLd(base));
-    expect(ld.location.address.addressCountry).toBe('US');
+    expect(
+      !Array.isArray(ld.location) && 'address' in ld.location && ld.location.address.addressCountry,
+    ).toBe('US');
     expect(ld.offers?.[0]).toMatchObject({ price: '25.75', availability: 'https://schema.org/InStock' });
     expect(ld.eventStatus).toBe('https://schema.org/EventScheduled');
   });
@@ -121,6 +123,21 @@ describe('JSON-LD Event (M1.11b)', () => {
     const c = eventJsonLd({ ...base, status: 'cancelled', offers: [] });
     expect(c.eventStatus).toBe('https://schema.org/EventCancelled');
     expect('offers' in c).toBe(false);
+  });
+
+  it('online events get a VirtualLocation (the page URL); hybrid ones both (M1.4c)', () => {
+    const online = EventJsonLdSchema.parse(eventJsonLd({ ...base, attendanceMode: 'online' }));
+    expect(online.eventAttendanceMode).toBe('https://schema.org/OnlineEventAttendanceMode');
+    expect(online.location).toEqual({ '@type': 'VirtualLocation', url: base.url });
+    const hybrid = EventJsonLdSchema.parse(eventJsonLd({ ...base, attendanceMode: 'hybrid' }));
+    expect(hybrid.eventAttendanceMode).toBe('https://schema.org/MixedEventAttendanceMode');
+    expect(Array.isArray(hybrid.location) && hybrid.location.map((l) => l['@type'])).toEqual([
+      'Place',
+      'VirtualLocation',
+    ]);
+    expect(EventJsonLdSchema.parse(eventJsonLd(base)).eventAttendanceMode).toBe(
+      'https://schema.org/OfflineEventAttendanceMode',
+    );
   });
 
   it('rejects relative images and numeric countries (the legacy defects)', () => {

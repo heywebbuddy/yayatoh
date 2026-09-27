@@ -419,13 +419,17 @@ export async function hasOccurrencesTx(tx: TenantTx, eventId: string): Promise<b
 }
 
 /**
- * The public event page's dates (cross-tenant by slug, SECURITY DEFINER `events.public_occurrences`):
+ * The public event page's dates (cross-tenant by slug, SECURITY DEFINER `events.public_occurrences_v2`):
  * only for events the public page shows; each date says whether it is sold out, never its numbers.
+ * `includePrivate` is for a private event an access code opened (M1.4d), as `publicEventBySlug`.
  */
-export async function publicOccurrences(slug: string): Promise<PublicOccurrenceDto[]> {
+export async function publicOccurrences(
+  slug: string,
+  opts: { includePrivate?: boolean } = {},
+): Promise<PublicOccurrenceDto[]> {
   const rows = await withoutTenant((tx) =>
     tx.execute<{ id: string; starts_at: string; ends_at: string; status: string; sold_out: boolean }>(
-      sql`select * from events.public_occurrences(${slug})`,
+      sql`select * from events.public_occurrences_v2(${slug}, ${opts.includePrivate === true})`,
     ),
   );
   return rows.map((r) =>

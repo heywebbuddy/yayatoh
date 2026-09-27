@@ -8,6 +8,7 @@ import { loadConsole } from '@/server/console.ts';
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
   { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
+  { key: 'venues', path: 'venues', group: 'build', module: 'core', icon: 'building' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
   { key: 'series', path: 'series', group: 'build', module: 'core', icon: 'layers' },
   { key: 'templates', path: 'templates', group: 'build', module: 'core', icon: 'copy' },

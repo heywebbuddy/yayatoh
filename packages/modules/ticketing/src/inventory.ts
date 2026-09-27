@@ -58,7 +58,8 @@ export async function quoteTx(
   requests: readonly LineRequest[],
   opts: {
     now: Date;
-    includeHidden: boolean;
+    /** true (box office) or the hidden passes an access code unlocked (public checkout). */
+    includeHidden: boolean | ReadonlySet<string>;
     promo?: PromoRow | null;
     /** Multi-date events: the chosen date; each ticket type must sell for it (M1.4b). */
     occurrenceId?: string | null;
@@ -96,8 +97,9 @@ export async function quoteTx(
   const lines: QuotedLine[] = [];
   for (const r of rows) {
     const quantity = merged.get(r.id) as number;
-    if (!opts.includeHidden && r.visibility !== 'public')
-      throw new DomainError('not_found', 'Ticket type not found');
+    const hiddenOk =
+      opts.includeHidden === true || (opts.includeHidden !== false && opts.includeHidden.has(r.id));
+    if (!hiddenOk && r.visibility !== 'public') throw new DomainError('not_found', 'Ticket type not found');
     if (opts.occurrenceId && !validForOccurrence(r, opts.occurrenceId))
       throw new DomainError('invalid_state', 'This ticket is not for the chosen date', {
         reason: 'wrong_date',
