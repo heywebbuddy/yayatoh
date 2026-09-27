@@ -8,6 +8,17 @@ import { ticketTypes } from './schema.ts';
 export interface LineRequest {
   readonly ticketTypeId: string;
   readonly quantity: number;
+  /** Donation passes only: the amount per ticket the buyer chose (≥ the pass's minimum). */
+  readonly amountMinor?: number;
+}
+
+type PriceRow = { priceMinor: number; earlyPriceMinor: number | null; earlyEndsAt: Date | null };
+
+/** The face price on sale now: the early-bird price until it ends, then the regular price. */
+export function currentFaceMinor(r: PriceRow, now: Date): number {
+  return r.earlyPriceMinor !== null && r.earlyEndsAt && r.earlyEndsAt > now
+    ? r.earlyPriceMinor
+    : r.priceMinor;
 }
 
 export interface QuotedLine {
@@ -47,10 +58,19 @@ export async function quoteTx(
   opts: { now: Date; includeHidden: boolean; promo?: PromoRow | null },
 ): Promise<Quote> {
   const merged = new Map<string, number>();
+  const amounts = new Map<string, number>();
   for (const r of requests) {
     if (!Number.isInteger(r.quantity) || r.quantity < 1)
       throw new DomainError('validation_failed', 'Quantity must be ≥ 1');
     merged.set(r.ticketTypeId, (merged.get(r.ticketTypeId) ?? 0) + r.quantity);
+    if (r.amountMinor !== undefined) {
+      const prev = amounts.get(r.ticketTypeId);
+      if (prev !== undefined && prev !== r.amountMinor)
+        throw new DomainError('validation_failed', 'One amount per donation pass', {
+          ticketTypeId: r.ticketTypeId,
+        });
+      amounts.set(r.ticketTypeId, r.amountMinor);
+    }
   }
   if (merged.size === 0) throw new DomainError('validation_failed', 'Choose at least one ticket');
   const rows = await tx
@@ -82,17 +102,35 @@ export async function quoteTx(
         max: r.maxPerOrder,
       });
     }
-    const discount = opts.promo ? promoDiscountMinor(opts.promo, r.id, r.priceMinor, r.currency) : 0;
-    const p = priceBreakdown(
-      money(r.priceMinor - discount, r.currency),
-      schedule,
-      r.feeMode as 'pass_on' | 'absorb',
-    );
+    const amount = amounts.get(r.id);
+    let face: number;
+    if (r.isDonation) {
+      if (
+        amount === undefined ||
+        !Number.isInteger(amount) ||
+        amount < r.priceMinor ||
+        amount > 100_000_000
+      ) {
+        throw new DomainError('validation_failed', 'Choose an amount at or above the minimum', {
+          reason: 'donation_amount',
+          ticketTypeId: r.id,
+          minimum: r.priceMinor,
+        });
+      }
+      face = amount;
+    } else {
+      if (amount !== undefined)
+        throw new DomainError('validation_failed', 'This pass has a fixed price', { ticketTypeId: r.id });
+      face = currentFaceMinor(r, opts.now);
+    }
+    // Promo codes don't apply to donations.
+    const discount = opts.promo && !r.isDonation ? promoDiscountMinor(opts.promo, r.id, face, r.currency) : 0;
+    const p = priceBreakdown(money(face - discount, r.currency), schedule, r.feeMode as 'pass_on' | 'absorb');
     lines.push({
       ticketTypeId: r.id,
       name: r.name,
       quantity,
-      unitFaceMinor: r.priceMinor,
+      unitFaceMinor: face,
       unitDiscountMinor: discount,
       unitFeeMinor: p.fee.amount,
       unitAllInMinor: p.allIn.amount,

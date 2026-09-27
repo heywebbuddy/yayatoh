@@ -107,6 +107,14 @@ describe('tenancy: organizations', () => {
   });
 });
 
+describe('organization updates', () => {
+  it('change only the fields they name (regression: defaults used to reset the rest)', async () => {
+    const u = await executeCommand(updateOrganizationCommand, { name: 'Bravo Renamed' }, b.ctx(), ports);
+    // The fixture created the org with profile "gala" and set America/Chicago.
+    expect(u).toMatchObject({ name: 'Bravo Renamed', defaultProfile: 'gala', timezone: 'America/Chicago' });
+  });
+});
+
 describe('idempotency', () => {
   it('replays the stored result for the same key and rejects the key for a different request', async () => {
     const ctx = a.ctx({ idempotencyKey: 'rename-1' });

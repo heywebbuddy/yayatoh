@@ -263,7 +263,10 @@
       "not_yet_on_sale": "Nog niet te koop",
       "sales_ended": "Verkoop gesloten",
       "fewLeft": "Nog maar een paar over"
-    }
+    },
+    "donationFrom": "Vanaf",
+    "earlyBird": "Early-birdprijs tot {date} (daarna {regular})",
+    "accessDates": "Dagen waarop deze pas toegang geeft"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -402,7 +405,14 @@
     "absorb": "Ik neem de kosten voor mijn rekening",
     "description": "Beschrijving (optioneel)",
     "add": "Tickettype toevoegen",
-    "added": "Tickettype toegevoegd."
+    "added": "Tickettype toegevoegd.",
+    "earlyPrice": "Early-birdprijs ({currency}, optioneel)",
+    "earlyPriceHint": "Wordt in plaats van de normale prijs gerekend tot de early bird afloopt.",
+    "earlyEndsAt": "Einde early bird (tijd van het evenement)",
+    "accessDates": "Dagen waarop deze pas toegang geeft (optioneel)",
+    "accessDatesHint": "Eén per regel: eerst datum, dan naam, bijv. 2027-10-14 Galavond.",
+    "isDonation": "Kopers kiezen het bedrag",
+    "isDonationHint": "De prijs hierboven wordt het minimum. Kortingscodes gelden niet."
   },
   "checkout": {
     "quantity": "Aantal",
@@ -413,7 +423,10 @@
     "chooseTickets": "Kies minstens één ticket.",
     "marketingOptIn": "Ik wil nieuws en aanbiedingen van {org} per e-mail ontvangen. Optioneel; je kunt je altijd afmelden.",
     "promoCode": "Kortingscode",
-    "promoInvalid": "Die kortingscode is niet geldig voor deze tickets."
+    "promoInvalid": "Die kortingscode is niet geldig voor deze tickets.",
+    "donationAmount": "Jouw bedrag",
+    "donationMinimum": "minimaal {minimum}",
+    "donationTooLow": "Vul voor elke gekozen pas een bedrag in dat minstens gelijk is aan het minimum."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",

@@ -1,6 +1,6 @@
 'use server';
 
-import { executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import { executeCommand, isDomainError, moneyFromDecimal, zonedTimeToUtc } from '@yayatoh/kernel';
 import {
   archiveTicketTypeCommand,
   createPromoCodeCommand,
@@ -14,6 +14,18 @@ import { ports } from '@/server/ports.ts';
 export interface TicketFormState {
   readonly ok: boolean;
   readonly code: string | null;
+}
+
+/** One "YYYY-MM-DD Name" per line; the command validates dates and uniqueness. */
+function parseAccessDates(text: string) {
+  return text
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const [date = '', ...name] = l.split(/\s+/);
+      return { date, name: name.join(' ') };
+    });
 }
 
 export async function createTicketTypeAction(
@@ -35,6 +47,11 @@ export async function createTicketTypeAction(
         quantityTotal: Number(get('quantity')),
         feeMode: get('feeMode') || 'pass_on',
         maxPerOrder: Number(get('maxPerOrder') || 10),
+        earlyPriceMinor: get('earlyPrice') ? moneyFromDecimal(get('earlyPrice'), ev.currency).amount : null,
+        // A wall-clock time in the event's timezone.
+        earlyEndsAt: get('earlyEndsAt') ? zonedTimeToUtc(get('earlyEndsAt'), ev.timezone) : null,
+        isDonation: form.get('isDonation') === '1',
+        accessDates: parseAccessDates(get('accessDates')),
       },
       data.ctx,
       ports,

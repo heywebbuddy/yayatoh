@@ -69,6 +69,37 @@ describe('events', () => {
     expect((await transition(e.id, 'archive')).status).toBe('archived');
   });
 
+  it('an update changes only the fields it names (regression: defaults used to reset the rest)', async () => {
+    const e = await executeCommand(
+      createEventCommand,
+      {
+        name: 'Keep Fields',
+        tagline: 'Stay',
+        venueName: 'Hall A',
+        city: 'Lyon',
+        currency: 'EUR',
+        timezone: 'Europe/Paris',
+        startsAt: '2027-05-01T08:00:00Z',
+        endsAt: '2027-05-01T18:00:00Z',
+      },
+      a.ctx(),
+      ports,
+    );
+    const u = await executeCommand(
+      updateEventCommand,
+      { eventId: e.id, name: 'Kept Fields' },
+      a.ctx(),
+      ports,
+    );
+    expect(u).toMatchObject({
+      name: 'Kept Fields',
+      tagline: 'Stay',
+      venueName: 'Hall A',
+      city: 'Lyon',
+      currency: 'EUR',
+    });
+  });
+
   it('freezes the slug once published', async () => {
     const e = await executeCommand(
       createEventCommand,

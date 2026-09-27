@@ -106,6 +106,13 @@
       "when": 1790486405213,
       "tag": "0014_colossal_wilson_fisk",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1790486989995,
+      "tag": "0015_warm_serpent_society",
+      "breakpoints": true
     }
   ]
 }

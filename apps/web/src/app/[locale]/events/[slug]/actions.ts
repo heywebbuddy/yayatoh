@@ -1,7 +1,7 @@
 'use server';
 
-import { checkoutTarget } from '@yayatoh/events';
-import { createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
+import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
@@ -27,9 +27,27 @@ export async function checkoutAction(
   const locale = await getLocale();
   const target = await checkoutTarget(slug);
   if (!target) return { code: 'not_found' };
-  const items = [...form.entries()]
-    .filter(([k, v]) => k.startsWith('qty:') && Number(v) > 0)
-    .map(([k, v]) => ({ ticketTypeId: k.slice(4), quantity: Number(v) }));
+  const event = await publicEventBySlug(slug);
+  if (!event) return { code: 'not_found' };
+  let items: { ticketTypeId: string; quantity: number; amountMinor?: number }[];
+  try {
+    items = [...form.entries()]
+      .filter(([k, v]) => k.startsWith('qty:') && Number(v) > 0)
+      .map(([k, v]) => {
+        const ticketTypeId = k.slice(4);
+        const amount = String(form.get(`amount:${ticketTypeId}`) ?? '').trim();
+        // Donation amounts are decimals in the event's currency (never the client's say-so).
+        return {
+          ticketTypeId,
+          quantity: Number(v),
+          ...(amount
+            ? { amountMinor: moneyFromDecimal(amount.replace(',', '.'), event.currency).amount }
+            : {}),
+        };
+      });
+  } catch {
+    return { code: 'validation_failed', reason: 'donation_amount' };
+  }
   if (items.length === 0) return { code: 'validation_failed', reason: 'empty' };
   const session = await getSession();
   const ctx = createCtx({

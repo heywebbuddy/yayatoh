@@ -3,6 +3,7 @@ import { withoutTenant } from '@yayatoh/db';
 import { money } from '@yayatoh/kernel';
 import { sql } from 'drizzle-orm';
 import { type PublicTicketTypeDto, publicTicketTypeSerializer } from './dto.ts';
+import { currentFaceMinor } from './inventory.ts';
 
 type Row = {
   id: string;
@@ -18,6 +19,10 @@ type Row = {
   max_per_order: number;
   percent_bps: number;
   fixed_minor: string;
+  early_price_minor: string | null;
+  early_ends_at: string | null;
+  is_donation: boolean;
+  access_dates: { date: string; name: string }[];
 };
 
 /**
@@ -29,14 +34,25 @@ export async function publicTicketTypes(
   now: Date = new Date(),
 ): Promise<PublicTicketTypeDto[]> {
   const rows = await withoutTenant((tx) =>
-    tx.execute<Row>(sql`select * from ticketing.public_ticket_types(${eventSlug})`),
+    tx.execute<Row>(sql`select * from ticketing.public_ticket_types_v2(${eventSlug})`),
   );
   return rows.map((r) => {
-    const p = priceBreakdown(
-      money(Number(r.price_minor), r.currency),
-      { percentBps: r.percent_bps, fixedMinor: Number(r.fixed_minor) },
-      r.fee_mode,
+    const allIn = (face: number) =>
+      priceBreakdown(
+        money(face, r.currency),
+        { percentBps: r.percent_bps, fixedMinor: Number(r.fixed_minor) },
+        r.fee_mode,
+      ).allIn.amount;
+    const earlyEndsAt = r.early_ends_at ? new Date(r.early_ends_at) : null;
+    const face = currentFaceMinor(
+      {
+        priceMinor: Number(r.price_minor),
+        earlyPriceMinor: r.early_price_minor === null ? null : Number(r.early_price_minor),
+        earlyEndsAt,
+      },
+      now,
     );
+    const earlyRunning = face !== Number(r.price_minor);
     const availability =
       r.sales_start_at && new Date(r.sales_start_at) > now
         ? 'not_yet_on_sale'
@@ -50,7 +66,11 @@ export async function publicTicketTypes(
       name: r.name,
       description: r.description,
       currency: r.currency,
-      allInMinor: p.allIn.amount,
+      allInMinor: allIn(face),
+      regularAllInMinor: earlyRunning ? allIn(Number(r.price_minor)) : null,
+      earlyEndsAt: earlyRunning ? earlyEndsAt : null,
+      isDonation: r.is_donation,
+      accessDates: r.access_dates,
       availability,
       fewLeft: availability === 'available' && r.remaining <= 10,
       minPerOrder: r.min_per_order,

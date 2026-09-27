@@ -263,7 +263,10 @@
       "not_yet_on_sale": "販売開始前",
       "sales_ended": "販売終了",
       "fewLeft": "残りわずか"
-    }
+    },
+    "donationFrom": "最低",
+    "earlyBird": "{date}まで早割価格（以降は{regular}）",
+    "accessDates": "このパスで入場できる日"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -402,7 +405,14 @@
     "absorb": "主催者が手数料を負担",
     "description": "説明（任意）",
     "add": "チケット種別を追加",
-    "added": "チケット種別を追加しました。"
+    "added": "チケット種別を追加しました。",
+    "earlyPrice": "早割価格（{currency}、任意）",
+    "earlyPriceHint": "早割期間の終了まで、通常価格の代わりに適用されます。",
+    "earlyEndsAt": "早割終了日時（イベントの現地時間）",
+    "accessDates": "このパスで入場できる日（任意）",
+    "accessDatesHint": "1行に1日ずつ、日付、名前の順に入力してください。例：2027-10-14 ガラナイト",
+    "isDonation": "購入者が金額を指定",
+    "isDonationHint": "上記の価格が最低金額になります。プロモコードは適用されません。"
   },
   "checkout": {
     "quantity": "枚数",
@@ -413,7 +423,10 @@
     "chooseTickets": "チケットを1枚以上選択してください。",
     "marketingOptIn": "{org}からのお知らせやキャンペーン情報をメールで受け取る（任意・配信はいつでも停止できます）",
     "promoCode": "プロモコード",
-    "promoInvalid": "このプロモコードは選択したチケットには使用できません。"
+    "promoInvalid": "このプロモコードは選択したチケットには使用できません。",
+    "donationAmount": "お支払い金額",
+    "donationMinimum": "{minimum}以上",
+    "donationTooLow": "選択した各パスについて、最低金額以上の金額を入力してください。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",

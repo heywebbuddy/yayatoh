@@ -263,7 +263,10 @@
       "not_yet_on_sale": "Not on sale yet",
       "sales_ended": "Sales ended",
       "fewLeft": "Only a few left"
-    }
+    },
+    "donationFrom": "From",
+    "earlyBird": "Early-bird price until {date} (then {regular})",
+    "accessDates": "Days this pass admits"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -402,7 +405,14 @@
     "absorb": "I absorb the fee",
     "description": "Description (optional)",
     "add": "Add ticket type",
-    "added": "Ticket type added."
+    "added": "Ticket type added.",
+    "earlyPrice": "Early-bird price ({currency}, optional)",
+    "earlyPriceHint": "Charged instead of the regular price until the early-bird ends.",
+    "earlyEndsAt": "Early-bird ends (event time)",
+    "accessDates": "Days this pass admits (optional)",
+    "accessDatesHint": "One per line: date then name, e.g. 2027-10-14 Gala Night.",
+    "isDonation": "Buyers choose the amount",
+    "isDonationHint": "The price above becomes the minimum. Promo codes do not apply."
   },
   "checkout": {
     "quantity": "Quantity",
@@ -413,7 +423,10 @@
     "chooseTickets": "Choose at least one ticket.",
     "marketingOptIn": "Email me news and offers from {org}. Optional; unsubscribe any time.",
     "promoCode": "Promo code",
-    "promoInvalid": "That promo code isn't valid for these tickets."
+    "promoInvalid": "That promo code isn't valid for these tickets.",
+    "donationAmount": "Your amount",
+    "donationMinimum": "at least {minimum}",
+    "donationTooLow": "Enter an amount at or above the minimum for each pass you chose."
   },
   "fakePay": {
     "eyebrow": "Test payment",

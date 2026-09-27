@@ -6,6 +6,7 @@ export {
 } from './commands/ticket-types.ts';
 export * from './dto.ts';
 export {
+  currentFaceMinor,
   holdInventoryTx,
   type LineRequest,
   type Quote,

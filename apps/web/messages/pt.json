@@ -263,7 +263,10 @@
       "not_yet_on_sale": "Ainda não está à venda",
       "sales_ended": "Vendas encerradas",
       "fewLeft": "Últimas unidades"
-    }
+    },
+    "donationFrom": "A partir de",
+    "earlyBird": "Preço de pré-venda até {date} (depois, {regular})",
+    "accessDates": "Dias de acesso deste passe"
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -402,7 +405,14 @@
     "absorb": "Eu absorvo a taxa",
     "description": "Descrição (opcional)",
     "add": "Adicionar tipo de ingresso",
-    "added": "Tipo de ingresso adicionado."
+    "added": "Tipo de ingresso adicionado.",
+    "earlyPrice": "Preço de pré-venda ({currency}, opcional)",
+    "earlyPriceHint": "Cobrado no lugar do preço normal até o fim da pré-venda.",
+    "earlyEndsAt": "Fim da pré-venda (horário do evento)",
+    "accessDates": "Dias de acesso deste passe (opcional)",
+    "accessDatesHint": "Um por linha: data e depois nome, por ex. 2027-10-14 Noite de gala.",
+    "isDonation": "Os compradores escolhem o valor",
+    "isDonationHint": "O preço acima passa a ser o mínimo. Códigos promocionais não se aplicam."
   },
   "checkout": {
     "quantity": "Quantidade",
@@ -413,7 +423,10 @@
     "chooseTickets": "Escolha pelo menos um ingresso.",
     "marketingOptIn": "Quero receber novidades e ofertas de {org} por e-mail. Opcional; você pode cancelar a inscrição a qualquer momento.",
     "promoCode": "Código promocional",
-    "promoInvalid": "Esse código promocional não é válido para estes ingressos."
+    "promoInvalid": "Esse código promocional não é válido para estes ingressos.",
+    "donationAmount": "Seu valor",
+    "donationMinimum": "no mínimo {minimum}",
+    "donationTooLow": "Informe um valor igual ou maior que o mínimo para cada passe escolhido."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",

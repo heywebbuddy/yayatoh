@@ -263,7 +263,10 @@
       "not_yet_on_sale": "尚未開賣",
       "sales_ended": "已停止販售",
       "fewLeft": "僅剩少量"
-    }
+    },
+    "donationFrom": "最低",
+    "earlyBird": "早鳥價至 {date}（之後為 {regular}）",
+    "accessDates": "此通行證可入場的日期"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -402,7 +405,14 @@
     "absorb": "由我吸收費用",
     "description": "說明（選填）",
     "add": "新增票種",
-    "added": "已新增票種。"
+    "added": "已新增票種。",
+    "earlyPrice": "早鳥價（{currency}，選填）",
+    "earlyPriceHint": "早鳥期結束前，以此價格取代原價收費。",
+    "earlyEndsAt": "早鳥截止時間（活動當地時間）",
+    "accessDates": "此通行證可入場的日期（選填）",
+    "accessDatesHint": "每行一筆：先寫日期，再寫名稱，例如 2027-10-14 盛典之夜。",
+    "isDonation": "由買家自訂金額",
+    "isDonationHint": "上方價格將作為最低金額。優惠碼不適用。"
   },
   "checkout": {
     "quantity": "數量",
@@ -413,7 +423,10 @@
     "chooseTickets": "請至少選擇一張票券。",
     "marketingOptIn": "我希望透過電子郵件接收{org}的最新消息與優惠資訊。（選填，可隨時取消訂閱）",
     "promoCode": "優惠碼",
-    "promoInvalid": "此優惠碼不適用於這些票券。"
+    "promoInvalid": "此優惠碼不適用於這些票券。",
+    "donationAmount": "你的金額",
+    "donationMinimum": "至少 {minimum}",
+    "donationTooLow": "請為所選的每種通行證輸入不低於最低金額的金額。"
   },
   "fakePay": {
     "eyebrow": "測試付款",

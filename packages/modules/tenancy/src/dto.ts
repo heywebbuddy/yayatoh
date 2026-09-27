@@ -1,4 +1,11 @@
-import { CurrencyCode, defineSerializer, IanaTimezone, LOCALES, Slug } from '@yayatoh/contracts';
+import {
+  CurrencyCode,
+  defineSerializer,
+  IanaTimezone,
+  LOCALES,
+  partialNoDefaults,
+  Slug,
+} from '@yayatoh/contracts';
 import { z } from 'zod';
 import { ORG_KINDS, ORG_ROLES, ORG_STATUSES } from './schema.ts';
 
@@ -52,12 +59,9 @@ export const CreateOrganizationInput = z.object({
 });
 export type CreateOrganizationInput = z.input<typeof CreateOrganizationInput>;
 
-export const UpdateOrganizationInput = CreateOrganizationInput.pick({
-  name: true,
-  defaultProfile: true,
-  defaultLocale: true,
-  timezone: true,
-}).partial();
+export const UpdateOrganizationInput = partialNoDefaults(
+  CreateOrganizationInput.pick({ name: true, defaultProfile: true, defaultLocale: true, timezone: true }),
+);
 
 export const AddMemberInput = z.object({ userId: z.uuid(), role: z.enum(ORG_ROLES) });
 export const ChangeMemberRoleInput = AddMemberInput;

@@ -168,6 +168,28 @@
 | AC5 | Viewers can't create codes; another org sees none; the fixture covers the table | `promo.int.test.ts`, `isolation.int.test.ts` |
 | AC6 | End to end: an organizer adds a one-use code, the first guest saves 25%, and the second is told it's not valid | `e2e/promo.spec.ts` |
 
+## M1.5d2 — early-bird, donation and multi-day passes (done)
+- **`ticket_types` additions:**
+  - `early_price_minor` + `early_ends_at` (legacy `sale_price` window): charged until the end instant, which the organizer sets in event time.
+  - `is_donation` (legacy "choose-your-amount"): `price_minor` becomes the minimum.
+  - `access_dates` `[{date, name}]` (legacy multi-day entitlement): stored sorted and unique, and shown on the pass. Check-in enforces them in M1.9.
+  - The early price must be below the regular price and needs an end; a donation pass has no early price. These rules are checked on create, on the merged row at update, and by DB CHECKs (`NOT VALID` + `VALIDATE`).
+- **Quote:**
+  - A donation line must carry `amountMinor` ≥ the minimum (`donation_amount` otherwise); a fixed-price line must not.
+  - Promo codes never discount donations.
+  - The public page shows the early price, the "(then {regular})" note and access-date chips via `ticketing.public_ticket_types_v2` (expand; v1 is dropped later).
+- **Bug fix (all update commands):** Zod `.partial()` kept `.default()`s, so updating one field silently reset the others (for example, event currency → USD, org profile → default, ticket description → null). The new `partialNoDefaults` in `@yayatoh/contracts` is now used by the ticket type, event and organization updates, with a regression test for each.
+
+### Acceptance (M1.5d2)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The early-bird price is charged and shown with the regular price until it ends, then the regular price | `packages/testing/tests/pricing.int.test.ts` |
+| AC2 | An early price at or above the regular price, or without an end, is rejected on create and on update | `pricing.int.test.ts` |
+| AC3 | Donations charge the chosen amount, never below the minimum; promo codes don't apply to them | `pricing.int.test.ts` |
+| AC4 | Access dates are stored sorted and unique, and returned publicly | `pricing.int.test.ts` |
+| AC5 | Updates change only the fields they name (tickets, events, orgs) | `pricing.int.test.ts`, `events.int.test.ts`, `tenancy.int.test.ts`, `contracts/tests/partial.test.ts` |
+| AC6 | End to end: an organizer adds early-bird, donation and multi-day passes; the public page shows them; a too-low donation is refused and a valid one is charged | `e2e/pricing.spec.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5d2:** early-bird tiers (price steps by date or quantity), donation tickets (buyer-chosen price with a minimum), `access_dates`, forms engine v1 (checkout questions).
+- **M1.5d3:** forms engine v1 (checkout questions, including kids/seated/standing counts).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

@@ -263,7 +263,10 @@
       "not_yet_on_sale": "Noch nicht im Verkauf",
       "sales_ended": "Verkauf beendet",
       "fewLeft": "Nur noch wenige verfügbar"
-    }
+    },
+    "donationFrom": "Ab",
+    "earlyBird": "Frühbucherpreis bis {date} (danach {regular})",
+    "accessDates": "Tage, für die dieser Pass gilt"
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -402,7 +405,14 @@
     "absorb": "Ich übernehme die Gebühr",
     "description": "Beschreibung (optional)",
     "add": "Ticketart hinzufügen",
-    "added": "Ticketart hinzugefügt."
+    "added": "Ticketart hinzugefügt.",
+    "earlyPrice": "Frühbucherpreis ({currency}, optional)",
+    "earlyPriceHint": "Wird bis zum Ende der Frühbucherphase statt des regulären Preises berechnet.",
+    "earlyEndsAt": "Ende der Frühbucherphase (Zeit des Events)",
+    "accessDates": "Tage, für die dieser Pass gilt (optional)",
+    "accessDatesHint": "Eine Zeile pro Tag: erst Datum, dann Name, z. B. 2027-10-14 Gala-Abend.",
+    "isDonation": "Käufer wählen den Betrag",
+    "isDonationHint": "Der Preis oben wird zum Mindestbetrag. Rabattcodes gelten nicht."
   },
   "checkout": {
     "quantity": "Anzahl",
@@ -413,7 +423,10 @@
     "chooseTickets": "Wähle mindestens ein Ticket.",
     "marketingOptIn": "Ich möchte Neuigkeiten und Angebote von {org} per E-Mail erhalten. Optional; du kannst dich jederzeit abmelden.",
     "promoCode": "Rabattcode",
-    "promoInvalid": "Dieser Rabattcode gilt nicht für diese Tickets."
+    "promoInvalid": "Dieser Rabattcode gilt nicht für diese Tickets.",
+    "donationAmount": "Dein Betrag",
+    "donationMinimum": "mindestens {minimum}",
+    "donationTooLow": "Gib für jeden gewählten Pass einen Betrag ein, der mindestens dem Mindestbetrag entspricht."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",

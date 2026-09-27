@@ -68,7 +68,14 @@ export const publicOrderSerializer = defineSerializer('orders.publicOrder', Publ
 export const StartCheckoutInput = z.object({
   eventId: z.uuid(),
   items: z
-    .array(z.object({ ticketTypeId: z.uuid(), quantity: z.int().min(1).max(100) }))
+    .array(
+      z.object({
+        ticketTypeId: z.uuid(),
+        quantity: z.int().min(1).max(100),
+        /** Donation passes: the amount per ticket, in minor units. */
+        amountMinor: z.int().min(0).max(100_000_000).optional(),
+      }),
+    )
     .min(1)
     .max(20),
   buyer: z.object({

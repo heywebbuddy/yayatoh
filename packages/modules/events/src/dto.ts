@@ -1,4 +1,4 @@
-import { CurrencyCode, defineSerializer, IanaTimezone, Slug } from '@yayatoh/contracts';
+import { CurrencyCode, defineSerializer, IanaTimezone, partialNoDefaults, Slug } from '@yayatoh/contracts';
 import { z } from 'zod';
 import { EVENT_PROFILES, EVENT_ROLES, EVENT_STATUSES, EVENT_VISIBILITIES } from './schema.ts';
 
@@ -65,7 +65,7 @@ export const CreateEventInput = Base.extend({ slug: Slug.optional() }).refine((v
 });
 export type CreateEventInput = z.input<typeof CreateEventInput>;
 
-export const UpdateEventInput = Base.partial()
+export const UpdateEventInput = partialNoDefaults(Base)
   .extend({ eventId: z.uuid(), slug: Slug.optional() })
   .refine((v) => !v.startsAt || !v.endsAt || v.endsAt > v.startsAt, {
     message: 'endsAt must be after startsAt',

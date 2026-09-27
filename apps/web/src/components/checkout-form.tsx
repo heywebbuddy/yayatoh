@@ -15,6 +15,12 @@ export interface PassView {
   readonly availability: 'available' | 'sold_out' | 'not_yet_on_sale' | 'sales_ended';
   readonly fewLeft: boolean;
   readonly maxPerOrder: number;
+  /** While an early-bird price runs: the regular price and the (formatted) last day. */
+  readonly regularPriceLabel?: string | null;
+  readonly earlyUntil?: string | null;
+  /** Choose-your-amount pass: `priceLabel` is the minimum. */
+  readonly isDonation?: boolean;
+  readonly accessDates?: readonly { readonly key: string; readonly label: string }[];
 }
 
 /**
@@ -42,7 +48,9 @@ export function CheckoutForm({
           ? t('checkout.chooseTickets')
           : state.reason === 'promo_invalid'
             ? t('checkout.promoInvalid')
-            : t(errorMessageKey(state.code));
+            : state.reason === 'donation_amount'
+              ? t('checkout.donationTooLow')
+              : t(errorMessageKey(state.code));
   return (
     <form action={formAction} className="flex min-w-0 flex-1 flex-col gap-4">
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -51,6 +59,9 @@ export function CheckoutForm({
             <Card tone={p.featured ? 'ink' : 'default'} size="panel" className="flex flex-col gap-2.5">
               <Label tone={p.featured ? 'inverse' : 'default'}>{p.name}</Label>
               <p className="text-[40px] leading-[44px] font-light tracking-[-0.04em]">
+                {p.isDonation ? (
+                  <span className="text-[15px] tracking-normal">{t('publicEvent.donationFrom')} </span>
+                ) : null}
                 {p.priceLabel}
                 <span
                   className={`ms-1 text-[15px] tracking-normal ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}
@@ -58,6 +69,26 @@ export function CheckoutForm({
                   {t('publicEvent.allInSuffix')}
                 </span>
               </p>
+              {p.regularPriceLabel && p.earlyUntil ? (
+                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
+                  {t('publicEvent.earlyBird', { date: p.earlyUntil, regular: p.regularPriceLabel })}
+                </p>
+              ) : null}
+              {p.accessDates && p.accessDates.length > 0 ? (
+                <ul
+                  aria-label={t('publicEvent.accessDates')}
+                  className="flex list-none flex-wrap gap-1.5 p-0"
+                >
+                  {p.accessDates.map((d) => (
+                    <li
+                      key={d.key}
+                      className={`rounded-pill border px-2.5 py-0.5 text-caption ${p.featured ? 'border-white/30 text-white/80' : 'border-zinc-200 text-zinc-600'}`}
+                    >
+                      {d.label}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               {p.description ? (
                 <p className={`text-body ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}>
                   {p.description}
@@ -71,7 +102,7 @@ export function CheckoutForm({
                 </p>
               ) : null}
               {p.id && p.availability === 'available' ? (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <label
                     htmlFor={`qty-${p.id}`}
                     className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}
@@ -91,6 +122,27 @@ export function CheckoutForm({
                       </option>
                     ))}
                   </select>
+                  {p.isDonation ? (
+                    <>
+                      <label
+                        htmlFor={`amount-${p.id}`}
+                        className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}
+                      >
+                        {t('checkout.donationAmount')}
+                        <span className="sr-only">
+                          {' '}
+                          — {p.name} ({t('checkout.donationMinimum', { minimum: p.priceLabel })})
+                        </span>
+                      </label>
+                      <input
+                        id={`amount-${p.id}`}
+                        name={`amount:${p.id}`}
+                        inputMode="decimal"
+                        pattern="[0-9]+([.,][0-9]{1,3})?"
+                        className="min-h-10 w-28 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
+                      />
+                    </>
+                  ) : null}
                 </div>
               ) : (
                 // Preview passes (no ticket type yet) cannot be bought; a disabled control says so.

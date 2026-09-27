@@ -7,6 +7,7 @@ import {
   foreignKey,
   index,
   integer,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -15,6 +16,11 @@ import {
 } from 'drizzle-orm/pg-core';
 
 export const ticketingSchema = pgSchema('ticketing');
+
+export interface AccessDate {
+  readonly date: string;
+  readonly name: string;
+}
 
 export const TICKET_TYPE_VISIBILITIES = ['public', 'hidden'] as const;
 export const FEE_MODES = ['pass_on', 'absorb'] as const;
@@ -41,6 +47,13 @@ export const ticketTypes = tenantTable(
     visibility: text('visibility').notNull().default('public'),
     sortOrder: integer('sort_order').notNull().default(0),
     archivedAt: ts('archived_at'),
+    /** Early-bird: this face price applies until `early_ends_at` (legacy `sale_price`). */
+    earlyPriceMinor: bigint('early_price_minor', { mode: 'number' }),
+    earlyEndsAt: ts('early_ends_at'),
+    /** Choose-your-amount: `price_minor` is the minimum the buyer may give (legacy `is_donation`). */
+    isDonation: boolean('is_donation').notNull().default(false),
+    /** Days a multi-day pass admits, e.g. [{date: '2027-10-14', name: 'Gala Night'}] (legacy `access_dates`). */
+    accessDates: jsonb('access_dates').$type<AccessDate[]>().notNull().default(sql`'[]'::jsonb`),
   },
   (t) => [
     index('ticket_types_org_event_idx').on(t.orgId, t.eventId, t.sortOrder),
@@ -57,6 +70,12 @@ export const ticketTypes = tenantTable(
     check('ticket_types_visibility_check', sql`visibility in ('public', 'hidden')`),
     check('ticket_types_fee_mode_check', sql`fee_mode in ('pass_on', 'absorb')`),
     check('ticket_types_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check(
+      'ticket_types_early_check',
+      sql`(early_price_minor is null) = (early_ends_at is null) and (early_price_minor is null or (early_price_minor >= 0 and early_price_minor < price_minor))`,
+    ),
+    check('ticket_types_donation_check', sql`not is_donation or early_price_minor is null`),
+    check('ticket_types_access_dates_check', sql`jsonb_typeof(access_dates) = 'array'`),
   ],
 );
 

@@ -54,6 +54,37 @@ export function TicketTypeForm({
         </select>
       </div>
       <Input name="description" maxLength={500} label={t('tickets.description')} />
+      <Input
+        name="earlyPrice"
+        inputMode="decimal"
+        pattern="[0-9]+([.,][0-9]{1,3})?"
+        label={t('tickets.earlyPrice', { currency })}
+        hint={t('tickets.earlyPriceHint')}
+      />
+      <Input name="earlyEndsAt" type="datetime-local" label={t('tickets.earlyEndsAt')} />
+      <div className="flex flex-col gap-1.5 md:col-span-2">
+        <label htmlFor="accessDates" className="text-caption text-zinc-600">
+          {t('tickets.accessDates')}
+        </label>
+        <textarea
+          id="accessDates"
+          name="accessDates"
+          rows={3}
+          maxLength={2000}
+          aria-describedby="accessDates-hint"
+          className="rounded-card border border-zinc-200 bg-white px-4 py-2.5 font-mono text-body"
+        />
+        <p id="accessDates-hint" className="text-caption text-zinc-500">
+          {t('tickets.accessDatesHint')}
+        </p>
+      </div>
+      <label className="flex min-h-6 items-start gap-2.5 text-body md:col-span-2">
+        <input type="checkbox" name="isDonation" value="1" className="mt-0.5 size-5 shrink-0 accent-ink" />
+        <span>
+          {t('tickets.isDonation')}
+          <span className="block text-caption text-zinc-500">{t('tickets.isDonationHint')}</span>
+        </span>
+      </label>
       <div className="flex flex-col gap-2 md:col-span-2">
         <div aria-live="polite">
           {state.ok ? <Alert tone="info" title={t('tickets.added')} /> : null}

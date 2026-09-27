@@ -263,7 +263,10 @@
       "not_yet_on_sale": "尚未开售",
       "sales_ended": "已停售",
       "fewLeft": "仅剩少量"
-    }
+    },
+    "donationFrom": "最低",
+    "earlyBird": "早鸟价截至 {date}（之后为 {regular}）",
+    "accessDates": "此通行证可入场的日期"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -402,7 +405,14 @@
     "absorb": "由我承担费用",
     "description": "描述（可选）",
     "add": "添加票种",
-    "added": "已添加票种。"
+    "added": "已添加票种。",
+    "earlyPrice": "早鸟价（{currency}，可选）",
+    "earlyPriceHint": "早鸟期结束前，按此价格代替常规价格收费。",
+    "earlyEndsAt": "早鸟截止时间（活动当地时间）",
+    "accessDates": "此通行证可入场的日期（可选）",
+    "accessDatesHint": "每行一个：先写日期，再写名称，例如 2027-10-14 盛典之夜。",
+    "isDonation": "由买家自定金额",
+    "isDonationHint": "上方价格将作为最低金额。优惠码不适用。"
   },
   "checkout": {
     "quantity": "数量",
@@ -413,7 +423,10 @@
     "chooseTickets": "请至少选择一张门票。",
     "marketingOptIn": "我希望通过电子邮件接收{org}的新闻和优惠信息。（可选，可随时退订）",
     "promoCode": "优惠码",
-    "promoInvalid": "该优惠码不适用于这些门票。"
+    "promoInvalid": "该优惠码不适用于这些门票。",
+    "donationAmount": "你的金额",
+    "donationMinimum": "至少 {minimum}",
+    "donationTooLow": "请为所选的每种通行证输入不低于最低金额的数额。"
   },
   "fakePay": {
     "eyebrow": "测试付款",

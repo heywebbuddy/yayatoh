@@ -34,6 +34,10 @@ export default async function PublicEventPage({
           availability: p.availability,
           fewLeft: p.fewLeft,
           maxPerOrder: p.maxPerOrder,
+          regularPrice: p.regularAllInMinor,
+          earlyEndsAt: p.earlyEndsAt,
+          isDonation: p.isDonation,
+          accessDates: p.accessDates,
         }))
       : (demo?.passes ?? []).map((p) => ({
           ...p,
@@ -42,6 +46,10 @@ export default async function PublicEventPage({
           availability: 'available' as const,
           fewLeft: false,
           maxPerOrder: 0,
+          regularPrice: null,
+          earlyEndsAt: null,
+          isDonation: false,
+          accessDates: [],
         }));
   const ev = {
     ...pub,
@@ -52,6 +60,14 @@ export default async function PublicEventPage({
   const t = await getTranslations();
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const range = formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), f);
+  const price = (minor: number) => formatMoney(money(minor, ev.currency), locale).replace(/\.00$/, '');
+  const day = new Intl.DateTimeFormat(locale, { timeZone: ev.timezone, month: 'short', day: 'numeric' });
+  const calendarDay = new Intl.DateTimeFormat(locale, {
+    timeZone: 'UTC',
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
   return (
     <div className="min-h-dvh bg-white">
       <section className="relative m-2 overflow-hidden rounded-panel bg-black px-6 pt-28 pb-10 text-white md:px-16 md:pt-32">
@@ -135,7 +151,15 @@ export default async function PublicEventPage({
           <CheckoutForm
             passes={ev.passes.map((p) => ({
               ...p,
-              priceLabel: formatMoney(money(p.price, ev.currency), locale).replace(/\.00$/, ''),
+              priceLabel: price(p.price),
+              regularPriceLabel: p.regularPrice === null ? null : price(p.regularPrice),
+              // The early-bird ends at an instant; show its day in the event's timezone.
+              earlyUntil: p.earlyEndsAt ? day.format(p.earlyEndsAt) : null,
+              accessDates: p.accessDates.map((d) => ({
+                key: d.date,
+                // Access dates are calendar days (no time): format them as UTC dates.
+                label: `${d.name} · ${calendarDay.format(new Date(`${d.date}T00:00:00Z`))}`,
+              })),
             }))}
             organizer={ev.organizerName}
             action={checkoutAction.bind(null, slug)}
