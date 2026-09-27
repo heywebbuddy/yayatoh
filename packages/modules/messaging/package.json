@@ -1,8 +1,11 @@
 {
-  "name": "@yayatoh/testing",
+  "name": "@yayatoh/messaging",
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "yayatoh": {
+    "tier": 3
+  },
   "exports": {
     ".": "./src/index.ts"
   },
@@ -11,28 +14,16 @@
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
-    "@yayatoh/billing": "workspace:*",
-    "@yayatoh/checkin": "workspace:*",
-    "@yayatoh/checkin-engine": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
     "@yayatoh/crm": "workspace:*",
-    "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
-    "@yayatoh/floorplan": "workspace:*",
-    "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
-    "@yayatoh/messaging": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
-    "@yayatoh/orders": "workspace:*",
-    "@yayatoh/payments": "workspace:*",
-    "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/reports": "workspace:*",
-    "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
-    "@yayatoh/ticket-crypto": "workspace:*",
-    "@yayatoh/ticketing": "workspace:*",
-    "drizzle-orm": "catalog:"
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",

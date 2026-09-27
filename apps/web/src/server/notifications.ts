@@ -4,11 +4,14 @@ import { getUsersByIds } from '@yayatoh/auth';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
+import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier, type DispatchDeps, devMailboxTransports, dispatchDue } from '@yayatoh/notifications';
 import { refundMailer, ticketMailer } from '@yayatoh/orders';
 import { consumeEvent, eventKey, recentEventsTx, type Subscriber } from '@yayatoh/platform';
 import { invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
+// The composition root registers the key vault (message params and manage links are encrypted).
+import './ports.ts';
 
 export const notifier = createNotifier();
 
@@ -25,6 +28,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
     attendeeMessageMailer({ notifier, event: findEventTx }),
+    announcementMailer({ notifier, appOrigin }),
+    threadReplyMailer({ notifier, appOrigin }),
+    contactWroteNotifier({ notifier }),
   ];
 }
 

@@ -20,6 +20,7 @@ const config: NextConfig = {
     '@yayatoh/orders',
     '@yayatoh/payments',
     '@yayatoh/notifications',
+    '@yayatoh/messaging',
   ],
   serverExternalPackages: ['postgres', '@node-rs/argon2'],
   experimental: { taint: true },

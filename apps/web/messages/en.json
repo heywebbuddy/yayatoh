@@ -1678,5 +1678,91 @@
     "meta": "{channel} to {to} · {at}",
     "show": "Show message",
     "preview": "Email preview: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Announcements to everyone attending {event}.",
+    "composeTitle": "New announcement",
+    "subject": "Subject",
+    "message": "Message",
+    "channels": "Send by",
+    "channel": {
+      "email": "Email",
+      "push": "Push notification"
+    },
+    "pushHint": "Push reaches attendees who use the app; everyone else gets the email.",
+    "preview": "Preview",
+    "previewTitle": "Announcement preview",
+    "previewFrame": "Email preview: {subject}",
+    "willReach": "{count, plural, one {This goes to # person.} other {This goes to # people.}}",
+    "send": "{count, plural, one {Send to # person} other {Send to # people}}",
+    "edit": "Edit",
+    "sent": "{count, plural, one {Sent to # person. Delivery continues in the background.} other {Sent to # people. Delivery continues in the background.}}",
+    "sentTitle": "Sent announcements",
+    "sentEmpty": "No announcements yet.",
+    "sentAt": "Sent",
+    "recipients": "Recipients",
+    "delivery": "Delivery",
+    "deliveryCounts": "{sent} sent · {pending} pending · {notSent} not sent",
+    "errors": {
+      "subjectRequired": "Add a subject.",
+      "messageRequired": "Write a message.",
+      "channelRequired": "Choose at least one way to send it.",
+      "no_recipients": "Nobody is attending this event yet, so there is no one to send to.",
+      "messaging_paused": "Yayatoh support paused messaging for your organization."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Messages",
+    "inboxDescription": "Conversations with your customers. Replies to your announcements land here.",
+    "filters": "Show",
+    "filter": {
+      "all": "All",
+      "unread": "Unread",
+      "blocked": "Blocked"
+    },
+    "emptyTitle": "No conversations",
+    "emptyDescription": "When someone replies to an announcement, their message appears here.",
+    "unread": "Unread",
+    "blockedChip": "Blocked",
+    "you": "You",
+    "threadTitle": "Conversation",
+    "back": "All messages",
+    "threadWith": "Conversation with {name}",
+    "history": "Messages",
+    "contactBlockedYou": "This person blocked messages from your organization.",
+    "replyTitle": "Reply",
+    "replyLabel": "Your reply (sent by email)",
+    "sendReply": "Send reply",
+    "sent": "Message sent.",
+    "safetyTitle": "Block or report",
+    "block": "Block this person",
+    "unblock": "Unblock",
+    "blockedText": "Blocked: their messages are refused.",
+    "report": "Report to Yayatoh",
+    "reportReason": "Reason",
+    "reportNote": "Details (optional)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuse or harassment",
+      "other": "Something else"
+    },
+    "reported": "Thanks. Yayatoh will review this conversation.",
+    "publicMetaTitle": "Messages",
+    "publicEyebrow": "Messages",
+    "publicTitle": "Your conversation with {org}",
+    "publicDescription": "Only you and the organizer can read this conversation.",
+    "notAccepting": "{org} isn't accepting messages here.",
+    "writeLabel": "Write to {org}",
+    "send": "Send",
+    "blockOrg": "Block {org}",
+    "unblockOrg": "Unblock {org}",
+    "youBlocked": "You blocked {org}: you won't get their replies or event updates.",
+    "errors": {
+      "required": "Write a message first.",
+      "blocked": "This conversation is blocked.",
+      "blocked_by_contact": "This person blocked messages from your organization.",
+      "you_blocked": "Unblock the organizer to write to them."
+    }
   }
 }

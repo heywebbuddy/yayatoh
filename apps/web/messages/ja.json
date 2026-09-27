@@ -1678,5 +1678,91 @@
     "meta": "{channel}・宛先 {to}・{at}",
     "show": "メッセージを表示",
     "preview": "メールのプレビュー：{subject}"
+  },
+  "announcements": {
+    "title": "マーケティング",
+    "description": "{event} の参加者全員へのお知らせ。",
+    "composeTitle": "新しいお知らせ",
+    "subject": "件名",
+    "message": "メッセージ",
+    "channels": "送信方法",
+    "channel": {
+      "email": "メール",
+      "push": "プッシュ通知"
+    },
+    "pushHint": "プッシュはアプリの利用者に届きます。それ以外の方にはメールが届きます。",
+    "preview": "プレビュー",
+    "previewTitle": "お知らせのプレビュー",
+    "previewFrame": "メールのプレビュー：{subject}",
+    "willReach": "{count, plural, other {# 人に送信されます。}}",
+    "send": "{count, plural, other {# 人に送信}}",
+    "edit": "編集",
+    "sent": "{count, plural, other {# 人に送信しました。配信はバックグラウンドで続きます。}}",
+    "sentTitle": "送信済みのお知らせ",
+    "sentEmpty": "お知らせはまだありません。",
+    "sentAt": "送信日時",
+    "recipients": "受信者",
+    "delivery": "配信状況",
+    "deliveryCounts": "送信済み {sent}・保留 {pending}・未送信 {notSent}",
+    "errors": {
+      "subjectRequired": "件名を入力してください。",
+      "messageRequired": "メッセージを入力してください。",
+      "channelRequired": "送信方法を 1 つ以上選んでください。",
+      "no_recipients": "このイベントにはまだ参加者がいないため、送信先がありません。",
+      "messaging_paused": "Yayatoh サポートがあなたの組織の配信を一時停止しています。"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "メッセージ",
+    "inboxDescription": "お客様とのやり取り。お知らせへの返信はここに届きます。",
+    "filters": "表示",
+    "filter": {
+      "all": "すべて",
+      "unread": "未読",
+      "blocked": "ブロック中"
+    },
+    "emptyTitle": "やり取りはありません",
+    "emptyDescription": "お知らせに返信があると、ここに表示されます。",
+    "unread": "未読",
+    "blockedChip": "ブロック中",
+    "you": "あなた",
+    "threadTitle": "やり取り",
+    "back": "すべてのメッセージ",
+    "threadWith": "{name} さんとのやり取り",
+    "history": "メッセージ",
+    "contactBlockedYou": "この方はあなたの組織からのメッセージをブロックしています。",
+    "replyTitle": "返信",
+    "replyLabel": "返信内容（メールで送信されます）",
+    "sendReply": "返信を送信",
+    "sent": "メッセージを送信しました。",
+    "safetyTitle": "ブロック・報告",
+    "block": "この方をブロック",
+    "unblock": "ブロックを解除",
+    "blockedText": "ブロック中：この方のメッセージは受け付けません。",
+    "report": "Yayatoh に報告",
+    "reportReason": "理由",
+    "reportNote": "詳細（任意）",
+    "reasons": {
+      "spam": "スパム",
+      "abuse": "嫌がらせ・迷惑行為",
+      "other": "その他"
+    },
+    "reported": "ありがとうございます。Yayatoh がこのやり取りを確認します。",
+    "publicMetaTitle": "メッセージ",
+    "publicEyebrow": "メッセージ",
+    "publicTitle": "{org} とのやり取り",
+    "publicDescription": "このやり取りを読めるのはあなたと主催者だけです。",
+    "notAccepting": "{org} はここでメッセージを受け付けていません。",
+    "writeLabel": "{org} にメッセージを書く",
+    "send": "送信",
+    "blockOrg": "{org} をブロック",
+    "unblockOrg": "{org} のブロックを解除",
+    "youBlocked": "{org} をブロックしました：返信やイベントのお知らせは届きません。",
+    "errors": {
+      "required": "先にメッセージを入力してください。",
+      "blocked": "このやり取りはブロックされています。",
+      "blocked_by_contact": "この方はあなたの組織からのメッセージをブロックしています。",
+      "you_blocked": "メッセージを送るには主催者のブロックを解除してください。"
+    }
   }
 }

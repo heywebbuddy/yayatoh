@@ -1678,5 +1678,91 @@
     "meta": "{channel} aan {to} · {at}",
     "show": "Bericht tonen",
     "preview": "E-mailvoorbeeld: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Aankondigingen aan iedereen die {event} bezoekt.",
+    "composeTitle": "Nieuwe aankondiging",
+    "subject": "Onderwerp",
+    "message": "Bericht",
+    "channels": "Versturen via",
+    "channel": {
+      "email": "E-mail",
+      "push": "Pushmelding"
+    },
+    "pushHint": "Push bereikt bezoekers die de app gebruiken; de rest krijgt de e-mail.",
+    "preview": "Voorbeeld",
+    "previewTitle": "Voorbeeld van de aankondiging",
+    "previewFrame": "E-mailvoorbeeld: {subject}",
+    "willReach": "{count, plural, one {Dit gaat naar # persoon.} other {Dit gaat naar # personen.}}",
+    "send": "{count, plural, one {Versturen naar # persoon} other {Versturen naar # personen}}",
+    "edit": "Bewerken",
+    "sent": "{count, plural, one {Verstuurd naar # persoon. De bezorging loopt op de achtergrond door.} other {Verstuurd naar # personen. De bezorging loopt op de achtergrond door.}}",
+    "sentTitle": "Verstuurde aankondigingen",
+    "sentEmpty": "Nog geen aankondigingen.",
+    "sentAt": "Verstuurd",
+    "recipients": "Ontvangers",
+    "delivery": "Bezorging",
+    "deliveryCounts": "{sent} verzonden · {pending} in behandeling · {notSent} niet verzonden",
+    "errors": {
+      "subjectRequired": "Vul een onderwerp in.",
+      "messageRequired": "Schrijf een bericht.",
+      "channelRequired": "Kies minstens één manier om te versturen.",
+      "no_recipients": "Nog niemand bezoekt dit evenement, dus er is niemand om het naar te sturen.",
+      "messaging_paused": "Yayatoh-support heeft berichten van je organisatie gepauzeerd."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Berichten",
+    "inboxDescription": "Gesprekken met je klanten. Antwoorden op je aankondigingen komen hier binnen.",
+    "filters": "Toon",
+    "filter": {
+      "all": "Alle",
+      "unread": "Ongelezen",
+      "blocked": "Geblokkeerd"
+    },
+    "emptyTitle": "Geen gesprekken",
+    "emptyDescription": "Als iemand op een aankondiging antwoordt, verschijnt het bericht hier.",
+    "unread": "Ongelezen",
+    "blockedChip": "Geblokkeerd",
+    "you": "Jij",
+    "threadTitle": "Gesprek",
+    "back": "Alle berichten",
+    "threadWith": "Gesprek met {name}",
+    "history": "Berichten",
+    "contactBlockedYou": "Deze persoon heeft berichten van je organisatie geblokkeerd.",
+    "replyTitle": "Antwoorden",
+    "replyLabel": "Je antwoord (per e-mail verstuurd)",
+    "sendReply": "Antwoord versturen",
+    "sent": "Bericht verstuurd.",
+    "safetyTitle": "Blokkeren of melden",
+    "block": "Deze persoon blokkeren",
+    "unblock": "Deblokkeren",
+    "blockedText": "Geblokkeerd: berichten worden geweigerd.",
+    "report": "Melden bij Yayatoh",
+    "reportReason": "Reden",
+    "reportNote": "Details (optioneel)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Misbruik of intimidatie",
+      "other": "Iets anders"
+    },
+    "reported": "Bedankt. Yayatoh bekijkt dit gesprek.",
+    "publicMetaTitle": "Berichten",
+    "publicEyebrow": "Berichten",
+    "publicTitle": "Je gesprek met {org}",
+    "publicDescription": "Alleen jij en de organisator kunnen dit gesprek lezen.",
+    "notAccepting": "{org} accepteert hier geen berichten.",
+    "writeLabel": "Schrijf naar {org}",
+    "send": "Versturen",
+    "blockOrg": "{org} blokkeren",
+    "unblockOrg": "{org} deblokkeren",
+    "youBlocked": "Je hebt {org} geblokkeerd: je krijgt geen antwoorden of evenementnieuws meer.",
+    "errors": {
+      "required": "Schrijf eerst een bericht.",
+      "blocked": "Dit gesprek is geblokkeerd.",
+      "blocked_by_contact": "Deze persoon heeft berichten van je organisatie geblokkeerd.",
+      "you_blocked": "Deblokkeer de organisator om te schrijven."
+    }
   }
 }

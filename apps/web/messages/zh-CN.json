@@ -1678,5 +1678,91 @@
     "meta": "{channel} 发送至 {to} · {at}",
     "show": "显示消息",
     "preview": "邮件预览：{subject}"
+  },
+  "announcements": {
+    "title": "营销",
+    "description": "发给 {event} 所有参加者的公告。",
+    "composeTitle": "新公告",
+    "subject": "主题",
+    "message": "内容",
+    "channels": "发送方式",
+    "channel": {
+      "email": "电子邮件",
+      "push": "推送通知"
+    },
+    "pushHint": "推送会发给使用应用的参加者；其他人会收到邮件。",
+    "preview": "预览",
+    "previewTitle": "公告预览",
+    "previewFrame": "邮件预览：{subject}",
+    "willReach": "{count, plural, other {将发送给 # 人。}}",
+    "send": "{count, plural, other {发送给 # 人}}",
+    "edit": "编辑",
+    "sent": "{count, plural, other {已发送给 # 人，投递将在后台继续。}}",
+    "sentTitle": "已发送的公告",
+    "sentEmpty": "暂无公告。",
+    "sentAt": "发送时间",
+    "recipients": "收件人",
+    "delivery": "投递",
+    "deliveryCounts": "已发送 {sent} · 待发送 {pending} · 未发送 {notSent}",
+    "errors": {
+      "subjectRequired": "请填写主题。",
+      "messageRequired": "请填写内容。",
+      "channelRequired": "请至少选择一种发送方式。",
+      "no_recipients": "此活动还没有参加者，暂无可发送的对象。",
+      "messaging_paused": "Yayatoh 支持团队已暂停您组织的消息发送。"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "消息",
+    "inboxDescription": "与客户的对话。对公告的回复会出现在这里。",
+    "filters": "显示",
+    "filter": {
+      "all": "全部",
+      "unread": "未读",
+      "blocked": "已屏蔽"
+    },
+    "emptyTitle": "暂无对话",
+    "emptyDescription": "有人回复公告后，消息会显示在这里。",
+    "unread": "未读",
+    "blockedChip": "已屏蔽",
+    "you": "您",
+    "threadTitle": "对话",
+    "back": "全部消息",
+    "threadWith": "与 {name} 的对话",
+    "history": "消息",
+    "contactBlockedYou": "此人已屏蔽您组织的消息。",
+    "replyTitle": "回复",
+    "replyLabel": "您的回复（通过邮件发送）",
+    "sendReply": "发送回复",
+    "sent": "消息已发送。",
+    "safetyTitle": "屏蔽或举报",
+    "block": "屏蔽此人",
+    "unblock": "取消屏蔽",
+    "blockedText": "已屏蔽：其消息将被拒收。",
+    "report": "向 Yayatoh 举报",
+    "reportReason": "原因",
+    "reportNote": "详情（可选）",
+    "reasons": {
+      "spam": "垃圾信息",
+      "abuse": "辱骂或骚扰",
+      "other": "其他"
+    },
+    "reported": "谢谢，Yayatoh 会审核此对话。",
+    "publicMetaTitle": "消息",
+    "publicEyebrow": "消息",
+    "publicTitle": "您与 {org} 的对话",
+    "publicDescription": "只有您和主办方可以查看此对话。",
+    "notAccepting": "{org} 不在此接收消息。",
+    "writeLabel": "写信给 {org}",
+    "send": "发送",
+    "blockOrg": "屏蔽 {org}",
+    "unblockOrg": "取消屏蔽 {org}",
+    "youBlocked": "您已屏蔽 {org}：您将不再收到其回复或活动动态。",
+    "errors": {
+      "required": "请先填写消息。",
+      "blocked": "此对话已被屏蔽。",
+      "blocked_by_contact": "此人已屏蔽您组织的消息。",
+      "you_blocked": "取消屏蔽主办方后才能写信。"
+    }
   }
 }

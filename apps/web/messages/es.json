@@ -1678,5 +1678,91 @@
     "meta": "{channel} para {to} · {at}",
     "show": "Mostrar mensaje",
     "preview": "Vista previa del correo: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Anuncios para todos los asistentes de {event}.",
+    "composeTitle": "Nuevo anuncio",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "channels": "Enviar por",
+    "channel": {
+      "email": "Correo",
+      "push": "Notificación push"
+    },
+    "pushHint": "El push llega a quienes usan la app; los demás reciben el correo.",
+    "preview": "Vista previa",
+    "previewTitle": "Vista previa del anuncio",
+    "previewFrame": "Vista previa del correo: {subject}",
+    "willReach": "{count, plural, one {Llegará a # persona.} other {Llegará a # personas.}}",
+    "send": "{count, plural, one {Enviar a # persona} other {Enviar a # personas}}",
+    "edit": "Editar",
+    "sent": "{count, plural, one {Enviado a # persona. La entrega continúa en segundo plano.} other {Enviado a # personas. La entrega continúa en segundo plano.}}",
+    "sentTitle": "Anuncios enviados",
+    "sentEmpty": "Aún no hay anuncios.",
+    "sentAt": "Enviado",
+    "recipients": "Destinatarios",
+    "delivery": "Entrega",
+    "deliveryCounts": "{sent} enviados · {pending} pendientes · {notSent} sin enviar",
+    "errors": {
+      "subjectRequired": "Añade un asunto.",
+      "messageRequired": "Escribe un mensaje.",
+      "channelRequired": "Elige al menos una forma de envío.",
+      "no_recipients": "Todavía nadie asiste a este evento, así que no hay a quién enviarlo.",
+      "messaging_paused": "El soporte de Yayatoh pausó los mensajes de tu organización."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Mensajes",
+    "inboxDescription": "Conversaciones con tus clientes. Aquí llegan las respuestas a tus anuncios.",
+    "filters": "Mostrar",
+    "filter": {
+      "all": "Todas",
+      "unread": "Sin leer",
+      "blocked": "Bloqueadas"
+    },
+    "emptyTitle": "No hay conversaciones",
+    "emptyDescription": "Cuando alguien responda a un anuncio, su mensaje aparecerá aquí.",
+    "unread": "Sin leer",
+    "blockedChip": "Bloqueada",
+    "you": "Tú",
+    "threadTitle": "Conversación",
+    "back": "Todos los mensajes",
+    "threadWith": "Conversación con {name}",
+    "history": "Mensajes",
+    "contactBlockedYou": "Esta persona bloqueó los mensajes de tu organización.",
+    "replyTitle": "Responder",
+    "replyLabel": "Tu respuesta (se envía por correo)",
+    "sendReply": "Enviar respuesta",
+    "sent": "Mensaje enviado.",
+    "safetyTitle": "Bloquear o denunciar",
+    "block": "Bloquear a esta persona",
+    "unblock": "Desbloquear",
+    "blockedText": "Bloqueada: sus mensajes se rechazan.",
+    "report": "Denunciar a Yayatoh",
+    "reportReason": "Motivo",
+    "reportNote": "Detalles (opcional)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuso o acoso",
+      "other": "Otra cosa"
+    },
+    "reported": "Gracias. Yayatoh revisará esta conversación.",
+    "publicMetaTitle": "Mensajes",
+    "publicEyebrow": "Mensajes",
+    "publicTitle": "Tu conversación con {org}",
+    "publicDescription": "Solo tú y el organizador pueden leer esta conversación.",
+    "notAccepting": "{org} no acepta mensajes aquí.",
+    "writeLabel": "Escribir a {org}",
+    "send": "Enviar",
+    "blockOrg": "Bloquear a {org}",
+    "unblockOrg": "Desbloquear a {org}",
+    "youBlocked": "Bloqueaste a {org}: no recibirás sus respuestas ni novedades de eventos.",
+    "errors": {
+      "required": "Primero escribe un mensaje.",
+      "blocked": "Esta conversación está bloqueada.",
+      "blocked_by_contact": "Esta persona bloqueó los mensajes de tu organización.",
+      "you_blocked": "Desbloquea al organizador para escribirle."
+    }
   }
 }

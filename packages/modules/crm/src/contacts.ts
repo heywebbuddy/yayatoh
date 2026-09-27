@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import {
   type CONSENT_CHANNELS,
   type CONSENT_PURPOSES,
@@ -107,4 +107,17 @@ export async function contactIdByEmailTx(tx: TenantTx, email: string): Promise<s
     .from(contacts)
     .where(eq(contacts.emailNorm, normalizeEmail(email)));
   return row?.id ?? null;
+}
+
+/** Signed-in accounts linked to contacts (push notifications need a user). */
+export async function contactUserIdsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, string>> {
+  if (contactIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: contacts.id, userId: contacts.userId })
+    .from(contacts)
+    .where(inArray(contacts.id, [...contactIds]));
+  return new Map(rows.filter((r) => r.userId).map((r) => [r.id, r.userId as string]));
 }

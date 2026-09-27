@@ -1,4 +1,5 @@
 import { composeNav, isProfileKey } from '@yayatoh/platform';
+import { roleCan } from '@yayatoh/tenancy';
 import { Label } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -28,7 +29,10 @@ export default async function EventLayout({
       nav={{
         base: `/o/${org}/e/${event}`,
         profile,
-        items: composeNav(profile, data.modules),
+        // The Marketing section holds announcements: hidden without access to messages.
+        items: composeNav(profile, data.modules).filter(
+          (i) => i.key !== 'marketing' || roleCan(data.role, 'messages:read'),
+        ),
         badges: { setupGuide: `${rules.filter((r) => r.done).length}/${rules.length}` },
       }}
       status={

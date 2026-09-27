@@ -10,6 +10,8 @@ export {
 export {
   BuyerMessageDto,
   buyerOrderMessagesTx,
+  DeliveryStatsDto,
+  deliveryStatsTx,
   INBOX_PAGE,
   InboxItemDto,
   inboxCountQuery,
@@ -83,8 +85,10 @@ export {
 export {
   maskEmail,
   resubscribeCommand,
+  suppressEmailTx,
   UnsubscribeInfoDto,
   unsubscribeCommand,
   unsubscribeInfo,
   unsubscribeRef,
+  unsuppressEmailTx,
 } from './unsubscribe.ts';

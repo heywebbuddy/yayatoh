@@ -1678,5 +1678,91 @@
     "meta": "{channel} {to} को · {at}",
     "show": "संदेश दिखाएँ",
     "preview": "ईमेल पूर्वावलोकन: {subject}"
+  },
+  "announcements": {
+    "title": "मार्केटिंग",
+    "description": "{event} में आने वाले सभी लोगों के लिए घोषणाएँ।",
+    "composeTitle": "नई घोषणा",
+    "subject": "विषय",
+    "message": "संदेश",
+    "channels": "इसके ज़रिए भेजें",
+    "channel": {
+      "email": "ईमेल",
+      "push": "पुश सूचना"
+    },
+    "pushHint": "पुश ऐप इस्तेमाल करने वालों तक पहुँचता है; बाकी सबको ईमेल मिलता है।",
+    "preview": "पूर्वावलोकन",
+    "previewTitle": "घोषणा का पूर्वावलोकन",
+    "previewFrame": "ईमेल पूर्वावलोकन: {subject}",
+    "willReach": "{count, plural, one {यह # व्यक्ति को जाएगी।} other {यह # लोगों को जाएगी।}}",
+    "send": "{count, plural, one {# व्यक्ति को भेजें} other {# लोगों को भेजें}}",
+    "edit": "संपादित करें",
+    "sent": "{count, plural, one {# व्यक्ति को भेजी गई। डिलीवरी पृष्ठभूमि में जारी है।} other {# लोगों को भेजी गई। डिलीवरी पृष्ठभूमि में जारी है।}}",
+    "sentTitle": "भेजी गई घोषणाएँ",
+    "sentEmpty": "अभी कोई घोषणा नहीं।",
+    "sentAt": "भेजी गई",
+    "recipients": "प्राप्तकर्ता",
+    "delivery": "डिलीवरी",
+    "deliveryCounts": "{sent} भेजे गए · {pending} बाकी · {notSent} नहीं भेजे गए",
+    "errors": {
+      "subjectRequired": "विषय जोड़ें।",
+      "messageRequired": "संदेश लिखें।",
+      "channelRequired": "भेजने का कम से कम एक तरीका चुनें।",
+      "no_recipients": "इस इवेंट में अभी कोई नहीं आ रहा, इसलिए भेजने के लिए कोई नहीं है।",
+      "messaging_paused": "Yayatoh सहायता ने आपके संगठन के संदेश रोक दिए हैं।"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "संदेश",
+    "inboxDescription": "आपके ग्राहकों के साथ बातचीत। आपकी घोषणाओं के जवाब यहाँ आते हैं।",
+    "filters": "दिखाएँ",
+    "filter": {
+      "all": "सभी",
+      "unread": "अपठित",
+      "blocked": "ब्लॉक किए गए"
+    },
+    "emptyTitle": "कोई बातचीत नहीं",
+    "emptyDescription": "जब कोई घोषणा का जवाब देगा, उसका संदेश यहाँ दिखेगा।",
+    "unread": "अपठित",
+    "blockedChip": "ब्लॉक",
+    "you": "आप",
+    "threadTitle": "बातचीत",
+    "back": "सभी संदेश",
+    "threadWith": "{name} के साथ बातचीत",
+    "history": "संदेश",
+    "contactBlockedYou": "इस व्यक्ति ने आपके संगठन के संदेश ब्लॉक किए हैं।",
+    "replyTitle": "जवाब दें",
+    "replyLabel": "आपका जवाब (ईमेल से भेजा जाएगा)",
+    "sendReply": "जवाब भेजें",
+    "sent": "संदेश भेजा गया।",
+    "safetyTitle": "ब्लॉक या रिपोर्ट करें",
+    "block": "इस व्यक्ति को ब्लॉक करें",
+    "unblock": "अनब्लॉक करें",
+    "blockedText": "ब्लॉक: इनके संदेश अस्वीकार होते हैं।",
+    "report": "Yayatoh को रिपोर्ट करें",
+    "reportReason": "कारण",
+    "reportNote": "विवरण (वैकल्पिक)",
+    "reasons": {
+      "spam": "स्पैम",
+      "abuse": "दुर्व्यवहार या उत्पीड़न",
+      "other": "कुछ और"
+    },
+    "reported": "धन्यवाद। Yayatoh इस बातचीत की समीक्षा करेगा।",
+    "publicMetaTitle": "संदेश",
+    "publicEyebrow": "संदेश",
+    "publicTitle": "{org} के साथ आपकी बातचीत",
+    "publicDescription": "इस बातचीत को केवल आप और आयोजक पढ़ सकते हैं।",
+    "notAccepting": "{org} यहाँ संदेश स्वीकार नहीं कर रहा।",
+    "writeLabel": "{org} को लिखें",
+    "send": "भेजें",
+    "blockOrg": "{org} को ब्लॉक करें",
+    "unblockOrg": "{org} को अनब्लॉक करें",
+    "youBlocked": "आपने {org} को ब्लॉक किया: अब आपको उनके जवाब या इवेंट अपडेट नहीं मिलेंगे।",
+    "errors": {
+      "required": "पहले संदेश लिखें।",
+      "blocked": "यह बातचीत ब्लॉक है।",
+      "blocked_by_contact": "इस व्यक्ति ने आपके संगठन के संदेश ब्लॉक किए हैं।",
+      "you_blocked": "लिखने के लिए आयोजक को अनब्लॉक करें।"
+    }
   }
 }

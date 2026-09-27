@@ -212,3 +212,27 @@ export async function buyerOrderMessagesTx(
     .limit(50);
   return rows.map(toLog(now)).map((r) => BuyerMessageDto.parse(r));
 }
+
+export const DeliveryStatsDto = z.object({
+  sent: z.int(),
+  pending: z.int(),
+  notSent: z.int(),
+});
+
+/** Delivery counts for messages whose dedupe key starts with `prefix` (an announcement's log). */
+export async function deliveryStatsTx(
+  tx: TenantTx,
+  prefix: string,
+): Promise<z.infer<typeof DeliveryStatsDto>> {
+  const rows = await tx
+    .select({ status: messages.status, n: count() })
+    .from(messages)
+    .where(sql`${messages.dedupeKey} like ${`${prefix.replace(/[\\%_]/g, '\\$&')}%`}`)
+    .groupBy(messages.status);
+  const by = new Map(rows.map((r) => [r.status, r.n]));
+  return {
+    sent: by.get('sent') ?? 0,
+    pending: by.get('queued') ?? 0,
+    notSent: (by.get('suppressed') ?? 0) + (by.get('failed') ?? 0) + (by.get('canceled') ?? 0),
+  };
+}

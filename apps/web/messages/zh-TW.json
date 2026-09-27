@@ -1678,5 +1678,91 @@
     "meta": "{channel} 寄至 {to} · {at}",
     "show": "顯示訊息",
     "preview": "郵件預覽：{subject}"
+  },
+  "announcements": {
+    "title": "行銷",
+    "description": "發給 {event} 所有參加者的公告。",
+    "composeTitle": "新公告",
+    "subject": "主旨",
+    "message": "內容",
+    "channels": "傳送方式",
+    "channel": {
+      "email": "電子郵件",
+      "push": "推播通知"
+    },
+    "pushHint": "推播會送給使用應用程式的參加者；其他人會收到郵件。",
+    "preview": "預覽",
+    "previewTitle": "公告預覽",
+    "previewFrame": "郵件預覽：{subject}",
+    "willReach": "{count, plural, other {將傳送給 # 人。}}",
+    "send": "{count, plural, other {傳送給 # 人}}",
+    "edit": "編輯",
+    "sent": "{count, plural, other {已傳送給 # 人，遞送會在背景繼續。}}",
+    "sentTitle": "已傳送的公告",
+    "sentEmpty": "尚無公告。",
+    "sentAt": "傳送時間",
+    "recipients": "收件人",
+    "delivery": "遞送",
+    "deliveryCounts": "已傳送 {sent} · 待傳送 {pending} · 未傳送 {notSent}",
+    "errors": {
+      "subjectRequired": "請填寫主旨。",
+      "messageRequired": "請填寫內容。",
+      "channelRequired": "請至少選擇一種傳送方式。",
+      "no_recipients": "此活動尚無參加者，沒有可傳送的對象。",
+      "messaging_paused": "Yayatoh 支援團隊已暫停您組織的訊息傳送。"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "訊息",
+    "inboxDescription": "與客戶的對話。對公告的回覆會出現在這裡。",
+    "filters": "顯示",
+    "filter": {
+      "all": "全部",
+      "unread": "未讀",
+      "blocked": "已封鎖"
+    },
+    "emptyTitle": "尚無對話",
+    "emptyDescription": "有人回覆公告後，訊息會顯示在這裡。",
+    "unread": "未讀",
+    "blockedChip": "已封鎖",
+    "you": "您",
+    "threadTitle": "對話",
+    "back": "所有訊息",
+    "threadWith": "與 {name} 的對話",
+    "history": "訊息",
+    "contactBlockedYou": "此人已封鎖您組織的訊息。",
+    "replyTitle": "回覆",
+    "replyLabel": "您的回覆（以郵件傳送）",
+    "sendReply": "傳送回覆",
+    "sent": "訊息已傳送。",
+    "safetyTitle": "封鎖或檢舉",
+    "block": "封鎖此人",
+    "unblock": "解除封鎖",
+    "blockedText": "已封鎖：其訊息將被拒收。",
+    "report": "向 Yayatoh 檢舉",
+    "reportReason": "原因",
+    "reportNote": "詳細說明（選填）",
+    "reasons": {
+      "spam": "垃圾訊息",
+      "abuse": "辱罵或騷擾",
+      "other": "其他"
+    },
+    "reported": "謝謝，Yayatoh 會審查此對話。",
+    "publicMetaTitle": "訊息",
+    "publicEyebrow": "訊息",
+    "publicTitle": "您與 {org} 的對話",
+    "publicDescription": "只有您和主辦單位可以查看此對話。",
+    "notAccepting": "{org} 不在此接收訊息。",
+    "writeLabel": "寫信給 {org}",
+    "send": "傳送",
+    "blockOrg": "封鎖 {org}",
+    "unblockOrg": "解除封鎖 {org}",
+    "youBlocked": "您已封鎖 {org}：您將不再收到其回覆或活動消息。",
+    "errors": {
+      "required": "請先填寫訊息。",
+      "blocked": "此對話已被封鎖。",
+      "blocked_by_contact": "此人已封鎖您組織的訊息。",
+      "you_blocked": "解除封鎖主辦單位後才能寫信。"
+    }
   }
 }

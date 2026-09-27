@@ -17,6 +17,14 @@ import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import {
+  announcementMailer,
+  contactMessageCommand,
+  contactReportCommand,
+  reportThreadCommand,
+  sendAnnouncementCommand,
+  threadToken,
+} from '@yayatoh/messaging';
+import {
   createNotifier,
   dispatchDue,
   memoryTransports,
@@ -35,7 +43,7 @@ import {
   startRefundCommand,
 } from '@yayatoh/orders';
 import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
-import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
+import { consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
   assignSeatsCommand,
@@ -474,6 +482,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // Messaging (M1.10c): an announcement fanned out to the event's attendees, a contact's reply,
+  // and a report from each side (isolation coverage).
+  const sent = await executeCommand(
+    sendAnnouncementCommand,
+    { eventId: event.id, subject: 'Doors at 7', body: 'See you there.', channels: ['email'] },
+    ctx({ idempotencyKey: `fixture-announcement-${slug}` }),
+    ports,
+  );
+  const [announced] = await withTenant(systemCtx(org.id), (tx) =>
+    recentEventsTx(tx, org.id, ['announcement.sent'], 3_600_000),
+  );
+  if (!announced || !sent.id) throw new Error('fixture: no announcement event');
+  await consumeEvent(announcementMailer({ notifier, appOrigin: 'https://app.yayatoh.test' }), announced);
+  const [thread] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(sql`select id from messaging.threads order by created_at limit 1`),
+  );
+  if (!thread) throw new Error('fixture: no conversation');
+  const anon = createCtx({ orgId: org.id });
+  await executeCommand(
+    contactMessageCommand,
+    { token: threadToken(thread.id), body: 'Is there parking?' },
+    anon,
+    ports,
+  );
+  await executeCommand(contactReportCommand, { token: threadToken(thread.id), reason: 'other' }, anon, ports);
+  await executeCommand(reportThreadCommand, { threadId: thread.id, reason: 'spam' }, ctx(), ports);
   return { org, ownerId, viewerId, event, ctx };
 }
 

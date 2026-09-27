@@ -29,7 +29,7 @@ export const CATEGORIES = [
 ] as const;
 export const PREFERENCE_CHANNELS = ['in_app', 'email', 'sms', 'push'] as const;
 export const PUSH_PLATFORMS = ['fcm', 'apns', 'webpush'] as const;
-export const SUPPRESSION_SOURCES = ['one_click', 'page', 'legacy'] as const;
+export const SUPPRESSION_SOURCES = ['one_click', 'page', 'legacy', 'block'] as const;
 
 const inList = (col: string, values: readonly string[]) =>
   sql.raw(`${col} in (${values.map((v) => `'${v}'`).join(', ')})`);

@@ -1,5 +1,6 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { findEventTx } from '@yayatoh/events';
+import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import { refundMailer, ticketMailer } from '@yayatoh/orders';
 import type { Subscriber } from '@yayatoh/platform';
@@ -32,6 +33,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
     attendeeMessageMailer({ notifier, event: findEventTx }),
+    announcementMailer({ notifier, appOrigin }),
+    threadReplyMailer({ notifier, appOrigin }),
+    contactWroteNotifier({ notifier }),
     releaseCancelledSeats(),
   ];
 }

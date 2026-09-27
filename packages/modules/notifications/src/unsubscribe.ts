@@ -197,3 +197,33 @@ export const resubscribeCommand = tenantCommand({
     data: { category: r.category },
   }),
 });
+
+/**
+ * Stop optional mail of one category to an address (a contact blocking the organizer, imports).
+ * Idempotent; transactional mail is unaffected.
+ */
+export async function suppressEmailTx(
+  tx: TenantTx,
+  orgId: string,
+  email: string,
+  category: (typeof OPTIONAL_CATEGORIES)[number],
+  source: 'page' | 'one_click' | 'legacy' | 'block',
+): Promise<boolean> {
+  const rows = await tx
+    .insert(suppressions)
+    .values({ orgId, emailNorm: normalizeEmail(email), category, source })
+    .onConflictDoNothing()
+    .returning({ id: suppressions.id });
+  return rows.length > 0;
+}
+
+/** Lift a suppression (the contact unblocks the organizer). */
+export async function unsuppressEmailTx(
+  tx: TenantTx,
+  email: string,
+  category: (typeof OPTIONAL_CATEGORIES)[number],
+): Promise<void> {
+  await tx
+    .delete(suppressions)
+    .where(and(eq(suppressions.emailNorm, normalizeEmail(email)), eq(suppressions.category, category)));
+}
