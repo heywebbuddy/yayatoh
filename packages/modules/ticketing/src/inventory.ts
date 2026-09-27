@@ -55,7 +55,12 @@ export async function quoteTx(
   tx: TenantTx,
   eventId: string,
   requests: readonly LineRequest[],
-  opts: { now: Date; includeHidden: boolean; promo?: PromoRow | null },
+  opts: {
+    now: Date;
+    /** true (box office) or the hidden passes an access code unlocked (public checkout). */
+    includeHidden: boolean | ReadonlySet<string>;
+    promo?: PromoRow | null;
+  },
 ): Promise<Quote> {
   const merged = new Map<string, number>();
   const amounts = new Map<string, number>();
@@ -89,8 +94,9 @@ export async function quoteTx(
   const lines: QuotedLine[] = [];
   for (const r of rows) {
     const quantity = merged.get(r.id) as number;
-    if (!opts.includeHidden && r.visibility !== 'public')
-      throw new DomainError('not_found', 'Ticket type not found');
+    const hiddenOk =
+      opts.includeHidden === true || (opts.includeHidden !== false && opts.includeHidden.has(r.id));
+    if (!hiddenOk && r.visibility !== 'public') throw new DomainError('not_found', 'Ticket type not found');
     if (r.salesStartAt && r.salesStartAt > opts.now)
       throw new DomainError('invalid_state', 'Not on sale yet', { ticketTypeId: r.id });
     if (r.salesEndAt && r.salesEndAt <= opts.now)

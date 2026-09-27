@@ -30,6 +30,7 @@
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {

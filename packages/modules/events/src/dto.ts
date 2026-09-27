@@ -1,5 +1,6 @@
 import { CurrencyCode, defineSerializer, IanaTimezone, partialNoDefaults, Slug } from '@yayatoh/contracts';
 import { z } from 'zod';
+import { ATTENDANCE_MODES, EVENT_CATEGORIES } from './domain/categories.ts';
 import { EVENT_PROFILES, EVENT_ROLES, EVENT_STATUSES, EVENT_VISIBILITIES } from './schema.ts';
 
 export const EventDto = z.object({
@@ -37,6 +38,13 @@ export const PublicEventDto = z.object({
   currency: z.string(),
   organizerName: z.string(),
   poweredByVisible: z.boolean(),
+  /** M1.4c/d (additive). */
+  category: z.enum(EVENT_CATEGORIES).nullable(),
+  attendanceMode: z.enum(ATTENDANCE_MODES),
+  /** The venue's public page, when the venue is in the directory. */
+  venueSlug: z.string().nullable(),
+  /** Private events are only ever returned after an access code unlocked them. */
+  visibility: z.enum(EVENT_VISIBILITIES),
 });
 export type PublicEventDto = z.infer<typeof PublicEventDto>;
 export const publicEventSerializer = defineSerializer('events.publicEvent', PublicEventDto);

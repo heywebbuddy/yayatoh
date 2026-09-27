@@ -31,11 +31,17 @@ export const getEventBySlugQuery = tenantQuery({
 /**
  * The public event page's only data source (cross-tenant by slug). The SECURITY DEFINER function
  * returns published / postponed / cancelled / completed events that are public or unlisted, and
- * the serializer allowlists what leaves.
+ * the serializer allowlists what leaves. `includePrivate` is for a private event whose page an
+ * access code has unlocked (the caller checked the grant first).
  */
-export async function publicEventBySlug(slug: string): Promise<PublicEventDto | null> {
+export async function publicEventBySlug(
+  slug: string,
+  opts: { includePrivate?: boolean } = {},
+): Promise<PublicEventDto | null> {
   const rows = await withoutTenant((tx) =>
-    tx.execute<Record<string, unknown>>(sql`select * from events.public_event(${slug})`),
+    tx.execute<Record<string, unknown>>(
+      sql`select * from events.public_event_v2(${slug}, ${opts.includePrivate === true})`,
+    ),
   );
   const r = rows[0];
   if (!r) return null;
@@ -53,6 +59,10 @@ export async function publicEventBySlug(slug: string): Promise<PublicEventDto | 
     currency: r.currency,
     organizerName: r.organizer_name,
     poweredByVisible: r.powered_by_visible,
+    category: r.category,
+    attendanceMode: r.attendance_mode,
+    venueSlug: r.venue_slug,
+    visibility: r.visibility,
   });
 }
 

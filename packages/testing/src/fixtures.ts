@@ -8,9 +8,15 @@ import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/b
 import { createCheckpointCommand, enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import {
+  addSectionCommand,
   assignEventRoleCommand,
+  createAccessCodeCommand,
+  createAnnouncementCommand,
   createEventCommand,
   type EventDto,
+  redeemAccessCodeCommand,
+  setEventDetailsCommand,
+  setPrivateInfoCommand,
   transitionEventCommand,
 } from '@yayatoh/events';
 import { buildRow } from '@yayatoh/floorplan';
@@ -52,6 +58,7 @@ import {
   createTicketTypeCommand,
   requestHolderLinkCommand,
 } from '@yayatoh/ticketing';
+import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
 import { ports, runBulk } from './ports.ts';
 
@@ -401,6 +408,64 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M1.4c: a directory venue picked for the event, a quote request on it, and tags.
+  const venue = await executeCommand(
+    createVenueCommand,
+    { name: `${name} Hall`, country: 'US', timezone: 'America/Chicago', directoryListed: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setEventDetailsCommand,
+    { eventId: event.id, venueId: venue.id, category: 'community', tags: ['Fixture', 'Isolation'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitQuoteRequestCommand,
+    {
+      venueId: venue.id,
+      name: 'Quote Asker',
+      email: `quotes@${slug}.test`,
+      message: 'Do you have space for 120 guests?',
+      clientKey: `fixture-client-${slug}`,
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  // M1.4d: a section, an announcement, private info, an access code (one use and one failed
+  // attempt); the short link was created with the event.
+  await executeCommand(
+    addSectionCommand,
+    { eventId: event.id, kind: 'text', title: 'About', content: { markdown: 'Welcome.' } },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createAnnouncementCommand,
+    { eventId: event.id, title: 'Doors at six', body: 'See you there.', publish: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setPrivateInfoCommand,
+    { eventId: event.id, body: `Wi-Fi password: fixture-${slug}` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createAccessCodeCommand,
+    { eventId: event.id, code: 'FIXTURE-CODE', unlocksEvent: true },
+    ctx(),
+    ports,
+  );
+  for (const code of ['FIXTURE-CODE', 'WRONG-CODE'])
+    await executeCommand(
+      redeemAccessCodeCommand,
+      { eventId: event.id, code, clientKey: `fixture-client-${slug}` },
+      createCtx({ orgId: org.id }),
+      ports,
+    );
   return { org, ownerId, viewerId, event, ctx };
 }
 

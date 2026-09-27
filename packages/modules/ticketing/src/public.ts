@@ -23,18 +23,24 @@ type Row = {
   early_ends_at: string | null;
   is_donation: boolean;
   access_dates: { date: string; name: string }[];
+  unlocked: boolean;
 };
 
 /**
  * Public passes for an event page (cross-tenant by slug, SECURITY DEFINER). Every price is
- * all-in; inventory is reduced to an availability state plus a "few left" hint.
+ * all-in; inventory is reduced to an availability state plus a "few left" hint. `access` is what a
+ * verified access code grants (M1.4d): hidden passes it unlocked, and a private event it opened.
  */
 export async function publicTicketTypes(
   eventSlug: string,
   now: Date = new Date(),
+  access: { readonly unlocked?: readonly string[]; readonly privateOk?: boolean } = {},
 ): Promise<PublicTicketTypeDto[]> {
+  const unlocked = `{${(access.unlocked ?? []).filter((id) => /^[0-9a-f-]{36}$/i.test(id)).join(',')}}`;
   const rows = await withoutTenant((tx) =>
-    tx.execute<Row>(sql`select * from ticketing.public_ticket_types_v2(${eventSlug})`),
+    tx.execute<Row>(
+      sql`select * from ticketing.public_ticket_types_v3(${eventSlug}, ${unlocked}::uuid[], ${access.privateOk === true})`,
+    ),
   );
   return rows.map((r) => {
     const allIn = (face: number) =>
@@ -75,6 +81,7 @@ export async function publicTicketTypes(
       fewLeft: availability === 'available' && r.remaining <= 10,
       minPerOrder: r.min_per_order,
       maxPerOrder: r.max_per_order,
+      unlocked: r.unlocked,
     });
   });
 }

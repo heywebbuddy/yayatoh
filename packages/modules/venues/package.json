@@ -1,10 +1,10 @@
 {
-  "name": "@yayatoh/events",
+  "name": "@yayatoh/venues",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 2
+    "tier": 1
   },
   "exports": {
     ".": "./src/index.ts",
@@ -18,8 +18,6 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/tenancy": "workspace:*",
-    "@yayatoh/venues": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },
