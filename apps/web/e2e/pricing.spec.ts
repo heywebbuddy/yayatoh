@@ -45,7 +45,7 @@ test.describe('early-bird, donation and multi-day passes', () => {
     await expectAccessible(guest);
 
     await guest.getByLabel(`Quantity — Supporter ${stamp}`).selectOption('1');
-    await guest.getByLabel(/^Your amount — Supporter/).fill('2');
+    await guest.getByLabel(`Your amount — Supporter ${stamp} (at least $5)`).fill('2');
     await guest.getByLabel('Full name').fill(`Ada ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ada+${stamp}@example.test`);
     await guest.getByRole('button', { name: 'Continue to payment' }).click();
@@ -54,7 +54,7 @@ test.describe('early-bird, donation and multi-day passes', () => {
     );
 
     await guest.getByLabel(`Quantity — Supporter ${stamp}`).selectOption('1');
-    await guest.getByLabel(/^Your amount — Supporter/).fill('12.50');
+    await guest.getByLabel(`Your amount — Supporter ${stamp} (at least $5)`).fill('12.50');
     await guest.getByLabel('Full name').fill(`Ada ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ada+${stamp}@example.test`);
     await guest.getByRole('button', { name: 'Continue to payment' }).click();
