@@ -4,6 +4,7 @@ import { Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
+import { HolderContent } from '@/components/holder-content.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
@@ -85,6 +86,13 @@ export default async function MyTicketsPage({
           ))}
         </ul>
       )}
+      {data.tickets.length > 0 && h.ctx.orgId ? (
+        <HolderContent
+          target={{ orgId: h.ctx.orgId, eventId: data.event.id }}
+          locale={locale}
+          timeZone={data.event.timezone}
+        />
+      ) : null}
     </main>
   );
 }

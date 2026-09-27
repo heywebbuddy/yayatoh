@@ -1,10 +1,12 @@
 import {
   Armchair,
   Bell,
+  Building2,
   Calendar,
   CalendarCheck,
   ChartLine,
   ClipboardList,
+  FileText,
   Globe,
   Heart,
   House,
@@ -12,8 +14,10 @@ import {
   Landmark,
   Library,
   ListChecks,
+  Lock,
   type LucideIcon,
   MailCheck,
+  MapPin,
   Megaphone,
   MessageSquare,
   Palette,
@@ -50,6 +54,10 @@ const ICONS: Record<string, LucideIcon> = {
   bell: Bell,
   settings: Settings,
   landmark: Landmark,
+  'map-pin': MapPin,
+  'file-text': FileText,
+  lock: Lock,
+  building: Building2,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

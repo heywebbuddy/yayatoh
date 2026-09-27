@@ -456,6 +456,9 @@ importers:
       '@yayatoh/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@yayatoh/venues':
+        specifier: workspace:*
+        version: link:../../packages/modules/venues
       geist:
         specifier: 1.7.2
         version: 1.7.2(next@16.3.6(@playwright/test@1.63.0)(@types/node@24.19.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))

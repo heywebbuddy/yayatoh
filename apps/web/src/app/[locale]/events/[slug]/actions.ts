@@ -1,6 +1,6 @@
 'use server';
 
-import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import { accessTarget, checkoutTarget, publicEventBySlug, redeemAccessCodeCommand } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
@@ -9,9 +9,12 @@ import { refresh } from 'next/cache';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
+import type { FormState } from '@/lib/form-state.ts';
+import { failure } from '@/server/form.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { getSession } from '@/server/session.ts';
+import { clientKey, currentAccess, rememberAccess } from '@/server/visitor.ts';
 
 export interface CheckoutState {
   readonly code: string | null;
@@ -30,9 +33,12 @@ export async function checkoutAction(
   form: FormData,
 ): Promise<CheckoutState> {
   const locale = await getLocale();
-  const target = await checkoutTarget(slug);
+  // M1.4d: an access code the visitor redeemed may open hidden passes or a private event.
+  const live = await accessTarget(slug);
+  const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
+  const target = (await checkoutTarget(slug)) ?? (grant?.unlocksEvent && live ? live : null);
   if (!target) return { code: 'not_found' };
-  const event = await publicEventBySlug(slug);
+  const event = await publicEventBySlug(slug, { includePrivate: grant?.unlocksEvent === true });
   if (!event) return { code: 'not_found' };
   let items: { ticketTypeId: string; quantity: number; amountMinor?: number }[];
   try {
@@ -90,6 +96,7 @@ export async function checkoutAction(
         buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
         marketingOptIn: form.get('marketingOptIn') === '1',
         promoCode: String(form.get('promoCode') ?? '').trim() || undefined,
+        ...(grant ? { accessCodeId: grant.codeId } : {}),
         answers,
         locale,
       },
@@ -146,7 +153,7 @@ export async function requestHolderLinkAction(
   _prev: HolderLinkState,
   form: FormData,
 ): Promise<HolderLinkState> {
-  const target = await checkoutTarget(slug);
+  const target = (await checkoutTarget(slug)) ?? (await accessTarget(slug));
   if (!target) return { sent: false, code: 'not_found' };
   try {
     await executeCommand(
@@ -159,4 +166,36 @@ export async function requestHolderLinkAction(
   } catch (err) {
     return { sent: false, code: isDomainError(err) ? err.code : 'internal' };
   }
+}
+
+/**
+ * Public: try an access code (M1.4d). A success is remembered in a signed, httpOnly cookie for this
+ * event and the page re-renders with what it unlocked. Wrong, expired and used-up codes get one
+ * answer; repeated failures from one device are rate-limited by the command.
+ */
+export async function redeemAccessCodeAction(
+  slug: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const target = await accessTarget(slug);
+  if (!target) return { ok: false, code: 'not_found' };
+  const code = String(form.get('accessCode') ?? '').trim();
+  if (!code) return { ok: false, code: 'validation_failed', fields: ['accessCode'], reason: 'empty' };
+  try {
+    const result = await executeCommand(
+      redeemAccessCodeCommand,
+      { eventId: target.eventId, code: code.slice(0, 64), clientKey: await clientKey('access-code') },
+      createCtx({ orgId: target.orgId, locale: await getLocale() }),
+      ports,
+    );
+    if (!result.ok)
+      return { ok: false, code: 'validation_failed', fields: ['accessCode'], reason: 'invalid_code' };
+    await rememberAccess(target.eventId, result.grant);
+  } catch (err) {
+    if (isDomainError(err)) return failure(err);
+    throw err;
+  }
+  refresh();
+  return { ok: true, code: null, stamp: Date.now() };
 }

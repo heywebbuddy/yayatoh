@@ -1,19 +1,101 @@
-import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import {
+  accessTarget,
+  checkoutTarget,
+  type PublicEventContentDto,
+  type PublicEventDto,
+  pageTarget,
+  publicEventBySlug,
+  publicEventContent,
+} from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
-import { brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
+import { Alert, brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AccessCodeEntry } from '@/components/access-code-entry.tsx';
+import { Announcements } from '@/components/announcements.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
+import { EventSections } from '@/components/event-sections.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
-import { checkoutAction, requestHolderLinkAction } from './actions.ts';
+import { currentAccess } from '@/server/visitor.ts';
+import { checkoutAction, redeemAccessCodeAction, requestHolderLinkAction } from './actions.ts';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  // Only what the public payload has; a private event (even unlocked) gets no metadata.
+  const pub = await publicEventBySlug(slug);
+  if (!pub) return { robots: { index: false } };
+  const description = pub.tagline ?? undefined;
+  return {
+    title: pub.name,
+    description,
+    openGraph: { title: pub.name, description, type: 'website' },
+    ...(pub.visibility === 'public' ? {} : { robots: { index: false } }),
+  };
+}
+
+const LD_STATUS = {
+  published: 'EventScheduled',
+  postponed: 'EventPostponed',
+  cancelled: 'EventCancelled',
+  completed: 'EventScheduled',
+} as Record<string, string>;
+const LD_MODE = {
+  in_person: 'OfflineEventAttendanceMode',
+  online: 'OnlineEventAttendanceMode',
+  hybrid: 'MixedEventAttendanceMode',
+} as const;
+
+/** schema.org Event from the allowlisted public payload only (never private info or join links). */
+function eventJsonLd(ev: PublicEventDto, url: string) {
+  const place =
+    ev.venueName || ev.city
+      ? { '@type': 'Place', name: ev.venueName ?? ev.city, address: ev.city ?? undefined }
+      : null;
+  const virtual = { '@type': 'VirtualLocation', url };
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: ev.name,
+    description: ev.tagline ?? undefined,
+    startDate: ev.startsAt.toISOString(),
+    endDate: ev.endsAt.toISOString(),
+    eventStatus: `https://schema.org/${LD_STATUS[ev.status] ?? 'EventScheduled'}`,
+    eventAttendanceMode: `https://schema.org/${LD_MODE[ev.attendanceMode]}`,
+    location:
+      ev.attendanceMode === 'online'
+        ? virtual
+        : ev.attendanceMode === 'hybrid'
+          ? [virtual, place].filter(Boolean)
+          : (place ?? undefined),
+    organizer: { '@type': 'Organization', name: ev.organizerName },
+    url,
+  };
+}
+
+/** A private event's page before a code opened it: nothing about the event, just the code form. */
+async function AccessGate({ slug }: { slug: string }) {
+  const t = await getTranslations('accessEntry');
+  return (
+    <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col justify-center gap-6 px-6 py-16">
+      <h1 className="text-[32px] leading-tight font-light tracking-[-0.04em]">{t('gateTitle')}</h1>
+      <p className="text-body text-zinc-500">{t('gateDescription')}</p>
+      <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} idPrefix="gate" />
+    </main>
+  );
+}
 
 export default async function PublicEventPage({
   params,
@@ -22,12 +104,29 @@ export default async function PublicEventPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const pub = await publicEventBySlug(slug);
-  if (!pub) notFound();
+  // M1.4d: an access code (signed cookie, re-checked here) may open a private event and hidden passes.
+  const live = await accessTarget(slug);
+  const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
+  let pub = await publicEventBySlug(slug);
+  if (!pub) {
+    if (live?.visibility !== 'private') notFound();
+    if (!grant?.unlocksEvent) return <AccessGate slug={slug} />;
+    pub = await publicEventBySlug(slug, { includePrivate: true });
+    if (!pub) notFound();
+  }
+  const unlockedPrivate = pub.visibility === 'private';
   // Passes, stats and agenda arrive with ticketing and sessions; showcase events get a dev overlay.
   const demo = publicDemoOverlay(slug);
-  const real = await publicTicketTypes(slug);
-  const target = await checkoutTarget(slug);
+  const real = await publicTicketTypes(slug, new Date(), {
+    unlocked: grant?.ticketTypeIds ?? [],
+    privateOk: grant?.unlocksEvent === true,
+  });
+  const target = (await checkoutTarget(slug)) ?? (unlockedPrivate && live ? live : null);
+  const contentTarget = (await pageTarget(slug)) ?? (unlockedPrivate && live ? live : null);
+  const content: PublicEventContentDto = contentTarget
+    ? await publicEventContent(contentTarget)
+    : { sections: [], announcements: [] };
+  const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
   const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
@@ -75,6 +174,7 @@ export default async function PublicEventPage({
     agenda: demo?.agenda ?? [],
   };
   const t = await getTranslations();
+  const origin = (process.env.BETTER_AUTH_URL ?? 'http://localhost:3000').replace(/\/$/, '');
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const range = formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), f);
   const price = (minor: number) => formatMoney(money(minor, ev.currency), locale).replace(/\.00$/, '');
@@ -87,6 +187,16 @@ export default async function PublicEventPage({
   });
   return (
     <div className="min-h-dvh bg-white">
+      {ev.visibility === 'public' ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              eventJsonLd(ev, `${origin}${locale === 'en' ? '' : `/${locale}`}/events/${ev.slug}`),
+            ).replace(/</g, '\\u003c'),
+          }}
+        />
+      ) : null}
       <section className="relative m-2 overflow-hidden rounded-panel bg-black px-6 pt-28 pb-10 text-white md:px-16 md:pt-32">
         <div
           aria-hidden="true"
@@ -115,6 +225,31 @@ export default async function PublicEventPage({
             {ev.name}
           </h1>
           {ev.tagline ? <p className="text-[16px] leading-6 text-white/80">{ev.tagline}</p> : null}
+          {ev.category || ev.attendanceMode !== 'in_person' || ev.venueSlug ? (
+            <ul
+              aria-label={t('publicEvent.facts')}
+              className="flex list-none flex-wrap gap-2 p-0 text-caption"
+            >
+              {ev.category ? (
+                <li className="rounded-pill bg-glass px-3 py-1">{t(`categories.${ev.category}`)}</li>
+              ) : null}
+              {ev.attendanceMode !== 'in_person' ? (
+                <li className="rounded-pill bg-glass px-3 py-1">
+                  {t(`publicEvent.mode.${ev.attendanceMode}`)}
+                </li>
+              ) : null}
+              {ev.venueSlug && ev.venueName ? (
+                <li>
+                  <Link
+                    href={`/venues/${ev.venueSlug}`}
+                    className="inline-flex min-h-6 items-center rounded-pill bg-glass px-3 py-1 text-white underline underline-offset-2"
+                  >
+                    {ev.venueName}
+                  </Link>
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
           {ev.status !== 'published' ? (
             <p className="inline-flex self-start rounded-pill bg-glass px-3 py-1 text-caption">
               {t(`eventStatus.${ev.status}`)}
@@ -144,6 +279,15 @@ export default async function PublicEventPage({
           </dl>
         ) : null}
       </section>
+
+      {content.announcements.length > 0 ? (
+        <section aria-labelledby="announcements-heading" className="flex flex-col gap-4 px-6 pt-10 md:px-16">
+          <h2 id="announcements-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+            {t('publicEvent.announcements')}
+          </h2>
+          <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
+        </section>
+      ) : null}
 
       <section
         id="passes"
@@ -192,6 +336,22 @@ export default async function PublicEventPage({
           />
         )}
       </section>
+
+      {live ? (
+        <section aria-labelledby="access-code-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">
+          <h2 id="access-code-heading" className="text-section">
+            {t('accessEntry.title')}
+          </h2>
+          {unlockedPasses || unlockedPrivate ? (
+            <Alert tone="info" title={t('accessEntry.active')} />
+          ) : (
+            <p className="text-body text-zinc-500">{t('accessEntry.hint')}</p>
+          )}
+          <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
+        </section>
+      ) : null}
+
+      <EventSections sections={content.sections} />
 
       {target ? (
         <section aria-labelledby="have-tickets-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">

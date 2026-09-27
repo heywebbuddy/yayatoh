@@ -1,4 +1,10 @@
-import { listEventsQuery } from '@yayatoh/events';
+import {
+  EVENT_CATEGORIES,
+  type EventCategory,
+  listEventsQuery,
+  orgTagsQuery,
+  searchEventsQuery,
+} from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { payoutAccountQuery } from '@yayatoh/payments';
 import {
@@ -35,7 +41,7 @@ export default async function OrgHome({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ period?: string; from?: string; to?: string }>;
+  searchParams: Promise<{ period?: string; from?: string; to?: string; category?: string; tag?: string }>;
 }) {
   const { locale, org } = await params;
   const sp = await searchParams;
@@ -82,7 +88,17 @@ export default async function OrgHome({
           {t('orgHome.events')}
         </h2>
         <Suspense fallback={<EventsSkeleton label={t('common.loading')} />}>
-          <EventList org={org} locale={locale} create={create} />
+          <EventList
+            org={org}
+            locale={locale}
+            create={create}
+            filters={{
+              category: (EVENT_CATEGORIES as readonly string[]).includes(sp.category ?? '')
+                ? (sp.category as EventCategory)
+                : undefined,
+              tag: sp.tag?.trim().slice(0, 40) || undefined,
+            }}
+          />
         </Suspense>
       </section>
     </>
@@ -100,20 +116,90 @@ function EventsSkeleton({ label }: { label: string }) {
   );
 }
 
-async function EventList({ org, locale, create }: { org: string; locale: string; create: ReactNode }) {
+async function EventList({
+  org,
+  locale,
+  create,
+  filters,
+}: {
+  org: string;
+  locale: string;
+  create: ReactNode;
+  filters: { category?: EventCategory; tag?: string };
+}) {
   const data = await loadConsole(org);
   const t = await getTranslations();
-  const events = (await executeQuery(listEventsQuery, {}, data.ctx, ports)).filter(
-    (e) => e.status !== 'archived',
-  );
+  const filtered = Boolean(filters.category || filters.tag);
+  const [events, tags] = await Promise.all([
+    executeQuery(searchEventsQuery, filters, data.ctx, ports).then((all) =>
+      all.filter((e) => e.status !== 'archived'),
+    ),
+    executeQuery(orgTagsQuery, {}, data.ctx, ports),
+  ]);
+  const selectClass = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
   return (
     <>
+      <search aria-label={t('eventFilters.label')}>
+        <form method="get" className="flex flex-wrap items-end gap-3">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="filter-category" className="text-caption text-zinc-600">
+              {t('eventFilters.category')}
+            </label>
+            <select
+              id="filter-category"
+              name="category"
+              defaultValue={filters.category ?? ''}
+              className={selectClass}
+            >
+              <option value="">{t('eventFilters.anyCategory')}</option>
+              {EVENT_CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {t(`categories.${c}`)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="filter-tag" className="text-caption text-zinc-600">
+              {t('eventFilters.tag')}
+            </label>
+            <select
+              id="filter-tag"
+              name="tag"
+              defaultValue={filters.tag?.toLowerCase() ?? ''}
+              className={selectClass}
+            >
+              <option value="">{t('eventFilters.anyTag')}</option>
+              {tags.map((tag) => (
+                <option key={tag.key} value={tag.key}>
+                  {tag.tag}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button type="submit" className={buttonClass('secondary')}>
+            {t('eventFilters.apply')}
+          </button>
+          {filtered ? (
+            <Link
+              href={`/o/${org}`}
+              className="inline-flex min-h-10 items-center text-caption underline underline-offset-2"
+            >
+              {t('eventFilters.clear')}
+            </Link>
+          ) : null}
+        </form>
+      </search>
       {events.length === 0 ? (
-        <EmptyState
-          title={t('orgHome.emptyTitle')}
-          description={t('orgHome.emptyDescription')}
-          action={create}
-        />
+        filtered ? (
+          <EmptyState title={t('eventFilters.noneTitle')} description={t('eventFilters.noneDescription')} />
+        ) : (
+          <EmptyState
+            title={t('orgHome.emptyTitle')}
+            description={t('orgHome.emptyDescription')}
+            action={create}
+          />
+        )
       ) : (
         <ul className="grid list-none grid-cols-1 gap-3.5 p-0 md:grid-cols-2 xl:grid-cols-3">
           {events.map((e) => {
@@ -121,7 +207,10 @@ async function EventList({ org, locale, create }: { org: string; locale: string;
             return (
               <li key={e.id}>
                 <Card className="flex h-full flex-col gap-3">
-                  <Label>{t(`profiles.${e.profile}`)}</Label>
+                  <Label>
+                    {t(`profiles.${e.profile}`)}
+                    {e.category ? ` · ${t(`categories.${e.category as EventCategory}`)}` : ''}
+                  </Label>
                   <h3 className="text-[22px] leading-tight font-light tracking-[-0.03em]">{e.name}</h3>
                   <p className="text-body text-zinc-500">
                     {formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
@@ -131,6 +220,18 @@ async function EventList({ org, locale, create }: { org: string; locale: string;
                     })}
                     {e.venueName ? ` · ${e.venueName}` : ''}
                   </p>
+                  {e.tags.length > 0 ? (
+                    <ul aria-label={t('eventFilters.tags')} className="flex list-none flex-wrap gap-1.5 p-0">
+                      {e.tags.map((tag) => (
+                        <li
+                          key={tag}
+                          className="rounded-pill bg-zinc-100 px-2.5 py-0.5 text-caption text-zinc-700"
+                        >
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                   <StatusDot
                     status={STATUS_DOT[e.status]}
                     label={`${t(`eventStatus.${e.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}

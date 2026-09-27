@@ -52,6 +52,7 @@ export {
   OrganizerTicketDto,
   orderByManageToken,
   orderDetailQuery,
+  orderHolderTarget,
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';

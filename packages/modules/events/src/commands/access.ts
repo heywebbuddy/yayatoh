@@ -212,7 +212,8 @@ export const listAccessCodesQuery = tenantQuery({
   input: z.object({ eventId: z.uuid() }),
   output: z.array(AccessCodeDto),
   entitlement: 'access_codes',
-  permission: 'events:read',
+  // Codes are secrets (they open private events): writers only, like the private info.
+  permission: 'events:write',
   handler: async ({ input, tx }) =>
     (
       await tx
