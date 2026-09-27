@@ -6,3 +6,4 @@ The per-event participant record. Owns Postgres schema `attendees`.
 - Every attendee belongs to one event and one org contact (`crm.contacts`); the contact is the person, the attendee is their participation.
 - Ticketed attendees are created in the same transaction that issues the ticket, one per ticket (`unique (org_id, ticket_id)`).
 - Organizer reads go through `listAttendeesQuery` and the `AttendeeDto` allowlist.
+- Taking a guest off the list (`removeGuestCommand`) emits `attendee.cancelled@1` `{ orgId, eventId, attendeeId }` so higher tiers can react (seating frees their seat).

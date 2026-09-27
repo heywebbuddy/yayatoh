@@ -409,7 +409,7 @@ export async function voidTicketsTx(
   tx: TenantTx,
   ctx: Ctx,
   req: { orderId: string; ticketIds: readonly string[]; reason: string },
-): Promise<{ id: string; ticketTypeId: string; orderItemId: string }[]> {
+): Promise<{ id: string; ticketTypeId: string; orderItemId: string; attendeeId: string | null }[]> {
   if (req.ticketIds.length === 0) return [];
   const rows = await tx
     .update(tickets)
@@ -438,7 +438,12 @@ export async function voidTicketsTx(
     tx,
     [...perType].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
   );
-  return rows.map(({ id, ticketTypeId, orderItemId }) => ({ id, ticketTypeId, orderItemId }));
+  return rows.map(({ id, ticketTypeId, orderItemId, attendeeId }) => ({
+    id,
+    ticketTypeId,
+    orderItemId,
+    attendeeId,
+  }));
 }
 
 /** Seated checkout: record each ticket's seat (it is printed on the ticket and the PDF). */

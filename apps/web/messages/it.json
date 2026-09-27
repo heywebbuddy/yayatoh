@@ -1297,6 +1297,77 @@
       "name": "Nome",
       "submit": "Salva piantina",
       "done": "Salvata. Puoi usarla per altri eventi."
+    },
+    "tabs": {
+      "label": "Viste dei posti",
+      "plan": "Piantina",
+      "assign": "Assegna ospiti"
+    },
+    "assign": {
+      "title": "Assegna ospiti",
+      "description": "Fai sedere le persone ai tavoli e nelle file. Trascina un nome sulla piantina, oppure spunta i nomi, scegli un tavolo e premi Fai sedere: con la tastiera puoi fare tutto ciò che fai trascinando.",
+      "noPlan": "Questo evento non ha ancora una piantina dei posti. Creane una, poi assegna qui i tuoi ospiti.",
+      "toPlan": "Vai alla piantina",
+      "summary": "{seated, plural, one {# persona con posto} other {# persone con posto}} · {unseated} ancora da sistemare",
+      "readOnly": "Puoi vedere chi siede dove, ma non modificarlo.",
+      "done": "{count, plural, one {# persona sistemata} other {# persone sistemate}} a {item}.",
+      "removed": "{name} non ha più un posto.",
+      "queue": {
+        "title": "Da sistemare ({count})",
+        "search": "Cerca per nome o email",
+        "list": "Persone da sistemare",
+        "selected": "{count, plural, =0 {Nessuno selezionato} one {# selezionata} other {# selezionate}}",
+        "selectShown": "Seleziona quelle mostrate",
+        "clear": "Cancella selezione",
+        "empty": "Tutti hanno un posto.",
+        "noMatch": "Nessuno corrisponde a «{q}».",
+        "more": "Mostrate {shown} di {total}. Cerca per trovare le altre."
+      },
+      "form": {
+        "title": "Sistema le persone selezionate",
+        "item": "Tavolo o fila",
+        "choose": "Scegli un tavolo o una fila",
+        "option": "{item} — {free} liberi su {capacity}",
+        "seat": "Posto",
+        "anySeat": "Qualsiasi posto libero",
+        "seatKept": "{label} (riservato)",
+        "submit": "Fai sedere",
+        "submitting": "Assegnazione…"
+      },
+      "errors": {
+        "noPeople": "Scegli almeno una persona.",
+        "noItem": "Scegli un tavolo o una fila.",
+        "onePerSeat": "Un posto è per una persona. Scegli una persona oppure «Qualsiasi posto libero».",
+        "notEnough": "Non ci stanno tutti: {fits, plural, =0 {non c’è nessun posto libero} one {c’è solo # posto libero} other {ci sono solo # posti liberi}} per {asked, plural, one {# persona} other {# persone}}.",
+        "seatTaken": "Quel posto è già occupato. Scegline un altro.",
+        "seatBlocked": "Quel posto è bloccato. Scegline un altro.",
+        "seatsTaken": "Alcuni di quei posti sono appena stati presi. Riprova.",
+        "seatedByTicket": "Ha già un posto con il suo biglietto.",
+        "cancelled": "Quella persona non partecipa più.",
+        "forbidden": "Puoi vedere i posti, ma non modificarli.",
+        "dropMiss": "Rilascia i nomi su un tavolo, una fila o un posto."
+      },
+      "canvas": {
+        "title": "Piantina",
+        "hint": "Trascina un nome (o i nomi spuntati) su un tavolo, una fila o un posto. Tutto si può fare anche con l’elenco e il modulo.",
+        "readOnlyHint": "Chi siede dove, come immagine della sala."
+      },
+      "state": {
+        "free": "Libero",
+        "assigned": "Ospite",
+        "sold": "Venduto",
+        "held": "In acquisto",
+        "reserved": "Riservato",
+        "blocked": "Bloccato"
+      },
+      "tables": {
+        "title": "Tavoli e file",
+        "count": "{taken} posti occupati su {capacity} · {free} liberi",
+        "byTicket": "{seat} · con biglietto",
+        "empty": "Ancora nessuno.",
+        "remove": "Rimuovi",
+        "removeLabel": "Rimuovi {name} da {item}"
+      }
     }
   }
 }

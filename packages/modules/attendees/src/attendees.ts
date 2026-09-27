@@ -62,6 +62,40 @@ export async function cancelAttendeesTx(
     .where(inArray(attendees.id, [...attendeeIds]));
 }
 
+/**
+ * The active people of one event, by name (seating, M1.7d). Internal fields only: callers
+ * serialize what they show.
+ */
+export async function eventAttendeesTx(tx: TenantTx, eventId: string) {
+  return tx
+    .select({
+      id: attendees.id,
+      name: attendees.name,
+      email: attendees.email,
+      source: attendees.source,
+      ticketId: attendees.ticketId,
+      labels: attendees.labels,
+    })
+    .from(attendees)
+    .where(and(eq(attendees.eventId, eventId), eq(attendees.status, 'active')))
+    .orderBy(attendees.name, attendees.id);
+}
+
+/** Attendees by id, with their event and status (callers check both). */
+export async function attendeesByIdsTx(tx: TenantTx, ids: readonly string[]) {
+  if (ids.length === 0) return [];
+  return tx
+    .select({
+      id: attendees.id,
+      eventId: attendees.eventId,
+      status: attendees.status,
+      ticketId: attendees.ticketId,
+      name: attendees.name,
+    })
+    .from(attendees)
+    .where(inArray(attendees.id, [...ids]));
+}
+
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /** Labels are short free text: trimmed, inner whitespace collapsed, 1–40 characters. */

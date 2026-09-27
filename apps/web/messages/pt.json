@@ -1297,6 +1297,77 @@
       "name": "Nome",
       "submit": "Salvar mapa",
       "done": "Salvo. Você pode usá-lo em outros eventos."
+    },
+    "tabs": {
+      "label": "Vistas de lugares",
+      "plan": "Planta",
+      "assign": "Atribuir convidados"
+    },
+    "assign": {
+      "title": "Atribuir convidados",
+      "description": "Acomode as pessoas em mesas e fileiras. Arraste um nome para a planta, ou marque nomes, escolha uma mesa e clique em Acomodar: pelo teclado dá para fazer tudo o que se faz arrastando.",
+      "noPlan": "Este evento ainda não tem planta de lugares. Crie uma primeiro e depois acomode aqui seus convidados.",
+      "toPlan": "Ir para a planta",
+      "summary": "{seated, plural, one {# pessoa acomodada} other {# pessoas acomodadas}} · {unseated} ainda sem lugar",
+      "readOnly": "Você pode ver quem senta onde, mas não pode alterar.",
+      "done": "{count, plural, one {# pessoa acomodada} other {# pessoas acomodadas}} em {item}.",
+      "removed": "{name} não tem mais lugar.",
+      "queue": {
+        "title": "Ainda sem lugar ({count})",
+        "search": "Buscar por nome ou e-mail",
+        "list": "Pessoas ainda sem lugar",
+        "selected": "{count, plural, =0 {Ninguém selecionado} one {# selecionada} other {# selecionadas}}",
+        "selectShown": "Selecionar as exibidas",
+        "clear": "Limpar seleção",
+        "empty": "Todos têm lugar.",
+        "noMatch": "Ninguém corresponde a “{q}”.",
+        "more": "Exibindo {shown} de {total}. Busque para encontrar as demais."
+      },
+      "form": {
+        "title": "Acomodar as pessoas selecionadas",
+        "item": "Mesa ou fileira",
+        "choose": "Escolha uma mesa ou fileira",
+        "option": "{item} — {free} de {capacity} livres",
+        "seat": "Lugar",
+        "anySeat": "Qualquer lugar livre",
+        "seatKept": "{label} (reservado)",
+        "submit": "Acomodar",
+        "submitting": "Acomodando…"
+      },
+      "errors": {
+        "noPeople": "Escolha pelo menos uma pessoa.",
+        "noItem": "Escolha uma mesa ou fileira.",
+        "onePerSeat": "Um lugar é para uma pessoa. Escolha uma pessoa ou “Qualquer lugar livre”.",
+        "notEnough": "Não cabem todos: {fits, plural, =0 {não há nenhum lugar livre} one {há só # lugar livre} other {há só # lugares livres}} ali para {asked, plural, one {# pessoa} other {# pessoas}}.",
+        "seatTaken": "Alguém já ocupa esse lugar. Escolha outro.",
+        "seatBlocked": "Esse lugar está bloqueado. Escolha outro.",
+        "seatsTaken": "Alguns desses lugares acabaram de ser ocupados. Tente de novo.",
+        "seatedByTicket": "Essa pessoa já tem lugar pelo ingresso.",
+        "cancelled": "Essa pessoa não vai mais participar.",
+        "forbidden": "Você pode ver os lugares, mas não alterá-los.",
+        "dropMiss": "Solte os nomes sobre uma mesa, uma fileira ou um lugar."
+      },
+      "canvas": {
+        "title": "Planta",
+        "hint": "Arraste um nome (ou os nomes marcados) para uma mesa, fileira ou lugar. Tudo isso também pode ser feito com a lista e o formulário.",
+        "readOnlyHint": "Quem senta onde, como imagem do salão."
+      },
+      "state": {
+        "free": "Livre",
+        "assigned": "Convidado",
+        "sold": "Vendido",
+        "held": "Em compra",
+        "reserved": "Reservado",
+        "blocked": "Bloqueado"
+      },
+      "tables": {
+        "title": "Mesas e fileiras",
+        "count": "{taken} de {capacity} lugares ocupados · {free} livres",
+        "byTicket": "{seat} · pelo ingresso",
+        "empty": "Ninguém ainda.",
+        "remove": "Remover",
+        "removeLabel": "Remover {name} de {item}"
+      }
     }
   }
 }

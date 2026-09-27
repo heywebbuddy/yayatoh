@@ -13,6 +13,8 @@ export {
 } from './document.ts';
 export {
   canonicalJson,
+  type Hit,
+  hitTest,
   type LayoutProblem,
   layoutProblems,
   type PlacedSeat,

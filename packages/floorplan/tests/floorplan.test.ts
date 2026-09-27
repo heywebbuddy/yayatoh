@@ -5,6 +5,7 @@ import {
   buildRow,
   canonicalJson,
   FloorplanDoc,
+  hitTest,
   layoutProblems,
   placedSeats,
   quickLayout,
@@ -69,5 +70,39 @@ describe('floor plan documents', () => {
     expect(layoutProblems(doc)).toEqual([]);
     expect(seatCount(doc)).toBe(30 * 40 + 20 * 10);
     expect(doc.items[0]).toMatchObject({ kind: 'object', objectType: 'stage' });
+  });
+
+  it('hit-tests the plan: a seat, else the table or row around the point, never objects', () => {
+    const row = buildRow({ label: 'A', count: 5, x: 100, y: 100 });
+    const table = buildRoundTable({ label: '1', seats: 8, x: 1500, y: 1000 });
+    const rotated = { ...buildRow({ label: 'B', count: 3, x: 2500, y: 300 }), rotation: 90 };
+    const stage = {
+      kind: 'object',
+      id: uuidv7(),
+      objectType: 'stage',
+      x: 100,
+      y: 1500,
+      width: 800,
+      height: 300,
+    };
+    const doc = room([row, table, rotated, stage]);
+    const seatOf = (label: string) => placedSeats(doc).find((p) => p.label === label);
+    const t1 = seatOf('Table 1 · 1');
+    expect(hitTest(doc, { x: t1?.x ?? 0, y: (t1?.y ?? 0) + 10 })).toEqual({
+      itemId: table.id,
+      seatId: t1?.seatId,
+    });
+    expect(hitTest(doc, { x: 1500, y: 1000 })).toEqual({ itemId: table.id, seatId: null });
+    expect(hitTest(doc, { x: 100 + 55 * 2, y: 100 })).toEqual({ itemId: row.id, seatId: row.seats[2]?.id });
+    // Between two seats of a row: the row.
+    expect(hitTest(doc, { x: 100 + 55 * 2 + 27, y: 100 })).toEqual({ itemId: row.id, seatId: null });
+    // A row turned 90° runs downwards.
+    expect(hitTest(doc, { x: 2500, y: 300 + 110 })).toEqual({
+      itemId: rotated.id,
+      seatId: rotated.seats[2]?.id,
+    });
+    expect(hitTest(doc, { x: 2500 + 110, y: 300 })).toBeNull();
+    expect(hitTest(doc, { x: 400, y: 1600 })).toBeNull();
+    expect(hitTest(doc, { x: 2900, y: 1900 })).toBeNull();
   });
 });

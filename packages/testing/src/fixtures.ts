@@ -28,6 +28,7 @@ import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayat
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
+  assignSeatsCommand,
   holdSeatsTx,
   publishEventLayoutCommand,
   saveLayoutCommand,
@@ -386,6 +387,19 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       holdId: uuidv7(),
       expiresAt: new Date(Date.now() + 600_000),
     }),
+  );
+  // A guest seated at that row (M1.7d seat assignments, isolation coverage).
+  const [guest] = await withTenant(ctx(), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from attendees.attendees where event_id = ${event.id} and ticket_id is null and status = 'active' order by created_at limit 1`,
+    ),
+  );
+  if (!guest) throw new Error('fixture: no guest to seat');
+  await executeCommand(
+    assignSeatsCommand,
+    { eventId: event.id, attendeeIds: [guest.id], itemId: plan.items[0]?.id ?? '' },
+    ctx(),
+    ports,
   );
   return { org, ownerId, viewerId, event, ctx };
 }
