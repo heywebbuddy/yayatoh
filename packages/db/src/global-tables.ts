@@ -10,5 +10,6 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'auth.accounts': 'Credentials and OAuth links; accessed only through packages/auth.',
   'auth.verifications': 'OTP / magic-link / verification tokens; accessed only through packages/auth.',
   'auth.two_factors': 'TOTP secrets and backup codes; accessed only through packages/auth.',
+  'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
 };

@@ -1,4 +1,4 @@
-import { withoutTenant } from '@yayatoh/db';
+import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { asc, eq, sql } from 'drizzle-orm';
@@ -54,4 +54,10 @@ export async function publicEventBySlug(slug: string): Promise<PublicEventDto | 
     organizerName: r.organizer_name,
     poweredByVisible: r.powered_by_visible,
   });
+}
+
+/** For lower-tier callers inside their own tenant transaction (e.g. ticketing). */
+export async function findEventTx(tx: TenantTx, eventId: string): Promise<EventDto | null> {
+  const [row] = await tx.select().from(events).where(eq(events.id, eventId));
+  return row ? EventDto.parse(row) : null;
 }

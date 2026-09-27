@@ -256,7 +256,14 @@
     "select": "Choisir",
     "poweredBy": "Propulsé par Yayatoh",
     "noTicketsTitle": "Les billets ne sont pas encore en vente",
-    "noTicketsDescription": "Revenez bientôt ou suivez l’organisateur pour être tenu informé."
+    "noTicketsDescription": "Revenez bientôt ou suivez l’organisateur pour être tenu informé.",
+    "availability": {
+      "available": "En vente",
+      "sold_out": "Complet",
+      "not_yet_on_sale": "Pas encore en vente",
+      "sales_ended": "Vente terminée",
+      "fewLeft": "Plus que quelques places"
+    }
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -366,5 +373,35 @@
     "city": "Ville",
     "submit": "Créer le brouillon",
     "slugTaken": "Un événement porte déjà ce nom. Essayez un nom légèrement différent."
+  },
+  "tickets": {
+    "subtitle": "Types de billets, prix et stock. Tous les prix affichés aux acheteurs incluent les frais.",
+    "caption": "Types de billets",
+    "emptyTitle": "Aucun type de billet pour l’instant",
+    "emptyDescription": "Ajoutez un type de billet pour commencer à vendre ou à enregistrer des inscriptions.",
+    "name": "Nom",
+    "price": "Valeur faciale",
+    "allIn": "Prix payé par l’acheteur",
+    "feeIncluded": "dont {fee} de frais",
+    "feeAbsorbed": "frais absorbés",
+    "sold": "Vendus",
+    "status": "Statut",
+    "soldOut": "Complet",
+    "onSale": "En vente",
+    "hidden": "Masqué sur la page publique",
+    "actions": "Actions",
+    "remove": "Retirer",
+    "archive": "Retirer {name}",
+    "addTitle": "Ajouter un type de billet",
+    "priceIn": "Prix ({currency})",
+    "priceHint": "Indiquez 0 pour les billets gratuits.",
+    "quantity": "Quantité disponible",
+    "maxPerOrder": "Maximum par commande",
+    "feeMode": "Frais de plateforme",
+    "passOn": "L’acheteur paie les frais",
+    "absorb": "J’absorbe les frais",
+    "description": "Description (facultatif)",
+    "add": "Ajouter le type de billet",
+    "added": "Type de billet ajouté."
   }
 }

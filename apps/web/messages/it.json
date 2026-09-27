@@ -256,7 +256,14 @@
     "select": "Seleziona",
     "poweredBy": "Con tecnologia Yayatoh",
     "noTicketsTitle": "I biglietti non sono ancora in vendita",
-    "noTicketsDescription": "Torna presto o segui l’organizzatore per gli aggiornamenti."
+    "noTicketsDescription": "Torna presto o segui l’organizzatore per gli aggiornamenti.",
+    "availability": {
+      "available": "In vendita",
+      "sold_out": "Esaurito",
+      "not_yet_on_sale": "Non ancora in vendita",
+      "sales_ended": "Vendite chiuse",
+      "fewLeft": "Ne restano pochi"
+    }
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -366,5 +373,35 @@
     "city": "Città",
     "submit": "Crea bozza",
     "slugTaken": "Esiste già un evento con questo nome. Prova con un nome leggermente diverso."
+  },
+  "tickets": {
+    "subtitle": "Tipi di biglietto, prezzi e disponibilità. Ogni prezzo mostrato agli acquirenti include le commissioni.",
+    "caption": "Tipi di biglietto",
+    "emptyTitle": "Ancora nessun tipo di biglietto",
+    "emptyDescription": "Aggiungi un tipo di biglietto per iniziare a vendere o a raccogliere iscrizioni.",
+    "name": "Nome",
+    "price": "Valore nominale",
+    "allIn": "L’acquirente paga",
+    "feeIncluded": "include {fee} di commissione",
+    "feeAbsorbed": "commissione a carico tuo",
+    "sold": "Venduti",
+    "status": "Stato",
+    "soldOut": "Esaurito",
+    "onSale": "In vendita",
+    "hidden": "Nascosto dalla pagina pubblica",
+    "actions": "Azioni",
+    "remove": "Rimuovi",
+    "archive": "Rimuovi {name}",
+    "addTitle": "Aggiungi un tipo di biglietto",
+    "priceIn": "Prezzo ({currency})",
+    "priceHint": "Usa 0 per i biglietti gratuiti.",
+    "quantity": "Quantità disponibile",
+    "maxPerOrder": "Massimo per ordine",
+    "feeMode": "Commissione della piattaforma",
+    "passOn": "La commissione la paga l’acquirente",
+    "absorb": "La commissione la pago io",
+    "description": "Descrizione (facoltativa)",
+    "add": "Aggiungi tipo di biglietto",
+    "added": "Tipo di biglietto aggiunto."
   }
 }

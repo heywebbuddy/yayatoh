@@ -1,4 +1,4 @@
-import { setEntitlementOverrideCommand } from '@yayatoh/billing';
+import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import { withTenant } from '@yayatoh/db';
 import { assignEventRoleCommand, createEventCommand, type EventDto } from '@yayatoh/events';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
@@ -10,6 +10,7 @@ import {
   type OrganizationDto,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
+import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { ports } from './ports.ts';
 
@@ -90,6 +91,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       endsAt: '2027-10-14T22:00:00Z',
     },
     ctx(),
+    ports,
+  );
+  await executeCommand(
+    createTicketTypeCommand,
+    { eventId: event.id, name: 'General Admission', priceMinor: 2500, quantityTotal: 100 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setFeeOverrideCommand,
+    { currency: 'EUR', percentBps: 100, fixedMinor: 0, reason: 'fixture' },
+    systemCtx(org.id),
     ports,
   );
   await executeCommand(

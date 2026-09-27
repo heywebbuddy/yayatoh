@@ -50,6 +50,20 @@
       "when": 1790480476766,
       "tag": "0006_events_public",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790481285698,
+      "tag": "0007_safe_diamondback",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790481287214,
+      "tag": "0008_ticketing_public",
+      "breakpoints": true
     }
   ]
 }

@@ -54,3 +54,22 @@ describe('Money', () => {
     expect(formatMoney(money(1234, 'KWD'), 'en-US')).toContain('1.234');
   });
 });
+
+import { moneyFromDecimal } from '../src/index.ts';
+
+describe('moneyFromDecimal', () => {
+  it('parses decimals into minor units without floats', () => {
+    expect(moneyFromDecimal('249', 'USD').amount).toBe(24900);
+    expect(moneyFromDecimal('249.5', 'USD').amount).toBe(24950);
+    expect(moneyFromDecimal('1,249.99', 'USD').amount).toBe(124999);
+    expect(moneyFromDecimal('0.29', 'USD').amount).toBe(29);
+    expect(moneyFromDecimal('5000', 'JPY').amount).toBe(5000);
+    expect(moneyFromDecimal('1.234', 'KWD').amount).toBe(1234);
+  });
+  it('rejects bad input and too many decimals', () => {
+    expect(() => moneyFromDecimal('12.345', 'USD')).toThrow(/decimal/);
+    expect(() => moneyFromDecimal('5.5', 'JPY')).toThrow(/decimal/);
+    expect(() => moneyFromDecimal('-3', 'USD')).toThrow();
+    expect(() => moneyFromDecimal('abc', 'USD')).toThrow();
+  });
+});

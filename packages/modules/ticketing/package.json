@@ -1,23 +1,27 @@
 {
-  "name": "@yayatoh/testing",
+  "name": "@yayatoh/ticketing",
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "yayatoh": {
+    "tier": 3
+  },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@yayatoh/billing": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/tenancy": "workspace:*",
-    "@yayatoh/ticketing": "workspace:*",
-    "drizzle-orm": "catalog:"
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",

@@ -256,7 +256,14 @@
     "select": "選択",
     "poweredBy": "Powered by Yayatoh",
     "noTicketsTitle": "チケットはまだ販売されていません",
-    "noTicketsDescription": "後でもう一度ご確認いただくか、主催者をフォローして最新情報をお受け取りください。"
+    "noTicketsDescription": "後でもう一度ご確認いただくか、主催者をフォローして最新情報をお受け取りください。",
+    "availability": {
+      "available": "販売中",
+      "sold_out": "完売",
+      "not_yet_on_sale": "販売開始前",
+      "sales_ended": "販売終了",
+      "fewLeft": "残りわずか"
+    }
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -366,5 +373,35 @@
     "city": "都市",
     "submit": "下書きを作成",
     "slugTaken": "同じ名前のイベントがすでにあります。少し違う名前をお試しください。"
+  },
+  "tickets": {
+    "subtitle": "チケット種別、価格、在庫を管理します。購入者に表示される価格はすべて手数料込みです。",
+    "caption": "チケット種別",
+    "emptyTitle": "チケット種別はまだありません",
+    "emptyDescription": "チケット種別を追加して、販売や申込受付を始めましょう。",
+    "name": "名前",
+    "price": "額面",
+    "allIn": "購入者の支払額",
+    "feeIncluded": "手数料 {fee} 込み",
+    "feeAbsorbed": "手数料は主催者負担",
+    "sold": "販売数",
+    "status": "ステータス",
+    "soldOut": "完売",
+    "onSale": "販売中",
+    "hidden": "公開ページでは非表示",
+    "actions": "操作",
+    "remove": "削除",
+    "archive": "{name}を削除",
+    "addTitle": "チケット種別を追加",
+    "priceIn": "価格（{currency}）",
+    "priceHint": "無料チケットは 0 を入力してください。",
+    "quantity": "販売可能数",
+    "maxPerOrder": "1注文あたりの上限",
+    "feeMode": "プラットフォーム手数料",
+    "passOn": "購入者が手数料を負担",
+    "absorb": "主催者が手数料を負担",
+    "description": "説明（任意）",
+    "add": "チケット種別を追加",
+    "added": "チケット種別を追加しました。"
   }
 }

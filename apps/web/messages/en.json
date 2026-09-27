@@ -256,7 +256,14 @@
     "select": "Select",
     "poweredBy": "Powered by Yayatoh",
     "noTicketsTitle": "Tickets aren't on sale yet",
-    "noTicketsDescription": "Check back soon, or follow the organizer for updates."
+    "noTicketsDescription": "Check back soon, or follow the organizer for updates.",
+    "availability": {
+      "available": "On sale",
+      "sold_out": "Sold out",
+      "not_yet_on_sale": "Not on sale yet",
+      "sales_ended": "Sales ended",
+      "fewLeft": "Only a few left"
+    }
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -366,5 +373,35 @@
     "city": "City",
     "submit": "Create draft",
     "slugTaken": "An event with this name already exists. Try a slightly different name."
+  },
+  "tickets": {
+    "subtitle": "Ticket types, prices and inventory. Every price buyers see includes fees.",
+    "caption": "Ticket types",
+    "emptyTitle": "No ticket types yet",
+    "emptyDescription": "Add a ticket type to start selling or registering.",
+    "name": "Name",
+    "price": "Face value",
+    "allIn": "Buyer pays",
+    "feeIncluded": "includes {fee} fee",
+    "feeAbsorbed": "fee absorbed",
+    "sold": "Sold",
+    "status": "Status",
+    "soldOut": "Sold out",
+    "onSale": "On sale",
+    "hidden": "Hidden from the public page",
+    "actions": "Actions",
+    "remove": "Remove",
+    "archive": "Remove {name}",
+    "addTitle": "Add a ticket type",
+    "priceIn": "Price ({currency})",
+    "priceHint": "Use 0 for free tickets.",
+    "quantity": "Quantity available",
+    "maxPerOrder": "Maximum per order",
+    "feeMode": "Platform fee",
+    "passOn": "Buyer pays the fee",
+    "absorb": "I absorb the fee",
+    "description": "Description (optional)",
+    "add": "Add ticket type",
+    "added": "Ticket type added."
   }
 }

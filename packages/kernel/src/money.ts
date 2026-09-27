@@ -149,3 +149,18 @@ export function formatMoney(m: Money, locale: string): string {
     maximumFractionDigits: exp,
   }).format(m.amount / 10 ** exp);
 }
+
+/**
+ * Parse a user-entered decimal amount ("249", "249.5", "1,249.00") into minor units for the
+ * currency. Rejects more decimals than the currency allows. Never goes through floats.
+ */
+export function moneyFromDecimal(input: string, currency: string): Money {
+  const exp = currencyExponent(currency);
+  const s = input.trim().replace(/[,\s]/g, '');
+  const m = /^(\d{1,12})(?:\.(\d+))?$/.exec(s);
+  if (!m) throw new DomainError('validation_failed', 'Enter an amount like 25 or 25.00');
+  const frac = m[2] ?? '';
+  if (frac.length > exp)
+    throw new DomainError('validation_failed', `At most ${exp} decimal places for ${currency}`);
+  return money(Number(m[1]) * 10 ** exp + Number(frac.padEnd(exp, '0') || '0'), currency);
+}

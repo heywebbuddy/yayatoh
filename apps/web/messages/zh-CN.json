@@ -256,7 +256,14 @@
     "select": "选择",
     "poweredBy": "由 Yayatoh 提供技术支持",
     "noTicketsTitle": "门票尚未开售",
-    "noTicketsDescription": "请稍后再来查看，或关注主办方获取最新动态。"
+    "noTicketsDescription": "请稍后再来查看，或关注主办方获取最新动态。",
+    "availability": {
+      "available": "售卖中",
+      "sold_out": "已售罄",
+      "not_yet_on_sale": "尚未开售",
+      "sales_ended": "已停售",
+      "fewLeft": "仅剩少量"
+    }
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -366,5 +373,35 @@
     "city": "城市",
     "submit": "创建草稿",
     "slugTaken": "已存在同名活动。请换一个稍有不同的名称。"
+  },
+  "tickets": {
+    "subtitle": "管理票种、价格和库存。买家看到的所有价格均已包含费用。",
+    "caption": "票种",
+    "emptyTitle": "暂无票种",
+    "emptyDescription": "添加一个票种，开始售票或报名。",
+    "name": "名称",
+    "price": "票面价",
+    "allIn": "买家支付",
+    "feeIncluded": "含 {fee} 费用",
+    "feeAbsorbed": "费用由主办方承担",
+    "sold": "已售",
+    "status": "状态",
+    "soldOut": "已售罄",
+    "onSale": "售卖中",
+    "hidden": "在公开页面中隐藏",
+    "actions": "操作",
+    "remove": "移除",
+    "archive": "移除{name}",
+    "addTitle": "添加票种",
+    "priceIn": "价格（{currency}）",
+    "priceHint": "免费门票请填 0。",
+    "quantity": "可售数量",
+    "maxPerOrder": "每单上限",
+    "feeMode": "平台费用",
+    "passOn": "由买家支付费用",
+    "absorb": "由我承担费用",
+    "description": "描述（可选）",
+    "add": "添加票种",
+    "added": "已添加票种。"
   }
 }

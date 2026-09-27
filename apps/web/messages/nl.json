@@ -256,7 +256,14 @@
     "select": "Kiezen",
     "poweredBy": "Mogelijk gemaakt door Yayatoh",
     "noTicketsTitle": "Tickets zijn nog niet te koop",
-    "noTicketsDescription": "Kom binnenkort terug of volg de organisator voor updates."
+    "noTicketsDescription": "Kom binnenkort terug of volg de organisator voor updates.",
+    "availability": {
+      "available": "In de verkoop",
+      "sold_out": "Uitverkocht",
+      "not_yet_on_sale": "Nog niet te koop",
+      "sales_ended": "Verkoop gesloten",
+      "fewLeft": "Nog maar een paar over"
+    }
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -366,5 +373,35 @@
     "city": "Plaats",
     "submit": "Concept aanmaken",
     "slugTaken": "Er bestaat al een evenement met deze naam. Probeer een iets andere naam."
+  },
+  "tickets": {
+    "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
+    "caption": "Tickettypes",
+    "emptyTitle": "Nog geen tickettypes",
+    "emptyDescription": "Voeg een tickettype toe om te beginnen met verkopen of registreren.",
+    "name": "Naam",
+    "price": "Nominale waarde",
+    "allIn": "Koper betaalt",
+    "feeIncluded": "incl. {fee} kosten",
+    "feeAbsorbed": "kosten voor jou",
+    "sold": "Verkocht",
+    "status": "Status",
+    "soldOut": "Uitverkocht",
+    "onSale": "In de verkoop",
+    "hidden": "Verborgen op de openbare pagina",
+    "actions": "Acties",
+    "remove": "Verwijderen",
+    "archive": "{name} verwijderen",
+    "addTitle": "Tickettype toevoegen",
+    "priceIn": "Prijs ({currency})",
+    "priceHint": "Gebruik 0 voor gratis tickets.",
+    "quantity": "Beschikbaar aantal",
+    "maxPerOrder": "Maximaal per bestelling",
+    "feeMode": "Platformkosten",
+    "passOn": "Koper betaalt de kosten",
+    "absorb": "Ik neem de kosten voor mijn rekening",
+    "description": "Beschrijving (optioneel)",
+    "add": "Tickettype toevoegen",
+    "added": "Tickettype toegevoegd."
   }
 }

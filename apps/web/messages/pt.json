@@ -256,7 +256,14 @@
     "select": "Selecionar",
     "poweredBy": "Com tecnologia Yayatoh",
     "noTicketsTitle": "Os ingressos ainda não estão à venda",
-    "noTicketsDescription": "Volte em breve ou siga o organizador para receber novidades."
+    "noTicketsDescription": "Volte em breve ou siga o organizador para receber novidades.",
+    "availability": {
+      "available": "À venda",
+      "sold_out": "Esgotado",
+      "not_yet_on_sale": "Ainda não está à venda",
+      "sales_ended": "Vendas encerradas",
+      "fewLeft": "Últimas unidades"
+    }
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -366,5 +373,35 @@
     "city": "Cidade",
     "submit": "Criar rascunho",
     "slugTaken": "Já existe um evento com este nome. Tente um nome um pouco diferente."
+  },
+  "tickets": {
+    "subtitle": "Tipos de ingresso, preços e estoque. Todo preço exibido aos compradores já inclui as taxas.",
+    "caption": "Tipos de ingresso",
+    "emptyTitle": "Nenhum tipo de ingresso ainda",
+    "emptyDescription": "Adicione um tipo de ingresso para começar a vender ou receber inscrições.",
+    "name": "Nome",
+    "price": "Valor de face",
+    "allIn": "Comprador paga",
+    "feeIncluded": "inclui taxa de {fee}",
+    "feeAbsorbed": "taxa absorvida",
+    "sold": "Vendidos",
+    "status": "Status",
+    "soldOut": "Esgotado",
+    "onSale": "À venda",
+    "hidden": "Oculto na página pública",
+    "actions": "Ações",
+    "remove": "Remover",
+    "archive": "Remover {name}",
+    "addTitle": "Adicionar tipo de ingresso",
+    "priceIn": "Preço ({currency})",
+    "priceHint": "Use 0 para ingressos gratuitos.",
+    "quantity": "Quantidade disponível",
+    "maxPerOrder": "Máximo por pedido",
+    "feeMode": "Taxa da plataforma",
+    "passOn": "O comprador paga a taxa",
+    "absorb": "Eu absorvo a taxa",
+    "description": "Descrição (opcional)",
+    "add": "Adicionar tipo de ingresso",
+    "added": "Tipo de ingresso adicionado."
   }
 }

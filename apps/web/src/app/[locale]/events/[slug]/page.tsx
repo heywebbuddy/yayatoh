@@ -1,5 +1,6 @@
 import { publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
+import { publicTicketTypes } from '@yayatoh/ticketing';
 import { buttonClass, Card, EmptyState, Label } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { notFound } from 'next/navigation';
@@ -19,9 +20,21 @@ export default async function PublicEventPage({
   if (!pub) notFound();
   // Passes, stats and agenda arrive with ticketing and sessions; showcase events get a dev overlay.
   const demo = publicDemoOverlay(slug);
+  const real = await publicTicketTypes(slug);
+  const passes =
+    real.length > 0
+      ? real.map((p) => ({
+          name: p.name,
+          price: p.allInMinor,
+          description: p.description ?? '',
+          featured: false,
+          availability: p.availability,
+          fewLeft: p.fewLeft,
+        }))
+      : (demo?.passes ?? []).map((p) => ({ ...p, availability: 'available' as const, fewLeft: false }));
   const ev = {
     ...pub,
-    passes: demo?.passes ?? [],
+    passes,
     stats: demo?.stats ?? [],
     agenda: demo?.agenda ?? [],
   };

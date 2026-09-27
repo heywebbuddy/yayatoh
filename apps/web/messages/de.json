@@ -256,7 +256,14 @@
     "select": "Auswählen",
     "poweredBy": "Unterstützt von Yayatoh",
     "noTicketsTitle": "Tickets sind noch nicht im Verkauf",
-    "noTicketsDescription": "Schau bald wieder vorbei oder folge dem Veranstalter für Neuigkeiten."
+    "noTicketsDescription": "Schau bald wieder vorbei oder folge dem Veranstalter für Neuigkeiten.",
+    "availability": {
+      "available": "Im Verkauf",
+      "sold_out": "Ausverkauft",
+      "not_yet_on_sale": "Noch nicht im Verkauf",
+      "sales_ended": "Verkauf beendet",
+      "fewLeft": "Nur noch wenige verfügbar"
+    }
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -366,5 +373,35 @@
     "city": "Stadt",
     "submit": "Entwurf erstellen",
     "slugTaken": "Es gibt bereits ein Event mit diesem Namen. Versuche einen leicht abweichenden Namen."
+  },
+  "tickets": {
+    "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
+    "caption": "Ticketarten",
+    "emptyTitle": "Noch keine Ticketarten",
+    "emptyDescription": "Füge eine Ticketart hinzu, um mit dem Verkauf oder der Anmeldung zu starten.",
+    "name": "Name",
+    "price": "Nennwert",
+    "allIn": "Käufer zahlt",
+    "feeIncluded": "inkl. {fee} Gebühr",
+    "feeAbsorbed": "Gebühr übernommen",
+    "sold": "Verkauft",
+    "status": "Status",
+    "soldOut": "Ausverkauft",
+    "onSale": "Im Verkauf",
+    "hidden": "Auf der öffentlichen Seite ausgeblendet",
+    "actions": "Aktionen",
+    "remove": "Entfernen",
+    "archive": "{name} entfernen",
+    "addTitle": "Ticketart hinzufügen",
+    "priceIn": "Preis ({currency})",
+    "priceHint": "0 für kostenlose Tickets.",
+    "quantity": "Verfügbare Menge",
+    "maxPerOrder": "Maximal pro Bestellung",
+    "feeMode": "Plattformgebühr",
+    "passOn": "Käufer zahlt die Gebühr",
+    "absorb": "Ich übernehme die Gebühr",
+    "description": "Beschreibung (optional)",
+    "add": "Ticketart hinzufügen",
+    "added": "Ticketart hinzugefügt."
   }
 }

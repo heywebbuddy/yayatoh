@@ -20,6 +20,7 @@
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/ui": "workspace:*",
     "geist": "1.7.2",
     "lucide-react": "1.48.0",
