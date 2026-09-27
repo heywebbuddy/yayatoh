@@ -349,6 +349,56 @@ test.describe('multi-date events', () => {
     await expect(result).toContainText('Welcome in');
   });
 
+  test('a ticket type can sell for chosen dates only; the box office sells one date', async ({
+    page,
+    browser,
+  }) => {
+    const tag = tagOf();
+    await signIn(page);
+    const base = await createEvent(page, `Matinee ${tag}`, '2027-03-03T19:00', '2027-03-03T22:00');
+    const slug = base.split('/').pop() as string;
+    await addWeekly(page, base, 2);
+    const first = consoleLabel('2027-03-03T19:00', '2027-03-03T22:00');
+    const second = consoleLabel('2027-03-10T19:00', '2027-03-10T22:00');
+    await addTicketType(page, base, 'Any night');
+    // A pass for the second date only.
+    await page.getByLabel('Name', { exact: true }).fill('Closing night');
+    await page.getByLabel('Price (USD)').fill('0');
+    await page.getByLabel('Quantity available').fill('10');
+    const valid = page.getByRole('group', { name: 'Sells for these dates' });
+    await expect(valid.getByText('Leave all unticked to sell for every date.')).toBeVisible();
+    await valid.getByLabel(second).check();
+    await page.getByRole('button', { name: 'Add ticket type' }).click();
+    await expect(page.getByRole('row').filter({ hasText: 'Closing night' })).toContainText('1 date');
+    await expect(page.getByRole('row').filter({ hasText: 'Any night' })).toContainText('All dates');
+    await expectAccessible(page);
+    await publish(page, base);
+
+    const guest = await (await browser.newContext()).newPage();
+    await guest.goto(`/events/${slug}`);
+    await guest.getByRole('link', { name: first }).click();
+    await expect(guest.getByLabel('Quantity — Any night')).toBeVisible();
+    await expect(guest.getByLabel('Quantity — Closing night')).toHaveCount(0);
+    await guest.goto(`/events/${slug}`);
+    await guest.getByRole('link', { name: second }).click();
+    await expect(guest.getByLabel('Quantity — Closing night')).toBeVisible();
+
+    // Box office: the date is chosen first; a pass not sold that night is refused.
+    await page.goto(`${base}/tickets-orders`);
+    const office = page.getByRole('region', { name: 'Box office' });
+    await office.getByLabel('Date', { exact: true }).selectOption({ label: first });
+    await office.getByLabel(/^Closing night/).fill('1');
+    await office.getByLabel("Buyer's name").fill(`Walk ${tag}`);
+    await office.getByLabel("Buyer's email").fill(`walk${tag}@example.test`);
+    await office.getByRole('button', { name: 'Record sale' }).click();
+    await expect(office.getByText("One of these tickets isn't sold for this date.")).toBeVisible();
+    await office.getByLabel('Date', { exact: true }).selectOption({ label: second });
+    await office.getByRole('button', { name: 'Record sale' }).click();
+    await expect(office.getByText('Sale recorded. The tickets are on their way.')).toBeVisible();
+    await page.goto(`${base}/dates`);
+    await expect(page.getByRole('row').filter({ hasText: second }).getByRole('cell').nth(2)).toHaveText('1');
+  });
+
   test('viewers see dates but cannot add, edit or cancel them (even by URL)', async ({ page, browser }) => {
     const tag = tagOf();
     await signIn(page);

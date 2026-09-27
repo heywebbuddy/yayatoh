@@ -17,7 +17,10 @@ export default async function PublicSeriesPage({
   if (!series) notFound();
   const t = await getTranslations();
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-16">
+    <main
+      id="main"
+      className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-16 [overflow-wrap:anywhere]"
+    >
       <PageHeader
         eyebrow={<Label>{t('publicSeries.eyebrow', { org: series.organizerName })}</Label>}
         title={series.name}

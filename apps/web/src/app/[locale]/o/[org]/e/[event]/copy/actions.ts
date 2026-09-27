@@ -52,7 +52,7 @@ export async function duplicateAction(
     return failure(err);
   }
   revalidatePath(`/o/${org}`, 'layout');
-  return redirect({ href: `/o/${org}/e/${slug}?copied=1`, locale: await getLocale() });
+  return redirect({ href: `/o/${org}/e/${slug}`, locale: await getLocale() });
 }
 
 export async function saveTemplateAction(

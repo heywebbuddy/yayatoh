@@ -207,6 +207,37 @@
                               "ticketTypeIds"
                             ]
                           }
+                        },
+                        "occurrences": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "startsAt": {
+                                "type": "string"
+                              },
+                              "endsAt": {
+                                "type": "string"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "scheduled",
+                                  "cancelled"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startsAt",
+                              "endsAt",
+                              "status"
+                            ]
+                          }
                         }
                       },
                       "required": [
@@ -215,7 +246,8 @@
                         "salt",
                         "serverTime",
                         "unknownPolicy",
-                        "checkpoints"
+                        "checkpoints",
+                        "occurrences"
                       ]
                     },
                     "rows": {
@@ -265,6 +297,13 @@
                               ]
                             }
                           },
+                          "occurrenceId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "uuid"
+                          },
                           "holderName": {
                             "type": "string"
                           },
@@ -283,6 +322,7 @@
                           "ticketTypeId",
                           "typeName",
                           "accessDates",
+                          "occurrenceId",
                           "holderName",
                           "emailHash",
                           "issuedAt"
