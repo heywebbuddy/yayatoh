@@ -1,13 +1,13 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page } from '@playwright/test';
 
-export const OWNER = '0190f5f6-0000-7000-8000-00000000a001';
-export const WEDDING_OWNER = '0190f5f6-0000-7000-8000-00000000b001';
+export const OWNER = 'pani@lakeside.test';
+export const WEDDING_OWNER = 'maya@rosewood.test';
 export const EVENT = '/o/lakeside-events/e/midwest-leadership-summit-2027';
 export const WEDDING = '/o/rosewood-weddings/e/harper-and-theo';
 
-export async function signIn(page: Page, userId = OWNER) {
-  const res = await page.request.post('/api/dev/login', { form: { userId, locale: 'en' }, maxRedirects: 0 });
+export async function signIn(page: Page, email = OWNER) {
+  const res = await page.request.post('/api/dev/login', { form: { email, locale: 'en' }, maxRedirects: 0 });
   expect(res.status()).toBe(303);
 }
 

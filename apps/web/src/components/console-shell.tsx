@@ -8,6 +8,7 @@ import type { ConsoleData } from '@/server/console.ts';
 import { Icon } from './icons.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
+import { SignOutButton } from './sign-out-button.tsx';
 
 export interface ShellNav {
   readonly base: string;
@@ -81,6 +82,7 @@ async function SidebarContent({
           <span className="truncate text-[13px] text-zinc-900">{data.session.name}</span>
           <span className="text-[12px] text-zinc-500">{t(`roles.${data.role}`)}</span>
         </div>
+        <SignOutButton />
       </div>
     </div>
   );

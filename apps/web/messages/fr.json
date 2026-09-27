@@ -23,7 +23,8 @@
     "skipToContent": "Aller au contenu",
     "switchContext": "Changer d’organisation ou d’événement",
     "yourOrganizations": "Vos organisations",
-    "organization": "Organisation"
+    "organization": "Organisation",
+    "signOut": "Se déconnecter"
   },
   "notifications": {
     "open": "Notifications",
@@ -278,5 +279,26 @@
     "title": "Page introuvable",
     "description": "La page a peut-être été déplacée, ou vous n’y avez pas accès.",
     "home": "Retour à l’accueil"
+  },
+  "signIn": {
+    "eyebrow": "Bon retour parmi nous",
+    "title": "Connexion à Yayatoh",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "code": "Code à 6 chiffres",
+    "codeHint": "Nous vous avons envoyé un code par e-mail. Il expire dans 10 minutes.",
+    "submit": "Se connecter",
+    "sendCode": "Recevoir un code par e-mail",
+    "verify": "Vérifier et se connecter",
+    "useCode": "Utiliser plutôt un code à usage unique",
+    "usePassword": "Utiliser plutôt votre mot de passe",
+    "invalid": "L’e-mail et le mot de passe ne correspondent pas.",
+    "invalidCode": "Ce code est incorrect ou a expiré.",
+    "failed": "Impossible d’envoyer le code. Veuillez réessayer.",
+    "devPersonas": "Personas de développement"
+  },
+  "orgPicker": {
+    "emptyTitle": "Vous ne faites encore partie d’aucune organisation",
+    "emptyDescription": "Demandez à un propriétaire de vous inviter, ou attendez votre e-mail d’invitation."
   }
 }

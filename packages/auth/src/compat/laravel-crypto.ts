@@ -6,7 +6,9 @@ import { createDecipheriv, createHmac, timingSafeEqual } from 'node:crypto';
  * (yayatoh.com, abc.yayatoh.com) and come from the vault, never the repo.
  */
 export function parseAppKey(appKey: string): Buffer {
-  const key = appKey.startsWith('base64:') ? Buffer.from(appKey.slice(7), 'base64') : Buffer.from(appKey, 'utf8');
+  const key = appKey.startsWith('base64:')
+    ? Buffer.from(appKey.slice(7), 'base64')
+    : Buffer.from(appKey, 'utf8');
   if (key.length !== 32) throw new Error('APP_KEY must be 32 bytes for AES-256-CBC');
   return key;
 }
@@ -27,12 +29,16 @@ export function laravelDecrypt(payloadB64: string, key: Buffer): string | null {
     return null;
   }
   if (typeof p?.iv !== 'string' || typeof p.value !== 'string' || typeof p.mac !== 'string') return null;
-  const expected = createHmac('sha256', key).update(p.iv + p.value).digest();
+  const expected = createHmac('sha256', key)
+    .update(p.iv + p.value)
+    .digest();
   const mac = Buffer.from(p.mac, 'hex');
   if (mac.length !== expected.length || !timingSafeEqual(mac, expected)) return null;
   try {
     const decipher = createDecipheriv('aes-256-cbc', key, Buffer.from(p.iv, 'base64'));
-    return Buffer.concat([decipher.update(Buffer.from(p.value, 'base64')), decipher.final()]).toString('utf8');
+    return Buffer.concat([decipher.update(Buffer.from(p.value, 'base64')), decipher.final()]).toString(
+      'utf8',
+    );
   } catch {
     return null;
   }

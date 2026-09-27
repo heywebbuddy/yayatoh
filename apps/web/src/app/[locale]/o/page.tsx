@@ -1,0 +1,21 @@
+import { myOrganizations } from '@yayatoh/tenancy';
+import { EmptyState } from '@yayatoh/ui';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { redirect } from '@/i18n/navigation.ts';
+import { getSession } from '@/server/session.ts';
+
+/** Entry after sign-in: open the user's first organization. */
+export default async function OrgPicker({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const session = await getSession();
+  if (!session) return redirect({ href: '/sign-in', locale });
+  const [first] = await myOrganizations(session.userId);
+  if (first) return redirect({ href: `/o/${first.slug}`, locale });
+  const t = await getTranslations('orgPicker');
+  return (
+    <main id="main" className="mx-auto max-w-xl px-6 py-24">
+      <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+    </main>
+  );
+}

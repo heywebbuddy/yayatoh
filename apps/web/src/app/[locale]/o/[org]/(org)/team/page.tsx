@@ -1,10 +1,11 @@
+import { getUsersByIds } from '@yayatoh/auth';
 import { executeQuery } from '@yayatoh/kernel';
 import { listMembersQuery } from '@yayatoh/tenancy';
 import { Avatar, PageHeader, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
-import { personaById } from '@/server/personas.ts';
+import { initialsOf } from '@/server/personas.ts';
 import { ports } from '@/server/ports.ts';
 
 export default async function TeamPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
@@ -14,9 +15,10 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
   const t = await getTranslations();
   const members = await executeQuery(listMembersQuery, {}, data.ctx, ports);
   const f = { locale, currency: data.org.currency, timeZone: data.org.timezone };
+  const people = await getUsersByIds(members.map((m) => m.userId));
   const rows = members.map((m) => {
-    const p = personaById(m.userId);
-    return { ...m, name: p?.name ?? t('team.unknownUser'), initials: p?.initials ?? '··' };
+    const name = people.get(m.userId)?.name ?? t('team.unknownUser');
+    return { ...m, name, initials: initialsOf(name) };
   });
   return (
     <>

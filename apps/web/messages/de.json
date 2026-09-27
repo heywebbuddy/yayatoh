@@ -23,7 +23,8 @@
     "skipToContent": "Zum Inhalt springen",
     "switchContext": "Organisation oder Event wechseln",
     "yourOrganizations": "Deine Organisationen",
-    "organization": "Organisation"
+    "organization": "Organisation",
+    "signOut": "Abmelden"
   },
   "notifications": {
     "open": "Benachrichtigungen",
@@ -278,5 +279,26 @@
     "title": "Seite nicht gefunden",
     "description": "Die Seite wurde möglicherweise verschoben oder du hast keinen Zugriff.",
     "home": "Zur Startseite"
+  },
+  "signIn": {
+    "eyebrow": "Willkommen zurück",
+    "title": "Bei Yayatoh anmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "code": "6-stelliger Code",
+    "codeHint": "Wir haben dir einen Code per E-Mail geschickt. Er ist 10 Minuten gültig.",
+    "submit": "Anmelden",
+    "sendCode": "Code per E-Mail senden",
+    "verify": "Bestätigen und anmelden",
+    "useCode": "Stattdessen einen Einmalcode verwenden",
+    "usePassword": "Stattdessen dein Passwort verwenden",
+    "invalid": "E-Mail und Passwort passen nicht zusammen.",
+    "invalidCode": "Dieser Code ist falsch oder abgelaufen.",
+    "failed": "Wir konnten keinen Code senden. Bitte versuche es erneut.",
+    "devPersonas": "Entwicklungs-Personas"
+  },
+  "orgPicker": {
+    "emptyTitle": "Du bist noch in keiner Organisation",
+    "emptyDescription": "Bitte eine Inhaberin oder einen Inhaber, dich einzuladen, oder warte auf deine Einladungs-E-Mail."
   }
 }

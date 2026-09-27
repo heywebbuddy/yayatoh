@@ -1,4 +1,4 @@
 {
-  "extends": "@yayatoh/config/tsconfig/library.json",
+  "extends": "@yayatoh/config/tsconfig/react.json",
   "include": ["src", "tests"]
 }

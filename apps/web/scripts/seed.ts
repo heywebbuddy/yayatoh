@@ -1,13 +1,31 @@
 import { closePools } from '@yayatoh/db';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { addMemberCommand, createOrganization, resolveOrgSlug } from '@yayatoh/tenancy';
+import { getAuth } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
 import { ports } from '../src/server/ports.ts';
 
-// Local/preview seed with the dev personas. Never runs against production (CLAUDE.md → Safety).
+// Local/preview seed: persona users (Better Auth) and their orgs. Never production (CLAUDE.md → Safety).
 const host = new URL(process.env.DATABASE_URL ?? 'postgres://localhost').hostname;
 if (!['localhost', '127.0.0.1', 'postgres'].includes(host) && !process.env.SEED_ALLOW_PREVIEW) {
   throw new Error(`Refusing to seed ${host}; set SEED_ALLOW_PREVIEW=1 for a preview branch database`);
+}
+const password = process.env.DEV_PERSONA_PASSWORD;
+if (!password || password.length < 12)
+  throw new Error('Set DEV_PERSONA_PASSWORD (≥12 chars) to seed personas');
+
+const auth = getAuth();
+const ctx = await auth.$context;
+const ids = new Map<string, string>();
+for (const p of PERSONAS) {
+  const existing = await ctx.internalAdapter.findUserByEmail(p.email);
+  if (existing) {
+    ids.set(p.email, existing.user.id);
+    continue;
+  }
+  const res = await auth.api.signUpEmail({ body: { email: p.email, password, name: p.name } });
+  ids.set(p.email, res.user.id);
+  console.info(`seed: user ${p.email}`);
 }
 
 for (const o of SEED_ORGS) {
@@ -16,20 +34,18 @@ for (const o of SEED_ORGS) {
     continue;
   }
   const [owner, ...others] = PERSONAS.filter((p) => p.orgSlug === o.slug);
-  if (!owner) continue;
-  const ownerCtx = createCtx({ actor: { type: 'user', userId: owner.userId } });
+  const ownerId = owner && ids.get(owner.email);
+  if (!ownerId) continue;
+  const ownerCtx = createCtx({ actor: { type: 'user', userId: ownerId } });
   const org = await createOrganization(
     ownerCtx,
     { slug: o.slug, name: o.name, defaultProfile: o.profile },
     ports,
   );
   for (const p of others) {
-    await executeCommand(
-      addMemberCommand,
-      { userId: p.userId, role: p.role },
-      { ...ownerCtx, orgId: org.id },
-      ports,
-    );
+    const userId = ids.get(p.email);
+    if (userId)
+      await executeCommand(addMemberCommand, { userId, role: p.role }, { ...ownerCtx, orgId: org.id }, ports);
   }
   console.info(`seed: created ${o.slug}`);
 }

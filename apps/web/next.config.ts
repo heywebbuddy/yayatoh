@@ -14,8 +14,9 @@ const config: NextConfig = {
     '@yayatoh/platform',
     '@yayatoh/tenancy',
     '@yayatoh/billing',
+    '@yayatoh/auth',
   ],
-  serverExternalPackages: ['postgres'],
+  serverExternalPackages: ['postgres', '@node-rs/argon2'],
   experimental: { taint: true },
 };
 

@@ -113,7 +113,12 @@ jobs:
       - name: Database roles, migrations and seed
         run: |
           APP=$(openssl rand -hex 12); MIG=$(openssl rand -hex 12); PR=$(openssl rand -hex 12)
+          SECRET=$(openssl rand -hex 32); PERSONA=$(openssl rand -hex 12)
+          echo "::add-mask::$PERSONA"
           {
+            echo "BETTER_AUTH_SECRET=$SECRET"
+            echo "BETTER_AUTH_URL=http://localhost:3100"
+            echo "DEV_PERSONA_PASSWORD=$PERSONA"
             echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
             echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
             echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
@@ -121,6 +126,7 @@ jobs:
           export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
           export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
           export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          export BETTER_AUTH_SECRET=$SECRET DEV_PERSONA_PASSWORD=$PERSONA
           pnpm db:bootstrap && pnpm db:migrate && pnpm seed
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium

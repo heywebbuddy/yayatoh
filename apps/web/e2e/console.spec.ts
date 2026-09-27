@@ -21,7 +21,7 @@ test.describe('console', () => {
 
   test('signed-out users are sent to sign in', async ({ page }) => {
     await page.goto(EVENT);
-    await expect(page).toHaveURL(/\/dev\/login$/);
+    await expect(page).toHaveURL(/\/sign-in$/);
   });
 
   test('the wedding profile swaps navigation and vocabulary', async ({ page }) => {

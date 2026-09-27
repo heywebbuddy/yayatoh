@@ -23,7 +23,8 @@
     "skipToContent": "跳至主要內容",
     "switchContext": "切換組織或活動",
     "yourOrganizations": "你的組織",
-    "organization": "組織"
+    "organization": "組織",
+    "signOut": "登出"
   },
   "notifications": {
     "open": "通知",
@@ -278,5 +279,26 @@
     "title": "找不到頁面",
     "description": "此頁面可能已移動，或你沒有存取權限。",
     "home": "返回首頁"
+  },
+  "signIn": {
+    "eyebrow": "歡迎回來",
+    "title": "登入 Yayatoh",
+    "email": "電子郵件",
+    "password": "密碼",
+    "code": "6 位數驗證碼",
+    "codeHint": "我們已將驗證碼寄到你的電子郵件，10 分鐘內有效。",
+    "submit": "登入",
+    "sendCode": "以電子郵件寄送驗證碼",
+    "verify": "驗證並登入",
+    "useCode": "改用一次性驗證碼",
+    "usePassword": "改用密碼",
+    "invalid": "電子郵件與密碼不符。",
+    "invalidCode": "驗證碼錯誤或已過期。",
+    "failed": "無法寄送驗證碼，請再試一次。",
+    "devPersonas": "開發測試角色"
+  },
+  "orgPicker": {
+    "emptyTitle": "你尚未加入任何組織",
+    "emptyDescription": "請擁有者邀請你，或等候邀請電子郵件。"
   }
 }

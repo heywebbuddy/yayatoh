@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./compat": "./src/compat/index.ts"
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./compat": "./src/compat/index.ts",
+    "./testing": "./src/testing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -21,6 +24,13 @@
   "devDependencies": {
     "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "@types/react": "catalog:"
+  },
+  "peerDependencies": {
+    "next": "^16.0.0",
+    "react": "^19.3.0"
   }
 }

@@ -23,7 +23,8 @@
     "skipToContent": "Naar inhoud",
     "switchContext": "Wissel van organisatie of evenement",
     "yourOrganizations": "Je organisaties",
-    "organization": "Organisatie"
+    "organization": "Organisatie",
+    "signOut": "Uitloggen"
   },
   "notifications": {
     "open": "Meldingen",
@@ -278,5 +279,26 @@
     "title": "Pagina niet gevonden",
     "description": "De pagina is mogelijk verplaatst, of je hebt geen toegang.",
     "home": "Naar start"
+  },
+  "signIn": {
+    "eyebrow": "Welkom terug",
+    "title": "Inloggen bij Yayatoh",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "code": "Code van 6 cijfers",
+    "codeHint": "We hebben een code naar je e-mail gestuurd. Deze verloopt over 10 minuten.",
+    "submit": "Inloggen",
+    "sendCode": "Stuur me een code per e-mail",
+    "verify": "Verifiëren en inloggen",
+    "useCode": "Gebruik in plaats daarvan een eenmalige code",
+    "usePassword": "Gebruik in plaats daarvan je wachtwoord",
+    "invalid": "Dit e-mailadres en wachtwoord komen niet overeen.",
+    "invalidCode": "Deze code is onjuist of verlopen.",
+    "failed": "We konden geen code versturen. Probeer het opnieuw.",
+    "devPersonas": "Ontwikkelpersona’s"
+  },
+  "orgPicker": {
+    "emptyTitle": "Je bent nog geen lid van een organisatie",
+    "emptyDescription": "Vraag een eigenaar om je uit te nodigen, of wacht op je uitnodigingsmail."
   }
 }

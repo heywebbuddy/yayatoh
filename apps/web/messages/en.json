@@ -23,7 +23,8 @@
     "skipToContent": "Skip to content",
     "switchContext": "Switch organization or event",
     "yourOrganizations": "Your organizations",
-    "organization": "Organization"
+    "organization": "Organization",
+    "signOut": "Sign out"
   },
   "notifications": {
     "open": "Notifications",
@@ -278,5 +279,26 @@
     "title": "Page not found",
     "description": "The page may have moved, or you may not have access.",
     "home": "Go home"
+  },
+  "signIn": {
+    "eyebrow": "Welcome back",
+    "title": "Sign in to Yayatoh",
+    "email": "Email",
+    "password": "Password",
+    "code": "6-digit code",
+    "codeHint": "We sent a code to your email. It expires in 10 minutes.",
+    "submit": "Sign in",
+    "sendCode": "Email me a code",
+    "verify": "Verify and sign in",
+    "useCode": "Use a one-time code instead",
+    "usePassword": "Use your password instead",
+    "invalid": "That email and password don't match.",
+    "invalidCode": "That code is wrong or has expired.",
+    "failed": "We couldn't send a code. Please try again.",
+    "devPersonas": "Development personas"
+  },
+  "orgPicker": {
+    "emptyTitle": "You're not in an organization yet",
+    "emptyDescription": "Ask an owner to invite you, or wait for your invitation email."
   }
 }

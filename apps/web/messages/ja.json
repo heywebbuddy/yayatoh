@@ -23,7 +23,8 @@
     "skipToContent": "コンテンツへスキップ",
     "switchContext": "組織またはイベントを切り替え",
     "yourOrganizations": "所属する組織",
-    "organization": "組織"
+    "organization": "組織",
+    "signOut": "サインアウト"
   },
   "notifications": {
     "open": "通知",
@@ -278,5 +279,26 @@
     "title": "ページが見つかりません",
     "description": "ページが移動したか、アクセス権限がない可能性があります。",
     "home": "ホームへ戻る"
+  },
+  "signIn": {
+    "eyebrow": "おかえりなさい",
+    "title": "Yayatoh にサインイン",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "code": "6桁のコード",
+    "codeHint": "メールアドレスにコードを送信しました。有効期限は10分です。",
+    "submit": "サインイン",
+    "sendCode": "メールでコードを受け取る",
+    "verify": "確認してサインイン",
+    "useCode": "ワンタイムコードを使用する",
+    "usePassword": "パスワードを使用する",
+    "invalid": "メールアドレスとパスワードが一致しません。",
+    "invalidCode": "コードが正しくないか、有効期限が切れています。",
+    "failed": "コードを送信できませんでした。もう一度お試しください。",
+    "devPersonas": "開発用ペルソナ"
+  },
+  "orgPicker": {
+    "emptyTitle": "まだどの組織にも所属していません",
+    "emptyDescription": "オーナーに招待を依頼するか、招待メールが届くまでお待ちください。"
   }
 }

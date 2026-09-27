@@ -200,6 +200,9 @@ export function checkModules(root: string): Violation[] {
       if (spec === '@yayatoh/db/platform' && !PLATFORM_READER_APPS.some((a) => rel.startsWith(`${a}/`))) {
         add('platform-reader', 'platform_reader access is limited to apps/admin and apps/worker');
       }
+      if (spec === '@yayatoh/db/identity' && pkg?.name !== '@yayatoh/auth') {
+        add('identity-db', 'the identity database handle is for packages/auth only');
+      }
       if (sub === './testing' && !test) add('testing-import', `${spec} may only be imported from tests`);
       if (pkg && !pkg.deps.has(target.name)) {
         add(

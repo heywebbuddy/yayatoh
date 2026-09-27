@@ -23,7 +23,8 @@
     "skipToContent": "跳到主要内容",
     "switchContext": "切换组织或活动",
     "yourOrganizations": "你的组织",
-    "organization": "组织"
+    "organization": "组织",
+    "signOut": "退出登录"
   },
   "notifications": {
     "open": "通知",
@@ -278,5 +279,26 @@
     "title": "页面未找到",
     "description": "该页面可能已移动，或你没有访问权限。",
     "home": "返回首页"
+  },
+  "signIn": {
+    "eyebrow": "欢迎回来",
+    "title": "登录 Yayatoh",
+    "email": "电子邮箱",
+    "password": "密码",
+    "code": "6 位验证码",
+    "codeHint": "我们已向你的邮箱发送验证码，10 分钟内有效。",
+    "submit": "登录",
+    "sendCode": "通过邮件发送验证码",
+    "verify": "验证并登录",
+    "useCode": "改用一次性验证码",
+    "usePassword": "改用密码",
+    "invalid": "邮箱和密码不匹配。",
+    "invalidCode": "验证码错误或已过期。",
+    "failed": "无法发送验证码，请重试。",
+    "devPersonas": "开发测试角色"
+  },
+  "orgPicker": {
+    "emptyTitle": "你还没有加入任何组织",
+    "emptyDescription": "请让所有者邀请你，或等待邀请邮件。"
   }
 }

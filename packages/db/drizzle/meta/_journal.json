@@ -15,6 +15,13 @@
       "when": 1790477255794,
       "tag": "0001_security_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790479372554,
+      "tag": "0002_lush_white_tiger",
+      "breakpoints": true
     }
   ]
 }

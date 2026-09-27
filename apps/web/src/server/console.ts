@@ -18,7 +18,7 @@ import { getSession } from './session.ts';
 export const loadConsole = cache(async (orgSlug: string) => {
   const locale = await getLocale();
   const session = await getSession();
-  if (!session) return redirect({ href: '/dev/login', locale });
+  if (!session) return redirect({ href: '/sign-in', locale });
   const resolved = await resolveOrgSlug(orgSlug);
   if (!resolved || resolved.status === 'terminated') notFound();
   const ctx = createCtx({ orgId: resolved.orgId, actor: { type: 'user', userId: session.userId }, locale });

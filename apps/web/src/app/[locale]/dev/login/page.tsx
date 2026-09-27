@@ -1,7 +1,7 @@
 import { Avatar, buttonClass, Card, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { PERSONAS } from '@/server/personas.ts';
+import { initialsOf, PERSONAS } from '@/server/personas.ts';
 import { devAuthEnabled } from '@/server/session.ts';
 
 export default async function DevLogin({ params }: { params: Promise<{ locale: string }> }) {
@@ -18,9 +18,9 @@ export default async function DevLogin({ params }: { params: Promise<{ locale: s
       />
       <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2">
         {PERSONAS.map((p) => (
-          <li key={p.userId}>
+          <li key={p.email}>
             <Card className="flex items-center gap-3">
-              <Avatar initials={p.initials} label={p.name} />
+              <Avatar initials={initialsOf(p.name)} label={p.name} />
               <div className="flex min-w-0 flex-1 flex-col">
                 <span>{p.name}</span>
                 <span className="text-caption text-zinc-500">
@@ -28,7 +28,7 @@ export default async function DevLogin({ params }: { params: Promise<{ locale: s
                 </span>
               </div>
               <form action="/api/dev/login" method="post">
-                <input type="hidden" name="userId" value={p.userId} />
+                <input type="hidden" name="email" value={p.email} />
                 <input type="hidden" name="locale" value={locale} />
                 <button type="submit" className={buttonClass('primary', 'sm')}>
                   {t('devLogin.signIn')}

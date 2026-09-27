@@ -20,6 +20,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.
   - Stripe test mode access for the platform account.
+- [ ] **Sign-in providers** (M1.2f): Google OAuth client and Apple Sign in with Apple service ID + key for `app.yayatoh.com`; Cloudflare Turnstile site key.
 - [ ] **Tenant domain** (M0.1): buy the tenant apex (e.g. `yayatoh.events`, availability unverified) and submit it to the Public Suffix List.
 - [ ] **Counsel and Stripe questions** (M0.1):
   - Hybrid payments model.
