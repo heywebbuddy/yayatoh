@@ -464,7 +464,23 @@
     "private": "(privé – alleen de organisator ziet dit)",
     "choose": "Kies…",
     "questionInvalid": "Controleer dit antwoord.",
-    "questionsInvalid": "Sommige antwoorden moet je nog even nakijken."
+    "questionsInvalid": "Sommige antwoorden moet je nog even nakijken.",
+    "chooseSeatsBelow": "Kies hieronder je plaatsen",
+    "chooseSeats": "Kies plaatsen voor tickets met een zitplaats.",
+    "seatsTaken": "Sommige van die plaatsen zijn net bezet. Kies andere plaatsen.",
+    "seats": {
+      "title": "Kies je plaatsen",
+      "selected": "{count, plural, =0 {Geen plaatsen geselecteerd} one {# plaats geselecteerd} other {# plaatsen geselecteerd}}",
+      "showMap": "Zaalplattegrond tonen",
+      "hideMap": "Zaalplattegrond verbergen",
+      "group": {
+        "row": "Rij {label}",
+        "table": "Tafel {label}"
+      },
+      "seat": "{label} ({price})",
+      "accessible": "Toegankelijk",
+      "taken": "Bezet"
+    }
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -511,7 +527,9 @@
       "organizer_mor": "Verkocht door {org}",
       "platform_mor": "Verkocht door Pani Digital Services, LLC (Yayatoh) namens {org}"
     },
-    "collectedBy": "Betaling ontvangen door {org}"
+    "collectedBy": "Betaling ontvangen door {org}",
+    "seat": "Plaats",
+    "seatLabel": "Plaats: {seat}"
   },
   "orders": {
     "title": "Recente bestellingen",

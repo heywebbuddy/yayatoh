@@ -30,6 +30,8 @@ const input = (over: Partial<Parameters<typeof ticketsHtml>[0]> = {}) => ({
   ...over,
 });
 
+type TicketRow = Parameters<typeof ticketsHtml>[0]['tickets'][number];
+
 describe('ticket PDF template', () => {
   it('sets lang and dir and renders one page per ticket with its QR', () => {
     const out = ticketsHtml(input());
@@ -37,6 +39,18 @@ describe('ticket PDF template', () => {
     expect(out.match(/<section class="ticket">/g)).toHaveLength(2);
     expect(out).toContain(qrPath('YY1ABC').d);
     expect(out).toContain('7K3M9QX2');
+  });
+
+  it('shows the seat on seated tickets only', () => {
+    const [first, second] = input().tickets as [TicketRow, TicketRow];
+    const out = ticketsHtml(
+      input({
+        tickets: [{ ...first, seatLabel: 'Row <A> · 12' }, second],
+        labels: { code: 'Code', holder: 'Holder', seat: 'Seat', footer: 'Show at the door' },
+      }),
+    );
+    expect(out).toContain('<dt>Seat</dt><dd>Row &lt;A&gt; · 12</dd>');
+    expect(out.match(/<dt>Seat<\/dt>/g)).toHaveLength(1);
   });
 
   it('escapes every value: no markup injection from event or holder names', () => {

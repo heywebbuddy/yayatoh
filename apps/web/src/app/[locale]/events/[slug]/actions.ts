@@ -5,6 +5,7 @@ import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
+import { refresh } from 'next/cache';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
@@ -52,7 +53,9 @@ export async function checkoutAction(
   } catch {
     return { code: 'validation_failed', reason: 'donation_amount' };
   }
-  if (items.length === 0) return { code: 'validation_failed', reason: 'empty' };
+  // Seated events: the chosen seats (their prices come from the seat map on the server).
+  const seats = form.getAll('seat').map(String).slice(0, 50);
+  if (items.length === 0 && seats.length === 0) return { code: 'validation_failed', reason: 'empty' };
   // Answers are read by the published questions' keys and types; the server validates them again.
   const questions = await publicForm(target.orgId, {
     kind: 'checkout_questions',
@@ -83,6 +86,7 @@ export async function checkoutAction(
       {
         eventId: target.eventId,
         items,
+        seats,
         buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
         marketingOptIn: form.get('marketingOptIn') === '1',
         promoCode: String(form.get('promoCode') ?? '').trim() || undefined,
@@ -93,12 +97,15 @@ export async function checkoutAction(
       ports,
     );
   } catch (err) {
-    if (isDomainError(err))
+    if (isDomainError(err)) {
+      // Someone else got a seat first: send the buyer a fresh seat map with the answer.
+      if (err.details?.reason === 'seats_taken') refresh();
       return {
         code: err.code,
         reason: String(err.details?.reason ?? ''),
         ...(typeof err.details?.field === 'string' ? { field: err.details.field } : {}),
       };
+    }
     throw err;
   }
   const { order, manageToken, payment: flow } = result;

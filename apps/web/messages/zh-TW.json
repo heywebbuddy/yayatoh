@@ -464,7 +464,23 @@
     "private": "（私密——僅主辦單位可見）",
     "choose": "請選擇…",
     "questionInvalid": "請檢查此回答。",
-    "questionsInvalid": "部分回答需要再確認一下。"
+    "questionsInvalid": "部分回答需要再確認一下。",
+    "chooseSeatsBelow": "請在下方選擇座位",
+    "chooseSeats": "請為對號入座的票券選擇座位。",
+    "seatsTaken": "部分座位剛剛被選走，請選擇其他座位。",
+    "seats": {
+      "title": "選擇座位",
+      "selected": "{count, plural, =0 {未選擇座位} other {已選 # 個座位}}",
+      "showMap": "顯示座位圖",
+      "hideMap": "隱藏座位圖",
+      "group": {
+        "row": "{label} 排",
+        "table": "{label} 號桌"
+      },
+      "seat": "{label}（{price}）",
+      "accessible": "無障礙座位",
+      "taken": "已售出"
+    }
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -511,7 +527,9 @@
       "organizer_mor": "銷售方：{org}",
       "platform_mor": "銷售方：Pani Digital Services, LLC (Yayatoh)（代表 {org}）"
     },
-    "collectedBy": "收款方：{org}"
+    "collectedBy": "收款方：{org}",
+    "seat": "座位",
+    "seatLabel": "座位：{seat}"
   },
   "orders": {
     "title": "最近訂單",

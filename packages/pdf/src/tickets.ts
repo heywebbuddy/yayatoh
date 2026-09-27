@@ -14,6 +14,8 @@ export interface TicketsPdfInput {
     readonly serialLabel: string;
     readonly shortCode: string;
     readonly holderName: string;
+    /** Seated events: the seat, e.g. "Row A · 12". */
+    readonly seatLabel?: string | null;
     readonly code: string;
     /** Accessible name of the QR image. */
     readonly qrLabel: string;
@@ -21,6 +23,7 @@ export interface TicketsPdfInput {
   readonly labels: {
     readonly code: string;
     readonly holder: string;
+    readonly seat?: string;
     readonly footer: string;
   };
 }
@@ -46,6 +49,7 @@ export function ticketsHtml(input: TicketsPdfInput): string {
   <dl>
     <div><dt>${input.labels.code}</dt><dd class="code">${t.shortCode}</dd></div>
     <div><dt>${input.labels.holder}</dt><dd>${t.holderName}</dd></div>
+    ${t.seatLabel ? html`<div><dt>${input.labels.seat ?? ''}</dt><dd>${t.seatLabel}</dd></div>` : ''}
   </dl>
   <footer>${input.labels.footer}</footer>
 </section>`;

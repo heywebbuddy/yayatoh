@@ -464,7 +464,23 @@
     "private": "(خاص — لا يراه إلا المنظِّم)",
     "choose": "اختر…",
     "questionInvalid": "راجع هذه الإجابة.",
-    "questionsInvalid": "بعض الإجابات تحتاج إلى مراجعة."
+    "questionsInvalid": "بعض الإجابات تحتاج إلى مراجعة.",
+    "chooseSeatsBelow": "اختر مقاعدك أدناه",
+    "chooseSeats": "اختر مقاعد للتذاكر ذات المقاعد المخصصة.",
+    "seatsTaken": "حُجز بعض هذه المقاعد للتو. يُرجى اختيار مقاعد أخرى.",
+    "seats": {
+      "title": "اختر مقاعدك",
+      "selected": "{count, plural, =0 {لم يتم اختيار أي مقعد} zero {لم يتم اختيار أي مقعد} one {تم اختيار مقعد واحد} two {تم اختيار مقعدين} few {تم اختيار # مقاعد} many {تم اختيار # مقعدًا} other {تم اختيار # مقعد}}",
+      "showMap": "عرض خريطة المقاعد",
+      "hideMap": "إخفاء خريطة المقاعد",
+      "group": {
+        "row": "الصف {label}",
+        "table": "الطاولة {label}"
+      },
+      "seat": "{label} ({price})",
+      "accessible": "مهيأ لذوي الإعاقة",
+      "taken": "محجوز"
+    }
   },
   "fakePay": {
     "eyebrow": "دفع تجريبي",
@@ -511,7 +527,9 @@
       "organizer_mor": "يبيعها {org}",
       "platform_mor": "تبيعها Pani Digital Services, LLC (Yayatoh) نيابةً عن {org}"
     },
-    "collectedBy": "حصّل {org} المبلغ"
+    "collectedBy": "حصّل {org} المبلغ",
+    "seat": "المقعد",
+    "seatLabel": "المقعد: {seat}"
   },
   "orders": {
     "title": "أحدث الطلبات",

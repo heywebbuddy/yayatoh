@@ -464,7 +464,23 @@
     "private": "(privado — só o organizador vê isto)",
     "choose": "Escolha…",
     "questionInvalid": "Confira esta resposta.",
-    "questionsInvalid": "Algumas respostas precisam ser revisadas."
+    "questionsInvalid": "Algumas respostas precisam ser revisadas.",
+    "chooseSeatsBelow": "Escolha seus assentos abaixo",
+    "chooseSeats": "Escolha os assentos para os ingressos com lugar marcado.",
+    "seatsTaken": "Alguns desses assentos acabaram de ser ocupados. Escolha outros.",
+    "seats": {
+      "title": "Escolha seus assentos",
+      "selected": "{count, plural, =0 {Nenhum assento selecionado} one {# assento selecionado} other {# assentos selecionados}}",
+      "showMap": "Mostrar mapa de assentos",
+      "hideMap": "Ocultar mapa de assentos",
+      "group": {
+        "row": "Fila {label}",
+        "table": "Mesa {label}"
+      },
+      "seat": "{label} ({price})",
+      "accessible": "Acessível",
+      "taken": "Ocupado"
+    }
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -511,7 +527,9 @@
       "organizer_mor": "Vendido por {org}",
       "platform_mor": "Vendido por Pani Digital Services, LLC (Yayatoh) em nome de {org}"
     },
-    "collectedBy": "Pagamento recebido por {org}"
+    "collectedBy": "Pagamento recebido por {org}",
+    "seat": "Assento",
+    "seatLabel": "Assento: {seat}"
   },
   "orders": {
     "title": "Pedidos recentes",

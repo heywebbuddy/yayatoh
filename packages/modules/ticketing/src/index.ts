@@ -36,6 +36,7 @@ export {
 } from './inventory.ts';
 export {
   activeTicketCountTx,
+  assignTicketSeatsTx,
   eventTicketTypeIdsTx,
   findTicketsByCodeQuery,
   type IssuedTicket,

@@ -464,7 +464,23 @@
     "private": "(निजी — इसे केवल आयोजक देख सकता है)",
     "choose": "चुनें…",
     "questionInvalid": "यह जवाब जाँचें।",
-    "questionsInvalid": "कुछ जवाबों को फिर से देखना होगा।"
+    "questionsInvalid": "कुछ जवाबों को फिर से देखना होगा।",
+    "chooseSeatsBelow": "नीचे अपनी सीटें चुनें",
+    "chooseSeats": "सीट वाले टिकटों के लिए सीटें चुनें।",
+    "seatsTaken": "इनमें से कुछ सीटें अभी-अभी बुक हो गईं। कृपया दूसरी सीटें चुनें।",
+    "seats": {
+      "title": "अपनी सीटें चुनें",
+      "selected": "{count, plural, =0 {कोई सीट नहीं चुनी गई} one {# सीट चुनी गई} other {# सीटें चुनी गईं}}",
+      "showMap": "सीट मैप दिखाएँ",
+      "hideMap": "सीट मैप छिपाएँ",
+      "group": {
+        "row": "पंक्ति {label}",
+        "table": "टेबल {label}"
+      },
+      "seat": "{label} ({price})",
+      "accessible": "सुलभ",
+      "taken": "बुक हो चुकी"
+    }
   },
   "fakePay": {
     "eyebrow": "टेस्ट भुगतान",
@@ -511,7 +527,9 @@
       "organizer_mor": "{org} द्वारा बेचा गया",
       "platform_mor": "{org} की ओर से Pani Digital Services, LLC (Yayatoh) द्वारा बेचा गया"
     },
-    "collectedBy": "भुगतान {org} द्वारा प्राप्त किया गया"
+    "collectedBy": "भुगतान {org} द्वारा प्राप्त किया गया",
+    "seat": "सीट",
+    "seatLabel": "सीट: {seat}"
   },
   "orders": {
     "title": "हाल के ऑर्डर",

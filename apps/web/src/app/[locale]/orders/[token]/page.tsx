@@ -96,6 +96,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     {t('order.shortCode')}{' '}
                     <span className="font-mono text-body tracking-[0.2em] text-black">{tk.shortCode}</span>
                   </p>
+                  {tk.seatLabel ? (
+                    <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
+                  ) : null}
                   <p className="text-caption">{tk.holderName}</p>
                 </Card>
               </li>

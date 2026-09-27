@@ -113,6 +113,8 @@ export const tickets = tenantTable(
     holderName: text('holder_name').notNull(),
     holderEmail: text('holder_email').notNull(),
     attendeeId: uuid('attendee_id'),
+    /** Seated events: the seat, as printed ("Row A · 5"). */
+    seatLabel: text('seat_label'),
   },
   (t) => [
     uniqueIndex('tickets_org_event_serial_key').on(t.orgId, t.eventId, t.serial),

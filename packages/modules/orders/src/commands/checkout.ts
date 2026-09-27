@@ -3,11 +3,20 @@ import { recordConsentTx, upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
-import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { claimProviderEventTx, fundsFlowTx, type ProviderEvent, postSaleTx } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
+import {
+  extendSeatHoldTx,
+  heldSeatsTx,
+  holdSeatsTx,
+  releaseSeatHoldTx,
+  seatedTicketTypesTx,
+  sellSeatsTx,
+} from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import {
+  assignTicketSeatsTx,
   claimPromoTx,
   holdInventoryTx,
   issueTicketsTx,
@@ -38,14 +47,35 @@ export async function loadOrderTx(tx: TenantTx, orderId: string, forUpdate = fal
 const lines = (items: { ticketTypeId: string; quantity: number }[]) =>
   items.map((i) => ({ ticketTypeId: i.ticketTypeId, quantity: i.quantity }));
 
-/** Paid → tickets, in the same transaction (a paid order always has its tickets). */
-function issueFor(tx: TenantTx, ctx: Ctx, order: OrderRow, items: (typeof orderItems.$inferSelect)[]) {
-  return issueTicketsTx(tx, ctx, {
+/**
+ * Paid → tickets, in the same transaction (a paid order always has its tickets). Seated orders:
+ * each ticket gets one of the order's held seats of its ticket type, the seats are sold to those
+ * tickets, and the event's floor plan locks.
+ */
+async function issueFor(tx: TenantTx, ctx: Ctx, order: OrderRow, items: (typeof orderItems.$inferSelect)[]) {
+  const issued = await issueTicketsTx(tx, ctx, {
     orderId: order.id,
     eventId: order.eventId,
     items: items.map((i) => ({ orderItemId: i.id, ticketTypeId: i.ticketTypeId, quantity: i.quantity })),
     holder: { name: order.buyerName, email: order.buyerEmail },
   });
+  if (order.seatUuids.length === 0) return issued;
+  const seats = await heldSeatsTx(tx, order.id);
+  const free = new Map<string, { seatUuid: string; label: string }[]>();
+  for (const s of seats) {
+    if (!s.ticketTypeId) continue;
+    free.set(s.ticketTypeId, [...(free.get(s.ticketTypeId) ?? []), { seatUuid: s.seatUuid, label: s.label }]);
+  }
+  const pairs: { seatUuid: string; ticketId: string; seatLabel: string }[] = [];
+  for (const t of issued) {
+    const seat = free.get(t.ticketTypeId)?.shift();
+    if (seat) pairs.push({ seatUuid: seat.seatUuid, ticketId: t.id, seatLabel: seat.label });
+  }
+  if (pairs.length !== order.seatUuids.length)
+    throw new DomainError('conflict', 'The seat hold was lost', { reason: 'hold_lost' });
+  await sellSeatsTx(tx, ctx, { eventId: order.eventId, holdId: order.id, tickets: pairs });
+  await assignTicketSeatsTx(tx, ctx, pairs);
+  return issued;
 }
 
 async function setStatus(
@@ -84,7 +114,34 @@ export const startCheckoutCommand = tenantCommand({
       throw new DomainError('not_found', 'Event not found');
     }
     const promo = input.promoCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
-    const quote = await quoteTx(tx, event.id, input.items, { now: ctx.now, includeHidden: false, promo });
+    // Seated events: the chosen seats are held under the order's id and decide the quantities of
+    // their ticket types; a seated ticket type cannot be bought without choosing seats.
+    const orderId = uuidv7(ctx.now.getTime());
+    const expiresAt = new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000);
+    const seatedTypes = await seatedTicketTypesTx(tx, event.id);
+    if (input.items.some((i) => seatedTypes.has(i.ticketTypeId)))
+      throw new DomainError('validation_failed', 'Choose seats for this ticket', { reason: 'choose_seats' });
+    const seatItems = new Map<string, number>();
+    if (input.seats.length) {
+      const held = await holdSeatsTx(tx, ctx, {
+        eventId: event.id,
+        seatUuids: input.seats,
+        holdId: orderId,
+        expiresAt,
+      });
+      for (const s of held) {
+        if (!s.ticketTypeId)
+          throw new DomainError('validation_failed', 'That seat is not on sale', {
+            reason: 'seat_not_on_sale',
+          });
+        seatItems.set(s.ticketTypeId, (seatItems.get(s.ticketTypeId) ?? 0) + 1);
+      }
+    }
+    const wanted = [
+      ...input.items,
+      ...[...seatItems].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
+    ];
+    const quote = await quoteTx(tx, event.id, wanted, { now: ctx.now, includeHidden: false, promo });
     await holdInventoryTx(tx, lines([...quote.lines]));
     // Counted with the hold, returned if the hold lapses.
     if (promo) await claimPromoTx(tx, promo.id);
@@ -109,8 +166,10 @@ export const startCheckoutCommand = tenantCommand({
     const [order] = await tx
       .insert(orders)
       .values({
+        id: orderId,
         orgId,
         eventId: event.id,
+        seatUuids: [...new Set(input.seats)],
         status: 'reserved',
         buyerEmail: input.buyer.email,
         buyerName: input.buyer.name,
@@ -129,7 +188,7 @@ export const startCheckoutCommand = tenantCommand({
         feeSchedule: quote.feeSchedule,
         manageTokenHash: hashManageToken(manageToken),
         manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
-        expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+        expiresAt,
       })
       .returning();
     if (!order) throw new DomainError('internal');
@@ -210,13 +269,15 @@ export const attachPaymentCommand = tenantCommand({
   permission: 'public:checkout',
   handler: async ({ input, ctx, tx }) => {
     const order = await loadOrderTx(tx, input.orderId, true);
+    const expiresAt = new Date(
+      Math.max(order.expiresAt?.getTime() ?? 0, ctx.now.getTime()) + PAYMENT_EXTENSION_MINUTES * 60_000,
+    );
     const row = await setStatus(tx, order, 'startPayment', ctx.now, {
       provider: input.provider,
       providerPaymentId: input.providerPaymentId,
-      expiresAt: new Date(
-        Math.max(order.expiresAt?.getTime() ?? 0, ctx.now.getTime()) + PAYMENT_EXTENSION_MINUTES * 60_000,
-      ),
+      expiresAt,
     });
+    if (order.seatUuids.length) await extendSeatHoldTx(tx, ctx, order.id, expiresAt);
     return { ...row, items: order.items };
   },
   audit: (input) => ({
@@ -266,11 +327,22 @@ export const applyProviderEventCommand = tenantCommand({
     if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };
     if (order.status === 'expired') {
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
+      let stockHeld = false;
       try {
         await holdInventoryTx(tx, lines(order.items));
+        stockHeld = true;
+        if (order.seatUuids.length)
+          await holdSeatsTx(tx, ctx, {
+            eventId: order.eventId,
+            seatUuids: order.seatUuids,
+            holdId: order.id,
+            expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+          });
         // The buyer paid the discounted price, so the use counts again if there is one left.
         if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);
       } catch {
+        // The seats went to someone else: give back the stock this attempt took.
+        if (stockHeld) await releaseHoldTx(tx, lines(order.items));
         emit({
           type: 'order.payment_orphaned',
           version: 1,
@@ -334,6 +406,7 @@ export const expireOrdersCommand = tenantCommand({
     for (const { id } of due) {
       const order = await loadOrderTx(tx, id);
       await releaseHoldTx(tx, lines(order.items));
+      if (order.seatUuids.length) await releaseSeatHoldTx(tx, ctx, order.id);
       if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
       await setStatus(tx, order, 'expire', ctx.now);
       emit({

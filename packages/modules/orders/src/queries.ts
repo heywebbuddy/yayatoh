@@ -154,6 +154,7 @@ export const OrganizerTicketDto = z.object({
   holderName: z.string(),
   holderEmail: z.string(),
   itemName: z.string(),
+  seatLabel: z.string().nullable(),
 });
 
 /** One order as the organizer sees it: the order, its tickets (who holds them, void or not). */
@@ -181,6 +182,7 @@ export const orderDetailQuery = tenantQuery({
       holderName: t.holderName,
       holderEmail: t.holderEmail,
       itemName: names.get(t.orderItemId) ?? '',
+      seatLabel: t.seatLabel,
     }));
     return {
       ...order,

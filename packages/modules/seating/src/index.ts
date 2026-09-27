@@ -7,9 +7,12 @@ export {
   type SeatStatus,
 } from './domain/seat-state.ts';
 export {
+  extendSeatHoldTx,
+  heldSeatsTx,
   holdSeatsTx,
   releaseExpiredSeatHoldsTx,
   releaseSeatHoldTx,
+  seatedTicketTypesTx,
   sellSeatsTx,
   voidSeatTx,
 } from './holds.ts';
@@ -21,6 +24,8 @@ export {
   getLayoutQuery,
   LayoutSummaryDto,
   listLayoutsQuery,
+  PublicSeatMapDto,
+  publicSeatMap,
   publishEventLayoutCommand,
   saveLayoutCommand,
   setEventLayoutCommand,

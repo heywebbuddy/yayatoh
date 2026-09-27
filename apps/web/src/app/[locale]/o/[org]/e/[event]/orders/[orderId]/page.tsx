@@ -93,7 +93,11 @@ export default async function OrderPage({
           rows={order.tickets}
           columns={[
             { key: 'serial', header: '#', cell: (tk) => tk.serial, mono: true },
-            { key: 'type', header: t('refunds.ticketType'), cell: (tk) => tk.itemName },
+            {
+              key: 'type',
+              header: t('refunds.ticketType'),
+              cell: (tk) => (tk.seatLabel ? `${tk.itemName} · ${tk.seatLabel}` : tk.itemName),
+            },
             {
               key: 'holder',
               header: t('refunds.holder'),

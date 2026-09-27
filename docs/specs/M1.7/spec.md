@@ -20,7 +20,7 @@ Roadmap: M1.7; ADR 0012 (layout document + `event_seats`, Postgres holds, lock a
   - `event_seats` — per-event seat state with its category (ticket type), hold, ticket and block reason; CHECKs tie each status to its fields.
 - **Commands:** save/list/get floor plans; set an event's floor plan (from a saved one or a document; refused once locked or while any seat is held or sold); publish; assign categories by section, row/table or seat (never sold seats); block/unblock (`channel`, `ada`, `kill`); the event's seating (document, per-seat state and counts).
 - **Holds** (`holdSeatsTx`): one `UPDATE … WHERE status = 'available'` for all requested seats under a 2 s lock timeout; fewer rows than asked → `conflict` / `seats_taken` and the caller's transaction rolls back, so it is all or nothing. `sellSeatsTx` sells a hold's seats to their tickets and **locks the layout**; `releaseSeatHoldTx`, `voidSeatTx` (a voided ticket frees its seat) and `releaseExpiredSeatHoldsTx` (the sweeper) complete the state machine, which is property-tested.
-- **Not yet:** checkout validating a seat's ticket type belongs to the event (M1.7c), the worker sweeper wiring (with M1.7c, when checkout creates seat holds).
+- **Since M1.7c:** checkout validates each chosen seat against the event and its ticket type, and seat holds are released with their order (the worker's order sweeper).
 
 ### Acceptance (M1.7a)
 | ID | Criterion | Test |
@@ -48,3 +48,24 @@ Roadmap: M1.7; ADR 0012 (layout document + `event_seats`, Postgres holds, lock a
 | AC1 | Quick layouts are valid rooms (stage, rows, tables) | `packages/floorplan/tests/floorplan.test.ts` |
 | AC2 | Editing keeps prices and blocks; a plan with held seats can't be replaced | `packages/testing/tests/seating.int.test.ts` |
 | AC3 | In the browser: an organizer creates a plan from numbers, moves a row with the keyboard (arrow), sees it autosave, undoes it, prices a table and puts seats on sale; axe passes | `apps/web/e2e/seating.spec.ts` |
+
+## M1.7c — seated checkout (done)
+
+- **Public event page:** when an event's seat plan is on sale, seated passes say "Choose your seats below" instead of a quantity; standing passes keep their quantity. **Choose your seats** lists every row and table as a group of seat checkboxes with the seat's all-in price (accessible seats marked, taken seats disabled), which is the default and works by keyboard and screen reader; "Show seat map" adds the plan (Konva, client-only) where a tap chooses a free seat. Both share one selection (at most 20 seats).
+- **Public seat map** (`publicSeatMap`): the published document plus, per priced seat, only its id, label, ticket type, `available` and `accessible` — never who holds or bought it.
+- **Checkout** (`startCheckoutCommand`, new `seats` input, at most 50): the order id is minted first and the chosen seats are held **under the order's id** in the same transaction (all or nothing, `seats_taken` on a race). Seats decide the quantities of their ticket types; posting a quantity for a seated ticket type is refused (`choose_seats`); a seat with no ticket type is refused (`seat_not_on_sale`). Attaching a payment extends the seat hold with the order's hold.
+- **On payment** each ticket is paired with a held seat: seats are sold to their tickets (which **locks the layout**) and the ticket keeps the seat label (`tickets.seat_label`). If the order had expired and someone else bought the seat meanwhile, the order is flagged `orphaned` (as with stock) and gives its stock back.
+- **Freed seats:** an expired order releases its seats; refunds and lost disputes void the ticket and free its seat for sale again. The box office refuses seated ticket types for now (seat choice at the box office comes with M1.7d).
+- **The seat everywhere:** the buyer's order page ("Seat: Row A · 5"), the tickets PDF, and the organizer's order page.
+- **A seat taken at checkout:** the buyer is told, keeps what they typed, and gets a refreshed map with that seat dropped from their choice. The checkout form no longer clears itself on any error.
+- **Dev seed:** "Lakeside Jazz Night" (`/events/lakeside-jazz-night`): three rows of Stalls, two tables, and standing room.
+
+### Acceptance (M1.7c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The public seat map carries only allowlisted fields | `packages/testing/tests/seated-checkout.int.test.ts` |
+| AC2 | Seated passes need seats; seats set quantities; standing passes sell by quantity; seats print on tickets | `seated-checkout.int.test.ts` |
+| AC3 | A seat race at checkout has one winner; the other buyer gets `seats_taken` | `seated-checkout.int.test.ts` |
+| AC4 | Expired checkouts and refunded tickets free their seats; a paid-late order whose seat was resold is flagged and releases its stock | `seated-checkout.int.test.ts` |
+| AC5 | The seat shows on the tickets PDF (escaped) | `packages/pdf/tests/tickets.test.ts` |
+| AC6 | In the browser: a guest picks seats from the list, opens the map, pays, sees "Seat: …" on each ticket, and the sold seats are disabled; in a race the loser keeps their details and sees the seat taken; axe passes | `apps/web/e2e/seated-checkout.spec.ts` |

@@ -96,3 +96,34 @@ export async function releaseExpiredSeatHoldsTx(tx: TenantTx, ctx: Ctx): Promise
     .returning({ id: eventSeats.id });
   return rows.length;
 }
+
+/** Ticket types sold by seat at this event: those need seats chosen, not quantities. */
+export async function seatedTicketTypesTx(tx: TenantTx, eventId: string): Promise<Set<string>> {
+  const rows = await tx
+    .selectDistinct({ ticketTypeId: eventSeats.ticketTypeId })
+    .from(eventSeats)
+    .where(and(eq(eventSeats.eventId, eventId), sql`${eventSeats.ticketTypeId} is not null`));
+  return new Set(rows.flatMap((r) => (r.ticketTypeId ? [r.ticketTypeId] : [])));
+}
+
+/** The seats a hold (an order) has, with their price category and label. */
+export async function heldSeatsTx(tx: TenantTx, holdId: string) {
+  return tx
+    .select({ seatUuid: eventSeats.seatUuid, ticketTypeId: eventSeats.ticketTypeId, label: eventSeats.label })
+    .from(eventSeats)
+    .where(and(eq(eventSeats.holdId, holdId), eq(eventSeats.status, 'held')))
+    .orderBy(eventSeats.label);
+}
+
+/** Payment started: the seats wait as long as the order does. */
+export async function extendSeatHoldTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  holdId: string,
+  expiresAt: Date,
+): Promise<void> {
+  await tx
+    .update(eventSeats)
+    .set({ holdExpiresAt: expiresAt, updatedAt: ctx.now })
+    .where(and(eq(eventSeats.holdId, holdId), eq(eventSeats.status, 'held')));
+}

@@ -1,6 +1,7 @@
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
+import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import { brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
@@ -28,6 +29,7 @@ export default async function PublicEventPage({
   const real = await publicTicketTypes(slug);
   const target = await checkoutTarget(slug);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
+  const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
   const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
   const questions = target
     ? ((
@@ -185,6 +187,7 @@ export default async function PublicEventPage({
             organizer={ev.organizerName}
             brand={brand ? { background: brand.background, text: brand.text } : null}
             questions={questions}
+            seatMap={seatMap}
             action={checkoutAction.bind(null, slug)}
           />
         )}

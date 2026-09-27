@@ -66,6 +66,8 @@ export const orders = tenantTable(
     /** Organizer-collected sales: how it was paid and any reference (e.g. a Zelle confirmation). */
     paymentMethod: text('payment_method'),
     paymentReference: text('payment_reference'),
+    /** Seated checkout: the chosen seats (held under the order's id until paid or expired). */
+    seatUuids: uuid('seat_uuids').array().notNull().default(sql`'{}'::uuid[]`),
     expiresAt: ts('expires_at'),
     paidAt: ts('paid_at'),
     cancelledAt: ts('cancelled_at'),

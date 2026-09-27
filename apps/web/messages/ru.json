@@ -464,7 +464,23 @@
     "private": "(конфиденциально — видит только организатор)",
     "choose": "Выберите…",
     "questionInvalid": "Проверьте этот ответ.",
-    "questionsInvalid": "Некоторые ответы нужно проверить."
+    "questionsInvalid": "Некоторые ответы нужно проверить.",
+    "chooseSeatsBelow": "Выберите места ниже",
+    "chooseSeats": "Выберите места для билетов с рассадкой.",
+    "seatsTaken": "Некоторые из этих мест только что заняли. Пожалуйста, выберите другие.",
+    "seats": {
+      "title": "Выберите места",
+      "selected": "{count, plural, =0 {Места не выбраны} one {Выбрано # место} few {Выбрано # места} many {Выбрано # мест} other {Выбрано # места}}",
+      "showMap": "Показать схему зала",
+      "hideMap": "Скрыть схему зала",
+      "group": {
+        "row": "Ряд {label}",
+        "table": "Стол {label}"
+      },
+      "seat": "{label} ({price})",
+      "accessible": "Для людей с ОВЗ",
+      "taken": "Занято"
+    }
   },
   "fakePay": {
     "eyebrow": "Тестовая оплата",
@@ -511,7 +527,9 @@
       "organizer_mor": "Продавец: {org}",
       "platform_mor": "Продавец: Pani Digital Services, LLC (Yayatoh) от имени {org}"
     },
-    "collectedBy": "Оплату получил продавец: {org}"
+    "collectedBy": "Оплату получил продавец: {org}",
+    "seat": "Место",
+    "seatLabel": "Место: {seat}"
   },
   "orders": {
     "title": "Последние заказы",

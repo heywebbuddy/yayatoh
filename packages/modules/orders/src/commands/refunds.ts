@@ -3,6 +3,7 @@ import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg } from '@y
 
 import { eventTransferTx, postRefundTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { voidSeatTx } from '@yayatoh/seating';
 import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
@@ -180,8 +181,15 @@ export const startRefundCommand = tenantCommand({
 async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSelect, emit: Emit) {
   const [order] = await tx.select().from(orders).where(eq(orders.id, refund.orderId)).for('update');
   if (!order) throw new DomainError('not_found', 'Order not found');
-  if (refund.ticketIds.length)
-    await voidTicketsTx(tx, ctx, { orderId: order.id, ticketIds: refund.ticketIds, reason: 'refunded' });
+  if (refund.ticketIds.length) {
+    const voided = await voidTicketsTx(tx, ctx, {
+      orderId: order.id,
+      ticketIds: refund.ticketIds,
+      reason: 'refunded',
+    });
+    // A refunded seat can be sold again.
+    for (const t of voided) await voidSeatTx(tx, ctx, t.id);
+  }
   const { receivableMinor } = await postRefundTx(tx, ctx, {
     refundId: refund.id,
     orderId: order.id,

@@ -44,6 +44,8 @@ export type CheckoutResultDto = z.infer<typeof CheckoutResultDto>;
 /** A ticket as its holder sees it; `code` is the signed yy1 payload rendered as the QR. */
 export const HolderTicketDto = z.object({
   id: z.uuid(),
+  /** Seated events: "Row A · 5". */
+  seatLabel: z.string().nullable(),
   ticketTypeId: z.uuid(),
   serial: z.int(),
   shortCode: z.string(),
@@ -88,8 +90,10 @@ export const StartCheckoutInput = z.object({
         amountMinor: z.int().min(0).max(100_000_000).optional(),
       }),
     )
-    .min(1)
-    .max(20),
+    .max(20)
+    .default([]),
+  /** Seated events: the chosen seats (their ticket types come from the seat map). */
+  seats: z.array(z.uuid()).max(50).default([]),
   buyer: z.object({
     email: z.email().transform((e) => e.toLowerCase()),
     name: z.string().trim().min(1).max(120),

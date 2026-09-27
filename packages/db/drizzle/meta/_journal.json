@@ -260,6 +260,13 @@
       "when": 1790529754892,
       "tag": "0036_loud_sleeper",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1790531617135,
+      "tag": "0037_cloudy_mantis",
+      "breakpoints": true
     }
   ]
 }

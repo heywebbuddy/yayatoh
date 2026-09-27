@@ -2,9 +2,10 @@
 
 import { Alert, Button, buttonClass, Card, Input, Label } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { type FormEvent, startTransition, useActionState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
+import { type SeatMapView, SeatPicker } from '@/components/seat-picker.tsx';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 export interface PassView {
@@ -34,8 +35,11 @@ export function CheckoutForm({
   questions = [],
   action,
   brand,
+  seatMap = null,
 }: {
   passes: readonly PassView[];
+  /** Seated events: the published seat map; its ticket types are bought by choosing seats. */
+  seatMap?: SeatMapView | null;
   organizer: string;
   /** Organizer brand colour and its readable text colour (brand kit); default styling when absent. */
   brand?: { background: string; text: string } | null;
@@ -44,25 +48,38 @@ export function CheckoutForm({
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
+  // Submit without React's automatic form reset, so an error (a seat just taken, a bad promo
+  // code) keeps everything the buyer typed and chose. Without JavaScript the form still posts.
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    startTransition(() => formAction(data));
+  };
   const buyable = passes.some((p) => p.id && p.availability === 'available');
+  const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
+  const prices = Object.fromEntries(passes.flatMap((p) => (p.id ? [[p.id, p.priceLabel]] : [])));
   const error =
     state.code === null
       ? null
-      : state.reason === 'sold_out'
-        ? t('checkout.soldOut')
-        : state.reason === 'empty'
-          ? t('checkout.chooseTickets')
-          : state.reason === 'promo_invalid'
-            ? t('checkout.promoInvalid')
-            : state.reason === 'donation_amount'
-              ? t('checkout.donationTooLow')
-              : state.reason === 'form_invalid'
-                ? t('checkout.questionsInvalid')
-                : state.reason === 'checkout_paused'
-                  ? t('publicEvent.salesPausedTitle')
-                  : t(errorMessageKey(state.code));
+      : state.reason === 'seats_taken'
+        ? t('checkout.seatsTaken')
+        : state.reason === 'choose_seats'
+          ? t('checkout.chooseSeats')
+          : state.reason === 'sold_out'
+            ? t('checkout.soldOut')
+            : state.reason === 'empty'
+              ? t('checkout.chooseTickets')
+              : state.reason === 'promo_invalid'
+                ? t('checkout.promoInvalid')
+                : state.reason === 'donation_amount'
+                  ? t('checkout.donationTooLow')
+                  : state.reason === 'form_invalid'
+                    ? t('checkout.questionsInvalid')
+                    : state.reason === 'checkout_paused'
+                      ? t('publicEvent.salesPausedTitle')
+                      : t(errorMessageKey(state.code));
   return (
-    <form action={formAction} className="flex min-w-0 flex-1 flex-col gap-4">
+    <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {passes.map((p) => (
           <li key={p.id ?? p.name}>
@@ -111,7 +128,11 @@ export function CheckoutForm({
                   )}
                 </p>
               ) : null}
-              {p.id && p.availability === 'available' ? (
+              {p.id && p.availability === 'available' && seatedTypes.has(p.id) ? (
+                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
+                  {t('checkout.chooseSeatsBelow')}
+                </p>
+              ) : p.id && p.availability === 'available' ? (
                 <div className="flex flex-wrap items-center gap-2">
                   <label
                     htmlFor={`qty-${p.id}`}
@@ -168,6 +189,11 @@ export function CheckoutForm({
           </li>
         ))}
       </ul>
+      {buyable && seatMap ? (
+        <Card>
+          <SeatPicker map={seatMap} prices={prices} />
+        </Card>
+      ) : null}
       {buyable && questions.length > 0 ? (
         <Card>
           <CheckoutQuestions questions={questions} invalidKey={state.field} />

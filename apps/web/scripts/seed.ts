@@ -1,6 +1,12 @@
 import { closePools } from '@yayatoh/db';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
+import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
+import {
+  assignSeatCategoryCommand,
+  publishEventLayoutCommand,
+  setEventLayoutCommand,
+} from '@yayatoh/seating';
 import {
   AGREEMENT_DOCUMENTS,
   acceptAgreementCommand,
@@ -9,6 +15,7 @@ import {
   PLATFORM_AGREEMENTS,
   resolveOrgSlug,
 } from '@yayatoh/tenancy';
+import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { DEMO_EVENTS } from '../src/demo/events.ts';
 import { getAuth } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
@@ -131,6 +138,70 @@ for (const d of DEMO_EVENTS) {
         ctx,
         ports,
       );
+      await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
+      console.info(`seed: event ${slug}`);
+    }
+  }
+}
+// A seated event (M1.7c): three rows sold as "Stalls", two tables as "Table", plus standing room.
+{
+  const owner = PERSONAS.find((p) => p.orgSlug === 'lakeside-events' && p.role === 'owner');
+  const ownerId = owner && ids.get(owner.email);
+  const org = await resolveOrgSlug('lakeside-events');
+  if (ownerId && org) {
+    const ctx = createCtx({ orgId: org.orgId, actor: { type: 'user', userId: ownerId } });
+    const slug = 'lakeside-jazz-night';
+    const exists = await executeQuery(getEventBySlugQuery, { slug }, ctx, ports).catch(() => null);
+    if (!exists) {
+      const e = await executeCommand(
+        createEventCommand,
+        {
+          name: 'Lakeside Jazz Night',
+          slug,
+          tagline: 'An evening of jazz by the water. Choose your seat.',
+          timezone: 'America/Chicago',
+          startsAt: '2027-07-16T00:00:00Z',
+          endsAt: '2027-07-16T03:00:00Z',
+          venueName: 'Harbor Hall',
+          city: 'Chicago',
+          currency: 'USD',
+        },
+        ctx,
+        ports,
+      );
+      const type = (name: string, priceMinor: number, quantityTotal: number) =>
+        executeCommand(
+          createTicketTypeCommand,
+          { eventId: e.id, name, priceMinor, quantityTotal },
+          ctx,
+          ports,
+        );
+      const stalls = await type('Stalls', 3500, 60);
+      const table = await type('Table', 6000, 16);
+      await type('Standing', 2000, 100);
+      const rows = ['A', 'B', 'C'].map((label, i) => buildRow({ label, count: 20, x: 200, y: 400 + i * 80 }));
+      const tables = ['1', '2'].map((label, i) =>
+        buildRoundTable({ label, seats: 8, x: 500 + i * 600, y: 900 }),
+      );
+      await executeCommand(
+        setEventLayoutCommand,
+        { eventId: e.id, doc: { version: 1, width: 1600, height: 1200, items: [...rows, ...tables] } },
+        ctx,
+        ports,
+      );
+      await executeCommand(
+        assignSeatCategoryCommand,
+        { eventId: e.id, itemIds: rows.map((r) => r.id), ticketTypeId: stalls.id },
+        ctx,
+        ports,
+      );
+      await executeCommand(
+        assignSeatCategoryCommand,
+        { eventId: e.id, itemIds: tables.map((t) => t.id), ticketTypeId: table.id },
+        ctx,
+        ports,
+      );
+      await executeCommand(publishEventLayoutCommand, { eventId: e.id }, ctx, ports);
       await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
       console.info(`seed: event ${slug}`);
     }

@@ -4,6 +4,7 @@ import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { postOrganizerCollectedSaleTx } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
+import { seatedTicketTypesTx } from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import { holdInventoryTx, issueTicketsTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
@@ -46,6 +47,12 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     if (!event) throw new DomainError('not_found', 'Event not found');
     if (event.status !== 'published')
       throw new DomainError('invalid_state', 'Sell once the event is published', { reason: 'not_published' });
+    // Seated passes are sold seat by seat online (M1.7c); the box office sells the rest.
+    const seated = await seatedTicketTypesTx(tx, event.id);
+    if (input.items.some((i) => seated.has(i.ticketTypeId)))
+      throw new DomainError('validation_failed', 'Seated tickets are sold with a seat', {
+        reason: 'choose_seats',
+      });
     const quote = await quoteTx(tx, event.id, input.items, { now: ctx.now, includeHidden: true });
     const lines = quote.lines.map((l) => ({ ticketTypeId: l.ticketTypeId, quantity: l.quantity }));
     await holdInventoryTx(tx, lines);

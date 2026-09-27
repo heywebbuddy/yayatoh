@@ -464,7 +464,23 @@
     "private": "（非公開：主催者のみが閲覧できます）",
     "choose": "選択してください…",
     "questionInvalid": "この回答を確認してください。",
-    "questionsInvalid": "いくつかの回答を見直してください。"
+    "questionsInvalid": "いくつかの回答を見直してください。",
+    "chooseSeatsBelow": "下で座席をお選びください",
+    "chooseSeats": "座席指定チケットの座席を選択してください。",
+    "seatsTaken": "選択した座席の一部がたった今埋まりました。別の座席をお選びください。",
+    "seats": {
+      "title": "座席を選択",
+      "selected": "{count, plural, =0 {座席が選択されていません} other {#席を選択中}}",
+      "showMap": "座席表を表示",
+      "hideMap": "座席表を非表示",
+      "group": {
+        "row": "{label}列",
+        "table": "テーブル{label}"
+      },
+      "seat": "{label}（{price}）",
+      "accessible": "バリアフリー席",
+      "taken": "選択不可"
+    }
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -511,7 +527,9 @@
       "organizer_mor": "販売元: {org}",
       "platform_mor": "販売元: Pani Digital Services, LLC (Yayatoh)（{org} の代理）"
     },
-    "collectedBy": "支払いの受領者: {org}"
+    "collectedBy": "支払いの受領者: {org}",
+    "seat": "座席",
+    "seatLabel": "座席：{seat}"
   },
   "orders": {
     "title": "最近の注文",

@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { canonicalJson, FloorplanDoc, layoutProblems, placedSeats, seatCount } from '@yayatoh/floorplan';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -328,3 +328,52 @@ export const eventSeatingQuery = tenantQuery({
     };
   },
 });
+
+export const PublicSeatMapDto = z.object({
+  doc: FloorplanDoc,
+  seats: z.array(
+    z.object({
+      seatUuid: z.uuid(),
+      label: z.string(),
+      ticketTypeId: z.uuid(),
+      available: z.boolean(),
+      accessible: z.boolean(),
+    }),
+  ),
+});
+
+/**
+ * The buyer's seat map: the plan and, for each seat on sale, whether it can be chosen. Only
+ * published or locked plans; nothing about who holds or bought a seat.
+ */
+export async function publicSeatMap(
+  orgId: string,
+  eventId: string,
+): Promise<z.infer<typeof PublicSeatMapDto> | null> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'seating.public-map' } });
+  return withTenant(ctx, async (tx) => {
+    const layout = await eventLayoutTx(tx, eventId);
+    if (!layout || layout.status === 'draft') return null;
+    const seats = await tx
+      .select({
+        seatUuid: eventSeats.seatUuid,
+        label: eventSeats.label,
+        ticketTypeId: eventSeats.ticketTypeId,
+        status: eventSeats.status,
+        accessible: eventSeats.accessible,
+      })
+      .from(eventSeats)
+      .where(and(eq(eventSeats.eventId, eventId), sql`${eventSeats.ticketTypeId} is not null`));
+    if (seats.length === 0) return null;
+    return PublicSeatMapDto.parse({
+      doc: layout.doc,
+      seats: seats.map((s) => ({
+        seatUuid: s.seatUuid,
+        label: s.label,
+        ticketTypeId: s.ticketTypeId,
+        available: s.status === 'available',
+        accessible: s.accessible,
+      })),
+    });
+  });
+}
