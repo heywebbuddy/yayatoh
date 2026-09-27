@@ -114,3 +114,24 @@ Roadmap §4.2/§4.4. Serving tenant sites on these hosts (proxy host routing, pe
 | AC3 | **A domain goes from pending to active** (roadmap acceptance): primary takeover once, `domain.activated@1` once, resolves; a failed primary hands back; switching primary; wallets only for active hosts; removal frees the name | `domains.int.test.ts` |
 | AC4 | Isolation: another org can't see or change a domain; `org_domains` rows exist for both fixture orgs | `domains.int.test.ts`, `isolation.int.test.ts` |
 | AC5 | In the browser: an owner adds a domain, sees the DNS records, checks it to active and primary with wallets ready, and removes it; reserved hosts show an error; axe passes | `apps/web/e2e/domains.spec.ts` |
+
+## M1.3e — admin v1
+
+Delivered in two parts: **e1** the platform-side commands (kill switches, payout holds) with their enforcement; **e2** the staff console `apps/admin` on `admin.yayatoh.com` (staff sign-in from the owner-approved list, tenants, entitlement overrides, fee overrides, Connect status, and the e1 switches).
+
+### e1 — kill switches and payout holds (done)
+- **Data.** `tenancy.org_suspensions` (tenant table, RLS): kind `pause_checkout | pause_publishing | pause_messaging`, staff note, who set it, lifted at/by. One active row per kind (partial unique); lifted rows stay as history. `payments.payment_accounts.payouts_held` + `hold_reason`.
+- **Commands** (platform actor only; an org owner gets `forbidden`): `tenancy.setSuspension` (`platform:org.suspend`, idempotent, `org.suspension_changed@1`), `tenancy.suspensionHistory` (staff view with notes), `payments.setPayoutHold` (`platform:payouts.hold`, `payouts.hold_changed@1`). Organizers read `tenancy.suspensions` (kind and since, never the note) and `payoutAccount.onHold`.
+- **Enforcement, inside each command's own transaction** (so "pause checkout" applies to the very next request — well inside the roadmap's 60 s):
+  - `orders.startCheckout` → `invalid_state` / `checkout_paused`; the public event page replaces the ticket form with "Ticket sales are paused".
+  - `events.transitionEvent` publish → `publishing_paused`; the console sends the organizer to the org home, which explains active pauses.
+  - Starting an attendee bulk email → `messaging_paused`. Messages already queued still send (a pause stops new sends; it doesn't drop mail).
+  - Payout holds: transfers and payouts (M1.5e release job) will check the flag; charges keep working.
+
+### Acceptance (M1.3e1)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Only a platform actor can pause or hold; organizers see what is paused but never the staff note | `packages/testing/tests/suspensions.int.test.ts` |
+| AC2 | **"Pause checkout" takes effect on the next checkout** (roadmap: within 60 s); other orgs keep selling; lifting restores sales; the public page shows the pause | `suspensions.int.test.ts` |
+| AC3 | Pause publishing and pause messaging block publishing and starting a bulk email | `suspensions.int.test.ts` |
+| AC4 | Payout hold and release; isolation covers `org_suspensions` for both orgs | `suspensions.int.test.ts`, `isolation.int.test.ts` |

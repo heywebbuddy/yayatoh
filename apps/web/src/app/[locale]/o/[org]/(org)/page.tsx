@@ -7,6 +7,7 @@ import {
   listInvitationsQuery,
   listMembersQuery,
   roleCan,
+  suspensionsQuery,
 } from '@yayatoh/tenancy';
 import { sellsPaidTicketsQuery } from '@yayatoh/ticketing';
 import { buttonClass, Card, EmptyState, Label, PageHeader, Skeleton, StatusDot } from '@yayatoh/ui';
@@ -34,6 +35,7 @@ export default async function OrgHome({ params }: { params: Promise<{ locale: st
   const t = await getTranslations();
   const firstName = data.session.name.split(' ')[0] ?? data.session.name;
   const canWrite = roleCan(data.role, 'events:write');
+  const paused = await executeQuery(suspensionsQuery, {}, data.ctx, ports);
   const create = canWrite ? (
     <Link href={`/o/${org}/events/new`} className={buttonClass('primary')}>
       {t('orgHome.create')}
@@ -46,6 +48,17 @@ export default async function OrgHome({ params }: { params: Promise<{ locale: st
         description={data.org.name}
         actions={create}
       />
+      {paused.length > 0 ? (
+        <div
+          role="status"
+          className="flex flex-col gap-1 rounded-card border border-accent-700 bg-accent-50 px-4 py-3 text-body text-accent-text"
+        >
+          {paused.map((p) => (
+            <p key={p.kind}>{t(`suspensions.${p.kind}`)}</p>
+          ))}
+          <p className="text-caption">{t('suspensions.contact')}</p>
+        </div>
+      ) : null}
       {roleCan(data.role, 'org:update') ? <SetupChecklist org={org} /> : null}
       <section aria-labelledby="events-heading" className="flex flex-col gap-3">
         <h2 id="events-heading" className="text-section">

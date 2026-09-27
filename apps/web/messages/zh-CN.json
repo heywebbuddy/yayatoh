@@ -296,7 +296,9 @@
     },
     "donationFrom": "最低",
     "earlyBird": "早鸟价截至 {date}（之后为 {regular}）",
-    "accessDates": "此通行证可入场的日期"
+    "accessDates": "此通行证可入场的日期",
+    "salesPausedTitle": "门票销售已暂停",
+    "salesPausedDescription": "该主办方的门票目前暂不销售，请稍后再来查看。"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -985,7 +987,8 @@
     "start": "设置收款",
     "continue": "继续设置",
     "returned": "谢谢。支付服务商正在核实你的信息，完成后此页面会自动更新。",
-    "noAccess": "只有所有者、管理员和财务可以更改收款信息。"
+    "noAccess": "只有所有者、管理员和财务可以更改收款信息。",
+    "onHold": "收款已暂停。门票销售将继续；如需了解详情，请联系 Yayatoh 支持团队。"
   },
   "fakeConnect": {
     "eyebrow": "测试模式",
@@ -1029,5 +1032,11 @@
     "managedMissing": "你的免费地址 {host} 尚未设置。",
     "managedCreate": "设置我的免费地址",
     "noAccess": "只有所有者和管理员可以更改域名。"
+  },
+  "suspensions": {
+    "pause_checkout": "门票销售已被 Yayatoh 支持团队暂停。",
+    "pause_publishing": "活动发布已被 Yayatoh 支持团队暂停。",
+    "pause_messaging": "向宾客发送消息已被 Yayatoh 支持团队暂停。",
+    "contact": "如需了解详情，请联系 Yayatoh 支持团队。"
   }
 }

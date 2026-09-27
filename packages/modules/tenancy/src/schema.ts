@@ -199,3 +199,32 @@ export const orgDomains = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+export const SUSPENSION_KINDS = ['pause_checkout', 'pause_publishing', 'pause_messaging'] as const;
+
+/**
+ * Staff kill switches per org (roadmap §5, M1.3e): each pauses one capability until lifted.
+ * Checked inside the command's own transaction, so a pause applies to the next request.
+ */
+export const orgSuspensions = tenantTable(
+  tenancy,
+  'org_suspensions',
+  {
+    kind: text('kind').notNull(),
+    /** Staff-only note (never shown to the organizer). */
+    reason: text('reason').notNull(),
+    createdBy: text('created_by').notNull(),
+    liftedAt: timestamp('lifted_at', { withTimezone: true }),
+    liftedBy: text('lifted_by'),
+  },
+  (t) => [
+    uniqueIndex('org_suspensions_org_kind_active_key').on(t.orgId, t.kind).where(sql`lifted_at is null`),
+    check('org_suspensions_kind_check', inList('kind', SUSPENSION_KINDS)),
+    check('org_suspensions_reason_length', sql`length(reason) between 3 and 500`),
+    foreignKey({
+      name: 'org_suspensions_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);

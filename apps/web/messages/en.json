@@ -296,7 +296,9 @@
     },
     "donationFrom": "From",
     "earlyBird": "Early-bird price until {date} (then {regular})",
-    "accessDates": "Days this pass admits"
+    "accessDates": "Days this pass admits",
+    "salesPausedTitle": "Ticket sales are paused",
+    "salesPausedDescription": "Tickets for this organizer are not on sale right now. Please check back later."
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -985,7 +987,8 @@
     "start": "Set up payouts",
     "continue": "Continue setup",
     "returned": "Thanks. The payment provider is checking your details; this page updates when it is done.",
-    "noAccess": "Only owners, admins and finance can change payout details."
+    "noAccess": "Only owners, admins and finance can change payout details.",
+    "onHold": "Payouts are on hold. Ticket sales continue; contact Yayatoh support to find out more."
   },
   "fakeConnect": {
     "eyebrow": "Test mode",
@@ -1029,5 +1032,11 @@
     "managedMissing": "Your free address {host} is not set up yet.",
     "managedCreate": "Set up my free address",
     "noAccess": "Only owners and admins can change domains."
+  },
+  "suspensions": {
+    "pause_checkout": "Ticket sales are paused by Yayatoh support.",
+    "pause_publishing": "Publishing events is paused by Yayatoh support.",
+    "pause_messaging": "Sending messages to guests is paused by Yayatoh support.",
+    "contact": "Contact Yayatoh support to find out more."
   }
 }

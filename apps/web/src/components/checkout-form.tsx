@@ -58,7 +58,9 @@ export function CheckoutForm({
               ? t('checkout.donationTooLow')
               : state.reason === 'form_invalid'
                 ? t('checkout.questionsInvalid')
-                : t(errorMessageKey(state.code));
+                : state.reason === 'checkout_paused'
+                  ? t('publicEvent.salesPausedTitle')
+                  : t(errorMessageKey(state.code));
   return (
     <form action={formAction} className="flex min-w-0 flex-1 flex-col gap-4">
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">

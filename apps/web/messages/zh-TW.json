@@ -296,7 +296,9 @@
     },
     "donationFrom": "最低",
     "earlyBird": "早鳥價至 {date}（之後為 {regular}）",
-    "accessDates": "此通行證可入場的日期"
+    "accessDates": "此通行證可入場的日期",
+    "salesPausedTitle": "票券販售已暫停",
+    "salesPausedDescription": "此主辦單位的票券目前暫不販售，請稍後再回來查看。"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -985,7 +987,8 @@
     "start": "設定收款",
     "continue": "繼續設定",
     "returned": "謝謝。金流服務商正在核對你的資訊，完成後此頁面會自動更新。",
-    "noAccess": "只有擁有者、管理員和財務可以變更收款資訊。"
+    "noAccess": "只有擁有者、管理員和財務可以變更收款資訊。",
+    "onHold": "收款已暫停。票券販售將持續進行；如需了解詳情，請聯絡 Yayatoh 支援團隊。"
   },
   "fakeConnect": {
     "eyebrow": "測試模式",
@@ -1029,5 +1032,11 @@
     "managedMissing": "你的免費網址 {host} 尚未設定。",
     "managedCreate": "設定我的免費網址",
     "noAccess": "只有擁有者和管理員可以變更網域。"
+  },
+  "suspensions": {
+    "pause_checkout": "票券販售已由 Yayatoh 支援團隊暫停。",
+    "pause_publishing": "活動發布已由 Yayatoh 支援團隊暫停。",
+    "pause_messaging": "向賓客傳送訊息已由 Yayatoh 支援團隊暫停。",
+    "contact": "如需了解詳情，請聯絡 Yayatoh 支援團隊。"
   }
 }

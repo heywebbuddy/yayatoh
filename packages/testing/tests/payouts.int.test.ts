@@ -59,6 +59,7 @@ describe('payout accounts (M1.3c)', () => {
       requirementsDue: [],
       country: 'US',
       fundsFlow: 'platform_mor',
+      onHold: false,
     });
   });
 

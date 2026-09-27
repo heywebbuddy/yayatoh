@@ -39,6 +39,15 @@ export {
   publicOrgProfile,
   setLegalPageCommand,
 } from './commands/settings.ts';
+export {
+  activeSuspensionsTx,
+  assertNotPausedTx,
+  SuspensionDto,
+  type SuspensionKind,
+  setSuspensionCommand,
+  suspensionHistoryQuery,
+  suspensionsQuery,
+} from './commands/suspensions.ts';
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {

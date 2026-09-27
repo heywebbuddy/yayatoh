@@ -9,6 +9,7 @@ import {
   type Mailer,
   tenantCommand,
 } from '@yayatoh/platform';
+import { assertNotPausedTx } from '@yayatoh/tenancy';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { AttendeeFilter, Label, MAX_LABELS } from './attendees.ts';
@@ -121,7 +122,11 @@ export const attendeeEmailAction = defineBulkAction({
   params: MessageParams,
   filter: AttendeeFilter,
   chunkSize: 500,
-  resolve: resolveAttendeeIdsTx,
+  resolve: async (tx, sel) => {
+    // Staff kill switch (M1.3e): no new messages while messaging is paused.
+    await assertNotPausedTx(tx, 'pause_messaging');
+    return resolveAttendeeIdsTx(tx, sel);
+  },
   run: async (tx, ctx, ids, _params, meta) => {
     if (ids.length === 0) return { results: [] };
     const rows = await tx

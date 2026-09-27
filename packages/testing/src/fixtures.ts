@@ -28,6 +28,7 @@ import {
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
   setLegalPageCommand,
+  setSuspensionCommand,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
 import {
@@ -298,6 +299,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // A lifted staff pause (kill-switch history), for isolation coverage without pausing anything.
+  for (const paused of [true, false])
+    await executeCommand(
+      setSuspensionCommand,
+      { kind: 'pause_messaging', paused, reason: 'fixture' },
+      systemCtx(org.id),
+      ports,
+    );
   return { org, ownerId, viewerId, event, ctx };
 }
 

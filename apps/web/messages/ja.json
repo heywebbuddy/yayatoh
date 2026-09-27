@@ -296,7 +296,9 @@
     },
     "donationFrom": "最低",
     "earlyBird": "{date}まで早割価格（以降は{regular}）",
-    "accessDates": "このパスで入場できる日"
+    "accessDates": "このパスで入場できる日",
+    "salesPausedTitle": "チケット販売は一時停止中です",
+    "salesPausedDescription": "この主催者のチケットは現在販売されていません。後でもう一度ご確認ください。"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -985,7 +987,8 @@
     "start": "入金を設定する",
     "continue": "設定を続ける",
     "returned": "ありがとうございます。決済代行会社が情報を確認しています。確認が終わるとこのページが更新されます。",
-    "noAccess": "入金情報を変更できるのは、オーナー、管理者、経理のみです。"
+    "noAccess": "入金情報を変更できるのは、オーナー、管理者、経理のみです。",
+    "onHold": "入金は保留中です。チケット販売は継続されます。詳しくは Yayatoh サポートにお問い合わせください。"
   },
   "fakeConnect": {
     "eyebrow": "テストモード",
@@ -1029,5 +1032,11 @@
     "managedMissing": "無料アドレス {host} はまだ設定されていません。",
     "managedCreate": "無料アドレスを設定する",
     "noAccess": "ドメインを変更できるのはオーナーと管理者のみです。"
+  },
+  "suspensions": {
+    "pause_checkout": "チケット販売は Yayatoh サポートにより一時停止されています。",
+    "pause_publishing": "イベントの公開は Yayatoh サポートにより一時停止されています。",
+    "pause_messaging": "ゲストへのメッセージ送信は Yayatoh サポートにより一時停止されています。",
+    "contact": "詳しくは Yayatoh サポートにお問い合わせください。"
   }
 }

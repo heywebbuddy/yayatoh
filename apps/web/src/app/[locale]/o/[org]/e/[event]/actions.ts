@@ -21,6 +21,8 @@ export async function transitionAction(
     const reason = isDomainError(err) ? (err.details as { reason?: unknown } | undefined)?.reason : undefined;
     if (reason === 'terms_not_accepted')
       redirect({ href: `/o/${org}/settings?need=terms`, locale: await getLocale() });
+    // Staff paused publishing: the org home explains it.
+    if (reason === 'publishing_paused') redirect({ href: `/o/${org}`, locale: await getLocale() });
     throw err;
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');

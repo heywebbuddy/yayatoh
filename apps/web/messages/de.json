@@ -296,7 +296,9 @@
     },
     "donationFrom": "Ab",
     "earlyBird": "Frühbucherpreis bis {date} (danach {regular})",
-    "accessDates": "Tage, für die dieser Pass gilt"
+    "accessDates": "Tage, für die dieser Pass gilt",
+    "salesPausedTitle": "Der Ticketverkauf ist pausiert",
+    "salesPausedDescription": "Tickets dieses Veranstalters sind derzeit nicht im Verkauf. Schau später wieder vorbei."
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -985,7 +987,8 @@
     "start": "Auszahlungen einrichten",
     "continue": "Einrichtung fortsetzen",
     "returned": "Danke. Der Zahlungsanbieter prüft deine Angaben; diese Seite wird aktualisiert, sobald das erledigt ist.",
-    "noAccess": "Nur Inhaber, Admins und Finanzen können die Auszahlungsdaten ändern."
+    "noAccess": "Nur Inhaber, Admins und Finanzen können die Auszahlungsdaten ändern.",
+    "onHold": "Auszahlungen sind angehalten. Der Ticketverkauf läuft weiter; wende dich an den Yayatoh-Support, um mehr zu erfahren."
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -1029,5 +1032,11 @@
     "managedMissing": "Deine kostenlose Adresse {host} ist noch nicht eingerichtet.",
     "managedCreate": "Meine kostenlose Adresse einrichten",
     "noAccess": "Nur Inhaber und Admins können Domains ändern."
+  },
+  "suspensions": {
+    "pause_checkout": "Der Ticketverkauf wurde vom Yayatoh-Support pausiert.",
+    "pause_publishing": "Das Veröffentlichen von Events wurde vom Yayatoh-Support pausiert.",
+    "pause_messaging": "Das Senden von Nachrichten an Gäste wurde vom Yayatoh-Support pausiert.",
+    "contact": "Wende dich an den Yayatoh-Support, um mehr zu erfahren."
   }
 }

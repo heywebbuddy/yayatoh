@@ -296,7 +296,9 @@
     },
     "donationFrom": "À partir de",
     "earlyBird": "Tarif prévente jusqu’au {date} (puis {regular})",
-    "accessDates": "Jours d’accès de ce pass"
+    "accessDates": "Jours d’accès de ce pass",
+    "salesPausedTitle": "La vente de billets est suspendue",
+    "salesPausedDescription": "Les billets de cet organisateur ne sont pas en vente pour le moment. Revenez plus tard."
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -985,7 +987,8 @@
     "start": "Configurer les versements",
     "continue": "Reprendre la configuration",
     "returned": "Merci. Le prestataire de paiement vérifie vos informations ; cette page se mettra à jour une fois la vérification terminée.",
-    "noAccess": "Seuls les propriétaires, les administrateurs et l’équipe finance peuvent modifier les informations de versement."
+    "noAccess": "Seuls les propriétaires, les administrateurs et l’équipe finance peuvent modifier les informations de versement.",
+    "onHold": "Les versements sont suspendus. La vente de billets continue ; contactez le support Yayatoh pour en savoir plus."
   },
   "fakeConnect": {
     "eyebrow": "Mode test",
@@ -1029,5 +1032,11 @@
     "managedMissing": "Votre adresse gratuite {host} n’est pas encore configurée.",
     "managedCreate": "Configurer mon adresse gratuite",
     "noAccess": "Seuls les propriétaires et les administrateurs peuvent modifier les domaines."
+  },
+  "suspensions": {
+    "pause_checkout": "La vente de billets a été suspendue par le support Yayatoh.",
+    "pause_publishing": "La publication d’événements a été suspendue par le support Yayatoh.",
+    "pause_messaging": "L’envoi de messages aux invités a été suspendu par le support Yayatoh.",
+    "contact": "Contactez le support Yayatoh pour en savoir plus."
   }
 }

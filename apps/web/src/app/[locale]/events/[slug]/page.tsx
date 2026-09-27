@@ -156,7 +156,13 @@ export default async function PublicEventPage({
             {t('publicEvent.allIn', { org: ev.organizerName })}
           </p>
         </div>
-        {ev.passes.length === 0 ? (
+        {orgProfile?.checkoutPaused ? (
+          <EmptyState
+            className="min-w-0 flex-1"
+            title={t('publicEvent.salesPausedTitle')}
+            description={t('publicEvent.salesPausedDescription')}
+          />
+        ) : ev.passes.length === 0 ? (
           <EmptyState
             className="min-w-0 flex-1"
             title={t('publicEvent.noTicketsTitle')}

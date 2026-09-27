@@ -6,6 +6,7 @@ import { submitResponseTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { claimProviderEventTx, fundsFlowTx, type ProviderEvent } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
+import { assertNotPausedTx } from '@yayatoh/tenancy';
 import {
   claimPromoTx,
   holdInventoryTx,
@@ -76,6 +77,8 @@ export const startCheckoutCommand = tenantCommand({
   permission: 'public:checkout',
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
+    // Staff kill switch (M1.3e): applies from the next checkout after it is set.
+    await assertNotPausedTx(tx, 'pause_checkout');
     const event = await findEventTx(tx, input.eventId);
     if (event?.status !== 'published' || event.visibility === 'private') {
       throw new DomainError('not_found', 'Event not found');

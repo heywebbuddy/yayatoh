@@ -296,7 +296,9 @@
     },
     "donationFrom": "Vanaf",
     "earlyBird": "Early-birdprijs tot {date} (daarna {regular})",
-    "accessDates": "Dagen waarop deze pas toegang geeft"
+    "accessDates": "Dagen waarop deze pas toegang geeft",
+    "salesPausedTitle": "De ticketverkoop is gepauzeerd",
+    "salesPausedDescription": "Tickets van deze organisator zijn op dit moment niet te koop. Kom later terug."
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -985,7 +987,8 @@
     "start": "Uitbetalingen instellen",
     "continue": "Verder met instellen",
     "returned": "Bedankt. De betaalprovider controleert je gegevens; deze pagina wordt bijgewerkt zodra dat klaar is.",
-    "noAccess": "Alleen eigenaren, beheerders en financiën kunnen de uitbetalingsgegevens wijzigen."
+    "noAccess": "Alleen eigenaren, beheerders en financiën kunnen de uitbetalingsgegevens wijzigen.",
+    "onHold": "Uitbetalingen zijn opgeschort. De ticketverkoop gaat door; neem contact op met Yayatoh-support voor meer informatie."
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -1029,5 +1032,11 @@
     "managedMissing": "Je gratis adres {host} is nog niet ingesteld.",
     "managedCreate": "Mijn gratis adres instellen",
     "noAccess": "Alleen eigenaren en beheerders kunnen domeinen wijzigen."
+  },
+  "suspensions": {
+    "pause_checkout": "De ticketverkoop is gepauzeerd door Yayatoh-support.",
+    "pause_publishing": "Het publiceren van evenementen is gepauzeerd door Yayatoh-support.",
+    "pause_messaging": "Het versturen van berichten aan gasten is gepauzeerd door Yayatoh-support.",
+    "contact": "Neem contact op met Yayatoh-support voor meer informatie."
   }
 }

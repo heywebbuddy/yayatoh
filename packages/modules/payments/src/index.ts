@@ -8,6 +8,7 @@ export {
   payoutAccountIdQuery,
   payoutAccountQuery,
   recordPayoutAccountCommand,
+  setPayoutHoldCommand,
 } from './accounts.ts';
 export { claimProviderEventTx } from './dedupe.ts';
 export { fakePaymentProvider, signFakeAccountWebhook, signFakeWebhook } from './fake.ts';

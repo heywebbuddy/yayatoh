@@ -37,6 +37,9 @@ export const paymentAccounts = tenantTable(
     requirementsDue: text('requirements_due').array().notNull().default(sql`'{}'::text[]`),
     country: text('country').notNull(),
     defaultCurrency: text('default_currency'),
+    /** Staff payout hold (M1.3e): releases and transfers wait while set. */
+    payoutsHeld: boolean('payouts_held').notNull().default(false),
+    holdReason: text('hold_reason'),
     lastEventAt: timestamp('last_event_at', { withTimezone: true, mode: 'date' }),
   },
   (t) => [

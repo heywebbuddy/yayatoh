@@ -36,6 +36,14 @@ export default async function PayoutsPage({
           {t('returned')}
         </p>
       ) : null}
+      {account.onHold ? (
+        <p
+          role="status"
+          className="rounded-card border border-accent-700 bg-accent-50 px-4 py-3 text-body text-accent-text"
+        >
+          {t('onHold')}
+        </p>
+      ) : null}
       <Card className="flex flex-col gap-4">
         <StatusDot status={DOT[account.state]} label={t(`state.${account.state}`)} />
         <p className="text-body text-zinc-600">{t(`explain.${account.state}`)}</p>

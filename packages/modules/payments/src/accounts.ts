@@ -26,6 +26,8 @@ export const PayoutAccountDto = z.object({
   requirementsDue: z.array(z.string()),
   country: z.string().nullable(),
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+  /** Staff hold on payouts (the note stays with staff). */
+  onHold: z.boolean(),
 });
 
 /** The funds flow for new orders of this org (roadmap §5.3). */
@@ -51,6 +53,7 @@ export const payoutAccountQuery = tenantQuery({
       requirementsDue: a?.requirementsDue ?? [],
       country: a?.country ?? null,
       fundsFlow: state === 'active' ? 'organizer_mor' : 'platform_mor',
+      onHold: a?.payoutsHeld ?? false,
     };
   },
 });
@@ -173,5 +176,41 @@ export const applyAccountEventCommand = tenantCommand({
     targetType: 'payment_account',
     targetId: input.account.accountId,
     data: { eventId: input.id, outcome: r?.outcome, state: r?.state },
+  }),
+});
+
+/**
+ * Staff hold (or release) an org's payouts (platform actor only). Transfers at release (M1.5e)
+ * and payouts wait while held; charges keep working. Emits `payouts.hold_changed@1`.
+ */
+export const setPayoutHoldCommand = tenantCommand({
+  name: 'payments.setPayoutHold',
+  input: z.object({ held: z.boolean(), reason: z.string().trim().min(3).max(500) }),
+  output: z.object({ held: z.boolean(), changed: z.boolean() }),
+  entitlement: null,
+  permission: 'platform:payouts.hold',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const [a] = await tx.select().from(paymentAccounts).limit(1).for('update');
+    if (!a) throw new DomainError('not_found', 'This organization has no payout account');
+    const changed = a.payoutsHeld !== input.held;
+    await tx
+      .update(paymentAccounts)
+      .set({ payoutsHeld: input.held, holdReason: input.held ? input.reason : null, updatedAt: ctx.now })
+      .where(eq(paymentAccounts.id, a.id));
+    if (changed)
+      emit({
+        type: 'payouts.hold_changed',
+        version: 1,
+        aggregateType: 'payment_account',
+        aggregateId: a.id,
+        payload: { orgId: a.orgId, held: input.held },
+      });
+    return { held: input.held, changed };
+  },
+  audit: (input, r) => ({
+    action: input.held ? 'payouts.hold' : 'payouts.release_hold',
+    targetType: 'payment_account',
+    targetId: null,
+    data: { reason: input.reason, changed: r?.changed },
   }),
 });

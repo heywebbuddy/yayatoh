@@ -12,6 +12,7 @@ import {
   legalPages,
   organizations,
 } from '../schema.ts';
+import { activeSuspensionsTx } from './suspensions.ts';
 
 export const LegalPageDto = z.object({
   kind: z.enum(LEGAL_PAGE_KINDS),
@@ -83,9 +84,13 @@ export async function publicLegalPage(
 }
 
 /** What public pages show about an organizer: brand colour and which legal pages exist. */
-export async function publicOrgProfile(
-  orgId: string,
-): Promise<{ slug: string; brandColor: string | null; legalPages: LegalPageKind[] } | null> {
+export async function publicOrgProfile(orgId: string): Promise<{
+  slug: string;
+  brandColor: string | null;
+  legalPages: LegalPageKind[];
+  /** Staff paused ticket sales (kill switch). */
+  checkoutPaused: boolean;
+} | null> {
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'tenancy.public-profile' } });
   return withTenant(ctx, async (tx) => {
     const [o] = await tx
@@ -97,10 +102,12 @@ export async function publicOrgProfile(
       .from(organizations);
     if (!o || (o.status !== 'active' && o.status !== 'limited')) return null;
     const pages = await tx.select({ kind: legalPages.kind }).from(legalPages);
+    const paused = await activeSuspensionsTx(tx);
     return {
       slug: o.slug,
       brandColor: o.brandColor,
       legalPages: LEGAL_PAGE_KINDS.filter((k) => pages.some((p) => p.kind === k)),
+      checkoutPaused: paused.has('pause_checkout'),
     };
   });
 }

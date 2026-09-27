@@ -60,7 +60,12 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
 };
 
 /** Platform permissions are not granted by org roles; they need a platform actor. */
-export const PLATFORM_PERMISSIONS = ['platform:org.create', 'platform:entitlements.manage'] as const;
+export const PLATFORM_PERMISSIONS = [
+  'platform:org.create',
+  'platform:entitlements.manage',
+  'platform:org.suspend',
+  'platform:payouts.hold',
+] as const;
 
 export function roleCan(role: OrgRole, permission: string): boolean {
   return (ROLE_PERMISSIONS[role] as readonly string[]).includes(permission);
