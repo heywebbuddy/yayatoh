@@ -56,6 +56,9 @@ test.describe('guest list', () => {
     const profile = page.getByRole('complementary', { name: 'Profile' });
     await expect(profile.getByRole('region', { name: /History/ })).toContainText('Added to the guest list');
     await profile.getByRole('button', { name: 'Remove from the list' }).click();
+    // The Server Action has finished once the guest is no longer active (the button goes away);
+    // navigating earlier can cancel it.
+    await expect(profile.getByRole('button', { name: 'Remove from the list' })).toHaveCount(0);
     await page.goto(`${base}/attendees?status=cancelled`);
     await expect(page.getByRole('row').filter({ hasText: `Uma ${stamp}` })).toBeVisible();
   });

@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "販売元: {org}",
       "platform_mor": "販売元: Pani Digital Services, LLC (Yayatoh)（{org} の代理）"
-    }
+    },
+    "collectedBy": "支払いの受領者: {org}"
   },
   "orders": {
     "title": "最近の注文",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "購入者に表示された返金ポリシー",
     "noPolicy": "主催者は返金ポリシーを公開していません。",
     "policyUpdated": "最終更新：{date}"
+  },
+  "boxOffice": {
+    "title": "窓口販売",
+    "description": "ご自身で販売したチケットを記録します（当日の現金、Zelle、ご自身のカードリーダーなど）。チケットはすぐに発行され、メールで送信されます。",
+    "tickets": "チケット",
+    "name": "購入者の氏名",
+    "email": "購入者のメールアドレス（チケットの送信先）",
+    "methodLabel": "支払方法",
+    "method": {
+      "cash": "現金",
+      "zelle": "Zelle",
+      "card_terminal": "ご自身のカードリーダー",
+      "other": "その他"
+    },
+    "reference": "参照番号（任意。例: Zelle の確認番号）",
+    "feeNote": "代金はそのままお受け取りください。予約手数料は Yayatoh へのお支払い額に加算され、次回の入金から差し引かれます。",
+    "submit": "販売を記録",
+    "done": "販売を記録しました。チケットを送信しています。",
+    "openOrder": "注文を開く",
+    "chooseTickets": "チケットを 1 枚以上選択してください。",
+    "soldOut": "チケットの残りが足りません。",
+    "collected": "ご自身で受領"
   }
 }

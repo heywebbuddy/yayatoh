@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "Verkauft von {org}",
       "platform_mor": "Verkauft von Pani Digital Services, LLC (Yayatoh) im Auftrag von {org}"
-    }
+    },
+    "collectedBy": "Zahlung eingenommen von {org}"
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "Den Käufern angezeigte Erstattungsrichtlinie",
     "noPolicy": "Der Veranstalter hat keine Erstattungsrichtlinie veröffentlicht.",
     "policyUpdated": "Zuletzt aktualisiert am {date}"
+  },
+  "boxOffice": {
+    "title": "Abendkasse",
+    "description": "Erfasse Tickets, die du selbst verkauft hast – bar an der Tür, per Zelle oder über dein eigenes Kartenlesegerät. Die Tickets werden sofort ausgestellt und per E-Mail verschickt.",
+    "tickets": "Tickets",
+    "name": "Name des Käufers",
+    "email": "E-Mail des Käufers (die Tickets werden hierhin geschickt)",
+    "methodLabel": "Bezahlt per",
+    "method": {
+      "cash": "Bar",
+      "zelle": "Zelle",
+      "card_terminal": "Dein Kartenlesegerät",
+      "other": "Sonstiges"
+    },
+    "reference": "Referenz (optional, z. B. eine Zelle-Bestätigung)",
+    "feeNote": "Du behältst das Geld. Die Buchungsgebühr wird zu dem Betrag addiert, den du Yayatoh schuldest, und von deiner nächsten Auszahlung abgezogen.",
+    "submit": "Verkauf erfassen",
+    "done": "Verkauf erfasst. Die Tickets sind unterwegs.",
+    "openOrder": "Bestellung öffnen",
+    "chooseTickets": "Wähle mindestens ein Ticket aus.",
+    "soldOut": "Dafür sind nicht mehr genug Tickets übrig.",
+    "collected": "Von dir eingenommen"
   }
 }

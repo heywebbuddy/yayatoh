@@ -13,6 +13,8 @@ export const PERMISSIONS = [
   'events:write',
   'orders:read',
   'orders:refund',
+  /** Record box-office sales the organizer collected themselves (cash, Zelle, card terminal). */
+  'orders:sell',
   'attendees:read',
   /** Label, tag and (later) edit attendees. */
   'attendees:write',
@@ -37,6 +39,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:read',
     'events:write',
     'orders:read',
+    'orders:sell',
     'attendees:read',
     'attendees:write',
     'attendees:export',
@@ -54,7 +57,15 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'payouts:manage',
   ],
   marketing: ['org:read', 'events:read', 'contacts:read', 'marketing:write'],
-  box_office: ['org:read', 'events:read', 'orders:read', 'attendees:read', 'attendees:write', 'checkin:scan'],
+  box_office: [
+    'org:read',
+    'events:read',
+    'orders:read',
+    'orders:sell',
+    'attendees:read',
+    'attendees:write',
+    'checkin:scan',
+  ],
   scanner: ['org:read', 'checkin:scan'],
   viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read'],
 };
@@ -82,6 +93,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'events:read',
     'events:write',
     'orders:read',
+    'orders:sell',
     'attendees:read',
     'attendees:write',
     'attendees:export',

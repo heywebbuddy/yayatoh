@@ -61,6 +61,11 @@ export const orders = tenantTable(
     /** The manage token, envelope-encrypted (KeyVault) so the worker can email the link. */
     manageTokenCiphertext: text('manage_token_ciphertext'),
     createdVia: text('created_via').notNull().default('web'),
+    /** Who took the money: the platform (online checkout) or the organizer (box office, Zelle). */
+    collectedBy: text('collected_by').notNull().default('platform'),
+    /** Organizer-collected sales: how it was paid and any reference (e.g. a Zelle confirmation). */
+    paymentMethod: text('payment_method'),
+    paymentReference: text('payment_reference'),
     expiresAt: ts('expires_at'),
     paidAt: ts('paid_at'),
     cancelledAt: ts('cancelled_at'),
@@ -82,6 +87,11 @@ export const orders = tenantTable(
       sql`(funds_flow = 'organizer_mor') = (connected_account_id is not null)`,
     ),
     check('orders_email_lower_check', sql`buyer_email = lower(buyer_email)`),
+    check('orders_collected_by_check', sql`collected_by in ('platform', 'organizer')`),
+    check(
+      'orders_payment_method_check',
+      sql`payment_method is null or payment_method in ('cash', 'zelle', 'card_terminal', 'other')`,
+    ),
   ],
 );
 

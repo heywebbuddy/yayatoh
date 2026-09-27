@@ -51,7 +51,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         </div>
         <p className="text-caption text-zinc-500">{t('order.feesIncluded', { fees: fmt(order.feeMinor) })}</p>
         <p className="text-caption text-zinc-500">
-          {t(`order.soldBy.${order.fundsFlow}`, { org: order.event.organizerName })}
+          {order.collectedBy === 'organizer'
+            ? t('order.collectedBy', { org: order.event.organizerName })
+            : t(`order.soldBy.${order.fundsFlow}`, { org: order.event.organizerName })}
         </p>
         {order.discountMinor > 0 ? (
           <p className="text-caption text-zinc-500">

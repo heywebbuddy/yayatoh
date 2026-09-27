@@ -162,6 +162,10 @@ export const orderDetailQuery = tenantQuery({
   input: z.object({ orderId: z.uuid() }),
   output: OrderDto.extend({
     fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+    collectedBy: z.enum(['platform', 'organizer']),
+    paymentMethod: z.string().nullable(),
+    paymentReference: z.string().nullable(),
+    createdVia: z.string(),
     tickets: z.array(OrganizerTicketDto),
   }),
   entitlement: 'ticketing',
@@ -178,6 +182,11 @@ export const orderDetailQuery = tenantQuery({
       holderEmail: t.holderEmail,
       itemName: names.get(t.orderItemId) ?? '',
     }));
-    return { ...order, fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor', tickets };
+    return {
+      ...order,
+      fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor',
+      collectedBy: order.collectedBy as 'platform' | 'organizer',
+      tickets,
+    };
   },
 });

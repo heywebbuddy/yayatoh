@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "銷售方：{org}",
       "platform_mor": "銷售方：Pani Digital Services, LLC (Yayatoh)（代表 {org}）"
-    }
+    },
+    "collectedBy": "收款方：{org}"
   },
   "orders": {
     "title": "最近訂單",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "向買家顯示的退款政策",
     "noPolicy": "主辦單位尚未發布退款政策。",
     "policyUpdated": "最後更新：{date}"
+  },
+  "boxOffice": {
+    "title": "售票處",
+    "description": "記錄你自行售出的票券，例如現場現金、Zelle 或你自己的刷卡機收款。票券會立即開立並以電子郵件寄出。",
+    "tickets": "票券",
+    "name": "購票人姓名",
+    "email": "購票人電子郵件（票券將寄送至此）",
+    "methodLabel": "付款方式",
+    "method": {
+      "cash": "現金",
+      "zelle": "Zelle",
+      "card_terminal": "你的刷卡機",
+      "other": "其他"
+    },
+    "reference": "參考編號（選填，例如 Zelle 確認編號）",
+    "feeNote": "款項歸你所有。預訂費用將計入你應付給 Yayatoh 的金額，並從你的下一筆收款中扣除。",
+    "submit": "記錄銷售",
+    "done": "銷售已記錄，票券正在寄送。",
+    "openOrder": "開啟訂單",
+    "chooseTickets": "請至少選擇一張票券。",
+    "soldOut": "剩餘票券不足。",
+    "collected": "由你收款"
   }
 }

@@ -5,6 +5,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { BoxOfficeForm } from '@/components/box-office-form.tsx';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
@@ -16,6 +17,7 @@ import {
   addGuestCountsAction,
   addQuestionAction,
   archiveTicketTypeAction,
+  boxOfficeSaleAction,
   createPromoCodeAction,
   createTicketTypeAction,
   moveQuestionAction,
@@ -157,6 +159,23 @@ export default async function TicketsPage({
           ]}
         />
       )}
+      {roleCan(data.role, 'orders:sell') && ev.status === 'published' && types.length > 0 ? (
+        <section aria-labelledby="box-office-heading" className="flex flex-col gap-3">
+          <h2 id="box-office-heading" className="text-section">
+            {t('boxOffice.title')}
+          </h2>
+          <p className="text-body text-zinc-600">{t('boxOffice.description')}</p>
+          <Card>
+            <BoxOfficeForm
+              action={boxOfficeSaleAction.bind(null, org, event)}
+              passes={types
+                .filter((tt) => tt.quantitySold + tt.quantityHeld < tt.quantityTotal && !tt.isDonation)
+                .map((tt) => ({ id: tt.id, label: `${tt.name} · ${fmt(tt.allInMinor)}` }))}
+              orderHref={`/o/${org}/e/${event}/orders/{id}`}
+            />
+          </Card>
+        </section>
+      ) : null}
       {orders ? (
         <section aria-labelledby="orders-heading" className="flex flex-col gap-3">
           <h2 id="orders-heading" className="text-section">

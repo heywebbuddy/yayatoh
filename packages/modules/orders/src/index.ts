@@ -1,3 +1,4 @@
+export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-office.ts';
 export {
   applyProviderEventCommand,
   attachPaymentCommand,

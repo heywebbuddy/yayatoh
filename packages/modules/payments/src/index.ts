@@ -32,6 +32,7 @@ export {
   ledgerBalancesQuery,
   type Posting,
   postJournalTx,
+  postOrganizerCollectedSaleTx,
   postRefundTx,
   postSaleTx,
   postTransferReversalTx,

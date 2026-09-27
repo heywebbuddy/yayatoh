@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "Vendu par {org}",
       "platform_mor": "Vendu par Pani Digital Services, LLC (Yayatoh) pour le compte de {org}"
-    }
+    },
+    "collectedBy": "Paiement encaissé par {org}"
   },
   "orders": {
     "title": "Commandes récentes",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "Politique de remboursement affichée aux acheteurs",
     "noPolicy": "L’organisateur n’a pas publié de politique de remboursement.",
     "policyUpdated": "Dernière mise à jour le {date}"
+  },
+  "boxOffice": {
+    "title": "Billetterie sur place",
+    "description": "Enregistrez les billets que vous avez vendus vous-même : en espèces à l’entrée, par Zelle ou avec votre propre terminal de paiement. Les billets sont émis et envoyés par e-mail immédiatement.",
+    "tickets": "Billets",
+    "name": "Nom de l’acheteur",
+    "email": "E-mail de l’acheteur (les billets y sont envoyés)",
+    "methodLabel": "Payé par",
+    "method": {
+      "cash": "Espèces",
+      "zelle": "Zelle",
+      "card_terminal": "Votre terminal de paiement",
+      "other": "Autre"
+    },
+    "reference": "Référence (facultatif, par ex. une confirmation Zelle)",
+    "feeNote": "Vous gardez l’argent. Les frais de réservation s’ajoutent à ce que vous devez à Yayatoh et sont déduits de votre prochain versement.",
+    "submit": "Enregistrer la vente",
+    "done": "Vente enregistrée. Les billets sont en route.",
+    "openOrder": "Ouvrir la commande",
+    "chooseTickets": "Choisissez au moins un billet.",
+    "soldOut": "Il ne reste pas assez de billets pour cela.",
+    "collected": "Encaissé par vous"
   }
 }

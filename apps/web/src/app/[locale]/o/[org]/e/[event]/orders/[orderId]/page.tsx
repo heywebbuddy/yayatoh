@@ -44,8 +44,10 @@ export default async function OrderPage({
     timeStyle: 'short',
     timeZone: data.org.timezone,
   });
+  // Organizer-collected money is refunded in person, not through the payment provider.
   const canRefund =
     roleCan(data.role, 'orders:refund') &&
+    order.collectedBy === 'platform' &&
     ['paid', 'partially_refunded'].includes(order.status) &&
     order.totalMinor > 0;
   const active = order.tickets.filter((tk) => tk.status === 'active');
@@ -64,7 +66,17 @@ export default async function OrderPage({
             label={t(`order.status.${order.status}`)}
           />
           <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
-          <span className="text-caption text-zinc-600">{t(`refunds.soldBy.${order.fundsFlow}`)}</span>
+          <span className="text-caption text-zinc-600">
+            {order.collectedBy === 'organizer'
+              ? [
+                  t('boxOffice.collected'),
+                  order.paymentMethod ? t(`boxOffice.method.${order.paymentMethod}`) : null,
+                  order.paymentReference,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')
+              : t(`refunds.soldBy.${order.fundsFlow}`)}
+          </span>
         </div>
         <p className="text-caption text-zinc-600">
           {order.items.map((i) => `${i.quantity} × ${i.name}`).join(', ')}

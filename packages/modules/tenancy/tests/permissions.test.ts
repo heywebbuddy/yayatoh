@@ -14,6 +14,15 @@ describe('org roles', () => {
     expect(refunders.sort()).toEqual(['admin', 'finance', 'owner']);
   });
 
+  it('box office, managers, owners and admins record organizer-collected sales; finance does not', () => {
+    expect(ORG_ROLES.filter((r) => roleCan(r, 'orders:sell')).sort()).toEqual([
+      'admin',
+      'box_office',
+      'manager',
+      'owner',
+    ]);
+  });
+
   it('only owner and admin can manage members', () => {
     expect(ORG_ROLES.filter((r) => roleCan(r, 'members:manage')).sort()).toEqual(['admin', 'owner']);
   });

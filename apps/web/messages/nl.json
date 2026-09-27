@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "Verkocht door {org}",
       "platform_mor": "Verkocht door Pani Digital Services, LLC (Yayatoh) namens {org}"
-    }
+    },
+    "collectedBy": "Betaling ontvangen door {org}"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "Terugbetalingsbeleid zoals getoond aan kopers",
     "noPolicy": "De organisator heeft geen terugbetalingsbeleid gepubliceerd.",
     "policyUpdated": "Laatst bijgewerkt {date}"
+  },
+  "boxOffice": {
+    "title": "Kassa",
+    "description": "Registreer tickets die je zelf hebt verkocht: contant aan de deur, via Zelle of met je eigen kaartlezer. De tickets worden direct uitgegeven en gemaild.",
+    "tickets": "Tickets",
+    "name": "Naam van de koper",
+    "email": "E-mailadres van de koper (de tickets worden hierheen gestuurd)",
+    "methodLabel": "Betaald met",
+    "method": {
+      "cash": "Contant",
+      "zelle": "Zelle",
+      "card_terminal": "Je eigen kaartlezer",
+      "other": "Anders"
+    },
+    "reference": "Referentie (optioneel, bijv. een Zelle-bevestiging)",
+    "feeNote": "Jij houdt het geld. De boekingskosten worden opgeteld bij wat je Yayatoh verschuldigd bent en ingehouden op je volgende uitbetaling.",
+    "submit": "Verkoop registreren",
+    "done": "Verkoop geregistreerd. De tickets zijn onderweg.",
+    "openOrder": "Bestelling openen",
+    "chooseTickets": "Kies minstens één ticket.",
+    "soldOut": "Daarvoor zijn niet genoeg tickets meer over.",
+    "collected": "Door jou ontvangen"
   }
 }

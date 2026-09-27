@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "Sold by {org}",
       "platform_mor": "Sold by Pani Digital Services, LLC (Yayatoh) on behalf of {org}"
-    }
+    },
+    "collectedBy": "Payment collected by {org}"
   },
   "orders": {
     "title": "Recent orders",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "Refund policy shown to buyers",
     "noPolicy": "The organizer has not published a refund policy.",
     "policyUpdated": "Last updated {date}"
+  },
+  "boxOffice": {
+    "title": "Box office",
+    "description": "Record tickets you sold yourself — cash at the door, Zelle, or your own card reader. Tickets are issued and emailed at once.",
+    "tickets": "Tickets",
+    "name": "Buyer's name",
+    "email": "Buyer's email (tickets are sent here)",
+    "methodLabel": "Paid by",
+    "method": {
+      "cash": "Cash",
+      "zelle": "Zelle",
+      "card_terminal": "Your card reader",
+      "other": "Other"
+    },
+    "reference": "Reference (optional, e.g. a Zelle confirmation)",
+    "feeNote": "You keep the money. The booking fee is added to what you owe Yayatoh and taken from your next payout.",
+    "submit": "Record sale",
+    "done": "Sale recorded. The tickets are on their way.",
+    "openOrder": "Open the order",
+    "chooseTickets": "Choose at least one ticket.",
+    "soldOut": "Not enough tickets left for that.",
+    "collected": "Collected by you"
   }
 }

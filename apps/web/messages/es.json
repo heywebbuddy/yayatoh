@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "Vendido por {org}",
       "platform_mor": "Vendido por Pani Digital Services, LLC (Yayatoh) en nombre de {org}"
-    }
+    },
+    "collectedBy": "Pago cobrado por {org}"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "Política de reembolso mostrada a los compradores",
     "noPolicy": "El organizador no ha publicado una política de reembolso.",
     "policyUpdated": "Última actualización: {date}"
+  },
+  "boxOffice": {
+    "title": "Taquilla",
+    "description": "Registra las entradas que vendiste tú mismo: en efectivo en la puerta, por Zelle o con tu propio lector de tarjetas. Las entradas se emiten y se envían por correo electrónico al instante.",
+    "tickets": "Entradas",
+    "name": "Nombre del comprador",
+    "email": "Correo del comprador (las entradas se envían aquí)",
+    "methodLabel": "Pagado con",
+    "method": {
+      "cash": "Efectivo",
+      "zelle": "Zelle",
+      "card_terminal": "Tu lector de tarjetas",
+      "other": "Otro"
+    },
+    "reference": "Referencia (opcional, p. ej., una confirmación de Zelle)",
+    "feeNote": "El dinero es tuyo. La tarifa de gestión se suma a lo que debes a Yayatoh y se descuenta de tu próximo pago.",
+    "submit": "Registrar venta",
+    "done": "Venta registrada. Las entradas van de camino.",
+    "openOrder": "Abrir el pedido",
+    "chooseTickets": "Elige al menos una entrada.",
+    "soldOut": "No quedan suficientes entradas para eso.",
+    "collected": "Cobrado por ti"
   }
 }

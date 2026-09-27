@@ -67,6 +67,8 @@ export const HolderEventDto = z.object({
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   /** Who sold it (roadmap §4.4 seller disclosure): the organizer, or the platform on their behalf. */
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+  /** Organizer-collected (box office): the receipt says "Payment collected by {Org}". */
+  collectedBy: z.enum(['platform', 'organizer']),
   tickets: z.array(HolderTicketDto),
   /** Tickets of this order now held by someone else (passed on with a claim link). */
   transferred: z.int(),

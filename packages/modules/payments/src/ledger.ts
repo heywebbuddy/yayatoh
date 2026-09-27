@@ -198,6 +198,31 @@ export async function postTransferReversalTx(
   });
 }
 
+/**
+ * An organizer-collected sale (box office, Zelle, cash; roadmap §5.3): no charge exists, the
+ * organizer holds the money, so the platform fee becomes a receivable, netted from the next
+ * release (or invoiced). The gross is kept as a memo.
+ */
+export async function postOrganizerCollectedSaleTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  o: { orderId: string; eventId: string; totalMinor: number; feeMinor: number; currency: string },
+) {
+  if (o.feeMinor === 0) return null;
+  return postJournalTx(tx, ctx, {
+    key: `sale:${o.orderId}`,
+    kind: 'organizer_collected_sale',
+    refType: 'order',
+    refId: o.orderId,
+    eventId: o.eventId,
+    memo: { collectedBy: 'organizer', grossMinor: o.totalMinor, feeMinor: o.feeMinor },
+    postings: [
+      { account: 'org:receivable', amountMinor: o.feeMinor, currency: o.currency },
+      { account: 'platform:platform_fee_deferred', amountMinor: -o.feeMinor, currency: o.currency },
+    ],
+  });
+}
+
 export const LedgerBalanceDto = z.object({
   account: z.enum(LEDGER_ACCOUNTS),
   currency: z.string(),

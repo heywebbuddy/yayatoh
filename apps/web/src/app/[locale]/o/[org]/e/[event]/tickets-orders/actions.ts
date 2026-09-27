@@ -8,6 +8,7 @@ import {
   moneyFromDecimal,
   zonedTimeToUtc,
 } from '@yayatoh/kernel';
+import { recordBoxOfficeSaleCommand } from '@yayatoh/orders';
 import {
   archiveTicketTypeCommand,
   createPromoCodeCommand,
@@ -215,4 +216,49 @@ export async function moveQuestionAction(org: string, event: string, key: string
     [next[i], next[j]] = [next[j] as FieldDefinition, next[i] as FieldDefinition];
     return next;
   });
+}
+
+export interface BoxOfficeState {
+  readonly ok: boolean;
+  readonly code: string | null;
+  readonly reason?: string;
+  readonly orderId?: string;
+}
+
+/** Record a sale taken at the door or by Zelle: tickets are issued and emailed at once. */
+export async function boxOfficeSaleAction(
+  org: string,
+  event: string,
+  _prev: BoxOfficeState,
+  form: FormData,
+): Promise<BoxOfficeState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const items = [...form.entries()]
+    .filter(([k]) => k.startsWith('qty:'))
+    .map(([k, v]) => ({ ticketTypeId: k.slice(4), quantity: Number(v) }))
+    .filter((i) => Number.isInteger(i.quantity) && i.quantity > 0);
+  if (items.length === 0) return { ok: false, code: 'validation_failed', reason: 'empty' };
+  try {
+    const { order } = await executeCommand(
+      recordBoxOfficeSaleCommand,
+      {
+        eventId: ev.id,
+        items,
+        buyer: { name: String(form.get('name') ?? ''), email: String(form.get('email') ?? '') },
+        method: String(form.get('method') ?? 'cash'),
+        reference: String(form.get('reference') ?? '').trim() || undefined,
+        locale: data.ctx.locale,
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
+    return { ok: true, code: null, orderId: order.id };
+  } catch (err) {
+    return {
+      ok: false,
+      code: isDomainError(err) ? err.code : 'internal',
+      reason: isDomainError(err) ? String(err.details?.reason ?? '') : undefined,
+    };
+  }
 }

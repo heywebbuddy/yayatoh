@@ -510,7 +510,8 @@
     "soldBy": {
       "organizer_mor": "Venduto da {org}",
       "platform_mor": "Venduto da Pani Digital Services, LLC (Yayatoh) per conto di {org}"
-    }
+    },
+    "collectedBy": "Pagamento incassato da {org}"
   },
   "orders": {
     "title": "Ordini recenti",
@@ -1163,5 +1164,27 @@
     "refundPolicy": "Politica di rimborso mostrata agli acquirenti",
     "noPolicy": "L’organizzatore non ha pubblicato una politica di rimborso.",
     "policyUpdated": "Ultimo aggiornamento: {date}"
+  },
+  "boxOffice": {
+    "title": "Botteghino",
+    "description": "Registra i biglietti che hai venduto tu: in contanti all’ingresso, con Zelle o con il tuo lettore di carte. I biglietti vengono emessi e inviati subito via email.",
+    "tickets": "Biglietti",
+    "name": "Nome dell’acquirente",
+    "email": "Email dell’acquirente (i biglietti vengono inviati qui)",
+    "methodLabel": "Pagato con",
+    "method": {
+      "cash": "Contanti",
+      "zelle": "Zelle",
+      "card_terminal": "Il tuo lettore di carte",
+      "other": "Altro"
+    },
+    "reference": "Riferimento (facoltativo, ad es. una conferma Zelle)",
+    "feeNote": "Il denaro resta a te. La commissione di prenotazione si aggiunge a quanto devi a Yayatoh e viene trattenuta dal tuo prossimo accredito.",
+    "submit": "Registra la vendita",
+    "done": "Vendita registrata. I biglietti sono in arrivo.",
+    "openOrder": "Apri l’ordine",
+    "chooseTickets": "Scegli almeno un biglietto.",
+    "soldOut": "Non ci sono abbastanza biglietti rimasti.",
+    "collected": "Incassato da te"
   }
 }

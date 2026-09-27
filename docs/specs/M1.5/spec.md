@@ -217,3 +217,22 @@
 
 ## Remaining M1.5 increments
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.
+
+## M1.5f — organizer-collected sales: box office, Zelle, cash (done)
+
+Roadmap §5.3 "organizer-collected sales" and §4.4 receipt variant.
+
+- **Who:** the new `orders:sell` permission — owner, admin, manager, box office, and event managers for their event. Finance and viewers cannot sell.
+- **What:** `orders.recordBoxOfficeSale` sells from the same all-in quote as online checkout (hidden passes included, donations excluded), takes stock atomically (never oversells), and marks the order paid at once with `created_via = box_office`, `collected_by = organizer`, the method (`cash`, `zelle`, `card_terminal`, `other`) and an optional reference. Tickets are issued and `order.paid@1` is emitted, so the tickets email goes out like an online sale. A published event is required, and staff's "pause checkout" also pauses the box office.
+- **Money:** no charge exists. The organizer holds the money, so the platform fee becomes their **receivable** (`org:receivable` +fee; `platform_fee_deferred` −fee), netted from their next release (M1.6c). Free and zero-fee sales post nothing.
+- **Receipts:** the buyer's order page says "Payment collected by {Org}" instead of the "Sold by" line; the console order page shows "Collected by you · method · reference".
+- **Refunds:** money the organizer holds is refunded in person. The refund form is hidden for these orders, and `orders.startRefund` refuses them (`no_payment`). Recording an in-person refund (void tickets, reverse the fee receivable) comes with the M3.10 orders console.
+- **Later:** walk-up buyers without an email (printed tickets), card-present payments on the platform (Stripe Terminal), invoicing the receivable when there is nothing to net it from.
+
+### Acceptance (M1.5f)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Only published events; tickets issued at once, organizer-collected, same all-in price, hidden passes included; the fee becomes a receivable with no platform cash; `order.paid@1` emitted; provider refunds refused | `packages/testing/tests/box-office.int.test.ts` |
+| AC2 | Never oversells | `box-office.int.test.ts` |
+| AC3 | Box office staff can sell; finance and viewers cannot; other orgs never see the order | `box-office.int.test.ts`, `packages/modules/tenancy/tests/permissions.test.ts` |
+| AC4 | In the browser: an organizer records a Zelle sale, opens the order, sees "Collected by you · Zelle · ZL-777", two valid tickets and no refund form; axe passes | `apps/web/e2e/box-office.spec.ts` |
