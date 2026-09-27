@@ -545,5 +545,31 @@
     "moveDown": "Mover {label} para baixo",
     "remove": "Remover {label}",
     "answers": "Respostas"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "{admitted} de {issued} ingressos com check-in hoje",
+    "codeLabel": "Código do ingresso",
+    "codeHint": "Escaneie o QR code ou digite o código de 8 caracteres impresso abaixo dele.",
+    "check": "Fazer check-in",
+    "who": "{name} · {pass} · Nº {serial}",
+    "firstAt": "Check-in já feito às {time}",
+    "recent": "Leituras recentes",
+    "noScansTitle": "Nenhuma leitura ainda",
+    "noScansDescription": "As leituras aparecem aqui conforme os convidados chegam.",
+    "undo": "Desfazer",
+    "undoFor": "Desfazer o check-in de {name}",
+    "undone": "Desfeito",
+    "noAccessTitle": "O check-in não faz parte da sua função",
+    "noAccessDescription": "Peça a um organizador para atribuir a você a função de controle de acesso ou bilheteria.",
+    "result": {
+      "admitted": "Boas-vindas",
+      "duplicate": "Check-in já feito",
+      "invalid": "Ingresso inválido",
+      "void": "Este ingresso foi cancelado",
+      "wrong_event": "Este ingresso é de outro evento",
+      "not_today": "Este passe não é válido hoje",
+      "outside_window": "O check-in não está aberto agora"
+    }
   }
 }

@@ -545,5 +545,31 @@
     "moveDown": "Sposta {label} giù",
     "remove": "Rimuovi {label}",
     "answers": "Risposte"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "{admitted} biglietti su {issued} registrati oggi",
+    "codeLabel": "Codice del biglietto",
+    "codeHint": "Scansiona il codice QR o digita il codice di 8 caratteri stampato sotto.",
+    "check": "Registra ingresso",
+    "who": "{name} · {pass} · N. {serial}",
+    "firstAt": "Check-in già effettuato alle {time}",
+    "recent": "Scansioni recenti",
+    "noScansTitle": "Ancora nessuna scansione",
+    "noScansDescription": "Le scansioni appariranno qui all’arrivo degli ospiti.",
+    "undo": "Annulla",
+    "undoFor": "Annulla il check-in di {name}",
+    "undone": "Annullato",
+    "noAccessTitle": "Il check-in non fa parte del tuo ruolo",
+    "noAccessDescription": "Chiedi a un organizzatore di assegnarti il ruolo Controllo accessi o Biglietteria.",
+    "result": {
+      "admitted": "Benvenuti",
+      "duplicate": "Check-in già effettuato",
+      "invalid": "Biglietto non valido",
+      "void": "Questo biglietto è stato annullato",
+      "wrong_event": "Questo biglietto è per un altro evento",
+      "not_today": "Questo pass non è valido oggi",
+      "outside_window": "Il check-in non è aperto in questo momento"
+    }
   }
 }

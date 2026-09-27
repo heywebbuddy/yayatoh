@@ -545,5 +545,31 @@
     "moveDown": "{label}を下に移動",
     "remove": "{label}を削除",
     "answers": "回答"
+  },
+  "checkin": {
+    "title": "チェックイン",
+    "progress": "本日のチェックイン：{issued}枚中{admitted}枚",
+    "codeLabel": "チケットコード",
+    "codeHint": "QRコードをスキャンするか、その下に印字された8文字のコードを入力してください。",
+    "check": "チェックイン",
+    "who": "{name} · {pass} · No. {serial}",
+    "firstAt": "{time}にチェックイン済み",
+    "recent": "最近のスキャン",
+    "noScansTitle": "スキャンはまだありません",
+    "noScansDescription": "ゲストが到着すると、スキャン結果がここに表示されます。",
+    "undo": "取り消す",
+    "undoFor": "{name}さんのチェックインを取り消す",
+    "undone": "取り消しました",
+    "noAccessTitle": "あなたの役割ではチェックインを利用できません",
+    "noAccessDescription": "主催者に、入場スキャン担当またはチケット窓口の役割を付与するよう依頼してください。",
+    "result": {
+      "admitted": "ようこそ",
+      "duplicate": "チェックイン済み",
+      "invalid": "無効なチケットです",
+      "void": "このチケットはキャンセルされています",
+      "wrong_event": "別のイベントのチケットです",
+      "not_today": "このパスは本日無効です",
+      "outside_window": "現在チェックインは受け付けていません"
+    }
   }
 }

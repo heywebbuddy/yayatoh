@@ -545,5 +545,31 @@
     "moveDown": "下移{label}",
     "remove": "移除{label}",
     "answers": "回答"
+  },
+  "checkin": {
+    "title": "報到",
+    "progress": "今日 {issued} 張票券中已報到 {admitted} 張",
+    "codeLabel": "票券代碼",
+    "codeHint": "掃描 QR 碼，或輸入印在下方的 8 位字元代碼。",
+    "check": "報到",
+    "who": "{name} · {pass} · 編號 {serial}",
+    "firstAt": "已於 {time} 報到",
+    "recent": "最近掃描",
+    "noScansTitle": "尚無掃描紀錄",
+    "noScansDescription": "賓客抵達後，掃描紀錄會顯示在這裡。",
+    "undo": "復原",
+    "undoFor": "復原 {name} 的報到",
+    "undone": "已復原",
+    "noAccessTitle": "你的角色不包含報到權限",
+    "noAccessDescription": "請主辦單位為你指派驗票員或售票處角色。",
+    "result": {
+      "admitted": "歡迎入場",
+      "duplicate": "已報到",
+      "invalid": "無效票券",
+      "void": "此票券已取消",
+      "wrong_event": "此票券屬於其他活動",
+      "not_today": "此通行證今日無效",
+      "outside_window": "目前未開放報到"
+    }
   }
 }

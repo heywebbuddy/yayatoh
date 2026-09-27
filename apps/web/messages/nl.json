@@ -545,5 +545,31 @@
     "moveDown": "{label} omlaag verplaatsen",
     "remove": "{label} verwijderen",
     "answers": "Antwoorden"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "{admitted} van {issued} tickets vandaag ingecheckt",
+    "codeLabel": "Ticketcode",
+    "codeHint": "Scan de QR-code of typ de code van 8 tekens die eronder staat.",
+    "check": "Inchecken",
+    "who": "{name} · {pass} · Nr. {serial}",
+    "firstAt": "Al ingecheckt om {time}",
+    "recent": "Recente scans",
+    "noScansTitle": "Nog geen scans",
+    "noScansDescription": "Scans verschijnen hier zodra gasten binnenkomen.",
+    "undo": "Ongedaan maken",
+    "undoFor": "Check-in van {name} ongedaan maken",
+    "undone": "Ongedaan gemaakt",
+    "noAccessTitle": "Check-in hoort niet bij je rol",
+    "noAccessDescription": "Vraag een organisator om je de rol Scanner of Kassa te geven.",
+    "result": {
+      "admitted": "Welkom",
+      "duplicate": "Al ingecheckt",
+      "invalid": "Geen geldig ticket",
+      "void": "Dit ticket is geannuleerd",
+      "wrong_event": "Dit ticket is voor een ander evenement",
+      "not_today": "Deze pas is vandaag niet geldig",
+      "outside_window": "Check-in is nu niet geopend"
+    }
   }
 }

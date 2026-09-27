@@ -545,5 +545,31 @@
     "moveDown": "Bajar {label}",
     "remove": "Eliminar {label}",
     "answers": "Respuestas"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "{admitted} de {issued} entradas con check-in hoy",
+    "codeLabel": "Código de la entrada",
+    "codeHint": "Escanea el código QR o escribe el código de 8 caracteres impreso debajo.",
+    "check": "Registrar entrada",
+    "who": "{name} · {pass} · N.º {serial}",
+    "firstAt": "Check-in ya realizado a las {time}",
+    "recent": "Escaneos recientes",
+    "noScansTitle": "Aún no hay escaneos",
+    "noScansDescription": "Los escaneos aparecerán aquí a medida que lleguen los invitados.",
+    "undo": "Deshacer",
+    "undoFor": "Deshacer el check-in de {name}",
+    "undone": "Deshecho",
+    "noAccessTitle": "El check-in no forma parte de tu rol",
+    "noAccessDescription": "Pide a un organizador que te asigne el rol de control de acceso o de taquilla.",
+    "result": {
+      "admitted": "Adelante",
+      "duplicate": "Check-in ya realizado",
+      "invalid": "No es una entrada válida",
+      "void": "Esta entrada fue cancelada",
+      "wrong_event": "Esta entrada es para otro evento",
+      "not_today": "Este pase no es válido hoy",
+      "outside_window": "El check-in no está abierto ahora"
+    }
   }
 }

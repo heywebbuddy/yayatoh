@@ -545,5 +545,31 @@
     "moveDown": "下移{label}",
     "remove": "移除{label}",
     "answers": "回答"
+  },
+  "checkin": {
+    "title": "签到",
+    "progress": "今日 {issued} 张门票中已签到 {admitted} 张",
+    "codeLabel": "门票代码",
+    "codeHint": "扫描二维码，或输入印在其下方的 8 位代码。",
+    "check": "签到",
+    "who": "{name} · {pass} · 编号 {serial}",
+    "firstAt": "已于 {time} 签到",
+    "recent": "最近扫描",
+    "noScansTitle": "暂无扫描记录",
+    "noScansDescription": "宾客到场后，扫描记录会显示在这里。",
+    "undo": "撤销",
+    "undoFor": "撤销 {name} 的签到",
+    "undone": "已撤销",
+    "noAccessTitle": "你的角色不包含签到权限",
+    "noAccessDescription": "请让主办方为你分配检票员或售票处角色。",
+    "result": {
+      "admitted": "欢迎入场",
+      "duplicate": "已签到",
+      "invalid": "无效门票",
+      "void": "此门票已取消",
+      "wrong_event": "此门票属于其他活动",
+      "not_today": "此通行证今日无效",
+      "outside_window": "当前未开放签到"
+    }
   }
 }

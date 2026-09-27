@@ -545,5 +545,31 @@
     "moveDown": "{label} nach unten verschieben",
     "remove": "{label} entfernen",
     "answers": "Antworten"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "Heute {admitted} von {issued} Tickets eingecheckt",
+    "codeLabel": "Ticketcode",
+    "codeHint": "Scanne den QR-Code oder gib den 8-stelligen Code darunter ein.",
+    "check": "Einchecken",
+    "who": "{name} · {pass} · Nr. {serial}",
+    "firstAt": "Bereits eingecheckt um {time}",
+    "recent": "Letzte Scans",
+    "noScansTitle": "Noch keine Scans",
+    "noScansDescription": "Scans erscheinen hier, sobald Gäste ankommen.",
+    "undo": "Rückgängig",
+    "undoFor": "Check-in von {name} rückgängig machen",
+    "undone": "Rückgängig gemacht",
+    "noAccessTitle": "Check-in gehört nicht zu deiner Rolle",
+    "noAccessDescription": "Bitte einen Veranstalter, dir die Rolle Einlasskontrolle oder Kasse zu geben.",
+    "result": {
+      "admitted": "Willkommen",
+      "duplicate": "Bereits eingecheckt",
+      "invalid": "Kein gültiges Ticket",
+      "void": "Dieses Ticket wurde storniert",
+      "wrong_event": "Dieses Ticket gilt für ein anderes Event",
+      "not_today": "Dieser Pass gilt heute nicht",
+      "outside_window": "Check-in ist gerade nicht geöffnet"
+    }
   }
 }
