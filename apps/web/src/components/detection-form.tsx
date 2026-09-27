@@ -2,7 +2,7 @@
 
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import type { DetectionFormState } from '@/app/[locale]/o/[org]/e/[event]/onsite/signals/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
@@ -18,6 +18,9 @@ export function DetectionForm({
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { kind: 'idle' });
+  // Controlled, so a validation error keeps what was typed (React resets uncontrolled fields).
+  const [rate, setRate] = useState(String(maxScansPerMinute));
+  const [speed, setSpeed] = useState(String(maxTravelKmh));
   const fieldError = (field: string) =>
     state.kind === 'error' && state.field === field ? t(`signals.settings.${field}Error`) : undefined;
   return (
@@ -25,7 +28,8 @@ export function DetectionForm({
       <Input
         name="maxScansPerMinute"
         inputMode="numeric"
-        defaultValue={String(maxScansPerMinute)}
+        value={rate}
+        onChange={(e) => setRate(e.target.value)}
         label={t('signals.settings.maxScansPerMinute')}
         hint={t('signals.settings.maxScansPerMinuteHint')}
         error={fieldError('maxScansPerMinute')}
@@ -33,7 +37,8 @@ export function DetectionForm({
       <Input
         name="maxTravelKmh"
         inputMode="numeric"
-        defaultValue={String(maxTravelKmh)}
+        value={speed}
+        onChange={(e) => setSpeed(e.target.value)}
         label={t('signals.settings.maxTravelKmh')}
         hint={t('signals.settings.maxTravelKmhHint')}
         error={fieldError('maxTravelKmh')}
