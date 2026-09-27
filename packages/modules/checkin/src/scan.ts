@@ -14,6 +14,7 @@ import {
   scanCheckpointTx,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+import { withOccurrenceTx } from './occurrence.ts';
 import {
   admissions,
   FRAUD_SIGNAL_KINDS,
@@ -97,7 +98,7 @@ export const scanTicketCommand = tenantCommand({
       }
     }
 
-    const verdict = ruleResult({ now: ctx.now, event, ticket });
+    const verdict = ruleResult({ now: ctx.now, event, ticket: await withOccurrenceTx(tx, ticket) });
     let result: ScanResult = verdict === 'ok' ? 'admitted' : verdict;
     let admissionId: string | null = null;
     let firstAdmittedAt: Date | null = null;

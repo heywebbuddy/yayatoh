@@ -1,1 +1,1 @@
-export { eventRoleAssignments, events } from './schema.ts';
+export { eventRoleAssignments, events, occurrences, series, seriesEvents } from './schema.ts';

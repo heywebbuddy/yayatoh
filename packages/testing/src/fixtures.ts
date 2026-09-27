@@ -8,14 +8,19 @@ import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/b
 import { createCheckpointCommand, enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import {
+  addRecurringOccurrencesCommand,
   assignEventRoleCommand,
+  cancelOccurrenceCommand,
   createEventCommand,
+  createSeriesCommand,
   type EventDto,
+  listOccurrencesQuery,
+  setEventSeriesCommand,
   transitionEventCommand,
 } from '@yayatoh/events';
 import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
-import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
+import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   applyDisputeEventCommand,
   applyProviderEventCommand,
@@ -34,6 +39,7 @@ import {
   saveLayoutCommand,
   setEventLayoutCommand,
 } from '@yayatoh/seating';
+import { saveTemplateCommand } from '@yayatoh/templates';
 import {
   AGREEMENT_DOCUMENTS,
   acceptAgreementCommand,
@@ -401,6 +407,40 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M1.4b: a weekly event with dates (one cancelled), a series holding both events, and a
+  // template saved from the launch event (isolation coverage).
+  const weekly = await executeCommand(
+    createEventCommand,
+    {
+      name: `${name} Weekly`,
+      slug: `${slug}-weekly`,
+      timezone: 'America/Chicago',
+      startsAt: '2027-11-04T00:00:00Z',
+      endsAt: '2027-11-04T03:00:00Z',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    addRecurringOccurrencesCommand,
+    {
+      eventId: weekly.id,
+      rule: { startDate: '2027-11-03', startTime: '19:00', endTime: '22:00', freq: 'weekly', count: 3 },
+    },
+    ctx(),
+    ports,
+  );
+  const [firstDate] = await executeQuery(listOccurrencesQuery, { eventId: weekly.id }, ctx(), ports);
+  if (firstDate) await executeCommand(cancelOccurrenceCommand, { occurrenceId: firstDate.id }, ctx(), ports);
+  const tour = await executeCommand(
+    createSeriesCommand,
+    { name: `${name} Tour`, slug: `${slug}-tour` },
+    ctx(),
+    ports,
+  );
+  for (const e of [event, weekly])
+    await executeCommand(setEventSeriesCommand, { eventId: e.id, seriesId: tour.id }, ctx(), ports);
+  await executeCommand(saveTemplateCommand, { eventId: event.id, name: `${name} template` }, ctx(), ports);
   return { org, ownerId, viewerId, event, ctx };
 }
 

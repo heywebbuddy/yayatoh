@@ -1,5 +1,5 @@
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, findOccurrenceTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
@@ -132,9 +132,18 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
       // Voided (refunded) tickets no longer work: no QR for them.
       const live = all.filter((t) => t.status === 'active');
       const mine = live.filter((t) => t.holderEmail.trim().toLowerCase() === buyer);
+      // Multi-date events: every ticket shows the date it admits (M1.4b).
+      const dates = new Map<string, { startsAt: Date; endsAt: Date }>();
+      for (const id of new Set(mine.flatMap((t) => (t.occurrenceId ? [t.occurrenceId] : [])))) {
+        const occ = await findOccurrenceTx(tx, id);
+        if (occ) dates.set(id, { startsAt: occ.startsAt, endsAt: occ.endsAt });
+      }
       return {
         ...o,
-        tickets: mine,
+        tickets: mine.map((t) => ({
+          ...t,
+          date: t.occurrenceId ? (dates.get(t.occurrenceId) ?? null) : null,
+        })),
         transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
       };

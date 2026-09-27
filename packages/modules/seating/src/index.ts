@@ -7,6 +7,7 @@ export {
   seatAssignmentsQuery,
   unassignSeatsCommand,
 } from './assignments.ts';
+export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
 export {
   ASSIGN_SEAT_STATES,
   type AssignSeatState,

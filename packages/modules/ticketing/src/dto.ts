@@ -33,6 +33,8 @@ export const TicketTypeDto = z.object({
   earlyEndsAt: z.date().nullable(),
   isDonation: z.boolean(),
   accessDates: z.array(AccessDateDto),
+  /** Multi-date events: the dates this type sells for; empty = every date. */
+  occurrenceIds: z.array(z.uuid()),
   /** Per-ticket price the buyer sees now (face + passed-on fees; early-bird while it runs). */
   allInMinor: z.int(),
   feeMinor: z.int(),
@@ -54,6 +56,8 @@ export const PublicTicketTypeDto = z.object({
   earlyEndsAt: z.date().nullable(),
   isDonation: z.boolean(),
   accessDates: z.array(AccessDateDto),
+  /** Multi-date events: the dates this pass is for; empty = every date. */
+  occurrenceIds: z.array(z.uuid()),
   availability: z.enum(PUBLIC_AVAILABILITY),
   fewLeft: z.boolean(),
   minPerOrder: z.int(),
@@ -78,6 +82,11 @@ const Fields = z.object({
   earlyEndsAt: z.coerce.date().nullable().default(null),
   isDonation: z.boolean().default(false),
   accessDates: AccessDates.default([]),
+  occurrenceIds: z
+    .array(z.uuid())
+    .max(366)
+    .default([])
+    .transform((a) => [...new Set(a)]),
 });
 
 /** Early-bird and donation rules on the merged ticket type (create input, or current row + update). */

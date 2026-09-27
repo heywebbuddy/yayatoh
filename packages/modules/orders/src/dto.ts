@@ -52,6 +52,8 @@ export const HolderTicketDto = z.object({
   status: z.string(),
   holderName: z.string(),
   code: z.string(),
+  /** Multi-date events (M1.4b): the date this ticket admits; null = every date of the event. */
+  date: z.object({ startsAt: z.date(), endsAt: z.date() }).nullable(),
 });
 
 /** What a guest sees on the order page (reached by the manage token, which is the credential). */
@@ -94,6 +96,8 @@ export const StartCheckoutInput = z.object({
     .default([]),
   /** Seated events: the chosen seats (their ticket types come from the seat map). */
   seats: z.array(z.uuid()).max(50).default([]),
+  /** Multi-date events (M1.4b): the chosen date; required when the event has dates. */
+  occurrenceId: z.uuid().optional(),
   buyer: z.object({
     email: z.email().transform((e) => e.toLowerCase()),
     name: z.string().trim().min(1).max(120),

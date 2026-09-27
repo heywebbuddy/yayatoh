@@ -10,7 +10,7 @@ import { SEAT_STATUSES } from './domain/seat-state.ts';
 import { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, eventLayouts, eventSeats, layouts } from './schema.ts';
 
 /** Parse and check a document; problems come back as `validation_failed` details. */
-function validDoc(raw: unknown) {
+export function validDoc(raw: unknown) {
   const parsed = FloorplanDoc.safeParse(raw);
   if (!parsed.success)
     throw new DomainError('validation_failed', 'Not a valid floor plan', {

@@ -68,6 +68,8 @@ export const orders = tenantTable(
     paymentReference: text('payment_reference'),
     /** Seated checkout: the chosen seats (held under the order's id until paid or expired). */
     seatUuids: uuid('seat_uuids').array().notNull().default(sql`'{}'::uuid[]`),
+    /** Multi-date events (M1.4b): the chosen date (`events.occurrences`, hand-written FK). */
+    occurrenceId: uuid('occurrence_id'),
     expiresAt: ts('expires_at'),
     paidAt: ts('paid_at'),
     cancelledAt: ts('cancelled_at'),
@@ -75,6 +77,9 @@ export const orders = tenantTable(
   (t) => [
     index('orders_org_event_created_idx').on(t.orgId, t.eventId, t.createdAt),
     index('orders_org_status_expires_idx').on(t.orgId, t.status, t.expiresAt),
+    index('orders_org_occurrence_status_idx')
+      .on(t.orgId, t.occurrenceId, t.status)
+      .where(sql`occurrence_id is not null`),
     uniqueIndex('orders_manage_token_hash_key').on(t.manageTokenHash),
     uniqueIndex('orders_org_provider_payment_key').on(t.orgId, t.provider, t.providerPaymentId),
     check('orders_status_check', sql.raw(`status in (${ORDER_STATUSES.map((s) => `'${s}'`).join(', ')})`)),

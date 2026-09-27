@@ -2,6 +2,7 @@ import { type FeeSchedule, feeScheduleTx, priceBreakdown } from '@yayatoh/billin
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError, money } from '@yayatoh/kernel';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { validForOccurrence } from './occurrences.ts';
 import { type PromoRow, promoDiscountMinor } from './promo.ts';
 import { ticketTypes } from './schema.ts';
 
@@ -55,7 +56,13 @@ export async function quoteTx(
   tx: TenantTx,
   eventId: string,
   requests: readonly LineRequest[],
-  opts: { now: Date; includeHidden: boolean; promo?: PromoRow | null },
+  opts: {
+    now: Date;
+    includeHidden: boolean;
+    promo?: PromoRow | null;
+    /** Multi-date events: the chosen date; each ticket type must sell for it (M1.4b). */
+    occurrenceId?: string | null;
+  },
 ): Promise<Quote> {
   const merged = new Map<string, number>();
   const amounts = new Map<string, number>();
@@ -91,6 +98,11 @@ export async function quoteTx(
     const quantity = merged.get(r.id) as number;
     if (!opts.includeHidden && r.visibility !== 'public')
       throw new DomainError('not_found', 'Ticket type not found');
+    if (opts.occurrenceId && !validForOccurrence(r, opts.occurrenceId))
+      throw new DomainError('invalid_state', 'This ticket is not for the chosen date', {
+        reason: 'wrong_date',
+        ticketTypeId: r.id,
+      });
     if (r.salesStartAt && r.salesStartAt > opts.now)
       throw new DomainError('invalid_state', 'Not on sale yet', { ticketTypeId: r.id });
     if (r.salesEndAt && r.salesEndAt <= opts.now)

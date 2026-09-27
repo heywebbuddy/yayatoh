@@ -33,9 +33,13 @@ export async function publicTicketTypes(
   eventSlug: string,
   now: Date = new Date(),
 ): Promise<PublicTicketTypeDto[]> {
-  const rows = await withoutTenant((tx) =>
-    tx.execute<Row>(sql`select * from ticketing.public_ticket_types_v2(${eventSlug})`),
-  );
+  const [rows, dates] = await withoutTenant(async (tx) => [
+    await tx.execute<Row>(sql`select * from ticketing.public_ticket_types_v2(${eventSlug})`),
+    await tx.execute<{ id: string; occurrence_ids: string[] }>(
+      sql`select * from ticketing.public_ticket_type_occurrences(${eventSlug})`,
+    ),
+  ]);
+  const occurrenceIds = new Map(dates.map((d) => [d.id, d.occurrence_ids]));
   return rows.map((r) => {
     const allIn = (face: number) =>
       priceBreakdown(
@@ -71,6 +75,7 @@ export async function publicTicketTypes(
       earlyEndsAt: earlyRunning ? earlyEndsAt : null,
       isDonation: r.is_donation,
       accessDates: r.access_dates,
+      occurrenceIds: occurrenceIds.get(r.id) ?? [],
       availability,
       fewLeft: availability === 'available' && r.remaining <= 10,
       minPerOrder: r.min_per_order,

@@ -25,6 +25,8 @@ export const SCAN_RESULTS = [
   'wrong_event',
   'not_today',
   'outside_window',
+  /** Multi-date events (M1.4b): the ticket is for another date of this event. */
+  'wrong_date',
   /** Offline reconciliation: another device admitted this ticket first (corrected time). */
   'duplicate_offline',
   /** An older code for a ticket that was reissued (rev bumped). */
