@@ -64,7 +64,7 @@ Roadmap: M1.13 ("`/v1` per §6.1; mobile auth; `/v1/mobile/config`; scanner endp
 - The roadmap names `@hey-api/openapi-ts`; openapi-typescript + openapi-fetch is the smaller, zero-codegen-runtime choice. Pending owner (inbox).
 
 ## M1.13c — app-version telemetry (done)
-- Every `/v1` request increments `platform.api_usage` (UTC day × route pattern × method × client × app version). No tenant, user or IP is stored. The client comes from `X-Yayatoh-Client: <client>/<version>`, else `X-App-Version` with the client guessed from the user agent, else `Yayatoh/<v>` in the user agent. Writes go through the SECURITY DEFINER `platform.record_api_usage` (fire-and-forget; never fails a request).
+- Every `/v1` request increments `platform.api_usage` (UTC day × route pattern × method × client × app version). No tenant, user or IP is stored. The client comes from `X-Yayatoh-Client: <client>/<version>`, else `X-App-Version` with the client guessed from the user agent, else `Yayatoh/<v>` in the user agent. Only known clients (`ios`, `android`, `web`, `scan-pwa`, `sdk-ts`, `sdk-swift`, `sdk-kotlin`) and semver-like versions are counted as given; anything else becomes `other` / `unknown`, so callers cannot mint counter rows. Writes go through the SECURITY DEFINER `platform.record_api_usage` (fire-and-forget; never fails a request).
 - Staff read it in the admin console at **API usage** (`/api-usage`, platform_reader, audited): last 7 days by route, client and version.
 - **Webhooks:** outbound subscriptions are M6.3. No seam was added here: the outbox and versioned domain events are already the natural seam.
 
