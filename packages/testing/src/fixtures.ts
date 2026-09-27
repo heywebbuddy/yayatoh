@@ -13,6 +13,7 @@ import {
   type EventDto,
   transitionEventCommand,
 } from '@yayatoh/events';
+import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import {
@@ -26,6 +27,12 @@ import {
 import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
+import {
+  holdSeatsTx,
+  publishEventLayoutCommand,
+  saveLayoutCommand,
+  setEventLayoutCommand,
+} from '@yayatoh/seating';
 import {
   AGREEMENT_DOCUMENTS,
   acceptAgreementCommand,
@@ -361,6 +368,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       systemCtx(org.id),
       ports,
     );
+  // Seating: a floor plan, the event's copy of it, and one held seat (isolation coverage).
+  const plan = {
+    version: 1,
+    width: 2000,
+    height: 1000,
+    sections: [],
+    items: [buildRow({ label: 'A', count: 4, x: 100, y: 100 })],
+  };
+  const layout = await executeCommand(saveLayoutCommand, { name: 'Main room', doc: plan }, ctx(), ports);
+  await executeCommand(setEventLayoutCommand, { eventId: event.id, layoutId: layout.id }, ctx(), ports);
+  await executeCommand(publishEventLayoutCommand, { eventId: event.id }, ctx(), ports);
+  await withTenant(ctx(), (tx) =>
+    holdSeatsTx(tx, ctx(), {
+      eventId: event.id,
+      seatUuids: [plan.items[0]?.seats[0]?.id ?? ''],
+      holdId: uuidv7(),
+      expiresAt: new Date(Date.now() + 600_000),
+    }),
+  );
   return { org, ownerId, viewerId, event, ctx };
 }
 

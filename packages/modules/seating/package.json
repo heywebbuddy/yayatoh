@@ -1,0 +1,29 @@
+{
+  "name": "@yayatoh/seating",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 3
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

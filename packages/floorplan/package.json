@@ -1,0 +1,25 @@
+{
+  "name": "@yayatoh/floorplan",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "yayatoh": {
+    "kind": "universal"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@yayatoh/kernel": "workspace:*",
+    "zod": "catalog:"
+  }
+}
