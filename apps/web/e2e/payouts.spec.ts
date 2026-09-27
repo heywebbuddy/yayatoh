@@ -27,6 +27,12 @@ test.describe('payouts', () => {
       await page.getByRole('button', { name: 'Continue setup' }).click();
       await page.getByRole('button', { name: 'Finish setup' }).click();
       await expect(page).toHaveURL(/\/payouts\?onboarding=returned$/);
+    } else if (await page.getByRole('button', { name: 'Continue setup' }).isVisible()) {
+      // A local rerun after an interrupted run: setup was started but not finished; resume it.
+      await expect(page.getByText('Setup started')).toBeVisible();
+      await page.getByRole('button', { name: 'Continue setup' }).click();
+      await page.getByRole('button', { name: 'Finish setup' }).click();
+      await expect(page).toHaveURL(/\/payouts\?onboarding=returned$/);
     }
     await expect(page.getByText('Active', { exact: true })).toBeVisible();
     await expect(page.getByText('New orders are paid straight into your account.')).toBeVisible();
