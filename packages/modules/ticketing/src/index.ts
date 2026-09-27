@@ -19,6 +19,7 @@ export {
   type IssueRequest,
   issueTicketsTx,
   publicKeysTx,
+  ticketSummariesQuery,
   ticketsForOrderTx,
 } from './issue.ts';
 export { publicTicketTypes } from './public.ts';

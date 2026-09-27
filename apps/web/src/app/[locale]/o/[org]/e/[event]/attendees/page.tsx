@@ -1,4 +1,8 @@
+import { listAttendeesQuery } from '@yayatoh/attendees';
+import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, term } from '@yayatoh/platform';
+import { roleCan } from '@yayatoh/tenancy';
+import { ticketSummariesQuery } from '@yayatoh/ticketing';
 import {
   Avatar,
   Button,
@@ -17,6 +21,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
+import { ports } from '@/server/ports.ts';
 
 const STATUS_DOT: Record<AttendeeStatus, 'success' | 'warning' | 'danger'> = {
   paid: 'success',
@@ -56,24 +61,53 @@ export default async function AttendeesPage({
   const { locale, org, event } = await params;
   const { segment = 'all', q = '', a: selectedId } = await searchParams;
   setRequestLocale(locale);
-  const { event: real } = await loadEvent(org, event);
+  const { data, event: real } = await loadEvent(org, event);
   const t = await getTranslations();
   const profile = isProfileKey(real.profile) ? real.profile : 'other';
-  // Attendees are created at ticket issue (M1.5); until then only seeded showcase events have a demo list.
-  const ev = demoOverlay(org, event) ?? {
-    name: real.name,
-    profile,
-    segments: [{ key: 'all', count: 0 }],
-    attendees: [] as DemoAttendee[],
-  };
-  const base = `/o/${org}/e/${event}/attendees`;
   const needle = q.trim().toLowerCase();
-  const rows = ev.attendees
-    .filter(SEGMENT_FILTER[segment] ?? SEGMENT_FILTER.all ?? (() => true))
-    .filter(
-      (a) =>
-        !needle || [a.name, a.company, a.order, a.seat ?? ''].some((v) => v.toLowerCase().includes(needle)),
+  // Real attendees (created at ticket issue) win; seeded showcase events without any keep a demo list.
+  const list = (extra: { search?: string; limit?: number }) =>
+    executeQuery(listAttendeesQuery, { eventId: real.id, ...extra }, data.ctx, ports);
+  const overall = roleCan(data.role, 'attendees:read') ? await list({ limit: 1 }) : { items: [], total: 0 };
+  const hasReal = overall.total > 0;
+  const live = hasReal ? await list({ search: needle || undefined }) : overall;
+  const demo = hasReal ? undefined : demoOverlay(org, event);
+  let ev: { segments: readonly { key: string; count: number }[]; attendees: DemoAttendee[] };
+  let rows: DemoAttendee[];
+  if (demo) {
+    ev = { segments: demo.segments, attendees: [...demo.attendees] };
+    rows = ev.attendees
+      .filter(SEGMENT_FILTER[segment] ?? SEGMENT_FILTER.all ?? (() => true))
+      .filter(
+        (a) =>
+          !needle || [a.name, a.company, a.order, a.seat ?? ''].some((v) => v.toLowerCase().includes(needle)),
+      );
+  } else {
+    const tickets = new Map(
+      (
+        await executeQuery(
+          ticketSummariesQuery,
+          { ticketIds: live.items.flatMap((a) => (a.ticketId ? [a.ticketId] : [])) },
+          data.ctx,
+          ports,
+        )
+      ).map((tk) => [tk.id, tk]),
     );
+    rows = live.items.map((a) => {
+      const tk = a.ticketId ? tickets.get(a.ticketId) : undefined;
+      return {
+        id: a.id,
+        name: a.name,
+        company: a.email,
+        ticketType: tk?.ticketTypeName ?? '—',
+        seat: null,
+        status: a.status === 'active' ? 'paid' : 'declined',
+        order: tk?.shortCode ?? '—',
+      } satisfies DemoAttendee;
+    });
+    ev = { segments: [{ key: 'all', count: overall.total }], attendees: rows };
+  }
+  const base = `/o/${org}/e/${event}/attendees`;
   const selected = ev.attendees.find((a) => a.id === selectedId);
   const title = t(term(profile, 'attendees'));
   const href = (p: Record<string, string | undefined>) => {
@@ -150,7 +184,7 @@ export default async function AttendeesPage({
           </form>
         </search>
 
-        {ev.attendees.length === 0 ? (
+        {(demo ? ev.attendees.length === 0 : !hasReal) ? (
           <EmptyState
             title={t('attendees.emptyTitle', { term: title })}
             description={t('attendees.emptyDescription')}

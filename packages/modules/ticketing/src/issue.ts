@@ -1,10 +1,13 @@
+import { createAttendeesTx } from '@yayatoh/attendees';
+import { upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import type { Ctx } from '@yayatoh/kernel';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
-import { keyVault } from '@yayatoh/platform';
+import { DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { keyVault, tenantQuery } from '@yayatoh/platform';
 import { generateKeyPair, randomShortCode, signTicketCode } from '@yayatoh/ticket-crypto';
-import { and, desc, eq, sql } from 'drizzle-orm';
-import { signingKeys, ticketBarcodes, tickets } from './schema.ts';
+import { and, desc, eq, inArray, sql } from 'drizzle-orm';
+import { z } from 'zod';
+import { signingKeys, TICKET_STATUSES, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
 
 export interface IssueRequest {
   readonly orderId: string;
@@ -81,27 +84,49 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
     .from(tickets)
     .where(and(eq(tickets.eventId, req.eventId)));
   const key = await activeKey(tx, orgId);
+  // The holder is an org contact; each ticket gets its own attendee (roadmap §4.4).
+  const contact = await upsertContactTx(tx, ctx, {
+    email: req.holder.email,
+    name: req.holder.name,
+    source: 'ticket',
+  });
+  const units = req.items.flatMap((item) =>
+    Array.from({ length: item.quantity }, () => ({ ...item, id: uuidv7() })),
+  );
+  const attendeeRows = await createAttendeesTx(
+    tx,
+    ctx,
+    units.map((u) => ({
+      eventId: req.eventId,
+      contactId: contact.id,
+      source: 'ticket' as const,
+      ticketId: u.id,
+      name: req.holder.name,
+      email: req.holder.email,
+    })),
+  );
+  const attendeeFor = new Map(attendeeRows.map((a) => [a.ticketId, a.id]));
   let serial = max;
   const out: IssuedTicket[] = [];
-  for (const item of req.items) {
-    for (let n = 0; n < item.quantity; n++) {
-      serial += 1;
-      const t = await insertTicket(tx, {
-        orgId,
-        eventId: req.eventId,
-        ticketTypeId: item.ticketTypeId,
-        orderId: req.orderId,
-        orderItemId: item.orderItemId,
-        serial,
-        holderName: req.holder.name,
-        holderEmail: req.holder.email,
-      });
-      const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev: t.rev }, key.privateKey);
-      await tx
-        .insert(ticketBarcodes)
-        .values({ orgId, ticketId: t.id, format: 'yy1', payload: code, rev: t.rev });
-      out.push({ id: t.id, ticketTypeId: t.ticketTypeId, serial, shortCode: t.shortCode, code });
-    }
+  for (const unit of units) {
+    serial += 1;
+    const t = await insertTicket(tx, {
+      id: unit.id,
+      orgId,
+      eventId: req.eventId,
+      ticketTypeId: unit.ticketTypeId,
+      orderId: req.orderId,
+      orderItemId: unit.orderItemId,
+      serial,
+      holderName: req.holder.name,
+      holderEmail: req.holder.email,
+      attendeeId: attendeeFor.get(unit.id) ?? null,
+    });
+    const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev: t.rev }, key.privateKey);
+    await tx
+      .insert(ticketBarcodes)
+      .values({ orgId, ticketId: t.id, format: 'yy1', payload: code, rev: t.rev });
+    out.push({ id: t.id, ticketTypeId: t.ticketTypeId, serial, shortCode: t.shortCode, code });
   }
   return out;
 }
@@ -136,3 +161,35 @@ export async function publicKeysTx(tx: TenantTx): Promise<Map<number, Uint8Array
   const rows = await tx.select({ kid: signingKeys.kid, publicKey: signingKeys.publicKey }).from(signingKeys);
   return new Map(rows.map((r) => [r.kid, new Uint8Array(Buffer.from(r.publicKey, 'base64'))]));
 }
+
+/** Ticket summaries for organizer views (the attendee list shows the pass and the short code). */
+export const ticketSummariesQuery = tenantQuery({
+  name: 'ticketing.ticketSummaries',
+  input: z.object({ ticketIds: z.array(z.uuid()).max(500) }),
+  output: z.array(
+    z.object({
+      id: z.uuid(),
+      ticketTypeName: z.string(),
+      serial: z.int(),
+      shortCode: z.string(),
+      status: z.enum(TICKET_STATUSES),
+    }),
+  ),
+  entitlement: 'ticketing',
+  permission: 'events:read',
+  handler: async ({ input, tx }) => {
+    if (input.ticketIds.length === 0) return [];
+    const rows = await tx
+      .select({
+        id: tickets.id,
+        ticketTypeName: ticketTypes.name,
+        serial: tickets.serial,
+        shortCode: tickets.shortCode,
+        status: tickets.status,
+      })
+      .from(tickets)
+      .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
+      .where(inArray(tickets.id, input.ticketIds));
+    return rows.map((r) => ({ ...r, status: r.status as (typeof TICKET_STATUSES)[number] }));
+  },
+});

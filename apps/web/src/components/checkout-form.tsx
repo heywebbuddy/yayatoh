@@ -23,9 +23,11 @@ export interface PassView {
  */
 export function CheckoutForm({
   passes,
+  organizer,
   action,
 }: {
   passes: readonly PassView[];
+  organizer: string;
   action: (prev: CheckoutState, form: FormData) => Promise<CheckoutState>;
 }) {
   const t = useTranslations();
@@ -103,16 +105,28 @@ export function CheckoutForm({
         ))}
       </ul>
       {buyable ? (
-        <Card className="flex flex-col gap-4 md:flex-row md:items-end">
-          <div className="flex-1">
-            <Input name="name" required autoComplete="name" label={t('checkout.name')} />
+        <Card className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end">
+            <div className="flex-1">
+              <Input name="name" required autoComplete="name" label={t('checkout.name')} />
+            </div>
+            <div className="flex-1">
+              <Input name="email" type="email" required autoComplete="email" label={t('checkout.email')} />
+            </div>
+            <Button type="submit" disabled={pending}>
+              {t('checkout.continue')}
+            </Button>
           </div>
-          <div className="flex-1">
-            <Input name="email" type="email" required autoComplete="email" label={t('checkout.email')} />
-          </div>
-          <Button type="submit" disabled={pending}>
-            {t('checkout.continue')}
-          </Button>
+          {/* Unticked by default: buying is never consent to marketing. */}
+          <label className="flex min-h-6 items-start gap-2.5 text-caption text-zinc-600">
+            <input
+              type="checkbox"
+              name="marketingOptIn"
+              value="1"
+              className="mt-0.5 size-5 shrink-0 accent-ink"
+            />
+            <span>{t('checkout.marketingOptIn', { org: organizer })}</span>
+          </label>
         </Card>
       ) : null}
       <div aria-live="assertive">{error ? <Alert title={error} /> : null}</div>

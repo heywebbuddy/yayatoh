@@ -84,7 +84,34 @@
 | AC4 | The guest sees a QR for each ticket after free and paid checkout | `e2e/checkout.spec.ts` |
 | AC5 | Isolation: the fixture covers the new tables; another org sees none of these tickets | `isolation.int.test.ts`, `tickets.int.test.ts` |
 
+## M1.5c2 — contacts, consents and attendees (done)
+- **`crm` module (tier 1):**
+  - `contacts`: org-scoped, unique on `email_norm` per org.
+  - `consents`: an append-only ledger with evidence; the latest row wins, and no row means no consent.
+- **`attendees` module (tier 2):** one attendee per ticket, created in the same transaction as the ticket, and linked both ways (`tickets.attendee_id`, `attendees.ticket_id`). `listAttendeesQuery` has server-side search with literal wildcards, behind `AttendeeDto`.
+- **Checkout:**
+  - The buyer becomes a contact (`orders.buyer_contact_id`).
+  - An **unticked** "email me news and offers" checkbox records `email/marketing = granted` with evidence `checkout_checkbox:event:{id}`. Buying alone never records consent.
+- **Permissions:**
+  - `attendees:read`: owner, admin, manager, box office, viewer.
+  - `contacts:read`: owner, admin, manager, marketing.
+- **Web:**
+  - The attendees page shows real attendees (pass name and ticket code) once an event has any. Seeded showcase events keep the dev demo list until then.
+  - A plain seeded event, `lakeside-open-house`, is where purchase flows and e2e create real data.
+- **Migration 0012:**
+  - Cross-module foreign keys are hand-written, all pointing down the tiers. Existing tables use `NOT VALID` + `VALIDATE`.
+  - The two new indexes on existing tables (`orders`, `tickets`) are built in the migration transaction. That is fine before launch (no production data); after launch they must be `CONCURRENTLY` in their own migration.
+
+### Acceptance (M1.5c2)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | One contact per email per org, case-insensitive | `packages/testing/tests/attendees.int.test.ts` |
+| AC2 | Buying is not consent; the explicit opt-in records consent with evidence | `attendees.int.test.ts` |
+| AC3 | Every issued ticket has its own attendee, linked both ways, sharing the holder's contact | `attendees.int.test.ts` |
+| AC4 | Organizers list and search attendees; viewers can, scanners can't; another org sees nothing | `attendees.int.test.ts`, `isolation.int.test.ts` |
+| AC5 | End to end: a guest buys (one with opt-in), and the organizer finds each ticket's attendee | `e2e/checkout.spec.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5c2:** attendees created at issue; CRM contacts + consents; the attendees page on real data; PDF ticket (ADR 0017 spike).
+- **M1.5c3:** PDF ticket (ADR 0017 spike), ticket email via the outbox (`order.paid` → mailer).
 - **M1.5d:** promo codes, early-bird tiers, donation tickets, `access_dates`, forms engine v1 (checkout questions).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

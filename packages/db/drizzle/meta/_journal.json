@@ -85,6 +85,13 @@
       "when": 1790484263541,
       "tag": "0011_loud_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1790485065428,
+      "tag": "0012_clean_inertia",
+      "breakpoints": true
     }
   ]
 }

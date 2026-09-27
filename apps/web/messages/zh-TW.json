@@ -410,7 +410,8 @@
     "email": "接收票券的電子郵件",
     "continue": "繼續付款",
     "soldOut": "抱歉，這些票券剛剛售完。請減少數量或選擇其他通行證。",
-    "chooseTickets": "請至少選擇一張票券。"
+    "chooseTickets": "請至少選擇一張票券。",
+    "marketingOptIn": "我希望透過電子郵件接收{org}的最新消息與優惠資訊。（選填，可隨時取消訂閱）"
   },
   "fakePay": {
     "eyebrow": "測試付款",

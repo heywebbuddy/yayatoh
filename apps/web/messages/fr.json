@@ -410,7 +410,8 @@
     "email": "E-mail pour recevoir vos billets",
     "continue": "Continuer vers le paiement",
     "soldOut": "Désolé, ces billets viennent d’être épuisés. Essayez une quantité plus petite ou un autre pass.",
-    "chooseTickets": "Choisissez au moins un billet."
+    "chooseTickets": "Choisissez au moins un billet.",
+    "marketingOptIn": "Je souhaite recevoir par e-mail les actualités et offres de {org}. Facultatif, vous pouvez vous désabonner à tout moment."
   },
   "fakePay": {
     "eyebrow": "Paiement test",

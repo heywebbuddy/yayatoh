@@ -410,7 +410,8 @@
     "email": "接收门票的电子邮箱",
     "continue": "继续付款",
     "soldOut": "抱歉，这些门票刚刚售罄。请减少数量或选择其他通行证。",
-    "chooseTickets": "请至少选择一张门票。"
+    "chooseTickets": "请至少选择一张门票。",
+    "marketingOptIn": "我希望通过电子邮件接收{org}的新闻和优惠信息。（可选，可随时退订）"
   },
   "fakePay": {
     "eyebrow": "测试付款",

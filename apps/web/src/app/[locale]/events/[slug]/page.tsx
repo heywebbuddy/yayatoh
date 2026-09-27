@@ -137,6 +137,7 @@ export default async function PublicEventPage({
               ...p,
               priceLabel: formatMoney(money(p.price, ev.currency), locale).replace(/\.00$/, ''),
             }))}
+            organizer={ev.organizerName}
             action={checkoutAction.bind(null, slug)}
           />
         )}

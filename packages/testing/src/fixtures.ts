@@ -113,6 +113,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       eventId: event.id,
       items: [{ ticketTypeId: ga.id, quantity: 2 }],
       buyer: { email: `buyer@${slug}.test`, name: 'Fixture Buyer' },
+      marketingOptIn: true,
     },
     createCtx({ orgId: org.id }),
     ports,

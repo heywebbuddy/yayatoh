@@ -410,7 +410,8 @@
     "email": "E-mail para receber seus ingressos",
     "continue": "Continuar para o pagamento",
     "soldOut": "Desculpe, esses ingressos acabaram de esgotar. Tente uma quantidade menor ou outro passe.",
-    "chooseTickets": "Escolha pelo menos um ingresso."
+    "chooseTickets": "Escolha pelo menos um ingresso.",
+    "marketingOptIn": "Quero receber novidades e ofertas de {org} por e-mail. Opcional; você pode cancelar a inscrição a qualquer momento."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",

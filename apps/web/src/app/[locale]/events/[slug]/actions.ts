@@ -45,6 +45,7 @@ export async function checkoutAction(
         eventId: target.eventId,
         items,
         buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
+        marketingOptIn: form.get('marketingOptIn') === '1',
         locale,
       },
       ctx,

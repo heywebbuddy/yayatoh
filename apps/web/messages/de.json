@@ -410,7 +410,8 @@
     "email": "E-Mail für deine Tickets",
     "continue": "Weiter zur Zahlung",
     "soldOut": "Leider sind diese Tickets gerade ausverkauft. Versuche eine kleinere Anzahl oder einen anderen Pass.",
-    "chooseTickets": "Wähle mindestens ein Ticket."
+    "chooseTickets": "Wähle mindestens ein Ticket.",
+    "marketingOptIn": "Ich möchte Neuigkeiten und Angebote von {org} per E-Mail erhalten. Optional; du kannst dich jederzeit abmelden."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",

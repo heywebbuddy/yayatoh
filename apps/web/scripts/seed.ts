@@ -82,4 +82,35 @@ for (const d of DEMO_EVENTS) {
   await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
   console.info(`seed: event ${d.slug}`);
 }
+
+// A plain published event with no demo overlay: purchase flows (and e2e) run against real data here.
+{
+  const owner = PERSONAS.find((p) => p.orgSlug === 'lakeside-events' && p.role === 'owner');
+  const ownerId = owner && ids.get(owner.email);
+  const org = await resolveOrgSlug('lakeside-events');
+  if (ownerId && org) {
+    const ctx = createCtx({ orgId: org.orgId, actor: { type: 'user', userId: ownerId } });
+    const slug = 'lakeside-open-house';
+    const exists = await executeQuery(getEventBySlugQuery, { slug }, ctx, ports).catch(() => null);
+    if (!exists) {
+      const e = await executeCommand(
+        createEventCommand,
+        {
+          name: 'Lakeside Open House',
+          slug,
+          tagline: 'Meet the team behind Lakeside Events.',
+          timezone: 'America/Chicago',
+          startsAt: '2027-06-10T22:00:00Z',
+          endsAt: '2027-06-11T01:00:00Z',
+          city: 'Chicago',
+          currency: 'USD',
+        },
+        ctx,
+        ports,
+      );
+      await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
+      console.info(`seed: event ${slug}`);
+    }
+  }
+}
 await closePools();

@@ -410,7 +410,8 @@
     "email": "Email per ricevere i biglietti",
     "continue": "Continua al pagamento",
     "soldOut": "Spiacenti, quei biglietti sono appena esauriti. Prova con una quantità minore o un altro pass.",
-    "chooseTickets": "Scegli almeno un biglietto."
+    "chooseTickets": "Scegli almeno un biglietto.",
+    "marketingOptIn": "Voglio ricevere via email novità e offerte da {org}. Facoltativo; puoi annullare l’iscrizione in qualsiasi momento."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",

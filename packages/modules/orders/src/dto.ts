@@ -59,5 +59,7 @@ export const StartCheckoutInput = z.object({
     email: z.email().transform((e) => e.toLowerCase()),
     name: z.string().trim().min(1).max(120),
   }),
+  /** An explicit, unticked-by-default checkbox; buying is never consent to marketing. */
+  marketingOptIn: z.boolean().default(false),
   locale: z.string().max(10).default('en'),
 });

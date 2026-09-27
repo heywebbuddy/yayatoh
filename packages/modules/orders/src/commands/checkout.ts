@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto';
+import { recordConsentTx, upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
@@ -73,6 +74,20 @@ export const startCheckoutCommand = tenantCommand({
     await holdInventoryTx(tx, lines([...quote.lines]));
     const manageToken = randomBytes(32).toString('base64url');
     const free = quote.totalMinor === 0;
+    const contact = await upsertContactTx(tx, ctx, {
+      email: input.buyer.email,
+      name: input.buyer.name,
+      source: 'checkout',
+    });
+    if (input.marketingOptIn) {
+      await recordConsentTx(tx, ctx, {
+        contactId: contact.id,
+        channel: 'email',
+        purpose: 'marketing',
+        status: 'granted',
+        evidence: `checkout_checkbox:event:${event.id}`,
+      });
+    }
     const [order] = await tx
       .insert(orders)
       .values({
@@ -82,6 +97,7 @@ export const startCheckoutCommand = tenantCommand({
         buyerEmail: input.buyer.email,
         buyerName: input.buyer.name,
         buyerUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        buyerContactId: contact.id,
         locale: input.locale,
         currency: quote.currency,
         subtotalMinor: quote.subtotalMinor,

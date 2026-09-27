@@ -16,6 +16,7 @@
   "dependencies": {
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",

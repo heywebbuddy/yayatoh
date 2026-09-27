@@ -12,6 +12,7 @@
     "seed": "node scripts/seed.ts"
   },
   "dependencies": {
+    "@yayatoh/attendees": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",

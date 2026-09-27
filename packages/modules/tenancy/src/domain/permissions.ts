@@ -13,6 +13,8 @@ export const PERMISSIONS = [
   'events:write',
   'orders:read',
   'orders:refund',
+  'attendees:read',
+  'contacts:read',
   'finance:read',
   'marketing:write',
   'checkin:scan',
@@ -29,14 +31,16 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:read',
     'events:write',
     'orders:read',
+    'attendees:read',
+    'contacts:read',
     'marketing:write',
     'checkin:scan',
   ],
   finance: ['org:read', 'billing:read', 'events:read', 'orders:read', 'orders:refund', 'finance:read'],
-  marketing: ['org:read', 'events:read', 'marketing:write'],
-  box_office: ['org:read', 'events:read', 'orders:read', 'checkin:scan'],
+  marketing: ['org:read', 'events:read', 'contacts:read', 'marketing:write'],
+  box_office: ['org:read', 'events:read', 'orders:read', 'attendees:read', 'checkin:scan'],
   scanner: ['org:read', 'checkin:scan'],
-  viewer: ['org:read', 'members:read', 'events:read', 'orders:read'],
+  viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read'],
 };
 
 /** Platform permissions are not granted by org roles; they need a platform actor. */

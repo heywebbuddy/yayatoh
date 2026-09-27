@@ -410,7 +410,8 @@
     "email": "Correo para tus entradas",
     "continue": "Continuar al pago",
     "soldOut": "Lo sentimos: esas entradas se acaban de agotar. Prueba con una cantidad menor u otro pase.",
-    "chooseTickets": "Elige al menos una entrada."
+    "chooseTickets": "Elige al menos una entrada.",
+    "marketingOptIn": "Quiero recibir novedades y ofertas de {org} por correo. Opcional; puedes darte de baja cuando quieras."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",

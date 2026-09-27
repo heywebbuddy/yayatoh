@@ -4,6 +4,8 @@ import { expect, type Page } from '@playwright/test';
 export const OWNER = 'pani@lakeside.test';
 export const WEDDING_OWNER = 'maya@rosewood.test';
 export const EVENT = '/o/lakeside-events/e/midwest-leadership-summit-2027';
+/** A plain event (no demo overlay) for flows that create real orders and attendees. */
+export const OPEN_HOUSE = '/o/lakeside-events/e/lakeside-open-house';
 export const WEDDING = '/o/rosewood-weddings/e/harper-and-theo';
 
 export async function signIn(page: Page, email = OWNER) {

@@ -410,7 +410,8 @@
     "email": "E-mailadres voor je tickets",
     "continue": "Door naar betalen",
     "soldOut": "Sorry, die tickets zijn net uitverkocht. Probeer een kleiner aantal of een andere pas.",
-    "chooseTickets": "Kies minstens één ticket."
+    "chooseTickets": "Kies minstens één ticket.",
+    "marketingOptIn": "Ik wil nieuws en aanbiedingen van {org} per e-mail ontvangen. Optioneel; je kunt je altijd afmelden."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",

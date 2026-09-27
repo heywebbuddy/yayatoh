@@ -1,10 +1,10 @@
 {
-  "name": "@yayatoh/ticketing",
+  "name": "@yayatoh/attendees",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 3
+    "tier": 2
   },
   "exports": {
     ".": "./src/index.ts",
@@ -14,15 +14,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@yayatoh/attendees": "workspace:*",
-    "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
-    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/ticket-crypto": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },

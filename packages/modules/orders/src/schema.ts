@@ -39,6 +39,8 @@ export const orders = tenantTable(
     buyerEmail: text('buyer_email').notNull(),
     buyerName: text('buyer_name').notNull(),
     buyerUserId: uuid('buyer_user_id'),
+    /** The buyer's org contact (`crm.contacts`, FK in a hand-written migration). */
+    buyerContactId: uuid('buyer_contact_id'),
     locale: text('locale').notNull().default('en'),
     currency: text('currency').notNull(),
     subtotalMinor: minor('subtotal_minor').notNull(),

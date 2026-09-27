@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { EVENT, expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('checkout', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -10,7 +10,7 @@ test.describe('checkout', () => {
   }) => {
     // Organizer sets up two ticket types.
     await signIn(page);
-    await page.goto(`${EVENT}/tickets-orders`);
+    await page.goto(`${OPEN_HOUSE}/tickets-orders`);
     const stamp = Date.now();
     for (const [name, price] of [
       [`Free pass ${stamp}`, '0'],
@@ -25,7 +25,7 @@ test.describe('checkout', () => {
 
     // A guest (fresh context, no session) buys.
     const guest = await (await browser.newContext()).newPage();
-    await guest.goto('/events/midwest-leadership-summit-2027');
+    await guest.goto('/events/lakeside-open-house');
     await expectAccessible(guest);
     await guest.getByLabel(`Quantity — Free pass ${stamp}`).selectOption('1');
     await guest.getByLabel('Full name').fill(`Grace Hopper ${stamp}`);
@@ -37,10 +37,11 @@ test.describe('checkout', () => {
     await expect(guest.getByRole('img', { name: /^QR code for ticket number \d+$/ })).toHaveCount(1);
     await expectAccessible(guest);
 
-    await guest.goto('/events/midwest-leadership-summit-2027');
+    await guest.goto('/events/lakeside-open-house');
     await guest.getByLabel(`Quantity — Paid pass ${stamp}`).selectOption('2');
     await guest.getByLabel('Full name').fill(`Alan Turing ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`alan+${stamp}@example.test`);
+    await guest.getByLabel(/^Email me news and offers from Lakeside Events/).check();
     await guest.getByRole('button', { name: 'Continue to payment' }).click();
     await expect(guest.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     await expect(guest.getByText('$80.00')).toBeVisible();
@@ -52,9 +53,21 @@ test.describe('checkout', () => {
     await expect(guest.getByRole('img', { name: /^QR code for ticket number \d+$/ })).toHaveCount(2);
 
     // The organizer sees both orders.
-    await page.goto(`${EVENT}/tickets-orders`);
+    await page.goto(`${OPEN_HOUSE}/tickets-orders`);
     await expect(page.getByRole('row').filter({ hasText: `Alan Turing ${stamp}` })).toContainText('Paid');
     await expect(page.getByRole('row').filter({ hasText: `Grace Hopper ${stamp}` })).toContainText('Paid');
+
+    // Every ticket became an attendee: one for Grace, two for Alan.
+    await page.goto(`${OPEN_HOUSE}/attendees?q=${stamp}`);
+    await expect(page.getByRole('row').filter({ hasText: `Grace Hopper ${stamp}` })).toHaveCount(1);
+    await expect(page.getByRole('row').filter({ hasText: `Alan Turing ${stamp}` })).toHaveCount(2);
+    await expect(
+      page
+        .getByRole('row')
+        .filter({ hasText: `Alan Turing ${stamp}` })
+        .first(),
+    ).toContainText(`Paid pass ${stamp}`);
+    await expectAccessible(page);
   });
 
   test('a forged webhook is rejected', async ({ request }) => {
