@@ -54,7 +54,8 @@
     "donations": "Donaties",
     "communications": "Communicatie",
     "team": "Team",
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "payouts": "Uitbetalingen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -502,7 +503,11 @@
     "holder": "Tickethouder",
     "downloadPdf": "Tickets downloaden (PDF)",
     "discountApplied": "Inclusief {amount} korting met {code}",
-    "transferred": "{count, plural, one {# ticket uit deze bestelling is doorgegeven aan iemand anders. Het is nu van hen.} other {# tickets uit deze bestelling zijn doorgegeven aan andere mensen. Ze zijn nu van hen.}}"
+    "transferred": "{count, plural, one {# ticket uit deze bestelling is doorgegeven aan iemand anders. Het is nu van hen.} other {# tickets uit deze bestelling zijn doorgegeven aan andere mensen. Ze zijn nu van hen.}}",
+    "soldBy": {
+      "organizer_mor": "Verkocht door {org}",
+      "platform_mor": "Verkocht door Pani Digital Services, LLC (Yayatoh) namens {org}"
+    }
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -925,7 +930,8 @@
       "legal": "Voeg je privacyverklaring en terugbetalingsbeleid toe",
       "brand": "Kies je huisstijlkleur",
       "event": "Maak je eerste evenement aan",
-      "team": "Nodig een teamlid uit"
+      "team": "Nodig een teamlid uit",
+      "payouts": "Stel uitbetalingen in"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "Ik ga namens deze organisatie akkoord met de <tos>Servicevoorwaarden</tos> en de <dpa>Verwerkersovereenkomst</dpa>.",
     "submit": "Organisatie aanmaken"
+  },
+  "payouts": {
+    "title": "Uitbetalingen",
+    "description": "Koppel een bankrekening zodat het geld van je tickets bij jou terechtkomt.",
+    "state": {
+      "none": "Niet ingesteld",
+      "pending": "Instellen gestart",
+      "restricted": "Meer informatie nodig",
+      "active": "Actief"
+    },
+    "explain": {
+      "none": "Stel uitbetalingen in bij onze betaalprovider. Dat duurt een paar minuten en je hebt je bedrijfs- en bankgegevens nodig.",
+      "pending": "Je bent begonnen met het instellen van uitbetalingen, maar bent nog niet klaar. Ga verder waar je gebleven was.",
+      "restricted": "De betaalprovider heeft nog wat meer informatie nodig voordat hij aan je kan uitbetalen.",
+      "active": "Je uitbetalingsaccount is klaar. Kopers betalen je nu rechtstreeks en onze kosten worden van elke betaling ingehouden."
+    },
+    "requirements": "Nog nodig",
+    "flow": {
+      "platform_mor": "Tot die tijd innen wij de ticketbetalingen voor je en betalen we ze na je evenement aan je uit.",
+      "organizer_mor": "Nieuwe bestellingen worden rechtstreeks op je rekening betaald."
+    },
+    "start": "Uitbetalingen instellen",
+    "continue": "Verder met instellen",
+    "returned": "Bedankt. De betaalprovider controleert je gegevens; deze pagina wordt bijgewerkt zodra dat klaar is.",
+    "noAccess": "Alleen eigenaren, beheerders en financiën kunnen de uitbetalingsgegevens wijzigen."
+  },
+  "fakeConnect": {
+    "eyebrow": "Testmodus",
+    "title": "Uitbetalingen instellen",
+    "description": "Een vervanging voor de onboarding van de betaalprovider. Er worden geen echte bedrijfs- of bankgegevens verzameld.",
+    "complete": "Instellen afronden",
+    "incomplete": "Versturen met ontbrekende gegevens"
   }
 }

@@ -32,6 +32,12 @@ export type OrderDto = z.infer<typeof OrderDto>;
 export const CheckoutResultDto = z.object({
   order: OrderDto,
   manageToken: z.string(),
+  /** How to create the provider payment (server only; never sent to the browser). */
+  payment: z.object({
+    fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+    connectedAccountId: z.string().nullable(),
+    applicationFeeMinor: z.int().nonnegative(),
+  }),
 });
 export type CheckoutResultDto = z.infer<typeof CheckoutResultDto>;
 
@@ -59,6 +65,8 @@ export const HolderEventDto = z.object({
 });
 
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
+  /** Who sold it (roadmap §4.4 seller disclosure): the organizer, or the platform on their behalf. */
+  fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
   tickets: z.array(HolderTicketDto),
   /** Tickets of this order now held by someone else (passed on with a claim link). */
   transferred: z.int(),

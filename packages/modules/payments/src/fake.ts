@@ -1,5 +1,11 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import type { CreatePaymentInput, PaymentProvider, ProviderEvent } from './port.ts';
+import type {
+  AccountEvent,
+  CreatePaymentInput,
+  PaymentProvider,
+  ProviderEvent,
+  WebhookEvent,
+} from './port.ts';
 
 /**
  * Fake provider for dev, preview and CI (no Stripe account yet — owner inbox). Payments are
@@ -23,15 +29,35 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
         currency: i.amount.currency,
         return: i.returnUrl,
       });
+      if (i.fundsFlow === 'organizer_mor') {
+        if (!i.connectedAccountId) throw new Error('organizer_mor needs a connected account');
+        params.set('acct', i.connectedAccountId);
+        params.set('fee', String(i.applicationFee.amount));
+      }
       return { providerPaymentId, redirectUrl: `${opts.appOrigin}/checkout/fake?${params}` };
     },
-    async verifyWebhook(rawBody: string, headers: Headers): Promise<ProviderEvent> {
+    async createConnectedAccount(i) {
+      // Deterministic per org: onboarding twice reuses the same test account.
+      return {
+        accountId: `fakeacct_${createHmac('sha256', opts.secret).update(`acct:${i.orgId}`).digest('hex').slice(0, 16)}`,
+      };
+    },
+    async createOnboardingLink(i) {
+      const params = new URLSearchParams({
+        acct: i.accountId,
+        org: i.orgId,
+        return: i.returnUrl,
+        refresh: i.refreshUrl,
+      });
+      return { url: `${opts.appOrigin}/connect/fake?${params}` };
+    },
+    async verifyWebhook(rawBody: string, headers: Headers): Promise<WebhookEvent> {
       const sig = headers.get('x-fake-signature') ?? '';
       const expected = createHmac('sha256', opts.secret).update(rawBody).digest('hex');
       const a = Buffer.from(sig);
       const b = Buffer.from(expected);
       if (a.length !== b.length || !timingSafeEqual(a, b)) throw new Error('invalid fake webhook signature');
-      const e = JSON.parse(rawBody) as ProviderEvent;
+      const e = JSON.parse(rawBody) as WebhookEvent;
       return { ...e, provider: 'fake' };
     },
   };
@@ -43,5 +69,19 @@ export function signFakeWebhook(
   e: Omit<ProviderEvent, 'provider' | 'id'> & { id?: string },
 ): { body: string; signature: string } {
   const body = JSON.stringify({ id: e.id ?? `fakeevt_${randomUUID()}`, ...e, provider: 'fake' });
+  return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };
+}
+
+/** Build and sign a fake `account.updated` webhook (the fake onboarding page and tests). */
+export function signFakeAccountWebhook(
+  secret: string,
+  e: Omit<AccountEvent, 'provider' | 'id' | 'type'> & { id?: string },
+): { body: string; signature: string } {
+  const body = JSON.stringify({
+    id: e.id ?? `fakeevt_${randomUUID()}`,
+    type: 'account.updated',
+    ...e,
+    provider: 'fake',
+  });
   return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };
 }

@@ -9,6 +9,7 @@ import {
   Heart,
   House,
   Image,
+  Landmark,
   Library,
   ListChecks,
   type LucideIcon,
@@ -48,6 +49,7 @@ const ICONS: Record<string, LucideIcon> = {
   'calendar-check': CalendarCheck,
   bell: Bell,
   settings: Settings,
+  landmark: Landmark,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

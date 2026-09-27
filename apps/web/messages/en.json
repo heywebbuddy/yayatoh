@@ -54,7 +54,8 @@
     "donations": "Donations",
     "communications": "Communications",
     "team": "Team",
-    "settings": "Settings"
+    "settings": "Settings",
+    "payouts": "Payouts"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -502,7 +503,11 @@
     "holder": "Ticket holder",
     "downloadPdf": "Download tickets (PDF)",
     "discountApplied": "Includes {amount} off with {code}",
-    "transferred": "{count, plural, one {# ticket from this order was passed on to someone else. It's theirs now.} other {# tickets from this order were passed on to other people. They're theirs now.}}"
+    "transferred": "{count, plural, one {# ticket from this order was passed on to someone else. It's theirs now.} other {# tickets from this order were passed on to other people. They're theirs now.}}",
+    "soldBy": {
+      "organizer_mor": "Sold by {org}",
+      "platform_mor": "Sold by Pani Digital Services, LLC (Yayatoh) on behalf of {org}"
+    }
   },
   "orders": {
     "title": "Recent orders",
@@ -925,7 +930,8 @@
       "legal": "Add your privacy notice and refund policy",
       "brand": "Choose your brand colour",
       "event": "Create your first event",
-      "team": "Invite a teammate"
+      "team": "Invite a teammate",
+      "payouts": "Set up payouts"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "I agree to the <tos>Terms of Service</tos> and the <dpa>Data Processing Addendum</dpa> on behalf of this organization.",
     "submit": "Create organization"
+  },
+  "payouts": {
+    "title": "Payouts",
+    "description": "Connect a bank account so ticket money reaches you.",
+    "state": {
+      "none": "Not set up",
+      "pending": "Setup started",
+      "restricted": "More information needed",
+      "active": "Active"
+    },
+    "explain": {
+      "none": "Set up payouts with our payment provider. It takes a few minutes and asks for your business and bank details.",
+      "pending": "You started setting up payouts but have not finished. Pick up where you left off.",
+      "restricted": "The payment provider needs a little more information before it can pay you.",
+      "active": "Your payout account is ready. Buyers now pay you directly, and our fee is taken from each payment."
+    },
+    "requirements": "Still needed",
+    "flow": {
+      "platform_mor": "Until then, we collect ticket payments for you and pay them out after your event.",
+      "organizer_mor": "New orders are paid straight into your account."
+    },
+    "start": "Set up payouts",
+    "continue": "Continue setup",
+    "returned": "Thanks. The payment provider is checking your details; this page updates when it is done.",
+    "noAccess": "Only owners, admins and finance can change payout details."
+  },
+  "fakeConnect": {
+    "eyebrow": "Test mode",
+    "title": "Payout setup",
+    "description": "A stand-in for the payment provider's onboarding. No real business or bank details are collected.",
+    "complete": "Finish setup",
+    "incomplete": "Submit with details missing"
   }
 }

@@ -54,7 +54,8 @@
     "donations": "Doações",
     "communications": "Comunicações",
     "team": "Equipe",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "payouts": "Repasses"
   },
   "vocab": {
     "attendee": "Participante",
@@ -502,7 +503,11 @@
     "holder": "Titular do ingresso",
     "downloadPdf": "Baixar ingressos (PDF)",
     "discountApplied": "Inclui {amount} de desconto com {code}",
-    "transferred": "{count, plural, one {# ingresso deste pedido foi repassado para outra pessoa. Agora ele é dela.} other {# ingressos deste pedido foram repassados para outras pessoas. Agora eles são delas.}}"
+    "transferred": "{count, plural, one {# ingresso deste pedido foi repassado para outra pessoa. Agora ele é dela.} other {# ingressos deste pedido foram repassados para outras pessoas. Agora eles são delas.}}",
+    "soldBy": {
+      "organizer_mor": "Vendido por {org}",
+      "platform_mor": "Vendido por Pani Digital Services, LLC (Yayatoh) em nome de {org}"
+    }
   },
   "orders": {
     "title": "Pedidos recentes",
@@ -925,7 +930,8 @@
       "legal": "Adicionar seu aviso de privacidade e sua política de reembolso",
       "brand": "Escolher a cor da sua marca",
       "event": "Criar seu primeiro evento",
-      "team": "Convidar um colega de equipe"
+      "team": "Convidar um colega de equipe",
+      "payouts": "Configurar os repasses"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "Concordo com os <tos>Termos de Serviço</tos> e o <dpa>Adendo de Tratamento de Dados</dpa> em nome desta organização.",
     "submit": "Criar organização"
+  },
+  "payouts": {
+    "title": "Repasses",
+    "description": "Conecte uma conta bancária para receber o dinheiro dos ingressos.",
+    "state": {
+      "none": "Não configurado",
+      "pending": "Configuração iniciada",
+      "restricted": "Mais informações necessárias",
+      "active": "Ativo"
+    },
+    "explain": {
+      "none": "Configure os repasses com nosso provedor de pagamentos. Leva poucos minutos e pede os dados da sua empresa e do seu banco.",
+      "pending": "Você começou a configurar os repasses, mas não terminou. Continue de onde parou.",
+      "restricted": "O provedor de pagamentos precisa de mais algumas informações antes de poder pagar você.",
+      "active": "Sua conta de repasses está pronta. Agora os compradores pagam diretamente a você, e nossa taxa é descontada de cada pagamento."
+    },
+    "requirements": "Ainda pendente",
+    "flow": {
+      "platform_mor": "Até lá, recebemos os pagamentos dos ingressos por você e fazemos o repasse depois do seu evento.",
+      "organizer_mor": "Os novos pedidos são pagos diretamente na sua conta."
+    },
+    "start": "Configurar os repasses",
+    "continue": "Continuar a configuração",
+    "returned": "Obrigado. O provedor de pagamentos está verificando seus dados; esta página será atualizada quando terminar.",
+    "noAccess": "Somente proprietários, administradores e a equipe financeira podem alterar os dados de repasse."
+  },
+  "fakeConnect": {
+    "eyebrow": "Modo de teste",
+    "title": "Configuração de repasses",
+    "description": "Uma simulação do cadastro no provedor de pagamentos. Nenhum dado real da empresa ou bancário é coletado.",
+    "complete": "Concluir a configuração",
+    "incomplete": "Enviar com dados faltando"
   }
 }

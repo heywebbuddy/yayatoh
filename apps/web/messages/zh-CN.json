@@ -54,7 +54,8 @@
     "donations": "捐款",
     "communications": "沟通",
     "team": "团队",
-    "settings": "设置"
+    "settings": "设置",
+    "payouts": "收款"
   },
   "vocab": {
     "attendee": "参会者",
@@ -502,7 +503,11 @@
     "holder": "持票人",
     "downloadPdf": "下载门票（PDF）",
     "discountApplied": "含优惠码 {code} 减免的 {amount}",
-    "transferred": "{count, plural, other {此订单中有 # 张票已转给他人，现归对方所有。}}"
+    "transferred": "{count, plural, other {此订单中有 # 张票已转给他人，现归对方所有。}}",
+    "soldBy": {
+      "organizer_mor": "销售方：{org}",
+      "platform_mor": "销售方：Pani Digital Services, LLC (Yayatoh)（代表 {org}）"
+    }
   },
   "orders": {
     "title": "最近订单",
@@ -925,7 +930,8 @@
       "legal": "添加隐私声明和退款政策",
       "brand": "选择品牌颜色",
       "event": "创建你的第一个活动",
-      "team": "邀请团队成员"
+      "team": "邀请团队成员",
+      "payouts": "设置收款"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "我代表本组织同意<tos>服务条款</tos>和<dpa>数据处理附录</dpa>。",
     "submit": "创建组织"
+  },
+  "payouts": {
+    "title": "收款",
+    "description": "关联银行账户，让门票收入转入你的账户。",
+    "state": {
+      "none": "未设置",
+      "pending": "已开始设置",
+      "restricted": "需要更多信息",
+      "active": "已启用"
+    },
+    "explain": {
+      "none": "通过我们的支付服务商设置收款。只需几分钟，需要填写你的企业和银行信息。",
+      "pending": "你已开始设置收款，但尚未完成。可以从上次中断的地方继续。",
+      "restricted": "支付服务商还需要一些信息才能向你付款。",
+      "active": "你的收款账户已就绪。买家现在直接向你付款，我们的服务费会从每笔付款中扣除。"
+    },
+    "requirements": "仍需提供",
+    "flow": {
+      "platform_mor": "在此之前，我们会代你收取门票款项，并在活动结束后支付给你。",
+      "organizer_mor": "新订单的款项将直接付到你的账户。"
+    },
+    "start": "设置收款",
+    "continue": "继续设置",
+    "returned": "谢谢。支付服务商正在核实你的信息，完成后此页面会自动更新。",
+    "noAccess": "只有所有者、管理员和财务可以更改收款信息。"
+  },
+  "fakeConnect": {
+    "eyebrow": "测试模式",
+    "title": "收款设置",
+    "description": "这是支付服务商开户流程的模拟页面，不会收集任何真实的企业或银行信息。",
+    "complete": "完成设置",
+    "incomplete": "在信息不完整时提交"
   }
 }

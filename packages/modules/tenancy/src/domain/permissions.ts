@@ -20,6 +20,8 @@ export const PERMISSIONS = [
   'attendees:export',
   'contacts:read',
   'finance:read',
+  /** Connect and change the payout account (KYC, bank). Money leaving the platform. */
+  'payouts:manage',
   'marketing:write',
   'checkin:scan',
 ] as const;
@@ -42,7 +44,15 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'marketing:write',
     'checkin:scan',
   ],
-  finance: ['org:read', 'billing:read', 'events:read', 'orders:read', 'orders:refund', 'finance:read'],
+  finance: [
+    'org:read',
+    'billing:read',
+    'events:read',
+    'orders:read',
+    'orders:refund',
+    'finance:read',
+    'payouts:manage',
+  ],
   marketing: ['org:read', 'events:read', 'contacts:read', 'marketing:write'],
   box_office: ['org:read', 'events:read', 'orders:read', 'attendees:read', 'attendees:write', 'checkin:scan'],
   scanner: ['org:read', 'checkin:scan'],

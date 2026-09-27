@@ -7,6 +7,7 @@ import { loadConsole } from '@/server/console.ts';
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
+  { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
 ];
 

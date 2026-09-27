@@ -34,7 +34,7 @@ Roadmap: M1.3. This milestone is delivered in increments:
   - choose a brand colour
   - create the first event
   - invite a teammate
-  - It is hidden when everything is done. Payouts join it with M1.3c.
+  - It is hidden when everything is done. Payouts join it (M1.3c) once the org sells paid tickets.
 
 ### Acceptance (M1.3a)
 | ID | Criterion | Test |
@@ -72,3 +72,23 @@ Roadmap: M1.3. This milestone is delivered in increments:
 | AC3 | In the browser: no form without a valid code; a signed-in person signs up with a code (address derived, profile picked) and lands in the org; the code can't be reused; HTTP password sign-up gets 403; axe passes | `apps/web/e2e/signup.spec.ts` |
 
 Roadmap acceptance "end-to-end signup with Stripe test KYC" completes with M1.3c (payouts onboarding); Stripe test mode is an owner account (owner inbox).
+
+## M1.3c — payouts onboarding (done, behind the payments port)
+
+Roadmap §5.3 hybrid funds flow, first half: an organization connects a payout account with the payment provider; once the account can take charges **and** pay out, new orders become `organizer_mor` (direct charge on the connected account, the platform fee as `application_fee_amount`). Until then every order stays `platform_mor` (platform charge; separate transfer at release, M1.5e/M1.6).
+
+- **Port.** `PaymentProvider.createConnectedAccount({orgId, country, email})` (idempotent per org) and `createOnboardingLink({accountId, returnUrl, refreshUrl})`. `verifyWebhook` now returns `payment.*` **or** `account.updated`. The fake adapter creates `fakeacct_<hmac(org)>` and a hosted fake onboarding page (`/connect/fake`) whose buttons post a signed `account.updated` webhook — the only way account state changes. Stripe (Connect, embedded onboarding) replaces it when the owner's test account exists.
+- **Data.** `payments.payment_accounts` (tenant table, one per org, RLS): provider, account id, class, charges/payouts enabled, details submitted, requirements due (keys only, no personal data), country, currency, last event. `orders.orders.connected_account_id` (set exactly when `funds_flow = 'organizer_mor'`; CHECK added NOT VALID + VALIDATE).
+- **Commands.** `payments.recordPayoutAccount` and `payments.payoutAccountId` need the new `payouts:manage` permission (owner, admin, finance). `payments.payoutAccount` (state `none | pending | restricted | active`, requirements, funds flow) is `org:read`. `payments.applyAccountEvent` is system-only (`platform:payments.webhook`), deduplicated by provider event id through `payments.provider_events`, applies only to the account recorded **in that org** (another org's account id → `unknown_account`), and emits `payouts.account_updated@1` on a state change.
+- **Checkout.** `orders.startCheckout` reads `fundsFlowTx` inside its transaction, stores the flow and connected account on the order, and returns payment instructions to the server action (never to the browser): `organizer_mor` → charge on the connected account with the order's fee as the application fee.
+- **Console.** `/o/[org]/payouts` (nav item): state, requirements still due, what the funds flow means, and "Set up payouts" / "Continue setup" for `payouts:manage`. The setup checklist gains "Set up payouts" once the org has a paid or donation ticket type.
+- **Out of scope here:** Stripe adapter and embedded components (owner account), payout holds and the admin Connect view (M1.3e), transfers at release and refunds on connected accounts (M1.5e/M1.6). Stripe's advice to re-fetch the account on `account.updated` (events may arrive out of order) lands with the Stripe adapter.
+
+### Acceptance (M1.3c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Recording is idempotent per org and refuses a second account; only owner/admin/finance manage payouts; webhooks are system-only | `packages/testing/tests/payouts.int.test.ts` |
+| AC2 | `account.updated` moves pending → restricted → active, deduplicated by event id, one domain event per state change; an org can't touch another org's account | `payouts.int.test.ts` |
+| AC3 | An active account switches new orders to `organizer_mor` with the connected account stored and the fee as application fee; other orgs stay `platform_mor`; payment accounts are covered by the isolation suite | `payouts.int.test.ts`, `isolation.int.test.ts` |
+| AC4 | The fake adapter charges the connected account for `organizer_mor`, refuses it without one, and verifies signed account webhooks | `packages/modules/payments/tests/fake.test.ts` |
+| AC5 | In the browser: an owner sets up payouts through the hosted (fake) onboarding, sees "more information needed", finishes, and a buyer's checkout then charges the connected account; axe passes | `apps/web/e2e/payouts.spec.ts` |

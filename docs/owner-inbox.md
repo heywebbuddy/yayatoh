@@ -22,6 +22,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - Until R2 exists, attendee exports (M1.8b) are stored in Postgres and expire after 7 days.
   - Twilio (SMS, and WhatsApp through Twilio) for M1.10. Until then, ticket links (M1.8d) go by email (console mailer until SES) or by copying the link.
   - Stripe test mode access for the platform account.
+    Payouts onboarding (M1.3c) runs on a fake provider until then: the Stripe adapter needs Connect enabled on the platform account (Standard or Express accounts, embedded onboarding) and a Connect webhook endpoint secret for `account.updated`. Label: `payments`.
 - [ ] **Confirm today's platform fee** (M1.5): the legacy commission % and any fixed per-ticket fee, per currency, and whether organizers absorb or pass it on by default. The new platform launches at 0% until this is set (`billing.fee_schedules`).
 - [ ] **Ticket signing key encryption** (M1.5c, before launch): an AWS KMS key (or approve another KMS) for encrypting each org's ticket-signing private key. Development and CI use a local AES key (`LOCAL_KMS_KEY`) behind the `KeyVault` port; the local adapter is refused in production.
 - [ ] **Sign-in providers** (M1.2f): Google OAuth client and Apple Sign in with Apple service ID + key for `app.yayatoh.com`; Cloudflare Turnstile site key.

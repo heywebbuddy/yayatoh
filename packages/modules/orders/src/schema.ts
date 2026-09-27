@@ -52,6 +52,8 @@ export const orders = tenantTable(
     feeMinor: minor('fee_minor').notNull(),
     totalMinor: minor('total_minor').notNull(),
     fundsFlow: text('funds_flow').notNull(),
+    /** The connected account charged directly (organizer_mor only; refunds go to the same one). */
+    connectedAccountId: text('connected_account_id'),
     feeSchedule: jsonb('fee_schedule').notNull(),
     provider: text('provider'),
     providerPaymentId: text('provider_payment_id'),
@@ -75,6 +77,10 @@ export const orders = tenantTable(
     ),
     check('orders_discount_check', sql`discount_minor >= 0`),
     check('orders_funds_flow_check', sql`funds_flow in ('organizer_mor', 'platform_mor')`),
+    check(
+      'orders_connected_account_check',
+      sql`(funds_flow = 'organizer_mor') = (connected_account_id is not null)`,
+    ),
     check('orders_email_lower_check', sql`buyer_email = lower(buyer_email)`),
   ],
 );

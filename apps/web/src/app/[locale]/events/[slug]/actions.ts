@@ -101,7 +101,7 @@ export async function checkoutAction(
       };
     throw err;
   }
-  const { order, manageToken } = result;
+  const { order, manageToken, payment: flow } = result;
   const orderPath = `/orders/${manageToken}`;
   if (order.status === 'paid') return redirect({ href: orderPath, locale });
 
@@ -110,8 +110,9 @@ export async function checkoutAction(
     orgId: target.orgId,
     orderId: order.id,
     amount: { amount: order.totalMinor, currency: order.currency },
-    fundsFlow: 'platform_mor',
-    applicationFee: { amount: 0, currency: order.currency },
+    fundsFlow: flow.fundsFlow,
+    connectedAccountId: flow.connectedAccountId,
+    applicationFee: { amount: flow.applicationFeeMinor, currency: order.currency },
     buyerEmail: order.buyerEmail,
     description: slug,
     idempotencyKey: `order:${order.id}:1`,

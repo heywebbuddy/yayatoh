@@ -7,6 +7,8 @@ export interface CreatePaymentInput {
   readonly orderId: string;
   readonly amount: Money;
   readonly fundsFlow: FundsFlow;
+  /** organizer_mor: the connected account charged directly (`Stripe-Account`). */
+  readonly connectedAccountId: string | null;
   /** Platform fee collected as `application_fee_amount` (organizer_mor) or kept (platform_mor). */
   readonly applicationFee: Money;
   readonly buyerEmail: string;
@@ -35,9 +37,49 @@ export interface ProviderEvent {
   readonly orderId: string;
 }
 
+/** A connected (payout) account's state, normalized from the provider (Stripe Connect). */
+export interface ConnectAccountState {
+  readonly accountId: string;
+  readonly chargesEnabled: boolean;
+  readonly payoutsEnabled: boolean;
+  readonly detailsSubmitted: boolean;
+  /** Requirement keys still due, e.g. `external_account`, `individual.verification.document`. */
+  readonly requirementsDue: readonly string[];
+  readonly country: string;
+  readonly defaultCurrency: string;
+}
+
+/** A verified connected-account notification (`account.updated`). */
+export interface AccountEvent {
+  readonly provider: 'fake' | 'stripe';
+  readonly id: string;
+  readonly type: 'account.updated';
+  readonly orgId: string;
+  readonly account: ConnectAccountState;
+}
+
+export type WebhookEvent = ProviderEvent | AccountEvent;
+export const isAccountEvent = (e: WebhookEvent): e is AccountEvent => e.type === 'account.updated';
+
 export interface PaymentProvider {
   readonly name: 'fake' | 'stripe';
   createPayment(input: CreatePaymentInput): Promise<CreatePaymentResult>;
   /** Verify the signature over the raw request body; throws on anything unverifiable. */
-  verifyWebhook(rawBody: string, headers: Headers): Promise<ProviderEvent>;
+  verifyWebhook(rawBody: string, headers: Headers): Promise<WebhookEvent>;
+  /**
+   * Connect (M1.3): create the organization's connected account (idempotent per org), and a
+   * hosted/embedded onboarding step for it. Payouts only: charges stay on the platform until the
+   * account is enabled (then orders use `organizer_mor`, roadmap §5.3).
+   */
+  createConnectedAccount(input: {
+    orgId: string;
+    country: string;
+    email: string;
+  }): Promise<{ accountId: string }>;
+  createOnboardingLink(input: {
+    orgId: string;
+    accountId: string;
+    returnUrl: string;
+    refreshUrl: string;
+  }): Promise<{ url: string }>;
 }

@@ -54,7 +54,8 @@
     "donations": "Donaciones",
     "communications": "Comunicaciones",
     "team": "Equipo",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "payouts": "Pagos recibidos"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -502,7 +503,11 @@
     "holder": "Titular de la entrada",
     "downloadPdf": "Descargar entradas (PDF)",
     "discountApplied": "Incluye {amount} de descuento con {code}",
-    "transferred": "{count, plural, one {# entrada de este pedido se pasó a otra persona. Ahora es suya.} other {# entradas de este pedido se pasaron a otras personas. Ahora son suyas.}}"
+    "transferred": "{count, plural, one {# entrada de este pedido se pasó a otra persona. Ahora es suya.} other {# entradas de este pedido se pasaron a otras personas. Ahora son suyas.}}",
+    "soldBy": {
+      "organizer_mor": "Vendido por {org}",
+      "platform_mor": "Vendido por Pani Digital Services, LLC (Yayatoh) en nombre de {org}"
+    }
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -925,7 +930,8 @@
       "legal": "Añadir tu aviso de privacidad y tu política de reembolso",
       "brand": "Elegir tu color de marca",
       "event": "Crear tu primer evento",
-      "team": "Invitar a un compañero"
+      "team": "Invitar a un compañero",
+      "payouts": "Configurar los pagos recibidos"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "Acepto los <tos>Términos del servicio</tos> y el <dpa>Acuerdo de tratamiento de datos</dpa> en nombre de esta organización.",
     "submit": "Crear organización"
+  },
+  "payouts": {
+    "title": "Pagos recibidos",
+    "description": "Conecta una cuenta bancaria para recibir el dinero de las entradas.",
+    "state": {
+      "none": "Sin configurar",
+      "pending": "Configuración iniciada",
+      "restricted": "Se necesita más información",
+      "active": "Activo"
+    },
+    "explain": {
+      "none": "Configura los pagos recibidos con nuestro proveedor de pagos. Solo tarda unos minutos y te pide los datos de tu empresa y de tu banco.",
+      "pending": "Empezaste a configurar los pagos recibidos, pero no terminaste. Continúa donde lo dejaste.",
+      "restricted": "El proveedor de pagos necesita un poco más de información antes de poder pagarte.",
+      "active": "Tu cuenta de pagos está lista. Ahora los compradores te pagan directamente y nuestra comisión se descuenta de cada pago."
+    },
+    "requirements": "Aún falta",
+    "flow": {
+      "platform_mor": "Mientras tanto, cobramos los pagos de las entradas por ti y te los transferimos después de tu evento.",
+      "organizer_mor": "Los pedidos nuevos se pagan directamente en tu cuenta."
+    },
+    "start": "Configurar los pagos recibidos",
+    "continue": "Continuar la configuración",
+    "returned": "Gracias. El proveedor de pagos está revisando tus datos; esta página se actualizará cuando termine.",
+    "noAccess": "Solo los propietarios, los administradores y el equipo de finanzas pueden cambiar los datos de pago."
+  },
+  "fakeConnect": {
+    "eyebrow": "Modo de prueba",
+    "title": "Configuración de pagos recibidos",
+    "description": "Una simulación del registro con el proveedor de pagos. No se recopilan datos reales de empresa ni bancarios.",
+    "complete": "Terminar la configuración",
+    "incomplete": "Enviar con datos incompletos"
   }
 }

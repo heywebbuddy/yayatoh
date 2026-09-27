@@ -2,6 +2,7 @@ export {
   archiveTicketTypeCommand,
   createTicketTypeCommand,
   listTicketTypesQuery,
+  sellsPaidTicketsQuery,
   updateTicketTypeCommand,
 } from './commands/ticket-types.ts';
 export {

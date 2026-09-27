@@ -4,7 +4,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
-import { claimProviderEventTx, type ProviderEvent } from '@yayatoh/payments';
+import { claimProviderEventTx, fundsFlowTx, type ProviderEvent } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
   claimPromoTx,
@@ -87,6 +87,8 @@ export const startCheckoutCommand = tenantCommand({
     if (promo) await claimPromoTx(tx, promo.id);
     const manageToken = randomBytes(32).toString('base64url');
     const free = quote.totalMinor === 0;
+    // Roadmap §5.3: direct charges on the organizer's account once it is fully enabled.
+    const flow = await fundsFlowTx(tx);
     const contact = await upsertContactTx(tx, ctx, {
       email: input.buyer.email,
       name: input.buyer.name,
@@ -119,9 +121,8 @@ export const startCheckoutCommand = tenantCommand({
         promoCode: promo?.code ?? null,
         feeMinor: quote.feeMinor,
         totalMinor: quote.totalMinor,
-        // Connected (organizer MoR) accounts arrive with Stripe Connect (M1.5e); until then all
-        // orders are platform MoR.
-        fundsFlow: 'platform_mor',
+        fundsFlow: flow.fundsFlow,
+        connectedAccountId: flow.accountId,
         feeSchedule: quote.feeSchedule,
         manageTokenHash: hashManageToken(manageToken),
         manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
@@ -174,7 +175,16 @@ export const startCheckoutCommand = tenantCommand({
         },
       });
     }
-    return { order: { ...final, items }, manageToken };
+    return {
+      order: { ...final, items },
+      manageToken,
+      payment: {
+        fundsFlow: flow.fundsFlow,
+        connectedAccountId: flow.accountId,
+        // organizer_mor: the platform fee is the application fee; platform_mor keeps it.
+        applicationFeeMinor: flow.fundsFlow === 'organizer_mor' ? final.feeMinor : 0,
+      },
+    };
   },
   audit: (input, r) => ({
     action: 'order.checkout',

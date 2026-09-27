@@ -54,7 +54,8 @@
     "donations": "Donazioni",
     "communications": "Comunicazioni",
     "team": "Team",
-    "settings": "Impostazioni"
+    "settings": "Impostazioni",
+    "payouts": "Accrediti"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -502,7 +503,11 @@
     "holder": "Intestatario del biglietto",
     "downloadPdf": "Scarica i biglietti (PDF)",
     "discountApplied": "Include {amount} di sconto con {code}",
-    "transferred": "{count, plural, one {# biglietto di questo ordine è stato ceduto a un’altra persona. Ora è suo.} other {# biglietti di questo ordine sono stati ceduti ad altre persone. Ora sono loro.}}"
+    "transferred": "{count, plural, one {# biglietto di questo ordine è stato ceduto a un’altra persona. Ora è suo.} other {# biglietti di questo ordine sono stati ceduti ad altre persone. Ora sono loro.}}",
+    "soldBy": {
+      "organizer_mor": "Venduto da {org}",
+      "platform_mor": "Venduto da Pani Digital Services, LLC (Yayatoh) per conto di {org}"
+    }
   },
   "orders": {
     "title": "Ordini recenti",
@@ -925,7 +930,8 @@
       "legal": "Aggiungi l’informativa sulla privacy e la politica di rimborso",
       "brand": "Scegli il colore del brand",
       "event": "Crea il tuo primo evento",
-      "team": "Invita un membro del team"
+      "team": "Invita un membro del team",
+      "payouts": "Configura gli accrediti"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "Accetto i <tos>Termini di servizio</tos> e l’<dpa>Accordo sul trattamento dei dati</dpa> per conto di questa organizzazione.",
     "submit": "Crea organizzazione"
+  },
+  "payouts": {
+    "title": "Accrediti",
+    "description": "Collega un conto bancario per ricevere il denaro dei biglietti.",
+    "state": {
+      "none": "Non configurato",
+      "pending": "Configurazione avviata",
+      "restricted": "Servono altre informazioni",
+      "active": "Attivo"
+    },
+    "explain": {
+      "none": "Configura gli accrediti con il nostro fornitore di pagamenti. Bastano pochi minuti e ti verranno chiesti i dati della tua attività e del tuo conto bancario.",
+      "pending": "Hai iniziato a configurare gli accrediti ma non hai finito. Riprendi da dove avevi lasciato.",
+      "restricted": "Il fornitore di pagamenti ha bisogno di qualche informazione in più prima di poterti pagare.",
+      "active": "Il tuo conto per gli accrediti è pronto. Ora gli acquirenti pagano direttamente te e la nostra commissione viene trattenuta da ogni pagamento."
+    },
+    "requirements": "Ancora necessario",
+    "flow": {
+      "platform_mor": "Fino ad allora, incassiamo noi i pagamenti dei biglietti per tuo conto e te li accreditiamo dopo l’evento.",
+      "organizer_mor": "I nuovi ordini vengono pagati direttamente sul tuo conto."
+    },
+    "start": "Configura gli accrediti",
+    "continue": "Continua la configurazione",
+    "returned": "Grazie. Il fornitore di pagamenti sta verificando i tuoi dati; questa pagina si aggiornerà al termine.",
+    "noAccess": "Solo proprietari, amministratori e il team finanza possono modificare i dati degli accrediti."
+  },
+  "fakeConnect": {
+    "eyebrow": "Modalità di prova",
+    "title": "Configurazione degli accrediti",
+    "description": "Una simulazione della procedura di registrazione del fornitore di pagamenti. Non vengono raccolti dati aziendali o bancari reali.",
+    "complete": "Completa la configurazione",
+    "incomplete": "Invia con dati mancanti"
   }
 }

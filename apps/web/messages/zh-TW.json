@@ -54,7 +54,8 @@
     "donations": "捐款",
     "communications": "溝通",
     "team": "團隊",
-    "settings": "設定"
+    "settings": "設定",
+    "payouts": "收款"
   },
   "vocab": {
     "attendee": "參加者",
@@ -502,7 +503,11 @@
     "holder": "持票人",
     "downloadPdf": "下載票券（PDF）",
     "discountApplied": "含優惠碼 {code} 折抵的 {amount}",
-    "transferred": "{count, plural, other {此訂單中有 # 張票已轉給他人，現歸對方所有。}}"
+    "transferred": "{count, plural, other {此訂單中有 # 張票已轉給他人，現歸對方所有。}}",
+    "soldBy": {
+      "organizer_mor": "銷售方：{org}",
+      "platform_mor": "銷售方：Pani Digital Services, LLC (Yayatoh)（代表 {org}）"
+    }
   },
   "orders": {
     "title": "最近訂單",
@@ -925,7 +930,8 @@
       "legal": "新增隱私權聲明和退款政策",
       "brand": "選擇品牌顏色",
       "event": "建立你的第一個活動",
-      "team": "邀請團隊成員"
+      "team": "邀請團隊成員",
+      "payouts": "設定收款"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "我代表本組織同意<tos>服務條款</tos>和<dpa>資料處理附錄</dpa>。",
     "submit": "建立組織"
+  },
+  "payouts": {
+    "title": "收款",
+    "description": "連結銀行帳戶，讓票券收入匯入你的帳戶。",
+    "state": {
+      "none": "未設定",
+      "pending": "已開始設定",
+      "restricted": "需要更多資訊",
+      "active": "已啟用"
+    },
+    "explain": {
+      "none": "透過我們的金流服務商設定收款。只需幾分鐘，需要填寫你的公司和銀行資訊。",
+      "pending": "你已開始設定收款，但尚未完成。可以從上次中斷的地方繼續。",
+      "restricted": "金流服務商還需要一些資訊才能付款給你。",
+      "active": "你的收款帳戶已就緒。買家現在直接付款給你，我們的服務費會從每筆付款中扣除。"
+    },
+    "requirements": "仍需提供",
+    "flow": {
+      "platform_mor": "在此之前，我們會代你收取票款，並在活動結束後支付給你。",
+      "organizer_mor": "新訂單的款項將直接匯入你的帳戶。"
+    },
+    "start": "設定收款",
+    "continue": "繼續設定",
+    "returned": "謝謝。金流服務商正在核對你的資訊，完成後此頁面會自動更新。",
+    "noAccess": "只有擁有者、管理員和財務可以變更收款資訊。"
+  },
+  "fakeConnect": {
+    "eyebrow": "測試模式",
+    "title": "收款設定",
+    "description": "這是金流服務商開戶流程的模擬頁面，不會收集任何真實的公司或銀行資訊。",
+    "complete": "完成設定",
+    "incomplete": "在資訊不完整時送出"
   }
 }

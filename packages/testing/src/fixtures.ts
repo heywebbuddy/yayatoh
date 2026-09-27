@@ -16,6 +16,7 @@ import {
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
+import { recordPayoutAccountCommand } from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
@@ -290,6 +291,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ),
   ])
     await runBulk(org.id, op.operationId);
+  // A payout account still in onboarding (orders stay platform_mor), for isolation coverage.
+  await executeCommand(
+    recordPayoutAccountCommand,
+    { provider: 'fake', accountId: `fakeacct_${slug}`, country: 'US' },
+    ctx(),
+    ports,
+  );
   return { org, ownerId, viewerId, event, ctx };
 }
 

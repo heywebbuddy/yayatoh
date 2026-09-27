@@ -54,7 +54,8 @@
     "donations": "Dons",
     "communications": "Communications",
     "team": "Équipe",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "payouts": "Versements"
   },
   "vocab": {
     "attendee": "Participant",
@@ -502,7 +503,11 @@
     "holder": "Titulaire du billet",
     "downloadPdf": "Télécharger les billets (PDF)",
     "discountApplied": "Dont {amount} de réduction avec {code}",
-    "transferred": "{count, plural, one {# billet de cette commande a été cédé à une autre personne. Il lui appartient désormais.} other {# billets de cette commande ont été cédés à d’autres personnes. Ils leur appartiennent désormais.}}"
+    "transferred": "{count, plural, one {# billet de cette commande a été cédé à une autre personne. Il lui appartient désormais.} other {# billets de cette commande ont été cédés à d’autres personnes. Ils leur appartiennent désormais.}}",
+    "soldBy": {
+      "organizer_mor": "Vendu par {org}",
+      "platform_mor": "Vendu par Pani Digital Services, LLC (Yayatoh) pour le compte de {org}"
+    }
   },
   "orders": {
     "title": "Commandes récentes",
@@ -925,7 +930,8 @@
       "legal": "Ajouter votre politique de confidentialité et votre politique de remboursement",
       "brand": "Choisir votre couleur de marque",
       "event": "Créer votre premier événement",
-      "team": "Inviter un membre de l’équipe"
+      "team": "Inviter un membre de l’équipe",
+      "payouts": "Configurer les versements"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "J’accepte les <tos>Conditions d’utilisation</tos> et l’<dpa>Accord de traitement des données</dpa> au nom de cette organisation.",
     "submit": "Créer l’organisation"
+  },
+  "payouts": {
+    "title": "Versements",
+    "description": "Associez un compte bancaire pour recevoir l’argent de vos billets.",
+    "state": {
+      "none": "Non configuré",
+      "pending": "Configuration commencée",
+      "restricted": "Informations supplémentaires requises",
+      "active": "Actif"
+    },
+    "explain": {
+      "none": "Configurez les versements avec notre prestataire de paiement. Cela prend quelques minutes et nécessite les coordonnées de votre entreprise et de votre banque.",
+      "pending": "Vous avez commencé à configurer les versements sans terminer. Reprenez là où vous vous êtes arrêté.",
+      "restricted": "Le prestataire de paiement a besoin de quelques informations supplémentaires avant de pouvoir vous payer.",
+      "active": "Votre compte de versement est prêt. Les acheteurs vous paient désormais directement, et nos frais sont prélevés sur chaque paiement."
+    },
+    "requirements": "Encore requis",
+    "flow": {
+      "platform_mor": "D’ici là, nous encaissons les paiements des billets pour vous et vous les reversons après votre événement.",
+      "organizer_mor": "Les nouvelles commandes sont versées directement sur votre compte."
+    },
+    "start": "Configurer les versements",
+    "continue": "Reprendre la configuration",
+    "returned": "Merci. Le prestataire de paiement vérifie vos informations ; cette page se mettra à jour une fois la vérification terminée.",
+    "noAccess": "Seuls les propriétaires, les administrateurs et l’équipe finance peuvent modifier les informations de versement."
+  },
+  "fakeConnect": {
+    "eyebrow": "Mode test",
+    "title": "Configuration des versements",
+    "description": "Une page de substitution pour l’inscription auprès du prestataire de paiement. Aucune information réelle sur l’entreprise ou la banque n’est collectée.",
+    "complete": "Terminer la configuration",
+    "incomplete": "Envoyer avec des informations manquantes"
   }
 }

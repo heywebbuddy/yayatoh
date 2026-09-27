@@ -190,6 +190,13 @@
       "when": 1790514582796,
       "tag": "0026_purple_blizzard",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1790516698390,
+      "tag": "0027_bent_vector",
+      "breakpoints": true
     }
   ]
 }

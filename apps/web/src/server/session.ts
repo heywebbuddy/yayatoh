@@ -12,6 +12,7 @@ export function devAuthEnabled(): boolean {
 export interface Session {
   readonly userId: string;
   readonly name: string;
+  readonly email: string;
   readonly initials: string;
 }
 
@@ -25,5 +26,5 @@ export const getSession = cache(async (): Promise<Session | null> => {
   const h = await headers();
   const s = await getAuth().api.getSession({ headers: h });
   if (!s) return null;
-  return { userId: s.user.id, name: s.user.name, initials: initialsOf(s.user.name) };
+  return { userId: s.user.id, name: s.user.name, email: s.user.email, initials: initialsOf(s.user.name) };
 });

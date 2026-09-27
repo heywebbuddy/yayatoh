@@ -54,7 +54,8 @@
     "donations": "Spenden",
     "communications": "Kommunikation",
     "team": "Team",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "payouts": "Auszahlungen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -502,7 +503,11 @@
     "holder": "Ticketinhaber",
     "downloadPdf": "Tickets herunterladen (PDF)",
     "discountApplied": "Enthält {amount} Rabatt mit {code}",
-    "transferred": "{count, plural, one {# Ticket aus dieser Bestellung wurde an eine andere Person weitergegeben. Es gehört jetzt ihr.} other {# Tickets aus dieser Bestellung wurden an andere Personen weitergegeben. Sie gehören jetzt ihnen.}}"
+    "transferred": "{count, plural, one {# Ticket aus dieser Bestellung wurde an eine andere Person weitergegeben. Es gehört jetzt ihr.} other {# Tickets aus dieser Bestellung wurden an andere Personen weitergegeben. Sie gehören jetzt ihnen.}}",
+    "soldBy": {
+      "organizer_mor": "Verkauft von {org}",
+      "platform_mor": "Verkauft von Pani Digital Services, LLC (Yayatoh) im Auftrag von {org}"
+    }
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -925,7 +930,8 @@
       "legal": "Datenschutzerklärung und Erstattungsrichtlinie hinzufügen",
       "brand": "Markenfarbe auswählen",
       "event": "Erstes Event erstellen",
-      "team": "Teammitglied einladen"
+      "team": "Teammitglied einladen",
+      "payouts": "Auszahlungen einrichten"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "Ich stimme den <tos>Allgemeinen Geschäftsbedingungen</tos> und dem <dpa>Auftragsverarbeitungsvertrag</dpa> im Namen dieser Organisation zu.",
     "submit": "Organisation erstellen"
+  },
+  "payouts": {
+    "title": "Auszahlungen",
+    "description": "Verbinde ein Bankkonto, damit das Geld aus dem Ticketverkauf bei dir ankommt.",
+    "state": {
+      "none": "Nicht eingerichtet",
+      "pending": "Einrichtung begonnen",
+      "restricted": "Weitere Angaben nötig",
+      "active": "Aktiv"
+    },
+    "explain": {
+      "none": "Richte Auszahlungen bei unserem Zahlungsanbieter ein. Das dauert nur ein paar Minuten; du brauchst dafür Angaben zu deinem Unternehmen und deiner Bankverbindung.",
+      "pending": "Du hast mit der Einrichtung der Auszahlungen begonnen, sie aber noch nicht abgeschlossen. Mach dort weiter, wo du aufgehört hast.",
+      "restricted": "Der Zahlungsanbieter braucht noch ein paar Angaben, bevor er an dich auszahlen kann.",
+      "active": "Dein Auszahlungskonto ist bereit. Käufer zahlen jetzt direkt an dich, und unsere Gebühr wird von jeder Zahlung abgezogen."
+    },
+    "requirements": "Noch benötigt",
+    "flow": {
+      "platform_mor": "Bis dahin nehmen wir die Ticketzahlungen für dich entgegen und zahlen sie nach deinem Event aus.",
+      "organizer_mor": "Neue Bestellungen werden direkt auf dein Konto gezahlt."
+    },
+    "start": "Auszahlungen einrichten",
+    "continue": "Einrichtung fortsetzen",
+    "returned": "Danke. Der Zahlungsanbieter prüft deine Angaben; diese Seite wird aktualisiert, sobald das erledigt ist.",
+    "noAccess": "Nur Inhaber, Admins und Finanzen können die Auszahlungsdaten ändern."
+  },
+  "fakeConnect": {
+    "eyebrow": "Testmodus",
+    "title": "Auszahlungen einrichten",
+    "description": "Ein Platzhalter für das Onboarding des Zahlungsanbieters. Es werden keine echten Unternehmens- oder Bankdaten erfasst.",
+    "complete": "Einrichtung abschließen",
+    "incomplete": "Mit fehlenden Angaben absenden"
   }
 }

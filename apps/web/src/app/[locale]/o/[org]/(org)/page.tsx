@@ -1,5 +1,6 @@
 import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
+import { payoutAccountQuery } from '@yayatoh/payments';
 import {
   agreementsQuery,
   legalPagesQuery,
@@ -7,6 +8,7 @@ import {
   listMembersQuery,
   roleCan,
 } from '@yayatoh/tenancy';
+import { sellsPaidTicketsQuery } from '@yayatoh/ticketing';
 import { buttonClass, Card, EmptyState, Label, PageHeader, Skeleton, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type ReactNode, Suspense } from 'react';
@@ -121,17 +123,21 @@ async function EventList({ org, locale, create }: { org: string; locale: string;
 
 /**
  * Setup checklist (M1.3): what an organizer still needs before selling. Hidden once everything is
- * done. Payouts join the list with Connect onboarding (M1.3c).
+ * done. Payouts join the list once the org sells paid tickets.
  */
 async function SetupChecklist({ org }: { org: string }) {
   const data = await loadConsole(org);
   const t = await getTranslations('setup');
-  const [agreements, legal, events, members, invitations] = await Promise.all([
+  const [agreements, legal, events, members, invitations, sells, payouts] = await Promise.all([
     executeQuery(agreementsQuery, {}, data.ctx, ports),
     executeQuery(legalPagesQuery, {}, data.ctx, ports),
     executeQuery(listEventsQuery, {}, data.ctx, ports),
     executeQuery(listMembersQuery, {}, data.ctx, ports),
     roleCan(data.role, 'members:manage') ? executeQuery(listInvitationsQuery, {}, data.ctx, ports) : [],
+    data.modules.has('ticketing')
+      ? executeQuery(sellsPaidTicketsQuery, {}, data.ctx, ports)
+      : { paid: false },
+    executeQuery(payoutAccountQuery, {}, data.ctx, ports),
   ]);
   const items = [
     { key: 'terms', done: agreements.every((a) => a.acceptedAt !== null), href: `/o/${org}/settings` },
@@ -143,6 +149,7 @@ async function SetupChecklist({ org }: { org: string }) {
     { key: 'brand', done: data.org.brandColor !== null, href: `/o/${org}/settings` },
     { key: 'event', done: events.length > 0, href: `/o/${org}/events/new` },
     { key: 'team', done: members.length > 1 || invitations.length > 0, href: `/o/${org}/team` },
+    ...(sells.paid ? [{ key: 'payouts', done: payouts.state === 'active', href: `/o/${org}/payouts` }] : []),
   ];
   const doneCount = items.filter((i) => i.done).length;
   if (doneCount === items.length) return null;

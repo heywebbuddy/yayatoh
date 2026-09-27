@@ -3,7 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, money, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, isNull } from 'drizzle-orm';
+import { and, asc, eq, gt, isNull, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { CreateTicketTypeInput, pricingProblem, TicketTypeDto, UpdateTicketTypeInput } from '../dto.ts';
 import { currentFaceMinor } from '../inventory.ts';
@@ -131,6 +131,28 @@ export const archiveTicketTypeCommand = tenantCommand({
     targetType: 'ticket_type',
     targetId: input.ticketTypeId,
   }),
+});
+
+/** Whether the org sells anything (a paid or donation ticket type): payouts then matter. */
+export const sellsPaidTicketsQuery = tenantQuery({
+  name: 'ticketing.sellsPaidTickets',
+  input: z.object({}),
+  output: z.object({ paid: z.boolean() }),
+  entitlement: 'ticketing',
+  permission: 'events:read',
+  handler: async ({ tx }) => {
+    const [row] = await tx
+      .select({ id: ticketTypes.id })
+      .from(ticketTypes)
+      .where(
+        and(
+          isNull(ticketTypes.archivedAt),
+          or(gt(ticketTypes.priceMinor, 0), eq(ticketTypes.isDonation, true)),
+        ),
+      )
+      .limit(1);
+    return { paid: Boolean(row) };
+  },
 });
 
 export const listTicketTypesQuery = tenantQuery({

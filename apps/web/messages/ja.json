@@ -54,7 +54,8 @@
     "donations": "寄付",
     "communications": "コミュニケーション",
     "team": "チーム",
-    "settings": "設定"
+    "settings": "設定",
+    "payouts": "入金"
   },
   "vocab": {
     "attendee": "参加者",
@@ -502,7 +503,11 @@
     "holder": "チケット名義人",
     "downloadPdf": "チケットをダウンロード（PDF）",
     "discountApplied": "{code} による {amount} の割引を含む",
-    "transferred": "{count, plural, other {この注文のチケット#枚は他の方に譲渡されました。現在はその方のチケットです。}}"
+    "transferred": "{count, plural, other {この注文のチケット#枚は他の方に譲渡されました。現在はその方のチケットです。}}",
+    "soldBy": {
+      "organizer_mor": "販売元: {org}",
+      "platform_mor": "販売元: Pani Digital Services, LLC (Yayatoh)（{org} の代理）"
+    }
   },
   "orders": {
     "title": "最近の注文",
@@ -925,7 +930,8 @@
       "legal": "プライバシーポリシーと返金ポリシーを追加する",
       "brand": "ブランドカラーを選ぶ",
       "event": "最初のイベントを作成する",
-      "team": "チームメンバーを招待する"
+      "team": "チームメンバーを招待する",
+      "payouts": "入金を設定する"
     }
   },
   "signup": {
@@ -954,5 +960,37 @@
     },
     "terms": "この組織を代表して、<tos>利用規約</tos>および<dpa>データ処理補足契約</dpa>に同意します。",
     "submit": "組織を作成"
+  },
+  "payouts": {
+    "title": "入金",
+    "description": "銀行口座を連携して、チケットの売上を受け取りましょう。",
+    "state": {
+      "none": "未設定",
+      "pending": "設定中",
+      "restricted": "追加情報が必要",
+      "active": "有効"
+    },
+    "explain": {
+      "none": "決済代行会社で入金を設定します。数分で完了し、事業情報と銀行口座情報の入力が必要です。",
+      "pending": "入金の設定を開始しましたが、まだ完了していません。途中から再開できます。",
+      "restricted": "お支払いを行う前に、決済代行会社が追加の情報を必要としています。",
+      "active": "入金用アカウントの準備ができました。購入者からの支払いは直接あなたに入金され、当社の手数料は各支払いから差し引かれます。"
+    },
+    "requirements": "未提出の項目",
+    "flow": {
+      "platform_mor": "それまでは、当社がチケット代金を代わりに受け取り、イベント終了後にお支払いします。",
+      "organizer_mor": "新しい注文の代金は、あなたの口座に直接入金されます。"
+    },
+    "start": "入金を設定する",
+    "continue": "設定を続ける",
+    "returned": "ありがとうございます。決済代行会社が情報を確認しています。確認が終わるとこのページが更新されます。",
+    "noAccess": "入金情報を変更できるのは、オーナー、管理者、経理のみです。"
+  },
+  "fakeConnect": {
+    "eyebrow": "テストモード",
+    "title": "入金の設定",
+    "description": "決済代行会社の登録手続きの代わりとなるページです。実際の事業情報や銀行口座情報は収集されません。",
+    "complete": "設定を完了する",
+    "incomplete": "未入力の項目を残して送信"
   }
 }
