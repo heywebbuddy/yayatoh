@@ -631,10 +631,13 @@
       "superseded": "已重新签发门票的旧代码",
       "provisional": "离线放行，待确认",
       "granted": "准许进入",
-      "no_access": "此通行证不包含该区域"
+      "no_access": "此通行证不包含该区域",
+      "wrong_checkpoint": "不是你的检查点"
     },
     "alertsTitle": "{count, plural, other {离线期间有 # 张票被重复放行}}",
-    "alertsHint": "两台扫描设备在同步前放行了同一张票。请在入口核查这些宾客。"
+    "alertsHint": "两台扫描设备在同步前放行了同一张票。请在入口核查这些宾客。",
+    "wrongCheckpointHint": "你负责 {places}。请在“扫描位置”中选择。",
+    "noCheckpointsHint": "你在这里没有分配检查点。请询问主办方。"
   },
   "devices": {
     "title": "扫描设备",
@@ -652,7 +655,10 @@
     "revoke": "撤销",
     "revokeFor": "撤销 {label}",
     "linkHint": "或在设备上打开此链接：它会为本活动设置好扫描器。",
-    "openScanner": "在此设备上打开扫描器"
+    "openScanner": "在此设备上打开扫描器",
+    "handedTo": "交给",
+    "orgDevice": "无人(可在任何位置扫描)",
+    "handedToName": "给 {name}"
   },
   "scan": {
     "title": "扫描器",
@@ -673,7 +679,9 @@
     "pending": "已在此设备上核验，同步后确认",
     "wipedTitle": "此扫描器已被清除",
     "wipedDescription": "其宾客名单和密钥已被删除。请向主办方索取新的设备链接以继续扫描。",
-    "cameraFailed": "无法启动相机。请检查相机权限，或输入代码。"
+    "cameraFailed": "无法启动相机。请检查相机权限，或输入代码。",
+    "notAssigned": "此设备未分配给此活动。请询问主办方。",
+    "badScope": "下载的名单未通过安全检查,未被使用。请重新连接后再试。"
   },
   "checkpoints": {
     "title": "入口和区域",
@@ -700,8 +708,18 @@
     "signalsTitle": "{count, plural, other {# 项待核查}}",
     "signal": {
       "two_entrances": "门票在第二个入口出示",
-      "invalid_burst": "连续出现多个无效代码"
-    }
+      "invalid_burst": "连续出现多个无效代码",
+      "device_velocity": "扫描速度超出人工可能",
+      "impossible_travel": "同一门票在相距过远的两处被放行",
+      "rejected_burst": "连续多次扫描被拒"
+    },
+    "chooseStand": "选择你的检查点",
+    "location": "位置(可选)",
+    "locationHint": "纬度和经度,例如来自地图应用。用于发现在相距过远的两处被放行的门票。",
+    "latitude": "纬度",
+    "longitude": "经度",
+    "locationError": "请同时以数字填写纬度(−90 到 90)和经度(−180 到 180),或都留空。",
+    "located": "位于 {lat}, {lng}"
   },
   "search": {
     "title": "搜索",
@@ -1784,6 +1802,81 @@
       "copied": "已复制。",
       "emptyTitle": "暂无公开活动",
       "emptyDescription": "发布活动后即可获取其小组件代码。"
+    }
+  },
+  "doorStaff": {
+    "title": "入口工作人员",
+    "description": "谁在 {event} 扫描,以及在哪里。",
+    "back": "返回签到",
+    "noAccess": "你需要此活动的访问权限才能查看入口工作人员。",
+    "listTitle": "在此扫描的人",
+    "emptyTitle": "还没有入口工作人员",
+    "emptyDescription": "在下方添加团队成员,让其只在此活动扫描。",
+    "anywhere": "活动内任何位置",
+    "archivedCheckpoint": "(已归档的检查点)",
+    "scansAt": "扫描位置:{where}",
+    "member": "团队成员",
+    "chooseMember": "选择团队成员",
+    "chooseMemberError": "请选择团队成员。",
+    "checkpointGone": "其中一个检查点已不存在。请刷新后重试。",
+    "where": "可以在哪里扫描?",
+    "whereFor": "{name} 可以在哪里扫描?",
+    "whereHint": "勾选入口和区域。全部不勾选即为整个活动。",
+    "noCheckpoints": "此活动还没有入口或区域,所以工作人员可在整个活动扫描。",
+    "saved": "已保存。",
+    "saveFor": "保存 {name}",
+    "add": "添加入口工作人员",
+    "addTitle": "添加入口工作人员",
+    "addHint": "入口工作人员只在此活动、只在你选择的位置扫描。",
+    "remove": "移除",
+    "removeFor": "移除 {name}",
+    "readOnly": "只有所有者和管理员可以更改入口工作人员。",
+    "byCheckpoint": "按检查点划分的入口工作人员",
+    "nobody": "未分配",
+    "manage": "管理入口工作人员"
+  },
+  "signals": {
+    "title": "欺诈信号",
+    "description": "{open, plural, =0 {没有未处理的信号} other {# 个未处理信号}}",
+    "openList": "查看全部欺诈信号",
+    "noAccess": "只有在此活动扫描的人才能查看欺诈信号。",
+    "listTitle": "信号",
+    "emptyTitle": "没有信号",
+    "emptyDescription": "入口处的任何异常,例如同一门票出现在两个入口或设备扫描过快,都会显示在这里。",
+    "severity": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "status": {
+      "open": "未处理",
+      "acknowledged": "已确认",
+      "dismissed": "已忽略"
+    },
+    "acknowledge": "确认",
+    "acknowledgeFor": "确认:{what}",
+    "dismiss": "忽略",
+    "dismissFor": "忽略:{what}",
+    "done": {
+      "acknowledged": "已确认:团队可以看到有人在处理。",
+      "dismissed": "已忽略。"
+    },
+    "travel": "{from} → {to}",
+    "rate": "一分钟内扫描 {count} 次(上限 {limit})",
+    "refused": "{seconds} 秒内被拒 {count} 次",
+    "speed": "{seconds} 秒内 {metres} 米(每小时 {kmh} 公里)",
+    "settings": {
+      "title": "检测规则",
+      "description": "根据场地调整。信号会在在线时以及离线设备同步时产生。",
+      "maxScansPerMinute": "一个人每分钟最多扫描次数",
+      "maxScansPerMinuteHint": "默认 40。更快的设备会被标记。",
+      "maxScansPerMinuteError": "请输入 2 到 600 之间的整数。",
+      "maxTravelKmh": "检查点之间的最快步行速度(公里/小时)",
+      "maxTravelKmhHint": "默认 12。需要检查点位置。",
+      "maxTravelKmhError": "请输入 1 到 200 之间的整数。",
+      "save": "保存规则",
+      "saved": "规则已保存。",
+      "current": "标记每分钟扫描超过 {rate} 次的设备,以及在检查点之间移动快于每小时 {kmh} 公里的门票。"
     }
   }
 }

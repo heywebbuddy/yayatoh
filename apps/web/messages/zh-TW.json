@@ -631,10 +631,13 @@
       "superseded": "已重新發行票券的舊代碼",
       "provisional": "離線放行，待確認",
       "granted": "准許進入",
-      "no_access": "此通行證不包含該區域"
+      "no_access": "此通行證不包含該區域",
+      "wrong_checkpoint": "不是你的檢查點"
     },
     "alertsTitle": "{count, plural, other {離線期間有 # 張票被重複放行}}",
-    "alertsHint": "兩台掃描裝置在同步前放行了同一張票。請在入口核查這些賓客。"
+    "alertsHint": "兩台掃描裝置在同步前放行了同一張票。請在入口核查這些賓客。",
+    "wrongCheckpointHint": "你負責 {places}。請在「掃描位置」中選擇。",
+    "noCheckpointsHint": "你在這裡沒有分配檢查點。請詢問主辦方。"
   },
   "devices": {
     "title": "掃描裝置",
@@ -652,7 +655,10 @@
     "revoke": "撤銷",
     "revokeFor": "撤銷 {label}",
     "linkHint": "或在裝置上開啟此連結：它會為本活動設定好掃描器。",
-    "openScanner": "在此裝置上開啟掃描器"
+    "openScanner": "在此裝置上開啟掃描器",
+    "handedTo": "交給",
+    "orgDevice": "無人(可在任何位置掃描)",
+    "handedToName": "給 {name}"
   },
   "scan": {
     "title": "掃描器",
@@ -673,7 +679,9 @@
     "pending": "已在此裝置上核驗，同步後確認",
     "wipedTitle": "此掃描器已被清除",
     "wipedDescription": "其賓客名單和金鑰已被刪除。請向主辦單位索取新的裝置連結以繼續掃描。",
-    "cameraFailed": "無法啟動相機。請檢查相機權限，或輸入代碼。"
+    "cameraFailed": "無法啟動相機。請檢查相機權限，或輸入代碼。",
+    "notAssigned": "此裝置未分配給此活動。請詢問主辦方。",
+    "badScope": "下載的名單未通過安全檢查,未被使用。請重新連線後再試。"
   },
   "checkpoints": {
     "title": "入口和區域",
@@ -700,8 +708,18 @@
     "signalsTitle": "{count, plural, other {# 項待核查}}",
     "signal": {
       "two_entrances": "票券在第二個入口出示",
-      "invalid_burst": "連續出現多個無效代碼"
-    }
+      "invalid_burst": "連續出現多個無效代碼",
+      "device_velocity": "掃描速度超出人工可能",
+      "impossible_travel": "同一票券在相距過遠的兩處被放行",
+      "rejected_burst": "連續多次掃描被拒"
+    },
+    "chooseStand": "選擇你的檢查點",
+    "location": "位置(選填)",
+    "locationHint": "緯度和經度,例如來自地圖應用程式。用於發現在相距過遠的兩處被放行的票券。",
+    "latitude": "緯度",
+    "longitude": "經度",
+    "locationError": "請同時以數字填寫緯度(−90 到 90)和經度(−180 到 180),或都留空。",
+    "located": "位於 {lat}, {lng}"
   },
   "search": {
     "title": "搜尋",
@@ -1784,6 +1802,81 @@
       "copied": "已複製。",
       "emptyTitle": "目前沒有公開活動",
       "emptyDescription": "發布活動即可取得小工具程式碼。"
+    }
+  },
+  "doorStaff": {
+    "title": "入口工作人員",
+    "description": "誰在 {event} 掃描,以及在哪裡。",
+    "back": "返回簽到",
+    "noAccess": "你需要此活動的存取權限才能查看入口工作人員。",
+    "listTitle": "在此掃描的人",
+    "emptyTitle": "還沒有入口工作人員",
+    "emptyDescription": "在下方新增團隊成員,讓其只在此活動掃描。",
+    "anywhere": "活動內任何位置",
+    "archivedCheckpoint": "(已封存的檢查點)",
+    "scansAt": "掃描位置:{where}",
+    "member": "團隊成員",
+    "chooseMember": "選擇團隊成員",
+    "chooseMemberError": "請選擇團隊成員。",
+    "checkpointGone": "其中一個檢查點已不存在。請重新整理後再試。",
+    "where": "可以在哪裡掃描?",
+    "whereFor": "{name} 可以在哪裡掃描?",
+    "whereHint": "勾選入口和區域。全部不勾選即為整個活動。",
+    "noCheckpoints": "此活動還沒有入口或區域,所以工作人員可在整個活動掃描。",
+    "saved": "已儲存。",
+    "saveFor": "儲存 {name}",
+    "add": "新增入口工作人員",
+    "addTitle": "新增入口工作人員",
+    "addHint": "入口工作人員只在此活動、只在你選擇的位置掃描。",
+    "remove": "移除",
+    "removeFor": "移除 {name}",
+    "readOnly": "只有擁有者和管理員可以變更入口工作人員。",
+    "byCheckpoint": "依檢查點劃分的入口工作人員",
+    "nobody": "未分配",
+    "manage": "管理入口工作人員"
+  },
+  "signals": {
+    "title": "詐欺訊號",
+    "description": "{open, plural, =0 {沒有未處理的訊號} other {# 個未處理訊號}}",
+    "openList": "查看全部詐欺訊號",
+    "noAccess": "只有在此活動掃描的人才能查看詐欺訊號。",
+    "listTitle": "訊號",
+    "emptyTitle": "沒有訊號",
+    "emptyDescription": "入口處的任何異常,例如同一票券出現在兩個入口或裝置掃描過快,都會顯示在這裡。",
+    "severity": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "status": {
+      "open": "未處理",
+      "acknowledged": "已確認",
+      "dismissed": "已忽略"
+    },
+    "acknowledge": "確認",
+    "acknowledgeFor": "確認:{what}",
+    "dismiss": "忽略",
+    "dismissFor": "忽略:{what}",
+    "done": {
+      "acknowledged": "已確認:團隊可以看到有人在處理。",
+      "dismissed": "已忽略。"
+    },
+    "travel": "{from} → {to}",
+    "rate": "一分鐘內掃描 {count} 次(上限 {limit})",
+    "refused": "{seconds} 秒內被拒 {count} 次",
+    "speed": "{seconds} 秒內 {metres} 公尺(每小時 {kmh} 公里)",
+    "settings": {
+      "title": "偵測規則",
+      "description": "依場地調整。訊號會在連線時以及離線裝置同步時產生。",
+      "maxScansPerMinute": "一個人每分鐘最多掃描次數",
+      "maxScansPerMinuteHint": "預設 40。更快的裝置會被標記。",
+      "maxScansPerMinuteError": "請輸入 2 到 600 之間的整數。",
+      "maxTravelKmh": "檢查點之間的最快步行速度(公里/小時)",
+      "maxTravelKmhHint": "預設 12。需要檢查點位置。",
+      "maxTravelKmhError": "請輸入 1 到 200 之間的整數。",
+      "save": "儲存規則",
+      "saved": "規則已儲存。",
+      "current": "標記每分鐘掃描超過 {rate} 次的裝置,以及在檢查點之間移動快於每小時 {kmh} 公里的票券。"
     }
   }
 }

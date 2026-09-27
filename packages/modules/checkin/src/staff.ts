@@ -12,7 +12,7 @@ import { eventRoleCan, memberRoleTx, roleCan } from '@yayatoh/tenancy';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx } from './checkpoints.ts';
-import { devices } from './schema.ts';
+import { CHECKPOINT_KINDS, type CheckpointKind, devices } from './schema.ts';
 
 /**
  * Where a scanner may scan at one event: `null` = anywhere (the whole event and every
@@ -76,17 +76,26 @@ export const DoorStaffDto = z.object({
 });
 export type DoorStaffDto = z.infer<typeof DoorStaffDto>;
 
-/** The event's live door-staff assignments (staff screen, door screen). */
+/** The event's live door-staff assignments, and the checkpoints they can be given (staff screen). */
 export const doorStaffQuery = tenantQuery({
   name: 'checkin.doorStaff',
   input: z.object({ eventId: z.uuid() }),
-  output: z.array(DoorStaffDto),
+  output: z.object({
+    staff: z.array(DoorStaffDto),
+    checkpoints: z.array(z.object({ id: z.uuid(), name: z.string(), kind: z.enum(CHECKPOINT_KINDS) })),
+  }),
   entitlement: 'checkin',
   permission: 'events:read',
-  handler: async ({ input, ctx, tx }) =>
-    (await eventStaffTx(tx, input.eventId, ctx.now))
+  handler: async ({ input, ctx, tx }) => ({
+    staff: (await eventStaffTx(tx, input.eventId, ctx.now))
       .filter((g) => g.role === 'door_staff')
       .map((g) => ({ userId: g.userId, checkpointIds: [...g.checkpointIds], expiresAt: g.expiresAt })),
+    checkpoints: (await checkpointsTx(tx, input.eventId)).map((c) => ({
+      id: c.id,
+      name: c.name,
+      kind: c.kind as CheckpointKind,
+    })),
+  }),
 });
 
 /**
@@ -149,4 +158,17 @@ export const removeDoorStaffCommand = tenantCommand({
     targetId: input.eventId,
     data: { userId: input.userId },
   }),
+});
+
+/** Where the signed-in scanner may scan at this event (the door screen's "Scanning at" list). */
+export const myScanScopeQuery = tenantQuery({
+  name: 'checkin.myScanScope',
+  input: z.object({ eventId: z.uuid() }),
+  output: z.object({ checkpointIds: z.array(z.uuid()).nullable() }),
+  entitlement: 'checkin',
+  permission: 'checkin:scan',
+  handler: async ({ input, ctx, tx }) => {
+    const scope = await actorScanScopeTx(tx, ctx, input.eventId);
+    return { checkpointIds: scope === null ? null : [...scope] };
+  },
 });

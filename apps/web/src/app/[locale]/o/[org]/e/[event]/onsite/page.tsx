@@ -1,16 +1,25 @@
-import { checkinStatusQuery, listCheckpointsQuery, listDevicesQuery } from '@yayatoh/checkin';
+import { getUsersByIds } from '@yayatoh/auth';
+import {
+  checkinStatusQuery,
+  doorStaffQuery,
+  listCheckpointsQuery,
+  listDevicesQuery,
+  myScanScopeQuery,
+} from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Button, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { CheckpointForm } from '@/components/checkpoint-form.tsx';
 import { DeviceEnrollForm } from '@/components/device-enroll-form.tsx';
 import { Scanner } from '@/components/scanner.tsx';
+import { SEVERITY_DOT, signalSummary } from '@/components/signal-summary.ts';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -36,6 +45,7 @@ const DOT = {
   provisional: 'warning',
   granted: 'success',
   no_access: 'danger',
+  wrong_checkpoint: 'danger',
 } as const;
 
 /** Door check-in: HID scanners and manual entry, entrances and zones, devices and alerts. */
@@ -76,6 +86,26 @@ export default async function OnsitePage({
     ? await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports)
     : [];
   const typeName = new Map(ticketTypes.map((tt) => [tt.id, tt.name]));
+  // Checkpoint-scoped door staff only see (and may only pick) their checkpoints.
+  const scope = await executeQuery(myScanScopeQuery, { eventId: ev.id }, data.ctx, ports);
+  const standable = checkpoints.filter(
+    (c) => !c.archived && (scope.checkpointIds === null || scope.checkpointIds.includes(c.id)),
+  );
+  const doorStaff =
+    manageDevices && roleCan(data.role, 'events:read')
+      ? (await executeQuery(doorStaffQuery, { eventId: ev.id }, data.ctx, ports)).staff
+      : [];
+  const people = await getUsersByIds([
+    ...new Set([
+      ...status.staff.flatMap((s) => s.userIds),
+      ...status.signals.flatMap((s) => (s.userId ? [s.userId] : [])),
+      ...devices.flatMap((d) => (d.assignedUserId ? [d.assignedUserId] : [])),
+      ...doorStaff.map((d) => d.userId),
+    ]),
+  ]);
+  const nameOf = (id: string) => people.get(id)?.name ?? t('team.unknownUser');
+  const cpName = new Map(checkpoints.map((c) => [c.id, c.name]));
+  const base = `/o/${org}/e/${event}/onsite`;
   const seen = new Intl.DateTimeFormat(locale, {
     timeZone: ev.timezone,
     dateStyle: 'medium',
@@ -107,7 +137,8 @@ export default async function OnsitePage({
       <Scanner
         action={scanAction.bind(null, org, event)}
         timeZone={ev.timezone}
-        checkpoints={checkpoints.filter((c) => !c.archived).map((c) => ({ id: c.id, name: c.name }))}
+        checkpoints={standable.map((c) => ({ id: c.id, name: c.name }))}
+        scoped={scope.checkpointIds !== null}
       />
       {status.signals.length > 0 ? (
         <section
@@ -117,17 +148,55 @@ export default async function OnsitePage({
           <h2 id="signals-heading" className="text-section">
             {t('checkpoints.signalsTitle', { count: status.signals.length })}
           </h2>
-          <ul className="flex list-none flex-col gap-1 p-0 text-body">
-            {status.signals.map((s, i) => (
-              <li key={`${s.at.toISOString()}-${i}`}>
-                {time.format(s.at)} · {t(`checkpoints.signal.${s.kind}`)}
-                {s.holderName ? ` · ${s.holderName}` : ''}
-                {s.checkpointName ? ` · ${s.checkpointName}` : ''}
+          <ul className="flex list-none flex-col gap-1.5 p-0 text-body">
+            {status.signals.map((s) => (
+              <li key={s.id} className="flex flex-wrap items-center gap-x-2">
+                <StatusDot status={SEVERITY_DOT[s.severity]} label={t(`signals.severity.${s.severity}`)} />
+                <span>
+                  {time.format(s.at)} · {t(`checkpoints.signal.${s.kind}`)}
+                  {signalSummary(s, t, nameOf)}
+                </span>
               </li>
             ))}
           </ul>
+          <Link href={`${base}/signals`} className="self-start text-body underline">
+            {t('signals.openList')}
+          </Link>
         </section>
-      ) : null}
+      ) : (
+        <p className="text-caption text-zinc-600">
+          <Link href={`${base}/signals`} className="underline">
+            {t('signals.openList')}
+          </Link>
+        </p>
+      )}
+      <section aria-labelledby="door-staff-heading" className="flex flex-col gap-3">
+        <h2 id="door-staff-heading" className="text-section">
+          {t('doorStaff.byCheckpoint')}
+        </h2>
+        <ul className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 bg-white p-0">
+          {status.staff
+            .filter((s) => s.checkpointId === null || cpName.has(s.checkpointId))
+            .map((s) => (
+              <li
+                key={s.checkpointId ?? 'event'}
+                className="flex flex-wrap items-baseline gap-x-3 px-4 py-2.5"
+              >
+                <span className="min-w-32 font-medium">
+                  {s.checkpointId ? cpName.get(s.checkpointId) : t('doorStaff.anywhere')}
+                </span>
+                <span className="text-body text-zinc-700">
+                  {s.userIds.length > 0 ? s.userIds.map(nameOf).join(', ') : t('doorStaff.nobody')}
+                </span>
+              </li>
+            ))}
+        </ul>
+        {roleCan(data.role, 'events:read') ? (
+          <Link href={`${base}/staff`} className={buttonClass('secondary', 'sm', 'self-start')}>
+            {t('doorStaff.manage')}
+          </Link>
+        ) : null}
+      </section>
       {status.alerts.length > 0 ? (
         <section
           aria-labelledby="alerts-heading"
@@ -205,6 +274,9 @@ export default async function OnsitePage({
                               : t('checkpoints.zoneFor', {
                                   types: c.ticketTypeIds.map((id) => typeName.get(id) ?? '—').join(', '),
                                 })}
+                        {c.latitude !== null && c.longitude !== null
+                          ? ` · ${t('checkpoints.located', { lat: c.latitude.toFixed(5), lng: c.longitude.toFixed(5) })}`
+                          : ''}
                       </span>
                     </span>
                     <form action={checkpointArchivedAction.bind(null, org, event, c.id, !c.archived)}>
@@ -244,7 +316,15 @@ export default async function OnsitePage({
                 {devices.map((d) => (
                   <li key={d.id} className="flex flex-wrap items-center gap-3 py-2.5">
                     <span className="min-w-0 flex-1">
-                      <span className="block">{d.label}</span>
+                      <span className="block">
+                        {d.label}
+                        {d.assignedUserId ? (
+                          <span className="text-caption text-zinc-500">
+                            {' '}
+                            · {t('devices.handedToName', { name: nameOf(d.assignedUserId) })}
+                          </span>
+                        ) : null}
+                      </span>
                       <span className="text-caption text-zinc-500">
                         {d.revoked
                           ? t('devices.revoked')
@@ -290,7 +370,11 @@ export default async function OnsitePage({
               </ul>
             </Card>
           ) : null}
-          <DeviceEnrollForm eventId={ev.id} action={enrollDeviceAction.bind(null, org, event)} />
+          <DeviceEnrollForm
+            eventId={ev.id}
+            action={enrollDeviceAction.bind(null, org, event)}
+            staff={doorStaff.map((d) => ({ id: d.userId, name: nameOf(d.userId) }))}
+          />
         </section>
       ) : null}
     </>

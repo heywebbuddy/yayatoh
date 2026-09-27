@@ -53,6 +53,7 @@ export {
 export {
   DoorStaffDto,
   doorStaffQuery,
+  myScanScopeQuery,
   removeDoorStaffCommand,
   type ScanScope,
   setDoorStaffCommand,

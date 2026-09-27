@@ -631,10 +631,13 @@
       "superseded": "Código antiguo de una entrada reemitida",
       "provisional": "Acceso sin conexión, pendiente de confirmar",
       "granted": "Acceso permitido",
-      "no_access": "Este pase no incluye esta zona"
+      "no_access": "Este pase no incluye esta zona",
+      "wrong_checkpoint": "No es tu punto de control"
     },
     "alertsTitle": "{count, plural, one {# entrada se aceptó dos veces sin conexión} other {# entradas se aceptaron dos veces sin conexión}}",
-    "alertsHint": "Dos escáneres aceptaron la misma entrada antes de poder sincronizarse. Revisa a estos invitados en la puerta."
+    "alertsHint": "Dos escáneres aceptaron la misma entrada antes de poder sincronizarse. Revisa a estos invitados en la puerta.",
+    "wrongCheckpointHint": "Escaneas en {places}. Elígelo en «Escaneando en».",
+    "noCheckpointsHint": "No tienes ningún punto de control asignado aquí. Pregunta al organizador."
   },
   "devices": {
     "title": "Dispositivos de escaneo",
@@ -652,7 +655,10 @@
     "revoke": "Revocar",
     "revokeFor": "Revocar {label}",
     "linkHint": "O abre este enlace en el dispositivo: configura el escáner para este evento.",
-    "openScanner": "Abrir el escáner en este dispositivo"
+    "openScanner": "Abrir el escáner en este dispositivo",
+    "handedTo": "Entregado a",
+    "orgDevice": "Nadie (escanea en cualquier lugar)",
+    "handedToName": "para {name}"
   },
   "scan": {
     "title": "Escáner",
@@ -673,7 +679,9 @@
     "pending": "Comprobado en este dispositivo: se confirmará al sincronizar",
     "wipedTitle": "Este escáner se ha borrado",
     "wipedDescription": "Se eliminaron su lista de invitados y su clave. Pide a un organizador un nuevo enlace de dispositivo para volver a escanear.",
-    "cameraFailed": "No se pudo iniciar la cámara. Revisa el permiso de la cámara o escribe el código."
+    "cameraFailed": "No se pudo iniciar la cámara. Revisa el permiso de la cámara o escribe el código.",
+    "notAssigned": "Este dispositivo no está asignado a este evento. Pregunta al organizador.",
+    "badScope": "La lista descargada no superó la comprobación de seguridad y no se usó. Vuelve a conectarte para reintentar."
   },
   "checkpoints": {
     "title": "Accesos y zonas",
@@ -700,8 +708,18 @@
     "signalsTitle": "{count, plural, one {# cosa por revisar} other {# cosas por revisar}}",
     "signal": {
       "two_entrances": "Entrada mostrada en un segundo acceso",
-      "invalid_burst": "Varios códigos no válidos seguidos"
-    }
+      "invalid_burst": "Varios códigos no válidos seguidos",
+      "device_velocity": "Escaneo más rápido de lo que puede una persona",
+      "impossible_travel": "Entrada admitida en dos lugares demasiado alejados",
+      "rejected_burst": "Muchos escaneos rechazados seguidos"
+    },
+    "chooseStand": "Elige tu punto de control",
+    "location": "Ubicación (opcional)",
+    "locationHint": "Latitud y longitud, por ejemplo de una app de mapas. Sirve para detectar una entrada admitida en dos lugares demasiado alejados.",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "locationError": "Introduce latitud (−90 a 90) y longitud (−180 a 180) como números, o deja ambos vacíos.",
+    "located": "en {lat}, {lng}"
   },
   "search": {
     "title": "Buscar",
@@ -1784,6 +1802,81 @@
       "copied": "Copiado.",
       "emptyTitle": "Aún no hay eventos públicos",
       "emptyDescription": "Publica un evento para obtener su fragmento del widget."
+    }
+  },
+  "doorStaff": {
+    "title": "Personal de acceso",
+    "description": "Quién escanea en {event} y dónde.",
+    "back": "Volver al control de acceso",
+    "noAccess": "Necesitas acceso a este evento para ver su personal de acceso.",
+    "listTitle": "Quién escanea aquí",
+    "emptyTitle": "Aún no hay personal de acceso",
+    "emptyDescription": "Añade abajo a alguien del equipo para que escanee solo en este evento.",
+    "anywhere": "En cualquier lugar del evento",
+    "archivedCheckpoint": "(punto de control archivado)",
+    "scansAt": "Escanea en: {where}",
+    "member": "Miembro del equipo",
+    "chooseMember": "Elige a alguien del equipo",
+    "chooseMemberError": "Elige a alguien del equipo.",
+    "checkpointGone": "Uno de esos puntos de control ya no existe. Recarga e inténtalo de nuevo.",
+    "where": "¿Dónde puede escanear?",
+    "whereFor": "¿Dónde puede escanear {name}?",
+    "whereHint": "Marca las entradas y zonas. Sin marcar = todo el evento.",
+    "noCheckpoints": "Este evento aún no tiene entradas ni zonas, así que el personal escanea en todo el evento.",
+    "saved": "Guardado.",
+    "saveFor": "Guardar {name}",
+    "add": "Añadir personal de acceso",
+    "addTitle": "Añadir personal de acceso",
+    "addHint": "El personal de acceso escanea solo en este evento y solo donde elijas.",
+    "remove": "Quitar",
+    "removeFor": "Quitar a {name}",
+    "readOnly": "Solo propietarios y administradores pueden cambiar el personal de acceso.",
+    "byCheckpoint": "Personal de acceso por punto de control",
+    "nobody": "Nadie asignado",
+    "manage": "Gestionar personal de acceso"
+  },
+  "signals": {
+    "title": "Señales de fraude",
+    "description": "{open, plural, =0 {Nada abierto} one {# señal abierta} other {# señales abiertas}}",
+    "openList": "Ver todas las señales de fraude",
+    "noAccess": "Solo quienes escanean en este evento pueden ver sus señales de fraude.",
+    "listTitle": "Señales",
+    "emptyTitle": "Sin señales",
+    "emptyDescription": "Cualquier cosa inusual en los accesos, como una entrada en dos puertas o un dispositivo que escanea demasiado rápido, aparece aquí.",
+    "severity": {
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
+    "status": {
+      "open": "Abierta",
+      "acknowledged": "Atendida",
+      "dismissed": "Descartada"
+    },
+    "acknowledge": "Atender",
+    "acknowledgeFor": "Atender: {what}",
+    "dismiss": "Descartar",
+    "dismissFor": "Descartar: {what}",
+    "done": {
+      "acknowledged": "Atendida: el equipo ve que alguien se encarga.",
+      "dismissed": "Descartada."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} escaneos en un minuto (límite {limit})",
+    "refused": "{count} rechazados en {seconds} s",
+    "speed": "{metres} m en {seconds} s ({kmh} km/h)",
+    "settings": {
+      "title": "Reglas de detección",
+      "description": "Ajústalas a este recinto. Las señales se generan en línea y cuando los dispositivos sin conexión sincronizan.",
+      "maxScansPerMinute": "Máximo de escaneos que una persona hace en un minuto",
+      "maxScansPerMinuteHint": "Por defecto 40. Un dispositivo más rápido se marca.",
+      "maxScansPerMinuteError": "Introduce un número entero de 2 a 600.",
+      "maxTravelKmh": "Velocidad máxima a pie entre puntos de control (km/h)",
+      "maxTravelKmhHint": "Por defecto 12. Requiere ubicaciones de los puntos de control.",
+      "maxTravelKmhError": "Introduce un número entero de 1 a 200.",
+      "save": "Guardar reglas",
+      "saved": "Reglas guardadas.",
+      "current": "Marca un dispositivo con más de {rate} escaneos por minuto y una entrada que se mueve a más de {kmh} km/h entre puntos de control."
     }
   }
 }

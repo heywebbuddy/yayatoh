@@ -67,8 +67,9 @@ export async function enrollDeviceAction(
 ): Promise<EnrollState> {
   const { data } = await loadEvent(org, event);
   const label = String(form.get('label') ?? '').trim();
+  const assignedUserId = String(form.get('assignedUserId') ?? '') || null;
   try {
-    const r = await executeCommand(enrollDeviceCommand, { label }, data.ctx, ports);
+    const r = await executeCommand(enrollDeviceCommand, { label, assignedUserId }, data.ctx, ports);
     revalidatePath(`/o/${org}/e/${event}/onsite`);
     return { kind: 'enrolled', label, token: r.token };
   } catch (err) {
@@ -87,7 +88,20 @@ export async function deviceStateAction(
   revalidatePath(`/o/${org}/e/${event}/onsite`);
 }
 
-export type CheckpointFormState = { readonly ok: boolean; readonly code: string | null };
+export type CheckpointFormState = {
+  readonly ok: boolean;
+  readonly code: string | null;
+  /** The field a validation error is about (the location pair). */
+  readonly field?: string | null;
+};
+
+/** Blank → null; anything else must be a finite number (a comma decimal is accepted). */
+function coordinate(v: FormDataEntryValue | null): number | null | 'bad' {
+  const s = String(v ?? '').trim();
+  if (s === '') return null;
+  const n = Number(s.replace(',', '.'));
+  return Number.isFinite(n) ? n : 'bad';
+}
 
 export async function createCheckpointAction(
   org: string,
@@ -96,6 +110,15 @@ export async function createCheckpointAction(
   form: FormData,
 ): Promise<CheckpointFormState> {
   const { data, event: ev } = await loadEvent(org, event);
+  const latitude = coordinate(form.get('latitude'));
+  const longitude = coordinate(form.get('longitude'));
+  const badLocation =
+    latitude === 'bad' ||
+    longitude === 'bad' ||
+    (latitude === null) !== (longitude === null) ||
+    (latitude !== null && Math.abs(latitude) > 90) ||
+    (longitude !== null && Math.abs(longitude) > 180);
+  if (badLocation) return { ok: false, code: 'validation_failed', field: 'location' };
   try {
     await executeCommand(
       createCheckpointCommand,
@@ -104,6 +127,8 @@ export async function createCheckpointAction(
         name: String(form.get('name') ?? ''),
         kind: form.get('kind') === 'zone' ? 'zone' : 'entrance',
         ticketTypeIds: form.get('kind') === 'zone' ? form.getAll('ticketTypeIds').map(String) : [],
+        latitude,
+        longitude,
       },
       data.ctx,
       ports,

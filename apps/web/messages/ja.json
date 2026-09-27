@@ -631,10 +631,13 @@
       "superseded": "再発行されたチケットの旧コードです",
       "provisional": "オフラインで入場済み（確認待ち）",
       "granted": "入場可",
-      "no_access": "このパスではこのエリアに入れません"
+      "no_access": "このパスではこのエリアに入れません",
+      "wrong_checkpoint": "Niet jouw controlepunt"
     },
     "alertsTitle": "{count, plural, other {オフライン中に#枚のチケットで2回入場がありました}}",
-    "alertsHint": "同期される前に、2台のスキャナーが同じチケットで入場を許可しました。入口でこれらのゲストを確認してください。"
+    "alertsHint": "同期される前に、2台のスキャナーが同じチケットで入場を許可しました。入口でこれらのゲストを確認してください。",
+    "wrongCheckpointHint": "Jij scant bij {places}. Kies het onder ‘Scannen bij’.",
+    "noCheckpointsHint": "Je bent hier aan geen controlepunt toegewezen. Vraag het de organisator."
   },
   "devices": {
     "title": "スキャン端末",
@@ -652,7 +655,10 @@
     "revoke": "取り消す",
     "revokeFor": "{label}を取り消す",
     "linkHint": "または端末でこのリンクを開いてください。このイベント用にスキャナーが設定されます。",
-    "openScanner": "この端末でスキャナーを開く"
+    "openScanner": "この端末でスキャナーを開く",
+    "handedTo": "Gegeven aan",
+    "orgDevice": "Niemand (scant overal)",
+    "handedToName": "voor {name}"
   },
   "scan": {
     "title": "スキャナー",
@@ -673,7 +679,9 @@
     "pending": "この端末で確認済み（同期後に確定）",
     "wipedTitle": "このスキャナーは消去されました",
     "wipedDescription": "ゲストリストとキーは削除されました。再度スキャンするには、主催者に新しい端末リンクを依頼してください。",
-    "cameraFailed": "カメラを起動できませんでした。カメラの権限を確認するか、コードを入力してください。"
+    "cameraFailed": "カメラを起動できませんでした。カメラの権限を確認するか、コードを入力してください。",
+    "notAssigned": "Dit apparaat is niet aan dit evenement toegewezen. Vraag het de organisator.",
+    "badScope": "De gedownloade lijst kwam niet door de beveiligingscontrole en wordt niet gebruikt. Maak opnieuw verbinding."
   },
   "checkpoints": {
     "title": "入口とゾーン",
@@ -700,8 +708,18 @@
     "signalsTitle": "{count, plural, other {確認事項 #件}}",
     "signal": {
       "two_entrances": "2か所目の入口でチケットが提示されました",
-      "invalid_burst": "無効なコードが連続しています"
-    }
+      "invalid_burst": "無効なコードが連続しています",
+      "device_velocity": "Sneller gescand dan een mens kan",
+      "impossible_travel": "Ticket binnengelaten op twee te ver uiteen liggende plekken",
+      "rejected_burst": "Veel geweigerde scans achter elkaar"
+    },
+    "chooseStand": "Kies je controlepunt",
+    "location": "Locatie (optioneel)",
+    "locationHint": "Breedte- en lengtegraad, bijvoorbeeld uit een kaart-app. Zo zie je een ticket dat op twee te ver uiteen liggende plekken is binnengelaten.",
+    "latitude": "Breedtegraad",
+    "longitude": "Lengtegraad",
+    "locationError": "Vul breedtegraad (−90 tot 90) en lengtegraad (−180 tot 180) in als getallen, of laat beide leeg.",
+    "located": "op {lat}, {lng}"
   },
   "search": {
     "title": "検索",
@@ -1784,6 +1802,81 @@
       "copied": "コピーしました。",
       "emptyTitle": "公開イベントはまだありません",
       "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
+    }
+  },
+  "doorStaff": {
+    "title": "Deurpersoneel",
+    "description": "Wie er scant bij {event}, en waar.",
+    "back": "Terug naar inchecken",
+    "noAccess": "Je hebt toegang tot dit evenement nodig om het deurpersoneel te zien.",
+    "listTitle": "Wie hier scant",
+    "emptyTitle": "Nog geen deurpersoneel",
+    "emptyDescription": "Voeg hieronder een teamlid toe om alleen bij dit evenement te scannen.",
+    "anywhere": "Overal op het evenement",
+    "archivedCheckpoint": "(gearchiveerd controlepunt)",
+    "scansAt": "Scant bij: {where}",
+    "member": "Teamlid",
+    "chooseMember": "Kies een teamlid",
+    "chooseMemberError": "Kies een teamlid.",
+    "checkpointGone": "Een van die controlepunten bestaat niet meer. Laad opnieuw en probeer het nog eens.",
+    "where": "Waar mag er gescand worden?",
+    "whereFor": "Waar mag {name} scannen?",
+    "whereHint": "Vink ingangen en zones aan. Niets aangevinkt = het hele evenement.",
+    "noCheckpoints": "Dit evenement heeft nog geen ingangen of zones, dus deurpersoneel scant overal.",
+    "saved": "Opgeslagen.",
+    "saveFor": "{name} opslaan",
+    "add": "Deurpersoneel toevoegen",
+    "addTitle": "Deurpersoneel toevoegen",
+    "addHint": "Deurpersoneel scant alleen bij dit evenement en alleen waar jij kiest.",
+    "remove": "Verwijderen",
+    "removeFor": "{name} verwijderen",
+    "readOnly": "Alleen eigenaren en beheerders kunnen deurpersoneel wijzigen.",
+    "byCheckpoint": "Deurpersoneel per controlepunt",
+    "nobody": "Niemand toegewezen",
+    "manage": "Deurpersoneel beheren"
+  },
+  "signals": {
+    "title": "Fraudesignalen",
+    "description": "{open, plural, =0 {Niets open} one {# open signaal} other {# open signalen}}",
+    "openList": "Alle fraudesignalen bekijken",
+    "noAccess": "Alleen wie bij dit evenement scant, ziet de fraudesignalen.",
+    "listTitle": "Signalen",
+    "emptyTitle": "Geen signalen",
+    "emptyDescription": "Alles wat opvalt bij de deur, zoals een ticket bij twee ingangen of een apparaat dat te snel scant, verschijnt hier.",
+    "severity": {
+      "high": "Hoog",
+      "medium": "Middel",
+      "low": "Laag"
+    },
+    "status": {
+      "open": "Open",
+      "acknowledged": "Bevestigd",
+      "dismissed": "Genegeerd"
+    },
+    "acknowledge": "Bevestigen",
+    "acknowledgeFor": "Bevestigen: {what}",
+    "dismiss": "Negeren",
+    "dismissFor": "Negeren: {what}",
+    "done": {
+      "acknowledged": "Bevestigd: het team ziet dat iemand ermee bezig is.",
+      "dismissed": "Genegeerd."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} scans in een minuut (limiet {limit})",
+    "refused": "{count} geweigerd in {seconds} s",
+    "speed": "{metres} m in {seconds} s ({kmh} km/u)",
+    "settings": {
+      "title": "Detectieregels",
+      "description": "Stem ze af op deze locatie. Signalen ontstaan online en wanneer offline apparaten synchroniseren.",
+      "maxScansPerMinute": "Maximaal aantal scans per minuut voor een mens",
+      "maxScansPerMinuteHint": "Standaard 40. Een sneller apparaat wordt gemarkeerd.",
+      "maxScansPerMinuteError": "Vul een heel getal in van 2 tot 600.",
+      "maxTravelKmh": "Hoogste loopsnelheid tussen controlepunten (km/u)",
+      "maxTravelKmhHint": "Standaard 12. Vereist locaties van controlepunten.",
+      "maxTravelKmhError": "Vul een heel getal in van 1 tot 200.",
+      "save": "Regels opslaan",
+      "saved": "Regels opgeslagen.",
+      "current": "Markeert een apparaat met meer dan {rate} scans per minuut en een ticket dat sneller dan {kmh} km/u tussen controlepunten gaat."
     }
   }
 }

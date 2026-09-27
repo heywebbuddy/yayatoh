@@ -631,10 +631,13 @@
       "superseded": "Codice vecchio di un biglietto riemesso",
       "provisional": "Ingresso offline, da confermare",
       "granted": "Accesso consentito",
-      "no_access": "Questo pass non include quest’area"
+      "no_access": "Questo pass non include quest’area",
+      "wrong_checkpoint": "Non è il tuo varco"
     },
     "alertsTitle": "{count, plural, one {# biglietto è stato accettato due volte offline} other {# biglietti sono stati accettati due volte offline}}",
-    "alertsHint": "Due scanner hanno accettato lo stesso biglietto prima di potersi sincronizzare. Verifica questi ospiti all’ingresso."
+    "alertsHint": "Due scanner hanno accettato lo stesso biglietto prima di potersi sincronizzare. Verifica questi ospiti all’ingresso.",
+    "wrongCheckpointHint": "Scansioni a {places}. Sceglilo in «Scansione presso».",
+    "noCheckpointsHint": "Non hai varchi assegnati qui. Chiedi all’organizzatore."
   },
   "devices": {
     "title": "Dispositivi di scansione",
@@ -652,7 +655,10 @@
     "revoke": "Revoca",
     "revokeFor": "Revoca {label}",
     "linkHint": "Oppure apri questo link sul dispositivo: configura lo scanner per questo evento.",
-    "openScanner": "Apri lo scanner su questo dispositivo"
+    "openScanner": "Apri lo scanner su questo dispositivo",
+    "handedTo": "Affidato a",
+    "orgDevice": "Nessuno (scansiona ovunque)",
+    "handedToName": "per {name}"
   },
   "scan": {
     "title": "Scanner",
@@ -673,7 +679,9 @@
     "pending": "Verificato su questo dispositivo: sarà confermato dopo la sincronizzazione",
     "wipedTitle": "Questo scanner è stato cancellato",
     "wipedDescription": "La lista ospiti e la chiave sono state rimosse. Chiedi a un organizzatore un nuovo link del dispositivo per tornare a scansionare.",
-    "cameraFailed": "Impossibile avviare la fotocamera. Controlla l'autorizzazione della fotocamera o digita il codice."
+    "cameraFailed": "Impossibile avviare la fotocamera. Controlla l'autorizzazione della fotocamera o digita il codice.",
+    "notAssigned": "Questo dispositivo non è assegnato a questo evento. Chiedi all’organizzatore.",
+    "badScope": "L’elenco scaricato non ha superato il controllo di sicurezza e non è stato usato. Riconnettiti per riprovare."
   },
   "checkpoints": {
     "title": "Ingressi e zone",
@@ -700,8 +708,18 @@
     "signalsTitle": "{count, plural, one {# cosa da verificare} other {# cose da verificare}}",
     "signal": {
       "two_entrances": "Biglietto mostrato a un secondo ingresso",
-      "invalid_burst": "Diversi codici non validi di fila"
-    }
+      "invalid_burst": "Diversi codici non validi di fila",
+      "device_velocity": "Scansioni più veloci di quanto possa una persona",
+      "impossible_travel": "Biglietto ammesso in due punti troppo distanti",
+      "rejected_burst": "Molte scansioni rifiutate di fila"
+    },
+    "chooseStand": "Scegli il tuo varco",
+    "location": "Posizione (facoltativa)",
+    "locationHint": "Latitudine e longitudine, ad esempio da un’app di mappe. Serve a notare un biglietto ammesso in due punti troppo distanti.",
+    "latitude": "Latitudine",
+    "longitude": "Longitudine",
+    "locationError": "Inserisci latitudine (da −90 a 90) e longitudine (da −180 a 180) come numeri, oppure lasciale vuote entrambe.",
+    "located": "a {lat}, {lng}"
   },
   "search": {
     "title": "Cerca",
@@ -1784,6 +1802,81 @@
       "copied": "Copiato.",
       "emptyTitle": "Ancora nessun evento pubblico",
       "emptyDescription": "Pubblica un evento per ottenere lo snippet del widget."
+    }
+  },
+  "doorStaff": {
+    "title": "Personale agli ingressi",
+    "description": "Chi scansiona a {event}, e dove.",
+    "back": "Torna al check-in",
+    "noAccess": "Ti serve l’accesso a questo evento per vederne il personale agli ingressi.",
+    "listTitle": "Chi scansiona qui",
+    "emptyTitle": "Ancora nessun personale agli ingressi",
+    "emptyDescription": "Aggiungi qui sotto un membro del team per farlo scansionare solo a questo evento.",
+    "anywhere": "Ovunque all’evento",
+    "archivedCheckpoint": "(varco archiviato)",
+    "scansAt": "Scansiona a: {where}",
+    "member": "Membro del team",
+    "chooseMember": "Scegli un membro del team",
+    "chooseMemberError": "Scegli un membro del team.",
+    "checkpointGone": "Uno di quei varchi non esiste più. Ricarica e riprova.",
+    "where": "Dove può scansionare?",
+    "whereFor": "Dove può scansionare {name}?",
+    "whereHint": "Seleziona ingressi e zone. Nessuna selezione = tutto l’evento.",
+    "noCheckpoints": "Questo evento non ha ancora ingressi o zone, quindi il personale scansiona ovunque.",
+    "saved": "Salvato.",
+    "saveFor": "Salva {name}",
+    "add": "Aggiungi personale",
+    "addTitle": "Aggiungi personale",
+    "addHint": "Il personale scansiona solo a questo evento e solo dove scegli tu.",
+    "remove": "Rimuovi",
+    "removeFor": "Rimuovi {name}",
+    "readOnly": "Solo proprietari e amministratori possono modificare il personale.",
+    "byCheckpoint": "Personale per varco",
+    "nobody": "Nessuno assegnato",
+    "manage": "Gestisci il personale"
+  },
+  "signals": {
+    "title": "Segnali di frode",
+    "description": "{open, plural, =0 {Niente di aperto} one {# segnale aperto} other {# segnali aperti}}",
+    "openList": "Vedi tutti i segnali di frode",
+    "noAccess": "Solo chi scansiona a questo evento può vederne i segnali di frode.",
+    "listTitle": "Segnali",
+    "emptyTitle": "Nessun segnale",
+    "emptyDescription": "Tutto ciò che è insolito agli ingressi, come un biglietto a due varchi o un dispositivo che scansiona troppo in fretta, appare qui.",
+    "severity": {
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Bassa"
+    },
+    "status": {
+      "open": "Aperto",
+      "acknowledged": "Preso in carico",
+      "dismissed": "Ignorato"
+    },
+    "acknowledge": "Prendi in carico",
+    "acknowledgeFor": "Prendi in carico: {what}",
+    "dismiss": "Ignora",
+    "dismissFor": "Ignora: {what}",
+    "done": {
+      "acknowledged": "Preso in carico: il team vede che qualcuno se ne occupa.",
+      "dismissed": "Ignorato."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} scansioni in un minuto (limite {limit})",
+    "refused": "{count} rifiutate in {seconds} s",
+    "speed": "{metres} m in {seconds} s ({kmh} km/h)",
+    "settings": {
+      "title": "Regole di rilevamento",
+      "description": "Adattale a questa sede. I segnali nascono online e quando i dispositivi offline si sincronizzano.",
+      "maxScansPerMinute": "Scansioni massime al minuto per una persona",
+      "maxScansPerMinuteHint": "Predefinito 40. Un dispositivo più veloce viene segnalato.",
+      "maxScansPerMinuteError": "Inserisci un numero intero da 2 a 600.",
+      "maxTravelKmh": "Velocità massima a piedi tra i varchi (km/h)",
+      "maxTravelKmhHint": "Predefinito 12. Servono le posizioni dei varchi.",
+      "maxTravelKmhError": "Inserisci un numero intero da 1 a 200.",
+      "save": "Salva regole",
+      "saved": "Regole salvate.",
+      "current": "Segnala un dispositivo con più di {rate} scansioni al minuto e un biglietto che si sposta a più di {kmh} km/h tra i varchi."
     }
   }
 }

@@ -125,7 +125,8 @@ describe('checkpoint-scoped door staff (M1.9d)', () => {
 
     expect(await set([north, north])).toMatchObject({ userId: a.viewerId, checkpointIds: [north] });
     const staff = await executeQuery(doorStaffQuery, { eventId }, viewer(), ports);
-    expect(staff).toEqual([{ userId: a.viewerId, checkpointIds: [north], expiresAt: null }]);
+    expect(staff.staff).toEqual([{ userId: a.viewerId, checkpointIds: [north], expiresAt: null }]);
+    expect(staff.checkpoints.map((c) => c.name)).toEqual(['North gate', 'South gate', 'Lounge']);
     const [audit] = await withTenant(a.ctx(), (tx) =>
       tx.execute<{ data: { userId: string; checkpointIds: string[] } }>(
         sql`select data from platform.audit_events where action = 'event.door_staff.set' and target_id = ${eventId} order by created_at desc limit 1`,
@@ -150,7 +151,10 @@ describe('checkpoint-scoped door staff (M1.9d)', () => {
     await expect(
       executeCommand(setDoorStaffCommand, { eventId, userId: b.viewerId, checkpointIds: [] }, b.ctx(), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
-    expect(await executeQuery(doorStaffQuery, { eventId }, b.ctx(), ports)).toEqual([]);
+    expect(await executeQuery(doorStaffQuery, { eventId }, b.ctx(), ports)).toEqual({
+      staff: [],
+      checkpoints: [],
+    });
   });
 
   it('online: a scoped member admits at their checkpoint and gets wrong_checkpoint elsewhere', async () => {

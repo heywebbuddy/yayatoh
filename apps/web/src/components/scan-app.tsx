@@ -4,7 +4,13 @@ import { Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { canUseCamera, createDecoder } from '@/scan/camera.ts';
-import { ScanClient, type ScanConfig, type ScanOutcome, type ServerResult } from '@/scan/client.ts';
+import {
+  ScanClient,
+  type ScanConfig,
+  type ScanOutcome,
+  ScanSyncError,
+  type ServerResult,
+} from '@/scan/client.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
 
@@ -23,6 +29,7 @@ const RESULT_KEY: Record<string, string> = {
   outside_window: 'outside_window',
   granted: 'granted',
   no_access: 'no_access',
+  wrong_checkpoint: 'wrong_checkpoint',
 };
 
 const TONE: Record<string, string> = {
@@ -77,12 +84,15 @@ export function ScanApp() {
         );
         setError(null);
         setOnline(true);
-      } catch {
-        setOnline(false);
+      } catch (err) {
+        if (err instanceof ScanSyncError) {
+          setOnline(true);
+          setError(t(err.reason === 'not_assigned' ? 'scan.notAssigned' : 'scan.badScope'));
+        } else setOnline(false);
       }
       await refresh(c);
     },
-    [refresh],
+    [refresh, t],
   );
 
   const start = useCallback(
@@ -246,7 +256,7 @@ export function ScanApp() {
           {lastSync ? <span>{t('scan.lastSync', { time: lastSync.toLocaleTimeString() })}</span> : null}
         </p>
       </header>
-      {client && client.checkpoints.length > 0 ? (
+      {client && (client.checkpoints.length > 0 || client.scoped) ? (
         <div className="flex flex-col gap-1.5 self-start">
           <label htmlFor="scan-app-checkpoint" className="text-caption text-zinc-600">
             {t('checkpoints.scanningAt')}
@@ -262,7 +272,9 @@ export function ScanApp() {
             }}
             className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
           >
-            <option value="">{t('checkpoints.wholeEvent')}</option>
+            <option value="">
+              {client.scoped ? t('checkpoints.chooseStand') : t('checkpoints.wholeEvent')}
+            </option>
             {client.checkpoints.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -319,6 +331,15 @@ export function ScanApp() {
             <p className="text-[28px] leading-tight font-medium tracking-[-0.02em]">
               {t(`checkin.result.${resultKey}`)}
             </p>
+            {resultKey === 'wrong_checkpoint' && client ? (
+              <p className="text-body">
+                {client.checkpoints.length > 0
+                  ? t('checkin.wrongCheckpointHint', {
+                      places: client.checkpoints.map((c) => c.name).join(', '),
+                    })
+                  : t('checkin.noCheckpointsHint')}
+              </p>
+            ) : null}
             {last.holderName ? (
               <p className="text-body">
                 {last.holderName}

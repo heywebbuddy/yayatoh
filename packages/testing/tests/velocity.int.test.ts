@@ -25,7 +25,6 @@ let a: OrgFixture;
 let b: OrgFixture;
 let eventId: string;
 let north: string;
-let south: string;
 let hall: string;
 let tickets: { code: string; shortCode: string; id: string }[];
 
@@ -119,7 +118,7 @@ beforeAll(async () => {
       )
     ).id;
   north = await cp('North gate', 'entrance', 41.8623, -87.6167);
-  south = await cp('South gate', 'entrance', 41.856, -87.6167);
+  await cp('South gate', 'entrance', 41.856, -87.6167);
   hall = await cp('Hall', 'zone', 41.8561, -87.6167);
 });
 afterAll(closePools);
