@@ -8,6 +8,7 @@ import {
   CODE_PREFIX,
   generateKeyPair,
   randomShortCode,
+  signStatement,
   signTicketCode,
   verifyTicketCode,
 } from '@yayatoh/ticket-crypto';
@@ -164,6 +165,20 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
     )
     .where(eq(tickets.orderId, orderId))
     .orderBy(tickets.serial);
+}
+
+/**
+ * Sign a small statement for offline scanners with the org's active ticket key (the checkpoint
+ * scope in a manifest, M1.9d). Scanners verify it with the manifest's public keys.
+ */
+export async function signForScannersTx(
+  tx: TenantTx,
+  orgId: string,
+  tag: string,
+  message: string,
+): Promise<string> {
+  const key = await activeKey(tx, orgId);
+  return signStatement(tag, message, key.kid, key.privateKey);
 }
 
 /** Public keys for scanners of this org (manifest header, M1.9). */

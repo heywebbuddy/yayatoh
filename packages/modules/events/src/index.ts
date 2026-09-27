@@ -8,10 +8,15 @@ export { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from
 export * from './dto.ts';
 export {
   checkoutTarget,
+  type EventRoleGrant,
+  eventRoleGrantsTx,
   eventRolesOf,
+  eventStaffTx,
   findEventTx,
   getEventBySlugQuery,
   listEventsQuery,
   publicEventBySlug,
+  removeEventRoleTx,
+  upsertEventRoleTx,
 } from './queries.ts';
 export { EVENT_PROFILES, EVENT_ROLES, EVENT_STATUSES, EVENT_VISIBILITIES } from './schema.ts';

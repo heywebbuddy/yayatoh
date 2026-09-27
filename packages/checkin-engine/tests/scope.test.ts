@@ -1,9 +1,9 @@
 import { generateKeyPair, signStatement, signTicketCode, verifyStatement } from '@yayatoh/ticket-crypto';
 import { beforeAll, describe, expect, it } from 'vitest';
 import {
+  MANIFEST_VERSION,
   type ManifestHeader,
   type ManifestScope,
-  MANIFEST_VERSION,
   type OfflineState,
   offlineVerdict,
   SCOPE_TAG,

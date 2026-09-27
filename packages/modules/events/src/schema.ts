@@ -78,6 +78,11 @@ export const eventRoleAssignments = tenantTable(
     userId: uuid('user_id').notNull(),
     role: text('role').notNull(),
     expiresAt: ts('expires_at'),
+    /**
+     * Door staff scope (M1.9d): the check-in checkpoints this assignment may scan at. Empty = the
+     * whole event. The checkin module validates the ids (they belong to the event).
+     */
+    checkpointIds: uuid('checkpoint_ids').array().notNull().default(sql`'{}'::uuid[]`),
   },
   (t) => [
     uniqueIndex('event_role_assignments_org_event_user_role_key').on(t.orgId, t.eventId, t.userId, t.role),

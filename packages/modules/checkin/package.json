@@ -22,6 +22,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",

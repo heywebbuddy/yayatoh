@@ -3,6 +3,7 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import type { OrgRole } from './domain/permissions.ts';
 import {
   InvitationDto,
   MembershipDto,
@@ -79,6 +80,15 @@ export async function myOrganizations(userId: string): Promise<MyOrganizationDto
     ),
   );
   return rows.map((r) => MyOrgSchema.parse({ orgId: r.org_id, slug: r.slug, name: r.name, role: r.role }));
+}
+
+/** A user's role in the current org (tenant transaction), or null when not a member. */
+export async function memberRoleTx(tx: TenantTx, userId: string): Promise<OrgRole | null> {
+  const [row] = await tx
+    .select({ role: memberships.role })
+    .from(memberships)
+    .where(eq(memberships.userId, userId));
+  return (row?.role as OrgRole | undefined) ?? null;
 }
 
 /** The current org's display name, inside the caller's tenant transaction (buyer-facing pages, PDFs). */

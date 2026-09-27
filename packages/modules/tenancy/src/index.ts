@@ -72,6 +72,7 @@ export {
   getOrganizationQuery,
   listInvitationsQuery,
   listMembersQuery,
+  memberRoleTx,
   myOrganizations,
   organizationDefaultsTx,
   organizationNameTx,

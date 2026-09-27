@@ -48,6 +48,7 @@ export {
   publicKeysTx,
   reissueTicketTx,
   type ScannableTicket,
+  signForScannersTx,
   ticketForScanTx,
   ticketSummariesQuery,
   ticketSummariesTx,

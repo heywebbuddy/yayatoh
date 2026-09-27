@@ -5,7 +5,12 @@ import {
   validateImportCommand,
 } from '@yayatoh/attendees';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
-import { createCheckpointCommand, enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
+import {
+  createCheckpointCommand,
+  enrollDeviceCommand,
+  scanTicketCommand,
+  setDetectionSettingsCommand,
+} from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import {
   assignEventRoleCommand,
@@ -291,6 +296,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ports,
     );
   }
+  // Per-event velocity rule settings (M1.9d), for isolation coverage.
+  await executeCommand(
+    setDetectionSettingsCommand,
+    { eventId: event.id, maxScansPerMinute: 60, maxTravelKmh: 15 },
+    ctx(),
+    ports,
+  );
   await executeCommand(
     setFeeOverrideCommand,
     { currency: 'EUR', percentBps: 100, fixedMinor: 0, reason: 'fixture' },
