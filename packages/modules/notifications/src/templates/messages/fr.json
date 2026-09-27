@@ -1,0 +1,90 @@
+{
+  "common": {
+    "greeting": "Bonjour {name},",
+    "greetingNoName": "Bonjour,",
+    "sentBy": "Envoyé par {org} avec Yayatoh.",
+    "poweredBy": "Propulsé par Yayatoh",
+    "linkFallback": "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :",
+    "unsubscribe": "Se désabonner",
+    "why": {
+      "reminders": "Vous recevez ce rappel car vous avez des billets de {org}.",
+      "event_updates": "Vous recevez ce message car vous êtes sur la liste des invités d’un événement de {org}.",
+      "marketing": "Vous recevez ce message car vous êtes abonné aux actualités de {org}."
+    },
+    "reply": "Répondre à {org}"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Vos billets pour {eventName}",
+      "intro": "{count, plural, =0 {Votre commande est confirmée.} one {Votre billet est prêt.} other {Vos # billets sont prêts.}} Gardez cet e-mail : le bouton ci-dessous les ouvre à tout moment.",
+      "cta": "Voir mes billets"
+    },
+    "orders.refund": {
+      "subject": "Votre remboursement pour {eventName}",
+      "intro": "{fully, select, yes {Votre commande a été entièrement remboursée :} other {Une partie de votre commande a été remboursée :}} {amount}. Le délai peut être de 5 à 10 jours ouvrés.",
+      "cta": "Voir ma commande"
+    },
+    "events.reminder": {
+      "subject": "Demain : {eventName}",
+      "intro": "Petit rappel : {eventName} commence le {when}.",
+      "venue": "Lieu : {venue}",
+      "cta": "Ouvrir mes billets"
+    },
+    "tenancy.invitation": {
+      "subject": "Vous êtes invité à rejoindre {orgName} sur Yayatoh",
+      "intro": "{orgName} vous invite à rejoindre son équipe en tant que {role}.",
+      "cta": "Accepter l’invitation"
+    },
+    "ticketing.claim-link": {
+      "subject": "Un billet pour {eventName} vous attend",
+      "intro": "Quelqu’un vous a transmis un billet pour {eventName}. Réclamez-le pour obtenir votre propre code QR.",
+      "cta": "Réclamer mon billet"
+    },
+    "ticketing.holder-link": {
+      "subject": "Votre lien vers vos billets pour {eventName}",
+      "intro": "Voici le lien demandé. Il ouvre vos billets pour {eventName}.",
+      "cta": "Ouvrir mes billets"
+    },
+    "seating.finder-code": {
+      "subject": "{code} est votre code pour trouver votre place à {eventName}",
+      "intro": "Saisissez {code} dans l'outil de recherche de place pour voir votre place. Le code ne sert qu'une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",
+      "cta": "Ouvrir la recherche de place"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "Un message de l’organisateur de {eventName} :"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "Des nouvelles de {eventName} :",
+      "cta": "Répondre à l’organisateur"
+    },
+    "messaging.reply": {
+      "subject": "Nouvelle réponse de {org}",
+      "intro": "{org} a répondu à votre message :",
+      "cta": "Lire et répondre"
+    },
+    "sales.order_paid": {
+      "subject": "Nouvelle commande : {name}",
+      "intro": "{name} a acheté {count, plural, one {# billet} other {# billets}} pour {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "Nouveau message de {name}",
+      "intro": "{name} vous a écrit au sujet de {eventName}."
+    },
+    "notifications.test": {
+      "subject": "Notification de test",
+      "intro": "Les notifications fonctionnent."
+    }
+  },
+  "roles": {
+    "owner": "propriétaire",
+    "admin": "administrateur",
+    "manager": "gestionnaire",
+    "finance": "finance",
+    "marketing": "marketing",
+    "box_office": "billetterie",
+    "scanner": "contrôleur",
+    "viewer": "lecteur"
+  }
+}

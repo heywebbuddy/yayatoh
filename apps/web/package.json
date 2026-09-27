@@ -25,6 +25,8 @@
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/messaging": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",

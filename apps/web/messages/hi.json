@@ -30,7 +30,116 @@
     "open": "सूचनाएँ",
     "title": "सूचनाएँ",
     "emptyTitle": "कोई नई सूचना नहीं",
-    "emptyDescription": "बिक्री, सीटिंग और चेक-इन से जुड़े अलर्ट यहाँ दिखेंगे।"
+    "emptyDescription": "बिक्री, सीटिंग और चेक-इन से जुड़े अलर्ट यहाँ दिखेंगे।",
+    "openWithCount": "सूचनाएँ, {count, plural, =0 {कोई अपठित नहीं} one {# अपठित} other {# अपठित}}",
+    "unreadAnnouncement": "{count, plural, =0 {कोई अपठित सूचना नहीं} one {आपकी # सूचना अपठित है} other {आपकी # सूचनाएँ अपठित हैं}}",
+    "markRead": "पढ़ा हुआ चिह्नित करें",
+    "markReadItem": "“{title}” को पढ़ा हुआ चिह्नित करें",
+    "markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+    "viewAll": "सभी सूचनाएँ",
+    "settings": "सूचना सेटिंग",
+    "unread": "अपठित",
+    "loadMore": "पुरानी दिखाएँ",
+    "pageTitle": "सूचनाएँ",
+    "pageDescription": "इस संगठन में आपके लिए अलर्ट: नए ऑर्डर और संदेश।",
+    "allRead": "सभी सूचनाएँ पढ़ी हुई हैं।",
+    "items": {
+      "sales": {
+        "order_paid": "नया ऑर्डर: {name} ने {eventName} के लिए {count, plural, one {# टिकट} other {# टिकट}} खरीदे ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} ने आपको {eventName} के बारे में संदेश भेजा"
+      },
+      "notifications": {
+        "test": "परीक्षण सूचना: सूचनाएँ काम कर रही हैं"
+      },
+      "other": "सूचना"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "टिकट",
+        "refund": "रिफ़ंड"
+      },
+      "events": {
+        "reminder": "इवेंट रिमाइंडर"
+      },
+      "tenancy": {
+        "invitation": "टीम निमंत्रण"
+      },
+      "ticketing": {
+        "claim-link": "टिकट क्लेम लिंक",
+        "holder-link": "टिकटों का लिंक"
+      },
+      "attendees": {
+        "message": "आयोजक का संदेश"
+      },
+      "messaging": {
+        "announcement": "घोषणा",
+        "reply": "जवाब",
+        "contact_replied": "नया संदेश"
+      },
+      "sales": {
+        "order_paid": "नए ऑर्डर का अलर्ट"
+      },
+      "notifications": {
+        "test": "परीक्षण सूचना"
+      }
+    },
+    "status": {
+      "queued": "भेजा जा रहा है",
+      "scheduled": "निर्धारित",
+      "sent": "भेजा गया",
+      "suppressed": "नहीं भेजा गया",
+      "failed": "विफल",
+      "canceled": "रद्द"
+    },
+    "reasons": {
+      "quiet_hours": "शांत समय के कारण रोका गया (प्राप्तकर्ता के लिए रात 9–सुबह 8)",
+      "messaging_paused": "Yayatoh सहायता ने संदेश रोक दिए हैं",
+      "unsubscribed": "प्राप्तकर्ता ने सदस्यता छोड़ दी",
+      "preference": "प्राप्तकर्ता की सेटिंग में बंद",
+      "no_device": "पुश के लिए कोई डिवाइस नहीं",
+      "no_address": "कोई पता नहीं",
+      "provider_error": "ईमेल प्रदाता ने अस्वीकार किया",
+      "retrying": "त्रुटि के बाद फिर से कोशिश"
+    },
+    "channels": {
+      "email": "ईमेल",
+      "sms": "SMS",
+      "push": "पुश",
+      "in_app": "ऐप में"
+    },
+    "log": {
+      "title": "संदेश",
+      "empty": "इस ऑर्डर के बारे में अभी कोई संदेश नहीं।",
+      "when": "कब",
+      "message": "संदेश",
+      "to": "किसे",
+      "channel": "चैनल"
+    },
+    "preferences": {
+      "title": "सूचना सेटिंग",
+      "description": "चुनें कि {org} में होने वाली बातों की जानकारी आपको कैसे मिले। आपके विकल्प केवल आप पर लागू होते हैं।",
+      "categories": {
+        "sales": {
+          "name": "बिक्री",
+          "hint": "एक नए ऑर्डर का भुगतान हुआ।"
+        },
+        "messages": {
+          "name": "संदेश",
+          "hint": "कोई ग्राहक आपके संगठन को लिखता है।"
+        },
+        "marketing": {
+          "name": "Yayatoh की खबरें",
+          "hint": "उत्पाद की खबरें और सुझाव। जब तक आप चालू न करें, बंद।"
+        }
+      },
+      "save": "सेटिंग सहेजें",
+      "saved": "आपकी सूचना सेटिंग सहेज ली गई हैं।",
+      "test": "मुझे परीक्षण सूचना भेजें",
+      "testSent": "परीक्षण सूचना भेजी गई। घंटी देखें।",
+      "required": "टिकट, रसीदें और सुरक्षा ईमेल हमेशा आप तक पहुँचते हैं।"
+    }
   },
   "nav": {
     "home": "होम",
@@ -531,7 +640,12 @@
     },
     "collectedBy": "भुगतान {org} द्वारा प्राप्त किया गया",
     "seat": "सीट",
-    "seatLabel": "सीट: {seat}"
+    "seatLabel": "सीट: {seat}",
+    "emailsSent": "भेजे गए ईमेल",
+    "emailsNone": "अभी कोई ईमेल नहीं।",
+    "emailSentAt": "{when} भेजा गया",
+    "emailScheduled": "{when} के लिए निर्धारित",
+    "emailQueued": "भेजा जा रहा है"
   },
   "orders": {
     "title": "हाल के ऑर्डर",
@@ -1665,6 +1779,129 @@
       "event": "इवेंट",
       "emptyTitle": "इस अवधि में कोई बिक्री नहीं",
       "emptyDescription": "लंबी अवधि चुनें, या बिक्री शुरू करने के लिए इवेंट पेज साझा करें।"
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "सदस्यता छोड़ें",
+    "eyebrow": "ईमेल सेटिंग",
+    "title": "{org} के ईमेल",
+    "category": {
+      "reminders": "उन इवेंट से पहले रिमाइंडर जिनके आपके पास टिकट हैं।",
+      "event_updates": "आप जिन इवेंट में जा रहे हैं उनके बारे में आयोजक की खबरें और संदेश।",
+      "marketing": "आयोजक की खबरें और ऑफ़र।",
+      "sales": "नए ऑर्डर के अलर्ट।",
+      "messages": "नए संदेशों के अलर्ट।"
+    },
+    "categoryName": {
+      "reminders": "इवेंट रिमाइंडर",
+      "event_updates": "इवेंट अपडेट",
+      "marketing": "खबरें और ऑफ़र",
+      "sales": "ऑर्डर अलर्ट",
+      "messages": "संदेश अलर्ट"
+    },
+    "address": "पता: {email}",
+    "question": "इस पते पर {org} से {what} पाना बंद करें?",
+    "confirm": "सदस्यता छोड़ें",
+    "done": "अब आपको {org} से {what} नहीं मिलेंगे।",
+    "resubscribe": "फिर से सदस्यता लें",
+    "transactionalNote": "ज़रूरी ईमेल, जैसे टिकट, रसीदें और रिफ़ंड, आपको मिलते रहेंगे।"
+  },
+  "devMailbox": {
+    "eyebrow": "डेवलपमेंट",
+    "title": "डेव मेलबॉक्स",
+    "description": "डेवलपमेंट में प्लेटफ़ॉर्म द्वारा भेजे गए संदेश। इनमें से कुछ भी इस मशीन से बाहर नहीं गया।",
+    "filter": "प्राप्तकर्ता",
+    "apply": "फ़िल्टर",
+    "emptyTitle": "अभी कोई संदेश नहीं",
+    "emptyDescription": "डेवलपमेंट में भेजे गए ईमेल, SMS और पुश सूचनाएँ यहाँ दिखती हैं।",
+    "meta": "{channel} {to} को · {at}",
+    "show": "संदेश दिखाएँ",
+    "preview": "ईमेल पूर्वावलोकन: {subject}"
+  },
+  "announcements": {
+    "title": "मार्केटिंग",
+    "description": "{event} में आने वाले सभी लोगों के लिए घोषणाएँ।",
+    "composeTitle": "नई घोषणा",
+    "subject": "विषय",
+    "message": "संदेश",
+    "channels": "इसके ज़रिए भेजें",
+    "channel": {
+      "email": "ईमेल",
+      "push": "पुश सूचना"
+    },
+    "pushHint": "पुश ऐप इस्तेमाल करने वालों तक पहुँचता है; बाकी सबको ईमेल मिलता है।",
+    "preview": "पूर्वावलोकन",
+    "previewTitle": "घोषणा का पूर्वावलोकन",
+    "previewFrame": "ईमेल पूर्वावलोकन: {subject}",
+    "willReach": "{count, plural, one {यह # व्यक्ति को जाएगी।} other {यह # लोगों को जाएगी।}}",
+    "send": "{count, plural, one {# व्यक्ति को भेजें} other {# लोगों को भेजें}}",
+    "edit": "संपादित करें",
+    "sent": "{count, plural, one {# व्यक्ति को भेजी गई। डिलीवरी पृष्ठभूमि में जारी है।} other {# लोगों को भेजी गई। डिलीवरी पृष्ठभूमि में जारी है।}}",
+    "sentTitle": "भेजी गई घोषणाएँ",
+    "sentEmpty": "अभी कोई घोषणा नहीं।",
+    "sentAt": "भेजी गई",
+    "recipients": "प्राप्तकर्ता",
+    "delivery": "डिलीवरी",
+    "deliveryCounts": "{sent} भेजे गए · {pending} बाकी · {notSent} नहीं भेजे गए",
+    "errors": {
+      "subjectRequired": "विषय जोड़ें।",
+      "messageRequired": "संदेश लिखें।",
+      "channelRequired": "भेजने का कम से कम एक तरीका चुनें।",
+      "no_recipients": "इस इवेंट में अभी कोई नहीं आ रहा, इसलिए भेजने के लिए कोई नहीं है।",
+      "messaging_paused": "Yayatoh सहायता ने आपके संगठन के संदेश रोक दिए हैं।"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "संदेश",
+    "inboxDescription": "आपके ग्राहकों के साथ बातचीत। आपकी घोषणाओं के जवाब यहाँ आते हैं।",
+    "filters": "दिखाएँ",
+    "filter": {
+      "all": "सभी",
+      "unread": "अपठित",
+      "blocked": "ब्लॉक किए गए"
+    },
+    "emptyTitle": "कोई बातचीत नहीं",
+    "emptyDescription": "जब कोई घोषणा का जवाब देगा, उसका संदेश यहाँ दिखेगा।",
+    "unread": "अपठित",
+    "blockedChip": "ब्लॉक",
+    "you": "आप",
+    "threadTitle": "बातचीत",
+    "back": "सभी संदेश",
+    "threadWith": "{name} के साथ बातचीत",
+    "history": "संदेश",
+    "contactBlockedYou": "इस व्यक्ति ने आपके संगठन के संदेश ब्लॉक किए हैं।",
+    "replyTitle": "जवाब दें",
+    "replyLabel": "आपका जवाब (ईमेल से भेजा जाएगा)",
+    "sendReply": "जवाब भेजें",
+    "sent": "संदेश भेजा गया।",
+    "safetyTitle": "ब्लॉक या रिपोर्ट करें",
+    "block": "इस व्यक्ति को ब्लॉक करें",
+    "unblock": "अनब्लॉक करें",
+    "blockedText": "ब्लॉक: इनके संदेश अस्वीकार होते हैं।",
+    "report": "Yayatoh को रिपोर्ट करें",
+    "reportReason": "कारण",
+    "reportNote": "विवरण (वैकल्पिक)",
+    "reasons": {
+      "spam": "स्पैम",
+      "abuse": "दुर्व्यवहार या उत्पीड़न",
+      "other": "कुछ और"
+    },
+    "reported": "धन्यवाद। Yayatoh इस बातचीत की समीक्षा करेगा।",
+    "publicMetaTitle": "संदेश",
+    "publicEyebrow": "संदेश",
+    "publicTitle": "{org} के साथ आपकी बातचीत",
+    "publicDescription": "इस बातचीत को केवल आप और आयोजक पढ़ सकते हैं।",
+    "notAccepting": "{org} यहाँ संदेश स्वीकार नहीं कर रहा।",
+    "writeLabel": "{org} को लिखें",
+    "send": "भेजें",
+    "blockOrg": "{org} को ब्लॉक करें",
+    "unblockOrg": "{org} को अनब्लॉक करें",
+    "youBlocked": "आपने {org} को ब्लॉक किया: अब आपको उनके जवाब या इवेंट अपडेट नहीं मिलेंगे।",
+    "errors": {
+      "required": "पहले संदेश लिखें।",
+      "blocked": "यह बातचीत ब्लॉक है।",
+      "blocked_by_contact": "इस व्यक्ति ने आपके संगठन के संदेश ब्लॉक किए हैं।",
+      "you_blocked": "लिखने के लिए आयोजक को अनब्लॉक करें।"
     }
   },
   "apiKeys": {

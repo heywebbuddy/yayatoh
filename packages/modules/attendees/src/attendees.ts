@@ -76,6 +76,7 @@ export async function eventAttendeesTx(tx: TenantTx, eventId: string) {
       source: attendees.source,
       ticketId: attendees.ticketId,
       labels: attendees.labels,
+      contactId: attendees.contactId,
     })
     .from(attendees)
     .where(and(eq(attendees.eventId, eventId), eq(attendees.status, 'active')))

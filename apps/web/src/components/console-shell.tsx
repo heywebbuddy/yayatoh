@@ -138,7 +138,7 @@ export async function ConsoleShell({
           </details>
           <div className="flex min-w-0 flex-1 items-center gap-2.5">{status}</div>
           <GlobalSearch org={data.org.slug} label={t('search')} placeholder={t('searchPlaceholder')} />
-          <NotificationCenter />
+          <NotificationCenter data={data} />
         </header>
         <main id="main" className="flex flex-col gap-[18px] px-4 pt-5 pb-10 md:px-8">
           {children}

@@ -30,7 +30,116 @@
     "open": "通知",
     "title": "通知",
     "emptyTitle": "目前沒有新通知",
-    "emptyDescription": "有關銷售、座位與報到的提醒將顯示在這裡。"
+    "emptyDescription": "有關銷售、座位與報到的提醒將顯示在這裡。",
+    "openWithCount": "通知，{count, plural, other {# 則未讀}}",
+    "unreadAnnouncement": "{count, plural, other {您有 # 則未讀通知}}",
+    "markRead": "標為已讀",
+    "markReadItem": "將「{title}」標為已讀",
+    "markAllRead": "全部標為已讀",
+    "viewAll": "所有通知",
+    "settings": "通知設定",
+    "unread": "未讀",
+    "loadMore": "顯示較舊的",
+    "pageTitle": "通知",
+    "pageDescription": "您在此組織的提醒：新訂單與訊息。",
+    "allRead": "所有通知皆已讀。",
+    "items": {
+      "sales": {
+        "order_paid": "新訂單：{name} 購買了 {count, plural, other {# 張}} {eventName} 票券（{amount}）"
+      },
+      "messaging": {
+        "contact_replied": "{name} 就 {eventName} 傳訊息給您"
+      },
+      "notifications": {
+        "test": "測試通知：通知功能正常"
+      },
+      "other": "通知"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "票券",
+        "refund": "退款"
+      },
+      "events": {
+        "reminder": "活動提醒"
+      },
+      "tenancy": {
+        "invitation": "團隊邀請"
+      },
+      "ticketing": {
+        "claim-link": "票券領取連結",
+        "holder-link": "票券連結"
+      },
+      "attendees": {
+        "message": "主辦單位訊息"
+      },
+      "messaging": {
+        "announcement": "公告",
+        "reply": "回覆",
+        "contact_replied": "新訊息"
+      },
+      "sales": {
+        "order_paid": "新訂單提醒"
+      },
+      "notifications": {
+        "test": "測試通知"
+      }
+    },
+    "status": {
+      "queued": "傳送中",
+      "scheduled": "已排程",
+      "sent": "已傳送",
+      "suppressed": "未傳送",
+      "failed": "失敗",
+      "canceled": "已取消"
+    },
+    "reasons": {
+      "quiet_hours": "因勿擾時段暫緩（收件人當地 21:00–8:00）",
+      "messaging_paused": "Yayatoh 支援團隊已暫停訊息傳送",
+      "unsubscribed": "收件人已取消訂閱",
+      "preference": "收件人已在設定中關閉",
+      "no_device": "沒有可推播的裝置",
+      "no_address": "沒有地址",
+      "provider_error": "郵件服務商拒收",
+      "retrying": "發生錯誤後重試中"
+    },
+    "channels": {
+      "email": "電子郵件",
+      "sms": "簡訊",
+      "push": "推播",
+      "in_app": "應用程式內"
+    },
+    "log": {
+      "title": "訊息",
+      "empty": "此訂單尚無訊息。",
+      "when": "時間",
+      "message": "訊息",
+      "to": "收件人",
+      "channel": "管道"
+    },
+    "preferences": {
+      "title": "通知設定",
+      "description": "選擇您如何得知 {org} 的動態。設定只對您本人生效。",
+      "categories": {
+        "sales": {
+          "name": "銷售",
+          "hint": "新訂單已付款。"
+        },
+        "messages": {
+          "name": "訊息",
+          "hint": "有客戶聯絡您的組織。"
+        },
+        "marketing": {
+          "name": "Yayatoh 消息",
+          "hint": "產品消息與技巧。預設關閉，除非您開啟。"
+        }
+      },
+      "save": "儲存設定",
+      "saved": "通知設定已儲存。",
+      "test": "傳送測試通知給我",
+      "testSent": "已傳送測試通知，請查看鈴鐺。",
+      "required": "票券、收據與安全性郵件一律會寄給您。"
+    }
   },
   "nav": {
     "home": "首頁",
@@ -531,7 +640,12 @@
     },
     "collectedBy": "收款方：{org}",
     "seat": "座位",
-    "seatLabel": "座位：{seat}"
+    "seatLabel": "座位：{seat}",
+    "emailsSent": "已寄出的郵件",
+    "emailsNone": "尚無郵件。",
+    "emailSentAt": "已於 {when} 寄出",
+    "emailScheduled": "預定於 {when} 寄出",
+    "emailQueued": "傳送中"
   },
   "orders": {
     "title": "最近訂單",
@@ -1665,6 +1779,129 @@
       "event": "活動",
       "emptyTitle": "此期間沒有銷售",
       "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "取消訂閱",
+    "eyebrow": "郵件設定",
+    "title": "來自 {org} 的郵件",
+    "category": {
+      "reminders": "您持有票券的活動開始前的提醒。",
+      "event_updates": "主辦單位關於您參加的活動的消息與訊息。",
+      "marketing": "主辦單位的消息與優惠。",
+      "sales": "新訂單提醒。",
+      "messages": "新訊息提醒。"
+    },
+    "categoryName": {
+      "reminders": "活動提醒",
+      "event_updates": "活動消息",
+      "marketing": "消息與優惠",
+      "sales": "訂單提醒",
+      "messages": "訊息提醒"
+    },
+    "address": "地址：{email}",
+    "question": "不再於此地址收到來自 {org} 的{what}？",
+    "confirm": "取消訂閱",
+    "done": "您已取消訂閱來自 {org} 的{what}。",
+    "resubscribe": "重新訂閱",
+    "transactionalNote": "您仍會收到必要的郵件，例如票券、收據與退款。"
+  },
+  "devMailbox": {
+    "eyebrow": "開發",
+    "title": "開發信箱",
+    "description": "平台在開發環境中傳送的訊息。這些內容都沒有離開這台電腦。",
+    "filter": "收件人",
+    "apply": "篩選",
+    "emptyTitle": "尚無訊息",
+    "emptyDescription": "開發環境中傳送的郵件、簡訊與推播通知會顯示在這裡。",
+    "meta": "{channel} 寄至 {to} · {at}",
+    "show": "顯示訊息",
+    "preview": "郵件預覽：{subject}"
+  },
+  "announcements": {
+    "title": "行銷",
+    "description": "發給 {event} 所有參加者的公告。",
+    "composeTitle": "新公告",
+    "subject": "主旨",
+    "message": "內容",
+    "channels": "傳送方式",
+    "channel": {
+      "email": "電子郵件",
+      "push": "推播通知"
+    },
+    "pushHint": "推播會送給使用應用程式的參加者；其他人會收到郵件。",
+    "preview": "預覽",
+    "previewTitle": "公告預覽",
+    "previewFrame": "郵件預覽：{subject}",
+    "willReach": "{count, plural, other {將傳送給 # 人。}}",
+    "send": "{count, plural, other {傳送給 # 人}}",
+    "edit": "編輯",
+    "sent": "{count, plural, other {已傳送給 # 人，遞送會在背景繼續。}}",
+    "sentTitle": "已傳送的公告",
+    "sentEmpty": "尚無公告。",
+    "sentAt": "傳送時間",
+    "recipients": "收件人",
+    "delivery": "遞送",
+    "deliveryCounts": "已傳送 {sent} · 待傳送 {pending} · 未傳送 {notSent}",
+    "errors": {
+      "subjectRequired": "請填寫主旨。",
+      "messageRequired": "請填寫內容。",
+      "channelRequired": "請至少選擇一種傳送方式。",
+      "no_recipients": "此活動尚無參加者，沒有可傳送的對象。",
+      "messaging_paused": "Yayatoh 支援團隊已暫停您組織的訊息傳送。"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "訊息",
+    "inboxDescription": "與客戶的對話。對公告的回覆會出現在這裡。",
+    "filters": "顯示",
+    "filter": {
+      "all": "全部",
+      "unread": "未讀",
+      "blocked": "已封鎖"
+    },
+    "emptyTitle": "尚無對話",
+    "emptyDescription": "有人回覆公告後，訊息會顯示在這裡。",
+    "unread": "未讀",
+    "blockedChip": "已封鎖",
+    "you": "您",
+    "threadTitle": "對話",
+    "back": "所有訊息",
+    "threadWith": "與 {name} 的對話",
+    "history": "訊息",
+    "contactBlockedYou": "此人已封鎖您組織的訊息。",
+    "replyTitle": "回覆",
+    "replyLabel": "您的回覆（以郵件傳送）",
+    "sendReply": "傳送回覆",
+    "sent": "訊息已傳送。",
+    "safetyTitle": "封鎖或檢舉",
+    "block": "封鎖此人",
+    "unblock": "解除封鎖",
+    "blockedText": "已封鎖：其訊息將被拒收。",
+    "report": "向 Yayatoh 檢舉",
+    "reportReason": "原因",
+    "reportNote": "詳細說明（選填）",
+    "reasons": {
+      "spam": "垃圾訊息",
+      "abuse": "辱罵或騷擾",
+      "other": "其他"
+    },
+    "reported": "謝謝，Yayatoh 會審查此對話。",
+    "publicMetaTitle": "訊息",
+    "publicEyebrow": "訊息",
+    "publicTitle": "您與 {org} 的對話",
+    "publicDescription": "只有您和主辦單位可以查看此對話。",
+    "notAccepting": "{org} 不在此接收訊息。",
+    "writeLabel": "寫信給 {org}",
+    "send": "傳送",
+    "blockOrg": "封鎖 {org}",
+    "unblockOrg": "解除封鎖 {org}",
+    "youBlocked": "您已封鎖 {org}：您將不再收到其回覆或活動消息。",
+    "errors": {
+      "required": "請先填寫訊息。",
+      "blocked": "此對話已被封鎖。",
+      "blocked_by_contact": "此人已封鎖您組織的訊息。",
+      "you_blocked": "解除封鎖主辦單位後才能寫信。"
     }
   },
   "apiKeys": {

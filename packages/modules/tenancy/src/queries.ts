@@ -1,7 +1,7 @@
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   InvitationDto,
@@ -135,4 +135,42 @@ export async function organizationPublicTx(
     .from(orgDomains)
     .where(and(eq(orgDomains.kind, 'site'), eq(orgDomains.isPrimary, true), eq(orgDomains.status, 'active')));
   return { ...o, primaryHost: d?.hostname ?? null, primaryHostManaged: d?.managed ?? false };
+}
+
+/** Members of the tenant org with one of these roles (notification fan-out), inside its transaction. */
+export async function memberUserIdsTx(
+  tx: TenantTx,
+  roles: readonly string[],
+): Promise<{ userId: string; role: string }[]> {
+  if (roles.length === 0) return [];
+  return tx
+    .select({ userId: memberships.userId, role: memberships.role })
+    .from(memberships)
+    .where(inArray(memberships.role, [...roles]));
+}
+
+/** What outbound messages need about the sender org: name, brand, timezone, "Powered by". */
+export async function organizationBrandTx(
+  tx: TenantTx,
+  orgId: string,
+): Promise<{
+  slug: string;
+  name: string;
+  brandColor: string | null;
+  poweredByVisible: boolean;
+  timezone: string;
+  status: string;
+} | null> {
+  const [row] = await tx
+    .select({
+      slug: organizations.slug,
+      name: organizations.name,
+      brandColor: organizations.brandColor,
+      poweredByVisible: organizations.poweredByVisible,
+      timezone: organizations.timezone,
+      status: organizations.status,
+    })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row ?? null;
 }
