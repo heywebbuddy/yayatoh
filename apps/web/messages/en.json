@@ -696,6 +696,10 @@
     "addLabel": "Add label",
     "removeLabel": "Remove label",
     "export": "Export as CSV",
+    "email": "Send email",
+    "subject": "Subject",
+    "message": "Message",
+    "messageHint": "Sent from the organizer about this event. Plain text; each person gets their own email.",
     "label": "Label",
     "labelHint": "For adding or removing a label.",
     "apply": "Apply",
@@ -704,7 +708,8 @@
     "title": {
       "label": "Bulk labels",
       "export": "Attendee export",
-      "import": "Guest-list import"
+      "import": "Guest-list import",
+      "email": "Email to guests"
     },
     "status": {
       "queued": "Waiting to start…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "Ready: {succeeded} rows exported.",
     "importDone": "Imported {succeeded} guests.",
+    "emailDone": "Sent to {succeeded} people.",
     "failure": "{count, plural, one {# failed: {reason}} other {# failed: {reason}}}",
     "code": {
       "too_many_labels": "they already have 20 labels",
       "not_found": "no longer in this list",
-      "other": "unexpected error"
+      "other": "unexpected error",
+      "not_attending": "no longer on the list"
     },
     "download": "Download CSV",
     "undo": "Undo"
@@ -830,5 +837,26 @@
     "requestEmail": "Email",
     "requestSend": "Email me a link",
     "requestSent": "If that email has tickets for this event, a link is on its way."
+  },
+  "guests": {
+    "name": "Full name",
+    "email": "Email",
+    "label": "Label (optional)",
+    "add": "Add to the list",
+    "added": "Added to the list.",
+    "remove": "Remove from the list"
+  },
+  "timeline": {
+    "title": "{count, plural, one {History · # event} other {History · # events}}",
+    "kind": {
+      "ticket": "Got a ticket",
+      "guest": "Added to the guest list",
+      "import": "Imported to the list",
+      "registration": "Registered",
+      "comp": "Given a complimentary ticket",
+      "order": "Placed an order",
+      "checked_in": "Checked in",
+      "removed": "Removed from the list"
+    }
   }
 }

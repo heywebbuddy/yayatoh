@@ -696,6 +696,10 @@
     "addLabel": "Label toevoegen",
     "removeLabel": "Label verwijderen",
     "export": "Exporteren als CSV",
+    "email": "E-mail versturen",
+    "subject": "Onderwerp",
+    "message": "Bericht",
+    "messageHint": "Verstuurd door de organisator over dit evenement. Platte tekst; iedereen krijgt een eigen e-mail.",
     "label": "Label",
     "labelHint": "Om een label toe te voegen of te verwijderen.",
     "apply": "Toepassen",
@@ -704,7 +708,8 @@
     "title": {
       "label": "Labels in bulk",
       "export": "Deelnemersexport",
-      "import": "Gastenlijstimport"
+      "import": "Gastenlijstimport",
+      "email": "E-mail aan gasten"
     },
     "status": {
       "queued": "Wacht op start…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "Klaar: {succeeded} rijen geëxporteerd.",
     "importDone": "{succeeded} gasten geïmporteerd.",
+    "emailDone": "Verstuurd naar {succeeded} personen.",
     "failure": "{count, plural, one {# mislukt: {reason}} other {# mislukt: {reason}}}",
     "code": {
       "too_many_labels": "ze hebben al 20 labels",
       "not_found": "niet meer in deze lijst",
-      "other": "onverwachte fout"
+      "other": "onverwachte fout",
+      "not_attending": "niet meer op de lijst"
     },
     "download": "CSV downloaden",
     "undo": "Ongedaan maken"
@@ -830,5 +837,26 @@
     "requestEmail": "E-mail",
     "requestSend": "Mail me een link",
     "requestSent": "Als dat e-mailadres tickets heeft voor dit evenement, is er een link onderweg."
+  },
+  "guests": {
+    "name": "Volledige naam",
+    "email": "E-mail",
+    "label": "Label (optioneel)",
+    "add": "Toevoegen aan de lijst",
+    "added": "Toegevoegd aan de lijst.",
+    "remove": "Verwijderen van de lijst"
+  },
+  "timeline": {
+    "title": "{count, plural, one {Geschiedenis · # evenement} other {Geschiedenis · # evenementen}}",
+    "kind": {
+      "ticket": "Heeft een ticket gekregen",
+      "guest": "Toegevoegd aan de gastenlijst",
+      "import": "Geïmporteerd in de lijst",
+      "registration": "Geregistreerd",
+      "comp": "Vrijkaart gekregen",
+      "order": "Bestelling geplaatst",
+      "checked_in": "Ingecheckt",
+      "removed": "Verwijderd van de lijst"
+    }
   }
 }

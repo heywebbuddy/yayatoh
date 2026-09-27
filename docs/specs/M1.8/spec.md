@@ -142,3 +142,29 @@ Roadmap: M1.8. This milestone is delivered in increments:
 ### Not yet (M1.8d)
 - SMS and WhatsApp delivery of links go through the messaging ports in M1.10 (Twilio is an owner account, see the owner inbox). Email uses the console mailer until SES exists.
 - Association tags (batches of tickets for a company or group) use attendee labels today; allocating seats to a group comes with seating (M1.7).
+
+## M1.8e — guest lists, bulk email and the contact timeline (done)
+- **Guest list:** `attendees.addGuest` (`attendees:write`) adds one person without a ticket (source `guest`), with optional labels. There is one active entry per email per event, compared case-insensitively.
+  - `attendees.removeGuest` sets `cancelled`. The record stays for history, and the person can be added again.
+  - Ticket holders leave the list by cancelling their ticket (M1.6), not here.
+- **Bulk email** (`attendees.email`, a bulk action):
+  - Organizers email the selected attendees, or everyone matching the list filters, with a subject and a plain-text message about the event.
+  - Each chunk emits `attendees.message_batch@1` with the operation id and attendee ids. The worker's `attendees.message-mailer` sends one email per active attendee, reading the subject and body from the operation.
+  - Each email has its own idempotency key (`attendee-message:<op>:<attendee>`), and the consumer is exactly-once through `processed_events`, so a replayed event never resends.
+  - Removed people fail as `not_attending`.
+  - These are operational messages about an event people are on the list for, not marketing: marketing consent isn't required. Campaigns and marketing consent enforcement come with M3.6.
+- **Bulk framework:** chunk runs can now emit outbox events (`meta.emit`, committed with the chunk). `bulkOperationParamsTx` lets subscribers read an operation's params.
+- **Contact timeline v1** (`reports.contactTimeline`, `contacts:read`): one person across this org's events. It shows how they got on each list (ticket, guest list, import…), their orders (total and status), their check-ins, and removals, newest first. It is shown as **History** in the attendee profile.
+- **Console:** "Add attendee" opens the guest form. The bulk form gains **Send email**; the subject and message fields appear only for that action.
+
+### Acceptance (M1.8e)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Guests are added by hand, one active entry per email (case-insensitive); removal keeps history and allows re-adding; viewers can't add; ticket holders can't be removed here | `packages/testing/tests/guests.int.test.ts` |
+| AC2 | Bulk email: one email per active attendee, removed people skipped with a reason, a replayed batch sends nothing | `guests.int.test.ts` |
+| AC3 | The timeline spans events (ticket, order, check-in, guest list), newest first; viewers are forbidden; org B gets `not_found` | `guests.int.test.ts` |
+| AC4 | In the console: add two guests (a duplicate is refused), email everyone matching, see History, remove one; axe passes | `apps/web/e2e/guests.spec.ts` |
+
+### M1.8 status
+- All roadmap items are done except the owner-gated delivery channels: SMS and WhatsApp, and real email through SES, both waiting on M1.10 accounts.
+- Acceptance: the 5,000-row import is well under 60 s with ≥97% accepted (M1.8c). The 1,000-seat bulk assignment arrives with seating (M1.7) on this framework. A claimed ticket's old QR is rejected (M1.8d).

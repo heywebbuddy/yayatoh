@@ -371,3 +371,14 @@ export async function admittedTicketIdsTx(
     );
   return new Set(rows.map((r) => r.ticketId));
 }
+
+/** Live admissions of some tickets, oldest first (the contact timeline). */
+export async function admissionsForTicketsTx(tx: TenantTx, ticketIds: readonly string[]) {
+  if (ticketIds.length === 0) return [];
+  return tx
+    .select({ ticketId: admissions.ticketId, eventId: admissions.eventId, admittedAt: admissions.admittedAt })
+    .from(admissions)
+    .where(and(inArray(admissions.ticketId, [...ticketIds]), isNull(admissions.undoneAt)))
+    .orderBy(admissions.admittedAt)
+    .limit(500);
+}

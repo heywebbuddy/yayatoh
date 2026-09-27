@@ -426,6 +426,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../../packages/modules/events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -913,6 +916,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/orders':
+        specifier: workspace:*
+        version: link:../orders
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform

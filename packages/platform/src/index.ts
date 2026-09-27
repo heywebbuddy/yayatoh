@@ -4,6 +4,7 @@ export {
   type BulkItemResult,
   BulkOperationDto,
   bulkCommands,
+  bulkOperationParamsTx,
   bulkStepCommand,
   defineBulkAction,
   listBulkOperationsQuery,

@@ -2,15 +2,16 @@ import {
   ATTENDEE_SOURCES,
   ATTENDEE_STATUSES,
   type AttendeeDto,
+  attendeeEmailBulk,
   attendeeImportBulk,
   attendeeLabelBulk,
   attendeeLabelsQuery,
   getAttendeeQuery,
   listAttendeesQuery,
 } from '@yayatoh/attendees';
-import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { type BulkOperationDto, isProfileKey, term } from '@yayatoh/platform';
-import { attendeeExportBulk } from '@yayatoh/reports';
+import { attendeeExportBulk, contactTimelineQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
 import { listClaimLinksQuery, ticketSummariesQuery } from '@yayatoh/ticketing';
 import {
@@ -28,7 +29,9 @@ import {
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { BulkFields } from '@/components/bulk-fields.tsx';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
+import { GuestForm } from '@/components/guest-form.tsx';
 import { LabelForm } from '@/components/label-form.tsx';
 import type { AttendeeStatus, DemoAttendee } from '@/demo/events.ts';
 import { Link } from '@/i18n/navigation.ts';
@@ -38,9 +41,11 @@ import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { ports } from '@/server/ports.ts';
 import {
+  addGuestAction,
   addLabelAction,
   type BulkKind,
   bulkAction,
+  removeGuestAction,
   removeLabelAction,
   revokeClaimAction,
   sendTicketAction,
@@ -134,7 +139,7 @@ export default async function AttendeesPage({
   const canBulk = hasReal && (canWrite || canExport);
   // The bulk operation the page was sent back to (progress, failures, undo, download).
   const opKind: BulkKind | null =
-    sp.opk === 'export' || sp.opk === 'label' || sp.opk === 'import' ? sp.opk : null;
+    sp.opk === 'export' || sp.opk === 'label' || sp.opk === 'import' || sp.opk === 'email' ? sp.opk : null;
   let op: BulkOperationDto | null = null;
   if (opKind && sp.op && /^[0-9a-f-]{36}$/.test(sp.op)) {
     const q =
@@ -142,7 +147,9 @@ export default async function AttendeesPage({
         ? attendeeExportBulk.status
         : opKind === 'import'
           ? attendeeImportBulk.status
-          : attendeeLabelBulk.status;
+          : opKind === 'email'
+            ? attendeeEmailBulk.status
+            : attendeeLabelBulk.status;
     op = await executeQuery(q, { operationId: sp.op }, data.ctx, ports).catch((err) => {
       if (isDomainError(err) && (err.code === 'not_found' || err.code === 'forbidden')) return null;
       throw err;
@@ -240,6 +247,12 @@ export default async function AttendeesPage({
         )
       : [];
   const openClaim = claims.find((c) => c.state === 'open');
+  const selectedRecord = selectedId ? liveById.get(selectedId) : undefined;
+  const timeline =
+    selectedRecord && roleCan(data.role, 'contacts:read')
+      ? await executeQuery(contactTimelineQuery, { attendeeId: selectedRecord.id }, data.ctx, ports)
+      : null;
+  const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
   const filtered = Boolean(needle || labels.length || source || status);
   const from = live.total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const to = Math.min(live.total, page * PAGE_SIZE);
@@ -267,11 +280,24 @@ export default async function AttendeesPage({
                 {t('actions.import')}
               </Button>
             )}
-            <Button disabled title={t('common.comingSoon')}>
-              {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
-            </Button>
+            {!demo && canWrite && data.modules.has('attendees') ? null : (
+              <Button disabled title={t('common.comingSoon')}>
+                {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
+              </Button>
+            )}
           </div>
         </div>
+
+        {!demo && canWrite && data.modules.has('attendees') ? (
+          <details className="group rounded-card border border-zinc-200 bg-white px-4 py-3">
+            <summary className="flex min-h-8 cursor-pointer list-none items-center text-body [&::-webkit-details-marker]:hidden">
+              {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
+            </summary>
+            <div className="pt-3">
+              <GuestForm action={addGuestAction.bind(null, org, event)} />
+            </div>
+          </details>
+        ) : null}
 
         <nav aria-label={t('attendees.segments')} className="-mx-1 overflow-x-auto">
           <ul className="flex list-none gap-1.5 px-1 pb-1">
@@ -391,15 +417,17 @@ export default async function AttendeesPage({
             <p className="text-body" role="status">
               {opKind === 'export' && op.status === 'done'
                 ? t('bulk.exportDone', { succeeded: formatNumber(op.succeeded, locale) })
-                : opKind === 'import' && op.status === 'done'
-                  ? t('bulk.importDone', { succeeded: formatNumber(op.succeeded, locale) })
-                  : t(`bulk.status.${op.status}`, {
-                      processed: formatNumber(op.processed, locale),
-                      total: formatNumber(op.total, locale),
-                      succeeded: formatNumber(op.succeeded, locale),
-                      failed: formatNumber(op.failed, locale),
-                      undone: formatNumber(op.undone, locale),
-                    })}
+                : opKind === 'email' && op.status === 'done'
+                  ? t('bulk.emailDone', { succeeded: formatNumber(op.succeeded, locale) })
+                  : opKind === 'import' && op.status === 'done'
+                    ? t('bulk.importDone', { succeeded: formatNumber(op.succeeded, locale) })
+                    : t(`bulk.status.${op.status}`, {
+                        processed: formatNumber(op.processed, locale),
+                        total: formatNumber(op.total, locale),
+                        succeeded: formatNumber(op.succeeded, locale),
+                        failed: formatNumber(op.failed, locale),
+                        undone: formatNumber(op.undone, locale),
+                      })}
             </p>
             {failureCodes.length ? (
               <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
@@ -473,44 +501,11 @@ export default async function AttendeesPage({
                 {t('bulk.allMatching', { count: live.total, formatted: formatNumber(live.total, locale) })}
               </label>
             </fieldset>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="bulk-what" className="text-caption text-zinc-600">
-                {t('bulk.action')}
-              </label>
-              <select
-                id="bulk-what"
-                name="bulk"
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-              >
-                {canWrite ? <option value="addLabel">{t('bulk.addLabel')}</option> : null}
-                {canWrite ? <option value="removeLabel">{t('bulk.removeLabel')}</option> : null}
-                {canExport ? <option value="export">{t('bulk.export')}</option> : null}
-              </select>
-            </div>
-            {canWrite ? (
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-label" className="text-caption text-zinc-600">
-                  {t('bulk.label')}
-                </label>
-                <input
-                  id="bulk-label"
-                  name="bulkLabel"
-                  maxLength={40}
-                  list="bulk-label-suggestions"
-                  autoComplete="off"
-                  aria-describedby="bulk-label-hint"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                />
-                <datalist id="bulk-label-suggestions">
-                  {labelCounts.map((l) => (
-                    <option key={l.label} value={l.label} />
-                  ))}
-                </datalist>
-                <span id="bulk-label-hint" className="text-caption text-zinc-500">
-                  {t('bulk.labelHint')}
-                </span>
-              </div>
-            ) : null}
+            <BulkFields
+              canWrite={canWrite}
+              canExport={canExport}
+              labelSuggestions={labelCounts.map((l) => l.label)}
+            />
             <Button type="submit" variant="secondary">
               {t('bulk.apply')}
             </Button>
@@ -715,6 +710,35 @@ export default async function AttendeesPage({
                   submitLabel={t('distribution.create')}
                 />
               </section>
+            ) : null}
+            {timeline && timeline.items.length > 0 ? (
+              <section aria-labelledby="history-heading" className="flex flex-col gap-2">
+                <h2 id="history-heading" className="text-caption text-zinc-500">
+                  {t('timeline.title', { count: timeline.events })}
+                </h2>
+                <ol className="flex list-none flex-col gap-1.5 p-0 text-caption">
+                  {timeline.items.slice(0, 12).map((i, n) => (
+                    <li key={`${i.kind}-${i.at.toISOString()}-${n}`} className="flex flex-col">
+                      <span className="text-zinc-900">
+                        {t(`timeline.kind.${i.kind}`)}
+                        {i.kind === 'order' && i.amountMinor !== null && i.currency
+                          ? ` · ${formatMoney(money(i.amountMinor, i.currency), locale)}`
+                          : ''}
+                      </span>
+                      <span className="text-zinc-500">
+                        {i.eventName} · {when.format(i.at)}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ) : null}
+            {canWrite && selectedRecord && !selectedRecord.ticketId && selectedRecord.status === 'active' ? (
+              <form action={removeGuestAction.bind(null, org, event, selectedRecord.id)}>
+                <Button type="submit" variant="ghost" size="sm">
+                  {t('guests.remove')}
+                </Button>
+              </form>
             ) : null}
             <div className="flex flex-wrap gap-2">
               <Button variant="secondary" size="sm" disabled title={t('common.comingSoon')}>

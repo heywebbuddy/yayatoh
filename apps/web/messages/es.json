@@ -696,6 +696,10 @@
     "addLabel": "Añadir etiqueta",
     "removeLabel": "Quitar etiqueta",
     "export": "Exportar como CSV",
+    "email": "Enviar correo",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "messageHint": "Lo envía el organizador sobre este evento. Texto sin formato; cada persona recibe su propio correo.",
     "label": "Etiqueta",
     "labelHint": "Para añadir o quitar una etiqueta.",
     "apply": "Aplicar",
@@ -704,7 +708,8 @@
     "title": {
       "label": "Etiquetas masivas",
       "export": "Exportación de asistentes",
-      "import": "Importación de la lista de invitados"
+      "import": "Importación de la lista de invitados",
+      "email": "Correo a los invitados"
     },
     "status": {
       "queued": "Esperando para empezar…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "Listo: {succeeded} filas exportadas.",
     "importDone": "{succeeded} invitados importados.",
+    "emailDone": "Enviado a {succeeded} personas.",
     "failure": "{count, plural, one {# falló: {reason}} other {# fallaron: {reason}}}",
     "code": {
       "too_many_labels": "ya tienen 20 etiquetas",
       "not_found": "ya no están en esta lista",
-      "other": "error inesperado"
+      "other": "error inesperado",
+      "not_attending": "ya no están en la lista"
     },
     "download": "Descargar CSV",
     "undo": "Deshacer"
@@ -830,5 +837,26 @@
     "requestEmail": "Correo electrónico",
     "requestSend": "Envíame un enlace",
     "requestSent": "Si ese correo tiene entradas para este evento, te llegará un enlace."
+  },
+  "guests": {
+    "name": "Nombre completo",
+    "email": "Correo electrónico",
+    "label": "Etiqueta (opcional)",
+    "add": "Añadir a la lista",
+    "added": "Añadido a la lista.",
+    "remove": "Quitar de la lista"
+  },
+  "timeline": {
+    "title": "{count, plural, one {Historial · # evento} other {Historial · # eventos}}",
+    "kind": {
+      "ticket": "Obtuvo una entrada",
+      "guest": "Añadido a la lista de invitados",
+      "import": "Importado a la lista",
+      "registration": "Se inscribió",
+      "comp": "Recibió una entrada de cortesía",
+      "order": "Hizo un pedido",
+      "checked_in": "Entrada registrada",
+      "removed": "Quitado de la lista"
+    }
   }
 }

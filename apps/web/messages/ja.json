@@ -696,6 +696,10 @@
     "addLabel": "ラベルを追加",
     "removeLabel": "ラベルを削除",
     "export": "CSVでエクスポート",
+    "email": "メールを送信",
+    "subject": "件名",
+    "message": "本文",
+    "messageHint": "このイベントについて主催者から送信されます。プレーンテキストで、一人ひとりに個別のメールが届きます。",
     "label": "ラベル",
     "labelHint": "ラベルの追加・削除に使用します。",
     "apply": "適用",
@@ -704,7 +708,8 @@
     "title": {
       "label": "ラベルの一括編集",
       "export": "参加者のエクスポート",
-      "import": "ゲストリストのインポート"
+      "import": "ゲストリストのインポート",
+      "email": "ゲストへのメール"
     },
     "status": {
       "queued": "開始を待っています…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "完了：{succeeded} 行をエクスポートしました。",
     "importDone": "{succeeded} 人のゲストをインポートしました。",
+    "emailDone": "{succeeded} 人に送信しました。",
     "failure": "{count, plural, other {#件失敗：{reason}}}",
     "code": {
       "too_many_labels": "ラベルがすでに20件あります",
       "not_found": "このリストにもう含まれていません",
-      "other": "予期しないエラー"
+      "other": "予期しないエラー",
+      "not_attending": "リストに含まれていません"
     },
     "download": "CSVをダウンロード",
     "undo": "取り消す"
@@ -830,5 +837,26 @@
     "requestEmail": "メールアドレス",
     "requestSend": "リンクをメールで受け取る",
     "requestSent": "このメールアドレスにこのイベントのチケットがある場合は、リンクをお送りしました。"
+  },
+  "guests": {
+    "name": "氏名",
+    "email": "メールアドレス",
+    "label": "ラベル（任意）",
+    "add": "リストに追加",
+    "added": "リストに追加しました。",
+    "remove": "リストから削除"
+  },
+  "timeline": {
+    "title": "{count, plural, other {履歴 · #件のイベント}}",
+    "kind": {
+      "ticket": "チケットを取得",
+      "guest": "ゲストリストに追加",
+      "import": "リストにインポート",
+      "registration": "登録",
+      "comp": "招待チケットを付与",
+      "order": "注文",
+      "checked_in": "チェックイン",
+      "removed": "リストから削除"
+    }
   }
 }

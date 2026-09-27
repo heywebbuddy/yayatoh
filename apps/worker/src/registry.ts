@@ -1,3 +1,5 @@
+import { attendeeMessageMailer } from '@yayatoh/attendees';
+import { findEventTx } from '@yayatoh/events';
 import { ticketMailer } from '@yayatoh/orders';
 import { consoleMailer, type Subscriber } from '@yayatoh/platform';
 import { invitationMailer } from '@yayatoh/tenancy';
@@ -25,5 +27,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     ticketMailer({ mailer: consoleMailer, appOrigin }),
     claimLinkMailer({ mailer: consoleMailer, appOrigin }),
     holderLinkMailer({ mailer: consoleMailer, appOrigin }),
+    attendeeMessageMailer({
+      mailer: consoleMailer,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
   ];
 }

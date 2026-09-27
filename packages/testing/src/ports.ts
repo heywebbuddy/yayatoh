@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
+import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { billingEntitlements } from '@yayatoh/billing';
 import { eventRolesOf } from '@yayatoh/events';
 import {
@@ -22,7 +22,12 @@ export const ports = createCommandPorts({
 setKeyVault(localKeyVault(randomBytes(32).toString('hex')));
 
 /** The bulk actions the apps register, and the step command built from them. */
-export const BULK_ACTIONS = [attendeeLabelAction, attendeeImportAction, attendeeExportAction] as const;
+export const BULK_ACTIONS = [
+  attendeeLabelAction,
+  attendeeImportAction,
+  attendeeEmailAction,
+  attendeeExportAction,
+] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>
   runBulkOperation(bulkStep, ports, orgId, operationId, budgetMs);

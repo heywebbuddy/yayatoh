@@ -696,6 +696,10 @@
     "addLabel": "新增標籤",
     "removeLabel": "移除標籤",
     "export": "匯出為 CSV",
+    "email": "傳送電子郵件",
+    "subject": "主旨",
+    "message": "內容",
+    "messageHint": "由主辦單位就此活動寄出。純文字；每個人都會收到自己的一封郵件。",
     "label": "標籤",
     "labelHint": "用於新增或移除標籤。",
     "apply": "套用",
@@ -704,7 +708,8 @@
     "title": {
       "label": "批次標籤",
       "export": "參加者匯出",
-      "import": "賓客名單匯入"
+      "import": "賓客名單匯入",
+      "email": "寄給賓客的電子郵件"
     },
     "status": {
       "queued": "等待開始…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "已完成：已匯出 {succeeded} 列。",
     "importDone": "已匯入 {succeeded} 位賓客。",
+    "emailDone": "已寄給 {succeeded} 人。",
     "failure": "{count, plural, other {# 筆失敗：{reason}}}",
     "code": {
       "too_many_labels": "已有 20 個標籤",
       "not_found": "已不在此清單中",
-      "other": "未預期的錯誤"
+      "other": "未預期的錯誤",
+      "not_attending": "已不在名單中"
     },
     "download": "下載 CSV",
     "undo": "復原"
@@ -830,5 +837,26 @@
     "requestEmail": "電子郵件",
     "requestSend": "以電子郵件寄送連結",
     "requestSent": "如果該電子郵件有本活動的票券，連結已在寄送途中。"
+  },
+  "guests": {
+    "name": "全名",
+    "email": "電子郵件",
+    "label": "標籤（選填）",
+    "add": "加入名單",
+    "added": "已加入名單。",
+    "remove": "從名單中移除"
+  },
+  "timeline": {
+    "title": "{count, plural, other {歷史紀錄 · # 場活動}}",
+    "kind": {
+      "ticket": "取得票券",
+      "guest": "被加入賓客名單",
+      "import": "被匯入名單",
+      "registration": "已報名",
+      "comp": "獲得招待票",
+      "order": "下了訂單",
+      "checked_in": "已報到",
+      "removed": "被移出名單"
+    }
   }
 }

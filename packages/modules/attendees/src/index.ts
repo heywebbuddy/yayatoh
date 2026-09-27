@@ -20,6 +20,14 @@ export {
 } from './bulk.ts';
 export * from './dto.ts';
 export {
+  addGuestCommand,
+  attendeeEmailAction,
+  attendeeEmailBulk,
+  attendeeMessageMailer,
+  contactAttendancesTx,
+  removeGuestCommand,
+} from './guests.ts';
+export {
   attendeeImportAction,
   attendeeImportBulk,
   guessMapping,

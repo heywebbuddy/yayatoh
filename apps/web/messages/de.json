@@ -696,6 +696,10 @@
     "addLabel": "Label hinzufügen",
     "removeLabel": "Label entfernen",
     "export": "Als CSV exportieren",
+    "email": "E-Mail senden",
+    "subject": "Betreff",
+    "message": "Nachricht",
+    "messageHint": "Wird vom Veranstalter zu diesem Event gesendet. Nur Text; jede Person erhält eine eigene E-Mail.",
     "label": "Label",
     "labelHint": "Zum Hinzufügen oder Entfernen eines Labels.",
     "apply": "Anwenden",
@@ -704,7 +708,8 @@
     "title": {
       "label": "Labels für mehrere",
       "export": "Export der Teilnehmenden",
-      "import": "Gästelisten-Import"
+      "import": "Gästelisten-Import",
+      "email": "E-Mail an Gäste"
     },
     "status": {
       "queued": "Wartet auf Start…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "Fertig: {succeeded} Zeilen exportiert.",
     "importDone": "{succeeded} Gäste importiert.",
+    "emailDone": "An {succeeded} Personen gesendet.",
     "failure": "{count, plural, one {# fehlgeschlagen: {reason}} other {# fehlgeschlagen: {reason}}}",
     "code": {
       "too_many_labels": "sie haben bereits 20 Labels",
       "not_found": "nicht mehr in dieser Liste",
-      "other": "unerwarteter Fehler"
+      "other": "unerwarteter Fehler",
+      "not_attending": "nicht mehr auf der Liste"
     },
     "download": "CSV herunterladen",
     "undo": "Rückgängig"
@@ -830,5 +837,26 @@
     "requestEmail": "E-Mail",
     "requestSend": "Link per E-Mail senden",
     "requestSent": "Wenn es für diese E-Mail Tickets für dieses Event gibt, ist ein Link unterwegs."
+  },
+  "guests": {
+    "name": "Vollständiger Name",
+    "email": "E-Mail",
+    "label": "Label (optional)",
+    "add": "Zur Liste hinzufügen",
+    "added": "Zur Liste hinzugefügt.",
+    "remove": "Von der Liste entfernen"
+  },
+  "timeline": {
+    "title": "{count, plural, one {Verlauf · # Event} other {Verlauf · # Events}}",
+    "kind": {
+      "ticket": "Ticket erhalten",
+      "guest": "Zur Gästeliste hinzugefügt",
+      "import": "In die Liste importiert",
+      "registration": "Angemeldet",
+      "comp": "Freiticket erhalten",
+      "order": "Bestellung aufgegeben",
+      "checked_in": "Eingecheckt",
+      "removed": "Von der Liste entfernt"
+    }
   }
 }

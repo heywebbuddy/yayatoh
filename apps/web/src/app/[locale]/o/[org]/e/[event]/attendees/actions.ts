@@ -3,8 +3,11 @@
 import {
   ATTENDEE_SOURCES,
   ATTENDEE_STATUSES,
+  addGuestCommand,
+  attendeeEmailBulk,
   attendeeImportBulk,
   attendeeLabelBulk,
+  removeGuestCommand,
   setAttendeeLabelsCommand,
 } from '@yayatoh/attendees';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
@@ -58,7 +61,7 @@ export async function removeLabelAction(
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }
 
-export type BulkKind = 'label' | 'export' | 'import';
+export type BulkKind = 'label' | 'export' | 'import' | 'email';
 
 const pick = <T extends string>(list: readonly T[], v: FormDataEntryValue | null): T | undefined =>
   list.includes(v as T) ? (v as T) : undefined;
@@ -72,7 +75,7 @@ export async function bulkAction(org: string, event: string, form: FormData): Pr
   const locale = await getLocale();
   const base = `/o/${org}/e/${event}/attendees`;
   const what = String(form.get('bulk') ?? '');
-  const kind: BulkKind = what === 'export' ? 'export' : 'label';
+  const kind: BulkKind = what === 'export' ? 'export' : what === 'email' ? 'email' : 'label';
   const selection =
     form.get('scope') === 'all'
       ? {
@@ -98,6 +101,17 @@ export async function bulkAction(org: string, event: string, form: FormData): Pr
             yes: t('yes'),
             no: t('no'),
           },
+        },
+        data.ctx,
+        ports,
+      ));
+    } else if (kind === 'email') {
+      ({ operationId } = await executeCommand(
+        attendeeEmailBulk.start,
+        {
+          eventId: ev.id,
+          selection,
+          params: { subject: String(form.get('subject') ?? ''), body: String(form.get('message') ?? '') },
         },
         data.ctx,
         ports,
@@ -169,5 +183,40 @@ export async function sendTicketAction(
 export async function revokeClaimAction(org: string, event: string, claimId: string): Promise<void> {
   const { data, event: ev } = await loadEvent(org, event);
   await executeCommand(revokeClaimLinkCommand, { eventId: ev.id, claimId }, data.ctx, ports);
+  revalidatePath(`/o/${org}/e/${event}/attendees`);
+}
+
+export type GuestState = { readonly ok: boolean; readonly code: string | null };
+
+export async function addGuestAction(
+  org: string,
+  event: string,
+  _prev: GuestState,
+  form: FormData,
+): Promise<GuestState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const label = String(form.get('label') ?? '').trim();
+  try {
+    await executeCommand(
+      addGuestCommand,
+      {
+        eventId: ev.id,
+        name: String(form.get('name') ?? ''),
+        email: String(form.get('email') ?? ''),
+        labels: label ? [label] : [],
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/attendees`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return { ok: false, code: isDomainError(err) ? err.code : 'internal' };
+  }
+}
+
+export async function removeGuestAction(org: string, event: string, attendeeId: string): Promise<void> {
+  const { data, event: ev } = await loadEvent(org, event);
+  await executeCommand(removeGuestCommand, { eventId: ev.id, attendeeId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }

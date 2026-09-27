@@ -696,6 +696,10 @@
     "addLabel": "Aggiungi etichetta",
     "removeLabel": "Rimuovi etichetta",
     "export": "Esporta in CSV",
+    "email": "Invia email",
+    "subject": "Oggetto",
+    "message": "Messaggio",
+    "messageHint": "Inviata dall’organizzatore su questo evento. Testo semplice; ogni persona riceve la propria email.",
     "label": "Etichetta",
     "labelHint": "Per aggiungere o rimuovere un’etichetta.",
     "apply": "Applica",
@@ -704,7 +708,8 @@
     "title": {
       "label": "Etichette di gruppo",
       "export": "Esportazione partecipanti",
-      "import": "Importazione lista ospiti"
+      "import": "Importazione lista ospiti",
+      "email": "Email agli ospiti"
     },
     "status": {
       "queued": "In attesa di avvio…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "Pronto: {succeeded} righe esportate.",
     "importDone": "{succeeded} ospiti importati.",
+    "emailDone": "Inviata a {succeeded} persone.",
     "failure": "{count, plural, one {# non riuscito: {reason}} other {# non riusciti: {reason}}}",
     "code": {
       "too_many_labels": "hanno già 20 etichette",
       "not_found": "non sono più in questo elenco",
-      "other": "errore imprevisto"
+      "other": "errore imprevisto",
+      "not_attending": "non sono più nella lista"
     },
     "download": "Scarica CSV",
     "undo": "Annulla"
@@ -830,5 +837,26 @@
     "requestEmail": "Email",
     "requestSend": "Inviami un link",
     "requestSent": "Se a quell’email corrispondono biglietti per questo evento, il link è in arrivo."
+  },
+  "guests": {
+    "name": "Nome e cognome",
+    "email": "Email",
+    "label": "Etichetta (facoltativa)",
+    "add": "Aggiungi alla lista",
+    "added": "Aggiunto alla lista.",
+    "remove": "Rimuovi dalla lista"
+  },
+  "timeline": {
+    "title": "{count, plural, one {Cronologia · # evento} other {Cronologia · # eventi}}",
+    "kind": {
+      "ticket": "Ha ottenuto un biglietto",
+      "guest": "Aggiunto alla lista degli ospiti",
+      "import": "Importato nella lista",
+      "registration": "Si è registrato",
+      "comp": "Ha ricevuto un biglietto omaggio",
+      "order": "Ha effettuato un ordine",
+      "checked_in": "Ingresso registrato",
+      "removed": "Rimosso dalla lista"
+    }
   }
 }

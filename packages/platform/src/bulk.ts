@@ -68,7 +68,13 @@ export interface BulkAction<P = unknown, F = unknown> {
     ctx: Ctx,
     ids: readonly string[],
     params: P,
-    meta: { first: boolean; eventId: string | null },
+    meta: {
+      first: boolean;
+      eventId: string | null;
+      operationId: string;
+      /** Outbox events for side effects (email, webhooks), committed with the chunk. */
+      emit: (event: DomainEvent) => void;
+    },
   ): Promise<{ results: readonly BulkItemResult[]; append?: string }>;
   undo?(tx: TenantTx, ctx: Ctx, items: readonly { id: string; undo: unknown }[], params: P): Promise<void>;
 }
@@ -326,6 +332,8 @@ export function bulkStepCommand(actions: readonly AnyBulkAction[]) {
       const { results, append } = await action.run(tx, ctx, ids, params, {
         first: op.processed === 0,
         eventId: op.eventId,
+        operationId: op.id,
+        emit,
       });
       const keep = results.filter((r) => !r.ok || (action.undo && r.undo !== undefined));
       if (keep.length)
@@ -492,6 +500,15 @@ export const markBulkFailedCommand = tenantCommand({
     return { ok: true };
   },
 });
+
+/** The params an operation was started with (for subscribers acting on its events). */
+export async function bulkOperationParamsTx(tx: TenantTx, operationId: string): Promise<unknown> {
+  const [op] = await tx
+    .select({ params: bulkOperations.params })
+    .from(bulkOperations)
+    .where(eq(bulkOperations.id, operationId));
+  return op?.params ?? null;
+}
 
 /** Recent operations for one event (the console's "recent bulk actions"); no file content. */
 export const listBulkOperationsQuery = tenantQuery({

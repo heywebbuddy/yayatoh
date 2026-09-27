@@ -696,6 +696,10 @@
     "addLabel": "添加标签",
     "removeLabel": "移除标签",
     "export": "导出为 CSV",
+    "email": "发送邮件",
+    "subject": "主题",
+    "message": "内容",
+    "messageHint": "由主办方就此活动发送。纯文本；每人会单独收到一封邮件。",
     "label": "标签",
     "labelHint": "用于添加或移除标签。",
     "apply": "应用",
@@ -704,7 +708,8 @@
     "title": {
       "label": "批量标签",
       "export": "参会者导出",
-      "import": "宾客名单导入"
+      "import": "宾客名单导入",
+      "email": "发送给宾客的邮件"
     },
     "status": {
       "queued": "等待开始…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "已完成：已导出 {succeeded} 行。",
     "importDone": "已导入 {succeeded} 位宾客。",
+    "emailDone": "已发送给 {succeeded} 人。",
     "failure": "{count, plural, other {# 条失败：{reason}}}",
     "code": {
       "too_many_labels": "已有 20 个标签",
       "not_found": "已不在此列表中",
-      "other": "意外错误"
+      "other": "意外错误",
+      "not_attending": "已不在名单中"
     },
     "download": "下载 CSV",
     "undo": "撤销"
@@ -830,5 +837,26 @@
     "requestEmail": "电子邮箱",
     "requestSend": "通过邮件发送链接",
     "requestSent": "如果该邮箱有本活动的门票，链接已在发送途中。"
+  },
+  "guests": {
+    "name": "全名",
+    "email": "电子邮箱",
+    "label": "标签（可选）",
+    "add": "添加到名单",
+    "added": "已添加到名单。",
+    "remove": "从名单中移除"
+  },
+  "timeline": {
+    "title": "{count, plural, other {历史记录 · # 场活动}}",
+    "kind": {
+      "ticket": "获得门票",
+      "guest": "被添加到宾客名单",
+      "import": "被导入名单",
+      "registration": "已报名",
+      "comp": "获赠赠票",
+      "order": "下了订单",
+      "checked_in": "已签到",
+      "removed": "被移出名单"
+    }
   }
 }

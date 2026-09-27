@@ -1,4 +1,4 @@
-import { withoutTenant, withTenant } from '@yayatoh/db';
+import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
@@ -50,6 +50,25 @@ export const OrderHitDto = z.object({
 });
 
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+/** A contact's orders (as buyer), newest first: the contact timeline. */
+export async function ordersForContactTx(tx: TenantTx, contactId: string) {
+  return (
+    await tx
+      .select({
+        id: orders.id,
+        eventId: orders.eventId,
+        status: orders.status,
+        currency: orders.currency,
+        totalMinor: orders.totalMinor,
+        createdAt: orders.createdAt,
+      })
+      .from(orders)
+      .where(eq(orders.buyerContactId, contactId))
+      .orderBy(desc(orders.createdAt))
+      .limit(200)
+  ).map((o) => ({ ...o, status: o.status as (typeof ORDER_STATUSES)[number] }));
+}
 
 /** Org-wide order search (the command palette): buyer name or email, or an order id prefix. */
 export const searchOrdersQuery = tenantQuery({

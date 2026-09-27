@@ -696,6 +696,10 @@
     "addLabel": "Adicionar etiqueta",
     "removeLabel": "Remover etiqueta",
     "export": "Exportar como CSV",
+    "email": "Enviar e-mail",
+    "subject": "Assunto",
+    "message": "Mensagem",
+    "messageHint": "Enviado pelo organizador sobre este evento. Texto simples; cada pessoa recebe seu próprio e-mail.",
     "label": "Etiqueta",
     "labelHint": "Para adicionar ou remover uma etiqueta.",
     "apply": "Aplicar",
@@ -704,7 +708,8 @@
     "title": {
       "label": "Etiquetas em massa",
       "export": "Exportação de participantes",
-      "import": "Importação da lista de convidados"
+      "import": "Importação da lista de convidados",
+      "email": "E-mail para convidados"
     },
     "status": {
       "queued": "Aguardando início…",
@@ -716,11 +721,13 @@
     },
     "exportDone": "Pronto: {succeeded} linhas exportadas.",
     "importDone": "{succeeded} convidados importados.",
+    "emailDone": "Enviado para {succeeded} pessoas.",
     "failure": "{count, plural, one {# falhou: {reason}} other {# falharam: {reason}}}",
     "code": {
       "too_many_labels": "já têm 20 etiquetas",
       "not_found": "não estão mais nesta lista",
-      "other": "erro inesperado"
+      "other": "erro inesperado",
+      "not_attending": "não estão mais na lista"
     },
     "download": "Baixar CSV",
     "undo": "Desfazer"
@@ -830,5 +837,26 @@
     "requestEmail": "E-mail",
     "requestSend": "Enviar um link por e-mail",
     "requestSent": "Se esse e-mail tiver ingressos para este evento, um link está a caminho."
+  },
+  "guests": {
+    "name": "Nome completo",
+    "email": "E-mail",
+    "label": "Etiqueta (opcional)",
+    "add": "Adicionar à lista",
+    "added": "Adicionado à lista.",
+    "remove": "Remover da lista"
+  },
+  "timeline": {
+    "title": "{count, plural, one {Histórico · # evento} other {Histórico · # eventos}}",
+    "kind": {
+      "ticket": "Recebeu um ingresso",
+      "guest": "Adicionado à lista de convidados",
+      "import": "Importado para a lista",
+      "registration": "Fez inscrição",
+      "comp": "Recebeu um ingresso de cortesia",
+      "order": "Fez um pedido",
+      "checked_in": "Fez check-in",
+      "removed": "Removido da lista"
+    }
   }
 }
