@@ -50,6 +50,33 @@ jobs:
             echo "ok: $c rejected"
           done
 
+  legacy-mask:
+    name: legacy masking — masked dump imports into MySQL 8
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: synthetic-only
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd "mysqladmin ping -uroot -psynthetic-only" --health-interval 3s --health-retries 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Mask the synthetic legacy fixture, verify, and load both into MySQL
+        env:
+          MYSQL: mysql -h127.0.0.1 -P3306 -uroot -psynthetic-only
+        run: |
+          set -euo pipefail
+          node tools/legacy-mask/cli.ts keygen --out "$RUNNER_TEMP/mask.key"
+          node tools/legacy-mask/cli.ts mask --in tools/legacy-mask/tests/fixtures/legacy-synthetic.sql --out "$RUNNER_TEMP/masked.sql" --key-file "$RUNNER_TEMP/mask.key"
+          node tools/legacy-mask/cli.ts verify --original tools/legacy-mask/tests/fixtures/legacy-synthetic.sql --masked "$RUNNER_TEMP/masked.sql"
+          tools/legacy-mask/scripts/import-check.sh tools/legacy-mask/tests/fixtures/legacy-synthetic.sql "$RUNNER_TEMP/masked.sql"
+
   integration:
     name: integration + isolation (Postgres 18)
     runs-on: ubuntu-latest

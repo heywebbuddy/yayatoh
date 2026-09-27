@@ -44,6 +44,8 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - FTC all-in pricing.
   - Organizer agreement.
   - Stripe's holding limit for funds on unconnected organizers.
+- [ ] **Card data in the legacy database (urgent, PCI):** the legacy app saves full card numbers, expiry, CVC and cardholder name for failed checkouts in `failed_bookings.payment_method` (and session payloads can carry them). Storing CVCs is never allowed. Ask your Laravel developer to stop writing it (M0.0), purge the column and old sessions, and check with Stripe/your acquirer whether a PCI incident report is needed. Generated guest passwords are also stored in plain text in `notifications.data` and queued jobs. The abc.yayatoh.com dump you uploaded on 2026-09-27 contains this data: consider deleting it from this environment and wherever else copies were made. Label: `payments`, `legal-copy`.
+- [ ] **Mask the legacy dumps yourself** (M2.2a): follow `docs/runbooks/legacy-export.md` for both instances and send only `masked.sql.gz` + `mask-report.json`. Keep `mask.key` and the raw dumps in the encrypted `legacy-ref` store.
 - [ ] **Legacy data access** (M0.2–M0.4):
   - Nightly database dumps for yayatoh.com and abc.yayatoh.com, masked before use.
   - 90 days of access logs.
