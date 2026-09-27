@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Seating views",
       "plan": "Plan",
-      "assign": "Assign guests"
+      "assign": "Assign guests",
+      "finder": "Seat finder"
     },
     "assign": {
       "title": "Assign guests",
@@ -1368,7 +1369,143 @@
         "remove": "Remove",
         "removeLabel": "Remove {name} from {item}"
       }
+    },
+    "finder": {
+      "title": "Seat finder",
+      "description": "Let guests find their seat on their phone and see the venue map. Print a poster with a QR code for the entrance.",
+      "noPlan": "This event has no seating plan yet. Create one first; guests then find their seats on it.",
+      "open": "Open to guests",
+      "closed": "Closed to guests",
+      "modeNow": "Look-up: {mode}",
+      "modeShort": {
+        "code": "email code",
+        "name": "full name"
+      },
+      "notPublic": "The event isn't published (or is private), so guests can't open the seat finder yet.",
+      "settingsTitle": "Guests",
+      "save": "Save",
+      "saved": "Seat finder settings saved.",
+      "publicMap": "Show guests the venue map and seat finder",
+      "publicMapHint": "The map shows the stage, entrances, bars and tables — never who sits where.",
+      "mode": "How guests look up their seat",
+      "modeOption": {
+        "code": "With a code sent to their email (recommended)",
+        "name": "Instantly, by full name"
+      },
+      "modeHint": {
+        "code": "Only someone who can read the guest's email sees their seat, and no one can find out who is on the list.",
+        "name": "Faster at the door, but anyone who knows a guest's full name can see where they sit."
+      },
+      "readOnly": "You can see these settings but not change them.",
+      "shareTitle": "Share it",
+      "address": "Seat finder address",
+      "openPublic": "Open the seat finder",
+      "poster": "Print seat-finder poster",
+      "closedNote": "The seat finder is closed. Guests who scan the poster are asked to check back later."
     }
+  },
+  "venueMap": {
+    "title": "Venue map",
+    "description": "Where the stage, entrances, bars and tables are.",
+    "findSeat": "Find my seat",
+    "tools": "Map controls",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "reset": "Whole room",
+    "zoom": "Zoom {percent}%",
+    "region": "Venue map",
+    "keys": "With the map selected: + and − zoom, the arrow keys move around, 0 shows the whole room. Everything on the map is also listed in the venue guide.",
+    "guide": "Venue guide",
+    "guideHint": "Everything on the map, and where it is.",
+    "object": {
+      "stage": "Stage",
+      "booth": "Booth",
+      "entrance": "Entrance",
+      "exit": "Exit",
+      "dance_floor": "Dance floor",
+      "bar": "Bar",
+      "custom": "Other"
+    },
+    "named": "{type}: {label}",
+    "table": "Table {label}",
+    "row": "Row {label}",
+    "seats": "{count, plural, one {# seat} other {# seats}}",
+    "area": {
+      "top-left": "Top left of the map",
+      "top": "Top of the map",
+      "top-right": "Top right of the map",
+      "left": "Left side of the map",
+      "centre": "Middle of the map",
+      "right": "Right side of the map",
+      "bottom-left": "Bottom left of the map",
+      "bottom": "Bottom of the map",
+      "bottom-right": "Bottom right of the map"
+    },
+    "yours": "{count, plural, one {Your seat: {seats}} other {Your seats: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Seat finder",
+    "title": "Find your seat",
+    "closedTitle": "The seat finder isn't open yet",
+    "closedDescription": "The organizer hasn't opened the seat finder for this event. Please check back closer to the day, or ask a host.",
+    "toEvent": "Back to the event",
+    "lookupTitle": "Find your seat",
+    "codeIntro": "Enter the email address your invitation or tickets were sent to. We'll email you a code to see your seat.",
+    "email": "Email",
+    "sendCode": "Email me a code",
+    "sending": "Sending…",
+    "codeTitle": "Enter your code",
+    "sent": "If you're on the guest list, we've emailed you a 6-digit code. It works for 10 minutes.",
+    "codeHint": "Enter the 6-digit code we emailed you.",
+    "code": "6-digit code",
+    "verify": "Show my seat",
+    "checking": "Checking…",
+    "otherEmail": "Use a different email",
+    "nameIntro": "Enter your full name as it appears on your invitation.",
+    "name": "Full name",
+    "findByName": "Find my seat",
+    "resultTitle": "{count, plural, one {Your seat} other {Your seats}}",
+    "noSeatTitle": "You're on the list",
+    "notFoundTitle": "No one found",
+    "noSeat": "You don't have a seat yet. The organizer will let you know, or ask a host.",
+    "notFound": "We couldn't find that name. Check the spelling, or ask a host.",
+    "seatAt": {
+      "table": "Table {item} · Seat {seat}",
+      "row": "Row {item} · Seat {seat}"
+    },
+    "nearest": "Nearest entrance: {name}",
+    "someUnseated": "{count, plural, one {# person in your party doesn't have a seat yet.} other {# people in your party don't have a seat yet.}}",
+    "again": "Look up someone else",
+    "challengeTitle": "Please confirm you're a person",
+    "challengeHint": "There have been many lookups from this device. Complete the check, then send again.",
+    "fakeChallenge": "I'm a person (test check)",
+    "mapTitle": "Venue map",
+    "errors": {
+      "wrong": "{left, plural, one {That code isn't right. You have # try left.} other {That code isn't right. You have # tries left.}}",
+      "locked": "Too many wrong codes. Ask for a new code.",
+      "expired": "This code has expired. Ask for a new one.",
+      "used": "This code has already been used. Ask for a new one.",
+      "invalidCode": "Enter the 6 digits from the email.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidName": "Enter your full name.",
+      "challengeFailed": "The check didn't pass. Please try again.",
+      "challengeUnavailable": "Too many lookups from this device. Please wait a minute and try again.",
+      "closed": "The seat finder isn't open for this event.",
+      "internal": "Something went wrong on our side."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Seat-finder poster",
+    "title": "Find your seat",
+    "back": "Back to the seat finder",
+    "print": "Print poster",
+    "closedNote": "The seat finder is closed. Guests who scan this poster are asked to check back later — open it on the Seating page.",
+    "qrLabel": "QR code to the seat finder: {url}",
+    "step1": "Scan the code with your phone's camera.",
+    "step2Code": "Enter your email — we'll send you a code.",
+    "step2Name": "Enter your full name.",
+    "step3": "See your table and seat on the venue map.",
+    "orVisit": "Or go to"
   },
   "reports": {
     "title": "Analysis",

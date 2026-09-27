@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Weergaven van de zaalindeling",
       "plan": "Plattegrond",
-      "assign": "Gasten plaatsen"
+      "assign": "Gasten plaatsen",
+      "finder": "Plaatszoeker"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -1368,7 +1369,143 @@
         "remove": "Verwijderen",
         "removeLabel": "{name} verwijderen van {item}"
       }
+    },
+    "finder": {
+      "title": "Plaatszoeker",
+      "description": "Gasten vinden hun plaats op hun telefoon en zien de plattegrond. Druk een poster met een QR-code af voor de ingang.",
+      "noPlan": "Dit evenement heeft nog geen zaalindeling. Maak er eerst een; daarop vinden gasten dan hun plaats.",
+      "open": "Open voor gasten",
+      "closed": "Gesloten voor gasten",
+      "modeNow": "Zoeken: {mode}",
+      "modeShort": {
+        "code": "code per e-mail",
+        "name": "volledige naam"
+      },
+      "notPublic": "Het evenement is niet gepubliceerd (of is privé), dus gasten kunnen de plaatszoeker nog niet openen.",
+      "settingsTitle": "Gasten",
+      "save": "Opslaan",
+      "saved": "Instellingen van de plaatszoeker opgeslagen.",
+      "publicMap": "Gasten de plattegrond en de plaatszoeker tonen",
+      "publicMapHint": "De plattegrond toont het podium, de ingangen, de bars en de tafels, nooit wie waar zit.",
+      "mode": "Hoe gasten hun plaats zoeken",
+      "modeOption": {
+        "code": "Met een code per e-mail (aanbevolen)",
+        "name": "Direct, op volledige naam"
+      },
+      "modeHint": {
+        "code": "Alleen wie de e-mail van de gast kan lezen, ziet diens plaats, en niemand kan achterhalen wie er op de lijst staat.",
+        "name": "Sneller bij de deur, maar iedereen die de volledige naam van een gast kent, kan zien waar die zit."
+      },
+      "readOnly": "U kunt deze instellingen zien, maar niet wijzigen.",
+      "shareTitle": "Delen",
+      "address": "Adres van de plaatszoeker",
+      "openPublic": "Plaatszoeker openen",
+      "poster": "Poster plaatszoeker afdrukken",
+      "closedNote": "De plaatszoeker is gesloten. Wie de poster scant, wordt gevraagd later terug te komen."
     }
+  },
+  "venueMap": {
+    "title": "Plattegrond",
+    "description": "Waar het podium, de ingangen, de bars en de tafels zijn.",
+    "findSeat": "Mijn plaats vinden",
+    "tools": "Kaartbediening",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "reset": "Hele zaal",
+    "zoom": "Zoom {percent}%",
+    "region": "Plattegrond",
+    "keys": "Met de plattegrond geselecteerd: + en − zoomen, de pijltjestoetsen verschuiven, 0 toont de hele zaal. Alles op de plattegrond staat ook in de zaalgids.",
+    "guide": "Zaalgids",
+    "guideHint": "Alles op de plattegrond en waar het is.",
+    "object": {
+      "stage": "Podium",
+      "booth": "Stand",
+      "entrance": "Ingang",
+      "exit": "Uitgang",
+      "dance_floor": "Dansvloer",
+      "bar": "Bar",
+      "custom": "Overig"
+    },
+    "named": "{type}: {label}",
+    "table": "Tafel {label}",
+    "row": "Rij {label}",
+    "seats": "{count, plural, one {# plaats} other {# plaatsen}}",
+    "area": {
+      "top-left": "Linksboven op de plattegrond",
+      "top": "Bovenaan de plattegrond",
+      "top-right": "Rechtsboven op de plattegrond",
+      "left": "Linkerkant van de plattegrond",
+      "centre": "Midden van de plattegrond",
+      "right": "Rechterkant van de plattegrond",
+      "bottom-left": "Linksonder op de plattegrond",
+      "bottom": "Onderaan de plattegrond",
+      "bottom-right": "Rechtsonder op de plattegrond"
+    },
+    "yours": "{count, plural, one {Uw plaats: {seats}} other {Uw plaatsen: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Plaatszoeker",
+    "title": "Vind uw plaats",
+    "closedTitle": "De plaatszoeker is nog niet open",
+    "closedDescription": "De organisator heeft de plaatszoeker voor dit evenement nog niet opengezet. Kijk dichter bij de datum nog eens of vraag het aan een gastheer of gastvrouw.",
+    "toEvent": "Terug naar het evenement",
+    "lookupTitle": "Vind uw plaats",
+    "codeIntro": "Vul het e-mailadres in waarnaar uw uitnodiging of tickets zijn gestuurd. We mailen u een code om uw plaats te zien.",
+    "email": "E-mail",
+    "sendCode": "Mail mij een code",
+    "sending": "Versturen…",
+    "codeTitle": "Vul uw code in",
+    "sent": "Als u op de gastenlijst staat, hebben we u een code van 6 cijfers gemaild. Die is 10 minuten geldig.",
+    "codeHint": "Vul de code van 6 cijfers uit onze e-mail in.",
+    "code": "Code van 6 cijfers",
+    "verify": "Mijn plaats tonen",
+    "checking": "Controleren…",
+    "otherEmail": "Ander e-mailadres gebruiken",
+    "nameIntro": "Vul uw volledige naam in zoals die op uw uitnodiging staat.",
+    "name": "Volledige naam",
+    "findByName": "Mijn plaats vinden",
+    "resultTitle": "{count, plural, one {Uw plaats} other {Uw plaatsen}}",
+    "noSeatTitle": "U staat op de lijst",
+    "notFoundTitle": "Niemand gevonden",
+    "noSeat": "U hebt nog geen plaats. De organisator laat het u weten, of vraag het aan een gastheer of gastvrouw.",
+    "notFound": "We konden die naam niet vinden. Controleer de spelling of vraag het aan een gastheer of gastvrouw.",
+    "seatAt": {
+      "table": "Tafel {item} · Plaats {seat}",
+      "row": "Rij {item} · Plaats {seat}"
+    },
+    "nearest": "Dichtstbijzijnde ingang: {name}",
+    "someUnseated": "{count, plural, one {# persoon uit uw gezelschap heeft nog geen plaats.} other {# personen uit uw gezelschap hebben nog geen plaats.}}",
+    "again": "Iemand anders zoeken",
+    "challengeTitle": "Bevestig dat u een mens bent",
+    "challengeHint": "Vanaf dit apparaat is veel gezocht. Voltooi de controle en verstuur opnieuw.",
+    "fakeChallenge": "Ik ben een mens (testcontrole)",
+    "mapTitle": "Plattegrond",
+    "errors": {
+      "wrong": "{left, plural, one {Die code klopt niet. U hebt nog # poging.} other {Die code klopt niet. U hebt nog # pogingen.}}",
+      "locked": "Te veel foute codes. Vraag een nieuwe code aan.",
+      "expired": "Deze code is verlopen. Vraag een nieuwe aan.",
+      "used": "Deze code is al gebruikt. Vraag een nieuwe aan.",
+      "invalidCode": "Vul de 6 cijfers uit de e-mail in.",
+      "invalidEmail": "Vul een geldig e-mailadres in.",
+      "invalidName": "Vul uw volledige naam in.",
+      "challengeFailed": "De controle is niet gelukt. Probeer het opnieuw.",
+      "challengeUnavailable": "Te veel zoekopdrachten vanaf dit apparaat. Wacht een minuut en probeer het opnieuw.",
+      "closed": "De plaatszoeker is niet open voor dit evenement.",
+      "internal": "Er ging bij ons iets mis."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Poster plaatszoeker",
+    "title": "Vind uw plaats",
+    "back": "Terug naar de plaatszoeker",
+    "print": "Poster afdrukken",
+    "closedNote": "De plaatszoeker is gesloten. Wie deze poster scant, wordt gevraagd later terug te komen. Zet hem open op de pagina Zitplaatsen.",
+    "qrLabel": "QR-code naar de plaatszoeker: {url}",
+    "step1": "Scan de code met de camera van uw telefoon.",
+    "step2Code": "Vul uw e-mailadres in; we sturen u een code.",
+    "step2Name": "Vul uw volledige naam in.",
+    "step3": "Zie uw tafel en plaats op de plattegrond.",
+    "orVisit": "Of ga naar"
   },
   "reports": {
     "title": "Analyse",

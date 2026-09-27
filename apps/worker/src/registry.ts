@@ -2,7 +2,7 @@ import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { findEventTx } from '@yayatoh/events';
 import { ticketMailer } from '@yayatoh/orders';
 import { consoleMailer, type Subscriber } from '@yayatoh/platform';
-import { releaseCancelledSeats } from '@yayatoh/seating';
+import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 import { z } from 'zod';
@@ -33,5 +33,6 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     releaseCancelledSeats(),
+    finderCodeMailer({ mailer: consoleMailer, appOrigin }),
   ];
 }

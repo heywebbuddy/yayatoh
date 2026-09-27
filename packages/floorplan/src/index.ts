@@ -21,3 +21,4 @@ export {
   placedSeats,
   seatCount,
 } from './geometry.ts';
+export { itemCenter, MAP_AREAS, type MapArea, mapArea, nearestObject, seatPosition } from './guide.ts';

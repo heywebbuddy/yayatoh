@@ -31,8 +31,10 @@ import {
   assignSeatsCommand,
   holdSeatsTx,
   publishEventLayoutCommand,
+  requestFinderCodeCommand,
   saveLayoutCommand,
   setEventLayoutCommand,
+  setFinderSettingsCommand,
 } from '@yayatoh/seating';
 import {
   AGREEMENT_DOCUMENTS,
@@ -390,8 +392,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // A guest seated at that row (M1.7d seat assignments, isolation coverage).
   const [guest] = await withTenant(ctx(), (tx) =>
-    tx.execute<{ id: string }>(
-      sql`select id from attendees.attendees where event_id = ${event.id} and ticket_id is null and status = 'active' order by created_at limit 1`,
+    tx.execute<{ id: string; email: string }>(
+      sql`select id, email from attendees.attendees where event_id = ${event.id} and ticket_id is null and status = 'active' order by created_at limit 1`,
     ),
   );
   if (!guest) throw new Error('fixture: no guest to seat');
@@ -399,6 +401,20 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     assignSeatsCommand,
     { eventId: event.id, attendeeIds: [guest.id], itemId: plan.items[0]?.id ?? '' },
     ctx(),
+    ports,
+  );
+  // The public seat finder (M1.7e): opened, and that guest asks for a code (a code row and a
+  // rate-limit counter, isolation coverage).
+  await executeCommand(
+    setFinderSettingsCommand,
+    { eventId: event.id, publicMap: true, mode: 'code' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    requestFinderCodeCommand,
+    { eventId: event.id, email: guest.email, device: `fixture-${slug}` },
+    createCtx({ orgId: org.id }),
     ports,
   );
   return { org, ownerId, viewerId, event, ctx };

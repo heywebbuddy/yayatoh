@@ -81,6 +81,31 @@ export async function eventAttendeesTx(tx: TenantTx, eventId: string) {
     .orderBy(attendees.name, attendees.id);
 }
 
+/** How a name is compared in exact lookups: trimmed, inner whitespace collapsed, lower case. */
+export const normalizePersonName = (name: string) => name.trim().replace(/\s+/g, ' ').toLowerCase();
+
+/**
+ * Exact lookups among one event's active people (the public seat finder, M1.7e): by email
+ * (case-insensitive) or by full name (case- and spacing-insensitive, never partial). Ids and
+ * ticket ids only: callers never learn names or emails they didn't already have.
+ */
+export async function eventAttendeesMatchingTx(
+  tx: TenantTx,
+  eventId: string,
+  by: { email: string } | { name: string },
+): Promise<{ id: string; ticketId: string | null }[]> {
+  const match =
+    'email' in by
+      ? sql`lower(btrim(${attendees.email})) = ${by.email.trim().toLowerCase()}`
+      : sql`lower(regexp_replace(btrim(${attendees.name}), '\\s+', ' ', 'g')) = ${normalizePersonName(by.name)}`;
+  return tx
+    .select({ id: attendees.id, ticketId: attendees.ticketId })
+    .from(attendees)
+    .where(and(eq(attendees.eventId, eventId), eq(attendees.status, 'active'), match))
+    .orderBy(attendees.createdAt, attendees.id)
+    .limit(50);
+}
+
 /** Attendees by id, with their event and status (callers check both). */
 export async function attendeesByIdsTx(tx: TenantTx, ids: readonly string[]) {
   if (ids.length === 0) return [];

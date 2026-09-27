@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Vistas de lugares",
       "plan": "Planta",
-      "assign": "Atribuir convidados"
+      "assign": "Atribuir convidados",
+      "finder": "Localizador de assentos"
     },
     "assign": {
       "title": "Atribuir convidados",
@@ -1368,7 +1369,143 @@
         "remove": "Remover",
         "removeLabel": "Remover {name} de {item}"
       }
+    },
+    "finder": {
+      "title": "Localizador de assentos",
+      "description": "Os convidados encontram o lugar deles no celular e veem o mapa do local. Imprima um cartaz com código QR para a entrada.",
+      "noPlan": "Este evento ainda não tem mapa de assentos. Crie um primeiro; é nele que os convidados vão encontrar o lugar.",
+      "open": "Aberto aos convidados",
+      "closed": "Fechado aos convidados",
+      "modeNow": "Busca: {mode}",
+      "modeShort": {
+        "code": "código por e-mail",
+        "name": "nome completo"
+      },
+      "notPublic": "O evento não está publicado (ou é privado), então os convidados ainda não conseguem abrir o localizador.",
+      "settingsTitle": "Convidados",
+      "save": "Salvar",
+      "saved": "Configurações do localizador salvas.",
+      "publicMap": "Mostrar aos convidados o mapa do local e o localizador de assentos",
+      "publicMapHint": "O mapa mostra o palco, as entradas, os bares e as mesas, nunca quem senta onde.",
+      "mode": "Como os convidados procuram o lugar",
+      "modeOption": {
+        "code": "Com um código enviado ao e-mail (recomendado)",
+        "name": "Na hora, pelo nome completo"
+      },
+      "modeHint": {
+        "code": "Só quem lê o e-mail do convidado vê o lugar dele, e ninguém consegue descobrir quem está na lista.",
+        "name": "Mais rápido na entrada, mas qualquer pessoa que saiba o nome completo de um convidado pode ver onde ele senta."
+      },
+      "readOnly": "Você pode ver estas configurações, mas não alterá-las.",
+      "shareTitle": "Compartilhar",
+      "address": "Endereço do localizador de assentos",
+      "openPublic": "Abrir o localizador de assentos",
+      "poster": "Imprimir cartaz do localizador",
+      "closedNote": "O localizador de assentos está fechado. Quem escanear o cartaz verá um pedido para voltar mais tarde."
     }
+  },
+  "venueMap": {
+    "title": "Mapa do local",
+    "description": "Onde ficam o palco, as entradas, os bares e as mesas.",
+    "findSeat": "Encontrar meu lugar",
+    "tools": "Controles do mapa",
+    "zoomIn": "Aproximar",
+    "zoomOut": "Afastar",
+    "reset": "Salão inteiro",
+    "zoom": "Zoom {percent}%",
+    "region": "Mapa do local",
+    "keys": "Com o mapa selecionado: + e − aproximam e afastam, as setas movem a vista e 0 mostra o salão inteiro. Tudo o que está no mapa também aparece no guia do local.",
+    "guide": "Guia do local",
+    "guideHint": "Tudo o que está no mapa e onde fica.",
+    "object": {
+      "stage": "Palco",
+      "booth": "Estande",
+      "entrance": "Entrada",
+      "exit": "Saída",
+      "dance_floor": "Pista de dança",
+      "bar": "Bar",
+      "custom": "Outro"
+    },
+    "named": "{type}: {label}",
+    "table": "Mesa {label}",
+    "row": "Fileira {label}",
+    "seats": "{count, plural, one {# lugar} other {# lugares}}",
+    "area": {
+      "top-left": "No alto, à esquerda do mapa",
+      "top": "No alto do mapa",
+      "top-right": "No alto, à direita do mapa",
+      "left": "Lado esquerdo do mapa",
+      "centre": "Centro do mapa",
+      "right": "Lado direito do mapa",
+      "bottom-left": "Embaixo, à esquerda do mapa",
+      "bottom": "Embaixo no mapa",
+      "bottom-right": "Embaixo, à direita do mapa"
+    },
+    "yours": "{count, plural, one {Seu lugar: {seats}} other {Seus lugares: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Localizador de assentos",
+    "title": "Encontre seu lugar",
+    "closedTitle": "O localizador de assentos ainda não está aberto",
+    "closedDescription": "O organizador ainda não abriu o localizador de assentos deste evento. Volte mais perto da data ou pergunte à equipe.",
+    "toEvent": "Voltar ao evento",
+    "lookupTitle": "Encontre seu lugar",
+    "codeIntro": "Digite o e-mail para o qual seu convite ou seus ingressos foram enviados. Vamos enviar um código para você ver seu lugar.",
+    "email": "E-mail",
+    "sendCode": "Enviar um código",
+    "sending": "Enviando…",
+    "codeTitle": "Digite seu código",
+    "sent": "Se você está na lista de convidados, enviamos um código de 6 dígitos para seu e-mail. Ele vale por 10 minutos.",
+    "codeHint": "Digite o código de 6 dígitos que enviamos por e-mail.",
+    "code": "Código de 6 dígitos",
+    "verify": "Mostrar meu lugar",
+    "checking": "Verificando…",
+    "otherEmail": "Usar outro e-mail",
+    "nameIntro": "Digite seu nome completo como aparece no convite.",
+    "name": "Nome completo",
+    "findByName": "Encontrar meu lugar",
+    "resultTitle": "{count, plural, one {Seu lugar} other {Seus lugares}}",
+    "noSeatTitle": "Você está na lista",
+    "notFoundTitle": "Ninguém encontrado",
+    "noSeat": "Você ainda não tem lugar. O organizador vai avisar você, ou pergunte à equipe.",
+    "notFound": "Não encontramos esse nome. Confira a grafia ou pergunte à equipe.",
+    "seatAt": {
+      "table": "Mesa {item} · Lugar {seat}",
+      "row": "Fileira {item} · Lugar {seat}"
+    },
+    "nearest": "Entrada mais próxima: {name}",
+    "someUnseated": "{count, plural, one {# pessoa do seu grupo ainda não tem lugar.} other {# pessoas do seu grupo ainda não têm lugar.}}",
+    "again": "Procurar outra pessoa",
+    "challengeTitle": "Confirme que você é uma pessoa",
+    "challengeHint": "Houve muitas buscas a partir deste dispositivo. Conclua a verificação e envie de novo.",
+    "fakeChallenge": "Sou uma pessoa (verificação de teste)",
+    "mapTitle": "Mapa do local",
+    "errors": {
+      "wrong": "{left, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}",
+      "locked": "Muitos códigos errados. Peça um novo código.",
+      "expired": "Este código expirou. Peça um novo.",
+      "used": "Este código já foi usado. Peça um novo.",
+      "invalidCode": "Digite os 6 dígitos do e-mail.",
+      "invalidEmail": "Digite um e-mail válido.",
+      "invalidName": "Digite seu nome completo.",
+      "challengeFailed": "A verificação não passou. Tente de novo.",
+      "challengeUnavailable": "Muitas buscas a partir deste dispositivo. Aguarde um minuto e tente de novo.",
+      "closed": "O localizador de assentos não está aberto para este evento.",
+      "internal": "Algo deu errado do nosso lado."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Cartaz do localizador de assentos",
+    "title": "Encontre seu lugar",
+    "back": "Voltar ao localizador de assentos",
+    "print": "Imprimir cartaz",
+    "closedNote": "O localizador de assentos está fechado. Quem escanear este cartaz verá um pedido para voltar mais tarde; abra-o na página Assentos.",
+    "qrLabel": "Código QR para o localizador de assentos: {url}",
+    "step1": "Escaneie o código com a câmera do celular.",
+    "step2Code": "Digite seu e-mail e enviaremos um código.",
+    "step2Name": "Digite seu nome completo.",
+    "step3": "Veja sua mesa e seu lugar no mapa do local.",
+    "orVisit": "Ou acesse"
   },
   "reports": {
     "title": "Análise",

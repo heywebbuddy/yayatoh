@@ -45,4 +45,24 @@ export {
   saveLayoutCommand,
   setEventLayoutCommand,
 } from './layouts.ts';
-export { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, SEAT_BLOCK_REASONS } from './schema.ts';
+export { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, FINDER_MODES, SEAT_BLOCK_REASONS } from './schema.ts';
+export {
+  devFinderCode,
+  FINDER_CODE_TTL_MS,
+  FINDER_CODES_PER_HOUR,
+  FINDER_MAX_ATTEMPTS,
+  FINDER_RATE_LIMIT,
+  FINDER_VERIFY_STATUSES,
+  FINDER_VIEW_MS,
+  FinderSettingsDto,
+  finderCodeMailer,
+  finderResultQuery,
+  finderSettingsQuery,
+  findSeatByNameCommand,
+  PublicVenueMapDto,
+  publicVenueMapQuery,
+  requestFinderCodeCommand,
+  SeatFinderResultDto,
+  setFinderSettingsCommand,
+  verifyFinderCodeCommand,
+} from './seat-finder.ts';

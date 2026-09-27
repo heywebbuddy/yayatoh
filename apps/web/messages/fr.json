@@ -1301,7 +1301,8 @@
     "tabs": {
       "label": "Vues du placement",
       "plan": "Plan",
-      "assign": "Placer les invités"
+      "assign": "Placer les invités",
+      "finder": "Trouver sa place"
     },
     "assign": {
       "title": "Placer les invités",
@@ -1368,7 +1369,143 @@
         "remove": "Retirer",
         "removeLabel": "Retirer {name} de {item}"
       }
+    },
+    "finder": {
+      "title": "Trouver sa place",
+      "description": "Les invités trouvent leur place sur leur téléphone et voient le plan des lieux. Imprimez une affiche avec un QR code pour l'entrée.",
+      "noPlan": "Cet événement n'a pas encore de plan de salle. Créez-en un d'abord ; les invités y trouveront leur place.",
+      "open": "Ouvert aux invités",
+      "closed": "Fermé aux invités",
+      "modeNow": "Recherche : {mode}",
+      "modeShort": {
+        "code": "code par e-mail",
+        "name": "nom complet"
+      },
+      "notPublic": "L'événement n'est pas publié (ou est privé) : les invités ne peuvent pas encore ouvrir la recherche de place.",
+      "settingsTitle": "Invités",
+      "save": "Enregistrer",
+      "saved": "Réglages de la recherche de place enregistrés.",
+      "publicMap": "Montrer aux invités le plan des lieux et la recherche de place",
+      "publicMapHint": "Le plan montre la scène, les entrées, les bars et les tables, jamais qui est assis où.",
+      "mode": "Comment les invités cherchent leur place",
+      "modeOption": {
+        "code": "Avec un code envoyé par e-mail (recommandé)",
+        "name": "Immédiatement, par nom complet"
+      },
+      "modeHint": {
+        "code": "Seule une personne qui lit les e-mails de l'invité voit sa place, et personne ne peut savoir qui est sur la liste.",
+        "name": "Plus rapide à l'entrée, mais quiconque connaît le nom complet d'un invité peut voir où il est assis."
+      },
+      "readOnly": "Vous pouvez voir ces réglages, mais pas les modifier.",
+      "shareTitle": "Partager",
+      "address": "Adresse de la recherche de place",
+      "openPublic": "Ouvrir la recherche de place",
+      "poster": "Imprimer l'affiche",
+      "closedNote": "La recherche de place est fermée. Les invités qui scannent l'affiche sont invités à revenir plus tard."
     }
+  },
+  "venueMap": {
+    "title": "Plan des lieux",
+    "description": "Où se trouvent la scène, les entrées, les bars et les tables.",
+    "findSeat": "Trouver ma place",
+    "tools": "Commandes du plan",
+    "zoomIn": "Zoom avant",
+    "zoomOut": "Zoom arrière",
+    "reset": "Toute la salle",
+    "zoom": "Zoom {percent} %",
+    "region": "Plan des lieux",
+    "keys": "Plan sélectionné : + et − zooment, les flèches déplacent la vue, 0 montre toute la salle. Tout ce qui figure sur le plan est aussi listé dans le guide des lieux.",
+    "guide": "Guide des lieux",
+    "guideHint": "Tout ce qui est sur le plan, et où.",
+    "object": {
+      "stage": "Scène",
+      "booth": "Stand",
+      "entrance": "Entrée",
+      "exit": "Sortie",
+      "dance_floor": "Piste de danse",
+      "bar": "Bar",
+      "custom": "Autre"
+    },
+    "named": "{type} : {label}",
+    "table": "Table {label}",
+    "row": "Rang {label}",
+    "seats": "{count, plural, one {# place} other {# places}}",
+    "area": {
+      "top-left": "En haut à gauche du plan",
+      "top": "En haut du plan",
+      "top-right": "En haut à droite du plan",
+      "left": "Côté gauche du plan",
+      "centre": "Au milieu du plan",
+      "right": "Côté droit du plan",
+      "bottom-left": "En bas à gauche du plan",
+      "bottom": "En bas du plan",
+      "bottom-right": "En bas à droite du plan"
+    },
+    "yours": "{count, plural, one {Votre place : {seats}} other {Vos places : {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Trouver sa place",
+    "title": "Trouvez votre place",
+    "closedTitle": "La recherche de place n'est pas encore ouverte",
+    "closedDescription": "L'organisateur n'a pas encore ouvert la recherche de place pour cet événement. Revenez plus près de la date ou demandez à l'accueil.",
+    "toEvent": "Retour à l'événement",
+    "lookupTitle": "Trouvez votre place",
+    "codeIntro": "Saisissez l'adresse e-mail à laquelle votre invitation ou vos billets ont été envoyés. Nous vous enverrons un code pour voir votre place.",
+    "email": "E-mail",
+    "sendCode": "M'envoyer un code",
+    "sending": "Envoi…",
+    "codeTitle": "Saisissez votre code",
+    "sent": "Si vous êtes sur la liste des invités, nous vous avons envoyé un code à 6 chiffres. Il est valable 10 minutes.",
+    "codeHint": "Saisissez le code à 6 chiffres reçu par e-mail.",
+    "code": "Code à 6 chiffres",
+    "verify": "Voir ma place",
+    "checking": "Vérification…",
+    "otherEmail": "Utiliser une autre adresse",
+    "nameIntro": "Saisissez votre nom complet tel qu'il figure sur votre invitation.",
+    "name": "Nom complet",
+    "findByName": "Trouver ma place",
+    "resultTitle": "{count, plural, one {Votre place} other {Vos places}}",
+    "noSeatTitle": "Vous êtes sur la liste",
+    "notFoundTitle": "Personne trouvé",
+    "noSeat": "Vous n'avez pas encore de place. L'organisateur vous préviendra, ou demandez à l'accueil.",
+    "notFound": "Nous n'avons pas trouvé ce nom. Vérifiez l'orthographe ou demandez à l'accueil.",
+    "seatAt": {
+      "table": "Table {item} · Place {seat}",
+      "row": "Rang {item} · Place {seat}"
+    },
+    "nearest": "Entrée la plus proche : {name}",
+    "someUnseated": "{count, plural, one {# personne de votre groupe n'a pas encore de place.} other {# personnes de votre groupe n'ont pas encore de place.}}",
+    "again": "Chercher quelqu'un d'autre",
+    "challengeTitle": "Confirmez que vous êtes une personne",
+    "challengeHint": "Beaucoup de recherches ont été faites depuis cet appareil. Terminez la vérification, puis renvoyez.",
+    "fakeChallenge": "Je suis une personne (vérification de test)",
+    "mapTitle": "Plan des lieux",
+    "errors": {
+      "wrong": "{left, plural, one {Ce code n'est pas bon. Il vous reste # essai.} other {Ce code n'est pas bon. Il vous reste # essais.}}",
+      "locked": "Trop de codes erronés. Demandez un nouveau code.",
+      "expired": "Ce code a expiré. Demandez-en un nouveau.",
+      "used": "Ce code a déjà été utilisé. Demandez-en un nouveau.",
+      "invalidCode": "Saisissez les 6 chiffres reçus par e-mail.",
+      "invalidEmail": "Saisissez une adresse e-mail valide.",
+      "invalidName": "Saisissez votre nom complet.",
+      "challengeFailed": "La vérification a échoué. Veuillez réessayer.",
+      "challengeUnavailable": "Trop de recherches depuis cet appareil. Patientez une minute puis réessayez.",
+      "closed": "La recherche de place n'est pas ouverte pour cet événement.",
+      "internal": "Un problème est survenu de notre côté."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Affiche « Trouver sa place »",
+    "title": "Trouvez votre place",
+    "back": "Retour à la recherche de place",
+    "print": "Imprimer l'affiche",
+    "closedNote": "La recherche de place est fermée. Les invités qui scannent cette affiche sont invités à revenir plus tard ; ouvrez-la depuis la page Placement.",
+    "qrLabel": "QR code vers la recherche de place : {url}",
+    "step1": "Scannez le code avec l'appareil photo de votre téléphone.",
+    "step2Code": "Saisissez votre e-mail : nous vous enverrons un code.",
+    "step2Name": "Saisissez votre nom complet.",
+    "step3": "Voyez votre table et votre place sur le plan.",
+    "orVisit": "Ou rendez-vous sur"
   },
   "reports": {
     "title": "Analyse",
