@@ -31,7 +31,116 @@
     "open": "Notificações",
     "title": "Notificações",
     "emptyTitle": "Tudo em dia",
-    "emptyDescription": "Alertas sobre vendas, assentos e check-in aparecerão aqui."
+    "emptyDescription": "Alertas sobre vendas, assentos e check-in aparecerão aqui.",
+    "openWithCount": "Notificações, {count, plural, =0 {nenhuma não lida} one {# não lida} other {# não lidas}}",
+    "unreadAnnouncement": "{count, plural, =0 {Nenhuma notificação não lida} one {Você tem # notificação não lida} other {Você tem # notificações não lidas}}",
+    "markRead": "Marcar como lida",
+    "markReadItem": "Marcar “{title}” como lida",
+    "markAllRead": "Marcar todas como lidas",
+    "viewAll": "Todas as notificações",
+    "settings": "Configurações de notificação",
+    "unread": "Não lida",
+    "loadMore": "Ver anteriores",
+    "pageTitle": "Notificações",
+    "pageDescription": "Alertas para você nesta organização: novos pedidos e mensagens.",
+    "allRead": "Todas as notificações estão marcadas como lidas.",
+    "items": {
+      "sales": {
+        "order_paid": "Novo pedido: {name} comprou {count, plural, one {# ingresso} other {# ingressos}} para {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} enviou uma mensagem sobre {eventName}"
+      },
+      "notifications": {
+        "test": "Notificação de teste: as notificações estão funcionando"
+      },
+      "other": "Notificação"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Ingressos",
+        "refund": "Reembolso"
+      },
+      "events": {
+        "reminder": "Lembrete do evento"
+      },
+      "tenancy": {
+        "invitation": "Convite para a equipe"
+      },
+      "ticketing": {
+        "claim-link": "Link para resgatar ingresso",
+        "holder-link": "Link para os ingressos"
+      },
+      "attendees": {
+        "message": "Mensagem do organizador"
+      },
+      "messaging": {
+        "announcement": "Anúncio",
+        "reply": "Resposta",
+        "contact_replied": "Nova mensagem"
+      },
+      "sales": {
+        "order_paid": "Alerta de novo pedido"
+      },
+      "notifications": {
+        "test": "Notificação de teste"
+      }
+    },
+    "status": {
+      "queued": "Enviando",
+      "scheduled": "Agendado",
+      "sent": "Enviado",
+      "suppressed": "Não enviado",
+      "failed": "Falhou",
+      "canceled": "Cancelado"
+    },
+    "reasons": {
+      "quiet_hours": "Aguardando o horário de silêncio (21h–8h do destinatário)",
+      "messaging_paused": "O suporte da Yayatoh pausou as mensagens",
+      "unsubscribed": "O destinatário cancelou a inscrição",
+      "preference": "Desativado nas configurações do destinatário",
+      "no_device": "Nenhum dispositivo para push",
+      "no_address": "Sem endereço",
+      "provider_error": "O provedor de e-mail recusou",
+      "retrying": "Tentando novamente após um erro"
+    },
+    "channels": {
+      "email": "E-mail",
+      "sms": "SMS",
+      "push": "Push",
+      "in_app": "No app"
+    },
+    "log": {
+      "title": "Mensagens",
+      "empty": "Ainda não há mensagens sobre este pedido.",
+      "when": "Quando",
+      "message": "Mensagem",
+      "to": "Para",
+      "channel": "Canal"
+    },
+    "preferences": {
+      "title": "Configurações de notificação",
+      "description": "Escolha como você fica sabendo do que acontece em {org}. Suas escolhas só valem para você.",
+      "categories": {
+        "sales": {
+          "name": "Vendas",
+          "hint": "Um novo pedido foi pago."
+        },
+        "messages": {
+          "name": "Mensagens",
+          "hint": "Um cliente escreve para sua organização."
+        },
+        "marketing": {
+          "name": "Novidades da Yayatoh",
+          "hint": "Novidades e dicas. Desativado, a menos que você ative."
+        }
+      },
+      "save": "Salvar configurações",
+      "saved": "Suas configurações de notificação foram salvas.",
+      "test": "Enviar uma notificação de teste",
+      "testSent": "Notificação de teste enviada. Confira o sino.",
+      "required": "Ingressos, recibos e e-mails de segurança sempre chegam a você."
+    }
   },
   "nav": {
     "home": "Início",
@@ -57,7 +166,9 @@
     "team": "Equipe",
     "settings": "Configurações",
     "payouts": "Repasses",
-    "domains": "Domínios"
+    "domains": "Domínios",
+    "apiKeys": "Chaves de API",
+    "publicSite": "Site público"
   },
   "vocab": {
     "attendee": "Participante",
@@ -548,7 +659,12 @@
     },
     "collectedBy": "Pagamento recebido por {org}",
     "seat": "Assento",
-    "seatLabel": "Assento: {seat}"
+    "seatLabel": "Assento: {seat}",
+    "emailsSent": "E-mails enviados",
+    "emailsNone": "Ainda não há e-mails.",
+    "emailSentAt": "Enviado {when}",
+    "emailScheduled": "Agendado para {when}",
+    "emailQueued": "Enviando"
   },
   "orders": {
     "title": "Pedidos recentes",
@@ -1321,7 +1437,8 @@
     "tabs": {
       "label": "Vistas de lugares",
       "plan": "Planta",
-      "assign": "Atribuir convidados"
+      "assign": "Atribuir convidados",
+      "finder": "Localizador de assentos"
     },
     "assign": {
       "title": "Atribuir convidados",
@@ -1388,7 +1505,143 @@
         "remove": "Remover",
         "removeLabel": "Remover {name} de {item}"
       }
+    },
+    "finder": {
+      "title": "Localizador de assentos",
+      "description": "Os convidados encontram o lugar deles no celular e veem o mapa do local. Imprima um cartaz com código QR para a entrada.",
+      "noPlan": "Este evento ainda não tem mapa de assentos. Crie um primeiro; é nele que os convidados vão encontrar o lugar.",
+      "open": "Aberto aos convidados",
+      "closed": "Fechado aos convidados",
+      "modeNow": "Busca: {mode}",
+      "modeShort": {
+        "code": "código por e-mail",
+        "name": "nome completo"
+      },
+      "notPublic": "O evento não está publicado (ou é privado), então os convidados ainda não conseguem abrir o localizador.",
+      "settingsTitle": "Convidados",
+      "save": "Salvar",
+      "saved": "Configurações do localizador salvas.",
+      "publicMap": "Mostrar aos convidados o mapa do local e o localizador de assentos",
+      "publicMapHint": "O mapa mostra o palco, as entradas, os bares e as mesas, nunca quem senta onde.",
+      "mode": "Como os convidados procuram o lugar",
+      "modeOption": {
+        "code": "Com um código enviado ao e-mail (recomendado)",
+        "name": "Na hora, pelo nome completo"
+      },
+      "modeHint": {
+        "code": "Só quem lê o e-mail do convidado vê o lugar dele, e ninguém consegue descobrir quem está na lista.",
+        "name": "Mais rápido na entrada, mas qualquer pessoa que saiba o nome completo de um convidado pode ver onde ele senta."
+      },
+      "readOnly": "Você pode ver estas configurações, mas não alterá-las.",
+      "shareTitle": "Compartilhar",
+      "address": "Endereço do localizador de assentos",
+      "openPublic": "Abrir o localizador de assentos",
+      "poster": "Imprimir cartaz do localizador",
+      "closedNote": "O localizador de assentos está fechado. Quem escanear o cartaz verá um pedido para voltar mais tarde."
     }
+  },
+  "venueMap": {
+    "title": "Mapa do local",
+    "description": "Onde ficam o palco, as entradas, os bares e as mesas.",
+    "findSeat": "Encontrar meu lugar",
+    "tools": "Controles do mapa",
+    "zoomIn": "Aproximar",
+    "zoomOut": "Afastar",
+    "reset": "Salão inteiro",
+    "zoom": "Zoom {percent}%",
+    "region": "Mapa do local",
+    "keys": "Com o mapa selecionado: + e − aproximam e afastam, as setas movem a vista e 0 mostra o salão inteiro. Tudo o que está no mapa também aparece no guia do local.",
+    "guide": "Guia do local",
+    "guideHint": "Tudo o que está no mapa e onde fica.",
+    "object": {
+      "stage": "Palco",
+      "booth": "Estande",
+      "entrance": "Entrada",
+      "exit": "Saída",
+      "dance_floor": "Pista de dança",
+      "bar": "Bar",
+      "custom": "Outro"
+    },
+    "named": "{type}: {label}",
+    "table": "Mesa {label}",
+    "row": "Fileira {label}",
+    "seats": "{count, plural, one {# lugar} other {# lugares}}",
+    "area": {
+      "top-left": "No alto, à esquerda do mapa",
+      "top": "No alto do mapa",
+      "top-right": "No alto, à direita do mapa",
+      "left": "Lado esquerdo do mapa",
+      "centre": "Centro do mapa",
+      "right": "Lado direito do mapa",
+      "bottom-left": "Embaixo, à esquerda do mapa",
+      "bottom": "Embaixo no mapa",
+      "bottom-right": "Embaixo, à direita do mapa"
+    },
+    "yours": "{count, plural, one {Seu lugar: {seats}} other {Seus lugares: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Localizador de assentos",
+    "title": "Encontre seu lugar",
+    "closedTitle": "O localizador de assentos ainda não está aberto",
+    "closedDescription": "O organizador ainda não abriu o localizador de assentos deste evento. Volte mais perto da data ou pergunte à equipe.",
+    "toEvent": "Voltar ao evento",
+    "lookupTitle": "Encontre seu lugar",
+    "codeIntro": "Digite o e-mail para o qual seu convite ou seus ingressos foram enviados. Vamos enviar um código para você ver seu lugar.",
+    "email": "E-mail",
+    "sendCode": "Enviar um código",
+    "sending": "Enviando…",
+    "codeTitle": "Digite seu código",
+    "sent": "Se você está na lista de convidados, enviamos um código de 6 dígitos para seu e-mail. Ele vale por 10 minutos.",
+    "codeHint": "Digite o código de 6 dígitos que enviamos por e-mail.",
+    "code": "Código de 6 dígitos",
+    "verify": "Mostrar meu lugar",
+    "checking": "Verificando…",
+    "otherEmail": "Usar outro e-mail",
+    "nameIntro": "Digite seu nome completo como aparece no convite.",
+    "name": "Nome completo",
+    "findByName": "Encontrar meu lugar",
+    "resultTitle": "{count, plural, one {Seu lugar} other {Seus lugares}}",
+    "noSeatTitle": "Você está na lista",
+    "notFoundTitle": "Ninguém encontrado",
+    "noSeat": "Você ainda não tem lugar. O organizador vai avisar você, ou pergunte à equipe.",
+    "notFound": "Não encontramos esse nome. Confira a grafia ou pergunte à equipe.",
+    "seatAt": {
+      "table": "Mesa {item} · Lugar {seat}",
+      "row": "Fileira {item} · Lugar {seat}"
+    },
+    "nearest": "Entrada mais próxima: {name}",
+    "someUnseated": "{count, plural, one {# pessoa do seu grupo ainda não tem lugar.} other {# pessoas do seu grupo ainda não têm lugar.}}",
+    "again": "Procurar outra pessoa",
+    "challengeTitle": "Confirme que você é uma pessoa",
+    "challengeHint": "Houve muitas buscas a partir deste dispositivo. Conclua a verificação e envie de novo.",
+    "fakeChallenge": "Sou uma pessoa (verificação de teste)",
+    "mapTitle": "Mapa do local",
+    "errors": {
+      "wrong": "{left, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}",
+      "locked": "Muitos códigos errados. Peça um novo código.",
+      "expired": "Este código expirou. Peça um novo.",
+      "used": "Este código já foi usado. Peça um novo.",
+      "invalidCode": "Digite os 6 dígitos do e-mail.",
+      "invalidEmail": "Digite um e-mail válido.",
+      "invalidName": "Digite seu nome completo.",
+      "challengeFailed": "A verificação não passou. Tente de novo.",
+      "challengeUnavailable": "Muitas buscas a partir deste dispositivo. Aguarde um minuto e tente de novo.",
+      "closed": "O localizador de assentos não está aberto para este evento.",
+      "internal": "Algo deu errado do nosso lado."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Cartaz do localizador de assentos",
+    "title": "Encontre seu lugar",
+    "back": "Voltar ao localizador de assentos",
+    "print": "Imprimir cartaz",
+    "closedNote": "O localizador de assentos está fechado. Quem escanear este cartaz verá um pedido para voltar mais tarde; abra-o na página Assentos.",
+    "qrLabel": "Código QR para o localizador de assentos: {url}",
+    "step1": "Escaneie o código com a câmera do celular.",
+    "step2Code": "Digite seu e-mail e enviaremos um código.",
+    "step2Name": "Digite seu nome completo.",
+    "step3": "Veja sua mesa e seu lugar no mapa do local.",
+    "orVisit": "Ou acesse"
   },
   "reports": {
     "title": "Análise",
@@ -1546,6 +1799,289 @@
       "event": "Evento",
       "emptyTitle": "Sem vendas neste período",
       "emptyDescription": "Escolha um período mais longo ou compartilhe a página de um evento para começar a vender."
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "Cancelar inscrição",
+    "eyebrow": "Configurações de e-mail",
+    "title": "E-mails de {org}",
+    "category": {
+      "reminders": "Lembretes antes dos eventos para os quais você tem ingressos.",
+      "event_updates": "Novidades e mensagens do organizador sobre eventos dos quais você participa.",
+      "marketing": "Novidades e ofertas do organizador.",
+      "sales": "Alertas de novos pedidos.",
+      "messages": "Alertas de novas mensagens."
+    },
+    "categoryName": {
+      "reminders": "lembretes de eventos",
+      "event_updates": "novidades de eventos",
+      "marketing": "novidades e ofertas",
+      "sales": "alertas de pedidos",
+      "messages": "alertas de mensagens"
+    },
+    "address": "Endereço: {email}",
+    "question": "Parar de receber {what} de {org} neste endereço?",
+    "confirm": "Cancelar inscrição",
+    "done": "Você não receberá mais {what} de {org}.",
+    "resubscribe": "Inscrever-se novamente",
+    "transactionalNote": "Você continuará recebendo os e-mails necessários, como ingressos, recibos e reembolsos."
+  },
+  "devMailbox": {
+    "eyebrow": "Desenvolvimento",
+    "title": "Caixa de desenvolvimento",
+    "description": "Mensagens que a plataforma enviou em desenvolvimento. Nada saiu desta máquina.",
+    "filter": "Destinatário",
+    "apply": "Filtrar",
+    "emptyTitle": "Ainda não há mensagens",
+    "emptyDescription": "E-mails, SMS e notificações push enviados em desenvolvimento aparecem aqui.",
+    "meta": "{channel} para {to} · {at}",
+    "show": "Mostrar mensagem",
+    "preview": "Prévia do e-mail: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Anúncios para todos os participantes de {event}.",
+    "composeTitle": "Novo anúncio",
+    "subject": "Assunto",
+    "message": "Mensagem",
+    "channels": "Enviar por",
+    "channel": {
+      "email": "E-mail",
+      "push": "Notificação push"
+    },
+    "pushHint": "O push chega a quem usa o app; os demais recebem o e-mail.",
+    "preview": "Pré-visualizar",
+    "previewTitle": "Prévia do anúncio",
+    "previewFrame": "Prévia do e-mail: {subject}",
+    "willReach": "{count, plural, one {Será enviado para # pessoa.} other {Será enviado para # pessoas.}}",
+    "send": "{count, plural, one {Enviar para # pessoa} other {Enviar para # pessoas}}",
+    "edit": "Editar",
+    "sent": "{count, plural, one {Enviado para # pessoa. A entrega continua em segundo plano.} other {Enviado para # pessoas. A entrega continua em segundo plano.}}",
+    "sentTitle": "Anúncios enviados",
+    "sentEmpty": "Ainda não há anúncios.",
+    "sentAt": "Enviado",
+    "recipients": "Destinatários",
+    "delivery": "Entrega",
+    "deliveryCounts": "{sent} enviados · {pending} pendentes · {notSent} não enviados",
+    "errors": {
+      "subjectRequired": "Adicione um assunto.",
+      "messageRequired": "Escreva uma mensagem.",
+      "channelRequired": "Escolha pelo menos uma forma de envio.",
+      "no_recipients": "Ninguém participa deste evento ainda, então não há para quem enviar.",
+      "messaging_paused": "O suporte da Yayatoh pausou as mensagens da sua organização."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Mensagens",
+    "inboxDescription": "Conversas com seus clientes. As respostas aos seus anúncios chegam aqui.",
+    "filters": "Mostrar",
+    "filter": {
+      "all": "Todas",
+      "unread": "Não lidas",
+      "blocked": "Bloqueadas"
+    },
+    "emptyTitle": "Nenhuma conversa",
+    "emptyDescription": "Quando alguém responder a um anúncio, a mensagem aparece aqui.",
+    "unread": "Não lida",
+    "blockedChip": "Bloqueada",
+    "you": "Você",
+    "threadTitle": "Conversa",
+    "back": "Todas as mensagens",
+    "threadWith": "Conversa com {name}",
+    "history": "Mensagens",
+    "contactBlockedYou": "Esta pessoa bloqueou as mensagens da sua organização.",
+    "replyTitle": "Responder",
+    "replyLabel": "Sua resposta (enviada por e-mail)",
+    "sendReply": "Enviar resposta",
+    "sent": "Mensagem enviada.",
+    "safetyTitle": "Bloquear ou denunciar",
+    "block": "Bloquear esta pessoa",
+    "unblock": "Desbloquear",
+    "blockedText": "Bloqueada: as mensagens dela são recusadas.",
+    "report": "Denunciar à Yayatoh",
+    "reportReason": "Motivo",
+    "reportNote": "Detalhes (opcional)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuso ou assédio",
+      "other": "Outra coisa"
+    },
+    "reported": "Obrigado. A Yayatoh vai analisar esta conversa.",
+    "publicMetaTitle": "Mensagens",
+    "publicEyebrow": "Mensagens",
+    "publicTitle": "Sua conversa com {org}",
+    "publicDescription": "Só você e o organizador podem ler esta conversa.",
+    "notAccepting": "{org} não está aceitando mensagens aqui.",
+    "writeLabel": "Escrever para {org}",
+    "send": "Enviar",
+    "blockOrg": "Bloquear {org}",
+    "unblockOrg": "Desbloquear {org}",
+    "youBlocked": "Você bloqueou {org}: não receberá respostas nem novidades de eventos.",
+    "errors": {
+      "required": "Escreva uma mensagem primeiro.",
+      "blocked": "Esta conversa está bloqueada.",
+      "blocked_by_contact": "Esta pessoa bloqueou as mensagens da sua organização.",
+      "you_blocked": "Desbloqueie o organizador para escrever para ele."
+    }
+  },
+  "apiKeys": {
+    "title": "Chaves de API",
+    "subtitle": "Permita que outros softwares acessem sua organização pela API da Yayatoh. Cada chave é mostrada uma única vez.",
+    "docs": "Referência da API",
+    "noAccessTitle": "Somente proprietários e administradores gerenciam chaves de API",
+    "noAccessDescription": "Peça a um proprietário ou administrador desta organização para criar uma chave para você.",
+    "createTitle": "Criar uma chave",
+    "name": "Nome",
+    "nameHint": "Onde a chave será usada, por ex. “Zapier” ou “Sincronização da bilheteria”.",
+    "nameRequired": "Dê um nome à chave.",
+    "scopes": "Permissões",
+    "scopesHint": "Uma chave só pode fazer o que suas permissões permitem, e somente nesta organização.",
+    "scopesRequired": "Escolha pelo menos uma permissão.",
+    "create": "Criar chave",
+    "created": "Chave “{name}” criada.",
+    "shownOnce": "Copie agora e guarde em local seguro: ela não será mostrada novamente.",
+    "copy": "Copiar chave",
+    "copied": "Copiada para a área de transferência.",
+    "listTitle": "Suas chaves",
+    "empty": "Nenhuma chave de API ainda.",
+    "key": "Chave",
+    "createdAt": "Criada",
+    "lastUsed": "Último uso",
+    "never": "Nunca",
+    "status": "Status",
+    "active": "Ativa",
+    "revoked": "Revogada",
+    "actions": "Ações",
+    "revoke": "Revogar",
+    "revokeNamed": "Revogar a chave {name}",
+    "scope": {
+      "org_read": "Ler a organização",
+      "events_read": "Ler eventos e tipos de ingresso",
+      "events_write": "Criar e alterar eventos",
+      "orders_read": "Ler pedidos",
+      "orders_refund": "Reembolsar pedidos",
+      "attendees_read": "Ler participantes",
+      "checkin_scan": "Escanear ingressos"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Site",
+    "browse": "Explorar eventos",
+    "forOrganizers": "Para organizadores",
+    "language": "Idioma",
+    "poweredBy": "Com tecnologia Yayatoh",
+    "upcoming": "Próximos eventos",
+    "results": "Resultados da pesquisa",
+    "count": "{count, plural, =0 {Nenhum evento} one {# evento} other {# eventos}}",
+    "seeAll": "Ver todos os eventos",
+    "when": "Quando",
+    "where": "Onde",
+    "priceLabel": "Preço:",
+    "by": "Por {org}",
+    "postponed": "Adiado",
+    "price": {
+      "soon": "Ingressos em breve",
+      "free": "Grátis",
+      "from": "A partir de {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Show",
+      "conference": "Conferência",
+      "community": "Comunidade",
+      "other": "Outro",
+      "wedding": "Casamento",
+      "agency": "Agência"
+    },
+    "filters": {
+      "label": "Pesquisar eventos",
+      "query": "Pesquise por nome, local ou organizador",
+      "city": "Cidade",
+      "anyCity": "Qualquer cidade",
+      "category": "Categoria",
+      "anyCategory": "Qualquer categoria",
+      "price": "Preço",
+      "anyPrice": "Qualquer preço",
+      "priceOption": {
+        "free": "Grátis",
+        "paid": "Pago"
+      },
+      "from": "A partir de",
+      "to": "Até",
+      "submit": "Pesquisar",
+      "clear": "Limpar filtros"
+    },
+    "pagination": {
+      "label": "Páginas",
+      "previous": "Página anterior",
+      "next": "Próxima página",
+      "status": "Página {page} de {count}"
+    },
+    "empty": {
+      "title": "Ainda não há próximos eventos",
+      "description": "Novos eventos aparecem aqui assim que os organizadores os publicam.",
+      "filteredTitle": "Nenhum evento corresponde a estes filtros",
+      "filteredDescription": "Tente outra data, cidade ou preço, ou limpe os filtros."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Encontre eventos perto de você",
+      "eyebrow": "Yayatoh",
+      "title": "Encontre seu próximo evento.",
+      "lede": "Shows, galas, conferências e eventos comunitários, com todas as taxas incluídas no preço.",
+      "demoCta": "Abrir o console de demonstração"
+    },
+    "events": {
+      "title": "Todos os eventos"
+    },
+    "tenant": {
+      "eyebrow": "Eventos",
+      "description": "Próximos eventos de {org}.",
+      "emptyTitle": "Nenhum próximo evento",
+      "emptyDescription": "{org} não tem nada à venda agora. Volte em breve."
+    },
+    "organizer": {
+      "eyebrow": "Organizador",
+      "description": "Próximos eventos de {org} no Yayatoh.",
+      "site": "Visitar o site do organizador",
+      "events": "Eventos de {org}",
+      "emptyTitle": "Nenhum próximo evento",
+      "emptyDescription": "{org} não tem nada à venda agora. Volte em breve."
+    }
+  },
+  "widget": {
+    "title": "Ingressos: {event}",
+    "fallbackTitle": "Ingressos",
+    "passes": "Ingressos",
+    "getTickets": "Comprar ingressos",
+    "newTab": "(abre em uma nova aba)"
+  },
+  "site": {
+    "title": "Site público",
+    "description": "Onde as pessoas encontram seus eventos: o marketplace Yayatoh, seu próprio site e o widget de ingressos.",
+    "readOnly": "Somente proprietários e administradores podem alterar estas configurações.",
+    "save": "Salvar",
+    "saved": "Salvo.",
+    "listing": {
+      "title": "Divulgação",
+      "marketplace": "Divulgar meus eventos públicos no marketplace Yayatoh",
+      "marketplaceHint": "Casamentos e eventos privados nunca são divulgados.",
+      "tenantSite": "Usar meu próprio site em {host} como página dos meus eventos",
+      "tenantSiteHint": "Os buscadores passam a levar as pessoas ao seu site em vez de yayatoh.com. Um domínio próprio sempre vem primeiro."
+    },
+    "widget": {
+      "title": "Widget de ingressos",
+      "description": "Mostre os ingressos de um evento no seu próprio site. Cole o trecho onde o widget deve aparecer.",
+      "origins": "Sites autorizados a mostrar o widget",
+      "originsHint": "Um endereço por linha, por exemplo https://www.example.com. Outros sites veem um quadro vazio.",
+      "noOrigins": "Nenhum site autorizado ainda.",
+      "snippets": "Trechos do widget",
+      "snippetFor": "Trecho para {event}",
+      "frameTitle": "Ingressos: {event}",
+      "copy": "Copiar trecho",
+      "copied": "Copiado.",
+      "emptyTitle": "Ainda não há eventos públicos",
+      "emptyDescription": "Publique um evento para obter o trecho do widget."
     }
   },
   "security": {

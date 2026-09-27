@@ -8,6 +8,7 @@ import {
   publishEventLayoutCommand,
   saveLayoutCommand,
   setEventLayoutCommand,
+  setFinderSettingsCommand,
   unassignSeatsCommand,
 } from '@yayatoh/seating';
 import { revalidatePath } from 'next/cache';
@@ -207,5 +208,31 @@ export async function unassignSeatAction(
     return { ok: true, code: null, count: r.released };
   } catch (err) {
     return assignFail(err);
+  }
+}
+
+/** Seat finder (M1.7e): open it to guests or not, and how they look up their seat. */
+export async function finderSettingsAction(
+  org: string,
+  event: string,
+  _prev: SeatingState,
+  form: FormData,
+): Promise<SeatingState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    await executeCommand(
+      setFinderSettingsCommand,
+      {
+        eventId: ev.id,
+        publicMap: form.get('publicMap') === 'on',
+        mode: form.get('mode') === 'name' ? 'name' : 'code',
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/finder`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return fail(err);
   }
 }

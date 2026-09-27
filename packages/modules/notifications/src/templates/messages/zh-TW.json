@@ -1,0 +1,90 @@
+{
+  "common": {
+    "greeting": "{name}，您好：",
+    "greetingNoName": "您好：",
+    "sentBy": "由 {org} 透過 Yayatoh 寄送。",
+    "poweredBy": "由 Yayatoh 提供技術支援",
+    "linkFallback": "如果按鈕無法使用，請將此連結複製到瀏覽器：",
+    "unsubscribe": "取消訂閱",
+    "why": {
+      "reminders": "您收到此提醒，是因為您持有 {org} 的票券。",
+      "event_updates": "您收到此郵件，是因為您在 {org} 某活動的賓客名單上。",
+      "marketing": "您收到此郵件，是因為您訂閱了 {org} 的消息。"
+    },
+    "reply": "回覆 {org}"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "您的 {eventName} 票券",
+      "intro": "{count, plural, =0 {您的訂單已確認。} other {您的 # 張票券已準備好。}}請保留此郵件：點擊下方按鈕即可隨時開啟票券。",
+      "cta": "查看我的票券"
+    },
+    "orders.refund": {
+      "subject": "您的 {eventName} 退款",
+      "intro": "{fully, select, yes {您的訂單已全額退款：} other {您的訂單已部分退款：}}{amount}。入帳可能需要 5–10 個工作天。",
+      "cta": "查看我的訂單"
+    },
+    "events.reminder": {
+      "subject": "明天：{eventName}",
+      "intro": "提醒您：{eventName} 將於 {when} 開始。",
+      "venue": "地點：{venue}",
+      "cta": "開啟我的票券"
+    },
+    "tenancy.invitation": {
+      "subject": "邀請您加入 Yayatoh 上的 {orgName}",
+      "intro": "{orgName} 邀請您以{role}身分加入團隊。",
+      "cta": "接受邀請"
+    },
+    "ticketing.claim-link": {
+      "subject": "有一張 {eventName} 的票券在等您",
+      "intro": "有人轉給您一張 {eventName} 的票券。領取後即可取得您專屬的 QR 碼。",
+      "cta": "領取票券"
+    },
+    "ticketing.holder-link": {
+      "subject": "您的 {eventName} 票券連結",
+      "intro": "這是您要求的連結，可開啟您的 {eventName} 票券。",
+      "cta": "開啟我的票券"
+    },
+    "seating.finder-code": {
+      "subject": "{code} 是您在 {eventName} 的座位查詢碼",
+      "intro": "在座位查詢中輸入 {code} 即可查看您的座位。此代碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的請求，請忽略此郵件。",
+      "cta": "開啟座位查詢"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "來自 {eventName} 主辦單位的訊息："
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "{eventName} 的最新消息：",
+      "cta": "回覆主辦單位"
+    },
+    "messaging.reply": {
+      "subject": "{org} 的新回覆",
+      "intro": "{org} 回覆了您的訊息：",
+      "cta": "閱讀並回覆"
+    },
+    "sales.order_paid": {
+      "subject": "新訂單：{name}",
+      "intro": "{name} 購買了 {count, plural, other {# 張}} {eventName} 票券（{amount}）。"
+    },
+    "messaging.contact_replied": {
+      "subject": "來自 {name} 的新訊息",
+      "intro": "{name} 就 {eventName} 傳訊息給您。"
+    },
+    "notifications.test": {
+      "subject": "測試通知",
+      "intro": "通知功能正常。"
+    }
+  },
+  "roles": {
+    "owner": "擁有者",
+    "admin": "管理員",
+    "manager": "經理",
+    "finance": "財務",
+    "marketing": "行銷",
+    "box_office": "售票處",
+    "scanner": "驗票員",
+    "viewer": "檢視者"
+  }
+}

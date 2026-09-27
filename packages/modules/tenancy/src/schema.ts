@@ -228,3 +228,52 @@ export const orgSuspensions = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+/**
+ * Scopes an org API key may carry (roadmap §6.1). Each is an org permission; a key never gets
+ * more than the member who creates it holds, and never the member-management or payout powers.
+ */
+export const API_KEY_SCOPES = [
+  'org:read',
+  'events:read',
+  'events:write',
+  'orders:read',
+  'orders:refund',
+  'attendees:read',
+  'checkin:scan',
+] as const;
+export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
+
+/**
+ * Org API keys (`yy_live_…`). Only a SHA-256 of the secret is stored; the key is shown once. The
+ * key alone resolves to (org, key) through the SECURITY DEFINER `tenancy.api_key_by_hash`, so
+ * its hash index is deliberately global. Revoked keys resolve to nothing.
+ */
+export const apiKeys = tenantTable(
+  tenancy,
+  'api_keys',
+  {
+    name: text('name').notNull(),
+    /** The first characters of the key (`yy_live_AbC1`), shown in lists to tell keys apart. */
+    prefix: text('prefix').notNull(),
+    keyHash: text('key_hash').notNull(),
+    scopes: text('scopes').array().notNull(),
+    createdBy: uuid('created_by'),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    revokedBy: uuid('revoked_by'),
+  },
+  (t) => [
+    uniqueIndex('api_keys_key_hash_key').on(t.keyHash),
+    check('api_keys_name_length', sql`length(name) between 1 and 60`),
+    check(
+      'api_keys_scopes_check',
+      sql`cardinality(scopes) >= 1 and scopes <@ array[${sql.raw(API_KEY_SCOPES.map((s) => `'${s}'`).join(', '))}]::text[]`,
+    ),
+    foreignKey({
+      name: 'api_keys_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);

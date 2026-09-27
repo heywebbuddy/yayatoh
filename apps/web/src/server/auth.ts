@@ -23,7 +23,7 @@ const sealer: SecretSealer = {
 
 /**
  * Development only: the last one-time code sent to each address, so persona tools and the e2e
- * suite can read "emailed" codes (`/api/dev/mailbox`). Kept in the verifications table (any server
+ * suite can read "emailed" codes (`/api/dev/last-code`). Kept in the verifications table (any server
  * process can read it) and never written outside dev auth.
  */
 const devMailboxKey = (email: string) => `yy-dev-mailbox:${email.toLowerCase()}`;

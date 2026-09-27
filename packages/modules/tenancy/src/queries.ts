@@ -1,7 +1,7 @@
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { roleRequiresTwoFactor } from './domain/permissions.ts';
 import {
@@ -11,7 +11,7 @@ import {
   MyOrganizationDto as MyOrgSchema,
   OrganizationDto,
 } from './dto.ts';
-import { invitations, memberships, organizations } from './schema.ts';
+import { invitations, memberships, organizations, orgDomains } from './schema.ts';
 
 export const getOrganizationQuery = tenantQuery({
   name: 'tenancy.getOrganization',
@@ -115,6 +115,79 @@ export async function organizationDefaultsTx(
 ): Promise<{ timezone: string; currency: string } | null> {
   const [row] = await tx
     .select({ timezone: organizations.timezone, currency: organizations.currency })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row ?? null;
+}
+
+/**
+ * What a public site may say about the current org (marketplace projection, tenant sites), inside
+ * its tenant transaction: slug, display name, status, brand colour, "Powered by" visibility and the
+ * primary active site hostname (custom domain or the managed tenant-apex subdomain).
+ */
+export async function organizationPublicTx(
+  tx: TenantTx,
+  orgId: string,
+): Promise<{
+  slug: string;
+  name: string;
+  status: string;
+  brandColor: string | null;
+  poweredByVisible: boolean;
+  primaryHost: string | null;
+  primaryHostManaged: boolean;
+} | null> {
+  const [o] = await tx
+    .select({
+      slug: organizations.slug,
+      name: organizations.name,
+      status: organizations.status,
+      brandColor: organizations.brandColor,
+      poweredByVisible: organizations.poweredByVisible,
+    })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  if (!o) return null;
+  const [d] = await tx
+    .select({ hostname: orgDomains.hostname, managed: orgDomains.managed })
+    .from(orgDomains)
+    .where(and(eq(orgDomains.kind, 'site'), eq(orgDomains.isPrimary, true), eq(orgDomains.status, 'active')));
+  return { ...o, primaryHost: d?.hostname ?? null, primaryHostManaged: d?.managed ?? false };
+}
+
+/** Members of the tenant org with one of these roles (notification fan-out), inside its transaction. */
+export async function memberUserIdsTx(
+  tx: TenantTx,
+  roles: readonly string[],
+): Promise<{ userId: string; role: string }[]> {
+  if (roles.length === 0) return [];
+  return tx
+    .select({ userId: memberships.userId, role: memberships.role })
+    .from(memberships)
+    .where(inArray(memberships.role, [...roles]));
+}
+
+/** What outbound messages need about the sender org: name, brand, timezone, "Powered by". */
+export async function organizationBrandTx(
+  tx: TenantTx,
+  orgId: string,
+): Promise<{
+  slug: string;
+  name: string;
+  brandColor: string | null;
+  poweredByVisible: boolean;
+  timezone: string;
+  status: string;
+} | null> {
+  const [row] = await tx
+    .select({
+      slug: organizations.slug,
+      name: organizations.name,
+      brandColor: organizations.brandColor,
+      poweredByVisible: organizations.poweredByVisible,
+      timezone: organizations.timezone,
+      status: organizations.status,
+    })
     .from(organizations)
     .where(eq(organizations.id, orgId));
   return row ?? null;

@@ -9,6 +9,7 @@ import {
   Heart,
   House,
   Image,
+  KeyRound,
   Landmark,
   Library,
   ListChecks,
@@ -50,6 +51,7 @@ const ICONS: Record<string, LucideIcon> = {
   bell: Bell,
   settings: Settings,
   landmark: Landmark,
+  key: KeyRound,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

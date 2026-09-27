@@ -13,6 +13,11 @@ describe('check-modules gate canaries', () => {
     );
   });
 
+  it('cache without an org scope (raw unstable_cache or use cache) fails', () => {
+    const v = checkModules(here('../canaries/unscoped-cache')).filter((x) => x.rule === 'cache-scope');
+    expect(v.map((x) => x.file)).toEqual(['apps/web/src/server/listings.ts', 'apps/web/src/server/other.ts']);
+  });
+
   it('table without RLS (not a tenantTable) fails', () => {
     expect(rules('table-without-rls')).toContain('tenant-table');
   });

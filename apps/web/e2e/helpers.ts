@@ -20,6 +20,9 @@ export async function expectAccessible(page: Page) {
   await expect(page).toHaveTitle(/\S/);
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+    // Fully sandboxed frames (email previews) run no scripts, so axe can't enter them and may
+    // hang waiting; their documents are checked on their own with expectHtmlAccessible.
+    .exclude('iframe[sandbox=""]')
     .analyze();
   const bad = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
   expect(
@@ -29,4 +32,12 @@ export async function expectAccessible(page: Page) {
       nodes: v.nodes.slice(0, 3).map((n) => n.target.join(' ')),
     })),
   ).toEqual([]);
+}
+
+/** axe on a standalone HTML document (e.g. an email), loaded into a fresh page of the context. */
+export async function expectHtmlAccessible(page: Page, html: string) {
+  const doc = await page.context().newPage();
+  await doc.setContent(html);
+  await expectAccessible(doc);
+  await doc.close();
 }

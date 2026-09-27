@@ -35,7 +35,7 @@ export default async function AssignSeatsPage({
   return (
     <>
       <PageHeader title={t('assign.title')} description={t('assign.description')} />
-      <SeatingTabs base={base} active="assign" />
+      <SeatingTabs base={base} active="assign" finder={data.modules.has('seat_finder')} />
       {view && seating ? (
         <SeatAssignments
           view={view}

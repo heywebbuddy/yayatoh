@@ -1,0 +1,90 @@
+{
+  "common": {
+    "greeting": "नमस्ते {name},",
+    "greetingNoName": "नमस्ते,",
+    "sentBy": "{org} ने Yayatoh से भेजा।",
+    "poweredBy": "Yayatoh द्वारा संचालित",
+    "linkFallback": "अगर बटन काम न करे, तो यह लिंक अपने ब्राउज़र में कॉपी करें:",
+    "unsubscribe": "सदस्यता छोड़ें",
+    "why": {
+      "reminders": "आपको यह रिमाइंडर इसलिए मिला क्योंकि आपके पास {org} के टिकट हैं।",
+      "event_updates": "आपको यह इसलिए मिला क्योंकि आप {org} के एक इवेंट की अतिथि सूची में हैं।",
+      "marketing": "आपको यह इसलिए मिला क्योंकि आपने {org} की खबरों की सदस्यता ली है।"
+    },
+    "reply": "{org} को जवाब दें"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "{eventName} के लिए आपके टिकट",
+      "intro": "{count, plural, =0 {आपका ऑर्डर पक्का हो गया है।} one {आपका टिकट तैयार है।} other {आपके # टिकट तैयार हैं।}} यह ईमेल संभाल कर रखें: नीचे का बटन उन्हें कभी भी खोलता है।",
+      "cta": "मेरे टिकट देखें"
+    },
+    "orders.refund": {
+      "subject": "{eventName} के लिए आपका रिफ़ंड",
+      "intro": "{fully, select, yes {आपके ऑर्डर का पूरा रिफ़ंड हो गया:} other {आपके ऑर्डर का कुछ हिस्सा रिफ़ंड हुआ:}} {amount}। खाते में आने में 5–10 कार्यदिवस लग सकते हैं।",
+      "cta": "मेरा ऑर्डर देखें"
+    },
+    "events.reminder": {
+      "subject": "कल: {eventName}",
+      "intro": "याद दिला दें कि {eventName} {when} शुरू होगा।",
+      "venue": "स्थान: {venue}",
+      "cta": "मेरे टिकट खोलें"
+    },
+    "tenancy.invitation": {
+      "subject": "Yayatoh पर {orgName} से जुड़ने का निमंत्रण",
+      "intro": "{orgName} ने आपको अपनी टीम में {role} के रूप में आमंत्रित किया है।",
+      "cta": "निमंत्रण स्वीकार करें"
+    },
+    "ticketing.claim-link": {
+      "subject": "{eventName} का एक टिकट आपका इंतज़ार कर रहा है",
+      "intro": "किसी ने आपको {eventName} का टिकट भेजा है। अपना QR कोड पाने के लिए इसे क्लेम करें।",
+      "cta": "मेरा टिकट क्लेम करें"
+    },
+    "ticketing.holder-link": {
+      "subject": "{eventName} के आपके टिकटों का लिंक",
+      "intro": "यह रहा आपका माँगा हुआ लिंक। यह {eventName} के आपके टिकट खोलता है।",
+      "cta": "मेरे टिकट खोलें"
+    },
+    "seating.finder-code": {
+      "subject": "{eventName} के लिए आपका सीट खोज कोड {code} है",
+      "intro": "अपनी सीट देखने के लिए सीट खोज में {code} दर्ज करें। यह कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा था, तो इस ईमेल को अनदेखा कर सकते हैं।",
+      "cta": "सीट खोज खोलें"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "{eventName} के आयोजक का संदेश:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "{eventName} के बारे में अपडेट:",
+      "cta": "आयोजक को जवाब दें"
+    },
+    "messaging.reply": {
+      "subject": "{org} का नया जवाब",
+      "intro": "{org} ने आपके संदेश का जवाब दिया:",
+      "cta": "पढ़ें और जवाब दें"
+    },
+    "sales.order_paid": {
+      "subject": "नया ऑर्डर: {name}",
+      "intro": "{name} ने {eventName} के लिए {count, plural, one {# टिकट} other {# टिकट}} खरीदे ({amount})।"
+    },
+    "messaging.contact_replied": {
+      "subject": "{name} का नया संदेश",
+      "intro": "{name} ने आपको {eventName} के बारे में लिखा।"
+    },
+    "notifications.test": {
+      "subject": "परीक्षण सूचना",
+      "intro": "सूचनाएँ काम कर रही हैं।"
+    }
+  },
+  "roles": {
+    "owner": "मालिक",
+    "admin": "एडमिन",
+    "manager": "मैनेजर",
+    "finance": "वित्त",
+    "marketing": "मार्केटिंग",
+    "box_office": "बॉक्स ऑफ़िस",
+    "scanner": "स्कैनर",
+    "viewer": "दर्शक"
+  }
+}

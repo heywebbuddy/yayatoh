@@ -21,6 +21,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/seating": "workspace:*",

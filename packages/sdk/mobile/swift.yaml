@@ -1,0 +1,12 @@
+# openapi-generator config for the future Swift 6 client (roadmap §6.1, §8.3). Not built in CI:
+# mobile apps are deferred. Run scripts/generate-mobile.sh to produce it locally.
+generatorName: swift6
+inputSpec: /local/apps/api/openapi.json
+outputDir: /local/packages/sdk/mobile/out/swift
+additionalProperties:
+  projectName: YayatohAPI
+  podSummary: Yayatoh /v1 API client
+  responseAs: AsyncAwait
+  useSPMFileStructure: true
+  hashableModels: true
+  library: urlsession

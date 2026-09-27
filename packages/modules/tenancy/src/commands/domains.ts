@@ -166,6 +166,14 @@ const DomainCheckInput = z.object({
  * Record what the hosting provider reported for a custom domain. The first time it is active it
  * emits `domain.activated@1` and becomes primary unless another custom domain already is.
  */
+async function primaryIdTx(tx: TenantTx, kind: string): Promise<string | null> {
+  const [p] = await tx
+    .select({ id: orgDomains.id })
+    .from(orgDomains)
+    .where(and(eq(orgDomains.kind, kind), eq(orgDomains.isPrimary, true)));
+  return p?.id ?? null;
+}
+
 export const recordDomainCheckCommand = tenantCommand({
   name: 'tenancy.recordDomainCheck',
   input: z.object({
@@ -179,6 +187,7 @@ export const recordDomainCheckCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const d = await loadDomainTx(tx, input.domainId);
     if (d.managed) throw new DomainError('invalid_state', 'The managed subdomain needs no DNS checks');
+    const primaryBefore = await primaryIdTx(tx, d.kind);
     const active = input.check.status === 'active';
     const first = active && d.activatedAt === null;
     let [row] = await tx
@@ -223,6 +232,15 @@ export const recordDomainCheckCommand = tenantCommand({
         aggregateId: d.id,
         payload: { orgId: d.orgId, domainId: d.id, hostname: d.hostname },
       });
+    const primaryAfter = await primaryIdTx(tx, d.kind);
+    if (primaryAfter !== primaryBefore)
+      emit({
+        type: 'domain.primary_changed',
+        version: 1,
+        aggregateType: 'domain',
+        aggregateId: primaryAfter ?? d.id,
+        payload: { orgId: d.orgId, kind: d.kind, domainId: primaryAfter },
+      });
     return present(row);
   },
   audit: (input, r) => ({
@@ -263,9 +281,17 @@ export const setPrimaryDomainCommand = tenantCommand({
   permission: 'org:update',
   // Step-up (roadmap §10): domains decide where buyers pay and sign in.
   stepUp: true,
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const d = await loadDomainTx(tx, input.domainId);
     if (d.status !== 'active') throw new DomainError('invalid_state', 'The domain is not active yet');
+    if (!d.isPrimary)
+      emit({
+        type: 'domain.primary_changed',
+        version: 1,
+        aggregateType: 'domain',
+        aggregateId: d.id,
+        payload: { orgId: d.orgId, kind: d.kind, domainId: d.id },
+      });
     await tx
       .update(orgDomains)
       .set({ isPrimary: false })

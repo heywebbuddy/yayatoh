@@ -278,8 +278,36 @@
     {
       "idx": 39,
       "version": "7",
-      "when": 1790539208274,
-      "tag": "0039_two_factor_step_up",
+      "when": 1790537139972,
+      "tag": "0039_simple_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1790543774823,
+      "tag": "0040_whole_black_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1790544082706,
+      "tag": "0041_lonely_blue_blade",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1790544469216,
+      "tag": "0042_fat_proemial_gods",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1790547371495,
+      "tag": "0043_perpetual_nocturne",
       "breakpoints": true
     }
   ]

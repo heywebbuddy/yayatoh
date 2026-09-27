@@ -162,7 +162,7 @@ test('staff see a tenant dispute and open its evidence packet', async ({ page, b
 
 const cents = (text: string) => Math.round(Number(text.replace(/[^0-9.-]/g, '')) * 100);
 
-test('staff read the commission report: a fee booked on a sale shows up for the tenant', async ({
+test('staff read the commission report (a fee booked on a sale shows up) and /v1 API usage', async ({
   page,
   browser,
 }) => {
@@ -245,12 +245,41 @@ test('staff read the commission report: a fee booked on a sale shows up for the 
   await expect(
     page.getByRole('cell', { name: 'staff console: commission report 2020-01-01 to 2020-01-31' }).first(),
   ).toBeVisible();
+
+  // /v1 app-version telemetry (M1.13c), in the same session: the admin sign-in is rate limited.
+  // An app build calls the web's /v1 mount (the same router as api.yayatoh.com).
+  const version = `9.${stamp % 100000}.0`;
+  const app = await browser.newContext();
+  for (let i = 0; i < 2; i++) {
+    const res = await app.request.get(`${WEB}/api/v1/mobile/config`, {
+      headers: { 'x-yayatoh-client': `android/${version}` },
+    });
+    expect(res.status()).toBe(200);
+  }
+  await app.close();
+  await page.getByRole('link', { name: 'API usage' }).click();
+  await expect(page.getByRole('heading', { name: 'API usage by app version' })).toBeVisible();
+  const usage = page.getByRole('row').filter({ hasText: version });
+  await expect(async () => {
+    await page.reload();
+    await expect(usage).toContainText('GET /mobile/config', { timeout: 1_000 });
+  }).toPass({ timeout: 15_000 });
+  await expect(usage).toContainText('android');
+  await expect(usage.getByRole('cell').nth(3)).toHaveText('2');
+  await expectAccessible(page);
+  await page.getByRole('link', { name: 'Access log' }).click();
+  await expect(
+    page.getByRole('cell', { name: 'staff console: read /v1 app-version telemetry' }).first(),
+  ).toBeVisible();
 });
 
-test('an organizer account cannot open the commission report', async ({ page }) => {
+test('an organizer account cannot open the commission report or the API usage', async ({ page }) => {
   await signIn(page, NOT_STAFF, { twoFactor: true });
   await expect(page).toHaveURL(/\/not-staff$/);
   await page.goto('/commission');
   await expect(page).toHaveURL(/\/not-staff$/);
   await expect(page.getByRole('table', { name: 'Commission' })).toHaveCount(0);
+  await page.goto('/api-usage');
+  await expect(page).toHaveURL(/\/not-staff$/);
+  await expect(page.getByRole('heading', { name: 'API usage by app version' })).toHaveCount(0);
 });

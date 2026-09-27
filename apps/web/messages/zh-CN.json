@@ -31,7 +31,116 @@
     "open": "通知",
     "title": "通知",
     "emptyTitle": "暂无新通知",
-    "emptyDescription": "有关销售、座位和签到的提醒将显示在这里。"
+    "emptyDescription": "有关销售、座位和签到的提醒将显示在这里。",
+    "openWithCount": "通知，{count, plural, other {# 条未读}}",
+    "unreadAnnouncement": "{count, plural, other {您有 # 条未读通知}}",
+    "markRead": "标为已读",
+    "markReadItem": "将“{title}”标为已读",
+    "markAllRead": "全部标为已读",
+    "viewAll": "全部通知",
+    "settings": "通知设置",
+    "unread": "未读",
+    "loadMore": "显示更早的",
+    "pageTitle": "通知",
+    "pageDescription": "您在此组织的提醒：新订单和消息。",
+    "allRead": "所有通知均已读。",
+    "items": {
+      "sales": {
+        "order_paid": "新订单：{name} 购买了 {count, plural, other {# 张}} {eventName} 门票（{amount}）"
+      },
+      "messaging": {
+        "contact_replied": "{name} 就 {eventName} 给您发了消息"
+      },
+      "notifications": {
+        "test": "测试通知：通知功能正常"
+      },
+      "other": "通知"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "门票",
+        "refund": "退款"
+      },
+      "events": {
+        "reminder": "活动提醒"
+      },
+      "tenancy": {
+        "invitation": "团队邀请"
+      },
+      "ticketing": {
+        "claim-link": "门票领取链接",
+        "holder-link": "门票链接"
+      },
+      "attendees": {
+        "message": "主办方消息"
+      },
+      "messaging": {
+        "announcement": "公告",
+        "reply": "回复",
+        "contact_replied": "新消息"
+      },
+      "sales": {
+        "order_paid": "新订单提醒"
+      },
+      "notifications": {
+        "test": "测试通知"
+      }
+    },
+    "status": {
+      "queued": "发送中",
+      "scheduled": "已计划",
+      "sent": "已发送",
+      "suppressed": "未发送",
+      "failed": "失败",
+      "canceled": "已取消"
+    },
+    "reasons": {
+      "quiet_hours": "因免打扰时段暂缓（收件人当地 21:00–8:00）",
+      "messaging_paused": "Yayatoh 支持团队已暂停消息发送",
+      "unsubscribed": "收件人已退订",
+      "preference": "收件人已在设置中关闭",
+      "no_device": "没有可推送的设备",
+      "no_address": "没有地址",
+      "provider_error": "邮件服务商拒收",
+      "retrying": "出错后重试中"
+    },
+    "channels": {
+      "email": "电子邮件",
+      "sms": "短信",
+      "push": "推送",
+      "in_app": "应用内"
+    },
+    "log": {
+      "title": "消息",
+      "empty": "此订单暂无消息。",
+      "when": "时间",
+      "message": "消息",
+      "to": "收件人",
+      "channel": "渠道"
+    },
+    "preferences": {
+      "title": "通知设置",
+      "description": "选择您如何获知 {org} 的动态。设置仅对您本人生效。",
+      "categories": {
+        "sales": {
+          "name": "销售",
+          "hint": "新订单已付款。"
+        },
+        "messages": {
+          "name": "消息",
+          "hint": "有客户联系您的组织。"
+        },
+        "marketing": {
+          "name": "Yayatoh 资讯",
+          "hint": "产品资讯与技巧。默认关闭，除非您开启。"
+        }
+      },
+      "save": "保存设置",
+      "saved": "通知设置已保存。",
+      "test": "给我发送测试通知",
+      "testSent": "测试通知已发送，请查看铃铛。",
+      "required": "门票、收据和安全邮件始终会发送给您。"
+    }
   },
   "nav": {
     "home": "首页",
@@ -57,7 +166,9 @@
     "team": "团队",
     "settings": "设置",
     "payouts": "收款",
-    "domains": "域名"
+    "domains": "域名",
+    "apiKeys": "API 密钥",
+    "publicSite": "公开网站"
   },
   "vocab": {
     "attendee": "参会者",
@@ -548,7 +659,12 @@
     },
     "collectedBy": "收款方：{org}",
     "seat": "座位",
-    "seatLabel": "座位：{seat}"
+    "seatLabel": "座位：{seat}",
+    "emailsSent": "已发送的邮件",
+    "emailsNone": "暂无邮件。",
+    "emailSentAt": "已于 {when} 发送",
+    "emailScheduled": "计划于 {when} 发送",
+    "emailQueued": "发送中"
   },
   "orders": {
     "title": "最近订单",
@@ -1321,7 +1437,8 @@
     "tabs": {
       "label": "座位视图",
       "plan": "座位图",
-      "assign": "安排宾客"
+      "assign": "安排宾客",
+      "finder": "座位查询"
     },
     "assign": {
       "title": "安排宾客",
@@ -1388,7 +1505,143 @@
         "remove": "移除",
         "removeLabel": "将 {name} 从{item}移除"
       }
+    },
+    "finder": {
+      "title": "座位查询",
+      "description": "宾客可以在手机上查找座位并查看场地地图。打印带二维码的海报放在入口处。",
+      "noPlan": "此活动还没有座位图。请先创建一个，宾客将在上面查找自己的座位。",
+      "open": "已向宾客开放",
+      "closed": "未向宾客开放",
+      "modeNow": "查询方式：{mode}",
+      "modeShort": {
+        "code": "邮箱验证码",
+        "name": "全名"
+      },
+      "notPublic": "活动尚未发布（或为私密活动），宾客暂时无法打开座位查询。",
+      "settingsTitle": "宾客",
+      "save": "保存",
+      "saved": "座位查询设置已保存。",
+      "publicMap": "向宾客显示场地地图和座位查询",
+      "publicMapHint": "地图显示舞台、入口、吧台和桌子，但绝不显示谁坐在哪里。",
+      "mode": "宾客如何查找座位",
+      "modeOption": {
+        "code": "通过发送到邮箱的验证码（推荐）",
+        "name": "输入全名，立即查看"
+      },
+      "modeHint": {
+        "code": "只有能读取宾客邮件的人才能看到其座位，也没有人能知道名单上有谁。",
+        "name": "入场更快，但任何知道宾客全名的人都能看到其座位。"
+      },
+      "readOnly": "你可以查看这些设置，但不能修改。",
+      "shareTitle": "分享",
+      "address": "座位查询地址",
+      "openPublic": "打开座位查询",
+      "poster": "打印座位查询海报",
+      "closedNote": "座位查询已关闭。扫描海报的宾客会被提示稍后再来。"
     }
+  },
+  "venueMap": {
+    "title": "场地地图",
+    "description": "舞台、入口、吧台和桌子的位置。",
+    "findSeat": "查找我的座位",
+    "tools": "地图控制",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "reset": "整个场地",
+    "zoom": "缩放 {percent}%",
+    "region": "场地地图",
+    "keys": "选中地图时：按 + 和 − 缩放，方向键移动，0 显示整个场地。地图上的所有内容也都列在场地指南中。",
+    "guide": "场地指南",
+    "guideHint": "地图上的所有内容及其位置。",
+    "object": {
+      "stage": "舞台",
+      "booth": "展位",
+      "entrance": "入口",
+      "exit": "出口",
+      "dance_floor": "舞池",
+      "bar": "吧台",
+      "custom": "其他"
+    },
+    "named": "{type}：{label}",
+    "table": "{label} 号桌",
+    "row": "{label} 排",
+    "seats": "{count, plural, other {# 个座位}}",
+    "area": {
+      "top-left": "地图左上方",
+      "top": "地图上方",
+      "top-right": "地图右上方",
+      "left": "地图左侧",
+      "centre": "地图中央",
+      "right": "地图右侧",
+      "bottom-left": "地图左下方",
+      "bottom": "地图下方",
+      "bottom-right": "地图右下方"
+    },
+    "yours": "{count, plural, other {你的座位：{seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "座位查询",
+    "title": "查找你的座位",
+    "closedTitle": "座位查询尚未开放",
+    "closedDescription": "主办方尚未为此活动开放座位查询。请在活动临近时再来查看，或询问现场工作人员。",
+    "toEvent": "返回活动",
+    "lookupTitle": "查找你的座位",
+    "codeIntro": "请输入接收邀请或门票的电子邮箱。我们会向你发送一个验证码，用于查看你的座位。",
+    "email": "电子邮箱",
+    "sendCode": "给我发送验证码",
+    "sending": "正在发送…",
+    "codeTitle": "输入验证码",
+    "sent": "如果你在宾客名单上，我们已向你发送了一个 6 位验证码，10 分钟内有效。",
+    "codeHint": "请输入邮件中的 6 位验证码。",
+    "code": "6 位验证码",
+    "verify": "显示我的座位",
+    "checking": "正在验证…",
+    "otherEmail": "使用其他邮箱",
+    "nameIntro": "请输入与邀请函上一致的全名。",
+    "name": "全名",
+    "findByName": "查找我的座位",
+    "resultTitle": "{count, plural, other {你的座位}}",
+    "noSeatTitle": "你在名单上",
+    "notFoundTitle": "未找到",
+    "noSeat": "你暂时还没有座位。主办方会通知你，你也可以询问现场工作人员。",
+    "notFound": "未找到这个名字。请检查拼写，或询问现场工作人员。",
+    "seatAt": {
+      "table": "{item} 号桌 · {seat} 号座",
+      "row": "{item} 排 · {seat} 号座"
+    },
+    "nearest": "最近的入口：{name}",
+    "someUnseated": "{count, plural, other {你们一行中有 # 人还没有座位。}}",
+    "again": "查找其他人",
+    "challengeTitle": "请确认你是真人",
+    "challengeHint": "此设备的查询次数过多。请完成验证后再次提交。",
+    "fakeChallenge": "我是真人（测试验证）",
+    "mapTitle": "场地地图",
+    "errors": {
+      "wrong": "{left, plural, other {验证码不正确。你还可以尝试 # 次。}}",
+      "locked": "错误次数过多。请重新获取验证码。",
+      "expired": "此验证码已过期。请重新获取。",
+      "used": "此验证码已被使用。请重新获取。",
+      "invalidCode": "请输入邮件中的 6 位数字。",
+      "invalidEmail": "请输入有效的电子邮箱。",
+      "invalidName": "请输入你的全名。",
+      "challengeFailed": "验证未通过。请重试。",
+      "challengeUnavailable": "此设备的查询次数过多。请稍等一分钟后重试。",
+      "closed": "此活动的座位查询未开放。",
+      "internal": "我们这边出了点问题。"
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "座位查询海报",
+    "title": "查找你的座位",
+    "back": "返回座位查询",
+    "print": "打印海报",
+    "closedNote": "座位查询已关闭。扫描此海报的宾客会被提示稍后再来——请在“座位”页面开放。",
+    "qrLabel": "座位查询二维码：{url}",
+    "step1": "用手机相机扫描二维码。",
+    "step2Code": "输入你的邮箱，我们会发送验证码给你。",
+    "step2Name": "输入你的全名。",
+    "step3": "在场地地图上查看你的桌号和座位。",
+    "orVisit": "或访问"
   },
   "reports": {
     "title": "分析",
@@ -1546,6 +1799,289 @@
       "event": "活动",
       "emptyTitle": "此时间段内没有销售",
       "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。"
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "退订",
+    "eyebrow": "邮件设置",
+    "title": "来自 {org} 的邮件",
+    "category": {
+      "reminders": "您持有门票的活动开始前的提醒。",
+      "event_updates": "主办方关于您参加的活动的动态和消息。",
+      "marketing": "主办方的资讯和优惠。",
+      "sales": "新订单提醒。",
+      "messages": "新消息提醒。"
+    },
+    "categoryName": {
+      "reminders": "活动提醒",
+      "event_updates": "活动动态",
+      "marketing": "资讯和优惠",
+      "sales": "订单提醒",
+      "messages": "消息提醒"
+    },
+    "address": "地址：{email}",
+    "question": "不再在此地址接收来自 {org} 的{what}？",
+    "confirm": "退订",
+    "done": "您已退订来自 {org} 的{what}。",
+    "resubscribe": "重新订阅",
+    "transactionalNote": "您仍会收到必要的邮件，例如门票、收据和退款。"
+  },
+  "devMailbox": {
+    "eyebrow": "开发",
+    "title": "开发邮箱",
+    "description": "平台在开发环境中发送的消息。这些内容都没有离开本机。",
+    "filter": "收件人",
+    "apply": "筛选",
+    "emptyTitle": "暂无消息",
+    "emptyDescription": "开发环境中发送的邮件、短信和推送通知会显示在这里。",
+    "meta": "{channel} 发送至 {to} · {at}",
+    "show": "显示消息",
+    "preview": "邮件预览：{subject}"
+  },
+  "announcements": {
+    "title": "营销",
+    "description": "发给 {event} 所有参加者的公告。",
+    "composeTitle": "新公告",
+    "subject": "主题",
+    "message": "内容",
+    "channels": "发送方式",
+    "channel": {
+      "email": "电子邮件",
+      "push": "推送通知"
+    },
+    "pushHint": "推送会发给使用应用的参加者；其他人会收到邮件。",
+    "preview": "预览",
+    "previewTitle": "公告预览",
+    "previewFrame": "邮件预览：{subject}",
+    "willReach": "{count, plural, other {将发送给 # 人。}}",
+    "send": "{count, plural, other {发送给 # 人}}",
+    "edit": "编辑",
+    "sent": "{count, plural, other {已发送给 # 人，投递将在后台继续。}}",
+    "sentTitle": "已发送的公告",
+    "sentEmpty": "暂无公告。",
+    "sentAt": "发送时间",
+    "recipients": "收件人",
+    "delivery": "投递",
+    "deliveryCounts": "已发送 {sent} · 待发送 {pending} · 未发送 {notSent}",
+    "errors": {
+      "subjectRequired": "请填写主题。",
+      "messageRequired": "请填写内容。",
+      "channelRequired": "请至少选择一种发送方式。",
+      "no_recipients": "此活动还没有参加者，暂无可发送的对象。",
+      "messaging_paused": "Yayatoh 支持团队已暂停您组织的消息发送。"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "消息",
+    "inboxDescription": "与客户的对话。对公告的回复会出现在这里。",
+    "filters": "显示",
+    "filter": {
+      "all": "全部",
+      "unread": "未读",
+      "blocked": "已屏蔽"
+    },
+    "emptyTitle": "暂无对话",
+    "emptyDescription": "有人回复公告后，消息会显示在这里。",
+    "unread": "未读",
+    "blockedChip": "已屏蔽",
+    "you": "您",
+    "threadTitle": "对话",
+    "back": "全部消息",
+    "threadWith": "与 {name} 的对话",
+    "history": "消息",
+    "contactBlockedYou": "此人已屏蔽您组织的消息。",
+    "replyTitle": "回复",
+    "replyLabel": "您的回复（通过邮件发送）",
+    "sendReply": "发送回复",
+    "sent": "消息已发送。",
+    "safetyTitle": "屏蔽或举报",
+    "block": "屏蔽此人",
+    "unblock": "取消屏蔽",
+    "blockedText": "已屏蔽：其消息将被拒收。",
+    "report": "向 Yayatoh 举报",
+    "reportReason": "原因",
+    "reportNote": "详情（可选）",
+    "reasons": {
+      "spam": "垃圾信息",
+      "abuse": "辱骂或骚扰",
+      "other": "其他"
+    },
+    "reported": "谢谢，Yayatoh 会审核此对话。",
+    "publicMetaTitle": "消息",
+    "publicEyebrow": "消息",
+    "publicTitle": "您与 {org} 的对话",
+    "publicDescription": "只有您和主办方可以查看此对话。",
+    "notAccepting": "{org} 不在此接收消息。",
+    "writeLabel": "写信给 {org}",
+    "send": "发送",
+    "blockOrg": "屏蔽 {org}",
+    "unblockOrg": "取消屏蔽 {org}",
+    "youBlocked": "您已屏蔽 {org}：您将不再收到其回复或活动动态。",
+    "errors": {
+      "required": "请先填写消息。",
+      "blocked": "此对话已被屏蔽。",
+      "blocked_by_contact": "此人已屏蔽您组织的消息。",
+      "you_blocked": "取消屏蔽主办方后才能写信。"
+    }
+  },
+  "apiKeys": {
+    "title": "API 密钥",
+    "subtitle": "允许其他软件通过 Yayatoh API 访问你的组织。每个密钥只显示一次。",
+    "docs": "API 参考",
+    "noAccessTitle": "只有所有者和管理员可以管理 API 密钥",
+    "noAccessDescription": "请让此组织的所有者或管理员为你创建密钥。",
+    "createTitle": "创建密钥",
+    "name": "名称",
+    "nameHint": "密钥的用途，例如“Zapier”或“售票处同步”。",
+    "nameRequired": "请为密钥命名。",
+    "scopes": "权限",
+    "scopesHint": "密钥只能在本组织内执行其权限允许的操作。",
+    "scopesRequired": "请至少选择一项权限。",
+    "create": "创建密钥",
+    "created": "已创建密钥“{name}”。",
+    "shownOnce": "请立即复制并妥善保存：它不会再次显示。",
+    "copy": "复制密钥",
+    "copied": "已复制到剪贴板。",
+    "listTitle": "你的密钥",
+    "empty": "还没有 API 密钥。",
+    "key": "密钥",
+    "createdAt": "创建时间",
+    "lastUsed": "上次使用",
+    "never": "从未",
+    "status": "状态",
+    "active": "有效",
+    "revoked": "已撤销",
+    "actions": "操作",
+    "revoke": "撤销",
+    "revokeNamed": "撤销密钥 {name}",
+    "scope": {
+      "org_read": "读取组织",
+      "events_read": "读取活动和票种",
+      "events_write": "创建和修改活动",
+      "orders_read": "读取订单",
+      "orders_refund": "订单退款",
+      "attendees_read": "读取参会者",
+      "checkin_scan": "扫描门票"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "网站",
+    "browse": "浏览活动",
+    "forOrganizers": "主办方入口",
+    "language": "语言",
+    "poweredBy": "由 Yayatoh 提供支持",
+    "upcoming": "即将举行的活动",
+    "results": "搜索结果",
+    "count": "{count, plural, other {# 个活动}}",
+    "seeAll": "查看全部活动",
+    "when": "时间",
+    "where": "地点",
+    "priceLabel": "价格：",
+    "by": "主办方：{org}",
+    "postponed": "已延期",
+    "price": {
+      "soon": "门票即将开售",
+      "free": "免费",
+      "from": "{price} 起"
+    },
+    "category": {
+      "gala": "晚宴",
+      "concert": "音乐会",
+      "conference": "会议",
+      "community": "社区",
+      "other": "其他",
+      "wedding": "婚礼",
+      "agency": "代理机构"
+    },
+    "filters": {
+      "label": "搜索活动",
+      "query": "按名称、地点或主办方搜索",
+      "city": "城市",
+      "anyCity": "任意城市",
+      "category": "类别",
+      "anyCategory": "任意类别",
+      "price": "价格",
+      "anyPrice": "任意价格",
+      "priceOption": {
+        "free": "免费",
+        "paid": "付费"
+      },
+      "from": "开始日期",
+      "to": "结束日期",
+      "submit": "搜索",
+      "clear": "清除筛选"
+    },
+    "pagination": {
+      "label": "分页",
+      "previous": "上一页",
+      "next": "下一页",
+      "status": "第 {page} 页，共 {count} 页"
+    },
+    "empty": {
+      "title": "暂无即将举行的活动",
+      "description": "主办方发布新活动后会立即显示在这里。",
+      "filteredTitle": "没有符合筛选条件的活动",
+      "filteredDescription": "请尝试其他日期、城市或价格，或清除筛选。"
+    },
+    "home": {
+      "metaTitle": "Yayatoh · 发现身边的活动",
+      "eyebrow": "Yayatoh",
+      "title": "发现你的下一场活动。",
+      "lede": "音乐会、晚宴、会议和社区活动，所有费用均已含在价格中。",
+      "demoCta": "打开演示控制台"
+    },
+    "events": {
+      "title": "全部活动"
+    },
+    "tenant": {
+      "eyebrow": "活动",
+      "description": "{org} 即将举行的活动。",
+      "emptyTitle": "暂无即将举行的活动",
+      "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
+    },
+    "organizer": {
+      "eyebrow": "主办方",
+      "description": "{org} 在 Yayatoh 上即将举行的活动。",
+      "site": "访问主办方网站",
+      "events": "{org} 的活动",
+      "emptyTitle": "暂无即将举行的活动",
+      "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
+    }
+  },
+  "widget": {
+    "title": "门票：{event}",
+    "fallbackTitle": "门票",
+    "passes": "门票",
+    "getTickets": "购买门票",
+    "newTab": "（在新标签页中打开）"
+  },
+  "site": {
+    "title": "公开网站",
+    "description": "人们在哪里找到你的活动：Yayatoh 活动广场、你自己的网站和购票小组件。",
+    "readOnly": "只有所有者和管理员可以更改这些设置。",
+    "save": "保存",
+    "saved": "已保存。",
+    "listing": {
+      "title": "展示",
+      "marketplace": "在 Yayatoh 活动广场展示我的公开活动",
+      "marketplaceHint": "婚礼和私人活动永远不会展示。",
+      "tenantSite": "将我在 {host} 的网站作为活动主页",
+      "tenantSiteHint": "搜索引擎会把人们带到你的网站而不是 yayatoh.com。自定义域名始终优先。"
+    },
+    "widget": {
+      "title": "购票小组件",
+      "description": "在你自己的网站上展示活动门票。把代码粘贴到希望小组件出现的位置。",
+      "origins": "允许展示小组件的网站",
+      "originsHint": "每行一个地址，例如 https://www.example.com。其他网站只会看到空白框。",
+      "noOrigins": "尚未允许任何网站。",
+      "snippets": "小组件代码",
+      "snippetFor": "{event} 的代码",
+      "frameTitle": "门票：{event}",
+      "copy": "复制代码",
+      "copied": "已复制。",
+      "emptyTitle": "暂无公开活动",
+      "emptyDescription": "发布活动后即可获取其小组件代码。"
     }
   },
   "security": {

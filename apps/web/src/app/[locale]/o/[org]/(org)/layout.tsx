@@ -1,4 +1,5 @@
 import type { NavItem } from '@yayatoh/platform';
+import { roleCan } from '@yayatoh/tenancy';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
@@ -6,10 +7,13 @@ import { loadConsole } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
+  { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
+  { key: 'publicSite', path: 'site', group: 'build', module: 'core', icon: 'store' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
+  { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
 ];
 
 export default async function OrgLayout({
@@ -30,7 +34,9 @@ export default async function OrgLayout({
       nav={{
         base: `/o/${org}`,
         profile: data.profile,
-        items: ORG_NAV.filter((i) => data.modules.has(i.module)),
+        items: ORG_NAV.filter(
+          (i) => data.modules.has(i.module) && (i.key !== 'messages' || roleCan(data.role, 'messages:read')),
+        ),
       }}
     >
       {children}

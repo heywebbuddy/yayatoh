@@ -1,5 +1,7 @@
 export {
   type ConsentInput,
+  contactIdByEmailTx,
+  contactUserIdsTx,
   currentConsentTx,
   normalizeEmail,
   recordConsentTx,

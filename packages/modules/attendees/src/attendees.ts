@@ -1,3 +1,4 @@
+import { KeysetAfter } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
@@ -75,10 +76,36 @@ export async function eventAttendeesTx(tx: TenantTx, eventId: string) {
       source: attendees.source,
       ticketId: attendees.ticketId,
       labels: attendees.labels,
+      contactId: attendees.contactId,
     })
     .from(attendees)
     .where(and(eq(attendees.eventId, eventId), eq(attendees.status, 'active')))
     .orderBy(attendees.name, attendees.id);
+}
+
+/** How a name is compared in exact lookups: trimmed, inner whitespace collapsed, lower case. */
+export const normalizePersonName = (name: string) => name.trim().replace(/\s+/g, ' ').toLowerCase();
+
+/**
+ * Exact lookups among one event's active people (the public seat finder, M1.7e): by email
+ * (case-insensitive) or by full name (case- and spacing-insensitive, never partial). Ids and
+ * ticket ids only: callers never learn names or emails they didn't already have.
+ */
+export async function eventAttendeesMatchingTx(
+  tx: TenantTx,
+  eventId: string,
+  by: { email: string } | { name: string },
+): Promise<{ id: string; ticketId: string | null }[]> {
+  const match =
+    'email' in by
+      ? sql`lower(btrim(${attendees.email})) = ${by.email.trim().toLowerCase()}`
+      : sql`lower(regexp_replace(btrim(${attendees.name}), '\\s+', ' ', 'g')) = ${normalizePersonName(by.name)}`;
+  return tx
+    .select({ id: attendees.id, ticketId: attendees.ticketId })
+    .from(attendees)
+    .where(and(eq(attendees.eventId, eventId), eq(attendees.status, 'active'), match))
+    .orderBy(attendees.createdAt, attendees.id)
+    .limit(50);
 }
 
 /** Attendees by id, with their event and status (callers check both). */
@@ -147,17 +174,27 @@ export const listAttendeesQuery = tenantQuery({
     eventId: z.uuid(),
     limit: z.int().min(1).max(500).default(200),
     offset: z.int().min(0).max(1_000_000).default(0),
+    /** Keyset position (newest first) for /v1 cursors; used instead of `offset`. */
+    after: KeysetAfter.optional(),
   }),
   output: z.object({ items: z.array(AttendeeDto), total: z.int() }),
   entitlement: 'attendees',
   permission: 'attendees:read',
   handler: async ({ input, tx }) => {
     const where = filterWhere(input.eventId, input);
+    const createdMs = sql`date_trunc('milliseconds', ${attendees.createdAt})`;
     const rows = await tx
       .select()
       .from(attendees)
-      .where(where)
-      .orderBy(desc(attendees.createdAt), desc(attendees.id))
+      .where(
+        input.after
+          ? and(
+              where,
+              sql`(${createdMs}, ${attendees.id}) < (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`,
+            )
+          : where,
+      )
+      .orderBy(desc(createdMs), desc(attendees.id))
       .limit(input.limit)
       .offset(input.offset);
     const [count] = await tx.select({ n: sql<number>`count(*)::int` }).from(attendees).where(where);

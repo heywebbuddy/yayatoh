@@ -78,7 +78,7 @@ export const updateTicketTypeCommand = tenantCommand({
   output: TicketTypeDto,
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const { ticketTypeId, ...fields } = input;
     const current = await findTicketType(tx, ticketTypeId);
     if (
@@ -99,6 +99,13 @@ export const updateTicketTypeCommand = tenantCommand({
       .where(eq(ticketTypes.id, ticketTypeId))
       .returning();
     if (!row) throw new DomainError('not_found');
+    emit({
+      type: 'ticket_type.updated',
+      version: 1,
+      aggregateType: 'ticket_type',
+      aggregateId: row.id,
+      payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id, fields: Object.keys(fields) },
+    });
     const [presented] = await present(tx, [row], ctx.now);
     return presented;
   },
@@ -116,13 +123,20 @@ export const archiveTicketTypeCommand = tenantCommand({
   output: TicketTypeDto,
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const [row] = await tx
       .update(ticketTypes)
       .set({ archivedAt: ctx.now, updatedAt: ctx.now })
       .where(and(eq(ticketTypes.id, input.ticketTypeId), isNull(ticketTypes.archivedAt)))
       .returning();
     if (!row) throw new DomainError('not_found');
+    emit({
+      type: 'ticket_type.archived',
+      version: 1,
+      aggregateType: 'ticket_type',
+      aggregateId: row.id,
+      payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id },
+    });
     const [presented] = await present(tx, [row], ctx.now);
     return presented;
   },
@@ -172,3 +186,33 @@ export const listTicketTypesQuery = tenantQuery({
       ctx.now,
     ),
 });
+
+/**
+ * The all-in price range of an event's public, unarchived ticket types (marketplace listings and
+ * JSON-LD offers), inside the caller's tenant transaction. Null when nothing is on offer.
+ */
+export async function eventPriceRangeTx(
+  tx: TenantTx,
+  eventId: string,
+  now: Date,
+): Promise<{ minMinor: number; maxMinor: number; currency: string; count: number } | null> {
+  const rows = await tx
+    .select()
+    .from(ticketTypes)
+    .where(
+      and(
+        eq(ticketTypes.eventId, eventId),
+        eq(ticketTypes.visibility, 'public'),
+        isNull(ticketTypes.archivedAt),
+      ),
+    );
+  if (rows.length === 0) return null;
+  const presented = await present(tx, rows, now);
+  const prices = presented.map((r) => r.allInMinor);
+  return {
+    minMinor: Math.min(...prices),
+    maxMinor: Math.max(...prices),
+    currency: rows[0]?.currency ?? 'USD',
+    count: rows.length,
+  };
+}

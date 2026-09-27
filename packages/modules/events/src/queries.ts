@@ -1,3 +1,4 @@
+import { KeysetAfter } from '@yayatoh/contracts';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
@@ -6,13 +7,40 @@ import { z } from 'zod';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { eventRoleAssignments, events } from './schema.ts';
 
+const startsMs = sql`date_trunc('milliseconds', ${events.startsAt})`;
+
+/** Events by start time. `limit` and `after` (a keyset position) page it for /v1; omitted, all. */
 export const listEventsQuery = tenantQuery({
   name: 'events.listEvents',
-  input: z.object({}),
+  input: z.object({ limit: z.int().min(1).max(101).optional(), after: KeysetAfter.optional() }),
   output: z.array(EventDto),
   entitlement: 'core',
   permission: 'events:read',
-  handler: ({ tx }) => tx.select().from(events).orderBy(asc(events.startsAt)),
+  handler: ({ input, tx }) => {
+    const q = tx
+      .select()
+      .from(events)
+      .where(
+        input.after
+          ? sql`(${startsMs}, ${events.id}) > (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`
+          : undefined,
+      )
+      .orderBy(asc(startsMs), asc(events.id));
+    return input.limit ? q.limit(input.limit) : q;
+  },
+});
+
+export const getEventQuery = tenantQuery({
+  name: 'events.getEvent',
+  input: z.object({ eventId: z.uuid() }),
+  output: EventDto,
+  entitlement: 'core',
+  permission: 'events:read',
+  handler: async ({ input, tx }) => {
+    const [row] = await tx.select().from(events).where(eq(events.id, input.eventId));
+    if (!row) throw new DomainError('not_found');
+    return row;
+  },
 });
 
 export const getEventBySlugQuery = tenantQuery({

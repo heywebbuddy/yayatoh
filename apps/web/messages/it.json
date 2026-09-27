@@ -31,7 +31,116 @@
     "open": "Notifiche",
     "title": "Notifiche",
     "emptyTitle": "Sei in pari",
-    "emptyDescription": "Gli avvisi su vendite, posti e check-in appariranno qui."
+    "emptyDescription": "Gli avvisi su vendite, posti e check-in appariranno qui.",
+    "openWithCount": "Notifiche, {count, plural, =0 {nessuna da leggere} one {# da leggere} other {# da leggere}}",
+    "unreadAnnouncement": "{count, plural, =0 {Nessuna notifica da leggere} one {Hai # notifica da leggere} other {Hai # notifiche da leggere}}",
+    "markRead": "Segna come letta",
+    "markReadItem": "Segna «{title}» come letta",
+    "markAllRead": "Segna tutte come lette",
+    "viewAll": "Tutte le notifiche",
+    "settings": "Impostazioni notifiche",
+    "unread": "Da leggere",
+    "loadMore": "Mostra precedenti",
+    "pageTitle": "Notifiche",
+    "pageDescription": "Avvisi per te in questa organizzazione: nuovi ordini e messaggi.",
+    "allRead": "Tutte le notifiche sono segnate come lette.",
+    "items": {
+      "sales": {
+        "order_paid": "Nuovo ordine: {name} ha acquistato {count, plural, one {# biglietto} other {# biglietti}} per {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} ti ha scritto su {eventName}"
+      },
+      "notifications": {
+        "test": "Notifica di prova: le notifiche funzionano"
+      },
+      "other": "Notifica"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Biglietti",
+        "refund": "Rimborso"
+      },
+      "events": {
+        "reminder": "Promemoria evento"
+      },
+      "tenancy": {
+        "invitation": "Invito al team"
+      },
+      "ticketing": {
+        "claim-link": "Link per riscattare il biglietto",
+        "holder-link": "Link ai biglietti"
+      },
+      "attendees": {
+        "message": "Messaggio dell’organizzatore"
+      },
+      "messaging": {
+        "announcement": "Annuncio",
+        "reply": "Risposta",
+        "contact_replied": "Nuovo messaggio"
+      },
+      "sales": {
+        "order_paid": "Avviso di nuovo ordine"
+      },
+      "notifications": {
+        "test": "Notifica di prova"
+      }
+    },
+    "status": {
+      "queued": "In invio",
+      "scheduled": "Programmato",
+      "sent": "Inviato",
+      "suppressed": "Non inviato",
+      "failed": "Non riuscito",
+      "canceled": "Annullato"
+    },
+    "reasons": {
+      "quiet_hours": "In attesa per le ore di quiete (21–8 per il destinatario)",
+      "messaging_paused": "I messaggi sono sospesi dal supporto Yayatoh",
+      "unsubscribed": "Il destinatario ha annullato l’iscrizione",
+      "preference": "Disattivato nelle impostazioni del destinatario",
+      "no_device": "Nessun dispositivo per il push",
+      "no_address": "Nessun indirizzo",
+      "provider_error": "Il provider email lo ha rifiutato",
+      "retrying": "Nuovo tentativo dopo un errore"
+    },
+    "channels": {
+      "email": "Email",
+      "sms": "SMS",
+      "push": "Push",
+      "in_app": "Nell’app"
+    },
+    "log": {
+      "title": "Messaggi",
+      "empty": "Ancora nessun messaggio per questo ordine.",
+      "when": "Quando",
+      "message": "Messaggio",
+      "to": "A",
+      "channel": "Canale"
+    },
+    "preferences": {
+      "title": "Impostazioni notifiche",
+      "description": "Scegli come essere aggiornato su {org}. Le tue scelte riguardano solo te.",
+      "categories": {
+        "sales": {
+          "name": "Vendite",
+          "hint": "Un nuovo ordine è stato pagato."
+        },
+        "messages": {
+          "name": "Messaggi",
+          "hint": "Un cliente scrive alla tua organizzazione."
+        },
+        "marketing": {
+          "name": "Novità da Yayatoh",
+          "hint": "Novità e consigli. Disattivato finché non lo attivi."
+        }
+      },
+      "save": "Salva impostazioni",
+      "saved": "Impostazioni delle notifiche salvate.",
+      "test": "Inviami una notifica di prova",
+      "testSent": "Notifica di prova inviata. Controlla la campanella.",
+      "required": "Biglietti, ricevute ed email di sicurezza ti arrivano sempre."
+    }
   },
   "nav": {
     "home": "Home",
@@ -57,7 +166,9 @@
     "team": "Team",
     "settings": "Impostazioni",
     "payouts": "Accrediti",
-    "domains": "Domini"
+    "domains": "Domini",
+    "apiKeys": "Chiavi API",
+    "publicSite": "Sito pubblico"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -548,7 +659,12 @@
     },
     "collectedBy": "Pagamento incassato da {org}",
     "seat": "Posto",
-    "seatLabel": "Posto: {seat}"
+    "seatLabel": "Posto: {seat}",
+    "emailsSent": "Email inviate",
+    "emailsNone": "Ancora nessuna email.",
+    "emailSentAt": "Inviata {when}",
+    "emailScheduled": "Programmata per {when}",
+    "emailQueued": "In invio"
   },
   "orders": {
     "title": "Ordini recenti",
@@ -1321,7 +1437,8 @@
     "tabs": {
       "label": "Viste dei posti",
       "plan": "Piantina",
-      "assign": "Assegna ospiti"
+      "assign": "Assegna ospiti",
+      "finder": "Trova posto"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -1388,7 +1505,143 @@
         "remove": "Rimuovi",
         "removeLabel": "Rimuovi {name} da {item}"
       }
+    },
+    "finder": {
+      "title": "Trova posto",
+      "description": "Gli invitati trovano il loro posto sul telefono e vedono la mappa della sala. Stampa un poster con un codice QR per l'ingresso.",
+      "noPlan": "Questo evento non ha ancora una piantina dei posti. Creane prima una: gli invitati troveranno lì il loro posto.",
+      "open": "Aperto agli invitati",
+      "closed": "Chiuso agli invitati",
+      "modeNow": "Ricerca: {mode}",
+      "modeShort": {
+        "code": "codice via email",
+        "name": "nome completo"
+      },
+      "notPublic": "L'evento non è pubblicato (o è privato), quindi gli invitati non possono ancora aprire la ricerca del posto.",
+      "settingsTitle": "Invitati",
+      "save": "Salva",
+      "saved": "Impostazioni della ricerca del posto salvate.",
+      "publicMap": "Mostra agli invitati la mappa della sala e la ricerca del posto",
+      "publicMapHint": "La mappa mostra palco, ingressi, bar e tavoli, mai chi siede dove.",
+      "mode": "Come gli invitati cercano il loro posto",
+      "modeOption": {
+        "code": "Con un codice inviato alla loro email (consigliato)",
+        "name": "Subito, con il nome completo"
+      },
+      "modeHint": {
+        "code": "Solo chi legge l'email dell'invitato vede il suo posto, e nessuno può scoprire chi è in lista.",
+        "name": "Più veloce all'ingresso, ma chiunque conosca il nome completo di un invitato può vedere dove siede."
+      },
+      "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
+      "shareTitle": "Condividi",
+      "address": "Indirizzo della ricerca del posto",
+      "openPublic": "Apri la ricerca del posto",
+      "poster": "Stampa il poster per trovare il posto",
+      "closedNote": "La ricerca del posto è chiusa. Chi scansiona il poster verrà invitato a tornare più tardi."
     }
+  },
+  "venueMap": {
+    "title": "Mappa della sala",
+    "description": "Dove si trovano palco, ingressi, bar e tavoli.",
+    "findSeat": "Trova il mio posto",
+    "tools": "Controlli della mappa",
+    "zoomIn": "Ingrandisci",
+    "zoomOut": "Riduci",
+    "reset": "Tutta la sala",
+    "zoom": "Zoom {percent}%",
+    "region": "Mappa della sala",
+    "keys": "Con la mappa selezionata: + e − ingrandiscono e riducono, le frecce spostano la vista, 0 mostra tutta la sala. Tutto ciò che è sulla mappa è elencato anche nella guida della sala.",
+    "guide": "Guida della sala",
+    "guideHint": "Tutto ciò che c'è sulla mappa e dove si trova.",
+    "object": {
+      "stage": "Palco",
+      "booth": "Stand",
+      "entrance": "Ingresso",
+      "exit": "Uscita",
+      "dance_floor": "Pista da ballo",
+      "bar": "Bar",
+      "custom": "Altro"
+    },
+    "named": "{type}: {label}",
+    "table": "Tavolo {label}",
+    "row": "Fila {label}",
+    "seats": "{count, plural, one {# posto} other {# posti}}",
+    "area": {
+      "top-left": "In alto a sinistra sulla mappa",
+      "top": "In alto sulla mappa",
+      "top-right": "In alto a destra sulla mappa",
+      "left": "Lato sinistro della mappa",
+      "centre": "Al centro della mappa",
+      "right": "Lato destro della mappa",
+      "bottom-left": "In basso a sinistra sulla mappa",
+      "bottom": "In basso sulla mappa",
+      "bottom-right": "In basso a destra sulla mappa"
+    },
+    "yours": "{count, plural, one {Il tuo posto: {seats}} other {I tuoi posti: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Trova posto",
+    "title": "Trova il tuo posto",
+    "closedTitle": "La ricerca del posto non è ancora aperta",
+    "closedDescription": "L'organizzatore non ha ancora aperto la ricerca del posto per questo evento. Ricontrolla più vicino alla data o chiedi allo staff.",
+    "toEvent": "Torna all'evento",
+    "lookupTitle": "Trova il tuo posto",
+    "codeIntro": "Inserisci l'indirizzo email a cui sono stati inviati l'invito o i biglietti. Ti invieremo un codice per vedere il tuo posto.",
+    "email": "Email",
+    "sendCode": "Inviami un codice",
+    "sending": "Invio in corso…",
+    "codeTitle": "Inserisci il codice",
+    "sent": "Se sei nella lista degli invitati, ti abbiamo inviato un codice di 6 cifre. È valido per 10 minuti.",
+    "codeHint": "Inserisci il codice di 6 cifre che ti abbiamo inviato.",
+    "code": "Codice di 6 cifre",
+    "verify": "Mostra il mio posto",
+    "checking": "Verifica in corso…",
+    "otherEmail": "Usa un'altra email",
+    "nameIntro": "Inserisci il tuo nome completo come appare sull'invito.",
+    "name": "Nome completo",
+    "findByName": "Trova il mio posto",
+    "resultTitle": "{count, plural, one {Il tuo posto} other {I tuoi posti}}",
+    "noSeatTitle": "Sei nella lista",
+    "notFoundTitle": "Nessuno trovato",
+    "noSeat": "Non hai ancora un posto. L'organizzatore ti avviserà, oppure chiedi allo staff.",
+    "notFound": "Non abbiamo trovato questo nome. Controlla come è scritto o chiedi allo staff.",
+    "seatAt": {
+      "table": "Tavolo {item} · Posto {seat}",
+      "row": "Fila {item} · Posto {seat}"
+    },
+    "nearest": "Ingresso più vicino: {name}",
+    "someUnseated": "{count, plural, one {# persona del tuo gruppo non ha ancora un posto.} other {# persone del tuo gruppo non hanno ancora un posto.}}",
+    "again": "Cerca un'altra persona",
+    "challengeTitle": "Conferma di essere una persona",
+    "challengeHint": "Da questo dispositivo sono arrivate molte ricerche. Completa la verifica e invia di nuovo.",
+    "fakeChallenge": "Sono una persona (verifica di prova)",
+    "mapTitle": "Mappa della sala",
+    "errors": {
+      "wrong": "{left, plural, one {Il codice non è corretto. Ti resta # tentativo.} other {Il codice non è corretto. Ti restano # tentativi.}}",
+      "locked": "Troppi codici errati. Chiedi un nuovo codice.",
+      "expired": "Questo codice è scaduto. Chiedine uno nuovo.",
+      "used": "Questo codice è già stato usato. Chiedine uno nuovo.",
+      "invalidCode": "Inserisci le 6 cifre dell'email.",
+      "invalidEmail": "Inserisci un indirizzo email valido.",
+      "invalidName": "Inserisci il tuo nome completo.",
+      "challengeFailed": "La verifica non è riuscita. Riprova.",
+      "challengeUnavailable": "Troppe ricerche da questo dispositivo. Attendi un minuto e riprova.",
+      "closed": "La ricerca del posto non è aperta per questo evento.",
+      "internal": "Si è verificato un problema da parte nostra."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Poster per trovare il posto",
+    "title": "Trova il tuo posto",
+    "back": "Torna alla ricerca del posto",
+    "print": "Stampa il poster",
+    "closedNote": "La ricerca del posto è chiusa. Chi scansiona questo poster verrà invitato a tornare più tardi: aprila dalla pagina Posti a sedere.",
+    "qrLabel": "Codice QR per la ricerca del posto: {url}",
+    "step1": "Inquadra il codice con la fotocamera del telefono.",
+    "step2Code": "Inserisci la tua email: ti invieremo un codice.",
+    "step2Name": "Inserisci il tuo nome completo.",
+    "step3": "Guarda il tuo tavolo e il tuo posto sulla mappa.",
+    "orVisit": "Oppure vai su"
   },
   "reports": {
     "title": "Analisi",
@@ -1546,6 +1799,289 @@
       "event": "Evento",
       "emptyTitle": "Nessuna vendita in questo periodo",
       "emptyDescription": "Scegli un periodo più lungo o condividi la pagina di un evento per iniziare a vendere."
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "Annulla iscrizione",
+    "eyebrow": "Impostazioni email",
+    "title": "Email da {org}",
+    "category": {
+      "reminders": "Promemoria prima degli eventi per cui hai i biglietti.",
+      "event_updates": "Aggiornamenti e messaggi dell’organizzatore sugli eventi a cui partecipi.",
+      "marketing": "Novità e offerte dell’organizzatore.",
+      "sales": "Avvisi sui nuovi ordini.",
+      "messages": "Avvisi sui nuovi messaggi."
+    },
+    "categoryName": {
+      "reminders": "promemoria degli eventi",
+      "event_updates": "aggiornamenti sugli eventi",
+      "marketing": "novità e offerte",
+      "sales": "avvisi sugli ordini",
+      "messages": "avvisi sui messaggi"
+    },
+    "address": "Indirizzo: {email}",
+    "question": "Non ricevere più {what} da {org} a questo indirizzo?",
+    "confirm": "Annulla iscrizione",
+    "done": "Non riceverai più {what} da {org}.",
+    "resubscribe": "Iscriviti di nuovo",
+    "transactionalNote": "Continuerai a ricevere le email necessarie, come biglietti, ricevute e rimborsi."
+  },
+  "devMailbox": {
+    "eyebrow": "Sviluppo",
+    "title": "Casella di sviluppo",
+    "description": "Messaggi inviati dalla piattaforma in sviluppo. Nulla è uscito da questa macchina.",
+    "filter": "Destinatario",
+    "apply": "Filtra",
+    "emptyTitle": "Ancora nessun messaggio",
+    "emptyDescription": "Qui compaiono email, SMS e notifiche push inviati in sviluppo.",
+    "meta": "{channel} a {to} · {at}",
+    "show": "Mostra messaggio",
+    "preview": "Anteprima email: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Annunci a tutti i partecipanti di {event}.",
+    "composeTitle": "Nuovo annuncio",
+    "subject": "Oggetto",
+    "message": "Messaggio",
+    "channels": "Invia tramite",
+    "channel": {
+      "email": "Email",
+      "push": "Notifica push"
+    },
+    "pushHint": "Il push raggiunge chi usa l’app; gli altri ricevono l’email.",
+    "preview": "Anteprima",
+    "previewTitle": "Anteprima dell’annuncio",
+    "previewFrame": "Anteprima email: {subject}",
+    "willReach": "{count, plural, one {Arriverà a # persona.} other {Arriverà a # persone.}}",
+    "send": "{count, plural, one {Invia a # persona} other {Invia a # persone}}",
+    "edit": "Modifica",
+    "sent": "{count, plural, one {Inviato a # persona. La consegna prosegue in background.} other {Inviato a # persone. La consegna prosegue in background.}}",
+    "sentTitle": "Annunci inviati",
+    "sentEmpty": "Ancora nessun annuncio.",
+    "sentAt": "Inviato",
+    "recipients": "Destinatari",
+    "delivery": "Consegna",
+    "deliveryCounts": "{sent} inviati · {pending} in attesa · {notSent} non inviati",
+    "errors": {
+      "subjectRequired": "Aggiungi un oggetto.",
+      "messageRequired": "Scrivi un messaggio.",
+      "channelRequired": "Scegli almeno un modo di invio.",
+      "no_recipients": "Nessuno partecipa ancora a questo evento, quindi non c’è nessuno a cui inviarlo.",
+      "messaging_paused": "Il supporto Yayatoh ha sospeso i messaggi della tua organizzazione."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Messaggi",
+    "inboxDescription": "Conversazioni con i tuoi clienti. Qui arrivano le risposte ai tuoi annunci.",
+    "filters": "Mostra",
+    "filter": {
+      "all": "Tutte",
+      "unread": "Da leggere",
+      "blocked": "Bloccate"
+    },
+    "emptyTitle": "Nessuna conversazione",
+    "emptyDescription": "Quando qualcuno risponde a un annuncio, il messaggio compare qui.",
+    "unread": "Da leggere",
+    "blockedChip": "Bloccata",
+    "you": "Tu",
+    "threadTitle": "Conversazione",
+    "back": "Tutti i messaggi",
+    "threadWith": "Conversazione con {name}",
+    "history": "Messaggi",
+    "contactBlockedYou": "Questa persona ha bloccato i messaggi della tua organizzazione.",
+    "replyTitle": "Rispondi",
+    "replyLabel": "La tua risposta (inviata via email)",
+    "sendReply": "Invia risposta",
+    "sent": "Messaggio inviato.",
+    "safetyTitle": "Blocca o segnala",
+    "block": "Blocca questa persona",
+    "unblock": "Sblocca",
+    "blockedText": "Bloccata: i suoi messaggi vengono rifiutati.",
+    "report": "Segnala a Yayatoh",
+    "reportReason": "Motivo",
+    "reportNote": "Dettagli (facoltativo)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuso o molestie",
+      "other": "Altro"
+    },
+    "reported": "Grazie. Yayatoh esaminerà questa conversazione.",
+    "publicMetaTitle": "Messaggi",
+    "publicEyebrow": "Messaggi",
+    "publicTitle": "La tua conversazione con {org}",
+    "publicDescription": "Solo tu e l’organizzatore potete leggere questa conversazione.",
+    "notAccepting": "{org} non accetta messaggi qui.",
+    "writeLabel": "Scrivi a {org}",
+    "send": "Invia",
+    "blockOrg": "Blocca {org}",
+    "unblockOrg": "Sblocca {org}",
+    "youBlocked": "Hai bloccato {org}: non riceverai più le sue risposte né gli aggiornamenti sugli eventi.",
+    "errors": {
+      "required": "Scrivi prima un messaggio.",
+      "blocked": "Questa conversazione è bloccata.",
+      "blocked_by_contact": "Questa persona ha bloccato i messaggi della tua organizzazione.",
+      "you_blocked": "Sblocca l’organizzatore per scrivergli."
+    }
+  },
+  "apiKeys": {
+    "title": "Chiavi API",
+    "subtitle": "Consenti ad altri software di accedere alla tua organizzazione tramite l’API di Yayatoh. Ogni chiave viene mostrata una sola volta.",
+    "docs": "Riferimento API",
+    "noAccessTitle": "Solo proprietari e amministratori gestiscono le chiavi API",
+    "noAccessDescription": "Chiedi a un proprietario o amministratore di questa organizzazione di creare una chiave per te.",
+    "createTitle": "Crea una chiave",
+    "name": "Nome",
+    "nameHint": "Dove verrà usata la chiave, ad es. «Zapier» o «Sincronizzazione biglietteria».",
+    "nameRequired": "Dai un nome alla chiave.",
+    "scopes": "Permessi",
+    "scopesHint": "Una chiave può fare solo ciò che i suoi permessi consentono, e solo in questa organizzazione.",
+    "scopesRequired": "Scegli almeno un permesso.",
+    "create": "Crea chiave",
+    "created": "Chiave «{name}» creata.",
+    "shownOnce": "Copiala ora e conservala in un luogo sicuro: non verrà più mostrata.",
+    "copy": "Copia chiave",
+    "copied": "Copiata negli appunti.",
+    "listTitle": "Le tue chiavi",
+    "empty": "Nessuna chiave API.",
+    "key": "Chiave",
+    "createdAt": "Creata",
+    "lastUsed": "Ultimo utilizzo",
+    "never": "Mai",
+    "status": "Stato",
+    "active": "Attiva",
+    "revoked": "Revocata",
+    "actions": "Azioni",
+    "revoke": "Revoca",
+    "revokeNamed": "Revoca la chiave {name}",
+    "scope": {
+      "org_read": "Leggere l’organizzazione",
+      "events_read": "Leggere eventi e tipi di biglietto",
+      "events_write": "Creare e modificare eventi",
+      "orders_read": "Leggere gli ordini",
+      "orders_refund": "Rimborsare gli ordini",
+      "attendees_read": "Leggere i partecipanti",
+      "checkin_scan": "Scansionare i biglietti"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Sito",
+    "browse": "Sfoglia gli eventi",
+    "forOrganizers": "Per gli organizzatori",
+    "language": "Lingua",
+    "poweredBy": "Realizzato con Yayatoh",
+    "upcoming": "Prossimi eventi",
+    "results": "Risultati della ricerca",
+    "count": "{count, plural, =0 {Nessun evento} one {# evento} other {# eventi}}",
+    "seeAll": "Vedi tutti gli eventi",
+    "when": "Quando",
+    "where": "Dove",
+    "priceLabel": "Prezzo:",
+    "by": "Di {org}",
+    "postponed": "Rinviato",
+    "price": {
+      "soon": "Biglietti a breve",
+      "free": "Gratis",
+      "from": "Da {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Concerto",
+      "conference": "Conferenza",
+      "community": "Comunità",
+      "other": "Altro",
+      "wedding": "Matrimonio",
+      "agency": "Agenzia"
+    },
+    "filters": {
+      "label": "Cerca eventi",
+      "query": "Cerca per nome, luogo o organizzatore",
+      "city": "Città",
+      "anyCity": "Qualsiasi città",
+      "category": "Categoria",
+      "anyCategory": "Qualsiasi categoria",
+      "price": "Prezzo",
+      "anyPrice": "Qualsiasi prezzo",
+      "priceOption": {
+        "free": "Gratis",
+        "paid": "A pagamento"
+      },
+      "from": "Dalla data",
+      "to": "Alla data",
+      "submit": "Cerca",
+      "clear": "Cancella i filtri"
+    },
+    "pagination": {
+      "label": "Pagine",
+      "previous": "Pagina precedente",
+      "next": "Pagina successiva",
+      "status": "Pagina {page} di {count}"
+    },
+    "empty": {
+      "title": "Ancora nessun evento in programma",
+      "description": "I nuovi eventi compaiono qui appena gli organizzatori li pubblicano.",
+      "filteredTitle": "Nessun evento corrisponde a questi filtri",
+      "filteredDescription": "Prova un'altra data, città o prezzo, oppure cancella i filtri."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Trova eventi vicino a te",
+      "eyebrow": "Yayatoh",
+      "title": "Trova il tuo prossimo evento.",
+      "lede": "Concerti, gala, conferenze ed eventi della comunità, con tutte le commissioni incluse nel prezzo.",
+      "demoCta": "Apri la console demo"
+    },
+    "events": {
+      "title": "Tutti gli eventi"
+    },
+    "tenant": {
+      "eyebrow": "Eventi",
+      "description": "Prossimi eventi di {org}.",
+      "emptyTitle": "Nessun evento in programma",
+      "emptyDescription": "{org} non ha nulla in vendita al momento. Torna presto."
+    },
+    "organizer": {
+      "eyebrow": "Organizzatore",
+      "description": "Prossimi eventi di {org} su Yayatoh.",
+      "site": "Visita il sito dell'organizzatore",
+      "events": "Eventi di {org}",
+      "emptyTitle": "Nessun evento in programma",
+      "emptyDescription": "{org} non ha nulla in vendita al momento. Torna presto."
+    }
+  },
+  "widget": {
+    "title": "Biglietti: {event}",
+    "fallbackTitle": "Biglietti",
+    "passes": "Biglietti",
+    "getTickets": "Prendi i biglietti",
+    "newTab": "(si apre in una nuova scheda)"
+  },
+  "site": {
+    "title": "Sito pubblico",
+    "description": "Dove le persone trovano i tuoi eventi: il marketplace Yayatoh, il tuo sito e il widget dei biglietti.",
+    "readOnly": "Solo i proprietari e gli amministratori possono modificare queste impostazioni.",
+    "save": "Salva",
+    "saved": "Salvato.",
+    "listing": {
+      "title": "Pubblicazione",
+      "marketplace": "Pubblica i miei eventi pubblici sul marketplace Yayatoh",
+      "marketplaceHint": "Matrimoni ed eventi privati non vengono mai pubblicati.",
+      "tenantSite": "Usa il mio sito {host} come casa dei miei eventi",
+      "tenantSiteHint": "I motori di ricerca manderanno le persone sul tuo sito invece che su yayatoh.com. Un dominio personalizzato ha sempre la precedenza."
+    },
+    "widget": {
+      "title": "Widget dei biglietti",
+      "description": "Mostra i biglietti di un evento sul tuo sito. Incolla lo snippet dove vuoi che appaia il widget.",
+      "origins": "Siti autorizzati a mostrare il widget",
+      "originsHint": "Un indirizzo per riga, per esempio https://www.example.com. Gli altri siti vedono una cornice vuota.",
+      "noOrigins": "Ancora nessun sito autorizzato.",
+      "snippets": "Snippet del widget",
+      "snippetFor": "Snippet per {event}",
+      "frameTitle": "Biglietti: {event}",
+      "copy": "Copia lo snippet",
+      "copied": "Copiato.",
+      "emptyTitle": "Ancora nessun evento pubblico",
+      "emptyDescription": "Pubblica un evento per ottenere lo snippet del widget."
     }
   },
   "security": {

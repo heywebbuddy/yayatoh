@@ -1,0 +1,21 @@
+{
+  "name": "@yayatoh/legacy-mask",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "legacy-mask": "./cli.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "zod": "catalog:"
+  }
+}

@@ -4,11 +4,13 @@ import {
   bigint,
   boolean,
   check,
+  date,
   foreignKey,
   index,
   integer,
   jsonb,
   pgSchema,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -87,6 +89,26 @@ export const idempotencyKeys = tenantTable(
 );
 
 const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
+
+/**
+ * Fixed-window request counters for abuse limits (roadmap §6.1 rate-limit table), e.g. the
+ * seat finder's per device + event budget. One row per bucket per window; old windows are
+ * pruned as new ones are counted. Upstash token buckets may replace this for hot paths later.
+ */
+export const rateLimits = tenantTable(
+  platform,
+  'rate_limits',
+  {
+    bucket: text('bucket').notNull(),
+    windowStart: tsz('window_start').notNull(),
+    hits: integer('hits').notNull().default(0),
+  },
+  (t) => [
+    uniqueIndex('rate_limits_org_bucket_window_key').on(t.orgId, t.bucket, t.windowStart),
+    index('rate_limits_org_window_idx').on(t.orgId, t.windowStart),
+    check('rate_limits_bucket_length', sql`length(${t.bucket}) between 1 and 200`),
+  ],
+);
 
 export const BULK_STATUSES = ['queued', 'running', 'done', 'failed', 'undoing', 'undone'] as const;
 export type BulkStatus = (typeof BULK_STATUSES)[number];
@@ -242,4 +264,28 @@ export const accessLog = platform.table(
     at: tsz('at').notNull().defaultNow(),
   },
   (t) => [index('access_log_at_idx').on(t.at)],
+);
+
+/**
+ * App-version telemetry for /v1 (roadmap M1.15): request counts per day × route × client × app
+ * version. No tenant, user or IP is recorded. app_user has no privileges: requests increment it
+ * through the SECURITY DEFINER `platform.record_api_usage`, and staff read it (platform_reader).
+ */
+export const apiUsage = platform.table(
+  'api_usage',
+  {
+    day: date('day', { mode: 'string' }).notNull(),
+    route: text('route').notNull(),
+    method: text('method').notNull(),
+    client: text('client').notNull(),
+    appVersion: text('app_version').notNull(),
+    count: bigint('count', { mode: 'number' }).notNull().default(0),
+  },
+  (t) => [
+    primaryKey({ name: 'api_usage_pkey', columns: [t.day, t.route, t.method, t.client, t.appVersion] }),
+    check(
+      'api_usage_lengths',
+      sql`length(route) <= 200 and length(client) <= 40 and length(app_version) <= 40`,
+    ),
+  ],
 );

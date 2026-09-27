@@ -166,7 +166,11 @@ export default async function SeatingPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs base={`/o/${org}/e/${event}/seating`} active="plan" />
+      <SeatingTabs
+        base={`/o/${org}/e/${event}/seating`}
+        active="plan"
+        finder={data.modules.has('seat_finder')}
+      />
       <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
         <StatusDot status={STATUS_DOT[seating.status]} label={t(`status.${seating.status}`)} />
         <span className="text-body">{t('counts', { ...seating.counts, total: seating.seats.length })}</span>

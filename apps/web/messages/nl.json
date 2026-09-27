@@ -31,7 +31,116 @@
     "open": "Meldingen",
     "title": "Meldingen",
     "emptyTitle": "Je bent helemaal bij",
-    "emptyDescription": "Meldingen over verkoop, plaatsen en check-in verschijnen hier."
+    "emptyDescription": "Meldingen over verkoop, plaatsen en check-in verschijnen hier.",
+    "openWithCount": "Meldingen, {count, plural, =0 {geen ongelezen} one {# ongelezen} other {# ongelezen}}",
+    "unreadAnnouncement": "{count, plural, =0 {Geen ongelezen meldingen} one {Je hebt # ongelezen melding} other {Je hebt # ongelezen meldingen}}",
+    "markRead": "Markeren als gelezen",
+    "markReadItem": "“{title}” markeren als gelezen",
+    "markAllRead": "Alles markeren als gelezen",
+    "viewAll": "Alle meldingen",
+    "settings": "Meldingsinstellingen",
+    "unread": "Ongelezen",
+    "loadMore": "Oudere tonen",
+    "pageTitle": "Meldingen",
+    "pageDescription": "Meldingen voor jou in deze organisatie: nieuwe bestellingen en berichten.",
+    "allRead": "Alle meldingen zijn gelezen.",
+    "items": {
+      "sales": {
+        "order_paid": "Nieuwe bestelling: {name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} stuurde je een bericht over {eventName}"
+      },
+      "notifications": {
+        "test": "Testmelding: meldingen werken"
+      },
+      "other": "Melding"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Tickets",
+        "refund": "Terugbetaling"
+      },
+      "events": {
+        "reminder": "Herinnering evenement"
+      },
+      "tenancy": {
+        "invitation": "Teamuitnodiging"
+      },
+      "ticketing": {
+        "claim-link": "Link om ticket te claimen",
+        "holder-link": "Link naar tickets"
+      },
+      "attendees": {
+        "message": "Bericht van de organisator"
+      },
+      "messaging": {
+        "announcement": "Aankondiging",
+        "reply": "Antwoord",
+        "contact_replied": "Nieuw bericht"
+      },
+      "sales": {
+        "order_paid": "Melding nieuwe bestelling"
+      },
+      "notifications": {
+        "test": "Testmelding"
+      }
+    },
+    "status": {
+      "queued": "Wordt verzonden",
+      "scheduled": "Gepland",
+      "sent": "Verzonden",
+      "suppressed": "Niet verzonden",
+      "failed": "Mislukt",
+      "canceled": "Geannuleerd"
+    },
+    "reasons": {
+      "quiet_hours": "Wacht op het einde van de stille uren (21–8 uur bij de ontvanger)",
+      "messaging_paused": "Berichten zijn gepauzeerd door Yayatoh-support",
+      "unsubscribed": "De ontvanger heeft zich afgemeld",
+      "preference": "Uitgeschakeld in de instellingen van de ontvanger",
+      "no_device": "Geen apparaat voor push",
+      "no_address": "Geen adres",
+      "provider_error": "De e-mailprovider weigerde het",
+      "retrying": "Opnieuw proberen na een fout"
+    },
+    "channels": {
+      "email": "E-mail",
+      "sms": "Sms",
+      "push": "Push",
+      "in_app": "In de app"
+    },
+    "log": {
+      "title": "Berichten",
+      "empty": "Nog geen berichten over deze bestelling.",
+      "when": "Wanneer",
+      "message": "Bericht",
+      "to": "Aan",
+      "channel": "Kanaal"
+    },
+    "preferences": {
+      "title": "Meldingsinstellingen",
+      "description": "Kies hoe je hoort wat er gebeurt bij {org}. Je keuzes gelden alleen voor jou.",
+      "categories": {
+        "sales": {
+          "name": "Verkoop",
+          "hint": "Een nieuwe bestelling is betaald."
+        },
+        "messages": {
+          "name": "Berichten",
+          "hint": "Een klant schrijft je organisatie."
+        },
+        "marketing": {
+          "name": "Nieuws van Yayatoh",
+          "hint": "Productnieuws en tips. Uit, tenzij je het aanzet."
+        }
+      },
+      "save": "Instellingen opslaan",
+      "saved": "Je meldingsinstellingen zijn opgeslagen.",
+      "test": "Stuur me een testmelding",
+      "testSent": "Testmelding verstuurd. Kijk bij de bel.",
+      "required": "Tickets, bonnen en beveiligingsmails krijg je altijd."
+    }
   },
   "nav": {
     "home": "Start",
@@ -57,7 +166,9 @@
     "team": "Team",
     "settings": "Instellingen",
     "payouts": "Uitbetalingen",
-    "domains": "Domeinen"
+    "domains": "Domeinen",
+    "apiKeys": "API-sleutels",
+    "publicSite": "Openbare site"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -548,7 +659,12 @@
     },
     "collectedBy": "Betaling ontvangen door {org}",
     "seat": "Plaats",
-    "seatLabel": "Plaats: {seat}"
+    "seatLabel": "Plaats: {seat}",
+    "emailsSent": "Verzonden e-mails",
+    "emailsNone": "Nog geen e-mails.",
+    "emailSentAt": "Verzonden {when}",
+    "emailScheduled": "Gepland voor {when}",
+    "emailQueued": "Wordt verzonden"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -1321,7 +1437,8 @@
     "tabs": {
       "label": "Weergaven van de zaalindeling",
       "plan": "Plattegrond",
-      "assign": "Gasten plaatsen"
+      "assign": "Gasten plaatsen",
+      "finder": "Plaatszoeker"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -1388,7 +1505,143 @@
         "remove": "Verwijderen",
         "removeLabel": "{name} verwijderen van {item}"
       }
+    },
+    "finder": {
+      "title": "Plaatszoeker",
+      "description": "Gasten vinden hun plaats op hun telefoon en zien de plattegrond. Druk een poster met een QR-code af voor de ingang.",
+      "noPlan": "Dit evenement heeft nog geen zaalindeling. Maak er eerst een; daarop vinden gasten dan hun plaats.",
+      "open": "Open voor gasten",
+      "closed": "Gesloten voor gasten",
+      "modeNow": "Zoeken: {mode}",
+      "modeShort": {
+        "code": "code per e-mail",
+        "name": "volledige naam"
+      },
+      "notPublic": "Het evenement is niet gepubliceerd (of is privé), dus gasten kunnen de plaatszoeker nog niet openen.",
+      "settingsTitle": "Gasten",
+      "save": "Opslaan",
+      "saved": "Instellingen van de plaatszoeker opgeslagen.",
+      "publicMap": "Gasten de plattegrond en de plaatszoeker tonen",
+      "publicMapHint": "De plattegrond toont het podium, de ingangen, de bars en de tafels, nooit wie waar zit.",
+      "mode": "Hoe gasten hun plaats zoeken",
+      "modeOption": {
+        "code": "Met een code per e-mail (aanbevolen)",
+        "name": "Direct, op volledige naam"
+      },
+      "modeHint": {
+        "code": "Alleen wie de e-mail van de gast kan lezen, ziet diens plaats, en niemand kan achterhalen wie er op de lijst staat.",
+        "name": "Sneller bij de deur, maar iedereen die de volledige naam van een gast kent, kan zien waar die zit."
+      },
+      "readOnly": "U kunt deze instellingen zien, maar niet wijzigen.",
+      "shareTitle": "Delen",
+      "address": "Adres van de plaatszoeker",
+      "openPublic": "Plaatszoeker openen",
+      "poster": "Poster plaatszoeker afdrukken",
+      "closedNote": "De plaatszoeker is gesloten. Wie de poster scant, wordt gevraagd later terug te komen."
     }
+  },
+  "venueMap": {
+    "title": "Plattegrond",
+    "description": "Waar het podium, de ingangen, de bars en de tafels zijn.",
+    "findSeat": "Mijn plaats vinden",
+    "tools": "Kaartbediening",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "reset": "Hele zaal",
+    "zoom": "Zoom {percent}%",
+    "region": "Plattegrond",
+    "keys": "Met de plattegrond geselecteerd: + en − zoomen, de pijltjestoetsen verschuiven, 0 toont de hele zaal. Alles op de plattegrond staat ook in de zaalgids.",
+    "guide": "Zaalgids",
+    "guideHint": "Alles op de plattegrond en waar het is.",
+    "object": {
+      "stage": "Podium",
+      "booth": "Stand",
+      "entrance": "Ingang",
+      "exit": "Uitgang",
+      "dance_floor": "Dansvloer",
+      "bar": "Bar",
+      "custom": "Overig"
+    },
+    "named": "{type}: {label}",
+    "table": "Tafel {label}",
+    "row": "Rij {label}",
+    "seats": "{count, plural, one {# plaats} other {# plaatsen}}",
+    "area": {
+      "top-left": "Linksboven op de plattegrond",
+      "top": "Bovenaan de plattegrond",
+      "top-right": "Rechtsboven op de plattegrond",
+      "left": "Linkerkant van de plattegrond",
+      "centre": "Midden van de plattegrond",
+      "right": "Rechterkant van de plattegrond",
+      "bottom-left": "Linksonder op de plattegrond",
+      "bottom": "Onderaan de plattegrond",
+      "bottom-right": "Rechtsonder op de plattegrond"
+    },
+    "yours": "{count, plural, one {Uw plaats: {seats}} other {Uw plaatsen: {seats}}}"
+  },
+  "seatFinder": {
+    "eyebrow": "Plaatszoeker",
+    "title": "Vind uw plaats",
+    "closedTitle": "De plaatszoeker is nog niet open",
+    "closedDescription": "De organisator heeft de plaatszoeker voor dit evenement nog niet opengezet. Kijk dichter bij de datum nog eens of vraag het aan een gastheer of gastvrouw.",
+    "toEvent": "Terug naar het evenement",
+    "lookupTitle": "Vind uw plaats",
+    "codeIntro": "Vul het e-mailadres in waarnaar uw uitnodiging of tickets zijn gestuurd. We mailen u een code om uw plaats te zien.",
+    "email": "E-mail",
+    "sendCode": "Mail mij een code",
+    "sending": "Versturen…",
+    "codeTitle": "Vul uw code in",
+    "sent": "Als u op de gastenlijst staat, hebben we u een code van 6 cijfers gemaild. Die is 10 minuten geldig.",
+    "codeHint": "Vul de code van 6 cijfers uit onze e-mail in.",
+    "code": "Code van 6 cijfers",
+    "verify": "Mijn plaats tonen",
+    "checking": "Controleren…",
+    "otherEmail": "Ander e-mailadres gebruiken",
+    "nameIntro": "Vul uw volledige naam in zoals die op uw uitnodiging staat.",
+    "name": "Volledige naam",
+    "findByName": "Mijn plaats vinden",
+    "resultTitle": "{count, plural, one {Uw plaats} other {Uw plaatsen}}",
+    "noSeatTitle": "U staat op de lijst",
+    "notFoundTitle": "Niemand gevonden",
+    "noSeat": "U hebt nog geen plaats. De organisator laat het u weten, of vraag het aan een gastheer of gastvrouw.",
+    "notFound": "We konden die naam niet vinden. Controleer de spelling of vraag het aan een gastheer of gastvrouw.",
+    "seatAt": {
+      "table": "Tafel {item} · Plaats {seat}",
+      "row": "Rij {item} · Plaats {seat}"
+    },
+    "nearest": "Dichtstbijzijnde ingang: {name}",
+    "someUnseated": "{count, plural, one {# persoon uit uw gezelschap heeft nog geen plaats.} other {# personen uit uw gezelschap hebben nog geen plaats.}}",
+    "again": "Iemand anders zoeken",
+    "challengeTitle": "Bevestig dat u een mens bent",
+    "challengeHint": "Vanaf dit apparaat is veel gezocht. Voltooi de controle en verstuur opnieuw.",
+    "fakeChallenge": "Ik ben een mens (testcontrole)",
+    "mapTitle": "Plattegrond",
+    "errors": {
+      "wrong": "{left, plural, one {Die code klopt niet. U hebt nog # poging.} other {Die code klopt niet. U hebt nog # pogingen.}}",
+      "locked": "Te veel foute codes. Vraag een nieuwe code aan.",
+      "expired": "Deze code is verlopen. Vraag een nieuwe aan.",
+      "used": "Deze code is al gebruikt. Vraag een nieuwe aan.",
+      "invalidCode": "Vul de 6 cijfers uit de e-mail in.",
+      "invalidEmail": "Vul een geldig e-mailadres in.",
+      "invalidName": "Vul uw volledige naam in.",
+      "challengeFailed": "De controle is niet gelukt. Probeer het opnieuw.",
+      "challengeUnavailable": "Te veel zoekopdrachten vanaf dit apparaat. Wacht een minuut en probeer het opnieuw.",
+      "closed": "De plaatszoeker is niet open voor dit evenement.",
+      "internal": "Er ging bij ons iets mis."
+    }
+  },
+  "seatFinderPoster": {
+    "pageTitle": "Poster plaatszoeker",
+    "title": "Vind uw plaats",
+    "back": "Terug naar de plaatszoeker",
+    "print": "Poster afdrukken",
+    "closedNote": "De plaatszoeker is gesloten. Wie deze poster scant, wordt gevraagd later terug te komen. Zet hem open op de pagina Zitplaatsen.",
+    "qrLabel": "QR-code naar de plaatszoeker: {url}",
+    "step1": "Scan de code met de camera van uw telefoon.",
+    "step2Code": "Vul uw e-mailadres in; we sturen u een code.",
+    "step2Name": "Vul uw volledige naam in.",
+    "step3": "Zie uw tafel en plaats op de plattegrond.",
+    "orVisit": "Of ga naar"
   },
   "reports": {
     "title": "Analyse",
@@ -1546,6 +1799,289 @@
       "event": "Evenement",
       "emptyTitle": "Geen verkopen in deze periode",
       "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "Afmelden",
+    "eyebrow": "E-mailinstellingen",
+    "title": "E-mails van {org}",
+    "category": {
+      "reminders": "Herinneringen voor evenementen waarvoor je tickets hebt.",
+      "event_updates": "Nieuws en berichten van de organisator over evenementen die je bezoekt.",
+      "marketing": "Nieuws en aanbiedingen van de organisator.",
+      "sales": "Meldingen over nieuwe bestellingen.",
+      "messages": "Meldingen over nieuwe berichten."
+    },
+    "categoryName": {
+      "reminders": "evenementherinneringen",
+      "event_updates": "evenementnieuws",
+      "marketing": "nieuws en aanbiedingen",
+      "sales": "bestelmeldingen",
+      "messages": "berichtmeldingen"
+    },
+    "address": "Adres: {email}",
+    "question": "Geen {what} van {org} meer ontvangen op dit adres?",
+    "confirm": "Afmelden",
+    "done": "Je ontvangt geen {what} van {org} meer.",
+    "resubscribe": "Opnieuw aanmelden",
+    "transactionalNote": "Je blijft de e-mails krijgen die je nodig hebt, zoals tickets, bonnen en terugbetalingen."
+  },
+  "devMailbox": {
+    "eyebrow": "Ontwikkeling",
+    "title": "Ontwikkelpostvak",
+    "description": "Berichten die het platform tijdens ontwikkeling verstuurde. Niets hiervan heeft deze machine verlaten.",
+    "filter": "Ontvanger",
+    "apply": "Filteren",
+    "emptyTitle": "Nog geen berichten",
+    "emptyDescription": "E-mails, sms’jes en pushmeldingen uit de ontwikkelomgeving verschijnen hier.",
+    "meta": "{channel} aan {to} · {at}",
+    "show": "Bericht tonen",
+    "preview": "E-mailvoorbeeld: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Aankondigingen aan iedereen die {event} bezoekt.",
+    "composeTitle": "Nieuwe aankondiging",
+    "subject": "Onderwerp",
+    "message": "Bericht",
+    "channels": "Versturen via",
+    "channel": {
+      "email": "E-mail",
+      "push": "Pushmelding"
+    },
+    "pushHint": "Push bereikt bezoekers die de app gebruiken; de rest krijgt de e-mail.",
+    "preview": "Voorbeeld",
+    "previewTitle": "Voorbeeld van de aankondiging",
+    "previewFrame": "E-mailvoorbeeld: {subject}",
+    "willReach": "{count, plural, one {Dit gaat naar # persoon.} other {Dit gaat naar # personen.}}",
+    "send": "{count, plural, one {Versturen naar # persoon} other {Versturen naar # personen}}",
+    "edit": "Bewerken",
+    "sent": "{count, plural, one {Verstuurd naar # persoon. De bezorging loopt op de achtergrond door.} other {Verstuurd naar # personen. De bezorging loopt op de achtergrond door.}}",
+    "sentTitle": "Verstuurde aankondigingen",
+    "sentEmpty": "Nog geen aankondigingen.",
+    "sentAt": "Verstuurd",
+    "recipients": "Ontvangers",
+    "delivery": "Bezorging",
+    "deliveryCounts": "{sent} verzonden · {pending} in behandeling · {notSent} niet verzonden",
+    "errors": {
+      "subjectRequired": "Vul een onderwerp in.",
+      "messageRequired": "Schrijf een bericht.",
+      "channelRequired": "Kies minstens één manier om te versturen.",
+      "no_recipients": "Nog niemand bezoekt dit evenement, dus er is niemand om het naar te sturen.",
+      "messaging_paused": "Yayatoh-support heeft berichten van je organisatie gepauzeerd."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Berichten",
+    "inboxDescription": "Gesprekken met je klanten. Antwoorden op je aankondigingen komen hier binnen.",
+    "filters": "Toon",
+    "filter": {
+      "all": "Alle",
+      "unread": "Ongelezen",
+      "blocked": "Geblokkeerd"
+    },
+    "emptyTitle": "Geen gesprekken",
+    "emptyDescription": "Als iemand op een aankondiging antwoordt, verschijnt het bericht hier.",
+    "unread": "Ongelezen",
+    "blockedChip": "Geblokkeerd",
+    "you": "Jij",
+    "threadTitle": "Gesprek",
+    "back": "Alle berichten",
+    "threadWith": "Gesprek met {name}",
+    "history": "Berichten",
+    "contactBlockedYou": "Deze persoon heeft berichten van je organisatie geblokkeerd.",
+    "replyTitle": "Antwoorden",
+    "replyLabel": "Je antwoord (per e-mail verstuurd)",
+    "sendReply": "Antwoord versturen",
+    "sent": "Bericht verstuurd.",
+    "safetyTitle": "Blokkeren of melden",
+    "block": "Deze persoon blokkeren",
+    "unblock": "Deblokkeren",
+    "blockedText": "Geblokkeerd: berichten worden geweigerd.",
+    "report": "Melden bij Yayatoh",
+    "reportReason": "Reden",
+    "reportNote": "Details (optioneel)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Misbruik of intimidatie",
+      "other": "Iets anders"
+    },
+    "reported": "Bedankt. Yayatoh bekijkt dit gesprek.",
+    "publicMetaTitle": "Berichten",
+    "publicEyebrow": "Berichten",
+    "publicTitle": "Je gesprek met {org}",
+    "publicDescription": "Alleen jij en de organisator kunnen dit gesprek lezen.",
+    "notAccepting": "{org} accepteert hier geen berichten.",
+    "writeLabel": "Schrijf naar {org}",
+    "send": "Versturen",
+    "blockOrg": "{org} blokkeren",
+    "unblockOrg": "{org} deblokkeren",
+    "youBlocked": "Je hebt {org} geblokkeerd: je krijgt geen antwoorden of evenementnieuws meer.",
+    "errors": {
+      "required": "Schrijf eerst een bericht.",
+      "blocked": "Dit gesprek is geblokkeerd.",
+      "blocked_by_contact": "Deze persoon heeft berichten van je organisatie geblokkeerd.",
+      "you_blocked": "Deblokkeer de organisator om te schrijven."
+    }
+  },
+  "apiKeys": {
+    "title": "API-sleutels",
+    "subtitle": "Laat andere software via de Yayatoh-API bij je organisatie. Elke sleutel wordt één keer getoond.",
+    "docs": "API-referentie",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren API-sleutels",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om een sleutel voor je te maken.",
+    "createTitle": "Sleutel maken",
+    "name": "Naam",
+    "nameHint": "Waar de sleutel gebruikt wordt, bijv. ‘Zapier’ of ‘Kassa-sync’.",
+    "nameRequired": "Geef de sleutel een naam.",
+    "scopes": "Rechten",
+    "scopesHint": "Een sleutel kan alleen wat zijn rechten toestaan, en alleen in deze organisatie.",
+    "scopesRequired": "Kies minstens één recht.",
+    "create": "Sleutel maken",
+    "created": "Sleutel ‘{name}’ gemaakt.",
+    "shownOnce": "Kopieer hem nu en bewaar hem veilig: hij wordt niet opnieuw getoond.",
+    "copy": "Sleutel kopiëren",
+    "copied": "Gekopieerd naar het klembord.",
+    "listTitle": "Je sleutels",
+    "empty": "Nog geen API-sleutels.",
+    "key": "Sleutel",
+    "createdAt": "Gemaakt",
+    "lastUsed": "Laatst gebruikt",
+    "never": "Nooit",
+    "status": "Status",
+    "active": "Actief",
+    "revoked": "Ingetrokken",
+    "actions": "Acties",
+    "revoke": "Intrekken",
+    "revokeNamed": "Sleutel {name} intrekken",
+    "scope": {
+      "org_read": "Organisatie lezen",
+      "events_read": "Evenementen en tickettypen lezen",
+      "events_write": "Evenementen maken en wijzigen",
+      "orders_read": "Bestellingen lezen",
+      "orders_refund": "Bestellingen terugbetalen",
+      "attendees_read": "Deelnemers lezen",
+      "checkin_scan": "Tickets scannen"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Site",
+    "browse": "Evenementen bekijken",
+    "forOrganizers": "Voor organisatoren",
+    "language": "Taal",
+    "poweredBy": "Mogelijk gemaakt door Yayatoh",
+    "upcoming": "Komende evenementen",
+    "results": "Zoekresultaten",
+    "count": "{count, plural, =0 {Geen evenementen} one {# evenement} other {# evenementen}}",
+    "seeAll": "Alle evenementen bekijken",
+    "when": "Wanneer",
+    "where": "Waar",
+    "priceLabel": "Prijs:",
+    "by": "Door {org}",
+    "postponed": "Uitgesteld",
+    "price": {
+      "soon": "Tickets binnenkort",
+      "free": "Gratis",
+      "from": "Vanaf {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Concert",
+      "conference": "Congres",
+      "community": "Gemeenschap",
+      "other": "Overig",
+      "wedding": "Bruiloft",
+      "agency": "Bureau"
+    },
+    "filters": {
+      "label": "Evenementen zoeken",
+      "query": "Zoek op naam, plaats of organisator",
+      "city": "Stad",
+      "anyCity": "Elke stad",
+      "category": "Categorie",
+      "anyCategory": "Elke categorie",
+      "price": "Prijs",
+      "anyPrice": "Elke prijs",
+      "priceOption": {
+        "free": "Gratis",
+        "paid": "Betaald"
+      },
+      "from": "Vanaf datum",
+      "to": "Tot datum",
+      "submit": "Zoeken",
+      "clear": "Filters wissen"
+    },
+    "pagination": {
+      "label": "Pagina's",
+      "previous": "Vorige pagina",
+      "next": "Volgende pagina",
+      "status": "Pagina {page} van {count}"
+    },
+    "empty": {
+      "title": "Nog geen komende evenementen",
+      "description": "Nieuwe evenementen verschijnen hier zodra organisatoren ze publiceren.",
+      "filteredTitle": "Geen evenementen voor deze filters",
+      "filteredDescription": "Probeer een andere datum, stad of prijs, of wis de filters."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Vind evenementen bij jou in de buurt",
+      "eyebrow": "Yayatoh",
+      "title": "Vind je volgende evenement.",
+      "lede": "Concerten, gala's, congressen en gemeenschapsevenementen, met alle kosten inbegrepen in de prijs.",
+      "demoCta": "Democonsole openen"
+    },
+    "events": {
+      "title": "Alle evenementen"
+    },
+    "tenant": {
+      "eyebrow": "Evenementen",
+      "description": "Komende evenementen van {org}.",
+      "emptyTitle": "Geen komende evenementen",
+      "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
+    },
+    "organizer": {
+      "eyebrow": "Organisator",
+      "description": "Komende evenementen van {org} op Yayatoh.",
+      "site": "Naar de website van de organisator",
+      "events": "Evenementen van {org}",
+      "emptyTitle": "Geen komende evenementen",
+      "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
+    }
+  },
+  "widget": {
+    "title": "Tickets: {event}",
+    "fallbackTitle": "Tickets",
+    "passes": "Tickets",
+    "getTickets": "Tickets kopen",
+    "newTab": "(opent in een nieuw tabblad)"
+  },
+  "site": {
+    "title": "Openbare site",
+    "description": "Waar mensen je evenementen vinden: de Yayatoh-marktplaats, je eigen site en de ticketwidget.",
+    "readOnly": "Alleen eigenaren en beheerders kunnen deze instellingen wijzigen.",
+    "save": "Opslaan",
+    "saved": "Opgeslagen.",
+    "listing": {
+      "title": "Vermelding",
+      "marketplace": "Mijn openbare evenementen op de Yayatoh-marktplaats vermelden",
+      "marketplaceHint": "Bruiloften en privé-evenementen worden nooit vermeld.",
+      "tenantSite": "Mijn eigen site op {host} gebruiken als thuis van mijn evenementen",
+      "tenantSiteHint": "Zoekmachines sturen mensen dan naar jouw site in plaats van naar yayatoh.com. Een eigen domein gaat altijd voor."
+    },
+    "widget": {
+      "title": "Ticketwidget",
+      "description": "Toon de tickets van een evenement op je eigen website. Plak het fragment waar de widget moet verschijnen.",
+      "origins": "Websites die de widget mogen tonen",
+      "originsHint": "Eén adres per regel, bijvoorbeeld https://www.example.com. Andere websites zien een leeg kader.",
+      "noOrigins": "Nog geen websites toegestaan.",
+      "snippets": "Widgetfragmenten",
+      "snippetFor": "Fragment voor {event}",
+      "frameTitle": "Tickets: {event}",
+      "copy": "Fragment kopiëren",
+      "copied": "Gekopieerd.",
+      "emptyTitle": "Nog geen openbare evenementen",
+      "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
     }
   },
   "security": {

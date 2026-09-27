@@ -2,6 +2,8 @@
 /legacy/
 *.sql
 !packages/db/drizzle/*.sql
+# Invented test data for the masking tool (a test enforces the SYNTHETIC marker and example domains)
+!tools/legacy-mask/tests/fixtures/*.sql
 *.sql.gz
 *.dump
 

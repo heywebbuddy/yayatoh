@@ -21,4 +21,6 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Platform staff (owner-approved list); platform_reader SELECT only, written through a SECURITY DEFINER function.',
   'platform.access_log':
     'Audit of platform_reader use; append-only through a SECURITY DEFINER function (platform_reader).',
+  'platform.api_usage':
+    'Request counts per day × /v1 route × client × app version (no tenant, user or IP); incremented through a SECURITY DEFINER function, read by platform_reader.',
 };

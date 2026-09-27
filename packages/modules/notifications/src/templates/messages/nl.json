@@ -1,0 +1,90 @@
+{
+  "common": {
+    "greeting": "Hoi {name},",
+    "greetingNoName": "Hallo,",
+    "sentBy": "Verzonden door {org} met Yayatoh.",
+    "poweredBy": "Mogelijk gemaakt door Yayatoh",
+    "linkFallback": "Werkt de knop niet? Kopieer deze link naar je browser:",
+    "unsubscribe": "Afmelden",
+    "why": {
+      "reminders": "Je krijgt deze herinnering omdat je tickets van {org} hebt.",
+      "event_updates": "Je krijgt dit omdat je op de gastenlijst staat van een evenement van {org}.",
+      "marketing": "Je krijgt dit omdat je je hebt aangemeld voor nieuws van {org}."
+    },
+    "reply": "{org} antwoorden"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Je tickets voor {eventName}",
+      "intro": "{count, plural, =0 {Je bestelling is bevestigd.} one {Je ticket staat klaar.} other {Je # tickets staan klaar.}} Bewaar deze e-mail: met de knop hieronder open je ze altijd.",
+      "cta": "Mijn tickets bekijken"
+    },
+    "orders.refund": {
+      "subject": "Je terugbetaling voor {eventName}",
+      "intro": "{fully, select, yes {Je bestelling is volledig terugbetaald:} other {Een deel van je bestelling is terugbetaald:}} {amount}. Het kan 5–10 werkdagen duren.",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "events.reminder": {
+      "subject": "Morgen: {eventName}",
+      "intro": "Een herinnering: {eventName} begint op {when}.",
+      "venue": "Waar: {venue}",
+      "cta": "Mijn tickets openen"
+    },
+    "tenancy.invitation": {
+      "subject": "Uitnodiging voor {orgName} op Yayatoh",
+      "intro": "{orgName} nodigt je uit voor hun team als {role}.",
+      "cta": "Uitnodiging accepteren"
+    },
+    "ticketing.claim-link": {
+      "subject": "Er wacht een ticket voor {eventName} op je",
+      "intro": "Iemand heeft je een ticket voor {eventName} gegeven. Claim het voor je eigen QR-code.",
+      "cta": "Mijn ticket claimen"
+    },
+    "ticketing.holder-link": {
+      "subject": "Je link naar je tickets voor {eventName}",
+      "intro": "Hier is de link die je vroeg. Hij opent je tickets voor {eventName}.",
+      "cta": "Mijn tickets openen"
+    },
+    "seating.finder-code": {
+      "subject": "{code} is je code voor de plaatszoeker van {eventName}",
+      "intro": "Voer {code} in bij de plaatszoeker om je plaats te zien. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren.",
+      "cta": "Plaatszoeker openen"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "Een bericht van de organisator van {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "Nieuws over {eventName}:",
+      "cta": "De organisator antwoorden"
+    },
+    "messaging.reply": {
+      "subject": "Nieuw antwoord van {org}",
+      "intro": "{org} heeft op je bericht geantwoord:",
+      "cta": "Lezen en antwoorden"
+    },
+    "sales.order_paid": {
+      "subject": "Nieuwe bestelling: {name}",
+      "intro": "{name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "Nieuw bericht van {name}",
+      "intro": "{name} schreef je over {eventName}."
+    },
+    "notifications.test": {
+      "subject": "Testmelding",
+      "intro": "Meldingen werken."
+    }
+  },
+  "roles": {
+    "owner": "eigenaar",
+    "admin": "beheerder",
+    "manager": "manager",
+    "finance": "financiën",
+    "marketing": "marketing",
+    "box_office": "kassa",
+    "scanner": "scanner",
+    "viewer": "lezer"
+  }
+}
