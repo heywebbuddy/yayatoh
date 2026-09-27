@@ -2,9 +2,11 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand } from '@yayatoh/orders';
-import { createCommandPorts } from '@yayatoh/platform';
+import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { orgAuthorizer } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
+
+if (process.env.LOCAL_KMS_KEY) setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY));
 
 const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
 

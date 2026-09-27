@@ -1,10 +1,10 @@
 import { createHash, randomBytes } from 'node:crypto';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { claimProviderEventTx, type ProviderEvent } from '@yayatoh/payments';
 import { tenantCommand } from '@yayatoh/platform';
-import { holdInventoryTx, quoteTx, releaseHoldTx, sellHeldTx } from '@yayatoh/ticketing';
+import { holdInventoryTx, issueTicketsTx, quoteTx, releaseHoldTx, sellHeldTx } from '@yayatoh/ticketing';
 import { and, eq, inArray, lte } from 'drizzle-orm';
 import { z } from 'zod';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
@@ -25,6 +25,16 @@ export async function loadOrderTx(tx: TenantTx, orderId: string, forUpdate = fal
 
 const lines = (items: { ticketTypeId: string; quantity: number }[]) =>
   items.map((i) => ({ ticketTypeId: i.ticketTypeId, quantity: i.quantity }));
+
+/** Paid → tickets, in the same transaction (a paid order always has its tickets). */
+function issueFor(tx: TenantTx, ctx: Ctx, order: OrderRow, items: (typeof orderItems.$inferSelect)[]) {
+  return issueTicketsTx(tx, ctx, {
+    orderId: order.id,
+    eventId: order.eventId,
+    items: items.map((i) => ({ orderItemId: i.id, ticketTypeId: i.ticketTypeId, quantity: i.quantity })),
+    holder: { name: order.buyerName, email: order.buyerEmail },
+  });
+}
 
 async function setStatus(
   tx: TenantTx,
@@ -107,6 +117,7 @@ export const startCheckoutCommand = tenantCommand({
     if (free) {
       await sellHeldTx(tx, lines(items));
       final = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
+      await issueFor(tx, ctx, final, items);
       emit({
         type: 'order.paid',
         version: 1,
@@ -216,6 +227,7 @@ export const applyProviderEventCommand = tenantCommand({
     }
     await sellHeldTx(tx, lines(order.items));
     const row = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
+    await issueFor(tx, ctx, row, order.items);
     emit({
       type: 'order.paid',
       version: 1,

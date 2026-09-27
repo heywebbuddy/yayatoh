@@ -3,6 +3,7 @@ import { orderByManageToken } from '@yayatoh/orders';
 import { Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { TicketQr } from '@/components/ticket-qr.tsx';
 
 const DOT = {
   paid: 'success',
@@ -23,6 +24,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   if (!order) notFound();
   const t = await getTranslations();
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
+  const typeName = new Map(order.items.map((i) => [i.ticketTypeId, i.name]));
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
       <PageHeader
@@ -48,6 +50,36 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         </div>
         <p className="text-caption text-zinc-500">{t('order.feesIncluded', { fees: fmt(order.feeMinor) })}</p>
       </Card>
+      {order.tickets.length > 0 ? (
+        <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
+          <h2 id="tickets-heading" className="text-section">
+            {t('order.tickets', { count: order.tickets.length })}
+          </h2>
+          <p className="text-caption text-zinc-500">{t('order.ticketsHint')}</p>
+          <ul className="flex list-none flex-col gap-4 p-0">
+            {order.tickets.map((tk) => (
+              <li key={tk.id}>
+                <Card size="panel" className="flex flex-col items-center gap-3 text-center">
+                  <p className="flex w-full justify-between gap-4 text-caption text-zinc-500">
+                    <span>{typeName.get(tk.ticketTypeId) ?? ''}</span>
+                    <span className="font-mono">{t('order.serial', { serial: tk.serial })}</span>
+                  </p>
+                  <TicketQr
+                    code={tk.code}
+                    label={t('order.qrLabel', { serial: tk.serial })}
+                    className="size-60 text-black"
+                  />
+                  <p className="text-caption text-zinc-500">
+                    {t('order.shortCode')}{' '}
+                    <span className="font-mono text-body tracking-[0.2em] text-black">{tk.shortCode}</span>
+                  </p>
+                  <p className="text-caption">{tk.holderName}</p>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </main>
   );
 }

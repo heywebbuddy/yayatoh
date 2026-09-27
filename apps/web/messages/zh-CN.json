@@ -443,7 +443,12 @@
     },
     "sentTo": "确认信息已发送至 {email}",
     "total": "合计",
-    "feesIncluded": "含 {fees} 费用"
+    "feesIncluded": "含 {fees} 费用",
+    "tickets": "{count, plural, other {你的 # 张票}}",
+    "ticketsHint": "入场时出示此二维码。截图也可以，即使离线也能扫描。",
+    "serial": "编号 {serial}",
+    "qrLabel": "票号 {serial} 的二维码",
+    "shortCode": "验证码"
   },
   "orders": {
     "title": "最近订单",

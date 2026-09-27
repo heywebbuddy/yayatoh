@@ -1,6 +1,10 @@
 import { billingEntitlements } from '@yayatoh/billing';
-import { createCommandPorts } from '@yayatoh/platform';
+import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { orgAuthorizer } from '@yayatoh/tenancy';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
 export const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+
+// AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
+const localKms = process.env.LOCAL_KMS_KEY;
+if (localKms) setKeyVault(localKeyVault(localKms));

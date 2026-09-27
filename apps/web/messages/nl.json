@@ -443,7 +443,12 @@
     },
     "sentTo": "Bevestiging verzonden naar {email}",
     "total": "Totaal",
-    "feesIncluded": "Inclusief {fees} aan kosten"
+    "feesIncluded": "Inclusief {fees} aan kosten",
+    "tickets": "{count, plural, one {Je ticket} other {Je # tickets}}",
+    "ticketsHint": "Laat deze code zien bij de ingang. Een screenshot werkt ook, dus hij scant zelfs offline.",
+    "serial": "Nr. {serial}",
+    "qrLabel": "QR-code voor ticketnummer {serial}",
+    "shortCode": "Code"
   },
   "orders": {
     "title": "Recente bestellingen",

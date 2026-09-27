@@ -443,7 +443,12 @@
     },
     "sentTo": "أُرسل التأكيد إلى {email}",
     "total": "الإجمالي",
-    "feesIncluded": "يشمل رسومًا بقيمة {fees}"
+    "feesIncluded": "يشمل رسومًا بقيمة {fees}",
+    "tickets": "{count, plural, zero {لا توجد تذاكر} one {تذكرتك} two {تذكرتاك} few {تذاكرك الـ#} many {تذاكرك الـ#} other {تذاكرك الـ#}}",
+    "ticketsHint": "اعرض هذا الرمز عند الدخول. لقطات الشاشة تعمل أيضًا، لذا يمكن مسحه حتى دون اتصال بالإنترنت.",
+    "serial": "رقم {serial}",
+    "qrLabel": "رمز QR للتذكرة رقم {serial}",
+    "shortCode": "الرمز"
   },
   "orders": {
     "title": "أحدث الطلبات",

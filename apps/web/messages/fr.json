@@ -443,7 +443,12 @@
     },
     "sentTo": "Confirmation envoyée à {email}",
     "total": "Total",
-    "feesIncluded": "Dont {fees} de frais"
+    "feesIncluded": "Dont {fees} de frais",
+    "tickets": "{count, plural, one {Votre billet} other {Vos # billets}}",
+    "ticketsHint": "Présentez ce code à l’entrée. Une capture d’écran fonctionne aussi : il se scanne même hors ligne.",
+    "serial": "N° {serial}",
+    "qrLabel": "QR code du billet numéro {serial}",
+    "shortCode": "Code"
   },
   "orders": {
     "title": "Commandes récentes",

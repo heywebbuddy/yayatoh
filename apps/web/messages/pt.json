@@ -443,7 +443,12 @@
     },
     "sentTo": "Confirmação enviada para {email}",
     "total": "Total",
-    "feesIncluded": "Inclui {fees} em taxas"
+    "feesIncluded": "Inclui {fees} em taxas",
+    "tickets": "{count, plural, one {Seu ingresso} other {Seus # ingressos}}",
+    "ticketsHint": "Mostre este código na entrada. Capturas de tela também funcionam, então ele pode ser lido mesmo offline.",
+    "serial": "Nº {serial}",
+    "qrLabel": "Código QR do ingresso número {serial}",
+    "shortCode": "Código"
   },
   "orders": {
     "title": "Pedidos recentes",

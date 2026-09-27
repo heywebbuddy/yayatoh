@@ -115,12 +115,15 @@ jobs:
         run: |
           APP=$(openssl rand -hex 12); MIG=$(openssl rand -hex 12); PR=$(openssl rand -hex 12)
           SECRET=$(openssl rand -hex 32); PERSONA=$(openssl rand -hex 12)
-          echo "::add-mask::$PERSONA"
+          TOKEN=$(openssl rand -hex 32); FAKE=$(openssl rand -hex 32); KMS=$(openssl rand -hex 32)
+          # Per-run throwaway values, still masked so they never appear in logs.
+          for v in "$SECRET" "$PERSONA" "$TOKEN" "$FAKE" "$KMS"; do echo "::add-mask::$v"; done
           {
             echo "BETTER_AUTH_SECRET=$SECRET"
             echo "BETTER_AUTH_URL=http://localhost:3100"
-            echo "APP_TOKEN_SECRET=$(openssl rand -hex 32)"
-            echo "FAKE_PAYMENTS_SECRET=$(openssl rand -hex 32)"
+            echo "APP_TOKEN_SECRET=$TOKEN"
+            echo "FAKE_PAYMENTS_SECRET=$FAKE"
+            echo "LOCAL_KMS_KEY=$KMS"
             echo "DEV_PERSONA_PASSWORD=$PERSONA"
             echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
             echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"

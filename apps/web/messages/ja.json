@@ -443,7 +443,12 @@
     },
     "sentTo": "確認メールを {email} に送信しました",
     "total": "合計",
-    "feesIncluded": "手数料 {fees} を含む"
+    "feesIncluded": "手数料 {fees} を含む",
+    "tickets": "{count, plural, other {チケット（#枚）}}",
+    "ticketsHint": "入場時にこのコードを提示してください。スクリーンショットでも使えるので、オフラインでも読み取れます。",
+    "serial": "No. {serial}",
+    "qrLabel": "チケット番号 {serial} のQRコード",
+    "shortCode": "コード"
   },
   "orders": {
     "title": "最近の注文",

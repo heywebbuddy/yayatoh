@@ -443,7 +443,12 @@
     },
     "sentTo": "पुष्टि {email} पर भेजी गई",
     "total": "कुल",
-    "feesIncluded": "{fees} शुल्क शामिल"
+    "feesIncluded": "{fees} शुल्क शामिल",
+    "tickets": "{count, plural, one {आपका टिकट} other {आपके # टिकट}}",
+    "ticketsHint": "प्रवेश द्वार पर यह कोड दिखाएँ। स्क्रीनशॉट भी काम करता है, इसलिए यह ऑफ़लाइन भी स्कैन हो जाता है।",
+    "serial": "सं. {serial}",
+    "qrLabel": "टिकट संख्या {serial} का QR कोड",
+    "shortCode": "कोड"
   },
   "orders": {
     "title": "हाल के ऑर्डर",

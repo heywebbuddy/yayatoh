@@ -443,7 +443,12 @@
     },
     "sentTo": "確認信已寄至 {email}",
     "total": "總計",
-    "feesIncluded": "含 {fees} 費用"
+    "feesIncluded": "含 {fees} 費用",
+    "tickets": "{count, plural, other {你的 # 張票}}",
+    "ticketsHint": "入場時出示此 QR 碼。截圖也可以，即使離線也能掃描。",
+    "serial": "編號 {serial}",
+    "qrLabel": "票號 {serial} 的 QR 碼",
+    "shortCode": "驗證碼"
   },
   "orders": {
     "title": "最近訂單",

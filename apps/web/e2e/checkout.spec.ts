@@ -33,6 +33,8 @@ test.describe('checkout', () => {
     await guest.getByRole('button', { name: 'Continue to payment' }).click();
     await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
     await expect(guest.getByText('Paid', { exact: true })).toBeVisible();
+    await expect(guest.getByRole('heading', { name: 'Your ticket' })).toBeVisible();
+    await expect(guest.getByRole('img', { name: /^QR code for ticket number \d+$/ })).toHaveCount(1);
     await expectAccessible(guest);
 
     await guest.goto('/events/midwest-leadership-summit-2027');
@@ -46,6 +48,8 @@ test.describe('checkout', () => {
     await expect(guest).toHaveURL(/\/orders\//);
     await expect(guest.getByText('Paid', { exact: true })).toBeVisible();
     await expect(guest.getByText('$80.00').first()).toBeVisible();
+    await expect(guest.getByRole('heading', { name: 'Your 2 tickets' })).toBeVisible();
+    await expect(guest.getByRole('img', { name: /^QR code for ticket number \d+$/ })).toHaveCount(2);
 
     // The organizer sees both orders.
     await page.goto(`${EVENT}/tickets-orders`);

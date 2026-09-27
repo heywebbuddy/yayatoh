@@ -18,6 +18,7 @@
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:"
   },

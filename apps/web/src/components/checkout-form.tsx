@@ -89,15 +89,14 @@ export function CheckoutForm({
                   </select>
                 </div>
               ) : (
-                <span
-                  className={buttonClass(
-                    p.featured ? 'on-dark' : 'secondary',
-                    'md',
-                    'pointer-events-none self-start opacity-50',
-                  )}
+                // Preview passes (no ticket type yet) cannot be bought; a disabled control says so.
+                <button
+                  type="button"
+                  disabled
+                  className={buttonClass(p.featured ? 'on-dark' : 'secondary', 'md', 'self-start')}
                 >
                   {t('publicEvent.select')}
-                </span>
+                </button>
               )}
             </Card>
           </li>

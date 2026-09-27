@@ -60,7 +60,31 @@
 | AC5 | End to end: organizer adds passes → guest buys free and paid tickets → organizer sees both paid orders; a forged webhook gets 400 | `e2e/checkout.spec.ts` |
 | AC6 | Isolation: another org can't read these orders or check out into this org's events; the fixture covers the new tables | `checkout.int.test.ts`, `isolation.int.test.ts` |
 
+## M1.5c — tickets with signed QR codes (done)
+- **`ticket-crypto` package (universal, no Node APIs):**
+  - yy1 code = `"YY1"` + base32(version ‖ kid ‖ ticket id ‖ rev ‖ Ed25519 signature).
+  - That is 139 characters and fits a V7-M QR in alphanumeric mode.
+  - Verifying needs only the public key, so offline scanners (M1.9) can check codes.
+- **Signing keys:**
+  - `ticketing.signing_keys` holds one active key per org (`kid`). It is created on first issue.
+  - The private key is envelope-encrypted through the `KeyVault` port. The local adapter is AES-256-GCM with the org as AAD (`LOCAL_KMS_KEY`). The production KMS adapter waits on the owner (owner inbox).
+- **Issue:**
+  - `issueTicketsTx` runs in the same transaction that marks an order paid, on both the free path and the provider-event path.
+  - It gives each ticket a per-event serial (under an advisory lock) and a per-org unique short code, retried on collision.
+  - Each ticket gets a `ticket_barcodes` row. A second issue for the same order is refused.
+- **Web:** the guest order page shows one card per ticket: a server-rendered SVG QR (no client JS), the serial, the short code and the holder. Strings are in 13 locales.
+- **CI:** all per-run e2e secrets are masked in logs.
+
+### Acceptance (M1.5c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A paid order has one signed ticket per unit, with sequential serials and short codes | `packages/testing/tests/tickets.int.test.ts` |
+| AC2 | Codes verify with the org's public key and fail with another org's key | `tickets.int.test.ts`, `packages/ticket-crypto/tests` |
+| AC3 | Private keys are never stored raw; issue is refused twice for one order | `tickets.int.test.ts` |
+| AC4 | The guest sees a QR for each ticket after free and paid checkout | `e2e/checkout.spec.ts` |
+| AC5 | Isolation: the fixture covers the new tables; another org sees none of these tickets | `isolation.int.test.ts`, `tickets.int.test.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5c:** tickets (serial, short code), Ed25519-signed QR with a per-org `kid`, PDF ticket; attendees created at issue; contacts + consents.
+- **M1.5c2:** attendees created at issue; CRM contacts + consents; the attendees page on real data; PDF ticket (ADR 0017 spike).
 - **M1.5d:** promo codes, early-bird tiers, donation tickets, `access_dates`, forms engine v1 (checkout questions).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

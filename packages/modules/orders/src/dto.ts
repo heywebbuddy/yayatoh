@@ -33,8 +33,19 @@ export const CheckoutResultDto = z.object({
 });
 export type CheckoutResultDto = z.infer<typeof CheckoutResultDto>;
 
-/** What a guest sees on the order page. */
-export const PublicOrderDto = OrderDto.omit({ eventId: true });
+/** A ticket as its holder sees it; `code` is the signed yy1 payload rendered as the QR. */
+export const HolderTicketDto = z.object({
+  id: z.uuid(),
+  ticketTypeId: z.uuid(),
+  serial: z.int(),
+  shortCode: z.string(),
+  status: z.string(),
+  holderName: z.string(),
+  code: z.string(),
+});
+
+/** What a guest sees on the order page (reached by the manage token, which is the credential). */
+export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({ tickets: z.array(HolderTicketDto) });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);
 
