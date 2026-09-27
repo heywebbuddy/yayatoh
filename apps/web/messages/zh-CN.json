@@ -702,7 +702,8 @@
     "selectOne": "选择 {name}",
     "title": {
       "label": "批量标签",
-      "export": "参会者导出"
+      "export": "参会者导出",
+      "import": "宾客名单导入"
     },
     "status": {
       "queued": "等待开始…",
@@ -713,6 +714,7 @@
       "undone": "已撤销：已恢复 {undone} 条。"
     },
     "exportDone": "已完成：已导出 {succeeded} 行。",
+    "importDone": "已导入 {succeeded} 位宾客。",
     "failure": "{count, plural, other {# 条失败：{reason}}}",
     "code": {
       "too_many_labels": "已有 20 个标签",
@@ -735,5 +737,53 @@
     "checkedIn": "已签到",
     "yes": "是",
     "no": "否"
+  },
+  "import": {
+    "title": "导入宾客",
+    "description": "从电子表格（CSV）将人员添加到此活动的宾客名单。在你检查各行并开始导入之前不会添加任何内容，导入后 10 分钟内可以撤销。",
+    "backToList": "返回列表",
+    "noAccessTitle": "你的角色不包含导入权限",
+    "noAccessDescription": "请让主办方为你分配可编辑参会者的角色。",
+    "step1": "1. 选择文件",
+    "fileHint": "包含标题行、每行一位宾客的 CSV 文件，最多 20,000 行、5 MB。请从 Excel、Numbers 或 Google Sheets 导出为 CSV。",
+    "file": "CSV 文件",
+    "upload": "上传",
+    "step2": "2. 匹配 {file} 中的列",
+    "rows": "{count, plural, other {# 行}}",
+    "field": {
+      "name": "姓名",
+      "email": "电子邮箱",
+      "labels": "标签"
+    },
+    "chooseColumn": "选择列",
+    "notInFile": "不在此文件中",
+    "columnN": "第 {n} 列",
+    "extraLabel": "为所有人添加标签（可选）",
+    "check": "检查各行",
+    "step3": "3. 检查并导入",
+    "summary": "{valid} 条可导入，{invalid} 条无法导入。",
+    "reason": {
+      "missing_email": "缺少电子邮箱",
+      "invalid_email": "电子邮箱地址似乎有误",
+      "invalid_label": "标签过长（最多 40 个字符）",
+      "too_many_labels": "标签超过 20 个",
+      "duplicate_in_file": "文件前面已出现相同的电子邮箱",
+      "already_on_list": "已在宾客名单中"
+    },
+    "preview": "前几行的导入效果",
+    "row": "行",
+    "result": "检查结果",
+    "ok": "可导入",
+    "start": "{count, plural, other {导入 # 位宾客}}",
+    "downloadProblems": "下载无法导入的行",
+    "problemColumn": "问题",
+    "csvError": {
+      "empty": "文件中没有任何行。",
+      "too_large": "文件大于 5 MB。",
+      "too_many_rows": "文件超过 20,000 行。",
+      "too_many_columns": "文件超过 50 列。",
+      "cell_too_long": "有单元格超过 1,000 个字符。",
+      "unterminated_quote": "文件中有未闭合的引号，无法作为 CSV 读取。"
+    }
   }
 }

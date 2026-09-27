@@ -74,3 +74,35 @@ Roadmap: M1.8. This milestone is delivered in increments:
 ### Not yet (M1.8b)
 - Bulk ticket actions (resend, cancel), bulk email and "assign seats" arrive with their features (M1.8d/e, M1.7), as new actions on this framework.
 - Export files live in Postgres until the owner's R2 account exists (owner inbox: Cloudflare account).
+
+## M1.8c — guest-list import (done)
+- **Upload** (`attendees.stageImport`, `attendees:write`): a CSV of ≤5 MB, ≤20,000 rows and ≤50 columns.
+  - The new universal `@yayatoh/csv` package parses it: RFC 4180 quoting and embedded newlines, CRLF or LF, a BOM, and a comma, semicolon or tab delimiter sniffed from the header.
+  - Unreadable files get a reason (unclosed quote, too many rows, …) and nothing is stored.
+  - Rows are staged in `attendees.import_rows` under an `import_batches` row. Nothing touches the guest list yet.
+- **Mapping and checks** (`attendees.validateImport`):
+  - Name, email and labels are mapped to columns. The mapping is guessed from headers in several languages, and the organizer can change it.
+  - An optional label can be added to everyone. A nameless row falls back to its email's local part.
+  - Every row gets a reason or none: `missing_email`, `invalid_email`, `invalid_label`, `too_many_labels`, `duplicate_in_file` (the first occurrence wins), `already_on_list` (an active attendee at the event with that email, case-insensitive).
+  - A file that has already been imported can't be re-mapped.
+- **Preview:** counts by reason plus the first 10 rows as they will be imported.
+- **Import job:** `attendees.import`, an action on the M1.8b bulk framework, 500 rows per chunk.
+  - Each chunk creates or reuses contacts in one statement (`crm.upsertContactsTx`), then inserts the attendees (source `import`) with ids assigned up front. Each staged row links to its attendee.
+  - A row whose email reached the list after the check fails as `already_on_list`.
+  - **Undo** within 10 minutes deletes exactly the attendees this import created. Contacts stay, deduplicated by email.
+- **Failure report:** the organizer's own columns plus a "Problem" column in their language, for the rows that were not imported, ready to fix and upload again.
+- **Console:** Attendees → **Import** → upload → match columns → check rows → **Import N guests**. It lands on the attendee list with the progress panel and Undo.
+- **Migration 0023:** `import_batches` and `import_rows`, with FORCE RLS, composite FKs (event, batch, and attendee with `ON DELETE SET NULL (attendee_id)`) and fixture rows for both orgs.
+
+### Acceptance (M1.8c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | **5,000 rows (2% invalid) are staged, checked and imported in <60 s** (about 2.5 s locally) **with ≥97% accepted**; one contact per email | `packages/testing/tests/imports.int.test.ts` |
+| AC2 | A reason for each bad row; preview after mapping; the extra label and the name fallback apply | `imports.int.test.ts` |
+| AC3 | The failure report has the original columns plus the localized reason, bad rows only; re-mapping after import is refused; undo removes exactly the imported guests | `imports.int.test.ts` |
+| AC4 | Unreadable files → `validation_failed` with a reason; viewers → `forbidden`; importing before checking → `invalid_state` | `imports.int.test.ts` |
+| AC5 | Org B can't read, validate, import or stage into org A's files and events | `imports.int.test.ts`, isolation suite |
+| AC6 | In the console: upload → map → check (one problem shown, report downloadable) → import 2 → labels applied → undo; axe passes | `apps/web/e2e/attendees.spec.ts` |
+
+### Not yet (M1.8c)
+- Import from XLSX (convert to CSV for now), custom fields and question answers per column arrive with registration forms (M5.1). Legacy guest-list migration uses the ELT pipeline (Phase 2), not this importer.

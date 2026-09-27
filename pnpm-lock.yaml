@@ -544,6 +544,18 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/csv:
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/db:
     dependencies:
       '@yayatoh/kernel':
@@ -593,6 +605,9 @@ importers:
       '@yayatoh/crm':
         specifier: workspace:*
         version: link:../crm
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -883,6 +898,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1059,6 +1077,9 @@ importers:
       '@yayatoh/crm':
         specifier: workspace:*
         version: link:../modules/crm
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../db

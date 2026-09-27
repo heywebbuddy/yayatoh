@@ -702,7 +702,8 @@
     "selectOne": "{name} selecteren",
     "title": {
       "label": "Labels in bulk",
-      "export": "Deelnemersexport"
+      "export": "Deelnemersexport",
+      "import": "Gastenlijstimport"
     },
     "status": {
       "queued": "Wacht op start…",
@@ -713,6 +714,7 @@
       "undone": "Ongedaan gemaakt: {undone} hersteld."
     },
     "exportDone": "Klaar: {succeeded} rijen geëxporteerd.",
+    "importDone": "{succeeded} gasten geïmporteerd.",
     "failure": "{count, plural, one {# mislukt: {reason}} other {# mislukt: {reason}}}",
     "code": {
       "too_many_labels": "ze hebben al 20 labels",
@@ -735,5 +737,53 @@
     "checkedIn": "Ingecheckt",
     "yes": "Ja",
     "no": "Nee"
+  },
+  "import": {
+    "title": "Gasten importeren",
+    "description": "Voeg mensen vanuit een spreadsheet (CSV) toe aan de gastenlijst van dit evenement. Er wordt niets toegevoegd totdat je de rijen controleert en de import start, en je kunt de import 10 minuten lang ongedaan maken.",
+    "backToList": "Terug naar de lijst",
+    "noAccessTitle": "Importeren hoort niet bij je rol",
+    "noAccessDescription": "Vraag een organisator om een rol waarmee je deelnemers kunt bewerken.",
+    "step1": "1. Kies een bestand",
+    "fileHint": "Een CSV met een koprij en één gast per regel, maximaal 20.000 rijen en 5 MB. Exporteer het als CSV vanuit Excel, Numbers of Google Sheets.",
+    "file": "CSV-bestand",
+    "upload": "Uploaden",
+    "step2": "2. Koppel de kolommen in {file}",
+    "rows": "{count, plural, one {# rij} other {# rijen}}",
+    "field": {
+      "name": "Naam",
+      "email": "E-mail",
+      "labels": "Labels"
+    },
+    "chooseColumn": "Kies een kolom",
+    "notInFile": "Niet in dit bestand",
+    "columnN": "Kolom {n}",
+    "extraLabel": "Iedereen labelen als (optioneel)",
+    "check": "Rijen controleren",
+    "step3": "3. Controleren en importeren",
+    "summary": "{valid} klaar om te importeren, {invalid} kunnen niet worden geïmporteerd.",
+    "reason": {
+      "missing_email": "Geen e-mail",
+      "invalid_email": "E-mailadres lijkt niet te kloppen",
+      "invalid_label": "Een label is te lang (max. 40 tekens)",
+      "too_many_labels": "Meer dan 20 labels",
+      "duplicate_in_file": "Hetzelfde e-mailadres staat eerder in het bestand",
+      "already_on_list": "Staat al op de gastenlijst"
+    },
+    "preview": "Eerste rijen zoals ze worden geïmporteerd",
+    "row": "Rij",
+    "result": "Controle",
+    "ok": "Klaar",
+    "start": "{count, plural, one {# gast importeren} other {# gasten importeren}}",
+    "downloadProblems": "Rijen downloaden die niet kunnen worden geïmporteerd",
+    "problemColumn": "Probleem",
+    "csvError": {
+      "empty": "Het bestand bevat geen rijen.",
+      "too_large": "Het bestand is groter dan 5 MB.",
+      "too_many_rows": "Het bestand heeft meer dan 20.000 rijen.",
+      "too_many_columns": "Het bestand heeft meer dan 50 kolommen.",
+      "cell_too_long": "Een cel is langer dan 1.000 tekens.",
+      "unterminated_quote": "Het bestand bevat een niet-afgesloten aanhalingsteken en kan daarom niet als CSV worden gelezen."
+    }
   }
 }

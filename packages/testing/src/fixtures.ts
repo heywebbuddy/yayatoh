@@ -1,4 +1,9 @@
-import { attendeeLabelBulk } from '@yayatoh/attendees';
+import {
+  attendeeImportBulk,
+  attendeeLabelBulk,
+  stageImportCommand,
+  validateImportCommand,
+} from '@yayatoh/attendees';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import { createCheckpointCommand, enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
@@ -207,8 +212,31 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  // A finished bulk label (undo data) and an export (a file with parts), for isolation coverage.
+  // A guest-list import (staged rows + a batch), a finished bulk label (undo data) and an export
+  // (a file with parts), for isolation coverage.
+  const staged = await executeCommand(
+    stageImportCommand,
+    {
+      eventId: event.id,
+      fileName: 'guests.csv',
+      csv: `Name,Email\nImported ${slug},imported-${slug}@example.test\nNo Email,\n`,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    validateImportCommand,
+    { eventId: event.id, batchId: staged.batchId, mapping: { name: 0, email: 1 } },
+    ctx(),
+    ports,
+  );
   for (const op of [
+    await executeCommand(
+      attendeeImportBulk.start,
+      { eventId: event.id, selection: { filter: { batchId: staged.batchId } }, params: {} },
+      ctx(),
+      ports,
+    ),
     await executeCommand(
       attendeeLabelBulk.start,
       { eventId: event.id, selection: { filter: {} }, params: { add: ['Fixture'] } },

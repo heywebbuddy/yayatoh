@@ -702,7 +702,8 @@
     "selectOne": "Select {name}",
     "title": {
       "label": "Bulk labels",
-      "export": "Attendee export"
+      "export": "Attendee export",
+      "import": "Guest-list import"
     },
     "status": {
       "queued": "Waiting to start…",
@@ -713,6 +714,7 @@
       "undone": "Undone: {undone} restored."
     },
     "exportDone": "Ready: {succeeded} rows exported.",
+    "importDone": "Imported {succeeded} guests.",
     "failure": "{count, plural, one {# failed: {reason}} other {# failed: {reason}}}",
     "code": {
       "too_many_labels": "they already have 20 labels",
@@ -735,5 +737,53 @@
     "checkedIn": "Checked in",
     "yes": "Yes",
     "no": "No"
+  },
+  "import": {
+    "title": "Import guests",
+    "description": "Add people to this event's guest list from a spreadsheet (CSV). Nothing is added until you check the rows and start the import, and you can undo it for 10 minutes.",
+    "backToList": "Back to the list",
+    "noAccessTitle": "Importing isn't part of your role",
+    "noAccessDescription": "Ask an organizer for a role that can edit attendees.",
+    "step1": "1. Choose a file",
+    "fileHint": "A CSV with a header row and one guest per line, up to 20,000 rows and 5 MB. Export it from Excel, Numbers or Google Sheets as CSV.",
+    "file": "CSV file",
+    "upload": "Upload",
+    "step2": "2. Match the columns in {file}",
+    "rows": "{count, plural, one {# row} other {# rows}}",
+    "field": {
+      "name": "Name",
+      "email": "Email",
+      "labels": "Labels"
+    },
+    "chooseColumn": "Choose a column",
+    "notInFile": "Not in this file",
+    "columnN": "Column {n}",
+    "extraLabel": "Label everyone as (optional)",
+    "check": "Check rows",
+    "step3": "3. Review and import",
+    "summary": "{valid} ready to import, {invalid} can't be imported.",
+    "reason": {
+      "missing_email": "No email",
+      "invalid_email": "Email address looks wrong",
+      "invalid_label": "A label is too long (max 40 characters)",
+      "too_many_labels": "More than 20 labels",
+      "duplicate_in_file": "Same email appears earlier in the file",
+      "already_on_list": "Already on the guest list"
+    },
+    "preview": "First rows as they will be imported",
+    "row": "Row",
+    "result": "Check",
+    "ok": "Ready",
+    "start": "{count, plural, one {Import # guest} other {Import # guests}}",
+    "downloadProblems": "Download the rows that can't be imported",
+    "problemColumn": "Problem",
+    "csvError": {
+      "empty": "The file has no rows.",
+      "too_large": "The file is larger than 5 MB.",
+      "too_many_rows": "The file has more than 20,000 rows.",
+      "too_many_columns": "The file has more than 50 columns.",
+      "cell_too_long": "A cell is longer than 1,000 characters.",
+      "unterminated_quote": "The file has an unclosed quote, so it can't be read as CSV."
+    }
   }
 }

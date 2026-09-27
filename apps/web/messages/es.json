@@ -702,7 +702,8 @@
     "selectOne": "Seleccionar a {name}",
     "title": {
       "label": "Etiquetas masivas",
-      "export": "Exportación de asistentes"
+      "export": "Exportación de asistentes",
+      "import": "Importación de la lista de invitados"
     },
     "status": {
       "queued": "Esperando para empezar…",
@@ -713,6 +714,7 @@
       "undone": "Deshecho: {undone} restaurados."
     },
     "exportDone": "Listo: {succeeded} filas exportadas.",
+    "importDone": "{succeeded} invitados importados.",
     "failure": "{count, plural, one {# falló: {reason}} other {# fallaron: {reason}}}",
     "code": {
       "too_many_labels": "ya tienen 20 etiquetas",
@@ -735,5 +737,53 @@
     "checkedIn": "Check-in",
     "yes": "Sí",
     "no": "No"
+  },
+  "import": {
+    "title": "Importar invitados",
+    "description": "Añade personas a la lista de invitados de este evento desde una hoja de cálculo (CSV). No se añade nada hasta que revises las filas e inicies la importación, y puedes deshacerla durante 10 minutos.",
+    "backToList": "Volver a la lista",
+    "noAccessTitle": "Importar no forma parte de tu rol",
+    "noAccessDescription": "Pide a un organizador un rol que pueda editar asistentes.",
+    "step1": "1. Elige un archivo",
+    "fileHint": "Un CSV con una fila de encabezado y un invitado por línea, hasta 20.000 filas y 5 MB. Expórtalo como CSV desde Excel, Numbers o Google Sheets.",
+    "file": "Archivo CSV",
+    "upload": "Subir",
+    "step2": "2. Asigna las columnas de {file}",
+    "rows": "{count, plural, one {# fila} other {# filas}}",
+    "field": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "labels": "Etiquetas"
+    },
+    "chooseColumn": "Elige una columna",
+    "notInFile": "No está en este archivo",
+    "columnN": "Columna {n}",
+    "extraLabel": "Etiquetar a todos como (opcional)",
+    "check": "Revisar filas",
+    "step3": "3. Revisa e importa",
+    "summary": "{valid} listos para importar, {invalid} no se pueden importar.",
+    "reason": {
+      "missing_email": "Sin correo electrónico",
+      "invalid_email": "El correo electrónico no parece válido",
+      "invalid_label": "Una etiqueta es demasiado larga (máx. 40 caracteres)",
+      "too_many_labels": "Más de 20 etiquetas",
+      "duplicate_in_file": "El mismo correo aparece antes en el archivo",
+      "already_on_list": "Ya está en la lista de invitados"
+    },
+    "preview": "Primeras filas tal como se importarán",
+    "row": "Fila",
+    "result": "Revisión",
+    "ok": "Listo",
+    "start": "{count, plural, one {Importar # invitado} other {Importar # invitados}}",
+    "downloadProblems": "Descargar las filas que no se pueden importar",
+    "problemColumn": "Problema",
+    "csvError": {
+      "empty": "El archivo no tiene filas.",
+      "too_large": "El archivo pesa más de 5 MB.",
+      "too_many_rows": "El archivo tiene más de 20.000 filas.",
+      "too_many_columns": "El archivo tiene más de 50 columnas.",
+      "cell_too_long": "Una celda tiene más de 1000 caracteres.",
+      "unterminated_quote": "El archivo tiene unas comillas sin cerrar, así que no se puede leer como CSV."
+    }
   }
 }

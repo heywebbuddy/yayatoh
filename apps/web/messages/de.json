@@ -702,7 +702,8 @@
     "selectOne": "{name} auswählen",
     "title": {
       "label": "Labels für mehrere",
-      "export": "Export der Teilnehmenden"
+      "export": "Export der Teilnehmenden",
+      "import": "Gästelisten-Import"
     },
     "status": {
       "queued": "Wartet auf Start…",
@@ -713,6 +714,7 @@
       "undone": "Rückgängig gemacht: {undone} wiederhergestellt."
     },
     "exportDone": "Fertig: {succeeded} Zeilen exportiert.",
+    "importDone": "{succeeded} Gäste importiert.",
     "failure": "{count, plural, one {# fehlgeschlagen: {reason}} other {# fehlgeschlagen: {reason}}}",
     "code": {
       "too_many_labels": "sie haben bereits 20 Labels",
@@ -735,5 +737,53 @@
     "checkedIn": "Eingecheckt",
     "yes": "Ja",
     "no": "Nein"
+  },
+  "import": {
+    "title": "Gäste importieren",
+    "description": "Füge Personen aus einer Tabelle (CSV) zur Gästeliste dieses Events hinzu. Es wird nichts hinzugefügt, bevor du die Zeilen prüfst und den Import startest, und du kannst ihn 10 Minuten lang rückgängig machen.",
+    "backToList": "Zurück zur Liste",
+    "noAccessTitle": "Importieren gehört nicht zu deiner Rolle",
+    "noAccessDescription": "Bitte einen Veranstalter um eine Rolle, die Teilnehmende bearbeiten darf.",
+    "step1": "1. Datei auswählen",
+    "fileHint": "Eine CSV-Datei mit Kopfzeile und einem Gast pro Zeile, höchstens 20.000 Zeilen und 5 MB. Exportiere sie aus Excel, Numbers oder Google Sheets als CSV.",
+    "file": "CSV-Datei",
+    "upload": "Hochladen",
+    "step2": "2. Spalten in {file} zuordnen",
+    "rows": "{count, plural, one {# Zeile} other {# Zeilen}}",
+    "field": {
+      "name": "Name",
+      "email": "E-Mail",
+      "labels": "Labels"
+    },
+    "chooseColumn": "Spalte auswählen",
+    "notInFile": "Nicht in dieser Datei",
+    "columnN": "Spalte {n}",
+    "extraLabel": "Allen dieses Label geben (optional)",
+    "check": "Zeilen prüfen",
+    "step3": "3. Prüfen und importieren",
+    "summary": "{valid} bereit zum Import, {invalid} können nicht importiert werden.",
+    "reason": {
+      "missing_email": "Keine E-Mail",
+      "invalid_email": "E-Mail-Adresse scheint falsch zu sein",
+      "invalid_label": "Ein Label ist zu lang (max. 40 Zeichen)",
+      "too_many_labels": "Mehr als 20 Labels",
+      "duplicate_in_file": "Dieselbe E-Mail steht weiter oben in der Datei",
+      "already_on_list": "Bereits auf der Gästeliste"
+    },
+    "preview": "Erste Zeilen, so wie sie importiert werden",
+    "row": "Zeile",
+    "result": "Prüfung",
+    "ok": "Bereit",
+    "start": "{count, plural, one {# Gast importieren} other {# Gäste importieren}}",
+    "downloadProblems": "Nicht importierbare Zeilen herunterladen",
+    "problemColumn": "Problem",
+    "csvError": {
+      "empty": "Die Datei enthält keine Zeilen.",
+      "too_large": "Die Datei ist größer als 5 MB.",
+      "too_many_rows": "Die Datei hat mehr als 20.000 Zeilen.",
+      "too_many_columns": "Die Datei hat mehr als 50 Spalten.",
+      "cell_too_long": "Eine Zelle ist länger als 1.000 Zeichen.",
+      "unterminated_quote": "Die Datei enthält ein nicht geschlossenes Anführungszeichen und kann nicht als CSV gelesen werden."
+    }
   }
 }

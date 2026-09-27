@@ -6,13 +6,14 @@ import {
 } from '@yayatoh/attendees';
 import { scanTicketCommand } from '@yayatoh/checkin';
 import { upsertContactTx } from '@yayatoh/crm';
+import { csvCell } from '@yayatoh/csv';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
 import { listBulkOperationsQuery } from '@yayatoh/platform';
-import { attendeeExportBulk, csvCell } from '@yayatoh/reports';
+import { attendeeExportBulk } from '@yayatoh/reports';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

@@ -15,6 +15,7 @@
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",

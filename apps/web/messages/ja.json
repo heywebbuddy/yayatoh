@@ -702,7 +702,8 @@
     "selectOne": "{name}さんを選択",
     "title": {
       "label": "ラベルの一括編集",
-      "export": "参加者のエクスポート"
+      "export": "参加者のエクスポート",
+      "import": "ゲストリストのインポート"
     },
     "status": {
       "queued": "開始を待っています…",
@@ -713,6 +714,7 @@
       "undone": "取り消しました：{undone}件を復元。"
     },
     "exportDone": "完了：{succeeded} 行をエクスポートしました。",
+    "importDone": "{succeeded} 人のゲストをインポートしました。",
     "failure": "{count, plural, other {#件失敗：{reason}}}",
     "code": {
       "too_many_labels": "ラベルがすでに20件あります",
@@ -735,5 +737,53 @@
     "checkedIn": "チェックイン済み",
     "yes": "はい",
     "no": "いいえ"
+  },
+  "import": {
+    "title": "ゲストをインポート",
+    "description": "スプレッドシート（CSV）から、このイベントのゲストリストに人を追加します。行を確認してインポートを開始するまで何も追加されません。インポート後10分間は取り消せます。",
+    "backToList": "リストに戻る",
+    "noAccessTitle": "あなたの役割ではインポートを利用できません",
+    "noAccessDescription": "参加者を編集できる役割を付与するよう主催者に依頼してください。",
+    "step1": "1. ファイルを選択",
+    "fileHint": "ヘッダー行があり、1行に1人のゲストを記載したCSV（最大20,000行、5 MB）。Excel、Numbers、Google SheetsからCSVとしてエクスポートしてください。",
+    "file": "CSVファイル",
+    "upload": "アップロード",
+    "step2": "2. {file}の列を対応付ける",
+    "rows": "{count, plural, other {#行}}",
+    "field": {
+      "name": "名前",
+      "email": "メールアドレス",
+      "labels": "ラベル"
+    },
+    "chooseColumn": "列を選択",
+    "notInFile": "このファイルにない",
+    "columnN": "列{n}",
+    "extraLabel": "全員に付けるラベル（任意）",
+    "check": "行を確認",
+    "step3": "3. 確認してインポート",
+    "summary": "インポート可能：{valid}件、インポート不可：{invalid}件。",
+    "reason": {
+      "missing_email": "メールアドレスがありません",
+      "invalid_email": "メールアドレスが正しくないようです",
+      "invalid_label": "ラベルが長すぎます（最大40文字）",
+      "too_many_labels": "ラベルが20件を超えています",
+      "duplicate_in_file": "同じメールアドレスがファイル内の前の行にあります",
+      "already_on_list": "すでにゲストリストに含まれています"
+    },
+    "preview": "インポートされる内容（先頭の行）",
+    "row": "行",
+    "result": "確認結果",
+    "ok": "OK",
+    "start": "{count, plural, other {#人のゲストをインポート}}",
+    "downloadProblems": "インポートできない行をダウンロード",
+    "problemColumn": "問題",
+    "csvError": {
+      "empty": "ファイルに行がありません。",
+      "too_large": "ファイルが5 MBを超えています。",
+      "too_many_rows": "ファイルの行数が20,000行を超えています。",
+      "too_many_columns": "ファイルの列数が50列を超えています。",
+      "cell_too_long": "1,000文字を超えるセルがあります。",
+      "unterminated_quote": "閉じられていない引用符があるため、CSVとして読み込めません。"
+    }
   }
 }

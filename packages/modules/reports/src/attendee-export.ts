@@ -1,11 +1,11 @@
 import { AttendeeFilter, attendeesForExportTx, resolveAttendeeIdsTx } from '@yayatoh/attendees';
 import { admittedTicketIdsTx } from '@yayatoh/checkin';
+import { csvRow } from '@yayatoh/csv';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError } from '@yayatoh/kernel';
 import { bulkCommands, defineBulkAction } from '@yayatoh/platform';
 import { ticketSummariesTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
-import { csvRow } from './csv.ts';
 
 export const ATTENDEE_EXPORT_COLUMNS = [
   'name',

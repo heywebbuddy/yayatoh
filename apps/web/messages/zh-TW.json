@@ -702,7 +702,8 @@
     "selectOne": "選取 {name}",
     "title": {
       "label": "批次標籤",
-      "export": "參加者匯出"
+      "export": "參加者匯出",
+      "import": "賓客名單匯入"
     },
     "status": {
       "queued": "等待開始…",
@@ -713,6 +714,7 @@
       "undone": "已復原：已還原 {undone} 筆。"
     },
     "exportDone": "已完成：已匯出 {succeeded} 列。",
+    "importDone": "已匯入 {succeeded} 位賓客。",
     "failure": "{count, plural, other {# 筆失敗：{reason}}}",
     "code": {
       "too_many_labels": "已有 20 個標籤",
@@ -735,5 +737,53 @@
     "checkedIn": "已報到",
     "yes": "是",
     "no": "否"
+  },
+  "import": {
+    "title": "匯入賓客",
+    "description": "從試算表（CSV）將人員加入此活動的賓客名單。在你檢查各列並開始匯入之前不會加入任何內容，匯入後 10 分鐘內可以復原。",
+    "backToList": "返回清單",
+    "noAccessTitle": "你的角色不包含匯入權限",
+    "noAccessDescription": "請主辦單位為你指派可編輯參加者的角色。",
+    "step1": "1. 選擇檔案",
+    "fileHint": "包含標題列、每列一位賓客的 CSV 檔案，最多 20,000 列、5 MB。請從 Excel、Numbers 或 Google Sheets 匯出為 CSV。",
+    "file": "CSV 檔案",
+    "upload": "上傳",
+    "step2": "2. 對應 {file} 中的欄位",
+    "rows": "{count, plural, other {# 列}}",
+    "field": {
+      "name": "姓名",
+      "email": "電子郵件",
+      "labels": "標籤"
+    },
+    "chooseColumn": "選擇欄位",
+    "notInFile": "不在此檔案中",
+    "columnN": "第 {n} 欄",
+    "extraLabel": "為所有人加上標籤（選填）",
+    "check": "檢查各列",
+    "step3": "3. 檢查並匯入",
+    "summary": "{valid} 筆可匯入，{invalid} 筆無法匯入。",
+    "reason": {
+      "missing_email": "缺少電子郵件",
+      "invalid_email": "電子郵件地址似乎有誤",
+      "invalid_label": "標籤過長（最多 40 個字元）",
+      "too_many_labels": "標籤超過 20 個",
+      "duplicate_in_file": "檔案前面已出現相同的電子郵件",
+      "already_on_list": "已在賓客名單中"
+    },
+    "preview": "前幾列的匯入結果",
+    "row": "列",
+    "result": "檢查結果",
+    "ok": "可匯入",
+    "start": "{count, plural, other {匯入 # 位賓客}}",
+    "downloadProblems": "下載無法匯入的列",
+    "problemColumn": "問題",
+    "csvError": {
+      "empty": "檔案中沒有任何列。",
+      "too_large": "檔案大於 5 MB。",
+      "too_many_rows": "檔案超過 20,000 列。",
+      "too_many_columns": "檔案超過 50 欄。",
+      "cell_too_long": "有儲存格超過 1,000 個字元。",
+      "unterminated_quote": "檔案中有未閉合的引號，無法作為 CSV 讀取。"
+    }
   }
 }

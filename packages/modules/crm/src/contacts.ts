@@ -20,6 +20,38 @@ export interface UpsertContact {
 }
 
 /**
+ * The batch form of upsertContactTx (imports): one statement for many emails. Returns the
+ * contact id per normalized email. Duplicate emails in the input resolve to one contact.
+ */
+export async function upsertContactsTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  input: readonly UpsertContact[],
+): Promise<Map<string, string>> {
+  const orgId = requireOrg(ctx);
+  const byNorm = new Map<string, UpsertContact>();
+  for (const c of input) if (!byNorm.has(normalizeEmail(c.email))) byNorm.set(normalizeEmail(c.email), c);
+  if (byNorm.size === 0) return new Map();
+  const rows = await tx
+    .insert(contacts)
+    .values(
+      [...byNorm].map(([emailNorm, c]) => ({
+        orgId,
+        email: c.email.trim(),
+        emailNorm,
+        name: c.name ?? null,
+        source: c.source,
+      })),
+    )
+    .onConflictDoUpdate({
+      target: [contacts.orgId, contacts.emailNorm],
+      set: { name: sql`coalesce(${contacts.name}, excluded.name)`, updatedAt: ctx.now },
+    })
+    .returning({ id: contacts.id, emailNorm: contacts.emailNorm });
+  return new Map(rows.map((r) => [r.emailNorm, r.id]));
+}
+
+/**
  * Find or create the org's contact for an email, inside the caller's transaction. An existing
  * contact keeps its name unless it had none.
  */

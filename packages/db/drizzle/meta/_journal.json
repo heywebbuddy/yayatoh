@@ -162,6 +162,13 @@
       "when": 1790506993796,
       "tag": "0022_modern_ken_ellis",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1790508195914,
+      "tag": "0023_remarkable_kate_bishop",
+      "breakpoints": true
     }
   ]
 }

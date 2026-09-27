@@ -702,7 +702,8 @@
     "selectOne": "Seleziona {name}",
     "title": {
       "label": "Etichette di gruppo",
-      "export": "Esportazione partecipanti"
+      "export": "Esportazione partecipanti",
+      "import": "Importazione lista ospiti"
     },
     "status": {
       "queued": "In attesa di avvio…",
@@ -713,6 +714,7 @@
       "undone": "Annullato: {undone} ripristinati."
     },
     "exportDone": "Pronto: {succeeded} righe esportate.",
+    "importDone": "{succeeded} ospiti importati.",
     "failure": "{count, plural, one {# non riuscito: {reason}} other {# non riusciti: {reason}}}",
     "code": {
       "too_many_labels": "hanno già 20 etichette",
@@ -735,5 +737,53 @@
     "checkedIn": "Check-in",
     "yes": "Sì",
     "no": "No"
+  },
+  "import": {
+    "title": "Importa ospiti",
+    "description": "Aggiungi persone alla lista degli ospiti di questo evento da un foglio di calcolo (CSV). Non viene aggiunto nulla finché non controlli le righe e avvii l’importazione, e puoi annullarla per 10 minuti.",
+    "backToList": "Torna alla lista",
+    "noAccessTitle": "L’importazione non fa parte del tuo ruolo",
+    "noAccessDescription": "Chiedi a un organizzatore un ruolo che possa modificare i partecipanti.",
+    "step1": "1. Scegli un file",
+    "fileHint": "Un CSV con una riga di intestazione e un ospite per riga, fino a 20.000 righe e 5 MB. Esportalo in CSV da Excel, Numbers o Google Sheets.",
+    "file": "File CSV",
+    "upload": "Carica",
+    "step2": "2. Abbina le colonne di {file}",
+    "rows": "{count, plural, one {# riga} other {# righe}}",
+    "field": {
+      "name": "Nome",
+      "email": "Email",
+      "labels": "Etichette"
+    },
+    "chooseColumn": "Scegli una colonna",
+    "notInFile": "Non presente in questo file",
+    "columnN": "Colonna {n}",
+    "extraLabel": "Assegna a tutti l’etichetta (facoltativo)",
+    "check": "Controlla le righe",
+    "step3": "3. Controlla e importa",
+    "summary": "{valid} pronti da importare, {invalid} non importabili.",
+    "reason": {
+      "missing_email": "Email mancante",
+      "invalid_email": "L’indirizzo email non sembra corretto",
+      "invalid_label": "Un’etichetta è troppo lunga (max 40 caratteri)",
+      "too_many_labels": "Più di 20 etichette",
+      "duplicate_in_file": "La stessa email compare prima nel file",
+      "already_on_list": "Già nella lista degli ospiti"
+    },
+    "preview": "Prime righe come verranno importate",
+    "row": "Riga",
+    "result": "Controllo",
+    "ok": "Pronto",
+    "start": "{count, plural, one {Importa # ospite} other {Importa # ospiti}}",
+    "downloadProblems": "Scarica le righe non importabili",
+    "problemColumn": "Problema",
+    "csvError": {
+      "empty": "Il file non contiene righe.",
+      "too_large": "Il file supera i 5 MB.",
+      "too_many_rows": "Il file ha più di 20.000 righe.",
+      "too_many_columns": "Il file ha più di 50 colonne.",
+      "cell_too_long": "Una cella supera i 1.000 caratteri.",
+      "unterminated_quote": "Il file contiene delle virgolette non chiuse, quindi non può essere letto come CSV."
+    }
   }
 }

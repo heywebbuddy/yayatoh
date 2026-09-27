@@ -3,6 +3,7 @@
 import {
   ATTENDEE_SOURCES,
   ATTENDEE_STATUSES,
+  attendeeImportBulk,
   attendeeLabelBulk,
   setAttendeeLabelsCommand,
 } from '@yayatoh/attendees';
@@ -55,7 +56,7 @@ export async function removeLabelAction(
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }
 
-export type BulkKind = 'label' | 'export';
+export type BulkKind = 'label' | 'export' | 'import';
 
 const pick = <T extends string>(list: readonly T[], v: FormDataEntryValue | null): T | undefined =>
   list.includes(v as T) ? (v as T) : undefined;
@@ -120,9 +121,19 @@ export async function bulkAction(org: string, event: string, form: FormData): Pr
   redirect({ href: `${base}?op=${operationId}&opk=${kind}`, locale });
 }
 
-export async function undoBulkAction(org: string, event: string, operationId: string): Promise<void> {
+export async function undoBulkAction(
+  org: string,
+  event: string,
+  kind: BulkKind,
+  operationId: string,
+): Promise<void> {
   const { data } = await loadEvent(org, event);
-  await executeCommand(attendeeLabelBulk.undo, { operationId }, data.ctx, ports);
+  await executeCommand(
+    kind === 'import' ? attendeeImportBulk.undo : attendeeLabelBulk.undo,
+    { operationId },
+    data.ctx,
+    ports,
+  );
   await runBulkInline(data.org.id, operationId);
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }

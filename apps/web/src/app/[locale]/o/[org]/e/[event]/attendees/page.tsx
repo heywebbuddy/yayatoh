@@ -2,6 +2,7 @@ import {
   ATTENDEE_SOURCES,
   ATTENDEE_STATUSES,
   type AttendeeDto,
+  attendeeImportBulk,
   attendeeLabelBulk,
   attendeeLabelsQuery,
   getAttendeeQuery,
@@ -85,6 +86,7 @@ export default async function AttendeesPage({
     page?: string;
     op?: string;
     opk?: string;
+    batch?: string;
     bulkError?: string;
   }>;
 }) {
@@ -122,10 +124,16 @@ export default async function AttendeesPage({
   const canExport = roleCan(data.role, 'attendees:export');
   const canBulk = hasReal && (canWrite || canExport);
   // The bulk operation the page was sent back to (progress, failures, undo, download).
-  const opKind: BulkKind | null = sp.opk === 'export' ? 'export' : sp.opk === 'label' ? 'label' : null;
+  const opKind: BulkKind | null =
+    sp.opk === 'export' || sp.opk === 'label' || sp.opk === 'import' ? sp.opk : null;
   let op: BulkOperationDto | null = null;
   if (opKind && sp.op && /^[0-9a-f-]{36}$/.test(sp.op)) {
-    const q = opKind === 'export' ? attendeeExportBulk.status : attendeeLabelBulk.status;
+    const q =
+      opKind === 'export'
+        ? attendeeExportBulk.status
+        : opKind === 'import'
+          ? attendeeImportBulk.status
+          : attendeeLabelBulk.status;
     op = await executeQuery(q, { operationId: sp.op }, data.ctx, ports).catch((err) => {
       if (isDomainError(err) && (err.code === 'not_found' || err.code === 'forbidden')) return null;
       throw err;
@@ -230,12 +238,15 @@ export default async function AttendeesPage({
             </h1>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" disabled title={t('common.comingSoon')}>
-              {t('actions.import')}
-            </Button>
-            <Button variant="secondary" disabled title={t('common.comingSoon')}>
-              {t('actions.export')}
-            </Button>
+            {!demo && canWrite && data.modules.has('attendees') ? (
+              <Link href={`${base}/import`} className={buttonClass('secondary')}>
+                {t('actions.import')}
+              </Link>
+            ) : (
+              <Button variant="secondary" disabled title={t('common.comingSoon')}>
+                {t('actions.import')}
+              </Button>
+            )}
             <Button disabled title={t('common.comingSoon')}>
               {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
             </Button>
@@ -360,13 +371,15 @@ export default async function AttendeesPage({
             <p className="text-body" role="status">
               {opKind === 'export' && op.status === 'done'
                 ? t('bulk.exportDone', { succeeded: formatNumber(op.succeeded, locale) })
-                : t(`bulk.status.${op.status}`, {
-                    processed: formatNumber(op.processed, locale),
-                    total: formatNumber(op.total, locale),
-                    succeeded: formatNumber(op.succeeded, locale),
-                    failed: formatNumber(op.failed, locale),
-                    undone: formatNumber(op.undone, locale),
-                  })}
+                : opKind === 'import' && op.status === 'done'
+                  ? t('bulk.importDone', { succeeded: formatNumber(op.succeeded, locale) })
+                  : t(`bulk.status.${op.status}`, {
+                      processed: formatNumber(op.processed, locale),
+                      total: formatNumber(op.total, locale),
+                      succeeded: formatNumber(op.succeeded, locale),
+                      failed: formatNumber(op.failed, locale),
+                      undone: formatNumber(op.undone, locale),
+                    })}
             </p>
             {failureCodes.length ? (
               <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
@@ -392,8 +405,8 @@ export default async function AttendeesPage({
                   {t('bulk.download')}
                 </a>
               ) : null}
-              {opKind === 'label' && op.undoUntil && canWrite ? (
-                <form action={undoBulkAction.bind(null, org, event, op.id)}>
+              {opKind !== 'export' && op.undoUntil && canWrite ? (
+                <form action={undoBulkAction.bind(null, org, event, opKind, op.id)}>
                   <Button type="submit" variant="secondary" size="sm">
                     {t('bulk.undo')}
                   </Button>

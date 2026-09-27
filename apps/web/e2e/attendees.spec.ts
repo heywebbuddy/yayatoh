@@ -169,3 +169,63 @@ test.describe('attendees: bulk actions and export', () => {
     expect(anon.status()).not.toBe(200);
   });
 });
+
+test.describe('attendees: import', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+
+  test('an organizer uploads a CSV, maps columns, sees problems, imports, and can undo', async ({ page }) => {
+    const stamp = Date.now();
+    await signIn(page);
+    await page.goto('/o/lakeside-events/events/new');
+    await page.getByLabel('Event name').fill(`Import ${stamp}`);
+    await page.getByLabel('Starts').fill('2027-11-01T18:00');
+    await page.getByLabel('Ends').fill('2027-11-01T22:00');
+    await page.getByRole('button', { name: 'Create draft' }).click();
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/import-\d+$/);
+    const base = new URL(page.url()).pathname;
+
+    await page.goto(`${base}/attendees`);
+    await page.getByRole('link', { name: 'Import' }).click();
+    await expect(page.getByRole('heading', { name: 'Import guests' })).toBeVisible();
+    const csv = [
+      'Guest name;Email address;Table',
+      `Nia ${stamp};nia.${stamp}@example.test;Table 4`,
+      `Omar ${stamp};omar.${stamp}@example.test;Table 4`,
+      `Broken ${stamp};not-an-email;`,
+    ].join('\n');
+    await page
+      .getByLabel('CSV file')
+      .setInputFiles({ name: 'guests.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+    await page.getByRole('button', { name: 'Upload' }).click();
+    await expect(page.getByRole('heading', { name: '2. Match the columns in guests.csv' })).toBeVisible();
+    await expect(page.getByText('3 rows')).toBeVisible();
+    // "Guest name" and "Table" aren't guessed: map them by hand.
+    await page.getByLabel('Name', { exact: true }).selectOption({ label: 'Guest name' });
+    await page.getByLabel('Email', { exact: true }).selectOption({ label: 'Email address' });
+    await page.getByLabel('Labels', { exact: true }).selectOption({ label: 'Table' });
+    await page.getByLabel('Label everyone as (optional)').fill('Imported');
+    await page.getByRole('button', { name: 'Check rows' }).click();
+    await expect(page.getByText("2 ready to import, 1 can't be imported.")).toBeVisible();
+    await expect(page.getByText('Email address looks wrong · 1')).toBeVisible();
+    await expectAccessible(page);
+
+    const report = await page
+      .getByRole('link', { name: "Download the rows that can't be imported" })
+      .getAttribute('href');
+    const res = await page.request.get(report ?? '');
+    expect(res.status()).toBe(200);
+    expect(await res.text()).toContain(`Broken ${stamp},not-an-email,,Email address looks wrong`);
+
+    await page.getByRole('button', { name: 'Import 2 guests' }).click();
+    await expect(page).toHaveURL(/\/attendees\?op=/);
+    const panel = page.getByRole('region', { name: 'Guest-list import' });
+    await expect(panel).toContainText('Imported 2 guests.');
+    const nia = page.getByRole('row').filter({ hasText: `Nia ${stamp}` });
+    await expect(nia).toContainText('Table 4');
+    await expect(nia).toContainText('Imported');
+
+    await panel.getByRole('button', { name: 'Undo' }).click();
+    await expect(panel).toContainText('Undone: 2 restored.');
+    await expect(page.getByRole('row').filter({ hasText: `Nia ${stamp}` })).toHaveCount(0);
+  });
+});

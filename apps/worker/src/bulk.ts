@@ -1,4 +1,4 @@
-import { attendeeLabelAction } from '@yayatoh/attendees';
+import { attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { bulkStepCommand, createCommandPorts, runBulkOperation } from '@yayatoh/platform';
@@ -7,7 +7,7 @@ import { orgAuthorizer } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
 /** Every bulk action the apps offer (the web app registers the same list). */
-export const BULK_ACTIONS = [attendeeLabelAction, attendeeExportAction] as const;
+export const BULK_ACTIONS = [attendeeLabelAction, attendeeImportAction, attendeeExportAction] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
 
