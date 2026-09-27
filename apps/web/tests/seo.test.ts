@@ -5,6 +5,7 @@ import { decimalPrice, EventJsonLdSchema, eventJsonLd, jsonLdScript } from '../s
 import { robotsTxt } from '../src/lib/seo/robots.ts';
 import { latest, localeSitemapXml, sitemapIndexXml } from '../src/lib/seo/sitemap.ts';
 import { hreflangAlternates, localizedPath, pageAlternates } from '../src/lib/seo/urls.ts';
+import { widgetSnippet } from '../src/lib/widget.ts';
 
 describe('hosts (M1.11a)', () => {
   it('strips ports and case; classifies marketplace, app, dev and tenant hosts', () => {
@@ -131,5 +132,15 @@ describe('JSON-LD Event (M1.11b)', () => {
     expect(decimalPrice(1500, 'JPY')).toBe('1500');
     expect(decimalPrice(5, 'USD')).toBe('0.05');
     expect(jsonLdScript({ name: '</script><b>' })).not.toContain('</script>');
+  });
+});
+
+describe('ticket widget snippet (M1.11c)', () => {
+  it('embeds the event with an escaped title and the resizing loader', () => {
+    const s = widgetSnippet('https://yayatoh.com', 'harbor-gala', 'Tickets: "Gala" <2027>');
+    expect(s).toContain('<iframe src="https://yayatoh.com/embed/harbor-gala"');
+    expect(s).toContain('title="Tickets: &quot;Gala&quot; &lt;2027>"');
+    expect(s).toContain('data-yayatoh-widget');
+    expect(s).toContain('<script src="https://yayatoh.com/widget.js" async></script>');
   });
 });

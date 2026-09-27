@@ -126,10 +126,10 @@ describe('embed origins (M1.11c)', () => {
       expect(normalizeOrigin(bad)).toBeNull();
   });
 
-  it('frame-ancestors lists the origins, or none', () => {
-    expect(frameAncestors([])).toBe("frame-ancestors 'none'");
+  it('frame-ancestors lists the platform itself and the allowed origins only', () => {
+    expect(frameAncestors([])).toBe("frame-ancestors 'self'");
     expect(frameAncestors(['https://a.com', 'https://b.com'])).toBe(
-      'frame-ancestors https://a.com https://b.com',
+      "frame-ancestors 'self' https://a.com https://b.com",
     );
   });
 });
