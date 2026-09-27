@@ -7,6 +7,8 @@ import {
   FloorplanDoc,
   layoutProblems,
   placedSeats,
+  quickLayout,
+  rowLabel,
   seatCount,
 } from '../src/index.ts';
 
@@ -57,5 +59,15 @@ describe('floor plan documents', () => {
 
   it('canonical JSON ignores key order', () => {
     expect(canonicalJson({ b: 1, a: [{ d: 2, c: 3 }] })).toBe(canonicalJson({ a: [{ c: 3, d: 2 }], b: 1 }));
+  });
+
+  it('quick layouts are valid rooms with a stage, rows and tables', () => {
+    expect([rowLabel(0), rowLabel(25), rowLabel(26), rowLabel(27)]).toEqual(['A', 'Z', 'AA', 'AB']);
+    const doc = FloorplanDoc.parse(
+      quickLayout({ rows: 30, seatsPerRow: 40, tables: 20, seatsPerTable: 10, stage: true }),
+    );
+    expect(layoutProblems(doc)).toEqual([]);
+    expect(seatCount(doc)).toBe(30 * 40 + 20 * 10);
+    expect(doc.items[0]).toMatchObject({ kind: 'object', objectType: 'stage' });
   });
 });

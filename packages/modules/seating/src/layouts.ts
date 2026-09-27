@@ -100,8 +100,9 @@ async function eventLayoutTx(tx: TenantTx, eventId: string, lock = false) {
 }
 
 /**
- * Give an event its floor plan (a copy of a saved one, or a document), replacing its seats. Not
- * once the layout is locked (the first sale) or while any seat is held or sold.
+ * Give an event its floor plan (a copy of a saved one, or a document), replacing its seats. Seats
+ * that keep their id keep their price and blocks, and a plan on sale stays on sale. Not once the
+ * layout is locked (the first sale) or while any seat is held or sold.
  */
 export const setEventLayoutCommand = tenantCommand({
   name: 'seating.setEventLayout',
@@ -134,6 +135,20 @@ export const setEventLayoutCommand = tenantCommand({
       raw = l.doc;
     }
     const { doc, checksum } = validDoc(raw);
+    // Editing keeps what was set on seats that still exist: their price category and blocks.
+    const kept = new Map(
+      (
+        await tx
+          .select({
+            seatUuid: eventSeats.seatUuid,
+            ticketTypeId: eventSeats.ticketTypeId,
+            status: eventSeats.status,
+            blockReason: eventSeats.blockReason,
+          })
+          .from(eventSeats)
+          .where(eq(eventSeats.eventId, input.eventId))
+      ).map((s) => [s.seatUuid, s]),
+    );
     await tx.delete(eventSeats).where(eq(eventSeats.eventId, input.eventId));
     const seats = placedSeats(doc);
     for (let i = 0; i < seats.length; i += 1000)
@@ -146,19 +161,23 @@ export const setEventLayoutCommand = tenantCommand({
           itemId: s.itemId,
           sectionId: s.sectionId,
           accessible: s.accessible,
+          ticketTypeId: kept.get(s.seatId)?.ticketTypeId ?? null,
+          status: kept.get(s.seatId)?.status === 'blocked' ? ('blocked' as const) : ('available' as const),
+          blockReason: kept.get(s.seatId)?.status === 'blocked' ? kept.get(s.seatId)?.blockReason : null,
         })),
       );
     const values = {
       doc,
       checksum,
       seatCount: seats.length,
-      sourceLayoutId: input.layoutId ?? null,
-      status: 'draft' as const,
+      sourceLayoutId: input.layoutId ?? current?.sourceLayoutId ?? null,
+      // Editing a plan that is on sale keeps it on sale.
+      status: current?.status === 'published' ? ('published' as const) : ('draft' as const),
       updatedAt: ctx.now,
     };
     if (current) await tx.update(eventLayouts).set(values).where(eq(eventLayouts.id, current.id));
     else await tx.insert(eventLayouts).values({ orgId, eventId: input.eventId, ...values });
-    return { eventId: input.eventId, seatCount: seats.length, status: 'draft' as const };
+    return { eventId: input.eventId, seatCount: seats.length, status: values.status };
   },
   audit: (input, r) => ({
     action: 'seating.event_layout_set',

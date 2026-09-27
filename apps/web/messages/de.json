@@ -1186,5 +1186,99 @@
     "chooseTickets": "Wähle mindestens ein Ticket aus.",
     "soldOut": "Dafür sind nicht mehr genug Tickets übrig.",
     "collected": "Von dir eingenommen"
+  },
+  "seating": {
+    "title": "Sitzplätze",
+    "description": "Zeichne den Saal, lege Preise für die Plätze fest und bring sie in den Verkauf. Alles auf dem Plan kannst du auch in der Liste darunter erledigen.",
+    "none": "Dieses Event hat noch keinen Sitzplan.",
+    "quick": {
+      "title": "Sitzplan anlegen",
+      "rows": "Reihen",
+      "seatsPerRow": "Plätze pro Reihe",
+      "tables": "Runde Tische",
+      "seatsPerTable": "Plätze pro Tisch",
+      "stage": "Vorne eine Bühne hinzufügen",
+      "submit": "Plan erstellen",
+      "done": "Sitzplan erstellt."
+    },
+    "saved": {
+      "title": "Oder einen gespeicherten Plan verwenden",
+      "layout": "Gespeicherter Plan",
+      "option": "{name} · {seats} Plätze",
+      "submit": "Diesen Plan verwenden"
+    },
+    "status": {
+      "draft": "Entwurf – nicht im Verkauf",
+      "published": "Im Verkauf",
+      "locked": "Gesperrt – es wurden bereits Plätze verkauft"
+    },
+    "counts": "{total} Plätze · {available} verfügbar · {held} reserviert · {sold} verkauft · {blocked} blockiert",
+    "priced": "{priced} von {total} Plätzen haben einen Preis",
+    "publish": "Plätze in den Verkauf bringen",
+    "lockedNote": "Es wurden bereits Plätze verkauft, daher lässt sich der Plan nicht mehr ändern. Die Preise nicht verkaufter Plätze kannst du weiterhin ändern.",
+    "editor": {
+      "title": "Plan",
+      "toolbar": "Planwerkzeuge",
+      "seats": "Plätze",
+      "addRow": "Reihe hinzufügen",
+      "addTable": "Tisch hinzufügen",
+      "objectType": "Objekt",
+      "addObject": "Objekt hinzufügen",
+      "rotate": "Um 15° drehen",
+      "delete": "Löschen",
+      "undo": "Rückgängig",
+      "redo": "Wiederholen",
+      "locked": "Schreibgeschützt",
+      "save": {
+        "saved": "Alle Änderungen gespeichert",
+        "dirty": "Nicht gespeicherte Änderungen…",
+        "saving": "Wird gespeichert…",
+        "error": "Speichern fehlgeschlagen"
+      },
+      "saveError": "Speichern fehlgeschlagen: {problem}",
+      "canvas": "Sitzplan",
+      "keys": "Wähle Reihen, Tische oder Objekte auf dem Plan aus (Shift erweitert die Auswahl) oder über die Kästchen unten. Wenn der Plan fokussiert ist: Pfeiltasten verschieben um 10 cm (Shift: 1 m), R dreht, Entf entfernt, Ctrl+Z macht rückgängig.",
+      "listCaption": "Alles auf dem Plan",
+      "select": "Auswählen",
+      "selectItem": "{item} auswählen",
+      "item": "Element",
+      "label": "Bezeichnung",
+      "labelOf": "Bezeichnung von {item}",
+      "seatsCol": "Plätze",
+      "rotation": "Drehung (°)",
+      "selectedCount": "{count, plural, one {# Element ausgewählt} other {# Elemente ausgewählt}}",
+      "kind": {
+        "row": "Reihe",
+        "table": "Tisch"
+      },
+      "object": {
+        "stage": "Bühne",
+        "booth": "Stand",
+        "entrance": "Eingang",
+        "exit": "Ausgang",
+        "dance_floor": "Tanzfläche",
+        "bar": "Bar",
+        "custom": "Sonstiges"
+      }
+    },
+    "prices": {
+      "title": "Preise",
+      "description": "Wähle Reihen oder Tische und die Ticketart, als die ihre Plätze verkauft werden.",
+      "which": "Reihen und Tische",
+      "item": {
+        "row": "Reihe {label}",
+        "table": "Tisch {label}"
+      },
+      "ticketType": "Verkauft als",
+      "offSale": "Nicht im Verkauf",
+      "submit": "Preis festlegen",
+      "done": "Preise aktualisiert."
+    },
+    "template": {
+      "title": "Als wiederverwendbaren Plan speichern",
+      "name": "Name",
+      "submit": "Plan speichern",
+      "done": "Gespeichert. Du kannst ihn für andere Events verwenden."
+    }
   }
 }

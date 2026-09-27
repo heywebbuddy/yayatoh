@@ -1186,5 +1186,99 @@
     "chooseTickets": "請至少選擇一張票券。",
     "soldOut": "剩餘票券不足。",
     "collected": "由你收款"
+  },
+  "seating": {
+    "title": "座位",
+    "description": "繪製場地、為座位定價並開賣。座位圖上的所有操作，也都能在下方清單中完成。",
+    "none": "此活動尚無座位圖。",
+    "quick": {
+      "title": "建立座位圖",
+      "rows": "排數",
+      "seatsPerRow": "每排座位數",
+      "tables": "圓桌數",
+      "seatsPerTable": "每桌座位數",
+      "stage": "在前方新增舞台",
+      "submit": "建立座位圖",
+      "done": "已建立座位圖。"
+    },
+    "saved": {
+      "title": "或使用已儲存的座位圖",
+      "layout": "已儲存的座位圖",
+      "option": "{name} · {seats} 個座位",
+      "submit": "使用此座位圖"
+    },
+    "status": {
+      "draft": "草稿（尚未開賣）",
+      "published": "販售中",
+      "locked": "已鎖定（已有座位售出）"
+    },
+    "counts": "共 {total} 個座位 · {available} 個可售 · {held} 個保留中 · {sold} 個已售 · {blocked} 個已封鎖",
+    "priced": "{total} 個座位中有 {priced} 個已定價",
+    "publish": "開賣座位",
+    "lockedNote": "已有座位售出，座位圖無法再變更。未售出座位的價格仍可修改。",
+    "editor": {
+      "title": "座位圖",
+      "toolbar": "座位圖工具",
+      "seats": "座位",
+      "addRow": "新增排",
+      "addTable": "新增桌",
+      "objectType": "物件",
+      "addObject": "新增物件",
+      "rotate": "旋轉 15°",
+      "delete": "刪除",
+      "undo": "復原",
+      "redo": "重做",
+      "locked": "唯讀",
+      "save": {
+        "saved": "所有變更皆已儲存",
+        "dirty": "有未儲存的變更…",
+        "saving": "儲存中…",
+        "error": "無法儲存"
+      },
+      "saveError": "無法儲存：{problem}",
+      "canvas": "座位圖",
+      "keys": "在座位圖上選取排、桌或物件（按住 Shift 可加入選取），或使用下方的核取方塊。座位圖取得焦點時：方向鍵移動 10 cm（Shift：1 m），R 旋轉，Delete 刪除，Ctrl+Z 復原。",
+      "listCaption": "座位圖上的所有項目",
+      "select": "選取",
+      "selectItem": "選取{item}",
+      "item": "項目",
+      "label": "標籤",
+      "labelOf": "{item}的標籤",
+      "seatsCol": "座位數",
+      "rotation": "旋轉（°）",
+      "selectedCount": "{count, plural, other {已選取 # 項}}",
+      "kind": {
+        "row": "排",
+        "table": "桌"
+      },
+      "object": {
+        "stage": "舞台",
+        "booth": "攤位",
+        "entrance": "入口",
+        "exit": "出口",
+        "dance_floor": "舞池",
+        "bar": "吧檯",
+        "custom": "其他"
+      }
+    },
+    "prices": {
+      "title": "價格",
+      "description": "選擇排或桌，並指定其座位以哪個票種販售。",
+      "which": "排與桌",
+      "item": {
+        "row": "第 {label} 排",
+        "table": "{label} 號桌"
+      },
+      "ticketType": "販售票種",
+      "offSale": "不販售",
+      "submit": "設定價格",
+      "done": "已更新價格。"
+    },
+    "template": {
+      "title": "儲存為可重複使用的座位圖",
+      "name": "名稱",
+      "submit": "儲存座位圖",
+      "done": "已儲存。你可以將它用於其他活動。"
+    }
   }
 }

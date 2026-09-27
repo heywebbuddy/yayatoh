@@ -70,11 +70,39 @@ describe('seating (M1.7a)', () => {
     expect(s?.seats.find((x) => x.seatUuid === seat(0))?.label).toBe('Row A · 1');
   });
 
+  it('editing keeps prices and blocks of seats that still exist', async () => {
+    const tt = uuidv7();
+    await executeCommand(
+      assignSeatCategoryCommand,
+      { eventId, itemIds: [rowA.id], ticketTypeId: tt },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(
+      blockSeatsCommand,
+      { eventId, seatUuids: [seat(3)], reason: 'channel' },
+      a.ctx(),
+      ports,
+    );
+    const moved = { ...doc, items: [{ ...rowA, x: rowA.x + 10 }, table] };
+    await executeCommand(setEventLayoutCommand, { eventId, doc: moved }, a.ctx(), ports);
+    const s = await seating();
+    expect(s?.seats.filter((x) => x.ticketTypeId === tt)).toHaveLength(10);
+    expect(s?.seats.find((x) => x.seatUuid === seat(3))?.status).toBe('blocked');
+    await executeCommand(blockSeatsCommand, { eventId, seatUuids: [seat(3)], reason: null }, a.ctx(), ports);
+  });
+
   it('draft seats are not on sale; published ones are', async () => {
     await expect(hold([seat(0)])).rejects.toMatchObject({ details: { reason: 'seats_not_on_sale' } });
     await executeCommand(publishEventLayoutCommand, { eventId }, a.ctx(), ports);
     const held = await hold([seat(0), seat(1)]);
     expect(held.map((h) => h.label).sort()).toEqual(['Row A · 1', 'Row A · 2']);
+    // With seats held the plan cannot be replaced (and a plan on sale would stay on sale).
+    await expect(
+      executeCommand(setEventLayoutCommand, { eventId, doc }, a.ctx(), ports),
+    ).rejects.toMatchObject({
+      details: { reason: 'seats_in_use' },
+    });
   });
 
   it('a seat race produces exactly one winner (ADR 0012 acceptance)', async () => {

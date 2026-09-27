@@ -1186,5 +1186,99 @@
     "chooseTickets": "Choisissez au moins un billet.",
     "soldOut": "Il ne reste pas assez de billets pour cela.",
     "collected": "Encaissé par vous"
+  },
+  "seating": {
+    "title": "Placement",
+    "description": "Dessinez la salle, fixez le prix des places et mettez-les en vente. Tout ce qui se fait sur le plan peut aussi se faire dans la liste en dessous.",
+    "none": "Cet événement n’a pas encore de plan de salle.",
+    "quick": {
+      "title": "Créer un plan de salle",
+      "rows": "Rangées",
+      "seatsPerRow": "Places par rangée",
+      "tables": "Tables rondes",
+      "seatsPerTable": "Places par table",
+      "stage": "Ajouter une scène à l’avant",
+      "submit": "Créer le plan",
+      "done": "Plan de salle créé."
+    },
+    "saved": {
+      "title": "Ou utilisez un plan enregistré",
+      "layout": "Plan enregistré",
+      "option": "{name} · {seats} places",
+      "submit": "Utiliser ce plan"
+    },
+    "status": {
+      "draft": "Brouillon : pas en vente",
+      "published": "En vente",
+      "locked": "Verrouillé : des places ont été vendues"
+    },
+    "counts": "{total} places · {available} disponibles · {held} retenues · {sold} vendues · {blocked} bloquées",
+    "priced": "{priced} places sur {total} ont un prix",
+    "publish": "Mettre les places en vente",
+    "lockedNote": "Des places ont été vendues, le plan ne peut donc plus être modifié. Le prix des places invendues peut encore l’être.",
+    "editor": {
+      "title": "Plan",
+      "toolbar": "Outils du plan",
+      "seats": "Places",
+      "addRow": "Ajouter une rangée",
+      "addTable": "Ajouter une table",
+      "objectType": "Objet",
+      "addObject": "Ajouter un objet",
+      "rotate": "Pivoter de 15°",
+      "delete": "Supprimer",
+      "undo": "Annuler",
+      "redo": "Rétablir",
+      "locked": "Lecture seule",
+      "save": {
+        "saved": "Toutes les modifications sont enregistrées",
+        "dirty": "Modifications non enregistrées…",
+        "saving": "Enregistrement…",
+        "error": "Échec de l’enregistrement"
+      },
+      "saveError": "Échec de l’enregistrement : {problem}",
+      "canvas": "Plan de salle",
+      "keys": "Sélectionnez des rangées, des tables ou des objets sur le plan (Shift pour les ajouter à la sélection) ou avec les cases ci-dessous. Lorsque le plan a le focus : les flèches déplacent de 10 cm (Shift : 1 m), R fait pivoter, Suppr supprime, Ctrl+Z annule.",
+      "listCaption": "Tout ce qui figure sur le plan",
+      "select": "Sélectionner",
+      "selectItem": "Sélectionner {item}",
+      "item": "Élément",
+      "label": "Libellé",
+      "labelOf": "Libellé de {item}",
+      "seatsCol": "Places",
+      "rotation": "Rotation (°)",
+      "selectedCount": "{count, plural, one {# élément sélectionné} other {# éléments sélectionnés}}",
+      "kind": {
+        "row": "Rangée",
+        "table": "Table"
+      },
+      "object": {
+        "stage": "Scène",
+        "booth": "Stand",
+        "entrance": "Entrée",
+        "exit": "Sortie",
+        "dance_floor": "Piste de danse",
+        "bar": "Bar",
+        "custom": "Autre"
+      }
+    },
+    "prices": {
+      "title": "Prix",
+      "description": "Choisissez des rangées ou des tables et le type de billet sous lequel leurs places sont vendues.",
+      "which": "Rangées et tables",
+      "item": {
+        "row": "Rangée {label}",
+        "table": "Table {label}"
+      },
+      "ticketType": "Vendu comme",
+      "offSale": "Pas en vente",
+      "submit": "Définir le prix",
+      "done": "Prix mis à jour."
+    },
+    "template": {
+      "title": "Enregistrer comme plan réutilisable",
+      "name": "Nom",
+      "submit": "Enregistrer le plan",
+      "done": "Enregistré. Vous pouvez l’utiliser pour d’autres événements."
+    }
   }
 }

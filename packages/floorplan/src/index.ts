@@ -1,4 +1,4 @@
-export { buildRoundTable, buildRow, SEAT_PITCH_CM } from './builders.ts';
+export { buildRoundTable, buildRow, quickLayout, rowLabel, SEAT_PITCH_CM } from './builders.ts';
 export {
   FloorObject,
   FloorplanDoc,

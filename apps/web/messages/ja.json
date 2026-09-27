@@ -1186,5 +1186,99 @@
     "chooseTickets": "チケットを 1 枚以上選択してください。",
     "soldOut": "チケットの残りが足りません。",
     "collected": "ご自身で受領"
+  },
+  "seating": {
+    "title": "座席",
+    "description": "会場を描き、座席に価格を設定して販売を開始します。座席表での操作はすべて、下の一覧からも行えます。",
+    "none": "このイベントにはまだ座席表がありません。",
+    "quick": {
+      "title": "座席表を作成",
+      "rows": "列数",
+      "seatsPerRow": "1列あたりの席数",
+      "tables": "丸テーブル数",
+      "seatsPerTable": "1テーブルあたりの席数",
+      "stage": "前方にステージを追加",
+      "submit": "座席表を作成",
+      "done": "座席表を作成しました。"
+    },
+    "saved": {
+      "title": "または保存済みの座席表を使用",
+      "layout": "保存済みの座席表",
+      "option": "{name} · {seats}席",
+      "submit": "この座席表を使用"
+    },
+    "status": {
+      "draft": "下書き（未販売）",
+      "published": "販売中",
+      "locked": "ロック中（販売済みの座席があります）"
+    },
+    "counts": "全{total}席 · 空席{available} · 確保中{held} · 販売済み{sold} · ブロック{blocked}",
+    "priced": "{total}席中{priced}席に価格が設定されています",
+    "publish": "座席の販売を開始",
+    "lockedNote": "販売済みの座席があるため、座席表は変更できなくなりました。未販売の座席の価格は引き続き変更できます。",
+    "editor": {
+      "title": "座席表",
+      "toolbar": "座席表ツール",
+      "seats": "座席",
+      "addRow": "列を追加",
+      "addTable": "テーブルを追加",
+      "objectType": "オブジェクト",
+      "addObject": "オブジェクトを追加",
+      "rotate": "15°回転",
+      "delete": "削除",
+      "undo": "元に戻す",
+      "redo": "やり直す",
+      "locked": "閲覧のみ",
+      "save": {
+        "saved": "すべての変更を保存しました",
+        "dirty": "未保存の変更があります…",
+        "saving": "保存中…",
+        "error": "保存できませんでした"
+      },
+      "saveError": "保存できませんでした: {problem}",
+      "canvas": "座席表",
+      "keys": "座席表上で列、テーブル、オブジェクトを選択するか（Shift で選択に追加）、下のチェックボックスで選択します。座席表にフォーカスがあるとき: 矢印キーで 10 cm 移動（Shift: 1 m）、R で回転、Delete で削除、Ctrl+Z で元に戻します。",
+      "listCaption": "座席表上のすべての項目",
+      "select": "選択",
+      "selectItem": "{item}を選択",
+      "item": "項目",
+      "label": "ラベル",
+      "labelOf": "{item}のラベル",
+      "seatsCol": "席数",
+      "rotation": "回転（°）",
+      "selectedCount": "{count, plural, other {#件を選択中}}",
+      "kind": {
+        "row": "列",
+        "table": "テーブル"
+      },
+      "object": {
+        "stage": "ステージ",
+        "booth": "ブース",
+        "entrance": "入口",
+        "exit": "出口",
+        "dance_floor": "ダンスフロア",
+        "bar": "バー",
+        "custom": "その他"
+      }
+    },
+    "prices": {
+      "title": "価格",
+      "description": "列またはテーブルを選び、その座席を販売するチケット種別を指定します。",
+      "which": "列とテーブル",
+      "item": {
+        "row": "{label}列",
+        "table": "テーブル{label}"
+      },
+      "ticketType": "販売するチケット種別",
+      "offSale": "販売しない",
+      "submit": "価格を設定",
+      "done": "価格を更新しました。"
+    },
+    "template": {
+      "title": "再利用できる座席表として保存",
+      "name": "名前",
+      "submit": "座席表を保存",
+      "done": "保存しました。ほかのイベントでも使用できます。"
+    }
   }
 }

@@ -1186,5 +1186,99 @@
     "chooseTickets": "Choose at least one ticket.",
     "soldOut": "Not enough tickets left for that.",
     "collected": "Collected by you"
+  },
+  "seating": {
+    "title": "Seating",
+    "description": "Draw the room, price its seats and put them on sale. Everything on the plan can also be done in the list below it.",
+    "none": "This event has no seating plan yet.",
+    "quick": {
+      "title": "Start a seating plan",
+      "rows": "Rows",
+      "seatsPerRow": "Seats per row",
+      "tables": "Round tables",
+      "seatsPerTable": "Seats per table",
+      "stage": "Add a stage at the front",
+      "submit": "Create plan",
+      "done": "Seating plan created."
+    },
+    "saved": {
+      "title": "Or use a saved plan",
+      "layout": "Saved plan",
+      "option": "{name} · {seats} seats",
+      "submit": "Use this plan"
+    },
+    "status": {
+      "draft": "Draft — not on sale",
+      "published": "On sale",
+      "locked": "Locked — seats have been sold"
+    },
+    "counts": "{total} seats · {available} available · {held} held · {sold} sold · {blocked} blocked",
+    "priced": "{priced} of {total} seats have a price",
+    "publish": "Put seats on sale",
+    "lockedNote": "Seats have been sold, so the plan can no longer change. Prices of unsold seats still can.",
+    "editor": {
+      "title": "Plan",
+      "toolbar": "Plan tools",
+      "seats": "Seats",
+      "addRow": "Add row",
+      "addTable": "Add table",
+      "objectType": "Object",
+      "addObject": "Add object",
+      "rotate": "Rotate 15°",
+      "delete": "Delete",
+      "undo": "Undo",
+      "redo": "Redo",
+      "locked": "Read only",
+      "save": {
+        "saved": "All changes saved",
+        "dirty": "Unsaved changes…",
+        "saving": "Saving…",
+        "error": "Could not save"
+      },
+      "saveError": "Could not save: {problem}",
+      "canvas": "Seating plan",
+      "keys": "Select rows, tables or objects on the plan (Shift adds to the selection) or with the boxes below. With the plan focused: arrow keys move by 10 cm (Shift: 1 m), R rotates, Delete removes, Ctrl+Z undoes.",
+      "listCaption": "Everything on the plan",
+      "select": "Select",
+      "selectItem": "Select {item}",
+      "item": "Item",
+      "label": "Label",
+      "labelOf": "Label of {item}",
+      "seatsCol": "Seats",
+      "rotation": "Rotation (°)",
+      "selectedCount": "{count, plural, one {# item selected} other {# items selected}}",
+      "kind": {
+        "row": "Row",
+        "table": "Table"
+      },
+      "object": {
+        "stage": "Stage",
+        "booth": "Booth",
+        "entrance": "Entrance",
+        "exit": "Exit",
+        "dance_floor": "Dance floor",
+        "bar": "Bar",
+        "custom": "Other"
+      }
+    },
+    "prices": {
+      "title": "Prices",
+      "description": "Choose rows or tables and the ticket type their seats sell as.",
+      "which": "Rows and tables",
+      "item": {
+        "row": "Row {label}",
+        "table": "Table {label}"
+      },
+      "ticketType": "Sells as",
+      "offSale": "Not on sale",
+      "submit": "Set price",
+      "done": "Prices updated."
+    },
+    "template": {
+      "title": "Save as a reusable plan",
+      "name": "Name",
+      "submit": "Save plan",
+      "done": "Saved. You can use it for other events."
+    }
   }
 }

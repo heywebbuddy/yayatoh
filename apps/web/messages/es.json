@@ -1186,5 +1186,99 @@
     "chooseTickets": "Elige al menos una entrada.",
     "soldOut": "No quedan suficientes entradas para eso.",
     "collected": "Cobrado por ti"
+  },
+  "seating": {
+    "title": "Asientos",
+    "description": "Dibuja la sala, pon precio a sus asientos y ponlos a la venta. Todo lo que se hace en el plano también se puede hacer en la lista de abajo.",
+    "none": "Este evento aún no tiene plano de asientos.",
+    "quick": {
+      "title": "Crea un plano de asientos",
+      "rows": "Filas",
+      "seatsPerRow": "Asientos por fila",
+      "tables": "Mesas redondas",
+      "seatsPerTable": "Asientos por mesa",
+      "stage": "Añadir un escenario al frente",
+      "submit": "Crear plano",
+      "done": "Plano de asientos creado."
+    },
+    "saved": {
+      "title": "O usa un plano guardado",
+      "layout": "Plano guardado",
+      "option": "{name} · {seats} asientos",
+      "submit": "Usar este plano"
+    },
+    "status": {
+      "draft": "Borrador: no está a la venta",
+      "published": "A la venta",
+      "locked": "Bloqueado: ya se han vendido asientos"
+    },
+    "counts": "{total} asientos · {available} disponibles · {held} retenidos · {sold} vendidos · {blocked} bloqueados",
+    "priced": "{priced} de {total} asientos tienen precio",
+    "publish": "Poner los asientos a la venta",
+    "lockedNote": "Ya se han vendido asientos, así que el plano ya no puede cambiar. Los precios de los asientos no vendidos sí.",
+    "editor": {
+      "title": "Plano",
+      "toolbar": "Herramientas del plano",
+      "seats": "Asientos",
+      "addRow": "Añadir fila",
+      "addTable": "Añadir mesa",
+      "objectType": "Objeto",
+      "addObject": "Añadir objeto",
+      "rotate": "Girar 15°",
+      "delete": "Eliminar",
+      "undo": "Deshacer",
+      "redo": "Rehacer",
+      "locked": "Solo lectura",
+      "save": {
+        "saved": "Todos los cambios guardados",
+        "dirty": "Cambios sin guardar…",
+        "saving": "Guardando…",
+        "error": "No se pudo guardar"
+      },
+      "saveError": "No se pudo guardar: {problem}",
+      "canvas": "Plano de asientos",
+      "keys": "Selecciona filas, mesas u objetos en el plano (Shift los añade a la selección) o con las casillas de abajo. Con el plano enfocado: las flechas mueven 10 cm (Shift: 1 m), R gira, Supr elimina y Ctrl+Z deshace.",
+      "listCaption": "Todo lo que hay en el plano",
+      "select": "Seleccionar",
+      "selectItem": "Seleccionar {item}",
+      "item": "Elemento",
+      "label": "Etiqueta",
+      "labelOf": "Etiqueta de {item}",
+      "seatsCol": "Asientos",
+      "rotation": "Rotación (°)",
+      "selectedCount": "{count, plural, one {# elemento seleccionado} other {# elementos seleccionados}}",
+      "kind": {
+        "row": "Fila",
+        "table": "Mesa"
+      },
+      "object": {
+        "stage": "Escenario",
+        "booth": "Stand",
+        "entrance": "Entrada",
+        "exit": "Salida",
+        "dance_floor": "Pista de baile",
+        "bar": "Barra",
+        "custom": "Otro"
+      }
+    },
+    "prices": {
+      "title": "Precios",
+      "description": "Elige filas o mesas y el tipo de entrada con el que se venden sus asientos.",
+      "which": "Filas y mesas",
+      "item": {
+        "row": "Fila {label}",
+        "table": "Mesa {label}"
+      },
+      "ticketType": "Se vende como",
+      "offSale": "No está a la venta",
+      "submit": "Fijar precio",
+      "done": "Precios actualizados."
+    },
+    "template": {
+      "title": "Guardar como plano reutilizable",
+      "name": "Nombre",
+      "submit": "Guardar plano",
+      "done": "Guardado. Puedes usarlo en otros eventos."
+    }
   }
 }

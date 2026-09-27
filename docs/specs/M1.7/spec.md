@@ -30,3 +30,21 @@ Roadmap: M1.7; ADR 0012 (layout document + `event_seats`, Postgres holds, lock a
 | AC3 | **A seat race produces one winner** (8 concurrent holds); holds are all-or-nothing | `packages/testing/tests/seating.int.test.ts` |
 | AC4 | Draft seats are not on sale; selling locks the layout; a locked layout can't be replaced; void frees the seat; holds release explicitly and by the sweeper | `seating.int.test.ts` |
 | AC5 | Categories and blocks by table/seat never touch sold or held seats; viewers read only; other orgs see nothing; fixture rows for isolation | `seating.int.test.ts`, `isolation.int.test.ts` |
+
+## M1.7b — organizer editor (done)
+
+- **Seating page** (`/o/[org]/e/[event]/seating`, where the event's profile shows Seating):
+  - **No plan yet:** "Start a seating plan" from numbers (a stage, rows × seats, round tables × seats) — `quickLayout` in `@yayatoh/floorplan` — or "Use a saved plan".
+  - **With a plan:** status (draft / on sale / locked), seat counts, how many seats have a price, "Put seats on sale".
+- **Editor** (Konva, client-only): the room at scale; rows, tables and objects are dragged and **snap to 10 cm**; click selects, **Shift-click multi-selects**; toolbar adds rows (n seats), round tables (n seats) and objects (stage, booth, entrance, exit, dance floor, bar, other), rotates the selection by 15°, deletes, **undoes and redoes** (100 steps). Changes **autosave** after 1.2 s ("All changes saved"; layout problems are reported). Seats are coloured by state (available, held, sold, blocked; accessible seats outlined).
+- **Accessible alternative** (roadmap: every canvas interaction has one): a list of everything on the plan with selection boxes and label / x / y / rotation fields; with the plan focused, arrow keys move the selection by 10 cm (Shift: 1 m), R rotates, Delete removes, Ctrl+Z / Ctrl+Shift+Z undo and redo. The plan region is a focusable `role="application"` with its keys described.
+- **Prices:** choose rows or tables and the ticket type their seats sell as (or "Not on sale"). **Save as a reusable plan** for other events.
+- **Editing is safe:** seats that keep their id keep their price and blocks, a plan on sale stays on sale, and nothing can change while seats are held or once any are sold (locked, read-only editor).
+- **Later in M1.7:** image underlay upload (needs file storage), section drawing and VIP sections in the editor, per-seat selection on the canvas, templates beyond the quick builder, performance check at 5,000 seats (iPad profile) with the picker in M1.7c.
+
+### Acceptance (M1.7b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Quick layouts are valid rooms (stage, rows, tables) | `packages/floorplan/tests/floorplan.test.ts` |
+| AC2 | Editing keeps prices and blocks; a plan with held seats can't be replaced | `packages/testing/tests/seating.int.test.ts` |
+| AC3 | In the browser: an organizer creates a plan from numbers, moves a row with the keyboard (arrow), sees it autosave, undoes it, prices a table and puts seats on sale; axe passes | `apps/web/e2e/seating.spec.ts` |

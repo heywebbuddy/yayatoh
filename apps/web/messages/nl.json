@@ -1186,5 +1186,99 @@
     "chooseTickets": "Kies minstens één ticket.",
     "soldOut": "Daarvoor zijn niet genoeg tickets meer over.",
     "collected": "Door jou ontvangen"
+  },
+  "seating": {
+    "title": "Zitplaatsen",
+    "description": "Teken de zaal, geef de plaatsen een prijs en zet ze in de verkoop. Alles op het zaalplan kun je ook in de lijst eronder doen.",
+    "none": "Dit evenement heeft nog geen zaalplan.",
+    "quick": {
+      "title": "Een zaalplan maken",
+      "rows": "Rijen",
+      "seatsPerRow": "Plaatsen per rij",
+      "tables": "Ronde tafels",
+      "seatsPerTable": "Plaatsen per tafel",
+      "stage": "Vooraan een podium toevoegen",
+      "submit": "Zaalplan maken",
+      "done": "Zaalplan gemaakt."
+    },
+    "saved": {
+      "title": "Of gebruik een opgeslagen zaalplan",
+      "layout": "Opgeslagen zaalplan",
+      "option": "{name} · {seats} plaatsen",
+      "submit": "Dit zaalplan gebruiken"
+    },
+    "status": {
+      "draft": "Concept: niet in de verkoop",
+      "published": "In de verkoop",
+      "locked": "Vergrendeld: er zijn al plaatsen verkocht"
+    },
+    "counts": "{total} plaatsen · {available} beschikbaar · {held} vastgehouden · {sold} verkocht · {blocked} geblokkeerd",
+    "priced": "{priced} van {total} plaatsen hebben een prijs",
+    "publish": "Plaatsen in de verkoop zetten",
+    "lockedNote": "Er zijn al plaatsen verkocht, dus het zaalplan kan niet meer veranderen. De prijzen van onverkochte plaatsen wel.",
+    "editor": {
+      "title": "Zaalplan",
+      "toolbar": "Zaalplanhulpmiddelen",
+      "seats": "Plaatsen",
+      "addRow": "Rij toevoegen",
+      "addTable": "Tafel toevoegen",
+      "objectType": "Object",
+      "addObject": "Object toevoegen",
+      "rotate": "15° draaien",
+      "delete": "Verwijderen",
+      "undo": "Ongedaan maken",
+      "redo": "Opnieuw",
+      "locked": "Alleen-lezen",
+      "save": {
+        "saved": "Alle wijzigingen opgeslagen",
+        "dirty": "Niet-opgeslagen wijzigingen…",
+        "saving": "Opslaan…",
+        "error": "Opslaan mislukt"
+      },
+      "saveError": "Opslaan mislukt: {problem}",
+      "canvas": "Zaalplan",
+      "keys": "Selecteer rijen, tafels of objecten op het zaalplan (Shift voegt toe aan de selectie) of met de vakjes hieronder. Als het zaalplan focus heeft: pijltoetsen verplaatsen 10 cm (Shift: 1 m), R draait, Delete verwijdert, Ctrl+Z maakt ongedaan.",
+      "listCaption": "Alles op het zaalplan",
+      "select": "Selecteren",
+      "selectItem": "{item} selecteren",
+      "item": "Item",
+      "label": "Label",
+      "labelOf": "Label van {item}",
+      "seatsCol": "Plaatsen",
+      "rotation": "Rotatie (°)",
+      "selectedCount": "{count, plural, one {# item geselecteerd} other {# items geselecteerd}}",
+      "kind": {
+        "row": "Rij",
+        "table": "Tafel"
+      },
+      "object": {
+        "stage": "Podium",
+        "booth": "Stand",
+        "entrance": "Ingang",
+        "exit": "Uitgang",
+        "dance_floor": "Dansvloer",
+        "bar": "Bar",
+        "custom": "Overig"
+      }
+    },
+    "prices": {
+      "title": "Prijzen",
+      "description": "Kies rijen of tafels en het tickettype waarmee hun plaatsen worden verkocht.",
+      "which": "Rijen en tafels",
+      "item": {
+        "row": "Rij {label}",
+        "table": "Tafel {label}"
+      },
+      "ticketType": "Verkocht als",
+      "offSale": "Niet in de verkoop",
+      "submit": "Prijs instellen",
+      "done": "Prijzen bijgewerkt."
+    },
+    "template": {
+      "title": "Opslaan als herbruikbaar zaalplan",
+      "name": "Naam",
+      "submit": "Zaalplan opslaan",
+      "done": "Opgeslagen. Je kunt het voor andere evenementen gebruiken."
+    }
   }
 }

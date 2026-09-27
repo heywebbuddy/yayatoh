@@ -1186,5 +1186,99 @@
     "chooseTickets": "Escolha pelo menos um ingresso.",
     "soldOut": "Não há ingressos suficientes para isso.",
     "collected": "Recebido por você"
+  },
+  "seating": {
+    "title": "Assentos",
+    "description": "Desenhe o espaço, defina o preço dos assentos e coloque-os à venda. Tudo o que é feito no mapa também pode ser feito na lista abaixo dele.",
+    "none": "Este evento ainda não tem mapa de assentos.",
+    "quick": {
+      "title": "Criar um mapa de assentos",
+      "rows": "Fileiras",
+      "seatsPerRow": "Assentos por fileira",
+      "tables": "Mesas redondas",
+      "seatsPerTable": "Assentos por mesa",
+      "stage": "Adicionar um palco na frente",
+      "submit": "Criar mapa",
+      "done": "Mapa de assentos criado."
+    },
+    "saved": {
+      "title": "Ou use um mapa salvo",
+      "layout": "Mapa salvo",
+      "option": "{name} · {seats} assentos",
+      "submit": "Usar este mapa"
+    },
+    "status": {
+      "draft": "Rascunho — não está à venda",
+      "published": "À venda",
+      "locked": "Bloqueado — já há assentos vendidos"
+    },
+    "counts": "{total} assentos · {available} disponíveis · {held} reservados · {sold} vendidos · {blocked} bloqueados",
+    "priced": "{priced} de {total} assentos têm preço",
+    "publish": "Colocar assentos à venda",
+    "lockedNote": "Já há assentos vendidos, então o mapa não pode mais ser alterado. Os preços dos assentos não vendidos ainda podem.",
+    "editor": {
+      "title": "Mapa",
+      "toolbar": "Ferramentas do mapa",
+      "seats": "Assentos",
+      "addRow": "Adicionar fileira",
+      "addTable": "Adicionar mesa",
+      "objectType": "Objeto",
+      "addObject": "Adicionar objeto",
+      "rotate": "Girar 15°",
+      "delete": "Excluir",
+      "undo": "Desfazer",
+      "redo": "Refazer",
+      "locked": "Somente leitura",
+      "save": {
+        "saved": "Todas as alterações salvas",
+        "dirty": "Alterações não salvas…",
+        "saving": "Salvando…",
+        "error": "Não foi possível salvar"
+      },
+      "saveError": "Não foi possível salvar: {problem}",
+      "canvas": "Mapa de assentos",
+      "keys": "Selecione fileiras, mesas ou objetos no mapa (Shift adiciona à seleção) ou pelas caixas abaixo. Com o mapa em foco: as setas movem 10 cm (Shift: 1 m), R gira, Delete remove, Ctrl+Z desfaz.",
+      "listCaption": "Tudo o que está no mapa",
+      "select": "Selecionar",
+      "selectItem": "Selecionar {item}",
+      "item": "Item",
+      "label": "Rótulo",
+      "labelOf": "Rótulo de {item}",
+      "seatsCol": "Assentos",
+      "rotation": "Rotação (°)",
+      "selectedCount": "{count, plural, one {# item selecionado} other {# itens selecionados}}",
+      "kind": {
+        "row": "Fileira",
+        "table": "Mesa"
+      },
+      "object": {
+        "stage": "Palco",
+        "booth": "Estande",
+        "entrance": "Entrada",
+        "exit": "Saída",
+        "dance_floor": "Pista de dança",
+        "bar": "Bar",
+        "custom": "Outro"
+      }
+    },
+    "prices": {
+      "title": "Preços",
+      "description": "Escolha fileiras ou mesas e o tipo de ingresso com que os assentos delas são vendidos.",
+      "which": "Fileiras e mesas",
+      "item": {
+        "row": "Fileira {label}",
+        "table": "Mesa {label}"
+      },
+      "ticketType": "Vendido como",
+      "offSale": "Não está à venda",
+      "submit": "Definir preço",
+      "done": "Preços atualizados."
+    },
+    "template": {
+      "title": "Salvar como mapa reutilizável",
+      "name": "Nome",
+      "submit": "Salvar mapa",
+      "done": "Salvo. Você pode usá-lo em outros eventos."
+    }
   }
 }

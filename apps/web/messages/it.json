@@ -1186,5 +1186,99 @@
     "chooseTickets": "Scegli almeno un biglietto.",
     "soldOut": "Non ci sono abbastanza biglietti rimasti.",
     "collected": "Incassato da te"
+  },
+  "seating": {
+    "title": "Posti a sedere",
+    "description": "Disegna la sala, assegna un prezzo ai posti e mettili in vendita. Tutto ciò che fai sulla piantina puoi farlo anche nell’elenco qui sotto.",
+    "none": "Questo evento non ha ancora una piantina dei posti.",
+    "quick": {
+      "title": "Crea una piantina dei posti",
+      "rows": "File",
+      "seatsPerRow": "Posti per fila",
+      "tables": "Tavoli rotondi",
+      "seatsPerTable": "Posti per tavolo",
+      "stage": "Aggiungi un palco davanti",
+      "submit": "Crea piantina",
+      "done": "Piantina dei posti creata."
+    },
+    "saved": {
+      "title": "Oppure usa una piantina salvata",
+      "layout": "Piantina salvata",
+      "option": "{name} · {seats} posti",
+      "submit": "Usa questa piantina"
+    },
+    "status": {
+      "draft": "Bozza: non in vendita",
+      "published": "In vendita",
+      "locked": "Bloccata: sono già stati venduti dei posti"
+    },
+    "counts": "{total} posti · {available} disponibili · {held} trattenuti · {sold} venduti · {blocked} bloccati",
+    "priced": "{priced} posti su {total} hanno un prezzo",
+    "publish": "Metti in vendita i posti",
+    "lockedNote": "Sono già stati venduti dei posti, quindi la piantina non può più cambiare. I prezzi dei posti invenduti invece sì.",
+    "editor": {
+      "title": "Piantina",
+      "toolbar": "Strumenti della piantina",
+      "seats": "Posti",
+      "addRow": "Aggiungi fila",
+      "addTable": "Aggiungi tavolo",
+      "objectType": "Oggetto",
+      "addObject": "Aggiungi oggetto",
+      "rotate": "Ruota di 15°",
+      "delete": "Elimina",
+      "undo": "Annulla",
+      "redo": "Ripeti",
+      "locked": "Sola lettura",
+      "save": {
+        "saved": "Tutte le modifiche salvate",
+        "dirty": "Modifiche non salvate…",
+        "saving": "Salvataggio…",
+        "error": "Impossibile salvare"
+      },
+      "saveError": "Impossibile salvare: {problem}",
+      "canvas": "Piantina dei posti",
+      "keys": "Seleziona file, tavoli o oggetti sulla piantina (Shift li aggiunge alla selezione) oppure con le caselle qui sotto. Con la piantina attiva: le frecce spostano di 10 cm (Shift: 1 m), R ruota, Canc elimina, Ctrl+Z annulla.",
+      "listCaption": "Tutto ciò che è sulla piantina",
+      "select": "Seleziona",
+      "selectItem": "Seleziona {item}",
+      "item": "Elemento",
+      "label": "Etichetta",
+      "labelOf": "Etichetta di {item}",
+      "seatsCol": "Posti",
+      "rotation": "Rotazione (°)",
+      "selectedCount": "{count, plural, one {# elemento selezionato} other {# elementi selezionati}}",
+      "kind": {
+        "row": "Fila",
+        "table": "Tavolo"
+      },
+      "object": {
+        "stage": "Palco",
+        "booth": "Stand",
+        "entrance": "Ingresso",
+        "exit": "Uscita",
+        "dance_floor": "Pista da ballo",
+        "bar": "Bar",
+        "custom": "Altro"
+      }
+    },
+    "prices": {
+      "title": "Prezzi",
+      "description": "Scegli file o tavoli e il tipo di biglietto con cui vengono venduti i loro posti.",
+      "which": "File e tavoli",
+      "item": {
+        "row": "Fila {label}",
+        "table": "Tavolo {label}"
+      },
+      "ticketType": "Venduti come",
+      "offSale": "Non in vendita",
+      "submit": "Imposta prezzo",
+      "done": "Prezzi aggiornati."
+    },
+    "template": {
+      "title": "Salva come piantina riutilizzabile",
+      "name": "Nome",
+      "submit": "Salva piantina",
+      "done": "Salvata. Puoi usarla per altri eventi."
+    }
   }
 }
