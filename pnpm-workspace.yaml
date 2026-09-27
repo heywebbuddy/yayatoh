@@ -28,11 +28,11 @@ catalog:
   zod: 4.6.5
 
 allowBuilds:
+  "@parcel/watcher": false
+  "@swc/core": false
   esbuild: true
   sharp: true
   "@biomejs/biome": true
-  '@parcel/watcher': set this to true or false
-  '@swc/core': set this to true or false
 
 minimumReleaseAgeExclude:
   - pg-boss@12.35.0

@@ -40,6 +40,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
+          package-manager-cache: false
       - name: Each canary must be rejected by check-modules
         run: |
           set +e
@@ -95,11 +96,11 @@ jobs:
           fetch-depth: 0
       - name: Base spec
         run: |
-          git show "origin/${{ github.base_ref }}:apps/api/openapi.json" > /tmp/base.json 2>/dev/null \
-            || echo '{"openapi":"3.1.0","info":{"title":"base","version":"0"},"paths":{}}' > /tmp/base.json
+          git show "origin/${{ github.base_ref }}:apps/api/openapi.json" > .oasdiff-base.json 2>/dev/null \
+            || echo '{"openapi":"3.1.0","info":{"title":"base","version":"0"},"paths":{}}' > .oasdiff-base.json
       - uses: oasdiff/oasdiff-action/breaking@v0.0.21
         with:
-          base: /tmp/base.json
+          base: .oasdiff-base.json
           revision: apps/api/openapi.json
           fail-on: ERR
 
