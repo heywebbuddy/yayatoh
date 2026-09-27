@@ -1298,5 +1298,147 @@
       "submit": "保存座位图",
       "done": "已保存。你可以将它用于其他活动。"
     }
+  },
+  "reports": {
+    "title": "分析",
+    "tabs": {
+      "label": "报告分区",
+      "overview": "概览",
+      "bookings": "预订",
+      "finance": "财务"
+    },
+    "asOf": "{time}更新",
+    "keyNumbers": "关键数据",
+    "moreNumbers": "更多数据",
+    "seeReport": "查看完整报告",
+    "emptyTitle": "暂无销售",
+    "emptyDescription": "首个订单后，销售、门票和签到数据将显示在这里。",
+    "noAccessTitle": "你的角色无法查看报告",
+    "noAccessDescription": "请向所有者或管理员申请可查看订单的角色。",
+    "financeNoAccessTitle": "财务仅对财务角色开放",
+    "financeNoAccessDescription": "净收入和平台费用仅对所有者、管理员和财务成员可见。",
+    "metric": {
+      "sales": {
+        "gross": "销售总额",
+        "refunds": "退款",
+        "discounts": "优惠码折扣"
+      },
+      "finance": {
+        "platformFees": "平台费用",
+        "disputesLost": "败诉的争议",
+        "net": "净收入"
+      },
+      "orders": {
+        "sold": "订单",
+        "comp": "赠票订单",
+        "failed": "付款失败",
+        "refunded": "已退款订单"
+      },
+      "tickets": {
+        "sold": "售出门票",
+        "comp": "赠票",
+        "refunded": "已退款门票",
+        "capacity": "容量",
+        "valid": "有效门票"
+      },
+      "checkins": {
+        "tickets": "已签到",
+        "rate": "签到率"
+      }
+    },
+    "note": {
+      "refunded": "已退款 {amount}",
+      "afterFees": "扣除退款和平台费用后",
+      "failed": "{count, plural, =0 {无付款失败} other {# 笔付款失败}}",
+      "compOrders": "{count, plural, =0 {无赠票订单} other {# 个赠票订单}}",
+      "compTickets": "{count, plural, =0 {无赠票} other {# 张赠票}}",
+      "ofCapacity": "共 {capacity} 个名额 · 赠票 {comps}",
+      "ofValid": "{valid} 张有效门票中的 {rate}"
+    },
+    "byDay": "按日销售",
+    "byDayChart": "按日销售总额（{currency}）",
+    "showData": "显示数据",
+    "day": "日期",
+    "orders": "订单",
+    "tickets": "门票",
+    "gross": "销售总额",
+    "byType": "按票种销售",
+    "ticketType": "票种",
+    "sold": "已售",
+    "comps": "赠票",
+    "capacity": "容量",
+    "byChannel": "按渠道销售",
+    "channel": "渠道",
+    "channels": {
+      "online": "在线结账",
+      "organizer": "由你收款"
+    },
+    "byStatus": "按状态统计订单",
+    "status": "状态",
+    "promo": "优惠码",
+    "code": "代码",
+    "uses": "使用次数",
+    "discount": "折扣金额",
+    "promoEmpty": "此活动没有优惠码。",
+    "inactive": "已暂停",
+    "finance": {
+      "title": "从总额到净额",
+      "description": "净收入 = 销售总额减去退款、败诉的争议和保留的平台费用，未扣除你自己 Stripe 账户上的刷卡手续费。票务窗口的款项已在你手中，其平台费用将从下次打款中扣除。",
+      "line": "项目",
+      "caption": "从销售总额到净收入"
+    },
+    "bookings": {
+      "search": "搜索预订",
+      "searchHint": "姓名、邮箱、订单号、优惠码或票码",
+      "show": "显示",
+      "submit": "搜索",
+      "filters": {
+        "all": "全部预订",
+        "paid": "已付款",
+        "comp": "赠票",
+        "failed": "付款失败",
+        "refunded": "已退款",
+        "pending": "待付款",
+        "expired": "已过期或已取消",
+        "box_office": "票务窗口"
+      },
+      "count": "{total, plural, =0 {暂无预订} other {# 个预订}}",
+      "showing": "显示 {total} 个中最新的 {shown} 个",
+      "caption": "预订",
+      "buyer": "购买人",
+      "tickets": "门票",
+      "total": "合计",
+      "status": "状态",
+      "date": "预订时间",
+      "comp": "赠票",
+      "boxOffice": "票务窗口",
+      "emptyTitle": "没有匹配的预订",
+      "emptyDescription": "请换个搜索条件，或显示全部预订。"
+    },
+    "org": {
+      "title": "销售",
+      "keyNumbers": "销售关键数据",
+      "period": "时间段",
+      "periods": {
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "90d": "最近 90 天",
+        "month": "本月",
+        "year": "今年",
+        "all": "全部时间",
+        "custom": "自定义日期"
+      },
+      "from": "开始",
+      "to": "结束",
+      "customHint": "用于自定义日期",
+      "apply": "应用",
+      "badRange": "结束日期早于开始日期。",
+      "badDate": "自定义时间段请选择两个日期。",
+      "range": "{from} – {to}",
+      "byEvent": "按活动销售",
+      "event": "活动",
+      "emptyTitle": "此时间段内没有销售",
+      "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。"
+    }
   }
 }

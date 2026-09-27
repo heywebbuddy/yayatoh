@@ -1298,5 +1298,147 @@
       "submit": "Salvar mapa",
       "done": "Salvo. Você pode usá-lo em outros eventos."
     }
+  },
+  "reports": {
+    "title": "Análise",
+    "tabs": {
+      "label": "Seções do relatório",
+      "overview": "Visão geral",
+      "bookings": "Reservas",
+      "finance": "Finanças"
+    },
+    "asOf": "Atualizado {time}",
+    "keyNumbers": "Números-chave",
+    "moreNumbers": "Mais números",
+    "seeReport": "Ver o relatório completo",
+    "emptyTitle": "Ainda sem vendas",
+    "emptyDescription": "Vendas, ingressos e entradas aparecem aqui após o primeiro pedido.",
+    "noAccessTitle": "Os relatórios não estão disponíveis para sua função",
+    "noAccessDescription": "Peça a um proprietário ou administrador uma função que possa ver pedidos.",
+    "financeNoAccessTitle": "As finanças são para funções financeiras",
+    "financeNoAccessDescription": "A receita líquida e as taxas da plataforma são visíveis para proprietários, administradores e membros financeiros.",
+    "metric": {
+      "sales": {
+        "gross": "Vendas brutas",
+        "refunds": "Reembolsos",
+        "discounts": "Descontos por código"
+      },
+      "finance": {
+        "platformFees": "Taxas da plataforma",
+        "disputesLost": "Disputas perdidas",
+        "net": "Receita líquida"
+      },
+      "orders": {
+        "sold": "Pedidos",
+        "comp": "Pedidos de cortesia",
+        "failed": "Pagamentos com falha",
+        "refunded": "Pedidos reembolsados"
+      },
+      "tickets": {
+        "sold": "Ingressos vendidos",
+        "comp": "Ingressos de cortesia",
+        "refunded": "Ingressos reembolsados",
+        "capacity": "Capacidade",
+        "valid": "Ingressos válidos"
+      },
+      "checkins": {
+        "tickets": "Entradas registradas",
+        "rate": "Taxa de entrada"
+      }
+    },
+    "note": {
+      "refunded": "{amount} reembolsados",
+      "afterFees": "Após reembolsos e taxas da plataforma",
+      "failed": "{count, plural, =0 {Nenhum pagamento com falha} one {# pagamento com falha} other {# pagamentos com falha}}",
+      "compOrders": "{count, plural, =0 {Sem pedidos de cortesia} one {# pedido de cortesia} other {# pedidos de cortesia}}",
+      "compTickets": "{count, plural, =0 {Sem ingressos de cortesia} one {# ingresso de cortesia} other {# ingressos de cortesia}}",
+      "ofCapacity": "de {capacity} lugares · {comps} de cortesia",
+      "ofValid": "{rate} de {valid} ingressos válidos"
+    },
+    "byDay": "Vendas por dia",
+    "byDayChart": "Vendas brutas por dia, {currency}",
+    "showData": "Mostrar os dados",
+    "day": "Dia",
+    "orders": "Pedidos",
+    "tickets": "Ingressos",
+    "gross": "Vendas brutas",
+    "byType": "Vendas por tipo de ingresso",
+    "ticketType": "Tipo de ingresso",
+    "sold": "Vendidos",
+    "comps": "Cortesia",
+    "capacity": "Capacidade",
+    "byChannel": "Vendas por canal",
+    "channel": "Canal",
+    "channels": {
+      "online": "Pagamento online",
+      "organizer": "Cobrado por você"
+    },
+    "byStatus": "Pedidos por estado",
+    "status": "Estado",
+    "promo": "Códigos promocionais",
+    "code": "Código",
+    "uses": "Utilizações",
+    "discount": "Desconto concedido",
+    "promoEmpty": "Sem códigos promocionais para este evento.",
+    "inactive": "Em pausa",
+    "finance": {
+      "title": "Do bruto ao líquido",
+      "description": "A receita líquida são as vendas brutas menos reembolsos, disputas perdidas e taxas da plataforma retidas, antes dos custos de cartão na sua própria conta Stripe. O dinheiro da bilheteria já está com você; a taxa correspondente é descontada no próximo repasse.",
+      "line": "Linha",
+      "caption": "Das vendas brutas à receita líquida"
+    },
+    "bookings": {
+      "search": "Pesquisar reservas",
+      "searchHint": "Nome, email, referência do pedido, código promocional ou código do ingresso",
+      "show": "Mostrar",
+      "submit": "Pesquisar",
+      "filters": {
+        "all": "Todas as reservas",
+        "paid": "Pagas",
+        "comp": "De cortesia",
+        "failed": "Pagamentos com falha",
+        "refunded": "Reembolsadas",
+        "pending": "Aguardando pagamento",
+        "expired": "Expiradas ou canceladas",
+        "box_office": "Bilheteria"
+      },
+      "count": "{total, plural, =0 {Sem reservas} one {# reserva} other {# reservas}}",
+      "showing": "mostrando as {shown} mais recentes de {total}",
+      "caption": "Reservas",
+      "buyer": "Comprador",
+      "tickets": "Ingressos",
+      "total": "Total",
+      "status": "Estado",
+      "date": "Reservada",
+      "comp": "Cortesia",
+      "boxOffice": "Bilheteria",
+      "emptyTitle": "Nenhuma reserva corresponde",
+      "emptyDescription": "Tente outra pesquisa ou mostre todas as reservas."
+    },
+    "org": {
+      "title": "Vendas",
+      "keyNumbers": "Números-chave de vendas",
+      "period": "Período",
+      "periods": {
+        "7d": "Últimos 7 dias",
+        "30d": "Últimos 30 dias",
+        "90d": "Últimos 90 dias",
+        "month": "Este mês",
+        "year": "Este ano",
+        "all": "Desde sempre",
+        "custom": "Datas personalizadas"
+      },
+      "from": "De",
+      "to": "Até",
+      "customHint": "Para datas personalizadas",
+      "apply": "Aplicar",
+      "badRange": "A data final é anterior à data inicial.",
+      "badDate": "Escolha ambas as datas para um período personalizado.",
+      "range": "{from} – {to}",
+      "byEvent": "Vendas por evento",
+      "event": "Evento",
+      "emptyTitle": "Sem vendas neste período",
+      "emptyDescription": "Escolha um período mais longo ou compartilhe a página de um evento para começar a vender."
+    }
   }
 }

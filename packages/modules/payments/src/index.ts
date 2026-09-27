@@ -62,3 +62,4 @@ export {
   SettlementDto,
   settlementsQuery,
 } from './settlements.ts';
+export { type DisputeScope, lostDisputeFactsTx } from './stats.ts';

@@ -220,3 +220,149 @@ export function ProgressRing({ value, label, size = 88 }: { value: number; label
     </div>
   );
 }
+
+export interface Bar {
+  readonly label: string;
+  readonly value: number;
+}
+
+/**
+ * Vertical bars (one series), tokens only. Decorative to assistive tech beyond its label: pair it
+ * with a `ChartTable` (the accessible alternative, also useful to sighted readers).
+ */
+export function BarChart({
+  title,
+  bars,
+  height = 200,
+  tone = 'accent',
+  formatValue = String,
+}: {
+  title: string;
+  bars: readonly Bar[];
+  height?: number;
+  tone?: SeriesTone;
+  formatValue?: (n: number) => string;
+}) {
+  const width = 640;
+  const pad = { top: 12, right: 12, bottom: 24, left: 56 };
+  const max = Math.max(1, ...bars.map((b) => b.value));
+  const inner = width - pad.left - pad.right;
+  const slot = inner / Math.max(1, bars.length);
+  const barW = Math.max(2, Math.min(40, slot * 0.7));
+  const y = (v: number) => pad.top + (1 - v / max) * (height - pad.top - pad.bottom);
+  const ticks = [0, 0.5, 1].map((f) => Math.round(max * f));
+  const every = Math.ceil(bars.length / 8);
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="h-auto w-full"
+      role="img"
+      aria-label={title}
+      direction="ltr"
+    >
+      {ticks.map((t) => (
+        <g key={t}>
+          <line
+            x1={pad.left}
+            x2={width - pad.right}
+            y1={y(t)}
+            y2={y(t)}
+            className="stroke-zinc-200"
+            strokeDasharray="3 4"
+          />
+          <text
+            x={pad.left - 8}
+            y={y(t) + 3}
+            textAnchor="end"
+            className="fill-zinc-500 font-mono text-[10px]"
+          >
+            {formatValue(t)}
+          </text>
+        </g>
+      ))}
+      {bars.map((b, i) => {
+        const cx = pad.left + slot * i + slot / 2;
+        return (
+          <g key={b.label}>
+            <rect
+              x={cx - barW / 2}
+              y={y(b.value)}
+              width={barW}
+              height={Math.max(0, height - pad.bottom - y(b.value))}
+              rx={2}
+              className={FILL[tone]}
+            />
+            {i % every === 0 ? (
+              <text x={cx} y={height - 6} textAnchor="middle" className="fill-zinc-500 font-mono text-[10px]">
+                {b.label}
+              </text>
+            ) : null}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+/**
+ * The data behind a chart as a real table, behind a disclosure (keyboard: Tab to the summary,
+ * Enter or Space to open). Every chart ships with one (accessible alternative, WCAG 1.1.1).
+ */
+export function ChartTable({
+  toggle,
+  caption,
+  headers,
+  rows,
+}: {
+  /** The disclosure's label, e.g. "Show the data". */
+  toggle: string;
+  caption: string;
+  headers: readonly string[];
+  rows: readonly (readonly string[])[];
+}) {
+  return (
+    <details className="group">
+      <summary className="inline-flex min-h-6 cursor-pointer items-center py-1 text-caption text-zinc-700 underline underline-offset-2">
+        {toggle}
+      </summary>
+      <div className="mt-2 overflow-x-auto">
+        <table className="w-full border-collapse text-body">
+          <caption className="sr-only">{caption}</caption>
+          <thead>
+            <tr className="border-b border-zinc-200">
+              {headers.map((h, i) => (
+                <th
+                  key={h}
+                  scope="col"
+                  className={cx(
+                    'px-3 py-2 font-mono text-label font-normal uppercase text-zinc-500',
+                    i === 0 ? 'text-start' : 'text-end',
+                  )}
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.join('|')} className="border-b border-zinc-100 last:border-0">
+                {r.map((c, i) =>
+                  i === 0 ? (
+                    <th key={headers[i]} scope="row" className="px-3 py-2 text-start font-normal">
+                      {c}
+                    </th>
+                  ) : (
+                    <td key={headers[i]} className="px-3 py-2 text-end font-mono tabular-nums">
+                      {c}
+                    </td>
+                  ),
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  );
+}

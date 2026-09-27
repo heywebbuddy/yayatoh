@@ -89,3 +89,15 @@ export async function organizationNameTx(tx: TenantTx, orgId: string): Promise<s
     .where(eq(organizations.id, orgId));
   return row?.name ?? null;
 }
+
+/** The org's reporting defaults (timezone for periods, currency for empty totals), inside its tenant transaction. */
+export async function organizationDefaultsTx(
+  tx: TenantTx,
+  orgId: string,
+): Promise<{ timezone: string; currency: string } | null> {
+  const [row] = await tx
+    .select({ timezone: organizations.timezone, currency: organizations.currency })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row ?? null;
+}

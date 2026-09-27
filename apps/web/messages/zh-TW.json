@@ -1298,5 +1298,147 @@
       "submit": "儲存座位圖",
       "done": "已儲存。你可以將它用於其他活動。"
     }
+  },
+  "reports": {
+    "title": "分析",
+    "tabs": {
+      "label": "報告分區",
+      "overview": "總覽",
+      "bookings": "預訂",
+      "finance": "財務"
+    },
+    "asOf": "{time}更新",
+    "keyNumbers": "關鍵數據",
+    "moreNumbers": "更多數據",
+    "seeReport": "查看完整報告",
+    "emptyTitle": "尚無銷售",
+    "emptyDescription": "第一筆訂單後，銷售、票券和報到資料會顯示在這裡。",
+    "noAccessTitle": "你的角色無法查看報告",
+    "noAccessDescription": "請向擁有者或管理員申請可查看訂單的角色。",
+    "financeNoAccessTitle": "財務僅限財務角色",
+    "financeNoAccessDescription": "淨收入與平台費用僅擁有者、管理員和財務成員可見。",
+    "metric": {
+      "sales": {
+        "gross": "銷售總額",
+        "refunds": "退款",
+        "discounts": "優惠碼折扣"
+      },
+      "finance": {
+        "platformFees": "平台費用",
+        "disputesLost": "敗訴的爭議",
+        "net": "淨收入"
+      },
+      "orders": {
+        "sold": "訂單",
+        "comp": "招待訂單",
+        "failed": "付款失敗",
+        "refunded": "已退款訂單"
+      },
+      "tickets": {
+        "sold": "售出票券",
+        "comp": "招待票",
+        "refunded": "已退款票券",
+        "capacity": "容量",
+        "valid": "有效票券"
+      },
+      "checkins": {
+        "tickets": "已報到",
+        "rate": "報到率"
+      }
+    },
+    "note": {
+      "refunded": "已退款 {amount}",
+      "afterFees": "扣除退款與平台費用後",
+      "failed": "{count, plural, =0 {沒有付款失敗} other {# 筆付款失敗}}",
+      "compOrders": "{count, plural, =0 {沒有招待訂單} other {# 筆招待訂單}}",
+      "compTickets": "{count, plural, =0 {沒有招待票} other {# 張招待票}}",
+      "ofCapacity": "共 {capacity} 個名額 · 招待 {comps}",
+      "ofValid": "{valid} 張有效票券中的 {rate}"
+    },
+    "byDay": "每日銷售",
+    "byDayChart": "每日銷售總額（{currency}）",
+    "showData": "顯示資料",
+    "day": "日期",
+    "orders": "訂單",
+    "tickets": "票券",
+    "gross": "銷售總額",
+    "byType": "依票種銷售",
+    "ticketType": "票種",
+    "sold": "已售",
+    "comps": "招待",
+    "capacity": "容量",
+    "byChannel": "依通路銷售",
+    "channel": "通路",
+    "channels": {
+      "online": "線上結帳",
+      "organizer": "由你收款"
+    },
+    "byStatus": "依狀態統計訂單",
+    "status": "狀態",
+    "promo": "優惠碼",
+    "code": "代碼",
+    "uses": "使用次數",
+    "discount": "折扣金額",
+    "promoEmpty": "此活動沒有優惠碼。",
+    "inactive": "已暫停",
+    "finance": {
+      "title": "從總額到淨額",
+      "description": "淨收入 = 銷售總額減去退款、敗訴的爭議和保留的平台費用，尚未扣除你自己 Stripe 帳戶上的刷卡手續費。售票處的款項已在你手上，其平台費用會從下次撥款中扣除。",
+      "line": "項目",
+      "caption": "從銷售總額到淨收入"
+    },
+    "bookings": {
+      "search": "搜尋預訂",
+      "searchHint": "姓名、電子郵件、訂單編號、優惠碼或票券代碼",
+      "show": "顯示",
+      "submit": "搜尋",
+      "filters": {
+        "all": "所有預訂",
+        "paid": "已付款",
+        "comp": "招待",
+        "failed": "付款失敗",
+        "refunded": "已退款",
+        "pending": "待付款",
+        "expired": "已過期或已取消",
+        "box_office": "售票處"
+      },
+      "count": "{total, plural, =0 {沒有預訂} other {# 筆預訂}}",
+      "showing": "顯示 {total} 筆中最新的 {shown} 筆",
+      "caption": "預訂",
+      "buyer": "購買人",
+      "tickets": "票券",
+      "total": "合計",
+      "status": "狀態",
+      "date": "預訂時間",
+      "comp": "招待",
+      "boxOffice": "售票處",
+      "emptyTitle": "沒有符合的預訂",
+      "emptyDescription": "請換個搜尋條件，或顯示所有預訂。"
+    },
+    "org": {
+      "title": "銷售",
+      "keyNumbers": "銷售關鍵數據",
+      "period": "期間",
+      "periods": {
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "90d": "最近 90 天",
+        "month": "本月",
+        "year": "今年",
+        "all": "全部時間",
+        "custom": "自訂日期"
+      },
+      "from": "開始",
+      "to": "結束",
+      "customHint": "用於自訂日期",
+      "apply": "套用",
+      "badRange": "結束日期早於開始日期。",
+      "badDate": "自訂期間請選擇兩個日期。",
+      "range": "{from} – {to}",
+      "byEvent": "依活動銷售",
+      "event": "活動",
+      "emptyTitle": "此期間沒有銷售",
+      "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
+    }
   }
 }

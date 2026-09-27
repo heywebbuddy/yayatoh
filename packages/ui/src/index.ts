@@ -7,6 +7,9 @@ export {
 } from './components/button.tsx';
 export { Card, CardLabel, type CardProps } from './components/card.tsx';
 export {
+  type Bar,
+  BarChart,
+  ChartTable,
   Donut,
   LineChart,
   ProgressRing,
