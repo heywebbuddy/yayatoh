@@ -1,4 +1,5 @@
 import { withoutTenant, withTenant } from '@yayatoh/db';
+import { checkoutTarget } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import { organizationPublicTx, resolveOrgSlug } from '@yayatoh/tenancy';
 import { asc, count, gt, sql } from 'drizzle-orm';
@@ -127,31 +128,40 @@ export async function publicSiteSettings(orgId: string): Promise<SiteSettingsDto
   return siteSettingsSerializer.serialize(await withTenant(ctx, (tx) => settingsTx(tx)));
 }
 
-/** The public face of an organizer by slug (`/o/{slug}`), or null for unknown or inactive orgs. */
-export async function publicOrganizer(slug: string): Promise<{
+export interface PublicOrganizer {
   readonly orgId: string;
   readonly slug: string;
   readonly name: string;
   readonly brandColor: string | null;
+  readonly poweredByVisible: boolean;
   readonly primaryHost: string | null;
+  /** The org runs a tenant site (switched on, or a custom domain is its primary host). */
   readonly tenantSite: boolean;
-} | null> {
-  const found = await resolveOrgSlug(slug);
-  if (!found) return null;
-  const ctx = createCtx({ orgId: found.orgId, actor: { type: 'system', name: 'marketplace.organizer' } });
+}
+
+/** The public face of an organizer by id (tenant sites), or null for unknown or inactive orgs. */
+export async function publicOrganizerById(orgId: string): Promise<PublicOrganizer | null> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'marketplace.organizer' } });
   return withTenant(ctx, async (tx) => {
-    const org = await organizationPublicTx(tx, found.orgId);
+    const org = await organizationPublicTx(tx, orgId);
     if (!org || (org.status !== 'active' && org.status !== 'limited')) return null;
     const settings = await settingsTx(tx);
     return {
-      orgId: found.orgId,
+      orgId,
       slug: org.slug,
       name: org.name,
       brandColor: org.brandColor,
+      poweredByVisible: org.poweredByVisible,
       primaryHost: org.primaryHost,
       tenantSite: settings.tenantSite || (org.primaryHost !== null && !org.primaryHostManaged),
     };
   });
+}
+
+/** The public face of an organizer by slug (`/o/{slug}`), or null for unknown or inactive orgs. */
+export async function publicOrganizer(slug: string): Promise<PublicOrganizer | null> {
+  const found = await resolveOrgSlug(slug);
+  return found ? publicOrganizerById(found.orgId) : null;
 }
 
 /**
@@ -173,4 +183,14 @@ export async function matchLegacyRedirect(
   if (!r) return null;
   const rule: RedirectRule = { source: r.source, match: r.match, target: r.target, status: Number(r.status) };
   return { location: redirectLocation(rule, pathWithQuery), status: rule.status };
+}
+
+/**
+ * The origins allowed to frame an event's ticket widget (M1.11c, CSP frame-ancestors), or null
+ * when the event has no public page.
+ */
+export async function widgetOrigins(eventSlug: string): Promise<string[] | null> {
+  const target = await checkoutTarget(eventSlug);
+  if (!target) return null;
+  return (await publicSiteSettings(target.orgId)).embedOrigins;
 }

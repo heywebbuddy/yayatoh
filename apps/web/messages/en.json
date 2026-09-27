@@ -56,7 +56,8 @@
     "team": "Team",
     "settings": "Settings",
     "payouts": "Payouts",
-    "domains": "Domains"
+    "domains": "Domains",
+    "publicSite": "Public site"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -1526,6 +1527,126 @@
       "event": "Event",
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Site",
+    "browse": "Browse events",
+    "forOrganizers": "For organizers",
+    "language": "Language",
+    "poweredBy": "Powered by Yayatoh",
+    "upcoming": "Upcoming events",
+    "results": "Search results",
+    "count": "{count, plural, =0 {No events} one {# event} other {# events}}",
+    "seeAll": "See all events",
+    "when": "When",
+    "where": "Where",
+    "priceLabel": "Price:",
+    "by": "By {org}",
+    "postponed": "Postponed",
+    "price": {
+      "soon": "Tickets soon",
+      "free": "Free",
+      "from": "From {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Concert",
+      "conference": "Conference",
+      "community": "Community",
+      "other": "Other",
+      "wedding": "Wedding",
+      "agency": "Agency"
+    },
+    "filters": {
+      "label": "Search events",
+      "query": "Search by name, place or organizer",
+      "city": "City",
+      "anyCity": "Any city",
+      "category": "Category",
+      "anyCategory": "Any category",
+      "price": "Price",
+      "anyPrice": "Any price",
+      "priceOption": {
+        "free": "Free",
+        "paid": "Paid"
+      },
+      "from": "From date",
+      "to": "To date",
+      "submit": "Search",
+      "clear": "Clear filters"
+    },
+    "pagination": {
+      "label": "Pages",
+      "previous": "Previous page",
+      "next": "Next page",
+      "status": "Page {page} of {count}"
+    },
+    "empty": {
+      "title": "No upcoming events yet",
+      "description": "New events appear here as soon as organizers publish them.",
+      "filteredTitle": "No events match these filters",
+      "filteredDescription": "Try another date, city or price, or clear the filters."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Find events near you",
+      "eyebrow": "Yayatoh",
+      "title": "Find your next event.",
+      "lede": "Concerts, galas, conferences and community events, with every fee included in the price.",
+      "demoCta": "Open the demo console"
+    },
+    "events": {
+      "title": "All events"
+    },
+    "tenant": {
+      "eyebrow": "Events",
+      "description": "Upcoming events by {org}.",
+      "emptyTitle": "No upcoming events",
+      "emptyDescription": "{org} has nothing on sale right now. Check back soon."
+    },
+    "organizer": {
+      "eyebrow": "Organizer",
+      "description": "Upcoming events by {org} on Yayatoh.",
+      "site": "Visit the organizer's website",
+      "events": "Events by {org}",
+      "emptyTitle": "No upcoming events",
+      "emptyDescription": "{org} has nothing on sale right now. Check back soon."
+    }
+  },
+  "widget": {
+    "title": "Tickets: {event}",
+    "fallbackTitle": "Tickets",
+    "passes": "Passes",
+    "getTickets": "Get tickets",
+    "newTab": "(opens in a new tab)"
+  },
+  "site": {
+    "title": "Public site",
+    "description": "Where people find your events: the Yayatoh marketplace, your own site and the ticket widget.",
+    "readOnly": "Only owners and admins can change these settings.",
+    "save": "Save",
+    "saved": "Saved.",
+    "listing": {
+      "title": "Listing",
+      "marketplace": "List my public events on the Yayatoh marketplace",
+      "marketplaceHint": "Weddings and private events are never listed.",
+      "tenantSite": "Use my own site at {host} as the home of my events",
+      "tenantSiteHint": "Search engines then send people to your site instead of yayatoh.com. A custom domain always comes first."
+    },
+    "widget": {
+      "title": "Ticket widget",
+      "description": "Show an event's passes on your own website. Paste its snippet where the widget should appear.",
+      "origins": "Websites allowed to show the widget",
+      "originsHint": "One address per line, for example https://www.example.com. Other websites see an empty frame.",
+      "noOrigins": "No websites allowed yet.",
+      "snippets": "Widget snippets",
+      "snippetFor": "Snippet for {event}",
+      "frameTitle": "Tickets: {event}",
+      "copy": "Copy snippet",
+      "copied": "Copied.",
+      "emptyTitle": "No public events yet",
+      "emptyDescription": "Publish an event to get its widget snippet."
     }
   }
 }

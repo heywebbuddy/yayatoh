@@ -1,33 +1,61 @@
-import { buttonClass, Card, CardLabel, StatusDot } from '@yayatoh/ui';
+import { parseSearchParams } from '@yayatoh/marketplace';
+import { buttonClass, CardLabel } from '@yayatoh/ui';
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { MarketplaceResults } from '@/components/marketplace/results.tsx';
+import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { requestHost } from '@/server/request-origin.ts';
+import { apexOrigin, publicMetadata } from '@/server/seo.ts';
 import { devAuthEnabled } from '@/server/session.ts';
 
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'market' });
+  const req = await requestHost();
+  return publicMetadata({
+    req,
+    locale,
+    canonicalOrigin: apexOrigin(req),
+    path: '/',
+    title: t('home.metaTitle'),
+    description: t('home.lede'),
+    image: `${req.origin}/api/og/home`,
+  });
+}
+
+/** The marketplace home (yayatoh.com; `/` locally): search and the next upcoming events. */
+export default async function Home({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations('home');
+  const t = await getTranslations('market');
+  const sp = parseSearchParams(await searchParams);
   return (
-    <main id="main" className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-24">
-      <CardLabel>{t('eyebrow')}</CardLabel>
-      <h1 className="text-[44px] leading-none font-light tracking-[-0.045em] md:text-display">
-        {t('title')}
-      </h1>
-      <p className="max-w-xl text-[15px] text-zinc-600">{t('lede')}</p>
-      {devAuthEnabled() ? (
-        <div className="flex flex-wrap gap-3">
-          <Link className={buttonClass('primary')} href="/dev/login">
-            {t('demoCta')}
-          </Link>
-          <Link className={buttonClass('secondary')} href="/events/midwest-leadership-summit-2027">
-            {t('eventCta')}
-          </Link>
-        </div>
-      ) : null}
-      <Card id="status" className="flex flex-col gap-3">
-        <CardLabel>{t('statusLabel')}</CardLabel>
-        <StatusDot status="success" label={t('statusOk')} />
-      </Card>
-    </main>
+    <div className="min-h-dvh bg-white">
+      <SiteHeader />
+      <main id="main" className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 md:px-6">
+        <section className="flex flex-col gap-4 pt-8 md:pt-16">
+          <CardLabel>{t('home.eyebrow')}</CardLabel>
+          <h1 className="text-[40px] leading-none font-light tracking-[-0.045em] md:text-display">
+            {t('home.title')}
+          </h1>
+          <p className="max-w-xl text-[15px] text-zinc-600">{t('home.lede')}</p>
+          {devAuthEnabled() ? (
+            <div className="flex flex-wrap gap-3">
+              <Link className={buttonClass('secondary')} href="/dev/login">
+                {t('home.demoCta')}
+              </Link>
+            </div>
+          ) : null}
+        </section>
+        <MarketplaceResults locale={locale} params={{ ...sp, page: 1 }} path="/events" limit={6} />
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

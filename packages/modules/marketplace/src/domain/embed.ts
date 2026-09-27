@@ -21,7 +21,10 @@ export function normalizeOrigin(input: string): string | null {
   return url.origin;
 }
 
-/** The CSP `frame-ancestors` value for an embed page: the org's allowed origins, else nobody. */
+/**
+ * The CSP `frame-ancestors` value for the widget: this platform itself plus the origins the org
+ * allowed. Every other site gets a blank frame.
+ */
 export function frameAncestors(origins: readonly string[]): string {
-  return origins.length === 0 ? "frame-ancestors 'none'" : `frame-ancestors ${origins.join(' ')}`;
+  return ["frame-ancestors 'self'", ...origins].join(' ');
 }

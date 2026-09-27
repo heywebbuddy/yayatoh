@@ -25,9 +25,12 @@ export {
   listingCities,
   matchLegacyRedirect,
   orgListings,
+  type PublicOrganizer,
   publicOrganizer,
+  publicOrganizerById,
   publicSiteSettings,
   searchListings,
   sitemapListings,
+  widgetOrigins,
 } from './queries.ts';
 export { LISTED_STATUSES, REDIRECT_MATCHES, REDIRECT_STATUSES } from './schema.ts';

@@ -1,7 +1,8 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { findEventTx } from '@yayatoh/events';
+import { listingsProjector } from '@yayatoh/marketplace';
 import { ticketMailer } from '@yayatoh/orders';
-import { consoleMailer, type Subscriber } from '@yayatoh/platform';
+import { consoleMailer, type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { releaseCancelledSeats } from '@yayatoh/seating';
 import { invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
@@ -33,5 +34,24 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     releaseCancelledSeats(),
+    listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
+}
+
+/**
+ * Ask the web app to drop an org's cached public pages (and the marketplace's) after its
+ * listings changed. Signed per org with APP_TOKEN_SECRET; failures only log (the cache TTL
+ * catches up within seconds).
+ */
+export async function revalidatePublicCache(appOrigin: string, orgId: string, secret: string): Promise<void> {
+  try {
+    const res = await fetch(`${appOrigin}/api/internal/revalidate`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: signLinkToken('cache.revalidate', orgId, secret) }),
+    });
+    if (!res.ok) console.warn(`revalidate ${orgId}: ${res.status}`);
+  } catch (err) {
+    console.warn(`revalidate ${orgId}: ${(err as Error).message}`);
+  }
 }

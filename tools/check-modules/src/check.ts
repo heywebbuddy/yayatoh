@@ -36,6 +36,8 @@ const RAW_DB_CLIENTS = [
 ];
 const PLATFORM_READER_APPS = ['apps/admin', 'apps/worker'];
 /** Files allowed to hold raw colour literals (ADR 0018: tokens are the only source). */
+/** The one file allowed to call Next's cache primitives: every entry is keyed and tagged by org. */
+const CACHE_HELPER = 'apps/web/src/server/public-cache.ts';
 const TOKEN_FILES = ['packages/ui/src/tokens.ts', 'packages/ui/src/styles.css'];
 
 function walk(dir: string, out: string[] = []): string[] {
@@ -142,6 +144,15 @@ export function checkModules(root: string): Violation[] {
       if (hex && !test) add('design-tokens', `raw colour ${hex[0]} — use a token from @yayatoh/ui`);
     }
     if (!SOURCE.test(abs)) continue;
+
+    // Cache guard (roadmap §4.3 step 6): public caching only through the org-scoped helper.
+    if (rel.startsWith('apps/') && !test && rel !== CACHE_HELPER) {
+      if (/\bunstable_cache\b|['"]use cache(?::[\w-]+)?['"]|\bcacheTag\s*\(/.test(src))
+        add(
+          'cache-scope',
+          `cache only through ${CACHE_HELPER} (publicCached), whose key and tag carry the org`,
+        );
+    }
 
     // UI strings go through next-intl (CLAUDE.md → UI): no literal JSX text or literal labels.
     if (rel.startsWith('apps/web/src/') && rel.endsWith('.tsx') && !test) {

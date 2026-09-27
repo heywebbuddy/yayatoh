@@ -56,7 +56,8 @@
     "team": "Équipe",
     "settings": "Paramètres",
     "payouts": "Versements",
-    "domains": "Domaines"
+    "domains": "Domaines",
+    "publicSite": "Site public"
   },
   "vocab": {
     "attendee": "Participant",
@@ -1526,6 +1527,126 @@
       "event": "Événement",
       "emptyTitle": "Aucune vente sur cette période",
       "emptyDescription": "Choisissez une période plus longue ou partagez la page d’un événement pour commencer à vendre."
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Site",
+    "browse": "Parcourir les événements",
+    "forOrganizers": "Pour les organisateurs",
+    "language": "Langue",
+    "poweredBy": "Propulsé par Yayatoh",
+    "upcoming": "Événements à venir",
+    "results": "Résultats de recherche",
+    "count": "{count, plural, =0 {Aucun événement} one {# événement} other {# événements}}",
+    "seeAll": "Voir tous les événements",
+    "when": "Quand",
+    "where": "Où",
+    "priceLabel": "Prix :",
+    "by": "Par {org}",
+    "postponed": "Reporté",
+    "price": {
+      "soon": "Billets bientôt disponibles",
+      "free": "Gratuit",
+      "from": "À partir de {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Concert",
+      "conference": "Conférence",
+      "community": "Communauté",
+      "other": "Autre",
+      "wedding": "Mariage",
+      "agency": "Agence"
+    },
+    "filters": {
+      "label": "Rechercher des événements",
+      "query": "Rechercher par nom, lieu ou organisateur",
+      "city": "Ville",
+      "anyCity": "Toutes les villes",
+      "category": "Catégorie",
+      "anyCategory": "Toutes les catégories",
+      "price": "Prix",
+      "anyPrice": "Tous les prix",
+      "priceOption": {
+        "free": "Gratuit",
+        "paid": "Payant"
+      },
+      "from": "À partir du",
+      "to": "Jusqu'au",
+      "submit": "Rechercher",
+      "clear": "Effacer les filtres"
+    },
+    "pagination": {
+      "label": "Pages",
+      "previous": "Page précédente",
+      "next": "Page suivante",
+      "status": "Page {page} sur {count}"
+    },
+    "empty": {
+      "title": "Aucun événement à venir pour l'instant",
+      "description": "Les nouveaux événements apparaissent ici dès que les organisateurs les publient.",
+      "filteredTitle": "Aucun événement ne correspond à ces filtres",
+      "filteredDescription": "Essayez une autre date, ville ou un autre prix, ou effacez les filtres."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Trouvez des événements près de chez vous",
+      "eyebrow": "Yayatoh",
+      "title": "Trouvez votre prochain événement.",
+      "lede": "Concerts, galas, conférences et événements associatifs, tous frais compris dans le prix.",
+      "demoCta": "Ouvrir la console de démonstration"
+    },
+    "events": {
+      "title": "Tous les événements"
+    },
+    "tenant": {
+      "eyebrow": "Événements",
+      "description": "Événements à venir de {org}.",
+      "emptyTitle": "Aucun événement à venir",
+      "emptyDescription": "{org} n'a rien en vente pour le moment. Revenez bientôt."
+    },
+    "organizer": {
+      "eyebrow": "Organisateur",
+      "description": "Événements à venir de {org} sur Yayatoh.",
+      "site": "Visiter le site de l'organisateur",
+      "events": "Événements de {org}",
+      "emptyTitle": "Aucun événement à venir",
+      "emptyDescription": "{org} n'a rien en vente pour le moment. Revenez bientôt."
+    }
+  },
+  "widget": {
+    "title": "Billets : {event}",
+    "fallbackTitle": "Billets",
+    "passes": "Billets",
+    "getTickets": "Obtenir des billets",
+    "newTab": "(s'ouvre dans un nouvel onglet)"
+  },
+  "site": {
+    "title": "Site public",
+    "description": "Là où l'on trouve vos événements : la marketplace Yayatoh, votre propre site et le widget de billetterie.",
+    "readOnly": "Seuls les propriétaires et les administrateurs peuvent modifier ces paramètres.",
+    "save": "Enregistrer",
+    "saved": "Enregistré.",
+    "listing": {
+      "title": "Référencement",
+      "marketplace": "Publier mes événements publics sur la marketplace Yayatoh",
+      "marketplaceHint": "Les mariages et les événements privés ne sont jamais publiés.",
+      "tenantSite": "Utiliser mon propre site {host} comme accueil de mes événements",
+      "tenantSiteHint": "Les moteurs de recherche envoient alors les visiteurs sur votre site plutôt que sur yayatoh.com. Un domaine personnalisé passe toujours en premier."
+    },
+    "widget": {
+      "title": "Widget de billetterie",
+      "description": "Affichez les billets d'un événement sur votre propre site. Collez son extrait là où le widget doit apparaître.",
+      "origins": "Sites autorisés à afficher le widget",
+      "originsHint": "Une adresse par ligne, par exemple https://www.example.com. Les autres sites voient un cadre vide.",
+      "noOrigins": "Aucun site autorisé pour l'instant.",
+      "snippets": "Extraits du widget",
+      "snippetFor": "Extrait pour {event}",
+      "frameTitle": "Billets : {event}",
+      "copy": "Copier l'extrait",
+      "copied": "Copié.",
+      "emptyTitle": "Aucun événement public pour l'instant",
+      "emptyDescription": "Publiez un événement pour obtenir l'extrait de son widget."
     }
   }
 }

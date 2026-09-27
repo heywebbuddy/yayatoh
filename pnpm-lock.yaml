@@ -429,6 +429,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders
@@ -538,6 +541,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders
