@@ -15,6 +15,9 @@ export async function signIn(page: Page, email = OWNER) {
 
 /** axe: zero serious or critical violations (WCAG 2.2 AA tags). */
 export async function expectAccessible(page: Page) {
+  // After a Server Action re-render, Next streams metadata back in: wait for the title (a page
+  // without one still fails here) so axe never judges that in-between moment.
+  await expect(page).toHaveTitle(/\S/);
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     .analyze();
