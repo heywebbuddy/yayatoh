@@ -403,5 +403,55 @@
     "description": "Description (optional)",
     "add": "Add ticket type",
     "added": "Ticket type added."
+  },
+  "checkout": {
+    "quantity": "Quantity",
+    "name": "Full name",
+    "email": "Email for your tickets",
+    "continue": "Continue to payment",
+    "soldOut": "Sorry — those tickets just sold out. Try a smaller quantity or another pass.",
+    "chooseTickets": "Choose at least one ticket."
+  },
+  "fakePay": {
+    "eyebrow": "Test payment",
+    "title": "Pay for your order",
+    "description": "This is a test payment page. No real money moves.",
+    "pay": "Pay now (test)",
+    "decline": "Simulate a declined card"
+  },
+  "order": {
+    "eyebrow": "Your order",
+    "title": {
+      "paid": "You're going, {name}!",
+      "reserved": "Almost there, {name}",
+      "awaiting_payment": "Finishing your payment…",
+      "payment_failed": "Your payment didn't go through",
+      "expired": "This order expired",
+      "cancelled": "This order was cancelled",
+      "partially_refunded": "Partially refunded",
+      "refunded": "Refunded"
+    },
+    "status": {
+      "paid": "Paid",
+      "reserved": "Reserved",
+      "awaiting_payment": "Awaiting payment",
+      "payment_failed": "Payment failed",
+      "expired": "Expired",
+      "cancelled": "Cancelled",
+      "partially_refunded": "Partially refunded",
+      "refunded": "Refunded"
+    },
+    "sentTo": "Confirmation sent to {email}",
+    "total": "Total",
+    "feesIncluded": "Includes {fees} in fees"
+  },
+  "orders": {
+    "title": "Recent orders",
+    "emptyTitle": "No orders yet",
+    "emptyDescription": "Orders appear here as soon as someone checks out.",
+    "buyer": "Buyer",
+    "items": "Tickets",
+    "total": "Total",
+    "status": "Status"
   }
 }

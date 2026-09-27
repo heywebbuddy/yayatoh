@@ -403,5 +403,55 @@
     "description": "Beschrijving (optioneel)",
     "add": "Tickettype toevoegen",
     "added": "Tickettype toegevoegd."
+  },
+  "checkout": {
+    "quantity": "Aantal",
+    "name": "Volledige naam",
+    "email": "E-mailadres voor je tickets",
+    "continue": "Door naar betalen",
+    "soldOut": "Sorry, die tickets zijn net uitverkocht. Probeer een kleiner aantal of een andere pas.",
+    "chooseTickets": "Kies minstens één ticket."
+  },
+  "fakePay": {
+    "eyebrow": "Testbetaling",
+    "title": "Betaal je bestelling",
+    "description": "Dit is een testbetaalpagina. Er wordt geen echt geld overgemaakt.",
+    "pay": "Nu betalen (test)",
+    "decline": "Geweigerde kaart simuleren"
+  },
+  "order": {
+    "eyebrow": "Je bestelling",
+    "title": {
+      "paid": "Je bent erbij, {name}!",
+      "reserved": "Bijna klaar, {name}",
+      "awaiting_payment": "Je betaling wordt afgerond…",
+      "payment_failed": "Je betaling is niet gelukt",
+      "expired": "Deze bestelling is verlopen",
+      "cancelled": "Deze bestelling is geannuleerd",
+      "partially_refunded": "Gedeeltelijk terugbetaald",
+      "refunded": "Terugbetaald"
+    },
+    "status": {
+      "paid": "Betaald",
+      "reserved": "Gereserveerd",
+      "awaiting_payment": "Wacht op betaling",
+      "payment_failed": "Betaling mislukt",
+      "expired": "Verlopen",
+      "cancelled": "Geannuleerd",
+      "partially_refunded": "Gedeeltelijk terugbetaald",
+      "refunded": "Terugbetaald"
+    },
+    "sentTo": "Bevestiging verzonden naar {email}",
+    "total": "Totaal",
+    "feesIncluded": "Inclusief {fees} aan kosten"
+  },
+  "orders": {
+    "title": "Recente bestellingen",
+    "emptyTitle": "Nog geen bestellingen",
+    "emptyDescription": "Bestellingen verschijnen hier zodra iemand afrekent.",
+    "buyer": "Koper",
+    "items": "Tickets",
+    "total": "Totaal",
+    "status": "Status"
   }
 }

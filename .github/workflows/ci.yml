@@ -89,6 +89,7 @@ jobs:
   e2e:
     name: e2e + axe (375/768/1280, en + ar)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:18
@@ -119,6 +120,7 @@ jobs:
             echo "BETTER_AUTH_SECRET=$SECRET"
             echo "BETTER_AUTH_URL=http://localhost:3100"
             echo "APP_TOKEN_SECRET=$(openssl rand -hex 32)"
+            echo "FAKE_PAYMENTS_SECRET=$(openssl rand -hex 32)"
             echo "DEV_PERSONA_PASSWORD=$PERSONA"
             echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
             echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"

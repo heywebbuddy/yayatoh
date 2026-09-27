@@ -27,6 +27,8 @@ export const orgAuthorizer: CommandPorts<unknown>['authorizer'] = {
     if (permission === 'platform:org.create') return ctx.actor.type === 'user' || ctx.actor.type === 'system';
     // Accepting is checked in the handler (token + verified email match), not by an org role.
     if (permission === 'invitation:accept') return ctx.actor.type === 'user';
+    // Public commands (checkout) are open to anyone; the command itself enforces what may be bought.
+    if (permission.startsWith('public:')) return true;
     if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
     if (ctx.actor.type === 'system') return true;
     const role = await memberRole(ctx);

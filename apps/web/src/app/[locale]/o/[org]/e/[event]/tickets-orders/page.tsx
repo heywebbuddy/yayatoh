@@ -1,4 +1,5 @@
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
+import { listOrdersQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -20,6 +21,9 @@ export default async function TicketsPage({
   const t = await getTranslations();
   const types = await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports);
   const canWrite = roleCan(data.role, 'events:write');
+  const orders = roleCan(data.role, 'orders:read')
+    ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
+    : null;
   const fmt = (minor: number) => formatMoney(money(minor, ev.currency), locale);
   return (
     <>
@@ -109,6 +113,62 @@ export default async function TicketsPage({
           ]}
         />
       )}
+      {orders ? (
+        <section aria-labelledby="orders-heading" className="flex flex-col gap-3">
+          <h2 id="orders-heading" className="text-section">
+            {t('orders.title')}
+          </h2>
+          {orders.length === 0 ? (
+            <EmptyState title={t('orders.emptyTitle')} description={t('orders.emptyDescription')} />
+          ) : (
+            <Table
+              caption={t('orders.title')}
+              rowKey={(o) => o.id}
+              rows={orders}
+              columns={[
+                {
+                  key: 'buyer',
+                  header: t('orders.buyer'),
+                  cell: (o) => (
+                    <span className="flex flex-col">
+                      <span>{o.buyerName}</span>
+                      <span className="text-caption text-zinc-500">{o.buyerEmail}</span>
+                    </span>
+                  ),
+                },
+                {
+                  key: 'items',
+                  header: t('orders.items'),
+                  cell: (o) => o.items.map((i) => `${i.quantity} × ${i.name}`).join(', '),
+                },
+                {
+                  key: 'total',
+                  header: t('orders.total'),
+                  cell: (o) => fmt(o.totalMinor),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'status',
+                  header: t('orders.status'),
+                  cell: (o) => (
+                    <StatusDot
+                      status={
+                        o.status === 'paid'
+                          ? 'success'
+                          : ['expired', 'cancelled'].includes(o.status)
+                            ? 'neutral'
+                            : 'warning'
+                      }
+                      label={t(`order.status.${o.status}`)}
+                    />
+                  ),
+                },
+              ]}
+            />
+          )}
+        </section>
+      ) : null}
       {canWrite ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{t('tickets.addTitle')}</h2>

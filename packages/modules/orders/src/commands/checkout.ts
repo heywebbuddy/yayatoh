@@ -1,0 +1,277 @@
+import { createHash, randomBytes } from 'node:crypto';
+import type { TenantTx } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
+import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { claimProviderEventTx, type ProviderEvent } from '@yayatoh/payments';
+import { tenantCommand } from '@yayatoh/platform';
+import { holdInventoryTx, quoteTx, releaseHoldTx, sellHeldTx } from '@yayatoh/ticketing';
+import { and, eq, inArray, lte } from 'drizzle-orm';
+import { z } from 'zod';
+import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
+import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
+import { orderItems, orders } from '../schema.ts';
+
+export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
+
+type OrderRow = typeof orders.$inferSelect;
+
+export async function loadOrderTx(tx: TenantTx, orderId: string, forUpdate = false) {
+  const q = tx.select().from(orders).where(eq(orders.id, orderId));
+  const [order] = forUpdate ? await q.for('update') : await q;
+  if (!order) throw new DomainError('not_found');
+  const items = await tx.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+  return { ...order, items };
+}
+
+const lines = (items: { ticketTypeId: string; quantity: number }[]) =>
+  items.map((i) => ({ ticketTypeId: i.ticketTypeId, quantity: i.quantity }));
+
+async function setStatus(
+  tx: TenantTx,
+  order: OrderRow,
+  event: keyof typeof orderLifecycle.events,
+  now: Date,
+  extra: Partial<typeof orders.$inferInsert> = {},
+) {
+  const to = orderLifecycle.next(order.status as (typeof orderLifecycle.states)[number], event);
+  const [row] = await tx
+    .update(orders)
+    .set({ status: to, updatedAt: now, ...extra })
+    .where(and(eq(orders.id, order.id), inArray(orders.status, [...orderLifecycle.from(event)])))
+    .returning();
+  if (!row) throw new DomainError('conflict', 'The order changed meanwhile');
+  return row;
+}
+
+/**
+ * Start checkout (public). Prices the cart all-in from live ticket types, holds inventory
+ * atomically, and snapshots totals and the fee schedule. A zero-total order is paid at once.
+ */
+export const startCheckoutCommand = tenantCommand({
+  name: 'orders.startCheckout',
+  input: StartCheckoutInput,
+  output: CheckoutResultDto,
+  entitlement: 'ticketing',
+  permission: 'public:checkout',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const orgId = requireOrg(ctx);
+    const event = await findEventTx(tx, input.eventId);
+    if (event?.status !== 'published' || event.visibility === 'private') {
+      throw new DomainError('not_found', 'Event not found');
+    }
+    const quote = await quoteTx(tx, event.id, input.items, { now: ctx.now, includeHidden: false });
+    await holdInventoryTx(tx, lines([...quote.lines]));
+    const manageToken = randomBytes(32).toString('base64url');
+    const free = quote.totalMinor === 0;
+    const [order] = await tx
+      .insert(orders)
+      .values({
+        orgId,
+        eventId: event.id,
+        status: 'reserved',
+        buyerEmail: input.buyer.email,
+        buyerName: input.buyer.name,
+        buyerUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        locale: input.locale,
+        currency: quote.currency,
+        subtotalMinor: quote.subtotalMinor,
+        feeMinor: quote.feeMinor,
+        totalMinor: quote.totalMinor,
+        // Connected (organizer MoR) accounts arrive with Stripe Connect (M1.5e); until then all
+        // orders are platform MoR.
+        fundsFlow: 'platform_mor',
+        feeSchedule: quote.feeSchedule,
+        manageTokenHash: hashManageToken(manageToken),
+        expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+      })
+      .returning();
+    if (!order) throw new DomainError('internal');
+    const items = await tx
+      .insert(orderItems)
+      .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))
+      .returning();
+    emit({
+      type: 'order.reserved',
+      version: 1,
+      aggregateType: 'order',
+      aggregateId: order.id,
+      payload: {
+        orgId,
+        orderId: order.id,
+        eventId: event.id,
+        totalMinor: order.totalMinor,
+        currency: order.currency,
+      },
+    });
+    let final = order;
+    if (free) {
+      await sellHeldTx(tx, lines(items));
+      final = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
+      emit({
+        type: 'order.paid',
+        version: 1,
+        aggregateType: 'order',
+        aggregateId: order.id,
+        payload: {
+          orgId,
+          orderId: order.id,
+          eventId: event.id,
+          totalMinor: 0,
+          currency: order.currency,
+          via: 'free',
+        },
+      });
+    }
+    return { order: { ...final, items }, manageToken };
+  },
+  audit: (input, r) => ({
+    action: 'order.checkout',
+    targetType: 'order',
+    targetId: r.order.id,
+    data: { eventId: input.eventId, totalMinor: r.order.totalMinor, items: input.items.length },
+  }),
+});
+
+/** Record the provider payment and extend the hold by 5 minutes (payment started). */
+export const attachPaymentCommand = tenantCommand({
+  name: 'orders.attachPayment',
+  input: z.object({
+    orderId: z.uuid(),
+    provider: z.enum(['fake', 'stripe']),
+    providerPaymentId: z.string().min(1),
+  }),
+  output: OrderDto,
+  entitlement: 'ticketing',
+  permission: 'public:checkout',
+  handler: async ({ input, ctx, tx }) => {
+    const order = await loadOrderTx(tx, input.orderId, true);
+    const row = await setStatus(tx, order, 'startPayment', ctx.now, {
+      provider: input.provider,
+      providerPaymentId: input.providerPaymentId,
+      expiresAt: new Date(
+        Math.max(order.expiresAt?.getTime() ?? 0, ctx.now.getTime()) + PAYMENT_EXTENSION_MINUTES * 60_000,
+      ),
+    });
+    return { ...row, items: order.items };
+  },
+  audit: (input) => ({
+    action: 'order.payment.start',
+    targetType: 'order',
+    targetId: input.orderId,
+    data: { provider: input.provider },
+  }),
+});
+
+/**
+ * Apply a verified provider event (webhook). Deduplicated by provider event id; amount,
+ * currency and payment id must match the order. Paid is set only here, for paid orders.
+ */
+export const applyProviderEventCommand = tenantCommand({
+  name: 'orders.applyProviderEvent',
+  input: z.object({
+    provider: z.enum(['fake', 'stripe']),
+    id: z.string().min(1),
+    type: z.enum(['payment.succeeded', 'payment.failed']),
+    providerPaymentId: z.string(),
+    amountMinor: z.int(),
+    currency: z.string(),
+    orgId: z.uuid(),
+    orderId: z.uuid(),
+  }),
+  output: z.object({ outcome: z.enum(['applied', 'duplicate', 'ignored', 'orphaned']), status: z.string() }),
+  entitlement: null,
+  permission: 'platform:payments.webhook',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const e = input as ProviderEvent;
+    if (!(await claimProviderEventTx(tx, e))) return { outcome: 'duplicate' as const, status: 'unchanged' };
+    const order = await loadOrderTx(tx, e.orderId, true);
+    if (
+      order.providerPaymentId !== e.providerPaymentId ||
+      order.totalMinor !== e.amountMinor ||
+      order.currency !== e.currency
+    ) {
+      throw new DomainError('conflict', 'Provider event does not match the order');
+    }
+    if (e.type === 'payment.failed') {
+      if (!orderLifecycle.can(order.status as never, 'failPayment'))
+        return { outcome: 'ignored' as const, status: order.status };
+      const row = await setStatus(tx, order, 'failPayment', ctx.now);
+      return { outcome: 'applied' as const, status: row.status };
+    }
+    if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };
+    if (order.status === 'expired') {
+      // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
+      try {
+        await holdInventoryTx(tx, lines(order.items));
+      } catch {
+        emit({
+          type: 'order.payment_orphaned',
+          version: 1,
+          aggregateType: 'order',
+          aggregateId: order.id,
+          payload: { orgId: order.orgId, orderId: order.id, providerPaymentId: e.providerPaymentId },
+        });
+        return { outcome: 'orphaned' as const, status: order.status };
+      }
+    }
+    await sellHeldTx(tx, lines(order.items));
+    const row = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
+    emit({
+      type: 'order.paid',
+      version: 1,
+      aggregateType: 'order',
+      aggregateId: order.id,
+      payload: {
+        orgId: order.orgId,
+        orderId: order.id,
+        eventId: order.eventId,
+        totalMinor: order.totalMinor,
+        currency: order.currency,
+        via: e.provider,
+      },
+    });
+    return { outcome: 'applied' as const, status: row.status };
+  },
+  audit: (input, r) => ({
+    action: 'order.provider_event',
+    targetType: 'order',
+    targetId: input.orderId,
+    data: { provider: input.provider, eventId: input.id, type: input.type, outcome: r.outcome },
+  }),
+});
+
+/** Release expired holds for this org (worker sweeper, every 30 s). */
+export const expireOrdersCommand = tenantCommand({
+  name: 'orders.expireOrders',
+  input: z.object({ limit: z.int().min(1).max(500).default(200) }),
+  output: z.object({ expired: z.int() }),
+  entitlement: null,
+  permission: 'platform:orders.sweep',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const due = await tx
+      .select({ id: orders.id })
+      .from(orders)
+      .where(and(inArray(orders.status, [...orderLifecycle.from('expire')]), lte(orders.expiresAt, ctx.now)))
+      .limit(input.limit)
+      .for('update', { skipLocked: true });
+    for (const { id } of due) {
+      const order = await loadOrderTx(tx, id);
+      await releaseHoldTx(tx, lines(order.items));
+      await setStatus(tx, order, 'expire', ctx.now);
+      emit({
+        type: 'order.expired',
+        version: 1,
+        aggregateType: 'order',
+        aggregateId: id,
+        payload: { orgId: order.orgId, orderId: id },
+      });
+    }
+    return { expired: due.length };
+  },
+  audit: (_i, r) => ({
+    action: 'order.sweep',
+    targetType: 'order',
+    targetId: null,
+    data: { expired: r.expired },
+  }),
+});

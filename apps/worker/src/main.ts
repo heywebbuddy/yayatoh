@@ -1,6 +1,7 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
+import { sweepExpiredHolds } from './sweeper.ts';
 import { startWorker } from './worker.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
@@ -42,6 +43,12 @@ async function loop() {
   }
 }
 void loop();
+
+// Release lapsed checkout holds every 30 s (leader only, so one sweeper runs at a time).
+setInterval(() => {
+  if (!release || stopping) return;
+  sweepExpiredHolds().catch((err) => console.error('sweeper', err));
+}, 30_000).unref();
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, async () => {

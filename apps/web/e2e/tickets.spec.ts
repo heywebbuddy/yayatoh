@@ -20,8 +20,9 @@ test.describe('ticket types', () => {
     await expectAccessible(page);
 
     await page.goto('/events/midwest-leadership-summit-2027');
-    await expect(page.getByText(name)).toBeVisible();
-    await expect(page.getByText('$75')).toBeVisible();
+    const card = page.getByRole('listitem').filter({ hasText: name });
+    await expect(card).toBeVisible();
+    await expect(card).toContainText('$75');
 
     await page.goto(`${EVENT}/tickets-orders`);
     await page.getByRole('button', { name: `Remove ${name}` }).click();

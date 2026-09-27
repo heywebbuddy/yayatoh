@@ -1,7 +1,13 @@
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import { withTenant } from '@yayatoh/db';
-import { assignEventRoleCommand, createEventCommand, type EventDto } from '@yayatoh/events';
+import {
+  assignEventRoleCommand,
+  createEventCommand,
+  type EventDto,
+  transitionEventCommand,
+} from '@yayatoh/events';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
+import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import {
   addMemberCommand,
@@ -93,10 +99,43 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const ga = await executeCommand(
     createTicketTypeCommand,
     { eventId: event.id, name: 'General Admission', priceMinor: 2500, quantityTotal: 100 },
     ctx(),
+    ports,
+  );
+  // One paid order (fake provider) so orders, order items and provider events are covered.
+  await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx(), ports);
+  const checkout = await executeCommand(
+    startCheckoutCommand,
+    {
+      eventId: event.id,
+      items: [{ ticketTypeId: ga.id, quantity: 2 }],
+      buyer: { email: `buyer@${slug}.test`, name: 'Fixture Buyer' },
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  await executeCommand(
+    attachPaymentCommand,
+    { orderId: checkout.order.id, provider: 'fake', providerPaymentId: `fakepi_${slug}` },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  await executeCommand(
+    applyProviderEventCommand,
+    {
+      provider: 'fake',
+      id: `fakeevt_${slug}`,
+      type: 'payment.succeeded',
+      providerPaymentId: `fakepi_${slug}`,
+      amountMinor: checkout.order.totalMinor,
+      currency: checkout.order.currency,
+      orgId: org.id,
+      orderId: checkout.order.id,
+    },
+    systemCtx(org.id),
     ports,
   );
   await executeCommand(

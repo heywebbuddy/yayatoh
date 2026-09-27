@@ -403,5 +403,55 @@
     "description": "說明（選填）",
     "add": "新增票種",
     "added": "已新增票種。"
+  },
+  "checkout": {
+    "quantity": "數量",
+    "name": "姓名",
+    "email": "接收票券的電子郵件",
+    "continue": "繼續付款",
+    "soldOut": "抱歉，這些票券剛剛售完。請減少數量或選擇其他通行證。",
+    "chooseTickets": "請至少選擇一張票券。"
+  },
+  "fakePay": {
+    "eyebrow": "測試付款",
+    "title": "支付訂單",
+    "description": "這是測試付款頁面，不會產生真實扣款。",
+    "pay": "立即付款（測試）",
+    "decline": "模擬信用卡遭拒"
+  },
+  "order": {
+    "eyebrow": "你的訂單",
+    "title": {
+      "paid": "{name}，期待與你相見！",
+      "reserved": "就差一步了，{name}",
+      "awaiting_payment": "正在完成付款…",
+      "payment_failed": "付款未成功",
+      "expired": "此訂單已逾期",
+      "cancelled": "此訂單已取消",
+      "partially_refunded": "已部分退款",
+      "refunded": "已退款"
+    },
+    "status": {
+      "paid": "已付款",
+      "reserved": "已保留",
+      "awaiting_payment": "待付款",
+      "payment_failed": "付款失敗",
+      "expired": "已逾期",
+      "cancelled": "已取消",
+      "partially_refunded": "已部分退款",
+      "refunded": "已退款"
+    },
+    "sentTo": "確認信已寄至 {email}",
+    "total": "總計",
+    "feesIncluded": "含 {fees} 費用"
+  },
+  "orders": {
+    "title": "最近訂單",
+    "emptyTitle": "尚無訂單",
+    "emptyDescription": "有人完成購買後，訂單會立即顯示在這裡。",
+    "buyer": "買家",
+    "items": "票券",
+    "total": "總計",
+    "status": "狀態"
   }
 }

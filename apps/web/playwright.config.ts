@@ -27,5 +27,13 @@ export default defineConfig({
   ],
   webServer: process.env.E2E_NO_SERVER
     ? undefined
-    : { command: `pnpm start -p ${PORT}`, port: PORT, reuseExistingServer: true, timeout: 120_000 },
+    : {
+        // Run next directly (a pnpm wrapper would not forward the stop signal) and bound the
+        // shutdown so a lingering connection pool can never hang the run.
+        command: `pnpm exec next start -p ${PORT}`,
+        port: PORT,
+        reuseExistingServer: true,
+        timeout: 120_000,
+        gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
+      },
 });

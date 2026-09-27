@@ -403,5 +403,55 @@
     "description": "Description (facultatif)",
     "add": "Ajouter le type de billet",
     "added": "Type de billet ajouté."
+  },
+  "checkout": {
+    "quantity": "Quantité",
+    "name": "Nom complet",
+    "email": "E-mail pour recevoir vos billets",
+    "continue": "Continuer vers le paiement",
+    "soldOut": "Désolé, ces billets viennent d’être épuisés. Essayez une quantité plus petite ou un autre pass.",
+    "chooseTickets": "Choisissez au moins un billet."
+  },
+  "fakePay": {
+    "eyebrow": "Paiement test",
+    "title": "Payer votre commande",
+    "description": "Ceci est une page de paiement test. Aucun argent réel n’est débité.",
+    "pay": "Payer maintenant (test)",
+    "decline": "Simuler une carte refusée"
+  },
+  "order": {
+    "eyebrow": "Votre commande",
+    "title": {
+      "paid": "C’est confirmé, {name} !",
+      "reserved": "Presque terminé, {name}",
+      "awaiting_payment": "Finalisation de votre paiement…",
+      "payment_failed": "Votre paiement n’a pas abouti",
+      "expired": "Cette commande a expiré",
+      "cancelled": "Cette commande a été annulée",
+      "partially_refunded": "Partiellement remboursée",
+      "refunded": "Remboursée"
+    },
+    "status": {
+      "paid": "Payée",
+      "reserved": "Réservée",
+      "awaiting_payment": "En attente de paiement",
+      "payment_failed": "Échec du paiement",
+      "expired": "Expirée",
+      "cancelled": "Annulée",
+      "partially_refunded": "Partiellement remboursée",
+      "refunded": "Remboursée"
+    },
+    "sentTo": "Confirmation envoyée à {email}",
+    "total": "Total",
+    "feesIncluded": "Dont {fees} de frais"
+  },
+  "orders": {
+    "title": "Commandes récentes",
+    "emptyTitle": "Aucune commande pour l’instant",
+    "emptyDescription": "Les commandes apparaissent ici dès qu’un achat est finalisé.",
+    "buyer": "Acheteur",
+    "items": "Billets",
+    "total": "Total",
+    "status": "Statut"
   }
 }

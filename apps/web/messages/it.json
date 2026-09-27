@@ -403,5 +403,55 @@
     "description": "Descrizione (facoltativa)",
     "add": "Aggiungi tipo di biglietto",
     "added": "Tipo di biglietto aggiunto."
+  },
+  "checkout": {
+    "quantity": "Quantità",
+    "name": "Nome e cognome",
+    "email": "Email per ricevere i biglietti",
+    "continue": "Continua al pagamento",
+    "soldOut": "Spiacenti, quei biglietti sono appena esauriti. Prova con una quantità minore o un altro pass.",
+    "chooseTickets": "Scegli almeno un biglietto."
+  },
+  "fakePay": {
+    "eyebrow": "Pagamento di prova",
+    "title": "Paga il tuo ordine",
+    "description": "Questa è una pagina di pagamento di prova. Non viene addebitato denaro reale.",
+    "pay": "Paga ora (prova)",
+    "decline": "Simula una carta rifiutata"
+  },
+  "order": {
+    "eyebrow": "Il tuo ordine",
+    "title": {
+      "paid": "Ci sei, {name}!",
+      "reserved": "Ci siamo quasi, {name}",
+      "awaiting_payment": "Stiamo completando il pagamento…",
+      "payment_failed": "Il pagamento non è andato a buon fine",
+      "expired": "Questo ordine è scaduto",
+      "cancelled": "Questo ordine è stato annullato",
+      "partially_refunded": "Rimborsato parzialmente",
+      "refunded": "Rimborsato"
+    },
+    "status": {
+      "paid": "Pagato",
+      "reserved": "Prenotato",
+      "awaiting_payment": "In attesa di pagamento",
+      "payment_failed": "Pagamento non riuscito",
+      "expired": "Scaduto",
+      "cancelled": "Annullato",
+      "partially_refunded": "Rimborsato parzialmente",
+      "refunded": "Rimborsato"
+    },
+    "sentTo": "Conferma inviata a {email}",
+    "total": "Totale",
+    "feesIncluded": "Include {fees} di commissioni"
+  },
+  "orders": {
+    "title": "Ordini recenti",
+    "emptyTitle": "Ancora nessun ordine",
+    "emptyDescription": "Gli ordini compaiono qui non appena qualcuno completa l’acquisto.",
+    "buyer": "Acquirente",
+    "items": "Biglietti",
+    "total": "Totale",
+    "status": "Stato"
   }
 }

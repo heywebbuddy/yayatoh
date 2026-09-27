@@ -403,5 +403,55 @@
     "description": "描述（可选）",
     "add": "添加票种",
     "added": "已添加票种。"
+  },
+  "checkout": {
+    "quantity": "数量",
+    "name": "姓名",
+    "email": "接收门票的电子邮箱",
+    "continue": "继续付款",
+    "soldOut": "抱歉，这些门票刚刚售罄。请减少数量或选择其他通行证。",
+    "chooseTickets": "请至少选择一张门票。"
+  },
+  "fakePay": {
+    "eyebrow": "测试付款",
+    "title": "支付订单",
+    "description": "这是测试付款页面，不会产生真实扣款。",
+    "pay": "立即付款（测试）",
+    "decline": "模拟银行卡被拒"
+  },
+  "order": {
+    "eyebrow": "你的订单",
+    "title": {
+      "paid": "{name}，期待与你相见！",
+      "reserved": "就差一步了，{name}",
+      "awaiting_payment": "正在完成付款…",
+      "payment_failed": "付款未成功",
+      "expired": "此订单已过期",
+      "cancelled": "此订单已取消",
+      "partially_refunded": "已部分退款",
+      "refunded": "已退款"
+    },
+    "status": {
+      "paid": "已付款",
+      "reserved": "已预留",
+      "awaiting_payment": "待付款",
+      "payment_failed": "付款失败",
+      "expired": "已过期",
+      "cancelled": "已取消",
+      "partially_refunded": "已部分退款",
+      "refunded": "已退款"
+    },
+    "sentTo": "确认信息已发送至 {email}",
+    "total": "合计",
+    "feesIncluded": "含 {fees} 费用"
+  },
+  "orders": {
+    "title": "最近订单",
+    "emptyTitle": "暂无订单",
+    "emptyDescription": "有人完成购买后，订单会立即显示在这里。",
+    "buyer": "买家",
+    "items": "门票",
+    "total": "合计",
+    "status": "状态"
   }
 }

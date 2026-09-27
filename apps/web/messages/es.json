@@ -403,5 +403,55 @@
     "description": "Descripción (opcional)",
     "add": "Añadir tipo de entrada",
     "added": "Tipo de entrada añadido."
+  },
+  "checkout": {
+    "quantity": "Cantidad",
+    "name": "Nombre completo",
+    "email": "Correo para tus entradas",
+    "continue": "Continuar al pago",
+    "soldOut": "Lo sentimos: esas entradas se acaban de agotar. Prueba con una cantidad menor u otro pase.",
+    "chooseTickets": "Elige al menos una entrada."
+  },
+  "fakePay": {
+    "eyebrow": "Pago de prueba",
+    "title": "Paga tu pedido",
+    "description": "Esta es una página de pago de prueba. No se mueve dinero real.",
+    "pay": "Pagar ahora (prueba)",
+    "decline": "Simular una tarjeta rechazada"
+  },
+  "order": {
+    "eyebrow": "Tu pedido",
+    "title": {
+      "paid": "¡Nos vemos allí, {name}!",
+      "reserved": "Ya casi, {name}",
+      "awaiting_payment": "Finalizando tu pago…",
+      "payment_failed": "Tu pago no se completó",
+      "expired": "Este pedido caducó",
+      "cancelled": "Este pedido se canceló",
+      "partially_refunded": "Reembolsado parcialmente",
+      "refunded": "Reembolsado"
+    },
+    "status": {
+      "paid": "Pagado",
+      "reserved": "Reservado",
+      "awaiting_payment": "Pendiente de pago",
+      "payment_failed": "Pago fallido",
+      "expired": "Caducado",
+      "cancelled": "Cancelado",
+      "partially_refunded": "Reembolsado parcialmente",
+      "refunded": "Reembolsado"
+    },
+    "sentTo": "Confirmación enviada a {email}",
+    "total": "Total",
+    "feesIncluded": "Incluye {fees} de tarifas"
+  },
+  "orders": {
+    "title": "Pedidos recientes",
+    "emptyTitle": "Aún no hay pedidos",
+    "emptyDescription": "Los pedidos aparecen aquí en cuanto alguien completa la compra.",
+    "buyer": "Comprador",
+    "items": "Entradas",
+    "total": "Total",
+    "status": "Estado"
   }
 }

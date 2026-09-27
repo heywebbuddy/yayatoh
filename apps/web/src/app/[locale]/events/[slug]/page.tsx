@@ -1,13 +1,15 @@
 import { publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { publicTicketTypes } from '@yayatoh/ticketing';
-import { buttonClass, Card, EmptyState, Label } from '@yayatoh/ui';
+import { buttonClass, EmptyState } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
+import { checkoutAction } from './actions.ts';
 
 export default async function PublicEventPage({
   params,
@@ -24,14 +26,23 @@ export default async function PublicEventPage({
   const passes =
     real.length > 0
       ? real.map((p) => ({
+          id: p.id,
           name: p.name,
           price: p.allInMinor,
           description: p.description ?? '',
           featured: false,
           availability: p.availability,
           fewLeft: p.fewLeft,
+          maxPerOrder: p.maxPerOrder,
         }))
-      : (demo?.passes ?? []).map((p) => ({ ...p, availability: 'available' as const, fewLeft: false }));
+      : (demo?.passes ?? []).map((p) => ({
+          ...p,
+          id: null,
+          featured: Boolean(p.featured),
+          availability: 'available' as const,
+          fewLeft: false,
+          maxPerOrder: 0,
+        }));
   const ev = {
     ...pub,
     passes,
@@ -121,33 +132,13 @@ export default async function PublicEventPage({
             description={t('publicEvent.noTicketsDescription')}
           />
         ) : (
-          <ul className="grid min-w-0 flex-1 list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
-            {ev.passes.map((p) => (
-              <li key={p.name}>
-                <Card tone={p.featured ? 'ink' : 'default'} size="panel" className="flex flex-col gap-2.5">
-                  <Label tone={p.featured ? 'inverse' : 'default'}>{p.name}</Label>
-                  <p className="text-[40px] leading-[44px] font-light tracking-[-0.04em]">
-                    {formatMoney(money(p.price, ev.currency), locale).replace(/\.00$/, '')}
-                    <span
-                      className={`ms-1 text-[15px] tracking-normal ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}
-                    >
-                      {t('publicEvent.allInSuffix')}
-                    </span>
-                  </p>
-                  <p className={`text-body ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}>
-                    {p.description}
-                  </p>
-                  <button
-                    type="button"
-                    disabled
-                    className={buttonClass(p.featured ? 'on-dark' : 'primary', 'md', 'self-start')}
-                  >
-                    {t('publicEvent.select')}
-                  </button>
-                </Card>
-              </li>
-            ))}
-          </ul>
+          <CheckoutForm
+            passes={ev.passes.map((p) => ({
+              ...p,
+              priceLabel: formatMoney(money(p.price, ev.currency), locale).replace(/\.00$/, ''),
+            }))}
+            action={checkoutAction.bind(null, slug)}
+          />
         )}
       </section>
 

@@ -403,5 +403,55 @@
     "description": "説明（任意）",
     "add": "チケット種別を追加",
     "added": "チケット種別を追加しました。"
+  },
+  "checkout": {
+    "quantity": "枚数",
+    "name": "氏名",
+    "email": "チケット送付先メールアドレス",
+    "continue": "お支払いへ進む",
+    "soldOut": "申し訳ありません。このチケットはちょうど完売しました。枚数を減らすか、別のパスをお試しください。",
+    "chooseTickets": "チケットを1枚以上選択してください。"
+  },
+  "fakePay": {
+    "eyebrow": "テスト決済",
+    "title": "ご注文のお支払い",
+    "description": "これはテスト用の決済ページです。実際のお金は動きません。",
+    "pay": "今すぐ支払う（テスト）",
+    "decline": "カード拒否をシミュレート"
+  },
+  "order": {
+    "eyebrow": "ご注文",
+    "title": {
+      "paid": "参加決定です、{name}さん！",
+      "reserved": "あと少しです、{name}さん",
+      "awaiting_payment": "お支払いを処理しています…",
+      "payment_failed": "お支払いが完了しませんでした",
+      "expired": "この注文は期限切れになりました",
+      "cancelled": "この注文はキャンセルされました",
+      "partially_refunded": "一部返金済み",
+      "refunded": "返金済み"
+    },
+    "status": {
+      "paid": "支払い済み",
+      "reserved": "予約済み",
+      "awaiting_payment": "支払い待ち",
+      "payment_failed": "支払い失敗",
+      "expired": "期限切れ",
+      "cancelled": "キャンセル済み",
+      "partially_refunded": "一部返金済み",
+      "refunded": "返金済み"
+    },
+    "sentTo": "確認メールを {email} に送信しました",
+    "total": "合計",
+    "feesIncluded": "手数料 {fees} を含む"
+  },
+  "orders": {
+    "title": "最近の注文",
+    "emptyTitle": "注文はまだありません",
+    "emptyDescription": "購入が完了すると、ここに注文が表示されます。",
+    "buyer": "購入者",
+    "items": "チケット",
+    "total": "合計",
+    "status": "ステータス"
   }
 }

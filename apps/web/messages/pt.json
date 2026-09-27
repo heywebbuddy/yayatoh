@@ -403,5 +403,55 @@
     "description": "Descrição (opcional)",
     "add": "Adicionar tipo de ingresso",
     "added": "Tipo de ingresso adicionado."
+  },
+  "checkout": {
+    "quantity": "Quantidade",
+    "name": "Nome completo",
+    "email": "E-mail para receber seus ingressos",
+    "continue": "Continuar para o pagamento",
+    "soldOut": "Desculpe, esses ingressos acabaram de esgotar. Tente uma quantidade menor ou outro passe.",
+    "chooseTickets": "Escolha pelo menos um ingresso."
+  },
+  "fakePay": {
+    "eyebrow": "Pagamento de teste",
+    "title": "Pague seu pedido",
+    "description": "Esta é uma página de pagamento de teste. Nenhum dinheiro real é movimentado.",
+    "pay": "Pagar agora (teste)",
+    "decline": "Simular um cartão recusado"
+  },
+  "order": {
+    "eyebrow": "Seu pedido",
+    "title": {
+      "paid": "Você está confirmado, {name}!",
+      "reserved": "Quase lá, {name}",
+      "awaiting_payment": "Finalizando seu pagamento…",
+      "payment_failed": "Seu pagamento não foi concluído",
+      "expired": "Este pedido expirou",
+      "cancelled": "Este pedido foi cancelado",
+      "partially_refunded": "Reembolsado parcialmente",
+      "refunded": "Reembolsado"
+    },
+    "status": {
+      "paid": "Pago",
+      "reserved": "Reservado",
+      "awaiting_payment": "Aguardando pagamento",
+      "payment_failed": "Falha no pagamento",
+      "expired": "Expirado",
+      "cancelled": "Cancelado",
+      "partially_refunded": "Reembolsado parcialmente",
+      "refunded": "Reembolsado"
+    },
+    "sentTo": "Confirmação enviada para {email}",
+    "total": "Total",
+    "feesIncluded": "Inclui {fees} em taxas"
+  },
+  "orders": {
+    "title": "Pedidos recentes",
+    "emptyTitle": "Nenhum pedido ainda",
+    "emptyDescription": "Os pedidos aparecem aqui assim que alguém finaliza a compra.",
+    "buyer": "Comprador",
+    "items": "Ingressos",
+    "total": "Total",
+    "status": "Status"
   }
 }

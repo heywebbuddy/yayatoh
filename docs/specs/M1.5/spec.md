@@ -27,8 +27,40 @@
 | AC4 | Another org can't add tickets to this event; a viewer can't create them; the isolation fixture covers the new tables | `ticketing.int.test.ts`, `isolation.int.test.ts` |
 | AC5 | An owner adds a ticket type and sees it on the public page at the all-in price | `e2e/tickets.spec.ts` |
 
+## M1.5b — orders and checkout (done)
+- **`orders` module (tier 4):**
+  - `orders` stores status, buyer, totals and the fee-schedule snapshot, the funds flow, the provider payment id, a hashed manage token and the hold expiry.
+  - `order_items` stores per-unit face, fee, all-in and organizer-net snapshots.
+  - The lifecycle follows roadmap §5.2 with conditional transitions.
+- **Checkout (public):**
+  - The org and event are resolved server-side from the slug (`events.checkout_target`), and prices are recomputed from the database (`ticketing.quoteTx`).
+  - Inventory is held by **one conditional UPDATE per line**, so nothing can oversell.
+  - Holds last 10 minutes, extended by 5 when payment starts.
+  - A zero-total order is paid at once.
+- **Payments (`payments` module, tier 3):**
+  - The `PaymentProvider` port, plus a **fake provider** (dev/preview/CI only, refused in production). Its hosted page posts an **HMAC-signed webhook**, and the webhook route verifies the raw body.
+  - `applyProviderEvent` is platform-only. It dedupes by provider event id (`payments.provider_events`), checks the amount, currency and payment id, and is the only way a paid order becomes `paid`.
+  - Paying after expiry re-holds stock if it is still available; otherwise it emits `order.payment_orphaned` for refund.
+- **Sweeper:** the worker releases lapsed holds every 30 s. It finds the orgs through `orders.orgs_with_due_holds` (platform reader), then expires the orders per org under RLS.
+- **Web:**
+  - Checkout form on the public event page (quantities, name, email).
+  - Fake payment page.
+  - Guest order page `/orders/{manageToken}`.
+  - Recent orders on the Tickets & Orders page.
+  - 13-locale strings.
+- **CI fix:** Playwright now starts `next start` directly with a bounded graceful shutdown. Before, the e2e job hung after the tests finished.
+
+### Acceptance (M1.5b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | 200 concurrent buyers for the last tickets never oversell; losers get `conflict` | `packages/testing/tests/checkout.int.test.ts` |
+| AC2 | Duplicate webhooks fulfil once; mismatched amounts are rejected; a browser cannot mark an order paid | `checkout.int.test.ts` |
+| AC3 | Free orders are paid at once; paid orders only after a verified provider event; the sweeper releases holds | `checkout.int.test.ts` |
+| AC4 | Guest order page by manage token only, with allowlisted fields | `checkout.int.test.ts`, `e2e/checkout.spec.ts` |
+| AC5 | End to end: organizer adds passes → guest buys free and paid tickets → organizer sees both paid orders; a forged webhook gets 400 | `e2e/checkout.spec.ts` |
+| AC6 | Isolation: another org can't read these orders or check out into this org's events; the fixture covers the new tables | `checkout.int.test.ts`, `isolation.int.test.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5b:** orders, holds (10 min, +5 at payment) with a sweeper, checkout for free and paid tickets through the `PaymentProvider` port, backed by a **fake adapter** until the owner's Stripe account exists. Acceptance: 200 concurrent buyers for 10 tickets never oversell; the fee snapshot is immutable; duplicate webhooks fulfil once.
 - **M1.5c:** tickets (serial, short code), Ed25519-signed QR with a per-org `kid`, PDF ticket; attendees created at issue; contacts + consents.
 - **M1.5d:** promo codes, early-bird tiers, donation tickets, `access_dates`, forms engine v1 (checkout questions).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

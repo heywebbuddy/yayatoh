@@ -61,3 +61,14 @@ export async function findEventTx(tx: TenantTx, eventId: string): Promise<EventD
   const [row] = await tx.select().from(events).where(eq(events.id, eventId));
   return row ? EventDto.parse(row) : null;
 }
+
+/** Public checkout: resolve a published, non-private event slug to its org and id (server-side only). */
+export async function checkoutTarget(slug: string): Promise<{ orgId: string; eventId: string } | null> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string; event_id: string }>(
+      sql`select org_id, event_id from events.checkout_target(${slug})`,
+    ),
+  );
+  const r = rows[0];
+  return r ? { orgId: r.org_id, eventId: r.event_id } : null;
+}

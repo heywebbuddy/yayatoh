@@ -14,6 +14,8 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",

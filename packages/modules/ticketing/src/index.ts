@@ -5,5 +5,14 @@ export {
   updateTicketTypeCommand,
 } from './commands/ticket-types.ts';
 export * from './dto.ts';
+export {
+  holdInventoryTx,
+  type LineRequest,
+  type Quote,
+  type QuotedLine,
+  quoteTx,
+  releaseHoldTx,
+  sellHeldTx,
+} from './inventory.ts';
 export { publicTicketTypes } from './public.ts';
 export { FEE_MODES, TICKET_TYPE_VISIBILITIES } from './schema.ts';

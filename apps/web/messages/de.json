@@ -403,5 +403,55 @@
     "description": "Beschreibung (optional)",
     "add": "Ticketart hinzufügen",
     "added": "Ticketart hinzugefügt."
+  },
+  "checkout": {
+    "quantity": "Anzahl",
+    "name": "Vollständiger Name",
+    "email": "E-Mail für deine Tickets",
+    "continue": "Weiter zur Zahlung",
+    "soldOut": "Leider sind diese Tickets gerade ausverkauft. Versuche eine kleinere Anzahl oder einen anderen Pass.",
+    "chooseTickets": "Wähle mindestens ein Ticket."
+  },
+  "fakePay": {
+    "eyebrow": "Testzahlung",
+    "title": "Bestellung bezahlen",
+    "description": "Dies ist eine Testzahlungsseite. Es fließt kein echtes Geld.",
+    "pay": "Jetzt bezahlen (Test)",
+    "decline": "Abgelehnte Karte simulieren"
+  },
+  "order": {
+    "eyebrow": "Deine Bestellung",
+    "title": {
+      "paid": "Du bist dabei, {name}!",
+      "reserved": "Fast geschafft, {name}",
+      "awaiting_payment": "Zahlung wird abgeschlossen…",
+      "payment_failed": "Deine Zahlung ist fehlgeschlagen",
+      "expired": "Diese Bestellung ist abgelaufen",
+      "cancelled": "Diese Bestellung wurde storniert",
+      "partially_refunded": "Teilweise erstattet",
+      "refunded": "Erstattet"
+    },
+    "status": {
+      "paid": "Bezahlt",
+      "reserved": "Reserviert",
+      "awaiting_payment": "Zahlung ausstehend",
+      "payment_failed": "Zahlung fehlgeschlagen",
+      "expired": "Abgelaufen",
+      "cancelled": "Storniert",
+      "partially_refunded": "Teilweise erstattet",
+      "refunded": "Erstattet"
+    },
+    "sentTo": "Bestätigung gesendet an {email}",
+    "total": "Gesamt",
+    "feesIncluded": "Enthält {fees} Gebühren"
+  },
+  "orders": {
+    "title": "Neueste Bestellungen",
+    "emptyTitle": "Noch keine Bestellungen",
+    "emptyDescription": "Bestellungen erscheinen hier, sobald jemand bezahlt.",
+    "buyer": "Käufer",
+    "items": "Tickets",
+    "total": "Gesamt",
+    "status": "Status"
   }
 }
