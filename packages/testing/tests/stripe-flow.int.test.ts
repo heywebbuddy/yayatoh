@@ -29,7 +29,7 @@ import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
  * Checkout Session, signed webhook, the order paid once, a refund of the session's payment and a
  * dispute found by its PaymentIntent. Stripe itself is a recording fake (no network).
  */
-const SECRET = 'whsec_int_0123456789abcdef';
+const SECRET = 'whsec_integration_test_only';
 let a: OrgFixture;
 let eventId: string;
 let typeId: string;
