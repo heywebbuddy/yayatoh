@@ -42,6 +42,12 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
         accountId: `fakeacct_${createHmac('sha256', opts.secret).update(`acct:${i.orgId}`).digest('hex').slice(0, 16)}`,
       };
     },
+    async refund(i) {
+      if (i.amount.amount <= 0) throw new Error('refund amount must be positive');
+      // The fake refunds anything; `fakepi_decline*` payments refuse refunds (tests).
+      const refundId = `fakere_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
+      return { refundId, status: i.providerPaymentId.startsWith('fakepi_decline') ? 'failed' : 'succeeded' };
+    },
     async registerPaymentMethodDomain(i) {
       const key = `pmd:${i.hostname}:${i.accountId ?? 'platform'}`;
       return { id: `fakepmd_${createHmac('sha256', opts.secret).update(key).digest('hex').slice(0, 16)}` };

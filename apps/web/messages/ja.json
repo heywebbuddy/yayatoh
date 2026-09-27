@@ -1038,5 +1038,51 @@
     "pause_publishing": "イベントの公開は Yayatoh サポートにより一時停止されています。",
     "pause_messaging": "ゲストへのメッセージ送信は Yayatoh サポートにより一時停止されています。",
     "contact": "詳しくは Yayatoh サポートにお問い合わせください。"
+  },
+  "refunds": {
+    "orderTitle": "{name}さんの注文",
+    "soldBy": {
+      "organizer_mor": "あなたの入金用アカウントで決済",
+      "platform_mor": "Yayatoh があなたに代わって決済"
+    },
+    "ticketsTitle": "チケット",
+    "ticketType": "チケット",
+    "holder": "名義人",
+    "code": "コード",
+    "ticketStatus": {
+      "active": "有効",
+      "void": "無効"
+    },
+    "title": "返金",
+    "when": "日時",
+    "reason": "理由",
+    "amountCol": "返金額",
+    "feeCol": "返金した手数料",
+    "status": {
+      "pending": "処理中",
+      "succeeded": "返金済み",
+      "failed": "失敗"
+    },
+    "reasons": {
+      "requested_by_customer": "購入者の依頼",
+      "event_cancelled": "イベント中止",
+      "event_postponed": "イベント延期（90日超、新しい日程なし）",
+      "duplicate": "重複注文",
+      "fraudulent": "不正利用",
+      "goodwill": "好意による返金"
+    },
+    "formTitle": "返金",
+    "feePolicy": "手数料は、イベントが中止・延期された場合、または重複注文・不正な注文の場合に返金されます。それ以外の場合は返金されません。",
+    "what": "返金の対象",
+    "modeTickets": "チケット単位（チケットは無効になります）",
+    "modeAmount": "金額指定（チケットは有効のままです）",
+    "tickets": "返金するチケット",
+    "amount": "金額（{currency}）",
+    "note": "メモ（任意、チーム用）",
+    "submit": "返金する",
+    "done": "返金しました。数日以内に購入者のカードに返金されます。",
+    "failed": "決済代行会社がこの返金を拒否しました。変更は行われていません。",
+    "exceedsRefundable": "この注文で返金できる残額を超えています。",
+    "ticketRefunded": "これらのチケットのいずれかは、すでに返金済みか返金処理中です。"
   }
 }

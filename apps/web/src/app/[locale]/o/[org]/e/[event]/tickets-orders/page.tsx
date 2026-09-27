@@ -8,6 +8,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -174,7 +175,12 @@ export default async function TicketsPage({
                   header: t('orders.buyer'),
                   cell: (o) => (
                     <span className="flex flex-col">
-                      <span>{o.buyerName}</span>
+                      <Link
+                        href={`/o/${org}/e/${event}/orders/${o.id}`}
+                        className="underline underline-offset-2"
+                      >
+                        {o.buyerName}
+                      </Link>
                       <span className="text-caption text-zinc-500">{o.buyerEmail}</span>
                     </span>
                   ),

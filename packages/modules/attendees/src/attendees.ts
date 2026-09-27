@@ -49,6 +49,19 @@ export async function reassignAttendeeTx(
   if (rows.length === 0) throw new DomainError('not_found', 'Attendee not found');
 }
 
+/** Tickets were voided (refund, cancellation): their attendees leave the list; records stay. */
+export async function cancelAttendeesTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  attendeeIds: readonly string[],
+): Promise<void> {
+  if (attendeeIds.length === 0) return;
+  await tx
+    .update(attendees)
+    .set({ status: 'cancelled', updatedAt: ctx.now })
+    .where(inArray(attendees.id, [...attendeeIds]));
+}
+
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /** Labels are short free text: trimmed, inner whitespace collapsed, 1–40 characters. */

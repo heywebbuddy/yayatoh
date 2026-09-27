@@ -1038,5 +1038,51 @@
     "pause_publishing": "Publishing events is paused by Yayatoh support.",
     "pause_messaging": "Sending messages to guests is paused by Yayatoh support.",
     "contact": "Contact Yayatoh support to find out more."
+  },
+  "refunds": {
+    "orderTitle": "Order from {name}",
+    "soldBy": {
+      "organizer_mor": "Charged on your payout account",
+      "platform_mor": "Charged by Yayatoh on your behalf"
+    },
+    "ticketsTitle": "Tickets",
+    "ticketType": "Ticket",
+    "holder": "Holder",
+    "code": "Code",
+    "ticketStatus": {
+      "active": "Valid",
+      "void": "Void"
+    },
+    "title": "Refunds",
+    "when": "When",
+    "reason": "Reason",
+    "amountCol": "Refunded",
+    "feeCol": "Fee returned",
+    "status": {
+      "pending": "Pending",
+      "succeeded": "Refunded",
+      "failed": "Failed"
+    },
+    "reasons": {
+      "requested_by_customer": "The buyer asked",
+      "event_cancelled": "Event cancelled",
+      "event_postponed": "Event postponed (over 90 days, no new date)",
+      "duplicate": "Duplicate order",
+      "fraudulent": "Fraudulent",
+      "goodwill": "Goodwill"
+    },
+    "formTitle": "Refund",
+    "feePolicy": "The booking fee is returned when the event is cancelled or postponed, or for duplicate and fraudulent orders. Otherwise it is kept.",
+    "what": "What to refund",
+    "modeTickets": "Whole tickets (they stop working)",
+    "modeAmount": "An amount (tickets stay valid)",
+    "tickets": "Tickets to refund",
+    "amount": "Amount ({currency})",
+    "note": "Note (optional, for your team)",
+    "submit": "Refund",
+    "done": "Refunded. The buyer gets the money back on their card in a few days.",
+    "failed": "The payment provider declined this refund. Nothing was changed.",
+    "exceedsRefundable": "That is more than is left to refund on this order.",
+    "ticketRefunded": "One of those tickets is already refunded or being refunded."
   }
 }

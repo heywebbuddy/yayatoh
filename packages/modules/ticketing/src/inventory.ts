@@ -204,3 +204,13 @@ export async function sellHeldTx(tx: TenantTx, lines: readonly LineRequest[]): P
       .where(eq(ticketTypes.id, l.ticketTypeId));
   }
 }
+
+/** Return sold inventory (refunded or cancelled tickets): the places can be sold again. */
+export async function returnSoldTx(tx: TenantTx, lines: readonly LineRequest[]): Promise<void> {
+  for (const l of lines) {
+    await tx
+      .update(ticketTypes)
+      .set({ quantitySold: sql`${ticketTypes.quantitySold} - ${l.quantity}` })
+      .where(eq(ticketTypes.id, l.ticketTypeId));
+  }
+}

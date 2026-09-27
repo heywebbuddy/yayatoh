@@ -1038,5 +1038,51 @@
     "pause_publishing": "Het publiceren van evenementen is gepauzeerd door Yayatoh-support.",
     "pause_messaging": "Het versturen van berichten aan gasten is gepauzeerd door Yayatoh-support.",
     "contact": "Neem contact op met Yayatoh-support voor meer informatie."
+  },
+  "refunds": {
+    "orderTitle": "Bestelling van {name}",
+    "soldBy": {
+      "organizer_mor": "Afgerekend via je uitbetalingsaccount",
+      "platform_mor": "Door Yayatoh namens jou afgerekend"
+    },
+    "ticketsTitle": "Tickets",
+    "ticketType": "Ticket",
+    "holder": "Houder",
+    "code": "Code",
+    "ticketStatus": {
+      "active": "Geldig",
+      "void": "Ongeldig"
+    },
+    "title": "Terugbetalingen",
+    "when": "Wanneer",
+    "reason": "Reden",
+    "amountCol": "Terugbetaald",
+    "feeCol": "Kosten terug",
+    "status": {
+      "pending": "In behandeling",
+      "succeeded": "Terugbetaald",
+      "failed": "Mislukt"
+    },
+    "reasons": {
+      "requested_by_customer": "Op verzoek van de koper",
+      "event_cancelled": "Evenement geannuleerd",
+      "event_postponed": "Evenement uitgesteld (meer dan 90 dagen, geen nieuwe datum)",
+      "duplicate": "Dubbele bestelling",
+      "fraudulent": "Frauduleus",
+      "goodwill": "Coulance"
+    },
+    "formTitle": "Terugbetalen",
+    "feePolicy": "De kosten worden terugbetaald als het evenement wordt geannuleerd of uitgesteld, en bij dubbele en frauduleuze bestellingen. Anders worden ze ingehouden.",
+    "what": "Wat terugbetalen",
+    "modeTickets": "Hele tickets (ze werken niet meer)",
+    "modeAmount": "Een bedrag (tickets blijven geldig)",
+    "tickets": "Terug te betalen tickets",
+    "amount": "Bedrag ({currency})",
+    "note": "Notitie (optioneel, voor je team)",
+    "submit": "Terugbetalen",
+    "done": "Terugbetaald. De koper krijgt het geld binnen een paar dagen terug op zijn kaart.",
+    "failed": "De betaalprovider heeft deze terugbetaling geweigerd. Er is niets gewijzigd.",
+    "exceedsRefundable": "Dat is meer dan er op deze bestelling nog terug te betalen is.",
+    "ticketRefunded": "Een van die tickets is al terugbetaald of wordt terugbetaald."
   }
 }

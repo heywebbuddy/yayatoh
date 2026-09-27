@@ -1,4 +1,4 @@
-import { createAttendeesTx, reassignAttendeeTx } from '@yayatoh/attendees';
+import { cancelAttendeesTx, createAttendeesTx, reassignAttendeeTx } from '@yayatoh/attendees';
 import { upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import type { Ctx } from '@yayatoh/kernel';
@@ -13,6 +13,7 @@ import {
 } from '@yayatoh/ticket-crypto';
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { returnSoldTx } from './inventory.ts';
 import { signingKeys, TICKET_STATUSES, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
 
 export interface IssueRequest {
@@ -143,6 +144,7 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
     .select({
       id: tickets.id,
       ticketTypeId: tickets.ticketTypeId,
+      orderItemId: tickets.orderItemId,
       serial: tickets.serial,
       shortCode: tickets.shortCode,
       status: tickets.status,
@@ -395,4 +397,45 @@ export async function manifestTicketsTx(
     .orderBy(sql`date_trunc('milliseconds', ${tickets.updatedAt})`, tickets.id)
     .limit(limit);
   return rows.map((r) => ({ ...r, status: r.status as ManifestTicket['status'] }));
+}
+
+/**
+ * Void active tickets of one order (refund or cancellation): scanners reject them from the next
+ * manifest, their attendees are cancelled and the places return to sale. Returns what was voided;
+ * tickets already void or of another order are skipped.
+ */
+export async function voidTicketsTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  req: { orderId: string; ticketIds: readonly string[]; reason: string },
+): Promise<{ id: string; ticketTypeId: string; orderItemId: string }[]> {
+  if (req.ticketIds.length === 0) return [];
+  const rows = await tx
+    .update(tickets)
+    .set({ status: 'void', voidReason: req.reason, updatedAt: ctx.now })
+    .where(
+      and(
+        eq(tickets.orderId, req.orderId),
+        eq(tickets.status, 'active'),
+        inArray(tickets.id, [...req.ticketIds]),
+      ),
+    )
+    .returning({
+      id: tickets.id,
+      ticketTypeId: tickets.ticketTypeId,
+      orderItemId: tickets.orderItemId,
+      attendeeId: tickets.attendeeId,
+    });
+  await cancelAttendeesTx(
+    tx,
+    ctx,
+    rows.flatMap((r) => (r.attendeeId ? [r.attendeeId] : [])),
+  );
+  const perType = new Map<string, number>();
+  for (const r of rows) perType.set(r.ticketTypeId, (perType.get(r.ticketTypeId) ?? 0) + 1);
+  await returnSoldTx(
+    tx,
+    [...perType].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
+  );
+  return rows.map(({ id, ticketTypeId, orderItemId }) => ({ id, ticketTypeId, orderItemId }));
 }

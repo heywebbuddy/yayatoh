@@ -1038,5 +1038,51 @@
     "pause_publishing": "Das Veröffentlichen von Events wurde vom Yayatoh-Support pausiert.",
     "pause_messaging": "Das Senden von Nachrichten an Gäste wurde vom Yayatoh-Support pausiert.",
     "contact": "Wende dich an den Yayatoh-Support, um mehr zu erfahren."
+  },
+  "refunds": {
+    "orderTitle": "Bestellung von {name}",
+    "soldBy": {
+      "organizer_mor": "Über dein Auszahlungskonto abgerechnet",
+      "platform_mor": "Von Yayatoh für dich abgerechnet"
+    },
+    "ticketsTitle": "Tickets",
+    "ticketType": "Ticket",
+    "holder": "Inhaber",
+    "code": "Code",
+    "ticketStatus": {
+      "active": "Gültig",
+      "void": "Ungültig"
+    },
+    "title": "Erstattungen",
+    "when": "Wann",
+    "reason": "Grund",
+    "amountCol": "Erstattet",
+    "feeCol": "Gebühr zurück",
+    "status": {
+      "pending": "Ausstehend",
+      "succeeded": "Erstattet",
+      "failed": "Fehlgeschlagen"
+    },
+    "reasons": {
+      "requested_by_customer": "Auf Wunsch des Käufers",
+      "event_cancelled": "Event abgesagt",
+      "event_postponed": "Event verschoben (über 90 Tage, kein neuer Termin)",
+      "duplicate": "Doppelte Bestellung",
+      "fraudulent": "Betrug",
+      "goodwill": "Kulanz"
+    },
+    "formTitle": "Erstatten",
+    "feePolicy": "Die Gebühr wird erstattet, wenn das Event abgesagt oder verschoben wird, sowie bei doppelten und betrügerischen Bestellungen. Ansonsten wird sie einbehalten.",
+    "what": "Was erstatten?",
+    "modeTickets": "Ganze Tickets (sie werden ungültig)",
+    "modeAmount": "Einen Betrag (Tickets bleiben gültig)",
+    "tickets": "Zu erstattende Tickets",
+    "amount": "Betrag ({currency})",
+    "note": "Notiz (optional, für dein Team)",
+    "submit": "Erstatten",
+    "done": "Erstattet. Der Käufer erhält das Geld in ein paar Tagen auf seine Karte zurück.",
+    "failed": "Der Zahlungsanbieter hat diese Erstattung abgelehnt. Es wurde nichts geändert.",
+    "exceedsRefundable": "Das ist mehr, als bei dieser Bestellung noch erstattet werden kann.",
+    "ticketRefunded": "Eines dieser Tickets ist bereits erstattet oder wird gerade erstattet."
   }
 }

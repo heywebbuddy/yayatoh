@@ -18,6 +18,7 @@ export {
   ledgerBalancesQuery,
   type Posting,
   postJournalTx,
+  postRefundTx,
   postSaleTx,
 } from './ledger.ts';
 export type {
@@ -28,6 +29,7 @@ export type {
   FundsFlow,
   PaymentProvider,
   ProviderEvent,
+  RefundInput,
   WebhookEvent,
 } from './port.ts';
 export { isAccountEvent } from './port.ts';

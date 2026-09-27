@@ -1038,5 +1038,51 @@
     "pause_publishing": "El soporte de Yayatoh ha pausado la publicación de eventos.",
     "pause_messaging": "El soporte de Yayatoh ha pausado el envío de mensajes a los invitados.",
     "contact": "Contacta con el soporte de Yayatoh para saber más."
+  },
+  "refunds": {
+    "orderTitle": "Pedido de {name}",
+    "soldBy": {
+      "organizer_mor": "Cobrado en tu cuenta de pagos",
+      "platform_mor": "Cobrado por Yayatoh en tu nombre"
+    },
+    "ticketsTitle": "Entradas",
+    "ticketType": "Entrada",
+    "holder": "Titular",
+    "code": "Código",
+    "ticketStatus": {
+      "active": "Válida",
+      "void": "Anulada"
+    },
+    "title": "Reembolsos",
+    "when": "Fecha",
+    "reason": "Motivo",
+    "amountCol": "Reembolsado",
+    "feeCol": "Tarifa devuelta",
+    "status": {
+      "pending": "Pendiente",
+      "succeeded": "Reembolsado",
+      "failed": "Fallido"
+    },
+    "reasons": {
+      "requested_by_customer": "Lo pidió el comprador",
+      "event_cancelled": "Evento cancelado",
+      "event_postponed": "Evento aplazado (más de 90 días, sin nueva fecha)",
+      "duplicate": "Pedido duplicado",
+      "fraudulent": "Fraudulento",
+      "goodwill": "Cortesía"
+    },
+    "formTitle": "Reembolsar",
+    "feePolicy": "La tarifa se devuelve cuando el evento se cancela o se aplaza, y en pedidos duplicados o fraudulentos. En los demás casos, no se devuelve.",
+    "what": "Qué reembolsar",
+    "modeTickets": "Entradas completas (dejan de funcionar)",
+    "modeAmount": "Un importe (las entradas siguen siendo válidas)",
+    "tickets": "Entradas a reembolsar",
+    "amount": "Importe ({currency})",
+    "note": "Nota (opcional, para tu equipo)",
+    "submit": "Reembolsar",
+    "done": "Reembolsado. El comprador recibirá el dinero en su tarjeta en unos días.",
+    "failed": "El proveedor de pagos rechazó este reembolso. No se cambió nada.",
+    "exceedsRefundable": "Eso supera lo que queda por reembolsar en este pedido.",
+    "ticketRefunded": "Una de esas entradas ya está reembolsada o se está reembolsando."
   }
 }

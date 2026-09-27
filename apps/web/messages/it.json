@@ -1038,5 +1038,51 @@
     "pause_publishing": "La pubblicazione degli eventi è stata sospesa dall’assistenza Yayatoh.",
     "pause_messaging": "L’invio di messaggi agli ospiti è stato sospeso dall’assistenza Yayatoh.",
     "contact": "Contatta l’assistenza Yayatoh per saperne di più."
+  },
+  "refunds": {
+    "orderTitle": "Ordine di {name}",
+    "soldBy": {
+      "organizer_mor": "Incassato sul tuo conto per gli accrediti",
+      "platform_mor": "Incassato da Yayatoh per tuo conto"
+    },
+    "ticketsTitle": "Biglietti",
+    "ticketType": "Biglietto",
+    "holder": "Intestatario",
+    "code": "Codice",
+    "ticketStatus": {
+      "active": "Valido",
+      "void": "Annullato"
+    },
+    "title": "Rimborsi",
+    "when": "Quando",
+    "reason": "Motivo",
+    "amountCol": "Rimborsato",
+    "feeCol": "Commissione restituita",
+    "status": {
+      "pending": "In attesa",
+      "succeeded": "Rimborsato",
+      "failed": "Non riuscito"
+    },
+    "reasons": {
+      "requested_by_customer": "Richiesta dell’acquirente",
+      "event_cancelled": "Evento annullato",
+      "event_postponed": "Evento rinviato (oltre 90 giorni, senza nuova data)",
+      "duplicate": "Ordine duplicato",
+      "fraudulent": "Fraudolento",
+      "goodwill": "Cortesia"
+    },
+    "formTitle": "Rimborsa",
+    "feePolicy": "La commissione viene restituita se l’evento è annullato o rinviato, oppure per ordini duplicati e fraudolenti. Negli altri casi viene trattenuta.",
+    "what": "Cosa rimborsare",
+    "modeTickets": "Biglietti interi (smettono di funzionare)",
+    "modeAmount": "Un importo (i biglietti restano validi)",
+    "tickets": "Biglietti da rimborsare",
+    "amount": "Importo ({currency})",
+    "note": "Nota (facoltativa, per il tuo team)",
+    "submit": "Rimborsa",
+    "done": "Rimborso effettuato. L’acquirente riceverà il denaro sulla carta entro qualche giorno.",
+    "failed": "Il fornitore di pagamenti ha rifiutato questo rimborso. Non è stato modificato nulla.",
+    "exceedsRefundable": "È più di quanto resta da rimborsare su questo ordine.",
+    "ticketRefunded": "Uno di questi biglietti è già rimborsato o in fase di rimborso."
   }
 }

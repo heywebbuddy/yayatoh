@@ -31,6 +31,7 @@ export {
   type QuotedLine,
   quoteTx,
   releaseHoldTx,
+  returnSoldTx,
   sellHeldTx,
 } from './inventory.ts';
 export {
@@ -49,6 +50,7 @@ export {
   ticketSummariesQuery,
   ticketSummariesTx,
   ticketsForOrderTx,
+  voidTicketsTx,
 } from './issue.ts';
 export {
   CreatePromoCodeInput,

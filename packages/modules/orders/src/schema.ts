@@ -110,3 +110,47 @@ export const orderItems = tenantTable(
     check('order_items_discount_check', sql`unit_discount_minor between 0 and unit_face_minor`),
   ],
 );
+
+export const REFUND_STATUSES = ['pending', 'succeeded', 'failed'] as const;
+export const REFUND_REASONS = [
+  'requested_by_customer',
+  'event_cancelled',
+  'event_postponed',
+  'duplicate',
+  'fraudulent',
+  'goodwill',
+] as const;
+
+/**
+ * Refunds (M1.6b): whole tickets (voided on success) or a goodwill amount. `fee_refunded_minor`
+ * is the platform-fee part given back, set by the refund policy.
+ */
+export const refunds = tenantTable(
+  ordersSchema,
+  'refunds',
+  {
+    orderId: uuid('order_id').notNull(),
+    status: text('status').notNull().default('pending'),
+    reason: text('reason').notNull(),
+    note: text('note'),
+    amountMinor: minor('amount_minor').notNull(),
+    feeRefundedMinor: minor('fee_refunded_minor').notNull().default(0),
+    currency: text('currency').notNull(),
+    ticketIds: uuid('ticket_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    providerRefundId: text('provider_refund_id'),
+    failureCode: text('failure_code'),
+    requestedBy: text('requested_by').notNull(),
+    completedAt: ts('completed_at'),
+  },
+  (t) => [
+    index('refunds_org_order_idx').on(t.orgId, t.orderId),
+    check('refunds_status_check', sql.raw(`status in (${REFUND_STATUSES.map((s) => `'${s}'`).join(', ')})`)),
+    check('refunds_reason_check', sql.raw(`reason in (${REFUND_REASONS.map((s) => `'${s}'`).join(', ')})`)),
+    check('refunds_amount_check', sql`amount_minor > 0 and fee_refunded_minor between 0 and amount_minor`),
+    foreignKey({
+      name: 'refunds_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+  ],
+);

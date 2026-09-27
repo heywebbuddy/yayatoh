@@ -129,11 +129,13 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
       // page no longer shows their codes, only how many were passed on.
       const all = await ticketsForOrderTx(tx, ref.order_id);
       const buyer = o.buyerEmail.trim().toLowerCase();
-      const mine = all.filter((t) => t.holderEmail.trim().toLowerCase() === buyer);
+      // Voided (refunded) tickets no longer work: no QR for them.
+      const live = all.filter((t) => t.status === 'active');
+      const mine = live.filter((t) => t.holderEmail.trim().toLowerCase() === buyer);
       return {
         ...o,
         tickets: mine,
-        transferred: all.length - mine.length,
+        transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
       };
     });
@@ -143,3 +145,39 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
     throw err;
   }
 }
+
+export const OrganizerTicketDto = z.object({
+  id: z.uuid(),
+  serial: z.int(),
+  shortCode: z.string(),
+  status: z.string(),
+  holderName: z.string(),
+  holderEmail: z.string(),
+  itemName: z.string(),
+});
+
+/** One order as the organizer sees it: the order, its tickets (who holds them, void or not). */
+export const orderDetailQuery = tenantQuery({
+  name: 'orders.orderDetail',
+  input: z.object({ orderId: z.uuid() }),
+  output: OrderDto.extend({
+    fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+    tickets: z.array(OrganizerTicketDto),
+  }),
+  entitlement: 'ticketing',
+  permission: 'orders:read',
+  handler: async ({ input, tx }) => {
+    const order = await loadOrderTx(tx, input.orderId);
+    const names = new Map(order.items.map((i) => [i.id, i.name]));
+    const tickets = (await ticketsForOrderTx(tx, order.id)).map((t) => ({
+      id: t.id,
+      serial: t.serial,
+      shortCode: t.shortCode,
+      status: t.status,
+      holderName: t.holderName,
+      holderEmail: t.holderEmail,
+      itemName: names.get(t.orderItemId) ?? '',
+    }));
+    return { ...order, fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor', tickets };
+  },
+});

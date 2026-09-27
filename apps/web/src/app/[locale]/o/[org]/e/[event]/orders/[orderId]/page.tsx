@@ -1,0 +1,166 @@
+import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
+import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
+import { roleCan } from '@yayatoh/tenancy';
+import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { notFound } from 'next/navigation';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { z } from 'zod';
+import { RefundForm } from '@/components/refund-form.tsx';
+import { loadEvent } from '@/server/console.ts';
+import { ports } from '@/server/ports.ts';
+import { refundAction } from './actions.ts';
+
+/** One order for the organizer: buyer, tickets (and who holds them), refunds, and the refund form. */
+export default async function OrderPage({
+  params,
+}: {
+  params: Promise<{ locale: string; org: string; event: string; orderId: string }>;
+}) {
+  const { locale, org, event, orderId } = await params;
+  setRequestLocale(locale);
+  if (!z.uuid().safeParse(orderId).success) notFound();
+  const { data, event: ev } = await loadEvent(org, event);
+  if (!roleCan(data.role, 'orders:read')) notFound();
+  const t = await getTranslations();
+  let order: Awaited<ReturnType<typeof loadOrder>>;
+  async function loadOrder() {
+    return executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
+  }
+  try {
+    order = await loadOrder();
+  } catch (err) {
+    if (isDomainError(err) && err.code === 'not_found') notFound();
+    throw err;
+  }
+  if (order.eventId !== ev.id) notFound();
+  const refunds = await executeQuery(orderRefundsQuery, { orderId }, data.ctx, ports);
+  const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
+  const when = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: data.org.timezone,
+  });
+  const canRefund =
+    roleCan(data.role, 'orders:refund') &&
+    ['paid', 'partially_refunded'].includes(order.status) &&
+    order.totalMinor > 0;
+  const active = order.tickets.filter((tk) => tk.status === 'active');
+  return (
+    <>
+      <PageHeader
+        title={t('refunds.orderTitle', { name: order.buyerName })}
+        description={`${order.buyerEmail} · ${when.format(order.createdAt)}`}
+      />
+      <Card className="flex flex-col gap-2">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <StatusDot
+            status={
+              order.status === 'paid' ? 'success' : order.status.includes('refunded') ? 'warning' : 'neutral'
+            }
+            label={t(`order.status.${order.status}`)}
+          />
+          <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
+          <span className="text-caption text-zinc-600">{t(`refunds.soldBy.${order.fundsFlow}`)}</span>
+        </div>
+        <p className="text-caption text-zinc-600">
+          {order.items.map((i) => `${i.quantity} × ${i.name}`).join(', ')}
+        </p>
+      </Card>
+
+      <section aria-labelledby="tickets-heading" className="flex flex-col gap-3">
+        <h2 id="tickets-heading" className="text-section">
+          {t('refunds.ticketsTitle')}
+        </h2>
+        <Table
+          caption={t('refunds.ticketsTitle')}
+          rowKey={(tk) => tk.id}
+          rows={order.tickets}
+          columns={[
+            { key: 'serial', header: '#', cell: (tk) => tk.serial, mono: true },
+            { key: 'type', header: t('refunds.ticketType'), cell: (tk) => tk.itemName },
+            {
+              key: 'holder',
+              header: t('refunds.holder'),
+              cell: (tk) => (
+                <span className="flex flex-col">
+                  <span>{tk.holderName}</span>
+                  <span className="text-caption text-zinc-500">{tk.holderEmail}</span>
+                </span>
+              ),
+            },
+            { key: 'code', header: t('refunds.code'), cell: (tk) => tk.shortCode, mono: true },
+            {
+              key: 'status',
+              header: t('orders.status'),
+              cell: (tk) => (
+                <StatusDot
+                  status={tk.status === 'active' ? 'success' : 'neutral'}
+                  label={t(`refunds.ticketStatus.${tk.status}`)}
+                />
+              ),
+            },
+          ]}
+        />
+      </section>
+
+      {refunds.length > 0 ? (
+        <section aria-labelledby="refunds-heading" className="flex flex-col gap-3">
+          <h2 id="refunds-heading" className="text-section">
+            {t('refunds.title')}
+          </h2>
+          <Table
+            caption={t('refunds.title')}
+            rowKey={(r) => r.id}
+            rows={refunds}
+            columns={[
+              { key: 'when', header: t('refunds.when'), cell: (r) => when.format(r.createdAt) },
+              { key: 'reason', header: t('refunds.reason'), cell: (r) => t(`refunds.reasons.${r.reason}`) },
+              {
+                key: 'amount',
+                header: t('refunds.amountCol'),
+                cell: (r) => fmt(r.amountMinor),
+                mono: true,
+                align: 'end',
+              },
+              {
+                key: 'fee',
+                header: t('refunds.feeCol'),
+                cell: (r) => fmt(r.feeRefundedMinor),
+                mono: true,
+                align: 'end',
+              },
+              {
+                key: 'status',
+                header: t('orders.status'),
+                cell: (r) => (
+                  <StatusDot
+                    status={r.status === 'succeeded' ? 'success' : r.status === 'failed' ? 'danger' : 'info'}
+                    label={t(`refunds.status.${r.status}`)}
+                  />
+                ),
+              },
+            ]}
+          />
+        </section>
+      ) : null}
+
+      {canRefund ? (
+        <section aria-labelledby="refund-heading" className="flex flex-col gap-3">
+          <h2 id="refund-heading" className="text-section">
+            {t('refunds.formTitle')}
+          </h2>
+          <Card>
+            <RefundForm
+              action={refundAction.bind(null, org, event, orderId)}
+              currency={order.currency}
+              tickets={active.map((tk) => ({
+                id: tk.id,
+                label: `#${tk.serial} · ${tk.itemName} · ${tk.holderName}`,
+              }))}
+            />
+          </Card>
+        </section>
+      ) : null}
+    </>
+  );
+}

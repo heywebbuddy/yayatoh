@@ -88,4 +88,20 @@ export interface PaymentProvider {
    * per connected account). Idempotent per (host, account).
    */
   registerPaymentMethodDomain(input: { hostname: string; accountId: string | null }): Promise<{ id: string }>;
+  /**
+   * Refund part or all of a payment (M1.6b). organizer_mor refunds on the connected account and
+   * may refund part of the application fee; platform_mor refunds the platform charge. Idempotent
+   * per key. `pending` completes later by webhook.
+   */
+  refund(input: RefundInput): Promise<{ refundId: string; status: 'succeeded' | 'pending' | 'failed' }>;
+}
+
+export interface RefundInput {
+  readonly providerPaymentId: string;
+  readonly amount: Money;
+  /** organizer_mor: the account the charge lives on. */
+  readonly connectedAccountId: string | null;
+  /** organizer_mor: how much of the application fee goes back (0 keeps it). */
+  readonly refundApplicationFee: Money;
+  readonly idempotencyKey: string;
 }

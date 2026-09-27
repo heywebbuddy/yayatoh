@@ -1038,5 +1038,51 @@
     "pause_publishing": "A publicação de eventos foi pausada pelo suporte da Yayatoh.",
     "pause_messaging": "O envio de mensagens aos convidados foi pausado pelo suporte da Yayatoh.",
     "contact": "Entre em contato com o suporte da Yayatoh para saber mais."
+  },
+  "refunds": {
+    "orderTitle": "Pedido de {name}",
+    "soldBy": {
+      "organizer_mor": "Cobrado na sua conta de repasses",
+      "platform_mor": "Cobrado pela Yayatoh em seu nome"
+    },
+    "ticketsTitle": "Ingressos",
+    "ticketType": "Ingresso",
+    "holder": "Titular",
+    "code": "Código",
+    "ticketStatus": {
+      "active": "Válido",
+      "void": "Anulado"
+    },
+    "title": "Reembolsos",
+    "when": "Quando",
+    "reason": "Motivo",
+    "amountCol": "Reembolsado",
+    "feeCol": "Taxa devolvida",
+    "status": {
+      "pending": "Pendente",
+      "succeeded": "Reembolsado",
+      "failed": "Falhou"
+    },
+    "reasons": {
+      "requested_by_customer": "A pedido do comprador",
+      "event_cancelled": "Evento cancelado",
+      "event_postponed": "Evento adiado (mais de 90 dias, sem nova data)",
+      "duplicate": "Pedido duplicado",
+      "fraudulent": "Fraudulento",
+      "goodwill": "Cortesia"
+    },
+    "formTitle": "Reembolsar",
+    "feePolicy": "A taxa é devolvida quando o evento é cancelado ou adiado, ou em pedidos duplicados e fraudulentos. Nos outros casos, ela é mantida.",
+    "what": "O que reembolsar",
+    "modeTickets": "Ingressos inteiros (eles deixam de funcionar)",
+    "modeAmount": "Um valor (os ingressos continuam válidos)",
+    "tickets": "Ingressos a reembolsar",
+    "amount": "Valor ({currency})",
+    "note": "Observação (opcional, para sua equipe)",
+    "submit": "Reembolsar",
+    "done": "Reembolsado. O comprador recebe o dinheiro de volta no cartão em alguns dias.",
+    "failed": "O provedor de pagamentos recusou este reembolso. Nada foi alterado.",
+    "exceedsRefundable": "Isso é mais do que resta para reembolsar neste pedido.",
+    "ticketRefunded": "Um desses ingressos já foi reembolsado ou está sendo reembolsado."
   }
 }

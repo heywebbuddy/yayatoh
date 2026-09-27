@@ -15,7 +15,13 @@ import {
 } from '@yayatoh/events';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
-import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
+import {
+  applyProviderEventCommand,
+  attachPaymentCommand,
+  completeRefundCommand,
+  startCheckoutCommand,
+  startRefundCommand,
+} from '@yayatoh/orders';
 import { recordPayoutAccountCommand } from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
@@ -196,6 +202,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       orderId: checkout.order.id,
     },
     systemCtx(org.id),
+    ports,
+  );
+  // A refund the provider declined (isolation coverage; the order stays paid).
+  const declined = await executeCommand(
+    startRefundCommand,
+    { orderId: checkout.order.id, reason: 'goodwill', amountMinor: 1 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    completeRefundCommand,
+    {
+      refundId: declined.refundId,
+      outcome: 'failed',
+      providerRefundId: `fakere_${slug}`,
+      failureCode: 'fixture',
+    },
+    ctx(),
     ports,
   );
   await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);

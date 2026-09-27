@@ -1038,5 +1038,51 @@
     "pause_publishing": "La publication d’événements a été suspendue par le support Yayatoh.",
     "pause_messaging": "L’envoi de messages aux invités a été suspendu par le support Yayatoh.",
     "contact": "Contactez le support Yayatoh pour en savoir plus."
+  },
+  "refunds": {
+    "orderTitle": "Commande de {name}",
+    "soldBy": {
+      "organizer_mor": "Encaissé sur votre compte de versement",
+      "platform_mor": "Encaissé par Yayatoh pour votre compte"
+    },
+    "ticketsTitle": "Billets",
+    "ticketType": "Billet",
+    "holder": "Titulaire",
+    "code": "Code",
+    "ticketStatus": {
+      "active": "Valide",
+      "void": "Annulé"
+    },
+    "title": "Remboursements",
+    "when": "Date",
+    "reason": "Motif",
+    "amountCol": "Remboursé",
+    "feeCol": "Frais rendus",
+    "status": {
+      "pending": "En attente",
+      "succeeded": "Remboursé",
+      "failed": "Échec"
+    },
+    "reasons": {
+      "requested_by_customer": "Demande de l’acheteur",
+      "event_cancelled": "Événement annulé",
+      "event_postponed": "Événement reporté (plus de 90 jours, sans nouvelle date)",
+      "duplicate": "Commande en double",
+      "fraudulent": "Frauduleuse",
+      "goodwill": "Geste commercial"
+    },
+    "formTitle": "Rembourser",
+    "feePolicy": "Les frais sont remboursés si l’événement est annulé ou reporté, ainsi que pour les commandes en double ou frauduleuses. Sinon, ils sont conservés.",
+    "what": "Que rembourser ?",
+    "modeTickets": "Des billets entiers (ils ne sont plus valables)",
+    "modeAmount": "Un montant (les billets restent valables)",
+    "tickets": "Billets à rembourser",
+    "amount": "Montant ({currency})",
+    "note": "Note (facultative, pour votre équipe)",
+    "submit": "Rembourser",
+    "done": "Remboursement effectué. L’acheteur récupérera l’argent sur sa carte d’ici quelques jours.",
+    "failed": "Le prestataire de paiement a refusé ce remboursement. Rien n’a été modifié.",
+    "exceedsRefundable": "C’est plus que le montant restant à rembourser sur cette commande.",
+    "ticketRefunded": "L’un de ces billets est déjà remboursé ou en cours de remboursement."
   }
 }

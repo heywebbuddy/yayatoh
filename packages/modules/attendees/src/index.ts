@@ -2,6 +2,7 @@ export {
   AttendeeFilter,
   AttendeeHitDto,
   attendeeLabelsQuery,
+  cancelAttendeesTx,
   createAttendeesTx,
   getAttendeeQuery,
   Label as AttendeeLabel,

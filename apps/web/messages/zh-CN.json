@@ -1038,5 +1038,51 @@
     "pause_publishing": "活动发布已被 Yayatoh 支持团队暂停。",
     "pause_messaging": "向宾客发送消息已被 Yayatoh 支持团队暂停。",
     "contact": "如需了解详情，请联系 Yayatoh 支持团队。"
+  },
+  "refunds": {
+    "orderTitle": "{name} 的订单",
+    "soldBy": {
+      "organizer_mor": "通过你的收款账户收取",
+      "platform_mor": "由 Yayatoh 代你收取"
+    },
+    "ticketsTitle": "门票",
+    "ticketType": "票种",
+    "holder": "持票人",
+    "code": "验证码",
+    "ticketStatus": {
+      "active": "有效",
+      "void": "已作废"
+    },
+    "title": "退款",
+    "when": "时间",
+    "reason": "原因",
+    "amountCol": "已退金额",
+    "feeCol": "退还的费用",
+    "status": {
+      "pending": "处理中",
+      "succeeded": "已退款",
+      "failed": "失败"
+    },
+    "reasons": {
+      "requested_by_customer": "买家要求",
+      "event_cancelled": "活动取消",
+      "event_postponed": "活动延期（超过 90 天且无新日期）",
+      "duplicate": "重复订单",
+      "fraudulent": "欺诈",
+      "goodwill": "善意补偿"
+    },
+    "formTitle": "退款",
+    "feePolicy": "活动取消或延期时，以及重复订单和欺诈订单，会退还费用。其他情况下不予退还。",
+    "what": "退款内容",
+    "modeTickets": "整张门票（门票将失效）",
+    "modeAmount": "指定金额（门票仍然有效）",
+    "tickets": "要退款的门票",
+    "amount": "金额（{currency}）",
+    "note": "备注（选填，供你的团队查看）",
+    "submit": "退款",
+    "done": "已退款。买家将在几天内收到退回其银行卡的款项。",
+    "failed": "支付服务商拒绝了此退款。未做任何更改。",
+    "exceedsRefundable": "超出了此订单剩余可退金额。",
+    "ticketRefunded": "其中一张门票已退款或正在退款。"
   }
 }
