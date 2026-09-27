@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { formatInsert, parseCreateTable, parseInsert, StatementSplitter } from '../src/index.ts';
 
@@ -12,6 +12,22 @@ function split(text: string, chunk: number): string[] {
   if (rest.trim()) out.push(rest);
   return out;
 }
+
+describe('fixtures are invented data only', () => {
+  // .gitignore lets *.sql in this folder through; this keeps a real dump from riding along.
+  it('every fixture says SYNTHETIC and uses only reserved example domains', () => {
+    const dir = new URL('./fixtures/', import.meta.url);
+    for (const name of readdirSync(dir)) {
+      const text = readFileSync(new URL(name, dir), 'utf8');
+      expect(text, name).toContain('SYNTHETIC TEST DATA ONLY');
+      const domains = [...text.matchAll(/@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g)].map((m) =>
+        (m[1] ?? '').toLowerCase(),
+      );
+      for (const d of domains)
+        expect(d, `${name}: ${d}`).toMatch(/(^|\.)example\.(com|org|net)$|(^|\.)test$/);
+    }
+  });
+});
 
 describe('mysqldump reader', () => {
   it('splits statements the same way whatever the chunk size (1 byte to whole file)', () => {
