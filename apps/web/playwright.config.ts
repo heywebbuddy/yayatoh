@@ -16,9 +16,12 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
-    ...(process.env.PW_CHROMIUM_PATH
-      ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
-      : {}),
+    launchOptions: {
+      // Tenant hosts (M1.11): `{org}.yayatoh.events` and test custom domains resolve to this
+      // server (`*.localhost` already does), so host routing runs exactly as in production.
+      args: ['--host-resolver-rules=MAP *.yayatoh.events 127.0.0.1, MAP *.verified.test 127.0.0.1'],
+      ...(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}),
+    },
   },
   projects: [
     { name: 'mobile-375', use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } } },

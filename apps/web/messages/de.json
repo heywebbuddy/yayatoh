@@ -56,7 +56,8 @@
     "team": "Team",
     "settings": "Einstellungen",
     "payouts": "Auszahlungen",
-    "domains": "Domains"
+    "domains": "Domains",
+    "publicSite": "Öffentliche Seite"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -1663,6 +1664,126 @@
       "event": "Veranstaltung",
       "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
       "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Website",
+    "browse": "Veranstaltungen entdecken",
+    "forOrganizers": "Für Veranstalter",
+    "language": "Sprache",
+    "poweredBy": "Bereitgestellt von Yayatoh",
+    "upcoming": "Kommende Veranstaltungen",
+    "results": "Suchergebnisse",
+    "count": "{count, plural, =0 {Keine Veranstaltungen} one {# Veranstaltung} other {# Veranstaltungen}}",
+    "seeAll": "Alle Veranstaltungen ansehen",
+    "when": "Wann",
+    "where": "Wo",
+    "priceLabel": "Preis:",
+    "by": "Von {org}",
+    "postponed": "Verschoben",
+    "price": {
+      "soon": "Tickets bald verfügbar",
+      "free": "Kostenlos",
+      "from": "Ab {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Konzert",
+      "conference": "Konferenz",
+      "community": "Gemeinschaft",
+      "other": "Sonstiges",
+      "wedding": "Hochzeit",
+      "agency": "Agentur"
+    },
+    "filters": {
+      "label": "Veranstaltungen suchen",
+      "query": "Nach Name, Ort oder Veranstalter suchen",
+      "city": "Stadt",
+      "anyCity": "Jede Stadt",
+      "category": "Kategorie",
+      "anyCategory": "Jede Kategorie",
+      "price": "Preis",
+      "anyPrice": "Jeder Preis",
+      "priceOption": {
+        "free": "Kostenlos",
+        "paid": "Kostenpflichtig"
+      },
+      "from": "Ab Datum",
+      "to": "Bis Datum",
+      "submit": "Suchen",
+      "clear": "Filter zurücksetzen"
+    },
+    "pagination": {
+      "label": "Seiten",
+      "previous": "Vorherige Seite",
+      "next": "Nächste Seite",
+      "status": "Seite {page} von {count}"
+    },
+    "empty": {
+      "title": "Noch keine kommenden Veranstaltungen",
+      "description": "Neue Veranstaltungen erscheinen hier, sobald Veranstalter sie veröffentlichen.",
+      "filteredTitle": "Keine Veranstaltungen passen zu diesen Filtern",
+      "filteredDescription": "Versuchen Sie ein anderes Datum, eine andere Stadt oder einen anderen Preis, oder setzen Sie die Filter zurück."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Veranstaltungen in Ihrer Nähe",
+      "eyebrow": "Yayatoh",
+      "title": "Finden Sie Ihre nächste Veranstaltung.",
+      "lede": "Konzerte, Galas, Konferenzen und Gemeinschaftsveranstaltungen, alle Gebühren im Preis enthalten.",
+      "demoCta": "Demo-Konsole öffnen"
+    },
+    "events": {
+      "title": "Alle Veranstaltungen"
+    },
+    "tenant": {
+      "eyebrow": "Veranstaltungen",
+      "description": "Kommende Veranstaltungen von {org}.",
+      "emptyTitle": "Keine kommenden Veranstaltungen",
+      "emptyDescription": "{org} hat gerade nichts im Verkauf. Schauen Sie bald wieder vorbei."
+    },
+    "organizer": {
+      "eyebrow": "Veranstalter",
+      "description": "Kommende Veranstaltungen von {org} auf Yayatoh.",
+      "site": "Website des Veranstalters besuchen",
+      "events": "Veranstaltungen von {org}",
+      "emptyTitle": "Keine kommenden Veranstaltungen",
+      "emptyDescription": "{org} hat gerade nichts im Verkauf. Schauen Sie bald wieder vorbei."
+    }
+  },
+  "widget": {
+    "title": "Tickets: {event}",
+    "fallbackTitle": "Tickets",
+    "passes": "Tickets",
+    "getTickets": "Tickets sichern",
+    "newTab": "(öffnet in einem neuen Tab)"
+  },
+  "site": {
+    "title": "Öffentliche Seite",
+    "description": "Wo Menschen Ihre Veranstaltungen finden: der Yayatoh-Marktplatz, Ihre eigene Website und das Ticket-Widget.",
+    "readOnly": "Nur Inhaber und Admins können diese Einstellungen ändern.",
+    "save": "Speichern",
+    "saved": "Gespeichert.",
+    "listing": {
+      "title": "Listung",
+      "marketplace": "Meine öffentlichen Veranstaltungen auf dem Yayatoh-Marktplatz listen",
+      "marketplaceHint": "Hochzeiten und private Veranstaltungen werden nie gelistet.",
+      "tenantSite": "Meine eigene Website unter {host} als Zuhause meiner Veranstaltungen verwenden",
+      "tenantSiteHint": "Suchmaschinen schicken Menschen dann auf Ihre Website statt auf yayatoh.com. Eine eigene Domain hat immer Vorrang."
+    },
+    "widget": {
+      "title": "Ticket-Widget",
+      "description": "Zeigen Sie die Tickets einer Veranstaltung auf Ihrer eigenen Website. Fügen Sie das Snippet dort ein, wo das Widget erscheinen soll.",
+      "origins": "Websites, die das Widget zeigen dürfen",
+      "originsHint": "Eine Adresse pro Zeile, zum Beispiel https://www.example.com. Andere Websites sehen einen leeren Rahmen.",
+      "noOrigins": "Noch keine Websites erlaubt.",
+      "snippets": "Widget-Snippets",
+      "snippetFor": "Snippet für {event}",
+      "frameTitle": "Tickets: {event}",
+      "copy": "Snippet kopieren",
+      "copied": "Kopiert.",
+      "emptyTitle": "Noch keine öffentlichen Veranstaltungen",
+      "emptyDescription": "Veröffentlichen Sie eine Veranstaltung, um ihr Widget-Snippet zu erhalten."
     }
   }
 }

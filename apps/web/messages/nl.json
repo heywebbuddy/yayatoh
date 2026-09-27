@@ -56,7 +56,8 @@
     "team": "Team",
     "settings": "Instellingen",
     "payouts": "Uitbetalingen",
-    "domains": "Domeinen"
+    "domains": "Domeinen",
+    "publicSite": "Openbare site"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -1663,6 +1664,126 @@
       "event": "Evenement",
       "emptyTitle": "Geen verkopen in deze periode",
       "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "Site",
+    "browse": "Evenementen bekijken",
+    "forOrganizers": "Voor organisatoren",
+    "language": "Taal",
+    "poweredBy": "Mogelijk gemaakt door Yayatoh",
+    "upcoming": "Komende evenementen",
+    "results": "Zoekresultaten",
+    "count": "{count, plural, =0 {Geen evenementen} one {# evenement} other {# evenementen}}",
+    "seeAll": "Alle evenementen bekijken",
+    "when": "Wanneer",
+    "where": "Waar",
+    "priceLabel": "Prijs:",
+    "by": "Door {org}",
+    "postponed": "Uitgesteld",
+    "price": {
+      "soon": "Tickets binnenkort",
+      "free": "Gratis",
+      "from": "Vanaf {price}"
+    },
+    "category": {
+      "gala": "Gala",
+      "concert": "Concert",
+      "conference": "Congres",
+      "community": "Gemeenschap",
+      "other": "Overig",
+      "wedding": "Bruiloft",
+      "agency": "Bureau"
+    },
+    "filters": {
+      "label": "Evenementen zoeken",
+      "query": "Zoek op naam, plaats of organisator",
+      "city": "Stad",
+      "anyCity": "Elke stad",
+      "category": "Categorie",
+      "anyCategory": "Elke categorie",
+      "price": "Prijs",
+      "anyPrice": "Elke prijs",
+      "priceOption": {
+        "free": "Gratis",
+        "paid": "Betaald"
+      },
+      "from": "Vanaf datum",
+      "to": "Tot datum",
+      "submit": "Zoeken",
+      "clear": "Filters wissen"
+    },
+    "pagination": {
+      "label": "Pagina's",
+      "previous": "Vorige pagina",
+      "next": "Volgende pagina",
+      "status": "Pagina {page} van {count}"
+    },
+    "empty": {
+      "title": "Nog geen komende evenementen",
+      "description": "Nieuwe evenementen verschijnen hier zodra organisatoren ze publiceren.",
+      "filteredTitle": "Geen evenementen voor deze filters",
+      "filteredDescription": "Probeer een andere datum, stad of prijs, of wis de filters."
+    },
+    "home": {
+      "metaTitle": "Yayatoh · Vind evenementen bij jou in de buurt",
+      "eyebrow": "Yayatoh",
+      "title": "Vind je volgende evenement.",
+      "lede": "Concerten, gala's, congressen en gemeenschapsevenementen, met alle kosten inbegrepen in de prijs.",
+      "demoCta": "Democonsole openen"
+    },
+    "events": {
+      "title": "Alle evenementen"
+    },
+    "tenant": {
+      "eyebrow": "Evenementen",
+      "description": "Komende evenementen van {org}.",
+      "emptyTitle": "Geen komende evenementen",
+      "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
+    },
+    "organizer": {
+      "eyebrow": "Organisator",
+      "description": "Komende evenementen van {org} op Yayatoh.",
+      "site": "Naar de website van de organisator",
+      "events": "Evenementen van {org}",
+      "emptyTitle": "Geen komende evenementen",
+      "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
+    }
+  },
+  "widget": {
+    "title": "Tickets: {event}",
+    "fallbackTitle": "Tickets",
+    "passes": "Tickets",
+    "getTickets": "Tickets kopen",
+    "newTab": "(opent in een nieuw tabblad)"
+  },
+  "site": {
+    "title": "Openbare site",
+    "description": "Waar mensen je evenementen vinden: de Yayatoh-marktplaats, je eigen site en de ticketwidget.",
+    "readOnly": "Alleen eigenaren en beheerders kunnen deze instellingen wijzigen.",
+    "save": "Opslaan",
+    "saved": "Opgeslagen.",
+    "listing": {
+      "title": "Vermelding",
+      "marketplace": "Mijn openbare evenementen op de Yayatoh-marktplaats vermelden",
+      "marketplaceHint": "Bruiloften en privé-evenementen worden nooit vermeld.",
+      "tenantSite": "Mijn eigen site op {host} gebruiken als thuis van mijn evenementen",
+      "tenantSiteHint": "Zoekmachines sturen mensen dan naar jouw site in plaats van naar yayatoh.com. Een eigen domein gaat altijd voor."
+    },
+    "widget": {
+      "title": "Ticketwidget",
+      "description": "Toon de tickets van een evenement op je eigen website. Plak het fragment waar de widget moet verschijnen.",
+      "origins": "Websites die de widget mogen tonen",
+      "originsHint": "Eén adres per regel, bijvoorbeeld https://www.example.com. Andere websites zien een leeg kader.",
+      "noOrigins": "Nog geen websites toegestaan.",
+      "snippets": "Widgetfragmenten",
+      "snippetFor": "Fragment voor {event}",
+      "frameTitle": "Tickets: {event}",
+      "copy": "Fragment kopiëren",
+      "copied": "Gekopieerd.",
+      "emptyTitle": "Nog geen openbare evenementen",
+      "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
     }
   }
 }

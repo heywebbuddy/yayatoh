@@ -1,0 +1,31 @@
+{
+  "name": "@yayatoh/marketplace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 6
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

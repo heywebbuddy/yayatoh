@@ -56,7 +56,8 @@
     "team": "团队",
     "settings": "设置",
     "payouts": "收款",
-    "domains": "域名"
+    "domains": "域名",
+    "publicSite": "公开网站"
   },
   "vocab": {
     "attendee": "参会者",
@@ -1663,6 +1664,126 @@
       "event": "活动",
       "emptyTitle": "此时间段内没有销售",
       "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "网站",
+    "browse": "浏览活动",
+    "forOrganizers": "主办方入口",
+    "language": "语言",
+    "poweredBy": "由 Yayatoh 提供支持",
+    "upcoming": "即将举行的活动",
+    "results": "搜索结果",
+    "count": "{count, plural, other {# 个活动}}",
+    "seeAll": "查看全部活动",
+    "when": "时间",
+    "where": "地点",
+    "priceLabel": "价格：",
+    "by": "主办方：{org}",
+    "postponed": "已延期",
+    "price": {
+      "soon": "门票即将开售",
+      "free": "免费",
+      "from": "{price} 起"
+    },
+    "category": {
+      "gala": "晚宴",
+      "concert": "音乐会",
+      "conference": "会议",
+      "community": "社区",
+      "other": "其他",
+      "wedding": "婚礼",
+      "agency": "代理机构"
+    },
+    "filters": {
+      "label": "搜索活动",
+      "query": "按名称、地点或主办方搜索",
+      "city": "城市",
+      "anyCity": "任意城市",
+      "category": "类别",
+      "anyCategory": "任意类别",
+      "price": "价格",
+      "anyPrice": "任意价格",
+      "priceOption": {
+        "free": "免费",
+        "paid": "付费"
+      },
+      "from": "开始日期",
+      "to": "结束日期",
+      "submit": "搜索",
+      "clear": "清除筛选"
+    },
+    "pagination": {
+      "label": "分页",
+      "previous": "上一页",
+      "next": "下一页",
+      "status": "第 {page} 页，共 {count} 页"
+    },
+    "empty": {
+      "title": "暂无即将举行的活动",
+      "description": "主办方发布新活动后会立即显示在这里。",
+      "filteredTitle": "没有符合筛选条件的活动",
+      "filteredDescription": "请尝试其他日期、城市或价格，或清除筛选。"
+    },
+    "home": {
+      "metaTitle": "Yayatoh · 发现身边的活动",
+      "eyebrow": "Yayatoh",
+      "title": "发现你的下一场活动。",
+      "lede": "音乐会、晚宴、会议和社区活动，所有费用均已含在价格中。",
+      "demoCta": "打开演示控制台"
+    },
+    "events": {
+      "title": "全部活动"
+    },
+    "tenant": {
+      "eyebrow": "活动",
+      "description": "{org} 即将举行的活动。",
+      "emptyTitle": "暂无即将举行的活动",
+      "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
+    },
+    "organizer": {
+      "eyebrow": "主办方",
+      "description": "{org} 在 Yayatoh 上即将举行的活动。",
+      "site": "访问主办方网站",
+      "events": "{org} 的活动",
+      "emptyTitle": "暂无即将举行的活动",
+      "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
+    }
+  },
+  "widget": {
+    "title": "门票：{event}",
+    "fallbackTitle": "门票",
+    "passes": "门票",
+    "getTickets": "购买门票",
+    "newTab": "（在新标签页中打开）"
+  },
+  "site": {
+    "title": "公开网站",
+    "description": "人们在哪里找到你的活动：Yayatoh 活动广场、你自己的网站和购票小组件。",
+    "readOnly": "只有所有者和管理员可以更改这些设置。",
+    "save": "保存",
+    "saved": "已保存。",
+    "listing": {
+      "title": "展示",
+      "marketplace": "在 Yayatoh 活动广场展示我的公开活动",
+      "marketplaceHint": "婚礼和私人活动永远不会展示。",
+      "tenantSite": "将我在 {host} 的网站作为活动主页",
+      "tenantSiteHint": "搜索引擎会把人们带到你的网站而不是 yayatoh.com。自定义域名始终优先。"
+    },
+    "widget": {
+      "title": "购票小组件",
+      "description": "在你自己的网站上展示活动门票。把代码粘贴到希望小组件出现的位置。",
+      "origins": "允许展示小组件的网站",
+      "originsHint": "每行一个地址，例如 https://www.example.com。其他网站只会看到空白框。",
+      "noOrigins": "尚未允许任何网站。",
+      "snippets": "小组件代码",
+      "snippetFor": "{event} 的代码",
+      "frameTitle": "门票：{event}",
+      "copy": "复制代码",
+      "copied": "已复制。",
+      "emptyTitle": "暂无公开活动",
+      "emptyDescription": "发布活动后即可获取其小组件代码。"
     }
   }
 }

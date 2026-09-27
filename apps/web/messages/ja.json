@@ -56,7 +56,8 @@
     "team": "チーム",
     "settings": "設定",
     "payouts": "入金",
-    "domains": "ドメイン"
+    "domains": "ドメイン",
+    "publicSite": "公開サイト"
   },
   "vocab": {
     "attendee": "参加者",
@@ -1663,6 +1664,126 @@
       "event": "イベント",
       "emptyTitle": "この期間の売上はありません",
       "emptyDescription": "期間を長くするか、イベントページを共有して販売を始めましょう。"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "サイト",
+    "browse": "イベントを探す",
+    "forOrganizers": "主催者の方へ",
+    "language": "言語",
+    "poweredBy": "Powered by Yayatoh",
+    "upcoming": "今後のイベント",
+    "results": "検索結果",
+    "count": "{count, plural, other {# 件のイベント}}",
+    "seeAll": "すべてのイベントを見る",
+    "when": "日時",
+    "where": "場所",
+    "priceLabel": "価格：",
+    "by": "主催：{org}",
+    "postponed": "延期",
+    "price": {
+      "soon": "チケットは近日発売",
+      "free": "無料",
+      "from": "{price} から"
+    },
+    "category": {
+      "gala": "ガラ",
+      "concert": "コンサート",
+      "conference": "カンファレンス",
+      "community": "コミュニティ",
+      "other": "その他",
+      "wedding": "結婚式",
+      "agency": "エージェンシー"
+    },
+    "filters": {
+      "label": "イベントを検索",
+      "query": "名前・場所・主催者で検索",
+      "city": "都市",
+      "anyCity": "すべての都市",
+      "category": "カテゴリー",
+      "anyCategory": "すべてのカテゴリー",
+      "price": "価格",
+      "anyPrice": "すべての価格",
+      "priceOption": {
+        "free": "無料",
+        "paid": "有料"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "submit": "検索",
+      "clear": "フィルターをクリア"
+    },
+    "pagination": {
+      "label": "ページ",
+      "previous": "前のページ",
+      "next": "次のページ",
+      "status": "{page} / {count} ページ"
+    },
+    "empty": {
+      "title": "今後のイベントはまだありません",
+      "description": "主催者が公開するとすぐにここに表示されます。",
+      "filteredTitle": "条件に合うイベントはありません",
+      "filteredDescription": "日付・都市・価格を変えるか、フィルターをクリアしてください。"
+    },
+    "home": {
+      "metaTitle": "Yayatoh · 近くのイベントを探す",
+      "eyebrow": "Yayatoh",
+      "title": "次のイベントを見つけよう。",
+      "lede": "コンサート、ガラ、カンファレンス、コミュニティイベント。手数料はすべて価格に含まれています。",
+      "demoCta": "デモコンソールを開く"
+    },
+    "events": {
+      "title": "すべてのイベント"
+    },
+    "tenant": {
+      "eyebrow": "イベント",
+      "description": "{org} の今後のイベント。",
+      "emptyTitle": "今後のイベントはありません",
+      "emptyDescription": "{org} は現在販売中のものがありません。また後でご確認ください。"
+    },
+    "organizer": {
+      "eyebrow": "主催者",
+      "description": "Yayatoh での {org} の今後のイベント。",
+      "site": "主催者のウェブサイトへ",
+      "events": "{org} のイベント",
+      "emptyTitle": "今後のイベントはありません",
+      "emptyDescription": "{org} は現在販売中のものがありません。また後でご確認ください。"
+    }
+  },
+  "widget": {
+    "title": "チケット：{event}",
+    "fallbackTitle": "チケット",
+    "passes": "チケット",
+    "getTickets": "チケットを購入",
+    "newTab": "（新しいタブで開きます）"
+  },
+  "site": {
+    "title": "公開サイト",
+    "description": "イベントが見つかる場所：Yayatoh マーケットプレイス、独自サイト、チケットウィジェット。",
+    "readOnly": "この設定を変更できるのはオーナーと管理者のみです。",
+    "save": "保存",
+    "saved": "保存しました。",
+    "listing": {
+      "title": "掲載",
+      "marketplace": "公開イベントを Yayatoh マーケットプレイスに掲載する",
+      "marketplaceHint": "結婚式と非公開イベントは掲載されません。",
+      "tenantSite": "{host} の独自サイトをイベントのホームにする",
+      "tenantSiteHint": "検索エンジンは yayatoh.com ではなくあなたのサイトへ案内します。カスタムドメインが常に優先されます。"
+    },
+    "widget": {
+      "title": "チケットウィジェット",
+      "description": "イベントのチケットを自分のウェブサイトに表示します。ウィジェットを表示したい場所にスニペットを貼り付けてください。",
+      "origins": "ウィジェットの表示を許可するサイト",
+      "originsHint": "1 行に 1 つのアドレス（例：https://www.example.com）。その他のサイトには空の枠が表示されます。",
+      "noOrigins": "許可されたサイトはまだありません。",
+      "snippets": "ウィジェットのスニペット",
+      "snippetFor": "{event} のスニペット",
+      "frameTitle": "チケット：{event}",
+      "copy": "スニペットをコピー",
+      "copied": "コピーしました。",
+      "emptyTitle": "公開イベントはまだありません",
+      "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
     }
   }
 }

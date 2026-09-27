@@ -75,6 +75,7 @@ export {
   myOrganizations,
   organizationDefaultsTx,
   organizationNameTx,
+  organizationPublicTx,
   resolveOrgSlug,
 } from './queries.ts';
 export {

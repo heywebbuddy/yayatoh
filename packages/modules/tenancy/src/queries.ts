@@ -10,7 +10,7 @@ import {
   MyOrganizationDto as MyOrgSchema,
   OrganizationDto,
 } from './dto.ts';
-import { invitations, memberships, organizations } from './schema.ts';
+import { invitations, memberships, organizations, orgDomains } from './schema.ts';
 
 export const getOrganizationQuery = tenantQuery({
   name: 'tenancy.getOrganization',
@@ -100,4 +100,39 @@ export async function organizationDefaultsTx(
     .from(organizations)
     .where(eq(organizations.id, orgId));
   return row ?? null;
+}
+
+/**
+ * What a public site may say about the current org (marketplace projection, tenant sites), inside
+ * its tenant transaction: slug, display name, status, brand colour, "Powered by" visibility and the
+ * primary active site hostname (custom domain or the managed tenant-apex subdomain).
+ */
+export async function organizationPublicTx(
+  tx: TenantTx,
+  orgId: string,
+): Promise<{
+  slug: string;
+  name: string;
+  status: string;
+  brandColor: string | null;
+  poweredByVisible: boolean;
+  primaryHost: string | null;
+  primaryHostManaged: boolean;
+} | null> {
+  const [o] = await tx
+    .select({
+      slug: organizations.slug,
+      name: organizations.name,
+      status: organizations.status,
+      brandColor: organizations.brandColor,
+      poweredByVisible: organizations.poweredByVisible,
+    })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  if (!o) return null;
+  const [d] = await tx
+    .select({ hostname: orgDomains.hostname, managed: orgDomains.managed })
+    .from(orgDomains)
+    .where(and(eq(orgDomains.kind, 'site'), eq(orgDomains.isPrimary, true), eq(orgDomains.status, 'active')));
+  return { ...o, primaryHost: d?.hostname ?? null, primaryHostManaged: d?.managed ?? false };
 }

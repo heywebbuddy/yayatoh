@@ -23,6 +23,7 @@
     "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",

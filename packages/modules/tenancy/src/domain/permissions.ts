@@ -78,6 +78,8 @@ export const PLATFORM_PERMISSIONS = [
   'platform:payouts.hold',
   'platform:payouts.release',
   'platform:disputes.submit',
+  /** Legacy URL redirects (migration tooling, roadmap §7.7). */
+  'platform:redirects.manage',
 ] as const;
 
 export function roleCan(role: OrgRole, permission: string): boolean {

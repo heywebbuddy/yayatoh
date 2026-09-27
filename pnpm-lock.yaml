@@ -429,6 +429,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders
@@ -538,6 +541,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders
@@ -953,6 +959,46 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/modules/marketplace:
+    dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../ticketing
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/modules/orders:
     dependencies:
       '@yayatoh/billing':
@@ -1296,6 +1342,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../kernel
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../modules/marketplace
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../modules/orders

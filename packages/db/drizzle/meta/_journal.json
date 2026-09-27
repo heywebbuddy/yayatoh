@@ -281,6 +281,13 @@
       "when": 1790537139972,
       "tag": "0039_simple_vivisector",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1790543774823,
+      "tag": "0040_whole_black_queen",
+      "breakpoints": true
     }
   ]
 }

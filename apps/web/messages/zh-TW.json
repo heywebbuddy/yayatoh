@@ -56,7 +56,8 @@
     "team": "團隊",
     "settings": "設定",
     "payouts": "收款",
-    "domains": "網域"
+    "domains": "網域",
+    "publicSite": "公開網站"
   },
   "vocab": {
     "attendee": "參加者",
@@ -1663,6 +1664,126 @@
       "event": "活動",
       "emptyTitle": "此期間沒有銷售",
       "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
+    }
+  },
+  "market": {
+    "wordmark": "Yayatoh",
+    "siteNav": "網站",
+    "browse": "瀏覽活動",
+    "forOrganizers": "主辦單位專區",
+    "language": "語言",
+    "poweredBy": "由 Yayatoh 提供技術支援",
+    "upcoming": "即將舉行的活動",
+    "results": "搜尋結果",
+    "count": "{count, plural, other {# 個活動}}",
+    "seeAll": "查看所有活動",
+    "when": "時間",
+    "where": "地點",
+    "priceLabel": "價格：",
+    "by": "主辦單位：{org}",
+    "postponed": "已延期",
+    "price": {
+      "soon": "門票即將開賣",
+      "free": "免費",
+      "from": "{price} 起"
+    },
+    "category": {
+      "gala": "晚宴",
+      "concert": "音樂會",
+      "conference": "研討會",
+      "community": "社群",
+      "other": "其他",
+      "wedding": "婚禮",
+      "agency": "代理商"
+    },
+    "filters": {
+      "label": "搜尋活動",
+      "query": "依名稱、地點或主辦單位搜尋",
+      "city": "城市",
+      "anyCity": "任何城市",
+      "category": "類別",
+      "anyCategory": "任何類別",
+      "price": "價格",
+      "anyPrice": "任何價格",
+      "priceOption": {
+        "free": "免費",
+        "paid": "付費"
+      },
+      "from": "開始日期",
+      "to": "結束日期",
+      "submit": "搜尋",
+      "clear": "清除篩選"
+    },
+    "pagination": {
+      "label": "分頁",
+      "previous": "上一頁",
+      "next": "下一頁",
+      "status": "第 {page} 頁，共 {count} 頁"
+    },
+    "empty": {
+      "title": "目前沒有即將舉行的活動",
+      "description": "主辦單位發布新活動後會立即顯示在這裡。",
+      "filteredTitle": "沒有符合篩選條件的活動",
+      "filteredDescription": "請嘗試其他日期、城市或價格，或清除篩選。"
+    },
+    "home": {
+      "metaTitle": "Yayatoh · 探索附近的活動",
+      "eyebrow": "Yayatoh",
+      "title": "找到你的下一場活動。",
+      "lede": "音樂會、晚宴、研討會與社群活動，所有費用皆已含在價格中。",
+      "demoCta": "開啟示範主控台"
+    },
+    "events": {
+      "title": "所有活動"
+    },
+    "tenant": {
+      "eyebrow": "活動",
+      "description": "{org} 即將舉行的活動。",
+      "emptyTitle": "沒有即將舉行的活動",
+      "emptyDescription": "{org} 目前沒有販售中的項目，請稍後再來看看。"
+    },
+    "organizer": {
+      "eyebrow": "主辦單位",
+      "description": "{org} 在 Yayatoh 上即將舉行的活動。",
+      "site": "前往主辦單位網站",
+      "events": "{org} 的活動",
+      "emptyTitle": "沒有即將舉行的活動",
+      "emptyDescription": "{org} 目前沒有販售中的項目，請稍後再來看看。"
+    }
+  },
+  "widget": {
+    "title": "門票：{event}",
+    "fallbackTitle": "門票",
+    "passes": "門票",
+    "getTickets": "購買門票",
+    "newTab": "（在新分頁中開啟）"
+  },
+  "site": {
+    "title": "公開網站",
+    "description": "大家在哪裡找到你的活動：Yayatoh 活動市集、你自己的網站與售票小工具。",
+    "readOnly": "只有擁有者與管理員可以變更這些設定。",
+    "save": "儲存",
+    "saved": "已儲存。",
+    "listing": {
+      "title": "刊登",
+      "marketplace": "將我的公開活動刊登在 Yayatoh 活動市集",
+      "marketplaceHint": "婚禮與私人活動永遠不會刊登。",
+      "tenantSite": "將我在 {host} 的網站作為活動首頁",
+      "tenantSiteHint": "搜尋引擎會把人們帶到你的網站，而不是 yayatoh.com。自訂網域一律優先。"
+    },
+    "widget": {
+      "title": "售票小工具",
+      "description": "在你自己的網站上顯示活動門票。將程式碼貼在小工具要出現的位置。",
+      "origins": "允許顯示小工具的網站",
+      "originsHint": "每行一個網址，例如 https://www.example.com。其他網站只會看到空白框。",
+      "noOrigins": "尚未允許任何網站。",
+      "snippets": "小工具程式碼",
+      "snippetFor": "{event} 的程式碼",
+      "frameTitle": "門票：{event}",
+      "copy": "複製程式碼",
+      "copied": "已複製。",
+      "emptyTitle": "目前沒有公開活動",
+      "emptyDescription": "發布活動即可取得小工具程式碼。"
     }
   }
 }
