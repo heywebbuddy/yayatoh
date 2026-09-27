@@ -13,9 +13,11 @@ import { sellsPaidTicketsQuery } from '@yayatoh/ticketing';
 import { buttonClass, Card, EmptyState, Label, PageHeader, Skeleton, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type ReactNode, Suspense } from 'react';
+import { OrgSales } from '@/components/org-sales.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { eventPhase, greetingKey } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
+import { resolvePeriod } from '@/lib/period.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -28,8 +30,15 @@ const STATUS_DOT = {
   archived: 'info',
 } as const;
 
-export default async function OrgHome({ params }: { params: Promise<{ locale: string; org: string }> }) {
+export default async function OrgHome({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string; org: string }>;
+  searchParams: Promise<{ period?: string; from?: string; to?: string }>;
+}) {
   const { locale, org } = await params;
+  const sp = await searchParams;
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations();
@@ -60,6 +69,14 @@ export default async function OrgHome({ params }: { params: Promise<{ locale: st
         </div>
       ) : null}
       {roleCan(data.role, 'org:update') ? <SetupChecklist org={org} /> : null}
+      {data.modules.has('reports') && roleCan(data.role, 'orders:read') ? (
+        <OrgSales
+          data={data}
+          org={org}
+          locale={locale}
+          period={resolvePeriod(sp, data.org.timezone, new Date())}
+        />
+      ) : null}
       <section aria-labelledby="events-heading" className="flex flex-col gap-3">
         <h2 id="events-heading" className="text-section">
           {t('orgHome.events')}

@@ -1,6 +1,6 @@
 import { type EventTransition, eventLifecycle } from '@yayatoh/events';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, buttonClass, Card, EmptyState, PageHeader, ProgressRing } from '@yayatoh/ui';
+import { Button, buttonClass, Card, PageHeader, ProgressRing } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
@@ -11,6 +11,7 @@ import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { transitionAction } from './actions.ts';
 import { DemoSections } from './demo-sections.tsx';
+import { EventKpis } from './event-kpis.tsx';
 
 /** Lifecycle actions offered in the header, in order of importance. */
 const ACTIONS: readonly EventTransition[] = [
@@ -79,9 +80,15 @@ export default async function EventDashboard({
 
       {demo ? (
         <DemoSections demo={demo} base={base} locale={locale} f={f} />
-      ) : (
-        <EmptyState title={t('dashboard.noSalesTitle')} description={t('dashboard.noSalesDescription')} />
-      )}
+      ) : data.modules.has('reports') && roleCan(data.role, 'orders:read') ? (
+        <EventKpis
+          eventId={ev.id}
+          base={base}
+          locale={locale}
+          ctx={data.ctx}
+          finance={roleCan(data.role, 'finance:read')}
+        />
+      ) : null}
 
       <Card className="flex flex-col gap-3">
         <h2 className="text-section">{t('dashboard.readiness')}</h2>

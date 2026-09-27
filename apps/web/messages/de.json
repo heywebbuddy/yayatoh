@@ -1369,5 +1369,163 @@
         "removeLabel": "{name} von {item} entfernen"
       }
     }
+  },
+  "reports": {
+    "title": "Analyse",
+    "tabs": {
+      "label": "Berichtsbereiche",
+      "overview": "Übersicht",
+      "bookings": "Buchungen",
+      "finance": "Finanzen"
+    },
+    "asOf": "Aktualisiert {time}",
+    "keyNumbers": "Kennzahlen",
+    "moreNumbers": "Weitere Zahlen",
+    "seeReport": "Vollständigen Bericht ansehen",
+    "emptyTitle": "Noch keine Verkäufe",
+    "emptyDescription": "Verkäufe, Tickets und Check-ins erscheinen hier nach der ersten Bestellung.",
+    "noAccessTitle": "Berichte sind für deine Rolle nicht verfügbar",
+    "noAccessDescription": "Bitte einen Inhaber oder Admin um eine Rolle, die Bestellungen sehen darf.",
+    "financeNoAccessTitle": "Finanzen sind Finanzrollen vorbehalten",
+    "financeNoAccessDescription": "Nettoumsatz und Plattformgebühren sehen Inhaber, Admins und Finanzmitglieder.",
+    "metric": {
+      "sales": {
+        "gross": "Bruttoumsatz",
+        "refunds": "Erstattungen",
+        "discounts": "Rabatte durch Codes"
+      },
+      "finance": {
+        "platformFees": "Plattformgebühren",
+        "disputesLost": "Verlorene Rückbuchungen",
+        "net": "Nettoumsatz"
+      },
+      "orders": {
+        "sold": "Bestellungen",
+        "comp": "Freibestellungen",
+        "failed": "Fehlgeschlagene Zahlungen",
+        "refunded": "Erstattete Bestellungen"
+      },
+      "tickets": {
+        "sold": "Verkaufte Tickets",
+        "comp": "Freitickets",
+        "refunded": "Erstattete Tickets",
+        "capacity": "Kapazität",
+        "valid": "Gültige Tickets"
+      },
+      "checkins": {
+        "tickets": "Eingecheckt",
+        "rate": "Check-in-Quote"
+      }
+    },
+    "note": {
+      "refunded": "{amount} erstattet",
+      "afterFees": "Nach Erstattungen und Plattformgebühren",
+      "failed": "{count, plural, =0 {Keine fehlgeschlagenen Zahlungen} one {# fehlgeschlagene Zahlung} other {# fehlgeschlagene Zahlungen}}",
+      "compOrders": "{count, plural, =0 {Keine Freibestellungen} one {# Freibestellung} other {# Freibestellungen}}",
+      "compTickets": "{count, plural, =0 {Keine Freitickets} one {# Freiticket} other {# Freitickets}}",
+      "ofCapacity": "von {capacity} Plätzen · {comps} frei",
+      "ofValid": "{rate} von {valid} gültigen Tickets"
+    },
+    "byDay": "Verkäufe pro Tag",
+    "byDayChart": "Bruttoumsatz pro Tag, {currency}",
+    "showData": "Daten anzeigen",
+    "day": "Tag",
+    "orders": "Bestellungen",
+    "tickets": "Tickets",
+    "gross": "Bruttoumsatz",
+    "byType": "Verkäufe nach Ticketart",
+    "ticketType": "Ticketart",
+    "sold": "Verkauft",
+    "comps": "Frei",
+    "capacity": "Kapazität",
+    "byChannel": "Verkäufe nach Kanal",
+    "channel": "Kanal",
+    "channels": {
+      "online": "Online-Kasse",
+      "organizer": "Von dir kassiert"
+    },
+    "byStatus": "Bestellungen nach Status",
+    "status": "Status",
+    "promo": "Aktionscodes",
+    "code": "Code",
+    "uses": "Einlösungen",
+    "discount": "Gewährter Rabatt",
+    "promoEmpty": "Keine Aktionscodes für diese Veranstaltung.",
+    "inactive": "Pausiert",
+    "finance": {
+      "title": "Von brutto zu netto",
+      "description": "Der Nettoumsatz ist der Bruttoumsatz abzüglich Erstattungen, verlorener Rückbuchungen und einbehaltener Plattformgebühren – vor Kartengebühren auf deinem eigenen Stripe-Konto. Abendkassengeld hast du bereits; die Plattformgebühr dafür wird mit deiner nächsten Auszahlung verrechnet.",
+      "line": "Posten",
+      "caption": "Vom Bruttoumsatz zum Nettoumsatz"
+    },
+    "bookings": {
+      "search": "Buchungen suchen",
+      "searchHint": "Name, E-Mail, Bestellnummer, Aktionscode oder Ticketcode",
+      "show": "Anzeigen",
+      "submit": "Suchen",
+      "filters": {
+        "all": "Alle Buchungen",
+        "paid": "Bezahlt",
+        "comp": "Freibuchungen",
+        "failed": "Fehlgeschlagene Zahlungen",
+        "refunded": "Erstattet",
+        "pending": "Zahlung ausstehend",
+        "expired": "Abgelaufen oder storniert",
+        "box_office": "Abendkasse"
+      },
+      "count": "{total, plural, =0 {Keine Buchungen} one {# Buchung} other {# Buchungen}}",
+      "showing": "die neuesten {shown} von {total}",
+      "caption": "Buchungen",
+      "buyer": "Käufer",
+      "tickets": "Tickets",
+      "total": "Summe",
+      "status": "Status",
+      "date": "Gebucht",
+      "comp": "Frei",
+      "boxOffice": "Abendkasse",
+      "emptyTitle": "Keine passenden Buchungen",
+      "emptyDescription": "Versuche eine andere Suche oder zeige alle Buchungen.",
+      "export": "Als CSV exportieren",
+      "exportTitle": "Buchungsexport",
+      "exportError": "Der Export konnte nicht starten: {reason}",
+      "columns": {
+        "reference": "Bestellnummer",
+        "buyerName": "Name des Käufers",
+        "buyerEmail": "E-Mail des Käufers",
+        "status": "Status",
+        "tickets": "Tickets",
+        "total": "Summe",
+        "currency": "Währung",
+        "promoCode": "Aktionscode",
+        "channel": "Kanal",
+        "bookedAt": "Gebucht am",
+        "paidAt": "Bezahlt am"
+      }
+    },
+    "org": {
+      "title": "Verkäufe",
+      "keyNumbers": "Verkaufskennzahlen",
+      "period": "Zeitraum",
+      "periods": {
+        "7d": "Letzte 7 Tage",
+        "30d": "Letzte 30 Tage",
+        "90d": "Letzte 90 Tage",
+        "month": "Dieser Monat",
+        "year": "Dieses Jahr",
+        "all": "Gesamter Zeitraum",
+        "custom": "Eigene Daten"
+      },
+      "from": "Von",
+      "to": "Bis",
+      "customHint": "Für eigene Daten",
+      "apply": "Anwenden",
+      "badRange": "Das Enddatum liegt vor dem Startdatum.",
+      "badDate": "Wähle beide Daten für einen eigenen Zeitraum.",
+      "range": "{from} – {to}",
+      "byEvent": "Verkäufe nach Veranstaltung",
+      "event": "Veranstaltung",
+      "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
+      "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
+    }
   }
 }

@@ -2,7 +2,7 @@ import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { bulkStepCommand, createCommandPorts, runBulkOperation } from '@yayatoh/platform';
-import { attendeeExportAction } from '@yayatoh/reports';
+import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { orgAuthorizer } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
@@ -12,6 +12,7 @@ export const BULK_ACTIONS = [
   attendeeImportAction,
   attendeeEmailAction,
   attendeeExportAction,
+  bookingsExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });

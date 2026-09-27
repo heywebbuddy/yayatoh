@@ -1369,5 +1369,163 @@
         "removeLabel": "Remove {name} from {item}"
       }
     }
+  },
+  "reports": {
+    "title": "Analysis",
+    "tabs": {
+      "label": "Report sections",
+      "overview": "Overview",
+      "bookings": "Bookings",
+      "finance": "Finance"
+    },
+    "asOf": "Updated {time}",
+    "keyNumbers": "Key numbers",
+    "moreNumbers": "More numbers",
+    "seeReport": "See the full report",
+    "emptyTitle": "No sales yet",
+    "emptyDescription": "Sales, tickets and check-ins appear here after the first order.",
+    "noAccessTitle": "Reports aren't available to your role",
+    "noAccessDescription": "Ask an owner or admin for a role that can see orders.",
+    "financeNoAccessTitle": "Finance is for finance roles",
+    "financeNoAccessDescription": "Net revenue and platform fees are visible to owners, admins and finance members.",
+    "metric": {
+      "sales": {
+        "gross": "Gross sales",
+        "refunds": "Refunds",
+        "discounts": "Promo discounts"
+      },
+      "finance": {
+        "platformFees": "Platform fees",
+        "disputesLost": "Disputes lost",
+        "net": "Net revenue"
+      },
+      "orders": {
+        "sold": "Orders",
+        "comp": "Complimentary orders",
+        "failed": "Failed payments",
+        "refunded": "Refunded orders"
+      },
+      "tickets": {
+        "sold": "Tickets sold",
+        "comp": "Complimentary tickets",
+        "refunded": "Tickets refunded",
+        "capacity": "Capacity",
+        "valid": "Valid tickets"
+      },
+      "checkins": {
+        "tickets": "Checked in",
+        "rate": "Check-in rate"
+      }
+    },
+    "note": {
+      "refunded": "{amount} refunded",
+      "afterFees": "After refunds and platform fees",
+      "failed": "{count, plural, =0 {No failed payments} one {# failed payment} other {# failed payments}}",
+      "compOrders": "{count, plural, =0 {No complimentary orders} one {# complimentary order} other {# complimentary orders}}",
+      "compTickets": "{count, plural, =0 {No complimentary tickets} one {# complimentary ticket} other {# complimentary tickets}}",
+      "ofCapacity": "of {capacity} places · {comps} complimentary",
+      "ofValid": "{rate} of {valid} valid tickets"
+    },
+    "byDay": "Sales by day",
+    "byDayChart": "Gross sales by day, {currency}",
+    "showData": "Show the data",
+    "day": "Day",
+    "orders": "Orders",
+    "tickets": "Tickets",
+    "gross": "Gross sales",
+    "byType": "Sales by ticket type",
+    "ticketType": "Ticket type",
+    "sold": "Sold",
+    "comps": "Complimentary",
+    "capacity": "Capacity",
+    "byChannel": "Sales by channel",
+    "channel": "Channel",
+    "channels": {
+      "online": "Online checkout",
+      "organizer": "Collected by you"
+    },
+    "byStatus": "Orders by status",
+    "status": "Status",
+    "promo": "Promo codes",
+    "code": "Code",
+    "uses": "Uses",
+    "discount": "Discount given",
+    "promoEmpty": "No promo codes for this event.",
+    "inactive": "Paused",
+    "finance": {
+      "title": "From gross to net",
+      "description": "Net revenue is gross sales minus refunds, disputes lost and the platform fees kept. It is before card processing costs on your own Stripe account. Box-office money is already with you; its platform fee comes off your next payout.",
+      "line": "Line",
+      "caption": "Gross sales to net revenue"
+    },
+    "bookings": {
+      "search": "Search bookings",
+      "searchHint": "Name, email, order reference, promo code or ticket code",
+      "show": "Show",
+      "submit": "Search",
+      "filters": {
+        "all": "All bookings",
+        "paid": "Paid",
+        "comp": "Complimentary",
+        "failed": "Failed payments",
+        "refunded": "Refunded",
+        "pending": "Awaiting payment",
+        "expired": "Expired or cancelled",
+        "box_office": "Box office"
+      },
+      "count": "{total, plural, =0 {No bookings} one {# booking} other {# bookings}}",
+      "showing": "showing the newest {shown} of {total}",
+      "caption": "Bookings",
+      "buyer": "Buyer",
+      "tickets": "Tickets",
+      "total": "Total",
+      "status": "Status",
+      "date": "Booked",
+      "comp": "Complimentary",
+      "boxOffice": "Box office",
+      "emptyTitle": "No bookings match",
+      "emptyDescription": "Try another search or show all bookings.",
+      "export": "Export as CSV",
+      "exportTitle": "Bookings export",
+      "exportError": "The export could not start: {reason}",
+      "columns": {
+        "reference": "Order reference",
+        "buyerName": "Buyer name",
+        "buyerEmail": "Buyer email",
+        "status": "Status",
+        "tickets": "Tickets",
+        "total": "Total",
+        "currency": "Currency",
+        "promoCode": "Promo code",
+        "channel": "Channel",
+        "bookedAt": "Booked at",
+        "paidAt": "Paid at"
+      }
+    },
+    "org": {
+      "title": "Sales",
+      "keyNumbers": "Sales key numbers",
+      "period": "Period",
+      "periods": {
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days",
+        "month": "This month",
+        "year": "This year",
+        "all": "All time",
+        "custom": "Custom dates"
+      },
+      "from": "From",
+      "to": "To",
+      "customHint": "For custom dates",
+      "apply": "Apply",
+      "badRange": "The end date is before the start date.",
+      "badDate": "Pick both dates for a custom period.",
+      "range": "{from} – {to}",
+      "byEvent": "Sales by event",
+      "event": "Event",
+      "emptyTitle": "No sales in this period",
+      "emptyDescription": "Pick a longer period, or share an event page to start selling."
+    }
   }
 }

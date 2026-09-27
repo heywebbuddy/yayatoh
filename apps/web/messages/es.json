@@ -1369,5 +1369,163 @@
         "removeLabel": "Quitar a {name} de {item}"
       }
     }
+  },
+  "reports": {
+    "title": "Análisis",
+    "tabs": {
+      "label": "Secciones del informe",
+      "overview": "Resumen",
+      "bookings": "Reservas",
+      "finance": "Finanzas"
+    },
+    "asOf": "Actualizado {time}",
+    "keyNumbers": "Cifras clave",
+    "moreNumbers": "Más cifras",
+    "seeReport": "Ver el informe completo",
+    "emptyTitle": "Aún no hay ventas",
+    "emptyDescription": "Las ventas, entradas y registros de acceso aparecen aquí tras el primer pedido.",
+    "noAccessTitle": "Los informes no están disponibles para tu rol",
+    "noAccessDescription": "Pide a un propietario o administrador un rol que pueda ver pedidos.",
+    "financeNoAccessTitle": "Finanzas es solo para roles financieros",
+    "financeNoAccessDescription": "Los ingresos netos y las comisiones de la plataforma son visibles para propietarios, administradores y miembros de finanzas.",
+    "metric": {
+      "sales": {
+        "gross": "Ventas brutas",
+        "refunds": "Reembolsos",
+        "discounts": "Descuentos por código"
+      },
+      "finance": {
+        "platformFees": "Comisiones de la plataforma",
+        "disputesLost": "Disputas perdidas",
+        "net": "Ingresos netos"
+      },
+      "orders": {
+        "sold": "Pedidos",
+        "comp": "Pedidos de cortesía",
+        "failed": "Pagos fallidos",
+        "refunded": "Pedidos reembolsados"
+      },
+      "tickets": {
+        "sold": "Entradas vendidas",
+        "comp": "Entradas de cortesía",
+        "refunded": "Entradas reembolsadas",
+        "capacity": "Aforo",
+        "valid": "Entradas válidas"
+      },
+      "checkins": {
+        "tickets": "Acreditados",
+        "rate": "Tasa de acceso"
+      }
+    },
+    "note": {
+      "refunded": "{amount} reembolsado",
+      "afterFees": "Después de reembolsos y comisiones de la plataforma",
+      "failed": "{count, plural, =0 {Sin pagos fallidos} one {# pago fallido} other {# pagos fallidos}}",
+      "compOrders": "{count, plural, =0 {Sin pedidos de cortesía} one {# pedido de cortesía} other {# pedidos de cortesía}}",
+      "compTickets": "{count, plural, =0 {Sin entradas de cortesía} one {# entrada de cortesía} other {# entradas de cortesía}}",
+      "ofCapacity": "de {capacity} plazas · {comps} de cortesía",
+      "ofValid": "{rate} de {valid} entradas válidas"
+    },
+    "byDay": "Ventas por día",
+    "byDayChart": "Ventas brutas por día, {currency}",
+    "showData": "Mostrar los datos",
+    "day": "Día",
+    "orders": "Pedidos",
+    "tickets": "Entradas",
+    "gross": "Ventas brutas",
+    "byType": "Ventas por tipo de entrada",
+    "ticketType": "Tipo de entrada",
+    "sold": "Vendidas",
+    "comps": "Cortesía",
+    "capacity": "Aforo",
+    "byChannel": "Ventas por canal",
+    "channel": "Canal",
+    "channels": {
+      "online": "Pago en línea",
+      "organizer": "Cobrado por ti"
+    },
+    "byStatus": "Pedidos por estado",
+    "status": "Estado",
+    "promo": "Códigos promocionales",
+    "code": "Código",
+    "uses": "Usos",
+    "discount": "Descuento aplicado",
+    "promoEmpty": "No hay códigos promocionales para este evento.",
+    "inactive": "En pausa",
+    "finance": {
+      "title": "De bruto a neto",
+      "description": "Los ingresos netos son las ventas brutas menos reembolsos, disputas perdidas y comisiones de la plataforma retenidas, antes de los costes de tarjeta en tu propia cuenta de Stripe. El dinero de taquilla ya lo tienes tú; su comisión se descuenta de tu próximo pago.",
+      "line": "Concepto",
+      "caption": "De ventas brutas a ingresos netos"
+    },
+    "bookings": {
+      "search": "Buscar reservas",
+      "searchHint": "Nombre, correo, referencia del pedido, código promocional o código de entrada",
+      "show": "Mostrar",
+      "submit": "Buscar",
+      "filters": {
+        "all": "Todas las reservas",
+        "paid": "Pagadas",
+        "comp": "De cortesía",
+        "failed": "Pagos fallidos",
+        "refunded": "Reembolsadas",
+        "pending": "Pendientes de pago",
+        "expired": "Caducadas o canceladas",
+        "box_office": "Taquilla"
+      },
+      "count": "{total, plural, =0 {Sin reservas} one {# reserva} other {# reservas}}",
+      "showing": "se muestran las {shown} más recientes de {total}",
+      "caption": "Reservas",
+      "buyer": "Comprador",
+      "tickets": "Entradas",
+      "total": "Total",
+      "status": "Estado",
+      "date": "Reservada",
+      "comp": "Cortesía",
+      "boxOffice": "Taquilla",
+      "emptyTitle": "Ninguna reserva coincide",
+      "emptyDescription": "Prueba otra búsqueda o muestra todas las reservas.",
+      "export": "Exportar como CSV",
+      "exportTitle": "Exportación de reservas",
+      "exportError": "No se pudo iniciar la exportación: {reason}",
+      "columns": {
+        "reference": "Referencia del pedido",
+        "buyerName": "Nombre del comprador",
+        "buyerEmail": "Correo del comprador",
+        "status": "Estado",
+        "tickets": "Entradas",
+        "total": "Total",
+        "currency": "Moneda",
+        "promoCode": "Código promocional",
+        "channel": "Canal",
+        "bookedAt": "Reservada el",
+        "paidAt": "Pagada el"
+      }
+    },
+    "org": {
+      "title": "Ventas",
+      "keyNumbers": "Cifras clave de ventas",
+      "period": "Periodo",
+      "periods": {
+        "7d": "Últimos 7 días",
+        "30d": "Últimos 30 días",
+        "90d": "Últimos 90 días",
+        "month": "Este mes",
+        "year": "Este año",
+        "all": "Todo el tiempo",
+        "custom": "Fechas personalizadas"
+      },
+      "from": "Desde",
+      "to": "Hasta",
+      "customHint": "Para fechas personalizadas",
+      "apply": "Aplicar",
+      "badRange": "La fecha final es anterior a la inicial.",
+      "badDate": "Elige ambas fechas para un periodo personalizado.",
+      "range": "{from} – {to}",
+      "byEvent": "Ventas por evento",
+      "event": "Evento",
+      "emptyTitle": "No hay ventas en este periodo",
+      "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
+    }
   }
 }

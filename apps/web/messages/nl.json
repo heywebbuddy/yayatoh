@@ -1369,5 +1369,163 @@
         "removeLabel": "{name} verwijderen van {item}"
       }
     }
+  },
+  "reports": {
+    "title": "Analyse",
+    "tabs": {
+      "label": "Rapportonderdelen",
+      "overview": "Overzicht",
+      "bookings": "Boekingen",
+      "finance": "Financiën"
+    },
+    "asOf": "Bijgewerkt {time}",
+    "keyNumbers": "Kerncijfers",
+    "moreNumbers": "Meer cijfers",
+    "seeReport": "Volledig rapport bekijken",
+    "emptyTitle": "Nog geen verkopen",
+    "emptyDescription": "Verkopen, tickets en check-ins verschijnen hier na de eerste bestelling.",
+    "noAccessTitle": "Rapporten zijn niet beschikbaar voor jouw rol",
+    "noAccessDescription": "Vraag een eigenaar of beheerder om een rol die bestellingen mag zien.",
+    "financeNoAccessTitle": "Financiën zijn voor financiële rollen",
+    "financeNoAccessDescription": "Netto-omzet en platformkosten zijn zichtbaar voor eigenaren, beheerders en financiële leden.",
+    "metric": {
+      "sales": {
+        "gross": "Bruto-omzet",
+        "refunds": "Terugbetalingen",
+        "discounts": "Kortingen via codes"
+      },
+      "finance": {
+        "platformFees": "Platformkosten",
+        "disputesLost": "Verloren betwistingen",
+        "net": "Netto-omzet"
+      },
+      "orders": {
+        "sold": "Bestellingen",
+        "comp": "Gratis bestellingen",
+        "failed": "Mislukte betalingen",
+        "refunded": "Terugbetaalde bestellingen"
+      },
+      "tickets": {
+        "sold": "Verkochte tickets",
+        "comp": "Gratis tickets",
+        "refunded": "Terugbetaalde tickets",
+        "capacity": "Capaciteit",
+        "valid": "Geldige tickets"
+      },
+      "checkins": {
+        "tickets": "Ingecheckt",
+        "rate": "Check-inpercentage"
+      }
+    },
+    "note": {
+      "refunded": "{amount} terugbetaald",
+      "afterFees": "Na terugbetalingen en platformkosten",
+      "failed": "{count, plural, =0 {Geen mislukte betalingen} one {# mislukte betaling} other {# mislukte betalingen}}",
+      "compOrders": "{count, plural, =0 {Geen gratis bestellingen} one {# gratis bestelling} other {# gratis bestellingen}}",
+      "compTickets": "{count, plural, =0 {Geen gratis tickets} one {# gratis ticket} other {# gratis tickets}}",
+      "ofCapacity": "van {capacity} plaatsen · {comps} gratis",
+      "ofValid": "{rate} van {valid} geldige tickets"
+    },
+    "byDay": "Verkopen per dag",
+    "byDayChart": "Bruto-omzet per dag, {currency}",
+    "showData": "Gegevens tonen",
+    "day": "Dag",
+    "orders": "Bestellingen",
+    "tickets": "Tickets",
+    "gross": "Bruto-omzet",
+    "byType": "Verkopen per tickettype",
+    "ticketType": "Tickettype",
+    "sold": "Verkocht",
+    "comps": "Gratis",
+    "capacity": "Capaciteit",
+    "byChannel": "Verkopen per kanaal",
+    "channel": "Kanaal",
+    "channels": {
+      "online": "Online afrekenen",
+      "organizer": "Door jou ontvangen"
+    },
+    "byStatus": "Bestellingen per status",
+    "status": "Status",
+    "promo": "Kortingscodes",
+    "code": "Code",
+    "uses": "Keer gebruikt",
+    "discount": "Gegeven korting",
+    "promoEmpty": "Geen kortingscodes voor dit evenement.",
+    "inactive": "Gepauzeerd",
+    "finance": {
+      "title": "Van bruto naar netto",
+      "description": "Netto-omzet is de bruto-omzet min terugbetalingen, verloren betwistingen en ingehouden platformkosten, vóór kaartkosten op je eigen Stripe-account. Kassageld heb je al; de platformkosten daarvan gaan af van je volgende uitbetaling.",
+      "line": "Regel",
+      "caption": "Van bruto-omzet naar netto-omzet"
+    },
+    "bookings": {
+      "search": "Boekingen zoeken",
+      "searchHint": "Naam, e-mail, bestelreferentie, kortingscode of ticketcode",
+      "show": "Tonen",
+      "submit": "Zoeken",
+      "filters": {
+        "all": "Alle boekingen",
+        "paid": "Betaald",
+        "comp": "Gratis",
+        "failed": "Mislukte betalingen",
+        "refunded": "Terugbetaald",
+        "pending": "Wacht op betaling",
+        "expired": "Verlopen of geannuleerd",
+        "box_office": "Kassa"
+      },
+      "count": "{total, plural, =0 {Geen boekingen} one {# boeking} other {# boekingen}}",
+      "showing": "de nieuwste {shown} van {total}",
+      "caption": "Boekingen",
+      "buyer": "Koper",
+      "tickets": "Tickets",
+      "total": "Totaal",
+      "status": "Status",
+      "date": "Geboekt",
+      "comp": "Gratis",
+      "boxOffice": "Kassa",
+      "emptyTitle": "Geen boekingen gevonden",
+      "emptyDescription": "Probeer een andere zoekopdracht of toon alle boekingen.",
+      "export": "Exporteren als CSV",
+      "exportTitle": "Export van boekingen",
+      "exportError": "De export kon niet starten: {reason}",
+      "columns": {
+        "reference": "Bestelreferentie",
+        "buyerName": "Naam koper",
+        "buyerEmail": "E-mail koper",
+        "status": "Status",
+        "tickets": "Tickets",
+        "total": "Totaal",
+        "currency": "Valuta",
+        "promoCode": "Kortingscode",
+        "channel": "Kanaal",
+        "bookedAt": "Geboekt op",
+        "paidAt": "Betaald op"
+      }
+    },
+    "org": {
+      "title": "Verkopen",
+      "keyNumbers": "Kerncijfers verkoop",
+      "period": "Periode",
+      "periods": {
+        "7d": "Afgelopen 7 dagen",
+        "30d": "Afgelopen 30 dagen",
+        "90d": "Afgelopen 90 dagen",
+        "month": "Deze maand",
+        "year": "Dit jaar",
+        "all": "Alles",
+        "custom": "Eigen data"
+      },
+      "from": "Van",
+      "to": "Tot en met",
+      "customHint": "Voor eigen data",
+      "apply": "Toepassen",
+      "badRange": "De einddatum ligt vóór de begindatum.",
+      "badDate": "Kies beide data voor een eigen periode.",
+      "range": "{from} – {to}",
+      "byEvent": "Verkopen per evenement",
+      "event": "Evenement",
+      "emptyTitle": "Geen verkopen in deze periode",
+      "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
+    }
   }
 }

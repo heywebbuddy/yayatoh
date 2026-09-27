@@ -1369,5 +1369,163 @@
         "removeLabel": "Retirer {name} de {item}"
       }
     }
+  },
+  "reports": {
+    "title": "Analyse",
+    "tabs": {
+      "label": "Sections du rapport",
+      "overview": "Vue d’ensemble",
+      "bookings": "Réservations",
+      "finance": "Finances"
+    },
+    "asOf": "Mis à jour {time}",
+    "keyNumbers": "Chiffres clés",
+    "moreNumbers": "Autres chiffres",
+    "seeReport": "Voir le rapport complet",
+    "emptyTitle": "Aucune vente pour l’instant",
+    "emptyDescription": "Les ventes, billets et entrées apparaissent ici après la première commande.",
+    "noAccessTitle": "Les rapports ne sont pas disponibles pour votre rôle",
+    "noAccessDescription": "Demandez à un propriétaire ou administrateur un rôle qui peut voir les commandes.",
+    "financeNoAccessTitle": "Les finances sont réservées aux rôles financiers",
+    "financeNoAccessDescription": "Le chiffre d’affaires net et les frais de plateforme sont visibles des propriétaires, administrateurs et membres finances.",
+    "metric": {
+      "sales": {
+        "gross": "Ventes brutes",
+        "refunds": "Remboursements",
+        "discounts": "Remises par code"
+      },
+      "finance": {
+        "platformFees": "Frais de plateforme",
+        "disputesLost": "Litiges perdus",
+        "net": "Revenu net"
+      },
+      "orders": {
+        "sold": "Commandes",
+        "comp": "Commandes offertes",
+        "failed": "Paiements échoués",
+        "refunded": "Commandes remboursées"
+      },
+      "tickets": {
+        "sold": "Billets vendus",
+        "comp": "Billets offerts",
+        "refunded": "Billets remboursés",
+        "capacity": "Capacité",
+        "valid": "Billets valides"
+      },
+      "checkins": {
+        "tickets": "Entrés",
+        "rate": "Taux d’entrée"
+      }
+    },
+    "note": {
+      "refunded": "{amount} remboursés",
+      "afterFees": "Après remboursements et frais de plateforme",
+      "failed": "{count, plural, =0 {Aucun paiement échoué} one {# paiement échoué} other {# paiements échoués}}",
+      "compOrders": "{count, plural, =0 {Aucune commande offerte} one {# commande offerte} other {# commandes offertes}}",
+      "compTickets": "{count, plural, =0 {Aucun billet offert} one {# billet offert} other {# billets offerts}}",
+      "ofCapacity": "sur {capacity} places · {comps} offerts",
+      "ofValid": "{rate} de {valid} billets valides"
+    },
+    "byDay": "Ventes par jour",
+    "byDayChart": "Ventes brutes par jour, {currency}",
+    "showData": "Afficher les données",
+    "day": "Jour",
+    "orders": "Commandes",
+    "tickets": "Billets",
+    "gross": "Ventes brutes",
+    "byType": "Ventes par type de billet",
+    "ticketType": "Type de billet",
+    "sold": "Vendus",
+    "comps": "Offerts",
+    "capacity": "Capacité",
+    "byChannel": "Ventes par canal",
+    "channel": "Canal",
+    "channels": {
+      "online": "Paiement en ligne",
+      "organizer": "Encaissé par vous"
+    },
+    "byStatus": "Commandes par statut",
+    "status": "Statut",
+    "promo": "Codes promo",
+    "code": "Code",
+    "uses": "Utilisations",
+    "discount": "Remise accordée",
+    "promoEmpty": "Aucun code promo pour cet événement.",
+    "inactive": "En pause",
+    "finance": {
+      "title": "Du brut au net",
+      "description": "Le revenu net correspond aux ventes brutes moins les remboursements, les litiges perdus et les frais de plateforme conservés, avant les frais de carte sur votre propre compte Stripe. L’argent de la billetterie sur place est déjà chez vous ; ses frais sont déduits de votre prochain versement.",
+      "line": "Ligne",
+      "caption": "Des ventes brutes au revenu net"
+    },
+    "bookings": {
+      "search": "Rechercher des réservations",
+      "searchHint": "Nom, e-mail, référence de commande, code promo ou code de billet",
+      "show": "Afficher",
+      "submit": "Rechercher",
+      "filters": {
+        "all": "Toutes les réservations",
+        "paid": "Payées",
+        "comp": "Offertes",
+        "failed": "Paiements échoués",
+        "refunded": "Remboursées",
+        "pending": "En attente de paiement",
+        "expired": "Expirées ou annulées",
+        "box_office": "Billetterie sur place"
+      },
+      "count": "{total, plural, =0 {Aucune réservation} one {# réservation} other {# réservations}}",
+      "showing": "affichage des {shown} plus récentes sur {total}",
+      "caption": "Réservations",
+      "buyer": "Acheteur",
+      "tickets": "Billets",
+      "total": "Total",
+      "status": "Statut",
+      "date": "Réservée le",
+      "comp": "Offert",
+      "boxOffice": "Sur place",
+      "emptyTitle": "Aucune réservation ne correspond",
+      "emptyDescription": "Essayez une autre recherche ou affichez toutes les réservations.",
+      "export": "Exporter en CSV",
+      "exportTitle": "Export des réservations",
+      "exportError": "L’export n’a pas pu démarrer : {reason}",
+      "columns": {
+        "reference": "Référence de commande",
+        "buyerName": "Nom de l’acheteur",
+        "buyerEmail": "E-mail de l’acheteur",
+        "status": "Statut",
+        "tickets": "Billets",
+        "total": "Total",
+        "currency": "Devise",
+        "promoCode": "Code promo",
+        "channel": "Canal",
+        "bookedAt": "Réservée le",
+        "paidAt": "Payée le"
+      }
+    },
+    "org": {
+      "title": "Ventes",
+      "keyNumbers": "Chiffres clés des ventes",
+      "period": "Période",
+      "periods": {
+        "7d": "7 derniers jours",
+        "30d": "30 derniers jours",
+        "90d": "90 derniers jours",
+        "month": "Ce mois-ci",
+        "year": "Cette année",
+        "all": "Depuis le début",
+        "custom": "Dates personnalisées"
+      },
+      "from": "Du",
+      "to": "Au",
+      "customHint": "Pour des dates personnalisées",
+      "apply": "Appliquer",
+      "badRange": "La date de fin est antérieure à la date de début.",
+      "badDate": "Choisissez les deux dates pour une période personnalisée.",
+      "range": "{from} – {to}",
+      "byEvent": "Ventes par événement",
+      "event": "Événement",
+      "emptyTitle": "Aucune vente sur cette période",
+      "emptyDescription": "Choisissez une période plus longue ou partagez la page d’un événement pour commencer à vendre."
+    }
   }
 }

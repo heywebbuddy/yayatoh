@@ -73,6 +73,7 @@ export {
   listInvitationsQuery,
   listMembersQuery,
   myOrganizations,
+  organizationDefaultsTx,
   organizationNameTx,
   resolveOrgSlug,
 } from './queries.ts';

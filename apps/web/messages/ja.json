@@ -1369,5 +1369,163 @@
         "removeLabel": "{name}さんを{item}から外す"
       }
     }
+  },
+  "reports": {
+    "title": "分析",
+    "tabs": {
+      "label": "レポートの項目",
+      "overview": "概要",
+      "bookings": "予約",
+      "finance": "財務"
+    },
+    "asOf": "{time}に更新",
+    "keyNumbers": "主要な数値",
+    "moreNumbers": "その他の数値",
+    "seeReport": "レポート全体を見る",
+    "emptyTitle": "まだ販売はありません",
+    "emptyDescription": "最初の注文のあと、売上・チケット・入場がここに表示されます。",
+    "noAccessTitle": "このロールではレポートを表示できません",
+    "noAccessDescription": "注文を閲覧できるロールをオーナーまたは管理者に依頼してください。",
+    "financeNoAccessTitle": "財務は財務ロール専用です",
+    "financeNoAccessDescription": "純収益とプラットフォーム手数料は、オーナー・管理者・財務メンバーのみ表示できます。",
+    "metric": {
+      "sales": {
+        "gross": "総売上",
+        "refunds": "返金",
+        "discounts": "プロモコード割引"
+      },
+      "finance": {
+        "platformFees": "プラットフォーム手数料",
+        "disputesLost": "敗訴したチャージバック",
+        "net": "純収益"
+      },
+      "orders": {
+        "sold": "注文",
+        "comp": "招待注文",
+        "failed": "支払い失敗",
+        "refunded": "返金済みの注文"
+      },
+      "tickets": {
+        "sold": "販売チケット",
+        "comp": "招待チケット",
+        "refunded": "返金済みチケット",
+        "capacity": "定員",
+        "valid": "有効なチケット"
+      },
+      "checkins": {
+        "tickets": "入場済み",
+        "rate": "入場率"
+      }
+    },
+    "note": {
+      "refunded": "{amount} 返金済み",
+      "afterFees": "返金とプラットフォーム手数料を差し引いた額",
+      "failed": "{count, plural, =0 {支払い失敗なし} other {支払い失敗 #件}}",
+      "compOrders": "{count, plural, =0 {招待注文なし} other {招待注文 #件}}",
+      "compTickets": "{count, plural, =0 {招待チケットなし} other {招待チケット #枚}}",
+      "ofCapacity": "定員 {capacity} 中 · 招待 {comps}",
+      "ofValid": "有効なチケット {valid} 枚中 {rate}"
+    },
+    "byDay": "日別の売上",
+    "byDayChart": "日別の総売上（{currency}）",
+    "showData": "データを表示",
+    "day": "日付",
+    "orders": "注文",
+    "tickets": "チケット",
+    "gross": "総売上",
+    "byType": "チケット種類別の売上",
+    "ticketType": "チケットの種類",
+    "sold": "販売数",
+    "comps": "招待",
+    "capacity": "定員",
+    "byChannel": "チャネル別の売上",
+    "channel": "チャネル",
+    "channels": {
+      "online": "オンライン決済",
+      "organizer": "主催者が受領"
+    },
+    "byStatus": "ステータス別の注文",
+    "status": "ステータス",
+    "promo": "プロモコード",
+    "code": "コード",
+    "uses": "利用回数",
+    "discount": "割引額",
+    "promoEmpty": "このイベントのプロモコードはありません。",
+    "inactive": "停止中",
+    "finance": {
+      "title": "総額から純額へ",
+      "description": "純収益は、総売上から返金・敗訴したチャージバック・差し引かれたプラットフォーム手数料を引いた額で、ご自身の Stripe アカウントでのカード処理手数料の前の金額です。窓口販売の代金はすでに手元にあり、その手数料は次回の支払いから差し引かれます。",
+      "line": "項目",
+      "caption": "総売上から純収益へ"
+    },
+    "bookings": {
+      "search": "予約を検索",
+      "searchHint": "名前、メール、注文番号、プロモコード、チケットコード",
+      "show": "表示",
+      "submit": "検索",
+      "filters": {
+        "all": "すべての予約",
+        "paid": "支払い済み",
+        "comp": "招待",
+        "failed": "支払い失敗",
+        "refunded": "返金済み",
+        "pending": "支払い待ち",
+        "expired": "期限切れ・キャンセル",
+        "box_office": "窓口販売"
+      },
+      "count": "{total, plural, =0 {予約なし} other {予約 #件}}",
+      "showing": "{total}件中、最新の{shown}件を表示",
+      "caption": "予約",
+      "buyer": "購入者",
+      "tickets": "チケット",
+      "total": "合計",
+      "status": "ステータス",
+      "date": "予約日時",
+      "comp": "招待",
+      "boxOffice": "窓口販売",
+      "emptyTitle": "該当する予約はありません",
+      "emptyDescription": "別の条件で検索するか、すべての予約を表示してください。",
+      "export": "CSV でエクスポート",
+      "exportTitle": "予約のエクスポート",
+      "exportError": "エクスポートを開始できませんでした：{reason}",
+      "columns": {
+        "reference": "注文番号",
+        "buyerName": "購入者名",
+        "buyerEmail": "購入者のメール",
+        "status": "ステータス",
+        "tickets": "チケット",
+        "total": "合計",
+        "currency": "通貨",
+        "promoCode": "プロモコード",
+        "channel": "チャネル",
+        "bookedAt": "予約日時",
+        "paidAt": "支払日時"
+      }
+    },
+    "org": {
+      "title": "売上",
+      "keyNumbers": "売上の主要な数値",
+      "period": "期間",
+      "periods": {
+        "7d": "過去7日間",
+        "30d": "過去30日間",
+        "90d": "過去90日間",
+        "month": "今月",
+        "year": "今年",
+        "all": "全期間",
+        "custom": "日付を指定"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "customHint": "日付を指定する場合",
+      "apply": "適用",
+      "badRange": "終了日が開始日より前です。",
+      "badDate": "期間を指定するには両方の日付を選んでください。",
+      "range": "{from}～{to}",
+      "byEvent": "イベント別の売上",
+      "event": "イベント",
+      "emptyTitle": "この期間の売上はありません",
+      "emptyDescription": "期間を長くするか、イベントページを共有して販売を始めましょう。"
+    }
   }
 }

@@ -1369,5 +1369,163 @@
         "removeLabel": "Rimuovi {name} da {item}"
       }
     }
+  },
+  "reports": {
+    "title": "Analisi",
+    "tabs": {
+      "label": "Sezioni del report",
+      "overview": "Panoramica",
+      "bookings": "Prenotazioni",
+      "finance": "Finanze"
+    },
+    "asOf": "Aggiornato {time}",
+    "keyNumbers": "Numeri chiave",
+    "moreNumbers": "Altri numeri",
+    "seeReport": "Vedi il report completo",
+    "emptyTitle": "Ancora nessuna vendita",
+    "emptyDescription": "Vendite, biglietti e ingressi compaiono qui dopo il primo ordine.",
+    "noAccessTitle": "I report non sono disponibili per il tuo ruolo",
+    "noAccessDescription": "Chiedi a un proprietario o amministratore un ruolo che possa vedere gli ordini.",
+    "financeNoAccessTitle": "Le finanze sono per i ruoli finanziari",
+    "financeNoAccessDescription": "Ricavi netti e commissioni della piattaforma sono visibili a proprietari, amministratori e membri finanza.",
+    "metric": {
+      "sales": {
+        "gross": "Vendite lorde",
+        "refunds": "Rimborsi",
+        "discounts": "Sconti da codice"
+      },
+      "finance": {
+        "platformFees": "Commissioni della piattaforma",
+        "disputesLost": "Contestazioni perse",
+        "net": "Ricavi netti"
+      },
+      "orders": {
+        "sold": "Ordini",
+        "comp": "Ordini omaggio",
+        "failed": "Pagamenti non riusciti",
+        "refunded": "Ordini rimborsati"
+      },
+      "tickets": {
+        "sold": "Biglietti venduti",
+        "comp": "Biglietti omaggio",
+        "refunded": "Biglietti rimborsati",
+        "capacity": "Capienza",
+        "valid": "Biglietti validi"
+      },
+      "checkins": {
+        "tickets": "Entrati",
+        "rate": "Tasso di ingresso"
+      }
+    },
+    "note": {
+      "refunded": "{amount} rimborsati",
+      "afterFees": "Dopo rimborsi e commissioni della piattaforma",
+      "failed": "{count, plural, =0 {Nessun pagamento non riuscito} one {# pagamento non riuscito} other {# pagamenti non riusciti}}",
+      "compOrders": "{count, plural, =0 {Nessun ordine omaggio} one {# ordine omaggio} other {# ordini omaggio}}",
+      "compTickets": "{count, plural, =0 {Nessun biglietto omaggio} one {# biglietto omaggio} other {# biglietti omaggio}}",
+      "ofCapacity": "su {capacity} posti · {comps} omaggio",
+      "ofValid": "{rate} di {valid} biglietti validi"
+    },
+    "byDay": "Vendite per giorno",
+    "byDayChart": "Vendite lorde per giorno, {currency}",
+    "showData": "Mostra i dati",
+    "day": "Giorno",
+    "orders": "Ordini",
+    "tickets": "Biglietti",
+    "gross": "Vendite lorde",
+    "byType": "Vendite per tipo di biglietto",
+    "ticketType": "Tipo di biglietto",
+    "sold": "Venduti",
+    "comps": "Omaggio",
+    "capacity": "Capienza",
+    "byChannel": "Vendite per canale",
+    "channel": "Canale",
+    "channels": {
+      "online": "Pagamento online",
+      "organizer": "Incassato da te"
+    },
+    "byStatus": "Ordini per stato",
+    "status": "Stato",
+    "promo": "Codici promozionali",
+    "code": "Codice",
+    "uses": "Utilizzi",
+    "discount": "Sconto concesso",
+    "promoEmpty": "Nessun codice promozionale per questo evento.",
+    "inactive": "In pausa",
+    "finance": {
+      "title": "Dal lordo al netto",
+      "description": "I ricavi netti sono le vendite lorde meno rimborsi, contestazioni perse e commissioni della piattaforma trattenute, prima dei costi delle carte sul tuo account Stripe. I soldi della biglietteria sono già tuoi; la loro commissione viene detratta dal prossimo pagamento.",
+      "line": "Voce",
+      "caption": "Dalle vendite lorde ai ricavi netti"
+    },
+    "bookings": {
+      "search": "Cerca prenotazioni",
+      "searchHint": "Nome, email, riferimento dell’ordine, codice promozionale o codice del biglietto",
+      "show": "Mostra",
+      "submit": "Cerca",
+      "filters": {
+        "all": "Tutte le prenotazioni",
+        "paid": "Pagate",
+        "comp": "Omaggio",
+        "failed": "Pagamenti non riusciti",
+        "refunded": "Rimborsate",
+        "pending": "In attesa di pagamento",
+        "expired": "Scadute o annullate",
+        "box_office": "Biglietteria"
+      },
+      "count": "{total, plural, =0 {Nessuna prenotazione} one {# prenotazione} other {# prenotazioni}}",
+      "showing": "le {shown} più recenti su {total}",
+      "caption": "Prenotazioni",
+      "buyer": "Acquirente",
+      "tickets": "Biglietti",
+      "total": "Totale",
+      "status": "Stato",
+      "date": "Prenotata",
+      "comp": "Omaggio",
+      "boxOffice": "Biglietteria",
+      "emptyTitle": "Nessuna prenotazione corrisponde",
+      "emptyDescription": "Prova un’altra ricerca o mostra tutte le prenotazioni.",
+      "export": "Esporta come CSV",
+      "exportTitle": "Esportazione prenotazioni",
+      "exportError": "Impossibile avviare l’esportazione: {reason}",
+      "columns": {
+        "reference": "Riferimento ordine",
+        "buyerName": "Nome acquirente",
+        "buyerEmail": "Email acquirente",
+        "status": "Stato",
+        "tickets": "Biglietti",
+        "total": "Totale",
+        "currency": "Valuta",
+        "promoCode": "Codice promozionale",
+        "channel": "Canale",
+        "bookedAt": "Prenotata il",
+        "paidAt": "Pagata il"
+      }
+    },
+    "org": {
+      "title": "Vendite",
+      "keyNumbers": "Numeri chiave delle vendite",
+      "period": "Periodo",
+      "periods": {
+        "7d": "Ultimi 7 giorni",
+        "30d": "Ultimi 30 giorni",
+        "90d": "Ultimi 90 giorni",
+        "month": "Questo mese",
+        "year": "Quest’anno",
+        "all": "Da sempre",
+        "custom": "Date personalizzate"
+      },
+      "from": "Dal",
+      "to": "Al",
+      "customHint": "Per date personalizzate",
+      "apply": "Applica",
+      "badRange": "La data di fine è precedente a quella di inizio.",
+      "badDate": "Scegli entrambe le date per un periodo personalizzato.",
+      "range": "{from} – {to}",
+      "byEvent": "Vendite per evento",
+      "event": "Evento",
+      "emptyTitle": "Nessuna vendita in questo periodo",
+      "emptyDescription": "Scegli un periodo più lungo o condividi la pagina di un evento per iniziare a vendere."
+    }
   }
 }

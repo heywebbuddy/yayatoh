@@ -65,6 +65,12 @@ export {
   settlementsQuery,
 } from './settlements.ts';
 export {
+  type DisputeScope,
+  lostDisputeFactsTx,
+  type PlatformFeeRow,
+  platformFeesByOrgTx,
+} from './stats.ts';
+export {
   accountState,
   STRIPE_API_VERSION,
   type StripeProviderOptions,

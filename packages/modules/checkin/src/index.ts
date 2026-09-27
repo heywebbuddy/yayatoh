@@ -37,3 +37,4 @@ export {
   SCAN_RESULTS,
   type ScanResult,
 } from './schema.ts';
+export { type CheckinScope, checkinFactsTx } from './stats.ts';
