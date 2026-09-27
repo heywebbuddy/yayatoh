@@ -40,3 +40,6 @@ test-results/
 .claude/settings.local.json
 next-env.d.ts
 blob-report/
+
+# migrate:legacy:demo handles for the e2e suite (synthetic, throwaway database)
+apps/web/e2e/.generated/

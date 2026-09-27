@@ -382,6 +382,8 @@ export const holderTicketsQuery = tenantQuery({
         ticketBarcodes,
         and(
           eq(ticketBarcodes.ticketId, tickets.id),
+          // The signed yy1 code: a migrated ticket also keeps its legacy QR payload (scan-only).
+          eq(ticketBarcodes.format, 'yy1'),
           eq(ticketBarcodes.active, true),
           eq(ticketBarcodes.rev, tickets.rev),
         ),

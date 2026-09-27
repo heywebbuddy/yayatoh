@@ -427,6 +427,22 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // Legacy migration (M2.2b): a host_affiliate child org (its own owner) and one legacy statement.
+  const affiliate = await createOrganization(
+    userCtx(uuidv7()),
+    { slug: `${slug}-affiliate`, name: `${name} Affiliate` },
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'host_affiliate', 'fixture')`,
+    );
+    await tx.execute(sql`
+      insert into payments.legacy_settlements (org_id, kind, instance, event_id, currency, status,
+        customer_paid_minor, commission_minor, admin_tax_minor, organizer_earning_minor,
+        transferred_minor, open_minor, source_rows)
+      values (${org.id}, 'event_statement', 'yay', ${event.id}, 'USD', 'open', 10000, 1000, 0, 9000, 0, 9000, 4)`);
+  });
   return { org, ownerId, viewerId, event, ctx };
 }
 

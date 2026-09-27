@@ -158,6 +158,8 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
       ticketBarcodes,
       and(
         eq(ticketBarcodes.ticketId, tickets.id),
+        // The signed yy1 code: a migrated ticket also keeps its legacy QR payload (scan-only).
+        eq(ticketBarcodes.format, 'yy1'),
         eq(ticketBarcodes.active, true),
         eq(ticketBarcodes.rev, tickets.rev),
       ),
@@ -277,6 +279,40 @@ export async function ticketForScanTx(
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
     .where('id' in by ? eq(tickets.id, by.id) : eq(tickets.shortCode, by.shortCode.trim().toUpperCase()));
   return row ? { ...row, status: row.status as ScannableTicket['status'] } : null;
+}
+
+/**
+ * Legacy QR codes (roadmap §7.5): the old apps encoded the booking's `order_number`, raw or inside a
+ * JSON object. Returns the payload to look up, or null when the text cannot be one.
+ */
+export function legacyQrPayload(raw: string): string | null {
+  const text = raw.trim();
+  if (text.startsWith('{')) {
+    try {
+      const v = (JSON.parse(text) as Record<string, unknown>).order_number;
+      return typeof v === 'string' || typeof v === 'number' ? legacyQrPayload(String(v)) : null;
+    } catch {
+      return null;
+    }
+  }
+  return /^[0-9A-Za-z_-]{6,64}$/.test(text) ? text : null;
+}
+
+/** The ticket a migrated legacy QR payload still admits (its active `legacy_eventmie` barcode). */
+export async function ticketForLegacyCodeTx(tx: TenantTx, raw: string): Promise<ScannableTicket | null> {
+  const payload = legacyQrPayload(raw);
+  if (!payload) return null;
+  const [b] = await tx
+    .select({ ticketId: ticketBarcodes.ticketId })
+    .from(ticketBarcodes)
+    .where(
+      and(
+        eq(ticketBarcodes.format, 'legacy_eventmie'),
+        eq(ticketBarcodes.payload, payload),
+        eq(ticketBarcodes.active, true),
+      ),
+    );
+  return b ? ticketForScanTx(tx, { id: b.ticketId }) : null;
 }
 
 /** Ids of an event's ticket types (checkpoint zones list the ones allowed in). */

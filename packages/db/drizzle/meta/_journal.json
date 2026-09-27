@@ -288,6 +288,13 @@
       "when": 1790543774823,
       "tag": "0040_whole_black_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1790545906727,
+      "tag": "0041_icy_raza",
+      "breakpoints": true
     }
   ]
 }

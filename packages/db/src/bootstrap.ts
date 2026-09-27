@@ -53,11 +53,16 @@ export async function bootstrapRoles(
   );
 }
 
-/** After migrations: let the runtime roles see every schema the migrator owns (except drizzle's). */
+/**
+ * After migrations: let the runtime roles see every schema the migrator owns, except drizzle's and
+ * the legacy ELT's platform-owned schemas (`legacy` control tables and `legacy_{inst}` staging, which
+ * hold raw legacy rows and are for the migrator only).
+ */
 export async function grantSchemaUsage(migrator: postgres.Sql): Promise<void> {
   const schemas = await migrator<{ name: string }[]>`
     select nspname as name from pg_namespace
-    where pg_get_userbyid(nspowner) = ${ROLE.migrator} and nspname <> 'drizzle'`;
+    where pg_get_userbyid(nspowner) = ${ROLE.migrator} and nspname <> 'drizzle'
+      and nspname <> 'legacy' and nspname not like 'legacy\_%'`;
   for (const { name } of schemas) {
     await migrator.unsafe(`GRANT USAGE ON SCHEMA ${ident(name)} TO ${ROLE.appUser}, ${ROLE.platformReader}`);
   }

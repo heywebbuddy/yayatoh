@@ -1,0 +1,6 @@
+{
+  "name": "@yayatoh/orders",
+  "dependencies": {
+    "@yayatoh/db": "workspace:*"
+  }
+}

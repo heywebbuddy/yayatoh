@@ -1,0 +1,32 @@
+{
+  "name": "@yayatoh/legacy-migrate",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "legacy-migrate": "./cli.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/legacy-mask": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticket-crypto": "workspace:*",
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

@@ -55,5 +55,5 @@ export {
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';
-export { ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
+export { CHARGE_MODELS, ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
 export { ticketMailer } from './subscribers.ts';
