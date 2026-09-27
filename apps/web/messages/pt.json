@@ -55,7 +55,8 @@
     "communications": "Comunicações",
     "team": "Equipe",
     "settings": "Configurações",
-    "payouts": "Repasses"
+    "payouts": "Repasses",
+    "domains": "Domínios"
   },
   "vocab": {
     "attendee": "Participante",
@@ -992,5 +993,41 @@
     "description": "Uma simulação do cadastro no provedor de pagamentos. Nenhum dado real da empresa ou bancário é coletado.",
     "complete": "Concluir a configuração",
     "incomplete": "Enviar com dados faltando"
+  },
+  "domains": {
+    "title": "Domínios",
+    "description": "Onde os convidados encontram suas páginas: seu endereço gratuito do yayatoh e os domínios que você possui.",
+    "listLabel": "Seus domínios",
+    "status": {
+      "pending_dns": "Aguardando DNS",
+      "verifying": "Verificando",
+      "active": "Ativo",
+      "failed": "Não está funcionando"
+    },
+    "primary": "Principal",
+    "managed": "Incluído na sua conta",
+    "walletsReady": "Apple Pay e Google Pay estão prontos aqui.",
+    "walletsPending": "Apple Pay e Google Pay ainda não estão configurados aqui. Verifique agora para configurá-los.",
+    "reason": {
+      "dns_conflict": "Este domínio aponta para outro lugar. Atualize os registros DNS dele e verifique novamente.",
+      "unknown": "Não conseguimos verificar este domínio. Confira os registros DNS dele e tente novamente."
+    },
+    "recordsIntro": "Adicione estes registros na empresa que gerencia o DNS do seu domínio e verifique novamente. As alterações podem levar até um dia.",
+    "recordsCaption": "Registros DNS de {host}",
+    "recordType": "Tipo",
+    "recordName": "Nome",
+    "recordValue": "Valor",
+    "lastChecked": "Última verificação {when}",
+    "check": "Verificar agora",
+    "makePrimary": "Tornar principal",
+    "remove": "Remover",
+    "addTitle": "Adicione um domínio que você possui",
+    "hostname": "Domínio",
+    "hostnameHint": "Por exemplo, tickets.yourcompany.com. Um subdomínio é o mais fácil de configurar.",
+    "add": "Adicionar domínio",
+    "added": "Domínio adicionado. Agora publique os registros DNS mostrados acima.",
+    "managedMissing": "Seu endereço gratuito {host} ainda não está configurado.",
+    "managedCreate": "Configurar meu endereço gratuito",
+    "noAccess": "Somente proprietários e administradores podem alterar domínios."
   }
 }

@@ -55,7 +55,8 @@
     "communications": "コミュニケーション",
     "team": "チーム",
     "settings": "設定",
-    "payouts": "入金"
+    "payouts": "入金",
+    "domains": "ドメイン"
   },
   "vocab": {
     "attendee": "参加者",
@@ -992,5 +993,41 @@
     "description": "決済代行会社の登録手続きの代わりとなるページです。実際の事業情報や銀行口座情報は収集されません。",
     "complete": "設定を完了する",
     "incomplete": "未入力の項目を残して送信"
+  },
+  "domains": {
+    "title": "ドメイン",
+    "description": "ゲストがあなたのページにアクセスする場所です。無料の yayatoh アドレスと、お持ちのドメインを管理できます。",
+    "listLabel": "あなたのドメイン",
+    "status": {
+      "pending_dns": "DNS の設定待ち",
+      "verifying": "確認中",
+      "active": "有効",
+      "failed": "機能していません"
+    },
+    "primary": "プライマリ",
+    "managed": "アカウントに含まれています",
+    "walletsReady": "ここでは Apple Pay と Google Pay を利用できます。",
+    "walletsPending": "ここではまだ Apple Pay と Google Pay が設定されていません。今すぐ確認して設定してください。",
+    "reason": {
+      "dns_conflict": "このドメインは別の場所を指しています。DNS レコードを更新して、もう一度確認してください。",
+      "unknown": "このドメインを確認できませんでした。DNS レコードを確認して、もう一度お試しください。"
+    },
+    "recordsIntro": "ドメインの DNS を管理している会社でこれらのレコードを追加し、もう一度確認してください。変更の反映には最大 1 日かかることがあります。",
+    "recordsCaption": "{host} の DNS レコード",
+    "recordType": "タイプ",
+    "recordName": "名前",
+    "recordValue": "値",
+    "lastChecked": "最終確認: {when}",
+    "check": "今すぐ確認",
+    "makePrimary": "プライマリにする",
+    "remove": "削除",
+    "addTitle": "お持ちのドメインを追加",
+    "hostname": "ドメイン",
+    "hostnameHint": "例: tickets.yourcompany.com。サブドメインがいちばん簡単に設定できます。",
+    "add": "ドメインを追加",
+    "added": "ドメインを追加しました。上に表示されている DNS レコードを公開してください。",
+    "managedMissing": "無料アドレス {host} はまだ設定されていません。",
+    "managedCreate": "無料アドレスを設定する",
+    "noAccess": "ドメインを変更できるのはオーナーと管理者のみです。"
   }
 }

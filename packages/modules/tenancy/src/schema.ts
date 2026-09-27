@@ -4,6 +4,7 @@ import {
   boolean,
   check,
   foreignKey,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -144,6 +145,55 @@ export const agreementAcceptances = tenantTable(
     check('agreement_acceptances_document_check', sql`document in ('platform_tos', 'dpa')`),
     foreignKey({
       name: 'agreement_acceptances_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export const DOMAIN_KINDS = ['site'] as const;
+export const DOMAIN_STATUSES = ['pending_dns', 'verifying', 'active', 'failed'] as const;
+
+/**
+ * The organization's hostnames (roadmap §4.4): custom domains the organizer adds, and the managed
+ * tenant-apex subdomain (`{slug}.yayatoh.events`) created with the org. A hostname belongs to one
+ * org platform-wide (DNS is global), so its unique index is deliberately not org-scoped; the org
+ * that already holds it gets `conflict`, and the host router (M1.11) resolves it through a
+ * SECURITY DEFINER function returning only the org id.
+ */
+export const orgDomains = tenantTable(
+  tenancy,
+  'org_domains',
+  {
+    hostname: text('hostname').notNull(),
+    kind: text('kind').notNull().default('site'),
+    /** The tenant-apex subdomain: DNS is the platform's wildcard, so it is active at once. */
+    managed: boolean('managed').notNull().default(false),
+    isPrimary: boolean('is_primary').notNull().default(false),
+    status: text('status').notNull().default('pending_dns'),
+    /** The hosting provider's reference (Vercel project domain). */
+    providerRef: text('provider_ref'),
+    /** DNS records the organizer must publish, as the provider last reported them. */
+    records: jsonb('records').notNull().default(sql`'[]'::jsonb`),
+    sslStatus: text('ssl_status'),
+    /** Stripe Payment Method Domain on the platform account (Apple Pay / Google Pay). */
+    paymentMethodDomainId: text('payment_method_domain_id'),
+    failureReason: text('failure_reason'),
+    lastCheckedAt: timestamp('last_checked_at', { withTimezone: true }),
+    activatedAt: timestamp('activated_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('org_domains_hostname_key').on(t.hostname),
+    uniqueIndex('org_domains_org_primary_key').on(t.orgId, t.kind).where(sql`is_primary`),
+    check('org_domains_kind_check', inList('kind', DOMAIN_KINDS)),
+    check('org_domains_status_check', inList('status', DOMAIN_STATUSES)),
+    check('org_domains_primary_active_check', sql`not is_primary or status = 'active'`),
+    check(
+      'org_domains_hostname_check',
+      sql`hostname = lower(hostname) and length(hostname) between 4 and 253 and hostname ~ '^[a-z0-9]([a-z0-9-]*[a-z0-9])?([.][a-z0-9]([a-z0-9-]*[a-z0-9])?)+$'`,
+    ),
+    foreignKey({
+      name: 'org_domains_org_fk',
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),

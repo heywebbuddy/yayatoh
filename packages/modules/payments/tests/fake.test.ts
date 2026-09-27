@@ -91,4 +91,15 @@ describe('fake payment provider', () => {
     const e = await p.verifyWebhook(body, new Headers({ 'x-fake-signature': signature }));
     expect(e).toMatchObject({ provider: 'fake', type: 'account.updated', account });
   });
+
+  it('registers payment method domains idempotently per host and account', async () => {
+    const a = await p.registerPaymentMethodDomain({ hostname: 'tickets.example.com', accountId: null });
+    const b = await p.registerPaymentMethodDomain({ hostname: 'tickets.example.com', accountId: null });
+    const c = await p.registerPaymentMethodDomain({
+      hostname: 'tickets.example.com',
+      accountId: 'fakeacct_1',
+    });
+    expect(a.id).toBe(b.id);
+    expect(a.id).not.toBe(c.id);
+  });
 });

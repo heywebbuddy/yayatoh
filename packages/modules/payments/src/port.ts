@@ -82,4 +82,10 @@ export interface PaymentProvider {
     returnUrl: string;
     refreshUrl: string;
   }): Promise<{ url: string }>;
+  /**
+   * Payment Method Domains (M1.3d): register a host so Apple Pay / Google Pay show there, on the
+   * platform account (`accountId` null) or on a connected account (direct charges show wallets
+   * per connected account). Idempotent per (host, account).
+   */
+  registerPaymentMethodDomain(input: { hostname: string; accountId: string | null }): Promise<{ id: string }>;
 }

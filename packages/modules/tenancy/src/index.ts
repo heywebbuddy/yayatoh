@@ -1,5 +1,17 @@
 export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
+  addDomainCommand,
+  DomainDto,
+  ensureManagedDomainCommand,
+  listDomainsQuery,
+  MAX_CUSTOM_DOMAINS,
+  recordDomainCheckCommand,
+  recordDomainWalletsCommand,
+  removeDomainCommand,
+  resolveHost,
+  setPrimaryDomainCommand,
+} from './commands/domains.ts';
+export {
   acceptInvitation,
   inviteMemberCommand,
   lookupInvitation,
@@ -39,6 +51,13 @@ export {
   roleCan,
 } from './domain/permissions.ts';
 export * from './dto.ts';
+export { managedHostname, normalizeHostname, reservedHostname, tenantApex } from './hosting/hostnames.ts';
+export {
+  type DnsRecord,
+  type DomainCheck,
+  type DomainProvider,
+  fakeDomainProvider,
+} from './hosting/provider.ts';
 export {
   getOrganizationQuery,
   listInvitationsQuery,
@@ -47,5 +66,12 @@ export {
   organizationNameTx,
   resolveOrgSlug,
 } from './queries.ts';
-export { LEGAL_PAGE_KINDS, type LegalPageKind, ORG_KINDS, ORG_ROLES, ORG_STATUSES } from './schema.ts';
+export {
+  DOMAIN_STATUSES,
+  LEGAL_PAGE_KINDS,
+  type LegalPageKind,
+  ORG_KINDS,
+  ORG_ROLES,
+  ORG_STATUSES,
+} from './schema.ts';
 export { invitationMailer } from './subscribers.ts';

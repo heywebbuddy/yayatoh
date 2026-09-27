@@ -55,7 +55,8 @@
     "communications": "沟通",
     "team": "团队",
     "settings": "设置",
-    "payouts": "收款"
+    "payouts": "收款",
+    "domains": "域名"
   },
   "vocab": {
     "attendee": "参会者",
@@ -992,5 +993,41 @@
     "description": "这是支付服务商开户流程的模拟页面，不会收集任何真实的企业或银行信息。",
     "complete": "完成设置",
     "incomplete": "在信息不完整时提交"
+  },
+  "domains": {
+    "title": "域名",
+    "description": "宾客在这里找到你的页面：你的免费 yayatoh 地址，以及你拥有的域名。",
+    "listLabel": "你的域名",
+    "status": {
+      "pending_dns": "等待 DNS",
+      "verifying": "正在检查",
+      "active": "已启用",
+      "failed": "无法使用"
+    },
+    "primary": "主域名",
+    "managed": "账户已包含",
+    "walletsReady": "Apple Pay 和 Google Pay 已在此就绪。",
+    "walletsPending": "Apple Pay 和 Google Pay 尚未在此设置。立即检查即可完成设置。",
+    "reason": {
+      "dns_conflict": "此域名指向了其他位置。请更新其 DNS 记录，然后再次检查。",
+      "unknown": "我们无法验证此域名。请检查其 DNS 记录，然后重试。"
+    },
+    "recordsIntro": "请在管理你域名 DNS 的服务商处添加这些记录，然后再次检查。更改最多可能需要一天才能生效。",
+    "recordsCaption": "{host} 的 DNS 记录",
+    "recordType": "类型",
+    "recordName": "名称",
+    "recordValue": "值",
+    "lastChecked": "上次检查：{when}",
+    "check": "立即检查",
+    "makePrimary": "设为主域名",
+    "remove": "移除",
+    "addTitle": "添加你拥有的域名",
+    "hostname": "域名",
+    "hostnameHint": "例如 tickets.yourcompany.com。使用子域名最容易设置。",
+    "add": "添加域名",
+    "added": "域名已添加。现在请发布上方显示的 DNS 记录。",
+    "managedMissing": "你的免费地址 {host} 尚未设置。",
+    "managedCreate": "设置我的免费地址",
+    "noAccess": "只有所有者和管理员可以更改域名。"
   }
 }

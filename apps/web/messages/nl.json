@@ -55,7 +55,8 @@
     "communications": "Communicatie",
     "team": "Team",
     "settings": "Instellingen",
-    "payouts": "Uitbetalingen"
+    "payouts": "Uitbetalingen",
+    "domains": "Domeinen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -992,5 +993,41 @@
     "description": "Een vervanging voor de onboarding van de betaalprovider. Er worden geen echte bedrijfs- of bankgegevens verzameld.",
     "complete": "Instellen afronden",
     "incomplete": "Versturen met ontbrekende gegevens"
+  },
+  "domains": {
+    "title": "Domeinen",
+    "description": "Waar gasten je pagina's vinden: je gratis yayatoh-adres en domeinen die van jou zijn.",
+    "listLabel": "Je domeinen",
+    "status": {
+      "pending_dns": "Wacht op DNS",
+      "verifying": "Wordt gecontroleerd",
+      "active": "Actief",
+      "failed": "Werkt niet"
+    },
+    "primary": "Primair",
+    "managed": "Inbegrepen bij je account",
+    "walletsReady": "Apple Pay en Google Pay zijn hier klaar voor gebruik.",
+    "walletsPending": "Apple Pay en Google Pay zijn hier nog niet ingesteld. Controleer nu om ze in te stellen.",
+    "reason": {
+      "dns_conflict": "Dit domein verwijst ergens anders naar. Werk de DNS-records bij en controleer opnieuw.",
+      "unknown": "We konden dit domein niet verifiëren. Controleer de DNS-records en probeer het opnieuw."
+    },
+    "recordsIntro": "Voeg deze records toe bij het bedrijf dat de DNS van je domein beheert en controleer daarna opnieuw. Wijzigingen kunnen tot een dag duren.",
+    "recordsCaption": "DNS-records voor {host}",
+    "recordType": "Type",
+    "recordName": "Naam",
+    "recordValue": "Waarde",
+    "lastChecked": "Laatst gecontroleerd {when}",
+    "check": "Nu controleren",
+    "makePrimary": "Primair maken",
+    "remove": "Verwijderen",
+    "addTitle": "Voeg een eigen domein toe",
+    "hostname": "Domein",
+    "hostnameHint": "Bijvoorbeeld tickets.yourcompany.com. Een subdomein is het makkelijkst in te stellen.",
+    "add": "Domein toevoegen",
+    "added": "Domein toegevoegd. Publiceer nu de DNS-records die hierboven staan.",
+    "managedMissing": "Je gratis adres {host} is nog niet ingesteld.",
+    "managedCreate": "Mijn gratis adres instellen",
+    "noAccess": "Alleen eigenaren en beheerders kunnen domeinen wijzigen."
   }
 }

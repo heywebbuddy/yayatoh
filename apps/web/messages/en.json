@@ -55,7 +55,8 @@
     "communications": "Communications",
     "team": "Team",
     "settings": "Settings",
-    "payouts": "Payouts"
+    "payouts": "Payouts",
+    "domains": "Domains"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -992,5 +993,41 @@
     "description": "A stand-in for the payment provider's onboarding. No real business or bank details are collected.",
     "complete": "Finish setup",
     "incomplete": "Submit with details missing"
+  },
+  "domains": {
+    "title": "Domains",
+    "description": "Where guests find your pages: your free yayatoh address, and domains you own.",
+    "listLabel": "Your domains",
+    "status": {
+      "pending_dns": "Waiting for DNS",
+      "verifying": "Checking",
+      "active": "Active",
+      "failed": "Not working"
+    },
+    "primary": "Primary",
+    "managed": "Included with your account",
+    "walletsReady": "Apple Pay and Google Pay are ready here.",
+    "walletsPending": "Apple Pay and Google Pay are not set up here yet. Check now to set them up.",
+    "reason": {
+      "dns_conflict": "This domain points somewhere else. Update its DNS records and check again.",
+      "unknown": "We could not verify this domain. Check its DNS records and try again."
+    },
+    "recordsIntro": "Add these records at the company that manages your domain's DNS, then check again. Changes can take up to a day.",
+    "recordsCaption": "DNS records for {host}",
+    "recordType": "Type",
+    "recordName": "Name",
+    "recordValue": "Value",
+    "lastChecked": "Last checked {when}",
+    "check": "Check now",
+    "makePrimary": "Make primary",
+    "remove": "Remove",
+    "addTitle": "Add a domain you own",
+    "hostname": "Domain",
+    "hostnameHint": "For example tickets.yourcompany.com. A subdomain is easiest to set up.",
+    "add": "Add domain",
+    "added": "Domain added. Now publish the DNS records shown above.",
+    "managedMissing": "Your free address {host} is not set up yet.",
+    "managedCreate": "Set up my free address",
+    "noAccess": "Only owners and admins can change domains."
   }
 }

@@ -55,7 +55,8 @@
     "communications": "溝通",
     "team": "團隊",
     "settings": "設定",
-    "payouts": "收款"
+    "payouts": "收款",
+    "domains": "網域"
   },
   "vocab": {
     "attendee": "參加者",
@@ -992,5 +993,41 @@
     "description": "這是金流服務商開戶流程的模擬頁面，不會收集任何真實的公司或銀行資訊。",
     "complete": "完成設定",
     "incomplete": "在資訊不完整時送出"
+  },
+  "domains": {
+    "title": "網域",
+    "description": "賓客在這裡找到你的頁面：你的免費 yayatoh 網址，以及你擁有的網域。",
+    "listLabel": "你的網域",
+    "status": {
+      "pending_dns": "等待 DNS",
+      "verifying": "檢查中",
+      "active": "已啟用",
+      "failed": "無法使用"
+    },
+    "primary": "主要網域",
+    "managed": "帳戶已包含",
+    "walletsReady": "Apple Pay 和 Google Pay 已在此就緒。",
+    "walletsPending": "Apple Pay 和 Google Pay 尚未在此設定。立即檢查即可完成設定。",
+    "reason": {
+      "dns_conflict": "此網域指向了其他位置。請更新其 DNS 記錄，然後再次檢查。",
+      "unknown": "我們無法驗證此網域。請檢查其 DNS 記錄，然後再試一次。"
+    },
+    "recordsIntro": "請在管理你網域 DNS 的服務商處新增這些記錄，然後再次檢查。變更最多可能需要一天才會生效。",
+    "recordsCaption": "{host} 的 DNS 記錄",
+    "recordType": "類型",
+    "recordName": "名稱",
+    "recordValue": "值",
+    "lastChecked": "上次檢查：{when}",
+    "check": "立即檢查",
+    "makePrimary": "設為主要網域",
+    "remove": "移除",
+    "addTitle": "新增你擁有的網域",
+    "hostname": "網域",
+    "hostnameHint": "例如 tickets.yourcompany.com。使用子網域最容易設定。",
+    "add": "新增網域",
+    "added": "網域已新增。現在請發布上方顯示的 DNS 記錄。",
+    "managedMissing": "你的免費網址 {host} 尚未設定。",
+    "managedCreate": "設定我的免費網址",
+    "noAccess": "只有擁有者和管理員可以變更網域。"
   }
 }

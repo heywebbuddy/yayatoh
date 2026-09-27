@@ -92,3 +92,25 @@ Roadmap §5.3 hybrid funds flow, first half: an organization connects a payout a
 | AC3 | An active account switches new orders to `organizer_mor` with the connected account stored and the fee as application fee; other orgs stay `platform_mor`; payment accounts are covered by the isolation suite | `payouts.int.test.ts`, `isolation.int.test.ts` |
 | AC4 | The fake adapter charges the connected account for `organizer_mor`, refuses it without one, and verifies signed account webhooks | `packages/modules/payments/tests/fake.test.ts` |
 | AC5 | In the browser: an owner sets up payouts through the hosted (fake) onboarding, sees "more information needed", finishes, and a buyer's checkout then charges the connected account; axe passes | `apps/web/e2e/payouts.spec.ts` |
+
+## M1.3d — domain lifecycle (done, behind hosting and payments ports)
+
+Roadmap §4.2/§4.4. Serving tenant sites on these hosts (proxy host routing, per-host robots/sitemaps, the "unregistered host blocks checkout" readiness rule) is M1.11; this increment owns the lifecycle and the resolver M1.11 uses.
+
+- **Data.** `tenancy.org_domains` (tenant table, RLS): hostname, kind (`site`; `email`/`tracking`/`embed` later), `managed`, `is_primary` (one per org and kind; only when active), status `pending_dns → verifying → active → failed`, provider ref, DNS records to publish, SSL status, Payment Method Domain id, failure reason, last checked, activated. **Exception, on purpose:** the hostname unique index is global, not org-scoped, because DNS is global; a taken name returns `conflict` whether this org or another holds it.
+- **Managed subdomain.** Every org gets `{slug}.{TENANT_APEX}` (default `yayatoh.events`, owner D2) at creation: active, primary until a custom domain goes live. Orgs created before this increment set it up from the Domains page.
+- **Rules.** Typed input is normalized (scheme, trailing dot/slash, case, IDN → punycode); IPs, ports, paths and single labels are refused. Platform hosts (`yayatoh.com` and subdomains, the tenant apex, `vercel.app`, `localhost`) are reserved: only staff (system actor) can add e.g. `abc.yayatoh.com`. At most 10 custom domains per org. All changes need `org:update`; reading needs `org:read`.
+- **Lifecycle.** `tenancy.addDomain` (claims the name, `domain.added@1`) → the web asks the `DomainProvider` (Vercel Domains API; fake until the owner's account) to add it and records the DNS records → "Check now" records the provider's answer (`tenancy.recordDomainCheck`). The first time a custom domain is active it emits `domain.activated@1` and takes primary from the managed subdomain (roadmap §4.2: verified custom domain first); a primary that stops resolving hands primary back. `setPrimaryDomain` (active only), `removeDomain` (custom only; frees the name, `domain.removed@1`; then removed at the provider).
+- **Wallets.** Once a host is active, it is registered with Stripe Payment Method Domains on the platform account and, when the org's payout account is active, on the connected account too (direct charges show wallets per connected account); the platform registration id is recorded (`recordDomainWallets`).
+- **Resolver.** `resolveHost(host)` → `{ orgId, primaryHost }` through the SECURITY DEFINER `tenancy.org_by_host` (active site domains of active/limited orgs only; nothing else is returned).
+- **Fake provider.** DNS is simulated from the name: `*.verified.test` is published (active, certificate issued), `*.fail.test` points elsewhere (failed), anything else waits for DNS.
+- **Later:** a worker re-check of pending domains (today: "Check now"), Vercel's 100/h add queue, Redis write-through for the router (M1.11), registering wallets on a connected account that activates after its domains (with the Stripe adapter).
+
+### Acceptance (M1.3d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Every org has its managed subdomain, active and primary, resolving to the org | `packages/testing/tests/domains.int.test.ts` |
+| AC2 | Normalization; bad, reserved, taken and over-limit names refused; viewers refused; staff can add platform hosts | `domains.int.test.ts`, `packages/modules/tenancy/tests/hostnames.test.ts` |
+| AC3 | **A domain goes from pending to active** (roadmap acceptance): primary takeover once, `domain.activated@1` once, resolves; a failed primary hands back; switching primary; wallets only for active hosts; removal frees the name | `domains.int.test.ts` |
+| AC4 | Isolation: another org can't see or change a domain; `org_domains` rows exist for both fixture orgs | `domains.int.test.ts`, `isolation.int.test.ts` |
+| AC5 | In the browser: an owner adds a domain, sees the DNS records, checks it to active and primary with wallets ready, and removes it; reserved hosts show an error; axe passes | `apps/web/e2e/domains.spec.ts` |

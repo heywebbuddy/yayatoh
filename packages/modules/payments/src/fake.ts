@@ -42,6 +42,10 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
         accountId: `fakeacct_${createHmac('sha256', opts.secret).update(`acct:${i.orgId}`).digest('hex').slice(0, 16)}`,
       };
     },
+    async registerPaymentMethodDomain(i) {
+      const key = `pmd:${i.hostname}:${i.accountId ?? 'platform'}`;
+      return { id: `fakepmd_${createHmac('sha256', opts.secret).update(key).digest('hex').slice(0, 16)}` };
+    },
     async createOnboardingLink(i) {
       const params = new URLSearchParams({
         acct: i.accountId,

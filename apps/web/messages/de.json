@@ -55,7 +55,8 @@
     "communications": "Kommunikation",
     "team": "Team",
     "settings": "Einstellungen",
-    "payouts": "Auszahlungen"
+    "payouts": "Auszahlungen",
+    "domains": "Domains"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -992,5 +993,41 @@
     "description": "Ein Platzhalter für das Onboarding des Zahlungsanbieters. Es werden keine echten Unternehmens- oder Bankdaten erfasst.",
     "complete": "Einrichtung abschließen",
     "incomplete": "Mit fehlenden Angaben absenden"
+  },
+  "domains": {
+    "title": "Domains",
+    "description": "Hier finden Gäste deine Seiten: deine kostenlose yayatoh-Adresse und Domains, die dir gehören.",
+    "listLabel": "Deine Domains",
+    "status": {
+      "pending_dns": "Wartet auf DNS",
+      "verifying": "Wird geprüft",
+      "active": "Aktiv",
+      "failed": "Funktioniert nicht"
+    },
+    "primary": "Primär",
+    "managed": "In deinem Konto enthalten",
+    "walletsReady": "Apple Pay und Google Pay sind hier bereit.",
+    "walletsPending": "Apple Pay und Google Pay sind hier noch nicht eingerichtet. Prüfe jetzt, um sie einzurichten.",
+    "reason": {
+      "dns_conflict": "Diese Domain verweist auf ein anderes Ziel. Aktualisiere ihre DNS-Einträge und prüfe erneut.",
+      "unknown": "Wir konnten diese Domain nicht verifizieren. Prüfe ihre DNS-Einträge und versuche es erneut."
+    },
+    "recordsIntro": "Füge diese Einträge bei dem Unternehmen hinzu, das die DNS deiner Domain verwaltet, und prüfe dann erneut. Änderungen können bis zu einem Tag dauern.",
+    "recordsCaption": "DNS-Einträge für {host}",
+    "recordType": "Typ",
+    "recordName": "Name",
+    "recordValue": "Wert",
+    "lastChecked": "Zuletzt geprüft {when}",
+    "check": "Jetzt prüfen",
+    "makePrimary": "Als primär festlegen",
+    "remove": "Entfernen",
+    "addTitle": "Eigene Domain hinzufügen",
+    "hostname": "Domain",
+    "hostnameHint": "Zum Beispiel tickets.yourcompany.com. Eine Subdomain lässt sich am einfachsten einrichten.",
+    "add": "Domain hinzufügen",
+    "added": "Domain hinzugefügt. Veröffentliche jetzt die oben angezeigten DNS-Einträge.",
+    "managedMissing": "Deine kostenlose Adresse {host} ist noch nicht eingerichtet.",
+    "managedCreate": "Meine kostenlose Adresse einrichten",
+    "noAccess": "Nur Inhaber und Admins können Domains ändern."
   }
 }

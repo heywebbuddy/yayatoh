@@ -55,7 +55,8 @@
     "communications": "Communications",
     "team": "Équipe",
     "settings": "Paramètres",
-    "payouts": "Versements"
+    "payouts": "Versements",
+    "domains": "Domaines"
   },
   "vocab": {
     "attendee": "Participant",
@@ -992,5 +993,41 @@
     "description": "Une page de substitution pour l’inscription auprès du prestataire de paiement. Aucune information réelle sur l’entreprise ou la banque n’est collectée.",
     "complete": "Terminer la configuration",
     "incomplete": "Envoyer avec des informations manquantes"
+  },
+  "domains": {
+    "title": "Domaines",
+    "description": "Là où vos invités trouvent vos pages : votre adresse yayatoh gratuite et les domaines qui vous appartiennent.",
+    "listLabel": "Vos domaines",
+    "status": {
+      "pending_dns": "En attente du DNS",
+      "verifying": "Vérification en cours",
+      "active": "Actif",
+      "failed": "Ne fonctionne pas"
+    },
+    "primary": "Principal",
+    "managed": "Inclus dans votre compte",
+    "walletsReady": "Apple Pay et Google Pay sont prêts ici.",
+    "walletsPending": "Apple Pay et Google Pay ne sont pas encore configurés ici. Vérifiez maintenant pour les configurer.",
+    "reason": {
+      "dns_conflict": "Ce domaine pointe ailleurs. Mettez à jour ses enregistrements DNS, puis vérifiez à nouveau.",
+      "unknown": "Nous n’avons pas pu vérifier ce domaine. Contrôlez ses enregistrements DNS et réessayez."
+    },
+    "recordsIntro": "Ajoutez ces enregistrements auprès de la société qui gère le DNS de votre domaine, puis vérifiez à nouveau. Les modifications peuvent prendre jusqu’à un jour.",
+    "recordsCaption": "Enregistrements DNS pour {host}",
+    "recordType": "Type",
+    "recordName": "Nom",
+    "recordValue": "Valeur",
+    "lastChecked": "Dernière vérification : {when}",
+    "check": "Vérifier maintenant",
+    "makePrimary": "Définir comme principal",
+    "remove": "Supprimer",
+    "addTitle": "Ajouter un domaine qui vous appartient",
+    "hostname": "Domaine",
+    "hostnameHint": "Par exemple tickets.yourcompany.com. Un sous-domaine est le plus simple à configurer.",
+    "add": "Ajouter le domaine",
+    "added": "Domaine ajouté. Publiez maintenant les enregistrements DNS affichés ci-dessus.",
+    "managedMissing": "Votre adresse gratuite {host} n’est pas encore configurée.",
+    "managedCreate": "Configurer mon adresse gratuite",
+    "noAccess": "Seuls les propriétaires et les administrateurs peuvent modifier les domaines."
   }
 }

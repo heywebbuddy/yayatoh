@@ -16,6 +16,7 @@ import { z } from 'zod';
 import { AGREEMENT_DOCUMENTS, PLATFORM_AGREEMENTS } from '../domain/agreements.ts';
 import { CreateOrganizationInput, OrganizationDto, UpdateOrganizationInput } from '../dto.ts';
 import { agreementAcceptances, memberships, organizations } from '../schema.ts';
+import { ensureManagedDomainTx } from './domains.ts';
 
 type Emit = (e: DomainEvent) => void;
 
@@ -43,6 +44,8 @@ async function insertOrganizationTx(
   if (ctx.actor.type === 'user') {
     await tx.insert(memberships).values({ orgId: id, userId: ctx.actor.userId, role: 'owner' });
   }
+  // The tenant-apex subdomain comes with every org (roadmap §4.4).
+  await ensureManagedDomainTx(tx, ctx, row.slug);
   emit({
     type: 'organization.created',
     version: 1,
