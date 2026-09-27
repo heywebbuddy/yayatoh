@@ -85,5 +85,7 @@ export const StartCheckoutInput = z.object({
   /** An explicit, unticked-by-default checkbox; buying is never consent to marketing. */
   marketingOptIn: z.boolean().default(false),
   promoCode: z.string().trim().max(64).optional(),
+  /** Answers to the event's checkout questions (forms module), validated server-side. */
+  answers: z.record(z.string().max(40), z.unknown()).default({}),
   locale: z.string().max(10).default('en'),
 });

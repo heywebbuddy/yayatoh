@@ -6,6 +6,7 @@ import {
   type EventDto,
   transitionEventCommand,
 } from '@yayatoh/events';
+import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
@@ -111,6 +112,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // Checkout questions (one sensitive) so forms, versions and responses are covered.
+  await executeCommand(
+    publishFormCommand,
+    {
+      kind: 'checkout_questions',
+      subjectType: 'event',
+      subjectId: event.id,
+      definition: {
+        fields: [
+          { key: 'kids', type: 'count', label: 'Kids' },
+          { key: 'access_needs', type: 'short_text', label: 'Access needs', sensitive: true },
+        ],
+      },
+    },
+    ctx(),
+    ports,
+  );
   // One paid order (fake provider) so orders, order items and provider events are covered.
   await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx(), ports);
   const checkout = await executeCommand(
@@ -120,6 +138,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       items: [{ ticketTypeId: ga.id, quantity: 2 }],
       buyer: { email: `buyer@${slug}.test`, name: 'Fixture Buyer' },
       marketingOptIn: true,
+      answers: { kids: 1, access_needs: 'Step-free entrance' },
     },
     createCtx({ orgId: org.id }),
     ports,

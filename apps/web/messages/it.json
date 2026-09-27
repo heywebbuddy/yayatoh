@@ -426,7 +426,13 @@
     "promoInvalid": "Quel codice promozionale non è valido per questi biglietti.",
     "donationAmount": "Il tuo importo",
     "donationMinimum": "almeno {minimum}",
-    "donationTooLow": "Inserisci un importo pari o superiore al minimo per ogni pass che hai scelto."
+    "donationTooLow": "Inserisci un importo pari o superiore al minimo per ogni pass che hai scelto.",
+    "questions": "Qualche domanda dall’organizzatore",
+    "optional": "(facoltativo)",
+    "private": "(privato: lo vede solo l’organizzatore)",
+    "choose": "Scegli…",
+    "questionInvalid": "Controlla questa risposta.",
+    "questionsInvalid": "Alcune risposte vanno ricontrollate."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -504,5 +510,40 @@
     "addTitle": "Aggiungi un codice promozionale",
     "add": "Aggiungi codice",
     "added": "Codice promozionale aggiunto."
+  },
+  "questions": {
+    "title": "Domande al checkout",
+    "emptyTitle": "Ancora nessuna domanda",
+    "emptyDescription": "Chiedi agli acquirenti ciò che ti serve sapere, ad esempio la scelta del menu o quanti bambini verranno.",
+    "addTitle": "Aggiungi una domanda",
+    "addGuestCounts": "Aggiungi il numero di ospiti (bambini, seduti, in piedi)",
+    "presetKids": "Bambini",
+    "presetSeated": "Ospiti seduti",
+    "presetStanding": "Ospiti in piedi",
+    "label": "Domanda",
+    "type": "Tipo di risposta",
+    "types": {
+      "short_text": "Testo breve",
+      "long_text": "Testo lungo",
+      "number": "Numero",
+      "count": "Quantità (numero intero)",
+      "select": "Una scelta",
+      "multi_select": "Più scelte",
+      "checkbox": "Casella di controllo"
+    },
+    "options": "Opzioni",
+    "optionsHint": "Una per riga.",
+    "max": "Massimo (facoltativo)",
+    "required": "Risposta obbligatoria",
+    "sensitive": "Risposta privata",
+    "sensitiveHint": "Salvata in forma crittografata, per dati sensibili come esigenze mediche o di accessibilità.",
+    "requiredBadge": "Obbligatoria",
+    "privateBadge": "Privata",
+    "add": "Aggiungi domanda",
+    "added": "Domanda aggiunta.",
+    "moveUp": "Sposta {label} su",
+    "moveDown": "Sposta {label} giù",
+    "remove": "Rimuovi {label}",
+    "answers": "Risposte"
   }
 }

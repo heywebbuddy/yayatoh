@@ -426,7 +426,13 @@
     "promoInvalid": "该优惠码不适用于这些门票。",
     "donationAmount": "你的金额",
     "donationMinimum": "至少 {minimum}",
-    "donationTooLow": "请为所选的每种通行证输入不低于最低金额的数额。"
+    "donationTooLow": "请为所选的每种通行证输入不低于最低金额的数额。",
+    "questions": "主办方的几个问题",
+    "optional": "（可选）",
+    "private": "（私密——仅主办方可见）",
+    "choose": "请选择…",
+    "questionInvalid": "请检查此回答。",
+    "questionsInvalid": "部分回答需要再检查一下。"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -504,5 +510,40 @@
     "addTitle": "添加优惠码",
     "add": "添加优惠码",
     "added": "已添加优惠码。"
+  },
+  "questions": {
+    "title": "结账问题",
+    "emptyTitle": "暂无问题",
+    "emptyDescription": "向购票者询问您需要了解的信息，例如餐食选择或随行儿童人数。",
+    "addTitle": "添加问题",
+    "addGuestCounts": "添加宾客人数（儿童、就座、站立）",
+    "presetKids": "儿童",
+    "presetSeated": "就座宾客",
+    "presetStanding": "站立宾客",
+    "label": "问题",
+    "type": "回答类型",
+    "types": {
+      "short_text": "短文本",
+      "long_text": "长文本",
+      "number": "数字",
+      "count": "数量（整数）",
+      "select": "单选",
+      "multi_select": "多选",
+      "checkbox": "复选框"
+    },
+    "options": "选项",
+    "optionsHint": "每行一个。",
+    "max": "上限（可选）",
+    "required": "必须回答",
+    "sensitive": "私密回答",
+    "sensitiveHint": "加密存储，用于医疗或无障碍需求等敏感信息。",
+    "requiredBadge": "必填",
+    "privateBadge": "私密",
+    "add": "添加问题",
+    "added": "问题已添加。",
+    "moveUp": "上移{label}",
+    "moveDown": "下移{label}",
+    "remove": "移除{label}",
+    "answers": "回答"
   }
 }

@@ -1,30 +1,24 @@
 {
-  "name": "@yayatoh/orders",
+  "name": "@yayatoh/forms",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 4
+    "tier": 1
   },
   "exports": {
     ".": "./src/index.ts",
+    "./ui": "./src/ui.ts",
     "./testing": "./src/testing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
-    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
-    "@yayatoh/events": "workspace:*",
-    "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
-    "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/tenancy": "workspace:*",
-    "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },

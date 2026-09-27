@@ -4,6 +4,7 @@ import { Alert, Button, buttonClass, Card, Input, Label } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
+import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 export interface PassView {
@@ -30,10 +31,12 @@ export interface PassView {
 export function CheckoutForm({
   passes,
   organizer,
+  questions = [],
   action,
 }: {
   passes: readonly PassView[];
   organizer: string;
+  questions?: readonly QuestionView[];
   action: (prev: CheckoutState, form: FormData) => Promise<CheckoutState>;
 }) {
   const t = useTranslations();
@@ -50,7 +53,9 @@ export function CheckoutForm({
             ? t('checkout.promoInvalid')
             : state.reason === 'donation_amount'
               ? t('checkout.donationTooLow')
-              : t(errorMessageKey(state.code));
+              : state.reason === 'form_invalid'
+                ? t('checkout.questionsInvalid')
+                : t(errorMessageKey(state.code));
   return (
     <form action={formAction} className="flex min-w-0 flex-1 flex-col gap-4">
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -158,6 +163,11 @@ export function CheckoutForm({
           </li>
         ))}
       </ul>
+      {buyable && questions.length > 0 ? (
+        <Card>
+          <CheckoutQuestions questions={questions} invalidKey={state.field} />
+        </Card>
+      ) : null}
       {buyable ? (
         <Card className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-end">

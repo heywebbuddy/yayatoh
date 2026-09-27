@@ -1,4 +1,5 @@
-import { publicEventBySlug } from '@yayatoh/events';
+import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import { buttonClass, EmptyState } from '@yayatoh/ui';
@@ -23,6 +24,16 @@ export default async function PublicEventPage({
   // Passes, stats and agenda arrive with ticketing and sessions; showcase events get a dev overlay.
   const demo = publicDemoOverlay(slug);
   const real = await publicTicketTypes(slug);
+  const target = await checkoutTarget(slug);
+  const questions = target
+    ? ((
+        await publicForm(target.orgId, {
+          kind: 'checkout_questions',
+          subjectType: 'event',
+          subjectId: target.eventId,
+        })
+      )?.fields ?? [])
+    : [];
   const passes =
     real.length > 0
       ? real.map((p) => ({
@@ -162,6 +173,7 @@ export default async function PublicEventPage({
               })),
             }))}
             organizer={ev.organizerName}
+            questions={questions}
             action={checkoutAction.bind(null, slug)}
           />
         )}

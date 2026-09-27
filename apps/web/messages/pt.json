@@ -426,7 +426,13 @@
     "promoInvalid": "Esse código promocional não é válido para estes ingressos.",
     "donationAmount": "Seu valor",
     "donationMinimum": "no mínimo {minimum}",
-    "donationTooLow": "Informe um valor igual ou maior que o mínimo para cada passe escolhido."
+    "donationTooLow": "Informe um valor igual ou maior que o mínimo para cada passe escolhido.",
+    "questions": "Algumas perguntas do organizador",
+    "optional": "(opcional)",
+    "private": "(privado — só o organizador vê isto)",
+    "choose": "Escolha…",
+    "questionInvalid": "Confira esta resposta.",
+    "questionsInvalid": "Algumas respostas precisam ser revisadas."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -504,5 +510,40 @@
     "addTitle": "Adicionar código promocional",
     "add": "Adicionar código",
     "added": "Código promocional adicionado."
+  },
+  "questions": {
+    "title": "Perguntas do checkout",
+    "emptyTitle": "Nenhuma pergunta ainda",
+    "emptyDescription": "Pergunte aos compradores o que você precisa saber, como a escolha de refeição ou quantas crianças vão.",
+    "addTitle": "Adicionar uma pergunta",
+    "addGuestCounts": "Adicionar número de convidados (crianças, sentados, em pé)",
+    "presetKids": "Crianças",
+    "presetSeated": "Convidados sentados",
+    "presetStanding": "Convidados em pé",
+    "label": "Pergunta",
+    "type": "Tipo de resposta",
+    "types": {
+      "short_text": "Texto curto",
+      "long_text": "Texto longo",
+      "number": "Número",
+      "count": "Quantidade (número inteiro)",
+      "select": "Uma opção",
+      "multi_select": "Várias opções",
+      "checkbox": "Caixa de seleção"
+    },
+    "options": "Opções",
+    "optionsHint": "Uma por linha.",
+    "max": "Máximo (opcional)",
+    "required": "Resposta obrigatória",
+    "sensitive": "Resposta privada",
+    "sensitiveHint": "Armazenada com criptografia, para informações sensíveis como necessidades médicas ou de acessibilidade.",
+    "requiredBadge": "Obrigatória",
+    "privateBadge": "Privada",
+    "add": "Adicionar pergunta",
+    "added": "Pergunta adicionada.",
+    "moveUp": "Mover {label} para cima",
+    "moveDown": "Mover {label} para baixo",
+    "remove": "Remover {label}",
+    "answers": "Respostas"
   }
 }

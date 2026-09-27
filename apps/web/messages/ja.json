@@ -426,7 +426,13 @@
     "promoInvalid": "このプロモコードは選択したチケットには使用できません。",
     "donationAmount": "お支払い金額",
     "donationMinimum": "{minimum}以上",
-    "donationTooLow": "選択した各パスについて、最低金額以上の金額を入力してください。"
+    "donationTooLow": "選択した各パスについて、最低金額以上の金額を入力してください。",
+    "questions": "主催者からの質問",
+    "optional": "（任意）",
+    "private": "（非公開：主催者のみが閲覧できます）",
+    "choose": "選択してください…",
+    "questionInvalid": "この回答を確認してください。",
+    "questionsInvalid": "いくつかの回答を見直してください。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -504,5 +510,40 @@
     "addTitle": "プロモコードを追加",
     "add": "コードを追加",
     "added": "プロモコードを追加しました。"
+  },
+  "questions": {
+    "title": "購入時の質問",
+    "emptyTitle": "質問はまだありません",
+    "emptyDescription": "食事の選択や同伴するお子さまの人数など、知っておきたいことを購入者に質問できます。",
+    "addTitle": "質問を追加",
+    "addGuestCounts": "ゲスト人数を追加（子ども、着席、立ち見）",
+    "presetKids": "子ども",
+    "presetSeated": "着席のゲスト",
+    "presetStanding": "立ち見のゲスト",
+    "label": "質問",
+    "type": "回答の形式",
+    "types": {
+      "short_text": "短いテキスト",
+      "long_text": "長いテキスト",
+      "number": "数値",
+      "count": "人数・個数（整数）",
+      "select": "単一選択",
+      "multi_select": "複数選択",
+      "checkbox": "チェックボックス"
+    },
+    "options": "選択肢",
+    "optionsHint": "1行に1つ入力します。",
+    "max": "上限（任意）",
+    "required": "回答必須",
+    "sensitive": "非公開の回答",
+    "sensitiveHint": "暗号化して保存されます。医療上の配慮やアクセシビリティのニーズなど、機微な情報に使用します。",
+    "requiredBadge": "必須",
+    "privateBadge": "非公開",
+    "add": "質問を追加",
+    "added": "質問を追加しました。",
+    "moveUp": "{label}を上に移動",
+    "moveDown": "{label}を下に移動",
+    "remove": "{label}を削除",
+    "answers": "回答"
   }
 }

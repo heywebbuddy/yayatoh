@@ -426,7 +426,13 @@
     "promoInvalid": "That promo code isn't valid for these tickets.",
     "donationAmount": "Your amount",
     "donationMinimum": "at least {minimum}",
-    "donationTooLow": "Enter an amount at or above the minimum for each pass you chose."
+    "donationTooLow": "Enter an amount at or above the minimum for each pass you chose.",
+    "questions": "A few questions from the organizer",
+    "optional": "(optional)",
+    "private": "(private — only the organizer sees this)",
+    "choose": "Choose…",
+    "questionInvalid": "Check this answer.",
+    "questionsInvalid": "Some answers need another look."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -504,5 +510,40 @@
     "addTitle": "Add a promo code",
     "add": "Add code",
     "added": "Promo code added."
+  },
+  "questions": {
+    "title": "Checkout questions",
+    "emptyTitle": "No questions yet",
+    "emptyDescription": "Ask buyers what you need to know, such as meal choices or how many kids are coming.",
+    "addTitle": "Add a question",
+    "addGuestCounts": "Add guest counts (kids, seated, standing)",
+    "presetKids": "Kids",
+    "presetSeated": "Seated guests",
+    "presetStanding": "Standing guests",
+    "label": "Question",
+    "type": "Answer type",
+    "types": {
+      "short_text": "Short text",
+      "long_text": "Long text",
+      "number": "Number",
+      "count": "Count (whole number)",
+      "select": "One choice",
+      "multi_select": "Several choices",
+      "checkbox": "Checkbox"
+    },
+    "options": "Choices",
+    "optionsHint": "One per line.",
+    "max": "Maximum (optional)",
+    "required": "Answer required",
+    "sensitive": "Private answer",
+    "sensitiveHint": "Stored encrypted, for sensitive details like medical or access needs.",
+    "requiredBadge": "Required",
+    "privateBadge": "Private",
+    "add": "Add question",
+    "added": "Question added.",
+    "moveUp": "Move {label} up",
+    "moveDown": "Move {label} down",
+    "remove": "Remove {label}",
+    "answers": "Answers"
   }
 }

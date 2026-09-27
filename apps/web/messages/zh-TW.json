@@ -426,7 +426,13 @@
     "promoInvalid": "此優惠碼不適用於這些票券。",
     "donationAmount": "你的金額",
     "donationMinimum": "至少 {minimum}",
-    "donationTooLow": "請為所選的每種通行證輸入不低於最低金額的金額。"
+    "donationTooLow": "請為所選的每種通行證輸入不低於最低金額的金額。",
+    "questions": "主辦單位的幾個問題",
+    "optional": "（選填）",
+    "private": "（私密——僅主辦單位可見）",
+    "choose": "請選擇…",
+    "questionInvalid": "請檢查此回答。",
+    "questionsInvalid": "部分回答需要再確認一下。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -504,5 +510,40 @@
     "addTitle": "新增優惠碼",
     "add": "新增優惠碼",
     "added": "已新增優惠碼。"
+  },
+  "questions": {
+    "title": "結帳問題",
+    "emptyTitle": "尚無問題",
+    "emptyDescription": "向購票者詢問您需要知道的資訊，例如餐點選擇或隨行兒童人數。",
+    "addTitle": "新增問題",
+    "addGuestCounts": "新增賓客人數（兒童、座位、站位）",
+    "presetKids": "兒童",
+    "presetSeated": "座位賓客",
+    "presetStanding": "站位賓客",
+    "label": "問題",
+    "type": "回答類型",
+    "types": {
+      "short_text": "簡短文字",
+      "long_text": "長篇文字",
+      "number": "數字",
+      "count": "數量（整數）",
+      "select": "單選",
+      "multi_select": "多選",
+      "checkbox": "核取方塊"
+    },
+    "options": "選項",
+    "optionsHint": "每行一個。",
+    "max": "上限（選填）",
+    "required": "必須回答",
+    "sensitive": "私密回答",
+    "sensitiveHint": "加密儲存，用於醫療或無障礙需求等敏感資訊。",
+    "requiredBadge": "必填",
+    "privateBadge": "私密",
+    "add": "新增問題",
+    "added": "已新增問題。",
+    "moveUp": "上移{label}",
+    "moveDown": "下移{label}",
+    "remove": "移除{label}",
+    "answers": "回答"
   }
 }

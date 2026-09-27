@@ -299,6 +299,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../../packages/modules/forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -648,6 +651,37 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/modules/forms:
+    dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/modules/orders:
     dependencies:
       '@yayatoh/billing':
@@ -665,6 +699,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
@@ -866,6 +903,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../modules/events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../modules/forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../kernel

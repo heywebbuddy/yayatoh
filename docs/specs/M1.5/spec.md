@@ -190,6 +190,30 @@
 | AC5 | Updates change only the fields they name (tickets, events, orgs) | `pricing.int.test.ts`, `events.int.test.ts`, `tenancy.int.test.ts`, `contracts/tests/partial.test.ts` |
 | AC6 | End to end: an organizer adds early-bird, donation and multi-day passes; the public page shows them; a too-low donation is refused and a valid one is charged | `e2e/pricing.spec.ts` |
 
+## M1.5d3 — forms engine v1: checkout questions (done)
+- **`forms` module (tier 1):**
+  - `forms` (one per kind and subject), `form_versions` (immutable JSON definitions) and `form_responses` (each points at the exact version answered).
+  - Field types: short/long text, number, count, one choice, several choices, checkbox. Each field can be required and/or private.
+  - Conditions (`showIf`) use a safe JsonLogic subset (`var == != > >= < <= in and or !`); anything else is rejected at publish.
+- **Answers:**
+  - Validated server-side in the checkout transaction: unknown keys rejected, hidden fields dropped, counts are whole numbers ≥ 0, choices must match an option. A bad answer fails the whole order with `form_invalid` and the question's key.
+  - Private answers are stored as one KeyVault envelope.
+- **Web:**
+  - The Tickets & Orders page lists the questions (reorder and remove through buttons, no drag), has a one-click "guest counts" preset (legacy kids/seated/standing, labels in the organizer's language) and an add form.
+  - The public checkout shows the questions with conditions applied as you answer.
+  - The orders table shows answers in question order, with choice labels.
+  - Strings are in 13 locales.
+- **Deviation from roadmap §4.4:** answers are JSON on the response row for now; a normalized `form_answers` table arrives with reporting (M3+).
+
+### Acceptance (M1.5d3)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Definitions reject duplicate keys, stray options and unsafe conditions; the evaluator handles the subset | `packages/modules/forms/tests/definition.test.ts` |
+| AC2 | Every publish writes a new version; old answers stay tied to theirs | `packages/testing/tests/forms.int.test.ts` |
+| AC3 | Valid answers are stored and normalized, hidden ones dropped, private ones encrypted (no plaintext in the DB) | `forms.int.test.ts` |
+| AC4 | An invalid answer names the question and rolls back the order; an event without questions accepts no answers | `forms.int.test.ts` |
+| AC5 | Viewers can't publish; another org sees nothing; the fixture covers all three tables | `forms.int.test.ts`, `isolation.int.test.ts` |
+| AC6 | End to end: an organizer adds a guest-count preset and a required choice question and reorders them; a guest answers; the organizer reads the answers | `e2e/questions.spec.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5d3:** forms engine v1 (checkout questions, including kids/seated/standing counts).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

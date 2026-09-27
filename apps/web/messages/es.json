@@ -426,7 +426,13 @@
     "promoInvalid": "Ese código promocional no es válido para estas entradas.",
     "donationAmount": "Tu importe",
     "donationMinimum": "mínimo {minimum}",
-    "donationTooLow": "Introduce un importe igual o superior al mínimo para cada pase que has elegido."
+    "donationTooLow": "Introduce un importe igual o superior al mínimo para cada pase que has elegido.",
+    "questions": "Algunas preguntas del organizador",
+    "optional": "(opcional)",
+    "private": "(privado: solo lo ve el organizador)",
+    "choose": "Elige…",
+    "questionInvalid": "Revisa esta respuesta.",
+    "questionsInvalid": "Algunas respuestas necesitan otra revisión."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -504,5 +510,40 @@
     "addTitle": "Añadir un código promocional",
     "add": "Añadir código",
     "added": "Código promocional añadido."
+  },
+  "questions": {
+    "title": "Preguntas del pago",
+    "emptyTitle": "Aún no hay preguntas",
+    "emptyDescription": "Pregunta a los compradores lo que necesitas saber, como la elección de menú o cuántos niños vendrán.",
+    "addTitle": "Añadir una pregunta",
+    "addGuestCounts": "Añadir número de invitados (niños, sentados, de pie)",
+    "presetKids": "Niños",
+    "presetSeated": "Invitados sentados",
+    "presetStanding": "Invitados de pie",
+    "label": "Pregunta",
+    "type": "Tipo de respuesta",
+    "types": {
+      "short_text": "Texto corto",
+      "long_text": "Texto largo",
+      "number": "Número",
+      "count": "Cantidad (número entero)",
+      "select": "Una opción",
+      "multi_select": "Varias opciones",
+      "checkbox": "Casilla de verificación"
+    },
+    "options": "Opciones",
+    "optionsHint": "Una por línea.",
+    "max": "Máximo (opcional)",
+    "required": "Respuesta obligatoria",
+    "sensitive": "Respuesta privada",
+    "sensitiveHint": "Se guarda cifrada, para datos sensibles como necesidades médicas o de accesibilidad.",
+    "requiredBadge": "Obligatoria",
+    "privateBadge": "Privada",
+    "add": "Añadir pregunta",
+    "added": "Pregunta añadida.",
+    "moveUp": "Subir {label}",
+    "moveDown": "Bajar {label}",
+    "remove": "Eliminar {label}",
+    "answers": "Respuestas"
   }
 }

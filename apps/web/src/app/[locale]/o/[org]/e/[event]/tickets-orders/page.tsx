@@ -1,3 +1,4 @@
+import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { listOrdersQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
@@ -5,14 +6,19 @@ import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
+import { QuestionForm } from '@/components/question-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
+  addGuestCountsAction,
+  addQuestionAction,
   archiveTicketTypeAction,
   createPromoCodeAction,
   createTicketTypeAction,
+  moveQuestionAction,
+  removeQuestionAction,
   setPromoCodeActiveAction,
 } from './actions.ts';
 
@@ -31,6 +37,34 @@ export default async function TicketsPage({
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
     : null;
   const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
+  const subject = { kind: 'checkout_questions', subjectType: 'event', subjectId: ev.id } as const;
+  const form = await executeQuery(getFormQuery, subject, data.ctx, ports);
+  const fields = form?.definition.fields ?? [];
+  const answers = orders
+    ? await executeQuery(
+        listResponsesQuery,
+        { ...subject, respondentIds: orders.map((o) => o.id) },
+        data.ctx,
+        ports,
+      )
+    : null;
+  // In the form's current order (then any questions since removed), with choice labels.
+  const answersFor = (orderId: string) => {
+    const r = answers?.responses.find((x) => x.respondentId === orderId);
+    if (!r || !answers) return '';
+    const order = [...fields.map((f) => f.key), ...Object.keys(r.answers)];
+    const shown = (k: string, v: unknown) => {
+      const labels = answers.questions[k]?.options ?? {};
+      if (Array.isArray(v)) return v.map((x) => labels[String(x)] ?? String(x)).join(', ');
+      if (v === true) return '✓';
+      return labels[String(v)] ?? String(v);
+    };
+    return [...new Set(order)]
+      .filter((k) => k in r.answers)
+      .map((k) => `${answers.questions[k]?.label ?? k}: ${shown(k, r.answers[k])}`)
+      .join(' · ');
+  };
+
   const fmt = (minor: number) => formatMoney(money(minor, ev.currency), locale);
   const pct = (bps: number) =>
     new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(bps / 10_000);
@@ -150,6 +184,17 @@ export default async function TicketsPage({
                   header: t('orders.items'),
                   cell: (o) => o.items.map((i) => `${i.quantity} × ${i.name}`).join(', '),
                 },
+                ...(fields.length > 0 || (answers?.responses.length ?? 0) > 0
+                  ? [
+                      {
+                        key: 'answers',
+                        header: t('questions.answers'),
+                        cell: (o: (typeof orders)[number]) => (
+                          <span className="text-caption text-zinc-600">{answersFor(o.id)}</span>
+                        ),
+                      },
+                    ]
+                  : []),
                 {
                   key: 'total',
                   header: t('orders.total'),
@@ -178,6 +223,82 @@ export default async function TicketsPage({
           )}
         </section>
       ) : null}
+      <section aria-labelledby="questions-heading" className="flex flex-col gap-3">
+        <h2 id="questions-heading" className="text-section">
+          {t('questions.title')}
+        </h2>
+        {fields.length === 0 ? (
+          <EmptyState title={t('questions.emptyTitle')} description={t('questions.emptyDescription')} />
+        ) : (
+          <ol className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+            {fields.map((f, i) => (
+              <li key={f.key} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span>{f.label}</span>
+                  <span className="text-caption text-zinc-500">
+                    {[
+                      t(`questions.types.${f.type}`),
+                      f.required ? t('questions.requiredBadge') : null,
+                      f.sensitive ? t('questions.privateBadge') : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </span>
+                </span>
+                {canWrite ? (
+                  <span className="flex gap-1">
+                    <form action={moveQuestionAction.bind(null, org, event, f.key, -1)}>
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        size="sm"
+                        disabled={i === 0}
+                        aria-label={t('questions.moveUp', { label: f.label })}
+                      >
+                        ↑
+                      </Button>
+                    </form>
+                    <form action={moveQuestionAction.bind(null, org, event, f.key, 1)}>
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        size="sm"
+                        disabled={i === fields.length - 1}
+                        aria-label={t('questions.moveDown', { label: f.label })}
+                      >
+                        ↓
+                      </Button>
+                    </form>
+                    <form action={removeQuestionAction.bind(null, org, event, f.key)}>
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        size="sm"
+                        aria-label={t('questions.remove', { label: f.label })}
+                      >
+                        {t('tickets.remove')}
+                      </Button>
+                    </form>
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        )}
+        {canWrite ? (
+          <Card className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="text-section">{t('questions.addTitle')}</h3>
+              <form action={addGuestCountsAction.bind(null, org, event)}>
+                <Button type="submit" variant="secondary" size="sm">
+                  {t('questions.addGuestCounts')}
+                </Button>
+              </form>
+            </div>
+            <QuestionForm action={addQuestionAction.bind(null, org, event)} />
+          </Card>
+        ) : null}
+      </section>
       <section aria-labelledby="promo-heading" className="flex flex-col gap-3">
         <h2 id="promo-heading" className="text-section">
           {t('promo.title')}

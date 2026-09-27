@@ -1,6 +1,7 @@
 'use server';
 
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
 import { redirect as nextRedirect } from 'next/navigation';
@@ -13,6 +14,8 @@ import { getSession } from '@/server/session.ts';
 export interface CheckoutState {
   readonly code: string | null;
   readonly reason?: string;
+  /** The question whose answer was rejected (checkout questions). */
+  readonly field?: string;
 }
 
 /**
@@ -49,6 +52,23 @@ export async function checkoutAction(
     return { code: 'validation_failed', reason: 'donation_amount' };
   }
   if (items.length === 0) return { code: 'validation_failed', reason: 'empty' };
+  // Answers are read by the published questions' keys and types; the server validates them again.
+  const questions = await publicForm(target.orgId, {
+    kind: 'checkout_questions',
+    subjectType: 'event',
+    subjectId: target.eventId,
+  });
+  const answers: Record<string, unknown> = {};
+  for (const q of questions?.fields ?? []) {
+    const name = `q:${q.key}`;
+    if (q.type === 'multi_select') {
+      const all = form.getAll(name).map(String);
+      if (all.length) answers[q.key] = all;
+    } else {
+      const v = String(form.get(name) ?? '').trim();
+      if (v) answers[q.key] = q.type === 'checkbox' ? true : v;
+    }
+  }
   const session = await getSession();
   const ctx = createCtx({
     orgId: target.orgId,
@@ -65,13 +85,19 @@ export async function checkoutAction(
         buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
         marketingOptIn: form.get('marketingOptIn') === '1',
         promoCode: String(form.get('promoCode') ?? '').trim() || undefined,
+        answers,
         locale,
       },
       ctx,
       ports,
     );
   } catch (err) {
-    if (isDomainError(err)) return { code: err.code, reason: String(err.details?.reason ?? '') };
+    if (isDomainError(err))
+      return {
+        code: err.code,
+        reason: String(err.details?.reason ?? ''),
+        ...(typeof err.details?.field === 'string' ? { field: err.details.field } : {}),
+      };
     throw err;
   }
   const { order, manageToken } = result;

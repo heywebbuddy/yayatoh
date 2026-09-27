@@ -2,6 +2,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { recordConsentTx, upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { submitResponseTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { claimProviderEventTx, type ProviderEvent } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
@@ -128,6 +129,14 @@ export const startCheckoutCommand = tenantCommand({
       })
       .returning();
     if (!order) throw new DomainError('internal');
+    await submitResponseTx(tx, ctx, {
+      kind: 'checkout_questions',
+      subjectType: 'event',
+      subjectId: event.id,
+      respondentType: 'order',
+      respondentId: order.id,
+      answers: input.answers,
+    });
     const items = await tx
       .insert(orderItems)
       .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))

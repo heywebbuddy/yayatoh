@@ -426,7 +426,13 @@
     "promoInvalid": "Dieser Rabattcode gilt nicht für diese Tickets.",
     "donationAmount": "Dein Betrag",
     "donationMinimum": "mindestens {minimum}",
-    "donationTooLow": "Gib für jeden gewählten Pass einen Betrag ein, der mindestens dem Mindestbetrag entspricht."
+    "donationTooLow": "Gib für jeden gewählten Pass einen Betrag ein, der mindestens dem Mindestbetrag entspricht.",
+    "questions": "Ein paar Fragen vom Veranstalter",
+    "optional": "(optional)",
+    "private": "(privat – nur der Veranstalter sieht das)",
+    "choose": "Auswählen…",
+    "questionInvalid": "Prüfe diese Antwort.",
+    "questionsInvalid": "Einige Antworten musst du noch einmal prüfen."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -504,5 +510,40 @@
     "addTitle": "Rabattcode hinzufügen",
     "add": "Code hinzufügen",
     "added": "Rabattcode hinzugefügt."
+  },
+  "questions": {
+    "title": "Fragen beim Checkout",
+    "emptyTitle": "Noch keine Fragen",
+    "emptyDescription": "Frag Käufer, was du wissen musst, zum Beispiel die Menüwahl oder wie viele Kinder mitkommen.",
+    "addTitle": "Frage hinzufügen",
+    "addGuestCounts": "Gästezahlen hinzufügen (Kinder, Sitzplätze, Stehplätze)",
+    "presetKids": "Kinder",
+    "presetSeated": "Gäste mit Sitzplatz",
+    "presetStanding": "Gäste mit Stehplatz",
+    "label": "Frage",
+    "type": "Antworttyp",
+    "types": {
+      "short_text": "Kurzer Text",
+      "long_text": "Langer Text",
+      "number": "Zahl",
+      "count": "Anzahl (ganze Zahl)",
+      "select": "Eine Auswahl",
+      "multi_select": "Mehrere Auswahlen",
+      "checkbox": "Kontrollkästchen"
+    },
+    "options": "Auswahlmöglichkeiten",
+    "optionsHint": "Eine pro Zeile.",
+    "max": "Maximum (optional)",
+    "required": "Antwort erforderlich",
+    "sensitive": "Private Antwort",
+    "sensitiveHint": "Wird verschlüsselt gespeichert, für sensible Angaben wie medizinische Bedürfnisse oder Barrierefreiheit.",
+    "requiredBadge": "Pflichtfeld",
+    "privateBadge": "Privat",
+    "add": "Frage hinzufügen",
+    "added": "Frage hinzugefügt.",
+    "moveUp": "{label} nach oben verschieben",
+    "moveDown": "{label} nach unten verschieben",
+    "remove": "{label} entfernen",
+    "answers": "Antworten"
   }
 }

@@ -426,7 +426,13 @@
     "promoInvalid": "Ce code promo n’est pas valable pour ces billets.",
     "donationAmount": "Votre montant",
     "donationMinimum": "au moins {minimum}",
-    "donationTooLow": "Saisissez un montant égal ou supérieur au minimum pour chaque pass choisi."
+    "donationTooLow": "Saisissez un montant égal ou supérieur au minimum pour chaque pass choisi.",
+    "questions": "Quelques questions de l’organisateur",
+    "optional": "(facultatif)",
+    "private": "(privé — seul l’organisateur le voit)",
+    "choose": "Choisir…",
+    "questionInvalid": "Vérifiez cette réponse.",
+    "questionsInvalid": "Certaines réponses sont à revoir."
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -504,5 +510,40 @@
     "addTitle": "Ajouter un code promo",
     "add": "Ajouter le code",
     "added": "Code promo ajouté."
+  },
+  "questions": {
+    "title": "Questions au paiement",
+    "emptyTitle": "Aucune question pour l’instant",
+    "emptyDescription": "Demandez aux acheteurs ce que vous devez savoir, comme le choix du menu ou le nombre d’enfants présents.",
+    "addTitle": "Ajouter une question",
+    "addGuestCounts": "Ajouter le nombre d’invités (enfants, assis, debout)",
+    "presetKids": "Enfants",
+    "presetSeated": "Invités assis",
+    "presetStanding": "Invités debout",
+    "label": "Question",
+    "type": "Type de réponse",
+    "types": {
+      "short_text": "Texte court",
+      "long_text": "Texte long",
+      "number": "Nombre",
+      "count": "Quantité (nombre entier)",
+      "select": "Un seul choix",
+      "multi_select": "Plusieurs choix",
+      "checkbox": "Case à cocher"
+    },
+    "options": "Choix",
+    "optionsHint": "Un par ligne.",
+    "max": "Maximum (facultatif)",
+    "required": "Réponse obligatoire",
+    "sensitive": "Réponse privée",
+    "sensitiveHint": "Stockée chiffrée, pour les informations sensibles comme les besoins médicaux ou d’accessibilité.",
+    "requiredBadge": "Obligatoire",
+    "privateBadge": "Privée",
+    "add": "Ajouter la question",
+    "added": "Question ajoutée.",
+    "moveUp": "Monter {label}",
+    "moveDown": "Descendre {label}",
+    "remove": "Supprimer {label}",
+    "answers": "Réponses"
   }
 }

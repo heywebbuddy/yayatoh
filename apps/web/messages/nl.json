@@ -426,7 +426,13 @@
     "promoInvalid": "Die kortingscode is niet geldig voor deze tickets.",
     "donationAmount": "Jouw bedrag",
     "donationMinimum": "minimaal {minimum}",
-    "donationTooLow": "Vul voor elke gekozen pas een bedrag in dat minstens gelijk is aan het minimum."
+    "donationTooLow": "Vul voor elke gekozen pas een bedrag in dat minstens gelijk is aan het minimum.",
+    "questions": "Een paar vragen van de organisator",
+    "optional": "(optioneel)",
+    "private": "(privé – alleen de organisator ziet dit)",
+    "choose": "Kies…",
+    "questionInvalid": "Controleer dit antwoord.",
+    "questionsInvalid": "Sommige antwoorden moet je nog even nakijken."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -504,5 +510,40 @@
     "addTitle": "Kortingscode toevoegen",
     "add": "Code toevoegen",
     "added": "Kortingscode toegevoegd."
+  },
+  "questions": {
+    "title": "Vragen bij het afrekenen",
+    "emptyTitle": "Nog geen vragen",
+    "emptyDescription": "Vraag kopers wat je moet weten, zoals de menukeuze of hoeveel kinderen er meekomen.",
+    "addTitle": "Vraag toevoegen",
+    "addGuestCounts": "Aantallen gasten toevoegen (kinderen, zittend, staand)",
+    "presetKids": "Kinderen",
+    "presetSeated": "Zittende gasten",
+    "presetStanding": "Staande gasten",
+    "label": "Vraag",
+    "type": "Antwoordtype",
+    "types": {
+      "short_text": "Korte tekst",
+      "long_text": "Lange tekst",
+      "number": "Getal",
+      "count": "Aantal (heel getal)",
+      "select": "Eén keuze",
+      "multi_select": "Meerdere keuzes",
+      "checkbox": "Selectievakje"
+    },
+    "options": "Keuzes",
+    "optionsHint": "Eén per regel.",
+    "max": "Maximum (optioneel)",
+    "required": "Antwoord verplicht",
+    "sensitive": "Privéantwoord",
+    "sensitiveHint": "Versleuteld opgeslagen, voor gevoelige gegevens zoals medische of toegankelijkheidsbehoeften.",
+    "requiredBadge": "Verplicht",
+    "privateBadge": "Privé",
+    "add": "Vraag toevoegen",
+    "added": "Vraag toegevoegd.",
+    "moveUp": "{label} omhoog verplaatsen",
+    "moveDown": "{label} omlaag verplaatsen",
+    "remove": "{label} verwijderen",
+    "answers": "Antwoorden"
   }
 }
