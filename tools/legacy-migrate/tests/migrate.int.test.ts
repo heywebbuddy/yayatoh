@@ -52,7 +52,7 @@ async function fingerprint() {
     const [r] = await sql().unsafe(
       `select count(*)::text || ':' || coalesce(md5(string_agg(id::text, ',' order by id)), '') as f from ${t}`,
     );
-    out[t] = String((r as { f: string }).f);
+    out[t] = String((r as unknown as { f: string }).f);
   }
   const [s] =
     await sql()`select md5(string_agg(serial || short_code || status, ',' order by id)) as f from ticketing.tickets`;

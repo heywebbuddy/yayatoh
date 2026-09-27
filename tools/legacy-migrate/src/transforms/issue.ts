@@ -48,16 +48,16 @@ export async function issueCodes(ctx: StepContext): Promise<void> {
     return k;
   };
 
-  // yy1 codes for migrated tickets that have none.
-  for (;;) {
-    const batch = await rows<{ id: string; org_id: string; rev: number }>(
-      ctx,
-      `select t.id, t.org_id, t.rev from legacy.ref r join ticketing.tickets t on t.id = r.new_id
-       where r.instance = {inst} and r.entity = 'booking_units'
-         and not exists (select 1 from ticketing.ticket_barcodes b where b.ticket_id = t.id and b.format = 'yy1')
-       limit ${BATCH}`,
-    );
-    if (!batch.length) break;
+  // yy1 codes for migrated tickets that have none (read once, written in batches).
+  const pending = await rows<{ id: string; org_id: string; rev: number }>(
+    ctx,
+    `select t.id, t.org_id, t.rev from legacy.ref r join ticketing.tickets t on t.id = r.new_id
+     where r.instance = {inst} and r.entity = 'booking_units'
+       and not exists (select 1 from ticketing.ticket_barcodes b
+                       where b.org_id = t.org_id and b.ticket_id = t.id and b.format = 'yy1')`,
+  );
+  for (let i = 0; i < pending.length; i += BATCH) {
+    const batch = pending.slice(i, i + BATCH);
     const values = [];
     for (const t of batch) {
       const key = await keyFor(t.org_id);

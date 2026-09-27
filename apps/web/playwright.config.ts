@@ -9,6 +9,8 @@ const PORT = Number(process.env.E2E_PORT ?? 3100);
  */
 export default defineConfig({
   testDir: './e2e',
+  // Migrates the synthetic legacy dataset (M2.2b) the legacy-migration spec checks.
+  globalSetup: './e2e/global-setup.ts',
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: 0,

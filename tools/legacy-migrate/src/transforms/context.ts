@@ -34,8 +34,21 @@ export function expand(ctx: StepContext, text: string): string {
 }
 
 export async function exec(ctx: StepContext, text: string): Promise<number> {
-  const r = await ctx.sql.unsafe(expand(ctx, text));
-  return r.count ?? 0;
+  const sql = expand(ctx, text);
+  if (!process.env.LEGACY_TRACE) {
+    const r = await ctx.sql.unsafe(sql);
+    return r.count ?? 0;
+  }
+  // LEGACY_TRACE=1: run statement by statement and log the slow ones (timing rehearsals).
+  let count = 0;
+  for (const stmt of sql.split(/;\s*\n/).filter((s) => s.replace(/--.*$/gm, '').trim())) {
+    const t = Date.now();
+    const r = await ctx.sql.unsafe(stmt);
+    count = r.count ?? 0;
+    const ms = Date.now() - t;
+    if (ms > 500) ctx.log(`  ${ms} ms: ${stmt.replace(/\s+/g, ' ').trim().slice(0, 110)}`);
+  }
+  return count;
 }
 
 export async function rows<T>(ctx: StepContext, text: string): Promise<T[]> {

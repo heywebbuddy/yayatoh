@@ -22,6 +22,14 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Name a translation owner** (M1.1). The 12 non-English locales are machine-drafted by Claude Code and need a native-speaker review, Arabic first. Tolgee is the planned workflow once accounts exist.
 - [ ] **Review the M1.1 screens** in the CI `e2e-report` artifact (screenshots at 375/768/1280 in English and Arabic) or on the preview once Vercel exists.
 
+- [ ] **Legacy migration defaults** (M2.2b, pending owner; labels `db-migration`, `payments`, `auth`). The ELT is built and proven on synthetic data (`docs/runbooks/legacy-migration.md`). Confirm or change:
+  - **Event times.** The legacy code saved event dates and times in the platform timezone (`regional.timezone_default`), converting the organizer's input on save. The migration reads them that way (`--event-clock=platform`) and renders each event in its venue's timezone. The roadmap's "venue-local" reading is available as `--event-clock=venue`. Confirm with a few real events during the first masked rehearsal (V12 prints 50 spot checks).
+  - **System timezone** per instance: read from each dump's `regional.timezone_default` (the roadmap expects America/New_York; abc may be America/Chicago). Override with `--system-timezone`.
+  - **ABC org owner.** The earliest abc admin becomes owner of the ABC org and the other admins become admins. Its slug is `abc`, and `abc.yayatoh.com` is attached as pending DNS, for staff to activate at cutover. Name the owner if different.
+  - **Opening balances.** Unsettled legacy commissions become `payments.legacy_settlements` opening balances per organizer and currency (`pending_signoff`). They need your sign-off before any release. The sign-off script is not built yet.
+  - **Legacy scanner accounts** become `scanner` members with `door_staff` on their assigned events (least privilege). The console does not yet let an org-role scanner open an event (it shows "not found"). Approve a small auth change that makes the event lookup event-role aware, or give scanners another role.
+  - **Masked dumps.** Nothing more is needed to rehearse: run the export runbook (M2.2a) and share the two masked files; rehearsals then run on them. The production KMS adapter (above) is needed before a production run, because the migration encrypts each org's signing key and each order's manage-token envelope.
+
 ## Phase 0 (M0.1–M0.4)
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.

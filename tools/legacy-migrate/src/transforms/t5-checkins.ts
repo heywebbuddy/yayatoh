@@ -60,7 +60,8 @@ export async function t5Checkins(ctx: StepContext): Promise<void> {
            (select r.new_id from legacy.ref r where r.instance = {inst} and r.entity = 'users' and r.legacy_id = a.user_id::text),
            a.at, a.at
     from t5_adm a
-    on conflict (id) do nothing;
+    -- Any conflict (the id, or one live admission per ticket per day): already imported.
+    on conflict do nothing;
 
     insert into checkin.scans (id, org_id, event_id, ticket_id, admission_id, result, code_kind, client_scan_id, scanned_at,
                                scanned_by, offline, created_at, updated_at)
@@ -70,7 +71,8 @@ export async function t5Checkins(ctx: StepContext): Promise<void> {
            (select r.new_id from legacy.ref r where r.instance = {inst} and r.entity = 'users' and r.legacy_id = a.user_id::text),
            false, a.at, a.at
     from t5_adm a
-    on conflict (id) do nothing;
+    -- Any conflict (the id, or one live admission per ticket per day): already imported.
+    on conflict do nothing;
   `,
   );
 }

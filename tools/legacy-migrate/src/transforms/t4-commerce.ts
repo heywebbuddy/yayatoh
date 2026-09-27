@@ -282,6 +282,7 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     select legacy_id, order_id, org_id, ticket_type_id, ticket_title, created, 2,
            1, p - pf * (qty - 1), r - rf * (qty - 1), fee - ff * (qty - 1), n - nf * (qty - 1), onet - of_ * (qty - 1)
     from even where not divides;
+    create index on t4_parts (legacy_id, part);
 
     drop table if exists t4_items;
     create temp table t4_items as
@@ -299,13 +300,16 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     from t4_items
     on conflict (id) do nothing;
 
-    alter table t4_units add column order_item_id uuid;
+    -- A row's last unit goes to its remainder part (part 2) when the row was split.
+    alter table t4_units add column order_item_id uuid, add column part int;
+    update t4_units t set part = 2 from t4_parts p2 where p2.legacy_id = t.legacy_id and p2.part = 2 and t.u = t.qty;
+    update t4_units set part = 1 where part is null;
     update t4_units t set order_item_id = i.id
     from t4_parts pt, t4_items i
-    where pt.legacy_id = t.legacy_id
-      and pt.part = case when t.u = t.qty and exists (select 1 from t4_parts p2 where p2.legacy_id = t.legacy_id and p2.part = 2) then 2 else 1 end
+    where pt.legacy_id = t.legacy_id and pt.part = t.part
       and i.order_id = pt.order_id and i.ticket_type_id = pt.ticket_type_id and i.face = pt.face and i.disc = pt.disc
       and i.fee = pt.fee and i.allin = pt.allin and i.onet = pt.onet;
+    create index on t4_units (order_id);
   `,
   );
 
