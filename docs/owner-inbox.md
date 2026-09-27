@@ -26,6 +26,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Ticket signing key encryption** (M1.5c, before launch): an AWS KMS key (or approve another KMS) for encrypting each org's ticket-signing private key. Development and CI use a local AES key (`LOCAL_KMS_KEY`) behind the `KeyVault` port; the local adapter is refused in production.
 - [ ] **Sign-in providers** (M1.2f): Google OAuth client and Apple Sign in with Apple service ID + key for `app.yayatoh.com`; Cloudflare Turnstile site key.
 - [ ] **Tenant domain** (M0.1): buy the tenant apex (e.g. `yayatoh.events`, availability unverified) and submit it to the Public Suffix List.
+- [ ] **Platform Terms of Service and DPA texts** (M1.3a): the click-wrap records acceptances of versioned *draft* texts (`apps/web/src/content/platform-legal.ts`). Counsel provides the final wording (and translations if wanted); bumping the version in `PLATFORM_AGREEMENTS` asks every org to accept again. Label: `legal-copy`.
 - [ ] **Counsel and Stripe questions** (M0.1):
   - Hybrid payments model.
   - Sales and admissions tax for platform-charged orders.

@@ -33,9 +33,12 @@ export function CheckoutForm({
   organizer,
   questions = [],
   action,
+  brand,
 }: {
   passes: readonly PassView[];
   organizer: string;
+  /** Organizer brand colour and its readable text colour (brand kit); default styling when absent. */
+  brand?: { background: string; text: string } | null;
   questions?: readonly QuestionView[];
   action: (prev: CheckoutState, form: FormData) => Promise<CheckoutState>;
 }) {
@@ -187,7 +190,15 @@ export function CheckoutForm({
                 label={t('checkout.promoCode')}
               />
             </div>
-            <Button type="submit" disabled={pending}>
+            <Button
+              type="submit"
+              disabled={pending}
+              style={
+                brand
+                  ? { background: brand.background, color: brand.text, borderColor: brand.background }
+                  : undefined
+              }
+            >
               {t('checkout.continue')}
             </Button>
           </div>

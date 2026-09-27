@@ -53,7 +53,8 @@
     "dayOf": "Eventtag",
     "donations": "Spenden",
     "communications": "Kommunikation",
-    "team": "Team"
+    "team": "Team",
+    "settings": "Einstellungen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -857,6 +858,74 @@
       "order": "Bestellung aufgegeben",
       "checked_in": "Eingecheckt",
       "removed": "Von der Liste entfernt"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "noAccessTitle": "Einstellungen gehören nicht zu deiner Rolle",
+    "noAccessDescription": "Bitte eine Inhaberin, einen Inhaber oder einen Admin, die Einstellungen der Organisation zu ändern.",
+    "save": "Speichern",
+    "saved": "Gespeichert.",
+    "general": {
+      "title": "Allgemein",
+      "name": "Name der Organisation",
+      "locale": "Standardsprache",
+      "timezone": "Zeitzone",
+      "country": "Land (Code mit 2 Buchstaben)",
+      "countryHint": "Zum Beispiel US, GB oder NG.",
+      "currency": "Standardwährung (Code mit 3 Buchstaben)",
+      "currencyHint": "Neue Events starten mit dieser Währung. Bereits erstellte Events behalten ihre."
+    },
+    "brand": {
+      "title": "Marke",
+      "description": "Deine Akzentfarbe auf öffentlichen Seiten, etwa für den Checkout-Button. Die Textfarbe darauf wird automatisch gewählt, damit sie lesbar bleibt.",
+      "color": "Markenfarbe",
+      "picker": "Farbe auswählen",
+      "placeholder": "#rrggbb",
+      "preview": "Tickets kaufen",
+      "ratio": "Textkontrast {ratio}:1.",
+      "tooLight": "Diese Farbe ist auf einer weißen Seite sehr hell ({ratio}:1); Buttons sind eventuell schwer zu erkennen. Probiere einen dunkleren Farbton."
+    },
+    "legal": {
+      "title": "Deine Rechtstexte",
+      "description": "Werden Gästen auf deinen Eventseiten angezeigt. Nur Text; lass eine Seite leer, um sie zu entfernen.",
+      "kind": {
+        "terms": "Geschäftsbedingungen",
+        "privacy": "Datenschutzerklärung",
+        "refund": "Erstattungsrichtlinie"
+      },
+      "view": "Öffentliche Seite ansehen"
+    },
+    "agreements": {
+      "title": "Yayatoh-Vereinbarungen",
+      "needed": "Akzeptiere die Allgemeinen Geschäftsbedingungen, um Events zu veröffentlichen.",
+      "doc": {
+        "platform_tos": "Allgemeine Geschäftsbedingungen",
+        "dpa": "Auftragsverarbeitungsvertrag"
+      },
+      "version": "Version {version}",
+      "acceptedOn": "Akzeptiert am {date}.",
+      "agree": "Ich habe das Dokument „{document}“ gelesen und stimme ihm im Namen dieser Organisation zu.",
+      "accept": "Akzeptieren",
+      "accepted": "Akzeptiert.",
+      "ownerOnly": "Eine Inhaberin, ein Inhaber oder ein Admin muss dies akzeptieren."
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "Zuletzt aktualisiert am {date}",
+    "organizerPages": "Richtlinien von {org}"
+  },
+  "setup": {
+    "title": "Bereit für den Verkauf · {done} von {total} erledigt",
+    "done": "Erledigt",
+    "todo": "Offen",
+    "item": {
+      "terms": "Allgemeine Geschäftsbedingungen akzeptieren",
+      "legal": "Datenschutzerklärung und Erstattungsrichtlinie hinzufügen",
+      "brand": "Markenfarbe auswählen",
+      "event": "Erstes Event erstellen",
+      "team": "Teammitglied einladen"
     }
   }
 }

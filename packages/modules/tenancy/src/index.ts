@@ -11,6 +11,18 @@ export {
   createOrganizationCommand,
   updateOrganizationCommand,
 } from './commands/organizations.ts';
+export {
+  AgreementStatusDto,
+  acceptAgreementCommand,
+  agreementsQuery,
+  hasAcceptedTermsTx,
+  LegalPageDto,
+  legalPagesQuery,
+  publicLegalPage,
+  publicOrgProfile,
+  setLegalPageCommand,
+} from './commands/settings.ts';
+export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {
   EVENT_ROLE_PERMISSIONS,
@@ -30,5 +42,5 @@ export {
   organizationNameTx,
   resolveOrgSlug,
 } from './queries.ts';
-export { ORG_KINDS, ORG_ROLES, ORG_STATUSES } from './schema.ts';
+export { LEGAL_PAGE_KINDS, type LegalPageKind, ORG_KINDS, ORG_ROLES, ORG_STATUSES } from './schema.ts';
 export { invitationMailer } from './subscribers.ts';

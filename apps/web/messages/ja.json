@@ -53,7 +53,8 @@
     "dayOf": "当日",
     "donations": "寄付",
     "communications": "コミュニケーション",
-    "team": "チーム"
+    "team": "チーム",
+    "settings": "設定"
   },
   "vocab": {
     "attendee": "参加者",
@@ -857,6 +858,74 @@
       "order": "注文",
       "checked_in": "チェックイン",
       "removed": "リストから削除"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "noAccessTitle": "設定はあなたのロールでは利用できません",
+    "noAccessDescription": "組織の設定を変更するには、オーナーまたは管理者に依頼してください。",
+    "save": "保存",
+    "saved": "保存しました。",
+    "general": {
+      "title": "一般",
+      "name": "組織名",
+      "locale": "デフォルトの言語",
+      "timezone": "タイムゾーン",
+      "country": "国（2文字のコード）",
+      "countryHint": "例：US、GB、NG",
+      "currency": "デフォルトの通貨（3文字のコード）",
+      "currencyHint": "新しいイベントはこの通貨で作成されます。作成済みのイベントの通貨は変わりません。"
+    },
+    "brand": {
+      "title": "ブランド",
+      "description": "公開ページで使うアクセントカラーです（決済ボタンなど）。ボタン上の文字色は読みやすいよう自動で選ばれます。",
+      "color": "ブランドカラー",
+      "picker": "色を選択",
+      "placeholder": "#rrggbb",
+      "preview": "チケットを入手",
+      "ratio": "文字のコントラスト {ratio}:1",
+      "tooLight": "この色は白いページに対して明るすぎます（{ratio}:1）。ボタンが見えにくくなる可能性があります。より濃い色をお試しください。"
+    },
+    "legal": {
+      "title": "法的ページ",
+      "description": "イベントページでゲストに表示されます。プレーンテキストで入力し、ページを削除するには空欄にしてください。",
+      "kind": {
+        "terms": "利用条件",
+        "privacy": "プライバシーポリシー",
+        "refund": "返金ポリシー"
+      },
+      "view": "公開ページを表示"
+    },
+    "agreements": {
+      "title": "Yayatohとの契約",
+      "needed": "イベントを公開するには利用規約に同意してください。",
+      "doc": {
+        "platform_tos": "利用規約",
+        "dpa": "データ処理補足契約"
+      },
+      "version": "バージョン {version}",
+      "acceptedOn": "{date}に同意済み。",
+      "agree": "この組織を代表して{document}を読み、同意します。",
+      "accept": "同意する",
+      "accepted": "同意しました。",
+      "ownerOnly": "オーナーまたは管理者の同意が必要です。"
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "最終更新日：{date}",
+    "organizerPages": "{org}のポリシー"
+  },
+  "setup": {
+    "title": "販売の準備 · {total}件中{done}件完了",
+    "done": "完了",
+    "todo": "未完了",
+    "item": {
+      "terms": "利用規約に同意する",
+      "legal": "プライバシーポリシーと返金ポリシーを追加する",
+      "brand": "ブランドカラーを選ぶ",
+      "event": "最初のイベントを作成する",
+      "team": "チームメンバーを招待する"
     }
   }
 }

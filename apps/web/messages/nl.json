@@ -53,7 +53,8 @@
     "dayOf": "Evenementdag",
     "donations": "Donaties",
     "communications": "Communicatie",
-    "team": "Team"
+    "team": "Team",
+    "settings": "Instellingen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -857,6 +858,74 @@
       "order": "Bestelling geplaatst",
       "checked_in": "Ingecheckt",
       "removed": "Verwijderd van de lijst"
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "noAccessTitle": "Instellingen horen niet bij je rol",
+    "noAccessDescription": "Vraag een eigenaar of beheerder om de instellingen van de organisatie te wijzigen.",
+    "save": "Opslaan",
+    "saved": "Opgeslagen.",
+    "general": {
+      "title": "Algemeen",
+      "name": "Naam van de organisatie",
+      "locale": "Standaardtaal",
+      "timezone": "Tijdzone",
+      "country": "Land (code van 2 letters)",
+      "countryHint": "Bijvoorbeeld US, GB of NG.",
+      "currency": "Standaardvaluta (code van 3 letters)",
+      "currencyHint": "Nieuwe evenementen starten met deze valuta. Evenementen die je al hebt aangemaakt, houden die van hen."
+    },
+    "brand": {
+      "title": "Huisstijl",
+      "description": "Je accentkleur op openbare pagina’s, zoals de afrekenknop. De tekstkleur erop wordt automatisch gekozen, zodat die leesbaar blijft.",
+      "color": "Huisstijlkleur",
+      "picker": "Kies een kleur",
+      "placeholder": "#rrggbb",
+      "preview": "Tickets kopen",
+      "ratio": "Tekstcontrast {ratio}:1.",
+      "tooLight": "Deze kleur is licht op een witte pagina ({ratio}:1); knoppen zijn mogelijk slecht zichtbaar. Probeer een donkerdere tint."
+    },
+    "legal": {
+      "title": "Je juridische pagina’s",
+      "description": "Worden aan gasten getoond op je evenementpagina’s. Platte tekst; laat een pagina leeg om die te verwijderen.",
+      "kind": {
+        "terms": "Algemene voorwaarden",
+        "privacy": "Privacyverklaring",
+        "refund": "Terugbetalingsbeleid"
+      },
+      "view": "Openbare pagina bekijken"
+    },
+    "agreements": {
+      "title": "Yayatoh-overeenkomsten",
+      "needed": "Accepteer de Servicevoorwaarden om evenementen te publiceren.",
+      "doc": {
+        "platform_tos": "Servicevoorwaarden",
+        "dpa": "Verwerkersovereenkomst"
+      },
+      "version": "Versie {version}",
+      "acceptedOn": "Geaccepteerd op {date}.",
+      "agree": "Ik heb de {document} gelezen en ga ermee akkoord namens deze organisatie.",
+      "accept": "Accepteren",
+      "accepted": "Geaccepteerd.",
+      "ownerOnly": "Een eigenaar of beheerder moet dit accepteren."
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "Laatst bijgewerkt op {date}",
+    "organizerPages": "Beleid van {org}"
+  },
+  "setup": {
+    "title": "Klaar om te verkopen · {done} van {total} klaar",
+    "done": "Klaar",
+    "todo": "Te doen",
+    "item": {
+      "terms": "Accepteer de Servicevoorwaarden",
+      "legal": "Voeg je privacyverklaring en terugbetalingsbeleid toe",
+      "brand": "Kies je huisstijlkleur",
+      "event": "Maak je eerste evenement aan",
+      "team": "Nodig een teamlid uit"
     }
   }
 }

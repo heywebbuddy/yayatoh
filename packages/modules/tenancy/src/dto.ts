@@ -20,6 +20,7 @@ export const OrganizationDto = z.object({
   timezone: z.string(),
   country: z.string(),
   currency: z.string(),
+  brandColor: z.string().nullable(),
 });
 export type OrganizationDto = z.infer<typeof OrganizationDto>;
 export const organizationSerializer = defineSerializer('tenancy.organization', OrganizationDto);
@@ -42,8 +43,34 @@ export const MyOrganizationDto = z.object({
 });
 export type MyOrganizationDto = z.infer<typeof MyOrganizationDto>;
 
+/**
+ * Org slugs that would collide with platform routes or pages (`/legal/platform/…`, subdomains
+ * like `admin.`). New orgs can't take them; existing orgs are unaffected.
+ */
+export const RESERVED_ORG_SLUGS: ReadonlySet<string> = new Set([
+  'admin',
+  'api',
+  'app',
+  'claim',
+  'events',
+  'help',
+  'invite',
+  'legal',
+  'my-tickets',
+  'o',
+  'orders',
+  'platform',
+  'scan',
+  'sign-in',
+  'signup',
+  'status',
+  'support',
+  'www',
+  'yayatoh',
+]);
+
 export const CreateOrganizationInput = z.object({
-  slug: Slug,
+  slug: Slug.refine((s) => !RESERVED_ORG_SLUGS.has(s), 'This address is reserved'),
   name: z.string().trim().min(1).max(120),
   kind: z.enum(ORG_KINDS).exclude(['platform']).default('organizer'),
   defaultProfile: z
@@ -60,7 +87,21 @@ export const CreateOrganizationInput = z.object({
 export type CreateOrganizationInput = z.input<typeof CreateOrganizationInput>;
 
 export const UpdateOrganizationInput = partialNoDefaults(
-  CreateOrganizationInput.pick({ name: true, defaultProfile: true, defaultLocale: true, timezone: true }),
+  CreateOrganizationInput.pick({
+    name: true,
+    defaultProfile: true,
+    defaultLocale: true,
+    timezone: true,
+    country: true,
+    currency: true,
+  }).extend({
+    /** Brand kit accent colour, #rrggbb (lower-cased), or null to use the default. */
+    brandColor: z
+      .string()
+      .regex(/^#[0-9a-fA-F]{6}$/)
+      .transform((c) => c.toLowerCase())
+      .nullable(),
+  }),
 );
 
 export const AddMemberInput = z.object({ userId: z.uuid(), role: z.enum(ORG_ROLES) });

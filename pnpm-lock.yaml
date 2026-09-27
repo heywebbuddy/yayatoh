@@ -765,6 +765,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

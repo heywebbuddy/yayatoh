@@ -176,6 +176,13 @@
       "when": 1790510655753,
       "tag": "0024_lazy_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1790513279543,
+      "tag": "0025_milky_mastermind",
+      "breakpoints": true
     }
   ]
 }

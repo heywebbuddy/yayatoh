@@ -43,6 +43,8 @@ export const organizations = tenantTable(
     country: text('country').notNull().default('US'),
     currency: text('currency').notNull().default('USD'),
     poweredByVisible: boolean('powered_by_visible').notNull().default(true),
+    /** Brand kit: the accent colour on public pages (#RRGGBB); text on it is chosen for contrast. */
+    brandColor: text('brand_color'),
     legacyInstance: text('legacy_instance'),
   },
   () => [
@@ -51,6 +53,7 @@ export const organizations = tenantTable(
     check('organizations_kind_check', inList('kind', ORG_KINDS)),
     check('organizations_status_check', inList('status', ORG_STATUSES)),
     check('organizations_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('organizations_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
   ],
 );
 
@@ -99,5 +102,50 @@ export const invitations = tenantTable(
     }).onDelete('cascade'),
     check('invitations_role_check', inList('role', ORG_ROLES)),
     check('invitations_email_lower_check', sql`email = lower(email)`),
+  ],
+);
+
+export const LEGAL_PAGE_KINDS = ['terms', 'privacy', 'refund'] as const;
+export type LegalPageKind = (typeof LEGAL_PAGE_KINDS)[number];
+
+/** The organizer's own legal pages (their terms, privacy notice, refund policy), shown publicly. */
+export const legalPages = tenantTable(
+  tenancy,
+  'legal_pages',
+  {
+    kind: text('kind').notNull(),
+    body: text('body').notNull(),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('legal_pages_org_kind_key').on(t.orgId, t.kind),
+    check('legal_pages_kind_check', inList('kind', LEGAL_PAGE_KINDS)),
+    check('legal_pages_body_length', sql`length(body) between 1 and 50000`),
+    foreignKey({
+      name: 'legal_pages_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** Click-wrap: who accepted which version of the platform's terms or DPA, for this org, when. */
+export const agreementAcceptances = tenantTable(
+  tenancy,
+  'agreement_acceptances',
+  {
+    document: text('document').notNull(),
+    version: text('version').notNull(),
+    acceptedBy: uuid('accepted_by').notNull(),
+    acceptedAt: timestamp('accepted_at', { withTimezone: true, mode: 'date' }).notNull(),
+  },
+  (t) => [
+    uniqueIndex('agreement_acceptances_org_doc_version_key').on(t.orgId, t.document, t.version),
+    check('agreement_acceptances_document_check', sql`document in ('platform_tos', 'dpa')`),
+    foreignKey({
+      name: 'agreement_acceptances_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
   ],
 );

@@ -53,7 +53,8 @@
     "dayOf": "Jour J",
     "donations": "Dons",
     "communications": "Communications",
-    "team": "Équipe"
+    "team": "Équipe",
+    "settings": "Paramètres"
   },
   "vocab": {
     "attendee": "Participant",
@@ -857,6 +858,74 @@
       "order": "A passé une commande",
       "checked_in": "Entrée enregistrée",
       "removed": "Retiré de la liste"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "noAccessTitle": "Les paramètres ne font pas partie de votre rôle",
+    "noAccessDescription": "Demandez à un propriétaire ou à un administrateur de modifier les paramètres de l’organisation.",
+    "save": "Enregistrer",
+    "saved": "Enregistré.",
+    "general": {
+      "title": "Général",
+      "name": "Nom de l’organisation",
+      "locale": "Langue par défaut",
+      "timezone": "Fuseau horaire",
+      "country": "Pays (code à 2 lettres)",
+      "countryHint": "Par exemple US, GB ou NG.",
+      "currency": "Devise par défaut (code à 3 lettres)",
+      "currencyHint": "Les nouveaux événements utilisent cette devise. Les événements déjà créés conservent la leur."
+    },
+    "brand": {
+      "title": "Marque",
+      "description": "Votre couleur d’accent sur les pages publiques, comme le bouton de paiement. La couleur du texte est choisie automatiquement pour rester lisible.",
+      "color": "Couleur de marque",
+      "picker": "Choisir une couleur",
+      "placeholder": "#rrggbb",
+      "preview": "Obtenir des billets",
+      "ratio": "Contraste du texte {ratio}:1.",
+      "tooLight": "Cette couleur est claire sur une page blanche ({ratio}:1) ; les boutons risquent d’être peu visibles. Essayez une teinte plus foncée."
+    },
+    "legal": {
+      "title": "Vos pages juridiques",
+      "description": "Affichées aux invités sur les pages de vos événements. Texte brut ; laissez une page vide pour la supprimer.",
+      "kind": {
+        "terms": "Conditions générales de vente",
+        "privacy": "Politique de confidentialité",
+        "refund": "Politique de remboursement"
+      },
+      "view": "Voir la page publique"
+    },
+    "agreements": {
+      "title": "Accords Yayatoh",
+      "needed": "Acceptez les Conditions d’utilisation pour publier des événements.",
+      "doc": {
+        "platform_tos": "Conditions d’utilisation",
+        "dpa": "Accord de traitement des données"
+      },
+      "version": "Version {version}",
+      "acceptedOn": "Accepté le {date}.",
+      "agree": "J’ai lu et j’accepte le document « {document} » au nom de cette organisation.",
+      "accept": "Accepter",
+      "accepted": "Accepté.",
+      "ownerOnly": "Un propriétaire ou un administrateur doit l’accepter."
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "Dernière mise à jour le {date}",
+    "organizerPages": "Politiques de {org}"
+  },
+  "setup": {
+    "title": "Prêt à vendre · {done} sur {total} terminés",
+    "done": "Terminé",
+    "todo": "À faire",
+    "item": {
+      "terms": "Accepter les Conditions d’utilisation",
+      "legal": "Ajouter votre politique de confidentialité et votre politique de remboursement",
+      "brand": "Choisir votre couleur de marque",
+      "event": "Créer votre premier événement",
+      "team": "Inviter un membre de l’équipe"
     }
   }
 }

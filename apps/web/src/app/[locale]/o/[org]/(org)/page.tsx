@@ -1,6 +1,12 @@
 import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
+import {
+  agreementsQuery,
+  legalPagesQuery,
+  listInvitationsQuery,
+  listMembersQuery,
+  roleCan,
+} from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, Label, PageHeader, Skeleton, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type ReactNode, Suspense } from 'react';
@@ -38,6 +44,7 @@ export default async function OrgHome({ params }: { params: Promise<{ locale: st
         description={data.org.name}
         actions={create}
       />
+      {roleCan(data.role, 'org:update') ? <SetupChecklist org={org} /> : null}
       <section aria-labelledby="events-heading" className="flex flex-col gap-3">
         <h2 id="events-heading" className="text-section">
           {t('orgHome.events')}
@@ -109,5 +116,57 @@ async function EventList({ org, locale, create }: { org: string; locale: string;
         </ul>
       )}
     </>
+  );
+}
+
+/**
+ * Setup checklist (M1.3): what an organizer still needs before selling. Hidden once everything is
+ * done. Payouts join the list with Connect onboarding (M1.3c).
+ */
+async function SetupChecklist({ org }: { org: string }) {
+  const data = await loadConsole(org);
+  const t = await getTranslations('setup');
+  const [agreements, legal, events, members, invitations] = await Promise.all([
+    executeQuery(agreementsQuery, {}, data.ctx, ports),
+    executeQuery(legalPagesQuery, {}, data.ctx, ports),
+    executeQuery(listEventsQuery, {}, data.ctx, ports),
+    executeQuery(listMembersQuery, {}, data.ctx, ports),
+    roleCan(data.role, 'members:manage') ? executeQuery(listInvitationsQuery, {}, data.ctx, ports) : [],
+  ]);
+  const items = [
+    { key: 'terms', done: agreements.every((a) => a.acceptedAt !== null), href: `/o/${org}/settings` },
+    {
+      key: 'legal',
+      done: ['privacy', 'refund'].every((k) => legal.some((p) => p.kind === k)),
+      href: `/o/${org}/settings`,
+    },
+    { key: 'brand', done: data.org.brandColor !== null, href: `/o/${org}/settings` },
+    { key: 'event', done: events.length > 0, href: `/o/${org}/events/new` },
+    { key: 'team', done: members.length > 1 || invitations.length > 0, href: `/o/${org}/team` },
+  ];
+  const doneCount = items.filter((i) => i.done).length;
+  if (doneCount === items.length) return null;
+  return (
+    <section aria-labelledby="setup-heading" className="flex flex-col gap-3">
+      <h2 id="setup-heading" className="text-section">
+        {t('title', { done: doneCount, total: items.length })}
+      </h2>
+      <Card className="flex flex-col">
+        <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+          {items.map((i) => (
+            <li key={i.key} className="flex min-h-11 items-center gap-3 py-2">
+              <StatusDot status={i.done ? 'success' : 'neutral'} label={i.done ? t('done') : t('todo')} />
+              {i.done ? (
+                <span className="text-zinc-500 line-through">{t(`item.${i.key}`)}</span>
+              ) : (
+                <Link href={i.href} className="underline underline-offset-2">
+                  {t(`item.${i.key}`)}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+      </Card>
+    </section>
   );
 }

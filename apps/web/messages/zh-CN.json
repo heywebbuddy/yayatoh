@@ -53,7 +53,8 @@
     "dayOf": "活动当天",
     "donations": "捐款",
     "communications": "沟通",
-    "team": "团队"
+    "team": "团队",
+    "settings": "设置"
   },
   "vocab": {
     "attendee": "参会者",
@@ -857,6 +858,74 @@
       "order": "下了订单",
       "checked_in": "已签到",
       "removed": "被移出名单"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "noAccessTitle": "你的角色无权访问设置",
+    "noAccessDescription": "请让所有者或管理员更改组织设置。",
+    "save": "保存",
+    "saved": "已保存。",
+    "general": {
+      "title": "常规",
+      "name": "组织名称",
+      "locale": "默认语言",
+      "timezone": "时区",
+      "country": "国家/地区（2 位字母代码）",
+      "countryHint": "例如 US、GB 或 NG。",
+      "currency": "默认货币（3 位字母代码）",
+      "currencyHint": "新活动将使用此货币。已创建的活动保留原有货币。"
+    },
+    "brand": {
+      "title": "品牌",
+      "description": "公开页面上使用的强调色，例如结账按钮。按钮上的文字颜色会自动选择，以保持清晰易读。",
+      "color": "品牌颜色",
+      "picker": "选择颜色",
+      "placeholder": "#rrggbb",
+      "preview": "购票",
+      "ratio": "文字对比度 {ratio}:1。",
+      "tooLight": "此颜色在白色页面上偏浅（{ratio}:1），按钮可能不易看清。请尝试更深的颜色。"
+    },
+    "legal": {
+      "title": "你的法律页面",
+      "description": "在你的活动页面上向宾客展示。仅支持纯文本；留空即可移除该页面。",
+      "kind": {
+        "terms": "条款和条件",
+        "privacy": "隐私声明",
+        "refund": "退款政策"
+      },
+      "view": "查看公开页面"
+    },
+    "agreements": {
+      "title": "Yayatoh 协议",
+      "needed": "接受服务条款后即可发布活动。",
+      "doc": {
+        "platform_tos": "服务条款",
+        "dpa": "数据处理附录"
+      },
+      "version": "版本 {version}",
+      "acceptedOn": "已于 {date} 接受。",
+      "agree": "我已阅读并代表本组织同意《{document}》。",
+      "accept": "接受",
+      "accepted": "已接受。",
+      "ownerOnly": "需要所有者或管理员接受。"
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "最后更新于 {date}",
+    "organizerPages": "{org} 的政策"
+  },
+  "setup": {
+    "title": "准备开售 · 已完成 {done}/{total}",
+    "done": "已完成",
+    "todo": "待完成",
+    "item": {
+      "terms": "接受服务条款",
+      "legal": "添加隐私声明和退款政策",
+      "brand": "选择品牌颜色",
+      "event": "创建你的第一个活动",
+      "team": "邀请团队成员"
     }
   }
 }

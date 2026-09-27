@@ -53,7 +53,8 @@
     "dayOf": "Giorno dell’evento",
     "donations": "Donazioni",
     "communications": "Comunicazioni",
-    "team": "Team"
+    "team": "Team",
+    "settings": "Impostazioni"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -857,6 +858,74 @@
       "order": "Ha effettuato un ordine",
       "checked_in": "Ingresso registrato",
       "removed": "Rimosso dalla lista"
+    }
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "noAccessTitle": "Le impostazioni non rientrano nel tuo ruolo",
+    "noAccessDescription": "Chiedi a un proprietario o a un amministratore di modificare le impostazioni dell’organizzazione.",
+    "save": "Salva",
+    "saved": "Salvato.",
+    "general": {
+      "title": "Generale",
+      "name": "Nome dell’organizzazione",
+      "locale": "Lingua predefinita",
+      "timezone": "Fuso orario",
+      "country": "Paese (codice di 2 lettere)",
+      "countryHint": "Ad esempio US, GB o NG.",
+      "currency": "Valuta predefinita (codice di 3 lettere)",
+      "currencyHint": "I nuovi eventi partono con questa valuta. Gli eventi già creati mantengono la propria."
+    },
+    "brand": {
+      "title": "Brand",
+      "description": "Il tuo colore di accento sulle pagine pubbliche, come il pulsante di pagamento. Il colore del testo viene scelto automaticamente per restare leggibile.",
+      "color": "Colore del brand",
+      "picker": "Scegli un colore",
+      "placeholder": "#rrggbb",
+      "preview": "Acquista biglietti",
+      "ratio": "Contrasto del testo {ratio}:1.",
+      "tooLight": "Questo colore è chiaro su una pagina bianca ({ratio}:1); i pulsanti potrebbero essere poco visibili. Prova una tonalità più scura."
+    },
+    "legal": {
+      "title": "Le tue pagine legali",
+      "description": "Mostrate agli ospiti nelle pagine dei tuoi eventi. Testo semplice; lascia vuota una pagina per rimuoverla.",
+      "kind": {
+        "terms": "Termini e condizioni",
+        "privacy": "Informativa sulla privacy",
+        "refund": "Politica di rimborso"
+      },
+      "view": "Vedi la pagina pubblica"
+    },
+    "agreements": {
+      "title": "Accordi Yayatoh",
+      "needed": "Accetta i Termini di servizio per pubblicare eventi.",
+      "doc": {
+        "platform_tos": "Termini di servizio",
+        "dpa": "Accordo sul trattamento dei dati"
+      },
+      "version": "Versione {version}",
+      "acceptedOn": "Accettato il {date}.",
+      "agree": "Ho letto e accetto il documento «{document}» per conto di questa organizzazione.",
+      "accept": "Accetta",
+      "accepted": "Accettato.",
+      "ownerOnly": "Deve accettarlo un proprietario o un amministratore."
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "Ultimo aggiornamento: {date}",
+    "organizerPages": "Policy di {org}"
+  },
+  "setup": {
+    "title": "Pronto a vendere · {done} di {total} completati",
+    "done": "Fatto",
+    "todo": "Da fare",
+    "item": {
+      "terms": "Accetta i Termini di servizio",
+      "legal": "Aggiungi l’informativa sulla privacy e la politica di rimborso",
+      "brand": "Scegli il colore del brand",
+      "event": "Crea il tuo primo evento",
+      "team": "Invita un membro del team"
     }
   }
 }

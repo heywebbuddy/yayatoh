@@ -1,7 +1,14 @@
 import { closePools } from '@yayatoh/db';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
-import { addMemberCommand, createOrganization, resolveOrgSlug } from '@yayatoh/tenancy';
+import {
+  AGREEMENT_DOCUMENTS,
+  acceptAgreementCommand,
+  addMemberCommand,
+  createOrganization,
+  PLATFORM_AGREEMENTS,
+  resolveOrgSlug,
+} from '@yayatoh/tenancy';
 import { DEMO_EVENTS } from '../src/demo/events.ts';
 import { getAuth } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
@@ -50,6 +57,22 @@ for (const o of SEED_ORGS) {
       await executeCommand(addMemberCommand, { userId, role: p.role }, { ...ownerCtx, orgId: org.id }, ports);
   }
   console.info(`seed: created ${o.slug}`);
+}
+
+// The owners accept the platform's current (draft) terms, so seeded orgs can publish.
+for (const o of SEED_ORGS) {
+  const owner = PERSONAS.find((p) => p.orgSlug === o.slug && p.role === 'owner');
+  const ownerId = owner && ids.get(owner.email);
+  const org = await resolveOrgSlug(o.slug);
+  if (!ownerId || !org) continue;
+  const ctx = createCtx({ orgId: org.orgId, actor: { type: 'user', userId: ownerId } });
+  for (const document of AGREEMENT_DOCUMENTS)
+    await executeCommand(
+      acceptAgreementCommand,
+      { document, version: PLATFORM_AGREEMENTS[document].version },
+      ctx,
+      ports,
+    );
 }
 
 // Real events for the showcase slugs (the dev overlay adds demo sales on top of these).

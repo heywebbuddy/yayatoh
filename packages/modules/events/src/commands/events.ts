@@ -1,6 +1,7 @@
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
+import { hasAcceptedTermsTx } from '@yayatoh/tenancy';
 import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from '../domain/lifecycle.ts';
@@ -118,6 +119,11 @@ export const transitionEventCommand = tenantCommand({
   permission: 'events:write',
   handler: async ({ input, ctx, tx, emit }) => {
     const current = await findEvent(tx, input.eventId);
+    // Going live needs the platform's current terms accepted (click-wrap, M1.3).
+    if (input.transition === 'publish' && !(await hasAcceptedTermsTx(tx)))
+      throw new DomainError('invalid_state', 'Accept the terms of service before publishing', {
+        reason: 'terms_not_accepted',
+      });
     const to = eventLifecycle.next(
       current.status as (typeof eventLifecycle.states)[number],
       input.transition,

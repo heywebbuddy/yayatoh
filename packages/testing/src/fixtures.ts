@@ -19,10 +19,14 @@ import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand }
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
+  AGREEMENT_DOCUMENTS,
+  acceptAgreementCommand,
   addMemberCommand,
   createOrganization,
   inviteMemberCommand,
   type OrganizationDto,
+  PLATFORM_AGREEMENTS,
+  setLegalPageCommand,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
 import {
@@ -58,6 +62,21 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   const org = await createOrganization(userCtx(ownerId), { slug, name, defaultProfile: 'gala' }, ports);
   const ctx = (overrides: Partial<Ctx> = {}) => userCtx(ownerId, org.id, overrides);
 
+  // Click-wrap: the owner accepts the platform's current terms (publishing needs them), and the
+  // org has a legal page (isolation coverage).
+  for (const document of AGREEMENT_DOCUMENTS)
+    await executeCommand(
+      acceptAgreementCommand,
+      { document, version: PLATFORM_AGREEMENTS[document].version },
+      ctx(),
+      ports,
+    );
+  await executeCommand(
+    setLegalPageCommand,
+    { kind: 'refund', body: `Refunds for ${name}: none.` },
+    ctx(),
+    ports,
+  );
   await executeCommand(addMemberCommand, { userId: viewerId, role: 'viewer' }, ctx(), ports);
   await executeCommand(
     updateOrganizationCommand,

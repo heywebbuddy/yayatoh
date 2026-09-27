@@ -53,7 +53,8 @@
     "dayOf": "活動當天",
     "donations": "捐款",
     "communications": "溝通",
-    "team": "團隊"
+    "team": "團隊",
+    "settings": "設定"
   },
   "vocab": {
     "attendee": "參加者",
@@ -857,6 +858,74 @@
       "order": "下了訂單",
       "checked_in": "已報到",
       "removed": "被移出名單"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "noAccessTitle": "你的角色無權存取設定",
+    "noAccessDescription": "請擁有者或管理員變更組織設定。",
+    "save": "儲存",
+    "saved": "已儲存。",
+    "general": {
+      "title": "一般",
+      "name": "組織名稱",
+      "locale": "預設語言",
+      "timezone": "時區",
+      "country": "國家/地區（2 位字母代碼）",
+      "countryHint": "例如 US、GB 或 NG。",
+      "currency": "預設貨幣（3 位字母代碼）",
+      "currencyHint": "新活動將使用此貨幣。已建立的活動會保留原有貨幣。"
+    },
+    "brand": {
+      "title": "品牌",
+      "description": "公開頁面上使用的強調色，例如結帳按鈕。按鈕上的文字顏色會自動選擇，以保持清楚易讀。",
+      "color": "品牌顏色",
+      "picker": "選擇顏色",
+      "placeholder": "#rrggbb",
+      "preview": "購票",
+      "ratio": "文字對比度 {ratio}:1。",
+      "tooLight": "此顏色在白色頁面上偏淺（{ratio}:1），按鈕可能不易看清。請嘗試較深的顏色。"
+    },
+    "legal": {
+      "title": "你的法律頁面",
+      "description": "在你的活動頁面上向賓客顯示。僅支援純文字；留白即可移除該頁面。",
+      "kind": {
+        "terms": "條款與細則",
+        "privacy": "隱私權聲明",
+        "refund": "退款政策"
+      },
+      "view": "檢視公開頁面"
+    },
+    "agreements": {
+      "title": "Yayatoh 協議",
+      "needed": "接受服務條款後即可發布活動。",
+      "doc": {
+        "platform_tos": "服務條款",
+        "dpa": "資料處理附錄"
+      },
+      "version": "版本 {version}",
+      "acceptedOn": "已於 {date} 接受。",
+      "agree": "我已閱讀並代表本組織同意《{document}》。",
+      "accept": "接受",
+      "accepted": "已接受。",
+      "ownerOnly": "需要擁有者或管理員接受。"
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "最後更新於 {date}",
+    "organizerPages": "{org} 的政策"
+  },
+  "setup": {
+    "title": "準備開賣 · 已完成 {done}/{total}",
+    "done": "已完成",
+    "todo": "待完成",
+    "item": {
+      "terms": "接受服務條款",
+      "legal": "新增隱私權聲明和退款政策",
+      "brand": "選擇品牌顏色",
+      "event": "建立你的第一個活動",
+      "team": "邀請團隊成員"
     }
   }
 }

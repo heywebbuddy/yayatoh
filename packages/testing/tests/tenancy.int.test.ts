@@ -49,6 +49,7 @@ describe('tenancy: organizations', () => {
     const org = await executeQuery(getOrganizationQuery, {}, a.ctx(), ports);
     expect(Object.keys(org).sort()).toEqual(
       [
+        'brandColor',
         'country',
         'currency',
         'defaultLocale',

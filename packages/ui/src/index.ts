@@ -29,5 +29,6 @@ export {
 } from './components/primitives.tsx';
 export { StatusDot } from './components/status-dot.tsx';
 export { type Column, Table, type TableProps } from './components/table.tsx';
+export { brandPalette, contrastRatio, luminance } from './contrast.ts';
 export { cx } from './cx.ts';
 export * from './tokens.ts';

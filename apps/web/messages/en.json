@@ -53,7 +53,8 @@
     "dayOf": "Day-of",
     "donations": "Donations",
     "communications": "Communications",
-    "team": "Team"
+    "team": "Team",
+    "settings": "Settings"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -857,6 +858,74 @@
       "order": "Placed an order",
       "checked_in": "Checked in",
       "removed": "Removed from the list"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "noAccessTitle": "Settings aren't part of your role",
+    "noAccessDescription": "Ask an owner or admin to change the organization's settings.",
+    "save": "Save",
+    "saved": "Saved.",
+    "general": {
+      "title": "General",
+      "name": "Organization name",
+      "locale": "Default language",
+      "timezone": "Time zone",
+      "country": "Country (2-letter code)",
+      "countryHint": "For example US, GB or NG.",
+      "currency": "Default currency (3-letter code)",
+      "currencyHint": "New events start with this currency. Events you already created keep theirs."
+    },
+    "brand": {
+      "title": "Brand",
+      "description": "Your accent colour on public pages, like the checkout button. Text on it is chosen automatically so it stays readable.",
+      "color": "Brand colour",
+      "picker": "Pick a colour",
+      "placeholder": "#rrggbb",
+      "preview": "Get tickets",
+      "ratio": "Text contrast {ratio}:1.",
+      "tooLight": "This colour is light against a white page ({ratio}:1); buttons may be hard to see. Try a darker shade."
+    },
+    "legal": {
+      "title": "Your legal pages",
+      "description": "Shown to guests on your event pages. Plain text; leave a page empty to remove it.",
+      "kind": {
+        "terms": "Terms and conditions",
+        "privacy": "Privacy notice",
+        "refund": "Refund policy"
+      },
+      "view": "View the public page"
+    },
+    "agreements": {
+      "title": "Yayatoh agreements",
+      "needed": "Accept the terms of service to publish events.",
+      "doc": {
+        "platform_tos": "Terms of Service",
+        "dpa": "Data Processing Addendum"
+      },
+      "version": "Version {version}",
+      "acceptedOn": "Accepted on {date}.",
+      "agree": "I have read and agree to the {document} on behalf of this organization.",
+      "accept": "Accept",
+      "accepted": "Accepted.",
+      "ownerOnly": "An owner or admin needs to accept this."
+    }
+  },
+  "legal": {
+    "platform": "Yayatoh",
+    "updated": "Last updated {date}",
+    "organizerPages": "{org} policies"
+  },
+  "setup": {
+    "title": "Get ready to sell · {done} of {total} done",
+    "done": "Done",
+    "todo": "To do",
+    "item": {
+      "terms": "Accept the terms of service",
+      "legal": "Add your privacy notice and refund policy",
+      "brand": "Choose your brand colour",
+      "event": "Create your first event",
+      "team": "Invite a teammate"
     }
   }
 }

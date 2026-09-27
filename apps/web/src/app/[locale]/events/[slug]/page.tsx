@@ -1,8 +1,9 @@
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
+import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
-import { buttonClass, EmptyState } from '@yayatoh/ui';
+import { brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -26,6 +27,8 @@ export default async function PublicEventPage({
   const demo = publicDemoOverlay(slug);
   const real = await publicTicketTypes(slug);
   const target = await checkoutTarget(slug);
+  const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
+  const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
   const questions = target
     ? ((
         await publicForm(target.orgId, {
@@ -174,6 +177,7 @@ export default async function PublicEventPage({
               })),
             }))}
             organizer={ev.organizerName}
+            brand={brand ? { background: brand.background, text: brand.text } : null}
             questions={questions}
             action={checkoutAction.bind(null, slug)}
           />
@@ -209,6 +213,19 @@ export default async function PublicEventPage({
               ))}
             </ul>
           </>
+        ) : null}
+        {orgProfile && orgProfile.legalPages.length > 0 ? (
+          <nav aria-label={t('legal.organizerPages', { org: ev.organizerName })}>
+            <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
+              {orgProfile.legalPages.map((k) => (
+                <li key={k}>
+                  <Link href={`/legal/${orgProfile.slug}/${k}`} className="text-zinc-600 underline">
+                    {t(`settings.legal.kind.${k}`)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         ) : null}
         {ev.poweredByVisible ? (
           <Link href="/" className="self-start text-caption text-zinc-500 underline">
