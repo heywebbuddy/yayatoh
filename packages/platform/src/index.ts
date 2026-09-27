@@ -15,8 +15,16 @@ export {
 export { tenantCommand, tenantQuery } from './commands/define.ts';
 export { createCommandPorts, type PolicyPorts, recentStepUp } from './commands/ports.ts';
 export { type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
-export { consoleMailer, type Mailer, type MailMessage, memoryMailer } from './mailer.ts';
 export { isModuleKey, MODULE_KEYS, type ModuleKey } from './modules.ts';
+export {
+  type MemberNotificationIntent,
+  memoryNotifier,
+  NOTIFICATION_CHANNELS,
+  type NotificationChannel,
+  type NotificationIntent,
+  type NotificationRecipient,
+  type Notifier,
+} from './notifier.ts';
 export { consumeEvent } from './outbox/consume.ts';
 export {
   defineSubscriber,

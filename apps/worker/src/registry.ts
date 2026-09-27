@@ -1,7 +1,8 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { findEventTx } from '@yayatoh/events';
-import { ticketMailer } from '@yayatoh/orders';
-import { consoleMailer, type Subscriber } from '@yayatoh/platform';
+import { createNotifier } from '@yayatoh/notifications';
+import { refundMailer, ticketMailer } from '@yayatoh/orders';
+import type { Subscriber } from '@yayatoh/platform';
 import { releaseCancelledSeats } from '@yayatoh/seating';
 import { invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
@@ -22,16 +23,15 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
   if (!secret || !appOrigin)
     throw new Error('APP_TOKEN_SECRET and NEXT_PUBLIC_APP_ORIGIN are required by the worker');
-  // consoleMailer until SES exists (M1.10, owner account pending).
+  // Subscribers queue messages; the notifications dispatcher sends them (main.ts).
+  const notifier = createNotifier();
   return [
-    invitationMailer({ mailer: consoleMailer, appOrigin, secret }),
-    ticketMailer({ mailer: consoleMailer, appOrigin }),
-    claimLinkMailer({ mailer: consoleMailer, appOrigin }),
-    holderLinkMailer({ mailer: consoleMailer, appOrigin }),
-    attendeeMessageMailer({
-      mailer: consoleMailer,
-      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
-    }),
+    invitationMailer({ notifier, appOrigin, secret }),
+    ticketMailer({ notifier, appOrigin }),
+    refundMailer({ notifier, appOrigin }),
+    claimLinkMailer({ notifier, appOrigin }),
+    holderLinkMailer({ notifier, appOrigin }),
+    attendeeMessageMailer({ notifier, event: findEventTx }),
     releaseCancelledSeats(),
   ];
 }

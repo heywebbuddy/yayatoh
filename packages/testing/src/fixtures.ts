@@ -17,6 +17,16 @@ import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import {
+  createNotifier,
+  dispatchDue,
+  memoryTransports,
+  registerPushTokenCommand,
+  setMyPreferencesCommand,
+  setTemplateOverrideCommand,
+  unsubscribeCommand,
+  unsubscribeUrls,
+} from '@yayatoh/notifications';
+import {
   applyDisputeEventCommand,
   applyProviderEventCommand,
   attachPaymentCommand,
@@ -398,6 +408,69 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     assignSeatsCommand,
     { eventId: event.id, attendeeIds: [guest.id], itemId: plan.items[0]?.id ?? '' },
+    ctx(),
+    ports,
+  );
+  // Notifications (M1.10): a queued and a sent message, an inbox item, a preference, a push
+  // token, a template override and an unsubscribe (isolation coverage).
+  const notifier = createNotifier();
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await notifier.enqueue(tx, {
+      kind: 'attendees.message',
+      to: { email: `fan+${slug}@example.test`, timeZone: 'UTC' },
+      params: { subject: 'Hello', body: 'Welcome', name: 'Fan', eventName: event.name },
+      dedupeKey: `fixture:${slug}`,
+      eventId: event.id,
+    });
+    await notifier.notifyMembers(tx, {
+      kind: 'sales.order_paid',
+      params: { name: 'Fixture', eventName: event.name, count: 1, amountMinor: 1000, currency: 'USD' },
+      dedupeKey: `fixture-sale:${slug}`,
+    });
+  });
+  await dispatchDue(org.id, {
+    transports: memoryTransports().transports,
+    appOrigin: 'https://app.yayatoh.test',
+    ignoreQuietHours: true,
+  });
+  const [sentMessage] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from notifications.messages where dedupe_key = ${`fixture:${slug}`} and status = 'sent'`,
+    ),
+  );
+  if (!sentMessage) throw new Error('fixture: the notification was not sent');
+  const unsubscribeToken =
+    unsubscribeUrls('https://app.yayatoh.test', sentMessage.id).page.split('/').pop() ?? '';
+  await executeCommand(
+    unsubscribeCommand,
+    { token: unsubscribeToken, source: 'page' },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    notifier.enqueue(tx, {
+      kind: 'attendees.message',
+      to: { email: `later+${slug}@example.test` },
+      params: { subject: 'Later', body: 'Soon', name: 'Later', eventName: event.name },
+      dedupeKey: `fixture-later:${slug}`,
+      sendAfter: new Date('2099-01-01T00:00:00Z'),
+    }),
+  );
+  await executeCommand(
+    setMyPreferencesCommand,
+    { preferences: [{ category: 'sales', channel: 'email', enabled: true }] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    registerPushTokenCommand,
+    { platform: 'fcm', token: `fixture-token-${slug}` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setTemplateOverrideCommand,
+    { kind: 'orders.tickets', locale: 'en', subject: `Tickets from ${name}`, intro: null },
     ctx(),
     ports,
   );

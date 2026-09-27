@@ -99,3 +99,12 @@ export async function currentConsentTx(
     .limit(1);
   return (row?.status as ConsentInput['status'] | undefined) ?? null;
 }
+
+/** The org's contact for an email, if there is one (no merge-following yet). */
+export async function contactIdByEmailTx(tx: TenantTx, email: string): Promise<string | null> {
+  const [row] = await tx
+    .select({ id: contacts.id })
+    .from(contacts)
+    .where(eq(contacts.emailNorm, normalizeEmail(email)));
+  return row?.id ?? null;
+}

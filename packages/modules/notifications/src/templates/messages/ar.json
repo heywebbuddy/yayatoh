@@ -1,0 +1,85 @@
+{
+  "common": {
+    "greeting": "مرحبًا {name}،",
+    "greetingNoName": "مرحبًا،",
+    "sentBy": "أرسلته {org} عبر Yayatoh.",
+    "poweredBy": "بدعم من Yayatoh",
+    "linkFallback": "إذا لم يعمل الزر، انسخ هذا الرابط في متصفحك:",
+    "unsubscribe": "إلغاء الاشتراك",
+    "why": {
+      "reminders": "تصلك رسالة التذكير هذه لأن لديك تذاكر من {org}.",
+      "event_updates": "تصلك هذه الرسالة لأنك على قائمة ضيوف فعالية تنظمها {org}.",
+      "marketing": "تصلك هذه الرسالة لأنك اشتركت في أخبار {org}."
+    },
+    "reply": "الرد على {org}"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "تذاكرك لفعالية {eventName}",
+      "intro": "{count, plural, zero {تم تأكيد طلبك.} one {تذكرتك جاهزة.} two {تذكرتاك جاهزتان.} few {تذاكرك الـ# جاهزة.} many {تذاكرك الـ# جاهزة.} other {تذاكرك الـ# جاهزة.}} احتفظ بهذه الرسالة: الزر أدناه يفتحها في أي وقت.",
+      "cta": "عرض تذاكري"
+    },
+    "orders.refund": {
+      "subject": "استرداد المبلغ لفعالية {eventName}",
+      "intro": "{fully, select, yes {تم استرداد طلبك بالكامل:} other {تم استرداد جزء من طلبك:}} {amount}. قد يستغرق وصوله إلى حسابك من 5 إلى 10 أيام عمل.",
+      "cta": "عرض طلبي"
+    },
+    "events.reminder": {
+      "subject": "غدًا: {eventName}",
+      "intro": "تذكير بأن {eventName} تبدأ في {when}.",
+      "venue": "المكان: {venue}",
+      "cta": "فتح تذاكري"
+    },
+    "tenancy.invitation": {
+      "subject": "دعوة للانضمام إلى {orgName} على Yayatoh",
+      "intro": "دعتك {orgName} للانضمام إلى فريقها بدور {role}.",
+      "cta": "قبول الدعوة"
+    },
+    "ticketing.claim-link": {
+      "subject": "تذكرة لفعالية {eventName} بانتظارك",
+      "intro": "أرسل إليك أحدهم تذكرة لفعالية {eventName}. استلمها لتحصل على رمز QR الخاص بك.",
+      "cta": "استلام تذكرتي"
+    },
+    "ticketing.holder-link": {
+      "subject": "رابط تذاكرك لفعالية {eventName}",
+      "intro": "إليك الرابط الذي طلبته. يفتح تذاكرك لفعالية {eventName}.",
+      "cta": "فتح تذاكري"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "رسالة من منظم {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "مستجدات حول {eventName}:",
+      "cta": "الرد على المنظم"
+    },
+    "messaging.reply": {
+      "subject": "رد جديد من {org}",
+      "intro": "ردّت {org} على رسالتك:",
+      "cta": "القراءة والرد"
+    },
+    "sales.order_paid": {
+      "subject": "طلب جديد: {name}",
+      "intro": "اشترى {name} {count, plural, zero {# تذكرة} one {تذكرة واحدة} two {تذكرتين} few {# تذاكر} many {# تذكرة} other {# تذكرة}} لفعالية {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "رسالة جديدة من {name}",
+      "intro": "كتب إليك {name} بشأن {eventName}."
+    },
+    "notifications.test": {
+      "subject": "إشعار تجريبي",
+      "intro": "الإشعارات تعمل."
+    }
+  },
+  "roles": {
+    "owner": "مالك",
+    "admin": "مسؤول",
+    "manager": "مدير",
+    "finance": "مالية",
+    "marketing": "تسويق",
+    "box_office": "شباك التذاكر",
+    "scanner": "ماسح التذاكر",
+    "viewer": "مشاهد"
+  }
+}

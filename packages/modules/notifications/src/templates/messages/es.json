@@ -1,0 +1,85 @@
+{
+  "common": {
+    "greeting": "Hola, {name}:",
+    "greetingNoName": "Hola:",
+    "sentBy": "Enviado por {org} con Yayatoh.",
+    "poweredBy": "Con tecnología de Yayatoh",
+    "linkFallback": "Si el botón no funciona, copia este enlace en tu navegador:",
+    "unsubscribe": "Cancelar suscripción",
+    "why": {
+      "reminders": "Recibes este recordatorio porque tienes entradas de {org}.",
+      "event_updates": "Recibes esto porque estás en la lista de invitados de un evento de {org}.",
+      "marketing": "Recibes esto porque te suscribiste a las novedades de {org}."
+    },
+    "reply": "Responder a {org}"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Tus entradas para {eventName}",
+      "intro": "{count, plural, =0 {Tu pedido está confirmado.} one {Tu entrada está lista.} other {Tus # entradas están listas.}} Guarda este correo: el botón de abajo las abre cuando quieras.",
+      "cta": "Ver mis entradas"
+    },
+    "orders.refund": {
+      "subject": "Tu reembolso de {eventName}",
+      "intro": "{fully, select, yes {Tu pedido se reembolsó por completo:} other {Se reembolsó parte de tu pedido:}} {amount}. Puede tardar de 5 a 10 días hábiles en llegar a tu cuenta.",
+      "cta": "Ver mi pedido"
+    },
+    "events.reminder": {
+      "subject": "Mañana: {eventName}",
+      "intro": "Te recordamos que {eventName} empieza el {when}.",
+      "venue": "Dónde: {venue}",
+      "cta": "Abrir mis entradas"
+    },
+    "tenancy.invitation": {
+      "subject": "Te invitan a unirte a {orgName} en Yayatoh",
+      "intro": "{orgName} te invitó a unirte a su equipo como {role}.",
+      "cta": "Aceptar la invitación"
+    },
+    "ticketing.claim-link": {
+      "subject": "Te espera una entrada para {eventName}",
+      "intro": "Alguien te pasó una entrada para {eventName}. Reclámala para obtener tu propio código QR.",
+      "cta": "Reclamar mi entrada"
+    },
+    "ticketing.holder-link": {
+      "subject": "Tu enlace a tus entradas para {eventName}",
+      "intro": "Aquí tienes el enlace que pediste. Abre tus entradas para {eventName}.",
+      "cta": "Abrir mis entradas"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "Un mensaje del organizador de {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "Novedades sobre {eventName}:",
+      "cta": "Responder al organizador"
+    },
+    "messaging.reply": {
+      "subject": "Nueva respuesta de {org}",
+      "intro": "{org} respondió a tu mensaje:",
+      "cta": "Leer y responder"
+    },
+    "sales.order_paid": {
+      "subject": "Nuevo pedido: {name}",
+      "intro": "{name} compró {count, plural, one {# entrada} other {# entradas}} para {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "Nuevo mensaje de {name}",
+      "intro": "{name} te escribió sobre {eventName}."
+    },
+    "notifications.test": {
+      "subject": "Notificación de prueba",
+      "intro": "Las notificaciones funcionan."
+    }
+  },
+  "roles": {
+    "owner": "propietario",
+    "admin": "administrador",
+    "manager": "gestor",
+    "finance": "finanzas",
+    "marketing": "marketing",
+    "box_office": "taquilla",
+    "scanner": "escáner",
+    "viewer": "lector"
+  }
+}

@@ -11,7 +11,7 @@ import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, findEventTx, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
-import { consumeEvent, memoryMailer } from '@yayatoh/platform';
+import { consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import { contactTimelineQuery } from '@yayatoh/reports';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
@@ -114,11 +114,8 @@ describe('guest lists, bulk email and the contact timeline (M1.8e)', () => {
         sql`select id, payload, aggregate_id from platform.domain_events where type = 'attendees.message_batch' and aggregate_id = ${op.operationId}`,
       ),
     );
-    const { mailer, sent } = memoryMailer();
-    const sub = attendeeMessageMailer({
-      mailer,
-      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
-    });
+    const { notifier, sent } = memoryNotifier();
+    const sub = attendeeMessageMailer({ notifier, event: findEventTx });
     const published = {
       id: evt?.id as string,
       orgId: a.org.id,
@@ -131,12 +128,12 @@ describe('guest lists, bulk email and the contact timeline (M1.8e)', () => {
     };
     expect(await consumeEvent(sub, published)).toBe(true);
     expect(await consumeEvent(sub, published)).toBe(false);
-    expect(sent.map((m) => m.to).sort()).toEqual(['rita@example.test', 'tom@example.test']);
+    expect(sent.map((m) => m.to.email).sort()).toEqual(['rita@example.test', 'tom@example.test']);
     expect(sent[0]).toMatchObject({
-      template: 'attendees.message',
+      kind: 'attendees.message',
       params: { subject: 'Dress code', body: 'Black tie, please.', eventName: 'Winter Gala' },
     });
-    expect(new Set(sent.map((m) => m.idempotencyKey)).size).toBe(2);
+    expect(new Set(sent.map((m) => m.dedupeKey)).size).toBe(2);
   });
 
   it('the contact timeline shows one person across events: tickets, orders, check-ins, guest lists', async () => {

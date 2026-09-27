@@ -1,0 +1,85 @@
+{
+  "common": {
+    "greeting": "{name}，您好：",
+    "greetingNoName": "您好：",
+    "sentBy": "由 {org} 通过 Yayatoh 发送。",
+    "poweredBy": "由 Yayatoh 提供支持",
+    "linkFallback": "如果按钮无法使用，请将此链接复制到浏览器：",
+    "unsubscribe": "退订",
+    "why": {
+      "reminders": "您收到此提醒，是因为您持有 {org} 的门票。",
+      "event_updates": "您收到此邮件，是因为您在 {org} 某活动的嘉宾名单上。",
+      "marketing": "您收到此邮件，是因为您订阅了 {org} 的资讯。"
+    },
+    "reply": "回复 {org}"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "您的 {eventName} 门票",
+      "intro": "{count, plural, =0 {您的订单已确认。} other {您的 # 张门票已就绪。}}请保留此邮件：点击下方按钮可随时打开门票。",
+      "cta": "查看我的门票"
+    },
+    "orders.refund": {
+      "subject": "您的 {eventName} 退款",
+      "intro": "{fully, select, yes {您的订单已全额退款：} other {您的订单已部分退款：}}{amount}。到账可能需要 5–10 个工作日。",
+      "cta": "查看我的订单"
+    },
+    "events.reminder": {
+      "subject": "明天：{eventName}",
+      "intro": "提醒您：{eventName} 将于 {when} 开始。",
+      "venue": "地点：{venue}",
+      "cta": "打开我的门票"
+    },
+    "tenancy.invitation": {
+      "subject": "邀请您加入 Yayatoh 上的 {orgName}",
+      "intro": "{orgName} 邀请您以{role}身份加入团队。",
+      "cta": "接受邀请"
+    },
+    "ticketing.claim-link": {
+      "subject": "有一张 {eventName} 的门票在等您",
+      "intro": "有人转给您一张 {eventName} 的门票。领取后即可获得您自己的二维码。",
+      "cta": "领取门票"
+    },
+    "ticketing.holder-link": {
+      "subject": "您的 {eventName} 门票链接",
+      "intro": "这是您请求的链接，可打开您的 {eventName} 门票。",
+      "cta": "打开我的门票"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "来自 {eventName} 主办方的消息："
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "{eventName} 的最新消息：",
+      "cta": "回复主办方"
+    },
+    "messaging.reply": {
+      "subject": "{org} 的新回复",
+      "intro": "{org} 回复了您的消息：",
+      "cta": "阅读并回复"
+    },
+    "sales.order_paid": {
+      "subject": "新订单：{name}",
+      "intro": "{name} 购买了 {count, plural, other {# 张}} {eventName} 门票（{amount}）。"
+    },
+    "messaging.contact_replied": {
+      "subject": "来自 {name} 的新消息",
+      "intro": "{name} 就 {eventName} 给您发了消息。"
+    },
+    "notifications.test": {
+      "subject": "测试通知",
+      "intro": "通知功能正常。"
+    }
+  },
+  "roles": {
+    "owner": "所有者",
+    "admin": "管理员",
+    "manager": "经理",
+    "finance": "财务",
+    "marketing": "市场",
+    "box_office": "售票处",
+    "scanner": "检票员",
+    "viewer": "查看者"
+  }
+}

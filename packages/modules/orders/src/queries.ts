@@ -1,6 +1,7 @@
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
+import { buyerOrderMessagesTx } from '@yayatoh/notifications';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
@@ -137,6 +138,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         tickets: mine,
         transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
+        messages: await buyerOrderMessagesTx(tx, ref.order_id, o.buyerEmail),
       };
     });
     return publicOrderSerializer.serialize(order);
