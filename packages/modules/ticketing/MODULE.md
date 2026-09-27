@@ -7,3 +7,5 @@ Ticket types, inventory and (from M1.5b) holds, tickets and barcodes. Owns Postg
 - Inventory: `quantity_sold + quantity_held ≤ quantity_total` is a CHECK constraint, so no code path can oversell.
 - A ticket type belongs to one event (composite FK `(org_id, event_id)`), and its currency is the event's.
 - Public reads go only through `ticketing.public_ticket_types(event_slug)` (SECURITY DEFINER, allowlisted, public + active + published events only).
+- **Dates (M1.4b):** a ticket type lists the occurrences it sells for (`occurrence_ids`, empty = every date; each must be a date of its event). A ticket bought for a date carries `occurrence_id` (FK to `events.occurrences`, hand-written); check-in refuses it elsewhere (`wrong_date`). Access dates remain a separate, additional rule.
+

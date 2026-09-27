@@ -33,6 +33,7 @@
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
+    "@yayatoh/templates": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/ui": "workspace:*",

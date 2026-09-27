@@ -302,6 +302,13 @@
       "when": 1790544469216,
       "tag": "0042_fat_proemial_gods",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1790547617014,
+      "tag": "0043_blue_bruce_banner",
+      "breakpoints": true
     }
   ]
 }

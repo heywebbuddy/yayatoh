@@ -15,6 +15,7 @@ export {
   PublicFormDto,
   publicForm,
   publishFormCommand,
+  publishFormTx,
   ResponseDto,
   submitResponseTx,
 } from './forms.ts';

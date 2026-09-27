@@ -1,4 +1,4 @@
-import { listEventsQuery } from '@yayatoh/events';
+import { listEventsQuery, listSeriesQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { payoutAccountQuery } from '@yayatoh/payments';
 import {
@@ -35,7 +35,7 @@ export default async function OrgHome({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ period?: string; from?: string; to?: string }>;
+  searchParams: Promise<{ period?: string; from?: string; to?: string; series?: string }>;
 }) {
   const { locale, org } = await params;
   const sp = await searchParams;
@@ -82,7 +82,7 @@ export default async function OrgHome({
           {t('orgHome.events')}
         </h2>
         <Suspense fallback={<EventsSkeleton label={t('common.loading')} />}>
-          <EventList org={org} locale={locale} create={create} />
+          <EventList org={org} locale={locale} create={create} seriesSlug={sp.series ?? null} />
         </Suspense>
       </section>
     </>
@@ -100,15 +100,58 @@ function EventsSkeleton({ label }: { label: string }) {
   );
 }
 
-async function EventList({ org, locale, create }: { org: string; locale: string; create: ReactNode }) {
+async function EventList({
+  org,
+  locale,
+  create,
+  seriesSlug,
+}: {
+  org: string;
+  locale: string;
+  create: ReactNode;
+  /** M1.4b: show only this series' events. */
+  seriesSlug: string | null;
+}) {
   const data = await loadConsole(org);
   const t = await getTranslations();
-  const events = (await executeQuery(listEventsQuery, {}, data.ctx, ports)).filter(
-    (e) => e.status !== 'archived',
-  );
+  const [all, series] = await Promise.all([
+    executeQuery(listEventsQuery, {}, data.ctx, ports),
+    executeQuery(listSeriesQuery, {}, data.ctx, ports),
+  ]);
+  const active = series.find((s) => s.slug === seriesSlug) ?? null;
+  const events = all.filter((e) => e.status !== 'archived' && (!active || active.eventIds.includes(e.id)));
+  const chip = (current: boolean) =>
+    `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white text-zinc-700'}`;
   return (
     <>
-      {events.length === 0 ? (
+      {series.length > 0 ? (
+        <nav aria-label={t('orgHome.seriesFilter')}>
+          <ul className="flex list-none flex-wrap gap-2 p-0">
+            <li>
+              <Link href={`/o/${org}`} aria-current={active ? undefined : 'page'} className={chip(!active)}>
+                {t('orgHome.allEvents')}
+              </Link>
+            </li>
+            {series.map((s) => (
+              <li key={s.id}>
+                <Link
+                  href={`/o/${org}?series=${s.slug}`}
+                  aria-current={active?.id === s.id ? 'page' : undefined}
+                  className={chip(active?.id === s.id)}
+                >
+                  {s.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
+      {events.length === 0 && active ? (
+        <EmptyState
+          title={t('orgHome.seriesEmptyTitle', { name: active.name })}
+          description={t('orgHome.seriesEmptyDescription')}
+        />
+      ) : events.length === 0 ? (
         <EmptyState
           title={t('orgHome.emptyTitle')}
           description={t('orgHome.emptyDescription')}

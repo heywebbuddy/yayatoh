@@ -15,7 +15,10 @@ export function BoxOfficeForm({
   action,
   passes,
   orderHref,
+  dates = [],
 }: {
+  /** Multi-date events (M1.4b): the date being sold. */
+  dates?: readonly { id: string; label: string }[];
   action: (prev: BoxOfficeState, form: FormData) => Promise<BoxOfficeState>;
   passes: readonly { id: string; label: string }[];
   /** The console order page, with `{id}` for the order id. */
@@ -42,9 +45,31 @@ export function BoxOfficeForm({
         ? t('chooseTickets')
         : state.reason === 'sold_out'
           ? t('soldOut')
-          : te(errorMessageKey(state.code));
+          : state.reason === 'choose_date'
+            ? t('chooseDate')
+            : state.reason === 'date_sold_out'
+              ? t('dateSoldOut')
+              : state.reason === 'wrong_date'
+                ? t('wrongDate')
+                : state.reason === 'date_cancelled' || state.reason === 'date_passed'
+                  ? t('dateUnavailable')
+                  : te(errorMessageKey(state.code));
   return (
     <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-4">
+      {dates.length > 0 ? (
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="bo-date" className="text-caption text-zinc-600">
+            {t('date')}
+          </label>
+          <select id="bo-date" name="occurrenceId" required className={field}>
+            {dates.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <fieldset className="flex flex-col gap-2">
         <legend className="text-caption text-zinc-600">{t('tickets')}</legend>
         {passes.map((p) => (

@@ -25,6 +25,8 @@ export interface IssueRequest {
     readonly quantity: number;
   }[];
   readonly holder: { readonly name: string; readonly email: string };
+  /** Multi-date events (M1.4b): the date every ticket of this request admits. */
+  readonly occurrenceId?: string | null;
 }
 
 export interface IssuedTicket {
@@ -128,6 +130,7 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
       holderName: req.holder.name,
       holderEmail: req.holder.email,
       attendeeId: attendeeFor.get(unit.id) ?? null,
+      occurrenceId: req.occurrenceId ?? null,
     });
     const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev: t.rev }, key.privateKey);
     await tx
@@ -146,6 +149,7 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
       ticketTypeId: tickets.ticketTypeId,
       orderItemId: tickets.orderItemId,
       seatLabel: tickets.seatLabel,
+      occurrenceId: tickets.occurrenceId,
       serial: tickets.serial,
       shortCode: tickets.shortCode,
       status: tickets.status,
@@ -253,6 +257,8 @@ export interface ScannableTicket {
   readonly holderName: string;
   readonly typeName: string;
   readonly accessDates: readonly { readonly date: string; readonly name: string }[];
+  /** Multi-date events: the date this ticket admits, or null (every date). */
+  readonly occurrenceId: string | null;
 }
 
 /** A ticket for the check-in engine, by id (from a verified code) or by its short code. */
@@ -272,6 +278,7 @@ export async function ticketForScanTx(
       holderName: tickets.holderName,
       typeName: ticketTypes.name,
       accessDates: ticketTypes.accessDates,
+      occurrenceId: tickets.occurrenceId,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
@@ -354,6 +361,7 @@ export interface ManifestTicket {
   readonly ticketTypeId: string;
   readonly typeName: string;
   readonly accessDates: readonly { readonly date: string; readonly name: string }[];
+  readonly occurrenceId: string | null;
   readonly holderName: string;
   readonly holderEmail: string;
   readonly createdAt: Date;
@@ -379,6 +387,7 @@ export async function manifestTicketsTx(
       ticketTypeId: tickets.ticketTypeId,
       typeName: ticketTypes.name,
       accessDates: ticketTypes.accessDates,
+      occurrenceId: tickets.occurrenceId,
       holderName: tickets.holderName,
       holderEmail: tickets.holderEmail,
       createdAt: tickets.createdAt,

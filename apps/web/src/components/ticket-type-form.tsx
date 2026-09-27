@@ -9,8 +9,11 @@ import { errorMessageKey } from '@/lib/errors.ts';
 export function TicketTypeForm({
   currency,
   action,
+  dates = [],
 }: {
   currency: string;
+  /** Multi-date events (M1.4b): the dates a type may be limited to. */
+  dates?: readonly { id: string; label: string }[];
   action: (prev: TicketFormState, form: FormData) => Promise<TicketFormState>;
 }) {
   const t = useTranslations();
@@ -78,6 +81,27 @@ export function TicketTypeForm({
           {t('tickets.accessDatesHint')}
         </p>
       </div>
+      {dates.length > 0 ? (
+        <fieldset className="flex flex-col gap-2 md:col-span-2">
+          <legend className="text-caption text-zinc-600">{t('tickets.validDates')}</legend>
+          <ul className="flex max-h-56 list-none flex-col gap-1 overflow-y-auto p-0">
+            {dates.map((d) => (
+              <li key={d.id}>
+                <label className="flex min-h-6 items-center gap-2.5 text-body">
+                  <input
+                    type="checkbox"
+                    name="occurrenceIds"
+                    value={d.id}
+                    className="size-5 shrink-0 accent-ink"
+                  />
+                  {d.label}
+                </label>
+              </li>
+            ))}
+          </ul>
+          <p className="text-caption text-zinc-500">{t('tickets.validDatesHint')}</p>
+        </fieldset>
+      ) : null}
       <label className="flex min-h-6 items-start gap-2.5 text-body md:col-span-2">
         <input type="checkbox" name="isDonation" value="1" className="mt-0.5 size-5 shrink-0 accent-ink" />
         <span>

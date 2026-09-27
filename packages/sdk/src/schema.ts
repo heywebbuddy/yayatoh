@@ -292,7 +292,7 @@ export interface paths {
                             /** Format: date-time */
                             firstAdmittedAt: string | null;
                             /** @enum {string} */
-                            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access";
+                            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access";
                             ticket: {
                                 holderName: string | null;
                                 serial: number;
@@ -479,6 +479,14 @@ export interface paths {
                                     startsAt: string;
                                     timezone: string;
                                 };
+                                occurrences: {
+                                    endsAt: string;
+                                    /** Format: uuid */
+                                    id: string;
+                                    startsAt: string;
+                                    /** @enum {string} */
+                                    status: "scheduled" | "cancelled";
+                                }[];
                                 publicKeys: {
                                     [key: string]: string;
                                 };
@@ -495,6 +503,8 @@ export interface paths {
                                 emailHash: string;
                                 holderName: string;
                                 issuedAt: string;
+                                /** Format: uuid */
+                                occurrenceId: string | null;
                                 rev: number;
                                 shortCode: string;
                                 /** @enum {string} */
@@ -2801,7 +2811,7 @@ export interface components {
             /** Format: date-time */
             firstAdmittedAt: string | null;
             /** @enum {string} */
-            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access";
+            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access";
             ticket: {
                 holderName: string | null;
                 serial: number;

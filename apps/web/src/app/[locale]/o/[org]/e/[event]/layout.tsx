@@ -1,4 +1,4 @@
-import { composeNav, isProfileKey } from '@yayatoh/platform';
+import { composeNav, isProfileKey, type NavItem } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
 import { Label } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -7,6 +7,12 @@ import { ConsoleShell } from '@/components/console-shell.tsx';
 import { eventPhase } from '@/lib/event-status.ts';
 import { readinessRules } from '@/lib/readiness.ts';
 import { loadEvent } from '@/server/console.ts';
+
+/** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
+const COPY_NAV: readonly NavItem[] = [
+  { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
+  { key: 'copy', path: 'copy', group: 'build', module: 'core', icon: 'copy' },
+];
 
 export default async function EventLayout({
   children,
@@ -30,9 +36,12 @@ export default async function EventLayout({
         base: `/o/${org}/e/${event}`,
         profile,
         // The Marketing section holds announcements: hidden without access to messages.
-        items: composeNav(profile, data.modules).filter(
-          (i) => i.key !== 'marketing' || roleCan(data.role, 'messages:read'),
-        ),
+        items: [
+          ...composeNav(profile, data.modules).filter(
+            (i) => i.key !== 'marketing' || roleCan(data.role, 'messages:read'),
+          ),
+          ...COPY_NAV,
+        ],
         badges: { setupGuide: `${rules.filter((r) => r.done).length}/${rules.length}` },
       }}
       status={

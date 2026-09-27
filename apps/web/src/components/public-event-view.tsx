@@ -1,4 +1,4 @@
-import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import { checkoutTarget, publicEventBySlug, publicOccurrences } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
@@ -11,6 +11,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { checkoutAction, requestHolderLinkAction } from '@/app/[locale]/events/[slug]/actions.ts';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
+import { DatePicker } from '@/components/date-picker.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
@@ -33,10 +34,13 @@ export async function PublicEventView({
   slug,
   orgId = null,
   embedded = false,
+  date = null,
 }: {
   locale: string;
   slug: string;
   orgId?: string | null;
+  /** The chosen date of a multi-date event (`?date=`, M1.4b). */
+  date?: string | null;
   /** The ticket widget (M1.11c): passes and checkout only. */
   embedded?: boolean;
 }) {
@@ -44,7 +48,15 @@ export async function PublicEventView({
   if (!pub) notFound();
   // Passes, stats and agenda arrive with ticketing and sessions; showcase events get a dev overlay.
   const demo = publicDemoOverlay(slug);
-  const real = await publicTicketTypes(slug);
+  // Multi-date events (M1.4b): the buyer picks a date first; passes are those valid for it.
+  const now = new Date();
+  const dates = await publicOccurrences(slug);
+  const chosen =
+    dates.find((d) => d.id === date && d.status === 'scheduled' && !d.soldOut && d.endsAt > now) ?? null;
+  const real = (await publicTicketTypes(slug)).filter(
+    (p) => !chosen || p.occurrenceIds.length === 0 || p.occurrenceIds.includes(chosen.id),
+  );
+  const needsDate = dates.length > 0 && !chosen;
   const target = await checkoutTarget(slug);
   if (orgId && target?.orgId !== orgId) notFound();
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
@@ -119,12 +131,32 @@ export async function PublicEventView({
         <p className="text-[15px] leading-[22px] text-zinc-500">
           {t('publicEvent.allIn', { org: ev.organizerName })}
         </p>
+        {chosen ? (
+          <p className="text-body font-medium">
+            {t('publicEvent.ticketsFor', {
+              date: new Intl.DateTimeFormat(locale, {
+                timeZone: ev.timezone,
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                hour: 'numeric',
+                minute: '2-digit',
+              }).format(chosen.startsAt),
+            })}
+          </p>
+        ) : null}
       </div>
       {orgProfile?.checkoutPaused ? (
         <EmptyState
           className="min-w-0 flex-1"
           title={t('publicEvent.salesPausedTitle')}
           description={t('publicEvent.salesPausedDescription')}
+        />
+      ) : needsDate ? (
+        <EmptyState
+          className="min-w-0 flex-1"
+          title={t('publicEvent.pickDateTitle')}
+          description={t('publicEvent.pickDateDescription')}
         />
       ) : ev.passes.length === 0 ? (
         <EmptyState
@@ -150,6 +182,7 @@ export async function PublicEventView({
           brand={brand ? { background: brand.background, text: brand.text } : null}
           questions={questions}
           seatMap={seatMap}
+          occurrenceId={chosen?.id ?? null}
           action={checkoutAction.bind(null, slug)}
         />
       )}
@@ -301,6 +334,18 @@ export async function PublicEventView({
         ) : null}
       </section>
 
+      {dates.length > 0 ? (
+        <section className="px-6 pt-10 md:px-16">
+          <DatePicker
+            slug={slug}
+            dates={dates}
+            chosen={chosen?.id ?? null}
+            locale={locale}
+            timeZone={ev.timezone}
+            now={now}
+          />
+        </section>
+      ) : null}
       {passesSection}
 
       {venue ? (

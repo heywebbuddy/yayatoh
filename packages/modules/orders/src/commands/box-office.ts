@@ -9,6 +9,7 @@ import { assertNotPausedTx } from '@yayatoh/tenancy';
 import { holdInventoryTx, issueTicketsTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { OrderDto } from '../dto.ts';
+import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
 import { hashManageToken } from './checkout.ts';
 
@@ -35,6 +36,8 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     }),
     method: z.enum(PAYMENT_METHODS),
     reference: z.string().trim().max(120).optional(),
+    /** Multi-date events (M1.4b): the date sold; required when the event has dates. */
+    occurrenceId: z.uuid().optional(),
     locale: z.string().max(10).default('en'),
   }),
   output: z.object({ order: OrderDto }),
@@ -53,7 +56,17 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       throw new DomainError('validation_failed', 'Seated tickets are sold with a seat', {
         reason: 'choose_seats',
       });
-    const quote = await quoteTx(tx, event.id, input.items, { now: ctx.now, includeHidden: true });
+    const occurrenceId = await claimOccurrenceTx(tx, {
+      eventId: event.id,
+      occurrenceId: input.occurrenceId,
+      quantity: input.items.reduce((n, i) => n + i.quantity, 0),
+      now: ctx.now,
+    });
+    const quote = await quoteTx(tx, event.id, input.items, {
+      now: ctx.now,
+      includeHidden: true,
+      occurrenceId,
+    });
     const lines = quote.lines.map((l) => ({ ticketTypeId: l.ticketTypeId, quantity: l.quantity }));
     await holdInventoryTx(tx, lines);
     await sellHeldTx(tx, lines);
@@ -68,6 +81,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       .values({
         orgId,
         eventId: event.id,
+        occurrenceId,
         status: 'paid',
         buyerEmail: input.buyer.email,
         buyerName: input.buyer.name,
@@ -99,6 +113,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       eventId: event.id,
       items: items.map((i) => ({ orderItemId: i.id, ticketTypeId: i.ticketTypeId, quantity: i.quantity })),
       holder: { name: order.buyerName, email: order.buyerEmail },
+      occurrenceId,
     });
     await postOrganizerCollectedSaleTx(tx, ctx, {
       orderId: order.id,

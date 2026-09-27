@@ -8,3 +8,4 @@ Orders, order items and checkout. Owns Postgres schema `orders`.
 - Totals and the fee schedule are **snapshotted** on the order and its items; later price or fee changes never alter an order.
 - Holds last 10 minutes (+5 when payment starts); the sweeper releases expired holds.
 - Guest orders are managed through a random `manage_token`; only its SHA-256 hash is stored.
+- **Dates (M1.4b):** a multi-date event sells one date per order (`orders.occurrence_id`, required when the event has dates). The date's row is locked, then its capacity is checked against live tickets for it plus tickets in orders still holding stock (`claimOccurrenceTx`); checkout and the box office both use it.

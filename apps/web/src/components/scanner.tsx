@@ -10,6 +10,7 @@ const TONE = {
   admitted: 'border-green-600 bg-green-50 text-green-900',
   duplicate: 'border-accent-700 bg-accent-50 text-accent-text',
   not_today: 'border-accent-700 bg-accent-50 text-accent-text',
+  wrong_date: 'border-accent-700 bg-accent-50 text-accent-text',
   outside_window: 'border-accent-700 bg-accent-50 text-accent-text',
   invalid: 'border-pink-700 bg-pink-50 text-pink-700',
   void: 'border-pink-700 bg-pink-50 text-pink-700',

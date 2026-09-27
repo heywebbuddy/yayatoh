@@ -1,6 +1,16 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
-import { check, foreignKey, index, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  check,
+  foreignKey,
+  index,
+  integer,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 export const eventsSchema = pgSchema('events');
 
@@ -88,5 +98,82 @@ export const eventRoleAssignments = tenantTable(
       foreignColumns: [events.orgId, events.id],
     }).onDelete('cascade'),
     check('event_role_assignments_role_check', inList('role', EVENT_ROLES)),
+  ],
+);
+
+export const OCCURRENCE_STATUSES = ['scheduled', 'cancelled'] as const;
+
+/**
+ * M1.4b: the dates of a multi-date (multi-day or recurring) event. An event without rows here is
+ * a single-date event (its own `starts_at`/`ends_at`); with rows, the event's times are the span of
+ * its scheduled occurrences. A ticket may be bound to one occurrence (`ticketing.tickets`).
+ */
+export const occurrences = tenantTable(
+  eventsSchema,
+  'occurrences',
+  {
+    eventId: uuid('event_id').notNull(),
+    startsAt: ts('starts_at').notNull(),
+    endsAt: ts('ends_at').notNull(),
+    /** Tickets this date may sell across all ticket types; null = only the ticket types' limits. */
+    capacity: integer('capacity'),
+    status: text('status').notNull().default('scheduled'),
+    cancelledAt: ts('cancelled_at'),
+  },
+  (t) => [
+    index('occurrences_org_event_starts_idx').on(t.orgId, t.eventId, t.startsAt),
+    uniqueIndex('occurrences_org_event_starts_key')
+      .on(t.orgId, t.eventId, t.startsAt)
+      .where(sql`status = 'scheduled'`),
+    foreignKey({
+      name: 'occurrences_event_fk',
+      columns: [t.orgId, t.eventId],
+      foreignColumns: [events.orgId, events.id],
+    }).onDelete('cascade'),
+    check('occurrences_time_order_check', sql`ends_at > starts_at`),
+    check('occurrences_capacity_check', sql`capacity is null or capacity >= 1`),
+    check('occurrences_status_check', inList('status', OCCURRENCE_STATUSES)),
+    check('occurrences_cancelled_check', sql`(status = 'cancelled') = (cancelled_at is not null)`),
+  ],
+);
+
+/** M1.4b: a named group of events (a tour, a season). Slugs are global: `/series/{slug}`. */
+export const series = tenantTable(
+  eventsSchema,
+  'series',
+  {
+    slug: text('slug').notNull(),
+    name: text('name').notNull(),
+    description: text('description'),
+  },
+  (t) => [
+    uniqueIndex('series_slug_key').on(t.slug),
+    index('series_org_name_idx').on(t.orgId, t.name),
+    check('series_slug_format_check', sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'`),
+    check('series_name_length_check', sql`length(name) between 2 and 160`),
+  ],
+);
+
+/** An event belongs to at most one series. */
+export const seriesEvents = tenantTable(
+  eventsSchema,
+  'series_events',
+  {
+    seriesId: uuid('series_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('series_events_org_event_key').on(t.orgId, t.eventId),
+    index('series_events_org_series_idx').on(t.orgId, t.seriesId),
+    foreignKey({
+      name: 'series_events_series_fk',
+      columns: [t.orgId, t.seriesId],
+      foreignColumns: [series.orgId, series.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'series_events_event_fk',
+      columns: [t.orgId, t.eventId],
+      foreignColumns: [events.orgId, events.id],
+    }).onDelete('cascade'),
   ],
 );

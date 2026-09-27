@@ -30,6 +30,7 @@ import { and, eq, inArray, lte } from 'drizzle-orm';
 import { z } from 'zod';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
+import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -58,6 +59,7 @@ async function issueFor(tx: TenantTx, ctx: Ctx, order: OrderRow, items: (typeof 
     eventId: order.eventId,
     items: items.map((i) => ({ orderItemId: i.id, ticketTypeId: i.ticketTypeId, quantity: i.quantity })),
     holder: { name: order.buyerName, email: order.buyerEmail },
+    occurrenceId: order.occurrenceId,
   });
   if (order.seatUuids.length === 0) return issued;
   const seats = await heldSeatsTx(tx, order.id);
@@ -141,7 +143,18 @@ export const startCheckoutCommand = tenantCommand({
       ...input.items,
       ...[...seatItems].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
     ];
-    const quote = await quoteTx(tx, event.id, wanted, { now: ctx.now, includeHidden: false, promo });
+    const occurrenceId = await claimOccurrenceTx(tx, {
+      eventId: event.id,
+      occurrenceId: input.occurrenceId,
+      quantity: wanted.reduce((n, w) => n + w.quantity, 0),
+      now: ctx.now,
+    });
+    const quote = await quoteTx(tx, event.id, wanted, {
+      now: ctx.now,
+      includeHidden: false,
+      promo,
+      occurrenceId,
+    });
     await holdInventoryTx(tx, lines([...quote.lines]));
     // Counted with the hold, returned if the hold lapses.
     if (promo) await claimPromoTx(tx, promo.id);
@@ -170,6 +183,7 @@ export const startCheckoutCommand = tenantCommand({
         orgId,
         eventId: event.id,
         seatUuids: [...new Set(input.seats)],
+        occurrenceId,
         status: 'reserved',
         buyerEmail: input.buyer.email,
         buyerName: input.buyer.name,

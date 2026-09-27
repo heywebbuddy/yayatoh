@@ -14,18 +14,34 @@ export interface EventWindow {
   readonly timezone: string;
 }
 
+/** The date (occurrence) a ticket of a multi-date event admits (M1.4b). */
+export interface RuleOccurrence {
+  readonly startsAt: Date;
+  readonly endsAt: Date;
+  readonly status: string;
+}
+
 export interface RuleTicket {
   readonly eventId: string;
   readonly status: string;
   readonly accessDates: readonly { readonly date: string }[];
+  /** Set when the ticket is for one date of a multi-date event; null/absent = every date. */
+  readonly occurrence?: RuleOccurrence | null;
 }
 
-export type RuleVerdict = 'ok' | 'invalid' | 'wrong_event' | 'void' | 'outside_window' | 'not_today';
+export type RuleVerdict =
+  | 'ok'
+  | 'invalid'
+  | 'wrong_event'
+  | 'void'
+  | 'outside_window'
+  | 'wrong_date'
+  | 'not_today';
 
 /**
  * The rules shared by the server and offline devices (everything but duplicates): the ticket
- * exists, belongs to this event, is live, and now is inside the event window and one of its
- * access dates (event timezone).
+ * exists, belongs to this event, is live, and now is inside the event window, around the ticket's
+ * own date for a multi-date event, and one of its access dates (event timezone).
  */
 export function ruleResult(i: { now: Date; event: EventWindow; ticket: RuleTicket | null }): RuleVerdict {
   if (!i.ticket) return 'invalid';
@@ -34,6 +50,16 @@ export function ruleResult(i: { now: Date; event: EventWindow; ticket: RuleTicke
   const t = i.now.getTime();
   if (t < i.event.startsAt.getTime() - EARLY_ENTRY_MS || t > i.event.endsAt.getTime() + LATE_ENTRY_MS)
     return 'outside_window';
+  // A ticket for one date admits around that date only (same early/late margins), never on a
+  // cancelled date.
+  const o = i.ticket.occurrence;
+  if (
+    o &&
+    (o.status !== 'scheduled' ||
+      t < o.startsAt.getTime() - EARLY_ENTRY_MS ||
+      t > o.endsAt.getTime() + LATE_ENTRY_MS)
+  )
+    return 'wrong_date';
   if (i.ticket.accessDates.length > 0) {
     const today = eventDay(i.now, i.event.timezone);
     if (!i.ticket.accessDates.some((d) => d.date === today)) return 'not_today';

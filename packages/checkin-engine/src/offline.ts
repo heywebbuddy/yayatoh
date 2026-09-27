@@ -10,6 +10,8 @@ export interface ManifestRow {
   readonly ticketTypeId: string;
   readonly typeName: string;
   readonly accessDates: readonly { readonly date: string; readonly name: string }[];
+  /** Multi-date events (M1.4b): the date this ticket admits (see the header's `occurrences`). */
+  readonly occurrenceId?: string | null;
   readonly holderName: string;
   readonly emailHash: string;
   readonly issuedAt: string;
@@ -31,6 +33,15 @@ export interface ManifestHeader {
   readonly unknownPolicy: 'provisional' | 'reject';
   /** The event's live checkpoints; a device scans at one of them, or at the event as a whole. */
   readonly checkpoints: readonly ManifestCheckpoint[];
+  /** Multi-date events (M1.4b): every date, so offline scans can tell a ticket's date. */
+  readonly occurrences?: readonly ManifestOccurrence[];
+}
+
+export interface ManifestOccurrence {
+  readonly id: string;
+  readonly startsAt: string;
+  readonly endsAt: string;
+  readonly status: 'scheduled' | 'cancelled';
 }
 
 export interface ManifestCheckpoint {
@@ -54,6 +65,7 @@ export type OfflineVerdict =
   | 'void'
   | 'wrong_event'
   | 'outside_window'
+  | 'wrong_date'
   | 'not_today'
   | 'granted'
   | 'no_access';
@@ -134,10 +146,21 @@ async function entranceVerdict(
     row = state.byShortCode.get(code) ?? null;
     if (!row) return { verdict: 'invalid', ticketId: null, row: null };
   }
+  const occ = row.occurrenceId ? h.occurrences?.find((o) => o.id === row.occurrenceId) : undefined;
   const rule = ruleResult({
     now,
     event,
-    ticket: { eventId: event.id, status: row.status, accessDates: row.accessDates },
+    ticket: {
+      eventId: event.id,
+      status: row.status,
+      accessDates: row.accessDates,
+      // A date missing from the manifest (deleted) admits nowhere: treat it as cancelled.
+      occurrence: row.occurrenceId
+        ? occ
+          ? { startsAt: new Date(occ.startsAt), endsAt: new Date(occ.endsAt), status: occ.status }
+          : { startsAt: new Date(0), endsAt: new Date(0), status: 'cancelled' }
+        : null,
+    },
   });
   if (rule !== 'ok') return { verdict: rule, ticketId: row.ticketId, row };
   if (state.admitted.has(admittedKey(row.ticketId, day)))

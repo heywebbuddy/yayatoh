@@ -39,6 +39,7 @@ export type ServerResult =
   | 'void'
   | 'wrong_event'
   | 'not_today'
+  | 'wrong_date'
   | 'outside_window'
   | 'duplicate_offline'
   | 'superseded'

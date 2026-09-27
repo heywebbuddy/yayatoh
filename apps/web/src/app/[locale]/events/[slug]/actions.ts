@@ -87,6 +87,10 @@ export async function checkoutAction(
         eventId: target.eventId,
         items,
         seats,
+        // Multi-date events: the date the buyer chose (validated against the event server-side).
+        ...(/^[0-9a-f-]{36}$/.test(String(form.get('occurrenceId') ?? ''))
+          ? { occurrenceId: String(form.get('occurrenceId')) }
+          : {}),
         buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
         marketingOptIn: form.get('marketingOptIn') === '1',
         promoCode: String(form.get('promoCode') ?? '').trim() || undefined,

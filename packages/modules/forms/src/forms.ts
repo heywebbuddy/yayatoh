@@ -67,36 +67,47 @@ export async function publicForm(orgId: string, s: Subject): Promise<PublicFormD
   return PublicFormDto.parse({ version: f.version, fields: f.definition.fields });
 }
 
+/**
+ * Write a new version of a subject's form inside the caller's transaction (publishing, and
+ * copying an event's questions to a duplicate or template, M1.4b).
+ */
+export async function publishFormTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  subject: Subject,
+  definition: FormDefinition,
+): Promise<{ version: number }> {
+  const orgId = requireOrg(ctx);
+  await tx
+    .insert(forms)
+    .values({ orgId, kind: subject.kind, subjectType: subject.subjectType, subjectId: subject.subjectId })
+    .onConflictDoNothing();
+  // Lock the form row so concurrent publishes get consecutive versions.
+  const [form] = await tx
+    .select()
+    .from(forms)
+    .where(
+      and(
+        eq(forms.kind, subject.kind),
+        eq(forms.subjectType, subject.subjectType),
+        eq(forms.subjectId, subject.subjectId),
+      ),
+    )
+    .for('update');
+  if (!form) throw new DomainError('internal');
+  const version = form.currentVersion + 1;
+  await tx.insert(formVersions).values({ orgId, formId: form.id, version, definition });
+  await tx.update(forms).set({ currentVersion: version, updatedAt: ctx.now }).where(eq(forms.id, form.id));
+  return { version };
+}
+
 export const publishFormCommand = tenantCommand({
   name: 'forms.publishForm',
   input: Subject.extend({ definition: FormDefinition }),
   output: z.object({ version: z.int() }),
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
-    const orgId = requireOrg(ctx);
-    await tx
-      .insert(forms)
-      .values({ orgId, kind: input.kind, subjectType: input.subjectType, subjectId: input.subjectId })
-      .onConflictDoNothing();
-    // Lock the form row so concurrent publishes get consecutive versions.
-    const [form] = await tx
-      .select()
-      .from(forms)
-      .where(
-        and(
-          eq(forms.kind, input.kind),
-          eq(forms.subjectType, input.subjectType),
-          eq(forms.subjectId, input.subjectId),
-        ),
-      )
-      .for('update');
-    if (!form) throw new DomainError('internal');
-    const version = form.currentVersion + 1;
-    await tx.insert(formVersions).values({ orgId, formId: form.id, version, definition: input.definition });
-    await tx.update(forms).set({ currentVersion: version, updatedAt: ctx.now }).where(eq(forms.id, form.id));
-    return { version };
-  },
+  handler: async ({ input, ctx, tx }) => publishFormTx(tx, ctx, input, input.definition),
   audit: (input, r) => ({
     action: 'form.publish',
     targetType: 'form',

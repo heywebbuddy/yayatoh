@@ -32,6 +32,16 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
     timeZone: order.event.timezone,
   });
   const typeName = new Map(order.items.map((i) => [i.ticketTypeId, i.name]));
+  // Multi-date events: each ticket shows its date, in the event's timezone (M1.4b).
+  const dateFmt = new Intl.DateTimeFormat(locale, {
+    timeZone: order.event.timezone,
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
       <PageHeader
@@ -102,6 +112,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     {t('order.shortCode')}{' '}
                     <span className="font-mono text-body tracking-[0.2em] text-black">{tk.shortCode}</span>
                   </p>
+                  {tk.date ? (
+                    <p className="text-body font-medium">
+                      {t('order.ticketDate', { date: dateFmt.format(tk.date.startsAt) })}
+                    </p>
+                  ) : null}
                   {tk.seatLabel ? (
                     <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
                   ) : null}

@@ -7,6 +7,7 @@ import { and, asc, eq, gt, isNull, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { CreateTicketTypeInput, pricingProblem, TicketTypeDto, UpdateTicketTypeInput } from '../dto.ts';
 import { currentFaceMinor } from '../inventory.ts';
+import { assertOccurrenceIdsTx } from '../occurrences.ts';
 import { ticketTypes } from '../schema.ts';
 
 type Row = typeof ticketTypes.$inferSelect;
@@ -49,6 +50,7 @@ export const createTicketTypeCommand = tenantCommand({
     if (['cancelled', 'completed', 'archived'].includes(event.status)) {
       throw new DomainError('invalid_state', 'Tickets cannot be added to a finished event');
     }
+    await assertOccurrenceIdsTx(tx, input.eventId, input.occurrenceIds);
     const [row] = await tx
       .insert(ticketTypes)
       .values({ ...input, orgId: requireOrg(ctx), currency: event.currency })
@@ -90,6 +92,7 @@ export const updateTicketTypeCommand = tenantCommand({
         minimum: current.quantitySold + current.quantityHeld,
       });
     }
+    if (fields.occurrenceIds) await assertOccurrenceIdsTx(tx, current.eventId, fields.occurrenceIds);
     const problem = pricingProblem({ ...current, ...fields });
     if (problem) throw new DomainError('validation_failed', problem.message, { field: problem.field });
     // Price changes after sales are allowed (audited below); existing orders keep their fee snapshot.

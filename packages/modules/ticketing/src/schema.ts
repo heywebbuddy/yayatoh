@@ -54,6 +54,8 @@ export const ticketTypes = tenantTable(
     isDonation: boolean('is_donation').notNull().default(false),
     /** Days a multi-day pass admits, e.g. [{date: '2027-10-14', name: 'Gala Night'}] (legacy `access_dates`). */
     accessDates: jsonb('access_dates').$type<AccessDate[]>().notNull().default(sql`'[]'::jsonb`),
+    /** Multi-date events (M1.4b): the occurrences this type sells for; empty = every date. */
+    occurrenceIds: uuid('occurrence_ids').array().notNull().default(sql`'{}'::uuid[]`),
   },
   (t) => [
     index('ticket_types_org_event_idx').on(t.orgId, t.eventId, t.sortOrder),
@@ -115,12 +117,15 @@ export const tickets = tenantTable(
     attendeeId: uuid('attendee_id'),
     /** Seated events: the seat, as printed ("Row A · 5"). */
     seatLabel: text('seat_label'),
+    /** Multi-date events (M1.4b): the date this ticket admits (`events.occurrences`, hand-written FK). */
+    occurrenceId: uuid('occurrence_id'),
   },
   (t) => [
     uniqueIndex('tickets_org_event_serial_key').on(t.orgId, t.eventId, t.serial),
     uniqueIndex('tickets_org_short_code_key').on(t.orgId, t.shortCode),
     index('tickets_org_order_idx').on(t.orgId, t.orderId),
     index('tickets_org_event_updated_idx').on(t.orgId, t.eventId, t.updatedAt, t.id),
+    index('tickets_org_occurrence_idx').on(t.orgId, t.occurrenceId).where(sql`occurrence_id is not null`),
     foreignKey({
       name: 'tickets_ticket_type_fk',
       columns: [t.orgId, t.ticketTypeId],

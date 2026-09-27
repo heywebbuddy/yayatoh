@@ -61,6 +61,8 @@ export async function createTicketTypeAction(
         earlyEndsAt: get('earlyEndsAt') ? zonedTimeToUtc(get('earlyEndsAt'), ev.timezone) : null,
         isDonation: form.get('isDonation') === '1',
         accessDates: parseAccessDates(get('accessDates')),
+        // Multi-date events: none ticked = every date.
+        occurrenceIds: form.getAll('occurrenceIds').map(String),
       },
       data.ctx,
       ports,
@@ -247,6 +249,7 @@ export async function boxOfficeSaleAction(
         buyer: { name: String(form.get('name') ?? ''), email: String(form.get('email') ?? '') },
         method: String(form.get('method') ?? 'cash'),
         reference: String(form.get('reference') ?? '').trim() || undefined,
+        ...(form.get('occurrenceId') ? { occurrenceId: String(form.get('occurrenceId')) } : {}),
         locale: data.ctx.locale,
       },
       data.ctx,

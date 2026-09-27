@@ -6,6 +6,7 @@ export {
   sellsPaidTicketsQuery,
   updateTicketTypeCommand,
 } from './commands/ticket-types.ts';
+export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
 export {
   CLAIM_PURPOSE,
   claimContext,
@@ -54,6 +55,13 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
+export {
+  activeTicketsForOccurrenceTx,
+  assertOccurrenceIdsTx,
+  OccurrenceSalesDto,
+  occurrenceSalesQuery,
+  validForOccurrence,
+} from './occurrences.ts';
 export {
   CreatePromoCodeInput,
   claimPromoTx,

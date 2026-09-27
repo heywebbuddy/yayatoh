@@ -8,7 +8,7 @@ import {
   zoneAllows,
 } from '@yayatoh/checkin-engine';
 import { withoutTenant } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
@@ -16,6 +16,7 @@ import { manifestTicketsTx, publicKeysTx, ticketForScanTx } from '@yayatoh/ticke
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
+import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -127,6 +128,7 @@ const ManifestRowDto = z.object({
   ticketTypeId: z.uuid(),
   typeName: z.string(),
   accessDates: z.array(z.object({ date: z.string(), name: z.string() })),
+  occurrenceId: z.uuid().nullable(),
   holderName: z.string(),
   emailHash: z.string(),
   issuedAt: z.string(),
@@ -151,6 +153,14 @@ export const ManifestPageDto = z.object({
         name: z.string(),
         kind: z.enum(CHECKPOINT_KINDS),
         ticketTypeIds: z.array(z.uuid()),
+      }),
+    ),
+    occurrences: z.array(
+      z.object({
+        id: z.uuid(),
+        startsAt: z.string(),
+        endsAt: z.string(),
+        status: z.enum(['scheduled', 'cancelled']),
       }),
     ),
   }),
@@ -213,6 +223,7 @@ export const deviceManifestQuery = tenantQuery({
         ticketTypeId: t.ticketTypeId,
         typeName: t.typeName,
         accessDates: t.accessDates,
+        occurrenceId: t.occurrenceId,
         holderName: t.holderName,
         emailHash: await lookupHash(salt, t.holderEmail),
         issuedAt: t.createdAt.toISOString(),
@@ -239,6 +250,12 @@ export const deviceManifestQuery = tenantQuery({
         kind: c.kind as 'entrance' | 'zone',
         ticketTypeIds: c.ticketTypeIds,
       })),
+      occurrences: (await occurrencesOfEventTx(tx, event.id)).map((o) => ({
+        id: o.id,
+        startsAt: o.startsAt.toISOString(),
+        endsAt: o.endsAt.toISOString(),
+        status: o.status,
+      })),
     };
     return {
       header,
@@ -258,6 +275,7 @@ const DEVICE_VERDICTS = [
   'void',
   'wrong_event',
   'outside_window',
+  'wrong_date',
   'not_today',
   'granted',
   'no_access',
@@ -332,7 +350,9 @@ export const syncScansCommand = tenantCommand({
       } else {
         ticket = await ticketForScanTx(tx, { shortCode: code });
       }
-      const rule = superseded ? 'superseded' : ruleResult({ now: at, event, ticket });
+      const rule = superseded
+        ? 'superseded'
+        : ruleResult({ now: at, event, ticket: await withOccurrenceTx(tx, ticket) });
       const checkpoint = s.checkpointId ? (cps.get(s.checkpointId) ?? null) : null;
       let result: ScanResult = rule === 'ok' ? 'admitted' : rule;
       let admissionId: string | null = null;

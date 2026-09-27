@@ -9,6 +9,8 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
   { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
+  { key: 'series', path: 'series', group: 'build', module: 'core', icon: 'layers' },
+  { key: 'templates', path: 'templates', group: 'build', module: 'core', icon: 'copy' },
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
   { key: 'publicSite', path: 'site', group: 'build', module: 'core', icon: 'store' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
