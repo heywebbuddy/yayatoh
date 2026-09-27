@@ -1,6 +1,6 @@
 import { type NavGroup, type NavItem, navLabelKey, type ProfileKey } from '@yayatoh/platform';
 import { Avatar, Chip } from '@yayatoh/ui';
-import { Menu } from 'lucide-react';
+import { Menu, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
@@ -10,6 +10,7 @@ import { Icon } from './icons.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
+import { StepUpProvider } from './step-up.tsx';
 
 export interface ShellNav {
   readonly base: string;
@@ -83,6 +84,14 @@ async function SidebarContent({
           <span className="truncate text-[13px] text-zinc-900">{data.session.name}</span>
           <span className="text-[12px] text-zinc-500">{t(`roles.${data.role}`)}</span>
         </div>
+        <Link
+          href="/account/security"
+          aria-label={t('shell.security')}
+          title={t('shell.security')}
+          className="ms-auto flex size-8 shrink-0 items-center justify-center rounded-pill text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+        >
+          <ShieldCheck aria-hidden="true" className="size-4" strokeWidth={1.6} />
+        </Link>
         <SignOutButton />
       </div>
     </div>
@@ -141,7 +150,7 @@ export async function ConsoleShell({
           <NotificationCenter />
         </header>
         <main id="main" className="flex flex-col gap-[18px] px-4 pt-5 pb-10 md:px-8">
-          {children}
+          <StepUpProvider>{children}</StepUpProvider>
         </main>
       </div>
     </div>

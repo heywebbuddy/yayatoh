@@ -1,9 +1,11 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
+import { getUsersByIds } from '@yayatoh/auth';
 import { findEventTx } from '@yayatoh/events';
 import { ticketMailer } from '@yayatoh/orders';
+import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consoleMailer, type Subscriber } from '@yayatoh/platform';
 import { releaseCancelledSeats } from '@yayatoh/seating';
-import { invitationMailer } from '@yayatoh/tenancy';
+import { invitationMailer, orgOwnerIdsTx } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
@@ -33,5 +35,10 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     releaseCancelledSeats(),
+    payoutDestinationMailer({
+      mailer: consoleMailer,
+      ownerEmails: async (tx) =>
+        [...(await getUsersByIds(await orgOwnerIdsTx(tx))).values()].map((u) => u.email),
+    }),
   ];
 }

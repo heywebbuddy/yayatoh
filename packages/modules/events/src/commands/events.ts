@@ -169,6 +169,8 @@ export const assignEventRoleCommand = tenantCommand({
   output: EventRoleDto,
   entitlement: 'core',
   permission: 'members:manage',
+  // Step-up (roadmap §10): an event role grants access.
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     await findEvent(tx, input.eventId);
     const [row] = await tx

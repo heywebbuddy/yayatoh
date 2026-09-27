@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { ActionState } from '@/app/[locale]/o/[org]/(org)/team/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { useStepUpAction } from './step-up.tsx';
 
 const ROLES = [
   'admin',
@@ -23,9 +24,11 @@ export function InviteForm({
   action: (prev: ActionState, form: FormData) => Promise<ActionState>;
 }) {
   const t = useTranslations();
-  const [state, formAction, pending] = useActionState(action, { ok: false, code: null });
+  // Inviting grants a role: a step-up command (M1.2c).
+  const stepUp = useStepUpAction(action);
+  const [state, formAction, pending] = useActionState(stepUp.action, { ok: false, code: null });
   return (
-    <form action={formAction} className="flex flex-col gap-3 md:flex-row md:items-end">
+    <form ref={stepUp.formRef} action={formAction} className="flex flex-col gap-3 md:flex-row md:items-end">
       <div className="flex-1">
         <Input name="email" type="email" required autoComplete="off" label={t('team.inviteEmail')} />
       </div>

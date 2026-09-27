@@ -1,3 +1,4 @@
+import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 import { closePools } from '@yayatoh/db';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
 import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
@@ -17,7 +18,7 @@ import {
 } from '@yayatoh/tenancy';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { DEMO_EVENTS } from '../src/demo/events.ts';
-import { getAuth } from '../src/server/auth.ts';
+import { getAuth, getTwoFactor } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
 import { ports } from '../src/server/ports.ts';
 
@@ -44,6 +45,18 @@ for (const p of PERSONAS) {
   console.info(`seed: user ${p.email}`);
 }
 
+// Two-step verification for the personas that need it (owners, M1.2c), with a dev-only secret
+// derived from DEV_PERSONA_PASSWORD so /dev/login and the e2e suite can answer the challenge.
+const twoFactor = getTwoFactor();
+for (const p of PERSONAS) {
+  const userId = ids.get(p.email);
+  if (!p.twoFactor || !userId || (await twoFactor.status(userId)).enabled) continue;
+  const secret = devPersonaTotpSecret(p.email, password);
+  await twoFactor.begin(userId, p.email, { secret });
+  await twoFactor.confirm(userId, totp(secretKey(secret), Date.now()));
+  console.info(`seed: two-step verification for ${p.email}`);
+}
+
 for (const o of SEED_ORGS) {
   if (await resolveOrgSlug(o.slug)) {
     console.info(`seed: ${o.slug} exists`);
@@ -52,7 +65,8 @@ for (const o of SEED_ORGS) {
   const [owner, ...others] = PERSONAS.filter((p) => p.orgSlug === o.slug);
   const ownerId = owner && ids.get(owner.email);
   if (!ownerId) continue;
-  const ownerCtx = createCtx({ actor: { type: 'user', userId: ownerId } });
+  // A trusted script acting as the owner who just signed in (fresh for step-up commands).
+  const ownerCtx = createCtx({ actor: { type: 'user', userId: ownerId }, stepUpAt: new Date() });
   const org = await createOrganization(
     ownerCtx,
     { slug: o.slug, name: o.name, defaultProfile: o.profile },

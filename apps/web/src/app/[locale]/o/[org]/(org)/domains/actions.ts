@@ -82,18 +82,30 @@ export async function checkDomainAction(org: string, domainId: string): Promise<
   revalidatePath(`/o/${org}/domains`);
 }
 
-export async function setPrimaryDomainAction(org: string, domainId: string): Promise<void> {
+/** Make a domain primary (step-up command: answers `step_up_required` when the session is not fresh). */
+export async function setPrimaryDomainAction(org: string, domainId: string): Promise<SettingsState> {
   const data = await loadConsole(org);
-  await executeCommand(setPrimaryDomainCommand, { domainId }, data.ctx, ports);
+  try {
+    await executeCommand(setPrimaryDomainCommand, { domainId }, data.ctx, ports);
+  } catch (err) {
+    return fail(err);
+  }
   revalidatePath(`/o/${org}/domains`);
+  return { ok: true, code: null };
 }
 
 /** Remove a custom domain here first (frees the name), then at the hosting provider. */
-export async function removeDomainAction(org: string, domainId: string): Promise<void> {
+export async function removeDomainAction(org: string, domainId: string): Promise<SettingsState> {
   const data = await loadConsole(org);
-  const { hostname } = await executeCommand(removeDomainCommand, { domainId }, data.ctx, ports);
+  let hostname: string;
+  try {
+    ({ hostname } = await executeCommand(removeDomainCommand, { domainId }, data.ctx, ports));
+  } catch (err) {
+    return fail(err);
+  }
   await getDomainProvider().removeDomain(hostname);
   revalidatePath(`/o/${org}/domains`);
+  return { ok: true, code: null };
 }
 
 /** Orgs created before domains existed get their managed subdomain on request. */

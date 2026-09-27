@@ -24,7 +24,8 @@
     "switchContext": "切換組織或活動",
     "yourOrganizations": "你的組織",
     "organization": "組織",
-    "signOut": "登出"
+    "signOut": "登出",
+    "security": "帳戶安全"
   },
   "notifications": {
     "open": "通知",
@@ -355,7 +356,25 @@
     "invalid": "電子郵件與密碼不符。",
     "invalidCode": "驗證碼錯誤或已過期。",
     "failed": "無法寄送驗證碼，請再試一次。",
-    "devPersonas": "開發測試角色"
+    "devPersonas": "開發測試角色",
+    "challenge": {
+      "title": "兩步驟驗證",
+      "explainTotp": "輸入驗證器應用程式中的 6 位數驗證碼。",
+      "explainBackup": "輸入一組備用碼。每組備用碼只能使用一次。",
+      "totpLabel": "6 位數驗證碼",
+      "backupLabel": "備用碼",
+      "backupHint": "例如：abcde-12345",
+      "verify": "驗證並登入",
+      "useBackup": "改用備用碼",
+      "useTotp": "改用驗證器應用程式",
+      "startOver": "重新登入",
+      "errors": {
+        "invalid_code": "驗證碼無效，請再試一次。",
+        "too_many_attempts": "錯誤驗證碼過多。請重新登入後再試。",
+        "locked": "失敗次數過多。請 15 分鐘後再試。",
+        "expired": "本次登入已過期，請重新登入。"
+      }
+    }
   },
   "orgPicker": {
     "emptyTitle": "你尚未加入任何組織",
@@ -1028,7 +1047,8 @@
         "transferred": "已支付",
         "failed": "重試中"
       }
-    }
+    },
+    "destinationHold": "新的撥款帳戶：為了你的安全，匯入此帳戶的轉帳將於 {until} 之後開始。已寄電子郵件通知組織擁有者。"
   },
   "fakeConnect": {
     "eyebrow": "測試模式",
@@ -1527,5 +1547,75 @@
       "emptyTitle": "此期間沒有銷售",
       "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
     }
+  },
+  "security": {
+    "metaTitle": "帳戶安全",
+    "eyebrow": "你的帳戶",
+    "title": "安全性",
+    "description": "以兩步驟驗證保護你的 Yayatoh 帳戶。",
+    "requiredTitle": "必須開啟兩步驟驗證",
+    "requiredExplain": "能移動款項、變更撥款與網域，或授予他人存取權的成員必須使用兩步驟驗證。開啟後即可開啟主控台。",
+    "requiredFor": "{org} 的{role}",
+    "appTitle": "驗證器應用程式",
+    "statusOn": "已開啟",
+    "statusOff": "已關閉",
+    "appExplain": "輸入密碼或電子郵件驗證碼後，你還需輸入手機上驗證器應用程式顯示的 6 位數驗證碼。",
+    "setUp": "設定驗證器應用程式",
+    "step1": "用驗證器應用程式掃描此 QR 碼。",
+    "qrLabel": "驗證器應用程式的 QR 碼。如果無法掃描，請輸入下方顯示的設定金鑰。",
+    "manualKeyLabel": "無法掃描？請在應用程式中改輸入此設定金鑰：",
+    "copyKey": "複製設定金鑰",
+    "copied": "已複製。",
+    "step2": "輸入應用程式顯示的 6 位數驗證碼。",
+    "codeLabel": "6 位數驗證碼",
+    "verify": "驗證並開啟",
+    "cancel": "取消",
+    "enabledNow": "兩步驟驗證已開啟。",
+    "codesTitle": "備用碼",
+    "codesExplain": "如果手機遺失，可用其中一組備用碼登入。每組備用碼只能使用一次。請妥善保存：我們不會再次顯示。",
+    "copyCodes": "複製備用碼",
+    "downloadCodes": "下載備用碼",
+    "codesSaved": "我已儲存備用碼",
+    "codesFileHeader": "Yayatoh 備用碼。每組備用碼只能使用一次。",
+    "continueToConsole": "前往主控台",
+    "turnOff": "關閉兩步驟驗證",
+    "turnOffExplain": "輸入驗證器應用程式的驗證碼或一組備用碼即可關閉。",
+    "currentCodeLabel": "驗證碼",
+    "turnOffConfirm": "關閉",
+    "cannotTurnOff": "你的角色要求使用兩步驟驗證，因此無法關閉：{reasons}。",
+    "codesLeft": "{count, plural, =0 {沒有剩餘的備用碼} other {剩餘 # 組備用碼}}",
+    "regenerate": "取得新的備用碼",
+    "regenerateWarning": "你目前的備用碼將會失效。",
+    "regenerateConfirm": "替換我的備用碼",
+    "backToConsole": "返回主控台",
+    "errors": {
+      "invalid_code": "驗證碼無效。請確認手機會自動設定時間，然後再試一次。",
+      "rate_limited": "嘗試次數過多。請等候 15 分鐘後再試。",
+      "not_pending": "請重新開始設定。",
+      "required": "你的角色要求使用兩步驟驗證，因此無法關閉。",
+      "already_enabled": "兩步驟驗證已開啟。",
+      "not_enabled": "兩步驟驗證已關閉。"
+    }
+  },
+  "stepUp": {
+    "title": "確認是你本人",
+    "why": "敏感變更需要最近登入。確認後 10 分鐘內不會再次詢問。",
+    "explain": {
+      "totp": "輸入驗證器應用程式中的 6 位數驗證碼，或一組備用碼。",
+      "password": "輸入你的密碼。",
+      "email": "我們已將 6 位數驗證碼寄到你的電子郵件，10 分鐘內有效。"
+    },
+    "loading": "請稍候…",
+    "codeLabel": "驗證碼",
+    "codeHint": "6 位數字或備用碼",
+    "passwordLabel": "密碼",
+    "confirm": "確認",
+    "cancel": "取消",
+    "resend": "重新寄送驗證碼",
+    "resent": "我們已寄出新的驗證碼。",
+    "invalidCode": "驗證碼無效，請再試一次。",
+    "invalidPassword": "密碼不正確。",
+    "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
+    "unauthenticated": "工作階段已結束，請重新登入。"
   }
 }

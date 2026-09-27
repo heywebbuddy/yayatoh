@@ -1,5 +1,12 @@
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { actorId, type CommandPorts, type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import {
+  actorId,
+  type CommandPorts,
+  type Ctx,
+  DomainError,
+  isStepUpFresh,
+  requireOrg,
+} from '@yayatoh/kernel';
 import { and, eq, gt, sql } from 'drizzle-orm';
 import { emitEvents } from '../outbox/outbox.ts';
 import { auditEvents, idempotencyKeys } from '../schema.ts';
@@ -10,10 +17,17 @@ export interface PolicyPorts {
   readonly stepUp?: CommandPorts<TenantTx>['stepUp'];
 }
 
-/** Step-up is satisfied by a re-authentication within the last 10 minutes. */
+/**
+ * Step-up is re-authentication of a person: a user passes with a sign-in or confirmation in the
+ * last 10 minutes (`ctx.stepUpAt`, from the session). System actors (verified webhooks, the
+ * worker, devices, the staff console) are authenticated at their transport and have no session to
+ * refresh. API keys and anonymous callers never pass: sensitive commands stay interactive.
+ */
 export const recentStepUp: CommandPorts<TenantTx>['stepUp'] = {
-  satisfied: async (ctx: Ctx) =>
-    ctx.stepUpAt !== null && ctx.now.getTime() - ctx.stepUpAt.getTime() < 10 * 60_000,
+  satisfied: async (ctx: Ctx) => {
+    if (ctx.actor.type === 'system') return true;
+    return ctx.actor.type === 'user' && isStepUpFresh(ctx.stepUpAt, ctx.now);
+  },
 };
 
 /**

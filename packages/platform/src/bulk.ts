@@ -57,6 +57,11 @@ export interface BulkAction<P = unknown, F = unknown> {
   readonly undoWindowMs?: number;
   /** Exports: the file each operation writes (appended per chunk). */
   readonly file?: { readonly contentType: string; name(params: P, now: Date): string };
+  /**
+   * Starting it needs a recent step-up (roadmap §10: bulk export). Defaults to true for exports
+   * (actions with a `file`): data leaving the platform in bulk.
+   */
+  readonly stepUp?: boolean;
   /** Resolve a selection to the ids this action may touch (validates scope; caller caps size). */
   resolve(
     tx: TenantTx,
@@ -172,6 +177,7 @@ export function bulkCommands<P, F>(action: BulkAction<P, F>) {
     output: z.object({ operationId: z.uuid(), total: z.int() }),
     entitlement: action.entitlement,
     permission: action.permission,
+    stepUp: action.stepUp ?? action.file !== undefined,
     handler: async ({ input, ctx, tx, emit }) => {
       const sel = input.selection as { ids?: string[]; filter?: F };
       const ids = [...new Set(await action.resolve(tx, { eventId: input.eventId, ...sel }))];

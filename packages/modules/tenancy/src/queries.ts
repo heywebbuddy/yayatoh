@@ -3,6 +3,7 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { roleRequiresTwoFactor } from './domain/permissions.ts';
 import {
   InvitationDto,
   MembershipDto,
@@ -79,6 +80,23 @@ export async function myOrganizations(userId: string): Promise<MyOrganizationDto
     ),
   );
   return rows.map((r) => MyOrgSchema.parse({ orgId: r.org_id, slug: r.slug, name: r.name, role: r.role }));
+}
+
+/**
+ * The memberships that make two-step verification mandatory for this person (owner, admin or
+ * finance in any org). Empty: it is optional for them.
+ */
+export async function twoFactorRequiredBy(userId: string): Promise<MyOrganizationDto[]> {
+  return (await myOrganizations(userId)).filter((o) => roleRequiresTwoFactor(o.role));
+}
+
+/** The org's owners (user ids), inside its tenant transaction: who security notices go to. */
+export async function orgOwnerIdsTx(tx: TenantTx): Promise<string[]> {
+  const rows = await tx
+    .select({ userId: memberships.userId })
+    .from(memberships)
+    .where(eq(memberships.role, 'owner'));
+  return rows.map((r) => r.userId);
 }
 
 /** The current org's display name, inside the caller's tenant transaction (buyer-facing pages, PDFs). */

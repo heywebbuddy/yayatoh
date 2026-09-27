@@ -526,6 +526,9 @@ importers:
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../../packages/modules/attendees
+      '@yayatoh/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing
@@ -572,9 +575,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
-      '@yayatoh/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config

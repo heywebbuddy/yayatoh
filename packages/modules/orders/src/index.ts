@@ -19,6 +19,8 @@ export {
 export { applyDisputeEventCommand } from './commands/disputes.ts';
 export {
   completeRefundCommand,
+  isLargeRefund,
+  LARGE_REFUND_MINOR,
   orderRefundsQuery,
   RefundDto,
   RefundPreviewDto,

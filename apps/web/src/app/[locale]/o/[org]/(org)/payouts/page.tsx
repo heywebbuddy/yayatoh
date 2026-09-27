@@ -4,6 +4,7 @@ import { payoutAccountQuery, settlementsQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { StepUpForm } from '@/components/step-up.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { startPayoutOnboarding } from './actions.ts';
@@ -60,6 +61,17 @@ export default async function PayoutsPage({
           {t('onHold')}
         </p>
       ) : null}
+      {account.destinationHoldUntil ? (
+        <p role="status" className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body">
+          {t('destinationHold', {
+            until: new Intl.DateTimeFormat(locale, {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+              timeZone: data.org.timezone,
+            }).format(account.destinationHoldUntil),
+          })}
+        </p>
+      ) : null}
       <Card className="flex flex-col gap-4">
         <StatusDot status={DOT[account.state]} label={t(`state.${account.state}`)} />
         <p className="text-body text-zinc-600">{t(`explain.${account.state}`)}</p>
@@ -77,9 +89,9 @@ export default async function PayoutsPage({
         ) : null}
         <p className="text-caption text-zinc-500">{t(`flow.${account.fundsFlow}`)}</p>
         {canManage && account.state !== 'active' ? (
-          <form action={startPayoutOnboarding.bind(null, org, locale)}>
+          <StepUpForm action={startPayoutOnboarding.bind(null, org, locale)}>
             <Button type="submit">{account.state === 'none' ? t('start') : t('continue')}</Button>
-          </form>
+          </StepUpForm>
         ) : !canManage ? (
           <p className="text-caption text-zinc-600">{t('noAccess')}</p>
         ) : null}

@@ -24,6 +24,11 @@ export interface HandlerArgs<I, Tx> {
   readonly tx: Tx;
   /** Queue a domain event; written to the outbox after the handler returns (step 8). */
   readonly emit: (event: DomainEvent) => void;
+  /**
+   * Step-up decided by data the handler reads (e.g. a large refund): throws `step_up_required`
+   * unless the actor re-authenticated recently. Rolls the transaction back like any error.
+   */
+  readonly requireStepUp: () => Promise<void>;
 }
 
 export interface CommandDefinition<I, O, R, Tx> {
@@ -123,9 +128,11 @@ export async function executeCommand<I, O, R, Tx>(
   }
 
   // 4. Step-up
-  if (command.stepUp && !(await ports.stepUp.satisfied(ctx))) {
-    throw new DomainError('step_up_required', 'Re-authentication required');
-  }
+  const requireStepUp = async () => {
+    if (!(await ports.stepUp.satisfied(ctx)))
+      throw new DomainError('step_up_required', 'Re-authentication required');
+  };
+  if (command.stepUp) await requireStepUp();
 
   // 5. Idempotency
   let fingerprint: string | null = null;
@@ -140,7 +147,13 @@ export async function executeCommand<I, O, R, Tx>(
   return ports.transaction(ctx, async (tx) => {
     // 7. Handler
     const events: DomainEvent[] = [];
-    const result = await command.handler({ input, ctx, tx, emit: (e) => void events.push(e) });
+    const result = await command.handler({
+      input,
+      ctx,
+      tx,
+      emit: (e) => void events.push(e),
+      requireStepUp,
+    });
 
     // 8. Outbox
     if (events.length > 0) await ports.outbox.emit(tx, ctx, events);

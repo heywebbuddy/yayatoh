@@ -12,8 +12,13 @@ import { ports } from '@/server/ports.ts';
 /**
  * Export the bookings the current search matches as CSV (M1.12c), through the bulk framework:
  * small exports finish in this request, bigger ones continue in the worker while the page polls.
+ * Bulk exports need a recent step-up (M1.2c).
  */
-export async function exportBookingsAction(org: string, event: string, form: FormData): Promise<void> {
+export async function exportBookingsAction(
+  org: string,
+  event: string,
+  form: FormData,
+): Promise<{ code: string } | undefined> {
   const locale = await getLocale();
   const { data, event: ev } = await loadEvent(org, event);
   const q = String(form.get('q') ?? '')
@@ -44,7 +49,10 @@ export async function exportBookingsAction(org: string, event: string, form: For
       ports,
     ));
   } catch (err) {
-    return redirect({ href: `${back}&exportError=${isDomainError(err) ? err.code : 'internal'}`, locale });
+    const code = isDomainError(err) ? err.code : 'internal';
+    // A step-up command: the form asks the person to confirm and sends it again.
+    if (code === 'step_up_required') return { code };
+    return redirect({ href: `${back}&exportError=${code}`, locale });
   }
   await runBulkInline(data.org.id, operationId);
   redirect({ href: `${back}&op=${operationId}`, locale });

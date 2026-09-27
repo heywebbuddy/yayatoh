@@ -64,15 +64,25 @@ async function netReceivableTx(tx: TenantTx, ctx: Ctx, key: string, currency: st
 export const releaseDueSettlementsCommand = tenantCommand({
   name: 'payments.releaseDueSettlements',
   input: z.object({}),
-  output: z.object({ held: z.boolean(), ready: z.array(ReadyDto) }),
+  output: z.object({
+    held: z.boolean(),
+    ready: z.array(ReadyDto),
+    /** Set while a new payout destination is in its 24 h hold (no transfers to it yet). */
+    destinationHoldUntil: z.date().nullable(),
+  }),
   entitlement: null,
   permission: 'platform:payouts.release',
   handler: async ({ ctx, tx }) => {
     const orgId = requireOrg(ctx);
     await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`payments.release:${orgId}`}))`);
     const [account] = await tx.select().from(paymentAccounts).limit(1);
-    if (account?.payoutsHeld) return { held: true, ready: [] };
-    const destination = account?.payoutsEnabled ? account.accountId : null;
+    if (account?.payoutsHeld) return { held: true, ready: [], destinationHoldUntil: null };
+    // A new payout destination waits 24 h (roadmap §10): nothing is sent to it until then.
+    const holdUntil =
+      account?.destinationHoldUntil && account.destinationHoldUntil > ctx.now
+        ? account.destinationHoldUntil
+        : null;
+    const destination = account?.payoutsEnabled && !holdUntil ? account.accountId : null;
     const statusFor = (amount: number) =>
       amount === 0
         ? ('transferred' as const)
@@ -189,8 +199,11 @@ export const releaseDueSettlementsCommand = tenantCommand({
       .where(inArray(settlements.status, ['ready', 'failed']));
     return {
       held: false,
+      destinationHoldUntil: holdUntil,
       ready: ready
-        .filter((r) => r.destinationAccountId)
+        .filter(
+          (r) => r.destinationAccountId && !(holdUntil && r.destinationAccountId === account?.accountId),
+        )
         .map((r) => ({
           settlementId: r.id,
           amountMinor: r.amountMinor,
@@ -204,7 +217,7 @@ export const releaseDueSettlementsCommand = tenantCommand({
     action: 'payouts.release',
     targetType: 'organization',
     targetId: null,
-    data: { held: r?.held, ready: r?.ready.length },
+    data: { held: r?.held, ready: r?.ready.length, destinationHold: r?.destinationHoldUntil !== null },
   }),
 });
 

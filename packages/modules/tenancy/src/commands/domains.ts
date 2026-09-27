@@ -115,6 +115,8 @@ export const addDomainCommand = tenantCommand({
   output: DomainDto,
   entitlement: 'core',
   permission: 'org:update',
+  // Step-up (roadmap §10): domains decide where buyers pay and sign in.
+  stepUp: true,
   handler: async ({ input, ctx, tx, emit }) => {
     const hostname = normalizeHostname(input.hostname);
     if (!hostname) throw new DomainError('validation_failed', 'Not a domain name', { field: 'hostname' });
@@ -259,6 +261,8 @@ export const setPrimaryDomainCommand = tenantCommand({
   output: DomainDto,
   entitlement: 'core',
   permission: 'org:update',
+  // Step-up (roadmap §10): domains decide where buyers pay and sign in.
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     const d = await loadDomainTx(tx, input.domainId);
     if (d.status !== 'active') throw new DomainError('invalid_state', 'The domain is not active yet');
@@ -284,6 +288,8 @@ export const removeDomainCommand = tenantCommand({
   output: z.object({ hostname: z.string() }),
   entitlement: 'core',
   permission: 'org:update',
+  // Step-up (roadmap §10): domains decide where buyers pay and sign in.
+  stepUp: true,
   handler: async ({ input, tx, emit }) => {
     const d = await loadDomainTx(tx, input.domainId);
     if (d.managed) throw new DomainError('invalid_state', 'The managed subdomain cannot be removed');

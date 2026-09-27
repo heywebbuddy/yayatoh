@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
-import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
+import { defineSubscriber, type Mailer, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import type { FundsFlow } from './port.ts';
@@ -28,7 +28,38 @@ export const PayoutAccountDto = z.object({
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
   /** Staff hold on payouts (the note stays with staff). */
   onHold: z.boolean(),
+  /** A new payout destination: no transfer goes to it before this time (24 h safety hold). */
+  destinationHoldUntil: z.date().nullable(),
 });
+
+/** Roadmap §10: a new or changed payout destination waits 24 hours before money moves to it. */
+export const DESTINATION_HOLD_MS = 24 * 3_600_000;
+
+/**
+ * Start the 24 h hold on a new payout destination and tell the org's owners (outbox →
+ * `payouts.destination_changed@1` → email). Transfers to it wait (`releaseDueSettlements`).
+ */
+async function holdNewDestinationTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  account: { id: string; orgId: string },
+  reason: 'connected' | 'bank_changed',
+  emit: (e: DomainEvent) => void,
+): Promise<Date> {
+  const until = new Date(ctx.now.getTime() + DESTINATION_HOLD_MS);
+  await tx
+    .update(paymentAccounts)
+    .set({ destinationHoldUntil: until, updatedAt: ctx.now })
+    .where(eq(paymentAccounts.id, account.id));
+  emit({
+    type: 'payouts.destination_changed',
+    version: 1,
+    aggregateType: 'payment_account',
+    aggregateId: account.id,
+    payload: { orgId: account.orgId, reason, holdUntil: until.toISOString() },
+  });
+  return until;
+}
 
 /** The funds flow for new orders of this org (roadmap §5.3). */
 export async function fundsFlowTx(tx: TenantTx): Promise<{ fundsFlow: FundsFlow; accountId: string | null }> {
@@ -44,9 +75,10 @@ export const payoutAccountQuery = tenantQuery({
   output: PayoutAccountDto,
   entitlement: 'core',
   permission: 'org:read',
-  handler: async ({ tx }) => {
+  handler: async ({ ctx, tx }) => {
     const [a] = await tx.select().from(paymentAccounts).limit(1);
     const state = stateOf(a);
+    const holdUntil = a?.destinationHoldUntil ?? null;
     return {
       state,
       provider: (a?.provider as 'fake' | 'stripe' | undefined) ?? null,
@@ -54,6 +86,7 @@ export const payoutAccountQuery = tenantQuery({
       country: a?.country ?? null,
       fundsFlow: state === 'active' ? 'organizer_mor' : 'platform_mor',
       onHold: a?.payoutsHeld ?? false,
+      destinationHoldUntil: holdUntil && holdUntil > ctx.now ? holdUntil : null,
     };
   },
 });
@@ -73,7 +106,8 @@ export const payoutAccountIdQuery = tenantQuery({
 
 /**
  * Record the connected account the provider created for this org (the web calls the provider
- * first, outside the transaction; the provider call is idempotent per org).
+ * first, outside the transaction; the provider call is idempotent per org). A new account is a
+ * new payout destination: it starts the 24 h hold and the owners are told.
  */
 export const recordPayoutAccountCommand = tenantCommand({
   name: 'payments.recordPayoutAccount',
@@ -85,18 +119,78 @@ export const recordPayoutAccountCommand = tenantCommand({
   output: z.object({ accountId: z.string() }),
   entitlement: 'core',
   permission: 'payouts:manage',
-  handler: async ({ input, ctx, tx }) => {
+  // Step-up (roadmap §10): payout setup decides where the organizer's money goes.
+  stepUp: true,
+  handler: async ({ input, ctx, tx, emit }) => {
     const [existing] = await tx.select().from(paymentAccounts).limit(1);
     if (existing) {
       if (existing.accountId !== input.accountId)
         throw new DomainError('conflict', 'This organization already has a payout account');
       return { accountId: existing.accountId };
     }
-    await tx.insert(paymentAccounts).values({ orgId: requireOrg(ctx), ...input });
+    const [row] = await tx
+      .insert(paymentAccounts)
+      .values({ orgId: requireOrg(ctx), ...input })
+      .returning({ id: paymentAccounts.id, orgId: paymentAccounts.orgId });
+    if (!row) throw new DomainError('internal');
+    await holdNewDestinationTx(tx, ctx, row, 'connected', emit);
     return { accountId: input.accountId };
   },
   audit: (input) => ({ action: 'payouts.account', targetType: 'payment_account', targetId: input.accountId }),
 });
+
+/**
+ * Continue payout set-up at the provider (hosted onboarding, where the bank account can be
+ * entered or changed): a step-up command, audited, that hands back the account to link to.
+ */
+export const continuePayoutOnboardingCommand = tenantCommand({
+  name: 'payments.continuePayoutOnboarding',
+  input: z.object({}),
+  output: z.object({ accountId: z.string() }),
+  entitlement: 'core',
+  permission: 'payouts:manage',
+  stepUp: true,
+  handler: async ({ tx }) => {
+    const [a] = await tx.select({ accountId: paymentAccounts.accountId }).from(paymentAccounts).limit(1);
+    if (!a) throw new DomainError('not_found', 'This organization has no payout account');
+    return { accountId: a.accountId };
+  },
+  audit: (_input, r) => ({
+    action: 'payouts.onboarding_continue',
+    targetType: 'payment_account',
+    targetId: r?.accountId ?? null,
+  }),
+});
+
+const DestinationChanged = z.object({
+  orgId: z.uuid(),
+  reason: z.enum(['connected', 'bank_changed']),
+  holdUntil: z.iso.datetime(),
+});
+
+/**
+ * Emails the org's owners when a payout destination is connected or changed (outbox → worker),
+ * so a takeover is noticed inside the 24 h hold. Recipients come from the composition root.
+ */
+export function payoutDestinationMailer(deps: {
+  mailer: Mailer;
+  ownerEmails: (tx: TenantTx) => Promise<readonly string[]>;
+}) {
+  return defineSubscriber({
+    name: 'payments.destination-mailer',
+    events: ['payouts.destination_changed@1'],
+    handle: async (tx, event) => {
+      const p = DestinationChanged.parse(event.payload);
+      for (const to of await deps.ownerEmails(tx))
+        await deps.mailer.send({
+          to,
+          template: 'payments.destination_changed',
+          params: { reason: p.reason, holdUntil: p.holdUntil },
+          idempotencyKey: `destination:${event.id}:${to}`,
+        });
+    },
+  });
+}
 
 export const AccountEventInput = z.object({
   provider: z.enum(['fake', 'stripe']),

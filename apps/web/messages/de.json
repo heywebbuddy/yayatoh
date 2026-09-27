@@ -24,7 +24,8 @@
     "switchContext": "Organisation oder Event wechseln",
     "yourOrganizations": "Deine Organisationen",
     "organization": "Organisation",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "security": "Kontosicherheit"
   },
   "notifications": {
     "open": "Benachrichtigungen",
@@ -355,7 +356,25 @@
     "invalid": "E-Mail und Passwort passen nicht zusammen.",
     "invalidCode": "Dieser Code ist falsch oder abgelaufen.",
     "failed": "Wir konnten keinen Code senden. Bitte versuche es erneut.",
-    "devPersonas": "Entwicklungs-Personas"
+    "devPersonas": "Entwicklungs-Personas",
+    "challenge": {
+      "title": "Zwei-Schritt-Verifizierung",
+      "explainTotp": "Gib den 6-stelligen Code aus deiner Authenticator-App ein.",
+      "explainBackup": "Gib einen deiner Backup-Codes ein. Jeder Code funktioniert einmal.",
+      "totpLabel": "6-stelliger Code",
+      "backupLabel": "Backup-Code",
+      "backupHint": "Zum Beispiel: abcde-12345",
+      "verify": "Prüfen und anmelden",
+      "useBackup": "Stattdessen einen Backup-Code verwenden",
+      "useTotp": "Stattdessen die Authenticator-App verwenden",
+      "startOver": "Erneut anmelden",
+      "errors": {
+        "invalid_code": "Dieser Code hat nicht funktioniert. Versuche es erneut.",
+        "too_many_attempts": "Zu viele falsche Codes. Melde dich erneut an, um es noch einmal zu versuchen.",
+        "locked": "Zu viele fehlgeschlagene Versuche. Versuche es in 15 Minuten erneut.",
+        "expired": "Diese Anmeldung ist abgelaufen. Melde dich erneut an."
+      }
+    }
   },
   "orgPicker": {
     "emptyTitle": "Du bist noch in keiner Organisation",
@@ -1028,7 +1047,8 @@
         "transferred": "Ausgezahlt",
         "failed": "Neuer Versuch läuft"
       }
-    }
+    },
+    "destinationHold": "Neues Auszahlungskonto: Zu deiner Sicherheit beginnen Überweisungen darauf erst nach {until}. Die Inhaber deiner Organisation wurden per E-Mail informiert."
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -1527,5 +1547,75 @@
       "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
       "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
     }
+  },
+  "security": {
+    "metaTitle": "Kontosicherheit",
+    "eyebrow": "Dein Konto",
+    "title": "Sicherheit",
+    "description": "Schütze dein Yayatoh-Konto mit der Zwei-Schritt-Verifizierung.",
+    "requiredTitle": "Zwei-Schritt-Verifizierung ist erforderlich",
+    "requiredExplain": "Wer Geld bewegen, Auszahlungen und Domains ändern oder anderen Zugriff geben kann, muss die Zwei-Schritt-Verifizierung nutzen. Richte sie ein, um deine Konsole zu öffnen.",
+    "requiredFor": "{role} bei {org}",
+    "appTitle": "Authenticator-App",
+    "statusOn": "An",
+    "statusOff": "Aus",
+    "appExplain": "Nach deinem Passwort oder dem Code per E-Mail gibst du einen 6-stelligen Code aus einer Authenticator-App auf deinem Handy ein.",
+    "setUp": "Authenticator-App einrichten",
+    "step1": "Scanne diesen QR-Code mit deiner Authenticator-App.",
+    "qrLabel": "QR-Code für deine Authenticator-App. Wenn du ihn nicht scannen kannst, gib den Einrichtungsschlüssel darunter ein.",
+    "manualKeyLabel": "Scannen klappt nicht? Gib stattdessen diesen Einrichtungsschlüssel in der App ein:",
+    "copyKey": "Einrichtungsschlüssel kopieren",
+    "copied": "Kopiert.",
+    "step2": "Gib den 6-stelligen Code ein, den deine App anzeigt.",
+    "codeLabel": "6-stelliger Code",
+    "verify": "Prüfen und einschalten",
+    "cancel": "Abbrechen",
+    "enabledNow": "Die Zwei-Schritt-Verifizierung ist eingeschaltet.",
+    "codesTitle": "Backup-Codes",
+    "codesExplain": "Wenn du dein Handy verlierst, meldest du dich mit einem dieser Codes an. Jeder Code funktioniert einmal. Bewahre sie sicher auf: Wir zeigen sie nicht noch einmal an.",
+    "copyCodes": "Codes kopieren",
+    "downloadCodes": "Codes herunterladen",
+    "codesSaved": "Ich habe meine Codes gespeichert",
+    "codesFileHeader": "Yayatoh-Backup-Codes. Jeder Code funktioniert einmal.",
+    "continueToConsole": "Weiter zu deiner Konsole",
+    "turnOff": "Zwei-Schritt-Verifizierung ausschalten",
+    "turnOffExplain": "Gib einen Code aus deiner Authenticator-App oder einen Backup-Code ein, um sie auszuschalten.",
+    "currentCodeLabel": "Code",
+    "turnOffConfirm": "Ausschalten",
+    "cannotTurnOff": "Deine Rolle erfordert die Zwei-Schritt-Verifizierung, deshalb kann sie nicht ausgeschaltet werden: {reasons}.",
+    "codesLeft": "{count, plural, =0 {Keine Backup-Codes mehr} one {# Backup-Code übrig} other {# Backup-Codes übrig}}",
+    "regenerate": "Neue Backup-Codes erstellen",
+    "regenerateWarning": "Deine aktuellen Backup-Codes funktionieren dann nicht mehr.",
+    "regenerateConfirm": "Meine Codes ersetzen",
+    "backToConsole": "Zurück zu deiner Konsole",
+    "errors": {
+      "invalid_code": "Dieser Code hat nicht funktioniert. Prüfe, ob dein Handy die Uhrzeit automatisch einstellt, und versuche es erneut.",
+      "rate_limited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
+      "not_pending": "Starte die Einrichtung erneut.",
+      "required": "Deine Rolle erfordert die Zwei-Schritt-Verifizierung, deshalb kann sie nicht ausgeschaltet werden.",
+      "already_enabled": "Die Zwei-Schritt-Verifizierung ist bereits eingeschaltet.",
+      "not_enabled": "Die Zwei-Schritt-Verifizierung ist ausgeschaltet."
+    }
+  },
+  "stepUp": {
+    "title": "Bestätige, dass du es bist",
+    "why": "Für sensible Änderungen ist eine aktuelle Anmeldung nötig. Nach der Bestätigung fragen wir 10 Minuten lang nicht erneut.",
+    "explain": {
+      "totp": "Gib den 6-stelligen Code aus deiner Authenticator-App oder einen Backup-Code ein.",
+      "password": "Gib dein Passwort ein.",
+      "email": "Wir haben dir einen 6-stelligen Code per E-Mail geschickt. Er ist 10 Minuten gültig."
+    },
+    "loading": "Einen Moment …",
+    "codeLabel": "Code",
+    "codeHint": "6 Ziffern oder ein Backup-Code",
+    "passwordLabel": "Passwort",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "resend": "Neuen Code per E-Mail senden",
+    "resent": "Wir haben einen neuen Code gesendet.",
+    "invalidCode": "Dieser Code hat nicht funktioniert. Versuche es erneut.",
+    "invalidPassword": "Dieses Passwort ist nicht richtig.",
+    "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
+    "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
   }
 }

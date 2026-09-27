@@ -4,13 +4,20 @@ import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
  * Envelope encryption for secrets we must store (ticket signing keys, OAuth tokens, TOTP seeds).
  * Production uses AWS KMS with a per-org data key (roadmap §10; owner account pending).
  * Dev/preview/CI use the local adapter with LOCAL_KMS_KEY; it refuses to run in production.
+ *
+ * The first argument is the key scope: an org id for tenant secrets, or a platform scope such
+ * as `platform:identity` for global secrets (users' TOTP seeds). A ciphertext only opens under
+ * the scope it was sealed with.
  */
 export interface KeyVault {
   encrypt(orgId: string, plaintext: Uint8Array): Promise<string>;
   decrypt(orgId: string, ciphertext: string): Promise<Uint8Array>;
 }
 
-/** AES-256-GCM with the org id as additional data, so a ciphertext cannot move between orgs. */
+/** The key scope for global identity secrets (TOTP seeds and backup codes). */
+export const IDENTITY_KEY_SCOPE = 'platform:identity';
+
+/** AES-256-GCM with the scope (org id) as additional data, so a ciphertext cannot move between orgs. */
 export function localKeyVault(masterKeyHex: string): KeyVault {
   if (process.env.VERCEL_ENV === 'production')
     throw new Error('The local key vault is not allowed in production');

@@ -46,6 +46,22 @@ export function createCtx(init: CtxInit = {}): Ctx {
   });
 }
 
+/**
+ * How long a re-authentication counts for step-up: the session's "fresh" window (M1.2a). Signing in
+ * is a re-authentication too, so a session is fresh for this long after it was created.
+ */
+export const STEP_UP_WINDOW_MS = 10 * 60_000;
+
+/** Tolerated clock skew between the database (session timestamps) and the app server. */
+const STEP_UP_SKEW_MS = 60_000;
+
+/** Whether a re-authentication at `stepUpAt` still satisfies step-up at `now`. */
+export function isStepUpFresh(stepUpAt: Date | null, now: Date): boolean {
+  if (!stepUpAt) return false;
+  const age = now.getTime() - stepUpAt.getTime();
+  return age > -STEP_UP_SKEW_MS && age < STEP_UP_WINDOW_MS;
+}
+
 /** The tenant for this context, or a DomainError if the context is not tenant-scoped. */
 export function requireOrg(ctx: Ctx): string {
   if (!ctx.orgId) throw new DomainError('forbidden', 'Tenant context required');

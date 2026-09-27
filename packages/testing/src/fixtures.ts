@@ -64,8 +64,21 @@ export interface OrgFixture {
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
 }
 
+/**
+ * A signed-in user's context. Like a real session it counts as freshly stepped up (signing in is
+ * a re-authentication, M1.2c) unless `stepUpAt` is given: pass `stepUpAt: null` or an old date to
+ * act as a user whose fresh window has passed.
+ */
 export const userCtx = (userId: string, orgId: string | null = null, extra: Partial<Ctx> = {}): Ctx =>
-  createCtx({ orgId, actor: { type: 'user', userId }, ...extra });
+  createCtx({
+    orgId,
+    actor: { type: 'user', userId },
+    ...extra,
+    stepUpAt: 'stepUpAt' in extra ? (extra.stepUpAt ?? null) : (extra.now ?? new Date()),
+  });
+
+/** A user context whose step-up window has passed (11 minutes since the last re-authentication). */
+export const staleCtx = (ctx: Ctx): Ctx => ({ ...ctx, stepUpAt: new Date(ctx.now.getTime() - 11 * 60_000) });
 
 export const systemCtx = (orgId: string) => createCtx({ orgId, actor: { type: 'system', name: 'fixture' } });
 

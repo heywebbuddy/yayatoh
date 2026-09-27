@@ -1,19 +1,32 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page, test } from '@playwright/test';
+import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
 
 const WEB = `http://localhost:${process.env.E2E_PORT ?? 3100}`;
 const STAFF = 'omar@yayatoh.test';
 const NOT_STAFF = 'pani@lakeside.test';
 
-async function signIn(page: Page, email: string) {
+function devPassword(): string {
   const password = process.env.DEV_PERSONA_PASSWORD;
   if (!password) throw new Error('DEV_PERSONA_PASSWORD is not set');
+  return password;
+}
+
+/** The seeded owners have two-step verification (M1.2c): their code comes from the dev secret. */
+const personaCode = (email: string) =>
+  totp(secretKey(devPersonaTotpSecret(email, devPassword())), Date.now());
+
+async function signIn(page: Page, email: string, opts: { twoFactor?: boolean } = {}) {
   await page.goto('/');
   await expect(page).toHaveURL(/\/sign-in$/);
   await page.getByLabel('Email').fill(email);
-  await page.getByLabel('Password').fill(password);
+  await page.getByLabel('Password').fill(devPassword());
   await page.getByRole('button', { name: 'Sign in' }).click();
+  if (!opts.twoFactor) return;
+  await expect(page.getByRole('heading', { name: 'Two-step verification' })).toBeVisible();
+  await page.getByLabel('6-digit code').fill(personaCode(email));
+  await page.getByRole('button', { name: 'Verify and sign in' }).click();
 }
 
 async function expectAccessible(page: Page) {
@@ -27,8 +40,22 @@ async function expectAccessible(page: Page) {
   );
 }
 
-test('an organizer account is not staff: no console', async ({ page }) => {
+test('a sign-in with two-step verification asks for the code; a wrong code is refused', async ({ page }) => {
   await signIn(page, NOT_STAFF);
+  await expect(page.getByRole('heading', { name: 'Two-step verification' })).toBeVisible();
+  await expectAccessible(page);
+  const code = page.getByLabel('6-digit code');
+  const right = personaCode(NOT_STAFF);
+  await code.fill(right === '000000' ? '111111' : '000000');
+  await page.getByRole('button', { name: 'Verify and sign in' }).click();
+  await expect(page.getByRole('alert').filter({ hasText: "That code didn't work" })).toBeVisible();
+  await code.fill(personaCode(NOT_STAFF));
+  await page.getByRole('button', { name: 'Verify and sign in' }).click();
+  await expect(page).toHaveURL(/\/not-staff$/);
+});
+
+test('an organizer account is not staff: no console', async ({ page }) => {
+  await signIn(page, NOT_STAFF, { twoFactor: true });
   await expect(page).toHaveURL(/\/not-staff$/);
   await expect(page.getByRole('heading', { name: 'Not a staff account' })).toBeVisible();
   await expectAccessible(page);
@@ -221,7 +248,7 @@ test('staff read the commission report: a fee booked on a sale shows up for the 
 });
 
 test('an organizer account cannot open the commission report', async ({ page }) => {
-  await signIn(page, NOT_STAFF);
+  await signIn(page, NOT_STAFF, { twoFactor: true });
   await expect(page).toHaveURL(/\/not-staff$/);
   await page.goto('/commission');
   await expect(page).toHaveURL(/\/not-staff$/);

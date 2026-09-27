@@ -7,6 +7,7 @@ import { Button, buttonClass, EmptyState, Input, PageHeader, StatusDot, Table } 
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { fmtMoney, ReportTabs } from '@/components/reports.tsx';
+import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -117,13 +118,13 @@ export default async function BookingsPage({
             : ''}
         </p>
         {canExport && r.total > 0 ? (
-          <form action={exportBookingsAction.bind(null, org, event)}>
+          <StepUpForm action={exportBookingsAction.bind(null, org, event)}>
             <input type="hidden" name="q" value={q} />
             <input type="hidden" name="filter" value={filter} />
             <Button type="submit" variant="secondary" size="sm">
               {t('reports.bookings.export')}
             </Button>
-          </form>
+          </StepUpForm>
         ) : null}
       </div>
       {sp.exportError ? (

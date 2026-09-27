@@ -31,6 +31,15 @@ type RefundRequest = z.output<typeof RefundRequest>;
 
 const REFUNDABLE = ['paid', 'partially_refunded'] as const;
 
+/**
+ * A "large" refund needs a recent step-up (roadmap §10): at least this many minor units (500.00
+ * in a two-decimal currency), or the whole order at once. **Pending owner confirmation.**
+ */
+export const LARGE_REFUND_MINOR = 50_000;
+
+export const isLargeRefund = (amountMinor: number, orderTotalMinor: number) =>
+  amountMinor >= LARGE_REFUND_MINOR || amountMinor >= orderTotalMinor;
+
 interface Computed {
   amountMinor: number;
   feeRefundedMinor: number;
@@ -134,8 +143,9 @@ export const startRefundCommand = tenantCommand({
   }),
   entitlement: 'ticketing',
   permission: 'orders:refund',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, requireStepUp }) => {
     const { order, c } = await computeTx(tx, input, true);
+    if (isLargeRefund(c.amountMinor, order.totalMinor)) await requireStepUp();
     if (!order.providerPaymentId)
       throw new DomainError('invalid_state', 'This order has no provider payment', { reason: 'no_payment' });
     const [r] = await tx

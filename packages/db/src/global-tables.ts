@@ -9,7 +9,10 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'auth.sessions': 'Better Auth sessions; accessed only through packages/auth.',
   'auth.accounts': 'Credentials and OAuth links; accessed only through packages/auth.',
   'auth.verifications': 'OTP / magic-link / verification tokens; accessed only through packages/auth.',
-  'auth.two_factors': 'TOTP secrets and backup codes; accessed only through packages/auth.',
+  'auth.two_factors':
+    'TOTP secrets and backup codes (KMS-envelope encrypted); accessed only through packages/auth.',
+  'auth.security_events':
+    'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
   'platform.signup_codes':

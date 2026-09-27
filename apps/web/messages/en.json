@@ -24,7 +24,8 @@
     "switchContext": "Switch organization or event",
     "yourOrganizations": "Your organizations",
     "organization": "Organization",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "security": "Account security"
   },
   "notifications": {
     "open": "Notifications",
@@ -355,7 +356,25 @@
     "invalid": "That email and password don't match.",
     "invalidCode": "That code is wrong or has expired.",
     "failed": "We couldn't send a code. Please try again.",
-    "devPersonas": "Development personas"
+    "devPersonas": "Development personas",
+    "challenge": {
+      "title": "Two-step verification",
+      "explainTotp": "Enter the 6-digit code from your authenticator app.",
+      "explainBackup": "Enter one of your backup codes. Each code works once.",
+      "totpLabel": "6-digit code",
+      "backupLabel": "Backup code",
+      "backupHint": "For example: abcde-12345",
+      "verify": "Verify and sign in",
+      "useBackup": "Use a backup code instead",
+      "useTotp": "Use your authenticator app instead",
+      "startOver": "Sign in again",
+      "errors": {
+        "invalid_code": "That code didn't work. Try again.",
+        "too_many_attempts": "Too many wrong codes. Sign in again to get another try.",
+        "locked": "Too many failed attempts. Try again in 15 minutes.",
+        "expired": "This sign-in has expired. Sign in again."
+      }
+    }
   },
   "orgPicker": {
     "emptyTitle": "You're not in an organization yet",
@@ -1028,7 +1047,8 @@
         "transferred": "Paid out",
         "failed": "Retrying"
       }
-    }
+    },
+    "destinationHold": "New payout account: for your security, transfers to it start after {until}. Your organization's owners were emailed."
   },
   "fakeConnect": {
     "eyebrow": "Test mode",
@@ -1527,5 +1547,75 @@
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
     }
+  },
+  "security": {
+    "metaTitle": "Account security",
+    "eyebrow": "Your account",
+    "title": "Security",
+    "description": "Protect your Yayatoh account with two-step verification.",
+    "requiredTitle": "Two-step verification is required",
+    "requiredExplain": "People who can move money, change payouts and domains, or give others access must use two-step verification. Set it up to open your console.",
+    "requiredFor": "{role} at {org}",
+    "appTitle": "Authenticator app",
+    "statusOn": "On",
+    "statusOff": "Off",
+    "appExplain": "After your password or emailed code, you enter a 6-digit code from an authenticator app on your phone.",
+    "setUp": "Set up authenticator app",
+    "step1": "Scan this QR code with your authenticator app.",
+    "qrLabel": "QR code for your authenticator app. If you can't scan it, enter the setup key shown below it.",
+    "manualKeyLabel": "Can't scan it? Enter this setup key in the app instead:",
+    "copyKey": "Copy setup key",
+    "copied": "Copied.",
+    "step2": "Enter the 6-digit code your app shows.",
+    "codeLabel": "6-digit code",
+    "verify": "Verify and turn on",
+    "cancel": "Cancel",
+    "enabledNow": "Two-step verification is on.",
+    "codesTitle": "Backup codes",
+    "codesExplain": "If you lose your phone, sign in with one of these codes. Each code works once. Save them somewhere safe: we won't show them again.",
+    "copyCodes": "Copy codes",
+    "downloadCodes": "Download codes",
+    "codesSaved": "I've saved my codes",
+    "codesFileHeader": "Yayatoh backup codes. Each code works once.",
+    "continueToConsole": "Continue to your console",
+    "turnOff": "Turn off two-step verification",
+    "turnOffExplain": "Enter a code from your authenticator app, or a backup code, to turn it off.",
+    "currentCodeLabel": "Code",
+    "turnOffConfirm": "Turn off",
+    "cannotTurnOff": "Your role requires two-step verification, so it can't be turned off: {reasons}.",
+    "codesLeft": "{count, plural, =0 {No backup codes left} one {# backup code left} other {# backup codes left}}",
+    "regenerate": "Get new backup codes",
+    "regenerateWarning": "Your current backup codes will stop working.",
+    "regenerateConfirm": "Replace my codes",
+    "backToConsole": "Back to your console",
+    "errors": {
+      "invalid_code": "That code didn't work. Check that your phone sets its time automatically, then try again.",
+      "rate_limited": "Too many attempts. Wait 15 minutes, then try again.",
+      "not_pending": "Start the set-up again.",
+      "required": "Your role requires two-step verification, so it can't be turned off.",
+      "already_enabled": "Two-step verification is already on.",
+      "not_enabled": "Two-step verification is off."
+    }
+  },
+  "stepUp": {
+    "title": "Confirm it's you",
+    "why": "Sensitive changes need a recent sign-in. Once you confirm, we won't ask again for 10 minutes.",
+    "explain": {
+      "totp": "Enter the 6-digit code from your authenticator app, or a backup code.",
+      "password": "Enter your password.",
+      "email": "We emailed you a 6-digit code. It expires in 10 minutes."
+    },
+    "loading": "One moment…",
+    "codeLabel": "Code",
+    "codeHint": "6 digits, or a backup code",
+    "passwordLabel": "Password",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "resend": "Email me a new code",
+    "resent": "We sent a new code.",
+    "invalidCode": "That code didn't work. Try again.",
+    "invalidPassword": "That password isn't right.",
+    "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
+    "unauthenticated": "Your session has ended. Sign in again."
   }
 }
