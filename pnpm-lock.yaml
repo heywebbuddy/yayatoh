@@ -532,6 +532,9 @@ importers:
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../../packages/modules/checkin
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -550,6 +553,9 @@ importers:
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../../packages/modules/payments
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../packages/pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform

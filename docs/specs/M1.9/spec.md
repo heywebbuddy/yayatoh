@@ -129,7 +129,7 @@ Manual, per release: install the PWA on a phone, open it in airplane mode (servi
   - `invalid_burst`: the 5th invalid code from one signed-in scanner within 60 s raises one signal per burst.
   - Device velocity, signature-failure trends, transfer churn and checkout velocity are later work (M3.3).
 - **Door screen:** shows today's count per entrance and a "things to check" panel. Managers get an Entrances and zones section with create and archive/restore.
-- **Not yet:** event-role scope by checkpoint (`scope.checkpoints` on door-staff assignments) is still to come. For now, door staff can scan at any checkpoint of their event.
+- **Not yet:** event-role scope by checkpoint — done in M1.9d.
 
 ### Acceptance (M1.9c2a)
 | ID | Criterion | Test |
@@ -154,10 +154,47 @@ Manual, per release: install the PWA on a phone, open it in airplane mode (servi
 
 Manual, per release: iPhone Safari, camera scan in daylight and low light.
 
+## M1.9d — checkpoint-scoped door staff, device velocity signals, drill runbook (done)
+- **Checkpoint-scoped door staff:**
+  - A door-staff assignment can list checkpoints: `events.event_role_assignments.checkpoint_ids` (empty = the whole event). `checkin.setDoorStaff` / `checkin.removeDoorStaff` (`members:manage`, audited as `event.door_staff.set|remove`) validate the member and that every checkpoint is a live one of the event; the events module stores it (`upsertEventRoleTx`, a tier-2 function called down the tiers).
+  - Scope resolution (`userScanScopeTx`): an org role that scans (owner, admin, manager, box office, scanner) is never scoped; otherwise the live `door_staff`/`session_scanner` assignments decide (any unscoped one, or an `event_manager` role, = anywhere; else the union of their checkpoints). Expired or removed assignments grant nothing (the authorizer already refuses).
+  - Online (`checkin.scanTicket`): outside the scope, including "whole event", the verdict is **`wrong_checkpoint`**: nothing admitted, no ticket described, the scan logged without a ticket id.
+  - Devices can be **handed to** a member at enrollment (`devices.assigned_user_id`); the device then follows that member's scope. Unassigned devices scan anywhere (as before).
+  - **Manifest v2**: the header lists only the device's checkpoints and carries `scope: { eventId, deviceId, checkpointIds | null, signature }`, signed with the org's Ed25519 ticket key over a domain-separated statement (`signStatement`/`verifyStatement` in `ticket-crypto`, tag `checkin-scope-v1`). `offlineVerdict` returns `wrong_checkpoint` outside the scope. The Scan PWA verifies the signature before using a manifest and refetches a v1 snapshot in full on its next sync; until then an old snapshot keeps scanning offline and the **server enforces the scope on sync** (old app versions included). A device handed to someone with no role at the event gets 403 on the manifest ("This device isn't assigned to this event").
+  - **Staff screen** (`/o/{org}/e/{event}/onsite/staff`): lists door staff and where each scans; owners/admins add a member and tick checkpoints (native checkboxes: a keyboard multi-select; none ticked = the whole event), edit and remove, with success and error messages. Anyone with `events:read` sees it read-only.
+  - **Door screen:** "Door staff by checkpoint" (the whole event first, then each live checkpoint), a "Handed to" choice when adding a device, and scoped staff see only their checkpoints under "Scanning at" with "Choose your checkpoint" instead of "Whole event".
+- **Device velocity signals** (same `checkin.fraud_signals` table and `checkin.fraud_signal@1` event, extended):
+  - Pure rules in `checkin-engine` (`detectVelocity`, unit-tested with fixed clocks): `device_velocity` (more than N scans in any 60 s from one device or signed-in scanner; N per event, default 40), `rejected_burst` (8 refused scans within 2 minutes from one device), `impossible_travel` (two successful scans of one ticket at located checkpoints ≥ 50 m apart, faster than the event's km/h, default 12, within 30 minutes; haversine distance).
+  - The server runs them after every online scan and after every synced offline batch, over the log by corrected time; re-running over the same log raises nothing twice (bursts deduplicated per source and window, travel per scan pair).
+  - Checkpoints get an optional location (latitude/longitude, both or neither).
+  - Per-event **detection rules** (`checkin.detection_settings`: scans per minute 2–600, km/h 1–200; `events:write`, audited).
+  - Every signal now stores a **severity** (two entrances and travel high; velocity and invalid bursts medium; refused bursts low) and a **status**: open → acknowledged or dismissed (`checkin.resolveFraudSignal`, `events:write`, audited as `fraud_signal.acknowledge|dismiss`, once).
+  - The door screen shows open signals with severity and what tripped them; the **fraud list** (`/onsite/signals`) shows all, open first by severity, with Acknowledge/Dismiss and the detection rules. Door staff can read it; viewers without an event role can't. Details leave through an allowlist of numbers.
+- **Drill:** `docs/runbooks/checkin-drill.md` and `pnpm --filter @yayatoh/worker drill-tickets -- --org <slug>` (dev/staging with the fake provider only): an event with 2 entrances and a zone, 265 valid tickets and 5 paid-then-refunded (void, the drill's "unpaid"), a 300-scan plan (CSV), printable QR cards and a results template.
+- **Migration 0041** (`0041_curved_mole_man.sql`): new `checkin.detection_settings` (RLS forced, FK to events); new columns on `checkpoints` (location), `devices` (assigned user), `fraud_signals` (severity, status, resolved at/by) and `events.event_role_assignments` (checkpoint ids); checks on existing tables added `NOT VALID` then validated; the kind and result checks widened by add-v2 → validate → drop → rename; existing `two_entrances` signals backfilled to `high`.
+- **`/v1` (additive):** the manifest header gains `version` and `scope`; the manifest may answer 403; batch results may say `wrong_checkpoint`. Strings in 13 locales.
+
+### Acceptance (M1.9d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Velocity rules: rate over a sliding minute (one signal per burst), refused bursts, haversine distances and impossible travel with time windows, idempotent over the same log | `packages/checkin-engine/tests/velocity.test.ts` |
+| AC2 | The scope is signed and verified (widened, re-targeted or foreign-key scopes fail); scoped devices refuse elsewhere offline; v1 manifests still work | `packages/checkin-engine/tests/scope.test.ts` |
+| AC3 | Assignments validate member and checkpoints, are audited, and only `members:manage` can change them; another org can't | `packages/testing/tests/door-scope.int.test.ts` |
+| AC4 | Online verdicts: scoped staff admit at their checkpoint and get `wrong_checkpoint` elsewhere (no ticket leaked); org roles unscoped; widening, expiry and removal behave | `door-scope.int.test.ts` |
+| AC5 | Manifests: a device handed to scoped staff gets only their checkpoints with a verifiable scope; unassigned devices get all; unassigned-to-event → 403; sync enforces the scope for old devices | `door-scope.int.test.ts` |
+| AC6 | Signals from online scans and from synced offline logs (corrected time), once per burst and re-sync-idempotent; severity; outbox events | `packages/testing/tests/velocity.int.test.ts` |
+| AC7 | Fraud list ordering and allowlisted details; acknowledge/dismiss audited, once; viewers, door staff and other orgs refused; the door screen shows open ones only; detection rules validated and audited; the new table is in the isolation suite | `velocity.int.test.ts`, `isolation.int.test.ts` |
+| AC8 | End to end: assign by keyboard; the member's door screen and Scan PWA refuse elsewhere and admit at the gate; the door screen lists staff per checkpoint; read-only for the member; widen and remove; Arabic RTL; axe; no sideways scroll at 375 | `apps/web/e2e/door-staff.spec.ts` |
+| AC9 | End to end: rules validation; rapid scans raise a velocity signal on the door screen and fraud list; bursts; acknowledge (keyboard) and dismiss persist; viewer denied; checkpoint location validation; Arabic RTL; axe | `apps/web/e2e/velocity-signals.spec.ts` |
+| AC10 | The drill (3 devices, 300 scans) on real hardware | **Owner** — `docs/runbooks/checkin-drill.md` (not automated) |
+
+### Later / not yet
+- Legacy QR payloads (needs the owner's legacy corpus) and Ably realtime (owner account) remain.
+- Signals on the order timeline (roadmap M1.9 "surfaced … on the order timeline") and alert delivery (push/email) arrive with M1.10 notifications; signature-failure trends, transfer churn and checkout velocity stay in M3.3.
+- Scoped *devices* follow their member's scope; a device-only scope (without a member) is not offered.
+- The Scan PWA doesn't show fraud signals; the door screen and fraud list do.
+
 ## Remaining M1.9 increments
-- **M1.9c2 (rest):**
-  - checkpoint-scoped door-staff assignments
-  - legacy QR payloads (needs the legacy corpus from the owner's data access)
-  - Ably realtime (owner account)
-  - device velocity signals
-  - the 3-device / 300-scan drill on real hardware
+- legacy QR payloads (needs the legacy corpus from the owner's data access)
+- Ably realtime (owner account)
+- the 3-device / 300-scan drill on real hardware (owner; runbook ready)
