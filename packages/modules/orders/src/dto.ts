@@ -1,4 +1,5 @@
 import { defineSerializer } from '@yayatoh/contracts';
+import { BuyerMessageDto } from '@yayatoh/notifications';
 import { z } from 'zod';
 import { ORDER_STATUSES } from './schema.ts';
 
@@ -75,6 +76,8 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   /** Tickets of this order now held by someone else (passed on with a claim link). */
   transferred: z.int(),
   event: HolderEventDto,
+  /** "Emails sent": messages to the buyer's address about this order (notifications log). */
+  messages: z.array(BuyerMessageDto),
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);

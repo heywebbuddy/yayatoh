@@ -25,6 +25,12 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   if (!order) notFound();
   const t = await getTranslations();
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
+  // Times in the event's own timezone (ADR 0015).
+  const when = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: order.event.timezone,
+  });
   const typeName = new Map(order.items.map((i) => [i.ticketTypeId, i.name]));
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -106,6 +112,32 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </ul>
         </section>
       ) : null}
+      <section aria-labelledby="emails-heading" className="flex flex-col gap-3">
+        <h2 id="emails-heading" className="text-section">
+          {t('order.emailsSent')}
+        </h2>
+        {order.messages.length === 0 ? (
+          <p className="text-body text-zinc-600">{t('order.emailsNone')}</p>
+        ) : (
+          <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+            {order.messages.map((m) => (
+              <li key={m.id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
+                <span className="flex flex-col">
+                  <span>{t(`notifications.kinds.${m.kind}`)}</span>
+                  {m.subject ? <span className="text-caption text-zinc-500">{m.subject}</span> : null}
+                </span>
+                <span className="text-caption text-zinc-600">
+                  {m.status === 'sent'
+                    ? t('order.emailSentAt', { when: when.format(m.at) })
+                    : m.status === 'scheduled'
+                      ? t('order.emailScheduled', { when: when.format(m.at) })
+                      : t('order.emailQueued')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { actorId, type Ctx, type DomainEvent, requireOrg } from '@yayatoh/kernel';
+import { and, asc, gt, inArray } from 'drizzle-orm';
 import { domainEvents } from '../schema.ts';
 
 /** Write events to the outbox inside the caller's tenant transaction (step 8). */
@@ -48,3 +49,34 @@ export function defineSubscriber(s: Subscriber): Subscriber {
 }
 
 export const eventKey = (e: { type: string; version: number }) => `${e.type}@${e.version}`;
+
+/**
+ * This org's recent outbox events of the given types (dev tooling: the web app's dev drain
+ * replays them through subscribers; consumers dedupe, so replays are harmless).
+ */
+export async function recentEventsTx(
+  tx: TenantTx,
+  orgId: string,
+  types: readonly string[],
+  sinceMs: number,
+): Promise<PublishedEvent[]> {
+  if (types.length === 0) return [];
+  const rows = await tx
+    .select()
+    .from(domainEvents)
+    .where(
+      and(inArray(domainEvents.type, [...types]), gt(domainEvents.createdAt, new Date(Date.now() - sinceMs))),
+    )
+    .orderBy(asc(domainEvents.createdAt), asc(domainEvents.id))
+    .limit(500);
+  return rows.map((r) => ({
+    id: r.id,
+    orgId,
+    type: r.type,
+    version: r.version,
+    aggregateType: r.aggregateType,
+    aggregateId: r.aggregateId,
+    payload: r.payload,
+    logSeq: r.logSeq ?? 0,
+  }));
+}

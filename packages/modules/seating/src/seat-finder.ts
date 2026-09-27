@@ -8,7 +8,7 @@ import {
   appTokenSecret,
   defineSubscriber,
   hitRateLimitTx,
-  type Mailer,
+  type Notifier,
   tenantCommand,
   tenantQuery,
 } from '@yayatoh/platform';
@@ -425,7 +425,7 @@ const CodePayload = z.object({ orgId: z.uuid(), eventId: z.uuid(), codeId: z.uui
  * Emails a seat finder code (worker). Lookups for addresses not on the list emit the same event;
  * their rows have no address, so nothing is sent. The code is re-derived; the event carries none.
  */
-export function finderCodeMailer(deps: { mailer: Mailer; appOrigin: string }) {
+export function finderCodeMailer(deps: { notifier: Notifier; appOrigin: string }) {
   return defineSubscriber({
     name: 'seating.finder-code-mailer',
     events: ['seating.finder_code_created@1'],
@@ -438,16 +438,18 @@ export function finderCodeMailer(deps: { mailer: Mailer; appOrigin: string }) {
       if (!row?.email || row.expiresAt <= new Date()) return;
       const ev = await findEventTx(tx, p.eventId);
       if (!ev) return;
-      await deps.mailer.send({
-        to: row.email,
-        template: 'seating.finder-code',
+      // Through the notifications core (M1.10): logged, deduplicated, urgent (no quiet hours).
+      await deps.notifier.enqueue(tx, {
+        kind: 'seating.finder-code',
+        to: { email: row.email, timeZone: ev.timezone },
         params: {
           code: finderCodeFor(row.id),
           eventName: ev.name,
           url: `${deps.appOrigin}/events/${ev.slug}/seat-finder`,
           minutes: FINDER_CODE_TTL_MS / 60_000,
         },
-        idempotencyKey: `finder-code:${row.id}`,
+        dedupeKey: `finder-code:${row.id}`,
+        eventId: p.eventId,
       });
     },
   });

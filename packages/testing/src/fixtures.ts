@@ -18,6 +18,24 @@ import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import {
+  announcementMailer,
+  contactMessageCommand,
+  contactReportCommand,
+  reportThreadCommand,
+  sendAnnouncementCommand,
+  threadToken,
+} from '@yayatoh/messaging';
+import {
+  createNotifier,
+  dispatchDue,
+  memoryTransports,
+  registerPushTokenCommand,
+  setMyPreferencesCommand,
+  setTemplateOverrideCommand,
+  unsubscribeCommand,
+  unsubscribeUrls,
+} from '@yayatoh/notifications';
+import {
   applyDisputeEventCommand,
   applyProviderEventCommand,
   attachPaymentCommand,
@@ -26,7 +44,7 @@ import {
   startRefundCommand,
 } from '@yayatoh/orders';
 import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
-import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
+import { consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
   assignSeatsCommand,
@@ -39,12 +57,15 @@ import {
 } from '@yayatoh/seating';
 import {
   AGREEMENT_DOCUMENTS,
+  API_KEY_SCOPES,
   acceptAgreementCommand,
   addMemberCommand,
+  createApiKeyCommand,
   createOrganization,
   inviteMemberCommand,
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
+  revokeApiKeyCommand,
   setLegalPageCommand,
   setSuspensionCommand,
   updateOrganizationCommand,
@@ -63,6 +84,8 @@ export interface OrgFixture {
   readonly ownerId: string;
   readonly viewerId: string;
   readonly event: EventDto;
+  /** A live org API key with every scope (the /v1 tests' credential). */
+  readonly apiKey: string;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
 }
@@ -264,6 +287,20 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
+  // Org API keys: one live with every scope, one revoked (isolation coverage).
+  const { key: apiKey } = await executeCommand(
+    createApiKeyCommand,
+    { name: `Fixture ${slug}`, scopes: [...API_KEY_SCOPES] },
+    ctx(),
+    ports,
+  );
+  const retired = await executeCommand(
+    createApiKeyCommand,
+    { name: `Retired ${slug}`, scopes: ['events:read'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(revokeApiKeyCommand, { apiKeyId: retired.id }, ctx(), ports);
   // One admission (and its scan) at event time, so the check-in tables are covered.
   const [issued] = await withTenant(systemCtx(org.id), (tx) =>
     tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
@@ -427,7 +464,96 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
-  return { org, ownerId, viewerId, event, ctx };
+  // Notifications (M1.10): a queued and a sent message, an inbox item, a preference, a push
+  // token, a template override and an unsubscribe (isolation coverage).
+  const notifier = createNotifier();
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await notifier.enqueue(tx, {
+      kind: 'attendees.message',
+      to: { email: `fan+${slug}@example.test`, timeZone: 'UTC' },
+      params: { subject: 'Hello', body: 'Welcome', name: 'Fan', eventName: event.name },
+      dedupeKey: `fixture:${slug}`,
+      eventId: event.id,
+    });
+    await notifier.notifyMembers(tx, {
+      kind: 'sales.order_paid',
+      params: { name: 'Fixture', eventName: event.name, count: 1, amountMinor: 1000, currency: 'USD' },
+      dedupeKey: `fixture-sale:${slug}`,
+    });
+  });
+  await dispatchDue(org.id, {
+    transports: memoryTransports().transports,
+    appOrigin: 'https://app.yayatoh.test',
+    ignoreQuietHours: true,
+  });
+  const [sentMessage] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from notifications.messages where dedupe_key = ${`fixture:${slug}`} and status = 'sent'`,
+    ),
+  );
+  if (!sentMessage) throw new Error('fixture: the notification was not sent');
+  const unsubscribeToken =
+    unsubscribeUrls('https://app.yayatoh.test', sentMessage.id).page.split('/').pop() ?? '';
+  await executeCommand(
+    unsubscribeCommand,
+    { token: unsubscribeToken, source: 'page' },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    notifier.enqueue(tx, {
+      kind: 'attendees.message',
+      to: { email: `later+${slug}@example.test` },
+      params: { subject: 'Later', body: 'Soon', name: 'Later', eventName: event.name },
+      dedupeKey: `fixture-later:${slug}`,
+      sendAfter: new Date('2099-01-01T00:00:00Z'),
+    }),
+  );
+  await executeCommand(
+    setMyPreferencesCommand,
+    { preferences: [{ category: 'sales', channel: 'email', enabled: true }] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    registerPushTokenCommand,
+    { platform: 'fcm', token: `fixture-token-${slug}` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setTemplateOverrideCommand,
+    { kind: 'orders.tickets', locale: 'en', subject: `Tickets from ${name}`, intro: null },
+    ctx(),
+    ports,
+  );
+  // Messaging (M1.10c): an announcement fanned out to the event's attendees, a contact's reply,
+  // and a report from each side (isolation coverage).
+  const sent = await executeCommand(
+    sendAnnouncementCommand,
+    { eventId: event.id, subject: 'Doors at 7', body: 'See you there.', channels: ['email'] },
+    ctx({ idempotencyKey: `fixture-announcement-${slug}` }),
+    ports,
+  );
+  const [announced] = await withTenant(systemCtx(org.id), (tx) =>
+    recentEventsTx(tx, org.id, ['announcement.sent'], 3_600_000),
+  );
+  if (!announced || !sent.id) throw new Error('fixture: no announcement event');
+  await consumeEvent(announcementMailer({ notifier, appOrigin: 'https://app.yayatoh.test' }), announced);
+  const [thread] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(sql`select id from messaging.threads order by created_at limit 1`),
+  );
+  if (!thread) throw new Error('fixture: no conversation');
+  const anon = createCtx({ orgId: org.id });
+  await executeCommand(
+    contactMessageCommand,
+    { token: threadToken(thread.id), body: 'Is there parking?' },
+    anon,
+    ports,
+  );
+  await executeCommand(contactReportCommand, { token: threadToken(thread.id), reason: 'other' }, anon, ports);
+  await executeCommand(reportThreadCommand, { threadId: thread.id, reason: 'spam' }, ctx(), ports);
+  return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

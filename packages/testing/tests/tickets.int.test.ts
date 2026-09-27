@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { orderByManageToken, startCheckoutCommand, ticketMailer } from '@yayatoh/orders';
-import { consumeEvent, memoryMailer } from '@yayatoh/platform';
+import { consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import { verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { createTicketTypeCommand, issueTicketsTx, publicKeysTx } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
@@ -102,7 +102,7 @@ describe('tickets', () => {
 
   it('a paid order emails the tickets link; the token is never in the event or stored in clear', async () => {
     const r = await buy(2, 'mail');
-    const { mailer, sent } = memoryMailer();
+    const { notifier, sent } = memoryNotifier();
     const payload = {
       orgId: a.org.id,
       orderId: r.order.id,
@@ -111,7 +111,7 @@ describe('tickets', () => {
       currency: 'USD',
       via: 'free',
     };
-    await consumeEvent(ticketMailer({ mailer, appOrigin: 'https://app.yayatoh.test' }), {
+    await consumeEvent(ticketMailer({ notifier, appOrigin: 'https://app.yayatoh.test' }), {
       id: uuidv7(),
       orgId: a.org.id,
       type: 'order.paid',
@@ -121,11 +121,12 @@ describe('tickets', () => {
       payload,
       logSeq: 1,
     });
-    expect(sent).toHaveLength(1);
-    expect(sent[0]).toMatchObject({
-      to: 'mail@example.test',
-      template: 'orders.tickets',
-      idempotencyKey: `order-tickets:${r.order.id}`,
+    const tickets = sent.filter((m) => m.kind === 'orders.tickets');
+    expect(tickets).toHaveLength(1);
+    expect(tickets[0]).toMatchObject({
+      to: { email: 'mail@example.test' },
+      orderId: r.order.id,
+      dedupeKey: `order-tickets:${r.order.id}`,
       params: { url: `https://app.yayatoh.test/orders/${r.manageToken}`, eventName: 'Tickets', count: 2 },
     });
     expect(JSON.stringify(payload)).not.toContain(r.manageToken);

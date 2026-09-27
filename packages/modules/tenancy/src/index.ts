@@ -1,5 +1,15 @@
 export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
+  API_KEY_PATTERN,
+  ApiKeyDto,
+  type ApiKeyIdentity,
+  apiKeyIdentity,
+  CreateApiKeyInput,
+  createApiKeyCommand,
+  listApiKeysQuery,
+  revokeApiKeyCommand,
+} from './commands/api-keys.ts';
+export {
   addDomainCommand,
   DomainDto,
   ensureManagedDomainCommand,
@@ -72,13 +82,17 @@ export {
   getOrganizationQuery,
   listInvitationsQuery,
   listMembersQuery,
+  memberUserIdsTx,
   myOrganizations,
+  organizationBrandTx,
   organizationDefaultsTx,
   organizationNameTx,
   organizationPublicTx,
   resolveOrgSlug,
 } from './queries.ts';
 export {
+  API_KEY_SCOPES,
+  type ApiKeyScope,
   DOMAIN_STATUSES,
   LEGAL_PAGE_KINDS,
   type LegalPageKind,

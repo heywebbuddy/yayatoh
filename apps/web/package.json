@@ -12,6 +12,7 @@
     "seed": "node scripts/seed.ts"
   },
   "dependencies": {
+    "@yayatoh/api-v1": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
@@ -24,6 +25,8 @@
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/messaging": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",

@@ -15,11 +15,14 @@
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/messaging": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
@@ -33,7 +36,6 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@yayatoh/auth": "workspace:*",
     "@yayatoh/config": "workspace:*",
     "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"

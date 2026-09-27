@@ -1,6 +1,6 @@
 import { closePools } from '@yayatoh/db/testing';
 import { executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
-import { memoryMailer, type PublishedEvent } from '@yayatoh/platform';
+import { consumeEvent, memoryNotifier, type PublishedEvent } from '@yayatoh/platform';
 import {
   acceptInvitation,
   invitationMailer,
@@ -35,8 +35,8 @@ describe('invitations', () => {
     const pending = await executeQuery(listInvitationsQuery, {}, a.ctx(), ports);
     expect(pending.map((p) => p.email)).toContain('lee@example.test');
 
-    const { mailer, sent } = memoryMailer();
-    const sub = invitationMailer({ mailer, appOrigin: 'https://app.yayatoh.test', secret: secret() });
+    const { notifier, sent } = memoryNotifier();
+    const sub = invitationMailer({ notifier, appOrigin: 'https://app.yayatoh.test', secret: secret() });
     const event: PublishedEvent = {
       id: uuidv7(),
       orgId: a.org.id,
@@ -47,7 +47,8 @@ describe('invitations', () => {
       payload: { orgId: a.org.id, invitationId: inv.id, email: inv.email, role: inv.role },
       logSeq: 1,
     };
-    await sub.handle(undefined as never, event);
+    expect(await consumeEvent(sub, event)).toBe(true);
+    expect(sent[0]).toMatchObject({ kind: 'tenancy.invitation', to: { email: inv.email } });
     expect(sent[0]?.params.url).toBe(
       `https://app.yayatoh.test/invite/${encodeURIComponent(signInvitation(inv.id, secret()))}`,
     );

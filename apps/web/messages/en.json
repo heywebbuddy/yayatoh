@@ -30,7 +30,116 @@
     "open": "Notifications",
     "title": "Notifications",
     "emptyTitle": "You're all caught up",
-    "emptyDescription": "Alerts about sales, seating and check-in will appear here."
+    "emptyDescription": "Alerts about sales, seating and check-in will appear here.",
+    "openWithCount": "Notifications, {count, plural, =0 {none unread} one {# unread} other {# unread}}",
+    "unreadAnnouncement": "{count, plural, =0 {No unread notifications} one {You have # unread notification} other {You have # unread notifications}}",
+    "markRead": "Mark as read",
+    "markReadItem": "Mark “{title}” as read",
+    "markAllRead": "Mark all as read",
+    "viewAll": "All notifications",
+    "settings": "Notification settings",
+    "unread": "Unread",
+    "loadMore": "Show older",
+    "pageTitle": "Notifications",
+    "pageDescription": "Alerts for you in this organization: new orders and messages.",
+    "allRead": "All notifications are marked as read.",
+    "items": {
+      "sales": {
+        "order_paid": "New order: {name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})"
+      },
+      "messaging": {
+        "contact_replied": "{name} sent you a message about {eventName}"
+      },
+      "notifications": {
+        "test": "Test notification: notifications are working"
+      },
+      "other": "Notification"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "Tickets",
+        "refund": "Refund"
+      },
+      "events": {
+        "reminder": "Event reminder"
+      },
+      "tenancy": {
+        "invitation": "Team invitation"
+      },
+      "ticketing": {
+        "claim-link": "Ticket claim link",
+        "holder-link": "Link to tickets"
+      },
+      "attendees": {
+        "message": "Message from the organizer"
+      },
+      "messaging": {
+        "announcement": "Announcement",
+        "reply": "Reply",
+        "contact_replied": "New message"
+      },
+      "sales": {
+        "order_paid": "New order alert"
+      },
+      "notifications": {
+        "test": "Test notification"
+      }
+    },
+    "status": {
+      "queued": "Sending",
+      "scheduled": "Scheduled",
+      "sent": "Sent",
+      "suppressed": "Not sent",
+      "failed": "Failed",
+      "canceled": "Canceled"
+    },
+    "reasons": {
+      "quiet_hours": "Held for quiet hours (9 PM–8 AM for the recipient)",
+      "messaging_paused": "Messaging is paused by Yayatoh support",
+      "unsubscribed": "The recipient unsubscribed",
+      "preference": "Turned off in the recipient's settings",
+      "no_device": "No device to push to",
+      "no_address": "No address",
+      "provider_error": "The email provider refused it",
+      "retrying": "Retrying after an error"
+    },
+    "channels": {
+      "email": "Email",
+      "sms": "SMS",
+      "push": "Push",
+      "in_app": "In the app"
+    },
+    "log": {
+      "title": "Messages",
+      "empty": "No messages about this order yet.",
+      "when": "When",
+      "message": "Message",
+      "to": "To",
+      "channel": "Channel"
+    },
+    "preferences": {
+      "title": "Notification settings",
+      "description": "Choose how you hear about things in {org}. Your choices only affect you.",
+      "categories": {
+        "sales": {
+          "name": "Sales",
+          "hint": "A new order is paid."
+        },
+        "messages": {
+          "name": "Messages",
+          "hint": "A customer writes to your organization."
+        },
+        "marketing": {
+          "name": "News from Yayatoh",
+          "hint": "Product news and tips. Off unless you turn it on."
+        }
+      },
+      "save": "Save settings",
+      "saved": "Your notification settings are saved.",
+      "test": "Send me a test notification",
+      "testSent": "Test notification sent. Check the bell.",
+      "required": "Tickets, receipts and security emails always reach you."
+    }
   },
   "nav": {
     "home": "Home",
@@ -57,6 +166,7 @@
     "settings": "Settings",
     "payouts": "Payouts",
     "domains": "Domains",
+    "apiKeys": "API keys",
     "publicSite": "Public site"
   },
   "vocab": {
@@ -530,7 +640,12 @@
     },
     "collectedBy": "Payment collected by {org}",
     "seat": "Seat",
-    "seatLabel": "Seat: {seat}"
+    "seatLabel": "Seat: {seat}",
+    "emailsSent": "Emails sent",
+    "emailsNone": "No emails yet.",
+    "emailSentAt": "Sent {when}",
+    "emailScheduled": "Scheduled for {when}",
+    "emailQueued": "Sending"
   },
   "orders": {
     "title": "Recent orders",
@@ -1664,6 +1779,169 @@
       "event": "Event",
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "Unsubscribe",
+    "eyebrow": "Email settings",
+    "title": "Emails from {org}",
+    "category": {
+      "reminders": "Reminders before events you have tickets for.",
+      "event_updates": "Updates and messages from the organizer about events you're attending.",
+      "marketing": "News and offers from the organizer.",
+      "sales": "Alerts about new orders.",
+      "messages": "Alerts about new messages."
+    },
+    "categoryName": {
+      "reminders": "event reminders",
+      "event_updates": "event updates",
+      "marketing": "news and offers",
+      "sales": "order alerts",
+      "messages": "message alerts"
+    },
+    "address": "Address: {email}",
+    "question": "Stop receiving {what} from {org} at this address?",
+    "confirm": "Unsubscribe",
+    "done": "You're unsubscribed from {what} from {org}.",
+    "resubscribe": "Subscribe again",
+    "transactionalNote": "You'll still get the emails you need, like tickets, receipts and refunds."
+  },
+  "devMailbox": {
+    "eyebrow": "Development",
+    "title": "Dev mailbox",
+    "description": "Messages the platform sent in development. Nothing here left this machine.",
+    "filter": "Recipient",
+    "apply": "Filter",
+    "emptyTitle": "No messages yet",
+    "emptyDescription": "Emails, SMS and push notifications sent in development appear here.",
+    "meta": "{channel} to {to} · {at}",
+    "show": "Show message",
+    "preview": "Email preview: {subject}"
+  },
+  "announcements": {
+    "title": "Marketing",
+    "description": "Announcements to everyone attending {event}.",
+    "composeTitle": "New announcement",
+    "subject": "Subject",
+    "message": "Message",
+    "channels": "Send by",
+    "channel": {
+      "email": "Email",
+      "push": "Push notification"
+    },
+    "pushHint": "Push reaches attendees who use the app; everyone else gets the email.",
+    "preview": "Preview",
+    "previewTitle": "Announcement preview",
+    "previewFrame": "Email preview: {subject}",
+    "willReach": "{count, plural, one {This goes to # person.} other {This goes to # people.}}",
+    "send": "{count, plural, one {Send to # person} other {Send to # people}}",
+    "edit": "Edit",
+    "sent": "{count, plural, one {Sent to # person. Delivery continues in the background.} other {Sent to # people. Delivery continues in the background.}}",
+    "sentTitle": "Sent announcements",
+    "sentEmpty": "No announcements yet.",
+    "sentAt": "Sent",
+    "recipients": "Recipients",
+    "delivery": "Delivery",
+    "deliveryCounts": "{sent} sent · {pending} pending · {notSent} not sent",
+    "errors": {
+      "subjectRequired": "Add a subject.",
+      "messageRequired": "Write a message.",
+      "channelRequired": "Choose at least one way to send it.",
+      "no_recipients": "Nobody is attending this event yet, so there is no one to send to.",
+      "messaging_paused": "Yayatoh support paused messaging for your organization."
+    }
+  },
+  "conversation": {
+    "inboxTitle": "Messages",
+    "inboxDescription": "Conversations with your customers. Replies to your announcements land here.",
+    "filters": "Show",
+    "filter": {
+      "all": "All",
+      "unread": "Unread",
+      "blocked": "Blocked"
+    },
+    "emptyTitle": "No conversations",
+    "emptyDescription": "When someone replies to an announcement, their message appears here.",
+    "unread": "Unread",
+    "blockedChip": "Blocked",
+    "you": "You",
+    "threadTitle": "Conversation",
+    "back": "All messages",
+    "threadWith": "Conversation with {name}",
+    "history": "Messages",
+    "contactBlockedYou": "This person blocked messages from your organization.",
+    "replyTitle": "Reply",
+    "replyLabel": "Your reply (sent by email)",
+    "sendReply": "Send reply",
+    "sent": "Message sent.",
+    "safetyTitle": "Block or report",
+    "block": "Block this person",
+    "unblock": "Unblock",
+    "blockedText": "Blocked: their messages are refused.",
+    "report": "Report to Yayatoh",
+    "reportReason": "Reason",
+    "reportNote": "Details (optional)",
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuse or harassment",
+      "other": "Something else"
+    },
+    "reported": "Thanks. Yayatoh will review this conversation.",
+    "publicMetaTitle": "Messages",
+    "publicEyebrow": "Messages",
+    "publicTitle": "Your conversation with {org}",
+    "publicDescription": "Only you and the organizer can read this conversation.",
+    "notAccepting": "{org} isn't accepting messages here.",
+    "writeLabel": "Write to {org}",
+    "send": "Send",
+    "blockOrg": "Block {org}",
+    "unblockOrg": "Unblock {org}",
+    "youBlocked": "You blocked {org}: you won't get their replies or event updates.",
+    "errors": {
+      "required": "Write a message first.",
+      "blocked": "This conversation is blocked.",
+      "blocked_by_contact": "This person blocked messages from your organization.",
+      "you_blocked": "Unblock the organizer to write to them."
+    }
+  },
+  "apiKeys": {
+    "title": "API keys",
+    "subtitle": "Let other software reach your organization through the Yayatoh API. Each key is shown once.",
+    "docs": "API reference",
+    "noAccessTitle": "Only owners and admins manage API keys",
+    "noAccessDescription": "Ask an owner or admin of this organization to create a key for you.",
+    "createTitle": "Create a key",
+    "name": "Name",
+    "nameHint": "Where the key will be used, e.g. “Zapier” or “Box office sync”.",
+    "nameRequired": "Give the key a name.",
+    "scopes": "Scopes",
+    "scopesHint": "A key can do only what its scopes allow, in this organization only.",
+    "scopesRequired": "Choose at least one scope.",
+    "create": "Create key",
+    "created": "Key “{name}” created.",
+    "shownOnce": "Copy it now and store it somewhere safe: it will not be shown again.",
+    "copy": "Copy key",
+    "copied": "Copied to the clipboard.",
+    "listTitle": "Your keys",
+    "empty": "No API keys yet.",
+    "key": "Key",
+    "createdAt": "Created",
+    "lastUsed": "Last used",
+    "never": "Never",
+    "status": "Status",
+    "active": "Active",
+    "revoked": "Revoked",
+    "actions": "Actions",
+    "revoke": "Revoke",
+    "revokeNamed": "Revoke key {name}",
+    "scope": {
+      "org_read": "Read the organization",
+      "events_read": "Read events and ticket types",
+      "events_write": "Create and change events",
+      "orders_read": "Read orders",
+      "orders_refund": "Refund orders",
+      "attendees_read": "Read attendees",
+      "checkin_scan": "Scan tickets"
     }
   },
   "market": {

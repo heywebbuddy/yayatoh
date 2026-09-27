@@ -1,0 +1,90 @@
+{
+  "common": {
+    "greeting": "Hi {name},",
+    "greetingNoName": "Hello,",
+    "sentBy": "Sent by {org} with Yayatoh.",
+    "poweredBy": "Powered by Yayatoh",
+    "linkFallback": "If the button doesn't work, copy this link into your browser:",
+    "unsubscribe": "Unsubscribe",
+    "why": {
+      "reminders": "You're getting this reminder because you have tickets from {org}.",
+      "event_updates": "You're getting this because you're on the guest list for an event by {org}.",
+      "marketing": "You're getting this because you subscribed to news from {org}."
+    },
+    "reply": "Reply to {org}"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Your tickets for {eventName}",
+      "intro": "{count, plural, =0 {Your order is confirmed.} one {Your ticket is ready.} other {Your # tickets are ready.}} Keep this email: the button below opens them anytime.",
+      "cta": "View my tickets"
+    },
+    "orders.refund": {
+      "subject": "Your refund for {eventName}",
+      "intro": "{fully, select, yes {Your order was refunded in full:} other {Part of your order was refunded:}} {amount}. It can take 5–10 business days to reach your account.",
+      "cta": "View my order"
+    },
+    "events.reminder": {
+      "subject": "Tomorrow: {eventName}",
+      "intro": "A reminder that {eventName} starts {when}.",
+      "venue": "Where: {venue}",
+      "cta": "Open my tickets"
+    },
+    "tenancy.invitation": {
+      "subject": "You're invited to join {orgName} on Yayatoh",
+      "intro": "{orgName} invited you to join their team as {role}.",
+      "cta": "Accept the invitation"
+    },
+    "ticketing.claim-link": {
+      "subject": "A ticket for {eventName} is waiting for you",
+      "intro": "Someone passed you a ticket for {eventName}. Claim it to get your own QR code.",
+      "cta": "Claim my ticket"
+    },
+    "ticketing.holder-link": {
+      "subject": "Your link to your tickets for {eventName}",
+      "intro": "Here is the link you asked for. It opens your tickets for {eventName}.",
+      "cta": "Open my tickets"
+    },
+    "seating.finder-code": {
+      "subject": "{code} is your seat finder code for {eventName}",
+      "intro": "Enter {code} on the seat finder to see your seat. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email.",
+      "cta": "Open the seat finder"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "A message from the organizer of {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "An update about {eventName}:",
+      "cta": "Reply to the organizer"
+    },
+    "messaging.reply": {
+      "subject": "New reply from {org}",
+      "intro": "{org} replied to your message:",
+      "cta": "Read and reply"
+    },
+    "sales.order_paid": {
+      "subject": "New order: {name}",
+      "intro": "{name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "New message from {name}",
+      "intro": "{name} wrote to you about {eventName}."
+    },
+    "notifications.test": {
+      "subject": "Test notification",
+      "intro": "Notifications are working."
+    }
+  },
+  "roles": {
+    "owner": "owner",
+    "admin": "admin",
+    "manager": "manager",
+    "finance": "finance",
+    "marketing": "marketing",
+    "box_office": "box office",
+    "scanner": "scanner",
+    "viewer": "viewer"
+  }
+}

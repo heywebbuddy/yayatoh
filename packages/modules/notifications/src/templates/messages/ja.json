@@ -1,0 +1,90 @@
+{
+  "common": {
+    "greeting": "{name} 様",
+    "greetingNoName": "こんにちは。",
+    "sentBy": "{org} が Yayatoh から送信しました。",
+    "poweredBy": "Powered by Yayatoh",
+    "linkFallback": "ボタンが使えない場合は、このリンクをブラウザにコピーしてください:",
+    "unsubscribe": "配信停止",
+    "why": {
+      "reminders": "{org} のチケットをお持ちのため、このリマインダーをお送りしています。",
+      "event_updates": "{org} のイベントのゲストリストに登録されているため、このメールをお送りしています。",
+      "marketing": "{org} のお知らせを購読されているため、このメールをお送りしています。"
+    },
+    "reply": "{org} に返信"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "{eventName} のチケット",
+      "intro": "{count, plural, =0 {ご注文が確定しました。} other {チケット # 枚の準備ができました。}}このメールは保存しておいてください。下のボタンからいつでも開けます。",
+      "cta": "チケットを見る"
+    },
+    "orders.refund": {
+      "subject": "{eventName} の返金",
+      "intro": "{fully, select, yes {ご注文は全額返金されました:} other {ご注文の一部が返金されました:}} {amount}。口座への反映まで 5〜10 営業日かかる場合があります。",
+      "cta": "注文を見る"
+    },
+    "events.reminder": {
+      "subject": "明日: {eventName}",
+      "intro": "{eventName} は {when} に始まります。",
+      "venue": "会場: {venue}",
+      "cta": "チケットを開く"
+    },
+    "tenancy.invitation": {
+      "subject": "Yayatoh で {orgName} に招待されました",
+      "intro": "{orgName} から {role} としてチームへの招待が届いています。",
+      "cta": "招待を承諾する"
+    },
+    "ticketing.claim-link": {
+      "subject": "{eventName} のチケットが届いています",
+      "intro": "{eventName} のチケットが譲渡されました。受け取ると自分専用の QR コードが発行されます。",
+      "cta": "チケットを受け取る"
+    },
+    "ticketing.holder-link": {
+      "subject": "{eventName} のチケットへのリンク",
+      "intro": "ご依頼のリンクです。{eventName} のチケットが開きます。",
+      "cta": "チケットを開く"
+    },
+    "seating.finder-code": {
+      "subject": "{eventName}の座席検索コードは{code}です",
+      "intro": "座席検索に{code}を入力すると座席が表示されます。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。",
+      "cta": "座席検索を開く"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "{eventName} の主催者からのメッセージ:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "{eventName} からのお知らせ:",
+      "cta": "主催者に返信する"
+    },
+    "messaging.reply": {
+      "subject": "{org} から新しい返信",
+      "intro": "{org} があなたのメッセージに返信しました:",
+      "cta": "読んで返信する"
+    },
+    "sales.order_paid": {
+      "subject": "新しい注文: {name}",
+      "intro": "{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）。"
+    },
+    "messaging.contact_replied": {
+      "subject": "{name} さんから新しいメッセージ",
+      "intro": "{name} さんから {eventName} についてメッセージが届きました。"
+    },
+    "notifications.test": {
+      "subject": "テスト通知",
+      "intro": "通知は正常に動作しています。"
+    }
+  },
+  "roles": {
+    "owner": "オーナー",
+    "admin": "管理者",
+    "manager": "マネージャー",
+    "finance": "経理",
+    "marketing": "マーケティング",
+    "box_office": "ボックスオフィス",
+    "scanner": "スキャナー",
+    "viewer": "閲覧者"
+  }
+}

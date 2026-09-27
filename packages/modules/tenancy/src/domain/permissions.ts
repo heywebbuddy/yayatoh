@@ -26,6 +26,12 @@ export const PERMISSIONS = [
   'payouts:manage',
   'marketing:write',
   'checkin:scan',
+  /** Create and revoke org API keys (/v1). */
+  'api_keys:manage',
+  /** Read the organizer inbox (conversations with customers) and the announcement log. */
+  'messages:read',
+  /** Send announcements and replies, block and report conversations. */
+  'messages:send',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -46,6 +52,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'contacts:read',
     'marketing:write',
     'checkin:scan',
+    'messages:read',
+    'messages:send',
   ],
   finance: [
     'org:read',
@@ -56,7 +64,14 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'finance:read',
     'payouts:manage',
   ],
-  marketing: ['org:read', 'events:read', 'contacts:read', 'marketing:write'],
+  marketing: [
+    'org:read',
+    'events:read',
+    'contacts:read',
+    'marketing:write',
+    'messages:read',
+    'messages:send',
+  ],
   box_office: [
     'org:read',
     'events:read',
@@ -65,6 +80,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'attendees:read',
     'attendees:write',
     'checkin:scan',
+    'messages:read',
   ],
   scanner: ['org:read', 'checkin:scan'],
   viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read'],
@@ -100,6 +116,8 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'attendees:write',
     'attendees:export',
     'checkin:scan',
+    'messages:read',
+    'messages:send',
   ],
   door_staff: ['events:read', 'checkin:scan'],
   session_scanner: ['checkin:scan'],

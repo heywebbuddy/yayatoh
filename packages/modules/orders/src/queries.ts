@@ -1,10 +1,12 @@
+import { KeysetAfter } from '@yayatoh/contracts';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
+import { buyerOrderMessagesTx } from '@yayatoh/notifications';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
-import { desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { and, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer } from './dto.ts';
@@ -12,16 +14,29 @@ import { ORDER_STATUSES, orderItems, orders } from './schema.ts';
 
 export const listOrdersQuery = tenantQuery({
   name: 'orders.listOrders',
-  input: z.object({ eventId: z.uuid(), limit: z.int().min(1).max(200).default(50) }),
+  input: z.object({
+    eventId: z.uuid(),
+    limit: z.int().min(1).max(200).default(50),
+    /** Keyset position (newest first): rows strictly older than it. */
+    after: KeysetAfter.optional(),
+  }),
   output: z.array(OrderDto),
   entitlement: 'ticketing',
   permission: 'orders:read',
   handler: async ({ input, tx }) => {
+    const createdMs = sql`date_trunc('milliseconds', ${orders.createdAt})`;
     const rows = await tx
       .select()
       .from(orders)
-      .where(eq(orders.eventId, input.eventId))
-      .orderBy(desc(orders.createdAt))
+      .where(
+        and(
+          eq(orders.eventId, input.eventId),
+          input.after
+            ? sql`(${createdMs}, ${orders.id}) < (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`
+            : undefined,
+        ),
+      )
+      .orderBy(desc(createdMs), desc(orders.id))
       .limit(input.limit);
     const items = rows.length
       ? await tx
@@ -137,6 +152,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         tickets: mine,
         transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
+        messages: await buyerOrderMessagesTx(tx, ref.order_id, o.buyerEmail),
       };
     });
     return publicOrderSerializer.serialize(order);

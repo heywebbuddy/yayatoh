@@ -1,6 +1,7 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { runDueBulkOperations } from './bulk.ts';
+import { dispatchNotifications, userEmails, workerTransports } from './notifications.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runSettlements } from './settlements.ts';
@@ -88,6 +89,21 @@ setInterval(() => {
       settling = false;
     });
 }, 10 * 60_000).unref();
+
+// Notifications (M1.10): send due messages every 2 s (leader only; rows are claimed with SKIP LOCKED).
+const transports = workerTransports();
+if (!transports) console.warn('notifications: no channel adapters configured; messages stay queued');
+const appOrigin = process.env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000';
+let dispatching = false;
+setInterval(() => {
+  if (!transports || !release || stopping || dispatching) return;
+  dispatching = true;
+  dispatchNotifications({ transports, appOrigin, userEmails })
+    .catch((err) => console.error('notifications', err))
+    .finally(() => {
+      dispatching = false;
+    });
+}, 2_000).unref();
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, async () => {

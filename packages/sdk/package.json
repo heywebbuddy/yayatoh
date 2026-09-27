@@ -1,0 +1,34 @@
+{
+  "name": "@yayatoh/sdk",
+  "version": "0.2.0",
+  "description": "TypeScript client for the Yayatoh /v1 API, typed from its OpenAPI document.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "private": true,
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "generate": "node scripts/generate.ts write",
+    "generate:check": "node scripts/generate.ts check"
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/api-v1": "workspace:*",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@hono/node-server": "catalog:",
+    "hono": "catalog:",
+    "openapi-typescript": "7.13.0",
+    "typescript": "catalog:"
+  }
+}

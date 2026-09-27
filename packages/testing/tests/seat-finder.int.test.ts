@@ -6,7 +6,7 @@ import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
-import { consumeEvent, memoryMailer } from '@yayatoh/platform';
+import { consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import {
   assignSeatCategoryCommand,
   assignSeatsCommand,
@@ -92,12 +92,12 @@ const outbox = async (codeId: string) =>
       sql`select id, type, payload from platform.domain_events where aggregate_id = ${codeId}`,
     ),
   );
-/** Run the worker's mailer over a code's event; returns what it sent. */
+/** Run the worker's mailer over a code's event; returns what it queued with the notifier. */
 async function mailFor(codeId: string) {
-  const { mailer, sent } = memoryMailer();
+  const { notifier, sent } = memoryNotifier();
   const [evt] = await outbox(codeId);
   if (!evt) throw new Error('no outbox event');
-  await consumeEvent(finderCodeMailer({ mailer, appOrigin: 'https://app.test' }), {
+  await consumeEvent(finderCodeMailer({ notifier, appOrigin: 'https://app.test' }), {
     id: evt.id,
     orgId: a.org.id,
     type: evt.type,
@@ -315,11 +315,11 @@ describe('codes by email: no enumeration', () => {
     // The mailer sends only to the listed address, with a six-digit code and the finder's link.
     expect(await mailFor(unknown.codeId ?? '')).toEqual([]);
     const [mail] = await mailFor(known.codeId ?? '');
-    expect(mail?.to).toBe(email('Known 0'));
-    expect(mail?.template).toBe('seating.finder-code');
+    expect(mail?.to.email).toBe(email('Known 0'));
+    expect(mail?.kind).toBe('seating.finder-code');
     expect(String(mail?.params.code)).toMatch(/^\d{6}$/);
     expect(mail?.params.url).toBe(`https://app.test/events/${await slugOf(eventId)}/seat-finder`);
-    expect(mail?.idempotencyKey).toBe(`finder-code:${known.codeId}`);
+    expect(mail?.dedupeKey).toBe(`finder-code:${known.codeId}`);
   });
 
   it('takes about as long either way (no timing oracle)', async () => {

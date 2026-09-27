@@ -30,7 +30,116 @@
     "open": "通知",
     "title": "通知",
     "emptyTitle": "新しい通知はありません",
-    "emptyDescription": "販売、座席、チェックインに関するお知らせがここに表示されます。"
+    "emptyDescription": "販売、座席、チェックインに関するお知らせがここに表示されます。",
+    "openWithCount": "通知、{count, plural, other {未読 # 件}}",
+    "unreadAnnouncement": "{count, plural, other {未読の通知が # 件あります}}",
+    "markRead": "既読にする",
+    "markReadItem": "「{title}」を既読にする",
+    "markAllRead": "すべて既読にする",
+    "viewAll": "すべての通知",
+    "settings": "通知設定",
+    "unread": "未読",
+    "loadMore": "以前の通知を表示",
+    "pageTitle": "通知",
+    "pageDescription": "この組織でのあなた宛てのお知らせ：新しい注文とメッセージ。",
+    "allRead": "すべての通知が既読です。",
+    "items": {
+      "sales": {
+        "order_paid": "新しい注文：{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）"
+      },
+      "messaging": {
+        "contact_replied": "{name} さんから {eventName} についてメッセージが届きました"
+      },
+      "notifications": {
+        "test": "テスト通知：通知は正常に動作しています"
+      },
+      "other": "通知"
+    },
+    "kinds": {
+      "orders": {
+        "tickets": "チケット",
+        "refund": "返金"
+      },
+      "events": {
+        "reminder": "イベントのリマインダー"
+      },
+      "tenancy": {
+        "invitation": "チームへの招待"
+      },
+      "ticketing": {
+        "claim-link": "チケット受け取りリンク",
+        "holder-link": "チケットへのリンク"
+      },
+      "attendees": {
+        "message": "主催者からのメッセージ"
+      },
+      "messaging": {
+        "announcement": "お知らせ",
+        "reply": "返信",
+        "contact_replied": "新しいメッセージ"
+      },
+      "sales": {
+        "order_paid": "新規注文のお知らせ"
+      },
+      "notifications": {
+        "test": "テスト通知"
+      }
+    },
+    "status": {
+      "queued": "送信中",
+      "scheduled": "予約済み",
+      "sent": "送信済み",
+      "suppressed": "未送信",
+      "failed": "失敗",
+      "canceled": "キャンセル"
+    },
+    "reasons": {
+      "quiet_hours": "静かな時間帯のため保留中（受信者の 21 時〜8 時）",
+      "messaging_paused": "Yayatoh サポートが配信を一時停止しています",
+      "unsubscribed": "受信者が配信を停止しました",
+      "preference": "受信者の設定でオフになっています",
+      "no_device": "プッシュ先の端末がありません",
+      "no_address": "アドレスがありません",
+      "provider_error": "メール配信サービスに拒否されました",
+      "retrying": "エラーのため再試行中"
+    },
+    "channels": {
+      "email": "メール",
+      "sms": "SMS",
+      "push": "プッシュ",
+      "in_app": "アプリ内"
+    },
+    "log": {
+      "title": "メッセージ",
+      "empty": "この注文に関するメッセージはまだありません。",
+      "when": "日時",
+      "message": "メッセージ",
+      "to": "宛先",
+      "channel": "チャネル"
+    },
+    "preferences": {
+      "title": "通知設定",
+      "description": "{org} の最新情報の受け取り方を選びます。設定はあなたにのみ適用されます。",
+      "categories": {
+        "sales": {
+          "name": "販売",
+          "hint": "新しい注文が支払われたとき。"
+        },
+        "messages": {
+          "name": "メッセージ",
+          "hint": "お客様が組織に連絡したとき。"
+        },
+        "marketing": {
+          "name": "Yayatoh からのお知らせ",
+          "hint": "新機能やヒント。オンにしない限りオフです。"
+        }
+      },
+      "save": "設定を保存",
+      "saved": "通知設定を保存しました。",
+      "test": "テスト通知を送信",
+      "testSent": "テスト通知を送信しました。ベルを確認してください。",
+      "required": "チケット、領収書、セキュリティに関するメールは常に届きます。"
+    }
   },
   "nav": {
     "home": "ホーム",
@@ -57,6 +166,7 @@
     "settings": "設定",
     "payouts": "入金",
     "domains": "ドメイン",
+    "apiKeys": "API キー",
     "publicSite": "公開サイト"
   },
   "vocab": {
@@ -530,7 +640,12 @@
     },
     "collectedBy": "支払いの受領者: {org}",
     "seat": "座席",
-    "seatLabel": "座席：{seat}"
+    "seatLabel": "座席：{seat}",
+    "emailsSent": "送信済みメール",
+    "emailsNone": "メールはまだありません。",
+    "emailSentAt": "{when} に送信",
+    "emailScheduled": "{when} に送信予定",
+    "emailQueued": "送信中"
   },
   "orders": {
     "title": "最近の注文",
@@ -1664,6 +1779,169 @@
       "event": "イベント",
       "emptyTitle": "この期間の売上はありません",
       "emptyDescription": "期間を長くするか、イベントページを共有して販売を始めましょう。"
+    }
+  },
+  "unsubscribe": {
+    "metaTitle": "配信停止",
+    "eyebrow": "メール設定",
+    "title": "{org} からのメール",
+    "category": {
+      "reminders": "チケットをお持ちのイベント前のリマインダー。",
+      "event_updates": "参加するイベントについての主催者からのお知らせとメッセージ。",
+      "marketing": "主催者からのお知らせと特典。",
+      "sales": "新しい注文のお知らせ。",
+      "messages": "新しいメッセージのお知らせ。"
+    },
+    "categoryName": {
+      "reminders": "イベントのリマインダー",
+      "event_updates": "イベントのお知らせ",
+      "marketing": "お知らせと特典",
+      "sales": "注文のお知らせ",
+      "messages": "メッセージのお知らせ"
+    },
+    "address": "アドレス：{email}",
+    "question": "このアドレスで {org} からの{what}の受信を停止しますか？",
+    "confirm": "配信停止",
+    "done": "{org} からの{what}の配信を停止しました。",
+    "resubscribe": "再度購読する",
+    "transactionalNote": "チケット、領収書、返金など必要なメールは引き続き届きます。"
+  },
+  "devMailbox": {
+    "eyebrow": "開発",
+    "title": "開発用メールボックス",
+    "description": "開発中にプラットフォームが送信したメッセージです。このマシンの外には送信されていません。",
+    "filter": "受信者",
+    "apply": "絞り込む",
+    "emptyTitle": "メッセージはまだありません",
+    "emptyDescription": "開発中に送信されたメール、SMS、プッシュ通知がここに表示されます。",
+    "meta": "{channel}・宛先 {to}・{at}",
+    "show": "メッセージを表示",
+    "preview": "メールのプレビュー：{subject}"
+  },
+  "announcements": {
+    "title": "マーケティング",
+    "description": "{event} の参加者全員へのお知らせ。",
+    "composeTitle": "新しいお知らせ",
+    "subject": "件名",
+    "message": "メッセージ",
+    "channels": "送信方法",
+    "channel": {
+      "email": "メール",
+      "push": "プッシュ通知"
+    },
+    "pushHint": "プッシュはアプリの利用者に届きます。それ以外の方にはメールが届きます。",
+    "preview": "プレビュー",
+    "previewTitle": "お知らせのプレビュー",
+    "previewFrame": "メールのプレビュー：{subject}",
+    "willReach": "{count, plural, other {# 人に送信されます。}}",
+    "send": "{count, plural, other {# 人に送信}}",
+    "edit": "編集",
+    "sent": "{count, plural, other {# 人に送信しました。配信はバックグラウンドで続きます。}}",
+    "sentTitle": "送信済みのお知らせ",
+    "sentEmpty": "お知らせはまだありません。",
+    "sentAt": "送信日時",
+    "recipients": "受信者",
+    "delivery": "配信状況",
+    "deliveryCounts": "送信済み {sent}・保留 {pending}・未送信 {notSent}",
+    "errors": {
+      "subjectRequired": "件名を入力してください。",
+      "messageRequired": "メッセージを入力してください。",
+      "channelRequired": "送信方法を 1 つ以上選んでください。",
+      "no_recipients": "このイベントにはまだ参加者がいないため、送信先がありません。",
+      "messaging_paused": "Yayatoh サポートがあなたの組織の配信を一時停止しています。"
+    }
+  },
+  "conversation": {
+    "inboxTitle": "メッセージ",
+    "inboxDescription": "お客様とのやり取り。お知らせへの返信はここに届きます。",
+    "filters": "表示",
+    "filter": {
+      "all": "すべて",
+      "unread": "未読",
+      "blocked": "ブロック中"
+    },
+    "emptyTitle": "やり取りはありません",
+    "emptyDescription": "お知らせに返信があると、ここに表示されます。",
+    "unread": "未読",
+    "blockedChip": "ブロック中",
+    "you": "あなた",
+    "threadTitle": "やり取り",
+    "back": "すべてのメッセージ",
+    "threadWith": "{name} さんとのやり取り",
+    "history": "メッセージ",
+    "contactBlockedYou": "この方はあなたの組織からのメッセージをブロックしています。",
+    "replyTitle": "返信",
+    "replyLabel": "返信内容（メールで送信されます）",
+    "sendReply": "返信を送信",
+    "sent": "メッセージを送信しました。",
+    "safetyTitle": "ブロック・報告",
+    "block": "この方をブロック",
+    "unblock": "ブロックを解除",
+    "blockedText": "ブロック中：この方のメッセージは受け付けません。",
+    "report": "Yayatoh に報告",
+    "reportReason": "理由",
+    "reportNote": "詳細（任意）",
+    "reasons": {
+      "spam": "スパム",
+      "abuse": "嫌がらせ・迷惑行為",
+      "other": "その他"
+    },
+    "reported": "ありがとうございます。Yayatoh がこのやり取りを確認します。",
+    "publicMetaTitle": "メッセージ",
+    "publicEyebrow": "メッセージ",
+    "publicTitle": "{org} とのやり取り",
+    "publicDescription": "このやり取りを読めるのはあなたと主催者だけです。",
+    "notAccepting": "{org} はここでメッセージを受け付けていません。",
+    "writeLabel": "{org} にメッセージを書く",
+    "send": "送信",
+    "blockOrg": "{org} をブロック",
+    "unblockOrg": "{org} のブロックを解除",
+    "youBlocked": "{org} をブロックしました：返信やイベントのお知らせは届きません。",
+    "errors": {
+      "required": "先にメッセージを入力してください。",
+      "blocked": "このやり取りはブロックされています。",
+      "blocked_by_contact": "この方はあなたの組織からのメッセージをブロックしています。",
+      "you_blocked": "メッセージを送るには主催者のブロックを解除してください。"
+    }
+  },
+  "apiKeys": {
+    "title": "API キー",
+    "subtitle": "Yayatoh API を通じて、他のソフトウェアが組織にアクセスできるようにします。各キーは一度だけ表示されます。",
+    "docs": "API リファレンス",
+    "noAccessTitle": "API キーを管理できるのはオーナーと管理者のみです",
+    "noAccessDescription": "この組織のオーナーまたは管理者にキーの作成を依頼してください。",
+    "createTitle": "キーを作成",
+    "name": "名前",
+    "nameHint": "キーの用途（例：「Zapier」「窓口の同期」）。",
+    "nameRequired": "キーに名前を付けてください。",
+    "scopes": "権限",
+    "scopesHint": "キーは、この組織内で、権限で許可された操作のみ行えます。",
+    "scopesRequired": "権限を 1 つ以上選んでください。",
+    "create": "キーを作成",
+    "created": "キー「{name}」を作成しました。",
+    "shownOnce": "今すぐコピーして安全な場所に保管してください。再表示はされません。",
+    "copy": "キーをコピー",
+    "copied": "クリップボードにコピーしました。",
+    "listTitle": "キー一覧",
+    "empty": "API キーはまだありません。",
+    "key": "キー",
+    "createdAt": "作成日",
+    "lastUsed": "最終使用",
+    "never": "なし",
+    "status": "ステータス",
+    "active": "有効",
+    "revoked": "取り消し済み",
+    "actions": "操作",
+    "revoke": "取り消す",
+    "revokeNamed": "キー {name} を取り消す",
+    "scope": {
+      "org_read": "組織の閲覧",
+      "events_read": "イベントとチケット種別の閲覧",
+      "events_write": "イベントの作成と変更",
+      "orders_read": "注文の閲覧",
+      "orders_refund": "注文の返金",
+      "attendees_read": "参加者の閲覧",
+      "checkin_scan": "チケットのスキャン"
     }
   },
   "market": {

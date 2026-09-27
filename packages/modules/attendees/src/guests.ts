@@ -6,7 +6,7 @@ import {
   bulkOperationParamsTx,
   defineBulkAction,
   defineSubscriber,
-  type Mailer,
+  type Notifier,
   tenantCommand,
 } from '@yayatoh/platform';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
@@ -176,10 +176,10 @@ const BatchPayload = z.object({
   attendeeIds: z.array(z.uuid()),
 });
 
-/** Sends the emails of one message batch (worker; SES once the owner's AWS account exists). */
+/** Queues the emails of one message batch (the notifications dispatcher sends them). */
 export function attendeeMessageMailer(deps: {
-  mailer: Mailer;
-  eventName: (tx: TenantTx, eventId: string) => Promise<string | null>;
+  notifier: Notifier;
+  event: (tx: TenantTx, eventId: string) => Promise<{ name: string; timezone: string } | null>;
 }) {
   return defineSubscriber({
     name: 'attendees.message-mailer',
@@ -191,13 +191,14 @@ export function attendeeMessageMailer(deps: {
         .select({ id: attendees.id, name: attendees.name, email: attendees.email })
         .from(attendees)
         .where(and(inArray(attendees.id, p.attendeeIds), eq(attendees.status, 'active')));
-      const eventName = p.eventId ? ((await deps.eventName(tx, p.eventId)) ?? '') : '';
+      const ev = p.eventId ? await deps.event(tx, p.eventId) : null;
       for (const a of people)
-        await deps.mailer.send({
-          to: a.email,
-          template: 'attendees.message',
-          params: { subject: params.subject, body: params.body, name: a.name, eventName },
-          idempotencyKey: `attendee-message:${p.operationId}:${a.id}`,
+        await deps.notifier.enqueue(tx, {
+          kind: 'attendees.message',
+          to: { email: a.email, name: a.name, timeZone: ev?.timezone ?? null },
+          params: { subject: params.subject, body: params.body, name: a.name, eventName: ev?.name ?? '' },
+          dedupeKey: `attendee-message:${p.operationId}:${a.id}`,
+          eventId: p.eventId,
         });
     },
   });

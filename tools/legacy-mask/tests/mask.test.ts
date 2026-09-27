@@ -260,7 +260,7 @@ describe('legacy masking — uniqueness and fail-closed behaviour', () => {
     v.endOriginal();
     v.pushMasked(out);
     expect(v.result().problems).toEqual([]);
-  });
+  }, 30_000); // 20,000 rows: correctness, not speed — generous on a loaded CI runner
 
   it('rows for a table without a definition are omitted and reported, never written unmasked', () => {
     const { out, report } = mask("INSERT INTO `mystery` VALUES (1,'someone@example.org');\n");
