@@ -1,7 +1,7 @@
 import 'server-only';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { bulkStepCommand, runBulkOperation } from '@yayatoh/platform';
-import { attendeeExportAction } from '@yayatoh/reports';
+import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { ports } from './ports.ts';
 
 /** Every bulk action the console offers (the worker registers the same list). */
@@ -10,6 +10,7 @@ export const BULK_ACTIONS = [
   attendeeImportAction,
   attendeeEmailAction,
   attendeeExportAction,
+  bookingsExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 

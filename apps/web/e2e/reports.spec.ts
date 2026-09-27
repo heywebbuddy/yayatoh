@@ -279,6 +279,44 @@ test.describe('reports and dashboard (M1.12)', () => {
     await page.reload();
     await expect(page.getByLabel('Search bookings')).toHaveValue(`nobody-${stamp}`);
     await expectAccessible(page);
+    // Nothing matches: nothing to export.
+    await expect(page.getByRole('button', { name: 'Export as CSV' })).toHaveCount(0);
+
+    // Export the paid bookings as CSV (bulk framework), then download the file.
+    await page.getByLabel('Search bookings').fill('');
+    await page.getByLabel('Show', { exact: true }).selectOption('paid');
+    await page.getByRole('button', { name: 'Search' }).click();
+    await expect(page.getByRole('status').filter({ hasText: 'booking' })).toHaveText('3 bookings');
+    await page.getByRole('button', { name: 'Export as CSV' }).click();
+    const exportPanel = page.getByRole('region', { name: 'Bookings export' });
+    await expect(exportPanel.getByText('Ready: 3 rows exported.')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByLabel('Show', { exact: true })).toHaveValue('paid');
+    const href = (await exportPanel.getByRole('link', { name: 'Download CSV' }).getAttribute('href')) ?? '';
+    const csv = await page.request.get(href);
+    expect(csv.status()).toBe(200);
+    expect(csv.headers()['content-type']).toContain('text/csv');
+    const lines = (await csv.text())
+      .replace(/^\uFEFF/, '')
+      .trimEnd()
+      .split('\r\n');
+    expect(lines[0]).toBe(
+      'Order reference,Buyer name,Buyer email,Status,Tickets,Total,Currency,Promo code,Channel,Booked at,Paid at',
+    );
+    expect(lines).toHaveLength(4);
+    const ada = lines.find((l) => l.includes(`ada+${stamp}@example.test`)) ?? '';
+    expect(ada).toContain(`,Partially refunded,2,${(a.amount / 100).toFixed(2)},USD,,Online checkout,`);
+    expect(lines.find((l) => l.includes(`ed+${stamp}@`))).toContain(',Collected by you,');
+    expect(lines.find((l) => l.includes(`bo+${stamp}@`))).toContain(`,${code},`);
+    await expectAccessible(page);
+    // A viewer can neither see the export button nor fetch the file.
+    const viewer = await browser.newContext();
+    const vp = await viewer.newPage();
+    await signIn(vp, 'jordan@lakeside.test');
+    expect((await vp.request.get(href)).status()).toBe(404);
+    await vp.goto(`${base}/analysis/bookings`);
+    await expect(vp.getByRole('status').filter({ hasText: 'booking' })).toBeVisible();
+    await expect(vp.getByRole('button', { name: 'Export as CSV' })).toHaveCount(0);
+    await viewer.close();
 
     // Arabic, right to left.
     await page.goto(`/ar${base}/analysis`);

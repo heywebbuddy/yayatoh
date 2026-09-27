@@ -1413,7 +1413,23 @@
       "comp": "मुफ़्त",
       "boxOffice": "बॉक्स ऑफ़िस",
       "emptyTitle": "कोई मेल खाती बुकिंग नहीं",
-      "emptyDescription": "कोई और खोज आज़माएँ या सभी बुकिंग दिखाएँ।"
+      "emptyDescription": "कोई और खोज आज़माएँ या सभी बुकिंग दिखाएँ।",
+      "export": "CSV के रूप में निर्यात करें",
+      "exportTitle": "बुकिंग निर्यात",
+      "exportError": "निर्यात शुरू नहीं हो सका: {reason}",
+      "columns": {
+        "reference": "ऑर्डर संदर्भ",
+        "buyerName": "खरीदार का नाम",
+        "buyerEmail": "खरीदार का ईमेल",
+        "status": "स्थिति",
+        "tickets": "टिकट",
+        "total": "कुल",
+        "currency": "मुद्रा",
+        "promoCode": "प्रोमो कोड",
+        "channel": "चैनल",
+        "bookedAt": "बुकिंग का समय",
+        "paidAt": "भुगतान का समय"
+      }
     },
     "org": {
       "title": "बिक्री",

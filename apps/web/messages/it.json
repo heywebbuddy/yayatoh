@@ -1413,7 +1413,23 @@
       "comp": "Omaggio",
       "boxOffice": "Biglietteria",
       "emptyTitle": "Nessuna prenotazione corrisponde",
-      "emptyDescription": "Prova un’altra ricerca o mostra tutte le prenotazioni."
+      "emptyDescription": "Prova un’altra ricerca o mostra tutte le prenotazioni.",
+      "export": "Esporta come CSV",
+      "exportTitle": "Esportazione prenotazioni",
+      "exportError": "Impossibile avviare l’esportazione: {reason}",
+      "columns": {
+        "reference": "Riferimento ordine",
+        "buyerName": "Nome acquirente",
+        "buyerEmail": "Email acquirente",
+        "status": "Stato",
+        "tickets": "Biglietti",
+        "total": "Totale",
+        "currency": "Valuta",
+        "promoCode": "Codice promozionale",
+        "channel": "Canale",
+        "bookedAt": "Prenotata il",
+        "paidAt": "Pagata il"
+      }
     },
     "org": {
       "title": "Vendite",

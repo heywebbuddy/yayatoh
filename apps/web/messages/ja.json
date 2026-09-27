@@ -1413,7 +1413,23 @@
       "comp": "招待",
       "boxOffice": "窓口販売",
       "emptyTitle": "該当する予約はありません",
-      "emptyDescription": "別の条件で検索するか、すべての予約を表示してください。"
+      "emptyDescription": "別の条件で検索するか、すべての予約を表示してください。",
+      "export": "CSV でエクスポート",
+      "exportTitle": "予約のエクスポート",
+      "exportError": "エクスポートを開始できませんでした：{reason}",
+      "columns": {
+        "reference": "注文番号",
+        "buyerName": "購入者名",
+        "buyerEmail": "購入者のメール",
+        "status": "ステータス",
+        "tickets": "チケット",
+        "total": "合計",
+        "currency": "通貨",
+        "promoCode": "プロモコード",
+        "channel": "チャネル",
+        "bookedAt": "予約日時",
+        "paidAt": "支払日時"
+      }
     },
     "org": {
       "title": "売上",

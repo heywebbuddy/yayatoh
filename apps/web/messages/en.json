@@ -1413,7 +1413,23 @@
       "comp": "Complimentary",
       "boxOffice": "Box office",
       "emptyTitle": "No bookings match",
-      "emptyDescription": "Try another search or show all bookings."
+      "emptyDescription": "Try another search or show all bookings.",
+      "export": "Export as CSV",
+      "exportTitle": "Bookings export",
+      "exportError": "The export could not start: {reason}",
+      "columns": {
+        "reference": "Order reference",
+        "buyerName": "Buyer name",
+        "buyerEmail": "Buyer email",
+        "status": "Status",
+        "tickets": "Tickets",
+        "total": "Total",
+        "currency": "Currency",
+        "promoCode": "Promo code",
+        "channel": "Channel",
+        "bookedAt": "Booked at",
+        "paidAt": "Paid at"
+      }
     },
     "org": {
       "title": "Sales",

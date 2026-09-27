@@ -1413,7 +1413,23 @@
       "comp": "Gratis",
       "boxOffice": "Kassa",
       "emptyTitle": "Geen boekingen gevonden",
-      "emptyDescription": "Probeer een andere zoekopdracht of toon alle boekingen."
+      "emptyDescription": "Probeer een andere zoekopdracht of toon alle boekingen.",
+      "export": "Exporteren als CSV",
+      "exportTitle": "Export van boekingen",
+      "exportError": "De export kon niet starten: {reason}",
+      "columns": {
+        "reference": "Bestelreferentie",
+        "buyerName": "Naam koper",
+        "buyerEmail": "E-mail koper",
+        "status": "Status",
+        "tickets": "Tickets",
+        "total": "Totaal",
+        "currency": "Valuta",
+        "promoCode": "Kortingscode",
+        "channel": "Kanaal",
+        "bookedAt": "Geboekt op",
+        "paidAt": "Betaald op"
+      }
     },
     "org": {
       "title": "Verkopen",

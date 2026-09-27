@@ -1,5 +1,11 @@
 export { ATTENDEE_EXPORT_COLUMNS, attendeeExportAction, attendeeExportBulk } from './attendee-export.ts';
 export {
+  BOOKING_EXPORT_COLUMNS,
+  bookingsExportAction,
+  bookingsExportBulk,
+  decimal,
+} from './bookings-export.ts';
+export {
   DisputeEvidenceDto,
   disputeEvidenceQuery,
   EVIDENCE_LABELS,

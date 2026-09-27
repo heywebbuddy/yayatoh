@@ -2,6 +2,10 @@ export {
   BOOKING_FILTERS,
   BookingDto,
   type BookingFilter,
+  type BookingRow,
+  BookingSelection,
+  bookingIdsTx,
+  bookingRowsTx,
   bookingSearchQuery,
 } from './bookings.ts';
 export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-office.ts';

@@ -1413,7 +1413,23 @@
       "comp": "Frei",
       "boxOffice": "Abendkasse",
       "emptyTitle": "Keine passenden Buchungen",
-      "emptyDescription": "Versuche eine andere Suche oder zeige alle Buchungen."
+      "emptyDescription": "Versuche eine andere Suche oder zeige alle Buchungen.",
+      "export": "Als CSV exportieren",
+      "exportTitle": "Buchungsexport",
+      "exportError": "Der Export konnte nicht starten: {reason}",
+      "columns": {
+        "reference": "Bestellnummer",
+        "buyerName": "Name des Käufers",
+        "buyerEmail": "E-Mail des Käufers",
+        "status": "Status",
+        "tickets": "Tickets",
+        "total": "Summe",
+        "currency": "Währung",
+        "promoCode": "Aktionscode",
+        "channel": "Kanal",
+        "bookedAt": "Gebucht am",
+        "paidAt": "Bezahlt am"
+      }
     },
     "org": {
       "title": "Verkäufe",

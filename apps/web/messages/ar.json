@@ -1413,7 +1413,23 @@
       "comp": "مجاني",
       "boxOffice": "شباك التذاكر",
       "emptyTitle": "لا توجد حجوزات مطابقة",
-      "emptyDescription": "جرّب بحثًا آخر أو اعرض كل الحجوزات."
+      "emptyDescription": "جرّب بحثًا آخر أو اعرض كل الحجوزات.",
+      "export": "تصدير بصيغة CSV",
+      "exportTitle": "تصدير الحجوزات",
+      "exportError": "تعذّر بدء التصدير: {reason}",
+      "columns": {
+        "reference": "مرجع الطلب",
+        "buyerName": "اسم المشتري",
+        "buyerEmail": "بريد المشتري",
+        "status": "الحالة",
+        "tickets": "التذاكر",
+        "total": "الإجمالي",
+        "currency": "العملة",
+        "promoCode": "الرمز الترويجي",
+        "channel": "القناة",
+        "bookedAt": "تاريخ الحجز",
+        "paidAt": "تاريخ الدفع"
+      }
     },
     "org": {
       "title": "المبيعات",

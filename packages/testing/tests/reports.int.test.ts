@@ -1,5 +1,6 @@
 import { setFeeOverrideCommand } from '@yayatoh/billing';
 import { scanTicketCommand } from '@yayatoh/checkin';
+import { withTenant } from '@yayatoh/db';
 import { type AdminSql, adminClient, closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
@@ -13,6 +14,7 @@ import {
   startCheckoutCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
+import { platformFeesByOrgTx } from '@yayatoh/payments';
 import {
   type EventReportDto,
   eventFinanceQuery,
@@ -42,7 +44,10 @@ let ga: string;
 let free: string;
 let vip: string;
 let entree: string;
-const orders: Record<string, string> = {};
+const orders = {} as Record<
+  'paid' | 'promo' | 'comp' | 'failed' | 'pending' | 'box' | 'eur' | 'disputed' | 'bravo',
+  string
+>;
 const STARTS = '2028-06-01T23:00:00Z';
 const DURING = new Date('2028-06-01T23:30:00Z');
 
@@ -615,5 +620,49 @@ describe('booking search (M1.12b)', () => {
     await expect(
       executeQuery(bookingSearchQuery, { eventId: usd, q: 'paula' }, b.ctx(), ports),
     ).resolves.toMatchObject({ total: 0 });
+  });
+});
+
+describe('admin commission report source (M1.12c)', () => {
+  const fees = (orgId: string, period: { from?: Date; to?: Date } = {}) =>
+    withTenant(systemCtx(orgId), (tx) => platformFeesByOrgTx(tx, period));
+
+  it("platform fees per org and currency equal the golden query over the org's orders and refunds", async () => {
+    // A cancellation refund gives the platform fee back too.
+    const [t] = await admin<{ id: string }[]>`
+      select id from ticketing.tickets where order_id = ${orders.promo} and status = 'active' order by serial limit 1`;
+    await refund(orders.promo, { reason: 'event_cancelled', ticketIds: [t?.id] });
+    for (const f of [a, b]) {
+      const rows = await fees(f.org.id);
+      const golden = await admin<{ currency: string; charged: string; sales: string; refunded: string }[]>`
+        select o.currency, sum(o.fee_minor)::text charged, count(*) filter (where o.fee_minor > 0)::text sales,
+          coalesce((select sum(r.fee_refunded_minor) from orders.refunds r
+            where r.org_id = ${f.org.id} and r.status = 'succeeded' and r.currency = o.currency), 0)::text refunded
+        from orders.orders o
+        where o.org_id = ${f.org.id} and o.status = any(${SOLD}) and o.total_minor > 0
+        group by o.currency having sum(o.fee_minor) > 0`;
+      expect(rows.every((r) => r.orgId === f.org.id)).toBe(true);
+      expect(rows.map((r) => r.currency).sort()).toEqual(golden.map((g) => g.currency).sort());
+      for (const g of golden) {
+        const r = rows.find((x) => x.currency === g.currency);
+        expect(r).toMatchObject({
+          chargedMinor: num(g.charged),
+          refundedMinor: num(g.refunded),
+          netMinor: num(g.charged) - num(g.refunded),
+          sales: num(g.sales),
+        });
+      }
+    }
+    const usdRow = (await fees(a.org.id)).find((r) => r.currency === 'USD');
+    expect(usdRow?.refundedMinor).toBeGreaterThan(0);
+  });
+
+  it('filters by the time the fee was booked', async () => {
+    expect(await fees(a.org.id, { to: new Date('2020-01-01T00:00:00Z') })).toEqual([]);
+    const now = await fees(a.org.id, {
+      from: new Date(Date.now() - 3_600_000),
+      to: new Date(Date.now() + 60_000),
+    });
+    expect(now.find((r) => r.currency === 'USD')?.chargedMinor).toBeGreaterThan(0);
   });
 });

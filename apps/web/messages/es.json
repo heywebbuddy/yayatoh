@@ -1413,7 +1413,23 @@
       "comp": "Cortesía",
       "boxOffice": "Taquilla",
       "emptyTitle": "Ninguna reserva coincide",
-      "emptyDescription": "Prueba otra búsqueda o muestra todas las reservas."
+      "emptyDescription": "Prueba otra búsqueda o muestra todas las reservas.",
+      "export": "Exportar como CSV",
+      "exportTitle": "Exportación de reservas",
+      "exportError": "No se pudo iniciar la exportación: {reason}",
+      "columns": {
+        "reference": "Referencia del pedido",
+        "buyerName": "Nombre del comprador",
+        "buyerEmail": "Correo del comprador",
+        "status": "Estado",
+        "tickets": "Entradas",
+        "total": "Total",
+        "currency": "Moneda",
+        "promoCode": "Código promocional",
+        "channel": "Canal",
+        "bookedAt": "Reservada el",
+        "paidAt": "Pagada el"
+      }
     },
     "org": {
       "title": "Ventas",

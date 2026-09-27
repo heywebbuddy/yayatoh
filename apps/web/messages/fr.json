@@ -1413,7 +1413,23 @@
       "comp": "Offert",
       "boxOffice": "Sur place",
       "emptyTitle": "Aucune réservation ne correspond",
-      "emptyDescription": "Essayez une autre recherche ou affichez toutes les réservations."
+      "emptyDescription": "Essayez une autre recherche ou affichez toutes les réservations.",
+      "export": "Exporter en CSV",
+      "exportTitle": "Export des réservations",
+      "exportError": "L’export n’a pas pu démarrer : {reason}",
+      "columns": {
+        "reference": "Référence de commande",
+        "buyerName": "Nom de l’acheteur",
+        "buyerEmail": "E-mail de l’acheteur",
+        "status": "Statut",
+        "tickets": "Billets",
+        "total": "Total",
+        "currency": "Devise",
+        "promoCode": "Code promo",
+        "channel": "Canal",
+        "bookedAt": "Réservée le",
+        "paidAt": "Payée le"
+      }
     },
     "org": {
       "title": "Ventes",

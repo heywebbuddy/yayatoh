@@ -9,7 +9,7 @@ import {
   runBulkOperation,
   setKeyVault,
 } from '@yayatoh/platform';
-import { attendeeExportAction } from '@yayatoh/reports';
+import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { createOrgAuthorizer } from '@yayatoh/tenancy';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
@@ -27,6 +27,7 @@ export const BULK_ACTIONS = [
   attendeeImportAction,
   attendeeEmailAction,
   attendeeExportAction,
+  bookingsExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

@@ -1413,7 +1413,23 @@
       "comp": "招待",
       "boxOffice": "售票處",
       "emptyTitle": "沒有符合的預訂",
-      "emptyDescription": "請換個搜尋條件，或顯示所有預訂。"
+      "emptyDescription": "請換個搜尋條件，或顯示所有預訂。",
+      "export": "匯出為 CSV",
+      "exportTitle": "預訂匯出",
+      "exportError": "無法開始匯出：{reason}",
+      "columns": {
+        "reference": "訂單編號",
+        "buyerName": "購買人姓名",
+        "buyerEmail": "購買人電子郵件",
+        "status": "狀態",
+        "tickets": "票券",
+        "total": "合計",
+        "currency": "幣別",
+        "promoCode": "優惠碼",
+        "channel": "通路",
+        "bookedAt": "預訂時間",
+        "paidAt": "付款時間"
+      }
     },
     "org": {
       "title": "銷售",

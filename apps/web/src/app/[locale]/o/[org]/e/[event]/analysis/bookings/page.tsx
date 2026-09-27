@@ -1,13 +1,18 @@
-import { executeQuery } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { BOOKING_FILTERS, type BookingFilter, bookingSearchQuery } from '@yayatoh/orders';
+import type { BulkOperationDto } from '@yayatoh/platform';
+import { bookingsExportBulk } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, EmptyState, Input, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, buttonClass, EmptyState, Input, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { fmtMoney, ReportTabs } from '@/components/reports.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { errorMessageKey } from '@/lib/errors.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { exportBookingsAction } from './actions.ts';
 
 const LIMIT = 100;
 const PILL = 'rounded-pill bg-zinc-100 px-2 py-px font-mono text-[11px] text-zinc-700';
@@ -22,7 +27,7 @@ export default async function BookingsPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
-  searchParams: Promise<{ q?: string; filter?: string }>;
+  searchParams: Promise<{ q?: string; filter?: string; op?: string; exportError?: string }>;
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
@@ -54,6 +59,19 @@ export default async function BookingsPage({
     timeStyle: 'short',
   });
   const n = (v: number) => formatNumber(v, locale);
+  const canExport = roleCan(data.role, 'attendees:export') && data.modules.has('reports');
+  // The export the page was sent back to (progress, then the download).
+  let op: BulkOperationDto | null = null;
+  if (canExport && sp.op && /^[0-9a-f-]{36}$/.test(sp.op)) {
+    op = await executeQuery(bookingsExportBulk.status, { operationId: sp.op }, data.ctx, ports).catch(
+      (err) => {
+        if (isDomainError(err) && (err.code === 'not_found' || err.code === 'forbidden')) return null;
+        throw err;
+      },
+    );
+    if (op && op.eventId !== ev.id) op = null;
+  }
+  const opActive = op ? ['queued', 'running'].includes(op.status) : false;
 
   return (
     <>
@@ -91,12 +109,62 @@ export default async function BookingsPage({
           {t('reports.bookings.submit')}
         </Button>
       </form>
-      <p role="status" className="text-body text-zinc-600">
-        {t('reports.bookings.count', { total: r.total })}
-        {r.total > r.items.length
-          ? ` · ${t('reports.bookings.showing', { shown: n(r.items.length), total: n(r.total) })}`
-          : ''}
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p role="status" className="text-body text-zinc-600">
+          {t('reports.bookings.count', { total: r.total })}
+          {r.total > r.items.length
+            ? ` · ${t('reports.bookings.showing', { shown: n(r.items.length), total: n(r.total) })}`
+            : ''}
+        </p>
+        {canExport && r.total > 0 ? (
+          <form action={exportBookingsAction.bind(null, org, event)}>
+            <input type="hidden" name="q" value={q} />
+            <input type="hidden" name="filter" value={filter} />
+            <Button type="submit" variant="secondary" size="sm">
+              {t('reports.bookings.export')}
+            </Button>
+          </form>
+        ) : null}
+      </div>
+      {sp.exportError ? (
+        <p
+          role="alert"
+          className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+        >
+          {t('reports.bookings.exportError', { reason: t(errorMessageKey(sp.exportError)) })}
+        </p>
+      ) : null}
+      {op ? (
+        <section
+          aria-labelledby="export-heading"
+          className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+        >
+          {opActive ? <AutoRefresh seconds={2} /> : null}
+          <h2 id="export-heading" className="text-section">
+            {t('reports.bookings.exportTitle')}
+          </h2>
+          <p className="text-body" role="status">
+            {op.status === 'done'
+              ? t('bulk.exportDone', { succeeded: n(op.succeeded) })
+              : t(`bulk.status.${op.status}`, {
+                  processed: n(op.processed),
+                  total: n(op.total),
+                  succeeded: n(op.succeeded),
+                  failed: n(op.failed),
+                  undone: n(op.undone),
+                })}
+          </p>
+          {op.status === 'done' && op.hasFile ? (
+            <a
+              href={`${locale === 'en' ? '' : `/${locale}`}${base}/bookings/exports/${op.id}`}
+              className={buttonClass('primary', 'sm', 'self-start')}
+              download
+            >
+              {t('bulk.download')}
+            </a>
+          ) : null}
+        </section>
+      ) : null}
       {r.items.length === 0 ? (
         <EmptyState
           title={t('reports.bookings.emptyTitle')}

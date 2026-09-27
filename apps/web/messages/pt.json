@@ -1413,7 +1413,23 @@
       "comp": "Cortesia",
       "boxOffice": "Bilheteria",
       "emptyTitle": "Nenhuma reserva corresponde",
-      "emptyDescription": "Tente outra pesquisa ou mostre todas as reservas."
+      "emptyDescription": "Tente outra pesquisa ou mostre todas as reservas.",
+      "export": "Exportar como CSV",
+      "exportTitle": "Exportação de reservas",
+      "exportError": "Não foi possível iniciar a exportação: {reason}",
+      "columns": {
+        "reference": "Referência do pedido",
+        "buyerName": "Nome do comprador",
+        "buyerEmail": "Email do comprador",
+        "status": "Status",
+        "tickets": "Ingressos",
+        "total": "Total",
+        "currency": "Moeda",
+        "promoCode": "Código promocional",
+        "channel": "Canal",
+        "bookedAt": "Reservada em",
+        "paidAt": "Paga em"
+      }
     },
     "org": {
       "title": "Vendas",

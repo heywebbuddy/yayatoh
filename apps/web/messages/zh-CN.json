@@ -1413,7 +1413,23 @@
       "comp": "赠票",
       "boxOffice": "票务窗口",
       "emptyTitle": "没有匹配的预订",
-      "emptyDescription": "请换个搜索条件，或显示全部预订。"
+      "emptyDescription": "请换个搜索条件，或显示全部预订。",
+      "export": "导出为 CSV",
+      "exportTitle": "预订导出",
+      "exportError": "无法开始导出：{reason}",
+      "columns": {
+        "reference": "订单号",
+        "buyerName": "购买人姓名",
+        "buyerEmail": "购买人邮箱",
+        "status": "状态",
+        "tickets": "门票",
+        "total": "合计",
+        "currency": "货币",
+        "promoCode": "优惠码",
+        "channel": "渠道",
+        "bookedAt": "预订时间",
+        "paidAt": "付款时间"
+      }
     },
     "org": {
       "title": "销售",

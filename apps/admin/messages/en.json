@@ -27,7 +27,8 @@
       "admin": "Admin",
       "support": "Support",
       "finance": "Finance"
-    }
+    },
+    "commission": "Commission"
   },
   "tenants": {
     "title": "Tenants",
@@ -211,5 +212,26 @@
     "refundPolicy": "Refund policy shown to buyers",
     "noPolicy": "The organizer has not published a refund policy.",
     "policyUpdated": "Last updated {date}"
+  },
+  "commission": {
+    "title": "Commission",
+    "description": "Platform fees per organization and currency, from the ledger: fees on sales (online and box office) minus fees given back by refunds. Days are in UTC.",
+    "from": "From",
+    "to": "To",
+    "apply": "Show",
+    "badRange": "The end date is before the start date. Showing this month instead.",
+    "badDate": "Pick both dates. Showing this month instead.",
+    "range": "{from} to {to} (UTC)",
+    "totals": "Totals by currency",
+    "totalIn": "Net commission, {currency}",
+    "col": {
+      "org": "Organization",
+      "currency": "Currency",
+      "sales": "Sales",
+      "charged": "Fees charged",
+      "refunded": "Fees refunded",
+      "net": "Net commission"
+    },
+    "empty": "No platform fees in this period."
   }
 }
