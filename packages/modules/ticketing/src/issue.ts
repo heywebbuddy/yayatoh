@@ -183,22 +183,25 @@ export const ticketSummariesQuery = tenantQuery({
   ),
   entitlement: 'ticketing',
   permission: 'events:read',
-  handler: async ({ input, tx }) => {
-    if (input.ticketIds.length === 0) return [];
-    const rows = await tx
-      .select({
-        id: tickets.id,
-        ticketTypeName: ticketTypes.name,
-        serial: tickets.serial,
-        shortCode: tickets.shortCode,
-        status: tickets.status,
-      })
-      .from(tickets)
-      .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
-      .where(inArray(tickets.id, input.ticketIds));
-    return rows.map((r) => ({ ...r, status: r.status as (typeof TICKET_STATUSES)[number] }));
-  },
+  handler: ({ input, tx }) => ticketSummariesTx(tx, input.ticketIds),
 });
+
+/** Type name, serial, short code and status for tickets (lists and exports). */
+export async function ticketSummariesTx(tx: TenantTx, ticketIds: readonly string[]) {
+  if (ticketIds.length === 0) return [];
+  const rows = await tx
+    .select({
+      id: tickets.id,
+      ticketTypeName: ticketTypes.name,
+      serial: tickets.serial,
+      shortCode: tickets.shortCode,
+      status: tickets.status,
+    })
+    .from(tickets)
+    .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
+    .where(inArray(tickets.id, [...ticketIds]));
+  return rows.map((r) => ({ ...r, status: r.status as (typeof TICKET_STATUSES)[number] }));
+}
 
 /**
  * Tickets a typed or scanned code points at (the command palette): a short code, or a yy1 code

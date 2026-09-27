@@ -685,5 +685,55 @@
     "orders": "الطلبات",
     "ticketCode": "التذكرة {code}",
     "orderRef": "المرجع {ref}"
+  },
+  "bulk": {
+    "formLabel": "إجراءات جماعية",
+    "applyTo": "تطبيق على",
+    "selected": "المحدد",
+    "allMatching": "{count, plural, zero {# نتيجة مطابقة} one {النتيجة المطابقة الوحيدة (#)} two {النتيجتان المطابقتان (#)} few {جميع النتائج المطابقة (#)} many {جميع النتائج المطابقة (#)} other {جميع النتائج المطابقة (#)}}",
+    "action": "الإجراء",
+    "addLabel": "إضافة تصنيف",
+    "removeLabel": "إزالة تصنيف",
+    "export": "تصدير بصيغة CSV",
+    "label": "التصنيف",
+    "labelHint": "لإضافة تصنيف أو إزالته.",
+    "apply": "تطبيق",
+    "select": "تحديد",
+    "selectOne": "تحديد {name}",
+    "title": {
+      "label": "تصنيفات جماعية",
+      "export": "تصدير الحضور"
+    },
+    "status": {
+      "queued": "بانتظار البدء…",
+      "running": "جارٍ العمل… اكتمل {processed} من {total}.",
+      "done": "اكتمل: تم تحديث {succeeded} من {total}، وفشل {failed}.",
+      "failed": "توقّف بعد {processed} من {total}. يرجى المحاولة مرة أخرى.",
+      "undoing": "جارٍ التراجع… تمت استعادة {undone} حتى الآن.",
+      "undone": "تم التراجع: تمت استعادة {undone}."
+    },
+    "exportDone": "جاهز: تم تصدير {succeeded} صف.",
+    "failure": "{count, plural, zero {# حالة فاشلة: {reason}} one {حالة واحدة فاشلة: {reason}} two {حالتان فاشلتان: {reason}} few {# حالات فاشلة: {reason}} many {# حالة فاشلة: {reason}} other {# حالة فاشلة: {reason}}}",
+    "code": {
+      "too_many_labels": "لديهم 20 تصنيفًا بالفعل",
+      "not_found": "لم يعودوا في هذه القائمة",
+      "other": "خطأ غير متوقع"
+    },
+    "download": "تنزيل ملف CSV",
+    "undo": "تراجع"
+  },
+  "exportColumns": {
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "ticketType": "نوع التذكرة",
+    "ticketCode": "رمز التذكرة",
+    "serial": "الرقم",
+    "source": "المصدر",
+    "status": "الحالة",
+    "labels": "التصنيفات",
+    "registeredAt": "تاريخ التسجيل",
+    "checkedIn": "تم تسجيل الحضور",
+    "yes": "نعم",
+    "no": "لا"
   }
 }

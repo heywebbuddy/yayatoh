@@ -685,5 +685,55 @@
     "orders": "Orders",
     "ticketCode": "Ticket {code}",
     "orderRef": "Ref {ref}"
+  },
+  "bulk": {
+    "formLabel": "Bulk actions",
+    "applyTo": "Apply to",
+    "selected": "Selected",
+    "allMatching": "{count, plural, one {The # matching} other {All # matching}}",
+    "action": "Action",
+    "addLabel": "Add label",
+    "removeLabel": "Remove label",
+    "export": "Export as CSV",
+    "label": "Label",
+    "labelHint": "For adding or removing a label.",
+    "apply": "Apply",
+    "select": "Select",
+    "selectOne": "Select {name}",
+    "title": {
+      "label": "Bulk labels",
+      "export": "Attendee export"
+    },
+    "status": {
+      "queued": "Waiting to start…",
+      "running": "Working… {processed} of {total} done.",
+      "done": "Done: {succeeded} of {total} updated, {failed} failed.",
+      "failed": "Stopped after {processed} of {total}. Please try again.",
+      "undoing": "Undoing… {undone} restored so far.",
+      "undone": "Undone: {undone} restored."
+    },
+    "exportDone": "Ready: {succeeded} rows exported.",
+    "failure": "{count, plural, one {# failed: {reason}} other {# failed: {reason}}}",
+    "code": {
+      "too_many_labels": "they already have 20 labels",
+      "not_found": "no longer in this list",
+      "other": "unexpected error"
+    },
+    "download": "Download CSV",
+    "undo": "Undo"
+  },
+  "exportColumns": {
+    "name": "Name",
+    "email": "Email",
+    "ticketType": "Ticket type",
+    "ticketCode": "Ticket code",
+    "serial": "No.",
+    "source": "Source",
+    "status": "Status",
+    "labels": "Labels",
+    "registeredAt": "Registered",
+    "checkedIn": "Checked in",
+    "yes": "Yes",
+    "no": "No"
   }
 }

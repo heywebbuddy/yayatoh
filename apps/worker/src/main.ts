@@ -1,4 +1,5 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
+import { runDueBulkOperations } from './bulk.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { sweepExpiredHolds } from './sweeper.ts';
@@ -49,6 +50,18 @@ setInterval(() => {
   if (!release || stopping) return;
   sweepExpiredHolds().catch((err) => console.error('sweeper', err));
 }, 30_000).unref();
+
+// Bulk actions and exports (M1.8b): keep unfinished operations moving (leader only).
+let bulkBusy = false;
+setInterval(() => {
+  if (!release || stopping || bulkBusy) return;
+  bulkBusy = true;
+  runDueBulkOperations()
+    .catch((err) => console.error('bulk', err))
+    .finally(() => {
+      bulkBusy = false;
+    });
+}, 2_000).unref();
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, async () => {

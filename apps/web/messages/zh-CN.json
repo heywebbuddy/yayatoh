@@ -685,5 +685,55 @@
     "orders": "订单",
     "ticketCode": "门票 {code}",
     "orderRef": "订单编号 {ref}"
+  },
+  "bulk": {
+    "formLabel": "批量操作",
+    "applyTo": "应用于",
+    "selected": "已选",
+    "allMatching": "{count, plural, other {全部 # 条匹配结果}}",
+    "action": "操作",
+    "addLabel": "添加标签",
+    "removeLabel": "移除标签",
+    "export": "导出为 CSV",
+    "label": "标签",
+    "labelHint": "用于添加或移除标签。",
+    "apply": "应用",
+    "select": "选择",
+    "selectOne": "选择 {name}",
+    "title": {
+      "label": "批量标签",
+      "export": "参会者导出"
+    },
+    "status": {
+      "queued": "等待开始…",
+      "running": "处理中… 已完成 {processed}/{total}。",
+      "done": "完成：{total} 条中已更新 {succeeded} 条，{failed} 条失败。",
+      "failed": "处理 {processed}/{total} 后已停止。请重试。",
+      "undoing": "正在撤销… 目前已恢复 {undone} 条。",
+      "undone": "已撤销：已恢复 {undone} 条。"
+    },
+    "exportDone": "已完成：已导出 {succeeded} 行。",
+    "failure": "{count, plural, other {# 条失败：{reason}}}",
+    "code": {
+      "too_many_labels": "已有 20 个标签",
+      "not_found": "已不在此列表中",
+      "other": "意外错误"
+    },
+    "download": "下载 CSV",
+    "undo": "撤销"
+  },
+  "exportColumns": {
+    "name": "姓名",
+    "email": "电子邮箱",
+    "ticketType": "票种",
+    "ticketCode": "门票代码",
+    "serial": "编号",
+    "source": "来源",
+    "status": "状态",
+    "labels": "标签",
+    "registeredAt": "报名时间",
+    "checkedIn": "已签到",
+    "yes": "是",
+    "no": "否"
   }
 }

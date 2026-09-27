@@ -21,6 +21,7 @@ export {
   syncScansCommand,
 } from './devices.ts';
 export {
+  admittedTicketIdsTx,
   CheckinStatusDto,
   checkinStatusQuery,
   ScanOutcomeDto,

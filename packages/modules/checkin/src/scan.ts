@@ -351,3 +351,23 @@ export const checkinStatusQuery = tenantQuery({
     };
   },
 });
+
+/** The tickets (of those given) with at least one live admission at this event, any day. */
+export async function admittedTicketIdsTx(
+  tx: TenantTx,
+  eventId: string,
+  ticketIds: readonly string[],
+): Promise<Set<string>> {
+  if (ticketIds.length === 0) return new Set();
+  const rows = await tx
+    .selectDistinct({ ticketId: admissions.ticketId })
+    .from(admissions)
+    .where(
+      and(
+        eq(admissions.eventId, eventId),
+        inArray(admissions.ticketId, [...ticketIds]),
+        isNull(admissions.undoneAt),
+      ),
+    );
+  return new Set(rows.map((r) => r.ticketId));
+}

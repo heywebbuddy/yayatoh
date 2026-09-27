@@ -26,6 +26,7 @@
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/reports": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/ui": "workspace:*",

@@ -685,5 +685,55 @@
     "orders": "訂單",
     "ticketCode": "票券 {code}",
     "orderRef": "訂單編號 {ref}"
+  },
+  "bulk": {
+    "formLabel": "批次操作",
+    "applyTo": "套用至",
+    "selected": "已選取",
+    "allMatching": "{count, plural, other {全部 # 筆符合結果}}",
+    "action": "操作",
+    "addLabel": "新增標籤",
+    "removeLabel": "移除標籤",
+    "export": "匯出為 CSV",
+    "label": "標籤",
+    "labelHint": "用於新增或移除標籤。",
+    "apply": "套用",
+    "select": "選取",
+    "selectOne": "選取 {name}",
+    "title": {
+      "label": "批次標籤",
+      "export": "參加者匯出"
+    },
+    "status": {
+      "queued": "等待開始…",
+      "running": "處理中… 已完成 {processed}/{total}。",
+      "done": "完成：{total} 筆中已更新 {succeeded} 筆，{failed} 筆失敗。",
+      "failed": "處理 {processed}/{total} 後已停止。請再試一次。",
+      "undoing": "正在復原… 目前已還原 {undone} 筆。",
+      "undone": "已復原：已還原 {undone} 筆。"
+    },
+    "exportDone": "已完成：已匯出 {succeeded} 列。",
+    "failure": "{count, plural, other {# 筆失敗：{reason}}}",
+    "code": {
+      "too_many_labels": "已有 20 個標籤",
+      "not_found": "已不在此清單中",
+      "other": "未預期的錯誤"
+    },
+    "download": "下載 CSV",
+    "undo": "復原"
+  },
+  "exportColumns": {
+    "name": "姓名",
+    "email": "電子郵件",
+    "ticketType": "票種",
+    "ticketCode": "票券代碼",
+    "serial": "編號",
+    "source": "來源",
+    "status": "狀態",
+    "labels": "標籤",
+    "registeredAt": "報名時間",
+    "checkedIn": "已報到",
+    "yes": "是",
+    "no": "否"
   }
 }

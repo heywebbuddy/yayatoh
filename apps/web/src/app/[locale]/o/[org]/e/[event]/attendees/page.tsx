@@ -2,12 +2,14 @@ import {
   ATTENDEE_SOURCES,
   ATTENDEE_STATUSES,
   type AttendeeDto,
+  attendeeLabelBulk,
   attendeeLabelsQuery,
   getAttendeeQuery,
   listAttendeesQuery,
 } from '@yayatoh/attendees';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { isProfileKey, term } from '@yayatoh/platform';
+import { type BulkOperationDto, isProfileKey, term } from '@yayatoh/platform';
+import { attendeeExportBulk } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
 import { ticketSummariesQuery } from '@yayatoh/ticketing';
 import {
@@ -24,14 +26,16 @@ import {
 } from '@yayatoh/ui';
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { LabelForm } from '@/components/label-form.tsx';
 import type { AttendeeStatus, DemoAttendee } from '@/demo/events.ts';
 import { Link } from '@/i18n/navigation.ts';
+import { errorMessageKey } from '@/lib/errors.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { ports } from '@/server/ports.ts';
-import { addLabelAction, removeLabelAction } from './actions.ts';
+import { addLabelAction, type BulkKind, bulkAction, removeLabelAction, undoBulkAction } from './actions.ts';
 
 const PAGE_SIZE = 50;
 const asArray = (v: string | string[] | undefined) => (v === undefined ? [] : Array.isArray(v) ? v : [v]);
@@ -79,6 +83,9 @@ export default async function AttendeesPage({
     source?: string;
     status?: string;
     page?: string;
+    op?: string;
+    opk?: string;
+    bulkError?: string;
   }>;
 }) {
   const { locale, org, event } = await params;
@@ -112,6 +119,27 @@ export default async function AttendeesPage({
     ? await executeQuery(attendeeLabelsQuery, { eventId: real.id }, data.ctx, ports)
     : [];
   const canWrite = roleCan(data.role, 'attendees:write');
+  const canExport = roleCan(data.role, 'attendees:export');
+  const canBulk = hasReal && (canWrite || canExport);
+  // The bulk operation the page was sent back to (progress, failures, undo, download).
+  const opKind: BulkKind | null = sp.opk === 'export' ? 'export' : sp.opk === 'label' ? 'label' : null;
+  let op: BulkOperationDto | null = null;
+  if (opKind && sp.op && /^[0-9a-f-]{36}$/.test(sp.op)) {
+    const q = opKind === 'export' ? attendeeExportBulk.status : attendeeLabelBulk.status;
+    op = await executeQuery(q, { operationId: sp.op }, data.ctx, ports).catch((err) => {
+      if (isDomainError(err) && (err.code === 'not_found' || err.code === 'forbidden')) return null;
+      throw err;
+    });
+  }
+  const opActive = op ? ['queued', 'running', 'undoing'].includes(op.status) : false;
+  const failureCodes = op
+    ? Object.entries(
+        op.failures.reduce<Record<string, number>>((acc, f) => {
+          acc[f.code] = (acc[f.code] ?? 0) + 1;
+          return acc;
+        }, {}),
+      )
+    : [];
   const liveById = new Map<string, AttendeeDto>(live.items.map((x) => [x.id, x]));
   // The profile panel opens from search results too, so it can't rely on the current page.
   if (hasReal && selectedId && !liveById.has(selectedId) && /^[0-9a-f-]{36}$/.test(selectedId)) {
@@ -320,6 +348,142 @@ export default async function AttendeesPage({
           </nav>
         ) : null}
 
+        {op && opKind ? (
+          <section
+            aria-labelledby="bulk-status-heading"
+            className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+          >
+            {opActive ? <AutoRefresh seconds={2} /> : null}
+            <h2 id="bulk-status-heading" className="text-section">
+              {t(`bulk.title.${opKind}`)}
+            </h2>
+            <p className="text-body" role="status">
+              {opKind === 'export' && op.status === 'done'
+                ? t('bulk.exportDone', { succeeded: formatNumber(op.succeeded, locale) })
+                : t(`bulk.status.${op.status}`, {
+                    processed: formatNumber(op.processed, locale),
+                    total: formatNumber(op.total, locale),
+                    succeeded: formatNumber(op.succeeded, locale),
+                    failed: formatNumber(op.failed, locale),
+                    undone: formatNumber(op.undone, locale),
+                  })}
+            </p>
+            {failureCodes.length ? (
+              <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
+                {failureCodes.map(([code, n]) => (
+                  <li key={code}>
+                    {t('bulk.failure', {
+                      count: n,
+                      reason: t(
+                        `bulk.code.${code === 'too_many_labels' || code === 'not_found' ? code : 'other'}`,
+                      ),
+                    })}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <div className="flex flex-wrap gap-2">
+              {opKind === 'export' && op.status === 'done' && op.hasFile ? (
+                <a
+                  href={`${locale === 'en' ? '' : `/${locale}`}${base}/exports/${op.id}`}
+                  className={buttonClass('primary', 'sm')}
+                  download
+                >
+                  {t('bulk.download')}
+                </a>
+              ) : null}
+              {opKind === 'label' && op.undoUntil && canWrite ? (
+                <form action={undoBulkAction.bind(null, org, event, op.id)}>
+                  <Button type="submit" variant="secondary" size="sm">
+                    {t('bulk.undo')}
+                  </Button>
+                </form>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+        {sp.bulkError ? (
+          <p
+            role="alert"
+            className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+          >
+            {t(errorMessageKey(sp.bulkError))}
+          </p>
+        ) : null}
+        {canBulk && rows.length > 0 ? (
+          <form
+            id="bulk-form"
+            action={bulkAction.bind(null, org, event)}
+            aria-label={t('bulk.formLabel')}
+            className="flex flex-wrap items-end gap-3 rounded-card border border-zinc-200 bg-white px-4 py-3"
+          >
+            <input type="hidden" name="f_q" value={q} />
+            {labels.map((l) => (
+              <input key={l} type="hidden" name="f_label" value={l} />
+            ))}
+            <input type="hidden" name="f_source" value={source ?? ''} />
+            <input type="hidden" name="f_status" value={status ?? ''} />
+            <fieldset className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <legend className="sr-only">{t('bulk.applyTo')}</legend>
+              <label className="flex min-h-6 items-center gap-2 text-body">
+                <input
+                  type="radio"
+                  name="scope"
+                  value="selected"
+                  defaultChecked
+                  className="size-5 accent-ink"
+                />
+                {t('bulk.selected')}
+              </label>
+              <label className="flex min-h-6 items-center gap-2 text-body">
+                <input type="radio" name="scope" value="all" className="size-5 accent-ink" />
+                {t('bulk.allMatching', { count: live.total, formatted: formatNumber(live.total, locale) })}
+              </label>
+            </fieldset>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="bulk-what" className="text-caption text-zinc-600">
+                {t('bulk.action')}
+              </label>
+              <select
+                id="bulk-what"
+                name="bulk"
+                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+              >
+                {canWrite ? <option value="addLabel">{t('bulk.addLabel')}</option> : null}
+                {canWrite ? <option value="removeLabel">{t('bulk.removeLabel')}</option> : null}
+                {canExport ? <option value="export">{t('bulk.export')}</option> : null}
+              </select>
+            </div>
+            {canWrite ? (
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="bulk-label" className="text-caption text-zinc-600">
+                  {t('bulk.label')}
+                </label>
+                <input
+                  id="bulk-label"
+                  name="bulkLabel"
+                  maxLength={40}
+                  list="bulk-label-suggestions"
+                  autoComplete="off"
+                  aria-describedby="bulk-label-hint"
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                />
+                <datalist id="bulk-label-suggestions">
+                  {labelCounts.map((l) => (
+                    <option key={l.label} value={l.label} />
+                  ))}
+                </datalist>
+                <span id="bulk-label-hint" className="text-caption text-zinc-500">
+                  {t('bulk.labelHint')}
+                </span>
+              </div>
+            ) : null}
+            <Button type="submit" variant="secondary">
+              {t('bulk.apply')}
+            </Button>
+          </form>
+        ) : null}
+
         {(demo ? ev.attendees.length === 0 : !hasReal) ? (
           <EmptyState
             title={t('attendees.emptyTitle', { term: title })}
@@ -333,6 +497,24 @@ export default async function AttendeesPage({
             rowKey={(r) => r.id}
             rows={rows}
             columns={[
+              ...(canBulk
+                ? [
+                    {
+                      key: 'select',
+                      header: t('bulk.select'),
+                      cell: (r: DemoAttendee) => (
+                        <input
+                          type="checkbox"
+                          form="bulk-form"
+                          name="ids"
+                          value={r.id}
+                          aria-label={t('bulk.selectOne', { name: r.name })}
+                          className="size-5 accent-ink"
+                        />
+                      ),
+                    },
+                  ]
+                : []),
               {
                 key: 'name',
                 header: t('attendees.name'),

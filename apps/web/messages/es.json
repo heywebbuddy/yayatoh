@@ -685,5 +685,55 @@
     "orders": "Pedidos",
     "ticketCode": "Entrada {code}",
     "orderRef": "Ref. {ref}"
+  },
+  "bulk": {
+    "formLabel": "Acciones masivas",
+    "applyTo": "Aplicar a",
+    "selected": "Seleccionados",
+    "allMatching": "{count, plural, one {# resultado} other {Los # resultados}}",
+    "action": "Acción",
+    "addLabel": "Añadir etiqueta",
+    "removeLabel": "Quitar etiqueta",
+    "export": "Exportar como CSV",
+    "label": "Etiqueta",
+    "labelHint": "Para añadir o quitar una etiqueta.",
+    "apply": "Aplicar",
+    "select": "Seleccionar",
+    "selectOne": "Seleccionar a {name}",
+    "title": {
+      "label": "Etiquetas masivas",
+      "export": "Exportación de asistentes"
+    },
+    "status": {
+      "queued": "Esperando para empezar…",
+      "running": "Procesando… {processed} de {total} listos.",
+      "done": "Listo: {succeeded} de {total} actualizados, {failed} con error.",
+      "failed": "Se detuvo tras {processed} de {total}. Inténtalo de nuevo.",
+      "undoing": "Deshaciendo… {undone} restaurados hasta ahora.",
+      "undone": "Deshecho: {undone} restaurados."
+    },
+    "exportDone": "Listo: {succeeded} filas exportadas.",
+    "failure": "{count, plural, one {# falló: {reason}} other {# fallaron: {reason}}}",
+    "code": {
+      "too_many_labels": "ya tienen 20 etiquetas",
+      "not_found": "ya no están en esta lista",
+      "other": "error inesperado"
+    },
+    "download": "Descargar CSV",
+    "undo": "Deshacer"
+  },
+  "exportColumns": {
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "ticketType": "Tipo de entrada",
+    "ticketCode": "Código de la entrada",
+    "serial": "N.º",
+    "source": "Origen",
+    "status": "Estado",
+    "labels": "Etiquetas",
+    "registeredAt": "Inscripción",
+    "checkedIn": "Check-in",
+    "yes": "Sí",
+    "no": "No"
   }
 }

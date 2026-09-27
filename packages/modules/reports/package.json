@@ -1,33 +1,31 @@
 {
-  "name": "@yayatoh/worker",
+  "name": "@yayatoh/reports",
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "yayatoh": {
+    "tier": 5
+  },
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "dev": "node --watch src/main.ts",
-    "start": "node src/main.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
-    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
-    "@yayatoh/orders": "workspace:*",
     "@yayatoh/platform": "workspace:*",
-    "@yayatoh/reports": "workspace:*",
-    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
-    "pg-boss": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
     "@yayatoh/config": "workspace:*",
-    "@yayatoh/testing": "workspace:*",
+    "@types/node": "catalog:",
     "typescript": "catalog:"
   }
 }

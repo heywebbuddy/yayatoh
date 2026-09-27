@@ -685,5 +685,55 @@
     "orders": "Commandes",
     "ticketCode": "Billet {code}",
     "orderRef": "Réf. {ref}"
+  },
+  "bulk": {
+    "formLabel": "Actions groupées",
+    "applyTo": "Appliquer à",
+    "selected": "Sélection",
+    "allMatching": "{count, plural, one {# résultat} other {Les # résultats}}",
+    "action": "Action",
+    "addLabel": "Ajouter une étiquette",
+    "removeLabel": "Retirer une étiquette",
+    "export": "Exporter en CSV",
+    "label": "Étiquette",
+    "labelHint": "Pour ajouter ou retirer une étiquette.",
+    "apply": "Appliquer",
+    "select": "Sélectionner",
+    "selectOne": "Sélectionner {name}",
+    "title": {
+      "label": "Étiquettes groupées",
+      "export": "Export des participants"
+    },
+    "status": {
+      "queued": "En attente de démarrage…",
+      "running": "En cours… {processed} sur {total} traités.",
+      "done": "Terminé : {succeeded} sur {total} mis à jour, {failed} en échec.",
+      "failed": "Arrêté après {processed} sur {total}. Veuillez réessayer.",
+      "undoing": "Annulation… {undone} restaurés pour l’instant.",
+      "undone": "Annulé : {undone} restaurés."
+    },
+    "exportDone": "Prêt : {succeeded} lignes exportées.",
+    "failure": "{count, plural, one {# échec : {reason}} other {# échecs : {reason}}}",
+    "code": {
+      "too_many_labels": "ils ont déjà 20 étiquettes",
+      "not_found": "ne sont plus dans cette liste",
+      "other": "erreur inattendue"
+    },
+    "download": "Télécharger le CSV",
+    "undo": "Annuler"
+  },
+  "exportColumns": {
+    "name": "Nom",
+    "email": "E-mail",
+    "ticketType": "Type de billet",
+    "ticketCode": "Code du billet",
+    "serial": "N°",
+    "source": "Source",
+    "status": "Statut",
+    "labels": "Étiquettes",
+    "registeredAt": "Inscription",
+    "checkedIn": "Check-in",
+    "yes": "Oui",
+    "no": "Non"
   }
 }

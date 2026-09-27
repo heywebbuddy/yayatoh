@@ -685,5 +685,55 @@
     "orders": "Bestellungen",
     "ticketCode": "Ticket {code}",
     "orderRef": "Ref. {ref}"
+  },
+  "bulk": {
+    "formLabel": "Sammelaktionen",
+    "applyTo": "Anwenden auf",
+    "selected": "Ausgewählte",
+    "allMatching": "{count, plural, one {# Treffer} other {Alle # Treffer}}",
+    "action": "Aktion",
+    "addLabel": "Label hinzufügen",
+    "removeLabel": "Label entfernen",
+    "export": "Als CSV exportieren",
+    "label": "Label",
+    "labelHint": "Zum Hinzufügen oder Entfernen eines Labels.",
+    "apply": "Anwenden",
+    "select": "Auswählen",
+    "selectOne": "{name} auswählen",
+    "title": {
+      "label": "Labels für mehrere",
+      "export": "Export der Teilnehmenden"
+    },
+    "status": {
+      "queued": "Wartet auf Start…",
+      "running": "Läuft… {processed} von {total} erledigt.",
+      "done": "Fertig: {succeeded} von {total} aktualisiert, {failed} fehlgeschlagen.",
+      "failed": "Nach {processed} von {total} abgebrochen. Bitte versuche es erneut.",
+      "undoing": "Wird rückgängig gemacht… bisher {undone} wiederhergestellt.",
+      "undone": "Rückgängig gemacht: {undone} wiederhergestellt."
+    },
+    "exportDone": "Fertig: {succeeded} Zeilen exportiert.",
+    "failure": "{count, plural, one {# fehlgeschlagen: {reason}} other {# fehlgeschlagen: {reason}}}",
+    "code": {
+      "too_many_labels": "sie haben bereits 20 Labels",
+      "not_found": "nicht mehr in dieser Liste",
+      "other": "unerwarteter Fehler"
+    },
+    "download": "CSV herunterladen",
+    "undo": "Rückgängig"
+  },
+  "exportColumns": {
+    "name": "Name",
+    "email": "E-Mail",
+    "ticketType": "Ticketart",
+    "ticketCode": "Ticketcode",
+    "serial": "Nr.",
+    "source": "Quelle",
+    "status": "Status",
+    "labels": "Labels",
+    "registeredAt": "Angemeldet am",
+    "checkedIn": "Eingecheckt",
+    "yes": "Ja",
+    "no": "Nein"
   }
 }

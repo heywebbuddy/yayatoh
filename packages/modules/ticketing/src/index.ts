@@ -28,6 +28,7 @@ export {
   type ScannableTicket,
   ticketForScanTx,
   ticketSummariesQuery,
+  ticketSummariesTx,
   ticketsForOrderTx,
 } from './issue.ts';
 export {

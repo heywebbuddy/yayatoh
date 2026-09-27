@@ -685,5 +685,55 @@
     "orders": "Заказы",
     "ticketCode": "Билет {code}",
     "orderRef": "Заказ {ref}"
+  },
+  "bulk": {
+    "formLabel": "Массовые действия",
+    "applyTo": "Применить к",
+    "selected": "Выбранные",
+    "allMatching": "{count, plural, one {# результат} few {Все # результата} many {Все # результатов} other {Все # результата}}",
+    "action": "Действие",
+    "addLabel": "Добавить метку",
+    "removeLabel": "Удалить метку",
+    "export": "Экспорт в CSV",
+    "label": "Метка",
+    "labelHint": "Для добавления или удаления метки.",
+    "apply": "Применить",
+    "select": "Выбрать",
+    "selectOne": "Выбрать {name}",
+    "title": {
+      "label": "Массовые метки",
+      "export": "Экспорт участников"
+    },
+    "status": {
+      "queued": "Ожидание запуска…",
+      "running": "Выполняется… готово {processed} из {total}.",
+      "done": "Готово: обновлено {succeeded} из {total}, ошибок: {failed}.",
+      "failed": "Остановлено после {processed} из {total}. Попробуйте ещё раз.",
+      "undoing": "Отмена… восстановлено: {undone}.",
+      "undone": "Отменено: восстановлено {undone}."
+    },
+    "exportDone": "Готово: экспортировано строк — {succeeded}.",
+    "failure": "{count, plural, one {# ошибка: {reason}} few {# ошибки: {reason}} many {# ошибок: {reason}} other {# ошибки: {reason}}}",
+    "code": {
+      "too_many_labels": "уже есть 20 меток",
+      "not_found": "больше нет в этом списке",
+      "other": "непредвиденная ошибка"
+    },
+    "download": "Скачать CSV",
+    "undo": "Отменить"
+  },
+  "exportColumns": {
+    "name": "Имя",
+    "email": "Email",
+    "ticketType": "Тип билета",
+    "ticketCode": "Код билета",
+    "serial": "№",
+    "source": "Источник",
+    "status": "Статус",
+    "labels": "Метки",
+    "registeredAt": "Дата регистрации",
+    "checkedIn": "Вход отмечен",
+    "yes": "Да",
+    "no": "Нет"
   }
 }

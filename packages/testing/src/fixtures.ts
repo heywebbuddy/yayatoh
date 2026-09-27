@@ -1,3 +1,4 @@
+import { attendeeLabelBulk } from '@yayatoh/attendees';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import { createCheckpointCommand, enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
@@ -11,6 +12,7 @@ import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
+import { attendeeExportBulk } from '@yayatoh/reports';
 import {
   addMemberCommand,
   createOrganization,
@@ -20,7 +22,7 @@ import {
 } from '@yayatoh/tenancy';
 import { createPromoCodeCommand, createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
-import { ports } from './ports.ts';
+import { ports, runBulk } from './ports.ts';
 
 export interface OrgFixture {
   readonly org: OrganizationDto;
@@ -205,8 +207,42 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // A finished bulk label (undo data) and an export (a file with parts), for isolation coverage.
+  for (const op of [
+    await executeCommand(
+      attendeeLabelBulk.start,
+      { eventId: event.id, selection: { filter: {} }, params: { add: ['Fixture'] } },
+      ctx(),
+      ports,
+    ),
+    await executeCommand(
+      attendeeExportBulk.start,
+      { eventId: event.id, selection: { filter: {} }, params: EXPORT_PARAMS },
+      ctx(),
+      ports,
+    ),
+  ])
+    await runBulk(org.id, op.operationId);
   return { org, ownerId, viewerId, event, ctx };
 }
+
+/** English headers for attendee exports (the console passes its own locale's). */
+export const EXPORT_PARAMS = {
+  headers: {
+    name: 'Name',
+    email: 'Email',
+    ticketType: 'Ticket type',
+    ticketCode: 'Ticket code',
+    serial: 'No.',
+    source: 'Source',
+    status: 'Status',
+    labels: 'Labels',
+    registeredAt: 'Registered',
+    checkedIn: 'Checked in',
+  },
+  yes: 'Yes',
+  no: 'No',
+};
 
 /** The two-org adversarial fixture (roadmap §9 seeds: `two-org-adversarial`). */
 export async function twoOrgs(suffix = uuidv7().slice(-8)) {

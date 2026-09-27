@@ -685,5 +685,55 @@
     "orders": "注文",
     "ticketCode": "チケット {code}",
     "orderRef": "注文番号 {ref}"
+  },
+  "bulk": {
+    "formLabel": "一括操作",
+    "applyTo": "適用対象",
+    "selected": "選択中",
+    "allMatching": "{count, plural, other {一致する#件すべて}}",
+    "action": "操作",
+    "addLabel": "ラベルを追加",
+    "removeLabel": "ラベルを削除",
+    "export": "CSVでエクスポート",
+    "label": "ラベル",
+    "labelHint": "ラベルの追加・削除に使用します。",
+    "apply": "適用",
+    "select": "選択",
+    "selectOne": "{name}さんを選択",
+    "title": {
+      "label": "ラベルの一括編集",
+      "export": "参加者のエクスポート"
+    },
+    "status": {
+      "queued": "開始を待っています…",
+      "running": "処理中… {total}件中{processed}件完了。",
+      "done": "完了：{total}件中{succeeded}件を更新、{failed}件失敗。",
+      "failed": "{total}件中{processed}件で停止しました。もう一度お試しください。",
+      "undoing": "取り消し中… これまでに{undone}件を復元。",
+      "undone": "取り消しました：{undone}件を復元。"
+    },
+    "exportDone": "完了：{succeeded} 行をエクスポートしました。",
+    "failure": "{count, plural, other {#件失敗：{reason}}}",
+    "code": {
+      "too_many_labels": "ラベルがすでに20件あります",
+      "not_found": "このリストにもう含まれていません",
+      "other": "予期しないエラー"
+    },
+    "download": "CSVをダウンロード",
+    "undo": "取り消す"
+  },
+  "exportColumns": {
+    "name": "名前",
+    "email": "メールアドレス",
+    "ticketType": "チケット種別",
+    "ticketCode": "チケットコード",
+    "serial": "No.",
+    "source": "経路",
+    "status": "ステータス",
+    "labels": "ラベル",
+    "registeredAt": "登録日時",
+    "checkedIn": "チェックイン済み",
+    "yes": "はい",
+    "no": "いいえ"
   }
 }

@@ -685,5 +685,55 @@
     "orders": "Bestellingen",
     "ticketCode": "Ticket {code}",
     "orderRef": "Ref. {ref}"
+  },
+  "bulk": {
+    "formLabel": "Bulkacties",
+    "applyTo": "Toepassen op",
+    "selected": "Geselecteerd",
+    "allMatching": "{count, plural, one {# resultaat} other {Alle # resultaten}}",
+    "action": "Actie",
+    "addLabel": "Label toevoegen",
+    "removeLabel": "Label verwijderen",
+    "export": "Exporteren als CSV",
+    "label": "Label",
+    "labelHint": "Om een label toe te voegen of te verwijderen.",
+    "apply": "Toepassen",
+    "select": "Selecteren",
+    "selectOne": "{name} selecteren",
+    "title": {
+      "label": "Labels in bulk",
+      "export": "Deelnemersexport"
+    },
+    "status": {
+      "queued": "Wacht op start…",
+      "running": "Bezig… {processed} van {total} klaar.",
+      "done": "Klaar: {succeeded} van {total} bijgewerkt, {failed} mislukt.",
+      "failed": "Gestopt na {processed} van {total}. Probeer het opnieuw.",
+      "undoing": "Bezig met ongedaan maken… tot nu toe {undone} hersteld.",
+      "undone": "Ongedaan gemaakt: {undone} hersteld."
+    },
+    "exportDone": "Klaar: {succeeded} rijen geëxporteerd.",
+    "failure": "{count, plural, one {# mislukt: {reason}} other {# mislukt: {reason}}}",
+    "code": {
+      "too_many_labels": "ze hebben al 20 labels",
+      "not_found": "niet meer in deze lijst",
+      "other": "onverwachte fout"
+    },
+    "download": "CSV downloaden",
+    "undo": "Ongedaan maken"
+  },
+  "exportColumns": {
+    "name": "Naam",
+    "email": "E-mail",
+    "ticketType": "Tickettype",
+    "ticketCode": "Ticketcode",
+    "serial": "Nr.",
+    "source": "Bron",
+    "status": "Status",
+    "labels": "Labels",
+    "registeredAt": "Geregistreerd",
+    "checkedIn": "Ingecheckt",
+    "yes": "Ja",
+    "no": "Nee"
   }
 }

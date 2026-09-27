@@ -16,6 +16,8 @@ export const PERMISSIONS = [
   'attendees:read',
   /** Label, tag and (later) edit attendees. */
   'attendees:write',
+  /** Download attendee lists (CSV). Contact data leaving the platform: narrower than read. */
+  'attendees:export',
   'contacts:read',
   'finance:read',
   'marketing:write',
@@ -35,6 +37,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'orders:read',
     'attendees:read',
     'attendees:write',
+    'attendees:export',
     'contacts:read',
     'marketing:write',
     'checkin:scan',
@@ -64,6 +67,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'orders:read',
     'attendees:read',
     'attendees:write',
+    'attendees:export',
     'checkin:scan',
   ],
   door_staff: ['events:read', 'checkin:scan'],

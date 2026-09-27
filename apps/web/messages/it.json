@@ -685,5 +685,55 @@
     "orders": "Ordini",
     "ticketCode": "Biglietto {code}",
     "orderRef": "Rif. {ref}"
+  },
+  "bulk": {
+    "formLabel": "Azioni di gruppo",
+    "applyTo": "Applica a",
+    "selected": "Selezionati",
+    "allMatching": "{count, plural, one {# risultato} other {Tutti i # risultati}}",
+    "action": "Azione",
+    "addLabel": "Aggiungi etichetta",
+    "removeLabel": "Rimuovi etichetta",
+    "export": "Esporta in CSV",
+    "label": "Etichetta",
+    "labelHint": "Per aggiungere o rimuovere un’etichetta.",
+    "apply": "Applica",
+    "select": "Seleziona",
+    "selectOne": "Seleziona {name}",
+    "title": {
+      "label": "Etichette di gruppo",
+      "export": "Esportazione partecipanti"
+    },
+    "status": {
+      "queued": "In attesa di avvio…",
+      "running": "In corso… {processed} di {total} completati.",
+      "done": "Fatto: {succeeded} di {total} aggiornati, {failed} non riusciti.",
+      "failed": "Interrotto dopo {processed} di {total}. Riprova.",
+      "undoing": "Annullamento… finora {undone} ripristinati.",
+      "undone": "Annullato: {undone} ripristinati."
+    },
+    "exportDone": "Pronto: {succeeded} righe esportate.",
+    "failure": "{count, plural, one {# non riuscito: {reason}} other {# non riusciti: {reason}}}",
+    "code": {
+      "too_many_labels": "hanno già 20 etichette",
+      "not_found": "non sono più in questo elenco",
+      "other": "errore imprevisto"
+    },
+    "download": "Scarica CSV",
+    "undo": "Annulla"
+  },
+  "exportColumns": {
+    "name": "Nome",
+    "email": "Email",
+    "ticketType": "Tipo di biglietto",
+    "ticketCode": "Codice del biglietto",
+    "serial": "N.",
+    "source": "Origine",
+    "status": "Stato",
+    "labels": "Etichette",
+    "registeredAt": "Registrazione",
+    "checkedIn": "Check-in",
+    "yes": "Sì",
+    "no": "No"
   }
 }

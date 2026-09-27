@@ -11,5 +11,11 @@ export {
   searchAttendeesQuery,
   setAttendeeLabelsCommand,
 } from './attendees.ts';
+export {
+  attendeeLabelAction,
+  attendeeLabelBulk,
+  attendeesForExportTx,
+  resolveAttendeeIdsTx,
+} from './bulk.ts';
 export * from './dto.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES } from './schema.ts';

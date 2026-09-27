@@ -1,3 +1,16 @@
+export {
+  type AnyBulkAction,
+  type BulkAction,
+  type BulkItemResult,
+  BulkOperationDto,
+  bulkCommands,
+  bulkStepCommand,
+  defineBulkAction,
+  listBulkOperationsQuery,
+  MAX_BULK_ITEMS,
+  markBulkFailedCommand,
+  runBulkOperation,
+} from './bulk.ts';
 export { tenantCommand, tenantQuery } from './commands/define.ts';
 export { createCommandPorts, type PolicyPorts, recentStepUp } from './commands/ports.ts';
 export { type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';

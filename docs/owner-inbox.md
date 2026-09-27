@@ -19,6 +19,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 ## Phase 0 (M0.1–M0.4)
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.
+  - Until R2 exists, attendee exports (M1.8b) are stored in Postgres and expire after 7 days.
   - Stripe test mode access for the platform account.
 - [ ] **Confirm today's platform fee** (M1.5): the legacy commission % and any fixed per-ticket fee, per currency, and whether organizers absorb or pass it on by default. The new platform launches at 0% until this is set (`billing.fee_schedules`).
 - [ ] **Ticket signing key encryption** (M1.5c, before launch): an AWS KMS key (or approve another KMS) for encrypting each org's ticket-signing private key. Development and CI use a local AES key (`LOCAL_KMS_KEY`) behind the `KeyVault` port; the local adapter is refused in production.

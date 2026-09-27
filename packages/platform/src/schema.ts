@@ -2,7 +2,9 @@ import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
   bigint,
+  boolean,
   check,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -81,5 +83,105 @@ export const idempotencyKeys = tenantTable(
   (t) => [
     uniqueIndex('idempotency_keys_org_scope_key_key').on(t.orgId, t.scope, t.key),
     check('idempotency_keys_key_length', sql`length(${t.key}) between 1 and 255`),
+  ],
+);
+
+const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
+
+export const BULK_STATUSES = ['queued', 'running', 'done', 'failed', 'undoing', 'undone'] as const;
+export type BulkStatus = (typeof BULK_STATUSES)[number];
+
+/**
+ * A bulk action over a snapshot of item ids (roadmap M1.8: ids or filter, progress, partial
+ * failures, undo window). The selection is resolved once, at request time; runners then work
+ * through `item_ids` in chunks, each chunk in its own tenant transaction.
+ */
+export const bulkOperations = tenantTable(
+  platform,
+  'bulk_operations',
+  {
+    action: text('action').notNull(),
+    eventId: uuid('event_id'),
+    status: text('status').notNull().default('queued'),
+    params: jsonb('params').notNull().default({}),
+    itemIds: uuid('item_ids').array().notNull(),
+    total: integer('total').notNull(),
+    processed: integer('processed').notNull().default(0),
+    succeeded: integer('succeeded').notNull().default(0),
+    failed: integer('failed').notNull().default(0),
+    undone: integer('undone').notNull().default(0),
+    requestedBy: uuid('requested_by'),
+    fileId: uuid('file_id'),
+    undoUntil: tsz('undo_until'),
+    finishedAt: tsz('finished_at'),
+    lastError: text('last_error'),
+  },
+  (t) => [
+    index('bulk_operations_org_created_idx').on(t.orgId, t.createdAt),
+    index('bulk_operations_active_idx')
+      .on(t.orgId, t.id)
+      .where(sql`status in ('queued', 'running', 'undoing')`),
+    check(
+      'bulk_operations_status_check',
+      sql`status in ('queued', 'running', 'done', 'failed', 'undoing', 'undone')`,
+    ),
+    check('bulk_operations_counts_check', sql`processed <= total and succeeded + failed <= processed`),
+  ],
+);
+
+/** Per-item outcomes worth keeping: failures (with a code) and what undo needs to restore. */
+export const bulkOperationItems = tenantTable(
+  platform,
+  'bulk_operation_items',
+  {
+    operationId: uuid('operation_id').notNull(),
+    itemId: uuid('item_id').notNull(),
+    ok: boolean('ok').notNull(),
+    errorCode: text('error_code'),
+    undo: jsonb('undo'),
+    undoneAt: tsz('undone_at'),
+  },
+  (t) => [
+    uniqueIndex('bulk_operation_items_org_op_item_key').on(t.orgId, t.operationId, t.itemId),
+    foreignKey({
+      name: 'bulk_operation_items_operation_fk',
+      columns: [t.orgId, t.operationId],
+      foreignColumns: [bulkOperations.orgId, bulkOperations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * Generated files (exports) kept in Postgres until object storage exists (R2, owner account).
+ * Content is appended in parts as a job progresses; downloads concatenate them in order.
+ */
+export const files = tenantTable(
+  platform,
+  'files',
+  {
+    name: text('name').notNull(),
+    contentType: text('content_type').notNull(),
+    bytes: integer('bytes').notNull().default(0),
+    complete: boolean('complete').notNull().default(false),
+    expiresAt: tsz('expires_at').notNull(),
+  },
+  (t) => [index('files_org_expires_idx').on(t.orgId, t.expiresAt)],
+);
+
+export const fileParts = tenantTable(
+  platform,
+  'file_parts',
+  {
+    fileId: uuid('file_id').notNull(),
+    seq: integer('seq').notNull(),
+    data: text('data').notNull(),
+  },
+  (t) => [
+    uniqueIndex('file_parts_org_file_seq_key').on(t.orgId, t.fileId, t.seq),
+    foreignKey({
+      name: 'file_parts_file_fk',
+      columns: [t.orgId, t.fileId],
+      foreignColumns: [files.orgId, files.id],
+    }).onDelete('cascade'),
   ],
 );

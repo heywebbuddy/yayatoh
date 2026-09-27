@@ -685,5 +685,55 @@
     "orders": "ऑर्डर",
     "ticketCode": "टिकट {code}",
     "orderRef": "रेफ़रेंस {ref}"
+  },
+  "bulk": {
+    "formLabel": "बल्क कार्रवाइयाँ",
+    "applyTo": "इन पर लागू करें",
+    "selected": "चुने गए",
+    "allMatching": "{count, plural, one {मेल खाने वाला #} other {मेल खाने वाले सभी #}}",
+    "action": "कार्रवाई",
+    "addLabel": "लेबल जोड़ें",
+    "removeLabel": "लेबल हटाएँ",
+    "export": "CSV के रूप में एक्सपोर्ट करें",
+    "label": "लेबल",
+    "labelHint": "लेबल जोड़ने या हटाने के लिए।",
+    "apply": "लागू करें",
+    "select": "चुनें",
+    "selectOne": "{name} को चुनें",
+    "title": {
+      "label": "बल्क लेबल",
+      "export": "प्रतिभागी एक्सपोर्ट"
+    },
+    "status": {
+      "queued": "शुरू होने का इंतज़ार…",
+      "running": "काम जारी है… {total} में से {processed} पूरे।",
+      "done": "पूरा हुआ: {total} में से {succeeded} अपडेट हुए, {failed} विफल।",
+      "failed": "{total} में से {processed} के बाद रुक गया। कृपया फिर से कोशिश करें।",
+      "undoing": "वापस लिया जा रहा है… अब तक {undone} बहाल।",
+      "undone": "वापस लिया गया: {undone} बहाल।"
+    },
+    "exportDone": "तैयार: {succeeded} पंक्तियाँ निर्यात की गईं।",
+    "failure": "{count, plural, one {# विफल: {reason}} other {# विफल: {reason}}}",
+    "code": {
+      "too_many_labels": "उनके पास पहले से 20 लेबल हैं",
+      "not_found": "अब इस सूची में नहीं हैं",
+      "other": "अनपेक्षित त्रुटि"
+    },
+    "download": "CSV डाउनलोड करें",
+    "undo": "वापस लें"
+  },
+  "exportColumns": {
+    "name": "नाम",
+    "email": "ईमेल",
+    "ticketType": "टिकट प्रकार",
+    "ticketCode": "टिकट कोड",
+    "serial": "नं.",
+    "source": "स्रोत",
+    "status": "स्थिति",
+    "labels": "लेबल",
+    "registeredAt": "पंजीकरण",
+    "checkedIn": "चेक-इन हुआ",
+    "yes": "हाँ",
+    "no": "नहीं"
   }
 }

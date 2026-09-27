@@ -40,6 +40,13 @@ export const Label = z
   .pipe(z.string().min(1).max(40));
 export const MAX_LABELS = 20;
 
+/** An attendee's labels after adding and removing (removal wins), sorted and deduplicated. */
+export const nextLabels = (add: readonly string[], remove: readonly string[]) => sql`(
+  select coalesce(array_agg(distinct l order by l), '{}'::text[])
+  from unnest(array_cat(${attendees.labels}, ${textArray(add)})) as l
+  where not (l = any(${textArray(remove)}))
+)`;
+
 /** A bound `text[]` literal: one parameter per element. */
 const textArray = (values: readonly string[]) =>
   values.length
@@ -58,7 +65,7 @@ export const AttendeeFilter = z.object({
 });
 export type AttendeeFilter = z.input<typeof AttendeeFilter>;
 
-function filterWhere(eventId: string, f: z.output<typeof AttendeeFilter>) {
+export function filterWhere(eventId: string, f: z.output<typeof AttendeeFilter>) {
   const q = f.search ? `%${escapeLike(f.search)}%` : null;
   return and(
     eq(attendees.eventId, eventId),
@@ -147,11 +154,7 @@ export const setAttendeeLabelsCommand = tenantCommand({
   permission: 'attendees:write',
   handler: async ({ input, ctx, tx }) => {
     const ids = [...new Set(input.attendeeIds)];
-    const next = sql`(
-      select coalesce(array_agg(distinct l order by l), '{}'::text[])
-      from unnest(array_cat(${attendees.labels}, ${textArray(input.add)})) as l
-      where not (l = any(${textArray(input.remove)}))
-    )`;
+    const next = nextLabels(input.add, input.remove);
     const over = await tx
       .select({ id: attendees.id })
       .from(attendees)

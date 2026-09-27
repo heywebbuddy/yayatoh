@@ -155,6 +155,13 @@
       "when": 1790504902196,
       "tag": "0021_naive_mentor",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1790506993796,
+      "tag": "0022_modern_ken_ellis",
+      "breakpoints": true
     }
   ]
 }
