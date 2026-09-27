@@ -16,6 +16,12 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
   - "Complimentary" means a paid order with a zero total (free passes, 100 % codes). Legacy bulk comp codes arrive with the ELT; tell us if the legacy report counted anything else as complimentary.
+- [ ] **Messaging providers** (M1.10, labels: `infra`, `legal-copy`). The notifications core is built behind ports; every channel runs on a fake until these exist (dev/CI write to the dev mailbox at `/dev/mailbox`; production leaves messages queued rather than pretending):
+  - **Amazon SES:** production access (out of the sandbox), the `mail.yayatoh.com` domain with Easy DKIM, a custom MAIL FROM and a DMARC record, and a configuration set for bounce/complaint events. Credentials go in Doppler.
+  - **Twilio:** toll-free number verification and 10DLC (brand + campaign) — see Phase 0 accounts.
+  - **Meta business verification** for WhatsApp (utility templates only in the US, decision D16).
+  - **Push:** a Firebase service account (FCM HTTP v1) and an APNs auth key (.p8, key id, team id, bundle ids) for the existing apps; VAPID keys for web push.
+  - **Confirm three defaults:** quiet hours 21:00–08:00 in the recipient's timezone also apply to non-urgent email (reminders, announcements, guest emails), not only SMS; the staff "pause messaging" switch holds everything except transactional mail (tickets, refunds, invitations, ticket links, replies the customer asked for); email templates use the platform's escaped-HTML templates instead of React Email (the worker runs TypeScript without a JSX step).
 - [ ] **Staff list and console** (M1.3e, decision D10): send the list of people who should be platform staff and their role (admin, support or finance). They are added with the worker CLI (`pnpm --filter @yayatoh/worker staff -- --email … --role …`). Also confirm the staff console (`admin.yayatoh.com`) may stay English-only; its strings are ready for translation if not. Hosting it needs a second Vercel project. Label: `auth`.
 - [ ] **Name a translation owner** (M1.1). The 12 non-English locales are machine-drafted by Claude Code and need a native-speaker review, Arabic first. Tolgee is the planned workflow once accounts exist.
 - [ ] **Review the M1.1 screens** in the CI `e2e-report` artifact (screenshots at 375/768/1280 in English and Arabic) or on the preview once Vercel exists.
@@ -24,7 +30,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.
   - Until R2 exists, attendee exports (M1.8b) and bookings exports (M1.12c, up to 50 000 rows) are stored in Postgres (`platform.files`) and expire after 7 days. Moving them to R2 needs the Cloudflare account, an R2 bucket per environment and an API token (label: `infra`).
-  - Twilio (SMS, and WhatsApp through Twilio) for M1.10. Until then, ticket links (M1.8d) go by email (console mailer until SES) or by copying the link.
+  - Twilio (SMS) for M1.10: **start toll-free verification and the 10DLC brand/campaign now** (weeks of lead time). WhatsApp stays on your own template gateway (`whatsapp.panitechnologies.com`) as legacy does; send its API docs and credentials. Until then all messages go to the dev mailbox (see the M1.10 entry below); ticket links (M1.8d) can also be copied.
   - Stripe test mode access for the platform account. **Keys added to the cloud environment (2026-09-27); the adapter is built (M1.5e).** Still needed:
     - Network access: allow `api.stripe.com`, `connect.stripe.com` and `files.stripe.com` in the environment (currently denied), then start a new session and run `PAYMENTS_PROVIDER=stripe pnpm --filter @yayatoh/payments stripe:smoke`.
     - Connect enabled on the platform account (Standard-equivalent accounts: full dashboard, the organizer pays fees and carries losses).
