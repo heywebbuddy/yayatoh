@@ -500,7 +500,8 @@
     "shortCode": "驗證碼",
     "holder": "持票人",
     "downloadPdf": "下載票券（PDF）",
-    "discountApplied": "含優惠碼 {code} 折抵的 {amount}"
+    "discountApplied": "含優惠碼 {code} 折抵的 {amount}",
+    "transferred": "{count, plural, other {此訂單中有 # 張票已轉給他人，現歸對方所有。}}"
   },
   "orders": {
     "title": "最近訂單",
@@ -785,5 +786,49 @@
       "cell_too_long": "有儲存格超過 1,000 個字元。",
       "unterminated_quote": "檔案中有未閉合的引號，無法作為 CSV 讀取。"
     }
+  },
+  "distribution": {
+    "title": "傳送這張票",
+    "hint": "建立一個連結，賓客開啟後即可將票轉到自己名下。領取後，原本的 QR 碼將失效。",
+    "recipient": "電子郵件（選填）",
+    "recipientHint": "我們會以電子郵件寄送連結。留空則可複製連結自行分享。",
+    "create": "建立連結",
+    "linkReady": "連結如下。請立即複製：它不會再次顯示。",
+    "linkEmailed": "我們已以電子郵件寄出連結。你也可以現在複製：它不會再次顯示。",
+    "linkLabel": "領取連結",
+    "open": "有一個領取連結尚未使用。",
+    "openTo": "已將領取連結寄至 {email}。",
+    "revoke": "撤銷連結"
+  },
+  "claim": {
+    "eyebrow": "給你的一張票",
+    "intro": "輸入你的姓名和電子郵件即可領取這張票。領取後票券歸你所有：我們會立即顯示你的 QR 碼，並以電子郵件寄送連結給你。",
+    "name": "姓名",
+    "email": "電子郵件",
+    "emailHint": "你的票券連結將寄到這裡。",
+    "submit": "領取票券",
+    "state": {
+      "open": "這張票正在等你領取",
+      "claimed": "這張票已被領取",
+      "revoked": "此連結已被取消",
+      "expired": "此連結已過期"
+    },
+    "stateHint": "請向寄送者索取新連結。"
+  },
+  "myTickets": {
+    "eyebrow": "我的票券",
+    "for": "{email} 的票券",
+    "expiredTitle": "此連結已過期",
+    "expiredDescription": "請在活動頁面重新取得：在「已有票券？」下方輸入你的電子郵件。",
+    "noneTitle": "這裡暫時沒有票券",
+    "noneDescription": "你轉給他人的票券將不再顯示在這裡。",
+    "giveTitle": "轉讓這張票",
+    "give": "建立連結",
+    "pending": "這張票有一個待領取的連結。建立新連結會使其失效。",
+    "requestTitle": "已有票券？",
+    "requestHint": "輸入接收票券的電子郵件，我們會以電子郵件寄送票券連結給你。",
+    "requestEmail": "電子郵件",
+    "requestSend": "以電子郵件寄送連結",
+    "requestSent": "如果該電子郵件有本活動的票券，連結已在寄送途中。"
   }
 }

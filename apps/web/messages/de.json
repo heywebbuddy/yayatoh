@@ -500,7 +500,8 @@
     "shortCode": "Code",
     "holder": "Ticketinhaber",
     "downloadPdf": "Tickets herunterladen (PDF)",
-    "discountApplied": "Enthält {amount} Rabatt mit {code}"
+    "discountApplied": "Enthält {amount} Rabatt mit {code}",
+    "transferred": "{count, plural, one {# Ticket aus dieser Bestellung wurde an eine andere Person weitergegeben. Es gehört jetzt ihr.} other {# Tickets aus dieser Bestellung wurden an andere Personen weitergegeben. Sie gehören jetzt ihnen.}}"
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -785,5 +786,49 @@
       "cell_too_long": "Eine Zelle ist länger als 1.000 Zeichen.",
       "unterminated_quote": "Die Datei enthält ein nicht geschlossenes Anführungszeichen und kann nicht als CSV gelesen werden."
     }
+  },
+  "distribution": {
+    "title": "Dieses Ticket senden",
+    "hint": "Erstelle einen Link, über den der Gast das Ticket auf seinen eigenen Namen übernimmt. Sobald er es übernommen hat, funktioniert der alte QR-Code nicht mehr.",
+    "recipient": "E-Mail (optional)",
+    "recipientHint": "Wir senden den Link per E-Mail. Lass das Feld leer, um ihn zu kopieren und selbst zu teilen.",
+    "create": "Link erstellen",
+    "linkReady": "Hier ist der Link. Kopiere ihn jetzt: Er wird nicht noch einmal angezeigt.",
+    "linkEmailed": "Wir haben den Link per E-Mail gesendet. Du kannst ihn auch jetzt kopieren: Er wird nicht noch einmal angezeigt.",
+    "linkLabel": "Übernahme-Link",
+    "open": "Ein Übernahme-Link wartet darauf, verwendet zu werden.",
+    "openTo": "Ein Übernahme-Link wurde an {email} gesendet.",
+    "revoke": "Link widerrufen"
+  },
+  "claim": {
+    "eyebrow": "Ein Ticket für dich",
+    "intro": "Gib deinen Namen und deine E-Mail ein, um dieses Ticket zu übernehmen. Es gehört dann dir: Wir zeigen dir sofort deinen QR-Code und senden dir einen Link dazu per E-Mail.",
+    "name": "Vollständiger Name",
+    "email": "E-Mail",
+    "emailHint": "Hierhin senden wir den Link zu deinem Ticket.",
+    "submit": "Ticket übernehmen",
+    "state": {
+      "open": "Dieses Ticket wartet auf dich",
+      "claimed": "Dieses Ticket wurde bereits übernommen",
+      "revoked": "Dieser Link wurde widerrufen",
+      "expired": "Dieser Link ist abgelaufen"
+    },
+    "stateHint": "Bitte die Person, die ihn dir geschickt hat, um einen neuen Link."
+  },
+  "myTickets": {
+    "eyebrow": "Meine Tickets",
+    "for": "Tickets für {email}",
+    "expiredTitle": "Dieser Link ist abgelaufen",
+    "expiredDescription": "Fordere auf der Eventseite einen neuen an: Gib deine E-Mail unter „Du hast schon Tickets?“ ein.",
+    "noneTitle": "Hier sind gerade keine Tickets",
+    "noneDescription": "Tickets, die du an jemand anderen weitergibst, erscheinen hier nicht mehr.",
+    "giveTitle": "Dieses Ticket weitergeben",
+    "give": "Link erstellen",
+    "pending": "Für dieses Ticket wartet ein Link darauf, übernommen zu werden. Wenn du einen neuen erstellst, wird er ungültig.",
+    "requestTitle": "Du hast schon Tickets?",
+    "requestHint": "Gib die E-Mail ein, an die deine Tickets gesendet wurden, und wir schicken dir einen Link dazu.",
+    "requestEmail": "E-Mail",
+    "requestSend": "Link per E-Mail senden",
+    "requestSent": "Wenn es für diese E-Mail Tickets für dieses Event gibt, ist ein Link unterwegs."
   }
 }

@@ -8,6 +8,7 @@ export {
   listAttendeesQuery,
   MAX_LABELS,
   type NewAttendee,
+  reassignAttendeeTx,
   searchAttendeesQuery,
   setAttendeeLabelsCommand,
 } from './attendees.ts';

@@ -169,6 +169,13 @@
       "when": 1790508195914,
       "tag": "0023_remarkable_kate_bishop",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790510655753,
+      "tag": "0024_lazy_gideon",
+      "breakpoints": true
     }
   ]
 }

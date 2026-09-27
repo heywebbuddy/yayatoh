@@ -12,7 +12,7 @@ import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { type BulkOperationDto, isProfileKey, term } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { ticketSummariesQuery } from '@yayatoh/ticketing';
+import { listClaimLinksQuery, ticketSummariesQuery } from '@yayatoh/ticketing';
 import {
   Avatar,
   Button,
@@ -28,6 +28,7 @@ import {
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { LabelForm } from '@/components/label-form.tsx';
 import type { AttendeeStatus, DemoAttendee } from '@/demo/events.ts';
 import { Link } from '@/i18n/navigation.ts';
@@ -36,7 +37,15 @@ import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { ports } from '@/server/ports.ts';
-import { addLabelAction, type BulkKind, bulkAction, removeLabelAction, undoBulkAction } from './actions.ts';
+import {
+  addLabelAction,
+  type BulkKind,
+  bulkAction,
+  removeLabelAction,
+  revokeClaimAction,
+  sendTicketAction,
+  undoBulkAction,
+} from './actions.ts';
 
 const PAGE_SIZE = 50;
 const asArray = (v: string | string[] | undefined) => (v === undefined ? [] : Array.isArray(v) ? v : [v]);
@@ -220,6 +229,17 @@ export default async function AttendeesPage({
     return s ? `${base}?${s}` : base;
   };
   const selectedLabels = selectedId ? (liveById.get(selectedId)?.labels ?? []) : [];
+  const selectedTicketId = selectedId ? (liveById.get(selectedId)?.ticketId ?? null) : null;
+  const claims =
+    selectedTicketId && data.modules.has('ticketing')
+      ? await executeQuery(
+          listClaimLinksQuery,
+          { eventId: real.id, ticketIds: [selectedTicketId] },
+          data.ctx,
+          ports,
+        )
+      : [];
+  const openClaim = claims.find((c) => c.state === 'open');
   const filtered = Boolean(needle || labels.length || source || status);
   const from = live.total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const to = Math.min(live.total, page * PAGE_SIZE);
@@ -669,10 +689,34 @@ export default async function AttendeesPage({
                 ) : null}
               </section>
             ) : null}
+            {hasReal && selectedTicketId && canWrite ? (
+              <section aria-labelledby="send-ticket-heading" className="flex flex-col gap-2">
+                <h2 id="send-ticket-heading" className="text-caption text-zinc-500">
+                  {t('distribution.title')}
+                </h2>
+                <p className="text-caption text-zinc-500">{t('distribution.hint')}</p>
+                {openClaim ? (
+                  <div className="flex flex-wrap items-center gap-2 text-caption">
+                    <span>
+                      {openClaim.recipientEmail
+                        ? t('distribution.openTo', { email: openClaim.recipientEmail })
+                        : t('distribution.open')}
+                    </span>
+                    <form action={revokeClaimAction.bind(null, org, event, openClaim.id)}>
+                      <Button type="submit" variant="ghost" size="sm">
+                        {t('distribution.revoke')}
+                      </Button>
+                    </form>
+                  </div>
+                ) : null}
+                <ClaimLinkForm
+                  action={sendTicketAction.bind(null, org, event, selectedTicketId)}
+                  idPrefix="send-ticket"
+                  submitLabel={t('distribution.create')}
+                />
+              </section>
+            ) : null}
             <div className="flex flex-wrap gap-2">
-              <Button variant="secondary" size="sm" disabled title={t('common.comingSoon')}>
-                {t('actions.sendTicket')}
-              </Button>
               <Button variant="secondary" size="sm" disabled title={t('common.comingSoon')}>
                 {t('actions.changeSeat')}
               </Button>

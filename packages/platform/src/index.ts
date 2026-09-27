@@ -38,3 +38,4 @@ export {
   VOCAB_TERMS,
   type VocabTerm,
 } from './profiles/index.ts';
+export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

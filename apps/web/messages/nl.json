@@ -500,7 +500,8 @@
     "shortCode": "Code",
     "holder": "Tickethouder",
     "downloadPdf": "Tickets downloaden (PDF)",
-    "discountApplied": "Inclusief {amount} korting met {code}"
+    "discountApplied": "Inclusief {amount} korting met {code}",
+    "transferred": "{count, plural, one {# ticket uit deze bestelling is doorgegeven aan iemand anders. Het is nu van hen.} other {# tickets uit deze bestelling zijn doorgegeven aan andere mensen. Ze zijn nu van hen.}}"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -785,5 +786,49 @@
       "cell_too_long": "Een cel is langer dan 1.000 tekens.",
       "unterminated_quote": "Het bestand bevat een niet-afgesloten aanhalingsteken en kan daarom niet als CSV worden gelezen."
     }
+  },
+  "distribution": {
+    "title": "Dit ticket versturen",
+    "hint": "Maak een link die de gast opent om het ticket op eigen naam te zetten. Zodra het is geclaimd, werkt de oude QR-code niet meer.",
+    "recipient": "E-mail (optioneel)",
+    "recipientHint": "We mailen de link. Laat leeg om hem te kopiëren en zelf te delen.",
+    "create": "Link maken",
+    "linkReady": "Hier is de link. Kopieer hem nu: hij wordt niet opnieuw getoond.",
+    "linkEmailed": "We hebben de link gemaild. Je kunt hem ook nu kopiëren: hij wordt niet opnieuw getoond.",
+    "linkLabel": "Claimlink",
+    "open": "Er staat een claimlink klaar om gebruikt te worden.",
+    "openTo": "Er is een claimlink verstuurd naar {email}.",
+    "revoke": "Link intrekken"
+  },
+  "claim": {
+    "eyebrow": "Een ticket voor jou",
+    "intro": "Vul je naam en e-mailadres in om dit ticket over te nemen. Het wordt van jou: we tonen meteen je QR-code en mailen je een link ernaartoe.",
+    "name": "Volledige naam",
+    "email": "E-mail",
+    "emailHint": "Hier komt de link naar je ticket.",
+    "submit": "Ticket claimen",
+    "state": {
+      "open": "Dit ticket wacht op je",
+      "claimed": "Dit ticket is al geclaimd",
+      "revoked": "Deze link is geannuleerd",
+      "expired": "Deze link is verlopen"
+    },
+    "stateHint": "Vraag degene die hem stuurde om een nieuwe link."
+  },
+  "myTickets": {
+    "eyebrow": "Mijn tickets",
+    "for": "Tickets voor {email}",
+    "expiredTitle": "Deze link is verlopen",
+    "expiredDescription": "Vraag een nieuwe aan op de evenementpagina: vul je e-mailadres in onder ‘Heb je al tickets?’.",
+    "noneTitle": "Hier staan nu geen tickets",
+    "noneDescription": "Tickets die je aan iemand anders doorgeeft, staan hier niet meer.",
+    "giveTitle": "Dit ticket doorgeven",
+    "give": "Link maken",
+    "pending": "Er staat een link voor dit ticket klaar om te worden geclaimd. Als je een nieuwe maakt, vervalt deze.",
+    "requestTitle": "Heb je al tickets?",
+    "requestHint": "Vul het e-mailadres in waarnaar je tickets zijn gestuurd, dan mailen we je een link ernaartoe.",
+    "requestEmail": "E-mail",
+    "requestSend": "Mail me een link",
+    "requestSent": "Als dat e-mailadres tickets heeft voor dit evenement, is er een link onderweg."
   }
 }

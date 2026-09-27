@@ -166,6 +166,10 @@ export class ScanClient {
       };
       header = page.header;
       for (const r of page.rows) {
+        // A reissued (claimed) ticket gets a new short code: forget the old one, so it stops
+        // working offline too.
+        const prev = this.byId.get(r.ticketId);
+        if (prev && prev.shortCode !== r.shortCode) this.byShort.delete(prev.shortCode);
         this.byId.set(r.ticketId, r);
         this.byShort.set(r.shortCode, r);
       }

@@ -193,3 +193,47 @@ export const promoCodes = tenantTable(
     check('promo_codes_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
   ],
 );
+
+/**
+ * Distribution (roadmap M1.8): a claim link hands one ticket to whoever opens it and enters
+ * their name and email. Claiming reissues the ticket (rev + 1), so the old QR stops working.
+ * The link token is `<id>~hmac`; at most one open link per ticket.
+ */
+export const ticketClaims = tenantTable(
+  ticketingSchema,
+  'ticket_claims',
+  {
+    ticketId: uuid('ticket_id').notNull(),
+    recipientEmail: text('recipient_email'),
+    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+    claimedAt: timestamp('claimed_at', { withTimezone: true, mode: 'date' }),
+    claimedByEmail: text('claimed_by_email'),
+    revokedAt: timestamp('revoked_at', { withTimezone: true, mode: 'date' }),
+    createdBy: text('created_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('ticket_claims_org_ticket_open_key')
+      .on(t.orgId, t.ticketId)
+      .where(sql`claimed_at is null and revoked_at is null`),
+    foreignKey({
+      name: 'ticket_claims_ticket_fk',
+      columns: [t.orgId, t.ticketId],
+      foreignColumns: [tickets.orgId, tickets.id],
+    }),
+  ],
+);
+
+/**
+ * Magic links for ticket holders (self-service): one event, one normalized email, valid for
+ * 7 days. The page lists that email's active tickets at the event.
+ */
+export const holderLinks = tenantTable(
+  ticketingSchema,
+  'holder_links',
+  {
+    eventId: uuid('event_id').notNull(),
+    emailNorm: text('email_norm').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+  },
+  (t) => [index('holder_links_org_email_idx').on(t.orgId, t.emailNorm, t.createdAt)],
+);

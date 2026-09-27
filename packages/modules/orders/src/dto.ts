@@ -60,6 +60,8 @@ export const HolderEventDto = z.object({
 
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   tickets: z.array(HolderTicketDto),
+  /** Tickets of this order now held by someone else (passed on with a claim link). */
+  transferred: z.int(),
   event: HolderEventDto,
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;

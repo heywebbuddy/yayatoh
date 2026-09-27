@@ -500,7 +500,8 @@
     "shortCode": "Codice",
     "holder": "Intestatario del biglietto",
     "downloadPdf": "Scarica i biglietti (PDF)",
-    "discountApplied": "Include {amount} di sconto con {code}"
+    "discountApplied": "Include {amount} di sconto con {code}",
+    "transferred": "{count, plural, one {# biglietto di questo ordine è stato ceduto a un’altra persona. Ora è suo.} other {# biglietti di questo ordine sono stati ceduti ad altre persone. Ora sono loro.}}"
   },
   "orders": {
     "title": "Ordini recenti",
@@ -785,5 +786,49 @@
       "cell_too_long": "Una cella supera i 1.000 caratteri.",
       "unterminated_quote": "Il file contiene delle virgolette non chiuse, quindi non può essere letto come CSV."
     }
+  },
+  "distribution": {
+    "title": "Invia questo biglietto",
+    "hint": "Crea un link che l’ospite apre per intestarsi il biglietto. Una volta riscattato, il vecchio codice QR non funziona più.",
+    "recipient": "Email (facoltativa)",
+    "recipientHint": "Inviamo il link via email. Lascia vuoto per copiarlo e condividerlo tu.",
+    "create": "Crea link",
+    "linkReady": "Ecco il link. Copialo ora: non verrà più mostrato.",
+    "linkEmailed": "Abbiamo inviato il link via email. Puoi anche copiarlo ora: non verrà più mostrato.",
+    "linkLabel": "Link di riscatto",
+    "open": "Un link di riscatto è in attesa di essere usato.",
+    "openTo": "Un link di riscatto è stato inviato a {email}.",
+    "revoke": "Revoca link"
+  },
+  "claim": {
+    "eyebrow": "Un biglietto per te",
+    "intro": "Inserisci nome ed email per prendere questo biglietto. Diventa tuo: ti mostriamo subito il codice QR e ti inviamo un link via email.",
+    "name": "Nome e cognome",
+    "email": "Email",
+    "emailHint": "Qui riceverai il link al tuo biglietto.",
+    "submit": "Riscatta biglietto",
+    "state": {
+      "open": "Questo biglietto ti aspetta",
+      "claimed": "Questo biglietto è già stato riscattato",
+      "revoked": "Questo link è stato annullato",
+      "expired": "Questo link è scaduto"
+    },
+    "stateHint": "Chiedi un nuovo link a chi te l’ha inviato."
+  },
+  "myTickets": {
+    "eyebrow": "I miei biglietti",
+    "for": "Biglietti di {email}",
+    "expiredTitle": "Questo link è scaduto",
+    "expiredDescription": "Richiedine uno nuovo nella pagina dell’evento: inserisci la tua email in «Hai già dei biglietti?».",
+    "noneTitle": "Nessun biglietto qui al momento",
+    "noneDescription": "I biglietti che cedi a qualcun altro non compaiono più qui.",
+    "giveTitle": "Cedi questo biglietto",
+    "give": "Crea link",
+    "pending": "Un link per questo biglietto è in attesa di essere riscattato. Crearne uno nuovo lo annulla.",
+    "requestTitle": "Hai già dei biglietti?",
+    "requestHint": "Inserisci l’email a cui sono stati inviati i biglietti e ti invieremo un link.",
+    "requestEmail": "Email",
+    "requestSend": "Inviami un link",
+    "requestSent": "Se a quell’email corrispondono biglietti per questo evento, il link è in arrivo."
   }
 }

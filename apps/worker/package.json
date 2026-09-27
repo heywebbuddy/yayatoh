@@ -20,6 +20,7 @@
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
     "pg-boss": "catalog:",
     "zod": "catalog:"

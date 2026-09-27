@@ -56,6 +56,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </p>
         ) : null}
       </Card>
+      {order.transferred > 0 ? (
+        <p className="text-body text-zinc-600">{t('order.transferred', { count: order.transferred })}</p>
+      ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
           <h2 id="tickets-heading" className="text-section">

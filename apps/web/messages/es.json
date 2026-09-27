@@ -500,7 +500,8 @@
     "shortCode": "Código",
     "holder": "Titular de la entrada",
     "downloadPdf": "Descargar entradas (PDF)",
-    "discountApplied": "Incluye {amount} de descuento con {code}"
+    "discountApplied": "Incluye {amount} de descuento con {code}",
+    "transferred": "{count, plural, one {# entrada de este pedido se pasó a otra persona. Ahora es suya.} other {# entradas de este pedido se pasaron a otras personas. Ahora son suyas.}}"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -785,5 +786,49 @@
       "cell_too_long": "Una celda tiene más de 1000 caracteres.",
       "unterminated_quote": "El archivo tiene unas comillas sin cerrar, así que no se puede leer como CSV."
     }
+  },
+  "distribution": {
+    "title": "Enviar esta entrada",
+    "hint": "Crea un enlace que el invitado abre para quedarse la entrada a su nombre. Cuando la reclame, el código QR anterior dejará de funcionar.",
+    "recipient": "Correo electrónico (opcional)",
+    "recipientHint": "Enviamos el enlace por correo. Déjalo vacío para copiarlo y compartirlo tú.",
+    "create": "Crear enlace",
+    "linkReady": "Aquí tienes el enlace. Cópialo ahora: no se volverá a mostrar.",
+    "linkEmailed": "Hemos enviado el enlace por correo. También puedes copiarlo ahora: no se volverá a mostrar.",
+    "linkLabel": "Enlace para reclamar",
+    "open": "Hay un enlace para reclamar pendiente de uso.",
+    "openTo": "Se envió un enlace para reclamar a {email}.",
+    "revoke": "Revocar enlace"
+  },
+  "claim": {
+    "eyebrow": "Una entrada para ti",
+    "intro": "Introduce tu nombre y correo para quedarte con esta entrada. Pasa a ser tuya: te mostraremos tu código QR al momento y te enviaremos un enlace por correo.",
+    "name": "Nombre completo",
+    "email": "Correo electrónico",
+    "emailHint": "Aquí te enviaremos el enlace a tu entrada.",
+    "submit": "Reclamar entrada",
+    "state": {
+      "open": "Esta entrada te está esperando",
+      "claimed": "Esta entrada ya se ha reclamado",
+      "revoked": "Este enlace se ha cancelado",
+      "expired": "Este enlace ha caducado"
+    },
+    "stateHint": "Pide un enlace nuevo a quien te lo envió."
+  },
+  "myTickets": {
+    "eyebrow": "Mis entradas",
+    "for": "Entradas de {email}",
+    "expiredTitle": "Este enlace ha caducado",
+    "expiredDescription": "Pide uno nuevo en la página del evento: introduce tu correo en «¿Ya tienes entradas?».",
+    "noneTitle": "No hay entradas aquí por ahora",
+    "noneDescription": "Las entradas que pases a otra persona ya no aparecen aquí.",
+    "giveTitle": "Pasar esta entrada",
+    "give": "Crear enlace",
+    "pending": "Hay un enlace para esta entrada pendiente de reclamar. Si creas uno nuevo, se cancela.",
+    "requestTitle": "¿Ya tienes entradas?",
+    "requestHint": "Introduce el correo al que se enviaron tus entradas y te enviaremos un enlace a ellas.",
+    "requestEmail": "Correo electrónico",
+    "requestSend": "Envíame un enlace",
+    "requestSent": "Si ese correo tiene entradas para este evento, te llegará un enlace."
   }
 }

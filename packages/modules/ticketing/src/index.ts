@@ -4,6 +4,23 @@ export {
   listTicketTypesQuery,
   updateTicketTypeCommand,
 } from './commands/ticket-types.ts';
+export {
+  CLAIM_PURPOSE,
+  claimContext,
+  claimDetailsQuery,
+  claimTicketCommand,
+  createClaimLinksCommand,
+  giveTicketCommand,
+  HOLDER_PURPOSE,
+  HolderTicketsDto,
+  holderContext,
+  holderTicketsQuery,
+  listClaimLinksQuery,
+  PublicClaimDto,
+  requestHolderLinkCommand,
+  revokeClaimLinkCommand,
+  TicketClaimDto,
+} from './distribution.ts';
 export * from './dto.ts';
 export {
   currentFaceMinor,
@@ -25,6 +42,7 @@ export {
   type ManifestTicket,
   manifestTicketsTx,
   publicKeysTx,
+  reissueTicketTx,
   type ScannableTicket,
   ticketForScanTx,
   ticketSummariesQuery,
@@ -44,3 +62,4 @@ export {
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
 export { FEE_MODES, PROMO_KINDS, TICKET_STATUSES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
+export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';

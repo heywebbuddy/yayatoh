@@ -9,8 +9,10 @@ import {
 } from '@yayatoh/attendees';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { ATTENDEE_EXPORT_COLUMNS, attendeeExportBulk } from '@yayatoh/reports';
+import { createClaimLinksCommand, revokeClaimLinkCommand } from '@yayatoh/ticketing';
 import { revalidatePath } from 'next/cache';
 import { getLocale, getTranslations } from 'next-intl/server';
+import type { ClaimLinkState } from '@/components/claim-link-form.tsx';
 import { redirect } from '@/i18n/navigation.ts';
 import { runBulkInline } from '@/server/bulk.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -135,5 +137,37 @@ export async function undoBulkAction(
     ports,
   );
   await runBulkInline(data.org.id, operationId);
+  revalidatePath(`/o/${org}/e/${event}/attendees`);
+}
+
+/** Send one ticket on with a claim link (emailed when an address is given; shown once). */
+export async function sendTicketAction(
+  org: string,
+  event: string,
+  ticketId: string,
+  _prev: ClaimLinkState,
+  form: FormData,
+): Promise<ClaimLinkState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const email = String(form.get('email') ?? '').trim();
+  try {
+    const [link] = await executeCommand(
+      createClaimLinksCommand,
+      { eventId: ev.id, ticketIds: [ticketId], recipientEmail: email || undefined },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/attendees`);
+    return link
+      ? { kind: 'link', token: link.token, emailed: Boolean(email) }
+      : { kind: 'error', code: 'internal' };
+  } catch (err) {
+    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal' };
+  }
+}
+
+export async function revokeClaimAction(org: string, event: string, claimId: string): Promise<void> {
+  const { data, event: ev } = await loadEvent(org, event);
+  await executeCommand(revokeClaimLinkCommand, { eventId: ev.id, claimId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }

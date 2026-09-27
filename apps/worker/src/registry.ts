@@ -1,6 +1,7 @@
 import { ticketMailer } from '@yayatoh/orders';
 import { consoleMailer, type Subscriber } from '@yayatoh/platform';
 import { invitationMailer } from '@yayatoh/tenancy';
+import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
 
@@ -22,5 +23,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
   return [
     invitationMailer({ mailer: consoleMailer, appOrigin, secret }),
     ticketMailer({ mailer: consoleMailer, appOrigin }),
+    claimLinkMailer({ mailer: consoleMailer, appOrigin }),
+    holderLinkMailer({ mailer: consoleMailer, appOrigin }),
   ];
 }

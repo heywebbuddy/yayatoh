@@ -500,7 +500,8 @@
     "shortCode": "验证码",
     "holder": "持票人",
     "downloadPdf": "下载门票（PDF）",
-    "discountApplied": "含优惠码 {code} 减免的 {amount}"
+    "discountApplied": "含优惠码 {code} 减免的 {amount}",
+    "transferred": "{count, plural, other {此订单中有 # 张票已转给他人，现归对方所有。}}"
   },
   "orders": {
     "title": "最近订单",
@@ -785,5 +786,49 @@
       "cell_too_long": "有单元格超过 1,000 个字符。",
       "unterminated_quote": "文件中有未闭合的引号，无法作为 CSV 读取。"
     }
+  },
+  "distribution": {
+    "title": "发送这张票",
+    "hint": "创建一个链接，宾客打开后即可将票转到自己名下。领取后，原来的二维码将失效。",
+    "recipient": "电子邮箱（可选）",
+    "recipientHint": "我们会通过邮件发送链接。留空则可复制链接自行分享。",
+    "create": "创建链接",
+    "linkReady": "链接如下。请立即复制：它不会再次显示。",
+    "linkEmailed": "我们已通过邮件发送链接。你也可以现在复制：它不会再次显示。",
+    "linkLabel": "领取链接",
+    "open": "有一个领取链接尚未使用。",
+    "openTo": "已向 {email} 发送领取链接。",
+    "revoke": "撤销链接"
+  },
+  "claim": {
+    "eyebrow": "给你的一张票",
+    "intro": "输入你的姓名和电子邮箱即可领取这张票。领取后票归你所有：我们会立即显示你的二维码，并通过邮件发送链接给你。",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "emailHint": "你的门票链接将发送到这里。",
+    "submit": "领取门票",
+    "state": {
+      "open": "这张票正在等你领取",
+      "claimed": "这张票已被领取",
+      "revoked": "此链接已被取消",
+      "expired": "此链接已过期"
+    },
+    "stateHint": "请向发送者索取新链接。"
+  },
+  "myTickets": {
+    "eyebrow": "我的门票",
+    "for": "{email} 的门票",
+    "expiredTitle": "此链接已过期",
+    "expiredDescription": "请在活动页面重新获取：在“已有门票？”下输入你的电子邮箱。",
+    "noneTitle": "这里暂时没有门票",
+    "noneDescription": "你转给他人的门票将不再显示在这里。",
+    "giveTitle": "转让这张票",
+    "give": "创建链接",
+    "pending": "这张票有一个待领取的链接。创建新链接会使其失效。",
+    "requestTitle": "已有门票？",
+    "requestHint": "输入接收门票的电子邮箱，我们会通过邮件发送门票链接给你。",
+    "requestEmail": "电子邮箱",
+    "requestSend": "通过邮件发送链接",
+    "requestSent": "如果该邮箱有本活动的门票，链接已在发送途中。"
   }
 }

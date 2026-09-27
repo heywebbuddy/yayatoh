@@ -441,6 +441,9 @@ importers:
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../../packages/modules/tenancy
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../../packages/modules/ticketing
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

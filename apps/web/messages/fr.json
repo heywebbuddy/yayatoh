@@ -500,7 +500,8 @@
     "shortCode": "Code",
     "holder": "Titulaire du billet",
     "downloadPdf": "Télécharger les billets (PDF)",
-    "discountApplied": "Dont {amount} de réduction avec {code}"
+    "discountApplied": "Dont {amount} de réduction avec {code}",
+    "transferred": "{count, plural, one {# billet de cette commande a été cédé à une autre personne. Il lui appartient désormais.} other {# billets de cette commande ont été cédés à d’autres personnes. Ils leur appartiennent désormais.}}"
   },
   "orders": {
     "title": "Commandes récentes",
@@ -785,5 +786,49 @@
       "cell_too_long": "Une cellule dépasse 1 000 caractères.",
       "unterminated_quote": "Le fichier contient un guillemet non fermé et ne peut pas être lu comme CSV."
     }
+  },
+  "distribution": {
+    "title": "Envoyer ce billet",
+    "hint": "Créez un lien que l’invité ouvre pour récupérer le billet à son nom. Une fois le billet récupéré, l’ancien QR code ne fonctionne plus.",
+    "recipient": "E-mail (facultatif)",
+    "recipientHint": "Nous envoyons le lien par e-mail. Laissez vide pour le copier et le partager vous-même.",
+    "create": "Créer le lien",
+    "linkReady": "Voici le lien. Copiez-le maintenant : il ne sera plus affiché.",
+    "linkEmailed": "Nous avons envoyé le lien par e-mail. Vous pouvez aussi le copier maintenant : il ne sera plus affiché.",
+    "linkLabel": "Lien de récupération",
+    "open": "Un lien de récupération attend d’être utilisé.",
+    "openTo": "Un lien de récupération a été envoyé à {email}.",
+    "revoke": "Révoquer le lien"
+  },
+  "claim": {
+    "eyebrow": "Un billet pour vous",
+    "intro": "Saisissez votre nom et votre e-mail pour récupérer ce billet. Il devient le vôtre : nous affichons votre QR code tout de suite et vous envoyons un lien par e-mail.",
+    "name": "Nom complet",
+    "email": "E-mail",
+    "emailHint": "Le lien vers votre billet sera envoyé ici.",
+    "submit": "Récupérer le billet",
+    "state": {
+      "open": "Ce billet vous attend",
+      "claimed": "Ce billet a déjà été récupéré",
+      "revoked": "Ce lien a été annulé",
+      "expired": "Ce lien a expiré"
+    },
+    "stateHint": "Demandez un nouveau lien à la personne qui vous l’a envoyé."
+  },
+  "myTickets": {
+    "eyebrow": "Mes billets",
+    "for": "Billets de {email}",
+    "expiredTitle": "Ce lien a expiré",
+    "expiredDescription": "Demandez-en un nouveau sur la page de l’événement : saisissez votre e-mail sous « Vous avez déjà des billets ? ».",
+    "noneTitle": "Aucun billet ici pour le moment",
+    "noneDescription": "Les billets que vous cédez à quelqu’un d’autre n’apparaissent plus ici.",
+    "giveTitle": "Céder ce billet",
+    "give": "Créer le lien",
+    "pending": "Un lien pour ce billet attend d’être utilisé. En créer un nouveau l’annule.",
+    "requestTitle": "Vous avez déjà des billets ?",
+    "requestHint": "Saisissez l’e-mail auquel vos billets ont été envoyés et nous vous enverrons un lien pour y accéder.",
+    "requestEmail": "E-mail",
+    "requestSend": "Recevoir un lien par e-mail",
+    "requestSent": "Si cet e-mail a des billets pour cet événement, un lien est en route."
   }
 }

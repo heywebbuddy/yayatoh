@@ -106,3 +106,39 @@ Roadmap: M1.8. This milestone is delivered in increments:
 
 ### Not yet (M1.8c)
 - Import from XLSX (convert to CSV for now), custom fields and question answers per column arrive with registration forms (M5.1). Legacy guest-list migration uses the ELT pipeline (Phase 2), not this importer.
+
+## M1.8d — distribution (claim links) and holder self-service (done)
+- **Link tokens** (`@yayatoh/platform` `signLinkToken` / `verifyLinkToken`):
+  - A token is `<row id>~HMAC-SHA256(purpose:id)` under `APP_TOKEN_SECRET`, bound to its purpose (`ticket-claim`, `ticket-holder`) and compared in constant time.
+  - Nothing secret is stored: the row's state decides whether the link still works.
+  - SECURITY DEFINER `ticketing.claim_org` / `ticketing.holder_link_org` resolve the id to its org before any tenant is known (active orgs only).
+- **Claim links** (`ticketing.ticket_claims`):
+  - An organizer (`attendees:write`) creates a link for up to 100 tickets of one event, optionally emailed via the `ticket.claim_link_created@1` event and its mailer.
+  - The token is shown once. At most one open link per ticket (partial unique): a new one revokes the old. Links can be revoked and expire (30 days by default).
+  - **Claiming** (public; name + email) reissues the ticket via `reissueTicketTx`:
+    - rev + 1 with a freshly signed code; older codes deactivate
+    - a new short code, so the old printed one stops working too
+    - the holder fields change, and the ticket's attendee moves to the new person
+  - It emits `ticket.claimed@1`. The claimant lands on their tickets straight away through a holder link.
+  - The buyer's order page and PDF stop showing passed-on tickets and their codes. They only say how many were passed on.
+  - Offline scanners drop a reissued ticket's old short code when the manifest syncs.
+- **Holder self-service** (`ticketing.holder_links`, 7 days):
+  - "Already have tickets?" on the public event page emails a magic link (`ticket.holder_link_created@1`).
+  - The answer never reveals whether the email has tickets, and requests are limited to 3 per email per event per hour.
+  - The **My tickets** page shows the holder's active tickets for the event, with QR, short code and holder. Holders can **pass a ticket on** with a new claim link; it stays theirs until claimed.
+- **Console:** the attendee profile has "Send this ticket" (optional email; the link is shown once to copy), plus the open link's state and Revoke.
+- **Migration 0024:** the two tables (FORCE RLS, composite FKs to tickets and events), the two definer functions, and fixture rows for both orgs.
+
+### Acceptance (M1.8d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | **A claimed ticket's old QR is rejected**, and its old short code too; the claimant's new code admits; the attendee is the claimant | `packages/testing/tests/distribution.int.test.ts`, `apps/web/e2e/distribution.spec.ts` |
+| AC2 | The buyer's order page no longer shows the passed-on ticket or its new code, only how many were passed on | `distribution.int.test.ts`, `distribution.spec.ts` |
+| AC3 | Holders pass a ticket on from their magic link; it leaves their list once claimed; they can't give away others' tickets | `distribution.int.test.ts` |
+| AC4 | Links work once; replaced, revoked and expired links are refused with their state | `distribution.int.test.ts` |
+| AC5 | Holder-link requests don't enumerate emails and are rate-limited; tokens are purpose-bound and tamper-evident | `distribution.int.test.ts`, `packages/platform/tests/tokens.test.ts` |
+| AC6 | Viewers can't create links; org B can't create links for, or read, org A's claims | `distribution.int.test.ts`, isolation suite |
+
+### Not yet (M1.8d)
+- SMS and WhatsApp delivery of links go through the messaging ports in M1.10 (Twilio is an owner account, see the owner inbox). Email uses the console mailer until SES exists.
+- Association tags (batches of tickets for a company or group) use attendee labels today; allocating seats to a group comes with seating (M1.7).

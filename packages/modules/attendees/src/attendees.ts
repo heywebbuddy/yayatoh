@@ -31,6 +31,24 @@ export async function createAttendeesTx(
   return out;
 }
 
+/**
+ * A ticket changed hands (claim or transfer): its attendee becomes the new holder. Labels stay;
+ * the person and their contact change.
+ */
+export async function reassignAttendeeTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  attendeeId: string,
+  to: { contactId: string; name: string; email: string },
+): Promise<void> {
+  const rows = await tx
+    .update(attendees)
+    .set({ contactId: to.contactId, name: to.name, email: to.email, updatedAt: ctx.now })
+    .where(eq(attendees.id, attendeeId))
+    .returning({ id: attendees.id });
+  if (rows.length === 0) throw new DomainError('not_found', 'Attendee not found');
+}
+
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /** Labels are short free text: trimmed, inner whitespace collapsed, 1–40 characters. */

@@ -500,7 +500,8 @@
     "shortCode": "Código",
     "holder": "Titular do ingresso",
     "downloadPdf": "Baixar ingressos (PDF)",
-    "discountApplied": "Inclui {amount} de desconto com {code}"
+    "discountApplied": "Inclui {amount} de desconto com {code}",
+    "transferred": "{count, plural, one {# ingresso deste pedido foi repassado para outra pessoa. Agora ele é dela.} other {# ingressos deste pedido foram repassados para outras pessoas. Agora eles são delas.}}"
   },
   "orders": {
     "title": "Pedidos recentes",
@@ -785,5 +786,49 @@
       "cell_too_long": "Uma célula tem mais de 1.000 caracteres.",
       "unterminated_quote": "O arquivo tem aspas não fechadas, então não pode ser lido como CSV."
     }
+  },
+  "distribution": {
+    "title": "Enviar este ingresso",
+    "hint": "Crie um link que o convidado abre para ficar com o ingresso no próprio nome. Depois do resgate, o código QR antigo deixa de funcionar.",
+    "recipient": "E-mail (opcional)",
+    "recipientHint": "Enviamos o link por e-mail. Deixe em branco para copiar e compartilhar você mesmo.",
+    "create": "Criar link",
+    "linkReady": "Aqui está o link. Copie agora: ele não será mostrado de novo.",
+    "linkEmailed": "Enviamos o link por e-mail. Você também pode copiá-lo agora: ele não será mostrado de novo.",
+    "linkLabel": "Link de resgate",
+    "open": "Há um link de resgate aguardando uso.",
+    "openTo": "Um link de resgate foi enviado para {email}.",
+    "revoke": "Revogar link"
+  },
+  "claim": {
+    "eyebrow": "Um ingresso para você",
+    "intro": "Informe seu nome e e-mail para ficar com este ingresso. Ele passa a ser seu: mostramos seu código QR na hora e enviamos um link para ele por e-mail.",
+    "name": "Nome completo",
+    "email": "E-mail",
+    "emailHint": "O link do seu ingresso será enviado para cá.",
+    "submit": "Resgatar ingresso",
+    "state": {
+      "open": "Este ingresso está esperando por você",
+      "claimed": "Este ingresso já foi resgatado",
+      "revoked": "Este link foi cancelado",
+      "expired": "Este link expirou"
+    },
+    "stateHint": "Peça um novo link a quem enviou."
+  },
+  "myTickets": {
+    "eyebrow": "Meus ingressos",
+    "for": "Ingressos de {email}",
+    "expiredTitle": "Este link expirou",
+    "expiredDescription": "Peça um novo na página do evento: informe seu e-mail em “Já tem ingressos?”.",
+    "noneTitle": "Nenhum ingresso aqui no momento",
+    "noneDescription": "Ingressos que você repassa para outra pessoa não aparecem mais aqui.",
+    "giveTitle": "Repassar este ingresso",
+    "give": "Criar link",
+    "pending": "Um link para este ingresso está aguardando resgate. Criar um novo cancela o anterior.",
+    "requestTitle": "Já tem ingressos?",
+    "requestHint": "Informe o e-mail para o qual seus ingressos foram enviados e mandaremos um link para eles.",
+    "requestEmail": "E-mail",
+    "requestSend": "Enviar um link por e-mail",
+    "requestSent": "Se esse e-mail tiver ingressos para este evento, um link está a caminho."
   }
 }

@@ -7,10 +7,11 @@ import { Check } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
+import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
-import { checkoutAction } from './actions.ts';
+import { checkoutAction, requestHolderLinkAction } from './actions.ts';
 
 export default async function PublicEventPage({
   params,
@@ -178,6 +179,15 @@ export default async function PublicEventPage({
           />
         )}
       </section>
+
+      {target ? (
+        <section aria-labelledby="have-tickets-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">
+          <h2 id="have-tickets-heading" className="text-section">
+            {t('myTickets.requestTitle')}
+          </h2>
+          <HolderLinkForm action={requestHolderLinkAction.bind(null, slug)} />
+        </section>
+      ) : null}
 
       <section
         id="agenda"

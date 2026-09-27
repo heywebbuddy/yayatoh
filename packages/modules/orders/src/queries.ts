@@ -106,9 +106,15 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
       const o = await loadOrderTx(tx, ref.order_id);
       const ev = await findEventTx(tx, o.eventId);
       if (!ev) throw new DomainError('not_found');
+      // Tickets passed on to someone else (claim links) belong to their new holder: the buyer's
+      // page no longer shows their codes, only how many were passed on.
+      const all = await ticketsForOrderTx(tx, ref.order_id);
+      const buyer = o.buyerEmail.trim().toLowerCase();
+      const mine = all.filter((t) => t.holderEmail.trim().toLowerCase() === buyer);
       return {
         ...o,
-        tickets: await ticketsForOrderTx(tx, ref.order_id),
+        tickets: mine,
+        transferred: all.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
       };
     });

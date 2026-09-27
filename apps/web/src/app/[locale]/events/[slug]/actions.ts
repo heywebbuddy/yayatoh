@@ -4,6 +4,7 @@ import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
+import { requestHolderLinkCommand } from '@yayatoh/ticketing';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
@@ -123,4 +124,30 @@ export async function checkoutAction(
     ports,
   );
   nextRedirect(payment.redirectUrl);
+}
+
+export type HolderLinkState = { readonly sent: boolean; readonly code: string | null };
+
+/**
+ * "Email me my tickets": the same answer whether or not the address has tickets here (no
+ * enumeration); the worker sends the magic link.
+ */
+export async function requestHolderLinkAction(
+  slug: string,
+  _prev: HolderLinkState,
+  form: FormData,
+): Promise<HolderLinkState> {
+  const target = await checkoutTarget(slug);
+  if (!target) return { sent: false, code: 'not_found' };
+  try {
+    await executeCommand(
+      requestHolderLinkCommand,
+      { eventId: target.eventId, email: String(form.get('email') ?? '').trim() },
+      createCtx({ orgId: target.orgId }),
+      ports,
+    );
+    return { sent: true, code: null };
+  } catch (err) {
+    return { sent: false, code: isDomainError(err) ? err.code : 'internal' };
+  }
 }

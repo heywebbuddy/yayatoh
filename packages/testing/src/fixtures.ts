@@ -25,7 +25,12 @@ import {
   type OrganizationDto,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
-import { createPromoCodeCommand, createTicketTypeCommand } from '@yayatoh/ticketing';
+import {
+  createClaimLinksCommand,
+  createPromoCodeCommand,
+  createTicketTypeCommand,
+  requestHolderLinkCommand,
+} from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { ports, runBulk } from './ports.ts';
 
@@ -212,6 +217,21 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // Distribution: an open claim link, and a holder magic link (isolation coverage).
+  const [held] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string; holder_email: string }>(
+      sql`select id, holder_email from ticketing.tickets where event_id = ${event.id} order by serial limit 1`,
+    ),
+  );
+  if (held) {
+    await executeCommand(createClaimLinksCommand, { eventId: event.id, ticketIds: [held.id] }, ctx(), ports);
+    await executeCommand(
+      requestHolderLinkCommand,
+      { eventId: event.id, email: held.holder_email },
+      createCtx({ orgId: org.id }),
+      ports,
+    );
+  }
   // A guest-list import (staged rows + a batch), a finished bulk label (undo data) and an export
   // (a file with parts), for isolation coverage.
   const staged = await executeCommand(

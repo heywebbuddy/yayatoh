@@ -1,4 +1,4 @@
-import { createAttendeesTx } from '@yayatoh/attendees';
+import { createAttendeesTx, reassignAttendeeTx } from '@yayatoh/attendees';
 import { upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import type { Ctx } from '@yayatoh/kernel';
@@ -147,6 +147,7 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
       shortCode: tickets.shortCode,
       status: tickets.status,
       holderName: tickets.holderName,
+      holderEmail: tickets.holderEmail,
       code: ticketBarcodes.payload,
     })
     .from(tickets)
@@ -282,6 +283,55 @@ export async function eventTicketTypeIdsTx(tx: TenantTx, eventId: string): Promi
     .from(ticketTypes)
     .where(eq(ticketTypes.eventId, eventId));
   return new Set(rows.map((r) => r.id));
+}
+
+/**
+ * Hand a ticket to a new holder: rev + 1 with a freshly signed code (every older code for it
+ * now scans as invalid) and a new short code (the old printed one stops working too); the
+ * holder fields and the ticket's attendee move to the new person.
+ */
+export async function reissueTicketTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  ticketId: string,
+  holder: { name: string; email: string },
+): Promise<{ id: string; rev: number; shortCode: string; code: string }> {
+  const orgId = requireOrg(ctx);
+  const [t] = await tx.select().from(tickets).where(eq(tickets.id, ticketId)).for('update');
+  if (!t) throw new DomainError('not_found', 'Ticket not found');
+  if (t.status !== 'active') throw new DomainError('invalid_state', 'This ticket is no longer valid');
+  const rev = t.rev + 1;
+  const key = await activeKey(tx, orgId);
+  const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev }, key.privateKey);
+  await tx
+    .update(ticketBarcodes)
+    .set({ active: false, updatedAt: ctx.now })
+    .where(and(eq(ticketBarcodes.ticketId, t.id), eq(ticketBarcodes.active, true)));
+  await tx.insert(ticketBarcodes).values({ orgId, ticketId: t.id, format: 'yy1', payload: code, rev });
+  // The short code printed under the old QR must stop working too: a new one goes with the new rev.
+  let shortCode: string | null = null;
+  for (let attempt = 0; attempt < 5 && !shortCode; attempt++) {
+    const candidate = randomShortCode();
+    const [taken] = await tx.select({ id: tickets.id }).from(tickets).where(eq(tickets.shortCode, candidate));
+    if (!taken) shortCode = candidate;
+  }
+  if (!shortCode) throw new DomainError('internal', 'Could not allocate a ticket short code');
+  await tx
+    .update(tickets)
+    .set({ rev, shortCode, holderName: holder.name, holderEmail: holder.email, updatedAt: ctx.now })
+    .where(eq(tickets.id, t.id));
+  const contact = await upsertContactTx(tx, ctx, {
+    email: holder.email,
+    name: holder.name,
+    source: 'ticket',
+  });
+  if (t.attendeeId)
+    await reassignAttendeeTx(tx, ctx, t.attendeeId, {
+      contactId: contact.id,
+      name: holder.name,
+      email: holder.email,
+    });
+  return { id: t.id, rev, shortCode, code };
 }
 
 /** Tickets issued (and not void) for an event: the check-in progress denominator. */

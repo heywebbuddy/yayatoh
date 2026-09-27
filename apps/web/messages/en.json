@@ -500,7 +500,8 @@
     "shortCode": "Code",
     "holder": "Ticket holder",
     "downloadPdf": "Download tickets (PDF)",
-    "discountApplied": "Includes {amount} off with {code}"
+    "discountApplied": "Includes {amount} off with {code}",
+    "transferred": "{count, plural, one {# ticket from this order was passed on to someone else. It's theirs now.} other {# tickets from this order were passed on to other people. They're theirs now.}}"
   },
   "orders": {
     "title": "Recent orders",
@@ -785,5 +786,49 @@
       "cell_too_long": "A cell is longer than 1,000 characters.",
       "unterminated_quote": "The file has an unclosed quote, so it can't be read as CSV."
     }
+  },
+  "distribution": {
+    "title": "Send this ticket",
+    "hint": "Create a link the guest opens to take the ticket in their own name. Once they claim it, the old QR code stops working.",
+    "recipient": "Email (optional)",
+    "recipientHint": "We email the link. Leave empty to copy it and share it yourself.",
+    "create": "Create link",
+    "linkReady": "Here's the link. Copy it now: it isn't shown again.",
+    "linkEmailed": "We've emailed the link. You can also copy it now: it isn't shown again.",
+    "linkLabel": "Claim link",
+    "open": "A claim link is waiting to be used.",
+    "openTo": "A claim link was sent to {email}.",
+    "revoke": "Revoke link"
+  },
+  "claim": {
+    "eyebrow": "A ticket for you",
+    "intro": "Enter your name and email to take this ticket. It becomes yours: we'll show your QR code right away and email you a link to it.",
+    "name": "Full name",
+    "email": "Email",
+    "emailHint": "Your ticket link goes here.",
+    "submit": "Claim ticket",
+    "state": {
+      "open": "This ticket is waiting for you",
+      "claimed": "This ticket has already been claimed",
+      "revoked": "This link was cancelled",
+      "expired": "This link has expired"
+    },
+    "stateHint": "Ask the person who sent it for a new link."
+  },
+  "myTickets": {
+    "eyebrow": "My tickets",
+    "for": "Tickets for {email}",
+    "expiredTitle": "This link has expired",
+    "expiredDescription": "Ask for a new one on the event page: enter your email under “Already have tickets?”.",
+    "noneTitle": "No tickets here right now",
+    "noneDescription": "Tickets you pass on to someone else no longer appear here.",
+    "giveTitle": "Pass this ticket on",
+    "give": "Create link",
+    "pending": "A link for this ticket is waiting to be claimed. Creating a new one cancels it.",
+    "requestTitle": "Already have tickets?",
+    "requestHint": "Enter the email your tickets were sent to and we'll email you a link to them.",
+    "requestEmail": "Email",
+    "requestSend": "Email me a link",
+    "requestSent": "If that email has tickets for this event, a link is on its way."
   }
 }
