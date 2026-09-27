@@ -4,7 +4,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { claimProviderEventTx, type ProviderEvent } from '@yayatoh/payments';
-import { tenantCommand } from '@yayatoh/platform';
+import { keyVault, tenantCommand } from '@yayatoh/platform';
 import { holdInventoryTx, issueTicketsTx, quoteTx, releaseHoldTx, sellHeldTx } from '@yayatoh/ticketing';
 import { and, eq, inArray, lte } from 'drizzle-orm';
 import { z } from 'zod';
@@ -108,6 +108,7 @@ export const startCheckoutCommand = tenantCommand({
         fundsFlow: 'platform_mor',
         feeSchedule: quote.feeSchedule,
         manageTokenHash: hashManageToken(manageToken),
+        manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
         expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
       })
       .returning();

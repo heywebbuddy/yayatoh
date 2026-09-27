@@ -51,6 +51,8 @@ export const orders = tenantTable(
     provider: text('provider'),
     providerPaymentId: text('provider_payment_id'),
     manageTokenHash: text('manage_token_hash').notNull(),
+    /** The manage token, envelope-encrypted (KeyVault) so the worker can email the link. */
+    manageTokenCiphertext: text('manage_token_ciphertext'),
     createdVia: text('created_via').notNull().default('web'),
     expiresAt: ts('expires_at'),
     paidAt: ts('paid_at'),

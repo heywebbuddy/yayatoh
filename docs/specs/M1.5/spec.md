@@ -111,7 +111,20 @@
 | AC4 | Organizers list and search attendees; viewers can, scanners can't; another org sees nothing | `attendees.int.test.ts`, `isolation.int.test.ts` |
 | AC5 | End to end: a guest buys (one with opt-in), and the organizer finds each ticket's attendee | `e2e/checkout.spec.ts` |
 
+## M1.5c3 — tickets email (done)
+- **Subscriber:** `orders.ticket-mailer` subscribes to `order.paid@1` and emails the buyer an `orders.tickets` message: the link, event name and ticket count. The idempotency key is `order-tickets:{orderId}`, and the locale is the order's.
+- **Manage token:**
+  - It is still looked up only by its hash.
+  - It is now also stored envelope-encrypted (`orders.manage_token_ciphertext`, KeyVault), so the worker can build the link. It never enters an event payload.
+  - Rotating the token (M1.8 self-service) replaces both columns.
+- **Mailer:** `consoleMailer` until SES and React Email templates land (M1.10, owner account).
+
+### Acceptance (M1.5c3)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A paid order emails one tickets link that opens the order; the token isn't in the event payload or stored in clear | `packages/testing/tests/tickets.int.test.ts` |
+
 ## Remaining M1.5 increments
-- **M1.5c3:** PDF ticket (ADR 0017 spike), ticket email via the outbox (`order.paid` → mailer).
+- **M1.5c4:** PDF ticket (ADR 0017 spike: react-pdf vs Gotenberg).
 - **M1.5d:** promo codes, early-bird tiers, donation tickets, `access_dates`, forms engine v1 (checkout questions).
 - **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.

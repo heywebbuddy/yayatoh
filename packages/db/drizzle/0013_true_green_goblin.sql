@@ -1,0 +1,1 @@
+ALTER TABLE "orders"."orders" ADD COLUMN "manage_token_ciphertext" text;

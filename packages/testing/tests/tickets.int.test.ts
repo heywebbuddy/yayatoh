@@ -1,8 +1,9 @@
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
-import { createCtx, executeCommand } from '@yayatoh/kernel';
-import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
+import { createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
+import { orderByManageToken, startCheckoutCommand, ticketMailer } from '@yayatoh/orders';
+import { consumeEvent, memoryMailer } from '@yayatoh/platform';
 import { verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { createTicketTypeCommand, issueTicketsTx, publicKeysTx } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
@@ -88,6 +89,44 @@ describe('tickets', () => {
     expect(row?.c).toBeTruthy();
     // A raw Ed25519 pkcs8 key starts with 302e0201 (MC4CAQ in base64).
     expect(String(row?.c)).not.toMatch(/^MC4CAQ/);
+  });
+
+  it('a paid order emails the tickets link; the token is never in the event or stored in clear', async () => {
+    const r = await buy(2, 'mail');
+    const { mailer, sent } = memoryMailer();
+    const payload = {
+      orgId: a.org.id,
+      orderId: r.order.id,
+      eventId,
+      totalMinor: 0,
+      currency: 'USD',
+      via: 'free',
+    };
+    await consumeEvent(ticketMailer({ mailer, appOrigin: 'https://app.yayatoh.test' }), {
+      id: uuidv7(),
+      orgId: a.org.id,
+      type: 'order.paid',
+      version: 1,
+      aggregateType: 'order',
+      aggregateId: r.order.id,
+      payload,
+      logSeq: 1,
+    });
+    expect(sent).toHaveLength(1);
+    expect(sent[0]).toMatchObject({
+      to: 'mail@example.test',
+      template: 'orders.tickets',
+      idempotencyKey: `order-tickets:${r.order.id}`,
+      params: { url: `https://app.yayatoh.test/orders/${r.manageToken}`, eventName: 'Tickets', count: 2 },
+    });
+    expect(JSON.stringify(payload)).not.toContain(r.manageToken);
+    const [row] = await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute<{ c: string }>(
+        sql`select manage_token_ciphertext as c from orders.orders where id = ${r.order.id}`,
+      ),
+    );
+    expect(row?.c).toMatch(/^local\.v1\./);
+    expect(row?.c).not.toContain(r.manageToken);
   });
 
   it('isolation: org B sees none of org A tickets', async () => {
