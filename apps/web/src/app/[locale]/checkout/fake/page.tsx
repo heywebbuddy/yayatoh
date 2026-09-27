@@ -24,6 +24,7 @@ export default async function FakeCheckout({
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
       <Card size="panel" className="flex flex-col gap-4">
+        {sp.desc ? <p className="text-body text-zinc-600">{sp.desc}</p> : null}
         <p className="text-[40px] font-light tracking-[-0.04em]">
           {formatMoney(money(Number(amount), currency), locale)}
         </p>

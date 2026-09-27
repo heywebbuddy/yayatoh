@@ -74,7 +74,19 @@ export interface DisputeEvent {
   readonly evidenceDueBy?: string;
 }
 
-export type WebhookEvent = ProviderEvent | AccountEvent | DisputeEvent;
+/**
+ * A verified notification the platform does not act on (another app's payment, a pending bank
+ * debit, an event type we don't subscribe to). Acknowledged with 200 so the provider stops retrying.
+ */
+export interface IgnoredEvent {
+  readonly provider: 'fake' | 'stripe';
+  readonly id: string;
+  readonly type: 'ignored';
+  readonly reason: string;
+}
+
+export type WebhookEvent = ProviderEvent | AccountEvent | DisputeEvent | IgnoredEvent;
+export const isIgnoredEvent = (e: WebhookEvent): e is IgnoredEvent => e.type === 'ignored';
 export const isAccountEvent = (e: WebhookEvent): e is AccountEvent => e.type === 'account.updated';
 export const isDisputeEvent = (e: WebhookEvent): e is DisputeEvent =>
   e.type === 'dispute.created' || e.type === 'dispute.closed';

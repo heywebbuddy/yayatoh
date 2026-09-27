@@ -216,7 +216,7 @@
 | AC6 | End to end: an organizer adds a guest-count preset and a required choice question and reorders them; a guest answers; the organizer reads the answers | `e2e/questions.spec.ts` |
 
 ## Remaining M1.5 increments
-- **M1.5e:** Stripe adapter for both funds flows (§5.3: direct charge + application fee on connected accounts; platform charge + separate charges & transfers). Wallet passes. **Blocked on the owner:** Stripe test access, Apple Pass Type ID, Google Wallet issuer, and counsel's opinion before live money.
+- **M1.5e2:** wallet passes. **Blocked on the owner:** Apple Pass Type ID, Google Wallet issuer. Live money also waits for counsel's opinion (roadmap §5.3).
 
 ## M1.5f — organizer-collected sales: box office, Zelle, cash (done)
 
@@ -236,3 +236,32 @@ Roadmap §5.3 "organizer-collected sales" and §4.4 receipt variant.
 | AC2 | Never oversells | `box-office.int.test.ts` |
 | AC3 | Box office staff can sell; finance and viewers cannot; other orgs never see the order | `box-office.int.test.ts`, `packages/modules/tenancy/tests/permissions.test.ts` |
 | AC4 | In the browser: an organizer records a Zelle sale, opens the order, sees "Collected by you · Zelle · ZL-777", two valid tickets and no refund form; axe passes | `apps/web/e2e/box-office.spec.ts` |
+
+## M1.5e1 — Stripe adapter for both funds flows (done; live test-mode run pending network access)
+
+Roadmap §5.3. `stripePaymentProvider` in `@yayatoh/payments` implements the whole `PaymentProvider` port with the official SDK (`stripe` 22.6.2, API version pinned to `2026-08-26.dahlia`).
+
+- **Choosing the provider:** `PAYMENTS_PROVIDER=stripe` with `STRIPE_SECRET_KEY` and at least one webhook secret; otherwise the fake provider stays the default, so adding test keys never switches the dev personas or the e2e suites off the fake pages (`paymentProviderFromEnv`). Live keys (`sk_live_`/`rk_live_`) are refused outside production.
+- **Charges:** a hosted **Checkout Session** per order attempt (idempotency key per attempt, 30-minute session, one line named after the event, buyer email, `client_reference_id` and metadata = org, order and funds flow).
+  - `organizer_mor`: a **direct charge** on the connected account (`Stripe-Account`) with `application_fee_amount` = the platform fee (legacy's model).
+  - `platform_mor`: a charge on the platform account; money moves later by transfer at release.
+  - The order's provider payment id is the Checkout Session id; refunds and disputes resolve its PaymentIntent.
+- **Webhooks** (`/api/webhooks/stripe`, shared handler with the fake route; only the configured provider's route answers, the other is a 404): verified on the raw body against the platform and the Connect endpoint secrets. `checkout.session.completed` (paid) and `async_payment_succeeded` → paid; `async_payment_failed` and `expired` → failed; a completed session still `unpaid` (bank debits) waits; `account.updated` → the payout account; `charge.dispute.created/closed` → the dispute, matched to the order's session by PaymentIntent on the right account. Other apps' sessions and other event types are acknowledged (200) and ignored. Dedupe, amount/currency/payment-id checks and fulfilment are the existing order commands.
+- **Refunds:** on the connected account for `organizer_mor`, then exactly the policy's share of the application fee as its own fee refund (not Stripe's pro-rata flag); on the platform for `platform_mor`. Pending refunds report `pending`; rejected ones `failed`.
+- **Transfers and reversals:** `transfer_group` per event, explicit reversals; Stripe's refusals come back as `failed` (the settlement retries; a failed reversal stays a receivable).
+- **Connect:** Standard-equivalent accounts (`controller`: full dashboard, the account pays fees, Stripe covers losses) tagged with the org, hosted onboarding links, Payment Method Domains registered once per host and account.
+- **Disputes:** reviewed evidence submitted as text (`submit: true`); attaching the packet PDF as a Stripe file comes with the live run.
+- **The hosted payment page** shows what is being paid for (the event name), on Stripe and on the fake page.
+- **Live test-mode smoke:** `PAYMENTS_PROVIDER=stripe pnpm --filter @yayatoh/payments stripe:smoke` (not in CI). This environment currently blocks `api.stripe.com` (owner inbox).
+- **Later:** Stripe Tax and Radar rules, `source_transaction` on transfers, embedded onboarding components, the dispute packet as a file, application-fee reconciliation (M1.6).
+
+### Acceptance (M1.5e1)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Direct charges carry `Stripe-Account` and the application fee; platform charges carry neither; every write has its idempotency key | `packages/modules/payments/tests/stripe.test.ts` |
+| AC2 | Webhooks are verified on the raw body (both endpoints' secrets); tampered, unsigned and foreign-signed bodies are refused; every event type maps as specified; unknown ones are acknowledged | `stripe.test.ts` |
+| AC3 | Refunds route to the right account with the exact fee share; transfers, reversals and evidence map Stripe's refusals to `failed` | `stripe.test.ts` |
+| AC4 | The provider is only Stripe when chosen, with its key and a webhook secret | `packages/modules/payments/tests/config.test.ts` |
+| AC5 | On a real database: session → signed webhook → order paid once (replay is a duplicate), a mismatched amount is refused, the refund hits the session's PaymentIntent, a dispute finds its order, other apps' events are ignored | `packages/testing/tests/stripe-flow.int.test.ts` |
+| AC6 | In the browser: the payment page names the event; the Stripe webhook endpoint is a 404 while Stripe is off | `apps/web/e2e/checkout.spec.ts` |
+

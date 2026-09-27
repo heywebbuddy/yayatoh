@@ -11,7 +11,8 @@
     "./testing": "./src/testing.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "stripe:smoke": "node scripts/stripe-smoke.ts"
   },
   "dependencies": {
     "@yayatoh/contracts": "workspace:*",
@@ -20,6 +21,7 @@
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "drizzle-orm": "catalog:",
+    "stripe": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

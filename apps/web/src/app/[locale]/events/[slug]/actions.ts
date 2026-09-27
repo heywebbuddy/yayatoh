@@ -121,7 +121,8 @@ export async function checkoutAction(
     connectedAccountId: flow.connectedAccountId,
     applicationFee: { amount: flow.applicationFeeMinor, currency: order.currency },
     buyerEmail: order.buyerEmail,
-    description: slug,
+    // The line the buyer sees on the hosted payment page and their card statement.
+    description: event.name,
     idempotencyKey: `order:${order.id}:1`,
     returnUrl: `${origin}${locale === 'en' ? '' : `/${locale}`}${orderPath}`,
   });

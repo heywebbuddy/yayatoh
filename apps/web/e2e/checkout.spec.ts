@@ -52,6 +52,8 @@ test.describe('checkout', () => {
     await guest.getByRole('button', { name: 'Continue to payment' }).click();
     await expect(guest.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     await expect(guest.getByText('$80.00')).toBeVisible();
+    // The hosted payment page names what is being paid for (Stripe shows the same line).
+    await expect(guest.getByText('Lakeside Open House', { exact: true })).toBeVisible();
     await guest.getByRole('button', { name: 'Pay now (test)' }).click();
     await expect(guest).toHaveURL(/\/orders\//);
     await expect(guest.getByText('Paid', { exact: true })).toBeVisible();
@@ -88,5 +90,15 @@ test.describe('checkout', () => {
       headers: { 'x-fake-signature': 'deadbeef' },
     });
     expect(res.status()).toBe(400);
+  });
+
+  test('only the configured provider has a webhook endpoint (Stripe is off in dev and CI)', async ({
+    request,
+  }) => {
+    const stripe = await request.post('/api/webhooks/stripe', {
+      data: '{"id":"evt_1","type":"checkout.session.completed"}',
+      headers: { 'stripe-signature': 't=1,v1=deadbeef', 'content-type': 'application/json' },
+    });
+    expect(stripe.status()).toBe(404);
   });
 });

@@ -10,6 +10,7 @@ export {
   recordPayoutAccountCommand,
   setPayoutHoldCommand,
 } from './accounts.ts';
+export { paymentProviderFromEnv } from './config.ts';
 export { claimProviderEventTx } from './dedupe.ts';
 export {
   closeDisputeTx,
@@ -44,12 +45,13 @@ export type {
   CreatePaymentResult,
   DisputeEvent,
   FundsFlow,
+  IgnoredEvent,
   PaymentProvider,
   ProviderEvent,
   RefundInput,
   WebhookEvent,
 } from './port.ts';
-export { isAccountEvent, isDisputeEvent } from './port.ts';
+export { isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
 export { DISPUTE_STATUSES, LEDGER_ACCOUNTS, type LedgerAccount, SETTLEMENT_STATUSES } from './schema.ts';
 export {
   addBusinessDays,
@@ -62,3 +64,9 @@ export {
   SettlementDto,
   settlementsQuery,
 } from './settlements.ts';
+export {
+  accountState,
+  STRIPE_API_VERSION,
+  type StripeProviderOptions,
+  stripePaymentProvider,
+} from './stripe.ts';

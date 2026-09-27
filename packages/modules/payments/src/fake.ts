@@ -28,6 +28,8 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
         order: i.orderId,
         amount: String(i.amount.amount),
         currency: i.amount.currency,
+        // What the buyer is paying for, as Stripe's hosted page shows it.
+        desc: i.description,
         return: i.returnUrl,
       });
       if (i.fundsFlow === 'organizer_mor') {
