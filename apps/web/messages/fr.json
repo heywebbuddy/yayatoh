@@ -217,7 +217,15 @@
     "profile": "Profil",
     "closeProfile": "Fermer le profil",
     "emptyTitle": "{term} : personne pour l’instant",
-    "emptyDescription": "Les personnes apparaissent ici lorsqu’elles achètent des billets, s’inscrivent ou sont ajoutées à la liste des invités."
+    "emptyDescription": "Les personnes apparaissent ici lorsqu’elles achètent des billets, s’inscrivent ou sont ajoutées à la liste des invités.",
+    "source": "Source",
+    "anySource": "Toutes les sources",
+    "anyStatus": "Tous les statuts",
+    "pages": "Pages",
+    "showing": "{from}–{to} sur {total}",
+    "filtered": "filtré",
+    "previous": "Précédent",
+    "next": "Suivant"
   },
   "attendeeStatus": {
     "paid": "Payé",
@@ -227,6 +235,25 @@
     "attending": "Présent",
     "pending": "En attente de réponse",
     "declined": "Décliné"
+  },
+  "attendeeSource": {
+    "ticket": "Billet",
+    "registration": "Inscription",
+    "guest": "Liste des invités",
+    "import": "Import",
+    "comp": "Invitation"
+  },
+  "attendeeRecordStatus": {
+    "active": "Actif",
+    "cancelled": "Annulé"
+  },
+  "labels": {
+    "title": "Étiquettes",
+    "filter": "Filtrer par étiquette",
+    "none": "Aucune étiquette pour l’instant.",
+    "add": "Ajouter une étiquette",
+    "addButton": "Ajouter",
+    "remove": "Retirer l’étiquette {label}"
   },
   "common": {
     "comingSoon": "Disponible dans une étape ultérieure",
@@ -645,5 +672,18 @@
       "two_entrances": "Billet présenté à une deuxième entrée",
       "invalid_burst": "Plusieurs codes non valides à la suite"
     }
+  },
+  "search": {
+    "title": "Recherche",
+    "resultsFor": "Résultats pour « {q} »",
+    "tooShortTitle": "Saisissez au moins 2 caractères",
+    "tooShortDescription": "Recherchez par nom, e-mail, référence de commande ou code de billet.",
+    "noneTitle": "Aucun résultat",
+    "noneDescription": "Essayez un nom, une adresse e-mail, une référence de commande ou le code à 8 caractères d’un billet.",
+    "events": "Événements",
+    "attendees": "Personnes",
+    "orders": "Commandes",
+    "ticketCode": "Billet {code}",
+    "orderRef": "Réf. {ref}"
   }
 }

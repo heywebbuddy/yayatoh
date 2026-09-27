@@ -148,6 +148,13 @@
       "when": 1790503537379,
       "tag": "0020_parched_namora",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1790504902196,
+      "tag": "0021_naive_mentor",
+      "breakpoints": true
     }
   ]
 }

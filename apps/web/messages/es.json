@@ -217,7 +217,15 @@
     "profile": "Perfil",
     "closeProfile": "Cerrar perfil",
     "emptyTitle": "Aún no hay {term}",
-    "emptyDescription": "Las personas aparecerán aquí a medida que compren entradas, se inscriban o se añadan a la lista de invitados."
+    "emptyDescription": "Las personas aparecerán aquí a medida que compren entradas, se inscriban o se añadan a la lista de invitados.",
+    "source": "Origen",
+    "anySource": "Cualquier origen",
+    "anyStatus": "Cualquier estado",
+    "pages": "Páginas",
+    "showing": "{from}–{to} de {total}",
+    "filtered": "filtrado",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "attendeeStatus": {
     "paid": "Pagado",
@@ -227,6 +235,25 @@
     "attending": "Asistirá",
     "pending": "Sin respuesta",
     "declined": "Rechazado"
+  },
+  "attendeeSource": {
+    "ticket": "Entrada",
+    "registration": "Inscripción",
+    "guest": "Lista de invitados",
+    "import": "Importación",
+    "comp": "Cortesía"
+  },
+  "attendeeRecordStatus": {
+    "active": "Activo",
+    "cancelled": "Cancelado"
+  },
+  "labels": {
+    "title": "Etiquetas",
+    "filter": "Filtrar por etiqueta",
+    "none": "Aún no hay etiquetas.",
+    "add": "Añadir una etiqueta",
+    "addButton": "Añadir",
+    "remove": "Quitar la etiqueta {label}"
   },
   "common": {
     "comingSoon": "Llegará en una fase posterior",
@@ -645,5 +672,18 @@
       "two_entrances": "Entrada mostrada en un segundo acceso",
       "invalid_burst": "Varios códigos no válidos seguidos"
     }
+  },
+  "search": {
+    "title": "Buscar",
+    "resultsFor": "Resultados de «{q}»",
+    "tooShortTitle": "Escribe al menos 2 caracteres",
+    "tooShortDescription": "Busca por nombre, correo electrónico, referencia de pedido o código de entrada.",
+    "noneTitle": "No se encontró nada",
+    "noneDescription": "Prueba con un nombre, un correo electrónico, una referencia de pedido o el código de 8 caracteres de una entrada.",
+    "events": "Eventos",
+    "attendees": "Personas",
+    "orders": "Pedidos",
+    "ticketCode": "Entrada {code}",
+    "orderRef": "Ref. {ref}"
   }
 }

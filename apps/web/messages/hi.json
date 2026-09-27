@@ -217,7 +217,15 @@
     "profile": "प्रोफ़ाइल",
     "closeProfile": "प्रोफ़ाइल बंद करें",
     "emptyTitle": "अभी कोई {term} नहीं",
-    "emptyDescription": "लोग टिकट खरीदने, पंजीकरण करने या मेहमानों की सूची में जोड़े जाने पर यहाँ दिखेंगे।"
+    "emptyDescription": "लोग टिकट खरीदने, पंजीकरण करने या मेहमानों की सूची में जोड़े जाने पर यहाँ दिखेंगे।",
+    "source": "स्रोत",
+    "anySource": "कोई भी स्रोत",
+    "anyStatus": "कोई भी स्थिति",
+    "pages": "पेज",
+    "showing": "{total} में से {from}–{to}",
+    "filtered": "फ़िल्टर किए गए",
+    "previous": "पिछला",
+    "next": "अगला"
   },
   "attendeeStatus": {
     "paid": "भुगतान हुआ",
@@ -227,6 +235,25 @@
     "attending": "आ रहे हैं",
     "pending": "जवाब का इंतज़ार",
     "declined": "मना किया"
+  },
+  "attendeeSource": {
+    "ticket": "टिकट",
+    "registration": "पंजीकरण",
+    "guest": "मेहमानों की सूची",
+    "import": "इम्पोर्ट",
+    "comp": "मुफ़्त"
+  },
+  "attendeeRecordStatus": {
+    "active": "सक्रिय",
+    "cancelled": "रद्द"
+  },
+  "labels": {
+    "title": "लेबल",
+    "filter": "लेबल से फ़िल्टर करें",
+    "none": "अभी कोई लेबल नहीं।",
+    "add": "लेबल जोड़ें",
+    "addButton": "जोड़ें",
+    "remove": "लेबल {label} हटाएँ"
   },
   "common": {
     "comingSoon": "बाद के माइलस्टोन में आएगा",
@@ -645,5 +672,18 @@
       "two_entrances": "टिकट दूसरे प्रवेश द्वार पर दिखाया गया",
       "invalid_burst": "लगातार कई अमान्य कोड"
     }
+  },
+  "search": {
+    "title": "खोजें",
+    "resultsFor": "“{q}” के नतीजे",
+    "tooShortTitle": "कम से कम 2 अक्षर लिखें",
+    "tooShortDescription": "नाम, ईमेल, ऑर्डर रेफ़रेंस या टिकट कोड से खोजें।",
+    "noneTitle": "कुछ नहीं मिला",
+    "noneDescription": "कोई नाम, ईमेल पता, ऑर्डर रेफ़रेंस या टिकट पर लिखा 8 अक्षरों का कोड आज़माएँ।",
+    "events": "इवेंट",
+    "attendees": "लोग",
+    "orders": "ऑर्डर",
+    "ticketCode": "टिकट {code}",
+    "orderRef": "रेफ़रेंस {ref}"
   }
 }

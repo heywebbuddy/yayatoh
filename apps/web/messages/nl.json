@@ -217,7 +217,15 @@
     "profile": "Profiel",
     "closeProfile": "Profiel sluiten",
     "emptyTitle": "Nog geen {term}",
-    "emptyDescription": "Mensen verschijnen hier zodra ze tickets kopen, zich registreren of aan de gastenlijst worden toegevoegd."
+    "emptyDescription": "Mensen verschijnen hier zodra ze tickets kopen, zich registreren of aan de gastenlijst worden toegevoegd.",
+    "source": "Bron",
+    "anySource": "Elke bron",
+    "anyStatus": "Elke status",
+    "pages": "Pagina’s",
+    "showing": "{from}–{to} van {total}",
+    "filtered": "gefilterd",
+    "previous": "Vorige",
+    "next": "Volgende"
   },
   "attendeeStatus": {
     "paid": "Betaald",
@@ -227,6 +235,25 @@
     "attending": "Aanwezig",
     "pending": "Wacht op antwoord",
     "declined": "Afgemeld"
+  },
+  "attendeeSource": {
+    "ticket": "Ticket",
+    "registration": "Registratie",
+    "guest": "Gastenlijst",
+    "import": "Import",
+    "comp": "Vrijkaart"
+  },
+  "attendeeRecordStatus": {
+    "active": "Actief",
+    "cancelled": "Geannuleerd"
+  },
+  "labels": {
+    "title": "Labels",
+    "filter": "Filteren op label",
+    "none": "Nog geen labels.",
+    "add": "Label toevoegen",
+    "addButton": "Toevoegen",
+    "remove": "Label {label} verwijderen"
   },
   "common": {
     "comingSoon": "Komt in een latere mijlpaal",
@@ -645,5 +672,18 @@
       "two_entrances": "Ticket getoond bij een tweede ingang",
       "invalid_burst": "Meerdere ongeldige codes achter elkaar"
     }
+  },
+  "search": {
+    "title": "Zoeken",
+    "resultsFor": "Resultaten voor ‘{q}’",
+    "tooShortTitle": "Typ minstens 2 tekens",
+    "tooShortDescription": "Zoek op naam, e-mail, bestelreferentie of ticketcode.",
+    "noneTitle": "Niets gevonden",
+    "noneDescription": "Probeer een naam, een e-mailadres, een bestelreferentie of de code van 8 tekens op een ticket.",
+    "events": "Evenementen",
+    "attendees": "Mensen",
+    "orders": "Bestellingen",
+    "ticketCode": "Ticket {code}",
+    "orderRef": "Ref. {ref}"
   }
 }

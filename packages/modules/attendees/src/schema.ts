@@ -31,5 +31,6 @@ export const attendees = tenantTable(
     uniqueIndex('attendees_org_ticket_key').on(t.orgId, t.ticketId).where(sql`ticket_id is not null`),
     check('attendees_source_check', sql`source in ('ticket', 'registration', 'guest', 'import', 'comp')`),
     check('attendees_status_check', sql`status in ('active', 'cancelled')`),
+    check('attendees_labels_check', sql`cardinality(labels) <= 20`),
   ],
 );

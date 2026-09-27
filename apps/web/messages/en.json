@@ -217,7 +217,15 @@
     "profile": "Profile",
     "closeProfile": "Close profile",
     "emptyTitle": "No {term} yet",
-    "emptyDescription": "People appear here as they buy tickets, register or are added to the guest list."
+    "emptyDescription": "People appear here as they buy tickets, register or are added to the guest list.",
+    "source": "Source",
+    "anySource": "Any source",
+    "anyStatus": "Any status",
+    "pages": "Pages",
+    "showing": "{from}–{to} of {total}",
+    "filtered": "filtered",
+    "previous": "Previous",
+    "next": "Next"
   },
   "attendeeStatus": {
     "paid": "Paid",
@@ -227,6 +235,25 @@
     "attending": "Attending",
     "pending": "Awaiting reply",
     "declined": "Declined"
+  },
+  "attendeeSource": {
+    "ticket": "Ticket",
+    "registration": "Registration",
+    "guest": "Guest list",
+    "import": "Import",
+    "comp": "Complimentary"
+  },
+  "attendeeRecordStatus": {
+    "active": "Active",
+    "cancelled": "Cancelled"
+  },
+  "labels": {
+    "title": "Labels",
+    "filter": "Filter by label",
+    "none": "No labels yet.",
+    "add": "Add a label",
+    "addButton": "Add",
+    "remove": "Remove label {label}"
   },
   "common": {
     "comingSoon": "Coming in a later milestone",
@@ -645,5 +672,18 @@
       "two_entrances": "Ticket shown at a second entrance",
       "invalid_burst": "Several invalid codes in a row"
     }
+  },
+  "search": {
+    "title": "Search",
+    "resultsFor": "Results for “{q}”",
+    "tooShortTitle": "Type at least 2 characters",
+    "tooShortDescription": "Search by name, email, order reference or ticket code.",
+    "noneTitle": "Nothing found",
+    "noneDescription": "Try a name, an email address, an order reference or the 8-character code on a ticket.",
+    "events": "Events",
+    "attendees": "People",
+    "orders": "Orders",
+    "ticketCode": "Ticket {code}",
+    "orderRef": "Ref {ref}"
   }
 }

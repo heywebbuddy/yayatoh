@@ -14,6 +14,8 @@ export const PERMISSIONS = [
   'orders:read',
   'orders:refund',
   'attendees:read',
+  /** Label, tag and (later) edit attendees. */
+  'attendees:write',
   'contacts:read',
   'finance:read',
   'marketing:write',
@@ -32,13 +34,14 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:write',
     'orders:read',
     'attendees:read',
+    'attendees:write',
     'contacts:read',
     'marketing:write',
     'checkin:scan',
   ],
   finance: ['org:read', 'billing:read', 'events:read', 'orders:read', 'orders:refund', 'finance:read'],
   marketing: ['org:read', 'events:read', 'contacts:read', 'marketing:write'],
-  box_office: ['org:read', 'events:read', 'orders:read', 'attendees:read', 'checkin:scan'],
+  box_office: ['org:read', 'events:read', 'orders:read', 'attendees:read', 'attendees:write', 'checkin:scan'],
   scanner: ['org:read', 'checkin:scan'],
   viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read'],
 };
@@ -55,7 +58,14 @@ export function roleCan(role: OrgRole, permission: string): boolean {
  * applies on top of the member's org role; it never reaches other events or org-level actions.
  */
 export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
-  event_manager: ['events:read', 'events:write', 'orders:read', 'attendees:read', 'checkin:scan'],
+  event_manager: [
+    'events:read',
+    'events:write',
+    'orders:read',
+    'attendees:read',
+    'attendees:write',
+    'checkin:scan',
+  ],
   door_staff: ['events:read', 'checkin:scan'],
   session_scanner: ['checkin:scan'],
 };

@@ -4,11 +4,11 @@ import { createCtx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
-import { desc, eq, inArray, sql } from 'drizzle-orm';
+import { desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer } from './dto.ts';
-import { orderItems, orders } from './schema.ts';
+import { ORDER_STATUSES, orderItems, orders } from './schema.ts';
 
 export const listOrdersQuery = tenantQuery({
   name: 'orders.listOrders',
@@ -35,6 +35,55 @@ export const listOrdersQuery = tenantQuery({
           )
       : [];
     return rows.map((r) => ({ ...r, items: items.filter((i) => i.orderId === r.id) }));
+  },
+});
+
+export const OrderHitDto = z.object({
+  id: z.uuid(),
+  eventId: z.uuid(),
+  status: z.enum(ORDER_STATUSES),
+  buyerName: z.string(),
+  buyerEmail: z.string(),
+  currency: z.string(),
+  totalMinor: z.int(),
+  createdAt: z.date(),
+});
+
+const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+/** Org-wide order search (the command palette): buyer name or email, or an order id prefix. */
+export const searchOrdersQuery = tenantQuery({
+  name: 'orders.search',
+  input: z.object({ q: z.string().trim().min(2).max(200), limit: z.int().min(1).max(50).default(10) }),
+  output: z.array(OrderHitDto),
+  entitlement: 'ticketing',
+  permission: 'orders:read',
+  handler: async ({ input, tx }) => {
+    const q = `%${escapeLike(input.q)}%`;
+    const idPrefix = /^[0-9a-f-]{8,36}$/i.test(input.q) ? `${input.q.toLowerCase()}%` : null;
+    return (
+      await tx
+        .select({
+          id: orders.id,
+          eventId: orders.eventId,
+          status: orders.status,
+          buyerName: orders.buyerName,
+          buyerEmail: orders.buyerEmail,
+          currency: orders.currency,
+          totalMinor: orders.totalMinor,
+          createdAt: orders.createdAt,
+        })
+        .from(orders)
+        .where(
+          or(
+            ilike(orders.buyerName, q),
+            ilike(orders.buyerEmail, q),
+            idPrefix ? sql`${orders.id}::text like ${idPrefix}` : undefined,
+          ),
+        )
+        .orderBy(desc(orders.createdAt), desc(orders.id))
+        .limit(input.limit)
+    ).map((r) => ({ ...r, status: r.status as (typeof ORDER_STATUSES)[number] }));
   },
 });
 

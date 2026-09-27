@@ -217,7 +217,15 @@
     "profile": "Profil",
     "closeProfile": "Profil schließen",
     "emptyTitle": "Noch keine {term}",
-    "emptyDescription": "Personen erscheinen hier, sobald sie Tickets kaufen, sich anmelden oder zur Gästeliste hinzugefügt werden."
+    "emptyDescription": "Personen erscheinen hier, sobald sie Tickets kaufen, sich anmelden oder zur Gästeliste hinzugefügt werden.",
+    "source": "Quelle",
+    "anySource": "Jede Quelle",
+    "anyStatus": "Jeder Status",
+    "pages": "Seiten",
+    "showing": "{from}–{to} von {total}",
+    "filtered": "gefiltert",
+    "previous": "Zurück",
+    "next": "Weiter"
   },
   "attendeeStatus": {
     "paid": "Bezahlt",
@@ -227,6 +235,25 @@
     "attending": "Zugesagt",
     "pending": "Antwort ausstehend",
     "declined": "Abgesagt"
+  },
+  "attendeeSource": {
+    "ticket": "Ticket",
+    "registration": "Anmeldung",
+    "guest": "Gästeliste",
+    "import": "Import",
+    "comp": "Freiticket"
+  },
+  "attendeeRecordStatus": {
+    "active": "Aktiv",
+    "cancelled": "Storniert"
+  },
+  "labels": {
+    "title": "Labels",
+    "filter": "Nach Label filtern",
+    "none": "Noch keine Labels.",
+    "add": "Label hinzufügen",
+    "addButton": "Hinzufügen",
+    "remove": "Label {label} entfernen"
   },
   "common": {
     "comingSoon": "Kommt in einem späteren Meilenstein",
@@ -645,5 +672,18 @@
       "two_entrances": "Ticket an einem zweiten Eingang vorgezeigt",
       "invalid_burst": "Mehrere ungültige Codes hintereinander"
     }
+  },
+  "search": {
+    "title": "Suche",
+    "resultsFor": "Ergebnisse für „{q}“",
+    "tooShortTitle": "Gib mindestens 2 Zeichen ein",
+    "tooShortDescription": "Suche nach Name, E-Mail, Bestellreferenz oder Ticketcode.",
+    "noneTitle": "Nichts gefunden",
+    "noneDescription": "Versuche einen Namen, eine E-Mail-Adresse, eine Bestellreferenz oder den 8-stelligen Code auf einem Ticket.",
+    "events": "Events",
+    "attendees": "Personen",
+    "orders": "Bestellungen",
+    "ticketCode": "Ticket {code}",
+    "orderRef": "Ref. {ref}"
   }
 }

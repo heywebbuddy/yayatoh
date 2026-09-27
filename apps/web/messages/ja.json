@@ -217,7 +217,15 @@
     "profile": "プロフィール",
     "closeProfile": "プロフィールを閉じる",
     "emptyTitle": "まだ{term}はいません",
-    "emptyDescription": "チケットを購入したり、登録したり、ゲストリストに追加されたりした人がここに表示されます。"
+    "emptyDescription": "チケットを購入したり、登録したり、ゲストリストに追加されたりした人がここに表示されます。",
+    "source": "経路",
+    "anySource": "すべての経路",
+    "anyStatus": "すべてのステータス",
+    "pages": "ページ",
+    "showing": "{from}–{to}件（全{total}件）",
+    "filtered": "絞り込み中",
+    "previous": "前へ",
+    "next": "次へ"
   },
   "attendeeStatus": {
     "paid": "支払い済み",
@@ -227,6 +235,25 @@
     "attending": "出席",
     "pending": "返信待ち",
     "declined": "欠席"
+  },
+  "attendeeSource": {
+    "ticket": "チケット",
+    "registration": "登録",
+    "guest": "ゲストリスト",
+    "import": "インポート",
+    "comp": "招待"
+  },
+  "attendeeRecordStatus": {
+    "active": "有効",
+    "cancelled": "キャンセル済み"
+  },
+  "labels": {
+    "title": "ラベル",
+    "filter": "ラベルで絞り込む",
+    "none": "ラベルはまだありません。",
+    "add": "ラベルを追加",
+    "addButton": "追加",
+    "remove": "ラベル「{label}」を削除"
   },
   "common": {
     "comingSoon": "今後のマイルストーンで提供予定",
@@ -645,5 +672,18 @@
       "two_entrances": "2か所目の入口でチケットが提示されました",
       "invalid_burst": "無効なコードが連続しています"
     }
+  },
+  "search": {
+    "title": "検索",
+    "resultsFor": "「{q}」の検索結果",
+    "tooShortTitle": "2文字以上入力してください",
+    "tooShortDescription": "名前、メールアドレス、注文番号、チケットコードで検索できます。",
+    "noneTitle": "見つかりませんでした",
+    "noneDescription": "名前、メールアドレス、注文番号、またはチケットに記載された8文字のコードをお試しください。",
+    "events": "イベント",
+    "attendees": "人",
+    "orders": "注文",
+    "ticketCode": "チケット {code}",
+    "orderRef": "注文番号 {ref}"
   }
 }

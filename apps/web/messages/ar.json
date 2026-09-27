@@ -217,7 +217,15 @@
     "profile": "الملف الشخصي",
     "closeProfile": "إغلاق الملف الشخصي",
     "emptyTitle": "{term}: لا أحد بعد",
-    "emptyDescription": "سيظهر هنا الأشخاص عند شرائهم التذاكر أو تسجيلهم أو إضافتهم إلى قائمة الضيوف."
+    "emptyDescription": "سيظهر هنا الأشخاص عند شرائهم التذاكر أو تسجيلهم أو إضافتهم إلى قائمة الضيوف.",
+    "source": "المصدر",
+    "anySource": "أي مصدر",
+    "anyStatus": "أي حالة",
+    "pages": "الصفحات",
+    "showing": "{from}–{to} من {total}",
+    "filtered": "مُصفّاة",
+    "previous": "السابق",
+    "next": "التالي"
   },
   "attendeeStatus": {
     "paid": "مدفوع",
@@ -227,6 +235,25 @@
     "attending": "سيحضر",
     "pending": "بانتظار الرد",
     "declined": "اعتذر"
+  },
+  "attendeeSource": {
+    "ticket": "تذكرة",
+    "registration": "تسجيل",
+    "guest": "قائمة الضيوف",
+    "import": "استيراد",
+    "comp": "مجاني"
+  },
+  "attendeeRecordStatus": {
+    "active": "نشط",
+    "cancelled": "ملغى"
+  },
+  "labels": {
+    "title": "التصنيفات",
+    "filter": "التصفية حسب التصنيف",
+    "none": "لا توجد تصنيفات بعد.",
+    "add": "إضافة تصنيف",
+    "addButton": "إضافة",
+    "remove": "إزالة التصنيف {label}"
   },
   "common": {
     "comingSoon": "قادم في مرحلة لاحقة",
@@ -645,5 +672,18 @@
       "two_entrances": "عُرضت التذكرة عند مدخل ثانٍ",
       "invalid_burst": "عدة رموز غير صالحة متتالية"
     }
+  },
+  "search": {
+    "title": "البحث",
+    "resultsFor": "نتائج البحث عن «{q}»",
+    "tooShortTitle": "اكتب حرفين على الأقل",
+    "tooShortDescription": "ابحث بالاسم أو البريد الإلكتروني أو مرجع الطلب أو رمز التذكرة.",
+    "noneTitle": "لم يتم العثور على شيء",
+    "noneDescription": "جرّب اسمًا أو عنوان بريد إلكتروني أو مرجع طلب أو الرمز المكوّن من 8 أحرف على التذكرة.",
+    "events": "الفعاليات",
+    "attendees": "الأشخاص",
+    "orders": "الطلبات",
+    "ticketCode": "التذكرة {code}",
+    "orderRef": "المرجع {ref}"
   }
 }

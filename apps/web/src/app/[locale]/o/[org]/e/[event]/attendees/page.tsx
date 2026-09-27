@@ -1,5 +1,12 @@
-import { listAttendeesQuery } from '@yayatoh/attendees';
-import { executeQuery } from '@yayatoh/kernel';
+import {
+  ATTENDEE_SOURCES,
+  ATTENDEE_STATUSES,
+  type AttendeeDto,
+  attendeeLabelsQuery,
+  getAttendeeQuery,
+  listAttendeesQuery,
+} from '@yayatoh/attendees';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { isProfileKey, term } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
 import { ticketSummariesQuery } from '@yayatoh/ticketing';
@@ -8,6 +15,7 @@ import {
   Button,
   buttonClass,
   Card,
+  Chip,
   EmptyState,
   Label,
   SearchPill,
@@ -16,12 +24,19 @@ import {
 } from '@yayatoh/ui';
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { LabelForm } from '@/components/label-form.tsx';
 import type { AttendeeStatus, DemoAttendee } from '@/demo/events.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { ports } from '@/server/ports.ts';
+import { addLabelAction, removeLabelAction } from './actions.ts';
+
+const PAGE_SIZE = 50;
+const asArray = (v: string | string[] | undefined) => (v === undefined ? [] : Array.isArray(v) ? v : [v]);
+const oneOf = <T extends string>(list: readonly T[], v: unknown): T | undefined =>
+  list.includes(v as T) ? (v as T) : undefined;
 
 const STATUS_DOT: Record<AttendeeStatus, 'success' | 'warning' | 'danger'> = {
   paid: 'success',
@@ -56,21 +71,61 @@ export default async function AttendeesPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
-  searchParams: Promise<{ segment?: string; q?: string; a?: string }>;
+  searchParams: Promise<{
+    segment?: string;
+    q?: string;
+    a?: string;
+    label?: string | string[];
+    source?: string;
+    status?: string;
+    page?: string;
+  }>;
 }) {
   const { locale, org, event } = await params;
-  const { segment = 'all', q = '', a: selectedId } = await searchParams;
+  const sp = await searchParams;
+  const { segment = 'all', q = '', a: selectedId } = sp;
+  const labels = asArray(sp.label).slice(0, 20);
+  const source = oneOf(ATTENDEE_SOURCES, sp.source);
+  const status = oneOf(ATTENDEE_STATUSES, sp.status);
+  const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
   const { data, event: real } = await loadEvent(org, event);
   const t = await getTranslations();
   const profile = isProfileKey(real.profile) ? real.profile : 'other';
   const needle = q.trim().toLowerCase();
   // Real attendees (created at ticket issue) win; seeded showcase events without any keep a demo list.
-  const list = (extra: { search?: string; limit?: number }) =>
+  const list = (extra: Record<string, unknown>) =>
     executeQuery(listAttendeesQuery, { eventId: real.id, ...extra }, data.ctx, ports);
   const overall = roleCan(data.role, 'attendees:read') ? await list({ limit: 1 }) : { items: [], total: 0 };
   const hasReal = overall.total > 0;
-  const live = hasReal ? await list({ search: needle || undefined }) : overall;
+  const live = hasReal
+    ? await list({
+        search: needle || undefined,
+        labels,
+        source,
+        status,
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+      })
+    : overall;
+  const labelCounts = hasReal
+    ? await executeQuery(attendeeLabelsQuery, { eventId: real.id }, data.ctx, ports)
+    : [];
+  const canWrite = roleCan(data.role, 'attendees:write');
+  const liveById = new Map<string, AttendeeDto>(live.items.map((x) => [x.id, x]));
+  // The profile panel opens from search results too, so it can't rely on the current page.
+  if (hasReal && selectedId && !liveById.has(selectedId) && /^[0-9a-f-]{36}$/.test(selectedId)) {
+    const one = await executeQuery(
+      getAttendeeQuery,
+      { eventId: real.id, attendeeId: selectedId },
+      data.ctx,
+      ports,
+    ).catch((err) => {
+      if (isDomainError(err) && err.code === 'not_found') return null;
+      throw err;
+    });
+    if (one) liveById.set(one.id, one);
+  }
   const demo = hasReal ? undefined : demoOverlay(org, event);
   let ev: { segments: readonly { key: string; count: number }[]; attendees: DemoAttendee[] };
   let rows: DemoAttendee[];
@@ -87,13 +142,13 @@ export default async function AttendeesPage({
       (
         await executeQuery(
           ticketSummariesQuery,
-          { ticketIds: live.items.flatMap((a) => (a.ticketId ? [a.ticketId] : [])) },
+          { ticketIds: [...liveById.values()].flatMap((a) => (a.ticketId ? [a.ticketId] : [])) },
           data.ctx,
           ports,
         )
       ).map((tk) => [tk.id, tk]),
     );
-    rows = live.items.map((a) => {
+    const toRow = (a: AttendeeDto) => {
       const tk = a.ticketId ? tickets.get(a.ticketId) : undefined;
       return {
         id: a.id,
@@ -104,20 +159,34 @@ export default async function AttendeesPage({
         status: a.status === 'active' ? 'paid' : 'declined',
         order: tk?.shortCode ?? '—',
       } satisfies DemoAttendee;
-    });
-    ev = { segments: [{ key: 'all', count: overall.total }], attendees: rows };
+    };
+    rows = live.items.map(toRow);
+    ev = { segments: [{ key: 'all', count: overall.total }], attendees: [...liveById.values()].map(toRow) };
   }
   const base = `/o/${org}/e/${event}/attendees`;
   const selected = ev.attendees.find((a) => a.id === selectedId);
   const title = t(term(profile, 'attendees'));
-  const href = (p: Record<string, string | undefined>) => {
-    const sp = new URLSearchParams(
-      Object.entries({ segment, q, ...p }).filter(([, v]) => v) as [string, string][],
-    );
-    if (sp.get('segment') === 'all') sp.delete('segment');
-    const s = sp.toString();
+  const href = (p: Record<string, string | string[] | undefined>) => {
+    const merged: Record<string, string | string[] | undefined> = {
+      segment,
+      q,
+      label: labels,
+      source,
+      status,
+      page: page > 1 ? String(page) : undefined,
+      ...p,
+    };
+    const out = new URLSearchParams();
+    for (const [k, v] of Object.entries(merged))
+      for (const one of Array.isArray(v) ? v : v ? [v] : []) out.append(k, one);
+    if (out.get('segment') === 'all') out.delete('segment');
+    const s = out.toString();
     return s ? `${base}?${s}` : base;
   };
+  const selectedLabels = selectedId ? (liveById.get(selectedId)?.labels ?? []) : [];
+  const filtered = Boolean(needle || labels.length || source || status);
+  const from = live.total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const to = Math.min(live.total, page * PAGE_SIZE);
 
   return (
     <div className="flex flex-col gap-[18px] xl:flex-row">
@@ -170,6 +239,9 @@ export default async function AttendeesPage({
         <search>
           <form action={base} className="flex flex-wrap items-center gap-2">
             {segment !== 'all' ? <input type="hidden" name="segment" value={segment} /> : null}
+            {labels.map((l) => (
+              <input key={l} type="hidden" name="label" value={l} />
+            ))}
             <SearchPill
               id="attendee-search"
               name="q"
@@ -178,11 +250,75 @@ export default async function AttendeesPage({
               placeholder={t('attendees.searchPlaceholder')}
               className="w-full sm:w-[360px]"
             />
+            {hasReal ? (
+              <>
+                <label htmlFor="attendee-source" className="sr-only">
+                  {t('attendees.source')}
+                </label>
+                <select
+                  id="attendee-source"
+                  name="source"
+                  defaultValue={source ?? ''}
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                >
+                  <option value="">{t('attendees.anySource')}</option>
+                  {ATTENDEE_SOURCES.map((x) => (
+                    <option key={x} value={x}>
+                      {t(`attendeeSource.${x}`)}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="attendee-status" className="sr-only">
+                  {t('attendees.status')}
+                </label>
+                <select
+                  id="attendee-status"
+                  name="status"
+                  defaultValue={status ?? ''}
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                >
+                  <option value="">{t('attendees.anyStatus')}</option>
+                  {ATTENDEE_STATUSES.map((x) => (
+                    <option key={x} value={x}>
+                      {t(`attendeeRecordStatus.${x}`)}
+                    </option>
+                  ))}
+                </select>
+              </>
+            ) : null}
             <button type="submit" className={buttonClass('secondary')}>
               {t('actions.search')}
             </button>
           </form>
         </search>
+
+        {labelCounts.length > 0 ? (
+          <nav aria-label={t('labels.filter')}>
+            <ul className="flex list-none flex-wrap gap-1.5 p-0">
+              {labelCounts.map((l) => {
+                const on = labels.includes(l.label);
+                return (
+                  <li key={l.label}>
+                    <Link
+                      href={href({
+                        label: on ? labels.filter((x) => x !== l.label) : [...labels, l.label],
+                        page: undefined,
+                        a: undefined,
+                      })}
+                      aria-current={on ? 'true' : undefined}
+                      className={`inline-flex min-h-8 items-center gap-2 rounded-pill border px-3 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                    >
+                      {l.label}
+                      <span className={`font-mono text-[11px] ${on ? 'text-white/70' : 'text-zinc-500'}`}>
+                        {formatNumber(l.count, locale)}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        ) : null}
 
         {(demo ? ev.attendees.length === 0 : !hasReal) ? (
           <EmptyState
@@ -209,6 +345,13 @@ export default async function AttendeesPage({
                     <span className="flex flex-col">
                       <span className="text-zinc-900">{r.name}</span>
                       <span className="text-caption text-zinc-500">{r.company}</span>
+                      {liveById.get(r.id)?.labels.length ? (
+                        <span className="mt-1 flex flex-wrap gap-1">
+                          {liveById.get(r.id)?.labels.map((l) => (
+                            <Chip key={l}>{l}</Chip>
+                          ))}
+                        </span>
+                      ) : null}
                     </span>
                   </Link>
                 ),
@@ -226,6 +369,34 @@ export default async function AttendeesPage({
             ]}
           />
         )}
+        {hasReal && live.total > 0 ? (
+          <nav aria-label={t('attendees.pages')} className="flex flex-wrap items-center gap-3">
+            <p className="text-caption text-zinc-500">
+              {t('attendees.showing', {
+                from: formatNumber(from, locale),
+                to: formatNumber(to, locale),
+                total: formatNumber(live.total, locale),
+              })}
+              {filtered ? ` · ${t('attendees.filtered')}` : ''}
+            </p>
+            {page > 1 ? (
+              <Link
+                href={href({ page: page > 2 ? String(page - 1) : undefined, a: undefined })}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {t('attendees.previous')}
+              </Link>
+            ) : null}
+            {to < live.total ? (
+              <Link
+                href={href({ page: String(page + 1), a: undefined })}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {t('attendees.next')}
+              </Link>
+            ) : null}
+          </nav>
+        ) : null}
       </div>
 
       {selected ? (
@@ -263,6 +434,46 @@ export default async function AttendeesPage({
                 />
               </dd>
             </dl>
+            {hasReal ? (
+              <section aria-labelledby="labels-heading" className="flex flex-col gap-2">
+                <h2 id="labels-heading" className="text-caption text-zinc-500">
+                  {t('labels.title')}
+                </h2>
+                {selectedLabels.length ? (
+                  <ul className="flex list-none flex-wrap gap-1.5 p-0">
+                    {selectedLabels.map((l) => (
+                      <li
+                        key={l}
+                        className="inline-flex items-center gap-1 rounded-pill border border-zinc-200 bg-zinc-50 ps-3 text-[13px]"
+                      >
+                        {l}
+                        {canWrite ? (
+                          <form action={removeLabelAction.bind(null, org, event, selected.id, l)}>
+                            <button
+                              type="submit"
+                              aria-label={t('labels.remove', { label: l })}
+                              className="flex size-7 items-center justify-center rounded-pill hover:bg-zinc-200"
+                            >
+                              <X aria-hidden="true" className="size-3.5" strokeWidth={1.6} />
+                            </button>
+                          </form>
+                        ) : (
+                          <span className="pe-3" />
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-caption text-zinc-500">{t('labels.none')}</p>
+                )}
+                {canWrite ? (
+                  <LabelForm
+                    action={addLabelAction.bind(null, org, event, selected.id)}
+                    suggestions={labelCounts.map((l) => l.label).filter((l) => !selectedLabels.includes(l))}
+                  />
+                ) : null}
+              </section>
+            ) : null}
             <div className="flex flex-wrap gap-2">
               <Button variant="secondary" size="sm" disabled title={t('common.comingSoon')}>
                 {t('actions.sendTicket')}

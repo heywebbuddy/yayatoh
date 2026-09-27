@@ -217,7 +217,15 @@
     "profile": "资料",
     "closeProfile": "关闭资料",
     "emptyTitle": "暂无{term}",
-    "emptyDescription": "有人购票、报名或被添加到宾客名单后，将显示在这里。"
+    "emptyDescription": "有人购票、报名或被添加到宾客名单后，将显示在这里。",
+    "source": "来源",
+    "anySource": "任意来源",
+    "anyStatus": "任意状态",
+    "pages": "分页",
+    "showing": "第 {from}–{to} 条，共 {total} 条",
+    "filtered": "已筛选",
+    "previous": "上一页",
+    "next": "下一页"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -227,6 +235,25 @@
     "attending": "将出席",
     "pending": "待回复",
     "declined": "已婉拒"
+  },
+  "attendeeSource": {
+    "ticket": "门票",
+    "registration": "报名",
+    "guest": "宾客名单",
+    "import": "导入",
+    "comp": "赠票"
+  },
+  "attendeeRecordStatus": {
+    "active": "有效",
+    "cancelled": "已取消"
+  },
+  "labels": {
+    "title": "标签",
+    "filter": "按标签筛选",
+    "none": "暂无标签。",
+    "add": "添加标签",
+    "addButton": "添加",
+    "remove": "移除标签 {label}"
   },
   "common": {
     "comingSoon": "将在后续里程碑中推出",
@@ -645,5 +672,18 @@
       "two_entrances": "门票在第二个入口出示",
       "invalid_burst": "连续出现多个无效代码"
     }
+  },
+  "search": {
+    "title": "搜索",
+    "resultsFor": "“{q}”的搜索结果",
+    "tooShortTitle": "请至少输入 2 个字符",
+    "tooShortDescription": "可按姓名、邮箱、订单编号或票码搜索。",
+    "noneTitle": "未找到结果",
+    "noneDescription": "请尝试姓名、邮箱地址、订单编号或门票上的 8 位票码。",
+    "events": "活动",
+    "attendees": "人员",
+    "orders": "订单",
+    "ticketCode": "门票 {code}",
+    "orderRef": "订单编号 {ref}"
   }
 }

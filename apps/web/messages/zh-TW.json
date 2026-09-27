@@ -217,7 +217,15 @@
     "profile": "個人檔案",
     "closeProfile": "關閉個人檔案",
     "emptyTitle": "尚無{term}",
-    "emptyDescription": "有人購票、報名或被加入賓客名單後，將顯示在這裡。"
+    "emptyDescription": "有人購票、報名或被加入賓客名單後，將顯示在這裡。",
+    "source": "來源",
+    "anySource": "任何來源",
+    "anyStatus": "任何狀態",
+    "pages": "分頁",
+    "showing": "第 {from}–{to} 筆，共 {total} 筆",
+    "filtered": "已篩選",
+    "previous": "上一頁",
+    "next": "下一頁"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -227,6 +235,25 @@
     "attending": "將出席",
     "pending": "等待回覆",
     "declined": "已婉拒"
+  },
+  "attendeeSource": {
+    "ticket": "票券",
+    "registration": "報名",
+    "guest": "賓客名單",
+    "import": "匯入",
+    "comp": "招待票"
+  },
+  "attendeeRecordStatus": {
+    "active": "有效",
+    "cancelled": "已取消"
+  },
+  "labels": {
+    "title": "標籤",
+    "filter": "依標籤篩選",
+    "none": "尚無標籤。",
+    "add": "新增標籤",
+    "addButton": "新增",
+    "remove": "移除標籤 {label}"
   },
   "common": {
     "comingSoon": "將於後續里程碑推出",
@@ -645,5 +672,18 @@
       "two_entrances": "票券在第二個入口出示",
       "invalid_burst": "連續出現多個無效代碼"
     }
+  },
+  "search": {
+    "title": "搜尋",
+    "resultsFor": "「{q}」的搜尋結果",
+    "tooShortTitle": "請至少輸入 2 個字元",
+    "tooShortDescription": "可依姓名、電子郵件、訂單編號或票券代碼搜尋。",
+    "noneTitle": "找不到結果",
+    "noneDescription": "請嘗試姓名、電子郵件地址、訂單編號或票券上的 8 字元代碼。",
+    "events": "活動",
+    "attendees": "人員",
+    "orders": "訂單",
+    "ticketCode": "票券 {code}",
+    "orderRef": "訂單編號 {ref}"
   }
 }

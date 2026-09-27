@@ -1,10 +1,11 @@
 import { type NavGroup, type NavItem, navLabelKey, type ProfileKey } from '@yayatoh/platform';
-import { Avatar, Chip, SearchPill } from '@yayatoh/ui';
+import { Avatar, Chip } from '@yayatoh/ui';
 import { Menu } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import type { ConsoleData } from '@/server/console.ts';
+import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
@@ -136,12 +137,7 @@ export async function ConsoleShell({
             </nav>
           </details>
           <div className="flex min-w-0 flex-1 items-center gap-2.5">{status}</div>
-          <SearchPill
-            label={t('search')}
-            placeholder={t('searchPlaceholder')}
-            shortcut="⌘K"
-            className="order-last w-full sm:order-none sm:w-[300px]"
-          />
+          <GlobalSearch org={data.org.slug} label={t('search')} placeholder={t('searchPlaceholder')} />
           <NotificationCenter />
         </header>
         <main id="main" className="flex flex-col gap-[18px] px-4 pt-5 pb-10 md:px-8">

@@ -18,6 +18,7 @@ export {
 export {
   activeTicketCountTx,
   eventTicketTypeIdsTx,
+  findTicketsByCodeQuery,
   type IssuedTicket,
   type IssueRequest,
   issueTicketsTx,

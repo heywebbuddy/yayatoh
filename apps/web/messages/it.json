@@ -217,7 +217,15 @@
     "profile": "Profilo",
     "closeProfile": "Chiudi profilo",
     "emptyTitle": "{term}: ancora nessuno",
-    "emptyDescription": "Le persone appariranno qui man mano che acquistano biglietti, si registrano o vengono aggiunte alla lista degli ospiti."
+    "emptyDescription": "Le persone appariranno qui man mano che acquistano biglietti, si registrano o vengono aggiunte alla lista degli ospiti.",
+    "source": "Origine",
+    "anySource": "Qualsiasi origine",
+    "anyStatus": "Qualsiasi stato",
+    "pages": "Pagine",
+    "showing": "{from}–{to} di {total}",
+    "filtered": "filtrati",
+    "previous": "Precedente",
+    "next": "Successiva"
   },
   "attendeeStatus": {
     "paid": "Pagato",
@@ -227,6 +235,25 @@
     "attending": "Partecipa",
     "pending": "In attesa di risposta",
     "declined": "Rifiutato"
+  },
+  "attendeeSource": {
+    "ticket": "Biglietto",
+    "registration": "Registrazione",
+    "guest": "Lista degli ospiti",
+    "import": "Importazione",
+    "comp": "Omaggio"
+  },
+  "attendeeRecordStatus": {
+    "active": "Attivo",
+    "cancelled": "Annullato"
+  },
+  "labels": {
+    "title": "Etichette",
+    "filter": "Filtra per etichetta",
+    "none": "Ancora nessuna etichetta.",
+    "add": "Aggiungi un’etichetta",
+    "addButton": "Aggiungi",
+    "remove": "Rimuovi l’etichetta {label}"
   },
   "common": {
     "comingSoon": "In arrivo in una fase successiva",
@@ -645,5 +672,18 @@
       "two_entrances": "Biglietto mostrato a un secondo ingresso",
       "invalid_burst": "Diversi codici non validi di fila"
     }
+  },
+  "search": {
+    "title": "Cerca",
+    "resultsFor": "Risultati per «{q}»",
+    "tooShortTitle": "Digita almeno 2 caratteri",
+    "tooShortDescription": "Cerca per nome, email, riferimento dell’ordine o codice del biglietto.",
+    "noneTitle": "Nessun risultato",
+    "noneDescription": "Prova con un nome, un indirizzo email, un riferimento d’ordine o il codice di 8 caratteri sul biglietto.",
+    "events": "Eventi",
+    "attendees": "Persone",
+    "orders": "Ordini",
+    "ticketCode": "Biglietto {code}",
+    "orderRef": "Rif. {ref}"
   }
 }

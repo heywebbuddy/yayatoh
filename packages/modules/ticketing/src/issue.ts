@@ -4,7 +4,13 @@ import type { TenantTx } from '@yayatoh/db';
 import type { Ctx } from '@yayatoh/kernel';
 import { DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { keyVault, tenantQuery } from '@yayatoh/platform';
-import { generateKeyPair, randomShortCode, signTicketCode } from '@yayatoh/ticket-crypto';
+import {
+  CODE_PREFIX,
+  generateKeyPair,
+  randomShortCode,
+  signTicketCode,
+  verifyTicketCode,
+} from '@yayatoh/ticket-crypto';
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { signingKeys, TICKET_STATUSES, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
@@ -191,6 +197,41 @@ export const ticketSummariesQuery = tenantQuery({
       .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
       .where(inArray(tickets.id, input.ticketIds));
     return rows.map((r) => ({ ...r, status: r.status as (typeof TICKET_STATUSES)[number] }));
+  },
+});
+
+/**
+ * Tickets a typed or scanned code points at (the command palette): a short code, or a yy1 code
+ * that verifies with this org's keys. Anything else finds nothing.
+ */
+export const findTicketsByCodeQuery = tenantQuery({
+  name: 'ticketing.findByCode',
+  input: z.object({ code: z.string().trim().min(1).max(400) }),
+  output: z.array(
+    z.object({ id: z.uuid(), eventId: z.uuid(), shortCode: z.string(), holderName: z.string() }),
+  ),
+  entitlement: 'ticketing',
+  permission: 'attendees:read',
+  handler: async ({ input, tx }) => {
+    const code = input.code.toUpperCase();
+    let where: ReturnType<typeof eq> | null = null;
+    if (code.startsWith(CODE_PREFIX)) {
+      const v = await verifyTicketCode(code, await publicKeysTx(tx));
+      if (v.ok) where = eq(tickets.id, v.ticketId);
+    } else if (/^[2-9A-HJKMNP-TV-Z]{8}$/.test(code)) {
+      where = eq(tickets.shortCode, code);
+    }
+    if (!where) return [];
+    return tx
+      .select({
+        id: tickets.id,
+        eventId: tickets.eventId,
+        shortCode: tickets.shortCode,
+        holderName: tickets.holderName,
+      })
+      .from(tickets)
+      .where(where)
+      .limit(5);
   },
 });
 

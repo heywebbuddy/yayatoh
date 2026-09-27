@@ -1,4 +1,4 @@
-import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
+import type { ComponentProps, HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.ts';
 
 /** Sidebar item look: thin 400-weight label; the active item is a zinc-100 pill (ADR 0018). */
@@ -29,7 +29,7 @@ export function SearchPill({
   shortcut,
   className,
   ...rest
-}: InputHTMLAttributes<HTMLInputElement> & { label: string; shortcut?: string }) {
+}: ComponentProps<'input'> & { label: string; shortcut?: string }) {
   const id = rest.id ?? 'global-search';
   return (
     <div
