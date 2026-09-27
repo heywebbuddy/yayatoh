@@ -17,6 +17,7 @@ export {
 } from './inventory.ts';
 export {
   activeTicketCountTx,
+  eventTicketTypeIdsTx,
   type IssuedTicket,
   type IssueRequest,
   issueTicketsTx,

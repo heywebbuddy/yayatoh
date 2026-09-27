@@ -47,6 +47,7 @@ export interface QueuedScan {
   readonly deviceTs: string;
   readonly clockOffsetMs: number;
   readonly verdict: string;
+  readonly checkpointId?: string;
 }
 
 export const queueAdd = (scan: QueuedScan) => run('queue', 'readwrite', (s) => s.put(scan));

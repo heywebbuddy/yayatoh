@@ -1,4 +1,4 @@
-import { eventDay, ruleResult } from '@yayatoh/checkin-engine';
+import { eventDay, ruleResult, zoneAllows } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
@@ -7,7 +7,22 @@ import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { activeTicketCountTx, publicKeysTx, type ScannableTicket, ticketForScanTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { admissions, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
+import {
+  checkInvalidBurstTx,
+  checkpointsTx,
+  raiseSignalTx,
+  scanCheckpointTx,
+  TWO_ENTRANCES_WINDOW_MS,
+} from './checkpoints.ts';
+import {
+  admissions,
+  FRAUD_SIGNAL_KINDS,
+  type FraudSignalKind,
+  fraudSignals,
+  SCAN_RESULTS,
+  type ScanResult,
+  scans,
+} from './schema.ts';
 
 const SHORT_CODE = /^[2-9A-HJKMNP-TV-Z]{8}$/;
 
@@ -53,6 +68,8 @@ export const scanTicketCommand = tenantCommand({
     code: z.string().trim().min(1).max(400),
     /** Set by scanners that retry: the same id returns the first outcome instead of a duplicate. */
     clientScanId: z.string().trim().min(8).max(80).optional(),
+    /** Where the scanner stands. An entrance admits; a zone checks the pass includes it. */
+    checkpointId: z.uuid().optional(),
   }),
   output: ScanOutcomeDto,
   entitlement: 'checkin',
@@ -61,6 +78,7 @@ export const scanTicketCommand = tenantCommand({
     const orgId = requireOrg(ctx);
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
+    const checkpoint = await scanCheckpointTx(tx, event.id, input.checkpointId);
     const { kind, ticket } = await resolveCode(tx, input.code);
     const scannedBy = ctx.actor.type === 'user' ? ctx.actor.userId : null;
 
@@ -83,7 +101,10 @@ export const scanTicketCommand = tenantCommand({
     let result: ScanResult = verdict === 'ok' ? 'admitted' : verdict;
     let admissionId: string | null = null;
     let firstAdmittedAt: Date | null = null;
-    if (verdict === 'ok' && ticket) {
+    if (verdict === 'ok' && ticket && checkpoint?.kind === 'zone') {
+      // Zones admit nobody to the event; they only check the pass includes the zone.
+      result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
+    } else if (verdict === 'ok' && ticket) {
       const day = eventDay(ctx.now, event.timezone);
       const [adm] = await tx
         .insert(admissions)
@@ -94,6 +115,7 @@ export const scanTicketCommand = tenantCommand({
           day,
           admittedAt: ctx.now,
           admittedBy: scannedBy,
+          checkpointId: checkpoint?.id ?? null,
         })
         .onConflictDoNothing()
         .returning({ id: admissions.id });
@@ -116,6 +138,24 @@ export const scanTicketCommand = tenantCommand({
           );
         admissionId = live?.id ?? null;
         firstAdmittedAt = live?.admittedAt ?? null;
+        // Admitted at one entrance, shown at another minutes later: a pass being handed back.
+        if (
+          live?.checkpointId &&
+          checkpoint &&
+          live.checkpointId !== checkpoint.id &&
+          ctx.now.getTime() - live.admittedAt.getTime() <= TWO_ENTRANCES_WINDOW_MS
+        ) {
+          await raiseSignalTx(tx, emit, {
+            orgId,
+            eventId: event.id,
+            kind: 'two_entrances',
+            at: ctx.now,
+            ticketId: ticket.id,
+            checkpointId: checkpoint.id,
+            userId: scannedBy,
+            detail: { firstCheckpointId: live.checkpointId },
+          });
+        }
       }
     }
     await tx.insert(scans).values({
@@ -128,7 +168,16 @@ export const scanTicketCommand = tenantCommand({
       clientScanId: input.clientScanId ?? null,
       scannedAt: ctx.now,
       scannedBy,
+      checkpointId: checkpoint?.id ?? null,
     });
+    if (result === 'invalid')
+      await checkInvalidBurstTx(tx, emit, {
+        orgId,
+        eventId: event.id,
+        at: ctx.now,
+        userId: scannedBy,
+        deviceId: null,
+      });
     // Tickets for another event are not described: a scanner only learns about this event's tickets.
     return {
       result,
@@ -141,7 +190,7 @@ export const scanTicketCommand = tenantCommand({
     action: 'checkin.scan',
     targetType: 'event',
     targetId: input.eventId,
-    data: { result: r?.result },
+    data: { result: r?.result, checkpointId: input.checkpointId ?? null },
   }),
 });
 
@@ -177,6 +226,17 @@ export const undoAdmissionCommand = tenantCommand({
 export const CheckinStatusDto = z.object({
   issued: z.int(),
   admittedToday: z.int(),
+  /** Today's live admissions per entrance (admissions without an entrance are not listed). */
+  byCheckpoint: z.array(z.object({ checkpointId: z.uuid(), name: z.string(), admittedToday: z.int() })),
+  /** Fraud signals (two entrances, invalid bursts), newest first. */
+  signals: z.array(
+    z.object({
+      at: z.date(),
+      kind: z.enum(FRAUD_SIGNAL_KINDS),
+      holderName: z.string().nullable(),
+      checkpointName: z.string().nullable(),
+    }),
+  ),
   /** Tickets let in by two devices while offline (checkin.duplicate_offline), newest first. */
   alerts: z.array(
     z.object({ at: z.date(), holderName: z.string().nullable(), shortCode: z.string().nullable() }),
@@ -248,8 +308,37 @@ export const checkinStatusQuery = tenantQuery({
       const t = d.ticketId ? await ticketForScanTx(tx, { id: d.ticketId }) : null;
       alerts.push({ at: d.at, holderName: t?.holderName ?? null, shortCode: t?.shortCode ?? null });
     }
+    const cps = await checkpointsTx(tx, event.id, true);
+    const cpName = new Map(cps.map((c) => [c.id, c.name]));
+    const perEntrance = await tx
+      .select({ checkpointId: admissions.checkpointId, n: sql<number>`count(*)::int` })
+      .from(admissions)
+      .where(and(eq(admissions.eventId, event.id), eq(admissions.day, day), isNull(admissions.undoneAt)))
+      .groupBy(admissions.checkpointId);
+    const counts = new Map(perEntrance.map((r) => [r.checkpointId, r.n]));
+    const byCheckpoint = cps
+      .filter((c) => c.kind === 'entrance' && (c.archivedAt === null || counts.has(c.id)))
+      .map((c) => ({ checkpointId: c.id, name: c.name, admittedToday: counts.get(c.id) ?? 0 }));
+    const signalRows = await tx
+      .select()
+      .from(fraudSignals)
+      .where(eq(fraudSignals.eventId, event.id))
+      .orderBy(desc(fraudSignals.raisedAt), desc(fraudSignals.id))
+      .limit(20);
+    const signals = [];
+    for (const f of signalRows) {
+      const t = f.ticketId ? await ticketForScanTx(tx, { id: f.ticketId }) : null;
+      signals.push({
+        at: f.raisedAt,
+        kind: f.kind as FraudSignalKind,
+        holderName: t?.holderName ?? null,
+        checkpointName: f.checkpointId ? (cpName.get(f.checkpointId) ?? null) : null,
+      });
+    }
     return {
       alerts,
+      signals,
+      byCheckpoint,
       issued: await activeTicketCountTx(tx, event.id),
       admittedToday: adm?.n ?? 0,
       recent: recent.map((r) => ({

@@ -572,7 +572,9 @@
       "outside_window": "当前未开放签到",
       "duplicate_offline": "已先在其他设备上签到",
       "superseded": "已重新签发门票的旧代码",
-      "provisional": "离线放行，待确认"
+      "provisional": "离线放行，待确认",
+      "granted": "准许进入",
+      "no_access": "此通行证不包含该区域"
     },
     "alertsTitle": "{count, plural, other {离线期间有 # 张票被重复放行}}",
     "alertsHint": "两台扫描设备在同步前放行了同一张票。请在入口核查这些宾客。"
@@ -614,5 +616,33 @@
     "pending": "已在此设备上核验，同步后确认",
     "wipedTitle": "此扫描器已被清除",
     "wipedDescription": "其宾客名单和密钥已被删除。请向主办方索取新的设备链接以继续扫描。"
+  },
+  "checkpoints": {
+    "title": "入口和区域",
+    "description": "入口供宾客进入活动，无论走哪个门，每天一次。区域（如 VIP 休息室）会核验通行证是否包含该区域，并允许再次进入。",
+    "name": "名称",
+    "nameHint": "例如北门或 VIP 休息室。",
+    "kind": "类型",
+    "entrance": "入口",
+    "zone": "区域",
+    "types": "允许的通行证",
+    "typesHint": "全部不勾选则所有通行证均可进入。",
+    "add": "添加",
+    "added": "已添加。",
+    "zoneAll": "区域 · 所有通行证",
+    "zoneFor": "区域 · {types}",
+    "archived": "已归档",
+    "archive": "归档",
+    "archiveFor": "归档 {name}",
+    "restore": "恢复",
+    "restoreFor": "恢复 {name}",
+    "scanningAt": "扫描位置",
+    "wholeEvent": "整个活动",
+    "perEntrance": "今日各入口签到",
+    "signalsTitle": "{count, plural, other {# 项待核查}}",
+    "signal": {
+      "two_entrances": "门票在第二个入口出示",
+      "invalid_burst": "连续出现多个无效代码"
+    }
   }
 }

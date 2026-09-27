@@ -1,9 +1,11 @@
 'use server';
 
 import {
+  createCheckpointCommand,
   enrollDeviceCommand,
   type ScanOutcomeDto,
   scanTicketCommand,
+  setCheckpointArchivedCommand,
   setDeviceStateCommand,
   undoAdmissionCommand,
 } from '@yayatoh/checkin';
@@ -33,6 +35,7 @@ export async function scanAction(
         code: String(form.get('code') ?? ''),
         // One id per submitted scan, so a double-submitted form is not reported as a duplicate.
         clientScanId: String(form.get('scanId') ?? '') || undefined,
+        checkpointId: String(form.get('checkpointId') ?? '') || undefined,
       },
       data.ctx,
       ports,
@@ -81,5 +84,49 @@ export async function deviceStateAction(
 ): Promise<void> {
   const { data } = await loadEvent(org, event);
   await executeCommand(setDeviceStateCommand, { deviceId, action }, data.ctx, ports);
+  revalidatePath(`/o/${org}/e/${event}/onsite`);
+}
+
+export type CheckpointFormState = { readonly ok: boolean; readonly code: string | null };
+
+export async function createCheckpointAction(
+  org: string,
+  event: string,
+  _prev: CheckpointFormState,
+  form: FormData,
+): Promise<CheckpointFormState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    await executeCommand(
+      createCheckpointCommand,
+      {
+        eventId: ev.id,
+        name: String(form.get('name') ?? ''),
+        kind: form.get('kind') === 'zone' ? 'zone' : 'entrance',
+        ticketTypeIds: form.get('kind') === 'zone' ? form.getAll('ticketTypeIds').map(String) : [],
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/onsite`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return { ok: false, code: isDomainError(err) ? err.code : 'internal' };
+  }
+}
+
+export async function checkpointArchivedAction(
+  org: string,
+  event: string,
+  checkpointId: string,
+  archived: boolean,
+): Promise<void> {
+  const { data, event: ev } = await loadEvent(org, event);
+  await executeCommand(
+    setCheckpointArchivedCommand,
+    { eventId: ev.id, checkpointId, archived },
+    data.ctx,
+    ports,
+  );
   revalidatePath(`/o/${org}/e/${event}/onsite`);
 }

@@ -117,11 +117,35 @@ Manual, per release: install the PWA on a phone, open it in airplane mode (servi
 | AC1 | A viewer who is door staff on event A can scan A, can't scan event B, can't enroll devices, and loses access when the assignment expires | `packages/testing/tests/checkin.int.test.ts` |
 | AC2 | Offline duplicates from the drill appear as door-screen alerts with the holder | `packages/testing/tests/devices.int.test.ts` |
 
+## M1.9c2a — entrances, zones and fraud signals (done)
+- **Checkpoints** (`checkin.checkpoints`, managed with `events:write`) belong to one event. Names are unique per event.
+  - An **entrance** admits to the event. There is still one admission per ticket per event day, whichever entrance is used. The admission and the scan record the entrance.
+  - A **zone** (a VIP lounge, backstage) admits nobody. It checks that the pass includes the zone: `ticket_type_ids` lists the allowed types, and an empty list means every type. The result is `granted` or `no_access`. Event rules (void, window, access dates) still come first, and re-entry is fine.
+  - Archiving hides a checkpoint from scanners. Scans at an archived checkpoint are refused (`not_found`) online. Offline scans made there before archiving still sync, and past counts keep it.
+  - Scanners choose "Scanning at" on the door screen and in the Scan PWA. The choice persists on the device. "Whole event" keeps the M1.9a behaviour.
+- **Offline:** manifest rows carry `ticketTypeId`, and the header lists live checkpoints. `offlineVerdict(state, code, now, checkpointId)` applies the zone rule locally. An unknown-but-signed pass only gets into an all-types zone. Batch scans carry `checkpointId`. All `/v1` changes are additive.
+- **Fraud signals** (`checkin.fraud_signals`, event `checkin.fraud_signal@1`, shown on the door screen):
+  - `two_entrances`: a ticket shown at a different entrance within 5 minutes of its admission (online, and on sync by corrected time).
+  - `invalid_burst`: the 5th invalid code from one signed-in scanner within 60 s raises one signal per burst.
+  - Device velocity, signature-failure trends, transfer churn and checkout velocity are later work (M3.3).
+- **Door screen:** shows today's count per entrance and a "things to check" panel. Managers get an Entrances and zones section with create and archive/restore.
+- **Not yet:** event-role scope by checkpoint (`scope.checkpoints` on door-staff assignments) is still to come. For now, door staff can scan at any checkpoint of their event.
+
+### Acceptance (M1.9c2a)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Entrances and zones: unique names; types must belong to the event; entrances list no types; door staff can't create them | `packages/testing/tests/checkpoints.int.test.ts` |
+| AC2 | Entrances admit once a day whichever gate is used; counts per entrance | `checkpoints.int.test.ts`, `e2e/checkpoints.spec.ts` |
+| AC3 | Zones grant listed types repeatedly, refuse others and admit nobody, online and offline (engine unit tests + sync) | `checkpoints.int.test.ts`, `packages/checkin-engine/tests/offline.test.ts` |
+| AC4 | The same ticket at a second entrance within 5 minutes raises exactly one `two_entrances` signal plus an outbox event; later or same-gate repeats don't | `checkpoints.int.test.ts`, `e2e/checkpoints.spec.ts` |
+| AC5 | Five invalid codes in a minute raise one `invalid_burst` | `checkpoints.int.test.ts` |
+| AC6 | Archived checkpoints leave the scanner list and refuse scans; isolation holds | `checkpoints.int.test.ts`, isolation suite |
+
 ## Remaining M1.9 increments
-- **M1.9c2:**
+- **M1.9c2 (rest):**
   - the zxing-wasm camera fallback (iOS Safari)
-  - checkpoints and entrances
+  - checkpoint-scoped door-staff assignments
   - legacy QR payloads (needs the legacy corpus from the owner's data access)
   - Ably realtime (owner account)
-  - fraud signals beyond offline duplicates: invalid bursts, the same ticket at two entrances, device velocity
+  - device velocity signals
   - the 3-device / 300-scan drill on real hardware

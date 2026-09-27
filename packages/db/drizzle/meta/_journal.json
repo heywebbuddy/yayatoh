@@ -141,6 +141,13 @@
       "when": 1790492600381,
       "tag": "0019_zippy_hedge_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1790503537379,
+      "tag": "0020_parched_namora",
+      "breakpoints": true
     }
   ]
 }

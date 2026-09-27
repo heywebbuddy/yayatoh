@@ -572,7 +572,9 @@
       "outside_window": "Check-in isn't open right now",
       "duplicate_offline": "Checked in on another device first",
       "superseded": "An older code for a reissued ticket",
-      "provisional": "Let in offline — to be confirmed"
+      "provisional": "Let in offline — to be confirmed",
+      "granted": "Access granted",
+      "no_access": "This pass doesn't include this area"
     },
     "alertsTitle": "{count, plural, one {# ticket was let in twice while offline} other {# tickets were let in twice while offline}}",
     "alertsHint": "Two scanners admitted the same ticket before they could sync. Check these guests at the door."
@@ -614,5 +616,33 @@
     "pending": "Checked on this device — will be confirmed when synced",
     "wipedTitle": "This scanner was wiped",
     "wipedDescription": "Its guest list and key were removed. Ask an organizer for a new device link to scan again."
+  },
+  "checkpoints": {
+    "title": "Entrances and zones",
+    "description": "Entrances let guests into the event, once a day whichever gate they use. Zones, like a VIP lounge, check the pass includes that area and allow re-entry.",
+    "name": "Name",
+    "nameHint": "For example North gate or VIP lounge.",
+    "kind": "Type",
+    "entrance": "Entrance",
+    "zone": "Zone",
+    "types": "Passes allowed in",
+    "typesHint": "Leave all unticked to let every pass in.",
+    "add": "Add",
+    "added": "Added.",
+    "zoneAll": "Zone · every pass",
+    "zoneFor": "Zone · {types}",
+    "archived": "Archived",
+    "archive": "Archive",
+    "archiveFor": "Archive {name}",
+    "restore": "Restore",
+    "restoreFor": "Restore {name}",
+    "scanningAt": "Scanning at",
+    "wholeEvent": "Whole event",
+    "perEntrance": "Checked in today by entrance",
+    "signalsTitle": "{count, plural, one {# thing to check} other {# things to check}}",
+    "signal": {
+      "two_entrances": "Ticket shown at a second entrance",
+      "invalid_burst": "Several invalid codes in a row"
+    }
   }
 }

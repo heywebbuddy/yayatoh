@@ -5,6 +5,7 @@ import {
   check,
   index,
   integer,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -30,6 +31,10 @@ export const SCAN_RESULTS = [
   'superseded',
   /** Admitted offline under the unknown-ticket policy (D17); flagged until reconciled. */
   'provisional',
+  /** Zone checkpoint: the pass includes this zone (no admission is recorded; re-entry is fine). */
+  'granted',
+  /** Zone checkpoint: the pass does not include this zone. */
+  'no_access',
 ] as const;
 export type ScanResult = (typeof SCAN_RESULTS)[number];
 
@@ -48,6 +53,8 @@ export const admissions = tenantTable(
     admittedAt: ts('admitted_at').notNull(),
     admittedBy: uuid('admitted_by'),
     deviceId: uuid('device_id'),
+    /** The entrance used, when the scanner picked one. */
+    checkpointId: uuid('checkpoint_id'),
     undoneAt: ts('undone_at'),
     undoneBy: uuid('undone_by'),
   },
@@ -78,6 +85,7 @@ export const scans = tenantTable(
     deviceTs: ts('device_ts'),
     clockOffsetMs: integer('clock_offset_ms'),
     offline: boolean('offline').notNull().default(false),
+    checkpointId: uuid('checkpoint_id'),
   },
   (t) => [
     index('scans_org_event_scanned_idx').on(t.orgId, t.eventId, t.scannedAt),
@@ -112,5 +120,58 @@ export const devices = tenantTable(
     // Global: the token alone resolves the device (and so the org) through a definer function.
     uniqueIndex('devices_token_hash_key').on(t.tokenHash),
     check('devices_battery_check', sql`battery_pct is null or battery_pct between 0 and 100`),
+  ],
+);
+
+export const CHECKPOINT_KINDS = ['entrance', 'zone'] as const;
+export type CheckpointKind = (typeof CHECKPOINT_KINDS)[number];
+
+/**
+ * Where scanning happens at an event. An entrance admits to the event (one admission per ticket
+ * per day, whichever entrance). A zone (VIP area, backstage) only checks that the pass includes
+ * it: `ticket_type_ids` lists the ticket types allowed in; empty means every type.
+ */
+export const checkpoints = tenantTable(
+  checkinSchema,
+  'checkpoints',
+  {
+    eventId: uuid('event_id').notNull(),
+    name: text('name').notNull(),
+    kind: text('kind').notNull(),
+    ticketTypeIds: uuid('ticket_type_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    archivedAt: ts('archived_at'),
+  },
+  (t) => [
+    uniqueIndex('checkpoints_org_event_name_key').on(t.orgId, t.eventId, t.name),
+    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone')`),
+  ],
+);
+
+export const FRAUD_SIGNAL_KINDS = [
+  /** The same ticket presented at a second entrance soon after it was admitted at another. */
+  'two_entrances',
+  /** Several invalid codes in a short window from one scanner. */
+  'invalid_burst',
+] as const;
+export type FraudSignalKind = (typeof FRAUD_SIGNAL_KINDS)[number];
+
+/** Fraud and misuse signals, raised during scanning and shown on the door screen. */
+export const fraudSignals = tenantTable(
+  checkinSchema,
+  'fraud_signals',
+  {
+    eventId: uuid('event_id').notNull(),
+    kind: text('kind').notNull(),
+    ticketId: uuid('ticket_id'),
+    checkpointId: uuid('checkpoint_id'),
+    deviceId: uuid('device_id'),
+    /** The signed-in scanner, when not a device. */
+    userId: uuid('user_id'),
+    detail: jsonb('detail').$type<Record<string, string | number>>().notNull().default({}),
+    raisedAt: ts('raised_at').notNull(),
+  },
+  (t) => [
+    index('fraud_signals_org_event_raised_idx').on(t.orgId, t.eventId, t.raisedAt),
+    check('fraud_signals_kind_check', sql`kind in ('two_entrances', 'invalid_burst')`),
   ],
 );

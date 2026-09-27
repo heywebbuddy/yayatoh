@@ -42,7 +42,9 @@ export type ServerResult =
   | 'outside_window'
   | 'duplicate_offline'
   | 'superseded'
-  | 'provisional';
+  | 'provisional'
+  | 'granted'
+  | 'no_access';
 
 export interface ScanOutcome {
   readonly scanId: string;
@@ -69,6 +71,8 @@ export class ScanClient {
   private admitted = new Set<string>();
   /** server time − device time, measured at each sync. */
   clockOffsetMs = 0;
+  /** Where this device stands (an entrance or zone), or null for the whole event. */
+  checkpointId: string | null = null;
 
   constructor(readonly config: ScanConfig) {}
 
@@ -98,6 +102,21 @@ export class ScanClient {
     return this.snapshot?.header.event.name ?? null;
   }
 
+  /** The event's live checkpoints (older snapshots have none). */
+  get checkpoints(): ManifestHeader['checkpoints'] {
+    return this.snapshot?.header.checkpoints ?? [];
+  }
+
+  /** The chosen checkpoint, if it still exists; archived ones fall back to the whole event. */
+  get checkpoint(): ManifestHeader['checkpoints'][number] | null {
+    return this.checkpoints.find((c) => c.id === this.checkpointId) ?? null;
+  }
+
+  async setCheckpoint(id: string | null): Promise<void> {
+    this.checkpointId = id;
+    await kvSet('checkpointId', id);
+  }
+
   /** Load the sealed snapshot. Returns false when it expired (the device is then wiped). */
   async load(): Promise<boolean> {
     const sealed = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('manifest');
@@ -110,6 +129,7 @@ export class ScanClient {
       }
     }
     this.clockOffsetMs = (await kvGet<number>('clockOffsetMs')) ?? 0;
+    this.checkpointId = (await kvGet<string | null>('checkpointId')) ?? null;
     return true;
   }
 
@@ -180,6 +200,7 @@ export class ScanClient {
       },
       code,
       now,
+      this.checkpoint?.id ?? null,
     );
     if ((verdict === 'admit' || verdict === 'provisional') && ticketId) {
       this.admitted.add(admittedKey(ticketId, eventDay(now, this.snapshot.header.event.timezone)));
@@ -191,6 +212,7 @@ export class ScanClient {
       deviceTs: new Date().toISOString(),
       clockOffsetMs: this.clockOffsetMs,
       verdict,
+      ...(this.checkpoint ? { checkpointId: this.checkpoint.id } : {}),
     };
     await queueAdd(scan);
     return {

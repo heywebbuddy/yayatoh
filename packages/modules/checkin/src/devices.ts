@@ -5,6 +5,7 @@ import {
   type ManifestHeader,
   type ManifestRow,
   ruleResult,
+  zoneAllows,
 } from '@yayatoh/checkin-engine';
 import { withoutTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
@@ -14,7 +15,8 @@ import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { manifestTicketsTx, publicKeysTx, ticketForScanTx } from '@yayatoh/ticketing';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { admissions, devices, type ScanResult, scans } from './schema.ts';
+import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
+import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 /** Devices act as a system actor named after the device; authorization happened at the token. */
@@ -122,6 +124,7 @@ const ManifestRowDto = z.object({
   shortCode: z.string(),
   rev: z.int(),
   status: z.enum(['active', 'void']),
+  ticketTypeId: z.uuid(),
   typeName: z.string(),
   accessDates: z.array(z.object({ date: z.string(), name: z.string() })),
   holderName: z.string(),
@@ -142,6 +145,14 @@ export const ManifestPageDto = z.object({
     salt: z.string(),
     serverTime: z.string(),
     unknownPolicy: z.enum(['provisional', 'reject']),
+    checkpoints: z.array(
+      z.object({
+        id: z.uuid(),
+        name: z.string(),
+        kind: z.enum(CHECKPOINT_KINDS),
+        ticketTypeIds: z.array(z.uuid()),
+      }),
+    ),
   }),
   rows: z.array(ManifestRowDto),
   /** Pass back as `cursor` for the next page / next sync. */
@@ -199,6 +210,7 @@ export const deviceManifestQuery = tenantQuery({
         shortCode: t.shortCode,
         rev: t.rev,
         status: t.status,
+        ticketTypeId: t.ticketTypeId,
         typeName: t.typeName,
         accessDates: t.accessDates,
         holderName: t.holderName,
@@ -221,6 +233,12 @@ export const deviceManifestQuery = tenantQuery({
       salt,
       serverTime: ctx.now.toISOString(),
       unknownPolicy: 'provisional',
+      checkpoints: (await checkpointsTx(tx, event.id)).map((c) => ({
+        id: c.id,
+        name: c.name,
+        kind: c.kind as 'entrance' | 'zone',
+        ticketTypeIds: c.ticketTypeIds,
+      })),
     };
     return {
       header,
@@ -241,6 +259,8 @@ const DEVICE_VERDICTS = [
   'wrong_event',
   'outside_window',
   'not_today',
+  'granted',
+  'no_access',
 ] as const;
 
 export const SyncResultDto = z.object({
@@ -265,6 +285,8 @@ export const syncScansCommand = tenantCommand({
           deviceTs: z.coerce.date(),
           clockOffsetMs: z.int().min(-86_400_000).max(86_400_000),
           verdict: z.enum(DEVICE_VERDICTS),
+          /** The checkpoint the device was scanning at, if any. */
+          checkpointId: z.uuid().optional(),
         }),
       )
       .min(1)
@@ -279,6 +301,8 @@ export const syncScansCommand = tenantCommand({
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
     const keys = await publicKeysTx(tx);
+    // Archived since the scan still counts: the device was standing there.
+    const cps = new Map((await checkpointsTx(tx, event.id, true)).map((c) => [c.id, c]));
     const corrected = (s: { deviceTs: Date; clockOffsetMs: number }) =>
       new Date(s.deviceTs.getTime() + s.clockOffsetMs);
     const ordered = [...input.scans].sort((a, b) => corrected(a).getTime() - corrected(b).getTime());
@@ -309,13 +333,24 @@ export const syncScansCommand = tenantCommand({
         ticket = await ticketForScanTx(tx, { shortCode: code });
       }
       const rule = superseded ? 'superseded' : ruleResult({ now: at, event, ticket });
+      const checkpoint = s.checkpointId ? (cps.get(s.checkpointId) ?? null) : null;
       let result: ScanResult = rule === 'ok' ? 'admitted' : rule;
       let admissionId: string | null = null;
-      if (rule === 'ok' && ticket) {
+      if (rule === 'ok' && ticket && checkpoint?.kind === 'zone') {
+        result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
+      } else if (rule === 'ok' && ticket) {
         const day = eventDay(at, event.timezone);
         const [adm] = await tx
           .insert(admissions)
-          .values({ orgId, eventId: event.id, ticketId: ticket.id, day, admittedAt: at, deviceId })
+          .values({
+            orgId,
+            eventId: event.id,
+            ticketId: ticket.id,
+            day,
+            admittedAt: at,
+            deviceId,
+            checkpointId: checkpoint?.id ?? null,
+          })
           .onConflictDoNothing()
           .returning({ id: admissions.id });
         if (adm) {
@@ -331,7 +366,13 @@ export const syncScansCommand = tenantCommand({
             // This scan was earlier: it wins; the previous winner's scans become offline duplicates.
             await tx
               .update(admissions)
-              .set({ admittedAt: at, deviceId, admittedBy: null, updatedAt: ctx.now })
+              .set({
+                admittedAt: at,
+                deviceId,
+                admittedBy: null,
+                checkpointId: checkpoint?.id ?? null,
+                updatedAt: ctx.now,
+              })
               .where(eq(admissions.id, live.id));
             const flipped = await tx
               .update(scans)
@@ -371,6 +412,24 @@ export const syncScansCommand = tenantCommand({
             } else {
               result = 'duplicate';
             }
+            // Refused at a second entrance soon after admission elsewhere: flag the handback.
+            if (
+              live?.checkpointId &&
+              checkpoint &&
+              live.checkpointId !== checkpoint.id &&
+              Math.abs(at.getTime() - live.admittedAt.getTime()) <= TWO_ENTRANCES_WINDOW_MS
+            ) {
+              await raiseSignalTx(tx, emit, {
+                orgId,
+                eventId: event.id,
+                kind: 'two_entrances',
+                at,
+                ticketId: ticket.id,
+                checkpointId: checkpoint.id,
+                deviceId,
+                detail: { firstCheckpointId: live.checkpointId },
+              });
+            }
           }
         }
       }
@@ -393,6 +452,7 @@ export const syncScansCommand = tenantCommand({
           deviceTs: s.deviceTs,
           clockOffsetMs: s.clockOffsetMs,
           offline: true,
+          checkpointId: checkpoint?.id ?? null,
         })
         .onConflictDoNothing();
       results.push({ scanId: s.scanId, result, stored: true });

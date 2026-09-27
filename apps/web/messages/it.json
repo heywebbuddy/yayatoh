@@ -572,7 +572,9 @@
       "outside_window": "Il check-in non è aperto in questo momento",
       "duplicate_offline": "Check-in già effettuato su un altro dispositivo",
       "superseded": "Codice vecchio di un biglietto riemesso",
-      "provisional": "Ingresso offline, da confermare"
+      "provisional": "Ingresso offline, da confermare",
+      "granted": "Accesso consentito",
+      "no_access": "Questo pass non include quest’area"
     },
     "alertsTitle": "{count, plural, one {# biglietto è stato accettato due volte offline} other {# biglietti sono stati accettati due volte offline}}",
     "alertsHint": "Due scanner hanno accettato lo stesso biglietto prima di potersi sincronizzare. Verifica questi ospiti all’ingresso."
@@ -614,5 +616,33 @@
     "pending": "Verificato su questo dispositivo: sarà confermato dopo la sincronizzazione",
     "wipedTitle": "Questo scanner è stato cancellato",
     "wipedDescription": "La lista ospiti e la chiave sono state rimosse. Chiedi a un organizzatore un nuovo link del dispositivo per tornare a scansionare."
+  },
+  "checkpoints": {
+    "title": "Ingressi e zone",
+    "description": "Gli ingressi fanno entrare gli ospiti all’evento, una volta al giorno da qualsiasi varco. Le zone, come una lounge VIP, verificano che il pass includa quell’area e consentono di rientrare.",
+    "name": "Nome",
+    "nameHint": "Ad esempio Varco nord o Lounge VIP.",
+    "kind": "Tipo",
+    "entrance": "Ingresso",
+    "zone": "Zona",
+    "types": "Pass ammessi",
+    "typesHint": "Lascia tutto deselezionato per ammettere ogni pass.",
+    "add": "Aggiungi",
+    "added": "Aggiunto.",
+    "zoneAll": "Zona · tutti i pass",
+    "zoneFor": "Zona · {types}",
+    "archived": "Archiviato",
+    "archive": "Archivia",
+    "archiveFor": "Archivia {name}",
+    "restore": "Ripristina",
+    "restoreFor": "Ripristina {name}",
+    "scanningAt": "Scansione a",
+    "wholeEvent": "Tutto l’evento",
+    "perEntrance": "Check-in di oggi per ingresso",
+    "signalsTitle": "{count, plural, one {# cosa da verificare} other {# cose da verificare}}",
+    "signal": {
+      "two_entrances": "Biglietto mostrato a un secondo ingresso",
+      "invalid_burst": "Diversi codici non validi di fila"
+    }
   }
 }

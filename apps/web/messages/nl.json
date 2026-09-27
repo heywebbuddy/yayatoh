@@ -572,7 +572,9 @@
       "outside_window": "Check-in is nu niet geopend",
       "duplicate_offline": "Eerst ingecheckt op een ander apparaat",
       "superseded": "Oude code van een opnieuw uitgegeven ticket",
-      "provisional": "Offline binnengelaten, nog te bevestigen"
+      "provisional": "Offline binnengelaten, nog te bevestigen",
+      "granted": "Toegang verleend",
+      "no_access": "Deze pas geeft geen toegang tot dit gebied"
     },
     "alertsTitle": "{count, plural, one {# ticket is offline twee keer binnengelaten} other {# tickets zijn offline twee keer binnengelaten}}",
     "alertsHint": "Twee scanners lieten hetzelfde ticket binnen voordat ze konden synchroniseren. Controleer deze gasten bij de deur."
@@ -614,5 +616,33 @@
     "pending": "Gecontroleerd op dit apparaat: wordt bevestigd na synchronisatie",
     "wipedTitle": "Deze scanner is gewist",
     "wipedDescription": "De gastenlijst en sleutel zijn verwijderd. Vraag een organisator om een nieuwe apparaatlink om weer te scannen."
+  },
+  "checkpoints": {
+    "title": "Ingangen en zones",
+    "description": "Via ingangen komen gasten het evenement binnen, één keer per dag, via welke poort dan ook. Zones, zoals een VIP-lounge, controleren of de pas toegang geeft tot dat gebied en staan opnieuw binnenkomen toe.",
+    "name": "Naam",
+    "nameHint": "Bijvoorbeeld Noordpoort of VIP-lounge.",
+    "kind": "Type",
+    "entrance": "Ingang",
+    "zone": "Zone",
+    "types": "Toegestane passen",
+    "typesHint": "Laat alles leeg om elke pas binnen te laten.",
+    "add": "Toevoegen",
+    "added": "Toegevoegd.",
+    "zoneAll": "Zone · elke pas",
+    "zoneFor": "Zone · {types}",
+    "archived": "Gearchiveerd",
+    "archive": "Archiveren",
+    "archiveFor": "{name} archiveren",
+    "restore": "Herstellen",
+    "restoreFor": "{name} herstellen",
+    "scanningAt": "Scannen bij",
+    "wholeEvent": "Hele evenement",
+    "perEntrance": "Vandaag ingecheckt per ingang",
+    "signalsTitle": "{count, plural, one {# punt om te controleren} other {# punten om te controleren}}",
+    "signal": {
+      "two_entrances": "Ticket getoond bij een tweede ingang",
+      "invalid_burst": "Meerdere ongeldige codes achter elkaar"
+    }
   }
 }

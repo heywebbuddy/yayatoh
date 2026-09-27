@@ -572,7 +572,9 @@
       "outside_window": "Le check-in n’est pas ouvert pour le moment",
       "duplicate_offline": "Déjà enregistré sur un autre appareil",
       "superseded": "Ancien code d’un billet réémis",
-      "provisional": "Entrée hors ligne — à confirmer"
+      "provisional": "Entrée hors ligne — à confirmer",
+      "granted": "Accès autorisé",
+      "no_access": "Ce pass n’inclut pas cette zone"
     },
     "alertsTitle": "{count, plural, one {# billet a été accepté deux fois hors ligne} other {# billets ont été acceptés deux fois hors ligne}}",
     "alertsHint": "Deux scanners ont accepté le même billet avant d’avoir pu se synchroniser. Vérifiez ces invités à l’entrée."
@@ -614,5 +616,33 @@
     "pending": "Vérifié sur cet appareil — sera confirmé après synchronisation",
     "wipedTitle": "Ce scanner a été effacé",
     "wipedDescription": "Sa liste d’invités et sa clé ont été supprimées. Demandez à un organisateur un nouveau lien d’appareil pour scanner à nouveau."
+  },
+  "checkpoints": {
+    "title": "Entrées et zones",
+    "description": "Les entrées font entrer les invités dans l’événement, une fois par jour quelle que soit la porte. Les zones, comme un salon VIP, vérifient que le pass inclut cet espace et permettent de ressortir et revenir.",
+    "name": "Nom",
+    "nameHint": "Par exemple Porte nord ou Salon VIP.",
+    "kind": "Type",
+    "entrance": "Entrée",
+    "zone": "Zone",
+    "types": "Pass autorisés",
+    "typesHint": "Ne cochez rien pour laisser entrer tous les pass.",
+    "add": "Ajouter",
+    "added": "Ajouté.",
+    "zoneAll": "Zone · tous les pass",
+    "zoneFor": "Zone · {types}",
+    "archived": "Archivé",
+    "archive": "Archiver",
+    "archiveFor": "Archiver {name}",
+    "restore": "Restaurer",
+    "restoreFor": "Restaurer {name}",
+    "scanningAt": "Scan à",
+    "wholeEvent": "Tout l’événement",
+    "perEntrance": "Enregistrés aujourd’hui par entrée",
+    "signalsTitle": "{count, plural, one {# point à vérifier} other {# points à vérifier}}",
+    "signal": {
+      "two_entrances": "Billet présenté à une deuxième entrée",
+      "invalid_burst": "Plusieurs codes non valides à la suite"
+    }
   }
 }

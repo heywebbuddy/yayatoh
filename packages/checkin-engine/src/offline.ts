@@ -7,6 +7,7 @@ export interface ManifestRow {
   readonly shortCode: string;
   readonly rev: number;
   readonly status: 'active' | 'void';
+  readonly ticketTypeId: string;
   readonly typeName: string;
   readonly accessDates: readonly { readonly date: string; readonly name: string }[];
   readonly holderName: string;
@@ -28,7 +29,21 @@ export interface ManifestHeader {
   readonly serverTime: string;
   /** Unknown-but-validly-signed tickets issued after the last sync (D17): admit and flag, or reject. */
   readonly unknownPolicy: 'provisional' | 'reject';
+  /** The event's live checkpoints; a device scans at one of them, or at the event as a whole. */
+  readonly checkpoints: readonly ManifestCheckpoint[];
 }
+
+export interface ManifestCheckpoint {
+  readonly id: string;
+  readonly name: string;
+  readonly kind: 'entrance' | 'zone';
+  /** Zones: ticket types allowed in; empty = every type. */
+  readonly ticketTypeIds: readonly string[];
+}
+
+/** A zone admits a pass whose type it lists (or any pass, when it lists none). */
+export const zoneAllows = (zone: Pick<ManifestCheckpoint, 'ticketTypeIds'>, ticketTypeId: string | null) =>
+  zone.ticketTypeIds.length === 0 || (ticketTypeId !== null && zone.ticketTypeIds.includes(ticketTypeId));
 
 export type OfflineVerdict =
   | 'admit'
@@ -39,7 +54,9 @@ export type OfflineVerdict =
   | 'void'
   | 'wrong_event'
   | 'outside_window'
-  | 'not_today';
+  | 'not_today'
+  | 'granted'
+  | 'no_access';
 
 export interface OfflineState {
   readonly header: ManifestHeader;
@@ -61,8 +78,25 @@ const b64 = (s: string) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 /**
  * The offline verdict table (ADR 0011). Pure: the caller records an `admit`/`provisional`
  * verdict in `admitted` and queues the scan for sync. `now` is the device's corrected time.
+ * At a zone checkpoint a valid pass is `granted` or `no_access` instead (zones allow re-entry).
  */
 export async function offlineVerdict(
+  state: OfflineState,
+  rawCode: string,
+  now: Date,
+  checkpointId: string | null = null,
+): Promise<{ verdict: OfflineVerdict; ticketId: string | null; row: ManifestRow | null }> {
+  const zone = state.header.checkpoints.find((c) => c.id === checkpointId && c.kind === 'zone') ?? null;
+  const r = await entranceVerdict(state, rawCode, now);
+  if (!zone) return r;
+  // Passes that would get in (including re-entry and unknown-but-signed ones) are checked
+  // against the zone; an unknown pass has no known type, so only an all-types zone takes it.
+  if (r.verdict === 'admit' || r.verdict === 'duplicate' || r.verdict === 'provisional')
+    return { ...r, verdict: zoneAllows(zone, r.row?.ticketTypeId ?? null) ? 'granted' : 'no_access' };
+  return r;
+}
+
+async function entranceVerdict(
   state: OfflineState,
   rawCode: string,
   now: Date,

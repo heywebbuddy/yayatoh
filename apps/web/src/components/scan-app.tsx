@@ -20,10 +20,13 @@ const RESULT_KEY: Record<string, string> = {
   wrong_event: 'wrong_event',
   not_today: 'not_today',
   outside_window: 'outside_window',
+  granted: 'granted',
+  no_access: 'no_access',
 };
 
 const TONE: Record<string, string> = {
   admitted: 'border-green-600 bg-green-50 text-green-900',
+  granted: 'border-green-600 bg-green-50 text-green-900',
   provisional: 'border-accent-700 bg-accent-50 text-accent-text',
   duplicate: 'border-accent-700 bg-accent-50 text-accent-text',
   not_today: 'border-accent-700 bg-accent-50 text-accent-text',
@@ -51,10 +54,12 @@ export function ScanApp() {
   const [last, setLast] = useState<ScanOutcome | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [camera, setCamera] = useState(false);
+  const [checkpointId, setCheckpointId] = useState('');
   const input = useRef<HTMLInputElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
   const refresh = useCallback(async (c: ScanClient) => {
+    setCheckpointId(c.checkpoint?.id ?? '');
     setTickets(c.ticketCount);
     setLastSync(c.lastSyncAt);
     setQueue(await c.queueDepth());
@@ -238,6 +243,31 @@ export function ScanApp() {
           {lastSync ? <span>{t('scan.lastSync', { time: lastSync.toLocaleTimeString() })}</span> : null}
         </p>
       </header>
+      {client && client.checkpoints.length > 0 ? (
+        <div className="flex flex-col gap-1.5 self-start">
+          <label htmlFor="scan-app-checkpoint" className="text-caption text-zinc-600">
+            {t('checkpoints.scanningAt')}
+          </label>
+          <select
+            id="scan-app-checkpoint"
+            value={checkpointId}
+            onChange={(e) => {
+              const id = e.target.value;
+              setCheckpointId(id);
+              void client.setCheckpoint(id || null);
+              input.current?.focus();
+            }}
+            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          >
+            <option value="">{t('checkpoints.wholeEvent')}</option>
+            {client.checkpoints.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <form
         className="flex flex-wrap items-end gap-3"
         onSubmit={(e) => {

@@ -572,7 +572,9 @@
       "outside_window": "El check-in no está abierto ahora",
       "duplicate_offline": "Check-in realizado antes en otro dispositivo",
       "superseded": "Código antiguo de una entrada reemitida",
-      "provisional": "Acceso sin conexión, pendiente de confirmar"
+      "provisional": "Acceso sin conexión, pendiente de confirmar",
+      "granted": "Acceso permitido",
+      "no_access": "Este pase no incluye esta zona"
     },
     "alertsTitle": "{count, plural, one {# entrada se aceptó dos veces sin conexión} other {# entradas se aceptaron dos veces sin conexión}}",
     "alertsHint": "Dos escáneres aceptaron la misma entrada antes de poder sincronizarse. Revisa a estos invitados en la puerta."
@@ -614,5 +616,33 @@
     "pending": "Comprobado en este dispositivo: se confirmará al sincronizar",
     "wipedTitle": "Este escáner se ha borrado",
     "wipedDescription": "Se eliminaron su lista de invitados y su clave. Pide a un organizador un nuevo enlace de dispositivo para volver a escanear."
+  },
+  "checkpoints": {
+    "title": "Accesos y zonas",
+    "description": "Los accesos permiten a los invitados entrar al evento, una vez al día por cualquier puerta. Las zonas, como una sala VIP, comprueban que el pase incluya esa área y permiten volver a entrar.",
+    "name": "Nombre",
+    "nameHint": "Por ejemplo, Puerta norte o Sala VIP.",
+    "kind": "Tipo",
+    "entrance": "Acceso",
+    "zone": "Zona",
+    "types": "Pases permitidos",
+    "typesHint": "Deja todo sin marcar para dejar pasar cualquier pase.",
+    "add": "Añadir",
+    "added": "Añadido.",
+    "zoneAll": "Zona · todos los pases",
+    "zoneFor": "Zona · {types}",
+    "archived": "Archivado",
+    "archive": "Archivar",
+    "archiveFor": "Archivar {name}",
+    "restore": "Restaurar",
+    "restoreFor": "Restaurar {name}",
+    "scanningAt": "Escaneando en",
+    "wholeEvent": "Todo el evento",
+    "perEntrance": "Check-in de hoy por acceso",
+    "signalsTitle": "{count, plural, one {# cosa por revisar} other {# cosas por revisar}}",
+    "signal": {
+      "two_entrances": "Entrada mostrada en un segundo acceso",
+      "invalid_burst": "Varios códigos no válidos seguidos"
+    }
   }
 }

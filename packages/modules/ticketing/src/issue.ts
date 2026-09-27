@@ -200,6 +200,7 @@ export interface ScannableTicket {
   readonly status: (typeof TICKET_STATUSES)[number];
   readonly rev: number;
   readonly serial: number;
+  readonly ticketTypeId: string;
   readonly shortCode: string;
   readonly holderName: string;
   readonly typeName: string;
@@ -218,6 +219,7 @@ export async function ticketForScanTx(
       status: tickets.status,
       rev: tickets.rev,
       serial: tickets.serial,
+      ticketTypeId: tickets.ticketTypeId,
       shortCode: tickets.shortCode,
       holderName: tickets.holderName,
       typeName: ticketTypes.name,
@@ -227,6 +229,15 @@ export async function ticketForScanTx(
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
     .where('id' in by ? eq(tickets.id, by.id) : eq(tickets.shortCode, by.shortCode.trim().toUpperCase()));
   return row ? { ...row, status: row.status as ScannableTicket['status'] } : null;
+}
+
+/** Ids of an event's ticket types (checkpoint zones list the ones allowed in). */
+export async function eventTicketTypeIdsTx(tx: TenantTx, eventId: string): Promise<Set<string>> {
+  const rows = await tx
+    .select({ id: ticketTypes.id })
+    .from(ticketTypes)
+    .where(eq(ticketTypes.eventId, eventId));
+  return new Set(rows.map((r) => r.id));
 }
 
 /** Tickets issued (and not void) for an event: the check-in progress denominator. */
@@ -243,6 +254,7 @@ export interface ManifestTicket {
   readonly shortCode: string;
   readonly rev: number;
   readonly status: (typeof TICKET_STATUSES)[number];
+  readonly ticketTypeId: string;
   readonly typeName: string;
   readonly accessDates: readonly { readonly date: string; readonly name: string }[];
   readonly holderName: string;
@@ -267,6 +279,7 @@ export async function manifestTicketsTx(
       shortCode: tickets.shortCode,
       rev: tickets.rev,
       status: tickets.status,
+      ticketTypeId: tickets.ticketTypeId,
       typeName: ticketTypes.name,
       accessDates: ticketTypes.accessDates,
       holderName: tickets.holderName,

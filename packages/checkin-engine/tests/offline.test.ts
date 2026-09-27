@@ -7,6 +7,7 @@ import {
   type OfflineState,
   offlineVerdict,
   uuidv7Time,
+  zoneAllows,
 } from '../src/index.ts';
 
 // UUIDv7 ids with chosen timestamps (first 48 bits = ms since epoch).
@@ -32,6 +33,7 @@ const row = (ticketId: string, over: Partial<ManifestRow> = {}): ManifestRow => 
   shortCode: `SC${'ABCDEFGH'[Number(ticketId.slice(-1))] ?? 'Z'}XYZWQ`,
   rev: 0,
   status: 'active',
+  ticketTypeId: 'type-ga',
   typeName: 'Pass',
   accessDates: [],
   holderName: 'Sam',
@@ -43,7 +45,7 @@ const row = (ticketId: string, over: Partial<ManifestRow> = {}): ManifestRow => 
 function state(admitted: string[] = [], policy: 'provisional' | 'reject' = 'provisional'): OfflineState {
   const rows = [
     row(KNOWN, { rev: 1 }),
-    row(GALA, { accessDates: [{ date: '2027-12-02', name: 'Gala' }] }),
+    row(GALA, { ticketTypeId: 'type-vip', accessDates: [{ date: '2027-12-02', name: 'Gala' }] }),
     row(VOIDED, { status: 'void' }),
   ];
   return {
@@ -59,6 +61,11 @@ function state(admitted: string[] = [], policy: 'provisional' | 'reject' = 'prov
       salt: 's',
       serverTime: new Date(SYNC).toISOString(),
       unknownPolicy: policy,
+      checkpoints: [
+        { id: 'north', name: 'North gate', kind: 'entrance', ticketTypeIds: [] },
+        { id: 'vip', name: 'VIP lounge', kind: 'zone', ticketTypeIds: ['type-vip'] },
+        { id: 'hall', name: 'Hall', kind: 'zone', ticketTypeIds: [] },
+      ],
     },
     byId: new Map(rows.map((r) => [r.ticketId, r])),
     byShortCode: new Map(rows.map((r) => [r.shortCode, r])),
@@ -118,5 +125,32 @@ describe('offline verdicts (ADR 0011 table)', () => {
   it('lookup hashes are salted per event and normalize the email', async () => {
     expect(await lookupHash('e1', ' Ada@Example.test ')).toBe(await lookupHash('e1', 'ada@example.test'));
     expect(await lookupHash('e1', 'ada@example.test')).not.toBe(await lookupHash('e2', 'ada@example.test'));
+  });
+});
+
+describe('checkpoints', () => {
+  const GALA_DAY = new Date('2027-12-02T20:00:00Z');
+
+  it('an entrance behaves like the event: admit, then duplicate on this device', async () => {
+    expect((await offlineVerdict(state(), await code(KNOWN, 1), NOW, 'north')).verdict).toBe('admit');
+    const day = '2027-12-01';
+    expect(
+      (await offlineVerdict(state([admittedKey(KNOWN, day)]), await code(KNOWN, 1), NOW, 'north')).verdict,
+    ).toBe('duplicate');
+  });
+
+  it('a zone grants the listed ticket types, refuses others, and allows re-entry', async () => {
+    expect((await offlineVerdict(state(), await code(GALA), GALA_DAY, 'vip')).verdict).toBe('granted');
+    expect((await offlineVerdict(state(), await code(KNOWN, 1), NOW, 'vip')).verdict).toBe('no_access');
+    const again = state([admittedKey(GALA, '2027-12-02')]);
+    expect((await offlineVerdict(again, await code(GALA), GALA_DAY, 'vip')).verdict).toBe('granted');
+    // Event rules still come first: the gala pass isn't valid on Dec 1.
+    expect((await offlineVerdict(state(), await code(GALA), NOW, 'vip')).verdict).toBe('not_today');
+  });
+
+  it('an unknown-but-signed pass only gets into an all-types zone', async () => {
+    expect((await offlineVerdict(state(), await code(LATE), NOW, 'vip')).verdict).toBe('no_access');
+    expect((await offlineVerdict(state(), await code(LATE), NOW, 'hall')).verdict).toBe('granted');
+    expect(zoneAllows({ ticketTypeIds: [] }, null)).toBe(true);
   });
 });

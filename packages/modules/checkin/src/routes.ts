@@ -53,6 +53,7 @@ const ScanBatchBody = z.object({
         deviceTs: z.iso.datetime(),
         clockOffsetMs: z.int(),
         verdict: z.string(),
+        checkpointId: z.uuid().optional(),
       }),
     )
     .min(1)

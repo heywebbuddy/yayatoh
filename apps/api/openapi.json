@@ -172,6 +172,41 @@
                             "provisional",
                             "reject"
                           ]
+                        },
+                        "checkpoints": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "kind": {
+                                "type": "string",
+                                "enum": [
+                                  "entrance",
+                                  "zone"
+                                ]
+                              },
+                              "ticketTypeIds": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "kind",
+                              "ticketTypeIds"
+                            ]
+                          }
                         }
                       },
                       "required": [
@@ -179,7 +214,8 @@
                         "publicKeys",
                         "salt",
                         "serverTime",
-                        "unknownPolicy"
+                        "unknownPolicy",
+                        "checkpoints"
                       ]
                     },
                     "rows": {
@@ -203,6 +239,10 @@
                               "active",
                               "void"
                             ]
+                          },
+                          "ticketTypeId": {
+                            "type": "string",
+                            "format": "uuid"
                           },
                           "typeName": {
                             "type": "string"
@@ -240,6 +280,7 @@
                           "shortCode",
                           "rev",
                           "status",
+                          "ticketTypeId",
                           "typeName",
                           "accessDates",
                           "holderName",
@@ -390,6 +431,10 @@
                         },
                         "verdict": {
                           "type": "string"
+                        },
+                        "checkpointId": {
+                          "type": "string",
+                          "format": "uuid"
                         }
                       },
                       "required": [

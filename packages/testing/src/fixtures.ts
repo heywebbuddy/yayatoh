@@ -1,5 +1,5 @@
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
-import { enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
+import { createCheckpointCommand, enrollDeviceCommand, scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import {
   assignEventRoleCommand,
@@ -170,12 +170,29 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   const [issued] = await withTenant(systemCtx(org.id), (tx) =>
     tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
   );
-  await executeCommand(
-    scanTicketCommand,
-    { eventId: event.id, code: issued?.short_code ?? '' },
-    ctx({ now: new Date('2027-10-14T15:00:00Z') }),
-    ports,
-  );
+  // Two entrances: admitted at one, shown at the other a minute later → a `two_entrances` signal.
+  const gate = async (name: string) =>
+    (
+      await executeCommand(
+        createCheckpointCommand,
+        { eventId: event.id, name, kind: 'entrance' },
+        ctx(),
+        ports,
+      )
+    ).id;
+  const mainGate = await gate('Main gate');
+  const sideGate = await gate('Side gate');
+  for (const [checkpointId, at] of [
+    [mainGate, '2027-10-14T15:00:00Z'],
+    [sideGate, '2027-10-14T15:01:00Z'],
+  ] as const) {
+    await executeCommand(
+      scanTicketCommand,
+      { eventId: event.id, code: issued?.short_code ?? '', checkpointId },
+      ctx({ now: new Date(at) }),
+      ports,
+    );
+  }
   await executeCommand(
     setFeeOverrideCommand,
     { currency: 'EUR', percentBps: 100, fixedMinor: 0, reason: 'fixture' },

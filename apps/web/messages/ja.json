@@ -572,7 +572,9 @@
       "outside_window": "現在チェックインは受け付けていません",
       "duplicate_offline": "別の端末で先にチェックイン済み",
       "superseded": "再発行されたチケットの旧コードです",
-      "provisional": "オフラインで入場済み（確認待ち）"
+      "provisional": "オフラインで入場済み（確認待ち）",
+      "granted": "入場可",
+      "no_access": "このパスではこのエリアに入れません"
     },
     "alertsTitle": "{count, plural, other {オフライン中に#枚のチケットで2回入場がありました}}",
     "alertsHint": "同期される前に、2台のスキャナーが同じチケットで入場を許可しました。入口でこれらのゲストを確認してください。"
@@ -614,5 +616,33 @@
     "pending": "この端末で確認済み（同期後に確定）",
     "wipedTitle": "このスキャナーは消去されました",
     "wipedDescription": "ゲストリストとキーは削除されました。再度スキャンするには、主催者に新しい端末リンクを依頼してください。"
+  },
+  "checkpoints": {
+    "title": "入口とゾーン",
+    "description": "入口はゲストをイベントに入場させます。どのゲートからでも1日1回です。VIPラウンジなどのゾーンは、パスにそのエリアが含まれているかを確認し、再入場を許可します。",
+    "name": "名前",
+    "nameHint": "例：北ゲート、VIPラウンジ",
+    "kind": "種類",
+    "entrance": "入口",
+    "zone": "ゾーン",
+    "types": "入場できるパス",
+    "typesHint": "すべてのパスを入場可能にするには、何も選択しないでください。",
+    "add": "追加",
+    "added": "追加しました。",
+    "zoneAll": "ゾーン · すべてのパス",
+    "zoneFor": "ゾーン · {types}",
+    "archived": "アーカイブ済み",
+    "archive": "アーカイブ",
+    "archiveFor": "{name}をアーカイブ",
+    "restore": "復元",
+    "restoreFor": "{name}を復元",
+    "scanningAt": "スキャン場所",
+    "wholeEvent": "イベント全体",
+    "perEntrance": "本日の入口別チェックイン",
+    "signalsTitle": "{count, plural, other {確認事項 #件}}",
+    "signal": {
+      "two_entrances": "2か所目の入口でチケットが提示されました",
+      "invalid_burst": "無効なコードが連続しています"
+    }
   }
 }

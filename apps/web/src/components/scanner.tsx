@@ -17,6 +17,8 @@ const TONE = {
   duplicate_offline: 'border-pink-700 bg-pink-50 text-pink-700',
   superseded: 'border-pink-700 bg-pink-50 text-pink-700',
   provisional: 'border-accent-700 bg-accent-50 text-accent-text',
+  granted: 'border-green-600 bg-green-50 text-green-900',
+  no_access: 'border-pink-700 bg-pink-50 text-pink-700',
 } as const;
 
 const newScanId = () => `web:${crypto.randomUUID()}`;
@@ -28,12 +30,17 @@ const newScanId = () => `web:${crypto.randomUUID()}`;
 export function Scanner({
   action,
   timeZone,
+  checkpoints,
 }: {
   action: (prev: ScanState, form: FormData) => Promise<ScanState>;
   timeZone: string;
+  /** Live entrances and zones; the choice stays put between scans. */
+  checkpoints: readonly { id: string; name: string }[];
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { kind: 'idle' });
+  const [checkpointId, setCheckpointId] = useState('');
+  const stand = checkpoints.some((c) => c.id === checkpointId) ? checkpointId : '';
   const [scanId, setScanId] = useState(newScanId);
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -49,8 +56,32 @@ export function Scanner({
 
   return (
     <div className="flex flex-col gap-4">
+      {checkpoints.length > 0 ? (
+        <div className="flex flex-col gap-1.5 self-start">
+          <label htmlFor="scan-checkpoint" className="text-caption text-zinc-600">
+            {t('checkpoints.scanningAt')}
+          </label>
+          <select
+            id="scan-checkpoint"
+            value={stand}
+            onChange={(e) => {
+              setCheckpointId(e.target.value);
+              input.current?.focus();
+            }}
+            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          >
+            <option value="">{t('checkpoints.wholeEvent')}</option>
+            {checkpoints.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <form action={formAction} className="flex flex-wrap items-end gap-3">
         <input type="hidden" name="scanId" value={scanId} />
+        <input type="hidden" name="checkpointId" value={stand} />
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <label htmlFor="scan-code" className="text-caption text-zinc-600">
             {t('checkin.codeLabel')}

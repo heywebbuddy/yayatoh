@@ -572,7 +572,9 @@
       "outside_window": "O check-in não está aberto agora",
       "duplicate_offline": "Check-in feito antes em outro dispositivo",
       "superseded": "Código antigo de um ingresso reemitido",
-      "provisional": "Entrada offline — a confirmar"
+      "provisional": "Entrada offline — a confirmar",
+      "granted": "Acesso liberado",
+      "no_access": "Este passe não inclui esta área"
     },
     "alertsTitle": "{count, plural, one {# ingresso foi aceito duas vezes offline} other {# ingressos foram aceitos duas vezes offline}}",
     "alertsHint": "Dois leitores aceitaram o mesmo ingresso antes de conseguirem sincronizar. Confira esses convidados na entrada."
@@ -614,5 +616,33 @@
     "pending": "Verificado neste dispositivo — será confirmado ao sincronizar",
     "wipedTitle": "Este leitor foi apagado",
     "wipedDescription": "A lista de convidados e a chave foram removidas. Peça a um organizador um novo link de dispositivo para voltar a ler."
+  },
+  "checkpoints": {
+    "title": "Entradas e zonas",
+    "description": "As entradas deixam os convidados entrar no evento, uma vez por dia, por qualquer portão. As zonas, como um lounge VIP, verificam se o passe inclui aquela área e permitem reentrada.",
+    "name": "Nome",
+    "nameHint": "Por exemplo, Portão norte ou Lounge VIP.",
+    "kind": "Tipo",
+    "entrance": "Entrada",
+    "zone": "Zona",
+    "types": "Passes permitidos",
+    "typesHint": "Deixe tudo desmarcado para liberar qualquer passe.",
+    "add": "Adicionar",
+    "added": "Adicionado.",
+    "zoneAll": "Zona · todos os passes",
+    "zoneFor": "Zona · {types}",
+    "archived": "Arquivado",
+    "archive": "Arquivar",
+    "archiveFor": "Arquivar {name}",
+    "restore": "Restaurar",
+    "restoreFor": "Restaurar {name}",
+    "scanningAt": "Lendo em",
+    "wholeEvent": "Evento inteiro",
+    "perEntrance": "Check-ins de hoje por entrada",
+    "signalsTitle": "{count, plural, one {# item para verificar} other {# itens para verificar}}",
+    "signal": {
+      "two_entrances": "Ingresso apresentado em uma segunda entrada",
+      "invalid_burst": "Vários códigos inválidos seguidos"
+    }
   }
 }

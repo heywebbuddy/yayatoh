@@ -572,7 +572,9 @@
       "outside_window": "Check-in ist gerade nicht geöffnet",
       "duplicate_offline": "Zuerst auf einem anderen Gerät eingecheckt",
       "superseded": "Alter Code eines neu ausgestellten Tickets",
-      "provisional": "Offline eingelassen – wird noch bestätigt"
+      "provisional": "Offline eingelassen – wird noch bestätigt",
+      "granted": "Zutritt gewährt",
+      "no_access": "Dieser Pass gilt nicht für diesen Bereich"
     },
     "alertsTitle": "{count, plural, one {# Ticket wurde offline doppelt eingelassen} other {# Tickets wurden offline doppelt eingelassen}}",
     "alertsHint": "Zwei Scanner haben dasselbe Ticket eingelassen, bevor sie synchronisieren konnten. Prüfe diese Gäste am Einlass."
@@ -614,5 +616,33 @@
     "pending": "Auf diesem Gerät geprüft – wird nach der Synchronisierung bestätigt",
     "wipedTitle": "Dieser Scanner wurde gelöscht",
     "wipedDescription": "Gästeliste und Schlüssel wurden entfernt. Bitte einen Veranstalter um einen neuen Gerätelink, um wieder zu scannen."
+  },
+  "checkpoints": {
+    "title": "Eingänge und Zonen",
+    "description": "Über Eingänge kommen Gäste ins Event – einmal pro Tag, egal an welchem Tor. Zonen wie eine VIP-Lounge prüfen, ob der Pass diesen Bereich umfasst, und erlauben den Wiedereintritt.",
+    "name": "Name",
+    "nameHint": "Zum Beispiel Nordtor oder VIP-Lounge.",
+    "kind": "Typ",
+    "entrance": "Eingang",
+    "zone": "Zone",
+    "types": "Zugelassene Pässe",
+    "typesHint": "Lass alles leer, um jeden Pass einzulassen.",
+    "add": "Hinzufügen",
+    "added": "Hinzugefügt.",
+    "zoneAll": "Zone · jeder Pass",
+    "zoneFor": "Zone · {types}",
+    "archived": "Archiviert",
+    "archive": "Archivieren",
+    "archiveFor": "{name} archivieren",
+    "restore": "Wiederherstellen",
+    "restoreFor": "{name} wiederherstellen",
+    "scanningAt": "Scannen an",
+    "wholeEvent": "Gesamtes Event",
+    "perEntrance": "Heute eingecheckt nach Eingang",
+    "signalsTitle": "{count, plural, one {# Punkt zu prüfen} other {# Punkte zu prüfen}}",
+    "signal": {
+      "two_entrances": "Ticket an einem zweiten Eingang vorgezeigt",
+      "invalid_burst": "Mehrere ungültige Codes hintereinander"
+    }
   }
 }
