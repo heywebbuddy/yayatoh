@@ -1,4 +1,4 @@
-import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
+import { checkoutTarget, publicEventBySlug, publicOccurrences } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { publicSeatMap } from '@yayatoh/seating';
@@ -9,6 +9,7 @@ import { Check } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
+import { DatePicker } from '@/components/date-picker.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
@@ -17,16 +18,27 @@ import { checkoutAction, requestHolderLinkAction } from './actions.ts';
 
 export default async function PublicEventPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ date?: string }>;
 }) {
   const { locale, slug } = await params;
+  const { date } = await searchParams;
   setRequestLocale(locale);
   const pub = await publicEventBySlug(slug);
   if (!pub) notFound();
   // Passes, stats and agenda arrive with ticketing and sessions; showcase events get a dev overlay.
   const demo = publicDemoOverlay(slug);
-  const real = await publicTicketTypes(slug);
+  // Multi-date events (M1.4b): the buyer picks a date first; passes are those valid for it.
+  const now = new Date();
+  const dates = await publicOccurrences(slug);
+  const chosen =
+    dates.find((d) => d.id === date && d.status === 'scheduled' && !d.soldOut && d.endsAt > now) ?? null;
+  const real = (await publicTicketTypes(slug)).filter(
+    (p) => !chosen || p.occurrenceIds.length === 0 || p.occurrenceIds.includes(chosen.id),
+  );
+  const needsDate = dates.length > 0 && !chosen;
   const target = await checkoutTarget(slug);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
@@ -145,6 +157,18 @@ export default async function PublicEventPage({
         ) : null}
       </section>
 
+      {dates.length > 0 ? (
+        <section className="px-6 pt-10 md:px-16">
+          <DatePicker
+            slug={slug}
+            dates={dates}
+            chosen={chosen?.id ?? null}
+            locale={locale}
+            timeZone={ev.timezone}
+            now={now}
+          />
+        </section>
+      ) : null}
       <section
         id="passes"
         aria-labelledby="passes-heading"
@@ -157,12 +181,32 @@ export default async function PublicEventPage({
           <p className="text-[15px] leading-[22px] text-zinc-500">
             {t('publicEvent.allIn', { org: ev.organizerName })}
           </p>
+          {chosen ? (
+            <p className="text-body font-medium">
+              {t('publicEvent.ticketsFor', {
+                date: new Intl.DateTimeFormat(locale, {
+                  timeZone: ev.timezone,
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                }).format(chosen.startsAt),
+              })}
+            </p>
+          ) : null}
         </div>
         {orgProfile?.checkoutPaused ? (
           <EmptyState
             className="min-w-0 flex-1"
             title={t('publicEvent.salesPausedTitle')}
             description={t('publicEvent.salesPausedDescription')}
+          />
+        ) : needsDate ? (
+          <EmptyState
+            className="min-w-0 flex-1"
+            title={t('publicEvent.pickDateTitle')}
+            description={t('publicEvent.pickDateDescription')}
           />
         ) : ev.passes.length === 0 ? (
           <EmptyState
@@ -188,6 +232,7 @@ export default async function PublicEventPage({
             brand={brand ? { background: brand.background, text: brand.text } : null}
             questions={questions}
             seatMap={seatMap}
+            occurrenceId={chosen?.id ?? null}
             action={checkoutAction.bind(null, slug)}
           />
         )}

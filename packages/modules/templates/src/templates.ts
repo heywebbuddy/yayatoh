@@ -114,6 +114,8 @@ export const TemplateDto = z.object({
   name: z.string(),
   description: z.string().nullable(),
   profile: z.string(),
+  /** Times of events made from it are entered in this zone. */
+  timezone: z.string(),
   ticketTypes: z.int(),
   questions: z.int(),
   seats: z.int(),
@@ -128,6 +130,7 @@ const toDto = (r: typeof eventTemplates.$inferSelect): TemplateDto => {
     name: r.name,
     description: r.description,
     profile: r.profile,
+    timezone: s.event.timezone,
     ticketTypes: s.ticketTypes.length,
     questions: s.questions?.fields.length ?? 0,
     seats: s.seating?.seats.length ?? 0,

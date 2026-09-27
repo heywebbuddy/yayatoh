@@ -3,13 +3,16 @@ import {
   Bell,
   Calendar,
   CalendarCheck,
+  CalendarRange,
   ChartLine,
   ClipboardList,
+  Copy,
   Globe,
   Heart,
   House,
   Image,
   Landmark,
+  Layers,
   Library,
   ListChecks,
   type LucideIcon,
@@ -50,6 +53,9 @@ const ICONS: Record<string, LucideIcon> = {
   bell: Bell,
   settings: Settings,
   landmark: Landmark,
+  'calendar-range': CalendarRange,
+  layers: Layers,
+  copy: Copy,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

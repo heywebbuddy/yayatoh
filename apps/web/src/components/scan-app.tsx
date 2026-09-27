@@ -20,6 +20,7 @@ const RESULT_KEY: Record<string, string> = {
   void: 'void',
   wrong_event: 'wrong_event',
   not_today: 'not_today',
+  wrong_date: 'wrong_date',
   outside_window: 'outside_window',
   granted: 'granted',
   no_access: 'no_access',
@@ -31,6 +32,7 @@ const TONE: Record<string, string> = {
   provisional: 'border-accent-700 bg-accent-50 text-accent-text',
   duplicate: 'border-accent-700 bg-accent-50 text-accent-text',
   not_today: 'border-accent-700 bg-accent-50 text-accent-text',
+  wrong_date: 'border-accent-700 bg-accent-50 text-accent-text',
   outside_window: 'border-accent-700 bg-accent-50 text-accent-text',
 };
 const tone = (key: string) => TONE[key] ?? 'border-pink-700 bg-pink-50 text-pink-700';

@@ -30,6 +30,7 @@ const DOT = {
   void: 'danger',
   wrong_event: 'danger',
   not_today: 'warning',
+  wrong_date: 'warning',
   outside_window: 'warning',
   duplicate_offline: 'danger',
   superseded: 'danger',

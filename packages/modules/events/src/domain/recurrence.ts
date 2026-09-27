@@ -44,6 +44,7 @@ export type RecurrenceProblem =
   | 'invalid_date'
   | 'invalid_time'
   | 'invalid_interval'
+  | 'invalid_count'
   | 'invalid_weekday'
   | 'invalid_month_day'
   | 'no_end'
@@ -103,7 +104,7 @@ export function expandRecurrence(
   }
   const count = rule.count ?? null;
   if (count !== null && (!Number.isInteger(count) || count < 1))
-    fail('invalid_interval', 'count', 'Enter a number of dates of at least 1');
+    fail('invalid_count', 'count', 'Enter a number of dates of at least 1');
   if (count !== null && count > max) fail('too_many', 'count', `At most ${max} dates`);
   const horizon = new Date(
     Date.UTC(start.getUTCFullYear() + MAX_RULE_YEARS, start.getUTCMonth(), start.getUTCDate()),

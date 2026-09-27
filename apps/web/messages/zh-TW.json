@@ -56,7 +56,11 @@
     "team": "團隊",
     "settings": "設定",
     "payouts": "收款",
-    "domains": "網域"
+    "domains": "網域",
+    "dates": "場次",
+    "copy": "複製與範本",
+    "series": "系列",
+    "templates": "範本"
   },
   "vocab": {
     "attendee": "參加者",
@@ -107,7 +111,11 @@
     "emptyTitle": "尚無活動",
     "emptyDescription": "建立你的第一個活動，開始售票或寄送邀請。",
     "open": "開啟活動",
-    "create": "建立活動"
+    "create": "建立活動",
+    "seriesFilter": "依系列篩選活動",
+    "allEvents": "全部活動",
+    "seriesEmptyTitle": "{name} 中還沒有活動",
+    "seriesEmptyDescription": "可在活動的「場次」頁面將其加入此系列。"
   },
   "team": {
     "subtitle": "{count, plural, other {# 位成員}}",
@@ -298,7 +306,15 @@
     "earlyBird": "早鳥價至 {date}（之後為 {regular}）",
     "accessDates": "此通行證可入場的日期",
     "salesPausedTitle": "票券販售已暫停",
-    "salesPausedDescription": "此主辦單位的票券目前暫不販售，請稍後再回來查看。"
+    "salesPausedDescription": "此主辦單位的票券目前暫不販售，請稍後再回來查看。",
+    "chooseDate": "選擇場次",
+    "datesTimezone": "時間為 {timezone}。",
+    "noUpcomingDates": "目前沒有即將舉行的場次。",
+    "dateCancelled": "已取消",
+    "dateSoldOut": "已售完",
+    "ticketsFor": "{date} 的門票",
+    "pickDateTitle": "請先選擇場次",
+    "pickDateDescription": "在上方選擇一個場次即可查看門票。"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -407,7 +423,8 @@
     "venue": "場地",
     "city": "城市",
     "submit": "建立草稿",
-    "slugTaken": "已有同名活動。請改用稍有不同的名稱。"
+    "slugTaken": "已有同名活動。請改用稍有不同的名稱。",
+    "fromTemplate": "從範本開始"
   },
   "tickets": {
     "subtitle": "管理票種、價格與庫存。買家看到的所有價格皆已包含費用。",
@@ -444,7 +461,12 @@
     "accessDates": "此通行證可入場的日期（選填）",
     "accessDatesHint": "每行一筆：先寫日期，再寫名稱，例如 2027-10-14 盛典之夜。",
     "isDonation": "由買家自訂金額",
-    "isDonationHint": "上方價格將作為最低金額。優惠碼不適用。"
+    "isDonationHint": "上方價格將作為最低金額。優惠碼不適用。",
+    "validDates": "適用場次",
+    "validDatesHint": "不勾選則適用於所有場次。",
+    "dates": "場次",
+    "allDates": "所有場次",
+    "someDates": "{count, plural, other {# 個場次}}"
   },
   "checkout": {
     "quantity": "數量",
@@ -480,7 +502,10 @@
       "seat": "{label}（{price}）",
       "accessible": "無障礙座位",
       "taken": "已售出"
-    }
+    },
+    "chooseDate": "請先選擇場次。",
+    "dateSoldOut": "此場次剛剛售完，請選擇其他場次。",
+    "dateUnavailable": "此場次已無法購買，請選擇其他場次。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -529,7 +554,8 @@
     },
     "collectedBy": "收款方：{org}",
     "seat": "座位",
-    "seatLabel": "座位：{seat}"
+    "seatLabel": "座位：{seat}",
+    "ticketDate": "適用於 {date}"
   },
   "orders": {
     "title": "最近訂單",
@@ -630,7 +656,8 @@
       "superseded": "已重新發行票券的舊代碼",
       "provisional": "離線放行，待確認",
       "granted": "准許進入",
-      "no_access": "此通行證不包含該區域"
+      "no_access": "此通行證不包含該區域",
+      "wrong_date": "此門票適用於其他場次"
     },
     "alertsTitle": "{count, plural, other {離線期間有 # 張票被重複放行}}",
     "alertsHint": "兩台掃描裝置在同步前放行了同一張票。請在入口核查這些賓客。"
@@ -1203,7 +1230,12 @@
     "openOrder": "開啟訂單",
     "chooseTickets": "請至少選擇一張票券。",
     "soldOut": "剩餘票券不足。",
-    "collected": "由你收款"
+    "collected": "由你收款",
+    "date": "場次",
+    "chooseDate": "請選擇場次。",
+    "dateSoldOut": "此場次剩餘門票不足。",
+    "wrongDate": "其中一種門票不在此場次販售。",
+    "dateUnavailable": "此場次已停止售票。"
   },
   "seating": {
     "title": "座位",
@@ -1527,5 +1559,167 @@
       "emptyTitle": "此期間沒有銷售",
       "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
     }
+  },
+  "dates": {
+    "title": "場次",
+    "description": "單一場次、多天或重複的日程。時間為 {timezone}。",
+    "emptyTitle": "此活動只有一個場次",
+    "single": "活動時間為 {range}。新增場次即可在多天或依重複日程售票；新增後，這些場次會取代這個單一場次。",
+    "listCaption": "{count, plural, other {# 個場次}}",
+    "when": "日期與時間",
+    "capacity": "容量",
+    "capacityHint": "選填。此場次所有票種合計可售的最多票數。",
+    "noLimit": "不限",
+    "sold": "已售票數",
+    "status": "狀態",
+    "statuses": {
+      "scheduled": "已排定",
+      "cancelled": "已取消"
+    },
+    "actions": "操作",
+    "edit": "編輯",
+    "editFor": "編輯 {date}",
+    "cancel": "取消",
+    "cancelFor": "取消 {date}",
+    "addOne": "新增場次",
+    "startsAt": "開始",
+    "endsAt": "結束",
+    "add": "新增場次",
+    "added": "{count, plural, other {已新增 # 個場次}}",
+    "repeat": "新增重複日程",
+    "repeatHint": "場次依 {timezone} 的當地時間安排：晚上 7 點的演出在時鐘調整後仍是晚上 7 點。",
+    "firstDate": "第一個日期",
+    "startTime": "開始時間",
+    "endTime": "結束時間",
+    "endTimeHint": "結束時間早於開始時間時，場次會在隔天結束。",
+    "freq": "重複",
+    "freqs": {
+      "daily": "每天",
+      "weekly": "每週",
+      "monthly": "每月"
+    },
+    "interval": "每隔",
+    "intervalHint": {
+      "daily": "場次之間相隔的天數（1 = 每天）。",
+      "weekly": "場次之間相隔的週數（1 = 每週）。",
+      "monthly": "場次之間相隔的月數（1 = 每月）。"
+    },
+    "monthDay": "每月的日期",
+    "monthDayHint": "沒有這一天的月份會被略過（例如 31 日）。",
+    "weekdays": "在這些日子",
+    "weekdaysHint": "未勾選時使用第一個日期的星期。",
+    "ends": "結束",
+    "endsAfter": "達到一定場次後",
+    "endsOn": "在某個日期",
+    "count": "場次數",
+    "until": "最後日期",
+    "preview": "預覽場次",
+    "save": "{count, plural, other {儲存 # 個場次}}",
+    "previewTitle": "{count, plural, other {將新增 # 個場次}}",
+    "previewMore": "{count, plural, other {…另有 # 個}}",
+    "overLimit": "一個活動最多可有 {max} 個場次，此活動已有 {existing} 個。請縮短日程。",
+    "editTitle": "編輯 {date}",
+    "closeEdit": "關閉",
+    "scope": "套用至",
+    "scopeOne": "僅此場次",
+    "scopeFollowing": "此場次及之後所有場次",
+    "scopeFollowingHint": "之後的每個場次保留其日期，並採用新的開始與結束時間。",
+    "saveChanges": "儲存變更",
+    "updated": "{count, plural, other {已更新 # 個場次}}",
+    "cancelTitle": "取消 {date}？",
+    "cancelImpact": "{count, plural, =0 {此場次尚未售出門票。} other {此場次已售出 # 張門票。}}",
+    "cancelRefunds": "退款不會自動進行。已取消場次的門票將無法入場；請查看訂單為購票者退款。",
+    "reviewOrders": "查看訂單",
+    "confirmCancel": "取消此場次",
+    "keep": "保留此場次",
+    "cancelled": "場次已取消。它不再售票，其門票也無法入場。",
+    "series": "系列",
+    "seriesHint": "將此活動與其他活動歸為一組，例如巡演或演出季。每個系列都有公開頁面。",
+    "noSeries": "無系列",
+    "saveSeries": "儲存系列",
+    "seriesSaved": "系列已儲存。",
+    "manageSeries": "管理系列",
+    "problem": {
+      "invalid": "請檢查此值。",
+      "invalid_date": "請輸入有效的日期與時間。",
+      "invalid_time": "請輸入有效的時間。",
+      "invalid_interval": "請輸入 1 到 52 之間的整數。",
+      "invalid_weekday": "請選擇星期。",
+      "invalid_month_day": "請選擇 1 到 31 之間的日期。",
+      "no_end": "請選擇結束方式：最後日期或場次數。",
+      "both_ends": "請選擇最後日期或場次數，不能兩者都選。",
+      "until_before_start": "最後日期早於第一個日期。",
+      "too_far": "日程最多只能安排到 5 年後。",
+      "too_many": "場次過多：一個活動最多 366 個場次。",
+      "no_dates": "此日程不會產生任何場次。",
+      "date_exists": "活動已有在該時間開始的場次。",
+      "end_before_start": "結束時間必須晚於開始時間。",
+      "event_finished": "已結束或已取消活動的場次無法變更。",
+      "cancelled": "已取消的場次無法變更。",
+      "invalid_count": "請輸入 1 到 366 之間的場次數。"
+    }
+  },
+  "copy": {
+    "title": "複製與範本",
+    "description": "重複使用此活動。副本會包含設定、票種、結帳問題與座位圖，但絕不包含訂單、參加者、門票、報到或撥款。",
+    "noAccessTitle": "你的角色無法複製活動",
+    "noAccessDescription": "請擁有者或管理者複製此活動或將其儲存為範本。",
+    "duplicate": "複製此活動",
+    "duplicateHint": "副本是新的草稿，擁有自己的網址。售票期間會隨開始時間一起調整。",
+    "copyName": "{name}（副本）",
+    "duplicateSubmit": "複製活動",
+    "template": "儲存為範本",
+    "templateHint": "有了範本，團隊中的任何人都能用這些設定建立新活動。",
+    "newName": "新活動名稱",
+    "startsAt": "開始",
+    "startsAtHint": "依活動所在時區。",
+    "templateName": "範本名稱",
+    "templateDescription": "說明（選填）",
+    "templateSaved": "範本已儲存。",
+    "openTemplates": "開啟範本",
+    "saveTemplate": "儲存範本",
+    "nameTaken": "此名稱已被使用，請換一個。",
+    "invalid": "請檢查此值。"
+  },
+  "series": {
+    "title": "系列",
+    "description": "將活動歸入巡演、演出季或節慶。每個系列都有公開頁面，列出即將舉行的活動。",
+    "emptyTitle": "還沒有系列",
+    "emptyDescription": "先建立系列，再於各活動的「場次」頁面將其加入。",
+    "caption": "系列",
+    "name": "名稱",
+    "descriptionField": "說明（選填）",
+    "events": "活動",
+    "links": "連結",
+    "publicPage": "公開頁面",
+    "showEvents": "查看活動",
+    "actions": "操作",
+    "delete": "刪除",
+    "deleteFor": "刪除系列 {name}",
+    "new": "新增系列",
+    "create": "建立系列",
+    "created": "系列已建立。",
+    "slugTaken": "已有同名系列，請換一個稍有不同的名稱。",
+    "nameInvalid": "請輸入 2 到 160 個字元的名稱。"
+  },
+  "templates": {
+    "title": "範本",
+    "description": "使用你自己的範本建立新活動。由範本建立的活動是沒有銷售紀錄的草稿。",
+    "emptyTitle": "還沒有範本",
+    "emptyDescription": "開啟一個活動，選擇「複製與範本」，將其儲存為範本。",
+    "contents": "{ticketTypes, plural, other {# 個票種}} · {questions, plural, other {# 個問題}} · {seats, plural, =0 {無座位圖} other {# 個座位}}",
+    "delete": "刪除",
+    "deleteFor": "刪除範本 {name}",
+    "use": "用 {name} 建立活動",
+    "timezone": "時間為 {timezone}。",
+    "createEvent": "建立活動"
+  },
+  "publicSeries": {
+    "eyebrow": "{org} 的系列",
+    "upcoming": "即將舉行的活動",
+    "emptyTitle": "目前沒有即將舉行的活動",
+    "emptyDescription": "新場次公布後會顯示在這裡。",
+    "view": "查看活動",
+    "viewEvent": "查看 {name}"
   }
 }

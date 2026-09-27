@@ -447,6 +447,9 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../../packages/modules/seating
+      '@yayatoh/templates':
+        specifier: workspace:*
+        version: link:../../packages/modules/templates
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../../packages/modules/tenancy

@@ -36,7 +36,10 @@ export function CheckoutForm({
   action,
   brand,
   seatMap = null,
+  occurrenceId = null,
 }: {
+  /** Multi-date events (M1.4b): the date chosen on the page, posted with the order. */
+  occurrenceId?: string | null;
   passes: readonly PassView[];
   /** Seated events: the published seat map; its ticket types are bought by choosing seats. */
   seatMap?: SeatMapView | null;
@@ -75,11 +78,18 @@ export function CheckoutForm({
                   ? t('checkout.donationTooLow')
                   : state.reason === 'form_invalid'
                     ? t('checkout.questionsInvalid')
-                    : state.reason === 'checkout_paused'
-                      ? t('publicEvent.salesPausedTitle')
-                      : t(errorMessageKey(state.code));
+                    : state.reason === 'choose_date'
+                      ? t('checkout.chooseDate')
+                      : state.reason === 'date_sold_out'
+                        ? t('checkout.dateSoldOut')
+                        : ['date_cancelled', 'date_passed', 'wrong_date'].includes(state.reason ?? '')
+                          ? t('checkout.dateUnavailable')
+                          : state.reason === 'checkout_paused'
+                            ? t('publicEvent.salesPausedTitle')
+                            : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
+      {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {passes.map((p) => (
           <li key={p.id ?? p.name}>

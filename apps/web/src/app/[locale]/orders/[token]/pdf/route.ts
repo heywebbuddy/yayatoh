@@ -15,6 +15,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
   if (!renderer || !order || order.tickets.length === 0) return new Response('Not found', { status: 404 });
   const t = await getTranslations({ locale });
   const ev = order.event;
+  const date = order.tickets.find((tk) => tk.date)?.date ?? null;
   let pdf: Uint8Array;
   try {
     pdf = await renderer.render({
@@ -22,7 +23,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
         lang: locale,
         dir: RTL_LOCALES.has(locale) ? 'rtl' : 'ltr',
         eventName: ev.name,
-        when: formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), {
+        // Multi-date events: an order's tickets are for one date (M1.4b); print that date.
+        when: formatEventDateRange((date ?? ev).startsAt.toISOString(), (date ?? ev).endsAt.toISOString(), {
           locale,
           currency: order.currency,
           timeZone: ev.timezone,

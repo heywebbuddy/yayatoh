@@ -56,7 +56,11 @@
     "team": "Team",
     "settings": "Settings",
     "payouts": "Payouts",
-    "domains": "Domains"
+    "domains": "Domains",
+    "dates": "Dates",
+    "copy": "Duplicate & template",
+    "series": "Series",
+    "templates": "Templates"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -107,7 +111,11 @@
     "emptyTitle": "No events yet",
     "emptyDescription": "Create your first event to start selling tickets or sending invitations.",
     "open": "Open event",
-    "create": "Create event"
+    "create": "Create event",
+    "seriesFilter": "Filter events by series",
+    "allEvents": "All events",
+    "seriesEmptyTitle": "No events in {name} yet",
+    "seriesEmptyDescription": "Add an event to this series from the event's Dates page."
   },
   "team": {
     "subtitle": "{count, plural, one {# member} other {# members}}",
@@ -298,7 +306,15 @@
     "earlyBird": "Early-bird price until {date} (then {regular})",
     "accessDates": "Days this pass admits",
     "salesPausedTitle": "Ticket sales are paused",
-    "salesPausedDescription": "Tickets for this organizer are not on sale right now. Please check back later."
+    "salesPausedDescription": "Tickets for this organizer are not on sale right now. Please check back later.",
+    "chooseDate": "Choose a date",
+    "datesTimezone": "Times are in {timezone}.",
+    "noUpcomingDates": "There are no upcoming dates.",
+    "dateCancelled": "Cancelled",
+    "dateSoldOut": "Sold out",
+    "ticketsFor": "Tickets for {date}",
+    "pickDateTitle": "Choose a date first",
+    "pickDateDescription": "Pick one of the dates above to see its tickets."
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -407,7 +423,8 @@
     "venue": "Venue",
     "city": "City",
     "submit": "Create draft",
-    "slugTaken": "An event with this name already exists. Try a slightly different name."
+    "slugTaken": "An event with this name already exists. Try a slightly different name.",
+    "fromTemplate": "Start from a template"
   },
   "tickets": {
     "subtitle": "Ticket types, prices and inventory. Every price buyers see includes fees.",
@@ -444,7 +461,12 @@
     "accessDates": "Days this pass admits (optional)",
     "accessDatesHint": "One per line: date then name, e.g. 2027-10-14 Gala Night.",
     "isDonation": "Buyers choose the amount",
-    "isDonationHint": "The price above becomes the minimum. Promo codes do not apply."
+    "isDonationHint": "The price above becomes the minimum. Promo codes do not apply.",
+    "validDates": "Sells for these dates",
+    "validDatesHint": "Leave all unticked to sell for every date.",
+    "dates": "Dates",
+    "allDates": "All dates",
+    "someDates": "{count, plural, one {# date} other {# dates}}"
   },
   "checkout": {
     "quantity": "Quantity",
@@ -480,7 +502,10 @@
       "seat": "{label} ({price})",
       "accessible": "Accessible",
       "taken": "Taken"
-    }
+    },
+    "chooseDate": "Choose a date first.",
+    "dateSoldOut": "This date just sold out. Choose another date.",
+    "dateUnavailable": "This date is no longer available. Choose another date."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -529,7 +554,8 @@
     },
     "collectedBy": "Payment collected by {org}",
     "seat": "Seat",
-    "seatLabel": "Seat: {seat}"
+    "seatLabel": "Seat: {seat}",
+    "ticketDate": "Valid on {date}"
   },
   "orders": {
     "title": "Recent orders",
@@ -630,7 +656,8 @@
       "superseded": "An older code for a reissued ticket",
       "provisional": "Let in offline — to be confirmed",
       "granted": "Access granted",
-      "no_access": "This pass doesn't include this area"
+      "no_access": "This pass doesn't include this area",
+      "wrong_date": "This ticket is for another date"
     },
     "alertsTitle": "{count, plural, one {# ticket was let in twice while offline} other {# tickets were let in twice while offline}}",
     "alertsHint": "Two scanners admitted the same ticket before they could sync. Check these guests at the door."
@@ -1203,7 +1230,12 @@
     "openOrder": "Open the order",
     "chooseTickets": "Choose at least one ticket.",
     "soldOut": "Not enough tickets left for that.",
-    "collected": "Collected by you"
+    "collected": "Collected by you",
+    "date": "Date",
+    "chooseDate": "Choose a date.",
+    "dateSoldOut": "Not enough tickets left for this date.",
+    "wrongDate": "One of these tickets isn't sold for this date.",
+    "dateUnavailable": "This date is no longer on sale."
   },
   "seating": {
     "title": "Seating",
@@ -1527,5 +1559,167 @@
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
     }
+  },
+  "dates": {
+    "title": "Dates",
+    "description": "One date, several days, or a repeating schedule. Times are in {timezone}.",
+    "emptyTitle": "This event has a single date",
+    "single": "It runs {range}. Add dates to sell it on several days or on a repeating schedule; once it has dates, they replace this single date.",
+    "listCaption": "{count, plural, one {# date} other {# dates}}",
+    "when": "Date and time",
+    "capacity": "Capacity",
+    "capacityHint": "Optional. The most tickets this date can sell, across all ticket types.",
+    "noLimit": "No limit",
+    "sold": "Tickets sold",
+    "status": "Status",
+    "statuses": {
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled"
+    },
+    "actions": "Actions",
+    "edit": "Edit",
+    "editFor": "Edit {date}",
+    "cancel": "Cancel",
+    "cancelFor": "Cancel {date}",
+    "addOne": "Add a date",
+    "startsAt": "Starts",
+    "endsAt": "Ends",
+    "add": "Add date",
+    "added": "{count, plural, one {# date added} other {# dates added}}",
+    "repeat": "Add a repeating schedule",
+    "repeatHint": "Dates follow the local time in {timezone}: a 7 pm show stays at 7 pm when the clocks change.",
+    "firstDate": "First date",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "endTimeHint": "An end time before the start time ends the next day.",
+    "freq": "Repeats",
+    "freqs": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly"
+    },
+    "interval": "Repeat every",
+    "intervalHint": {
+      "daily": "Number of days between dates (1 = every day).",
+      "weekly": "Number of weeks between dates (1 = every week).",
+      "monthly": "Number of months between dates (1 = every month)."
+    },
+    "monthDay": "Day of the month",
+    "monthDayHint": "Months without this day are skipped (for example the 31st).",
+    "weekdays": "On these days",
+    "weekdaysHint": "None ticked: the weekday of the first date.",
+    "ends": "Ends",
+    "endsAfter": "After a number of dates",
+    "endsOn": "On a date",
+    "count": "Number of dates",
+    "until": "Last date",
+    "preview": "Preview dates",
+    "save": "{count, plural, one {Save # date} other {Save # dates}}",
+    "previewTitle": "{count, plural, one {# date will be added} other {# dates will be added}}",
+    "previewMore": "{count, plural, one {…and # more} other {…and # more}}",
+    "overLimit": "An event can have at most {max} dates, and this one already has {existing}. Shorten the schedule.",
+    "editTitle": "Edit {date}",
+    "closeEdit": "Close",
+    "scope": "Apply to",
+    "scopeOne": "This date only",
+    "scopeFollowing": "This date and all later dates",
+    "scopeFollowingHint": "Each later date keeps its day and takes the new start and end times.",
+    "saveChanges": "Save changes",
+    "updated": "{count, plural, one {# date updated} other {# dates updated}}",
+    "cancelTitle": "Cancel {date}?",
+    "cancelImpact": "{count, plural, =0 {No tickets have been sold for this date.} one {# ticket has been sold for this date.} other {# tickets have been sold for this date.}}",
+    "cancelRefunds": "Refunds are not automatic. Tickets for a cancelled date no longer get in; review the orders to refund their buyers.",
+    "reviewOrders": "Review orders",
+    "confirmCancel": "Cancel this date",
+    "keep": "Keep this date",
+    "cancelled": "The date was cancelled. It no longer sells, and its tickets no longer get in.",
+    "series": "Series",
+    "seriesHint": "Group this event with others, such as a tour or a season. Each series has a public page.",
+    "noSeries": "No series",
+    "saveSeries": "Save series",
+    "seriesSaved": "Series saved.",
+    "manageSeries": "Manage series",
+    "problem": {
+      "invalid": "Check this value.",
+      "invalid_date": "Enter a valid date and time.",
+      "invalid_time": "Enter a valid time.",
+      "invalid_interval": "Enter a whole number from 1 to 52.",
+      "invalid_weekday": "Choose the days of the week.",
+      "invalid_month_day": "Choose a day of the month from 1 to 31.",
+      "no_end": "Choose an end: a last date or a number of dates.",
+      "both_ends": "Choose a last date or a number of dates, not both.",
+      "until_before_start": "The last date is before the first date.",
+      "too_far": "A schedule can reach at most 5 years ahead.",
+      "too_many": "Too many dates: an event can have at most 366.",
+      "no_dates": "This schedule produces no dates.",
+      "date_exists": "The event already has a date starting at that time.",
+      "end_before_start": "The end must be after the start.",
+      "event_finished": "The dates of a finished or cancelled event can't change.",
+      "cancelled": "A cancelled date can't be changed.",
+      "invalid_count": "Enter a number of dates from 1 to 366."
+    }
+  },
+  "copy": {
+    "title": "Duplicate & template",
+    "description": "Reuse this event. A copy takes its settings, ticket types, checkout questions and floor plan — never its orders, attendees, tickets, check-ins or payouts.",
+    "noAccessTitle": "Copying events isn't part of your role",
+    "noAccessDescription": "Ask an owner or a manager to duplicate this event or save it as a template.",
+    "duplicate": "Duplicate this event",
+    "duplicateHint": "The copy is a new draft with its own address. Its dates of sale move with its start.",
+    "copyName": "{name} (copy)",
+    "duplicateSubmit": "Duplicate event",
+    "template": "Save as template",
+    "templateHint": "Templates let anyone on the team create a new event with these settings.",
+    "newName": "Name of the new event",
+    "startsAt": "Starts",
+    "startsAtHint": "In the event's time zone.",
+    "templateName": "Template name",
+    "templateDescription": "Description (optional)",
+    "templateSaved": "Template saved.",
+    "openTemplates": "Open templates",
+    "saveTemplate": "Save template",
+    "nameTaken": "That name is already used. Choose another.",
+    "invalid": "Check this value."
+  },
+  "series": {
+    "title": "Series",
+    "description": "Group events into tours, seasons or festivals. Each series has a public page listing its upcoming events.",
+    "emptyTitle": "No series yet",
+    "emptyDescription": "Create a series, then add events to it from each event's Dates page.",
+    "caption": "Series",
+    "name": "Name",
+    "descriptionField": "Description (optional)",
+    "events": "Events",
+    "links": "Links",
+    "publicPage": "Public page",
+    "showEvents": "Show events",
+    "actions": "Actions",
+    "delete": "Delete",
+    "deleteFor": "Delete the series {name}",
+    "new": "New series",
+    "create": "Create series",
+    "created": "Series created.",
+    "slugTaken": "A series with this name already exists. Try a slightly different name.",
+    "nameInvalid": "Enter a name of 2 to 160 characters."
+  },
+  "templates": {
+    "title": "Templates",
+    "description": "Start new events from your own templates. An event made from a template is a draft with no sales.",
+    "emptyTitle": "No templates yet",
+    "emptyDescription": "Open an event, choose Duplicate & template, and save it as a template.",
+    "contents": "{ticketTypes, plural, one {# ticket type} other {# ticket types}} · {questions, plural, one {# question} other {# questions}} · {seats, plural, =0 {no floor plan} one {# seat} other {# seats}}",
+    "delete": "Delete",
+    "deleteFor": "Delete the template {name}",
+    "use": "Create an event from {name}",
+    "timezone": "Times are in {timezone}.",
+    "createEvent": "Create event"
+  },
+  "publicSeries": {
+    "eyebrow": "A series by {org}",
+    "upcoming": "Upcoming events",
+    "emptyTitle": "No upcoming events",
+    "emptyDescription": "New dates will appear here when they are announced.",
+    "view": "View event",
+    "viewEvent": "View {name}"
   }
 }

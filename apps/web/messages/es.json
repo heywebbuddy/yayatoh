@@ -56,7 +56,11 @@
     "team": "Equipo",
     "settings": "Configuración",
     "payouts": "Pagos recibidos",
-    "domains": "Dominios"
+    "domains": "Dominios",
+    "dates": "Fechas",
+    "copy": "Duplicar y plantilla",
+    "series": "Series",
+    "templates": "Plantillas"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -107,7 +111,11 @@
     "emptyTitle": "Aún no hay eventos",
     "emptyDescription": "Crea tu primer evento para empezar a vender entradas o enviar invitaciones.",
     "open": "Abrir evento",
-    "create": "Crear evento"
+    "create": "Crear evento",
+    "seriesFilter": "Filtrar eventos por serie",
+    "allEvents": "Todos los eventos",
+    "seriesEmptyTitle": "Aún no hay eventos en {name}",
+    "seriesEmptyDescription": "Añade un evento a esta serie desde su página Fechas."
   },
   "team": {
     "subtitle": "{count, plural, one {# miembro} other {# miembros}}",
@@ -298,7 +306,15 @@
     "earlyBird": "Precio de preventa hasta {date} (después, {regular})",
     "accessDates": "Días que incluye este pase",
     "salesPausedTitle": "La venta de entradas está en pausa",
-    "salesPausedDescription": "Las entradas de este organizador no están a la venta en este momento. Vuelve más tarde."
+    "salesPausedDescription": "Las entradas de este organizador no están a la venta en este momento. Vuelve más tarde.",
+    "chooseDate": "Elige una fecha",
+    "datesTimezone": "Horas en {timezone}.",
+    "noUpcomingDates": "No hay próximas fechas.",
+    "dateCancelled": "Cancelada",
+    "dateSoldOut": "Agotada",
+    "ticketsFor": "Entradas para el {date}",
+    "pickDateTitle": "Primero elige una fecha",
+    "pickDateDescription": "Elige una de las fechas de arriba para ver sus entradas."
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -407,7 +423,8 @@
     "venue": "Lugar",
     "city": "Ciudad",
     "submit": "Crear borrador",
-    "slugTaken": "Ya existe un evento con este nombre. Prueba con un nombre ligeramente distinto."
+    "slugTaken": "Ya existe un evento con este nombre. Prueba con un nombre ligeramente distinto.",
+    "fromTemplate": "Empezar con una plantilla"
   },
   "tickets": {
     "subtitle": "Tipos de entrada, precios e inventario. Todos los precios que ven los compradores incluyen las tarifas.",
@@ -444,7 +461,12 @@
     "accessDates": "Días que incluye este pase (opcional)",
     "accessDatesHint": "Uno por línea: fecha y luego nombre, p. ej. 2027-10-14 Noche de gala.",
     "isDonation": "Los compradores eligen el importe",
-    "isDonationHint": "El precio de arriba pasa a ser el mínimo. Los códigos promocionales no se aplican."
+    "isDonationHint": "El precio de arriba pasa a ser el mínimo. Los códigos promocionales no se aplican.",
+    "validDates": "Se vende para estas fechas",
+    "validDatesHint": "Sin marcar: se vende para todas las fechas.",
+    "dates": "Fechas",
+    "allDates": "Todas las fechas",
+    "someDates": "{count, plural, one {# fecha} other {# fechas}}"
   },
   "checkout": {
     "quantity": "Cantidad",
@@ -480,7 +502,10 @@
       "seat": "{label} ({price})",
       "accessible": "Accesible",
       "taken": "Ocupado"
-    }
+    },
+    "chooseDate": "Primero elige una fecha.",
+    "dateSoldOut": "Esta fecha se acaba de agotar. Elige otra.",
+    "dateUnavailable": "Esta fecha ya no está disponible. Elige otra."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -529,7 +554,8 @@
     },
     "collectedBy": "Pago cobrado por {org}",
     "seat": "Asiento",
-    "seatLabel": "Asiento: {seat}"
+    "seatLabel": "Asiento: {seat}",
+    "ticketDate": "Válida el {date}"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -630,7 +656,8 @@
       "superseded": "Código antiguo de una entrada reemitida",
       "provisional": "Acceso sin conexión, pendiente de confirmar",
       "granted": "Acceso permitido",
-      "no_access": "Este pase no incluye esta zona"
+      "no_access": "Este pase no incluye esta zona",
+      "wrong_date": "Esta entrada es para otra fecha"
     },
     "alertsTitle": "{count, plural, one {# entrada se aceptó dos veces sin conexión} other {# entradas se aceptaron dos veces sin conexión}}",
     "alertsHint": "Dos escáneres aceptaron la misma entrada antes de poder sincronizarse. Revisa a estos invitados en la puerta."
@@ -1203,7 +1230,12 @@
     "openOrder": "Abrir el pedido",
     "chooseTickets": "Elige al menos una entrada.",
     "soldOut": "No quedan suficientes entradas para eso.",
-    "collected": "Cobrado por ti"
+    "collected": "Cobrado por ti",
+    "date": "Fecha",
+    "chooseDate": "Elige una fecha.",
+    "dateSoldOut": "No quedan suficientes entradas para esta fecha.",
+    "wrongDate": "Una de estas entradas no se vende para esta fecha.",
+    "dateUnavailable": "Esta fecha ya no está a la venta."
   },
   "seating": {
     "title": "Asientos",
@@ -1527,5 +1559,167 @@
       "emptyTitle": "No hay ventas en este periodo",
       "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
     }
+  },
+  "dates": {
+    "title": "Fechas",
+    "description": "Una fecha, varios días o un calendario que se repite. Horas en {timezone}.",
+    "emptyTitle": "Este evento tiene una sola fecha",
+    "single": "Se celebra {range}. Añade fechas para venderlo varios días o con un calendario que se repite; cuando tenga fechas, sustituirán a esta fecha única.",
+    "listCaption": "{count, plural, one {# fecha} other {# fechas}}",
+    "when": "Fecha y hora",
+    "capacity": "Aforo",
+    "capacityHint": "Opcional. El máximo de entradas de esta fecha, sumando todos los tipos.",
+    "noLimit": "Sin límite",
+    "sold": "Entradas vendidas",
+    "status": "Estado",
+    "statuses": {
+      "scheduled": "Programada",
+      "cancelled": "Cancelada"
+    },
+    "actions": "Acciones",
+    "edit": "Editar",
+    "editFor": "Editar {date}",
+    "cancel": "Cancelar",
+    "cancelFor": "Cancelar {date}",
+    "addOne": "Añadir una fecha",
+    "startsAt": "Empieza",
+    "endsAt": "Termina",
+    "add": "Añadir fecha",
+    "added": "{count, plural, one {# fecha añadida} other {# fechas añadidas}}",
+    "repeat": "Añadir un calendario que se repite",
+    "repeatHint": "Las fechas siguen la hora local de {timezone}: una función a las 19:00 sigue a las 19:00 cuando cambia la hora.",
+    "firstDate": "Primera fecha",
+    "startTime": "Hora de inicio",
+    "endTime": "Hora de fin",
+    "endTimeHint": "Si el fin es antes del inicio, termina al día siguiente.",
+    "freq": "Se repite",
+    "freqs": {
+      "daily": "Cada día",
+      "weekly": "Cada semana",
+      "monthly": "Cada mes"
+    },
+    "interval": "Repetir cada",
+    "intervalHint": {
+      "daily": "Días entre fechas (1 = cada día).",
+      "weekly": "Semanas entre fechas (1 = cada semana).",
+      "monthly": "Meses entre fechas (1 = cada mes)."
+    },
+    "monthDay": "Día del mes",
+    "monthDayHint": "Se omiten los meses sin ese día (por ejemplo, el 31).",
+    "weekdays": "Estos días",
+    "weekdaysHint": "Ninguno marcado: el día de la semana de la primera fecha.",
+    "ends": "Termina",
+    "endsAfter": "Tras un número de fechas",
+    "endsOn": "En una fecha",
+    "count": "Número de fechas",
+    "until": "Última fecha",
+    "preview": "Ver fechas",
+    "save": "{count, plural, one {Guardar # fecha} other {Guardar # fechas}}",
+    "previewTitle": "{count, plural, one {Se añadirá # fecha} other {Se añadirán # fechas}}",
+    "previewMore": "{count, plural, one {…y # más} other {…y # más}}",
+    "overLimit": "Un evento puede tener como máximo {max} fechas y este ya tiene {existing}. Acorta el calendario.",
+    "editTitle": "Editar {date}",
+    "closeEdit": "Cerrar",
+    "scope": "Aplicar a",
+    "scopeOne": "Solo esta fecha",
+    "scopeFollowing": "Esta fecha y todas las siguientes",
+    "scopeFollowingHint": "Cada fecha siguiente conserva su día y toma las nuevas horas.",
+    "saveChanges": "Guardar cambios",
+    "updated": "{count, plural, one {# fecha actualizada} other {# fechas actualizadas}}",
+    "cancelTitle": "¿Cancelar {date}?",
+    "cancelImpact": "{count, plural, =0 {No se ha vendido ninguna entrada para esta fecha.} one {Se ha vendido # entrada para esta fecha.} other {Se han vendido # entradas para esta fecha.}}",
+    "cancelRefunds": "Los reembolsos no son automáticos. Las entradas de una fecha cancelada ya no dan acceso; revisa los pedidos para reembolsar a los compradores.",
+    "reviewOrders": "Revisar pedidos",
+    "confirmCancel": "Cancelar esta fecha",
+    "keep": "Mantener esta fecha",
+    "cancelled": "La fecha se ha cancelado. Ya no se vende y sus entradas ya no dan acceso.",
+    "series": "Serie",
+    "seriesHint": "Agrupa este evento con otros, como una gira o una temporada. Cada serie tiene una página pública.",
+    "noSeries": "Sin serie",
+    "saveSeries": "Guardar serie",
+    "seriesSaved": "Serie guardada.",
+    "manageSeries": "Gestionar series",
+    "problem": {
+      "invalid": "Revisa este valor.",
+      "invalid_date": "Introduce una fecha y hora válidas.",
+      "invalid_time": "Introduce una hora válida.",
+      "invalid_interval": "Introduce un número entero del 1 al 52.",
+      "invalid_weekday": "Elige los días de la semana.",
+      "invalid_month_day": "Elige un día del mes del 1 al 31.",
+      "no_end": "Elige un final: una última fecha o un número de fechas.",
+      "both_ends": "Elige una última fecha o un número de fechas, no ambos.",
+      "until_before_start": "La última fecha es anterior a la primera.",
+      "too_far": "Un calendario puede llegar como mucho a 5 años vista.",
+      "too_many": "Demasiadas fechas: un evento puede tener como máximo 366.",
+      "no_dates": "Este calendario no genera ninguna fecha.",
+      "date_exists": "El evento ya tiene una fecha que empieza a esa hora.",
+      "end_before_start": "El final debe ser posterior al inicio.",
+      "event_finished": "Las fechas de un evento terminado o cancelado no se pueden cambiar.",
+      "cancelled": "Una fecha cancelada no se puede cambiar.",
+      "invalid_count": "Introduce un número de fechas del 1 al 366."
+    }
+  },
+  "copy": {
+    "title": "Duplicar y plantilla",
+    "description": "Reutiliza este evento. Una copia conserva su configuración, tipos de entrada, preguntas de compra y plano de sala; nunca sus pedidos, asistentes, entradas, accesos ni pagos.",
+    "noAccessTitle": "Copiar eventos no forma parte de tu rol",
+    "noAccessDescription": "Pide a una persona propietaria o gestora que duplique este evento o lo guarde como plantilla.",
+    "duplicate": "Duplicar este evento",
+    "duplicateHint": "La copia es un nuevo borrador con su propia dirección. Sus periodos de venta se mueven con su inicio.",
+    "copyName": "{name} (copia)",
+    "duplicateSubmit": "Duplicar evento",
+    "template": "Guardar como plantilla",
+    "templateHint": "Con las plantillas, cualquiera del equipo puede crear un evento con esta configuración.",
+    "newName": "Nombre del nuevo evento",
+    "startsAt": "Empieza",
+    "startsAtHint": "En la zona horaria del evento.",
+    "templateName": "Nombre de la plantilla",
+    "templateDescription": "Descripción (opcional)",
+    "templateSaved": "Plantilla guardada.",
+    "openTemplates": "Abrir plantillas",
+    "saveTemplate": "Guardar plantilla",
+    "nameTaken": "Ese nombre ya está en uso. Elige otro.",
+    "invalid": "Revisa este valor."
+  },
+  "series": {
+    "title": "Series",
+    "description": "Agrupa eventos en giras, temporadas o festivales. Cada serie tiene una página pública con sus próximos eventos.",
+    "emptyTitle": "Aún no hay series",
+    "emptyDescription": "Crea una serie y añádele eventos desde la página Fechas de cada evento.",
+    "caption": "Series",
+    "name": "Nombre",
+    "descriptionField": "Descripción (opcional)",
+    "events": "Eventos",
+    "links": "Enlaces",
+    "publicPage": "Página pública",
+    "showEvents": "Ver eventos",
+    "actions": "Acciones",
+    "delete": "Eliminar",
+    "deleteFor": "Eliminar la serie {name}",
+    "new": "Nueva serie",
+    "create": "Crear serie",
+    "created": "Serie creada.",
+    "slugTaken": "Ya existe una serie con este nombre. Prueba con uno algo distinto.",
+    "nameInvalid": "Introduce un nombre de 2 a 160 caracteres."
+  },
+  "templates": {
+    "title": "Plantillas",
+    "description": "Crea eventos a partir de tus propias plantillas. Un evento creado desde una plantilla es un borrador sin ventas.",
+    "emptyTitle": "Aún no hay plantillas",
+    "emptyDescription": "Abre un evento, elige Duplicar y plantilla y guárdalo como plantilla.",
+    "contents": "{ticketTypes, plural, one {# tipo de entrada} other {# tipos de entrada}} · {questions, plural, one {# pregunta} other {# preguntas}} · {seats, plural, =0 {sin plano de sala} one {# asiento} other {# asientos}}",
+    "delete": "Eliminar",
+    "deleteFor": "Eliminar la plantilla {name}",
+    "use": "Crear un evento a partir de {name}",
+    "timezone": "Horas en {timezone}.",
+    "createEvent": "Crear evento"
+  },
+  "publicSeries": {
+    "eyebrow": "Una serie de {org}",
+    "upcoming": "Próximos eventos",
+    "emptyTitle": "No hay próximos eventos",
+    "emptyDescription": "Las nuevas fechas aparecerán aquí cuando se anuncien.",
+    "view": "Ver evento",
+    "viewEvent": "Ver {name}"
   }
 }

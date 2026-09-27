@@ -30,16 +30,17 @@ export const publicOccurrenceSerializer = defineSerializer('events.publicOccurre
 
 const Capacity = z.int().min(1).max(1_000_000).nullable();
 
+/** Ranges are checked by `expandRecurrence`, which names the reason and the field. */
 export const RecurrenceRuleInput = z.object({
-  startDate: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
+  startDate: z.string().max(10),
+  startTime: z.string().max(5),
+  endTime: z.string().max(5),
   freq: z.enum(RECURRENCE_FREQS),
-  interval: z.int().min(1).max(52).default(1),
-  byWeekday: z.array(z.int().min(1).max(7)).max(7).default([]),
-  byMonthDay: z.int().min(1).max(31).nullable().default(null),
-  until: z.string().nullable().default(null),
-  count: z.int().min(1).nullable().default(null),
+  interval: z.int().default(1),
+  byWeekday: z.array(z.int()).max(7).default([]),
+  byMonthDay: z.int().nullable().default(null),
+  until: z.string().max(10).nullable().default(null),
+  count: z.int().nullable().default(null),
 });
 export type RecurrenceRuleInput = z.input<typeof RecurrenceRuleInput>;
 

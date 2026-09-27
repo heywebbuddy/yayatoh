@@ -1,3 +1,4 @@
+import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { listOrdersQuery } from '@yayatoh/orders';
@@ -35,6 +36,24 @@ export default async function TicketsPage({
   const { data, event: ev } = await loadEvent(org, event);
   const t = await getTranslations();
   const types = await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports);
+  // Multi-date events (M1.4b): ticket types may be limited to dates; the box office sells one date.
+  const dates = await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports);
+  const dateFmt = new Intl.DateTimeFormat(locale, {
+    timeZone: ev.timezone,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+  const dateOptions = dates
+    .filter((d) => d.status === 'scheduled')
+    .map((d) => ({ id: d.id, label: dateFmt.formatRange(d.startsAt, d.endsAt) }));
+  const nowMs = Date.now();
+  const saleDates = dateOptions.filter(
+    (o) => (dates.find((d) => d.id === o.id)?.endsAt.getTime() ?? 0) > nowMs,
+  );
   const canWrite = roleCan(data.role, 'events:write');
   const orders = roleCan(data.role, 'orders:read')
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
@@ -117,6 +136,18 @@ export default async function TicketsPage({
               mono: true,
               align: 'end',
             },
+            ...(dates.length > 0
+              ? [
+                  {
+                    key: 'dates',
+                    header: t('tickets.dates'),
+                    cell: (r: (typeof types)[number]) =>
+                      r.occurrenceIds.length === 0
+                        ? t('tickets.allDates')
+                        : t('tickets.someDates', { count: r.occurrenceIds.length }),
+                  },
+                ]
+              : []),
             {
               key: 'sold',
               header: t('tickets.sold'),
@@ -172,6 +203,7 @@ export default async function TicketsPage({
                 .filter((tt) => tt.quantitySold + tt.quantityHeld < tt.quantityTotal && !tt.isDonation)
                 .map((tt) => ({ id: tt.id, label: `${tt.name} · ${fmt(tt.allInMinor)}` }))}
               orderHref={`/o/${org}/e/${event}/orders/{id}`}
+              dates={saleDates}
             />
           </Card>
         </section>
@@ -401,7 +433,11 @@ export default async function TicketsPage({
       {canWrite ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{t('tickets.addTitle')}</h2>
-          <TicketTypeForm currency={ev.currency} action={createTicketTypeAction.bind(null, org, event)} />
+          <TicketTypeForm
+            currency={ev.currency}
+            dates={dateOptions}
+            action={createTicketTypeAction.bind(null, org, event)}
+          />
         </Card>
       ) : null}
     </>

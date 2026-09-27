@@ -56,7 +56,11 @@
     "team": "Team",
     "settings": "Einstellungen",
     "payouts": "Auszahlungen",
-    "domains": "Domains"
+    "domains": "Domains",
+    "dates": "Termine",
+    "copy": "Duplizieren & Vorlage",
+    "series": "Reihen",
+    "templates": "Vorlagen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -107,7 +111,11 @@
     "emptyTitle": "Noch keine Events",
     "emptyDescription": "Erstelle dein erstes Event, um Tickets zu verkaufen oder Einladungen zu versenden.",
     "open": "Event öffnen",
-    "create": "Event erstellen"
+    "create": "Event erstellen",
+    "seriesFilter": "Events nach Reihe filtern",
+    "allEvents": "Alle Events",
+    "seriesEmptyTitle": "Noch keine Events in {name}",
+    "seriesEmptyDescription": "Füge ein Event über seine Seite „Termine“ zu dieser Reihe hinzu."
   },
   "team": {
     "subtitle": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
@@ -298,7 +306,15 @@
     "earlyBird": "Frühbucherpreis bis {date} (danach {regular})",
     "accessDates": "Tage, für die dieser Pass gilt",
     "salesPausedTitle": "Der Ticketverkauf ist pausiert",
-    "salesPausedDescription": "Tickets dieses Veranstalters sind derzeit nicht im Verkauf. Schau später wieder vorbei."
+    "salesPausedDescription": "Tickets dieses Veranstalters sind derzeit nicht im Verkauf. Schau später wieder vorbei.",
+    "chooseDate": "Termin wählen",
+    "datesTimezone": "Zeiten in {timezone}.",
+    "noUpcomingDates": "Es gibt keine kommenden Termine.",
+    "dateCancelled": "Abgesagt",
+    "dateSoldOut": "Ausverkauft",
+    "ticketsFor": "Tickets für {date}",
+    "pickDateTitle": "Wähle zuerst einen Termin",
+    "pickDateDescription": "Wähle oben einen Termin, um seine Tickets zu sehen."
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -407,7 +423,8 @@
     "venue": "Veranstaltungsort",
     "city": "Stadt",
     "submit": "Entwurf erstellen",
-    "slugTaken": "Es gibt bereits ein Event mit diesem Namen. Versuche einen leicht abweichenden Namen."
+    "slugTaken": "Es gibt bereits ein Event mit diesem Namen. Versuche einen leicht abweichenden Namen.",
+    "fromTemplate": "Mit einer Vorlage beginnen"
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -444,7 +461,12 @@
     "accessDates": "Tage, für die dieser Pass gilt (optional)",
     "accessDatesHint": "Eine Zeile pro Tag: erst Datum, dann Name, z. B. 2027-10-14 Gala-Abend.",
     "isDonation": "Käufer wählen den Betrag",
-    "isDonationHint": "Der Preis oben wird zum Mindestbetrag. Rabattcodes gelten nicht."
+    "isDonationHint": "Der Preis oben wird zum Mindestbetrag. Rabattcodes gelten nicht.",
+    "validDates": "Wird für diese Termine verkauft",
+    "validDatesHint": "Nichts ausgewählt: für alle Termine.",
+    "dates": "Termine",
+    "allDates": "Alle Termine",
+    "someDates": "{count, plural, one {# Termin} other {# Termine}}"
   },
   "checkout": {
     "quantity": "Anzahl",
@@ -480,7 +502,10 @@
       "seat": "{label} ({price})",
       "accessible": "Barrierefrei",
       "taken": "Vergeben"
-    }
+    },
+    "chooseDate": "Wähle zuerst einen Termin.",
+    "dateSoldOut": "Dieser Termin ist gerade ausverkauft. Wähle einen anderen.",
+    "dateUnavailable": "Dieser Termin ist nicht mehr verfügbar. Wähle einen anderen."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -529,7 +554,8 @@
     },
     "collectedBy": "Zahlung eingenommen von {org}",
     "seat": "Platz",
-    "seatLabel": "Platz: {seat}"
+    "seatLabel": "Platz: {seat}",
+    "ticketDate": "Gültig am {date}"
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -630,7 +656,8 @@
       "superseded": "Alter Code eines neu ausgestellten Tickets",
       "provisional": "Offline eingelassen – wird noch bestätigt",
       "granted": "Zutritt gewährt",
-      "no_access": "Dieser Pass gilt nicht für diesen Bereich"
+      "no_access": "Dieser Pass gilt nicht für diesen Bereich",
+      "wrong_date": "Dieses Ticket gilt für einen anderen Termin"
     },
     "alertsTitle": "{count, plural, one {# Ticket wurde offline doppelt eingelassen} other {# Tickets wurden offline doppelt eingelassen}}",
     "alertsHint": "Zwei Scanner haben dasselbe Ticket eingelassen, bevor sie synchronisieren konnten. Prüfe diese Gäste am Einlass."
@@ -1203,7 +1230,12 @@
     "openOrder": "Bestellung öffnen",
     "chooseTickets": "Wähle mindestens ein Ticket aus.",
     "soldOut": "Dafür sind nicht mehr genug Tickets übrig.",
-    "collected": "Von dir eingenommen"
+    "collected": "Von dir eingenommen",
+    "date": "Termin",
+    "chooseDate": "Wähle einen Termin.",
+    "dateSoldOut": "Für diesen Termin sind nicht mehr genug Tickets übrig.",
+    "wrongDate": "Eines dieser Tickets wird für diesen Termin nicht verkauft.",
+    "dateUnavailable": "Dieser Termin ist nicht mehr im Verkauf."
   },
   "seating": {
     "title": "Sitzplätze",
@@ -1527,5 +1559,167 @@
       "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
       "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
     }
+  },
+  "dates": {
+    "title": "Termine",
+    "description": "Ein Termin, mehrere Tage oder ein wiederkehrender Plan. Zeiten in {timezone}.",
+    "emptyTitle": "Dieses Event hat einen einzigen Termin",
+    "single": "Es findet {range} statt. Füge Termine hinzu, um es an mehreren Tagen oder regelmäßig zu verkaufen; sobald es Termine hat, ersetzen sie diesen einen Termin.",
+    "listCaption": "{count, plural, one {# Termin} other {# Termine}}",
+    "when": "Datum und Uhrzeit",
+    "capacity": "Kapazität",
+    "capacityHint": "Optional. Höchstzahl der Tickets für diesen Termin über alle Ticketarten.",
+    "noLimit": "Keine Grenze",
+    "sold": "Verkaufte Tickets",
+    "status": "Status",
+    "statuses": {
+      "scheduled": "Geplant",
+      "cancelled": "Abgesagt"
+    },
+    "actions": "Aktionen",
+    "edit": "Bearbeiten",
+    "editFor": "{date} bearbeiten",
+    "cancel": "Absagen",
+    "cancelFor": "{date} absagen",
+    "addOne": "Termin hinzufügen",
+    "startsAt": "Beginn",
+    "endsAt": "Ende",
+    "add": "Termin hinzufügen",
+    "added": "{count, plural, one {# Termin hinzugefügt} other {# Termine hinzugefügt}}",
+    "repeat": "Wiederkehrenden Plan hinzufügen",
+    "repeatHint": "Termine folgen der Ortszeit in {timezone}: Eine Show um 19 Uhr bleibt bei der Zeitumstellung um 19 Uhr.",
+    "firstDate": "Erster Termin",
+    "startTime": "Beginn",
+    "endTime": "Ende",
+    "endTimeHint": "Liegt das Ende vor dem Beginn, endet der Termin am nächsten Tag.",
+    "freq": "Wiederholung",
+    "freqs": {
+      "daily": "Täglich",
+      "weekly": "Wöchentlich",
+      "monthly": "Monatlich"
+    },
+    "interval": "Wiederholen alle",
+    "intervalHint": {
+      "daily": "Anzahl Tage zwischen den Terminen (1 = jeden Tag).",
+      "weekly": "Anzahl Wochen zwischen den Terminen (1 = jede Woche).",
+      "monthly": "Anzahl Monate zwischen den Terminen (1 = jeden Monat)."
+    },
+    "monthDay": "Tag des Monats",
+    "monthDayHint": "Monate ohne diesen Tag werden übersprungen (zum Beispiel der 31.).",
+    "weekdays": "An diesen Tagen",
+    "weekdaysHint": "Keiner ausgewählt: der Wochentag des ersten Termins.",
+    "ends": "Endet",
+    "endsAfter": "Nach einer Anzahl Termine",
+    "endsOn": "An einem Datum",
+    "count": "Anzahl Termine",
+    "until": "Letzter Termin",
+    "preview": "Termine anzeigen",
+    "save": "{count, plural, one {# Termin speichern} other {# Termine speichern}}",
+    "previewTitle": "{count, plural, one {# Termin wird hinzugefügt} other {# Termine werden hinzugefügt}}",
+    "previewMore": "{count, plural, one {… und # weiterer} other {… und # weitere}}",
+    "overLimit": "Ein Event kann höchstens {max} Termine haben, dieses hat bereits {existing}. Verkürze den Plan.",
+    "editTitle": "{date} bearbeiten",
+    "closeEdit": "Schließen",
+    "scope": "Anwenden auf",
+    "scopeOne": "Nur diesen Termin",
+    "scopeFollowing": "Diesen und alle späteren Termine",
+    "scopeFollowingHint": "Jeder spätere Termin behält seinen Tag und übernimmt die neuen Uhrzeiten.",
+    "saveChanges": "Änderungen speichern",
+    "updated": "{count, plural, one {# Termin aktualisiert} other {# Termine aktualisiert}}",
+    "cancelTitle": "{date} absagen?",
+    "cancelImpact": "{count, plural, =0 {Für diesen Termin wurden keine Tickets verkauft.} one {Für diesen Termin wurde # Ticket verkauft.} other {Für diesen Termin wurden # Tickets verkauft.}}",
+    "cancelRefunds": "Erstattungen erfolgen nicht automatisch. Tickets für einen abgesagten Termin gewähren keinen Einlass mehr; prüfe die Bestellungen, um den Käufern zu erstatten.",
+    "reviewOrders": "Bestellungen prüfen",
+    "confirmCancel": "Diesen Termin absagen",
+    "keep": "Termin behalten",
+    "cancelled": "Der Termin wurde abgesagt. Er wird nicht mehr verkauft, und seine Tickets gewähren keinen Einlass mehr.",
+    "series": "Reihe",
+    "seriesHint": "Fasse dieses Event mit anderen zusammen, etwa zu einer Tour oder Saison. Jede Reihe hat eine öffentliche Seite.",
+    "noSeries": "Keine Reihe",
+    "saveSeries": "Reihe speichern",
+    "seriesSaved": "Reihe gespeichert.",
+    "manageSeries": "Reihen verwalten",
+    "problem": {
+      "invalid": "Prüfe diesen Wert.",
+      "invalid_date": "Gib ein gültiges Datum und eine Uhrzeit ein.",
+      "invalid_time": "Gib eine gültige Uhrzeit ein.",
+      "invalid_interval": "Gib eine ganze Zahl von 1 bis 52 ein.",
+      "invalid_weekday": "Wähle die Wochentage.",
+      "invalid_month_day": "Wähle einen Tag des Monats von 1 bis 31.",
+      "no_end": "Wähle ein Ende: einen letzten Termin oder eine Anzahl Termine.",
+      "both_ends": "Wähle einen letzten Termin oder eine Anzahl, nicht beides.",
+      "until_before_start": "Der letzte Termin liegt vor dem ersten.",
+      "too_far": "Ein Plan reicht höchstens 5 Jahre voraus.",
+      "too_many": "Zu viele Termine: Ein Event kann höchstens 366 haben.",
+      "no_dates": "Dieser Plan ergibt keine Termine.",
+      "date_exists": "Das Event hat bereits einen Termin, der zu dieser Zeit beginnt.",
+      "end_before_start": "Das Ende muss nach dem Beginn liegen.",
+      "event_finished": "Die Termine eines beendeten oder abgesagten Events können nicht geändert werden.",
+      "cancelled": "Ein abgesagter Termin kann nicht geändert werden.",
+      "invalid_count": "Gib eine Anzahl Termine von 1 bis 366 ein."
+    }
+  },
+  "copy": {
+    "title": "Duplizieren & Vorlage",
+    "description": "Verwende dieses Event erneut. Eine Kopie übernimmt Einstellungen, Ticketarten, Checkout-Fragen und Saalplan – niemals Bestellungen, Teilnehmende, Tickets, Check-ins oder Auszahlungen.",
+    "noAccessTitle": "Events zu kopieren gehört nicht zu deiner Rolle",
+    "noAccessDescription": "Bitte eine Inhaberin oder einen Manager, dieses Event zu duplizieren oder als Vorlage zu speichern.",
+    "duplicate": "Dieses Event duplizieren",
+    "duplicateHint": "Die Kopie ist ein neuer Entwurf mit eigener Adresse. Die Verkaufszeiträume verschieben sich mit dem Beginn.",
+    "copyName": "{name} (Kopie)",
+    "duplicateSubmit": "Event duplizieren",
+    "template": "Als Vorlage speichern",
+    "templateHint": "Mit Vorlagen kann jede Person im Team ein neues Event mit diesen Einstellungen anlegen.",
+    "newName": "Name des neuen Events",
+    "startsAt": "Beginn",
+    "startsAtHint": "In der Zeitzone des Events.",
+    "templateName": "Name der Vorlage",
+    "templateDescription": "Beschreibung (optional)",
+    "templateSaved": "Vorlage gespeichert.",
+    "openTemplates": "Vorlagen öffnen",
+    "saveTemplate": "Vorlage speichern",
+    "nameTaken": "Dieser Name wird bereits verwendet. Wähle einen anderen.",
+    "invalid": "Prüfe diesen Wert."
+  },
+  "series": {
+    "title": "Reihen",
+    "description": "Fasse Events zu Tourneen, Saisons oder Festivals zusammen. Jede Reihe hat eine öffentliche Seite mit ihren kommenden Events.",
+    "emptyTitle": "Noch keine Reihen",
+    "emptyDescription": "Lege eine Reihe an und füge ihr dann Events über deren Seite „Termine“ hinzu.",
+    "caption": "Reihen",
+    "name": "Name",
+    "descriptionField": "Beschreibung (optional)",
+    "events": "Events",
+    "links": "Links",
+    "publicPage": "Öffentliche Seite",
+    "showEvents": "Events anzeigen",
+    "actions": "Aktionen",
+    "delete": "Löschen",
+    "deleteFor": "Die Reihe {name} löschen",
+    "new": "Neue Reihe",
+    "create": "Reihe anlegen",
+    "created": "Reihe angelegt.",
+    "slugTaken": "Eine Reihe mit diesem Namen gibt es bereits. Versuche einen etwas anderen Namen.",
+    "nameInvalid": "Gib einen Namen mit 2 bis 160 Zeichen ein."
+  },
+  "templates": {
+    "title": "Vorlagen",
+    "description": "Beginne neue Events mit deinen eigenen Vorlagen. Ein Event aus einer Vorlage ist ein Entwurf ohne Verkäufe.",
+    "emptyTitle": "Noch keine Vorlagen",
+    "emptyDescription": "Öffne ein Event, wähle „Duplizieren & Vorlage“ und speichere es als Vorlage.",
+    "contents": "{ticketTypes, plural, one {# Ticketart} other {# Ticketarten}} · {questions, plural, one {# Frage} other {# Fragen}} · {seats, plural, =0 {kein Saalplan} one {# Platz} other {# Plätze}}",
+    "delete": "Löschen",
+    "deleteFor": "Die Vorlage {name} löschen",
+    "use": "Ein Event aus {name} anlegen",
+    "timezone": "Zeiten in {timezone}.",
+    "createEvent": "Event anlegen"
+  },
+  "publicSeries": {
+    "eyebrow": "Eine Reihe von {org}",
+    "upcoming": "Kommende Events",
+    "emptyTitle": "Keine kommenden Events",
+    "emptyDescription": "Neue Termine erscheinen hier, sobald sie angekündigt werden.",
+    "view": "Event ansehen",
+    "viewEvent": "{name} ansehen"
   }
 }

@@ -56,7 +56,11 @@
     "team": "Team",
     "settings": "Instellingen",
     "payouts": "Uitbetalingen",
-    "domains": "Domeinen"
+    "domains": "Domeinen",
+    "dates": "Data",
+    "copy": "Dupliceren & sjabloon",
+    "series": "Reeksen",
+    "templates": "Sjablonen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -107,7 +111,11 @@
     "emptyTitle": "Nog geen evenementen",
     "emptyDescription": "Maak je eerste evenement aan om tickets te verkopen of uitnodigingen te versturen.",
     "open": "Evenement openen",
-    "create": "Evenement aanmaken"
+    "create": "Evenement aanmaken",
+    "seriesFilter": "Evenementen filteren op reeks",
+    "allEvents": "Alle evenementen",
+    "seriesEmptyTitle": "Nog geen evenementen in {name}",
+    "seriesEmptyDescription": "Voeg een evenement aan deze reeks toe via de pagina Data van het evenement."
   },
   "team": {
     "subtitle": "{count, plural, one {# lid} other {# leden}}",
@@ -298,7 +306,15 @@
     "earlyBird": "Early-birdprijs tot {date} (daarna {regular})",
     "accessDates": "Dagen waarop deze pas toegang geeft",
     "salesPausedTitle": "De ticketverkoop is gepauzeerd",
-    "salesPausedDescription": "Tickets van deze organisator zijn op dit moment niet te koop. Kom later terug."
+    "salesPausedDescription": "Tickets van deze organisator zijn op dit moment niet te koop. Kom later terug.",
+    "chooseDate": "Kies een datum",
+    "datesTimezone": "Tijden in {timezone}.",
+    "noUpcomingDates": "Er zijn geen komende data.",
+    "dateCancelled": "Geannuleerd",
+    "dateSoldOut": "Uitverkocht",
+    "ticketsFor": "Tickets voor {date}",
+    "pickDateTitle": "Kies eerst een datum",
+    "pickDateDescription": "Kies hierboven een datum om de tickets te zien."
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -407,7 +423,8 @@
     "venue": "Locatie",
     "city": "Plaats",
     "submit": "Concept aanmaken",
-    "slugTaken": "Er bestaat al een evenement met deze naam. Probeer een iets andere naam."
+    "slugTaken": "Er bestaat al een evenement met deze naam. Probeer een iets andere naam.",
+    "fromTemplate": "Beginnen met een sjabloon"
   },
   "tickets": {
     "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
@@ -444,7 +461,12 @@
     "accessDates": "Dagen waarop deze pas toegang geeft (optioneel)",
     "accessDatesHint": "Eén per regel: eerst datum, dan naam, bijv. 2027-10-14 Galavond.",
     "isDonation": "Kopers kiezen het bedrag",
-    "isDonationHint": "De prijs hierboven wordt het minimum. Kortingscodes gelden niet."
+    "isDonationHint": "De prijs hierboven wordt het minimum. Kortingscodes gelden niet.",
+    "validDates": "Verkocht voor deze data",
+    "validDatesHint": "Niets aangevinkt: verkocht voor alle data.",
+    "dates": "Data",
+    "allDates": "Alle data",
+    "someDates": "{count, plural, one {# datum} other {# data}}"
   },
   "checkout": {
     "quantity": "Aantal",
@@ -480,7 +502,10 @@
       "seat": "{label} ({price})",
       "accessible": "Toegankelijk",
       "taken": "Bezet"
-    }
+    },
+    "chooseDate": "Kies eerst een datum.",
+    "dateSoldOut": "Deze datum is net uitverkocht. Kies een andere.",
+    "dateUnavailable": "Deze datum is niet meer beschikbaar. Kies een andere."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -529,7 +554,8 @@
     },
     "collectedBy": "Betaling ontvangen door {org}",
     "seat": "Plaats",
-    "seatLabel": "Plaats: {seat}"
+    "seatLabel": "Plaats: {seat}",
+    "ticketDate": "Geldig op {date}"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -630,7 +656,8 @@
       "superseded": "Oude code van een opnieuw uitgegeven ticket",
       "provisional": "Offline binnengelaten, nog te bevestigen",
       "granted": "Toegang verleend",
-      "no_access": "Deze pas geeft geen toegang tot dit gebied"
+      "no_access": "Deze pas geeft geen toegang tot dit gebied",
+      "wrong_date": "Dit ticket is voor een andere datum"
     },
     "alertsTitle": "{count, plural, one {# ticket is offline twee keer binnengelaten} other {# tickets zijn offline twee keer binnengelaten}}",
     "alertsHint": "Twee scanners lieten hetzelfde ticket binnen voordat ze konden synchroniseren. Controleer deze gasten bij de deur."
@@ -1203,7 +1230,12 @@
     "openOrder": "Bestelling openen",
     "chooseTickets": "Kies minstens één ticket.",
     "soldOut": "Daarvoor zijn niet genoeg tickets meer over.",
-    "collected": "Door jou ontvangen"
+    "collected": "Door jou ontvangen",
+    "date": "Datum",
+    "chooseDate": "Kies een datum.",
+    "dateSoldOut": "Er zijn niet genoeg tickets meer voor deze datum.",
+    "wrongDate": "Een van deze tickets wordt niet voor deze datum verkocht.",
+    "dateUnavailable": "Deze datum is niet meer te koop."
   },
   "seating": {
     "title": "Zitplaatsen",
@@ -1527,5 +1559,167 @@
       "emptyTitle": "Geen verkopen in deze periode",
       "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
     }
+  },
+  "dates": {
+    "title": "Data",
+    "description": "Eén datum, meerdere dagen of een terugkerend schema. Tijden in {timezone}.",
+    "emptyTitle": "Dit evenement heeft één datum",
+    "single": "Het vindt plaats {range}. Voeg data toe om het op meerdere dagen of volgens een terugkerend schema te verkopen; zodra het data heeft, vervangen die deze ene datum.",
+    "listCaption": "{count, plural, one {# datum} other {# data}}",
+    "when": "Datum en tijd",
+    "capacity": "Capaciteit",
+    "capacityHint": "Optioneel. Het maximum aantal tickets voor deze datum, over alle tickettypes.",
+    "noLimit": "Geen limiet",
+    "sold": "Verkochte tickets",
+    "status": "Status",
+    "statuses": {
+      "scheduled": "Gepland",
+      "cancelled": "Geannuleerd"
+    },
+    "actions": "Acties",
+    "edit": "Bewerken",
+    "editFor": "{date} bewerken",
+    "cancel": "Annuleren",
+    "cancelFor": "{date} annuleren",
+    "addOne": "Een datum toevoegen",
+    "startsAt": "Begint",
+    "endsAt": "Eindigt",
+    "add": "Datum toevoegen",
+    "added": "{count, plural, one {# datum toegevoegd} other {# data toegevoegd}}",
+    "repeat": "Een terugkerend schema toevoegen",
+    "repeatHint": "Data volgen de lokale tijd in {timezone}: een show om 19.00 uur blijft om 19.00 uur als de klok verzet wordt.",
+    "firstDate": "Eerste datum",
+    "startTime": "Begintijd",
+    "endTime": "Eindtijd",
+    "endTimeHint": "Een eindtijd vóór de begintijd eindigt de volgende dag.",
+    "freq": "Herhaalt",
+    "freqs": {
+      "daily": "Dagelijks",
+      "weekly": "Wekelijks",
+      "monthly": "Maandelijks"
+    },
+    "interval": "Herhaal elke",
+    "intervalHint": {
+      "daily": "Aantal dagen tussen data (1 = elke dag).",
+      "weekly": "Aantal weken tussen data (1 = elke week).",
+      "monthly": "Aantal maanden tussen data (1 = elke maand)."
+    },
+    "monthDay": "Dag van de maand",
+    "monthDayHint": "Maanden zonder deze dag worden overgeslagen (bijvoorbeeld de 31e).",
+    "weekdays": "Op deze dagen",
+    "weekdaysHint": "Niets aangevinkt: de weekdag van de eerste datum.",
+    "ends": "Eindigt",
+    "endsAfter": "Na een aantal data",
+    "endsOn": "Op een datum",
+    "count": "Aantal data",
+    "until": "Laatste datum",
+    "preview": "Data bekijken",
+    "save": "{count, plural, one {# datum opslaan} other {# data opslaan}}",
+    "previewTitle": "{count, plural, one {# datum wordt toegevoegd} other {# data worden toegevoegd}}",
+    "previewMore": "{count, plural, one {…en nog #} other {…en nog #}}",
+    "overLimit": "Een evenement kan hoogstens {max} data hebben en dit heeft er al {existing}. Maak het schema korter.",
+    "editTitle": "{date} bewerken",
+    "closeEdit": "Sluiten",
+    "scope": "Toepassen op",
+    "scopeOne": "Alleen deze datum",
+    "scopeFollowing": "Deze en alle latere data",
+    "scopeFollowingHint": "Elke latere datum houdt zijn dag en krijgt de nieuwe tijden.",
+    "saveChanges": "Wijzigingen opslaan",
+    "updated": "{count, plural, one {# datum bijgewerkt} other {# data bijgewerkt}}",
+    "cancelTitle": "{date} annuleren?",
+    "cancelImpact": "{count, plural, =0 {Er zijn geen tickets verkocht voor deze datum.} one {Er is # ticket verkocht voor deze datum.} other {Er zijn # tickets verkocht voor deze datum.}}",
+    "cancelRefunds": "Terugbetalingen gaan niet automatisch. Tickets voor een geannuleerde datum geven geen toegang meer; bekijk de bestellingen om kopers terug te betalen.",
+    "reviewOrders": "Bestellingen bekijken",
+    "confirmCancel": "Deze datum annuleren",
+    "keep": "Datum behouden",
+    "cancelled": "De datum is geannuleerd. Hij wordt niet meer verkocht en de tickets geven geen toegang meer.",
+    "series": "Reeks",
+    "seriesHint": "Groepeer dit evenement met andere, zoals een tour of seizoen. Elke reeks heeft een openbare pagina.",
+    "noSeries": "Geen reeks",
+    "saveSeries": "Reeks opslaan",
+    "seriesSaved": "Reeks opgeslagen.",
+    "manageSeries": "Reeksen beheren",
+    "problem": {
+      "invalid": "Controleer deze waarde.",
+      "invalid_date": "Voer een geldige datum en tijd in.",
+      "invalid_time": "Voer een geldige tijd in.",
+      "invalid_interval": "Voer een geheel getal van 1 tot 52 in.",
+      "invalid_weekday": "Kies de dagen van de week.",
+      "invalid_month_day": "Kies een dag van de maand van 1 tot 31.",
+      "no_end": "Kies een einde: een laatste datum of een aantal data.",
+      "both_ends": "Kies een laatste datum of een aantal data, niet allebei.",
+      "until_before_start": "De laatste datum ligt vóór de eerste.",
+      "too_far": "Een schema reikt hoogstens 5 jaar vooruit.",
+      "too_many": "Te veel data: een evenement kan er hoogstens 366 hebben.",
+      "no_dates": "Dit schema levert geen data op.",
+      "date_exists": "Het evenement heeft al een datum die op dat tijdstip begint.",
+      "end_before_start": "Het einde moet na het begin liggen.",
+      "event_finished": "De data van een afgelopen of geannuleerd evenement kunnen niet veranderen.",
+      "cancelled": "Een geannuleerde datum kan niet worden gewijzigd.",
+      "invalid_count": "Voer een aantal data van 1 tot 366 in."
+    }
+  },
+  "copy": {
+    "title": "Dupliceren & sjabloon",
+    "description": "Hergebruik dit evenement. Een kopie neemt de instellingen, tickettypes, checkoutvragen en plattegrond over — nooit bestellingen, deelnemers, tickets, check-ins of uitbetalingen.",
+    "noAccessTitle": "Evenementen kopiëren hoort niet bij je rol",
+    "noAccessDescription": "Vraag een eigenaar of manager om dit evenement te dupliceren of als sjabloon op te slaan.",
+    "duplicate": "Dit evenement dupliceren",
+    "duplicateHint": "De kopie is een nieuw concept met een eigen adres. De verkoopperiodes schuiven mee met de start.",
+    "copyName": "{name} (kopie)",
+    "duplicateSubmit": "Evenement dupliceren",
+    "template": "Opslaan als sjabloon",
+    "templateHint": "Met sjablonen kan iedereen in het team een nieuw evenement met deze instellingen maken.",
+    "newName": "Naam van het nieuwe evenement",
+    "startsAt": "Begint",
+    "startsAtHint": "In de tijdzone van het evenement.",
+    "templateName": "Naam van het sjabloon",
+    "templateDescription": "Beschrijving (optioneel)",
+    "templateSaved": "Sjabloon opgeslagen.",
+    "openTemplates": "Sjablonen openen",
+    "saveTemplate": "Sjabloon opslaan",
+    "nameTaken": "Deze naam is al in gebruik. Kies een andere.",
+    "invalid": "Controleer deze waarde."
+  },
+  "series": {
+    "title": "Reeksen",
+    "description": "Groepeer evenementen in tours, seizoenen of festivals. Elke reeks heeft een openbare pagina met de komende evenementen.",
+    "emptyTitle": "Nog geen reeksen",
+    "emptyDescription": "Maak een reeks en voeg er evenementen aan toe via de pagina Data van elk evenement.",
+    "caption": "Reeksen",
+    "name": "Naam",
+    "descriptionField": "Beschrijving (optioneel)",
+    "events": "Evenementen",
+    "links": "Links",
+    "publicPage": "Openbare pagina",
+    "showEvents": "Evenementen tonen",
+    "actions": "Acties",
+    "delete": "Verwijderen",
+    "deleteFor": "De reeks {name} verwijderen",
+    "new": "Nieuwe reeks",
+    "create": "Reeks maken",
+    "created": "Reeks gemaakt.",
+    "slugTaken": "Er bestaat al een reeks met deze naam. Probeer een iets andere naam.",
+    "nameInvalid": "Voer een naam van 2 tot 160 tekens in."
+  },
+  "templates": {
+    "title": "Sjablonen",
+    "description": "Begin nieuwe evenementen met je eigen sjablonen. Een evenement uit een sjabloon is een concept zonder verkopen.",
+    "emptyTitle": "Nog geen sjablonen",
+    "emptyDescription": "Open een evenement, kies Dupliceren & sjabloon en sla het op als sjabloon.",
+    "contents": "{ticketTypes, plural, one {# tickettype} other {# tickettypes}} · {questions, plural, one {# vraag} other {# vragen}} · {seats, plural, =0 {geen plattegrond} one {# stoel} other {# stoelen}}",
+    "delete": "Verwijderen",
+    "deleteFor": "Het sjabloon {name} verwijderen",
+    "use": "Een evenement maken uit {name}",
+    "timezone": "Tijden in {timezone}.",
+    "createEvent": "Evenement maken"
+  },
+  "publicSeries": {
+    "eyebrow": "Een reeks van {org}",
+    "upcoming": "Komende evenementen",
+    "emptyTitle": "Geen komende evenementen",
+    "emptyDescription": "Nieuwe data verschijnen hier zodra ze bekend zijn.",
+    "view": "Evenement bekijken",
+    "viewEvent": "{name} bekijken"
   }
 }

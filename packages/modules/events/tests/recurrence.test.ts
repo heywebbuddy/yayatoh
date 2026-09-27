@@ -146,6 +146,10 @@ describe('recurrence expansion', () => {
     expect(problem(() => expandRecurrence(weekly({ interval: 0 }), 'UTC'))).toMatchObject({
       reason: 'invalid_interval',
     });
+    expect(problem(() => expandRecurrence(weekly({ count: 0 }), 'UTC'))).toMatchObject({
+      reason: 'invalid_count',
+      field: 'count',
+    });
     expect(problem(() => expandRecurrence(weekly({ byWeekday: [8] }), 'UTC'))).toMatchObject({
       reason: 'invalid_weekday',
     });
