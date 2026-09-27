@@ -45,3 +45,30 @@ Roadmap: M1.3. This milestone is delivered in increments:
 | AC4 | Legal pages: set, public by slug, removed by an empty body, per org; unknown orgs get nothing | `settings.int.test.ts` |
 | AC5 | Contrast: correct WCAG ratios; readable text always ≥4.5:1; light colours are flagged | `packages/ui/tests/contrast.test.ts` |
 | AC6 | In the console: the checklist is shown, the brand colour is checked and saved, and the refund policy appears on the event page and the public legal page; axe passes | `apps/web/e2e/settings.spec.ts` |
+
+## M1.3b — invite-only signup with a profile picker (done)
+- **Signup codes:** `platform.signup_codes` is a global table (listed in `GLOBAL_TABLES` with its reason).
+  - Only the SHA-256 of a normalized code is stored (case and separators ignored).
+  - Codes have a use limit (1–1000), an expiry, a note and a creator.
+  - **app_user has no privileges on the table.**
+    - `platform.signup_code_valid(hash)` (read) and `platform.claim_signup_code(hash)` (atomic `uses + 1` inside the signup transaction) are SECURITY DEFINER functions granted to app_user.
+    - `platform.create_signup_code(…)` is granted only to platform_reader. It runs through `withPlatformReader(…, { callsWritingFunctions: true })` and is audited.
+- **Staff CLI:** `pnpm --filter @yayatoh/worker signup-code -- --uses 1 --days 14 --note "Acme"` prints a code like `YY-7KQ4-M2XR-P9TD` (60 bits). The admin app gets a screen for it in M1.3e.
+- **Signup:** `tenancy.signUpOrganization` requires a signed-in person (`user` actor) and a valid code.
+  - In one transaction it claims one use, creates the org and its owner membership, and records acceptance of the current ToS and DPA (the form's click-wrap).
+  - A failed signup, such as a taken address, rolls back and gives the use back. Reserved addresses are refused.
+- **Flow:** `/signup?code=…`.
+  - Without a valid code there is no form.
+  - Signed out, "Continue with email" signs the person in with a one-time code. That creates and verifies the account (Better Auth email OTP), then returns to the form.
+  - The form asks for the organization name, the web address (derived from the name, editable), a **profile picker** (wedding, gala, concert, conference, community, agency, other, each with a one-line description) and the terms checkbox.
+  - It detects the browser time zone and uses the page language, then lands on the new org's home with its setup checklist.
+- **Password sign-up over HTTP is closed:** `/api/auth/sign-up/*` returns 403. Accounts start with an emailed code, which proves the address.
+
+### Acceptance (M1.3b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A valid code creates the org, owner and accepted terms, and the org can publish; codes are single-use when made so, case-insensitive, and creation is audited | `apps/worker/tests/signup.int.test.ts` |
+| AC2 | A failed signup gives the use back; unknown and expired codes, system actors, unticked terms and reserved slugs are refused | `signup.int.test.ts` |
+| AC3 | In the browser: no form without a valid code; a signed-in person signs up with a code (address derived, profile picked) and lands in the org; the code can't be reused; HTTP password sign-up gets 403; axe passes | `apps/web/e2e/signup.spec.ts` |
+
+Roadmap acceptance "end-to-end signup with Stripe test KYC" completes with M1.3c (payouts onboarding); Stripe test mode is an owner account (owner inbox).

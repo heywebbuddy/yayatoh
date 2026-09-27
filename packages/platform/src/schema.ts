@@ -185,3 +185,27 @@ export const fileParts = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+/**
+ * Invite-only signup (M1.3): a code lets someone create an organization. Only the SHA-256 of the
+ * code is stored. app_user has no privileges on this table: codes are checked and claimed
+ * through SECURITY DEFINER functions, and created by platform staff (platform_reader).
+ */
+export const signupCodes = platform.table(
+  'signup_codes',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    codeHash: text('code_hash').notNull(),
+    maxUses: integer('max_uses').notNull(),
+    uses: integer('uses').notNull().default(0),
+    expiresAt: tsz('expires_at').notNull(),
+    revokedAt: tsz('revoked_at'),
+    note: text('note').notNull().default(''),
+    createdBy: text('created_by').notNull(),
+    createdAt: tsz('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex('signup_codes_code_hash_key').on(t.codeHash),
+    check('signup_codes_uses_check', sql`uses >= 0 and uses <= max_uses and max_uses between 1 and 1000`),
+  ],
+);

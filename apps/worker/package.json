@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "node --watch src/main.ts",
     "start": "node src/main.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "signup-code": "node scripts/signup-code.ts"
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",

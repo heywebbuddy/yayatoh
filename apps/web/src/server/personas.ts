@@ -5,6 +5,7 @@
 export interface Persona {
   readonly email: string;
   readonly name: string;
+  /** Empty for a newcomer with no organization yet (the invite-only signup flow). */
   readonly orgSlug: string;
   readonly role: 'owner' | 'viewer';
 }
@@ -14,6 +15,7 @@ export const PERSONAS: readonly Persona[] = [
   { email: 'jordan@lakeside.test', name: 'Jordan Lee', orgSlug: 'lakeside-events', role: 'viewer' },
   { email: 'maya@rosewood.test', name: 'Maya Chen', orgSlug: 'rosewood-weddings', role: 'owner' },
   { email: 'sam@rosewood.test', name: 'Sam Rivera', orgSlug: 'rosewood-weddings', role: 'viewer' },
+  { email: 'nia@newcomer.test', name: 'Nia Newcomer', orgSlug: '', role: 'owner' },
 ];
 
 export const SEED_ORGS = [

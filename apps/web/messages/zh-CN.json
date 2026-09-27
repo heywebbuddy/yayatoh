@@ -927,5 +927,32 @@
       "event": "创建你的第一个活动",
       "team": "邀请团队成员"
     }
+  },
+  "signup": {
+    "eyebrow": "开始使用",
+    "title": "创建你的组织",
+    "description": "Yayatoh 目前仅限受邀使用。你的邀请中包含一个注册码。",
+    "needCode": "创建组织需要注册码。请向 Yayatoh 团队申请邀请，或打开邀请邮件中的链接。",
+    "invalidCode": "此注册码无效，可能已过期或已被使用。",
+    "verifyFirst": "首先确认你的邮箱地址：我们会向你发送一次性验证码。然后再为你的组织命名。",
+    "continueWithEmail": "使用邮箱继续",
+    "signedInAs": "已登录为 {email}。",
+    "code": "注册码",
+    "orgName": "组织名称",
+    "slug": "网址",
+    "slugHint": "你的页面将位于 yayatoh.com/o/{slug}。可使用小写字母、数字和连字符。",
+    "slugTaken": "该网址已被占用，请换一个。",
+    "profile": "你举办哪类活动？",
+    "profileHint": {
+      "wedding": "宾客名单、回复确认、座位安排和宾客网站。",
+      "gala": "桌位、赞助商、捐款和顺畅的签到。",
+      "concert": "票档、入口快速扫码和容量管理。",
+      "conference": "报名、议程场次、演讲嘉宾和胸牌。",
+      "community": "免费报名、聚会和简单的票务。",
+      "agency": "用一个账户为多个客户举办活动。",
+      "other": "从简单开始，按需开启功能。"
+    },
+    "terms": "我代表本组织同意<tos>服务条款</tos>和<dpa>数据处理附录</dpa>。",
+    "submit": "创建组织"
   }
 }

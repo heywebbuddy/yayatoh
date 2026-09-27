@@ -183,6 +183,13 @@
       "when": 1790513279543,
       "tag": "0025_milky_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1790514582796,
+      "tag": "0026_purple_blizzard",
+      "breakpoints": true
     }
   ]
 }

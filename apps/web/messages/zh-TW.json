@@ -927,5 +927,32 @@
       "event": "建立你的第一個活動",
       "team": "邀請團隊成員"
     }
+  },
+  "signup": {
+    "eyebrow": "開始使用",
+    "title": "建立你的組織",
+    "description": "Yayatoh 目前僅限受邀使用。你的邀請中包含一組註冊碼。",
+    "needCode": "建立組織需要註冊碼。請向 Yayatoh 團隊索取邀請，或開啟邀請電子郵件中的連結。",
+    "invalidCode": "此註冊碼無效，可能已過期或已被使用。",
+    "verifyFirst": "首先確認你的電子郵件地址：我們會寄送一次性驗證碼給你。接著再為你的組織命名。",
+    "continueWithEmail": "使用電子郵件繼續",
+    "signedInAs": "已登入為 {email}。",
+    "code": "註冊碼",
+    "orgName": "組織名稱",
+    "slug": "網址",
+    "slugHint": "你的頁面將位於 yayatoh.com/o/{slug}。可使用小寫字母、數字和連字號。",
+    "slugTaken": "此網址已被使用，請換一個。",
+    "profile": "你舉辦哪類活動？",
+    "profileHint": {
+      "wedding": "賓客名單、出席回覆、座位安排和賓客網站。",
+      "gala": "桌次、贊助商、捐款和順暢的報到。",
+      "concert": "票種、入口快速掃描和容量管理。",
+      "conference": "報名、場次、講者和名牌。",
+      "community": "免費報名、聚會和簡單的票務。",
+      "agency": "用一個帳戶為多個客戶舉辦活動。",
+      "other": "從簡單開始，依需要開啟功能。"
+    },
+    "terms": "我代表本組織同意<tos>服務條款</tos>和<dpa>資料處理附錄</dpa>。",
+    "submit": "建立組織"
   }
 }

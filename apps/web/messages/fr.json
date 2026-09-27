@@ -927,5 +927,32 @@
       "event": "Créer votre premier événement",
       "team": "Inviter un membre de l’équipe"
     }
+  },
+  "signup": {
+    "eyebrow": "Commencer",
+    "title": "Créez votre organisation",
+    "description": "Yayatoh est pour l’instant accessible sur invitation uniquement. Votre invitation contient un code d’inscription.",
+    "needCode": "Un code d’inscription est nécessaire pour créer une organisation. Demandez une invitation à l’équipe Yayatoh ou ouvrez le lien de votre e-mail d’invitation.",
+    "invalidCode": "Ce code d’inscription n’est pas valide. Il a peut-être expiré ou déjà été utilisé.",
+    "verifyFirst": "Confirmez d’abord votre adresse e-mail : nous vous enverrons un code à usage unique. Vous nommerez ensuite votre organisation.",
+    "continueWithEmail": "Continuer avec l’e-mail",
+    "signedInAs": "Connecté en tant que {email}.",
+    "code": "Code d’inscription",
+    "orgName": "Nom de l’organisation",
+    "slug": "Adresse web",
+    "slugHint": "Vos pages seront accessibles à yayatoh.com/o/{slug}. Lettres minuscules, chiffres et traits d’union.",
+    "slugTaken": "Cette adresse web est déjà prise. Essayez-en une autre.",
+    "profile": "Quel type d’événements organisez-vous ?",
+    "profileHint": {
+      "wedding": "Listes d’invités, RSVP, placement et site pour les invités.",
+      "gala": "Tables, sponsors, dons et un check-in soigné.",
+      "concert": "Catégories de billets, scan rapide à l’entrée et capacité.",
+      "conference": "Inscriptions, sessions, intervenants et badges.",
+      "community": "Inscriptions gratuites, rencontres et billetterie simple.",
+      "agency": "Gérez les événements de plusieurs clients depuis un seul compte.",
+      "other": "Commencez simplement et activez ce dont vous avez besoin."
+    },
+    "terms": "J’accepte les <tos>Conditions d’utilisation</tos> et l’<dpa>Accord de traitement des données</dpa> au nom de cette organisation.",
+    "submit": "Créer l’organisation"
   }
 }

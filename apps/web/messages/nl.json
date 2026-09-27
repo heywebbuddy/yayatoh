@@ -927,5 +927,32 @@
       "event": "Maak je eerste evenement aan",
       "team": "Nodig een teamlid uit"
     }
+  },
+  "signup": {
+    "eyebrow": "Aan de slag",
+    "title": "Maak je organisatie aan",
+    "description": "Yayatoh is voorlopig alleen op uitnodiging. Je uitnodiging bevat een aanmeldcode.",
+    "needCode": "Je hebt een aanmeldcode nodig om een organisatie aan te maken. Vraag het Yayatoh-team om een uitnodiging, of open de link in je uitnodigingsmail.",
+    "invalidCode": "Deze aanmeldcode is ongeldig. Hij is mogelijk verlopen of al gebruikt.",
+    "verifyFirst": "Bevestig eerst je e-mailadres: we sturen je een eenmalige code. Daarna geef je je organisatie een naam.",
+    "continueWithEmail": "Doorgaan met e-mail",
+    "signedInAs": "Ingelogd als {email}.",
+    "code": "Aanmeldcode",
+    "orgName": "Naam van de organisatie",
+    "slug": "Webadres",
+    "slugHint": "Je pagina’s komen op yayatoh.com/o/{slug}. Kleine letters, cijfers en koppeltekens.",
+    "slugTaken": "Dat webadres is al in gebruik. Probeer een ander.",
+    "profile": "Wat voor evenementen organiseer je?",
+    "profileHint": {
+      "wedding": "Gastenlijsten, RSVP’s, plaatsen en een website voor gasten.",
+      "gala": "Tafels, sponsors, donaties en een verzorgde check-in.",
+      "concert": "Ticketcategorieën, snel scannen aan de deur en capaciteit.",
+      "conference": "Registratie, sessies, sprekers en badges.",
+      "community": "Gratis aanmeldingen, meetups en eenvoudige ticketverkoop.",
+      "agency": "Organiseer evenementen voor meerdere klanten vanuit één account.",
+      "other": "Begin eenvoudig en zet aan wat je nodig hebt."
+    },
+    "terms": "Ik ga namens deze organisatie akkoord met de <tos>Servicevoorwaarden</tos> en de <dpa>Verwerkersovereenkomst</dpa>.",
+    "submit": "Organisatie aanmaken"
   }
 }

@@ -9,6 +9,11 @@ export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from '
 export {
   createOrganization,
   createOrganizationCommand,
+  hashSignupCode,
+  SignUpOrganizationInput,
+  signUpOrganization,
+  signUpOrganizationCommand,
+  signupCodeValid,
   updateOrganizationCommand,
 } from './commands/organizations.ts';
 export {

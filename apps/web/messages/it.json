@@ -927,5 +927,32 @@
       "event": "Crea il tuo primo evento",
       "team": "Invita un membro del team"
     }
+  },
+  "signup": {
+    "eyebrow": "Inizia",
+    "title": "Crea la tua organizzazione",
+    "description": "Per ora Yayatoh è solo su invito. Il tuo invito include un codice di registrazione.",
+    "needCode": "Ti serve un codice di registrazione per creare un’organizzazione. Chiedi un invito al team di Yayatoh o apri il link nell’email di invito.",
+    "invalidCode": "Questo codice di registrazione non è valido. Potrebbe essere scaduto o già stato usato.",
+    "verifyFirst": "Per prima cosa, conferma il tuo indirizzo email: ti invieremo un codice monouso. Poi darai un nome alla tua organizzazione.",
+    "continueWithEmail": "Continua con l’email",
+    "signedInAs": "Accesso effettuato come {email}.",
+    "code": "Codice di registrazione",
+    "orgName": "Nome dell’organizzazione",
+    "slug": "Indirizzo web",
+    "slugHint": "Le tue pagine saranno su yayatoh.com/o/{slug}. Lettere minuscole, numeri e trattini.",
+    "slugTaken": "Questo indirizzo web è già in uso. Provane un altro.",
+    "profile": "Che tipo di eventi organizzi?",
+    "profileHint": {
+      "wedding": "Liste degli ospiti, RSVP, posti e un sito per gli ospiti.",
+      "gala": "Tavoli, sponsor, donazioni e un check-in impeccabile.",
+      "concert": "Categorie di biglietti, scansione rapida all’ingresso e capienza.",
+      "conference": "Registrazione, sessioni, relatori e badge.",
+      "community": "Iscrizioni gratuite, meetup e biglietteria semplice.",
+      "agency": "Gestisci eventi per più clienti da un unico account.",
+      "other": "Parti in modo semplice e attiva ciò che ti serve."
+    },
+    "terms": "Accetto i <tos>Termini di servizio</tos> e l’<dpa>Accordo sul trattamento dei dati</dpa> per conto di questa organizzazione.",
+    "submit": "Crea organizzazione"
   }
 }

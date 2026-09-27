@@ -927,5 +927,32 @@
       "event": "Create your first event",
       "team": "Invite a teammate"
     }
+  },
+  "signup": {
+    "eyebrow": "Get started",
+    "title": "Create your organization",
+    "description": "Yayatoh is invite-only for now. Your invitation includes a signup code.",
+    "needCode": "You need a signup code to create an organization. Ask the Yayatoh team for an invitation, or open the link from your invitation email.",
+    "invalidCode": "This signup code isn't valid. It may have expired or been used already.",
+    "verifyFirst": "First, confirm your email address: we'll send you a one-time code. Then you'll name your organization.",
+    "continueWithEmail": "Continue with email",
+    "signedInAs": "Signed in as {email}.",
+    "code": "Signup code",
+    "orgName": "Organization name",
+    "slug": "Web address",
+    "slugHint": "Your pages will live at yayatoh.com/o/{slug}. Lowercase letters, numbers and hyphens.",
+    "slugTaken": "That web address is already taken. Try another.",
+    "profile": "What kind of events do you run?",
+    "profileHint": {
+      "wedding": "Guest lists, RSVPs, seating and a guest website.",
+      "gala": "Tables, sponsors, donations and a polished check-in.",
+      "concert": "Ticket tiers, fast door scanning and capacity.",
+      "conference": "Registration, sessions, speakers and badges.",
+      "community": "Free sign-ups, meetups and simple ticketing.",
+      "agency": "Run events for several clients from one account.",
+      "other": "Start simple and switch on what you need."
+    },
+    "terms": "I agree to the <tos>Terms of Service</tos> and the <dpa>Data Processing Addendum</dpa> on behalf of this organization.",
+    "submit": "Create organization"
   }
 }
