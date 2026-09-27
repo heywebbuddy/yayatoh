@@ -22,6 +22,7 @@ import {
   publicSeatMap,
   publishEventLayoutCommand,
   releaseCancelledSeats,
+  releaseSeatHoldTx,
   seatAssignmentsQuery,
   setEventLayoutCommand,
   unassignSeatsCommand,
@@ -396,6 +397,82 @@ describe('seat assignment (M1.7d)', () => {
 });
 
 describe('seat assignment and plan edits (M1.7d)', () => {
+  it('automatic placement follows the plan order, whatever order the database returns seats in', async () => {
+    const ev = (
+      await executeCommand(
+        createEventCommand,
+        {
+          name: 'Ordered row',
+          timezone: 'UTC',
+          startsAt: '2028-12-01T18:00:00Z',
+          endsAt: '2028-12-01T23:00:00Z',
+        },
+        a.ctx(),
+        ports,
+      )
+    ).id;
+    // Seat ids that sort in reverse plan order: an index-ordered read comes back backwards too.
+    const built = buildRow({ label: 'Q', count: 8, x: 100, y: 100 });
+    const ids = built.seats
+      .map(() => crypto.randomUUID())
+      .sort()
+      .reverse();
+    const r = { ...built, seats: built.seats.map((seat, i) => ({ ...seat, id: ids[i] as string })) };
+    await executeCommand(
+      setEventLayoutCommand,
+      { eventId: ev, doc: { version: 1, width: 1400, height: 900, items: [r] } },
+      a.ctx(),
+      ports,
+    );
+    const category = await executeCommand(
+      createTicketTypeCommand,
+      { eventId: ev, name: 'Row seats', priceMinor: 2000, quantityTotal: 8 },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(
+      assignSeatCategoryCommand,
+      { eventId: ev, itemIds: [r.id], ticketTypeId: category.id },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(publishEventLayoutCommand, { eventId: ev }, a.ctx(), ports);
+    await executeCommand(transitionEventCommand, { eventId: ev, transition: 'publish' }, a.ctx(), ports);
+    // Hold and release every seat, last seat first (as buyers do): each gets new index entries in
+    // reverse plan order, so a read without an explicit order returns them backwards.
+    for (const seat of [...r.seats].reverse()) {
+      const holdId = crypto.randomUUID();
+      await withTenant(a.ctx(), async (tx) => {
+        await holdSeatsTx(tx, a.ctx(), {
+          eventId: ev,
+          seatUuids: [seat.id],
+          holdId,
+          expiresAt: new Date(Date.now() + 60_000),
+        });
+        await releaseSeatHoldTx(tx, a.ctx(), holdId);
+      });
+    }
+    const people: string[] = [];
+    for (const name of ['Ola', 'Pia', 'Quin'])
+      people.push(
+        (
+          await executeCommand(
+            addGuestCommand,
+            { eventId: ev, name, email: `${name.toLowerCase()}@order.test` },
+            a.ctx(),
+            ports,
+          )
+        ).id,
+      );
+    const placed = await executeCommand(
+      assignSeatsCommand,
+      { eventId: ev, attendeeIds: people, itemId: r.id },
+      a.ctx(),
+      ports,
+    );
+    expect(placed.seated.map((x) => x.seatLabel)).toEqual(['Row Q · 1', 'Row Q · 2', 'Row Q · 3']);
+  });
+
   it('keeps guests on seats that still exist, follows moved seats, and unseats the rest', async () => {
     const ev = (
       await executeCommand(

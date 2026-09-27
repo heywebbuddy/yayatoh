@@ -137,17 +137,23 @@ export const assignSeatsCommand = tenantCommand({
 
     // Lock the table's seats: concurrent assignments to one table queue up here.
     await tx.execute(sql`set local lock_timeout = '2s'`);
-    const seatRows = await tx
-      .select({
-        seatUuid: eventSeats.seatUuid,
-        label: eventSeats.label,
-        status: eventSeats.status,
-        blockReason: eventSeats.blockReason,
-        accessible: eventSeats.accessible,
-      })
-      .from(eventSeats)
-      .where(and(eq(eventSeats.eventId, input.eventId), eq(eventSeats.itemId, item.id)))
-      .for('update');
+    // Locked in one fixed order (concurrent assignments can't deadlock), then put in the plan's seat
+    // order: "the first free seats" are the plan's, never whatever order the database returns.
+    const planOrder = new Map(item.seats.map((d, i) => [d.id, i]));
+    const seatRows = (
+      await tx
+        .select({
+          seatUuid: eventSeats.seatUuid,
+          label: eventSeats.label,
+          status: eventSeats.status,
+          blockReason: eventSeats.blockReason,
+          accessible: eventSeats.accessible,
+        })
+        .from(eventSeats)
+        .where(and(eq(eventSeats.eventId, input.eventId), eq(eventSeats.itemId, item.id)))
+        .orderBy(eventSeats.seatUuid)
+        .for('update')
+    ).sort((x, y) => (planOrder.get(x.seatUuid) ?? 0) - (planOrder.get(y.seatUuid) ?? 0));
     const seatOf = new Map(seatRows.map((s) => [s.seatUuid, s]));
     const current = await tx
       .select({
