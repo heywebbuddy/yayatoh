@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "The event operating system"
@@ -7,8 +10,273 @@
     "eyebrow": "Yayatoh 2.0",
     "title": "Every event, one operating system.",
     "lede": "Tickets, guests, seating, check-in and marketing for concerts, galas, weddings and conferences.",
-    "primaryCta": "See platform status",
+    "demoCta": "Open the demo console",
+    "eventCta": "See a public event page",
     "statusLabel": "Platform",
     "statusOk": "All systems normal"
+  },
+  "shell": {
+    "navigation": "Main navigation",
+    "menu": "Open menu",
+    "search": "Search",
+    "searchPlaceholder": "Search attendees, orders, events…",
+    "skipToContent": "Skip to content",
+    "switchContext": "Switch organization or event",
+    "yourOrganizations": "Your organizations",
+    "organization": "Organization"
+  },
+  "notifications": {
+    "open": "Notifications",
+    "title": "Notifications",
+    "emptyTitle": "You're all caught up",
+    "emptyDescription": "Alerts about sales, seating and check-in will appear here."
+  },
+  "nav": {
+    "home": "Home",
+    "analysis": "Analysis",
+    "setupGuide": "Setup guide",
+    "branding": "Branding",
+    "ticketsOrders": "Tickets & Orders",
+    "seating": "Seating",
+    "sessions": "Sessions",
+    "exhibitors": "Exhibitors",
+    "marketing": "Marketing",
+    "onsite": "On-site",
+    "libraries": "Libraries",
+    "guests": "Guests",
+    "rsvp": "RSVP",
+    "seatFinder": "Seat finder",
+    "website": "Website",
+    "gallery": "Gallery",
+    "messages": "Messages",
+    "dayOf": "Day-of",
+    "donations": "Donations",
+    "communications": "Communications",
+    "team": "Team"
+  },
+  "vocab": {
+    "attendee": "Attendee",
+    "attendees": "Attendees",
+    "guest": "Guest",
+    "guests": "Guests",
+    "member": "Member",
+    "members": "Members",
+    "fan": "Fan",
+    "fans": "Fans",
+    "registration": "Registration",
+    "rsvp": "RSVP",
+    "ticket": "Ticket",
+    "tickets": "Tickets"
+  },
+  "roles": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "manager": "Manager",
+    "finance": "Finance",
+    "marketing": "Marketing",
+    "box_office": "Box office",
+    "scanner": "Scanner",
+    "viewer": "Viewer"
+  },
+  "profiles": {
+    "wedding": "Wedding",
+    "gala": "Gala",
+    "concert": "Concert",
+    "conference": "Conference",
+    "community": "Community",
+    "agency": "Agency",
+    "other": "Event"
+  },
+  "greeting": {
+    "morning": "Good morning, {name}.",
+    "afternoon": "Good afternoon, {name}.",
+    "evening": "Good evening, {name}."
+  },
+  "phase": {
+    "planning": "Planning · {days, plural, one {# day} other {# days}} to go",
+    "live": "Live now",
+    "completed": "Completed"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {no events yet} one {# event} other {# events}}",
+    "events": "Events",
+    "emptyTitle": "No events yet",
+    "emptyDescription": "Events you create will appear here.",
+    "open": "Open event"
+  },
+  "team": {
+    "subtitle": "{count, plural, one {# member} other {# members}}",
+    "unknownUser": "Invited user",
+    "empty": "No members yet",
+    "name": "Name",
+    "role": "Role",
+    "since": "Member since"
+  },
+  "dashboard": {
+    "previewPage": "Preview page",
+    "openCommandCenter": "Open Command Center",
+    "keyNumbers": "Key numbers",
+    "registrationsTrend": "All event registrations",
+    "weeksOut": "Weeks out",
+    "mix": "By ticket type",
+    "needsAttention": "Needs attention",
+    "readiness": "Event readiness",
+    "readinessPercent": "{value}% ready"
+  },
+  "kpi": {
+    "registrations": "Registrations",
+    "grossSales": "Gross sales",
+    "distributed": "Distributed",
+    "seated": "Seated",
+    "invited": "Invited",
+    "attending": "Attending",
+    "awaitingReply": "Awaiting reply",
+    "goal": "Goal {goal}",
+    "net": "Net {value}",
+    "thisWeek": "{delta} this week",
+    "ofSold": "of {sold} sold · {pct}%",
+    "unseated": "{count} still unseated",
+    "atSubEvent": "{count} at {name}",
+    "households": "{count} households",
+    "declined": "{count} declined",
+    "deadline": "RSVP by {date}",
+    "reminded": "{count} reminded",
+    "tables": "{count} tables"
+  },
+  "attention": {
+    "unseated": "{count, plural, one {# person does not have a seat} other {# people do not have seats}}",
+    "layout": "{name} · {layout} layout",
+    "undistributed": "{count} purchased tickets have not been distributed",
+    "distributeLater": "{count} buyers with distribute-later orders",
+    "paymentsFailed": "{count, plural, one {# payment failed} other {# payments failed}}",
+    "last24h": "Last 24 hours · declined or 3-D Secure abandoned",
+    "noMeal": "{count} guests have not chosen a meal",
+    "caterer": "The caterer needs final numbers by {date}"
+  },
+  "actions": {
+    "assignSeats": "Assign seats",
+    "remindBuyers": "Remind buyers",
+    "review": "Review",
+    "remindGuests": "Remind guests",
+    "import": "Import",
+    "export": "Export",
+    "addAttendee": "Add {term}",
+    "search": "Search",
+    "sendTicket": "Send ticket",
+    "changeSeat": "Change seat",
+    "checkIn": "Check in",
+    "tryAgain": "Try again"
+  },
+  "readiness": {
+    "ticketsOnSale": "Tickets on sale",
+    "seatingPublished": "Seating chart published",
+    "payoutsConnected": "Payouts connected",
+    "brandingDone": "Branding finished",
+    "scannersEnrolled": "Scanners enrolled",
+    "invitationsSent": "Invitations sent",
+    "websitePublished": "Website published",
+    "mealChoices": "Meal choices collected",
+    "done": "Done",
+    "todo": "Not done yet"
+  },
+  "segments": {
+    "all": "All",
+    "registered": "Registered",
+    "attending": "Attending",
+    "needsSeat": "Needs seat",
+    "awaitingPayment": "Awaiting payment",
+    "pending": "Awaiting reply",
+    "waitlist": "Waitlist"
+  },
+  "attendees": {
+    "segments": "Segments",
+    "search": "Search {term}",
+    "searchPlaceholder": "Name, email, order or seat",
+    "noMatches": "No matches",
+    "noMatchesHint": "Try another segment or search term.",
+    "name": "Name",
+    "ticketType": "Ticket type",
+    "seat": "Seat",
+    "status": "Status",
+    "order": "Order",
+    "profile": "Profile",
+    "closeProfile": "Close profile"
+  },
+  "attendeeStatus": {
+    "paid": "Paid",
+    "needs_seat": "Needs seat",
+    "awaiting_payment": "Awaiting payment",
+    "refund_requested": "Refund requested",
+    "attending": "Attending",
+    "pending": "Awaiting reply",
+    "declined": "Declined"
+  },
+  "common": {
+    "comingSoon": "Coming in a later milestone",
+    "loading": "Loading…"
+  },
+  "section": {
+    "comingTitle": "This area is being built",
+    "comingDescription": "It arrives in a later milestone. Your navigation already reflects your plan and event type."
+  },
+  "publicEvent": {
+    "nav": "Event",
+    "passes": "Passes",
+    "agenda": "Agenda",
+    "getTickets": "Get tickets",
+    "seeAgenda": "See the agenda",
+    "stats": {
+      "days": "days",
+      "sessions": "sessions",
+      "speakers": "speakers",
+      "attendees": "attendees",
+      "guests": "guests",
+      "tables": "tables"
+    },
+    "choosePass": "Choose your pass",
+    "allIn": "Every price includes all fees. At {org}, powered by Yayatoh.",
+    "allInSuffix": "all-in",
+    "select": "Select",
+    "poweredBy": "Powered by Yayatoh"
+  },
+  "portal": {
+    "day": "Day {day} · {date}",
+    "yourTicket": "Your ticket",
+    "addToWallet": "Add to Wallet",
+    "today": "Today",
+    "fullAgenda": "Full agenda",
+    "app": "App",
+    "tabs": {
+      "home": "Home",
+      "agenda": "Agenda",
+      "ticket": "Ticket",
+      "map": "Map",
+      "profile": "Profile"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "Development only",
+    "title": "Choose a persona",
+    "description": "Seed users for local and preview environments. Real sign-in arrives with M1.2.",
+    "signIn": "Sign in"
+  },
+  "errors": {
+    "validation_failed": "Some details need fixing.",
+    "unauthenticated": "Please sign in again.",
+    "step_up_required": "Please confirm it's you to continue.",
+    "forbidden": "You don't have access to this.",
+    "module_not_enabled": "This feature isn't enabled for your organization.",
+    "not_found": "We couldn't find that.",
+    "conflict": "That conflicts with something that already exists.",
+    "invalid_state": "That can't be done right now.",
+    "idempotency_key_reused": "This request was already sent with different details.",
+    "rate_limited": "Too many attempts. Please wait a moment.",
+    "internal": "Something went wrong on our side.",
+    "reference": "Reference: {id}"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page may have moved, or you may not have access.",
+    "home": "Go home"
   }
 }

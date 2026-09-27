@@ -15,18 +15,25 @@ export const PROFILE_KEYS = [
 ] as const;
 export type ProfileKey = (typeof PROFILE_KEYS)[number];
 
-/** A navigation entry. `label` is an i18n key under `nav.*`; `module` gates visibility. */
+export const VOCAB_TERMS = ['attendee', 'attendees', 'registration', 'ticket', 'tickets'] as const;
+export type VocabTerm = (typeof VOCAB_TERMS)[number];
+/** Overlay: base term → profile term. Both are i18n keys under `vocab.*`. */
+export type Vocabulary = Readonly<Partial<Record<VocabTerm, string>>>;
+
+export type NavGroup = 'overview' | 'build' | 'run';
+
+/**
+ * A navigation entry. `path` is relative to the event (or org) root; '' is the home page.
+ * The label is `nav.<key>` unless `term` is set, in which case the profile's vocabulary decides it.
+ */
 export interface NavItem {
   readonly key: string;
-  readonly label: string;
+  readonly path: string;
+  readonly group: NavGroup;
   readonly module: ModuleKey;
   readonly icon: string;
+  readonly term?: VocabTerm;
 }
-
-/** Vocabulary overlay: base term → profile term, both i18n keys under `vocab.*`. */
-export type Vocabulary = Readonly<
-  Partial<Record<'attendee' | 'attendees' | 'registration' | 'ticket' | 'tickets', string>>
->;
 
 export interface Profile {
   readonly key: ProfileKey;
@@ -35,31 +42,41 @@ export interface Profile {
   readonly vocabulary: Vocabulary;
 }
 
-const item = (key: string, module: ModuleKey, icon: string): NavItem => ({
+const item = (key: string, group: NavGroup, module: ModuleKey, icon: string, term?: VocabTerm): NavItem => ({
   key,
-  label: `nav.${key}`,
+  path: key === 'home' ? '' : key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`),
+  group,
   module,
   icon,
+  ...(term ? { term } : {}),
 });
 
-const overview = item('overview', 'core', 'home');
-const settings = item('settings', 'core', 'settings');
+const home = item('home', 'overview', 'core', 'home');
+const analysis = item('analysis', 'overview', 'reports', 'chart');
+const setupGuide = item('setupGuide', 'overview', 'core', 'list-checks');
+const branding = item('branding', 'overview', 'whitelabel', 'palette');
+const attendees = item('attendees', 'build', 'attendees', 'users', 'attendees');
+const ticketsOrders = item('ticketsOrders', 'build', 'ticketing', 'ticket');
+const seating = item('seating', 'build', 'seating', 'armchair');
+const marketing = item('marketing', 'build', 'marketing', 'megaphone');
+const onsite = item('onsite', 'run', 'checkin', 'scan');
+const libraries = item('libraries', 'run', 'core', 'library');
 
 export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
   wedding: {
     key: 'wedding',
     defaultModules: ['core', 'guests', 'rsvp', 'seating', 'seat_finder', 'gallery', 'website', 'messaging'],
     nav: [
-      overview,
-      item('guests', 'guests', 'users'),
-      item('rsvp', 'rsvp', 'mail-check'),
-      item('seating', 'seating', 'armchair'),
-      item('seatFinder', 'seat_finder', 'search'),
-      item('gallery', 'gallery', 'image'),
-      item('website', 'website', 'globe'),
-      item('messages', 'messaging', 'message'),
-      item('dayOf', 'checkin', 'calendar-check'),
-      settings,
+      home,
+      setupGuide,
+      item('guests', 'build', 'guests', 'users'),
+      item('rsvp', 'build', 'rsvp', 'mail-check'),
+      seating,
+      item('seatFinder', 'build', 'seat_finder', 'search'),
+      item('website', 'build', 'website', 'globe'),
+      item('gallery', 'build', 'gallery', 'image'),
+      item('messages', 'build', 'messaging', 'message'),
+      item('dayOf', 'run', 'checkin', 'calendar-check'),
     ],
     vocabulary: { attendee: 'guest', attendees: 'guests', registration: 'rsvp' },
   },
@@ -76,31 +93,24 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       'marketing',
     ],
     nav: [
-      overview,
-      item('tickets', 'ticketing', 'ticket'),
-      item('guests', 'attendees', 'users'),
-      item('seating', 'seating', 'armchair'),
-      item('donations', 'donations', 'heart'),
-      item('marketing', 'marketing', 'megaphone'),
-      item('checkIn', 'checkin', 'scan'),
-      item('sales', 'reports', 'chart'),
-      settings,
+      home,
+      analysis,
+      setupGuide,
+      branding,
+      ticketsOrders,
+      attendees,
+      seating,
+      item('donations', 'build', 'donations', 'heart'),
+      marketing,
+      onsite,
     ],
     vocabulary: { attendee: 'guest', attendees: 'guests' },
   },
   concert: {
     key: 'concert',
     defaultModules: ['core', 'ticketing', 'orders', 'attendees', 'checkin', 'marketing', 'reports'],
-    nav: [
-      overview,
-      item('tickets', 'ticketing', 'ticket'),
-      item('attendees', 'attendees', 'users'),
-      item('marketing', 'marketing', 'megaphone'),
-      item('checkIn', 'checkin', 'scan'),
-      item('sales', 'reports', 'chart'),
-      settings,
-    ],
-    vocabulary: {},
+    nav: [home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite],
+    vocabulary: { attendee: 'fan', attendees: 'fans' },
   },
   conference: {
     key: 'conference',
@@ -116,18 +126,21 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       'reports',
     ],
     nav: [
-      overview,
-      item('registration', 'registration', 'clipboard'),
-      item('sessions', 'sessions', 'calendar'),
-      item('speakers', 'speakers', 'mic'),
-      item('exhibitors', 'exhibitors', 'store'),
-      item('sponsors', 'sponsors', 'award'),
-      item('badges', 'badges', 'id-card'),
-      item('checkIn', 'checkin', 'scan'),
-      item('analytics', 'reports', 'chart'),
-      settings,
+      home,
+      analysis,
+      setupGuide,
+      branding,
+      item('registration', 'build', 'registration', 'clipboard', 'registration'),
+      attendees,
+      ticketsOrders,
+      seating,
+      item('sessions', 'build', 'sessions', 'calendar'),
+      item('exhibitors', 'build', 'exhibitors', 'store'),
+      marketing,
+      onsite,
+      libraries,
     ],
-    vocabulary: { attendee: 'registrant', attendees: 'registrants' },
+    vocabulary: {},
   },
   community: {
     key: 'community',
@@ -143,46 +156,40 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       'reports',
     ],
     nav: [
-      overview,
-      item('events', 'events', 'calendar'),
-      item('ticketsRegistration', 'ticketing', 'ticket'),
-      item('attendees', 'attendees', 'users'),
-      item('communications', 'messaging', 'message'),
-      item('donations', 'donations', 'heart'),
-      item('checkIn', 'checkin', 'scan'),
-      item('reports', 'reports', 'chart'),
-      settings,
+      home,
+      analysis,
+      setupGuide,
+      ticketsOrders,
+      attendees,
+      item('communications', 'build', 'messaging', 'message'),
+      item('donations', 'build', 'donations', 'heart'),
+      onsite,
     ],
     vocabulary: { attendee: 'member', attendees: 'members' },
   },
   agency: {
     key: 'agency',
     defaultModules: ['core', 'events', 'marketing', 'reports'],
-    nav: [
-      overview,
-      item('clients', 'core', 'briefcase'),
-      item('events', 'events', 'calendar'),
-      item('marketing', 'marketing', 'megaphone'),
-      item('reports', 'reports', 'chart'),
-      settings,
-    ],
+    nav: [home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite],
     vocabulary: {},
   },
   other: {
     key: 'other',
     defaultModules: ['core', 'events', 'ticketing', 'orders', 'attendees', 'checkin', 'reports'],
-    nav: [
-      overview,
-      item('events', 'events', 'calendar'),
-      item('tickets', 'ticketing', 'ticket'),
-      item('attendees', 'attendees', 'users'),
-      item('checkIn', 'checkin', 'scan'),
-      item('reports', 'reports', 'chart'),
-      settings,
-    ],
+    nav: [home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite],
     vocabulary: {},
   },
 };
+
+/** Resolve a base term through the profile overlay; returns the i18n key under `vocab.*`. */
+export function term(profile: ProfileKey, base: VocabTerm): string {
+  return `vocab.${PROFILES[profile].vocabulary[base] ?? base}`;
+}
+
+/** The i18n key for a nav item's label under this profile. */
+export function navLabelKey(profile: ProfileKey, i: NavItem): string {
+  return i.term ? term(profile, i.term) : `nav.${i.key}`;
+}
 
 /**
  * Navigation for a profile given the org's effective modules: items for modules the org is not
@@ -192,7 +199,6 @@ export function composeNav(profile: ProfileKey, effective: ReadonlySet<string>):
   return PROFILES[profile].nav.filter((i) => effective.has(i.module));
 }
 
-/** Resolve a base term through the profile overlay; returns the i18n key under `vocab.*`. */
-export function term(profile: ProfileKey, base: keyof Vocabulary): string {
-  return `vocab.${PROFILES[profile].vocabulary[base] ?? base}`;
+export function isProfileKey(v: string): v is ProfileKey {
+  return (PROFILE_KEYS as readonly string[]).includes(v);
 }

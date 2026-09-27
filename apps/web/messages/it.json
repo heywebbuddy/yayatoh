@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "Il sistema operativo per gli eventi"
@@ -6,9 +9,274 @@
   "home": {
     "eyebrow": "Yayatoh 2.0",
     "title": "Ogni evento, un unico sistema operativo.",
-    "lede": "Biglietti, ospiti, posti a sedere, check-in e marketing per concerti, gala, matrimoni e conferenze.",
-    "primaryCta": "Vedi lo stato della piattaforma",
+    "lede": "Biglietti, ospiti, posti, check-in e marketing per concerti, gala, matrimoni e conferenze.",
+    "demoCta": "Apri la console demo",
+    "eventCta": "Vedi una pagina evento pubblica",
     "statusLabel": "Piattaforma",
-    "statusOk": "Tutti i sistemi funzionano"
+    "statusOk": "Tutti i sistemi funzionano regolarmente"
+  },
+  "shell": {
+    "navigation": "Navigazione principale",
+    "menu": "Apri menu",
+    "search": "Cerca",
+    "searchPlaceholder": "Cerca partecipanti, ordini, eventi…",
+    "skipToContent": "Vai al contenuto",
+    "switchContext": "Cambia organizzazione o evento",
+    "yourOrganizations": "Le tue organizzazioni",
+    "organization": "Organizzazione"
+  },
+  "notifications": {
+    "open": "Notifiche",
+    "title": "Notifiche",
+    "emptyTitle": "Sei in pari",
+    "emptyDescription": "Gli avvisi su vendite, posti e check-in appariranno qui."
+  },
+  "nav": {
+    "home": "Home",
+    "analysis": "Analisi",
+    "setupGuide": "Guida alla configurazione",
+    "branding": "Branding",
+    "ticketsOrders": "Biglietti e ordini",
+    "seating": "Posti",
+    "sessions": "Sessioni",
+    "exhibitors": "Espositori",
+    "marketing": "Marketing",
+    "onsite": "In loco",
+    "libraries": "Librerie",
+    "guests": "Ospiti",
+    "rsvp": "RSVP",
+    "seatFinder": "Trova posto",
+    "website": "Sito web",
+    "gallery": "Galleria",
+    "messages": "Messaggi",
+    "dayOf": "Giorno dell’evento",
+    "donations": "Donazioni",
+    "communications": "Comunicazioni",
+    "team": "Team"
+  },
+  "vocab": {
+    "attendee": "Partecipante",
+    "attendees": "Partecipanti",
+    "guest": "Ospite",
+    "guests": "Ospiti",
+    "member": "Membro",
+    "members": "Membri",
+    "fan": "Fan",
+    "fans": "Fan",
+    "registration": "Registrazione",
+    "rsvp": "RSVP",
+    "ticket": "Biglietto",
+    "tickets": "Biglietti"
+  },
+  "roles": {
+    "owner": "Proprietario",
+    "admin": "Amministratore",
+    "manager": "Manager",
+    "finance": "Finanza",
+    "marketing": "Marketing",
+    "box_office": "Biglietteria",
+    "scanner": "Controllo accessi",
+    "viewer": "Sola lettura"
+  },
+  "profiles": {
+    "wedding": "Matrimonio",
+    "gala": "Gala",
+    "concert": "Concerto",
+    "conference": "Conferenza",
+    "community": "Comunità",
+    "agency": "Agenzia",
+    "other": "Evento"
+  },
+  "greeting": {
+    "morning": "Buongiorno, {name}.",
+    "afternoon": "Buon pomeriggio, {name}.",
+    "evening": "Buonasera, {name}."
+  },
+  "phase": {
+    "planning": "Pianificazione · {days, plural, one {manca # giorno} other {mancano # giorni}}",
+    "live": "In corso",
+    "completed": "Concluso"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {ancora nessun evento} one {# evento} other {# eventi}}",
+    "events": "Eventi",
+    "emptyTitle": "Ancora nessun evento",
+    "emptyDescription": "Gli eventi che crei appariranno qui.",
+    "open": "Apri evento"
+  },
+  "team": {
+    "subtitle": "{count, plural, one {# membro} other {# membri}}",
+    "unknownUser": "Utente invitato",
+    "empty": "Ancora nessun membro",
+    "name": "Nome",
+    "role": "Ruolo",
+    "since": "Membro dal"
+  },
+  "dashboard": {
+    "previewPage": "Anteprima pagina",
+    "openCommandCenter": "Apri il Command Center",
+    "keyNumbers": "Numeri chiave",
+    "registrationsTrend": "Tutte le registrazioni all’evento",
+    "weeksOut": "Settimane prima",
+    "mix": "Per tipo di biglietto",
+    "needsAttention": "Richiede attenzione",
+    "readiness": "Preparazione dell’evento",
+    "readinessPercent": "Pronto al {value}%"
+  },
+  "kpi": {
+    "registrations": "Registrazioni",
+    "grossSales": "Vendite lorde",
+    "distributed": "Distribuiti",
+    "seated": "Con posto",
+    "invited": "Invitati",
+    "attending": "Partecipano",
+    "awaitingReply": "In attesa di risposta",
+    "goal": "Obiettivo {goal}",
+    "net": "Netto {value}",
+    "thisWeek": "{delta} questa settimana",
+    "ofSold": "di {sold} venduti · {pct}%",
+    "unseated": "{count} ancora senza posto",
+    "atSubEvent": "{count} a {name}",
+    "households": "{count} nuclei familiari",
+    "declined": "{count} hanno rifiutato",
+    "deadline": "RSVP entro il {date}",
+    "reminded": "{count} sollecitati",
+    "tables": "{count} tavoli"
+  },
+  "attention": {
+    "unseated": "{count, plural, one {# persona non ha un posto} other {# persone non hanno un posto}}",
+    "layout": "{name} · disposizione {layout}",
+    "undistributed": "{count} biglietti acquistati non sono stati distribuiti",
+    "distributeLater": "{count} acquirenti con ordini da distribuire in seguito",
+    "paymentsFailed": "{count, plural, one {# pagamento non riuscito} other {# pagamenti non riusciti}}",
+    "last24h": "Ultime 24 ore · rifiutati o 3-D Secure abbandonato",
+    "noMeal": "{count} ospiti non hanno scelto il pasto",
+    "caterer": "Il catering ha bisogno dei numeri definitivi entro il {date}"
+  },
+  "actions": {
+    "assignSeats": "Assegna posti",
+    "remindBuyers": "Sollecita acquirenti",
+    "review": "Rivedi",
+    "remindGuests": "Sollecita ospiti",
+    "import": "Importa",
+    "export": "Esporta",
+    "addAttendee": "Aggiungi {term}",
+    "search": "Cerca",
+    "sendTicket": "Invia biglietto",
+    "changeSeat": "Cambia posto",
+    "checkIn": "Registra ingresso",
+    "tryAgain": "Riprova"
+  },
+  "readiness": {
+    "ticketsOnSale": "Biglietti in vendita",
+    "seatingPublished": "Mappa dei posti pubblicata",
+    "payoutsConnected": "Pagamenti collegati",
+    "brandingDone": "Branding completato",
+    "scannersEnrolled": "Scanner registrati",
+    "invitationsSent": "Inviti inviati",
+    "websitePublished": "Sito web pubblicato",
+    "mealChoices": "Scelte dei pasti raccolte",
+    "done": "Fatto",
+    "todo": "Da fare"
+  },
+  "segments": {
+    "all": "Tutti",
+    "registered": "Registrati",
+    "attending": "Partecipano",
+    "needsSeat": "Senza posto",
+    "awaitingPayment": "Pagamento in attesa",
+    "pending": "In attesa di risposta",
+    "waitlist": "Lista d’attesa"
+  },
+  "attendees": {
+    "segments": "Segmenti",
+    "search": "Cerca {term}",
+    "searchPlaceholder": "Nome, email, ordine o posto",
+    "noMatches": "Nessun risultato",
+    "noMatchesHint": "Prova un altro segmento o termine di ricerca.",
+    "name": "Nome",
+    "ticketType": "Tipo di biglietto",
+    "seat": "Posto",
+    "status": "Stato",
+    "order": "Ordine",
+    "profile": "Profilo",
+    "closeProfile": "Chiudi profilo"
+  },
+  "attendeeStatus": {
+    "paid": "Pagato",
+    "needs_seat": "Senza posto",
+    "awaiting_payment": "Pagamento in attesa",
+    "refund_requested": "Rimborso richiesto",
+    "attending": "Partecipa",
+    "pending": "In attesa di risposta",
+    "declined": "Rifiutato"
+  },
+  "common": {
+    "comingSoon": "In arrivo in una fase successiva",
+    "loading": "Caricamento…"
+  },
+  "section": {
+    "comingTitle": "Quest’area è in costruzione",
+    "comingDescription": "Arriverà in una fase successiva. La navigazione riflette già il tuo piano e il tipo di evento."
+  },
+  "publicEvent": {
+    "nav": "Evento",
+    "passes": "Pass",
+    "agenda": "Programma",
+    "getTickets": "Acquista biglietti",
+    "seeAgenda": "Vedi il programma",
+    "stats": {
+      "days": "giorni",
+      "sessions": "sessioni",
+      "speakers": "relatori",
+      "attendees": "partecipanti",
+      "guests": "ospiti",
+      "tables": "tavoli"
+    },
+    "choosePass": "Scegli il tuo pass",
+    "allIn": "Tutti i prezzi includono tutte le commissioni. Presso {org}, con tecnologia Yayatoh.",
+    "allInSuffix": "tutto incluso",
+    "select": "Seleziona",
+    "poweredBy": "Con tecnologia Yayatoh"
+  },
+  "portal": {
+    "day": "Giorno {day} · {date}",
+    "yourTicket": "Il tuo biglietto",
+    "addToWallet": "Aggiungi a Wallet",
+    "today": "Oggi",
+    "fullAgenda": "Programma completo",
+    "app": "App",
+    "tabs": {
+      "home": "Home",
+      "agenda": "Programma",
+      "ticket": "Biglietto",
+      "map": "Mappa",
+      "profile": "Profilo"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "Solo sviluppo",
+    "title": "Scegli un profilo",
+    "description": "Utenti di prova per ambienti locali e di anteprima. L’accesso reale arriva con M1.2.",
+    "signIn": "Accedi"
+  },
+  "errors": {
+    "validation_failed": "Alcuni dati devono essere corretti.",
+    "unauthenticated": "Accedi di nuovo.",
+    "step_up_required": "Conferma la tua identità per continuare.",
+    "forbidden": "Non hai accesso a questo contenuto.",
+    "module_not_enabled": "Questa funzione non è attiva per la tua organizzazione.",
+    "not_found": "Non l’abbiamo trovato.",
+    "conflict": "È in conflitto con qualcosa che esiste già.",
+    "invalid_state": "Non è possibile farlo in questo momento.",
+    "idempotency_key_reused": "Questa richiesta è già stata inviata con dati diversi.",
+    "rate_limited": "Troppi tentativi. Attendi un momento.",
+    "internal": "Qualcosa è andato storto da parte nostra.",
+    "reference": "Riferimento: {id}"
+  },
+  "notFound": {
+    "title": "Pagina non trovata",
+    "description": "La pagina potrebbe essere stata spostata o potresti non avere accesso.",
+    "home": "Torna alla home"
   }
 }

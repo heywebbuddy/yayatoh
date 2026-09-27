@@ -1,14 +1,282 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "活動作業系統"
   },
   "home": {
     "eyebrow": "Yayatoh 2.0",
-    "title": "每一場活動，一個作業系統。",
-    "lede": "為音樂會、晚宴、婚禮和會議提供票務、賓客、座位、報到和行銷。",
-    "primaryCta": "查看平台狀態",
+    "title": "所有活動，一套作業系統。",
+    "lede": "為演唱會、晚宴、婚禮與研討會提供票務、賓客、座位、報到與行銷管理。",
+    "demoCta": "開啟示範主控台",
+    "eventCta": "查看公開活動頁面",
     "statusLabel": "平台",
     "statusOk": "所有系統運作正常"
+  },
+  "shell": {
+    "navigation": "主要導覽",
+    "menu": "開啟選單",
+    "search": "搜尋",
+    "searchPlaceholder": "搜尋參加者、訂單、活動…",
+    "skipToContent": "跳至主要內容",
+    "switchContext": "切換組織或活動",
+    "yourOrganizations": "你的組織",
+    "organization": "組織"
+  },
+  "notifications": {
+    "open": "通知",
+    "title": "通知",
+    "emptyTitle": "目前沒有新通知",
+    "emptyDescription": "有關銷售、座位與報到的提醒將顯示在這裡。"
+  },
+  "nav": {
+    "home": "首頁",
+    "analysis": "分析",
+    "setupGuide": "設定指南",
+    "branding": "品牌",
+    "ticketsOrders": "票券與訂單",
+    "seating": "座位",
+    "sessions": "場次",
+    "exhibitors": "參展商",
+    "marketing": "行銷",
+    "onsite": "現場",
+    "libraries": "資料庫",
+    "guests": "賓客",
+    "rsvp": "出席回覆",
+    "seatFinder": "座位查詢",
+    "website": "網站",
+    "gallery": "相簿",
+    "messages": "訊息",
+    "dayOf": "活動當天",
+    "donations": "捐款",
+    "communications": "溝通",
+    "team": "團隊"
+  },
+  "vocab": {
+    "attendee": "參加者",
+    "attendees": "參加者",
+    "guest": "賓客",
+    "guests": "賓客",
+    "member": "會員",
+    "members": "會員",
+    "fan": "粉絲",
+    "fans": "粉絲",
+    "registration": "報名",
+    "rsvp": "出席回覆",
+    "ticket": "票券",
+    "tickets": "票券"
+  },
+  "roles": {
+    "owner": "擁有者",
+    "admin": "管理員",
+    "manager": "經理",
+    "finance": "財務",
+    "marketing": "行銷",
+    "box_office": "售票處",
+    "scanner": "驗票員",
+    "viewer": "唯讀"
+  },
+  "profiles": {
+    "wedding": "婚禮",
+    "gala": "晚宴",
+    "concert": "演唱會",
+    "conference": "研討會",
+    "community": "社群",
+    "agency": "代理商",
+    "other": "活動"
+  },
+  "greeting": {
+    "morning": "早安，{name}。",
+    "afternoon": "午安，{name}。",
+    "evening": "晚安，{name}。"
+  },
+  "phase": {
+    "planning": "籌備中 · 還有 {days, plural, other {# 天}}",
+    "live": "進行中",
+    "completed": "已結束"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {尚無活動} other {# 個活動}}",
+    "events": "活動",
+    "emptyTitle": "尚無活動",
+    "emptyDescription": "你建立的活動將顯示在這裡。",
+    "open": "開啟活動"
+  },
+  "team": {
+    "subtitle": "{count, plural, other {# 位成員}}",
+    "unknownUser": "受邀使用者",
+    "empty": "尚無成員",
+    "name": "姓名",
+    "role": "角色",
+    "since": "加入時間"
+  },
+  "dashboard": {
+    "previewPage": "預覽頁面",
+    "openCommandCenter": "開啟指揮中心",
+    "keyNumbers": "關鍵數據",
+    "registrationsTrend": "所有活動報名",
+    "weeksOut": "距活動週數",
+    "mix": "依票種",
+    "needsAttention": "需要注意",
+    "readiness": "活動準備狀態",
+    "readinessPercent": "已完成 {value}%"
+  },
+  "kpi": {
+    "registrations": "報名數",
+    "grossSales": "總銷售額",
+    "distributed": "已發送",
+    "seated": "已安排座位",
+    "invited": "已邀請",
+    "attending": "將出席",
+    "awaitingReply": "等待回覆",
+    "goal": "目標 {goal}",
+    "net": "淨額 {value}",
+    "thisWeek": "本週 {delta}",
+    "ofSold": "已售 {sold} · {pct}%",
+    "unseated": "仍有 {count} 人未安排座位",
+    "atSubEvent": "{name}：{count}",
+    "households": "{count} 個家庭",
+    "declined": "{count} 人婉拒",
+    "deadline": "請於 {date} 前回覆",
+    "reminded": "已提醒 {count} 人",
+    "tables": "{count} 桌"
+  },
+  "attention": {
+    "unseated": "{count, plural, other {# 人沒有座位}}",
+    "layout": "{name} · {layout} 配置",
+    "undistributed": "{count} 張已購票券尚未發送",
+    "distributeLater": "{count} 位買家的訂單選擇稍後發送",
+    "paymentsFailed": "{count, plural, other {# 筆付款失敗}}",
+    "last24h": "過去 24 小時 · 遭拒絕或 3-D Secure 驗證未完成",
+    "noMeal": "{count} 位賓客尚未選擇餐點",
+    "caterer": "外燴廠商需要在 {date} 前取得最終人數"
+  },
+  "actions": {
+    "assignSeats": "分配座位",
+    "remindBuyers": "提醒買家",
+    "review": "檢視",
+    "remindGuests": "提醒賓客",
+    "import": "匯入",
+    "export": "匯出",
+    "addAttendee": "新增{term}",
+    "search": "搜尋",
+    "sendTicket": "發送票券",
+    "changeSeat": "更換座位",
+    "checkIn": "報到",
+    "tryAgain": "再試一次"
+  },
+  "readiness": {
+    "ticketsOnSale": "票券已開賣",
+    "seatingPublished": "座位圖已發布",
+    "payoutsConnected": "已連結撥款帳戶",
+    "brandingDone": "品牌設定已完成",
+    "scannersEnrolled": "掃描裝置已註冊",
+    "invitationsSent": "邀請已寄出",
+    "websitePublished": "網站已發布",
+    "mealChoices": "已收集餐點選擇",
+    "done": "已完成",
+    "todo": "尚未完成"
+  },
+  "segments": {
+    "all": "全部",
+    "registered": "已報名",
+    "attending": "將出席",
+    "needsSeat": "待安排座位",
+    "awaitingPayment": "待付款",
+    "pending": "等待回覆",
+    "waitlist": "候補名單"
+  },
+  "attendees": {
+    "segments": "分群",
+    "search": "搜尋{term}",
+    "searchPlaceholder": "姓名、電子郵件、訂單或座位",
+    "noMatches": "沒有符合的結果",
+    "noMatchesHint": "請嘗試其他分群或搜尋字詞。",
+    "name": "姓名",
+    "ticketType": "票種",
+    "seat": "座位",
+    "status": "狀態",
+    "order": "訂單",
+    "profile": "個人檔案",
+    "closeProfile": "關閉個人檔案"
+  },
+  "attendeeStatus": {
+    "paid": "已付款",
+    "needs_seat": "待安排座位",
+    "awaiting_payment": "待付款",
+    "refund_requested": "已申請退款",
+    "attending": "將出席",
+    "pending": "等待回覆",
+    "declined": "已婉拒"
+  },
+  "common": {
+    "comingSoon": "將於後續里程碑推出",
+    "loading": "載入中…"
+  },
+  "section": {
+    "comingTitle": "此區域正在建置中",
+    "comingDescription": "此功能將於後續里程碑推出。你的導覽已依據你的方案與活動類型調整。"
+  },
+  "publicEvent": {
+    "nav": "活動",
+    "passes": "通行證",
+    "agenda": "議程",
+    "getTickets": "購票",
+    "seeAgenda": "查看議程",
+    "stats": {
+      "days": "天",
+      "sessions": "場次",
+      "speakers": "位講者",
+      "attendees": "位參加者",
+      "guests": "位賓客",
+      "tables": "桌"
+    },
+    "choosePass": "選擇你的通行證",
+    "allIn": "所有價格皆已包含全部費用。主辦單位：{org}，由 Yayatoh 提供技術支援。",
+    "allInSuffix": "含所有費用",
+    "select": "選擇",
+    "poweredBy": "由 Yayatoh 提供技術支援"
+  },
+  "portal": {
+    "day": "第 {day} 天 · {date}",
+    "yourTicket": "你的票券",
+    "addToWallet": "加入 Wallet",
+    "today": "今天",
+    "fullAgenda": "完整議程",
+    "app": "App",
+    "tabs": {
+      "home": "首頁",
+      "agenda": "議程",
+      "ticket": "票券",
+      "map": "地圖",
+      "profile": "個人檔案"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "僅限開發環境",
+    "title": "選擇一個角色",
+    "description": "供本機與預覽環境使用的測試使用者。正式登入將於 M1.2 推出。",
+    "signIn": "登入"
+  },
+  "errors": {
+    "validation_failed": "部分資料需要修正。",
+    "unauthenticated": "請重新登入。",
+    "step_up_required": "請確認你的身分以繼續。",
+    "forbidden": "你沒有存取權限。",
+    "module_not_enabled": "你的組織尚未啟用此功能。",
+    "not_found": "找不到相關內容。",
+    "conflict": "與現有的內容衝突。",
+    "invalid_state": "目前無法執行此操作。",
+    "idempotency_key_reused": "此請求已使用不同的資料送出過。",
+    "rate_limited": "嘗試次數過多，請稍候。",
+    "internal": "我們這邊發生了問題。",
+    "reference": "參考編號：{id}"
+  },
+  "notFound": {
+    "title": "找不到頁面",
+    "description": "此頁面可能已移動，或你沒有存取權限。",
+    "home": "返回首頁"
   }
 }

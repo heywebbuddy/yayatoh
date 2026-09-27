@@ -1,14 +1,282 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "活动操作系统"
   },
   "home": {
     "eyebrow": "Yayatoh 2.0",
-    "title": "每一场活动，一个操作系统。",
-    "lede": "为音乐会、晚宴、婚礼和会议提供票务、宾客、座位、签到和营销。",
-    "primaryCta": "查看平台状态",
+    "title": "所有活动，一个操作系统。",
+    "lede": "为音乐会、晚宴、婚礼和会议提供票务、宾客、座位、签到和营销管理。",
+    "demoCta": "打开演示控制台",
+    "eventCta": "查看公开活动页面",
     "statusLabel": "平台",
     "statusOk": "所有系统运行正常"
+  },
+  "shell": {
+    "navigation": "主导航",
+    "menu": "打开菜单",
+    "search": "搜索",
+    "searchPlaceholder": "搜索参会者、订单、活动…",
+    "skipToContent": "跳到主要内容",
+    "switchContext": "切换组织或活动",
+    "yourOrganizations": "你的组织",
+    "organization": "组织"
+  },
+  "notifications": {
+    "open": "通知",
+    "title": "通知",
+    "emptyTitle": "暂无新通知",
+    "emptyDescription": "有关销售、座位和签到的提醒将显示在这里。"
+  },
+  "nav": {
+    "home": "首页",
+    "analysis": "分析",
+    "setupGuide": "设置指南",
+    "branding": "品牌",
+    "ticketsOrders": "票务与订单",
+    "seating": "座位",
+    "sessions": "议程场次",
+    "exhibitors": "参展商",
+    "marketing": "营销",
+    "onsite": "现场",
+    "libraries": "资源库",
+    "guests": "宾客",
+    "rsvp": "回复确认",
+    "seatFinder": "座位查询",
+    "website": "网站",
+    "gallery": "相册",
+    "messages": "消息",
+    "dayOf": "活动当天",
+    "donations": "捐款",
+    "communications": "沟通",
+    "team": "团队"
+  },
+  "vocab": {
+    "attendee": "参会者",
+    "attendees": "参会者",
+    "guest": "宾客",
+    "guests": "宾客",
+    "member": "会员",
+    "members": "会员",
+    "fan": "粉丝",
+    "fans": "粉丝",
+    "registration": "报名",
+    "rsvp": "回复确认",
+    "ticket": "门票",
+    "tickets": "门票"
+  },
+  "roles": {
+    "owner": "所有者",
+    "admin": "管理员",
+    "manager": "经理",
+    "finance": "财务",
+    "marketing": "营销",
+    "box_office": "售票处",
+    "scanner": "检票员",
+    "viewer": "只读"
+  },
+  "profiles": {
+    "wedding": "婚礼",
+    "gala": "晚宴",
+    "concert": "音乐会",
+    "conference": "会议",
+    "community": "社区",
+    "agency": "代理机构",
+    "other": "活动"
+  },
+  "greeting": {
+    "morning": "早上好，{name}。",
+    "afternoon": "下午好，{name}。",
+    "evening": "晚上好，{name}。"
+  },
+  "phase": {
+    "planning": "筹备中 · 还有 {days, plural, other {# 天}}",
+    "live": "正在进行",
+    "completed": "已结束"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {暂无活动} other {# 个活动}}",
+    "events": "活动",
+    "emptyTitle": "暂无活动",
+    "emptyDescription": "你创建的活动将显示在这里。",
+    "open": "打开活动"
+  },
+  "team": {
+    "subtitle": "{count, plural, other {# 名成员}}",
+    "unknownUser": "受邀用户",
+    "empty": "暂无成员",
+    "name": "姓名",
+    "role": "角色",
+    "since": "加入时间"
+  },
+  "dashboard": {
+    "previewPage": "预览页面",
+    "openCommandCenter": "打开指挥中心",
+    "keyNumbers": "关键数据",
+    "registrationsTrend": "全部活动报名",
+    "weeksOut": "距活动周数",
+    "mix": "按票种",
+    "needsAttention": "需要关注",
+    "readiness": "活动准备情况",
+    "readinessPercent": "已准备 {value}%"
+  },
+  "kpi": {
+    "registrations": "报名数",
+    "grossSales": "总销售额",
+    "distributed": "已分发",
+    "seated": "已安排座位",
+    "invited": "已邀请",
+    "attending": "将出席",
+    "awaitingReply": "待回复",
+    "goal": "目标 {goal}",
+    "net": "净额 {value}",
+    "thisWeek": "本周 {delta}",
+    "ofSold": "已售 {sold} · {pct}%",
+    "unseated": "仍有 {count} 人未安排座位",
+    "atSubEvent": "{name}：{count}",
+    "households": "{count} 个家庭",
+    "declined": "{count} 人婉拒",
+    "deadline": "请于 {date} 前回复",
+    "reminded": "已提醒 {count} 人",
+    "tables": "{count} 桌"
+  },
+  "attention": {
+    "unseated": "{count, plural, other {# 人没有座位}}",
+    "layout": "{name} · {layout} 布局",
+    "undistributed": "{count} 张已购门票尚未分发",
+    "distributeLater": "{count} 位买家的订单选择稍后分发",
+    "paymentsFailed": "{count, plural, other {# 笔付款失败}}",
+    "last24h": "过去 24 小时 · 被拒绝或 3-D Secure 验证未完成",
+    "noMeal": "{count} 位宾客尚未选择餐食",
+    "caterer": "餐饮供应商需要在 {date} 前获得最终人数"
+  },
+  "actions": {
+    "assignSeats": "分配座位",
+    "remindBuyers": "提醒买家",
+    "review": "查看",
+    "remindGuests": "提醒宾客",
+    "import": "导入",
+    "export": "导出",
+    "addAttendee": "添加{term}",
+    "search": "搜索",
+    "sendTicket": "发送门票",
+    "changeSeat": "更换座位",
+    "checkIn": "签到",
+    "tryAgain": "重试"
+  },
+  "readiness": {
+    "ticketsOnSale": "门票已开售",
+    "seatingPublished": "座位图已发布",
+    "payoutsConnected": "已关联收款账户",
+    "brandingDone": "品牌设置已完成",
+    "scannersEnrolled": "扫码设备已注册",
+    "invitationsSent": "邀请已发送",
+    "websitePublished": "网站已发布",
+    "mealChoices": "已收集餐食选择",
+    "done": "已完成",
+    "todo": "未完成"
+  },
+  "segments": {
+    "all": "全部",
+    "registered": "已报名",
+    "attending": "将出席",
+    "needsSeat": "待安排座位",
+    "awaitingPayment": "待付款",
+    "pending": "待回复",
+    "waitlist": "候补名单"
+  },
+  "attendees": {
+    "segments": "分组",
+    "search": "搜索{term}",
+    "searchPlaceholder": "姓名、邮箱、订单或座位",
+    "noMatches": "没有匹配结果",
+    "noMatchesHint": "请尝试其他分组或搜索词。",
+    "name": "姓名",
+    "ticketType": "票种",
+    "seat": "座位",
+    "status": "状态",
+    "order": "订单",
+    "profile": "资料",
+    "closeProfile": "关闭资料"
+  },
+  "attendeeStatus": {
+    "paid": "已付款",
+    "needs_seat": "待安排座位",
+    "awaiting_payment": "待付款",
+    "refund_requested": "已申请退款",
+    "attending": "将出席",
+    "pending": "待回复",
+    "declined": "已婉拒"
+  },
+  "common": {
+    "comingSoon": "将在后续里程碑中推出",
+    "loading": "加载中…"
+  },
+  "section": {
+    "comingTitle": "此区域正在建设中",
+    "comingDescription": "它将在后续里程碑中推出。你的导航已根据你的套餐和活动类型进行调整。"
+  },
+  "publicEvent": {
+    "nav": "活动",
+    "passes": "通行证",
+    "agenda": "议程",
+    "getTickets": "购票",
+    "seeAgenda": "查看议程",
+    "stats": {
+      "days": "天",
+      "sessions": "场次",
+      "speakers": "位演讲嘉宾",
+      "attendees": "位参会者",
+      "guests": "位宾客",
+      "tables": "桌"
+    },
+    "choosePass": "选择你的通行证",
+    "allIn": "所有价格均已包含全部费用。主办方：{org}，由 Yayatoh 提供技术支持。",
+    "allInSuffix": "含全部费用",
+    "select": "选择",
+    "poweredBy": "由 Yayatoh 提供技术支持"
+  },
+  "portal": {
+    "day": "第 {day} 天 · {date}",
+    "yourTicket": "你的门票",
+    "addToWallet": "添加到 Wallet",
+    "today": "今天",
+    "fullAgenda": "完整议程",
+    "app": "应用",
+    "tabs": {
+      "home": "首页",
+      "agenda": "议程",
+      "ticket": "门票",
+      "map": "地图",
+      "profile": "资料"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "仅限开发环境",
+    "title": "选择一个角色",
+    "description": "用于本地和预览环境的测试用户。正式登录将在 M1.2 中推出。",
+    "signIn": "登录"
+  },
+  "errors": {
+    "validation_failed": "部分信息需要修改。",
+    "unauthenticated": "请重新登录。",
+    "step_up_required": "请确认你的身份以继续。",
+    "forbidden": "你没有访问权限。",
+    "module_not_enabled": "你的组织未启用此功能。",
+    "not_found": "未找到相关内容。",
+    "conflict": "与已有内容冲突。",
+    "invalid_state": "当前无法执行此操作。",
+    "idempotency_key_reused": "此请求已使用不同的信息发送过。",
+    "rate_limited": "尝试次数过多，请稍候。",
+    "internal": "我们这边出了点问题。",
+    "reference": "参考编号：{id}"
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "description": "该页面可能已移动，或你没有访问权限。",
+    "home": "返回首页"
   }
 }

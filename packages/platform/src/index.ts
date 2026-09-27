@@ -11,10 +11,15 @@ export {
 } from './outbox/outbox.ts';
 export {
   composeNav,
+  isProfileKey,
+  type NavGroup,
   type NavItem,
+  navLabelKey,
   PROFILE_KEYS,
   PROFILES,
   type Profile,
   type ProfileKey,
   term,
+  VOCAB_TERMS,
+  type VocabTerm,
 } from './profiles/index.ts';

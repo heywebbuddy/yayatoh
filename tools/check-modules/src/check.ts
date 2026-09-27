@@ -91,6 +91,17 @@ export function importsOf(source: string): string[] {
   return out;
 }
 
+/** JSX text nodes containing letters (outside `{…}` expressions). Heuristic, tuned for our TSX. */
+export function literalJsxText(src: string): string[] {
+  const out: string[] = [];
+  for (const m of src.matchAll(/(?:[\w"'}]|\/)>([^<>{}]*)</gu)) {
+    const text = (m[1] ?? '').trim();
+    if (!/\p{L}/u.test(text) || /[;=()[\]]|=>|&&|\|\|/.test(text)) continue;
+    out.push(text.replace(/\s+/g, ' ').slice(0, 40));
+  }
+  return out;
+}
+
 function isTestFile(rel: string): boolean {
   return /(^|\/)tests?\//.test(rel) || /\.(int\.)?test\.tsx?$/.test(rel) || /(^|\/)e2e\//.test(rel);
 }
@@ -131,6 +142,15 @@ export function checkModules(root: string): Violation[] {
       if (hex && !test) add('design-tokens', `raw colour ${hex[0]} — use a token from @yayatoh/ui`);
     }
     if (!SOURCE.test(abs)) continue;
+
+    // UI strings go through next-intl (CLAUDE.md → UI): no literal JSX text or literal labels.
+    if (rel.startsWith('apps/web/src/') && rel.endsWith('.tsx') && !test) {
+      for (const text of literalJsxText(src))
+        add('i18n-literal', `literal UI text "${text}" — use a next-intl message`);
+      for (const m of src.matchAll(/\b(aria-label|placeholder|title|alt|label)="([^"]*\p{L}[^"]*)"/gu)) {
+        add('i18n-literal', `literal ${m[1]}="${m[2]}" — use a next-intl message`);
+      }
+    }
 
     for (const spec of importsOf(src)) {
       // Relative imports must stay inside their own package.

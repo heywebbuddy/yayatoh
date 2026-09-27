@@ -3,6 +3,15 @@
   "compilerOptions": {
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["next-env.d.ts", "src", "tests", "messages", ".next/types/**/*.ts", "next.config.ts"],
+  "include": [
+    "next-env.d.ts",
+    "src",
+    "tests",
+    "e2e",
+    "messages",
+    ".next/types/**/*.ts",
+    "next.config.ts",
+    "playwright.config.ts"
+  ],
   "exclude": ["node_modules"]
 }

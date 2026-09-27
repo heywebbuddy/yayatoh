@@ -7,24 +7,35 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "e2e": "playwright test",
+    "seed": "node scripts/seed.ts"
   },
   "dependencies": {
+    "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/db": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ui": "workspace:*",
     "geist": "1.7.2",
+    "lucide-react": "1.48.0",
     "next": "catalog:",
     "next-intl": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "server-only": "0.0.1",
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
     "@tailwindcss/postcss": "catalog:",
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@yayatoh/config": "workspace:*",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

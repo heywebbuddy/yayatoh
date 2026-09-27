@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "Het besturingssysteem voor evenementen"
@@ -6,9 +9,274 @@
   "home": {
     "eyebrow": "Yayatoh 2.0",
     "title": "Elk evenement, één besturingssysteem.",
-    "lede": "Tickets, gasten, zitplaatsen, check-in en marketing voor concerten, gala’s, bruiloften en congressen.",
-    "primaryCta": "Platformstatus bekijken",
+    "lede": "Tickets, gasten, plaatsen, check-in en marketing voor concerten, gala’s, bruiloften en congressen.",
+    "demoCta": "Open de democonsole",
+    "eventCta": "Bekijk een openbare evenementpagina",
     "statusLabel": "Platform",
     "statusOk": "Alle systemen werken normaal"
+  },
+  "shell": {
+    "navigation": "Hoofdnavigatie",
+    "menu": "Menu openen",
+    "search": "Zoeken",
+    "searchPlaceholder": "Zoek deelnemers, bestellingen, evenementen…",
+    "skipToContent": "Naar inhoud",
+    "switchContext": "Wissel van organisatie of evenement",
+    "yourOrganizations": "Je organisaties",
+    "organization": "Organisatie"
+  },
+  "notifications": {
+    "open": "Meldingen",
+    "title": "Meldingen",
+    "emptyTitle": "Je bent helemaal bij",
+    "emptyDescription": "Meldingen over verkoop, plaatsen en check-in verschijnen hier."
+  },
+  "nav": {
+    "home": "Start",
+    "analysis": "Analyse",
+    "setupGuide": "Installatiegids",
+    "branding": "Huisstijl",
+    "ticketsOrders": "Tickets & bestellingen",
+    "seating": "Plaatsen",
+    "sessions": "Sessies",
+    "exhibitors": "Exposanten",
+    "marketing": "Marketing",
+    "onsite": "Ter plaatse",
+    "libraries": "Bibliotheken",
+    "guests": "Gasten",
+    "rsvp": "RSVP",
+    "seatFinder": "Plaatszoeker",
+    "website": "Website",
+    "gallery": "Galerij",
+    "messages": "Berichten",
+    "dayOf": "Evenementdag",
+    "donations": "Donaties",
+    "communications": "Communicatie",
+    "team": "Team"
+  },
+  "vocab": {
+    "attendee": "Deelnemer",
+    "attendees": "Deelnemers",
+    "guest": "Gast",
+    "guests": "Gasten",
+    "member": "Lid",
+    "members": "Leden",
+    "fan": "Fan",
+    "fans": "Fans",
+    "registration": "Registratie",
+    "rsvp": "RSVP",
+    "ticket": "Ticket",
+    "tickets": "Tickets"
+  },
+  "roles": {
+    "owner": "Eigenaar",
+    "admin": "Beheerder",
+    "manager": "Manager",
+    "finance": "Financiën",
+    "marketing": "Marketing",
+    "box_office": "Kassa",
+    "scanner": "Scanner",
+    "viewer": "Alleen lezen"
+  },
+  "profiles": {
+    "wedding": "Bruiloft",
+    "gala": "Gala",
+    "concert": "Concert",
+    "conference": "Congres",
+    "community": "Community",
+    "agency": "Bureau",
+    "other": "Evenement"
+  },
+  "greeting": {
+    "morning": "Goedemorgen, {name}.",
+    "afternoon": "Goedemiddag, {name}.",
+    "evening": "Goedenavond, {name}."
+  },
+  "phase": {
+    "planning": "Planning · nog {days, plural, one {# dag} other {# dagen}}",
+    "live": "Nu live",
+    "completed": "Afgerond"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {nog geen evenementen} one {# evenement} other {# evenementen}}",
+    "events": "Evenementen",
+    "emptyTitle": "Nog geen evenementen",
+    "emptyDescription": "Evenementen die je aanmaakt verschijnen hier.",
+    "open": "Evenement openen"
+  },
+  "team": {
+    "subtitle": "{count, plural, one {# lid} other {# leden}}",
+    "unknownUser": "Uitgenodigde gebruiker",
+    "empty": "Nog geen leden",
+    "name": "Naam",
+    "role": "Rol",
+    "since": "Lid sinds"
+  },
+  "dashboard": {
+    "previewPage": "Voorbeeld pagina",
+    "openCommandCenter": "Command Center openen",
+    "keyNumbers": "Kerncijfers",
+    "registrationsTrend": "Alle registraties voor het evenement",
+    "weeksOut": "Weken vooraf",
+    "mix": "Per tickettype",
+    "needsAttention": "Vraagt aandacht",
+    "readiness": "Gereedheid evenement",
+    "readinessPercent": "{value}% gereed"
+  },
+  "kpi": {
+    "registrations": "Registraties",
+    "grossSales": "Brutoverkoop",
+    "distributed": "Verdeeld",
+    "seated": "Geplaatst",
+    "invited": "Uitgenodigd",
+    "attending": "Aanwezig",
+    "awaitingReply": "Wacht op antwoord",
+    "goal": "Doel {goal}",
+    "net": "Netto {value}",
+    "thisWeek": "{delta} deze week",
+    "ofSold": "van {sold} verkocht · {pct}%",
+    "unseated": "{count} nog zonder plaats",
+    "atSubEvent": "{count} bij {name}",
+    "households": "{count} huishoudens",
+    "declined": "{count} afgemeld",
+    "deadline": "RSVP vóór {date}",
+    "reminded": "{count} herinnerd",
+    "tables": "{count} tafels"
+  },
+  "attention": {
+    "unseated": "{count, plural, one {# persoon heeft geen plaats} other {# personen hebben geen plaats}}",
+    "layout": "{name} · indeling {layout}",
+    "undistributed": "{count} gekochte tickets zijn niet verdeeld",
+    "distributeLater": "{count} kopers met bestellingen om later te verdelen",
+    "paymentsFailed": "{count, plural, one {# betaling mislukt} other {# betalingen mislukt}}",
+    "last24h": "Afgelopen 24 uur · geweigerd of 3-D Secure afgebroken",
+    "noMeal": "{count} gasten hebben geen maaltijd gekozen",
+    "caterer": "De cateraar heeft de definitieve aantallen nodig vóór {date}"
+  },
+  "actions": {
+    "assignSeats": "Plaatsen toewijzen",
+    "remindBuyers": "Kopers herinneren",
+    "review": "Bekijken",
+    "remindGuests": "Gasten herinneren",
+    "import": "Importeren",
+    "export": "Exporteren",
+    "addAttendee": "{term} toevoegen",
+    "search": "Zoeken",
+    "sendTicket": "Ticket versturen",
+    "changeSeat": "Plaats wijzigen",
+    "checkIn": "Inchecken",
+    "tryAgain": "Opnieuw proberen"
+  },
+  "readiness": {
+    "ticketsOnSale": "Tickets in de verkoop",
+    "seatingPublished": "Plattegrond gepubliceerd",
+    "payoutsConnected": "Uitbetalingen gekoppeld",
+    "brandingDone": "Huisstijl voltooid",
+    "scannersEnrolled": "Scanners aangemeld",
+    "invitationsSent": "Uitnodigingen verstuurd",
+    "websitePublished": "Website gepubliceerd",
+    "mealChoices": "Maaltijdkeuzes verzameld",
+    "done": "Klaar",
+    "todo": "Nog te doen"
+  },
+  "segments": {
+    "all": "Alle",
+    "registered": "Geregistreerd",
+    "attending": "Aanwezig",
+    "needsSeat": "Zonder plaats",
+    "awaitingPayment": "Wacht op betaling",
+    "pending": "Wacht op antwoord",
+    "waitlist": "Wachtlijst"
+  },
+  "attendees": {
+    "segments": "Segmenten",
+    "search": "{term} zoeken",
+    "searchPlaceholder": "Naam, e-mail, bestelling of plaats",
+    "noMatches": "Geen resultaten",
+    "noMatchesHint": "Probeer een ander segment of een andere zoekterm.",
+    "name": "Naam",
+    "ticketType": "Tickettype",
+    "seat": "Plaats",
+    "status": "Status",
+    "order": "Bestelling",
+    "profile": "Profiel",
+    "closeProfile": "Profiel sluiten"
+  },
+  "attendeeStatus": {
+    "paid": "Betaald",
+    "needs_seat": "Zonder plaats",
+    "awaiting_payment": "Wacht op betaling",
+    "refund_requested": "Terugbetaling aangevraagd",
+    "attending": "Aanwezig",
+    "pending": "Wacht op antwoord",
+    "declined": "Afgemeld"
+  },
+  "common": {
+    "comingSoon": "Komt in een latere mijlpaal",
+    "loading": "Laden…"
+  },
+  "section": {
+    "comingTitle": "Dit onderdeel wordt gebouwd",
+    "comingDescription": "Het komt in een latere mijlpaal. Je navigatie past al bij je abonnement en type evenement."
+  },
+  "publicEvent": {
+    "nav": "Evenement",
+    "passes": "Passen",
+    "agenda": "Programma",
+    "getTickets": "Tickets kopen",
+    "seeAgenda": "Bekijk het programma",
+    "stats": {
+      "days": "dagen",
+      "sessions": "sessies",
+      "speakers": "sprekers",
+      "attendees": "deelnemers",
+      "guests": "gasten",
+      "tables": "tafels"
+    },
+    "choosePass": "Kies je pas",
+    "allIn": "Alle prijzen zijn inclusief alle kosten. Bij {org}, mogelijk gemaakt door Yayatoh.",
+    "allInSuffix": "all-in",
+    "select": "Kiezen",
+    "poweredBy": "Mogelijk gemaakt door Yayatoh"
+  },
+  "portal": {
+    "day": "Dag {day} · {date}",
+    "yourTicket": "Je ticket",
+    "addToWallet": "Toevoegen aan Wallet",
+    "today": "Vandaag",
+    "fullAgenda": "Volledig programma",
+    "app": "App",
+    "tabs": {
+      "home": "Start",
+      "agenda": "Programma",
+      "ticket": "Ticket",
+      "map": "Kaart",
+      "profile": "Profiel"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "Alleen ontwikkeling",
+    "title": "Kies een persona",
+    "description": "Testgebruikers voor lokale en previewomgevingen. Echt inloggen komt met M1.2.",
+    "signIn": "Inloggen"
+  },
+  "errors": {
+    "validation_failed": "Sommige gegevens moeten worden aangepast.",
+    "unauthenticated": "Log opnieuw in.",
+    "step_up_required": "Bevestig dat jij het bent om verder te gaan.",
+    "forbidden": "Je hebt hier geen toegang toe.",
+    "module_not_enabled": "Deze functie is niet ingeschakeld voor je organisatie.",
+    "not_found": "We konden dat niet vinden.",
+    "conflict": "Dit conflicteert met iets dat al bestaat.",
+    "invalid_state": "Dat kan op dit moment niet.",
+    "idempotency_key_reused": "Dit verzoek is al verstuurd met andere gegevens.",
+    "rate_limited": "Te veel pogingen. Wacht even.",
+    "internal": "Er ging bij ons iets mis.",
+    "reference": "Referentie: {id}"
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "description": "De pagina is mogelijk verplaatst, of je hebt geen toegang.",
+    "home": "Naar start"
   }
 }

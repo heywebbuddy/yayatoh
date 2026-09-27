@@ -63,3 +63,16 @@ describe('Table', () => {
     expect(html).toContain('Nothing yet');
   });
 });
+
+describe('chart swatches', () => {
+  it('use literal token classes Tailwind can see', async () => {
+    const { swatchClass } = await import('../src/index.ts');
+    const src = (await import('node:fs')).readFileSync(
+      new URL('../src/components/charts.tsx', import.meta.url),
+      'utf8',
+    );
+    for (const tone of ['accent', 'zinc-400', 'zinc-300', 'green', 'pink', 'yellow'] as const) {
+      expect(src).toContain(`'${swatchClass(tone)}'`);
+    }
+  });
+});

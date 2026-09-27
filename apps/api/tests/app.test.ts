@@ -21,10 +21,16 @@ describe('/v1', () => {
     expect(openApiDocument().paths?.['/v1/health']).toBeDefined();
   });
 
-  it('returns the error envelope for unknown routes', async () => {
+  it('returns RFC 9457 problem+json for unknown routes', async () => {
     const res = await app.request('/v1/nope');
     expect(res.status).toBe(404);
-    expect(await res.json()).toEqual({ error: { code: 'not_found', message: 'Not found' } });
+    expect(res.headers.get('content-type')).toBe('application/problem+json');
+    expect(await res.json()).toEqual({
+      type: 'https://docs.yayatoh.com/problems/not_found',
+      title: 'Not found',
+      status: 404,
+      code: 'not_found',
+    });
   });
 
   it('sets secure headers', async () => {

@@ -36,10 +36,17 @@ export const IanaTimezone = z.string().refine((tz) => {
 }, 'unknown IANA timezone');
 export const MoneyDto = z.object({ amount: z.int(), currency: CurrencyCode });
 
-export const ErrorDto = z.object({
-  error: z.object({
-    code: z.string(),
-    message: z.string(),
-    details: z.record(z.string(), z.unknown()).optional(),
-  }),
+/**
+ * RFC 9457 problem details. `code` is the stable machine code (kernel ErrorCode) that clients map
+ * to localized messages; `detail` is developer-facing English and never shown to end users.
+ */
+export const ProblemDto = z.object({
+  type: z.string(),
+  title: z.string(),
+  status: z.int(),
+  code: z.string(),
+  detail: z.string().optional(),
+  details: z.record(z.string(), z.unknown()).optional(),
 });
+export type ProblemDto = z.infer<typeof ProblemDto>;
+export const PROBLEM_TYPE_BASE = 'https://docs.yayatoh.com/problems/';

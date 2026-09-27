@@ -1,14 +1,282 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
-    "title": "يايا توه",
+    "title": "Yayatoh",
     "description": "نظام تشغيل الفعاليات"
   },
   "home": {
-    "eyebrow": "يايا توه 2.0",
+    "eyebrow": "Yayatoh 2.0",
     "title": "كل فعالية، نظام تشغيل واحد.",
-    "lede": "التذاكر والضيوف وتوزيع المقاعد وتسجيل الحضور والتسويق للحفلات والأمسيات والأعراس والمؤتمرات.",
-    "primaryCta": "عرض حالة المنصة",
+    "lede": "التذاكر والضيوف والمقاعد وتسجيل الحضور والتسويق للحفلات الموسيقية والحفلات الرسمية وحفلات الزفاف والمؤتمرات.",
+    "demoCta": "فتح وحدة التحكم التجريبية",
+    "eventCta": "عرض صفحة فعالية عامة",
     "statusLabel": "المنصة",
     "statusOk": "جميع الأنظمة تعمل بشكل طبيعي"
+  },
+  "shell": {
+    "navigation": "التنقل الرئيسي",
+    "menu": "فتح القائمة",
+    "search": "بحث",
+    "searchPlaceholder": "ابحث عن الحضور والطلبات والفعاليات…",
+    "skipToContent": "انتقل إلى المحتوى",
+    "switchContext": "تبديل المؤسسة أو الفعالية",
+    "yourOrganizations": "مؤسساتك",
+    "organization": "المؤسسة"
+  },
+  "notifications": {
+    "open": "الإشعارات",
+    "title": "الإشعارات",
+    "emptyTitle": "لا توجد إشعارات جديدة",
+    "emptyDescription": "ستظهر هنا التنبيهات المتعلقة بالمبيعات والمقاعد وتسجيل الحضور."
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "analysis": "التحليلات",
+    "setupGuide": "دليل الإعداد",
+    "branding": "الهوية البصرية",
+    "ticketsOrders": "التذاكر والطلبات",
+    "seating": "المقاعد",
+    "sessions": "الجلسات",
+    "exhibitors": "العارضون",
+    "marketing": "التسويق",
+    "onsite": "في الموقع",
+    "libraries": "المكتبات",
+    "guests": "الضيوف",
+    "rsvp": "تأكيد الحضور",
+    "seatFinder": "البحث عن مقعد",
+    "website": "الموقع الإلكتروني",
+    "gallery": "المعرض",
+    "messages": "الرسائل",
+    "dayOf": "يوم الفعالية",
+    "donations": "التبرعات",
+    "communications": "الاتصالات",
+    "team": "الفريق"
+  },
+  "vocab": {
+    "attendee": "حاضر",
+    "attendees": "الحضور",
+    "guest": "ضيف",
+    "guests": "الضيوف",
+    "member": "عضو",
+    "members": "الأعضاء",
+    "fan": "معجب",
+    "fans": "المعجبون",
+    "registration": "تسجيل",
+    "rsvp": "تأكيد الحضور",
+    "ticket": "تذكرة",
+    "tickets": "التذاكر"
+  },
+  "roles": {
+    "owner": "المالك",
+    "admin": "مسؤول",
+    "manager": "مدير",
+    "finance": "المالية",
+    "marketing": "التسويق",
+    "box_office": "شباك التذاكر",
+    "scanner": "ماسح التذاكر",
+    "viewer": "مشاهد فقط"
+  },
+  "profiles": {
+    "wedding": "حفل زفاف",
+    "gala": "حفل رسمي",
+    "concert": "حفل موسيقي",
+    "conference": "مؤتمر",
+    "community": "مجتمع",
+    "agency": "وكالة",
+    "other": "فعالية"
+  },
+  "greeting": {
+    "morning": "صباح الخير يا {name}.",
+    "afternoon": "مساء الخير يا {name}.",
+    "evening": "مساء الخير يا {name}."
+  },
+  "phase": {
+    "planning": "التخطيط · {days, plural, zero {لا أيام متبقية} one {يوم واحد متبقٍ} two {يومان متبقيان} few {# أيام متبقية} many {# يومًا متبقيًا} other {# يوم متبقٍ}}",
+    "live": "مباشر الآن",
+    "completed": "مكتملة"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {لا توجد فعاليات بعد} zero {لا توجد فعاليات} one {فعالية واحدة} two {فعاليتان} few {# فعاليات} many {# فعالية} other {# فعالية}}",
+    "events": "الفعاليات",
+    "emptyTitle": "لا توجد فعاليات بعد",
+    "emptyDescription": "ستظهر هنا الفعاليات التي تنشئها.",
+    "open": "فتح الفعالية"
+  },
+  "team": {
+    "subtitle": "{count, plural, zero {لا أعضاء} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",
+    "unknownUser": "مستخدم مدعو",
+    "empty": "لا يوجد أعضاء بعد",
+    "name": "الاسم",
+    "role": "الدور",
+    "since": "عضو منذ"
+  },
+  "dashboard": {
+    "previewPage": "معاينة الصفحة",
+    "openCommandCenter": "فتح مركز القيادة",
+    "keyNumbers": "الأرقام الرئيسية",
+    "registrationsTrend": "جميع تسجيلات الفعالية",
+    "weeksOut": "أسابيع قبل الفعالية",
+    "mix": "حسب نوع التذكرة",
+    "needsAttention": "يتطلب الانتباه",
+    "readiness": "جاهزية الفعالية",
+    "readinessPercent": "جاهزة بنسبة {value}%"
+  },
+  "kpi": {
+    "registrations": "التسجيلات",
+    "grossSales": "إجمالي المبيعات",
+    "distributed": "الموزعة",
+    "seated": "بمقاعد",
+    "invited": "المدعوون",
+    "attending": "سيحضرون",
+    "awaitingReply": "بانتظار الرد",
+    "goal": "الهدف {goal}",
+    "net": "الصافي {value}",
+    "thisWeek": "{delta} هذا الأسبوع",
+    "ofSold": "من {sold} مباعة · {pct}%",
+    "unseated": "{count} لا يزالون بلا مقاعد",
+    "atSubEvent": "{count} في {name}",
+    "households": "{count} أسر",
+    "declined": "{count} اعتذروا",
+    "deadline": "أكّد الحضور قبل {date}",
+    "reminded": "تم تذكير {count}",
+    "tables": "{count} طاولات"
+  },
+  "attention": {
+    "unseated": "{count, plural, zero {لا أحد بلا مقعد} one {شخص واحد ليس لديه مقعد} two {شخصان ليس لديهما مقعد} few {# أشخاص ليس لديهم مقاعد} many {# شخصًا ليس لديهم مقاعد} other {# شخص ليس لديهم مقاعد}}",
+    "layout": "{name} · تخطيط {layout}",
+    "undistributed": "لم يتم توزيع {count} من التذاكر المشتراة",
+    "distributeLater": "{count} من المشترين لديهم طلبات للتوزيع لاحقًا",
+    "paymentsFailed": "{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت عملية دفع واحدة} two {فشلت عمليتا دفع} few {فشلت # عمليات دفع} many {فشلت # عملية دفع} other {فشلت # عملية دفع}}",
+    "last24h": "آخر 24 ساعة · مرفوضة أو لم يكتمل 3-D Secure",
+    "noMeal": "{count} من الضيوف لم يختاروا وجبة",
+    "caterer": "يحتاج متعهد الطعام إلى الأعداد النهائية قبل {date}"
+  },
+  "actions": {
+    "assignSeats": "تعيين المقاعد",
+    "remindBuyers": "تذكير المشترين",
+    "review": "مراجعة",
+    "remindGuests": "تذكير الضيوف",
+    "import": "استيراد",
+    "export": "تصدير",
+    "addAttendee": "إضافة {term}",
+    "search": "بحث",
+    "sendTicket": "إرسال التذكرة",
+    "changeSeat": "تغيير المقعد",
+    "checkIn": "تسجيل الحضور",
+    "tryAgain": "إعادة المحاولة"
+  },
+  "readiness": {
+    "ticketsOnSale": "التذاكر معروضة للبيع",
+    "seatingPublished": "تم نشر مخطط المقاعد",
+    "payoutsConnected": "تم ربط المدفوعات",
+    "brandingDone": "اكتملت الهوية البصرية",
+    "scannersEnrolled": "تم تسجيل الماسحات",
+    "invitationsSent": "تم إرسال الدعوات",
+    "websitePublished": "تم نشر الموقع",
+    "mealChoices": "تم جمع اختيارات الوجبات",
+    "done": "تم",
+    "todo": "لم يتم بعد"
+  },
+  "segments": {
+    "all": "الكل",
+    "registered": "المسجلون",
+    "attending": "سيحضرون",
+    "needsSeat": "بحاجة إلى مقعد",
+    "awaitingPayment": "بانتظار الدفع",
+    "pending": "بانتظار الرد",
+    "waitlist": "قائمة الانتظار"
+  },
+  "attendees": {
+    "segments": "الشرائح",
+    "search": "البحث في {term}",
+    "searchPlaceholder": "الاسم أو البريد الإلكتروني أو الطلب أو المقعد",
+    "noMatches": "لا توجد نتائج",
+    "noMatchesHint": "جرّب شريحة أو عبارة بحث أخرى.",
+    "name": "الاسم",
+    "ticketType": "نوع التذكرة",
+    "seat": "المقعد",
+    "status": "الحالة",
+    "order": "الطلب",
+    "profile": "الملف الشخصي",
+    "closeProfile": "إغلاق الملف الشخصي"
+  },
+  "attendeeStatus": {
+    "paid": "مدفوع",
+    "needs_seat": "بحاجة إلى مقعد",
+    "awaiting_payment": "بانتظار الدفع",
+    "refund_requested": "طُلب استرداد",
+    "attending": "سيحضر",
+    "pending": "بانتظار الرد",
+    "declined": "اعتذر"
+  },
+  "common": {
+    "comingSoon": "قادم في مرحلة لاحقة",
+    "loading": "جارٍ التحميل…"
+  },
+  "section": {
+    "comingTitle": "هذا القسم قيد الإنشاء",
+    "comingDescription": "سيتوفر في مرحلة لاحقة. يعكس التنقل لديك بالفعل خطتك ونوع فعاليتك."
+  },
+  "publicEvent": {
+    "nav": "الفعالية",
+    "passes": "التصاريح",
+    "agenda": "البرنامج",
+    "getTickets": "احصل على التذاكر",
+    "seeAgenda": "عرض البرنامج",
+    "stats": {
+      "days": "أيام",
+      "sessions": "جلسات",
+      "speakers": "متحدثون",
+      "attendees": "حضور",
+      "guests": "ضيوف",
+      "tables": "طاولات"
+    },
+    "choosePass": "اختر تصريحك",
+    "allIn": "تشمل جميع الأسعار كل الرسوم. لدى {org}، بدعم من Yayatoh.",
+    "allInSuffix": "شامل الرسوم",
+    "select": "اختيار",
+    "poweredBy": "بدعم من Yayatoh"
+  },
+  "portal": {
+    "day": "اليوم {day} · {date}",
+    "yourTicket": "تذكرتك",
+    "addToWallet": "إضافة إلى Wallet",
+    "today": "اليوم",
+    "fullAgenda": "البرنامج الكامل",
+    "app": "التطبيق",
+    "tabs": {
+      "home": "الرئيسية",
+      "agenda": "البرنامج",
+      "ticket": "التذكرة",
+      "map": "الخريطة",
+      "profile": "الملف الشخصي"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "للتطوير فقط",
+    "title": "اختر شخصية",
+    "description": "مستخدمون تجريبيون للبيئات المحلية وبيئات المعاينة. يتوفر تسجيل الدخول الفعلي مع M1.2.",
+    "signIn": "تسجيل الدخول"
+  },
+  "errors": {
+    "validation_failed": "بعض التفاصيل تحتاج إلى تصحيح.",
+    "unauthenticated": "يرجى تسجيل الدخول مرة أخرى.",
+    "step_up_required": "يرجى تأكيد هويتك للمتابعة.",
+    "forbidden": "ليس لديك صلاحية الوصول إلى هذا.",
+    "module_not_enabled": "هذه الميزة غير مفعّلة لمؤسستك.",
+    "not_found": "لم نتمكن من العثور على ذلك.",
+    "conflict": "يتعارض هذا مع عنصر موجود بالفعل.",
+    "invalid_state": "لا يمكن تنفيذ ذلك الآن.",
+    "idempotency_key_reused": "تم إرسال هذا الطلب مسبقًا بتفاصيل مختلفة.",
+    "rate_limited": "محاولات كثيرة جدًا. يرجى الانتظار قليلًا.",
+    "internal": "حدث خطأ من جانبنا.",
+    "reference": "المرجع: {id}"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "description": "ربما نُقلت الصفحة، أو ليس لديك صلاحية الوصول.",
+    "home": "الذهاب إلى الرئيسية"
   }
 }

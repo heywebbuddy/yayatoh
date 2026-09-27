@@ -17,7 +17,12 @@ export const OrganizationDto = z.object({
 export type OrganizationDto = z.infer<typeof OrganizationDto>;
 export const organizationSerializer = defineSerializer('tenancy.organization', OrganizationDto);
 
-export const MembershipDto = z.object({ orgId: z.uuid(), userId: z.uuid(), role: z.enum(ORG_ROLES) });
+export const MembershipDto = z.object({
+  orgId: z.uuid(),
+  userId: z.uuid(),
+  role: z.enum(ORG_ROLES),
+  createdAt: z.date(),
+});
 export type MembershipDto = z.infer<typeof MembershipDto>;
 export const membershipSerializer = defineSerializer('tenancy.membership', MembershipDto);
 

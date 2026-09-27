@@ -19,7 +19,7 @@
     "db:bootstrap": "pnpm --filter @yayatoh/db bootstrap",
     "db:generate": "pnpm --filter @yayatoh/db generate",
     "db:migrate": "pnpm --filter @yayatoh/db migrate",
-    "seed": "pnpm --filter @yayatoh/testing seed",
+    "seed": "pnpm --filter @yayatoh/web seed",
     "contracts:check": "pnpm --filter @yayatoh/api openapi:check",
     "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
   },

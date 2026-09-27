@@ -1,14 +1,282 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "Операционная система для мероприятий"
   },
   "home": {
     "eyebrow": "Yayatoh 2.0",
-    "title": "Каждое мероприятие — одна система.",
-    "lede": "Билеты, гости, рассадка, регистрация и маркетинг для концертов, гала-вечеров, свадеб и конференций.",
-    "primaryCta": "Статус платформы",
+    "title": "Любое мероприятие — одна операционная система.",
+    "lede": "Билеты, гости, рассадка, регистрация на входе и маркетинг для концертов, гала-вечеров, свадеб и конференций.",
+    "demoCta": "Открыть демо-консоль",
+    "eventCta": "Посмотреть публичную страницу мероприятия",
     "statusLabel": "Платформа",
     "statusOk": "Все системы работают нормально"
+  },
+  "shell": {
+    "navigation": "Основная навигация",
+    "menu": "Открыть меню",
+    "search": "Поиск",
+    "searchPlaceholder": "Поиск участников, заказов, мероприятий…",
+    "skipToContent": "Перейти к содержимому",
+    "switchContext": "Сменить организацию или мероприятие",
+    "yourOrganizations": "Ваши организации",
+    "organization": "Организация"
+  },
+  "notifications": {
+    "open": "Уведомления",
+    "title": "Уведомления",
+    "emptyTitle": "Новых уведомлений нет",
+    "emptyDescription": "Здесь появятся оповещения о продажах, рассадке и регистрации на входе."
+  },
+  "nav": {
+    "home": "Главная",
+    "analysis": "Аналитика",
+    "setupGuide": "Руководство по настройке",
+    "branding": "Брендинг",
+    "ticketsOrders": "Билеты и заказы",
+    "seating": "Рассадка",
+    "sessions": "Сессии",
+    "exhibitors": "Экспоненты",
+    "marketing": "Маркетинг",
+    "onsite": "На площадке",
+    "libraries": "Библиотеки",
+    "guests": "Гости",
+    "rsvp": "RSVP",
+    "seatFinder": "Поиск места",
+    "website": "Сайт",
+    "gallery": "Галерея",
+    "messages": "Сообщения",
+    "dayOf": "День мероприятия",
+    "donations": "Пожертвования",
+    "communications": "Коммуникации",
+    "team": "Команда"
+  },
+  "vocab": {
+    "attendee": "Участник",
+    "attendees": "Участники",
+    "guest": "Гость",
+    "guests": "Гости",
+    "member": "Член",
+    "members": "Члены",
+    "fan": "Фанат",
+    "fans": "Фанаты",
+    "registration": "Регистрация",
+    "rsvp": "RSVP",
+    "ticket": "Билет",
+    "tickets": "Билеты"
+  },
+  "roles": {
+    "owner": "Владелец",
+    "admin": "Администратор",
+    "manager": "Менеджер",
+    "finance": "Финансы",
+    "marketing": "Маркетинг",
+    "box_office": "Касса",
+    "scanner": "Контролёр",
+    "viewer": "Только просмотр"
+  },
+  "profiles": {
+    "wedding": "Свадьба",
+    "gala": "Гала-вечер",
+    "concert": "Концерт",
+    "conference": "Конференция",
+    "community": "Сообщество",
+    "agency": "Агентство",
+    "other": "Мероприятие"
+  },
+  "greeting": {
+    "morning": "Доброе утро, {name}.",
+    "afternoon": "Добрый день, {name}.",
+    "evening": "Добрый вечер, {name}."
+  },
+  "phase": {
+    "planning": "Подготовка · {days, plural, one {остался # день} few {осталось # дня} many {осталось # дней} other {осталось # дня}}",
+    "live": "Идёт сейчас",
+    "completed": "Завершено"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {пока нет мероприятий} one {# мероприятие} few {# мероприятия} many {# мероприятий} other {# мероприятия}}",
+    "events": "Мероприятия",
+    "emptyTitle": "Пока нет мероприятий",
+    "emptyDescription": "Созданные вами мероприятия появятся здесь.",
+    "open": "Открыть мероприятие"
+  },
+  "team": {
+    "subtitle": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
+    "unknownUser": "Приглашённый пользователь",
+    "empty": "Пока нет участников",
+    "name": "Имя",
+    "role": "Роль",
+    "since": "В команде с"
+  },
+  "dashboard": {
+    "previewPage": "Предпросмотр страницы",
+    "openCommandCenter": "Открыть командный центр",
+    "keyNumbers": "Ключевые показатели",
+    "registrationsTrend": "Все регистрации на мероприятие",
+    "weeksOut": "Недель до начала",
+    "mix": "По типам билетов",
+    "needsAttention": "Требует внимания",
+    "readiness": "Готовность мероприятия",
+    "readinessPercent": "Готово на {value}%"
+  },
+  "kpi": {
+    "registrations": "Регистрации",
+    "grossSales": "Валовые продажи",
+    "distributed": "Распределено",
+    "seated": "Рассажено",
+    "invited": "Приглашено",
+    "attending": "Придут",
+    "awaitingReply": "Ждём ответа",
+    "goal": "Цель {goal}",
+    "net": "Чистыми {value}",
+    "thisWeek": "{delta} за эту неделю",
+    "ofSold": "из {sold} проданных · {pct}%",
+    "unseated": "Без места: {count}",
+    "atSubEvent": "{count} — {name}",
+    "households": "Семей: {count}",
+    "declined": "Отказались: {count}",
+    "deadline": "Ответить до {date}",
+    "reminded": "Напомнили: {count}",
+    "tables": "Столов: {count}"
+  },
+  "attention": {
+    "unseated": "{count, plural, one {# человек без места} few {# человека без места} many {# человек без места} other {# человека без места}}",
+    "layout": "{name} · схема {layout}",
+    "undistributed": "Купленные билеты не распределены: {count}",
+    "distributeLater": "Покупатели с заказами для распределения позже: {count}",
+    "paymentsFailed": "{count, plural, one {# платёж не прошёл} few {# платежа не прошли} many {# платежей не прошли} other {# платежа не прошли}}",
+    "last24h": "За последние 24 часа · отклонены или 3-D Secure не завершён",
+    "noMeal": "Гости без выбранного меню: {count}",
+    "caterer": "Кейтерингу нужны окончательные цифры до {date}"
+  },
+  "actions": {
+    "assignSeats": "Назначить места",
+    "remindBuyers": "Напомнить покупателям",
+    "review": "Проверить",
+    "remindGuests": "Напомнить гостям",
+    "import": "Импорт",
+    "export": "Экспорт",
+    "addAttendee": "Добавить: {term}",
+    "search": "Поиск",
+    "sendTicket": "Отправить билет",
+    "changeSeat": "Сменить место",
+    "checkIn": "Отметить вход",
+    "tryAgain": "Повторить"
+  },
+  "readiness": {
+    "ticketsOnSale": "Билеты в продаже",
+    "seatingPublished": "Схема рассадки опубликована",
+    "payoutsConnected": "Выплаты подключены",
+    "brandingDone": "Брендинг завершён",
+    "scannersEnrolled": "Сканеры подключены",
+    "invitationsSent": "Приглашения отправлены",
+    "websitePublished": "Сайт опубликован",
+    "mealChoices": "Выбор меню собран",
+    "done": "Готово",
+    "todo": "Ещё не сделано"
+  },
+  "segments": {
+    "all": "Все",
+    "registered": "Зарегистрированы",
+    "attending": "Придут",
+    "needsSeat": "Без места",
+    "awaitingPayment": "Ждут оплаты",
+    "pending": "Ждём ответа",
+    "waitlist": "Лист ожидания"
+  },
+  "attendees": {
+    "segments": "Сегменты",
+    "search": "Поиск: {term}",
+    "searchPlaceholder": "Имя, email, заказ или место",
+    "noMatches": "Ничего не найдено",
+    "noMatchesHint": "Попробуйте другой сегмент или запрос.",
+    "name": "Имя",
+    "ticketType": "Тип билета",
+    "seat": "Место",
+    "status": "Статус",
+    "order": "Заказ",
+    "profile": "Профиль",
+    "closeProfile": "Закрыть профиль"
+  },
+  "attendeeStatus": {
+    "paid": "Оплачено",
+    "needs_seat": "Без места",
+    "awaiting_payment": "Ждёт оплаты",
+    "refund_requested": "Запрошен возврат",
+    "attending": "Придёт",
+    "pending": "Ждём ответа",
+    "declined": "Отказался"
+  },
+  "common": {
+    "comingSoon": "Появится на следующем этапе",
+    "loading": "Загрузка…"
+  },
+  "section": {
+    "comingTitle": "Этот раздел в разработке",
+    "comingDescription": "Он появится на следующем этапе. Навигация уже соответствует вашему тарифу и типу мероприятия."
+  },
+  "publicEvent": {
+    "nav": "Мероприятие",
+    "passes": "Пропуска",
+    "agenda": "Программа",
+    "getTickets": "Купить билеты",
+    "seeAgenda": "Смотреть программу",
+    "stats": {
+      "days": "дней",
+      "sessions": "сессий",
+      "speakers": "спикеров",
+      "attendees": "участников",
+      "guests": "гостей",
+      "tables": "столов"
+    },
+    "choosePass": "Выберите пропуск",
+    "allIn": "Все цены включают все сборы. Организатор — {org}, на платформе Yayatoh.",
+    "allInSuffix": "всё включено",
+    "select": "Выбрать",
+    "poweredBy": "Работает на Yayatoh"
+  },
+  "portal": {
+    "day": "День {day} · {date}",
+    "yourTicket": "Ваш билет",
+    "addToWallet": "Добавить в Wallet",
+    "today": "Сегодня",
+    "fullAgenda": "Вся программа",
+    "app": "Приложение",
+    "tabs": {
+      "home": "Главная",
+      "agenda": "Программа",
+      "ticket": "Билет",
+      "map": "Карта",
+      "profile": "Профиль"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "Только для разработки",
+    "title": "Выберите персону",
+    "description": "Тестовые пользователи для локальной среды и предпросмотра. Настоящий вход появится в M1.2.",
+    "signIn": "Войти"
+  },
+  "errors": {
+    "validation_failed": "Некоторые данные нужно исправить.",
+    "unauthenticated": "Войдите снова.",
+    "step_up_required": "Подтвердите, что это вы, чтобы продолжить.",
+    "forbidden": "У вас нет доступа к этому.",
+    "module_not_enabled": "Эта функция не включена для вашей организации.",
+    "not_found": "Не удалось найти.",
+    "conflict": "Это противоречит уже существующим данным.",
+    "invalid_state": "Сейчас это сделать нельзя.",
+    "idempotency_key_reused": "Этот запрос уже был отправлен с другими данными.",
+    "rate_limited": "Слишком много попыток. Подождите немного.",
+    "internal": "На нашей стороне что-то пошло не так.",
+    "reference": "Код: {id}"
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "description": "Возможно, страница перемещена или у вас нет доступа.",
+    "home": "На главную"
   }
 }

@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "Das Betriebssystem für Events"
@@ -6,9 +9,274 @@
   "home": {
     "eyebrow": "Yayatoh 2.0",
     "title": "Jedes Event, ein Betriebssystem.",
-    "lede": "Tickets, Gäste, Sitzpläne, Check-in und Marketing für Konzerte, Galas, Hochzeiten und Konferenzen.",
-    "primaryCta": "Plattformstatus ansehen",
+    "lede": "Tickets, Gäste, Sitzplätze, Check-in und Marketing für Konzerte, Galas, Hochzeiten und Konferenzen.",
+    "demoCta": "Demo-Konsole öffnen",
+    "eventCta": "Öffentliche Eventseite ansehen",
     "statusLabel": "Plattform",
-    "statusOk": "Alle Systeme normal"
+    "statusOk": "Alle Systeme laufen normal"
+  },
+  "shell": {
+    "navigation": "Hauptnavigation",
+    "menu": "Menü öffnen",
+    "search": "Suchen",
+    "searchPlaceholder": "Teilnehmende, Bestellungen, Events suchen…",
+    "skipToContent": "Zum Inhalt springen",
+    "switchContext": "Organisation oder Event wechseln",
+    "yourOrganizations": "Deine Organisationen",
+    "organization": "Organisation"
+  },
+  "notifications": {
+    "open": "Benachrichtigungen",
+    "title": "Benachrichtigungen",
+    "emptyTitle": "Du bist auf dem neuesten Stand",
+    "emptyDescription": "Hinweise zu Verkäufen, Sitzplätzen und Check-in erscheinen hier."
+  },
+  "nav": {
+    "home": "Start",
+    "analysis": "Analyse",
+    "setupGuide": "Einrichtungshilfe",
+    "branding": "Branding",
+    "ticketsOrders": "Tickets & Bestellungen",
+    "seating": "Sitzplätze",
+    "sessions": "Sessions",
+    "exhibitors": "Aussteller",
+    "marketing": "Marketing",
+    "onsite": "Vor Ort",
+    "libraries": "Bibliotheken",
+    "guests": "Gäste",
+    "rsvp": "RSVP",
+    "seatFinder": "Platzfinder",
+    "website": "Website",
+    "gallery": "Galerie",
+    "messages": "Nachrichten",
+    "dayOf": "Eventtag",
+    "donations": "Spenden",
+    "communications": "Kommunikation",
+    "team": "Team"
+  },
+  "vocab": {
+    "attendee": "Teilnehmer",
+    "attendees": "Teilnehmende",
+    "guest": "Gast",
+    "guests": "Gäste",
+    "member": "Mitglied",
+    "members": "Mitglieder",
+    "fan": "Fan",
+    "fans": "Fans",
+    "registration": "Anmeldung",
+    "rsvp": "RSVP",
+    "ticket": "Ticket",
+    "tickets": "Tickets"
+  },
+  "roles": {
+    "owner": "Inhaber",
+    "admin": "Admin",
+    "manager": "Manager",
+    "finance": "Finanzen",
+    "marketing": "Marketing",
+    "box_office": "Kasse",
+    "scanner": "Einlasskontrolle",
+    "viewer": "Nur Lesen"
+  },
+  "profiles": {
+    "wedding": "Hochzeit",
+    "gala": "Gala",
+    "concert": "Konzert",
+    "conference": "Konferenz",
+    "community": "Community",
+    "agency": "Agentur",
+    "other": "Event"
+  },
+  "greeting": {
+    "morning": "Guten Morgen, {name}.",
+    "afternoon": "Guten Tag, {name}.",
+    "evening": "Guten Abend, {name}."
+  },
+  "phase": {
+    "planning": "Planung · noch {days, plural, one {# Tag} other {# Tage}}",
+    "live": "Jetzt live",
+    "completed": "Abgeschlossen"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {noch keine Events} one {# Event} other {# Events}}",
+    "events": "Events",
+    "emptyTitle": "Noch keine Events",
+    "emptyDescription": "Events, die du erstellst, erscheinen hier.",
+    "open": "Event öffnen"
+  },
+  "team": {
+    "subtitle": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+    "unknownUser": "Eingeladene Person",
+    "empty": "Noch keine Mitglieder",
+    "name": "Name",
+    "role": "Rolle",
+    "since": "Mitglied seit"
+  },
+  "dashboard": {
+    "previewPage": "Seitenvorschau",
+    "openCommandCenter": "Command Center öffnen",
+    "keyNumbers": "Kennzahlen",
+    "registrationsTrend": "Alle Event-Anmeldungen",
+    "weeksOut": "Wochen vorher",
+    "mix": "Nach Ticketart",
+    "needsAttention": "Erfordert Aufmerksamkeit",
+    "readiness": "Event-Bereitschaft",
+    "readinessPercent": "{value} % bereit"
+  },
+  "kpi": {
+    "registrations": "Anmeldungen",
+    "grossSales": "Bruttoumsatz",
+    "distributed": "Verteilt",
+    "seated": "Platziert",
+    "invited": "Eingeladen",
+    "attending": "Zugesagt",
+    "awaitingReply": "Antwort ausstehend",
+    "goal": "Ziel {goal}",
+    "net": "Netto {value}",
+    "thisWeek": "{delta} diese Woche",
+    "ofSold": "von {sold} verkauft · {pct} %",
+    "unseated": "{count} noch ohne Platz",
+    "atSubEvent": "{count} bei {name}",
+    "households": "{count} Haushalte",
+    "declined": "{count} abgesagt",
+    "deadline": "RSVP bis {date}",
+    "reminded": "{count} erinnert",
+    "tables": "{count} Tische"
+  },
+  "attention": {
+    "unseated": "{count, plural, one {# Person hat keinen Platz} other {# Personen haben keinen Platz}}",
+    "layout": "{name} · Layout {layout}",
+    "undistributed": "{count} gekaufte Tickets wurden nicht verteilt",
+    "distributeLater": "{count} Käufer mit Bestellungen zur späteren Verteilung",
+    "paymentsFailed": "{count, plural, one {# Zahlung fehlgeschlagen} other {# Zahlungen fehlgeschlagen}}",
+    "last24h": "Letzte 24 Stunden · abgelehnt oder 3-D Secure abgebrochen",
+    "noMeal": "{count} Gäste haben kein Menü gewählt",
+    "caterer": "Der Caterer braucht die endgültigen Zahlen bis {date}"
+  },
+  "actions": {
+    "assignSeats": "Plätze zuweisen",
+    "remindBuyers": "Käufer erinnern",
+    "review": "Prüfen",
+    "remindGuests": "Gäste erinnern",
+    "import": "Importieren",
+    "export": "Exportieren",
+    "addAttendee": "{term} hinzufügen",
+    "search": "Suchen",
+    "sendTicket": "Ticket senden",
+    "changeSeat": "Platz ändern",
+    "checkIn": "Einchecken",
+    "tryAgain": "Erneut versuchen"
+  },
+  "readiness": {
+    "ticketsOnSale": "Tickets im Verkauf",
+    "seatingPublished": "Sitzplan veröffentlicht",
+    "payoutsConnected": "Auszahlungen verbunden",
+    "brandingDone": "Branding fertig",
+    "scannersEnrolled": "Scanner registriert",
+    "invitationsSent": "Einladungen versendet",
+    "websitePublished": "Website veröffentlicht",
+    "mealChoices": "Menüwahl erfasst",
+    "done": "Erledigt",
+    "todo": "Noch offen"
+  },
+  "segments": {
+    "all": "Alle",
+    "registered": "Angemeldet",
+    "attending": "Zugesagt",
+    "needsSeat": "Braucht Platz",
+    "awaitingPayment": "Zahlung ausstehend",
+    "pending": "Antwort ausstehend",
+    "waitlist": "Warteliste"
+  },
+  "attendees": {
+    "segments": "Segmente",
+    "search": "{term} suchen",
+    "searchPlaceholder": "Name, E-Mail, Bestellung oder Platz",
+    "noMatches": "Keine Treffer",
+    "noMatchesHint": "Versuche ein anderes Segment oder einen anderen Suchbegriff.",
+    "name": "Name",
+    "ticketType": "Ticketart",
+    "seat": "Platz",
+    "status": "Status",
+    "order": "Bestellung",
+    "profile": "Profil",
+    "closeProfile": "Profil schließen"
+  },
+  "attendeeStatus": {
+    "paid": "Bezahlt",
+    "needs_seat": "Braucht Platz",
+    "awaiting_payment": "Zahlung ausstehend",
+    "refund_requested": "Erstattung angefragt",
+    "attending": "Zugesagt",
+    "pending": "Antwort ausstehend",
+    "declined": "Abgesagt"
+  },
+  "common": {
+    "comingSoon": "Kommt in einem späteren Meilenstein",
+    "loading": "Wird geladen…"
+  },
+  "section": {
+    "comingTitle": "Dieser Bereich wird gerade gebaut",
+    "comingDescription": "Er kommt in einem späteren Meilenstein. Deine Navigation entspricht bereits deinem Tarif und Eventtyp."
+  },
+  "publicEvent": {
+    "nav": "Event",
+    "passes": "Pässe",
+    "agenda": "Programm",
+    "getTickets": "Tickets kaufen",
+    "seeAgenda": "Programm ansehen",
+    "stats": {
+      "days": "Tage",
+      "sessions": "Sessions",
+      "speakers": "Speaker",
+      "attendees": "Teilnehmende",
+      "guests": "Gäste",
+      "tables": "Tische"
+    },
+    "choosePass": "Wähle deinen Pass",
+    "allIn": "Alle Preise inklusive aller Gebühren. Bei {org}, unterstützt von Yayatoh.",
+    "allInSuffix": "inkl. Gebühren",
+    "select": "Auswählen",
+    "poweredBy": "Unterstützt von Yayatoh"
+  },
+  "portal": {
+    "day": "Tag {day} · {date}",
+    "yourTicket": "Dein Ticket",
+    "addToWallet": "Zu Wallet hinzufügen",
+    "today": "Heute",
+    "fullAgenda": "Gesamtes Programm",
+    "app": "App",
+    "tabs": {
+      "home": "Start",
+      "agenda": "Programm",
+      "ticket": "Ticket",
+      "map": "Karte",
+      "profile": "Profil"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "Nur Entwicklung",
+    "title": "Persona auswählen",
+    "description": "Testnutzer für lokale und Vorschau-Umgebungen. Die echte Anmeldung kommt mit M1.2.",
+    "signIn": "Anmelden"
+  },
+  "errors": {
+    "validation_failed": "Einige Angaben müssen korrigiert werden.",
+    "unauthenticated": "Bitte melde dich erneut an.",
+    "step_up_required": "Bitte bestätige zum Fortfahren, dass du es bist.",
+    "forbidden": "Du hast keinen Zugriff darauf.",
+    "module_not_enabled": "Diese Funktion ist für deine Organisation nicht aktiviert.",
+    "not_found": "Das konnten wir nicht finden.",
+    "conflict": "Das steht im Konflikt mit etwas, das bereits existiert.",
+    "invalid_state": "Das ist gerade nicht möglich.",
+    "idempotency_key_reused": "Diese Anfrage wurde bereits mit anderen Angaben gesendet.",
+    "rate_limited": "Zu viele Versuche. Bitte warte einen Moment.",
+    "internal": "Bei uns ist etwas schiefgelaufen.",
+    "reference": "Referenz: {id}"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die Seite wurde möglicherweise verschoben oder du hast keinen Zugriff.",
+    "home": "Zur Startseite"
   }
 }

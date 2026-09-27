@@ -86,6 +86,54 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
+  e2e:
+    name: e2e + axe (375/768/1280, en + ar)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: yayatoh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+    env:
+      # CI-only throwaway database; role passwords are generated per run.
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
+      YAYATOH_DEV_AUTH: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Database roles, migrations and seed
+        run: |
+          APP=$(openssl rand -hex 12); MIG=$(openssl rand -hex 12); PR=$(openssl rand -hex 12)
+          {
+            echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
+            echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
+            echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
+          } >> "$GITHUB_ENV"
+          export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
+          export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
+          export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          pnpm db:bootstrap && pnpm db:migrate && pnpm seed
+      - run: pnpm --filter @yayatoh/web build
+      - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
+      - run: pnpm --filter @yayatoh/web e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-report
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+          retention-days: 14
+
   openapi-breaking:
     name: oasdiff (/v1 additive only)
     if: github.event_name == 'pull_request'

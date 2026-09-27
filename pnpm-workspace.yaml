@@ -28,6 +28,7 @@ catalog:
   zod: 4.6.5
 
 allowBuilds:
+  "@node-rs/argon2": true
   "@parcel/watcher": false
   "@swc/core": false
   esbuild: true

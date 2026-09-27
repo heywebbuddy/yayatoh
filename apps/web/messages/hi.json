@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "wordmark": "yayatoh"
+  },
   "meta": {
     "title": "Yayatoh",
     "description": "इवेंट ऑपरेटिंग सिस्टम"
@@ -6,9 +9,274 @@
   "home": {
     "eyebrow": "Yayatoh 2.0",
     "title": "हर इवेंट, एक ऑपरेटिंग सिस्टम।",
-    "lede": "कॉन्सर्ट, गाला, शादियों और सम्मेलनों के लिए टिकट, मेहमान, सीटिंग, चेक-इन और मार्केटिंग।",
-    "primaryCta": "प्लेटफ़ॉर्म की स्थिति देखें",
+    "lede": "कॉन्सर्ट, गाला, शादियों और कॉन्फ़्रेंस के लिए टिकट, मेहमान, सीटिंग, चेक-इन और मार्केटिंग।",
+    "demoCta": "डेमो कंसोल खोलें",
+    "eventCta": "सार्वजनिक इवेंट पेज देखें",
     "statusLabel": "प्लेटफ़ॉर्म",
     "statusOk": "सभी सिस्टम सामान्य हैं"
+  },
+  "shell": {
+    "navigation": "मुख्य नेविगेशन",
+    "menu": "मेनू खोलें",
+    "search": "खोजें",
+    "searchPlaceholder": "प्रतिभागी, ऑर्डर, इवेंट खोजें…",
+    "skipToContent": "सामग्री पर जाएँ",
+    "switchContext": "संगठन या इवेंट बदलें",
+    "yourOrganizations": "आपके संगठन",
+    "organization": "संगठन"
+  },
+  "notifications": {
+    "open": "सूचनाएँ",
+    "title": "सूचनाएँ",
+    "emptyTitle": "कोई नई सूचना नहीं",
+    "emptyDescription": "बिक्री, सीटिंग और चेक-इन से जुड़े अलर्ट यहाँ दिखेंगे।"
+  },
+  "nav": {
+    "home": "होम",
+    "analysis": "विश्लेषण",
+    "setupGuide": "सेटअप गाइड",
+    "branding": "ब्रांडिंग",
+    "ticketsOrders": "टिकट और ऑर्डर",
+    "seating": "सीटिंग",
+    "sessions": "सत्र",
+    "exhibitors": "प्रदर्शक",
+    "marketing": "मार्केटिंग",
+    "onsite": "स्थल पर",
+    "libraries": "लाइब्रेरी",
+    "guests": "मेहमान",
+    "rsvp": "RSVP",
+    "seatFinder": "सीट खोजें",
+    "website": "वेबसाइट",
+    "gallery": "गैलरी",
+    "messages": "संदेश",
+    "dayOf": "इवेंट का दिन",
+    "donations": "दान",
+    "communications": "संचार",
+    "team": "टीम"
+  },
+  "vocab": {
+    "attendee": "प्रतिभागी",
+    "attendees": "प्रतिभागी",
+    "guest": "मेहमान",
+    "guests": "मेहमान",
+    "member": "सदस्य",
+    "members": "सदस्य",
+    "fan": "प्रशंसक",
+    "fans": "प्रशंसक",
+    "registration": "पंजीकरण",
+    "rsvp": "RSVP",
+    "ticket": "टिकट",
+    "tickets": "टिकट"
+  },
+  "roles": {
+    "owner": "मालिक",
+    "admin": "एडमिन",
+    "manager": "मैनेजर",
+    "finance": "वित्त",
+    "marketing": "मार्केटिंग",
+    "box_office": "बॉक्स ऑफ़िस",
+    "scanner": "टिकट स्कैनर",
+    "viewer": "केवल देखने वाला"
+  },
+  "profiles": {
+    "wedding": "शादी",
+    "gala": "गाला",
+    "concert": "कॉन्सर्ट",
+    "conference": "कॉन्फ़्रेंस",
+    "community": "समुदाय",
+    "agency": "एजेंसी",
+    "other": "इवेंट"
+  },
+  "greeting": {
+    "morning": "सुप्रभात, {name}।",
+    "afternoon": "नमस्ते, {name}।",
+    "evening": "शुभ संध्या, {name}।"
+  },
+  "phase": {
+    "planning": "योजना · {days, plural, one {# दिन} other {# दिन}} बाकी",
+    "live": "अभी लाइव",
+    "completed": "पूरा हुआ"
+  },
+  "orgHome": {
+    "subtitle": "{org} · {count, plural, =0 {अभी कोई इवेंट नहीं} one {# इवेंट} other {# इवेंट}}",
+    "events": "इवेंट",
+    "emptyTitle": "अभी कोई इवेंट नहीं",
+    "emptyDescription": "आपके बनाए इवेंट यहाँ दिखेंगे।",
+    "open": "इवेंट खोलें"
+  },
+  "team": {
+    "subtitle": "{count, plural, one {# सदस्य} other {# सदस्य}}",
+    "unknownUser": "आमंत्रित उपयोगकर्ता",
+    "empty": "अभी कोई सदस्य नहीं",
+    "name": "नाम",
+    "role": "भूमिका",
+    "since": "सदस्य कब से"
+  },
+  "dashboard": {
+    "previewPage": "पेज का पूर्वावलोकन",
+    "openCommandCenter": "कमांड सेंटर खोलें",
+    "keyNumbers": "मुख्य आँकड़े",
+    "registrationsTrend": "सभी इवेंट पंजीकरण",
+    "weeksOut": "इवेंट से पहले के हफ़्ते",
+    "mix": "टिकट प्रकार के अनुसार",
+    "needsAttention": "ध्यान देना ज़रूरी",
+    "readiness": "इवेंट की तैयारी",
+    "readinessPercent": "{value}% तैयार"
+  },
+  "kpi": {
+    "registrations": "पंजीकरण",
+    "grossSales": "कुल बिक्री",
+    "distributed": "वितरित",
+    "seated": "सीट मिली",
+    "invited": "आमंत्रित",
+    "attending": "आ रहे हैं",
+    "awaitingReply": "जवाब का इंतज़ार",
+    "goal": "लक्ष्य {goal}",
+    "net": "शुद्ध {value}",
+    "thisWeek": "इस हफ़्ते {delta}",
+    "ofSold": "{sold} बिके में से · {pct}%",
+    "unseated": "{count} को अभी सीट नहीं मिली",
+    "atSubEvent": "{name} में {count}",
+    "households": "{count} परिवार",
+    "declined": "{count} ने मना किया",
+    "deadline": "{date} तक RSVP करें",
+    "reminded": "{count} को याद दिलाया",
+    "tables": "{count} टेबल"
+  },
+  "attention": {
+    "unseated": "{count, plural, one {# व्यक्ति के पास सीट नहीं है} other {# लोगों के पास सीट नहीं है}}",
+    "layout": "{name} · {layout} लेआउट",
+    "undistributed": "{count} खरीदे गए टिकट वितरित नहीं हुए हैं",
+    "distributeLater": "बाद में वितरित करने वाले ऑर्डर के {count} खरीदार",
+    "paymentsFailed": "{count, plural, one {# भुगतान विफल रहा} other {# भुगतान विफल रहे}}",
+    "last24h": "पिछले 24 घंटे · अस्वीकृत या 3-D Secure अधूरा छोड़ा गया",
+    "noMeal": "{count} मेहमानों ने भोजन नहीं चुना है",
+    "caterer": "कैटरर को {date} तक अंतिम संख्या चाहिए"
+  },
+  "actions": {
+    "assignSeats": "सीटें दें",
+    "remindBuyers": "खरीदारों को याद दिलाएँ",
+    "review": "समीक्षा करें",
+    "remindGuests": "मेहमानों को याद दिलाएँ",
+    "import": "इंपोर्ट करें",
+    "export": "एक्सपोर्ट करें",
+    "addAttendee": "{term} जोड़ें",
+    "search": "खोजें",
+    "sendTicket": "टिकट भेजें",
+    "changeSeat": "सीट बदलें",
+    "checkIn": "चेक-इन करें",
+    "tryAgain": "फिर से कोशिश करें"
+  },
+  "readiness": {
+    "ticketsOnSale": "टिकट बिक्री पर",
+    "seatingPublished": "सीटिंग चार्ट प्रकाशित",
+    "payoutsConnected": "भुगतान खाता जुड़ा",
+    "brandingDone": "ब्रांडिंग पूरी",
+    "scannersEnrolled": "स्कैनर पंजीकृत",
+    "invitationsSent": "निमंत्रण भेजे गए",
+    "websitePublished": "वेबसाइट प्रकाशित",
+    "mealChoices": "भोजन विकल्प एकत्र",
+    "done": "पूरा",
+    "todo": "अभी बाकी"
+  },
+  "segments": {
+    "all": "सभी",
+    "registered": "पंजीकृत",
+    "attending": "आ रहे हैं",
+    "needsSeat": "सीट चाहिए",
+    "awaitingPayment": "भुगतान बाकी",
+    "pending": "जवाब का इंतज़ार",
+    "waitlist": "प्रतीक्षा सूची"
+  },
+  "attendees": {
+    "segments": "सेगमेंट",
+    "search": "{term} खोजें",
+    "searchPlaceholder": "नाम, ईमेल, ऑर्डर या सीट",
+    "noMatches": "कोई मिलान नहीं",
+    "noMatchesHint": "कोई दूसरा सेगमेंट या खोज शब्द आज़माएँ।",
+    "name": "नाम",
+    "ticketType": "टिकट प्रकार",
+    "seat": "सीट",
+    "status": "स्थिति",
+    "order": "ऑर्डर",
+    "profile": "प्रोफ़ाइल",
+    "closeProfile": "प्रोफ़ाइल बंद करें"
+  },
+  "attendeeStatus": {
+    "paid": "भुगतान हुआ",
+    "needs_seat": "सीट चाहिए",
+    "awaiting_payment": "भुगतान बाकी",
+    "refund_requested": "रिफ़ंड का अनुरोध",
+    "attending": "आ रहे हैं",
+    "pending": "जवाब का इंतज़ार",
+    "declined": "मना किया"
+  },
+  "common": {
+    "comingSoon": "बाद के माइलस्टोन में आएगा",
+    "loading": "लोड हो रहा है…"
+  },
+  "section": {
+    "comingTitle": "यह हिस्सा अभी बन रहा है",
+    "comingDescription": "यह बाद के माइलस्टोन में आएगा। आपका नेविगेशन पहले से आपके प्लान और इवेंट प्रकार के अनुसार है।"
+  },
+  "publicEvent": {
+    "nav": "इवेंट",
+    "passes": "पास",
+    "agenda": "कार्यक्रम",
+    "getTickets": "टिकट लें",
+    "seeAgenda": "कार्यक्रम देखें",
+    "stats": {
+      "days": "दिन",
+      "sessions": "सत्र",
+      "speakers": "वक्ता",
+      "attendees": "प्रतिभागी",
+      "guests": "मेहमान",
+      "tables": "टेबल"
+    },
+    "choosePass": "अपना पास चुनें",
+    "allIn": "हर कीमत में सभी शुल्क शामिल हैं। {org} द्वारा, Yayatoh की तकनीक पर।",
+    "allInSuffix": "सभी शुल्क सहित",
+    "select": "चुनें",
+    "poweredBy": "Yayatoh द्वारा संचालित"
+  },
+  "portal": {
+    "day": "दिन {day} · {date}",
+    "yourTicket": "आपका टिकट",
+    "addToWallet": "Wallet में जोड़ें",
+    "today": "आज",
+    "fullAgenda": "पूरा कार्यक्रम",
+    "app": "ऐप",
+    "tabs": {
+      "home": "होम",
+      "agenda": "कार्यक्रम",
+      "ticket": "टिकट",
+      "map": "नक्शा",
+      "profile": "प्रोफ़ाइल"
+    }
+  },
+  "devLogin": {
+    "eyebrow": "केवल डेवलपमेंट",
+    "title": "एक पर्सोना चुनें",
+    "description": "लोकल और प्रीव्यू एनवायरनमेंट के लिए टेस्ट उपयोगकर्ता। असली साइन-इन M1.2 के साथ आएगा।",
+    "signIn": "साइन इन करें"
+  },
+  "errors": {
+    "validation_failed": "कुछ जानकारी ठीक करनी होगी।",
+    "unauthenticated": "कृपया फिर से साइन इन करें।",
+    "step_up_required": "जारी रखने के लिए कृपया पुष्टि करें कि यह आप ही हैं।",
+    "forbidden": "आपके पास इसकी पहुँच नहीं है।",
+    "module_not_enabled": "यह सुविधा आपके संगठन के लिए चालू नहीं है।",
+    "not_found": "हमें वह नहीं मिला।",
+    "conflict": "यह पहले से मौजूद किसी चीज़ से टकराता है।",
+    "invalid_state": "यह अभी नहीं किया जा सकता।",
+    "idempotency_key_reused": "यह अनुरोध पहले ही अलग जानकारी के साथ भेजा जा चुका है।",
+    "rate_limited": "बहुत ज़्यादा कोशिशें। कृपया थोड़ा रुकें।",
+    "internal": "हमारी ओर से कुछ गड़बड़ हो गई।",
+    "reference": "संदर्भ: {id}"
+  },
+  "notFound": {
+    "title": "पेज नहीं मिला",
+    "description": "हो सकता है पेज हट गया हो, या आपके पास पहुँच न हो।",
+    "home": "होम पर जाएँ"
   }
 }

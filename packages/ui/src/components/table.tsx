@@ -21,8 +21,13 @@ export interface TableProps<Row> {
 
 export function Table<Row>({ caption, columns, rows, rowKey, empty, captionHidden = true }: TableProps<Row>) {
   return (
-    <div className="overflow-x-auto rounded-card border border-zinc-200 bg-white">
-      <table className="w-full border-collapse text-body">
+    <section
+      aria-label={caption}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1)
+      tabIndex={0}
+      className="overflow-x-auto rounded-card border border-zinc-200 bg-white"
+    >
+      <table className="w-full min-w-[36rem] border-collapse text-body">
         <caption className={captionHidden ? 'sr-only' : 'p-4 text-start text-section'}>{caption}</caption>
         <thead>
           <tr className="border-b border-zinc-200">
@@ -67,6 +72,6 @@ export function Table<Row>({ caption, columns, rows, rowKey, empty, captionHidde
           )}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }

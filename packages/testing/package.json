@@ -7,8 +7,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "seed": "node scripts/seed.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@yayatoh/billing": "workspace:*",

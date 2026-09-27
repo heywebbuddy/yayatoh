@@ -1,6 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { secureHeaders } from 'hono/secure-headers';
-import { notFound, onError } from './errors.ts';
+import { notFound, onError, validationFailed } from './errors.ts';
 import { API_VERSION, health } from './routes/health.ts';
 
 export const OPENAPI_INFO = {
@@ -16,7 +16,7 @@ export function createApp() {
   const v1 = new OpenAPIHono({
     defaultHook: (result, c) => {
       if (!result.success) {
-        return c.json({ error: { code: 'validation_failed', message: 'Invalid request' } }, 400);
+        return validationFailed(c);
       }
     },
   });

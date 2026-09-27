@@ -6,7 +6,16 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const config: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  transpilePackages: ['@yayatoh/ui', '@yayatoh/contracts', '@yayatoh/kernel'],
+  transpilePackages: [
+    '@yayatoh/ui',
+    '@yayatoh/contracts',
+    '@yayatoh/kernel',
+    '@yayatoh/db',
+    '@yayatoh/platform',
+    '@yayatoh/tenancy',
+    '@yayatoh/billing',
+  ],
+  serverExternalPackages: ['postgres'],
   experimental: { taint: true },
 };
 
