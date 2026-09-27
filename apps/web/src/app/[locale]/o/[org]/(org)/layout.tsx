@@ -17,7 +17,16 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
   { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
+  { key: 'activity', path: 'activity', group: 'build', module: 'core', icon: 'history' },
+  { key: 'privacy', path: 'privacy', group: 'build', module: 'core', icon: 'shield' },
 ];
+
+/** Items only some roles may open (the pages refuse everyone else too). */
+const NEEDS: Readonly<Record<string, string>> = {
+  messages: 'messages:read',
+  activity: 'audit:read',
+  privacy: 'privacy:manage',
+};
 
 export default async function OrgLayout({
   children,
@@ -38,7 +47,7 @@ export default async function OrgLayout({
         base: `/o/${org}`,
         profile: data.profile,
         items: ORG_NAV.filter(
-          (i) => data.modules.has(i.module) && (i.key !== 'messages' || roleCan(data.role, 'messages:read')),
+          (i) => data.modules.has(i.module) && (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)),
         ),
       }}
     >

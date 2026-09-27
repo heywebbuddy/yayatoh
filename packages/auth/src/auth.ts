@@ -55,7 +55,10 @@ export function createAuth(opts: AuthOptions) {
       enabled: true,
       window: 60,
       max: 100,
-      customRules: { '/sign-in/*': { window: 60, max: 10 } },
+      // Sign-in and emailed codes are limited in front of Better Auth by the platform limiter
+      // (M1.14a: per device, per email and a per-IP ceiling), which tolerates shared IPs; Better
+      // Auth's per-IP bucket (one global bucket when no IP is known) would lock out a whole venue.
+      customRules: { '/sign-in/*': false, '/email-otp/send-verification-otp': false },
     },
     advanced: {
       // Better Auth would prefix `__Secure-`, which hides the `__Host-` prefix from browsers.

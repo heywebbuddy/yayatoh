@@ -123,6 +123,7 @@ export {
 } from './public-content.ts';
 export {
   checkoutTarget,
+  eventIdsEndedBeforeTx,
   eventRolesOf,
   findEventTx,
   getEventBySlugQuery,

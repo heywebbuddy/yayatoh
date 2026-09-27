@@ -9,7 +9,8 @@
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test",
-    "seed": "node scripts/seed.ts"
+    "seed": "node scripts/seed.ts",
+    "load:prepare": "node scripts/load-prepare.ts"
   },
   "dependencies": {
     "@yayatoh/api-v1": "workspace:*",
@@ -31,6 +32,7 @@
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/privacy": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/templates": "workspace:*",

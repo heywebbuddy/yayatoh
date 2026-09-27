@@ -11,6 +11,7 @@ import {
   FileText,
   Globe,
   Heart,
+  History,
   House,
   Image,
   KeyRound,
@@ -28,6 +29,7 @@ import {
   ScanLine,
   Search,
   Settings,
+  ShieldCheck,
   Store,
   Ticket,
   Users,
@@ -66,6 +68,8 @@ const ICONS: Record<string, LucideIcon> = {
   'file-text': FileText,
   lock: Lock,
   building: Building2,
+  history: History,
+  shield: ShieldCheck,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

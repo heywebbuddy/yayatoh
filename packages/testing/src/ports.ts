@@ -3,12 +3,14 @@ import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '
 import { billingEntitlements } from '@yayatoh/billing';
 import { eventRolesOf } from '@yayatoh/events';
 import {
+  auditExportAction,
   bulkStepCommand,
   createCommandPorts,
   localKeyVault,
   runBulkOperation,
   setKeyVault,
 } from '@yayatoh/platform';
+import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { createOrgAuthorizer } from '@yayatoh/tenancy';
 
@@ -28,6 +30,8 @@ export const BULK_ACTIONS = [
   attendeeEmailAction,
   attendeeExportAction,
   bookingsExportAction,
+  auditExportAction,
+  dsarExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

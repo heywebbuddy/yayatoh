@@ -13,7 +13,9 @@
     "demoCta": "Abrir o console de demonstração",
     "eventCta": "Ver uma página pública de evento",
     "statusLabel": "Plataforma",
-    "statusOk": "Todos os sistemas operando normalmente"
+    "statusOk": "Todos os sistemas operando normalmente",
+    "privacyLink": "Aviso de privacidade",
+    "subProcessorsLink": "Subcontratantes"
   },
   "shell": {
     "navigation": "Navegação principal",
@@ -166,6 +168,8 @@
     "settings": "Configurações",
     "payouts": "Repasses",
     "domains": "Domínios",
+    "activity": "Atividade",
+    "privacy": "Pedidos de privacidade",
     "venues": "Locais",
     "details": "Detalhes",
     "content": "Conteúdo da página",
@@ -471,7 +475,8 @@
     "idempotency_key_reused": "Esta solicitação já foi enviada com dados diferentes.",
     "rate_limited": "Muitas tentativas. Aguarde um momento.",
     "internal": "Algo deu errado do nosso lado.",
-    "reference": "Referência: {id}"
+    "reference": "Referência: {id}",
+    "rateLimitedRetry": "Demasiadas tentativas. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -493,7 +498,8 @@
     "invalid": "O e-mail e a senha não correspondem.",
     "invalidCode": "Esse código está incorreto ou expirou.",
     "failed": "Não foi possível enviar o código. Tente novamente.",
-    "devPersonas": "Personas de desenvolvimento"
+    "devPersonas": "Personas de desenvolvimento",
+    "rateLimited": "Demasiadas tentativas de início de sessão. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "orgPicker": {
     "emptyTitle": "Você ainda não faz parte de uma organização",
@@ -1092,7 +1098,9 @@
       "accept": "Aceitar",
       "accepted": "Aceito.",
       "ownerOnly": "Um proprietário ou administrador precisa aceitar isto."
-    }
+    },
+    "activityLink": "Registo de atividade",
+    "privacyLink": "Pedidos de privacidade"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1824,6 +1832,200 @@
       "event": "Evento",
       "emptyTitle": "Sem vendas neste período",
       "emptyDescription": "Escolha um período mais longo ou compartilhe a página de um evento para começar a vender."
+    }
+  },
+  "activity": {
+    "title": "Atividade",
+    "description": "Tudo o que as pessoas e o sistema alteraram nesta organização. Horas em {timeZone}.",
+    "backToSettings": "Definições",
+    "integrityTitle": "Integridade do registo",
+    "verified": "Verificado",
+    "verifiedDetail": "{count, plural, one {# entrada} other {# entradas}}, cadeia de hash intacta",
+    "broken": "A verificação de integridade falhou na entrada n.º {seq}. O registo pode ter sido alterado fora da aplicação; contacte o suporte.",
+    "noAccessTitle": "Só proprietários e administradores podem ver a atividade",
+    "noAccessDescription": "Pergunte a um proprietário ou administrador desta organização se precisar de saber quem alterou algo.",
+    "formerMember": "Antigo membro",
+    "system": "Sistema ({name})",
+    "apiKey": "Chave de API",
+    "anonymous": "Um convidado (sem sessão iniciada)",
+    "filters": {
+      "actor": "Quem",
+      "anyone": "Qualquer pessoa",
+      "action": "O quê",
+      "anyAction": "Qualquer ação",
+      "from": "De",
+      "to": "Até",
+      "apply": "Filtrar",
+      "clear": "Limpar filtros"
+    },
+    "errors": {
+      "badDate": "Introduza as datas como AAAA-MM-DD.",
+      "backwards": "A data de início é posterior à data de fim, por isso as datas foram ignoradas."
+    },
+    "showing": "{count, plural, =0 {Sem entradas} one {# entrada nesta página} other {# entradas nesta página}}",
+    "export": "Exportar CSV",
+    "exportError": "A exportação não começou: {reason}",
+    "exportTitle": "Exportação de atividade",
+    "emptyTitle": "Ainda sem atividade",
+    "emptyFilteredTitle": "Nada corresponde a estes filtros",
+    "emptyDescription": "As alterações a eventos, bilhetes, encomendas, equipa e definições aparecem aqui assim que acontecem.",
+    "caption": "Registo de atividade, mais recente primeiro",
+    "columns": {
+      "seq": "N.º",
+      "at": "Quando",
+      "actor": "Quem",
+      "action": "Ação",
+      "targetType": "Tipo de alvo",
+      "targetId": "Alvo",
+      "details": "Detalhes"
+    },
+    "pagination": "Páginas de atividade",
+    "newest": "Mais recentes",
+    "older": "Entradas anteriores"
+  },
+  "privacy": {
+    "title": "Pedidos de privacidade",
+    "description": "Responda a quem pergunta que dados tem sobre si ou pede para ser esquecido. Cada pedido fica registado.",
+    "noticeLink": "Aviso de privacidade da Yayatoh",
+    "noAccessTitle": "Só proprietários e administradores podem tratar pedidos de privacidade",
+    "noAccessDescription": "Peça a um proprietário ou administrador desta organização ajuda com um pedido sobre os dados de alguém.",
+    "find": {
+      "title": "Encontrar uma pessoa",
+      "hint": "Pesquise por email em contactos, encomendas, bilhetes, listas de convidados, respostas e entradas.",
+      "email": "Endereço de email",
+      "submit": "Procurar"
+    },
+    "result": {
+      "title": "O que esta organização tem sobre {email}",
+      "noneTitle": "Nada encontrado para este email",
+      "noneDescription": "Nenhum contacto, encomenda, bilhete ou convidado usa este endereço nesta organização."
+    },
+    "categories": {
+      "contacts": "Registos de contacto",
+      "consents": "Registos de consentimento",
+      "orders": "Encomendas",
+      "paidOrders": "Encomendas pagas (guardadas para a contabilidade)",
+      "tickets": "Bilhetes",
+      "activeTickets": "Bilhetes válidos",
+      "claims": "Ligações de transferência de bilhetes",
+      "holderLinks": "Ligações de acesso a bilhetes",
+      "attendees": "Entradas em listas de convidados",
+      "answers": "Respostas no pagamento",
+      "admissions": "Entradas registadas"
+    },
+    "export": {
+      "title": "Exportar os dados",
+      "hint": "Um ficheiro JSON com tudo o que está acima, para enviar à pessoa. É eliminado após 7 dias.",
+      "submit": "Exportar dados (JSON)",
+      "download": "Transferir o ficheiro",
+      "running": "A preparar o ficheiro… recarregue a página daqui a pouco."
+    },
+    "erase": {
+      "title": "Apagar esta pessoa",
+      "what": "O nome, email, telefone, respostas e ligações são removidos de contactos, encomendas, bilhetes e listas de convidados, e os ficheiros exportados que os mencionam são eliminados.",
+      "holds": "{paid, plural, =0 {Não há encomendas pagas a guardar.} one {# encomenda paga é guardada para impostos e contabilidade, sem nome nem email.} other {# encomendas pagas são guardadas para impostos e contabilidade, sem nome nem email.}}",
+      "tickets": "{active, plural, =0 {Não tem bilhetes válidos.} one {# bilhete válido continua válido, sem nome.} other {# bilhetes válidos continuam válidos, sem nome.}}",
+      "final": "Não é possível anular.",
+      "confirm": "Escreva {email} para confirmar",
+      "submit": "Apagar dados pessoais",
+      "done": "Apagado. {records, plural, one {# registo foi anonimizado ou eliminado} other {# registos foram anonimizados ou eliminados}}; {kept, plural, =0 {nenhuma encomenda paga guardada} one {# encomenda paga guardada sem dados pessoais} other {# encomendas pagas guardadas sem dados pessoais}}."
+    },
+    "errors": {
+      "invalidEmail": "Introduza um endereço de email válido.",
+      "confirmMismatch": "Não corresponde. Escreva o mesmo endereço de email para confirmar.",
+      "nothingHeld": "Já não existe nada guardado sobre este email."
+    },
+    "history": {
+      "title": "Pedidos anteriores",
+      "caption": "Pedidos de privacidade, mais recentes primeiro",
+      "empty": "Ainda sem pedidos.",
+      "when": "Quando",
+      "kind": "Pedido",
+      "subject": "Pessoa",
+      "by": "Tratado por",
+      "records": "Registos"
+    },
+    "kinds": {
+      "access": "Acesso (exportação)",
+      "erasure": "Apagamento"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Aviso de privacidade",
+    "updated": "Última atualização: {date}",
+    "draft": "RASCUNHO para revisão jurídica — ainda não é o texto final.",
+    "intro": "Este aviso explica como a Yayatoh trata dados pessoais quando utiliza a plataforma para organizar eventos, ou para comprar bilhetes e participar neles.",
+    "subProcessorsLink": "Ver a lista de subcontratantes",
+    "sections": {
+      "roles": {
+        "title": "Quem é responsável",
+        "body": "O organizador de um evento decide como os dados dos participantes são usados e é o responsável pelo tratamento; a Yayatoh trata esses dados em nome do organizador ao abrigo de um acordo de tratamento de dados. A Yayatoh é responsável pelas contas de organizadores e da equipa, pelo mercado público de eventos e pela prevenção de fraude."
+      },
+      "data": {
+        "title": "Que dados recolhemos",
+        "body": "Dados da conta (nome, email, palavra-passe ou códigos de acesso); dados de compradores e participantes indicados no pagamento (nome, email, respostas às perguntas do organizador); bilhetes, encomendas e entradas; e dados técnicos, como registos de dispositivos e pedidos. Os dados do cartão são tratados pela Stripe e nunca chegam à Yayatoh."
+      },
+      "purposes": {
+        "title": "Para que os usamos",
+        "body": "Para vender e entregar bilhetes, gerir entradas, enviar as mensagens que pediu, pagar aos organizadores, prevenir fraude e abuso, manter o serviço seguro e cumprir obrigações legais. As mensagens de marketing só são enviadas com o seu consentimento e os sinais Global Privacy Control são respeitados."
+      },
+      "sharing": {
+        "title": "Com quem os partilhamos",
+        "body": "Com o organizador do evento que reserva, com os subcontratantes da nossa lista e com as autoridades quando a lei o exige. Não vendemos dados pessoais."
+      },
+      "retention": {
+        "title": "Durante quanto tempo os guardamos",
+        "body": "Os dados dos participantes são removidos 24 meses após o evento e os registos de entrada após 12 meses. Os registos de pagamento são guardados durante 7 anos para efeitos fiscais e contabilísticos. Os pagamentos nunca concluídos perdem os dados pessoais após 30 dias."
+      },
+      "security": {
+        "title": "Como os protegemos",
+        "body": "Os dados de cada organizador estão separados dos restantes; as respostas sensíveis e as chaves são cifradas; o acesso da equipa da Yayatoh é limitado e registado."
+      },
+      "rights": {
+        "title": "Os seus direitos",
+        "body": "Pode pedir uma cópia dos seus dados, a sua correção ou o seu apagamento. Para um evento, peça ao organizador, que pode exportar ou apagar os seus dados na consola da Yayatoh; também nos pode escrever e encaminharemos o pedido. Os dados que a lei nos obriga a guardar (como encomendas pagas) são mantidos sem elementos que o identifiquem."
+      },
+      "contact": {
+        "title": "Contacto",
+        "body": "A Yayatoh é operada pela Pani Digital Services, LLC. Os contactos para pedidos de privacidade serão publicados aqui com o texto final."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Subcontratantes",
+    "updated": "Última atualização: {date}",
+    "draft": "RASCUNHO para revisão jurídica: a lista segue o alojamento previsto e pode mudar antes do lançamento.",
+    "intro": "Estas empresas tratam dados pessoais em nome da Yayatoh para fazer funcionar o serviço.",
+    "caption": "Subcontratantes",
+    "columns": {
+      "name": "Empresa",
+      "purpose": "O que faz",
+      "data": "Dados",
+      "location": "Localização"
+    },
+    "notice": "Avisamos os organizadores com 30 dias de antecedência antes de adicionar ou substituir um subcontratante.",
+    "privacyLink": "Ler o aviso de privacidade",
+    "purposes": {
+      "vercel": "Alojamento web e entrega",
+      "neon": "Alojamento da base de dados",
+      "fly": "Tarefas em segundo plano",
+      "upstash": "Limitação de pedidos e cache",
+      "cloudflare": "Armazenamento de ficheiros e entrega de conteúdos",
+      "aws": "Envio de email e gestão de chaves",
+      "stripe": "Pagamentos e transferências",
+      "twilio": "SMS",
+      "ably": "Atualizações em direto",
+      "sentry": "Monitorização de erros",
+      "axiom": "Registos"
+    },
+    "data": {
+      "traffic": "Dados de pedidos e técnicos",
+      "all": "Todos os dados de contas e eventos",
+      "files": "Ficheiros exportados e imagens",
+      "contact": "Nomes, emails e números de telefone",
+      "payment": "Dados de pagamento e contas de transferência"
     }
   },
   "categories": {

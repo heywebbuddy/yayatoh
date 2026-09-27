@@ -40,3 +40,6 @@ test-results/
 .claude/settings.local.json
 next-env.d.ts
 blob-report/
+k6/.data/
+zap/zap-report.*
+zap/zap.yaml

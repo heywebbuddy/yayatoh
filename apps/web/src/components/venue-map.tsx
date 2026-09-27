@@ -4,7 +4,15 @@ import { type FloorplanDoc, type OBJECT_TYPES, placedSeats } from '@yayatoh/floo
 import { Button } from '@yayatoh/ui';
 import { Maximize, Minus, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { type KeyboardEvent, type PointerEvent, useId, useMemo, useRef, useState } from 'react';
+import {
+  type KeyboardEvent,
+  type PointerEvent,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 type ObjectType = (typeof OBJECT_TYPES)[number];
 
@@ -52,6 +60,11 @@ export function VenueMap({
   const [view, setView] = useState(focus ? { zoom: 2, cx: focus.x, cy: focus.y } : home);
   const drag = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
   const box = useRef<HTMLDivElement>(null);
+  // The room's proportions, set through the CSSOM: the strict CSP (M1.14a) refuses style attributes.
+  const svgRef = useRef<SVGSVGElement>(null);
+  useLayoutEffect(() => {
+    if (svgRef.current) svgRef.current.style.aspectRatio = `${doc.width} / ${doc.height}`;
+  }, [doc.width, doc.height]);
 
   const z = ZOOMS[view.zoom] ?? 1;
   const w = doc.width / z;
@@ -158,7 +171,7 @@ export function VenueMap({
           viewBox={`${Math.round(x)} ${Math.round(y)} ${Math.round(w)} ${Math.round(h)}`}
           preserveAspectRatio="xMidYMid meet"
           className="block max-h-[70vh] w-full select-none"
-          style={{ aspectRatio: `${doc.width} / ${doc.height}` }}
+          ref={svgRef}
           direction="ltr"
           aria-hidden="true"
         >

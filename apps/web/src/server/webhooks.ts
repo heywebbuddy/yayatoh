@@ -8,8 +8,10 @@ import {
   isIgnoredEvent,
   type WebhookEvent,
 } from '@yayatoh/payments';
+import { tooManyRequests } from '@yayatoh/platform/security';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
+import { limitRequest } from '@/server/rate-limit.ts';
 
 /**
  * A payment provider's webhook: only the configured provider's endpoint answers (the other is a
@@ -26,6 +28,10 @@ export async function handlePaymentWebhook(req: Request, expected: 'fake' | 'str
   try {
     event = await provider.verifyWebhook(raw, req.headers);
   } catch {
+    // Abuse path (M1.14a): only deliveries that fail verification count, per source IP, so a
+    // forger gets a 429 while the provider's genuine (signed) deliveries are never limited.
+    const decision = await limitRequest(req, 'webhookAbuse', { scope: expected });
+    if (!decision.allowed) return tooManyRequests(decision);
     return new Response(null, { status: 400 });
   }
   if (isIgnoredEvent(event)) return Response.json({ outcome: 'ignored' });

@@ -13,7 +13,9 @@
     "demoCta": "Abrir la consola de demostración",
     "eventCta": "Ver una página pública de evento",
     "statusLabel": "Plataforma",
-    "statusOk": "Todos los sistemas funcionan con normalidad"
+    "statusOk": "Todos los sistemas funcionan con normalidad",
+    "privacyLink": "Aviso de privacidad",
+    "subProcessorsLink": "Subencargados del tratamiento"
   },
   "shell": {
     "navigation": "Navegación principal",
@@ -166,6 +168,8 @@
     "settings": "Configuración",
     "payouts": "Pagos recibidos",
     "domains": "Dominios",
+    "activity": "Actividad",
+    "privacy": "Solicitudes de privacidad",
     "venues": "Recintos",
     "details": "Detalles",
     "content": "Contenido de la página",
@@ -471,7 +475,8 @@
     "idempotency_key_reused": "Esta solicitud ya se envió con datos diferentes.",
     "rate_limited": "Demasiados intentos. Espera un momento.",
     "internal": "Algo salió mal por nuestra parte.",
-    "reference": "Referencia: {id}"
+    "reference": "Referencia: {id}",
+    "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -493,7 +498,8 @@
     "invalid": "El correo electrónico y la contraseña no coinciden.",
     "invalidCode": "Ese código es incorrecto o ha caducado.",
     "failed": "No pudimos enviar el código. Inténtalo de nuevo.",
-    "devPersonas": "Perfiles de desarrollo"
+    "devPersonas": "Perfiles de desarrollo",
+    "rateLimited": "Demasiados intentos de inicio de sesión. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "orgPicker": {
     "emptyTitle": "Aún no perteneces a ninguna organización",
@@ -1092,7 +1098,9 @@
       "accept": "Aceptar",
       "accepted": "Aceptado.",
       "ownerOnly": "Un propietario o administrador debe aceptarlo."
-    }
+    },
+    "activityLink": "Registro de actividad",
+    "privacyLink": "Solicitudes de privacidad"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1824,6 +1832,200 @@
       "event": "Evento",
       "emptyTitle": "No hay ventas en este periodo",
       "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
+    }
+  },
+  "activity": {
+    "title": "Actividad",
+    "description": "Todo lo que las personas y el sistema cambiaron en esta organización. Horas en {timeZone}.",
+    "backToSettings": "Configuración",
+    "integrityTitle": "Integridad del registro",
+    "verified": "Verificado",
+    "verifiedDetail": "{count, plural, one {# entrada} other {# entradas}}, cadena de hash intacta",
+    "broken": "La comprobación de integridad falló en la entrada n.º {seq}. Es posible que el registro se haya alterado fuera de la aplicación; contacta con soporte.",
+    "noAccessTitle": "Solo propietarios y administradores pueden ver la actividad",
+    "noAccessDescription": "Pregunta a un propietario o administrador de esta organización si necesitas saber quién cambió algo.",
+    "formerMember": "Exmiembro",
+    "system": "Sistema ({name})",
+    "apiKey": "Clave de API",
+    "anonymous": "Un invitado (sin sesión iniciada)",
+    "filters": {
+      "actor": "Quién",
+      "anyone": "Cualquiera",
+      "action": "Qué",
+      "anyAction": "Cualquier acción",
+      "from": "Desde",
+      "to": "Hasta",
+      "apply": "Filtrar",
+      "clear": "Borrar filtros"
+    },
+    "errors": {
+      "badDate": "Introduce las fechas como AAAA-MM-DD.",
+      "backwards": "La fecha de inicio es posterior a la de fin, así que se ignoraron las fechas."
+    },
+    "showing": "{count, plural, =0 {Sin entradas} one {# entrada en esta página} other {# entradas en esta página}}",
+    "export": "Exportar CSV",
+    "exportError": "La exportación no se inició: {reason}",
+    "exportTitle": "Exportación de actividad",
+    "emptyTitle": "Aún no hay actividad",
+    "emptyFilteredTitle": "Nada coincide con estos filtros",
+    "emptyDescription": "Los cambios en eventos, entradas, pedidos, equipo y configuración aparecen aquí en cuanto ocurren.",
+    "caption": "Registro de actividad, lo más reciente primero",
+    "columns": {
+      "seq": "#",
+      "at": "Cuándo",
+      "actor": "Quién",
+      "action": "Acción",
+      "targetType": "Tipo de objetivo",
+      "targetId": "Objetivo",
+      "details": "Detalles"
+    },
+    "pagination": "Páginas de actividad",
+    "newest": "Más recientes",
+    "older": "Entradas anteriores"
+  },
+  "privacy": {
+    "title": "Solicitudes de privacidad",
+    "description": "Responde a quienes preguntan qué datos tienes sobre ellos o piden ser olvidados. Cada solicitud queda registrada.",
+    "noticeLink": "Aviso de privacidad de Yayatoh",
+    "noAccessTitle": "Solo propietarios y administradores pueden gestionar solicitudes de privacidad",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que ayude con una solicitud sobre los datos de alguien.",
+    "find": {
+      "title": "Buscar a una persona",
+      "hint": "Busca por correo en contactos, pedidos, entradas, listas de invitados, respuestas y registros de acceso.",
+      "email": "Correo electrónico",
+      "submit": "Buscar"
+    },
+    "result": {
+      "title": "Lo que esta organización tiene sobre {email}",
+      "noneTitle": "No se encontró nada para este correo",
+      "noneDescription": "Ningún contacto, pedido, entrada o invitado usa esta dirección en esta organización."
+    },
+    "categories": {
+      "contacts": "Registros de contacto",
+      "consents": "Registros de consentimiento",
+      "orders": "Pedidos",
+      "paidOrders": "Pedidos pagados (se conservan para contabilidad)",
+      "tickets": "Entradas",
+      "activeTickets": "Entradas válidas",
+      "claims": "Enlaces de transferencia de entradas",
+      "holderLinks": "Enlaces de acceso a entradas",
+      "attendees": "Entradas en listas de invitados",
+      "answers": "Respuestas del pago",
+      "admissions": "Registros de acceso"
+    },
+    "export": {
+      "title": "Exportar sus datos",
+      "hint": "Un archivo JSON con todo lo anterior para enviarlo a la persona. Se elimina a los 7 días.",
+      "submit": "Exportar datos (JSON)",
+      "download": "Descargar el archivo",
+      "running": "Preparando el archivo… recarga la página en un momento."
+    },
+    "erase": {
+      "title": "Borrar a esta persona",
+      "what": "Su nombre, correo, teléfono, respuestas y enlaces se eliminan de contactos, pedidos, entradas y listas de invitados, y se borran los archivos exportados que los mencionan.",
+      "holds": "{paid, plural, =0 {No hay pedidos pagados que conservar.} one {Se conserva # pedido pagado para impuestos y contabilidad, sin su nombre ni correo.} other {Se conservan # pedidos pagados para impuestos y contabilidad, sin su nombre ni correo.}}",
+      "tickets": "{active, plural, =0 {No tiene entradas válidas.} one {# entrada válida sigue siendo válida, sin nombre.} other {# entradas válidas siguen siendo válidas, sin nombre.}}",
+      "final": "No se puede deshacer.",
+      "confirm": "Escribe {email} para confirmar",
+      "submit": "Borrar datos personales",
+      "done": "Borrado. {records, plural, one {Se anonimizó o eliminó # registro} other {Se anonimizaron o eliminaron # registros}}; {kept, plural, =0 {no se conservó ningún pedido pagado} one {se conservó # pedido pagado sin datos personales} other {se conservaron # pedidos pagados sin datos personales}}."
+    },
+    "errors": {
+      "invalidEmail": "Introduce un correo electrónico válido.",
+      "confirmMismatch": "No coincide. Escribe el mismo correo para confirmar.",
+      "nothingHeld": "Ya no se guarda nada sobre este correo."
+    },
+    "history": {
+      "title": "Solicitudes anteriores",
+      "caption": "Solicitudes de privacidad, las más recientes primero",
+      "empty": "Aún no hay solicitudes.",
+      "when": "Cuándo",
+      "kind": "Solicitud",
+      "subject": "Persona",
+      "by": "Gestionada por",
+      "records": "Registros"
+    },
+    "kinds": {
+      "access": "Acceso (exportación)",
+      "erasure": "Supresión"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Aviso de privacidad",
+    "updated": "Última actualización: {date}",
+    "draft": "BORRADOR para revisión legal: aún no es el texto definitivo.",
+    "intro": "Este aviso explica cómo Yayatoh trata los datos personales cuando usas la plataforma para organizar eventos o para comprar entradas y asistir.",
+    "subProcessorsLink": "Ver la lista de subencargados",
+    "sections": {
+      "roles": {
+        "title": "Quién es responsable",
+        "body": "El organizador de un evento decide cómo se usan los datos de los asistentes y es su responsable; Yayatoh trata esos datos por cuenta del organizador según un acuerdo de encargo del tratamiento. Yayatoh es responsable de las cuentas de organizadores y personal, del mercado público de eventos y de la prevención del fraude."
+      },
+      "data": {
+        "title": "Qué datos recogemos",
+        "body": "Datos de la cuenta (nombre, correo, contraseña o códigos de acceso); datos de compradores y asistentes dados al pagar (nombre, correo, respuestas a las preguntas del organizador); entradas, pedidos y registros de acceso; y datos técnicos como registros de dispositivos y solicitudes. Los datos de tarjeta los gestiona Stripe y nunca llegan a Yayatoh."
+      },
+      "purposes": {
+        "title": "Para qué los usamos",
+        "body": "Para vender y entregar entradas, gestionar el acceso, enviar los mensajes que pediste, pagar a los organizadores, prevenir el fraude y el abuso, mantener el servicio seguro y cumplir obligaciones legales. Los mensajes de marketing solo se envían con tu consentimiento y se respetan las señales de Global Privacy Control."
+      },
+      "sharing": {
+        "title": "Con quién los compartimos",
+        "body": "Con el organizador del evento que reservas, con los subencargados de nuestra lista y con las autoridades cuando la ley lo exija. No vendemos datos personales."
+      },
+      "retention": {
+        "title": "Cuánto tiempo los conservamos",
+        "body": "Los datos de los asistentes se eliminan 24 meses después del evento y los registros de acceso a los 12 meses. Los registros de pago se conservan 7 años por motivos fiscales y contables. Los pagos que nunca se completaron pierden sus datos personales a los 30 días."
+      },
+      "security": {
+        "title": "Cómo los protegemos",
+        "body": "Los datos de cada organizador están separados de los de los demás; las respuestas sensibles y las claves están cifradas; el acceso del personal de Yayatoh está limitado y registrado."
+      },
+      "rights": {
+        "title": "Tus derechos",
+        "body": "Puedes pedir una copia de tus datos, corregirlos o que se borren. Para un evento, pídelo a su organizador, que puede exportar o borrar tus datos desde su consola de Yayatoh; también puedes escribirnos y trasladaremos la solicitud. Los datos que la ley nos obliga a conservar (como los pedidos pagados) se guardan sin detalles que te identifiquen."
+      },
+      "contact": {
+        "title": "Contacto",
+        "body": "Pani Digital Services, LLC opera Yayatoh. Los datos de contacto para solicitudes de privacidad se publicarán aquí con el texto definitivo."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Subencargados del tratamiento",
+    "updated": "Última actualización: {date}",
+    "draft": "BORRADOR para revisión legal: la lista sigue el alojamiento previsto y puede cambiar antes del lanzamiento.",
+    "intro": "Estas empresas tratan datos personales por cuenta de Yayatoh para prestar el servicio.",
+    "caption": "Subencargados del tratamiento",
+    "columns": {
+      "name": "Empresa",
+      "purpose": "Qué hace",
+      "data": "Datos",
+      "location": "Ubicación"
+    },
+    "notice": "Avisamos a los organizadores con 30 días de antelación antes de añadir o sustituir un subencargado.",
+    "privacyLink": "Leer el aviso de privacidad",
+    "purposes": {
+      "vercel": "Alojamiento web y entrega",
+      "neon": "Alojamiento de base de datos",
+      "fly": "Tareas en segundo plano",
+      "upstash": "Limitación de solicitudes y caché",
+      "cloudflare": "Almacenamiento de archivos y entrega de contenido",
+      "aws": "Envío de correo y gestión de claves",
+      "stripe": "Pagos y liquidaciones",
+      "twilio": "Mensajes de texto",
+      "ably": "Actualizaciones en directo",
+      "sentry": "Supervisión de errores",
+      "axiom": "Registros"
+    },
+    "data": {
+      "traffic": "Datos de solicitudes y técnicos",
+      "all": "Todos los datos de cuentas y eventos",
+      "files": "Archivos exportados e imágenes",
+      "contact": "Nombres, correos y teléfonos",
+      "payment": "Datos de pago y cuentas de liquidación"
     }
   },
   "categories": {

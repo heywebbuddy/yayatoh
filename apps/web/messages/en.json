@@ -13,7 +13,9 @@
     "demoCta": "Open the demo console",
     "eventCta": "See a public event page",
     "statusLabel": "Platform",
-    "statusOk": "All systems normal"
+    "statusOk": "All systems normal",
+    "privacyLink": "Privacy notice",
+    "subProcessorsLink": "Sub-processors"
   },
   "shell": {
     "navigation": "Main navigation",
@@ -166,6 +168,8 @@
     "settings": "Settings",
     "payouts": "Payouts",
     "domains": "Domains",
+    "activity": "Activity",
+    "privacy": "Privacy requests",
     "venues": "Venues",
     "details": "Details",
     "content": "Page content",
@@ -471,7 +475,8 @@
     "idempotency_key_reused": "This request was already sent with different details.",
     "rate_limited": "Too many attempts. Please wait a moment.",
     "internal": "Something went wrong on our side.",
-    "reference": "Reference: {id}"
+    "reference": "Reference: {id}",
+    "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
   },
   "notFound": {
     "title": "Page not found",
@@ -493,7 +498,8 @@
     "invalid": "That email and password don't match.",
     "invalidCode": "That code is wrong or has expired.",
     "failed": "We couldn't send a code. Please try again.",
-    "devPersonas": "Development personas"
+    "devPersonas": "Development personas",
+    "rateLimited": "Too many sign-in attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
   },
   "orgPicker": {
     "emptyTitle": "You're not in an organization yet",
@@ -1092,7 +1098,9 @@
       "accept": "Accept",
       "accepted": "Accepted.",
       "ownerOnly": "An owner or admin needs to accept this."
-    }
+    },
+    "activityLink": "Activity log",
+    "privacyLink": "Privacy requests"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1824,6 +1832,200 @@
       "event": "Event",
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
+    }
+  },
+  "activity": {
+    "title": "Activity",
+    "description": "Everything people and the system changed in this organization. Times are in {timeZone}.",
+    "backToSettings": "Settings",
+    "integrityTitle": "Log integrity",
+    "verified": "Verified",
+    "verifiedDetail": "{count, plural, one {# entry} other {# entries}}, hash chain intact",
+    "broken": "Integrity check failed at entry #{seq}. The log may have been altered outside the app; contact support.",
+    "noAccessTitle": "Only owners and admins can see activity",
+    "noAccessDescription": "Ask an owner or admin of this organization if you need to know who changed something.",
+    "formerMember": "Former member",
+    "system": "System ({name})",
+    "apiKey": "API key",
+    "anonymous": "A guest (not signed in)",
+    "filters": {
+      "actor": "Who",
+      "anyone": "Anyone",
+      "action": "What",
+      "anyAction": "Any action",
+      "from": "From",
+      "to": "To",
+      "apply": "Filter",
+      "clear": "Clear filters"
+    },
+    "errors": {
+      "badDate": "Enter dates as YYYY-MM-DD.",
+      "backwards": "The start date is after the end date, so the dates were ignored."
+    },
+    "showing": "{count, plural, =0 {No entries} one {# entry on this page} other {# entries on this page}}",
+    "export": "Export CSV",
+    "exportError": "The export didn’t start: {reason}",
+    "exportTitle": "Activity export",
+    "emptyTitle": "No activity yet",
+    "emptyFilteredTitle": "Nothing matches these filters",
+    "emptyDescription": "Changes to events, tickets, orders, team and settings appear here as they happen.",
+    "caption": "Activity log, newest first",
+    "columns": {
+      "seq": "#",
+      "at": "When",
+      "actor": "Who",
+      "action": "Action",
+      "targetType": "Target type",
+      "targetId": "Target",
+      "details": "Details"
+    },
+    "pagination": "Activity pages",
+    "newest": "Newest",
+    "older": "Older entries"
+  },
+  "privacy": {
+    "title": "Privacy requests",
+    "description": "Answer people who ask what you hold about them, or ask to be forgotten. Every request is recorded.",
+    "noticeLink": "Yayatoh privacy notice",
+    "noAccessTitle": "Only owners and admins can handle privacy requests",
+    "noAccessDescription": "Ask an owner or admin of this organization to help with a request about someone’s data.",
+    "find": {
+      "title": "Find a person",
+      "hint": "Search by email across contacts, orders, tickets, guest lists, answers and check-ins.",
+      "email": "Email address",
+      "submit": "Find"
+    },
+    "result": {
+      "title": "What this organization holds about {email}",
+      "noneTitle": "Nothing found for this email",
+      "noneDescription": "No contact, order, ticket or guest record uses this address in this organization."
+    },
+    "categories": {
+      "contacts": "Contact records",
+      "consents": "Consent records",
+      "orders": "Orders",
+      "paidOrders": "Paid orders (kept for accounting)",
+      "tickets": "Tickets",
+      "activeTickets": "Valid tickets",
+      "claims": "Ticket transfer links",
+      "holderLinks": "Ticket access links",
+      "attendees": "Guest list entries",
+      "answers": "Checkout answers",
+      "admissions": "Check-ins"
+    },
+    "export": {
+      "title": "Export their data",
+      "hint": "A JSON file with everything above, for you to send to the person. It is deleted after 7 days.",
+      "submit": "Export data (JSON)",
+      "download": "Download the file",
+      "running": "Preparing the file… reload the page in a moment."
+    },
+    "erase": {
+      "title": "Erase this person",
+      "what": "Their name, email, phone, answers and links are removed from contacts, orders, tickets and guest lists, and export files that mention them are deleted.",
+      "holds": "{paid, plural, =0 {No paid orders need to be kept.} one {# paid order is kept for tax and accounting, without their name or email.} other {# paid orders are kept for tax and accounting, without their name or email.}}",
+      "tickets": "{active, plural, =0 {They have no valid tickets.} one {# valid ticket stays valid, without a name.} other {# valid tickets stay valid, without a name.}}",
+      "final": "This can’t be undone.",
+      "confirm": "Type {email} to confirm",
+      "submit": "Erase personal data",
+      "done": "Erased. {records, plural, one {# record was} other {# records were}} redacted or deleted; {kept, plural, =0 {no paid orders were kept} one {# paid order was kept without personal data} other {# paid orders were kept without personal data}}."
+    },
+    "errors": {
+      "invalidEmail": "Enter a valid email address.",
+      "confirmMismatch": "That doesn’t match. Type the same email address to confirm.",
+      "nothingHeld": "Nothing is held about this email any more."
+    },
+    "history": {
+      "title": "Past requests",
+      "caption": "Privacy requests, newest first",
+      "empty": "No requests yet.",
+      "when": "When",
+      "kind": "Request",
+      "subject": "Person",
+      "by": "Handled by",
+      "records": "Records"
+    },
+    "kinds": {
+      "access": "Access (export)",
+      "erasure": "Erasure"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Privacy notice",
+    "updated": "Last updated {date}",
+    "draft": "DRAFT for legal review — not yet the final text.",
+    "intro": "This notice explains how Yayatoh handles personal data when you use the platform to run events, or to buy tickets and attend them.",
+    "subProcessorsLink": "See the list of sub-processors",
+    "sections": {
+      "roles": {
+        "title": "Who is responsible",
+        "body": "The organizer of an event decides how attendee data is used and is its controller; Yayatoh processes that data on the organizer’s behalf under a data processing agreement. Yayatoh is the controller for organizer and staff accounts, the public event marketplace and fraud prevention."
+      },
+      "data": {
+        "title": "What we collect",
+        "body": "Account details (name, email, password or sign-in codes); buyer and attendee details given at checkout (name, email, answers to the organizer’s questions); tickets, orders and check-ins; and technical data such as device and request logs. Card details are handled by Stripe and never reach Yayatoh."
+      },
+      "purposes": {
+        "title": "Why we use it",
+        "body": "To sell and deliver tickets, run check-in, send the messages you asked for, pay organizers, prevent fraud and abuse, keep the service secure, and meet legal duties. Marketing messages are only sent with your consent, and Global Privacy Control signals are honored."
+      },
+      "sharing": {
+        "title": "Who we share it with",
+        "body": "With the organizer of the event you book, with the sub-processors on our sub-processor list, and with authorities when the law requires it. We do not sell personal data."
+      },
+      "retention": {
+        "title": "How long we keep it",
+        "body": "Attendee details are removed 24 months after the event and check-in logs after 12 months. Payment records are kept for 7 years for tax and accounting. Checkouts that were never paid lose their personal details after 30 days."
+      },
+      "security": {
+        "title": "How we protect it",
+        "body": "Each organizer’s data is kept apart from every other organizer’s; sensitive answers and keys are encrypted; access by Yayatoh staff is limited and logged."
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": "You can ask for a copy of your data, to correct it, or to have it erased. For an event, ask its organizer, who can export or erase your data from their Yayatoh console; you can also write to us and we will pass the request on. Data the law requires us to keep (such as paid orders) is kept without details that identify you."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "Pani Digital Services, LLC operates Yayatoh. Contact details for privacy requests will be published here with the final text."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Sub-processors",
+    "updated": "Last updated {date}",
+    "draft": "DRAFT for legal review: the list follows the planned hosting and may change before launch.",
+    "intro": "These companies process personal data on Yayatoh’s behalf to run the service.",
+    "caption": "Sub-processors",
+    "columns": {
+      "name": "Company",
+      "purpose": "What they do",
+      "data": "Data",
+      "location": "Location"
+    },
+    "notice": "We give organizers 30 days’ notice before adding or replacing a sub-processor.",
+    "privacyLink": "Read the privacy notice",
+    "purposes": {
+      "vercel": "Web hosting and delivery",
+      "neon": "Database hosting",
+      "fly": "Background jobs",
+      "upstash": "Rate limiting and caching",
+      "cloudflare": "File storage and content delivery",
+      "aws": "Email delivery and key management",
+      "stripe": "Payments and payouts",
+      "twilio": "Text messages",
+      "ably": "Live updates",
+      "sentry": "Error monitoring",
+      "axiom": "Logs"
+    },
+    "data": {
+      "traffic": "Request and technical data",
+      "all": "All account and event data",
+      "files": "Exported files and images",
+      "contact": "Names, email addresses and phone numbers",
+      "payment": "Payment details and payout accounts"
     }
   },
   "categories": {

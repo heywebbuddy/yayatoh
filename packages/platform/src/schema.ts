@@ -55,7 +55,13 @@ export const processedEvents = tenantTable(
   (t) => [uniqueIndex('processed_events_org_consumer_event_key').on(t.orgId, t.consumer, t.eventId)],
 );
 
-/** Append-only audit log (app_user may only INSERT and SELECT; see migration). */
+/**
+ * Append-only audit log (app_user may only INSERT and SELECT; see migration). Each org's entries
+ * form a hash chain (M1.14b): a BEFORE INSERT trigger (`platform.audit_chain`) numbers them
+ * (`seq`, gap-free per org, under a per-org advisory lock) and sets
+ * `hash = sha256(prev_hash, org, seq, actor, action, target, data, request, created_at)`.
+ * The defaults below are placeholders the trigger always overwrites.
+ */
 export const auditEvents = tenantTable(
   platform,
   'audit_events',
@@ -66,8 +72,16 @@ export const auditEvents = tenantTable(
     targetId: text('target_id'),
     data: jsonb('data').notNull().default({}),
     requestId: text('request_id').notNull(),
+    seq: bigint('seq', { mode: 'number' }).notNull().default(0),
+    prevHash: text('prev_hash').notNull().default(''),
+    hash: text('hash').notNull().default(''),
   },
-  (t) => [index('audit_events_org_id_created_at_idx').on(t.orgId, t.createdAt)],
+  (t) => [
+    index('audit_events_org_id_created_at_idx').on(t.orgId, t.createdAt),
+    uniqueIndex('audit_events_org_seq_key').on(t.orgId, t.seq),
+    index('audit_events_org_actor_seq_idx').on(t.orgId, t.actor, t.seq),
+    index('audit_events_org_action_seq_idx').on(t.orgId, t.action, t.seq),
+  ],
 );
 
 export const idempotencyKeys = tenantTable(
@@ -288,4 +302,24 @@ export const apiUsage = platform.table(
       sql`length(route) <= 200 and length(client) <= 40 and length(app_version) <= 40`,
     ),
   ],
+);
+
+/**
+ * Rate-limit windows (M1.14a; `rate_limit_windows`, not the per-org fixed windows of
+ * `rate_limits` above, which the seat finder uses): one sliding-window counter per key (policy + device, IP or hashed
+ * identity; never raw PII). Global and UNLOGGED (losing counters on a crash is harmless). No
+ * app_user privileges: every hit goes through the SECURITY DEFINER `platform.rate_limit_hit`.
+ * Replaced by Upstash Redis once the owner's account exists.
+ */
+export const rateLimitWindows = platform.table(
+  'rate_limit_windows',
+  {
+    key: text('key').primaryKey(),
+    windowMs: integer('window_ms').notNull(),
+    windowStart: bigint('window_start', { mode: 'number' }).notNull(),
+    prev: integer('prev').notNull().default(0),
+    curr: integer('curr').notNull().default(0),
+    expiresAt: tsz('expires_at').notNull(),
+  },
+  (t) => [index('rate_limit_windows_expires_idx').on(t.expiresAt)],
 );

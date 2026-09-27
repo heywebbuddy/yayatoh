@@ -9,16 +9,16 @@ import {
   turnstileHumanCheck,
   verifyLinkToken,
 } from '@yayatoh/platform';
+import { DEVICE_COOKIE } from '@yayatoh/platform/security';
 import { publicVenueMapQuery } from '@yayatoh/seating';
 import { cookies } from 'next/headers';
 import { ports } from './ports.ts';
 
 /**
- * The public seat finder's browser state (M1.7e). The device cookie is set by the proxy on the
- * finder's pages and keys the rate limit (roadmap §6.1: per device + event, tolerant of shared
- * venue Wi-Fi). The code and view cookies hold signed code ids, bound to the event.
+ * The public seat finder's browser state (M1.7e). The device cookie (M1.14a, set by the proxy on
+ * every page) keys the rate limit (roadmap §6.1: per device + event, tolerant of shared venue
+ * Wi-Fi). The code and view cookies hold signed code ids, bound to the event.
  */
-export const DEVICE_COOKIE = 'yy_device';
 const CODE_MAX_AGE_S = 15 * 60;
 const VIEW_MAX_AGE_S = 24 * 3600;
 

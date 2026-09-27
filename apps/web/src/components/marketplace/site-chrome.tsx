@@ -43,9 +43,23 @@ export async function SiteHeader({ name, browse = true }: { name?: string; brows
 /** Footer: language switch (`/lang/{code}` keeps the page) and "Powered by". */
 export async function SiteFooter({ children }: { children?: ReactNode }) {
   const t = await getTranslations('market');
+  const home = await getTranslations('home');
   return (
     <footer className="mx-auto mt-16 flex w-full max-w-6xl flex-col gap-4 border-t border-zinc-200 px-4 py-8 md:px-6">
       {children}
+      {/* The privacy notice and sub-processors (M1.14c) are linked from every public page. */}
+      <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
+        <li>
+          <Link href="/privacy" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+            {home('privacyLink')}
+          </Link>
+        </li>
+        <li>
+          <Link href="/sub-processors" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+            {home('subProcessorsLink')}
+          </Link>
+        </li>
+      </ul>
       <nav aria-label={t('language')}>
         <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
           {LOCALES.map((l) => (

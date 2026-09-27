@@ -37,7 +37,15 @@ export function HolderLinkForm({
       </form>
       <div aria-live="polite">
         {state.sent ? <p className="text-body">{t('myTickets.requestSent')}</p> : null}
-        {state.code ? <Alert title={t(errorMessageKey(state.code))} /> : null}
+        {state.code ? (
+          <Alert
+            title={
+              state.code === 'rate_limited'
+                ? t('errors.rateLimitedRetry', { minutes: state.retryMinutes ?? 1 })
+                : t(errorMessageKey(state.code))
+            }
+          />
+        ) : null}
       </div>
     </div>
   );

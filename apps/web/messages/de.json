@@ -13,7 +13,9 @@
     "demoCta": "Demo-Konsole öffnen",
     "eventCta": "Öffentliche Eventseite ansehen",
     "statusLabel": "Plattform",
-    "statusOk": "Alle Systeme laufen normal"
+    "statusOk": "Alle Systeme laufen normal",
+    "privacyLink": "Datenschutzhinweis",
+    "subProcessorsLink": "Unterauftragsverarbeiter"
   },
   "shell": {
     "navigation": "Hauptnavigation",
@@ -166,6 +168,8 @@
     "settings": "Einstellungen",
     "payouts": "Auszahlungen",
     "domains": "Domains",
+    "activity": "Aktivität",
+    "privacy": "Datenschutzanfragen",
     "venues": "Veranstaltungsorte",
     "details": "Details",
     "content": "Seiteninhalt",
@@ -471,7 +475,8 @@
     "idempotency_key_reused": "Diese Anfrage wurde bereits mit anderen Angaben gesendet.",
     "rate_limited": "Zu viele Versuche. Bitte warte einen Moment.",
     "internal": "Bei uns ist etwas schiefgelaufen.",
-    "reference": "Referenz: {id}"
+    "reference": "Referenz: {id}",
+    "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -493,7 +498,8 @@
     "invalid": "E-Mail und Passwort passen nicht zusammen.",
     "invalidCode": "Dieser Code ist falsch oder abgelaufen.",
     "failed": "Wir konnten keinen Code senden. Bitte versuche es erneut.",
-    "devPersonas": "Entwicklungs-Personas"
+    "devPersonas": "Entwicklungs-Personas",
+    "rateLimited": "Zu viele Anmeldeversuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
   },
   "orgPicker": {
     "emptyTitle": "Du bist noch in keiner Organisation",
@@ -1092,7 +1098,9 @@
       "accept": "Akzeptieren",
       "accepted": "Akzeptiert.",
       "ownerOnly": "Eine Inhaberin, ein Inhaber oder ein Admin muss dies akzeptieren."
-    }
+    },
+    "activityLink": "Aktivitätsprotokoll",
+    "privacyLink": "Datenschutzanfragen"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1824,6 +1832,200 @@
       "event": "Veranstaltung",
       "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
       "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
+    }
+  },
+  "activity": {
+    "title": "Aktivität",
+    "description": "Alles, was Personen und das System in dieser Organisation geändert haben. Zeiten in {timeZone}.",
+    "backToSettings": "Einstellungen",
+    "integrityTitle": "Integrität des Protokolls",
+    "verified": "Verifiziert",
+    "verifiedDetail": "{count, plural, one {# Eintrag} other {# Einträge}}, Hash-Kette intakt",
+    "broken": "Integritätsprüfung bei Eintrag #{seq} fehlgeschlagen. Das Protokoll wurde möglicherweise außerhalb der App verändert; wenden Sie sich an den Support.",
+    "noAccessTitle": "Nur Inhaber und Admins können die Aktivität sehen",
+    "noAccessDescription": "Fragen Sie einen Inhaber oder Admin dieser Organisation, wenn Sie wissen müssen, wer etwas geändert hat.",
+    "formerMember": "Ehemaliges Mitglied",
+    "system": "System ({name})",
+    "apiKey": "API-Schlüssel",
+    "anonymous": "Ein Gast (nicht angemeldet)",
+    "filters": {
+      "actor": "Wer",
+      "anyone": "Alle",
+      "action": "Was",
+      "anyAction": "Jede Aktion",
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Filtern",
+      "clear": "Filter zurücksetzen"
+    },
+    "errors": {
+      "badDate": "Geben Sie Daten als JJJJ-MM-TT ein.",
+      "backwards": "Das Startdatum liegt nach dem Enddatum, daher wurden die Daten ignoriert."
+    },
+    "showing": "{count, plural, =0 {Keine Einträge} one {# Eintrag auf dieser Seite} other {# Einträge auf dieser Seite}}",
+    "export": "CSV exportieren",
+    "exportError": "Der Export wurde nicht gestartet: {reason}",
+    "exportTitle": "Aktivitätsexport",
+    "emptyTitle": "Noch keine Aktivität",
+    "emptyFilteredTitle": "Nichts entspricht diesen Filtern",
+    "emptyDescription": "Änderungen an Veranstaltungen, Tickets, Bestellungen, Team und Einstellungen erscheinen hier, sobald sie passieren.",
+    "caption": "Aktivitätsprotokoll, neueste zuerst",
+    "columns": {
+      "seq": "#",
+      "at": "Wann",
+      "actor": "Wer",
+      "action": "Aktion",
+      "targetType": "Zieltyp",
+      "targetId": "Ziel",
+      "details": "Details"
+    },
+    "pagination": "Aktivitätsseiten",
+    "newest": "Neueste",
+    "older": "Ältere Einträge"
+  },
+  "privacy": {
+    "title": "Datenschutzanfragen",
+    "description": "Beantworten Sie Anfragen von Personen, die wissen möchten, was Sie über sie speichern, oder die gelöscht werden möchten. Jede Anfrage wird protokolliert.",
+    "noticeLink": "Datenschutzhinweis von Yayatoh",
+    "noAccessTitle": "Nur Inhaber und Admins können Datenschutzanfragen bearbeiten",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation um Hilfe bei einer Anfrage zu den Daten einer Person.",
+    "find": {
+      "title": "Person finden",
+      "hint": "Suche per E-Mail in Kontakten, Bestellungen, Tickets, Gästelisten, Antworten und Check-ins.",
+      "email": "E-Mail-Adresse",
+      "submit": "Suchen"
+    },
+    "result": {
+      "title": "Was diese Organisation über {email} speichert",
+      "noneTitle": "Nichts zu dieser E-Mail gefunden",
+      "noneDescription": "Kein Kontakt, keine Bestellung, kein Ticket und kein Gasteintrag nutzt diese Adresse in dieser Organisation."
+    },
+    "categories": {
+      "contacts": "Kontakteinträge",
+      "consents": "Einwilligungseinträge",
+      "orders": "Bestellungen",
+      "paidOrders": "Bezahlte Bestellungen (für die Buchhaltung aufbewahrt)",
+      "tickets": "Tickets",
+      "activeTickets": "Gültige Tickets",
+      "claims": "Links zur Ticketweitergabe",
+      "holderLinks": "Links zum Ticketzugang",
+      "attendees": "Gästelisteneinträge",
+      "answers": "Antworten beim Checkout",
+      "admissions": "Check-ins"
+    },
+    "export": {
+      "title": "Daten exportieren",
+      "hint": "Eine JSON-Datei mit allem oben Genannten, die Sie der Person schicken können. Sie wird nach 7 Tagen gelöscht.",
+      "submit": "Daten exportieren (JSON)",
+      "download": "Datei herunterladen",
+      "running": "Die Datei wird vorbereitet … laden Sie die Seite gleich neu."
+    },
+    "erase": {
+      "title": "Diese Person löschen",
+      "what": "Name, E-Mail, Telefon, Antworten und Links werden aus Kontakten, Bestellungen, Tickets und Gästelisten entfernt, und Exportdateien, in denen die Person vorkommt, werden gelöscht.",
+      "holds": "{paid, plural, =0 {Es müssen keine bezahlten Bestellungen aufbewahrt werden.} one {# bezahlte Bestellung wird für Steuer und Buchhaltung aufbewahrt, ohne Name und E-Mail.} other {# bezahlte Bestellungen werden für Steuer und Buchhaltung aufbewahrt, ohne Name und E-Mail.}}",
+      "tickets": "{active, plural, =0 {Keine gültigen Tickets vorhanden.} one {# gültiges Ticket bleibt gültig, ohne Namen.} other {# gültige Tickets bleiben gültig, ohne Namen.}}",
+      "final": "Das kann nicht rückgängig gemacht werden.",
+      "confirm": "Geben Sie zur Bestätigung {email} ein",
+      "submit": "Personenbezogene Daten löschen",
+      "done": "Gelöscht. {records, plural, one {# Eintrag wurde} other {# Einträge wurden}} geschwärzt oder gelöscht; {kept, plural, =0 {keine bezahlten Bestellungen aufbewahrt} one {# bezahlte Bestellung ohne personenbezogene Daten aufbewahrt} other {# bezahlte Bestellungen ohne personenbezogene Daten aufbewahrt}}."
+    },
+    "errors": {
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "confirmMismatch": "Das stimmt nicht überein. Geben Sie zur Bestätigung dieselbe E-Mail-Adresse ein.",
+      "nothingHeld": "Zu dieser E-Mail ist nichts mehr gespeichert."
+    },
+    "history": {
+      "title": "Frühere Anfragen",
+      "caption": "Datenschutzanfragen, neueste zuerst",
+      "empty": "Noch keine Anfragen.",
+      "when": "Wann",
+      "kind": "Anfrage",
+      "subject": "Person",
+      "by": "Bearbeitet von",
+      "records": "Einträge"
+    },
+    "kinds": {
+      "access": "Auskunft (Export)",
+      "erasure": "Löschung"
+    }
+  },
+  "privacyNotice": {
+    "eyebrow": "Yayatoh",
+    "title": "Datenschutzhinweis",
+    "updated": "Zuletzt aktualisiert am {date}",
+    "draft": "ENTWURF zur rechtlichen Prüfung – noch nicht der endgültige Text.",
+    "intro": "Dieser Hinweis erklärt, wie Yayatoh personenbezogene Daten verarbeitet, wenn Sie die Plattform nutzen, um Veranstaltungen durchzuführen oder Tickets zu kaufen und teilzunehmen.",
+    "subProcessorsLink": "Liste der Unterauftragsverarbeiter ansehen",
+    "sections": {
+      "roles": {
+        "title": "Wer verantwortlich ist",
+        "body": "Der Veranstalter entscheidet, wie Teilnehmerdaten verwendet werden, und ist dafür Verantwortlicher; Yayatoh verarbeitet diese Daten im Auftrag des Veranstalters auf Grundlage eines Auftragsverarbeitungsvertrags. Für Veranstalter- und Mitarbeiterkonten, den öffentlichen Veranstaltungsmarktplatz und die Betrugsprävention ist Yayatoh Verantwortlicher."
+      },
+      "data": {
+        "title": "Welche Daten wir erheben",
+        "body": "Kontodaten (Name, E-Mail, Passwort oder Anmeldecodes); beim Checkout angegebene Käufer- und Teilnehmerdaten (Name, E-Mail, Antworten auf Fragen des Veranstalters); Tickets, Bestellungen und Check-ins; sowie technische Daten wie Geräte- und Anfrageprotokolle. Kartendaten verarbeitet Stripe; sie gelangen nie zu Yayatoh."
+      },
+      "purposes": {
+        "title": "Wofür wir sie verwenden",
+        "body": "Um Tickets zu verkaufen und zuzustellen, den Einlass abzuwickeln, gewünschte Nachrichten zu senden, Veranstalter auszuzahlen, Betrug und Missbrauch zu verhindern, den Dienst sicher zu halten und rechtliche Pflichten zu erfüllen. Werbenachrichten senden wir nur mit Ihrer Einwilligung; Global-Privacy-Control-Signale werden beachtet."
+      },
+      "sharing": {
+        "title": "An wen wir sie weitergeben",
+        "body": "Mit dem Veranstalter der gebuchten Veranstaltung, mit den Unterauftragsverarbeitern auf unserer Liste und mit Behörden, wenn das Gesetz es verlangt. Wir verkaufen keine personenbezogenen Daten."
+      },
+      "retention": {
+        "title": "Wie lange wir sie aufbewahren",
+        "body": "Teilnehmerdaten werden 24 Monate nach der Veranstaltung entfernt, Check-in-Protokolle nach 12 Monaten. Zahlungsunterlagen bewahren wir für Steuer und Buchhaltung 7 Jahre auf. Nie bezahlte Checkouts verlieren ihre personenbezogenen Daten nach 30 Tagen."
+      },
+      "security": {
+        "title": "Wie wir sie schützen",
+        "body": "Die Daten jedes Veranstalters sind von denen aller anderen getrennt; sensible Antworten und Schlüssel sind verschlüsselt; Zugriffe durch Yayatoh-Mitarbeitende sind beschränkt und werden protokolliert."
+      },
+      "rights": {
+        "title": "Ihre Rechte",
+        "body": "Sie können eine Kopie Ihrer Daten, deren Berichtigung oder Löschung verlangen. Wenden Sie sich bei einer Veranstaltung an deren Veranstalter, der Ihre Daten in seiner Yayatoh-Konsole exportieren oder löschen kann; Sie können uns auch schreiben, und wir leiten die Anfrage weiter. Daten, die wir gesetzlich aufbewahren müssen (z. B. bezahlte Bestellungen), bleiben ohne Angaben erhalten, die Sie identifizieren."
+      },
+      "contact": {
+        "title": "Kontakt",
+        "body": "Yayatoh wird von Pani Digital Services, LLC betrieben. Kontaktdaten für Datenschutzanfragen werden hier mit dem endgültigen Text veröffentlicht."
+      }
+    }
+  },
+  "subprocessors": {
+    "eyebrow": "Yayatoh",
+    "title": "Unterauftragsverarbeiter",
+    "updated": "Zuletzt aktualisiert am {date}",
+    "draft": "ENTWURF zur rechtlichen Prüfung: Die Liste folgt dem geplanten Hosting und kann sich vor dem Start ändern.",
+    "intro": "Diese Unternehmen verarbeiten personenbezogene Daten im Auftrag von Yayatoh, um den Dienst zu betreiben.",
+    "caption": "Unterauftragsverarbeiter",
+    "columns": {
+      "name": "Unternehmen",
+      "purpose": "Aufgabe",
+      "data": "Daten",
+      "location": "Standort"
+    },
+    "notice": "Wir informieren Veranstalter 30 Tage im Voraus, bevor wir einen Unterauftragsverarbeiter hinzufügen oder ersetzen.",
+    "privacyLink": "Datenschutzhinweis lesen",
+    "purposes": {
+      "vercel": "Webhosting und Auslieferung",
+      "neon": "Datenbank-Hosting",
+      "fly": "Hintergrundaufgaben",
+      "upstash": "Ratenbegrenzung und Caching",
+      "cloudflare": "Dateispeicher und Inhaltsauslieferung",
+      "aws": "E-Mail-Versand und Schlüsselverwaltung",
+      "stripe": "Zahlungen und Auszahlungen",
+      "twilio": "SMS",
+      "ably": "Live-Aktualisierungen",
+      "sentry": "Fehlerüberwachung",
+      "axiom": "Protokolle"
+    },
+    "data": {
+      "traffic": "Anfrage- und technische Daten",
+      "all": "Alle Konto- und Veranstaltungsdaten",
+      "files": "Exportierte Dateien und Bilder",
+      "contact": "Namen, E-Mail-Adressen und Telefonnummern",
+      "payment": "Zahlungsdaten und Auszahlungskonten"
     }
   },
   "categories": {

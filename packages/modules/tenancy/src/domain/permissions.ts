@@ -32,6 +32,10 @@ export const PERMISSIONS = [
   'messages:read',
   /** Send announcements and replies, block and report conversations. */
   'messages:send',
+  /** Settings → Activity: the org's audit log and its export (M1.14b). Owners and admins. */
+  'audit:read',
+  /** Data-subject requests: find, export and erase a person's data (M1.14c). Owners and admins. */
+  'privacy:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 

@@ -24,6 +24,7 @@ import {
 } from '@/app/[locale]/events/[slug]/actions.ts';
 import { AccessCodeEntry } from '@/components/access-code-entry.tsx';
 import { Announcements } from '@/components/announcements.tsx';
+import { BrandLink } from '@/components/brand-styled.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
@@ -260,16 +261,16 @@ export async function PublicEventView({
             ))}
           </ul>
         )}
-        <a
+        <BrandLink
           href={eventUrl}
           target="_blank"
           rel="noopener"
           className={buttonClass('primary')}
-          style={brand ? { background: brand.background, color: brand.text } : undefined}
+          brand={brand ? { background: brand.background, text: brand.text } : null}
         >
           {t('widget.getTickets')}
           <span className="sr-only"> {t('widget.newTab')}</span>
-        </a>
+        </BrandLink>
         {ev.poweredByVisible ? (
           <p className="text-caption text-zinc-500">{t('publicEvent.poweredBy')}</p>
         ) : null}

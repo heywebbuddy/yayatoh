@@ -1,10 +1,10 @@
 import 'server-only';
-import { createHmac, randomUUID } from 'node:crypto';
+import { createHmac } from 'node:crypto';
 import { type AccessGrantDto, accessGrant } from '@yayatoh/events';
 import { appTokenSecret, signLinkToken, verifyLinkToken } from '@yayatoh/platform';
+import { DEVICE_COOKIE, isDeviceId, newDeviceId } from '@yayatoh/platform/security';
 import { cookies } from 'next/headers';
 
-const DEVICE_COOKIE = 'yy_device';
 const ACCESS_PURPOSE = 'event-access';
 const accessCookie = (eventId: string) => `yy_access_${eventId.replace(/-/g, '')}`;
 const secure = process.env.NODE_ENV === 'production';
@@ -18,14 +18,15 @@ const secure = process.env.NODE_ENV === 'production';
 export async function clientKey(purpose: string): Promise<string> {
   const jar = await cookies();
   let device = jar.get(DEVICE_COOKIE)?.value;
-  if (!device || !/^[0-9a-f-]{36}$/.test(device)) {
-    device = randomUUID();
+  // The proxy sets the device cookie (M1.14a) on every page; a form posted without one gets it here.
+  if (!isDeviceId(device)) {
+    device = newDeviceId();
     jar.set(DEVICE_COOKIE, device, {
       httpOnly: true,
       sameSite: 'lax',
       secure,
       path: '/',
-      maxAge: 60 * 60 * 24 * 365,
+      maxAge: 60 * 60 * 24 * 400,
     });
   }
   return createHmac('sha256', appTokenSecret()).update(`${purpose}:${device}`).digest('base64url');

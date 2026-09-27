@@ -1,11 +1,26 @@
 export { recordApiUsage } from './api-usage.ts';
 export {
+  AUDIT_DETAIL_KEYS,
+  AUDIT_EXPORT_COLUMNS,
+  type AuditChainStatus,
+  AuditEntryDto,
+  AuditFilter,
+  AuditPageDto,
+  auditDetails,
+  auditEntriesTx,
+  auditExportAction,
+  auditExportBulk,
+  auditLogQuery,
+  verifyAuditChainTx,
+} from './audit.ts';
+export {
   type AnyBulkAction,
   type BulkAction,
   type BulkItemResult,
   BulkOperationDto,
   bulkCommands,
   bulkOperationParamsTx,
+  bulkOperationRequesterTx,
   bulkStepCommand,
   defineBulkAction,
   listBulkOperationsQuery,
@@ -42,6 +57,14 @@ export {
   type Subscriber,
 } from './outbox/outbox.ts';
 export {
+  clearFinishedBulkParamsTx,
+  ERASED_EMAIL,
+  ERASED_NAME,
+  purgeExpiredFilesTx,
+  purgeExpiredIdempotencyKeysTx,
+  purgeFilesMentioningTx,
+} from './privacy.ts';
+export {
   composeNav,
   isProfileKey,
   type NavGroup,
@@ -61,5 +84,6 @@ export {
   type RateLimitRule,
   windowStart,
 } from './rate-limit.ts';
+export { postgresRateLimitStore, purgeRateLimits } from './rate-limit-store.ts';
 export { STAFF_ROLES } from './schema.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

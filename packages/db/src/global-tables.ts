@@ -16,6 +16,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
   'platform.staff':
     'Platform staff (owner-approved list); platform_reader SELECT only, written through a SECURITY DEFINER function.',
+  'platform.rate_limit_windows':
+    'Rate-limit counters keyed by policy + device/IP/hashed identity (no tenant); no app_user privileges, only the SECURITY DEFINER platform.rate_limit_hit.',
   'platform.access_log':
     'Audit of platform_reader use; append-only through a SECURITY DEFINER function (platform_reader).',
   'platform.api_usage':

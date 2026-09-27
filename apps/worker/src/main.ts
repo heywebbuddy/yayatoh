@@ -4,6 +4,7 @@ import { runDueBulkOperations } from './bulk.ts';
 import { dispatchNotifications, userEmails, workerTransports } from './notifications.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
+import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
 import { sweepExpiredHolds } from './sweeper.ts';
 import { startWorker } from './worker.ts';
@@ -104,6 +105,20 @@ setInterval(() => {
       dispatching = false;
     });
 }, 2_000).unref();
+// Retention (M1.14c): once a day, first run 10 minutes after start (leader only).
+let retaining = false;
+const retain = () => {
+  if (!release || stopping || retaining) return;
+  retaining = true;
+  runRetention()
+    .then((r) => console.info(JSON.stringify({ job: 'retention', ...r })))
+    .catch((err) => console.error('retention', err))
+    .finally(() => {
+      retaining = false;
+    });
+};
+setTimeout(retain, 10 * 60_000).unref();
+setInterval(retain, 24 * 3_600_000).unref();
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, async () => {

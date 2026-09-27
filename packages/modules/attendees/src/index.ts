@@ -23,6 +23,7 @@ export {
   attendeesForExportTx,
   resolveAttendeeIdsTx,
 } from './bulk.ts';
+export { attendeesDsarTx, eraseAttendeesDsarTx, redactAttendeesForEventsTx } from './dsar.ts';
 export * from './dto.ts';
 export {
   addGuestCommand,

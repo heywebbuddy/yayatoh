@@ -1,5 +1,8 @@
 import { cx } from '../cx.ts';
 
+/** Chart sizes as static classes: the strict CSP allows no style attributes (M1.14a). */
+const CHART_SIZE = { 88: 'size-[88px]', 120: 'size-[120px]', 150: 'size-[150px]' } as const;
+
 /** Series colours are tokens only (ADR 0018 data visualisation). */
 export type SeriesTone = 'accent' | 'zinc-400' | 'zinc-300' | 'green' | 'pink' | 'yellow';
 
@@ -154,14 +157,14 @@ export function Donut({
   title: string;
   segments: readonly Segment[];
   center?: React.ReactNode;
-  size?: number;
+  size?: keyof typeof CHART_SIZE;
 }) {
   const total = segments.reduce((a, s) => a + s.value, 0) || 1;
   const r = 42;
   const c = 2 * Math.PI * r;
   let offset = 0;
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
+    <div className={cx('relative shrink-0', CHART_SIZE[size])}>
       <svg viewBox="0 0 100 100" className="size-full -rotate-90" role="img" aria-label={title}>
         <circle cx="50" cy="50" r={r} fill="none" className="stroke-zinc-100" strokeWidth="10" />
         {segments.map((s) => {
@@ -191,12 +194,20 @@ export function Donut({
 }
 
 /** Circular progress (readiness). */
-export function ProgressRing({ value, label, size = 88 }: { value: number; label: string; size?: number }) {
+export function ProgressRing({
+  value,
+  label,
+  size = 88,
+}: {
+  value: number;
+  label: string;
+  size?: keyof typeof CHART_SIZE;
+}) {
   const r = 40;
   const c = 2 * Math.PI * r;
   const pct = Math.min(100, Math.max(0, value));
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
+    <div className={cx('relative shrink-0', CHART_SIZE[size])}>
       <svg viewBox="0 0 100 100" className="size-full -rotate-90" role="img" aria-label={label}>
         <circle cx="50" cy="50" r={r} fill="none" className="stroke-zinc-100" strokeWidth="8" />
         <circle

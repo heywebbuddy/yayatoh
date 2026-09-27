@@ -172,7 +172,17 @@ test.describe('embeddable ticket widget (M1.11c)', () => {
 
   test('a website that is not allowed cannot frame the widget (CSP frame-ancestors)', async ({ page }) => {
     const res = await page.request.get('/embed/lakeside-open-house');
-    expect(res.headers()['content-security-policy']).toBe(`frame-ancestors 'self' ${ALLOWED.join(' ')}`);
+    // The full page CSP (M1.14a), with frame-ancestors widened to exactly the allowed origins.
+    const csp = res.headers()['content-security-policy'] ?? '';
+    const directive = (name: string) =>
+      csp
+        .split(';')
+        .map((d) => d.trim().split(/\s+/))
+        .find(([k]) => k === name)
+        ?.slice(1);
+    expect(directive('frame-ancestors')).toEqual(["'self'", ...ALLOWED]);
+    expect(directive('script-src')?.some((v) => v.startsWith("'nonce-"))).toBe(true);
+    expect(res.headers()['x-frame-options']).toBeUndefined();
     const snippet = await page
       .getByRole('list', { name: 'Widget snippets' })
       .getByLabel('Snippet for Lakeside Open House')
