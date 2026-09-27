@@ -3,7 +3,12 @@ export interface ParsedCsv {
   readonly rows: readonly (readonly string[])[];
 }
 
-export type CsvErrorCode = 'too_many_rows' | 'too_many_columns' | 'cell_too_long' | 'unterminated_quote' | 'empty';
+export type CsvErrorCode =
+  | 'too_many_rows'
+  | 'too_many_columns'
+  | 'cell_too_long'
+  | 'unterminated_quote'
+  | 'empty';
 
 // Plain fields, not parameter properties: Node runs this file with type stripping only.
 export class CsvError extends Error {
