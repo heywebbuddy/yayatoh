@@ -4,8 +4,10 @@ export {
   generateKeyPair,
   type KeyPair,
   randomShortCode,
+  signStatement,
   signTicketCode,
   type TicketClaims,
   type VerifyResult,
+  verifyStatement,
   verifyTicketCode,
 } from './ticket-code.ts';

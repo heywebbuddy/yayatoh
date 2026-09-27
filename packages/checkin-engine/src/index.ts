@@ -1,13 +1,19 @@
 export {
   admittedKey,
   lookupHash,
+  MANIFEST_VERSION,
   type ManifestCheckpoint,
   type ManifestHeader,
   type ManifestRow,
+  type ManifestScope,
   type OfflineState,
   type OfflineVerdict,
   offlineVerdict,
+  SCOPE_TAG,
+  scopeAllows,
+  scopeMessage,
   uuidv7Time,
+  verifyManifestScope,
   zoneAllows,
 } from './offline.ts';
 export {
@@ -19,3 +25,18 @@ export {
   type RuleVerdict,
   ruleResult,
 } from './rules.ts';
+export {
+  DEFAULT_VELOCITY_RULES,
+  detectVelocity,
+  distanceMeters,
+  type GeoPoint,
+  MIN_TRAVEL_DISTANCE_M,
+  OK_RESULTS,
+  outcomeOf,
+  RATE_WINDOW_MS,
+  TRAVEL_WINDOW_MS,
+  type VelocityFinding,
+  type VelocityOutcome,
+  type VelocityRules,
+  type VelocityScan,
+} from './velocity.ts';
