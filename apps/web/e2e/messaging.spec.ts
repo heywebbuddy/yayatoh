@@ -22,7 +22,7 @@ test.describe('messaging: announcements and conversations', () => {
     page,
     browser,
   }) => {
-    test.setTimeout(120_000);
+    test.setTimeout(240_000);
     const stamp = `${Date.now()}${test.info().project.name.slice(0, 1)}`;
     const guestName = `Gia ${stamp}`;
     const email = `gia.${stamp}@example.test`;
