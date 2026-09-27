@@ -96,6 +96,32 @@ test.describe('security headers and CSP', () => {
     expect(scan?.headers()['content-security-policy']).toContain("'wasm-unsafe-eval'");
   });
 
+  test('robots.txt keeps crawlers out of the console and secret-link pages', async ({ request }) => {
+    const res = await request.get('/robots.txt');
+    expect(res.status()).toBe(200);
+    const body = await res.text();
+    for (const p of ['/o/', '/orders/', '/my-tickets/', '/claim/', '/invite/', '/api/'])
+      expect(body).toContain(`Disallow: ${p}`);
+  });
+
+  test('a 404 for an unknown file path is still under the CSP and runs no unapproved script', async ({
+    page,
+  }) => {
+    const violations = await watchCsp(page);
+    const res = await page.goto('/does-not-exist.txt');
+    expect(res?.status()).toBe(404);
+    expect(res?.headers()['content-security-policy']).toMatch(/script-src 'self' 'nonce-[^']+'/);
+    await page.waitForLoadState('networkidle');
+    // Next's fallback error shell carries one un-nonced inline <style>, which the CSP blocks (as it
+    // should); no script is ever refused.
+    expect(violations.filter((v) => /script/i.test(v))).toEqual([]);
+  });
+
+  test('the sign-in form posts even before JavaScript runs (no password in a URL)', async ({ page }) => {
+    await page.goto('/sign-in');
+    await expect(page.locator('form:has(input[type=password])')).toHaveAttribute('method', 'post');
+  });
+
   test('API responses cannot render or be framed', async ({ request }) => {
     const res = await request.post('/api/csp-report', {
       data: 'nope',

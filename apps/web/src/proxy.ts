@@ -7,11 +7,12 @@ import {
   securityHeaders,
   stripLocale,
 } from '@yayatoh/platform/security';
-import { NextRequest, type NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing.ts';
 
 const intl = createMiddleware(routing);
+const FILE = /\/[^/]*\.[^/]+$/;
 
 /**
  * Optimistic only (CLAUDE.md): locale routing and request protection; authorization happens in
@@ -31,7 +32,11 @@ export default function proxy(request: NextRequest): NextResponse {
   const forwarded = new Headers(request.headers);
   forwarded.set('x-nonce', nonce);
   forwarded.set('content-security-policy', headers['content-security-policy'] as string);
-  const response = intl(new NextRequest(request, { headers: forwarded }));
+  // Files (and 404s for dotted paths such as /robots.txt) skip locale routing but still get the
+  // headers, so even a not-found page renders under the CSP with this response's nonce.
+  const response = FILE.test(request.nextUrl.pathname)
+    ? NextResponse.next({ request: { headers: forwarded } })
+    : intl(new NextRequest(request, { headers: forwarded }));
   for (const [k, v] of Object.entries(headers)) response.headers.set(k, v);
   if (!isDeviceId(request.cookies.get(DEVICE_COOKIE)?.value)) {
     response.cookies.set(DEVICE_COOKIE, newDeviceId(), {
@@ -46,5 +51,5 @@ export default function proxy(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  matcher: ['/((?!api|_next|_vercel).*)'],
 };

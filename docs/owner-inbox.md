@@ -20,6 +20,19 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Name a translation owner** (M1.1). The 12 non-English locales are machine-drafted by Claude Code and need a native-speaker review, Arabic first. Tolgee is the planned workflow once accounts exist.
 - [ ] **Review the M1.1 screens** in the CI `e2e-report` artifact (screenshots at 375/768/1280 in English and Arabic) or on the preview once Vercel exists.
 
+## Security, privacy and ops readiness (M1.14)
+- [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
+- [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).
+- [ ] **WAF and BotID** (label: `infra`): Vercel Firewall managed rules on the production project, rate rules for `/api/auth/*` and `/api/webhooks/*`, and Vercel BotID (or Cloudflare Turnstile keys, already listed under M1.2f) on sign-in and checkout. Queue-it or a waiting room for on-sales above a few thousand buyers (load test: docs/ops/security-testing.md).
+- [ ] **Backups** (label: `infra`, `db-migration`): Neon PITR retention ≥ 7 days on production; a **separate** backup account with a bucket that has Object Lock; generate the offline `age` key pair (keep the private key offline) and give Claude Code the public key; schedule `tools/ops/offsite-dump.sh` nightly. Then run a restore drill on staging with a masked production-size snapshot and record it in docs/runbooks/restore-drill.md (acceptance: RTO ≤ 1 h).
+- [ ] **Status page, paging and the on-call rota**: pick a status page and paging tool (e.g. Better Stack), name the contracted backup, fill in the rota in docs/runbooks/incident.md, and connect the SLO alerts in docs/ops/slos.md once Axiom/Sentry exist.
+- [ ] **Retention defaults** (pending owner; `packages/modules/privacy/src/retention.ts`): attendee PII 24 months after the event and check-in logs 12 months (roadmap), plus proposals: abandoned checkouts lose buyer details after 30 days, holder links deleted 30 days after expiry, unclaimed claim links lose the address after 90 days. Paid orders keep buyer details for the 7-year payment record.
+- [ ] **Access-log archive**: the platform access log is purged after 12 months only once an off-account WORM archive exists; then set `ACCESS_LOG_ARCHIVED=1` on the worker.
+- [ ] **Privacy notice, sub-processor list and DPA** (label: `legal-copy`): counsel reviews the drafts at `/privacy` and `/sub-processors` (texts in `apps/web/messages/*.json` → `privacyNotice`, `subprocessors`; list in `apps/web/src/content/sub-processors.ts`) and the DPA draft; provide the privacy contact address; confirm the 30-day notice for sub-processor changes. Translations are machine drafts.
+- [ ] **Staging security runs** before M2.1: `bash zap/run-baseline.sh https://<staging>` and k6 at 3× expected peak (`k6/`); decide on an external pen test.
+- [ ] **HSTS preload**: HSTS (2 years, includeSubDomains) is sent on https; decide whether to submit the apex to the preload list (hard to undo).
+- [ ] **Accessibility**: NVDA and VoiceOver passes and the VPAT 2.5 (roadmap §10).
+
 ## Phase 0 (M0.1–M0.4)
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.
