@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --port 3000",
-    "build": "next build",
+    "dev": "node scripts/copy-zxing.ts && next dev --port 3000",
+    "build": "node scripts/copy-zxing.ts && next build",
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test",
@@ -37,7 +37,8 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "server-only": "0.0.1",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "zxing-wasm": "3.1.4"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

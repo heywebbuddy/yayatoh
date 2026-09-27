@@ -615,7 +615,8 @@
     "confirmed": "Confirmé par le serveur",
     "pending": "Vérifié sur cet appareil — sera confirmé après synchronisation",
     "wipedTitle": "Ce scanner a été effacé",
-    "wipedDescription": "Sa liste d’invités et sa clé ont été supprimées. Demandez à un organisateur un nouveau lien d’appareil pour scanner à nouveau."
+    "wipedDescription": "Sa liste d’invités et sa clé ont été supprimées. Demandez à un organisateur un nouveau lien d’appareil pour scanner à nouveau.",
+    "cameraFailed": "La caméra n'a pas pu démarrer. Vérifiez l'autorisation de la caméra ou saisissez le code."
   },
   "checkpoints": {
     "title": "Entrées et zones",

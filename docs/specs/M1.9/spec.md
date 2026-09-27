@@ -84,7 +84,7 @@ Roadmap: M1.9 (Scan PWA). ADR 0011 (QR format and offline check-in). This milest
   - When online the queue flushes immediately, so the server's answer, including cross-device first-wins, replaces the local one: "Confirmed by the server".
   - Offline, scans wait ("n scans waiting to sync") and flush on the browser's `online` event. The header shows online/offline, tickets on the device, the queue and the last update.
 - **Heartbeat** every 30 s reports battery, queue depth and clock offset. A server `wipe` command, or a revoked key (401), deletes the whole local database.
-- **Camera:** uses `BarcodeDetector` where the browser has it (Chrome/Android). The zxing-wasm fallback for iOS Safari is M1.9c.
+- **Camera:** uses `BarcodeDetector` where the browser has it (Chrome/Android), and otherwise the zxing-wasm reader (M1.9c2b).
 - **Service worker** (`/scan-sw.js`) caches only `/scan` pages (network first) and Next's hashed static assets (cache first), so the scanner reopens without a network. Everything else passes through. A web app manifest makes the PWA installable.
 - **Strings** are in 13 locales.
 
@@ -141,9 +141,21 @@ Manual, per release: install the PWA on a phone, open it in airplane mode (servi
 | AC5 | Five invalid codes in a minute raise one `invalid_burst` | `checkpoints.int.test.ts` |
 | AC6 | Archived checkpoints leave the scanner list and refuse scans; isolation holds | `checkpoints.int.test.ts`, isolation suite |
 
+## M1.9c2b — camera fallback for iOS Safari (done)
+- Without `BarcodeDetector` (iOS Safari, desktop Linux/Windows), the Scan PWA decodes camera frames with **zxing-wasm 3.1.4** (MIT, reader build, ~950 KB). It loads only when the camera is first used, and frames are scaled to at most 960 px wide.
+- The wasm is served **from our own origin** under a content-hashed name, `/scan-zxing-<sha256[0:16]>.wasm`. `scripts/copy-zxing.ts` copies it before `dev` and `build`, and the file is gitignored. The client derives the name from `ZXING_WASM_SHA256`. The service worker caches it cache-first (a `/scan*` path), so the camera works offline after one online use. No CDN is involved.
+- If the camera can't start (no permission, no device), the scanner says so and typing still works.
+
+### Acceptance (M1.9c2b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The QR codes we print and show (139-char yy1 and short codes) decode exactly with zxing-wasm | `packages/pdf/tests/qr-decode.test.ts` |
+| AC2 | With `BarcodeDetector` removed, a fake camera showing a ticket QR admits it, and the decoder is fetched from our origin | `apps/web/e2e/scan-camera.spec.ts` |
+
+Manual, per release: iPhone Safari, camera scan in daylight and low light.
+
 ## Remaining M1.9 increments
 - **M1.9c2 (rest):**
-  - the zxing-wasm camera fallback (iOS Safari)
   - checkpoint-scoped door-staff assignments
   - legacy QR payloads (needs the legacy corpus from the owner's data access)
   - Ably realtime (owner account)

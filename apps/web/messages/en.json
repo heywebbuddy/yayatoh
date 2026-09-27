@@ -615,7 +615,8 @@
     "confirmed": "Confirmed by the server",
     "pending": "Checked on this device — will be confirmed when synced",
     "wipedTitle": "This scanner was wiped",
-    "wipedDescription": "Its guest list and key were removed. Ask an organizer for a new device link to scan again."
+    "wipedDescription": "Its guest list and key were removed. Ask an organizer for a new device link to scan again.",
+    "cameraFailed": "The camera couldn't start. Check the camera permission, or type the code."
   },
   "checkpoints": {
     "title": "Entrances and zones",

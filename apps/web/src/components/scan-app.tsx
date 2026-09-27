@@ -3,6 +3,7 @@
 import { Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { canUseCamera, createDecoder } from '@/scan/camera.ts';
 import { ScanClient, type ScanConfig, type ScanOutcome, type ServerResult } from '@/scan/client.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
@@ -34,10 +35,6 @@ const TONE: Record<string, string> = {
 };
 const tone = (key: string) => TONE[key] ?? 'border-pink-700 bg-pink-50 text-pink-700';
 
-interface Detector {
-  detect(source: CanvasImageSource): Promise<{ rawValue: string }[]>;
-}
-
 /**
  * The Scan PWA: works offline from a downloaded guest list, queues scans, and syncs when the
  * network is back. Setup comes from the enrollment link (`#e=<event>&k=<key>`); the fragment
@@ -55,6 +52,8 @@ export function ScanApp() {
   const [error, setError] = useState<string | null>(null);
   const [camera, setCamera] = useState(false);
   const [checkpointId, setCheckpointId] = useState('');
+  const [hasCamera, setHasCamera] = useState(false);
+  useEffect(() => setHasCamera(canUseCamera()), []);
   const input = useRef<HTMLInputElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
@@ -162,35 +161,39 @@ export function ScanApp() {
     [client, refresh, syncNow],
   );
 
-  // Camera scanning where the browser has BarcodeDetector (zxing-wasm fallback: M1.9c).
+  // Camera scanning: BarcodeDetector, or the zxing-wasm fallback (iOS Safari).
   useEffect(() => {
     if (!camera) return;
-    const Ctor = (window as unknown as { BarcodeDetector?: new (o: { formats: string[] }) => Detector })
-      .BarcodeDetector;
-    if (!Ctor || !video.current) return;
-    const detector = new Ctor({ formats: ['qr_code'] });
     let stream: MediaStream | null = null;
     let stop = false;
     let lastCode = '';
     void (async () => {
+      const decode = await createDecoder();
       stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-      if (!video.current) return;
+      if (stop || !video.current) {
+        // Closed while the permission prompt was up: release the camera now.
+        for (const track of stream.getTracks()) track.stop();
+        return;
+      }
       video.current.srcObject = stream;
       await video.current.play();
       while (!stop && video.current) {
-        const [hit] = await detector.detect(video.current).catch(() => []);
-        if (hit && hit.rawValue !== lastCode) {
-          lastCode = hit.rawValue;
-          await scan(hit.rawValue);
+        const code = await decode(video.current);
+        if (code && code !== lastCode) {
+          lastCode = code;
+          await scan(code);
         }
         await new Promise((r) => setTimeout(r, 250));
       }
-    })().catch(() => setCamera(false));
+    })().catch(() => {
+      setCamera(false);
+      setError(t('scan.cameraFailed'));
+    });
     return () => {
       stop = true;
       for (const track of stream?.getTracks() ?? []) track.stop();
     };
-  }, [camera, scan]);
+  }, [camera, scan, t]);
 
   if (phase === 'boot') return <p className="text-body text-zinc-500">{t('common.loading')}</p>;
 
@@ -297,12 +300,13 @@ export function ScanApp() {
         <Button type="submit" className="min-h-14">
           {t('checkin.check')}
         </Button>
-        {'BarcodeDetector' in globalThis ? (
+        {hasCamera ? (
           <Button type="button" variant="secondary" className="min-h-14" onClick={() => setCamera((v) => !v)}>
             {camera ? t('scan.stopCamera') : t('scan.camera')}
           </Button>
         ) : null}
       </form>
+      {error ? <p className="text-body text-pink-700">{error}</p> : null}
       {camera ? (
         <video ref={video} className="aspect-video w-full max-w-md rounded-card bg-black" playsInline muted />
       ) : null}

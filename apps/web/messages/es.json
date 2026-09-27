@@ -615,7 +615,8 @@
     "confirmed": "Confirmado por el servidor",
     "pending": "Comprobado en este dispositivo: se confirmará al sincronizar",
     "wipedTitle": "Este escáner se ha borrado",
-    "wipedDescription": "Se eliminaron su lista de invitados y su clave. Pide a un organizador un nuevo enlace de dispositivo para volver a escanear."
+    "wipedDescription": "Se eliminaron su lista de invitados y su clave. Pide a un organizador un nuevo enlace de dispositivo para volver a escanear.",
+    "cameraFailed": "No se pudo iniciar la cámara. Revisa el permiso de la cámara o escribe el código."
   },
   "checkpoints": {
     "title": "Accesos y zonas",

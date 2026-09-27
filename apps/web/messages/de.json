@@ -615,7 +615,8 @@
     "confirmed": "Vom Server bestätigt",
     "pending": "Auf diesem Gerät geprüft – wird nach der Synchronisierung bestätigt",
     "wipedTitle": "Dieser Scanner wurde gelöscht",
-    "wipedDescription": "Gästeliste und Schlüssel wurden entfernt. Bitte einen Veranstalter um einen neuen Gerätelink, um wieder zu scannen."
+    "wipedDescription": "Gästeliste und Schlüssel wurden entfernt. Bitte einen Veranstalter um einen neuen Gerätelink, um wieder zu scannen.",
+    "cameraFailed": "Die Kamera konnte nicht starten. Prüfe die Kameraberechtigung oder gib den Code ein."
   },
   "checkpoints": {
     "title": "Eingänge und Zonen",

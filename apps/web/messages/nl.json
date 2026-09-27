@@ -615,7 +615,8 @@
     "confirmed": "Bevestigd door de server",
     "pending": "Gecontroleerd op dit apparaat: wordt bevestigd na synchronisatie",
     "wipedTitle": "Deze scanner is gewist",
-    "wipedDescription": "De gastenlijst en sleutel zijn verwijderd. Vraag een organisator om een nieuwe apparaatlink om weer te scannen."
+    "wipedDescription": "De gastenlijst en sleutel zijn verwijderd. Vraag een organisator om een nieuwe apparaatlink om weer te scannen.",
+    "cameraFailed": "De camera kon niet starten. Controleer de cameratoestemming of typ de code."
   },
   "checkpoints": {
     "title": "Ingangen en zones",

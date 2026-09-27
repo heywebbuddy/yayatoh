@@ -615,7 +615,8 @@
     "confirmed": "Confermato dal server",
     "pending": "Verificato su questo dispositivo: sarà confermato dopo la sincronizzazione",
     "wipedTitle": "Questo scanner è stato cancellato",
-    "wipedDescription": "La lista ospiti e la chiave sono state rimosse. Chiedi a un organizzatore un nuovo link del dispositivo per tornare a scansionare."
+    "wipedDescription": "La lista ospiti e la chiave sono state rimosse. Chiedi a un organizzatore un nuovo link del dispositivo per tornare a scansionare.",
+    "cameraFailed": "Impossibile avviare la fotocamera. Controlla l'autorizzazione della fotocamera o digita il codice."
   },
   "checkpoints": {
     "title": "Ingressi e zone",

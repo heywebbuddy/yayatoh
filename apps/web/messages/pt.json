@@ -615,7 +615,8 @@
     "confirmed": "Confirmado pelo servidor",
     "pending": "Verificado neste dispositivo — será confirmado ao sincronizar",
     "wipedTitle": "Este leitor foi apagado",
-    "wipedDescription": "A lista de convidados e a chave foram removidas. Peça a um organizador um novo link de dispositivo para voltar a ler."
+    "wipedDescription": "A lista de convidados e a chave foram removidas. Peça a um organizador um novo link de dispositivo para voltar a ler.",
+    "cameraFailed": "Não foi possível iniciar a câmera. Verifique a permissão da câmera ou digite o código."
   },
   "checkpoints": {
     "title": "Entradas e zonas",

@@ -615,7 +615,8 @@
     "confirmed": "已由伺服器確認",
     "pending": "已在此裝置上核驗，同步後確認",
     "wipedTitle": "此掃描器已被清除",
-    "wipedDescription": "其賓客名單和金鑰已被刪除。請向主辦單位索取新的裝置連結以繼續掃描。"
+    "wipedDescription": "其賓客名單和金鑰已被刪除。請向主辦單位索取新的裝置連結以繼續掃描。",
+    "cameraFailed": "無法啟動相機。請檢查相機權限，或輸入代碼。"
   },
   "checkpoints": {
     "title": "入口和區域",

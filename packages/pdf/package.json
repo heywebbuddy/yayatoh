@@ -17,6 +17,7 @@
     "@types/node": "catalog:",
     "@types/qrcode": "1.5.6",
     "@yayatoh/config": "workspace:*",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "zxing-wasm": "3.1.4"
   }
 }

@@ -615,7 +615,8 @@
     "confirmed": "已由服务器确认",
     "pending": "已在此设备上核验，同步后确认",
     "wipedTitle": "此扫描器已被清除",
-    "wipedDescription": "其宾客名单和密钥已被删除。请向主办方索取新的设备链接以继续扫描。"
+    "wipedDescription": "其宾客名单和密钥已被删除。请向主办方索取新的设备链接以继续扫描。",
+    "cameraFailed": "无法启动相机。请检查相机权限，或输入代码。"
   },
   "checkpoints": {
     "title": "入口和区域",
