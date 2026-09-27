@@ -38,7 +38,7 @@ describe('legacy bcrypt', () => {
 
 describe('Sanctum tokens', () => {
   it('parses id|secret and checks the SHA-256 hash in constant time', () => {
-    const secret = 'Zm9vYmFyYmF6cXV4MTIzNDU2Nzg5MGFiY2RlZmdo';
+    const secret = randomBytes(30).toString('base64url');
     const stored = createHash('sha256').update(secret).digest('hex');
     const t = parseSanctumToken(`42|${secret}`);
     expect(t).toEqual({ id: 42, secret });
