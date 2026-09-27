@@ -9,6 +9,7 @@ export {
 export {
   type FeeMode,
   type FeeSchedule,
+  feeScheduleQuery,
   feeScheduleTx,
   type PriceBreakdown,
   priceBreakdown,

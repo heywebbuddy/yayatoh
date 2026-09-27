@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "title": "Yayatoh staff console"
+  },
+  "signIn": {
+    "eyebrow": "Staff only",
+    "title": "Sign in to the staff console",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "invalid": "That email and password don't match."
+  },
+  "notStaff": {
+    "title": "Not a staff account",
+    "description": "This account is not on the Yayatoh staff list, or can't do that. Ask the platform owner if you need access.",
+    "signOut": "Sign out"
+  },
+  "shell": {
+    "skip": "Skip to content",
+    "product": "Yayatoh staff",
+    "nav": "Staff console",
+    "tenants": "Tenants",
+    "accessLog": "Access log",
+    "signedInAs": "{name} · {role}",
+    "signOut": "Sign out",
+    "roles": {
+      "admin": "Admin",
+      "support": "Support",
+      "finance": "Finance"
+    }
+  },
+  "tenants": {
+    "title": "Tenants",
+    "description": "Every organization on the platform. Each view is recorded in the access log.",
+    "search": "Search by name or address",
+    "searchButton": "Search",
+    "empty": "No organizations match.",
+    "held": "Payouts on hold",
+    "col": {
+      "name": "Organization",
+      "status": "Status",
+      "members": "Members",
+      "payouts": "Payouts",
+      "paused": "Paused",
+      "created": "Created"
+    },
+    "status": {
+      "active": "Active",
+      "limited": "Limited",
+      "suspended": "Suspended",
+      "terminated": "Terminated"
+    },
+    "payout": {
+      "none": "Not set up",
+      "pending": "Onboarding",
+      "restricted": "Restricted",
+      "active": "Active"
+    },
+    "pause": {
+      "pause_checkout": "Checkout",
+      "pause_publishing": "Publishing",
+      "pause_messaging": "Messaging"
+    }
+  },
+  "tenant": {
+    "reason": "Reason (kept in the audit log)",
+    "error": "That didn't work ({code}).",
+    "done": {
+      "paused": "Paused. It applies to the organizer's next request.",
+      "resumed": "Resumed.",
+      "held": "Payouts are on hold.",
+      "released": "Payout hold released.",
+      "fee": "Fee override saved.",
+      "entitlement": "Entitlement override saved."
+    },
+    "field": {
+      "status": "Status",
+      "kind": "Kind",
+      "country": "Country",
+      "currency": "Currency",
+      "timezone": "Time zone",
+      "members": "Members",
+      "profile": "Profile"
+    },
+    "switches": {
+      "title": "Kill switches",
+      "description": "Pausing takes effect on the organizer's next request. The organizer sees what is paused, not your reason.",
+      "on": "Paused",
+      "off": "Running",
+      "pause": "Pause {what}",
+      "resume": "Resume {what}",
+      "history": "History",
+      "kind": {
+        "pause_checkout": "Ticket sales",
+        "pause_publishing": "Publishing",
+        "pause_messaging": "Guest messaging"
+      }
+    },
+    "payouts": {
+      "title": "Payouts (Connect)",
+      "state": {
+        "none": "No payout account",
+        "pending": "Onboarding started",
+        "restricted": "Restricted: information due",
+        "active": "Active"
+      },
+      "flow": {
+        "platform_mor": "Orders are charged by the platform (platform_mor).",
+        "organizer_mor": "Orders are charged on the connected account (organizer_mor)."
+      },
+      "due": "Due: {keys}",
+      "held": "Payouts on hold",
+      "notHeld": "Payouts not held",
+      "hold": "Hold payouts",
+      "release": "Release hold"
+    },
+    "fees": {
+      "title": "Platform fee",
+      "current": "{currency}: {percent}% + {fixed} (minor units)",
+      "override": "Org override",
+      "plan": "From the plan",
+      "currency": "Currency",
+      "bps": "Percent (basis points)",
+      "fixed": "Fixed (minor units)",
+      "save": "Save fee override"
+    },
+    "entitlements": {
+      "title": "Entitlements",
+      "current": "Modules on:",
+      "module": "Module",
+      "effect": "Effect",
+      "grant": "Grant",
+      "revoke": "Revoke",
+      "save": "Save override"
+    },
+    "domains": {
+      "title": "Domains",
+      "primary": "primary",
+      "wallets": "wallets ready"
+    }
+  },
+  "accessLog": {
+    "title": "Access log",
+    "description": "Every cross-tenant read by staff and the worker, newest first (latest 200).",
+    "at": "When (UTC)",
+    "actor": "Who",
+    "reason": "Why"
+  }
+}

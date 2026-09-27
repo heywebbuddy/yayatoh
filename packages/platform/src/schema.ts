@@ -209,3 +209,37 @@ export const signupCodes = platform.table(
     check('signup_codes_uses_check', sql`uses >= 0 and uses <= max_uses and max_uses between 1 and 1000`),
   ],
 );
+
+export const STAFF_ROLES = ['admin', 'support', 'finance'] as const;
+
+/**
+ * Platform staff (roadmap D10: an owner-approved list only). Global: staff act across tenants in
+ * apps/admin. app_user has no privileges; platform_reader reads it, and staff are added or
+ * revoked only through a SECURITY DEFINER function run by the worker CLI.
+ */
+export const platformStaff = platform.table(
+  'staff',
+  {
+    userId: uuid('user_id').primaryKey(),
+    role: text('role').notNull(),
+    addedBy: text('added_by').notNull(),
+    createdAt: tsz('created_at').notNull().defaultNow(),
+    revokedAt: tsz('revoked_at'),
+  },
+  () => [check('staff_role_check', sql.raw(`role in (${STAFF_ROLES.map((r) => `'${r}'`).join(', ')})`))],
+);
+
+/**
+ * Every platform_reader use (apps/admin and the worker): who, why, when. Append-only through a
+ * SECURITY DEFINER function; nobody can update or delete rows.
+ */
+export const accessLog = platform.table(
+  'access_log',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    actor: text('actor').notNull(),
+    reason: text('reason').notNull(),
+    at: tsz('at').notNull().defaultNow(),
+  },
+  (t) => [index('access_log_at_idx').on(t.at)],
+);

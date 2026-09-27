@@ -14,4 +14,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
+  'platform.staff':
+    'Platform staff (owner-approved list); platform_reader SELECT only, written through a SECURITY DEFINER function.',
+  'platform.access_log':
+    'Audit of platform_reader use; append-only through a SECURITY DEFINER function (platform_reader).',
 };

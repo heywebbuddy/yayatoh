@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { add, applyBps, DomainError, type Money, money, requireOrg, subtract, zero } from '@yayatoh/kernel';
-import { tenantCommand } from '@yayatoh/platform';
+import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { DEFAULT_PLAN } from './entitlements.ts';
@@ -55,6 +55,22 @@ export async function feeScheduleTx(tx: TenantTx, currency: string): Promise<Fee
     ? { percentBps: r.percent_bps, fixedMinor: Number(r.fixed_minor) }
     : { percentBps: 0, fixedMinor: 0 };
 }
+
+/** The effective fee for one currency, and whether it is an org override (staff console, settings). */
+export const feeScheduleQuery = tenantQuery({
+  name: 'billing.feeSchedule',
+  input: z.object({ currency: z.string().regex(/^[A-Z]{3}$/) }),
+  output: z.object({ percentBps: z.int(), fixedMinor: z.int(), override: z.boolean() }),
+  entitlement: null,
+  permission: 'org:read',
+  handler: async ({ input, tx }) => {
+    const [o] = await tx
+      .select({ id: orgFeeOverrides.id })
+      .from(orgFeeOverrides)
+      .where(eq(orgFeeOverrides.currency, input.currency));
+    return { ...(await feeScheduleTx(tx, input.currency)), override: Boolean(o) };
+  },
+});
 
 export const setFeeOverrideCommand = tenantCommand({
   name: 'billing.setFeeOverride',

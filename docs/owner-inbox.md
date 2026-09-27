@@ -13,6 +13,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 
 ## Design
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
+- [ ] **Staff list and console** (M1.3e, decision D10): send the list of people who should be platform staff and their role (admin, support or finance). They are added with the worker CLI (`pnpm --filter @yayatoh/worker staff -- --email … --role …`). Also confirm the staff console (`admin.yayatoh.com`) may stay English-only; its strings are ready for translation if not. Hosting it needs a second Vercel project. Label: `auth`.
 - [ ] **Name a translation owner** (M1.1). The 12 non-English locales are machine-drafted by Claude Code and need a native-speaker review, Arabic first. Tolgee is the planned workflow once accounts exist.
 - [ ] **Review the M1.1 screens** in the CI `e2e-report` artifact (screenshots at 375/768/1280 in English and Arabic) or on the preview once Vercel exists.
 

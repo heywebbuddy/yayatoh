@@ -39,4 +39,5 @@ export {
   VOCAB_TERMS,
   type VocabTerm,
 } from './profiles/index.ts';
+export { STAFF_ROLES } from './schema.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

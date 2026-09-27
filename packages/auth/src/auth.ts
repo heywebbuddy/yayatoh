@@ -16,6 +16,11 @@ export interface AuthOptions {
   readonly secret: string;
   readonly mailer: AuthMailer;
   readonly trustedOrigins?: readonly string[];
+  /**
+   * Distinct cookie names for a second app on the same host name (apps/admin on localhost:3001
+   * next to the web on :3000: browsers share cookies across ports). Production hosts differ anyway.
+   */
+  readonly cookieNamespace?: string;
 }
 
 export const SESSION_COOKIE_BASENAME = 'yy.session';
@@ -56,9 +61,11 @@ export function createAuth(opts: AuthOptions) {
       // Better Auth would prefix `__Secure-`, which hides the `__Host-` prefix from browsers.
       // Set Secure explicitly and name the session cookie `__Host-…` ourselves instead.
       useSecureCookies: false,
-      cookiePrefix: secure ? '__Host-yy' : 'yy',
+      cookiePrefix: `${secure ? '__Host-' : ''}yy${opts.cookieNamespace ? `-${opts.cookieNamespace}` : ''}`,
       cookies: {
-        session_token: { name: secure ? `__Host-${SESSION_COOKIE_BASENAME}` : SESSION_COOKIE_BASENAME },
+        session_token: {
+          name: `${secure ? '__Host-' : ''}${SESSION_COOKIE_BASENAME}${opts.cookieNamespace ? `.${opts.cookieNamespace}` : ''}`,
+        },
       },
       defaultCookieAttributes: { sameSite: 'lax', path: '/', secure },
       database: { generateId: () => uuidv7() },

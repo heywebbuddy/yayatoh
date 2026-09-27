@@ -58,3 +58,11 @@ export async function tryAcquireLeadership(name: string): Promise<(() => Promise
     conn.release();
   };
 }
+
+/**
+ * The durable audit sink: one `platform.access_log` row per platform_reader use (apps/admin).
+ * Written before the read runs, so a failed write stops the read.
+ */
+export const databaseAuditSink: PlatformAuditSink = async ({ actor, reason }) => {
+  await pool('platformReader').db.execute(sql`select platform.log_access(${actor}, ${reason})`);
+};

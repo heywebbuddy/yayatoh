@@ -82,5 +82,6 @@ export {
   ORG_KINDS,
   ORG_ROLES,
   ORG_STATUSES,
+  SUSPENSION_KINDS,
 } from './schema.ts';
 export { invitationMailer } from './subscribers.ts';

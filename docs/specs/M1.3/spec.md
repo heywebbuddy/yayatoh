@@ -135,3 +135,18 @@ Delivered in two parts: **e1** the platform-side commands (kill switches, payout
 | AC2 | **"Pause checkout" takes effect on the next checkout** (roadmap: within 60 s); other orgs keep selling; lifting restores sales; the public page shows the pause | `suspensions.int.test.ts` |
 | AC3 | Pause publishing and pause messaging block publishing and starting a bulk email | `suspensions.int.test.ts` |
 | AC4 | Payout hold and release; isolation covers `org_suspensions` for both orgs | `suspensions.int.test.ts`, `isolation.int.test.ts` |
+
+### e2 — staff console `apps/admin` (done)
+- **Who.** Staff come only from the owner-approved list (roadmap D10): `platform.staff` (global; `platform_reader` SELECT only) holds user and role (`admin | support | finance`), set or revoked by email with `pnpm --filter @yayatoh/worker staff -- --email … --role …` / `--revoke` (SECURITY DEFINER `platform.set_staff`). A person must already have an account. The console signs in with Better Auth under its own cookie namespace (`yy-admin`), so a web session never signs anyone in here; any account not on the list lands on "Not a staff account".
+- **What each role can do.** admin: everything; support: view + kill switches; finance: view + payout holds + fee overrides. Entitlement overrides are admin-only.
+- **Reads.** The cross-tenant tenant list (search by name or slug; status, members, payout state, holds, active pauses) and the access log use `platform_reader`. **Every use writes a `platform.access_log` row first** (`databaseAuditSink`, append-only through `platform.log_access`); the console shows the latest 200. The tenant page reads through ordinary tenant queries with the staff member as a platform actor (`staff:<userId>`): organization, members, suspension history, payout account, entitlements, effective fee (`billing.feeSchedule`), domains.
+- **Writes.** All through commands as that platform actor, each with a reason kept in the audit log: pause/resume ticket sales, publishing, guest messaging; hold/release payouts; fee override; entitlement grant/revoke.
+- **Language.** English only for now. Strings still go through next-intl, so adding locales is mechanical (owner inbox: confirm).
+- **Later:** passkeys/step-up for staff (roadmap §9.4), org status changes (suspend/terminate a tenant), support sessions (impersonation with consent), signup-code screen (today: the worker CLI), Vercel project for `admin.yayatoh.com`.
+
+### Acceptance (M1.3e2)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Staff are set, changed and revoked by email only; unknown people/roles refused; every platform read is logged; the runtime role can't read staff or write the log | `apps/worker/tests/staff.int.test.ts` |
+| AC2 | A non-staff account gets no console | `apps/admin/e2e/admin.spec.ts` |
+| AC3 | **Staff pause ticket sales and the public page shows it on the next request; resuming restores sales** (roadmap: "pause checkout" within 60 s); the search is in the access log; axe passes at 1280 and 375 | `admin.spec.ts` |

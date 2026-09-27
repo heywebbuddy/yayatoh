@@ -4,6 +4,8 @@ import { setPlatformAuditSink } from '@yayatoh/db/platform';
 import { createSignupCode } from '../src/signup-codes.ts';
 
 const { values } = parseArgs({
+  // pnpm forwards a literal `--` separator; drop it.
+  args: process.argv.slice(2).filter((a) => a !== '--'),
   options: {
     uses: { type: 'string', default: '1' },
     days: { type: 'string', default: '14' },

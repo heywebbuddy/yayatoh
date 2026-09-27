@@ -16,6 +16,8 @@ export const PERSONAS: readonly Persona[] = [
   { email: 'maya@rosewood.test', name: 'Maya Chen', orgSlug: 'rosewood-weddings', role: 'owner' },
   { email: 'sam@rosewood.test', name: 'Sam Rivera', orgSlug: 'rosewood-weddings', role: 'viewer' },
   { email: 'nia@newcomer.test', name: 'Nia Newcomer', orgSlug: '', role: 'owner' },
+  // Platform staff (apps/admin): the staff role comes from the worker CLI, not from an org.
+  { email: 'omar@yayatoh.test', name: 'Omar Ops', orgSlug: '', role: 'owner' },
 ];
 
 export const SEED_ORGS = [

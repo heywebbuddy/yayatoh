@@ -10,7 +10,8 @@
     "dev": "node --watch src/main.ts",
     "start": "node src/main.ts",
     "typecheck": "tsc --noEmit",
-    "signup-code": "node scripts/signup-code.ts"
+    "signup-code": "node scripts/signup-code.ts",
+    "staff": "node scripts/staff.ts"
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@yayatoh/auth": "workspace:*",
     "@yayatoh/config": "workspace:*",
     "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"

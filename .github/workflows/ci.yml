@@ -142,6 +142,12 @@ jobs:
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
       - run: pnpm --filter @yayatoh/web e2e
+      # Staff console (M1.3e): after the web suite, because it pauses checkout on a seed org.
+      - name: Staff console e2e
+        run: |
+          pnpm --filter @yayatoh/worker staff -- --email omar@yayatoh.test --role admin
+          pnpm --filter @yayatoh/admin build
+          pnpm --filter @yayatoh/admin e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -149,6 +155,8 @@ jobs:
           path: |
             apps/web/playwright-report
             apps/web/test-results
+            apps/admin/playwright-report
+            apps/admin/test-results
           retention-days: 14
 
   openapi-breaking:
