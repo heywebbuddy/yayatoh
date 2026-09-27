@@ -1,12 +1,13 @@
 import { publicOrganizerById } from '@yayatoh/marketplace';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
 import { OrgHero } from '@/components/marketplace/org-hero.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter } from '@/components/marketplace/site-chrome.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { pageLocale } from '@/server/locale.ts';
 import { cachedTenantListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { publicMetadata } from '@/server/seo.ts';
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /** A tenant site's home (`{org host}/`, rewritten here by the proxy): the org's upcoming events. */
 export default async function TenantHome({ params, searchParams }: Props) {
   const { locale, org } = await params;
-  setRequestLocale(locale);
+  pageLocale(locale);
   const orgId = tenantOrgParam(org);
   const o = orgId ? await publicOrganizerById(orgId) : null;
   if (!orgId || !o) notFound();

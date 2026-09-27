@@ -2,9 +2,10 @@ import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { publicSiteSettings } from '@yayatoh/marketplace';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { EmbedResizer } from '@/components/embed-resizer.tsx';
 import { PublicEventView } from '@/components/public-event-view.tsx';
+import { pageLocale } from '@/server/locale.ts';
 
 type Params = { params: Promise<{ locale: string; slug: string }> };
 
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
  */
 export default async function EmbedPage({ params }: Params) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
+  pageLocale(locale);
   const target = await checkoutTarget(slug);
   if (!target) notFound();
   const settings = await publicSiteSettings(target.orgId);

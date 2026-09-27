@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
 import { PublicEventView } from '@/components/public-event-view.tsx';
 import { eventMetadata } from '@/server/event-metadata.ts';
+import { pageLocale } from '@/server/locale.ts';
 
 type Params = { params: Promise<{ locale: string; slug: string }> };
 
@@ -12,6 +12,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function PublicEventPage({ params }: Params) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
+  pageLocale(locale);
   return <PublicEventView locale={locale} slug={slug} />;
 }

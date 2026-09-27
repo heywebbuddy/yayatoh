@@ -1,12 +1,13 @@
 import { parseSearchParams, publicOrganizer } from '@yayatoh/marketplace';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
 import { OrgHero } from '@/components/marketplace/org-hero.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
 import { originFor } from '@/lib/hosts.ts';
+import { pageLocale } from '@/server/locale.ts';
 import { cachedOrganizerListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  */
 export default async function OrganizerPage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
+  pageLocale(locale);
   const o = await publicOrganizer(slug);
   if (!o) notFound();
   const sp = parseSearchParams(await searchParams);

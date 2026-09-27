@@ -1,8 +1,9 @@
 import { parseSearchParams } from '@yayatoh/marketplace';
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { MarketplaceResults } from '@/components/marketplace/results.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
 
@@ -33,7 +34,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 /** All upcoming marketplace events with search, filters and pagination (legacy `/events`). */
 export default async function EventsPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  setRequestLocale(locale);
+  pageLocale(locale);
   const t = await getTranslations('market');
   const sp = parseSearchParams(await searchParams);
   return (
