@@ -1297,6 +1297,77 @@
       "name": "名稱",
       "submit": "儲存座位圖",
       "done": "已儲存。你可以將它用於其他活動。"
+    },
+    "tabs": {
+      "label": "座位檢視",
+      "plan": "座位圖",
+      "assign": "安排賓客"
+    },
+    "assign": {
+      "title": "安排賓客",
+      "description": "為賓客安排桌位和排位。把名字拖到座位圖上，或勾選名字、選擇一張桌子後點選「安排入座」——拖曳能做的事，鍵盤都能做。",
+      "noPlan": "此活動還沒有座位圖。請先建立座位圖，再在這裡安排賓客。",
+      "toPlan": "前往座位圖",
+      "summary": "{seated, plural, other {已安排 # 人}} · 還有 {unseated} 人待安排",
+      "readOnly": "你可以查看誰坐在哪裡，但無法變更。",
+      "done": "已在{item}安排{count, plural, other {# 人}}入座。",
+      "removed": "{name} 已沒有座位。",
+      "queue": {
+        "title": "待安排（{count}）",
+        "search": "依姓名或電子郵件搜尋",
+        "list": "待安排的賓客",
+        "selected": "{count, plural, =0 {未選取任何人} other {已選取 # 人}}",
+        "selectShown": "全選顯示的人",
+        "clear": "清除選取",
+        "empty": "每個人都有座位了。",
+        "noMatch": "沒有人符合「{q}」。",
+        "more": "顯示 {total} 人中的 {shown} 人。搜尋可找到其他人。"
+      },
+      "form": {
+        "title": "為選取的人安排座位",
+        "item": "桌子或排",
+        "choose": "選擇桌子或排",
+        "option": "{item} — {capacity} 個座位中空 {free} 個",
+        "seat": "座位",
+        "anySeat": "任意空位",
+        "seatKept": "{label}（已保留）",
+        "submit": "安排入座",
+        "submitting": "正在安排…"
+      },
+      "errors": {
+        "noPeople": "請至少選擇一個人。",
+        "noItem": "請選擇桌子或排。",
+        "onePerSeat": "一個座位只能坐一個人。請選擇一個人，或選擇「任意空位」。",
+        "notEnough": "坐不下所有人：那裡{fits, plural, =0 {沒有空位} other {只剩 # 個空位}}，而你選擇了{asked, plural, other {# 人}}。",
+        "seatTaken": "這個座位已經有人了，請換一個。",
+        "seatBlocked": "這個座位已封鎖，請換一個。",
+        "seatsTaken": "其中一些座位剛被佔用，請重試。",
+        "seatedByTicket": "此人已憑票券擁有座位。",
+        "cancelled": "此人已不再參加。",
+        "forbidden": "你可以查看座位安排，但無法變更。",
+        "dropMiss": "請把名字放到桌子、排或座位上。"
+      },
+      "canvas": {
+        "title": "座位圖",
+        "hint": "把名字（或勾選的名字）拖到桌子、排或座位上。這些操作也都可以透過清單和表單完成。",
+        "readOnlyHint": "以場地圖的形式顯示誰坐在哪裡。"
+      },
+      "state": {
+        "free": "空位",
+        "assigned": "賓客",
+        "sold": "已售",
+        "held": "結帳中",
+        "reserved": "已保留",
+        "blocked": "已封鎖"
+      },
+      "tables": {
+        "title": "桌子和排",
+        "count": "{capacity} 個座位已佔 {taken} 個 · 空 {free} 個",
+        "byTicket": "{seat} · 憑票券",
+        "empty": "還沒有人。",
+        "remove": "移除",
+        "removeLabel": "將 {name} 從{item}移除"
+      }
     }
   }
 }

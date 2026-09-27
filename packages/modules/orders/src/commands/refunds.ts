@@ -3,7 +3,7 @@ import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg } from '@y
 
 import { eventTransferTx, postRefundTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { voidSeatTx } from '@yayatoh/seating';
+import { releaseAttendeeSeatsTx, voidSeatTx } from '@yayatoh/seating';
 import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
@@ -187,8 +187,13 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
       ticketIds: refund.ticketIds,
       reason: 'refunded',
     });
-    // A refunded seat can be sold again.
+    // A refunded seat can be sold again; a guest assigned a seat by the organizer gives it back.
     for (const t of voided) await voidSeatTx(tx, ctx, t.id);
+    await releaseAttendeeSeatsTx(
+      tx,
+      ctx,
+      voided.flatMap((t) => (t.attendeeId ? [t.attendeeId] : [])),
+    );
   }
   const { receivableMinor } = await postRefundTx(tx, ctx, {
     refundId: refund.id,

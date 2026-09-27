@@ -547,6 +547,9 @@ importers:
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
+      '@yayatoh/seating':
+        specifier: workspace:*
+        version: link:../../packages/modules/seating
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../../packages/modules/tenancy
@@ -1090,6 +1093,9 @@ importers:
 
   packages/modules/seating:
     dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db

@@ -1297,6 +1297,77 @@
       "name": "Name",
       "submit": "Plan speichern",
       "done": "Gespeichert. Du kannst ihn für andere Events verwenden."
+    },
+    "tabs": {
+      "label": "Sitzplan-Ansichten",
+      "plan": "Plan",
+      "assign": "Gäste platzieren"
+    },
+    "assign": {
+      "title": "Gäste platzieren",
+      "description": "Weisen Sie Personen Tische und Reihen zu. Ziehen Sie einen Namen auf den Plan oder haken Sie Namen an, wählen Sie einen Tisch und klicken Sie auf „Platzieren“ – mit der Tastatur geht alles, was per Ziehen geht.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Sitzplan. Erstellen Sie zuerst einen und platzieren Sie dann hier Ihre Gäste.",
+      "toPlan": "Zum Plan",
+      "summary": "{seated, plural, one {# Person platziert} other {# Personen platziert}} · {unseated} noch ohne Platz",
+      "readOnly": "Sie sehen, wer wo sitzt, können es aber nicht ändern.",
+      "done": "{count, plural, one {# Person} other {# Personen}} an {item} platziert.",
+      "removed": "{name} hat keinen Platz mehr.",
+      "queue": {
+        "title": "Noch ohne Platz ({count})",
+        "search": "Nach Name oder E-Mail suchen",
+        "list": "Personen noch ohne Platz",
+        "selected": "{count, plural, =0 {Niemand ausgewählt} one {# ausgewählt} other {# ausgewählt}}",
+        "selectShown": "Alle angezeigten auswählen",
+        "clear": "Auswahl aufheben",
+        "empty": "Alle haben einen Platz.",
+        "noMatch": "Niemand passt zu „{q}“.",
+        "more": "{shown} von {total} angezeigt. Suchen Sie, um die anderen zu finden."
+      },
+      "form": {
+        "title": "Ausgewählte Personen platzieren",
+        "item": "Tisch oder Reihe",
+        "choose": "Tisch oder Reihe wählen",
+        "option": "{item} – {free} von {capacity} frei",
+        "seat": "Platz",
+        "anySeat": "Beliebiger freier Platz",
+        "seatKept": "{label} (zurückgehalten)",
+        "submit": "Platzieren",
+        "submitting": "Wird platziert…"
+      },
+      "errors": {
+        "noPeople": "Wählen Sie mindestens eine Person aus.",
+        "noItem": "Wählen Sie einen Tisch oder eine Reihe.",
+        "onePerSeat": "Ein Platz ist für eine Person. Wählen Sie eine Person oder „Beliebiger freier Platz“.",
+        "notEnough": "Nicht alle passen: Dort {fits, plural, =0 {ist kein Platz frei} one {ist nur # Platz frei} other {sind nur # Plätze frei}} für {asked, plural, one {# Person} other {# Personen}}.",
+        "seatTaken": "Dieser Platz ist bereits vergeben. Wählen Sie einen anderen.",
+        "seatBlocked": "Dieser Platz ist gesperrt. Wählen Sie einen anderen.",
+        "seatsTaken": "Einige dieser Plätze wurden gerade vergeben. Bitte versuchen Sie es erneut.",
+        "seatedByTicket": "Diese Person hat bereits einen Platz über ihr Ticket.",
+        "cancelled": "Diese Person nimmt nicht mehr teil.",
+        "forbidden": "Sie können den Sitzplan ansehen, aber nicht ändern.",
+        "dropMiss": "Legen Sie Namen auf einem Tisch, einer Reihe oder einem Platz ab."
+      },
+      "canvas": {
+        "title": "Plan",
+        "hint": "Ziehen Sie einen Namen (oder die angehakten Namen) auf einen Tisch, eine Reihe oder einen Platz. Alles geht auch mit der Liste und dem Formular.",
+        "readOnlyHint": "Wer wo sitzt, als Bild des Raums."
+      },
+      "state": {
+        "free": "Frei",
+        "assigned": "Gast",
+        "sold": "Verkauft",
+        "held": "Im Checkout",
+        "reserved": "Zurückgehalten",
+        "blocked": "Gesperrt"
+      },
+      "tables": {
+        "title": "Tische und Reihen",
+        "count": "{taken} von {capacity} Plätzen belegt · {free} frei",
+        "byTicket": "{seat} · per Ticket",
+        "empty": "Noch niemand.",
+        "remove": "Entfernen",
+        "removeLabel": "{name} von {item} entfernen"
+      }
     }
   }
 }

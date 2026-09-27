@@ -1,7 +1,7 @@
 import { DomainError } from '@yayatoh/kernel';
 import { claimProviderEventTx, closeDisputeTx, openDisputeTx } from '@yayatoh/payments';
 import { tenantCommand } from '@yayatoh/platform';
-import { voidSeatTx } from '@yayatoh/seating';
+import { releaseAttendeeSeatsTx, voidSeatTx } from '@yayatoh/seating';
 import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
@@ -85,6 +85,11 @@ export const applyDisputeEventCommand = tenantCommand({
         reason: 'dispute_lost',
       });
       for (const t of voided) await voidSeatTx(tx, ctx, t.id);
+      await releaseAttendeeSeatsTx(
+        tx,
+        ctx,
+        voided.flatMap((t) => (t.attendeeId ? [t.attendeeId] : [])),
+      );
       if (orderLifecycle.can(order.status as never, 'refund'))
         await tx
           .update(orders)

@@ -7,6 +7,7 @@ import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SeatingEditor } from '@/components/seating-editor.tsx';
+import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -165,6 +166,7 @@ export default async function SeatingPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <SeatingTabs base={`/o/${org}/e/${event}/seating`} active="plan" />
       <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
         <StatusDot status={STATUS_DOT[seating.status]} label={t(`status.${seating.status}`)} />
         <span className="text-body">{t('counts', { ...seating.counts, total: seating.seats.length })}</span>

@@ -1297,6 +1297,77 @@
       "name": "Naam",
       "submit": "Zaalplan opslaan",
       "done": "Opgeslagen. Je kunt het voor andere evenementen gebruiken."
+    },
+    "tabs": {
+      "label": "Weergaven van de zaalindeling",
+      "plan": "Plattegrond",
+      "assign": "Gasten plaatsen"
+    },
+    "assign": {
+      "title": "Gasten plaatsen",
+      "description": "Zet mensen aan tafels en in rijen. Sleep een naam naar de plattegrond, of vink namen aan, kies een tafel en klik op Plaatsen: met het toetsenbord kan alles wat met slepen kan.",
+      "noPlan": "Dit evenement heeft nog geen zaalindeling. Maak er eerst een en plaats hier daarna je gasten.",
+      "toPlan": "Naar de plattegrond",
+      "summary": "{seated, plural, one {# persoon geplaatst} other {# personen geplaatst}} · {unseated} nog te plaatsen",
+      "readOnly": "Je ziet wie waar zit, maar kunt het niet wijzigen.",
+      "done": "{count, plural, one {# persoon geplaatst} other {# personen geplaatst}} aan {item}.",
+      "removed": "{name} heeft geen plaats meer.",
+      "queue": {
+        "title": "Nog te plaatsen ({count})",
+        "search": "Zoeken op naam of e-mail",
+        "list": "Mensen die nog geplaatst moeten worden",
+        "selected": "{count, plural, =0 {Niemand geselecteerd} one {# geselecteerd} other {# geselecteerd}}",
+        "selectShown": "Alle getoonde selecteren",
+        "clear": "Selectie wissen",
+        "empty": "Iedereen heeft een plaats.",
+        "noMatch": "Niemand komt overeen met ‘{q}’.",
+        "more": "{shown} van {total} getoond. Zoek om de anderen te vinden."
+      },
+      "form": {
+        "title": "Geselecteerde mensen plaatsen",
+        "item": "Tafel of rij",
+        "choose": "Kies een tafel of rij",
+        "option": "{item} — {free} van {capacity} vrij",
+        "seat": "Plaats",
+        "anySeat": "Elke vrije plaats",
+        "seatKept": "{label} (achtergehouden)",
+        "submit": "Plaatsen",
+        "submitting": "Bezig met plaatsen…"
+      },
+      "errors": {
+        "noPeople": "Kies minstens één persoon.",
+        "noItem": "Kies een tafel of rij.",
+        "onePerSeat": "Een plaats is voor één persoon. Kies één persoon, of ‘Elke vrije plaats’.",
+        "notEnough": "Niet iedereen past: {fits, plural, =0 {er is geen plaats vrij} one {er is maar # plaats vrij} other {er zijn maar # plaatsen vrij}} voor {asked, plural, one {# persoon} other {# personen}}.",
+        "seatTaken": "Iemand heeft die plaats al. Kies een andere.",
+        "seatBlocked": "Die plaats is geblokkeerd. Kies een andere.",
+        "seatsTaken": "Sommige van die plaatsen zijn net bezet. Probeer het opnieuw.",
+        "seatedByTicket": "Deze persoon heeft al een plaats via het ticket.",
+        "cancelled": "Deze persoon komt niet meer.",
+        "forbidden": "Je kunt de zaalindeling bekijken, maar niet wijzigen.",
+        "dropMiss": "Zet namen neer op een tafel, een rij of een plaats."
+      },
+      "canvas": {
+        "title": "Plattegrond",
+        "hint": "Sleep een naam (of de aangevinkte namen) naar een tafel, rij of plaats. Alles kan ook met de lijst en het formulier.",
+        "readOnlyHint": "Wie waar zit, als afbeelding van de zaal."
+      },
+      "state": {
+        "free": "Vrij",
+        "assigned": "Gast",
+        "sold": "Verkocht",
+        "held": "In afrekening",
+        "reserved": "Achtergehouden",
+        "blocked": "Geblokkeerd"
+      },
+      "tables": {
+        "title": "Tafels en rijen",
+        "count": "{taken} van {capacity} plaatsen bezet · {free} vrij",
+        "byTicket": "{seat} · via ticket",
+        "empty": "Nog niemand.",
+        "remove": "Verwijderen",
+        "removeLabel": "{name} verwijderen van {item}"
+      }
     }
   }
 }

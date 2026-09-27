@@ -23,6 +23,7 @@
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/reports": "workspace:*",
+    "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",

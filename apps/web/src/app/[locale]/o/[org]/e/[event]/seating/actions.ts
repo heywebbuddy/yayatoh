@@ -4,9 +4,11 @@ import { quickLayout } from '@yayatoh/floorplan';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
   assignSeatCategoryCommand,
+  assignSeatsCommand,
   publishEventLayoutCommand,
   saveLayoutCommand,
   setEventLayoutCommand,
+  unassignSeatsCommand,
 } from '@yayatoh/seating';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
@@ -136,5 +138,74 @@ export async function categoryAction(
     return { ok: true, code: null };
   } catch (err) {
     return fail(err);
+  }
+}
+
+export interface AssignState {
+  readonly ok: boolean;
+  readonly code: string | null;
+  readonly reason?: string;
+  /** A group that didn't fit: how many were asked for and how many would. */
+  readonly fits?: number;
+  readonly asked?: number;
+  readonly count?: number;
+}
+
+const assignFail = (err: unknown): AssignState => {
+  if (!isDomainError(err)) return { ok: false, code: 'internal' };
+  const d = (err.details ?? {}) as { reason?: unknown; fits?: unknown; asked?: unknown };
+  return {
+    ok: false,
+    code: err.code,
+    reason: typeof d.reason === 'string' ? d.reason : undefined,
+    fits: typeof d.fits === 'number' ? d.fits : undefined,
+    asked: typeof d.asked === 'number' ? d.asked : undefined,
+  };
+};
+
+/** Seat people at a table or row (M1.7d): the list's "Seat them" and a drop on the plan. */
+export async function assignSeatsAction(
+  org: string,
+  event: string,
+  input: { attendeeIds: readonly string[]; itemId: string; seatUuid?: string | null },
+): Promise<AssignState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    const r = await executeCommand(
+      assignSeatsCommand,
+      {
+        eventId: ev.id,
+        attendeeIds: [...input.attendeeIds],
+        itemId: input.itemId,
+        seatUuid: input.seatUuid || undefined,
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/assign`);
+    return { ok: true, code: null, count: r.seated.length };
+  } catch (err) {
+    return assignFail(err);
+  }
+}
+
+/** Take someone off their seat; they go back to the unseated queue. */
+export async function unassignSeatAction(
+  org: string,
+  event: string,
+  attendeeId: string,
+): Promise<AssignState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    const r = await executeCommand(
+      unassignSeatsCommand,
+      { eventId: ev.id, attendeeIds: [attendeeId] },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/assign`);
+    return { ok: true, code: null, count: r.released };
+  } catch (err) {
+    return assignFail(err);
   }
 }

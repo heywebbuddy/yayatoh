@@ -1297,6 +1297,77 @@
       "name": "名前",
       "submit": "座席表を保存",
       "done": "保存しました。ほかのイベントでも使用できます。"
+    },
+    "tabs": {
+      "label": "座席の表示",
+      "plan": "座席表",
+      "assign": "ゲストの割り当て"
+    },
+    "assign": {
+      "title": "ゲストの割り当て",
+      "description": "テーブルや列に人を割り当てます。名前を座席表にドラッグするか、名前にチェックを入れてテーブルを選び「着席させる」を押します。ドラッグでできることはすべてキーボードでもできます。",
+      "noPlan": "このイベントにはまだ座席表がありません。先に作成してから、ここでゲストを割り当ててください。",
+      "toPlan": "座席表へ",
+      "summary": "{seated, plural, other {#人着席済み}} · 未着席{unseated}人",
+      "readOnly": "誰がどこに座るかは確認できますが、変更はできません。",
+      "done": "{item}に{count, plural, other {#人}}を割り当てました。",
+      "removed": "{name}さんの席を外しました。",
+      "queue": {
+        "title": "未着席（{count}）",
+        "search": "名前またはメールで検索",
+        "list": "未着席の人",
+        "selected": "{count, plural, =0 {選択なし} other {#人を選択中}}",
+        "selectShown": "表示中をすべて選択",
+        "clear": "選択を解除",
+        "empty": "全員に席があります。",
+        "noMatch": "「{q}」に一致する人はいません。",
+        "more": "{total}人中{shown}人を表示しています。ほかの人は検索してください。"
+      },
+      "form": {
+        "title": "選択した人を着席させる",
+        "item": "テーブルまたは列",
+        "choose": "テーブルまたは列を選択",
+        "option": "{item} — 空き{free}/{capacity}",
+        "seat": "座席",
+        "anySeat": "空いている席ならどこでも",
+        "seatKept": "{label}（確保済み）",
+        "submit": "着席させる",
+        "submitting": "割り当て中…"
+      },
+      "errors": {
+        "noPeople": "少なくとも1人を選んでください。",
+        "noItem": "テーブルまたは列を選んでください。",
+        "onePerSeat": "1つの席には1人です。1人を選ぶか、「空いている席ならどこでも」を選んでください。",
+        "notEnough": "全員は座れません。{asked, plural, other {#人}}に対して、{fits, plural, =0 {空席がありません} other {空席は#席だけです}}。",
+        "seatTaken": "その席にはすでに人がいます。別の席を選んでください。",
+        "seatBlocked": "その席はブロックされています。別の席を選んでください。",
+        "seatsTaken": "いくつかの席がたった今埋まりました。もう一度お試しください。",
+        "seatedByTicket": "チケットで席がすでに決まっています。",
+        "cancelled": "この人はもう参加しません。",
+        "forbidden": "座席は確認できますが、変更はできません。",
+        "dropMiss": "名前をテーブル、列、または座席の上にドロップしてください。"
+      },
+      "canvas": {
+        "title": "座席表",
+        "hint": "名前（またはチェックした名前）をテーブル、列、座席にドラッグします。リストとフォームでも同じことができます。",
+        "readOnlyHint": "誰がどこに座るかを会場の図で示します。"
+      },
+      "state": {
+        "free": "空席",
+        "assigned": "ゲスト",
+        "sold": "販売済み",
+        "held": "購入手続き中",
+        "reserved": "確保済み",
+        "blocked": "ブロック"
+      },
+      "tables": {
+        "title": "テーブルと列",
+        "count": "{capacity}席中{taken}席使用 · 空き{free}席",
+        "byTicket": "{seat} · チケット",
+        "empty": "まだ誰もいません。",
+        "remove": "外す",
+        "removeLabel": "{name}さんを{item}から外す"
+      }
     }
   }
 }

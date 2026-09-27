@@ -1297,6 +1297,77 @@
       "name": "Name",
       "submit": "Save plan",
       "done": "Saved. You can use it for other events."
+    },
+    "tabs": {
+      "label": "Seating views",
+      "plan": "Plan",
+      "assign": "Assign guests"
+    },
+    "assign": {
+      "title": "Assign guests",
+      "description": "Seat people at tables and rows. Drag a name onto the plan, or tick names, choose a table and press Seat them — the keyboard does everything dragging does.",
+      "noPlan": "This event has no seating plan yet. Create one first, then seat your guests here.",
+      "toPlan": "Go to the plan",
+      "summary": "{seated, plural, one {# person seated} other {# people seated}} · {unseated} still to seat",
+      "readOnly": "You can see who sits where, but not change it.",
+      "done": "{count, plural, one {Seated # person} other {Seated # people}} at {item}.",
+      "removed": "{name} no longer has a seat.",
+      "queue": {
+        "title": "Still to seat ({count})",
+        "search": "Search by name or email",
+        "list": "People still to seat",
+        "selected": "{count, plural, =0 {No one selected} one {# selected} other {# selected}}",
+        "selectShown": "Select all shown",
+        "clear": "Clear selection",
+        "empty": "Everyone has a seat.",
+        "noMatch": "No one matches “{q}”.",
+        "more": "Showing {shown} of {total}. Search to find the others."
+      },
+      "form": {
+        "title": "Seat the selected people",
+        "item": "Table or row",
+        "choose": "Choose a table or row",
+        "option": "{item} — {free} of {capacity} free",
+        "seat": "Seat",
+        "anySeat": "Any free seat",
+        "seatKept": "{label} (kept back)",
+        "submit": "Seat them",
+        "submitting": "Seating…"
+      },
+      "errors": {
+        "noPeople": "Choose at least one person to seat.",
+        "noItem": "Choose a table or row.",
+        "onePerSeat": "A seat is for one person. Choose one person, or “Any free seat”.",
+        "notEnough": "They don't all fit: {fits, plural, =0 {no seats are free} one {only # seat is free} other {only # seats are free}} there for {asked, plural, one {# person} other {# people}}.",
+        "seatTaken": "Someone already has that seat. Choose another one.",
+        "seatBlocked": "That seat is blocked. Choose another one.",
+        "seatsTaken": "Some of those seats were just taken. Please try again.",
+        "seatedByTicket": "They already have a seat from their ticket.",
+        "cancelled": "That person is no longer attending.",
+        "forbidden": "You can see the seating but not change it.",
+        "dropMiss": "Drop names onto a table, a row or a seat."
+      },
+      "canvas": {
+        "title": "Plan",
+        "hint": "Drag a name (or the ticked names) onto a table, row or seat. Everything here can also be done with the list and form.",
+        "readOnlyHint": "Who sits where, as a picture of the room."
+      },
+      "state": {
+        "free": "Free",
+        "assigned": "Guest",
+        "sold": "Sold",
+        "held": "In checkout",
+        "reserved": "Kept back",
+        "blocked": "Blocked"
+      },
+      "tables": {
+        "title": "Tables and rows",
+        "count": "{taken} of {capacity} seats taken · {free} free",
+        "byTicket": "{seat} · by ticket",
+        "empty": "No one yet.",
+        "remove": "Remove",
+        "removeLabel": "Remove {name} from {item}"
+      }
     }
   }
 }

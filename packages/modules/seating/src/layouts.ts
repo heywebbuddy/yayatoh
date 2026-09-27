@@ -5,6 +5,7 @@ import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { reconcileAssignmentsTx } from './assignments.ts';
 import { SEAT_STATUSES } from './domain/seat-state.ts';
 import { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, eventLayouts, eventSeats, layouts } from './schema.ts';
 
@@ -166,6 +167,8 @@ export const setEventLayoutCommand = tenantCommand({
           blockReason: kept.get(s.seatId)?.status === 'blocked' ? kept.get(s.seatId)?.blockReason : null,
         })),
       );
+    // Guests keep seats that still exist (and follow them to their table); others are unseated.
+    await reconcileAssignmentsTx(tx, input.eventId);
     const values = {
       doc,
       checksum,
@@ -270,7 +273,13 @@ export const blockSeatsCommand = tenantCommand({
           .update(eventSeats)
           .set({ status: 'available', blockReason: null, updatedAt: ctx.now })
           .where(
-            and(eq(eventSeats.eventId, input.eventId), eq(eventSeats.status, 'blocked'), selected(input)),
+            and(
+              eq(eventSeats.eventId, input.eventId),
+              eq(eventSeats.status, 'blocked'),
+              // A guest's seat is freed by unseating them, not by unblocking.
+              ne(eventSeats.blockReason, 'assigned'),
+              selected(input),
+            ),
           )
           .returning({ id: eventSeats.id });
     return { updated: rows.length };

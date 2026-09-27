@@ -83,7 +83,7 @@ export const removeGuestCommand = tenantCommand({
   output: z.object({ ok: z.boolean() }),
   entitlement: 'attendees',
   permission: 'attendees:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const [a] = await tx
       .select({ ticketId: attendees.ticketId, status: attendees.status })
       .from(attendees)
@@ -95,6 +95,15 @@ export const removeGuestCommand = tenantCommand({
       .update(attendees)
       .set({ status: 'cancelled', updatedAt: ctx.now })
       .where(eq(attendees.id, input.attendeeId));
+    // Higher tiers react (seating gives their seat back, M1.7d).
+    if (a.status === 'active')
+      emit({
+        type: 'attendee.cancelled',
+        version: 1,
+        aggregateType: 'attendee',
+        aggregateId: input.attendeeId,
+        payload: { orgId: requireOrg(ctx), eventId: input.eventId, attendeeId: input.attendeeId },
+      });
     return { ok: true };
   },
   audit: (input) => ({

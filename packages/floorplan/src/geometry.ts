@@ -102,3 +102,52 @@ export function canonicalJson(value: unknown): string {
 
 export const seatCount = (doc: FloorplanDoc) =>
   doc.items.reduce((n, i) => n + (i.kind === 'object' ? 0 : i.seats.length), 0);
+
+export interface Hit {
+  readonly itemId: string;
+  /** The seat under the point, or null for the table or row around it. */
+  readonly seatId: string | null;
+}
+
+/**
+ * What is at a point of the room (centimetres): a seat (within `seatRadius`), else the table or
+ * row whose outline — grown by `pad` to take in the seats around a table — contains it; objects
+ * are never hit. Used to drop a guest onto the plan.
+ */
+export function hitTest(
+  doc: FloorplanDoc,
+  point: { readonly x: number; readonly y: number },
+  opts: { readonly seatRadius?: number; readonly pad?: number } = {},
+): Hit | null {
+  const seatRadius = opts.seatRadius ?? 25;
+  const pad = opts.pad ?? 60;
+  let best: { seat: PlacedSeat; d: number } | null = null;
+  for (const seat of placedSeats(doc)) {
+    const d = Math.hypot(seat.x - point.x, seat.y - point.y);
+    if (d <= seatRadius && (!best || d < best.d)) best = { seat, d };
+  }
+  if (best) return { itemId: best.seat.itemId, seatId: best.seat.seatId };
+  // Later items are drawn on top: test them first.
+  for (const item of [...doc.items].reverse()) {
+    if (item.kind === 'object') continue;
+    const local = rotate(point.x - item.x, point.y - item.y, -item.rotation);
+    if (item.kind === 'table') {
+      const inside =
+        item.shape === 'round'
+          ? Math.hypot(local.x, local.y) <= item.width / 2 + pad
+          : Math.abs(local.x) <= item.width / 2 + pad && Math.abs(local.y) <= item.height / 2 + pad;
+      if (inside) return { itemId: item.id, seatId: null };
+      continue;
+    }
+    const xs = item.seats.map((s) => s.x);
+    const ys = item.seats.map((s) => s.y);
+    if (
+      local.x >= Math.min(...xs) - pad &&
+      local.x <= Math.max(...xs) + pad &&
+      local.y >= Math.min(...ys) - pad &&
+      local.y <= Math.max(...ys) + pad
+    )
+      return { itemId: item.id, seatId: null };
+  }
+  return null;
+}

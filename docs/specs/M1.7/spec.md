@@ -69,3 +69,40 @@ Roadmap: M1.7; ADR 0012 (layout document + `event_seats`, Postgres holds, lock a
 | AC4 | Expired checkouts and refunded tickets free their seats; a paid-late order whose seat was resold is flagged and releases its stock | `seated-checkout.int.test.ts` |
 | AC5 | The seat shows on the tickets PDF (escaped) | `packages/pdf/tests/tickets.test.ts` |
 | AC6 | In the browser: a guest picks seats from the list, opens the map, pays, sees "Seat: …" on each ticket, and the sold seats are disabled; in a race the loser keeps their details and sees the seat taken; axe passes | `apps/web/e2e/seated-checkout.spec.ts` |
+
+## M1.7d — organizer seat assignment (done)
+
+- **Assign guests** (`/o/[org]/e/[event]/seating/assign`, a second view beside the Plan on the Seating page, "Plan · Assign guests"):
+  - **Still to seat** — the unseated queue: active attendees (guests, imports, ticket holders) with no assigned seat and no seat bought with their ticket, by name; search by name or email; tick people ("Select all shown", "Clear selection"). Shows 200 at a time (search finds the rest).
+  - **Seat the selected people** — choose a table or row ("Table 1 — 3 of 8 free") and optionally one seat ("Any free seat", or a free seat; seats kept back for a channel or accessibility are listed as "(kept back)"), then **Seat them**. Several people at once is the party path; a specific seat takes one person.
+  - **Plan** (Konva, drawing only) — seats coloured by who has them (free, guest, sold, in checkout, kept back, blocked) and "taken/capacity" on each table. **Drag a name** (or all ticked names) from the queue onto a table or row (first free seats) or onto one seat (that seat); the drop point is mapped to room centimetres and hit-tested (`hitTest` in `@yayatoh/floorplan`), and the table or seat under the pointer is highlighted. Everything the drag does, the queue and form do by keyboard (roadmap: every canvas interaction has an accessible alternative).
+  - **Tables and rows** — each with "n of m seats taken · k free" and who sits where (seat label; buyers show "· by ticket"), with **Remove** per person (they go back to the queue).
+  - Success and errors are announced (`aria-live`); "can't fit" says how many seats are free for how many people; viewers see everything read-only (no boxes, form or Remove buttons), and a change sent from a stale page after losing edit rights is refused by the server.
+- **`seating.seat_assignments`** (tenant table, RLS): event, attendee (composite FK to `attendees.attendees (org_id, id)`, hand-written, `ON DELETE CASCADE`), table/row, seat, `pinned` (the organizer chose this seat), `prior_block`. Unique per (org, event, attendee) and per (org, event, seat).
+  - **Every assignment holds a real seat**, blocked with the new block reason **`assigned`** (the `event_seats_block_check` widened with `NOT VALID` + `VALIDATE`), so a guest's seat is off sale and holds can never take it. Only available seats are placed automatically (in plan order, accessible seats last); a chosen seat may also be one kept back for a channel or accessibility (its block comes back when the guest is unseated). Held, sold and killed seats are refused (`seat_taken`, `seat_blocked`).
+  - A delete trigger (`seating.seat_assignment_released`) restores the seat's previous state however an assignment goes (unseated, refunded, an imported guest removed by import undo, the seat deleted from the plan). Unblocking seats by hand never frees an assigned seat.
+- **Commands** (`events:write`, audited, entitlement `seating`): `seating.assign` — `{ eventId, attendeeIds (≤ 50), itemId, seatUuid? }`, all or nothing under a row lock on the table's seats and the one-statement seat update (a seat taken meanwhile → `seats_taken`); people already seated elsewhere move; a guest placed automatically moves to another free seat at the table when their seat is chosen for someone else; a group that doesn't fit → `conflict` / `not_enough_seats` with `fits` and `asked`; ticket holders with a bought seat → `seated_by_ticket`; cancelled attendees → `attendee_cancelled`. `seating.unassign` — `{ eventId, attendeeIds }`.
+- **Query** `seating.assignments` (`attendees:read`): tables and rows with capacity, free seats and per-seat state and occupant, the unseated queue (`id`, `name`, `email`, `labels` only) and the seated count — `SeatAssignmentsDto` allowlist.
+- **Releases:** refunds and lost disputes void tickets and call `releaseAttendeeSeatsTx` in the same transaction (`voidTicketsTx` now returns each ticket's attendee). Taking a guest off the list emits `attendee.cancelled@1` (attendees, tier 2); the worker's `seating.release-cancelled` subscriber frees their seat.
+- **Plan edits:** guests keep seats whose id survives an edit (and follow them to their table); guests whose seat is deleted are unseated.
+
+**Later / not yet**
+- **Parties and households** (M4 weddings): today a party is "tick several people, seat them together"; dragging a party chip and keeping households together come with the M4 guest model.
+- Dragging people already seated from one table to another (today: Remove, then seat again — both by keyboard), and drag on touch screens (the list and form work on touch).
+- Seat choice at the **box office** (it still refuses seated ticket types, M1.7c).
+- The Plan view's counts still show assigned seats under "blocked", and the editor colours them as blocked.
+- Suggested seating ("intelligent seating", M6.11/M6.12), place cards and the public seat finder (M1.7e).
+
+### Acceptance (M1.7d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Seat states for assignment; automatic placement in plan order, accessible seats last; "fits" when a group doesn't | `packages/modules/seating/tests/assign.test.ts` |
+| AC2 | A drop point hits the seat under it, else the table or row around it (rotations included), never objects | `packages/floorplan/tests/floorplan.test.ts` |
+| AC3 | A party is seated at a table in one go; seats go off sale; a group that doesn't fit is refused with how many fit, all or nothing; moving and re-seating; one person per chosen seat; an automatically placed guest makes room | `packages/testing/tests/seat-assignments.int.test.ts` |
+| AC4 | No collision with sales: an assigned seat can't be held and shows taken on the public map; unseating puts it back on sale; held, sold and killed seats can't be assigned; seats kept back for a channel get their block back; buyers are seated by their ticket | `seat-assignments.int.test.ts` |
+| AC5 | A refund releases the assignment; a guest taken off the list releases it through `attendee.cancelled@1` (idempotent); plan edits keep or unseat guests | `seat-assignments.int.test.ts` |
+| AC6 | Viewers read but can't assign or unassign; other orgs see nothing; fixture rows for both orgs | `seat-assignments.int.test.ts`, `isolation.int.test.ts` |
+| AC7 | **Keyboard-only assignment works end to end** (ADR 0012): tab to the queue, tick people, choose a table, seat them, see them listed and gone from the queue, remove one and they return; persisted; empty states; axe on each state | `apps/web/e2e/seat-assignment.spec.ts` |
+| AC8 | Drag and drop onto a table and onto one seat of the plan | `seat-assignment.spec.ts` |
+| AC9 | Form errors and the can't-fit error; a seat given to a guest is disabled on the public event page and free again after Remove | `seat-assignment.spec.ts` |
+| AC10 | A viewer sees who sits where with no controls, and a stale page's actions are refused; Arabic renders right to left | `seat-assignment.spec.ts` |

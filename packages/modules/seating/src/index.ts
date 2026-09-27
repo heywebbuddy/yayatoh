@@ -1,4 +1,19 @@
 export {
+  assignSeatsCommand,
+  MAX_ASSIGN,
+  releaseAttendeeSeatsTx,
+  releaseCancelledSeats,
+  SeatAssignmentsDto,
+  seatAssignmentsQuery,
+  unassignSeatsCommand,
+} from './assignments.ts';
+export {
+  ASSIGN_SEAT_STATES,
+  type AssignSeatState,
+  assignSeatState,
+  pickSeats,
+} from './domain/assign.ts';
+export {
   fromStatuses,
   nextSeatStatus,
   SEAT_EVENTS,
@@ -30,4 +45,4 @@ export {
   saveLayoutCommand,
   setEventLayoutCommand,
 } from './layouts.ts';
-export { BLOCK_REASONS, EVENT_LAYOUT_STATUSES } from './schema.ts';
+export { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, SEAT_BLOCK_REASONS } from './schema.ts';
