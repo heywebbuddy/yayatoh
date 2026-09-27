@@ -1,6 +1,7 @@
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
-import { processedEvents } from '../schema.ts';
+import { and, asc, eq, inArray, notExists, sql } from 'drizzle-orm';
+import { domainEvents, processedEvents } from '../schema.ts';
 import type { PublishedEvent, Subscriber } from './outbox.ts';
 
 /**
@@ -20,4 +21,50 @@ export async function consumeEvent(subscriber: Subscriber, event: PublishedEvent
     await subscriber.handle(tx, event);
     return true;
   });
+}
+
+/**
+ * Hand one org's committed events that a subscriber has not handled yet to it, oldest first
+ * (seed scripts and e2e, where no worker runs; a projector's catch-up after a deploy). Each event
+ * still goes through consumeEvent, so a concurrent worker never double-applies one.
+ */
+export async function catchUpSubscriber(subscriber: Subscriber, orgId: string): Promise<number> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: subscriber.name } });
+  const pending = await withTenant(ctx, (tx) =>
+    tx
+      .select()
+      .from(domainEvents)
+      .where(
+        and(
+          inArray(sql`${domainEvents.type} || '@' || ${domainEvents.version}`, [...subscriber.events]),
+          notExists(
+            tx
+              .select({ one: sql`1` })
+              .from(processedEvents)
+              .where(
+                and(
+                  eq(processedEvents.consumer, subscriber.name),
+                  eq(processedEvents.eventId, domainEvents.id),
+                ),
+              ),
+          ),
+        ),
+      )
+      .orderBy(asc(domainEvents.id)),
+  );
+  let n = 0;
+  for (const e of pending) {
+    const done = await consumeEvent(subscriber, {
+      id: e.id,
+      orgId: e.orgId,
+      type: e.type,
+      version: e.version,
+      aggregateType: e.aggregateType,
+      aggregateId: e.aggregateId,
+      payload: e.payload,
+      logSeq: e.logSeq ?? 0,
+    });
+    if (done) n += 1;
+  }
+  return n;
 }

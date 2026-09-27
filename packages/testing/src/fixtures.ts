@@ -16,6 +16,7 @@ import {
 import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
+import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import {
   applyDisputeEventCommand,
   applyProviderEventCommand,
@@ -399,6 +400,15 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     assignSeatsCommand,
     { eventId: event.id, attendeeIds: [guest.id], itemId: plan.items[0]?.id ?? '' },
     ctx(),
+    ports,
+  );
+  // Marketplace (M1.11): enrolled, the event's listing projected, one legacy redirect.
+  await executeCommand(updateSiteSettingsCommand, { listOnMarketplace: true }, ctx(), ports);
+  await catchUpListings(org.id);
+  await executeCommand(
+    addLegacyRedirectCommand,
+    { host: 'yayatoh.com', source: `/${slug}`, target: `/o/${slug}` },
+    systemCtx(org.id),
     ports,
   );
   return { org, ownerId, viewerId, event, ctx };

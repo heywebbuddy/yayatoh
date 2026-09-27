@@ -17,7 +17,7 @@ export { createCommandPorts, type PolicyPorts, recentStepUp } from './commands/p
 export { type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
 export { consoleMailer, type Mailer, type MailMessage, memoryMailer } from './mailer.ts';
 export { isModuleKey, MODULE_KEYS, type ModuleKey } from './modules.ts';
-export { consumeEvent } from './outbox/consume.ts';
+export { catchUpSubscriber, consumeEvent } from './outbox/consume.ts';
 export {
   defineSubscriber,
   emitEvents,

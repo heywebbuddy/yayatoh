@@ -1,6 +1,7 @@
 export {
   archiveTicketTypeCommand,
   createTicketTypeCommand,
+  eventPriceRangeTx,
   listTicketTypesQuery,
   sellsPaidTicketsQuery,
   updateTicketTypeCommand,
