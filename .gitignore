@@ -1,5 +1,5 @@
 # Legacy code and data never enter this repo (reference lives in the private yayatoh-legacy repo)
-legacy/
+/legacy/
 *.sql
 !packages/db/drizzle/*.sql
 *.sql.gz

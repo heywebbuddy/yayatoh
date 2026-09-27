@@ -9,7 +9,7 @@ import {
   verifyLaravelSignedUrl,
   verifyLegacyBcrypt,
   verifySanctumSecret,
-} from '../src/legacy/index.ts';
+} from '../src/compat/index.ts';
 
 // Test-only key, generated for these vectors. Real APP_KEYs live in the vault.
 const APP_KEY = `base64:${Buffer.alloc(32, 7).toString('base64')}`;
