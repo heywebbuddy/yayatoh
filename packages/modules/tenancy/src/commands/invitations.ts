@@ -167,8 +167,7 @@ export async function acceptInvitation(
   ports: CommandPorts<TenantTx>,
 ) {
   const inv = await lookupInvitation(token);
-  if (!inv || inv.status !== 'pending')
-    throw new DomainError('invalid_state', 'This invitation is no longer valid');
+  if (inv?.status !== 'pending') throw new DomainError('invalid_state', 'This invitation is no longer valid');
   if (!account.emailVerified || account.email.toLowerCase() !== inv.email) {
     throw new DomainError('forbidden', 'Sign in with the email address the invitation was sent to');
   }

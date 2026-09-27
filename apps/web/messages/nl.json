@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {nog geen evenementen} one {# evenement} other {# evenementen}}",
     "events": "Evenementen",
     "emptyTitle": "Nog geen evenementen",
-    "emptyDescription": "Evenementen die je aanmaakt verschijnen hier.",
-    "open": "Evenement openen"
+    "emptyDescription": "Maak je eerste evenement aan om tickets te verkopen of uitnodigingen te versturen.",
+    "open": "Evenement openen",
+    "create": "Evenement aanmaken"
   },
   "team": {
     "subtitle": "{count, plural, one {# lid} other {# leden}}",
@@ -129,7 +130,9 @@
     "mix": "Per tickettype",
     "needsAttention": "Vraagt aandacht",
     "readiness": "Gereedheid evenement",
-    "readinessPercent": "{value}% gereed"
+    "readinessPercent": "{value}% gereed",
+    "noSalesTitle": "Nog geen verkopen",
+    "noSalesDescription": "Registraties, verkopen en plaatsen verschijnen hier zodra tickets in de verkoop zijn."
   },
   "kpi": {
     "registrations": "Registraties",
@@ -185,7 +188,11 @@
     "websitePublished": "Website gepubliceerd",
     "mealChoices": "Maaltijdkeuzes verzameld",
     "done": "Klaar",
-    "todo": "Nog te doen"
+    "todo": "Nog te doen",
+    "detailsAdded": "Naam en datums toegevoegd",
+    "venueSet": "Locatie toegevoegd",
+    "taglineWritten": "Korte beschrijving geschreven",
+    "published": "Evenement gepubliceerd"
   },
   "segments": {
     "all": "Alle",
@@ -208,7 +215,9 @@
     "status": "Status",
     "order": "Bestelling",
     "profile": "Profiel",
-    "closeProfile": "Profiel sluiten"
+    "closeProfile": "Profiel sluiten",
+    "emptyTitle": "Nog geen {term}",
+    "emptyDescription": "Mensen verschijnen hier zodra ze tickets kopen, zich registreren of aan de gastenlijst worden toegevoegd."
   },
   "attendeeStatus": {
     "paid": "Betaald",
@@ -245,7 +254,9 @@
     "allIn": "Alle prijzen zijn inclusief alle kosten. Bij {org}, mogelijk gemaakt door Yayatoh.",
     "allInSuffix": "all-in",
     "select": "Kiezen",
-    "poweredBy": "Mogelijk gemaakt door Yayatoh"
+    "poweredBy": "Mogelijk gemaakt door Yayatoh",
+    "noTicketsTitle": "Tickets zijn nog niet te koop",
+    "noTicketsDescription": "Kom binnenkort terug of volg de organisator voor updates."
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "Deze uitnodiging is verlopen. Vraag om een nieuwe.",
       "unavailable": "Deze organisatie is momenteel niet beschikbaar."
     }
+  },
+  "eventStatus": {
+    "draft": "Concept",
+    "published": "Gepubliceerd",
+    "postponed": "Uitgesteld",
+    "cancelled": "Geannuleerd",
+    "completed": "Afgerond",
+    "archived": "Gearchiveerd"
+  },
+  "eventActions": {
+    "publish": "Publiceren",
+    "unpublish": "Publicatie intrekken",
+    "postpone": "Uitstellen",
+    "reschedule": "Opnieuw plannen",
+    "cancel": "Evenement annuleren",
+    "complete": "Markeren als afgerond",
+    "archive": "Archiveren"
+  },
+  "newEvent": {
+    "title": "Evenement aanmaken",
+    "description": "Je kunt alles later nog wijzigen. Het evenement blijft een concept totdat je het publiceert.",
+    "name": "Naam van het evenement",
+    "profile": "Type evenement",
+    "timezone": "Tijdzone",
+    "startsAt": "Begint",
+    "endsAt": "Eindigt",
+    "localTimeHint": "In de tijdzone van het evenement.",
+    "venue": "Locatie",
+    "city": "Plaats",
+    "submit": "Concept aanmaken",
+    "slugTaken": "Er bestaat al een evenement met deze naam. Probeer een iets andere naam."
   }
 }

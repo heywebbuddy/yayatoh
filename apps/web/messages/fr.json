@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {aucun événement pour l’instant} one {# événement} other {# événements}}",
     "events": "Événements",
     "emptyTitle": "Aucun événement pour l’instant",
-    "emptyDescription": "Les événements que vous créez apparaîtront ici.",
-    "open": "Ouvrir l’événement"
+    "emptyDescription": "Créez votre premier événement pour commencer à vendre des billets ou envoyer des invitations.",
+    "open": "Ouvrir l’événement",
+    "create": "Créer un événement"
   },
   "team": {
     "subtitle": "{count, plural, one {# membre} other {# membres}}",
@@ -129,7 +130,9 @@
     "mix": "Par type de billet",
     "needsAttention": "À traiter",
     "readiness": "Préparation de l’événement",
-    "readinessPercent": "Prêt à {value} %"
+    "readinessPercent": "Prêt à {value} %",
+    "noSalesTitle": "Aucune vente pour l’instant",
+    "noSalesDescription": "Les inscriptions, les ventes et le placement apparaîtront ici dès que les billets seront en vente."
   },
   "kpi": {
     "registrations": "Inscriptions",
@@ -185,7 +188,11 @@
     "websitePublished": "Site web publié",
     "mealChoices": "Choix de repas recueillis",
     "done": "Terminé",
-    "todo": "À faire"
+    "todo": "À faire",
+    "detailsAdded": "Nom et dates ajoutés",
+    "venueSet": "Lieu ajouté",
+    "taglineWritten": "Description courte rédigée",
+    "published": "Événement publié"
   },
   "segments": {
     "all": "Tous",
@@ -208,7 +215,9 @@
     "status": "Statut",
     "order": "Commande",
     "profile": "Profil",
-    "closeProfile": "Fermer le profil"
+    "closeProfile": "Fermer le profil",
+    "emptyTitle": "{term} : personne pour l’instant",
+    "emptyDescription": "Les personnes apparaissent ici lorsqu’elles achètent des billets, s’inscrivent ou sont ajoutées à la liste des invités."
   },
   "attendeeStatus": {
     "paid": "Payé",
@@ -245,7 +254,9 @@
     "allIn": "Tous les prix incluent l’ensemble des frais. Chez {org}, propulsé par Yayatoh.",
     "allInSuffix": "tout compris",
     "select": "Choisir",
-    "poweredBy": "Propulsé par Yayatoh"
+    "poweredBy": "Propulsé par Yayatoh",
+    "noTicketsTitle": "Les billets ne sont pas encore en vente",
+    "noTicketsDescription": "Revenez bientôt ou suivez l’organisateur pour être tenu informé."
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "Cette invitation a expiré. Demandez-en une nouvelle.",
       "unavailable": "Cette organisation n’est pas disponible pour le moment."
     }
+  },
+  "eventStatus": {
+    "draft": "Brouillon",
+    "published": "Publié",
+    "postponed": "Reporté",
+    "cancelled": "Annulé",
+    "completed": "Terminé",
+    "archived": "Archivé"
+  },
+  "eventActions": {
+    "publish": "Publier",
+    "unpublish": "Dépublier",
+    "postpone": "Reporter",
+    "reschedule": "Reprogrammer",
+    "cancel": "Annuler l’événement",
+    "complete": "Marquer comme terminé",
+    "archive": "Archiver"
+  },
+  "newEvent": {
+    "title": "Créer un événement",
+    "description": "Vous pourrez tout modifier plus tard. L’événement reste un brouillon jusqu’à sa publication.",
+    "name": "Nom de l’événement",
+    "profile": "Type d’événement",
+    "timezone": "Fuseau horaire",
+    "startsAt": "Début",
+    "endsAt": "Fin",
+    "localTimeHint": "Dans le fuseau horaire de l’événement.",
+    "venue": "Lieu",
+    "city": "Ville",
+    "submit": "Créer le brouillon",
+    "slugTaken": "Un événement porte déjà ce nom. Essayez un nom légèrement différent."
   }
 }

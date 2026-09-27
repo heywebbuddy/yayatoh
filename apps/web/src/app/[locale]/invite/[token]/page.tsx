@@ -21,7 +21,7 @@ export default async function InvitePage({ params }: { params: Promise<{ locale:
         title={inv ? t('invite.title', { org: inv.orgName }) : t('invite.invalidTitle')}
       />
       <Card size="panel" className="flex flex-col gap-4">
-        {!inv || inv.status !== 'pending' ? (
+        {inv?.status !== 'pending' ? (
           <Alert title={t(`invite.status.${inv?.status ?? 'invalid'}`)} />
         ) : !session ? (
           <>

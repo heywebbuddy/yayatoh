@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {イベントはまだありません} other {#件のイベント}}",
     "events": "イベント",
     "emptyTitle": "イベントはまだありません",
-    "emptyDescription": "作成したイベントがここに表示されます。",
-    "open": "イベントを開く"
+    "emptyDescription": "最初のイベントを作成して、チケットの販売や招待状の送信を始めましょう。",
+    "open": "イベントを開く",
+    "create": "イベントを作成"
   },
   "team": {
     "subtitle": "{count, plural, other {#人のメンバー}}",
@@ -129,7 +130,9 @@
     "mix": "チケット種別ごと",
     "needsAttention": "要対応",
     "readiness": "イベントの準備状況",
-    "readinessPercent": "{value}%完了"
+    "readinessPercent": "{value}%完了",
+    "noSalesTitle": "まだ販売はありません",
+    "noSalesDescription": "チケットの販売を開始すると、登録数、販売、座席がここに表示されます。"
   },
   "kpi": {
     "registrations": "登録数",
@@ -185,7 +188,11 @@
     "websitePublished": "ウェブサイトを公開済み",
     "mealChoices": "食事の選択を収集済み",
     "done": "完了",
-    "todo": "未完了"
+    "todo": "未完了",
+    "detailsAdded": "名前と日程を追加済み",
+    "venueSet": "会場を追加済み",
+    "taglineWritten": "短い説明を作成済み",
+    "published": "イベントを公開済み"
   },
   "segments": {
     "all": "すべて",
@@ -208,7 +215,9 @@
     "status": "ステータス",
     "order": "注文",
     "profile": "プロフィール",
-    "closeProfile": "プロフィールを閉じる"
+    "closeProfile": "プロフィールを閉じる",
+    "emptyTitle": "まだ{term}はいません",
+    "emptyDescription": "チケットを購入したり、登録したり、ゲストリストに追加されたりした人がここに表示されます。"
   },
   "attendeeStatus": {
     "paid": "支払い済み",
@@ -245,7 +254,9 @@
     "allIn": "表示価格はすべての手数料込みです。主催: {org}、Powered by Yayatoh。",
     "allInSuffix": "手数料込み",
     "select": "選択",
-    "poweredBy": "Powered by Yayatoh"
+    "poweredBy": "Powered by Yayatoh",
+    "noTicketsTitle": "チケットはまだ販売されていません",
+    "noTicketsDescription": "後でもう一度ご確認いただくか、主催者をフォローして最新情報をお受け取りください。"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -324,5 +335,36 @@
       "expired": "この招待は有効期限が切れています。新しい招待を依頼してください。",
       "unavailable": "この組織は現在利用できません。"
     }
+  },
+  "eventStatus": {
+    "draft": "下書き",
+    "published": "公開中",
+    "postponed": "延期",
+    "cancelled": "中止",
+    "completed": "終了",
+    "archived": "アーカイブ済み"
+  },
+  "eventActions": {
+    "publish": "公開",
+    "unpublish": "非公開にする",
+    "postpone": "延期",
+    "reschedule": "日程を変更",
+    "cancel": "イベントを中止",
+    "complete": "終了にする",
+    "archive": "アーカイブ"
+  },
+  "newEvent": {
+    "title": "イベントを作成",
+    "description": "内容はあとからすべて変更できます。公開するまでイベントは下書きのままです。",
+    "name": "イベント名",
+    "profile": "イベントの種類",
+    "timezone": "タイムゾーン",
+    "startsAt": "開始",
+    "endsAt": "終了",
+    "localTimeHint": "イベントのタイムゾーンで入力します。",
+    "venue": "会場",
+    "city": "都市",
+    "submit": "下書きを作成",
+    "slugTaken": "同じ名前のイベントがすでにあります。少し違う名前をお試しください。"
   }
 }

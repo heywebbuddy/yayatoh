@@ -2,9 +2,8 @@ import { Avatar, Button, buttonClass, Label } from '@yayatoh/ui';
 import { CalendarDays, House, Map as MapIcon, Ticket, User } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { publicDemoEvent } from '@/demo/events.ts';
 import { formatDate } from '@/lib/format.ts';
-import { devAuthEnabled } from '@/server/session.ts';
+import { publicDemoOverlay } from '@/server/demo.ts';
 
 export default async function AttendeePortal({
   params,
@@ -13,8 +12,8 @@ export default async function AttendeePortal({
 }) {
   const { locale, event } = await params;
   setRequestLocale(locale);
-  if (!devAuthEnabled()) notFound();
-  const ev = publicDemoEvent(event);
+  // The attendee portal needs tickets and attendee sign-in (M1.5+); dev/preview shows the demo.
+  const ev = publicDemoOverlay(event);
   const me = ev?.attendees[0];
   if (!ev || !me) notFound();
   const t = await getTranslations();

@@ -7,6 +7,7 @@ const PAGES = [
   { name: 'event dashboard', path: EVENT, auth: true },
   { name: 'attendees + profile', path: `${EVENT}/attendees?a=a1`, auth: true },
   { name: 'section placeholder', path: `${EVENT}/seating`, auth: true },
+  { name: 'new event', path: '/o/lakeside-events/events/new', auth: true },
   { name: 'public event page', path: '/events/midwest-leadership-summit-2027', auth: false },
   { name: 'attendee portal', path: '/portal/midwest-leadership-summit-2027', auth: false },
   { name: 'dev login', path: '/dev/login', auth: false },

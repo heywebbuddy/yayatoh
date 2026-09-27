@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {ancora nessun evento} one {# evento} other {# eventi}}",
     "events": "Eventi",
     "emptyTitle": "Ancora nessun evento",
-    "emptyDescription": "Gli eventi che crei appariranno qui.",
-    "open": "Apri evento"
+    "emptyDescription": "Crea il tuo primo evento per iniziare a vendere biglietti o inviare inviti.",
+    "open": "Apri evento",
+    "create": "Crea evento"
   },
   "team": {
     "subtitle": "{count, plural, one {# membro} other {# membri}}",
@@ -129,7 +130,9 @@
     "mix": "Per tipo di biglietto",
     "needsAttention": "Richiede attenzione",
     "readiness": "Preparazione dell’evento",
-    "readinessPercent": "Pronto al {value}%"
+    "readinessPercent": "Pronto al {value}%",
+    "noSalesTitle": "Ancora nessuna vendita",
+    "noSalesDescription": "Registrazioni, vendite e posti appariranno qui quando i biglietti saranno in vendita."
   },
   "kpi": {
     "registrations": "Registrazioni",
@@ -185,7 +188,11 @@
     "websitePublished": "Sito web pubblicato",
     "mealChoices": "Scelte dei pasti raccolte",
     "done": "Fatto",
-    "todo": "Da fare"
+    "todo": "Da fare",
+    "detailsAdded": "Nome e date aggiunti",
+    "venueSet": "Luogo aggiunto",
+    "taglineWritten": "Breve descrizione scritta",
+    "published": "Evento pubblicato"
   },
   "segments": {
     "all": "Tutti",
@@ -208,7 +215,9 @@
     "status": "Stato",
     "order": "Ordine",
     "profile": "Profilo",
-    "closeProfile": "Chiudi profilo"
+    "closeProfile": "Chiudi profilo",
+    "emptyTitle": "{term}: ancora nessuno",
+    "emptyDescription": "Le persone appariranno qui man mano che acquistano biglietti, si registrano o vengono aggiunte alla lista degli ospiti."
   },
   "attendeeStatus": {
     "paid": "Pagato",
@@ -245,7 +254,9 @@
     "allIn": "Tutti i prezzi includono tutte le commissioni. Presso {org}, con tecnologia Yayatoh.",
     "allInSuffix": "tutto incluso",
     "select": "Seleziona",
-    "poweredBy": "Con tecnologia Yayatoh"
+    "poweredBy": "Con tecnologia Yayatoh",
+    "noTicketsTitle": "I biglietti non sono ancora in vendita",
+    "noTicketsDescription": "Torna presto o segui l’organizzatore per gli aggiornamenti."
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "Questo invito è scaduto. Chiedine uno nuovo.",
       "unavailable": "Questa organizzazione non è disponibile al momento."
     }
+  },
+  "eventStatus": {
+    "draft": "Bozza",
+    "published": "Pubblicato",
+    "postponed": "Rinviato",
+    "cancelled": "Annullato",
+    "completed": "Concluso",
+    "archived": "Archiviato"
+  },
+  "eventActions": {
+    "publish": "Pubblica",
+    "unpublish": "Annulla pubblicazione",
+    "postpone": "Rinvia",
+    "reschedule": "Riprogramma",
+    "cancel": "Annulla evento",
+    "complete": "Segna come concluso",
+    "archive": "Archivia"
+  },
+  "newEvent": {
+    "title": "Crea un evento",
+    "description": "Puoi modificare tutto in seguito. L’evento resta una bozza finché non lo pubblichi.",
+    "name": "Nome dell’evento",
+    "profile": "Tipo di evento",
+    "timezone": "Fuso orario",
+    "startsAt": "Inizio",
+    "endsAt": "Fine",
+    "localTimeHint": "Nel fuso orario dell’evento.",
+    "venue": "Luogo",
+    "city": "Città",
+    "submit": "Crea bozza",
+    "slugTaken": "Esiste già un evento con questo nome. Prova con un nome leggermente diverso."
   }
 }

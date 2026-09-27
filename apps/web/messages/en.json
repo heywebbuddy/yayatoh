@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {no events yet} one {# event} other {# events}}",
     "events": "Events",
     "emptyTitle": "No events yet",
-    "emptyDescription": "Events you create will appear here.",
-    "open": "Open event"
+    "emptyDescription": "Create your first event to start selling tickets or sending invitations.",
+    "open": "Open event",
+    "create": "Create event"
   },
   "team": {
     "subtitle": "{count, plural, one {# member} other {# members}}",
@@ -129,7 +130,9 @@
     "mix": "By ticket type",
     "needsAttention": "Needs attention",
     "readiness": "Event readiness",
-    "readinessPercent": "{value}% ready"
+    "readinessPercent": "{value}% ready",
+    "noSalesTitle": "No sales yet",
+    "noSalesDescription": "Registrations, sales and seating appear here once tickets are on sale."
   },
   "kpi": {
     "registrations": "Registrations",
@@ -185,7 +188,11 @@
     "websitePublished": "Website published",
     "mealChoices": "Meal choices collected",
     "done": "Done",
-    "todo": "Not done yet"
+    "todo": "Not done yet",
+    "detailsAdded": "Name and dates added",
+    "venueSet": "Venue added",
+    "taglineWritten": "Short description written",
+    "published": "Event published"
   },
   "segments": {
     "all": "All",
@@ -208,7 +215,9 @@
     "status": "Status",
     "order": "Order",
     "profile": "Profile",
-    "closeProfile": "Close profile"
+    "closeProfile": "Close profile",
+    "emptyTitle": "No {term} yet",
+    "emptyDescription": "People appear here as they buy tickets, register or are added to the guest list."
   },
   "attendeeStatus": {
     "paid": "Paid",
@@ -245,7 +254,9 @@
     "allIn": "Every price includes all fees. At {org}, powered by Yayatoh.",
     "allInSuffix": "all-in",
     "select": "Select",
-    "poweredBy": "Powered by Yayatoh"
+    "poweredBy": "Powered by Yayatoh",
+    "noTicketsTitle": "Tickets aren't on sale yet",
+    "noTicketsDescription": "Check back soon, or follow the organizer for updates."
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "This invitation has expired. Ask for a new one.",
       "unavailable": "This organization isn't available right now."
     }
+  },
+  "eventStatus": {
+    "draft": "Draft",
+    "published": "Published",
+    "postponed": "Postponed",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "archived": "Archived"
+  },
+  "eventActions": {
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "postpone": "Postpone",
+    "reschedule": "Reschedule",
+    "cancel": "Cancel event",
+    "complete": "Mark completed",
+    "archive": "Archive"
+  },
+  "newEvent": {
+    "title": "Create an event",
+    "description": "You can change everything later. The event stays a draft until you publish it.",
+    "name": "Event name",
+    "profile": "Event type",
+    "timezone": "Time zone",
+    "startsAt": "Starts",
+    "endsAt": "Ends",
+    "localTimeHint": "In the event's time zone.",
+    "venue": "Venue",
+    "city": "City",
+    "submit": "Create draft",
+    "slugTaken": "An event with this name already exists. Try a slightly different name."
   }
 }

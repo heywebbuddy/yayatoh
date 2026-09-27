@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {暂无活动} other {# 个活动}}",
     "events": "活动",
     "emptyTitle": "暂无活动",
-    "emptyDescription": "你创建的活动将显示在这里。",
-    "open": "打开活动"
+    "emptyDescription": "创建你的第一个活动，开始售票或发送邀请。",
+    "open": "打开活动",
+    "create": "创建活动"
   },
   "team": {
     "subtitle": "{count, plural, other {# 名成员}}",
@@ -129,7 +130,9 @@
     "mix": "按票种",
     "needsAttention": "需要关注",
     "readiness": "活动准备情况",
-    "readinessPercent": "已准备 {value}%"
+    "readinessPercent": "已准备 {value}%",
+    "noSalesTitle": "暂无销售",
+    "noSalesDescription": "门票开售后，报名、销售和座位情况将显示在这里。"
   },
   "kpi": {
     "registrations": "报名数",
@@ -185,7 +188,11 @@
     "websitePublished": "网站已发布",
     "mealChoices": "已收集餐食选择",
     "done": "已完成",
-    "todo": "未完成"
+    "todo": "未完成",
+    "detailsAdded": "已添加名称和日期",
+    "venueSet": "已添加场地",
+    "taglineWritten": "已撰写简短描述",
+    "published": "活动已发布"
   },
   "segments": {
     "all": "全部",
@@ -208,7 +215,9 @@
     "status": "状态",
     "order": "订单",
     "profile": "资料",
-    "closeProfile": "关闭资料"
+    "closeProfile": "关闭资料",
+    "emptyTitle": "暂无{term}",
+    "emptyDescription": "有人购票、报名或被添加到宾客名单后，将显示在这里。"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -245,7 +254,9 @@
     "allIn": "所有价格均已包含全部费用。主办方：{org}，由 Yayatoh 提供技术支持。",
     "allInSuffix": "含全部费用",
     "select": "选择",
-    "poweredBy": "由 Yayatoh 提供技术支持"
+    "poweredBy": "由 Yayatoh 提供技术支持",
+    "noTicketsTitle": "门票尚未开售",
+    "noTicketsDescription": "请稍后再来查看，或关注主办方获取最新动态。"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -324,5 +335,36 @@
       "expired": "此邀请已过期，请申请新的邀请。",
       "unavailable": "该组织目前不可用。"
     }
+  },
+  "eventStatus": {
+    "draft": "草稿",
+    "published": "已发布",
+    "postponed": "已延期",
+    "cancelled": "已取消",
+    "completed": "已结束",
+    "archived": "已归档"
+  },
+  "eventActions": {
+    "publish": "发布",
+    "unpublish": "取消发布",
+    "postpone": "延期",
+    "reschedule": "重新安排",
+    "cancel": "取消活动",
+    "complete": "标记为已结束",
+    "archive": "归档"
+  },
+  "newEvent": {
+    "title": "创建活动",
+    "description": "所有内容之后都可以修改。发布之前，活动将保持草稿状态。",
+    "name": "活动名称",
+    "profile": "活动类型",
+    "timezone": "时区",
+    "startsAt": "开始",
+    "endsAt": "结束",
+    "localTimeHint": "按活动所在时区。",
+    "venue": "场地",
+    "city": "城市",
+    "submit": "创建草稿",
+    "slugTaken": "已存在同名活动。请换一个稍有不同的名称。"
   }
 }

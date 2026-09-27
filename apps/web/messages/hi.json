@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {अभी कोई इवेंट नहीं} one {# इवेंट} other {# इवेंट}}",
     "events": "इवेंट",
     "emptyTitle": "अभी कोई इवेंट नहीं",
-    "emptyDescription": "आपके बनाए इवेंट यहाँ दिखेंगे।",
-    "open": "इवेंट खोलें"
+    "emptyDescription": "टिकट बेचना या आमंत्रण भेजना शुरू करने के लिए अपना पहला इवेंट बनाएँ।",
+    "open": "इवेंट खोलें",
+    "create": "इवेंट बनाएँ"
   },
   "team": {
     "subtitle": "{count, plural, one {# सदस्य} other {# सदस्य}}",
@@ -129,7 +130,9 @@
     "mix": "टिकट प्रकार के अनुसार",
     "needsAttention": "ध्यान देना ज़रूरी",
     "readiness": "इवेंट की तैयारी",
-    "readinessPercent": "{value}% तैयार"
+    "readinessPercent": "{value}% तैयार",
+    "noSalesTitle": "अभी कोई बिक्री नहीं",
+    "noSalesDescription": "टिकट बिक्री पर आते ही पंजीकरण, बिक्री और सीटिंग यहाँ दिखेंगे।"
   },
   "kpi": {
     "registrations": "पंजीकरण",
@@ -185,7 +188,11 @@
     "websitePublished": "वेबसाइट प्रकाशित",
     "mealChoices": "भोजन विकल्प एकत्र",
     "done": "पूरा",
-    "todo": "अभी बाकी"
+    "todo": "अभी बाकी",
+    "detailsAdded": "नाम और तारीखें जोड़ी गईं",
+    "venueSet": "वेन्यू जोड़ा गया",
+    "taglineWritten": "छोटा विवरण लिखा गया",
+    "published": "इवेंट प्रकाशित"
   },
   "segments": {
     "all": "सभी",
@@ -208,7 +215,9 @@
     "status": "स्थिति",
     "order": "ऑर्डर",
     "profile": "प्रोफ़ाइल",
-    "closeProfile": "प्रोफ़ाइल बंद करें"
+    "closeProfile": "प्रोफ़ाइल बंद करें",
+    "emptyTitle": "अभी कोई {term} नहीं",
+    "emptyDescription": "लोग टिकट खरीदने, पंजीकरण करने या मेहमानों की सूची में जोड़े जाने पर यहाँ दिखेंगे।"
   },
   "attendeeStatus": {
     "paid": "भुगतान हुआ",
@@ -245,7 +254,9 @@
     "allIn": "हर कीमत में सभी शुल्क शामिल हैं। {org} द्वारा, Yayatoh की तकनीक पर।",
     "allInSuffix": "सभी शुल्क सहित",
     "select": "चुनें",
-    "poweredBy": "Yayatoh द्वारा संचालित"
+    "poweredBy": "Yayatoh द्वारा संचालित",
+    "noTicketsTitle": "टिकट अभी बिक्री पर नहीं हैं",
+    "noTicketsDescription": "जल्द ही दोबारा देखें, या अपडेट के लिए आयोजक को फ़ॉलो करें।"
   },
   "portal": {
     "day": "दिन {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "यह आमंत्रण समाप्त हो गया है। नए आमंत्रण का अनुरोध करें।",
       "unavailable": "यह संगठन अभी उपलब्ध नहीं है।"
     }
+  },
+  "eventStatus": {
+    "draft": "ड्राफ़्ट",
+    "published": "प्रकाशित",
+    "postponed": "स्थगित",
+    "cancelled": "रद्द",
+    "completed": "पूरा हुआ",
+    "archived": "संग्रहीत"
+  },
+  "eventActions": {
+    "publish": "प्रकाशित करें",
+    "unpublish": "अप्रकाशित करें",
+    "postpone": "स्थगित करें",
+    "reschedule": "नई तारीख तय करें",
+    "cancel": "इवेंट रद्द करें",
+    "complete": "पूरा हुआ चिह्नित करें",
+    "archive": "संग्रहीत करें"
+  },
+  "newEvent": {
+    "title": "इवेंट बनाएँ",
+    "description": "आप बाद में सब कुछ बदल सकते हैं। प्रकाशित करने तक इवेंट ड्राफ़्ट ही रहेगा।",
+    "name": "इवेंट का नाम",
+    "profile": "इवेंट का प्रकार",
+    "timezone": "समय क्षेत्र",
+    "startsAt": "शुरू",
+    "endsAt": "समाप्त",
+    "localTimeHint": "इवेंट के समय क्षेत्र में।",
+    "venue": "वेन्यू",
+    "city": "शहर",
+    "submit": "ड्राफ़्ट बनाएँ",
+    "slugTaken": "इस नाम का इवेंट पहले से मौजूद है। थोड़ा अलग नाम आज़माएँ।"
   }
 }

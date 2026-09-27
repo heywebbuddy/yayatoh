@@ -1,5 +1,6 @@
 import { setEntitlementOverrideCommand } from '@yayatoh/billing';
 import { withTenant } from '@yayatoh/db';
+import { assignEventRoleCommand, createEventCommand, type EventDto } from '@yayatoh/events';
 import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import {
@@ -16,6 +17,7 @@ export interface OrgFixture {
   readonly org: OrganizationDto;
   readonly ownerId: string;
   readonly viewerId: string;
+  readonly event: EventDto;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
 }
@@ -78,7 +80,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       sql`insert into platform.idempotency_keys (org_id, scope, key, fingerprint, response) values (${org.id}, 'fixture', ${slug}, 'f', '{}')`,
     ),
   );
-  return { org, ownerId, viewerId, ctx };
+  const event = await executeCommand(
+    createEventCommand,
+    {
+      name: `${name} Launch`,
+      slug: `${slug}-launch`,
+      timezone: 'America/Chicago',
+      startsAt: '2027-10-14T14:00:00Z',
+      endsAt: '2027-10-14T22:00:00Z',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignEventRoleCommand,
+    { eventId: event.id, userId: viewerId, role: 'door_staff' },
+    ctx(),
+    ports,
+  );
+  return { org, ownerId, viewerId, event, ctx };
 }
 
 /** The two-org adversarial fixture (roadmap §9 seeds: `two-org-adversarial`). */

@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {لا توجد فعاليات بعد} zero {لا توجد فعاليات} one {فعالية واحدة} two {فعاليتان} few {# فعاليات} many {# فعالية} other {# فعالية}}",
     "events": "الفعاليات",
     "emptyTitle": "لا توجد فعاليات بعد",
-    "emptyDescription": "ستظهر هنا الفعاليات التي تنشئها.",
-    "open": "فتح الفعالية"
+    "emptyDescription": "أنشئ فعاليتك الأولى لتبدأ في بيع التذاكر أو إرسال الدعوات.",
+    "open": "فتح الفعالية",
+    "create": "إنشاء فعالية"
   },
   "team": {
     "subtitle": "{count, plural, zero {لا أعضاء} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",
@@ -129,7 +130,9 @@
     "mix": "حسب نوع التذكرة",
     "needsAttention": "يتطلب الانتباه",
     "readiness": "جاهزية الفعالية",
-    "readinessPercent": "جاهزة بنسبة {value}%"
+    "readinessPercent": "جاهزة بنسبة {value}%",
+    "noSalesTitle": "لا توجد مبيعات بعد",
+    "noSalesDescription": "ستظهر هنا التسجيلات والمبيعات والمقاعد بمجرد طرح التذاكر للبيع."
   },
   "kpi": {
     "registrations": "التسجيلات",
@@ -185,7 +188,11 @@
     "websitePublished": "تم نشر الموقع",
     "mealChoices": "تم جمع اختيارات الوجبات",
     "done": "تم",
-    "todo": "لم يتم بعد"
+    "todo": "لم يتم بعد",
+    "detailsAdded": "تمت إضافة الاسم والتواريخ",
+    "venueSet": "تمت إضافة المكان",
+    "taglineWritten": "تمت كتابة وصف مختصر",
+    "published": "تم نشر الفعالية"
   },
   "segments": {
     "all": "الكل",
@@ -208,7 +215,9 @@
     "status": "الحالة",
     "order": "الطلب",
     "profile": "الملف الشخصي",
-    "closeProfile": "إغلاق الملف الشخصي"
+    "closeProfile": "إغلاق الملف الشخصي",
+    "emptyTitle": "{term}: لا أحد بعد",
+    "emptyDescription": "سيظهر هنا الأشخاص عند شرائهم التذاكر أو تسجيلهم أو إضافتهم إلى قائمة الضيوف."
   },
   "attendeeStatus": {
     "paid": "مدفوع",
@@ -245,7 +254,9 @@
     "allIn": "تشمل جميع الأسعار كل الرسوم. لدى {org}، بدعم من Yayatoh.",
     "allInSuffix": "شامل الرسوم",
     "select": "اختيار",
-    "poweredBy": "بدعم من Yayatoh"
+    "poweredBy": "بدعم من Yayatoh",
+    "noTicketsTitle": "التذاكر غير معروضة للبيع بعد",
+    "noTicketsDescription": "عُد قريبًا، أو تابع المنظِّم للاطلاع على آخر المستجدات."
   },
   "portal": {
     "day": "اليوم {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "انتهت صلاحية هذه الدعوة. اطلب دعوة جديدة.",
       "unavailable": "هذه المؤسسة غير متاحة حاليًا."
     }
+  },
+  "eventStatus": {
+    "draft": "مسودة",
+    "published": "منشورة",
+    "postponed": "مؤجلة",
+    "cancelled": "ملغاة",
+    "completed": "مكتملة",
+    "archived": "مؤرشفة"
+  },
+  "eventActions": {
+    "publish": "نشر",
+    "unpublish": "إلغاء النشر",
+    "postpone": "تأجيل",
+    "reschedule": "إعادة الجدولة",
+    "cancel": "إلغاء الفعالية",
+    "complete": "تحديد كمكتملة",
+    "archive": "أرشفة"
+  },
+  "newEvent": {
+    "title": "إنشاء فعالية",
+    "description": "يمكنك تغيير كل شيء لاحقًا. تبقى الفعالية مسودة إلى أن تنشرها.",
+    "name": "اسم الفعالية",
+    "profile": "نوع الفعالية",
+    "timezone": "المنطقة الزمنية",
+    "startsAt": "تبدأ",
+    "endsAt": "تنتهي",
+    "localTimeHint": "حسب المنطقة الزمنية للفعالية.",
+    "venue": "المكان",
+    "city": "المدينة",
+    "submit": "إنشاء مسودة",
+    "slugTaken": "توجد فعالية بهذا الاسم بالفعل. جرّب اسمًا مختلفًا قليلًا."
   }
 }

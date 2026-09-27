@@ -1,6 +1,8 @@
 import { closePools } from '@yayatoh/db';
-import { createCtx, executeCommand } from '@yayatoh/kernel';
+import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
+import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { addMemberCommand, createOrganization, resolveOrgSlug } from '@yayatoh/tenancy';
+import { DEMO_EVENTS } from '../src/demo/events.ts';
 import { getAuth } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
 import { ports } from '../src/server/ports.ts';
@@ -48,5 +50,36 @@ for (const o of SEED_ORGS) {
       await executeCommand(addMemberCommand, { userId, role: p.role }, { ...ownerCtx, orgId: org.id }, ports);
   }
   console.info(`seed: created ${o.slug}`);
+}
+
+// Real events for the showcase slugs (the dev overlay adds demo sales on top of these).
+for (const d of DEMO_EVENTS) {
+  const owner = PERSONAS.find((p) => p.orgSlug === d.orgSlug && p.role === 'owner');
+  const ownerId = owner && ids.get(owner.email);
+  const org = await resolveOrgSlug(d.orgSlug);
+  if (!ownerId || !org) continue;
+  const ctx = createCtx({ orgId: org.orgId, actor: { type: 'user', userId: ownerId } });
+  const exists = await executeQuery(getEventBySlugQuery, { slug: d.slug }, ctx, ports).catch(() => null);
+  if (exists) continue;
+  const e = await executeCommand(
+    createEventCommand,
+    {
+      name: d.name,
+      slug: d.slug,
+      tagline: d.tagline,
+      profile: d.profile,
+      visibility: d.profile === 'wedding' ? 'private' : 'public',
+      timezone: d.timezone,
+      startsAt: d.startsAt,
+      endsAt: d.endsAt,
+      venueName: d.venue,
+      city: d.city,
+      currency: d.currency,
+    },
+    ctx,
+    ports,
+  );
+  await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
+  console.info(`seed: event ${d.slug}`);
 }
 await closePools();

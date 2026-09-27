@@ -1,10 +1,10 @@
 /**
- * DEMO VIEW-MODELS — M1.1 only.
+ * DEMO OVERLAY — dev/preview only.
  *
- * Events, tickets, orders and attendees arrive with M1.4/M1.5. Until then the reference screens
- * render these typed view-models so the shell, navigation, vocabulary, i18n and accessibility can
- * be built and reviewed. They are scoped by org slug (an org only ever sees its own demo events)
- * and are replaced module by module; nothing here is written to the database.
+ * Events are real since M1.4a. Sales, attendees, passes and agenda arrive with M1.5+; until then
+ * the seeded showcase events (same slugs, created by `pnpm seed`) get these view-models overlaid
+ * so the reference screens can be reviewed. The overlay is keyed by org slug + event slug, is
+ * never shown when YAYATOH_DEV_AUTH is off, and nothing here is written to the database.
  */
 import type { ProfileKey } from '@yayatoh/platform';
 import type { SeriesTone } from '@yayatoh/ui';
@@ -337,10 +337,8 @@ const wedding: DemoEvent = {
 
 const EVENTS: readonly DemoEvent[] = [summit, wedding];
 
-/** Demo events for one org only. */
-export function demoEventsFor(orgSlug: string): DemoEvent[] {
-  return EVENTS.filter((e) => e.orgSlug === orgSlug);
-}
+/** Seeded showcase events (dev/preview) — `pnpm seed` creates real events with these slugs. */
+export const DEMO_EVENTS: readonly DemoEvent[] = EVENTS;
 
 export function demoEvent(orgSlug: string, slug: string): DemoEvent | undefined {
   return EVENTS.find((e) => e.orgSlug === orgSlug && e.slug === slug);

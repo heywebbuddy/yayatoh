@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {尚無活動} other {# 個活動}}",
     "events": "活動",
     "emptyTitle": "尚無活動",
-    "emptyDescription": "你建立的活動將顯示在這裡。",
-    "open": "開啟活動"
+    "emptyDescription": "建立你的第一個活動，開始售票或寄送邀請。",
+    "open": "開啟活動",
+    "create": "建立活動"
   },
   "team": {
     "subtitle": "{count, plural, other {# 位成員}}",
@@ -129,7 +130,9 @@
     "mix": "依票種",
     "needsAttention": "需要注意",
     "readiness": "活動準備狀態",
-    "readinessPercent": "已完成 {value}%"
+    "readinessPercent": "已完成 {value}%",
+    "noSalesTitle": "尚無銷售",
+    "noSalesDescription": "票券開賣後，報名、銷售與座位情況將顯示在這裡。"
   },
   "kpi": {
     "registrations": "報名數",
@@ -185,7 +188,11 @@
     "websitePublished": "網站已發布",
     "mealChoices": "已收集餐點選擇",
     "done": "已完成",
-    "todo": "尚未完成"
+    "todo": "尚未完成",
+    "detailsAdded": "已新增名稱與日期",
+    "venueSet": "已新增場地",
+    "taglineWritten": "已撰寫簡短說明",
+    "published": "活動已發布"
   },
   "segments": {
     "all": "全部",
@@ -208,7 +215,9 @@
     "status": "狀態",
     "order": "訂單",
     "profile": "個人檔案",
-    "closeProfile": "關閉個人檔案"
+    "closeProfile": "關閉個人檔案",
+    "emptyTitle": "尚無{term}",
+    "emptyDescription": "有人購票、報名或被加入賓客名單後，將顯示在這裡。"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -245,7 +254,9 @@
     "allIn": "所有價格皆已包含全部費用。主辦單位：{org}，由 Yayatoh 提供技術支援。",
     "allInSuffix": "含所有費用",
     "select": "選擇",
-    "poweredBy": "由 Yayatoh 提供技術支援"
+    "poweredBy": "由 Yayatoh 提供技術支援",
+    "noTicketsTitle": "票券尚未開賣",
+    "noTicketsDescription": "請稍後再回來查看，或追蹤主辦單位以取得最新消息。"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -324,5 +335,36 @@
       "expired": "此邀請已過期，請要求新的邀請。",
       "unavailable": "此組織目前無法使用。"
     }
+  },
+  "eventStatus": {
+    "draft": "草稿",
+    "published": "已發布",
+    "postponed": "已延期",
+    "cancelled": "已取消",
+    "completed": "已結束",
+    "archived": "已封存"
+  },
+  "eventActions": {
+    "publish": "發布",
+    "unpublish": "取消發布",
+    "postpone": "延期",
+    "reschedule": "重新排程",
+    "cancel": "取消活動",
+    "complete": "標示為已結束",
+    "archive": "封存"
+  },
+  "newEvent": {
+    "title": "建立活動",
+    "description": "所有內容之後都可以修改。發布之前，活動會維持草稿狀態。",
+    "name": "活動名稱",
+    "profile": "活動類型",
+    "timezone": "時區",
+    "startsAt": "開始",
+    "endsAt": "結束",
+    "localTimeHint": "以活動所在時區為準。",
+    "venue": "場地",
+    "city": "城市",
+    "submit": "建立草稿",
+    "slugTaken": "已有同名活動。請改用稍有不同的名稱。"
   }
 }

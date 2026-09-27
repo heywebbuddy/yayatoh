@@ -102,8 +102,9 @@
     "subtitle": "{org} · {count, plural, =0 {noch keine Events} one {# Event} other {# Events}}",
     "events": "Events",
     "emptyTitle": "Noch keine Events",
-    "emptyDescription": "Events, die du erstellst, erscheinen hier.",
-    "open": "Event öffnen"
+    "emptyDescription": "Erstelle dein erstes Event, um Tickets zu verkaufen oder Einladungen zu versenden.",
+    "open": "Event öffnen",
+    "create": "Event erstellen"
   },
   "team": {
     "subtitle": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
@@ -129,7 +130,9 @@
     "mix": "Nach Ticketart",
     "needsAttention": "Erfordert Aufmerksamkeit",
     "readiness": "Event-Bereitschaft",
-    "readinessPercent": "{value} % bereit"
+    "readinessPercent": "{value} % bereit",
+    "noSalesTitle": "Noch keine Verkäufe",
+    "noSalesDescription": "Anmeldungen, Verkäufe und Sitzplätze erscheinen hier, sobald Tickets im Verkauf sind."
   },
   "kpi": {
     "registrations": "Anmeldungen",
@@ -185,7 +188,11 @@
     "websitePublished": "Website veröffentlicht",
     "mealChoices": "Menüwahl erfasst",
     "done": "Erledigt",
-    "todo": "Noch offen"
+    "todo": "Noch offen",
+    "detailsAdded": "Name und Termine hinzugefügt",
+    "venueSet": "Veranstaltungsort hinzugefügt",
+    "taglineWritten": "Kurzbeschreibung verfasst",
+    "published": "Event veröffentlicht"
   },
   "segments": {
     "all": "Alle",
@@ -208,7 +215,9 @@
     "status": "Status",
     "order": "Bestellung",
     "profile": "Profil",
-    "closeProfile": "Profil schließen"
+    "closeProfile": "Profil schließen",
+    "emptyTitle": "Noch keine {term}",
+    "emptyDescription": "Personen erscheinen hier, sobald sie Tickets kaufen, sich anmelden oder zur Gästeliste hinzugefügt werden."
   },
   "attendeeStatus": {
     "paid": "Bezahlt",
@@ -245,7 +254,9 @@
     "allIn": "Alle Preise inklusive aller Gebühren. Bei {org}, unterstützt von Yayatoh.",
     "allInSuffix": "inkl. Gebühren",
     "select": "Auswählen",
-    "poweredBy": "Unterstützt von Yayatoh"
+    "poweredBy": "Unterstützt von Yayatoh",
+    "noTicketsTitle": "Tickets sind noch nicht im Verkauf",
+    "noTicketsDescription": "Schau bald wieder vorbei oder folge dem Veranstalter für Neuigkeiten."
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -324,5 +335,36 @@
       "expired": "Diese Einladung ist abgelaufen. Bitte um eine neue.",
       "unavailable": "Diese Organisation ist derzeit nicht verfügbar."
     }
+  },
+  "eventStatus": {
+    "draft": "Entwurf",
+    "published": "Veröffentlicht",
+    "postponed": "Verschoben",
+    "cancelled": "Abgesagt",
+    "completed": "Abgeschlossen",
+    "archived": "Archiviert"
+  },
+  "eventActions": {
+    "publish": "Veröffentlichen",
+    "unpublish": "Veröffentlichung aufheben",
+    "postpone": "Verschieben",
+    "reschedule": "Neu terminieren",
+    "cancel": "Event absagen",
+    "complete": "Als abgeschlossen markieren",
+    "archive": "Archivieren"
+  },
+  "newEvent": {
+    "title": "Event erstellen",
+    "description": "Du kannst später alles ändern. Das Event bleibt ein Entwurf, bis du es veröffentlichst.",
+    "name": "Eventname",
+    "profile": "Eventtyp",
+    "timezone": "Zeitzone",
+    "startsAt": "Beginn",
+    "endsAt": "Ende",
+    "localTimeHint": "In der Zeitzone des Events.",
+    "venue": "Veranstaltungsort",
+    "city": "Stadt",
+    "submit": "Entwurf erstellen",
+    "slugTaken": "Es gibt bereits ein Event mit diesem Namen. Versuche einen leicht abweichenden Namen."
   }
 }

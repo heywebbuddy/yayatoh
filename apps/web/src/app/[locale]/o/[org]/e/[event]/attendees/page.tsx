@@ -1,4 +1,4 @@
-import { term } from '@yayatoh/platform';
+import { isProfileKey, term } from '@yayatoh/platform';
 import {
   Avatar,
   Button,
@@ -11,12 +11,12 @@ import {
   Table,
 } from '@yayatoh/ui';
 import { X } from 'lucide-react';
-import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { type AttendeeStatus, type DemoAttendee, demoEvent } from '@/demo/events.ts';
+import type { AttendeeStatus, DemoAttendee } from '@/demo/events.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { loadConsole } from '@/server/console.ts';
+import { loadEvent } from '@/server/console.ts';
+import { demoOverlay } from '@/server/demo.ts';
 
 const STATUS_DOT: Record<AttendeeStatus, 'success' | 'warning' | 'danger'> = {
   paid: 'success',
@@ -56,10 +56,16 @@ export default async function AttendeesPage({
   const { locale, org, event } = await params;
   const { segment = 'all', q = '', a: selectedId } = await searchParams;
   setRequestLocale(locale);
-  await loadConsole(org);
-  const ev = demoEvent(org, event);
-  if (!ev) notFound();
+  const { event: real } = await loadEvent(org, event);
   const t = await getTranslations();
+  const profile = isProfileKey(real.profile) ? real.profile : 'other';
+  // Attendees are created at ticket issue (M1.5); until then only seeded showcase events have a demo list.
+  const ev = demoOverlay(org, event) ?? {
+    name: real.name,
+    profile,
+    segments: [{ key: 'all', count: 0 }],
+    attendees: [] as DemoAttendee[],
+  };
   const base = `/o/${org}/e/${event}/attendees`;
   const needle = q.trim().toLowerCase();
   const rows = ev.attendees
@@ -69,7 +75,7 @@ export default async function AttendeesPage({
         !needle || [a.name, a.company, a.order, a.seat ?? ''].some((v) => v.toLowerCase().includes(needle)),
     );
   const selected = ev.attendees.find((a) => a.id === selectedId);
-  const title = t(term(ev.profile, 'attendees'));
+  const title = t(term(profile, 'attendees'));
   const href = (p: Record<string, string | undefined>) => {
     const sp = new URLSearchParams(
       Object.entries({ segment, q, ...p }).filter(([, v]) => v) as [string, string][],
@@ -84,7 +90,7 @@ export default async function AttendeesPage({
       <div className="flex min-w-0 flex-1 flex-col gap-[18px]">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label>{ev.name}</Label>
+            <Label>{real.name}</Label>
             <h1 className="flex items-baseline gap-3 text-[32px] leading-[1.1] font-light tracking-[-0.04em] md:text-title">
               {title}
               <span className="font-mono text-[15px] text-zinc-500">
@@ -100,7 +106,7 @@ export default async function AttendeesPage({
               {t('actions.export')}
             </Button>
             <Button disabled title={t('common.comingSoon')}>
-              {t('actions.addAttendee', { term: t(term(ev.profile, 'attendee')) })}
+              {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
             </Button>
           </div>
         </div>
@@ -144,7 +150,12 @@ export default async function AttendeesPage({
           </form>
         </search>
 
-        {rows.length === 0 ? (
+        {ev.attendees.length === 0 ? (
+          <EmptyState
+            title={t('attendees.emptyTitle', { term: title })}
+            description={t('attendees.emptyDescription')}
+          />
+        ) : rows.length === 0 ? (
           <EmptyState title={t('attendees.noMatches')} description={t('attendees.noMatchesHint')} />
         ) : (
           <Table
@@ -187,7 +198,7 @@ export default async function AttendeesPage({
         <aside aria-label={t('attendees.profile')} className="w-full shrink-0 xl:w-[360px]">
           <Card size="panel" className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <Label>{t(term(ev.profile, 'attendee'))}</Label>
+              <Label>{t(term(profile, 'attendee'))}</Label>
               <Link
                 href={href({ a: undefined })}
                 aria-label={t('attendees.closeProfile')}

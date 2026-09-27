@@ -1,6 +1,7 @@
 import 'server-only';
 import { effectiveModules } from '@yayatoh/billing';
-import { createCtx, executeQuery } from '@yayatoh/kernel';
+import { getEventBySlugQuery } from '@yayatoh/events';
+import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { isProfileKey, type ProfileKey } from '@yayatoh/platform';
 import { getOrganizationQuery, memberRole, myOrganizations, resolveOrgSlug } from '@yayatoh/tenancy';
 import { notFound } from 'next/navigation';
@@ -34,3 +35,15 @@ export const loadConsole = cache(async (orgSlug: string) => {
 });
 
 export type ConsoleData = Awaited<ReturnType<typeof loadConsole>>;
+
+/** The event for the console route, under the org's RLS. Unknown or foreign slugs are a 404. */
+export const loadEvent = cache(async (orgSlug: string, eventSlug: string) => {
+  const data = await loadConsole(orgSlug);
+  try {
+    const event = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, data.ctx, ports);
+    return { data, event };
+  } catch (err) {
+    if (isDomainError(err) && err.code === 'not_found') notFound();
+    throw err;
+  }
+});

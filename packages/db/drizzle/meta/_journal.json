@@ -36,6 +36,20 @@
       "when": 1790479995426,
       "tag": "0004_invitation_status",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790480475233,
+      "tag": "0005_lyrical_wraith",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790480476766,
+      "tag": "0006_events_public",
+      "breakpoints": true
     }
   ]
 }
