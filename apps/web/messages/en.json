@@ -56,7 +56,9 @@
     "team": "Team",
     "settings": "Settings",
     "payouts": "Payouts",
-    "domains": "Domains"
+    "domains": "Domains",
+    "activity": "Activity",
+    "privacy": "Privacy requests"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "This request was already sent with different details.",
     "rate_limited": "Too many attempts. Please wait a moment.",
     "internal": "Something went wrong on our side.",
-    "reference": "Reference: {id}"
+    "reference": "Reference: {id}",
+    "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
   },
   "notFound": {
     "title": "Page not found",
@@ -355,7 +358,8 @@
     "invalid": "That email and password don't match.",
     "invalidCode": "That code is wrong or has expired.",
     "failed": "We couldn't send a code. Please try again.",
-    "devPersonas": "Development personas"
+    "devPersonas": "Development personas",
+    "rateLimited": "Too many sign-in attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
   },
   "orgPicker": {
     "emptyTitle": "You're not in an organization yet",
@@ -936,7 +940,9 @@
       "accept": "Accept",
       "accepted": "Accepted.",
       "ownerOnly": "An owner or admin needs to accept this."
-    }
+    },
+    "activityLink": "Activity log",
+    "privacyLink": "Privacy requests"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "No sales in this period",
       "emptyDescription": "Pick a longer period, or share an event page to start selling."
     }
+  },
+  "activity": {
+    "title": "Activity",
+    "description": "Everything people and the system changed in this organization. Times are in {timeZone}.",
+    "backToSettings": "Settings",
+    "integrityTitle": "Log integrity",
+    "verified": "Verified",
+    "verifiedDetail": "{count, plural, one {# entry} other {# entries}}, hash chain intact",
+    "broken": "Integrity check failed at entry #{seq}. The log may have been altered outside the app; contact support.",
+    "noAccessTitle": "Only owners and admins can see activity",
+    "noAccessDescription": "Ask an owner or admin of this organization if you need to know who changed something.",
+    "formerMember": "Former member",
+    "system": "System ({name})",
+    "apiKey": "API key",
+    "anonymous": "A guest (not signed in)",
+    "filters": {
+      "actor": "Who",
+      "anyone": "Anyone",
+      "action": "What",
+      "anyAction": "Any action",
+      "from": "From",
+      "to": "To",
+      "apply": "Filter",
+      "clear": "Clear filters"
+    },
+    "errors": {
+      "badDate": "Enter dates as YYYY-MM-DD.",
+      "backwards": "The start date is after the end date, so the dates were ignored."
+    },
+    "showing": "{count, plural, =0 {No entries} one {# entry on this page} other {# entries on this page}}",
+    "export": "Export CSV",
+    "exportError": "The export didn’t start: {reason}",
+    "exportTitle": "Activity export",
+    "emptyTitle": "No activity yet",
+    "emptyFilteredTitle": "Nothing matches these filters",
+    "emptyDescription": "Changes to events, tickets, orders, team and settings appear here as they happen.",
+    "caption": "Activity log, newest first",
+    "columns": {
+      "seq": "#",
+      "at": "When",
+      "actor": "Who",
+      "action": "Action",
+      "targetType": "Target type",
+      "targetId": "Target",
+      "details": "Details"
+    },
+    "pagination": "Activity pages",
+    "newest": "Newest",
+    "older": "Older entries"
   }
 }

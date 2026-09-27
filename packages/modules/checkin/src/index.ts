@@ -20,6 +20,7 @@ export {
   setDeviceStateCommand,
   syncScansCommand,
 } from './devices.ts';
+export { admissionsDsarTx } from './dsar.ts';
 export {
   admissionsForTicketsTx,
   admittedTicketIdsTx,

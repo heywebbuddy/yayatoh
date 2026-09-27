@@ -66,13 +66,26 @@ export function SearchPill({
   );
 }
 
-export function Avatar({ initials, label, size = 30 }: { initials: string; label: string; size?: number }) {
+/** Avatar sizes as static classes: the strict CSP allows no style attributes (M1.14a). */
+const AVATAR_SIZE = { 28: 'size-7', 30: 'size-[30px]', 48: 'size-12' } as const;
+
+export function Avatar({
+  initials,
+  label,
+  size = 30,
+}: {
+  initials: string;
+  label: string;
+  size?: keyof typeof AVATAR_SIZE;
+}) {
   return (
     <span
       role="img"
       aria-label={label}
-      style={{ width: size, height: size }}
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-zinc-900 font-mono text-[11px] text-white"
+      className={cx(
+        'inline-flex shrink-0 items-center justify-center rounded-full bg-zinc-900 font-mono text-[11px] text-white',
+        AVATAR_SIZE[size],
+      )}
     >
       {initials}
     </span>

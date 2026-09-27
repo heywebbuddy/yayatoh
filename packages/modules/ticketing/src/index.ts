@@ -22,6 +22,7 @@ export {
   revokeClaimLinkCommand,
   TicketClaimDto,
 } from './distribution.ts';
+export { eraseTicketsDsarTx, ticketsDsarTx } from './dsar.ts';
 export * from './dto.ts';
 export {
   currentFaceMinor,

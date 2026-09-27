@@ -56,7 +56,9 @@
     "team": "Team",
     "settings": "Instellingen",
     "payouts": "Uitbetalingen",
-    "domains": "Domeinen"
+    "domains": "Domeinen",
+    "activity": "Activiteit",
+    "privacy": "Privacyverzoeken"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "Dit verzoek is al verstuurd met andere gegevens.",
     "rate_limited": "Te veel pogingen. Wacht even.",
     "internal": "Er ging bij ons iets mis.",
-    "reference": "Referentie: {id}"
+    "reference": "Referentie: {id}",
+    "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -355,7 +358,8 @@
     "invalid": "Dit e-mailadres en wachtwoord komen niet overeen.",
     "invalidCode": "Deze code is onjuist of verlopen.",
     "failed": "We konden geen code versturen. Probeer het opnieuw.",
-    "devPersonas": "Ontwikkelpersona’s"
+    "devPersonas": "Ontwikkelpersona’s",
+    "rateLimited": "Te veel inlogpogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
   },
   "orgPicker": {
     "emptyTitle": "Je bent nog geen lid van een organisatie",
@@ -936,7 +940,9 @@
       "accept": "Accepteren",
       "accepted": "Geaccepteerd.",
       "ownerOnly": "Een eigenaar of beheerder moet dit accepteren."
-    }
+    },
+    "activityLink": "Activiteitenlogboek",
+    "privacyLink": "Privacyverzoeken"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "Geen verkopen in deze periode",
       "emptyDescription": "Kies een langere periode of deel een evenementpagina om te beginnen met verkopen."
     }
+  },
+  "activity": {
+    "title": "Activiteit",
+    "description": "Alles wat mensen en het systeem in deze organisatie hebben gewijzigd. Tijden in {timeZone}.",
+    "backToSettings": "Instellingen",
+    "integrityTitle": "Integriteit van het logboek",
+    "verified": "Geverifieerd",
+    "verifiedDetail": "{count, plural, one {# vermelding} other {# vermeldingen}}, hashketen intact",
+    "broken": "Integriteitscontrole mislukt bij vermelding #{seq}. Het logboek is mogelijk buiten de app gewijzigd; neem contact op met support.",
+    "noAccessTitle": "Alleen eigenaren en beheerders kunnen de activiteit zien",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie als je wilt weten wie iets heeft gewijzigd.",
+    "formerMember": "Voormalig lid",
+    "system": "Systeem ({name})",
+    "apiKey": "API-sleutel",
+    "anonymous": "Een gast (niet ingelogd)",
+    "filters": {
+      "actor": "Wie",
+      "anyone": "Iedereen",
+      "action": "Wat",
+      "anyAction": "Elke actie",
+      "from": "Van",
+      "to": "Tot",
+      "apply": "Filteren",
+      "clear": "Filters wissen"
+    },
+    "errors": {
+      "badDate": "Voer datums in als JJJJ-MM-DD.",
+      "backwards": "De begindatum ligt na de einddatum, dus de datums zijn genegeerd."
+    },
+    "showing": "{count, plural, =0 {Geen vermeldingen} one {# vermelding op deze pagina} other {# vermeldingen op deze pagina}}",
+    "export": "CSV exporteren",
+    "exportError": "De export is niet gestart: {reason}",
+    "exportTitle": "Activiteitenexport",
+    "emptyTitle": "Nog geen activiteit",
+    "emptyFilteredTitle": "Niets komt overeen met deze filters",
+    "emptyDescription": "Wijzigingen in evenementen, tickets, bestellingen, team en instellingen verschijnen hier zodra ze gebeuren.",
+    "caption": "Activiteitenlogboek, nieuwste eerst",
+    "columns": {
+      "seq": "#",
+      "at": "Wanneer",
+      "actor": "Wie",
+      "action": "Actie",
+      "targetType": "Type doel",
+      "targetId": "Doel",
+      "details": "Details"
+    },
+    "pagination": "Activiteitspagina’s",
+    "newest": "Nieuwste",
+    "older": "Oudere vermeldingen"
   }
 }

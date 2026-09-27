@@ -8,6 +8,9 @@ import { useRouter } from '@/i18n/navigation.ts';
 
 type Mode = 'password' | 'code';
 
+/** Better Auth client errors carry the HTTP status and our 429 body (`retryAfter` seconds). */
+type AuthError = { status?: number; retryAfter?: unknown } | null;
+
 /** Email + password, or a one-time code by email (M1.2). Errors map to localized messages. */
 export function SignInForm({ next }: { next: string }) {
   const t = useTranslations('signIn');
@@ -16,6 +19,14 @@ export function SignInForm({ next }: { next: string }) {
   const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  /** A 429 from the rate limiter (M1.14a): say how long to wait, in the user's language. */
+  const limited = (err: AuthError) => {
+    if (err?.status !== 429) return false;
+    const seconds = typeof err.retryAfter === 'number' ? err.retryAfter : 60;
+    setError(t('rateLimited', { minutes: Math.max(1, Math.ceil(seconds / 60)) }));
+    return true;
+  };
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,9 +40,11 @@ export function SignInForm({ next }: { next: string }) {
           email,
           password: String(form.get('password') ?? ''),
         });
+        if (limited(err)) return;
         if (err) return setError(t('invalid'));
       } else if (!codeSent) {
         const { error: err } = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
+        if (limited(err)) return;
         if (err) return setError(t('failed'));
         return setCodeSent(true);
       } else {
@@ -39,6 +52,7 @@ export function SignInForm({ next }: { next: string }) {
           email,
           otp: String(form.get('otp') ?? ''),
         });
+        if (limited(err)) return;
         if (err) return setError(t('invalidCode'));
       }
       router.replace(next);

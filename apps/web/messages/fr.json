@@ -56,7 +56,9 @@
     "team": "Équipe",
     "settings": "Paramètres",
     "payouts": "Versements",
-    "domains": "Domaines"
+    "domains": "Domaines",
+    "activity": "Activité",
+    "privacy": "Demandes de confidentialité"
   },
   "vocab": {
     "attendee": "Participant",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "Cette requête a déjà été envoyée avec d’autres informations.",
     "rate_limited": "Trop de tentatives. Veuillez patienter un instant.",
     "internal": "Une erreur s’est produite de notre côté.",
-    "reference": "Référence : {id}"
+    "reference": "Référence : {id}",
+    "rateLimitedRetry": "Trop de tentatives. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
   },
   "notFound": {
     "title": "Page introuvable",
@@ -355,7 +358,8 @@
     "invalid": "L’e-mail et le mot de passe ne correspondent pas.",
     "invalidCode": "Ce code est incorrect ou a expiré.",
     "failed": "Impossible d’envoyer le code. Veuillez réessayer.",
-    "devPersonas": "Personas de développement"
+    "devPersonas": "Personas de développement",
+    "rateLimited": "Trop de tentatives de connexion. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
   },
   "orgPicker": {
     "emptyTitle": "Vous ne faites encore partie d’aucune organisation",
@@ -936,7 +940,9 @@
       "accept": "Accepter",
       "accepted": "Accepté.",
       "ownerOnly": "Un propriétaire ou un administrateur doit l’accepter."
-    }
+    },
+    "activityLink": "Journal d’activité",
+    "privacyLink": "Demandes de confidentialité"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "Aucune vente sur cette période",
       "emptyDescription": "Choisissez une période plus longue ou partagez la page d’un événement pour commencer à vendre."
     }
+  },
+  "activity": {
+    "title": "Activité",
+    "description": "Tout ce que les personnes et le système ont modifié dans cette organisation. Heures en {timeZone}.",
+    "backToSettings": "Paramètres",
+    "integrityTitle": "Intégrité du journal",
+    "verified": "Vérifié",
+    "verifiedDetail": "{count, plural, one {# entrée} other {# entrées}}, chaîne de hachage intacte",
+    "broken": "La vérification d’intégrité a échoué à l’entrée n° {seq}. Le journal a peut-être été modifié hors de l’application ; contactez le support.",
+    "noAccessTitle": "Seuls les propriétaires et administrateurs peuvent voir l’activité",
+    "noAccessDescription": "Demandez à un propriétaire ou administrateur de cette organisation si vous devez savoir qui a modifié quelque chose.",
+    "formerMember": "Ancien membre",
+    "system": "Système ({name})",
+    "apiKey": "Clé API",
+    "anonymous": "Un invité (non connecté)",
+    "filters": {
+      "actor": "Qui",
+      "anyone": "Tout le monde",
+      "action": "Quoi",
+      "anyAction": "Toute action",
+      "from": "Du",
+      "to": "Au",
+      "apply": "Filtrer",
+      "clear": "Effacer les filtres"
+    },
+    "errors": {
+      "badDate": "Saisissez les dates au format AAAA-MM-JJ.",
+      "backwards": "La date de début est postérieure à la date de fin ; les dates ont été ignorées."
+    },
+    "showing": "{count, plural, =0 {Aucune entrée} one {# entrée sur cette page} other {# entrées sur cette page}}",
+    "export": "Exporter en CSV",
+    "exportError": "L’export n’a pas démarré : {reason}",
+    "exportTitle": "Export de l’activité",
+    "emptyTitle": "Aucune activité pour l’instant",
+    "emptyFilteredTitle": "Rien ne correspond à ces filtres",
+    "emptyDescription": "Les modifications des événements, billets, commandes, de l’équipe et des paramètres apparaissent ici dès qu’elles ont lieu.",
+    "caption": "Journal d’activité, du plus récent au plus ancien",
+    "columns": {
+      "seq": "N°",
+      "at": "Quand",
+      "actor": "Qui",
+      "action": "Action",
+      "targetType": "Type de cible",
+      "targetId": "Cible",
+      "details": "Détails"
+    },
+    "pagination": "Pages d’activité",
+    "newest": "Plus récentes",
+    "older": "Entrées plus anciennes"
   }
 }

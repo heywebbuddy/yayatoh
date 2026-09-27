@@ -8,6 +8,7 @@ export {
   FormDefinition,
   type Logic,
 } from './definition.ts';
+export { eraseResponsesDsarTx, responsesDsarTx } from './dsar.ts';
 export {
   currentFormTx,
   getFormQuery,

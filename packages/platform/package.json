@@ -10,13 +10,16 @@
     ".": "./src/index.ts",
     "./profiles": "./src/profiles/index.ts",
     "./testing": "./src/testing.ts",
-    "./http": "./src/http.ts"
+    "./http": "./src/http.ts",
+    "./security": "./src/security/index.ts",
+    "./ssrf": "./src/security/ssrf.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "drizzle-orm": "catalog:",

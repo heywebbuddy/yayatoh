@@ -1,4 +1,5 @@
 import type { NavItem } from '@yayatoh/platform';
+import { roleCan } from '@yayatoh/tenancy';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
@@ -10,7 +11,12 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
+  { key: 'activity', path: 'activity', group: 'build', module: 'core', icon: 'history' },
+  { key: 'privacy', path: 'privacy', group: 'build', module: 'core', icon: 'shield' },
 ];
+
+/** Items only some roles may open (the pages refuse everyone else too). */
+const NEEDS: Readonly<Record<string, string>> = { activity: 'audit:read', privacy: 'privacy:manage' };
 
 export default async function OrgLayout({
   children,
@@ -30,7 +36,9 @@ export default async function OrgLayout({
       nav={{
         base: `/o/${org}`,
         profile: data.profile,
-        items: ORG_NAV.filter((i) => data.modules.has(i.module)),
+        items: ORG_NAV.filter(
+          (i) => data.modules.has(i.module) && (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)),
+        ),
       }}
     >
       {children}

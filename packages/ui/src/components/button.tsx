@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes, Ref } from 'react';
 import { cx } from '../cx.ts';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'on-dark' | 'glass';
@@ -34,6 +34,7 @@ export function buttonClass(
 }
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  ref?: Ref<HTMLButtonElement>;
   variant?: ButtonVariant;
   size?: ButtonSize;
 }

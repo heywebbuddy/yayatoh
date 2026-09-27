@@ -56,7 +56,9 @@
     "team": "團隊",
     "settings": "設定",
     "payouts": "收款",
-    "domains": "網域"
+    "domains": "網域",
+    "activity": "活動",
+    "privacy": "隱私請求"
   },
   "vocab": {
     "attendee": "參加者",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "此請求已使用不同的資料送出過。",
     "rate_limited": "嘗試次數過多，請稍候。",
     "internal": "我們這邊發生了問題。",
-    "reference": "參考編號：{id}"
+    "reference": "參考編號：{id}",
+    "rateLimitedRetry": "嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
   },
   "notFound": {
     "title": "找不到頁面",
@@ -355,7 +358,8 @@
     "invalid": "電子郵件與密碼不符。",
     "invalidCode": "驗證碼錯誤或已過期。",
     "failed": "無法寄送驗證碼，請再試一次。",
-    "devPersonas": "開發測試角色"
+    "devPersonas": "開發測試角色",
+    "rateLimited": "登入嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
   },
   "orgPicker": {
     "emptyTitle": "你尚未加入任何組織",
@@ -936,7 +940,9 @@
       "accept": "接受",
       "accepted": "已接受。",
       "ownerOnly": "需要擁有者或管理員接受。"
-    }
+    },
+    "activityLink": "活動紀錄",
+    "privacyLink": "隱私請求"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "此期間沒有銷售",
       "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
     }
+  },
+  "activity": {
+    "title": "活動",
+    "description": "人員和系統在此組織中所做的所有變更。時間為 {timeZone}。",
+    "backToSettings": "設定",
+    "integrityTitle": "紀錄完整性",
+    "verified": "已驗證",
+    "verifiedDetail": "{count, plural, other {# 筆紀錄}}，雜湊鏈完整",
+    "broken": "完整性檢查在第 {seq} 筆紀錄處失敗。紀錄可能在應用程式之外遭竄改；請聯絡支援。",
+    "noAccessTitle": "只有擁有者和管理員可以查看活動",
+    "noAccessDescription": "如需了解是誰變更了內容，請詢問此組織的擁有者或管理員。",
+    "formerMember": "前成員",
+    "system": "系統（{name}）",
+    "apiKey": "API 金鑰",
+    "anonymous": "訪客（未登入）",
+    "filters": {
+      "actor": "誰",
+      "anyone": "任何人",
+      "action": "什麼",
+      "anyAction": "任何操作",
+      "from": "從",
+      "to": "到",
+      "apply": "篩選",
+      "clear": "清除篩選"
+    },
+    "errors": {
+      "badDate": "請以 YYYY-MM-DD 格式輸入日期。",
+      "backwards": "開始日期晚於結束日期，因此已忽略日期。"
+    },
+    "showing": "{count, plural, =0 {沒有紀錄} other {本頁 # 筆紀錄}}",
+    "export": "匯出 CSV",
+    "exportError": "匯出未開始：{reason}",
+    "exportTitle": "活動匯出",
+    "emptyTitle": "尚無活動",
+    "emptyFilteredTitle": "沒有符合這些篩選條件的內容",
+    "emptyDescription": "對活動、票券、訂單、團隊和設定的變更會在發生時顯示在這裡。",
+    "caption": "活動紀錄，最新在前",
+    "columns": {
+      "seq": "#",
+      "at": "時間",
+      "actor": "誰",
+      "action": "操作",
+      "targetType": "對象類型",
+      "targetId": "對象",
+      "details": "詳情"
+    },
+    "pagination": "活動分頁",
+    "newest": "最新",
+    "older": "更早的紀錄"
   }
 }

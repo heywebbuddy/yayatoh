@@ -11,6 +11,7 @@ import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
+import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 import { getSession } from '@/server/session.ts';
 
 export interface CheckoutState {
@@ -18,6 +19,8 @@ export interface CheckoutState {
   readonly reason?: string;
   /** The question whose answer was rejected (checkout questions). */
   readonly field?: string;
+  /** `rate_limited`: minutes until the buyer may try again. */
+  readonly retryMinutes?: number;
 }
 
 /**
@@ -30,6 +33,9 @@ export async function checkoutAction(
   form: FormData,
 ): Promise<CheckoutState> {
   const locale = await getLocale();
+  // Each checkout start holds inventory: limit per device (shared venue IPs stay usable).
+  const limit = await limitAction('checkoutStart');
+  if (!limit.allowed) return { code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };
   const target = await checkoutTarget(slug);
   if (!target) return { code: 'not_found' };
   const event = await publicEventBySlug(slug);
@@ -135,7 +141,11 @@ export async function checkoutAction(
   nextRedirect(payment.redirectUrl);
 }
 
-export type HolderLinkState = { readonly sent: boolean; readonly code: string | null };
+export type HolderLinkState = {
+  readonly sent: boolean;
+  readonly code: string | null;
+  readonly retryMinutes?: number;
+};
 
 /**
  * "Email me my tickets": the same answer whether or not the address has tickets here (no
@@ -146,12 +156,16 @@ export async function requestHolderLinkAction(
   _prev: HolderLinkState,
   form: FormData,
 ): Promise<HolderLinkState> {
+  const email = String(form.get('email') ?? '').trim();
+  // Each request emails a magic link: limit per device and per address.
+  const limit = await limitAction('holderLink', { identity: email, scope: 'request' });
+  if (!limit.allowed) return { sent: false, code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };
   const target = await checkoutTarget(slug);
   if (!target) return { sent: false, code: 'not_found' };
   try {
     await executeCommand(
       requestHolderLinkCommand,
-      { eventId: target.eventId, email: String(form.get('email') ?? '').trim() },
+      { eventId: target.eventId, email },
       createCtx({ orgId: target.orgId }),
       ports,
     );

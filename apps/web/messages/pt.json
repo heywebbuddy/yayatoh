@@ -56,7 +56,9 @@
     "team": "Equipe",
     "settings": "Configurações",
     "payouts": "Repasses",
-    "domains": "Domínios"
+    "domains": "Domínios",
+    "activity": "Atividade",
+    "privacy": "Pedidos de privacidade"
   },
   "vocab": {
     "attendee": "Participante",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "Esta solicitação já foi enviada com dados diferentes.",
     "rate_limited": "Muitas tentativas. Aguarde um momento.",
     "internal": "Algo deu errado do nosso lado.",
-    "reference": "Referência: {id}"
+    "reference": "Referência: {id}",
+    "rateLimitedRetry": "Demasiadas tentativas. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -355,7 +358,8 @@
     "invalid": "O e-mail e a senha não correspondem.",
     "invalidCode": "Esse código está incorreto ou expirou.",
     "failed": "Não foi possível enviar o código. Tente novamente.",
-    "devPersonas": "Personas de desenvolvimento"
+    "devPersonas": "Personas de desenvolvimento",
+    "rateLimited": "Demasiadas tentativas de início de sessão. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "orgPicker": {
     "emptyTitle": "Você ainda não faz parte de uma organização",
@@ -936,7 +940,9 @@
       "accept": "Aceitar",
       "accepted": "Aceito.",
       "ownerOnly": "Um proprietário ou administrador precisa aceitar isto."
-    }
+    },
+    "activityLink": "Registo de atividade",
+    "privacyLink": "Pedidos de privacidade"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "Sem vendas neste período",
       "emptyDescription": "Escolha um período mais longo ou compartilhe a página de um evento para começar a vender."
     }
+  },
+  "activity": {
+    "title": "Atividade",
+    "description": "Tudo o que as pessoas e o sistema alteraram nesta organização. Horas em {timeZone}.",
+    "backToSettings": "Definições",
+    "integrityTitle": "Integridade do registo",
+    "verified": "Verificado",
+    "verifiedDetail": "{count, plural, one {# entrada} other {# entradas}}, cadeia de hash intacta",
+    "broken": "A verificação de integridade falhou na entrada n.º {seq}. O registo pode ter sido alterado fora da aplicação; contacte o suporte.",
+    "noAccessTitle": "Só proprietários e administradores podem ver a atividade",
+    "noAccessDescription": "Pergunte a um proprietário ou administrador desta organização se precisar de saber quem alterou algo.",
+    "formerMember": "Antigo membro",
+    "system": "Sistema ({name})",
+    "apiKey": "Chave de API",
+    "anonymous": "Um convidado (sem sessão iniciada)",
+    "filters": {
+      "actor": "Quem",
+      "anyone": "Qualquer pessoa",
+      "action": "O quê",
+      "anyAction": "Qualquer ação",
+      "from": "De",
+      "to": "Até",
+      "apply": "Filtrar",
+      "clear": "Limpar filtros"
+    },
+    "errors": {
+      "badDate": "Introduza as datas como AAAA-MM-DD.",
+      "backwards": "A data de início é posterior à data de fim, por isso as datas foram ignoradas."
+    },
+    "showing": "{count, plural, =0 {Sem entradas} one {# entrada nesta página} other {# entradas nesta página}}",
+    "export": "Exportar CSV",
+    "exportError": "A exportação não começou: {reason}",
+    "exportTitle": "Exportação de atividade",
+    "emptyTitle": "Ainda sem atividade",
+    "emptyFilteredTitle": "Nada corresponde a estes filtros",
+    "emptyDescription": "As alterações a eventos, bilhetes, encomendas, equipa e definições aparecem aqui assim que acontecem.",
+    "caption": "Registo de atividade, mais recente primeiro",
+    "columns": {
+      "seq": "N.º",
+      "at": "Quando",
+      "actor": "Quem",
+      "action": "Ação",
+      "targetType": "Tipo de alvo",
+      "targetId": "Alvo",
+      "details": "Detalhes"
+    },
+    "pagination": "Páginas de atividade",
+    "newest": "Mais recentes",
+    "older": "Entradas anteriores"
   }
 }

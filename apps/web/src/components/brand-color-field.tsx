@@ -3,6 +3,7 @@
 import { brandPalette } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { useCssomStyle } from '@/lib/cssom-style.ts';
 
 /** Brand colour with a live preview and the WCAG contrast check (ADR 0018 brand kit). */
 export function BrandColorField({ initial, fallback }: { initial: string | null; fallback: string }) {
@@ -10,6 +11,7 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
   const [value, setValue] = useState(initial ?? '');
   const valid = /^#[0-9a-fA-F]{6}$/.test(value);
   const p = brandPalette(valid ? value.toLowerCase() : fallback);
+  const preview = useCssomStyle<HTMLSpanElement>({ background: p.background, color: p.text });
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end gap-3">
@@ -36,8 +38,8 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
           className="size-10 cursor-pointer rounded-pill border border-zinc-200 bg-white"
         />
         <span
+          ref={preview}
           data-testid="brand-preview"
-          style={{ background: p.background, color: p.text }}
           className="inline-flex min-h-10 items-center rounded-pill px-5 text-body"
         >
           {t('preview')}

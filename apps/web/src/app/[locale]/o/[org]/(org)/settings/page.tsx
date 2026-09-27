@@ -7,7 +7,7 @@ import {
   legalPagesQuery,
   roleCan,
 } from '@yayatoh/tenancy';
-import { Card, color, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, color, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
@@ -54,7 +54,24 @@ export default async function SettingsPage({
   );
   return (
     <>
-      <PageHeader title={t('settings.title')} description={o.name} />
+      <PageHeader
+        title={t('settings.title')}
+        description={o.name}
+        actions={
+          <>
+            {roleCan(data.role, 'audit:read') ? (
+              <Link href={`/o/${org}/activity`} className={buttonClass('secondary', 'sm')}>
+                {t('settings.activityLink')}
+              </Link>
+            ) : null}
+            {roleCan(data.role, 'privacy:manage') ? (
+              <Link href={`/o/${org}/privacy`} className={buttonClass('secondary', 'sm')}>
+                {t('settings.privacyLink')}
+              </Link>
+            ) : null}
+          </>
+        }
+      />
       {need === 'terms' ? (
         <p
           role="alert"

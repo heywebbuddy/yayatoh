@@ -56,7 +56,9 @@
     "team": "Team",
     "settings": "Einstellungen",
     "payouts": "Auszahlungen",
-    "domains": "Domains"
+    "domains": "Domains",
+    "activity": "Aktivität",
+    "privacy": "Datenschutzanfragen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "Diese Anfrage wurde bereits mit anderen Angaben gesendet.",
     "rate_limited": "Zu viele Versuche. Bitte warte einen Moment.",
     "internal": "Bei uns ist etwas schiefgelaufen.",
-    "reference": "Referenz: {id}"
+    "reference": "Referenz: {id}",
+    "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -355,7 +358,8 @@
     "invalid": "E-Mail und Passwort passen nicht zusammen.",
     "invalidCode": "Dieser Code ist falsch oder abgelaufen.",
     "failed": "Wir konnten keinen Code senden. Bitte versuche es erneut.",
-    "devPersonas": "Entwicklungs-Personas"
+    "devPersonas": "Entwicklungs-Personas",
+    "rateLimited": "Zu viele Anmeldeversuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
   },
   "orgPicker": {
     "emptyTitle": "Du bist noch in keiner Organisation",
@@ -936,7 +940,9 @@
       "accept": "Akzeptieren",
       "accepted": "Akzeptiert.",
       "ownerOnly": "Eine Inhaberin, ein Inhaber oder ein Admin muss dies akzeptieren."
-    }
+    },
+    "activityLink": "Aktivitätsprotokoll",
+    "privacyLink": "Datenschutzanfragen"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "Keine Verkäufe in diesem Zeitraum",
       "emptyDescription": "Wähle einen längeren Zeitraum oder teile eine Veranstaltungsseite, um zu verkaufen."
     }
+  },
+  "activity": {
+    "title": "Aktivität",
+    "description": "Alles, was Personen und das System in dieser Organisation geändert haben. Zeiten in {timeZone}.",
+    "backToSettings": "Einstellungen",
+    "integrityTitle": "Integrität des Protokolls",
+    "verified": "Verifiziert",
+    "verifiedDetail": "{count, plural, one {# Eintrag} other {# Einträge}}, Hash-Kette intakt",
+    "broken": "Integritätsprüfung bei Eintrag #{seq} fehlgeschlagen. Das Protokoll wurde möglicherweise außerhalb der App verändert; wenden Sie sich an den Support.",
+    "noAccessTitle": "Nur Inhaber und Admins können die Aktivität sehen",
+    "noAccessDescription": "Fragen Sie einen Inhaber oder Admin dieser Organisation, wenn Sie wissen müssen, wer etwas geändert hat.",
+    "formerMember": "Ehemaliges Mitglied",
+    "system": "System ({name})",
+    "apiKey": "API-Schlüssel",
+    "anonymous": "Ein Gast (nicht angemeldet)",
+    "filters": {
+      "actor": "Wer",
+      "anyone": "Alle",
+      "action": "Was",
+      "anyAction": "Jede Aktion",
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Filtern",
+      "clear": "Filter zurücksetzen"
+    },
+    "errors": {
+      "badDate": "Geben Sie Daten als JJJJ-MM-TT ein.",
+      "backwards": "Das Startdatum liegt nach dem Enddatum, daher wurden die Daten ignoriert."
+    },
+    "showing": "{count, plural, =0 {Keine Einträge} one {# Eintrag auf dieser Seite} other {# Einträge auf dieser Seite}}",
+    "export": "CSV exportieren",
+    "exportError": "Der Export wurde nicht gestartet: {reason}",
+    "exportTitle": "Aktivitätsexport",
+    "emptyTitle": "Noch keine Aktivität",
+    "emptyFilteredTitle": "Nichts entspricht diesen Filtern",
+    "emptyDescription": "Änderungen an Veranstaltungen, Tickets, Bestellungen, Team und Einstellungen erscheinen hier, sobald sie passieren.",
+    "caption": "Aktivitätsprotokoll, neueste zuerst",
+    "columns": {
+      "seq": "#",
+      "at": "Wann",
+      "actor": "Wer",
+      "action": "Aktion",
+      "targetType": "Zieltyp",
+      "targetId": "Ziel",
+      "details": "Details"
+    },
+    "pagination": "Aktivitätsseiten",
+    "newest": "Neueste",
+    "older": "Ältere Einträge"
   }
 }

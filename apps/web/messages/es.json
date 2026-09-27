@@ -56,7 +56,9 @@
     "team": "Equipo",
     "settings": "Configuración",
     "payouts": "Pagos recibidos",
-    "domains": "Dominios"
+    "domains": "Dominios",
+    "activity": "Actividad",
+    "privacy": "Solicitudes de privacidad"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "Esta solicitud ya se envió con datos diferentes.",
     "rate_limited": "Demasiados intentos. Espera un momento.",
     "internal": "Algo salió mal por nuestra parte.",
-    "reference": "Referencia: {id}"
+    "reference": "Referencia: {id}",
+    "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -355,7 +358,8 @@
     "invalid": "El correo electrónico y la contraseña no coinciden.",
     "invalidCode": "Ese código es incorrecto o ha caducado.",
     "failed": "No pudimos enviar el código. Inténtalo de nuevo.",
-    "devPersonas": "Perfiles de desarrollo"
+    "devPersonas": "Perfiles de desarrollo",
+    "rateLimited": "Demasiados intentos de inicio de sesión. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "orgPicker": {
     "emptyTitle": "Aún no perteneces a ninguna organización",
@@ -936,7 +940,9 @@
       "accept": "Aceptar",
       "accepted": "Aceptado.",
       "ownerOnly": "Un propietario o administrador debe aceptarlo."
-    }
+    },
+    "activityLink": "Registro de actividad",
+    "privacyLink": "Solicitudes de privacidad"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "No hay ventas en este periodo",
       "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
     }
+  },
+  "activity": {
+    "title": "Actividad",
+    "description": "Todo lo que las personas y el sistema cambiaron en esta organización. Horas en {timeZone}.",
+    "backToSettings": "Configuración",
+    "integrityTitle": "Integridad del registro",
+    "verified": "Verificado",
+    "verifiedDetail": "{count, plural, one {# entrada} other {# entradas}}, cadena de hash intacta",
+    "broken": "La comprobación de integridad falló en la entrada n.º {seq}. Es posible que el registro se haya alterado fuera de la aplicación; contacta con soporte.",
+    "noAccessTitle": "Solo propietarios y administradores pueden ver la actividad",
+    "noAccessDescription": "Pregunta a un propietario o administrador de esta organización si necesitas saber quién cambió algo.",
+    "formerMember": "Exmiembro",
+    "system": "Sistema ({name})",
+    "apiKey": "Clave de API",
+    "anonymous": "Un invitado (sin sesión iniciada)",
+    "filters": {
+      "actor": "Quién",
+      "anyone": "Cualquiera",
+      "action": "Qué",
+      "anyAction": "Cualquier acción",
+      "from": "Desde",
+      "to": "Hasta",
+      "apply": "Filtrar",
+      "clear": "Borrar filtros"
+    },
+    "errors": {
+      "badDate": "Introduce las fechas como AAAA-MM-DD.",
+      "backwards": "La fecha de inicio es posterior a la de fin, así que se ignoraron las fechas."
+    },
+    "showing": "{count, plural, =0 {Sin entradas} one {# entrada en esta página} other {# entradas en esta página}}",
+    "export": "Exportar CSV",
+    "exportError": "La exportación no se inició: {reason}",
+    "exportTitle": "Exportación de actividad",
+    "emptyTitle": "Aún no hay actividad",
+    "emptyFilteredTitle": "Nada coincide con estos filtros",
+    "emptyDescription": "Los cambios en eventos, entradas, pedidos, equipo y configuración aparecen aquí en cuanto ocurren.",
+    "caption": "Registro de actividad, lo más reciente primero",
+    "columns": {
+      "seq": "#",
+      "at": "Cuándo",
+      "actor": "Quién",
+      "action": "Acción",
+      "targetType": "Tipo de objetivo",
+      "targetId": "Objetivo",
+      "details": "Detalles"
+    },
+    "pagination": "Páginas de actividad",
+    "newest": "Más recientes",
+    "older": "Entradas anteriores"
   }
 }

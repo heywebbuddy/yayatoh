@@ -7,6 +7,7 @@ import {
   ClipboardList,
   Globe,
   Heart,
+  History,
   House,
   Image,
   Landmark,
@@ -20,6 +21,7 @@ import {
   ScanLine,
   Search,
   Settings,
+  ShieldCheck,
   Store,
   Ticket,
   Users,
@@ -50,6 +52,8 @@ const ICONS: Record<string, LucideIcon> = {
   bell: Bell,
   settings: Settings,
   landmark: Landmark,
+  history: History,
+  shield: ShieldCheck,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

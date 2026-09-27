@@ -6,6 +6,7 @@ import { type FormEvent, startTransition, useActionState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
 import { type SeatMapView, SeatPicker } from '@/components/seat-picker.tsx';
+import { useCssomStyle } from '@/lib/cssom-style.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 export interface PassView {
@@ -48,6 +49,9 @@ export function CheckoutForm({
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
+  const brandButton = useCssomStyle<HTMLButtonElement>(
+    brand ? { background: brand.background, color: brand.text, borderColor: brand.background } : null,
+  );
   // Submit without React's automatic form reset, so an error (a seat just taken, a bad promo
   // code) keeps everything the buyer typed and chose. Without JavaScript the form still posts.
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -61,23 +65,25 @@ export function CheckoutForm({
   const error =
     state.code === null
       ? null
-      : state.reason === 'seats_taken'
-        ? t('checkout.seatsTaken')
-        : state.reason === 'choose_seats'
-          ? t('checkout.chooseSeats')
-          : state.reason === 'sold_out'
-            ? t('checkout.soldOut')
-            : state.reason === 'empty'
-              ? t('checkout.chooseTickets')
-              : state.reason === 'promo_invalid'
-                ? t('checkout.promoInvalid')
-                : state.reason === 'donation_amount'
-                  ? t('checkout.donationTooLow')
-                  : state.reason === 'form_invalid'
-                    ? t('checkout.questionsInvalid')
-                    : state.reason === 'checkout_paused'
-                      ? t('publicEvent.salesPausedTitle')
-                      : t(errorMessageKey(state.code));
+      : state.code === 'rate_limited'
+        ? t('errors.rateLimitedRetry', { minutes: state.retryMinutes ?? 1 })
+        : state.reason === 'seats_taken'
+          ? t('checkout.seatsTaken')
+          : state.reason === 'choose_seats'
+            ? t('checkout.chooseSeats')
+            : state.reason === 'sold_out'
+              ? t('checkout.soldOut')
+              : state.reason === 'empty'
+                ? t('checkout.chooseTickets')
+                : state.reason === 'promo_invalid'
+                  ? t('checkout.promoInvalid')
+                  : state.reason === 'donation_amount'
+                    ? t('checkout.donationTooLow')
+                    : state.reason === 'form_invalid'
+                      ? t('checkout.questionsInvalid')
+                      : state.reason === 'checkout_paused'
+                        ? t('publicEvent.salesPausedTitle')
+                        : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -218,15 +224,7 @@ export function CheckoutForm({
                 label={t('checkout.promoCode')}
               />
             </div>
-            <Button
-              type="submit"
-              disabled={pending}
-              style={
-                brand
-                  ? { background: brand.background, color: brand.text, borderColor: brand.background }
-                  : undefined
-              }
-            >
+            <Button type="submit" disabled={pending} ref={brandButton}>
               {t('checkout.continue')}
             </Button>
           </div>

@@ -56,7 +56,9 @@
     "team": "团队",
     "settings": "设置",
     "payouts": "收款",
-    "domains": "域名"
+    "domains": "域名",
+    "activity": "活动",
+    "privacy": "隐私请求"
   },
   "vocab": {
     "attendee": "参会者",
@@ -333,7 +335,8 @@
     "idempotency_key_reused": "此请求已使用不同的信息发送过。",
     "rate_limited": "尝试次数过多，请稍候。",
     "internal": "我们这边出了点问题。",
-    "reference": "参考编号：{id}"
+    "reference": "参考编号：{id}",
+    "rateLimitedRetry": "尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
   },
   "notFound": {
     "title": "页面未找到",
@@ -355,7 +358,8 @@
     "invalid": "邮箱和密码不匹配。",
     "invalidCode": "验证码错误或已过期。",
     "failed": "无法发送验证码，请重试。",
-    "devPersonas": "开发测试角色"
+    "devPersonas": "开发测试角色",
+    "rateLimited": "登录尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
   },
   "orgPicker": {
     "emptyTitle": "你还没有加入任何组织",
@@ -936,7 +940,9 @@
       "accept": "接受",
       "accepted": "已接受。",
       "ownerOnly": "需要所有者或管理员接受。"
-    }
+    },
+    "activityLink": "活动日志",
+    "privacyLink": "隐私请求"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1527,5 +1533,54 @@
       "emptyTitle": "此时间段内没有销售",
       "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。"
     }
+  },
+  "activity": {
+    "title": "活动",
+    "description": "人员和系统在此组织中所做的全部更改。时间为 {timeZone}。",
+    "backToSettings": "设置",
+    "integrityTitle": "日志完整性",
+    "verified": "已验证",
+    "verifiedDetail": "{count, plural, other {# 条记录}}，哈希链完整",
+    "broken": "完整性检查在第 {seq} 条记录处失败。日志可能在应用之外被篡改；请联系支持。",
+    "noAccessTitle": "只有所有者和管理员可以查看活动",
+    "noAccessDescription": "如需了解是谁更改了内容，请询问此组织的所有者或管理员。",
+    "formerMember": "前成员",
+    "system": "系统（{name}）",
+    "apiKey": "API 密钥",
+    "anonymous": "访客（未登录）",
+    "filters": {
+      "actor": "谁",
+      "anyone": "任何人",
+      "action": "什么",
+      "anyAction": "任何操作",
+      "from": "从",
+      "to": "到",
+      "apply": "筛选",
+      "clear": "清除筛选"
+    },
+    "errors": {
+      "badDate": "请按 YYYY-MM-DD 格式输入日期。",
+      "backwards": "开始日期晚于结束日期，因此已忽略日期。"
+    },
+    "showing": "{count, plural, =0 {没有记录} other {本页 # 条记录}}",
+    "export": "导出 CSV",
+    "exportError": "导出未开始：{reason}",
+    "exportTitle": "活动导出",
+    "emptyTitle": "暂无活动",
+    "emptyFilteredTitle": "没有符合这些筛选条件的内容",
+    "emptyDescription": "对活动、门票、订单、团队和设置的更改会在发生时显示在这里。",
+    "caption": "活动日志，最新在前",
+    "columns": {
+      "seq": "#",
+      "at": "时间",
+      "actor": "谁",
+      "action": "操作",
+      "targetType": "对象类型",
+      "targetId": "对象",
+      "details": "详情"
+    },
+    "pagination": "活动分页",
+    "newest": "最新",
+    "older": "更早的记录"
   }
 }
