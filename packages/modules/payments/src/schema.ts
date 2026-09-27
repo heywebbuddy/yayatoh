@@ -86,12 +86,15 @@ export const journalEntries = tenantTable(
     kind: text('kind').notNull(),
     refType: text('ref_type').notNull(),
     refId: uuid('ref_id').notNull(),
+    /** The event the money belongs to (settlements release per event). */
+    eventId: uuid('event_id'),
     occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull(),
     memo: jsonb('memo').notNull().default(sql`'{}'::jsonb`),
   },
   (t) => [
     uniqueIndex('journal_entries_org_key').on(t.orgId, t.idempotencyKey),
     index('journal_entries_org_ref_idx').on(t.orgId, t.refType, t.refId),
+    index('journal_entries_org_event_idx').on(t.orgId, t.eventId),
   ],
 );
 
@@ -119,5 +122,52 @@ export const postings = tenantTable(
       columns: [t.orgId, t.journalId],
       foreignColumns: [journalEntries.orgId, journalEntries.id],
     }),
+  ],
+);
+
+export const SETTLEMENT_KINDS = ['event', 'reserve'] as const;
+export const SETTLEMENT_STATUSES = ['ready', 'waiting_account', 'transferred', 'failed'] as const;
+
+/**
+ * Settlements (M1.6c, platform_mor): an event's held funds released after the event (less the
+ * reserve and any receivable), or a reserve released after the dispute window, then transferred
+ * to the organizer's connected account (separate charges & transfers, transfer at release).
+ */
+export const settlements = tenantTable(
+  paymentsSchema,
+  'settlements',
+  {
+    kind: text('kind').notNull(),
+    eventId: uuid('event_id'),
+    currency: text('currency').notNull(),
+    status: text('status').notNull(),
+    /** Released from payable_held (event) or reserve (reserve release). */
+    releasedMinor: bigint('released_minor', { mode: 'number' }).notNull(),
+    /** Kept back as reserve until reserveReleaseAt. */
+    reserveMinor: bigint('reserve_minor', { mode: 'number' }).notNull().default(0),
+    /** Netted against what the organizer owed (receivable). */
+    nettedMinor: bigint('netted_minor', { mode: 'number' }).notNull().default(0),
+    /** What is transferred: released − reserve − netted. */
+    amountMinor: bigint('amount_minor', { mode: 'number' }).notNull(),
+    reserveReleaseAt: timestamp('reserve_release_at', { withTimezone: true }),
+    reserveReleasedAt: timestamp('reserve_released_at', { withTimezone: true }),
+    destinationAccountId: text('destination_account_id'),
+    transferId: text('transfer_id'),
+    failure: text('failure'),
+    releasedAt: timestamp('released_at', { withTimezone: true }).notNull(),
+    transferredAt: timestamp('transferred_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('settlements_org_status_idx').on(t.orgId, t.status),
+    index('settlements_org_event_idx').on(t.orgId, t.eventId),
+    check('settlements_kind_check', sql.raw(`kind in (${SETTLEMENT_KINDS.map((k) => `'${k}'`).join(', ')})`)),
+    check(
+      'settlements_status_check',
+      sql.raw(`status in (${SETTLEMENT_STATUSES.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check(
+      'settlements_amounts_check',
+      sql`released_minor >= 0 and reserve_minor >= 0 and netted_minor >= 0 and amount_minor >= 0 and amount_minor = released_minor - reserve_minor - netted_minor`,
+    ),
   ],
 );

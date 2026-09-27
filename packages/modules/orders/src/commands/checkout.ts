@@ -287,6 +287,7 @@ export const applyProviderEventCommand = tenantCommand({
     // The ledger records the sale in the same transaction (roadmap §5.3).
     await postSaleTx(tx, ctx, {
       orderId: order.id,
+      eventId: order.eventId,
       fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor',
       totalMinor: order.totalMinor,
       feeMinor: order.feeMinor,

@@ -988,7 +988,28 @@
     "continue": "Einrichtung fortsetzen",
     "returned": "Danke. Der Zahlungsanbieter prüft deine Angaben; diese Seite wird aktualisiert, sobald das erledigt ist.",
     "noAccess": "Nur Inhaber, Admins und Finanzen können die Auszahlungsdaten ändern.",
-    "onHold": "Auszahlungen sind angehalten. Der Ticketverkauf läuft weiter; wende dich an den Yayatoh-Support, um mehr zu erfahren."
+    "onHold": "Auszahlungen sind angehalten. Der Ticketverkauf läuft weiter; wende dich an den Yayatoh-Support, um mehr zu erfahren.",
+    "settlements": {
+      "title": "Abrechnungen",
+      "description": "Wenn Yayatoh das Ticketgeld für dich entgegennimmt, wird es 5 Werktage nach dem Ende jedes Events ausgezahlt. 5 % werden 90 Tage lang für mögliche Erstattungen oder Rückbuchungen einbehalten, und offene Beträge, die du uns schuldest, werden vorher abgezogen.",
+      "empty": "Noch keine Abrechnungen.",
+      "date": "Freigegeben",
+      "what": "Für",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Rücklage freigegeben · {event}"
+      },
+      "released": "Freigegeben",
+      "kept": "Einbehalten",
+      "amount": "Ausgezahlt",
+      "statusCol": "Status",
+      "status": {
+        "ready": "Wird gesendet",
+        "waiting_account": "Warten auf dein Auszahlungskonto",
+        "transferred": "Ausgezahlt",
+        "failed": "Neuer Versuch läuft"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",

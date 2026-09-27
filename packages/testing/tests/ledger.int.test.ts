@@ -55,11 +55,12 @@ describe('ledger (M1.6a)', () => {
     );
     expect(row?.n).toBe(1);
     expect(row?.total).toBe('0');
+    // Cash equals everything owed to the organizer and the platform's fee (all other accounts).
     const bal = await balances(a);
-    expect((bal.get('platform:stripe_cash:USD') ?? 0) > 0).toBe(true);
-    expect(bal.get('platform:stripe_cash:USD')).toBe(
-      -((bal.get('org:payable_held:USD') ?? 0) + (bal.get('platform:platform_fee_deferred:USD') ?? 0)),
-    );
+    const cash = bal.get('platform:stripe_cash:USD') ?? 0;
+    const others = [...bal].filter(([k]) => k.endsWith(':USD') && k !== 'platform:stripe_cash:USD');
+    expect(cash > 0).toBe(true);
+    expect(cash).toBe(-others.reduce((n, [, v]) => n + v, 0));
   });
 
   it('property: over random sales in both funds flows, cash = organizer payables + platform fees', async () => {
@@ -78,6 +79,7 @@ describe('ledger (M1.6a)', () => {
         const orderId = uuidv7();
         await postSaleTx(tx, systemCtx(b.org.id), {
           orderId,
+          eventId: b.event.id,
           fundsFlow: flow,
           totalMinor: total,
           feeMinor: fee,
@@ -86,6 +88,7 @@ describe('ledger (M1.6a)', () => {
         // A replay (webhook retry) never posts twice.
         const again = await postSaleTx(tx, systemCtx(b.org.id), {
           orderId,
+          eventId: b.event.id,
           fundsFlow: flow,
           totalMinor: total,
           feeMinor: fee,
@@ -172,7 +175,9 @@ describe('ledger (M1.6a)', () => {
     expect(seen.length).toBeGreaterThan(0);
     // Org A's balances are unaffected by the 60 sales posted for org B.
     const [aJournals] = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from payments.journal_entries`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from payments.journal_entries where kind = 'sale'`,
+      ),
     );
     expect(aJournals?.n).toBe(1);
   });

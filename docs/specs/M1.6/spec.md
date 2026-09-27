@@ -49,3 +49,28 @@ Live money stays gated on the counsel items in roadmap §5.3 and owner decision 
 | AC4 | Amounts are capped; the platform minimum refunds face and fee; the order ends `refunded` with this order's cash netting to zero | `refunds.int.test.ts` |
 | AC5 | Only refunders refund; orgs never see each other's refunds; fixture rows for isolation | `refunds.int.test.ts`, `isolation.int.test.ts` |
 | AC6 | In the browser: an organizer refunds one ticket, sees it void and the refund listed, an over-refund is refused; the buyer's page shows the partial refund and one QR; axe passes | `apps/web/e2e/refunds.spec.ts` |
+
+## M1.6c — settlements and transfers at release (done)
+
+`platform_mor` only (separate charges & transfers; ADR 0005). `organizer_mor` sales are paid out by Stripe on the connected account's own schedule.
+
+- **Release policy (Standard tier; defaults pending D3):** an event's held funds are released **5 business days after the event ends** (UTC weekdays; bank holidays not modelled yet), keeping a **5% reserve for 90 days**. Trusted (weekly advances) and New/high-risk (manual release) tiers come with the owner's D3 answer.
+- **Journals carry the event** (`journal_entries.event_id`; `post_journal` gained the parameter, the 8-argument version stays until nothing calls it).
+- **The release job** (`payments.releaseDueSettlements`, platform actor, serialized per org with a transaction advisory lock; the worker leader runs it every 10 minutes through `runSettlements`):
+  1. For each event whose release date has passed: `payable_held` → `payable_releasable` + `reserve`, then any **receivable is netted** first, and a settlement is recorded (`released − reserve − netted = amount`).
+  2. Reserves whose window has passed are released the same way (what refunds left of that event's reserve).
+  3. Settlements that waited for a payout account become ready once payouts are enabled.
+  4. Nothing moves while staff hold the org's payouts.
+- **Transfers.** For each ready (or failed) settlement the worker calls `PaymentProvider.createTransfer` to the connected account (`transfer_group` = the event), idempotent per settlement, and records it (`payments.recordTransfer`): `payable_releasable` → out of `stripe_cash`, `payouts.transferred@1`. Failures are retried on the next run. No payout account yet → `waiting_account`.
+- **Refunds after release** (roadmap §5.3): the organizer's share comes from the event's held funds, then the event's reserve, and the rest becomes a **receivable**. `completeRefund` then returns a reversal instruction; the server action calls `PaymentProvider.reverseTransfer` (explicit reversal — `reverse_transfer` does not apply to separate charges & transfers) and records it (`payments.recordTransferReversal`). A failed reversal leaves the receivable, netted from the next release.
+- **Organizer view.** Payouts page → Settlements (owner, admin, finance): per event, released, kept back (reserve + netted), paid out, status. It replaces the legacy "Transferred" checkbox; migrated settlements arrive with the migration (Phase 2).
+- **Later:** agency commission transfers in the same group, `source_transaction` linking, advances for far-future events, Stripe holding-limit checks, daily reconciliation.
+
+### Acceptance (M1.6c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Funds stay held until 5 business days after the event; released less 5%; released once; waits without a payout account | `packages/testing/tests/settlements.int.test.ts` |
+| AC2 | With payouts enabled it becomes ready, a failed transfer is retried, a succeeded one is booked and not transferred again | `settlements.int.test.ts` |
+| AC3 | A refund after transfer draws on the event's reserve, then a receivable, and asks for a reversal; a failed reversal leaves the receivable; the next release nets it | `settlements.int.test.ts` |
+| AC4 | Reserves come back after the window (what refunds left); a staff hold stops releases; the books sum to zero; settlements are finance-only and per org | `settlements.int.test.ts` |
+| AC5 | The worker job transfers a waiting settlement once payouts are enabled, exactly once, audited | `apps/worker/tests/settlements.int.test.ts` |

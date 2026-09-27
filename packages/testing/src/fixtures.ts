@@ -22,7 +22,7 @@ import {
   startCheckoutCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
-import { recordPayoutAccountCommand } from '@yayatoh/payments';
+import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber } from '@yayatoh/platform';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
@@ -202,6 +202,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       orderId: checkout.order.id,
     },
     systemCtx(org.id),
+    ports,
+  );
+  // The release job after the event (a settlement waiting for a payout account; isolation).
+  await executeCommand(
+    releaseDueSettlementsCommand,
+    {},
+    { ...systemCtx(org.id), now: new Date('2030-01-01T00:00:00Z') },
     ports,
   );
   // A refund the provider declined (isolation coverage; the order stays paid).

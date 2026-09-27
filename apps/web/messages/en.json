@@ -988,7 +988,28 @@
     "continue": "Continue setup",
     "returned": "Thanks. The payment provider is checking your details; this page updates when it is done.",
     "noAccess": "Only owners, admins and finance can change payout details.",
-    "onHold": "Payouts are on hold. Ticket sales continue; contact Yayatoh support to find out more."
+    "onHold": "Payouts are on hold. Ticket sales continue; contact Yayatoh support to find out more.",
+    "settlements": {
+      "title": "Settlements",
+      "description": "When Yayatoh collects ticket money for you, it is paid out 5 business days after each event ends. 5% is kept for 90 days in case of refunds or disputes, and anything you owe is taken off first.",
+      "empty": "No settlements yet.",
+      "date": "Released",
+      "what": "For",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Reserve returned · {event}"
+      },
+      "released": "Released",
+      "kept": "Kept back",
+      "amount": "Paid out",
+      "statusCol": "Status",
+      "status": {
+        "ready": "Sending",
+        "waiting_account": "Waiting for your payout account",
+        "transferred": "Paid out",
+        "failed": "Retrying"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Test mode",

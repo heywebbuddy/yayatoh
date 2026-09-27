@@ -20,6 +20,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",

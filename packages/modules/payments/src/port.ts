@@ -94,6 +94,27 @@ export interface PaymentProvider {
    * per key. `pending` completes later by webhook.
    */
   refund(input: RefundInput): Promise<{ refundId: string; status: 'succeeded' | 'pending' | 'failed' }>;
+  /**
+   * platform_mor settlements (M1.6c): transfer released funds to the organizer's connected
+   * account (separate charges & transfers). Idempotent per key.
+   */
+  createTransfer(input: {
+    destinationAccountId: string;
+    amount: Money;
+    /** Groups the event's charges and transfers (Stripe `transfer_group`). */
+    transferGroup: string;
+    idempotencyKey: string;
+  }): Promise<{ transferId: string; status: 'succeeded' | 'failed'; failure?: string }>;
+  /**
+   * Take money back from a transfer (a refund after release). `reverse_transfer` does not apply to
+   * separate charges & transfers, so this is an explicit reversal; it can fail (the organizer's
+   * balance is empty), and the debt then stays a receivable.
+   */
+  reverseTransfer(input: {
+    transferId: string;
+    amount: Money;
+    idempotencyKey: string;
+  }): Promise<{ reversalId: string; status: 'succeeded' | 'failed' }>;
 }
 
 export interface RefundInput {

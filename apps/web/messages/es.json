@@ -988,7 +988,28 @@
     "continue": "Continuar la configuración",
     "returned": "Gracias. El proveedor de pagos está revisando tus datos; esta página se actualizará cuando termine.",
     "noAccess": "Solo los propietarios, los administradores y el equipo de finanzas pueden cambiar los datos de pago.",
-    "onHold": "Los pagos recibidos están retenidos. La venta de entradas continúa; contacta con el soporte de Yayatoh para saber más."
+    "onHold": "Los pagos recibidos están retenidos. La venta de entradas continúa; contacta con el soporte de Yayatoh para saber más.",
+    "settlements": {
+      "title": "Liquidaciones",
+      "description": "Cuando Yayatoh cobra el dinero de las entradas por ti, se te paga 5 días hábiles después de que termine cada evento. Un 5 % se retiene durante 90 días por si hay reembolsos o disputas, y primero se descuenta lo que debas.",
+      "empty": "Aún no hay liquidaciones.",
+      "date": "Liberado",
+      "what": "Concepto",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Reserva devuelta · {event}"
+      },
+      "released": "Liberado",
+      "kept": "Retenido",
+      "amount": "Pagado",
+      "statusCol": "Estado",
+      "status": {
+        "ready": "Enviando",
+        "waiting_account": "Esperando tu cuenta de pagos",
+        "transferred": "Pagado",
+        "failed": "Reintentando"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modo de prueba",

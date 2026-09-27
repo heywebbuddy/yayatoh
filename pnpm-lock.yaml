@@ -520,6 +520,9 @@ importers:
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders
+      '@yayatoh/payments':
+        specifier: workspace:*
+        version: link:../../packages/modules/payments
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
@@ -967,6 +970,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel

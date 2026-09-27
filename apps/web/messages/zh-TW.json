@@ -988,7 +988,28 @@
     "continue": "繼續設定",
     "returned": "謝謝。金流服務商正在核對你的資訊，完成後此頁面會自動更新。",
     "noAccess": "只有擁有者、管理員和財務可以變更收款資訊。",
-    "onHold": "收款已暫停。票券販售將持續進行；如需了解詳情，請聯絡 Yayatoh 支援團隊。"
+    "onHold": "收款已暫停。票券販售將持續進行；如需了解詳情，請聯絡 Yayatoh 支援團隊。",
+    "settlements": {
+      "title": "結算",
+      "description": "當 Yayatoh 代你收取票款時，款項會在每場活動結束後 5 個工作天內支付給你。其中 5% 會保留 90 天，以因應退款或爭議，你所欠的款項會先行扣除。",
+      "empty": "尚無結算紀錄。",
+      "date": "撥付日期",
+      "what": "項目",
+      "kind": {
+        "event": "{event}",
+        "reserve": "退還保留金 · {event}"
+      },
+      "released": "已撥付",
+      "kept": "保留",
+      "amount": "已支付",
+      "statusCol": "狀態",
+      "status": {
+        "ready": "傳送中",
+        "waiting_account": "等待你的收款帳戶",
+        "transferred": "已支付",
+        "failed": "重試中"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "測試模式",

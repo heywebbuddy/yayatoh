@@ -1,7 +1,9 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
+import { fakePaymentProvider } from '@yayatoh/payments';
 import { runDueBulkOperations } from './bulk.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
+import { runSettlements } from './settlements.ts';
 import { sweepExpiredHolds } from './sweeper.ts';
 import { startWorker } from './worker.ts';
 
@@ -62,6 +64,30 @@ setInterval(() => {
       bulkBusy = false;
     });
 }, 2_000).unref();
+
+// Payout Release job (M1.6c): release due funds and transfer them, every 10 minutes (leader only).
+// Stripe arrives with the owner's account; until then dev/preview use the fake provider.
+const fakeSecret = process.env.FAKE_PAYMENTS_SECRET;
+const payments = fakeSecret
+  ? fakePaymentProvider({
+      secret: fakeSecret,
+      appOrigin: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
+    })
+  : null;
+if (!payments) console.warn('settlements: no payment provider configured; the release job is off');
+let settling = false;
+setInterval(() => {
+  if (!payments || !release || stopping || settling) return;
+  settling = true;
+  runSettlements(payments)
+    .then((r) => {
+      if (r.transferred || r.failed) console.info(JSON.stringify({ job: 'settlements', ...r }));
+    })
+    .catch((err) => console.error('settlements', err))
+    .finally(() => {
+      settling = false;
+    });
+}, 10 * 60_000).unref();
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, async () => {

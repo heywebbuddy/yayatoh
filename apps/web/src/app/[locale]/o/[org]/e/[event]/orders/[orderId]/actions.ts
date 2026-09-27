@@ -7,6 +7,7 @@ import {
   type RefundReason,
   startRefundCommand,
 } from '@yayatoh/orders';
+import { recordTransferReversalCommand } from '@yayatoh/payments';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
 import { loadEvent } from '@/server/console.ts';
@@ -74,6 +75,29 @@ export async function refundAction(
     data.ctx,
     ports,
   );
+  // Refunded after the event was paid out: take the organizer's share back from the transfer
+  // (explicit reversal). If that fails it stays a receivable, netted from the next release.
+  if (done.reversal) {
+    const rev = await provider.reverseTransfer({
+      transferId: done.reversal.transferId,
+      amount: { amount: done.reversal.amountMinor, currency: done.reversal.currency },
+      idempotencyKey: `reversal:${started.refundId}`,
+    });
+    await executeCommand(
+      recordTransferReversalCommand,
+      {
+        refundId: started.refundId,
+        orderId: done.reversal.orderId,
+        eventId: done.reversal.eventId,
+        outcome: rev.status,
+        reversalId: rev.reversalId,
+        amountMinor: done.reversal.amountMinor,
+        currency: done.reversal.currency,
+      },
+      data.ctx,
+      ports,
+    );
+  }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
   return done.status === 'failed' ? { ok: false, code: 'refund_failed' } : { ok: true, code: null };
 }

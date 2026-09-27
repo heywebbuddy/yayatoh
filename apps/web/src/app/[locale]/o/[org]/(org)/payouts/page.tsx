@@ -1,7 +1,8 @@
-import { executeQuery } from '@yayatoh/kernel';
-import { payoutAccountQuery } from '@yayatoh/payments';
+import { listEventsQuery } from '@yayatoh/events';
+import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
+import { payoutAccountQuery, settlementsQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -28,6 +29,21 @@ export default async function PayoutsPage({
   const t = await getTranslations('payouts');
   const account = await executeQuery(payoutAccountQuery, {}, data.ctx, ports);
   const canManage = roleCan(data.role, 'payouts:manage');
+  const canSeeMoney = roleCan(data.role, 'finance:read');
+  const settlements = canSeeMoney ? await executeQuery(settlementsQuery, {}, data.ctx, ports) : [];
+  const eventNames = new Map(
+    settlements.length
+      ? (await executeQuery(listEventsQuery, {}, data.ctx, ports)).map((e) => [e.id, e.name])
+      : [],
+  );
+  const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
+  const day = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: data.org.timezone });
+  const SETTLEMENT_DOT = {
+    ready: 'info',
+    waiting_account: 'warning',
+    transferred: 'success',
+    failed: 'danger',
+  } as const;
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
@@ -68,6 +84,65 @@ export default async function PayoutsPage({
           <p className="text-caption text-zinc-600">{t('noAccess')}</p>
         ) : null}
       </Card>
+      {canSeeMoney ? (
+        <section aria-labelledby="settlements-heading" className="flex flex-col gap-3">
+          <h2 id="settlements-heading" className="text-section">
+            {t('settlements.title')}
+          </h2>
+          <p className="text-body text-zinc-600">{t('settlements.description')}</p>
+          {settlements.length === 0 ? (
+            <p className="text-caption text-zinc-500">{t('settlements.empty')}</p>
+          ) : (
+            <Table
+              caption={t('settlements.title')}
+              rowKey={(s) => s.id}
+              rows={settlements}
+              columns={[
+                { key: 'date', header: t('settlements.date'), cell: (s) => day.format(s.releasedAt) },
+                {
+                  key: 'what',
+                  header: t('settlements.what'),
+                  cell: (s) =>
+                    t(`settlements.kind.${s.kind}`, {
+                      event: (s.eventId && eventNames.get(s.eventId)) || '—',
+                    }),
+                },
+                {
+                  key: 'released',
+                  header: t('settlements.released'),
+                  cell: (s) => fmt(s.releasedMinor, s.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'kept',
+                  header: t('settlements.kept'),
+                  cell: (s) => fmt(s.reserveMinor + s.nettedMinor, s.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'amount',
+                  header: t('settlements.amount'),
+                  cell: (s) => fmt(s.amountMinor, s.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'status',
+                  header: t('settlements.statusCol'),
+                  cell: (s) => (
+                    <StatusDot
+                      status={SETTLEMENT_DOT[s.status]}
+                      label={t(`settlements.status.${s.status}`)}
+                    />
+                  ),
+                },
+              ]}
+            />
+          )}
+        </section>
+      ) : null}
     </>
   );
 }

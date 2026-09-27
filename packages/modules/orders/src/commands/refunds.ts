@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 
-import { postRefundTx } from '@yayatoh/payments';
+import { eventTransferTx, postRefundTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray } from 'drizzle-orm';
@@ -182,9 +182,10 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
   if (!order) throw new DomainError('not_found', 'Order not found');
   if (refund.ticketIds.length)
     await voidTicketsTx(tx, ctx, { orderId: order.id, ticketIds: refund.ticketIds, reason: 'refunded' });
-  await postRefundTx(tx, ctx, {
+  const { receivableMinor } = await postRefundTx(tx, ctx, {
     refundId: refund.id,
     orderId: order.id,
+    eventId: order.eventId,
     fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor',
     amountMinor: refund.amountMinor,
     feeRefundedMinor: refund.feeRefundedMinor,
@@ -213,6 +214,17 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
       fully: to === 'refunded',
     },
   });
+  // Paid out already: the organizer's share is a receivable; ask the caller to reverse the transfer.
+  const transferId = receivableMinor > 0 ? await eventTransferTx(tx, order.eventId) : null;
+  return transferId
+    ? {
+        transferId,
+        amountMinor: receivableMinor,
+        currency: refund.currency,
+        eventId: order.eventId,
+        orderId: order.id,
+      }
+    : null;
 }
 
 /**
@@ -228,20 +240,33 @@ export const completeRefundCommand = tenantCommand({
     providerRefundId: z.string().min(1).max(255),
     failureCode: z.string().max(100).optional(),
   }),
-  output: z.object({ status: z.enum(REFUND_STATUSES), changed: z.boolean() }),
+  output: z.object({
+    status: z.enum(REFUND_STATUSES),
+    changed: z.boolean(),
+    /** After a transfer: reverse this much of it (roadmap §5.3), then record the reversal. */
+    reversal: z
+      .object({
+        transferId: z.string(),
+        amountMinor: z.int(),
+        currency: z.string(),
+        eventId: z.uuid(),
+        orderId: z.uuid(),
+      })
+      .nullable(),
+  }),
   entitlement: 'ticketing',
   permission: 'orders:refund',
   handler: async ({ input, ctx, tx, emit }) => {
     const [refund] = await tx.select().from(refunds).where(eq(refunds.id, input.refundId)).for('update');
     if (!refund) throw new DomainError('not_found', 'Refund not found');
     if (refund.status !== 'pending')
-      return { status: refund.status as 'succeeded' | 'failed', changed: false };
+      return { status: refund.status as 'succeeded' | 'failed', changed: false, reversal: null };
     if (input.outcome === 'pending') {
       await tx
         .update(refunds)
         .set({ providerRefundId: input.providerRefundId, updatedAt: ctx.now })
         .where(eq(refunds.id, refund.id));
-      return { status: 'pending' as const, changed: false };
+      return { status: 'pending' as const, changed: false, reversal: null };
     }
     const [row] = await tx
       .update(refunds)
@@ -255,8 +280,8 @@ export const completeRefundCommand = tenantCommand({
       .where(eq(refunds.id, refund.id))
       .returning();
     if (!row) throw new DomainError('internal');
-    if (input.outcome === 'succeeded') await succeedTx(tx, ctx, row, emit);
-    return { status: input.outcome, changed: true };
+    const reversal = input.outcome === 'succeeded' ? await succeedTx(tx, ctx, row, emit) : null;
+    return { status: input.outcome, changed: true, reversal };
   },
   audit: (input, r) => ({
     action: 'order.refund_complete',

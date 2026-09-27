@@ -988,7 +988,28 @@
     "continue": "继续设置",
     "returned": "谢谢。支付服务商正在核实你的信息，完成后此页面会自动更新。",
     "noAccess": "只有所有者、管理员和财务可以更改收款信息。",
-    "onHold": "收款已暂停。门票销售将继续；如需了解详情，请联系 Yayatoh 支持团队。"
+    "onHold": "收款已暂停。门票销售将继续；如需了解详情，请联系 Yayatoh 支持团队。",
+    "settlements": {
+      "title": "结算",
+      "description": "当 Yayatoh 代你收取门票款项时，款项会在每场活动结束后 5 个工作日内支付给你。其中 5% 会保留 90 天，以应对退款或争议，你所欠的款项会先行扣除。",
+      "empty": "暂无结算记录。",
+      "date": "发放日期",
+      "what": "项目",
+      "kind": {
+        "event": "{event}",
+        "reserve": "退还保留金 · {event}"
+      },
+      "released": "已发放",
+      "kept": "保留",
+      "amount": "已支付",
+      "statusCol": "状态",
+      "status": {
+        "ready": "发送中",
+        "waiting_account": "等待你的收款账户",
+        "transferred": "已支付",
+        "failed": "重试中"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "测试模式",

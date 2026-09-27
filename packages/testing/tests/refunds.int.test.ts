@@ -183,7 +183,7 @@ describe('refunds (M1.6b)', () => {
         a.ctx(),
         ports,
       ),
-    ).toEqual({ status: 'failed', changed: false });
+    ).toEqual({ status: 'failed', changed: false, reversal: null });
     const [t] = await q<{ status: string }>(
       sql`select status from ticketing.tickets where id = ${ticketIds[1]}`,
     );

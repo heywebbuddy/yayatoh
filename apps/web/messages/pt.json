@@ -988,7 +988,28 @@
     "continue": "Continuar a configuração",
     "returned": "Obrigado. O provedor de pagamentos está verificando seus dados; esta página será atualizada quando terminar.",
     "noAccess": "Somente proprietários, administradores e a equipe financeira podem alterar os dados de repasse.",
-    "onHold": "Os repasses estão retidos. A venda de ingressos continua; entre em contato com o suporte da Yayatoh para saber mais."
+    "onHold": "Os repasses estão retidos. A venda de ingressos continua; entre em contato com o suporte da Yayatoh para saber mais.",
+    "settlements": {
+      "title": "Liquidações",
+      "description": "Quando a Yayatoh recebe o dinheiro dos ingressos por você, o repasse é feito 5 dias úteis após o fim de cada evento. 5% ficam retidos por 90 dias para cobrir reembolsos ou contestações, e o que você deve é descontado primeiro.",
+      "empty": "Nenhuma liquidação ainda.",
+      "date": "Liberado",
+      "what": "Referente a",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Reserva devolvida · {event}"
+      },
+      "released": "Liberado",
+      "kept": "Retido",
+      "amount": "Repassado",
+      "statusCol": "Status",
+      "status": {
+        "ready": "Enviando",
+        "waiting_account": "Aguardando sua conta de repasses",
+        "transferred": "Repassado",
+        "failed": "Tentando novamente"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modo de teste",

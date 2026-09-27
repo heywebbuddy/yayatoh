@@ -48,6 +48,19 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
       const refundId = `fakere_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
       return { refundId, status: i.providerPaymentId.startsWith('fakepi_decline') ? 'failed' : 'succeeded' };
     },
+    async createTransfer(i) {
+      if (i.amount.amount <= 0) throw new Error('transfer amount must be positive');
+      const transferId = `faketr_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
+      // `fakeacct_nopayouts*` accounts refuse transfers (tests).
+      return i.destinationAccountId.startsWith('fakeacct_nopayouts')
+        ? { transferId, status: 'failed', failure: 'account_closed' }
+        : { transferId, status: 'succeeded' };
+    },
+    async reverseTransfer(i) {
+      const reversalId = `faketrr_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
+      // Reversals above 100,000 minor units fail, as if the organizer's balance were empty (tests).
+      return { reversalId, status: i.amount.amount > 100_000 ? 'failed' : 'succeeded' };
+    },
     async registerPaymentMethodDomain(i) {
       const key = `pmd:${i.hostname}:${i.accountId ?? 'platform'}`;
       return { id: `fakepmd_${createHmac('sha256', opts.secret).update(key).digest('hex').slice(0, 16)}` };

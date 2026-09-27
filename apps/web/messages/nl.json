@@ -988,7 +988,28 @@
     "continue": "Verder met instellen",
     "returned": "Bedankt. De betaalprovider controleert je gegevens; deze pagina wordt bijgewerkt zodra dat klaar is.",
     "noAccess": "Alleen eigenaren, beheerders en financiën kunnen de uitbetalingsgegevens wijzigen.",
-    "onHold": "Uitbetalingen zijn opgeschort. De ticketverkoop gaat door; neem contact op met Yayatoh-support voor meer informatie."
+    "onHold": "Uitbetalingen zijn opgeschort. De ticketverkoop gaat door; neem contact op met Yayatoh-support voor meer informatie.",
+    "settlements": {
+      "title": "Afrekeningen",
+      "description": "Als Yayatoh het ticketgeld voor je int, wordt het 5 werkdagen na het einde van elk evenement aan je uitbetaald. 5% wordt 90 dagen vastgehouden voor eventuele terugbetalingen of geschillen, en wat je nog verschuldigd bent, wordt eerst afgetrokken.",
+      "empty": "Nog geen afrekeningen.",
+      "date": "Vrijgegeven",
+      "what": "Voor",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Reserve teruggestort · {event}"
+      },
+      "released": "Vrijgegeven",
+      "kept": "Ingehouden",
+      "amount": "Uitbetaald",
+      "statusCol": "Status",
+      "status": {
+        "ready": "Wordt verzonden",
+        "waiting_account": "Wacht op je uitbetalingsaccount",
+        "transferred": "Uitbetaald",
+        "failed": "Nieuwe poging"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",

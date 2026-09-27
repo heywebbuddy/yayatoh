@@ -988,7 +988,28 @@
     "continue": "Reprendre la configuration",
     "returned": "Merci. Le prestataire de paiement vérifie vos informations ; cette page se mettra à jour une fois la vérification terminée.",
     "noAccess": "Seuls les propriétaires, les administrateurs et l’équipe finance peuvent modifier les informations de versement.",
-    "onHold": "Les versements sont suspendus. La vente de billets continue ; contactez le support Yayatoh pour en savoir plus."
+    "onHold": "Les versements sont suspendus. La vente de billets continue ; contactez le support Yayatoh pour en savoir plus.",
+    "settlements": {
+      "title": "Règlements",
+      "description": "Lorsque Yayatoh encaisse l’argent des billets pour vous, il vous est versé 5 jours ouvrés après la fin de chaque événement. 5 % sont conservés pendant 90 jours en cas de remboursements ou de litiges, et les sommes que vous devez sont déduites en premier.",
+      "empty": "Aucun règlement pour l’instant.",
+      "date": "Débloqué",
+      "what": "Pour",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Réserve restituée · {event}"
+      },
+      "released": "Débloqué",
+      "kept": "Retenu",
+      "amount": "Versé",
+      "statusCol": "Statut",
+      "status": {
+        "ready": "Envoi en cours",
+        "waiting_account": "En attente de votre compte de versement",
+        "transferred": "Versé",
+        "failed": "Nouvelle tentative"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Mode test",

@@ -988,7 +988,28 @@
     "continue": "Continua la configurazione",
     "returned": "Grazie. Il fornitore di pagamenti sta verificando i tuoi dati; questa pagina si aggiornerà al termine.",
     "noAccess": "Solo proprietari, amministratori e il team finanza possono modificare i dati degli accrediti.",
-    "onHold": "Gli accrediti sono sospesi. La vendita dei biglietti continua; contatta l’assistenza Yayatoh per saperne di più."
+    "onHold": "Gli accrediti sono sospesi. La vendita dei biglietti continua; contatta l’assistenza Yayatoh per saperne di più.",
+    "settlements": {
+      "title": "Liquidazioni",
+      "description": "Quando Yayatoh incassa per te il denaro dei biglietti, te lo accreditiamo 5 giorni lavorativi dopo la fine di ogni evento. Il 5% viene trattenuto per 90 giorni in caso di rimborsi o contestazioni, e quanto devi viene detratto prima.",
+      "empty": "Nessuna liquidazione per ora.",
+      "date": "Svincolato",
+      "what": "Per",
+      "kind": {
+        "event": "{event}",
+        "reserve": "Riserva restituita · {event}"
+      },
+      "released": "Svincolato",
+      "kept": "Trattenuto",
+      "amount": "Accreditato",
+      "statusCol": "Stato",
+      "status": {
+        "ready": "Invio in corso",
+        "waiting_account": "In attesa del tuo conto per gli accrediti",
+        "transferred": "Accreditato",
+        "failed": "Nuovo tentativo in corso"
+      }
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modalità di prova",
