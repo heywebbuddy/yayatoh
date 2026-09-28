@@ -488,7 +488,10 @@ test.describe('organization logo (M1.4e)', () => {
     const menu = page.locator('summary').filter({ hasText: 'Open menu' });
     if (await menu.isVisible()) await menu.click();
     await expect(
-      page.getByTestId('console-logo').getByRole('img', { name: `${org.name} logo` }).filter({ visible: true }),
+      page
+        .getByTestId('console-logo')
+        .getByRole('img', { name: `${org.name} logo` })
+        .filter({ visible: true }),
     ).toHaveCount(1);
 
     const guest = await anonymous(browser);
