@@ -8,6 +8,15 @@ import { eventPhase } from '@/lib/event-status.ts';
 import { loadEvent } from '@/server/console.ts';
 import { loadReadiness } from '@/server/readiness.ts';
 
+/** M3.8a: tracked links with the marketing module (read with `marketing:read`). */
+const TRACKED_LINKS: NavItem = {
+  key: 'trackedLinks',
+  path: 'tracked-links',
+  group: 'build',
+  module: 'marketing',
+  icon: 'link',
+};
+
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
@@ -40,6 +49,7 @@ export default async function EventLayout({
           ...composeNav(profile, data.modules).filter(
             (i) => i.key !== 'marketing' || roleCan(data.role, 'messages:read'),
           ),
+          ...(data.modules.has('marketing') && roleCan(data.role, 'marketing:read') ? [TRACKED_LINKS] : []),
           ...COPY_NAV,
         ],
         badges: { setupGuide: `${rules.filter((r) => r.done).length}/${rules.length}` },

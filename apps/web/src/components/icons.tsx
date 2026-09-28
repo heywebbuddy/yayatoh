@@ -19,6 +19,7 @@ import {
   Landmark,
   Layers,
   Library,
+  Link2,
   ListChecks,
   Lock,
   type LucideIcon,
@@ -76,6 +77,7 @@ const ICONS: Record<string, LucideIcon> = {
   building: Building2,
   history: History,
   shield: ShieldCheck,
+  link: Link2,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

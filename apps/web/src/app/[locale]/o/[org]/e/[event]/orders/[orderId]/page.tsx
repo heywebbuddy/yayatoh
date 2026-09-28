@@ -1,4 +1,5 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
+import { orderAttributionQuery } from '@yayatoh/marketing';
 import { orderMessagesQuery } from '@yayatoh/notifications';
 import { orderDetailQuery, orderRefundsQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
@@ -43,6 +44,10 @@ export default async function OrderPage({
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
     : [];
   const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
+  // M3.8a: where the order came from (tracked-link click or UTM landing), when recorded.
+  const attribution = data.modules.has('marketing')
+    ? await executeQuery(orderAttributionQuery, { orderId }, data.ctx, ports)
+    : null;
   const tp = await getTranslations('refundPolicy');
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
   const when = new Intl.DateTimeFormat(locale, {
@@ -96,6 +101,40 @@ export default async function OrderPage({
           </p>
         ) : null}
       </Card>
+
+      {attribution ? (
+        <section aria-labelledby="attribution-heading" className="flex flex-col gap-3">
+          <h2 id="attribution-heading" className="text-section">
+            {t('trackedLinks.attributionTitle')}
+          </h2>
+          <Card>
+            <dl className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {(['firstTouch', 'lastTouch'] as const).map((k) => {
+                const touch = attribution[k];
+                return (
+                  <div key={k} className="flex flex-col gap-1" data-testid={`attribution-${k}`}>
+                    <dt className="text-caption text-zinc-600">{t(`trackedLinks.${k}`)}</dt>
+                    <dd className="m-0 text-body">
+                      {[touch.source, touch.medium, touch.campaign].filter(Boolean).join(' / ')}
+                      {touch.code ? (
+                        <span dir="ltr" className="ms-2 font-mono text-caption text-zinc-500">
+                          /r/{touch.code}
+                        </span>
+                      ) : null}
+                      <span className="block text-caption text-zinc-500">
+                        {attribution.model === 'click'
+                          ? t('trackedLinks.viaClick')
+                          : t('trackedLinks.viaUtm')}{' '}
+                        · {when.format(touch.at)}
+                      </span>
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </Card>
+        </section>
+      ) : null}
 
       <section aria-labelledby="tickets-heading" className="flex flex-col gap-3">
         <h2 id="tickets-heading" className="text-section">

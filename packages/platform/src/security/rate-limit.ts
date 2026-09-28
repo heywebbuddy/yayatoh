@@ -243,6 +243,13 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 60, windowMs: 60 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** Tracked-link clicks (M3.8a): over the limit, the visitor is still redirected but no click is
+   * recorded (a flood must not inflate a link's figures). */
+  trackedClick: {
+    device: { limit: 30, windowMs: 10 * MIN },
+    anonymousIp: { limit: 60, windowMs: 10 * MIN },
+    ipCeiling: { limit: 600, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },
