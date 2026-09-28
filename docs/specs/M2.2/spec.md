@@ -317,5 +317,180 @@ Temporary working tables are analyzed explicitly, because autovacuum never analy
 | AC13 | Browser: the migrated owner signs in with the legacy password and sees the migrated event, orders (and one order), attendees and check-ins; scans a migrated ticket by its legacy QR; the buyer's order page shows tickets with QR; a scanner sub-account is refused; axe; Arabic RTL; keyboard; rerun-safe | `apps/web/e2e/legacy-migration.spec.ts` |
 | AC14 | Full run time on a realistic synthetic dataset measured and recorded | this section (timing table); `docs/runbooks/legacy-migration.md` |
 
+## M2.2c — the pipeline's remainder, on synthetic data (done)
+
+Scope: the M2.2b "Later" list minus sessions, speakers, sections and CMS content (M2.2d, their modules were merging in parallel). **No real legacy data was used**: the synthetic generator gained the new legacy tables, and everything below is proven on it.
+
+### Synthetic generator additions
+- New legacy tables (column names and types from the legacy migrations; nothing copied): `venues`, `event_venue`, `seatcharts`, `seats` (with `capacity`, `width`, `height`), `personal_access_tokens`, `password_resets`, `newsletter_subscribers`, `notifications`; new columns `users.fcm_token`, `apn_token`, `magic_login_token`, `magic_login_expires_at`, `organisation_url`, `attendees.seat_id`.
+- They draw from their **own random stream**, so every M2.2b row stays byte-identical (checked by diffing dumps).
+- Planted cases:
+  - seat charts on the demo gala, on every fifth event and on one repetitive event, with 4 rows × 10 chairs, 2 tables of 8, one switched-off seat and one seat in the old `{left, top}` form;
+  - seated attendees within each seat's capacity per date;
+  - a venue slug shared by both instances, a venue with unreadable coordinates and an unlisted venue;
+  - an unmapped category;
+  - one organizer's "Winter Gala" in 2024 and 2025, and the same title at another org;
+  - Sanctum tokens (a quarter expired, one whose user no longer exists);
+  - magic links, live and expired;
+  - a 30-minute-old and a 3-day-old password reset;
+  - newsletter subscribers, some unsubscribed, plus one invalid address;
+  - a notification holding a plain-text guest password (it must never be copied);
+  - an old-style event slug (`Lakeshore_Spring_Gala`) whose URL must redirect.
+
+### T3 remainder (`src/transforms/t3-venues-series.ts`, `t3-seating.ts`, `src/seatchart.ts`)
+- **Venues directory.**
+  - Each legacy venue becomes its organizer's org venue, listed in the directory when it was active.
+  - Slug: the legacy one, or `-{inst}-{id}` when taken.
+  - Country, timezone from country and state, and coordinates only when both parse and are in range. The rest is listed.
+  - `event_venue` links set `events.venue_id` within the same org.
+  - Inline event venues stay as the event's display text.
+- **Categories** (`src/categories.ts`).
+  - Keyword rules map legacy categories to the platform taxonomy. Unmatched categories become `other` and are listed.
+  - abc events also get an org tag with the legacy category name.
+  - A category already set is never overwritten.
+- **Series inference.**
+  - Events of one org whose titles match without the year, ordinals and "annual" (`seriesKey`), across two or more years, become an `events.series`.
+  - Each one is listed as `series_inferred` for review.
+  - An event already in a series is left alone.
+- **Seat charts → `layout_v1`.**
+  - Each legacy chart (one per seated ticket type) becomes an org floor plan (`seating.layouts`), with the chart image as the underlay under `legacy/{inst}/storage/…`.
+  - Chairs are grouped into rows by their letter prefix. A seat point sits at the centre of the legacy seat box. Pixels become cm at 2.5 cm/px, or at the image's natural size when `legacy.media_images` has it.
+  - A seat with capacity N becomes a round table with N places.
+  - `seat_uuid = uuidv5(ns, "{inst}:seat:{id}")`; table places 2…N add `:{k}`.
+  - Each seated event gets its event plan (several charts become one plan with a section each) and materialized seats:
+    - the chart's ticket type as the price category;
+    - switched-off seats `blocked/kill`;
+    - booked seats `sold` to the attendee's migrated ticket, with the ticket's `seat_label`, and the plan `locked`.
+  - Repetitive events' per-date bookings stay on the tickets only (listed).
+  - Void tickets' seats stay free (listed).
+  - Orgs with charts get a `seating` entitlement override; seated events take the `gala` profile (pending owner).
+
+### T6 communications (`src/transforms/t6-comms.ts`)
+- **Consent is never invented.**
+  - Newsletter subscribers become contacts of the instance's platform-level org: `yayatoh` (kind `platform`, created here) for yay, and ABC for abc.
+  - Each gets a `granted` email-marketing consent (`evidence = legacy_newsletter`), plus `withdrawn` when they unsubscribed.
+  - Every other migrated contact gets `unknown_legacy` (`legacy_import:{inst}`).
+- **Push tokens.** Legacy FCM and APNs tokens are registered with `source = legacy`, on their real platform. Organizers' and staff's go to their orgs; consumers' go to the platform-level org.
+- **Database notifications are not carried.** They hold plain-text guest passwords; a test proves the planted one appears nowhere.
+- **The buyer order-link plan** (`legacy.order_link_plan`):
+  - One row per migrated order of an event that had not ended at the freeze, marked planned or skipped with a reason (`invalid_email`, `order_*`, `no_active_tickets`, `no_manage_link`).
+  - `pnpm migrate:legacy:order-links --instance=… [--report]` prints the dry run: counts, per event, masked samples.
+  - **Nothing is sent.**
+
+### T8 auth artifacts (`src/transforms/t8-auth.ts`, `packages/auth/src/legacy-tokens.ts`, `compat/dual.ts`)
+- The new **global** table `auth.legacy_tokens` holds hashes only.
+- **Sanctum personal access tokens.**
+  - Live at the freeze and belonging to a migrated user: carried with the legacy SHA-256, name, abilities, last use and expiry.
+  - Expired tokens are dropped. A token whose user was not migrated is revoked and listed.
+  - `verifyLegacyAccessToken("{id}|{secret}")` resolves one; it is used by the future facade.
+- **Magic login links.** Kept until expiry as the SHA-256 of the token (the legacy table stored it in plain text). `consumeLegacyMagicLink` works once.
+- **Password resets.** Kept only when under 60 minutes old at the freeze (bcrypt as stored). OTPs are never carried.
+- **Dual-hash grace (roadmap T1).**
+  - A merged identity whose eligible legacy accounts had different passwords stores `$yydual$<until>$<primary>|<other>`.
+  - `verifyPassword` accepts either password until 180 days after the freeze, then only the primary. The first sign-in rehashes to Argon2id.
+  - A dual whose second password has gone reverts to the primary. T1 never overwrites it.
+- `--freeze-at=<instant>` sets the freeze (default: now).
+
+### T9 derived data (`src/transforms/t9-derived.ts`)
+- New tenant projections, rebuilt on each run with `source = 'legacy'`. The live projectors come later (M3.1, M3.6).
+  - `crm.event_participation` per contact × event: tickets, types, seat, checked in, registered at, spend.
+  - `crm.contact_stats` per contact × currency.
+  - `platform.metric_timeseries`, monthly in the org timezone: `sales.gross`, `sales.refunds`, `orders.sold`, `tickets.sold`, `checkins.tickets`.
+  - DSAR exports include participation and totals.
+- **`domain_events` backfill with `replayed = true`.**
+  - `order.paid`, `order.refunded` and `ticket.admitted` in their live v1 shapes, at their historic times.
+  - Stamped into the log under the relay's own advisory lock, so `log_seq` stays gap-free, and marked published.
+  - `platform.domain_events.replayed` is a new column.
+  - The relay's `relay_pending()` returns it, and the relay never enqueues a replayed event for a subscriber that does not opt in (`subscribes()`).
+  - `consumeEvent` re-reads the flag from the row and records the event without running the handler. A stale queued job or a catch-up therefore cannot mail either.
+  - Projectors opt in with `acceptsReplayed`.
+  - Tests prove the real ticket and refund mailers stay silent, and that an opting-in projector sees history.
+
+### URL inventory (`src/transforms/url-inventory.ts`)
+- `legacy.url_inventory` holds every DB-derived legacy URL with its planned status:
+  - `/events/{slug}` and `/events/{slug}/attendee`: 200 when kept, 308 to the new slug, 404 when not public. A slug shared by several legacy events resolves to the lowest id, as the legacy app did, and is listed.
+  - `/venues/{slug}`.
+  - `/{organisation_url}` → `/o/{slug}`.
+- The 308s go into `marketplace.legacy_redirects` for the instance host (`yayatoh.com`, `abc.yayatoh.com`; the e2e demo adds `yayatoh.localhost`). The web proxy serves them.
+
+### Offline scanning of legacy QR codes
+- A manifest row now carries `legacyCodes`: salted lookup hashes of the ticket's active legacy payloads.
+- The Scan PWA indexes them. `offlineVerdict` reads a raw or JSON legacy payload (`legacyCodePayload`) before short codes, as online does.
+- The device batch sync resolves legacy payloads on the server (`code_kind = 'legacy'`).
+- `/v1` change: an optional field on the manifest row (additive; `openapi.json` and the SDK regenerated).
+
+### Validation V6–V10 (`src/validate-extra.ts`, `src/golden.ts`, `src/facade-diff.ts`)
+- **V6 vectors (100 %).** Four checks:
+  - every active booking's unique legacy QR payload resolves to exactly its ticket (duplicates listed, never attached);
+  - a sample of 200 yy1 codes verifies against the org keys;
+  - every live access token and magic link is carried with the right hash;
+  - every carried password (or dual) is one of that person's eligible legacy hashes.
+  - Remember-me and signed-URL vectors are *pending*: they need each instance's `APP_KEY` and the owner's corpus. The verifiers already exist in `@yayatoh/auth/compat`.
+- **V7 golden queries (0 diff).** 14 queries, legacy vs migrated, per org or event:
+  - gross, refunds, discounts;
+  - valid tickets per org and per event, tickets per type, orders;
+  - payouts made, open balances, commission;
+  - promo redemptions, events and ticket types, imported check-ins, distinct buyers.
+- **V8 facade twin diff.** *Pending*: the `/api/v2` facade is not built (frozen contract). The harness is ready: a type-strict JSON diff, a quirks-ledger explainer and a HAR reader, all unit-tested.
+- **V9 URLs.** Every inventoried URL has its planned redirect or page.
+- **V10 checksums.** Every staging table's content and the migrated tables' stable columns are hashed. The same staging input must reproduce an earlier successful run's migrated checksums; new input records a new baseline. Check-ins and participation are excluded, because door scans after a rehearsal change them legitimately.
+
+### Nightly rehearsal CI (`.github/workflows/legacy-rehearsal.yml`)
+- **Synthetic job (on).** Nightly (and on demand) on the `large` dataset: both instances, a rerun (V10), the order-link dry run, reports uploaded.
+- **Masked job (defined, off).** It turns on when the owner sets `LEGACY_MASKED_DUMPS_READY=true` with the `legacy-ref` environment and the dumps' secrets (owner inbox).
+
+### Schema (migration `0050_lazy_gressill.sql`; renumbered at merge)
+- New global table `auth.legacy_tokens` (listed in `GLOBAL_TABLES`).
+- New tenant tables, with ENABLE + FORCE RLS, the NULLIF policy, org-leading uniques and fixture rows for both orgs:
+  - `crm.event_participation`
+  - `crm.contact_stats`
+  - `platform.metric_timeseries`
+- New column `platform.domain_events.replayed boolean not null default false`.
+- Hand edits (between `-- hand-written: begin/end`):
+  - the cross-module composite FK `event_participation (org_id, event_id) → events.events (org_id, id)`;
+  - `platform.relay_pending(integer)` dropped and recreated to also return `replayed`, with its grants restored (revoke from PUBLIC, execute to `platform_reader`).
+- Control schema (runtime, not drizzle): `legacy.media_images`, `legacy.order_link_plan`, `legacy.url_inventory`, and `legacy.runs.freeze_at`.
+
+### Pending owner (defaults chosen; also in docs/owner-inbox.md)
+- The `yayatoh` platform org for platform-level legacy data.
+- Seating granted to orgs with charts, and the `gala` profile for seated events.
+- Repetitive events' per-date seats kept on tickets only.
+- The 2.5 cm/px chart scale until the media manifest is loaded.
+- Category keyword map.
+- Series inference.
+- Notifications not carried.
+- The order-link send.
+- The legacy token routes (facade, `/magic-login/{token}`).
+- The dual-hash grace (label `auth`).
+- Masked dumps for the nightly job.
+
+### Later / not yet
+- **M2.2d:** sessions, speakers, exhibitors, sections, announcements and private info (typed sub-entities); CMS content (T7: `pages`, Voyager); chats, blocks and message reports (T6); legacy `tags` (Eventmie's typed performer/speaker pages) → speakers.
+- Per-occurrence seat plans for repetitive events (with occurrences of repetitive events); the chart images themselves (media copy to R2); a pixel screenshot diff against the real chart images (the e2e compares every row and table against the legacy coordinates instead, since synthetic charts have no image).
+- The `/api/v2` facade (V8 runs when it exists), the `/magic-login/{token}` sign-in route and `POST /v1/auth/legacy-exchange`.
+- Sending the order-link messages (a reviewed runbook step).
+- The live projectors for participation, contact stats and metrics (M3.1, M3.6).
+- Remember-me and signed-URL vectors (APP_KEYs), conflicting Apple/Google ids, beta-tenant merges.
+- T4/T5 remainders from M2.2b (failed bookings archive, exact fee schedules, `billing_customers`, bulk comps, distribution records, guest lists, event codes, kids counts).
+
+### Acceptance (M2.2c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The generator's new tables are deterministic, leave every M2.2b row unchanged, and plant every M2.2c case (seats within capacity per date, token hashes, magic tokens, orphan token, guest password, invalid newsletter address) | `tools/legacy-migrate/tests/m22c.test.ts` ("synthetic legacy generator") |
+| AC2 | Seat charts → floor plans: coordinate forms, rows by letter, tables per capacity, cm scale, natural image size, deterministic ids (`uuidv5` RFC vector), merged multi-chart plans | `m22c.test.ts` ("seat charts", "ids") |
+| AC3 | Category map, series key and name; the facade diff harness (type-strict, quirks ledger, HAR) | `m22c.test.ts` |
+| AC4 | Both instances pass V1–V12 with V6–V10 in the report and V8 pending | `tools/legacy-migrate/tests/m22c.int.test.ts` ("runs and V6–V10") |
+| AC5 | T3: venues (slug clash, bad coordinates, same-org links), categories and abc tags, series within one org only; seat plans with sold seats on the booked tickets, blocked seats, locked plan, per-date events without sales, natural-size scaling | `m22c.int.test.ts` ("T3 remainder") |
+| AC6 | T6: never opted in (granted only from the newsletter, withdrawn kept, every other contact `unknown_legacy`); push tokens on their platform; the guest password copied nowhere; the order-link plan is built and nothing is sent | `m22c.int.test.ts` ("T6 communications") |
+| AC7 | T8: a legacy Sanctum bearer resolves (expired, orphan and tampered do not); magic links until expiry, once; resets under 60 min only; only hashes stored; dual-hash grace both passwords, rerun-stable, reverts when the second password is gone | `m22c.int.test.ts` ("T8"); `packages/auth/tests/dual.test.ts` |
+| AC8 | T9: participation, totals and metrics add up to the orders; replayed events are stamped gap-free and published, the real mailers skip them (relay, `subscribes`, `consumeEvent`) and an opting-in projector sees them | `m22c.int.test.ts` ("T9"); `apps/worker/tests/relay.int.test.ts` ("replayed") |
+| AC9 | Legacy URLs: every 308 in the inventory is served by the proxy's lookup; unchanged ones are not redirected | `m22c.int.test.ts` ("URL inventory") |
+| AC10 | Isolation: an org sees none of another migrated org's new rows (11 tables); app_user cannot read the control schema | `m22c.int.test.ts` ("isolation") |
+| AC11 | A rerun changes nothing (15 new tables' ids) and V10 reproduces the checksums | `m22c.int.test.ts` ("idempotence and V10") |
+| AC12 | V6, V7 and V9 each catch a planted defect and pass again after | `m22c.int.test.ts` ("planted defects") |
+| AC13 | Offline legacy QR: raw and JSON payloads admit, duplicates, void and unknown refused, per-event salt | `packages/checkin-engine/tests/legacy.test.ts` |
+| AC14 | Browser: the gala's migrated chart is a locked plan whose every row and table sits at its legacy position (axe); a legacy QR scans on the Scan PWA offline and syncs; a renamed event's legacy URL and the organizer's root URL 308 to their pages (axe), unchanged URLs are served, other hosts are not rewritten | `apps/web/e2e/legacy-migration.spec.ts` |
+| AC15 | Nightly rehearsal job: synthetic on, masked defined and off until the owner's dumps exist | `.github/workflows/legacy-rehearsal.yml` |
+
 ## Next
-- M2.2c: T3 remainder (venues, categories, series inference, sessions/speakers/sections, seat charts), T6–T9, V6–V10, and the dual-hash grace period, then the nightly masked rehearsal in CI once masked dumps exist.
+- M2.2d: sessions, speakers, exhibitors, sections, announcements and private info; CMS content (T7); chats, blocks and reports; then the masked nightly rehearsal once the owner's masked dumps exist.

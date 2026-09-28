@@ -37,9 +37,13 @@ Each run:
    zone`, `tinyint(1)` smallint, unsigned bigint, zero dates null; values a column cannot hold (bad JSON
    in a JSON column, impossible dates, a TIME past 24 h) load as null and are quarantined.
 2. **Transform** T1 identity → T2 orgs → T3 catalog (events, ticket types, event roles, promo codes) →
-   T4 commerce → T5 check-ins → codes and links. Each stage is one transaction. Ids are deterministic,
-   so a rerun on the same dump changes nothing and duplicates nothing.
-3. **Validate** (V1–V5, V11, V12) and the quarantine gate, then print the summary and write the JSON report.
+   T4 commerce → T5 check-ins → codes and links → T3 remainder (venues, categories, series, seat
+   charts) → T6 communications (consents, push tokens, the order-link plan) → T8 auth artifacts
+   (access tokens, magic links, resets, dual-hash grace) → T9 derived data (participation, contact
+   totals, monthly metrics, replayed domain events) → the URL inventory (legacy redirects). Each stage
+   is one transaction. Ids are deterministic, so a rerun on the same dump changes nothing and
+   duplicates nothing.
+3. **Validate** (V1–V12) and the quarantine gate, then print the summary and write the JSON report.
 
 Options:
 
@@ -49,6 +53,7 @@ Options:
 | `--system-timezone=Area/City` | the dump's `regional.timezone_default` (else `America/New_York`) | The platform timezone that system timestamps are wall-clock in. |
 | `--report <file>` | none | Also write the full JSON report (checks, quarantine, exceptions, timings). |
 | `--skip-load` | off | Re-run the transforms on what is already staged (no `--dump`). |
+| `--freeze-at=<ISO instant>` | now | The freeze (T−0). What was live then is carried: unexpired access tokens, magic links until they expire, password resets under 60 minutes old; the dual-hash grace runs 180 days from it; the order-link plan covers events that had not ended. Use the real T−0 at cutover. |
 
 `LEGACY_TRACE=1` logs every statement slower than 0.5 s (timing rehearsals).
 
@@ -67,6 +72,11 @@ legacy migration validation — instance yay, run 12: PASS
   ok   V3 Status distributions (tickets by legacy booking state; orders reported)
   ok   V4 Referential integrity (0 orphans)
   ok   V5 Merged users vs distinct emails; pre-hijack guard; no staff from legacy
+  ok   V6 QR, token and password vectors (100% pass)
+  ok   V7 Golden queries (14) legacy vs migrated: 0 differences
+  ok   V8 Facade twin diff (0 unexplained) — pending: facade not built
+  ok   V9 URL inventory: every legacy URL has its planned status
+  ok   V10 Checksums per table (reproduced by a rerun on the same dump)
   ok   V11 RLS enabled + forced on every org_id table; two-org probe as app_user; staging not visible
   ok   V12 Timezone spot checks (50 events, 50 check-ins; DST folds/gaps logged)
   ok   quarantine: none
@@ -81,7 +91,20 @@ legacy migration validation — instance yay, run 12: PASS
   holding org (their owner was not an organizer), timezone fallbacks, DST folds and gaps, duplicate
   QR payloads (`order_number` repeated within an instance: not attached to any ticket), repeated
   gateway references, credentials skipped by the pre-hijack guard, legacy admins (never platform
-  staff), placeholder buyer emails, direct charges without a connected account.
+  staff), placeholder buyer emails, direct charges without a connected account; and since M2.2c:
+  unmapped categories, inferred series, venue coordinates or timezones that could not be read, seats
+  booked per date or over capacity, access tokens of users who were not migrated, invalid newsletter
+  addresses, legacy slugs shared by several events (`url_ambiguous_slug`).
+- **V6–V10** (M2.2c): V6 checks that every active booking's legacy QR resolves to exactly its ticket,
+  a sample of yy1 codes verifies, every live access token and magic link was carried with the right
+  hash, and every carried password is one of that person's legacy hashes (remember-me and signed-URL
+  vectors need the instances' APP_KEYs: pending). V7 runs 14 golden queries twice (legacy vs new: sales,
+  refunds, discounts, valid tickets per org and event, tickets per type, orders, payouts, open balances,
+  commission, promo redemptions, events and ticket types, check-ins, buyers). V8 is the facade twin diff:
+  pending until the `/api/v2` facade exists (harness `tools/legacy-migrate/src/facade-diff.ts`). V9 checks
+  each inventoried URL has its planned redirect or page. V10 hashes every staging table and the migrated
+  tables' stable columns: the same input must give the same output (a rerun on the same dump reproduces
+  the checksums).
 - Queries the owner may want:
 
 ```sql
@@ -100,7 +123,31 @@ select * from payments.legacy_settlements where kind = 'opening_balance' order b
   and payouts off; refresh their capabilities from Stripe at cutover (M2.6).
 - **ABC**: `abc.yayatoh.com` is attached to the ABC org as `pending_dns`; staff activate it at the
   B-A cutover. The ABC owner is the earliest abc admin (pending owner confirmation).
-- **Buyers' order links**: every migrated order has a manage token; sending the links is a T6 step (Later).
+- **Buyers' order links** (T6): every migrated order has a manage token. The migration builds the plan
+  and never sends anything. Review the dry run:
+
+  ```bash
+  pnpm migrate:legacy:order-links --instance=yay --report reports/yay-order-links.json
+  ```
+
+  It lists how many buyers get a "your new order link" message (orders of events that had not ended
+  at the freeze), per org and event, with masked samples and the reasons others are skipped
+  (`invalid_email`, `order_cancelled`, `no_active_tickets`, …). The send is a separate, reviewed step
+  after cutover (it queues the transactional `orders.tickets` message per planned order); it is not built
+  yet and needs owner approval.
+- **Consents**: newsletter subscribers are `granted` (with `withdrawn` for those who unsubscribed) on the
+  instance's platform-level org (the `yayatoh` platform org for yayatoh.com, ABC for abc); every other
+  migrated contact is `unknown_legacy`. Nobody is opted in.
+- **Seating**: each legacy chart is an org floor plan (Seating → saved plans) with the chart image as its
+  underlay (the image arrives with the media copy); sold seats are on the tickets. Organizers with
+  charts get the seating module (a `grant` override, `billing.entitlement_overrides`), and seated events
+  the `gala` profile. Repetitive events' per-date seats stay on the tickets only (exception
+  `seat_per_date_not_migrated`). Load the media manifest's image sizes into `legacy.media_images`
+  (instance, path, width_px, height_px) before the run to scale charts to their images.
+- **Series** (`series_inferred` exceptions): events of one organizer with the same title across years are
+  grouped; check the list and edit them in the console (Series).
+- **Legacy URLs** (`legacy.url_inventory`): every event, attendee-page, venue and organizer URL with its
+  planned status; the 308s are loaded into `marketplace.legacy_redirects` for the instance host.
 
 ## 4. Timed rehearsal and cutover
 
@@ -123,3 +170,10 @@ not create, and it never overwrites a password set on the new platform.
 No real legacy data is used in development. `pnpm migrate:legacy:synth --instance=yay --scale=small|demo|large --out file.sql`
 writes a deterministic synthetic dump (marked `SYNTHETIC TEST DATA ONLY`, reserved example domains);
 `pnpm migrate:legacy:demo` generates and migrates the e2e dataset (the Playwright global setup runs it).
+
+**Nightly rehearsals** (`.github/workflows/legacy-rehearsal.yml`): the synthetic job runs every night on
+the `large` dataset (both instances, a rerun for V10, the order-link dry run; reports as artifacts). The
+masked job is defined but off until the masked dumps exist: set the repository variable
+`LEGACY_MASKED_DUMPS_READY=true`, the `legacy-ref` environment, and the secrets
+`LEGACY_MASKED_DUMP_YAY_URL` / `LEGACY_MASKED_DUMP_ABC_URL` (read-only, expiring links to the masked
+files).

@@ -3,8 +3,8 @@ import { exec, hasTable, rows, type StepContext } from './context.ts';
 
 /**
  * T3 Catalog, the part commerce needs (roadmap §7.5): events, ticket types, event roles and promo
- * codes. Venues directory, categories/tags, `event_series` inference and typed sub-entities (sessions,
- * speakers, sections) are Later.
+ * codes. Venues directory, categories/tags, series inference and seat charts: t3-venues-series.ts and
+ * t3-seating.ts (M2.2c); typed sub-entities (sessions, speakers, sections): M2.2d.
  *
  * Time: the legacy app stored an event's DATE + TIME as wall-clock time in the platform timezone
  * (`regional.timezone_default`; the organizer's input was converted on save). The instant is that
