@@ -91,5 +91,12 @@
     "box_office": "taquilla",
     "scanner": "escáner",
     "viewer": "lector"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Tu cuenta de Yayatoh se ha eliminado",
+      "intro": "Como pediste, tu cuenta de Yayatoh se ha eliminado. Se cerró tu sesión en todas partes y se borraron tus datos de acceso y la verificación en dos pasos. Los organizadores a los que compraste conservan sus registros de pedidos, como exige la ley.\n\nSi no lo pediste tú, responde a este correo de inmediato."
+    },
+    "sentBy": "Enviado por Yayatoh sobre tu cuenta."
   }
 }

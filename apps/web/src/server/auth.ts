@@ -7,7 +7,7 @@ import {
   type TwoFactorService,
   twoFactorService,
 } from '@yayatoh/auth';
-import { IDENTITY_KEY_SCOPE, keyVault } from '@yayatoh/platform';
+import { IDENTITY_KEY_SCOPE, keyVault, liftErasedAccountMail } from '@yayatoh/platform';
 import { devAuthEnabled } from './dev.ts';
 // Registers the key vault (the composition root) before any seed is sealed.
 import './ports.ts';
@@ -63,6 +63,11 @@ export function getAuth(): Auth {
       secret,
       mailer,
       sealer,
+      // Someone whose address was erased signs up again (M1.14e): account mail reaches them again;
+      // org marketing still needs a new consent from them.
+      onUserCreated: async (user) => {
+        await liftErasedAccountMail(user.email);
+      },
     });
   }
   return instance;

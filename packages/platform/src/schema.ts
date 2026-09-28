@@ -323,3 +323,26 @@ export const rateLimitWindows = platform.table(
   },
   (t) => [index('rate_limit_windows_expires_idx').on(t.expiresAt)],
 );
+
+/**
+ * Platform-wide erased-address suppression (M1.14e). When a person is erased (an org-side
+ * erasure or an account deletion), the SHA-256 of their normalized email is kept here so the
+ * address isn't mailed again or re-added to a marketing list by any org: never the address
+ * itself. Global (DNS and inboxes are global); no app_user privileges: written and read only
+ * through SECURITY DEFINER functions (`platform.erased_address_*`), read by platform_reader.
+ * `account_lifted_at`: the person signed up again, so account mail reaches them; org marketing
+ * still needs a consent given after `created_at`.
+ */
+export const erasedAddresses = platform.table(
+  'erased_addresses',
+  {
+    addressHash: text('address_hash').primaryKey(),
+    reason: text('reason').notNull().default('erased'),
+    createdAt: tsz('created_at').notNull().defaultNow(),
+    accountLiftedAt: tsz('account_lifted_at'),
+  },
+  () => [
+    check('erased_addresses_hash_check', sql`address_hash ~ '^[0-9a-f]{64}$'`),
+    check('erased_addresses_reason_check', sql`reason in ('erased')`),
+  ],
+);

@@ -10,10 +10,12 @@ import {
   bulkCommands,
   bulkOperationRequesterTx,
   defineBulkAction,
+  markAddressErasedTx,
   purgeFilesMentioningTx,
   tenantCommand,
   tenantQuery,
 } from '@yayatoh/platform';
+import { eraseInvitationsDsarTx, invitationsDsarTx } from '@yayatoh/tenancy';
 import { eraseTicketsDsarTx, ticketsDsarTx } from '@yayatoh/ticketing';
 import { desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
@@ -41,8 +43,10 @@ export function maskEmail(emailNorm: string): string {
 }
 
 /** Everything the org holds about one email, allowlisted per module. */
-export async function collectSubjectTx(tx: TenantTx, orgId: string, emailNorm: string) {
+export async function collectSubjectTx(tx: TenantTx, orgId: string, emailNorm: string, now = new Date()) {
   const crm = await contactDsarTx(tx, emailNorm);
+  // Team invitations addressed to the person (M1.14e).
+  const invitations = await invitationsDsarTx(tx, emailNorm, now);
   const orders = await ordersDsarTx(tx, emailNorm);
   const orderIds = orders.map((o) => o.id);
   const ticketing = await ticketsDsarTx(tx, emailNorm, orderIds);
@@ -56,7 +60,7 @@ export async function collectSubjectTx(tx: TenantTx, orgId: string, emailNorm: s
     tx,
     ticketing.tickets.map((t) => t.id),
   );
-  return { crm, orders, ticketing, attendees, answers, admissions };
+  return { crm, orders, ticketing, attendees, answers, admissions, invitations };
 }
 
 type Subject = Awaited<ReturnType<typeof collectSubjectTx>>;
@@ -73,6 +77,7 @@ export const DsarSummary = z.object({
   attendees: z.int(),
   answers: z.int(),
   admissions: z.int(),
+  invitations: z.int(),
 });
 export type DsarSummary = z.infer<typeof DsarSummary>;
 
@@ -91,6 +96,7 @@ export function summarize(s: Subject): DsarSummary {
     attendees: s.attendees.length,
     answers: s.answers.length,
     admissions: s.admissions.length,
+    invitations: s.invitations.length,
   };
 }
 
@@ -127,7 +133,7 @@ export const findSubjectQuery = tenantQuery({
   permission: 'privacy:manage',
   handler: async ({ input, ctx, tx }) => {
     const email = normalizeEmail(input.email);
-    const summary = summarize(await collectSubjectTx(tx, requireOrg(ctx), email));
+    const summary = summarize(await collectSubjectTx(tx, requireOrg(ctx), email, ctx.now));
     const ref = await sha256Hex(email);
     const history = await tx
       .select()
@@ -168,7 +174,7 @@ async function eventNames(tx: TenantTx, ids: Iterable<string>): Promise<Record<s
 
 /** The access-request document (JSON): versioned, allowlisted, events named. */
 export async function subjectDocumentTx(tx: TenantTx, ctx: Ctx, emailNorm: string, orgName: string) {
-  const s = await collectSubjectTx(tx, requireOrg(ctx), emailNorm);
+  const s = await collectSubjectTx(tx, requireOrg(ctx), emailNorm, ctx.now);
   const events = await eventNames(tx, [
     ...s.orders.map((o) => o.eventId),
     ...s.ticketing.tickets.map((t) => t.eventId),
@@ -190,6 +196,7 @@ export async function subjectDocumentTx(tx: TenantTx, ctx: Ctx, emailNorm: strin
     attendeeRecords: s.attendees.map(({ id: _id, ...a }) => a),
     formAnswers: s.answers,
     checkIns: s.admissions,
+    teamInvitations: s.invitations,
     notes: [
       'Card numbers are never stored by the organizer or Yayatoh; payments are processed by Stripe.',
       'Money amounts are in minor units of the order currency (e.g. cents).',
@@ -251,6 +258,7 @@ export const EraseResult = z.object({
     attendees: z.int(),
     importRows: z.int(),
     answers: z.int(),
+    invitations: z.int(),
     files: z.int(),
   }),
 });
@@ -273,7 +281,7 @@ export const eraseSubjectCommand = tenantCommand({
     if (normalizeEmail(input.confirm) !== email)
       throw new DomainError('validation_failed', 'Type the email again to confirm', { field: 'confirm' });
     const orgId = requireOrg(ctx);
-    const before = summarize(await collectSubjectTx(tx, orgId, email));
+    const before = summarize(await collectSubjectTx(tx, orgId, email, ctx.now));
     if (!Object.values(before).some((n) => n > 0))
       throw new DomainError('not_found', 'Nothing is held about this email');
     const contact = await eraseContactDsarTx(tx, email, ctx.now);
@@ -281,7 +289,10 @@ export const eraseSubjectCommand = tenantCommand({
     const answers = await eraseResponsesDsarTx(tx, orders.orderIds, ctx.now);
     const tickets = await eraseTicketsDsarTx(tx, email, ctx.now);
     const attendees = await eraseAttendeesDsarTx(tx, email, contact.contactIds, ctx.now);
+    const invitations = await eraseInvitationsDsarTx(tx, email, ctx.now);
     const files = await purgeFilesMentioningTx(tx, email);
+    // Platform-wide (M1.14e): no org mails or re-imports the address to a marketing list again.
+    await markAddressErasedTx(tx, email);
     const summary = {
       contacts: contact.erased,
       consentsKept: contact.consentsKept,
@@ -294,6 +305,7 @@ export const eraseSubjectCommand = tenantCommand({
       attendees: attendees.erased,
       importRows: attendees.importRowsDeleted,
       answers: answers.erased,
+      invitations: invitations.deleted + invitations.redacted,
       files,
     };
     const [row] = await tx

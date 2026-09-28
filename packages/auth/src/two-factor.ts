@@ -57,7 +57,9 @@ export type SecurityAction =
   | 'two_factor.backup_code_used'
   | 'two_factor.challenge_passed'
   | 'step_up.confirmed'
-  | 'step_up.failed';
+  | 'step_up.failed'
+  | 'account.exported'
+  | 'account.deleted';
 
 export interface TwoFactorStatus {
   readonly enabled: boolean;

@@ -19,6 +19,7 @@ const CATEGORIES = [
   'attendees',
   'answers',
   'admissions',
+  'invitations',
 ] as const;
 
 /**

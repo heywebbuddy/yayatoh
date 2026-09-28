@@ -134,6 +134,7 @@ export {
   listEventsQuery,
   publicEventBySlug,
   removeEventRoleTx,
+  removeUserEventRolesTx,
   upsertEventRoleTx,
 } from './queries.ts';
 export {

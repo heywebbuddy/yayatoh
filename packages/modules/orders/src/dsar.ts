@@ -1,6 +1,6 @@
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
-import { and, asc, eq, inArray, isNotNull, lt, ne } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, lt, ne, or, type SQL, sql } from 'drizzle-orm';
 import { orderItems, orders, refunds } from './schema.ts';
 
 /** Orders that were ever paid: kept for tax and accounting (legal hold), only redacted. */
@@ -8,11 +8,48 @@ const SOLD = ['paid', 'partially_refunded', 'refunded'] as const;
 
 /** A person's orders as buyer, with items and refunds, allowlisted (M1.14c). */
 export async function ordersDsarTx(tx: TenantTx, emailNorm: string) {
+  return ordersWhereTx(tx, eq(orders.buyerEmail, emailNorm));
+}
+
+/**
+ * A signed-in person's own orders in the current org (M1.14e account export): those linked to
+ * their account or bought with their email. Same allowlist as the org-side export: what the
+ * buyer sees on their order page (status, names, amounts, items, refunds), no tokens or
+ * provider references.
+ */
+export async function buyerOrdersDsarTx(tx: TenantTx, userId: string | null, emailNorm: string) {
+  return ordersWhereTx(
+    tx,
+    userId
+      ? or(eq(orders.buyerUserId, userId), eq(orders.buyerEmail, emailNorm))
+      : eq(orders.buyerEmail, emailNorm),
+  );
+}
+
+/** Orgs where a person bought, linked or by email (SECURITY DEFINER; org ids only). */
+export async function buyerOrgs(userId: string | null, emailNorm: string): Promise<string[]> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string }>(sql`select org_id from orders.buyer_orgs(${userId}::uuid, ${emailNorm})`),
+  );
+  return rows.map((r) => r.org_id);
+}
+
+/**
+ * The account is being deleted (M1.14e): its orders stay (the org needs them for accounting and
+ * its own customer records; the buyer email on them is the org's data) but no longer point at the
+ * account. Returns how many were unlinked.
+ */
+export async function unlinkBuyerUserTx(tx: TenantTx, userId: string, now: Date): Promise<number> {
   const rows = await tx
-    .select()
-    .from(orders)
-    .where(eq(orders.buyerEmail, emailNorm))
-    .orderBy(asc(orders.createdAt));
+    .update(orders)
+    .set({ buyerUserId: null, updatedAt: now })
+    .where(eq(orders.buyerUserId, userId))
+    .returning({ id: orders.id });
+  return rows.length;
+}
+
+async function ordersWhereTx(tx: TenantTx, where: SQL | undefined) {
+  const rows = await tx.select().from(orders).where(where).orderBy(asc(orders.createdAt));
   const ids = rows.map((o) => o.id);
   const items = ids.length ? await tx.select().from(orderItems).where(inArray(orderItems.orderId, ids)) : [];
   const refundRows = ids.length ? await tx.select().from(refunds).where(inArray(refunds.orderId, ids)) : [];

@@ -118,7 +118,8 @@
       "complained": "Onderdrukt: de ontvanger markeerde eerdere mail als spam",
       "event_cancelled": "Het evenement of de datum is geannuleerd",
       "event_started": "Het evenement was al begonnen",
-      "event_postponed": "In de wacht zolang het evenement is uitgesteld"
+      "event_postponed": "In de wacht zolang het evenement is uitgesteld",
+      "erased": "Niet verzonden: de gegevens van deze persoon zijn op diens verzoek gewist"
     },
     "channels": {
       "email": "E-mail",
@@ -1071,7 +1072,8 @@
       "invalid_label": "Een label is te lang (max. 40 tekens)",
       "too_many_labels": "Meer dan 20 labels",
       "duplicate_in_file": "Hetzelfde e-mailadres staat eerder in het bestand",
-      "already_on_list": "Staat al op de gastenlijst"
+      "already_on_list": "Staat al op de gastenlijst",
+      "erased": "De gegevens van deze persoon zijn op diens verzoek gewist"
     },
     "preview": "Eerste rijen zoals ze worden geïmporteerd",
     "row": "Rij",
@@ -2168,7 +2170,8 @@
       "holderLinks": "Toegangslinks voor tickets",
       "attendees": "Vermeldingen op gastenlijsten",
       "answers": "Antwoorden bij het afrekenen",
-      "admissions": "Check-ins"
+      "admissions": "Check-ins",
+      "invitations": "Teamuitnodigingen"
     },
     "export": {
       "title": "Gegevens exporteren",
@@ -3610,6 +3613,28 @@
       "required": "Je rol vereist verificatie in twee stappen, dus die kan niet uit.",
       "already_enabled": "Verificatie in twee stappen staat al aan.",
       "not_enabled": "Verificatie in twee stappen staat uit."
+    },
+    "data": {
+      "title": "Je gegevens",
+      "explain": "Download een kopie van wat Yayatoh over je account bewaart, als JSON-bestand.",
+      "includes": "Het bevat je profiel, je inlogsessies en beveiligingsgebeurtenissen, de organisaties waarvoor je werkt en je rollen, je bestellingen en tickets, je meldingsvoorkeuren en toestemmingen.",
+      "excludes": "Het bevat nooit wachtwoorden, codes of andere geheimen. Organisatoren kunnen je geven wat zij over jou als klant bewaren.",
+      "prepare": "Mijn gegevens downloaden",
+      "ready": "Je bestand staat klaar.",
+      "download": "Bestand downloaden (JSON)"
+    },
+    "delete": {
+      "title": "Je account verwijderen",
+      "signOut": "Je wordt overal uitgelogd, en je wachtwoord, inlogcodes en tweestapsverificatie worden verwijderd.",
+      "teams": "Je verlaat alle organisaties waarvoor je werkt.",
+      "orders": "Organisatoren bewaren je bestellingen en tickets in hun administratie, zoals de wet vereist, maar ze zijn niet meer aan een account gekoppeld.",
+      "final": "Dit kan niet ongedaan worden gemaakt. Je kunt je later opnieuw aanmelden met hetzelfde e-mailadres; voor marketingmails is dan opnieuw je toestemming nodig.",
+      "blockedTitle": "Je kunt je account nog niet verwijderen",
+      "blockedExplain": "{count, plural, one {Je bent de enige eigenaar van deze organisatie. Maak eerst iemand anders eigenaar, of vraag Yayatoh-support om haar te sluiten:} other {Je bent de enige eigenaar van deze # organisaties. Maak eerst iemand anders eigenaar, of vraag Yayatoh-support om ze te sluiten:}}",
+      "confirmLabel": "Typ {email} om te bevestigen",
+      "confirmRequired": "Typ je e-mailadres om te bevestigen.",
+      "confirmMismatch": "Dat komt niet overeen. Typ je eigen e-mailadres om te bevestigen.",
+      "submit": "Mijn account verwijderen"
     }
   },
   "stepUp": {
@@ -3632,5 +3657,16 @@
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
     "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+  },
+  "accountDeleted": {
+    "metaTitle": "Account verwijderd",
+    "eyebrow": "Je account",
+    "title": "Je account is verwijderd",
+    "description": "Je bent uitgelogd en je Yayatoh-account bestaat niet meer.",
+    "email": "We hebben een bevestiging naar je e-mailadres gestuurd voordat we het verwijderden.",
+    "orders": "Organisatoren bij wie je kocht, bewaren hun bestelgegevens; vraag hen die ook te wissen als je dat wilt.",
+    "comeBack": "Je bent altijd welkom: inloggen met je e-mailadres maakt een nieuw account aan.",
+    "home": "Naar de startpagina",
+    "signIn": "Inloggen"
   }
 }

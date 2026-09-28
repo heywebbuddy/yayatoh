@@ -72,6 +72,15 @@ export {
   roleRequiresTwoFactor,
   TWO_FACTOR_ROLES,
 } from './domain/permissions.ts';
+export {
+  accountMembershipTx,
+  agreementsAcceptedByTx,
+  eraseInvitationsDsarTx,
+  invitationOrgs,
+  invitationsDsarTx,
+  leaveOrganizationTx,
+  soleOwnerOrgs,
+} from './dsar.ts';
 export * from './dto.ts';
 export { managedHostname, normalizeHostname, reservedHostname, tenantApex } from './hosting/hostnames.ts';
 export {

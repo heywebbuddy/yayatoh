@@ -118,7 +118,8 @@
       "complained": "Soppresso: il destinatario ha segnalato un’email precedente come spam",
       "event_cancelled": "L’evento o la data è stato annullato",
       "event_started": "L’evento era già iniziato",
-      "event_postponed": "In attesa finché l’evento è rinviato"
+      "event_postponed": "In attesa finché l’evento è rinviato",
+      "erased": "Non inviato: i dati di questa persona sono stati cancellati su sua richiesta"
     },
     "channels": {
       "email": "Email",
@@ -1071,7 +1072,8 @@
       "invalid_label": "Un’etichetta è troppo lunga (max 40 caratteri)",
       "too_many_labels": "Più di 20 etichette",
       "duplicate_in_file": "La stessa email compare prima nel file",
-      "already_on_list": "Già nella lista degli ospiti"
+      "already_on_list": "Già nella lista degli ospiti",
+      "erased": "I dati di questa persona sono stati cancellati su sua richiesta"
     },
     "preview": "Prime righe come verranno importate",
     "row": "Riga",
@@ -2168,7 +2170,8 @@
       "holderLinks": "Link di accesso ai biglietti",
       "attendees": "Voci nelle liste ospiti",
       "answers": "Risposte al checkout",
-      "admissions": "Check-in"
+      "admissions": "Check-in",
+      "invitations": "Inviti al team"
     },
     "export": {
       "title": "Esporta i suoi dati",
@@ -3610,6 +3613,28 @@
       "required": "Il tuo ruolo richiede la verifica in due passaggi, quindi non può essere disattivata.",
       "already_enabled": "La verifica in due passaggi è già attiva.",
       "not_enabled": "La verifica in due passaggi è disattivata."
+    },
+    "data": {
+      "title": "I tuoi dati",
+      "explain": "Scarica una copia di ciò che Yayatoh conserva sul tuo account, in un file JSON.",
+      "includes": "Include il tuo profilo, le sessioni di accesso e gli eventi di sicurezza, le organizzazioni in cui lavori e i tuoi ruoli, i tuoi ordini e biglietti, le preferenze di notifica e i consensi.",
+      "excludes": "Non include mai password, codici o altri segreti. Gli organizzatori possono darti ciò che conservano su di te come cliente.",
+      "prepare": "Scarica i miei dati",
+      "ready": "Il tuo file è pronto.",
+      "download": "Scarica il file (JSON)"
+    },
+    "delete": {
+      "title": "Elimina il tuo account",
+      "signOut": "Verrai disconnesso ovunque e la password, i codici di accesso e la verifica in due passaggi verranno rimossi.",
+      "teams": "Lascerai tutte le organizzazioni in cui lavori.",
+      "orders": "Gli organizzatori conservano i tuoi ordini e biglietti nei loro registri, come richiesto dalla legge, ma non saranno più collegati a un account.",
+      "final": "L'operazione non si può annullare. Potrai registrarti di nuovo con la stessa email; per le email di marketing servirà di nuovo il tuo consenso.",
+      "blockedTitle": "Non puoi ancora eliminare il tuo account",
+      "blockedExplain": "{count, plural, one {Sei l'unico proprietario di questa organizzazione. Prima nomina un altro proprietario o chiedi al supporto Yayatoh di chiuderla:} other {Sei l'unico proprietario di queste # organizzazioni. Prima nomina un altro proprietario o chiedi al supporto Yayatoh di chiuderle:}}",
+      "confirmLabel": "Digita {email} per confermare",
+      "confirmRequired": "Digita il tuo indirizzo email per confermare.",
+      "confirmMismatch": "Non corrisponde. Digita il tuo indirizzo email per confermare.",
+      "submit": "Elimina il mio account"
     }
   },
   "stepUp": {
@@ -3632,5 +3657,16 @@
     "invalidPassword": "La password non è corretta.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti, poi riprova.",
     "unauthenticated": "La sessione è scaduta. Accedi di nuovo."
+  },
+  "accountDeleted": {
+    "metaTitle": "Account eliminato",
+    "eyebrow": "Il tuo account",
+    "title": "Il tuo account è stato eliminato",
+    "description": "Sei stato disconnesso e il tuo account Yayatoh non esiste più.",
+    "email": "Abbiamo inviato una conferma al tuo indirizzo email prima di rimuoverlo.",
+    "orders": "Gli organizzatori da cui hai acquistato conservano i loro ordini; chiedi loro di cancellarli se lo desideri.",
+    "comeBack": "Puoi tornare quando vuoi: accedendo con la tua email si crea un nuovo account.",
+    "home": "Vai alla home page",
+    "signIn": "Accedi"
   }
 }

@@ -254,3 +254,65 @@ ${input.org.poweredByVisible ? html`<p style="margin:0;">${cat.common.poweredBy}
     preview: intro.length > 180 ? `${intro.slice(0, 177)}…` : intro,
   };
 }
+
+/**
+ * Platform notices about a person's own Yayatoh account (M1.14e), not sent on behalf of an org:
+ * the account-deleted confirmation, sent to the old address before it is erased. Same layout as
+ * org mail with the platform ink, no unsubscribe (strictly necessary).
+ */
+export function renderAccountNotice(input: {
+  readonly notice: 'deleted';
+  readonly locale: string | null | undefined;
+  readonly name?: string | null;
+}): RenderedMessage {
+  const lang = emailLocale(input.locale);
+  const dir = RTL_LOCALES.has(lang) ? 'rtl' : 'ltr';
+  const cat = EMAIL_MESSAGES[lang];
+  const copy = cat.account[input.notice];
+  const subject = copy.subject;
+  const intro = copy.intro;
+  const greeting = input.name
+    ? format(cat.common.greeting, lang, { name: input.name })
+    : cat.common.greetingNoName;
+  const paragraphs = intro
+    .split(/\n{2,}/)
+    .map(
+      (para) =>
+        html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${para}</p>`,
+    );
+  const doc = html`<!doctype html>
+<html lang="${lang}" dir="${dir}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background:${color.zinc[100]};font-family:'Helvetica Neue',Arial,'Noto Sans Arabic','Noto Sans Devanagari','Noto Sans SC','Noto Sans TC','Noto Sans JP',sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${color.zinc[100]};">
+<tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${color.white};border-radius:${radius.card};overflow:hidden;text-align:start;">
+<tr><td style="background:${color.ink};color:${color.white};padding:18px 28px;font-size:16px;font-weight:600;">Yayatoh</td></tr>
+<tr><td style="padding:28px 28px 8px;">
+<h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:400;color:${color.ink};">${subject}</h1>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${greeting}</p>
+${paragraphs}
+</td></tr>
+<tr><td style="padding:16px 28px 24px;border-top:1px solid ${color.zinc[200]};font-size:12px;line-height:1.5;color:${color.zinc[500]};">
+<p style="margin:0;">${cat.account.sentBy}</p>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+  const text = [subject, '', greeting, '', intro, '', '--', cat.account.sentBy, ''].join('\n');
+  return {
+    subject,
+    html: doc instanceof SafeHtml ? doc.value : String(doc),
+    text,
+    lang,
+    dir,
+    preview: intro.length > 180 ? `${intro.slice(0, 177)}…` : intro,
+  };
+}

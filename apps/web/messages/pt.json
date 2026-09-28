@@ -118,7 +118,8 @@
       "complained": "Suprimido: o destinatário marcou um e-mail anterior como spam",
       "event_cancelled": "O evento ou a data foi cancelado",
       "event_started": "O evento já tinha começado",
-      "event_postponed": "Em espera enquanto o evento está adiado"
+      "event_postponed": "Em espera enquanto o evento está adiado",
+      "erased": "Não enviado: os dados desta pessoa foram apagados a pedido dela"
     },
     "channels": {
       "email": "E-mail",
@@ -1071,7 +1072,8 @@
       "invalid_label": "Uma etiqueta é longa demais (máx. 40 caracteres)",
       "too_many_labels": "Mais de 20 etiquetas",
       "duplicate_in_file": "O mesmo e-mail aparece antes no arquivo",
-      "already_on_list": "Já está na lista de convidados"
+      "already_on_list": "Já está na lista de convidados",
+      "erased": "Os dados desta pessoa foram apagados a pedido dela"
     },
     "preview": "Primeiras linhas como serão importadas",
     "row": "Linha",
@@ -2168,7 +2170,8 @@
       "holderLinks": "Ligações de acesso a bilhetes",
       "attendees": "Entradas em listas de convidados",
       "answers": "Respostas no pagamento",
-      "admissions": "Entradas registadas"
+      "admissions": "Entradas registadas",
+      "invitations": "Convites de equipa"
     },
     "export": {
       "title": "Exportar os dados",
@@ -3610,6 +3613,28 @@
       "required": "Sua função exige a verificação em duas etapas, então ela não pode ser desativada.",
       "already_enabled": "A verificação em duas etapas já está ativada.",
       "not_enabled": "A verificação em duas etapas está desativada."
+    },
+    "data": {
+      "title": "Os seus dados",
+      "explain": "Transfira uma cópia do que a Yayatoh guarda sobre a sua conta, num ficheiro JSON.",
+      "includes": "Inclui o seu perfil, sessões e eventos de segurança, as organizações onde trabalha e as suas funções, as suas encomendas e bilhetes, as preferências de notificação e os consentimentos.",
+      "excludes": "Nunca inclui palavras-passe, códigos ou outros segredos. Os organizadores podem dar-lhe o que guardam sobre si enquanto cliente.",
+      "prepare": "Transferir os meus dados",
+      "ready": "O seu ficheiro está pronto.",
+      "download": "Transferir o ficheiro (JSON)"
+    },
+    "delete": {
+      "title": "Eliminar a sua conta",
+      "signOut": "A sessão será terminada em todo o lado, e a sua palavra-passe, códigos de acesso e verificação em dois passos serão removidos.",
+      "teams": "Sairá de todas as organizações onde trabalha.",
+      "orders": "Os organizadores mantêm as suas encomendas e bilhetes nos registos, como a lei exige, mas deixam de estar ligados a uma conta.",
+      "final": "Não é possível anular. Pode voltar a registar-se com o mesmo e-mail; os e-mails de marketing voltam a precisar do seu consentimento.",
+      "blockedTitle": "Ainda não pode eliminar a sua conta",
+      "blockedExplain": "{count, plural, one {É o único proprietário desta organização. Primeiro torne outra pessoa proprietária ou peça ao suporte da Yayatoh para a encerrar:} other {É o único proprietário destas # organizações. Primeiro torne outra pessoa proprietária ou peça ao suporte da Yayatoh para as encerrar:}}",
+      "confirmLabel": "Escreva {email} para confirmar",
+      "confirmRequired": "Escreva o seu endereço de e-mail para confirmar.",
+      "confirmMismatch": "Não corresponde. Escreva o seu próprio endereço de e-mail para confirmar.",
+      "submit": "Eliminar a minha conta"
     }
   },
   "stepUp": {
@@ -3632,5 +3657,16 @@
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
     "unauthenticated": "Sua sessão terminou. Entre de novo."
+  },
+  "accountDeleted": {
+    "metaTitle": "Conta eliminada",
+    "eyebrow": "A sua conta",
+    "title": "A sua conta foi eliminada",
+    "description": "A sessão foi terminada e a sua conta Yayatoh já não existe.",
+    "email": "Enviámos uma confirmação para o seu e-mail antes de o remover.",
+    "orders": "Os organizadores a quem comprou mantêm os registos das encomendas; peça-lhes que os apaguem se também o desejar.",
+    "comeBack": "Pode voltar quando quiser: iniciar sessão com o seu e-mail cria uma nova conta.",
+    "home": "Ir para a página inicial",
+    "signIn": "Iniciar sessão"
   }
 }

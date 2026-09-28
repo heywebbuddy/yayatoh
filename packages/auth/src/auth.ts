@@ -39,6 +39,11 @@ export interface AuthOptions {
   readonly sealer?: SecretSealer;
   /** Where the sign-in page is, for a magic link that still needs the second step. */
   readonly signInPath?: string;
+  /**
+   * Called after a new account is created (a first sign-in with an emailed code, an accepted
+   * invitation). The web lifts an erased address's account-mail suppression here (M1.14e).
+   */
+  readonly onUserCreated?: (user: { id: string; email: string }) => Promise<void>;
 }
 
 export const SESSION_COOKIE_BASENAME = 'yy.session';
@@ -123,6 +128,17 @@ export function createAuth(opts: AuthOptions) {
     trustedOrigins: [...(opts.trustedOrigins ?? [])],
     telemetry: { enabled: false },
     database: sealer ? (options: Any) => sealTwoFactorSecrets(database(options), sealer) : database,
+    databaseHooks: opts.onUserCreated
+      ? {
+          user: {
+            create: {
+              after: async (user: { id: string; email: string }) => {
+                await opts.onUserCreated?.({ id: user.id, email: user.email });
+              },
+            },
+          },
+        }
+      : undefined,
     emailAndPassword: {
       enabled: true,
       minPasswordLength: 8,

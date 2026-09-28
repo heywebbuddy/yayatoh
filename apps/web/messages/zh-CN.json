@@ -118,7 +118,8 @@
       "complained": "已抑制：收件人曾将之前的邮件标记为垃圾邮件",
       "event_cancelled": "活动或场次已取消",
       "event_started": "活动已经开始",
-      "event_postponed": "活动延期期间暂缓"
+      "event_postponed": "活动延期期间暂缓",
+      "erased": "未发送：此人的数据已应其要求删除"
     },
     "channels": {
       "email": "电子邮件",
@@ -1071,7 +1072,8 @@
       "invalid_label": "标签过长（最多 40 个字符）",
       "too_many_labels": "标签超过 20 个",
       "duplicate_in_file": "文件前面已出现相同的电子邮箱",
-      "already_on_list": "已在宾客名单中"
+      "already_on_list": "已在宾客名单中",
+      "erased": "此人的数据已应其要求删除"
     },
     "preview": "前几行的导入效果",
     "row": "行",
@@ -2168,7 +2170,8 @@
       "holderLinks": "门票访问链接",
       "attendees": "宾客名单条目",
       "answers": "结账时的回答",
-      "admissions": "签到"
+      "admissions": "签到",
+      "invitations": "团队邀请"
     },
     "export": {
       "title": "导出其数据",
@@ -3610,6 +3613,28 @@
       "required": "你的角色要求使用两步验证，因此无法关闭。",
       "already_enabled": "两步验证已开启。",
       "not_enabled": "两步验证已关闭。"
+    },
+    "data": {
+      "title": "你的数据",
+      "explain": "下载 Yayatoh 保存的有关你账户的信息副本（JSON 文件）。",
+      "includes": "包括你的个人资料、登录会话和安全事件、你所在的组织及角色、你的订单和门票、通知偏好以及同意记录。",
+      "excludes": "绝不包含密码、验证码或其他机密信息。主办方可以向你提供他们作为客户保存的你的信息。",
+      "prepare": "下载我的数据",
+      "ready": "你的文件已准备好。",
+      "download": "下载文件（JSON）"
+    },
+    "delete": {
+      "title": "删除你的账户",
+      "signOut": "你将在所有设备上退出登录，你的密码、登录验证码和两步验证都会被移除。",
+      "teams": "你将退出你所在的所有组织。",
+      "orders": "主办方会依法在其记录中保留你的订单和门票，但它们将不再与账户关联。",
+      "final": "此操作无法撤销。你以后可以用同一邮箱重新注册；营销邮件需要你再次同意。",
+      "blockedTitle": "你暂时无法删除账户",
+      "blockedExplain": "{count, plural, other {你是以下 # 个组织的唯一所有者。请先将其他人设为所有者，或请 Yayatoh 支持关闭这些组织：}}",
+      "confirmLabel": "输入 {email} 以确认",
+      "confirmRequired": "请输入你的邮箱地址以确认。",
+      "confirmMismatch": "不匹配。请输入你自己的邮箱地址以确认。",
+      "submit": "删除我的账户"
     }
   },
   "stepUp": {
@@ -3632,5 +3657,16 @@
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
     "unauthenticated": "会话已结束，请重新登录。"
+  },
+  "accountDeleted": {
+    "metaTitle": "账户已删除",
+    "eyebrow": "你的账户",
+    "title": "你的账户已删除",
+    "description": "你已退出登录，你的 Yayatoh 账户已不存在。",
+    "email": "在删除之前，我们已向你的邮箱发送了确认。",
+    "orders": "你购票的主办方会保留其订单记录；如需删除，请联系他们。",
+    "comeBack": "欢迎随时回来：使用你的邮箱登录即可创建新账户。",
+    "home": "前往首页",
+    "signIn": "登录"
   }
 }

@@ -62,3 +62,34 @@ export function nextDeliveryState(current: string | null, event: DeliveryFact): 
 export function suppressedReason(reason: string): 'bounced' | 'complained' {
   return reason === 'complaint' ? 'complained' : 'bounced';
 }
+
+/**
+ * Mail to an erased address (M1.14e platform-wide suppression). Three classes of message:
+ * - `order`: strictly necessary transactional mail about an order or ticket (tickets, refunds,
+ *   claim and holder links, seat-finder codes, replies the customer asked for). It goes out: it
+ *   only exists because of an order that is still being fulfilled or a new one the person placed.
+ * - `account`: mail to a Yayatoh account (team invitations, member notifications). It goes out
+ *   only once the person has signed up again after the erasure.
+ * - `org`: everything else an org sends (reminders, event updates, marketing). Suppressed in
+ *   every org until that org records a new marketing consent for the address after the erasure.
+ * Pending counsel (docs/specs/M1.14/spec.md, M1.14e).
+ */
+export type ErasedMailClass = 'order' | 'account' | 'org';
+
+export function erasedMailClass(
+  kind: string,
+  def: { readonly category: string; readonly audience?: readonly string[] },
+): ErasedMailClass {
+  if (kind === 'tenancy.invitation' || def.audience) return 'account';
+  return def.category === 'transactional' ? 'order' : 'org';
+}
+
+export function erasedAddressAllows(input: {
+  readonly mailClass: ErasedMailClass;
+  readonly accountLiftedAt: Date | null;
+  readonly consentRegiven: boolean;
+}): boolean {
+  if (input.mailClass === 'order') return true;
+  if (input.mailClass === 'account') return input.accountLiftedAt !== null;
+  return input.consentRegiven;
+}

@@ -33,3 +33,39 @@ export const dsarRequests = tenantTable(
     check('dsar_requests_subject_ref_check', sql`subject_ref ~ '^[0-9a-f]{64}$'`),
   ],
 );
+
+export const ACCOUNT_REQUEST_KINDS = ['access', 'erasure'] as const;
+
+/**
+ * Data-subject requests about Yayatoh's own accounts (M1.14e; Yayatoh is the controller):
+ * self-service downloads and deletions, and staff-handled requests from the admin console.
+ * Global (a person's account spans orgs). Like `dsar_requests` it never keeps the address:
+ * `subject_ref` is the SHA-256 of the normalized email and `subject_hint` a masked form; `actor`
+ * is `self` or `staff:<id>`; `reason` is the staff member's note (required for staff). No app_user
+ * privileges: rows are added only through the SECURITY DEFINER `privacy.record_account_request`,
+ * and read by platform_reader (the admin console).
+ */
+export const accountRequests = privacySchema.table(
+  'account_requests',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    kind: text('kind').notNull(),
+    subjectRef: text('subject_ref').notNull(),
+    subjectHint: text('subject_hint').notNull(),
+    actor: text('actor').notNull(),
+    reason: text('reason'),
+    summary: jsonb('summary').notNull().default({}),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('account_requests_created_idx').on(t.createdAt),
+    index('account_requests_subject_idx').on(t.subjectRef),
+    check('account_requests_kind_check', sql`kind in ('access', 'erasure')`),
+    check('account_requests_subject_ref_check', sql`subject_ref ~ '^[0-9a-f]{64}$'`),
+    check('account_requests_actor_check', sql`actor = 'self' or actor ~ '^staff:[0-9a-f-]{36}$'`),
+    check(
+      'account_requests_reason_check',
+      sql`(actor = 'self' and reason is null) or (actor <> 'self' and length(btrim(reason)) between 10 and 500)`,
+    ),
+  ],
+);

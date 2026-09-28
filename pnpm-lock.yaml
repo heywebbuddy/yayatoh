@@ -271,6 +271,9 @@ importers:
       '@yayatoh/messaging':
         specifier: workspace:*
         version: link:../../packages/modules/messaging
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../../packages/modules/notifications
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../../packages/modules/payments
@@ -280,6 +283,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
+      '@yayatoh/privacy':
+        specifier: workspace:*
+        version: link:../../packages/modules/privacy
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
@@ -1398,6 +1404,9 @@ importers:
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../attendees
+      '@yayatoh/auth':
+        specifier: workspace:*
+        version: link:../../auth
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
@@ -1419,6 +1428,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
@@ -1820,6 +1832,9 @@ importers:
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../modules/attendees
+      '@yayatoh/auth':
+        specifier: workspace:*
+        version: link:../auth
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../modules/billing

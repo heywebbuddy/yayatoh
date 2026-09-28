@@ -1,6 +1,6 @@
 # M1.14 — Security, privacy and ops readiness
 
-Roadmap: M1.14 ("Two CSP profiles; WAF and BotID; rate limits; org-facing audit view. PITR plus off-account dumps, with a restore drill. Status page, on-call rota, runbooks v1, SLO alerts. Privacy notice, sub-processor list, DPA; DSAR tooling; retention jobs. k6 load tests; ZAP; accessibility audit; threat model. Acceptance: restore RTO ≤1 h; zero high ZAP findings; k6 thresholds met."). Roadmap §10 (request protection, privacy, retention, SLOs), §8.2 (runbooks, on-call). Risk tags: `auth`, `tenancy`, `db-migration`, `infra`, `legal-copy`. Delivered in four increments; one migration (`0039_clear_zzzax.sql`).
+Roadmap: M1.14 ("Two CSP profiles; WAF and BotID; rate limits; org-facing audit view. PITR plus off-account dumps, with a restore drill. Status page, on-call rota, runbooks v1, SLO alerts. Privacy notice, sub-processor list, DPA; DSAR tooling; retention jobs. k6 load tests; ZAP; accessibility audit; threat model. Acceptance: restore RTO ≤1 h; zero high ZAP findings; k6 thresholds met."). Roadmap §10 (request protection, privacy, retention, SLOs), §8.2 (runbooks, on-call). Risk tags: `auth`, `tenancy`, `db-migration`, `infra`, `legal-copy`. Delivered in five increments; migrations `0039_clear_zzzax.sql` and (M1.14e) `0054_cuddly_jackal.sql`.
 
 Services that need owner accounts (Vercel WAF/BotID, Upstash, Neon PITR, the backup account, a status page and paging) have config, scripts, runbooks and local or fake equivalents here; the owner steps are in `docs/owner-inbox.md` (M1.14).
 
@@ -43,6 +43,50 @@ Services that need owner accounts (Vercel WAF/BotID, Upstash, Neon PITR, the bac
 - **ZAP** (`zap/baseline.conf`, `zap/run-baseline.sh`): baseline in Docker; exits non-zero on High or FAIL rules.
 - **Threat model** (`docs/ops/threat-model.md`): STRIDE per surface with controls and gaps. **Results:** `docs/ops/security-testing.md`.
 
+## M1.14e — DSAR for Yayatoh's own accounts, team invitations, erased-address suppression (done)
+Yayatoh is the **controller** for accounts (identity, sessions, security history, which orgs a person works in); each org stays the controller of its own customers (orders, tickets, contacts, consents).
+
+- **Self-service (account page, `/account/security`):**
+  - *Download my data:* "Confirm it's you" (step-up, 10 minutes), then `GET /api/account/export` returns `yayatoh.account/1` JSON: profile, sign-in methods (booleans, never hashes), sessions (device, IP, times; never tokens), security events (action + allowlisted `method`/`purpose`/`by`), memberships and roles, notification choices and click-wrap acceptances per org, their orders and tickets per organizer (the fields the buyer already sees), marketing consents, team invitations. Allowlisted by a Zod document schema (unknown keys dropped). Recorded in `privacy.account_requests` (masked) and as a security event `account.exported`. Signed out → 401; stale step-up → 403.
+  - *Delete my account:* the email typed again + step-up. Refused (`invalid_state`, reason `last_owner`) while the person is the only owner of any org; the page then hides the form and names the orgs, and a stale form submitted later gets the same message. On confirm: the confirmation email goes to the old address first (dev mailbox in dev/CI; platform sender, 13 locales, no unsubscribe), then **per org** a platform command (`privacy.detachAccount`, `platform:` permission → system actor only) removes the membership (same per-org owner lock as role changes), event roles, notification choices, push tokens and inbox, unlinks orders and contacts from the account and deletes/redacts invitations addressed to them — audited in each org's chain as `privacy.account_erased` against the user id (now pseudonymous; no address in the data). Then the identity is anonymised in one transaction (packages/auth): `account.deleted` security event, every session revoked, credentials, two-step verification and pending codes deleted, email → `sha256(email)+<id>@erased.invalid`, name/picture/language cleared, `deleted_at` set. The address joins the erased list, signup-code notes that mention it are redacted, and the request is recorded. The person lands on `/account/deleted`; their password no longer works; signing in with an emailed code creates a new, empty account.
+  - **Orders stay** (legal/accounting hold): the buyer email on an order is the organizer's customer record and stays with the org (they can erase it with their own DSAR tool; the confirmation page says so). Pending owner/counsel.
+- **Staff console (`apps/admin`, `/people`, English only):** admin and support staff (`privacy` action; finance has no need to see or erase personal data — pending owner). Find by email across accounts (live and earlier deleted ones, by hash), staff role, memberships, team invitations (all orgs), orders as a buyer, signup codes (created or mentioning the address), sessions, security events, the erased list and earlier requests — one audited platform_reader read whose access-log reason carries a masked address only. Export (same document) and erase (same rules, no step-up for the subject) each need a written reason (10–500 characters), recorded with `staff:<id>` in `privacy.account_requests`; erase also needs the email typed again and is refused for active staff (revoke with the owner CLI first). An address without an account can be erased too (its invitations).
+- **Team invitations in the org-side DSAR (M1.14c gap):** `privacy.findSubject` counts invitations, the access export lists `teamInvitations` (email, role, status, dates; never the inviter), and erasure deletes open invitations and redacts the address on accepted/revoked ones.
+- **Platform-wide erased-address suppression:** `platform.erased_addresses` (SHA-256 of the NFC-normalized, trimmed, lower-cased address; reason `erased`; `created_at`; `account_lifted_at`; never the address). Global, no app_user privileges; SECURITY DEFINER `erased_address_add` / `_lookup` / `_lift_account`. Written by org-side erasure and account deletion (a repeat erasure restarts the clock).
+  - *Dispatcher (every org):* **order mail** (transactional kinds about an order or ticket: tickets, refunds, claim and holder links, seat-finder codes, replies the customer asked for) still goes out — it exists only for an order being fulfilled or a new one; **account mail** (team invitations, member notifications) goes out once the person has signed up again; **org mail** (reminders, event updates, marketing) is suppressed (`reason: erased`, shown in the order's message log) until that org records a new marketing consent captured after the erasure. Pending counsel.
+  - *Guest-list import (every org):* an erased address is skipped at "Check rows" and at import time with the reason "This person's data was erased at their request" (in the counts and the "rows that can't be imported" CSV).
+  - *Signup:* allowed. A new account for the address lifts the suppression for account mail only (Better Auth `databaseHooks.user.create.after` → `liftErasedAccountMail`); org marketing needs a new consent.
+- **Retention of the anonymised rows (pending owner):** the anonymised `auth.users` row and its `security_events` are kept while any org audit entry, order or record names the id (at most the 7-year accounting hold of the orders they bought), then may be deleted by a later retention job; `privacy.account_requests` and `platform.erased_addresses` are kept for 7 years (accountability / proof of erasure; hashes only). The message log keeps delivery rows (evidence); `recipient_email` on queued org messages is not yet redacted (see Later).
+
+### M1.14e pending the owner / counsel
+Keeping orders (and the buyer email) with the org after an account deletion; which mail may reach an erased address (order mail yes, account mail after re-signup, org mail after a new consent); a platform-wide suppression triggered by one org's erasure; admin+support (not finance) for staff DSAR; retention periods above; production email provider for the confirmation (SES, owner account).
+
+### M1.14e later / not yet
+- Redact `notifications.messages.recipient_email` and delivery rows for an erased address (org-side erasure and deletion).
+- Refuse self-service deletion for active staff (the admin console refuses; the web page can't read the staff list).
+- Indexes for `orders.buyer_orgs` (buyer email / user id, created concurrently) if DSAR volume grows; today it scans orders.
+- Unassign door-staff devices (`checkin.devices.assigned_user_id`) on deletion (the account can no longer sign in; the device stays with the org).
+- A retention job that deletes anonymised identity rows once nothing references them.
+
+### M1.14e acceptance
+| ID | Criterion | Test |
+|---|---|---|
+| AC24 | Address normalization (NFC, trim, lower-case) and SHA-256 hashing; no address kept | `packages/platform/tests/erased-addresses.test.ts` |
+| AC25 | Account document allowlist: no tokens, hashes, seeds, backup codes, provider ids, internal ids or other people; grouped by org; summary counts | `packages/modules/privacy/tests/account-document.test.ts` |
+| AC26 | Erased-address mail classes and rules (order / account after re-signup / org after new consent); deletion notice in 13 locales, RTL, escaped, platform sender | `packages/modules/notifications/tests/erased-rules.test.ts`, `account-notice.test.ts` |
+| AC27 | Self export: step-up required; allowlisted document across orgs (membership, purchase, consent, invitation); recorded masked; security event; app_user can't read the record or the list | `packages/testing/tests/account-dsar.int.test.ts` |
+| AC28 | Self deletion: last-owner refusal naming the org (nothing changed); step-up; anonymised identity, sessions/credentials/2FA gone, old password refused; membership removed, order kept but unlinked, invitation removed; every org's audit chain verifies with a pseudonymous `privacy.account_erased` entry; erased list + record; signing up again works and lifts account mail | `account-dsar.int.test.ts` |
+| AC29 | Only the platform may detach an account (owners refused); a detach in one org leaves another untouched | `account-dsar.int.test.ts` |
+| AC30 | Staff requests: reason required; export without step-up; erase an address with only invitations; not_found for nothing; same last-owner rule; recorded with staff and reason | `account-dsar.int.test.ts` |
+| AC31 | Org-side DSAR finds, exports and erases team invitations; isolation | `account-dsar.int.test.ts` |
+| AC32 | Erasure in one org suppresses org mail in every org; order mail goes out; invitations suppressed until re-signup; a new consent in one org re-enables that org only; import in another org skips the address with `erased` | `account-dsar.int.test.ts` |
+| AC33 | Account page: download my data (step-up dialog, file contents), keyboard-only download, 401/403 without session or step-up, Arabic RTL, axe | `apps/web/e2e/account-privacy.spec.ts` |
+| AC34 | Delete my account: empty and mismatched confirmation, cancelled step-up keeps the account, deletion, confirmation email, signed out, old password refused, emailed-code sign-in creates a new account; Arabic confirmation page; axe | `apps/web/e2e/account-privacy.spec.ts` |
+| AC35 | Last owner: no form and the org named (hidden control); a stale form refused naming the org (refused action) | `apps/web/e2e/account-privacy.spec.ts` |
+| AC36 | Org console: an invitation is found, exported (JSON) and removed by erasure; an erased address is skipped on a guest import with the reason shown | `apps/web/e2e/account-privacy.spec.ts` |
+| AC37 | Staff console: find (validation, nothing found), export with reason (download checked), erase (mismatch, reason), history and erased list after, masked access log; keyboard; last-owner refusal; finance: no nav item, page refused; axe | `apps/admin/e2e/people.spec.ts` |
+| AC38 | Messages in 13 locales | `apps/web/tests/messages.test.ts` |
+
 ## Pending the owner
 Rate-limit values; retention defaults; Upstash; WAF/BotID/Turnstile; PITR + backup account + offline key + production-size drill; status page, paging and rota; privacy notice / sub-processors / DPA wording and contact (counsel); HSTS preload; staging ZAP and k6 at 3× peak; NVDA/VoiceOver and VPAT (docs/owner-inbox.md, M1.14).
 
@@ -51,7 +95,7 @@ Rate-limit values; retention defaults; Upstash; WAF/BotID/Turnstile; PITR + back
 - CSP for `apps/admin` (staff console) with the same builder.
 - Step-up before erasure and exports once M1.2c lands (typed confirmation today).
 - WORM anchor of each org's chain head (Object Lock) to detect truncation.
-- ZIP/CSV variants of the access export; DSAR for Yayatoh's own accounts (controller side) and team invitations; suppression list so an erased address isn't re-added to marketing.
+- ZIP/CSV variants of the access export. (DSAR for Yayatoh's own accounts, team invitations and the erased-address suppression list: done in M1.14e.)
 - Turnstile after repeated failures; account-level lockout alerts.
 - The checkout stress profile (no think time, one ticket type) exceeds 800 ms p95 on one small machine: waiting room / capacity work (roadmap §10, M2.3).
 

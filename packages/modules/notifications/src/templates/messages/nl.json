@@ -91,5 +91,12 @@
     "box_office": "kassa",
     "scanner": "scanner",
     "viewer": "lezer"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Je Yayatoh-account is verwijderd",
+      "intro": "Zoals je vroeg, is je Yayatoh-account verwijderd. Je bent overal uitgelogd en je inloggegevens en tweestapsverificatie zijn verwijderd. Organisatoren bij wie je kocht, bewaren hun bestelgegevens, zoals de wet vereist.\n\nHeb jij dit niet gevraagd? Beantwoord deze e-mail dan meteen."
+    },
+    "sentBy": "Verzonden door Yayatoh over je account."
   }
 }

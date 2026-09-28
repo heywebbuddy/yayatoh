@@ -13,13 +13,17 @@ setPlatformAuditSink(databaseAuditSink);
 
 export type StaffRole = (typeof STAFF_ROLES)[number];
 
-/** What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only). */
+/**
+ * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
+ * `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
+ * people's requests; finance has no reason to see or erase personal data (pending owner).
+ */
 const CAN: Record<StaffRole, readonly StaffAction[]> = {
-  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'reports'],
-  support: ['view', 'suspend', 'reports'],
+  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'reports', 'privacy'],
+  support: ['view', 'suspend', 'reports', 'privacy'],
   finance: ['view', 'payouts', 'fees'],
 };
-export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements' | 'reports';
+export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements' | 'reports' | 'privacy';
 
 export interface Staff {
   readonly userId: string;
