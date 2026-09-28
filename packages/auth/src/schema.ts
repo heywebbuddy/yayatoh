@@ -265,6 +265,102 @@ export const legacyTokens = identity.table(
   ],
 );
 
+/**
+ * Passkeys (M1.2f; Better Auth's passkey plugin, WebAuthn). Staff sign in to the staff console
+ * with one (a user-verifying passkey counts as the console's second step). Only the public key is
+ * stored; the private key never leaves the authenticator.
+ */
+export const passkeys = identity.table(
+  'passkeys',
+  {
+    id: uuid('id').primaryKey(),
+    name: text('name'),
+    publicKey: text('public_key').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    credentialID: text('credential_id').notNull(),
+    counter: integer('counter').notNull(),
+    deviceType: text('device_type').notNull(),
+    backedUp: boolean('backed_up').notNull(),
+    transports: text('transports'),
+    aaguid: text('aaguid'),
+    createdAt: ts('created_at').defaultNow(),
+  },
+  (t) => [
+    index('passkeys_user_id_idx').on(t.userId),
+    uniqueIndex('passkeys_credential_id_key').on(t.credentialID),
+  ],
+);
+
+/**
+ * Trusted devices (M1.2f): after the second sign-in step, a person may trust the browser for 30
+ * days; later sign-ins there skip the second step. The browser holds `<id>.<secret>` in a
+ * host-only cookie; only the SHA-256 of the secret is stored. Listed and revocable in account
+ * security; all revoked on a password change or reset and on account deletion.
+ */
+export const trustedDevices = identity.table(
+  'trusted_devices',
+  {
+    id: uuid('id').primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    secretHash: text('secret_hash').notNull(),
+    /** The host the cookie lives on (with port outside production). */
+    host: text('host').notNull(),
+    /** A short description from the user agent ("Chrome on macOS"); never the raw header. */
+    label: text('label').notNull(),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    lastUsedAt: ts('last_used_at'),
+    expiresAt: ts('expires_at').notNull(),
+    revokedAt: ts('revoked_at'),
+    /** `revoked` (by the person), `password_changed`, `account_deleted`. */
+    revokedReason: text('revoked_reason'),
+  },
+  (t) => [
+    index('trusted_devices_user_idx').on(t.userId, t.createdAt),
+    check(
+      'trusted_devices_revoked_reason_check',
+      sql`revoked_reason is null or revoked_reason in ('revoked', 'password_changed', 'account_deleted')`,
+    ),
+  ],
+);
+
+/**
+ * Rotating refresh tokens for /v1 clients (M1.2f): each use spends the token and issues the next
+ * one in the same family with a new short-lived access session. A spent token presented again is
+ * a reuse: the whole family is revoked (and its access sessions end). Only SHA-256 is stored.
+ */
+export const refreshTokens = identity.table(
+  'refresh_tokens',
+  {
+    id: uuid('id').primaryKey(),
+    familyId: uuid('family_id').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    tokenHash: text('token_hash').notNull(),
+    /** The Better Auth session (bearer access token) issued with this refresh token. */
+    accessSessionToken: text('access_session_token'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    expiresAt: ts('expires_at').notNull(),
+    usedAt: ts('used_at'),
+    revokedAt: ts('revoked_at'),
+    /** `reuse` (a spent token came back), `signed_out`, `password_changed`. */
+    revokedReason: text('revoked_reason'),
+  },
+  (t) => [
+    uniqueIndex('refresh_tokens_token_hash_key').on(t.tokenHash),
+    index('refresh_tokens_family_idx').on(t.familyId),
+    index('refresh_tokens_user_idx').on(t.userId),
+    check(
+      'refresh_tokens_revoked_reason_check',
+      sql`revoked_reason is null or revoked_reason in ('reuse', 'signed_out', 'password_changed')`,
+    ),
+  ],
+);
+
 /** Keys match Better Auth model names (drizzle adapter). */
 export const authSchema = {
   user: users,
@@ -272,4 +368,5 @@ export const authSchema = {
   account: accounts,
   verification: verifications,
   twoFactor: twoFactors,
+  passkey: passkeys,
 };
