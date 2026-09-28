@@ -10,20 +10,20 @@ Follows NIST SP 800-61r3 (prepare → detect/analyse → contain/eradicate/recov
 | **SEV3** | A single org or feature degraded; rate-limit false positives; CSP report spike after a deploy | Next business day |
 
 ## On-call rota
-The owner is primary; a contracted backup covers nights and the owner's absences. Until a paging
-tool exists (owner inbox: PagerDuty/Opsgenie or Better Stack), alerts go to both by SMS and email.
-Event days over 1,000 attendees: both are reachable from doors-open to doors-close + 1 h.
-
-| Week | Primary | Backup |
-|---|---|---|
-| (fill in weekly) | owner | contractor |
+**The rota, escalation, response targets and communication templates are in
+[on-call.md](on-call.md)** (M3.11b). In short: the owner is primary; a contracted backup covers
+nights and the owner's absences and is paged when the primary hasn't acknowledged in 10 minutes.
+Until a paging tool exists (owner inbox: Better Stack, PagerDuty or Opsgenie), alerts go to both by
+SMS and email. Event days over 1,000 attendees: both are reachable from doors-open − 1 h to
+doors-close + 1 h.
 
 ## First 15 minutes
 1. Acknowledge the alert; open an incident note (time, symptoms, links).
 2. Stop the bleeding with the pre-authorized actions (roadmap §8.2): pause checkout, extend the
    check-in window, force offline mode for scanners, pause messaging, roll back
    ([rollback.md](rollback.md)).
-3. Post on the status page (template below). Don't name customers.
+3. Post on the status page (templates below and in [on-call.md](on-call.md)); the console and
+   marketplace banners follow it automatically. Don't name customers.
 
 ## Suspected tenant leak (SEV1)
 1. Contain: roll back the change or pause the affected surface; keep logs (don't rotate them).

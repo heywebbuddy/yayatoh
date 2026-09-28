@@ -24,3 +24,15 @@ site's navigation links and lists entries in sitemaps.
   `cms.entry_archived@1` / `cms.entry_deleted@1` (payload: org, entry id, kind, slug).
 - **Hook (M1.4e):** cover images arrive with the media pipeline as a `cover_media_id` column
   and a `cover` field on the public DTOs; nothing stores images before then.
+
+**Platform CMS (M3.11b)** — the help center and the marketing site, written by the marketplace
+content org and read under its RLS (never across tenants):
+- `help_categories` (audience, slug unique per org, `search` reserved, translations jsonb),
+  `help_articles` (per locale; a translation is the same slug in another locale; `entries`
+  lifecycle; slug frozen once published), `help_feedback` (one answer per voter hash per article;
+  no person or IP), `site_sections` (per placement and locale; CTA is a site path or https only),
+  `contact_requests` (personal data: `marketing:write` roles only, never public).
+- Public reads return published rows only, through allowlisted DTOs, with a per-slug fallback to
+  English (`pickLocale`). Search ranking and related articles are pure (`domain/help.ts`).
+- Public commands: `submitHelpFeedback` (`public:help_feedback`) and `submitContactRequest`
+  (`public:contact_request`); the web rate-limits both (`helpFeedback`, `contactRequest`).

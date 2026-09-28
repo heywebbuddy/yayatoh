@@ -11,6 +11,7 @@ approved by the owner step by step.
 | [rollback.md](rollback.md) | A deploy made things worse |
 | [restore-drill.md](restore-drill.md) | Monthly drill; a real database restore |
 | [incident.md](incident.md) | Anything user-visible is broken or data may be exposed |
+| [on-call.md](on-call.md) | Who is on call, severity levels, response targets, escalation and status-page templates (M3.11b) |
 | [key-rotation.md](key-rotation.md) | Scheduled rotation, a leaked secret, a departing person |
 | [webhook-replay.md](webhook-replay.md) | Payments or other provider events were missed or failed |
 
