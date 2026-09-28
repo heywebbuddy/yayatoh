@@ -1,4 +1,4 @@
-import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
+import { CODE_PREFIX, verifyStatement, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { type EventWindow, eventDay, ruleResult } from './rules.ts';
 
 /** One manifest row (roadmap §5.4). Contact details only as per-event salted hashes. */
@@ -31,8 +31,15 @@ export interface ManifestHeader {
   readonly serverTime: string;
   /** Unknown-but-validly-signed tickets issued after the last sync (D17): admit and flag, or reject. */
   readonly unknownPolicy: 'provisional' | 'reject';
-  /** The event's live checkpoints; a device scans at one of them, or at the event as a whole. */
+  /**
+   * The event's live checkpoints the device may scan at; a device scans at one of them, or at
+   * the event as a whole when it isn't scoped. A scoped device only receives its checkpoints.
+   */
   readonly checkpoints: readonly ManifestCheckpoint[];
+  /** Manifest format. 1 (absent) before checkpoint scopes; 2 adds `scope`. */
+  readonly version?: number;
+  /** Where this device may scan (M1.9d). Absent on version 1 manifests: the whole event. */
+  readonly scope?: ManifestScope;
   /** Multi-date events (M1.4b): every date, so offline scans can tell a ticket's date. */
   readonly occurrences?: readonly ManifestOccurrence[];
 }
@@ -43,6 +50,47 @@ export interface ManifestOccurrence {
   readonly endsAt: string;
   readonly status: 'scheduled' | 'cancelled';
 }
+
+/**
+ * The checkpoints a device may scan at, signed with the org's ticket key so a tampered local
+ * copy can't widen it. `checkpointIds: null` = the whole event (no restriction).
+ */
+export interface ManifestScope {
+  readonly eventId: string;
+  readonly deviceId: string;
+  readonly checkpointIds: readonly string[] | null;
+  /** Detached signature over `scopeMessage(scope)` (see `verifyManifestScope`). */
+  readonly signature: string;
+}
+
+export const MANIFEST_VERSION = 2;
+export const SCOPE_TAG = 'checkin-scope-v1';
+
+/** The canonical signed form of a scope (sorted ids, fixed key order). */
+export const scopeMessage = (s: Omit<ManifestScope, 'signature'>) =>
+  JSON.stringify({
+    eventId: s.eventId,
+    deviceId: s.deviceId,
+    checkpointIds: s.checkpointIds === null ? null : [...s.checkpointIds].sort(),
+  });
+
+/** True when the header's scope was signed by one of the header's (org) keys for this event. */
+export async function verifyManifestScope(header: ManifestHeader): Promise<boolean> {
+  const s = header.scope;
+  if (!s) return (header.version ?? 1) < MANIFEST_VERSION;
+  if (s.eventId !== header.event.id) return false;
+  const keys = new Map(Object.entries(header.publicKeys).map(([kid, k]) => [Number(kid), b64(k)]));
+  return verifyStatement(SCOPE_TAG, scopeMessage(s), s.signature, keys);
+}
+
+/** Whether a scope lets a device scan at a checkpoint (null = the whole event). */
+export const scopeAllows = (
+  scope: Pick<ManifestScope, 'checkpointIds'> | null | undefined,
+  checkpointId: string | null,
+) =>
+  !scope ||
+  scope.checkpointIds === null ||
+  (checkpointId !== null && scope.checkpointIds.includes(checkpointId));
 
 export interface ManifestCheckpoint {
   readonly id: string;
@@ -68,7 +116,9 @@ export type OfflineVerdict =
   | 'wrong_date'
   | 'not_today'
   | 'granted'
-  | 'no_access';
+  | 'no_access'
+  /** The device's scope doesn't include where it is scanning (checkpoint-scoped door staff). */
+  | 'wrong_checkpoint';
 
 export interface OfflineState {
   readonly header: ManifestHeader;
@@ -98,6 +148,9 @@ export async function offlineVerdict(
   now: Date,
   checkpointId: string | null = null,
 ): Promise<{ verdict: OfflineVerdict; ticketId: string | null; row: ManifestRow | null }> {
+  // A scoped device refuses anywhere outside its checkpoints, before looking at the code.
+  if (!scopeAllows(state.header.scope, checkpointId))
+    return { verdict: 'wrong_checkpoint', ticketId: null, row: null };
   const zone = state.header.checkpoints.find((c) => c.id === checkpointId && c.kind === 'zone') ?? null;
   const r = await entranceVerdict(state, rawCode, now);
   if (!zone) return r;

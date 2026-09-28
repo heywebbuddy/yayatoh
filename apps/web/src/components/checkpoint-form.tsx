@@ -18,6 +18,7 @@ export function CheckpointForm({
   const [state, formAction, pending] = useActionState(action, { ok: false, code: null });
   const [kind, setKind] = useState<'entrance' | 'zone'>('entrance');
   const ref = useRef<HTMLFormElement>(null);
+  const locationError = state.field === 'location' ? t('checkpoints.locationError') : undefined;
   useEffect(() => {
     if (state.ok) {
       ref.current?.reset();
@@ -62,10 +63,21 @@ export function CheckpointForm({
           </div>
         </fieldset>
       ) : null}
+      <fieldset className="grid grid-cols-1 gap-4 md:col-span-2 md:grid-cols-2">
+        <legend className="text-caption text-zinc-600">{t('checkpoints.location')}</legend>
+        <p className="text-caption text-zinc-500 md:col-span-2">{t('checkpoints.locationHint')}</p>
+        <Input name="latitude" inputMode="decimal" label={t('checkpoints.latitude')} error={locationError} />
+        <Input
+          name="longitude"
+          inputMode="decimal"
+          label={t('checkpoints.longitude')}
+          error={locationError}
+        />
+      </fieldset>
       <div className="flex flex-col gap-2 md:col-span-2">
         <div aria-live="polite">
           {state.ok ? <Alert tone="info" title={t('checkpoints.added')} /> : null}
-          {state.code ? <Alert title={t(errorMessageKey(state.code))} /> : null}
+          {state.code && state.field !== 'location' ? <Alert title={t(errorMessageKey(state.code))} /> : null}
         </div>
         <Button type="submit" disabled={pending} className="self-start">
           {t('checkpoints.add')}

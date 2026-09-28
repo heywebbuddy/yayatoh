@@ -5,7 +5,7 @@ import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
-import { eventRoleAssignments, events } from './schema.ts';
+import { type EVENT_ROLES, eventRoleAssignments, events } from './schema.ts';
 
 const startsMs = sql`date_trunc('milliseconds', ${events.startsAt})`;
 
@@ -128,6 +128,108 @@ export async function eventRolesOf(ctx: Ctx, eventId: string): Promise<string[]>
       ),
   );
   return rows.map((r) => r.role);
+}
+
+/** One live event-role assignment with its checkpoint scope (empty = the whole event). */
+export interface EventRoleGrant {
+  readonly userId: string;
+  readonly role: string;
+  readonly checkpointIds: readonly string[];
+  readonly expiresAt: Date | null;
+}
+
+const liveGrant = (now: Date) =>
+  or(isNull(eventRoleAssignments.expiresAt), gt(eventRoleAssignments.expiresAt, now));
+
+const toGrant = (r: typeof eventRoleAssignments.$inferSelect): EventRoleGrant => ({
+  userId: r.userId,
+  role: r.role,
+  checkpointIds: r.checkpointIds,
+  expiresAt: r.expiresAt,
+});
+
+/** A user's live roles for one event, with scope (checkin resolves door-staff checkpoints with it). */
+export async function eventRoleGrantsTx(
+  tx: TenantTx,
+  eventId: string,
+  userId: string,
+  now: Date,
+): Promise<EventRoleGrant[]> {
+  const rows = await tx
+    .select()
+    .from(eventRoleAssignments)
+    .where(
+      and(eq(eventRoleAssignments.eventId, eventId), eq(eventRoleAssignments.userId, userId), liveGrant(now)),
+    );
+  return rows.map(toGrant);
+}
+
+/** Every live role assignment of one event (the staff screen and the door screen's staff list). */
+export async function eventStaffTx(tx: TenantTx, eventId: string, now: Date): Promise<EventRoleGrant[]> {
+  const rows = await tx
+    .select()
+    .from(eventRoleAssignments)
+    .where(and(eq(eventRoleAssignments.eventId, eventId), liveGrant(now)))
+    .orderBy(asc(eventRoleAssignments.createdAt));
+  return rows.map(toGrant);
+}
+
+/**
+ * Create or replace one event-role assignment with its checkpoint scope. The caller (a higher-tier
+ * command) has validated the scope and authorized the change.
+ */
+export async function upsertEventRoleTx(
+  tx: TenantTx,
+  a: {
+    orgId: string;
+    eventId: string;
+    userId: string;
+    role: (typeof EVENT_ROLES)[number];
+    checkpointIds: readonly string[];
+    expiresAt: Date | null;
+    now: Date;
+  },
+): Promise<EventRoleGrant> {
+  const [row] = await tx
+    .insert(eventRoleAssignments)
+    .values({
+      orgId: a.orgId,
+      eventId: a.eventId,
+      userId: a.userId,
+      role: a.role,
+      checkpointIds: [...a.checkpointIds],
+      expiresAt: a.expiresAt,
+    })
+    .onConflictDoUpdate({
+      target: [
+        eventRoleAssignments.orgId,
+        eventRoleAssignments.eventId,
+        eventRoleAssignments.userId,
+        eventRoleAssignments.role,
+      ],
+      set: { checkpointIds: [...a.checkpointIds], expiresAt: a.expiresAt, updatedAt: a.now },
+    })
+    .returning();
+  if (!row) throw new DomainError('internal');
+  return toGrant(row);
+}
+
+/** Remove one event-role assignment. Returns false when there was none. */
+export async function removeEventRoleTx(
+  tx: TenantTx,
+  a: { eventId: string; userId: string; role: (typeof EVENT_ROLES)[number] },
+): Promise<boolean> {
+  const rows = await tx
+    .delete(eventRoleAssignments)
+    .where(
+      and(
+        eq(eventRoleAssignments.eventId, a.eventId),
+        eq(eventRoleAssignments.userId, a.userId),
+        eq(eventRoleAssignments.role, a.role),
+      ),
+    )
+    .returning({ id: eventRoleAssignments.id });
+  return rows.length > 0;
 }
 
 /** Events of this org that ended before `before` (retention: attendee data after the event). */

@@ -832,10 +832,13 @@
       "provisional": "Offline binnengelaten, nog te bevestigen",
       "granted": "Toegang verleend",
       "no_access": "Deze pas geeft geen toegang tot dit gebied",
+      "wrong_checkpoint": "Não é o seu ponto de controle",
       "wrong_date": "Dit ticket is voor een andere datum"
     },
     "alertsTitle": "{count, plural, one {# ticket is offline twee keer binnengelaten} other {# tickets zijn offline twee keer binnengelaten}}",
-    "alertsHint": "Twee scanners lieten hetzelfde ticket binnen voordat ze konden synchroniseren. Controleer deze gasten bij de deur."
+    "alertsHint": "Twee scanners lieten hetzelfde ticket binnen voordat ze konden synchroniseren. Controleer deze gasten bij de deur.",
+    "wrongCheckpointHint": "Você escaneia em {places}. Escolha em “Escaneando em”.",
+    "noCheckpointsHint": "Você não tem ponto de controle atribuído aqui. Fale com o organizador."
   },
   "devices": {
     "title": "Scanapparaten",
@@ -853,7 +856,10 @@
     "revoke": "Intrekken",
     "revokeFor": "{label} intrekken",
     "linkHint": "Of open deze link op het apparaat: hij stelt de scanner in voor dit evenement.",
-    "openScanner": "Scanner openen op dit apparaat"
+    "openScanner": "Scanner openen op dit apparaat",
+    "handedTo": "Entregue a",
+    "orgDevice": "Ninguém (escaneia em qualquer lugar)",
+    "handedToName": "para {name}"
   },
   "scan": {
     "title": "Scanner",
@@ -874,7 +880,9 @@
     "pending": "Gecontroleerd op dit apparaat: wordt bevestigd na synchronisatie",
     "wipedTitle": "Deze scanner is gewist",
     "wipedDescription": "De gastenlijst en sleutel zijn verwijderd. Vraag een organisator om een nieuwe apparaatlink om weer te scannen.",
-    "cameraFailed": "De camera kon niet starten. Controleer de cameratoestemming of typ de code."
+    "cameraFailed": "De camera kon niet starten. Controleer de cameratoestemming of typ de code.",
+    "notAssigned": "Este aparelho não está atribuído a este evento. Fale com o organizador.",
+    "badScope": "A lista baixada falhou na verificação de segurança e não foi usada. Reconecte para tentar de novo."
   },
   "checkpoints": {
     "title": "Ingangen en zones",
@@ -901,8 +909,18 @@
     "signalsTitle": "{count, plural, one {# punt om te controleren} other {# punten om te controleren}}",
     "signal": {
       "two_entrances": "Ticket getoond bij een tweede ingang",
-      "invalid_burst": "Meerdere ongeldige codes achter elkaar"
-    }
+      "invalid_burst": "Meerdere ongeldige codes achter elkaar",
+      "device_velocity": "Escaneando mais rápido do que uma pessoa consegue",
+      "impossible_travel": "Ingresso admitido em dois lugares distantes demais",
+      "rejected_burst": "Muitos escaneamentos recusados seguidos"
+    },
+    "chooseStand": "Escolha seu ponto de controle",
+    "location": "Localização (opcional)",
+    "locationHint": "Latitude e longitude, por exemplo de um app de mapas. Serve para detectar um ingresso admitido em dois lugares distantes demais.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationError": "Informe latitude (−90 a 90) e longitude (−180 a 180) como números, ou deixe ambas vazias.",
+    "located": "em {lat}, {lng}"
   },
   "search": {
     "title": "Zoeken",
@@ -2959,6 +2977,81 @@
       "copied": "Gekopieerd.",
       "emptyTitle": "Nog geen openbare evenementen",
       "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
+    }
+  },
+  "doorStaff": {
+    "title": "Equipe de portaria",
+    "description": "Quem escaneia em {event}, e onde.",
+    "back": "Voltar ao check-in",
+    "noAccess": "Você precisa de acesso a este evento para ver a equipe de portaria.",
+    "listTitle": "Quem escaneia aqui",
+    "emptyTitle": "Ainda sem equipe de portaria",
+    "emptyDescription": "Adicione alguém da equipe abaixo para escanear só neste evento.",
+    "anywhere": "Em qualquer lugar do evento",
+    "archivedCheckpoint": "(ponto de controle arquivado)",
+    "scansAt": "Escaneia em: {where}",
+    "member": "Membro da equipe",
+    "chooseMember": "Escolha um membro da equipe",
+    "chooseMemberError": "Escolha um membro da equipe.",
+    "checkpointGone": "Um desses pontos de controle não existe mais. Recarregue e tente de novo.",
+    "where": "Onde pode escanear?",
+    "whereFor": "Onde {name} pode escanear?",
+    "whereHint": "Marque as entradas e zonas. Nada marcado = o evento inteiro.",
+    "noCheckpoints": "Este evento ainda não tem entradas nem zonas, então a equipe escaneia no evento inteiro.",
+    "saved": "Salvo.",
+    "saveFor": "Salvar {name}",
+    "add": "Adicionar à portaria",
+    "addTitle": "Adicionar à portaria",
+    "addHint": "A equipe de portaria escaneia só neste evento e só onde você escolher.",
+    "remove": "Remover",
+    "removeFor": "Remover {name}",
+    "readOnly": "Só proprietários e administradores podem alterar a equipe de portaria.",
+    "byCheckpoint": "Equipe de portaria por ponto de controle",
+    "nobody": "Ninguém atribuído",
+    "manage": "Gerenciar portaria"
+  },
+  "signals": {
+    "title": "Sinais de fraude",
+    "description": "{open, plural, =0 {Nada em aberto} one {# sinal em aberto} other {# sinais em aberto}}",
+    "openList": "Ver todos os sinais de fraude",
+    "noAccess": "Só quem escaneia neste evento vê os sinais de fraude.",
+    "listTitle": "Sinais",
+    "emptyTitle": "Nenhum sinal",
+    "emptyDescription": "Qualquer coisa incomum na portaria, como um ingresso em duas entradas ou um aparelho escaneando rápido demais, aparece aqui.",
+    "severity": {
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa"
+    },
+    "status": {
+      "open": "Em aberto",
+      "acknowledged": "Reconhecido",
+      "dismissed": "Descartado"
+    },
+    "acknowledge": "Reconhecer",
+    "acknowledgeFor": "Reconhecer: {what}",
+    "dismiss": "Descartar",
+    "dismissFor": "Descartar: {what}",
+    "done": {
+      "acknowledged": "Reconhecido: a equipe vê que alguém está cuidando disso.",
+      "dismissed": "Descartado."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} escaneamentos em um minuto (limite {limit})",
+    "refused": "{count} recusados em {seconds} s",
+    "speed": "{metres} m em {seconds} s ({kmh} km/h)",
+    "settings": {
+      "title": "Regras de detecção",
+      "description": "Ajuste para este local. Os sinais surgem online e quando aparelhos offline sincronizam.",
+      "maxScansPerMinute": "Máximo de escaneamentos por minuto de uma pessoa",
+      "maxScansPerMinuteHint": "Padrão 40. Um aparelho mais rápido é sinalizado.",
+      "maxScansPerMinuteError": "Informe um número inteiro de 2 a 600.",
+      "maxTravelKmh": "Velocidade máxima a pé entre pontos de controle (km/h)",
+      "maxTravelKmhHint": "Padrão 12. Requer localização dos pontos de controle.",
+      "maxTravelKmhError": "Informe um número inteiro de 1 a 200.",
+      "save": "Salvar regras",
+      "saved": "Regras salvas.",
+      "current": "Sinaliza um aparelho com mais de {rate} escaneamentos por minuto e um ingresso que se move a mais de {kmh} km/h entre pontos de controle."
     }
   },
   "security": {

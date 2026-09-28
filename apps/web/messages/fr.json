@@ -832,10 +832,13 @@
       "provisional": "Entrée hors ligne — à confirmer",
       "granted": "Accès autorisé",
       "no_access": "Ce pass n’inclut pas cette zone",
+      "wrong_checkpoint": "Ce n’est pas votre point de contrôle",
       "wrong_date": "Ce billet est pour une autre date"
     },
     "alertsTitle": "{count, plural, one {# billet a été accepté deux fois hors ligne} other {# billets ont été acceptés deux fois hors ligne}}",
-    "alertsHint": "Deux scanners ont accepté le même billet avant d’avoir pu se synchroniser. Vérifiez ces invités à l’entrée."
+    "alertsHint": "Deux scanners ont accepté le même billet avant d’avoir pu se synchroniser. Vérifiez ces invités à l’entrée.",
+    "wrongCheckpointHint": "Vous scannez à {places}. Choisissez-le dans « Scan à ».",
+    "noCheckpointsHint": "Aucun point de contrôle ne vous est attribué ici. Demandez à l’organisateur."
   },
   "devices": {
     "title": "Appareils de scan",
@@ -853,7 +856,10 @@
     "revoke": "Révoquer",
     "revokeFor": "Révoquer {label}",
     "linkHint": "Ou ouvrez ce lien sur l’appareil : il configure le scanner pour cet événement.",
-    "openScanner": "Ouvrir le scanner sur cet appareil"
+    "openScanner": "Ouvrir le scanner sur cet appareil",
+    "handedTo": "Confié à",
+    "orgDevice": "Personne (scanne partout)",
+    "handedToName": "pour {name}"
   },
   "scan": {
     "title": "Scanner",
@@ -874,7 +880,9 @@
     "pending": "Vérifié sur cet appareil — sera confirmé après synchronisation",
     "wipedTitle": "Ce scanner a été effacé",
     "wipedDescription": "Sa liste d’invités et sa clé ont été supprimées. Demandez à un organisateur un nouveau lien d’appareil pour scanner à nouveau.",
-    "cameraFailed": "La caméra n'a pas pu démarrer. Vérifiez l'autorisation de la caméra ou saisissez le code."
+    "cameraFailed": "La caméra n'a pas pu démarrer. Vérifiez l'autorisation de la caméra ou saisissez le code.",
+    "notAssigned": "Cet appareil n’est pas attribué à cet événement. Demandez à l’organisateur.",
+    "badScope": "La liste téléchargée a échoué au contrôle de sécurité et n’a pas été utilisée. Reconnectez-vous pour réessayer."
   },
   "checkpoints": {
     "title": "Entrées et zones",
@@ -901,8 +909,18 @@
     "signalsTitle": "{count, plural, one {# point à vérifier} other {# points à vérifier}}",
     "signal": {
       "two_entrances": "Billet présenté à une deuxième entrée",
-      "invalid_burst": "Plusieurs codes non valides à la suite"
-    }
+      "invalid_burst": "Plusieurs codes non valides à la suite",
+      "device_velocity": "Scans plus rapides qu’un humain",
+      "impossible_travel": "Billet admis à deux endroits trop éloignés",
+      "rejected_burst": "Beaucoup de scans refusés d’affilée"
+    },
+    "chooseStand": "Choisissez votre point de contrôle",
+    "location": "Emplacement (facultatif)",
+    "locationHint": "Latitude et longitude, par exemple depuis une appli de cartes. Sert à repérer un billet admis à deux endroits trop éloignés.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationError": "Saisissez la latitude (−90 à 90) et la longitude (−180 à 180) en chiffres, ou laissez les deux vides.",
+    "located": "à {lat}, {lng}"
   },
   "search": {
     "title": "Recherche",
@@ -2959,6 +2977,81 @@
       "copied": "Copié.",
       "emptyTitle": "Aucun événement public pour l'instant",
       "emptyDescription": "Publiez un événement pour obtenir l'extrait de son widget."
+    }
+  },
+  "doorStaff": {
+    "title": "Équipe d’accueil",
+    "description": "Qui scanne à {event}, et où.",
+    "back": "Retour à l’enregistrement",
+    "noAccess": "Vous devez avoir accès à cet événement pour voir son équipe d’accueil.",
+    "listTitle": "Qui scanne ici",
+    "emptyTitle": "Pas encore d’équipe d’accueil",
+    "emptyDescription": "Ajoutez un membre de l’équipe ci-dessous pour qu’il scanne uniquement à cet événement.",
+    "anywhere": "Partout sur l’événement",
+    "archivedCheckpoint": "(point de contrôle archivé)",
+    "scansAt": "Scanne à : {where}",
+    "member": "Membre de l’équipe",
+    "chooseMember": "Choisissez un membre de l’équipe",
+    "chooseMemberError": "Choisissez un membre de l’équipe.",
+    "checkpointGone": "Un de ces points de contrôle n’existe plus. Rechargez et réessayez.",
+    "where": "Où peut-il scanner ?",
+    "whereFor": "Où {name} peut-il scanner ?",
+    "whereHint": "Cochez les entrées et zones. Rien de coché = tout l’événement.",
+    "noCheckpoints": "Cet événement n’a pas encore d’entrées ni de zones : l’équipe scanne sur tout l’événement.",
+    "saved": "Enregistré.",
+    "saveFor": "Enregistrer {name}",
+    "add": "Ajouter à l’équipe d’accueil",
+    "addTitle": "Ajouter à l’équipe d’accueil",
+    "addHint": "L’équipe d’accueil scanne uniquement à cet événement, et seulement où vous le choisissez.",
+    "remove": "Retirer",
+    "removeFor": "Retirer {name}",
+    "readOnly": "Seuls les propriétaires et admins peuvent modifier l’équipe d’accueil.",
+    "byCheckpoint": "Équipe d’accueil par point de contrôle",
+    "nobody": "Personne d’affecté",
+    "manage": "Gérer l’équipe d’accueil"
+  },
+  "signals": {
+    "title": "Signaux de fraude",
+    "description": "{open, plural, =0 {Rien d’ouvert} one {# signal ouvert} other {# signaux ouverts}}",
+    "openList": "Voir tous les signaux de fraude",
+    "noAccess": "Seules les personnes qui scannent à cet événement voient ses signaux de fraude.",
+    "listTitle": "Signaux",
+    "emptyTitle": "Aucun signal",
+    "emptyDescription": "Tout ce qui est inhabituel aux portes, comme un billet à deux entrées ou un appareil qui scanne trop vite, apparaît ici.",
+    "severity": {
+      "high": "Élevée",
+      "medium": "Moyenne",
+      "low": "Faible"
+    },
+    "status": {
+      "open": "Ouvert",
+      "acknowledged": "Pris en charge",
+      "dismissed": "Écarté"
+    },
+    "acknowledge": "Prendre en charge",
+    "acknowledgeFor": "Prendre en charge : {what}",
+    "dismiss": "Écarter",
+    "dismissFor": "Écarter : {what}",
+    "done": {
+      "acknowledged": "Pris en charge : l’équipe voit que quelqu’un s’en occupe.",
+      "dismissed": "Écarté."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} scans en une minute (limite {limit})",
+    "refused": "{count} refusés en {seconds} s",
+    "speed": "{metres} m en {seconds} s ({kmh} km/h)",
+    "settings": {
+      "title": "Règles de détection",
+      "description": "Adaptez-les à ce lieu. Les signaux sont levés en ligne et quand les appareils hors ligne se synchronisent.",
+      "maxScansPerMinute": "Nombre maximal de scans par minute pour une personne",
+      "maxScansPerMinuteHint": "Par défaut 40. Un appareil plus rapide est signalé.",
+      "maxScansPerMinuteError": "Saisissez un nombre entier de 2 à 600.",
+      "maxTravelKmh": "Vitesse de marche maximale entre points de contrôle (km/h)",
+      "maxTravelKmhHint": "Par défaut 12. Nécessite les emplacements des points de contrôle.",
+      "maxTravelKmhError": "Saisissez un nombre entier de 1 à 200.",
+      "save": "Enregistrer les règles",
+      "saved": "Règles enregistrées.",
+      "current": "Signale un appareil à plus de {rate} scans par minute et un billet qui se déplace à plus de {kmh} km/h entre points de contrôle."
     }
   },
   "security": {

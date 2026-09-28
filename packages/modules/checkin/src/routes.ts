@@ -41,6 +41,10 @@ const manifest = createRoute({
   },
   responses: {
     200: { description: 'Manifest page', content: { 'application/json': { schema: ManifestPageDto } } },
+    403: {
+      description: 'The device is handed to a member with no role at this event',
+      content: { 'application/problem+json': { schema: ProblemDto } },
+    },
     ...problems,
   },
 });

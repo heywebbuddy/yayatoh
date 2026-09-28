@@ -118,3 +118,70 @@ export function randomShortCode(length = 8): string {
   globalThis.crypto.getRandomValues(r);
   return [...r].map((x) => alphabet[x % alphabet.length]).join('');
 }
+
+/**
+ * A detached Ed25519 signature over a tagged message, with the org's ticket key. Used for small
+ * statements scanners must trust offline (the checkpoint scope in a manifest). The tag separates
+ * domains, so a statement signature can never pass as a ticket code and vice versa.
+ * Format: base64url(kid(2, BE) ‖ signature(64)).
+ */
+export async function signStatement(
+  tag: string,
+  message: string,
+  kid: number,
+  privateKeyPkcs8: Uint8Array,
+): Promise<string> {
+  if (!Number.isInteger(kid) || kid < 0 || kid > 0xffff) throw new Error('kid must be 0..65535');
+  const key = await subtle().importKey('pkcs8', buf(privateKeyPkcs8), { name: 'Ed25519' }, false, ['sign']);
+  const sig = new Uint8Array(
+    await subtle().sign({ name: 'Ed25519' }, key, buf(statementBytes(tag, message))),
+  );
+  const all = new Uint8Array(2 + SIG_LEN);
+  all[0] = kid >> 8;
+  all[1] = kid & 255;
+  all.set(sig, 2);
+  return toBase64Url(all);
+}
+
+/** Verify a statement signature with public keys only. Never throws on bad input. */
+export async function verifyStatement(
+  tag: string,
+  message: string,
+  signature: string,
+  publicKeys: ReadonlyMap<number, Uint8Array>,
+): Promise<boolean> {
+  const bytes = fromBase64Url(signature);
+  if (!bytes || bytes.length !== 2 + SIG_LEN) return false;
+  const raw = publicKeys.get(((bytes[0] as number) << 8) | (bytes[1] as number));
+  if (!raw) return false;
+  try {
+    const key = await subtle().importKey('raw', buf(raw), { name: 'Ed25519' }, false, ['verify']);
+    return await subtle().verify(
+      { name: 'Ed25519' },
+      key,
+      buf(bytes.slice(2)),
+      buf(statementBytes(tag, message)),
+    );
+  } catch {
+    return false;
+  }
+}
+
+const statementBytes = (tag: string, message: string) =>
+  new TextEncoder().encode(`yayatoh-statement:${tag}\n${message}`);
+
+function toBase64Url(b: Uint8Array): string {
+  let s = '';
+  for (const x of b) s += String.fromCharCode(x);
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function fromBase64Url(s: string): Uint8Array | null {
+  if (!/^[A-Za-z0-9_-]*$/.test(s)) return null;
+  try {
+    const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+    return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+  } catch {
+    return null;
+  }
+}

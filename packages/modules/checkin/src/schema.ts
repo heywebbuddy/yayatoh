@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -37,6 +38,8 @@ export const SCAN_RESULTS = [
   'granted',
   /** Zone checkpoint: the pass does not include this zone. */
   'no_access',
+  /** The scanner (checkpoint-scoped door staff, or their device) may not scan at this checkpoint. */
+  'wrong_checkpoint',
 ] as const;
 export type ScanResult = (typeof SCAN_RESULTS)[number];
 
@@ -117,6 +120,11 @@ export const devices = tenantTable(
     clockOffsetMs: integer('clock_offset_ms'),
     wipeRequestedAt: ts('wipe_requested_at'),
     revokedAt: ts('revoked_at'),
+    /**
+     * The door-staff member this device is handed to (M1.9d). Its manifest and scans follow that
+     * member's checkpoint scope. Null = an org device that may scan anywhere.
+     */
+    assignedUserId: uuid('assigned_user_id'),
   },
   (t) => [
     // Global: the token alone resolves the device (and so the org) through a definer function.
@@ -142,10 +150,17 @@ export const checkpoints = tenantTable(
     kind: text('kind').notNull(),
     ticketTypeIds: uuid('ticket_type_ids').array().notNull().default(sql`'{}'::uuid[]`),
     archivedAt: ts('archived_at'),
+    /** Where it is (WGS 84), for the impossible-travel signal. Both or neither. */
+    latitude: doublePrecision('latitude'),
+    longitude: doublePrecision('longitude'),
   },
   (t) => [
     uniqueIndex('checkpoints_org_event_name_key').on(t.orgId, t.eventId, t.name),
     check('checkpoints_kind_check', sql`kind in ('entrance', 'zone')`),
+    check(
+      'checkpoints_location_check',
+      sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,
+    ),
   ],
 );
 
@@ -154,8 +169,30 @@ export const FRAUD_SIGNAL_KINDS = [
   'two_entrances',
   /** Several invalid codes in a short window from one scanner. */
   'invalid_burst',
+  /** One device (or signed-in scanner) scanning faster than a person can (M1.9d). */
+  'device_velocity',
+  /** One ticket let in at two checkpoints too far apart for the time between (M1.9d). */
+  'impossible_travel',
+  /** Many refused scans in a short window from one device (M1.9d). */
+  'rejected_burst',
 ] as const;
 export type FraudSignalKind = (typeof FRAUD_SIGNAL_KINDS)[number];
+
+export const FRAUD_SEVERITIES = ['low', 'medium', 'high'] as const;
+export type FraudSeverity = (typeof FRAUD_SEVERITIES)[number];
+
+/** How serious each kind is (stored on the signal, so a later change doesn't rewrite history). */
+export const FRAUD_SEVERITY: Readonly<Record<FraudSignalKind, FraudSeverity>> = {
+  two_entrances: 'high',
+  impossible_travel: 'high',
+  device_velocity: 'medium',
+  invalid_burst: 'medium',
+  rejected_burst: 'low',
+};
+
+/** open → acknowledged (someone is on it) or dismissed (not a problem). Both are audited. */
+export const FRAUD_STATUSES = ['open', 'acknowledged', 'dismissed'] as const;
+export type FraudStatus = (typeof FRAUD_STATUSES)[number];
 
 /** Fraud and misuse signals, raised during scanning and shown on the door screen. */
 export const fraudSignals = tenantTable(
@@ -171,9 +208,39 @@ export const fraudSignals = tenantTable(
     userId: uuid('user_id'),
     detail: jsonb('detail').$type<Record<string, string | number>>().notNull().default({}),
     raisedAt: ts('raised_at').notNull(),
+    severity: text('severity').notNull().default('medium'),
+    status: text('status').notNull().default('open'),
+    resolvedAt: ts('resolved_at'),
+    resolvedBy: uuid('resolved_by'),
   },
   (t) => [
     index('fraud_signals_org_event_raised_idx').on(t.orgId, t.eventId, t.raisedAt),
-    check('fraud_signals_kind_check', sql`kind in ('two_entrances', 'invalid_burst')`),
+    check(
+      'fraud_signals_kind_check',
+      sql.raw(`kind in (${FRAUD_SIGNAL_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('fraud_signals_severity_check', sql`severity in ('low', 'medium', 'high')`),
+    check('fraud_signals_status_check', sql`status in ('open', 'acknowledged', 'dismissed')`),
+    check('fraud_signals_resolved_check', sql`(status = 'open') = (resolved_at is null)`),
+  ],
+);
+
+/**
+ * Per-event velocity rule settings (M1.9d). No row = the defaults
+ * (`DEFAULT_VELOCITY_RULES` in checkin-engine).
+ */
+export const detectionSettings = tenantTable(
+  checkinSchema,
+  'detection_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    maxScansPerMinute: integer('max_scans_per_minute').notNull(),
+    maxTravelKmh: integer('max_travel_kmh').notNull(),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('detection_settings_org_event_key').on(t.orgId, t.eventId),
+    check('detection_settings_rate_check', sql`max_scans_per_minute between 2 and 600`),
+    check('detection_settings_travel_check', sql`max_travel_kmh between 1 and 200`),
   ],
 );

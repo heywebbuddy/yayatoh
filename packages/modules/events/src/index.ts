@@ -123,13 +123,18 @@ export {
 } from './public-content.ts';
 export {
   checkoutTarget,
+  type EventRoleGrant,
   eventIdsEndedBeforeTx,
+  eventRoleGrantsTx,
   eventRolesOf,
+  eventStaffTx,
   findEventTx,
   getEventBySlugQuery,
   getEventQuery,
   listEventsQuery,
   publicEventBySlug,
+  removeEventRoleTx,
+  upsertEventRoleTx,
 } from './queries.ts';
 export {
   EVENT_PROFILES,

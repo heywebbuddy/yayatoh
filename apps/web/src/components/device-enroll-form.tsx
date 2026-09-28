@@ -9,9 +9,12 @@ import { errorMessageKey } from '@/lib/errors.ts';
 export function DeviceEnrollForm({
   eventId,
   action,
+  staff,
 }: {
   eventId: string;
   action: (prev: EnrollState, form: FormData) => Promise<EnrollState>;
+  /** This event's door staff: a device handed to one scans only where they may. */
+  staff: readonly { id: string; name: string }[];
 }) {
   const t = useTranslations();
   const locale = useLocale();
@@ -31,6 +34,26 @@ export function DeviceEnrollForm({
             hint={t('devices.labelHint')}
           />
         </div>
+        {staff.length > 0 ? (
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="device-assigned" className="text-caption text-zinc-600">
+              {t('devices.handedTo')}
+            </label>
+            <select
+              id="device-assigned"
+              name="assignedUserId"
+              defaultValue=""
+              className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            >
+              <option value="">{t('devices.orgDevice')}</option>
+              {staff.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : null}
         <Button type="submit" disabled={pending}>
           {t('devices.add')}
         </Button>

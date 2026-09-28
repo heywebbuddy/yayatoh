@@ -2,22 +2,29 @@ import { createHash, randomBytes } from 'node:crypto';
 import {
   eventDay,
   lookupHash,
+  MANIFEST_VERSION,
   type ManifestHeader,
   type ManifestRow,
+  OK_RESULTS,
   ruleResult,
+  SCOPE_TAG,
+  scopeMessage,
   zoneAllows,
 } from '@yayatoh/checkin-engine';
 import { withoutTenant } from '@yayatoh/db';
 import { findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { memberRoleTx } from '@yayatoh/tenancy';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
-import { manifestTicketsTx, publicKeysTx, ticketForScanTx } from '@yayatoh/ticketing';
+import { manifestTicketsTx, publicKeysTx, signForScannersTx, ticketForScanTx } from '@yayatoh/ticketing';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
+import { checkVelocityTx } from './signals.ts';
+import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 /** Devices act as a system actor named after the device; authorization happened at the token. */
@@ -50,12 +57,20 @@ export async function deviceContext(token: string): Promise<{ ctx: Ctx; wipe: bo
 
 export const enrollDeviceCommand = tenantCommand({
   name: 'checkin.enrollDevice',
-  input: z.object({ label: z.string().trim().min(1).max(60) }),
+  input: z.object({
+    label: z.string().trim().min(1).max(60),
+    /** Hand the device to a member: it then scans only where they may (checkpoint scope). */
+    assignedUserId: z.uuid().nullable().default(null),
+  }),
   // The token is returned exactly once; only its hash is stored.
   output: z.object({ deviceId: z.uuid(), token: z.string() }),
   entitlement: 'checkin',
   permission: 'checkin:scan',
   handler: async ({ input, ctx, tx }) => {
+    if (input.assignedUserId && (await memberRoleTx(tx, input.assignedUserId)) === null)
+      throw new DomainError('validation_failed', 'Not a member of this organization', {
+        field: 'assignedUserId',
+      });
     const token = `yyd_${randomBytes(32).toString('base64url')}`;
     const [d] = await tx
       .insert(devices)
@@ -64,6 +79,7 @@ export const enrollDeviceCommand = tenantCommand({
         label: input.label,
         tokenHash: hashToken(token),
         enrolledBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        assignedUserId: input.assignedUserId,
       })
       .returning({ id: devices.id });
     if (!d) throw new DomainError('internal');
@@ -147,6 +163,7 @@ export const ManifestPageDto = z.object({
     salt: z.string(),
     serverTime: z.string(),
     unknownPolicy: z.enum(['provisional', 'reject']),
+    /** The checkpoints this device may scan at (all live ones when it isn't scoped). */
     checkpoints: z.array(
       z.object({
         id: z.uuid(),
@@ -163,12 +180,32 @@ export const ManifestPageDto = z.object({
         status: z.enum(['scheduled', 'cancelled']),
       }),
     ),
+    /** Manifest format: 2 adds `scope` (older devices ignore it; the server enforces it on sync). */
+    version: z.int(),
+    /** Where this device may scan, signed with the org's ticket key (null ids = the whole event). */
+    scope: z.object({
+      eventId: z.uuid(),
+      deviceId: z.uuid(),
+      checkpointIds: z.array(z.uuid()).nullable(),
+      signature: z.string(),
+    }),
   }),
   rows: z.array(ManifestRowDto),
   /** Pass back as `cursor` for the next page / next sync. */
   cursor: z.string().nullable(),
   complete: z.boolean(),
 });
+
+async function signedScope(
+  tx: Parameters<typeof checkpointsTx>[0],
+  orgId: string,
+  eventId: string,
+  deviceId: string,
+  scope: ReadonlySet<string> | null,
+): Promise<NonNullable<ManifestHeader['scope']>> {
+  const base = { eventId, deviceId, checkpointIds: scope === null ? null : [...scope].sort() };
+  return { ...base, signature: await signForScannersTx(tx, orgId, SCOPE_TAG, scopeMessage(base)) };
+}
 
 /** Rows re-sent before the cursor, so a change committed out of timestamp order is not missed. */
 const CURSOR_OVERLAP_MS = 60_000;
@@ -202,9 +239,13 @@ export const deviceManifestQuery = tenantQuery({
   entitlement: 'checkin',
   permission: 'checkin:device',
   handler: async ({ input, ctx, tx }) => {
-    deviceIdOf(ctx);
+    const deviceId = deviceIdOf(ctx);
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
+    // A device handed to door staff gets only their checkpoints; no assignment here → nothing.
+    const scope = await deviceScanScopeTx(tx, deviceId, event.id, ctx.now);
+    if (scope !== null && scope.size === 0)
+      throw new DomainError('forbidden', 'This device is not assigned to this event');
     const keys = await publicKeysTx(tx);
     const salt = `yy-manifest:${event.id}`;
     const page = await manifestTicketsTx(
@@ -244,18 +285,22 @@ export const deviceManifestQuery = tenantQuery({
       salt,
       serverTime: ctx.now.toISOString(),
       unknownPolicy: 'provisional',
-      checkpoints: (await checkpointsTx(tx, event.id)).map((c) => ({
-        id: c.id,
-        name: c.name,
-        kind: c.kind as 'entrance' | 'zone',
-        ticketTypeIds: c.ticketTypeIds,
-      })),
+      checkpoints: (await checkpointsTx(tx, event.id))
+        .filter((c) => scopeAllowsCheckpoint(scope, c.id))
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          kind: c.kind as 'entrance' | 'zone',
+          ticketTypeIds: c.ticketTypeIds,
+        })),
       occurrences: (await occurrencesOfEventTx(tx, event.id)).map((o) => ({
         id: o.id,
         startsAt: o.startsAt.toISOString(),
         endsAt: o.endsAt.toISOString(),
         status: o.status,
       })),
+      version: MANIFEST_VERSION,
+      scope: await signedScope(tx, requireOrg(ctx), event.id, deviceId, scope),
     };
     return {
       header,
@@ -279,6 +324,7 @@ const DEVICE_VERDICTS = [
   'not_today',
   'granted',
   'no_access',
+  'wrong_checkpoint',
 ] as const;
 
 export const SyncResultDto = z.object({
@@ -321,6 +367,9 @@ export const syncScansCommand = tenantCommand({
     const keys = await publicKeysTx(tx);
     // Archived since the scan still counts: the device was standing there.
     const cps = new Map((await checkpointsTx(tx, event.id, true)).map((c) => [c.id, c]));
+    // The scope as it is now: a device used outside its member's checkpoints is refused.
+    const scope = await deviceScanScopeTx(tx, deviceId, event.id, ctx.now);
+    const okTickets: string[] = [];
     const corrected = (s: { deviceTs: Date; clockOffsetMs: number }) =>
       new Date(s.deviceTs.getTime() + s.clockOffsetMs);
     const ordered = [...input.scans].sort((a, b) => corrected(a).getTime() - corrected(b).getTime());
@@ -350,10 +399,14 @@ export const syncScansCommand = tenantCommand({
       } else {
         ticket = await ticketForScanTx(tx, { shortCode: code });
       }
-      const rule = superseded
-        ? 'superseded'
-        : ruleResult({ now: at, event, ticket: await withOccurrenceTx(tx, ticket) });
       const checkpoint = s.checkpointId ? (cps.get(s.checkpointId) ?? null) : null;
+      const inScope = scopeAllowsCheckpoint(scope, checkpoint?.id ?? null);
+      if (!inScope) ticket = null;
+      const rule = !inScope
+        ? 'wrong_checkpoint'
+        : superseded
+          ? 'superseded'
+          : ruleResult({ now: at, event, ticket: await withOccurrenceTx(tx, ticket) });
       let result: ScanResult = rule === 'ok' ? 'admitted' : rule;
       let admissionId: string | null = null;
       if (rule === 'ok' && ticket && checkpoint?.kind === 'zone') {
@@ -476,7 +529,21 @@ export const syncScansCommand = tenantCommand({
         })
         .onConflictDoNothing();
       results.push({ scanId: s.scanId, result, stored: true });
+      if (ticket && OK_RESULTS.has(result)) okTickets.push(ticket.id);
     }
+    // Velocity rules over the uploaded log (corrected times), alongside the online ones.
+    const stored = ordered.filter((s) => results.some((r) => r.scanId === s.scanId && r.stored));
+    const first = stored[0];
+    const last = stored.at(-1);
+    if (first && last)
+      await checkVelocityTx(tx, emit, {
+        orgId,
+        eventId: event.id,
+        from: corrected(first),
+        to: corrected(last),
+        deviceId,
+        ticketIds: okTickets,
+      });
     // Answer in the device's order.
     const order = new Map(input.scans.map((s, i) => [s.scanId, i]));
     results.sort((a, b) => (order.get(a.scanId) ?? 0) - (order.get(b.scanId) ?? 0));
@@ -499,6 +566,8 @@ export const DeviceDto = z.object({
   clockOffsetMs: z.int().nullable(),
   wipeRequested: z.boolean(),
   revoked: z.boolean(),
+  /** The member the device is handed to (null = an org device). */
+  assignedUserId: z.uuid().nullable(),
 });
 
 export const listDevicesQuery = tenantQuery({
@@ -517,5 +586,6 @@ export const listDevicesQuery = tenantQuery({
       clockOffsetMs: d.clockOffsetMs,
       wipeRequested: d.wipeRequestedAt !== null,
       revoked: d.revokedAt !== null,
+      assignedUserId: d.assignedUserId,
     })),
 });

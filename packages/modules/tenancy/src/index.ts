@@ -84,6 +84,7 @@ export {
   getOrganizationQuery,
   listInvitationsQuery,
   listMembersQuery,
+  memberRoleTx,
   memberUserIdsTx,
   myOrganizations,
   organizationBrandTx,

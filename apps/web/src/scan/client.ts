@@ -1,10 +1,12 @@
 import {
   admittedKey,
   eventDay,
+  MANIFEST_VERSION,
   type ManifestHeader,
   type ManifestRow,
   type OfflineVerdict,
   offlineVerdict,
+  verifyManifestScope,
 } from '@yayatoh/checkin-engine';
 import { uuidv7 } from '@yayatoh/kernel';
 import {
@@ -45,7 +47,15 @@ export type ServerResult =
   | 'superseded'
   | 'provisional'
   | 'granted'
-  | 'no_access';
+  | 'no_access'
+  | 'wrong_checkpoint';
+
+/** A sync the server refused for a reason the scanner should show (not just "offline"). */
+export class ScanSyncError extends Error {
+  constructor(readonly reason: 'not_assigned' | 'bad_scope') {
+    super(reason);
+  }
+}
 
 export interface ScanOutcome {
   readonly scanId: string;
@@ -103,9 +113,14 @@ export class ScanClient {
     return this.snapshot?.header.event.name ?? null;
   }
 
-  /** The event's live checkpoints (older snapshots have none). */
+  /** The live checkpoints this device may scan at (older snapshots have none). */
   get checkpoints(): ManifestHeader['checkpoints'] {
     return this.snapshot?.header.checkpoints ?? [];
+  }
+
+  /** True when the device is handed to checkpoint-scoped door staff (no "whole event"). */
+  get scoped(): boolean {
+    return (this.snapshot?.header.scope?.checkpointIds ?? null) !== null;
   }
 
   /** The chosen checkpoint, if it still exists; archived ones fall back to the whole event. */
@@ -150,7 +165,14 @@ export class ScanClient {
 
   /** Pull manifest changes since the last sync (first page overlaps a minute). */
   async sync(): Promise<void> {
-    let cursor = this.snapshot?.cursor ?? null;
+    // A snapshot from an older manifest format is refetched from scratch (it has no signed scope);
+    // until then it keeps working offline, and the server enforces the scope on sync.
+    const current = (this.snapshot?.header.version ?? 1) >= MANIFEST_VERSION;
+    let cursor = current ? (this.snapshot?.cursor ?? null) : null;
+    if (!current) {
+      this.byId = new Map();
+      this.byShort = new Map();
+    }
     let first = true;
     let header: ManifestHeader | null = null;
     for (;;) {
@@ -158,6 +180,7 @@ export class ScanClient {
       if (cursor) qs.set('cursor', cursor);
       if (cursor && first) qs.set('overlap', 'true');
       const res = await fetch(`/api/v1/events/${this.config.eventId}/manifest?${qs}`, this.api);
+      if (res.status === 403) throw new ScanSyncError('not_assigned');
       if (!res.ok) throw new Error(`manifest ${res.status}`);
       const page = (await res.json()) as {
         header: ManifestHeader;
@@ -179,6 +202,8 @@ export class ScanClient {
       if (page.complete) break;
     }
     if (!header) return;
+    // The scope is signed with the org's key: a manifest whose scope doesn't verify is not used.
+    if (!(await verifyManifestScope(header))) throw new ScanSyncError('bad_scope');
     this.clockOffsetMs = new Date(header.serverTime).getTime() - Date.now();
     await kvSet('clockOffsetMs', this.clockOffsetMs);
     this.snapshot = {

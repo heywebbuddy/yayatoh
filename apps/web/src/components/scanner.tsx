@@ -20,6 +20,7 @@ const TONE = {
   provisional: 'border-accent-700 bg-accent-50 text-accent-text',
   granted: 'border-green-600 bg-green-50 text-green-900',
   no_access: 'border-pink-700 bg-pink-50 text-pink-700',
+  wrong_checkpoint: 'border-pink-700 bg-pink-50 text-pink-700',
 } as const;
 
 const newScanId = () => `web:${crypto.randomUUID()}`;
@@ -32,11 +33,14 @@ export function Scanner({
   action,
   timeZone,
   checkpoints,
+  scoped = false,
 }: {
   action: (prev: ScanState, form: FormData) => Promise<ScanState>;
   timeZone: string;
   /** Live entrances and zones; the choice stays put between scans. */
   checkpoints: readonly { id: string; name: string }[];
+  /** Checkpoint-scoped door staff: only their checkpoints, no "whole event"; they must pick one. */
+  scoped?: boolean;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { kind: 'idle' });
@@ -57,7 +61,7 @@ export function Scanner({
 
   return (
     <div className="flex flex-col gap-4">
-      {checkpoints.length > 0 ? (
+      {checkpoints.length > 0 || scoped ? (
         <div className="flex flex-col gap-1.5 self-start">
           <label htmlFor="scan-checkpoint" className="text-caption text-zinc-600">
             {t('checkpoints.scanningAt')}
@@ -71,7 +75,7 @@ export function Scanner({
             }}
             className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
           >
-            <option value="">{t('checkpoints.wholeEvent')}</option>
+            <option value="">{scoped ? t('checkpoints.chooseStand') : t('checkpoints.wholeEvent')}</option>
             {checkpoints.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -117,6 +121,13 @@ export function Scanner({
             <p className="text-[28px] leading-tight font-medium tracking-[-0.02em]">
               {t(`checkin.result.${state.outcome.result}`)}
             </p>
+            {state.outcome.result === 'wrong_checkpoint' ? (
+              <p className="text-body">
+                {checkpoints.length > 0
+                  ? t('checkin.wrongCheckpointHint', { places: checkpoints.map((c) => c.name).join(', ') })
+                  : t('checkin.noCheckpointsHint')}
+              </p>
+            ) : null}
             {state.outcome.ticket ? (
               <p className="text-body">
                 {t('checkin.who', {

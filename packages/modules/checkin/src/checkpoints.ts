@@ -12,6 +12,7 @@ import {
   CHECKPOINT_KINDS,
   type CheckpointKind,
   checkpoints,
+  FRAUD_SEVERITY,
   type FraudSignalKind,
   fraudSignals,
   scans,
@@ -23,6 +24,8 @@ export const CheckpointDto = z.object({
   kind: z.enum(CHECKPOINT_KINDS),
   ticketTypeIds: z.array(z.uuid()),
   archived: z.boolean(),
+  latitude: z.number().nullable(),
+  longitude: z.number().nullable(),
 });
 export type CheckpointDto = z.infer<typeof CheckpointDto>;
 
@@ -33,6 +36,8 @@ const toDto = (c: CheckpointRow): CheckpointDto => ({
   kind: c.kind as CheckpointKind,
   ticketTypeIds: c.ticketTypeIds,
   archived: c.archivedAt !== null,
+  latitude: c.latitude,
+  longitude: c.longitude,
 });
 
 export const createCheckpointCommand = tenantCommand({
@@ -44,10 +49,17 @@ export const createCheckpointCommand = tenantCommand({
       kind: z.enum(CHECKPOINT_KINDS),
       /** Zones only: the ticket types allowed in (empty = every type). */
       ticketTypeIds: z.array(z.uuid()).max(100).default([]),
+      /** Where it is (WGS 84), for the impossible-travel signal. Both or neither. */
+      latitude: z.number().min(-90).max(90).nullable().default(null),
+      longitude: z.number().min(-180).max(180).nullable().default(null),
     })
     .refine((v) => v.kind === 'zone' || v.ticketTypeIds.length === 0, {
       message: 'Only zones list ticket types',
       path: ['ticketTypeIds'],
+    })
+    .refine((v) => (v.latitude === null) === (v.longitude === null), {
+      message: 'Give both latitude and longitude, or neither',
+      path: ['longitude'],
     }),
   output: CheckpointDto,
   entitlement: 'checkin',
@@ -66,6 +78,8 @@ export const createCheckpointCommand = tenantCommand({
         name: input.name,
         kind: input.kind,
         ticketTypeIds: [...new Set(input.ticketTypeIds)],
+        latitude: input.latitude,
+        longitude: input.longitude,
       })
       .onConflictDoNothing()
       .returning();
@@ -171,6 +185,7 @@ export async function raiseSignalTx(
       userId: s.userId ?? null,
       detail: s.detail ?? {},
       raisedAt: s.at,
+      severity: FRAUD_SEVERITY[s.kind],
     })
     .returning({ id: fraudSignals.id });
   emit({
@@ -178,7 +193,13 @@ export async function raiseSignalTx(
     version: 1,
     aggregateType: 'event',
     aggregateId: s.eventId,
-    payload: { orgId: s.orgId, eventId: s.eventId, signalId: row?.id ?? null, kind: s.kind },
+    payload: {
+      orgId: s.orgId,
+      eventId: s.eventId,
+      signalId: row?.id ?? null,
+      kind: s.kind,
+      severity: FRAUD_SEVERITY[s.kind],
+    },
   });
 }
 

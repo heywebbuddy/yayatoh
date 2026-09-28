@@ -832,10 +832,13 @@
       "provisional": "Offline eingelassen – wird noch bestätigt",
       "granted": "Zutritt gewährt",
       "no_access": "Dieser Pass gilt nicht für diesen Bereich",
+      "wrong_checkpoint": "Nicht dein Kontrollpunkt",
       "wrong_date": "Dieses Ticket gilt für einen anderen Termin"
     },
     "alertsTitle": "{count, plural, one {# Ticket wurde offline doppelt eingelassen} other {# Tickets wurden offline doppelt eingelassen}}",
-    "alertsHint": "Zwei Scanner haben dasselbe Ticket eingelassen, bevor sie synchronisieren konnten. Prüfe diese Gäste am Einlass."
+    "alertsHint": "Zwei Scanner haben dasselbe Ticket eingelassen, bevor sie synchronisieren konnten. Prüfe diese Gäste am Einlass.",
+    "wrongCheckpointHint": "Du scannst an: {places}. Wähle es unter „Scannen bei“.",
+    "noCheckpointsHint": "Dir ist hier kein Kontrollpunkt zugewiesen. Frag den Veranstalter."
   },
   "devices": {
     "title": "Scan-Geräte",
@@ -853,7 +856,10 @@
     "revoke": "Widerrufen",
     "revokeFor": "{label} widerrufen",
     "linkHint": "Oder öffne diesen Link auf dem Gerät: Er richtet den Scanner für dieses Event ein.",
-    "openScanner": "Scanner auf diesem Gerät öffnen"
+    "openScanner": "Scanner auf diesem Gerät öffnen",
+    "handedTo": "Übergeben an",
+    "orgDevice": "Niemand (scannt überall)",
+    "handedToName": "für {name}"
   },
   "scan": {
     "title": "Scanner",
@@ -874,7 +880,9 @@
     "pending": "Auf diesem Gerät geprüft – wird nach der Synchronisierung bestätigt",
     "wipedTitle": "Dieser Scanner wurde gelöscht",
     "wipedDescription": "Gästeliste und Schlüssel wurden entfernt. Bitte einen Veranstalter um einen neuen Gerätelink, um wieder zu scannen.",
-    "cameraFailed": "Die Kamera konnte nicht starten. Prüfe die Kameraberechtigung oder gib den Code ein."
+    "cameraFailed": "Die Kamera konnte nicht starten. Prüfe die Kameraberechtigung oder gib den Code ein.",
+    "notAssigned": "Dieses Gerät ist dieser Veranstaltung nicht zugewiesen. Frag den Veranstalter.",
+    "badScope": "Die geladene Liste hat die Sicherheitsprüfung nicht bestanden und wird nicht verwendet. Verbinde dich erneut."
   },
   "checkpoints": {
     "title": "Eingänge und Zonen",
@@ -901,8 +909,18 @@
     "signalsTitle": "{count, plural, one {# Punkt zu prüfen} other {# Punkte zu prüfen}}",
     "signal": {
       "two_entrances": "Ticket an einem zweiten Eingang vorgezeigt",
-      "invalid_burst": "Mehrere ungültige Codes hintereinander"
-    }
+      "invalid_burst": "Mehrere ungültige Codes hintereinander",
+      "device_velocity": "Schneller gescannt, als ein Mensch kann",
+      "impossible_travel": "Ticket an zwei zu weit entfernten Orten eingelassen",
+      "rejected_burst": "Viele abgelehnte Scans hintereinander"
+    },
+    "chooseStand": "Kontrollpunkt wählen",
+    "location": "Standort (optional)",
+    "locationHint": "Breiten- und Längengrad, z. B. aus einer Karten-App. Damit fällt ein Ticket auf, das an zwei zu weit entfernten Orten eingelassen wurde.",
+    "latitude": "Breitengrad",
+    "longitude": "Längengrad",
+    "locationError": "Gib Breitengrad (−90 bis 90) und Längengrad (−180 bis 180) als Zahlen ein oder lass beide leer.",
+    "located": "bei {lat}, {lng}"
   },
   "search": {
     "title": "Suche",
@@ -2959,6 +2977,81 @@
       "copied": "Kopiert.",
       "emptyTitle": "Noch keine öffentlichen Veranstaltungen",
       "emptyDescription": "Veröffentlichen Sie eine Veranstaltung, um ihr Widget-Snippet zu erhalten."
+    }
+  },
+  "doorStaff": {
+    "title": "Einlasspersonal",
+    "description": "Wer bei {event} scannt – und wo.",
+    "back": "Zurück zum Einlass",
+    "noAccess": "Du brauchst Zugriff auf diese Veranstaltung, um ihr Einlasspersonal zu sehen.",
+    "listTitle": "Wer hier scannt",
+    "emptyTitle": "Noch kein Einlasspersonal",
+    "emptyDescription": "Füge unten ein Teammitglied hinzu, damit es nur bei dieser Veranstaltung scannt.",
+    "anywhere": "Überall bei der Veranstaltung",
+    "archivedCheckpoint": "(archivierter Kontrollpunkt)",
+    "scansAt": "Scannt bei: {where}",
+    "member": "Teammitglied",
+    "chooseMember": "Teammitglied wählen",
+    "chooseMemberError": "Wähle ein Teammitglied.",
+    "checkpointGone": "Einer dieser Kontrollpunkte existiert nicht mehr. Lade neu und versuche es noch einmal.",
+    "where": "Wo darf gescannt werden?",
+    "whereFor": "Wo darf {name} scannen?",
+    "whereHint": "Hake Eingänge und Zonen an. Nichts angehakt = die ganze Veranstaltung.",
+    "noCheckpoints": "Diese Veranstaltung hat noch keine Eingänge oder Zonen, also scannt das Einlasspersonal überall.",
+    "saved": "Gespeichert.",
+    "saveFor": "{name} speichern",
+    "add": "Einlasspersonal hinzufügen",
+    "addTitle": "Einlasspersonal hinzufügen",
+    "addHint": "Einlasspersonal scannt nur bei dieser Veranstaltung und nur dort, wo du es festlegst.",
+    "remove": "Entfernen",
+    "removeFor": "{name} entfernen",
+    "readOnly": "Nur Inhaber und Admins können das Einlasspersonal ändern.",
+    "byCheckpoint": "Einlasspersonal nach Kontrollpunkt",
+    "nobody": "Niemand zugewiesen",
+    "manage": "Einlasspersonal verwalten"
+  },
+  "signals": {
+    "title": "Betrugshinweise",
+    "description": "{open, plural, =0 {Nichts offen} one {# offener Hinweis} other {# offene Hinweise}}",
+    "openList": "Alle Betrugshinweise ansehen",
+    "noAccess": "Nur wer bei dieser Veranstaltung scannt, sieht ihre Betrugshinweise.",
+    "listTitle": "Hinweise",
+    "emptyTitle": "Keine Hinweise",
+    "emptyDescription": "Auffälliges am Einlass – etwa ein Ticket an zwei Eingängen oder ein Gerät, das zu schnell scannt – erscheint hier.",
+    "severity": {
+      "high": "Hoch",
+      "medium": "Mittel",
+      "low": "Niedrig"
+    },
+    "status": {
+      "open": "Offen",
+      "acknowledged": "Bestätigt",
+      "dismissed": "Verworfen"
+    },
+    "acknowledge": "Bestätigen",
+    "acknowledgeFor": "Bestätigen: {what}",
+    "dismiss": "Verwerfen",
+    "dismissFor": "Verwerfen: {what}",
+    "done": {
+      "acknowledged": "Bestätigt: Das Team sieht, dass sich jemand kümmert.",
+      "dismissed": "Verworfen."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} Scans in einer Minute (Grenze {limit})",
+    "refused": "{count} abgelehnt in {seconds} s",
+    "speed": "{metres} m in {seconds} s ({kmh} km/h)",
+    "settings": {
+      "title": "Erkennungsregeln",
+      "description": "Passe sie an diesen Veranstaltungsort an. Hinweise entstehen online und wenn Offline-Geräte synchronisieren.",
+      "maxScansPerMinute": "Höchstzahl Scans pro Minute für einen Menschen",
+      "maxScansPerMinuteHint": "Standard 40. Ein schnelleres Gerät wird markiert.",
+      "maxScansPerMinuteError": "Gib eine ganze Zahl von 2 bis 600 ein.",
+      "maxTravelKmh": "Höchste Gehgeschwindigkeit zwischen Kontrollpunkten (km/h)",
+      "maxTravelKmhHint": "Standard 12. Braucht Standorte der Kontrollpunkte.",
+      "maxTravelKmhError": "Gib eine ganze Zahl von 1 bis 200 ein.",
+      "save": "Regeln speichern",
+      "saved": "Regeln gespeichert.",
+      "current": "Markiert Geräte mit mehr als {rate} Scans pro Minute und Tickets, die sich schneller als {kmh} km/h zwischen Kontrollpunkten bewegen."
     }
   },
   "security": {

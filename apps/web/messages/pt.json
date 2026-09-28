@@ -832,10 +832,13 @@
       "provisional": "Entrada offline — a confirmar",
       "granted": "Acesso liberado",
       "no_access": "Este passe não inclui esta área",
+      "wrong_checkpoint": "Не ваш пункт проверки",
       "wrong_date": "Este ingresso é para outra data"
     },
     "alertsTitle": "{count, plural, one {# ingresso foi aceito duas vezes offline} other {# ingressos foram aceitos duas vezes offline}}",
-    "alertsHint": "Dois leitores aceitaram o mesmo ingresso antes de conseguirem sincronizar. Confira esses convidados na entrada."
+    "alertsHint": "Dois leitores aceitaram o mesmo ingresso antes de conseguirem sincronizar. Confira esses convidados na entrada.",
+    "wrongCheckpointHint": "Вы сканируете здесь: {places}. Выберите это в «Сканирую в».",
+    "noCheckpointsHint": "Вам здесь не назначен ни один пункт проверки. Обратитесь к организатору."
   },
   "devices": {
     "title": "Dispositivos de leitura",
@@ -853,7 +856,10 @@
     "revoke": "Revogar",
     "revokeFor": "Revogar {label}",
     "linkHint": "Ou abra este link no dispositivo: ele configura o leitor para este evento.",
-    "openScanner": "Abrir o leitor neste dispositivo"
+    "openScanner": "Abrir o leitor neste dispositivo",
+    "handedTo": "Кому выдано",
+    "orgDevice": "Никому (сканирует везде)",
+    "handedToName": "для {name}"
   },
   "scan": {
     "title": "Leitor",
@@ -874,7 +880,9 @@
     "pending": "Verificado neste dispositivo — será confirmado ao sincronizar",
     "wipedTitle": "Este leitor foi apagado",
     "wipedDescription": "A lista de convidados e a chave foram removidas. Peça a um organizador um novo link de dispositivo para voltar a ler.",
-    "cameraFailed": "Não foi possível iniciar a câmera. Verifique a permissão da câmera ou digite o código."
+    "cameraFailed": "Não foi possível iniciar a câmera. Verifique a permissão da câmera ou digite o código.",
+    "notAssigned": "Это устройство не назначено на это мероприятие. Обратитесь к организатору.",
+    "badScope": "Загруженный список не прошёл проверку безопасности и не используется. Подключитесь снова."
   },
   "checkpoints": {
     "title": "Entradas e zonas",
@@ -901,8 +909,18 @@
     "signalsTitle": "{count, plural, one {# item para verificar} other {# itens para verificar}}",
     "signal": {
       "two_entrances": "Ingresso apresentado em uma segunda entrada",
-      "invalid_burst": "Vários códigos inválidos seguidos"
-    }
+      "invalid_burst": "Vários códigos inválidos seguidos",
+      "device_velocity": "Сканирование быстрее, чем может человек",
+      "impossible_travel": "Билет пропущен в двух слишком удалённых местах",
+      "rejected_burst": "Много отказов подряд"
+    },
+    "chooseStand": "Выберите свой пункт проверки",
+    "location": "Местоположение (необязательно)",
+    "locationHint": "Широта и долгота, например из приложения карт. Помогает заметить билет, пропущенный в двух слишком удалённых местах.",
+    "latitude": "Широта",
+    "longitude": "Долгота",
+    "locationError": "Введите широту (от −90 до 90) и долготу (от −180 до 180) числами или оставьте оба поля пустыми.",
+    "located": "в точке {lat}, {lng}"
   },
   "search": {
     "title": "Pesquisar",
@@ -2959,6 +2977,81 @@
       "copied": "Copiado.",
       "emptyTitle": "Ainda não há eventos públicos",
       "emptyDescription": "Publique um evento para obter o trecho do widget."
+    }
+  },
+  "doorStaff": {
+    "title": "Контролёры на входе",
+    "description": "Кто сканирует на {event} и где.",
+    "back": "Назад к регистрации",
+    "noAccess": "Чтобы видеть контролёров, нужен доступ к этому мероприятию.",
+    "listTitle": "Кто здесь сканирует",
+    "emptyTitle": "Контролёров пока нет",
+    "emptyDescription": "Добавьте ниже участника команды, чтобы он сканировал только на этом мероприятии.",
+    "anywhere": "В любом месте мероприятия",
+    "archivedCheckpoint": "(пункт в архиве)",
+    "scansAt": "Сканирует: {where}",
+    "member": "Участник команды",
+    "chooseMember": "Выберите участника команды",
+    "chooseMemberError": "Выберите участника команды.",
+    "checkpointGone": "Одного из этих пунктов больше нет. Обновите страницу и попробуйте снова.",
+    "where": "Где можно сканировать?",
+    "whereFor": "Где может сканировать {name}?",
+    "whereHint": "Отметьте входы и зоны. Ничего не отмечено — всё мероприятие.",
+    "noCheckpoints": "У мероприятия пока нет входов и зон, поэтому контролёры сканируют везде.",
+    "saved": "Сохранено.",
+    "saveFor": "Сохранить: {name}",
+    "add": "Добавить контролёра",
+    "addTitle": "Добавить контролёра",
+    "addHint": "Контролёры сканируют только на этом мероприятии и только там, где вы укажете.",
+    "remove": "Убрать",
+    "removeFor": "Убрать: {name}",
+    "readOnly": "Менять контролёров могут только владельцы и администраторы.",
+    "byCheckpoint": "Контролёры по пунктам",
+    "nobody": "Никто не назначен",
+    "manage": "Управлять контролёрами"
+  },
+  "signals": {
+    "title": "Сигналы мошенничества",
+    "description": "{open, plural, =0 {Открытых нет} one {# открытый сигнал} few {# открытых сигнала} many {# открытых сигналов} other {# открытого сигнала}}",
+    "openList": "Все сигналы мошенничества",
+    "noAccess": "Сигналы мошенничества видят только те, кто сканирует на этом мероприятии.",
+    "listTitle": "Сигналы",
+    "emptyTitle": "Сигналов нет",
+    "emptyDescription": "Всё необычное на входе — например, билет у двух входов или слишком быстрое сканирование — появится здесь.",
+    "severity": {
+      "high": "Высокая",
+      "medium": "Средняя",
+      "low": "Низкая"
+    },
+    "status": {
+      "open": "Открыт",
+      "acknowledged": "Принят",
+      "dismissed": "Отклонён"
+    },
+    "acknowledge": "Принять",
+    "acknowledgeFor": "Принять: {what}",
+    "dismiss": "Отклонить",
+    "dismissFor": "Отклонить: {what}",
+    "done": {
+      "acknowledged": "Принято: команда видит, что этим занимаются.",
+      "dismissed": "Отклонено."
+    },
+    "travel": "{from} → {to}",
+    "rate": "Сканов за минуту: {count} (предел {limit})",
+    "refused": "Отказов за {seconds} с: {count}",
+    "speed": "{metres} м за {seconds} с ({kmh} км/ч)",
+    "settings": {
+      "title": "Правила обнаружения",
+      "description": "Настройте их под площадку. Сигналы возникают онлайн и при синхронизации офлайн-устройств.",
+      "maxScansPerMinute": "Максимум сканов в минуту для человека",
+      "maxScansPerMinuteHint": "По умолчанию 40. Более быстрое устройство отмечается.",
+      "maxScansPerMinuteError": "Введите целое число от 2 до 600.",
+      "maxTravelKmh": "Максимальная скорость ходьбы между пунктами (км/ч)",
+      "maxTravelKmhHint": "По умолчанию 12. Нужны координаты пунктов.",
+      "maxTravelKmhError": "Введите целое число от 1 до 200.",
+      "save": "Сохранить правила",
+      "saved": "Правила сохранены.",
+      "current": "Отмечает устройство, делающее больше {rate} сканов в минуту, и билет, перемещающийся между пунктами быстрее {kmh} км/ч."
     }
   },
   "security": {

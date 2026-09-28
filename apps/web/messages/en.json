@@ -832,10 +832,13 @@
       "provisional": "Let in offline — to be confirmed",
       "granted": "Access granted",
       "no_access": "This pass doesn't include this area",
+      "wrong_checkpoint": "Not your checkpoint",
       "wrong_date": "This ticket is for another date"
     },
     "alertsTitle": "{count, plural, one {# ticket was let in twice while offline} other {# tickets were let in twice while offline}}",
-    "alertsHint": "Two scanners admitted the same ticket before they could sync. Check these guests at the door."
+    "alertsHint": "Two scanners admitted the same ticket before they could sync. Check these guests at the door.",
+    "wrongCheckpointHint": "You scan at {places}. Choose it under Scanning at.",
+    "noCheckpointsHint": "You aren't assigned to any checkpoint here. Ask the organizer."
   },
   "devices": {
     "title": "Scanner devices",
@@ -853,7 +856,10 @@
     "revoke": "Revoke",
     "revokeFor": "Revoke {label}",
     "linkHint": "Or open this link on the device: it sets the scanner up for this event.",
-    "openScanner": "Open the scanner on this device"
+    "openScanner": "Open the scanner on this device",
+    "handedTo": "Handed to",
+    "orgDevice": "Nobody (scans anywhere)",
+    "handedToName": "for {name}"
   },
   "scan": {
     "title": "Scanner",
@@ -874,7 +880,9 @@
     "pending": "Checked on this device — will be confirmed when synced",
     "wipedTitle": "This scanner was wiped",
     "wipedDescription": "Its guest list and key were removed. Ask an organizer for a new device link to scan again.",
-    "cameraFailed": "The camera couldn't start. Check the camera permission, or type the code."
+    "cameraFailed": "The camera couldn't start. Check the camera permission, or type the code.",
+    "notAssigned": "This device isn't assigned to this event. Ask the organizer.",
+    "badScope": "The downloaded list failed its security check and wasn't used. Reconnect to try again."
   },
   "checkpoints": {
     "title": "Entrances and zones",
@@ -901,8 +909,18 @@
     "signalsTitle": "{count, plural, one {# thing to check} other {# things to check}}",
     "signal": {
       "two_entrances": "Ticket shown at a second entrance",
-      "invalid_burst": "Several invalid codes in a row"
-    }
+      "invalid_burst": "Several invalid codes in a row",
+      "device_velocity": "Scanning faster than a person can",
+      "impossible_travel": "Ticket let in at two places too far apart",
+      "rejected_burst": "Many refused scans in a row"
+    },
+    "chooseStand": "Choose your checkpoint",
+    "location": "Location (optional)",
+    "locationHint": "Latitude and longitude, for example from a map app. Used to spot a ticket let in at two places too far apart.",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationError": "Enter both latitude (−90 to 90) and longitude (−180 to 180) as numbers, or leave both empty.",
+    "located": "at {lat}, {lng}"
   },
   "search": {
     "title": "Search",
@@ -2959,6 +2977,81 @@
       "copied": "Copied.",
       "emptyTitle": "No public events yet",
       "emptyDescription": "Publish an event to get its widget snippet."
+    }
+  },
+  "doorStaff": {
+    "title": "Door staff",
+    "description": "Who scans at {event}, and where.",
+    "back": "Back to check-in",
+    "noAccess": "You need access to this event to see its door staff.",
+    "listTitle": "Who scans here",
+    "emptyTitle": "No door staff yet",
+    "emptyDescription": "Add a team member below to let them scan at this event only.",
+    "anywhere": "Anywhere at the event",
+    "archivedCheckpoint": "(archived checkpoint)",
+    "scansAt": "Scans at: {where}",
+    "member": "Team member",
+    "chooseMember": "Choose a team member",
+    "chooseMemberError": "Choose a team member.",
+    "checkpointGone": "One of those checkpoints no longer exists. Reload and try again.",
+    "where": "Where can they scan?",
+    "whereFor": "Where can {name} scan?",
+    "whereHint": "Tick the entrances and zones. Leave all unticked for the whole event.",
+    "noCheckpoints": "This event has no entrances or zones yet, so door staff scan at the whole event.",
+    "saved": "Saved.",
+    "saveFor": "Save {name}",
+    "add": "Add door staff",
+    "addTitle": "Add door staff",
+    "addHint": "Door staff scan at this event only, and only where you choose.",
+    "remove": "Remove",
+    "removeFor": "Remove {name}",
+    "readOnly": "Only owners and admins can change door staff.",
+    "byCheckpoint": "Door staff by checkpoint",
+    "nobody": "Nobody assigned",
+    "manage": "Manage door staff"
+  },
+  "signals": {
+    "title": "Fraud signals",
+    "description": "{open, plural, =0 {Nothing open} one {# open signal} other {# open signals}}",
+    "openList": "See all fraud signals",
+    "noAccess": "Only people who scan at this event can see its fraud signals.",
+    "listTitle": "Signals",
+    "emptyTitle": "No signals",
+    "emptyDescription": "Anything unusual at the doors, like a ticket at two entrances or a device scanning too fast, shows up here.",
+    "severity": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "status": {
+      "open": "Open",
+      "acknowledged": "Acknowledged",
+      "dismissed": "Dismissed"
+    },
+    "acknowledge": "Acknowledge",
+    "acknowledgeFor": "Acknowledge: {what}",
+    "dismiss": "Dismiss",
+    "dismissFor": "Dismiss: {what}",
+    "done": {
+      "acknowledged": "Acknowledged: the team can see someone is on it.",
+      "dismissed": "Dismissed."
+    },
+    "travel": "{from} → {to}",
+    "rate": "{count} scans in a minute (limit {limit})",
+    "refused": "{count} refused in {seconds} s",
+    "speed": "{metres} m in {seconds} s ({kmh} km/h)",
+    "settings": {
+      "title": "Detection rules",
+      "description": "Tune them to this venue. Signals are raised online and when offline devices sync.",
+      "maxScansPerMinute": "Most scans a person can do in a minute",
+      "maxScansPerMinuteHint": "Default 40. A device going faster is flagged.",
+      "maxScansPerMinuteError": "Enter a whole number from 2 to 600.",
+      "maxTravelKmh": "Fastest walking speed between checkpoints (km/h)",
+      "maxTravelKmhHint": "Default 12. Needs checkpoint locations.",
+      "maxTravelKmhError": "Enter a whole number from 1 to 200.",
+      "save": "Save rules",
+      "saved": "Rules saved.",
+      "current": "Flags a device doing more than {rate} scans a minute, and a ticket moving faster than {kmh} km/h between checkpoints."
     }
   },
   "security": {

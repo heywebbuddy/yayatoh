@@ -1,6 +1,6 @@
 import { eventDay, ruleResult, zoneAllows } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { eventStaffTx, findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
@@ -15,15 +15,9 @@ import {
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
-import {
-  admissions,
-  FRAUD_SIGNAL_KINDS,
-  type FraudSignalKind,
-  fraudSignals,
-  SCAN_RESULTS,
-  type ScanResult,
-  scans,
-} from './schema.ts';
+import { admissions, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
+import { checkVelocityTx, FraudSignalDto, fraudSignalsTx } from './signals.ts';
+import { actorScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const SHORT_CODE = /^[2-9A-HJKMNP-TV-Z]{8}$/;
 
@@ -98,7 +92,11 @@ export const scanTicketCommand = tenantCommand({
       }
     }
 
-    const verdict = ruleResult({ now: ctx.now, event, ticket: await withOccurrenceTx(tx, ticket) });
+    // Checkpoint-scoped door staff scan only where they are assigned (and never "whole event").
+    const inScope = scopeAllowsCheckpoint(await actorScanScopeTx(tx, ctx, event.id), checkpoint?.id ?? null);
+    const verdict = inScope
+      ? ruleResult({ now: ctx.now, event, ticket: await withOccurrenceTx(tx, ticket) })
+      : 'wrong_checkpoint';
     let result: ScanResult = verdict === 'ok' ? 'admitted' : verdict;
     let admissionId: string | null = null;
     let firstAdmittedAt: Date | null = null;
@@ -159,10 +157,12 @@ export const scanTicketCommand = tenantCommand({
         }
       }
     }
+    // Out of scope, the code isn't looked at further: the log keeps no ticket for it.
+    const loggedTicket = inScope ? (ticket?.id ?? null) : null;
     await tx.insert(scans).values({
       orgId,
       eventId: event.id,
-      ticketId: ticket?.id ?? null,
+      ticketId: loggedTicket,
       admissionId,
       result,
       codeKind: kind,
@@ -179,10 +179,19 @@ export const scanTicketCommand = tenantCommand({
         userId: scannedBy,
         deviceId: null,
       });
+    await checkVelocityTx(tx, emit, {
+      orgId,
+      eventId: event.id,
+      from: ctx.now,
+      to: ctx.now,
+      userId: scannedBy,
+      ticketIds: loggedTicket ? [loggedTicket] : [],
+    });
     // Tickets for another event are not described: a scanner only learns about this event's tickets.
+    // Nor are tickets shown where the scanner may not scan.
     return {
       result,
-      ticket: result === 'wrong_event' ? null : summary(ticket),
+      ticket: result === 'wrong_event' || result === 'wrong_checkpoint' ? null : summary(ticket),
       admissionId,
       firstAdmittedAt,
     };
@@ -229,15 +238,10 @@ export const CheckinStatusDto = z.object({
   admittedToday: z.int(),
   /** Today's live admissions per entrance (admissions without an entrance are not listed). */
   byCheckpoint: z.array(z.object({ checkpointId: z.uuid(), name: z.string(), admittedToday: z.int() })),
-  /** Fraud signals (two entrances, invalid bursts), newest first. */
-  signals: z.array(
-    z.object({
-      at: z.date(),
-      kind: z.enum(FRAUD_SIGNAL_KINDS),
-      holderName: z.string().nullable(),
-      checkpointName: z.string().nullable(),
-    }),
-  ),
+  /** Open fraud signals (two entrances, bursts, velocity), newest first. */
+  signals: z.array(FraudSignalDto),
+  /** Door staff per checkpoint (`checkpointId: null` = the whole event), live assignments only. */
+  staff: z.array(z.object({ checkpointId: z.uuid().nullable(), userIds: z.array(z.uuid()) })),
   /** Tickets let in by two devices while offline (checkin.duplicate_offline), newest first. */
   alerts: z.array(
     z.object({ at: z.date(), holderName: z.string().nullable(), shortCode: z.string().nullable() }),
@@ -310,7 +314,6 @@ export const checkinStatusQuery = tenantQuery({
       alerts.push({ at: d.at, holderName: t?.holderName ?? null, shortCode: t?.shortCode ?? null });
     }
     const cps = await checkpointsTx(tx, event.id, true);
-    const cpName = new Map(cps.map((c) => [c.id, c.name]));
     const perEntrance = await tx
       .select({ checkpointId: admissions.checkpointId, n: sql<number>`count(*)::int` })
       .from(admissions)
@@ -320,25 +323,24 @@ export const checkinStatusQuery = tenantQuery({
     const byCheckpoint = cps
       .filter((c) => c.kind === 'entrance' && (c.archivedAt === null || counts.has(c.id)))
       .map((c) => ({ checkpointId: c.id, name: c.name, admittedToday: counts.get(c.id) ?? 0 }));
-    const signalRows = await tx
-      .select()
-      .from(fraudSignals)
-      .where(eq(fraudSignals.eventId, event.id))
-      .orderBy(desc(fraudSignals.raisedAt), desc(fraudSignals.id))
-      .limit(20);
-    const signals = [];
-    for (const f of signalRows) {
-      const t = f.ticketId ? await ticketForScanTx(tx, { id: f.ticketId }) : null;
-      signals.push({
-        at: f.raisedAt,
-        kind: f.kind as FraudSignalKind,
-        holderName: t?.holderName ?? null,
-        checkpointName: f.checkpointId ? (cpName.get(f.checkpointId) ?? null) : null,
-      });
-    }
+    const signals = await fraudSignalsTx(tx, event.id, { openOnly: true, limit: 20 });
+    const doorStaff = (await eventStaffTx(tx, event.id, ctx.now)).filter((g) => g.role === 'door_staff');
+    const staffAt = (checkpointId: string | null) =>
+      doorStaff
+        .filter((g) =>
+          checkpointId === null ? g.checkpointIds.length === 0 : g.checkpointIds.includes(checkpointId),
+        )
+        .map((g) => g.userId);
+    const staff = [
+      { checkpointId: null, userIds: staffAt(null) },
+      ...cps
+        .filter((c) => c.archivedAt === null)
+        .map((c) => ({ checkpointId: c.id, userIds: staffAt(c.id) })),
+    ];
     return {
       alerts,
       signals,
+      staff,
       byCheckpoint,
       issued: await activeTicketCountTx(tx, event.id),
       admittedToday: adm?.n ?? 0,

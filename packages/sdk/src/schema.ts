@@ -292,7 +292,7 @@ export interface paths {
                             /** Format: date-time */
                             firstAdmittedAt: string | null;
                             /** @enum {string} */
-                            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access";
+                            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint";
                             ticket: {
                                 holderName: string | null;
                                 serial: number;
@@ -491,9 +491,18 @@ export interface paths {
                                     [key: string]: string;
                                 };
                                 salt: string;
+                                scope: {
+                                    checkpointIds: string[] | null;
+                                    /** Format: uuid */
+                                    deviceId: string;
+                                    /** Format: uuid */
+                                    eventId: string;
+                                    signature: string;
+                                };
                                 serverTime: string;
                                 /** @enum {string} */
                                 unknownPolicy: "provisional" | "reject";
+                                version: number;
                             };
                             rows: {
                                 accessDates: {
@@ -520,6 +529,24 @@ export interface paths {
                 };
                 /** @description Missing or unknown device token */
                 401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": {
+                            code: string;
+                            detail?: string;
+                            details?: {
+                                [key: string]: unknown;
+                            };
+                            status: number;
+                            title: string;
+                            type: string;
+                        };
+                    };
+                };
+                /** @description The device is handed to a member with no role at this event */
+                403: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -2811,7 +2838,7 @@ export interface components {
             /** Format: date-time */
             firstAdmittedAt: string | null;
             /** @enum {string} */
-            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access";
+            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint";
             ticket: {
                 holderName: string | null;
                 serial: number;

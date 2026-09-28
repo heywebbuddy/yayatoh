@@ -33,9 +33,30 @@ export {
 export {
   CHECKPOINT_KINDS,
   type CheckpointKind,
+  FRAUD_SEVERITIES,
+  FRAUD_SEVERITY,
   FRAUD_SIGNAL_KINDS,
+  FRAUD_STATUSES,
+  type FraudSeverity,
   type FraudSignalKind,
+  type FraudStatus,
   SCAN_RESULTS,
   type ScanResult,
 } from './schema.ts';
+export {
+  DetectionSettingsDto,
+  detectionSettingsQuery,
+  FraudSignalDto,
+  listFraudSignalsQuery,
+  resolveFraudSignalCommand,
+  setDetectionSettingsCommand,
+} from './signals.ts';
+export {
+  DoorStaffDto,
+  doorStaffQuery,
+  myScanScopeQuery,
+  removeDoorStaffCommand,
+  type ScanScope,
+  setDoorStaffCommand,
+} from './staff.ts';
 export { type CheckinScope, checkinFactsTx } from './stats.ts';
