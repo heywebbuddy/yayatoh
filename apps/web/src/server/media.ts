@@ -1,9 +1,14 @@
 import 'server-only';
 import { executeQuery } from '@yayatoh/kernel';
 import {
+  catchUpProgramMedia,
+  isProgramOwner,
   listMediaQuery,
+  listOwnersMediaQuery,
   type MediaAssetDto,
   type OwnerType,
+  PROGRAM_IMAGES,
+  type ProgramImageOwner,
   type Slot,
   signUploadTicket,
 } from '@yayatoh/media';
@@ -21,6 +26,8 @@ export interface MediaItem {
   readonly sourceType: string;
   /** A small preview (the vector for SVG, else the smallest WebP). */
   readonly preview: string;
+  /** `{url} {width}w` for the WebP variants (thumbnails pick the right one). */
+  readonly srcSet: string;
 }
 
 function toItem(a: MediaAssetDto): MediaItem {
@@ -34,6 +41,7 @@ function toItem(a: MediaAssetDto): MediaItem {
     height: a.height,
     sourceType: a.sourceType,
     preview: (vector ?? webp[0] ?? a.variants[0])?.url ?? '',
+    srcSet: vector ? '' : webp.map((v) => `${v.url} ${v.width}w`).join(', '),
   };
 }
 
@@ -54,4 +62,54 @@ export async function mediaPanel(
     ? signUploadTicket({ orgId: data.org.id, ownerType, ownerId, slot, userId: data.session.userId })
     : null;
   return { items: assets.map(toItem), ticket, canWrite };
+}
+
+/**
+ * M1.4h: the images of every speaker, exhibitor or sponsor on a program page in one query, with
+ * an upload ticket per row for people who may change them (event editors). Viewers get no
+ * tickets, so no upload control renders for them.
+ */
+export async function programMediaPanels(
+  data: ConsoleData,
+  kind: ProgramImageOwner,
+  ownerIds: readonly string[],
+): Promise<Map<string, { items: MediaItem[]; ticket: string | null }>> {
+  const assets = await executeQuery(
+    listOwnersMediaQuery,
+    { ownerType: kind, ownerIds: [...ownerIds] },
+    data.ctx,
+    ports,
+  );
+  const canWrite = isProgramOwner(kind) && roleCan(data.role, 'events:write');
+  const slot = PROGRAM_IMAGES[kind].slot;
+  return new Map(
+    ownerIds.map((id) => [
+      id,
+      {
+        items: assets.filter((a) => a.ownerId === id).map(toItem),
+        ticket: canWrite
+          ? signUploadTicket({
+              orgId: data.org.id,
+              ownerType: kind,
+              ownerId: id,
+              slot,
+              userId: data.session.userId,
+            })
+          : null,
+      },
+    ]),
+  );
+}
+
+/**
+ * Right after a speaker, exhibitor or sponsor is deleted: remove its images now (rows, then
+ * files) instead of waiting for the worker, which delivers the same outbox event as a backstop.
+ * The image is already private at this point (its owner is gone), so a failure only logs.
+ */
+export async function purgeDeletedProgramMedia(orgId: string): Promise<void> {
+  try {
+    await catchUpProgramMedia(orgId);
+  } catch (err) {
+    console.warn(`program media cleanup ${orgId}: ${(err as Error).message}`);
+  }
 }

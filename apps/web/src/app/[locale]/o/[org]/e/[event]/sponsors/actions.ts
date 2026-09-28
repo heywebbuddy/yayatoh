@@ -12,6 +12,7 @@ import { revalidatePath } from 'next/cache';
 import type { ProgramFormState } from '@/components/program-form.tsx';
 import { loadEvent } from '@/server/console.ts';
 import { failure, numberOrNull, success, textOrNull } from '@/server/form.ts';
+import { purgeDeletedProgramMedia } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 
 const done = (org: string, event: string) => revalidatePath(`/o/${org}/e/${event}/sponsors`);
@@ -106,5 +107,7 @@ export async function updateSponsorAction(
 export async function deleteSponsorAction(org: string, event: string, sponsorId: string): Promise<void> {
   const { data, event: ev } = await loadEvent(org, event);
   await executeCommand(deleteSponsorCommand, { eventId: ev.id, sponsorId }, data.ctx, ports);
+  // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
+  await purgeDeletedProgramMedia(data.org.id);
   done(org, event);
 }

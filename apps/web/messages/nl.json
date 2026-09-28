@@ -3323,7 +3323,9 @@
       "room_overlap": "{room} is op dit tijdstip ook geboekt voor ‘{other}’.",
       "speaker_overlap": "{speaker} spreekt op dit tijdstip ook in ‘{other}’.",
       "outside_event": "Deze sessie valt buiten het begin en einde van het evenement."
-    }
+    },
+    "photoAfterSave": "Je kunt een foto toevoegen nadat de spreker is opgeslagen.",
+    "logoAfterSave": "Je kunt een logo toevoegen na het opslaan."
   },
   "aiDraft": {
     "title": "Schrijven met AI",
@@ -3429,19 +3431,28 @@
       "cover": "Omslagafbeelding",
       "gallery": "Galerij",
       "photo": "Foto's van de locatie",
-      "logo": "Logo"
+      "logo": "Logo",
+      "speaker": "Foto van de spreker",
+      "exhibitor": "Logo van de exposant",
+      "sponsor": "Logo van de sponsor"
     },
     "hint": {
       "cover": "Bovenaan de evenementpagina, op evenementkaarten en in linkvoorbeelden.",
       "gallery": "Tot {max} foto's, op de evenementpagina.",
       "photo": "Tot {max} foto's, op de openbare pagina van de locatie.",
-      "logo": "In de console, op je organisatorpagina en -site en in e-mails."
+      "logo": "In de console, op je organisatorpagina en -site en in e-mails.",
+      "speaker": "Getoond op de evenementpagina, de eigen pagina van de spreker en naast hun sessies in het programma.",
+      "exhibitor": "Getoond bij de exposant op de evenementpagina. SVG-logo’s blijven op elk formaat scherp.",
+      "sponsor": "Getoond in het niveau van de sponsor op de evenementpagina (hogere niveaus tonen grotere logo’s). SVG-logo’s blijven scherp."
     },
     "empty": {
       "cover": "Nog geen omslagafbeelding.",
       "gallery": "Nog geen foto's in de galerij.",
       "photo": "Nog geen foto's van de locatie.",
-      "logo": "Nog geen logo."
+      "logo": "Nog geen logo.",
+      "speaker": "Nog geen foto.",
+      "exhibitor": "Nog geen logo.",
+      "sponsor": "Nog geen logo."
     },
     "count": "{count, plural, one {# afbeelding} other {# afbeeldingen}} van {max}",
     "listLabel": "Huidige afbeeldingen",
@@ -3485,7 +3496,16 @@
       "slot_full": "De galerij is vol ({max} afbeeldingen). Verwijder of vervang er een.",
       "forbidden": "Je kunt deze afbeeldingen niet wijzigen.",
       "network": "Het uploaden is mislukt. Controleer je verbinding en probeer het opnieuw.",
-      "generic": "Het uploaden is mislukt. Probeer het opnieuw."
+      "generic": "Het uploaden is mislukt. Probeer het opnieuw.",
+      "alt_missing": "Voer alternatieve tekst in die de afbeelding beschrijft."
+    },
+    "titleNamed": {
+      "speaker": "Foto: {name}",
+      "exhibitor": "Logo: {name}",
+      "sponsor": "Logo: {name}"
+    },
+    "defaultAlt": {
+      "speaker": "Foto van {name}"
     }
   },
   "doorStaff": {

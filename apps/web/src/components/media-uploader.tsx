@@ -16,12 +16,15 @@ import {
 import type { MediaItem } from '@/server/media.ts';
 
 type Slot = 'cover' | 'gallery' | 'photo' | 'logo';
-type Family = 'content' | 'logo';
+/** M1.4h: a program row's single image (speaker photo, exhibitor or sponsor logo). */
+type ProgramKind = 'speaker' | 'exhibitor' | 'sponsor';
+type Family = 'content' | 'logo' | ProgramKind;
 
 /** Upload error reasons with their own message (anything else is `generic`). */
 const REASONS = new Set([
   'no_file',
   'alt_required',
+  'alt_missing',
   'unsupported_type',
   'too_large',
   'too_many_pixels',
@@ -44,6 +47,10 @@ interface UploadError {
  * The image uploader (M1.4e): a real file input (keyboard and screen readers; dropping a file
  * on the zone is optional sugar), alt text (required unless decorative), a progress bar and
  * live status, and per image: alt text editing, replace and remove.
+ *
+ * M1.4h: with `kind` it holds a speaker's photo or an exhibitor's/sponsor's logo — one image,
+ * never decorative, the alt text prefilled with `defaultAlt` ("Photo of {name}", the company
+ * name) for the organizer to edit.
  */
 export function MediaUploader({
   org,
@@ -51,13 +58,20 @@ export function MediaUploader({
   ticket,
   items,
   headingLevel = 2,
+  kind,
+  defaultAlt = '',
+  title,
 }: {
   org: string;
   slot: Slot;
   /** Signed by the server for people who may change these images; null hides every control. */
   ticket: string | null;
   items: readonly MediaItem[];
-  headingLevel?: 2 | 3;
+  headingLevel?: 2 | 3 | 4;
+  kind?: ProgramKind;
+  defaultAlt?: string;
+  /** The section heading (default: the slot's title). */
+  title?: string;
 }) {
   const t = useTranslations('media');
   const locale = useLocale();
@@ -66,7 +80,7 @@ export function MediaUploader({
   const fileRef = useRef<HTMLInputElement>(null);
   const altRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [alt, setAlt] = useState('');
+  const [alt, setAlt] = useState(defaultAlt);
   const [decorative, setDecorative] = useState(false);
   const [replaceId, setReplaceId] = useState<string | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
@@ -74,11 +88,14 @@ export function MediaUploader({
   const [error, setError] = useState<UploadError | null>(null);
   const [dragging, setDragging] = useState(false);
 
-  const family: Family = slot === 'logo' ? 'logo' : 'content';
-  const multiple = slot === 'gallery' || slot === 'photo';
+  const family: Family = kind ?? (slot === 'logo' ? 'logo' : 'content');
+  const multiple = !kind && (slot === 'gallery' || slot === 'photo');
+  // Messages per slot, or per program kind (their photo/logo differ from venue photos and the org logo).
+  const key = kind ?? slot;
+  const altMissing = family === 'content' ? 'alt_required' : kind ? 'alt_missing' : 'alt_required';
   const full = multiple && items.length >= GALLERY_MAX && !replaceId;
   const size = formatMegabytes(UPLOAD_MAX_BYTES, locale);
-  const Heading = headingLevel === 2 ? 'h2' : 'h3';
+  const Heading = headingLevel === 2 ? 'h2' : headingLevel === 3 ? 'h3' : 'h4';
   const replacing = replaceId ? items.find((i) => i.id === replaceId) : null;
   const nameOf = (i: MediaItem) => i.alt ?? t('decorativeName');
   const message = (e: UploadError) =>
@@ -87,7 +104,7 @@ export function MediaUploader({
   function reset() {
     if (fileRef.current) fileRef.current.value = '';
     setFileName(null);
-    setAlt('');
+    setAlt(defaultAlt);
     setDecorative(false);
     setReplaceId(null);
   }
@@ -107,7 +124,7 @@ export function MediaUploader({
     if (!file) return fail('no_file', 'file');
     if (!looksLikeImage(file)) return fail('unsupported_type', 'file');
     if (file.size > UPLOAD_MAX_BYTES) return fail('too_large', 'file');
-    if (!decorative && !alt.trim()) return fail('alt_required', 'alt');
+    if (!decorative && !alt.trim()) return fail(altMissing, 'alt');
     setError(null);
     const body = new FormData();
     body.set('ticket', ticket);
@@ -139,7 +156,7 @@ export function MediaUploader({
       const field = res.fields?.includes('alt') ? 'alt' : 'file';
       const reason =
         res.reason ??
-        (res.fields?.includes('alt') ? 'alt_required' : res.code === 'forbidden' ? 'forbidden' : 'generic');
+        (res.fields?.includes('alt') ? altMissing : res.code === 'forbidden' ? 'forbidden' : 'generic');
       fail(reason, field);
     };
     xhr.onerror = () => fail('network', null);
@@ -164,9 +181,9 @@ export function MediaUploader({
     <section aria-labelledby={headingId} className="flex flex-col gap-4" data-slot={slot}>
       <div className="flex flex-col gap-1">
         <Heading id={headingId} className="text-section">
-          {t(`title.${slot}`)}
+          {title ?? t(`title.${key}`)}
         </Heading>
-        <p className="text-body text-zinc-500">{t(`hint.${slot}`, { max: GALLERY_MAX })}</p>
+        <p className="text-body text-zinc-500">{t(`hint.${key}`, { max: GALLERY_MAX })}</p>
         {multiple ? (
           <p className="text-caption text-zinc-500">
             {t('count', { count: items.length, max: GALLERY_MAX })}
@@ -176,7 +193,7 @@ export function MediaUploader({
 
       {items.length === 0 ? (
         <p className="rounded-card border border-dashed border-zinc-200 px-4 py-6 text-body text-zinc-500">
-          {t(`empty.${slot}`)}
+          {t(`empty.${key}`)}
         </p>
       ) : (
         <ul
@@ -189,6 +206,7 @@ export function MediaUploader({
               org={org}
               item={item}
               family={family}
+              altError={altMissing}
               canWrite={ticket !== null}
               name={nameOf(item)}
               onReplace={() => {
@@ -295,7 +313,7 @@ export function MediaUploader({
               </p>
             )}
           </div>
-          {family === 'logo' ? null : (
+          {family !== 'content' ? null : (
             <label className="inline-flex min-h-6 items-center gap-2 text-body">
               <input
                 type="checkbox"
@@ -348,6 +366,7 @@ function MediaItemCard({
   org,
   item,
   family,
+  altError,
   canWrite,
   name,
   onReplace,
@@ -355,6 +374,7 @@ function MediaItemCard({
   org: string;
   item: MediaItem;
   family: Family;
+  altError: string;
   canWrite: boolean;
   name: string;
   onReplace: () => void;
@@ -428,7 +448,7 @@ function MediaItemCard({
                 defaultValue={item.alt ?? ''}
                 maxLength={300}
                 disabled={decorative}
-                error={altBad ? t('errors.alt_required') : undefined}
+                error={altBad ? t(`errors.${altError}`) : undefined}
               />
               {family === 'content' ? (
                 <label className="inline-flex min-h-6 items-center gap-2">

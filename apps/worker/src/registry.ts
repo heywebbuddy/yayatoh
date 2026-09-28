@@ -1,6 +1,7 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
+import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
@@ -42,6 +43,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     releaseCancelledSeats(),
     payoutDestinationMailer({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
+    programMediaCleaner(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
 }

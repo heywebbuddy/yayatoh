@@ -35,13 +35,16 @@ export function MediaPicture({
   sizes,
   className,
   eager = false,
+  alt: altOverride,
 }: {
   image: PictureSource;
   sizes: string;
   className?: string;
   eager?: boolean;
+  /** Replace the image's alt text (`""` where the name is right next to it, e.g. agenda avatars). */
+  alt?: string;
 }) {
-  const alt = image.decorative ? '' : (image.alt ?? '');
+  const alt = altOverride ?? (image.decorative ? '' : (image.alt ?? ''));
   const vector = image.variants.find((v) => v.format === 'svg');
   const fallback = fallbackOf(image);
   const common = {

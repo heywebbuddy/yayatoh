@@ -89,3 +89,15 @@ export const UpdateAltInput = z
   .object({ assetId: z.uuid(), alt: Alt, decorative: z.boolean().default(false) })
   .refine(altRequired, altIssue);
 export type UpdateAltInput = z.input<typeof UpdateAltInput>;
+
+/**
+ * M1.4h: a speaker photo or an exhibitor/sponsor logo. Always described (never decorative): the
+ * console suggests "Photo of {name}" or the company name, which the organizer can edit.
+ */
+export const UploadProgramImageInput = UploadFields.omit({ decorative: true })
+  .extend({ ownerId: z.uuid() })
+  .refine(altRequired, altIssue);
+export type UploadProgramImageInput = z.input<typeof UploadProgramImageInput>;
+
+export const UpdateProgramAltInput = z.object({ assetId: z.uuid(), alt: Alt }).refine(altRequired, altIssue);
+export type UpdateProgramAltInput = z.input<typeof UpdateProgramAltInput>;

@@ -111,6 +111,30 @@ describe('JSON-LD Event (M1.11b)', () => {
     offers: [{ name: 'GA', priceMinor: 2575, currency: 'USD', availability: 'available' as const }],
   };
 
+  it('lists speakers as performers with their absolute photo URL (M1.4h)', () => {
+    expect(eventJsonLd(base)).not.toHaveProperty('performer');
+    expect(eventJsonLd({ ...base, performers: [] })).not.toHaveProperty('performer');
+    const ld = EventJsonLdSchema.parse(
+      eventJsonLd({
+        ...base,
+        performers: [
+          { name: 'Ada Lovelace', image: 'https://yayatoh.com/media/o/a/1280-abc.jpg' },
+          { name: 'Grace Hopper', image: null },
+        ],
+      }),
+    );
+    expect(ld.performer).toEqual([
+      { '@type': 'Person', name: 'Ada Lovelace', image: 'https://yayatoh.com/media/o/a/1280-abc.jpg' },
+      { '@type': 'Person', name: 'Grace Hopper' },
+    ]);
+    // A relative photo URL is not valid Rich Results output.
+    expect(
+      EventJsonLdSchema.safeParse(
+        eventJsonLd({ ...base, performers: [{ name: 'X', image: '/media/x.jpg' }] }),
+      ).success,
+    ).toBe(false);
+  });
+
   it('is valid, with a PostalAddress country code, absolute URLs and decimal prices', () => {
     const ld = EventJsonLdSchema.parse(eventJsonLd(base));
     expect(

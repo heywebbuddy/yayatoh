@@ -2,7 +2,11 @@ import type { SponsorDto } from '@yayatoh/program';
 import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { defaultProgramAlt } from '@/lib/program-media.ts';
+import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import {
   createSponsorAction,
@@ -20,7 +24,13 @@ export default async function SponsorsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { program, canWrite } = await loadProgramPage(org, event, 'sponsors');
+  const { data, program, canWrite } = await loadProgramPage(org, event, 'sponsors');
+  const tm = await getTranslations('media');
+  const logos = await programMediaPanels(
+    data,
+    'sponsor',
+    program.sponsors.map((s) => s.id),
+  );
   const t = await getTranslations();
   const tp = await getTranslations('program');
   const errors = {
@@ -93,7 +103,10 @@ export default async function SponsorsPage({
                       <ul className="flex list-none flex-col gap-2 p-0">
                         {inTier.map((s) => (
                           <li key={s.id} className="flex flex-col gap-1 border-t border-zinc-100 pt-2">
-                            <span className="text-body">{s.name}</span>
+                            <span className="flex items-center gap-3">
+                              <ProgramThumb item={logos.get(s.id)?.items[0]} />
+                              <span className="text-body">{s.name}</span>
+                            </span>
                             {s.websiteUrl ? (
                               <span className="text-caption text-zinc-600">{s.websiteUrl}</span>
                             ) : null}
@@ -111,6 +124,16 @@ export default async function SponsorsPage({
                                     submitLabel={tp('save')}
                                     successLabel={tp('saved')}
                                     errors={errors}
+                                  />
+                                  <MediaUploader
+                                    org={org}
+                                    slot="logo"
+                                    kind="sponsor"
+                                    headingLevel={4}
+                                    title={tm('titleNamed.sponsor', { name: s.name })}
+                                    defaultAlt={defaultProgramAlt('sponsor', s.name, (name) => name)}
+                                    ticket={logos.get(s.id)?.ticket ?? null}
+                                    items={logos.get(s.id)?.items ?? []}
                                   />
                                   <form action={deleteSponsorAction.bind(null, org, event, s.id)}>
                                     <Button type="submit" variant="ghost" size="sm">
@@ -179,6 +202,7 @@ export default async function SponsorsPage({
                     errors={errors}
                     reset
                   />
+                  <p className="text-caption text-zinc-500">{tp('logoAfterSave')}</p>
                 </Card>
               </section>
             ) : null}

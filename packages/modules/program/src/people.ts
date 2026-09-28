@@ -6,7 +6,7 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { ExhibitorDto, SpeakerDto, SponsorDto, SponsorTierDto } from './dto.ts';
 import { exhibitors, speakers, sponsors, sponsorTiers } from './schema.ts';
-import { eventOf } from './shared.ts';
+import { eventOf, programOwnerDeleted } from './shared.ts';
 
 export const MAX_SPEAKERS_PER_EVENT = 300;
 export const MAX_EXHIBITORS_PER_EVENT = 300;
@@ -130,13 +130,15 @@ export const deleteSpeakerCommand = tenantCommand({
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'speakers',
   permission: 'events:write',
-  handler: async ({ input, tx }) => {
+  handler: async ({ input, tx, emit }) => {
     // Their session links go with them (cascade); the sessions stay.
     const rows = await tx
       .delete(speakers)
       .where(and(eq(speakers.id, input.speakerId), eq(speakers.eventId, input.eventId)))
       .returning({ id: speakers.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    // Its images (media, a higher tier) are removed by media's subscriber to this event.
+    emit(programOwnerDeleted('speaker', input.eventId, input.speakerId));
     return { deleted: true };
   },
   audit: (input) => ({
@@ -221,12 +223,14 @@ export const deleteExhibitorCommand = tenantCommand({
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'exhibitors',
   permission: 'events:write',
-  handler: async ({ input, tx }) => {
+  handler: async ({ input, tx, emit }) => {
     const rows = await tx
       .delete(exhibitors)
       .where(and(eq(exhibitors.id, input.exhibitorId), eq(exhibitors.eventId, input.eventId)))
       .returning({ id: exhibitors.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    // Its images (media, a higher tier) are removed by media's subscriber to this event.
+    emit(programOwnerDeleted('exhibitor', input.eventId, input.exhibitorId));
     return { deleted: true };
   },
   audit: (input) => ({
@@ -393,12 +397,14 @@ export const deleteSponsorCommand = tenantCommand({
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sponsors',
   permission: 'events:write',
-  handler: async ({ input, tx }) => {
+  handler: async ({ input, tx, emit }) => {
     const rows = await tx
       .delete(sponsors)
       .where(and(eq(sponsors.id, input.sponsorId), eq(sponsors.eventId, input.eventId)))
       .returning({ id: sponsors.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    // Its images (media, a higher tier) are removed by media's subscriber to this event.
+    emit(programOwnerDeleted('sponsor', input.eventId, input.sponsorId));
     return { deleted: true };
   },
   audit: (input) => ({

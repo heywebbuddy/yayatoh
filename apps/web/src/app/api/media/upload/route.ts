@@ -1,5 +1,12 @@
 import { createCtx, isDomainError } from '@yayatoh/kernel';
-import { MAX_UPLOAD_BYTES, uploadLogo, uploadMedia, verifyUploadTicket } from '@yayatoh/media';
+import {
+  isProgramOwner,
+  MAX_UPLOAD_BYTES,
+  uploadLogo,
+  uploadMedia,
+  uploadProgramImage,
+  verifyUploadTicket,
+} from '@yayatoh/media';
 import { revalidatePath } from 'next/cache';
 import { ports } from '@/server/ports.ts';
 import { getSession } from '@/server/session.ts';
@@ -53,22 +60,31 @@ export async function POST(req: Request): Promise<Response> {
   });
   const bytes = new Uint8Array(await file.arrayBuffer());
   try {
+    const owner = ticket.ownerType;
     const result =
-      ticket.ownerType === 'org'
+      owner === 'org'
         ? await uploadLogo(ctx, { alt, file: bytes, replaceAssetId: replace }, ports)
-        : await uploadMedia(
-            ctx,
-            {
-              ownerType: ticket.ownerType,
-              ownerId: ticket.ownerId,
-              slot: ticket.slot as 'cover' | 'gallery' | 'photo',
-              alt,
-              decorative,
-              file: bytes,
-              replaceAssetId: replace,
-            },
-            ports,
-          );
+        : isProgramOwner(owner)
+          ? // M1.4h: speaker photos, exhibitor and sponsor logos (never decorative).
+            await uploadProgramImage(
+              ctx,
+              owner,
+              { ownerId: ticket.ownerId, alt, file: bytes, replaceAssetId: replace },
+              ports,
+            )
+          : await uploadMedia(
+              ctx,
+              {
+                ownerType: owner,
+                ownerId: ticket.ownerId,
+                slot: ticket.slot as 'cover' | 'gallery' | 'photo',
+                alt,
+                decorative,
+                file: bytes,
+                replaceAssetId: replace,
+              },
+              ports,
+            );
     // Console pages render per request; the org layout (header logo) and public pages follow.
     revalidatePath('/', 'layout');
     return json(200, { ok: true, assetId: result.asset.id, replaced: result.replacedAssetId });

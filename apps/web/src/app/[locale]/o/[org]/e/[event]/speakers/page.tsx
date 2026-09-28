@@ -3,11 +3,18 @@ import type { SpeakerDto } from '@yayatoh/program';
 import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { defaultProgramAlt } from '@/lib/program-media.ts';
+import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import { createSpeakerAction, deleteSpeakerAction, updateSpeakerAction } from './actions.ts';
 
-/** Speakers (M1.4f): profile, bio (Markdown subset) and links; public on the event page. */
+/**
+ * Speakers (M1.4f): profile, bio (Markdown subset) and links; public on the event page.
+ * M1.4h: a photo per speaker (thumbnail in the list, uploader in the edit disclosure).
+ */
 export default async function SpeakersPage({
   params,
 }: {
@@ -15,9 +22,15 @@ export default async function SpeakersPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { program, canWrite } = await loadProgramPage(org, event, 'speakers');
+  const { data, program, canWrite } = await loadProgramPage(org, event, 'speakers');
   const t = await getTranslations();
   const tp = await getTranslations('program');
+  const tm = await getTranslations('media');
+  const photos = await programMediaPanels(
+    data,
+    'speaker',
+    program.speakers.map((p) => p.id),
+  );
   const errors = {
     name: tp('errors.name'),
     links: tp('errors.links'),
@@ -81,7 +94,10 @@ export default async function SpeakersPage({
             {program.speakers.map((p) => (
               <li key={p.id}>
                 <Card className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">{p.name}</h3>
+                  <div className="flex items-center gap-3">
+                    <ProgramThumb item={photos.get(p.id)?.items[0]} round />
+                    <h3 className="text-body font-medium">{p.name}</h3>
+                  </div>
                   <p className="text-caption text-zinc-600">
                     {[p.title, p.company].filter(Boolean).join(' · ')}
                     {[p.title, p.company].some(Boolean) ? ' · ' : ''}
@@ -101,6 +117,18 @@ export default async function SpeakersPage({
                           submitLabel={tp('save')}
                           successLabel={tp('saved')}
                           errors={errors}
+                        />
+                        <MediaUploader
+                          org={org}
+                          slot="photo"
+                          kind="speaker"
+                          headingLevel={4}
+                          title={tm('titleNamed.speaker', { name: p.name })}
+                          defaultAlt={defaultProgramAlt('speaker', p.name, (name) =>
+                            tm('defaultAlt.speaker', { name }),
+                          )}
+                          ticket={photos.get(p.id)?.ticket ?? null}
+                          items={photos.get(p.id)?.items ?? []}
                         />
                         <form action={deleteSpeakerAction.bind(null, org, event, p.id)}>
                           <Button type="submit" variant="ghost" size="sm">
@@ -130,6 +158,7 @@ export default async function SpeakersPage({
                 errors={errors}
                 reset
               />
+              <p className="text-caption text-zinc-500">{tp('photoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

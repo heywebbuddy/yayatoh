@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { appTokenSecret } from '@yayatoh/platform';
 import { z } from 'zod';
+import { OWNER_TYPES, SLOTS } from './schema.ts';
 
 /**
  * A signed upload ticket (M1.4e). The console page issues one per uploader to people allowed to
@@ -11,9 +12,9 @@ import { z } from 'zod';
  */
 export const UploadTicket = z.object({
   orgId: z.uuid(),
-  ownerType: z.enum(['event', 'venue', 'org']),
+  ownerType: z.enum(OWNER_TYPES),
   ownerId: z.uuid(),
-  slot: z.enum(['cover', 'gallery', 'photo', 'logo']),
+  slot: z.enum(SLOTS),
   userId: z.string().min(1).max(100),
   /** Unix seconds. */
   expiresAt: z.number().int(),

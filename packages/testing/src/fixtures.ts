@@ -34,7 +34,7 @@ import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia } from '@yayatoh/media';
+import { uploadLogo, uploadMedia, uploadProgramImage } from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -825,6 +825,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     createSpeakerCommand,
     { eventId: event.id, name: `${name} Speaker`, company: name, bio: 'Talks about *fixtures*.' },
     ctx(),
+    ports,
+  );
+  // M1.4h: the speaker's photo (a media asset owned by a program row).
+  await uploadProgramImage(
+    ctx(),
+    'speaker',
+    { ownerId: speaker.id, alt: `Photo of ${name} Speaker`, file: fixturePng('logo') },
     ports,
   );
   await executeCommand(
