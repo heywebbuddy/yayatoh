@@ -99,7 +99,7 @@ export async function BlogIndexView({
   const list = await cachedEntries(site.org.orgId, 'post', page);
   return (
     <Chrome site={site} current="/blogs">
-      <h1 className="text-[40px] leading-tight font-normal tracking-[-0.03em]">
+      <h1 className="break-words text-[40px] leading-tight font-normal tracking-[-0.03em]">
         {t('blogTitle', { org: site.org.name })}
       </h1>
       {list.items.length === 0 ? (
@@ -109,7 +109,7 @@ export async function BlogIndexView({
           {list.items.map((p) => (
             <li key={p.slug}>
               <article className="flex flex-col gap-2 border-b border-zinc-200 pb-6">
-                <h2 className="text-[24px] font-normal tracking-[-0.02em]">
+                <h2 className="break-words text-[24px] font-normal tracking-[-0.02em]">
                   <Link
                     href={`${site.base}${entryPath('post', p.slug)}`}
                     className="underline-offset-4 hover:underline"
@@ -181,7 +181,9 @@ export async function EntryView({
               {t('allPosts')}
             </Link>
           ) : null}
-          <h1 className="text-[40px] leading-tight font-normal tracking-[-0.03em]">{entry.title}</h1>
+          <h1 className="break-words text-[40px] leading-tight font-normal tracking-[-0.03em]">
+            {entry.title}
+          </h1>
           {kind === 'post' ? (
             <p className="text-caption text-zinc-500">
               <time dateTime={entry.publishedAt.toISOString()}>
