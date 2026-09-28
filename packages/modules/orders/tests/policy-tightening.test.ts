@@ -9,7 +9,11 @@ import {
   type RefundPolicy,
 } from '../src/domain/refund-policy.ts';
 
-const until = (daysBefore: number, retainedMinor = 0): RefundPolicy => ({ kind: 'until', daysBefore, retainedMinor });
+const until = (daysBefore: number, retainedMinor = 0): RefundPolicy => ({
+  kind: 'until',
+  daysBefore,
+  retainedMinor,
+});
 const always = (retainedMinor = 0): RefundPolicy => ({ kind: 'always', daysBefore: null, retainedMinor });
 const none: RefundPolicy = { kind: 'none', daysBefore: null, retainedMinor: 0 };
 const snap = (p: RefundPolicy | null): PolicySnapshot => policySnapshot(p);

@@ -4,10 +4,15 @@ import { actorId, type Ctx, DomainError, type DomainEvent, isDomainError, requir
 import { openDisputeOrderIdsTx, refundJournalTotalsTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { liveTicketsByOrderItemTx, ticketsForOrderTx } from '@yayatoh/ticketing';
-import { and, asc, eq, inArray, isNull, ne, or, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, notExists, sql } from 'drizzle-orm';
 import type { AnyPgColumn } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
-import { type CancellationPreview, cancellationPreview, type PreviewOrder } from '../domain/mass-refund.ts';
+import {
+  amountFeeBack,
+  type CancellationPreview,
+  cancellationPreview,
+  type PreviewOrder,
+} from '../domain/mass-refund.ts';
 import {
   MASS_REFUND_ITEM_STATUSES,
   MASS_REFUND_STATUSES,
@@ -34,11 +39,15 @@ async function previewOrdersTx(tx: TenantTx, eventId: string): Promise<PreviewOr
   const refunded = new Map(
     (
       await tx
-        .select({ orderId: refunds.orderId, sum: sql<string>`sum(${refunds.amountMinor})::text` })
+        .select({
+          orderId: refunds.orderId,
+          sum: sql<string>`sum(${refunds.amountMinor})::text`,
+          fee: sql<string>`sum(${refunds.feeRefundedMinor})::text`,
+        })
         .from(refunds)
         .where(and(inArray(refunds.orderId, ids), inArray(refunds.status, ['pending', 'succeeded'])))
         .groupBy(refunds.orderId)
-    ).map((r) => [r.orderId, Number(r.sum)]),
+    ).map((r) => [r.orderId, { amount: Number(r.sum), fee: Number(r.fee) }]),
   );
   const items = new Map(
     (await tx.select().from(orderItems).where(inArray(orderItems.orderId, ids))).map((i) => [i.id, i]),
@@ -59,7 +68,8 @@ async function previewOrdersTx(tx: TenantTx, eventId: string): Promise<PreviewOr
     status: o.status,
     totalMinor: o.totalMinor,
     feeMinor: o.feeMinor,
-    refundedMinor: refunded.get(o.id) ?? 0,
+    refundedMinor: refunded.get(o.id)?.amount ?? 0,
+    feeRefundedMinor: refunded.get(o.id)?.fee ?? 0,
     disputed: disputed.has(o.id),
     live: live.get(o.id) ?? [],
   }));
@@ -498,21 +508,30 @@ export const nextMassRefundStepCommand = tenantCommand({
     const run = await loadRunTx(tx, input.runId, true);
     if (run.status !== 'running') return { state: run.status === 'done' ? 'done' : 'paused' } as const;
     // The next pending order, passing over refunds the provider is completing asynchronously.
-    const [next] = await tx
-      .select({ item: massRefundItems })
+    const [item] = await tx
+      .select()
       .from(massRefundItems)
-      .leftJoin(refunds, eq(refunds.id, massRefundItems.refundId))
       .where(
         and(
           eq(massRefundItems.runId, run.id),
           eq(massRefundItems.status, 'pending'),
-          or(isNull(refunds.id), ne(refunds.status, 'pending'), isNull(refunds.providerRefundId)),
+          notExists(
+            tx
+              .select({ id: refunds.id })
+              .from(refunds)
+              .where(
+                and(
+                  eq(refunds.id, massRefundItems.refundId),
+                  eq(refunds.status, 'pending'),
+                  isNotNull(refunds.providerRefundId),
+                ),
+              ),
+          ),
         ),
       )
       .orderBy(asc(massRefundItems.position))
       .limit(1)
-      .for('update', { of: massRefundItems, skipLocked: true });
-    const item = next?.item;
+      .for('update', { skipLocked: true });
     if (!item) {
       const [waiting] = await tx
         .select({ id: massRefundItems.id })
@@ -612,7 +631,18 @@ async function tryCompute(tx: TenantTx, ctx: Ctx, orderId: string, reason: MassR
     }
   }
   const { c } = await computeTx(tx, ctx, { orderId, reason, amountMinor: 1 }, false);
-  return computeTx(tx, ctx, { orderId, reason, amountMinor: c.refundableMinor }, false);
+  const rest = await computeTx(tx, ctx, { orderId, reason, amountMinor: c.refundableMinor }, false);
+  // The platform minimum gives the fee back: whatever of it earlier refunds did not.
+  const [prior] = await tx
+    .select({ fee: sql<string>`coalesce(sum(${refunds.feeRefundedMinor}), 0)::text` })
+    .from(refunds)
+    .where(and(eq(refunds.orderId, orderId), inArray(refunds.status, ['pending', 'succeeded'])));
+  const feeBack = amountFeeBack(
+    { feeMinor: rest.order.feeMinor, feeRefundedMinor: Number(prior?.fee ?? 0) },
+    rest.c.amountMinor,
+  );
+  // The event is off: the live tickets go void with the last of the money.
+  return { ...rest, c: { ...rest.c, ticketIds: liveIds, feeRefundedMinor: feeBack } };
 }
 
 const codeOf = (c: string | null | undefined) => {

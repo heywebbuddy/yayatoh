@@ -10,6 +10,7 @@ const order = (o: Partial<PreviewOrder> & { id: string }): PreviewOrder => ({
   totalMinor: 2 * 5550,
   feeMinor: 2 * 550,
   refundedMinor: 0,
+  feeRefundedMinor: 0,
   disputed: false,
   live: [{ count: 2, ...unit }],
   ...o,
@@ -33,15 +34,19 @@ describe('cancellation refund per order (M3.10b)', () => {
   });
 
   it('an earlier goodwill amount leaves less than the tickets: what is left, as an amount', () => {
-    expect(cancellationRefund(order({ id: 'a', status: 'partially_refunded', refundedMinor: 1000 }))).toEqual({
-      kind: 'amount',
-      amountMinor: 10_100,
-      feeRefundedMinor: 0,
-    });
+    expect(cancellationRefund(order({ id: 'a', status: 'partially_refunded', refundedMinor: 1000 }))).toEqual(
+      {
+        kind: 'amount',
+        amountMinor: 10_100,
+        feeRefundedMinor: 0,
+      },
+    );
   });
 
   it('nothing left, or not sold: nothing', () => {
-    expect(cancellationRefund(order({ id: 'a', status: 'refunded', refundedMinor: 11_100, live: [] }))).toEqual({
+    expect(
+      cancellationRefund(order({ id: 'a', status: 'refunded', refundedMinor: 11_100, live: [] })),
+    ).toEqual({
       kind: 'none',
     });
     expect(cancellationRefund(order({ id: 'a', status: 'expired' }))).toEqual({ kind: 'none' });
@@ -59,7 +64,12 @@ describe('cancellation preview (M3.10b)', () => {
       order({ id: 'r1', status: 'partially_refunded', refundedMinor: 11_100, live: [] }),
       // Not sold, or free: not counted at all.
       order({ id: 'x1', status: 'expired' }),
-      order({ id: 'f1', totalMinor: 0, feeMinor: 0, live: [{ count: 1, unitAllInMinor: 0, unitFeeMinor: 0 }] }),
+      order({
+        id: 'f1',
+        totalMinor: 0,
+        feeMinor: 0,
+        live: [{ count: 1, unitAllInMinor: 0, unitFeeMinor: 0 }],
+      }),
     ]);
     expect(p.orders).toBe(6);
     expect(p.grossMinor).toBe(5 * 11_100 + 10_000);

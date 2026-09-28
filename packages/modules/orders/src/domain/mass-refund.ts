@@ -16,6 +16,8 @@ export interface PreviewOrder {
   readonly feeMinor: number;
   /** Refunds already made or on their way (succeeded + pending). */
   readonly refundedMinor: number;
+  /** The platform fee already given back by them. */
+  readonly feeRefundedMinor: number;
   /** A chargeback is still open on the payment. */
   readonly disputed: boolean;
   /** Live tickets per order line, with what one of them was paid (all-in) and its fee part. */
@@ -28,15 +30,20 @@ export interface PreviewOrder {
 
 export type OrderRefundPlan =
   | { readonly kind: 'tickets'; readonly amountMinor: number; readonly feeRefundedMinor: number }
-  | { readonly kind: 'amount'; readonly amountMinor: number; readonly feeRefundedMinor: 0 }
+  | { readonly kind: 'amount'; readonly amountMinor: number; readonly feeRefundedMinor: number }
   | { readonly kind: 'none' };
 
 const SOLD = ['paid', 'partially_refunded'];
 
+/** The fee still to give back with an amount refund of `amountMinor` (never more than the amount). */
+export const amountFeeBack = (o: Pick<PreviewOrder, 'feeMinor' | 'feeRefundedMinor'>, amountMinor: number) =>
+  Math.max(0, Math.min(o.feeMinor - o.feeRefundedMinor, amountMinor));
+
 /**
  * What cancelling refunds on one order: its live tickets in full (face + fee), or — when earlier
- * partial refunds leave less than that — whatever is left, as an amount. Nothing when nothing is
- * left to refund.
+ * partial refunds leave less than that — whatever is left, as an amount, with whatever of the
+ * platform fee has not gone back yet (the platform minimum returns the fee). Nothing when nothing
+ * is left to refund.
  */
 export function cancellationRefund(o: PreviewOrder): OrderRefundPlan {
   const left = o.totalMinor - o.refundedMinor;
@@ -44,7 +51,7 @@ export function cancellationRefund(o: PreviewOrder): OrderRefundPlan {
   const tickets = o.live.reduce((n, l) => n + l.count * l.unitAllInMinor, 0);
   const fee = o.live.reduce((n, l) => n + l.count * l.unitFeeMinor, 0);
   if (tickets > 0 && tickets <= left) return { kind: 'tickets', amountMinor: tickets, feeRefundedMinor: fee };
-  return { kind: 'amount', amountMinor: left, feeRefundedMinor: 0 };
+  return { kind: 'amount', amountMinor: left, feeRefundedMinor: amountFeeBack(o, left) };
 }
 
 export interface FlowTotals {
