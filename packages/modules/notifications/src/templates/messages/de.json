@@ -45,6 +45,15 @@
       "intro": "Hier ist der angeforderte Link. Er öffnet deine Tickets für {eventName}.",
       "cta": "Meine Tickets öffnen"
     },
+    "ticketing.tickets-resent": {
+      "subject": "Dein Ticket für {eventName}",
+      "intro": "Der Veranstalter von {eventName} hat dir dein Ticket {code} erneut geschickt. Über die Schaltfläche unten öffnest du deine Tickets jederzeit.",
+      "cta": "Meine Tickets öffnen"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Dein Ticket für {eventName} wurde storniert",
+      "intro": "Der Veranstalter von {eventName} hat dein Ticket {code} storniert. Es gewährt keinen Einlass mehr. Bei Fragen antworte dem Veranstalter."
+    },
     "seating.finder-code": {
       "subject": "{code} ist dein Code für die Platzsuche bei {eventName}",
       "intro": "Gib {code} in der Platzsuche ein, um deinen Platz zu sehen. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn du ihn nicht angefordert hast, kannst du diese E-Mail ignorieren.",

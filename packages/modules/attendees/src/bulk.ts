@@ -3,7 +3,14 @@ import { DomainError } from '@yayatoh/kernel';
 import { bulkCommands, defineBulkAction, MAX_BULK_ITEMS } from '@yayatoh/platform';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { AttendeeFilter, filterWhere, Label, MAX_LABELS, nextLabels } from './attendees.ts';
+import {
+  AttendeeFilter,
+  filterWhere,
+  Label,
+  MAX_LABELS,
+  nextLabels,
+  type TicketFilterExtension,
+} from './attendees.ts';
 import { attendees } from './schema.ts';
 
 /**
@@ -13,6 +20,7 @@ import { attendees } from './schema.ts';
 export async function resolveAttendeeIdsTx(
   tx: TenantTx,
   sel: { eventId: string | null; ids?: readonly string[]; filter?: z.output<typeof AttendeeFilter> },
+  ext: TicketFilterExtension = {},
 ): Promise<string[]> {
   if (!sel.eventId) throw new DomainError('validation_failed', 'An event is required');
   const rows = await tx
@@ -21,7 +29,7 @@ export async function resolveAttendeeIdsTx(
     .where(
       sel.ids
         ? and(eq(attendees.eventId, sel.eventId), inArray(attendees.id, [...sel.ids]))
-        : filterWhere(sel.eventId, sel.filter ?? AttendeeFilter.parse({})),
+        : filterWhere(sel.eventId, sel.filter ?? AttendeeFilter.parse({}), ext),
     )
     .orderBy(attendees.createdAt, attendees.id)
     .limit(MAX_BULK_ITEMS + 1);

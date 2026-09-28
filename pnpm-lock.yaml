@@ -1208,6 +1208,9 @@ importers:
 
   packages/modules/orders:
     dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing

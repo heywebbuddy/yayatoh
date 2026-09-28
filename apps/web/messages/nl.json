@@ -362,7 +362,15 @@
     "showing": "{from}–{to} van {total}",
     "filtered": "gefilterd",
     "previous": "Vorige",
-    "next": "Volgende"
+    "next": "Volgende",
+    "anyTicketType": "Elk tickettype",
+    "checkIn": "Inchecken",
+    "anyCheckIn": "Ingecheckt of niet",
+    "checkedIn": {
+      "today": "Vandaag ingecheckt",
+      "any": "Ingecheckt (op welke dag ook)",
+      "never": "Niet ingecheckt"
+    }
   },
   "attendeeStatus": {
     "paid": "Betaald",
@@ -957,7 +965,10 @@
       "label": "Labels in bulk",
       "export": "Deelnemersexport",
       "import": "Gastenlijstimport",
-      "email": "E-mail aan gasten"
+      "email": "E-mail aan gasten",
+      "seats": "Plaatstoewijzing",
+      "resend": "Opnieuw verstuurde tickets",
+      "cancel": "Geannuleerde tickets"
     },
     "status": {
       "queued": "Wacht op start…",
@@ -975,10 +986,42 @@
       "too_many_labels": "ze hebben al 20 labels",
       "not_found": "niet meer in deze lijst",
       "other": "onverwachte fout",
-      "not_attending": "niet meer op de lijst"
+      "not_attending": "niet meer op de lijst",
+      "not_enough_seats": "daar is geen plaats meer vrij",
+      "seated_by_ticket": "hebben al een plaats via hun ticket",
+      "attendee_cancelled": "komen niet meer",
+      "no_ticket": "geen ticket (alleen gastenlijst)",
+      "ticket_void": "ticket al geannuleerd"
     },
     "download": "CSV downloaden",
-    "undo": "Ongedaan maken"
+    "undo": "Ongedaan maken",
+    "assignSeats": "Plaatsen toewijzen",
+    "resend": "Tickets opnieuw sturen",
+    "cancelTickets": "Tickets annuleren (zonder terugbetaling)",
+    "target": "Plaatsen in",
+    "targetBest": "Beste vrije plaatsen — {free} vrij",
+    "targetSection": "Vak {section}",
+    "targetGroup": "Groepsblok: {group} — {unused, plural, one {nog # plaats} other {nog # plaatsen}}",
+    "overrideRules": "Ze hebben toegankelijke plaatsen nodig (vrijgehouden plaatsen gebruiken)",
+    "assignHint": "Plaatsen worden toegewezen in de volgorde van de plattegrond. Wie daar al zit, houdt zijn plaats; wie niet past, staat daarna in de lijst. Je kunt het 10 minuten ongedaan maken.",
+    "resendHint": "Iedereen met een ticket krijgt het opnieuw per e-mail, met een link naar zijn tickets.",
+    "cancelHint": "Hun tickets werken niet meer aan de deur en hun plaatsen gaan terug in de verkoop. Er wordt niets terugbetaald: betaal bestellingen één voor één terug. Dit kan niet ongedaan worden gemaakt.",
+    "cancelReview": "Annulering controleren…",
+    "confirmCancel": {
+      "title": "Tickets van {count, plural, one {# persoon} other {# personen}} annuleren?",
+      "body": "Hun tickets worden direct ongeldig en ze krijgen een e-mail. Niemand krijgt geld terug, en dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Tickets van {count, plural, one {# persoon} other {# personen}} annuleren",
+      "keep": "Tickets behouden",
+      "none": "Selecteer eerst minstens één persoon."
+    },
+    "seatsDone": "{count, plural, one {# persoon} other {# personen}} van {total} geplaatst.",
+    "resendDone": "{count, plural, one {# ticket} other {# tickets}} opnieuw verstuurd.",
+    "cancelDone": "Geannuleerd: {count, plural, one {# ticket} other {# tickets}}.",
+    "progress": "Voortgang: {processed} van {total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, one {# persoon zit} other {# personen zitten}} op vrijgehouden toegankelijke plaatsen.",
+      "other": "{count, plural, one {# persoon vraagt} other {# personen vragen}} om een tweede blik."
+    }
   },
   "exportColumns": {
     "name": "Naam",
@@ -1712,6 +1755,34 @@
       "save": "Regels opslaan",
       "saved": "Zaalregels opgeslagen.",
       "fixErrors": "Corrigeer het gemarkeerde veld."
+    },
+    "groups": {
+      "title": "Groepsblokken",
+      "description": "Houd plaatsen vrij voor een groep: mensen met hetzelfde label, zoals een bedrijf of een familie. Plaats de leden in één keer in het blok en geef daarna de ongebruikte plaatsen vrij.",
+      "empty": "Nog geen enkele groep heeft vrijgehouden plaatsen.",
+      "list": "Groepen met vrijgehouden plaatsen",
+      "summary": "{seats, plural, one {# plaats} other {# plaatsen}} bij {where} · {seated} bezet · {unused} ongebruikt",
+      "seatMembers": "Groep {label} plaatsen",
+      "release": "Ongebruikte plaatsen van {label} vrijgeven",
+      "released": "{count, plural, one {# plaats} other {# plaatsen}} van {label} weer te koop.",
+      "allocated": "{count, plural, one {# plaats} other {# plaatsen}} bij {item} vrijgehouden voor {label}.",
+      "form": {
+        "title": "Plaatsen vrijhouden voor een groep",
+        "label": "Groep (label)",
+        "labelHint": "Iedereen met dit label hoort erbij.",
+        "item": "Plaatsen vrijhouden bij",
+        "count": "Aantal plaatsen",
+        "countHint": "Laat leeg om alle vrije plaatsen daar vrij te houden.",
+        "submit": "Plaatsen vrijhouden"
+      },
+      "errors": {
+        "label": "Vul het label van de groep in (maximaal 40 tekens).",
+        "itemId": "Kies waar de plaatsen vrijgehouden worden.",
+        "count": "Vul een aantal plaatsen van 1 tot 2.000 in, of laat het leeg.",
+        "notEnough": "{fits, plural, =0 {Daar is geen plaats vrij.} one {Daar is maar # plaats vrij.} other {Daar zijn maar # plaatsen vrij.}}",
+        "forbidden": "Je kunt de groepen zien, maar niet wijzigen.",
+        "noMembers": "Nog niemand op de lijst heeft het label {label}."
+      }
     }
   },
   "venueMap": {

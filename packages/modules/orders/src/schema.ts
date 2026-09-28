@@ -92,6 +92,9 @@ export const orders = tenantTable(
   },
   (t) => [
     index('orders_org_event_created_idx').on(t.orgId, t.eventId, t.createdAt),
+    // Search (M1.8f): trigram indexes for the buyer name/email `ILIKE '%…%'` search.
+    index('orders_buyer_name_trgm_idx').using('gin', t.buyerName.op('gin_trgm_ops')),
+    index('orders_buyer_email_trgm_idx').using('gin', t.buyerEmail.op('gin_trgm_ops')),
     index('orders_org_status_expires_idx').on(t.orgId, t.status, t.expiresAt),
     index('orders_org_occurrence_status_idx')
       .on(t.orgId, t.occurrenceId, t.status)

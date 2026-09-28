@@ -3,19 +3,26 @@
 import { quickLayout } from '@yayatoh/floorplan';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
+  allocateGroupSeatsCommand,
   assignSeatCategoryCommand,
   assignSeatsCommand,
+  MAX_GROUP_SEATS,
   MAX_RELEASE_DAYS,
   MAX_SEATS_PER_ORDER,
   publishEventLayoutCommand,
+  releaseGroupSeatsCommand,
   type SeatingRuleDto,
   saveLayoutCommand,
+  seatAssignBulk,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
   unassignSeatsCommand,
 } from '@yayatoh/seating';
 import { revalidatePath } from 'next/cache';
+import { getLocale } from 'next-intl/server';
+import { redirect } from '@/i18n/navigation.ts';
+import { runBulkInline } from '@/server/bulk.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -320,4 +327,112 @@ export async function seatingRulesAction(
   } catch (err) {
     return { ok: false, code: isDomainError(err) ? err.code : 'internal' };
   }
+}
+
+export interface GroupState {
+  readonly ok: boolean;
+  readonly code: string | null;
+  /** What was done: seats kept for a group, or seats released. */
+  readonly done?: 'allocated' | 'released' | 'seated';
+  readonly count?: number;
+  readonly label?: string;
+  /** The table or row (id) the seats were kept at. */
+  readonly item?: string;
+  /** Which field is wrong (the form points at it). */
+  readonly field?: 'label' | 'itemId' | 'count';
+  readonly reason?: string;
+  readonly fits?: number;
+  /** When the server answered (the page shows the newest of several forms' answers). */
+  readonly at?: number;
+}
+
+const groupFail = (err: unknown): GroupState => {
+  if (!isDomainError(err)) return { ok: false, code: 'internal' };
+  const d = (err.details ?? {}) as { reason?: unknown; fits?: unknown };
+  return {
+    ok: false,
+    code: err.code,
+    reason: typeof d.reason === 'string' ? d.reason : undefined,
+    fits: typeof d.fits === 'number' ? d.fits : undefined,
+  };
+};
+
+/** Keep a block of seats at a table or row for a group (M1.8f). */
+export async function allocateGroupAction(
+  org: string,
+  event: string,
+  _prev: GroupState,
+  form: FormData,
+): Promise<GroupState> {
+  const label = String(form.get('label') ?? '').trim();
+  const itemId = String(form.get('itemId') ?? '');
+  const rawCount = String(form.get('count') ?? '').trim();
+  if (!label || label.length > 40) return { ok: false, code: 'validation_failed', field: 'label' };
+  if (!itemId) return { ok: false, code: 'validation_failed', field: 'itemId' };
+  const count = rawCount ? Number(rawCount) : undefined;
+  if (count !== undefined && !(Number.isInteger(count) && count >= 1 && count <= MAX_GROUP_SEATS))
+    return { ok: false, code: 'validation_failed', field: 'count' };
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    const r = await executeCommand(
+      allocateGroupSeatsCommand,
+      { eventId: ev.id, label, itemId, count },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/assign`);
+    return { ok: true, code: null, done: 'allocated', count: r.allocated, label: r.label, item: itemId };
+  } catch (err) {
+    return groupFail(err);
+  }
+}
+
+/** Give a group's unused seats back to sale. */
+export async function releaseGroupAction(
+  org: string,
+  event: string,
+  _prev: GroupState,
+  form: FormData,
+): Promise<GroupState> {
+  const label = String(form.get('label') ?? '');
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    const r = await executeCommand(releaseGroupSeatsCommand, { eventId: ev.id, label }, data.ctx, ports);
+    revalidatePath(`/o/${org}/e/${event}/seating/assign`);
+    return { ok: true, code: null, done: 'released', count: r.released, label, at: Date.now() };
+  } catch (err) {
+    return { ...groupFail(err), label, at: Date.now() };
+  }
+}
+
+/**
+ * Seat everyone labelled with the group's name into its block (a bulk operation, M1.8f), then
+ * show its progress on the attendee list, filtered to the group.
+ */
+export async function seatGroupAction(
+  org: string,
+  event: string,
+  _prev: GroupState,
+  form: FormData,
+): Promise<GroupState> {
+  const label = String(form.get('label') ?? '');
+  const { data, event: ev } = await loadEvent(org, event);
+  let operationId: string;
+  try {
+    ({ operationId } = await executeCommand(
+      seatAssignBulk.start,
+      {
+        eventId: ev.id,
+        selection: { filter: { labels: [label], status: 'active' } },
+        params: { target: { kind: 'group', label } },
+      },
+      data.ctx,
+      ports,
+    ));
+  } catch (err) {
+    return { ...groupFail(err), label, done: 'seated', at: Date.now() };
+  }
+  await runBulkInline(data.org.id, operationId);
+  const q = new URLSearchParams({ label, op: operationId, opk: 'seats' });
+  return redirect({ href: `/o/${org}/e/${event}/attendees?${q}`, locale: await getLocale() });
 }

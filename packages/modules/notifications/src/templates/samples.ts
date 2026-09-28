@@ -34,6 +34,13 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     url: 'https://app.yayatoh.test/my-tickets/sample',
     eventName: 'Lakeside Jazz Night',
   },
+  'ticketing.tickets-resent': {
+    url: 'https://app.yayatoh.test/my-tickets/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+    code: 'K7M2Q9XW',
+  },
+  'ticketing.ticket-cancelled': { name: 'Amina Diallo', eventName: 'Lakeside Jazz Night', code: 'K7M2Q9XW' },
   'seating.finder-code': {
     code: '482913',
     eventName: 'Lakeside Jazz Night',

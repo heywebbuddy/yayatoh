@@ -8,7 +8,12 @@ import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { invitationMailer } from '@yayatoh/tenancy';
-import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
+import {
+  claimLinkMailer,
+  holderLinkMailer,
+  ticketCancelledMailer,
+  ticketResendMailer,
+} from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
 
@@ -34,6 +39,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     refundMailer({ notifier, appOrigin }),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
+    ticketResendMailer({ notifier, appOrigin }),
+    ticketCancelledMailer({ notifier }),
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),

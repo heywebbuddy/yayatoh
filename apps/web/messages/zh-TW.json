@@ -362,7 +362,15 @@
     "showing": "第 {from}–{to} 筆，共 {total} 筆",
     "filtered": "已篩選",
     "previous": "上一頁",
-    "next": "下一頁"
+    "next": "下一頁",
+    "anyTicketType": "任何票種",
+    "checkIn": "報到",
+    "anyCheckIn": "不限報到狀態",
+    "checkedIn": {
+      "today": "今天已報到",
+      "any": "已報到（任一天）",
+      "never": "未報到"
+    }
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -957,7 +965,10 @@
       "label": "批次標籤",
       "export": "參加者匯出",
       "import": "賓客名單匯入",
-      "email": "寄給賓客的電子郵件"
+      "email": "寄給賓客的電子郵件",
+      "seats": "座位分配",
+      "resend": "重新寄送的票券",
+      "cancel": "已取消的票券"
     },
     "status": {
       "queued": "等待開始…",
@@ -975,10 +986,42 @@
       "too_many_labels": "已有 20 個標籤",
       "not_found": "已不在此清單中",
       "other": "未預期的錯誤",
-      "not_attending": "已不在名單中"
+      "not_attending": "已不在名單中",
+      "not_enough_seats": "那裡已無空位",
+      "seated_by_ticket": "已憑票券有座位",
+      "attendee_cancelled": "已不再參加",
+      "no_ticket": "無票券（僅在賓客名單中）",
+      "ticket_void": "票券已取消"
     },
     "download": "下載 CSV",
-    "undo": "復原"
+    "undo": "復原",
+    "assignSeats": "分配座位",
+    "resend": "重新寄送票券",
+    "cancelTickets": "取消票券（不退款）",
+    "target": "安排在",
+    "targetBest": "最佳空位 — 空位 {free}",
+    "targetSection": "區域 {section}",
+    "targetGroup": "團體座位區：{group} — 剩餘{unused, plural, other {# 個座位}}",
+    "overrideRules": "他們需要無障礙座位（使用保留座位）",
+    "assignHint": "座位依平面圖順序分配。已經坐在那裡的人保留座位；坐不下的人會在之後列出。10 分鐘內可以復原。",
+    "resendHint": "每位持票人都會再次透過電子郵件收到票券及票券連結。",
+    "cancelHint": "他們的票券將無法入場，座位與名額重新開放販售。不會退款：請逐筆訂單退款。此操作無法復原。",
+    "cancelReview": "檢查取消內容…",
+    "confirmCancel": {
+      "title": "取消 {count, plural, other {# 人}}的票券？",
+      "body": "他們的票券會立即作廢，並以電子郵件通知本人。不會退款，且無法復原。",
+      "confirm": "取消 {count, plural, other {# 人}}的票券",
+      "keep": "保留票券",
+      "none": "請先至少選擇一人。"
+    },
+    "seatsDone": "已為 {total} 人中的{count, plural, other {# 人}}安排座位。",
+    "resendDone": "已重新寄送{count, plural, other {# 張票券}}。",
+    "cancelDone": "已取消{count, plural, other {# 張票券}}。",
+    "progress": "進度：{processed}/{total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, other {# 人}}被安排在保留的無障礙座位上。",
+      "other": "{count, plural, other {# 人}}需要再檢查一下。"
+    }
   },
   "exportColumns": {
     "name": "姓名",
@@ -1712,6 +1755,34 @@
       "save": "儲存規則",
       "saved": "座位規則已儲存。",
       "fixErrors": "請修改標出的欄位。"
+    },
+    "groups": {
+      "title": "團體座位區",
+      "description": "為團體（帶相同標籤的人，例如同一公司或家庭）保留座位。一次把成員安排進座位區，再釋出無人使用的座位。",
+      "empty": "還沒有團體保留座位。",
+      "list": "有保留座位的團體",
+      "summary": "{where}共{seats, plural, other {# 個座位}} · 已坐 {seated} · 未用 {unused}",
+      "seatMembers": "為 {label} 團體安排座位",
+      "release": "釋出 {label} 的未用座位",
+      "released": "{label} 的{count, plural, other {# 個座位}}已重新開放販售。",
+      "allocated": "已在{item}為 {label} 保留{count, plural, other {# 個座位}}。",
+      "form": {
+        "title": "為團體保留座位",
+        "label": "團體（標籤）",
+        "labelHint": "帶此標籤的人都是成員。",
+        "item": "保留位置",
+        "count": "座位數",
+        "countHint": "留空則保留那裡的所有空位。",
+        "submit": "保留座位"
+      },
+      "errors": {
+        "label": "請輸入團體標籤（最多 40 個字元）。",
+        "itemId": "請選擇保留座位的位置。",
+        "count": "請輸入 1 到 2000 之間的座位數，或留空。",
+        "notEnough": "{fits, plural, =0 {那裡沒有空位。} other {那裡只有 # 個空位。}}",
+        "forbidden": "你可以查看團體，但不能變更。",
+        "noMembers": "名單中還沒有人帶有標籤 {label}。"
+      }
     }
   },
   "venueMap": {

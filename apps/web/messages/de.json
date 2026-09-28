@@ -362,7 +362,15 @@
     "showing": "{from}–{to} von {total}",
     "filtered": "gefiltert",
     "previous": "Zurück",
-    "next": "Weiter"
+    "next": "Weiter",
+    "anyTicketType": "Jede Ticketart",
+    "checkIn": "Einlass",
+    "anyCheckIn": "Eingelassen oder nicht",
+    "checkedIn": {
+      "today": "Heute eingelassen",
+      "any": "Eingelassen (an irgendeinem Tag)",
+      "never": "Nicht eingelassen"
+    }
   },
   "attendeeStatus": {
     "paid": "Bezahlt",
@@ -957,7 +965,10 @@
       "label": "Labels für mehrere",
       "export": "Export der Teilnehmenden",
       "import": "Gästelisten-Import",
-      "email": "E-Mail an Gäste"
+      "email": "E-Mail an Gäste",
+      "seats": "Platzzuweisung",
+      "resend": "Erneut gesendete Tickets",
+      "cancel": "Stornierte Tickets"
     },
     "status": {
       "queued": "Wartet auf Start…",
@@ -975,10 +986,42 @@
       "too_many_labels": "sie haben bereits 20 Labels",
       "not_found": "nicht mehr in dieser Liste",
       "other": "unerwarteter Fehler",
-      "not_attending": "nicht mehr auf der Liste"
+      "not_attending": "nicht mehr auf der Liste",
+      "not_enough_seats": "dort ist kein Platz mehr frei",
+      "seated_by_ticket": "haben schon einen Platz durch ihr Ticket",
+      "attendee_cancelled": "nehmen nicht mehr teil",
+      "no_ticket": "kein Ticket (nur Gästeliste)",
+      "ticket_void": "Ticket bereits storniert"
     },
     "download": "CSV herunterladen",
-    "undo": "Rückgängig"
+    "undo": "Rückgängig",
+    "assignSeats": "Plätze zuweisen",
+    "resend": "Tickets erneut senden",
+    "cancelTickets": "Tickets stornieren (ohne Erstattung)",
+    "target": "Platzieren in",
+    "targetBest": "Beste freie Plätze — {free} frei",
+    "targetSection": "Bereich {section}",
+    "targetGroup": "Gruppenblock: {group} — {unused, plural, one {# Platz frei} other {# Plätze frei}}",
+    "overrideRules": "Sie brauchen barrierefreie Plätze (zurückgehaltene Plätze nutzen)",
+    "assignHint": "Plätze werden in der Reihenfolge des Plans vergeben. Wer dort schon sitzt, behält seinen Platz; wer nicht mehr passt, wird danach aufgeführt. Du kannst es 10 Minuten lang rückgängig machen.",
+    "resendHint": "Alle mit Ticket erhalten es erneut per E-Mail, mit einem Link zu ihren Tickets.",
+    "cancelHint": "Ihre Tickets gelten am Einlass nicht mehr, ihre Plätze gehen zurück in den Verkauf. Es wird nichts erstattet: Erstatte Bestellungen einzeln. Das lässt sich nicht rückgängig machen.",
+    "cancelReview": "Stornierung prüfen…",
+    "confirmCancel": {
+      "title": "Tickets von {count, plural, one {# Person} other {# Personen}} stornieren?",
+      "body": "Ihre Tickets werden sofort ungültig und sie werden per E-Mail informiert. Niemand bekommt Geld zurück, und das lässt sich nicht rückgängig machen.",
+      "confirm": "Tickets von {count, plural, one {# Person} other {# Personen}} stornieren",
+      "keep": "Tickets behalten",
+      "none": "Wähle zuerst mindestens eine Person aus."
+    },
+    "seatsDone": "{count, plural, one {# Person} other {# Personen}} von {total} platziert.",
+    "resendDone": "{count, plural, one {# Ticket} other {# Tickets}} erneut gesendet.",
+    "cancelDone": "Storniert: {count, plural, one {# Ticket} other {# Tickets}}.",
+    "progress": "Fortschritt: {processed} von {total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, one {# Person sitzt} other {# Personen sitzen}} auf zurückgehaltenen barrierefreien Plätzen.",
+      "other": "{count, plural, one {# Person braucht} other {# Personen brauchen}} einen zweiten Blick."
+    }
   },
   "exportColumns": {
     "name": "Name",
@@ -1712,6 +1755,34 @@
       "save": "Regeln speichern",
       "saved": "Sitzregeln gespeichert.",
       "fixErrors": "Bitte korrigiere das markierte Feld."
+    },
+    "groups": {
+      "title": "Gruppenblöcke",
+      "description": "Halte Plätze für eine Gruppe zurück – Personen mit demselben Label, etwa eine Firma oder Familie. Platziere ihre Mitglieder in einem Schritt im Block und gib danach ungenutzte Plätze frei.",
+      "empty": "Noch keine Gruppe hat zurückgehaltene Plätze.",
+      "list": "Gruppen mit zurückgehaltenen Plätzen",
+      "summary": "{seats, plural, one {# Platz} other {# Plätze}} bei {where} · {seated} belegt · {unused} ungenutzt",
+      "seatMembers": "Gruppe {label} platzieren",
+      "release": "Ungenutzte Plätze von {label} freigeben",
+      "released": "{count, plural, one {# Platz} other {# Plätze}} von {label} wieder im Verkauf.",
+      "allocated": "{count, plural, one {# Platz} other {# Plätze}} bei {item} für {label} zurückgehalten.",
+      "form": {
+        "title": "Plätze für eine Gruppe zurückhalten",
+        "label": "Gruppe (Label)",
+        "labelHint": "Alle mit diesem Label gehören dazu.",
+        "item": "Plätze zurückhalten bei",
+        "count": "Anzahl der Plätze",
+        "countHint": "Leer lassen, um alle freien Plätze dort zurückzuhalten.",
+        "submit": "Plätze zurückhalten"
+      },
+      "errors": {
+        "label": "Gib das Label der Gruppe ein (bis zu 40 Zeichen).",
+        "itemId": "Wähle, wo die Plätze zurückgehalten werden.",
+        "count": "Gib eine Platzanzahl von 1 bis 2.000 ein oder lass das Feld leer.",
+        "notEnough": "{fits, plural, =0 {Dort ist kein Platz frei.} one {Dort ist nur # Platz frei.} other {Dort sind nur # Plätze frei.}}",
+        "forbidden": "Du kannst die Gruppen sehen, aber nicht ändern.",
+        "noMembers": "Noch niemand auf der Liste hat das Label {label}."
+      }
     }
   },
   "venueMap": {

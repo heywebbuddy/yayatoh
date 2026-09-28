@@ -6,7 +6,7 @@ import { buyerOrderMessagesTx } from '@yayatoh/notifications';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
-import { and, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer } from './dto.ts';
@@ -110,8 +110,9 @@ export const searchOrdersQuery = tenantQuery({
         .from(orders)
         .where(
           or(
-            ilike(orders.buyerName, q),
-            ilike(orders.buyerEmail, q),
+            // The same ILIKE on buyer name/email, run by `orders.search_ids` so the trigram
+            // indexes serve it under row-level security (migration 0051, M1.8f).
+            sql`${orders.id} in (select orders.search_ids(${q}))`,
             idPrefix ? sql`${orders.id}::text like ${idPrefix}` : undefined,
           ),
         )

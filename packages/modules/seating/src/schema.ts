@@ -24,10 +24,15 @@ export const EVENT_LAYOUT_STATUSES = ['draft', 'published', 'locked'] as const;
 export const FINDER_MODES = ['code', 'name'] as const;
 /** Reasons an organizer blocks seats by hand. */
 export const BLOCK_REASONS = ['channel', 'ada', 'kill'] as const;
-/** Every block reason a seat can carry: `assigned` = a guest was given this seat (M1.7d). */
-export const SEAT_BLOCK_REASONS = [...BLOCK_REASONS, 'assigned'] as const;
+/**
+ * Every block reason a seat can carry: `assigned` = a guest was given this seat (M1.7d); `group` =
+ * kept back for a group (an attendee label, e.g. a company) whose name is in `group_label` (M1.8f).
+ */
+export const SEAT_BLOCK_REASONS = [...BLOCK_REASONS, 'assigned', 'group'] as const;
 /** Blocks a seat assignment may take over (and gives back when the guest is unseated). */
-export const ASSIGNABLE_BLOCKS = ['channel', 'ada'] as const;
+export const ASSIGNABLE_BLOCKS = ['channel', 'ada', 'group'] as const;
+/** A group's name is an attendee label: 1–40 characters. */
+export const MAX_GROUP_LABEL = 40;
 /**
  * Seating rules (M1.7f): `ada_reserved` keeps accessible seats back until some days before the
  * event; `max_per_order_seats` caps the seats in one order.
@@ -99,10 +104,18 @@ export const eventSeats = tenantTable(
     holdExpiresAt: timestamp('hold_expires_at', { withTimezone: true }),
     ticketId: uuid('ticket_id'),
     blockReason: text('block_reason'),
+    /**
+     * The group this seat is kept for (M1.8f): set while it is blocked for the group, and kept
+     * while a member sits in it, so unseating them gives the seat back to their group.
+     */
+    groupLabel: text('group_label'),
   },
   (t) => [
     uniqueIndex('event_seats_org_event_seat_key').on(t.orgId, t.eventId, t.seatUuid),
     index('event_seats_org_event_status_idx').on(t.orgId, t.eventId, t.status),
+    index('event_seats_org_event_group_idx')
+      .on(t.orgId, t.eventId, t.groupLabel)
+      .where(sql`group_label is not null`),
     index('event_seats_org_hold_idx').on(t.orgId, t.holdId),
     check(
       'event_seats_status_check',
@@ -119,6 +132,10 @@ export const eventSeats = tenantTable(
       sql`(status = 'held') = (hold_id is not null and hold_expires_at is not null)`,
     ),
     check('event_seats_sold_check', sql`(status = 'sold') = (ticket_id is not null)`),
+    check(
+      'event_seats_group_check',
+      sql`(block_reason is distinct from 'group' or group_label is not null) and (group_label is null or length(group_label) between 1 and 40)`,
+    ),
   ],
 );
 

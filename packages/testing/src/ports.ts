@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { billingEntitlements } from '@yayatoh/billing';
 import { eventRolesOf } from '@yayatoh/events';
+import { ticketCancelAction } from '@yayatoh/orders';
 import {
   auditExportAction,
   bulkStepCommand,
@@ -12,7 +13,9 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
+import { seatAssignAction } from '@yayatoh/seating';
 import { createOrgAuthorizer } from '@yayatoh/tenancy';
+import { ticketResendAction } from '@yayatoh/ticketing';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
 export const ports = createCommandPorts({
@@ -32,6 +35,9 @@ export const BULK_ACTIONS = [
   bookingsExportAction,
   auditExportAction,
   dsarExportAction,
+  seatAssignAction,
+  ticketResendAction,
+  ticketCancelAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

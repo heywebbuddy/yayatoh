@@ -32,6 +32,11 @@ export interface BulkItemResult {
   readonly code?: string;
   /** What undo needs to restore this item (undoable actions only). */
   readonly undo?: unknown;
+  /**
+   * A stable code for an item that succeeded with a caveat the organizer should see (a guest
+   * placed in an accessible seat that is kept back, M1.8f).
+   */
+  readonly warning?: string;
 }
 
 export interface BulkSelection {
@@ -62,6 +67,13 @@ export interface BulkAction<P = unknown, F = unknown> {
    * (actions with a `file`): data leaving the platform in bulk.
    */
   readonly stepUp?: boolean;
+  /**
+   * Destructive actions that must never run while platform staff impersonate a member (M1.2e
+   * blocks money, export and delete). Declared here so the impersonation guard can refuse them.
+   */
+  readonly blockedWhileImpersonating?: boolean;
+  /** What of the params the `bulk.start` audit row records (never message bodies or tokens). */
+  auditParams?(params: P): Record<string, unknown>;
   /** Resolve a selection to the ids this action may touch (validates scope; caller caps size). */
   resolve(
     tx: TenantTx,
@@ -111,12 +123,14 @@ export const BulkOperationDto = z.object({
   hasFile: z.boolean(),
   /** First failures, for the organizer to act on. */
   failures: z.array(z.object({ itemId: z.uuid(), code: z.string() })),
+  /** First items that succeeded with a caveat (`BulkItemResult.warning`). */
+  warnings: z.array(z.object({ itemId: z.uuid(), code: z.string() })),
 });
 export type BulkOperationDto = z.infer<typeof BulkOperationDto>;
 
 type OpRow = typeof bulkOperations.$inferSelect;
 
-const baseDto = (op: OpRow, now: Date): Omit<BulkOperationDto, 'failures'> => ({
+const baseDto = (op: OpRow, now: Date): Omit<BulkOperationDto, 'failures' | 'warnings'> => ({
   id: op.id,
   action: op.action,
   eventId: op.eventId,
@@ -141,9 +155,23 @@ async function toDto(tx: TenantTx, op: OpRow, now: Date): Promise<BulkOperationD
         .orderBy(asc(bulkOperationItems.id))
         .limit(50)
     : [];
+  // Warnings are stored as the code of an item that succeeded.
+  const warnings = await tx
+    .select({ itemId: bulkOperationItems.itemId, code: bulkOperationItems.errorCode })
+    .from(bulkOperationItems)
+    .where(
+      and(
+        eq(bulkOperationItems.operationId, op.id),
+        eq(bulkOperationItems.ok, true),
+        isNotNull(bulkOperationItems.errorCode),
+      ),
+    )
+    .orderBy(asc(bulkOperationItems.id))
+    .limit(50);
   return {
     ...baseDto(op, now),
     failures: failures.map((f) => ({ itemId: f.itemId, code: f.code ?? 'failed' })),
+    warnings: warnings.map((w) => ({ itemId: w.itemId, code: w.code ?? 'warning' })),
   };
 }
 
@@ -227,7 +255,12 @@ export function bulkCommands<P, F>(action: BulkAction<P, F>) {
       action: 'bulk.start',
       targetType: 'bulk_operation',
       targetId: r?.operationId ?? null,
-      data: { action: action.key, eventId: input.eventId, total: r?.total ?? 0 },
+      data: {
+        action: action.key,
+        eventId: input.eventId,
+        total: r?.total ?? 0,
+        ...(action.auditParams?.(input.params as P) ?? {}),
+      },
     }),
   });
 
@@ -341,7 +374,9 @@ export function bulkStepCommand(actions: readonly AnyBulkAction[]) {
         operationId: op.id,
         emit,
       });
-      const keep = results.filter((r) => !r.ok || (action.undo && r.undo !== undefined));
+      const keep = results.filter(
+        (r) => !r.ok || r.warning !== undefined || (action.undo && r.undo !== undefined),
+      );
       if (keep.length)
         await tx.insert(bulkOperationItems).values(
           keep.map((r) => ({
@@ -349,7 +384,7 @@ export function bulkStepCommand(actions: readonly AnyBulkAction[]) {
             operationId: op.id,
             itemId: r.id,
             ok: r.ok,
-            errorCode: r.ok ? null : (r.code ?? 'failed'),
+            errorCode: r.ok ? (r.warning ?? null) : (r.code ?? 'failed'),
             undo: r.ok ? (r.undo ?? null) : null,
           })),
         );
@@ -529,7 +564,7 @@ export async function bulkOperationRequesterTx(tx: TenantTx, operationId: string
 export const listBulkOperationsQuery = tenantQuery({
   name: 'platform.listBulkOperations',
   input: z.object({ eventId: z.uuid(), limit: z.int().min(1).max(50).default(10) }),
-  output: z.array(BulkOperationDto.omit({ failures: true })),
+  output: z.array(BulkOperationDto.omit({ failures: true, warnings: true })),
   entitlement: 'core',
   permission: 'events:read',
   handler: async ({ input, ctx, tx }) => {

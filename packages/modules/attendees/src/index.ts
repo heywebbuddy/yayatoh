@@ -1,6 +1,7 @@
 export {
   AttendeeFilter,
   AttendeeHitDto,
+  AttendeeListDto,
   attendeeLabelsQuery,
   attendeesByIdsTx,
   cancelAttendeesTx,
@@ -9,13 +10,16 @@ export {
   eventAttendeesTx,
   getAttendeeQuery,
   Label as AttendeeLabel,
+  ListAttendeesInput,
   listAttendeesQuery,
+  listAttendeesTx,
   MAX_LABELS,
   type NewAttendee,
   normalizePersonName,
   reassignAttendeeTx,
   searchAttendeesQuery,
   setAttendeeLabelsCommand,
+  type TicketFilterExtension,
 } from './attendees.ts';
 export {
   attendeeLabelAction,

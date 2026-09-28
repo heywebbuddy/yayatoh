@@ -362,7 +362,15 @@
     "showing": "{from}–{to} di {total}",
     "filtered": "filtrati",
     "previous": "Precedente",
-    "next": "Successiva"
+    "next": "Successiva",
+    "anyTicketType": "Qualsiasi tipo di biglietto",
+    "checkIn": "Check-in",
+    "anyCheckIn": "Con o senza check-in",
+    "checkedIn": {
+      "today": "Check-in oggi",
+      "any": "Check-in (qualsiasi giorno)",
+      "never": "Senza check-in"
+    }
   },
   "attendeeStatus": {
     "paid": "Pagato",
@@ -957,7 +965,10 @@
       "label": "Etichette di gruppo",
       "export": "Esportazione partecipanti",
       "import": "Importazione lista ospiti",
-      "email": "Email agli ospiti"
+      "email": "Email agli ospiti",
+      "seats": "Assegnazione posti",
+      "resend": "Biglietti inviati di nuovo",
+      "cancel": "Biglietti annullati"
     },
     "status": {
       "queued": "In attesa di avvio…",
@@ -975,10 +986,42 @@
       "too_many_labels": "hanno già 20 etichette",
       "not_found": "non sono più in questo elenco",
       "other": "errore imprevisto",
-      "not_attending": "non sono più nella lista"
+      "not_attending": "non sono più nella lista",
+      "not_enough_seats": "non ci sono più posti liberi lì",
+      "seated_by_ticket": "hanno già un posto con il biglietto",
+      "attendee_cancelled": "non partecipano più",
+      "no_ticket": "nessun biglietto (solo lista ospiti)",
+      "ticket_void": "biglietto già annullato"
     },
     "download": "Scarica CSV",
-    "undo": "Annulla"
+    "undo": "Annulla",
+    "assignSeats": "Assegna posti",
+    "resend": "Invia di nuovo i biglietti",
+    "cancelTickets": "Annulla biglietti (senza rimborso)",
+    "target": "Farli sedere in",
+    "targetBest": "Migliori posti disponibili — {free} liberi",
+    "targetSection": "Settore {section}",
+    "targetGroup": "Blocco del gruppo: {group} — {unused, plural, one {# posto rimasto} other {# posti rimasti}}",
+    "overrideRules": "Hanno bisogno di posti accessibili (usa quelli riservati)",
+    "assignHint": "I posti vengono assegnati nell’ordine della piantina. Chi è già seduto lì mantiene il posto; chi non ci sta viene elencato dopo. Puoi annullare per 10 minuti.",
+    "resendHint": "Chi ha un biglietto lo riceve di nuovo via email, con un link ai propri biglietti.",
+    "cancelHint": "I loro biglietti non funzioneranno più all’ingresso e i posti tornano in vendita. Nessun rimborso: rimborsa gli ordini uno per uno. Non si può annullare.",
+    "cancelReview": "Rivedi l’annullamento…",
+    "confirmCancel": {
+      "title": "Annullare i biglietti di {count, plural, one {# persona} other {# persone}}?",
+      "body": "I loro biglietti vengono annullati subito e ricevono un’email. Nessuno viene rimborsato e non si può tornare indietro.",
+      "confirm": "Annulla i biglietti di {count, plural, one {# persona} other {# persone}}",
+      "keep": "Mantieni i biglietti",
+      "none": "Seleziona prima almeno una persona."
+    },
+    "seatsDone": "{count, plural, one {# persona sistemata} other {# persone sistemate}} su {total}.",
+    "resendDone": "Inviati di nuovo: {count, plural, one {# biglietto} other {# biglietti}}.",
+    "cancelDone": "Annullati: {count, plural, one {# biglietto} other {# biglietti}}.",
+    "progress": "Avanzamento: {processed} su {total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, one {# persona è stata sistemata} other {# persone sono state sistemate}} in posti accessibili riservati.",
+      "other": "{count, plural, one {# persona richiede} other {# persone richiedono}} un controllo."
+    }
   },
   "exportColumns": {
     "name": "Nome",
@@ -1712,6 +1755,34 @@
       "save": "Salva regole",
       "saved": "Regole dei posti salvate.",
       "fixErrors": "Correggi il campo evidenziato."
+    },
+    "groups": {
+      "title": "Blocchi di gruppo",
+      "description": "Tieni da parte dei posti per un gruppo: persone con la stessa etichetta, come un’azienda o una famiglia. Fai sedere i membri nel blocco in un colpo solo, poi libera i posti non usati.",
+      "empty": "Nessun gruppo ha ancora posti riservati.",
+      "list": "Gruppi con posti riservati",
+      "summary": "{seats, plural, one {# posto} other {# posti}} a {where} · {seated} occupati · {unused} liberi",
+      "seatMembers": "Fai sedere il gruppo {label}",
+      "release": "Libera i posti non usati di {label}",
+      "released": "{count, plural, one {# posto} other {# posti}} di {label} di nuovo in vendita.",
+      "allocated": "Riservati {count, plural, one {# posto} other {# posti}} a {item} per {label}.",
+      "form": {
+        "title": "Riserva posti per un gruppo",
+        "label": "Gruppo (etichetta)",
+        "labelHint": "Chi ha questa etichetta fa parte del gruppo.",
+        "item": "Riserva posti a",
+        "count": "Numero di posti",
+        "countHint": "Lascia vuoto per riservare tutti i posti liberi lì.",
+        "submit": "Riserva i posti"
+      },
+      "errors": {
+        "label": "Inserisci l’etichetta del gruppo (massimo 40 caratteri).",
+        "itemId": "Scegli dove riservare i posti.",
+        "count": "Inserisci un numero di posti da 1 a 2.000, oppure lascia vuoto.",
+        "notEnough": "{fits, plural, =0 {Non ci sono posti liberi lì.} one {Lì è libero solo # posto.} other {Lì sono liberi solo # posti.}}",
+        "forbidden": "Puoi vedere i gruppi ma non modificarli.",
+        "noMembers": "Nessuno nella lista ha ancora l’etichetta {label}."
+      }
     }
   },
   "venueMap": {

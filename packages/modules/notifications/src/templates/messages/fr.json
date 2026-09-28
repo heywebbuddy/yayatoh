@@ -45,6 +45,15 @@
       "intro": "Voici le lien demandé. Il ouvre vos billets pour {eventName}.",
       "cta": "Ouvrir mes billets"
     },
+    "ticketing.tickets-resent": {
+      "subject": "Votre billet pour {eventName}",
+      "intro": "L'organisateur de {eventName} vous a renvoyé votre billet {code}. Le bouton ci-dessous ouvre vos billets à tout moment.",
+      "cta": "Ouvrir mes billets"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Votre billet pour {eventName} a été annulé",
+      "intro": "L'organisateur de {eventName} a annulé votre billet {code}. Il ne donne plus accès à l'événement. Pour toute question, répondez à l'organisateur."
+    },
     "seating.finder-code": {
       "subject": "{code} est votre code pour trouver votre place à {eventName}",
       "intro": "Saisissez {code} dans l'outil de recherche de place pour voir votre place. Le code ne sert qu'une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",

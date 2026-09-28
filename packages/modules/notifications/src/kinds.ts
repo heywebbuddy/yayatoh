@@ -61,6 +61,19 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'eventName'],
   },
+  // Organizer actions on tickets (M1.8f bulk actions): a resent ticket, a cancelled one.
+  'ticketing.tickets-resent': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'code'],
+  },
+  'ticketing.ticket-cancelled': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['name', 'eventName', 'code'],
+  },
   'seating.finder-code': {
     category: 'transactional',
     channels: ['email'],

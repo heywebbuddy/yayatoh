@@ -45,6 +45,15 @@
       "intro": "這是您要求的連結，可開啟您的 {eventName} 票券。",
       "cta": "開啟我的票券"
     },
+    "ticketing.tickets-resent": {
+      "subject": "您的 {eventName} 票券",
+      "intro": "{eventName} 的主辦單位重新寄送了您的票券 {code}。點選下方按鈕即可隨時開啟您的票券。",
+      "cta": "開啟我的票券"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "您的 {eventName} 票券已取消",
+      "intro": "{eventName} 的主辦單位已取消您的票券 {code}，此票券已無法入場。如有疑問，請回覆主辦單位。"
+    },
     "seating.finder-code": {
       "subject": "{code} 是您在 {eventName} 的座位查詢碼",
       "intro": "在座位查詢中輸入 {code} 即可查看您的座位。此代碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的請求，請忽略此郵件。",
