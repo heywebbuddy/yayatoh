@@ -214,7 +214,9 @@ test.describe('multi-date events', () => {
     await later.getByLabel('Ends', { exact: true }).fill('2027-03-17T23:30');
     await later.getByLabel('This date and all later dates').check();
     await later.getByRole('button', { name: 'Save changes' }).click();
-    await expect(later.getByText('2 dates updated')).toBeVisible();
+    // Saved: the panel is now titled with the date's new times.
+    const saved = page.getByRole('region', { name: /^Edit / });
+    await expect(saved.getByText('2 dates updated')).toBeVisible();
     for (const day of ['17', '24'])
       await expect(
         page.getByRole('cell', {

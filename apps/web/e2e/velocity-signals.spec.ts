@@ -61,6 +61,8 @@ test.describe('velocity fraud signals', () => {
     page,
     browser,
   }, info) => {
+    // A long journey (an event with tickets, a burst of scans, triage from two roles).
+    test.setTimeout(90_000);
     const stamp = `${Date.now()}-${info.project.name}`;
     await signIn(page);
     const { base, codes } = await eventWithTickets(page, browser, `Fast ${stamp}`, 1);

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { expectAccessible } from './helpers.ts';
+import { codeForKey, expectAccessible } from './helpers.ts';
 
 /**
  * M2.2b legacy migration: a synthetic legacy dataset is migrated into the e2e database by the
@@ -62,6 +62,20 @@ test.describe('legacy migration — the migrated organizer', () => {
 
   test('signs in with their legacy password and lands in their migrated org', async () => {
     await signInWithLegacyPassword(page, h.owner.email, h.owner.password);
+    // Owners must use two-step verification (M1.2c, D14): a migrated owner sets it up at their
+    // first sign-in, then continues to their org.
+    await expect(page).toHaveURL(/\/account\/security\?required=1$/);
+    await expect(page.getByRole('heading', { name: 'Two-step verification is required' })).toBeVisible();
+    await page
+      .getByRole('region', { name: 'Authenticator app' })
+      .getByRole('button', { name: 'Set up authenticator app' })
+      .click();
+    const key = (await page.getByTestId('setup-key').textContent()) ?? '';
+    await page.getByLabel('6-digit code').fill(codeForKey(key));
+    await page.getByRole('button', { name: 'Verify and turn on' }).click();
+    await expect(page.getByRole('status').filter({ hasText: 'Two-step verification is on.' })).toBeVisible();
+    await page.getByRole('button', { name: "I've saved my codes" }).click();
+    await page.goto(`/o/${h.org.slug}`);
     await expect(page).toHaveURL(new RegExp(`/o/${h.org.slug}$`));
     await expect(page.getByRole('heading', { level: 1 })).toContainText(h.owner.name.split(' ')[0] as string);
     await expect(page.getByText(h.weekly.name)).toBeVisible();
