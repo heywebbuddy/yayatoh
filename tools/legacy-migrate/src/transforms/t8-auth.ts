@@ -17,7 +17,6 @@ import { exec, hasColumn, hasTable, rows, type StepContext } from './context.ts'
  *   account stores `$yydual$…` (packages/auth `dualHash`); the first sign-in rehashes to Argon2id.
  */
 export async function t8Auth(ctx: StepContext): Promise<void> {
-  const inst = ctx.instance;
   if (await hasTable(ctx, 'personal_access_tokens'))
     await exec(
       ctx,

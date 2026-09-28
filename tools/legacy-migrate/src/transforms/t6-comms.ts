@@ -1,5 +1,5 @@
 import { detUuid, legacyKey } from '../ids.ts';
-import { exec, hasColumn, hasTable, rows, type StepContext } from './context.ts';
+import { exec, hasColumn, hasTable, type StepContext } from './context.ts';
 
 /**
  * T6 Communications (roadmap §7.5, M2.2c).
@@ -22,7 +22,6 @@ import { exec, hasColumn, hasTable, rows, type StepContext } from './context.ts'
  *   dry-run report. The migration never sends anything.
  */
 export async function t6Comms(ctx: StepContext): Promise<void> {
-  const inst = ctx.instance;
   const hostOrg = await platformOrg(ctx);
 
   if (await hasTable(ctx, 'newsletter_subscribers'))
