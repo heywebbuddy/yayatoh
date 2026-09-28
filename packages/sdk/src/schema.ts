@@ -10,76 +10,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Sign in with email and password; returns a bearer session token (no cookies) */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["LoginRequest"];
-                };
-            };
-            responses: {
-                /** @description Signed in */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Session"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Sign in with email and password; returns a bearer session token (no cookies)
+         * @description Signs in with email and password and returns a session token to send as `Authorization: Bearer <token>`. No cookie is set. Accounts with two-factor sign-in get `step_up_required`: use the web sign-in. Limited per account (5 per 15 min) and per IP.
+         */
+        post: operations["login"];
         delete?: never;
         options?: never;
         head?: never;
@@ -95,70 +30,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** End the session; the token stops working at once */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Signed out */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * End the session; the token stops working at once
+         * @description Ends the session: the token is refused from the next request on.
+         */
+        post: operations["logout"];
         delete?: never;
         options?: never;
         head?: never;
@@ -174,72 +50,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Keep a session alive: returns the token with its extended expiry */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The session */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Session"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Keep a session alive: returns the token with its extended expiry
+         * @description Slides the session’s expiry forward and returns the same token with its new expiry.
+         */
+        post: operations["refreshSession"];
         delete?: never;
         options?: never;
         head?: never;
@@ -259,87 +74,7 @@ export interface paths {
          * Scan one ticket online and get the door verdict
          * @description Retrying with the same Idempotency-Key returns the first verdict instead of a duplicate.
          */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    "idempotency-key": string;
-                };
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        checkpointId?: string;
-                        code: string;
-                        /** Format: uuid */
-                        eventId: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description The verdict */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** Format: uuid */
-                            admissionId: string | null;
-                            /** Format: date-time */
-                            firstAdmittedAt: string | null;
-                            /** @enum {string} */
-                            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint";
-                            ticket: {
-                                holderName: string | null;
-                                serial: number;
-                                shortCode: string;
-                                typeName: string;
-                            } | null;
-                        };
-                    };
-                };
-                /** @description Missing or unknown device token */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-                /** @description Not found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-            };
-        };
+        post: operations["checkInWithDevice"];
         delete?: never;
         options?: never;
         head?: never;
@@ -355,75 +90,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Device health every 30 s; returns pending commands (wipe) */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        batteryPct?: number | null;
-                        clockOffsetMs: number;
-                        queueDepth: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description Server time and commands */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            commands: "wipe"[];
-                            /** Format: date-time */
-                            serverTime: string;
-                        };
-                    };
-                };
-                /** @description Missing or unknown device token */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-                /** @description Not found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-            };
-        };
+        /**
+         * Device health every 30 s; returns pending commands (wipe)
+         * @description Reports the device’s health about every 30 seconds and returns pending commands such as `wipe`. Device token only.
+         */
+        post: operations["deviceHeartbeat"];
         delete?: never;
         options?: never;
         head?: never;
@@ -437,152 +108,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Offline manifest page for a scanner device */
-        get: {
-            parameters: {
-                query?: {
-                    cursor?: string;
-                    limit?: number;
-                    overlap?: "true" | "false";
-                };
-                header?: never;
-                path: {
-                    eventId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Manifest page */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            complete: boolean;
-                            cursor: string | null;
-                            header: {
-                                checkpoints: {
-                                    /** Format: uuid */
-                                    id: string;
-                                    /** @enum {string} */
-                                    kind: "entrance" | "zone";
-                                    name: string;
-                                    ticketTypeIds: string[];
-                                }[];
-                                event: {
-                                    endsAt: string;
-                                    /** Format: uuid */
-                                    id: string;
-                                    name: string;
-                                    startsAt: string;
-                                    timezone: string;
-                                };
-                                occurrences: {
-                                    endsAt: string;
-                                    /** Format: uuid */
-                                    id: string;
-                                    startsAt: string;
-                                    /** @enum {string} */
-                                    status: "scheduled" | "cancelled";
-                                }[];
-                                publicKeys: {
-                                    [key: string]: string;
-                                };
-                                salt: string;
-                                scope: {
-                                    checkpointIds: string[] | null;
-                                    /** Format: uuid */
-                                    deviceId: string;
-                                    /** Format: uuid */
-                                    eventId: string;
-                                    signature: string;
-                                };
-                                serverTime: string;
-                                /** @enum {string} */
-                                unknownPolicy: "provisional" | "reject";
-                                version: number;
-                            };
-                            rows: {
-                                accessDates: {
-                                    date: string;
-                                    name: string;
-                                }[];
-                                emailHash: string;
-                                holderName: string;
-                                issuedAt: string;
-                                /** Format: uuid */
-                                occurrenceId: string | null;
-                                rev: number;
-                                shortCode: string;
-                                /** @enum {string} */
-                                status: "active" | "void";
-                                /** Format: uuid */
-                                ticketId: string;
-                                /** Format: uuid */
-                                ticketTypeId: string;
-                                typeName: string;
-                            }[];
-                        };
-                    };
-                };
-                /** @description Missing or unknown device token */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-                /** @description The device is handed to a member with no role at this event */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-                /** @description Not found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-            };
-        };
+        /**
+         * Offline manifest page for a scanner device
+         * @description One page of the offline manifest a paired scanner device keeps (ticket rows by short code). Device token only.
+         */
+        get: operations["getScannerManifest"];
         put?: never;
         post?: never;
         delete?: never;
@@ -598,34 +128,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Liveness check */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The API is up */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            service: string;
-                            /** @enum {string} */
-                            status: "ok" | "degraded";
-                            /** Format: date-time */
-                            time: string;
-                            version: string;
-                        };
-                    };
-                };
-            };
-        };
+        /**
+         * Liveness check
+         * @description Answers 200 while the API is up. No credential; not rate limited beyond the anonymous budget.
+         */
+        get: operations["getHealth"];
         put?: never;
         post?: never;
         delete?: never;
@@ -641,72 +148,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** The signed-in user */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The user */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["User"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * The signed-in user
+         * @description The user behind the bearer session. API keys are not users: they get 401 here.
+         */
+        get: operations["getMe"];
         put?: never;
         post?: never;
         delete?: never;
@@ -722,72 +168,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Organizations the signed-in user belongs to, with their role */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Memberships */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["MembershipList"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Organizations the signed-in user belongs to, with their role
+         * @description Every organization the signed-in user is a member of, with their role in it.
+         */
+        get: operations["listMyOrganizations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -803,27 +188,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Minimum and latest app versions, base URLs and feature flags (public) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Mobile configuration */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["MobileConfig"];
-                    };
-                };
-            };
-        };
+        /**
+         * Minimum and latest app versions, base URLs and feature flags (public)
+         * @description Minimum and latest app versions per platform, the base URLs and feature flags. No credential.
+         */
+        get: operations["getMobileConfig"];
         put?: never;
         post?: never;
         delete?: never;
@@ -839,75 +208,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** The organization */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The organization */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Organization"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * The organization
+         * @description The organization in the path, which must be the API key’s org or one the user belongs to.
+         *
+         *     Scope `org:read`.
+         */
+        get: operations["getOrganization"];
         put?: never;
         post?: never;
         delete?: never;
@@ -923,78 +230,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Search attendees across events by name or email (scope `attendees:read`; 60/min) */
-        get: {
-            parameters: {
-                query: {
-                    limit?: number;
-                    q: string;
-                };
-                header?: never;
-                path: {
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Matches, newest first */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AttendeeHitList"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Search attendees across events by name or email (scope `attendees:read`; 60/min)
+         * @description Attendees across the organization’s events matching a name or email. Limited to 60 per minute.
+         *
+         *     Scope `attendees:read`.
+         */
+        get: operations["searchAttendees"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1010,174 +252,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Events by start time (scope `events:read`) */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description The previous page’s `nextCursor`. */
-                    cursor?: string;
-                    limit?: number;
-                };
-                header?: never;
-                path: {
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description A page of events */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["EventPage"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Events by start time (scope `events:read`)
+         * @description The organization’s events by start time, every status and visibility.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEvents"];
         put?: never;
-        /** Create a draft event (scope `events:write`) */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateEventRequest"];
-                };
-            };
-            responses: {
-                /** @description The new draft event */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Event"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Create a draft event (scope `events:write`)
+         * @description Creates a draft event. Times are instants; `timezone` is how they render. Needs an `Idempotency-Key`.
+         *
+         *     Scope `events:write`.
+         */
+        post: operations["createEvent"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1191,176 +280,69 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** One event (scope `events:read`) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The event */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Event"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * One event (scope `events:read`)
+         * @description One event of the organization; another org’s event is a 404.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["getEvent"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Change an event (scope `events:write`) */
-        patch: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["UpdateEventRequest"];
-                };
-            };
-            responses: {
-                /** @description The event */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Event"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
+        /**
+         * Change an event (scope `events:write`)
+         * @description Changes the fields given; the slug is frozen once published. Needs an `Idempotency-Key`.
+         *
+         *     Scope `events:write`.
+         */
+        patch: operations["updateEvent"];
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/agenda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
+        /**
+         * An event’s agenda
+         * @description Tracks, rooms and sessions grouped by day in the event’s timezone, with ids and capacities.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["getEventAgenda"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/announcements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * An event’s announcements
+         * @description Every announcement, newest first: drafts (`publishedAt` null) and both audiences.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEventAnnouncements"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/orgs/{org}/events/{eventId}/attendees": {
@@ -1370,83 +352,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** The event’s attendees, newest first (scope `attendees:read`) */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description The previous page’s `nextCursor`. */
-                    cursor?: string;
-                    limit?: number;
-                    /** @description Name or email contains */
-                    search?: string;
-                    status?: "active" | "cancelled";
-                };
-                header?: never;
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description A page of attendees */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AttendeePage"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * The event’s attendees, newest first (scope `attendees:read`)
+         * @description The event’s attendees, newest first, optionally filtered by a search term or status.
+         *
+         *     Scope `attendees:read`.
+         */
+        get: operations["listEventAttendees"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1462,77 +374,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** One attendee (scope `attendees:read`) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    attendeeId: string;
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The attendee */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Attendee"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * One attendee (scope `attendees:read`)
+         * @description One attendee of the event.
+         *
+         *     Scope `attendees:read`.
+         */
+        get: operations["getEventAttendee"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1554,100 +402,51 @@ export interface paths {
          * Scan a ticket online and get the door verdict (scope `checkin:scan`)
          * @description The same engine as the Scan PWA. Retrying with the same Idempotency-Key returns the first verdict instead of a duplicate.
          */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ScanRequest"];
-                };
-            };
-            responses: {
-                /** @description The verdict */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ScanVerdict"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
+        post: operations["checkInTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
+        /**
+         * An event’s dates
+         * @description The dates of a multi-date event in start order, with capacities.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEventDates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/exhibitors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * An event’s exhibitors
+         * @description Exhibitors by name.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEventExhibitors"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1661,80 +460,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** The event’s orders, newest first (scope `orders:read`) */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description The previous page’s `nextCursor`. */
-                    cursor?: string;
-                    limit?: number;
-                };
-                header?: never;
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description A page of orders */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["OrderPage"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * The event’s orders, newest first (scope `orders:read`)
+         * @description The event’s orders, newest first, without payment-provider internals.
+         *
+         *     Scope `orders:read`.
+         */
+        get: operations["listEventOrders"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1752,97 +484,101 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Publish a draft event (scope `events:write`) */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The published event */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Event"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
+        /**
+         * Publish a draft event (scope `events:write`)
+         * @description Publishes a draft event (lifecycle `draft → published`). Needs an `Idempotency-Key`.
+         *
+         *     Scope `events:write`.
+         */
+        post: operations["publishEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/sections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
+        /**
+         * An event’s content sections
+         * @description Every content section in page order, hidden ones included (`visible`).
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEventSections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/speakers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * An event’s speakers
+         * @description Speakers by name.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEventSpeakers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/speakers/{speakerId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One speaker
+         * @description A speaker and the sessions they speak in.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["getEventSpeaker"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/sponsors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * An event’s sponsor tiers
+         * @description Every sponsor tier in display order (empty ones included) with its sponsors.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listEventSponsors"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1856,172 +592,21 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** The event’s ticket types (scope `events:read`) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Ticket types in display order */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TicketTypeList"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * The event’s ticket types (scope `events:read`)
+         * @description Every ticket type of the event in display order, with sold and held counts.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listTicketTypes"];
         put?: never;
-        /** Add a ticket type (scope `events:write`) */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    eventId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateTicketTypeRequest"];
-                };
-            };
-            responses: {
-                /** @description The new ticket type */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TicketType"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Add a ticket type (scope `events:write`)
+         * @description Adds a ticket type (prices in minor units). Needs an `Idempotency-Key`.
+         *
+         *     Scope `events:write`.
+         */
+        post: operations["createTicketType"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2035,76 +620,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** One order with its tickets (scope `orders:read`) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    orderId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The order */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["OrderDetail"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * One order with its tickets (scope `orders:read`)
+         * @description One order with its line items and tickets.
+         *
+         *     Scope `orders:read`.
+         */
+        get: operations["getOrder"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2122,101 +644,13 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Refund tickets or an amount under the refund policy (scope `orders:refund`) */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    orderId: string;
-                    /** @description Organization id or slug */
-                    org: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["RefundRequest"];
-                };
-            };
-            responses: {
-                /** @description The refund and its outcome */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Refund"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
-        };
+        /**
+         * Refund tickets or an amount under the refund policy (scope `orders:refund`)
+         * @description Refunds whole tickets or an amount under the event’s refund policy, through the payment provider. Needs an `Idempotency-Key`; a retry returns the first result.
+         *
+         *     Scope `orders:refund`.
+         */
+        post: operations["refundOrder"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2236,101 +670,57 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Change a ticket type (scope `events:write`) */
-        patch: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
-                    "idempotency-key": string;
-                };
-                path: {
-                    /** @description Organization id or slug */
-                    org: string;
-                    ticketTypeId: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["UpdateTicketTypeRequest"];
-                };
-            };
-            responses: {
-                /** @description The ticket type */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TicketType"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
+        /**
+         * Change a ticket type (scope `events:write`)
+         * @description Changes the fields given. Needs an `Idempotency-Key`.
+         *
+         *     Scope `events:write`.
+         */
+        patch: operations["updateTicketType"];
+        trace?: never;
+    };
+    "/v1/orgs/{org}/venues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
+        /**
+         * The organization’s venues
+         * @description Saved venues by name, archived ones included (`archivedAt`).
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["listVenues"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/venues/{venueId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One venue
+         * @description A saved venue.
+         *
+         *     Scope `events:read`.
+         */
+        get: operations["getVenue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/public/events/{slug}": {
@@ -2340,56 +730,191 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** A published event’s public page data (no credential) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    slug: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The public event */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PublicEvent"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
+        /**
+         * A published event’s public page data (no credential)
+         * @description The allowlisted public data of an event with a public page (public or unlisted). Private events and drafts are a 404. No credential.
+         */
+        get: operations["getPublicEvent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/agenda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
+        /**
+         * A public event’s agenda
+         * @description Sessions grouped by day in the event’s timezone, with track, room and speakers. The whole agenda in one response (at most 500 sessions per event). No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["getPublicEventAgenda"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/announcements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s announcements
+         * @description Published announcements for everyone, pinned first, then newest first. Announcements for ticket holders only are never listed here. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventAnnouncements"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s dates
+         * @description The dates of a multi-date event in start order, cancelled ones included (marked). An event with no dates is a single-date event: use its own start and end. No capacity numbers, only `soldOut`. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventDates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/exhibitors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s exhibitors
+         * @description Exhibitors by name, with booth labels. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventExhibitors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s images
+         * @description The cover, the gallery and the organizer’s logo (`slot`), each with AVIF/WebP/fallback variants at absolute, content-hashed URLs that never change (cache them forever). No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventImages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/sections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s content sections
+         * @description The visible content blocks of the event page, in page order (hidden ones never appear). No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventSections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/speakers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s speakers
+         * @description Speakers by name. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventSpeakers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/speakers/{speakerId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One speaker of a public event
+         * @description A speaker’s profile and the sessions they speak in. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["getPublicEventSpeaker"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/sponsors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A public event’s sponsors by tier
+         * @description Sponsor tiers in display order, each with its sponsors; empty tiers are left out. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listPublicEventSponsors"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2405,56 +930,51 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** A published event’s passes with all-in prices and availability (no credential) */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    slug: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Public passes */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PublicTicketTypeList"];
-                    };
-                };
-                /** @description Validation failed (`validation_failed`) */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Not found, or not visible to this credential (`not_found`) */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-                /** @description Too many requests (`rate_limited`); see `Retry-After` */
-                429: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["Problem"];
-                    };
-                };
-            };
+        /**
+         * A published event’s passes with all-in prices and availability (no credential)
+         * @description The event’s on-sale passes with all-in prices (fees included when passed on) and availability. Hidden passes never appear. No credential.
+         */
+        get: operations["listPublicTicketTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/venues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
+        /**
+         * The venue directory
+         * @description Venues listed in the public directory, by name. No credential. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["listDirectoryVenues"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/venues/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A directory venue
+         * @description A listed venue’s public details, photos and upcoming public events. Unlisted or archived venues are a 404. No credential. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.
+         */
+        get: operations["getPublicVenue"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2472,89 +992,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Sync up to 500 offline scans (idempotent by scanId) */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        eventId: string;
-                        scans: {
-                            /** Format: uuid */
-                            checkpointId?: string;
-                            clockOffsetMs: number;
-                            code: string;
-                            /** Format: date-time */
-                            deviceTs: string;
-                            /** Format: uuid */
-                            scanId: string;
-                            verdict: string;
-                        }[];
-                    };
-                };
-            };
-            responses: {
-                /** @description Server results per scan */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            duplicatesOffline: number;
-                            results: {
-                                result: string;
-                                /** Format: uuid */
-                                scanId: string;
-                                stored: boolean;
-                            }[];
-                        };
-                    };
-                };
-                /** @description Missing or unknown device token */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-                /** @description Not found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": {
-                            code: string;
-                            detail?: string;
-                            details?: {
-                                [key: string]: unknown;
-                            };
-                            status: number;
-                            title: string;
-                            type: string;
-                        };
-                    };
-                };
-            };
-        };
+        /**
+         * Sync up to 500 offline scans (idempotent by scanId)
+         * @description Uploads scans made offline; each is applied once by its `scanId`, so a retry is safe. Device token only.
+         */
+        post: operations["syncScans"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2565,6 +1007,65 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @description The organizer’s agenda with track and room ids and capacities. */
+        Agenda: {
+            days: components["schemas"]["ProgramDay"][];
+            rooms: components["schemas"]["Room"][];
+            timezone: string;
+            tracks: components["schemas"]["Track"][];
+        };
+        AgendaDay: {
+            /**
+             * Format: date
+             * @description The day in the event’s timezone (`YYYY-MM-DD`).
+             */
+            date: string;
+            sessions: components["schemas"]["AgendaSession"][];
+        };
+        AgendaSession: {
+            /**
+             * Format: uuid
+             * @description The event date it belongs to (multi-date events).
+             */
+            dateId: string | null;
+            /** @description Sanitized Markdown. */
+            description: string;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            room: string | null;
+            speakers: components["schemas"]["SpeakerRef"][];
+            /** Format: date-time */
+            startsAt: string;
+            title: string;
+            track: string | null;
+        };
+        Announcement: {
+            audience: components["schemas"]["AnnouncementAudience"];
+            body: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            id: string;
+            pinned: boolean;
+            /**
+             * Format: date-time
+             * @description Null while it is a draft.
+             */
+            publishedAt: string | null;
+            title: string;
+        };
+        /** @enum {string} */
+        AnnouncementAudience: "public" | "holders";
+        AnnouncementPage: {
+            data: components["schemas"]["Announcement"][];
+            nextCursor: string | null;
+        };
+        /** @enum {string} */
+        AttendanceMode: "in_person" | "online" | "hybrid";
         Attendee: {
             /** Format: date-time */
             createdAt: string;
@@ -2575,10 +1076,8 @@ export interface components {
             id: string;
             labels: string[];
             name: string;
-            /** @enum {string} */
-            source: "ticket" | "registration" | "guest" | "import" | "comp";
-            /** @enum {string} */
-            status: "active" | "cancelled";
+            source: components["schemas"]["AttendeeSource"];
+            status: components["schemas"]["AttendeeStatus"];
             /** Format: uuid */
             ticketId: string | null;
         };
@@ -2599,6 +1098,14 @@ export interface components {
             data: components["schemas"]["Attendee"][];
             nextCursor: string | null;
         };
+        /** @enum {string} */
+        AttendeeSource: "ticket" | "registration" | "guest" | "import" | "comp";
+        /** @enum {string} */
+        AttendeeStatus: "active" | "cancelled";
+        /** @enum {string} */
+        Availability: "available" | "sold_out" | "not_yet_on_sale" | "sales_ended";
+        /** @enum {string} */
+        CheckpointKind: "entrance" | "zone";
         CreateEventRequest: {
             city?: string | null;
             country?: string | null;
@@ -2606,8 +1113,7 @@ export interface components {
             /** Format: date-time */
             endsAt: string;
             name: string;
-            /** @enum {string} */
-            profile?: "wedding" | "gala" | "concert" | "conference" | "community" | "agency" | "other";
+            profile?: components["schemas"]["EventProfile"];
             slug?: string;
             /** Format: date-time */
             startsAt: string;
@@ -2615,16 +1121,14 @@ export interface components {
             /** @example America/Chicago */
             timezone: string;
             venueName?: string | null;
-            /** @enum {string} */
-            visibility?: "public" | "unlisted" | "private";
+            visibility?: components["schemas"]["EventVisibility"];
         };
         CreateTicketTypeRequest: {
             description?: string | null;
             /** Format: date-time */
             earlyEndsAt?: string | null;
             earlyPriceMinor?: number | null;
-            /** @enum {string} */
-            feeMode?: "pass_on" | "absorb";
+            feeMode?: components["schemas"]["FeeMode"];
             isDonation?: boolean;
             maxPerOrder?: number;
             minPerOrder?: number;
@@ -2636,8 +1140,21 @@ export interface components {
             /** Format: date-time */
             salesStartAt?: string | null;
             sortOrder?: number;
-            /** @enum {string} */
-            visibility?: "public" | "hidden";
+            visibility?: components["schemas"]["TicketTypeVisibility"];
+        };
+        /** @enum {string} */
+        DateStatus: "scheduled" | "cancelled";
+        DirectoryVenue: {
+            capacity: number | null;
+            city: string | null;
+            country: string;
+            name: string;
+            region: string | null;
+            slug: string;
+        };
+        DirectoryVenuePage: {
+            data: components["schemas"]["DirectoryVenue"][];
+            nextCursor: string | null;
         };
         Event: {
             city: string | null;
@@ -2648,37 +1165,182 @@ export interface components {
             /** Format: uuid */
             id: string;
             name: string;
-            /** @enum {string} */
-            profile: "wedding" | "gala" | "concert" | "conference" | "community" | "agency" | "other";
+            profile: components["schemas"]["EventProfile"];
             /** Format: date-time */
             publishedAt: string | null;
             slug: string;
             /** Format: date-time */
             startsAt: string;
-            /** @enum {string} */
-            status: "draft" | "published" | "postponed" | "cancelled" | "completed" | "archived";
+            status: components["schemas"]["EventStatus"];
             tagline: string | null;
             /** @description IANA timezone; event times render in it. */
             timezone: string;
             venueName: string | null;
-            /** @enum {string} */
-            visibility: "public" | "unlisted" | "private";
+            visibility: components["schemas"]["EventVisibility"];
+        };
+        /** @enum {string|null} */
+        EventCategory: "arts_culture" | "business_seminars" | "charity" | "community" | "education_classes" | "family" | "food_drink" | "health_wellness" | "music" | "nightlife" | "religion_spirituality" | "social_gatherings" | "sports_fitness" | "technology" | "travel_leisure" | "other" | null;
+        EventDate: {
+            capacity: number | null;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            startsAt: string;
+            status: components["schemas"]["DateStatus"];
+        };
+        EventDatePage: {
+            data: components["schemas"]["EventDate"][];
+            nextCursor: string | null;
         };
         EventPage: {
             data: components["schemas"]["Event"][];
             nextCursor: string | null;
+        };
+        /** @enum {string} */
+        EventProfile: "wedding" | "gala" | "concert" | "conference" | "community" | "agency" | "other";
+        /** @description A content block of the event page; `kind` says which `content` shape it has. */
+        EventSection: components["schemas"]["TextSection"] | components["schemas"]["FaqSection"] | components["schemas"]["ScheduleSection"] | components["schemas"]["LocationSection"] | components["schemas"]["LinksSection"];
+        EventSectionList: {
+            data: components["schemas"]["EventSection"][];
+        };
+        /** @enum {string} */
+        EventStatus: "draft" | "published" | "postponed" | "cancelled" | "completed" | "archived";
+        /** @enum {string} */
+        EventVisibility: "public" | "unlisted" | "private";
+        Exhibitor: {
+            boothLabel: string | null;
+            description: string;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            websiteUrl: string | null;
+        };
+        ExhibitorPage: {
+            data: components["schemas"]["Exhibitor"][];
+            nextCursor: string | null;
+        };
+        FaqSection: {
+            content: components["schemas"]["FaqSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "faq";
+            position: number;
+            title: string;
+            visible: boolean;
+        };
+        FaqSectionContent: {
+            items: {
+                answer: string;
+                question: string;
+            }[];
+        };
+        /** @enum {string} */
+        FeeMode: "pass_on" | "absorb";
+        Health: {
+            service: string;
+            status: components["schemas"]["HealthStatus"];
+            /** Format: date-time */
+            time: string;
+            version: string;
+        };
+        /** @enum {string} */
+        HealthStatus: "ok" | "degraded";
+        Image: {
+            /** @description Empty for decorative images. */
+            alt: string;
+            decorative: boolean;
+            height: number;
+            /** Format: uuid */
+            id: string;
+            position: number;
+            slot: components["schemas"]["ImageSlot"];
+            variants: components["schemas"]["ImageVariant"][];
+            width: number;
+        };
+        /** @enum {string} */
+        ImageFormat: "avif" | "webp" | "jpeg" | "png" | "svg";
+        ImageList: {
+            data: components["schemas"]["Image"][];
+        };
+        /** @enum {string} */
+        ImageSlot: "cover" | "gallery" | "photo" | "logo";
+        ImageVariant: {
+            /** @description The JPEG/PNG (or SVG) every client can show. */
+            fallback: boolean;
+            format: components["schemas"]["ImageFormat"];
+            height: number;
+            /**
+             * Format: uri
+             * @description Absolute, content-hashed and immutable (`…/{width}-{sha256}.{ext}`): cache it forever.
+             */
+            url: string;
+            width: number;
+        };
+        Link: {
+            label: string;
+            url: string;
+        };
+        LinksSection: {
+            content: components["schemas"]["LinksSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "links";
+            position: number;
+            title: string;
+            visible: boolean;
+        };
+        LinksSectionContent: {
+            items: components["schemas"]["Link"][];
+        };
+        LocationSection: {
+            content: components["schemas"]["LocationSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "location";
+            position: number;
+            title: string;
+            visible: boolean;
+        };
+        LocationSectionContent: {
+            address: string;
+            directions: string;
+            mapUrl: string | null;
         };
         LoginRequest: {
             /** Format: email */
             email: string;
             password: string;
         };
+        /** @enum {string} */
+        ManifestDateStatus: "scheduled" | "cancelled";
+        /**
+         * @description `true` re-reads the last page’s rows as well (after a crash mid-page).
+         * @enum {string}
+         */
+        ManifestOverlap: "true" | "false";
+        /** @enum {string} */
+        ManifestTicketStatus: "active" | "void";
         Membership: {
             /** Format: uuid */
             id: string;
             name: string;
-            /** @enum {string} */
-            role: "owner" | "admin" | "manager" | "finance" | "marketing" | "box_office" | "scanner" | "viewer";
+            role: components["schemas"]["OrgRole"];
             slug: string;
         };
         MembershipList: {
@@ -2724,8 +1386,7 @@ export interface components {
             /** Format: date-time */
             paidAt: string | null;
             promoCode: string | null;
-            /** @enum {string} */
-            status: "reserved" | "awaiting_payment" | "payment_failed" | "paid" | "expired" | "cancelled" | "partially_refunded" | "refunded";
+            status: components["schemas"]["OrderStatus"];
             subtotalMinor: number;
             totalMinor: number;
         };
@@ -2746,6 +1407,8 @@ export interface components {
             data: components["schemas"]["Order"][];
             nextCursor: string | null;
         };
+        /** @enum {string} */
+        OrderStatus: "reserved" | "awaiting_payment" | "payment_failed" | "paid" | "expired" | "cancelled" | "partially_refunded" | "refunded";
         Organization: {
             country: string;
             currency: string;
@@ -2756,6 +1419,8 @@ export interface components {
             slug: string;
             timezone: string;
         };
+        /** @enum {string} */
+        OrgRole: "owner" | "admin" | "manager" | "finance" | "marketing" | "box_office" | "scanner" | "viewer";
         Problem: {
             /** @description Stable machine code, e.g. `forbidden`, `rate_limited`. */
             code: string;
@@ -2767,23 +1432,155 @@ export interface components {
             title: string;
             type: string;
         };
+        ProgramDay: {
+            /**
+             * Format: date
+             * @description The day in the event’s timezone (`YYYY-MM-DD`).
+             */
+            date: string;
+            sessions: components["schemas"]["ProgramSession"][];
+        };
+        ProgramSession: {
+            capacity: number | null;
+            /** Format: uuid */
+            dateId: string | null;
+            description: string;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            roomId: string | null;
+            speakerIds: string[];
+            /** Format: date-time */
+            startsAt: string;
+            title: string;
+            /** Format: uuid */
+            trackId: string | null;
+        };
+        /** @description Sessions grouped by day in the event’s timezone, in start order. */
+        PublicAgenda: {
+            days: components["schemas"]["AgendaDay"][];
+            /** @description The event’s IANA timezone; days and times render in it. */
+            timezone: string;
+        };
+        /** @description A published announcement for everyone (`public` audience). */
+        PublicAnnouncement: {
+            /** @description Sanitized Markdown. */
+            body: string;
+            /** Format: uuid */
+            id: string;
+            pinned: boolean;
+            /** Format: date-time */
+            publishedAt: string;
+            title: string;
+        };
+        PublicAnnouncementPage: {
+            data: components["schemas"]["PublicAnnouncement"][];
+            nextCursor: string | null;
+        };
         PublicEvent: {
+            attendanceMode: components["schemas"]["AttendanceMode"];
+            category: components["schemas"]["EventCategory"];
             city: string | null;
             currency: string;
             /** Format: date-time */
             endsAt: string;
             name: string;
             organizerName: string;
-            /** @enum {string} */
-            profile: "wedding" | "gala" | "concert" | "conference" | "community" | "agency" | "other";
+            profile: components["schemas"]["EventProfile"];
             slug: string;
             /** Format: date-time */
             startsAt: string;
-            /** @enum {string} */
-            status: "draft" | "published" | "postponed" | "cancelled" | "completed" | "archived";
+            status: components["schemas"]["EventStatus"];
             tagline: string | null;
             timezone: string;
             venueName: string | null;
+            /** @description The venue’s slug when it is in the directory (`GET /v1/public/venues/{slug}`). */
+            venueSlug: string | null;
+        };
+        /** @description One date of a multi-date event (no capacity numbers). */
+        PublicEventDate: {
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            soldOut: boolean;
+            /** Format: date-time */
+            startsAt: string;
+            status: components["schemas"]["DateStatus"];
+        };
+        PublicEventDatePage: {
+            data: components["schemas"]["PublicEventDate"][];
+            nextCursor: string | null;
+        };
+        /** @description A content block of the event page; `kind` says which `content` shape it has. */
+        PublicEventSection: components["schemas"]["PublicTextSection"] | components["schemas"]["PublicFaqSection"] | components["schemas"]["PublicScheduleSection"] | components["schemas"]["PublicLocationSection"] | components["schemas"]["PublicLinksSection"];
+        PublicEventSectionList: {
+            data: components["schemas"]["PublicEventSection"][];
+        };
+        PublicFaqSection: {
+            content: components["schemas"]["FaqSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "faq";
+            title: string;
+        };
+        PublicLinksSection: {
+            content: components["schemas"]["LinksSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "links";
+            title: string;
+        };
+        PublicLocationSection: {
+            content: components["schemas"]["LocationSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "location";
+            title: string;
+        };
+        PublicScheduleSection: {
+            content: components["schemas"]["ScheduleSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "schedule";
+            title: string;
+        };
+        /** @description A sponsor package with its sponsors, in display order. */
+        PublicSponsorTier: {
+            name: string;
+            sponsors: components["schemas"]["Sponsor"][];
+        };
+        PublicSponsorTierList: {
+            data: components["schemas"]["PublicSponsorTier"][];
+        };
+        PublicTextSection: {
+            content: components["schemas"]["TextSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "text";
+            title: string;
         };
         PublicTicketType: {
             accessDates: {
@@ -2791,8 +1588,7 @@ export interface components {
                 name: string;
             }[];
             allInMinor: number;
-            /** @enum {string} */
-            availability: "available" | "sold_out" | "not_yet_on_sale" | "sales_ended";
+            availability: components["schemas"]["Availability"];
             currency: string;
             description: string | null;
             /** Format: date-time */
@@ -2809,22 +1605,51 @@ export interface components {
         PublicTicketTypeList: {
             data: components["schemas"]["PublicTicketType"][];
         };
+        /** @description A venue listed in the directory (quote requests are not exposed). */
+        PublicVenue: {
+            accessibilityNotes: string | null;
+            addressLine1: string | null;
+            addressLine2: string | null;
+            capacity: number | null;
+            city: string | null;
+            country: string;
+            latitude: number | null;
+            longitude: number | null;
+            mapUrl: string | null;
+            name: string;
+            organizerName: string;
+            photos: components["schemas"]["Image"][];
+            postalCode: string | null;
+            region: string | null;
+            slug: string;
+            timezone: string;
+            /** @description Upcoming public events at the venue. */
+            upcomingEvents: components["schemas"]["VenueEvent"][];
+        };
         Refund: {
             amountMinor: number;
             currency: string;
             feeRefundedMinor: number;
             /** Format: uuid */
             refundId: string;
-            /** @enum {string} */
-            status: "succeeded" | "failed" | "pending";
+            status: components["schemas"]["RefundStatus"];
         };
+        /** @enum {string} */
+        RefundReason: "requested_by_customer" | "event_cancelled" | "event_postponed" | "duplicate" | "fraudulent" | "goodwill";
         /** @description Refund whole tickets (`ticketIds`) or an amount (`amountMinor`), not both. */
         RefundRequest: {
             amountMinor?: number;
             note?: string;
-            /** @enum {string} */
-            reason: "requested_by_customer" | "event_cancelled" | "event_postponed" | "duplicate" | "fraudulent" | "goodwill";
+            reason: components["schemas"]["RefundReason"];
             ticketIds?: string[];
+        };
+        /** @enum {string} */
+        RefundStatus: "succeeded" | "failed" | "pending";
+        Room: {
+            capacity: number | null;
+            /** Format: uuid */
+            id: string;
+            name: string;
         };
         ScanRequest: {
             /** Format: uuid */
@@ -2832,19 +1657,41 @@ export interface components {
             /** @description The QR payload (`yy1…`) or the printed short code. */
             code: string;
         };
+        /** @enum {string} */
+        ScanResult: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint";
         ScanVerdict: {
             /** Format: uuid */
             admissionId: string | null;
             /** Format: date-time */
             firstAdmittedAt: string | null;
-            /** @enum {string} */
-            result: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint";
+            result: components["schemas"]["ScanResult"];
             ticket: {
                 holderName: string | null;
                 serial: number;
                 shortCode: string;
                 typeName: string;
             } | null;
+        };
+        ScheduleSection: {
+            content: components["schemas"]["ScheduleSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "schedule";
+            position: number;
+            title: string;
+            visible: boolean;
+        };
+        ScheduleSectionContent: {
+            items: {
+                detail: string | null;
+                /** @description `HH:MM`, wall-clock in the event’s timezone. */
+                time: string;
+                title: string;
+            }[];
         };
         Session: {
             /** Format: date-time */
@@ -2854,6 +1701,65 @@ export interface components {
             /** @enum {string} */
             tokenType: "bearer";
             user: components["schemas"]["User"];
+        };
+        Speaker: {
+            /** @description Sanitized Markdown. */
+            bio: string;
+            company: string | null;
+            /** Format: uuid */
+            id: string;
+            links: components["schemas"]["Link"][];
+            name: string;
+            title: string | null;
+        };
+        /** @description A speaker and the sessions they speak in. */
+        SpeakerDetail: {
+            sessions: components["schemas"]["AgendaSession"][];
+            speaker: components["schemas"]["Speaker"];
+        };
+        SpeakerPage: {
+            data: components["schemas"]["Speaker"][];
+            nextCursor: string | null;
+        };
+        SpeakerRef: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+        };
+        Sponsor: {
+            description: string;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            websiteUrl: string | null;
+        };
+        SponsorTier: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @description Display order (1 first). */
+            position: number;
+            sponsors: components["schemas"]["Sponsor"][];
+        };
+        SponsorTierList: {
+            data: components["schemas"]["SponsorTier"][];
+        };
+        TextSection: {
+            content: components["schemas"]["TextSectionContent"];
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "text";
+            position: number;
+            title: string;
+            visible: boolean;
+        };
+        TextSectionContent: {
+            /** @description Sanitized Markdown (small subset). */
+            markdown: string;
         };
         TicketType: {
             accessDates: {
@@ -2869,8 +1775,7 @@ export interface components {
             /** Format: uuid */
             eventId: string;
             feeMinor: number;
-            /** @enum {string} */
-            feeMode: "pass_on" | "absorb";
+            feeMode: components["schemas"]["FeeMode"];
             /** Format: uuid */
             id: string;
             isDonation: boolean;
@@ -2887,12 +1792,20 @@ export interface components {
             /** Format: date-time */
             salesStartAt: string | null;
             sortOrder: number;
-            /** @enum {string} */
-            visibility: "public" | "hidden";
+            visibility: components["schemas"]["TicketTypeVisibility"];
         };
         TicketTypeList: {
             data: components["schemas"]["TicketType"][];
         };
+        /** @enum {string} */
+        TicketTypeVisibility: "public" | "hidden";
+        Track: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+        };
+        /** @enum {string} */
+        UnknownTicketPolicy: "provisional" | "reject";
         UpdateEventRequest: {
             city?: string | null;
             country?: string | null;
@@ -2900,8 +1813,7 @@ export interface components {
             /** Format: date-time */
             endsAt?: string;
             name?: string;
-            /** @enum {string} */
-            profile?: "wedding" | "gala" | "concert" | "conference" | "community" | "agency" | "other";
+            profile?: components["schemas"]["EventProfile"];
             slug?: string;
             /** Format: date-time */
             startsAt?: string;
@@ -2909,16 +1821,14 @@ export interface components {
             /** @example America/Chicago */
             timezone?: string;
             venueName?: string | null;
-            /** @enum {string} */
-            visibility?: "public" | "unlisted" | "private";
+            visibility?: components["schemas"]["EventVisibility"];
         };
         UpdateTicketTypeRequest: {
             description?: string | null;
             /** Format: date-time */
             earlyEndsAt?: string | null;
             earlyPriceMinor?: number | null;
-            /** @enum {string} */
-            feeMode?: "pass_on" | "absorb";
+            feeMode?: components["schemas"]["FeeMode"];
             isDonation?: boolean;
             maxPerOrder?: number;
             minPerOrder?: number;
@@ -2930,14 +1840,47 @@ export interface components {
             /** Format: date-time */
             salesStartAt?: string | null;
             sortOrder?: number;
-            /** @enum {string} */
-            visibility?: "public" | "hidden";
+            visibility?: components["schemas"]["TicketTypeVisibility"];
         };
         User: {
             email: string;
             /** Format: uuid */
             id: string;
             name: string;
+        };
+        Venue: {
+            accessibilityNotes: string | null;
+            addressLine1: string | null;
+            addressLine2: string | null;
+            /** Format: date-time */
+            archivedAt: string | null;
+            capacity: number | null;
+            city: string | null;
+            country: string;
+            directoryListed: boolean;
+            /** Format: uuid */
+            id: string;
+            latitude: number | null;
+            longitude: number | null;
+            mapUrl: string | null;
+            name: string;
+            postalCode: string | null;
+            region: string | null;
+            slug: string;
+            timezone: string;
+        };
+        VenueEvent: {
+            /** Format: date-time */
+            endsAt: string;
+            name: string;
+            slug: string;
+            /** Format: date-time */
+            startsAt: string;
+            timezone: string;
+        };
+        VenuePage: {
+            data: components["schemas"]["Venue"][];
+            nextCursor: string | null;
         };
     };
     responses: never;
@@ -2947,4 +1890,3609 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export interface operations {
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Signed in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Session"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Signed out */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    refreshSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The session */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Session"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    checkInWithDevice: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required. A retry with the same key returns the first verdict. */
+                "idempotency-key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    checkpointId?: string;
+                    code: string;
+                    /** Format: uuid */
+                    eventId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The verdict */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        admissionId: string | null;
+                        /** Format: date-time */
+                        firstAdmittedAt: string | null;
+                        result: components["schemas"]["ScanResult"];
+                        ticket: {
+                            holderName: string | null;
+                            serial: number;
+                            shortCode: string;
+                            typeName: string;
+                        } | null;
+                    };
+                };
+            };
+            /** @description Missing or unknown device token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+        };
+    };
+    deviceHeartbeat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    batteryPct?: number | null;
+                    clockOffsetMs: number;
+                    queueDepth: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Server time and commands */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        commands: "wipe"[];
+                        /** Format: date-time */
+                        serverTime: string;
+                    };
+                };
+            };
+            /** @description Missing or unknown device token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+        };
+    };
+    getScannerManifest: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `cursor` (sync position); omit for the start. */
+                cursor?: string;
+                /** @description Rows per page (1–2000). */
+                limit?: number;
+                /** @description `true` re-reads the last page’s rows as well (after a crash mid-page). */
+                overlap?: components["schemas"]["ManifestOverlap"];
+            };
+            header?: never;
+            path: {
+                /** @description The event the device scans for */
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Manifest page */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        complete: boolean;
+                        cursor: string | null;
+                        header: {
+                            checkpoints: {
+                                /** Format: uuid */
+                                id: string;
+                                kind: components["schemas"]["CheckpointKind"];
+                                name: string;
+                                ticketTypeIds: string[];
+                            }[];
+                            event: {
+                                endsAt: string;
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                startsAt: string;
+                                timezone: string;
+                            };
+                            occurrences: {
+                                endsAt: string;
+                                /** Format: uuid */
+                                id: string;
+                                startsAt: string;
+                                status: components["schemas"]["ManifestDateStatus"];
+                            }[];
+                            publicKeys: {
+                                [key: string]: string;
+                            };
+                            salt: string;
+                            scope: {
+                                checkpointIds: string[] | null;
+                                /** Format: uuid */
+                                deviceId: string;
+                                /** Format: uuid */
+                                eventId: string;
+                                signature: string;
+                            };
+                            serverTime: string;
+                            unknownPolicy: components["schemas"]["UnknownTicketPolicy"];
+                            version: number;
+                        };
+                        rows: {
+                            accessDates: {
+                                date: string;
+                                name: string;
+                            }[];
+                            emailHash: string;
+                            holderName: string;
+                            issuedAt: string;
+                            /** Format: uuid */
+                            occurrenceId: string | null;
+                            rev: number;
+                            shortCode: string;
+                            status: components["schemas"]["ManifestTicketStatus"];
+                            /** Format: uuid */
+                            ticketId: string;
+                            /** Format: uuid */
+                            ticketTypeId: string;
+                            typeName: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or unknown device token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description The device is handed to a member with no role at this event */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+        };
+    };
+    getHealth: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The API is up */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    getMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listMyOrganizations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Memberships */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getMobileConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Mobile configuration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MobileConfig"];
+                };
+            };
+        };
+    };
+    getOrganization: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The organization */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Organization"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    searchAttendees: {
+        parameters: {
+            query: {
+                /** @description Most hits to return (1–50) */
+                limit?: number;
+                /** @description Part of a name or email (2+ characters) */
+                q: string;
+            };
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Matches, newest first */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttendeeHitList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEvents: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of events */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventPage"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    createEvent: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateEventRequest"];
+            };
+        };
+        responses: {
+            /** @description The new draft event */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Event"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The event */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Event"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    updateEvent: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateEventRequest"];
+            };
+        };
+        responses: {
+            /** @description The event */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Event"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getEventAgenda: {
+        parameters: {
+            query?: {
+                /** @description Only this date’s sessions (and those on no date), for multi-date events. */
+                dateId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The agenda */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Agenda"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventAnnouncements: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of announcements */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnnouncementPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventAttendees: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+                /** @description Name or email contains */
+                search?: string;
+                /** @description Only attendees with this status */
+                status?: components["schemas"]["AttendeeStatus"];
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of attendees */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttendeePage"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getEventAttendee: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The attendee id */
+                attendeeId: string;
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The attendee */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Attendee"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    checkInTicket: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScanRequest"];
+            };
+        };
+        responses: {
+            /** @description The verdict */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScanVerdict"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventDates: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of dates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventDatePage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventExhibitors: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of exhibitors */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExhibitorPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventOrders: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of orders */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderPage"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    publishEvent: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The published event */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Event"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventSections: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sections */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventSectionList"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventSpeakers: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of speakers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeakerPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getEventSpeaker: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+                /** @description The speaker id */
+                speakerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The speaker */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeakerDetail"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listEventSponsors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sponsor tiers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorTierList"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listTicketTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Ticket types in display order */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketTypeList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    createTicketType: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description The new ticket type */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketType"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The order id */
+                orderId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The order */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderDetail"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    refundOrder: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The order id */
+                orderId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefundRequest"];
+            };
+        };
+        responses: {
+            /** @description The refund and its outcome */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Refund"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    updateTicketType: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+                /** @description The ticket type id */
+                ticketTypeId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTicketTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description The ticket type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketType"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listVenues: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of venues */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VenuePage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getVenue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+                /** @description The venue id */
+                venueId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The venue */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Venue"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getPublicEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The public event */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicEvent"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getPublicEventAgenda: {
+        parameters: {
+            query?: {
+                /** @description Only this date’s sessions (and those on no date), for multi-date events. */
+                dateId?: string;
+            };
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The agenda */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicAgenda"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventAnnouncements: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of announcements */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicAnnouncementPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventDates: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of dates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicEventDatePage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventExhibitors: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of exhibitors */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExhibitorPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventImages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Images */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageList"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventSections: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Visible sections */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicEventSectionList"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventSpeakers: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of speakers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeakerPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getPublicEventSpeaker: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+                /** @description The speaker id */
+                speakerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The speaker */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeakerDetail"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicEventSponsors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sponsor tiers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSponsorTierList"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPublicTicketTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Public passes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicTicketTypeList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listDirectoryVenues: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of venues */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DirectoryVenuePage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getPublicVenue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The venue’s directory slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The venue */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicVenue"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    syncScans: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    eventId: string;
+                    scans: {
+                        /** Format: uuid */
+                        checkpointId?: string;
+                        clockOffsetMs: number;
+                        code: string;
+                        /** Format: date-time */
+                        deviceTs: string;
+                        /** Format: uuid */
+                        scanId: string;
+                        verdict: string;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Server results per scan */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        duplicatesOffline: number;
+                        results: {
+                            result: string;
+                            /** Format: uuid */
+                            scanId: string;
+                            stored: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or unknown device token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+        };
+    };
+}

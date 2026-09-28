@@ -31,6 +31,8 @@ export const deps: V1Deps = {
     return payments;
   },
   mobile: process.env.MOBILE_CONFIG_JSON ? JSON.parse(process.env.MOBILE_CONFIG_JSON) : undefined,
+  // Images are served by the web app (`/media/…`); /v1 hands out absolute URLs on its origin.
+  publicOrigin: process.env.NEXT_PUBLIC_APP_ORIGIN || undefined,
 };
 
 export function createApp(overrides: Partial<V1Deps> = {}) {

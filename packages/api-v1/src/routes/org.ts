@@ -1,8 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import {
   createEventCommand,
-  EVENT_PROFILES,
-  EVENT_VISIBILITIES,
   getEventQuery,
   listEventsQuery,
   transitionEventCommand,
@@ -10,16 +8,21 @@ import {
 } from '@yayatoh/events';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { getOrganizationQuery } from '@yayatoh/tenancy';
-import {
-  createTicketTypeCommand,
-  FEE_MODES,
-  listTicketTypesQuery,
-  TICKET_TYPE_VISIBILITIES,
-  updateTicketTypeCommand,
-} from '@yayatoh/ticketing';
+import { createTicketTypeCommand, listTicketTypesQuery, updateTicketTypeCommand } from '@yayatoh/ticketing';
 import type { V1Deps, V1Env } from '../context.ts';
 import { decodeCursor, pageOf } from '../cursor.ts';
-import { Event, listSchema, Organization, pageSchema, TicketType, toWire } from '../resources.ts';
+import {
+  Event,
+  EventProfile,
+  EventVisibility,
+  FeeMode,
+  listSchema,
+  Organization,
+  pageSchema,
+  TicketType,
+  TicketTypeVisibility,
+  toWire,
+} from '../resources.ts';
 import {
   body,
   EventParams,
@@ -38,8 +41,8 @@ const DateTime = z.iso.datetime({ offset: true });
 const EventFields = {
   name: z.string().min(2).max(160),
   tagline: z.string().max(280).nullable(),
-  profile: z.enum(EVENT_PROFILES),
-  visibility: z.enum(EVENT_VISIBILITIES),
+  profile: EventProfile,
+  visibility: EventVisibility,
   timezone: z.string().openapi({ example: 'America/Chicago' }),
   startsAt: DateTime,
   endsAt: DateTime,
@@ -63,13 +66,13 @@ const TicketTypeFields = {
   name: z.string().min(1).max(120),
   description: z.string().max(500).nullable(),
   priceMinor: z.int().min(0).max(100_000_000),
-  feeMode: z.enum(FEE_MODES),
+  feeMode: FeeMode,
   quantityTotal: z.int().min(0).max(1_000_000),
   minPerOrder: z.int().min(1).max(100),
   maxPerOrder: z.int().min(1).max(100),
   salesStartAt: DateTime.nullable(),
   salesEndAt: DateTime.nullable(),
-  visibility: z.enum(TICKET_TYPE_VISIBILITIES),
+  visibility: TicketTypeVisibility,
   sortOrder: z.int(),
   earlyPriceMinor: z.int().min(0).max(100_000_000).nullable(),
   earlyEndsAt: DateTime.nullable(),
@@ -89,8 +92,11 @@ const routes = {
   org: createRoute({
     method: 'get',
     path: '/orgs/{org}',
+    operationId: 'getOrganization',
     tags: ['organizations'],
     summary: 'The organization',
+    description:
+      'The organization in the path, which must be the API key’s org or one the user belongs to.\n\nScope `org:read`.',
     security: orgSecurity,
     request: { params: OrgParam },
     responses: { 200: json(Organization, 'The organization'), ...problems },
@@ -98,8 +104,11 @@ const routes = {
   listEvents: createRoute({
     method: 'get',
     path: '/orgs/{org}/events',
+    operationId: 'listEvents',
     tags: ['events'],
     summary: 'Events by start time (scope `events:read`)',
+    description:
+      'The organization’s events by start time, every status and visibility.\n\nScope `events:read`.',
     security: orgSecurity,
     request: { params: OrgParam, query: PageQuery },
     responses: { 200: json(EventPage, 'A page of events'), ...problems },
@@ -107,8 +116,11 @@ const routes = {
   createEvent: createRoute({
     method: 'post',
     path: '/orgs/{org}/events',
+    operationId: 'createEvent',
     tags: ['events'],
     summary: 'Create a draft event (scope `events:write`)',
+    description:
+      'Creates a draft event. Times are instants; `timezone` is how they render. Needs an `Idempotency-Key`.\n\nScope `events:write`.',
     security: orgSecurity,
     request: { params: OrgParam, headers: IdempotencyHeader, ...body(CreateEventBody) },
     responses: { 201: json(Event, 'The new draft event'), ...writeProblems },
@@ -116,8 +128,10 @@ const routes = {
   getEvent: createRoute({
     method: 'get',
     path: '/orgs/{org}/events/{eventId}',
+    operationId: 'getEvent',
     tags: ['events'],
     summary: 'One event (scope `events:read`)',
+    description: 'One event of the organization; another org’s event is a 404.\n\nScope `events:read`.',
     security: orgSecurity,
     request: { params: EventParams },
     responses: { 200: json(Event, 'The event'), ...problems },
@@ -125,8 +139,11 @@ const routes = {
   updateEvent: createRoute({
     method: 'patch',
     path: '/orgs/{org}/events/{eventId}',
+    operationId: 'updateEvent',
     tags: ['events'],
     summary: 'Change an event (scope `events:write`)',
+    description:
+      'Changes the fields given; the slug is frozen once published. Needs an `Idempotency-Key`.\n\nScope `events:write`.',
     security: orgSecurity,
     request: { params: EventParams, headers: IdempotencyHeader, ...body(UpdateEventBody) },
     responses: { 200: json(Event, 'The event'), ...writeProblems },
@@ -134,8 +151,11 @@ const routes = {
   publishEvent: createRoute({
     method: 'post',
     path: '/orgs/{org}/events/{eventId}/publish',
+    operationId: 'publishEvent',
     tags: ['events'],
     summary: 'Publish a draft event (scope `events:write`)',
+    description:
+      'Publishes a draft event (lifecycle `draft → published`). Needs an `Idempotency-Key`.\n\nScope `events:write`.',
     security: orgSecurity,
     request: { params: EventParams, headers: IdempotencyHeader },
     responses: { 200: json(Event, 'The published event'), ...writeProblems },
@@ -143,8 +163,11 @@ const routes = {
   listTicketTypes: createRoute({
     method: 'get',
     path: '/orgs/{org}/events/{eventId}/ticket-types',
+    operationId: 'listTicketTypes',
     tags: ['ticket types'],
     summary: 'The event’s ticket types (scope `events:read`)',
+    description:
+      'Every ticket type of the event in display order, with sold and held counts.\n\nScope `events:read`.',
     security: orgSecurity,
     request: { params: EventParams },
     responses: { 200: json(TicketTypeList, 'Ticket types in display order'), ...problems },
@@ -152,8 +175,11 @@ const routes = {
   createTicketType: createRoute({
     method: 'post',
     path: '/orgs/{org}/events/{eventId}/ticket-types',
+    operationId: 'createTicketType',
     tags: ['ticket types'],
     summary: 'Add a ticket type (scope `events:write`)',
+    description:
+      'Adds a ticket type (prices in minor units). Needs an `Idempotency-Key`.\n\nScope `events:write`.',
     security: orgSecurity,
     request: { params: EventParams, headers: IdempotencyHeader, ...body(CreateTicketTypeBody) },
     responses: { 201: json(TicketType, 'The new ticket type'), ...writeProblems },
@@ -161,11 +187,17 @@ const routes = {
   updateTicketType: createRoute({
     method: 'patch',
     path: '/orgs/{org}/ticket-types/{ticketTypeId}',
+    operationId: 'updateTicketType',
     tags: ['ticket types'],
     summary: 'Change a ticket type (scope `events:write`)',
+    description: 'Changes the fields given. Needs an `Idempotency-Key`.\n\nScope `events:write`.',
     security: orgSecurity,
     request: {
-      params: OrgParam.extend({ ticketTypeId: z.uuid() }),
+      params: OrgParam.extend({
+        ticketTypeId: z
+          .uuid()
+          .openapi({ param: { name: 'ticketTypeId', in: 'path' }, description: 'The ticket type id' }),
+      }),
       headers: IdempotencyHeader,
       ...body(UpdateTicketTypeBody),
     },

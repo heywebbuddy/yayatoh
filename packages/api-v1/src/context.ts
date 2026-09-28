@@ -26,6 +26,11 @@ export interface V1Deps {
   /** Count requests per route × client × app version (on unless false). */
   readonly telemetry?: boolean;
   readonly mobile?: Partial<MobileSettings>;
+  /**
+   * The web app's origin, which serves `/media/…` (images get absolute URLs). Default: the
+   * request's origin, right for the web mount; `apps/api` sets `NEXT_PUBLIC_APP_ORIGIN`.
+   */
+  readonly publicOrigin?: string;
   /** Where the router is mounted (`/v1` on api.yayatoh.com, `/api/v1` on the web app). */
   readonly basePath?: string;
 }

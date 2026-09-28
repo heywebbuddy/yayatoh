@@ -255,7 +255,16 @@ export const API_KEY_SCOPES = [
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
 
 /**
- * Org API keys (`yy_live_…`). Only a SHA-256 of the secret is stored; the key is shown once. The
+ * What a test key (`yy_test_…`, `sandbox`) may carry: read-only and no personal data (M1.13d,
+ * pending owner). Test keys live in laptops, CI logs and demo apps, so they can neither change
+ * anything nor read buyers or attendees. A linked sandbox org with fake-provider orders would be
+ * a later relaxation, not a break.
+ */
+export const TEST_KEY_SCOPES = ['org:read', 'events:read'] as const satisfies readonly ApiKeyScope[];
+
+/**
+ * Org API keys (`yy_live_…`; `yy_test_…` test keys have `sandbox`). Only a SHA-256 of the secret
+ * is stored; the key is shown once. The
  * key alone resolves to (org, key) through the SECURITY DEFINER `tenancy.api_key_by_hash`, so
  * its hash index is deliberately global. Revoked keys resolve to nothing.
  */
@@ -272,6 +281,8 @@ export const apiKeys = tenantTable(
     lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
     revokedAt: timestamp('revoked_at', { withTimezone: true }),
     revokedBy: uuid('revoked_by'),
+    /** A test key (`yy_test_…`): read-only, non-personal scopes only (`TEST_KEY_SCOPES`). */
+    sandbox: boolean('sandbox').notNull().default(false),
   },
   (t) => [
     uniqueIndex('api_keys_key_hash_key').on(t.keyHash),
@@ -279,6 +290,10 @@ export const apiKeys = tenantTable(
     check(
       'api_keys_scopes_check',
       sql`cardinality(scopes) >= 1 and scopes <@ array[${sql.raw(API_KEY_SCOPES.map((s) => `'${s}'`).join(', '))}]::text[]`,
+    ),
+    check(
+      'api_keys_sandbox_check',
+      sql`(not sandbox and starts_with(prefix, 'yy_live_')) or (sandbox and starts_with(prefix, 'yy_test_') and scopes <@ array[${sql.raw(TEST_KEY_SCOPES.map((s) => `'${s}'`).join(', '))}]::text[])`,
     ),
     foreignKey({
       name: 'api_keys_org_fk',

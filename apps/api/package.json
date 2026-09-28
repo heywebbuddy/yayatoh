@@ -11,7 +11,8 @@
     "start": "node src/server.ts",
     "typecheck": "tsc --noEmit",
     "openapi:write": "node scripts/openapi.ts write",
-    "openapi:check": "node scripts/openapi.ts check"
+    "openapi:check": "node scripts/openapi.ts check",
+    "openapi:lint": "spectral lint openapi.json --ruleset spectral/.spectral.yaml --fail-severity warn --format text"
   },
   "dependencies": {
     "@hono/node-server": "catalog:",
@@ -30,6 +31,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@stoplight/spectral-cli": "6.16.3",
     "@types/node": "catalog:",
     "@yayatoh/config": "workspace:*",
     "@yayatoh/db": "workspace:*",

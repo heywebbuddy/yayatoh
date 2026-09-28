@@ -36,6 +36,7 @@ allowBuilds:
   sharp: true
   "@biomejs/biome": true
   vue-demi: false
+  "@scarf/scarf": false
 
 minimumReleaseAgeExclude:
   - pg-boss@12.35.0

@@ -5,10 +5,15 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { type OrgRole, roleCan } from '../domain/permissions.ts';
-import { API_KEY_SCOPES, type ApiKeyScope, apiKeys, memberships } from '../schema.ts';
+import { API_KEY_SCOPES, type ApiKeyScope, apiKeys, memberships, TEST_KEY_SCOPES } from '../schema.ts';
 
-/** `yy_live_` + 32 random bytes (base64url). Test keys (`yy_test_`, a linked sandbox org) come later. */
-export const API_KEY_PATTERN = /^yy_live_[A-Za-z0-9_-]{43}$/;
+/**
+ * `yy_live_` (or `yy_test_` for a test key) + 32 random bytes (base64url). The prefix is part of
+ * the hashed secret, so a caller cannot turn a test key into a live one or back.
+ */
+export const API_KEY_PATTERN = /^yy_(live|test)_[A-Za-z0-9_-]{43}$/;
+export const API_KEY_MODES = ['live', 'test'] as const;
+export type ApiKeyMode = (typeof API_KEY_MODES)[number];
 const PREFIX_LENGTH = 12;
 
 export const hashApiKey = (key: string) => createHash('sha256').update(key).digest('hex');
@@ -18,6 +23,8 @@ export const ApiKeyDto = z.object({
   name: z.string(),
   prefix: z.string(),
   scopes: z.array(z.enum(API_KEY_SCOPES)),
+  /** A test key (`yy_test_…`): read-only, non-personal scopes (`TEST_KEY_SCOPES`). */
+  sandbox: z.boolean(),
   createdAt: z.date(),
   lastUsedAt: z.date().nullable(),
   revokedAt: z.date().nullable(),
@@ -31,6 +38,8 @@ export const CreateApiKeyInput = z.object({
     .min(1)
     .max(API_KEY_SCOPES.length)
     .transform((s) => [...new Set(s)]),
+  /** `test` makes a `yy_test_` key limited to `TEST_KEY_SCOPES`. */
+  mode: z.enum(API_KEY_MODES).default('live'),
 });
 
 async function roleInTx(tx: TenantTx, ctx: Ctx): Promise<OrgRole | null> {
@@ -61,7 +70,16 @@ export const createApiKeyCommand = tenantCommand({
         scopes: beyond,
       });
     }
-    const key = `yy_live_${randomBytes(32).toString('base64url')}`;
+    const sandbox = input.mode === 'test';
+    const notForTest = sandbox ? input.scopes.filter((s) => !isTestKeyScope(s)) : [];
+    if (notForTest.length > 0) {
+      throw new DomainError('validation_failed', 'A test key is read-only without personal data', {
+        issues: [{ path: 'scopes', code: 'test_key_scope' }],
+        reason: 'test_key_scope',
+        scopes: notForTest,
+      });
+    }
+    const key = `yy_${input.mode}_${randomBytes(32).toString('base64url')}`;
     const [row] = await tx
       .insert(apiKeys)
       .values({
@@ -70,6 +88,7 @@ export const createApiKeyCommand = tenantCommand({
         prefix: key.slice(0, PREFIX_LENGTH),
         keyHash: hashApiKey(key),
         scopes: input.scopes,
+        sandbox,
         createdBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
       })
       .returning();
@@ -80,7 +99,7 @@ export const createApiKeyCommand = tenantCommand({
     action: 'apiKey.create',
     targetType: 'api_key',
     targetId: r.id,
-    data: { name: input.name, scopes: input.scopes },
+    data: { name: input.name, scopes: input.scopes, mode: input.mode },
   }),
 });
 
@@ -123,10 +142,14 @@ export const listApiKeysQuery = tenantQuery({
     ).map((r) => ({ ...r, scopes: r.scopes as ApiKeyScope[] })),
 });
 
+const isTestKeyScope = (s: string) => (TEST_KEY_SCOPES as readonly string[]).includes(s);
+
 export interface ApiKeyIdentity {
   readonly orgId: string;
   readonly keyId: string;
   readonly scopes: readonly ApiKeyScope[];
+  /** A test key (`yy_test_…`). */
+  readonly sandbox: boolean;
 }
 
 /**
@@ -154,16 +177,22 @@ export async function apiKeyIdentity(key: string): Promise<ApiKeyIdentity | null
         ),
       ),
   );
-  return { orgId: r.org_id, keyId: r.key_id, scopes: r.scopes as ApiKeyScope[] };
+  const sandbox = key.startsWith('yy_test_');
+  const scopes = (r.scopes as ApiKeyScope[]).filter((s) => !sandbox || isTestKeyScope(s));
+  return { orgId: r.org_id, keyId: r.key_id, scopes, sandbox };
 }
 
-/** The live scopes of a key in the context org (revoked keys have none). */
+/**
+ * The live scopes of a key in the context org (revoked keys have none). A test key never gets
+ * more than `TEST_KEY_SCOPES`, whatever its row says (the table CHECK says the same).
+ */
 export async function apiKeyScopes(ctx: Ctx, keyId: string): Promise<readonly string[]> {
   const [row] = await withTenant(ctx, (tx) =>
     tx
-      .select({ scopes: apiKeys.scopes })
+      .select({ scopes: apiKeys.scopes, sandbox: apiKeys.sandbox })
       .from(apiKeys)
       .where(and(eq(apiKeys.id, keyId), isNull(apiKeys.revokedAt))),
   );
-  return row?.scopes ?? [];
+  if (!row) return [];
+  return row.sandbox ? row.scopes.filter(isTestKeyScope) : row.scopes;
 }

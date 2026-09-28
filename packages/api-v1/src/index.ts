@@ -6,9 +6,11 @@ import { apiKeyIdentity, memberRole, resolveOrgSlug } from '@yayatoh/tenancy';
 import { createMiddleware } from 'hono/factory';
 import { routePath } from 'hono/route';
 import type { Principal, V1Deps, V1Env } from './context.ts';
+import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
 import { memoryRateLimiter, RATE_LIMITS } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
+import { contentRoutes } from './routes/content.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
 import { orgRoutes } from './routes/org.ts';
@@ -17,11 +19,42 @@ import { salesRoutes } from './routes/sales.ts';
 import { API_VERSION } from './routes/version.ts';
 import { clientInfo } from './telemetry.ts';
 
+export { cachedJson, etagOf } from './caching.ts';
 export type { MobileSettings, Principal, V1Deps } from './context.ts';
-export { decodeCursor, encodeCursor, pageOf } from './cursor.ts';
+export { decodeCursor, encodeCursor, pageByKey, pageOf } from './cursor.ts';
+export {
+  type Deprecation,
+  deprecated,
+  deprecationHeaders,
+  deprecationMiddleware,
+  deprecations,
+} from './deprecation.ts';
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
 export { type ClientInfo, clientInfo } from './telemetry.ts';
+
+/** Every operation's tag, described (Spectral `openapi-tags`, `tag-description`). */
+const API_TAGS = [
+  { name: 'system', description: 'Liveness and the API document.' },
+  { name: 'auth', description: 'Bearer sessions for mobile and command-line clients.' },
+  { name: 'me', description: 'The signed-in user and their organizations.' },
+  { name: 'mobile', description: 'Configuration for the mobile apps (versions, base URLs, flags).' },
+  { name: 'public', description: 'Published events and their passes, without a credential.' },
+  {
+    name: 'public content',
+    description:
+      'Event page content, dates, agenda, speakers, sponsors, images and venues, without a credential.',
+  },
+  { name: 'organizations', description: 'The organization an API key or session belongs to.' },
+  { name: 'events', description: 'The organization’s events.' },
+  { name: 'event content', description: 'Sections, announcements, dates and the program of an event.' },
+  { name: 'venues', description: 'The organization’s saved venues.' },
+  { name: 'ticket types', description: 'Passes and their prices.' },
+  { name: 'orders', description: 'Orders, tickets and refunds.' },
+  { name: 'attendees', description: 'Attendees and search.' },
+  { name: 'check-in', description: 'Online scans with an API key or session.' },
+  { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
+];
 
 export const OPENAPI_INFO = {
   openapi: '3.1.0',
@@ -33,6 +66,8 @@ export const OPENAPI_INFO = {
       '',
       '- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under',
       '  Settings → API keys) or a user session token from `POST /v1/auth/login`. No cookies.',
+      '- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,',
+      '  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.',
       '- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the',
       '  user must be a member. It is never read from a header.',
       '- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).',
@@ -40,8 +75,12 @@ export const OPENAPI_INFO = {
       '- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.',
       '- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.',
       '- **Request ids:** every response has `X-Request-Id` (send your own to correlate).',
+      '- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.',
+      '- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a',
+      '  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes.',
     ].join('\n'),
   },
+  tags: API_TAGS,
 } as const;
 
 const REQUEST_ID = /^[A-Za-z0-9._:-]{8,128}$/;
@@ -84,6 +123,9 @@ export function createV1(deps: V1Deps) {
   });
 
   // App-version telemetry per route (M1.15). Best effort: never delays or fails a request.
+  // Deprecation / Sunset headers for routes marked with `deprecated()` (none yet).
+  v1.use('*', deprecationMiddleware(v1 as never, basePath));
+
   if (deps.telemetry !== false) {
     v1.use('*', async (c, next) => {
       await next();
@@ -115,7 +157,14 @@ export function createV1(deps: V1Deps) {
     // Rate limit per credential; anonymous callers per IP with a generous budget.
     const p = c.get('principal');
     const device = token?.startsWith('yyd_');
-    const rule = p ? RATE_LIMITS.credential : device ? { limit: 3000, window: 60 } : RATE_LIMITS.anonymous;
+    const rule =
+      p?.kind === 'api_key' && p.key.sandbox
+        ? RATE_LIMITS.testKey
+        : p
+          ? RATE_LIMITS.credential
+          : device
+            ? { limit: 3000, window: 60 }
+            : RATE_LIMITS.anonymous;
     const key = p
       ? credentialKey(p)
       : device
@@ -161,6 +210,7 @@ export function createV1(deps: V1Deps) {
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));
   v1.route('/', publicRoutes());
+  v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
   v1.route('/', salesRoutes(deps, limiter, credentialKey));
   v1.route('/', scannerRoutes(deps.ports));
@@ -170,7 +220,8 @@ export function createV1(deps: V1Deps) {
   v1.openAPIRegistry.registerComponent('securitySchemes', 'apiKey', {
     type: 'http',
     scheme: 'bearer',
-    description: 'An org API key (`yy_live_…`). Shown once when created; scoped; bound to one org.',
+    description:
+      'An org API key (`yy_live_…`, or a read-only `yy_test_…` test key). Shown once when created; scoped; bound to one org.',
   });
   v1.openAPIRegistry.registerComponent('securitySchemes', 'bearerSession', {
     type: 'http',
