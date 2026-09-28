@@ -114,15 +114,15 @@ jobs:
       - run: pnpm build
 
   e2e:
-    # Sharded: the suite outgrew one 20-minute runner (M1.11). Each shard gets its own database
-    # and seed, so shards never share state.
-    name: e2e + axe · shard ${{ matrix.shard }}/3
+    # Sharded: the suite outgrew one 20-minute runner (M1.11), then three (M1.2c–M2.2b). Each shard
+    # gets its own database and seed, so shards never share state.
+    name: e2e + axe · shard ${{ matrix.shard }}/6
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4, 5, 6]
     services:
       postgres:
         image: postgres:18
@@ -170,15 +170,15 @@ jobs:
           export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
           export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
           export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
-          export BETTER_AUTH_SECRET=$SECRET DEV_PERSONA_PASSWORD=$PERSONA
+          export BETTER_AUTH_SECRET=$SECRET DEV_PERSONA_PASSWORD=$PERSONA APP_TOKEN_SECRET=$TOKEN FAKE_PAYMENTS_SECRET=$FAKE LOCAL_KMS_KEY=$KMS
           pnpm db:bootstrap && pnpm db:migrate && pnpm seed
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
-      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/3
+      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/6
       # Staff console (M1.3e): after the web tests on the same runner, because it pauses checkout
       # on a seed org of that runner's database.
       - name: Staff console e2e
-        if: matrix.shard == 3
+        if: matrix.shard == 6
         run: |
           pnpm --filter @yayatoh/worker staff -- --email omar@yayatoh.test --role admin
           pnpm --filter @yayatoh/admin build

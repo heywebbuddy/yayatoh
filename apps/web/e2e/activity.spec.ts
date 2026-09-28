@@ -74,6 +74,8 @@ test.describe('Activity (audit log)', () => {
   });
 
   test('pages through older entries and back to the newest', async ({ page }) => {
+    // Filling a second page on a fresh shard database can take up to 30 saves.
+    test.setTimeout(90_000);
     await signIn(page, WEDDING_OWNER);
     await page.goto(`${ROSEWOOD}/activity`);
     // Make sure there is more than one page (a fresh database has few entries).
