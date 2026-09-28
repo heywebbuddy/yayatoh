@@ -1,5 +1,13 @@
 import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 import { closePools } from '@yayatoh/db';
+import {
+  createHelpArticleCommand,
+  createHelpCategoryCommand,
+  createSiteSectionCommand,
+  listHelpQuery,
+  setHelpArticleStatusCommand,
+  setSiteSectionStatusCommand,
+} from '@yayatoh/cms';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
 import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -19,6 +27,7 @@ import {
 } from '@yayatoh/tenancy';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { createVenueCommand, listVenuesQuery } from '@yayatoh/venues';
+import { STARTER_ARTICLES, STARTER_CATEGORIES, STARTER_SECTIONS } from '../src/content/platform-starter.ts';
 import { DEMO_EVENTS } from '../src/demo/events.ts';
 import { getAuth, getTwoFactor } from '../src/server/auth.ts';
 import { PERSONAS, SEED_ORGS } from '../src/server/personas.ts';
@@ -439,6 +448,53 @@ for (const d of DEMO_EVENTS) {
         ports,
       );
       console.info(`seed: venue ${name}`);
+    }
+  }
+}
+// M3.11b: the platform CMS's starter help center and marketing sections (draft copy for the
+// owner), in the marketplace content org (Harbor Arts locally, as the e2e). Once per database.
+{
+  const slug = process.env.MARKETPLACE_CONTENT_ORG?.trim() || 'harbor-arts';
+  const owner = PERSONAS.find((p) => p.orgSlug === slug && p.role === 'owner');
+  const ownerId = owner && ids.get(owner.email);
+  const org = await resolveOrgSlug(slug);
+  if (ownerId && org) {
+    const ctx = createCtx({ orgId: org.orgId, actor: { type: 'user', userId: ownerId } });
+    const existing = await executeQuery(listHelpQuery, {}, ctx, ports);
+    if (existing.categories.length === 0) {
+      const categoryIds = new Map<string, string>();
+      for (const c of STARTER_CATEGORIES) {
+        const row = await executeCommand(createHelpCategoryCommand, { ...c }, ctx, ports);
+        categoryIds.set(c.slug, row.id);
+      }
+      for (const a of STARTER_ARTICLES) {
+        const { category, draft, ...fields } = a;
+        const row = await executeCommand(
+          createHelpArticleCommand,
+          { ...fields, locale: (a.locale ?? 'en') as never, categoryId: categoryIds.get(category) ?? '' },
+          ctx,
+          ports,
+        );
+        if (!draft)
+          await executeCommand(setHelpArticleStatusCommand, { articleId: row.id, action: 'publish' }, ctx, ports);
+      }
+      for (const s of STARTER_SECTIONS) {
+        const { cta, draft, ...fields } = s;
+        const row = await executeCommand(
+          createSiteSectionCommand,
+          {
+            ...fields,
+            locale: (s.locale ?? 'en') as never,
+            ctaLabel: cta?.label ?? null,
+            ctaHref: cta?.href ?? null,
+          },
+          ctx,
+          ports,
+        );
+        if (!draft)
+          await executeCommand(setSiteSectionStatusCommand, { sectionId: row.id, action: 'publish' }, ctx, ports);
+      }
+      console.info(`seed: help center and marketing sections for ${slug}`);
     }
   }
 }

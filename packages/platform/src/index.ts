@@ -120,6 +120,7 @@ export {
   betterStackStatusPage,
   COMPONENT_STATUSES,
   type ComponentStatus,
+  type FakeIncidentRow,
   fakeIncident,
   fakeStatusPage,
   type IncidentBanner,

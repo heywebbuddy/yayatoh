@@ -242,7 +242,9 @@
     "emails": "E-Mail-Vorlagen",
     "speakers": "Speaker",
     "sponsors": "Sponsoren",
-    "media": "Bilder"
+    "media": "Bilder",
+    "helpCenter": "Hilfecenter",
+    "marketingSite": "Marketing-Website"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -3187,7 +3189,9 @@
       "eyebrow": "Yayatoh",
       "title": "Finden Sie Ihre nächste Veranstaltung.",
       "lede": "Konzerte, Galas, Konferenzen und Gemeinschaftsveranstaltungen, alle Gebühren im Preis enthalten.",
-      "demoCta": "Demo-Konsole öffnen"
+      "demoCta": "Demo-Konsole öffnen",
+      "organizersTitle": "Warum Veranstalter Yayatoh wählen",
+      "organizersMore": "Alle Funktionen ansehen"
     },
     "events": {
       "title": "Alle Veranstaltungen"
@@ -3205,7 +3209,12 @@
       "events": "Veranstaltungen von {org}",
       "emptyTitle": "Keine kommenden Veranstaltungen",
       "emptyDescription": "{org} hat gerade nichts im Verkauf. Schauen Sie bald wieder vorbei."
-    }
+    },
+    "features": "Funktionen",
+    "help": "Hilfe",
+    "helpCenter": "Hilfecenter",
+    "contact": "Kontakt",
+    "status": "Systemstatus"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -4375,5 +4384,269 @@
       "title": "Diese Organisation ist geschlossen",
       "body": "Der Yayatoh-Support hat sie geschlossen. Die öffentlichen Seiten sind offline, und nichts kann mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen, zum Beispiel unter Aktivität."
     }
+  },
+  "help": {
+    "breadcrumbs": "Brotkrumennavigation",
+    "title": "Hilfecenter",
+    "lede": "Antworten für Veranstalter und Ticketkäufer: Events einrichten, Tickets verkaufen, Check-in, Erstattungen und mehr.",
+    "emptyTitle": "Noch keine Hilfeartikel",
+    "emptyDescription": "Artikel erscheinen hier, sobald sie veröffentlicht sind.",
+    "articleCount": "{count, plural, =0 {Keine Artikel} one {# Artikel} other {# Artikel}}",
+    "articlesIn": "Artikel in {category}",
+    "related": "Ähnliche Artikel",
+    "updated": "Aktualisiert am {date}",
+    "notTranslated": "Dieser Artikel ist noch nicht in Ihrer Sprache verfügbar und wird daher auf Englisch angezeigt.",
+    "audience": {
+      "organizers": "Für Veranstalter",
+      "buyers": "Für Ticketkäufer"
+    },
+    "meta": {
+      "title": "Hilfecenter · Yayatoh",
+      "description": "Antworten für Veranstalter und Ticketkäufer auf Yayatoh.",
+      "category": "{category} · Yayatoh-Hilfecenter",
+      "search": "„{query}“ · Yayatoh-Hilfecenter"
+    },
+    "search": {
+      "label": "Hilfecenter durchsuchen",
+      "field": "Hilfeartikel durchsuchen",
+      "placeholder": "Zum Beispiel: Ticket erstatten",
+      "submit": "Suchen",
+      "title": "Suche",
+      "resultsFor": "Ergebnisse für „{query}“",
+      "count": "{count, plural, =0 {Keine Artikel gefunden} one {# Artikel gefunden} other {# Artikel gefunden}}",
+      "prompt": "Geben Sie ein paar Wörter ein, um das Hilfecenter zu durchsuchen.",
+      "results": "Suchergebnisse",
+      "emptyTitle": "Keine Treffer für Ihre Suche",
+      "emptyDescription": "Versuchen Sie andere Wörter oder stöbern Sie in den Kategorien des Hilfecenters."
+    },
+    "feedback": {
+      "question": "War dieser Artikel hilfreich?",
+      "yes": "Ja",
+      "no": "Nein",
+      "reasonLegend": "Was hat nicht gepasst? (optional)",
+      "reason": {
+        "unclear": "Er war schwer verständlich",
+        "incomplete": "Es fehlte etwas",
+        "outdated": "Er ist veraltet",
+        "other": "Etwas anderes"
+      },
+      "sendReason": "Senden",
+      "thanksYes": "Danke für Ihre Rückmeldung.",
+      "thanksNo": "Danke. Wir nutzen Ihre Antwort, um diesen Artikel zu verbessern.",
+      "rateLimited": "Zu viele Antworten von diesem Gerät. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "Funktionen für Veranstalter · Yayatoh",
+      "title": "Alles, was Sie für Ihre Events brauchen",
+      "lede": "Tickets, Sitzpläne, Check-in, Nachrichten und Auszahlungen an einem Ort.",
+      "emptyTitle": "Funktionen folgen in Kürze",
+      "emptyDescription": "Diese Seite wird gerade erstellt. Kontaktieren Sie uns in der Zwischenzeit.",
+      "contactCta": "Sprechen Sie mit uns",
+      "helpCta": "Zum Hilfecenter"
+    },
+    "contact": {
+      "metaTitle": "Kontakt und Vertrieb · Yayatoh",
+      "title": "Kontakt",
+      "lede": "Fragen zu Yayatoh, eine Demo oder Preise für Ihre Events? Senden Sie uns eine Nachricht, wir antworten per E-Mail.",
+      "formTitle": "Nachricht senden",
+      "fields": {
+        "topic": "Thema",
+        "name": "Ihr Name",
+        "email": "E-Mail",
+        "company": "Organisation",
+        "message": "Nachricht"
+      },
+      "topics": {
+        "sales": "Vertrieb und Demos",
+        "support": "Hilfe zu meinem Konto",
+        "partnership": "Partnerschaften",
+        "other": "Etwas anderes"
+      },
+      "optional": "Optional",
+      "messageHint": "Mindestens 10 Zeichen.",
+      "privacy": "Wir verwenden Ihre Angaben nur, um diese Nachricht zu beantworten.",
+      "submit": "Nachricht senden",
+      "sentTitle": "Danke, Ihre Nachricht wurde gesendet.",
+      "sentBody": "Wir antworten so bald wie möglich an Ihre E-Mail-Adresse.",
+      "fixErrors": "Prüfen Sie die markierten Felder.",
+      "rateLimited": "Zu viele Nachrichten von diesem Gerät. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+      "errors": {
+        "name": "Geben Sie Ihren Namen ein.",
+        "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "company": "Verwenden Sie höchstens 160 Zeichen.",
+        "message": "Schreiben Sie eine Nachricht mit 10 bis 4.000 Zeichen.",
+        "human": "Bestätigen Sie, dass Sie ein Mensch sind."
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "Dienststatus",
+      "incident": "Wir haben ein Problem: {title}",
+      "maintenance": "Wartung läuft: {title}",
+      "others": "{count, plural, one {Und # weiterer.} other {Und # weitere.}}",
+      "link": "Zur Statusseite"
+    },
+    "page": {
+      "metaTitle": "Systemstatus · Yayatoh",
+      "title": "Systemstatus",
+      "lede": "Der aktuelle Zustand der Yayatoh-Dienste und jüngste Störungen. Zeiten in UTC.",
+      "unavailableTitle": "Status nicht verfügbar",
+      "unavailableBody": "Wir können den Dienststatus gerade nicht anzeigen. Bitte versuchen Sie es in einigen Minuten erneut.",
+      "checked": "Geprüft {time}",
+      "components": "Dienste",
+      "open": "Aktuelle Störungen",
+      "noOpen": "Derzeit keine Störungen.",
+      "past": "Letzte 14 Tage",
+      "noPast": "Keine Störungen in den letzten 14 Tagen."
+    },
+    "overall": {
+      "operational": "Alle Systeme betriebsbereit",
+      "maintenance": "Wartung läuft",
+      "degraded": "Einige Systeme sind beeinträchtigt",
+      "partial_outage": "Teilweiser Ausfall",
+      "major_outage": "Schwerer Ausfall"
+    },
+    "componentStatus": {
+      "operational": "Betriebsbereit",
+      "maintenance": "Wartung",
+      "degraded": "Beeinträchtigt",
+      "partial_outage": "Teilweiser Ausfall",
+      "major_outage": "Schwerer Ausfall"
+    },
+    "impact": {
+      "minor": "Geringe Auswirkung",
+      "major": "Erhebliche Auswirkung",
+      "critical": "Kritische Auswirkung",
+      "maintenance": "Wartung"
+    },
+    "incidentStatus": {
+      "investigating": "Wird untersucht",
+      "identified": "Ursache erkannt",
+      "monitoring": "Wird beobachtet",
+      "resolved": "Behoben",
+      "scheduled": "Geplant",
+      "in_progress": "Läuft",
+      "completed": "Abgeschlossen"
+    },
+    "components": {
+      "marketplace": "Eventseiten und Marktplatz",
+      "checkout": "Kasse",
+      "console": "Veranstalterkonsole",
+      "checkin": "Check-in und Scannen",
+      "payments": "Zahlungen und Auszahlungen",
+      "messaging": "E-Mail und Nachrichten",
+      "api": "API"
+    },
+    "affects": "Betrifft: {components}",
+    "updates": "Updates zu {title}"
+  },
+  "helpConsole": {
+    "title": "Hilfecenter",
+    "description": "Artikel und Kategorien des öffentlichen Hilfecenters. Entwürfe bleiben privat, bis Sie sie veröffentlichen.",
+    "tabsLabel": "Bereiche des Hilfecenters",
+    "tabs": {
+      "articles": "Artikel",
+      "categories": "Kategorien"
+    },
+    "newArticle": "Neuer Artikel",
+    "newArticleDescription": "Ein Entwurf, bis Sie ihn veröffentlichen. Um einen Artikel zu übersetzen, legen Sie ihn mit derselben Adresse in einer anderen Sprache erneut an.",
+    "createArticle": "Entwurf erstellen",
+    "back": "Zurück zum Hilfecenter",
+    "categoryCreated": "Kategorie erstellt.",
+    "emptyArticlesTitle": "Noch keine Artikel",
+    "emptyArticlesDescription": "Schreiben Sie den ersten Artikel für Veranstalter oder Ticketkäufer.",
+    "emptyNeedsCategory": "Erstellen Sie zuerst eine Kategorie und schreiben Sie dann Artikel darin.",
+    "emptyCategoriesTitle": "Noch keine Kategorien",
+    "emptyCategoriesDescription": "Kategorien gruppieren Artikel für Veranstalter oder für Ticketkäufer.",
+    "newCategory": "Neue Kategorie",
+    "createCategory": "Kategorie erstellen",
+    "columns": {
+      "category": "Kategorie",
+      "helpful": "Hilfreich"
+    },
+    "helpfulCounts": "{yes} Ja · {no} Nein",
+    "fields": {
+      "category": "Kategorie",
+      "locale": "Sprache",
+      "title": "Titel",
+      "slug": "Adresse",
+      "summary": "Zusammenfassung",
+      "body": "Text",
+      "keywords": "Suchbegriffe",
+      "position": "Reihenfolge",
+      "audience": "Zielgruppe",
+      "categoryTitle": "Name",
+      "description": "Beschreibung"
+    },
+    "titleError": "Geben Sie einen Titel ein.",
+    "slugFrozen": "Die Adresse eines veröffentlichten Artikels kann nicht geändert werden.",
+    "slugHint": "Leer lassen, um sie aus dem Titel abzuleiten. Eine Übersetzung verwendet die Adresse des englischen Artikels.",
+    "keywordsHint": "Kommagetrennte Wörter, nach denen gesucht werden könnte.",
+    "positionHint": "Niedrigere Zahlen stehen weiter oben.",
+    "positionError": "Verwenden Sie eine ganze Zahl von 0 bis 10.000.",
+    "audience": {
+      "organizers": "Veranstalter",
+      "buyers": "Ticketkäufer"
+    },
+    "slugReserved": "Diese Adresse ist reserviert. Wählen Sie eine andere.",
+    "categorySlugHint": "Leer lassen, um sie aus dem Namen abzuleiten. Sie kann später nicht geändert werden.",
+    "translations": "Name in anderen Sprachen",
+    "translationsError": "Prüfen Sie die übersetzten Namen.",
+    "categoryHasArticles": "Verschieben oder löschen Sie zuerst die Artikel dieser Kategorie."
+  },
+  "siteConsole": {
+    "title": "Marketing-Website",
+    "description": "Die Abschnitte der Startseite, der Funktionsseite und der Kontaktseite sowie die über das Kontaktformular gesendeten Nachrichten.",
+    "tabsLabel": "Bereiche der Marketing-Website",
+    "tabs": {
+      "sections": "Abschnitte",
+      "requests": "Kontaktanfragen"
+    },
+    "newSection": "Neuer Abschnitt",
+    "newSectionDescription": "Ein Entwurf, bis Sie ihn veröffentlichen. Um einen Abschnitt zu übersetzen, legen Sie ihn mit demselben Schlüssel in einer anderen Sprache erneut an.",
+    "createSection": "Entwurf erstellen",
+    "back": "Zurück zur Marketing-Website",
+    "noSections": "Noch keine Abschnitte auf dieser Seite.",
+    "placement": {
+      "home": "Startseite: Warum Yayatoh",
+      "features": "Funktionsseite",
+      "contact": "Kontaktseite"
+    },
+    "fields": {
+      "placement": "Seite",
+      "locale": "Sprache",
+      "eyebrow": "Beschriftung über der Überschrift",
+      "heading": "Überschrift",
+      "slug": "Schlüssel",
+      "body": "Text",
+      "ctaLabel": "Button-Text",
+      "ctaHref": "Button-Link",
+      "position": "Reihenfolge"
+    },
+    "optional": "Optional",
+    "headingError": "Geben Sie eine Überschrift ein.",
+    "slugHint": "Leer lassen, um ihn aus der Überschrift abzuleiten. Eine Übersetzung verwendet den Schlüssel des englischen Abschnitts.",
+    "ctaLegend": "Button (optional)",
+    "ctaLabelError": "Geben Sie den Button-Text (bis zu 40 Zeichen) mit seinem Link ein.",
+    "ctaHrefHint": "Eine Seite dieser Website, etwa /contact, oder eine https://-Adresse.",
+    "ctaHrefError": "Verwenden Sie eine Seite dieser Website (beginnend mit /) oder eine https://-Adresse.",
+    "positionHint": "Niedrigere Zahlen stehen weiter oben.",
+    "positionError": "Verwenden Sie eine ganze Zahl von 0 bis 10.000.",
+    "noRequestsTitle": "Keine Kontaktanfragen",
+    "noRequestsDescription": "Über die Kontaktseite gesendete Nachrichten erscheinen hier.",
+    "requestStatus": {
+      "new": "Neu",
+      "handled": "Erledigt"
+    },
+    "topics": {
+      "sales": "Vertrieb und Demos",
+      "support": "Kontohilfe",
+      "partnership": "Partnerschaften",
+      "other": "Sonstiges"
+    },
+    "markHandled": "Als erledigt markieren"
   }
 }

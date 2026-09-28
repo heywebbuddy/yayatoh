@@ -242,7 +242,9 @@
     "emails": "邮件模板",
     "speakers": "演讲嘉宾",
     "sponsors": "赞助商",
-    "media": "图片"
+    "media": "图片",
+    "helpCenter": "帮助中心",
+    "marketingSite": "营销网站"
   },
   "vocab": {
     "attendee": "参会者",
@@ -3187,7 +3189,9 @@
       "eyebrow": "Yayatoh",
       "title": "发现你的下一场活动。",
       "lede": "音乐会、晚宴、会议和社区活动，所有费用均已含在价格中。",
-      "demoCta": "打开演示控制台"
+      "demoCta": "打开演示控制台",
+      "organizersTitle": "主办方为何选择 Yayatoh",
+      "organizersMore": "查看全部功能"
     },
     "events": {
       "title": "全部活动"
@@ -3205,7 +3209,12 @@
       "events": "{org} 的活动",
       "emptyTitle": "暂无即将举行的活动",
       "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
-    }
+    },
+    "features": "功能",
+    "help": "帮助",
+    "helpCenter": "帮助中心",
+    "contact": "联系我们",
+    "status": "系统状态"
   },
   "widget": {
     "title": "门票：{event}",
@@ -4375,5 +4384,269 @@
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
     }
+  },
+  "help": {
+    "breadcrumbs": "面包屑导航",
+    "title": "帮助中心",
+    "lede": "为主办方和购票者解答问题：创建活动、销售门票、签到、退款等。",
+    "emptyTitle": "暂无帮助文章",
+    "emptyDescription": "文章发布后会立即显示在这里。",
+    "articleCount": "{count, plural, =0 {暂无文章} other {# 篇文章}}",
+    "articlesIn": "{category}中的文章",
+    "related": "相关文章",
+    "updated": "更新于 {date}",
+    "notTranslated": "本文暂无你所用语言的版本，因此以英文显示。",
+    "audience": {
+      "organizers": "面向主办方",
+      "buyers": "面向购票者"
+    },
+    "meta": {
+      "title": "帮助中心 · Yayatoh",
+      "description": "为 Yayatoh 上的主办方和购票者解答问题。",
+      "category": "{category} · Yayatoh 帮助中心",
+      "search": "“{query}” · Yayatoh 帮助中心"
+    },
+    "search": {
+      "label": "搜索帮助中心",
+      "field": "搜索帮助文章",
+      "placeholder": "例如：为门票退款",
+      "submit": "搜索",
+      "title": "搜索",
+      "resultsFor": "“{query}”的搜索结果",
+      "count": "{count, plural, =0 {未找到文章} other {找到 # 篇文章}}",
+      "prompt": "输入几个词来搜索帮助中心。",
+      "results": "搜索结果",
+      "emptyTitle": "没有符合搜索条件的结果",
+      "emptyDescription": "请尝试其他关键词，或浏览帮助中心的分类。"
+    },
+    "feedback": {
+      "question": "这篇文章有帮助吗？",
+      "yes": "是",
+      "no": "否",
+      "reasonLegend": "哪里有问题？（可选）",
+      "reason": {
+        "unclear": "难以理解",
+        "incomplete": "缺少内容",
+        "outdated": "内容已过时",
+        "other": "其他原因"
+      },
+      "sendReason": "发送",
+      "thanksYes": "感谢你的反馈。",
+      "thanksNo": "谢谢。我们会根据你的反馈改进这篇文章。",
+      "rateLimited": "此设备提交的反馈过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "主办方功能 · Yayatoh",
+      "title": "举办活动所需的一切",
+      "lede": "门票、座位、签到、消息和结算，尽在一处。",
+      "emptyTitle": "功能介绍即将推出",
+      "emptyDescription": "本页面正在编写中。在此期间，请联系我们。",
+      "contactCta": "联系我们",
+      "helpCta": "访问帮助中心"
+    },
+    "contact": {
+      "metaTitle": "联系与销售 · Yayatoh",
+      "title": "联系我们",
+      "lede": "对 Yayatoh 有疑问、想预约演示，或想了解活动的价格？给我们留言，我们会通过电子邮件回复。",
+      "formTitle": "发送消息",
+      "fields": {
+        "topic": "主题",
+        "name": "你的姓名",
+        "email": "电子邮件",
+        "company": "组织",
+        "message": "消息"
+      },
+      "topics": {
+        "sales": "销售与演示",
+        "support": "账户帮助",
+        "partnership": "合作伙伴",
+        "other": "其他"
+      },
+      "optional": "可选",
+      "messageHint": "至少 10 个字符。",
+      "privacy": "你的信息仅用于回复此消息。",
+      "submit": "发送消息",
+      "sentTitle": "谢谢，你的消息已发送。",
+      "sentBody": "我们会尽快回复到你的电子邮件地址。",
+      "fixErrors": "请检查突出显示的字段。",
+      "rateLimited": "此设备发送的消息过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+      "errors": {
+        "name": "请输入你的姓名。",
+        "email": "请输入有效的电子邮件地址。",
+        "company": "最多 160 个字符。",
+        "message": "请输入 10 至 4,000 个字符的消息。",
+        "human": "请确认你是真人。"
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "服务状态",
+      "incident": "我们遇到了问题：{title}",
+      "maintenance": "正在维护：{title}",
+      "others": "{count, plural, other {另有 # 项。}}",
+      "link": "查看状态页面"
+    },
+    "page": {
+      "metaTitle": "系统状态 · Yayatoh",
+      "title": "系统状态",
+      "lede": "Yayatoh 各项服务的当前状态及近期事件。时间均为 UTC。",
+      "unavailableTitle": "无法获取状态",
+      "unavailableBody": "目前无法显示服务状态。请过几分钟再试。",
+      "checked": "检查于 {time}",
+      "components": "服务",
+      "open": "当前事件",
+      "noOpen": "目前没有事件。",
+      "past": "过去 14 天",
+      "noPast": "过去 14 天内没有事件。"
+    },
+    "overall": {
+      "operational": "所有系统运行正常",
+      "maintenance": "正在维护",
+      "degraded": "部分系统性能下降",
+      "partial_outage": "部分中断",
+      "major_outage": "重大中断"
+    },
+    "componentStatus": {
+      "operational": "正常运行",
+      "maintenance": "维护中",
+      "degraded": "性能下降",
+      "partial_outage": "部分中断",
+      "major_outage": "重大中断"
+    },
+    "impact": {
+      "minor": "轻微影响",
+      "major": "重大影响",
+      "critical": "严重影响",
+      "maintenance": "维护"
+    },
+    "incidentStatus": {
+      "investigating": "调查中",
+      "identified": "已确定原因",
+      "monitoring": "监控中",
+      "resolved": "已解决",
+      "scheduled": "已计划",
+      "in_progress": "进行中",
+      "completed": "已完成"
+    },
+    "components": {
+      "marketplace": "活动页面与市场",
+      "checkout": "结账",
+      "console": "主办方控制台",
+      "checkin": "签到与扫码",
+      "payments": "支付与结算",
+      "messaging": "电子邮件与消息",
+      "api": "API"
+    },
+    "affects": "影响范围：{components}",
+    "updates": "{title}的最新进展"
+  },
+  "helpConsole": {
+    "title": "帮助中心",
+    "description": "公开帮助中心的文章和分类。草稿在发布前保持私密。",
+    "tabsLabel": "帮助中心栏目",
+    "tabs": {
+      "articles": "文章",
+      "categories": "分类"
+    },
+    "newArticle": "新建文章",
+    "newArticleDescription": "发布前为草稿。要翻译文章，请用相同的地址以另一种语言再次创建。",
+    "createArticle": "创建草稿",
+    "back": "返回帮助中心",
+    "categoryCreated": "分类已创建。",
+    "emptyArticlesTitle": "暂无文章",
+    "emptyArticlesDescription": "为主办方或购票者撰写第一篇文章。",
+    "emptyNeedsCategory": "请先创建分类，再在其中撰写文章。",
+    "emptyCategoriesTitle": "暂无分类",
+    "emptyCategoriesDescription": "分类用于归类面向主办方或购票者的文章。",
+    "newCategory": "新建分类",
+    "createCategory": "创建分类",
+    "columns": {
+      "category": "分类",
+      "helpful": "有帮助"
+    },
+    "helpfulCounts": "{yes} 是 · {no} 否",
+    "fields": {
+      "category": "分类",
+      "locale": "语言",
+      "title": "标题",
+      "slug": "地址",
+      "summary": "摘要",
+      "body": "正文",
+      "keywords": "搜索关键词",
+      "position": "排序",
+      "audience": "受众",
+      "categoryTitle": "名称",
+      "description": "描述"
+    },
+    "titleError": "请输入标题。",
+    "slugFrozen": "已发布文章的地址无法更改。",
+    "slugHint": "留空则根据标题自动生成。翻译版本使用英文文章的地址。",
+    "keywordsHint": "用逗号分隔用户可能搜索的词语。",
+    "positionHint": "数字越小越靠前。",
+    "positionError": "请输入 0 至 10,000 之间的整数。",
+    "audience": {
+      "organizers": "主办方",
+      "buyers": "购票者"
+    },
+    "slugReserved": "此地址已被保留。请另选一个。",
+    "categorySlugHint": "留空则根据名称自动生成。之后无法更改。",
+    "translations": "其他语言的名称",
+    "translationsError": "请检查翻译后的名称。",
+    "categoryHasArticles": "请先移动或删除此分类中的文章。"
+  },
+  "siteConsole": {
+    "title": "营销网站",
+    "description": "首页、功能页和联系页的各个栏目，以及通过联系表单发送的消息。",
+    "tabsLabel": "营销网站栏目",
+    "tabs": {
+      "sections": "栏目",
+      "requests": "联系请求"
+    },
+    "newSection": "新建栏目",
+    "newSectionDescription": "发布前为草稿。要翻译栏目，请用相同的键以另一种语言再次创建。",
+    "createSection": "创建草稿",
+    "back": "返回营销网站",
+    "noSections": "此页面暂无栏目。",
+    "placement": {
+      "home": "首页：为何选择 Yayatoh",
+      "features": "功能页",
+      "contact": "联系页"
+    },
+    "fields": {
+      "placement": "页面",
+      "locale": "语言",
+      "eyebrow": "标题上方的标签",
+      "heading": "标题",
+      "slug": "键",
+      "body": "正文",
+      "ctaLabel": "按钮文字",
+      "ctaHref": "按钮链接",
+      "position": "排序"
+    },
+    "optional": "可选",
+    "headingError": "请输入标题。",
+    "slugHint": "留空则根据标题自动生成。翻译版本使用英文栏目的键。",
+    "ctaLegend": "按钮（可选）",
+    "ctaLabelError": "请输入按钮文字（最多 40 个字符）及其链接。",
+    "ctaHrefHint": "本站的页面（如 /contact）或 https:// 地址。",
+    "ctaHrefError": "请使用本站的页面（以 / 开头）或 https:// 地址。",
+    "positionHint": "数字越小越靠前。",
+    "positionError": "请输入 0 至 10,000 之间的整数。",
+    "noRequestsTitle": "暂无联系请求",
+    "noRequestsDescription": "通过联系页面发送的消息会显示在这里。",
+    "requestStatus": {
+      "new": "新",
+      "handled": "已处理"
+    },
+    "topics": {
+      "sales": "销售与演示",
+      "support": "账户帮助",
+      "partnership": "合作伙伴",
+      "other": "其他"
+    },
+    "markHandled": "标记为已处理"
   }
 }

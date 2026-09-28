@@ -11,7 +11,8 @@ export type StaffAction =
   | 'impersonate'
   | 'status'
   | 'signupCodes'
-  | 'privacy';
+  | 'privacy'
+  | 'incidents';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -21,6 +22,8 @@ export type StaffAction =
  * - Admins and support hand out signup codes (onboarding is a support task); finance doesn't.
  * - `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
  *   people's requests; finance has no reason to see or erase personal data (pending owner).
+ * - `incidents` (M3.11b): post and update status-page incidents (the fake provider; Better Stack
+ *   in production). Whoever is on call: admin and support (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -34,8 +37,9 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'status',
     'signupCodes',
     'privacy',
+    'incidents',
   ],
-  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy'],
+  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'incidents'],
   finance: ['view', 'payouts', 'fees'],
 };
 

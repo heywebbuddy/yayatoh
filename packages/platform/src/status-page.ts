@@ -313,7 +313,10 @@ const Update = z.object({
   attributes: z.object({ message: z.string().catch(''), published_at: z.string().nullable().catch(null) }),
 });
 const list = <T extends z.ZodType>(item: T) =>
-  z.object({ data: z.array(z.unknown()).catch([]) }).transform((v) =>
+  z
+    .object({ data: z.array(z.unknown()).catch([]) })
+    .catch({ data: [] })
+    .transform((v) =>
     v.data.flatMap((d) => {
       const p = item.safeParse(d);
       return p.success ? [p.data as z.infer<T>] : [];

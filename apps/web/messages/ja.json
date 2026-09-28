@@ -242,7 +242,9 @@
     "emails": "メールテンプレート",
     "speakers": "登壇者",
     "sponsors": "スポンサー",
-    "media": "画像"
+    "media": "画像",
+    "helpCenter": "ヘルプセンター",
+    "marketingSite": "マーケティングサイト"
   },
   "vocab": {
     "attendee": "参加者",
@@ -3187,7 +3189,9 @@
       "eyebrow": "Yayatoh",
       "title": "次のイベントを見つけよう。",
       "lede": "コンサート、ガラ、カンファレンス、コミュニティイベント。手数料はすべて価格に含まれています。",
-      "demoCta": "デモコンソールを開く"
+      "demoCta": "デモコンソールを開く",
+      "organizersTitle": "主催者が Yayatoh を選ぶ理由",
+      "organizersMore": "すべての機能を見る"
     },
     "events": {
       "title": "すべてのイベント"
@@ -3205,7 +3209,12 @@
       "events": "{org} のイベント",
       "emptyTitle": "今後のイベントはありません",
       "emptyDescription": "{org} は現在販売中のものがありません。また後でご確認ください。"
-    }
+    },
+    "features": "機能",
+    "help": "ヘルプ",
+    "helpCenter": "ヘルプセンター",
+    "contact": "お問い合わせ",
+    "status": "システムステータス"
   },
   "widget": {
     "title": "チケット：{event}",
@@ -4375,5 +4384,269 @@
       "title": "この組織は閉鎖されています",
       "body": "Yayatoh サポートがこの組織を閉鎖しました。公開ページは停止され、何も変更できません。オーナーは引き続き開いて、アクティビティなどからデータをダウンロードできます。"
     }
+  },
+  "help": {
+    "breadcrumbs": "パンくずリスト",
+    "title": "ヘルプセンター",
+    "lede": "主催者とチケット購入者のための回答集：イベントの設定、チケット販売、チェックイン、返金など。",
+    "emptyTitle": "ヘルプ記事はまだありません",
+    "emptyDescription": "記事は公開されるとすぐにここに表示されます。",
+    "articleCount": "{count, plural, =0 {記事はありません} other {# 件の記事}}",
+    "articlesIn": "{category}の記事",
+    "related": "関連記事",
+    "updated": "{date}に更新",
+    "notTranslated": "この記事はまだお使いの言語に対応していないため、英語で表示しています。",
+    "audience": {
+      "organizers": "主催者向け",
+      "buyers": "チケット購入者向け"
+    },
+    "meta": {
+      "title": "ヘルプセンター · Yayatoh",
+      "description": "Yayatoh の主催者とチケット購入者のための回答集。",
+      "category": "{category} · Yayatoh ヘルプセンター",
+      "search": "「{query}」 · Yayatoh ヘルプセンター"
+    },
+    "search": {
+      "label": "ヘルプセンターを検索",
+      "field": "ヘルプ記事を検索",
+      "placeholder": "例：チケットを返金する",
+      "submit": "検索",
+      "title": "検索",
+      "resultsFor": "「{query}」の検索結果",
+      "count": "{count, plural, =0 {記事が見つかりませんでした} other {# 件の記事が見つかりました}}",
+      "prompt": "キーワードを入力してヘルプセンターを検索してください。",
+      "results": "検索結果",
+      "emptyTitle": "検索に一致する結果はありません",
+      "emptyDescription": "別のキーワードを試すか、ヘルプセンターのカテゴリから探してください。"
+    },
+    "feedback": {
+      "question": "この記事は役に立ちましたか？",
+      "yes": "はい",
+      "no": "いいえ",
+      "reasonLegend": "どこに問題がありましたか？（任意）",
+      "reason": {
+        "unclear": "わかりにくかった",
+        "incomplete": "情報が不足していた",
+        "outdated": "情報が古い",
+        "other": "その他"
+      },
+      "sendReason": "送信",
+      "thanksYes": "ご回答ありがとうございます。",
+      "thanksNo": "ありがとうございます。いただいた回答は記事の改善に役立てます。",
+      "rateLimited": "このデバイスからの回答が多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。"
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "主催者向けの機能 · Yayatoh",
+      "title": "イベント運営に必要なすべてを",
+      "lede": "チケット、座席、チェックイン、メッセージ、支払いをひとつの場所で。",
+      "emptyTitle": "機能紹介は近日公開予定です",
+      "emptyDescription": "このページは現在準備中です。それまではお問い合わせください。",
+      "contactCta": "相談する",
+      "helpCta": "ヘルプセンターへ"
+    },
+    "contact": {
+      "metaTitle": "お問い合わせ・営業 · Yayatoh",
+      "title": "お問い合わせ",
+      "lede": "Yayatoh についてのご質問、デモのご依頼、イベントの料金に関するご相談など、メッセージをお送りください。メールでご返信します。",
+      "formTitle": "メッセージを送信",
+      "fields": {
+        "topic": "件名",
+        "name": "お名前",
+        "email": "メールアドレス",
+        "company": "組織名",
+        "message": "メッセージ"
+      },
+      "topics": {
+        "sales": "営業・デモ",
+        "support": "アカウントに関するサポート",
+        "partnership": "パートナーシップ",
+        "other": "その他"
+      },
+      "optional": "任意",
+      "messageHint": "10 文字以上で入力してください。",
+      "privacy": "ご入力いただいた情報は、このメッセージへの返信にのみ使用します。",
+      "submit": "メッセージを送信",
+      "sentTitle": "ありがとうございます。メッセージを送信しました。",
+      "sentBody": "できるだけ早くご登録のメールアドレスにご返信します。",
+      "fixErrors": "強調表示された項目を確認してください。",
+      "rateLimited": "このデバイスからのメッセージが多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。",
+      "errors": {
+        "name": "お名前を入力してください。",
+        "email": "有効なメールアドレスを入力してください。",
+        "company": "160 文字以内で入力してください。",
+        "message": "メッセージは 10～4,000 文字で入力してください。",
+        "human": "人間であることを確認してください。"
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "サービスステータス",
+      "incident": "問題が発生しています：{title}",
+      "maintenance": "メンテナンス中：{title}",
+      "others": "{count, plural, other {ほか # 件。}}",
+      "link": "ステータスページを見る"
+    },
+    "page": {
+      "metaTitle": "システムステータス · Yayatoh",
+      "title": "システムステータス",
+      "lede": "Yayatoh のサービスの現在の状態と最近のインシデントです。時刻は UTC で表示しています。",
+      "unavailableTitle": "ステータスを表示できません",
+      "unavailableBody": "現在、サービスステータスを表示できません。数分後にもう一度お試しください。",
+      "checked": "{time}に確認",
+      "components": "サービス",
+      "open": "発生中のインシデント",
+      "noOpen": "現在インシデントはありません。",
+      "past": "過去 14 日間",
+      "noPast": "過去 14 日間にインシデントはありません。"
+    },
+    "overall": {
+      "operational": "すべてのシステムが正常に稼働しています",
+      "maintenance": "メンテナンス中",
+      "degraded": "一部のシステムでパフォーマンスが低下しています",
+      "partial_outage": "部分的な障害",
+      "major_outage": "大規模な障害"
+    },
+    "componentStatus": {
+      "operational": "正常",
+      "maintenance": "メンテナンス",
+      "degraded": "パフォーマンス低下",
+      "partial_outage": "部分的な障害",
+      "major_outage": "大規模な障害"
+    },
+    "impact": {
+      "minor": "軽微な影響",
+      "major": "大きな影響",
+      "critical": "重大な影響",
+      "maintenance": "メンテナンス"
+    },
+    "incidentStatus": {
+      "investigating": "調査中",
+      "identified": "原因特定済み",
+      "monitoring": "監視中",
+      "resolved": "解決済み",
+      "scheduled": "予定",
+      "in_progress": "実施中",
+      "completed": "完了"
+    },
+    "components": {
+      "marketplace": "イベントページとマーケットプレイス",
+      "checkout": "決済手続き",
+      "console": "主催者コンソール",
+      "checkin": "チェックインとスキャン",
+      "payments": "支払いと入金",
+      "messaging": "メールとメッセージ",
+      "api": "API"
+    },
+    "affects": "影響範囲：{components}",
+    "updates": "{title}の最新情報"
+  },
+  "helpConsole": {
+    "title": "ヘルプセンター",
+    "description": "公開ヘルプセンターの記事とカテゴリです。下書きは公開するまで非公開のままです。",
+    "tabsLabel": "ヘルプセンターのセクション",
+    "tabs": {
+      "articles": "記事",
+      "categories": "カテゴリ"
+    },
+    "newArticle": "新しい記事",
+    "newArticleDescription": "公開するまでは下書きです。記事を翻訳するには、同じアドレスで別の言語の記事を作成してください。",
+    "createArticle": "下書きを作成",
+    "back": "ヘルプセンターに戻る",
+    "categoryCreated": "カテゴリを作成しました。",
+    "emptyArticlesTitle": "記事はまだありません",
+    "emptyArticlesDescription": "主催者またはチケット購入者向けの最初の記事を書きましょう。",
+    "emptyNeedsCategory": "まずカテゴリを作成してから、その中に記事を書いてください。",
+    "emptyCategoriesTitle": "カテゴリはまだありません",
+    "emptyCategoriesDescription": "カテゴリは主催者向けまたはチケット購入者向けの記事をまとめます。",
+    "newCategory": "新しいカテゴリ",
+    "createCategory": "カテゴリを作成",
+    "columns": {
+      "category": "カテゴリ",
+      "helpful": "役に立った"
+    },
+    "helpfulCounts": "はい {yes} · いいえ {no}",
+    "fields": {
+      "category": "カテゴリ",
+      "locale": "言語",
+      "title": "タイトル",
+      "slug": "アドレス",
+      "summary": "概要",
+      "body": "本文",
+      "keywords": "検索キーワード",
+      "position": "表示順",
+      "audience": "対象",
+      "categoryTitle": "名前",
+      "description": "説明"
+    },
+    "titleError": "タイトルを入力してください。",
+    "slugFrozen": "公開済みの記事のアドレスは変更できません。",
+    "slugHint": "空欄にするとタイトルから自動生成されます。翻訳版には英語の記事のアドレスを使用します。",
+    "keywordsHint": "検索に使われそうな語をカンマ区切りで入力します。",
+    "positionHint": "数字が小さいほど先に表示されます。",
+    "positionError": "0～10,000 の整数を入力してください。",
+    "audience": {
+      "organizers": "主催者",
+      "buyers": "チケット購入者"
+    },
+    "slugReserved": "このアドレスは予約されています。別のアドレスを選んでください。",
+    "categorySlugHint": "空欄にすると名前から自動生成されます。後から変更することはできません。",
+    "translations": "他の言語での名前",
+    "translationsError": "翻訳された名前を確認してください。",
+    "categoryHasArticles": "先にこのカテゴリの記事を移動または削除してください。"
+  },
+  "siteConsole": {
+    "title": "マーケティングサイト",
+    "description": "ホームページ、機能ページ、お問い合わせページのセクションと、お問い合わせフォームから送信されたメッセージです。",
+    "tabsLabel": "マーケティングサイトのセクション",
+    "tabs": {
+      "sections": "セクション",
+      "requests": "お問い合わせ"
+    },
+    "newSection": "新しいセクション",
+    "newSectionDescription": "公開するまでは下書きです。セクションを翻訳するには、同じキーで別の言語のセクションを作成してください。",
+    "createSection": "下書きを作成",
+    "back": "マーケティングサイトに戻る",
+    "noSections": "このページにはまだセクションがありません。",
+    "placement": {
+      "home": "ホームページ：Yayatoh を選ぶ理由",
+      "features": "機能ページ",
+      "contact": "お問い合わせページ"
+    },
+    "fields": {
+      "placement": "ページ",
+      "locale": "言語",
+      "eyebrow": "見出しの上のラベル",
+      "heading": "見出し",
+      "slug": "キー",
+      "body": "本文",
+      "ctaLabel": "ボタンのテキスト",
+      "ctaHref": "ボタンのリンク",
+      "position": "表示順"
+    },
+    "optional": "任意",
+    "headingError": "見出しを入力してください。",
+    "slugHint": "空欄にすると見出しから自動生成されます。翻訳版には英語のセクションのキーを使用します。",
+    "ctaLegend": "ボタン（任意）",
+    "ctaLabelError": "ボタンのテキスト（40 文字以内）とリンクを入力してください。",
+    "ctaHrefHint": "このサイトのページ（/contact など）または https:// で始まるアドレス。",
+    "ctaHrefError": "このサイトのページ（/ で始まる）または https:// で始まるアドレスを使用してください。",
+    "positionHint": "数字が小さいほど先に表示されます。",
+    "positionError": "0～10,000 の整数を入力してください。",
+    "noRequestsTitle": "お問い合わせはありません",
+    "noRequestsDescription": "お問い合わせページから送信されたメッセージがここに表示されます。",
+    "requestStatus": {
+      "new": "新規",
+      "handled": "対応済み"
+    },
+    "topics": {
+      "sales": "営業・デモ",
+      "support": "アカウントのサポート",
+      "partnership": "パートナーシップ",
+      "other": "その他"
+    },
+    "markHandled": "対応済みにする"
   }
 }

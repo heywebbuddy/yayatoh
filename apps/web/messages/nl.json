@@ -242,7 +242,9 @@
     "emails": "E-mailsjablonen",
     "speakers": "Sprekers",
     "sponsors": "Sponsors",
-    "media": "Afbeeldingen"
+    "media": "Afbeeldingen",
+    "helpCenter": "Helpcentrum",
+    "marketingSite": "Marketingsite"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -3187,7 +3189,9 @@
       "eyebrow": "Yayatoh",
       "title": "Vind je volgende evenement.",
       "lede": "Concerten, gala's, congressen en gemeenschapsevenementen, met alle kosten inbegrepen in de prijs.",
-      "demoCta": "Democonsole openen"
+      "demoCta": "Democonsole openen",
+      "organizersTitle": "Waarom organisatoren voor Yayatoh kiezen",
+      "organizersMore": "Bekijk alle functies"
     },
     "events": {
       "title": "Alle evenementen"
@@ -3205,7 +3209,12 @@
       "events": "Evenementen van {org}",
       "emptyTitle": "Geen komende evenementen",
       "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
-    }
+    },
+    "features": "Functies",
+    "help": "Hulp",
+    "helpCenter": "Helpcentrum",
+    "contact": "Neem contact op",
+    "status": "Systeemstatus"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -4375,5 +4384,269 @@
       "title": "Deze organisatie is gesloten",
       "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
     }
+  },
+  "help": {
+    "breadcrumbs": "Kruimelpad",
+    "title": "Helpcentrum",
+    "lede": "Antwoorden voor organisatoren en ticketkopers: evenementen opzetten, tickets verkopen, inchecken, terugbetalingen en meer.",
+    "emptyTitle": "Nog geen helpartikelen",
+    "emptyDescription": "Artikelen verschijnen hier zodra ze zijn gepubliceerd.",
+    "articleCount": "{count, plural, =0 {Geen artikelen} one {# artikel} other {# artikelen}}",
+    "articlesIn": "Artikelen in {category}",
+    "related": "Gerelateerde artikelen",
+    "updated": "Bijgewerkt op {date}",
+    "notTranslated": "Dit artikel is nog niet beschikbaar in jouw taal en wordt daarom in het Engels getoond.",
+    "audience": {
+      "organizers": "Voor organisatoren",
+      "buyers": "Voor ticketkopers"
+    },
+    "meta": {
+      "title": "Helpcentrum · Yayatoh",
+      "description": "Antwoorden voor organisatoren en ticketkopers op Yayatoh.",
+      "category": "{category} · Yayatoh-helpcentrum",
+      "search": "‘{query}’ · Yayatoh-helpcentrum"
+    },
+    "search": {
+      "label": "Zoeken in het helpcentrum",
+      "field": "Helpartikelen doorzoeken",
+      "placeholder": "Bijvoorbeeld: ticket terugbetalen",
+      "submit": "Zoeken",
+      "title": "Zoeken",
+      "resultsFor": "Resultaten voor ‘{query}’",
+      "count": "{count, plural, =0 {Geen artikelen gevonden} one {# artikel gevonden} other {# artikelen gevonden}}",
+      "prompt": "Typ een paar woorden om het helpcentrum te doorzoeken.",
+      "results": "Zoekresultaten",
+      "emptyTitle": "Niets gevonden voor je zoekopdracht",
+      "emptyDescription": "Probeer andere woorden of blader door de categorieën in het helpcentrum."
+    },
+    "feedback": {
+      "question": "Was dit artikel nuttig?",
+      "yes": "Ja",
+      "no": "Nee",
+      "reasonLegend": "Wat klopte er niet? (optioneel)",
+      "reason": {
+        "unclear": "Het was moeilijk te begrijpen",
+        "incomplete": "Er ontbrak iets",
+        "outdated": "Het is verouderd",
+        "other": "Iets anders"
+      },
+      "sendReason": "Versturen",
+      "thanksYes": "Bedankt voor je reactie.",
+      "thanksNo": "Bedankt. We gebruiken je antwoord om dit artikel te verbeteren.",
+      "rateLimited": "Te veel antwoorden vanaf dit apparaat. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "Functies voor organisatoren · Yayatoh",
+      "title": "Alles wat je nodig hebt om je evenementen te organiseren",
+      "lede": "Tickets, zitplaatsen, inchecken, berichten en uitbetalingen op één plek.",
+      "emptyTitle": "Functies volgen binnenkort",
+      "emptyDescription": "Aan deze pagina wordt nog gewerkt. Neem in de tussentijd contact met ons op.",
+      "contactCta": "Praat met ons",
+      "helpCta": "Ga naar het helpcentrum"
+    },
+    "contact": {
+      "metaTitle": "Contact en sales · Yayatoh",
+      "title": "Neem contact op",
+      "lede": "Vragen over Yayatoh, een demo of prijzen voor je evenementen? Stuur ons een bericht en we antwoorden per e-mail.",
+      "formTitle": "Stuur een bericht",
+      "fields": {
+        "topic": "Onderwerp",
+        "name": "Je naam",
+        "email": "E-mail",
+        "company": "Organisatie",
+        "message": "Bericht"
+      },
+      "topics": {
+        "sales": "Sales en demo's",
+        "support": "Hulp met mijn account",
+        "partnership": "Partnerschappen",
+        "other": "Iets anders"
+      },
+      "optional": "Optioneel",
+      "messageHint": "Minimaal 10 tekens.",
+      "privacy": "We gebruiken je gegevens alleen om dit bericht te beantwoorden.",
+      "submit": "Bericht versturen",
+      "sentTitle": "Bedankt, je bericht is verstuurd.",
+      "sentBody": "We antwoorden zo snel mogelijk op je e-mailadres.",
+      "fixErrors": "Controleer de gemarkeerde velden.",
+      "rateLimited": "Te veel berichten vanaf dit apparaat. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+      "errors": {
+        "name": "Vul je naam in.",
+        "email": "Vul een geldig e-mailadres in.",
+        "company": "Gebruik maximaal 160 tekens.",
+        "message": "Schrijf een bericht van 10 tot 4.000 tekens.",
+        "human": "Bevestig dat je een mens bent."
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "Servicestatus",
+      "incident": "Er is een probleem: {title}",
+      "maintenance": "Onderhoud bezig: {title}",
+      "others": "{count, plural, one {En nog #.} other {En nog #.}}",
+      "link": "Bekijk de statuspagina"
+    },
+    "page": {
+      "metaTitle": "Systeemstatus · Yayatoh",
+      "title": "Systeemstatus",
+      "lede": "De huidige status van de diensten van Yayatoh en recente incidenten. Tijden zijn in UTC.",
+      "unavailableTitle": "Status is niet beschikbaar",
+      "unavailableBody": "We kunnen de servicestatus nu niet tonen. Probeer het over een paar minuten opnieuw.",
+      "checked": "Gecontroleerd {time}",
+      "components": "Diensten",
+      "open": "Huidige incidenten",
+      "noOpen": "Momenteel geen incidenten.",
+      "past": "Afgelopen 14 dagen",
+      "noPast": "Geen incidenten in de afgelopen 14 dagen."
+    },
+    "overall": {
+      "operational": "Alle systemen werken normaal",
+      "maintenance": "Onderhoud bezig",
+      "degraded": "Sommige systemen werken verminderd",
+      "partial_outage": "Gedeeltelijke storing",
+      "major_outage": "Grote storing"
+    },
+    "componentStatus": {
+      "operational": "Operationeel",
+      "maintenance": "Onderhoud",
+      "degraded": "Verminderd",
+      "partial_outage": "Gedeeltelijke storing",
+      "major_outage": "Grote storing"
+    },
+    "impact": {
+      "minor": "Kleine impact",
+      "major": "Grote impact",
+      "critical": "Kritieke impact",
+      "maintenance": "Onderhoud"
+    },
+    "incidentStatus": {
+      "investigating": "In onderzoek",
+      "identified": "Vastgesteld",
+      "monitoring": "Wordt gevolgd",
+      "resolved": "Opgelost",
+      "scheduled": "Gepland",
+      "in_progress": "Bezig",
+      "completed": "Voltooid"
+    },
+    "components": {
+      "marketplace": "Evenementpagina's en marktplaats",
+      "checkout": "Afrekenen",
+      "console": "Organisatorconsole",
+      "checkin": "Inchecken en scannen",
+      "payments": "Betalingen en uitbetalingen",
+      "messaging": "E-mail en berichten",
+      "api": "API"
+    },
+    "affects": "Betreft: {components}",
+    "updates": "Updates over {title}"
+  },
+  "helpConsole": {
+    "title": "Helpcentrum",
+    "description": "Artikelen en categorieën van het openbare helpcentrum. Concepten blijven privé tot je ze publiceert.",
+    "tabsLabel": "Onderdelen van het helpcentrum",
+    "tabs": {
+      "articles": "Artikelen",
+      "categories": "Categorieën"
+    },
+    "newArticle": "Nieuw artikel",
+    "newArticleDescription": "Een concept tot je het publiceert. Om een artikel te vertalen, maak je het opnieuw aan met hetzelfde adres in een andere taal.",
+    "createArticle": "Concept maken",
+    "back": "Terug naar het helpcentrum",
+    "categoryCreated": "Categorie aangemaakt.",
+    "emptyArticlesTitle": "Nog geen artikelen",
+    "emptyArticlesDescription": "Schrijf het eerste artikel voor organisatoren of ticketkopers.",
+    "emptyNeedsCategory": "Maak eerst een categorie aan en schrijf daarna artikelen in die categorie.",
+    "emptyCategoriesTitle": "Nog geen categorieën",
+    "emptyCategoriesDescription": "Categorieën groeperen artikelen voor organisatoren of voor ticketkopers.",
+    "newCategory": "Nieuwe categorie",
+    "createCategory": "Categorie maken",
+    "columns": {
+      "category": "Categorie",
+      "helpful": "Nuttig"
+    },
+    "helpfulCounts": "{yes} ja · {no} nee",
+    "fields": {
+      "category": "Categorie",
+      "locale": "Taal",
+      "title": "Titel",
+      "slug": "Adres",
+      "summary": "Samenvatting",
+      "body": "Tekst",
+      "keywords": "Zoekwoorden",
+      "position": "Volgorde",
+      "audience": "Doelgroep",
+      "categoryTitle": "Naam",
+      "description": "Beschrijving"
+    },
+    "titleError": "Vul een titel in.",
+    "slugFrozen": "Het adres van een gepubliceerd artikel kan niet worden gewijzigd.",
+    "slugHint": "Laat leeg om het van de titel af te leiden. Een vertaling gebruikt het adres van het Engelse artikel.",
+    "keywordsHint": "Woorden waarop mensen kunnen zoeken, gescheiden door komma's.",
+    "positionHint": "Lagere nummers komen eerst.",
+    "positionError": "Gebruik een heel getal van 0 tot 10.000.",
+    "audience": {
+      "organizers": "Organisatoren",
+      "buyers": "Ticketkopers"
+    },
+    "slugReserved": "Dit adres is gereserveerd. Kies een ander adres.",
+    "categorySlugHint": "Laat leeg om het van de naam af te leiden. Het kan later niet meer worden gewijzigd.",
+    "translations": "Naam in andere talen",
+    "translationsError": "Controleer de vertaalde namen.",
+    "categoryHasArticles": "Verplaats of verwijder eerst de artikelen in deze categorie."
+  },
+  "siteConsole": {
+    "title": "Marketingsite",
+    "description": "De onderdelen van de homepage, de functiepagina en de contactpagina, en de berichten die via het contactformulier zijn verstuurd.",
+    "tabsLabel": "Onderdelen van de marketingsite",
+    "tabs": {
+      "sections": "Onderdelen",
+      "requests": "Contactaanvragen"
+    },
+    "newSection": "Nieuw onderdeel",
+    "newSectionDescription": "Een concept tot je het publiceert. Om een onderdeel te vertalen, maak je het opnieuw aan met dezelfde sleutel in een andere taal.",
+    "createSection": "Concept maken",
+    "back": "Terug naar de marketingsite",
+    "noSections": "Nog geen onderdelen op deze pagina.",
+    "placement": {
+      "home": "Homepage: waarom Yayatoh",
+      "features": "Functiepagina",
+      "contact": "Contactpagina"
+    },
+    "fields": {
+      "placement": "Pagina",
+      "locale": "Taal",
+      "eyebrow": "Label boven de kop",
+      "heading": "Kop",
+      "slug": "Sleutel",
+      "body": "Tekst",
+      "ctaLabel": "Knoptekst",
+      "ctaHref": "Knoplink",
+      "position": "Volgorde"
+    },
+    "optional": "Optioneel",
+    "headingError": "Vul een kop in.",
+    "slugHint": "Laat leeg om de sleutel van de kop af te leiden. Een vertaling gebruikt de sleutel van het Engelse onderdeel.",
+    "ctaLegend": "Knop (optioneel)",
+    "ctaLabelError": "Vul de knoptekst (maximaal 40 tekens) en de bijbehorende link in.",
+    "ctaHrefHint": "Een pagina van deze site, zoals /contact, of een https://-adres.",
+    "ctaHrefError": "Gebruik een pagina van deze site (beginnend met /) of een https://-adres.",
+    "positionHint": "Lagere nummers komen eerst.",
+    "positionError": "Gebruik een heel getal van 0 tot 10.000.",
+    "noRequestsTitle": "Geen contactaanvragen",
+    "noRequestsDescription": "Berichten die via de contactpagina zijn verstuurd, verschijnen hier.",
+    "requestStatus": {
+      "new": "Nieuw",
+      "handled": "Afgehandeld"
+    },
+    "topics": {
+      "sales": "Sales en demo's",
+      "support": "Accounthulp",
+      "partnership": "Partnerschappen",
+      "other": "Overig"
+    },
+    "markHandled": "Markeren als afgehandeld"
   }
 }
