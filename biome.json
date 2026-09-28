@@ -9,7 +9,8 @@
       "!**/*.md",
       "!**/next-env.d.ts",
       "!**/openapi.json",
-      "!packages/sdk/src/schema.ts"
+      "!packages/sdk/src/schema.ts",
+      "!packages/modules/media/fixtures"
     ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2, "lineWidth": 110 },

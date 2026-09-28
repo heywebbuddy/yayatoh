@@ -1,0 +1,261 @@
+{
+  "banner.png": {
+    "sourceType": "png",
+    "width": 2000,
+    "height": 500,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 320,
+        "height": 80,
+        "fallback": false,
+        "sha256": "bba42f60e894728efe172df5104762a02b21b5a280f15a367ceb7cbd03fded9f"
+      },
+      {
+        "format": "webp",
+        "width": 320,
+        "height": 80,
+        "fallback": false,
+        "sha256": "b9656a2b5d296b36c9e8c5567036849c711e3f3e3167f093079cde04b321fbd1"
+      },
+      {
+        "format": "avif",
+        "width": 640,
+        "height": 160,
+        "fallback": false,
+        "sha256": "bb8b4aae09275c5428fcc2db2d0a7212272254ae767cc53c2e5ef376b4da73ce"
+      },
+      {
+        "format": "webp",
+        "width": 640,
+        "height": 160,
+        "fallback": false,
+        "sha256": "47b130cba0f595332843d2ed23823b73fa47eac717cf0207ba26213ff06ee5c6"
+      },
+      {
+        "format": "avif",
+        "width": 1280,
+        "height": 320,
+        "fallback": false,
+        "sha256": "054991958daf21ce611f3bda13c2385bcd86468315f1d00b43006290d0fc49cd"
+      },
+      {
+        "format": "webp",
+        "width": 1280,
+        "height": 320,
+        "fallback": false,
+        "sha256": "01059fff2d7884a1f6b49f4238937e50594ec43c15a30f9bf4cabf8d5a58170f"
+      },
+      {
+        "format": "avif",
+        "width": 1920,
+        "height": 480,
+        "fallback": false,
+        "sha256": "80691ecdc89fee85ad1d01f250da1827cc52a8020c0ee2566655fd209679f97f"
+      },
+      {
+        "format": "webp",
+        "width": 1920,
+        "height": 480,
+        "fallback": false,
+        "sha256": "6ce30776865de56f4c0a040af0ed30dc7799a07933a73c959c552a89ceda52ee"
+      },
+      {
+        "format": "jpeg",
+        "width": 1280,
+        "height": 320,
+        "fallback": true,
+        "sha256": "cc3c69fd563c6769178bb5bf51da09f0a93ce5a17c97643084c97eb7a6b93053"
+      }
+    ]
+  },
+  "photo-exif.jpg": {
+    "sourceType": "jpeg",
+    "width": 480,
+    "height": 640,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 320,
+        "height": 427,
+        "fallback": false,
+        "sha256": "16f868726f344237335595399a2d976a58ca0db4986f50a9e910d3d146fdb543"
+      },
+      {
+        "format": "webp",
+        "width": 320,
+        "height": 427,
+        "fallback": false,
+        "sha256": "1103ddbb583dbc4fb17933cc334cac42774df2014d07ef1acde019ab6ccf833d"
+      },
+      {
+        "format": "avif",
+        "width": 480,
+        "height": 640,
+        "fallback": false,
+        "sha256": "80f16f760024feebe3c5ed7f40de463b3d70b29cab753c2cdb20601aaf7455e5"
+      },
+      {
+        "format": "webp",
+        "width": 480,
+        "height": 640,
+        "fallback": false,
+        "sha256": "b150b3095b2d3dff25d97d98d54337024de06372967ea100978d4b780f91a10f"
+      },
+      {
+        "format": "jpeg",
+        "width": 480,
+        "height": 640,
+        "fallback": true,
+        "sha256": "03b171220bbdcbf08ab4ab1e67618ba2e12f5850b88adcbad099f1c867c03b83"
+      }
+    ]
+  },
+  "alpha.png": {
+    "sourceType": "png",
+    "width": 300,
+    "height": 300,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 300,
+        "height": 300,
+        "fallback": false,
+        "sha256": "ca687c9224e5bbcd9fa658ec35ee96fcf69392036f8ddad6115b0a7fc69835e5"
+      },
+      {
+        "format": "webp",
+        "width": 300,
+        "height": 300,
+        "fallback": false,
+        "sha256": "341326360d6e7353a85200295cfa7b558ebc532ace61efa34627b372bd9c05aa"
+      },
+      {
+        "format": "png",
+        "width": 300,
+        "height": 300,
+        "fallback": true,
+        "sha256": "8988eb4f7659b0dcda49a6491cef77c04541ade21b5bb89a416be0ed1c65d1ad"
+      }
+    ]
+  },
+  "still.gif": {
+    "sourceType": "gif",
+    "width": 120,
+    "height": 80,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 120,
+        "height": 80,
+        "fallback": false,
+        "sha256": "00932799d8e8f414af34bef3c7e41ac6448bda8db4046303ab308a0e3a611fe4"
+      },
+      {
+        "format": "webp",
+        "width": 120,
+        "height": 80,
+        "fallback": false,
+        "sha256": "7a981af3fe04c0827cd3d35a1532d43df59e368b390b0ad053ee475dff118a51"
+      },
+      {
+        "format": "png",
+        "width": 120,
+        "height": 80,
+        "fallback": true,
+        "sha256": "62a158ac1a9f5332d6b36eeee24eeab2bfba61495d118a91fd290a257e29893b"
+      }
+    ]
+  },
+  "small.webp": {
+    "sourceType": "webp",
+    "width": 200,
+    "height": 100,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 200,
+        "height": 100,
+        "fallback": false,
+        "sha256": "1cfdfb467fca1a484a3080d2452365ea16d8f62972f72967d9d40902e34ddecc"
+      },
+      {
+        "format": "webp",
+        "width": 200,
+        "height": 100,
+        "fallback": false,
+        "sha256": "2f1469447f55321e4f89501f225a449827c4f89c5b2dd68050de2fe17fe8e4d2"
+      },
+      {
+        "format": "jpeg",
+        "width": 200,
+        "height": 100,
+        "fallback": true,
+        "sha256": "e86dd432a017588e4ee8cbaf7db67adc7b9be92a900d6ca5c816661d6de6cbbe"
+      }
+    ]
+  },
+  "tiny.avif": {
+    "sourceType": "avif",
+    "width": 64,
+    "height": 64,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 64,
+        "height": 64,
+        "fallback": false,
+        "sha256": "9161829f5e16e722168065df0f603a5cd0cfd33c2022492249f6c3ee2d43b799"
+      },
+      {
+        "format": "webp",
+        "width": 64,
+        "height": 64,
+        "fallback": false,
+        "sha256": "a8b6eefcf0933fd5efcb308283dd02f3433d904e12da1f5042705a475754aaf8"
+      },
+      {
+        "format": "jpeg",
+        "width": 64,
+        "height": 64,
+        "fallback": true,
+        "sha256": "441a510a7b28375900ca9ace2770889e7e94d167525b8afc9bd03a4cdd9eca43"
+      }
+    ]
+  },
+  "logo.svg": {
+    "sourceType": "svg",
+    "width": 240,
+    "height": 80,
+    "variants": [
+      {
+        "format": "avif",
+        "width": 240,
+        "height": 80,
+        "fallback": false,
+        "sha256": "6ff168f33b5384c2f5513ded8d69dca6ccc2f621055a8d1b5d4012a834d7d6ec"
+      },
+      {
+        "format": "webp",
+        "width": 240,
+        "height": 80,
+        "fallback": false,
+        "sha256": "0e745bbf8a63ce8e0d395b4185b3f2648855f75e19c03f928aab594e6c74d52e"
+      },
+      {
+        "format": "png",
+        "width": 240,
+        "height": 80,
+        "fallback": true,
+        "sha256": "17d8b91cded4f0113e49f03621bc94da6563f33a5ee831c2f575aad47b5033f2"
+      },
+      {
+        "format": "svg",
+        "width": 240,
+        "height": 80,
+        "fallback": false,
+        "sha256": "17e80fe4784f632792fcaab2fa83e91332ec33666ef06df0b9b7141cb1fd68d3"
+      }
+    ]
+  }
+}
