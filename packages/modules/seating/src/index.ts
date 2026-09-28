@@ -86,9 +86,9 @@ export {
   publicSeatMap,
   publicUnderlayShown,
   publishEventLayoutCommand,
+  removeDateChartCommand,
   saveLayoutCommand,
   setEventLayoutCommand,
-  useEventPlanForDateCommand,
 } from './layouts.ts';
 export {
   chartForDate,
@@ -151,4 +151,5 @@ export {
   attendeeSeatLabelsTx,
   SeatPerson,
   seatLabelWithSection,
+  ticketSeatLabelsQuery,
 } from './seat-labels.ts';

@@ -937,6 +937,7 @@ export const EXPORT_PARAMS = {
     labels: 'Labels',
     registeredAt: 'Registered',
     checkedIn: 'Checked in',
+    seat: 'Seat',
   },
   yes: 'Yes',
   no: 'No',

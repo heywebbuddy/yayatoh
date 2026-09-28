@@ -123,6 +123,15 @@ export async function attendeesByIdsTx(tx: TenantTx, ids: readonly string[]) {
     .where(inArray(attendees.id, [...ids]));
 }
 
+/** The attendees holding these tickets (one per ticket), for the order page's seats (M1.7g). */
+export async function attendeesByTicketIdsTx(tx: TenantTx, ticketIds: readonly string[]) {
+  if (ticketIds.length === 0) return [];
+  return tx
+    .select({ id: attendees.id, ticketId: attendees.ticketId })
+    .from(attendees)
+    .where(inArray(attendees.ticketId, [...ticketIds]));
+}
+
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /**

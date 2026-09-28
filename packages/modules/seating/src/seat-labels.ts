@@ -1,3 +1,4 @@
+import { attendeesByTicketIdsTx } from '@yayatoh/attendees';
 import type { TenantTx } from '@yayatoh/db';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { tenantQuery } from '@yayatoh/platform';
@@ -119,4 +120,35 @@ export const attendeeSeatLabelsQuery = tenantQuery({
       attendeeId,
       seat,
     })),
+});
+
+/**
+ * The seat of each ticket for its date (M1.7g, the organizer's order page): the seat bought with
+ * it, or the seat the organizer gave its holder.
+ */
+export const ticketSeatLabelsQuery = tenantQuery({
+  name: 'seating.ticketSeatLabels',
+  input: z.object({
+    eventId: z.uuid(),
+    tickets: z.array(z.object({ ticketId: z.uuid(), occurrenceId: z.uuid().nullable() })).max(500),
+  }),
+  output: z.array(z.object({ ticketId: z.uuid(), seat: z.string() })),
+  entitlement: 'seating',
+  permission: 'attendees:read',
+  handler: async ({ input, tx }) => {
+    const holders = await attendeesByTicketIdsTx(
+      tx,
+      input.tickets.map((t) => t.ticketId),
+    );
+    const holderOf = new Map(holders.map((h) => [h.ticketId, h.id]));
+    const people = input.tickets.flatMap((t) => {
+      const attendeeId = holderOf.get(t.ticketId);
+      return attendeeId ? [{ attendeeId, ticketId: t.ticketId, occurrenceId: t.occurrenceId }] : [];
+    });
+    const labels = await attendeeSeatLabelsTx(tx, input.eventId, people);
+    return people.flatMap((p) => {
+      const seat = labels.get(p.attendeeId);
+      return seat ? [{ ticketId: p.ticketId, seat }] : [];
+    });
+  },
 });

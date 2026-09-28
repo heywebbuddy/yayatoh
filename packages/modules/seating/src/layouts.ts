@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { findEventTx, findOccurrenceTx } from '@yayatoh/events';
+import { findOccurrenceTx } from '@yayatoh/events';
 import { canonicalJson, FloorplanDoc, layoutProblems, placedSeats, seatCount } from '@yayatoh/floorplan';
 import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
@@ -671,8 +671,10 @@ const SEAT_COPY_BLOCKS = [...BLOCK_REASONS, 'group'] as const;
  * A date goes back to the event plan: its own chart, seats and guest seats on it are removed.
  * Refused once anything was sold on it (locked) or while seats are held there.
  */
-export const useEventPlanForDateCommand = tenantCommand({
-  name: 'seating.useEventPlanForDate',
+export const removeDateChartCommand = tenantCommand({
+  name: 'seating.removeDateChart',
+  // It unseats the guests seated on that chart for good (M1.2e: refused while impersonating).
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid() }),
   output: z.object({ occurrenceId: z.uuid(), unseated: z.int() }),
   entitlement: 'seating',

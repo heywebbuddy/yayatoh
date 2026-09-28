@@ -188,6 +188,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'privacy.detachAccount',
         // Bulk "cancel tickets" voids tickets for good (M1.8f).
         'orders.startCancelTickets',
+        // A date's own seating chart goes, with the guests seated on it (M1.7g).
+        'seating.removeDateChart',
       ]),
     );
   });

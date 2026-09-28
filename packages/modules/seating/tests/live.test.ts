@@ -186,6 +186,44 @@ describe('seat feed: coalescing, catch-up and isolation', () => {
     expect(got.staff).toHaveLength(2);
   });
 
+  it('a date with its own chart has its own channels; one notification re-reads every chart of the event', async () => {
+    const DATE = '0190d000-0000-7000-8000-00000000000d';
+    const plan = fakePlan(3);
+    const own = fakePlan(3);
+    const hub = memoryRealtimeHub();
+    const feed = createSeatFeed({
+      publisher: hub,
+      load: async (o, e, chart) => (chart === DATE ? own.load(o, e) : plan.load(o, e)),
+      resolveChart: async (_o, _e, occ) => (occ === DATE ? DATE : null),
+      coalesceMs: 100,
+      minIntervalMs: 500,
+      epoch: 'ep9',
+      clock: () => Date.now(),
+    });
+    expect(seatChannels(ORG, EV, DATE)).toEqual({
+      public: `org:${ORG}:event:${EV}:date:${DATE}:seats`,
+      staff: `org:${ORG}:event:${EV}:date:${DATE}:seat-states`,
+    });
+    const onPlan: RealtimeMessage[] = [];
+    const onDate: RealtimeMessage[] = [];
+    hub.subscribe(seatChannels(ORG, EV).public, (m) => onPlan.push(m));
+    hub.subscribe(seatChannels(ORG, EV, DATE).public, (m) => onDate.push(m));
+    const wd = await feed.watch(ORG, EV, DATE);
+    // Another date without its own chart joins the event plan's watch.
+    const wp = await feed.watch(ORG, EV, '0190d000-0000-7000-8000-0000000000ff');
+    expect(wd?.channels.public).toContain(`:date:${DATE}:`);
+    expect(wp?.channels).toEqual(seatChannels(ORG, EV));
+    expect(feed.watching()).toBe(2);
+    await vi.advanceTimersByTimeAsync(1_000);
+    own.status.set(S(0), 'sold');
+    feed.notify(`${ORG}:${EV}`);
+    await vi.advanceTimersByTimeAsync(1_000);
+    expect(onDate).toHaveLength(1);
+    expect(onDate[0]).toMatchObject({ event: 'delta', data: { off: [S(0)] } });
+    expect(onPlan).toEqual([]);
+    feed.close();
+  });
+
   it('throttles: at most one message per event per interval, however many notifications', async () => {
     const { plan, feed, got } = setup(20);
     await feed.watch(ORG, EV);

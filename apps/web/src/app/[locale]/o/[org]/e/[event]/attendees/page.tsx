@@ -19,6 +19,7 @@ import {
 } from '@yayatoh/reports';
 import {
   activeAdaRule,
+  attendeeSeatLabelsQuery,
   eventSeatingQuery,
   seatAssignBulk,
   seatGroupsQuery,
@@ -279,6 +280,26 @@ export default async function AttendeesPage({
         )
       ).map((tk) => [tk.id, tk]),
     );
+    // The Seat column (M1.7g): each person's seat for their ticket's date.
+    const seatOf = new Map(
+      data.modules.has('seating')
+        ? (
+            await executeQuery(
+              attendeeSeatLabelsQuery,
+              {
+                eventId: real.id,
+                people: [...liveById.values()].map((x) => ({
+                  attendeeId: x.id,
+                  ticketId: x.ticketId,
+                  occurrenceId: (x.ticketId ? tickets.get(x.ticketId)?.occurrenceId : null) ?? null,
+                })),
+              },
+              data.ctx,
+              ports,
+            )
+          ).map((r) => [r.attendeeId, r.seat])
+        : [],
+    );
     const toRow = (a: AttendeeDto) => {
       const tk = a.ticketId ? tickets.get(a.ticketId) : undefined;
       return {
@@ -286,7 +307,7 @@ export default async function AttendeesPage({
         name: a.name,
         company: a.email,
         ticketType: tk?.ticketTypeName ?? '—',
-        seat: null,
+        seat: seatOf.get(a.id) ?? null,
         status: a.status === 'active' ? 'paid' : 'declined',
         order: tk?.shortCode ?? '—',
       } satisfies DemoAttendee;

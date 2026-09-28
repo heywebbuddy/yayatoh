@@ -2,6 +2,7 @@ import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel
 import { orderMessagesQuery } from '@yayatoh/notifications';
 import { orderDetailQuery, orderRefundsQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
+import { ticketSeatLabelsQuery } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -57,6 +58,23 @@ export default async function OrderPage({
     ['paid', 'partially_refunded'].includes(order.status) &&
     order.totalMinor > 0;
   const active = order.tickets.filter((tk) => tk.status === 'active');
+  // The Seat column (M1.7g): the seat bought with each ticket, or the one the organizer gave its
+  // holder, on the chart of the ticket's date.
+  const seats = new Map(
+    data.modules.has('seating') && roleCan(data.role, 'attendees:read')
+      ? (
+          await executeQuery(
+            ticketSeatLabelsQuery,
+            {
+              eventId: ev.id,
+              tickets: order.tickets.map((tk) => ({ ticketId: tk.id, occurrenceId: tk.occurrenceId })),
+            },
+            data.ctx,
+            ports,
+          )
+        ).map((r) => [r.ticketId, r.seat])
+      : [],
+  );
   return (
     <>
       <PageHeader
@@ -111,6 +129,11 @@ export default async function OrderPage({
               key: 'type',
               header: t('refunds.ticketType'),
               cell: (tk) => (tk.seatLabel ? `${tk.itemName} · ${tk.seatLabel}` : tk.itemName),
+            },
+            {
+              key: 'seat',
+              header: t('attendees.seat'),
+              cell: (tk) => seats.get(tk.id) ?? tk.seatLabel ?? '—',
             },
             {
               key: 'holder',

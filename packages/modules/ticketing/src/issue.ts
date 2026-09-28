@@ -204,6 +204,7 @@ export const ticketSummariesQuery = tenantQuery({
       serial: z.int(),
       shortCode: z.string(),
       status: z.enum(TICKET_STATUSES),
+      occurrenceId: z.uuid().nullable(),
     }),
   ),
   entitlement: 'ticketing',
@@ -221,6 +222,8 @@ export async function ticketSummariesTx(tx: TenantTx, ticketIds: readonly string
       serial: tickets.serial,
       shortCode: tickets.shortCode,
       status: tickets.status,
+      /** The date the ticket is for (multi-date events; M1.7g seats resolve per date). */
+      occurrenceId: tickets.occurrenceId,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
