@@ -6,7 +6,7 @@ import { columnPrivacy, holder, internal } from '@yayatoh/db';
  */
 export const privateColumns = columnPrivacy('events', {
   access_code_attempts: { client_key: internal() },
-  access_codes: { code: holder(), label: internal() },
+  access_codes: { code: holder('code'), label: internal() },
   // Published announcements are public; the holders-only ones are not.
   event_announcements: {
     title: holder(undefined, { where: "audience <> 'public'" }),

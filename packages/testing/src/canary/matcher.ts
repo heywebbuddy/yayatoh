@@ -1,5 +1,5 @@
 import type { ColumnId } from './registry.ts';
-import { PHONE_PREFIX, phoneColumns, privateColumnList } from './registry.ts';
+import { codeColumns, PHONE_PREFIX, phoneColumns, privateColumnList } from './registry.ts';
 
 export type LeakClass = 'secret' | 'personal' | 'internal' | 'holder' | 'unknown';
 
@@ -30,9 +30,11 @@ export interface Leak extends Hit {
 
 const TOKEN = /__canary_([a-z0-9_]+\.[a-z0-9_]+\.[a-z0-9_]+)__/gi;
 const PHONE = new RegExp(`\\+?${PHONE_PREFIX.slice(1)}(\\d)\\d{3}`, 'g');
+const CODE = /\bCANARY_(\d{2})_\d+/gi;
 
 let classes: Map<ColumnId, LeakClass> | null = null;
 let phones: ColumnId[] | null = null;
+let codes: ColumnId[] | null = null;
 const classOf = (id: ColumnId): LeakClass => {
   classes ??= new Map(privateColumnList().map((c) => [c.id, c.rule.class]));
   return classes.get(id) ?? 'unknown';
@@ -48,6 +50,11 @@ export function findCanaries(text: string): Hit[] {
   phones ??= phoneColumns();
   for (const m of text.matchAll(PHONE)) {
     const column = phones[Number(m[1])] ?? `phone.${m[1]}`;
+    if (!out.has(column)) out.set(column, { column, class: classOf(column), match: m[0] });
+  }
+  codes ??= codeColumns();
+  for (const m of text.matchAll(CODE)) {
+    const column = codes[Number(m[1])] ?? `code.${m[1]}`;
     if (!out.has(column)) out.set(column, { column, class: classOf(column), match: m[0] });
   }
   return [...out.values()];

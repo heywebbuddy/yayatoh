@@ -20,5 +20,5 @@ export {
   ResponseDto,
   submitResponseTx,
 } from './forms.ts';
-export { FORM_KINDS, RESPONDENT_TYPES, SUBJECT_TYPES } from './schema.ts';
 export { privateColumns } from './private-columns.ts';
+export { FORM_KINDS, RESPONDENT_TYPES, SUBJECT_TYPES } from './schema.ts';

@@ -6,6 +6,7 @@ export {
   previewAnnouncementQuery,
   sendAnnouncementCommand,
 } from './announcements.ts';
+export { privateColumns } from './private-columns.ts';
 export { ANNOUNCEMENT_CHANNELS, REPORT_REASONS } from './schema.ts';
 export {
   blockThreadCommand,
@@ -28,4 +29,3 @@ export {
   threadsQuery,
   threadToken,
 } from './threads.ts';
-export { privateColumns } from './private-columns.ts';

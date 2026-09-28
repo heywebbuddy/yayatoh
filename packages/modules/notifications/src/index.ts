@@ -48,6 +48,7 @@ export {
   preferenceEnabledTx,
   setMyPreferencesCommand,
 } from './preferences.ts';
+export { privateColumns } from './private-columns.ts';
 export { importLegacyPushTokensTx, type LegacyDeviceRow, registerPushTokenCommand } from './push.ts';
 export { isValidTimeZone, QUIET_END_HOUR, QUIET_START_HOUR, quietHoursRelease } from './quiet-hours.ts';
 export {
@@ -92,4 +93,3 @@ export {
   unsubscribeRef,
   unsuppressEmailTx,
 } from './unsubscribe.ts';
-export { privateColumns } from './private-columns.ts';

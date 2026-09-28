@@ -6,7 +6,7 @@ import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
  */
 export const privateColumns = columnPrivacy('ticketing', {
   holder_links: { email_norm: personal('email') },
-  promo_codes: { code: internal(), kind: 'vocab', currency: 'vocab' },
+  promo_codes: { code: internal('code'), kind: 'vocab', currency: 'vocab' },
   signing_keys: {
     // Public keys ship in every door manifest.
     public_key: 'public',

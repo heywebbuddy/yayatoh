@@ -55,6 +55,7 @@ export type {
   WebhookEvent,
 } from './port.ts';
 export { isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
+export { privateColumns } from './private-columns.ts';
 export { DISPUTE_STATUSES, LEDGER_ACCOUNTS, type LedgerAccount, SETTLEMENT_STATUSES } from './schema.ts';
 export {
   addBusinessDays,
@@ -79,4 +80,3 @@ export {
   type StripeProviderOptions,
   stripePaymentProvider,
 } from './stripe.ts';
-export { privateColumns } from './private-columns.ts';

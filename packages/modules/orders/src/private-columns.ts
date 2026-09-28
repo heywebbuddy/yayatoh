@@ -15,7 +15,8 @@ export const privateColumns = columnPrivacy('orders', {
     currency: 'vocab',
     promo_code: internal(),
     funds_flow: 'vocab',
-    connected_account_id: secret(),
+    // Set exactly for direct charges (CHECK).
+    connected_account_id: secret(undefined, { where: "funds_flow = 'organizer_mor'" }),
     fee_schedule: internal(),
     provider: 'vocab',
     provider_payment_id: secret(),

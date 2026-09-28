@@ -1,4 +1,5 @@
 export * from './dto.ts';
+export { privateColumns } from './private-columns.ts';
 export { QUOTE_STATUSES } from './schema.ts';
 export {
   createVenueCommand,
@@ -16,4 +17,3 @@ export {
   venueDirectory,
   venueSlug,
 } from './venues.ts';
-export { privateColumns } from './private-columns.ts';

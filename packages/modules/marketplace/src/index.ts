@@ -14,6 +14,7 @@ export {
   SearchParams,
 } from './domain/search.ts';
 export * from './dto.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   catchUpListings,
   EVENT_LISTING_EVENTS,
@@ -34,4 +35,3 @@ export {
   widgetOrigins,
 } from './queries.ts';
 export { LISTED_STATUSES, REDIRECT_MATCHES, REDIRECT_STATUSES } from './schema.ts';
-export { privateColumns } from './private-columns.ts';

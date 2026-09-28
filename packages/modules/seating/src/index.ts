@@ -80,6 +80,7 @@ export {
   seatChannels,
   seatingLiveAccessQuery,
 } from './live.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   checkSeatRulesTx,
   MAX_RELEASE_DAYS,
@@ -118,4 +119,3 @@ export {
   setFinderSettingsCommand,
   verifyFinderCodeCommand,
 } from './seat-finder.ts';
-export { privateColumns } from './private-columns.ts';

@@ -7,10 +7,11 @@ import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 export const privateColumns = columnPrivacy('seating', {
   // The published seat map is public (the finder and the event page show it).
   event_layouts: { doc: 'public', checksum: 'vocab', status: 'vocab', finder_mode: 'vocab' },
-  event_seats: { label: 'public', status: 'vocab', block_reason: internal() },
+  // block_reason is a closed set (channel, ada, kill, assigned) by CHECK.
+  event_seats: { label: 'public', status: 'vocab', block_reason: 'vocab' },
   finder_codes: { email_hash: secret(), email: personal('email'), code_hash: secret() },
   // The org's layout library (drafts); only an event's published copy is public.
   layouts: { name: internal(), doc: internal(), checksum: 'vocab' },
-  seat_assignments: { prior_block: internal() },
+  seat_assignments: { prior_block: 'vocab' },
   seating_rules: { kind: 'vocab', severity: 'vocab', params: internal() },
 });

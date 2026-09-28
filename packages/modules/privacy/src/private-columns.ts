@@ -7,7 +7,7 @@ import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 export const privateColumns = columnPrivacy('privacy', {
   dsar_requests: {
     kind: 'vocab',
-    subject_ref: secret(),
+    subject_ref: secret('none', { why: 'a SHA-256 hex digest by CHECK constraint; it holds no plaintext' }),
     subject_hint: personal(),
     summary: internal(),
   },

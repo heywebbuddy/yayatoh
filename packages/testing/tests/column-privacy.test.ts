@@ -33,7 +33,10 @@ function owners(): (schema: string) => string {
       if (e.isDirectory()) walk(p);
       else if (e.name.endsWith('.ts')) {
         for (const m of readFileSync(p, 'utf8').matchAll(/pgSchema\(\s*['"](\w+)['"]\s*\)/g))
-          map.set(m[1] as string, `${p.slice(root.length + 1).replace(/\/src\/.*$/, '')}/src/private-columns.ts`);
+          map.set(
+            m[1] as string,
+            `${p.slice(root.length + 1).replace(/\/src\/.*$/, '')}/src/private-columns.ts`,
+          );
       }
     }
   };
@@ -55,7 +58,12 @@ describe('column-privacy registry (roadmap §9 canary leak test)', () => {
         'events.speakers': {
           schema: 'events',
           name: 'speakers',
-          columns: { id: { type: 'uuid' }, org_id: { type: 'uuid' }, bio: { type: 'text' }, notes: { type: 'jsonb' } },
+          columns: {
+            id: { type: 'uuid' },
+            org_id: { type: 'uuid' },
+            bio: { type: 'text' },
+            notes: { type: 'jsonb' },
+          },
         },
         'media.assets': {
           schema: 'media',
@@ -71,7 +79,9 @@ describe('column-privacy registry (roadmap §9 canary leak test)', () => {
       'media.assets.alt',
       'media.assets.tags',
     ]);
-    expect(problems[0]?.message).toContain('packages/modules/events/src/private-columns.ts: under `speakers`');
+    expect(problems[0]?.message).toContain(
+      'packages/modules/events/src/private-columns.ts: under `speakers`',
+    );
     expect(problems[0]?.message).toContain("bio: 'public' | 'vocab' | secret() | personal()");
     expect(problems[2]?.message).toContain("columnPrivacy('media', { assets: { … } })");
     expect(problems[2]?.message).toContain('COLUMN_PRIVACY');

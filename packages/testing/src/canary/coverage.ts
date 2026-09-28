@@ -5,7 +5,11 @@ import { isPrivate, registeredColumns } from './registry.ts';
 export interface Snapshot {
   readonly tables: Record<
     string,
-    { readonly schema: string; readonly name: string; readonly columns: Record<string, { readonly type: string }> }
+    {
+      readonly schema: string;
+      readonly name: string;
+      readonly columns: Record<string, { readonly type: string }>;
+    }
   >;
 }
 
@@ -67,6 +71,8 @@ export function columnCoverage(
     const json = type.startsWith('json');
     if ((seed === 'json' && !json) || ((seed === 'sealed' || seed === 'sealed-json') && type !== 'text'))
       problems.push({ id, message: `${id}: seed '${seed}' does not fit the column type ${type}` });
+    if (!json && type !== 'text' && seed && ['email', 'phone', 'url', 'path', 'code'].includes(seed))
+      problems.push({ id, message: `${id}: seed '${seed}' needs a text column, not ${type}` });
     if (json && seed && !['json', 'none'].includes(seed))
       problems.push({ id, message: `${id}: a ${type} column takes seed 'json' (or 'none')` });
   }

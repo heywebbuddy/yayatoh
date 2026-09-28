@@ -1,3 +1,4 @@
+export { privateColumns } from './private-columns.ts';
 export {
   createFromTemplateCommand,
   deleteTemplateCommand,
@@ -7,4 +8,3 @@ export {
   saveTemplateCommand,
   TemplateDto,
 } from './templates.ts';
-export { privateColumns } from './private-columns.ts';

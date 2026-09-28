@@ -21,6 +21,7 @@ export {
   syncScansCommand,
 } from './devices.ts';
 export { admissionsDsarTx, purgeScansBeforeTx } from './dsar.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   admissionsForTicketsTx,
   admittedTicketIdsTx,
@@ -60,4 +61,3 @@ export {
   setDoorStaffCommand,
 } from './staff.ts';
 export { type CheckinScope, checkinFactsTx } from './stats.ts';
-export { privateColumns } from './private-columns.ts';

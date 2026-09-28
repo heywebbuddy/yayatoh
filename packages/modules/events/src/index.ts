@@ -112,6 +112,7 @@ export {
   RecurrenceRuleInput,
   updateOccurrenceCommand,
 } from './occurrences.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   accessTarget,
   type EventTarget,
@@ -155,4 +156,3 @@ export {
   setEventSeriesCommand,
   updateSeriesCommand,
 } from './series.ts';
-export { privateColumns } from './private-columns.ts';

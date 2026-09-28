@@ -5,7 +5,7 @@ import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
  * @yayatoh/db). Every text, jsonb and text[] column of a tenant table is listed.
  */
 export const privateColumns = columnPrivacy('notifications', {
-  inbox_items: { kind: 'vocab', params: internal(), href: internal(), dedupe_key: internal() },
+  inbox_items: { kind: 'vocab', params: internal(), href: internal('path'), dedupe_key: internal() },
   messages: {
     kind: 'vocab',
     category: 'vocab',

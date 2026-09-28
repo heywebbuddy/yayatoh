@@ -72,6 +72,7 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   CreatePromoCodeInput,
   claimPromoTx,
@@ -87,4 +88,3 @@ export { publicTicketTypes } from './public.ts';
 export { FEE_MODES, PROMO_KINDS, TICKET_STATUSES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
 export { orderIdsByShortCodeTx, type TicketTypeStats, ticketTypeStatsTx } from './stats.ts';
 export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';
-export { privateColumns } from './private-columns.ts';

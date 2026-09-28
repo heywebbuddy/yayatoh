@@ -22,12 +22,24 @@ export type PrivateClass = 'secret' | 'personal' | 'internal' | 'holder';
 /**
  * How the canary fixture writes the canary (default from the SQL type: text → `text`,
  * jsonb → `json`, text[] → `array`).
- * - `email` / `phone` / `url`: a canary shaped to pass the column's validators.
+ * - `email` / `phone` / `url` / `path` / `code`: a canary shaped to pass the column's CHECKs
+ *   (`code`: `CANARY_<nn>_<row>`, for upper-case codes such as promo and access codes).
  * - `sealed`: the canary is encrypted with the org's key vault (plaintext exposure is what counts).
  * - `sealed-json`: the sealed JSON object gains a `__canary` key.
  * - `none`: not seedable; `why` must say where exposure is covered instead.
  */
-export type CanarySeed = 'text' | 'email' | 'phone' | 'url' | 'json' | 'array' | 'sealed' | 'sealed-json' | 'none';
+export type CanarySeed =
+  | 'text'
+  | 'email'
+  | 'phone'
+  | 'url'
+  | 'path'
+  | 'code'
+  | 'json'
+  | 'array'
+  | 'sealed'
+  | 'sealed-json'
+  | 'none';
 
 export interface PrivateColumn {
   readonly class: PrivateClass;

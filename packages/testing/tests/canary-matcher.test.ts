@@ -45,14 +45,20 @@ describe('canary matcher', () => {
     const text = [EMAIL, TOKEN_HASH, NOTE, 'tickets.tickets.x'].map(canaryToken).join(' ');
     const cols = (s: Parameters<typeof leaksIn>[2]) => leaksIn('u', text, s).map((l) => l.column);
     expect(cols({ kind: 'public' })).toEqual([EMAIL, TOKEN_HASH, NOTE, 'tickets.tickets.x']);
-    expect(cols({ kind: 'scoped', allow: [EMAIL, TOKEN_HASH] })).toEqual([TOKEN_HASH, NOTE, 'tickets.tickets.x']);
+    expect(cols({ kind: 'scoped', allow: [EMAIL, TOKEN_HASH] })).toEqual([
+      TOKEN_HASH,
+      NOTE,
+      'tickets.tickets.x',
+    ]);
     expect(cols({ kind: 'outbound' })).toEqual([TOKEN_HASH, NOTE, 'tickets.tickets.x']);
     expect(leaksIn('u', 'nothing here __CANARY_ but broken', { kind: 'public' })).toEqual([]);
   });
 
   it('formats every hit with its URL and column', () => {
     const msg = formatLeaks(leaksIn('https://x.test/e', canaryToken(EMAIL), { kind: 'public' }));
-    expect(msg).toBe(`1 canary leak(s):\n  https://x.test/e\n    ${EMAIL} (personal) ← "${canaryToken(EMAIL)}"`);
+    expect(msg).toBe(
+      `1 canary leak(s):\n  https://x.test/e\n    ${EMAIL} (personal) ← "${canaryToken(EMAIL)}"`,
+    );
     expect(formatLeaks([])).toBe('no canary leaks');
   });
 });
@@ -64,7 +70,11 @@ describe('canary crawler (gate canary: a planted leak fails the crawl)', () => {
       contentType: 'text/html',
       body: '<a href="/events/a">A</a><a href="/events/b#tickets">B</a><a href="https://elsewhere.test/x">x</a><link rel="alternate" href="/fr/events/a">',
     },
-    'https://market.test/events/a': { status: 200, contentType: 'text/html', body: '<a href="/o/org">org</a>' },
+    'https://market.test/events/a': {
+      status: 200,
+      contentType: 'text/html',
+      body: '<a href="/o/org">org</a>',
+    },
     'https://market.test/fr/events/a': { status: 200, contentType: 'text/html', body: canaryToken(NOTE) },
     'https://market.test/events/b': {
       status: 200,

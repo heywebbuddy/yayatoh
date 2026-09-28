@@ -32,7 +32,11 @@ const LOC = /<loc>\s*([^<\s]+)\s*<\/loc>/gi;
 const SITEMAP_LINE = /^\s*Sitemap:\s*(\S+)/gim;
 
 const decode = (s: string) =>
-  s.replace(/&amp;/g, '&').replace(/&#x2F;/gi, '/').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+  s
+    .replace(/&amp;/g, '&')
+    .replace(/&#x2F;/gi, '/')
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"');
 
 /** Links in HTML attributes, sitemap `<loc>`s and robots.txt `Sitemap:` lines. */
 export function extractLinks(body: string, base: string): string[] {

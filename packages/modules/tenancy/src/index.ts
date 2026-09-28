@@ -80,6 +80,7 @@ export {
   type DomainProvider,
   fakeDomainProvider,
 } from './hosting/provider.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   getOrganizationQuery,
   listInvitationsQuery,
@@ -106,4 +107,3 @@ export {
   SUSPENSION_KINDS,
 } from './schema.ts';
 export { invitationMailer } from './subscribers.ts';
-export { privateColumns } from './private-columns.ts';

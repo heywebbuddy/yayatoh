@@ -75,7 +75,9 @@ export function registeredColumns(list: readonly SchemaPrivacy[] = COLUMN_PRIVAC
   );
 }
 
-export function privateColumnList(list: readonly SchemaPrivacy[] = COLUMN_PRIVACY): RegisteredPrivateColumn[] {
+export function privateColumnList(
+  list: readonly SchemaPrivacy[] = COLUMN_PRIVACY,
+): RegisteredPrivateColumn[] {
   return registeredColumns(list).filter((c): c is RegisteredPrivateColumn => isPrivate(c.rule));
 }
 
@@ -88,6 +90,13 @@ export const PHONE_PREFIX = '+1999555';
 export function phoneColumns(list: readonly SchemaPrivacy[] = COLUMN_PRIVACY): ColumnId[] {
   return privateColumnList(list)
     .filter((c) => c.rule.seed === 'phone')
+    .map((c) => c.id);
+}
+
+/** Code canaries (upper-case code columns): `CANARY_<two-digit column index>_<row>`. */
+export function codeColumns(list: readonly SchemaPrivacy[] = COLUMN_PRIVACY): ColumnId[] {
+  return privateColumnList(list)
+    .filter((c) => c.rule.seed === 'code')
     .map((c) => c.id);
 }
 
