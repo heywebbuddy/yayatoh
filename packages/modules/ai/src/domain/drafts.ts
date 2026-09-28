@@ -1,5 +1,7 @@
 import { formatFaqText, markdownToPlainText, parseFaqText, sanitizeMarkdown } from '@yayatoh/events';
-import type { DraftKind } from './ledger.ts';
+import { type DraftKind, MAX_NOTES_LENGTH } from './ledger.ts';
+
+export { MAX_NOTES_LENGTH };
 
 /**
  * Prompt hygiene for AI drafting (M1.4f). Organizer-entered text (event name, notes, venue) is
@@ -32,7 +34,6 @@ export interface DraftRequest {
   readonly notes: string;
 }
 
-export const MAX_NOTES_LENGTH = 1000;
 export const TAGLINE_MAX = 280;
 export const DESCRIPTION_MAX = 4000;
 export const FAQ_MAX_ITEMS = 8;

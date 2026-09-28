@@ -13,6 +13,7 @@
     "load:prepare": "node scripts/load-prepare.ts"
   },
   "dependencies": {
+    "@yayatoh/ai": "workspace:*",
     "@yayatoh/api-v1": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/auth": "workspace:*",
@@ -33,6 +34,7 @@
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/privacy": "workspace:*",
+    "@yayatoh/program": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/templates": "workspace:*",

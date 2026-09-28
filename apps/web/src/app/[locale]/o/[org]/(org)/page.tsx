@@ -60,7 +60,7 @@ export default async function OrgHome({
   const canWrite = roleCan(data.role, 'events:write');
   const paused = await executeQuery(suspensionsQuery, {}, data.ctx, ports);
   const create = canWrite ? (
-    <Link href={`/o/${org}/events/new`} className={buttonClass('primary')}>
+    <Link href={`/o/${org}/events/new/guided`} className={buttonClass('primary')}>
       {t('orgHome.create')}
     </Link>
   ) : undefined;
@@ -319,7 +319,7 @@ async function SetupChecklist({ org }: { org: string }) {
       href: `/o/${org}/settings`,
     },
     { key: 'brand', done: data.org.brandColor !== null, href: `/o/${org}/settings` },
-    { key: 'event', done: events.length > 0, href: `/o/${org}/events/new` },
+    { key: 'event', done: events.length > 0, href: `/o/${org}/events/new/guided` },
     { key: 'team', done: members.length > 1 || invitations.length > 0, href: `/o/${org}/team` },
     ...(sells.paid ? [{ key: 'payouts', done: payouts.state === 'active', href: `/o/${org}/payouts` }] : []),
   ];

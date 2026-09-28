@@ -20,6 +20,8 @@ export type CreditEntryKind = (typeof CREDIT_ENTRY_KINDS)[number];
 /** Pending owner (owner-inbox): the free monthly allowance per org. */
 export const FREE_MONTHLY_CREDITS = 20;
 export const DRAFT_COST = 1;
+/** Organizer notes sent with a draft request (data, never instructions). */
+export const MAX_NOTES_LENGTH = 1000;
 
 export interface CreditState {
   readonly balance: number;

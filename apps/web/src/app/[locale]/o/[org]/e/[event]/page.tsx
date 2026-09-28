@@ -6,9 +6,9 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { greetingKey } from '@/lib/event-status.ts';
 import { type FormatCtx, formatEventDateRange } from '@/lib/format.ts';
-import { readinessRules } from '@/lib/readiness.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
+import { loadReadiness } from '@/server/readiness.ts';
 import { transitionAction } from './actions.ts';
 import { DemoSections } from './demo-sections.tsx';
 import { EventKpis } from './event-kpis.tsx';
@@ -36,7 +36,10 @@ export default async function EventDashboard({
   const t = await getTranslations();
   const f: FormatCtx = { locale, currency: ev.currency, timeZone: ev.timezone };
   const firstName = data.session.name.split(' ')[0] ?? data.session.name;
-  const rules = demo ? demo.readiness : readinessRules(ev);
+  // Showcase events keep their demo checklist; real events get readiness v1 with deep links.
+  const rules: readonly { key: string; done: boolean; path?: string }[] = demo
+    ? demo.readiness
+    : await loadReadiness(org, event);
   const readiness = Math.round((rules.filter((r) => r.done).length / rules.length) * 100);
   const canWrite = roleCan(data.role, 'events:write');
   const actions = ACTIONS.filter((a) =>
@@ -91,7 +94,17 @@ export default async function EventDashboard({
       ) : null}
 
       <Card className="flex flex-col gap-3">
-        <h2 className="text-section">{t('dashboard.readiness')}</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-section">{t('dashboard.readiness')}</h2>
+          {demo ? null : (
+            <Link
+              href={`${base}/setup-guide`}
+              className="inline-flex min-h-6 items-center text-caption underline"
+            >
+              {t('setupGuide.open')}
+            </Link>
+          )}
+        </div>
         <div className="flex items-center gap-[18px]">
           <ProgressRing value={readiness} label={t('dashboard.readinessPercent', { value: readiness })} />
           <ul className="flex list-none flex-col p-0">
@@ -102,10 +115,20 @@ export default async function EventDashboard({
                 >
                   {r.done ? <Check aria-hidden="true" className="size-3" strokeWidth={2.5} /> : null}
                 </span>
-                <span className={r.done ? 'text-zinc-900' : 'text-zinc-500'}>
-                  {t(`readiness.${r.key}`)}
-                  <span className="sr-only">{r.done ? t('readiness.done') : t('readiness.todo')}</span>
-                </span>
+                {r.path !== undefined && !r.done ? (
+                  <Link
+                    href={r.path ? `${base}/${r.path}` : base}
+                    className="inline-flex min-h-6 items-center text-zinc-600 underline underline-offset-2"
+                  >
+                    {t(`readiness.${r.key}`)}
+                    <span className="sr-only">{t('readiness.todo')}</span>
+                  </Link>
+                ) : (
+                  <span className={r.done ? 'text-zinc-900' : 'text-zinc-500'}>
+                    {t(`readiness.${r.key}`)}
+                    <span className="sr-only">{r.done ? t('readiness.done') : t('readiness.todo')}</span>
+                  </span>
+                )}
               </li>
             ))}
           </ul>

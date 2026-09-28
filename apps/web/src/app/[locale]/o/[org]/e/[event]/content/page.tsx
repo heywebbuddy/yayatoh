@@ -1,3 +1,4 @@
+import { creditBalanceQuery } from '@yayatoh/ai';
 import {
   announcementsQuery,
   type EventSectionDto,
@@ -10,18 +11,22 @@ import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AiDraftPanel } from '@/components/ai-draft-panel.tsx';
 import { AnnouncementForm } from '@/components/announcement-form.tsx';
 import { Markdown } from '@/components/markdown.tsx';
 import { SectionForm, type SectionValues } from '@/components/section-form.tsx';
 import { SectionList } from '@/components/section-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
+  acceptDraftAction,
   addSectionAction,
   createAnnouncementAction,
   deleteAnnouncementAction,
   deleteSectionAction,
+  draftWithAiAction,
   moveSectionAction,
   reorderSectionsAction,
   updateAnnouncementAction,
@@ -60,6 +65,9 @@ export default async function ContentPage({
     executeQuery(eventSectionsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(announcementsQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
+  // M1.4f: AI drafting for writers of orgs with the `ai` module.
+  const ai =
+    canWrite && data.modules.has('ai') ? await executeQuery(creditBalanceQuery, {}, data.ctx, ports) : null;
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
     timeStyle: 'short',
@@ -109,6 +117,30 @@ export default async function ContentPage({
         }
       />
       {canWrite ? null : <p className="text-body text-zinc-500">{t('content.viewerNotice')}</p>}
+      <section aria-labelledby="tagline-heading" className="flex flex-col gap-2">
+        <h2 id="tagline-heading" className="text-section">
+          {t('aiDraft.taglineHeading')}
+        </h2>
+        <p className="text-body text-zinc-700" data-testid="event-tagline">
+          {ev.tagline ?? t('aiDraft.noTagline')}
+        </p>
+      </section>
+      {ai ? (
+        <section aria-labelledby="ai-heading" className="flex flex-col gap-3">
+          <h2 id="ai-heading" className="text-section">
+            {t('aiDraft.title')}
+          </h2>
+          <Card size="panel">
+            <AiDraftPanel
+              draft={draftWithAiAction.bind(null, org, event)}
+              accept={acceptDraftAction.bind(null, org, event)}
+              balance={ai.balance}
+              allowance={ai.allowance}
+              enabled={aiDrafter() !== null}
+            />
+          </Card>
+        </section>
+      ) : null}
       <section aria-labelledby="sections-heading" className="flex flex-col gap-3">
         <h2 id="sections-heading" className="text-section">
           {t('content.sections')}
