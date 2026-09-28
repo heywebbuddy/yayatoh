@@ -15,6 +15,7 @@
     "test": "vitest run --project unit",
     "test:int": "vitest run --project integration",
     "test:isolation": "vitest run --project integration -t isolation",
+    "test:canary": "pnpm --filter @yayatoh/web exec playwright test canary-crawl --project=desktop-1280",
     "check:modules": "node tools/check-modules/cli.ts",
     "db:bootstrap": "pnpm --filter @yayatoh/db bootstrap",
     "db:generate": "pnpm --filter @yayatoh/db generate",

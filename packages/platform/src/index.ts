@@ -64,6 +64,7 @@ export {
   purgeExpiredIdempotencyKeysTx,
   purgeFilesMentioningTx,
 } from './privacy.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   composeNav,
   isProfileKey,

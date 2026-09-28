@@ -20,8 +20,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
     launchOptions: {
       // Tenant hosts (M1.11): `{org}.yayatoh.events` and test custom domains resolve to this
-      // server (`*.localhost` already does), so host routing runs exactly as in production.
-      args: ['--host-resolver-rules=MAP *.yayatoh.events 127.0.0.1, MAP *.verified.test 127.0.0.1'],
+      // server (`*.localhost` already does), so host routing runs exactly as in production. A
+      // preview host (`*.vercel.app`) and the dashboard host too, for the noindex guard (M1.11d).
+      args: [
+        '--host-resolver-rules=MAP *.yayatoh.events 127.0.0.1, MAP *.verified.test 127.0.0.1, MAP *.vercel.app 127.0.0.1, MAP app.yayatoh.com 127.0.0.1',
+      ],
       ...(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}),
     },
   },

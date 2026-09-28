@@ -45,3 +45,4 @@ export {
   failingDrafter,
   fakeDrafter,
 } from './drafter.ts';
+export { privateColumns } from './private-columns.ts';

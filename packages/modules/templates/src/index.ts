@@ -1,3 +1,4 @@
+export { privateColumns } from './private-columns.ts';
 export {
   createFromTemplateCommand,
   deleteTemplateCommand,

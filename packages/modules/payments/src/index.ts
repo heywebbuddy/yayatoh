@@ -64,6 +64,7 @@ export type {
   WebhookEvent,
 } from './port.ts';
 export { BALANCE_TRANSACTION_KINDS, isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   dayBounds,
   ReconciliationItemDto,

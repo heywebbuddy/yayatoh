@@ -10,7 +10,7 @@ import {
   sessionHostAccepted,
 } from '../src/lib/hosts.ts';
 import { decimalPrice, EventJsonLdSchema, eventJsonLd, jsonLdScript } from '../src/lib/seo/jsonld.ts';
-import { robotsTxt } from '../src/lib/seo/robots.ts';
+import { isPrivatePage, NOINDEX, robotsHeader, robotsMeta, robotsTxt } from '../src/lib/seo/robots.ts';
 import { latest, localeSitemapXml, sitemapIndexXml } from '../src/lib/seo/sitemap.ts';
 import { hreflangAlternates, localizedPath, pageAlternates } from '../src/lib/seo/urls.ts';
 import { widgetSnippet } from '../src/lib/widget.ts';
@@ -207,5 +207,74 @@ describe('central login hosts (M1.2d)', () => {
       'harbor.yayatoh.events:3100',
     );
     expect(parseTenantReturn('http://localhost:3100/', dev, env)).toBeNull();
+  });
+});
+
+describe('noindex guard (M1.11d)', () => {
+  const PUBLIC = [
+    '/',
+    '/events',
+    '/events/gala',
+    '/events/gala/seat-finder',
+    '/series/tour',
+    '/venues',
+    '/venues/hall',
+    '/legal/lakeside/refund',
+    '/privacy',
+    '/sub-processors',
+    '/robots.txt',
+    '/sitemap.xml',
+  ];
+  const PRIVATE = [
+    '/o/lakeside/settings',
+    '/o/lakeside/e/gala/attendees',
+    '/o',
+    '/sign-in',
+    '/signup',
+    '/checkout/fake',
+    '/my-tickets/tok',
+    '/orders/tok',
+    '/orders/tok/pdf',
+    '/claim/tok',
+    '/invite/tok',
+    '/portal/gala',
+    '/connect/fake',
+    '/scan',
+    '/embed/gala',
+    '/events/gala/unlock',
+    '/messages/tok',
+    '/unsubscribe/tok',
+    '/account/security',
+    '/dev/login',
+    '/t/org-id',
+    '/organizers/lakeside',
+  ];
+
+  it('public pages on public hosts send no noindex header; private pages always do', () => {
+    for (const kind of ['marketplace', 'tenant'] as const) {
+      for (const p of PUBLIC) expect([kind, p, robotsHeader(kind, p)]).toEqual([kind, p, null]);
+      for (const p of PRIVATE) expect([kind, p, robotsHeader(kind, p)]).toEqual([kind, p, NOINDEX]);
+    }
+  });
+
+  it('the organizer page /o/{slug} is public on the marketplace only (elsewhere it is the console)', () => {
+    expect(isPrivatePage('marketplace', '/o/lakeside')).toBe(false);
+    expect(isPrivatePage('marketplace', '/o/lakeside/')).toBe(false);
+    expect(isPrivatePage('tenant', '/o/lakeside')).toBe(true);
+    expect(isPrivatePage('dev', '/o/lakeside')).toBe(true);
+  });
+
+  it('dashboard, localhost and preview hosts are noindex on every page, header and meta', () => {
+    for (const kind of ['app', 'dev'] as const) {
+      for (const p of [...PUBLIC, ...PRIVATE]) expect(robotsHeader(kind, p)).toBe(NOINDEX);
+      expect(robotsMeta(kind)).toEqual({ index: false, follow: true });
+    }
+    expect(classifyHost('pr-42-yayatoh.vercel.app', {})).toBe('dev');
+  });
+
+  it('public metadata indexes on public hosts unless the page opts out (unlisted, finished)', () => {
+    expect(robotsMeta('marketplace')).toEqual({ index: true, follow: true });
+    expect(robotsMeta('tenant')).toEqual({ index: true, follow: true });
+    expect(robotsMeta('tenant', false)).toEqual({ index: false, follow: true });
   });
 });

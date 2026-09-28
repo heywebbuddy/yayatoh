@@ -15,3 +15,4 @@ export {
   priceBreakdown,
   setFeeOverrideCommand,
 } from './fees.ts';
+export { privateColumns } from './private-columns.ts';

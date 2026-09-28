@@ -28,6 +28,7 @@ export {
   updateSpeakerCommand,
   updateSponsorCommand,
 } from './people.ts';
+export { privateColumns } from './private-columns.ts';
 export { publicProgram, publicSpeaker } from './public.ts';
 export {
   CreateSessionInput,

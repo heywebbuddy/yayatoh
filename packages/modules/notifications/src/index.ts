@@ -76,6 +76,7 @@ export {
   PREVIEW_TTL_MS,
   storeEmailPreviewCommand,
 } from './previews.ts';
+export { privateColumns } from './private-columns.ts';
 export { importLegacyPushTokensTx, type LegacyDeviceRow, registerPushTokenCommand } from './push.ts';
 export { isValidTimeZone, QUIET_END_HOUR, QUIET_START_HOUR, quietHoursRelease } from './quiet-hours.ts';
 export { planReminder, type ReminderPlan, reminderTime } from './reminder-time.ts';

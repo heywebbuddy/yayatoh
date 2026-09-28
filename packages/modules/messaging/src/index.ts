@@ -6,6 +6,7 @@ export {
   previewAnnouncementQuery,
   sendAnnouncementCommand,
 } from './announcements.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   EXCERPT_CHARS,
   EXCERPT_MESSAGES,

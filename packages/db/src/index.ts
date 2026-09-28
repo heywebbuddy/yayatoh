@@ -1,4 +1,16 @@
 export { closePools } from './client.ts';
+export {
+  type CanarySeed,
+  type ColumnRule,
+  columnPrivacy,
+  holder,
+  internal,
+  type PrivateClass,
+  type PrivateColumn,
+  personal,
+  type SchemaPrivacy,
+  secret,
+} from './column-privacy.ts';
 export { isUniqueViolation } from './errors.ts';
 export { GLOBAL_TABLES } from './global-tables.ts';
 export { type Listener, listenChannel } from './listen.ts';

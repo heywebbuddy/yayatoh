@@ -1,4 +1,5 @@
-import type { HostKind } from '../hosts.ts';
+import { pageTypeOf } from '@yayatoh/platform/security';
+import { type HostKind, indexable } from '../hosts.ts';
 
 /**
  * Private areas never crawled on any public host (buyer, holder and organizer pages; M1.14a):
@@ -32,4 +33,35 @@ export function robotsTxt(kind: HostKind, origin: string): string {
   const lines = ['User-agent: *', 'Allow: /', ...PRIVATE_PATHS.map((p) => `Disallow: ${p}`)];
   if (kind === 'marketplace') lines.push('Disallow: /organizers/');
   return `${lines.join('\n')}\n\nSitemap: ${origin}/sitemap.xml\n`;
+}
+
+/** The `X-Robots-Tag` of every never-indexed response. */
+export const NOINDEX = 'noindex, nofollow';
+
+/**
+ * Private pages (path without the locale): the console, checkout, secret-link pages, the scanner,
+ * sign-in, the widget frame, unlock, message and unsubscribe links, the account, internal
+ * segments. On the marketplace `/o/{slug}` itself is the public organizer page; anywhere else
+ * `/o/…` is the console.
+ */
+export function isPrivatePage(kind: HostKind, path: string): boolean {
+  if (kind === 'marketplace' && /^\/o\/[^/]+\/?$/.test(path)) return false;
+  if (pageTypeOf(path) !== 'public') return true;
+  return /^\/(?:embed|messages|unsubscribe|account|dev|t|organizers|api)(?:\/|$)|^\/events\/[^/]+\/unlock\/?$/.test(
+    path,
+  );
+}
+
+/**
+ * The noindex guard (M1.11d). Hosts that are never indexed (dashboard, localhost, previews) and
+ * private pages send `X-Robots-Tag: noindex, nofollow` on every response; public pages on public
+ * hosts send none (their metadata alone decides: unlisted and finished events say noindex).
+ */
+export function robotsHeader(kind: HostKind, path: string): string | null {
+  return !indexable(kind) || isPrivatePage(kind, path) ? NOINDEX : null;
+}
+
+/** The robots meta of a public page: indexed on public hosts unless the page opts out. */
+export function robotsMeta(kind: HostKind, index = true): { index: boolean; follow: boolean } {
+  return { index: index && indexable(kind), follow: true };
 }

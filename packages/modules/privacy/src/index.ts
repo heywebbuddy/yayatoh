@@ -13,5 +13,6 @@ export {
   subjectDocumentTx,
   summarize,
 } from './dsar.ts';
+export { privateColumns } from './private-columns.ts';
 export { RETENTION, RetentionResult, retentionCommand } from './retention.ts';
 export { DSAR_KINDS } from './schema.ts';

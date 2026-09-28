@@ -14,6 +14,7 @@ export {
   SearchParams,
 } from './domain/search.ts';
 export * from './dto.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   catchUpListings,
   EVENT_LISTING_EVENTS,

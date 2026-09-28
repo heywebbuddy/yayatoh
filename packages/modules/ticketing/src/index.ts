@@ -83,6 +83,7 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   CreatePromoCodeInput,
   claimPromoTx,

@@ -30,6 +30,7 @@ export {
 export { MediaRejected, type RejectReason } from './pipeline/process.ts';
 export { ACCEPT_MIME, sniff } from './pipeline/sniff.ts';
 export { sanitizeSvg } from './pipeline/svg.ts';
+export { privateColumns } from './private-columns.ts';
 export { OWNER_TYPES, type OwnerType, SLOTS, type Slot } from './schema.ts';
 export { mediaStore, mediaStoreFromEnv, setMediaStore } from './storage/config.ts';
 export type { MediaStore } from './storage/port.ts';
