@@ -38,6 +38,7 @@ test.describe('self-serve signup', () => {
 
   test('open: a newcomer verifies their email, creates an org in setup mode and finishes the onboarding checklist', async ({
     page,
+    browser,
   }) => {
     test.setTimeout(300_000);
     await ownClientIp(page.context());
@@ -98,11 +99,15 @@ test.describe('self-serve signup', () => {
     await expect(setup.getByRole('button', { name: 'Finish setup' })).toHaveCount(0);
     await expectAccessible(page);
 
-    // Arabic RTL: the same checklist, mirrored.
-    await page.goto(`/ar/o/${slug}`);
-    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expect(page.getByText('مؤسستك في وضع الإعداد')).toBeVisible();
-    await expectAccessible(page);
+    // Arabic RTL: the same checklist, mirrored (its own tab, so this one keeps English).
+    const arabic = await (
+      await browser.newContext({ storageState: await page.context().storageState() })
+    ).newPage();
+    await arabic.goto(`/ar/o/${slug}`);
+    await expect(arabic.locator('html')).toHaveAttribute('dir', 'rtl');
+    await expect(arabic.getByText('مؤسستك في وضع الإعداد')).toBeVisible();
+    await expectAccessible(arabic);
+    await arabic.context().close();
 
     // Privacy notice, through the deep link.
     await page.goto(`/o/${slug}`);

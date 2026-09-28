@@ -90,9 +90,12 @@ async function SidebarContent({
         </div>
       ))}
       <div className="mt-auto flex items-center gap-2.5 px-2.5 py-2">
-        <Avatar initials={data.session.initials} label={data.session.name} />
+        {/* An account made with an emailed code may have no name yet: the address stands in. */}
+        <Avatar initials={data.session.initials} label={data.session.name || data.session.email} />
         <div className="flex min-w-0 flex-col">
-          <span className="truncate text-[13px] text-zinc-900">{data.session.name}</span>
+          <span className="truncate text-[13px] text-zinc-900">
+            {data.session.name || data.session.email}
+          </span>
           <span className="text-[12px] text-zinc-500">{t(`roles.${data.role}`)}</span>
         </div>
         {data.session.impersonation ? null : (
