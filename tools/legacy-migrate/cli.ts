@@ -133,6 +133,10 @@ async function main(): Promise<number> {
             extraHosts: instance === 'yay' ? ['yayatoh.localhost'] : [],
           });
           console.info(r.summary);
+          // CI only sees stdout: print what failed, not just that it failed.
+          if (!r.pass)
+            for (const c of r.report.checks.filter((c) => !c.pass))
+              console.info(`${c.id} details: ${JSON.stringify(c.details)}`);
           ok &&= r.pass;
         }
       } finally {

@@ -7,7 +7,7 @@ import { migratorSql } from '@yayatoh/db/migration';
 import { adminClient, schemaGuard } from '@yayatoh/db/testing';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { orderByManageToken } from '@yayatoh/orders';
-import { ports } from '@yayatoh/testing';
+import { createOrgFixture, ports } from '@yayatoh/testing';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { demoHandles } from '../src/demo.ts';
 import { detUuid, emailNorm, legacyKey, shortCode } from '../src/ids.ts';
@@ -622,5 +622,15 @@ describe('every validation catches a planted defect', () => {
 
   it('ends in a passing state again', async () => {
     expect((await revalidate('yay')).pass).toBe(true);
+  });
+});
+
+describe('golden queries compare only what the migration wrote', () => {
+  it('V7 ignores a non-migrated org’s legacy settlement (the canary org has one)', async () => {
+    // createOrgFixture writes a `yay` event statement for an event the migration never made.
+    const f = await createOrgFixture(`v7-foreign-${Date.now().toString(36)}`, 'Not From Legacy');
+    const r = check(await revalidate('yay'), 'V7');
+    expect(r?.pass).toBe(true);
+    expect(JSON.stringify(r?.details)).not.toContain(f.org.id);
   });
 });
