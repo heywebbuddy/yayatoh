@@ -26,6 +26,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/forms": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",

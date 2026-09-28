@@ -7,6 +7,7 @@ import { privateColumns as crm } from '@yayatoh/crm';
 import type { CanarySeed, ColumnRule, PrivateClass, PrivateColumn, SchemaPrivacy } from '@yayatoh/db';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
+import { privateColumns as guests } from '@yayatoh/guests';
 import { privateColumns as marketplace } from '@yayatoh/marketplace';
 import { privateColumns as media } from '@yayatoh/media';
 import { privateColumns as messaging } from '@yayatoh/messaging';
@@ -38,6 +39,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   crm,
   events,
   forms,
+  guests,
   marketplace,
   media,
   messaging,
