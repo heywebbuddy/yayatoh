@@ -11,8 +11,10 @@ import { refundMailer, ticketMailer } from '@yayatoh/orders';
 import {
   consumeEvent,
   defineSubscriber,
+  localKeyVault,
   type PublishedEvent,
   type Subscriber,
+  setKeyVault,
   subscribes,
 } from '@yayatoh/platform';
 import { sql as dsql } from 'drizzle-orm';
@@ -24,6 +26,11 @@ import { orderLinkReport } from '../src/order-links.ts';
 import { type RunResult, revalidate, runMigration } from '../src/run.ts';
 import { CM_PER_PX } from '../src/seatchart.ts';
 import { DEMO, generateDumpFile, SYNTH_PASSWORD_HASH, type SynthSummary } from '../src/synth/generate.ts';
+
+// Both legacy suites migrate the same synthetic orgs (deterministic ids) into the shared test
+// database, so they seal and open those orgs' ticket keys under one fixed test vault, whichever
+// suite runs first (@yayatoh/testing registers a random vault per file).
+setKeyVault(localKeyVault('5e'.repeat(32)));
 
 /**
  * M2.2c on synthetic data: the T3 remainder (venues, categories, series, seat charts), T6
