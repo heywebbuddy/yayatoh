@@ -1,0 +1,340 @@
+import { listOccurrencesQuery } from '@yayatoh/events';
+import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
+import { groupByDay, type SessionDto } from '@yayatoh/program';
+import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { type FieldSpec, ProgramForm, ScheduleWarning } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
+import { ports } from '@/server/ports.ts';
+import { loadProgramPage, warningMessages } from '@/server/program.ts';
+import {
+  createRoomAction,
+  createSessionAction,
+  createTrackAction,
+  deleteRoomAction,
+  deleteSessionAction,
+  deleteTrackAction,
+  updateSessionAction,
+} from './actions.ts';
+
+/**
+ * Sessions (M1.4f): the agenda as a keyboard-friendly list grouped by day in the event's
+ * timezone, with conflict warnings, plus rooms and tracks. List mode is the accessible
+ * alternative to any grid.
+ */
+export default async function SessionsPage({
+  params,
+}: {
+  params: Promise<{ locale: string; org: string; event: string }>;
+}) {
+  const { locale, org, event } = await params;
+  setRequestLocale(locale);
+  const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'sessions');
+  const t = await getTranslations();
+  const tp = await getTranslations('program');
+  const dates = (await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports)).filter(
+    (d) => d.status === 'scheduled',
+  );
+  const tz = ev.timezone;
+  const time = new Intl.DateTimeFormat(locale, { timeZone: tz, hour: 'numeric', minute: '2-digit' });
+  const dayLabel = new Intl.DateTimeFormat(locale, {
+    timeZone: 'UTC',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+  const dateLabel = new Intl.DateTimeFormat(locale, {
+    timeZone: tz,
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+  const isPublic =
+    ['published', 'postponed', 'cancelled', 'completed'].includes(ev.status) && ev.visibility !== 'private';
+  const errors = {
+    title: tp('errors.title'),
+    startsAt: tp('errors.startsAt'),
+    endsAt: tp('errors.endsAt'),
+    capacity: tp('errors.capacity'),
+    outside_date: tp('errors.outside_date'),
+    cancelled: tp('errors.cancelled'),
+    unknown: tp('errors.unknown'),
+    too_many: tp('errors.too_many'),
+    name: tp('errors.name'),
+    'conflict.name': tp('errors.nameTaken'),
+  };
+  const sessionFields = (s?: SessionDto): FieldSpec[] => [
+    {
+      kind: 'text',
+      name: 'title',
+      label: tp('sessionTitle'),
+      required: true,
+      maxLength: 160,
+      defaultValue: s?.title,
+    },
+    ...(dates.length > 0
+      ? [
+          {
+            kind: 'select' as const,
+            name: 'occurrenceId',
+            label: tp('date'),
+            hint: tp('dateHint'),
+            defaultValue: s?.occurrenceId ?? '',
+            options: [
+              { value: '', label: tp('anyDate') },
+              ...dates.map((d) => ({ value: d.id, label: dateLabel.format(d.startsAt) })),
+            ],
+          },
+        ]
+      : []),
+    {
+      kind: 'datetime-local',
+      name: 'startsAt',
+      label: tp('startsAt'),
+      required: true,
+      hint: tp('timeHint', { timezone: tz.replace(/_/g, ' ') }),
+      defaultValue: s ? utcToZonedInput(s.startsAt, tz) : undefined,
+    },
+    {
+      kind: 'datetime-local',
+      name: 'endsAt',
+      label: tp('endsAt'),
+      required: true,
+      defaultValue: s ? utcToZonedInput(s.endsAt, tz) : undefined,
+    },
+    {
+      kind: 'select',
+      name: 'roomId',
+      label: tp('room'),
+      defaultValue: s?.roomId ?? '',
+      options: [
+        { value: '', label: tp('noRoom') },
+        ...program.rooms.map((r) => ({ value: r.id, label: r.name })),
+      ],
+    },
+    {
+      kind: 'select',
+      name: 'trackId',
+      label: tp('track'),
+      defaultValue: s?.trackId ?? '',
+      options: [
+        { value: '', label: tp('noTrack') },
+        ...program.tracks.map((r) => ({ value: r.id, label: r.name })),
+      ],
+    },
+    {
+      kind: 'checkboxes',
+      name: 'speakerIds',
+      label: tp('speakers'),
+      defaultValues: s?.speakerIds ?? [],
+      options: program.speakers.map((p) => ({ value: p.id, label: p.name })),
+    },
+    {
+      kind: 'number',
+      name: 'capacity',
+      label: tp('capacity'),
+      hint: tp('capacityHint'),
+      defaultValue: s?.capacity ? String(s.capacity) : undefined,
+    },
+    {
+      kind: 'textarea',
+      name: 'description',
+      label: tp('description'),
+      hint: tp('markdownHint'),
+      defaultValue: s?.description,
+    },
+  ];
+  const days = groupByDay(program.sessions, tz);
+  const allWarnings = await warningMessages(program.warnings, program);
+  const nameOf = (list: readonly { id: string; name: string }[], id: string | null) =>
+    list.find((x) => x.id === id)?.name ?? null;
+  return (
+    <>
+      <PageHeader
+        title={t('nav.sessions')}
+        description={tp('sessionsSubtitle')}
+        actions={
+          isPublic ? (
+            <Link
+              href={`/events/${ev.slug}#agenda`}
+              className="inline-flex min-h-10 items-center underline underline-offset-2"
+            >
+              {t('dashboard.previewPage')}
+            </Link>
+          ) : undefined
+        }
+      />
+      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {program.warnings.length > 0 ? (
+        <section aria-labelledby="conflicts-heading" className="flex flex-col gap-2">
+          <h2 id="conflicts-heading" className="text-section">
+            {tp('conflicts', { count: program.warnings.length })}
+          </h2>
+          <ul className="flex list-none flex-col gap-2 p-0">
+            {allWarnings.map((w, i) => (
+              <li key={`${i}-${w}`}>
+                <ScheduleWarning>{w}</ScheduleWarning>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+      <section aria-labelledby="agenda-heading" className="flex flex-col gap-3">
+        <h2 id="agenda-heading" className="text-section">
+          {tp('agenda')}
+        </h2>
+        <p className="text-caption text-zinc-500">{tp('timesIn', { timezone: tz.replace(/_/g, ' ') })}</p>
+        {days.length === 0 ? (
+          <EmptyState title={tp('emptySessionsTitle')} description={tp('emptySessionsDescription')} />
+        ) : (
+          days.map((d) => (
+            <section key={d.day} aria-labelledby={`day-${d.day}`} className="flex flex-col gap-2">
+              <h3 id={`day-${d.day}`} className="text-body font-medium">
+                {dayLabel.format(new Date(`${d.day}T00:00:00Z`))}
+              </h3>
+              <ol className="flex list-none flex-col gap-2 p-0">
+                {d.items.map((s) => {
+                  const mine = program.warnings.filter((w) => w.sessionId === s.id || w.otherId === s.id);
+                  const room = nameOf(program.rooms, s.roomId);
+                  const track = nameOf(program.tracks, s.trackId);
+                  const people = s.speakerIds
+                    .map((id) => nameOf(program.speakers, id))
+                    .filter((n): n is string => Boolean(n));
+                  return (
+                    <li key={s.id}>
+                      <Card className="flex flex-col gap-2" data-session={s.title}>
+                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <span className="font-mono text-caption text-zinc-600">
+                            {time.format(s.startsAt)}–{time.format(s.endsAt)}
+                          </span>
+                          <h4 className="text-body font-medium">{s.title}</h4>
+                          {mine.length > 0 ? <Label>{tp('conflictLabel')}</Label> : null}
+                        </div>
+                        <p className="text-caption text-zinc-600">
+                          {[room, track, people.join(', ')].filter(Boolean).join(' · ') || tp('noDetails')}
+                        </p>
+                        {canWrite ? (
+                          <details className="border-t border-zinc-100 pt-2">
+                            <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                              {tp('editSession', { title: s.title })}
+                            </summary>
+                            <div className="flex flex-col gap-3 pt-3">
+                              <ProgramForm
+                                action={updateSessionAction.bind(null, org, event, s.id)}
+                                fields={sessionFields(s)}
+                                idPrefix={`session-${s.id}`}
+                                submitLabel={tp('saveSession')}
+                                successLabel={tp('sessionSaved')}
+                                errors={errors}
+                              />
+                              <form action={deleteSessionAction.bind(null, org, event, s.id)}>
+                                <Button type="submit" variant="ghost" size="sm">
+                                  {tp('deleteNamed', { name: s.title })}
+                                </Button>
+                              </form>
+                            </div>
+                          </details>
+                        ) : null}
+                      </Card>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          ))
+        )}
+        {canWrite ? (
+          <section aria-labelledby="add-session-heading">
+            <Card size="panel" className="flex flex-col gap-3">
+              <h3 id="add-session-heading" className="text-section">
+                {tp('addSession')}
+              </h3>
+              <ProgramForm
+                action={createSessionAction.bind(null, org, event)}
+                fields={sessionFields()}
+                idPrefix="new-session"
+                submitLabel={tp('addSession')}
+                successLabel={tp('sessionAdded')}
+                errors={errors}
+                reset
+              />
+            </Card>
+          </section>
+        ) : null}
+      </section>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {(
+          [
+            ['rooms', program.rooms, createRoomAction, deleteRoomAction],
+            ['tracks', program.tracks, createTrackAction, deleteTrackAction],
+          ] as const
+        ).map(([kind, list, create, remove]) => (
+          <section key={kind} aria-labelledby={`${kind}-heading`} className="flex flex-col gap-3">
+            <h2 id={`${kind}-heading`} className="text-section">
+              {tp(kind)}
+            </h2>
+            {list.length === 0 ? (
+              <p className="text-body text-zinc-500">{tp(`${kind}Empty`)}</p>
+            ) : (
+              <ul className="flex list-none flex-col gap-1 p-0">
+                {list.map((x) => (
+                  <li
+                    key={x.id}
+                    className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 py-1"
+                  >
+                    <span className="text-body">
+                      {x.name}
+                      {'capacity' in x && x.capacity ? (
+                        <span className="text-caption text-zinc-500">
+                          {' '}
+                          · {tp('seats', { count: x.capacity })}
+                        </span>
+                      ) : null}
+                    </span>
+                    {canWrite ? (
+                      <form action={remove.bind(null, org, event, x.id)}>
+                        <Button type="submit" variant="ghost" size="sm">
+                          {tp('deleteNamed', { name: x.name })}
+                        </Button>
+                      </form>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {canWrite ? (
+              <Card className="flex flex-col gap-3">
+                <ProgramForm
+                  action={create.bind(null, org, event)}
+                  fields={[
+                    {
+                      kind: 'text',
+                      name: 'name',
+                      label: tp(kind === 'rooms' ? 'roomName' : 'trackName'),
+                      required: true,
+                      maxLength: 80,
+                    },
+                    ...(kind === 'rooms'
+                      ? [
+                          {
+                            kind: 'number' as const,
+                            name: 'capacity',
+                            label: tp('capacity'),
+                            hint: tp('capacityHint'),
+                          },
+                        ]
+                      : []),
+                  ]}
+                  idPrefix={`new-${kind}`}
+                  submitLabel={tp(kind === 'rooms' ? 'addRoom' : 'addTrack')}
+                  successLabel={tp(kind === 'rooms' ? 'roomAdded' : 'trackAdded')}
+                  errors={errors}
+                  reset
+                />
+              </Card>
+            ) : null}
+          </section>
+        ))}
+      </div>
+    </>
+  );
+}

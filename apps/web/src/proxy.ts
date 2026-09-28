@@ -180,6 +180,12 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
       return secure(
         rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${seats[1]}/seats/stream`, locale),
       );
+    // M1.4f: speaker pages stay on the org's site (another org's event is a 404 there).
+    const sp = /^\/events\/([^/]+)\/speakers\/([^/]+)\/?$/.exec(rest);
+    if (sp)
+      return secure(
+        rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${sp[1]}/speakers/${sp[2]}`, locale),
+      );
   }
 
   // The ticket widget: only the org's allowed origins may frame it (M1.11c). Its CSP is the public

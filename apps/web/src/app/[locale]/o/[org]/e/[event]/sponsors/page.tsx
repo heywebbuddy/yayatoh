@@ -1,0 +1,190 @@
+import type { SponsorDto } from '@yayatoh/program';
+import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Markdown } from '@/components/markdown.tsx';
+import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { loadProgramPage } from '@/server/program.ts';
+import {
+  createSponsorAction,
+  createTierAction,
+  deleteSponsorAction,
+  deleteTierAction,
+  updateSponsorAction,
+} from './actions.ts';
+
+/** Sponsors (M1.4f): tiers (package name and order) and the sponsors in each. */
+export default async function SponsorsPage({
+  params,
+}: {
+  params: Promise<{ locale: string; org: string; event: string }>;
+}) {
+  const { locale, org, event } = await params;
+  setRequestLocale(locale);
+  const { program, canWrite } = await loadProgramPage(org, event, 'sponsors');
+  const t = await getTranslations();
+  const tp = await getTranslations('program');
+  const errors = {
+    name: tp('errors.name'),
+    'conflict.name': tp('errors.nameTaken'),
+    position: tp('errors.position'),
+    tierId: tp('errors.tier'),
+    websiteUrl: tp('errors.website'),
+    tier_in_use: tp('errors.tierInUse'),
+    too_many: tp('errors.too_many'),
+  };
+  const tierOptions = program.sponsorTiers.map((x) => ({ value: x.id, label: x.name }));
+  const fields = (s?: SponsorDto): FieldSpec[] => [
+    { kind: 'select', name: 'tierId', label: tp('tier'), options: tierOptions, defaultValue: s?.tierId },
+    {
+      kind: 'text',
+      name: 'name',
+      label: tp('sponsorName'),
+      required: true,
+      maxLength: 120,
+      defaultValue: s?.name,
+    },
+    { kind: 'url', name: 'websiteUrl', label: tp('website'), defaultValue: s?.websiteUrl ?? undefined },
+    {
+      kind: 'textarea',
+      name: 'description',
+      label: tp('description'),
+      hint: tp('markdownHint'),
+      defaultValue: s?.description,
+    },
+  ];
+  return (
+    <>
+      <PageHeader title={t('nav.sponsors')} description={tp('sponsorsSubtitle')} />
+      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <section aria-labelledby="tiers-heading" className="flex flex-col gap-3">
+        <h2 id="tiers-heading" className="text-section">
+          {tp('tiers')}
+        </h2>
+        {program.sponsorTiers.length === 0 ? (
+          <EmptyState title={tp('emptyTiersTitle')} description={tp('emptyTiersDescription')} />
+        ) : (
+          <ol className="flex list-none flex-col gap-3 p-0">
+            {program.sponsorTiers.map((tier) => {
+              const inTier = program.sponsors.filter((s) => s.tierId === tier.id);
+              return (
+                <li key={tier.id}>
+                  <Card className="flex flex-col gap-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h3 className="text-body font-medium">
+                        {tier.name}{' '}
+                        <span className="text-caption text-zinc-500">
+                          · {tp('order', { position: tier.position })}
+                        </span>
+                      </h3>
+                      {canWrite ? (
+                        <ProgramForm
+                          action={deleteTierAction.bind(null, org, event, tier.id)}
+                          fields={[]}
+                          idPrefix={`tier-${tier.id}`}
+                          submitLabel={tp('deleteNamed', { name: tier.name })}
+                          successLabel={tp('deleted')}
+                          errors={errors}
+                        />
+                      ) : null}
+                    </div>
+                    {inTier.length === 0 ? (
+                      <p className="text-caption text-zinc-500">{tp('noSponsorsInTier')}</p>
+                    ) : (
+                      <ul className="flex list-none flex-col gap-2 p-0">
+                        {inTier.map((s) => (
+                          <li key={s.id} className="flex flex-col gap-1 border-t border-zinc-100 pt-2">
+                            <span className="text-body">{s.name}</span>
+                            {s.websiteUrl ? (
+                              <span className="text-caption text-zinc-600">{s.websiteUrl}</span>
+                            ) : null}
+                            {s.description ? <Markdown source={s.description} /> : null}
+                            {canWrite ? (
+                              <details>
+                                <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                                  {tp('editNamed', { name: s.name })}
+                                </summary>
+                                <div className="flex flex-col gap-3 pt-3">
+                                  <ProgramForm
+                                    action={updateSponsorAction.bind(null, org, event, s.id)}
+                                    fields={fields(s)}
+                                    idPrefix={`sponsor-${s.id}`}
+                                    submitLabel={tp('save')}
+                                    successLabel={tp('saved')}
+                                    errors={errors}
+                                  />
+                                  <form action={deleteSponsorAction.bind(null, org, event, s.id)}>
+                                    <Button type="submit" variant="ghost" size="sm">
+                                      {tp('deleteNamed', { name: s.name })}
+                                    </Button>
+                                  </form>
+                                </div>
+                              </details>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </Card>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+        {canWrite ? (
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <section aria-labelledby="add-tier-heading">
+              <Card size="panel" className="flex flex-col gap-3">
+                <h3 id="add-tier-heading" className="text-section">
+                  {tp('addTier')}
+                </h3>
+                <ProgramForm
+                  action={createTierAction.bind(null, org, event)}
+                  fields={[
+                    {
+                      kind: 'text',
+                      name: 'name',
+                      label: tp('tierName'),
+                      hint: tp('tierNameHint'),
+                      required: true,
+                      maxLength: 60,
+                    },
+                    {
+                      kind: 'number',
+                      name: 'position',
+                      label: tp('tierOrder'),
+                      hint: tp('tierOrderHint'),
+                      required: true,
+                    },
+                  ]}
+                  idPrefix="new-tier"
+                  submitLabel={tp('addTier')}
+                  successLabel={tp('tierAdded')}
+                  errors={errors}
+                  reset
+                />
+              </Card>
+            </section>
+            {program.sponsorTiers.length > 0 ? (
+              <section aria-labelledby="add-sponsor-heading">
+                <Card size="panel" className="flex flex-col gap-3">
+                  <h3 id="add-sponsor-heading" className="text-section">
+                    {tp('addSponsor')}
+                  </h3>
+                  <ProgramForm
+                    action={createSponsorAction.bind(null, org, event)}
+                    fields={fields()}
+                    idPrefix="new-sponsor"
+                    submitLabel={tp('addSponsor')}
+                    successLabel={tp('sponsorAdded')}
+                    errors={errors}
+                    reset
+                  />
+                </Card>
+              </section>
+            ) : null}
+          </div>
+        ) : null}
+      </section>
+    </>
+  );
+}

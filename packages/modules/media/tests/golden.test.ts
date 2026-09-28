@@ -21,7 +21,9 @@ interface Golden {
 }
 const golden = JSON.parse(readFileSync(join(dir, 'golden.json'), 'utf8')) as Record<string, Golden>;
 
-describe('golden transforms', () => {
+// AVIF + WebP encoding at every width is CPU-bound: under a loaded runner (parallel test files)
+// one fixture can take longer than vitest's 5 s default. The assertions are unchanged.
+describe('golden transforms', { timeout: 30_000 }, () => {
   it('covers every fixture', () => {
     expect(Object.keys(golden).sort()).toEqual([...RASTER_FIXTURES].sort());
   });

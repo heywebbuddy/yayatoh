@@ -235,6 +235,14 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 30, windowMs: 10 * MIN },
     ipCeiling: { limit: 30, windowMs: 10 * MIN },
   },
+  /** AI drafts (M1.4f): each one calls a paid model; credits cap the month, this caps bursts
+   * (identity = member and event). */
+  aiDraft: {
+    device: { limit: 20, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 60, windowMs: 60 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },

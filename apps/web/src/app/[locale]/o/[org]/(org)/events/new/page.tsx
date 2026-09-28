@@ -19,9 +19,14 @@ export default async function NewEventPage({ params }: { params: Promise<{ local
         title={t('title')}
         description={t('description')}
         actions={
-          <Link href={`/o/${org}/templates`} className={buttonClass('secondary')}>
-            {t('fromTemplate')}
-          </Link>
+          <>
+            <Link href={`/o/${org}/events/new/guided`} className={buttonClass('primary')}>
+              {t('guided')}
+            </Link>
+            <Link href={`/o/${org}/templates`} className={buttonClass('secondary')}>
+              {t('fromTemplate')}
+            </Link>
+          </>
         }
       />
       <CreateEventForm

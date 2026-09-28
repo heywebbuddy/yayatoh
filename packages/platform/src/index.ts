@@ -69,6 +69,7 @@ export {
   isProfileKey,
   type NavGroup,
   type NavItem,
+  navIncludes,
   navLabelKey,
   PROFILE_KEYS,
   PROFILES,

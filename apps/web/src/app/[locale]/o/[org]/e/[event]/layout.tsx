@@ -5,8 +5,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
 import { eventPhase } from '@/lib/event-status.ts';
-import { readinessRules } from '@/lib/readiness.ts';
 import { loadEvent } from '@/server/console.ts';
+import { loadReadiness } from '@/server/readiness.ts';
 
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
@@ -27,7 +27,7 @@ export default async function EventLayout({
   const t = await getTranslations();
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   const phase = eventPhase(ev.startsAt.toISOString(), ev.endsAt.toISOString());
-  const rules = readinessRules(ev);
+  const rules = await loadReadiness(org, event);
   return (
     <ConsoleShell
       data={data}

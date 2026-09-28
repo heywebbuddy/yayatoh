@@ -11,6 +11,7 @@ import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia } from '@yayatoh/media';
+import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
@@ -31,6 +32,7 @@ import { DatePicker } from '@/components/date-picker.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
+import { ProgramSections } from '@/components/program-sections.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -99,6 +101,23 @@ export async function PublicEventView({
     : [];
   const cover = images.find((m) => m.slot === 'cover') ?? null;
   const gallery = images.filter((m) => m.slot === 'gallery');
+  // M1.4f: the real program (agenda, speakers, exhibitors, sponsors). With a date chosen, the
+  // agenda shows that date's sessions and the sessions that belong to no date.
+  const fullProgram: PublicProgramDto = contentTarget
+    ? await publicProgram(contentTarget)
+    : { sessions: [], speakers: [], exhibitors: [], sponsorTiers: [] };
+  const program: PublicProgramDto = chosen
+    ? {
+        ...fullProgram,
+        sessions: fullProgram.sessions.filter((x) => x.occurrenceId === null || x.occurrenceId === chosen.id),
+      }
+    : fullProgram;
+  const programStats = [
+    { key: 'sessions', value: fullProgram.sessions.length },
+    { key: 'speakers', value: fullProgram.speakers.length },
+    { key: 'exhibitors', value: fullProgram.exhibitors.length },
+    { key: 'sponsors', value: fullProgram.sponsorTiers.reduce((n, x) => n + x.sponsors.length, 0) },
+  ].filter((x) => x.value > 0);
   const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
@@ -145,8 +164,9 @@ export async function PublicEventView({
   const ev = {
     ...pub,
     passes,
-    stats: demo?.stats ?? [],
-    agenda: demo?.agenda ?? [],
+    // Real data wins; showcase events keep their dev overlay until they have a program.
+    stats: programStats.length > 0 ? programStats : (demo?.stats ?? []),
+    agenda: program.sessions.length > 0 ? [] : (demo?.agenda ?? []),
   };
   const t = await getTranslations();
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
@@ -342,9 +362,11 @@ export async function PublicEventView({
             <a href="#passes" className="text-white">
               {t('publicEvent.passes')}
             </a>
-            <a href="#agenda" className="text-white">
-              {t('publicEvent.agenda')}
-            </a>
+            {program.sessions.length > 0 || ev.agenda.length > 0 ? (
+              <a href="#agenda" className="text-white">
+                {t('publicEvent.agenda')}
+              </a>
+            ) : null}
           </nav>
           <span className="text-[19px] font-semibold tracking-[-0.04em] md:px-10">{t('brand.wordmark')}</span>
           <a href="#passes" className={buttonClass('on-dark', 'sm')}>
@@ -394,9 +416,11 @@ export async function PublicEventView({
             <a href="#passes" className={buttonClass('on-dark')}>
               {t('publicEvent.getTickets')}
             </a>
-            <a href="#agenda" className={buttonClass('glass')}>
-              {t('publicEvent.seeAgenda')}
-            </a>
+            {program.sessions.length > 0 || ev.agenda.length > 0 ? (
+              <a href="#agenda" className={buttonClass('glass')}>
+                {t('publicEvent.seeAgenda')}
+              </a>
+            ) : null}
           </div>
         </div>
         {ev.stats.length > 0 ? (
@@ -473,6 +497,8 @@ export async function PublicEventView({
         </section>
       ) : null}
 
+      <ProgramSections program={program} slug={slug} locale={locale} timeZone={ev.timezone} />
+
       {venue ? (
         <section
           id="venue"
@@ -505,8 +531,7 @@ export async function PublicEventView({
       ) : null}
 
       <section
-        id="agenda"
-        aria-label={t('publicEvent.agenda')}
+        {...(ev.agenda.length > 0 ? { id: 'agenda', 'aria-label': t('publicEvent.agenda') } : {})}
         className="flex flex-col gap-4 px-6 pb-16 md:px-16"
       >
         {ev.agenda.length > 0 ? (
