@@ -11,6 +11,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'auth.verifications': 'OTP / magic-link / verification tokens; accessed only through packages/auth.',
   'auth.two_factors':
     'TOTP secrets and backup codes (KMS-envelope encrypted); accessed only through packages/auth.',
+  'auth.legacy_tokens':
+    'Hashed legacy personal access tokens, magic links and resets per instance (migration T8); accessed only through packages/auth.',
   'auth.security_events':
     'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',

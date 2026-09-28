@@ -36,11 +36,47 @@ export const domainEvents = tenantTable(
     requestId: text('request_id').notNull(),
     logSeq: bigint('log_seq', { mode: 'number' }),
     publishedAt: timestamp('published_at', { withTimezone: true }),
+    /**
+     * Backfilled history (the legacy migration, T9): relayed and logged like any event, but
+     * subscribers skip it unless they opt in (`acceptsReplayed`), so no email or journey fires.
+     */
+    replayed: boolean('replayed').notNull().default(false),
   },
   (t) => [
     uniqueIndex('domain_events_log_seq_key').on(t.logSeq),
     index('domain_events_org_id_log_seq_idx').on(t.orgId, t.logSeq),
     index('domain_events_unpublished_idx').on(t.orgId, t.id).where(sql`published_at is null`),
+  ],
+);
+
+/**
+ * Monthly metric history per org (roadmap §5.1 `metric_timeseries`), keyed by the reports metric
+ * registry (`sales.gross`, `orders.sold`, `tickets.sold`, `checkins.tickets`, …). Money metrics
+ * carry their currency; counts use `currency = ''`. M2.2c backfills the legacy years
+ * (`source = 'legacy'`) so year-over-year comparisons have history; the live projector (M3.1)
+ * writes `source = 'live'`.
+ */
+export const metricTimeseries = tenantTable(
+  platform,
+  'metric_timeseries',
+  {
+    metric: text('metric').notNull(),
+    bucket: date('bucket', { mode: 'string' }).notNull(),
+    currency: text('currency').notNull().default(''),
+    value: bigint('value', { mode: 'number' }).notNull(),
+    source: text('source').notNull(),
+  },
+  (t) => [
+    uniqueIndex('metric_timeseries_org_metric_bucket_key').on(
+      t.orgId,
+      t.metric,
+      t.bucket,
+      t.currency,
+      t.source,
+    ),
+    check('metric_timeseries_source_check', sql`source in ('legacy', 'live')`),
+    check('metric_timeseries_bucket_check', sql`extract(day from bucket) = 1`),
+    check('metric_timeseries_currency_check', sql`currency = '' or currency ~ '^[A-Z]{3}$'`),
   ],
 );
 

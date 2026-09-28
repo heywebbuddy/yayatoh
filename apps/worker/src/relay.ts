@@ -1,5 +1,5 @@
 import { withPlatformReader } from '@yayatoh/db/platform';
-import { eventKey, type PublishedEvent, type Subscriber } from '@yayatoh/platform';
+import { type PublishedEvent, type Subscriber, subscribes } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import type { PgBoss } from 'pg-boss';
 
@@ -14,6 +14,7 @@ type Row = {
   aggregate_id: string;
   payload: unknown;
   log_seq: string | number;
+  replayed: boolean;
 };
 
 /**
@@ -42,9 +43,11 @@ export async function relayOnce(
           aggregateId: r.aggregate_id,
           payload: r.payload,
           logSeq: Number(r.log_seq),
+          replayed: r.replayed,
         };
         for (const s of subscribers) {
-          if (!s.events.includes(eventKey(event))) continue;
+          // Backfilled history is logged but never enqueued for mailers or journeys.
+          if (!subscribes(s, event)) continue;
           await boss.send(subscriberQueue(s), { orgId: event.orgId, event }, { singletonKey: event.id });
         }
       }

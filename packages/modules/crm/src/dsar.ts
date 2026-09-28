@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL } from '@yayatoh/platform';
 import { asc, eq, inArray } from 'drizzle-orm';
-import { consents, contacts } from './schema.ts';
+import { consents, contactStats, contacts, eventParticipation } from './schema.ts';
 
 /** A person's org contact and consent history, allowlisted (M1.14c data-subject access). */
 export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
@@ -13,6 +13,16 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
         .from(consents)
         .where(inArray(consents.contactId, ids))
         .orderBy(asc(consents.capturedAt))
+    : [];
+  const participation = ids.length
+    ? await tx
+        .select()
+        .from(eventParticipation)
+        .where(inArray(eventParticipation.contactId, ids))
+        .orderBy(asc(eventParticipation.registeredAt))
+    : [];
+  const stats = ids.length
+    ? await tx.select().from(contactStats).where(inArray(contactStats.contactId, ids))
     : [];
   return {
     contacts: rows.map((r) => ({
@@ -29,6 +39,25 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
       status: c.status,
       evidence: c.evidence,
       capturedAt: c.capturedAt,
+    })),
+    participation: participation.map((p) => ({
+      eventId: p.eventId,
+      tickets: p.tickets,
+      hasSeat: p.hasSeat,
+      checkedIn: p.checkedIn,
+      registeredAt: p.registeredAt,
+      spendMinor: p.spendMinor,
+      currency: p.currency,
+    })),
+    stats: stats.map((t) => ({
+      currency: t.currency,
+      orders: t.orders,
+      tickets: t.tickets,
+      events: t.events,
+      eventsAttended: t.eventsAttended,
+      spendMinor: t.spendMinor,
+      firstSeenAt: t.firstSeenAt,
+      lastSeenAt: t.lastSeenAt,
     })),
   };
 }
