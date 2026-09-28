@@ -105,6 +105,14 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - Organizer "Revoke and reissue link" is allowed for owners, admins, managers, box office and event managers (new permission `orders:support`); viewers and finance cannot.
 - [ ] **SES for guest codes** (M1.5f, label: `infra`): checkout and My tickets codes are sent at once by the web app (never queued, so the code is never stored). In production there is no email provider yet, so **these flows cannot work in production until SES is set up** (see the M1.10 SES item); dev/preview/CI use the dev mailbox.
 
+## Phase 4 (weddings and galas)
+- [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - **Who sees the private answers.** Dietary and accessibility answers and home addresses are stored encrypted (P4-3) and shown on the Guests page to every organizer role that can read attendees today (`attendees:read`: owners, admins, managers, box office, viewers, and the event manager role). Editing needs `attendees:write`. M4.2a maps co-host and planner onto the same permissions. Say if viewers or box office should not see the private answers; a narrower `guests:private` permission can be added without a migration.
+  - **Gala guests.** Only the wedding profile has a Guests tab; the gala profile keeps its ticket-based guest list (M4.2b adds table claims). The page appears for any profile whose navigation lists `guests`, so adding it to gala is a one-line profile change.
+  - **Limits** (placeholders): 1,000 parties and 3,000 guests per event, 20 guests per party, one plus-one per guest.
+  - **Data requests and retention for guests.** A person's guest rows are not yet included in data-subject exports or erasure (M1.14c) and follow the event's lifetime; this lands with the retention default for social events (P4-3 e).
+- [ ] **Legal copy (M4.1, `legal-copy`):** the privacy notice for guests whose details a host enters (already listed in the Phase 4 plan §4).
+
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
 - [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).

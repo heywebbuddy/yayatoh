@@ -358,87 +358,87 @@ export default async function GuestsPage({
           {tp('parties')}
         </h2>
         {list.counts.parties > 0 ? (
-          <form
-            // Remount on navigation: uncontrolled fields would keep the previous filters' values.
-            key={`${q}|${side}|${tag}|${sp.vip ?? ''}`}
-            role="search"
-            aria-label={tp('filters')}
-            method="get"
-            className="flex flex-wrap items-end gap-3"
-          >
-            <div className="flex min-w-48 flex-1 flex-col gap-1.5">
-              <label htmlFor="guest-search" className="text-caption text-zinc-600">
-                {tp('search')}
-              </label>
-              <input
-                id="guest-search"
-                name="q"
-                type="search"
-                defaultValue={q}
-                maxLength={100}
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="guest-side" className="text-caption text-zinc-600">
-                {tp('side')}
-              </label>
-              <select
-                id="guest-side"
-                name="side"
-                defaultValue={side}
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-              >
-                <option value="">{tp('anySide')}</option>
-                {list.sides.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="guest-tag" className="text-caption text-zinc-600">
-                {tp('tag')}
-              </label>
-              <select
-                id="guest-tag"
-                name="tag"
-                defaultValue={tag}
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-              >
-                <option value="">{tp('anyTag')}</option>
-                {list.tags.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="guest-vip" className="text-caption text-zinc-600">
-                {tp('vip')}
-              </label>
-              <select
-                id="guest-vip"
-                name="vip"
-                defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-              >
-                <option value="">{tp('vipAny')}</option>
-                <option value="yes">{tp('vipOnly')}</option>
-                <option value="no">{tp('vipNot')}</option>
-              </select>
-            </div>
-            <button type="submit" className={buttonClass('secondary')}>
-              {tp('apply')}
-            </button>
-            {filtered ? (
-              <Link href={`/o/${org}/e/${event}/guests`} className="min-h-6 py-2 text-caption underline">
-                {tp('clear')}
-              </Link>
-            ) : null}
-          </form>
+          <search aria-label={tp('filters')}>
+            <form
+              // Remount on navigation: uncontrolled fields would keep the previous filters' values.
+              key={`${q}|${side}|${tag}|${sp.vip ?? ''}`}
+              method="get"
+              className="flex flex-wrap items-end gap-3"
+            >
+              <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+                <label htmlFor="guest-search" className="text-caption text-zinc-600">
+                  {tp('search')}
+                </label>
+                <input
+                  id="guest-search"
+                  name="q"
+                  type="search"
+                  defaultValue={q}
+                  maxLength={100}
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="guest-side" className="text-caption text-zinc-600">
+                  {tp('side')}
+                </label>
+                <select
+                  id="guest-side"
+                  name="side"
+                  defaultValue={side}
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                >
+                  <option value="">{tp('anySide')}</option>
+                  {list.sides.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="guest-tag" className="text-caption text-zinc-600">
+                  {tp('tag')}
+                </label>
+                <select
+                  id="guest-tag"
+                  name="tag"
+                  defaultValue={tag}
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                >
+                  <option value="">{tp('anyTag')}</option>
+                  {list.tags.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="guest-vip" className="text-caption text-zinc-600">
+                  {tp('vip')}
+                </label>
+                <select
+                  id="guest-vip"
+                  name="vip"
+                  defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
+                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                >
+                  <option value="">{tp('vipAny')}</option>
+                  <option value="yes">{tp('vipOnly')}</option>
+                  <option value="no">{tp('vipNot')}</option>
+                </select>
+              </div>
+              <button type="submit" className={buttonClass('secondary')}>
+                {tp('apply')}
+              </button>
+              {filtered ? (
+                <Link href={`/o/${org}/e/${event}/guests`} className="min-h-6 py-2 text-caption underline">
+                  {tp('clear')}
+                </Link>
+              ) : null}
+            </form>
+          </search>
         ) : null}
         {list.counts.parties > 0 ? (
           <p role="status" className="text-caption text-zinc-600">
