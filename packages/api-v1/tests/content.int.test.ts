@@ -388,7 +388,9 @@ describe('/v1 public content (no credential)', () => {
     expect(data(sp)).toEqual([
       {
         name: 'Gold',
-        sponsors: [{ id: expect.any(String), name: 'Big Sponsor', description: '', websiteUrl: null }],
+        sponsors: [
+          { id: expect.any(String), name: 'Big Sponsor', description: '', websiteUrl: null, image: null },
+        ],
       },
     ]);
   });

@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page, test } from '@playwright/test';
 import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
+import { continueToPayment } from './helpers.ts';
 
 const WEB = `http://localhost:${process.env.E2E_PORT ?? 3100}`;
 const STAFF = 'omar@yayatoh.test';
@@ -139,7 +140,7 @@ test('staff see a tenant dispute and open its evidence packet', async ({ page, b
   await guest.getByLabel(`Quantity — Staff dispute ${stamp}`).selectOption('1');
   await guest.getByLabel('Full name').fill('Stella Staff');
   await guest.getByLabel('Email for your tickets').fill(`stella+${stamp}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, `stella+${stamp}@example.test`);
   await expect(guest).toHaveURL(/\/checkout\/fake\?/);
   const fake = new URL(guest.url());
   await guest.getByRole('button', { name: /^Pay/ }).click();
@@ -502,7 +503,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
   await guest.getByLabel('Full name').fill(`Ivy Impersonation ${stamp}`);
   await guest.getByLabel('Email for your tickets').fill(`ivy+${stamp}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, `ivy+${stamp}@example.test`);
   await guest.getByRole('button', { name: /^Pay/ }).click();
   await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
   await page.reload();

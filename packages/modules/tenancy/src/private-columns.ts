@@ -6,7 +6,7 @@ import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
  */
 export const privateColumns = columnPrivacy('tenancy', {
   agreement_acceptances: { document: 'vocab', version: 'vocab' },
-  api_keys: { name: internal(), prefix: internal(), key_hash: secret(), scopes: 'vocab' },
+  api_keys: { name: internal(), prefix: internal('key-prefix'), key_hash: secret(), scopes: 'vocab' },
   invitations: { email: personal('email'), role: 'vocab' },
   // Published legal pages (refund policy, terms) are public.
   legal_pages: { kind: 'vocab', body: 'public' },

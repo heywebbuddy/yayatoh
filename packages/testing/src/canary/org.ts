@@ -236,6 +236,7 @@ async function fill(admin: CanaryAdmin, orgId: string): Promise<Record<string, n
         phone: `'${PHONE_PREFIX}${Math.max(0, phones.indexOf(c.id))}' || lpad((r.n % 1000)::text, 3, '0') || left($2, 0)`,
         url: `'https://canary.test/' || $2 || ${suffix}`,
         path: `'/' || $2 || ${suffix}`,
+        'key-prefix': `left(t.${col}, 8) || $2 || ${suffix}`,
         code: `'CANARY_${String(codes.indexOf(c.id)).padStart(2, '0')}_' || r.n::text || left($2, 0)`,
         json: `case jsonb_typeof(t.${col})
                  when 'object' then t.${col} || jsonb_build_object('__canary', $2 || ${suffix})

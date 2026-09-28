@@ -13,6 +13,7 @@ import {
 } from '@yayatoh/marketplace';
 import { startCheckoutCommand } from '@yayatoh/orders';
 import { auditExportBulk, consumeEvent, memoryNotifier } from '@yayatoh/platform';
+import { surveyRef, surveyToken } from '@yayatoh/surveys';
 import {
   getOrganizationQuery,
   managedHostname,
@@ -74,6 +75,9 @@ const rename = (o: OrgFixture, name: string, ctx = o.ctx()) =>
 
 /** Everything the public can read about the org, by its own addresses. */
 async function publicFace(o: OrgFixture) {
+  const [invitation] = await withTenant(systemCtx(o.org.id), (tx) =>
+    tx.execute<{ id: string }>(sql`select id from surveys.invitations order by created_at, id limit 1`),
+  );
   return {
     event: (await publicEventBySlug(o.event.slug)) !== null,
     checkout: (await checkoutTarget(o.event.slug)) !== null,
@@ -82,6 +86,8 @@ async function publicFace(o: OrgFixture) {
     legal: (await publicLegalPage(o.org.slug, 'refund')) !== null,
     marketplace: (await searchListings({ ...parseSearchParams({}), orgSlug: o.org.slug })).total > 0,
     listing: (await listingBySlug(o.event.slug)) !== null,
+    // A survey link (M3.9a) resolves only for a live org.
+    survey: invitation ? (await surveyRef(surveyToken(invitation.id))) !== null : 'no invitation',
   };
 }
 const ONLINE = {
@@ -92,6 +98,7 @@ const ONLINE = {
   legal: true,
   marketplace: true,
   listing: true,
+  survey: true,
 };
 const OFFLINE = {
   event: false,
@@ -101,6 +108,7 @@ const OFFLINE = {
   legal: false,
   marketplace: false,
   listing: false,
+  survey: false,
 };
 
 beforeAll(async () => {

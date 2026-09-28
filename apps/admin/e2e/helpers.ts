@@ -150,3 +150,23 @@ export async function serverForm(page: Page, label: string): Promise<string> {
     { html, label },
   );
 }
+
+/**
+ * A guest on the web app continues from the ticket form and proves the email with the code
+ * the dev mailbox received (M1.5f: guest checkout verifies the buyer's email).
+ */
+export async function continueToPayment(guest: Page, email: string) {
+  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  const field = guest.getByLabel('Verification code', { exact: true });
+  await expect(field).toBeVisible();
+  let code: string | null = null;
+  await expect
+    .poll(async () => {
+      const res = await guest.request.get(`${WEB}/api/dev/last-code?to=${encodeURIComponent(email)}`);
+      code = ((await res.json()) as { code: string | null }).code;
+      return code;
+    })
+    .toMatch(/^\d{6}$/);
+  await field.fill(code ?? '');
+  await guest.getByRole('button', { name: 'Verify and continue' }).click();
+}

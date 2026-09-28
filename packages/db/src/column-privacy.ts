@@ -24,6 +24,8 @@ export type PrivateClass = 'secret' | 'personal' | 'internal' | 'holder';
  * jsonb → `json`, text[] → `array`).
  * - `email` / `phone` / `url` / `path` / `code`: a canary shaped to pass the column's CHECKs
  *   (`code`: `CANARY_<nn>_<row>`, for upper-case codes such as promo and access codes).
+ * - `key-prefix`: keeps the value's `yy_live_` / `yy_test_` head (API key prefixes, whose CHECK
+ *   ties the head to the key's mode) and replaces the rest with the canary.
  * - `sealed`: the canary is encrypted with the org's key vault (plaintext exposure is what counts).
  * - `sealed-json`: the sealed JSON object gains a `__canary` key.
  * - `none`: not seedable; `why` must say where exposure is covered instead.
@@ -35,6 +37,7 @@ export type CanarySeed =
   | 'url'
   | 'path'
   | 'code'
+  | 'key-prefix'
   | 'json'
   | 'array'
   | 'sealed'
