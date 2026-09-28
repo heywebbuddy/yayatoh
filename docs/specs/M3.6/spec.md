@@ -143,3 +143,9 @@ with `messages:read` in orgs with the `marketing` module.
 - Audience export uses `attendees:export` (the marketing role can build but not export).
 - "Previous edition" = the series event that started last before the chosen one (weekly series
   mean last week, not last year).
+
+### Gate results (M3.6a, 2026-09-28)
+- `pnpm verify`: green. Lint, check:modules and typecheck pass; unit 1010/1010 (106 files); integration 713/713 (90 files).
+- New tests: unit 14 (`crm/tests/segments.test.ts` 10, `audiences/tests/templates.test.ts` 4); integration 14 (`testing/tests/audiences.int.test.ts`), plus audience-export coverage in the canary suite; e2e 4 specs × 3 viewports = 12 (`apps/web/e2e/audiences.spec.ts`), all passing.
+- Full web e2e: 1105 passed, 32 skipped, 3 failed, none in audiences. `seat-finder.spec.ts:392` (tablet) passes when re-run alone (it failed under load). `ai-draft.spec.ts:171` opens the first `harbor-arts` event link, which now 404s on `/content`. `noindex.spec.ts:55` finds `rtl-*` blog posts that `cms.spec` created on Lakeside, served with a `noindex, nofollow` header. Both depend on shared seeded-org state from other specs and touch no audiences code.
+- Found in passing: the two legacy-migrate suites share one test database and deterministic ids. Their whole-database counts (T5 duplicate admissions, T6 consents), the V10 settlement checksum and their per-file random key vaults made them depend on file order. Now fixed: counts and the checksum are scoped to migrated rows, and both suites use one test vault. Still open (reproduced on base 40935d3): if `m22c` runs before `migrate`, `migrate`'s V6 fails. Vitest's default order (by size) runs `migrate` first.
