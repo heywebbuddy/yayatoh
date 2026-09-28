@@ -140,6 +140,8 @@ test.describe('realtime channels (M3.1b)', () => {
       .getByRole('button', { name: `Undo check-in for ${holder}` })
       .first()
       .click();
+    // The undo committed once the door that made it shows it; the other screen follows within 3 s.
+    await expect(door.getByText('1 of 2 tickets checked in today')).toBeVisible();
     await expect(page.getByText('1 of 2 tickets checked in today')).toBeVisible({ timeout: 3_000 });
     await expectAccessible(page);
     // It survives a reload: the counts come from the server, the stream reconnects.
