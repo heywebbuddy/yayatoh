@@ -144,9 +144,9 @@ setInterval(() => {
 }, 60_000).unref();
 
 // Notifications (M1.10): send due messages every 2 s (leader only; rows are claimed with SKIP LOCKED).
-const transports = workerTransports();
-if (!transports) console.warn('notifications: no channel adapters configured; messages stay queued');
 const appOrigin = process.env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000';
+const transports = workerTransports(process.env, appOrigin);
+if (!transports) console.warn('notifications: no channel adapters configured; messages stay queued');
 let dispatching = false;
 setInterval(() => {
   if (!transports || !release || stopping || dispatching) return;

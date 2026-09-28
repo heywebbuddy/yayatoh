@@ -4,7 +4,7 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, count, desc, eq, inArray, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { isMessageKind, MESSAGE_KINDS } from './kinds.ts';
-import { addInboxItemTx } from './notifier.ts';
+import { addInboxItemTx, createNotifier } from './notifier.ts';
 import { requireUser } from './preferences.ts';
 import { inboxItems, messages } from './schema.ts';
 
@@ -123,15 +123,24 @@ export const sendTestNotificationCommand = tenantCommand({
   permission: 'org:read',
   handler: async ({ ctx, tx }) => {
     const userId = requireUser(ctx);
+    const dedupeKey = `test:${uuidv7()}`;
     const queued = await addInboxItemTx(tx, {
       orgId: requireOrg(ctx),
       userId,
       kind: 'notifications.test',
       params: {},
-      dedupeKey: `test:${uuidv7()}`,
+      dedupeKey,
       href: '/notifications/preferences',
     });
-    return { queued };
+    // And to the member's opted-in devices (M1.10e), so they can check push works.
+    const pushed = await createNotifier().enqueue(tx, {
+      kind: 'notifications.test',
+      to: { userId },
+      channels: ['push'],
+      params: { _href: '/notifications/preferences' },
+      dedupeKey,
+    });
+    return { queued: queued + pushed.queued };
   },
 });
 

@@ -2875,7 +2875,7 @@
       "email": "Email",
       "push": "Notifica push"
     },
-    "pushHint": "Il push raggiunge chi usa l’app; gli altri ricevono l’email.",
+    "pushHint": "Le notifiche push raggiungono i partecipanti che le hanno attivate nella pagina dell'ordine o nell'app; gli altri ricevono l'email.",
     "preview": "Anteprima",
     "previewTitle": "Anteprima dell’annuncio",
     "previewFrame": "Anteprima email: {subject}",
@@ -3794,6 +3794,32 @@
     "invalidPassword": "La password non è corretta.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti, poi riprova.",
     "unauthenticated": "La sessione è scaduta. Accedi di nuovo."
+  },
+  "webPush": {
+    "title": "Notifiche push",
+    "buyerHint": "Ricevi su questo dispositivo gli aggiornamenti di {org} su questo evento, anche a pagina chiusa.",
+    "memberHint": "Ricevi su questo dispositivo i nuovi ordini e messaggi di {org}, anche con Yayatoh chiuso.",
+    "checking": "Verifica di questo browser…",
+    "on": "Le notifiche sono attive su questo dispositivo.",
+    "off": "Le notifiche sono disattivate su questo dispositivo.",
+    "turnOn": "Attiva le notifiche",
+    "turnOff": "Disattiva su questo dispositivo",
+    "turnedOn": "Notifiche attive. Gli aggiornamenti arriveranno su questo dispositivo.",
+    "turnedOff": "Le notifiche sono disattivate su questo dispositivo.",
+    "blocked": "Le notifiche sono bloccate per questo sito. Consentile nelle impostazioni del sito del browser, poi ricarica la pagina.",
+    "notAllowed": "Le notifiche non sono state consentite, quindi non è cambiato nulla.",
+    "unsupported": "Questo browser non può ricevere notifiche push.",
+    "unavailable": "Le notifiche push non sono ancora disponibili.",
+    "failed": "Non è stato possibile attivare le notifiche. Riprova.",
+    "tooMany": "Troppi dispositivi ricevono notifiche. Rimuovine uno e riprova.",
+    "devices": "I tuoi dispositivi",
+    "devicesNone": "Nessun dispositivo riceve ancora notifiche.",
+    "thisDevice": "(questo dispositivo)",
+    "since": "Dal {date}",
+    "remove": "Rimuovi",
+    "removeLabel": "Rimuovi {label}",
+    "removed": "Dispositivo rimosso.",
+    "unknownDevice": "Browser"
   },
   "fraudSignals": {
     "door": {

@@ -242,7 +242,9 @@ describe('T6 communications', () => {
                (select count(*)::int from crm.consents where evidence = 'legacy_newsletter' and status = 'granted') as granted,
                (select count(*)::int from crm.consents where evidence = 'legacy_newsletter_unsubscribe' and status = 'withdrawn') as withdrawn,
                (select count(*)::int from crm.consents where status = 'unknown_legacy') as unknown,
-               (select count(*)::int from crm.consents where status = 'granted' and evidence <> 'legacy_newsletter') as granted_other,
+               (select count(*)::int from crm.consents where status = 'granted' and evidence <> 'legacy_newsletter'
+                  -- migrated orgs only: other suites' fixture orgs (checkout opt-ins) share this database
+                  and org_id in (select new_id from legacy.ref where entity in ('organizers', 'platform_org'))) as granted_other,
                (select count(*)::int from crm.contacts c where c.source = 'legacy'
                   and not exists (select 1 from crm.consents x where x.contact_id = c.id)) as without`,
     );

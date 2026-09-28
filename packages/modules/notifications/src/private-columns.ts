@@ -36,7 +36,23 @@ export const privateColumns = columnPrivacy('notifications', {
     detail: internal(),
   },
   preferences: { category: 'vocab', channel: 'vocab' },
-  push_tokens: { platform: 'vocab', token: secret(), source: 'vocab' },
+  // Web push (M1.10e): the endpoint and the browser's keys never leave the server (the device DTO
+  // is an allowlist); a guest device belongs to the buyer's email.
+  push_deliveries: { platform: 'vocab', status: 'vocab', provider_message_id: internal() },
+  push_tokens: {
+    platform: 'vocab',
+    token: secret('url'),
+    source: 'vocab',
+    email_norm: personal('email', { where: 'email_norm is not null' }),
+    p256dh: secret('none', {
+      why: 'CHECK requires an 87-char base64url P-256 key; never selected into a DTO (web-push.int.test)',
+    }),
+    auth_secret: secret('none', {
+      why: 'CHECK requires a 22-char base64url secret; never selected into a DTO (web-push.int.test)',
+    }),
+    label: internal(),
+    time_zone: 'vocab',
+  },
   suppressions: { email_norm: personal('email'), category: 'vocab', source: 'vocab' },
   template_overrides: {
     kind: 'vocab',

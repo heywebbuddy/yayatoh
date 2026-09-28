@@ -5,6 +5,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { eraseResponsesDsarTx, responsesDsarTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { eraseSubjectPushDevicesTx } from '@yayatoh/notifications';
 import { eraseOrdersDsarTx, ordersDsarTx } from '@yayatoh/orders';
 import {
   bulkCommands,
@@ -292,6 +293,8 @@ export const eraseSubjectCommand = tenantCommand({
     const attendees = await eraseAttendeesDsarTx(tx, email, contact.contactIds, ctx.now);
     const invitations = await eraseInvitationsDsarTx(tx, email, ctx.now);
     const files = await purgeFilesMentioningTx(tx, email);
+    // The buyer's browser push devices in this org (M1.10e): their endpoint is personal data.
+    await eraseSubjectPushDevicesTx(tx, email);
     // Platform-wide (M1.14e): no org mails or re-imports the address to a marketing list again.
     await markAddressErasedTx(tx, email);
     const summary = {

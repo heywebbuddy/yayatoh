@@ -4,6 +4,7 @@ import { memberUserIdsTx } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { kindOf } from './kinds.ts';
 import { preferenceEnabledTx } from './preferences.ts';
+import { hasPushDeviceTx } from './push.ts';
 import { inboxItems, messages } from './schema.ts';
 
 const currentOrg = async (tx: TenantTx): Promise<string> => {
@@ -68,10 +69,15 @@ export function createNotifier(): Notifier {
     async enqueue(tx, intent) {
       const def = kindOf(intent.kind);
       const orgId = await currentOrg(tx);
+      // Push only to people who opted a device in (members by account, buyers by email, M1.10e):
+      // everyone else gets nothing rather than a "no device" row in the log.
+      const wantsPush = (intent.channels ?? def.channels).includes('push');
+      const canPush =
+        wantsPush && (await hasPushDeviceTx(tx, { userId: intent.to.userId, email: intent.to.email }));
       const channels = (intent.channels ?? def.channels).filter(
         (c): c is Exclude<NotificationChannel, 'in_app'> => {
           if (c === 'email') return Boolean(intent.to.email || intent.to.userId);
-          if (c === 'push') return Boolean(intent.to.userId);
+          if (c === 'push') return canPush;
           if (c === 'sms') return Boolean(intent.to.phone);
           return false;
         },
@@ -101,7 +107,7 @@ export function createNotifier(): Notifier {
             category: def.category,
             channel,
             dedupeKey: intent.dedupeKey,
-            recipientEmail: channel === 'email' ? (intent.to.email?.trim() ?? null) : null,
+            recipientEmail: channel === 'sms' ? null : (intent.to.email?.trim() ?? null),
             recipientUserId: intent.to.userId ?? null,
             recipientName: intent.to.name ?? null,
             locale: intent.to.locale ?? 'en',
@@ -140,8 +146,9 @@ export function createNotifier(): Notifier {
         if (channels.length === 0) continue;
         const paramsCiphertext = await encryptParams(orgId, { ...intent.params, _href: intent.href ?? '' });
         for (const channel of channels) {
-          // Skip rows the member switched off; the dispatcher checks again at send time.
+          // Skip rows the member switched off (or push with no device); the dispatcher checks again.
           if (!(await preferenceEnabledTx(tx, m.userId, def.category, channel))) continue;
+          if (channel === 'push' && !(await hasPushDeviceTx(tx, { userId: m.userId }))) continue;
           const rows = await tx
             .insert(messages)
             .values({

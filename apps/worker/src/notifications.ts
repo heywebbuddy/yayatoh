@@ -6,6 +6,8 @@ import {
   dispatchDue,
   fakeDeliverySecret,
   type Transports,
+  vapidConfig,
+  withWebPush,
 } from '@yayatoh/notifications';
 import { sql } from 'drizzle-orm';
 
@@ -14,10 +16,19 @@ import { sql } from 'drizzle-orm';
  * arrive with the owner's accounts (docs/owner-inbox.md). Until then development and preview
  * write to the dev mailbox; production refuses to pretend and leaves messages queued.
  */
-export function workerTransports(env: NodeJS.ProcessEnv = process.env): Transports | null {
+export function workerTransports(
+  env: NodeJS.ProcessEnv = process.env,
+  appOrigin = env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000',
+): Transports | null {
   if (env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production') return null;
-  // The fake provider's delivery reports wait in the mailbox for the dev drain (M1.10d).
-  return devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) });
+  // The fake provider's delivery reports wait in the mailbox for the dev drain (M1.10d). Web push
+  // (M1.10e) uses the real adapter with the dev VAPID keys; with dev auth on, the fake push service
+  // on the app's origin is reachable too.
+  return withWebPush(devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) }), {
+    vapid: vapidConfig(env),
+    appOrigin,
+    fakeOrigin: env.YAYATOH_DEV_AUTH === '1' ? appOrigin : null,
+  });
 }
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>

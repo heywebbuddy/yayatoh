@@ -1,4 +1,9 @@
-export { eraseUserNotificationsTx, sendAccountNotice, userPreferencesTx } from './account-data.ts';
+export {
+  eraseSubjectPushDevicesTx,
+  eraseUserNotificationsTx,
+  sendAccountNotice,
+  userPreferencesTx,
+} from './account-data.ts';
 export {
   DELIVERY_SIGNATURE_TOLERANCE_S,
   DeliveryEvent,
@@ -29,6 +34,9 @@ export {
   dispatchDue,
   dispatchDueTx,
   MAX_ATTEMPTS,
+  type PushRowOutcome,
+  pushOptions,
+  pushRowOutcome,
   UNSUBSCRIBE_PURPOSE,
   unsubscribeUrls,
 } from './dispatch.ts';
@@ -81,7 +89,25 @@ export {
   storeEmailPreviewCommand,
 } from './previews.ts';
 export { privateColumns } from './private-columns.ts';
-export { importLegacyPushTokensTx, type LegacyDeviceRow, registerPushTokenCommand } from './push.ts';
+export {
+  DeviceLabel,
+  endpointRef,
+  fakePushAllowed,
+  hasPushDeviceTx,
+  importLegacyPushTokensTx,
+  type LegacyDeviceRow,
+  MAX_PUSH_DEVICES,
+  myPushDevicesQuery,
+  PushDeviceDto,
+  type PushOwner,
+  pushDevicesTx,
+  RemoveDeviceInput,
+  registerPushTokenCommand,
+  removePushDeviceTx,
+  removePushTokenCommand,
+  upsertWebPushTx,
+  WebPushDeviceInput,
+} from './push.ts';
 export { isValidTimeZone, QUIET_END_HOUR, QUIET_START_HOUR, quietHoursRelease } from './quiet-hours.ts';
 export { planReminder, type ReminderPlan, reminderTime } from './reminder-time.ts';
 export { type ReminderTarget, type RescheduleResult, rescheduleRemindersTx } from './reminders.ts';
@@ -91,6 +117,7 @@ export {
   MESSAGE_CHANNELS,
   MESSAGE_STATUSES,
   PREFERENCE_CHANNELS,
+  PUSH_DELIVERY_STATUSES,
   PUSH_PLATFORMS,
 } from './schema.ts';
 export {
@@ -110,14 +137,18 @@ export {
   devMailboxDir,
   devMailboxTransports,
   type EmailTransport,
+  type FakePushEntry,
   fakeOutcome,
   memoryTransports,
   type OutboundEmail,
   type OutboundPush,
   type OutboundSms,
   PLATFORM_SENDER,
+  type PushSendResult,
   type PushTransport,
   readDevMailbox,
+  readFakePushes,
+  recordFakePush,
   type SmsTransport,
   type Transports,
   takeDevDeliveryEvents,
@@ -132,3 +163,40 @@ export {
   unsubscribeRef,
   unsuppressEmailTx,
 } from './unsubscribe.ts';
+export {
+  b64url,
+  buildWebPushPayload,
+  classifyPushResponse,
+  decryptPayload,
+  encryptPayload,
+  FAKE_PUSH_PATH,
+  generateVapidKeys,
+  isAllowedPushEndpoint,
+  isVapidSubject,
+  MAX_PLAINTEXT_BYTES,
+  normalizeSubscriptionKeys,
+  PUSH_SERVICE_HOSTS,
+  type PushOutcome,
+  pushHeaders,
+  pushTopic,
+  RECORD_SIZE,
+  retryAfterMs,
+  URGENCIES,
+  type Urgency,
+  VAPID_TOKEN_TTL_S,
+  type VapidKeys,
+  vapidAuthorization,
+  vapidJwt,
+  vapidPublicKeyOf,
+  verifyVapidAuthorization,
+  WebPushPayload,
+  WebPushSubscription,
+} from './web-push.ts';
+export {
+  DEFAULT_VAPID_SUBJECT,
+  routedPushTransport,
+  type VapidConfig,
+  vapidConfig,
+  webPushTransport,
+  withWebPush,
+} from './web-push-transport.ts';

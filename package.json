@@ -26,6 +26,7 @@
     "migrate:legacy:synth": "node tools/legacy-migrate/cli.ts synth",
     "migrate:legacy:demo": "node tools/legacy-migrate/cli.ts demo",
     "migrate:legacy:order-links": "node tools/legacy-migrate/cli.ts order-links",
+    "vapid:generate": "node packages/modules/notifications/scripts/generate-vapid-keys.ts",
     "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/sdk generate:check",
     "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
   },

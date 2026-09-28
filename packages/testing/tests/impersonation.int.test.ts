@@ -188,6 +188,9 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'privacy.detachAccount',
         // Bulk "cancel tickets" voids tickets for good (M1.8f).
         'orders.startCancelTickets',
+        // Removing a push device (member or buyer, M1.10e).
+        'notifications.removePushToken',
+        'orders.removePush',
       ]),
     );
   });

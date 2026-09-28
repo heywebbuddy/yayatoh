@@ -97,7 +97,7 @@ export const messages = tenantTable(
     check('messages_dedupe_key_length', sql`length(dedupe_key) between 1 and 255`),
     check(
       'messages_address_check',
-      sql`(channel = 'email' and (recipient_email is not null or recipient_user_id is not null)) or (channel = 'push' and recipient_user_id is not null) or channel = 'sms'`,
+      sql`(channel = 'email' and (recipient_email is not null or recipient_user_id is not null)) or (channel = 'push' and (recipient_user_id is not null or recipient_email is not null)) or channel = 'sms'`,
     ),
   ],
 );
@@ -168,15 +168,27 @@ export const suppressions = tenantTable(
 
 /**
  * Device push tokens. Legacy tokens are imported with their real platform: the legacy app sent
- * APNs tokens through FCM, which never delivered (roadmap §2 audit).
+ * APNs tokens through FCM, which never delivered (roadmap §2 audit). Web push (M1.10e): the token
+ * is the subscription's endpoint, with its `p256dh`/`auth` keys; a device belongs either to a
+ * member (`user_id`) or to a ticket buyer without an account (`email_norm`, opted in from the
+ * order page).
  */
 export const pushTokens = tenantTable(
   notificationsSchema,
   'push_tokens',
   {
-    userId: uuid('user_id').notNull(),
+    userId: uuid('user_id'),
+    /** Guest buyers (M1.10e): the normalised email of the order the device was opted in from. */
+    emailNorm: text('email_norm'),
     platform: text('platform').notNull(),
     token: text('token').notNull(),
+    /** Web push keys (RFC 8291): the browser's P-256 public key and auth secret, base64url. */
+    p256dh: text('p256dh'),
+    authSecret: text('auth_secret'),
+    /** What the person sees in their device list ("Chrome on Android"); never the endpoint. */
+    label: text('label'),
+    /** The device's IANA timezone as the browser reported it: push quiet hours use it. */
+    timeZone: text('time_zone'),
     source: text('source').notNull().default('app'),
     lastSeenAt: tsz('last_seen_at').notNull().defaultNow(),
     disabledAt: tsz('disabled_at'),
@@ -184,9 +196,60 @@ export const pushTokens = tenantTable(
   (t) => [
     uniqueIndex('push_tokens_org_platform_token_key').on(t.orgId, t.platform, t.token),
     index('push_tokens_org_user_idx').on(t.orgId, t.userId),
+    index('push_tokens_org_email_idx').on(t.orgId, t.emailNorm).where(sql`email_norm is not null`),
     check('push_tokens_platform_check', inList('platform', PUSH_PLATFORMS)),
     check('push_tokens_source_check', sql`source in ('app', 'web', 'legacy')`),
     check('push_tokens_token_length', sql`length(token) between 8 and 4096`),
+    check('push_tokens_owner_check', sql`(user_id is not null) <> (email_norm is not null)`),
+    check(
+      'push_tokens_email_norm_check',
+      sql`email_norm is null or (email_norm = lower(btrim(email_norm)) and email_norm like '%@%')`,
+    ),
+    check(
+      'push_tokens_webpush_check',
+      sql`(platform = 'webpush' and token ~ '^https?://' and p256dh ~ '^[A-Za-z0-9_-]{87}$' and auth_secret ~ '^[A-Za-z0-9_-]{22}$') or (platform <> 'webpush' and p256dh is null and auth_secret is null)`,
+    ),
+    check('push_tokens_label_length', sql`label is null or length(label) between 1 and 80`),
+    check('push_tokens_time_zone_length', sql`time_zone is null or length(time_zone) between 1 and 64`),
+  ],
+);
+
+export const PUSH_DELIVERY_STATUSES = ['sent', 'expired', 'rejected', 'retrying'] as const;
+
+/**
+ * The push delivery log (M1.10e): one row per message and device. A device the message already
+ * reached is skipped when the message is retried (another device was rate limited), so a device
+ * gets each message once; expired subscriptions (404/410) and refusals are recorded with the
+ * HTTP status. Removing a device keeps its log rows (the token reference is cleared).
+ */
+export const pushDeliveries = tenantTable(
+  notificationsSchema,
+  'push_deliveries',
+  {
+    messageId: uuid('message_id').notNull(),
+    pushTokenId: uuid('push_token_id'),
+    platform: text('platform').notNull(),
+    status: text('status').notNull(),
+    httpStatus: integer('http_status'),
+    attempts: integer('attempts').notNull().default(1),
+    providerMessageId: text('provider_message_id'),
+    sentAt: tsz('sent_at'),
+  },
+  (t) => [
+    uniqueIndex('push_deliveries_org_message_token_key').on(t.orgId, t.messageId, t.pushTokenId),
+    index('push_deliveries_org_token_idx').on(t.orgId, t.pushTokenId).where(sql`push_token_id is not null`),
+    foreignKey({
+      name: 'push_deliveries_message_fk',
+      columns: [t.orgId, t.messageId],
+      foreignColumns: [messages.orgId, messages.id],
+    }),
+    check('push_deliveries_status_check', inList('status', PUSH_DELIVERY_STATUSES)),
+    check('push_deliveries_platform_check', inList('platform', PUSH_PLATFORMS)),
+    check('push_deliveries_http_status_check', sql`http_status is null or http_status between 100 and 599`),
+    check(
+      'push_deliveries_provider_message_id_length',
+      sql`provider_message_id is null or length(provider_message_id) <= 200`,
+    ),
   ],
 );
 

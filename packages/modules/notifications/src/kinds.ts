@@ -152,7 +152,7 @@ export const KINDS = {
   },
   'notifications.test': {
     category: 'transactional',
-    channels: ['in_app'],
+    channels: ['in_app', 'push'],
     urgent: true,
     params: [],
   },

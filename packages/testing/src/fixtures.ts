@@ -1,3 +1,4 @@
+import { createECDH } from 'node:crypto';
 import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
 import {
   attendeeImportBulk,
@@ -51,6 +52,7 @@ import {
   memoryTransports,
   recordDeliveryEventsCommand,
   registerPushTokenCommand,
+  sendTestNotificationCommand,
   setMyPreferencesCommand,
   setTemplateOverrideCommand,
   storeEmailPreviewCommand,
@@ -62,6 +64,7 @@ import {
   applyProviderEventCommand,
   attachPaymentCommand,
   completeRefundCommand,
+  registerOrderPushCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
   startRefundCommand,
@@ -652,6 +655,49 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M1.10e: a browser (web push) device, a test notification pushed to it, and its delivery log row.
+  const browserKey = createECDH('prime256v1');
+  browserKey.generateKeys();
+  await executeCommand(
+    registerPushTokenCommand,
+    {
+      platform: 'webpush',
+      subscription: {
+        endpoint: `https://fcm.googleapis.com/fcm/send/fixture-${slug}`,
+        keys: {
+          p256dh: browserKey.getPublicKey().toString('base64url'),
+          auth: Buffer.alloc(16, 7).toString('base64url'),
+        },
+        label: 'Fixture browser',
+      },
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(sendTestNotificationCommand, {}, ctx(), ports);
+  // A guest buyer's browser, opted in from their order page (M1.10e: owned by the buyer's email).
+  const guestKey = createECDH('prime256v1');
+  guestKey.generateKeys();
+  await executeCommand(
+    registerOrderPushCommand,
+    {
+      token: checkout.manageToken,
+      subscription: {
+        endpoint: `https://fcm.googleapis.com/fcm/send/fixture-guest-${slug}`,
+        keys: {
+          p256dh: guestKey.getPublicKey().toString('base64url'),
+          auth: Buffer.alloc(16, 9).toString('base64url'),
+        },
+        label: 'Fixture guest browser',
+      },
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  await dispatchDue(org.id, {
+    transports: memoryTransports().transports,
+    appOrigin: 'https://app.yayatoh.test',
+  });
   await executeCommand(
     setTemplateOverrideCommand,
     { kind: 'orders.tickets', locale: 'en', subject: `Tickets from ${name}`, intro: null },

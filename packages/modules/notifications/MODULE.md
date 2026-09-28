@@ -21,8 +21,13 @@ key) inside their own transaction; this module records, gates, renders and sends
   session, never from input.
 - Push tokens keep their real platform; legacy APNs tokens are imported as `apns` (the legacy app
   sent them through FCM).
-- Providers (SES, Twilio, WhatsApp, FCM v1, APNs, VAPID) are owner accounts: until they exist,
-  `devMailboxTransports` (dev/CI) and `memoryTransports` (tests) stand in.
+- Providers (SES, Twilio, WhatsApp, FCM v1, APNs) are owner accounts: until they exist,
+  `devMailboxTransports` (dev/CI) and `memoryTransports` (tests) stand in. Web push (M1.10e) is a
+  real adapter (RFC 8030/8291/8292 with `node:crypto`) that only contacts known push services.
+- Web push devices belong to a member (`user_id`) or a guest buyer (`email_norm`), never both; at
+  most 10 per person and org. Push is queued only for people with an active device, sent once per
+  device (`push_deliveries`, also across retries), and pruned on 404/410. Payloads are an
+  allowlist (title, body, a link on our origin); endpoints and keys never leave the server.
 - Delivery reports (M1.10d) come from a verified provider webhook and are kept once per provider
   event id (`message_events`, append-only). Hard bounces, complaints and repeated soft bounces put
   the address on `address_suppressions`, which the dispatcher honours for every category,

@@ -14,6 +14,7 @@ import {
   FAKE_DELIVERY_SIGNATURE_HEADER,
   fakeDeliverySecret,
   takeDevDeliveryEvents,
+  withWebPush,
 } from '@yayatoh/notifications';
 import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
@@ -23,6 +24,7 @@ import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import './ports.ts';
 import { deliveryAdapter, ingestDeliveryEvents } from './delivery-webhooks.ts';
+import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
 
@@ -82,7 +84,13 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     if (fresh === 0) break;
   }
   const deps: DispatchDeps = {
-    transports: devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret() }),
+    // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
+    // it may reach besides real push services are the fake push service on this origin.
+    transports: withWebPush(devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret() }), {
+      vapid: webPushConfig(),
+      appOrigin,
+      fakeOrigin: appOrigin,
+    }),
     appOrigin,
     userEmails,
     userLocales,

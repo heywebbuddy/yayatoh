@@ -29,6 +29,19 @@ export async function eraseUserNotificationsTx(tx: TenantTx, userId: string) {
 }
 
 /**
+ * A DSAR erasure (privacy.eraseSubject): the buyer's browser push devices in the current org,
+ * registered under their email (M1.10e), are deleted. The push delivery log keeps its rows with
+ * the device cleared (evidence, no address).
+ */
+export async function eraseSubjectPushDevicesTx(tx: TenantTx, emailNorm: string) {
+  const t = await tx
+    .delete(pushTokens)
+    .where(eq(pushTokens.emailNorm, emailNorm))
+    .returning({ id: pushTokens.id });
+  return t.length;
+}
+
+/**
  * Send a platform notice about the person's own account (M1.14e: the deletion confirmation, to
  * the old address before it is erased), in their email language, from the platform sender.
  */

@@ -2875,7 +2875,7 @@
       "email": "E-mail",
       "push": "Notification push"
     },
-    "pushHint": "Le push atteint les participants qui utilisent l’app ; les autres reçoivent l’e-mail.",
+    "pushHint": "Les notifications push atteignent les participants qui les ont activées sur la page de leur commande ou dans l'application ; les autres reçoivent l'e-mail.",
     "preview": "Aperçu",
     "previewTitle": "Aperçu de l’annonce",
     "previewFrame": "Aperçu de l’e-mail : {subject}",
@@ -3794,6 +3794,32 @@
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
     "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+  },
+  "webPush": {
+    "title": "Notifications push",
+    "buyerHint": "Recevez sur cet appareil les nouvelles de {org} sur cet événement, même quand cette page est fermée.",
+    "memberHint": "Recevez sur cet appareil les nouvelles commandes et les messages de {org}, même quand Yayatoh est fermé.",
+    "checking": "Vérification de ce navigateur…",
+    "on": "Les notifications sont activées sur cet appareil.",
+    "off": "Les notifications sont désactivées sur cet appareil.",
+    "turnOn": "Activer les notifications",
+    "turnOff": "Désactiver sur cet appareil",
+    "turnedOn": "Notifications activées. Les nouvelles arriveront sur cet appareil.",
+    "turnedOff": "Les notifications sont désactivées sur cet appareil.",
+    "blocked": "Les notifications sont bloquées pour ce site. Autorisez-les dans les paramètres du site de votre navigateur, puis rechargez cette page.",
+    "notAllowed": "Les notifications n'ont pas été autorisées : rien n'a changé.",
+    "unsupported": "Ce navigateur ne peut pas recevoir de notifications push.",
+    "unavailable": "Les notifications push ne sont pas encore disponibles.",
+    "failed": "Impossible d'activer les notifications. Veuillez réessayer.",
+    "tooMany": "Trop d'appareils reçoivent des notifications. Retirez-en un, puis réessayez.",
+    "devices": "Vos appareils",
+    "devicesNone": "Aucun appareil ne reçoit encore de notifications.",
+    "thisDevice": "(cet appareil)",
+    "since": "Depuis le {date}",
+    "remove": "Retirer",
+    "removeLabel": "Retirer {label}",
+    "removed": "Appareil retiré.",
+    "unknownDevice": "Navigateur"
   },
   "fraudSignals": {
     "door": {

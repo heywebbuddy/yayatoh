@@ -21,6 +21,12 @@ export {
 } from './commands/checkout.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
 export {
+  manageTokenOrg,
+  orderPushDevices,
+  registerOrderPushCommand,
+  removeOrderPushCommand,
+} from './commands/push.ts';
+export {
   eventRefundPolicyTx,
   publicRefundPolicy,
   RefundPolicyDto,

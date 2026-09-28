@@ -2875,7 +2875,7 @@
       "email": "E-mail",
       "push": "Pushmelding"
     },
-    "pushHint": "Push bereikt bezoekers die de app gebruiken; de rest krijgt de e-mail.",
+    "pushHint": "Push bereikt deelnemers die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail.",
     "preview": "Voorbeeld",
     "previewTitle": "Voorbeeld van de aankondiging",
     "previewFrame": "E-mailvoorbeeld: {subject}",
@@ -3794,6 +3794,32 @@
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
     "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+  },
+  "webPush": {
+    "title": "Pushmeldingen",
+    "buyerHint": "Ontvang updates van {org} over dit evenement op dit apparaat, ook als deze pagina gesloten is.",
+    "memberHint": "Ontvang nieuwe bestellingen en berichten voor {org} op dit apparaat, ook als Yayatoh gesloten is.",
+    "checking": "Deze browser wordt gecontroleerd…",
+    "on": "Meldingen staan aan op dit apparaat.",
+    "off": "Meldingen staan uit op dit apparaat.",
+    "turnOn": "Meldingen aanzetten",
+    "turnOff": "Uitzetten op dit apparaat",
+    "turnedOn": "Meldingen staan aan. Updates komen binnen op dit apparaat.",
+    "turnedOff": "Meldingen staan uit op dit apparaat.",
+    "blocked": "Meldingen zijn geblokkeerd voor deze site. Sta ze toe in de site-instellingen van je browser en laad deze pagina opnieuw.",
+    "notAllowed": "Meldingen zijn niet toegestaan, dus er is niets veranderd.",
+    "unsupported": "Deze browser kan geen pushmeldingen ontvangen.",
+    "unavailable": "Pushmeldingen zijn nog niet beschikbaar.",
+    "failed": "We konden de meldingen niet aanzetten. Probeer het opnieuw.",
+    "tooMany": "Te veel apparaten ontvangen meldingen. Verwijder er een en probeer het opnieuw.",
+    "devices": "Je apparaten",
+    "devicesNone": "Nog geen apparaten ontvangen meldingen.",
+    "thisDevice": "(dit apparaat)",
+    "since": "Sinds {date}",
+    "remove": "Verwijderen",
+    "removeLabel": "{label} verwijderen",
+    "removed": "Apparaat verwijderd.",
+    "unknownDevice": "Browser"
   },
   "fraudSignals": {
     "door": {

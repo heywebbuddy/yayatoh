@@ -2,6 +2,7 @@ import { Button, Card, cx, EmptyState, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
+import { MemberPushSection } from '@/components/member-push-section.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { loadInbox } from '@/server/inbox.ts';
@@ -98,6 +99,7 @@ export default async function NotificationsPage({
           </ul>
         </Card>
       )}
+      <MemberPushSection data={data} org={org} locale={locale} showDevices={false} />
       {view.more && last ? (
         <Link
           href={`/o/${org}/notifications?before=${last.id}`}

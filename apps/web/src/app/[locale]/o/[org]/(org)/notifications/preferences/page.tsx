@@ -4,6 +4,7 @@ import { myPreferencesQuery } from '@yayatoh/notifications';
 import { Card, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { MemberPushSection } from '@/components/member-push-section.tsx';
 import { PreferencesForm } from '@/components/preferences-form.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { loadConsole } from '@/server/console.ts';
@@ -36,6 +37,7 @@ export default async function PreferencesPage({
           grid={grid.map((p) => ({ category: p.category, channel: p.channel, enabled: p.enabled }))}
         />
       </Card>
+      <MemberPushSection data={data} org={org} locale={locale} />
       <section aria-labelledby="email-language-heading" className="flex flex-col gap-3">
         <h2 id="email-language-heading" className="text-section">
           {t('language.title')}
