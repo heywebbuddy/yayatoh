@@ -13,6 +13,7 @@ import {
   startCheckoutCommand,
   verifyGuestChallenge,
 } from '@yayatoh/orders';
+import { signLinkToken, verifyLinkToken } from '@yayatoh/platform';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
 import { refresh } from 'next/cache';
 import { headers } from 'next/headers';
@@ -21,15 +22,7 @@ import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import type { FormState } from '@/lib/form-state.ts';
 import { failure } from '@/server/form.ts';
-import {
-  emailVerifiedHere,
-  forgetPendingChallenge,
-  guestLimits,
-  pendingChallenge,
-  rememberPendingChallenge,
-  rememberVerifiedEmail,
-  sendGuestEmail,
-} from '@/server/guest.ts';
+import { emailVerifiedHere, guestLimits, rememberVerifiedEmail, sendGuestEmail } from '@/server/guest.ts';
 import { getCheckoutRisk, getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
@@ -53,6 +46,8 @@ export interface CheckoutState {
     readonly attemptsLeft?: number | null;
     /** When a new code may be asked for (epoch ms), when known. */
     readonly resendAt?: number | null;
+    /** The pending code's challenge id, signed; posted back with the code. */
+    readonly token?: string;
   };
 }
 
@@ -63,6 +58,8 @@ export interface CheckoutState {
  * Placed before the order so the 10-minute hold never runs while the buyer reads their email,
  * and a mistyped address never holds stock.
  */
+const PENDING_PURPOSE = 'guest-checkout';
+
 async function verifyBuyerEmail(
   orgId: string,
   email: string,
@@ -71,14 +68,15 @@ async function verifyBuyerEmail(
 ): Promise<CheckoutState | null> {
   const limits = await guestLimits();
   const code = String(form.get('verifyCode') ?? '').replace(/\s/g, '');
-  const pending = await pendingChallenge('checkout');
+  // The pending code travels in the form as a signed token (not a cookie: setting a cookie here
+  // would re-render the page, and a seat map refreshed mid-step would drop the buyer's seats).
+  const pending = verifyLinkToken(PENDING_PURPOSE, String(form.get('verifyToken') ?? ''));
   if (code && form.get('verifyIntent') !== 'resend' && pending) {
     const r = await verifyGuestChallenge(
       { challengeId: pending, code, purpose: 'checkout', scopeOrgId: orgId, email },
       limits,
     );
     if (r.status === 'ok') {
-      await forgetPendingChallenge('checkout');
       await rememberVerifiedEmail(email);
       return null;
     }
@@ -87,7 +85,15 @@ async function verifyBuyerEmail(
         code: 'rate_limited',
         retryMinutes: Math.max(1, Math.ceil((r.retryAfterMs ?? 60_000) / 60_000)),
       };
-    return { code: 'verify_email', verify: { email, status: r.status, attemptsLeft: r.attemptsLeft } };
+    return {
+      code: 'verify_email',
+      verify: {
+        email,
+        status: r.status,
+        attemptsLeft: r.attemptsLeft,
+        token: signLinkToken(PENDING_PURPOSE, pending),
+      },
+    };
   }
   let sent: Awaited<ReturnType<typeof requestGuestChallenge>>;
   try {
@@ -99,7 +105,15 @@ async function verifyBuyerEmail(
   if (sent.status === 'rate_limited')
     return { code: 'rate_limited', retryMinutes: Math.max(1, Math.ceil(sent.retryAfterMs / 60_000)) };
   if (sent.status === 'cooldown')
-    return { code: 'verify_email', verify: { email, status: 'cooldown', resendAt: sent.resendAt.getTime() } };
+    return {
+      code: 'verify_email',
+      verify: {
+        email,
+        status: 'cooldown',
+        resendAt: sent.resendAt.getTime(),
+        token: signLinkToken(PENDING_PURPOSE, sent.challengeId),
+      },
+    };
   await sendGuestEmail({
     kind: 'guest.checkout-code',
     to: email,
@@ -107,8 +121,15 @@ async function verifyBuyerEmail(
     orgId,
     params: { code: sent.code, minutes: GUEST_CODE_TTL_MS / 60_000 },
   });
-  await rememberPendingChallenge('checkout', sent.challengeId);
-  return { code: 'verify_email', verify: { email, status: 'sent', resendAt: sent.resendAt.getTime() } };
+  return {
+    code: 'verify_email',
+    verify: {
+      email,
+      status: 'sent',
+      resendAt: sent.resendAt.getTime(),
+      token: signLinkToken(PENDING_PURPOSE, sent.challengeId),
+    },
+  };
 }
 
 /**

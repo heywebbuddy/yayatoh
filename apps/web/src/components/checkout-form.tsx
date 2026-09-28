@@ -287,6 +287,7 @@ export function CheckoutForm({
             <h2 id="verify-email-title" className="text-section">
               {t('guestVerify.title')}
             </h2>
+            {verify.token ? <input type="hidden" name="verifyToken" value={verify.token} /> : null}
             <GuestCodeFields
               email={verify.email}
               status={verify.status}
