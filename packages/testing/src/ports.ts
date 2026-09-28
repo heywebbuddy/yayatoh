@@ -12,12 +12,14 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
-import { createOrgAuthorizer } from '@yayatoh/tenancy';
+import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
 export const ports = createCommandPorts({
   entitlements: billingEntitlements,
   authorizer: createOrgAuthorizer({ eventRoles: eventRolesOf }),
+  // A suspended or terminated org is read-only for its members and the public (M1.3f).
+  orgGate: orgStatusGate,
 });
 
 // Tests get a per-run local key vault (ticket signing keys are envelope-encrypted).

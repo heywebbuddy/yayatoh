@@ -9,6 +9,7 @@ Roadmap: M1.3. This milestone is delivered in increments:
 | c | Payouts onboarding (Connect embedded, behind the payments port) | fake adapter until the owner's Stripe account | payments |
 | d | Domain lifecycle (Vercel port, Payment Method Domains, tenant-apex subdomains) | fake adapter until Vercel/Cloudflare accounts | infra |
 | e | Admin v1 (`apps/admin`) | tenants, kill switches ("pause checkout" ≤60 s), entitlement overrides, fee schedules, Connect status, payout holds | tenancy, payments |
+| f | Admin v1 leftovers | tenant status (suspend/reactivate/terminate), signup-code screen, domain re-check job, staff console CSP | tenancy, auth, infra, db-migration |
 
 ## M1.3a — settings, legal pages, brand kit, click-wrap, setup checklist (done)
 - **Settings** (`/o/{org}/settings`, `org:update`):
@@ -104,7 +105,7 @@ Roadmap §4.2/§4.4. Serving tenant sites on these hosts (proxy host routing, pe
 - **Wallets.** Once a host is active, it is registered with Stripe Payment Method Domains on the platform account and, when the org's payout account is active, on the connected account too (direct charges show wallets per connected account); the platform registration id is recorded (`recordDomainWallets`).
 - **Resolver.** `resolveHost(host)` → `{ orgId, primaryHost }` through the SECURITY DEFINER `tenancy.org_by_host` (active site domains of active/limited orgs only; nothing else is returned).
 - **Fake provider.** DNS is simulated from the name: `*.verified.test` is published (active, certificate issued), `*.fail.test` points elsewhere (failed), anything else waits for DNS.
-- **Later:** a worker re-check of pending domains (today: "Check now"), Vercel's 100/h add queue, Redis write-through for the router (M1.11), registering wallets on a connected account that activates after its domains (with the Stripe adapter).
+- **Later:** ~~a worker re-check of pending domains~~ (done in M1.3f), Vercel's 100/h add queue, Redis write-through for the router (M1.11), registering wallets on a connected account that activates after its domains (with the Stripe adapter).
 
 ### Acceptance (M1.3d)
 | ID | Criterion | Test |
@@ -142,7 +143,7 @@ Delivered in two parts: **e1** the platform-side commands (kill switches, payout
 - **Reads.** The cross-tenant tenant list (search by name or slug; status, members, payout state, holds, active pauses) and the access log use `platform_reader`. **Every use writes a `platform.access_log` row first** (`databaseAuditSink`, append-only through `platform.log_access`); the console shows the latest 200. The tenant page reads through ordinary tenant queries with the staff member as a platform actor (`staff:<userId>`): organization, members, suspension history, payout account, entitlements, effective fee (`billing.feeSchedule`), domains.
 - **Writes.** All through commands as that platform actor, each with a reason kept in the audit log: pause/resume ticket sales, publishing, guest messaging; hold/release payouts; fee override; entitlement grant/revoke.
 - **Language.** English only for now. Strings still go through next-intl, so adding locales is mechanical (owner inbox: confirm).
-- **Later:** passkeys/step-up for staff (roadmap §9.4), org status changes (suspend/terminate a tenant), support sessions (impersonation with consent), signup-code screen (today: the worker CLI), Vercel project for `admin.yayatoh.com`.
+- **Later:** passkeys/step-up for staff (roadmap §9.4), support sessions (impersonation with consent), Vercel project for `admin.yayatoh.com`. Org status changes and the signup-code screen: done in M1.3f.
 
 ### Acceptance (M1.3e2)
 | ID | Criterion | Test |
@@ -150,3 +151,74 @@ Delivered in two parts: **e1** the platform-side commands (kill switches, payout
 | AC1 | Staff are set, changed and revoked by email only; unknown people/roles refused; every platform read is logged; the runtime role can't read staff or write the log | `apps/worker/tests/staff.int.test.ts` |
 | AC2 | A non-staff account gets no console | `apps/admin/e2e/admin.spec.ts` |
 | AC3 | **Staff pause ticket sales and the public page shows it on the next request; resuming restores sales** (roadmap: "pause checkout" within 60 s); the search is in the access log; axe passes at 1280 and 375 | `admin.spec.ts` |
+
+## M1.3f — admin v1 leftovers (done)
+
+The "Later" items of M1.3d/e2 that belong to M1.3: tenant status, the signup-code screen, the domain re-check job, and the staff console's CSP. **Risk tags:** `tenancy`, `auth`, `infra`, `db-migration`.
+
+### Tenant status (suspend, reactivate, terminate)
+- **Who.** Only staff with the **admin** role (new console action `status`; `apps/admin/src/server/staff-roles.ts`). Suspending takes every public page offline and terminating can't be undone from the console, so it is an account decision; support keeps the per-capability kill switches (M1.3e1) for incidents. *Pending the owner.*
+- **Command.** `tenancy.setOrgStatus` (new platform permission `platform:org.status`; platform actor only; `suspend`: active/limited → suspended, `reactivate`: suspended → active, `terminate`: active/limited/suspended → terminated; anything else is `invalid_state`, `reason: terminated | not_live | not_suspended`). A reason (3–500 characters) is required. Each change is written to the new tenant table `tenancy.org_status_changes` (history with the staff note), the org's audit log (`org.status_change` with from, to and the note), and the outbox as **`org.status_changed@1`** `{orgId, changeId, action, from, to}`. The staff console also writes a platform **access-log** row first (`staff console: {action} organization {slug}: {reason}`), then asks the web app to drop the org's cached public reads (the signed `/api/internal/revalidate` call the worker makes).
+- **Staff console** (tenant page → "Organization status"): current status, what it means, one form per allowed action (reason; a confirmation box for suspend/reactivate; the org's address typed for terminate), the history with the staff member's name and note. Refusals: blank reason, box not ticked, wrong address, a replayed form after the status changed (`invalid_state`). Terminated orgs show no forms ("can't be reactivated from the console").
+- **Public face** of a suspended or terminated org: the event page, `/o/{slug}` on the marketplace, the tenant site and its event pages, the widget, `/v1/public/…` and the org's legal pages are **404** (the not-found page carries `noindex`). Most reads already required an active or limited org (SECURITY DEFINER functions); the marketplace functions (`search_listings`, `listing_cities`, `listing_by_slug`, `sitemap_listings`) now also join the org's status, so listings disappear **at once**. The **projector** handles `org.status_changed@1`: it drops the org's listings and, on reactivation, **rebuilds them from the org's events** (not only from existing rows). Tenant hosts resolve through the proxy's 30 s in-process cache (M1.11): the pages themselves check the status, so a suspended site is 404 at once; a reactivated one can take up to 30 s to come back on its tenant host.
+- **Checkout is refused**: `events.checkout_target` already excluded non-active orgs; a buyer on a page opened before the suspension gets "This organizer isn't selling tickets right now. Tickets already bought stay valid." (`events.org_unavailable_for_event`, 13 locales), and `orders.startCheckout` is refused by the org gate. **Existing orders stay valid.**
+- **Read-only console (the org gate).** New optional command port `orgGate` (kernel; run inside the tenant transaction, before the handler; wired in the web, `/v1`, the staff console and the test ports). `tenancy.orgStatusGate` refuses writes of a suspended org by members, API keys and the public (`invalid_state`, `reason: org_suspended`), except: platform actors (staff, the worker, webhooks, door devices), **exports** (organizers can take their data out), **door scanning and ticket holders' own actions** (`checkin.scanTicket`, `undoAdmission`, `syncScans`, `heartbeat`, `ticketing.claimTicket`, `requestHolderLink`, `giveTicket`), and personal/safety actions (marking notifications read, own preferences, unsubscribe, report/block). Reads work. Staff acting as a member (M1.2e) are read-only too. Every console page shows a banner ("This organization is suspended … the console is read-only … Tickets already sold stay valid and still scan at the door"; 13 locales, RTL); the staff note is never shown.
+- **Tickets still scan while suspended** (`checkin.device_by_token` now resolves devices of suspended orgs; the gate lets scans through): guests paid, and a suspension is usually a review, so turning them away at the door would punish buyers, not the organizer. *Pending the owner.* Terminated orgs' devices resolve to nothing.
+- **Terminated.** Same public effects; scanning stops; **members lose the console except owners**, who keep it read-only with a "closed" banner and can still start and download exports (the gate lets `export` commands through for owners only). *Pending the owner.* Nothing is deleted: erasure is a DSAR or retention matter (M1.14c); retention keeps skipping terminated orgs as before.
+- **Owners are told** at once (new kind `tenancy.org-status`: transactional, urgent, in-app + email, audience owner; 13 locales; subscriber `tenancy.org-status-notice` in the worker and the dev drain), without the staff note.
+- **Impersonation (M1.2e):** allowed for a suspended org (support needs to see what the organizer sees; the session is read-only by the gate); refused for a terminated org (`tenancy.startImpersonation` → `invalid_state`, `reason: org_terminated`).
+
+### Signup-code screen (`apps/admin` → Signup codes)
+- For **admins and support** (finance: no link, page refused). *Pending the owner.*
+- **List** (latest 200): note, state (active, used up, expired, revoked), uses left of total, expiry (UTC), created by (the staff member's name, or `staff:cli`) and when; revoked codes say by whom and when.
+- **Create:** uses (1–1000), days (1–365), note (1–200, required), each validated with its own message. The code (`YY-XXXX-XXXX-XXXX`, now generated in tenancy with rejection sampling, `randomSignupCode`) is shown **once** in the response: never stored (only its SHA-256), never in a URL; after a reload only the note is listed.
+- **Revoke** (idempotent): the code stops working at once; orgs already made with it stay. `platform.signup_codes.revoked_by` records who.
+- The table stays closed to `platform_reader` and `app_user`: new SECURITY DEFINER functions `platform.list_signup_codes(limit)` (allowlisted columns, never the hash) and `platform.revoke_signup_code(id, by)`, granted to `platform_reader` only. Create, list and revoke are each logged in the platform access log with the staff member.
+- The worker CLI (`pnpm --filter @yayatoh/worker signup-code …`) keeps working unchanged.
+
+### Domain re-check job (worker)
+- `recheckPendingDomains` / `domainRecheckJob` (`apps/worker/src/domains.ts`), **every minute, leader only**. Lists pending custom domains (`pending_dns`, `verifying`; not managed) of **live orgs** through `platform_reader` (audited), oldest check first, and checks those due on an **age-based backoff** (`recheckDue`: every minute for the first 10 minutes, then every 5 minutes to an hour, 15 minutes to 6 hours, 30 minutes to a day, then hourly; stops after 7 days — "Check now" still works). Each answer is recorded with `tenancy.recordDomainCheck` as a system actor in the org's own transaction — the same command as "Check now", so activation, primary takeover and `domain.activated@1` happen once whoever checks first (**idempotent**). Newly active hosts get their Payment Method Domains (platform account, and the connected one when active).
+- **Provider budget:** at most `DOMAIN_CHECKS_PER_HOUR` (default **60**) provider calls an hour, counted in the shared Postgres limiter (`domains:provider:{name}`), leaving room under Vercel's 100/h for organizers' own Add and Check now. When it runs out the job stops and waits until the budget frees up.
+- **Backoff on provider failures:** the run stops at the first error; the job waits 1, 2, 4 … minutes (at most 30) before the next run and resets after a clean one.
+- Uses the fake provider (`FAKE_PAYMENTS_SECRET`) until the owner's Vercel account; the domains page now says pending domains are checked automatically.
+
+### Staff console CSP (M1.14 builder)
+- `apps/admin/src/proxy.ts` applies `securityHeaders('console')` to every page: a fresh 128-bit nonce + `'strict-dynamic'`, `style-src 'self' 'nonce-…'`, **`style-src-attr 'none'`**, `frame-ancestors 'none'`, `object-src`/`base-uri 'none'`, `form-action 'self'`, report-uri; X-Frame-Options DENY, nosniff, `Referrer-Policy: same-origin`, Permissions-Policy, COOP/CORP. The root layout renders per request (`connection()`) so every page carries its nonce; Zod runs jitless in the browser (`instrumentation-client.ts`). The console had no `style=` props.
+- API routes get `default-src 'none'; frame-ancestors 'none'; base-uri 'none'`. `/api/csp-report` in the console (same parsing as the web, now shared: `readCspReports` in `@yayatoh/platform/security`; rate-limited per client). Dispute **evidence packets** (a static HTML document when no PDF renderer is configured) get their own policy: no scripts, only their `<style>` block by SHA-256 hash.
+
+### Also fixed
+- `@yayatoh/ui` `Table`: its scroll container is `relative`, so absolutely positioned content (the Team page's screen-reader role labels, M1.2c) no longer widens the page at 375 px (`apps/web/e2e/a11y.spec.ts` "team" had failed since M1.2d/e).
+- The CSP report parsing moved to `@yayatoh/platform/security` (`readCspReports`), shared by both apps.
+
+### Data model and migration
+`packages/db/drizzle/0049_outstanding_cannonball.sql` (generated; to be renumbered on merge). Generated: new tenant table `tenancy.org_status_changes` (tenantTable: `org_id`, ENABLE + FORCE RLS, canonical policy, org-leading indexes, org FK, checks on action/statuses/reason length); nullable `platform.signup_codes.revoked_by`. Hand edits:
+1. Two header comment lines.
+2. Hand-written block (`-- hand-written: begin/end`): `platform.list_signup_codes(integer)` and `platform.revoke_signup_code(uuid, text)` (SECURITY DEFINER; REVOKE PUBLIC; EXECUTE to `platform_reader`); `CREATE OR REPLACE checkin.device_by_token` (suspended orgs' devices resolve); new `events.org_unavailable_for_event(text)` (EXECUTE to `app_user`); `CREATE OR REPLACE` of `marketplace.search_listings`, `listing_cities`, `listing_by_slug`, `sitemap_listings` with an org-status join (same signatures and grants).
+
+Fixture: both orgs of `createOrgFixture` are suspended and reactivated once (isolation coverage of `org_status_changes`).
+
+### Later / not yet
+- Owner decisions above (who may change status and hand out codes; scanning while suspended; owners' access after termination; whether owners see the staff reason).
+- A reviewed runbook to un-terminate (a status change outside the console) and to erase a terminated org's data after the retention period.
+- Organizers' own "Add" and "Check now" don't draw from the job's provider budget; the Vercel adapter will queue adds (Vercel's 100/h) and share the budget.
+- Suspension doesn't revoke API keys or end open impersonations; both stop working through the status checks (keys resolve to nothing; the session is read-only).
+- The staff console stays English-only (owner inbox).
+
+### Acceptance (M1.3f)
+| ID | Criterion | Test |
+|---|---|---|
+| AC-3f-01 | Only a platform actor changes status; owners and viewers refused; a reason is required; transitions and the terminal state are enforced | `packages/testing/tests/org-status.int.test.ts`, `packages/modules/tenancy/tests/org-status.test.ts` |
+| AC-3f-02 | A suspended org disappears from every public read at once (event, checkout target, organizer, host, legal page, marketplace search and listing); other orgs untouched; reactivation restores | `org-status.int.test.ts` |
+| AC-3f-03 | Suspended: member and public writes refused (`org_suspended`), reads work, exports start, staff act; terminated: only personal actions and owners' exports; nothing deleted | `org-status.int.test.ts`, `org-status.test.ts` |
+| AC-3f-04 | The org gate runs inside the transaction before the handler; a refusal writes no outbox or audit row | `packages/kernel/tests/command.test.ts` |
+| AC-3f-05 | The projection drops the listings on suspension and rebuilds them on reactivation (idempotent replay); isolation covers `org_status_changes` | `org-status.int.test.ts`, `isolation.int.test.ts` |
+| AC-3f-06 | Audit row with from/to/note, `org.status_changed@1` payload, owners' notice without the note; the kind renders in 13 locales | `org-status.int.test.ts`, `packages/modules/notifications/tests/render.test.ts` |
+| AC-3f-07 | Impersonation allowed for suspended orgs (read-only), refused for terminated ones | `org-status.int.test.ts`, `apps/admin/e2e/tenant-status.spec.ts` |
+| AC-3f-08 | In the browser: suspend (blank reason and missing confirmation refused) → event page, organizer page, tenant site, widget and `/v1` 404 with `noindex`, marketplace listing gone, open checkout refused with the message, owner's console read-only with the banner (Arabic RTL), notice by email and inbox → reactivate by keyboard → everything back; access log; terminate (wrong address refused) → no way back, a replayed reactivate refused, owners keep a read-only console, other members 404; axe | `apps/admin/e2e/tenant-status.spec.ts` |
+| AC-3f-09 | Only admins: support sees no status controls and a replayed form is refused | `tenant-status.spec.ts`, `apps/admin/tests/staff-roles.test.ts` |
+| AC-3f-10 | Signup codes: list without the hash; revoke once, at once, with who; runtime and reader roles can't touch the table; the CLI still creates codes | `apps/worker/tests/signup.int.test.ts` |
+| AC-3f-11 | In the browser: validation messages per field, create by keyboard, code shown once, a newcomer signs up with it, uses left drops, revoke by keyboard stops it, access log; finance refused (link hidden, page refused), support allowed; axe | `apps/admin/e2e/signup-codes.spec.ts` |
+| AC-3f-12 | Re-check job: pending → active without "Check now" (primary, wallets, one activation event), age-based backoff, hourly budget, provider-failure backoff, suspended orgs and week-old domains skipped, audited listing | `apps/worker/tests/domains.int.test.ts`, `packages/modules/tenancy/tests/recheck.test.ts` |
+| AC-3f-13 | **A domain goes from pending to active** (roadmap) through the job in the browser: the organizer sees it live, primary, with wallets; the auto-check note in English and Arabic; staff see it active; axe | `apps/admin/e2e/domain-recheck.spec.ts` |
+| AC-3f-14 | Staff console CSP: strict nonce profile and headers, fresh nonce per response, every script carries it, no style attributes, no violations through sign-in, a tenant page and a Server Action; API policy; CSP report endpoint | `apps/admin/e2e/security.spec.ts` |
+| AC-3f-15 | Messages in 13 locales with valid plurals | `apps/web/tests/messages.test.ts` |

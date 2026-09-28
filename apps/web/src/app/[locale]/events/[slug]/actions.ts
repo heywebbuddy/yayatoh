@@ -1,6 +1,12 @@
 'use server';
 
-import { accessTarget, checkoutTarget, publicEventBySlug, redeemAccessCodeCommand } from '@yayatoh/events';
+import {
+  accessTarget,
+  checkoutTarget,
+  orgUnavailableForEvent,
+  publicEventBySlug,
+  redeemAccessCodeCommand,
+} from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
@@ -45,7 +51,11 @@ export async function checkoutAction(
   const live = await accessTarget(slug);
   const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
   const target = (await checkoutTarget(slug)) ?? (grant?.unlocksEvent && live ? live : null);
-  if (!target) return { code: 'not_found' };
+  if (!target) {
+    // The page was opened before staff suspended or closed the org (M1.3f): say so plainly.
+    if (await orgUnavailableForEvent(slug)) return { code: 'invalid_state', reason: 'org_suspended' };
+    return { code: 'not_found' };
+  }
   const event = await publicEventBySlug(slug, { includePrivate: grant?.unlocksEvent === true });
   if (!event) return { code: 'not_found' };
   let items: { ticketTypeId: string; quantity: number; amountMinor?: number }[];

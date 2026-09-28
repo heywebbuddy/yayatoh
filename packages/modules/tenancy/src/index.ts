@@ -37,9 +37,20 @@ export {
 } from './commands/invitations.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
 export {
+  ORG_STATUS_CHANGED,
+  OrgStatusChangeDto,
+  orgStatusGate,
+  orgStatusHistoryQuery,
+  orgStatusNotice,
+  SetOrgStatusInput,
+  setOrgStatusCommand,
+} from './commands/org-status.ts';
+export {
   createOrganization,
   createOrganizationCommand,
   hashSignupCode,
+  NewSignupCodeInput,
+  randomSignupCode,
   SignUpOrganizationInput,
   signUpOrganization,
   signUpOrganizationCommand,
@@ -70,6 +81,14 @@ export {
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {
+  isOrgLive,
+  nextOrgStatus,
+  type OrgStatus,
+  type OrgStatusAction,
+  orgStatusActions,
+  orgWriteRefusal,
+} from './domain/org-status.ts';
+export {
   EVENT_ROLE_PERMISSIONS,
   eventRoleCan,
   type OrgRole,
@@ -88,6 +107,12 @@ export {
   type DomainProvider,
   fakeDomainProvider,
 } from './hosting/provider.ts';
+export {
+  providerBackoffMs,
+  RECHECK_MAX_AGE_MS,
+  recheckDue,
+  recheckIntervalMs,
+} from './hosting/recheck.ts';
 export {
   getOrganizationQuery,
   listInvitationsQuery,
@@ -109,6 +134,7 @@ export {
   type LegalPageKind,
   ORG_KINDS,
   ORG_ROLES,
+  ORG_STATUS_ACTIONS,
   ORG_STATUSES,
   SUSPENSION_KINDS,
 } from './schema.ts';

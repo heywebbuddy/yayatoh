@@ -48,7 +48,7 @@ Rate-limit values; retention defaults; Upstash; WAF/BotID/Turnstile; PITR + back
 
 ## Later / not yet
 - Static/ISR public pages with build-time script hashes (the public profile is ready for SRI'd third parties; pages render per request today).
-- CSP for `apps/admin` (staff console) with the same builder.
+- ~~CSP for `apps/admin` (staff console) with the same builder~~: done in M1.3f.
 - Step-up before erasure and exports once M1.2c lands (typed confirmation today).
 - WORM anchor of each org's chain head (Object Lock) to detect truncation.
 - ZIP/CSV variants of the access export; DSAR for Yayatoh's own accounts (controller side) and team invitations; suppression list so an erased address isn't re-added to marketing.

@@ -335,6 +335,12 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
+      '@yayatoh/worker':
+        specifier: workspace:*
+        version: link:../worker
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3

@@ -3,7 +3,7 @@ import { defineSubscriber, type Notifier, tenantCommand } from '@yayatoh/platfor
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { organizationBrandTx } from '../queries.ts';
-import { memberships } from '../schema.ts';
+import { memberships, organizations } from '../schema.ts';
 
 /**
  * Staff impersonation in the org's own record (M1.2e, decision D14 "reason + org notice"). The
@@ -33,6 +33,14 @@ export const startImpersonationCommand = tenantCommand({
   permission: 'platform:impersonate',
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
+    // A closed org has nothing left to support (M1.3f); suspended orgs can still be looked into
+    // (the console is read-only for the member, and so for staff acting as them).
+    const [org] = await tx
+      .select({ status: organizations.status })
+      .from(organizations)
+      .where(eq(organizations.id, orgId));
+    if (org?.status === 'terminated')
+      throw new DomainError('invalid_state', 'This organization is closed', { reason: 'org_terminated' });
     const [member] = await tx
       .select({ role: memberships.role })
       .from(memberships)

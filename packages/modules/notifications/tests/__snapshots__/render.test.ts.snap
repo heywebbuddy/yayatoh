@@ -2951,6 +2951,240 @@ Lakeside Events 邀請您以經理身分加入團隊。
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · ar 1`] = `
+{
+  "subject": "علّقت Yayatoh ‏Lakeside Events",
+  "text": "علّقت Yayatoh ‏Lakeside Events
+
+مرحبًا،
+
+علّق فريق دعم Yayatoh ‏Lakeside Events. صفحاتها العامة وبيع التذاكر متوقفة، ولوحة التحكم للقراءة فقط. تبقى التذاكر المبيعة صالحة ويمكن مسحها عند الباب. تواصل مع دعم Yayatoh لمعرفة المزيد.
+
+فتح لوحة التحكم: https://app.yayatoh.test/o/lakeside-events
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · de 1`] = `
+{
+  "subject": "Yayatoh hat Lakeside Events gesperrt",
+  "text": "Yayatoh hat Lakeside Events gesperrt
+
+Hallo,
+
+Der Yayatoh-Support hat Lakeside Events gesperrt. Die öffentlichen Seiten und der Ticketverkauf sind offline, und die Konsole ist schreibgeschützt. Bereits verkaufte Tickets bleiben gültig und können weiterhin am Eingang gescannt werden. Wende dich an den Yayatoh-Support, um mehr zu erfahren.
+
+Konsole öffnen: https://app.yayatoh.test/o/lakeside-events
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · en 1`] = `
+{
+  "subject": "Yayatoh suspended Lakeside Events",
+  "text": "Yayatoh suspended Lakeside Events
+
+Hello,
+
+Yayatoh support suspended Lakeside Events. Its public pages and ticket sales are offline and the console is read-only. Tickets already sold stay valid and can still be scanned at the door. Contact Yayatoh support to find out more.
+
+Open the console: https://app.yayatoh.test/o/lakeside-events
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · es 1`] = `
+{
+  "subject": "Yayatoh suspendió Lakeside Events",
+  "text": "Yayatoh suspendió Lakeside Events
+
+Hola:
+
+El soporte de Yayatoh suspendió Lakeside Events. Sus páginas públicas y la venta de entradas están desconectadas y la consola es de solo lectura. Las entradas ya vendidas siguen siendo válidas y se pueden escanear en la puerta. Contacta con el soporte de Yayatoh para saber más.
+
+Abrir la consola: https://app.yayatoh.test/o/lakeside-events
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · fr 1`] = `
+{
+  "subject": "Yayatoh a suspendu Lakeside Events",
+  "text": "Yayatoh a suspendu Lakeside Events
+
+Bonjour,
+
+Le support Yayatoh a suspendu Lakeside Events. Ses pages publiques et la vente de billets sont hors ligne et la console est en lecture seule. Les billets déjà vendus restent valables et peuvent toujours être scannés à l’entrée. Contactez le support Yayatoh pour en savoir plus.
+
+Ouvrir la console: https://app.yayatoh.test/o/lakeside-events
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · hi 1`] = `
+{
+  "subject": "Yayatoh ने Lakeside Events को निलंबित किया",
+  "text": "Yayatoh ने Lakeside Events को निलंबित किया
+
+नमस्ते,
+
+Yayatoh सहायता टीम ने Lakeside Events को निलंबित कर दिया है। इसके सार्वजनिक पेज और टिकट बिक्री बंद हैं और कंसोल केवल पढ़ने के लिए है। पहले से बिके टिकट मान्य रहते हैं और दरवाज़े पर स्कैन किए जा सकते हैं। अधिक जानने के लिए Yayatoh सहायता से संपर्क करें।
+
+कंसोल खोलें: https://app.yayatoh.test/o/lakeside-events
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · it 1`] = `
+{
+  "subject": "Yayatoh ha sospeso Lakeside Events",
+  "text": "Yayatoh ha sospeso Lakeside Events
+
+Ciao,
+
+Il supporto Yayatoh ha sospeso Lakeside Events. Le pagine pubbliche e la vendita dei biglietti sono offline e la console è in sola lettura. I biglietti già venduti restano validi e possono ancora essere scansionati all’ingresso. Contatta il supporto Yayatoh per saperne di più.
+
+Apri la console: https://app.yayatoh.test/o/lakeside-events
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · ja 1`] = `
+{
+  "subject": "Yayatoh が Lakeside Events を停止しました",
+  "text": "Yayatoh が Lakeside Events を停止しました
+
+こんにちは。
+
+Yayatoh サポートが Lakeside Events を停止しました。公開ページとチケット販売は停止中で、コンソールは閲覧のみです。販売済みのチケットは引き続き有効で、入口でスキャンできます。詳しくは Yayatoh サポートにお問い合わせください。
+
+コンソールを開く: https://app.yayatoh.test/o/lakeside-events
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · nl 1`] = `
+{
+  "subject": "Yayatoh heeft Lakeside Events opgeschort",
+  "text": "Yayatoh heeft Lakeside Events opgeschort
+
+Hallo,
+
+Yayatoh-support heeft Lakeside Events opgeschort. De openbare pagina's en de ticketverkoop zijn offline en de console is alleen-lezen. Al verkochte tickets blijven geldig en kunnen nog steeds bij de ingang worden gescand. Neem contact op met Yayatoh-support voor meer informatie.
+
+Console openen: https://app.yayatoh.test/o/lakeside-events
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · pt 1`] = `
+{
+  "subject": "A Yayatoh suspendeu Lakeside Events",
+  "text": "A Yayatoh suspendeu Lakeside Events
+
+Olá!
+
+O suporte da Yayatoh suspendeu Lakeside Events. As páginas públicas e a venda de ingressos estão offline e o console está somente para leitura. Os ingressos já vendidos continuam válidos e ainda podem ser lidos na entrada. Fale com o suporte da Yayatoh para saber mais.
+
+Abrir o console: https://app.yayatoh.test/o/lakeside-events
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · ru 1`] = `
+{
+  "subject": "Yayatoh приостановил Lakeside Events",
+  "text": "Yayatoh приостановил Lakeside Events
+
+Здравствуйте!
+
+Поддержка Yayatoh приостановила Lakeside Events. Публичные страницы и продажа билетов отключены, консоль доступна только для чтения. Уже проданные билеты остаются действительными и сканируются на входе. Обратитесь в поддержку Yayatoh, чтобы узнать подробности.
+
+Открыть консоль: https://app.yayatoh.test/o/lakeside-events
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · zh-CN 1`] = `
+{
+  "subject": "Yayatoh 已暂停 Lakeside Events",
+  "text": "Yayatoh 已暂停 Lakeside Events
+
+您好：
+
+Yayatoh 支持团队已暂停 Lakeside Events。其公开页面和售票已下线，控制台为只读。已售出的门票仍然有效，仍可在入口扫描。如需了解详情，请联系 Yayatoh 支持。
+
+打开控制台: https://app.yayatoh.test/o/lakeside-events
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · zh-TW 1`] = `
+{
+  "subject": "Yayatoh 已暫停 Lakeside Events",
+  "text": "Yayatoh 已暫停 Lakeside Events
+
+您好：
+
+Yayatoh 支援團隊已暫停 Lakeside Events。其公開頁面和售票已下線，主控台為唯讀。已售出的票券仍然有效，仍可在入口掃描。如需了解詳情，請聯絡 Yayatoh 支援。
+
+開啟主控台: https://app.yayatoh.test/o/lakeside-events
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · ar 1`] = `
 {
   "subject": "دعم Yayatoh يتصرف بصفة Jordan Lee في Lakeside Events",

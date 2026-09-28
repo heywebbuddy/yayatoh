@@ -82,6 +82,11 @@
       "intro": "Ein Mitarbeiter von Yayatoh handelt jetzt als {member} in {org}, um zu helfen. Grund: {reason}. Dieser Zugriff endet spätestens {until}. Solange er besteht, kann nichts erstattet, ausgezahlt, exportiert oder gelöscht werden, und alles Getane erscheint in deinem Aktivitätsprotokoll. Wenn du das nicht erwartet hast, wende dich sofort an den Yayatoh-Support.",
       "cta": "Aktivität ansehen"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh hat {org} gesperrt} reactivated {{org} ist wieder online} other {Yayatoh hat {org} geschlossen}}",
+      "intro": "{status, select, suspended {Der Yayatoh-Support hat {org} gesperrt. Die öffentlichen Seiten und der Ticketverkauf sind offline, und die Konsole ist schreibgeschützt. Bereits verkaufte Tickets bleiben gültig und können weiterhin am Eingang gescannt werden. Wende dich an den Yayatoh-Support, um mehr zu erfahren.} reactivated {Der Yayatoh-Support hat {org} wieder freigeschaltet. Öffentliche Seiten, Einträge und Ticketverkauf sind zurück, und die Konsole funktioniert wie zuvor.} other {Der Yayatoh-Support hat {org} geschlossen. Die öffentlichen Seiten sind offline, und die Organisation kann nicht mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen. Wende dich an den Yayatoh-Support, wenn du das für einen Fehler hältst.}}",
+      "cta": "Konsole öffnen"
+    },
     "notifications.test": {
       "subject": "Testbenachrichtigung",
       "intro": "Benachrichtigungen funktionieren."

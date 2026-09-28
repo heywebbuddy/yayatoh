@@ -82,6 +82,11 @@
       "intro": "Een medewerker van Yayatoh handelt nu als {member} in {org} om te helpen. Reden: {reason}. Deze toegang eindigt uiterlijk {until}. Zolang die duurt, kan niets worden terugbetaald, uitbetaald, geëxporteerd of verwijderd, en alles wat er gebeurt staat in je activiteitenlog. Had je dit niet verwacht? Neem dan direct contact op met Yayatoh-support.",
       "cta": "Activiteit bekijken"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh heeft {org} opgeschort} reactivated {{org} is weer online} other {Yayatoh heeft {org} gesloten}}",
+      "intro": "{status, select, suspended {Yayatoh-support heeft {org} opgeschort. De openbare pagina's en de ticketverkoop zijn offline en de console is alleen-lezen. Al verkochte tickets blijven geldig en kunnen nog steeds bij de ingang worden gescand. Neem contact op met Yayatoh-support voor meer informatie.} reactivated {Yayatoh-support heeft {org} weer geactiveerd. De openbare pagina's, vermeldingen en ticketverkoop zijn terug en de console werkt zoals voorheen.} other {Yayatoh-support heeft {org} gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je de organisatie nog openen en je gegevens downloaden. Neem contact op met Yayatoh-support als je denkt dat dit een vergissing is.}}",
+      "cta": "Console openen"
+    },
     "notifications.test": {
       "subject": "Testmelding",
       "intro": "Meldingen werken."

@@ -2,7 +2,7 @@ import { KeysetAfter } from '@yayatoh/contracts';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, gt, isNull, lt, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, inArray, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { eventRoleAssignments, events } from './schema.ts';
@@ -111,6 +111,19 @@ export async function checkoutTarget(slug: string): Promise<{ orgId: string; eve
   return r ? { orgId: r.org_id, eventId: r.event_id } : null;
 }
 
+/**
+ * Whether a published event exists under this slug whose org is suspended or terminated (M1.3f):
+ * checkout tells the buyer the organizer isn't selling instead of "not found". Nothing else.
+ */
+export async function orgUnavailableForEvent(slug: string): Promise<boolean> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ unavailable: boolean }>(
+      sql`select events.org_unavailable_for_event(${slug}) as unavailable`,
+    ),
+  );
+  return rows[0]?.unavailable === true;
+}
+
 /** The signed-in actor's live event-scoped roles for one event (the tenancy authorizer's port). */
 export async function eventRolesOf(ctx: Ctx, eventId: string): Promise<string[]> {
   if (ctx.actor.type !== 'user') return [];
@@ -128,6 +141,18 @@ export async function eventRolesOf(ctx: Ctx, eventId: string): Promise<string[]>
       ),
   );
   return rows.map((r) => r.role);
+}
+
+/**
+ * Events of this org that may have a public listing (published or postponed, public): the
+ * marketplace rebuilds them when the org comes back online (M1.3f).
+ */
+export async function publicCandidateEventIdsTx(tx: TenantTx): Promise<string[]> {
+  const rows = await tx
+    .select({ id: events.id })
+    .from(events)
+    .where(and(inArray(events.status, ['published', 'postponed']), eq(events.visibility, 'public')));
+  return rows.map((r) => r.id);
 }
 
 /** Events of this org that ended before `before` (retention: attendee data after the event). */

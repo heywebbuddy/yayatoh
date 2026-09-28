@@ -117,6 +117,15 @@ export const KINDS = {
     audience: ['owner'],
     params: ['url', 'member', 'reason', 'until', 'timeZone'],
   },
+  // Staff suspended, reactivated or closed the org (M1.3f): the owners hear at once. The staff
+  // note is not included.
+  'tenancy.org-status': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner'],
+    params: ['url', 'status'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app'],

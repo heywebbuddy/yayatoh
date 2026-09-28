@@ -82,6 +82,11 @@
       "intro": "A Yayatoh staff member started acting as {member} in {org} to help. Reason: {reason}. This access ends by {until}. While it lasts, nothing can be refunded, paid out, exported or deleted, and everything done appears in your activity log. If you didn't expect this, contact Yayatoh support right away.",
       "cta": "View activity"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh suspended {org}} reactivated {{org} is back online} other {Yayatoh closed {org}}}",
+      "intro": "{status, select, suspended {Yayatoh support suspended {org}. Its public pages and ticket sales are offline and the console is read-only. Tickets already sold stay valid and can still be scanned at the door. Contact Yayatoh support to find out more.} reactivated {Yayatoh support reactivated {org}. Its public pages, listings and ticket sales are back, and the console works as before.} other {Yayatoh support closed {org}. Its public pages are offline and it can't be changed any more. As an owner you can still open it and download your data. Contact Yayatoh support if you think this is a mistake.}}",
+      "cta": "Open the console"
+    },
     "notifications.test": {
       "subject": "Test notification",
       "intro": "Notifications are working."

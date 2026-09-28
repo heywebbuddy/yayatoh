@@ -40,6 +40,8 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@yayatoh/config": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/worker": "workspace:*",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

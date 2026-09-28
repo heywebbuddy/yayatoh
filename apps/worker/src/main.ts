@@ -1,6 +1,8 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { fakePaymentProvider } from '@yayatoh/payments';
+import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { runDueBulkOperations } from './bulk.ts';
+import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { dispatchNotifications, userEmails, workerTransports } from './notifications.ts';
 import { JOBS, subscribers } from './registry.ts';
@@ -97,6 +99,29 @@ setInterval(() => {
       settling = false;
     });
 }, 10 * 60_000).unref();
+
+// Pending custom domains (M1.3f): check them again every minute on their backoff schedule, so a
+// domain goes live without "Check now" (leader only; the fake provider until the owner's Vercel).
+const domainJob = fakeSecret
+  ? domainRecheckJob({ provider: fakeDomainProvider({ secret: fakeSecret }), payments })
+  : null;
+if (!domainJob)
+  console.warn('domains: no domain provider configured; pending domains are checked by hand only');
+let rechecking = false;
+setInterval(() => {
+  if (!domainJob || !release || stopping || rechecking) return;
+  rechecking = true;
+  domainJob
+    .tick()
+    .then((r) => {
+      if (r && (r.checked || r.failed || r.rateLimited))
+        console.info(JSON.stringify({ job: 'domains.recheck', ...r }));
+    })
+    .catch((err) => console.error('domains.recheck', err))
+    .finally(() => {
+      rechecking = false;
+    });
+}, 60_000).unref();
 
 // Notifications (M1.10): send due messages every 2 s (leader only; rows are claimed with SKIP LOCKED).
 const transports = workerTransports();

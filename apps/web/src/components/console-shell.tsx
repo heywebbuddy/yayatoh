@@ -9,6 +9,7 @@ import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
 import { ImpersonationBanner } from './impersonation-banner.tsx';
 import { NotificationCenter } from './notification-center.tsx';
+import { OrgStatusBanner } from './org-status-banner.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
 import { StepUpProvider } from './step-up.tsx';
@@ -137,6 +138,7 @@ export async function ConsoleShell({
       </nav>
       <div className="flex min-w-0 flex-1 flex-col">
         <ImpersonationBanner session={data.session} locale={data.ctx.locale} timeZone={data.org.timezone} />
+        <OrgStatusBanner status={data.org.status} />
         <header className="flex flex-wrap items-center gap-3 px-4 pt-4 md:px-8 md:pt-[26px]">
           <details className="lg:hidden">
             <summary className="flex size-10 cursor-pointer list-none items-center justify-center rounded-pill border border-zinc-200 bg-white [&::-webkit-details-marker]:hidden">

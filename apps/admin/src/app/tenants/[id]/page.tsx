@@ -8,6 +8,8 @@ import {
   listDomainsQuery,
   listMembersQuery,
   type OrganizationDto,
+  orgStatusActions,
+  orgStatusHistoryQuery,
   SUSPENSION_KINDS,
   suspensionHistoryQuery,
 } from '@yayatoh/tenancy';
@@ -23,11 +25,22 @@ import {
   endImpersonationAction,
   entitlementAction,
   feeOverrideAction,
+  orgStatusAction,
   payoutHoldAction,
   startImpersonationAction,
   submitEvidenceAction,
   suspensionAction,
 } from './actions.ts';
+
+/** Refusals of a status change with their own message (others use the generic one). */
+const STATUS_ERRORS = new Set(['status_reason', 'status_confirm', 'status_slug']);
+
+const STATUS_DOT = {
+  active: 'success',
+  limited: 'warning',
+  suspended: 'danger',
+  terminated: 'neutral',
+} as const;
 
 /** Refusals of "Act as a member" with their own message (others use the generic one). */
 const IMPERSONATE_ERRORS = new Set([
@@ -82,20 +95,26 @@ export default async function TenantPage({
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
-  const [members, pauses, payout, entitlements, fee, domains, ledger, disputes] = await Promise.all([
-    executeQuery(listMembersQuery, {}, ctx, ports),
-    executeQuery(suspensionHistoryQuery, {}, ctx, ports),
-    executeQuery(payoutAccountQuery, {}, ctx, ports),
-    executeQuery(getEntitlementsQuery, {}, ctx, ports),
-    executeQuery(feeScheduleQuery, { currency: org.currency }, ctx, ports),
-    executeQuery(listDomainsQuery, {}, ctx, ports),
-    executeQuery(ledgerBalancesQuery, {}, ctx, ports),
-    executeQuery(disputesQuery, {}, ctx, ports),
-  ]);
-  const [people, impersonations] = await Promise.all([
+  const [members, pauses, payout, entitlements, fee, domains, ledger, disputes, statusHistory] =
+    await Promise.all([
+      executeQuery(listMembersQuery, {}, ctx, ports),
+      executeQuery(suspensionHistoryQuery, {}, ctx, ports),
+      executeQuery(payoutAccountQuery, {}, ctx, ports),
+      executeQuery(getEntitlementsQuery, {}, ctx, ports),
+      executeQuery(feeScheduleQuery, { currency: org.currency }, ctx, ports),
+      executeQuery(listDomainsQuery, {}, ctx, ports),
+      executeQuery(ledgerBalancesQuery, {}, ctx, ports),
+      executeQuery(disputesQuery, {}, ctx, ports),
+      executeQuery(orgStatusHistoryQuery, {}, ctx, ports),
+    ]);
+  // Status changes name the staff member (`system:staff:<id>`): show their name.
+  const staffIdOf = (actor: string) => /staff:([0-9a-f-]{36})$/.exec(actor)?.[1] ?? null;
+  const [people, impersonations, changers] = await Promise.all([
     getUsersByIds(members.map((m) => m.userId)),
     listImpersonations(id),
+    getUsersByIds(statusHistory.map((h) => staffIdOf(h.changedBy)).filter((x): x is string => x !== null)),
   ]);
+  const changerName = (actor: string) => changers.get(staffIdOf(actor) ?? '')?.name ?? actor;
   const now = new Date();
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
@@ -107,7 +126,11 @@ export default async function TenantPage({
         {error ? (
           <Alert
             title={
-              IMPERSONATE_ERRORS.has(error) ? t(`impersonate.errors.${error}`) : t('error', { code: error })
+              IMPERSONATE_ERRORS.has(error)
+                ? t(`impersonate.errors.${error}`)
+                : STATUS_ERRORS.has(error)
+                  ? t(`status.errors.${error}`)
+                  : t('error', { code: error })
             }
           />
         ) : null}
@@ -130,6 +153,88 @@ export default async function TenantPage({
           </div>
         ))}
       </dl>
+
+      <Section id="status" title={t('status.title')}>
+        <StatusDot
+          status={STATUS_DOT[org.status]}
+          label={t('status.current', { status: t(`status.value.${org.status}`) })}
+        />
+        <p className="text-caption text-zinc-600">{t(`status.explain.${org.status}`)}</p>
+        {staff.can('status') ? (
+          orgStatusActions(org.status).map((action) => (
+            <form
+              key={action}
+              aria-label={t(`status.form.${action}`)}
+              action={orgStatusAction.bind(null, id, action)}
+              className="flex flex-col gap-3 border-t border-zinc-100 pt-4"
+            >
+              <h3 className="text-body font-medium">{t(`status.form.${action}`)}</h3>
+              <p className="text-caption text-zinc-600">{t(`status.effect.${action}`)}</p>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor={`status-${action}-reason`} className="text-caption text-zinc-600">
+                  {t('reason')}
+                </label>
+                <textarea
+                  id={`status-${action}-reason`}
+                  name="reason"
+                  required
+                  maxLength={500}
+                  rows={2}
+                  className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                />
+              </div>
+              {action === 'terminate' ? (
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="status-terminate-slug" className="text-caption text-zinc-600">
+                    {t('status.typeSlug', { slug: org.slug })}
+                  </label>
+                  <input
+                    id="status-terminate-slug"
+                    name="confirmSlug"
+                    autoComplete="off"
+                    spellCheck={false}
+                    className={`${field} max-w-sm font-mono`}
+                  />
+                </div>
+              ) : (
+                <label className="flex min-h-6 items-center gap-2 text-body">
+                  <input type="checkbox" name="confirm" value="yes" className="size-5" />
+                  {t(`status.confirm.${action}`)}
+                </label>
+              )}
+              <Button
+                type="submit"
+                variant={action === 'reactivate' ? 'primary' : 'secondary'}
+                className="self-start"
+              >
+                {t(`status.submit.${action}`)}
+              </Button>
+            </form>
+          ))
+        ) : (
+          <p className="text-caption text-zinc-600">{t('status.adminsOnly')}</p>
+        )}
+        {org.status === 'terminated' ? (
+          <p className="text-caption text-zinc-600">{t('status.final')}</p>
+        ) : null}
+        <h3 className="text-body font-medium">{t('status.history')}</h3>
+        {statusHistory.length === 0 ? (
+          <p className="text-caption text-zinc-600">{t('status.empty')}</p>
+        ) : (
+          <ul aria-label={t('status.history')} className="flex list-none flex-col gap-1 p-0 text-caption">
+            {statusHistory.map((h) => (
+              <li key={`${h.at.toISOString()}-${h.action}`}>
+                {t('status.entry', {
+                  when: when.format(h.at),
+                  action: t(`status.did.${h.action}`),
+                  who: changerName(h.changedBy),
+                  reason: h.reason,
+                })}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Section>
 
       <Section id="switches" title={t('switches.title')}>
         <p className="text-caption text-zinc-600">{t('switches.description')}</p>

@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, publicCandidateEventIdsTx } from '@yayatoh/events';
 import { catchUpSubscriber, defineSubscriber, type Subscriber } from '@yayatoh/platform';
 import { organizationPublicTx } from '@yayatoh/tenancy';
 import { eventPriceRangeTx } from '@yayatoh/ticketing';
@@ -31,6 +31,8 @@ export const ORG_LISTING_EVENTS = [
   'domain.removed@1',
   'domain.primary_changed@1',
 ] as const;
+/** The org went offline or came back (M1.3f): every listing is dropped or rebuilt. */
+export const ORG_STATUS_EVENTS = ['org.status_changed@1'] as const;
 
 export async function settingsTx(tx: TenantTx) {
   const [row] = await tx.select().from(siteSettings);
@@ -90,6 +92,16 @@ export async function refreshOrgListingsTx(tx: TenantTx, orgId: string, now = ne
   for (const r of rows) await refreshListingTx(tx, orgId, r.eventId, now);
 }
 
+/**
+ * Rebuild the org's listings from its events, not only the rows that exist: a reactivated org
+ * has none left (suspension dropped them). Rows of events that no longer qualify are deleted.
+ */
+export async function rebuildOrgListingsTx(tx: TenantTx, orgId: string, now = new Date()) {
+  const existing = await tx.select({ eventId: publicListings.eventId }).from(publicListings);
+  const ids = new Set([...existing.map((r) => r.eventId), ...(await publicCandidateEventIdsTx(tx))]);
+  for (const id of ids) await refreshListingTx(tx, orgId, id, now);
+}
+
 const EventPayload = z.object({ eventId: z.uuid() });
 
 /**
@@ -100,10 +112,12 @@ const EventPayload = z.object({ eventId: z.uuid() });
 export function listingsProjector(deps: { onChange?: (orgId: string) => Promise<void> } = {}): Subscriber {
   return defineSubscriber({
     name: 'marketplace.listings',
-    events: [...EVENT_LISTING_EVENTS, ...ORG_LISTING_EVENTS],
+    events: [...EVENT_LISTING_EVENTS, ...ORG_LISTING_EVENTS, ...ORG_STATUS_EVENTS],
     handle: async (tx, event) => {
       const key = `${event.type}@${event.version}`;
-      if ((ORG_LISTING_EVENTS as readonly string[]).includes(key)) {
+      if ((ORG_STATUS_EVENTS as readonly string[]).includes(key)) {
+        await rebuildOrgListingsTx(tx, event.orgId);
+      } else if ((ORG_LISTING_EVENTS as readonly string[]).includes(key)) {
         await refreshOrgListingsTx(tx, event.orgId);
       } else {
         const p = EventPayload.parse(event.payload);

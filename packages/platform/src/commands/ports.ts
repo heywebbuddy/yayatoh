@@ -15,6 +15,8 @@ export interface PolicyPorts {
   readonly entitlements: CommandPorts<TenantTx>['entitlements'];
   readonly authorizer: CommandPorts<TenantTx>['authorizer'];
   readonly stepUp?: CommandPorts<TenantTx>['stepUp'];
+  /** The org's own state refusing writes (tenancy's `orgStatusGate`, M1.3f). */
+  readonly orgGate?: CommandPorts<TenantTx>['orgGate'];
 }
 
 /**
@@ -54,6 +56,7 @@ export function createCommandPorts(policy: PolicyPorts): CommandPorts<TenantTx> 
     entitlements: policy.entitlements,
     authorizer: policy.authorizer,
     stepUp: policy.stepUp ?? recentStepUp,
+    ...(policy.orgGate ? { orgGate: policy.orgGate } : {}),
     transaction: (ctx, fn) => withTenant(ctx, fn),
     outbox: { emit: emitEvents },
     audit: {

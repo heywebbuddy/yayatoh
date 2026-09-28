@@ -61,7 +61,8 @@
         "destination-changed": "新的撥款帳戶：匯入此帳戶的轉帳將於 {until} 之後開始"
       },
       "tenancy": {
-        "staff-access": "Yayatoh 支援人員正以 {member} 的身分操作，直到 {until}"
+        "staff-access": "Yayatoh 支援人員正以 {member} 的身分操作，直到 {until}",
+        "org-status": "{status, select, suspended {Yayatoh 已暫停此組織} reactivated {此組織已恢復上線} other {Yayatoh 已關閉此組織}}"
       }
     },
     "kinds": {
@@ -74,7 +75,8 @@
       },
       "tenancy": {
         "invitation": "團隊邀請",
-        "staff-access": "工作人員存取"
+        "staff-access": "工作人員存取",
+        "org-status": "組織狀態"
       },
       "ticketing": {
         "claim-link": "票券領取連結",
@@ -705,7 +707,8 @@
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
     "chooseDate": "請先選擇場次。",
     "dateSoldOut": "此場次剛剛售完，請選擇其他場次。",
-    "dateUnavailable": "此場次已無法購買，請選擇其他場次。"
+    "dateUnavailable": "此場次已無法購買，請選擇其他場次。",
+    "orgUnavailable": "該主辦方目前未在售票。已購買的票券仍然有效。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1291,6 +1294,7 @@
       "unknown": "我們無法驗證此網域。請檢查其 DNS 記錄，然後再試一次。"
     },
     "recordsIntro": "請在管理你網域 DNS 的服務商處新增這些記錄，然後再次檢查。變更最多可能需要一天才會生效。",
+    "autoCheck": "我們也會每隔幾分鐘自動再次檢查，因此此頁面無需你操作即可更新。",
     "recordsCaption": "{host} 的 DNS 記錄",
     "recordType": "類型",
     "recordName": "名稱",
@@ -3085,5 +3089,16 @@
     "banner": "你正以 {member} 的身分操作（{staff}，Yayatoh 工作人員）。退款、付款、匯出和刪除皆已關閉。將於 {until} 結束。",
     "end": "結束",
     "endLabel": "結束以 {member} 身分操作"
+  },
+  "orgStatus": {
+    "label": "組織狀態",
+    "suspended": {
+      "title": "此組織已被暫停",
+      "body": "Yayatoh 支援團隊已暫停此組織。你的公開頁面和售票已下線，主控台為唯讀：你可以檢視所有內容並下載匯出檔案，但不能做任何變更。已售出的票券仍然有效，仍可在入口掃描。如需了解詳情，請聯絡 Yayatoh 支援。"
+    },
+    "terminated": {
+      "title": "此組織已關閉",
+      "body": "Yayatoh 支援團隊已關閉此組織。其公開頁面已下線，無法再做任何變更。身為擁有者，你仍可開啟它並下載你的資料，例如在「動態」中。"
+    }
   }
 }

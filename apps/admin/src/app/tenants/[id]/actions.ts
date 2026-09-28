@@ -12,11 +12,15 @@ import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/b
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { type Ctx, executeCommand, executeQuery, isDomainError, uuidv7 } from '@yayatoh/kernel';
 import { markEvidenceSubmittedCommand, setPayoutHoldCommand } from '@yayatoh/payments';
+import { signLinkToken } from '@yayatoh/platform';
 import {
   endImpersonationCommand,
   getOrganizationQuery,
+  ORG_STATUS_ACTIONS,
+  type OrgStatusAction,
   SUSPENSION_KINDS,
   type SuspensionKind,
+  setOrgStatusCommand,
   setSuspensionCommand,
   startImpersonationCommand,
 } from '@yayatoh/tenancy';
@@ -113,6 +117,67 @@ export async function submitEvidenceAction(
     if (r.status !== 'submitted') throw new Error('The provider did not accept the evidence');
     return executeCommand(markEvidenceSubmittedCommand, { disputeId }, ctx, ports);
   });
+}
+
+/**
+ * Ask the web app to drop the org's cached public reads (and the marketplace's) at once, the same
+ * signed call the worker makes after a listing change. A failure only logs: the cache's 30 s TTL
+ * catches up, and the public reads check the org's status themselves.
+ */
+async function revalidatePublic(orgId: string) {
+  try {
+    const res = await fetch(`${appOrigin()}/api/internal/revalidate`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: signLinkToken('cache.revalidate', orgId) }),
+    });
+    if (!res.ok) console.warn(`revalidate ${orgId}: ${res.status}`);
+  } catch (err) {
+    console.warn(`revalidate ${orgId}: ${(err as Error).message}`);
+  }
+}
+
+/**
+ * Suspend, reactivate or terminate an org (M1.3f; admins only). A reason is required and kept in
+ * the org's history and audit log; suspending and reactivating need the confirmation box ticked,
+ * terminating needs the org's address typed. The platform access log records who did it first.
+ */
+export async function orgStatusAction(orgId: string, action: OrgStatusAction, form: FormData) {
+  if (!Id.safeParse(orgId).success || !ORG_STATUS_ACTIONS.includes(action)) redirect('/');
+  const staff = await requireStaff('status');
+  const back = `/tenants/${orgId}`;
+  const reason = String(form.get('reason') ?? '').trim();
+  if (reason.length < 3 || reason.length > 500) redirect(`${back}?error=status_reason#status`);
+  const ctx = staff.ctx(orgId);
+  let slug: string;
+  try {
+    slug = (await executeQuery(getOrganizationQuery, {}, ctx, ports)).slug;
+  } catch {
+    redirect('/');
+  }
+  if (action === 'terminate') {
+    if (
+      String(form.get('confirmSlug') ?? '')
+        .trim()
+        .toLowerCase() !== slug
+    )
+      redirect(`${back}?error=status_slug#status`);
+  } else if (form.get('confirm') !== 'yes') redirect(`${back}?error=status_confirm#status`);
+  // Platform audit: the access log names the staff member, the org and the reason.
+  await withPlatformReader(
+    { actor: staff.actor, reason: `staff console: ${action} organization ${slug}: ${reason}` },
+    (tx) => tx.execute(sql`select 1`),
+  );
+  let outcome: string;
+  try {
+    await executeCommand(setOrgStatusCommand, { action, reason }, ctx, ports);
+    outcome = `done=status_${action}`;
+  } catch (err) {
+    outcome = `error=${isDomainError(err) ? err.code : 'internal'}`;
+  }
+  await revalidatePublic(orgId);
+  revalidatePath(back);
+  redirect(`${back}?${outcome}#status`);
 }
 
 /** The app host staff are sent to (app.yayatoh.com in production; the web's origin elsewhere). */

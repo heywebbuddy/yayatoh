@@ -100,6 +100,38 @@ describe('executeCommand', () => {
     ]);
   });
 
+  it('runs the org gate inside the transaction, before the handler; a refusal writes nothing (M1.3f)', async () => {
+    const seen: unknown[] = [];
+    const { ports, log } = fakePorts({
+      orgGate: {
+        check: async (tx, _c, command) => {
+          seen.push({ tx: tx.id, ...command });
+          log.push('orgGate');
+        },
+      },
+    });
+    await executeCommand(rename, { name: 'Acme' }, ctx, ports);
+    expect(log.slice(log.indexOf('tx:begin'), log.indexOf('tx:begin') + 3)).toEqual([
+      'tx:begin',
+      'orgGate',
+      'outbox:organization.renamed',
+    ]);
+    expect(seen).toEqual([{ tx: 'tx1', name: 'tenancy.renameOrganization', category: undefined }]);
+
+    const refused = fakePorts({
+      orgGate: {
+        check: async () => {
+          throw new DomainError('invalid_state', 'suspended', { reason: 'org_suspended' });
+        },
+      },
+    });
+    await expect(executeCommand(rename, { name: 'Acme' }, ctx, refused.ports)).rejects.toMatchObject({
+      code: 'invalid_state',
+      details: { reason: 'org_suspended' },
+    });
+    expect(refused.log.some((l) => l.startsWith('outbox') || l.startsWith('audit'))).toBe(false);
+  });
+
   it('serializes through the allowlist and never returns extra fields', async () => {
     const { ports } = fakePorts();
     const out = await executeCommand(rename, { name: 'Acme' }, ctx, ports);

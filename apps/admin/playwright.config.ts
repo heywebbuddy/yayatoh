@@ -18,9 +18,11 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
-    ...(process.env.PW_CHROMIUM_PATH
-      ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
-      : {}),
+    launchOptions: {
+      // Tenant sites (M1.11) resolve to the web server, as in apps/web/playwright.config.ts.
+      args: ['--host-resolver-rules=MAP *.yayatoh.events 127.0.0.1, MAP *.verified.test 127.0.0.1'],
+      ...(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}),
+    },
   },
   projects: [
     { name: 'desktop-1280', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } } },

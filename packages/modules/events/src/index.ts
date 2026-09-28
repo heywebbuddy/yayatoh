@@ -129,6 +129,8 @@ export {
   getEventBySlugQuery,
   getEventQuery,
   listEventsQuery,
+  orgUnavailableForEvent,
+  publicCandidateEventIdsTx,
   publicEventBySlug,
 } from './queries.ts';
 export {

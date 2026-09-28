@@ -95,6 +95,8 @@ export const PLATFORM_PERMISSIONS = [
   'platform:org.create',
   'platform:entitlements.manage',
   'platform:org.suspend',
+  /** Suspend, reactivate or terminate the whole org (M1.3f). */
+  'platform:org.status',
   'platform:payouts.hold',
   'platform:payouts.release',
   'platform:disputes.submit',

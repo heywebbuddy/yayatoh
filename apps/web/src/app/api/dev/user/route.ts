@@ -1,7 +1,18 @@
 import { randomBytes } from 'node:crypto';
 import { generateTotpSecret, secretKey, setupKey, totp } from '@yayatoh/auth/totp';
+import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
-import { addMemberCommand, createOrganization, resolveOrgSlug } from '@yayatoh/tenancy';
+import { catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
+import {
+  AGREEMENT_DOCUMENTS,
+  acceptAgreementCommand,
+  addMemberCommand,
+  createOrganization,
+  PLATFORM_AGREEMENTS,
+  resolveOrgSlug,
+  setLegalPageCommand,
+} from '@yayatoh/tenancy';
+import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { type NextRequest, NextResponse } from 'next/server';
 import { devLastCode, getAuth, getTwoFactor } from '@/server/auth.ts';
 import { devPasswordSignIn } from '@/server/dev-sign-in.ts';
@@ -17,6 +28,9 @@ import { devAuthEnabled } from '@/server/session.ts';
  * - `join=<slug>:<role>` (repeatable): add it to existing organizations;
  * - `twoFactor=1`: two-step verification already on (the setup key and backup codes come back);
  * - `signIn=0`: don't sign in.
+ * - `event=published` (with `org=new`): the org accepts the terms, gets a refund policy, lists on
+ *   the marketplace with its tenant site on, and publishes one event with a free and a paid pass
+ *   (its slug comes back as `eventSlug`), already projected into the listings.
  */
 export async function POST(req: NextRequest) {
   const devPassword = process.env.DEV_PERSONA_PASSWORD;
@@ -40,6 +54,7 @@ export async function POST(req: NextRequest) {
     });
 
   let orgSlug: string | null = null;
+  let eventSlug: string | null = null;
   if (form.get('org') === 'new') {
     const org = await createOrganization(
       createCtx({ actor: { type: 'user', userId: user.id } }),
@@ -47,6 +62,7 @@ export async function POST(req: NextRequest) {
       ports,
     );
     orgSlug = org.slug;
+    if (form.get('event') === 'published') eventSlug = await publishedEvent(org.id, user.id, stamp);
   }
   for (const j of form.getAll('join')) {
     const [slug = '', role = ''] = String(j).split(':');
@@ -89,9 +105,59 @@ export async function POST(req: NextRequest) {
   const res = NextResponse.json({
     email,
     orgSlug,
+    eventSlug,
     setupKey: secret ? setupKey(secret) : null,
     backupCodes,
   });
   for (const c of cookies) res.headers.append('set-cookie', c);
   return res;
+}
+
+/** A public, published event with a free and a paid pass in a fresh org (see `event=published`). */
+async function publishedEvent(orgId: string, userId: string, stamp: string): Promise<string> {
+  const ctx = createCtx({ orgId, actor: { type: 'user', userId }, stepUpAt: new Date() });
+  for (const document of AGREEMENT_DOCUMENTS)
+    await executeCommand(
+      acceptAgreementCommand,
+      { document, version: PLATFORM_AGREEMENTS[document].version },
+      ctx,
+      ports,
+    );
+  await executeCommand(
+    setLegalPageCommand,
+    { kind: 'refund', body: 'Refunds up to a week before.' },
+    ctx,
+    ports,
+  );
+  await executeCommand(updateSiteSettingsCommand, { listOnMarketplace: true, tenantSite: true }, ctx, ports);
+  const starts = new Date(Date.now() + 30 * 86_400_000);
+  const event = await executeCommand(
+    createEventCommand,
+    {
+      name: `Test Show ${stamp}`,
+      slug: `test-show-${stamp}`,
+      timezone: 'America/New_York',
+      startsAt: starts.toISOString(),
+      endsAt: new Date(starts.getTime() + 3 * 3_600_000).toISOString(),
+      city: 'Boston',
+      country: 'US',
+    },
+    ctx,
+    ports,
+  );
+  await executeCommand(
+    createTicketTypeCommand,
+    { eventId: event.id, name: 'Free entry', priceMinor: 0, quantityTotal: 50 },
+    ctx,
+    ports,
+  );
+  await executeCommand(
+    createTicketTypeCommand,
+    { eventId: event.id, name: 'Supporter', priceMinor: 1500, quantityTotal: 50 },
+    ctx,
+    ports,
+  );
+  await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx, ports);
+  await catchUpListings(orgId);
+  return event.slug;
 }
