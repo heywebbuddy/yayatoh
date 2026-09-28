@@ -78,6 +78,14 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Animated GIFs become still images** (the first frame).
   - Public images are cached for a year by browsers and CDNs (their URLs change whenever the file changes). An image removed from a public page can stay in someone's cache; nothing private is ever cached publicly.
 
+- [ ] **Click tracking and attribution: confirm the M3.8a defaults (pending owner)** (labels: `db-migration`, `tenancy`, `legal-copy`). Built with these defaults; say if any should change:
+  - **Attribution window: 30 days** before the order, per org (organizers can set 1–90 days on the event's Tracked links page; a change applies to new orders only). Both first touch and last touch are stored on every order; reports credit orders and revenue to the **last** touch and also show first-touch counts.
+  - **Only sold orders count** (paid, partially refunded, refunded); revenue is the gross order total per currency, refunds not netted (like the M1.12 gross figures). Conversion = last-touch orders ÷ clicks.
+  - **A click counts only for the event its link belongs to** (a click on event A's link does not credit an order for event B).
+  - **The click cookie lives 24 hours;** longer windows rely on the `yy_did` device cookie (the click log keeps only keyed hashes of the device id and the IP, never the raw values, the user agent or the referrer). Add click tracking to the privacy notice and cookie list (`yy_click`, `yy_utm`), and confirm a retention period for the click log (suggested: 13 months).
+  - **Who sees it:** new `marketing:read` permission for owners, admins, managers, marketing, finance and viewers (viewers see revenue per link, as they already see orders). Creating links and the window: `marketing:write`. Door staff and scanners see nothing.
+  - **Bots and floods** (link-preview fetchers, crawlers, HTTP tools, over 30 clicks per device per 10 minutes) are redirected but not counted.
+
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
 - [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).
