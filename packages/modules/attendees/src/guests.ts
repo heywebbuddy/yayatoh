@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { AttendeeFilter, Label, MAX_LABELS } from './attendees.ts';
 import { resolveAttendeeIdsTx } from './bulk.ts';
 import { AttendeeDto, attendeeSerializer } from './dto.ts';
+import { emitAttendeesChangedTx } from './participation.ts';
 import { attendees } from './schema.ts';
 
 /**
@@ -63,6 +64,7 @@ export const addGuestCommand = tenantCommand({
       })
       .returning();
     if (!row) throw new DomainError('internal');
+    await emitAttendeesChangedTx(tx, ctx, [row]);
     return attendeeSerializer.serialize(row);
   },
   audit: (input, r) => ({

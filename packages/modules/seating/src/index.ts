@@ -98,6 +98,7 @@ export {
   seatChannels,
   seatingLiveAccessQuery,
 } from './live.ts';
+export { seatedAttendeeIdsTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   checkSeatRulesTx,

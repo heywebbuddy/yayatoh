@@ -1,4 +1,4 @@
-import { columnPrivacy, personal } from '@yayatoh/db';
+import { columnPrivacy, internal, personal } from '@yayatoh/db';
 
 /**
  * Column privacy of the `crm` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -15,5 +15,12 @@ export const privateColumns = columnPrivacy('crm', {
     phone_e164: personal('phone'),
     source: 'vocab',
   },
-  event_participation: { currency: 'vocab', source: 'vocab' },
+  // Per-contact profile (M3.6): counts, times and consent codes; labels are organizer-written text
+  // about people (attendee labels), so they are internal like the attendee label column.
+  contact_profile: {
+    labels: internal(),
+    email_consent: 'vocab',
+    sms_consent: 'vocab',
+  },
+  event_participation: { currency: 'vocab', source: 'vocab', labels: internal() },
 });

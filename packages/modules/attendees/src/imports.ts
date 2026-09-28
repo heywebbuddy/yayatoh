@@ -13,6 +13,7 @@ import {
 import { and, asc, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Label, MAX_LABELS } from './attendees.ts';
+import { emitAttendeesChangedTx } from './participation.ts';
 import { attendees, IMPORT_FIELDS, type ImportField, importBatches, importRows } from './schema.ts';
 
 export const IMPORT_ERROR_CODES = [
@@ -417,6 +418,14 @@ export const attendeeImportAction = defineBulkAction({
           labels: m.labels,
         })),
       );
+    await emitAttendeesChangedTx(
+      tx,
+      ctx,
+      go.map(([, m]) => ({
+        eventId: b.eventId,
+        contactId: contactIds.get(normalizeEmail(m.email)) as string,
+      })),
+    );
     const failedRows = [...mapped]
       .filter(([id]) => !attendeeOf.has(id) && !erasedRows.has(id))
       .map(([id]) => id);
@@ -447,11 +456,18 @@ export const attendeeImportAction = defineBulkAction({
       }),
     };
   },
-  undo: async (tx, _ctx, items) => {
+  undo: async (tx, ctx, items) => {
     const ids = items.map((i) => z.object({ attendeeId: z.uuid() }).parse(i.undo).attendeeId);
     // Imported guests have no tickets; the row link clears itself (ON DELETE SET NULL).
     if (ids.length)
-      await tx.delete(attendees).where(and(inArray(attendees.id, ids), eq(attendees.source, 'import')));
+      await emitAttendeesChangedTx(
+        tx,
+        ctx,
+        await tx
+          .delete(attendees)
+          .where(and(inArray(attendees.id, ids), eq(attendees.source, 'import')))
+          .returning({ eventId: attendees.eventId, contactId: attendees.contactId }),
+      );
   },
 });
 

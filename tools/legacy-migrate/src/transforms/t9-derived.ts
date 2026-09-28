@@ -8,6 +8,7 @@ import { exec, type StepContext } from './context.ts';
  *   a check-in, the first registration and what they spent as the buyer (net of refunds).
  * - **`crm.contact_stats`** per contact × currency: orders, tickets, events, events attended,
  *   spend, first and last seen.
+ * - **`crm.contact_profile`** (M3.6) rebuilt for the migrated orgs' contacts.
  * - **`platform.metric_timeseries`**, monthly in the org's timezone: `sales.gross`,
  *   `sales.refunds` (per currency), `orders.sold`, `tickets.sold`, `checkins.tickets`, so reports
  *   have the legacy years for year-over-year comparisons.
@@ -69,9 +70,11 @@ export async function t9Derived(ctx: StepContext): Promise<void> {
     delete from crm.event_participation p using t9_part x
     where p.org_id = x.org_id and p.contact_id = x.contact_id and p.event_id = x.event_id and p.source = 'legacy';
     insert into crm.event_participation (id, org_id, contact_id, event_id, ticket_type_ids, tickets, has_seat, checked_in,
-                                         registered_at, spend_minor, currency, source, created_at, updated_at)
+                                         registered_at, spend_minor, currency, source, registered, orders,
+                                         created_at, updated_at)
     select legacy.det_uuid(registered_at, {inst} || '|event_participation|' || contact_id || '|' || event_id), org_id, contact_id,
-           event_id, types, tickets, has_seat, checked_in, registered_at, spend, currency, 'legacy', now(), now()
+           event_id, types, tickets, has_seat, checked_in, registered_at, spend, currency, 'legacy', tickets > 0, orders,
+           now(), now()
     from t9_part
     on conflict (org_id, contact_id, event_id) do nothing;
 
@@ -84,6 +87,9 @@ export async function t9Derived(ctx: StepContext): Promise<void> {
            min(registered_at), max(registered_at), 'legacy', now(), now()
     from t9_part group by org_id, contact_id, currency
     on conflict (org_id, contact_id, currency) do nothing;
+
+    -- M3.6 contact profiles of the migrated contacts, from the rows above and the consent ledger.
+    select crm.refresh_contact_profiles(o.org_id, null) from (select distinct org_id from t9_part) o;
 
     -- Monthly metrics (org timezone).
     delete from platform.metric_timeseries m

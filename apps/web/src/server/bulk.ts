@@ -1,5 +1,6 @@
 import 'server-only';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
+import { audienceExportAction } from '@yayatoh/audiences';
 import { ticketCancelAction } from '@yayatoh/orders';
 import { auditExportAction, bulkStepCommand, runBulkOperation } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
@@ -20,6 +21,7 @@ export const BULK_ACTIONS = [
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,
+  audienceExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 

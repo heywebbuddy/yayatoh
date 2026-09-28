@@ -220,7 +220,7 @@ export const undoAdmissionCommand = tenantCommand({
   output: z.object({ undone: z.boolean() }),
   entitlement: 'checkin',
   permission: 'checkin:scan',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const rows = await tx
       .update(admissions)
       .set({
@@ -235,8 +235,23 @@ export const undoAdmissionCommand = tenantCommand({
           isNull(admissions.undoneAt),
         ),
       )
-      .returning({ id: admissions.id });
-    if (rows.length === 0) throw new DomainError('not_found', 'Admission not found or already undone');
+      .returning({ id: admissions.id, ticketId: admissions.ticketId, day: admissions.day });
+    const [undone] = rows;
+    if (!undone) throw new DomainError('not_found', 'Admission not found or already undone');
+    // Projections that count check-ins (M3.6 audiences) follow the undo.
+    emit({
+      type: 'ticket.admission_undone',
+      version: 1,
+      aggregateType: 'ticket',
+      aggregateId: undone.ticketId,
+      payload: {
+        orgId: ctx.orgId,
+        eventId: input.eventId,
+        ticketId: undone.ticketId,
+        admissionId: undone.id,
+        day: undone.day,
+      },
+    });
     return { undone: true };
   },
   audit: (input) => ({ action: 'checkin.undo', targetType: 'admission', targetId: input.admissionId }),

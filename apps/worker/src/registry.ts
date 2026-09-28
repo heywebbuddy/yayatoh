@@ -1,4 +1,5 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
+import { participationProjector } from '@yayatoh/audiences';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -51,6 +52,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     impersonationNotice({ notifier, appOrigin }),
     orgStatusNotice({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
+    participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
 }

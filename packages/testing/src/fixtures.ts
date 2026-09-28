@@ -5,6 +5,7 @@ import {
   stageImportCommand,
   validateImportCommand,
 } from '@yayatoh/attendees';
+import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   createCheckpointCommand,
@@ -921,6 +922,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id }),
       ports,
     );
+  // M3.6 audiences: the participation projector catches up on everything above (live rows and
+  // profiles), and one saved audience (isolation coverage).
+  await catchUpParticipation(org.id);
+  await executeCommand(
+    saveSegmentCommand,
+    {
+      name: 'Launch no-shows',
+      definition: templateDefinition('registeredNotCheckedIn', { eventId: event.id }),
+    },
+    ctx(),
+    ports,
+  );
   return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 

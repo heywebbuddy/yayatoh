@@ -78,6 +78,7 @@ export {
   salesFactsTx,
   type TicketTypeSalesFact,
 } from './facts.ts';
+export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   listOrdersQuery,

@@ -1,4 +1,5 @@
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
+import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { ticketCancelAction } from '@yayatoh/orders';
@@ -22,6 +23,7 @@ export const BULK_ACTIONS = [
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,
+  audienceExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 // The org gate (M1.3f) lets system actors through; wired for parity with the apps.

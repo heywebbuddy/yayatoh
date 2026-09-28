@@ -1,24 +1,32 @@
 {
-  "name": "@yayatoh/crm",
+  "name": "@yayatoh/audiences",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 1
+    "tier": 5
   },
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.ts",
-    "./testing": "./src/testing.ts"
+    "./client": "./src/client.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/seating": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },

@@ -1,6 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
+import { refreshContactProfilesTx } from './projection.ts';
 import {
   type CONSENT_CHANNELS,
   type CONSENT_PURPOSES,
@@ -80,6 +81,8 @@ export interface ConsentInput {
 
 export async function recordConsentTx(tx: TenantTx, ctx: Ctx, input: ConsentInput): Promise<void> {
   await tx.insert(consents).values({ orgId: requireOrg(ctx), ...input, capturedAt: ctx.now });
+  // The profile's consent summary (M3.6) moves in the same transaction as the ledger.
+  await refreshContactProfilesTx(tx, ctx, [input.contactId]);
 }
 
 /** The current consent status, or null when none was ever recorded (which means no consent). */

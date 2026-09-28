@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { releaseAttendeeSeatsTx } from './assignments.ts';
 import { type BulkAssignUndo, type ChunkPerson, planChunk, planUndo } from './domain/bulk-assign.ts';
 import { activeAdaRule } from './domain/rules.ts';
+import { emitAssignmentsChangedTx } from './participation.ts';
 import { seatingRulesTx } from './rules.ts';
 import { ASSIGNABLE_BLOCKS, eventLayouts, eventSeats, seatAssignments } from './schema.ts';
 
@@ -226,6 +227,11 @@ export const seatAssignAction = defineBulkAction({
           };
         }),
       );
+      await emitAssignmentsChangedTx(
+        tx,
+        ctx,
+        plan.placements.map((p) => ({ eventId, attendeeId: p.attendeeId })),
+      );
     }
     const failed = new Map(plan.failures.map((f) => [f.attendeeId, f.code]));
     const placed = new Map(plan.placements.map((p) => [p.attendeeId, p.seatUuid]));
@@ -311,6 +317,7 @@ export const seatAssignAction = defineBulkAction({
         pinned: r.prev.pinned,
         priorBlock: r.prev.priorBlock,
       });
+      await emitAssignmentsChangedTx(tx, ctx, [{ eventId, attendeeId: r.attendeeId }]);
     }
   },
 });

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",

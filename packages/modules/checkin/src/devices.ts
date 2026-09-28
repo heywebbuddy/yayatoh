@@ -443,6 +443,14 @@ export const syncScansCommand = tenantCommand({
           .returning({ id: admissions.id });
         if (adm) {
           admissionId = adm.id;
+          // An offline admission is an admission: same event as a live scan (M3.6 audiences).
+          emit({
+            type: 'ticket.admitted',
+            version: 1,
+            aggregateType: 'ticket',
+            aggregateId: ticket.id,
+            payload: { orgId, eventId: event.id, ticketId: ticket.id, admissionId: adm.id, day },
+          });
         } else {
           const [live] = await tx
             .select()

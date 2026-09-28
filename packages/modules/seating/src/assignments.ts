@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { ASSIGN_SEAT_STATES, assignSeatState, pickSeats } from './domain/assign.ts';
 import { activeAdaRule } from './domain/rules.ts';
 import type { SeatStatus } from './domain/seat-state.ts';
+import { emitAssignmentsChangedTx } from './participation.ts';
 import { checkSeatRulesTx, RuleHitDto, seatingRulesTx } from './rules.ts';
 import {
   ASSIGNABLE_BLOCKS,
@@ -42,7 +43,7 @@ async function layoutDocTx(tx: TenantTx, eventId: string) {
  */
 export async function releaseAttendeeSeatsTx(
   tx: TenantTx,
-  _ctx: Ctx,
+  ctx: Ctx,
   attendeeIds: readonly string[],
 ): Promise<number> {
   const ids = [...new Set(attendeeIds)];
@@ -50,7 +51,12 @@ export async function releaseAttendeeSeatsTx(
   const gone = await tx
     .delete(seatAssignments)
     .where(inArray(seatAssignments.attendeeId, ids))
-    .returning({ id: seatAssignments.id });
+    .returning({
+      id: seatAssignments.id,
+      eventId: seatAssignments.eventId,
+      attendeeId: seatAssignments.attendeeId,
+    });
+  await emitAssignmentsChangedTx(tx, ctx, gone);
   return gone.length;
 }
 
@@ -58,13 +64,20 @@ export async function releaseAttendeeSeatsTx(
  * The floor plan changed: assignments whose seat no longer exists are dropped, and the rest
  * follow their seat's table or row (seats keep their ids across edits).
  */
-export async function reconcileAssignmentsTx(tx: TenantTx, eventId: string): Promise<void> {
-  await tx.execute(sql`
+export async function reconcileAssignmentsTx(tx: TenantTx, eventId: string, ctx?: Ctx): Promise<void> {
+  const gone = await tx.execute<{ attendee_id: string }>(sql`
     delete from ${seatAssignments} a
     where a.event_id = ${eventId}
       and not exists (
         select 1 from ${eventSeats} s where s.event_id = a.event_id and s.seat_uuid = a.seat_uuid
-      )`);
+      )
+    returning a.attendee_id`);
+  if (ctx && gone.length)
+    await emitAssignmentsChangedTx(
+      tx,
+      ctx,
+      gone.map((g) => ({ eventId, attendeeId: g.attendee_id })),
+    );
   await tx.execute(sql`
     update ${seatAssignments} a set item_id = s.item_id
     from ${eventSeats} s
@@ -295,6 +308,11 @@ export const assignSeatsCommand = tenantCommand({
           pinned: w.pinned,
           priorBlock: prior.get(w.seatUuid) ?? null,
         })),
+      );
+      await emitAssignmentsChangedTx(
+        tx,
+        ctx,
+        wanted.map((w) => ({ eventId: input.eventId, attendeeId: w.attendeeId })),
       );
     }
     const labelOf = new Map(seatRows.map((s) => [s.seatUuid, s.label]));
