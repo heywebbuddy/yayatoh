@@ -80,3 +80,75 @@ export async function hasColumn(ctx: StepContext, table: string, column: string)
 
 /** Legacy system timestamp (wall clock in the platform timezone) → timestamptz, as SQL. */
 export const sysTs = (col: string) => `(${col} at time zone {tz})`;
+
+/** Insert rows in batches (every column named by the first row), skipping any that conflict. */
+export async function insertRows(
+  ctx: StepContext,
+  table: string,
+  rows: readonly Record<string, unknown>[],
+): Promise<void> {
+  for (let i = 0; i < rows.length; i += 1000) {
+    const batch = rows.slice(i, i + 1000);
+    await ctx.sql`insert into ${ctx.sql(table)} ${ctx.sql(batch as never)} on conflict do nothing`;
+  }
+}
+
+export interface Finding {
+  readonly legacyId: string;
+  readonly kind: string;
+  readonly detail?: Record<string, unknown>;
+}
+
+/** Exceptions for owner review (the row migrated, adjusted, or was deliberately not carried). */
+export async function recordExceptions(ctx: StepContext, table: string, found: readonly Finding[]) {
+  await insertRows(
+    ctx,
+    'legacy.exceptions',
+    found.map((f) => ({
+      run_id: ctx.runId,
+      instance: ctx.instance,
+      kind: f.kind,
+      legacy_table: table,
+      legacy_id: f.legacyId,
+      detail: JSON.stringify(f.detail ?? {}),
+    })),
+  );
+}
+
+/** Quarantined rows: invalid, not migrated (content tables may quarantine up to 0.5%). */
+export async function recordQuarantine(ctx: StepContext, table: string, found: readonly Finding[]) {
+  await insertRows(
+    ctx,
+    'legacy.quarantine',
+    found.map((f) => ({
+      run_id: ctx.runId,
+      instance: ctx.instance,
+      table_name: table,
+      legacy_id: f.legacyId,
+      column_name: (f.detail?.column as string | undefined) ?? null,
+      reason: f.kind,
+      detail: f.detail ? JSON.stringify(f.detail) : null,
+    })),
+  );
+}
+
+/** Legacy id → new id (idempotent; a rerun keeps the same mapping). */
+export async function recordRefs(
+  ctx: StepContext,
+  entity: string,
+  refs: readonly { legacyId: string; newId: string; orgId: string; compatId?: number | null }[],
+) {
+  for (let i = 0; i < refs.length; i += 1000)
+    await ctx.sql`
+      insert into legacy.ref ${ctx.sql(
+        refs.slice(i, i + 1000).map((r) => ({
+          instance: ctx.instance,
+          entity,
+          legacy_id: r.legacyId,
+          new_id: r.newId,
+          org_id: r.orgId,
+          compat_id: r.compatId ?? null,
+        })),
+      )}
+      on conflict (instance, entity, legacy_id) do update set new_id = excluded.new_id, org_id = excluded.org_id`;
+}

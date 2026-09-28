@@ -3,14 +3,18 @@ import { type LoadResult, loadDump } from './load.ts';
 import { ensureControlSchema, ident, stagingSchema } from './sql.ts';
 import type { EventClock, Instance, StepContext } from './transforms/context.ts';
 import { issueCodes } from './transforms/issue.ts';
+import { mediaRefs } from './transforms/media-refs.ts';
 import { t1Identity } from './transforms/t1-identity.ts';
 import { t2Orgs } from './transforms/t2-orgs.ts';
 import { t3Catalog } from './transforms/t3-catalog.ts';
+import { t3Program } from './transforms/t3-program.ts';
 import { t3Seating } from './transforms/t3-seating.ts';
 import { t3VenuesSeries } from './transforms/t3-venues-series.ts';
 import { t4Commerce } from './transforms/t4-commerce.ts';
 import { t5Checkins } from './transforms/t5-checkins.ts';
+import { t6Chats } from './transforms/t6-chats.ts';
 import { t6Comms } from './transforms/t6-comms.ts';
+import { t7Content } from './transforms/t7-content.ts';
 import { t8Auth } from './transforms/t8-auth.ts';
 import { t9Derived } from './transforms/t9-derived.ts';
 import { urlInventory } from './transforms/url-inventory.ts';
@@ -54,9 +58,13 @@ export const STAGES = [
   'issue_codes',
   't3_venues_series',
   't3_seating',
+  't3_program',
   't6_comms',
+  't6_chats',
+  't7_content',
   't8_auth',
   't9_derived',
+  'media_refs',
   'url_inventory',
 ] as const;
 
@@ -158,9 +166,13 @@ export async function runMigration(opts: RunOptions): Promise<RunResult> {
         issue_codes: issueCodes,
         t3_venues_series: t3VenuesSeries,
         t3_seating: t3Seating,
+        t3_program: t3Program,
         t6_comms: t6Comms,
+        t6_chats: t6Chats,
+        t7_content: t7Content,
         t8_auth: t8Auth,
         t9_derived: t9Derived,
+        media_refs: mediaRefs,
         url_inventory: (c) => urlInventory(c, opts.extraHosts),
       };
       for (const name of STAGES) {

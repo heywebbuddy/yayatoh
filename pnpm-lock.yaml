@@ -2093,6 +2093,9 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@yayatoh/cms':
+        specifier: workspace:*
+        version: link:../../packages/modules/cms
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -2139,6 +2142,9 @@ importers:
       '@yayatoh/notifications':
         specifier: workspace:*
         version: link:../../packages/modules/notifications
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../../packages/modules/program
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../../packages/testing

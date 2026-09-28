@@ -82,6 +82,16 @@ export async function demoHandles() {
   const orgUrl = urls.find((u) => u.kind === 'organizer' && u.target === `/o/${org.slug}`);
   const renamed = urls.find((u) => u.kind === 'event' && u.planned_status === 308);
   const unchanged = urls.find((u) => u.kind === 'event' && u.planned_status === 200);
+  // M2.2d: the weekly event's migrated program and the organizer's migrated CMS page.
+  const speaker = await one(
+    sql<{ id: string; name: string }[]>`
+      select sp.id, sp.name from program.speakers sp join events.events e on e.id = sp.event_id
+      join legacy.ref r on r.new_id = sp.id and r.instance = 'yay' and r.entity = 'event_speakers'
+      where e.slug = ${weekly.slug} and sp.name = ${DEMO.program.speaker}`,
+    'migrated speaker',
+  );
+  const tagUrl = urls.find((u) => u.kind === 'tag' && u.path.startsWith(`/events/${weekly.slug}/`));
+  const pageUrl = urls.find((u) => u.kind === 'page' && u.path === `/pages/${DEMO.page.slug}`);
   const staff = await sql<{ email: string; role: string }[]>`
     select u.email, m.role from tenancy.memberships m join auth.users u on u.id = m.user_id
     where m.org_id = ${org.id} and m.role <> 'owner' order by m.role`;
@@ -102,6 +112,16 @@ export async function demoHandles() {
       layout: plan.layout,
       doc: plan.doc,
       legacySeats,
+    },
+    program: {
+      ...DEMO.program,
+      speakerId: speaker.id,
+      tagUrl: tagUrl ? { path: tagUrl.path, target: tagUrl.target } : null,
+    },
+    page: {
+      ...DEMO.page,
+      legacyPath: pageUrl?.path ?? null,
+      target: pageUrl?.target ?? null,
     },
     urls: {
       host: 'yayatoh.localhost',

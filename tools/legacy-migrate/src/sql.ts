@@ -123,6 +123,35 @@ create table if not exists legacy.url_inventory (
   org_id uuid,
   primary key (instance, host, path)
 );
+-- M2.2d: the migrated row a page, post or performer URL resolves to (V9 checks it).
+alter table legacy.url_inventory add column if not exists entity_id uuid;
+
+-- M2.2d: the media manifest — every legacy upload a migrated row references (seat-chart images,
+-- event and venue images, speaker avatars, exhibitor logos, session thumbnails, performer images,
+-- CMS images), with the key the media copy writes it to (R2 \`legacy/{inst}/storage/…\`) and its
+-- target: a media-pipeline owner slot (\`media:event:cover\`, …) the import runs it through, the
+-- plan underlay it already is, or \`none:<table>\` where the new module has no image yet (listed).
+create table if not exists legacy.media_refs (
+  instance text not null,
+  entity text not null,
+  legacy_id text not null,
+  role text not null,
+  position integer not null default 0,
+  path text not null,
+  storage_key text not null,
+  new_id uuid not null,
+  org_id uuid not null,
+  target text not null,
+  width_px integer,
+  height_px integer,
+  run_id bigint not null,
+  primary key (instance, entity, legacy_id, role, position)
+);
+
+create or replace function legacy.media_key(inst text, path text) returns text
+language sql immutable parallel safe as $$
+  select left('legacy/' || inst || '/storage/' || regexp_replace(regexp_replace(path, '^/+', ''), '^storage/', ''), 500)
+$$;
 
 create table if not exists legacy.venue_tz (
   country text not null,

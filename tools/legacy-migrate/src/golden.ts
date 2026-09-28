@@ -9,6 +9,8 @@ export interface GoldenQuery {
   readonly id: string;
   readonly name: string;
   readonly sql: string;
+  /** Staging tables the query reads beyond the M2.2b core (skipped, and reported, when absent). */
+  readonly requires?: readonly string[];
 }
 
 // Legacy organizer of a booking row → its org; bookings that are not hand-ons.
@@ -26,6 +28,15 @@ const pair = (legacy: string, migrated: string) => `
   with l as (${legacy}), m as (${migrated})
   select coalesce(l.key, m.key) as key, coalesce(l.v, 0)::bigint as legacy, coalesce(m.v, 0)::bigint as migrated
   from l full join m on m.key = l.key`;
+
+// M2.2d: a legacy content row of a migrated event, not quarantined by the latest run.
+const LIVE = (table: string, alias: string, key = `${alias}.id::text`) => `
+  not exists (select 1 from legacy.quarantine q where q.instance = $1 and q.table_name = '${table}' and q.legacy_id = ${key}
+              and q.run_id = (select max(id) from legacy.runs where instance = $1))`;
+const EV = (alias: string) =>
+  `join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = ${alias}.event_id::text`;
+const REF = (entities: string, alias: string) =>
+  `join legacy.ref r on r.instance = $1 and r.entity in (${entities}) and r.new_id = ${alias}.id`;
 
 export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
   {
@@ -110,7 +121,9 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = c.event_id::text
        where c.status = 1 and c.transferred = 0 group by 1`,
       `select s.org_id::text as key, sum(s.open_minor) as v from payments.legacy_settlements s
-       where s.kind = 'opening_balance' and s.instance = $1 group by 1`,
+       where s.kind = 'opening_balance' and s.instance = $1
+         and exists (select 1 from legacy.ref r where r.instance = $1 and r.entity = 'organizers' and r.new_id = s.org_id)
+       group by 1`,
     ),
   },
   {
@@ -168,6 +181,93 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
     sql: pair(
       `select ev.org_id::text as key, count(distinct legacy.email_norm(b.customer_email)) filter (where legacy.email_ok(legacy.email_norm(b.customer_email))) as v ${LB} group by 1`,
       `select o.org_id::text as key, count(distinct o.buyer_email) filter (where legacy.email_ok(o.buyer_email)) as v ${NEW_ORDERS} group by 1`,
+    ),
+  },
+  // --- M2.2d: the program, announcements and CMS content --------------------------------------
+  {
+    id: 'G15',
+    requires: ['event_sessions'],
+    name: 'Program sessions per event',
+    sql: pair(
+      `select ev.new_id::text as key, count(*) as v from {s}.event_sessions x ${EV('x')} where ${LIVE('event_sessions', 'x')} group by 1`,
+      `select t.event_id::text as key, count(*) as v from program.sessions t ${REF(`'event_sessions'`, 't')} group by 1`,
+    ),
+  },
+  {
+    id: 'G16',
+    requires: ['event_speakers', 'event_tag', 'tags'],
+    name: 'Speakers per event (event speakers and performer tags)',
+    sql: pair(
+      `select key, sum(v) as v from (
+         select ev.new_id::text as key, count(*) as v from {s}.event_speakers x ${EV('x')} where ${LIVE('event_speakers', 'x')} group by 1
+         union all
+         select ev.new_id::text, count(distinct (x.tag_id, x.event_id)) from {s}.event_tag x ${EV('x')}
+         join {s}.tags t on t.id = x.tag_id
+         where coalesce(t.status, 1) = 1 and nullif(btrim(t.title), '') is not null
+           and ${LIVE('event_tag', 'x', `x.tag_id::text || ':' || x.event_id::text`)} group by 1) u group by 1`,
+      `select t.event_id::text as key, count(*) as v from program.speakers t ${REF(`'event_speakers', 'event_tag'`, 't')} group by 1`,
+    ),
+  },
+  {
+    id: 'G17',
+    requires: ['event_exhibitors'],
+    name: 'Exhibitors per event',
+    sql: pair(
+      `select ev.new_id::text as key, count(*) as v from {s}.event_exhibitors x ${EV('x')} where ${LIVE('event_exhibitors', 'x')} group by 1`,
+      `select t.event_id::text as key, count(*) as v from program.exhibitors t ${REF(`'event_exhibitors'`, 't')} group by 1`,
+    ),
+  },
+  {
+    id: 'G18',
+    requires: ['event_exhibitors'],
+    name: 'Sponsors per event and level',
+    sql: pair(
+      `select ev.new_id::text || '|' || lower(btrim(x.sponsor_type)) as key, count(*) as v from {s}.event_exhibitors x ${EV('x')}
+       where lower(btrim(x.sponsor_type)) in ('platinum', 'gold', 'silver', 'bronze') and ${LIVE('event_exhibitors', 'x')} group by 1`,
+      `select t.event_id::text || '|' || lower(st.name) as key, count(*) as v from program.sponsors t ${REF(`'exhibitor_sponsors'`, 't')}
+       join program.sponsor_tiers st on st.id = t.tier_id group by 1`,
+    ),
+  },
+  {
+    id: 'G19',
+    requires: ['event_announcements'],
+    name: 'Live announcements per event (active in legacy = published)',
+    sql: pair(
+      `select ev.new_id::text as key, count(*) as v from {s}.event_announcements x ${EV('x')}
+       where coalesce(x.is_active, 1) = 1 and ${LIVE('event_announcements', 'x')} group by 1`,
+      `select t.event_id::text as key, count(*) as v from events.event_announcements t ${REF(`'event_announcements'`, 't')}
+       where t.published_at is not null group by 1`,
+    ),
+  },
+  {
+    id: 'G20',
+    requires: ['event_sessions', 'event_speakers'],
+    name: 'Session speaker links per event',
+    sql: pair(
+      `select ev.new_id::text as key, count(distinct (s.id, sp.id)) as v from {s}.event_sessions s ${EV('s')}
+       cross join lateral jsonb_array_elements_text(case when jsonb_typeof(s.speaker_ids) = 'array' then s.speaker_ids else '[]'::jsonb end) j(v)
+       join {s}.event_speakers sp on sp.id::text = btrim(j.v) and sp.event_id = s.event_id
+       where ${LIVE('event_sessions', 's')} and ${LIVE('event_speakers', 'sp')} group by 1`,
+      `select t.event_id::text as key, count(*) as v from program.session_speakers l
+       join program.sessions t on t.id = l.session_id ${REF(`'event_sessions'`, 't')} group by 1`,
+    ),
+  },
+  {
+    id: 'G21',
+    requires: ['pages', 'posts'],
+    name: 'Published CMS pages and posts per owning org (author’s org, else the platform org)',
+    sql: pair(
+      `select coalesce(o.org_id, p.org_id)::text as key, count(*) as v from (
+         select id, author_id, 'pages' as tbl, status::text = 'ACTIVE' as live from {s}.pages
+         union all select id, author_id, 'posts', status::text = 'PUBLISHED' from {s}.posts) x
+       left join legacy.ref o on o.instance = $1 and o.entity = 'organizers' and o.legacy_id = x.author_id::text
+       left join (select new_id as org_id from legacy.ref
+                  where instance = $1 and ((instance = 'yay' and entity = 'platform_org') or (instance = 'abc' and entity = 'organizers' and legacy_id = 'parent'))
+                  limit 1) p on true
+       where x.live and not exists (select 1 from legacy.quarantine q where q.instance = $1 and q.table_name = x.tbl
+         and q.legacy_id = x.id::text and q.run_id = (select max(id) from legacy.runs where instance = $1))
+       group by 1`,
+      `select t.org_id::text as key, count(*) as v from cms.entries t ${REF(`'pages', 'posts'`, 't')} where t.status = 'published' group by 1`,
     ),
   },
 ];

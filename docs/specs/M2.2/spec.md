@@ -512,5 +512,87 @@ Scope: the M2.2b "Later" list minus sessions, speakers, sections and CMS content
 | AC14 | Browser: the gala's migrated chart is a locked plan whose every row and table sits at its legacy position (axe); a legacy QR scans on the Scan PWA offline and syncs; a renamed event's legacy URL and the organizer's root URL 308 to their pages (axe), unchanged URLs are served, other hosts are not rewritten | `apps/web/e2e/legacy-migration.spec.ts` |
 | AC15 | Nightly rehearsal job: synthetic on, masked defined and off until the owner's dumps exist | `.github/workflows/legacy-rehearsal.yml` |
 
+## M2.2d — typed sub-entities, CMS content, chats and the media manifest, on synthetic data (done)
+
+Scope: the M2.2c "Later" list's M2.2d line. **No real legacy data was used**: the synthetic generator gained the legacy tables below and everything is proven on it. No schema change: every target table already existed (program M1.4f, event content M1.4d, CMS M1.4g); the new control data is runtime (`legacy.media_refs`, `legacy.url_inventory.entity_id`, `legacy.media_key()`).
+
+### Synthetic generator additions
+- New legacy tables (names and types from the legacy migrations; nothing copied): `event_speakers`, `event_sessions` (with `speaker_ids`, `access_type`, `additional_fee`, `thumbnail`), `event_exhibitors` (with `staff`, `videos`, `sponsor_type`, `email`, `phone`), `event_announcements`, `event_custom_sections`, `event_custom_section_items`, `tags`, `event_tag`, `posts`, `chats`, `messages`, `blocked_users`, `message_reports`; `pages` gained its real `excerpt`, `image`, `meta_description`, `meta_keywords` columns.
+- A third random stream: every earlier table's rows are byte-identical (checked by diffing dumps); `pages` keeps its row and gains three.
+- Planted: a session ending at its start, a session naming a speaker that does not exist, a paid session, an unsafe (`javascript:`) speaker link, an exhibitor website without a scheme, exhibitors with every sponsor level, exhibitor staff/email/phone, a switched-off performer tag and performer email/phone, an FAQ item without an answer, legacy HTML with a `<script>`, an old-style page slug (`Terms_Of_Service`), an inactive page, a draft post, an organizer's own page, attendee chats with a block and a pending and a resolved report. The demo weekly event has a fixed program for the e2e (`DEMO.program`, `DEMO.page`). An orphan session is planted only at `large` scale (content tables may quarantine ≤ 0.5 %).
+
+### Typed sub-entities → the program and event content (`src/transforms/t3-program.ts`, rules in `src/content.ts`)
+- **Legacy rich text → the Markdown subset** (`htmlToMarkdown`): paragraphs, headings, lists, bold/italic/code, http(s)/mailto links; scripts, styles and every other tag dropped; entities decoded; control and bidi characters stripped. Never injected: the pages parse it to React elements as before.
+- **Speakers** (`event_speakers`) → `program.speakers`: name, job title, company, bio, links (legacy object or array forms, http(s) only, ≤ 10; dropped ones listed).
+- **Performer/speaker tags** (Eventmie `tags`, organizer-wide, linked by `event_tag`) → one speaker per linked event (title = sub-title, else the tag type). Switched-off tags and tags without an event are listed; performer email/phone are not carried (listed).
+- **Sessions** (`event_sessions`) → `program.sessions`, `program.rooms` (from `room_location`, one per event and name; an existing room of that name is reused) and `program.session_speakers` (from `speaker_ids`, same event only, ≤ 20). **Times are the organizer's wall clock as typed** (the legacy form saved them unconverted, unlike event times), read in the event's timezone. An end at or before the start becomes start + 1 h; sessions outside the event are kept (the module treats that as a warning); paid/invitation access has no program equivalent. Each is listed.
+- **Exhibitors** → `program.exhibitors` (booth label, http(s) website); a sponsor level also makes a `program.sponsors` row in its tier (Platinum 1, Gold 2, Silver 3, Bronze 4). Staff, videos, email and phone are not carried (listed).
+- **Announcements** → `events.event_announcements`: public; active ones published at their legacy time, inactive ones drafts; `alert`/`warning` types pinned.
+- **Custom sections** (+ items) → `events.event_sections`: an accordion becomes an FAQ (items without a question or answer skipped, listed), cards/lists a text section with a bulleted list; validated with the events module's `EventSectionDto` before writing; sections with nothing usable are listed.
+- **Private info** (`events.private_info`: Wi-Fi, parking, door codes) → `events.event_private_info` (ticket holders only), as labelled Markdown in a fixed order. An event whose private info was already set on the new platform keeps it. Tests prove it reaches `holderEventContent` and no public read.
+- **Console profile**: events that gained a program and still had the default `other` profile take `conference` (its console lists Sessions, Speakers, Exhibitors, Sponsors; pending owner, like seating's `gala`). The migrated organizer finds and can edit the program there (e2e).
+- Deterministic ids and `legacy.ref` rows for every entity (`event_sessions`, `event_speakers`, `event_tag`, `event_exhibitors`, `exhibitor_sponsors`, `event_announcements`, `event_custom_sections`, `event_private_info`); inserts never overwrite a row edited on the new platform.
+- **Quarantine**: rows of an unknown event, or without a name/title/start time (content tables, ≤ 0.5 %).
+
+### T7 CMS content (`src/transforms/t7-content.ts`)
+- Voyager `pages` → CMS pages (`/pages/{slug}`), `posts` → posts (`/blogs/{slug}`).
+- Owner: the author's org when the author is a migrated organizer; else the instance's platform-level org (`yayatoh` for yayatoh.com, ABC for abc; roadmap T7).
+- Slug: the legacy one in the CMS form (lowercase, hyphens), unique per org and kind (`-2`, … when taken; listed when changed). Frozen afterwards: a rerun keeps the migrated slug and never rewrites the entry.
+- Body: legacy HTML → Markdown, capped at 20,000 (listed when cut); excerpt, SEO title and meta description carried; ACTIVE/PUBLISHED → published at the legacy creation time, anything else → draft.
+
+### T6 chats, blocks and message reports (`src/transforms/t6-chats.ts`) — kept in staging
+- **No target module exists.** The legacy chat is a per-event networking chat between two attendees; the messaging module (M1.10c) is organizer ↔ contact conversations with organizer/contact blocks and staff-reviewed reports. Mapping one onto the other would show attendees' private messages to organizers. No chat module was created.
+- The rows stay in `legacy_{inst}` (12 months, invisible to app_user and platform_reader), and each chat (with its message count), block and report (with its status) is an exception for the owner (`chat_not_migrated`, `chat_block_not_migrated`, `chat_report_not_migrated`). V1 counts them against staging; a test proves nothing reached `messaging.*`.
+
+### Media manifest (`src/transforms/media-refs.ts`)
+- `legacy.media_refs`: every legacy upload a migrated row references — seat-chart images, event images (first = cover, rest gallery), venue images, speaker avatars, exhibitor logos, session thumbnails, performer images, page and post images — with its R2 key (`legacy.media_key()`, the SQL twin of M2.2c's `legacyMediaUrl`, so a plan's underlay and its manifest row agree; tested) and its target: a media-pipeline owner slot (`media:event:cover`, `media:event:gallery`, `media:venue:photo`), the plan underlay it already is (`underlay:seating.layouts`), or `none:<table>` where the new module has no image yet (one `media_no_target` exception per kind). External URLs are listed, not referenced. The image sizes of `legacy.media_images` are joined in.
+- Nothing is fetched (no network in tests): the file copy (`rclone`) and the import through the media pipeline are the roadmap's "Media" step (below).
+
+### URL inventory (V9)
+- `/pages/{slug}` and `/blogs/{slug}` (as stored and in lower case): the host's own content (yay: the platform org; abc: ABC's tenant site) is 200 when unchanged, else 308 to the new slug; an organizer's page 308s to its organizer page (`/o/{org}/pages/{slug}`; from abc to `https://yayatoh.com/o/…`, since abc.yayatoh.com is ABC's own site); drafts are 404.
+- `/events/{slug}/tag_{Title}` (the legacy performer page, title with hyphens as the legacy views built it): 308 to the event's migrated speaker page; 404 when the event is not public.
+- V9 checks page/post/tag URLs through the row they came from (`url_inventory.entity_id`).
+- `yayatoh.com/pages/…` for platform pages is served by the marketplace when `MARKETPLACE_CONTENT_ORG` is the platform org (runbook: set it at cutover).
+
+### Validation extended (scoped to rows the migration wrote)
+- **V1** 12 new lines: sessions, speakers (event speakers + active tag links), session-speaker links (same event, ≤ 20), exhibitors, sponsors, announcements, sections (+ listed empties), private info (+ listed empties), CMS entries, and chats/blocks/reports kept in staging (= their exceptions). Legacy side from staging less this run's quarantine; migrated side through `legacy.ref`.
+- **V4** every new `legacy.ref` points at its row in its org; session speakers, rooms and sponsor tiers stay within their event; every manifest row points at a migrated row; every migrated plan's underlay has its manifest row.
+- **V7** seven new golden queries (21 in all): sessions, speakers, exhibitors, sponsors per level, live announcements and session-speaker links per event; published CMS entries per owning org. A query whose staging tables a dump lacks is skipped and reported.
+- **V10** checksums of the program, announcements, sections, private info and CMS entries through `legacy.ref`.
+- **Fix found on the way:** V10's `legacy_settlements` checksum and V7's G09 counted rows by `instance` alone, so the e2e canary org's settlement row (made after a run) failed V10 on the next demo migration. Both now count only settlements of migrated events or organizers.
+
+### Pending owner (defaults chosen; also in docs/owner-inbox.md)
+- Chats, blocks and reports not carried (no target module).
+- Program events → `conference` profile.
+- Session times read as typed, in the event's timezone.
+- Paid/invitation sessions as normal sessions; exhibitor and performer contacts not carried.
+- Platform pages and posts to the `yayatoh` platform org, and `MARKETPLACE_CONTENT_ORG=yayatoh` at cutover.
+
+### Later / not yet
+- The media copy and import: `rclone` to the manifest's keys, then `media:*` targets through the media pipeline (sniff, re-encode, EXIF strip) as a reviewed runbook step; images for speakers, exhibitors, sessions and CMS entries once those modules hold images (`none:*`).
+- An attendee-to-attendee chat module, if the owner wants the legacy chats carried.
+- Per-occurrence sessions (sessions of repetitive events belong to no date until occurrences are migrated).
+- Legacy stored-case URL variants for events (`/events/Lakeshore_Spring_Gala`; pages and posts already list both cases).
+- Timing the M2.2d stages on the `large` dataset (they are batched like M2.2c's; the e2e and integration datasets run them in under a second).
+- Per-date seats stay a separate milestone (exception `seat_per_date_not_migrated` unchanged).
+
+### Acceptance (M2.2d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The generator's M2.2d tables are written and plant every case; the demo event's program is fixed; orphans only at large scale | `tools/legacy-migrate/tests/m22d.test.ts` ("synthetic legacy generator") |
+| AC2 | Legacy HTML → Markdown (no script, safe links only), plain lines, web URLs, speaker links, private info, custom sections (validated by `EventSectionDto`), sponsor tiers, tag URL segments | `m22d.test.ts` |
+| AC3 | Both instances pass V1–V12 with the 12 new V1 lines, the new V4 keys and G15–G21 at 0 difference | `tools/legacy-migrate/tests/m22d.int.test.ts` ("runs") |
+| AC4 | Sessions in the event timezone with rooms and same-event speakers; end fixed, unknown speakers dropped, paid access listed; unsafe links dropped; tags → a speaker per linked event, switched-off not migrated, no contacts carried; sponsors in ordered tiers; the public program and speaker page read them | `m22d.int.test.ts` ("the program") |
+| AC5 | Announcements published/draft/pinned; sections as FAQ and text on the public page; private info only through the holder read | `m22d.int.test.ts` ("announcements, sections and private info") |
+| AC6 | CMS pages/posts to the platform org, the organizer's org and ABC, with CMS slugs, Markdown, published/draft; public read serves only published | `m22d.int.test.ts` ("T7 CMS content") |
+| AC7 | Chats, blocks and reports stay in staging, each listed, none copied into messaging | `m22d.int.test.ts` ("T6 chats") |
+| AC8 | Media manifest: every kind with its target; keys equal the TypeScript rule; every plan underlay has its row | `m22d.int.test.ts` ("media manifest") |
+| AC9 | Page, post and tag URLs: 308s served by the proxy lookup, unchanged pages and drafts not redirected; abc affiliates to yayatoh.com | `m22d.int.test.ts` ("URL inventory") |
+| AC10 | Isolation: an org sees none of another org's migrated program, content or CMS rows (11 tables); the manifest is invisible to app_user | `m22d.int.test.ts` ("isolation") |
+| AC11 | Quarantine of unknown-event, untitled and unnamed rows, in a rolled-back transaction | `m22d.int.test.ts` ("quarantine") |
+| AC12 | A rerun changes nothing (11 tables), V10 reproduces the content checksums, exceptions are listed again | `m22d.int.test.ts` ("idempotence and V10") |
+| AC13 | V1, V4, V7, V9 and V10 each catch a planted defect (rolled back) and pass after | `m22d.int.test.ts` ("planted defects") |
+| AC14 | Browser: the migrated event page shows the agenda (legacy wall clock, room), speakers (incl. a performer tag), exhibitor, sponsor and announcement; the speaker page opens by keyboard with the migrated bio; a tag URL and the organizer's page URL 308 to their pages; the organizer finds the program in the console; Arabic RTL once; axe on every screen | `apps/web/e2e/legacy-migration.spec.ts` ("migrated program and content (M2.2d)", "finds the migrated program in the event console") |
+
 ## Next
-- M2.2d: sessions, speakers, exhibitors, sections, announcements and private info; CMS content (T7); chats, blocks and reports; then the masked nightly rehearsal once the owner's masked dumps exist.
+- The media copy and import step; the masked nightly rehearsal once the owner's masked dumps exist.

@@ -1,4 +1,6 @@
-import { exec, hasColumn, hasTable, type Instance, type StepContext } from './context.ts';
+import { legacyTagPathSegment, urlSafeSegment } from '../content.ts';
+import { exec, hasColumn, hasTable, type Instance, rows, type StepContext } from './context.ts';
+import { platformOrg } from './t6-comms.ts';
 
 /** The public host of each legacy instance (roadmap §7.7). */
 export const LEGACY_HOSTS: Record<Instance, string> = { yay: 'yayatoh.com', abc: 'abc.yayatoh.com' };
@@ -11,7 +13,14 @@ export const LEGACY_HOSTS: Record<Instance, string> = { yay: 'yayatoh.com', abc:
  *   public (draft); a legacy slug shared by several events resolves as the legacy app did (the
  *   lowest id) and the others are listed;
  * - `/venues/{slug}`: 200 or 308 for directory venues, 404 for unlisted ones;
- * - `/{organisation_url}` (the organizer's root page): 308 to `/o/{slug}`.
+ * - `/{organisation_url}` (the organizer's root page): 308 to `/o/{slug}`;
+ * - (M2.2d) `/pages/{slug}` and `/blogs/{slug}` (Voyager pages and posts, as stored and in lower
+ *   case): the host's own content (yay: the platform org, served when it is the marketplace content
+ *   org; abc: ABC's tenant site) is 200 when the slug is unchanged, else 308 to the new slug; an
+ *   organizer's content 308s to its organizer page (`/o/{org}/pages/{slug}`; from abc, on
+ *   yayatoh.com); drafts are 404;
+ * - (M2.2d) `/events/{slug}/tag_{Title}` (performer/speaker tag pages): 308 to the event's
+ *   migrated speaker page, 404 when the event is not public.
  * Every 308 is loaded into `marketplace.legacy_redirects` for the instance host (and any extra
  * hosts, e.g. a dev host for e2e), served by the web proxy for at least 12 months.
  */
@@ -83,6 +92,7 @@ export async function urlInventory(ctx: StepContext, extraHosts: readonly string
       `,
       );
   }
+  await contentUrls(ctx, hosts);
   await exec(
     ctx,
     `
@@ -93,4 +103,111 @@ export async function urlInventory(ctx: StepContext, extraHosts: readonly string
       where marketplace.legacy_redirects.org_id = excluded.org_id;
   `,
   );
+}
+
+interface InventoryRow {
+  instance: string;
+  host: string;
+  path: string;
+  kind: string;
+  planned_status: number;
+  target: string | null;
+  org_id: string;
+  entity_id: string;
+}
+
+/** M2.2d: CMS pages and posts, and performer/speaker tag pages. */
+async function contentUrls(ctx: StepContext, hosts: readonly string[]): Promise<void> {
+  const inst = ctx.instance;
+  const homeOrg = await platformOrg(ctx);
+  const out: InventoryRow[] = [];
+  const seen = new Set<string>();
+  const add = (r: Omit<InventoryRow, 'instance'>) => {
+    const key = `${r.host}|${r.path}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push({ instance: inst, ...r });
+  };
+  for (const [table, kind, base] of [
+    ['pages', 'page', '/pages/'],
+    ['posts', 'post', '/blogs/'],
+  ] as const) {
+    if (!(await hasTable(ctx, table))) continue;
+    const entries = await rows<{
+      legacy_slug: string;
+      entry_id: string;
+      slug: string;
+      status: string;
+      org_id: string;
+      org_slug: string;
+    }>(
+      ctx,
+      `select btrim(p.slug) as legacy_slug, e.id as entry_id, e.slug, e.status, e.org_id, o.slug as org_slug
+       from {s}.${table} p
+       join legacy.ref r on r.instance = {inst} and r.entity = '${table}' and r.legacy_id = p.id::text
+       join cms.entries e on e.id = r.new_id
+       join tenancy.organizations o on o.id = e.org_id
+       order by p.id`,
+    );
+    for (const host of hosts)
+      for (const e of entries) {
+        const own = e.org_id === homeOrg;
+        const target =
+          e.status !== 'published'
+            ? null
+            : own
+              ? `${base}${e.slug}`
+              : `${inst === 'abc' ? `https://${LEGACY_HOSTS.yay}` : ''}/o/${e.org_slug}${base}${e.slug}`;
+        for (const seg of new Set([e.legacy_slug, e.legacy_slug.toLowerCase()])) {
+          if (!seg || !urlSafeSegment(seg)) continue;
+          const path = `${base}${seg}`;
+          add({
+            host,
+            path,
+            kind,
+            planned_status: target === null ? 404 : target === path ? 200 : 308,
+            target: target === null || target === path ? null : target,
+            org_id: e.org_id,
+            entity_id: e.entry_id,
+          });
+        }
+      }
+  }
+  if ((await hasTable(ctx, 'tags')) && (await hasTable(ctx, 'event_tag'))) {
+    const tags = await rows<{
+      event_slug: string;
+      title: string;
+      speaker_id: string;
+      slug: string;
+      status: string;
+      org_id: string;
+    }>(
+      ctx,
+      `select lower(btrim(le.slug)) as event_slug, btrim(t.title) as title, sp.id as speaker_id, e.slug, e.status, e.org_id
+       from legacy.ref r
+       join program.speakers sp on sp.id = r.new_id
+       join events.events e on e.id = sp.event_id
+       join {s}.tags t on t.id::text = split_part(r.legacy_id, ':', 1)
+       join {s}.events le on le.id::text = split_part(r.legacy_id, ':', 2)
+       where r.instance = {inst} and r.entity = 'event_tag' and btrim(coalesce(le.slug, '')) ~ '^[A-Za-z0-9._~-]+$'
+       order by le.id, t.id`,
+    );
+    for (const host of hosts)
+      for (const t of tags) {
+        const seg = legacyTagPathSegment(t.title);
+        if (!urlSafeSegment(seg)) continue;
+        const published = t.status === 'published';
+        add({
+          host,
+          path: `/events/${t.event_slug}/${seg}`,
+          kind: 'tag',
+          planned_status: published ? 308 : 404,
+          target: published ? `/events/${t.slug}/speakers/${t.speaker_id}` : null,
+          org_id: t.org_id,
+          entity_id: t.speaker_id,
+        });
+      }
+  }
+  for (let i = 0; i < out.length; i += 1000)
+    await ctx.sql`insert into legacy.url_inventory ${ctx.sql(out.slice(i, i + 1000))} on conflict do nothing`;
 }

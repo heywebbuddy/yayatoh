@@ -157,6 +157,7 @@ export async function validate(
     factor,
     pass: n(v1?.[l]) === n(v1?.[m]),
   }));
+  v1lines.push(...(await v1Content(q, instance, runId)));
   checks.push({
     id: 'V1',
     name: 'Row counts with split factors',
@@ -280,7 +281,9 @@ export async function validate(
          where t.status = 'active' and not exists (select 1 from ticketing.ticket_barcodes b where b.ticket_id = t.id and b.active and b.format = 'yy1' and b.rev = t.rev)) as active_tickets_without_code`,
     [instance],
   );
-  const orphans = Object.fromEntries(Object.entries(v4 ?? {}).map(([k, v]) => [k, n(v)]));
+  const orphans = Object.fromEntries(
+    Object.entries({ ...v4, ...(await v4Content(q, instance)) }).map(([k, v]) => [k, n(v)]),
+  );
   checks.push({
     id: 'V4',
     name: 'Referential integrity (0 orphans)',
@@ -461,3 +464,164 @@ export function summarize(r: ValidationReport): string {
   if (ex.length) lines.push(`  exceptions for owner review: ${ex.map(([k, v]) => `${k} ${v}`).join(', ')}`);
   return lines.join('\n');
 }
+
+/** Staging tables of the M2.2d transforms (a dump may lack any of them: counted as 0). */
+const CONTENT_TABLES = [
+  'event_sessions',
+  'event_speakers',
+  'event_exhibitors',
+  'event_announcements',
+  'event_custom_sections',
+  'tags',
+  'event_tag',
+  'pages',
+  'posts',
+  'chats',
+  'blocked_users',
+  'message_reports',
+] as const;
+
+/**
+ * V1 for the M2.2d content (program, announcements, sections, private info, CMS, chats): the
+ * legacy side from staging (rows of migrated events, less this run's quarantine), the migrated
+ * side through `legacy.ref`, so rows made on the new platform (or by other orgs) never count.
+ * Rows deliberately not carried count through their exception (sections with nothing usable,
+ * empty private info, chats kept in staging).
+ */
+async function v1Content(q: Q, instance: 'yay' | 'abc', runId: number | null) {
+  const S = stagingSchema(instance);
+  const present = new Set(
+    (await q(`select table_name from information_schema.tables where table_schema = $1`, [S])).map((r) =>
+      String(r.table_name),
+    ),
+  );
+  const has = (t: (typeof CONTENT_TABLES)[number]) => present.has(t);
+  const live = (t: string, alias: string, key = `${alias}.id::text`) =>
+    `not exists (select 1 from legacy.quarantine x where x.run_id = $2 and x.table_name = '${t}' and x.legacy_id = ${key})`;
+  const ofEvent = (alias: string) =>
+    `exists (select 1 from legacy.ref ev where ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = ${alias}.event_id::text)`;
+  const refCount = (entities: string, table: string) =>
+    `(select count(*) from ${table} t join legacy.ref r on r.new_id = t.id and r.instance = $1 and r.entity in (${entities}))`;
+  const ex = (kind: string) =>
+    `(select count(*) from legacy.exceptions e where e.run_id = $2 and e.instance = $1 and e.kind = '${kind}')`;
+  const zero = '0';
+  const [r] = await q(
+    `select
+      ${has('event_sessions') ? `(select count(*) from {s}.event_sessions s where ${ofEvent('s')} and ${live('event_sessions', 's')})` : zero} as legacy_sessions,
+      ${refCount(`'event_sessions'`, 'program.sessions')} as sessions,
+      ${has('event_speakers') ? `(select count(*) from {s}.event_speakers s where ${ofEvent('s')} and ${live('event_speakers', 's')})` : zero}
+      + ${
+        has('tags') && has('event_tag')
+          ? `(select count(*) from (select distinct et.tag_id, et.event_id from {s}.event_tag et join {s}.tags t on t.id = et.tag_id
+               where coalesce(t.status, 1) = 1 and nullif(btrim(t.title), '') is not null and ${ofEvent('et')}
+                 and ${live('event_tag', 'et', `et.tag_id::text || ':' || et.event_id::text`)}) l)`
+          : zero
+      } as legacy_speakers,
+      ${refCount(`'event_speakers', 'event_tag'`, 'program.speakers')} as speakers,
+      ${
+        has('event_sessions') && has('event_speakers')
+          ? `(select coalesce(sum(least(n, 20)), 0) from (
+               select s.id, count(distinct sp.id) as n from {s}.event_sessions s
+               cross join lateral jsonb_array_elements_text(case when jsonb_typeof(s.speaker_ids) = 'array' then s.speaker_ids else '[]'::jsonb end) j(v)
+               join {s}.event_speakers sp on sp.id::text = btrim(j.v) and sp.event_id = s.event_id
+               where ${ofEvent('s')} and ${live('event_sessions', 's')} and ${live('event_speakers', 'sp')}
+               group by s.id) x)`
+          : zero
+      } as legacy_session_speakers,
+      (select count(*) from program.session_speakers t join legacy.ref r on r.new_id = t.session_id and r.instance = $1 and r.entity = 'event_sessions') as session_speakers,
+      ${has('event_exhibitors') ? `(select count(*) from {s}.event_exhibitors s where ${ofEvent('s')} and ${live('event_exhibitors', 's')})` : zero} as legacy_exhibitors,
+      ${refCount(`'event_exhibitors'`, 'program.exhibitors')} as exhibitors,
+      ${has('event_exhibitors') ? `(select count(*) from {s}.event_exhibitors s where ${ofEvent('s')} and ${live('event_exhibitors', 's')} and lower(btrim(s.sponsor_type)) in ('platinum', 'gold', 'silver', 'bronze'))` : zero} as legacy_sponsors,
+      ${refCount(`'exhibitor_sponsors'`, 'program.sponsors')} as sponsors,
+      ${has('event_announcements') ? `(select count(*) from {s}.event_announcements s where ${ofEvent('s')} and ${live('event_announcements', 's')})` : zero} as legacy_announcements,
+      ${refCount(`'event_announcements'`, 'events.event_announcements')} as announcements,
+      ${has('event_custom_sections') ? `(select count(*) from {s}.event_custom_sections s where ${ofEvent('s')} and ${live('event_custom_sections', 's')})` : zero} as legacy_sections,
+      ${refCount(`'event_custom_sections'`, 'events.event_sections')} + ${ex('section_empty_not_migrated')} as sections,
+      (select count(*) from {s}.events le where ${
+        (
+          await q(
+            `select 1 from information_schema.columns where table_schema = $1 and table_name = 'events' and column_name = 'private_info'`,
+            [S],
+          )
+        ).length
+          ? `jsonb_typeof(le.private_info) = 'object' and le.private_info <> '{}'::jsonb`
+          : 'false'
+      } and exists (select 1 from legacy.ref ev where ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = le.id::text)) as legacy_private_info,
+      ${refCount(`'event_private_info'`, 'events.event_private_info')} + ${ex('private_info_empty')} as private_info,
+      ${has('pages') ? `(select count(*) from {s}.pages s where ${live('pages', 's')})` : zero}
+      + ${has('posts') ? `(select count(*) from {s}.posts s where ${live('posts', 's')})` : zero} as legacy_cms,
+      ${refCount(`'pages', 'posts'`, 'cms.entries')} as cms,
+      ${has('chats') ? '(select count(*) from {s}.chats)' : zero} as legacy_chats, ${ex('chat_not_migrated')} as chats,
+      ${has('blocked_users') ? '(select count(*) from {s}.blocked_users)' : zero} as legacy_blocks, ${ex('chat_block_not_migrated')} as blocks,
+      ${has('message_reports') ? '(select count(*) from {s}.message_reports)' : zero} as legacy_reports, ${ex('chat_report_not_migrated')} as reports`,
+    [instance, runId ?? -1],
+  );
+  const lines: [string, string, string, string][] = [
+    ['program_sessions', 'legacy_sessions', 'sessions', '1:1 (sessions of migrated events)'],
+    ['program_speakers', 'legacy_speakers', 'speakers', 'event speakers + one per (active tag, event) link'],
+    [
+      'session_speakers',
+      'legacy_session_speakers',
+      'session_speakers',
+      'speaker ids of the same event (≤ 20 per session)',
+    ],
+    ['program_exhibitors', 'legacy_exhibitors', 'exhibitors', '1:1'],
+    ['program_sponsors', 'legacy_sponsors', 'sponsors', 'exhibitors with a sponsor level'],
+    ['event_announcements', 'legacy_announcements', 'announcements', '1:1'],
+    ['event_sections', 'legacy_sections', 'sections', '1:1 (+ listed when nothing usable)'],
+    [
+      'event_private_info',
+      'legacy_private_info',
+      'private_info',
+      'events with private info (+ listed when empty)',
+    ],
+    ['cms_entries', 'legacy_cms', 'cms', 'pages + posts'],
+    ['chats_kept_in_staging', 'legacy_chats', 'chats', 'listed (no target module)'],
+    ['chat_blocks_kept_in_staging', 'legacy_blocks', 'blocks', 'listed (no target module)'],
+    ['chat_reports_kept_in_staging', 'legacy_reports', 'reports', 'listed (no target module)'],
+  ];
+  return lines.map(([name, l, m, factor]) => ({
+    name,
+    legacy: n(r?.[l]),
+    migrated: n(r?.[m]),
+    factor,
+    pass: n(r?.[l]) === n(r?.[m]),
+  }));
+}
+
+/**
+ * V4 for the M2.2d content: every `legacy.ref` of a new entity points at its row; program links
+ * stay within one event; media manifest rows point at existing rows; every migrated plan's underlay
+ * is in the manifest. Scoped to what the migration wrote.
+ */
+async function v4Content(q: Q, instance: 'yay' | 'abc'): Promise<Record<string, unknown>> {
+  const refsWithout = (entities: string, table: string) =>
+    `(select count(*) from legacy.ref r where r.instance = $1 and r.entity in (${entities})
+       and not exists (select 1 from ${table} t where t.id = r.new_id and t.org_id = r.org_id))`;
+  const [r] = await q(
+    `with sess as (select t.* from program.sessions t join legacy.ref r on r.new_id = t.id and r.instance = $1 and r.entity = 'event_sessions')
+    select
+      ${refsWithout(`'event_sessions'`, 'program.sessions')} as refs_without_session,
+      ${refsWithout(`'event_speakers', 'event_tag'`, 'program.speakers')} as refs_without_speaker,
+      ${refsWithout(`'event_exhibitors'`, 'program.exhibitors')} as refs_without_exhibitor,
+      ${refsWithout(`'exhibitor_sponsors'`, 'program.sponsors')} as refs_without_sponsor,
+      ${refsWithout(`'event_announcements'`, 'events.event_announcements')} as refs_without_announcement,
+      ${refsWithout(`'event_custom_sections'`, 'events.event_sections')} as refs_without_section,
+      ${refsWithout(`'event_private_info'`, 'events.event_private_info')} as refs_without_private_info,
+      ${refsWithout(`'pages', 'posts'`, 'cms.entries')} as refs_without_cms_entry,
+      (select count(*) from program.session_speakers l join sess s on s.id = l.session_id
+         join program.speakers sp on sp.id = l.speaker_id where sp.event_id <> s.event_id or sp.org_id <> s.org_id) as session_speakers_other_event,
+      (select count(*) from sess s join program.rooms rm on rm.id = s.room_id where rm.event_id <> s.event_id) as sessions_room_other_event,
+      (select count(*) from program.sponsors sp join legacy.ref r on r.new_id = sp.id and r.instance = $1 and r.entity = 'exhibitor_sponsors'
+         join program.sponsor_tiers t on t.id = sp.tier_id where t.event_id <> sp.event_id) as sponsors_tier_other_event,
+      (select count(*) from legacy.media_refs m where m.instance = $1 and not exists (
+         select 1 from legacy.ref r where r.instance = $1 and r.new_id = m.new_id and r.org_id = m.org_id)) as media_refs_without_row,
+      (select count(*) from seating.layouts l join legacy.ref r on r.new_id = l.id and r.instance = $1 and r.entity = 'seatcharts'
+        where l.doc -> 'underlay' ->> 'url' is not null and not exists (
+          select 1 from legacy.media_refs m where m.instance = $1 and m.new_id = l.id and m.storage_key = l.doc -> 'underlay' ->> 'url')) as underlays_without_manifest`,
+    [instance],
+  );
+  return r ?? {};
+}
+
+type Q = (text: string, params?: unknown[]) => Promise<Row[]>;
