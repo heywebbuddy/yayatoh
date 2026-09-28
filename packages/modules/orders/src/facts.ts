@@ -16,6 +16,11 @@ export interface FactScope {
   readonly eventId?: string;
   readonly from?: Date;
   readonly to?: Date;
+  /**
+   * One shard of the orders (M3.1 metric projections): orders whose id's last byte modulo
+   * `count` is `index` (`metricShardOf` in reports computes the same from the id string).
+   */
+  readonly shard?: { readonly index: number; readonly count: number };
 }
 
 /** Who took the money: the platform (online checkout) or the organizer (box office, Zelle, cash). */
@@ -29,6 +34,10 @@ function scopeSql(scope: FactScope, timeColumn: SQL, alias = sql.raw('o')): SQL 
   if (scope.eventId) parts.push(sql`${alias}.event_id = ${scope.eventId}::uuid`);
   if (scope.from) parts.push(sql`${timeColumn} >= ${scope.from.toISOString()}::timestamptz`);
   if (scope.to) parts.push(sql`${timeColumn} < ${scope.to.toISOString()}::timestamptz`);
+  if (scope.shard)
+    parts.push(
+      sql`get_byte(uuid_send(${alias}.id), 15) % ${scope.shard.count}::int = ${scope.shard.index}::int`,
+    );
   return parts.length ? sql`and ${sql.join(parts, sql` and `)}` : sql``;
 }
 
@@ -229,5 +238,113 @@ export async function salesByEventTx(tx: TenantTx, scope: FactScope): Promise<Ev
     tickets: n(r.tickets),
     compTickets: n(r.comp),
     grossMinor: n(r.gross),
+  }));
+}
+
+/** Where one order sits in the metric projections (M3.1): its event and payment time. No order row. */
+export async function orderMetricRefTx(
+  tx: TenantTx,
+  orderId: string,
+): Promise<{ eventId: string; paidAt: Date | null } | null> {
+  const [r] = await tx.execute<{ event_id: string; paid_at: string | Date | null }>(sql`
+    select o.event_id, o.paid_at from orders.orders o where o.id = ${orderId}::uuid`);
+  if (!r) return null;
+  return { eventId: String(r.event_id), paidAt: r.paid_at ? new Date(r.paid_at) : null };
+}
+
+/** Where one refund sits in the metric projections: its order, event and completion time. */
+export async function refundMetricRefTx(
+  tx: TenantTx,
+  refundId: string,
+): Promise<{ orderId: string; eventId: string; completedAt: Date | null } | null> {
+  const [r] = await tx.execute<{
+    order_id: string;
+    event_id: string;
+    completed_at: string | Date | null;
+  }>(sql`
+    select r.order_id, o.event_id, r.completed_at
+    from orders.refunds r join orders.orders o on o.id = r.order_id and o.org_id = r.org_id
+    where r.id = ${refundId}::uuid`);
+  if (!r) return null;
+  return {
+    orderId: String(r.order_id),
+    eventId: String(r.event_id),
+    completedAt: r.completed_at ? new Date(r.completed_at) : null,
+  };
+}
+
+/** Time-series grains for the metric projections (UTC buckets). */
+export type SeriesBucket = 'minute' | 'hour';
+
+export interface SalesSeriesFact {
+  readonly bucketStart: Date;
+  readonly shard: number;
+  readonly currency: string;
+  readonly comp: boolean;
+  readonly orders: number;
+  readonly tickets: number;
+  readonly grossMinor: number;
+}
+
+/**
+ * Sold orders of one event per UTC bucket of payment time and order shard (M3.1 time series).
+ * With `from`/`to` (and `shard`) in scope it reads one bucket window; without, the whole event
+ * (a rebuild). The same query serves both, so projections and rebuilds agree to the unit.
+ */
+export async function salesSeriesTx(
+  tx: TenantTx,
+  scope: FactScope & { readonly eventId: string },
+  bucket: SeriesBucket,
+  shards: number,
+): Promise<SalesSeriesFact[]> {
+  const rows = await tx.execute<Record<string, unknown>>(sql`
+    select date_trunc(${bucket}, o.paid_at, 'UTC') as bucket_start,
+      get_byte(uuid_send(o.id), 15) % ${shards}::int as shard,
+      o.currency, (o.total_minor = 0) as comp,
+      count(*)::int as orders, coalesce(sum(i.qty), 0)::int as tickets, sum(o.total_minor)::text as gross
+    from orders.orders o
+    left join (select order_id, sum(quantity) as qty from orders.order_items group by order_id) i
+      on i.order_id = o.id
+    where o.status in (${SOLD}) and o.paid_at is not null ${scopeSql(scope, sql`o.paid_at`)}
+    group by 1, 2, 3, 4`);
+  return rows.map((r) => ({
+    bucketStart: new Date(r.bucket_start as string),
+    shard: n(r.shard),
+    currency: String(r.currency),
+    comp: Boolean(r.comp),
+    orders: n(r.orders),
+    tickets: n(r.tickets),
+    grossMinor: n(r.gross),
+  }));
+}
+
+export interface RefundSeriesFact {
+  readonly bucketStart: Date;
+  readonly shard: number;
+  readonly currency: string;
+  readonly tickets: number;
+  readonly amountMinor: number;
+}
+
+/** Succeeded refunds of one event per UTC bucket of completion and order shard (see salesSeriesTx). */
+export async function refundSeriesTx(
+  tx: TenantTx,
+  scope: FactScope & { readonly eventId: string },
+  bucket: SeriesBucket,
+  shards: number,
+): Promise<RefundSeriesFact[]> {
+  const rows = await tx.execute<Record<string, unknown>>(sql`
+    select date_trunc(${bucket}, r.completed_at, 'UTC') as bucket_start,
+      get_byte(uuid_send(o.id), 15) % ${shards}::int as shard, r.currency,
+      coalesce(sum(cardinality(r.ticket_ids)), 0)::int as tickets, sum(r.amount_minor)::text as amount
+    from orders.refunds r join orders.orders o on o.id = r.order_id and o.org_id = r.org_id
+    where r.status = 'succeeded' and r.completed_at is not null ${scopeSql(scope, sql`r.completed_at`)}
+    group by 1, 2, 3`);
+  return rows.map((r) => ({
+    bucketStart: new Date(r.bucket_start as string),
+    shard: n(r.shard),
+    currency: String(r.currency),
+    tickets: n(r.tickets),
+    amountMinor: n(r.amount),
   }));
 }

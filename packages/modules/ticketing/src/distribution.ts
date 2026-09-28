@@ -284,7 +284,7 @@ export const claimTicketCommand = tenantCommand({
       version: 1,
       aggregateType: 'ticket',
       aggregateId: t.id,
-      payload: { orgId, ticketId: t.id, claimId: c.id, rev: t.rev },
+      payload: { orgId, ticketId: t.id, claimId: c.id, rev: t.rev, eventId: ticket?.eventId ?? null },
     });
     const link = ticket ? await createHolderLinkTx(tx, ctx, ticket.eventId, input.email) : null;
     return { holderToken: link?.token ?? null };

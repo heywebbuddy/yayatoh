@@ -85,5 +85,10 @@ export {
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
 export { FEE_MODES, PROMO_KINDS, TICKET_STATUSES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
-export { orderIdsByShortCodeTx, type TicketTypeStats, ticketTypeStatsTx } from './stats.ts';
+export {
+  orderIdsByShortCodeTx,
+  type TicketTypeStats,
+  ticketsDistributedTx,
+  ticketTypeStatsTx,
+} from './stats.ts';
 export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';

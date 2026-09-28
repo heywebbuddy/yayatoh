@@ -13,7 +13,8 @@
     "signup-code": "node scripts/signup-code.ts",
     "staff": "node scripts/staff.ts",
     "retention": "node scripts/retention.ts",
-    "drill-tickets": "node scripts/drill-tickets.ts"
+    "drill-tickets": "node scripts/drill-tickets.ts",
+    "metrics:rebuild": "node scripts/metrics-rebuild.ts"
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",

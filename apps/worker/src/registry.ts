@@ -6,6 +6,7 @@ import { createNotifier } from '@yayatoh/notifications';
 import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
@@ -43,6 +44,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     payoutDestinationMailer({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
+    // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
+    metricsProjector(),
+    analyticsForwarder(postgresAnalyticsSink),
   ];
 }
 

@@ -69,7 +69,7 @@ import {
   recordReconciliationCommand,
   releaseDueSettlementsCommand,
 } from '@yayatoh/payments';
-import { consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
+import { catchUpSubscriber, consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
   createExhibitorCommand,
@@ -80,7 +80,12 @@ import {
   createSponsorTierCommand,
   createTrackCommand,
 } from '@yayatoh/program';
-import { attendeeExportBulk } from '@yayatoh/reports';
+import {
+  analyticsForwarder,
+  attendeeExportBulk,
+  catchUpMetrics,
+  postgresAnalyticsSink,
+} from '@yayatoh/reports';
 import {
   assignSeatsCommand,
   holdSeatsTx,
@@ -860,6 +865,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M3.1a: the metrics projector (snapshots, sharded counter, time series, lag samples) and the
+  // analytics sink over this org's outbox, as the worker would.
+  await catchUpMetrics(org.id);
+  await catchUpSubscriber(analyticsForwarder(postgresAnalyticsSink), org.id);
   return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 

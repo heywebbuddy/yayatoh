@@ -5,6 +5,7 @@ export {
   releaseCancelledSeats,
   SeatAssignmentsDto,
   seatAssignmentsQuery,
+  seatsOccupiedTx,
   unassignSeatsCommand,
 } from './assignments.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';

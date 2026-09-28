@@ -1,10 +1,18 @@
 import type { TenantTx } from '@yayatoh/db';
 import { actorId, type Ctx, type DomainEvent, requireOrg } from '@yayatoh/kernel';
-import { and, asc, gt, inArray } from 'drizzle-orm';
-import { domainEvents } from '../schema.ts';
+import { and, asc, eq, gt, inArray, isNull, notExists, sql } from 'drizzle-orm';
+import { domainEvents, processedEvents } from '../schema.ts';
 
-/** Write events to the outbox inside the caller's tenant transaction (step 8). */
-export async function emitEvents(tx: TenantTx, ctx: Ctx, events: readonly DomainEvent[]): Promise<void> {
+/**
+ * Write events to the outbox inside the caller's tenant transaction (step 8). `replayed` marks
+ * backfilled history (the legacy migration): projections apply it, side effects never fire.
+ */
+export async function emitEvents(
+  tx: TenantTx,
+  ctx: Ctx,
+  events: readonly DomainEvent[],
+  opts: { replayed?: boolean } = {},
+): Promise<void> {
   if (events.length === 0) return;
   const orgId = requireOrg(ctx);
   await tx.insert(domainEvents).values(
@@ -17,6 +25,7 @@ export async function emitEvents(tx: TenantTx, ctx: Ctx, events: readonly Domain
       payload: e.payload as object,
       actor: actorId(ctx.actor),
       requestId: ctx.requestId,
+      replayed: opts.replayed === true,
     })),
   );
 }
@@ -31,6 +40,10 @@ export interface PublishedEvent {
   readonly aggregateId: string;
   readonly payload: unknown;
   readonly logSeq: number;
+  /** When the event was written (ISO; the source transaction's time). Filled in by consumeEvent when absent. */
+  readonly occurredAt?: string;
+  /** Backfilled history (see emitEvents). Filled in by consumeEvent when absent. */
+  readonly replayed?: boolean;
 }
 
 export interface Subscriber {
@@ -39,6 +52,12 @@ export interface Subscriber {
   /** `type@version` keys, e.g. `organization.created@1`. */
   readonly events: readonly string[];
   readonly handle: (tx: TenantTx, event: PublishedEvent) => Promise<void>;
+  /**
+   * What to do with backfilled (`replayed`) events. Default `skip`: they are marked handled and
+   * never reach `handle`, so mail, journeys and webhooks never fire for history. Projections
+   * (metrics, listings, the analytics sink) pass `apply`.
+   */
+  readonly replay?: 'apply' | 'skip';
 }
 
 export function defineSubscriber(s: Subscriber): Subscriber {
@@ -78,5 +97,52 @@ export async function recentEventsTx(
     aggregateId: r.aggregateId,
     payload: r.payload,
     logSeq: r.logSeq ?? 0,
+    occurredAt: r.createdAt.toISOString(),
+    replayed: r.replayed,
+  }));
+}
+
+/**
+ * This org's events of the given `type@version` keys that are not yet published by the relay
+ * and that `consumer` has not handled, oldest first (read-your-writes for projections: a page can
+ * apply what the relay has not picked up yet; in production that is at most a second of events).
+ * Uses the partial index on unpublished events.
+ */
+export async function unpublishedPendingTx(
+  tx: TenantTx,
+  orgId: string,
+  consumer: string,
+  keys: readonly string[],
+  limit = 500,
+): Promise<PublishedEvent[]> {
+  if (keys.length === 0) return [];
+  const rows = await tx
+    .select()
+    .from(domainEvents)
+    .where(
+      and(
+        isNull(domainEvents.publishedAt),
+        inArray(sql`${domainEvents.type} || '@' || ${domainEvents.version}`, [...keys]),
+        notExists(
+          tx
+            .select({ one: sql`1` })
+            .from(processedEvents)
+            .where(and(eq(processedEvents.consumer, consumer), eq(processedEvents.eventId, domainEvents.id))),
+        ),
+      ),
+    )
+    .orderBy(asc(domainEvents.id))
+    .limit(limit);
+  return rows.map((r) => ({
+    id: r.id,
+    orgId,
+    type: r.type,
+    version: r.version,
+    aggregateType: r.aggregateType,
+    aggregateId: r.aggregateId,
+    payload: r.payload,
+    logSeq: r.logSeq ?? 0,
+    occurredAt: r.createdAt.toISOString(),
+    replayed: r.replayed,
   }));
 }

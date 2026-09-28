@@ -1,3 +1,13 @@
+export {
+  ANALYTICS_EVENT_NAMES,
+  ANALYTICS_SOURCE_EVENTS,
+  AnalyticsEvent,
+  type AnalyticsSink,
+  analyticsForwarder,
+  fakeAnalyticsSink,
+  postgresAnalyticsSink,
+  toAnalyticsEventTx,
+} from './analytics.ts';
 export { ATTENDEE_EXPORT_COLUMNS, attendeeExportAction, attendeeExportBulk } from './attendee-export.ts';
 export {
   BOOKING_EXPORT_COLUMNS,
@@ -18,6 +28,29 @@ export {
   packetWithinLimits,
 } from './dispute-evidence.ts';
 export {
+  BUCKETS,
+  type Bucket,
+  bucketEnd,
+  bucketStart,
+  COUNTER_SHARDS,
+  checkinSeriesPoints,
+  MAX_RANGE_MS,
+  metricShardOf,
+  PROJECTED_KEYS,
+  PROJECTED_METRICS,
+  type ProjectedKey,
+  type ProjectedMetricDef,
+  ProjectedMetricValue,
+  percentile,
+  projectedKeysFor,
+  SERIES_KEYS,
+  SERIES_SHARDS,
+  type SeriesKey,
+  type SeriesPoint,
+  salesSeriesPoints,
+  sumSeries,
+} from './metrics/catalog.ts';
+export {
   EventReportDto,
   eventFinanceQuery,
   eventReportQuery,
@@ -32,6 +65,36 @@ export {
   periodRange,
 } from './metrics/org-report.ts';
 export {
+  applyUnpublishedMetricEvents,
+  CHECKIN_EVENTS,
+  catchUpMetrics,
+  computeEventMetricsTx,
+  DEVICE_EVENTS,
+  LAG_RETENTION_MS,
+  METRIC_EVENTS,
+  METRICS_CONSUMER,
+  metricsProjector,
+  projectMetricEventTx,
+  purgeProjectorLag,
+  REFRESH_EVENTS,
+  rebuildEventMetricsTx,
+  rebuildOrgMetrics,
+  type SnapshotRow,
+} from './metrics/projector.ts';
+export {
+  EventKpisDto,
+  eventFinanceKpisQuery,
+  eventFinanceMetricsQuery,
+  eventKpisQuery,
+  eventMetricsQuery,
+  eventTimeseriesQuery,
+  MetricsPipelineDto,
+  metricsPipelineQuery,
+  TimeseriesDto,
+} from './metrics/read.ts';
+export { rebuildEventMetricsCommand } from './metrics/rebuild.ts';
+export {
+  checkinRateBps,
   deriveMetrics,
   METRIC_KEYS,
   METRIC_UNITS,

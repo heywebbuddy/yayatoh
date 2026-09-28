@@ -299,7 +299,7 @@ export const attachPaymentCommand = tenantCommand({
   output: OrderDto,
   entitlement: 'ticketing',
   permission: 'public:checkout',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const order = await loadOrderTx(tx, input.orderId, true);
     const expiresAt = new Date(
       Math.max(order.expiresAt?.getTime() ?? 0, ctx.now.getTime()) + PAYMENT_EXTENSION_MINUTES * 60_000,
@@ -310,6 +310,15 @@ export const attachPaymentCommand = tenantCommand({
       expiresAt,
     });
     if (order.seatUuids.length) await extendSeatHoldTx(tx, ctx, order.id, expiresAt);
+    // A retry after a declined card leaves the failed state (the failed-payments metric follows).
+    if (order.status === 'payment_failed')
+      emit({
+        type: 'order.payment_started',
+        version: 1,
+        aggregateType: 'order',
+        aggregateId: order.id,
+        payload: { orgId: order.orgId, orderId: order.id, eventId: order.eventId },
+      });
     return { ...row, items: order.items };
   },
   audit: (input) => ({
@@ -354,6 +363,13 @@ export const applyProviderEventCommand = tenantCommand({
       if (!orderLifecycle.can(order.status as never, 'failPayment'))
         return { outcome: 'ignored' as const, status: order.status };
       const row = await setStatus(tx, order, 'failPayment', ctx.now);
+      emit({
+        type: 'order.payment_failed',
+        version: 1,
+        aggregateType: 'order',
+        aggregateId: order.id,
+        payload: { orgId: order.orgId, orderId: order.id, eventId: order.eventId },
+      });
       return { outcome: 'applied' as const, status: row.status };
     }
     if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };

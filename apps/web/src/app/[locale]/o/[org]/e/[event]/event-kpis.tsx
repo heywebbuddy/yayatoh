@@ -1,5 +1,5 @@
 import { type Ctx, executeQuery } from '@yayatoh/kernel';
-import { eventFinanceQuery, eventReportQuery } from '@yayatoh/reports';
+import { applyUnpublishedMetricEvents, eventFinanceKpisQuery, eventKpisQuery } from '@yayatoh/reports';
 import { buttonClass, EmptyState } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { AsOf, countOf, fmtPercent, Kpi, KpiGrid, metricText } from '@/components/reports.tsx';
@@ -9,7 +9,9 @@ import { ports } from '@/server/ports.ts';
 
 /**
  * The event home's key numbers (M1.12), from the metric registry: gross sales, net revenue
- * (finance roles) or orders, tickets sold against capacity, and check-ins.
+ * (finance roles) or orders, tickets sold against capacity, and check-ins. Read from the metric
+ * projections (M3.1) after applying any events the relay has not published yet, so a change the
+ * organizer just made shows at once and the numbers equal the full report's.
  */
 export async function EventKpis({
   eventId,
@@ -25,10 +27,11 @@ export async function EventKpis({
   finance: boolean;
 }) {
   const t = await getTranslations();
-  const r = await executeQuery(eventReportQuery, { eventId }, ctx, ports);
+  if (ctx.orgId) await applyUnpublishedMetricEvents(ctx.orgId);
+  const r = await executeQuery(eventKpisQuery, { eventId }, ctx, ports);
   if (!r.hasSales)
     return <EmptyState title={t('dashboard.noSalesTitle')} description={t('dashboard.noSalesDescription')} />;
-  const f = finance ? await executeQuery(eventFinanceQuery, { eventId }, ctx, ports) : null;
+  const f = finance ? await executeQuery(eventFinanceKpisQuery, { eventId }, ctx, ports) : null;
   const m = r.metrics;
   const n = (v: number) => formatNumber(v, locale);
   return (

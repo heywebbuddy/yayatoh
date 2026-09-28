@@ -7,7 +7,8 @@ import type { PublishedEvent, Subscriber } from './outbox.ts';
 /**
  * Run a subscriber for one event, exactly once per (consumer, event) even under replay:
  * the processed_events insert and the handler share one tenant transaction.
- * Returns false when the event was already handled.
+ * Returns false when the event was already handled, or when it is backfilled history
+ * (`replayed`) and the subscriber does not apply history (it is still marked handled).
  */
 export async function consumeEvent(subscriber: Subscriber, event: PublishedEvent): Promise<boolean> {
   const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: subscriber.name } });
@@ -18,9 +19,25 @@ export async function consumeEvent(subscriber: Subscriber, event: PublishedEvent
       .onConflictDoNothing()
       .returning({ id: processedEvents.id });
     if (inserted.length === 0) return false;
-    await subscriber.handle(tx, event);
+    const full = await withEventMetaTx(tx, event);
+    if (full.replayed && subscriber.replay !== 'apply') return false;
+    await subscriber.handle(tx, full);
     return true;
   });
+}
+
+/** The relay's job payload has no write time or replay flag: read them from the outbox row. */
+async function withEventMetaTx(tx: TenantTx, event: PublishedEvent): Promise<PublishedEvent> {
+  if (event.occurredAt !== undefined && event.replayed !== undefined) return event;
+  const [row] = await tx
+    .select({ createdAt: domainEvents.createdAt, replayed: domainEvents.replayed })
+    .from(domainEvents)
+    .where(eq(domainEvents.id, event.id));
+  return {
+    ...event,
+    occurredAt: event.occurredAt ?? row?.createdAt.toISOString() ?? new Date().toISOString(),
+    replayed: event.replayed ?? row?.replayed ?? false,
+  };
 }
 
 /**
@@ -63,6 +80,8 @@ export async function catchUpSubscriber(subscriber: Subscriber, orgId: string): 
       aggregateId: e.aggregateId,
       payload: e.payload,
       logSeq: e.logSeq ?? 0,
+      occurredAt: e.createdAt.toISOString(),
+      replayed: e.replayed,
     });
     if (done) n += 1;
   }

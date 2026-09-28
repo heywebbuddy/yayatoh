@@ -3,7 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
-import { defineSubscriber, tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { defineSubscriber, emitEvents, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { ASSIGN_SEAT_STATES, assignSeatState, pickSeats } from './domain/assign.ts';
@@ -85,6 +85,29 @@ const AssignedDto = z.object({ attendeeId: z.uuid(), seatUuid: z.uuid(), seatLab
  * a warning; when the rule is enforced, automatic placement skips them and choosing one needs
  * `overrideRules` ("this guest needs an accessible seat", audited).
  */
+/** Seats given or taken back by the organizer (the occupied-seats metric follows it). */
+const assignmentsChanged = (orgId: string, eventId: string) => ({
+  type: 'seating.assignments_changed',
+  version: 1,
+  aggregateType: 'event',
+  aggregateId: eventId,
+  payload: { orgId, eventId },
+});
+
+/**
+ * Occupied seats of one event (M3.1 metrics): seats sold with a ticket plus seats the organizer
+ * assigned to a guest. A count only.
+ */
+export async function seatsOccupiedTx(tx: TenantTx, eventId: string): Promise<number> {
+  const [r] = await tx.execute<{ n: number }>(sql`
+    select count(*)::int as n from seating.event_seats s
+    where s.event_id = ${eventId}::uuid
+      and (s.status = 'sold' or exists (
+        select 1 from seating.seat_assignments a
+        where a.org_id = s.org_id and a.event_id = s.event_id and a.seat_uuid = s.seat_uuid))`);
+  return Number(r?.n ?? 0);
+}
+
 export const assignSeatsCommand = tenantCommand({
   name: 'seating.assign',
   input: z
@@ -102,7 +125,7 @@ export const assignSeatsCommand = tenantCommand({
   output: z.object({ itemLabel: z.string(), seated: z.array(AssignedDto), warnings: z.array(RuleHitDto) }),
   entitlement: 'seating',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const ids = [...new Set(input.attendeeIds)];
     const layout = await layoutDocTx(tx, input.eventId);
@@ -305,6 +328,7 @@ export const assignSeatsCommand = tenantCommand({
       }),
       ...wanted.map((w) => [w.attendeeId, w.seatUuid] as const),
     ]);
+    emit(assignmentsChanged(orgId, input.eventId));
     return {
       itemLabel: item.label,
       seated: ids.map((id) => {
@@ -335,7 +359,7 @@ export const unassignSeatsCommand = tenantCommand({
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const rows = await tx
       .select({ attendeeId: seatAssignments.attendeeId })
       .from(seatAssignments)
@@ -345,13 +369,13 @@ export const unassignSeatsCommand = tenantCommand({
           inArray(seatAssignments.attendeeId, input.attendeeIds),
         ),
       );
-    return {
-      released: await releaseAttendeeSeatsTx(
-        tx,
-        ctx,
-        rows.map((r) => r.attendeeId),
-      ),
-    };
+    const released = await releaseAttendeeSeatsTx(
+      tx,
+      ctx,
+      rows.map((r) => r.attendeeId),
+    );
+    if (released > 0) emit(assignmentsChanged(requireOrg(ctx), input.eventId));
+    return { released };
   },
   audit: (input, r) => ({
     action: 'seating.unassign',
@@ -497,7 +521,8 @@ export function releaseCancelledSeats() {
     handle: async (tx, event) => {
       const p = CancelledPayload.parse(event.payload);
       const ctx = createCtx({ orgId: p.orgId, actor: { type: 'system', name: 'seating.release-cancelled' } });
-      await releaseAttendeeSeatsTx(tx, ctx, [p.attendeeId]);
+      const released = await releaseAttendeeSeatsTx(tx, ctx, [p.attendeeId]);
+      if (released > 0) await emitEvents(tx, ctx, [assignmentsChanged(p.orgId, p.eventId)]);
     },
   });
 }

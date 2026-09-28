@@ -36,6 +36,11 @@ export const domainEvents = tenantTable(
     requestId: text('request_id').notNull(),
     logSeq: bigint('log_seq', { mode: 'number' }),
     publishedAt: timestamp('published_at', { withTimezone: true }),
+    /**
+     * Backfilled history (ADR 0008, M2.2 T9): projections apply it, side effects (mail, journeys,
+     * webhooks) never fire for it. Subscribers opt in with `replay: 'apply'`.
+     */
+    replayed: boolean('replayed').notNull().default(false),
   },
   (t) => [
     uniqueIndex('domain_events_log_seq_key').on(t.logSeq),

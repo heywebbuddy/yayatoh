@@ -3,6 +3,7 @@ import { withPlatformReader } from '@yayatoh/db/platform';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { createCommandPorts, purgeRateLimits } from '@yayatoh/platform';
 import { type RetentionResult, retentionCommand } from '@yayatoh/privacy';
+import { LAG_RETENTION_MS, purgeProjectorLag } from '@yayatoh/reports';
 import { orgAuthorizer } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
@@ -39,6 +40,8 @@ export async function runRetention(opts: { onlyOrgs?: readonly string[] } = {}):
     try {
       const r = await executeCommand(retentionCommand, {}, ctx, ports);
       for (const [k, v] of Object.entries(r)) totals[k] = (totals[k] ?? 0) + v;
+      // Metrics projector lag samples (M3.1): 7 days.
+      await purgeProjectorLag(org_id, new Date(Date.now() - LAG_RETENTION_MS));
     } catch (err) {
       failed++;
       console.error(JSON.stringify({ job: 'retention', org: org_id, error: String(err) }));

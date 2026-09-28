@@ -8,10 +8,12 @@ export {
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
 export {
+  DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,
   deviceContext,
   deviceIdOf,
   deviceManifestQuery,
+  devicesOnlineTx,
   enrollDeviceCommand,
   heartbeatCommand,
   listDevicesQuery,
@@ -60,4 +62,4 @@ export {
   type ScanScope,
   setDoorStaffCommand,
 } from './staff.ts';
-export { type CheckinScope, checkinFactsTx } from './stats.ts';
+export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
