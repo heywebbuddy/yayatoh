@@ -4071,7 +4071,9 @@
         "open": "Offen",
         "approved": "Genehmigt",
         "declined": "Abgelehnt"
-      }
+      },
+      "answeredApproved": "Genehmigt am {date}.",
+      "answeredDeclined": "Abgelehnt am {date}: „{reason}“"
     },
     "queue": {
       "title": "Erstattungsanfragen",

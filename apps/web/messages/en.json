@@ -4071,7 +4071,9 @@
         "open": "Open",
         "approved": "Approved",
         "declined": "Declined"
-      }
+      },
+      "answeredApproved": "Approved {date}.",
+      "answeredDeclined": "Declined {date}: “{reason}”"
     },
     "queue": {
       "title": "Refund requests",

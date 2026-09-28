@@ -4071,7 +4071,9 @@
         "open": "Открыт",
         "approved": "Одобрен",
         "declined": "Отклонён"
-      }
+      },
+      "answeredApproved": "Одобрено {date}.",
+      "answeredDeclined": "Отклонено {date}: «{reason}»"
     },
     "queue": {
       "title": "Запросы на возврат",

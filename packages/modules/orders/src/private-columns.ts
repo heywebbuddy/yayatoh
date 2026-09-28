@@ -38,7 +38,7 @@ export const privateColumns = columnPrivacy('orders', {
     status: 'vocab',
     message: personal(),
     // Sent to the buyer (order page and email): holder data, never public.
-    decline_reason: holder(),
+    decline_reason: holder(undefined, { where: "status = 'declined'" }),
     decided_by: internal(),
   },
   order_notes: { body: internal(), author_id: internal() },

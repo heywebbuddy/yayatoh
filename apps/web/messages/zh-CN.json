@@ -4071,7 +4071,9 @@
         "open": "待处理",
         "approved": "已批准",
         "declined": "已拒绝"
-      }
+      },
+      "answeredApproved": "已于 {date} 批准。",
+      "answeredDeclined": "已于 {date} 拒绝：“{reason}”"
     },
     "queue": {
       "title": "退款申请",

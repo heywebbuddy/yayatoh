@@ -4071,7 +4071,9 @@
         "open": "Aberto",
         "approved": "Aprovado",
         "declined": "Recusado"
-      }
+      },
+      "answeredApproved": "Aprovado em {date}.",
+      "answeredDeclined": "Recusado em {date}: “{reason}”"
     },
     "queue": {
       "title": "Pedidos de reembolso",

@@ -4071,7 +4071,9 @@
         "open": "مفتوح",
         "approved": "تمت الموافقة",
         "declined": "مرفوض"
-      }
+      },
+      "answeredApproved": "تمت الموافقة في {date}.",
+      "answeredDeclined": "رُفض في {date}: «{reason}»"
     },
     "queue": {
       "title": "طلبات الاسترداد",

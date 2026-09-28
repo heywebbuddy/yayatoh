@@ -4071,7 +4071,9 @@
         "open": "Ouverte",
         "approved": "Acceptée",
         "declined": "Refusée"
-      }
+      },
+      "answeredApproved": "Acceptée le {date}.",
+      "answeredDeclined": "Refusée le {date} : « {reason} »"
     },
     "queue": {
       "title": "Demandes de remboursement",

@@ -4071,7 +4071,9 @@
         "open": "Open",
         "approved": "Goedgekeurd",
         "declined": "Afgewezen"
-      }
+      },
+      "answeredApproved": "Goedgekeurd op {date}.",
+      "answeredDeclined": "Afgewezen op {date}: ‘{reason}’"
     },
     "queue": {
       "title": "Terugbetalingsverzoeken",

@@ -4071,7 +4071,9 @@
         "open": "Aperta",
         "approved": "Approvata",
         "declined": "Rifiutata"
-      }
+      },
+      "answeredApproved": "Approvata il {date}.",
+      "answeredDeclined": "Rifiutata il {date}: «{reason}»"
     },
     "queue": {
       "title": "Richieste di rimborso",

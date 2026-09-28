@@ -4071,7 +4071,9 @@
         "open": "खुला",
         "approved": "स्वीकृत",
         "declined": "अस्वीकृत"
-      }
+      },
+      "answeredApproved": "{date} को स्वीकृत।",
+      "answeredDeclined": "{date} को अस्वीकृत: “{reason}”"
     },
     "queue": {
       "title": "रिफ़ंड अनुरोध",

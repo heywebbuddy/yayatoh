@@ -4071,7 +4071,9 @@
         "open": "未対応",
         "approved": "承認済み",
         "declined": "お断り済み"
-      }
+      },
+      "answeredApproved": "{date} に承認。",
+      "answeredDeclined": "{date} にお断り：「{reason}」"
     },
     "queue": {
       "title": "返金リクエスト",

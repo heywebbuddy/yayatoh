@@ -56,6 +56,8 @@ export default async function OrderPage({
   const tr = await getTranslations('refundOps');
   const requests = await executeQuery(refundRequestsQuery, { orderId }, data.ctx, ports);
   const openRequest = requests.find((r) => r.status === 'open') ?? null;
+  // Answered: the latest request stays in view with its outcome.
+  const lastAnswered = openRequest ? null : (requests[0] ?? null);
   const timeline = await executeQuery(orderTimelineQuery, { orderId }, data.ctx, ports);
   // Disputes are finance data: only members who may see them get them on the timeline.
   const fullTimeline = {
@@ -199,6 +201,28 @@ export default async function OrderPage({
             ) : (
               <p className="text-caption text-zinc-600">{tr('request.readOnly')}</p>
             )}
+          </Card>
+        </section>
+      ) : lastAnswered ? (
+        <section aria-labelledby="request-heading" className="flex flex-col gap-3">
+          <h2 id="request-heading" className="text-section">
+            {tr('request.title')}
+          </h2>
+          <Card className="flex flex-col gap-2">
+            <StatusDot
+              status={lastAnswered.status === 'approved' ? 'success' : 'neutral'}
+              label={tr(`request.status.${lastAnswered.status}`)}
+            />
+            <p className="whitespace-pre-line break-words text-body">
+              {lastAnswered.status === 'approved'
+                ? tr('request.answeredApproved', {
+                    date: eventWhen.format(lastAnswered.decidedAt ?? lastAnswered.createdAt),
+                  })
+                : tr('request.answeredDeclined', {
+                    date: eventWhen.format(lastAnswered.decidedAt ?? lastAnswered.createdAt),
+                    reason: lastAnswered.declineReason ?? '',
+                  })}
+            </p>
           </Card>
         </section>
       ) : null}
