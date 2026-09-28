@@ -6,6 +6,7 @@ import { useActionState, useState } from 'react';
 import { type ForgotState, requestResetAction } from '@/app/[locale]/forgot-password/actions.ts';
 import { type ResetState, resetPasswordAction } from '@/app/[locale]/reset-password/actions.ts';
 import { Link } from '@/i18n/navigation.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 import { HumanCheckGroup, type HumanCheckWidget } from './human-check-field.tsx';
 
 /** Email + the human check; always the same answer, known address or not. */
@@ -30,7 +31,16 @@ export function ForgotPasswordForm({
       </div>
     );
   return (
-    <form action={action} onSubmit={() => setTries((n) => n + 1)} className="flex flex-col gap-4" noValidate>
+    <form
+      action={action}
+      onSubmit={(e) => {
+        // Keep the typed email after a refusal (React would reset the form).
+        keepValues(action)(e);
+        setTries((n) => n + 1);
+      }}
+      className="flex flex-col gap-4"
+      noValidate
+    >
       <div aria-live="polite">
         {state.code ? <Alert title={t(`errors.${state.code}`, { minutes: state.minutes ?? 1 })} /> : null}
       </div>
