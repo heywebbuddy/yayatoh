@@ -1,6 +1,6 @@
 # Phase 3 plan — Command Center, marketing and communications
 
-Status: **proposed, awaiting owner approval** (2026-09-28). Roadmap: `docs/roadmap.md` Phase 3 (M3.1–M3.11). Owner priority 1.
+Status: **approved by the owner** (2026-09-28): all five decisions accepted; Wave A started. Roadmap: `docs/roadmap.md` Phase 3 (M3.1–M3.11). Owner priority 1.
 
 ## 1. What I'm asking you to decide
 
