@@ -73,7 +73,7 @@
 - **M1.4b:** done (above).
 - **M1.4c:** venues (directory, org-owned, quote requests), categories and tags. **Done, see below.**
 - **M1.4d:** content sections, announcements, the private-info portal, access codes, short URLs, online events. **Done, see below.**
-- **M1.4e:** media pipeline (R2 + re-encode, SVG neutralized; blocked on the owner's Cloudflare account), tenant CMS, reviews.
+- **M1.4e:** media pipeline (R2 + re-encode, SVG neutralized): **done behind a storage port, see below** (R2 itself waits for the owner's Cloudflare account). Tenant CMS and reviews move to a later increment.
 - **M1.4f:** lightweight sessions, speakers, exhibitors and sponsors; AI drafting with the credits ledger.
 - **Authorization for event roles** (`scopeFilter()`) arrives with the first event-role consumer, check-in in M1.9. The assignments are stored now.
 
@@ -176,3 +176,84 @@
 | D5 | Short links: automatic per event, vanity validation, global uniqueness across orgs, 308 to the canonical URL, drafts/archived don't resolve | `events/tests/short-code.test.ts`, `event-content.int.test.ts`, `e2e/event-content.spec.ts` |
 | D6 | Isolation: every new tenant table has fixture rows for both orgs | `isolation.int.test.ts` |
 | D7 | Viewers are denied on every new organizer screen (hidden controls and server refusal); axe on every state; Arabic RTL; no horizontal scroll at 375 | `e2e/venues.spec.ts`, `e2e/event-content.spec.ts` |
+
+## M1.4e — media pipeline: uploads, images and SVG safety (done, R2 behind a port)
+**Risk tags:** `db-migration`, `tenancy`, `infra` (owner approval). Migration `0046_amusing_toro.sql` (renumber on merge).
+
+**Module `media` (tier 3, schema `media`, `packages/modules/media`).** Tier 3 so it can check owners through the public exports of `events` (2), `venues` (1) and `tenancy` (1); nothing below it imports it.
+- **Tables** (all `tenantTable`, ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, composite FKs):
+  - `media.assets`: owner (`event` | `venue` | `org`), owner id, slot (`cover`, `gallery` for events; `photo` for venues; `logo` for the org, whose owner id must be the org), position, sniffed source type, width/height, alt text, `decorative`, stored bytes, uploader. CHECKs: owner/slot pairs, **alt required unless decorative** (1–300 characters), dimensions. A partial unique index keeps one `cover` / `logo` per owner.
+  - `media.variants`: format (`avif`, `webp`, `jpeg`, `png`, `svg`), width/height, bytes, SHA-256, file name `{width}-{sha256[:32]}.{ext}`, `fallback`; composite FK to its asset, `ON DELETE CASCADE`.
+  - `media.blobs`: the **Postgres storage adapter's** objects (dev, preview, CI); a CHECK keeps every key under `{org}/`.
+  - `media.quotas`: per-org quota override (default 1 GiB, pending owner).
+- **Storage port** (`MediaStore`: `put`, `get`, `deleteAsset`), keys `{org}/{asset}/{file}`; every call names the org and refuses a key outside its prefix (and any path trick):
+  - `postgres` (default outside production): `media.blobs` in its own short tenant transaction under RLS, like a remote store.
+  - `r2`: Cloudflare R2's S3 API signed with **AWS Signature V4** (region `auto`), implemented on `fetch` + `node:crypto` (no SDK). Checked against AWS's published SigV4 test vector and a stub `fetch`; **never called in tests**. `MEDIA_STORE=r2` + `R2_*` (`.env.example`); production refuses the Postgres store. Owner inbox: R2.
+- **Pipeline** (`src/pipeline/*`, pure and unit-tested):
+  - **Sniffing** by magic bytes only (JPEG, PNG, GIF, WebP, AVIF by its `ftyp` brand, SVG as UTF-8 text whose first element is `<svg`); the file name and Content-Type are never trusted.
+  - **Limits:** 4 MB per upload (Vercel's 4.5 MB request cap; SVG 1 MB), 40 megapixels (`limitInputPixels`, checked on the header so a decompression bomb is refused before decoding).
+  - **Re-encode with `sharp` 0.35 (libvips 8.18):** first frame only, auto-oriented from EXIF, AVIF + WebP at 320/640/1280/1920 below the source width plus the source width (capped, never enlarged), and one PNG (transparency, SVG) or JPEG fallback ≤1280 px for email and OG images. The encoders write no metadata: EXIF (GPS, camera serials), XMP, IPTC and ICC never reach a variant (tested with a GPS-tagged JPEG).
+  - **SVG: sanitize, then serve with a sandboxing CSP** (both, not either). The sanitizer is a small strict XML tokenizer that never expands entities (the DOCTYPE is discarded; `&lol9;` becomes nothing) and rebuilds the document from an element/attribute allowlist: no `script`, `foreignObject`, animation (`set`/`animate*` can rewrite `href`), `feImage`, `iframe`/`object`/`embed`/`handler`, `on*` handlers, `href`/`xlink:href` other than a local `#id` (an `<image>` may carry a `data:` PNG/JPEG/GIF/WebP), CSS `url()` other than `#id`, `@import`/`@font-face`, processing instructions, or any attribute value with a URL scheme after whitespace/control characters are removed. Output is re-serialized with escaping. Rasters are made from the **sanitized** document only. *Why both:* the vector keeps logos crisp and small; the sanitizer makes the file inert anywhere it ends up (downloads, other clients), and the CSP (`default-src 'none'; style-src 'unsafe-inline'; sandbox`) plus `nosniff` protect even if the sanitizer ever missed something. Raster-only would lose vector logos and still need a sanitizer before rasterizing (librsvg follows external references).
+  - Processing runs inside the command's transaction, after authorization (a viewer's upload is refused before any decoding). The roadmap's worker re-encode is Later (see below).
+- **Commands** (10-step pipeline via `tenantCommand`, audited, outbox events `media.asset_added@1` / `media.asset_removed@1`): `media.uploadMedia` / `removeMedia` / `updateMediaAlt` (`events:write`: event and venue images) and `media.uploadLogo` / `removeLogo` / `updateLogoAlt` (`org:update`; a logo is never decorative). Each family refuses the other's assets. Uploads check the owner exists **under the org's RLS** (another org's event id is `not_found`), the slot (one cover/logo, which a new upload replaces; ≤20 gallery images/venue photos, `slot_full`), and the **quota** under a per-org advisory lock (a replacement's old bytes don't count twice; `quota_exceeded`). Wrappers `uploadMedia`/`uploadLogo`/`removeMedia` purge files after commit: a replaced/removed asset's `{org}/{asset}/` prefix, or a failed upload's own (the asset id is always generated server-side, so a purge never hits a live image).
+- **Queries:** `media.listMedia`, `media.usage` (`org:read`: every member may look).
+- **Public reads** (SECURITY DEFINER, allowlisted `PublicMediaDto`, no byte counts/uploader/source type): `media.owner_visibility(org, type, id)` → `public` (published/postponed/cancelled/completed public or unlisted events; listed, live venues; the logo of an active/limited org), `private_event` (a live private event: only with an access grant the server checked) or `none`; `media.public_media(type, id, private_ok)`, `media.public_covers(slugs[])` (listing cards, ≤500), `media.serve_target(org, asset, file)` (metadata only).
+- **Org logo on tenancy** (existing table, expand step): `tenancy.organizations.logo_path` + `logo_alt` (the fallback variant's `/media/…` path, CHECKed), set only through tenancy's new `setOrganizationLogoTx` from the logo commands; `organizationBrandTx` / `organizationPublicTx` return them. Emails render the logo from the absolute URL (`appOrigin` + path) with its alt text.
+
+**Web (`apps/web`).**
+- **Upload:** `POST /api/media/upload` (multipart). The console page signs an **upload ticket** (HMAC with `APP_TOKEN_SECRET`: org, owner, slot, user, 1 h expiry) only for people who may change those images; the endpoint caps `Content-Length` before reading, needs the session user to be the ticket's user, and runs the command, which authorizes on its own (a ticket never grants a permission). Errors return the code, reason and field.
+- **Serving:** `GET /media/{org}/{asset}/{width}-{hash}.{ext}` on the app origin (so the strict CSP `img-src 'self' data: blob:` holds; `proxy.ts` skips `/media/`). Public owners: `Cache-Control: public, max-age=31536000, immutable`, `Cross-Origin-Resource-Policy: cross-origin` (email clients). Otherwise only a visitor with the event's access grant or a **member of that org** gets it (`private, …`, `Vary: Cookie`, CORP same-origin); anyone else — another org's owner included — gets the same 404 as a missing file. Every response: ETag = SHA-256, `nosniff`, `default-src 'none'; style-src 'unsafe-inline'; sandbox`, `Referrer-Policy: no-referrer`.
+- **Uploader** (`MediaUploader`, client): a real, labelled file input (keyboard and screen readers; dropping a file on the zone is optional sugar), alt text with hint, "decorative" checkbox (not for logos), client checks mirrored from the module (type, 4 MB, alt; `tests/media-limits.test.ts` keeps them equal) and the server's reasons shown on the field (`aria-invalid`, focus moves to it), a `<progress>` bar from XHR upload progress with a live status ("Uploading… 40 %", "Processing the image…", "Image uploaded."), and per image: preview with its alt, **Replace** (in place, gallery keeps its position), **Remove**, **Edit alt text** (Server Actions). Viewers see the images and a notice, no controls.
+- **Console:** event **Images** page (`/o/{org}/e/{event}/media`, nav item `media` in every profile): cover + gallery. **Settings → Logo** (owners/admins; the logo shows in the console's org switcher). **Venue page → Venue photos.**
+- **Public:** event hero (cover, dimmed under white text) and **Gallery** section (also on tenant sites, and for a private event once a code opened it); listing cards (cover thumbnail, one `public_covers` query per page); `og:image`/JSON-LD image = the cover's JPEG/PNG fallback (absolute) when there is one, else the generated card; org page `/o/{slug}` and tenant site hero (logo on a white tile); public venue page **Photos**. `<picture>` with AVIF → WebP → fallback `srcset`s, width/height attributes (no inline styles), lazy loading.
+- Messages: `media.*`, `eventMedia.*`, `nav.media`, `publicEvent.gallery`, `venuePage.photos` in 13 locales (Arabic zero/one/two/few/many/other, Russian one/few/many/other).
+
+### Golden transforms (roadmap acceptance "Blob transforms pass the golden queries")
+`packages/modules/media/fixtures/` holds tiny synthetic, license-free images made by `scripts/make-fixtures.ts` from arithmetic patterns (a 2000×500 PNG banner, a 640×480 JPEG with EXIF GPS and orientation 6, a 300×300 PNG with alpha, a GIF, a WebP, an AVIF, an SVG logo with DOCTYPE/gradient/`<use>`), refused inputs (a PNG header claiming 20000×20000, text named `.png`, broken SVG, HTML named `.svg`) and the **malicious SVG corpus** (script, CDATA script, uppercase/namespaced script, `onload`/`onclick`, `xlink:href="javascript:"` incl. entity-encoded, external `<use>`/`<image>`/`feImage`, `foreignObject` with iframe, entity expansion + XXE, `set`/`animate` href, CSS `@import`/`url()` exfiltration, `xml-stylesheet`, iframe/embed/object/handler). `fixtures/golden.json` records every variant's format, dimensions, fallback flag and SHA-256; the test fails on any change (regenerate on purpose with `pnpm --filter @yayatoh/media golden:update` and review the diff, e.g. after a sharp upgrade). Output was verified deterministic across runs.
+
+### Legacy images → media rows (mapping for the M2.2b ELT; not built here)
+The legacy app (Eventmie Pro + custom code) stores **paths relative to its storage disk** (`public` → served at `https://{host}/storage/{path}`, or `s3` → the bucket URL), written by `upload_base64_image` / Laravel `store`: `events/{MonthYYYY}/{name}.{ext}` and similar. The media files arrive in R2 under `legacy/{instance}/…` by `rclone copy --checksum` (roadmap §7.4); `/storage/*` stays redirected for ≥24 months.
+
+| Legacy source | Target | Notes |
+|---|---|---|
+| `events.poster` (16:9 banner, 1280×720 crop) | `media.assets` owner `event`, slot `cover` | The legacy hero. Alt text: none exists → `alt = event title` (non-decorative), flagged `needs_review` in the ELT report. |
+| `events.thumbnail` (512×512 square) | cover **only if `poster` is empty**; otherwise dropped (the new pipeline derives card thumbnails from the cover) | Kept in the R2 legacy prefix for the `/storage/*` redirect. |
+| `events.images` (JSON array of paths) | slot `gallery`, `position` = array index | Invalid JSON / non-array → quarantine row; >20 images → first 20, rest reported. Alt = `"{event title} – photo {n}"`, `needs_review`. |
+| `events.seatingchart_image` | not media: floor-plan background (M1.7 import) | Out of scope here. |
+| `venues.images` (JSON array) | owner `venue`, slot `photo`, position = index | Same JSON rules as `events.images`; venue via the M2.2 venue id map. |
+| Voyager `settings` `site.logo` (per instance: yayatoh, ABC) | owner `org`, slot `logo` of the instance's migrated org; `alt = org name` | Sets `tenancy.organizations.logo_path/logo_alt` through the same command path. |
+| `users.avatar` (organizer profile pictures) | not migrated in M1.4e (no user avatars yet) | Listed for M2.2 decision; kept in R2 legacy prefix. |
+| `session_thumbnails/…`, `EventSpeaker.avatar`, `EventExhibitor.logo`/team avatars | owners from M1.4f (sessions, speakers, exhibitors) | Mapping added with M1.4f. |
+
+Rules for every row: fetch the object from the R2 legacy prefix (or S3 when the legacy disk was `s3`; absolute `http(s)` values are external and are **not** fetched: reported), run the **same pipeline** (sniff, sanitize SVG, re-encode, EXIF strip) through the commands with a system actor (`system:elt`, audited), so a legacy SVG with script is neutralized like any upload; unsupported or undecodable files and missing objects are quarantined with the legacy table/id/path; per-org quota checks are skipped for the backfill (reported instead); idempotent by `(instance, legacy table, legacy id, path)` in the ELT's own mapping table so re-runs replace nothing twice; `legacy_redirects` gets `/storage/{path}` → the new fallback variant for every migrated image (M1.11).
+
+### Migration `0046_amusing_toro.sql`
+- New schema `media` with `assets`, `variants`, `blobs`, `quotas` (FORCE RLS, NULLIF policies, org-leading indexes, `variants_asset_fk` composite FK).
+- Existing table (nullable columns only): `tenancy.organizations.logo_path`, `logo_alt`.
+- Hand-written (between `-- hand-written: begin/end`):
+  1. `organizations_logo_check` added `NOT VALID`, then `VALIDATE CONSTRAINT` (every existing row has no logo).
+  2. SECURITY DEFINER functions `media.owner_visibility(uuid, text, uuid)`, `media.public_media(text, uuid, boolean)`, `media.public_covers(text[])`, `media.serve_target(uuid, uuid, text)`, each with `REVOKE ALL … FROM PUBLIC` and `GRANT EXECUTE … TO app_user`. They read `tenancy.organizations`, `events.events` and `venues.venues` for visibility only (as the M1.4d public functions do).
+
+### Later / not yet (M1.4e)
+- **Re-encoding in the worker** (roadmap §2, research 22 "isolated worker"): today it runs in the upload request after authorization. Moving it to a pg-boss job needs a "processing" state and polling in the uploader.
+- **Direct-to-R2 uploads** (presigned PUT in the upload ticket's shape) to lift the 4 MB cap; a sweeper for orphaned objects (a crash between the store write and commit); CDN purge by tag when a public image is removed or its event unpublished (public responses are cached for a year today).
+- Staff screen for quotas; per-event storage caps (M4.5 guest galleries); image focal point/cropping; gallery reordering (drag with Move up/down, as in M1.4d); captions; video (Cloudflare Stream, D19).
+- Emails: the template preview in the console does not show the logo yet (the real send does). Legacy image ELT (mapping above) in M2.2b. User avatars.
+- Tenant CMS and reviews (the rest of the original M1.4e line).
+
+## Acceptance (M1.4e)
+| ID | Criterion | Test |
+|---|---|---|
+| E1 | Sniffing by magic bytes (never name/header); AVIF brands; SVG text rules | `media/tests/sniff.test.ts` |
+| E2 | **An SVG with script is neutralized**: the whole malicious corpus comes out inert (and rasterizes); safe SVGs keep gradients/`<use>`; malformed/too-complex refused; CSS sanitizer | `media/tests/svg.test.ts` |
+| E3 | Variant planning: standard widths, never enlarged, fallback choice, file names | `media/tests/plan.test.ts` |
+| E4 | **Blob transforms pass the golden queries**: every fixture → recorded formats, dimensions and SHA-256; EXIF/GPS stripped with orientation applied; bombs, text-as-PNG, oversize and truncated files refused | `media/tests/golden.test.ts` |
+| E5 | Storage port: org-prefixed keys only; R2 SigV4 matches AWS's test vector; the R2 adapter signs every call and never leaves the stub; env selection, production refuses Postgres; upload tickets verify, expire and resist tampering | `media/tests/storage.test.ts`, `media/tests/ticket.test.ts`, `apps/web/tests/media-limits.test.ts` |
+| E6 | Commands: upload/replace (cover single, gallery in place, ≤20), alt required unless decorative, SVG stored sanitized, slot/owner rules; viewer refused, manager can't touch the logo, families separated | `testing/tests/media.int.test.ts` |
+| E7 | Quota under a lock; a failed upload leaves no files; replacement not double-counted; per org | `media.int.test.ts` |
+| E8 | Isolation: another org can't list, change, remove or attach; the store refuses cross-org keys; fixture rows for both orgs | `media.int.test.ts`, `testing/tests/isolation.int.test.ts` |
+| E9 | Serve permissions: event images public only with a public page, private events only with a grant, venue photos only listed/live, logo of active orgs; unknown/mismatched files resolve to nothing | `media.int.test.ts`, `e2e/media.spec.ts` |
+| E10 | Deletion removes rows, variants and files; the URLs stop serving; the logo reference clears | `media.int.test.ts`, `e2e/media.spec.ts` |
+| E11 | UI: cover validation errors (no file, wrong type by name and by bytes, too big, missing alt), keyboard-only upload, persistence, public hero + listing card + og:image, replace and remove, gallery (decorative, replace in place), malicious SVG served inert (headers + body, no dialog), viewer: no controls + refused endpoint + other org 404, org logo (console, org page, tenant site, replace, remove), venue photos (public page, unlisting hides them), axe on every new screen/state, Arabic RTL, 375 layout | `e2e/media.spec.ts` |
+| E12 | Email header shows the logo from its absolute URL with alt; relative/script URLs never render | `notifications/tests/render.test.ts` |
+
