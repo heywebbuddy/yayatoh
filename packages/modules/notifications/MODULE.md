@@ -33,3 +33,12 @@ key) inside their own transaction; this module records, gates, renders and sends
 - Member notifications render in the member's own email language, looked up at send time.
 - Email previews are stored for ten minutes (`email_previews`, creator only) and served from their
   own URL with their own sandboxed CSP; drafts never travel in URLs.
+- Policy gate v2 (M3.5a) is a registry of rules (`src/policy/gate.ts`, `POLICY_RULES`) run in two
+  phases: `eligibility` blocks (texts without consent in the crm ledger, US marketing WhatsApp) and
+  `timing` holds (state calling hours as data, frequency caps, monthly quotas). A hold keeps the
+  message queued with a reason; a quota or cap never drops reminders or updates.
+- Every send is metered in `usage_counters` (SMS by GSM-7/UCS-2 segment). Over the org's quota,
+  optional messages wait; transactional messages and members' alerts never do.
+- A complaint rate strictly above 0.3 % (30 days, ≥ 100 emails, since the last auto-pause) switches
+  on the org's `pause_messaging` suspension and records `auto_pauses`; only staff lift it (audited).
+- Frequency caps count by `recipient_key` (an HMAC of channel and address), never a readable phone.
