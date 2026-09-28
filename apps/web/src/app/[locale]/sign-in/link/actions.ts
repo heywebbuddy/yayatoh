@@ -2,6 +2,7 @@
 
 import { confirmLinkProof } from '@yayatoh/auth';
 import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { getAuth } from '@/server/auth.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -37,5 +38,6 @@ export async function confirmLinkAction(
     next: safeNext(target.next),
     handoff: target.returnUrl && target.state ? { returnUrl: target.returnUrl, state: target.state } : null,
   };
-  return { url: signed.challenge ? challengeUrl(t) : await afterSignIn(r.userId, t), code: null };
+  // Server-side redirect: the page itself re-renders as "expired" once the proof cookie is gone.
+  redirect(signed.challenge ? challengeUrl(t) : await afterSignIn(r.userId, t));
 }

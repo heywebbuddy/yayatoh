@@ -8,7 +8,8 @@
     "./client": "./src/client.ts",
     "./compat": "./src/compat/index.ts",
     "./testing": "./src/testing.ts",
-    "./totp": "./src/totp.ts"
+    "./totp": "./src/totp.ts",
+    "./passkey-client": "./src/passkey-client.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

@@ -106,6 +106,11 @@ export async function lastEmailedCode(page: Page, email: string): Promise<string
   return code ?? '';
 }
 
+/** Ticks the fake "are you a person?" check (M1.2f; Turnstile's stand-in in dev and CI). */
+export async function passHumanCheck(page: Page) {
+  await page.getByRole('checkbox', { name: "I'm a person (test check)" }).check();
+}
+
 /** The "Confirm it's you" dialog. */
 export const stepUpDialog = (page: Page) => page.getByRole('dialog', { name: "Confirm it's you" });
 

@@ -37,11 +37,19 @@ export function getAuth(): Auth {
   if (!instance) {
     const secret = process.env.BETTER_AUTH_SECRET;
     if (!secret) throw new Error('BETTER_AUTH_SECRET is not set (see .env.example)');
+    const baseURL = process.env.ADMIN_AUTH_URL ?? 'http://localhost:3001';
     instance = createAuth({
-      baseURL: process.env.ADMIN_AUTH_URL ?? 'http://localhost:3001',
+      baseURL,
       secret,
       mailer: consoleMailer,
       cookieNamespace: 'admin',
+      // Staff passkeys (M1.2f): rpID is the registrable domain (`yayatoh.com` in production, set by
+      // PASSKEY_RP_ID) or this console's host name; only this console's origin may use them.
+      passkey: {
+        rpID: process.env.PASSKEY_RP_ID || new URL(baseURL).hostname,
+        origin: baseURL,
+        rpName: 'Yayatoh staff',
+      },
       sealer,
       // Dev personas' derived authenticator secrets only (dev auth on, never in production).
       ...(exempt ? { totpReplayExempt: exempt } : {}),

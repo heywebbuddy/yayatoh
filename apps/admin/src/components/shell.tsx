@@ -44,6 +44,9 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
           <Link href="/api-usage" className="underline-offset-2 hover:underline">
             {t('apiUsage')}
           </Link>
+          <Link href="/security" className="underline-offset-2 hover:underline">
+            {t('passkeys')}
+          </Link>
         </nav>
         <span className="ms-auto text-caption text-zinc-600">
           {t('signedInAs', { name: staff.name, role: t(`roles.${staff.role}`) })}

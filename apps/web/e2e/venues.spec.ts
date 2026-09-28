@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, passHumanCheck, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -207,7 +207,8 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await expectAccessible(guest);
     await noHorizontalScroll(guest);
 
-    // Validation errors.
+    // Validation errors (past the human check, M1.2f).
+    await passHumanCheck(guest);
     await guest.getByRole('button', { name: 'Send request' }).click();
     await expect(guest.getByText('Some details need fixing. Check the highlighted fields.')).toBeVisible();
     await expect(guest.getByText('Enter your name.')).toBeVisible();
@@ -228,6 +229,7 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await guest.getByLabel('Email').fill(`riley.${s}@example.test`);
     await guest.getByLabel('Number of guests (optional)').fill('120');
     await guest.getByLabel('About your event').fill('A summer wedding reception with dinner and dancing.');
+    await passHumanCheck(guest);
     await guest.getByRole('button', { name: 'Send request' }).click();
     await expect(guest.getByText('Thanks! Your request was sent to the venue.')).toBeVisible();
     await expect(guest.getByLabel('Your name')).toHaveValue('');

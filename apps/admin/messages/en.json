@@ -25,7 +25,10 @@
         "locked": "Too many failed attempts. Try again in 15 minutes.",
         "expired": "This sign-in has expired. Sign in again."
       }
-    }
+    },
+    "passkey": "Sign in with a passkey",
+    "or": "or",
+    "passkeyFailed": "That passkey didn't work. Try again, or sign in with your password."
   },
   "notStaff": {
     "title": "Not a staff account",
@@ -49,7 +52,8 @@
     "apiUsage": "API usage",
     "signupCodes": "Signup codes",
     "reports": "Messaging reports",
-    "people": "Privacy requests"
+    "people": "Privacy requests",
+    "passkeys": "Passkeys"
   },
   "tenants": {
     "title": "Tenants",
@@ -547,5 +551,22 @@
       "forbidden": "You can't do that.",
       "internal": "Something went wrong. Try again."
     }
+  },
+  "passkeys": {
+    "metaTitle": "Passkeys",
+    "title": "Passkeys",
+    "description": "Sign in to the staff console with a passkey on this device or a security key. A passkey that asks for your PIN or fingerprint counts as both sign-in steps.",
+    "none": "No passkeys yet.",
+    "unnamed": "Passkey",
+    "added_on": "Added {date}",
+    "remove": "Remove",
+    "removeNamed": "Remove {name}",
+    "nameLabel": "Name (optional)",
+    "nameHint": "For example: Work laptop",
+    "add": "Add a passkey",
+    "added": "Passkey added. Next time, choose “Sign in with a passkey”.",
+    "addFailed": "The passkey wasn't added. Try again.",
+    "notFresh": "For your security, sign in again (in the last 10 minutes) before adding a passkey.",
+    "deleted": "Passkey removed."
   }
 }

@@ -47,8 +47,10 @@ export default async function FakeSocialConsent({
       />
       <Card size="panel">
         <FakeConsentForm
-          provider={provider}
+          locale={locale}
           params={{ provider, state: sp.state, nonce: sp.nonce, redirectUri: sp.redirect_uri }}
+          error={sp.error === 'email_required' ? 'email_required' : null}
+          name={(sp.name ?? '').slice(0, 200)}
         />
       </Card>
     </main>

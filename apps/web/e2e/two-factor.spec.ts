@@ -10,6 +10,7 @@ import {
   newUser,
   OWNER,
   ownClientIp,
+  passHumanCheck,
   personaCode,
   signIn,
   stepUpDialog,
@@ -279,6 +280,8 @@ test.describe('two-step verification: the sign-in challenge', () => {
     await page.goto('/sign-in');
     await page.getByRole('button', { name: 'Use a one-time code instead' }).click();
     await page.getByLabel('Email').fill(user.email);
+    // M1.2f: an emailed code (which can create an account) needs the human check.
+    await passHumanCheck(page);
     await page.getByRole('button', { name: 'Email me a code' }).click();
     await page.getByLabel('6-digit code').fill(await lastEmailedCode(page, user.email));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();

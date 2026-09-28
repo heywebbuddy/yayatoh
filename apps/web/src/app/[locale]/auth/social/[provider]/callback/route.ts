@@ -40,9 +40,10 @@ export async function GET(req: NextRequest, { params }: Params) {
   const abs = (path: string) => (/^https?:\/\//.test(path) ? path : new URL(path, here.origin).toString());
   const done = (path: string, cookies: string[] = []) => {
     const res = NextResponse.redirect(abs(path), 303);
-    for (const c of cookies) res.headers.append('set-cookie', c);
     res.headers.set('cache-control', 'no-store');
     res.headers.set('referrer-policy', 'no-referrer');
+    // The state is single use: its cookie goes. Better Auth's cookies (session, challenge) are
+    // appended after, so the cookie helper never re-serializes them.
     res.cookies.set(socialStateCookie(https), '', {
       httpOnly: true,
       secure: https,
@@ -50,6 +51,7 @@ export async function GET(req: NextRequest, { params }: Params) {
       path: '/',
       maxAge: 0,
     });
+    for (const c of cookies) res.headers.append('set-cookie', c);
     return res;
   };
   if (here.kind === 'tenant' || !isSocialProvider(provider))

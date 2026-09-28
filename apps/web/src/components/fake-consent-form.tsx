@@ -1,59 +1,66 @@
-'use client';
-
 import { Alert, Button, Input } from '@yayatoh/ui';
-import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
-import {
-  type FakeConsentParams,
-  type FakeConsentState,
-  fakeCancelAction,
-  fakeConsentAction,
-} from '@/app/[locale]/auth/social/fake/actions.ts';
+import { getTranslations } from 'next-intl/server';
+import { localizedPath } from '@/lib/seo/urls.ts';
 
-/** The fake provider's consent form: who is signing in, and the provider's claims about them. */
-export function FakeConsentForm({
-  provider,
+export interface FakeConsentParams {
+  readonly provider: 'google' | 'apple';
+  readonly state: string;
+  readonly nonce: string;
+  readonly redirectUri: string;
+}
+
+/**
+ * The fake provider's consent form (M1.2f): who is signing in, and the provider's claims about
+ * them. A plain form POST (like a real provider's page on its own origin).
+ */
+export async function FakeConsentForm({
   params,
+  locale,
+  error,
+  name,
 }: {
-  provider: 'google' | 'apple';
   params: FakeConsentParams;
+  locale: string;
+  error: 'email_required' | null;
+  name: string;
 }) {
-  const t = useTranslations('fakeSocial');
-  const [state, action, pending] = useActionState<FakeConsentState, FormData>(
-    fakeConsentAction.bind(null, params),
-    { code: null },
-  );
+  const t = await getTranslations('fakeSocial');
   return (
-    <div className="flex flex-col gap-4">
-      <form action={action} className="flex flex-col gap-4" noValidate>
-        <div aria-live="polite">{state.code ? <Alert title={t(`errors.${state.code}`)} /> : null}</div>
-        <Input
-          name="email"
-          type="email"
-          autoComplete="email"
-          label={t('email')}
-          error={state.code === 'email_required' ? t('errors.email_required') : undefined}
-        />
-        <Input name="name" autoComplete="name" label={t('name')} />
+    <form
+      method="post"
+      action={localizedPath(locale, '/auth/social/fake/answer')}
+      className="flex flex-col gap-4"
+      noValidate
+    >
+      <input type="hidden" name="provider" value={params.provider} />
+      <input type="hidden" name="state" value={params.state} />
+      <input type="hidden" name="nonce" value={params.nonce} />
+      <input type="hidden" name="redirect_uri" value={params.redirectUri} />
+      {error ? <Alert title={t(`errors.${error}`)} /> : null}
+      <Input
+        name="email"
+        type="email"
+        autoComplete="email"
+        label={t('email')}
+        error={error === 'email_required' ? t('errors.email_required') : undefined}
+      />
+      <Input name="name" autoComplete="name" label={t('name')} defaultValue={name} />
+      <label className="flex min-h-6 items-center gap-2 text-body">
+        <input type="checkbox" name="verified" value="yes" defaultChecked className="size-5" />
+        {t('verified')}
+      </label>
+      {params.provider === 'apple' ? (
         <label className="flex min-h-6 items-center gap-2 text-body">
-          <input type="checkbox" name="verified" value="yes" defaultChecked className="size-5" />
-          {t('verified')}
+          <input type="checkbox" name="hide" value="yes" className="size-5" />
+          {t('hideEmail')}
         </label>
-        {provider === 'apple' ? (
-          <label className="flex min-h-6 items-center gap-2 text-body">
-            <input type="checkbox" name="hide" value="yes" className="size-5" />
-            {t('hideEmail')}
-          </label>
-        ) : null}
-        <Button type="submit" disabled={pending}>
-          {t('continue')}
-        </Button>
-      </form>
-      <form action={fakeCancelAction.bind(null, params)}>
-        <Button type="submit" variant="ghost" className="w-full">
-          {t('cancel')}
-        </Button>
-      </form>
-    </div>
+      ) : null}
+      <Button type="submit" name="answer" value="continue">
+        {t('continue')}
+      </Button>
+      <Button type="submit" name="answer" value="cancel" variant="ghost">
+        {t('cancel')}
+      </Button>
+    </form>
   );
 }
