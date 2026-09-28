@@ -1,3 +1,4 @@
+import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
 import {
   attendeeImportBulk,
   attendeeLabelBulk,
@@ -57,6 +58,15 @@ import {
 import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
+import {
+  createExhibitorCommand,
+  createRoomCommand,
+  createSessionCommand,
+  createSpeakerCommand,
+  createSponsorCommand,
+  createSponsorTierCommand,
+  createTrackCommand,
+} from '@yayatoh/program';
 import { attendeeExportBulk } from '@yayatoh/reports';
 import {
   assignSeatsCommand,
@@ -670,6 +680,59 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runBulk(org.id, dsar.operationId);
+  // M1.4f: a small program (track, room, speaker, session, exhibitor, sponsor tier and sponsor)
+  // and one AI draft (credit account + ledger rows), for isolation coverage.
+  const track = await executeCommand(
+    createTrackCommand,
+    { eventId: event.id, name: 'Main track' },
+    ctx(),
+    ports,
+  );
+  const room = await executeCommand(
+    createRoomCommand,
+    { eventId: event.id, name: 'Hall A', capacity: 200 },
+    ctx(),
+    ports,
+  );
+  const speaker = await executeCommand(
+    createSpeakerCommand,
+    { eventId: event.id, name: `${name} Speaker`, company: name, bio: 'Talks about *fixtures*.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createSessionCommand,
+    {
+      eventId: event.id,
+      title: 'Opening keynote',
+      startsAt: event.startsAt,
+      endsAt: new Date(event.startsAt.getTime() + 3_600_000),
+      roomId: room.id,
+      trackId: track.id,
+      speakerIds: [speaker.id],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createExhibitorCommand,
+    { eventId: event.id, name: `${name} Exhibitor`, boothLabel: 'B1' },
+    ctx(),
+    ports,
+  );
+  const tier = await executeCommand(
+    createSponsorTierCommand,
+    { eventId: event.id, name: 'Gold', position: 1 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createSponsorCommand,
+    { eventId: event.id, tierId: tier.id, name: `${name} Sponsor` },
+    ctx(),
+    ports,
+  );
+  await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
   return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 

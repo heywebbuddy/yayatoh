@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MODULE_KEYS } from '../src/modules.ts';
-import { composeNav, navLabelKey, PROFILE_KEYS, PROFILES, term } from '../src/profiles/index.ts';
+import { composeNav, navIncludes, navLabelKey, PROFILE_KEYS, PROFILES, term } from '../src/profiles/index.ts';
 
 const all = new Set<string>(MODULE_KEYS);
 
@@ -30,5 +30,16 @@ describe('profiles', () => {
       expect(new Set(nav.map((i) => i.path)).size).toBe(nav.length);
       for (const i of nav) expect(i.path).toMatch(/^[a-z-]*$/);
     }
+  });
+
+  it('the program pages (M1.4f) follow the profile registry', () => {
+    const program = ['sessions', 'speakers', 'exhibitors', 'sponsors'];
+    for (const key of program) expect(navIncludes('conference', all, key)).toBe(true);
+    for (const p of PROFILE_KEYS.filter((k) => k !== 'conference'))
+      for (const key of program) expect(navIncludes(p, all, key)).toBe(false);
+    // Revoking the module hides the item for the profile that lists it.
+    expect(navIncludes('conference', new Set([...all].filter((m) => m !== 'speakers')), 'speakers')).toBe(
+      false,
+    );
   });
 });

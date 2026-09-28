@@ -1,5 +1,6 @@
 import {
   Armchair,
+  Award,
   Bell,
   Building2,
   Calendar,
@@ -25,6 +26,7 @@ import {
   MapPin,
   Megaphone,
   MessageSquare,
+  Mic,
   Palette,
   ScanLine,
   Search,
@@ -50,6 +52,8 @@ const ICONS: Record<string, LucideIcon> = {
   clipboard: ClipboardList,
   calendar: Calendar,
   store: Store,
+  mic: Mic,
+  award: Award,
   heart: Heart,
   message: MessageSquare,
   'mail-check': MailCheck,

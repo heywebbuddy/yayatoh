@@ -146,8 +146,11 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       attendees,
       ticketsOrders,
       seating,
+      // M1.4f: the lightweight program. Any profile listing these items gets the pages.
       item('sessions', 'build', 'sessions', 'calendar'),
+      item('speakers', 'build', 'speakers', 'mic'),
       item('exhibitors', 'build', 'exhibitors', 'store'),
+      item('sponsors', 'build', 'sponsors', 'award'),
       marketing,
       onsite,
       libraries,
@@ -209,6 +212,14 @@ export function navLabelKey(profile: ProfileKey, i: NavItem): string {
  */
 export function composeNav(profile: ProfileKey, effective: ReadonlySet<string>): NavItem[] {
   return PROFILES[profile].nav.filter((i) => effective.has(i.module));
+}
+
+/**
+ * Whether a profile shows a nav item (given the org's modules). Pages behind profile-driven items
+ * (M1.4f program pages) use this to 404 for profiles that don't list them.
+ */
+export function navIncludes(profile: ProfileKey, effective: ReadonlySet<string>, key: string): boolean {
+  return composeNav(profile, effective).some((i) => i.key === key);
 }
 
 export function isProfileKey(v: string): v is ProfileKey {

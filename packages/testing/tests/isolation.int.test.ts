@@ -95,7 +95,12 @@ describe('isolation suite', () => {
   });
 
   it('append-only tables reject UPDATE and DELETE from app_user', async () => {
-    for (const t of ['platform.audit_events', 'platform.domain_events', 'platform.processed_events']) {
+    for (const t of [
+      'platform.audit_events',
+      'platform.domain_events',
+      'platform.processed_events',
+      'ai.credit_ledger',
+    ]) {
       await expect(
         withTenant(createCtx({ orgId: a.org.id }), (tx) => tx.execute(sql`delete from ${ident(t)}`)),
       ).rejects.toThrow();
