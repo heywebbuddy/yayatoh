@@ -111,3 +111,15 @@ export async function demoHandles() {
     },
   };
 }
+
+/**
+ * The e2e dataset starts from a freshly migrated owner each time (legacy accounts never had
+ * two-step verification): a rerun on a used database clears what an earlier e2e run set up, and
+ * signs the synthetic owner out everywhere. Synthetic demo data only.
+ */
+export async function resetDemoOwner(): Promise<void> {
+  const sql = migratorSql();
+  await sql`delete from auth.two_factors t using auth.users u where t.user_id = u.id and u.email = ${DEMO.ownerEmail}`;
+  await sql`delete from auth.sessions s using auth.users u where s.user_id = u.id and u.email = ${DEMO.ownerEmail}`;
+  await sql`update auth.users set two_factor_enabled = false where email = ${DEMO.ownerEmail}`;
+}

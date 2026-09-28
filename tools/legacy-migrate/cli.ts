@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
-import { demoHandles } from './src/demo.ts';
+import { demoHandles, resetDemoOwner } from './src/demo.ts';
 import { orderLinkReport } from './src/order-links.ts';
 import { revalidate, runMigration } from './src/run.ts';
 import { generateDumpFile, SCALES } from './src/synth/generate.ts';
@@ -138,6 +138,7 @@ async function main(): Promise<number> {
       } finally {
         rmSync(dir, { recursive: true, force: true });
       }
+      await resetDemoOwner();
       const out = resolve(args.get('out') ?? 'apps/web/e2e/.generated/legacy-demo.json');
       mkdirSync(dirname(out), { recursive: true });
       writeFileSync(out, `${JSON.stringify(await demoHandles(), null, 2)}\n`);

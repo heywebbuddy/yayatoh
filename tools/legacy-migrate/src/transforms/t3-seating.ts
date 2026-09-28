@@ -15,6 +15,8 @@ import { exec, hasTable, rows, type StepContext } from './context.ts';
  * - a seat booked by a void ticket stays available (listed);
  * - repetitive events: legacy seats are booked per date, the new plan is per event (per-occurrence
  *   plans are Later), so the plan is migrated but its bookings stay on the tickets only (listed).
+ * Orgs with migrated charts keep the seating module (a `grant` entitlement override), and a seated
+ * event takes the `gala` profile, whose console has Seating (both pending owner).
  * Charts whose seats cannot be read are placed at the origin and listed. Idempotent: ids are
  * derived, the event plan is rewritten while no new-platform sale has touched it.
  */
@@ -245,6 +247,16 @@ export async function t3Seating(ctx: StepContext): Promise<void> {
     update ticketing.tickets t set seat_label = s.label
     from t3_seat_sold x join seating.event_seats s on s.org_id = x.org_id and s.event_id = x.event_id and s.seat_uuid = x.seat_uuid
     where t.id = x.ticket_id and t.seat_label is distinct from s.label;
+
+    -- Organizers who sold seats on image charts keep seating (a plan decision for the owner later:
+    -- the grant is listed as a legacy entitlement, docs/owner-inbox.md).
+    -- A seated event takes the seated-event profile (its console shows Seating); pending owner.
+    update events.events e set profile = 'gala'
+    where e.id in (select distinct event_id from t3_seat_places) and e.profile = 'other';
+
+    insert into billing.entitlement_overrides (org_id, module_key, effect, reason)
+    select distinct org_id, 'seating', 'grant', 'legacy seat charts (migration ' || {inst} || ')' from t3_seat_places
+    on conflict (org_id, module_key) do nothing;
 
     update seating.event_layouts l set status = 'locked', locked_at = coalesce(l.locked_at, now())
     where exists (select 1 from t3_seat_sold x where x.org_id = l.org_id and x.event_id = l.event_id)

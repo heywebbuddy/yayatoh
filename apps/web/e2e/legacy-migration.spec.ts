@@ -18,6 +18,53 @@ interface Handles {
   gala: { slug: string; name: string };
   buyer: { name: string; email: string; orderId: string; manageToken: string };
   scans: Record<string, { name: string; legacyCode: string; shortCode: string }>;
+  seating: {
+    total: number;
+    sold: number;
+    blocked: number;
+    status: string;
+    layout: string | null;
+    legacySeats: { name: string; coordinates: string; capacity: number }[];
+  };
+  urls: {
+    host: string;
+    organizer: { path: string; target: string } | null;
+    renamedEvent: { path: string; target: string } | null;
+    unchangedEvent: { path: string } | null;
+  };
+}
+
+const PORT = Number(process.env.E2E_PORT ?? 3100);
+const MARKET = `http://yayatoh.localhost:${PORT}`;
+
+/**
+ * The expected plan of a legacy chart, straight from the legacy rows: each seat sat at its CSS
+ * top-left corner (`Xpx,Ypx` or `{left, top}`) with a 20 px box (tables 60 px); the migrated plan
+ * is in centimetres (2.5 cm per legacy pixel), a row starting at its first seat's centre and a
+ * table centred on its seat.
+ */
+function expectedPlan(seats: Handles['seating']['legacySeats']) {
+  const centre = (s: { coordinates: string; capacity: number }) => {
+    const c = s.coordinates.trim().startsWith('{')
+      ? (JSON.parse(s.coordinates) as { left: number; top: number })
+      : (() => {
+          const [x, y] = s.coordinates.replace(/px/g, '').split(',').map(Number);
+          return { left: x ?? 0, top: y ?? 0 };
+        })();
+    const half = s.capacity > 1 ? 30 : 10;
+    return { x: Math.round((c.left + half) * 2.5), y: Math.round((c.top + half) * 2.5) };
+  };
+  const items = new Map<string, { x: number; y: number }>();
+  for (const s of seats) {
+    const p = centre(s);
+    if (s.capacity > 1) items.set(s.name, p);
+    else {
+      const row = /^[A-Za-z]+/.exec(s.name)?.[0]?.toUpperCase() ?? '';
+      const cur = items.get(row);
+      items.set(row, { x: Math.min(cur?.x ?? p.x, p.x), y: Math.min(cur?.y ?? p.y, p.y) });
+    }
+  }
+  return items;
 }
 
 const FILE = new URL('./.generated/legacy-demo.json', import.meta.url);
@@ -203,6 +250,82 @@ test.describe('legacy migration — the migrated organizer', () => {
     await expectAccessible(page);
   });
 
+  test('sees the gala’s legacy seat chart as a locked floor plan with every seat where it was', async () => {
+    await page.goto(`/o/${h.org.slug}/e/${h.gala.slug}/seating`);
+    await expect(page.getByRole('heading', { name: 'Seating', level: 1 })).toBeVisible();
+    await expect(page.getByText('Locked — seats have been sold')).toBeVisible();
+    await expect(
+      page.getByText(new RegExp(`^${h.seating.total} seats · .* · ${h.seating.sold} sold`)),
+    ).toBeVisible();
+    const plan = page.getByRole('application', { name: 'Seating plan' });
+    await expect(plan.locator('canvas').first()).toBeVisible();
+    // The migrated render matches the legacy chart: every row and table at the legacy spot.
+    const list = page.getByRole('table', { name: 'Everything on the plan' });
+    const expected = expectedPlan(h.seating.legacySeats);
+    expect(expected.size).toBeGreaterThanOrEqual(6);
+    for (const [label, p] of expected) {
+      await expect(list.getByRole('spinbutton', { name: `x — ${label}`, exact: true })).toHaveValue(
+        String(p.x),
+      );
+      await expect(list.getByRole('spinbutton', { name: `y — ${label}`, exact: true })).toHaveValue(
+        String(p.y),
+      );
+    }
+    // A locked plan is read-only.
+    await expect(list.getByRole('spinbutton', { name: 'x — A', exact: true })).toBeDisabled();
+    await expectAccessible(page);
+  });
+
+  test('scans a migrated ticket’s legacy QR on the Scan PWA with the network off, then syncs', async ({
+    browser,
+  }) => {
+    test.setTimeout(90_000);
+    const mine = h.scans[test.info().project.name] ?? h.scans['desktop-1280'];
+    if (!mine) throw new Error('no scan handle');
+    await page.goto(`${EVENT}/onsite`);
+    // The online test admitted this ticket: undo it, so the device admits it again.
+    const undo = page.getByRole('button', { name: `Undo check-in for ${mine.name}` }).first();
+    if (await undo.isVisible()) {
+      await undo.click();
+      await expect(page.getByRole('button', { name: `Undo check-in for ${mine.name}` })).toHaveCount(0);
+    }
+    await page.getByLabel('Device name').fill(`Legacy door ${test.info().project.name} ${Date.now()}`);
+    await page.getByRole('button', { name: 'Add device' }).click();
+    const link = await page.getByTestId('scan-link').getAttribute('href');
+    expect(link).toMatch(/\/scan#e=[0-9a-f-]{36}&k=yyd_/);
+
+    const deviceContext = await browser.newContext();
+    try {
+      const device = await deviceContext.newPage();
+      await device.goto(link ?? '');
+      await expect(device.getByRole('heading', { name: h.weekly.name })).toBeVisible();
+      await expect(device.getByText(/tickets? on this device/)).toBeVisible();
+      await deviceContext.setOffline(true);
+      const field = device.getByLabel('Ticket code');
+      const result = device.getByRole('status').filter({ has: device.locator('[data-result]') });
+      await field.fill(mine.legacyCode);
+      await field.press('Enter');
+      await expect(result).toContainText('Welcome in');
+      await expect(result).toContainText('will be confirmed when synced');
+      // The old app's JSON form of the same QR: already in, on this device.
+      await field.fill(JSON.stringify({ order_number: mine.legacyCode }));
+      await field.press('Enter');
+      await expect(result).toContainText('Already checked in');
+      // A legacy-looking code that was never issued is refused offline too.
+      await field.fill('888888888888888');
+      await field.press('Enter');
+      await expect(result).toContainText('Not a valid ticket');
+      await deviceContext.setOffline(false);
+      await expect(device.getByTestId('scan-queue')).toHaveText('All scans synced', { timeout: 20_000 });
+      await expectAccessible(device);
+    } finally {
+      await deviceContext.close();
+    }
+    // The server took the offline scan: the console lists it with its undo.
+    await page.reload();
+    await expect(page.getByRole('button', { name: `Undo check-in for ${mine.name}` }).first()).toBeVisible();
+  });
+
   test('the migrated event renders right-to-left in Arabic', async () => {
     await page.goto(`/ar${EVENT}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
@@ -266,5 +389,49 @@ test.describe('legacy migration — a migrated scanner sub-account', () => {
       await expect(page.getByText(h.buyer.email)).toHaveCount(0);
     }
     await expectAccessible(page);
+  });
+});
+
+test.describe('legacy migration — legacy URLs', () => {
+  let h: Handles;
+  test.beforeAll(() => {
+    h = handles();
+  });
+
+  /** Open a legacy URL in the browser (it resolves *.localhost) and return the first hop's status. */
+  async function follow(page: Page, path: string) {
+    const res = await page.goto(`${MARKET}${path}`);
+    const first = res?.request().redirectedFrom();
+    return { first: (await first?.response())?.status() ?? res?.status(), final: res?.status() };
+  }
+
+  test('a renamed event’s legacy URL 308s to its new address, and the page opens', async ({ page }) => {
+    const r = h.urls.renamedEvent;
+    if (!r) throw new Error('no renamed legacy event URL in the inventory');
+    const hop = await follow(page, `${r.path}?ref=poster`);
+    expect(hop.first).toBe(308);
+    await expect(page).toHaveURL(`${MARKET}${r.target}?ref=poster`);
+    expect(hop.final).toBe(200);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(h.gala.name);
+    await expectAccessible(page);
+  });
+
+  test('the organizer’s legacy root URL 308s to its org page; unchanged URLs are served as they are', async ({
+    page,
+  }) => {
+    const o = h.urls.organizer;
+    if (!o) throw new Error('no legacy organizer URL in the inventory');
+    const hop = await follow(page, o.path);
+    expect(hop.first).toBe(308);
+    await expect(page).toHaveURL(`${MARKET}${o.target}`);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(h.org.name);
+    const same = h.urls.unchangedEvent;
+    if (!same) throw new Error('no unchanged legacy URL in the inventory');
+    const kept = await page.goto(`${MARKET}${same.path}`);
+    expect(kept?.request().redirectedFrom()).toBeNull();
+    expect(kept?.status()).toBe(200);
+    // Redirects are per legacy host: the same path on another host is not rewritten.
+    const other = await page.request.get(o.path, { maxRedirects: 0 });
+    expect(other.status()).toBe(404);
   });
 });
