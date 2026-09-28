@@ -275,7 +275,7 @@ The owner's Stripe **test** keys were in the session environment (a `sk_test_` s
 - New `pnpm --filter @yayatoh/payments stripe:contract [-- --capture] [-- --account acct_…]` (not in CI): exercises every call `stripePaymentProvider` makes and asserts the adapter parses the real answers. **11/11 steps passed** (last run):
   1. `platform_mor` Checkout Session: amount, metadata, Managed Payments off, hosted URL.
   2. Connect account (Accounts v2, Standard-equivalent), idempotent per org, `accountState` parses the v1 view, org metadata present, hosted onboarding link on `connect.stripe.com`.
-  3. A test merchant account onboarded **by API with Stripe's test data** (dashboard `none`, platform-collected requirements: test identity, `address_full_match`, SSN `000000000`, `btok_us_verified`, `accessible.stripe.com`) reaches `charges_enabled` + `payouts_enabled`. Stripe's verification takes one to several minutes; `--account` reuses one that is already active. A full-dashboard (Standard) account cannot be onboarded by API (Stripe owns its requirements and refuses API terms-of-service acceptance): that needs the hosted onboarding.
+  3. A test merchant account onboarded **by API with Stripe's test data** (dashboard `none`, platform-collected requirements: test identity, `address_full_match`, SSN `000000000`, `btok_us_verified`, `accessible.stripe.com`) reaches `charges_enabled` + `payouts_enabled`. Stripe's verification takes one to a few minutes once the business name matches the statement descriptor (the helper sets both); `--account` reuses an active one. A full-dashboard (Standard) account cannot be onboarded by API (Stripe owns its requirements and refuses API terms-of-service acceptance): that needs the hosted onboarding.
   4. `organizer_mor` direct-charge Checkout Session with the application fee, on the connected account.
   5. `organizer_mor` refund on the connected account plus exactly 200 of the 500 application fee refunded (checked on the fee object).
   6. `platform_mor` partial refund; replaying the idempotency key returns the same refund.
@@ -297,7 +297,7 @@ The owner's Stripe **test** keys were in the session environment (a `sk_test_` s
 **Still needs the owner / a public URL**
 - Webhook endpoints (platform + Connect) on a public preview URL and their signing secrets; until then webhooks were proven only by signing real payloads locally.
 - Whether `account.updated` arrives for Accounts v2 accounts on the Connect endpoint (or the v2 thin events are needed).
-- Stripe test clocks for the refund-after-transfer scenarios (`stripe:test-clocks`, M1.6e) run against the API the same way; live money stays gated on D3 and counsel.
+- Stripe test clocks for the refund-after-transfer scenarios: `stripe:test-clocks` (M1.6e) passed in test mode. Live money stays gated on D3 and counsel.
 
 ### Acceptance (M1.5e3)
 | ID | Criterion | Test |

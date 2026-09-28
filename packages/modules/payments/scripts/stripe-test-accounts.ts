@@ -50,7 +50,11 @@ export async function testMerchantAccount(
   opts.onCreated(a.id);
   await stripe.accounts.createExternalAccount(a.id, { external_account: 'btok_us_verified' });
   await stripe.accounts.update(a.id, {
-    business_profile: { url: 'https://accessible.stripe.com', product_description: 'Event tickets' },
+    business_profile: {
+      name: 'Contract Org',
+      url: 'https://accessible.stripe.com',
+      product_description: 'Event tickets',
+    },
     settings: { payments: { statement_descriptor: 'CONTRACT ORG' } },
   });
   for (let i = 0; i < 180; i++) {

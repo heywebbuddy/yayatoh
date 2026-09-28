@@ -49,10 +49,15 @@ test.describe('receivables (M1.6e)', () => {
 
     await page.goto('/o/lakeside-events/payouts');
     const receivables = page.getByRole('region', { name: 'Receivables' });
-    await expect(receivables.getByText('Owed', { exact: true }).first()).toBeVisible();
-    await expect(receivables.getByText('Taken from your next payout').first()).toBeVisible();
     const history = receivables.getByRole('table', { name: 'Receivable history' });
     await expect(history.getByText(/^Refund after payout · /).first()).toBeVisible();
+    // Still owed — or already taken from a later payout (another run's release may have netted it).
+    await expect(
+      receivables
+        .getByText('Taken from your next payout')
+        .or(history.getByText('Taken from a payout'))
+        .first(),
+    ).toBeVisible();
     // The release it came after is on the same page.
     await expect(page.getByRole('region', { name: 'Settlements' }).getByRole('table')).toBeVisible();
     await expectAccessible(page);
