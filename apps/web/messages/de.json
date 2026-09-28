@@ -2750,7 +2750,7 @@
       "email": "E-Mail",
       "push": "Push-Benachrichtigung"
     },
-    "pushHint": "Push erreicht alle, die die App nutzen; alle anderen bekommen die E-Mail.",
+    "pushHint": "Push erreicht Teilnehmende, die Benachrichtigungen auf ihrer Bestellseite oder in der App eingeschaltet haben; alle anderen erhalten die E-Mail.",
     "preview": "Vorschau",
     "previewTitle": "Vorschau der Ankündigung",
     "previewFrame": "E-Mail-Vorschau: {subject}",

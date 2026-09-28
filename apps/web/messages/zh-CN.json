@@ -2750,7 +2750,7 @@
       "email": "电子邮件",
       "push": "推送通知"
     },
-    "pushHint": "推送会发给使用应用的参加者；其他人会收到邮件。",
+    "pushHint": "推送会发送给在订单页面或应用中开启了通知的参与者；其他人会收到电子邮件。",
     "preview": "预览",
     "previewTitle": "公告预览",
     "previewFrame": "邮件预览：{subject}",

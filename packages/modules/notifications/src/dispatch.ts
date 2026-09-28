@@ -212,8 +212,8 @@ export async function dispatchDueTx(
           : typeof params.replyUrl === 'string' && params.replyUrl
             ? params.replyUrl
             : href
-            ? `${deps.appOrigin}/o/${org.slug}${href}`
-            : null;
+              ? `${deps.appOrigin}/o/${org.slug}${href}`
+              : null;
       let providerMessageId: string;
       if (row.channel === 'email') {
         if (!email) {

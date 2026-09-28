@@ -2750,7 +2750,7 @@
       "email": "Email",
       "push": "Push notification"
     },
-    "pushHint": "Push reaches attendees who use the app; everyone else gets the email.",
+    "pushHint": "Push reaches attendees who turned on notifications on their order page or in the app; everyone else gets the email.",
     "preview": "Preview",
     "previewTitle": "Announcement preview",
     "previewFrame": "Email preview: {subject}",

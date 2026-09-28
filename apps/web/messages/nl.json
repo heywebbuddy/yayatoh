@@ -2750,7 +2750,7 @@
       "email": "E-mail",
       "push": "Pushmelding"
     },
-    "pushHint": "Push bereikt bezoekers die de app gebruiken; de rest krijgt de e-mail.",
+    "pushHint": "Push bereikt deelnemers die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail.",
     "preview": "Voorbeeld",
     "previewTitle": "Voorbeeld van de aankondiging",
     "previewFrame": "E-mailvoorbeeld: {subject}",

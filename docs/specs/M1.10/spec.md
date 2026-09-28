@@ -2,7 +2,7 @@
 
 Roadmap: M1.10 ("Platform senders: SES, Twilio toll-free/10DLC, WhatsApp as legacy does. FCM v1 and APNs with migrated tokens; web push. React Email templates with org and locale overrides. In-app inbox and preferences. Announcement push. Organizer↔customer messaging. 1:1 chat at parity, with report and block. Per-order message log; reminder idempotency; one-click unsubscribe. Acceptance: all templates render in 13 locales, RTL included; a duplicated job sends once; a migrated token receives push."). Roadmap §5.2 (message states), §6.4 (messaging pipeline, policy gate), §4.4 (platform sender), CLAUDE.md → Time (quiet hours in the recipient's timezone).
 
-Delivered in four increments. **Risk tags:** `db-migration`, `tenancy` (new tenant tables, SECURITY DEFINER functions). All providers are owner accounts, so every channel runs behind a port with a fake adapter (see "Pending the owner").
+Delivered in five increments. **Risk tags:** `db-migration`, `tenancy` (new tenant tables, SECURITY DEFINER functions). All providers are owner accounts, so every channel runs behind a port with a fake adapter (see "Pending the owner").
 
 Migration: `packages/db/drizzle/0039_melodic_adam_destine.sql` (new schemas `notifications` and `messaging`, 10 tenant tables; hand-written block listed below).
 
@@ -65,8 +65,66 @@ Migration: `packages/db/drizzle/0052_illegal_karnak.sql` (renumbered at merge fr
 - A dedicated account settings page (the email language lives on the notification preferences page).
 - CSP for `apps/admin` (M1.14 Later) now that it lists user-written text.
 
+## M1.10e — web push and announcement push (done)
+Migration: `packages/db/drizzle/0054_material_dreadnoughts.sql` (to be renumbered at merge) (1 new tenant table `notifications.push_deliveries`; new columns on `notifications.push_tokens`; a widened CHECK on `notifications.messages`; hand-written block listed below). Risk tags: `db-migration`, `tenancy`.
+
+Standard Web Push needs no provider account, so this increment ships a real adapter (the FCM/APNs adapters still wait for the owner's accounts).
+
+- **Protocol, with `node:crypto` only** (`packages/modules/notifications/src/web-push.ts`, no push library):
+  - RFC 8292 VAPID: an ES256 JWT (`aud` = the push service's origin, `exp` 12 h, `sub` mailto:/https:) in `Authorization: vapid t=…, k=…`.
+  - RFC 8291 encryption with the `aes128gcm` content coding (RFC 8188): ECDH P-256 + HKDF + AES-128-GCM, one 4096-byte record (plaintext ≤ 3993 bytes). The Appendix A test vector reproduces byte for byte.
+  - RFC 8030 headers: `TTL` (clamped to 28 days; announcements 24 h, member alerts 4 h, reminders 12 h, the test notification 5 min), `Urgency` (`high` for urgent kinds, else `normal`), `Topic` (32 base64url characters of sha256(message id), so the push service collapses a retried send).
+  - Responses: 201 sent (the `Location` is the provider id); 404/410 → the subscription is pruned (`disabled_at`); 429/5xx/network → retry, honouring `Retry-After` (never sooner than the dispatcher's exponential backoff); 400/401/403/413 → refused for good.
+  - **SSRF guard:** endpoints come from browsers, so the adapter (and registration) only accept https on known push services (FCM, Mozilla autopush, Apple, WNS). Dev/CI also allow the fake push service on the app's own origin.
+- **Keys** (`vapidConfig`): `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (names in `.env.example`; a mismatched pair refuses to start). Development and CI derive a stable pair from `APP_TOKEN_SECRET`; production without keys offers no opt-in. `pnpm vapid:generate` prints a new pair (production keys: `docs/owner-inbox.md`).
+- **Devices** (`notifications.push_tokens`): web push rows keep the endpoint as the token plus `p256dh`, `auth_secret`, a `label` ("Chrome · Android", from the User-Agent, never the endpoint) and the browser's IANA `time_zone`. A device belongs to a member (`user_id`) **or** to a guest buyer (`email_norm`, CHECK: exactly one). At most 10 active devices per person and org; the same browser subscribing again reuses its row.
+  - Members: `registerPushTokenCommand` (now a union: `fcm`/`apns` token, or a `webpush` subscription), `removePushTokenCommand` (by id or endpoint; someone else's device is `not_found`), `myPushDevicesQuery`.
+  - Guest buyers (orders module, the manage token is the credential): `registerOrderPushCommand`, `removeOrderPushCommand` (permission `public:order-push`; the token is re-verified under the org's RLS in the handler), `orderPushDevices(token)`. They store through the same `upsertWebPushTx` as the member command.
+  - Output is allowlisted (`PushDeviceDto`: id, platform, label, since, last seen, and `ref` = a hash of the endpoint so a browser can mark "this device"); endpoints and keys never leave the server.
+- **Dispatch** (`dispatchDueTx`): a push message goes to each of the recipient's active devices (members by user, buyers by email). Every attempt is recorded in **`notifications.push_deliveries`** (one row per message and device: `sent`, `expired`, `rejected`, `retrying`, HTTP status, attempts). When one device is rate limited the message is retried later and devices it already reached are skipped, so nobody gets it twice. All devices expired → `suppressed/no_device`; all refused → `failed/provider_error`. Removing a device keeps its log rows (the reference is cleared by `ON DELETE SET NULL (push_token_id)`).
+  - Policy gate as for email: `pause_messaging` holds optional push; **quiet hours use the device's timezone** (the most recently seen device), else the event's, else the org's; unsubscribes and a contact's block of the organizer (per address and category) now stop push to that address too; member preferences apply per channel.
+  - Push payload (`WebPushPayload`, strict allowlist): `title`, `body` (the announcement's text, else the template's preview), `url` (only on our origin, else dropped), `tag`, `lang`, `dir`. No names, emails or ids beyond what the notification shows.
+- **Queueing:** the notifier queues a push row only when the recipient has an active device at that moment (members by account, buyers by email): a buyer without opt-in gets nothing and the log shows no "no device" noise. Push rows now carry the recipient's email (the `messages_address_check` accepts push with a user **or** an email).
+- **Announcement push:** the organizer ticks "Push" in the composer (its hint now says push reaches people who turned notifications on); `announcement.sent@1` fans out as before under `announcement:{id}:{email}` per channel, so a duplicated job or relay sends once per person; the push opens the person's conversation link.
+- **Member notifications:** kinds with a push channel (`sales.order_paid`, `messaging.contact_replied`) now also reach opted-in members' browsers; "Send me a test notification" pushes to the member's devices too (`notifications.test` gains the push channel).
+- **Web app:**
+  - `public/push-sw.js`: shows the notification (allowlisted fields, RTL for Arabic), a click opens the link (same origin only, else the site root) or focuses a tab already on it. Registered with the scope `/push/` so it controls no page and never replaces the scanner's worker at `/`. Served `Cache-Control: no-cache` under the page CSP; `worker-src 'self' blob:` was already in the builder (now asserted by a unit test and e2e).
+  - `WebPushControl` (client): support and permission checks, "Turn on notifications" / "Turn off on this device" (native buttons, polite status region), clear messages for blocked, not allowed, unsupported and unavailable, the device list with "Remove {label}" (no-JS forms) and "(this device)".
+  - Buyer order page (`/orders/{token}`): a "Push notifications" section. Member: notification settings (with the device list) and the inbox page (opt-in only). Strings in the `webPush` namespace, 13 locales.
+  - Dev/CI: `POST /api/dev/push-service/{id}` is a fake RFC 8030 push service (dev auth only, 404 otherwise): it verifies the VAPID JWT (401 without), keeps the encrypted body and answers 201; ids starting `gone-` answer 410, `busy-` 429. `GET` returns what it received. The dev drain and the worker send web push through the real adapter.
+
+### Hand-written SQL (migration 0054, between `-- hand-written: begin/end`)
+1. CHECKs on existing tables added `NOT VALID`, then `VALIDATE CONSTRAINT`: `notifications.messages.messages_address_check` (widened: push with a user or an email), `notifications.push_tokens.push_tokens_owner_check`, `push_tokens_email_norm_check`, `push_tokens_webpush_check`, `push_tokens_label_length`, `push_tokens_time_zone_length`.
+2. `notifications.push_deliveries.push_deliveries_token_fk`: composite FK `(org_id, push_token_id)` → `push_tokens (org_id, id)` `ON DELETE SET NULL (push_token_id)` (drizzle cannot express the column list).
+
+### Later / not yet (M1.10e)
+- FCM HTTP v1 and APNs adapters (owner accounts); the production worker transports (it has none until SES).
+- `pushsubscriptionchange` (a browser rotating its subscription) re-registering from the service worker; today the person turns notifications on again.
+- Reminders reach a buyer's browser only if they opted in before the reminder was queued (at purchase); re-planning queued reminders for devices added later.
+- A push column in the organizer's announcement log (sent · pending · not sent counts include push rows today) and a per-device delivery view.
+- Real browser push services in CI (headless Chromium has none, so e2e replaces `PushManager.subscribe` with a subscription pointing at the fake push service; everything after that is real).
+
+### Acceptance (M1.10e)
+| Criterion | Test |
+|---|---|
+| VAPID JWT (ES256, aud/exp/sub), verification refuses other keys, audiences, expiry, forgeries | `packages/modules/notifications/tests/web-push.test.ts` "RFC 8292 VAPID" |
+| RFC 8291 test vectors (intermediates, encrypt byte for byte, decrypt), tampering, sizes | `web-push.test.ts` "RFC 8291 message encryption" |
+| TTL / Urgency / Topic headers; 201 / 404 / 410 / 413 / 429 (Retry-After) rules; endpoint allowlist; payload allowlist | `web-push.test.ts` "push request headers and responses", "the web push adapter", "push rules for a message" |
+| Service worker: allowlisted notification, RTL, off-site links refused, click opens/focuses | `apps/web/tests/push-sw.test.ts` |
+| CSP `worker-src 'self'` on every profile | `packages/platform/tests/csp.test.ts`; e2e `web-push.spec.ts` (viewer test) |
+| Buyer opt-in stored, allowlisted list, bad token/keys/endpoint (SSRF) refused, cross-org refused, 10-device cap, remove own only | `packages/testing/tests/web-push.int.test.ts` "guest buyers opt in" |
+| A duplicated job sends once (duplicated relay + three concurrent dispatchers → one push, decrypted) | `web-push.int.test.ts` "fans out once per opted-in person…" |
+| Quiet hours in the device's timezone; pause_messaging holds; unsubscribe/block stops push | `web-push.int.test.ts` |
+| 410 prunes; 429 retries later without repeating other devices; delivery log kept after removal | `web-push.int.test.ts` |
+| Members: opt-in, test push, member alerts by push, own devices only; system actor refused | `web-push.int.test.ts` "members" |
+| Isolation of `push_deliveries` and the new device rows | `packages/testing/tests/isolation.int.test.ts` (fixture: a browser device, a test push and its delivery row in both orgs); `web-push.int.test.ts` "isolation" |
+| e2e: opt-in from the order page (keyboard, axe, Arabic RTL, reload), a sent announcement arrives at the fake push service (decrypted), a duplicated drain sends nothing more, turn off, the next announcement doesn't arrive | `apps/web/e2e/web-push.spec.ts` "a buyer opts in…" |
+| e2e: a buyer who blocks notifications is told how to allow them and gets nothing | `web-push.spec.ts` |
+| e2e: member opt-in on settings and inbox, test push decrypted, device list, remove by keyboard, reload, Arabic, axe | `web-push.spec.ts` "a member turns push on…" |
+| e2e: a viewer cannot send announcements; the fake push service refuses unsigned pushes | `web-push.spec.ts` |
+
 ## Later / not yet
-- Real adapters: SES v2 (with Tenants in M3.5), Twilio SMS (toll-free + 10DLC), the WhatsApp template gateway, FCM HTTP v1, APNs, web push with VAPID keys. Push token registration exists as a command (`registerPushTokenCommand`); the buyer-page web-push opt-in and the service worker wait for VAPID keys.
+- Real adapters: SES v2 (with Tenants in M3.5), Twilio SMS (toll-free + 10DLC), the WhatsApp template gateway, FCM HTTP v1 and APNs (web push shipped in M1.10e; production VAPID keys are the owner's).
 - Provider webhooks for SES/Twilio (the port, fake adapter, `message_events` and suppression landed in M1.10d), fallbacks (WhatsApp → SMS, push → email), segment counting, frequency caps and state quiet-hour rules (M3.5 policy gate).
 - Realtime inbox counts over Ably; the attendee app inbox (M1.15) and a `/v1` inbox API.
 - Legacy migration of notifications, chats, reports and blocks (roadmap §7).

@@ -2750,7 +2750,7 @@
       "email": "E-mail",
       "push": "Notification push"
     },
-    "pushHint": "Le push atteint les participants qui utilisent l’app ; les autres reçoivent l’e-mail.",
+    "pushHint": "Les notifications push atteignent les participants qui les ont activées sur la page de leur commande ou dans l'application ; les autres reçoivent l'e-mail.",
     "preview": "Aperçu",
     "previewTitle": "Aperçu de l’annonce",
     "previewFrame": "Aperçu de l’e-mail : {subject}",

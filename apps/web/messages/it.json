@@ -2750,7 +2750,7 @@
       "email": "Email",
       "push": "Notifica push"
     },
-    "pushHint": "Il push raggiunge chi usa l’app; gli altri ricevono l’email.",
+    "pushHint": "Le notifiche push raggiungono i partecipanti che le hanno attivate nella pagina dell'ordine o nell'app; gli altri ricevono l'email.",
     "preview": "Anteprima",
     "previewTitle": "Anteprima dell’annuncio",
     "previewFrame": "Anteprima email: {subject}",
