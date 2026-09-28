@@ -271,6 +271,9 @@ importers:
       '@yayatoh/messaging':
         specifier: workspace:*
         version: link:../../packages/modules/messaging
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../../packages/modules/notifications
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../../packages/modules/payments

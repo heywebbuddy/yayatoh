@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { UnsubscribeForm } from '@/components/unsubscribe-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { unsubscribeAction } from './actions.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,6 +40,11 @@ export default async function UnsubscribePage({
           category={info.category}
         />
         <p className="text-caption text-zinc-500">{t('transactionalNote')}</p>
+        {info.preferencesPath ? (
+          <Link href={info.preferencesPath} className="self-start text-body underline underline-offset-4">
+            {t('managePreferences', { org: info.orgName })}
+          </Link>
+        ) : null}
       </Card>
     </main>
   );

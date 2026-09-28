@@ -26,6 +26,7 @@ export default async function MarketingPage({
   const { data, event: ev } = await loadEvent(org, event);
   if (!data.modules.has('messaging') || !roleCan(data.role, 'messages:read')) notFound();
   const t = await getTranslations('announcements');
+  const tn = await getTranslations('notifications');
   const log = await executeQuery(announcementsQuery, { eventId: ev.id }, data.ctx, ports);
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
@@ -81,7 +82,25 @@ export default async function MarketingPage({
             {
               key: 'delivery',
               header: t('delivery'),
-              cell: (a) => t('deliveryCounts', a.delivery),
+              cell: (a) => (
+                <span className="flex flex-col gap-0.5">
+                  <span>{t('deliveryCounts', a.delivery)}</span>
+                  {a.reasons.length ? (
+                    <span className="flex flex-col text-caption text-zinc-600">
+                      <span className="sr-only">{t('reasonsLabel')}</span>
+                      {a.reasons.map((r) => (
+                        <span key={`${r.channel}:${r.reason}`}>
+                          {t('reasonLine', {
+                            channel: tn(`channels.${r.channel}`),
+                            reason: tn.has(`reasons.${r.reason}`) ? tn(`reasons.${r.reason}`) : r.reason,
+                            count: r.count,
+                          })}
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
+                </span>
+              ),
             },
           ]}
         />

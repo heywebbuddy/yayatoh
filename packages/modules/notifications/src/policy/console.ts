@@ -514,3 +514,49 @@ export const liftAddressSuppressionCommand = tenantCommand({
     data: { channel: r?.channel, reason: r?.reason, note: input.note },
   }),
 });
+
+export const AutoPausedOrgDto = z.object({
+  orgId: z.uuid(),
+  orgName: z.string(),
+  orgSlug: z.string(),
+  since: z.date(),
+  complaints: z.int(),
+  sent: z.int(),
+  rateBps: z.int(),
+});
+export type AutoPausedOrgDto = z.infer<typeof AutoPausedOrgDto>;
+
+/**
+ * Staff console (platform_reader, audited by the caller): orgs whose messaging is auto-paused
+ * right now, newest first. Allowlisted: org name/slug and the numbers that tripped the pause.
+ */
+export async function autoPausedOrgsTx(tx: TenantTx): Promise<AutoPausedOrgDto[]> {
+  const rows = await tx.execute<{
+    org_id: string;
+    org_name: string;
+    org_slug: string;
+    created_at: string;
+    complaints: number;
+    sent: number;
+    rate_bps: number;
+  }>(sql`
+    select p.org_id, o.name as org_name, o.slug as org_slug, p.created_at, p.complaints, p.sent, p.rate_bps
+    from notifications.auto_pauses p
+    join tenancy.organizations o on o.id = p.org_id
+    where p.lifted_at is null
+      and exists (select 1 from tenancy.org_suspensions s
+                  where s.org_id = p.org_id and s.kind = 'pause_messaging' and s.lifted_at is null)
+    order by p.created_at desc
+    limit 200`);
+  return rows.map((r) =>
+    AutoPausedOrgDto.parse({
+      orgId: r.org_id,
+      orgName: r.org_name,
+      orgSlug: r.org_slug,
+      since: new Date(r.created_at),
+      complaints: r.complaints,
+      sent: r.sent,
+      rateBps: r.rate_bps,
+    }),
+  );
+}

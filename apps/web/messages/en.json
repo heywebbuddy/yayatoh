@@ -51,7 +51,8 @@
         "order_paid": "New order: {name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})"
       },
       "messaging": {
-        "contact_replied": "{name} sent you a message about {eventName}"
+        "contact_replied": "{name} sent you a message about {eventName}",
+        "auto_paused": "Messaging paused: complaints reached {rate}. Tickets and receipts still go out."
       },
       "notifications": {
         "test": "Test notification: notifications are working"
@@ -82,7 +83,8 @@
       "messaging": {
         "announcement": "Announcement",
         "reply": "Reply",
-        "contact_replied": "New message"
+        "contact_replied": "New message",
+        "auto_paused": "Messaging paused alert"
       },
       "sales": {
         "order_paid": "New order alert"
@@ -95,6 +97,9 @@
       },
       "payments": {
         "destination-changed": "Payout account change"
+      },
+      "marketing": {
+        "message": "News and offers"
       }
     },
     "status": {
@@ -118,13 +123,20 @@
       "complained": "Suppressed: the recipient marked earlier mail as spam",
       "event_cancelled": "The event or date was cancelled",
       "event_started": "The event had already started",
-      "event_postponed": "On hold while the event is postponed"
+      "event_postponed": "On hold while the event is postponed",
+      "consent_missing": "Blocked: no consent to receive this",
+      "consent_withdrawn": "Blocked: the recipient withdrew consent",
+      "whatsapp_marketing_us": "Blocked: WhatsApp marketing isn't allowed to US numbers",
+      "state_quiet_hours": "Held for state calling hours (for example Texas Sundays before noon)",
+      "frequency_cap": "Held or skipped: this person got many messages recently",
+      "quota_reached": "Waiting: this month's quota is used up"
     },
     "channels": {
       "email": "Email",
       "sms": "SMS",
       "push": "Push",
-      "in_app": "In the app"
+      "in_app": "In the app",
+      "whatsapp": "WhatsApp"
     },
     "log": {
       "title": "Messages",
@@ -212,7 +224,8 @@
     "emails": "Email templates",
     "speakers": "Speakers",
     "sponsors": "Sponsors",
-    "media": "Images"
+    "media": "Images",
+    "messagingHealth": "Messaging limits"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -2725,7 +2738,8 @@
     "confirm": "Unsubscribe",
     "done": "You're unsubscribed from {what} from {org}.",
     "resubscribe": "Subscribe again",
-    "transactionalNote": "You'll still get the emails you need, like tickets, receipts and refunds."
+    "transactionalNote": "You'll still get the emails you need, like tickets, receipts and refunds.",
+    "managePreferences": "Manage all your preferences for {org}"
   },
   "devMailbox": {
     "eyebrow": "Development",
@@ -2748,7 +2762,8 @@
     "channels": "Send by",
     "channel": {
       "email": "Email",
-      "push": "Push notification"
+      "push": "Push notification",
+      "sms": "Text message (SMS)"
     },
     "pushHint": "Push reaches attendees who use the app; everyone else gets the email.",
     "preview": "Preview",
@@ -2770,7 +2785,14 @@
       "channelRequired": "Choose at least one way to send it.",
       "no_recipients": "Nobody is attending this event yet, so there is no one to send to.",
       "messaging_paused": "Yayatoh support paused messaging for your organization."
-    }
+    },
+    "smsHint": "Texts go only to attendees who gave a mobile number and agreed to texts; the others are listed as not sent, with the reason.",
+    "smsPreviewTitle": "Text message",
+    "smsCount": "{characters, plural, one {# character} other {# characters}} · {segments, plural, one {# segment} other {# segments}} ({encoding})",
+    "smsReach": "{count, plural, =0 {No attendee has a mobile number yet.} one {# attendee has a mobile number.} other {# attendees have a mobile number.}}",
+    "quotaReached": "This month's quota for {channels} is used up: those messages will wait until it resets or Yayatoh raises your limit.",
+    "reasonsLabel": "Why not sent",
+    "reasonLine": "{channel}: {reason} ({count})"
   },
   "eventAnnouncements": {
     "heading": "Announcements",
@@ -3632,5 +3654,105 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "messagingHealth": {
+    "title": "Messaging limits",
+    "description": "This month's usage and quotas, messages the rules held or blocked, suppressed addresses and how often one person may hear from you.",
+    "autoPaused": "Messaging is paused: complaints reached {rate} ({complaints} of {sent} emails), above the 0.3% limit.",
+    "autoPausedBody": "Since {since}, reminders, updates and marketing wait. Tickets, receipts and replies still go out. Yayatoh support will review it with you and resume messaging.",
+    "staffPaused": "Yayatoh support paused messaging for your organization. Tickets, receipts and replies still go out.",
+    "usageTitle": "This month",
+    "usageCaption": "Usage and quotas this month",
+    "channel": "Channel",
+    "used": "Used",
+    "limit": "Monthly limit",
+    "status": "Status",
+    "waiting": "Waiting",
+    "usedOf": "{used} of {limit}",
+    "units": {
+      "email": "emails",
+      "sms": "segments",
+      "whatsapp": "messages",
+      "push": "notifications"
+    },
+    "ok": "Within quota",
+    "reached": "Quota reached",
+    "quotaReachedTitle": "{channels, plural, one {A quota is used up} other {Quotas are used up}}: {list}.",
+    "quotaReachedBody": "Optional messages wait (none are dropped) until {resets} or until Yayatoh raises your limit. Tickets and receipts still go out.",
+    "resets": "Quotas reset on {date}.",
+    "smsSegmentsNote": "Text messages count in segments: 160 characters (70 in scripts like Arabic or Japanese), fewer per segment when a text is longer.",
+    "logTitle": "Held and blocked",
+    "logCaption": "Messages held or blocked by the messaging rules",
+    "logEmpty": "Nothing held or blocked.",
+    "when": "When",
+    "message": "Message",
+    "to": "To",
+    "reason": "Reason",
+    "held": "Held",
+    "blocked": "Blocked",
+    "noAddress": "Text or app",
+    "suppressionsTitle": "Suppressed addresses",
+    "suppressionsCaption": "Addresses messages are not sent to",
+    "suppressionsEmpty": "No suppressed addresses.",
+    "address": "Address",
+    "since": "Since",
+    "action": "Action",
+    "suppressionReason": {
+      "hard_bounce": "Bounced (address doesn't exist)",
+      "soft_bounce": "Bounced repeatedly (mailbox full or unavailable)",
+      "complaint": "Marked as spam"
+    },
+    "liftNote": "Why lift it for {address}?",
+    "lift": "Lift",
+    "liftLabel": "Lift the suppression for {address}",
+    "supportOnly": "Only Yayatoh support can lift this.",
+    "lifted": "The suppression was lifted. Messages to that address go out again.",
+    "noteRequired": "Add a note of at least 3 characters.",
+    "capsTitle": "Frequency caps",
+    "capsDescription": "The most messages one person gets from you on one channel. Updates and reminders over a cap wait; news and offers over a cap are skipped.",
+    "capsCaption": "Frequency caps per person",
+    "scope": {
+      "reminders": "Reminders",
+      "event_updates": "Event updates",
+      "marketing": "News and offers",
+      "all": "All optional messages"
+    },
+    "maxMessages": "{scope}: most messages",
+    "windowHours": "{scope}: per how many hours",
+    "capValue": "{max, plural, one {# message} other {# messages}} per {hours, plural, one {# hour} other {# hours}}",
+    "default": "Default",
+    "custom": "Yours",
+    "saveCaps": "Save caps",
+    "capsSaved": "Caps saved.",
+    "maxInvalid": "Enter a whole number from 1 to 20.",
+    "windowInvalid": "Enter a whole number of hours from 1 to 720."
+  },
+  "preferenceCenter": {
+    "metaTitle": "Your message preferences",
+    "eyebrow": "Message preferences",
+    "title": "Messages from {org}",
+    "description": "Choose what {org} sends you and how. Tickets, receipts and replies you asked for always arrive by email.",
+    "emailLegend": "By email to {email}",
+    "category": {
+      "reminders": "Reminders before events",
+      "event_updates": "Updates about events you're attending",
+      "marketing": "News and offers"
+    },
+    "phoneLabel": "Mobile number",
+    "phoneHint": "With the country code, for example +1 212 555 0100.",
+    "phoneCurrent": "Currently {phone}. Leave blank to keep it.",
+    "smsLegend": "Text messages (SMS)",
+    "whatsappLegend": "WhatsApp",
+    "informational": "Reminders and updates about events you're attending",
+    "marketingText": "News and offers",
+    "disclosure": "By checking a text or WhatsApp box you agree to receive recurring automated messages from {org} at this number. Consent is not a condition of any purchase. Message frequency varies; message and data rates may apply. Reply STOP to cancel or HELP for help, or come back here anytime.",
+    "save": "Save my preferences",
+    "saved": "Your preferences are saved.",
+    "errors": {
+      "invalid_phone": "Enter the number with its country code, for example +1 212 555 0100.",
+      "phone_required": "Add a mobile number to get text or WhatsApp messages.",
+      "not_found": "This link doesn't work anymore.",
+      "internal": "Something went wrong. Try again."
+    }
   }
 }

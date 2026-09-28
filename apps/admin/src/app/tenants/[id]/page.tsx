@@ -16,6 +16,7 @@ import {
   suspensionHistoryQuery,
 } from '@yayatoh/tenancy';
 import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -92,6 +93,11 @@ export default async function TenantPage({
   return (
     <Shell staff={staff}>
       <PageHeader eyebrow={<span className="font-mono text-caption">{org.slug}</span>} title={org.name} />
+      <p>
+        <Link href={`/tenants/${id}/messaging`} className="text-body underline underline-offset-2">
+          {t('messagingLink')}
+        </Link>
+      </p>
       <div aria-live="polite">
         {done ? <Alert tone="info" title={t(`done.${done}`)} /> : null}
         {error ? <Alert title={t('error', { code: error })} /> : null}

@@ -17,6 +17,7 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",

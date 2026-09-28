@@ -15,11 +15,20 @@ export type StaffRole = (typeof STAFF_ROLES)[number];
 
 /** What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only). */
 const CAN: Record<StaffRole, readonly StaffAction[]> = {
-  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'reports'],
-  support: ['view', 'suspend', 'reports'],
-  finance: ['view', 'payouts', 'fees'],
+  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'reports', 'messaging', 'quotas'],
+  support: ['view', 'suspend', 'reports', 'messaging'],
+  finance: ['view', 'payouts', 'fees', 'quotas'],
 };
-export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements' | 'reports';
+/** `messaging`: see and lift complaint-rate auto-pauses; `quotas`: set messaging quotas (M3.5a). */
+export type StaffAction =
+  | 'view'
+  | 'suspend'
+  | 'payouts'
+  | 'fees'
+  | 'entitlements'
+  | 'reports'
+  | 'messaging'
+  | 'quotas';
 
 export interface Staff {
   readonly userId: string;
