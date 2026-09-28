@@ -1,6 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
-import { defineSubscriber, type Mailer, tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { defineSubscriber, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { organizationBrandTx } from '@yayatoh/tenancy';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import type { FundsFlow } from './port.ts';
@@ -169,25 +170,29 @@ const DestinationChanged = z.object({
 });
 
 /**
- * Emails the org's owners when a payout destination is connected or changed (outbox → worker),
- * so a takeover is noticed inside the 24 h hold. Recipients come from the composition root.
+ * Tells the org's owners when a payout destination is connected or changed (outbox → worker →
+ * `payments.destination-changed`: in-app and email, transactional, no quiet hours), so a takeover
+ * is noticed inside the 24 h hold. The notifications module fans out to the owners by role.
  */
-export function payoutDestinationMailer(deps: {
-  mailer: Mailer;
-  ownerEmails: (tx: TenantTx) => Promise<readonly string[]>;
-}) {
+export function payoutDestinationMailer(deps: { notifier: Notifier; appOrigin: string }) {
   return defineSubscriber({
     name: 'payments.destination-mailer',
     events: ['payouts.destination_changed@1'],
     handle: async (tx, event) => {
       const p = DestinationChanged.parse(event.payload);
-      for (const to of await deps.ownerEmails(tx))
-        await deps.mailer.send({
-          to,
-          template: 'payments.destination_changed',
-          params: { reason: p.reason, holdUntil: p.holdUntil },
-          idempotencyKey: `destination:${event.id}:${to}`,
-        });
+      const org = await organizationBrandTx(tx, p.orgId);
+      if (!org) return;
+      await deps.notifier.notifyMembers(tx, {
+        kind: 'payments.destination-changed',
+        params: {
+          url: `${deps.appOrigin}/o/${org.slug}/payouts`,
+          reason: p.reason,
+          holdUntil: p.holdUntil,
+          timeZone: org.timezone,
+        },
+        dedupeKey: `destination:${event.id}`,
+        href: '/payouts',
+      });
     },
   });
 }

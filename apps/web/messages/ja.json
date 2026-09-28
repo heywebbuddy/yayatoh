@@ -54,7 +54,10 @@
       "notifications": {
         "test": "テスト通知：通知は正常に動作しています"
       },
-      "other": "通知"
+      "other": "通知",
+      "payments": {
+        "destination-changed": "新しい支払い口座: この口座への送金は {until} 以降に始まります"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "テスト通知"
+      },
+      "payments": {
+        "destination-changed": "支払い口座の変更"
       }
     },
     "status": {

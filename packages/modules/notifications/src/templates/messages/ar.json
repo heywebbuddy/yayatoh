@@ -72,6 +72,11 @@
       "subject": "رسالة جديدة من {name}",
       "intro": "كتب إليك {name} بشأن {eventName}."
     },
+    "payments.destination-changed": {
+      "subject": "حساب جديد لاستلام مدفوعات {org}",
+      "intro": "{reason, select, bank_changed {تم تغيير الحساب المصرفي الذي يستلم مدفوعات {org}.} other {تم ربط حساب لاستلام المدفوعات بـ {org}.}} حرصًا على أمانك، لن تُحوَّل إليه أي أموال قبل {until}. إذا لم تُجرِ هذا التغيير، فتواصل مع دعم Yayatoh فورًا.",
+      "cta": "مراجعة المدفوعات"
+    },
     "notifications.test": {
       "subject": "إشعار تجريبي",
       "intro": "الإشعارات تعمل."

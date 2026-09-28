@@ -107,6 +107,15 @@ function values(input: RenderInput, locale: Locale, cat: Catalog): Record<string
       timeZone: tz,
     }).format(new Date(p.startsAt));
   }
+  // Security notices: a moment (e.g. the end of a payout hold) in the org's zone.
+  if (typeof p.holdUntil === 'string') {
+    const tz = typeof p.timeZone === 'string' && p.timeZone ? p.timeZone : 'UTC';
+    out.until = new Intl.DateTimeFormat(locale, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone: tz,
+    }).format(new Date(p.holdUntil));
+  }
   if (typeof p.role === 'string') out.role = cat.roles[p.role as keyof Catalog['roles']] ?? p.role;
   return out;
 }

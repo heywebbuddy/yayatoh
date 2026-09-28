@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Notification de test : les notifications fonctionnent"
       },
-      "other": "Notification"
+      "other": "Notification",
+      "payments": {
+        "destination-changed": "Nouveau compte de versement : les virements vers ce compte commencent après le {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Notification de test"
+      },
+      "payments": {
+        "destination-changed": "Changement de compte de versement"
       }
     },
     "status": {

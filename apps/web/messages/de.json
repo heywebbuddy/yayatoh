@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Testbenachrichtigung: Benachrichtigungen funktionieren"
       },
-      "other": "Benachrichtigung"
+      "other": "Benachrichtigung",
+      "payments": {
+        "destination-changed": "Neues Auszahlungskonto: Überweisungen darauf beginnen erst nach {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Testbenachrichtigung"
+      },
+      "payments": {
+        "destination-changed": "Änderung des Auszahlungskontos"
       }
     },
     "status": {

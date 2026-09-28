@@ -90,15 +90,6 @@ export async function twoFactorRequiredBy(userId: string): Promise<MyOrganizatio
   return (await myOrganizations(userId)).filter((o) => roleRequiresTwoFactor(o.role));
 }
 
-/** The org's owners (user ids), inside its tenant transaction: who security notices go to. */
-export async function orgOwnerIdsTx(tx: TenantTx): Promise<string[]> {
-  const rows = await tx
-    .select({ userId: memberships.userId })
-    .from(memberships)
-    .where(eq(memberships.role, 'owner'));
-  return rows.map((r) => r.userId);
-}
-
 /** The current org's display name, inside the caller's tenant transaction (buyer-facing pages, PDFs). */
 export async function organizationNameTx(tx: TenantTx, orgId: string): Promise<string | null> {
   const [row] = await tx

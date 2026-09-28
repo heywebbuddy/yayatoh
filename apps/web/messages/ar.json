@@ -54,7 +54,10 @@
       "notifications": {
         "test": "إشعار تجريبي: الإشعارات تعمل"
       },
-      "other": "إشعار"
+      "other": "إشعار",
+      "payments": {
+        "destination-changed": "حساب دفعات جديد: تبدأ التحويلات إليه بعد {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "إشعار تجريبي"
+      },
+      "payments": {
+        "destination-changed": "تغيير حساب الدفعات"
       }
     },
     "status": {

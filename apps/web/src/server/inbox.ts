@@ -42,6 +42,7 @@ export async function loadInbox(
     const p = { ...i.params };
     if (typeof p.amountMinor === 'number' && typeof p.currency === 'string')
       p.amount = formatMoney(money(p.amountMinor, p.currency), locale);
+    if (typeof p.holdUntil === 'string') p.until = fmt.format(new Date(p.holdUntil));
     return t.has(i.kind) ? t(i.kind, p) : t('other');
   };
   return {

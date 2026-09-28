@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Notificação de teste: as notificações estão funcionando"
       },
-      "other": "Notificação"
+      "other": "Notificação",
+      "payments": {
+        "destination-changed": "Nova conta de repasse: as transferências para ela começam depois de {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Notificação de teste"
+      },
+      "payments": {
+        "destination-changed": "Alteração da conta de repasse"
       }
     },
     "status": {

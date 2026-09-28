@@ -60,6 +60,8 @@ describe('payout accounts (M1.3c)', () => {
       country: 'US',
       fundsFlow: 'platform_mor',
       onHold: false,
+      // Just connected: the 24 h hold on a new payout destination (M1.2c).
+      destinationHoldUntil: expect.any(Date),
     });
   });
 

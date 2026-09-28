@@ -17,7 +17,19 @@ function devPassword(): string {
 const personaCode = (email: string) =>
   totp(secretKey(devPersonaTotpSecret(email, devPassword())), Date.now());
 
+/**
+ * Sign-in is rate limited per client IP (10 a minute); each test acts as its own client, as real
+ * staff do, so a run with many sign-ins in a minute is not mistaken for an attack.
+ */
+async function ownClientIp(page: Page) {
+  const n = Math.floor(Math.random() * 0xffffff);
+  await page
+    .context()
+    .setExtraHTTPHeaders({ 'x-forwarded-for': `10.${n >> 16}.${(n >> 8) & 255}.${n & 255}` });
+}
+
 async function signIn(page: Page, email: string, opts: { twoFactor?: boolean } = {}) {
+  await ownClientIp(page);
   await page.goto('/');
   await expect(page).toHaveURL(/\/sign-in$/);
   await page.getByLabel('Email').fill(email);

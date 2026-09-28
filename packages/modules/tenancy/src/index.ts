@@ -90,7 +90,6 @@ export {
   organizationDefaultsTx,
   organizationNameTx,
   organizationPublicTx,
-  orgOwnerIdsTx,
   resolveOrgSlug,
   twoFactorRequiredBy,
 } from './queries.ts';

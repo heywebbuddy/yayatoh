@@ -2,10 +2,10 @@
 
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { type ReactNode, useActionState } from 'react';
+import type { ReactNode } from 'react';
 import type { SettingsState } from '@/app/[locale]/o/[org]/(org)/settings/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
-import { useStepUpAction } from './step-up.tsx';
+import { useStepUpActionState } from './step-up.tsx';
 
 /**
  * A settings section's form: server action, saved/error feedback, one submit button. A step-up
@@ -25,10 +25,9 @@ export function SettingsForm({
   className?: string;
 }) {
   const t = useTranslations();
-  const stepUp = useStepUpAction(action);
-  const [state, formAction, pending] = useActionState(stepUp.action, { ok: false, code: null });
+  const [state, formAction, pending, formRef] = useStepUpActionState(action, { ok: false, code: null });
   return (
-    <form ref={stepUp.formRef} action={formAction} className={className ?? 'flex flex-col gap-4'}>
+    <form ref={formRef} action={formAction} className={className ?? 'flex flex-col gap-4'}>
       {children}
       <div aria-live="polite">
         {state.ok ? <Alert tone="info" title={savedLabel} /> : null}

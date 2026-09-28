@@ -1,5 +1,4 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
-import { getUsersByIds } from '@yayatoh/auth';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -40,7 +39,6 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
     releaseCancelledSeats(),
-    // TODO(M1.2c): port to the notifier (M1.10 retired the platform Mailer).
     payoutDestinationMailer({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

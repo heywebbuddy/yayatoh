@@ -54,7 +54,10 @@
       "notifications": {
         "test": "測試通知：通知功能正常"
       },
-      "other": "通知"
+      "other": "通知",
+      "payments": {
+        "destination-changed": "新的撥款帳戶：匯入此帳戶的轉帳將於 {until} 之後開始"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "測試通知"
+      },
+      "payments": {
+        "destination-changed": "撥款帳戶變更"
       }
     },
     "status": {

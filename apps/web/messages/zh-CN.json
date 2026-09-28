@@ -54,7 +54,10 @@
       "notifications": {
         "test": "测试通知：通知功能正常"
       },
-      "other": "通知"
+      "other": "通知",
+      "payments": {
+        "destination-changed": "新的收款账户：向该账户的转账将在 {until} 之后开始"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "测试通知"
+      },
+      "payments": {
+        "destination-changed": "收款账户变更"
       }
     },
     "status": {

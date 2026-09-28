@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Testmelding: meldingen werken"
       },
-      "other": "Melding"
+      "other": "Melding",
+      "payments": {
+        "destination-changed": "Nieuwe uitbetaalrekening: overboekingen ernaartoe beginnen pas na {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Testmelding"
+      },
+      "payments": {
+        "destination-changed": "Wijziging van de uitbetaalrekening"
       }
     },
     "status": {

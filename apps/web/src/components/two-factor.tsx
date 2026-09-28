@@ -14,7 +14,7 @@ import {
 } from '@/app/[locale]/account/security/actions.ts';
 import { Link, useRouter } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
-import { useStepUp, useStepUpAction } from './step-up.tsx';
+import { useStepUp, useStepUpActionState } from './step-up.tsx';
 
 /** Localized text for the codes packages/auth answers with. */
 function useCodeMessage() {
@@ -106,6 +106,7 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
     code: null,
   });
   const keyId = useId();
+  const errorId = useId();
 
   const begin = () =>
     startTransition(async () => {
@@ -160,6 +161,7 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
             <p className="flex flex-wrap items-center gap-2">
               <code
                 id={keyId}
+                data-testid="setup-key"
                 dir="ltr"
                 className="rounded-md bg-zinc-100 px-2 py-1 font-mono text-body tracking-wide select-all"
               >
@@ -172,7 +174,9 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
         <li>
           <form action={formAction} className="flex flex-col gap-3" noValidate>
             <p className="text-body">{t('step2')}</p>
-            <div aria-live="polite">{state.code ? <Alert title={message(state.code) ?? ''} /> : null}</div>
+            <div id={errorId} aria-live="polite">
+              {state.code ? <Alert title={message(state.code) ?? ''} /> : null}
+            </div>
             <Input
               id="totp-code"
               name="code"
@@ -182,7 +186,8 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
               required
               autoFocus
               label={t('codeLabel')}
-              error={state.code === 'invalid_code' ? t('errors.invalid_code') : undefined}
+              aria-invalid={state.code === 'invalid_code' || undefined}
+              aria-describedby={state.code ? errorId : undefined}
             />
             <div className="flex flex-wrap gap-2">
               <Button type="submit" disabled={pending}>
@@ -204,6 +209,7 @@ export function TwoFactorOff() {
   const t = useTranslations('security');
   const message = useCodeMessage();
   const [open, setOpen] = useState(false);
+  const errorId = useId();
   const [state, formAction, pending] = useActionState<SecurityState, FormData>(disableAction, {
     ok: false,
     code: null,
@@ -217,7 +223,9 @@ export function TwoFactorOff() {
   return (
     <form action={formAction} className="flex flex-col gap-3" noValidate>
       <p className="text-body text-zinc-600">{t('turnOffExplain')}</p>
-      <div aria-live="polite">{state.code ? <Alert title={message(state.code) ?? ''} /> : null}</div>
+      <div id={errorId} aria-live="polite">
+        {state.code ? <Alert title={message(state.code) ?? ''} /> : null}
+      </div>
       <Input
         id="disable-code"
         name="code"
@@ -225,7 +233,8 @@ export function TwoFactorOff() {
         required
         autoFocus
         label={t('currentCodeLabel')}
-        error={state.code === 'invalid_code' ? t('errors.invalid_code') : undefined}
+        aria-invalid={state.code === 'invalid_code' || undefined}
+        aria-describedby={state.code ? errorId : undefined}
       />
       <div className="flex flex-wrap gap-2">
         <Button type="submit" disabled={pending}>
@@ -245,13 +254,23 @@ export function RegenerateCodes({ left }: { left: number }) {
   const message = useCodeMessage();
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
-  const { action, formRef } = useStepUpAction<CodesState>(regenerateCodesAction);
-  const [state, formAction, pending] = useActionState<CodesState, FormData>(action, {
+  const [state, formAction, pending, formRef] = useStepUpActionState<CodesState>(regenerateCodesAction, {
     ok: false,
     code: null,
   });
-  if (state.ok && state.backupCodes)
-    return <BackupCodes codes={state.backupCodes} onDone={() => router.refresh()} />;
+  // The new codes stay on screen until the person says they saved them (then never again).
+  const [saved, setSaved] = useState<readonly string[] | null>(null);
+  if (state.ok && state.backupCodes && saved !== state.backupCodes)
+    return (
+      <BackupCodes
+        codes={state.backupCodes}
+        onDone={() => {
+          setSaved(state.backupCodes ?? null);
+          setConfirming(false);
+          router.refresh();
+        }}
+      />
+    );
   return (
     <form ref={formRef} action={formAction} className="flex flex-col gap-3">
       <p className="text-body text-zinc-600">{t('codesLeft', { count: left })}</p>

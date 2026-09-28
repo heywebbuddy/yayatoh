@@ -20,6 +20,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
     "drizzle-orm": "catalog:",
     "stripe": "catalog:",
     "zod": "catalog:"

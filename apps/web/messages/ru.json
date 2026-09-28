@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Тестовое уведомление: уведомления работают"
       },
-      "other": "Уведомление"
+      "other": "Уведомление",
+      "payments": {
+        "destination-changed": "Новый счёт для выплат: переводы на него начнутся после {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Тестовое уведомление"
+      },
+      "payments": {
+        "destination-changed": "Изменение счёта для выплат"
       }
     },
     "status": {

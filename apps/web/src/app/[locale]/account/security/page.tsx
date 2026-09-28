@@ -61,9 +61,11 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
             </ul>
           </section>
         ) : null}
-        <Card className="flex flex-col gap-4">
+        <Card role="region" aria-labelledby="app-heading" className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-section">{t('security.appTitle')}</h2>
+            <h2 id="app-heading" className="text-section">
+              {t('security.appTitle')}
+            </h2>
             <StatusDot
               status={status.enabled ? 'success' : 'neutral'}
               label={status.enabled ? t('security.statusOn') : t('security.statusOff')}
@@ -83,8 +85,10 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
           )}
         </Card>
         {status.enabled ? (
-          <Card className="flex flex-col gap-3">
-            <h2 className="text-section">{t('security.codesTitle')}</h2>
+          <Card role="region" aria-labelledby="codes-heading" className="flex flex-col gap-3">
+            <h2 id="codes-heading" className="text-section">
+              {t('security.codesTitle')}
+            </h2>
             <RegenerateCodes left={status.backupCodesLeft} />
           </Card>
         ) : null}

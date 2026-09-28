@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Test notification: notifications are working"
       },
-      "other": "Notification"
+      "other": "Notification",
+      "payments": {
+        "destination-changed": "New payout account: transfers to it start after {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Test notification"
+      },
+      "payments": {
+        "destination-changed": "Payout account change"
       }
     },
     "status": {

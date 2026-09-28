@@ -1,13 +1,19 @@
 import { expect, test } from '@playwright/test';
-import { OWNER } from './helpers.ts';
+import { OWNER, ownClientIp, personaCode } from './helpers.ts';
 
 test.describe('sign-in', () => {
+  test.beforeEach(async ({ context }) => ownClientIp(context));
+
   test('a user signs in with email and password and lands in their org', async ({ page }) => {
     test.skip(!process.env.DEV_PERSONA_PASSWORD, 'needs the seeded persona password');
     await page.goto('/sign-in');
     await page.getByLabel('Email').fill(OWNER);
     await page.getByLabel('Password').fill(process.env.DEV_PERSONA_PASSWORD as string);
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    // Owners use two-step verification (M1.2c): the authenticator code comes next.
+    await expect(page.getByRole('heading', { name: 'Two-step verification' })).toBeVisible();
+    await page.getByLabel('6-digit code').fill(personaCode(OWNER));
+    await page.getByRole('button', { name: 'Verify and sign in' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events$/);
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Pani');
   });

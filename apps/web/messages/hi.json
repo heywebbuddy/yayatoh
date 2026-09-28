@@ -54,7 +54,10 @@
       "notifications": {
         "test": "परीक्षण सूचना: सूचनाएँ काम कर रही हैं"
       },
-      "other": "सूचना"
+      "other": "सूचना",
+      "payments": {
+        "destination-changed": "नया भुगतान खाता: इस खाते में ट्रांसफ़र {until} के बाद शुरू होंगे"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "परीक्षण सूचना"
+      },
+      "payments": {
+        "destination-changed": "भुगतान खाते में बदलाव"
       }
     },
     "status": {

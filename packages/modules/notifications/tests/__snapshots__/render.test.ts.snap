@@ -2028,6 +2028,240 @@ Amina Diallo，您好：
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · ar 1`] = `
+{
+  "subject": "حساب جديد لاستلام مدفوعات Lakeside Events",
+  "text": "حساب جديد لاستلام مدفوعات Lakeside Events
+
+مرحبًا،
+
+تم ربط حساب لاستلام المدفوعات بـ Lakeside Events. حرصًا على أمانك، لن تُحوَّل إليه أي أموال قبل 13‏/06‏/2027، 10:00 ص. إذا لم تُجرِ هذا التغيير، فتواصل مع دعم Yayatoh فورًا.
+
+مراجعة المدفوعات: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · de 1`] = `
+{
+  "subject": "Neues Auszahlungskonto für Lakeside Events",
+  "text": "Neues Auszahlungskonto für Lakeside Events
+
+Hallo,
+
+Ein Auszahlungskonto wurde mit Lakeside Events verbunden. Zu deiner Sicherheit wird vor dem 13.06.2027, 10:00 kein Geld darauf überwiesen. Wenn du diese Änderung nicht vorgenommen hast, wende dich sofort an den Yayatoh-Support.
+
+Auszahlungen prüfen: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · en 1`] = `
+{
+  "subject": "A new payout account for Lakeside Events",
+  "text": "A new payout account for Lakeside Events
+
+Hello,
+
+A payout account was connected to Lakeside Events. For your security, no money is sent to it before Jun 13, 2027, 10:00 AM. If you didn't make this change, contact Yayatoh support right away.
+
+Review payouts: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · es 1`] = `
+{
+  "subject": "Nueva cuenta de pagos para Lakeside Events",
+  "text": "Nueva cuenta de pagos para Lakeside Events
+
+Hola:
+
+Se conectó una cuenta de pagos a Lakeside Events. Por tu seguridad, no se le enviará dinero antes del 13 jun 2027, 10:00. Si no hiciste este cambio, contacta de inmediato con el soporte de Yayatoh.
+
+Revisar pagos: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · fr 1`] = `
+{
+  "subject": "Nouveau compte de versement pour Lakeside Events",
+  "text": "Nouveau compte de versement pour Lakeside Events
+
+Bonjour,
+
+Un compte de versement a été associé à Lakeside Events. Par sécurité, aucun virement n'y sera effectué avant le 13 juin 2027, 10:00. Si vous n'êtes pas à l'origine de ce changement, contactez immédiatement l'assistance Yayatoh.
+
+Voir les versements: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · hi 1`] = `
+{
+  "subject": "Lakeside Events के लिए नया भुगतान खाता",
+  "text": "Lakeside Events के लिए नया भुगतान खाता
+
+नमस्ते,
+
+Lakeside Events से एक भुगतान खाता जोड़ा गया है। आपकी सुरक्षा के लिए, 13 जून 2027, 10:00 am से पहले इसमें कोई पैसा नहीं भेजा जाएगा। अगर यह बदलाव आपने नहीं किया है, तो तुरंत Yayatoh सहायता से संपर्क करें।
+
+भुगतान देखें: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · it 1`] = `
+{
+  "subject": "Nuovo conto per i pagamenti di Lakeside Events",
+  "text": "Nuovo conto per i pagamenti di Lakeside Events
+
+Ciao,
+
+È stato collegato un conto per i pagamenti a Lakeside Events. Per sicurezza, non verrà inviato denaro prima del 13 giu 2027, 10:00. Se non hai effettuato tu questa modifica, contatta subito l'assistenza Yayatoh.
+
+Controlla i pagamenti: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · ja 1`] = `
+{
+  "subject": "Lakeside Events の新しい振込先口座",
+  "text": "Lakeside Events の新しい振込先口座
+
+こんにちは。
+
+Lakeside Events に振込先口座が接続されました。安全のため、2027/06/13 10:00 より前にこの口座へ送金されることはありません。この変更に心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。
+
+振込を確認: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · nl 1`] = `
+{
+  "subject": "Nieuwe uitbetalingsrekening voor Lakeside Events",
+  "text": "Nieuwe uitbetalingsrekening voor Lakeside Events
+
+Hallo,
+
+Er is een uitbetalingsrekening gekoppeld aan Lakeside Events. Voor je veiligheid wordt er vóór 13 jun 2027, 10:00 geen geld naar overgemaakt. Heb je deze wijziging niet zelf gedaan? Neem dan meteen contact op met Yayatoh-support.
+
+Uitbetalingen bekijken: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · pt 1`] = `
+{
+  "subject": "Nova conta de repasses para Lakeside Events",
+  "text": "Nova conta de repasses para Lakeside Events
+
+Olá!
+
+Uma conta de repasses foi conectada a Lakeside Events. Para sua segurança, nenhum dinheiro será enviado a ela antes de 13 de jun. de 2027, 10:00. Se você não fez essa alteração, entre em contato com o suporte da Yayatoh imediatamente.
+
+Ver repasses: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · ru 1`] = `
+{
+  "subject": "Новый счёт для выплат Lakeside Events",
+  "text": "Новый счёт для выплат Lakeside Events
+
+Здравствуйте!
+
+К Lakeside Events подключён счёт для выплат. В целях безопасности деньги на него не будут переводиться до 13 июн. 2027 г., 10:00. Если вы не вносили это изменение, немедленно свяжитесь со службой поддержки Yayatoh.
+
+Проверить выплаты: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · zh-CN 1`] = `
+{
+  "subject": "Lakeside Events 的新收款账户",
+  "text": "Lakeside Events 的新收款账户
+
+您好：
+
+已为 Lakeside Events 关联收款账户。为了您的安全，在 2027年6月13日 10:00 之前不会向该账户转账。如果这不是您本人所做的更改，请立即联系 Yayatoh 支持。
+
+查看付款: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.destination-changed · zh-TW 1`] = `
+{
+  "subject": "Lakeside Events 的新收款帳戶",
+  "text": "Lakeside Events 的新收款帳戶
+
+您好：
+
+已為 Lakeside Events 連結收款帳戶。為了您的安全，在 2027年6月13日 上午10:00 之前不會轉帳至此帳戶。如果這不是您本人所做的變更，請立即聯絡 Yayatoh 支援。
+
+查看撥款: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > sales.order_paid · ar 1`] = `
 {
   "subject": "طلب جديد: Amina Diallo",

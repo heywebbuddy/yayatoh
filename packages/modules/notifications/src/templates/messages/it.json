@@ -72,6 +72,11 @@
       "subject": "Nuovo messaggio da {name}",
       "intro": "{name} ti ha scritto su {eventName}."
     },
+    "payments.destination-changed": {
+      "subject": "Nuovo conto per i pagamenti di {org}",
+      "intro": "{reason, select, bank_changed {Il conto bancario che riceve i pagamenti di {org} è stato modificato.} other {È stato collegato un conto per i pagamenti a {org}.}} Per sicurezza, non verrà inviato denaro prima del {until}. Se non hai effettuato tu questa modifica, contatta subito l'assistenza Yayatoh.",
+      "cta": "Controlla i pagamenti"
+    },
     "notifications.test": {
       "subject": "Notifica di prova",
       "intro": "Le notifiche funzionano."

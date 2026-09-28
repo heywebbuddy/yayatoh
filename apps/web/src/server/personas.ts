@@ -16,10 +16,34 @@ export interface Persona {
 }
 
 export const PERSONAS: readonly Persona[] = [
-  { email: 'pani@lakeside.test', name: 'Pani Digital', orgSlug: 'lakeside-events', role: 'owner', twoFactor: true },
-  { email: 'jordan@lakeside.test', name: 'Jordan Lee', orgSlug: 'lakeside-events', role: 'viewer', twoFactor: false },
-  { email: 'maya@rosewood.test', name: 'Maya Chen', orgSlug: 'rosewood-weddings', role: 'owner', twoFactor: true },
-  { email: 'sam@rosewood.test', name: 'Sam Rivera', orgSlug: 'rosewood-weddings', role: 'viewer', twoFactor: false },
+  {
+    email: 'pani@lakeside.test',
+    name: 'Pani Digital',
+    orgSlug: 'lakeside-events',
+    role: 'owner',
+    twoFactor: true,
+  },
+  {
+    email: 'jordan@lakeside.test',
+    name: 'Jordan Lee',
+    orgSlug: 'lakeside-events',
+    role: 'viewer',
+    twoFactor: false,
+  },
+  {
+    email: 'maya@rosewood.test',
+    name: 'Maya Chen',
+    orgSlug: 'rosewood-weddings',
+    role: 'owner',
+    twoFactor: true,
+  },
+  {
+    email: 'sam@rosewood.test',
+    name: 'Sam Rivera',
+    orgSlug: 'rosewood-weddings',
+    role: 'viewer',
+    twoFactor: false,
+  },
   // A public organizer with a tenant site and a full calendar (marketplace, M1.11).
   { email: 'lee@harbor.test', name: 'Lee Harbor', orgSlug: 'harbor-arts', role: 'owner', twoFactor: true },
   // A newcomer who will own the organization she signs up.

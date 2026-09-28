@@ -54,7 +54,10 @@
       "notifications": {
         "test": "Notifica di prova: le notifiche funzionano"
       },
-      "other": "Notifica"
+      "other": "Notifica",
+      "payments": {
+        "destination-changed": "Nuovo conto per i pagamenti: i trasferimenti verso questo conto iniziano dopo il {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -84,6 +87,9 @@
       },
       "notifications": {
         "test": "Notifica di prova"
+      },
+      "payments": {
+        "destination-changed": "Modifica del conto per i pagamenti"
       }
     },
     "status": {

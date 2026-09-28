@@ -5,6 +5,7 @@ import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import {
   createContext,
+  type FormEvent,
   type FormHTMLAttributes,
   type ReactNode,
   useActionState,
@@ -69,12 +70,11 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const descId = useId();
+  const errorId = useId();
   const [method, setMethod] = useState<StepUpMethod | null>(null);
   const [resent, setResent] = useState(false);
-  const [state, formAction, pending] = useActionState<StepUpState, FormData>(confirmStepUpAction, {
-    ok: false,
-    code: null,
-  });
+  const [code, setCode] = useState<StepUpState['code']>(null);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     const d = ref.current;
@@ -97,18 +97,37 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
     [onDone],
   );
 
-  useEffect(() => {
-    if (state.ok) finish(true);
-  }, [state.ok, finish]);
+  // A plain submit handler, not a form action: the form that opened this dialog is still inside
+  // its own (async) transition, and React holds state from transitions until all of them end.
+  // Resolving the confirmation here, outside any transition, lets that form continue.
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (busy || !method) return;
+    const form = e.currentTarget;
+    setBusy(true);
+    setResent(false);
+    try {
+      const r = await confirmStepUpAction({ ok: false, code: null }, new FormData(form));
+      if (r.ok) return finish(true);
+      setCode(r.code);
+      const field = form.querySelector<HTMLInputElement>('input[name="code"], input[name="password"]');
+      if (field) {
+        field.value = '';
+        field.focus();
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
 
   const error =
-    state.code === 'invalid_password'
+    code === 'invalid_password'
       ? t('invalidPassword')
-      : state.code === 'rate_limited'
+      : code === 'rate_limited'
         ? t('rateLimited')
-        : state.code === 'unauthenticated'
+        : code === 'unauthenticated'
           ? t('unauthenticated')
-          : state.code
+          : code
             ? t('invalidCode')
             : null;
 
@@ -123,7 +142,7 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
       }}
       className="m-auto w-[min(440px,calc(100vw-2rem))] rounded-panel border border-zinc-200 bg-white p-6 text-zinc-900 shadow-xl backdrop:bg-zinc-900/40"
     >
-      <form action={formAction} className="flex flex-col gap-4">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
         <h2 id={titleId} className="text-section">
           {t('title')}
         </h2>
@@ -131,7 +150,7 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
           <p>{t('why')}</p>
           {method ? <p>{t(`explain.${method}`)}</p> : <p aria-live="polite">{t('loading')}</p>}
         </div>
-        <div aria-live="polite">
+        <div id={errorId} aria-live="polite">
           {error ? <Alert title={error} /> : null}
           {resent && !error ? <Alert tone="info" title={t('resent')} /> : null}
         </div>
@@ -146,6 +165,8 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
             required
             autoFocus
             label={t('passwordLabel')}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? errorId : undefined}
           />
         ) : method ? (
           <Input
@@ -158,10 +179,16 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
             autoFocus
             label={t('codeLabel')}
             hint={method === 'totp' ? t('codeHint') : undefined}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={
+              [error ? errorId : null, method === 'totp' ? 'step-up-code-hint' : null]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
           />
         ) : null}
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="submit" disabled={pending || !method}>
+          <Button type="submit" disabled={busy || !method}>
             {t('confirm')}
           </Button>
           <Button variant="secondary" onClick={() => finish(false)}>
@@ -171,6 +198,7 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
             <Button
               variant="ghost"
               onClick={async () => {
+                setCode(null);
                 await beginStepUpAction();
                 setResent(true);
               }}
@@ -207,38 +235,42 @@ function refill(form: HTMLFormElement, fd: FormData) {
   }
 }
 
-function useRefill() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [restore, setRestore] = useState<FormData | null>(null);
-  useEffect(() => {
-    if (restore && formRef.current) {
-      refill(formRef.current, restore);
-      setRestore(null);
-    }
-  }, [restore]);
-  return { formRef, setRestore };
-}
-
-type Coded = { readonly code: string | null };
+/** The error code an action state carries, if any (`{ code }` states, or union states with one). */
+const codeOf = (s: unknown): string | null =>
+  s && typeof s === 'object' && 'code' in s && typeof s.code === 'string' ? s.code : null;
 
 /**
- * For `useActionState` forms: wraps the Server Action so a `step_up_required` answer opens the
- * dialog and, once confirmed, retries with the same values. Attach `formRef` to the form.
+ * `useActionState` for forms whose Server Action may answer `step_up_required`: the dialog opens
+ * and, once confirmed, the same submission is sent again. When the action still answers with a
+ * code (cancelled, or another error), what was typed is put back: React resets a form after its
+ * action, so the refill runs in an effect after the result is committed. Attach `formRef`.
  */
-export function useStepUpAction<S extends Coded>(action: (prev: S, form: FormData) => Promise<S>) {
+export function useStepUpActionState<S>(action: (prev: S, form: FormData) => Promise<S>, initial: S) {
   const stepUp = useContext(StepUpContext);
-  const { formRef, setRestore } = useRefill();
+  const formRef = useRef<HTMLFormElement>(null);
+  const refillWith = useRef<FormData | null>(null);
   const wrapped = useCallback(
     async (prev: S, form: FormData): Promise<S> => {
       const first = await action(prev, form);
-      if (first.code !== 'step_up_required' || !stepUp) return first;
-      const result = (await stepUp.confirm()) ? await action(prev, form) : first;
-      if (result.code) setRestore(form);
+      const result =
+        codeOf(first) === 'step_up_required' && stepUp && (await stepUp.confirm())
+          ? await action(prev, form)
+          : first;
+      refillWith.current = codeOf(result) ? form : null;
       return result;
     },
-    [action, stepUp, setRestore],
+    [action, stepUp],
   );
-  return { action: wrapped, formRef };
+  // States are plain objects, never promises: Awaited<S> is S.
+  type Reducer = (prev: Awaited<S>, form: FormData) => Promise<Awaited<S>>;
+  const [state, formAction, pending] = useActionState(wrapped as unknown as Reducer, initial as Awaited<S>);
+  useEffect(() => {
+    const fd = refillWith.current;
+    if (!fd || !formRef.current || !state) return;
+    refillWith.current = null;
+    refill(formRef.current, fd);
+  }, [state]);
+  return [state, formAction, pending, formRef] as const;
 }
 
 export type StepUpActionResult = { readonly code: string | null } | undefined;
@@ -256,24 +288,17 @@ export function StepUpForm({
   children: ReactNode;
 } & Omit<FormHTMLAttributes<HTMLFormElement>, 'action' | 'children'>) {
   const t = useTranslations();
-  const stepUp = useContext(StepUpContext);
-  const { formRef, setRestore } = useRefill();
-  const [code, setCode] = useState<string | null>(null);
-  const run = async (form: FormData) => {
-    setCode(null);
-    let r = await action(form);
-    if (r?.code === 'step_up_required' && stepUp && (await stepUp.confirm())) r = await action(form);
-    if (r?.code) {
-      setRestore(form);
-      setCode(r.code);
-    }
-  };
+  const run = useCallback(
+    async (_prev: { code: string | null }, form: FormData) => ({ code: (await action(form))?.code ?? null }),
+    [action],
+  );
+  const [state, formAction, , formRef] = useStepUpActionState(run, { code: null });
   return (
-    <form ref={formRef} action={run} {...props}>
+    <form ref={formRef} action={formAction} {...props}>
       {children}
-      {code ? (
+      {state.code ? (
         <div aria-live="polite" className="basis-full">
-          <Alert title={t(errorMessageKey(code))} />
+          <Alert title={t(errorMessageKey(state.code))} />
         </div>
       ) : null}
     </form>
