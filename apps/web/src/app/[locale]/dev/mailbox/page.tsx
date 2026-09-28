@@ -63,9 +63,16 @@ export default async function DevMailboxPage({
                 <p className="text-section">{m.subject}</p>
                 <details>
                   <summary className="cursor-pointer text-body">{t('show')}</summary>
-                  <pre className="mt-2 overflow-x-auto whitespace-pre-wrap text-caption">{m.text}</pre>
+                  {/* biome-ignore lint/a11y/noNoninteractiveTabindex: a scroll container must be focusable (axe scrollable-region-focusable) */}
+                  <pre tabIndex={0} className="mt-2 overflow-x-auto whitespace-pre-wrap text-caption">
+                    {m.text}
+                  </pre>
                   {Object.keys(m.headers).length > 0 ? (
-                    <pre className="mt-2 overflow-x-auto whitespace-pre-wrap text-caption text-zinc-500">
+                    <pre
+                      // biome-ignore lint/a11y/noNoninteractiveTabindex: a scroll container must be focusable (axe scrollable-region-focusable)
+                      tabIndex={0}
+                      className="mt-2 overflow-x-auto whitespace-pre-wrap text-caption text-zinc-500"
+                    >
                       {Object.entries(m.headers)
                         .map(([k, v]) => `${k}: ${v}`)
                         .join('\n')}

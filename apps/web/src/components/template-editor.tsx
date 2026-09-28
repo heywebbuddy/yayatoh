@@ -64,7 +64,12 @@ export function TemplateEditor({
     return () => clearTimeout(timer);
   }, [values, preview]);
 
-  const errors: Partial<Record<TemplateField, string>> = { ...shown.errors, ...state.errors };
+  // The last save's errors apply to what was submitted; editing since makes them stale.
+  const submitted = state.values.subject === values.subject && state.values.intro === values.intro;
+  const errors: Partial<Record<TemplateField, string>> = {
+    ...shown.errors,
+    ...(submitted ? state.errors : {}),
+  };
   const describe = (f: TemplateField) =>
     [errors[f] ? `template-${f}-error` : null, `template-${f}-default`].filter(Boolean).join(' ');
   const input = (f: TemplateField, label: string) => (

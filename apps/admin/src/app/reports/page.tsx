@@ -21,6 +21,8 @@ export default async function ReportsPage({
   const status = sp.status === 'closed' ? 'closed' : 'open';
   const t = await getTranslations('reports');
   const rows = await messagingReports(staff, status);
+  const noteError = (id: string) =>
+    sp.report === id && (sp.error === 'note_required' || sp.error === 'note_too_long');
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const tab = (s: 'open' | 'closed') => (
     <Link
@@ -109,10 +111,15 @@ export default async function ReportsPage({
                         name="note"
                         rows={2}
                         maxLength={1000}
-                        required
-                        aria-invalid={sp.report === r.id && sp.error?.startsWith('note_') ? true : undefined}
+                        aria-invalid={noteError(r.id) ? true : undefined}
+                        aria-describedby={noteError(r.id) ? `note-${r.id}-error` : undefined}
                         className="rounded-card border border-zinc-200 bg-white px-3 py-2 text-body"
                       />
+                      {noteError(r.id) ? (
+                        <p id={`note-${r.id}-error`} className="text-caption text-pink-700">
+                          {t(`errors.${sp.error}`)}
+                        </p>
+                      ) : null}
                       <div className="flex flex-wrap gap-2">
                         <Button type="submit" name="decision" value="resolved">
                           {t('resolve')}
