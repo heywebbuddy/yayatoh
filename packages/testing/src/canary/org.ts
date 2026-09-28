@@ -206,11 +206,12 @@ async function fill(admin: CanaryAdmin, orgId: string): Promise<Record<string, n
         filled[c.id] = rows.length;
         continue;
       }
-      const suffix = `case when r.n = 1 then '' else r.n::text end`;
+      // A stable per-row suffix: unique columns stay unique and a refill writes the same values.
+      const suffix = `r.n::text`;
       const value = {
         text: `$2 || ${suffix}`,
         email: `lower($2) || ${suffix} || '@canary.test'`,
-        phone: `'${PHONE_PREFIX}${Math.max(0, phones.indexOf(c.id))}' || lpad(r.n::text, 3, '0') || left($2, 0)`,
+        phone: `'${PHONE_PREFIX}${Math.max(0, phones.indexOf(c.id))}' || lpad((r.n % 1000)::text, 3, '0') || left($2, 0)`,
         url: `'https://canary.test/' || $2 || ${suffix}`,
         path: `'/' || $2 || ${suffix}`,
         code: `'CANARY_${String(codes.indexOf(c.id)).padStart(2, '0')}_' || r.n::text || left($2, 0)`,
@@ -218,10 +219,12 @@ async function fill(admin: CanaryAdmin, orgId: string): Promise<Record<string, n
                  when 'object' then t.${col} || jsonb_build_object('__canary', $2 || ${suffix})
                  when 'array' then t.${col} || jsonb_build_array($2 || ${suffix})
                  else jsonb_build_object('__canary', $2 || ${suffix}) end`,
-        array: `array_append(coalesce(t.${col}, '{}'), $2 || ${suffix})`,
+        // Idempotent (a refill on a reused org must not grow the array).
+        array: `case when ($2 || ${suffix}) = any(coalesce(t.${col}, '{}')) then t.${col}
+                 else array_append(coalesce(t.${col}, '{}'), $2 || ${suffix}) end`,
       }[seed];
       const res = await tx.unsafe(
-        `with r as (select ctid, row_number() over (order by ctid) as n from ${table} where ${where})
+        `with r as (select ctid, abs(hashtext(id::text)) % 100000000 as n from ${table} where ${where})
          update ${table} t set ${col} = ${value} from r where t.ctid = r.ctid returning 1`,
         [orgId, token],
       );

@@ -544,6 +544,9 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3

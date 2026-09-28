@@ -27,7 +27,7 @@ export interface CrawlResult {
   readonly errors: readonly { url: string; status: number }[];
 }
 
-const ATTR = /\b(?:href|src|action|content)\s*=\s*["']([^"']+)["']/gi;
+const ATTR = /\b(?:href|src|action)\s*=\s*["']([^"']+)["']/gi;
 const LOC = /<loc>\s*([^<\s]+)\s*<\/loc>/gi;
 const SITEMAP_LINE = /^\s*Sitemap:\s*(\S+)/gim;
 

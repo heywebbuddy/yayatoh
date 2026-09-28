@@ -3,6 +3,7 @@ import { keyVault } from '@yayatoh/platform';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   canaryToken,
+  EXPORT_ALLOW,
   findCanaries,
   formatLeaks,
   leaksIn,
@@ -114,18 +115,3 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 });
-
-/** What each export may show of the org's own data (the console's download columns). */
-const EXPORT_ALLOW = {
-  attendees: [
-    'attendees.attendees.name',
-    'attendees.attendees.email',
-    'attendees.attendees.labels',
-    'ticketing.tickets.short_code',
-  ],
-  bookings: ['orders.orders.buyer_name', 'orders.orders.buyer_email', 'orders.orders.promo_code'],
-  // The access request is the person's own data (their guest record and organizer labels).
-  dsar: ['attendees.attendees.name', 'attendees.attendees.email', 'attendees.attendees.labels'],
-  // The activity log for owners and admins: who did it and to what.
-  audit: ['platform.audit_events.actor', 'platform.audit_events.target_id'],
-} as const satisfies Record<string, readonly string[]>;
