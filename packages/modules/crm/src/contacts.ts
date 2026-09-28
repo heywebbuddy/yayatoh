@@ -121,3 +121,67 @@ export async function contactUserIdsTx(
     .where(inArray(contacts.id, [...contactIds]));
   return new Map(rows.filter((r) => r.userId).map((r) => [r.id, r.userId as string]));
 }
+
+/** The latest consent row per (channel, purpose) for a contact, with its evidence (M3.5a). */
+export async function consentSummaryTx(
+  tx: TenantTx,
+  contactId: string,
+): Promise<Map<string, { status: ConsentInput['status']; evidence: string; capturedAt: Date }>> {
+  const rows = await tx
+    .select({
+      channel: consents.channel,
+      purpose: consents.purpose,
+      status: consents.status,
+      evidence: consents.evidence,
+      capturedAt: consents.capturedAt,
+    })
+    .from(consents)
+    .where(eq(consents.contactId, contactId))
+    .orderBy(desc(consents.capturedAt), desc(consents.id));
+  const out = new Map<string, { status: ConsentInput['status']; evidence: string; capturedAt: Date }>();
+  for (const r of rows) {
+    const key = `${r.channel}:${r.purpose}`;
+    if (!out.has(key))
+      out.set(key, {
+        status: r.status as ConsentInput['status'],
+        evidence: r.evidence,
+        capturedAt: r.capturedAt,
+      });
+  }
+  return out;
+}
+
+/** A contact's email, name and phone (the preference center, M3.5a); null when unknown. */
+export async function contactByIdTx(
+  tx: TenantTx,
+  contactId: string,
+): Promise<{ id: string; email: string; name: string | null; phoneE164: string | null } | null> {
+  const [row] = await tx
+    .select({ id: contacts.id, email: contacts.email, name: contacts.name, phoneE164: contacts.phoneE164 })
+    .from(contacts)
+    .where(eq(contacts.id, contactId));
+  return row ?? null;
+}
+
+/** Contacts' phone numbers (texts to attendees, M3.5a). */
+export async function contactPhonesTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, string>> {
+  if (contactIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: contacts.id, phone: contacts.phoneE164 })
+    .from(contacts)
+    .where(inArray(contacts.id, [...contactIds]));
+  return new Map(rows.filter((r) => r.phone).map((r) => [r.id, r.phone as string]));
+}
+
+/** Set (or clear) a contact's E.164 phone number. */
+export async function setContactPhoneTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  contactId: string,
+  phoneE164: string | null,
+): Promise<void> {
+  await tx.update(contacts).set({ phoneE164, updatedAt: ctx.now }).where(eq(contacts.id, contactId));
+}

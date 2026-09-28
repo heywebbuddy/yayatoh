@@ -49,7 +49,9 @@ import {
   memoryTransports,
   recordDeliveryEventsCommand,
   registerPushTokenCommand,
+  setFrequencyCapsCommand,
   setMyPreferencesCommand,
+  setQuotaLimitCommand,
   setTemplateOverrideCommand,
   storeEmailPreviewCommand,
   unsubscribeCommand,
@@ -650,6 +652,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { kind: 'orders.tickets', locale: 'en', subject: `Tickets from ${name}`, intro: null },
     ctx(),
     ports,
+  );
+  // Messaging policy (M3.5a): a staff quota limit, the org's own caps and a (lifted) auto-pause
+  // record; the sends above already metered usage (isolation coverage).
+  await executeCommand(
+    setQuotaLimitCommand,
+    { channel: 'sms', monthlyLimit: 250, reason: 'fixture limit' },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    setFrequencyCapsCommand,
+    { caps: [{ scope: 'marketing', maxMessages: 1, windowHours: 72 }] },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into notifications.auto_pauses
+      (org_id, complaints, sent, rate_bps, window_start, lifted_at, lifted_by, lift_note)
+      values (${org.id}, 2, 400, 50, now() - interval '1 day', now(), 'system:fixture', 'fixture lift')`),
   );
   // Messaging (M1.10c): an announcement fanned out to the event's attendees, a contact's reply,
   // and a report from each side (isolation coverage).

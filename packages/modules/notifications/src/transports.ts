@@ -34,6 +34,22 @@ export interface SmsTransport {
   send(message: OutboundSms): Promise<{ readonly providerMessageId: string }>;
 }
 
+/**
+ * WhatsApp (M3.5a port; D16 / 2026-09-28: one port, two adapters — the Cloud API for new
+ * tenants and the owner's gateway for existing flows — both arrive in M3.5b). `category` is the
+ * template category Meta bills and reviews (utility, marketing, authentication).
+ */
+export interface OutboundWhatsApp {
+  readonly to: string;
+  readonly body: string;
+  readonly category: 'utility' | 'marketing' | 'authentication';
+  readonly idempotencyKey: string;
+}
+
+export interface WhatsAppTransport {
+  send(message: OutboundWhatsApp): Promise<{ readonly providerMessageId: string }>;
+}
+
 export interface OutboundPush {
   readonly platform: 'fcm' | 'apns' | 'webpush';
   readonly token: string;
@@ -53,6 +69,7 @@ export interface PushTransport {
 export interface Transports {
   readonly email: EmailTransport;
   readonly sms?: SmsTransport;
+  readonly whatsapp?: WhatsAppTransport;
   readonly push?: PushTransport;
 }
 
@@ -64,6 +81,7 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
   const emails: OutboundEmail[] = [];
   const sms: OutboundSms[] = [];
   const pushes: OutboundPush[] = [];
+  const whatsapp: OutboundWhatsApp[] = [];
   const invalid = new Set<string>();
   const wait = () => (opts.delayMs ? new Promise((r) => setTimeout(r, opts.delayMs)) : Promise.resolve());
   const transports: Transports = {
@@ -80,6 +98,12 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
         return { providerMessageId: `mem-sms-${sms.length}` };
       },
     },
+    whatsapp: {
+      async send(m) {
+        whatsapp.push(m);
+        return { providerMessageId: `mem-wa-${whatsapp.length}` };
+      },
+    },
     push: {
       async send(m) {
         if (invalid.has(m.token)) return { error: 'invalid_token' as const };
@@ -88,13 +112,13 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
       },
     },
   };
-  return { transports, emails, sms, pushes, invalid };
+  return { transports, emails, sms, whatsapp, pushes, invalid };
 }
 
 export interface DevMailboxEntry extends OutboundEmail {
   readonly id: string;
   readonly at: string;
-  readonly channel: 'email' | 'sms' | 'push';
+  readonly channel: 'email' | 'sms' | 'whatsapp' | 'push';
 }
 
 export const devMailboxDir = () => process.env.DEV_MAILBOX_DIR ?? join(tmpdir(), 'yayatoh-dev-mailbox');
@@ -162,6 +186,16 @@ export function devMailboxTransports(
     sms: {
       send: async (m) =>
         write('sms', { ...blank, to: m.to, subject: '', text: m.body, idempotencyKey: m.idempotencyKey }),
+    },
+    whatsapp: {
+      send: async (m) =>
+        write('whatsapp', {
+          ...blank,
+          to: m.to,
+          subject: m.category,
+          text: m.body,
+          idempotencyKey: m.idempotencyKey,
+        }),
     },
     push: {
       send: async (m) =>

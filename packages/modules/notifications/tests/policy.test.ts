@@ -136,19 +136,40 @@ describe('frequency caps', () => {
     sentAt: new Date(now.getTime() - h * 3_600_000),
   });
   it('under the cap: send', () => {
-    expect(capVerdict({ category: 'event_updates', recent: [ago(1), ago(2)], caps: DEFAULT_CAPS, now })).toBeNull();
+    expect(
+      capVerdict({ category: 'event_updates', recent: [ago(1), ago(2)], caps: DEFAULT_CAPS, now }),
+    ).toBeNull();
   });
   it('event updates over the cap wait until the oldest counted message leaves the window', () => {
-    const v = capVerdict({ category: 'event_updates', recent: [ago(1), ago(5), ago(20)], caps: DEFAULT_CAPS, now });
-    expect(v).toEqual({ action: 'hold', reason: 'frequency_cap', until: new Date(now.getTime() + 4 * 3_600_000 + 1000) });
+    const v = capVerdict({
+      category: 'event_updates',
+      recent: [ago(1), ago(5), ago(20)],
+      caps: DEFAULT_CAPS,
+      now,
+    });
+    expect(v).toEqual({
+      action: 'hold',
+      reason: 'frequency_cap',
+      until: new Date(now.getTime() + 4 * 3_600_000 + 1000),
+    });
   });
   it('marketing over the cap is skipped, not deferred', () => {
     expect(
-      capVerdict({ category: 'marketing', recent: [ago(1, 'marketing'), ago(100, 'marketing')], caps: DEFAULT_CAPS, now }),
+      capVerdict({
+        category: 'marketing',
+        recent: [ago(1, 'marketing'), ago(100, 'marketing')],
+        caps: DEFAULT_CAPS,
+        now,
+      }),
     ).toEqual({ action: 'block', reason: 'frequency_cap' });
     // Outside its 7-day window: fine.
     expect(
-      capVerdict({ category: 'marketing', recent: [ago(1, 'marketing'), ago(200, 'marketing')], caps: DEFAULT_CAPS, now }),
+      capVerdict({
+        category: 'marketing',
+        recent: [ago(1, 'marketing'), ago(200, 'marketing')],
+        caps: DEFAULT_CAPS,
+        now,
+      }),
     ).toBeNull();
   });
   it('the org-wide cap counts every optional category', () => {
@@ -196,18 +217,26 @@ describe('consent and WhatsApp categories', () => {
       action: 'block',
       reason: 'consent_missing',
     });
-    expect(textConsentVerdict({ category: 'marketing', marketing: 'withdrawn', informational: 'granted' })).toEqual({
+    expect(
+      textConsentVerdict({ category: 'marketing', marketing: 'withdrawn', informational: 'granted' }),
+    ).toEqual({
       action: 'block',
       reason: 'consent_withdrawn',
     });
-    expect(textConsentVerdict({ category: 'marketing', marketing: 'unknown_legacy', informational: null })?.action).toBe(
-      'block',
-    );
-    expect(textConsentVerdict({ category: 'marketing', marketing: 'granted', informational: null })).toBeNull();
+    expect(
+      textConsentVerdict({ category: 'marketing', marketing: 'unknown_legacy', informational: null })?.action,
+    ).toBe('block');
+    expect(
+      textConsentVerdict({ category: 'marketing', marketing: 'granted', informational: null }),
+    ).toBeNull();
   });
   it('reminders and updates need consent to informational texts (marketing consent covers them)', () => {
-    expect(textConsentVerdict({ category: 'reminders', marketing: null, informational: 'granted' })).toBeNull();
-    expect(textConsentVerdict({ category: 'event_updates', marketing: 'granted', informational: null })).toBeNull();
+    expect(
+      textConsentVerdict({ category: 'reminders', marketing: null, informational: 'granted' }),
+    ).toBeNull();
+    expect(
+      textConsentVerdict({ category: 'event_updates', marketing: 'granted', informational: null }),
+    ).toBeNull();
     expect(
       textConsentVerdict({ category: 'event_updates', marketing: 'granted', informational: 'withdrawn' }),
     ).toEqual({ action: 'block', reason: 'consent_withdrawn' });
@@ -217,10 +246,14 @@ describe('consent and WhatsApp categories', () => {
     });
   });
   it('every kind has a WhatsApp category; US marketing WhatsApp is blocked (D16)', () => {
-    for (const kind of Object.keys(KINDS)) expect(['utility', 'marketing', 'authentication']).toContain(whatsappCategoryOf(kind));
+    for (const kind of Object.keys(KINDS))
+      expect(['utility', 'marketing', 'authentication']).toContain(whatsappCategoryOf(kind));
     expect(whatsappCategoryOf('marketing.message')).toBe('marketing');
     expect(whatsappCategoryOf('messaging.announcement')).toBe('utility');
-    expect(whatsappVerdict('marketing', '+15125550100')).toEqual({ action: 'block', reason: 'whatsapp_marketing_us' });
+    expect(whatsappVerdict('marketing', '+15125550100')).toEqual({
+      action: 'block',
+      reason: 'whatsapp_marketing_us',
+    });
     expect(whatsappVerdict('marketing', '+447700900123')).toBeNull();
     expect(whatsappVerdict('utility', '+15125550100')).toBeNull();
   });

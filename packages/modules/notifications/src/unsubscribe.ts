@@ -7,6 +7,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { UNSUBSCRIBE_PURPOSE } from './dispatch.ts';
 import { OPTIONAL_CATEGORIES } from './kinds.ts';
+import { preferencesPathForEmailTx } from './preference-center.ts';
 import { messages, preferences, suppressions } from './schema.ts';
 
 /**
@@ -73,6 +74,8 @@ export const UnsubscribeInfoDto = z.object({
   category: z.enum(OPTIONAL_CATEGORIES),
   email: z.string().nullable(),
   unsubscribed: z.boolean(),
+  /** The recipient's preference center (M3.5a), when the address is one of the org's contacts. */
+  preferencesPath: z.string().nullable().default(null),
 });
 export type UnsubscribeInfoDto = z.infer<typeof UnsubscribeInfoDto>;
 
@@ -89,6 +92,7 @@ export async function unsubscribeInfo(token: string): Promise<UnsubscribeInfoDto
       category: t.category,
       email: t.email ? maskEmail(t.email) : null,
       unsubscribed: await isUnsubscribedTx(tx, t.category, t.target),
+      preferencesPath: t.email ? await preferencesPathForEmailTx(tx, ref.orgId, t.email) : null,
     });
   });
 }

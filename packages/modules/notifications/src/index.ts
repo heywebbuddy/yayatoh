@@ -65,6 +65,86 @@ export {
   templateOverridesQuery,
 } from './overrides.ts';
 export {
+  CAP_CATEGORIES,
+  CAP_LIMITS,
+  CAP_SCOPES,
+  type CapCategory,
+  type CapScope,
+  COMPLAINT_MIN_VOLUME,
+  COMPLAINT_RATE_LIMIT_BPS,
+  COMPLAINT_WINDOW_DAYS,
+  DEFAULT_CAPS,
+  DEFAULT_MONTHLY_QUOTAS,
+  type FrequencyCap,
+  QUOTA_CHANNELS,
+  type QuotaChannel,
+} from './policy/config.ts';
+export {
+  AddressSuppressionDto,
+  AUTO_PAUSE_ACTOR,
+  AutoPauseDto,
+  addressSuppressionsQuery,
+  autoPauseQuery,
+  CapDto,
+  CapInput,
+  deliveryReasonsTx,
+  evaluateComplaintRateTx,
+  frequencyCapsQuery,
+  latestAutoPauseTx,
+  liftAddressSuppressionCommand,
+  liftAutoPauseCommand,
+  maskPhone,
+  messagingUsageQuery,
+  POLICY_REASONS,
+  PolicyLogDto,
+  policyLogQuery,
+  setFrequencyCapsCommand,
+  setQuotaLimitCommand,
+  UsageDto,
+  usageSummaryTx,
+} from './policy/console.ts';
+export {
+  createGateState,
+  type GateFacts,
+  type GateState,
+  POLICY_RULES,
+  type PolicyPhase,
+  type PolicyRule,
+  recipientKey,
+  runPolicyPhase,
+} from './policy/gate.ts';
+export {
+  capVerdict,
+  complaintRateBps,
+  quotaPeriod,
+  shouldAutoPause,
+  textConsentVerdict,
+  type Verdict,
+  WHATSAPP_CATEGORIES,
+  type WhatsAppCategory,
+  whatsappVerdict,
+} from './policy/rules.ts';
+export { isGsm7, type SmsEncoding, type SmsSegmentCount, smsSegments } from './policy/sms-segments.ts';
+export {
+  applicableStateRules,
+  STATE_RULES,
+  type StateRule,
+  stateOfPhone,
+  stateOfRegion,
+  type UsState,
+} from './policy/state-rules.ts';
+export { allowedAt, nextAllowedInstant } from './policy/windows.ts';
+export {
+  E164,
+  normalizePhone,
+  PreferenceCenterDto,
+  preferenceCenterInfo,
+  preferencesPath,
+  preferencesRef,
+  savePreferenceCenterCommand,
+  TEXT_DISCLOSURE_VERSION,
+} from './preference-center.ts';
+export {
   myPreferencesQuery,
   PreferenceDto,
   preferenceEnabledTx,
@@ -110,12 +190,14 @@ export {
   type OutboundEmail,
   type OutboundPush,
   type OutboundSms,
+  type OutboundWhatsApp,
   PLATFORM_SENDER,
   type PushTransport,
   readDevMailbox,
   type SmsTransport,
   type Transports,
   takeDevDeliveryEvents,
+  type WhatsAppTransport,
 } from './transports.ts';
 export {
   maskEmail,
@@ -127,39 +209,3 @@ export {
   unsubscribeRef,
   unsuppressEmailTx,
 } from './unsubscribe.ts';
-export {
-  CAP_CATEGORIES,
-  CAP_LIMITS,
-  CAP_SCOPES,
-  type CapCategory,
-  type CapScope,
-  COMPLAINT_MIN_VOLUME,
-  COMPLAINT_RATE_LIMIT_BPS,
-  COMPLAINT_WINDOW_DAYS,
-  DEFAULT_CAPS,
-  DEFAULT_MONTHLY_QUOTAS,
-  type FrequencyCap,
-  QUOTA_CHANNELS,
-  type QuotaChannel,
-} from './policy/config.ts';
-export {
-  capVerdict,
-  complaintRateBps,
-  quotaPeriod,
-  shouldAutoPause,
-  textConsentVerdict,
-  type Verdict,
-  WHATSAPP_CATEGORIES,
-  type WhatsAppCategory,
-  whatsappVerdict,
-} from './policy/rules.ts';
-export { isGsm7, type SmsEncoding, type SmsSegmentCount, smsSegments } from './policy/sms-segments.ts';
-export {
-  applicableStateRules,
-  STATE_RULES,
-  type StateRule,
-  stateOfPhone,
-  stateOfRegion,
-  type UsState,
-} from './policy/state-rules.ts';
-export { allowedAt, nextAllowedInstant } from './policy/windows.ts';

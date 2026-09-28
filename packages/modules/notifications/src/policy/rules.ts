@@ -1,9 +1,9 @@
 import { utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
 import {
-  COMPLAINT_MIN_VOLUME,
-  COMPLAINT_RATE_LIMIT_BPS,
   type CapCategory,
   type CapScope,
+  COMPLAINT_MIN_VOLUME,
+  COMPLAINT_RATE_LIMIT_BPS,
   type FrequencyCap,
 } from './config.ts';
 
@@ -94,6 +94,7 @@ export function textConsentVerdict(input: {
   if (informational === 'granted' || (informational === null && marketing === 'granted')) return null;
   return {
     action: 'block',
-    reason: informational === 'withdrawn' || marketing === 'withdrawn' ? 'consent_withdrawn' : 'consent_missing',
+    reason:
+      informational === 'withdrawn' || marketing === 'withdrawn' ? 'consent_withdrawn' : 'consent_missing',
   };
 }

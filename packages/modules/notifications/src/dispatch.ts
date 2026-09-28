@@ -5,12 +5,16 @@ import { signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { and, asc, eq, isNull, lte } from 'drizzle-orm';
 import { suppressedReason } from './delivery-rules.ts';
-import { kindOf, type MessageKind } from './kinds.ts';
+import { kindOf, type MessageKind, whatsappCategoryOf } from './kinds.ts';
 import { decryptParams } from './notifier.ts';
+import type { QuotaChannel } from './policy/config.ts';
+import { createGateState, type GateFacts, runPolicyPhase } from './policy/gate.ts';
+import type { Verdict } from './policy/rules.ts';
+import { smsSegments } from './policy/sms-segments.ts';
 import { preferenceEnabledTx } from './preferences.ts';
 import { isValidTimeZone, quietHoursRelease } from './quiet-hours.ts';
 import { addressSuppressions, messages, pushTokens, suppressions, templateOverrides } from './schema.ts';
-import { emailLocale, renderMessage } from './templates/render.ts';
+import { emailLocale, renderMessage, smsText } from './templates/render.ts';
 import { PLATFORM_SENDER, type Transports } from './transports.ts';
 
 export const UNSUBSCRIBE_PURPOSE = 'notifications.unsubscribe';
@@ -80,6 +84,8 @@ export async function dispatchDueTx(
   const org = await organizationBrandTx(tx, orgId);
   if (!org) return result;
   const paused = (await activeSuspensionsTx(tx)).has('pause_messaging');
+  // Policy gate v2 (M3.5a): quotas and caps loaded once for this org's batch.
+  const gate = createGateState(orgId, org.timezone, now);
   const needEmails = due.filter((r) => r.channel === 'email' && !r.recipientEmail && r.recipientUserId);
   const memberIds = [...new Set(needEmails.map((r) => r.recipientUserId as string))];
   const emails =
@@ -100,6 +106,13 @@ export async function dispatchDueTx(
     await update(row, { status: 'suppressed', reason });
     result.suppressed += 1;
   };
+  const apply = async (row: Row, verdict: Verdict) => {
+    if (verdict.action === 'block') await suppress(row, verdict.reason);
+    else {
+      await update(row, { sendAfter: verdict.until, reason: verdict.reason });
+      result.held += 1;
+    }
+  };
 
   for (const row of due) {
     const def = kindOf(row.kind);
@@ -114,7 +127,7 @@ export async function dispatchDueTx(
     // Bounces and complaints (M1.10d): the address can't or mustn't receive mail, whatever the
     // category, transactional included; the message log shows why.
     const phoneOf = async () => {
-      if (row.channel !== 'sms') return null;
+      if (row.channel !== 'sms' && row.channel !== 'whatsapp') return null;
       const p = (await decryptParams(orgId, row.paramsCiphertext))._phone;
       return typeof p === 'string' ? p : null;
     };
@@ -150,10 +163,26 @@ export async function dispatchDueTx(
         tx,
         row.recipientUserId,
         def.category,
-        row.channel as 'email' | 'sms' | 'push',
+        row.channel === 'whatsapp' ? 'sms' : (row.channel as 'email' | 'sms' | 'push'),
       ))
     ) {
       await suppress(row, 'preference');
+      continue;
+    }
+    const facts: GateFacts = {
+      tx,
+      orgId,
+      row,
+      def,
+      now,
+      phone: email ? null : address,
+      orgTimeZone: org.timezone,
+      ignoreQuietHours: Boolean(deps.ignoreQuietHours),
+      state: gate,
+    };
+    const eligibility = await runPolicyPhase('eligibility', facts);
+    if (eligibility) {
+      await apply(row, eligibility);
       continue;
     }
     if (!def.urgent && !deps.ignoreQuietHours) {
@@ -164,6 +193,11 @@ export async function dispatchDueTx(
         result.held += 1;
         continue;
       }
+    }
+    const timing = await runPolicyPhase('timing', facts);
+    if (timing) {
+      await apply(row, timing);
+      continue;
     }
     try {
       const params = await decryptParams(orgId, row.paramsCiphertext);
@@ -193,6 +227,9 @@ export async function dispatchDueTx(
             ? `${deps.appOrigin}/o/${org.slug}${href}`
             : null;
       let providerMessageId: string;
+      let segments: number | null = null;
+      const textBody = () =>
+        smsText(rendered, { orgName: org.name, category: def.category, body: params.body, link });
       if (row.channel === 'email') {
         if (!email) {
           await update(row, { status: 'failed', reason: 'no_address', attempts: row.attempts + 1 });
@@ -247,6 +284,21 @@ export async function dispatchDueTx(
           continue;
         }
         providerMessageId = ids.join(',');
+      } else if (row.channel === 'whatsapp') {
+        const wa = deps.transports.whatsapp;
+        const phone = typeof params._phone === 'string' ? params._phone : null;
+        if (!wa) throw new Error('no WhatsApp adapter configured');
+        if (!phone) {
+          await update(row, { status: 'failed', reason: 'no_address', attempts: row.attempts + 1 });
+          result.failed += 1;
+          continue;
+        }
+        ({ providerMessageId } = await wa.send({
+          to: phone,
+          body: textBody(),
+          category: whatsappCategoryOf(row.kind),
+          idempotencyKey: row.id,
+        }));
       } else {
         const sms = deps.transports.sms;
         const phone = typeof params._phone === 'string' ? params._phone : null;
@@ -256,13 +308,9 @@ export async function dispatchDueTx(
           result.failed += 1;
           continue;
         }
-        ({ providerMessageId } = await sms.send({
-          to: phone,
-          body: link
-            ? `${rendered.subject}\n${rendered.preview}\n${link}`
-            : `${rendered.subject}\n${rendered.preview}`,
-          idempotencyKey: row.id,
-        }));
+        const body = textBody();
+        segments = smsSegments(body).segments;
+        ({ providerMessageId } = await sms.send({ to: phone, body, idempotencyKey: row.id }));
       }
       await update(row, {
         status: 'sent',
@@ -273,7 +321,10 @@ export async function dispatchDueTx(
         attempts: row.attempts + 1,
         reason: null,
         lastError: null,
+        segments,
       });
+      // Usage metering (M3.5a): SMS by segment, everything else by message.
+      await gate.meter(tx, row.channel as QuotaChannel, segments ?? 1);
       result.sent += 1;
     } catch (err) {
       const attempts = row.attempts + 1;

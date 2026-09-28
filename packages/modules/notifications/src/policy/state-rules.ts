@@ -51,7 +51,8 @@ export const STATE_RULES: Readonly<Record<UsState, StateRule>> = {
     allowed: [{ days: EVERY_DAY, from: '08:00', until: '20:00' }],
     zones: ['America/New_York', 'America/Chicago'],
     citation: 'Fla. Stat. § 501.616(6)(a) (Florida Telephone Solicitation Act, as amended 2021)',
-    source: 'http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0500-0599/0501/Sections/0501.616.html',
+    source:
+      'http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0500-0599/0501/Sections/0501.616.html',
     status: 'pending_tcpa_counsel',
   },
   OK: {
@@ -100,8 +101,33 @@ const AREA_CODES: Readonly<Record<UsState, Readonly<Record<string, readonly stri
   TX: {
     ...Object.fromEntries(
       [
-        '210', '214', '254', '281', '325', '346', '361', '409', '430', '432', '469', '512', '682', '713',
-        '726', '737', '806', '817', '830', '832', '903', '936', '940', '945', '956', '972', '979',
+        '210',
+        '214',
+        '254',
+        '281',
+        '325',
+        '346',
+        '361',
+        '409',
+        '430',
+        '432',
+        '469',
+        '512',
+        '682',
+        '713',
+        '726',
+        '737',
+        '806',
+        '817',
+        '830',
+        '832',
+        '903',
+        '936',
+        '940',
+        '945',
+        '956',
+        '972',
+        '979',
       ].map((c) => [c, ['America/Chicago']]),
     ),
     '915': ['America/Denver'],
@@ -109,8 +135,26 @@ const AREA_CODES: Readonly<Record<UsState, Readonly<Record<string, readonly stri
   FL: {
     ...Object.fromEntries(
       [
-        '239', '305', '321', '324', '352', '386', '407', '561', '645', '656', '689', '727', '754', '772',
-        '786', '813', '863', '904', '941', '954',
+        '239',
+        '305',
+        '321',
+        '324',
+        '352',
+        '386',
+        '407',
+        '561',
+        '645',
+        '656',
+        '689',
+        '727',
+        '754',
+        '772',
+        '786',
+        '813',
+        '863',
+        '904',
+        '941',
+        '954',
       ].map((c) => [c, ['America/New_York']]),
     ),
     '850': ['America/New_York', 'America/Chicago'],
@@ -129,7 +173,9 @@ const BY_AREA_CODE = new Map<string, { state: UsState; zones: readonly string[] 
 );
 
 /** The state (and its zones) a +1 number's area code belongs to, when a rule exists for it. */
-export function stateOfPhone(phone: string | null | undefined): { state: UsState; zones: readonly string[] } | null {
+export function stateOfPhone(
+  phone: string | null | undefined,
+): { state: UsState; zones: readonly string[] } | null {
   const m = /^\+1([2-9][0-9]{2})[2-9][0-9]{6}$/.exec(phone ?? '');
   return m?.[1] ? (BY_AREA_CODE.get(m[1]) ?? null) : null;
 }

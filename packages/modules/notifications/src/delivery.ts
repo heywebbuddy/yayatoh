@@ -7,6 +7,7 @@ import { and, eq, gte, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { nextDeliveryState, SOFT_BOUNCE_WINDOW_MS, suppressionFor } from './delivery-rules.ts';
 import { decryptParams } from './notifier.ts';
+import { evaluateComplaintRateTx } from './policy/console.ts';
 import { addressSuppressions, messageEvents, messages } from './schema.ts';
 
 /**
@@ -114,6 +115,8 @@ const RecordOutput = z.object({
   duplicate: z.int(),
   unknown: z.int(),
   suppressed: z.int(),
+  /** The complaint rate went over the limit and optional messaging paused (M3.5a). */
+  autoPaused: z.boolean(),
 });
 
 /**
@@ -131,9 +134,10 @@ export const recordDeliveryEventsCommand = tenantCommand({
   output: RecordOutput,
   entitlement: null,
   permission: 'platform:notifications.delivery_events',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
-    const out = { recorded: 0, duplicate: 0, unknown: 0, suppressed: 0 };
+    const out = { recorded: 0, duplicate: 0, unknown: 0, suppressed: 0, autoPaused: false };
+    let complaints = 0;
     for (const e of input.events) {
       const [msg] = await tx.select().from(messages).where(eq(messages.id, e.messageId)).for('update');
       // A signed event must still name one of our sends: the provider's id has to match.
@@ -166,6 +170,7 @@ export const recordDeliveryEventsCommand = tenantCommand({
         continue;
       }
       out.recorded += 1;
+      if (e.type === 'complained') complaints += 1;
       const fact = {
         type: e.type,
         bounceType: e.type === 'bounced' ? (e.bounceType ?? 'hard') : null,
@@ -229,6 +234,7 @@ export const recordDeliveryEventsCommand = tenantCommand({
         .returning({ id: addressSuppressions.id });
       out.suppressed += s.length;
     }
+    if (complaints > 0) out.autoPaused = await evaluateComplaintRateTx(tx, ctx, emit);
     return out;
   },
   audit: (input, r) => ({

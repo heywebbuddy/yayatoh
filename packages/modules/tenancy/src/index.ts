@@ -53,6 +53,8 @@ export {
 export {
   activeSuspensionsTx,
   assertNotPausedTx,
+  liftCapabilityTx,
+  pauseCapabilityTx,
   SuspensionDto,
   type SuspensionKind,
   setSuspensionCommand,

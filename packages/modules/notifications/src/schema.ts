@@ -18,7 +18,7 @@ export const notificationsSchema = pgSchema('notifications');
 
 const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
-export const MESSAGE_CHANNELS = ['email', 'sms', 'push'] as const;
+export const MESSAGE_CHANNELS = ['email', 'sms', 'whatsapp', 'push'] as const;
 export const MESSAGE_STATUSES = ['queued', 'sent', 'suppressed', 'failed', 'canceled'] as const;
 export const CATEGORIES = [
   'transactional',
@@ -76,6 +76,17 @@ export const messages = tenantTable(
     /** The provider's latest delivery report (delivered, bounced, soft_bounced, complained). */
     delivery: text('delivery'),
     deliveryAt: tsz('delivery_at'),
+    /** The recipient's crm contact (M3.5a): texts check the consent ledger. */
+    contactId: uuid('contact_id'),
+    /** ISO 3166-2 region of the recipient's address (`US-TX`): state quiet-hour rules. */
+    recipientRegion: text('recipient_region'),
+    /**
+     * Keyed hash of (channel, address) — HMAC under APP_TOKEN_SECRET, never the address — so
+     * frequency caps count one person's recent messages without a readable phone column.
+     */
+    recipientKey: text('recipient_key'),
+    /** SMS segments (GSM-7/UCS-2) billed for the sent text; metering counts them. */
+    segments: integer('segments'),
   },
   (t) => [
     uniqueIndex('messages_org_channel_dedupe_key').on(t.orgId, t.channel, t.dedupeKey),
@@ -95,8 +106,16 @@ export const messages = tenantTable(
     check('messages_dedupe_key_length', sql`length(dedupe_key) between 1 and 255`),
     check(
       'messages_address_check',
-      sql`(channel = 'email' and (recipient_email is not null or recipient_user_id is not null)) or (channel = 'push' and recipient_user_id is not null) or channel = 'sms'`,
+      sql`(channel = 'email' and (recipient_email is not null or recipient_user_id is not null)) or (channel = 'push' and recipient_user_id is not null) or channel in ('sms', 'whatsapp')`,
     ),
+    index('messages_org_recipient_sent_idx')
+      .on(t.orgId, t.recipientKey, t.sentAt)
+      .where(sql`status = 'sent' and recipient_key is not null`),
+    check(
+      'messages_recipient_region_check',
+      sql`recipient_region is null or recipient_region ~ '^[A-Z]{2}-[A-Z0-9]{1,3}$'`,
+    ),
+    check('messages_segments_check', sql`segments is null or segments between 0 and 100`),
   ],
 );
 
@@ -283,5 +302,93 @@ export const emailPreviews = tenantTable(
   (t) => [
     index('email_previews_org_expires_idx').on(t.orgId, t.expiresAt),
     check('email_previews_html_length', sql`length(html) between 1 and 524288`),
+  ],
+);
+
+export const QUOTA_CHANNEL_VALUES = ['email', 'sms', 'whatsapp', 'push'] as const;
+
+/**
+ * Usage metering (M3.5a): what the org sent per channel in each quota period (its calendar month,
+ * `YYYY-MM`). `units` is what the quota counts (SMS segments; one per message elsewhere).
+ */
+export const usageCounters = tenantTable(
+  notificationsSchema,
+  'usage_counters',
+  {
+    period: text('period').notNull(),
+    channel: text('channel').notNull(),
+    messages: integer('messages').notNull().default(0),
+    units: integer('units').notNull().default(0),
+  },
+  (t) => [
+    uniqueIndex('usage_counters_org_period_channel_key').on(t.orgId, t.period, t.channel),
+    check('usage_counters_period_check', sql`period ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'`),
+    check('usage_counters_channel_check', inList('channel', QUOTA_CHANNEL_VALUES)),
+    check('usage_counters_counts_check', sql`messages >= 0 and units >= 0`),
+  ],
+);
+
+/**
+ * Per-org monthly limits set by Yayatoh staff (M3.5a); a channel without a row uses the default
+ * in `policy/config.ts`. Over the limit, optional messages wait (held, never dropped).
+ */
+export const quotaLimits = tenantTable(
+  notificationsSchema,
+  'quota_limits',
+  {
+    channel: text('channel').notNull(),
+    monthlyLimit: integer('monthly_limit').notNull(),
+    reason: text('reason').notNull(),
+    setBy: text('set_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('quota_limits_org_channel_key').on(t.orgId, t.channel),
+    check('quota_limits_channel_check', inList('channel', QUOTA_CHANNEL_VALUES)),
+    check('quota_limits_limit_check', sql`monthly_limit between 0 and 10000000`),
+    check('quota_limits_reason_length', sql`length(reason) between 3 and 500`),
+  ],
+);
+
+/** The org's own frequency caps per recipient (M3.5a); a scope without a row uses the default. */
+export const frequencyCaps = tenantTable(
+  notificationsSchema,
+  'frequency_caps',
+  {
+    scope: text('scope').notNull(),
+    maxMessages: integer('max_messages').notNull(),
+    windowHours: integer('window_hours').notNull(),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('frequency_caps_org_scope_key').on(t.orgId, t.scope),
+    check('frequency_caps_scope_check', sql`scope in ('reminders', 'event_updates', 'marketing', 'all')`),
+    check('frequency_caps_max_check', sql`max_messages between 1 and 20`),
+    check('frequency_caps_window_check', sql`window_hours between 1 and 720`),
+  ],
+);
+
+/**
+ * Complaint-rate auto-pauses (M3.5a): the numbers that tripped it, and who lifted it. The pause
+ * itself is the org's `pause_messaging` suspension (tenancy), so every sender already honours it.
+ */
+export const autoPauses = tenantTable(
+  notificationsSchema,
+  'auto_pauses',
+  {
+    complaints: integer('complaints').notNull(),
+    sent: integer('sent').notNull(),
+    rateBps: integer('rate_bps').notNull(),
+    windowStart: tsz('window_start').notNull(),
+    liftedAt: tsz('lifted_at'),
+    liftedBy: text('lifted_by'),
+    liftNote: text('lift_note'),
+  },
+  (t) => [
+    index('auto_pauses_org_created_idx').on(t.orgId, t.createdAt),
+    check('auto_pauses_counts_check', sql`complaints >= 0 and sent > 0 and rate_bps >= 0`),
+    check(
+      'auto_pauses_lift_check',
+      sql`(lifted_at is null and lifted_by is null and lift_note is null) or (lifted_at is not null and lifted_by is not null and length(lift_note) between 3 and 500)`,
+    ),
   ],
 );

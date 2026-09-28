@@ -1,9 +1,16 @@
 import { eventAttendeesTx } from '@yayatoh/attendees';
-import { contactUserIdsTx, normalizeEmail } from '@yayatoh/crm';
+import { contactPhonesTx, contactUserIdsTx, normalizeEmail } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
-import { deliveryStatsTx, renderMessage } from '@yayatoh/notifications';
+import {
+  deliveryReasonsTx,
+  deliveryStatsTx,
+  renderMessage,
+  smsSegments,
+  smsText,
+  usageSummaryTx,
+} from '@yayatoh/notifications';
 import { defineSubscriber, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { assertNotPausedTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { desc, eq } from 'drizzle-orm';
@@ -15,7 +22,7 @@ export const AnnouncementInput = z.object({
   eventId: z.uuid(),
   subject: z.string().trim().min(1).max(150),
   body: z.string().trim().min(1).max(5000),
-  channels: z.array(z.enum(ANNOUNCEMENT_CHANNELS)).min(1).max(2),
+  channels: z.array(z.enum(ANNOUNCEMENT_CHANNELS)).min(1).max(3),
 });
 
 /** One recipient per email address among the event's active attendees. */
@@ -46,6 +53,19 @@ export const previewAnnouncementQuery = tenantQuery({
     html: z.string(),
     text: z.string(),
     dir: z.enum(['ltr', 'rtl']),
+    /** The text message (M3.5a), when SMS is chosen: how it counts on the bill. */
+    sms: z
+      .object({
+        text: z.string(),
+        characters: z.int(),
+        segments: z.int(),
+        encoding: z.enum(['GSM-7', 'UCS-2']),
+        /** Attendees with a mobile number (texts go only to those who agreed, see the log). */
+        withPhone: z.int(),
+      })
+      .nullable(),
+    /** Channels whose monthly quota is used up: those messages will wait (M3.5a). */
+    quotaReached: z.array(z.enum(ANNOUNCEMENT_CHANNELS)),
   }),
   entitlement: 'messaging',
   permission: 'messages:send',
@@ -60,12 +80,38 @@ export const previewAnnouncementQuery = tenantQuery({
       org,
       unsubscribeUrl: '#unsubscribe',
     });
+    const people = await recipientsTx(tx, input.eventId);
+    let sms = null;
+    if (input.channels.includes('sms')) {
+      const text = smsText(r, {
+        orgName: org.name,
+        category: 'event_updates',
+        body: input.body,
+        link: null,
+      });
+      const count = smsSegments(text);
+      const phones = await contactPhonesTx(
+        tx,
+        [...people.values()].map((p) => p.contactId),
+      );
+      sms = {
+        text,
+        characters: count.units,
+        segments: count.segments,
+        encoding: count.encoding,
+        withPhone: phones.size,
+      };
+    }
+    const usage = await usageSummaryTx(tx, requireOrg(ctx), ctx.now);
+    const reached = new Set(usage.channels.filter((c) => c.reached).map((c) => c.channel as string));
     return {
-      recipients: (await recipientsTx(tx, input.eventId)).size,
+      recipients: people.size,
       subject: r.subject,
       html: r.html,
       text: r.text,
       dir: r.dir,
+      sms,
+      quotaReached: input.channels.filter((c) => reached.has(c)),
     };
   },
 });
@@ -128,6 +174,8 @@ export const AnnouncementDto = z.object({
   recipients: z.int(),
   sentAt: z.date(),
   delivery: z.object({ sent: z.int(), pending: z.int(), notSent: z.int() }),
+  /** Why messages wait or were not sent, per channel (consent, quiet hours, quota…; M3.5a). */
+  reasons: z.array(z.object({ channel: z.string(), reason: z.string(), count: z.int() })),
 });
 
 /** The event's sent log, newest first, with delivery counts from the notifications log. */
@@ -153,6 +201,7 @@ export const announcementsQuery = tenantQuery({
         recipients: r.recipients,
         sentAt: r.createdAt,
         delivery: await deliveryStatsTx(tx, `announcement:${r.id}:`),
+        reasons: await deliveryReasonsTx(tx, `announcement:${r.id}:`),
       })),
     );
   },
@@ -175,10 +224,12 @@ export function announcementMailer(deps: { notifier: Notifier; appOrigin: string
       const ev = await findEventTx(tx, p.eventId);
       if (!a || !ev) return;
       const people = await recipientsTx(tx, p.eventId);
-      const userIds = await contactUserIdsTx(
-        tx,
-        [...people.values()].map((x) => x.contactId),
-      );
+      const contactIds = [...people.values()].map((x) => x.contactId);
+      const userIds = await contactUserIdsTx(tx, contactIds);
+      // Texts (M3.5a) go to attendees' numbers; the gate checks each one's consent.
+      const phones = a.channels.includes('sms')
+        ? await contactPhonesTx(tx, contactIds)
+        : new Map<string, string>();
       for (const [norm, person] of people) {
         const thread = await upsertThreadTx(tx, p.orgId, person.email, person.name, p.eventId);
         if (thread.contactBlockedAt) continue;
@@ -198,9 +249,11 @@ export function announcementMailer(deps: { notifier: Notifier; appOrigin: string
             email: person.email,
             name: person.name,
             userId: userIds.get(person.contactId) ?? null,
+            phone: phones.get(person.contactId) ?? null,
+            contactId: person.contactId,
             timeZone: ev.timezone,
           },
-          channels: a.channels as ('email' | 'push')[],
+          channels: a.channels as ('email' | 'push' | 'sms')[],
           params: {
             subject: a.subject,
             body: a.body,
