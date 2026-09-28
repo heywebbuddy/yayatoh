@@ -3,12 +3,11 @@
 These are tasks only the owner (or their developer, accountant or lawyer) can do. Claude Code keeps this list current. Each task names the milestone that is blocked until it's done.
 
 ## Now
-- [ ] **M0.0 security fixes.** Hand `docs/legacy/M0.0-security-hotfix.md` to your Laravel developer.
-  - P0 items within 24–48 h: forged social login, forged payment webhooks, account takeover, leaked order numbers and private info, secret rotation, killing magic-login tokens.
-- [ ] **Rotate the secrets committed in the legacy repo:** `APP_KEY`, Pusher key/secret/app ID, the staging DB credentials, and the Flutterwave sandbox keys.
-- [ ] **Review damage after the fixes.** Check for forged-payment bookings, unexpected email or role changes, and scraping in the access logs.
-- [ ] **Tell ABC** to change the venue Wi-Fi password and parking codes exposed through `private_info`.
-- [ ] **Delete merged agent branches on GitHub** (housekeeping; Claude Code's sessions may push only to their own branches and cannot delete). Already merged into `m0.5-foundation-ey5gqp`: `agent/m1.10`, `agent/m1.11`, `agent/m1.13`, `agent/m1.4b`, `agent/m1.4cd`, `agent/m1.14`. Delete them from the repo's Branches page; nothing is lost.
+- [ ] **M0.0 security fixes.** Hand the private M0.0 fix list (kept outside this public repo) to your Laravel developer; the P0 items are due within 24–48 h.
+- [ ] **Rotate the secrets committed in the legacy repo** (listed in the private fix list).
+- [ ] **Review for abuse after the fixes** (checks listed in the private fix list).
+- [ ] **Tell ABC** which venue details to change (listed in the private fix list).
+- [x] **Delete merged agent branches on GitHub** (done 2026-09-28 with `tools/ops/delete-merged-branches.sh`; re-run it after each merge batch) (housekeeping; Claude Code's sessions may push only to their own branches and cannot delete). Already fully merged into `m0.5-foundation-ey5gqp` (checked 2026-09-28): `agent/m1.10`, `agent/m1.10d`, `agent/m1.11`, `agent/m1.13`, `agent/m1.14`, `agent/m1.4b`, `agent/m1.4cd`, `agent/m1.4e`, `agent/m1.4f`, `agent/m1.6e`, `agent/m1.9d`, `agent/m2.2b`, and the old `m0.5-foundation`. Delete them from the repo's Branches page; nothing is lost. Keep `main` (the PR base) and any `agent/*` branch not listed here (still being merged).
 - [x] **Install the Claude GitHub App** on `Pani-Digital-Services-LLC`, for the `yayatoh` and `yayatoh-legacy` repos only. See `docs/cloud-environment.md` §1.
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 

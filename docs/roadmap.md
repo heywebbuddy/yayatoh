@@ -67,31 +67,12 @@ The lifecycle it must cover: `Create → Promote → Register → Sell → Manag
 - The iOS privacy URL points at staging, and the store privacy labels are inconsistent.
 
 ### 1.3 Live security finding
-Verified 2026-09-26 with read-only requests. Only field names were inspected; values were not retrieved.
-
-`GET /events/api/get_events` on **both** installs serializes the full organizer `user` model and each event's `private_info`:
-- **Both installs** expose field names for bank account and routing, tax ID, Mailchimp API key, magic-login token, Stripe IDs and push tokens. On `yayatoh.com` page 1, all of these values are empty.
-- **`abc.yayatoh.com`** returns populated values for:
-  - organizer FCM push tokens
-  - Stripe customer IDs
-  - a `seller_tax_info` string
-  - the attendee-only private info, including the venue Wi-Fi password
-- No password hashes were seen. Other pages and endpoints were not checked.
+Verified 2026-09-26 with read-only requests (field names only; no values retrieved). A public endpoint on both installs returned organizer and attendee-private fields that must never be public. Details are kept out of this public repository (held privately by the owner); the fix is M0.0.
 
 **Action:** hotfix Laravel first (**M0.0**). The new platform prevents this class of bug with principle 13.
 
 ### 1.3b Code audit findings (read-only audit of `legacy/abc-web-main`, 2026-09-26)
-**Critical security holes in the live app.** Fix these in M0.0, most severe first:
-
-| # | Hole | Where |
-|---|---|---|
-| 1 | **Forged social login.** The Google/Apple JWT is base64-decoded without signature checks, so anyone can log in as any email, including the admin. It also resets `role_id` to 2. | `Api/v2/Auth/SocialLoginController.php:59-127` |
-| 2 | **Forged paid bookings.** The Stripe webhook signature check is disabled by an empty constructor override. Flutterwave callback/webhook and Mesdoh callback trust `?status=success` or the posted status. | `WebhookController.php:9-12`, `Service/Flutterwave.php:112,183`, `Service/MesdohService.php:105-128` |
-| 3 | **Account takeover by organisers.** Any organiser can change any user's email, including user 1. Impersonation routes are likely open to every user (no `canImpersonate` override). | `SubOrganizerController.php:53-83`, `web.php:1048` |
-| 4 | **Leaked order numbers.** Order numbers are the QR payload (unsigned). They leak through the unauthenticated Apple Wallet pass endpoint (`/api/v2/generate-pass/{booking_id}`), the public attendee search (which also returns `private_info`), and the event show/details payloads (attendee PII + order numbers). | `PassController.php`, `PublicEventController.php:44-151`, `Ticket.php:40-56` |
-| 5 | **Leaked organizer rows and private info.** Full organizer `User` rows (including `magic_login_token`, bank/tax/Mailchimp fields) and `private_info` go out on events lists, landing, show/details, venues and organiser endpoints. The cause is `with(['user'])` with no column select, `$hidden` covering only password/remember_token, and a `view()` override that dumps every view variable as JSON under `api/v2`. Password-protected and unpublished events are readable through `/api/v2/events/show`. | `Event.php:23,132,266,303,344`, `EventsController.php:166,194,695-728`, `app/Helper/helpers.php:13-16` |
-| 6 | **Secrets committed in git.** `APP_KEY`, DB password and Pusher secret are in `docs_setting.md` and `.env-example`. A Flutterwave test key sits in a comment. | — |
-| 7 | **Unauthenticated OpenAI routes** (anyone can spend the key). Open `organiser-mail` relay. Public `seat_status` writes. `/generate-sitemap-12345` runs Artisan. The installer is reachable. Any organiser can force-create bookings via failed-booking recovery. Public OTP verification has no attempt limit. Almost no rate limiting (`app/Http/Kernel.php` is dead in Laravel 11). | various |
+The audit found critical security issues in the live legacy app (authentication, payment confirmation, access control, data exposure, committed secrets and missing rate limits). The detailed findings are kept **out of this public repository** and held privately by the owner and their developer; they are fixed in M0.0. The new platform's design answers each class of issue (principles 1–13, §4.3, §9, §10).
 
 **Facts that correct the plan:**
 - **Payments today are not Yayatoh-as-merchant-of-record for connected organizers.**
@@ -1278,37 +1259,11 @@ The gala and holiday season, and the blackout rule, may push B-Y into early 2028
 - Counsel and Stripe engaged.
 
 **M0.0 Legacy security hotfix (M, first; scope from §1.3b)**
-- **Day 0–1, highest risk first:**
-  - Disable Google/Apple social login in the API, or verify the JWT properly against the provider JWKS (`aud`/`iss`/`exp`), and stop resetting `role_id`.
-  - Remove the empty constructor in `WebhookController` so the Stripe signature check works again.
-  - Verify Flutterwave and Mesdoh payments server-side, or disable those gateways.
-  - Add an ownership check to `SubOrganizerController` email changes.
-  - Restrict impersonation to admins (`canImpersonate`).
-  - Put auth on the OpenAI routes.
-  - Put auth and an ownership check on `generate-pass`.
-  - Remove `/generate-sitemap-12345` and the installer route.
-  - Rotate `APP_KEY` (this invalidates remember-me and signed URLs), the DB password and the Pusher secret, and remove them from git.
-  - Audit bookings created through webhooks and callbacks for forged payments, and check for unexpected role or email changes.
-- **Hour 0:** null every outstanding magic-login token on both instances. Cap new tokens at 15 min, single use.
-- **Ship first:** an authenticated `/api/v2` private-info endpoint for code-joined attendees. The app may rely on the leaked field, so this must exist before the leak is closed.
-- **Leak fix:**
-  - Eager-load `user:id,name,avatar,organisation,organisation_url` only.
-  - Hide sensitive User columns and `private_info`.
-  - Limit ticket → attendee → booking eager loads to the seat-map fields.
-  - Gate password/unpublished events on the API.
-  - Mask order numbers in public attendee search and require `enable_public_seating`.
-  - Add rate limits to login, OTP, OTP verify and register.
-- In Laravel:
-  - Hide `User` attributes via `$hidden` **and** use explicit allowlisted API Resources. Fields: bank_*, taxpayer_number, seller_*, mailchimp_*, magic_login_*, stripe_*, pm_*, fcm_token, apn_token, apple_id, ip_address, remember_token, password.
-  - Strip `private_info` from public web payloads. For `/api/v2`, first grep the app source for reads of that field. If an app reads it, restrict it to authenticated code-joined users; otherwise strip it.
-  - Audit every unauthenticated route with an `audit-public-routes` script built from `route:list --json`. The script walks JSON responses **and** JSON embedded in Blade/Vue props, and flags sensitive keys.
-  - Remove `/test-payment`.
-- Review access logs for scraping.
-- Notify ABC about the exposed Wi-Fi password.
-- Assess notification duty for `seller_tax_info` with counsel.
-- **Acceptance:** a contract test over captured responses finds none of the listed fields, and both store apps still work (HAR spot-check on devices).
-- **Who does it:** the owner's current developer implements and deploys it (owner decision). Claude Code delivers the fix list with file:line references and verification checks from the audit, then re-audits the patched code read-only.
-- **Owner:** deployment, key rotation, forged-booking review, ABC communication, legal assessment.
+- The fix list (file and line references, order of work, verification checks) is kept **out of this public repository** and held by the owner and their developer, who implement and deploy it (owner decision).
+- It covers the §1.3b findings, rotating the legacy secrets, reviewing records for abuse, closing the data leak in §1.3 (after an authenticated replacement ships for any field the store apps read), rate limits, and an audit of every unauthenticated route.
+- **Acceptance:** a contract test over captured responses finds none of the sensitive fields, and both store apps still work (HAR spot-check on devices).
+- **Who does it:** the owner's current developer. Claude Code supplies the private fix list and re-audits the patched code read-only.
+- **Owner:** deployment, key rotation, abuse review, customer communication, legal assessment.
 
 **M0.1 Access, accounts, environments and legal kickoff (S)**
 - Audit steps 1–2.
