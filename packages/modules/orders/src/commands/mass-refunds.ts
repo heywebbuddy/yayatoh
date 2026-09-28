@@ -500,6 +500,7 @@ async function finishRunTx(tx: TenantTx, ctx: Ctx, run: Run, emit: (e: DomainEve
  */
 export const nextMassRefundStepCommand = tenantCommand({
   name: 'orders.nextMassRefundStep',
+  category: 'money',
   input: z.object({ runId: z.uuid() }),
   output: StepOutput,
   entitlement: 'ticketing',
@@ -660,6 +661,7 @@ const codeOf = (c: string | null | undefined) => {
  */
 export const settleMassRefundItemCommand = tenantCommand({
   name: 'orders.settleMassRefundItem',
+  category: 'money',
   input: z.object({ itemId: z.uuid() }),
   output: z.object({ status: z.enum(MASS_REFUND_ITEM_STATUSES) }),
   entitlement: 'ticketing',

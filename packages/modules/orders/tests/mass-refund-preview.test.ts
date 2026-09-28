@@ -33,14 +33,23 @@ describe('cancellation refund per order (M3.10b)', () => {
     ).toEqual({ kind: 'tickets', amountMinor: 5550, feeRefundedMinor: 550 });
   });
 
-  it('an earlier goodwill amount leaves less than the tickets: what is left, as an amount', () => {
+  it('an earlier goodwill amount leaves less than the tickets: what is left, as an amount, fee back', () => {
     expect(cancellationRefund(order({ id: 'a', status: 'partially_refunded', refundedMinor: 1000 }))).toEqual(
       {
         kind: 'amount',
         amountMinor: 10_100,
-        feeRefundedMinor: 0,
+        feeRefundedMinor: 1_100,
       },
     );
+    // The fee part an earlier refund already gave back is not given twice; never more than the amount.
+    expect(
+      cancellationRefund(
+        order({ id: 'a', status: 'partially_refunded', refundedMinor: 10_600, feeRefundedMinor: 1_000 }),
+      ),
+    ).toEqual({ kind: 'amount', amountMinor: 500, feeRefundedMinor: 100 });
+    expect(
+      cancellationRefund(order({ id: 'a', status: 'partially_refunded', refundedMinor: 11_050, live: [] })),
+    ).toEqual({ kind: 'amount', amountMinor: 50, feeRefundedMinor: 50 });
   });
 
   it('nothing left, or not sold: nothing', () => {

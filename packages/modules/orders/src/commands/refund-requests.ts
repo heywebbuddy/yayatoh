@@ -111,6 +111,7 @@ export async function buyerRefundPanelTx(tx: TenantTx, ctx: Ctx, order: Order): 
  */
 export const requestRefundCommand = tenantCommand({
   name: 'orders.requestRefund',
+  category: 'money',
   input: z.object({
     manageToken: z.string().regex(TOKEN),
     /** The buyer's own live tickets to refund; empty: all of them. */
@@ -340,6 +341,7 @@ export const refundRequestCountsQuery = tenantQuery({
  */
 export const declineRefundRequestCommand = tenantCommand({
   name: 'orders.declineRefundRequest',
+  category: 'money',
   input: z.object({ requestId: z.uuid(), reason: z.string().trim().min(3).max(500) }),
   output: z.object({ id: z.uuid(), status: z.enum(REFUND_REQUEST_STATUSES) }),
   entitlement: 'ticketing',
