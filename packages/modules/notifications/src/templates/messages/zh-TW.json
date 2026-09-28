@@ -99,6 +99,20 @@
     "notifications.test": {
       "subject": "測試通知",
       "intro": "通知功能正常。"
+    },
+    "orders.refund-requested": {
+      "subject": "退款申請：{name}",
+      "intro": "{name} 申請退還 {eventName} 的{count, plural, =0 {訂單} other {# 張票券}}。請在 5 個工作天內處理。"
+    },
+    "orders.refund-declined": {
+      "subject": "您對 {eventName} 的退款申請",
+      "intro": "{eventName} 的主辦單位拒絕了您的退款申請：「{reason}」您的票券仍然有效。",
+      "cta": "查看我的訂單"
+    },
+    "events.postponed": {
+      "subject": "{eventName} 已延期",
+      "intro": "{eventName} 已延期。您的票券在新日期仍然有效。如無法參加，可依主辦單位的退款政策在訂單頁面申請退款。",
+      "cta": "查看我的訂單"
     }
   },
   "roles": {

@@ -24,6 +24,8 @@ export {
   EVIDENCE_SUMMARY_MAX,
   markEvidenceSubmittedCommand,
   markOrgEvidenceSubmittedCommand,
+  OPEN_DISPUTE_STATUSES,
+  openDisputeOrderIdsTx,
   openDisputeTx,
   saveEvidenceDraftCommand,
 } from './disputes.ts';
@@ -47,6 +49,7 @@ export {
   postRefundTx,
   postSaleTx,
   postTransferReversalTx,
+  refundJournalTotalsTx,
 } from './ledger.ts';
 export type {
   AccountEvent,

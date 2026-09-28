@@ -15,6 +15,8 @@ export const PERMISSIONS = [
   'orders:refund',
   /** Record box-office sales the organizer collected themselves (cash, Zelle, card terminal). */
   'orders:sell',
+  /** Add internal notes to an order (M3.10b support timeline). */
+  'orders:note',
   'attendees:read',
   /** Label, tag and (later) edit attendees. */
   'attendees:write',
@@ -56,6 +58,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:write',
     'orders:read',
     'orders:sell',
+    'orders:note',
     'attendees:read',
     'attendees:write',
     'attendees:export',
@@ -71,6 +74,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:read',
     'orders:read',
     'orders:refund',
+    'orders:note',
     'finance:read',
     'finance:reconcile',
     'disputes:respond',
@@ -89,6 +93,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:read',
     'orders:read',
     'orders:sell',
+    'orders:note',
     'attendees:read',
     'attendees:write',
     'checkin:scan',
@@ -139,6 +144,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'events:write',
     'orders:read',
     'orders:sell',
+    'orders:note',
     'attendees:read',
     'attendees:write',
     'attendees:export',

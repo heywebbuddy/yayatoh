@@ -9,8 +9,9 @@ import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
-import { eventRefundPolicyTx } from './commands/refund-policy.ts';
-import { OrderDto, type PublicOrderDto, publicOrderSerializer } from './dto.ts';
+import { orderRefundPolicyTx } from './commands/refund-policy.ts';
+import { buyerRefundPanelTx } from './commands/refund-requests.ts';
+import { OrderDto, type PublicOrderDto, publicOrderSerializer, RefundPolicyDto } from './dto.ts';
 import { ORDER_STATUSES, orderItems, orders } from './schema.ts';
 
 export const listOrdersQuery = tenantQuery({
@@ -164,7 +165,8 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
         messages: await buyerOrderMessagesTx(tx, ref.order_id, o.buyerEmail),
-        refundPolicy: await eventRefundPolicyTx(tx, o.eventId),
+        refundPolicy: await orderRefundPolicyTx(tx, o),
+        refundRequest: await buyerRefundPanelTx(tx, ctx, o),
       };
     });
     return publicOrderSerializer.serialize(order);
@@ -225,6 +227,8 @@ export const orderDetailQuery = tenantQuery({
     riskReview: z.array(z.string()),
     /** organizer_mor: the org's own connected account the charge is on (disputes are answered there). */
     connectedAccountId: z.string().nullable(),
+    /** M3.10b: the refund policy this order is under (bought under, or a looser current one). */
+    refundPolicy: RefundPolicyDto.nullable(),
   }),
   entitlement: 'ticketing',
   permission: 'orders:read',
@@ -247,6 +251,7 @@ export const orderDetailQuery = tenantQuery({
       collectedBy: order.collectedBy as 'platform' | 'organizer',
       tickets,
       riskReview: order.riskReview ?? [],
+      refundPolicy: await orderRefundPolicyTx(tx, order),
     };
   },
 });

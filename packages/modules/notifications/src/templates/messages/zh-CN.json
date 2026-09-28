@@ -99,6 +99,20 @@
     "notifications.test": {
       "subject": "测试通知",
       "intro": "通知功能正常。"
+    },
+    "orders.refund-requested": {
+      "subject": "退款申请：{name}",
+      "intro": "{name} 申请退还 {eventName} 的{count, plural, =0 {订单} other {# 张门票}}。请在 5 个工作日内处理。"
+    },
+    "orders.refund-declined": {
+      "subject": "您对 {eventName} 的退款申请",
+      "intro": "{eventName} 的主办方拒绝了您的退款申请：“{reason}”您的门票仍然有效。",
+      "cta": "查看我的订单"
+    },
+    "events.postponed": {
+      "subject": "{eventName} 已延期",
+      "intro": "{eventName} 已延期。您的门票在新日期仍然有效。如无法参加，可根据主办方的退款政策在订单页面申请退款。",
+      "cta": "查看我的订单"
     }
   },
   "roles": {

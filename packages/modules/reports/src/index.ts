@@ -55,4 +55,13 @@ export {
   metricKeysFor,
   reportCurrencies,
 } from './metrics/registry.ts';
+export {
+  disputeTimelineItems,
+  ORDER_TIMELINE_KINDS,
+  type OrderTimelineDto,
+  OrderTimelineItemDto,
+  type OrderTimelineKind,
+  orderTimelineQuery,
+  sortTimeline,
+} from './order-timeline.ts';
 export { ContactTimelineDto, contactTimelineQuery, TIMELINE_KINDS } from './timeline.ts';

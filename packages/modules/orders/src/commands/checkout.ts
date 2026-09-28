@@ -36,9 +36,11 @@ import {
 import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
+import { policySnapshot } from '../domain/refund-policy.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
+import { refundPolicyTx } from './refunds.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
 
@@ -219,6 +221,8 @@ export const startCheckoutCommand = tenantCommand({
         feeSchedule: quote.feeSchedule,
         manageTokenHash: hashManageToken(manageToken),
         riskReview: input.riskReview,
+        // M3.10b: the refund policy the buyer sees now is the one this order keeps.
+        refundPolicySnapshot: policySnapshot(await refundPolicyTx(tx, event.id)),
         manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
         expiresAt,
       })

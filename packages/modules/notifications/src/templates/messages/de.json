@@ -99,6 +99,20 @@
     "notifications.test": {
       "subject": "Testbenachrichtigung",
       "intro": "Benachrichtigungen funktionieren."
+    },
+    "orders.refund-requested": {
+      "subject": "Erstattungsanfrage: {name}",
+      "intro": "{name} hat die Erstattung {count, plural, =0 {der Bestellung} one {von # Ticket} other {von # Tickets}} für {eventName} angefragt. Bitte innerhalb von 5 Werktagen beantworten."
+    },
+    "orders.refund-declined": {
+      "subject": "Deine Erstattungsanfrage für {eventName}",
+      "intro": "Der Veranstalter von {eventName} hat deine Erstattungsanfrage abgelehnt: „{reason}“ Deine Tickets bleiben gültig.",
+      "cta": "Meine Bestellung ansehen"
+    },
+    "events.postponed": {
+      "subject": "{eventName} wurde verschoben",
+      "intro": "{eventName} wurde verschoben. Deine Tickets bleiben für den neuen Termin gültig. Wenn du nicht kommen kannst, kannst du auf deiner Bestellseite nach der Erstattungsrichtlinie des Veranstalters eine Erstattung anfragen.",
+      "cta": "Meine Bestellung ansehen"
     }
   },
   "roles": {

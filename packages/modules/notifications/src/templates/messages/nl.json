@@ -99,6 +99,20 @@
     "notifications.test": {
       "subject": "Testmelding",
       "intro": "Meldingen werken."
+    },
+    "orders.refund-requested": {
+      "subject": "Terugbetalingsverzoek: {name}",
+      "intro": "{name} vroeg om terugbetaling van {count, plural, =0 {de bestelling} one {# ticket} other {# tickets}} voor {eventName}. Beantwoord het binnen 5 werkdagen."
+    },
+    "orders.refund-declined": {
+      "subject": "Je terugbetalingsverzoek voor {eventName}",
+      "intro": "De organisator van {eventName} heeft je terugbetalingsverzoek afgewezen: ‘{reason}’ Je tickets blijven geldig.",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "events.postponed": {
+      "subject": "{eventName} is uitgesteld",
+      "intro": "{eventName} is uitgesteld. Je tickets blijven geldig voor de nieuwe datum. Kun je niet komen, dan kun je op je bestelpagina om terugbetaling vragen volgens het terugbetalingsbeleid van de organisator.",
+      "cta": "Mijn bestelling bekijken"
     }
   },
   "roles": {

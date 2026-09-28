@@ -524,3 +524,39 @@ export async function assignTicketSeatsTx(
       .set({ seatLabel: s.seatLabel, updatedAt: ctx.now })
       .where(eq(tickets.id, s.ticketId));
 }
+
+/**
+ * Live (active) tickets of an event per order and order item (M3.10b): the cancellation preview
+ * adds up what each order would get back without reading every order's tickets one by one.
+ */
+export async function liveTicketsByOrderItemTx(
+  tx: TenantTx,
+  eventId: string,
+): Promise<{ orderId: string; orderItemId: string; count: number }[]> {
+  return tx
+    .select({
+      orderId: tickets.orderId,
+      orderItemId: tickets.orderItemId,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(tickets)
+    .where(and(eq(tickets.eventId, eventId), eq(tickets.status, 'active')))
+    .groupBy(tickets.orderId, tickets.orderItemId);
+}
+
+/** Every ticket of an order with when it was issued and, if void, why and when (the order timeline). */
+export async function ticketHistoryForOrderTx(tx: TenantTx, orderId: string) {
+  return tx
+    .select({
+      id: tickets.id,
+      serial: tickets.serial,
+      status: tickets.status,
+      voidReason: tickets.voidReason,
+      holderName: tickets.holderName,
+      createdAt: tickets.createdAt,
+      updatedAt: tickets.updatedAt,
+    })
+    .from(tickets)
+    .where(eq(tickets.orderId, orderId))
+    .orderBy(tickets.serial);
+}

@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
+import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `orders` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -29,7 +29,21 @@ export const privateColumns = columnPrivacy('orders', {
     charge_model: 'vocab',
     // Checkout risk signals (M1.6e): staff and finance only.
     risk_review: internal(),
+    // M3.10b: the refund policy at purchase (kind, days, kept amount): the same terms the event
+    // page shows publicly.
+    refund_policy_snapshot: 'public',
   },
+  // M3.10b: buyer refund requests, notes, mass refunds.
+  refund_requests: {
+    status: 'vocab',
+    message: personal(),
+    // Sent to the buyer (order page and email): holder data, never public.
+    decline_reason: holder(),
+    decided_by: internal(),
+  },
+  order_notes: { body: internal(), author_id: internal() },
+  mass_refunds: { reason: 'vocab', status: 'vocab', currency: 'vocab', requested_by: internal() },
+  mass_refund_items: { status: 'vocab', code: 'vocab' },
   refund_policies: { kind: 'vocab', updated_by: internal() },
   refunds: {
     status: 'vocab',

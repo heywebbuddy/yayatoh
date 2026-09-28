@@ -99,6 +99,20 @@
     "notifications.test": {
       "subject": "Notificação de teste",
       "intro": "As notificações estão funcionando."
+    },
+    "orders.refund-requested": {
+      "subject": "Pedido de reembolso: {name}",
+      "intro": "{name} pediu o reembolso de {count, plural, =0 {seu pedido} one {# ingresso} other {# ingressos}} para {eventName}. Responda em até 5 dias úteis."
+    },
+    "orders.refund-declined": {
+      "subject": "Seu pedido de reembolso para {eventName}",
+      "intro": "O organizador de {eventName} recusou seu pedido de reembolso: “{reason}” Seus ingressos continuam válidos.",
+      "cta": "Ver meu pedido"
+    },
+    "events.postponed": {
+      "subject": "{eventName} foi adiado",
+      "intro": "{eventName} foi adiado. Seus ingressos continuam válidos para a nova data. Se não puder ir, você pode pedir um reembolso na página do seu pedido, conforme a política de reembolso do organizador.",
+      "cta": "Ver meu pedido"
     }
   },
   "roles": {

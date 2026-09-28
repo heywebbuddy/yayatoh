@@ -1,5 +1,5 @@
 import { normalizeEmail } from '@yayatoh/crm';
-import { withoutTenant } from '@yayatoh/db';
+import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yayatoh/platform';
@@ -478,3 +478,25 @@ export const giveTicketCommand = tenantCommand({
   },
   audit: (input) => ({ action: 'ticket.give', targetType: 'ticket', targetId: input.ticketId }),
 });
+
+/**
+ * Claim links of some tickets with every moment they changed (M3.10b order timeline): offered,
+ * claimed (by whom), revoked. Newest first, bounded.
+ */
+export async function claimsForTicketsTx(tx: TenantTx, ticketIds: readonly string[]) {
+  if (ticketIds.length === 0) return [];
+  return tx
+    .select({
+      id: ticketClaims.id,
+      ticketId: ticketClaims.ticketId,
+      recipientEmail: ticketClaims.recipientEmail,
+      claimedByEmail: ticketClaims.claimedByEmail,
+      createdAt: ticketClaims.createdAt,
+      claimedAt: ticketClaims.claimedAt,
+      revokedAt: ticketClaims.revokedAt,
+    })
+    .from(ticketClaims)
+    .where(inArray(ticketClaims.ticketId, [...ticketIds]))
+    .orderBy(desc(ticketClaims.createdAt))
+    .limit(200);
+}

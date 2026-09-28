@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { actorId, type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { balanceTx, type Posting, postJournalTx } from './ledger.ts';
 import type { FundsFlow } from './port.ts';
@@ -284,3 +284,29 @@ export const markOrgEvidenceSubmittedCommand = tenantCommand({
     data: { by: 'organizer', excluded: input.excluded, summaryLength: input.summary.length },
   }),
 });
+
+/** Dispute statuses where the charge is still contested (the money may yet go back to the buyer). */
+export const OPEN_DISPUTE_STATUSES = ['open', 'evidence_submitted'] as const;
+
+/**
+ * Orders with a dispute still open (M3.10b): a mass refund skips them, since refunding a disputed
+ * charge would pay the buyer twice. One event, or the given orders.
+ */
+export async function openDisputeOrderIdsTx(
+  tx: TenantTx,
+  scope: { eventId: string } | { orderIds: readonly string[] },
+): Promise<Set<string>> {
+  if ('orderIds' in scope && scope.orderIds.length === 0) return new Set();
+  const rows = await tx
+    .select({ orderId: disputes.orderId })
+    .from(disputes)
+    .where(
+      and(
+        inArray(disputes.status, [...OPEN_DISPUTE_STATUSES]),
+        'eventId' in scope
+          ? eq(disputes.eventId, scope.eventId)
+          : inArray(disputes.orderId, [...scope.orderIds]),
+      ),
+    );
+  return new Set(rows.map((r) => r.orderId));
+}
