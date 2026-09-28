@@ -5,10 +5,12 @@ import { createHmac, randomBytes } from 'node:crypto';
  * Postgres stays the system of record; a lost message is repaired by the next snapshot.
  *
  * - `memoryRealtimeHub()` fans messages out inside one process. The web app's SSE endpoints
- *   subscribe to it (dev, CI, and the SSE fallback in production).
+ *   subscribe to it (dev, CI, and the SSE transport in production).
  * - `ablyRealtimePublisher()` publishes the same messages to Ably over its REST API when
- *   `REALTIME_PROVIDER=ably` and `ABLY_API_KEY` are set (owner account; token auth for browsers
- *   comes with it). Until then SSE is the transport everywhere.
+ *   `REALTIME_PROVIDER=ably` and `ABLY_API_KEY` are set (owner account), and `ablyTokenRequest()`
+ *   signs browser token requests locally. Until then SSE is the transport everywhere.
+ * - M3.1b adds the channel registry (`realtime-channels.ts`), the message log and its
+ *   LISTEN/NOTIFY fan-out (`realtime-log.ts`), and the shared SSE core (`realtime-sse.ts`).
  *
  * Channels are always scoped to an org (`org:{orgId}:…`), so a token or a stream for one org can
  * never name another org's channel.

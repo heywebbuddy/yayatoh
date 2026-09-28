@@ -52,6 +52,7 @@ export function LiveCheckins({ url }: { url: string }) {
       className="flex flex-wrap items-center gap-x-4 gap-y-1"
       data-testid="live-checkins"
       data-live={state}
+      data-stream={url}
     >
       <StatusDot status={DOT[state]} label={t(`state.${state}`)} live={state === 'live'} />
       <p className="text-caption text-zinc-600" aria-live="polite" role="status">
