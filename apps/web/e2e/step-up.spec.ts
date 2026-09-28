@@ -279,9 +279,9 @@ test.describe('step-up: "Confirm it\'s you"', () => {
 async function paidOrder(page: Page, browser: Browser) {
   const s = stamp();
   await page.goto('/o/lakeside-events/events/new');
-  await page.getByLabel('Event name').fill(`Step-up ${s}`);
-  await page.getByLabel('Starts').fill('2028-03-01T18:00');
-  await page.getByLabel('Ends').fill('2028-03-01T22:00');
+  await page.getByLabel('Event name', { exact: true }).fill(`Step-up ${s}`);
+  await page.getByLabel('Starts', { exact: true }).fill('2028-03-01T18:00');
+  await page.getByLabel('Ends', { exact: true }).fill('2028-03-01T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/step-up-/);
   const base = new URL(page.url()).pathname;

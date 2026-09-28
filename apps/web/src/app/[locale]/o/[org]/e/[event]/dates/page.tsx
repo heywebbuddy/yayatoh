@@ -107,6 +107,8 @@ export default async function DatesPage({
               </Link>
             </div>
             <EditDateForm
+              // One form per date: its typed values and result never carry over to another date.
+              key={editing.id}
               action={updateDateAction.bind(null, org, event, editing.id)}
               defaults={{
                 startsAt: local(editing.startsAt),

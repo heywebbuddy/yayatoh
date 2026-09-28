@@ -206,7 +206,10 @@ test.describe('multi-date events', () => {
     await page
       .getByRole('link', { name: `Edit ${consoleLabel('2027-03-17T19:00', '2027-03-17T22:00')}` })
       .click();
-    const later = page.getByRole('region', { name: /^Edit / });
+    const later = page.getByRole('region', {
+      name: `Edit ${consoleLabel('2027-03-17T19:00', '2027-03-17T22:00')}`,
+    });
+    await expect(later).toBeVisible();
     await later.getByLabel('Starts', { exact: true }).fill('2027-03-17T20:00');
     await later.getByLabel('Ends', { exact: true }).fill('2027-03-17T23:30');
     await later.getByLabel('This date and all later dates').check();
