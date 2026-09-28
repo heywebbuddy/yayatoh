@@ -173,8 +173,11 @@ export const impersonations = identity.table(
     userId: uuid('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    /** The org the member is acted as in; the session can open only this org's console. */
-    orgId: uuid('org_id').notNull(),
+    /**
+     * The org the member is acted as in; the session can open only this org's console. Named
+     * `target_org_id`, not `org_id`: this global table is not tenant-owned (V11, M2.2c).
+     */
+    orgId: uuid('target_org_id').notNull(),
     reason: text('reason').notNull(),
     /** Where "End" sends the staff member back to (the staff console's tenant page). */
     returnUrl: text('return_url').notNull(),
@@ -186,7 +189,7 @@ export const impersonations = identity.table(
     endedReason: text('ended_reason'),
   },
   (t) => [
-    index('impersonations_org_started_idx').on(t.orgId, t.startedAt),
+    index('impersonations_target_org_started_idx').on(t.orgId, t.startedAt),
     index('impersonations_staff_idx').on(t.staffUserId, t.startedAt),
     index('impersonations_open_idx').on(t.expiresAt).where(sql`${t.endedAt} is null`),
   ],

@@ -320,8 +320,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "org_id": {
-          "name": "org_id",
+        "target_org_id": {
+          "name": "target_org_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -371,27 +371,6 @@
         }
       },
       "indexes": {
-        "impersonations_org_started_idx": {
-          "name": "impersonations_org_started_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "started_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "impersonations_staff_idx": {
           "name": "impersonations_staff_idx",
           "columns": [
@@ -425,6 +404,27 @@
           ],
           "isUnique": false,
           "where": "\"auth\".\"impersonations\".\"ended_at\" is null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "impersonations_target_org_started_idx": {
+          "name": "impersonations_target_org_started_idx",
+          "columns": [
+            {
+              "expression": "target_org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
           "concurrently": false,
           "method": "btree",
           "with": {}

@@ -17,7 +17,7 @@ CREATE TABLE "auth"."impersonations" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"staff_user_id" uuid NOT NULL,
 	"user_id" uuid NOT NULL,
-	"org_id" uuid NOT NULL,
+	"target_org_id" uuid NOT NULL,
 	"reason" text NOT NULL,
 	"return_url" text NOT NULL,
 	"ip_address" text,
@@ -37,7 +37,7 @@ ALTER TABLE "auth"."impersonations" ADD CONSTRAINT "impersonations_user_id_users
 CREATE UNIQUE INDEX "handoff_codes_code_hash_key" ON "auth"."handoff_codes" USING btree ("code_hash");--> statement-breakpoint
 CREATE INDEX "handoff_codes_user_idx" ON "auth"."handoff_codes" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "handoff_codes_expires_idx" ON "auth"."handoff_codes" USING btree ("expires_at");--> statement-breakpoint
-CREATE INDEX "impersonations_org_started_idx" ON "auth"."impersonations" USING btree ("org_id","started_at");--> statement-breakpoint
+CREATE INDEX "impersonations_target_org_started_idx" ON "auth"."impersonations" USING btree ("target_org_id","started_at");--> statement-breakpoint
 CREATE INDEX "impersonations_staff_idx" ON "auth"."impersonations" USING btree ("staff_user_id","started_at");--> statement-breakpoint
 CREATE INDEX "impersonations_open_idx" ON "auth"."impersonations" USING btree ("expires_at") WHERE "auth"."impersonations"."ended_at" is null;--> statement-breakpoint
 -- hand-written: begin
