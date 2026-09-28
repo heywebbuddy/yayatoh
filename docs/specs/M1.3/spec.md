@@ -199,7 +199,7 @@ Fixture: both orgs of `createOrgFixture` are suspended and reactivated once (iso
 
 ### Later / not yet
 - Owner decisions above (who may change status and hand out codes; scanning while suspended; owners' access after termination; whether owners see the staff reason).
-- A reviewed runbook to un-terminate (a status change outside the console) and to erase a terminated org's data after the retention period.
+- ~~A reviewed runbook to un-terminate~~ (done: see "Restoring a terminated org" below) and one to erase a terminated org's data after the retention period.
 - Organizers' own "Add" and "Check now" don't draw from the job's provider budget; the Vercel adapter will queue adds (Vercel's 100/h) and share the budget.
 - Suspension doesn't revoke API keys or end open impersonations; both stop working through the status checks (keys resolve to nothing; the session is read-only).
 - The staff console stays English-only (owner inbox).
@@ -222,3 +222,23 @@ Fixture: both orgs of `createOrgFixture` are suspended and reactivated once (iso
 | AC-3f-13 | **A domain goes from pending to active** (roadmap) through the job in the browser: the organizer sees it live, primary, with wallets; the auto-check note in English and Arabic; staff see it active; axe | `apps/admin/e2e/domain-recheck.spec.ts` |
 | AC-3f-14 | Staff console CSP: strict nonce profile and headers, fresh nonce per response, every script carries it, no style attributes, no violations through sign-in, a tenant page and a Server Action; API policy; CSP report endpoint | `apps/admin/e2e/security.spec.ts` |
 | AC-3f-15 | Messages in 13 locales with valid plurals | `apps/web/tests/messages.test.ts` |
+
+### Restoring a terminated org (un-terminate, M1.13d follow-up, done)
+- **Runbook:** `docs/runbooks/restore-terminated-org.md` (reviewed; linked from the runbooks index): who (admin staff after the platform owner's written approval), what termination did and what restore reverses, pre-checks (a termination row exists, no erasure ran), the steps, verification, undo, and a review checklist.
+- **Command** `tenancy.restoreOrg` (new platform permission `platform:org.restore`, platform actor only; entitlement none; `stepUp: true`). Platform actors pass the step-up port at their transport, so the command **checks the staff step-up itself**: `ctx.stepUpAt` within 10 minutes, else `step_up_required`. A reason of 3–500 characters is required.
+  - Only a terminated org (`invalid_state`, `reason: not_terminated`), and only one whose termination is recorded: the newest `org_status_changes` row into `terminated` gives the status to go back to (`restoredOrgStatus`, pure). Without one it refuses (`no_termination_record`): the runbook says to escalate, never to edit the database.
+  - **Reverses only what termination did**, which is the status change: the org gets back its recorded `from` status (active, limited or **suspended**). Kill switches, payout holds, API keys, devices, domains, members, and fee and entitlement overrides are untouched (termination never changed them; they only stopped resolving).
+  - Recorded like any status change: an `org_status_changes` row (`restore`, `terminated` → the status), the org's audit row `org.status_change` (`statusAction: restore`, from, to, the note, the termination's id), and `org.status_changed@1` with `action: restore`. The listings projector rebuilds a live org's listings; the owners are told ("back online" when the org is live again, without the note).
+  - **Fix:** the owners' notice now reads "reactivated" for any live status (`isOrgLive`), so a restore to `limited` isn't announced as "closed".
+- **Staff console** (tenant page, terminated orgs only): a separate "Restore a terminated organization" region. Admins get a form: what it will restore to, the reason, the org's address typed, and **"Confirm it's you"** (their password, or their authenticator code if they use one: `twoFactorService.stepUp` on the console session, audited in packages/auth as `step_up.confirmed`/`step_up.failed`, rate limited). The action writes the platform access-log row first (`staff console: restore organization {slug}: {reason}`), runs the command with the fresh `stepUpAt`, then drops the org's cached public reads. Refusals: blank reason, wrong address, wrong password/code, too many tries, staff with neither a password nor an authenticator. Support and finance see "Only admins can restore an organization." and no form. The status region's closing note now points to the restore ("can't be reactivated with these forms"). English only, like the rest of the staff console.
+- **Migration:** `0060_flimsy_talos.sql` (shared with M1.13d) widens `org_status_changes_action_check` with `restore` (NOT VALID, then VALIDATE).
+- *Pending the owner:* admin only after written approval; a suspended org comes back suspended; a single staff member (not two).
+
+### Acceptance (restore)
+| ID | Criterion | Test |
+|---|---|---|
+| AC-3f-16 | Only a platform actor with a fresh step-up (none or 11 minutes old refused) and a reason; only a terminated org; refusals change nothing and write no audit row | `packages/testing/tests/org-restore.int.test.ts` "only staff, with a fresh step-up…" |
+| AC-3f-17 | Restore brings an active org back online (event, checkout, organizer, listing, API key), members write again, the other org untouched; history, audit (with the termination id and note), `org.status_changed@1` (`restore`), owners told "reactivated" without the note; a second restore refused | `org-restore.int.test.ts` "puts an active org back online…" |
+| AC-3f-18 | Reverses only the termination: a suspended org comes back suspended (still read-only, still offline) with its kill switch on | `org-restore.int.test.ts` "reverses only the termination…" |
+| AC-3f-19 | An org terminated without a recorded termination is refused (`no_termination_record`) | `org-restore.int.test.ts` "refuses an org terminated without…"; `packages/modules/tenancy/tests/org-status.test.ts` (`restoredOrgStatus`) |
+| AC-3f-20 | In the browser: terminate → owner's console closed (Arabic, RTL) → restore by keyboard only: wrong password and wrong address refused, then restored → status Active, "Restored by" in the history, public pages back, owner's console back, "back online" email without the note, access-log line; axe; support sees no form | `apps/admin/e2e/tenant-restore.spec.ts` |

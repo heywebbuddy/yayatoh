@@ -242,7 +242,7 @@
       "effect": {
         "suspend": "Takes its public pages, marketplace listings, tenant site, widget and checkout offline at once and makes its console read-only. Existing orders stay valid and tickets still scan. The owners are told (without your reason).",
         "reactivate": "Brings its public pages, listings and checkout back and makes its console writable again. The owners are told.",
-        "terminate": "Closes it for good: public pages go offline, ticket scanning stops and members lose the console, except owners, who can still export their data. This can't be undone from the console. Nothing is deleted."
+        "terminate": "Closes it for good: public pages go offline, ticket scanning stops and members lose the console, except owners, who can still export their data. Only the reviewed restore (runbook, with the platform owner's approval) can undo it. Nothing is deleted."
       },
       "confirm": {
         "suspend": "I understand its public pages go offline and its console becomes read-only.",

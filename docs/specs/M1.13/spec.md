@@ -11,7 +11,7 @@ Roadmap: M1.13 ("`/v1` per §6.1; mobile auth; `/v1/mobile/config`; scanner endp
 
 **Authentication** (no cookies on `/v1`; `Authorization: Bearer …` only):
 - **Org API keys** `yy_live_<43 base64url>`: `tenancy.api_keys` (tenant table, FORCE RLS). Only a SHA-256 of the key is stored; the key is shown once. The key resolves to (org, key, scopes) through the SECURITY DEFINER `tenancy.api_key_by_hash`, which returns nothing for revoked keys and for suspended or terminated orgs. Last use is stamped at most once a minute.
-  - **Scopes** (`API_KEY_SCOPES`): `org:read`, `events:read`, `events:write`, `orders:read`, `orders:refund`, `attendees:read`, `checkin:scan`. The authorizer lets an `api_key` actor do exactly what its **live** scopes list (a revoke applies to the next request). A key never gets more than its creator's role (`scope_exceeds_role`), and never member-management or payout powers.
+  - **Scopes** (`API_KEY_SCOPES`): `org:read`, `events:read`, `events:write`, `orders:read`, `orders:refund`, `attendees:read`, `checkin:scan`; M1.13d adds `attendees:write`. The authorizer lets an `api_key` actor do exactly what its **live** scopes list (a revoke applies to the next request). A key never gets more than its creator's role (`scope_exceeds_role`), and never member-management or payout powers.
   - Managed by the new permission `api_keys:manage` (owner, admin). Commands `tenancy.createApiKey`, `tenancy.revokeApiKey`, query `tenancy.listApiKeys`, all audited.
   - Not the Better Auth api-key plugin: it stores user-bound keys in the identity schema without RLS. Org-bound keys as tenant rows follow the device-token pattern (M1.9). Pending owner (inbox).
 - **User sessions for mobile/CLI**: `POST /v1/auth/login` (email + password) returns a Better Auth session token used as a bearer token (the `bearer` plugin; no cookie is set). `POST /v1/auth/refresh` slides the expiry; `POST /v1/auth/logout` ends it at once. Accounts with two-factor sign-in get `step_up_required` (`two_factor_required`): use the web sign-in. Login is limited per account (5 / 15 min) and per IP (100 / min).
@@ -68,6 +68,32 @@ Roadmap: M1.13 ("`/v1` per §6.1; mobile auth; `/v1/mobile/config`; scanner endp
 - Staff read it in the admin console at **API usage** (`/api-usage`, platform_reader, audited): last 7 days by route, client and version.
 - **Webhooks:** outbound subscriptions are M6.3. No seam was added here: the outbox and versioned domain events are already the natural seam.
 
+## M1.13d — bulk actions on `/v1` (done)
+The M1.8 bulk-action framework (M1.8b/e/f) through `/v1/orgs/{org}/…`, additive only (oasdiff: no breaking changes). **Risk tags:** `auth`, `tenancy`, `db-migration`, `payments`-adjacent (cancel without refund).
+
+**Same commands as the console.** Each kind is one registered bulk action, and `/v1` runs its own `start`, `undo` and `status` commands from `bulkCommands(action)` (`packages/api-v1/src/routes/bulk.ts`). So the permission (the key's scopes or the member's role, including event-scoped roles), the entitlement, step-up, the M1.2e category, the M1.3f org gate, the `bulk.start` / `bulk.undo` audit rows (actor `api_key:<id>` or `user:<id>`, the request id) and the outbox events are the console's. Starts and undos run with `idempotent: true`.
+
+| Method + path | What | Scope / permission |
+|---|---|---|
+| `POST /v1/orgs/{org}/events/{eventId}/bulk/labels` | add/remove labels (`add`, `remove`) | `attendees:write` |
+| `POST …/bulk/emails` | email attendees (`subject`, `body`) | `attendees:write` |
+| `POST …/bulk/seat-assignments` | seat them (`target`: item, section, best, group; `overrideRules`) | `events:write` |
+| `POST …/bulk/ticket-resends` | resend tickets | `attendees:write` |
+| `POST …/bulk/ticket-cancellations` | cancel tickets without a refund (explicit `ids` only) | `orders:refund` |
+| `GET /v1/orgs/{org}/bulk/{kind}/{operationId}` | progress and results | the kind's |
+| `POST /v1/orgs/{org}/bulk/{kind}/{operationId}/undo` | undo (`labels`, `seat-assignments`; once, within 10 minutes) | the kind's |
+
+- **Selection:** `{ ids: [...] }` (1–50,000 attendees of the event; a foreign or unknown id refuses the whole request with 404) or `{ filter: { search, labels, source, status } }` (the list's attendee filters, resolved once when the operation starts). Ticket-type and check-in filters are not offered: they would have to be resolved to ids in the transport, which would make an idempotent retry's input depend on when it runs. Callers select by ids for those.
+- **Cancel** takes ids only: it can't be undone, so the caller names exactly who (the console's confirmation count, M1.8f, plays that role there).
+- **Responses:** starts and undos are `202` with the `BulkOperation` after up to 3 s of inline work (`V1Deps.bulkInlineMs`, like the console); the worker's leader finishes anything bigger (it registers every one of these actions). `BulkOperation` (allowlist): `id`, `kind`, `eventId`, `status`, `total`, `processed`, `succeeded`, `failed`, `undone`, `createdAt`, `finishedAt`, `undoUntil`, and the first 50 `failures` and `warnings` as `{ attendeeId, code }`. Never the params (message bodies), the item ids or the requester.
+- **Idempotency:** a retry with the same `Idempotency-Key` returns the same operation (the start command's stored output); another body with that key is 422; no key is 400. The fingerprint is the command input, which is fully determined by the request (hence filters are passed to the command as they are).
+- **Kinds are separate:** an operation read or undone under another kind's path is 404 (the status command loads by id *and* action).
+- **Exports** (attendee, bookings, audit, DSAR) are not offered: they need a step-up, which no `/v1` credential carries (API keys have no person; bearer sessions are long-lived). Pending the owner.
+- **New API key scope `attendees:write`** ("Change attendees and resend tickets", 13 locales: `apiKeys.scope.attendees_write`). Pending the owner.
+- **SDK:** regenerated (`BulkOperation`, `BulkSelection`, the request schemas). `packages/sdk/tests/sdk.int.test.ts` starts, polls and undoes an operation through it.
+
+**Migration** `packages/db/drizzle/0060_flimsy_talos.sql` (renumbered at merge; shared with M1.3's restore): widens `tenancy.api_keys_scopes_check` (+ `attendees:write`) and `tenancy.org_status_changes_action_check` (+ `restore`). Generated as drop + add; hand-edited (`-- hand-written` block) to add both `NOT VALID` and then `VALIDATE`, plus two header lines. No new tables.
+
 ## Later / not yet
 - **The `/api/v2` facade (§6.2)** and M1.13's HAR acceptance: needs the golden HARs from both store builds (owner inbox, M0.3) and the M0.8 route list. It will need: a Hono sub-app at `apps/web/app/api/v2/[...route]`, host-namespaced instances, `compat_ids`, Sanctum token lookup (`packages/auth/compat/sanctum.ts` is ready) against migrated `personal_access_tokens` (M2 ELT), per-route × app-version × instance telemetry (the `platform.api_usage` pattern plus an instance column) and a kill switch per route.
 - **"Migrated tokens work without re-login"**: needs the migrated Sanctum tokens (M2 ELT) and `/v1/auth/legacy-exchange`; not buildable before the ELT.
@@ -108,3 +134,11 @@ Roadmap: M1.13 ("`/v1` per §6.1; mobile auth; `/v1/mobile/config`; scanner endp
 | SDK works against a running API | `packages/sdk/tests/sdk.int.test.ts`; `packages/sdk/tests/schema.test.ts` |
 | App-version telemetry per route, readable by staff only | `v1.int.test.ts` "/v1 app-version telemetry"; `apps/admin/e2e/admin.spec.ts` "staff read the commission report … and /v1 API usage", "an organizer account cannot open … the API usage"; `v1.test.ts` (client parsing) |
 | HARs match / migrated tokens / store builds on staging | **Not yet** (facade, ELT and staging; see "Later") |
+| **M1.13d** Bulk labels by ids with a key: 202, done inline, allowlisted output, audited as the key with the request id; status per kind (another kind's path 404); undo once (second 409) | `packages/api-v1/tests/bulk.int.test.ts` "labels by ids with an API key…" |
+| M1.13d One operation per Idempotency-Key (retry replays, other body 422, none 400) | `bulk.int.test.ts` "one operation per Idempotency-Key…" |
+| M1.13d Resend (`no_ticket` failures, one resend event per chunk), email (body not audited, wire validation), seat assignment + undo, cancel (ids only, tickets void, no undo route) | `bulk.int.test.ts` |
+| M1.13d Scopes and roles: read-only key 403 on every kind and on status; viewer 403; manager labels (audited as the user) but can't cancel; no credential 401 | `bulk.int.test.ts` "respects scopes and roles…" |
+| M1.13d Tenant isolation: another org's key 404 on the path, the event's ids, the operation and its undo; the entitlement (`module_not_enabled`) | `bulk.int.test.ts` "isolates tenants…", "needs the module…" |
+| M1.13d Through the SDK: start with a key, same key same operation, poll, undo, another org 404 | `packages/sdk/tests/sdk.int.test.ts` "runs a bulk action…" |
+| M1.13d In the browser: a key made with the new scope labels guests through `/api/v1`, polls, undoes, the console shows it; a read-only key 403 | `apps/web/e2e/api-bulk.spec.ts` |
+| M1.13d oasdiff clean; openapi.json and SDK current; the scope in 13 locales | `pnpm contracts:check`; `oasdiff breaking` against the base (no breaking changes); `apps/web/tests/messages.test.ts` |
