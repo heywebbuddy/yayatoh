@@ -16,7 +16,7 @@ node --version
 
 # pnpm via corepack (version pinned by packageManager in package.json once M0.5 lands)
 corepack enable
-corepack prepare pnpm@latest --activate || npm install -g pnpm
+corepack prepare pnpm@12.6.0 --activate || npm install -g pnpm@12.6.0
 pnpm --version
 
 # Service images for integration and tenant-isolation tests (Postgres 18, Redis, Mailpit)
@@ -29,7 +29,10 @@ fi
 
 # Playwright browsers (only once the repo has Playwright installed, after M0.5)
 if [ -f package.json ] && grep -q '"@playwright/test"' package.json 2>/dev/null; then
-  pnpm install --frozen-lockfile
+  # Best effort: every session runs `pnpm install` itself, so a failed warm-up install (for
+  # example a package whose postinstall needs a host the network policy blocks) must not
+  # abort the whole setup.
+  pnpm install --frozen-lockfile || echo "WARN: pnpm install failed during setup; sessions install on start"
   pnpm exec playwright install --with-deps chromium || true
 fi
 
