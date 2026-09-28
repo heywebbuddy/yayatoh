@@ -152,7 +152,8 @@ const keeps = (p: RefundPolicy | null) => (!p || p.kind === 'none' ? 0 : p.retai
  */
 export function isTighter(next: RefundPolicy | null, prev: RefundPolicy | null): boolean {
   if (closesDaysBefore(next) > closesDaysBefore(prev)) return true;
-  return next?.kind !== 'none' && keeps(next) > keeps(prev);
+  // Keeping more only matters when refunds were possible before (from "no refunds" it's a loosening).
+  return next?.kind !== 'none' && prev?.kind !== 'none' && keeps(next) > keeps(prev);
 }
 
 /** `a` is at least as generous as `b` on every count. */

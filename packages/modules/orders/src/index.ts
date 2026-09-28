@@ -135,6 +135,7 @@ export {
   refundAtProvider,
   refundOrder,
   runMassRefund,
+  runOrgMassRefunds,
   type StartedRefund,
 } from './refund-flow.ts';
 export {

@@ -1,6 +1,7 @@
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { type CommandPorts, type Ctx, createCtx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { type PaymentProvider, recordTransferReversalCommand } from '@yayatoh/payments';
+import { eq } from 'drizzle-orm';
 import type { z } from 'zod';
 import { nextMassRefundStepCommand, settleMassRefundItemCommand } from './commands/mass-refunds.ts';
 import {
@@ -8,6 +9,7 @@ import {
   type startPolicyOverrideRefundCommand,
   startRefundCommand,
 } from './commands/refunds.ts';
+import { massRefunds } from './schema.ts';
 
 export interface RefundOutcome {
   readonly refundId: string;
@@ -153,4 +155,23 @@ export async function runMassRefund(
     settled += 1;
   }
   return { settled, stoppedBy: 'budget' };
+}
+
+/**
+ * Work every running mass refund of one org (dev and CI: what the worker's job does, run from
+ * the web's dev route so browser journeys need no worker).
+ */
+export async function runOrgMassRefunds(
+  provider: PaymentProvider,
+  ports: CommandPorts<TenantTx>,
+  orgId: string,
+  opts: { budgetMs?: number; maxItems?: number } = {},
+): Promise<{ runs: number; settled: number }> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'orders.mass-refund' } });
+  const running = await withTenant(ctx, (tx) =>
+    tx.select({ id: massRefunds.id }).from(massRefunds).where(eq(massRefunds.status, 'running')),
+  );
+  let settled = 0;
+  for (const r of running) settled += (await runMassRefund(provider, ports, orgId, r.id, opts)).settled;
+  return { runs: running.length, settled };
 }

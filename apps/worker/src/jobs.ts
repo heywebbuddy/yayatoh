@@ -10,6 +10,11 @@ export interface JobDefinition<P> {
   readonly payload: z.ZodType<P>;
   readonly handler: (payload: P, meta: { id: string; name: string }) => Promise<void>;
   readonly retryLimit?: number;
+  /**
+   * pg-boss queue policy. `exclusive`: at most one job per `singletonKey` queued or active (a
+   * resumable batch is worked by one job at a time). Default `standard`.
+   */
+  readonly policy?: 'standard' | 'exclusive';
 }
 
 export function defineJob<P>(def: JobDefinition<P>): JobDefinition<P> {
