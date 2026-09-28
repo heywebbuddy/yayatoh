@@ -77,6 +77,12 @@ export default async function EventDashboard({
                   </form>
                 ))
               : null}
+            {/* M3.10b: the cancel/postpone wizard (money preview, mass refund, buyer notices). */}
+            {canWrite && ['published', 'postponed', 'cancelled'].includes(ev.status) ? (
+              <Link href={`${base}/cancel`} className={buttonClass('secondary')}>
+                {t('refundOps.wizard.link')}
+              </Link>
+            ) : null}
           </>
         }
       />

@@ -8,6 +8,7 @@ import { loadConsole } from '@/server/console.ts';
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
   { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
+  { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
   { key: 'venues', path: 'venues', group: 'build', module: 'core', icon: 'building' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
   { key: 'series', path: 'series', group: 'build', module: 'core', icon: 'layers' },
@@ -27,6 +28,7 @@ const ORG_NAV: readonly NavItem[] = [
 /** Items only some roles may open (the pages refuse everyone else too). */
 const NEEDS: Readonly<Record<string, string>> = {
   messages: 'messages:read',
+  refundRequests: 'orders:read',
   finance: 'finance:read',
   activity: 'audit:read',
   privacy: 'privacy:manage',

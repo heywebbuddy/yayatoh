@@ -1,16 +1,22 @@
 'use server';
 
-import { isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import {
+  addOrderNoteCommand,
+  declineRefundRequestCommand,
+  orderDetailQuery,
   REFUND_REASONS,
   type RefundOutcome,
   type RefundReason,
   refundOrder,
+  refundRequestsQuery,
   startPolicyOverrideRefundCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
 import { revalidatePath } from 'next/cache';
+import type { FormState } from '@/lib/form-state.ts';
 import { loadEvent } from '@/server/console.ts';
+import { failure, success } from '@/server/form.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -71,4 +77,102 @@ export async function refundAction(
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
   return done.status === 'failed' ? { ok: false, code: 'refund_failed' } : { ok: true, code: null };
+}
+
+/**
+ * Approve a buyer's refund request (M3.10b): the same refund flow (command, step-up for large
+ * refunds, provider keyed by the refund), linked to the request, under the policy as it stood when
+ * the buyer asked. The tickets they asked for, or an amount (tickets stay valid).
+ */
+export async function approveRequestAction(
+  org: string,
+  event: string,
+  orderId: string,
+  requestId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const [request] = (await executeQuery(refundRequestsQuery, { orderId }, data.ctx, ports)).filter(
+    (r) => r.id === requestId,
+  );
+  if (!request) return { ok: false, code: 'not_found' };
+  const reason: RefundReason = ev.status === 'cancelled' ? 'event_cancelled' : 'requested_by_customer';
+  let ticketIds = request.ticketIds;
+  if (ticketIds.length === 0) {
+    const order = await executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
+    ticketIds = order.tickets.filter((t) => t.status === 'active').map((t) => t.id);
+  }
+  let amountMinor = 0;
+  if (form.get('mode') === 'amount') {
+    try {
+      amountMinor = moneyFromDecimal(
+        String(form.get('amount') ?? '0').replace(',', '.') || '0',
+        ev.currency,
+      ).amount;
+    } catch {
+      return { ok: false, code: 'validation_failed', fields: ['amountMinor'] };
+    }
+  }
+  try {
+    const done = await refundOrder(
+      form.get('mode') === 'amount'
+        ? { orderId, reason, amountMinor, refundRequestId: requestId }
+        : { orderId, reason, ticketIds, refundRequestId: requestId },
+      data.ctx,
+      ports,
+      getPaymentProvider(),
+    );
+    if (done.status === 'failed') return { ok: false, code: 'refund_failed' };
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}`, 'layout');
+  return success();
+}
+
+/** Decline a buyer's refund request with a reason they are emailed (M3.10b). */
+export async function declineRequestAction(
+  org: string,
+  event: string,
+  requestId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data } = await loadEvent(org, event);
+  try {
+    await executeCommand(
+      declineRefundRequestCommand,
+      { requestId, reason: String(form.get('reason') ?? '') },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}`, 'layout');
+  return success();
+}
+
+/** Add an internal note to the order (M3.10b timeline). */
+export async function addNoteAction(
+  org: string,
+  event: string,
+  orderId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data } = await loadEvent(org, event);
+  try {
+    await executeCommand(
+      addOrderNoteCommand,
+      { orderId, body: String(form.get('body') ?? '') },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+  return success();
 }

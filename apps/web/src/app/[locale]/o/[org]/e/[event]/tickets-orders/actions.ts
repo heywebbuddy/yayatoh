@@ -281,13 +281,19 @@ export async function boxOfficeSaleAction(
   }
 }
 
-/** Set (or clear) the event's refund policy (M1.6e). The retained fee is a decimal in the event currency. */
+/** The policy form's state: M3.10b adds how many sold orders keep their terms after a tightening. */
+export type RefundPolicyFormState = FormState & { readonly keptTerms?: number | null };
+
+/**
+ * Set (or clear) the event's refund policy (M1.6e). The retained fee is a decimal in the event
+ * currency. A tightening applies to orders placed from now on (M3.10b): the form says so.
+ */
 export async function setRefundPolicyAction(
   org: string,
   event: string,
-  _prev: FormState,
+  _prev: RefundPolicyFormState,
   form: FormData,
-): Promise<FormState> {
+): Promise<RefundPolicyFormState> {
   const { data, event: ev } = await loadEvent(org, event);
   const kind = String(form.get('kind') ?? 'unset');
   let retainedMinor = 0;
@@ -298,8 +304,9 @@ export async function setRefundPolicyAction(
     return { ok: false, code: 'validation_failed', fields: ['retainedMinor'] };
   }
   const days = String(form.get('daysBefore') ?? '').trim();
+  let saved: { tightened: boolean; ordersKeepingTerms: number } | null;
   try {
-    await executeCommand(
+    saved = await executeCommand(
       setRefundPolicyCommand,
       {
         eventId: ev.id,
@@ -314,5 +321,9 @@ export async function setRefundPolicyAction(
     return failure(err);
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
-  return success();
+  // Stricter than before with orders already sold: say that those orders keep their terms.
+  return {
+    ...success(),
+    keptTerms: saved?.tightened && saved.ordersKeepingTerms > 0 ? saved.ordersKeepingTerms : null,
+  };
 }
