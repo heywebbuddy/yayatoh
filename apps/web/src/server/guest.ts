@@ -27,6 +27,7 @@ import { rememberDevCode } from './auth.ts';
 import { devAuthEnabled } from './dev.ts';
 import { clientIp, rateLimiter } from './rate-limit.ts';
 import { requestHost } from './request-origin.ts';
+import { ownAuthSession } from './session.ts';
 
 /**
  * Guest email verification in the browser (M1.5f): the cookies behind checkout verification and
@@ -82,8 +83,8 @@ export async function rememberVerifiedEmail(email: string) {
 }
 
 /**
- * Did this browser prove this address recently, by a checkout code (cookie) or by signing in to
- * My tickets on this site (the attendee session)?
+ * Did this browser prove this address recently: a checkout code (cookie), a My tickets sign-in on
+ * this site (the attendee session), or a signed-in account whose verified email it is (M1.2f)?
  */
 export async function emailVerifiedHere(email: string, orgId: string | null): Promise<boolean> {
   const raw = await readCookie(VERIFIED);
@@ -101,7 +102,14 @@ export async function emailVerifiedHere(email: string, orgId: string | null): Pr
       return true;
   }
   const session = await currentGuestSession(orgId);
-  return session !== null && session.email === normalizeGuestEmail(email);
+  if (session !== null && session.email === normalizeGuestEmail(email)) return true;
+  // A person signed in on this host (M1.2f) whose account email is verified has proved it already;
+  // never while staff act as them (M1.2e).
+  const own = await ownAuthSession();
+  return (
+    Boolean(own?.user.emailVerified) &&
+    normalizeGuestEmail(own?.user.email ?? '') === normalizeGuestEmail(email)
+  );
 }
 
 // ─── Pending codes ──────────────────────────────────────────────────────────────────────────

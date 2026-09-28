@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 import {
   addTicketType,
   createGala,
@@ -44,10 +44,10 @@ async function buySeat(browser: Browser, slug: string, nth: number, seat: string
   await expect(guest).toHaveURL(/\?date=/);
   await seatBox(guest, seat).check();
   await guest.getByLabel('Full name').fill(who);
-  await guest
-    .getByLabel('Email for your tickets')
-    .fill(`${who.toLowerCase().replace(/\W+/g, '.')}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  const email = `${who.toLowerCase().replace(/\W+/g, '.')}@example.test`;
+  await guest.getByLabel('Email for your tickets').fill(email);
+  // Guests confirm their email with a code before the order is placed (M1.5f).
+  await continueToPayment(guest, email);
   await expect(guest).toHaveURL(/\/orders\//);
   return guest;
 }
@@ -166,6 +166,7 @@ test.describe('per-date seating charts (M1.7g)', () => {
     await expect(seatBox(page, 'Table 2 · 4')).toBeDisabled();
     // On the event plan (date 2) the seat is still free.
     await dates.getByRole('link').first().click();
+    await expect(dates.getByRole('link').first()).toHaveAttribute('aria-current', 'page');
     await expect(seatBox(page, 'Table 2 · 4')).toBeEnabled();
     await expectAccessible(page);
 
