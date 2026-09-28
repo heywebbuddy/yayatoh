@@ -3,7 +3,7 @@
 import { DRAFT_KINDS, type DraftKind, MAX_NOTES_LENGTH } from '@yayatoh/ai/ui';
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useId, useRef, useState, useTransition } from 'react';
+import { useEffect, useId, useRef, useState, useTransition } from 'react';
 import type { AiDraftState } from '@/app/[locale]/o/[org]/e/[event]/content/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import type { FormState } from '@/lib/form-state.ts';
@@ -41,6 +41,14 @@ export function AiDraftPanel({
   const [pending, start] = useTransition();
   const previewRef = useRef<HTMLTextAreaElement>(null);
   const out = balance <= 0;
+  // Move focus to a new preview so keyboard and screen-reader users land on the result.
+  const focusPreview = useRef(false);
+  useEffect(() => {
+    if (preview && focusPreview.current) {
+      focusPreview.current = false;
+      previewRef.current?.focus();
+    }
+  }, [preview]);
 
   const onDraft = () =>
     start(async () => {
@@ -49,8 +57,7 @@ export function AiDraftPanel({
       if (res.ok && res.text !== undefined && res.kind) {
         setBalance(res.balance ?? balance);
         setPreview({ kind: res.kind, text: res.text });
-        // Move focus to the preview so keyboard and screen-reader users land on the result.
-        requestAnimationFrame(() => previewRef.current?.focus());
+        focusPreview.current = true;
         return;
       }
       if (res.reason === 'out_of_credits') setBalance(0);
