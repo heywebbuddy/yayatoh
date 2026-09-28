@@ -7,13 +7,14 @@ import { migratorSql } from '@yayatoh/db/migration';
 import { adminClient, schemaGuard } from '@yayatoh/db/testing';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { orderByManageToken } from '@yayatoh/orders';
-import { createOrgFixture, ports } from '@yayatoh/testing';
+import { ports } from '@yayatoh/testing';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { demoHandles } from '../src/demo.ts';
 import { detUuid, emailNorm, legacyKey, shortCode } from '../src/ids.ts';
 import { type RunResult, revalidate, runMigration } from '../src/run.ts';
 import { DEMO, generateDumpFile, SYNTH_PASSWORD_HASH } from '../src/synth/generate.ts';
 import { checkinInstant, wallToInstant } from '../src/time.ts';
+import { v7Golden } from '../src/validate-extra.ts';
 
 const dir = mkdtempSync(join(tmpdir(), 'legacy-int-'));
 const dumps = { yay: join(dir, 'yay.sql'), abc: join(dir, 'abc.sql') };
@@ -626,11 +627,35 @@ describe('every validation catches a planted defect', () => {
 });
 
 describe('golden queries compare only what the migration wrote', () => {
-  it('V7 ignores a non-migrated org’s legacy settlement (the canary org has one)', async () => {
-    // createOrgFixture writes a `yay` event statement for an event the migration never made.
-    const f = await createOrgFixture(`v7-foreign-${Date.now().toString(36)}`, 'Not From Legacy');
-    const r = check(await revalidate('yay'), 'V7');
-    expect(r?.pass).toBe(true);
-    expect(JSON.stringify(r?.details)).not.toContain(f.org.id);
+  it('V7 ignores a legacy settlement for an event the migration did not make (the e2e canary org has one)', async () => {
+    // Inside a rolled-back transaction: the other legacy tests expect a database with migrated rows only.
+    const rollback = new Error('rollback');
+    const result = await sql()
+      .begin(async (tx) => {
+        const e = await one(tx<{ id: string; org_id: string }[]>`
+          select e.id, e.org_id from events.events e
+          join legacy.ref r on r.new_id = e.id and r.instance = 'yay' and r.entity = 'events' limit 1`);
+        const [copy] = await tx<{ id: string }[]>`
+          insert into events.events select (jsonb_populate_record(e, jsonb_build_object(
+            'id', gen_random_uuid(), 'slug', e.slug || '-not-migrated'))).* from events.events e where e.id = ${e.id}
+          returning id`;
+        await tx`
+          insert into payments.legacy_settlements (org_id, kind, instance, event_id, currency, status,
+            customer_paid_minor, commission_minor, admin_tax_minor, organizer_earning_minor,
+            transferred_minor, open_minor, source_rows)
+          values (${e.org_id}, 'event_statement', 'yay', ${copy?.id ?? null}, 'USD', 'open', 10000, 1000, 0, 9000, 500, 8500, 4)`;
+        const q = async (text: string, params: unknown[] = []) =>
+          (await tx.unsafe(text.replaceAll('{s}', 'legacy_yay'), params as never[])) as unknown as Record<
+            string,
+            unknown
+          >[];
+        const v7 = await v7Golden(q, 'yay');
+        throw Object.assign(rollback, { v7 });
+      })
+      .catch((err: unknown) => {
+        if (err !== rollback) throw err;
+        return (err as Error & { v7: Awaited<ReturnType<typeof v7Golden>> }).v7;
+      });
+    expect(result.pass).toBe(true);
   });
 });

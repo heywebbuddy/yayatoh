@@ -1,5 +1,20 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { expectAccessible, signIn } from './helpers.ts';
+
+/** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
+function chicago(offsetH: number): string {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date(Date.now() + offsetH * 3_600_000));
+  const p = Object.fromEntries(parts.map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
 
 /**
  * Receivables on the settlement view (M1.6e): a refund after the organizer's funds were released
@@ -13,7 +28,21 @@ test.describe('receivables (M1.6e)', () => {
     const pass = `Released ${stamp}`;
     const buyer = `Rae Receivable ${stamp}`;
     await signIn(page);
-    await page.goto(`${OPEN_HOUSE}/tickets-orders`);
+    // An event of its own: a refund draws on the event's held funds first, so a parallel test's
+    // purchase on a shared event after the release would cover it and no receivable would appear.
+    const eventName = `Receivable Night ${stamp}`;
+    await page.goto('/o/lakeside-events/events/new');
+    await page.getByLabel('Event name', { exact: true }).fill(eventName);
+    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
+    await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
+    await page.getByRole('button', { name: 'Create draft' }).click();
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+    const base = new URL(page.url()).pathname;
+    const slug = base.split('/').at(-1);
+    await page.getByRole('button', { name: 'Publish' }).click();
+    await expect(page.getByText('Published ·')).toBeVisible();
+    await page.goto(`${base}/tickets-orders`);
     await page.getByLabel('Name', { exact: true }).fill(pass);
     await page.getByLabel('Price (USD)').fill('40');
     await page.getByLabel('Quantity available').fill('5');
@@ -21,7 +50,7 @@ test.describe('receivables (M1.6e)', () => {
     await expect(page.getByRole('row').filter({ hasText: pass })).toBeVisible();
 
     const guest = await (await browser.newContext()).newPage();
-    await guest.goto('/events/lakeside-open-house');
+    await guest.goto(`/events/${slug}`);
     await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`rae+${stamp}@example.test`);
@@ -50,7 +79,7 @@ test.describe('receivables (M1.6e)', () => {
     await page.goto('/o/lakeside-events/payouts');
     const receivables = page.getByRole('region', { name: 'Receivables' });
     const history = receivables.getByRole('table', { name: 'Receivable history' });
-    await expect(history.getByText(/^Refund after payout · /).first()).toBeVisible();
+    await expect(history.getByText(`Refund after payout · ${eventName}`)).toBeVisible();
     // Still owed — or already taken from a later payout (another run's release may have netted it).
     await expect(
       receivables
