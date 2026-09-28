@@ -1,4 +1,4 @@
-import { dualHash, GRACE_DAYS } from '@yayatoh/auth/compat';
+import { dualHash, GRACE_DAYS, parseDualHash } from '@yayatoh/auth/compat';
 import { exec, hasColumn, hasTable, rows, type StepContext } from './context.ts';
 
 /**
@@ -94,11 +94,20 @@ export async function t8Auth(ctx: StepContext): Promise<void> {
      group by a.user_id, a.password
      having count(distinct c.password_hash) > 1`,
   );
+  // A dual hash whose second password is gone (a newer dump, a pre-hijack skip) is the primary again.
+  await exec(
+    ctx,
+    `
+    update auth.accounts a set password = split_part(substring(a.password from '^\\$yydual\\$[0-9]+\\$(.*)$'), '|', 1), updated_at = now()
+    where a.provider_id = 'credential' and a.password like '$yydual$%'
+      and a.user_id in (select distinct user_id from legacy.credentials where instance = {inst})
+      and (select count(distinct c.password_hash) from legacy.credentials c
+           where c.user_id = a.user_id and (c.verified or c.has_paid)) < 2;
+  `,
+  );
   const until = new Date(ctx.freezeAt.getTime() + GRACE_DAYS * 86_400_000);
   for (const m of merged) {
-    const primary = m.primary_hash.startsWith('$yydual$')
-      ? (m.primary_hash.split('$')[3]?.split('|')[0] ?? '')
-      : m.primary_hash;
+    const primary = parseDualHash(m.primary_hash)?.primary ?? m.primary_hash;
     const others = m.hashes.filter((h) => h !== primary);
     if (!primary || !others.length) continue;
     const value = dualHash(primary, others, until);

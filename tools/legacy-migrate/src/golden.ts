@@ -155,8 +155,9 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join {s}.bookings b on b.id = c.booking_id
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = b.event_id::text
        group by 1`,
-      `select a.event_id::text as key, count(distinct a.ticket_id) as v from checkin.admissions a
-       join legacy.ref r on r.instance = $1 and r.entity = 'booking_units' and r.new_id = a.ticket_id group by 1`,
+      // The imported check-ins (T5's legacy scans), not door scans made since on the new platform.
+      `select s.event_id::text as key, count(distinct s.ticket_id) as v from checkin.scans s
+       where s.code_kind = 'legacy' and s.client_scan_id like 'legacy:' || $1 || ':%' and s.result = 'admitted' group by 1`,
     ),
   },
   {

@@ -1888,6 +1888,12 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../../packages/modules/notifications
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../../packages/testing

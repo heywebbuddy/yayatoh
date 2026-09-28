@@ -86,7 +86,7 @@ export async function v6Vectors(q: Q, instance: string, freezeAt: Date): Promise
           and not exists (select 1 from legacy.credentials c where c.user_id = a.user_id and c.password_hash = a.password)) as bcrypt_foreign,
       (select count(*) from auth.accounts a
          join (select distinct new_id from legacy.ref where instance = $1 and entity = 'users') r on r.new_id = a.user_id
-        cross join lateral unnest(string_to_array(split_part(a.password, '$', 4), '|')) h
+        cross join lateral unnest(string_to_array(substring(a.password from '^\\$yydual\\$[0-9]+\\$(.*)$'), '|')) h
         where a.provider_id = 'credential' and a.password like '$yydual$%'
           and not exists (select 1 from legacy.credentials c where c.user_id = a.user_id and c.password_hash = h
                           and (c.verified or c.has_paid))) as dual_foreign
@@ -199,6 +199,10 @@ export async function v9Urls(q: Q, instance: string): Promise<Check> {
   };
 }
 
+/**
+ * Migrated tables and the columns the migration alone decides. Check-ins and the participation
+ * projection are left out: door scans after a rehearsal change them legitimately.
+ */
 const MIGRATED_CHECKSUMS: Record<string, string> = {
   events: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', e.id, e.slug, e.name, e.starts_at, e.ends_at, e.timezone, e.status, e.category, e.venue_id)) as x
              from events.events e join legacy.ref r on r.new_id = e.id and r.instance = $1 and r.entity = 'events') t`,
@@ -208,22 +212,19 @@ const MIGRATED_CHECKSUMS: Record<string, string> = {
              from orders.orders o join legacy.ref r on r.new_id = o.id and r.instance = $1 and r.entity = 'orders') t`,
   tickets: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', t.id, t.status, t.void_reason, t.serial, t.short_code, t.seat_label, t.holder_email)) as x
              from ticketing.tickets t join legacy.ref r on r.new_id = t.id and r.instance = $1 and r.entity = 'booking_units') t`,
-  admissions: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', a.ticket_id, a.day, a.admitted_at)) as x
-             from checkin.admissions a join legacy.ref r on r.new_id = a.ticket_id and r.instance = $1 and r.entity = 'booking_units') t`,
   legacy_settlements: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.kind, s.currency, s.customer_paid_minor, s.commission_minor, s.organizer_earning_minor, s.open_minor)) as x
              from payments.legacy_settlements s where s.instance = $1) t`,
   event_seats: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.seat_uuid, s.label, s.status, s.block_reason, s.ticket_id, s.ticket_type_id)) as x
              from seating.event_seats s join legacy.ref r on r.new_id = s.event_id and r.instance = $1 and r.entity = 'events') t`,
   venues: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', v.id, v.slug, v.name, v.timezone, v.latitude)) as x
              from venues.venues v join legacy.ref r on r.new_id = v.id and r.instance = $1 and r.entity = 'venues') t`,
-  event_participation: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', p.contact_id, p.event_id, p.tickets, p.checked_in, p.spend_minor)) as x
-             from crm.event_participation p join legacy.ref r on r.new_id = p.event_id and r.instance = $1 and r.entity = 'events' where p.source = 'legacy') t`,
 };
 
 /**
  * V10: checksums. Every staging table's content (what was loaded from the dump) and each migrated
- * table's stable columns are hashed; a rerun on the same dump must reproduce the previous
- * successful run's checksums exactly (the first run records the baseline).
+ * table's stable columns are hashed. The same input must give the same output: a run whose staging
+ * checksums equal an earlier successful run's must reproduce that run's migrated checksums exactly
+ * (a run on new input records a new baseline).
  */
 export async function v10Checksums(
   q: Q,
@@ -248,20 +249,24 @@ export async function v10Checksums(
     const [r] = await q(text, [instance]).catch(() => [{}]);
     migrated[name] = String((r && Object.values(r)[0]) ?? '');
   }
-  const [prev] = runId
+  // The baseline: the latest earlier successful run of this instance that read exactly the same
+  // staging content (same dump, nothing edited in between).
+  const earlier = runId
     ? await q(
-        `select p.id, p.report -> 'checks' as checks from legacy.runs p, legacy.runs me
-         where me.id = $2 and p.instance = $1 and p.id < me.id and p.status = 'succeeded'
-           and p.dump_sha256 = coalesce(me.dump_sha256, (select dump_sha256 from legacy.runs x where x.instance = $1 and x.dump_sha256 is not null and x.id <= me.id order by x.id desc limit 1))
-         order by p.id desc limit 1`,
+        `select id, report -> 'checks' as checks from legacy.runs
+         where instance = $1 and id < $2 and status = 'succeeded' order by id desc limit 20`,
         [instance, runId],
       )
     : [];
-  const prevV10 = (
-    prev?.checks as
-      | { id: string; details: { staging?: Record<string, string>; migrated?: Record<string, string> } }[]
-      | undefined
-  )?.find((c) => c.id === 'V10')?.details;
+  type V10 = { staging?: Record<string, string>; migrated?: Record<string, string> };
+  const v10Of = (r: Row) =>
+    (r.checks as { id: string; details: V10 }[] | null)?.find((c) => c.id === 'V10')?.details;
+  const same = (a: Record<string, string> | undefined) =>
+    !!a &&
+    Object.keys(staging).length === Object.keys(a).length &&
+    Object.entries(staging).every(([k, v]) => a[k] === v);
+  const prev = earlier.find((r) => same(v10Of(r)?.staging));
+  const prevV10 = prev ? v10Of(prev) : undefined;
   const changed: string[] = [];
   if (prevV10) {
     for (const [k, v] of Object.entries(staging))

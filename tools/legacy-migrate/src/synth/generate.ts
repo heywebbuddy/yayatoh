@@ -868,7 +868,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     const title =
       o === demoOwner
         ? 'Lakeshore Hall'
-        : i === 0
+        : o === venueOwners.find((x) => x !== demoOwner)
           ? 'Union Depot'
           : `${VENUES[(i * 3) % VENUES.length]} ${o.id}`;
     const slug = title

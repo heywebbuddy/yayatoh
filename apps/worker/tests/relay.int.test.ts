@@ -77,4 +77,35 @@ describe('outbox relay', () => {
     expect(await consumeEvent(recorder, event)).toBe(false);
     expect(seen.length).toBe(before);
   });
+
+  it('logs backfilled (replayed) events but never delivers them (M2.2c, ADR 0008)', async () => {
+    const { a } = await twoOrgs();
+    const [ev] = await admin<{ id: string }[]>`
+      insert into platform.domain_events (org_id, type, version, aggregate_type, aggregate_id, payload, actor, request_id, replayed)
+      values (${a.org.id}, 'organization.updated', 1, 'organization', ${a.org.id}, '{}'::jsonb, 'legacy:yay', 'legacy-backfill:test', true)
+      returning id`;
+    await drain();
+    const [row] = await admin<{ log_seq: string | null; published: boolean }[]>`
+      select log_seq, published_at is not null as published from platform.domain_events where id = ${ev?.id ?? ''}`;
+    expect(row?.log_seq).not.toBeNull();
+    expect(row?.published).toBe(true);
+    await new Promise((r) => setTimeout(r, 1500));
+    expect(seen.some((e) => e.id === ev?.id)).toBe(false);
+    // Handed to the subscriber directly (a catch-up, a stale queued job): skipped and recorded.
+    const replay = {
+      id: ev?.id ?? '',
+      orgId: a.org.id,
+      type: 'organization.updated',
+      version: 1,
+      aggregateType: 'organization',
+      aggregateId: a.org.id,
+      payload: {},
+      logSeq: 0,
+    };
+    expect(await consumeEvent(recorder, replay)).toBe(false);
+    expect(seen.some((e) => e.id === ev?.id)).toBe(false);
+    const [done] = await admin<{ n: number }[]>`
+      select count(*)::int as n from platform.processed_events where event_id = ${ev?.id ?? ''} and consumer = 'test.recorder'`;
+    expect(done?.n).toBe(1);
+  });
 });

@@ -29,6 +29,8 @@
     "@types/node": "catalog:",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/config": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"
   }
