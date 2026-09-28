@@ -39,7 +39,10 @@ export function SectionList({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
+  // Blocks a second move only while the server call runs, not during the page refresh after it
+  // (a fast second key press must not be dropped once the first move is saved and announced).
+  const busy = useRef(false);
   const buttons = useRef(new Map<string, HTMLButtonElement | null>());
   const [focusTarget, setFocusTarget] = useState<string | null>(null);
   useEffect(() => setOrder(sections), [sections]);
@@ -65,8 +68,14 @@ export function SectionList({
     const before = order;
     setOrder(next);
     setError(null);
+    busy.current = true;
     startTransition(async () => {
-      const res = await call();
+      let res: FormState;
+      try {
+        res = await call();
+      } finally {
+        busy.current = false;
+      }
       if (!res.ok) {
         setOrder(before);
         setError(te(errorMessageKey(res.code)));
@@ -85,7 +94,7 @@ export function SectionList({
     });
   };
   const step = (id: string, direction: 'up' | 'down') => {
-    if (pending) return;
+    if (busy.current) return;
     const i = order.findIndex((s) => s.id === id);
     const j = direction === 'up' ? i - 1 : i + 1;
     if (i < 0 || j < 0 || j >= order.length) return;
@@ -95,7 +104,7 @@ export function SectionList({
   };
   const drop = (e: DragEvent<HTMLLIElement>, targetId: string) => {
     e.preventDefault();
-    if (pending) return;
+    if (busy.current) return;
     const id = e.dataTransfer.getData(DRAG_TYPE) || dragging;
     setDragging(null);
     if (!id || id === targetId) return;
