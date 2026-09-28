@@ -11,7 +11,8 @@
       "event_updates": "Vous recevez ce message car vous êtes sur la liste des invités d’un événement de {org}.",
       "marketing": "Vous recevez ce message car vous êtes abonné aux actualités de {org}."
     },
-    "reply": "Répondre à {org}"
+    "reply": "Répondre à {org}",
+    "smsStop": "Répondez STOP pour vous désabonner."
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "Nouveau compte de versement pour {org}",
       "intro": "{reason, select, bank_changed {Le compte bancaire qui reçoit les versements de {org} a été modifié.} other {Un compte de versement a été associé à {org}.}} Par sécurité, aucun virement n'y sera effectué avant le {until}. Si vous n'êtes pas à l'origine de ce changement, contactez immédiatement l'assistance Yayatoh.",
       "cta": "Voir les versements"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Des nouvelles de {org} :"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messages suspendus pour {org}",
+      "intro": "Les plaintes concernant les e-mails de {org} ont atteint {rate}, au-delà de la limite de 0,3 %, donc Yayatoh a suspendu vos rappels, actualités et envois marketing. Les billets, reçus et réponses partent toujours. Le support Yayatoh examinera la situation avec vous avant la reprise des envois."
     },
     "notifications.test": {
       "subject": "Notification de test",

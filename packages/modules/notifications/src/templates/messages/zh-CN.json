@@ -11,7 +11,8 @@
       "event_updates": "您收到此邮件，是因为您在 {org} 某活动的嘉宾名单上。",
       "marketing": "您收到此邮件，是因为您订阅了 {org} 的资讯。"
     },
-    "reply": "回复 {org}"
+    "reply": "回复 {org}",
+    "smsStop": "回复 STOP 退订。"
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "{org} 的新收款账户",
       "intro": "{reason, select, bank_changed {{org} 接收付款的银行账户已更改。} other {已为 {org} 关联收款账户。}}为了您的安全，在 {until} 之前不会向该账户转账。如果这不是您本人所做的更改，请立即联系 Yayatoh 支持。",
       "cta": "查看付款"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "来自 {org} 的消息："
+    },
+    "messaging.auto_paused": {
+      "subject": "{org} 的消息发送已暂停",
+      "intro": "针对 {org} 邮件的投诉率达到 {rate}，超过 0.3% 的上限，因此 Yayatoh 已暂停你的提醒、动态和营销消息。门票、收据和回复仍会照常发送。恢复发送前，Yayatoh 支持团队会与你一起核查。"
     },
     "notifications.test": {
       "subject": "测试通知",

@@ -11,7 +11,8 @@
       "event_updates": "您收到此郵件，是因為您在 {org} 某活動的賓客名單上。",
       "marketing": "您收到此郵件，是因為您訂閱了 {org} 的消息。"
     },
-    "reply": "回覆 {org}"
+    "reply": "回覆 {org}",
+    "smsStop": "回覆 STOP 取消訂閱。"
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "{org} 的新收款帳戶",
       "intro": "{reason, select, bank_changed {{org} 接收款項的銀行帳戶已變更。} other {已為 {org} 連結收款帳戶。}}為了您的安全，在 {until} 之前不會轉帳至此帳戶。如果這不是您本人所做的變更，請立即聯絡 Yayatoh 支援。",
       "cta": "查看撥款"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "來自 {org} 的消息："
+    },
+    "messaging.auto_paused": {
+      "subject": "{org} 的訊息傳送已暫停",
+      "intro": "針對 {org} 電子郵件的投訴率達到 {rate}，超過 0.3% 的上限，因此 Yayatoh 已暫停你的提醒、動態和行銷訊息。門票、收據和回覆仍會照常傳送。恢復傳送前，Yayatoh 支援團隊會與你一起檢視。"
     },
     "notifications.test": {
       "subject": "測試通知",

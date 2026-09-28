@@ -11,7 +11,8 @@
       "event_updates": "Recibes esto porque estás en la lista de invitados de un evento de {org}.",
       "marketing": "Recibes esto porque te suscribiste a las novedades de {org}."
     },
-    "reply": "Responder a {org}"
+    "reply": "Responder a {org}",
+    "smsStop": "Responde STOP para darte de baja."
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "Nueva cuenta de pagos para {org}",
       "intro": "{reason, select, bank_changed {Se cambió la cuenta bancaria que recibe los pagos de {org}.} other {Se conectó una cuenta de pagos a {org}.}} Por tu seguridad, no se le enviará dinero antes del {until}. Si no hiciste este cambio, contacta de inmediato con el soporte de Yayatoh.",
       "cta": "Revisar pagos"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Novedades de {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Mensajes en pausa para {org}",
+      "intro": "Las quejas sobre los correos de {org} llegaron al {rate}, por encima del límite del 0,3 %, así que Yayatoh pausó tus recordatorios, novedades y marketing. Las entradas, los recibos y las respuestas se siguen enviando. El soporte de Yayatoh lo revisará contigo antes de reanudar los mensajes."
     },
     "notifications.test": {
       "subject": "Notificación de prueba",

@@ -11,7 +11,8 @@
       "event_updates": "You're getting this because you're on the guest list for an event by {org}.",
       "marketing": "You're getting this because you subscribed to news from {org}."
     },
-    "reply": "Reply to {org}"
+    "reply": "Reply to {org}",
+    "smsStop": "Reply STOP to opt out."
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "A new payout account for {org}",
       "intro": "{reason, select, bank_changed {The bank account that receives {org}'s payouts was changed.} other {A payout account was connected to {org}.}} For your security, no money is sent to it before {until}. If you didn't make this change, contact Yayatoh support right away.",
       "cta": "Review payouts"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "News from {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messaging paused for {org}",
+      "intro": "Complaints about {org}'s emails reached {rate}, above the 0.3% limit, so Yayatoh paused your reminders, updates and marketing. Tickets, receipts and replies still go out. Yayatoh support will review it with you before messaging resumes."
     },
     "notifications.test": {
       "subject": "Test notification",

@@ -7,13 +7,17 @@ import type { TenantTx } from '@yayatoh/db';
  * per locale and hands it to a channel adapter. Enqueueing happens inside the caller's tenant
  * transaction, so a rolled-back command never sends and a replayed event never sends twice.
  */
-export const NOTIFICATION_CHANNELS = ['email', 'sms', 'push', 'in_app'] as const;
+export const NOTIFICATION_CHANNELS = ['email', 'sms', 'whatsapp', 'push', 'in_app'] as const;
 export type NotificationChannel = (typeof NOTIFICATION_CHANNELS)[number];
 
 export interface NotificationRecipient {
   readonly email?: string | null;
-  /** E.164, for SMS. */
+  /** E.164, for SMS and WhatsApp. */
   readonly phone?: string | null;
+  /** ISO 3166-2 region of the recipient's address (`US-TX`): state quiet-hour rules (M3.5a). */
+  readonly region?: string | null;
+  /** The org's crm contact: the consent ledger is checked for texts (M3.5a). */
+  readonly contactId?: string | null;
   /** A signed-in user (members, buyers with accounts): preferences, push tokens and the inbox. */
   readonly userId?: string | null;
   readonly name?: string | null;

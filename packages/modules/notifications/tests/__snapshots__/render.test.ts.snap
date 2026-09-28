@@ -559,6 +559,266 @@ Amina Diallo，您好：
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > marketing.message · ar 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+مرحبًا Amina Diallo،
+
+أخبار من Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك هذه الرسالة لأنك اشتركت في أخبار Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · de 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Hallo Amina Diallo,
+
+Neuigkeiten von Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst dies, weil du Neuigkeiten von Lakeside Events abonniert hast.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · en 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Hi Amina Diallo,
+
+News from Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this because you subscribed to news from Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · es 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Hola, Amina Diallo:
+
+Novedades de Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes esto porque te suscribiste a las novedades de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · fr 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Bonjour Amina Diallo,
+
+Des nouvelles de Lakeside Events :
+
+Save 20% on the autumn season until Friday.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce message car vous êtes abonné aux actualités de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · hi 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+नमस्ते Amina Diallo,
+
+Lakeside Events की ओर से खबर:
+
+Save 20% on the autumn season until Friday.
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह इसलिए मिला क्योंकि आपने Lakeside Events की खबरों की सदस्यता ली है।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · it 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Ciao Amina Diallo,
+
+Novità da Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo messaggio perché sei iscritto alle novità di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · ja 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Amina Diallo 様
+
+Lakeside Eventsからのお知らせ:
+
+Save 20% on the autumn season until Friday.
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のお知らせを購読されているため、このメールをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · nl 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Hoi Amina Diallo,
+
+Nieuws van Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt dit omdat je je hebt aangemeld voor nieuws van Lakeside Events.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · pt 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Olá, Amina Diallo!
+
+Novidades de Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe isto porque assinou as novidades de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · ru 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Здравствуйте, Amina Diallo!
+
+Новости от Lakeside Events:
+
+Save 20% on the autumn season until Friday.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это письмо, потому что подписались на новости Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · zh-CN 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Amina Diallo，您好：
+
+来自 Lakeside Events 的消息：
+
+Save 20% on the autumn season until Friday.
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此邮件，是因为您订阅了 Lakeside Events 的资讯。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > marketing.message · zh-TW 1`] = `
+{
+  "subject": "Early-bird tickets are back",
+  "text": "Early-bird tickets are back
+
+Amina Diallo，您好：
+
+來自 Lakeside Events 的消息：
+
+Save 20% on the autumn season until Friday.
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此郵件，是因為您訂閱了 Lakeside Events 的消息。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > messaging.announcement · ar 1`] = `
 {
   "subject": "Doors open at 7",
@@ -866,6 +1126,214 @@ See you soon!
 由 Lakeside Events 透過 Yayatoh 寄送。
 您收到此郵件，是因為您在 Lakeside Events 某活動的賓客名單上。
 取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · ar 1`] = `
+{
+  "subject": "تم إيقاف الرسائل مؤقتًا لـ Lakeside Events",
+  "text": "تم إيقاف الرسائل مؤقتًا لـ Lakeside Events
+
+مرحبًا،
+
+بلغت الشكاوى من رسائل Lakeside Events الإلكترونية 0.42‎%‎، وهو أعلى من الحد 0.3%، لذا أوقفت Yayatoh التذكيرات والتحديثات والتسويق مؤقتًا. ما زالت التذاكر والإيصالات والردود تُرسل. سيراجع دعم Yayatoh الأمر معك قبل استئناف الإرسال.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · de 1`] = `
+{
+  "subject": "Nachrichten für Lakeside Events pausiert",
+  "text": "Nachrichten für Lakeside Events pausiert
+
+Hallo,
+
+Beschwerden über die E-Mails von Lakeside Events erreichten 0,42 % und damit mehr als die Grenze von 0,3 %. Yayatoh hat daher Erinnerungen, Neuigkeiten und Marketing pausiert. Tickets, Belege und Antworten werden weiter versendet. Der Yayatoh-Support prüft das mit Ihnen, bevor der Versand wieder startet.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · en 1`] = `
+{
+  "subject": "Messaging paused for Lakeside Events",
+  "text": "Messaging paused for Lakeside Events
+
+Hello,
+
+Complaints about Lakeside Events's emails reached 0.42%, above the 0.3% limit, so Yayatoh paused your reminders, updates and marketing. Tickets, receipts and replies still go out. Yayatoh support will review it with you before messaging resumes.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · es 1`] = `
+{
+  "subject": "Mensajes en pausa para Lakeside Events",
+  "text": "Mensajes en pausa para Lakeside Events
+
+Hola:
+
+Las quejas sobre los correos de Lakeside Events llegaron al 0,42 %, por encima del límite del 0,3 %, así que Yayatoh pausó tus recordatorios, novedades y marketing. Las entradas, los recibos y las respuestas se siguen enviando. El soporte de Yayatoh lo revisará contigo antes de reanudar los mensajes.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · fr 1`] = `
+{
+  "subject": "Messages suspendus pour Lakeside Events",
+  "text": "Messages suspendus pour Lakeside Events
+
+Bonjour,
+
+Les plaintes concernant les e-mails de Lakeside Events ont atteint 0,42 %, au-delà de la limite de 0,3 %, donc Yayatoh a suspendu vos rappels, actualités et envois marketing. Les billets, reçus et réponses partent toujours. Le support Yayatoh examinera la situation avec vous avant la reprise des envois.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · hi 1`] = `
+{
+  "subject": "Lakeside Events के संदेश रोके गए",
+  "text": "Lakeside Events के संदेश रोके गए
+
+नमस्ते,
+
+Lakeside Events के ईमेल के बारे में शिकायतें 0.42% तक पहुँच गईं, जो 0.3% की सीमा से ऊपर है, इसलिए Yayatoh ने आपके रिमाइंडर, अपडेट और मार्केटिंग रोक दिए हैं। टिकट, रसीदें और जवाब अब भी भेजे जाते हैं। संदेश फिर शुरू होने से पहले Yayatoh सहायता आपके साथ इसकी समीक्षा करेगी।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · it 1`] = `
+{
+  "subject": "Messaggi in pausa per Lakeside Events",
+  "text": "Messaggi in pausa per Lakeside Events
+
+Ciao,
+
+I reclami sulle email di Lakeside Events hanno raggiunto il 0,42%, oltre il limite dello 0,3%, quindi Yayatoh ha messo in pausa promemoria, aggiornamenti e marketing. Biglietti, ricevute e risposte continuano a partire. Il supporto Yayatoh verificherà con te prima di riprendere gli invii.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · ja 1`] = `
+{
+  "subject": "Lakeside Eventsのメッセージ送信を一時停止しました",
+  "text": "Lakeside Eventsのメッセージ送信を一時停止しました
+
+こんにちは。
+
+Lakeside Eventsのメールへの苦情が0.42%に達し、上限の0.3%を超えたため、Yayatohはリマインダー、お知らせ、マーケティングの送信を一時停止しました。チケット、領収書、返信は引き続き送信されます。送信を再開する前に、Yayatohサポートが一緒に確認します。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · nl 1`] = `
+{
+  "subject": "Berichten gepauzeerd voor Lakeside Events",
+  "text": "Berichten gepauzeerd voor Lakeside Events
+
+Hallo,
+
+Klachten over de e-mails van Lakeside Events bereikten 0,42%, boven de grens van 0,3%, dus Yayatoh heeft je herinneringen, updates en marketing gepauzeerd. Tickets, bonnen en antwoorden gaan nog steeds uit. Yayatoh-support bekijkt het met je voordat het versturen weer start.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · pt 1`] = `
+{
+  "subject": "Mensagens pausadas para Lakeside Events",
+  "text": "Mensagens pausadas para Lakeside Events
+
+Olá!
+
+As reclamações sobre os e-mails de Lakeside Events chegaram a 0,42%, acima do limite de 0,3%, então a Yayatoh pausou seus lembretes, novidades e marketing. Ingressos, recibos e respostas continuam sendo enviados. O suporte da Yayatoh vai revisar isso com você antes de retomar os envios.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · ru 1`] = `
+{
+  "subject": "Рассылки Lakeside Events приостановлены",
+  "text": "Рассылки Lakeside Events приостановлены
+
+Здравствуйте!
+
+Жалобы на письма Lakeside Events достигли 0,42 %, это выше порога 0,3 %, поэтому Yayatoh приостановил напоминания, новости и маркетинг. Билеты, чеки и ответы по-прежнему отправляются. Поддержка Yayatoh разберётся вместе с вами, прежде чем рассылки возобновятся.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · zh-CN 1`] = `
+{
+  "subject": "Lakeside Events 的消息发送已暂停",
+  "text": "Lakeside Events 的消息发送已暂停
+
+您好：
+
+针对 Lakeside Events 邮件的投诉率达到 0.42%，超过 0.3% 的上限，因此 Yayatoh 已暂停你的提醒、动态和营销消息。门票、收据和回复仍会照常发送。恢复发送前，Yayatoh 支持团队会与你一起核查。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · zh-TW 1`] = `
+{
+  "subject": "Lakeside Events 的訊息傳送已暫停",
+  "text": "Lakeside Events 的訊息傳送已暫停
+
+您好：
+
+針對 Lakeside Events 電子郵件的投訴率達到 0.42%，超過 0.3% 的上限，因此 Yayatoh 已暫停你的提醒、動態和行銷訊息。門票、收據和回覆仍會照常傳送。恢復傳送前，Yayatoh 支援團隊會與你一起檢視。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
 由 Yayatoh 提供技術支援
 ",
 }

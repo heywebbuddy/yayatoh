@@ -11,7 +11,8 @@
       "event_updates": "{org} のイベントのゲストリストに登録されているため、このメールをお送りしています。",
       "marketing": "{org} のお知らせを購読されているため、このメールをお送りしています。"
     },
-    "reply": "{org} に返信"
+    "reply": "{org} に返信",
+    "smsStop": "配信停止はSTOPと返信してください。"
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "{org} の新しい振込先口座",
       "intro": "{reason, select, bank_changed {{org} の振込先の銀行口座が変更されました。} other {{org} に振込先口座が接続されました。}}安全のため、{until} より前にこの口座へ送金されることはありません。この変更に心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。",
       "cta": "振込を確認"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "{org}からのお知らせ:"
+    },
+    "messaging.auto_paused": {
+      "subject": "{org}のメッセージ送信を一時停止しました",
+      "intro": "{org}のメールへの苦情が{rate}に達し、上限の0.3%を超えたため、Yayatohはリマインダー、お知らせ、マーケティングの送信を一時停止しました。チケット、領収書、返信は引き続き送信されます。送信を再開する前に、Yayatohサポートが一緒に確認します。"
     },
     "notifications.test": {
       "subject": "テスト通知",

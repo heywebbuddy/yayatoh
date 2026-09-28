@@ -1,5 +1,6 @@
 import type { NotificationChannel } from '@yayatoh/platform';
 import type { OrgRole } from '@yayatoh/tenancy';
+import type { WhatsAppCategory } from './policy/rules.ts';
 import type { CATEGORIES, PREFERENCE_CHANNELS } from './schema.ts';
 
 export type Category = (typeof CATEGORIES)[number];
@@ -15,6 +16,8 @@ export interface KindDefinition {
   readonly audience?: readonly OrgRole[];
   /** Params that must be present for the template to render. */
   readonly params: readonly string[];
+  /** Meta's template category on WhatsApp (M3.5a); defaults from the category (`whatsappCategoryOf`). */
+  readonly whatsapp?: WhatsAppCategory;
 }
 
 const SALES_TEAM: readonly OrgRole[] = ['owner', 'admin', 'manager', 'finance', 'box_office'];
@@ -108,6 +111,23 @@ export const KINDS = {
     audience: ['owner'],
     params: ['url', 'reason', 'holdUntil', 'timeZone'],
   },
+  // Promotional news to contacts who opted in (M3.5a; campaigns send it from M3.6b). Needs
+  // marketing consent on every channel; WhatsApp marketing to US numbers is blocked (D16).
+  'marketing.message': {
+    category: 'marketing',
+    channels: ['email'],
+    urgent: false,
+    whatsapp: 'marketing',
+    params: ['subject', 'body', 'name'],
+  },
+  // The org's complaint rate went over the limit and optional messaging paused itself (M3.5a).
+  'messaging.auto_paused': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin'],
+    params: ['rateBps'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app'],
@@ -125,6 +145,12 @@ export const EMAIL_KINDS = MESSAGE_KINDS.filter((k) =>
 
 export function isMessageKind(v: string): v is MessageKind {
   return Object.hasOwn(KINDS, v);
+}
+
+/** The WhatsApp template category of a kind: its own, else marketing for marketing, else utility. */
+export function whatsappCategoryOf(kind: string): WhatsAppCategory {
+  const def = kindOf(kind);
+  return def.whatsapp ?? (def.category === 'marketing' ? 'marketing' : 'utility');
 }
 
 export function kindOf(kind: string): KindDefinition {

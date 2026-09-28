@@ -11,7 +11,8 @@
       "event_updates": "Du erhältst dies, weil du auf der Gästeliste einer Veranstaltung von {org} stehst.",
       "marketing": "Du erhältst dies, weil du Neuigkeiten von {org} abonniert hast."
     },
-    "reply": "{org} antworten"
+    "reply": "{org} antworten",
+    "smsStop": "Antworten Sie STOP zum Abmelden."
   },
   "kinds": {
     "orders.tickets": {
@@ -76,6 +77,14 @@
       "subject": "Neues Auszahlungskonto für {org}",
       "intro": "{reason, select, bank_changed {Das Bankkonto, auf das {org} Auszahlungen erhält, wurde geändert.} other {Ein Auszahlungskonto wurde mit {org} verbunden.}} Zu deiner Sicherheit wird vor dem {until} kein Geld darauf überwiesen. Wenn du diese Änderung nicht vorgenommen hast, wende dich sofort an den Yayatoh-Support.",
       "cta": "Auszahlungen prüfen"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Neuigkeiten von {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Nachrichten für {org} pausiert",
+      "intro": "Beschwerden über die E-Mails von {org} erreichten {rate} und damit mehr als die Grenze von 0,3 %. Yayatoh hat daher Erinnerungen, Neuigkeiten und Marketing pausiert. Tickets, Belege und Antworten werden weiter versendet. Der Yayatoh-Support prüft das mit Ihnen, bevor der Versand wieder startet."
     },
     "notifications.test": {
       "subject": "Testbenachrichtigung",

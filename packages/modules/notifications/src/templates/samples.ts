@@ -72,5 +72,11 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     holdUntil: '2027-06-13T15:00:00.000Z',
     timeZone: 'America/Chicago',
   },
+  'marketing.message': {
+    subject: 'Early-bird tickets are back',
+    body: 'Save 20% on the autumn season until Friday.',
+    name: 'Amina Diallo',
+  },
+  'messaging.auto_paused': { rateBps: 42 },
   'notifications.test': {},
 };
