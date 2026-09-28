@@ -87,7 +87,7 @@ Roadmap M1.2 ("TOTP for owners, admins and finance"), §10 security Phase 1 ("TO
 - **Bank-account changes reported by the provider** (Stripe `account.external_account.*`) should start the same hold with reason `bank_changed` (the event and email already carry it); needs the owner's Stripe account.
 - **Large refunds and step-up through `/v1`:** decide whether API keys with `orders:refund` may make large refunds (today: refused). Pending owner.
 - ~~Member role changes and removals in the console~~ (done in M1.2d/e below).
-- **Passkeys for staff** (roadmap §10) and "trust this device" for 30 days.
+- ~~**Passkeys for staff** (roadmap §10) and "trust this device" for 30 days.~~ Done in M1.2f.
 - ~~TOTP replay protection~~ (done below). A recovery flow for people who lose both phone and backup codes (support-assisted, with the impersonation rules from M1.2e) is still to come.
 - **AWS KMS** instead of the local key vault (owner's AWS account).
 
@@ -131,8 +131,8 @@ Contents: new global tables `auth.handoff_codes` (id, code_hash unique, user_id 
 
 ### Later / not yet
 - The app host is `BETTER_AUTH_URL` (app.yayatoh.com in production, the dev host locally). Serving the console only on the app host (redirecting `/o/*` on tenant hosts) and tenant-host previews of drafts come with the pages that need a tenant-host session.
-- Passkeys (rpID `yayatoh.com`) and Google/Apple sign-in (M1.2f) will run the same handoff.
-- Tenant event pages don't show the account corner yet (the site home does).
+- ~~Passkeys (rpID `yayatoh.com`) and Google/Apple sign-in (M1.2f) will run the same handoff.~~ Google/Apple sign-in runs the handoff (M1.2f); passkeys are for staff (admin app).
+- ~~Tenant event pages don't show the account corner yet (the site home does).~~ Done in M1.2f.
 
 ## M1.2e — staff impersonation (done)
 
@@ -180,5 +180,58 @@ Roadmap M1.2 ("Impersonation (audited, 1 h, blocks money, export and delete)"), 
 | AC-2c-15 | Team: role change and removal with step-up, confirmation, keyboard, Arabic; last owner kept; only owners change owners; viewers see no controls and a replayed action is refused | `apps/web/e2e/team.spec.ts`, `impersonation.int.test.ts` |
 | AC-2c-16 | TOTP replay: a code works once (sign-in, step-up, turn off, set-up); a right code refused for another reason isn't spent; concurrent use signs in once | `packages/auth/tests/two-factor.int.test.ts`, `packages/auth/tests/totp.test.ts`, `apps/web/e2e/two-factor.spec.ts` |
 
+## M1.2f — social sign-in, human check and auth follow-ups (done, on fakes)
+
+Roadmap M1.2 ("Google and Apple sign-in", "Turnstile"), §4.2 (central login), §6.1 (mobile tokens), §10 ("passkeys for staff", "Rate limits and Turnstile"). **Risk tags:** `auth`, `tenancy`, `db-migration`, `mobile-contract`. Real Google/Apple clients and the Cloudflare account are owner tasks (owner inbox → Sign-in providers); everything runs behind ports with fake adapters in dev/CI.
+
+### What was built
+- **Google and Apple sign-in** (`packages/auth/src/social.ts`, `apps/web/src/server/social.ts`), on the app host only, through the M1.2d handoff:
+  - **Port** `SocialProvider` (`authorizationUrl`, `exchange` → provider, subject, email, emailVerified, name). Real adapters wrap Better Auth's Google/Apple OIDC helpers (PKCE, nonce checked in the ID token; Apple's `form_post` is turned into a GET). The **fake adapter** sends the browser to `/auth/social/fake` (email, name, "The provider has verified this email", Apple "Hide my email"), whose codes are HMAC-signed (derived from `BETTER_AUTH_SECRET`), bound to provider, nonce and redirect URI and live 5 minutes. `SOCIAL_SIGN_IN_PROVIDER=real|fake` (fake is the default outside production; production is always real and offers a provider only when both its keys are set).
+  - **Flow:** "Continue with Google/Apple" is a **link** to `/auth/social/{provider}/start` (a form's redirect to the provider would be blocked by the CSP's `form-action 'self'`), which stores the pending sign-in server-side (10 minutes, single use) under a random state kept in a host-only cookie (`__Host-yy.oauth`), with the PKCE verifier, nonce, locale, `next` and the tenant handoff. `/auth/social/{provider}/callback` checks the state against the cookie (no login CSRF; a replayed callback is refused).
+  - **Linking rules (no pre-hijack takeover):** an identity already linked signs in its account; a new **provider-verified** email creates an account (unverified or missing emails are refused with a message); an email that **already has an account** is never linked on the provider's word: a 6-digit code goes to that address and `/sign-in/link` asks for it (5 tries, 10 minutes, bound to the browser by `__Host-yy.link`). If the existing account had never verified its email, proving it removes that account's password, two-step verification, trusted devices and sessions and marks the email verified. People with two-step verification still get the second step after a provider sign-in (a provider is one factor, like an emailed code).
+  - **Apple private relay** (`@privaterelay.appleid.com`) is accepted as the account's email and never matches another account. An account whose only ways in are Apple and a relay address can't unlink Apple (`last_method`).
+  - **Account security → Sign-in methods:** each provider with "Linked on …", **Link** (step-up, then the provider; the callback links it to the person who started, if still signed in) and **Unlink** (step-up). One identity belongs to one account (`linked_elsewhere`), one identity per provider per account. Audited: `social.account_created`, `social.link_proof_sent|failed`, `social.linked` (with `proof` and `reset`), `social.unlinked`.
+- **Human check (Turnstile)** — the existing `HumanCheck` port (M1.7e) moved to `apps/web/src/server/human-check.ts` (the seat finder re-exports it); the fake adapter has an always-pass token (the checkbox) and an always-fail token (`FAKE_HUMAN_FAIL_TOKEN`). Server-side verification everywhere:
+  - **emailed sign-in codes and magic links** (a first code creates the account: this is sign-up) — always, in front of Better Auth in `/api/auth/*` (`x-human-check` header; `403 HUMAN_CHECK_REQUIRED|FAILED`);
+  - **password sign-in after failures** — after 3 wrong passwords for one email in 15 minutes (`packages/auth/src/sign-in-guard.ts`, counted per email across devices, cleared by a success); the form shows the check as soon as the third failure answers;
+  - **password reset** — new `/forgot-password` (the same answer whether or not an account exists; also rate-limited like emailed codes) and `/reset-password` (8–128 characters, typed twice; the link works once for 30 minutes). Better Auth's reset endpoints are closed over HTTP; the app's actions call them in-process;
+  - **venue quote form** (after the honeypot).
+  - **Accessible fallback:** the check is a labelled group ("Security check") with a short explanation; if Turnstile can't load (blocked script, error, 10 s) a status message says what to do and names support. Tokens are single use: forms show a fresh widget after each try.
+- **Trusted devices** (`packages/auth/src/trusted-devices.ts`): "Trust this device for 30 days" on the second step. The browser gets `__Host-yy.trusted` (`<id>.<secret>`, 256 bits; only the SHA-256 is stored) bound to the person and the host; later sign-ins there (password, emailed code, magic link, Google/Apple) skip the code (`/trusted-device/redeem`, closed over HTTP). Fixed 30 days (use doesn't extend it). **Account security → Trusted devices** lists label ("Chrome on macOS", never the raw user agent), trusted/last used/until, with **Revoke** and **Revoke all**. A password change or reset and account deletion revoke them all. Not offered in the staff console. Audited: `trusted_device.added|used|revoked`, `trusted_devices.revoked_all`, `two_factor.skipped_trusted_device`.
+- **Staff passkeys** (admin app; Better Auth passkey plugin `@better-auth/passkey`, WebAuthn): a **Passkeys** page (add with an optional name — needs a sign-in in the last 10 minutes — list, remove) and **Sign in with a passkey** on the staff sign-in. Passkeys require **user verification** (checked again after the ceremony); such a passkey is both factors, so staff with two-step verification skip the authenticator code. rpID `PASSKEY_RP_ID` (the registrable domain in production) or the console's host name; only the console's origin. Audited: `passkey.added`, `passkey.signed_in`. The web app has no passkeys (not enabled on its auth instance).
+- **Access + refresh tokens for `/v1`** (additive; oasdiff: no breaking changes; SDK regenerated): `POST /v1/auth/token` with `grantType: password` gives a **15-minute access token** (a bearer session that is never extended) and a **30-day refresh token** (`yyr_…`, SHA-256 stored); `grantType: refresh_token` spends it and returns a new pair in the same **family** (the previous access token ends). A spent refresh token presented again is a **reuse**: the whole family is revoked and every access token from it ends (`401`, `details.reason: refresh_token_reused`). `POST /v1/auth/revoke` signs a family out. Password changes/resets revoke every family. `POST /v1/auth/login` is unchanged. Two-step accounts still get `step_up_required` (use the web).
+- **Account corner on tenant event pages** (and the tenant home): signed out, "Sign in" (through the app host, back to the same event); signed in, "Signed in as …", **Your tickets** (new tenant page `/tickets`: the person's own orders at this organizer placed while signed in, with each order's link; empty state otherwise) and, for members of this org only, **Organizer console** (the app host's `/o/{slug}`). Only this host's session and this org's data (`orders.buyerOrdersInOrg`, an allowlisted DTO).
+
+### Data model and migration
+`packages/db/drizzle/0060_petite_onslaught.sql` (generated; the only hand edit is the two header comment lines). New global tables (listed in `GLOBAL_TABLES`; no tenant rows, so no RLS or isolation fixture; reached only through `packages/auth`):
+- `auth.passkeys` (Better Auth's passkey model: public key, credential id unique, counter, device type, backed up, transports, aaguid, name; user FK cascade);
+- `auth.trusted_devices` (user, secret hash, host, label, created/last used/expires, revoked at + reason `revoked|password_changed|account_deleted`);
+- `auth.refresh_tokens` (family, user, token hash unique, access session token, created/expires/used/revoked + reason `reuse|signed_out|password_changed`).
+
+### Later / not yet
+- Real Google/Apple and Turnstile keys (owner inbox). Apple's private relay needs `mail.yayatoh.com` registered with Apple.
+- Requiring staff to have a passkey or two-step verification (pending owner; today staff with 2FA answer it or use a passkey).
+- Admin app strings are English only (the staff console has no locales yet), so the passkey screens have no Arabic render.
+- Trusted devices are per host: a tenant site's own sign-in goes through the app host, where the trust lives.
+- "Your tickets" lists orders placed while signed in; guest orders (email only) still use their emailed links. Linking guest orders by verified email is a later step.
+- A change-password form for signed-in people (today: "Forgot your password?"); the revocation hook already covers `/change-password`.
+
+## Acceptance (M1.2f)
+| ID | Criterion | Test |
+|---|---|---|
+| AC-2f-01 | Fake provider codes: signed, expiring, bound to provider/nonce/redirect; relay emails recognised; device labels; refresh token shape | `packages/auth/tests/sign-in-extras.test.ts` (unit) |
+| AC-2f-02 | Linking rules: new verified email creates; linked identity signs in; unverified/no email refused; an existing account needs the emailed code (wrong code, 5-try limit, single use); never-verified accounts lose the squatter's password and sessions; link/unlink rules and isolation | `packages/auth/tests/sign-in-extras.int.test.ts` |
+| AC-2f-03 | A fake Google sign-in creates an account and the next one signs into the same account; keyboard only; axe | `apps/web/e2e/social-sign-in.spec.ts` |
+| AC-2f-04 | An existing password account is not taken over without proving the email; Arabic RTL; 2FA still applies; tenant handoff | `social-sign-in.spec.ts` |
+| AC-2f-05 | Link/unlink in account security need step-up; one identity per account; Apple relay can't lose its last way in | `social-sign-in.spec.ts`, `sign-in-extras.int.test.ts` |
+| AC-2f-06 | Human check: the fake verifier passes its token and refuses the fail token; Turnstile siteverify | `packages/platform/tests/human-check.test.ts` (unit) |
+| AC-2f-07 | Emailed codes, resets and quotes need the check (missing and failed refused, server-side, no API bypass); password sign-in after 3 failures; Arabic; axe; keyboard | `apps/web/e2e/human-check.spec.ts`, `sign-in-extras.int.test.ts` |
+| AC-2f-08 | Password reset: validation, single-use link, old password stops working; revokes trusted devices and refresh tokens | `human-check.spec.ts`, `trusted-devices.spec.ts`, `sign-in-extras.int.test.ts` |
+| AC-2f-09 | Trusting a device skips the second step there only; listed; revoking (one or all) brings it back; isolation between people; account deletion revokes | `apps/web/e2e/trusted-devices.spec.ts`, `sign-in-extras.int.test.ts` |
+| AC-2f-10 | Staff add a passkey and sign in with it (no authenticator code); removing it stops it; a non-verifying passkey is refused | `apps/admin/e2e/passkeys.spec.ts` |
+| AC-2f-11 | `/v1` tokens: 15-minute access token, rotation ends the old access token, a reused refresh token revokes the family, revoke, refusals; `/v1` additive (oasdiff), SDK current | `packages/api-v1/tests/v1.int.test.ts`, `sign-in-extras.int.test.ts`, `pnpm contracts:check` |
+| AC-2f-12 | Tenant event pages: Sign in through the app host and back; Your tickets (empty and with an order); console link for members only; nothing from other orgs; Arabic; axe | `apps/web/e2e/tenant-account-corner.spec.ts` |
+| AC-2f-13 | Every new string in 13 locales | `apps/web/tests/messages.test.ts` |
+
 ## Remaining increments
-- **M1.2f** — Google and Apple sign-in, and Turnstile. **Blocked on the owner:** OAuth client credentials and a Cloudflare account (owner inbox M0.1).
+- None in M1.2 beyond the owner items above (real provider keys; the staff second-factor requirement).
