@@ -60,6 +60,7 @@ import {
   applyProviderEventCommand,
   attachPaymentCommand,
   completeRefundCommand,
+  setCheckoutSettingsCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
   startRefundCommand,
@@ -345,6 +346,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M1.5f: the event's checkout settings (buyer email verification off, not the default).
+  await executeCommand(setCheckoutSettingsCommand, { eventId: event.id, verifyEmail: false }, ctx(), ports);
   // M1.6e: a refund policy on the event, and a reconciliation day with one open difference.
   await executeCommand(
     setRefundPolicyCommand,

@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { chromium, expect, test } from '@playwright/test';
 import { qrPath } from '@yayatoh/pdf';
-import { signIn } from './helpers.ts';
+import { continueToPayment, signIn } from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -75,7 +75,7 @@ test.describe('Scan PWA camera', () => {
     await guest.getByLabel('Quantity — Lens pass').selectOption('1');
     await guest.getByLabel('Full name').fill(`Cam ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`cam+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `cam+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/orders\//);
     const code = (await guest.locator('.tracking-\\[0\\.2em\\]').first().textContent())?.trim() ?? '';
 

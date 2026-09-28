@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { continueToPayment } from './helpers.ts';
 
 /** A unique name per test and viewport project (projects run in parallel on one database). */
 export const unique = (what: string) => `${what} ${Date.now()} ${test.info().project.name.split('-')[0]}`;
@@ -123,6 +124,6 @@ export async function holdSeats(page: Page, slug: string, labels: readonly strin
   await page
     .getByLabel('Email for your tickets')
     .fill(`${who.toLowerCase().replace(/\W+/g, '.')}@example.test`);
-  await page.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(page, `${who.toLowerCase().replace(/\W+/g, '.')}@example.test`);
   await expect(page.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
 }

@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 /**
  * M1.4b: multi-date events — recurring schedules (preview, validation, DST), editing one date or
@@ -109,7 +109,7 @@ async function buyForDate(browser: Browser, slug: string, dateLabel: string, pas
   await guest
     .getByLabel('Email for your tickets')
     .fill(`${who.replace(/\W/g, '').toLowerCase()}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, `${who.replace(/\W/g, '').toLowerCase()}@example.test`);
   await expect(guest).toHaveURL(/\/orders\//);
   return guest;
 }

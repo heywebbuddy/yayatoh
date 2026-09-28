@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 /** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
 function chicago(offsetH: number): string {
@@ -48,7 +48,7 @@ test.describe('check-in', () => {
     await guest.getByLabel('Quantity — Door pass').selectOption('1');
     await guest.getByLabel('Full name').fill(`Hedy ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`hedy+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `hedy+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/orders\//);
     const code = (await guest.locator('.tracking-\\[0\\.2em\\]').first().textContent())?.trim() ?? '';
     expect(code).toMatch(/^[2-9A-Z]{8}$/);

@@ -146,3 +146,23 @@ export async function expectHtmlAccessible(page: Page, html: string) {
   await expectAccessible(doc);
   await doc.close();
 }
+
+/**
+ * M1.5f: checkout's buyer email step. Clicks "Continue to payment", then (unless this browser
+ * already proved the address, `verify: false`) enters the 6-digit code the dev mailbox received
+ * (`/api/dev/last-code`) and chooses "Verify and continue". Afterwards the page is wherever
+ * checkout goes next (the order, the payment page or an error), exactly as before verification.
+ */
+export async function continueToPayment(page: Page, email: string, opts: { verify?: boolean } = {}) {
+  await page.getByRole('button', { name: 'Continue to payment' }).click();
+  if (opts.verify === false) return;
+  await verifyCheckoutEmail(page, email);
+}
+
+/** Enter the emailed checkout code (the code step must be showing or about to show). */
+export async function verifyCheckoutEmail(page: Page, email: string) {
+  const field = page.getByLabel('Verification code', { exact: true });
+  await expect(field).toBeVisible();
+  await field.fill(await lastEmailedCode(page, email));
+  await page.getByRole('button', { name: 'Verify and continue' }).click();
+}

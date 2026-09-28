@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
-import { expectAccessible, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 
@@ -371,7 +371,7 @@ test.describe('venue map and seat finder (M1.7e)', () => {
     await seats.nth(1).check();
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(emailOf(buyer));
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, emailOf(buyer));
     await expect(guest).toHaveURL(/\/orders\//);
 
     await guest.goto(`/events/${slug}/seat-finder`);

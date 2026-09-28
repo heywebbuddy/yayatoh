@@ -1,10 +1,10 @@
 import { consumeGuestLink } from '@yayatoh/orders';
-import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { linkCodeAction, openLinkAction } from '@/app/[locale]/my-tickets/actions.ts';
-import { LinkCodeForm } from '@/components/my-tickets-forms.tsx';
+import { GoToMyTickets, LinkCodeForm, OpenLinkForm } from '@/components/my-tickets-forms.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { browserState } from '@/server/guest.ts';
+import { browserState, currentGuestSession } from '@/server/guest.ts';
 
 /**
  * A sign-in magic link (M1.5f). Nothing is spent by opening the page (mail scanners fetch links):
@@ -21,6 +21,9 @@ export async function MyTicketsVerifyView({
   token: string;
 }) {
   const t = await getTranslations();
+  // Already signed in on this site (for instance, this page re-rendering right after the sign-in
+  // set its cookie): go on to My tickets.
+  if (await currentGuestSession(orgId)) return <GoToMyTickets label={t('attendeeSignIn.continue')} />;
   const r = await consumeGuestLink({
     token,
     browserState: await browserState(false),
@@ -43,9 +46,7 @@ export async function MyTicketsVerifyView({
       ) : r.status === 'ok' ? (
         <Card className="flex flex-col gap-4">
           <p className="text-body">{t('attendeeSignIn.linkReady', { email: r.email })}</p>
-          <form action={openLinkAction.bind(null, orgId, token)}>
-            <Button type="submit">{t('attendeeSignIn.continue')}</Button>
-          </form>
+          <OpenLinkForm action={openLinkAction.bind(null, orgId, token)} />
         </Card>
       ) : (
         <Card className="flex flex-col gap-4">

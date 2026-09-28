@@ -1,6 +1,6 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import { fakeDeliverySecret, signFakeDeliveryEvents } from '@yayatoh/notifications';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 /**
  * M1.10d: CSP-safe email previews, the template editor, reminders that follow a reschedule,
@@ -104,7 +104,7 @@ async function buy(browser: Browser, slug: string, pass: string, who: string, em
   await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
   await guest.getByLabel('Full name').fill(who);
   await guest.getByLabel('Email for your tickets').fill(email);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, email);
   await expect(guest).toHaveURL(/\/orders\//);
   return guest;
 }

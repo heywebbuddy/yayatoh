@@ -263,14 +263,11 @@ export function CheckoutForm({
               />
             </div>
             {/* Hidden (not removed) during the email step, so its brand colours stay applied. */}
-            <Button
-              type="submit"
-              disabled={pending}
-              ref={brandButton}
-              className={verify ? 'hidden' : undefined}
-            >
-              {t('checkout.continue')}
-            </Button>
+            <div className={verify ? 'hidden' : 'contents'}>
+              <Button type="submit" disabled={pending} ref={brandButton}>
+                {t('checkout.continue')}
+              </Button>
+            </div>
           </div>
           {/* Unticked by default: buying is never consent to marketing. */}
           <label className="flex min-h-6 items-start gap-2.5 text-caption text-zinc-600">

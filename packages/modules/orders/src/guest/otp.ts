@@ -84,11 +84,11 @@ export function resendAt(lastSentAt: Date | null, now: Date): Date | null {
   return at > now.getTime() ? new Date(at) : null;
 }
 
-/** Magic link token: `{challengeId}.{secret}`. */
-export const guestLinkToken = (challengeId: string, secret: string) => `${challengeId}.${secret}`;
+/** Magic link token: `{challengeId}~{secret}` (no dot: the path must not look like a file). */
+export const guestLinkToken = (challengeId: string, secret: string) => `${challengeId}~${secret}`;
 
 export function parseGuestLinkToken(token: string): { challengeId: string; secret: string } | null {
-  const m = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.([A-Za-z0-9_-]{43})$/.exec(
+  const m = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})~([A-Za-z0-9_-]{43})$/.exec(
     token,
   );
   return m ? { challengeId: m[1] as string, secret: m[2] as string } : null;

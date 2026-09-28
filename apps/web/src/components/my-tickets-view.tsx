@@ -1,14 +1,9 @@
 import { formatMoney, money } from '@yayatoh/kernel';
 import { guestOrders } from '@yayatoh/orders';
-import { Alert, Button, Card, EmptyState, Label, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Card, EmptyState, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
-import {
-  orderLinksAction,
-  signInAction,
-  signOutAction,
-  signOutEverywhereAction,
-} from '@/app/[locale]/my-tickets/actions.ts';
-import { OrderLinksForm, SignInForm } from '@/components/my-tickets-forms.tsx';
+import { orderLinksAction, signInAction, signOutAction } from '@/app/[locale]/my-tickets/actions.ts';
+import { OrderLinksForm, SignInForm, SignOutButtons } from '@/components/my-tickets-forms.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { currentGuestSession } from '@/server/guest.ts';
@@ -90,18 +85,10 @@ export async function MyTicketsView({
               ))}
             </ul>
           )}
-          <div className="flex flex-wrap gap-3">
-            <form action={signOutAction.bind(null, orgId)}>
-              <Button type="submit" variant="secondary">
-                {t('attendeeSignIn.signOut')}
-              </Button>
-            </form>
-            <form action={signOutEverywhereAction.bind(null, orgId)}>
-              <Button type="submit" variant="secondary">
-                {t('attendeeSignIn.signOutEverywhere')}
-              </Button>
-            </form>
-          </div>
+          <SignOutButtons
+            action={signOutAction.bind(null, orgId, false)}
+            everywhere={signOutAction.bind(null, orgId, true)}
+          />
         </>
       ) : (
         <Card>

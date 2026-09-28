@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 test.describe('attendees: labels, filters and org-wide search', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -35,7 +35,7 @@ test.describe('attendees: labels, filters and org-wide search', () => {
       await guest
         .getByLabel('Email for your tickets')
         .fill(`${who.replace(' ', '.').toLowerCase()}@example.test`);
-      await guest.getByRole('button', { name: 'Continue to payment' }).click();
+      await continueToPayment(guest, `${who.replace(' ', '.').toLowerCase()}@example.test`);
       await expect(guest).toHaveURL(/\/orders\//);
       codes.push((await guest.locator('.tracking-\\[0\\.2em\\]').first().textContent())?.trim() ?? '');
     }
@@ -124,7 +124,7 @@ test.describe('attendees: bulk actions and export', () => {
       await guest.getByLabel('Quantity — Pass').selectOption('1');
       await guest.getByLabel('Full name').fill(`${who} ${stamp}`);
       await guest.getByLabel('Email for your tickets').fill(`${who.toLowerCase()}.${stamp}@example.test`);
-      await guest.getByRole('button', { name: 'Continue to payment' }).click();
+      await continueToPayment(guest, `${who.toLowerCase()}.${stamp}@example.test`);
       await expect(guest).toHaveURL(/\/orders\//);
     }
 

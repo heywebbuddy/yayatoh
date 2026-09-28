@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 /** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
 function chicago(offsetH: number): string {
@@ -68,7 +68,7 @@ async function guestBuys(
   await guest.getByLabel('Full name').fill(opts.name);
   await guest.getByLabel('Email for your tickets').fill(opts.email);
   if (opts.promo) await guest.getByLabel('Promo code').fill(opts.promo);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, opts.email);
   if (opts.outcome === 'free') {
     await expect(guest).toHaveURL(/\/orders\//);
     return { guest, amount: 0 };

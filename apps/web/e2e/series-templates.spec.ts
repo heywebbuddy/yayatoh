@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 /** M1.4b: event series (console + public page + filter), duplicate event, org templates. */
 
@@ -136,7 +136,7 @@ test.describe('duplicate and templates', () => {
     await guest.getByLabel('Quantity — Gala seat').selectOption('2');
     await guest.getByLabel('Full name').fill(`Ada ${tag}`);
     await guest.getByLabel('Email for your tickets').fill(`ada${tag}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `ada${tag}@example.test`);
     await expect(guest).toHaveURL(/\/orders\//);
     await page.goto(`${base}/tickets-orders`);
     await expect(page.getByRole('row').filter({ hasText: `Ada ${tag}` })).toBeVisible();

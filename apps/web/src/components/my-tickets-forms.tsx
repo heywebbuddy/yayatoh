@@ -1,9 +1,14 @@
 'use client';
 
 import { Alert, Button, Card, Input } from '@yayatoh/ui';
-import { useTranslations } from 'next-intl';
-import { type FormEvent, startTransition, useActionState } from 'react';
-import type { LinkCodeState, OrderLinksState, SignInState } from '@/app/[locale]/my-tickets/actions.ts';
+import { useLocale, useTranslations } from 'next-intl';
+import { type FormEvent, startTransition, useActionState, useEffect } from 'react';
+import type {
+  LinkCodeState,
+  OrderLinksState,
+  SignInState,
+  SignOutState,
+} from '@/app/[locale]/my-tickets/actions.ts';
 import { GuestCodeFields } from '@/components/guest-code-fields.tsx';
 import { errorMessageKey } from '@/lib/errors.ts';
 
@@ -72,6 +77,74 @@ export function SignInForm({
   );
 }
 
+/** Once signed in or out, a full load of the next page (through the proxy, like any visit). */
+function useGoWhenDone(done: string | null | undefined) {
+  useEffect(() => {
+    if (done) window.location.assign(done);
+  }, [done]);
+}
+
+/** Signed in on a sign-in link's page: load My tickets (a plain link too, should scripts be off). */
+export function GoToMyTickets({ label }: { label: string }) {
+  const locale = useLocale();
+  const href = `${locale === 'en' ? '' : `/${locale}`}/my-tickets`;
+  useGoWhenDone(href);
+  return (
+    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-12 md:px-6">
+      <a href={href} className="text-body underline underline-offset-2">
+        {label}
+      </a>
+    </main>
+  );
+}
+
+/** The magic link in the browser that asked for it: one button signs in. */
+export function OpenLinkForm({ action }: { action: (prev: LinkCodeState) => Promise<LinkCodeState> }) {
+  const t = useTranslations();
+  const [state, formAction, pending] = useActionState(action, { code: null });
+  useGoWhenDone(state.done);
+  return (
+    <form action={formAction} className="flex flex-col gap-3">
+      <div>
+        <Button type="submit" disabled={pending || Boolean(state.done)}>
+          {t('attendeeSignIn.continue')}
+        </Button>
+      </div>
+      <div aria-live="assertive">
+        {state.status ? <Alert title={t('attendeeSignIn.linkInvalidTitle')} /> : null}
+      </div>
+    </form>
+  );
+}
+
+/** Sign out here, or on every device. */
+export function SignOutButtons({
+  action,
+  everywhere,
+}: {
+  action: (prev: SignOutState) => Promise<SignOutState>;
+  everywhere: (prev: SignOutState) => Promise<SignOutState>;
+}) {
+  const t = useTranslations();
+  const [one, oneAction, onePending] = useActionState(action, { done: null });
+  const [all, allAction, allPending] = useActionState(everywhere, { done: null });
+  useGoWhenDone(one.done ?? all.done);
+  return (
+    <div className="flex flex-wrap gap-3">
+      <form action={oneAction}>
+        <Button type="submit" variant="secondary" disabled={onePending || allPending}>
+          {t('attendeeSignIn.signOut')}
+        </Button>
+      </form>
+      <form action={allAction}>
+        <Button type="submit" variant="secondary" disabled={onePending || allPending}>
+          {t('attendeeSignIn.signOutEverywhere')}
+        </Button>
+      </form>
+    </div>
+  );
+}
+
 /** A magic link opened in another browser: prove it with the code from the same email. */
 export function LinkCodeForm({
   action,
@@ -80,6 +153,7 @@ export function LinkCodeForm({
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
+  useGoWhenDone(state.done);
   const onSubmit = useKeepValues(formAction);
   const failed = state.status && state.status !== 'sent' && state.status !== 'cooldown';
   const message =

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('checkout', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -30,7 +30,7 @@ test.describe('checkout', () => {
     await guest.getByLabel(`Quantity — Free pass ${stamp}`).selectOption('1');
     await guest.getByLabel('Full name').fill(`Grace Hopper ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`grace+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `grace+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
     await expect(guest.getByText('Paid', { exact: true })).toBeVisible();
     await expect(guest.getByRole('heading', { name: 'Your ticket' })).toBeVisible();
@@ -49,7 +49,7 @@ test.describe('checkout', () => {
     await guest.getByLabel('Full name').fill(`Alan Turing ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`alan+${stamp}@example.test`);
     await guest.getByLabel(/^Email me news and offers from Lakeside Events/).check();
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `alan+${stamp}@example.test`);
     await expect(guest.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     await expect(guest.getByText('$80.00')).toBeVisible();
     // The hosted payment page names what is being paid for (Stripe shows the same line).

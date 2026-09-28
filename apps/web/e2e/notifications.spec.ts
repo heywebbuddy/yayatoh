@@ -1,5 +1,12 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  OPEN_HOUSE,
+  signIn,
+  WEDDING,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 interface Captured {
   to: string;
@@ -43,7 +50,7 @@ test.describe('notifications: emails sent and the message log', () => {
     await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(email);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, email);
     await guest.getByRole('button', { name: /^Pay/ }).click();
     await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
     const orderUrl = new URL(guest.url()).pathname;

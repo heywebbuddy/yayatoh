@@ -48,7 +48,7 @@ export type GuestChallengeResult =
       readonly challengeId: string;
       /** For the caller to email right away; never stored. */
       readonly code: string;
-      /** Sign-in only: the magic link token (`{challengeId}.{secret}`), bound to `browserState`. */
+      /** Sign-in only: the magic link token (`{challengeId}~{secret}`), bound to `browserState`. */
       readonly linkToken: string | null;
       readonly resendAt: Date;
     }

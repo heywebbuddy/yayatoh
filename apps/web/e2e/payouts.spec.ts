@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('payouts', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -51,7 +51,7 @@ test.describe('payouts', () => {
     await guest.getByLabel(`Quantity — Direct pass ${stamp}`).selectOption('1');
     await guest.getByLabel('Full name').fill('Direct Buyer');
     await guest.getByLabel('Email for your tickets').fill(`direct+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `direct+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/checkout\/fake\?.*acct=fakeacct_/);
     await guest.getByRole('button', { name: /^Pay/ }).click();
     await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);

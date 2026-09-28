@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible } from './helpers.ts';
+import { continueToPayment, expectAccessible } from './helpers.ts';
 
 const JAZZ = '/events/lakeside-jazz-night';
 
@@ -24,11 +24,11 @@ async function freeSeats(page: Page, n: number, from: 'front' | 'back') {
   return ids;
 }
 
-async function buyer(page: Page, name: string) {
+async function buyer(page: Page, name: string): Promise<string> {
+  const email = `${name.toLowerCase().replace(/\W+/g, '.')}@example.test`;
   await page.getByLabel('Full name').fill(name);
-  await page
-    .getByLabel('Email for your tickets')
-    .fill(`${name.toLowerCase().replace(/\W+/g, '.')}@example.test`);
+  await page.getByLabel('Email for your tickets').fill(email);
+  return email;
 }
 
 test.describe('seated checkout', () => {
@@ -59,8 +59,8 @@ test.describe('seated checkout', () => {
         ((await page.locator(`label:has(input[value="${id}"])`).innerText()).split(' (')[0] ?? '').trim(),
       ),
     );
-    await buyer(page, `Billie Holiday ${stamp}`);
-    await page.getByRole('button', { name: 'Continue to payment' }).click();
+    const billie = await buyer(page, `Billie Holiday ${stamp}`);
+    await continueToPayment(page, billie);
     await expect(page.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     await page.getByRole('button', { name: 'Pay now (test)' }).click();
     await expect(page).toHaveURL(/\/orders\//);
@@ -89,17 +89,18 @@ test.describe('seated checkout', () => {
     await two.route('**/seats/stream', (r) => r.abort());
     await Promise.all([one.goto(JAZZ), two.goto(JAZZ)]);
     const [seat] = await freeSeats(one, 1, 'back');
+    const emails: string[] = [];
     for (const [p, name] of [
       [one, `Ella First ${stamp}`],
       [two, `Nina Second ${stamp}`],
     ] as const) {
       await p.locator(`input[name="seat"][value="${seat}"]`).check();
-      await buyer(p, name);
+      emails.push(await buyer(p, name));
     }
-    await one.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(one, emails[0] ?? '');
     await expect(one.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     // The first buyer's seat is held while they pay; the second is told and keeps their details.
-    await two.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(two, emails[1] ?? '');
     await expect(two.getByText('Some of those seats were just taken. Please choose others.')).toBeVisible();
     await expect(two.getByLabel('Full name')).toHaveValue(`Nina Second ${stamp}`);
     // Their seat map is refreshed: the taken seat is shown as taken and dropped from the choice.

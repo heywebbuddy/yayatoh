@@ -15,13 +15,12 @@ import {
   verifyGuestChallenge,
 } from '@yayatoh/orders';
 import { organizationNameTx, resolveHost } from '@yayatoh/tenancy';
+import { refresh } from 'next/cache';
 import { getLocale } from 'next-intl/server';
 import type { GuestCodeStatus } from '@/components/guest-code-fields.tsx';
-import { redirect } from '@/i18n/navigation.ts';
 import { classifyHost } from '@/lib/hosts.ts';
 import {
   browserState,
-  clearGuestSessionCookie,
   currentGuestSession,
   forgetPendingChallenge,
   guestHost,
@@ -112,8 +111,13 @@ async function signIn(orgId: string | null, email: string) {
   await setGuestSessionCookie(session.token);
   await rememberVerifiedEmail(email);
   await forgetPendingChallenge('sign_in');
-  redirect({ href: '/my-tickets', locale: await getLocale() });
 }
+
+/**
+ * Where to go once signed in or out. The browser navigates there itself (a full load through the
+ * proxy): a Server Action redirect would render the target without the tenant host's rewrite.
+ */
+const myTicketsHref = async (query = '') => `${localePrefix(await getLocale())}/my-tickets${query}`;
 
 /**
  * Step 1 (email → code and link) and step 2 (code → signed in) of the sign-in form. Every
@@ -135,7 +139,12 @@ export async function signInAction(
       { challengeId: pending, code, purpose: 'sign_in', scopeOrgId: orgId, email },
       await guestLimits(),
     );
-    if (r.status === 'ok') return signIn(orgId, email) as never;
+    if (r.status === 'ok') {
+      await signIn(orgId, email);
+      // Re-render this page (its route, as the proxy rewrote it) with the session.
+      refresh();
+      return { step: 'email', code: null };
+    }
     if (r.status === 'rate_limited')
       return { ...prev, code: 'rate_limited', retryMinutes: minutes(r.retryAfterMs) };
     return { step: 'code', code: null, email, status: r.status, attemptsLeft: r.attemptsLeft };
@@ -145,17 +154,24 @@ export async function signInAction(
 
 export type LinkCodeState = {
   readonly code: string | null;
+  /** Signed in: the page the browser goes to next. */
+  readonly done?: string;
   readonly status?: GuestCodeStatus;
   readonly attemptsLeft?: number | null;
   readonly retryMinutes?: number;
 };
 
 /** The magic link in the browser that asked for it: spend it and sign in. */
-export async function openLinkAction(orgId: string | null, token: string): Promise<void> {
+export async function openLinkAction(
+  orgId: string | null,
+  token: string,
+  _prev: LinkCodeState,
+): Promise<LinkCodeState> {
   await assertSite(orgId);
   const r = await consumeGuestLink({ token, browserState: await browserState(false), scopeOrgId: orgId });
-  if (r.status === 'ok') return signIn(orgId, r.email);
-  redirect({ href: `/my-tickets/verify/${token}`, locale: await getLocale() });
+  if (r.status !== 'ok') return { code: null, status: 'expired' };
+  await signIn(orgId, r.email);
+  return { code: null, done: await myTicketsHref() };
 }
 
 /** The magic link opened in another browser: the code from the same email proves the address. */
@@ -177,27 +193,36 @@ export async function linkCodeAction(
     },
     await guestLimits(),
   );
-  if (v.status === 'ok')
-    return v.email ? (signIn(orgId, v.email) as never) : { code: null, status: 'expired' };
+  if (v.status === 'ok') {
+    if (!v.email) return { code: null, status: 'expired' };
+    await signIn(orgId, v.email);
+    return { code: null, done: await myTicketsHref() };
+  }
   if (v.status === 'rate_limited') return { code: 'rate_limited', retryMinutes: minutes(v.retryAfterMs) };
   return { code: null, status: v.status, attemptsLeft: v.attemptsLeft };
 }
 
-/** Sign out this browser. */
-export async function signOutAction(orgId: string | null): Promise<void> {
-  await assertSite(orgId);
-  await endGuestSession(await guestSessionToken());
-  await clearGuestSessionCookie();
-  redirect({ href: '/my-tickets?signedOut=1', locale: await getLocale() });
-}
+export type SignOutState = { readonly done: string | null };
 
-/** Sign out on every device: revoke all of this address's sessions for this site. */
-export async function signOutEverywhereAction(orgId: string | null): Promise<void> {
+/**
+ * Sign out this browser, or (`everywhere`) every device: all this address's sessions for this
+ * site. The session row is revoked, so the cookie's token opens nothing; the cookie itself is
+ * left for the next sign-in to replace (changing a cookie would re-render this page before the
+ * browser loads the signed-out page).
+ */
+export async function signOutAction(
+  orgId: string | null,
+  everywhere: boolean,
+  _prev: SignOutState,
+): Promise<SignOutState> {
   await assertSite(orgId);
-  const session = await currentGuestSession(orgId);
-  if (session) await revokeGuestSessions(session.email, orgId);
-  await clearGuestSessionCookie();
-  redirect({ href: '/my-tickets?signedOut=all', locale: await getLocale() });
+  if (everywhere) {
+    const session = await currentGuestSession(orgId);
+    if (session) await revokeGuestSessions(session.email, orgId);
+  } else {
+    await endGuestSession(await guestSessionToken());
+  }
+  return { done: await myTicketsHref(everywhere ? '?signedOut=all' : '?signedOut=1') };
 }
 
 export type OrderLinksState = {

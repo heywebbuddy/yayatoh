@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 // A fresh event per run: its checkout questions must not leak into other specs' purchases.
 test.describe('checkout questions', () => {
@@ -50,7 +50,7 @@ test.describe('checkout questions', () => {
     await guest.getByLabel('Full name').fill(`Grace ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`grace+${stamp}@example.test`);
     await expectAccessible(guest);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `grace+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/orders\//);
 
     await page.goto(`${base}/tickets-orders`);

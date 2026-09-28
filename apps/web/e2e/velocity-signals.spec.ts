@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 
@@ -39,8 +39,9 @@ async function eventWithTickets(page: Page, browser: Browser, name: string, coun
   await guest.goto(`/events/${base.split('/').pop()}`);
   await guest.getByLabel('Quantity — Door pass').selectOption(String(count));
   await guest.getByLabel('Full name').fill(`Guest ${name}`);
-  await guest.getByLabel('Email for your tickets').fill(`guest+${Date.now()}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  const email = `guest+${Date.now()}@example.test`;
+  await guest.getByLabel('Email for your tickets').fill(email);
+  await continueToPayment(guest, email);
   await expect(guest).toHaveURL(/\/orders\//);
   const codes = (await guest.locator('.tracking-\\[0\\.2em\\]').allTextContents()).map((c) => c.trim());
   expect(codes).toHaveLength(count);

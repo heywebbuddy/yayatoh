@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('early-bird, donation and multi-day passes', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -48,7 +48,7 @@ test.describe('early-bird, donation and multi-day passes', () => {
     await guest.getByLabel(`Your amount — Supporter ${stamp} (at least $5)`).fill('2');
     await guest.getByLabel('Full name').fill(`Ada ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ada+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `ada+${stamp}@example.test`);
     await expect(guest.getByRole('region', { name: 'Choose your pass' }).getByRole('alert')).toContainText(
       'Enter an amount at or above the minimum',
     );
@@ -57,7 +57,8 @@ test.describe('early-bird, donation and multi-day passes', () => {
     await guest.getByLabel(`Your amount — Supporter ${stamp} (at least $5)`).fill('12.50');
     await guest.getByLabel('Full name').fill(`Ada ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ada+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    // Proved a moment ago in this browser: no second code (M1.5f).
+    await continueToPayment(guest, `ada+${stamp}@example.test`, { verify: false });
     await expect(guest.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     await expect(guest.getByText('$12.50')).toBeVisible();
   });

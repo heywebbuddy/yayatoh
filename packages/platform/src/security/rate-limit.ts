@@ -222,7 +222,7 @@ export const RATE_LIMIT_POLICIES = {
     device: { limit: 10, windowMs: 10 * MIN },
     anonymousIp: { limit: 30, windowMs: 10 * MIN },
     identity: { limit: 5, windowMs: 15 * MIN },
-    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
   /** Guest code checks (each code also locks after 5 wrong tries). */
   guestVerify: {

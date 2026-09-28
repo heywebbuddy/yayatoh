@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('disputes', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -24,7 +24,7 @@ test.describe('disputes', () => {
     await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`dee+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `dee+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/checkout\/fake\?/);
     const fake = new URL(guest.url());
     const pi = fake.searchParams.get('pi') ?? '';
