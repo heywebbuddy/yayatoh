@@ -229,6 +229,19 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 10, windowMs: 60 * MIN },
     ipCeiling: { limit: 200, windowMs: 10 * MIN },
   },
+  /** Review submissions from order pages (M1.4g); identity = the order's manage token. */
+  reviewSubmit: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 5, windowMs: 60 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
+  /** Reports of public reviews (M1.4g). */
+  reviewReport: {
+    device: { limit: 10, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
   /** Webhook calls that fail signature verification (valid deliveries are never limited). */
   webhookAbuse: {
     device: { limit: 30, windowMs: 10 * MIN },

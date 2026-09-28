@@ -1,3 +1,4 @@
+import { MAX_NAV_PAGES, pageIdsTx } from '@yayatoh/cms';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { z } from 'zod';
@@ -26,6 +27,7 @@ export const updateSiteSettingsCommand = tenantCommand({
     listOnMarketplace: z.boolean().optional(),
     tenantSite: z.boolean().optional(),
     embedOrigins: z.array(z.string().max(300)).max(MAX_EMBED_ORIGINS).optional(),
+    navPageIds: z.array(z.uuid()).max(MAX_NAV_PAGES).optional(),
   }),
   output: SiteSettingsDto,
   entitlement: 'core',
@@ -46,6 +48,16 @@ export const updateSiteSettingsCommand = tenantCommand({
         if (!embedOrigins.includes(o)) embedOrigins.push(o);
       }
     }
+    let navPageIds: string[] | undefined;
+    if (input.navPageIds) {
+      navPageIds = [...new Set(input.navPageIds)];
+      // Only this org's CMS pages (RLS scopes the lookup); drafts may be linked and show once published.
+      const known = new Set(await pageIdsTx(tx, navPageIds));
+      if (navPageIds.some((id) => !known.has(id)))
+        throw new DomainError('validation_failed', 'Not a page of this organization', {
+          field: 'navPageIds',
+        });
+    }
     const current = await settingsTx(tx);
     // Letting a new website embed checkout grants it access (roadmap §10): a step-up, M1.2c.
     // Removing websites never needs one.
@@ -54,6 +66,7 @@ export const updateSiteSettingsCommand = tenantCommand({
       listOnMarketplace: input.listOnMarketplace ?? current.listOnMarketplace,
       tenantSite: input.tenantSite ?? current.tenantSite,
       embedOrigins: embedOrigins ?? current.embedOrigins,
+      navPageIds: navPageIds ?? current.navPageIds,
     };
     await tx
       .insert(siteSettings)

@@ -252,6 +252,8 @@ describe('site settings, canonical hosts and isolation (M1.11a/b)', () => {
       listOnMarketplace: false,
       tenantSite: false,
       embedOrigins: [],
+      // M1.4g: the fixture links its published "About" page from the tenant site's navigation.
+      navPageIds: [expect.any(String)],
     });
   });
 

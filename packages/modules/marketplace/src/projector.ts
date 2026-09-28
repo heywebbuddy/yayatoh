@@ -35,7 +35,12 @@ export const ORG_LISTING_EVENTS = [
 export async function settingsTx(tx: TenantTx) {
   const [row] = await tx.select().from(siteSettings);
   return row
-    ? { listOnMarketplace: row.listOnMarketplace, tenantSite: row.tenantSite, embedOrigins: row.embedOrigins }
+    ? {
+        listOnMarketplace: row.listOnMarketplace,
+        tenantSite: row.tenantSite,
+        embedOrigins: row.embedOrigins,
+        navPageIds: row.navPageIds,
+      }
     : DEFAULT_SITE_SETTINGS;
 }
 

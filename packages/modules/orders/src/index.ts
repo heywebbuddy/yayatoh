@@ -56,6 +56,7 @@ export {
   orderByManageToken,
   orderDetailQuery,
   orderHolderTarget,
+  orderHoldingTx,
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';

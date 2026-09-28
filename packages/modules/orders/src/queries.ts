@@ -242,3 +242,50 @@ export const orderDetailQuery = tenantQuery({
     };
   },
 });
+
+/**
+ * What a buyer holds, from their manage link, inside the caller's tenant transaction (reviews,
+ * M1.4g): the order, its event, and the buyer's own live tickets with the instant each one's
+ * date ends (the ticket's date for multi-date events, else the event's end). Null when the token
+ * is not an order of this org.
+ */
+export async function orderHoldingTx(
+  tx: TenantTx,
+  token: string,
+): Promise<{
+  orderId: string;
+  eventId: string;
+  buyerEmail: string;
+  buyerName: string;
+  liveTicketEnds: Date[];
+} | null> {
+  if (!/^[A-Za-z0-9_-]{40,60}$/.test(token)) return null;
+  const [o] = await tx
+    .select({
+      id: orders.id,
+      eventId: orders.eventId,
+      buyerEmail: orders.buyerEmail,
+      buyerName: orders.buyerName,
+    })
+    .from(orders)
+    .where(eq(orders.manageTokenHash, hashManageToken(token)));
+  if (!o) return null;
+  const ev = await findEventTx(tx, o.eventId);
+  if (!ev) return null;
+  const buyer = o.buyerEmail.trim().toLowerCase();
+  const mine = (await ticketsForOrderTx(tx, o.id)).filter(
+    (t) => t.status === 'active' && t.holderEmail.trim().toLowerCase() === buyer,
+  );
+  const liveTicketEnds: Date[] = [];
+  for (const t of mine) {
+    const occ = t.occurrenceId ? await findOccurrenceTx(tx, t.occurrenceId) : null;
+    liveTicketEnds.push(occ?.endsAt ?? ev.endsAt);
+  }
+  return {
+    orderId: o.id,
+    eventId: o.eventId,
+    buyerEmail: o.buyerEmail,
+    buyerName: o.buyerName,
+    liveTicketEnds,
+  };
+}

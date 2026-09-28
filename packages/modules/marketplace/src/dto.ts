@@ -38,6 +38,7 @@ export const SiteSettingsDto = z.object({
   listOnMarketplace: z.boolean(),
   tenantSite: z.boolean(),
   embedOrigins: z.array(z.string()),
+  navPageIds: z.array(z.uuid()),
 });
 export type SiteSettingsDto = z.infer<typeof SiteSettingsDto>;
 export const siteSettingsSerializer = defineSerializer('marketplace.siteSettings', SiteSettingsDto);
@@ -46,6 +47,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettingsDto = {
   listOnMarketplace: false,
   tenantSite: false,
   embedOrigins: [],
+  navPageIds: [],
 };
 
 /** A sitemap entry: path-relevant fields and lastmod only. */
