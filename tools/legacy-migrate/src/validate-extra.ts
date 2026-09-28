@@ -216,7 +216,8 @@ const MIGRATED_CHECKSUMS: Record<string, string> = {
   tickets: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', t.id, t.status, t.void_reason, t.serial, t.short_code, t.seat_label, t.holder_email)) as x
              from ticketing.tickets t join legacy.ref r on r.new_id = t.id and r.instance = $1 and r.entity = 'booking_units') t`,
   legacy_settlements: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.kind, s.currency, s.customer_paid_minor, s.commission_minor, s.organizer_earning_minor, s.open_minor)) as x
-             from payments.legacy_settlements s where s.instance = $1) t`,
+             from payments.legacy_settlements s where s.instance = $1
+               and s.org_id in (select r.org_id from legacy.ref r where r.instance = $1 and r.entity = 'events')) t`,
   event_seats: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.seat_uuid, s.label, s.status, s.block_reason, s.ticket_id, s.ticket_type_id)) as x
              from seating.event_seats s join legacy.ref r on r.new_id = s.event_id and r.instance = $1 and r.entity = 'events') t`,
   venues: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', v.id, v.slug, v.name, v.timezone, v.latitude)) as x

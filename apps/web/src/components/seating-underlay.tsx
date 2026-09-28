@@ -180,6 +180,7 @@ export function UnderlayPanel({
   return (
     <section
       aria-labelledby={`${id}-h`}
+      data-underlay={u?.url}
       className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4"
     >
       <h3 id={`${id}-h`} className="text-body font-medium">
@@ -271,7 +272,7 @@ export function UnderlayPanel({
                 ) : null}
               </div>
               {marking ? (
-                <p role="status" className="text-caption text-accent-900">
+                <p role="status" className="text-caption font-medium text-ink">
                   {t(marking === 'a' ? 'markingA' : 'markingB')}
                 </p>
               ) : null}

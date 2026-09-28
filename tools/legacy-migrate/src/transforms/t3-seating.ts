@@ -159,7 +159,8 @@ export async function t3Seating(ctx: StepContext): Promise<void> {
       insert into seating.event_layouts (id, org_id, event_id, source_layout_id, doc, checksum, seat_count, status)
       values (${current?.id ?? planId}, ${ev.org}, ${eventId}, null, ${JSON.stringify(doc)}::jsonb, ${checksumOf(doc)},
               ${placed.length}, ${ev.published ? 'published' : 'draft'})
-      on conflict (org_id, event_id) do update set doc = excluded.doc, checksum = excluded.checksum,
+      -- The event plan (M1.7g: dates may have charts of their own, which the import never writes).
+      on conflict (org_id, event_id) where occurrence_id is null do update set doc = excluded.doc, checksum = excluded.checksum,
         seat_count = excluded.seat_count, status = excluded.status, locked_at = null`;
     if (sourceLayout)
       await ctx.sql`update seating.event_layouts set source_layout_id = (select id from seating.layouts where id = ${sourceLayout})

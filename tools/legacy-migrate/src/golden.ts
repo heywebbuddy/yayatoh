@@ -22,6 +22,12 @@ const NEW_ORDERS = `
 const NEW_TICKETS = `
   from ticketing.tickets t join legacy.ref r on r.instance = $1 and r.entity = 'booking_units' and r.new_id = t.id`;
 
+/**
+ * Orgs this instance's migration wrote events for: settlement rows of any other org (test
+ * fixtures that share the instance tag) are not the migration's output.
+ */
+const MIGRATED_ORGS = `select r.org_id from legacy.ref r where r.instance = $1 and r.entity = 'events'`;
+
 const pair = (legacy: string, migrated: string) => `
   with l as (${legacy}), m as (${migrated})
   select coalesce(l.key, m.key) as key, coalesce(l.v, 0)::bigint as legacy, coalesce(m.v, 0)::bigint as migrated
@@ -97,7 +103,7 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = c.event_id::text
        where c.status = 1 and c.transferred = 1 group by 1`,
       `select s.org_id::text as key, sum(s.transferred_minor) as v from payments.legacy_settlements s
-       where s.kind = 'event_statement' and s.instance = $1 group by 1`,
+       where s.kind = 'event_statement' and s.instance = $1 and s.org_id in (${MIGRATED_ORGS}) group by 1`,
     ),
   },
   {
@@ -109,7 +115,7 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = c.event_id::text
        where c.status = 1 and c.transferred = 0 group by 1`,
       `select s.org_id::text as key, sum(s.open_minor) as v from payments.legacy_settlements s
-       where s.kind = 'opening_balance' and s.instance = $1 group by 1`,
+       where s.kind = 'opening_balance' and s.instance = $1 and s.org_id in (${MIGRATED_ORGS}) group by 1`,
     ),
   },
   {
@@ -121,7 +127,7 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = c.event_id::text
        where c.status = 1 group by 1`,
       `select s.org_id::text as key, sum(s.commission_minor) as v from payments.legacy_settlements s
-       where s.kind = 'event_statement' and s.instance = $1 group by 1`,
+       where s.kind = 'event_statement' and s.instance = $1 and s.org_id in (${MIGRATED_ORGS}) group by 1`,
     ),
   },
   {
