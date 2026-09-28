@@ -273,7 +273,6 @@ test.describe('fraud signals: at the door', () => {
 test.describe('fraud signals: chat reports and the Signals list', () => {
   test('a chat abuse report raises a signal and an alert; the list filters by kind, severity and status by keyboard', async ({
     page,
-    browser,
   }, info) => {
     test.setTimeout(150_000);
     const stamp = `${Date.now()}${info.project.name.slice(0, 1)}`;
