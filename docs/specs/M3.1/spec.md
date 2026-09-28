@@ -96,3 +96,8 @@ Nothing destructive. After deploying, run `metrics:rebuild` once (owner inbox).
 | AC11 | Bucketing (UTC, half-open), sharding math (TS = SQL), series points, catalog permissions, DTO allowlists | `packages/modules/reports/tests/metrics-pipeline.test.ts` |
 | AC12 | Isolation: both orgs have rows in every new table; the isolation suite passes | `packages/testing/tests/isolation.int.test.ts` |
 | AC13 | End to end: tiles follow sales, a declined card, a check-in and its undo; equal the full report; survive a reload; keyboard-only path to the report; a viewer sees orders and no net revenue; axe; Arabic RTL. The M1.12 dashboard e2e still passes unchanged | `apps/web/e2e/metrics.spec.ts`, `apps/web/e2e/reports.spec.ts` |
+
+### Gate results (M3.1a)
+- `pnpm verify`: lint, check:modules, typecheck, 847 unit tests (88 files), 606 integration tests (80 files) — all pass.
+- Web e2e (all specs, 3 viewports): 919 passed, 10 skipped, 7 failed, 15 did not run (serial followers of failures). The 7 failures (`legacy-migration.spec.ts:90` ×3, `receivables.spec.ts:10` ×3, `ai-draft.spec.ts:171` desktop) fail identically on a build of the base commit `251e80c` against the same database, so they are pre-existing and unrelated.
+- `seat-finder.int.test.ts` "allows 30 lookups a minute…" failed once in a full run and passed alone and in the next full run: its rate-limit windows are wall-clock minutes, so 30 lookups straddling a minute boundary flake (pre-existing).
