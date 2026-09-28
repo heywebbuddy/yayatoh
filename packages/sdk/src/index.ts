@@ -5,7 +5,7 @@ export type { components, paths };
 /** The /v1 resources, e.g. `Schemas['Event']`. */
 export type Schemas = components['schemas'];
 
-export const SDK_VERSION = '0.2.0';
+export const SDK_VERSION = '0.3.0';
 
 export interface YayatohClientOptions {
   /** The server, without `/v1`: `https://api.yayatoh.com`, or `https://app.yayatoh.com/api`. */

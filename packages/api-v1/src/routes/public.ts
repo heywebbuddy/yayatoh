@@ -1,34 +1,32 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { publicEventBySlug } from '@yayatoh/events';
 import { DomainError } from '@yayatoh/kernel';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import type { V1Env } from '../context.ts';
 import { listSchema, PublicEvent, PublicTicketType, toWire } from '../resources.ts';
-import { json, publicProblems } from './common.ts';
+import { json, publicProblems, SlugParam } from './common.ts';
 
-const SlugParam = z.object({
-  slug: z
-    .string()
-    .min(2)
-    .max(63)
-    .regex(/^[a-z0-9-]+$/)
-    .openapi({ param: { name: 'slug', in: 'path' }, example: 'lakeside-jazz-night' }),
-});
 const PublicTicketTypeList = listSchema(PublicTicketType, 'PublicTicketTypeList');
 
 const event = createRoute({
   method: 'get',
   path: '/public/events/{slug}',
+  operationId: 'getPublicEvent',
   tags: ['public'],
   summary: 'A published event’s public page data (no credential)',
+  description:
+    'The allowlisted public data of an event with a public page (public or unlisted). Private events and drafts are a 404. No credential.',
   request: { params: SlugParam },
   responses: { 200: json(PublicEvent, 'The public event'), ...publicProblems },
 });
 const ticketTypes = createRoute({
   method: 'get',
   path: '/public/events/{slug}/ticket-types',
+  operationId: 'listPublicTicketTypes',
   tags: ['public'],
   summary: 'A published event’s passes with all-in prices and availability (no credential)',
+  description:
+    'The event’s on-sale passes with all-in prices (fees included when passed on) and availability. Hidden passes never appear. No credential.',
   request: { params: SlugParam },
   responses: { 200: json(PublicTicketTypeList, 'Public passes'), ...publicProblems },
 });

@@ -1,8 +1,18 @@
 import { z } from '@hono/zod-openapi';
 import { ATTENDEE_SOURCES, ATTENDEE_STATUSES } from '@yayatoh/attendees';
-import { SCAN_RESULTS } from '@yayatoh/checkin';
+import { ScanResult } from '@yayatoh/checkin/routes';
 import type { ProblemDto } from '@yayatoh/contracts';
-import { EVENT_PROFILES, EVENT_STATUSES, EVENT_VISIBILITIES } from '@yayatoh/events';
+import {
+  ANNOUNCEMENT_AUDIENCES,
+  ATTENDANCE_MODES,
+  EVENT_CATEGORIES,
+  EVENT_PROFILES,
+  EVENT_STATUSES,
+  EVENT_VISIBILITIES,
+  OCCURRENCE_STATUSES,
+  SECTION_KINDS,
+} from '@yayatoh/events';
+import { SLOTS, VARIANT_FORMATS } from '@yayatoh/media';
 import { ORDER_STATUSES, REFUND_REASONS } from '@yayatoh/orders';
 import { API_KEY_SCOPES, ORG_ROLES } from '@yayatoh/tenancy';
 import { FEE_MODES, TICKET_TYPE_VISIBILITIES } from '@yayatoh/ticketing';
@@ -25,6 +35,37 @@ function isoDates(v: unknown): unknown {
 }
 
 const DateTime = z.iso.datetime({ offset: true });
+
+/*
+ * Named enums (Spectral `yayatoh-named-enums`): every choice list is a component, so the
+ * generated TS/Swift/Kotlin clients get one type per enum instead of anonymous inline ones.
+ */
+export const OrgRole = z.enum(ORG_ROLES).openapi('OrgRole');
+export const EventProfile = z.enum(EVENT_PROFILES).openapi('EventProfile');
+export const EventStatus = z.enum(EVENT_STATUSES).openapi('EventStatus');
+export const EventVisibility = z.enum(EVENT_VISIBILITIES).openapi('EventVisibility');
+export const EventCategory = z.enum(EVENT_CATEGORIES).openapi('EventCategory');
+export const AttendanceMode = z.enum(ATTENDANCE_MODES).openapi('AttendanceMode');
+export const FeeMode = z.enum(FEE_MODES).openapi('FeeMode');
+export const TicketTypeVisibility = z.enum(TICKET_TYPE_VISIBILITIES).openapi('TicketTypeVisibility');
+export const Availability = z
+  .enum(['available', 'sold_out', 'not_yet_on_sale', 'sales_ended'])
+  .openapi('Availability');
+export const OrderStatus = z.enum(ORDER_STATUSES).openapi('OrderStatus');
+export const RefundStatus = z.enum(['succeeded', 'failed', 'pending']).openapi('RefundStatus');
+export const RefundReason = z.enum(REFUND_REASONS).openapi('RefundReason');
+export const AttendeeSource = z.enum(ATTENDEE_SOURCES).openapi('AttendeeSource');
+export const AttendeeStatus = z.enum(ATTENDEE_STATUSES).openapi('AttendeeStatus');
+export { ScanResult };
+export const HealthStatus = z.enum(['ok', 'degraded']).openapi('HealthStatus');
+export const Health = z
+  .object({ status: HealthStatus, service: z.string(), version: z.string(), time: z.iso.datetime() })
+  .openapi('Health');
+export const SectionKind = z.enum(SECTION_KINDS).openapi('SectionKind');
+export const AnnouncementAudience = z.enum(ANNOUNCEMENT_AUDIENCES).openapi('AnnouncementAudience');
+export const DateStatus = z.enum(OCCURRENCE_STATUSES).openapi('DateStatus');
+export const ImageSlot = z.enum(SLOTS).openapi('ImageSlot');
+export const ImageFormat = z.enum(VARIANT_FORMATS).openapi('ImageFormat');
 
 /** RFC 9457 problem details (the same shape as `ProblemDto`). */
 export const Problem = z
@@ -50,7 +91,7 @@ export const Session = z
   .openapi('Session');
 
 export const Membership = z
-  .object({ id: z.uuid(), slug: z.string(), name: z.string(), role: z.enum(ORG_ROLES) })
+  .object({ id: z.uuid(), slug: z.string(), name: z.string(), role: OrgRole })
   .openapi('Membership');
 
 export const Organization = z
@@ -71,9 +112,9 @@ export const Event = z
     slug: z.string(),
     name: z.string(),
     tagline: z.string().nullable(),
-    profile: z.enum(EVENT_PROFILES),
-    status: z.enum(EVENT_STATUSES),
-    visibility: z.enum(EVENT_VISIBILITIES),
+    profile: EventProfile,
+    status: EventStatus,
+    visibility: EventVisibility,
     timezone: z.string().openapi({ description: 'IANA timezone; event times render in it.' }),
     startsAt: DateTime,
     endsAt: DateTime,
@@ -95,7 +136,7 @@ export const TicketType = z
     description: z.string().nullable(),
     priceMinor: z.int().openapi({ description: 'Face value in minor units.' }),
     currency: z.string(),
-    feeMode: z.enum(FEE_MODES),
+    feeMode: FeeMode,
     quantityTotal: z.int(),
     quantitySold: z.int(),
     quantityHeld: z.int(),
@@ -103,7 +144,7 @@ export const TicketType = z
     maxPerOrder: z.int(),
     salesStartAt: DateTime.nullable(),
     salesEndAt: DateTime.nullable(),
-    visibility: z.enum(TICKET_TYPE_VISIBILITIES),
+    visibility: TicketTypeVisibility,
     sortOrder: z.int(),
     earlyPriceMinor: z.int().nullable(),
     earlyEndsAt: DateTime.nullable(),
@@ -125,7 +166,7 @@ export const Order = z
   .object({
     id: z.uuid(),
     eventId: z.uuid(),
-    status: z.enum(ORDER_STATUSES),
+    status: OrderStatus,
     buyerName: z.string(),
     buyerEmail: z.string(),
     currency: z.string(),
@@ -156,7 +197,7 @@ export const OrderDetail = Order.extend({ tickets: z.array(OrderTicket) }).opena
 export const Refund = z
   .object({
     refundId: z.uuid(),
-    status: z.enum(['succeeded', 'failed', 'pending']),
+    status: RefundStatus,
     amountMinor: z.int(),
     feeRefundedMinor: z.int(),
     currency: z.string(),
@@ -165,7 +206,7 @@ export const Refund = z
 
 export const RefundRequest = z
   .object({
-    reason: z.enum(REFUND_REASONS),
+    reason: RefundReason,
     ticketIds: z.array(z.uuid()).min(1).max(500).optional(),
     amountMinor: z.int().positive().optional(),
     note: z.string().max(500).optional(),
@@ -180,8 +221,8 @@ export const Attendee = z
     eventId: z.uuid(),
     name: z.string(),
     email: z.string(),
-    source: z.enum(ATTENDEE_SOURCES),
-    status: z.enum(ATTENDEE_STATUSES),
+    source: AttendeeSource,
+    status: AttendeeStatus,
     ticketId: z.uuid().nullable(),
     labels: z.array(z.string()),
     createdAt: DateTime,
@@ -200,7 +241,7 @@ export const AttendeeHit = z
 
 export const ScanVerdict = z
   .object({
-    result: z.enum(SCAN_RESULTS),
+    result: ScanResult,
     ticket: z
       .object({
         holderName: z.string().nullable(),
@@ -219,8 +260,8 @@ export const PublicEvent = z
     slug: z.string(),
     name: z.string(),
     tagline: z.string().nullable(),
-    profile: z.enum(EVENT_PROFILES),
-    status: z.enum(EVENT_STATUSES),
+    profile: EventProfile,
+    status: EventStatus,
     timezone: z.string(),
     startsAt: DateTime,
     endsAt: DateTime,
@@ -228,6 +269,12 @@ export const PublicEvent = z
     city: z.string().nullable(),
     currency: z.string(),
     organizerName: z.string(),
+    // M1.13d (additive): what a client needs to link the venue and label the event.
+    category: EventCategory.nullable(),
+    attendanceMode: AttendanceMode,
+    venueSlug: z.string().nullable().openapi({
+      description: 'The venue’s slug when it is in the directory (`GET /v1/public/venues/{slug}`).',
+    }),
   })
   .openapi('PublicEvent');
 
@@ -242,7 +289,7 @@ export const PublicTicketType = z
     earlyEndsAt: DateTime.nullable(),
     isDonation: z.boolean(),
     accessDates: z.array(AccessDate),
-    availability: z.enum(['available', 'sold_out', 'not_yet_on_sale', 'sales_ended']),
+    availability: Availability,
     fewLeft: z.boolean(),
     minPerOrder: z.int(),
     maxPerOrder: z.int(),
@@ -268,3 +315,294 @@ export function pageSchema<T extends z.ZodType>(item: T, name: string) {
 export function listSchema<T extends z.ZodType>(item: T, name: string) {
   return z.object({ data: z.array(item) }).openapi(name);
 }
+
+/* ------------------------------------------------ M1.13d: event content, venues, program ---- */
+
+const Link = z.object({ label: z.string(), url: z.string() }).openapi('Link');
+
+const sectionVariant = <K extends (typeof SECTION_KINDS)[number], C extends z.ZodType>(
+  kind: K,
+  content: C,
+  name: string,
+  extra: z.ZodRawShape = {},
+) => z.object({ id: z.uuid(), title: z.string(), kind: z.literal(kind), content, ...extra }).openapi(name);
+
+const TextContent = z
+  .object({ markdown: z.string().openapi({ description: 'Sanitized Markdown (small subset).' }) })
+  .openapi('TextSectionContent');
+const FaqContent = z
+  .object({ items: z.array(z.object({ question: z.string(), answer: z.string() })) })
+  .openapi('FaqSectionContent');
+const ScheduleContent = z
+  .object({
+    items: z.array(
+      z.object({
+        time: z.string().openapi({ description: '`HH:MM`, wall-clock in the event’s timezone.' }),
+        title: z.string(),
+        detail: z.string().nullable(),
+      }),
+    ),
+  })
+  .openapi('ScheduleSectionContent');
+const LocationContent = z
+  .object({ address: z.string(), directions: z.string(), mapUrl: z.string().nullable() })
+  .openapi('LocationSectionContent');
+const LinksContent = z.object({ items: z.array(Link) }).openapi('LinksSectionContent');
+
+function sectionSchema(prefix: string, extra: z.ZodRawShape = {}) {
+  return z
+    .discriminatedUnion('kind', [
+      sectionVariant('text', TextContent, `${prefix}TextSection`, extra),
+      sectionVariant('faq', FaqContent, `${prefix}FaqSection`, extra),
+      sectionVariant('schedule', ScheduleContent, `${prefix}ScheduleSection`, extra),
+      sectionVariant('location', LocationContent, `${prefix}LocationSection`, extra),
+      sectionVariant('links', LinksContent, `${prefix}LinksSection`, extra),
+    ])
+    .openapi(`${prefix}EventSection`, {
+      description: 'A content block of the event page; `kind` says which `content` shape it has.',
+    });
+}
+
+/** A visible section of a public event page (hidden sections never appear). */
+export const PublicEventSection = sectionSchema('Public');
+/** An event page section as the organizer sees it, hidden ones included. */
+export const EventSection = sectionSchema('', { position: z.int(), visible: z.boolean() });
+
+export const PublicAnnouncement = z
+  .object({
+    id: z.uuid(),
+    title: z.string(),
+    body: z.string().openapi({ description: 'Sanitized Markdown.' }),
+    pinned: z.boolean(),
+    publishedAt: DateTime,
+  })
+  .openapi('PublicAnnouncement', {
+    description: 'A published announcement for everyone (`public` audience).',
+  });
+
+export const Announcement = z
+  .object({
+    id: z.uuid(),
+    eventId: z.uuid(),
+    title: z.string(),
+    body: z.string(),
+    audience: AnnouncementAudience,
+    pinned: z.boolean(),
+    publishedAt: DateTime.nullable().openapi({ description: 'Null while it is a draft.' }),
+    createdAt: DateTime,
+  })
+  .openapi('Announcement');
+
+export const PublicEventDate = z
+  .object({
+    id: z.uuid(),
+    startsAt: DateTime,
+    endsAt: DateTime,
+    status: DateStatus,
+    soldOut: z.boolean(),
+  })
+  .openapi('PublicEventDate', { description: 'One date of a multi-date event (no capacity numbers).' });
+
+export const EventDate = z
+  .object({
+    id: z.uuid(),
+    eventId: z.uuid(),
+    startsAt: DateTime,
+    endsAt: DateTime,
+    capacity: z.int().nullable(),
+    status: DateStatus,
+  })
+  .openapi('EventDate');
+
+export const ImageVariant = z
+  .object({
+    format: ImageFormat,
+    width: z.int(),
+    height: z.int(),
+    url: z.url().openapi({
+      description: 'Absolute, content-hashed and immutable (`…/{width}-{sha256}.{ext}`): cache it forever.',
+    }),
+    fallback: z.boolean().openapi({ description: 'The JPEG/PNG (or SVG) every client can show.' }),
+  })
+  .openapi('ImageVariant');
+
+export const Image = z
+  .object({
+    id: z.uuid(),
+    slot: ImageSlot,
+    position: z.int(),
+    width: z.int(),
+    height: z.int(),
+    alt: z.string().openapi({ description: 'Empty for decorative images.' }),
+    decorative: z.boolean(),
+    variants: z.array(ImageVariant),
+  })
+  .openapi('Image');
+
+const VenueEvent = z
+  .object({ slug: z.string(), name: z.string(), startsAt: DateTime, endsAt: DateTime, timezone: z.string() })
+  .openapi('VenueEvent');
+
+export const DirectoryVenue = z
+  .object({
+    slug: z.string(),
+    name: z.string(),
+    city: z.string().nullable(),
+    region: z.string().nullable(),
+    country: z.string(),
+    capacity: z.int().nullable(),
+  })
+  .openapi('DirectoryVenue');
+
+const venueFields = {
+  slug: z.string(),
+  name: z.string(),
+  addressLine1: z.string().nullable(),
+  addressLine2: z.string().nullable(),
+  city: z.string().nullable(),
+  region: z.string().nullable(),
+  postalCode: z.string().nullable(),
+  country: z.string(),
+  latitude: z.number().nullable(),
+  longitude: z.number().nullable(),
+  timezone: z.string(),
+  capacity: z.int().nullable(),
+  accessibilityNotes: z.string().nullable(),
+  mapUrl: z.string().nullable(),
+};
+
+export const PublicVenue = z
+  .object({
+    ...venueFields,
+    organizerName: z.string(),
+    photos: z.array(Image),
+    upcomingEvents: z.array(VenueEvent).openapi({ description: 'Upcoming public events at the venue.' }),
+  })
+  .openapi('PublicVenue', {
+    description: 'A venue listed in the directory (quote requests are not exposed).',
+  });
+
+export const Venue = z
+  .object({ id: z.uuid(), ...venueFields, directoryListed: z.boolean(), archivedAt: DateTime.nullable() })
+  .openapi('Venue');
+
+const SpeakerRef = z.object({ id: z.uuid(), name: z.string() }).openapi('SpeakerRef');
+
+export const AgendaSession = z
+  .object({
+    id: z.uuid(),
+    title: z.string(),
+    description: z.string().openapi({ description: 'Sanitized Markdown.' }),
+    startsAt: DateTime,
+    endsAt: DateTime,
+    dateId: z.uuid().nullable().openapi({ description: 'The event date it belongs to (multi-date events).' }),
+    track: z.string().nullable(),
+    room: z.string().nullable(),
+    speakers: z.array(SpeakerRef),
+  })
+  .openapi('AgendaSession');
+
+const agendaDay = <T extends z.ZodType>(session: T, name: string) =>
+  z
+    .object({
+      date: z.iso.date().openapi({ description: 'The day in the event’s timezone (`YYYY-MM-DD`).' }),
+      sessions: z.array(session),
+    })
+    .openapi(name);
+
+export const PublicAgenda = z
+  .object({
+    timezone: z.string().openapi({ description: 'The event’s IANA timezone; days and times render in it.' }),
+    days: z.array(agendaDay(AgendaSession, 'AgendaDay')),
+  })
+  .openapi('PublicAgenda', {
+    description: 'Sessions grouped by day in the event’s timezone, in start order.',
+  });
+
+export const Track = z.object({ id: z.uuid(), name: z.string() }).openapi('Track');
+export const Room = z
+  .object({ id: z.uuid(), name: z.string(), capacity: z.int().nullable() })
+  .openapi('Room');
+
+export const ProgramSession = z
+  .object({
+    id: z.uuid(),
+    title: z.string(),
+    description: z.string(),
+    startsAt: DateTime,
+    endsAt: DateTime,
+    dateId: z.uuid().nullable(),
+    trackId: z.uuid().nullable(),
+    roomId: z.uuid().nullable(),
+    capacity: z.int().nullable(),
+    speakerIds: z.array(z.uuid()),
+  })
+  .openapi('ProgramSession');
+
+export const Agenda = z
+  .object({
+    timezone: z.string(),
+    tracks: z.array(Track),
+    rooms: z.array(Room),
+    days: z.array(agendaDay(ProgramSession, 'ProgramDay')),
+  })
+  .openapi('Agenda', { description: 'The organizer’s agenda with track and room ids and capacities.' });
+
+export const Speaker = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    title: z.string().nullable(),
+    company: z.string().nullable(),
+    bio: z.string().openapi({ description: 'Sanitized Markdown.' }),
+    links: z.array(Link),
+    image: Image.nullable().openapi({
+      description:
+        'The speaker’s photo (M1.4h); null when none. Public reads show it only when the event page is public.',
+    }),
+  })
+  .openapi('Speaker');
+
+export const SpeakerDetail = z
+  .object({ speaker: Speaker, sessions: z.array(AgendaSession) })
+  .openapi('SpeakerDetail', { description: 'A speaker and the sessions they speak in.' });
+
+export const Exhibitor = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    description: z.string(),
+    boothLabel: z.string().nullable(),
+    websiteUrl: z.string().nullable(),
+    image: Image.nullable().openapi({
+      description:
+        'The exhibitor’s logo (M1.4h); null when none. Public reads show it only when the event page is public.',
+    }),
+  })
+  .openapi('Exhibitor');
+
+const Sponsor = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    description: z.string(),
+    websiteUrl: z.string().nullable(),
+    image: Image.nullable().openapi({
+      description:
+        'The sponsor’s logo (M1.4h); null when none. Public reads show it only when the event page is public.',
+    }),
+  })
+  .openapi('Sponsor');
+
+export const SponsorTier = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    position: z.int().openapi({ description: 'Display order (1 first).' }),
+    sponsors: z.array(Sponsor),
+  })
+  .openapi('SponsorTier');
+
+export const PublicSponsorTier = z
+  .object({ name: z.string(), sponsors: z.array(Sponsor) })
+  .openapi('PublicSponsorTier', { description: 'A sponsor package with its sponsors, in display order.' });

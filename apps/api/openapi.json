@@ -3,8 +3,70 @@
   "info": {
     "title": "Yayatoh API",
     "version": "0.2.0",
-    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user session token from `POST /v1/auth/login`. No cookies.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate)."
+    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user session token from `POST /v1/auth/login`. No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
   },
+  "tags": [
+    {
+      "name": "system",
+      "description": "Liveness and the API document."
+    },
+    {
+      "name": "auth",
+      "description": "Bearer sessions for mobile and command-line clients."
+    },
+    {
+      "name": "me",
+      "description": "The signed-in user and their organizations."
+    },
+    {
+      "name": "mobile",
+      "description": "Configuration for the mobile apps (versions, base URLs, flags)."
+    },
+    {
+      "name": "public",
+      "description": "Published events and their passes, without a credential."
+    },
+    {
+      "name": "public content",
+      "description": "Event page content, dates, agenda, speakers, sponsors, images and venues, without a credential."
+    },
+    {
+      "name": "organizations",
+      "description": "The organization an API key or session belongs to."
+    },
+    {
+      "name": "events",
+      "description": "The organization’s events."
+    },
+    {
+      "name": "event content",
+      "description": "Sections, announcements, dates and the program of an event."
+    },
+    {
+      "name": "venues",
+      "description": "The organization’s saved venues."
+    },
+    {
+      "name": "ticket types",
+      "description": "Passes and their prices."
+    },
+    {
+      "name": "orders",
+      "description": "Orders, tickets and refunds."
+    },
+    {
+      "name": "attendees",
+      "description": "Attendees and search."
+    },
+    {
+      "name": "check-in",
+      "description": "Online scans with an API key or session."
+    },
+    {
+      "name": "scanner",
+      "description": "The Scan PWA’s device-token routes (manifest, offline sync)."
+    }
+  ],
   "components": {
     "securitySchemes": {
       "deviceToken": {
@@ -15,7 +77,7 @@
       "apiKey": {
         "type": "http",
         "scheme": "bearer",
-        "description": "An org API key (`yy_live_…`). Shown once when created; scoped; bound to one org."
+        "description": "An org API key (`yy_live_…`, or a read-only `yy_test_…` test key). Shown once when created; scoped; bound to one org."
       },
       "bearerSession": {
         "type": "http",
@@ -24,6 +86,37 @@
       }
     },
     "schemas": {
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/HealthStatus"
+          },
+          "service": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "status",
+          "service",
+          "version",
+          "time"
+        ]
+      },
+      "HealthStatus": {
+        "type": "string",
+        "enum": [
+          "ok",
+          "degraded"
+        ]
+      },
       "Session": {
         "type": "object",
         "properties": {
@@ -150,17 +243,7 @@
             "type": "string"
           },
           "role": {
-            "type": "string",
-            "enum": [
-              "owner",
-              "admin",
-              "manager",
-              "finance",
-              "marketing",
-              "box_office",
-              "scanner",
-              "viewer"
-            ]
+            "$ref": "#/components/schemas/OrgRole"
           }
         },
         "required": [
@@ -168,6 +251,19 @@
           "slug",
           "name",
           "role"
+        ]
+      },
+      "OrgRole": {
+        "type": "string",
+        "enum": [
+          "owner",
+          "admin",
+          "manager",
+          "finance",
+          "marketing",
+          "box_office",
+          "scanner",
+          "viewer"
         ]
       },
       "MobileConfig": {
@@ -252,27 +348,10 @@
             ]
           },
           "profile": {
-            "type": "string",
-            "enum": [
-              "wedding",
-              "gala",
-              "concert",
-              "conference",
-              "community",
-              "agency",
-              "other"
-            ]
+            "$ref": "#/components/schemas/EventProfile"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "postponed",
-              "cancelled",
-              "completed",
-              "archived"
-            ]
+            "$ref": "#/components/schemas/EventStatus"
           },
           "timezone": {
             "type": "string"
@@ -302,6 +381,19 @@
           },
           "organizerName": {
             "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/EventCategory"
+          },
+          "attendanceMode": {
+            "$ref": "#/components/schemas/AttendanceMode"
+          },
+          "venueSlug": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The venue’s slug when it is in the directory (`GET /v1/public/venues/{slug}`)."
           }
         },
         "required": [
@@ -316,7 +408,66 @@
           "venueName",
           "city",
           "currency",
-          "organizerName"
+          "organizerName",
+          "category",
+          "attendanceMode",
+          "venueSlug"
+        ]
+      },
+      "EventProfile": {
+        "type": "string",
+        "enum": [
+          "wedding",
+          "gala",
+          "concert",
+          "conference",
+          "community",
+          "agency",
+          "other"
+        ]
+      },
+      "EventStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "published",
+          "postponed",
+          "cancelled",
+          "completed",
+          "archived"
+        ]
+      },
+      "EventCategory": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "arts_culture",
+          "business_seminars",
+          "charity",
+          "community",
+          "education_classes",
+          "family",
+          "food_drink",
+          "health_wellness",
+          "music",
+          "nightlife",
+          "religion_spirituality",
+          "social_gatherings",
+          "sports_fitness",
+          "technology",
+          "travel_leisure",
+          "other",
+          null
+        ]
+      },
+      "AttendanceMode": {
+        "type": "string",
+        "enum": [
+          "in_person",
+          "online",
+          "hybrid"
         ]
       },
       "PublicTicketTypeList": {
@@ -390,13 +541,7 @@
             }
           },
           "availability": {
-            "type": "string",
-            "enum": [
-              "available",
-              "sold_out",
-              "not_yet_on_sale",
-              "sales_ended"
-            ]
+            "$ref": "#/components/schemas/Availability"
           },
           "fewLeft": {
             "type": "boolean"
@@ -422,6 +567,1769 @@
           "fewLeft",
           "minPerOrder",
           "maxPerOrder"
+        ]
+      },
+      "Availability": {
+        "type": "string",
+        "enum": [
+          "available",
+          "sold_out",
+          "not_yet_on_sale",
+          "sales_ended"
+        ]
+      },
+      "PublicEventSectionList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicEventSection"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PublicEventSection": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PublicTextSection"
+          },
+          {
+            "$ref": "#/components/schemas/PublicFaqSection"
+          },
+          {
+            "$ref": "#/components/schemas/PublicScheduleSection"
+          },
+          {
+            "$ref": "#/components/schemas/PublicLocationSection"
+          },
+          {
+            "$ref": "#/components/schemas/PublicLinksSection"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "text": "#/components/schemas/PublicTextSection",
+            "faq": "#/components/schemas/PublicFaqSection",
+            "schedule": "#/components/schemas/PublicScheduleSection",
+            "location": "#/components/schemas/PublicLocationSection",
+            "links": "#/components/schemas/PublicLinksSection"
+          }
+        },
+        "description": "A content block of the event page; `kind` says which `content` shape it has."
+      },
+      "PublicTextSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "text"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/TextSectionContent"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content"
+        ]
+      },
+      "TextSectionContent": {
+        "type": "object",
+        "properties": {
+          "markdown": {
+            "type": "string",
+            "description": "Sanitized Markdown (small subset)."
+          }
+        },
+        "required": [
+          "markdown"
+        ]
+      },
+      "PublicFaqSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "faq"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/FaqSectionContent"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content"
+        ]
+      },
+      "FaqSectionContent": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "question",
+                "answer"
+              ]
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "PublicScheduleSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "schedule"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/ScheduleSectionContent"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content"
+        ]
+      },
+      "ScheduleSectionContent": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "description": "`HH:MM`, wall-clock in the event’s timezone."
+                },
+                "title": {
+                  "type": "string"
+                },
+                "detail": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "time",
+                "title",
+                "detail"
+              ]
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "PublicLocationSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "location"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/LocationSectionContent"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content"
+        ]
+      },
+      "LocationSectionContent": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "directions": {
+            "type": "string"
+          },
+          "mapUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "directions",
+          "mapUrl"
+        ]
+      },
+      "PublicLinksSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "links"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/LinksSectionContent"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content"
+        ]
+      },
+      "LinksSectionContent": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "url"
+        ]
+      },
+      "PublicAnnouncementPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicAnnouncement"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "PublicAnnouncement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string",
+            "description": "Sanitized Markdown."
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "body",
+          "pinned",
+          "publishedAt"
+        ],
+        "description": "A published announcement for everyone (`public` audience)."
+      },
+      "PublicEventDatePage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicEventDate"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "PublicEventDate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DateStatus"
+          },
+          "soldOut": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "startsAt",
+          "endsAt",
+          "status",
+          "soldOut"
+        ],
+        "description": "One date of a multi-date event (no capacity numbers)."
+      },
+      "DateStatus": {
+        "type": "string",
+        "enum": [
+          "scheduled",
+          "cancelled"
+        ]
+      },
+      "PublicAgenda": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "description": "The event’s IANA timezone; days and times render in it."
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendaDay"
+            }
+          }
+        },
+        "required": [
+          "timezone",
+          "days"
+        ],
+        "description": "Sessions grouped by day in the event’s timezone, in start order."
+      },
+      "AgendaDay": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "The day in the event’s timezone (`YYYY-MM-DD`)."
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendaSession"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "sessions"
+        ]
+      },
+      "AgendaSession": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "description": "Sanitized Markdown."
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The event date it belongs to (multi-date events)."
+          },
+          "track": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "room": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "speakers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpeakerRef"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "startsAt",
+          "endsAt",
+          "dateId",
+          "track",
+          "room",
+          "speakers"
+        ]
+      },
+      "SpeakerRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "SpeakerPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Speaker"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "Speaker": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "company": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bio": {
+            "type": "string",
+            "description": "Sanitized Markdown."
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          },
+          "image": {
+            "$ref": "#/components/schemas/Image"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "title",
+          "company",
+          "bio",
+          "links",
+          "image"
+        ]
+      },
+      "Image": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/ImageSlot"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "alt": {
+            "type": "string",
+            "description": "Empty for decorative images."
+          },
+          "decorative": {
+            "type": "boolean"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageVariant"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "slot",
+          "position",
+          "width",
+          "height",
+          "alt",
+          "decorative",
+          "variants"
+        ],
+        "description": "The speaker’s photo (M1.4h); null when none. Public reads show it only when the event page is public."
+      },
+      "ImageSlot": {
+        "type": "string",
+        "enum": [
+          "cover",
+          "gallery",
+          "photo",
+          "logo"
+        ]
+      },
+      "ImageVariant": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "$ref": "#/components/schemas/ImageFormat"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute, content-hashed and immutable (`…/{width}-{sha256}.{ext}`): cache it forever."
+          },
+          "fallback": {
+            "type": "boolean",
+            "description": "The JPEG/PNG (or SVG) every client can show."
+          }
+        },
+        "required": [
+          "format",
+          "width",
+          "height",
+          "url",
+          "fallback"
+        ]
+      },
+      "ImageFormat": {
+        "type": "string",
+        "enum": [
+          "avif",
+          "webp",
+          "jpeg",
+          "png",
+          "svg"
+        ]
+      },
+      "SpeakerDetail": {
+        "type": "object",
+        "properties": {
+          "speaker": {
+            "$ref": "#/components/schemas/Speaker"
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendaSession"
+            }
+          }
+        },
+        "required": [
+          "speaker",
+          "sessions"
+        ],
+        "description": "A speaker and the sessions they speak in."
+      },
+      "ExhibitorPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Exhibitor"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "Exhibitor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "boothLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "websiteUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Image"
+              },
+              {
+                "description": "The exhibitor’s logo (M1.4h); null when none. Public reads show it only when the event page is public."
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "boothLabel",
+          "websiteUrl",
+          "image"
+        ]
+      },
+      "PublicSponsorTierList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicSponsorTier"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PublicSponsorTier": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sponsors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sponsor"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "sponsors"
+        ],
+        "description": "A sponsor package with its sponsors, in display order."
+      },
+      "Sponsor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Image"
+              },
+              {
+                "description": "The sponsor’s logo (M1.4h); null when none. Public reads show it only when the event page is public."
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "websiteUrl",
+          "image"
+        ]
+      },
+      "ImageList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "DirectoryVenuePage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DirectoryVenue"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "DirectoryVenue": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "city",
+          "region",
+          "country",
+          "capacity"
+        ]
+      },
+      "PublicVenue": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "addressLine1": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "addressLine2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postalCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "longitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "accessibilityNotes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mapUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "organizerName": {
+            "type": "string"
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          },
+          "upcomingEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VenueEvent"
+            },
+            "description": "Upcoming public events at the venue."
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "addressLine1",
+          "addressLine2",
+          "city",
+          "region",
+          "postalCode",
+          "country",
+          "latitude",
+          "longitude",
+          "timezone",
+          "capacity",
+          "accessibilityNotes",
+          "mapUrl",
+          "organizerName",
+          "photos",
+          "upcomingEvents"
+        ],
+        "description": "A venue listed in the directory (quote requests are not exposed)."
+      },
+      "VenueEvent": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "startsAt",
+          "endsAt",
+          "timezone"
+        ]
+      },
+      "EventSectionList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventSection"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "EventSection": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TextSection"
+          },
+          {
+            "$ref": "#/components/schemas/FaqSection"
+          },
+          {
+            "$ref": "#/components/schemas/ScheduleSection"
+          },
+          {
+            "$ref": "#/components/schemas/LocationSection"
+          },
+          {
+            "$ref": "#/components/schemas/LinksSection"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "text": "#/components/schemas/TextSection",
+            "faq": "#/components/schemas/FaqSection",
+            "schedule": "#/components/schemas/ScheduleSection",
+            "location": "#/components/schemas/LocationSection",
+            "links": "#/components/schemas/LinksSection"
+          }
+        },
+        "description": "A content block of the event page; `kind` says which `content` shape it has."
+      },
+      "TextSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "text"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/TextSectionContent"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content",
+          "position",
+          "visible"
+        ]
+      },
+      "FaqSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "faq"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/FaqSectionContent"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content",
+          "position",
+          "visible"
+        ]
+      },
+      "ScheduleSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "schedule"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/ScheduleSectionContent"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content",
+          "position",
+          "visible"
+        ]
+      },
+      "LocationSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "location"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/LocationSectionContent"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content",
+          "position",
+          "visible"
+        ]
+      },
+      "LinksSection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "links"
+            ]
+          },
+          "content": {
+            "$ref": "#/components/schemas/LinksSectionContent"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "content",
+          "position",
+          "visible"
+        ]
+      },
+      "AnnouncementPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Announcement"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "Announcement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "audience": {
+            "$ref": "#/components/schemas/AnnouncementAudience"
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "publishedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Null while it is a draft."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "eventId",
+          "title",
+          "body",
+          "audience",
+          "pinned",
+          "publishedAt",
+          "createdAt"
+        ]
+      },
+      "AnnouncementAudience": {
+        "type": "string",
+        "enum": [
+          "public",
+          "holders"
+        ]
+      },
+      "EventDatePage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventDate"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "EventDate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/DateStatus"
+          }
+        },
+        "required": [
+          "id",
+          "eventId",
+          "startsAt",
+          "endsAt",
+          "capacity",
+          "status"
+        ]
+      },
+      "Agenda": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string"
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Track"
+            }
+          },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Room"
+            }
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProgramDay"
+            }
+          }
+        },
+        "required": [
+          "timezone",
+          "tracks",
+          "rooms",
+          "days"
+        ],
+        "description": "The organizer’s agenda with track and room ids and capacities."
+      },
+      "Track": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "capacity"
+        ]
+      },
+      "ProgramDay": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "The day in the event’s timezone (`YYYY-MM-DD`)."
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProgramSession"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "sessions"
+        ]
+      },
+      "ProgramSession": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "trackId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "speakerIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "startsAt",
+          "endsAt",
+          "dateId",
+          "trackId",
+          "roomId",
+          "capacity",
+          "speakerIds"
+        ]
+      },
+      "SponsorTierList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SponsorTier"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "SponsorTier": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "description": "Display order (1 first)."
+          },
+          "sponsors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sponsor"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "position",
+          "sponsors"
+        ]
+      },
+      "VenuePage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Venue"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "Venue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "addressLine1": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "addressLine2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postalCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "longitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "accessibilityNotes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mapUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "directoryListed": {
+            "type": "boolean"
+          },
+          "archivedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "addressLine1",
+          "addressLine2",
+          "city",
+          "region",
+          "postalCode",
+          "country",
+          "latitude",
+          "longitude",
+          "timezone",
+          "capacity",
+          "accessibilityNotes",
+          "mapUrl",
+          "directoryListed",
+          "archivedAt"
         ]
       },
       "Organization": {
@@ -501,35 +2409,13 @@
             ]
           },
           "profile": {
-            "type": "string",
-            "enum": [
-              "wedding",
-              "gala",
-              "concert",
-              "conference",
-              "community",
-              "agency",
-              "other"
-            ]
+            "$ref": "#/components/schemas/EventProfile"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "postponed",
-              "cancelled",
-              "completed",
-              "archived"
-            ]
+            "$ref": "#/components/schemas/EventStatus"
           },
           "visibility": {
-            "type": "string",
-            "enum": [
-              "public",
-              "unlisted",
-              "private"
-            ]
+            "$ref": "#/components/schemas/EventVisibility"
           },
           "timezone": {
             "type": "string",
@@ -590,6 +2476,14 @@
           "publishedAt"
         ]
       },
+      "EventVisibility": {
+        "type": "string",
+        "enum": [
+          "public",
+          "unlisted",
+          "private"
+        ]
+      },
       "CreateEventRequest": {
         "type": "object",
         "properties": {
@@ -606,24 +2500,10 @@
             "maxLength": 280
           },
           "profile": {
-            "type": "string",
-            "enum": [
-              "wedding",
-              "gala",
-              "concert",
-              "conference",
-              "community",
-              "agency",
-              "other"
-            ]
+            "$ref": "#/components/schemas/EventProfile"
           },
           "visibility": {
-            "type": "string",
-            "enum": [
-              "public",
-              "unlisted",
-              "private"
-            ]
+            "$ref": "#/components/schemas/EventVisibility"
           },
           "timezone": {
             "type": "string",
@@ -691,24 +2571,10 @@
             "maxLength": 280
           },
           "profile": {
-            "type": "string",
-            "enum": [
-              "wedding",
-              "gala",
-              "concert",
-              "conference",
-              "community",
-              "agency",
-              "other"
-            ]
+            "$ref": "#/components/schemas/EventProfile"
           },
           "visibility": {
-            "type": "string",
-            "enum": [
-              "public",
-              "unlisted",
-              "private"
-            ]
+            "$ref": "#/components/schemas/EventVisibility"
           },
           "timezone": {
             "type": "string",
@@ -796,11 +2662,7 @@
             "type": "string"
           },
           "feeMode": {
-            "type": "string",
-            "enum": [
-              "pass_on",
-              "absorb"
-            ]
+            "$ref": "#/components/schemas/FeeMode"
           },
           "quantityTotal": {
             "type": "integer"
@@ -832,11 +2694,7 @@
             "format": "date-time"
           },
           "visibility": {
-            "type": "string",
-            "enum": [
-              "public",
-              "hidden"
-            ]
+            "$ref": "#/components/schemas/TicketTypeVisibility"
           },
           "sortOrder": {
             "type": "integer"
@@ -907,6 +2765,20 @@
           "feeMinor"
         ]
       },
+      "FeeMode": {
+        "type": "string",
+        "enum": [
+          "pass_on",
+          "absorb"
+        ]
+      },
+      "TicketTypeVisibility": {
+        "type": "string",
+        "enum": [
+          "public",
+          "hidden"
+        ]
+      },
       "CreateTicketTypeRequest": {
         "type": "object",
         "properties": {
@@ -928,11 +2800,7 @@
             "maximum": 100000000
           },
           "feeMode": {
-            "type": "string",
-            "enum": [
-              "pass_on",
-              "absorb"
-            ]
+            "$ref": "#/components/schemas/FeeMode"
           },
           "quantityTotal": {
             "type": "integer",
@@ -964,11 +2832,7 @@
             "format": "date-time"
           },
           "visibility": {
-            "type": "string",
-            "enum": [
-              "public",
-              "hidden"
-            ]
+            "$ref": "#/components/schemas/TicketTypeVisibility"
           },
           "sortOrder": {
             "type": "integer"
@@ -1019,11 +2883,7 @@
             "maximum": 100000000
           },
           "feeMode": {
-            "type": "string",
-            "enum": [
-              "pass_on",
-              "absorb"
-            ]
+            "$ref": "#/components/schemas/FeeMode"
           },
           "quantityTotal": {
             "type": "integer",
@@ -1055,11 +2915,7 @@
             "format": "date-time"
           },
           "visibility": {
-            "type": "string",
-            "enum": [
-              "public",
-              "hidden"
-            ]
+            "$ref": "#/components/schemas/TicketTypeVisibility"
           },
           "sortOrder": {
             "type": "integer"
@@ -1117,17 +2973,7 @@
             "format": "uuid"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "reserved",
-              "awaiting_payment",
-              "payment_failed",
-              "paid",
-              "expired",
-              "cancelled",
-              "partially_refunded",
-              "refunded"
-            ]
+            "$ref": "#/components/schemas/OrderStatus"
           },
           "buyerName": {
             "type": "string"
@@ -1212,6 +3058,19 @@
           "items"
         ]
       },
+      "OrderStatus": {
+        "type": "string",
+        "enum": [
+          "reserved",
+          "awaiting_payment",
+          "payment_failed",
+          "paid",
+          "expired",
+          "cancelled",
+          "partially_refunded",
+          "refunded"
+        ]
+      },
       "OrderDetail": {
         "allOf": [
           {
@@ -1287,12 +3146,7 @@
             "format": "uuid"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "succeeded",
-              "failed",
-              "pending"
-            ]
+            "$ref": "#/components/schemas/RefundStatus"
           },
           "amountMinor": {
             "type": "integer"
@@ -1312,19 +3166,19 @@
           "currency"
         ]
       },
+      "RefundStatus": {
+        "type": "string",
+        "enum": [
+          "succeeded",
+          "failed",
+          "pending"
+        ]
+      },
       "RefundRequest": {
         "type": "object",
         "properties": {
           "reason": {
-            "type": "string",
-            "enum": [
-              "requested_by_customer",
-              "event_cancelled",
-              "event_postponed",
-              "duplicate",
-              "fraudulent",
-              "goodwill"
-            ]
+            "$ref": "#/components/schemas/RefundReason"
           },
           "ticketIds": {
             "type": "array",
@@ -1348,6 +3202,17 @@
           "reason"
         ],
         "description": "Refund whole tickets (`ticketIds`) or an amount (`amountMinor`), not both."
+      },
+      "RefundReason": {
+        "type": "string",
+        "enum": [
+          "requested_by_customer",
+          "event_cancelled",
+          "event_postponed",
+          "duplicate",
+          "fraudulent",
+          "goodwill"
+        ]
       },
       "AttendeePage": {
         "type": "object",
@@ -1388,21 +3253,10 @@
             "type": "string"
           },
           "source": {
-            "type": "string",
-            "enum": [
-              "ticket",
-              "registration",
-              "guest",
-              "import",
-              "comp"
-            ]
+            "$ref": "#/components/schemas/AttendeeSource"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "cancelled"
-            ]
+            "$ref": "#/components/schemas/AttendeeStatus"
           },
           "ticketId": {
             "type": [
@@ -1432,6 +3286,23 @@
           "ticketId",
           "labels",
           "createdAt"
+        ]
+      },
+      "AttendeeSource": {
+        "type": "string",
+        "enum": [
+          "ticket",
+          "registration",
+          "guest",
+          "import",
+          "comp"
+        ]
+      },
+      "AttendeeStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "cancelled"
         ]
       },
       "AttendeeHitList": {
@@ -1485,23 +3356,7 @@
         "type": "object",
         "properties": {
           "result": {
-            "type": "string",
-            "enum": [
-              "admitted",
-              "duplicate",
-              "invalid",
-              "void",
-              "wrong_event",
-              "not_today",
-              "outside_window",
-              "wrong_date",
-              "duplicate_offline",
-              "superseded",
-              "provisional",
-              "granted",
-              "no_access",
-              "wrong_checkpoint"
-            ]
+            "$ref": "#/components/schemas/ScanResult"
           },
           "ticket": {
             "type": [
@@ -1554,6 +3409,25 @@
           "firstAdmittedAt"
         ]
       },
+      "ScanResult": {
+        "type": "string",
+        "enum": [
+          "admitted",
+          "duplicate",
+          "invalid",
+          "void",
+          "wrong_event",
+          "not_today",
+          "outside_window",
+          "wrong_date",
+          "duplicate_offline",
+          "superseded",
+          "provisional",
+          "granted",
+          "no_access",
+          "wrong_checkpoint"
+        ]
+      },
       "ScanRequest": {
         "type": "object",
         "properties": {
@@ -1571,6 +3445,42 @@
         "required": [
           "code"
         ]
+      },
+      "UnknownTicketPolicy": {
+        "type": "string",
+        "enum": [
+          "provisional",
+          "reject"
+        ]
+      },
+      "CheckpointKind": {
+        "type": "string",
+        "enum": [
+          "entrance",
+          "zone"
+        ]
+      },
+      "ManifestDateStatus": {
+        "type": "string",
+        "enum": [
+          "scheduled",
+          "cancelled"
+        ]
+      },
+      "ManifestTicketStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "void"
+        ]
+      },
+      "ManifestOverlap": {
+        "type": "string",
+        "enum": [
+          "true",
+          "false"
+        ],
+        "description": "`true` re-reads the last page’s rows as well (after a crash mid-page)."
       }
     },
     "parameters": {}
@@ -1578,42 +3488,19 @@
   "paths": {
     "/v1/health": {
       "get": {
+        "operationId": "getHealth",
         "tags": [
           "system"
         ],
         "summary": "Liveness check",
+        "description": "Answers 200 while the API is up. No credential; not rate limited beyond the anonymous budget.",
         "responses": {
           "200": {
             "description": "The API is up",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "ok",
-                        "degraded"
-                      ]
-                    },
-                    "service": {
-                      "type": "string"
-                    },
-                    "version": {
-                      "type": "string"
-                    },
-                    "time": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  },
-                  "required": [
-                    "status",
-                    "service",
-                    "version",
-                    "time"
-                  ]
+                  "$ref": "#/components/schemas/Health"
                 }
               }
             }
@@ -1623,10 +3510,12 @@
     },
     "/v1/auth/login": {
       "post": {
+        "operationId": "login",
         "tags": [
           "auth"
         ],
         "summary": "Sign in with email and password; returns a bearer session token (no cookies)",
+        "description": "Signs in with email and password and returns a session token to send as `Authorization: Bearer <token>`. No cookie is set. Accounts with two-factor sign-in get `step_up_required`: use the web sign-in. Limited per account (5 per 15 min) and per IP.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1703,10 +3592,12 @@
     },
     "/v1/auth/refresh": {
       "post": {
+        "operationId": "refreshSession",
         "tags": [
           "auth"
         ],
         "summary": "Keep a session alive: returns the token with its extended expiry",
+        "description": "Slides the session’s expiry forward and returns the same token with its new expiry.",
         "security": [
           {
             "bearerSession": []
@@ -1778,10 +3669,12 @@
     },
     "/v1/auth/logout": {
       "post": {
+        "operationId": "logout",
         "tags": [
           "auth"
         ],
         "summary": "End the session; the token stops working at once",
+        "description": "Ends the session: the token is refused from the next request on.",
         "security": [
           {
             "bearerSession": []
@@ -1846,10 +3739,12 @@
     },
     "/v1/me": {
       "get": {
+        "operationId": "getMe",
         "tags": [
           "me"
         ],
         "summary": "The signed-in user",
+        "description": "The user behind the bearer session. API keys are not users: they get 401 here.",
         "security": [
           {
             "bearerSession": []
@@ -1921,10 +3816,12 @@
     },
     "/v1/me/organizations": {
       "get": {
+        "operationId": "listMyOrganizations",
         "tags": [
           "me"
         ],
         "summary": "Organizations the signed-in user belongs to, with their role",
+        "description": "Every organization the signed-in user is a member of, with their role in it.",
         "security": [
           {
             "bearerSession": []
@@ -1996,10 +3893,12 @@
     },
     "/v1/mobile/config": {
       "get": {
+        "operationId": "getMobileConfig",
         "tags": [
           "mobile"
         ],
         "summary": "Minimum and latest app versions, base URLs and feature flags (public)",
+        "description": "Minimum and latest app versions per platform, the base URLs and feature flags. No credential.",
         "responses": {
           "200": {
             "description": "Mobile configuration",
@@ -2016,10 +3915,12 @@
     },
     "/v1/public/events/{slug}": {
       "get": {
+        "operationId": "getPublicEvent",
         "tags": [
           "public"
         ],
         "summary": "A published event’s public page data (no credential)",
+        "description": "The allowlisted public data of an event with a public page (public or unlisted). Private events and drafts are a 404. No credential.",
         "parameters": [
           {
             "schema": {
@@ -2027,9 +3928,11 @@
               "minLength": 2,
               "maxLength": 63,
               "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
               "example": "lakeside-jazz-night"
             },
             "required": true,
+            "description": "The event’s public slug",
             "name": "slug",
             "in": "path"
           }
@@ -2080,10 +3983,12 @@
     },
     "/v1/public/events/{slug}/ticket-types": {
       "get": {
+        "operationId": "listPublicTicketTypes",
         "tags": [
           "public"
         ],
         "summary": "A published event’s passes with all-in prices and availability (no credential)",
+        "description": "The event’s on-sale passes with all-in prices (fees included when passed on) and availability. Hidden passes never appear. No credential.",
         "parameters": [
           {
             "schema": {
@@ -2091,9 +3996,11 @@
               "minLength": 2,
               "maxLength": 63,
               "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
               "example": "lakeside-jazz-night"
             },
             "required": true,
+            "description": "The event’s public slug",
             "name": "slug",
             "in": "path"
           }
@@ -2142,12 +4049,2144 @@
         }
       }
     },
+    "/v1/public/events/{slug}/sections": {
+      "get": {
+        "operationId": "listPublicEventSections",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s content sections",
+        "description": "The visible content blocks of the event page, in page order (hidden ones never appear). No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Visible sections",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventSectionList"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/announcements": {
+      "get": {
+        "operationId": "listPublicEventAnnouncements",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s announcements",
+        "description": "Published announcements for everyone, pinned first, then newest first. Announcements for ticket holders only are never listed here. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of announcements",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAnnouncementPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/dates": {
+      "get": {
+        "operationId": "listPublicEventDates",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s dates",
+        "description": "The dates of a multi-date event in start order, cancelled ones included (marked). An event with no dates is a single-date event: use its own start and end. No capacity numbers, only `soldOut`. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of dates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventDatePage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/agenda": {
+      "get": {
+        "operationId": "getPublicEventAgenda",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s agenda",
+        "description": "Sessions grouped by day in the event’s timezone, with track, room and speakers. The whole agenda in one response (at most 500 sessions per event). No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Only this date’s sessions (and those on no date), for multi-date events."
+            },
+            "required": false,
+            "description": "Only this date’s sessions (and those on no date), for multi-date events.",
+            "name": "dateId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The agenda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAgenda"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/speakers": {
+      "get": {
+        "operationId": "listPublicEventSpeakers",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s speakers",
+        "description": "Speakers by name. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of speakers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/speakers/{speakerId}": {
+      "get": {
+        "operationId": "getPublicEventSpeaker",
+        "tags": [
+          "public content"
+        ],
+        "summary": "One speaker of a public event",
+        "description": "A speaker’s profile and the sessions they speak in. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The speaker id"
+            },
+            "required": true,
+            "description": "The speaker id",
+            "name": "speakerId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The speaker",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerDetail"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/exhibitors": {
+      "get": {
+        "operationId": "listPublicEventExhibitors",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s exhibitors",
+        "description": "Exhibitors by name, with booth labels. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of exhibitors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExhibitorPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/sponsors": {
+      "get": {
+        "operationId": "listPublicEventSponsors",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s sponsors by tier",
+        "description": "Sponsor tiers in display order, each with its sponsors; empty tiers are left out. No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sponsor tiers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSponsorTierList"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/images": {
+      "get": {
+        "operationId": "listPublicEventImages",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A public event’s images",
+        "description": "The cover, the gallery and the organizer’s logo (`slot`), each with AVIF/WebP/fallback variants at absolute, content-hashed URLs that never change (cache them forever). No credential. Only events with a public page (public or unlisted) answer; private events and drafts are a 404. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Images",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageList"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/venues": {
+      "get": {
+        "operationId": "listDirectoryVenues",
+        "tags": [
+          "public content"
+        ],
+        "summary": "The venue directory",
+        "description": "Venues listed in the public directory, by name. No credential. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of venues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectoryVenuePage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/venues/{slug}": {
+      "get": {
+        "operationId": "getPublicVenue",
+        "tags": [
+          "public content"
+        ],
+        "summary": "A directory venue",
+        "description": "A listed venue’s public details, photos and upcoming public events. Unlisted or archived venues are a 404. No credential. Responses carry an `ETag`; send it back as `If-None-Match` to get a 304.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The venue’s directory slug",
+              "example": "lakeside-pavilion"
+            },
+            "required": true,
+            "description": "The venue’s directory slug",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The venue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicVenue"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/sections": {
+      "get": {
+        "operationId": "listEventSections",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s content sections",
+        "description": "Every content section in page order, hidden ones included (`visible`).\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sections",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSectionList"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/announcements": {
+      "get": {
+        "operationId": "listEventAnnouncements",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s announcements",
+        "description": "Every announcement, newest first: drafts (`publishedAt` null) and both audiences.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of announcements",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnnouncementPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/dates": {
+      "get": {
+        "operationId": "listEventDates",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s dates",
+        "description": "The dates of a multi-date event in start order, with capacities.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of dates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDatePage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/agenda": {
+      "get": {
+        "operationId": "getEventAgenda",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s agenda",
+        "description": "Tracks, rooms and sessions grouped by day in the event’s timezone, with ids and capacities.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Only this date’s sessions (and those on no date), for multi-date events."
+            },
+            "required": false,
+            "description": "Only this date’s sessions (and those on no date), for multi-date events.",
+            "name": "dateId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The agenda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agenda"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/speakers": {
+      "get": {
+        "operationId": "listEventSpeakers",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s speakers",
+        "description": "Speakers by name.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of speakers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/speakers/{speakerId}": {
+      "get": {
+        "operationId": "getEventSpeaker",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "One speaker",
+        "description": "A speaker and the sessions they speak in.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The speaker id"
+            },
+            "required": true,
+            "description": "The speaker id",
+            "name": "speakerId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The speaker",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerDetail"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/exhibitors": {
+      "get": {
+        "operationId": "listEventExhibitors",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s exhibitors",
+        "description": "Exhibitors by name.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of exhibitors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExhibitorPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/sponsors": {
+      "get": {
+        "operationId": "listEventSponsors",
+        "tags": [
+          "event content"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "An event’s sponsor tiers",
+        "description": "Every sponsor tier in display order (empty ones included) with its sponsors.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sponsor tiers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SponsorTierList"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/venues": {
+      "get": {
+        "operationId": "listVenues",
+        "tags": [
+          "venues"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "The organization’s venues",
+        "description": "Saved venues by name, archived ones included (`archivedAt`).\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of venues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VenuePage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/venues/{venueId}": {
+      "get": {
+        "operationId": "getVenue",
+        "tags": [
+          "venues"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "summary": "One venue",
+        "description": "A saved venue.\n\nScope `events:read`.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The venue id"
+            },
+            "required": true,
+            "description": "The venue id",
+            "name": "venueId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The venue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Venue"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/orgs/{org}": {
       "get": {
+        "operationId": "getOrganization",
         "tags": [
           "organizations"
         ],
         "summary": "The organization",
+        "description": "The organization in the path, which must be the API key’s org or one the user belongs to.\n\nScope `org:read`.",
         "security": [
           {
             "apiKey": []
@@ -2237,10 +6276,12 @@
     },
     "/v1/orgs/{org}/events": {
       "get": {
+        "operationId": "listEvents",
         "tags": [
           "events"
         ],
         "summary": "Events by start time (scope `events:read`)",
+        "description": "The organization’s events by start time, every status and visibility.\n\nScope `events:read`.",
         "security": [
           {
             "apiKey": []
@@ -2268,9 +6309,11 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 100,
-              "default": 25
+              "default": 25,
+              "description": "Page size (1–100)."
             },
             "required": false,
+            "description": "Page size (1–100).",
             "name": "limit",
             "in": "query"
           },
@@ -2350,10 +6393,12 @@
         }
       },
       "post": {
+        "operationId": "createEvent",
         "tags": [
           "events"
         ],
         "summary": "Create a draft event (scope `events:write`)",
+        "description": "Creates a draft event. Times are instants; `timezone` is how they render. Needs an `Idempotency-Key`.\n\nScope `events:write`.",
         "security": [
           {
             "apiKey": []
@@ -2485,10 +6530,12 @@
     },
     "/v1/orgs/{org}/events/{eventId}": {
       "get": {
+        "operationId": "getEvent",
         "tags": [
           "events"
         ],
         "summary": "One event (scope `events:read`)",
+        "description": "One event of the organization; another org’s event is a 404.\n\nScope `events:read`.",
         "security": [
           {
             "apiKey": []
@@ -2514,9 +6561,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           }
@@ -2585,10 +6634,12 @@
         }
       },
       "patch": {
+        "operationId": "updateEvent",
         "tags": [
           "events"
         ],
         "summary": "Change an event (scope `events:write`)",
+        "description": "Changes the fields given; the slug is frozen once published. Needs an `Idempotency-Key`.\n\nScope `events:write`.",
         "security": [
           {
             "apiKey": []
@@ -2614,9 +6665,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
@@ -2729,10 +6782,12 @@
     },
     "/v1/orgs/{org}/events/{eventId}/publish": {
       "post": {
+        "operationId": "publishEvent",
         "tags": [
           "events"
         ],
         "summary": "Publish a draft event (scope `events:write`)",
+        "description": "Publishes a draft event (lifecycle `draft → published`). Needs an `Idempotency-Key`.\n\nScope `events:write`.",
         "security": [
           {
             "apiKey": []
@@ -2758,9 +6813,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
@@ -2863,10 +6920,12 @@
     },
     "/v1/orgs/{org}/events/{eventId}/ticket-types": {
       "get": {
+        "operationId": "listTicketTypes",
         "tags": [
           "ticket types"
         ],
         "summary": "The event’s ticket types (scope `events:read`)",
+        "description": "Every ticket type of the event in display order, with sold and held counts.\n\nScope `events:read`.",
         "security": [
           {
             "apiKey": []
@@ -2892,9 +6951,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           }
@@ -2963,10 +7024,12 @@
         }
       },
       "post": {
+        "operationId": "createTicketType",
         "tags": [
           "ticket types"
         ],
         "summary": "Add a ticket type (scope `events:write`)",
+        "description": "Adds a ticket type (prices in minor units). Needs an `Idempotency-Key`.\n\nScope `events:write`.",
         "security": [
           {
             "apiKey": []
@@ -2992,9 +7055,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
@@ -3107,10 +7172,12 @@
     },
     "/v1/orgs/{org}/ticket-types/{ticketTypeId}": {
       "patch": {
+        "operationId": "updateTicketType",
         "tags": [
           "ticket types"
         ],
         "summary": "Change a ticket type (scope `events:write`)",
+        "description": "Changes the fields given. Needs an `Idempotency-Key`.\n\nScope `events:write`.",
         "security": [
           {
             "apiKey": []
@@ -3136,9 +7203,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The ticket type id"
             },
             "required": true,
+            "description": "The ticket type id",
             "name": "ticketTypeId",
             "in": "path"
           },
@@ -3251,10 +7320,12 @@
     },
     "/v1/orgs/{org}/events/{eventId}/orders": {
       "get": {
+        "operationId": "listEventOrders",
         "tags": [
           "orders"
         ],
         "summary": "The event’s orders, newest first (scope `orders:read`)",
+        "description": "The event’s orders, newest first, without payment-provider internals.\n\nScope `orders:read`.",
         "security": [
           {
             "apiKey": []
@@ -3280,9 +7351,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
@@ -3291,9 +7364,11 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 100,
-              "default": 25
+              "default": 25,
+              "description": "Page size (1–100)."
             },
             "required": false,
+            "description": "Page size (1–100).",
             "name": "limit",
             "in": "query"
           },
@@ -3375,10 +7450,12 @@
     },
     "/v1/orgs/{org}/orders/{orderId}": {
       "get": {
+        "operationId": "getOrder",
         "tags": [
           "orders"
         ],
         "summary": "One order with its tickets (scope `orders:read`)",
+        "description": "One order with its line items and tickets.\n\nScope `orders:read`.",
         "security": [
           {
             "apiKey": []
@@ -3404,9 +7481,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The order id"
             },
             "required": true,
+            "description": "The order id",
             "name": "orderId",
             "in": "path"
           }
@@ -3477,10 +7556,12 @@
     },
     "/v1/orgs/{org}/orders/{orderId}/refunds": {
       "post": {
+        "operationId": "refundOrder",
         "tags": [
           "orders"
         ],
         "summary": "Refund tickets or an amount under the refund policy (scope `orders:refund`)",
+        "description": "Refunds whole tickets or an amount under the event’s refund policy, through the payment provider. Needs an `Idempotency-Key`; a retry returns the first result.\n\nScope `orders:refund`.",
         "security": [
           {
             "apiKey": []
@@ -3506,9 +7587,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The order id"
             },
             "required": true,
+            "description": "The order id",
             "name": "orderId",
             "in": "path"
           },
@@ -3621,10 +7704,12 @@
     },
     "/v1/orgs/{org}/events/{eventId}/attendees": {
       "get": {
+        "operationId": "listEventAttendees",
         "tags": [
           "attendees"
         ],
         "summary": "The event’s attendees, newest first (scope `attendees:read`)",
+        "description": "The event’s attendees, newest first, optionally filtered by a search term or status.\n\nScope `attendees:read`.",
         "security": [
           {
             "apiKey": []
@@ -3650,9 +7735,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
@@ -3661,9 +7748,11 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 100,
-              "default": 25
+              "default": 25,
+              "description": "Page size (1–100)."
             },
             "required": false,
+            "description": "Page size (1–100).",
             "name": "limit",
             "in": "query"
           },
@@ -3691,13 +7780,10 @@
           },
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "active",
-                "cancelled"
-              ]
+              "$ref": "#/components/schemas/AttendeeStatus"
             },
             "required": false,
+            "description": "Only attendees with this status",
             "name": "status",
             "in": "query"
           }
@@ -3768,10 +7854,12 @@
     },
     "/v1/orgs/{org}/events/{eventId}/attendees/{attendeeId}": {
       "get": {
+        "operationId": "getEventAttendee",
         "tags": [
           "attendees"
         ],
         "summary": "One attendee (scope `attendees:read`)",
+        "description": "One attendee of the event.\n\nScope `attendees:read`.",
         "security": [
           {
             "apiKey": []
@@ -3797,18 +7885,22 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The attendee id"
             },
             "required": true,
+            "description": "The attendee id",
             "name": "attendeeId",
             "in": "path"
           }
@@ -3879,10 +7971,12 @@
     },
     "/v1/orgs/{org}/attendees/search": {
       "get": {
+        "operationId": "searchAttendees",
         "tags": [
           "attendees"
         ],
         "summary": "Search attendees across events by name or email (scope `attendees:read`; 60/min)",
+        "description": "Attendees across the organization’s events matching a name or email. Limited to 60 per minute.\n\nScope `attendees:read`.",
         "security": [
           {
             "apiKey": []
@@ -3909,9 +8003,11 @@
             "schema": {
               "type": "string",
               "minLength": 2,
-              "maxLength": 200
+              "maxLength": 200,
+              "description": "Part of a name or email (2+ characters)"
             },
             "required": true,
+            "description": "Part of a name or email (2+ characters)",
             "name": "q",
             "in": "query"
           },
@@ -3920,9 +8016,11 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 50,
-              "default": 10
+              "default": 10,
+              "description": "Most hits to return (1–50)"
             },
             "required": false,
+            "description": "Most hits to return (1–50)",
             "name": "limit",
             "in": "query"
           }
@@ -3993,6 +8091,7 @@
     },
     "/v1/orgs/{org}/events/{eventId}/checkins": {
       "post": {
+        "operationId": "checkInTicket",
         "tags": [
           "check-in"
         ],
@@ -4023,9 +8122,11 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event id"
             },
             "required": true,
+            "description": "The event id",
             "name": "eventId",
             "in": "path"
           },
@@ -4138,10 +8239,12 @@
     },
     "/v1/events/{eventId}/manifest": {
       "get": {
+        "operationId": "getScannerManifest",
         "tags": [
           "scanner"
         ],
         "summary": "Offline manifest page for a scanner device",
+        "description": "One page of the offline manifest a paired scanner device keeps (ticket rows by short code). Device token only.",
         "security": [
           {
             "deviceToken": []
@@ -4151,30 +8254,31 @@
           {
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "description": "The event the device scans for"
             },
             "required": true,
+            "description": "The event the device scans for",
             "name": "eventId",
             "in": "path"
           },
           {
             "schema": {
               "type": "string",
-              "maxLength": 100
+              "maxLength": 100,
+              "description": "The previous page’s `cursor` (sync position); omit for the start."
             },
             "required": false,
+            "description": "The previous page’s `cursor` (sync position); omit for the start.",
             "name": "cursor",
             "in": "query"
           },
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "true",
-                "false"
-              ]
+              "$ref": "#/components/schemas/ManifestOverlap"
             },
             "required": false,
+            "description": "`true` re-reads the last page’s rows as well (after a crash mid-page).",
             "name": "overlap",
             "in": "query"
           },
@@ -4182,9 +8286,11 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 2000
+              "maximum": 2000,
+              "description": "Rows per page (1–2000)."
             },
             "required": false,
+            "description": "Rows per page (1–2000).",
             "name": "limit",
             "in": "query"
           }
@@ -4241,11 +8347,7 @@
                           "type": "string"
                         },
                         "unknownPolicy": {
-                          "type": "string",
-                          "enum": [
-                            "provisional",
-                            "reject"
-                          ]
+                          "$ref": "#/components/schemas/UnknownTicketPolicy"
                         },
                         "checkpoints": {
                           "type": "array",
@@ -4260,11 +8362,7 @@
                                 "type": "string"
                               },
                               "kind": {
-                                "type": "string",
-                                "enum": [
-                                  "entrance",
-                                  "zone"
-                                ]
+                                "$ref": "#/components/schemas/CheckpointKind"
                               },
                               "ticketTypeIds": {
                                 "type": "array",
@@ -4298,11 +8396,7 @@
                                 "type": "string"
                               },
                               "status": {
-                                "type": "string",
-                                "enum": [
-                                  "scheduled",
-                                  "cancelled"
-                                ]
+                                "$ref": "#/components/schemas/ManifestDateStatus"
                               }
                             },
                             "required": [
@@ -4377,11 +8471,7 @@
                             "type": "integer"
                           },
                           "status": {
-                            "type": "string",
-                            "enum": [
-                              "active",
-                              "void"
-                            ]
+                            "$ref": "#/components/schemas/ManifestTicketStatus"
                           },
                           "ticketTypeId": {
                             "type": "string",
@@ -4582,10 +8672,12 @@
     },
     "/v1/scans/batch": {
       "post": {
+        "operationId": "syncScans",
         "tags": [
           "scanner"
         ],
         "summary": "Sync up to 500 offline scans (idempotent by scanId)",
+        "description": "Uploads scans made offline; each is applied once by its `scanId`, so a retry is safe. Device token only.",
         "security": [
           {
             "deviceToken": []
@@ -4776,10 +8868,12 @@
     },
     "/v1/devices/heartbeat": {
       "post": {
+        "operationId": "deviceHeartbeat",
         "tags": [
           "scanner"
         ],
         "summary": "Device health every 30 s; returns pending commands (wipe)",
+        "description": "Reports the device’s health about every 30 seconds and returns pending commands such as `wipe`. Device token only.",
         "security": [
           {
             "deviceToken": []
@@ -4925,6 +9019,7 @@
     },
     "/v1/checkins": {
       "post": {
+        "operationId": "checkInWithDevice",
         "tags": [
           "scanner"
         ],
@@ -4939,9 +9034,11 @@
           {
             "schema": {
               "type": "string",
-              "pattern": "^[\\x21-\\x7e]{8,80}$"
+              "pattern": "^[\\x21-\\x7e]{8,80}$",
+              "description": "Required. A retry with the same key returns the first verdict."
             },
             "required": true,
+            "description": "Required. A retry with the same key returns the first verdict.",
             "name": "idempotency-key",
             "in": "header"
           }
@@ -4984,23 +9081,7 @@
                   "type": "object",
                   "properties": {
                     "result": {
-                      "type": "string",
-                      "enum": [
-                        "admitted",
-                        "duplicate",
-                        "invalid",
-                        "void",
-                        "wrong_event",
-                        "not_today",
-                        "outside_window",
-                        "wrong_date",
-                        "duplicate_offline",
-                        "superseded",
-                        "provisional",
-                        "granted",
-                        "no_access",
-                        "wrong_checkpoint"
-                      ]
+                      "$ref": "#/components/schemas/ScanResult"
                     },
                     "ticket": {
                       "type": [

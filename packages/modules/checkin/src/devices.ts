@@ -1,4 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
+// The zod of @hono/zod-openapi: the manifest is a /v1 response, so its enums carry component names.
+import { z } from '@hono/zod-openapi';
 import {
   eventDay,
   legacyPayloadHash,
@@ -26,7 +28,6 @@ import {
   ticketForScanTx,
 } from '@yayatoh/ticketing';
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import { z } from 'zod';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
@@ -147,7 +148,7 @@ const ManifestRowDto = z.object({
   ticketId: z.uuid(),
   shortCode: z.string(),
   rev: z.int(),
-  status: z.enum(['active', 'void']),
+  status: z.enum(['active', 'void']).openapi('ManifestTicketStatus'),
   ticketTypeId: z.uuid(),
   typeName: z.string(),
   accessDates: z.array(z.object({ date: z.string(), name: z.string() })),
@@ -174,13 +175,13 @@ export const ManifestPageDto = z.object({
     publicKeys: z.record(z.string(), z.string()),
     salt: z.string(),
     serverTime: z.string(),
-    unknownPolicy: z.enum(['provisional', 'reject']),
+    unknownPolicy: z.enum(['provisional', 'reject']).openapi('UnknownTicketPolicy'),
     /** The checkpoints this device may scan at (all live ones when it isn't scoped). */
     checkpoints: z.array(
       z.object({
         id: z.uuid(),
         name: z.string(),
-        kind: z.enum(CHECKPOINT_KINDS),
+        kind: z.enum(CHECKPOINT_KINDS).openapi('CheckpointKind'),
         ticketTypeIds: z.array(z.uuid()),
       }),
     ),
@@ -189,7 +190,7 @@ export const ManifestPageDto = z.object({
         id: z.uuid(),
         startsAt: z.string(),
         endsAt: z.string(),
-        status: z.enum(['scheduled', 'cancelled']),
+        status: z.enum(['scheduled', 'cancelled']).openapi('ManifestDateStatus'),
       }),
     ),
     /** Manifest format: 2 adds `scope` (older devices ignore it; the server enforces it on sync). */

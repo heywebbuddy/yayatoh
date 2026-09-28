@@ -37,6 +37,7 @@ export {
   FILE_NAME,
   MAX_UPLOAD_BYTES,
   STANDARD_WIDTHS,
+  VARIANT_FORMATS,
   type VariantFormat,
 } from './pipeline/plan.ts';
 export { MediaRejected, type RejectReason } from './pipeline/process.ts';

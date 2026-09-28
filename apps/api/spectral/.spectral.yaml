@@ -1,0 +1,68 @@
+# Spectral ruleset for apps/api/openapi.json (M1.13d), run by `pnpm contracts:check`.
+# Spectral's recommended OAS rules are off; we enable the few that keep the generated
+# TS/Swift/Kotlin clients clean, plus two of our own (functions/). Every rule is an error.
+extends: [[spectral:oas, off]]
+functionsDir: functions
+functions: [namedEnums, paginationParams]
+rules:
+  # Every operation has a unique, URL-safe operationId (the SDK method names).
+  operation-operationId: error
+  operation-operationId-unique: error
+  operation-operationId-valid-in-url: error
+  # Every operation is tagged with a tag declared, and described, at the top level.
+  operation-tags: error
+  operation-tag-defined: error
+  openapi-tags: error
+  openapi-tags-uniqueness: error
+  tag-description: error
+  # Descriptions: every operation, every parameter, the API itself.
+  operation-description: error
+  info-description: error
+  yayatoh-operation-summary:
+    description: Every operation has a one-line summary.
+    severity: error
+    given: $.paths[*][get,put,post,patch,delete]
+    then:
+      field: summary
+      function: truthy
+  yayatoh-parameter-description:
+    description: Every parameter says what it is.
+    severity: error
+    given: $.paths[*][get,put,post,patch,delete].parameters[*]
+    then:
+      field: description
+      function: truthy
+  yayatoh-operation-success:
+    description: Every operation documents a 2xx response.
+    severity: error
+    given: $.paths[*][get,put,post,patch,delete].responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          patternProperties: { "^2\\d\\d$": {} }
+          minProperties: 1
+          anyOf:
+            - required: ["200"]
+            - required: ["201"]
+            - required: ["202"]
+            - required: ["204"]
+  # Choice lists are named components (one generated type per enum).
+  yayatoh-named-enums:
+    description: An enum with more than one value is a named schema under components.schemas.
+    severity: error
+    message: "{{error}}"
+    resolved: false
+    given: $
+    then:
+      function: namedEnums
+  # Lists that return `nextCursor` take `limit` (1–100) and `cursor`. (The scanner manifest's sync
+  # cursor, returned as `cursor` with `complete`, is its own protocol.)
+  yayatoh-pagination-params:
+    description: Cursor pages declare `limit` (integer, 1–100) and `cursor` query parameters.
+    severity: error
+    message: "{{error}}"
+    given: $.paths[*].get
+    then:
+      function: paginationParams

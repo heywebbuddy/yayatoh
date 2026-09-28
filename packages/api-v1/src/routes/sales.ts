@@ -1,10 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
-import {
-  ATTENDEE_STATUSES,
-  getAttendeeQuery,
-  listAttendeesQuery,
-  searchAttendeesQuery,
-} from '@yayatoh/attendees';
+import { getAttendeeQuery, listAttendeesQuery, searchAttendeesQuery } from '@yayatoh/attendees';
 import { scanTicketCommand } from '@yayatoh/checkin';
 import { DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { listOrdersQuery, orderDetailQuery, refundOrder, startRefundCommand } from '@yayatoh/orders';
@@ -14,6 +9,7 @@ import { RATE_LIMITS, type RateLimiter } from '../rate-limit.ts';
 import {
   Attendee,
   AttendeeHit,
+  AttendeeStatus,
   listSchema,
   Order,
   OrderDetail,
@@ -39,7 +35,9 @@ import {
 const OrderPage = pageSchema(Order, 'OrderPage');
 const AttendeePage = pageSchema(Attendee, 'AttendeePage');
 const AttendeeHitList = listSchema(AttendeeHit, 'AttendeeHitList');
-const OrderParams = OrgParam.extend({ orderId: z.uuid() });
+const OrderParams = OrgParam.extend({
+  orderId: z.uuid().openapi({ param: { name: 'orderId', in: 'path' }, description: 'The order id' }),
+});
 
 export const ScanRequest = z
   .object({
@@ -56,8 +54,11 @@ const routes = {
   listOrders: createRoute({
     method: 'get',
     path: '/orgs/{org}/events/{eventId}/orders',
+    operationId: 'listEventOrders',
     tags: ['orders'],
     summary: 'The event’s orders, newest first (scope `orders:read`)',
+    description:
+      'The event’s orders, newest first, without payment-provider internals.\n\nScope `orders:read`.',
     security: orgSecurity,
     request: { params: EventParams, query: PageQuery },
     responses: { 200: json(OrderPage, 'A page of orders'), ...problems },
@@ -65,8 +66,10 @@ const routes = {
   getOrder: createRoute({
     method: 'get',
     path: '/orgs/{org}/orders/{orderId}',
+    operationId: 'getOrder',
     tags: ['orders'],
     summary: 'One order with its tickets (scope `orders:read`)',
+    description: 'One order with its line items and tickets.\n\nScope `orders:read`.',
     security: orgSecurity,
     request: { params: OrderParams },
     responses: { 200: json(OrderDetail, 'The order'), ...problems },
@@ -74,8 +77,11 @@ const routes = {
   refund: createRoute({
     method: 'post',
     path: '/orgs/{org}/orders/{orderId}/refunds',
+    operationId: 'refundOrder',
     tags: ['orders'],
     summary: 'Refund tickets or an amount under the refund policy (scope `orders:refund`)',
+    description:
+      'Refunds whole tickets or an amount under the event’s refund policy, through the payment provider. Needs an `Idempotency-Key`; a retry returns the first result.\n\nScope `orders:refund`.',
     security: orgSecurity,
     request: { params: OrderParams, headers: IdempotencyHeader, ...body(RefundRequest) },
     responses: { 201: json(Refund, 'The refund and its outcome'), ...writeProblems },
@@ -83,14 +89,19 @@ const routes = {
   listAttendees: createRoute({
     method: 'get',
     path: '/orgs/{org}/events/{eventId}/attendees',
+    operationId: 'listEventAttendees',
     tags: ['attendees'],
     summary: 'The event’s attendees, newest first (scope `attendees:read`)',
+    description:
+      'The event’s attendees, newest first, optionally filtered by a search term or status.\n\nScope `attendees:read`.',
     security: orgSecurity,
     request: {
       params: EventParams,
       query: PageQuery.extend({
         search: z.string().max(200).optional().openapi({ description: 'Name or email contains' }),
-        status: z.enum(ATTENDEE_STATUSES).optional(),
+        status: AttendeeStatus.optional().openapi({
+          param: { description: 'Only attendees with this status' },
+        }),
       }),
     },
     responses: { 200: json(AttendeePage, 'A page of attendees'), ...problems },
@@ -98,23 +109,40 @@ const routes = {
   getAttendee: createRoute({
     method: 'get',
     path: '/orgs/{org}/events/{eventId}/attendees/{attendeeId}',
+    operationId: 'getEventAttendee',
     tags: ['attendees'],
     summary: 'One attendee (scope `attendees:read`)',
+    description: 'One attendee of the event.\n\nScope `attendees:read`.',
     security: orgSecurity,
-    request: { params: EventParams.extend({ attendeeId: z.uuid() }) },
+    request: {
+      params: EventParams.extend({
+        attendeeId: z
+          .uuid()
+          .openapi({ param: { name: 'attendeeId', in: 'path' }, description: 'The attendee id' }),
+      }),
+    },
     responses: { 200: json(Attendee, 'The attendee'), ...problems },
   }),
   searchAttendees: createRoute({
     method: 'get',
     path: '/orgs/{org}/attendees/search',
+    operationId: 'searchAttendees',
     tags: ['attendees'],
     summary: 'Search attendees across events by name or email (scope `attendees:read`; 60/min)',
+    description:
+      'Attendees across the organization’s events matching a name or email. Limited to 60 per minute.\n\nScope `attendees:read`.',
     security: orgSecurity,
     request: {
       params: OrgParam,
       query: z.object({
-        q: z.string().min(2).max(200),
-        limit: z.coerce.number().int().min(1).max(50).default(10),
+        q: z.string().min(2).max(200).openapi({ description: 'Part of a name or email (2+ characters)' }),
+        limit: z.coerce
+          .number()
+          .int()
+          .min(1)
+          .max(50)
+          .default(10)
+          .openapi({ description: 'Most hits to return (1–50)' }),
       }),
     },
     responses: { 200: json(AttendeeHitList, 'Matches, newest first'), ...problems },
@@ -122,6 +150,7 @@ const routes = {
   checkin: createRoute({
     method: 'post',
     path: '/orgs/{org}/events/{eventId}/checkins',
+    operationId: 'checkInTicket',
     tags: ['check-in'],
     summary: 'Scan a ticket online and get the door verdict (scope `checkin:scan`)',
     description:

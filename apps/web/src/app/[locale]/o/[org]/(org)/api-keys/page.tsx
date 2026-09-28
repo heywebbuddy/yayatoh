@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { API_KEY_SCOPES, listApiKeysQuery, roleCan } from '@yayatoh/tenancy';
-import { Button, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, Chip, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ApiKeyForm } from '@/components/api-key-form.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
@@ -51,7 +51,20 @@ export default async function ApiKeysPage({ params }: { params: Promise<{ locale
         rows={keys}
         empty={t('apiKeys.empty')}
         columns={[
-          { key: 'name', header: t('apiKeys.name'), cell: (k) => k.name },
+          {
+            key: 'name',
+            header: t('apiKeys.name'),
+            cell: (k) => (
+              <span className="flex flex-wrap items-center gap-2">
+                <span>{k.name}</span>
+                {k.sandbox ? (
+                  <span data-testid="test-key-badge" className="inline-flex">
+                    <Chip tone="neutral">{t('apiKeys.testBadge')}</Chip>
+                  </span>
+                ) : null}
+              </span>
+            ),
+          },
           { key: 'prefix', header: t('apiKeys.key'), cell: (k) => `${k.prefix}…`, mono: true },
           {
             key: 'scopes',

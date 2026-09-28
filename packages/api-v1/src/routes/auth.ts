@@ -14,48 +14,62 @@ const LoginBody = z
 const login = createRoute({
   method: 'post',
   path: '/auth/login',
+  operationId: 'login',
   tags: ['auth'],
   summary: 'Sign in with email and password; returns a bearer session token (no cookies)',
+  description:
+    'Signs in with email and password and returns a session token to send as `Authorization: Bearer <token>`. No cookie is set. Accounts with two-factor sign-in get `step_up_required`: use the web sign-in. Limited per account (5 per 15 min) and per IP.',
   request: body(LoginBody),
   responses: { 200: json(Session, 'Signed in'), ...problems },
 });
 const refresh = createRoute({
   method: 'post',
   path: '/auth/refresh',
+  operationId: 'refreshSession',
   tags: ['auth'],
   summary: 'Keep a session alive: returns the token with its extended expiry',
+  description: 'Slides the session’s expiry forward and returns the same token with its new expiry.',
   security: userSecurity,
   responses: { 200: json(Session, 'The session'), ...problems },
 });
 const logout = createRoute({
   method: 'post',
   path: '/auth/logout',
+  operationId: 'logout',
   tags: ['auth'],
   summary: 'End the session; the token stops working at once',
+  description: 'Ends the session: the token is refused from the next request on.',
   security: userSecurity,
   responses: { 204: { description: 'Signed out' }, ...problems },
 });
 const me = createRoute({
   method: 'get',
   path: '/me',
+  operationId: 'getMe',
   tags: ['me'],
   summary: 'The signed-in user',
+  description: 'The user behind the bearer session. API keys are not users: they get 401 here.',
   security: userSecurity,
   responses: { 200: json(User, 'The user'), ...problems },
 });
 const myOrgs = createRoute({
   method: 'get',
   path: '/me/organizations',
+  operationId: 'listMyOrganizations',
   tags: ['me'],
   summary: 'Organizations the signed-in user belongs to, with their role',
+  description: 'Every organization the signed-in user is a member of, with their role in it.',
   security: userSecurity,
   responses: { 200: json(listSchema(Membership, 'MembershipList'), 'Memberships'), ...problems },
 });
 const mobileConfig = createRoute({
   method: 'get',
   path: '/mobile/config',
+  operationId: 'getMobileConfig',
   tags: ['mobile'],
   summary: 'Minimum and latest app versions, base URLs and feature flags (public)',
+  description:
+    'Minimum and latest app versions per platform, the base URLs and feature flags. No credential.',
   responses: { 200: json(MobileConfig, 'Mobile configuration') },
 });
 

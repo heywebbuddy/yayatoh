@@ -1,8 +1,10 @@
 export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
+  API_KEY_MODES,
   API_KEY_PATTERN,
   ApiKeyDto,
   type ApiKeyIdentity,
+  type ApiKeyMode,
   apiKeyIdentity,
   CreateApiKeyInput,
   createApiKeyCommand,
@@ -150,5 +152,6 @@ export {
   ORG_STATUS_ACTIONS,
   ORG_STATUSES,
   SUSPENSION_KINDS,
+  TEST_KEY_SCOPES,
 } from './schema.ts';
 export { invitationMailer } from './subscribers.ts';

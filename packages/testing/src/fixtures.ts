@@ -131,6 +131,8 @@ export interface OrgFixture {
   readonly event: EventDto;
   /** A live org API key with every scope (the /v1 tests' credential). */
   readonly apiKey: string;
+  /** A `yy_test_` key (read-only, `org:read` + `events:read`). */
+  readonly testKey: string;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
 }
@@ -379,10 +381,16 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
-  // Org API keys: one live with every scope, one revoked (isolation coverage).
+  // Org API keys: one live with every scope, one test key (M1.13d), one revoked (isolation coverage).
   const { key: apiKey } = await executeCommand(
     createApiKeyCommand,
     { name: `Fixture ${slug}`, scopes: [...API_KEY_SCOPES] },
+    ctx(),
+    ports,
+  );
+  const { key: testKey } = await executeCommand(
+    createApiKeyCommand,
+    { name: `Sandbox ${slug}`, scopes: ['org:read', 'events:read'], mode: 'test' },
     ctx(),
     ports,
   );
@@ -981,7 +989,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id }),
       ports,
     );
-  return { org, ownerId, viewerId, event, apiKey, ctx };
+  return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

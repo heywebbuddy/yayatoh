@@ -48,6 +48,8 @@ export function memoryRateLimiter(opts: { maxKeys?: number; clock?: () => number
 export const RATE_LIMITS = {
   /** Per API key or per signed-in user. */
   credential: { limit: 600, window: 60 },
+  /** Per test key (`yy_test_`): enough to build and test against, too little to run production on. */
+  testKey: { limit: 120, window: 60 },
   /** Anonymous public reads, per client IP: generous, since venue Wi-Fi and CGNAT share IPs. */
   anonymous: { limit: 300, window: 60 },
   search: { limit: 60, window: 60 },

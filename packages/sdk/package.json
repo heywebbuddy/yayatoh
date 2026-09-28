@@ -1,6 +1,6 @@
 {
   "name": "@yayatoh/sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "TypeScript client for the Yayatoh /v1 API, typed from its OpenAPI document.",
   "license": "UNLICENSED",
   "type": "module",
@@ -15,7 +15,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "generate": "node scripts/generate.ts write",
-    "generate:check": "node scripts/generate.ts check"
+    "generate:check": "node scripts/generate.ts check",
+    "generate:mobile": "bash scripts/generate-mobile.sh"
   },
   "dependencies": {
     "openapi-fetch": "0.17.0"

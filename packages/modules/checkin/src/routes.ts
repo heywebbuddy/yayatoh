@@ -28,15 +28,32 @@ const problems = {
 const manifest = createRoute({
   method: 'get',
   path: '/events/{eventId}/manifest',
+  operationId: 'getScannerManifest',
   tags: ['scanner'],
   summary: 'Offline manifest page for a scanner device',
+  description:
+    'One page of the offline manifest a paired scanner device keeps (ticket rows by short code). Device token only.',
   security,
   request: {
-    params: z.object({ eventId: z.uuid() }),
+    params: z.object({ eventId: z.uuid().openapi({ description: 'The event the device scans for' }) }),
     query: z.object({
-      cursor: z.string().max(100).optional(),
-      overlap: z.enum(['true', 'false']).optional(),
-      limit: z.coerce.number().int().min(1).max(2000).optional(),
+      cursor: z
+        .string()
+        .max(100)
+        .optional()
+        .openapi({ description: 'The previous page’s `cursor` (sync position); omit for the start.' }),
+      overlap: z
+        .enum(['true', 'false'])
+        .openapi('ManifestOverlap')
+        .optional()
+        .openapi({ description: '`true` re-reads the last page’s rows as well (after a crash mid-page).' }),
+      limit: z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(2000)
+        .optional()
+        .openapi({ description: 'Rows per page (1–2000).' }),
     }),
   },
   responses: {
@@ -69,8 +86,11 @@ const ScanBatchBody = z.object({
 const batch = createRoute({
   method: 'post',
   path: '/scans/batch',
+  operationId: 'syncScans',
   tags: ['scanner'],
   summary: 'Sync up to 500 offline scans (idempotent by scanId)',
+  description:
+    'Uploads scans made offline; each is applied once by its `scanId`, so a retry is safe. Device token only.',
   security,
   request: { body: { content: { 'application/json': { schema: ScanBatchBody } }, required: true } },
   responses: {
@@ -92,8 +112,11 @@ const HeartbeatResponse = z.object({ serverTime: z.iso.datetime(), commands: z.a
 const heartbeat = createRoute({
   method: 'post',
   path: '/devices/heartbeat',
+  operationId: 'deviceHeartbeat',
   tags: ['scanner'],
   summary: 'Device health every 30 s; returns pending commands (wipe)',
+  description:
+    'Reports the device’s health about every 30 seconds and returns pending commands such as `wipe`. Device token only.',
   security,
   request: { body: { content: { 'application/json': { schema: HeartbeatBody } }, required: true } },
   responses: {
@@ -110,8 +133,11 @@ const CheckinBody = z.object({
   code: z.string().min(1).max(400),
   checkpointId: z.uuid().optional(),
 });
+/** The door verdict (a named /v1 schema; `@yayatoh/api-v1` reuses it). */
+export const ScanResult = z.enum(SCAN_RESULTS).openapi('ScanResult');
+
 const CheckinVerdict = z.object({
-  result: z.enum(SCAN_RESULTS),
+  result: ScanResult,
   ticket: z
     .object({
       holderName: z.string().nullable(),
@@ -127,12 +153,18 @@ const CheckinVerdict = z.object({
 const checkin = createRoute({
   method: 'post',
   path: '/checkins',
+  operationId: 'checkInWithDevice',
   tags: ['scanner'],
   summary: 'Scan one ticket online and get the door verdict',
   description: 'Retrying with the same Idempotency-Key returns the first verdict instead of a duplicate.',
   security,
   request: {
-    headers: z.object({ 'idempotency-key': z.string().regex(/^[\x21-\x7e]{8,80}$/) }),
+    headers: z.object({
+      'idempotency-key': z
+        .string()
+        .regex(/^[\x21-\x7e]{8,80}$/)
+        .openapi({ description: 'Required. A retry with the same key returns the first verdict.' }),
+    }),
     body: { content: { 'application/json': { schema: CheckinBody } }, required: true },
   },
   responses: {
