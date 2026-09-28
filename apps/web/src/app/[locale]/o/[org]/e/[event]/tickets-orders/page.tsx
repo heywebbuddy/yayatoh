@@ -107,6 +107,16 @@ export default async function TicketsPage({
   return (
     <>
       <PageHeader title={t('nav.ticketsOrders')} description={t('tickets.subtitle')} />
+      {roleCan(data.role, 'orders:support') ? (
+        <p>
+          <Link
+            href={`/o/${org}/e/${event}/tickets-orders/waitlists`}
+            className="text-body underline underline-offset-2"
+          >
+            {t('waitlist.console.open')}
+          </Link>
+        </p>
+      ) : null}
       {types.length === 0 ? (
         <EmptyState title={t('tickets.emptyTitle')} description={t('tickets.emptyDescription')} />
       ) : (

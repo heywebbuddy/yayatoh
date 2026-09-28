@@ -59,6 +59,19 @@ export {
   refundsFee,
 } from './domain/refund-policy.ts';
 export {
+  ACTIVE_STATUSES as WAITLIST_ACTIVE_STATUSES,
+  canRejoin,
+  compareQueue,
+  DEFAULT_OFFER_MINUTES,
+  MAX_OFFER_MINUTES,
+  MIN_OFFER_MINUTES,
+  offerExpiresAt,
+  offerOpen,
+  planOffers,
+  queuePosition,
+  sortQueue,
+} from './domain/waitlist.ts';
+export {
   buyerOrdersDsarTx,
   buyerOrgs,
   eraseOrdersDsarTx,
@@ -151,22 +164,14 @@ export {
   searchOrdersQuery,
 } from './queries.ts';
 export { type RefundOutcome, refundOrder } from './refund-flow.ts';
-export { CHARGE_MODELS, ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
-export { REMINDER_LEAD_MS, refundMailer, reminderRescheduler, ticketMailer } from './subscribers.ts';
 export {
-  ACTIVE_STATUSES as WAITLIST_ACTIVE_STATUSES,
-  canRejoin,
-  compareQueue,
-  DEFAULT_OFFER_MINUTES,
-  MAX_OFFER_MINUTES,
-  MIN_OFFER_MINUTES,
-  offerExpiresAt,
-  offerOpen,
-  planOffers,
-  queuePosition,
-  sortQueue,
-} from './domain/waitlist.ts';
-export { WAITLIST_ENTRY_STATUSES } from './schema.ts';
+  CHARGE_MODELS,
+  ORDER_STATUSES,
+  REFUND_REASONS,
+  REFUND_STATUSES,
+  WAITLIST_ENTRY_STATUSES,
+} from './schema.ts';
+export { REMINDER_LEAD_MS, refundMailer, reminderRescheduler, ticketMailer } from './subscribers.ts';
 export {
   declineWaitlistOfferCommand,
   eraseWaitlistDsarTx,

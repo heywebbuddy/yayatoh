@@ -285,9 +285,7 @@ export const waitlists = tenantTable(
   },
   (t) => [
     index('waitlists_org_event_idx').on(t.orgId, t.eventId),
-    uniqueIndex('waitlists_org_type_key')
-      .on(t.orgId, t.ticketTypeId)
-      .where(sql`occurrence_id is null`),
+    uniqueIndex('waitlists_org_type_key').on(t.orgId, t.ticketTypeId).where(sql`occurrence_id is null`),
     uniqueIndex('waitlists_org_type_date_key')
       .on(t.orgId, t.ticketTypeId, t.occurrenceId)
       .where(sql`occurrence_id is not null`),
@@ -327,13 +325,9 @@ export const waitlistEntries = tenantTable(
   },
   (t) => [
     index('waitlist_entries_org_queue_idx').on(t.orgId, t.waitlistId, t.status, t.positionAt, t.id),
-    index('waitlist_entries_org_offer_idx')
-      .on(t.orgId, t.offerExpiresAt)
-      .where(sql`status = 'offered'`),
+    index('waitlist_entries_org_offer_idx').on(t.orgId, t.offerExpiresAt).where(sql`status = 'offered'`),
     index('waitlist_entries_org_email_idx').on(t.orgId, t.email),
-    index('waitlist_entries_org_order_idx')
-      .on(t.orgId, t.orderId)
-      .where(sql`order_id is not null`),
+    index('waitlist_entries_org_order_idx').on(t.orgId, t.orderId).where(sql`order_id is not null`),
     uniqueIndex('waitlist_entries_org_active_email_key')
       .on(t.orgId, t.waitlistId, t.email)
       .where(sql`status in ('waiting', 'offered')`),

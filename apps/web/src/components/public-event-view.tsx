@@ -11,7 +11,7 @@ import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia, publicProgramMedia } from '@yayatoh/media';
-import { publicRefundPolicy } from '@yayatoh/orders';
+import { publicRefundPolicy, waitlistHeldBack } from '@yayatoh/orders';
 import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
 import { MIN_REVIEWS_FOR_RATING } from '@yayatoh/reviews';
 import { publicSeatMap } from '@yayatoh/seating';
@@ -137,6 +137,14 @@ export async function PublicEventView({
   // The event's refund policy (M1.6e), in the buyer's words, before they buy.
   const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
+  // M3.10a: passes whose remaining stock is kept for their waitlist read as sold out, and sold-out
+  // passes (not seated, not choose-your-amount, not code-unlocked) offer "Join the waitlist".
+  const heldBack = target && !embedded ? await waitlistHeldBack(target.orgId, target.eventId) : [];
+  const seatedIds = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
+  const waitlistHref = (p: { id: string; isDonation: boolean; unlocked: boolean }) =>
+    target && !embedded && !unlockedPrivate && !p.isDonation && !p.unlocked && !seatedIds.has(p.id)
+      ? `/events/${slug}/waitlist?pass=${p.id}${chosen ? `&date=${chosen.id}` : ''}`
+      : null;
   // The venue map and seat finder, once the organizer opened them (M1.7e).
   const venue = target ? await openVenueMap(target.orgId, target.eventId) : null;
   const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
@@ -157,8 +165,15 @@ export async function PublicEventView({
           price: p.allInMinor,
           description: p.description ?? '',
           featured: false,
-          availability: p.availability,
-          fewLeft: p.fewLeft,
+          availability:
+            p.availability === 'available' && heldBack.includes(p.id)
+              ? ('sold_out' as const)
+              : p.availability,
+          fewLeft: p.fewLeft && !heldBack.includes(p.id),
+          waitlistHref:
+            p.availability === 'sold_out' || (p.availability === 'available' && heldBack.includes(p.id))
+              ? waitlistHref(p)
+              : null,
           maxPerOrder: p.maxPerOrder,
           regularPrice: p.regularAllInMinor,
           earlyEndsAt: p.earlyEndsAt,
@@ -171,6 +186,7 @@ export async function PublicEventView({
           featured: Boolean(p.featured),
           availability: 'available' as const,
           fewLeft: false,
+          waitlistHref: null,
           maxPerOrder: 0,
           regularPrice: null,
           earlyEndsAt: null,
@@ -483,6 +499,7 @@ export async function PublicEventView({
             locale={locale}
             timeZone={ev.timezone}
             now={now}
+            waitlist={Boolean(target) && !unlockedPrivate && !embedded}
           />
         </section>
       ) : null}

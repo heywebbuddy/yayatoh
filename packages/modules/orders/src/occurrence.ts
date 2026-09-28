@@ -55,7 +55,11 @@ export async function claimOccurrenceTx(
  * waitlist offers holding stock for it (M3.10a); with `reserve`, also what the date's waitlists
  * are waiting for.
  */
-export async function occurrenceTakenTx(tx: TenantTx, occurrenceId: string, reserve: boolean): Promise<number> {
+export async function occurrenceTakenTx(
+  tx: TenantTx,
+  occurrenceId: string,
+  reserve: boolean,
+): Promise<number> {
   const sold = await activeTicketsForOccurrenceTx(tx, occurrenceId);
   const [held] = await tx
     .select({ n: sql<number>`coalesce(sum(${orderItems.quantity}), 0)::int` })
@@ -71,7 +75,10 @@ export async function occurrenceTakenTx(tx: TenantTx, occurrenceId: string, rese
     })
     .from(waitlistEntries)
     .where(
-      and(eq(waitlistEntries.occurrenceId, occurrenceId), inArray(waitlistEntries.status, ['offered', 'waiting'])),
+      and(
+        eq(waitlistEntries.occurrenceId, occurrenceId),
+        inArray(waitlistEntries.status, ['offered', 'waiting']),
+      ),
     );
   return sold + (held?.n ?? 0) + (queued?.offered ?? 0) + (reserve ? (queued?.waiting ?? 0) : 0);
 }

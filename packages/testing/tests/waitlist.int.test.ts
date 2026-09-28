@@ -112,11 +112,17 @@ const entries = async (s: Scenario) => {
   if (!list) return [];
   return (await executeQuery(waitlistEntriesQuery, { waitlistId: list.id }, a.ctx(), ports)).entries;
 };
-const statusOf = async (s: Scenario, entryId: string) => (await entries(s)).find((x) => x.id === entryId)?.status;
+const statusOf = async (s: Scenario, entryId: string) =>
+  (await entries(s)).find((x) => x.id === entryId)?.status;
 
 /** Let the scenario's first checkout lapse (its places become free). */
 const lapseHold = (now = later(11 * 60_000)) =>
-  executeCommand(expireOrdersCommand, {}, { ...sys(), now, actor: { type: 'system', name: 'sweeper' } }, ports);
+  executeCommand(
+    expireOrdersCommand,
+    {},
+    { ...sys(), now, actor: { type: 'system', name: 'sweeper' } },
+    ports,
+  );
 
 const buy = (s: Scenario, who: { name: string; email: string }, quantity: number, extra: object = {}) =>
   executeCommand(
@@ -210,8 +216,9 @@ describe('waitlists: joining (M3.10a)', () => {
     ).rejects.toMatchObject({ code: 'not_found' });
     // Joining is recorded once per new place (the confirmation email's event).
     const joined = await withTenant(a.ctx(), (tx) => recentEventsTx(tx, a.org.id, ['waitlist.joined'], HOUR));
-    expect(joined.filter((x) => [amy.entryId, ben.entryId].includes((x.payload as { entryId: string }).entryId)))
-      .toHaveLength(2);
+    expect(
+      joined.filter((x) => [amy.entryId, ben.entryId].includes((x.payload as { entryId: string }).entryId)),
+    ).toHaveLength(2);
     // The public view of one's own link: position, pass, event; no offer yet.
     const view = await publicWaitlistEntry(waitlistToken(ben.entryId));
     expect(view).toMatchObject({
@@ -258,7 +265,12 @@ describe('waitlists: timed offers', () => {
     expect(await offeredEvents(amy.entryId)).toHaveLength(1);
 
     // A capacity increase frees two more: Ben's whole quantity now fits; the rest is on sale again.
-    await executeCommand(updateTicketTypeCommand, { ticketTypeId: s.typeId, quantityTotal: 4 }, a.ctx(), ports);
+    await executeCommand(
+      updateTicketTypeCommand,
+      { ticketTypeId: s.typeId, quantityTotal: 4 },
+      a.ctx(),
+      ports,
+    );
     expect(await sweep()).toMatchObject({ offered: 1 });
     expect(await statusOf(s, ben.entryId)).toBe('offered');
     expect(await stock(s)).toEqual({ sold: 0, held: 3 });
@@ -368,7 +380,9 @@ describe('waitlists: timed offers', () => {
     );
     expect(expired.some((x) => (x.payload as { entryId: string }).entryId === amy.entryId)).toBe(true);
     // An expired offer's link can't buy.
-    await expect(buy(s, person('Amy'), 1, { waitlistToken: waitlistToken(amy.entryId) })).rejects.toMatchObject({
+    await expect(
+      buy(s, person('Amy'), 1, { waitlistToken: waitlistToken(amy.entryId) }),
+    ).rejects.toMatchObject({
       code: 'invalid_state',
     });
     // Amy rejoins: behind Cat.
@@ -403,7 +417,12 @@ describe('waitlists: dates', () => {
     n += 1;
     const e = await executeCommand(
       createEventCommand,
-      { name: `Dates ${n}`, timezone: 'UTC', startsAt: '2027-11-01T18:00:00Z', endsAt: '2027-11-01T22:00:00Z' },
+      {
+        name: `Dates ${n}`,
+        timezone: 'UTC',
+        startsAt: '2027-11-01T18:00:00Z',
+        endsAt: '2027-11-01T22:00:00Z',
+      },
       a.ctx(),
       ports,
     );
@@ -473,7 +492,13 @@ describe('waitlists: organizer console', () => {
     const amy = await join(s, person('Amy'), 1);
     const ben = await join(s, person('Ben'), 1);
     const [list] = await executeQuery(listWaitlistsQuery, { eventId: s.eventId }, a.ctx(), ports);
-    expect(list).toMatchObject({ waiting: 2, waitingPlaces: 2, offered: 0, autoOffer: true, offerMinutes: 1440 });
+    expect(list).toMatchObject({
+      waiting: 2,
+      waitingPlaces: 2,
+      offered: 0,
+      autoOffer: true,
+      offerMinutes: 1440,
+    });
     if (!list) throw new Error('list');
     await executeCommand(
       updateWaitlistCommand,
@@ -535,11 +560,28 @@ describe('waitlists: organizer console', () => {
       eventId: s.eventId,
       selection: { filter: { waitlistId: list.id } },
       params: {
-        headers: { position: '#', name: 'Name', email: 'Email', quantity: 'Qty', status: 'Status', joinedAt: 'Joined' },
-        statuses: { waiting: 'Waiting', offered: 'Offered', accepted: 'Bought', expired: 'Expired', declined: 'Declined', left: 'Left', removed: 'Removed' },
+        headers: {
+          position: '#',
+          name: 'Name',
+          email: 'Email',
+          quantity: 'Qty',
+          status: 'Status',
+          joinedAt: 'Joined',
+        },
+        statuses: {
+          waiting: 'Waiting',
+          offered: 'Offered',
+          accepted: 'Bought',
+          expired: 'Expired',
+          declined: 'Declined',
+          left: 'Left',
+          removed: 'Removed',
+        },
       },
     };
-    await expect(executeCommand(waitlistExportBulk.start, start, staleCtx(a.ctx()), ports)).rejects.toMatchObject({
+    await expect(
+      executeCommand(waitlistExportBulk.start, start, staleCtx(a.ctx()), ports),
+    ).rejects.toMatchObject({
       code: 'step_up_required',
     });
     await expect(
@@ -554,10 +596,14 @@ describe('waitlists: organizer console', () => {
     const file = await executeQuery(waitlistExportBulk.file, { operationId }, a.ctx(), ports);
     const lines = file.content.replace(/^﻿/, '').trim().split(/\r?\n/);
     expect(lines[0]).toBe('#,Name,Email,Qty,Status,Joined');
-    expect(lines[1]).toMatch(new RegExp(`^1,Amy,amy\\.${n}@example\\.test,1,Waiting,2\\d{3}-\\d{2}-\\d{2} \\d{2}:\\d{2}$`));
+    expect(lines[1]).toMatch(
+      new RegExp(`^1,Amy,amy\\.${n}@example\\.test,1,Waiting,2\\d{3}-\\d{2}-\\d{2} \\d{2}:\\d{2}$`),
+    );
     expect(lines[2]).toContain('2,"Ben ""B"" Ng"');
     const audit = await withTenant(a.ctx(), (tx) =>
-      tx.execute<{ action: string }>(sql`select action from platform.audit_events where target_id = ${operationId}`),
+      tx.execute<{ action: string }>(
+        sql`select action from platform.audit_events where target_id = ${operationId}`,
+      ),
     );
     expect(audit.map((r) => r.action)).toContain('bulk.start');
   });
@@ -570,10 +616,14 @@ describe('waitlists: permissions and isolation', () => {
     const [list] = await executeQuery(listWaitlistsQuery, { eventId: s.eventId }, a.ctx(), ports);
     if (!list) throw new Error('list');
     const viewer = userCtx(a.viewerId, a.org.id);
-    await expect(executeQuery(listWaitlistsQuery, { eventId: s.eventId }, viewer, ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(listWaitlistsQuery, { eventId: s.eventId }, viewer, ports),
+    ).rejects.toMatchObject({
       code: 'forbidden',
     });
-    await expect(executeQuery(waitlistEntriesQuery, { waitlistId: list.id }, viewer, ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(waitlistEntriesQuery, { waitlistId: list.id }, viewer, ports),
+    ).rejects.toMatchObject({
       code: 'forbidden',
     });
     for (const [cmd, input] of [
@@ -590,7 +640,9 @@ describe('waitlists: permissions and isolation', () => {
     });
     // Org B: RLS hides every list and place; acting on them is "not found".
     expect(await executeQuery(listWaitlistsQuery, { eventId: s.eventId }, b.ctx(), ports)).toEqual([]);
-    await expect(executeQuery(waitlistEntriesQuery, { waitlistId: list.id }, b.ctx(), ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(waitlistEntriesQuery, { waitlistId: list.id }, b.ctx(), ports),
+    ).rejects.toMatchObject({
       code: 'not_found',
     });
     await expect(

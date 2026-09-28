@@ -14,6 +14,7 @@ export async function DatePicker({
   locale,
   timeZone,
   now,
+  waitlist = false,
 }: {
   slug: string;
   dates: readonly PublicOccurrenceDto[];
@@ -21,8 +22,11 @@ export async function DatePicker({
   locale: string;
   timeZone: string;
   now: Date;
+  /** M3.10a: a sold-out date links to its waitlist. */
+  waitlist?: boolean;
 }) {
   const t = await getTranslations('publicEvent');
+  const tw = await getTranslations('waitlist');
   const fmt = new Intl.DateTimeFormat(locale, {
     timeZone,
     weekday: 'short',
@@ -56,6 +60,15 @@ export async function DatePicker({
                   <span className="inline-flex min-h-11 flex-col justify-center rounded-card border border-zinc-200 bg-zinc-50 px-4 py-2 text-caption text-zinc-500">
                     <span className="line-through">{label}</span>
                     <span>{unavailable}</span>
+                    {waitlist && d.status === 'scheduled' && d.soldOut ? (
+                      <Link
+                        href={`/events/${slug}/waitlist?date=${d.id}`}
+                        aria-label={tw('joinDateLink', { date: label })}
+                        className="inline-flex min-h-6 items-center text-zinc-900 underline underline-offset-2"
+                      >
+                        {tw('joinLink')}
+                      </Link>
+                    ) : null}
                   </span>
                 ) : (
                   <Link

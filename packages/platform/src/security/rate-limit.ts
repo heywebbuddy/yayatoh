@@ -238,6 +238,13 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 3, windowMs: 60 * MIN },
     ipCeiling: { limit: 100, windowMs: 10 * MIN },
   },
+  /** Joining a waitlist (M3.10a): each join may send a code and a confirmation email. */
+  waitlistJoin: {
+    device: { limit: 10, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    identity: { limit: 10, windowMs: 60 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
   /** Starting a checkout (creates holds on inventory). */
   checkoutStart: {
     device: { limit: 20, windowMs: 10 * MIN },

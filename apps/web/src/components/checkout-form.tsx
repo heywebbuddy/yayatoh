@@ -7,6 +7,7 @@ import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
 import { GuestCodeFields } from '@/components/guest-code-fields.tsx';
 import { type SeatMapView, SeatPicker, type SeatStreamSource } from '@/components/seat-picker.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { useCssomStyle } from '@/lib/cssom-style.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
@@ -25,6 +26,8 @@ export interface PassView {
   /** Choose-your-amount pass: `priceLabel` is the minimum. */
   readonly isDonation?: boolean;
   readonly accessDates?: readonly { readonly key: string; readonly label: string }[];
+  /** M3.10a: sold out, with a waitlist to join (the join page's path). */
+  readonly waitlistHref?: string | null;
 }
 
 /**
@@ -167,7 +170,15 @@ export function CheckoutForm({
                   )}
                 </p>
               ) : null}
-              {p.id && p.availability === 'available' && seatedTypes.has(p.id) ? (
+              {p.waitlistHref ? (
+                <Link
+                  href={p.waitlistHref}
+                  className={buttonClass(p.featured ? 'on-dark' : 'secondary', 'md', 'self-start')}
+                >
+                  {t('waitlist.joinLink')}
+                  <span className="sr-only"> — {p.name}</span>
+                </Link>
+              ) : p.id && p.availability === 'available' && seatedTypes.has(p.id) ? (
                 <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
                   {t('checkout.chooseSeatsBelow')}
                 </p>

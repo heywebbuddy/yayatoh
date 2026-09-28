@@ -1,7 +1,7 @@
 import { csvRow } from '@yayatoh/csv';
 import { isUniqueViolation, type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { findEventTx, findOccurrenceTx, hasOccurrencesTx } from '@yayatoh/events';
-import { createCtx, type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, createCtx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import {
   bulkCommands,
   defineBulkAction,
@@ -94,10 +94,7 @@ export async function waitlistReserveTx(
     })
     .from(waitlistEntries)
     .where(
-      and(
-        inArray(waitlistEntries.ticketTypeId, [...ticketTypeIds]),
-        eq(waitlistEntries.status, 'waiting'),
-      ),
+      and(inArray(waitlistEntries.ticketTypeId, [...ticketTypeIds]), eq(waitlistEntries.status, 'waiting')),
     )
     .groupBy(waitlistEntries.ticketTypeId);
   return new Map(rows.map((r) => [r.ticketTypeId, r.n]));
@@ -119,7 +116,8 @@ async function publicRoomTx(
   let room = stock.free - reserve;
   if (occurrenceId) {
     const occ = await findOccurrenceTx(tx, occurrenceId);
-    if (occ?.capacity != null) room = Math.min(room, occ.capacity - (await occurrenceTakenTx(tx, occ.id, true)));
+    if (occ?.capacity != null)
+      room = Math.min(room, occ.capacity - (await occurrenceTakenTx(tx, occ.id, true)));
   }
   return Math.max(0, room);
 }
@@ -156,7 +154,9 @@ async function listForTx(
   const orgId = requireOrg(ctx);
   const where = and(
     eq(waitlists.ticketTypeId, input.ticketTypeId),
-    input.occurrenceId ? eq(waitlists.occurrenceId, input.occurrenceId) : sql`${waitlists.occurrenceId} is null`,
+    input.occurrenceId
+      ? eq(waitlists.occurrenceId, input.occurrenceId)
+      : sql`${waitlists.occurrenceId} is null`,
   );
   const [found] = await tx.select().from(waitlists).where(where);
   if (found) return found;
@@ -269,8 +269,7 @@ export const joinWaitlistCommand = tenantCommand({
           inArray(waitlistEntries.status, ['waiting', 'offered']),
         ),
       );
-    if (already)
-      return { entryId: already.id, position: await positionTx(tx, already), alreadyJoined: true };
+    if (already) return { entryId: already.id, position: await positionTx(tx, already), alreadyJoined: true };
     if ((await publicRoomTx(tx, stock.id, occurrenceId)) >= input.quantity)
       throw new DomainError('invalid_state', 'Tickets are still on sale', { reason: 'not_sold_out' });
     let entry: EntryRow | undefined;
@@ -381,7 +380,7 @@ async function offerRoomTx(tx: TenantTx, list: ListRow, now: Date): Promise<numb
   let dateRoom: number | null = null;
   if (list.occurrenceId) {
     const occ = await findOccurrenceTx(tx, list.occurrenceId, true);
-    if (!occ || occ.status !== 'scheduled' || occ.endsAt <= now) return null;
+    if (occ?.status !== 'scheduled' || occ.endsAt <= now) return null;
     if (occ.capacity !== null) dateRoom = occ.capacity - (await occurrenceTakenTx(tx, occ.id, false));
   }
   const stock = await ticketTypeStockTx(tx, list.ticketTypeId, true);
@@ -687,7 +686,8 @@ export async function claimWaitlistOfferTx(
   },
 ): Promise<WaitlistClaim> {
   const e = await entryByTokenTx(tx, input.token);
-  const closed = () => new DomainError('invalid_state', 'This offer is no longer open', { reason: 'offer_closed' });
+  const closed = () =>
+    new DomainError('invalid_state', 'This offer is no longer open', { reason: 'offer_closed' });
   if (e.status !== 'offered' || !offerOpen(e.offerExpiresAt, input.now) || e.eventId !== input.eventId)
     throw closed();
   if (e.email !== input.email.trim().toLowerCase())
@@ -861,7 +861,10 @@ async function entriesOfTx(tx: TenantTx, waitlistId: string) {
 export const waitlistEntriesQuery = tenantQuery({
   name: 'orders.waitlistEntries',
   input: z.object({ waitlistId: z.uuid() }),
-  output: z.object({ list: z.object({ id: z.uuid(), eventId: z.uuid() }), entries: z.array(WaitlistEntryDto) }),
+  output: z.object({
+    list: z.object({ id: z.uuid(), eventId: z.uuid() }),
+    entries: z.array(WaitlistEntryDto),
+  }),
   entitlement: 'ticketing',
   permission: 'orders:support',
   handler: async ({ input, tx }) => {
@@ -899,7 +902,11 @@ async function lockedListOfTx(tx: TenantTx, entryId: string) {
     .where(eq(waitlistEntries.id, entryId));
   if (!peek) throw new DomainError('not_found', 'Not on this waitlist');
   const [list] = await tx.select().from(waitlists).where(eq(waitlists.id, peek.waitlistId)).for('update');
-  const [entry] = await tx.select().from(waitlistEntries).where(eq(waitlistEntries.id, entryId)).for('update');
+  const [entry] = await tx
+    .select()
+    .from(waitlistEntries)
+    .where(eq(waitlistEntries.id, entryId))
+    .for('update');
   if (!list || !entry) throw new DomainError('not_found', 'Not on this waitlist');
   return { list, entry };
 }
@@ -917,7 +924,9 @@ export const offerWaitlistEntryCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const { list, entry } = await lockedListOfTx(tx, input.entryId);
     if (entry.status !== 'waiting')
-      throw new DomainError('invalid_state', 'Only someone waiting can get an offer', { reason: entry.status });
+      throw new DomainError('invalid_state', 'Only someone waiting can get an offer', {
+        reason: entry.status,
+      });
     const room = await offerRoomTx(tx, list, ctx.now);
     if (room === null)
       throw new DomainError('invalid_state', 'This pass or date is not on sale', { reason: 'not_on_sale' });
