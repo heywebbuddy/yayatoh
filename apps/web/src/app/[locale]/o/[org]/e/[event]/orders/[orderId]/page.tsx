@@ -1,17 +1,22 @@
+import { getUsersByIds } from '@yayatoh/auth';
+import { orderSignalsQuery } from '@yayatoh/checkin';
+import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { orderMessagesQuery } from '@yayatoh/notifications';
 import { orderDetailQuery, orderRefundsQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
-import { roleCan } from '@yayatoh/tenancy';
+import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
 import { RefundForm } from '@/components/refund-form.tsx';
+import { SignalItem } from '@/components/signal-item.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { resolveSignalAction } from '../../onsite/signals/actions.ts';
 import { refundAction } from './actions.ts';
 
 /** One order for the organizer: buyer, tickets (and who holds them), refunds, and the refund form. */
@@ -43,6 +48,11 @@ export default async function OrderPage({
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
     : [];
   const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
+  // M1.9e order timeline: fraud signals about the order and its tickets, oldest first.
+  const signals = await executeQuery(orderSignalsQuery, { orderId }, data.ctx, ports);
+  const scanners = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
+  const canTriage =
+    roleCan(data.role, 'events:write') || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'events:write');
   const tp = await getTranslations('refundPolicy');
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
   const when = new Intl.DateTimeFormat(locale, {
@@ -135,6 +145,28 @@ export default async function OrderPage({
             },
           ]}
         />
+      </section>
+
+      <section aria-labelledby="signals-heading" className="flex flex-col gap-3">
+        <h2 id="signals-heading" className="text-section">
+          {t('fraudSignals.timeline.title')}
+        </h2>
+        {signals.length === 0 ? (
+          <p className="text-body text-zinc-600">{t('fraudSignals.timeline.empty')}</p>
+        ) : (
+          <ol aria-labelledby="signals-heading" className="flex list-none flex-col gap-3 p-0">
+            {signals.map((s) => (
+              <li key={s.id}>
+                <SignalItem
+                  signal={s}
+                  timeZone={ev.timezone}
+                  people={Object.fromEntries([...scanners].map(([id, u]) => [id, u.name]))}
+                  action={canTriage ? resolveSignalAction.bind(null, org, event, s.id) : null}
+                />
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
 
       {refunds.length > 0 ? (

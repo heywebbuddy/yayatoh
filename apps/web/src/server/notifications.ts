@@ -1,6 +1,7 @@
 import 'server-only';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
+import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
@@ -47,6 +48,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
     payoutDestinationMailer({ notifier, appOrigin }),
+    checkoutRiskSignals(),
+    chatReportSignals(),
+    fraudSignalAlerts({ notifier }),
   ];
 }
 
@@ -63,11 +67,18 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
   const subs = messageSubscribers(appOrigin);
   const types = [...new Set(subs.flatMap((s) => s.events.map((e) => e.split('@')[0] as string)))];
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'dev.drain' } });
-  const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
   let consumed = 0;
-  for (const event of events) {
-    for (const s of subs)
-      if (s.events.includes(eventKey(event)) && (await consumeEvent(s, event))) consumed += 1;
+  // Subscribers may emit events other subscribers consume (fraud signals → alerts, M1.9e): run
+  // until a pass consumes nothing new (bounded).
+  for (let pass = 0; pass < 3; pass++) {
+    const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
+    let fresh = 0;
+    for (const event of events) {
+      for (const s of subs)
+        if (s.events.includes(eventKey(event)) && (await consumeEvent(s, event))) fresh += 1;
+    }
+    consumed += fresh;
+    if (fresh === 0) break;
   }
   const deps: DispatchDeps = {
     transports: devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret() }),

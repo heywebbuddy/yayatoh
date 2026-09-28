@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "परीक्षण सूचना",
       "intro": "सूचनाएँ काम कर रही हैं।"
+    },
+    "security.fraud_signal": {
+      "subject": "धोखाधड़ी अलर्ट: {signal, select, two_entrances {एक ही टिकट दो प्रवेश द्वारों पर} impossible_travel {चेकपॉइंट के बीच असंभव यात्रा} device_velocity {बहुत तेज़ी से स्कैन करता स्कैनर} invalid_burst {अमान्य कोड की झड़ी} rejected_burst {अस्वीकृत स्कैन की झड़ी} purchase_velocity {एक ही खरीदार के कई ऑर्डर} country_mismatch {किसी दूसरे देश में खरीदार} checkout_blocked {रोका गया चेकआउट} card_testing {संभावित कार्ड टेस्टिंग} chat_abuse {रिपोर्ट की गई बातचीत} other {धोखाधड़ी संकेत}}",
+      "intro": "{org}{eventName, select, none {} other { ({eventName})}} में एक उच्च-गंभीरता संकेत को देखना ज़रूरी है: {signal, select, two_entrances {एक ही टिकट दो प्रवेश द्वारों पर} impossible_travel {चेकपॉइंट के बीच असंभव यात्रा} device_velocity {बहुत तेज़ी से स्कैन करता स्कैनर} invalid_burst {अमान्य कोड की झड़ी} rejected_burst {अस्वीकृत स्कैन की झड़ी} purchase_velocity {एक ही खरीदार के कई ऑर्डर} country_mismatch {किसी दूसरे देश में खरीदार} checkout_blocked {रोका गया चेकआउट} card_testing {संभावित कार्ड टेस्टिंग} chat_abuse {रिपोर्ट की गई बातचीत} other {धोखाधड़ी संकेत}}। इसे स्वीकार या खारिज करने के लिए खोलें।",
+      "cta": "संकेत देखें"
     }
   },
   "roles": {

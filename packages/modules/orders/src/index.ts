@@ -15,6 +15,7 @@ export {
   checkoutRiskSignals,
   expireOrdersCommand,
   hashManageToken,
+  recordCheckoutBlockCommand,
   startCheckoutCommand,
 } from './commands/checkout.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';

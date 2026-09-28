@@ -1,4 +1,10 @@
-import { CODE_PREFIX, verifyStatement, verifyTicketCode } from '@yayatoh/ticket-crypto';
+import {
+  CODE_PREFIX,
+  legacyPayloadHash,
+  legacyQrPayload,
+  verifyStatement,
+  verifyTicketCode,
+} from '@yayatoh/ticket-crypto';
 import { type EventWindow, eventDay, ruleResult } from './rules.ts';
 
 /** One manifest row (roadmap §5.4). Contact details only as per-event salted hashes. */
@@ -15,6 +21,11 @@ export interface ManifestRow {
   readonly holderName: string;
   readonly emailHash: string;
   readonly issuedAt: string;
+  /**
+   * Migrated tickets (M1.9e): their legacy QR payloads as `legacyPayloadHash(salt, payload)`,
+   * never the payloads. Absent on manifests from before M1.9e and on tickets without one.
+   */
+  readonly legacyHashes?: readonly string[];
 }
 
 export interface ManifestHeader {
@@ -124,6 +135,8 @@ export interface OfflineState {
   readonly header: ManifestHeader;
   readonly byId: ReadonlyMap<string, ManifestRow>;
   readonly byShortCode: ReadonlyMap<string, ManifestRow>;
+  /** Rows by each of their `legacyHashes` (M1.9e); absent = no legacy lookup. */
+  readonly byLegacyHash?: ReadonlyMap<string, ManifestRow>;
   /** `${ticketId}:${day}` admitted on this device. */
   readonly admitted: ReadonlySet<string>;
   /** When this device last completed a manifest sync. */
@@ -196,7 +209,10 @@ async function entranceVerdict(
     if (v.rev < row.rev) return { verdict: 'superseded', ticketId: row.ticketId, row };
     if (v.rev > row.rev) return { verdict: 'provisional', ticketId: row.ticketId, row };
   } else {
-    row = state.byShortCode.get(code) ?? null;
+    // A migrated ticket's legacy QR (case-sensitive), before short codes, as on the server.
+    const legacy = state.byLegacyHash?.size ? legacyQrPayload(rawCode) : null;
+    if (legacy) row = state.byLegacyHash?.get(await legacyPayloadHash(h.salt, legacy)) ?? null;
+    row ??= state.byShortCode.get(code) ?? null;
     if (!row) return { verdict: 'invalid', ticketId: null, row: null };
   }
   const occ = row.occurrenceId ? h.occurrences?.find((o) => o.id === row.occurrenceId) : undefined;
@@ -219,6 +235,13 @@ async function entranceVerdict(
   if (state.admitted.has(admittedKey(row.ticketId, day)))
     return { verdict: 'duplicate', ticketId: row.ticketId, row };
   return { verdict: 'admit', ticketId: row.ticketId, row };
+}
+
+/** Index manifest rows by their legacy payload hashes (the offline lookup for migrated tickets). */
+export function legacyIndex(rows: Iterable<ManifestRow>): Map<string, ManifestRow> {
+  const out = new Map<string, ManifestRow>();
+  for (const r of rows) for (const h of r.legacyHashes ?? []) out.set(h, r);
+  return out;
 }
 
 /** SHA-256 of `salt:value`, hex — the manifest's offline lookup hash for a normalized email. */

@@ -6,7 +6,7 @@ import { useActionState } from 'react';
 import type { PreferencesState } from '@/app/[locale]/o/[org]/(org)/notifications/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
-const CATEGORIES = ['sales', 'messages', 'marketing'] as const;
+const CATEGORIES = ['sales', 'messages', 'security', 'marketing'] as const;
 const CHANNELS = ['in_app', 'email', 'sms', 'push'] as const;
 
 /**

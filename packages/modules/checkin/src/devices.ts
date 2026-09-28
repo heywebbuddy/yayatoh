@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import {
   eventDay,
+  legacyPayloadHash,
   lookupHash,
   MANIFEST_VERSION,
   type ManifestHeader,
@@ -17,13 +18,20 @@ import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { memberRoleTx } from '@yayatoh/tenancy';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
-import { manifestTicketsTx, publicKeysTx, signForScannersTx, ticketForScanTx } from '@yayatoh/ticketing';
+import {
+  legacyPayloadsForTicketsTx,
+  manifestTicketsTx,
+  publicKeysTx,
+  signForScannersTx,
+  ticketForLegacyCodeTx,
+  ticketForScanTx,
+} from '@yayatoh/ticketing';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
-import { checkVelocityTx } from './signals.ts';
+import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -148,6 +156,8 @@ const ManifestRowDto = z.object({
   holderName: z.string(),
   emailHash: z.string(),
   issuedAt: z.string(),
+  /** Migrated tickets (M1.9e): legacy QR payloads as salted hashes only (additive). */
+  legacyHashes: z.array(z.string()).optional(),
 });
 
 export const ManifestPageDto = z.object({
@@ -255,7 +265,12 @@ export const deviceManifestQuery = tenantQuery({
       input.limit,
     );
     const rows: ManifestRow[] = [];
+    const legacy = await legacyPayloadsForTicketsTx(
+      tx,
+      page.map((t) => t.id),
+    );
     for (const t of page) {
+      const payloads = legacy.get(t.id) ?? [];
       rows.push({
         ticketId: t.id,
         shortCode: t.shortCode,
@@ -268,6 +283,9 @@ export const deviceManifestQuery = tenantQuery({
         holderName: t.holderName,
         emailHash: await lookupHash(salt, t.holderEmail),
         issuedAt: t.createdAt.toISOString(),
+        ...(payloads.length
+          ? { legacyHashes: await Promise.all(payloads.map((p) => legacyPayloadHash(salt, p))) }
+          : {}),
       });
     }
     const last = page.at(-1);
@@ -328,7 +346,15 @@ const DEVICE_VERDICTS = [
 ] as const;
 
 export const SyncResultDto = z.object({
-  results: z.array(z.object({ scanId: z.uuid(), result: z.string(), stored: z.boolean() })),
+  results: z.array(
+    z.object({
+      scanId: z.uuid(),
+      result: z.string(),
+      stored: z.boolean(),
+      /** Open high-severity fraud signals about the scanned ticket or its order (M1.9e, additive). */
+      openSignals: z.int().optional(),
+    }),
+  ),
   duplicatesOffline: z.int(),
 });
 
@@ -389,6 +415,7 @@ export const syncScansCommand = tenantCommand({
       // Server truth for the code (same rules as online), at the corrected scan time.
       const code = s.code.toUpperCase();
       let ticket = null;
+      let legacy = null;
       let superseded = false;
       if (code.startsWith(CODE_PREFIX)) {
         const v = await verifyTicketCode(code, keys);
@@ -397,7 +424,9 @@ export const syncScansCommand = tenantCommand({
           if (ticket && v.rev < ticket.rev) superseded = true;
         }
       } else {
-        ticket = await ticketForScanTx(tx, { shortCode: code });
+        // A migrated ticket's legacy QR (case-sensitive, the raw code), before short codes (M1.9e).
+        legacy = await ticketForLegacyCodeTx(tx, s.code);
+        ticket = legacy ?? (await ticketForScanTx(tx, { shortCode: code }));
       }
       const checkpoint = s.checkpointId ? (cps.get(s.checkpointId) ?? null) : null;
       const inScope = scopeAllowsCheckpoint(scope, checkpoint?.id ?? null);
@@ -516,9 +545,11 @@ export const syncScansCommand = tenantCommand({
           result,
           codeKind: code.startsWith(CODE_PREFIX)
             ? 'yy1'
-            : /^[2-9A-HJKMNP-TV-Z]{8}$/.test(code)
-              ? 'short'
-              : 'unknown',
+            : legacy
+              ? 'legacy'
+              : /^[2-9A-HJKMNP-TV-Z]{8}$/.test(code)
+                ? 'short'
+                : 'unknown',
           clientScanId: s.scanId,
           scannedAt: at,
           deviceId,
@@ -528,7 +559,12 @@ export const syncScansCommand = tenantCommand({
           checkpointId: checkpoint?.id ?? null,
         })
         .onConflictDoNothing();
-      results.push({ scanId: s.scanId, result, stored: true });
+      results.push({
+        scanId: s.scanId,
+        result,
+        stored: true,
+        openSignals: ticket && inScope ? await openHighSignalCountTx(tx, ticket) : 0,
+      });
       if (ticket && OK_RESULTS.has(result)) okTickets.push(ticket.id);
     }
     // Velocity rules over the uploaded log (corrected times), alongside the online ones.

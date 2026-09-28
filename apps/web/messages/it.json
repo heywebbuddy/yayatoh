@@ -59,6 +59,9 @@
       "other": "Notifica",
       "payments": {
         "destination-changed": "Nuovo conto per i pagamenti: i trasferimenti verso questo conto iniziano dopo il {until}"
+      },
+      "security": {
+        "fraud_signal": "Avviso di frode: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}{eventName, select, none {} other { · {eventName}}}"
       }
     },
     "kinds": {
@@ -95,6 +98,9 @@
       },
       "payments": {
         "destination-changed": "Modifica del conto per i pagamenti"
+      },
+      "security": {
+        "fraud_signal": "Avviso di frode"
       }
     },
     "status": {
@@ -145,6 +151,10 @@
         "messages": {
           "name": "Messaggi",
           "hint": "Un cliente scrive alla tua organizzazione."
+        },
+        "security": {
+          "name": "Avvisi di frode e sicurezza",
+          "hint": "Segnali di frode di gravità alta: all’ingresso, al checkout e conversazioni segnalate."
         },
         "marketing": {
           "name": "Novità da Yayatoh",
@@ -959,7 +969,12 @@
       "invalid_burst": "Diversi codici non validi di fila",
       "device_velocity": "Scansioni più veloci di quanto possa una persona",
       "impossible_travel": "Biglietto ammesso in due punti troppo distanti",
-      "rejected_burst": "Molte scansioni rifiutate di fila"
+      "rejected_burst": "Molte scansioni rifiutate di fila",
+      "purchase_velocity": "Molti ordini dallo stesso acquirente",
+      "country_mismatch": "Acquistato da un altro paese",
+      "checkout_blocked": "Checkout bloccato dalle regole di rischio",
+      "card_testing": "Possibile test di carte",
+      "chat_abuse": "Conversazione segnalata"
     },
     "chooseStand": "Scegli il tuo varco",
     "location": "Posizione (facoltativa)",
@@ -3132,7 +3147,9 @@
     "flagged": "Segnalato al pagamento",
     "rules": {
       "email_velocity_review": "Molti ordini da questa email in un’ora",
-      "country_mismatch_review": "Acquistato da un paese diverso da quello dell’evento"
+      "country_mismatch_review": "Acquistato da un paese diverso da quello dell’evento",
+      "email_velocity_block": "Troppi ordini da questa email in un’ora",
+      "payment_failures_block": "Troppi pagamenti non riusciti da questa email"
     }
   },
   "refundPolicy": {
@@ -3632,5 +3649,51 @@
     "invalidPassword": "La password non è corretta.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti, poi riprova.",
     "unauthenticated": "La sessione è scaduta. Accedi di nuovo."
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, one {# segnale aperto di gravità alta su questo biglietto} other {# segnali aperti di gravità alta su questo biglietto}}",
+      "action": "Chiedi a un responsabile prima di far entrare."
+    },
+    "note": {
+      "label": "Nota",
+      "hint": "Facoltativa per prendere in carico; obbligatoria per archiviare.",
+      "required": "Indica perché lo archivi (almeno 3 caratteri).",
+      "shown": "Nota: {note}"
+    },
+    "filter": {
+      "title": "Filtra i segnali",
+      "kind": "Tipo",
+      "allKinds": "Tutti i tipi",
+      "severity": "Gravità",
+      "allSeverities": "Tutte le gravità",
+      "status": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "apply": "Filtra",
+      "clear": "Rimuovi i filtri",
+      "showing": "{count, plural, =0 {Nessun segnale corrisponde al filtro} one {# segnale corrisponde al filtro} other {# segnali corrispondono al filtro}}",
+      "emptyTitle": "Nessun segnale corrispondente",
+      "emptyDescription": "Prova un altro tipo, gravità o stato."
+    },
+    "source": {
+      "checkin": "All’ingresso",
+      "checkout": "Al checkout",
+      "chat": "Segnalazione chat"
+    },
+    "summary": {
+      "orders": "{count, plural, one {# ordine da questa email in un’ora} other {# ordini da questa email in un’ora}}",
+      "failures": "{count, plural, one {# pagamento non riuscito} other {# pagamenti non riusciti}}",
+      "reason": {
+        "spam": "Segnalato come spam",
+        "abuse": "Segnalato come offensivo",
+        "other": "Segnalato per un altro motivo"
+      }
+    },
+    "openOrder": "Apri l’ordine",
+    "openConversation": "Apri la conversazione",
+    "timeline": {
+      "title": "Segnali",
+      "empty": "Nessun segnale di frode su questo ordine."
+    }
   }
 }

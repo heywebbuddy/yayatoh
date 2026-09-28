@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "Testmelding",
       "intro": "Meldingen werken."
+    },
+    "security.fraud_signal": {
+      "subject": "Fraudemelding: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}",
+      "intro": "Een signaal met hoge ernst bij {org}{eventName, select, none {} other { ({eventName})}} moet bekeken worden: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}. Open het om het op te pakken of te negeren.",
+      "cta": "Signaal bekijken"
     }
   },
   "roles": {

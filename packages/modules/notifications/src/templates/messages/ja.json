@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "テスト通知",
       "intro": "通知は正常に動作しています。"
+    },
+    "security.fraud_signal": {
+      "subject": "不正アラート: {signal, select, two_entrances {同じチケットが2つの入口で使用} impossible_travel {チェックポイント間のありえない移動} device_velocity {スキャンが速すぎるスキャナー} invalid_burst {無効なコードの連続} rejected_burst {拒否されたスキャンの連続} purchase_velocity {同じ購入者からの多数の注文} country_mismatch {別の国の購入者} checkout_blocked {ブロックされた決済} card_testing {カードテストの可能性} chat_abuse {報告された会話} other {不正シグナル}}",
+      "intro": "{org}{eventName, select, none {} other {（{eventName}）}}で重要度の高いシグナルの確認が必要です: {signal, select, two_entrances {同じチケットが2つの入口で使用} impossible_travel {チェックポイント間のありえない移動} device_velocity {スキャンが速すぎるスキャナー} invalid_burst {無効なコードの連続} rejected_burst {拒否されたスキャンの連続} purchase_velocity {同じ購入者からの多数の注文} country_mismatch {別の国の購入者} checkout_blocked {ブロックされた決済} card_testing {カードテストの可能性} chat_abuse {報告された会話} other {不正シグナル}}。開いて対応済みにするか却下してください。",
+      "cta": "シグナルを確認"
     }
   },
   "roles": {

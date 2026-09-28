@@ -7,6 +7,7 @@ import { keyVault, tenantQuery } from '@yayatoh/platform';
 import {
   CODE_PREFIX,
   generateKeyPair,
+  legacyQrPayload,
   randomShortCode,
   signStatement,
   signTicketCode,
@@ -276,6 +277,8 @@ export interface ScannableTicket {
   readonly accessDates: readonly { readonly date: string; readonly name: string }[];
   /** Multi-date events: the date this ticket admits, or null (every date). */
   readonly occurrenceId: string | null;
+  /** The order it was sold in (fraud signals on the order reach the door, M1.9e). */
+  readonly orderId: string;
 }
 
 /** A ticket for the check-in engine, by id (from a verified code) or by its short code. */
@@ -296,28 +299,12 @@ export async function ticketForScanTx(
       typeName: ticketTypes.name,
       accessDates: ticketTypes.accessDates,
       occurrenceId: tickets.occurrenceId,
+      orderId: tickets.orderId,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
     .where('id' in by ? eq(tickets.id, by.id) : eq(tickets.shortCode, by.shortCode.trim().toUpperCase()));
   return row ? { ...row, status: row.status as ScannableTicket['status'] } : null;
-}
-
-/**
- * Legacy QR codes (roadmap §7.5): the old apps encoded the booking's `order_number`, raw or inside a
- * JSON object. Returns the payload to look up, or null when the text cannot be one.
- */
-export function legacyQrPayload(raw: string): string | null {
-  const text = raw.trim();
-  if (text.startsWith('{')) {
-    try {
-      const v = (JSON.parse(text) as Record<string, unknown>).order_number;
-      return typeof v === 'string' || typeof v === 'number' ? legacyQrPayload(String(v)) : null;
-    } catch {
-      return null;
-    }
-  }
-  return /^[0-9A-Za-z_-]{6,64}$/.test(text) ? text : null;
 }
 
 /** The ticket a migrated legacy QR payload still admits (its active `legacy_eventmie` barcode). */
@@ -335,6 +322,30 @@ export async function ticketForLegacyCodeTx(tx: TenantTx, raw: string): Promise<
       ),
     );
   return b ? ticketForScanTx(tx, { id: b.ticketId }) : null;
+}
+
+/**
+ * The active legacy QR payloads of some tickets (M1.9e): the offline manifest carries them only
+ * as salted hashes, so migrated tickets scan offline too.
+ */
+export async function legacyPayloadsForTicketsTx(
+  tx: TenantTx,
+  ticketIds: readonly string[],
+): Promise<Map<string, string[]>> {
+  const out = new Map<string, string[]>();
+  if (ticketIds.length === 0) return out;
+  const rows = await tx
+    .select({ ticketId: ticketBarcodes.ticketId, payload: ticketBarcodes.payload })
+    .from(ticketBarcodes)
+    .where(
+      and(
+        inArray(ticketBarcodes.ticketId, [...ticketIds]),
+        eq(ticketBarcodes.format, 'legacy_eventmie'),
+        eq(ticketBarcodes.active, true),
+      ),
+    );
+  for (const r of rows) out.set(r.ticketId, [...(out.get(r.ticketId) ?? []), r.payload]);
+  return out;
 }
 
 /** Ids of an event's ticket types (checkpoint zones list the ones allowed in). */

@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "Тестовое уведомление",
       "intro": "Уведомления работают."
+    },
+    "security.fraud_signal": {
+      "subject": "Сигнал мошенничества: {signal, select, two_entrances {один билет на двух входах} impossible_travel {невозможное перемещение между пунктами} device_velocity {сканер работает слишком быстро} invalid_burst {серия недействительных кодов} rejected_burst {серия отклонённых сканирований} purchase_velocity {много заказов от одного покупателя} country_mismatch {покупатель в другой стране} checkout_blocked {заблокированная оплата} card_testing {возможная проверка карт} chat_abuse {жалоба на переписку} other {сигнал мошенничества}}",
+      "intro": "В {org}{eventName, select, none {} other { ({eventName})}} нужно проверить сигнал высокой важности: {signal, select, two_entrances {один билет на двух входах} impossible_travel {невозможное перемещение между пунктами} device_velocity {сканер работает слишком быстро} invalid_burst {серия недействительных кодов} rejected_burst {серия отклонённых сканирований} purchase_velocity {много заказов от одного покупателя} country_mismatch {покупатель в другой стране} checkout_blocked {заблокированная оплата} card_testing {возможная проверка карт} chat_abuse {жалоба на переписку} other {сигнал мошенничества}}. Откройте его, чтобы взять в работу или отклонить.",
+      "cta": "Проверить сигнал"
     }
   },
   "roles": {

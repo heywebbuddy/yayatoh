@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "Notificação de teste",
       "intro": "As notificações estão funcionando."
+    },
+    "security.fraud_signal": {
+      "subject": "Alerta de fraude: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}",
+      "intro": "Um sinal de gravidade alta precisa de atenção em {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}. Abra-o para confirmar ou descartar.",
+      "cta": "Rever o sinal"
     }
   },
   "roles": {

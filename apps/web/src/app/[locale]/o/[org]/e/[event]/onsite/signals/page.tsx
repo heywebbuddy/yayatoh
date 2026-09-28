@@ -1,37 +1,53 @@
 import { getUsersByIds } from '@yayatoh/auth';
-import { detectionSettingsQuery, listFraudSignalsQuery } from '@yayatoh/checkin';
+import {
+  detectionSettingsQuery,
+  FRAUD_SEVERITIES,
+  FRAUD_SIGNAL_KINDS,
+  type FraudSeverity,
+  type FraudSignalKind,
+  listFraudSignalsQuery,
+} from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DetectionForm } from '@/components/detection-form.tsx';
-import { SignalActions } from '@/components/signal-actions.tsx';
-import { SEVERITY_DOT, signalSummary } from '@/components/signal-summary.ts';
+import { SignalItem } from '@/components/signal-item.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { resolveSignalAction, saveDetectionAction } from './actions.ts';
 
+const STATUSES = ['all', 'open', 'acknowledged', 'dismissed'] as const;
+type StatusFilter = (typeof STATUSES)[number];
+
+const pick = <T extends string>(list: readonly T[], v: string | string[] | undefined): T | undefined =>
+  typeof v === 'string' && (list as readonly string[]).includes(v) ? (v as T) : undefined;
+
 /**
- * The event's fraud list (M1.9d): every signal with its severity and status. Managers acknowledge
- * or dismiss (audited) and tune the velocity rules; door staff read it; others can't open it.
+ * The event's Signals list (M1.9d fraud list, M1.9e: every source). Filter by kind, severity and
+ * status (a GET form: the filter is in the URL); managers acknowledge or dismiss with a note
+ * (audited) and tune the velocity rules; door staff read it; others can't open it.
  */
 export default async function SignalsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
+  const sp = await searchParams;
   const { data, event: ev } = await loadEvent(org, event);
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'onsite')) notFound();
   const t = await getTranslations();
-  const canRead =
-    roleCan(data.role, 'checkin:scan') || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'checkin:scan');
+  const roles = await eventRolesOf(data.ctx, ev.id);
+  const canRead = roleCan(data.role, 'checkin:scan') || eventRoleCan(roles, 'checkin:scan');
   if (!canRead) {
     return (
       <>
@@ -40,59 +56,120 @@ export default async function SignalsPage({
       </>
     );
   }
-  const canTriage =
-    roleCan(data.role, 'events:write') || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'events:write');
-  const signals = await executeQuery(listFraudSignalsQuery, { eventId: ev.id }, data.ctx, ports);
+  const canTriage = roleCan(data.role, 'events:write') || eventRoleCan(roles, 'events:write');
+  const kind = pick<FraudSignalKind>(FRAUD_SIGNAL_KINDS, sp.kind);
+  const severity = pick<FraudSeverity>(FRAUD_SEVERITIES, sp.severity);
+  const status: StatusFilter = pick(STATUSES, sp.status) ?? 'all';
+  const filtered = Boolean(kind || severity || status !== 'all');
+  const signals = await executeQuery(
+    listFraudSignalsQuery,
+    { eventId: ev.id, status, ...(kind ? { kind } : {}), ...(severity ? { severity } : {}) },
+    data.ctx,
+    ports,
+  );
   const settings = await executeQuery(detectionSettingsQuery, { eventId: ev.id }, data.ctx, ports);
   const people = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
-  const nameOf = (id: string) => people.get(id)?.name ?? t('team.unknownUser');
-  const when = new Intl.DateTimeFormat(locale, {
-    timeZone: ev.timezone,
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
   const open = signals.filter((s) => s.status === 'open').length;
+  const base = `/o/${org}/e/${event}`;
+  const select = 'min-h-10 rounded-pill border border-zinc-300 bg-white px-4 text-body';
   return (
     <>
-      <PageHeader title={t('signals.title')} description={t('signals.description', { open })} />
-      <Link href={`/o/${org}/e/${event}/onsite`} className="text-body underline">
+      <PageHeader
+        title={t('signals.title')}
+        description={
+          filtered
+            ? t('fraudSignals.filter.showing', { count: signals.length })
+            : t('signals.description', { open })
+        }
+      />
+      <Link href={`${base}/onsite`} className="text-body underline">
         {t('doorStaff.back')}
       </Link>
+      <form
+        method="get"
+        aria-label={t('fraudSignals.filter.title')}
+        className="flex flex-wrap items-end gap-3"
+      >
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="signal-kind" className="text-caption text-zinc-600">
+            {t('fraudSignals.filter.kind')}
+          </label>
+          <select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
+            <option value="">{t('fraudSignals.filter.allKinds')}</option>
+            {FRAUD_SIGNAL_KINDS.map((k) => (
+              <option key={k} value={k}>
+                {t(`checkpoints.signal.${k}`)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="signal-severity" className="text-caption text-zinc-600">
+            {t('fraudSignals.filter.severity')}
+          </label>
+          <select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
+            <option value="">{t('fraudSignals.filter.allSeverities')}</option>
+            {FRAUD_SEVERITIES.map((s) => (
+              <option key={s} value={s}>
+                {t(`signals.severity.${s}`)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="signal-status" className="text-caption text-zinc-600">
+            {t('fraudSignals.filter.status')}
+          </label>
+          <select id="signal-status" name="status" defaultValue={status} className={select}>
+            {STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {s === 'all' ? t('fraudSignals.filter.allStatuses') : t(`signals.status.${s}`)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button type="submit" variant="secondary">
+          {t('fraudSignals.filter.apply')}
+        </Button>
+        {filtered ? (
+          <Link href={`${base}/onsite/signals`} className="min-h-6 self-center text-body underline">
+            {t('fraudSignals.filter.clear')}
+          </Link>
+        ) : null}
+      </form>
       <section aria-labelledby="signal-list-heading" className="flex flex-col gap-3">
         <h2 id="signal-list-heading" className="text-section">
           {t('signals.listTitle')}
         </h2>
         {signals.length === 0 ? (
-          <EmptyState title={t('signals.emptyTitle')} description={t('signals.emptyDescription')} />
+          filtered ? (
+            <EmptyState
+              title={t('fraudSignals.filter.emptyTitle')}
+              description={t('fraudSignals.filter.emptyDescription')}
+            />
+          ) : (
+            <EmptyState title={t('signals.emptyTitle')} description={t('signals.emptyDescription')} />
+          )
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
-            {signals.map((s) => {
-              const what = `${t(`checkpoints.signal.${s.kind}`)}${signalSummary(s, t, nameOf)}`;
-              return (
-                <li key={s.id}>
-                  <Card className="flex flex-col gap-2" data-signal={s.kind}>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                      <StatusDot
-                        status={SEVERITY_DOT[s.severity]}
-                        label={t(`signals.severity.${s.severity}`)}
-                      />
-                      <span className="text-caption text-zinc-600">{when.format(s.at)}</span>
-                      <span className="text-caption text-zinc-600">{t(`signals.status.${s.status}`)}</span>
-                    </div>
-                    <p className="text-body">{what}</p>
-                    {canTriage ? (
-                      <SignalActions
-                        key={s.id}
-                        open={s.status === 'open'}
-                        label={what}
-                        acknowledge={resolveSignalAction.bind(null, org, event, s.id, 'acknowledged')}
-                        dismiss={resolveSignalAction.bind(null, org, event, s.id, 'dismissed')}
-                      />
-                    ) : null}
-                  </Card>
-                </li>
-              );
-            })}
+            {signals.map((s) => (
+              <li key={s.id}>
+                <SignalItem
+                  signal={s}
+                  timeZone={ev.timezone}
+                  people={Object.fromEntries([...people].map(([id, u]) => [id, u.name]))}
+                  orderHref={
+                    s.orderId && roleCan(data.role, 'orders:read') ? `${base}/orders/${s.orderId}` : null
+                  }
+                  threadHref={
+                    s.threadId && roleCan(data.role, 'messages:read')
+                      ? `/o/${org}/messages/${s.threadId}`
+                      : null
+                  }
+                  action={canTriage ? resolveSignalAction.bind(null, org, event, s.id) : null}
+                />
+              </li>
+            ))}
           </ul>
         )}
       </section>

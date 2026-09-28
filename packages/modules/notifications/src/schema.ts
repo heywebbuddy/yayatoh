@@ -27,6 +27,8 @@ export const CATEGORIES = [
   'marketing',
   'sales',
   'messages',
+  /** Fraud and security alerts for the org's team (M1.9e). */
+  'security',
 ] as const;
 export const PREFERENCE_CHANNELS = ['in_app', 'email', 'sms', 'push'] as const;
 export const PUSH_PLATFORMS = ['fcm', 'apns', 'webpush'] as const;

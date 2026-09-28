@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "Test notification",
       "intro": "Notifications are working."
+    },
+    "security.fraud_signal": {
+      "subject": "Fraud alert: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}",
+      "intro": "A high-severity signal needs a look at {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}. Open it to acknowledge or dismiss it.",
+      "cta": "Review the signal"
     }
   },
   "roles": {

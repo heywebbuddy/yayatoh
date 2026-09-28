@@ -22,7 +22,7 @@ import {
 } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
-import { checkVelocityTx, FraudSignalDto, fraudSignalsTx } from './signals.ts';
+import { checkVelocityTx, FraudSignalDto, fraudSignalsTx, openHighSignalCountTx } from './signals.ts';
 import { actorScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const SHORT_CODE = /^[2-9A-HJKMNP-TV-Z]{8}$/;
@@ -40,6 +40,11 @@ export const ScanOutcomeDto = z.object({
   admissionId: z.uuid().nullable(),
   /** For a duplicate: when the ticket was first admitted today. */
   firstAdmittedAt: z.date().nullable(),
+  /**
+   * Open high-severity fraud signals about this ticket or its order (M1.9e): the door shows a
+   * banner to fetch a supervisor. A count only; 0 when no ticket is described.
+   */
+  openSignals: z.int(),
 });
 export type ScanOutcomeDto = z.infer<typeof ScanOutcomeDto>;
 
@@ -92,11 +97,13 @@ export const scanTicketCommand = tenantCommand({
         const [adm] = prior.admissionId
           ? await tx.select().from(admissions).where(eq(admissions.id, prior.admissionId))
           : [];
+        const priorTicket = prior.ticketId ? await ticketForScanTx(tx, { id: prior.ticketId }) : null;
         return {
           result: prior.result as ScanResult,
-          ticket: prior.ticketId ? summary(await ticketForScanTx(tx, { id: prior.ticketId })) : null,
+          ticket: summary(priorTicket),
           admissionId: prior.admissionId,
           firstAdmittedAt: prior.result === 'duplicate' ? (adm?.admittedAt ?? null) : null,
+          openSignals: priorTicket ? await openHighSignalCountTx(tx, priorTicket) : 0,
         };
       }
     }
@@ -198,11 +205,13 @@ export const scanTicketCommand = tenantCommand({
     });
     // Tickets for another event are not described: a scanner only learns about this event's tickets.
     // Nor are tickets shown where the scanner may not scan.
+    const described = result !== 'wrong_event' && result !== 'wrong_checkpoint';
     return {
       result,
-      ticket: result === 'wrong_event' || result === 'wrong_checkpoint' ? null : summary(ticket),
+      ticket: described ? summary(ticket) : null,
       admissionId,
       firstAdmittedAt,
+      openSignals: described && ticket ? await openHighSignalCountTx(tx, ticket) : 0,
     };
   },
   audit: (input, r) => ({
@@ -332,7 +341,13 @@ export const checkinStatusQuery = tenantQuery({
     const byCheckpoint = cps
       .filter((c) => c.kind === 'entrance' && (c.archivedAt === null || counts.has(c.id)))
       .map((c) => ({ checkpointId: c.id, name: c.name, admittedToday: counts.get(c.id) ?? 0 }));
-    const signals = await fraudSignalsTx(tx, event.id, { openOnly: true, limit: 20 });
+    // The door screen shows the door's own signals; checkout and chat ones live on the fraud list
+    // and the order (a scan of an affected ticket still shows its count, M1.9e).
+    const signals = await fraudSignalsTx(tx, event.id, {
+      openOnly: true,
+      limit: 20,
+      filter: { source: 'checkin' },
+    });
     const doorStaff = (await eventStaffTx(tx, event.id, ctx.now)).filter((g) => g.role === 'door_staff');
     const staffAt = (checkpointId: string | null) =>
       doorStaff

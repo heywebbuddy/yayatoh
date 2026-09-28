@@ -59,6 +59,9 @@
       "other": "通知",
       "payments": {
         "destination-changed": "新的撥款帳戶：匯入此帳戶的轉帳將於 {until} 之後開始"
+      },
+      "security": {
+        "fraud_signal": "詐欺警示：{signal, select, two_entrances {同一張票出現在兩個入口} impossible_travel {檢查點之間不可能的移動} device_velocity {掃描過快的掃描裝置} invalid_burst {一連串無效代碼} rejected_burst {一連串被拒絕的掃描} purchase_velocity {同一買家的大量訂單} country_mismatch {買家位於其他國家} checkout_blocked {被攔截的結帳} card_testing {疑似盜刷測試} chat_abuse {被檢舉的對話} other {詐欺訊號}}{eventName, select, none {} other { · {eventName}}}"
       }
     },
     "kinds": {
@@ -95,6 +98,9 @@
       },
       "payments": {
         "destination-changed": "撥款帳戶變更"
+      },
+      "security": {
+        "fraud_signal": "詐欺警示"
       }
     },
     "status": {
@@ -145,6 +151,10 @@
         "messages": {
           "name": "訊息",
           "hint": "有客戶聯絡您的組織。"
+        },
+        "security": {
+          "name": "詐欺與安全警示",
+          "hint": "高嚴重性詐欺訊號：入口、結帳和被檢舉的對話。"
         },
         "marketing": {
           "name": "Yayatoh 消息",
@@ -959,7 +969,12 @@
       "invalid_burst": "連續出現多個無效代碼",
       "device_velocity": "掃描速度超出人工可能",
       "impossible_travel": "同一票券在相距過遠的兩處被放行",
-      "rejected_burst": "連續多次掃描被拒"
+      "rejected_burst": "連續多次掃描被拒",
+      "purchase_velocity": "同一買家的大量訂單",
+      "country_mismatch": "從其他國家購買",
+      "checkout_blocked": "結帳被風險規則攔截",
+      "card_testing": "疑似盜刷測試",
+      "chat_abuse": "對話被檢舉"
     },
     "chooseStand": "選擇你的檢查點",
     "location": "位置(選填)",
@@ -3132,7 +3147,9 @@
     "flagged": "結帳時被標記",
     "rules": {
       "email_velocity_review": "此電子郵件一小時內下了多筆訂單",
-      "country_mismatch_review": "購買地與活動所在國家不同"
+      "country_mismatch_review": "購買地與活動所在國家不同",
+      "email_velocity_block": "此電子郵件一小時內的訂單過多",
+      "payment_failures_block": "此電子郵件的付款失敗次數過多"
     }
   },
   "refundPolicy": {
@@ -3632,5 +3649,51 @@
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
     "unauthenticated": "工作階段已結束，請重新登入。"
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, other {此票有 # 個未處理的高嚴重性訊號}}",
+      "action": "放行前請先詢問主管。"
+    },
+    "note": {
+      "label": "備註",
+      "hint": "確認時可選；忽略時必填。",
+      "required": "請說明忽略的原因（至少 3 個字元）。",
+      "shown": "備註：{note}"
+    },
+    "filter": {
+      "title": "篩選訊號",
+      "kind": "類型",
+      "allKinds": "所有類型",
+      "severity": "嚴重性",
+      "allSeverities": "所有嚴重性",
+      "status": "狀態",
+      "allStatuses": "所有狀態",
+      "apply": "篩選",
+      "clear": "清除篩選",
+      "showing": "{count, plural, =0 {沒有符合篩選條件的訊號} other {# 個訊號符合篩選條件}}",
+      "emptyTitle": "沒有符合的訊號",
+      "emptyDescription": "請嘗試其他類型、嚴重性或狀態。"
+    },
+    "source": {
+      "checkin": "入口",
+      "checkout": "結帳時",
+      "chat": "聊天檢舉"
+    },
+    "summary": {
+      "orders": "{count, plural, other {此電子郵件一小時內下了 # 筆訂單}}",
+      "failures": "{count, plural, other {# 次付款失敗}}",
+      "reason": {
+        "spam": "被檢舉為垃圾訊息",
+        "abuse": "被檢舉為辱罵",
+        "other": "因其他原因被檢舉"
+      }
+    },
+    "openOrder": "開啟訂單",
+    "openConversation": "開啟對話",
+    "timeline": {
+      "title": "訊號",
+      "empty": "此訂單沒有詐欺訊號。"
+    }
   }
 }

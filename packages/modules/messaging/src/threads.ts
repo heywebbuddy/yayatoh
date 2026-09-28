@@ -1,7 +1,7 @@
-import { normalizeEmail } from '@yayatoh/crm';
+import { contactIdByEmailTx, normalizeEmail } from '@yayatoh/crm';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { createCtx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { suppressEmailTx, unsuppressEmailTx } from '@yayatoh/notifications';
 import {
   defineSubscriber,
@@ -293,6 +293,34 @@ export const blockThreadCommand = tenantCommand({
   }),
 });
 
+/**
+ * `messaging.report_filed@1` (M1.9e): a conversation was reported. Ids and enums only (never the
+ * note, the messages or the address); check-in turns organizer reports into fraud signals.
+ */
+async function reportFiledEvent(
+  tx: TenantTx,
+  t: typeof threads.$inferSelect,
+  reportId: string,
+  reporter: 'organizer' | 'contact',
+  reason: (typeof REPORT_REASONS)[number],
+): Promise<DomainEvent> {
+  return {
+    type: 'messaging.report_filed',
+    version: 1,
+    aggregateType: 'thread',
+    aggregateId: t.id,
+    payload: {
+      orgId: t.orgId,
+      reportId,
+      threadId: t.id,
+      eventId: t.lastEventId,
+      contactId: await contactIdByEmailTx(tx, t.contactEmail),
+      reporter,
+      reason,
+    },
+  };
+}
+
 const ReportInput = z.object({
   reason: z.enum(REPORT_REASONS),
   note: z.string().trim().max(1000).optional(),
@@ -305,16 +333,20 @@ export const reportThreadCommand = tenantCommand({
   output: z.object({ reported: z.boolean() }),
   entitlement: 'messaging',
   permission: 'messages:send',
-  handler: async ({ input, ctx, tx }) => {
-    await threadTx(tx, input.threadId);
-    await tx.insert(reports).values({
-      orgId: requireOrg(ctx),
-      threadId: input.threadId,
-      reporter: 'organizer',
-      reporterUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
-      reason: input.reason,
-      note: input.note || null,
-    });
+  handler: async ({ input, ctx, tx, emit }) => {
+    const t = await threadTx(tx, input.threadId);
+    const [report] = await tx
+      .insert(reports)
+      .values({
+        orgId: requireOrg(ctx),
+        threadId: input.threadId,
+        reporter: 'organizer',
+        reporterUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        reason: input.reason,
+        note: input.note || null,
+      })
+      .returning({ id: reports.id });
+    if (report) emit(await reportFiledEvent(tx, t, report.id, 'organizer', input.reason));
     return { reported: true };
   },
   audit: (input) => ({
@@ -454,15 +486,19 @@ export const contactReportCommand = tenantCommand({
   output: z.object({ reported: z.boolean() }),
   entitlement: 'messaging',
   permission: 'public:messaging',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const t = await threadFromToken(tx, input.token);
-    await tx.insert(reports).values({
-      orgId: requireOrg(ctx),
-      threadId: t.id,
-      reporter: 'contact',
-      reason: input.reason,
-      note: input.note || null,
-    });
+    const [report] = await tx
+      .insert(reports)
+      .values({
+        orgId: requireOrg(ctx),
+        threadId: t.id,
+        reporter: 'contact',
+        reason: input.reason,
+        note: input.note || null,
+      })
+      .returning({ id: reports.id });
+    if (report) emit(await reportFiledEvent(tx, t, report.id, 'contact', input.reason));
     return { reported: true, threadId: t.id };
   },
   present: () => ({ reported: true }),

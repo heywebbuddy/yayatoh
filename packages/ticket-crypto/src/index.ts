@@ -1,4 +1,5 @@
 export { base32Decode, base32Encode } from './base32.ts';
+export { legacyPayloadHash, legacyQrPayload } from './legacy.ts';
 export {
   CODE_PREFIX,
   generateKeyPair,

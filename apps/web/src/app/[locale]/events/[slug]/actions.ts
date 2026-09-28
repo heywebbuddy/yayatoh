@@ -7,6 +7,7 @@ import {
   attachPaymentCommand,
   type CheckoutResultDto,
   checkoutRiskSignals,
+  recordCheckoutBlockCommand,
   startCheckoutCommand,
 } from '@yayatoh/orders';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
@@ -106,13 +107,33 @@ export async function checkoutAction(
     ipCountry: geo && /^[A-Z]{2}$/.test(geo) ? geo : null,
     eventCountry: signals.eventCountry,
   });
-  if (risk.action === 'block') return { code: 'forbidden', reason: 'risk_blocked' };
   const session = await getSession();
   const ctx = createCtx({
     orgId: target.orgId,
     actor: session ? { type: 'user', userId: session.userId } : { type: 'anonymous' },
     locale,
   });
+  if (risk.action === 'block') {
+    // M1.9e: the refused attempt becomes a fraud signal (card testing / order velocity) for the
+    // organizer; recording it never changes the buyer's answer.
+    try {
+      await executeCommand(
+        recordCheckoutBlockCommand,
+        {
+          eventId: target.eventId,
+          email: email.slice(0, 320),
+          rules: [...risk.rules],
+          emailOrders: signals.emailOrders,
+          paymentFailures: signals.paymentFailures,
+        },
+        ctx,
+        ports,
+      );
+    } catch (err) {
+      console.warn(`checkout block not recorded: ${(err as Error).message}`);
+    }
+    return { code: 'forbidden', reason: 'risk_blocked' };
+  }
   let result: CheckoutResultDto;
   try {
     result = await executeCommand(

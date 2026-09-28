@@ -24,5 +24,11 @@ export function signalSummary(s: FraudSignalDto, t: T, nameOf: (userId: string) 
     parts.push(t('signals.refused', { count: d.count, seconds: d.windowSeconds }));
   if (s.kind === 'impossible_travel' && d.distanceM !== null && d.seconds !== null && d.kmh !== null)
     parts.push(t('signals.speed', { metres: d.distanceM, seconds: d.seconds, kmh: d.kmh }));
+  // M1.9e: checkout risk (the rules and counts that tripped) and chat reports (the reason).
+  for (const r of d.rules) parts.push(t(`risk.rules.${r}`));
+  if (d.orders !== null) parts.push(t('fraudSignals.summary.orders', { count: d.orders }));
+  if (d.failures !== null && d.failures > 0)
+    parts.push(t('fraudSignals.summary.failures', { count: d.failures }));
+  if (d.reason) parts.push(t(`fraudSignals.summary.reason.${d.reason}`));
   return parts.map((p) => ` · ${p}`).join('');
 }

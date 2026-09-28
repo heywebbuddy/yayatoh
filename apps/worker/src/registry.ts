@@ -1,4 +1,5 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
+import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -42,6 +43,10 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     releaseCancelledSeats(),
     payoutDestinationMailer({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
+    // M1.9e: checkout risk outcomes and chat reports become fraud signals; high ones alert.
+    checkoutRiskSignals(),
+    chatReportSignals(),
+    fraudSignalAlerts({ notifier }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
 }

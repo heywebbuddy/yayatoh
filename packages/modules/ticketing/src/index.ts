@@ -1,3 +1,4 @@
+export { legacyQrPayload } from '@yayatoh/ticket-crypto';
 export {
   archiveTicketTypeCommand,
   createTicketTypeCommand,
@@ -51,7 +52,7 @@ export {
   type IssuedTicket,
   type IssueRequest,
   issueTicketsTx,
-  legacyQrPayload,
+  legacyPayloadsForTicketsTx,
   type ManifestTicket,
   manifestTicketsTx,
   publicKeysTx,

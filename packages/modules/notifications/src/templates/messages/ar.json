@@ -80,6 +80,11 @@
     "notifications.test": {
       "subject": "إشعار تجريبي",
       "intro": "الإشعارات تعمل."
+    },
+    "security.fraud_signal": {
+      "subject": "تنبيه احتيال: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}",
+      "intro": "توجد إشارة عالية الخطورة تحتاج إلى مراجعة في {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}. افتحها لتأكيدها أو تجاهلها.",
+      "cta": "مراجعة الإشارة"
     }
   },
   "roles": {

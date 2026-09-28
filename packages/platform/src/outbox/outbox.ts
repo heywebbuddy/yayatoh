@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { actorId, type Ctx, type DomainEvent, requireOrg } from '@yayatoh/kernel';
-import { and, asc, gt, inArray } from 'drizzle-orm';
+import { and, desc, gt, inArray } from 'drizzle-orm';
 import { domainEvents } from '../schema.ts';
 
 /** Write events to the outbox inside the caller's tenant transaction (step 8). */
@@ -67,8 +67,10 @@ export async function recentEventsTx(
     .where(
       and(inArray(domainEvents.type, [...types]), gt(domainEvents.createdAt, new Date(Date.now() - sinceMs))),
     )
-    .orderBy(asc(domainEvents.createdAt), asc(domainEvents.id))
+    // The newest 500, handed over oldest first (a busy org's latest events are never cut off).
+    .orderBy(desc(domainEvents.createdAt), desc(domainEvents.id))
     .limit(500);
+  rows.reverse();
   return rows.map((r) => ({
     id: r.id,
     orgId,
