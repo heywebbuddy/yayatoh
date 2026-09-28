@@ -10,7 +10,8 @@ import { OWNER, signIn } from './helpers.ts';
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const MARKET = `http://yayatoh.localhost:${PORT}`;
 const HARBOR = `http://harbor-arts.yayatoh.events:${PORT}`;
-const PREVIEW = `http://pr-7-yayatoh.vercel.app:${PORT}`;
+const PREVIEW_HOST = `pr-7-yayatoh.vercel.app:${PORT}`;
+const PREVIEW = `http://${PREVIEW_HOST}`;
 const APP = `http://app.yayatoh.com:${PORT}`;
 
 // Headers and metadata do not depend on the viewport: one project runs it.
@@ -26,6 +27,21 @@ async function robotsOf(page: Page, url: string) {
     .getAttribute('content', { timeout: 1000 })
     .catch(() => null);
   return { status: res?.status() ?? 0, header, meta: meta ?? '' };
+}
+
+/**
+ * The same over a plain HTTP request to this server with a preview Host header. Chromium's HSTS
+ * preload list covers `vercel.app`, so the browser upgrades a navigation to it to https (which the
+ * test server does not speak); a preview deployment receives exactly this Host.
+ */
+async function robotsOfHost(page: Page, host: string, path: string) {
+  const res = await page.request.get(`http://localhost:${PORT}${path}`, {
+    headers: { host },
+    maxRedirects: 0,
+  });
+  const html = res.headers()['content-type']?.includes('text/html') ? await res.text() : '';
+  const meta = /<meta name="robots" content="([^"]*)"/.exec(html)?.[1] ?? '';
+  return { status: res.status(), header: res.headers()['x-robots-tag'] ?? '', meta };
 }
 
 async function sitemapUrls(page: Page, origin: string): Promise<string[]> {
@@ -110,11 +126,15 @@ test.describe('noindex guard (M1.11d)', () => {
     page,
   }) => {
     for (const origin of [PREVIEW, `http://localhost:${PORT}`, APP]) {
-      const r = await robotsOf(page, `${origin}/events/lakeside-open-house`);
+      const path = '/events/lakeside-open-house';
+      const r =
+        origin === PREVIEW
+          ? await robotsOfHost(page, PREVIEW_HOST, path)
+          : await robotsOf(page, `${origin}${path}`);
       expect([origin, r.header]).toEqual([origin, 'noindex, nofollow']);
       if (r.status === 200) expect([origin, r.meta]).toEqual([origin, expect.stringMatching(/noindex/)]);
     }
-    const preview = await robotsOf(page, `${PREVIEW}/`);
+    const preview = await robotsOfHost(page, PREVIEW_HOST, '/');
     expect(preview.header).toBe('noindex, nofollow');
     expect(preview.meta).toMatch(/noindex/);
   });
