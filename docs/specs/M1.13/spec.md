@@ -92,6 +92,8 @@ The M1.8 bulk-action framework (M1.8b/e/f) through `/v1/orgs/{org}/…`, additiv
 - **New API key scope `attendees:write`** ("Change attendees and resend tickets", 13 locales: `apiKeys.scope.attendees_write`). Pending the owner.
 - **SDK:** regenerated (`BulkOperation`, `BulkSelection`, the request schemas). `packages/sdk/tests/sdk.int.test.ts` starts, polls and undoes an operation through it.
 
+**Gate (2026-09-28, with M1.3's restore):** `pnpm verify` green (unit 997, integration 713); web e2e 1,097 passed, 32 skipped, 2 failed that fail the same way on the base commit (`ai-draft.spec.ts:171` "credits running out between page load and click": the "Draft with AI" button never appears, 30 s timeout; `noindex.spec.ts:55` "every page in the public sitemaps is indexable": `/o/lakeside-events/blogs` and three RTL blog posts send `X-Robots-Tag: noindex, nofollow` on the marketplace host); admin e2e 50 passed.
+
 **Migration** `packages/db/drizzle/0060_flimsy_talos.sql` (renumbered at merge; shared with M1.3's restore): widens `tenancy.api_keys_scopes_check` (+ `attendees:write`) and `tenancy.org_status_changes_action_check` (+ `restore`). Generated as drop + add; hand-edited (`-- hand-written` block) to add both `NOT VALID` and then `VALIDATE`, plus two header lines. No new tables.
 
 ## Later / not yet
