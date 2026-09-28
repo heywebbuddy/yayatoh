@@ -9,7 +9,11 @@ import {
   searchTerms,
 } from '../src/domain/help.ts';
 
-const doc = (slug: string, title: string, over: Partial<{ summary: string; keywords: string; body: string }> = {}) => ({
+const doc = (
+  slug: string,
+  title: string,
+  over: Partial<{ summary: string; keywords: string; body: string }> = {},
+) => ({
   slug,
   title,
   summary: over.summary ?? null,
@@ -74,8 +78,12 @@ describe('ranking (M3.11b)', () => {
 
   it('matches accents, other scripts and CJK without spaces', () => {
     expect(rankArticles('reembolso', [doc('es', 'Reembolsó rápido')]).map((x) => x.doc.slug)).toEqual(['es']);
-    expect(rankArticles('استرداد', [doc('ar', 'طلب استرداد المبلغ'), doc('en', 'Refund')]).map((x) => x.doc.slug)).toEqual(['ar']);
-    expect(rankArticles('チケット', [doc('ja', 'チケットを譲渡する')]).map((x) => x.doc.slug)).toEqual(['ja']);
+    expect(
+      rankArticles('استرداد', [doc('ar', 'طلب استرداد المبلغ'), doc('en', 'Refund')]).map((x) => x.doc.slug),
+    ).toEqual(['ar']);
+    expect(rankArticles('チケット', [doc('ja', 'チケットを譲渡する')]).map((x) => x.doc.slug)).toEqual([
+      'ja',
+    ]);
     expect(rankArticles('退款', [doc('zh', '申请退款')]).map((x) => x.doc.slug)).toEqual(['zh']);
   });
 
@@ -144,7 +152,9 @@ describe('call-to-action links (M3.11b)', () => {
 
 describe('plain excerpt', () => {
   it('drops Markdown markup, keeps hyphenated words and caps the length', () => {
-    expect(plainExcerpt('## Check-in\n\n- **Scan** the [code](https://x.test)\n1. Done')).toBe('Check-in Scan the code Done');
+    expect(plainExcerpt('## Check-in\n\n- **Scan** the [code](https://x.test)\n1. Done')).toBe(
+      'Check-in Scan the code Done',
+    );
     expect(plainExcerpt('word '.repeat(100), 20)).toMatch(/…$/);
     expect(plainExcerpt('word '.repeat(100), 20).length).toBeLessThanOrEqual(20);
   });

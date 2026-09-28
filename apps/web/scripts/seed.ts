@@ -1,5 +1,4 @@
 import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
-import { closePools } from '@yayatoh/db';
 import {
   createHelpArticleCommand,
   createHelpCategoryCommand,
@@ -8,6 +7,7 @@ import {
   setHelpArticleStatusCommand,
   setSiteSectionStatusCommand,
 } from '@yayatoh/cms';
+import { closePools } from '@yayatoh/db';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
 import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -476,7 +476,12 @@ for (const d of DEMO_EVENTS) {
           ports,
         );
         if (!draft)
-          await executeCommand(setHelpArticleStatusCommand, { articleId: row.id, action: 'publish' }, ctx, ports);
+          await executeCommand(
+            setHelpArticleStatusCommand,
+            { articleId: row.id, action: 'publish' },
+            ctx,
+            ports,
+          );
       }
       for (const s of STARTER_SECTIONS) {
         const { cta, draft, ...fields } = s;
@@ -492,7 +497,12 @@ for (const d of DEMO_EVENTS) {
           ports,
         );
         if (!draft)
-          await executeCommand(setSiteSectionStatusCommand, { sectionId: row.id, action: 'publish' }, ctx, ports);
+          await executeCommand(
+            setSiteSectionStatusCommand,
+            { sectionId: row.id, action: 'publish' },
+            ctx,
+            ports,
+          );
       }
       console.info(`seed: help center and marketing sections for ${slug}`);
     }

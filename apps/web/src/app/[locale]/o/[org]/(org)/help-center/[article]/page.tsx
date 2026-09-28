@@ -81,7 +81,11 @@ export default async function HelpArticleConsole({
         <Card>
           <ArticleEditor
             action={updateArticleAction.bind(null, org, article.id)}
-            categories={categories.map((c) => ({ id: c.id, title: c.title, audienceLabel: t(`audience.${c.audience}`) }))}
+            categories={categories.map((c) => ({
+              id: c.id,
+              title: c.title,
+              audienceLabel: t(`audience.${c.audience}`),
+            }))}
             locales={null}
             slugFrozen={article.publishedAt !== null}
             submitLabel={tc('save')}

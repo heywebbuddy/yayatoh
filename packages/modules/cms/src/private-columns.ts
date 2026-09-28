@@ -50,7 +50,12 @@ export const privateColumns = columnPrivacy('cms', {
     eyebrow: internal(undefined, DRAFT),
     heading: internal(undefined, DRAFT),
     body: internal(undefined, DRAFT),
-    cta_label: internal(undefined, DRAFT),
+    // CHECKed to come with a link: a canary can't be seeded alone; drafts never leave
+    // (help-center.int.test.ts and the marketing e2e cover draft sections).
+    cta_label: internal('none', {
+      ...DRAFT,
+      why: 'set together with cta_href (CHECK); draft sections are never read publicly',
+    }),
     // CHECKed to a site path or https URL: a canary can't be seeded; drafts never leave (tests).
     cta_href: 'public',
     status: 'vocab',

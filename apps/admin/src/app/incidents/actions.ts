@@ -14,10 +14,15 @@ export interface IncidentFormState {
   readonly closed?: boolean;
 }
 
-const fieldsOf = (issues: readonly { path: PropertyKey[] }[]) => [...new Set(issues.map((i) => String(i.path[0])))];
+const fieldsOf = (issues: readonly { path: PropertyKey[] }[]) => [
+  ...new Set(issues.map((i) => String(i.path[0]))),
+];
 
 /** Open an incident on the (fake) status page: title, impact, components, first update. */
-export async function postIncidentAction(_prev: IncidentFormState, form: FormData): Promise<IncidentFormState> {
+export async function postIncidentAction(
+  _prev: IncidentFormState,
+  form: FormData,
+): Promise<IncidentFormState> {
   const staff = await requireStaff('incidents');
   if (incidentProvider() !== 'fake') return { ok: false, errors: ['provider'], stamp: Date.now() };
   const parsed = PostIncidentInput.safeParse({

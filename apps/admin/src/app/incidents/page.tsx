@@ -26,7 +26,11 @@ export default async function IncidentsPage() {
       {fake ? (
         <>
           <Card>
-            <NewIncidentForm action={postIncidentAction} impacts={INCIDENT_IMPACTS} components={STATUS_COMPONENTS} />
+            <NewIncidentForm
+              action={postIncidentAction}
+              impacts={INCIDENT_IMPACTS}
+              components={STATUS_COMPONENTS}
+            />
           </Card>
           <section aria-labelledby="incidents-list" className="flex flex-col gap-4">
             <h2 id="incidents-list" className="text-section">
@@ -41,7 +45,9 @@ export default async function IncidentsPage() {
                 </div>
                 <p className="text-caption text-zinc-600">
                   {t(`impact.${i.impact}`)} · {t('started', { date: date.format(i.startedAt) })}
-                  {i.components.length > 0 ? ` · ${i.components.map((c) => t(`component.${c}`)).join(', ')}` : ''}
+                  {i.components.length > 0
+                    ? ` · ${i.components.map((c) => t(`component.${c}`)).join(', ')}`
+                    : ''}
                 </p>
                 <ol className="flex list-none flex-col gap-2 border-s border-zinc-200 p-0 ps-4">
                   {i.updates.map((u) => (
@@ -59,7 +65,9 @@ export default async function IncidentsPage() {
                     title={i.title}
                     action={updateIncidentAction.bind(null, i.id)}
                     statuses={INCIDENT_STATUSES.filter((s) =>
-                      i.impact === 'maintenance' ? MAINTENANCE_STATUSES.includes(s) : !MAINTENANCE_STATUSES.includes(s),
+                      i.impact === 'maintenance'
+                        ? MAINTENANCE_STATUSES.includes(s)
+                        : !MAINTENANCE_STATUSES.includes(s),
                     )}
                   />
                 ) : null}

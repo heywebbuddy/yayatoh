@@ -11,9 +11,9 @@ import { ImpersonationBanner } from './impersonation-banner.tsx';
 import { MediaPicture } from './media-picture.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { OrgStatusBanner } from './org-status-banner.tsx';
-import { IncidentBanner } from './status/incident-banner.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
+import { IncidentBanner } from './status/incident-banner.tsx';
 import { StepUpProvider } from './step-up.tsx';
 
 export interface ShellNav {

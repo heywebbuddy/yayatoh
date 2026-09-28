@@ -202,7 +202,11 @@ export const deleteSiteSectionCommand = tenantCommand({
     if (!row) throw new DomainError('not_found');
     return { ok: true as const };
   },
-  audit: (input) => ({ action: 'cms.site_section.delete', targetType: 'site_section', targetId: input.sectionId }),
+  audit: (input) => ({
+    action: 'cms.site_section.delete',
+    targetType: 'site_section',
+    targetId: input.sectionId,
+  }),
 });
 
 export const listSiteSectionsQuery = tenantQuery({

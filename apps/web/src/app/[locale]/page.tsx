@@ -61,7 +61,10 @@ export default async function Home({ params, searchParams }: Props) {
         </section>
         <MarketplaceResults locale={locale} params={{ ...sp, page: 1 }} path="/events" limit={6} />
         {sections.length > 0 ? (
-          <section aria-labelledby="home-organizers" className="flex flex-col gap-6 border-t border-zinc-200 pt-10">
+          <section
+            aria-labelledby="home-organizers"
+            className="flex flex-col gap-6 border-t border-zinc-200 pt-10"
+          >
             <div className="flex flex-col gap-2">
               <h2 id="home-organizers" className="text-[32px] leading-tight font-light tracking-[-0.03em]">
                 {t('home.organizersTitle')}

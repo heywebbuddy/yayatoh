@@ -48,7 +48,10 @@ const slugConflict = () =>
   });
 
 const translationsOf = (raw: unknown) => z.record(z.string(), CategoryTranslation).catch({}).parse(raw);
-const categoryRow = (r: typeof helpCategories.$inferSelect) => ({ ...r, translations: translationsOf(r.translations) });
+const categoryRow = (r: typeof helpCategories.$inferSelect) => ({
+  ...r,
+  translations: translationsOf(r.translations),
+});
 
 async function findCategory(tx: TenantTx, id: string) {
   const [row] = await tx.select().from(helpCategories).where(eq(helpCategories.id, id));
@@ -64,7 +67,10 @@ async function findArticle(tx: TenantTx, id: string) {
 
 /** The category must exist in this org (RLS: another org's id is simply not found). */
 async function categoryOrFail(tx: TenantTx, id: string) {
-  const [row] = await tx.select({ id: helpCategories.id }).from(helpCategories).where(eq(helpCategories.id, id));
+  const [row] = await tx
+    .select({ id: helpCategories.id })
+    .from(helpCategories)
+    .where(eq(helpCategories.id, id));
   if (!row)
     throw new DomainError('validation_failed', 'Unknown category', {
       issues: [{ path: 'categoryId', code: 'unknown' }],
@@ -362,7 +368,11 @@ export const deleteHelpArticleCommand = tenantCommand({
     });
     return { ok: true as const };
   },
-  audit: (input) => ({ action: 'cms.help_article.delete', targetType: 'help_article', targetId: input.articleId }),
+  audit: (input) => ({
+    action: 'cms.help_article.delete',
+    targetType: 'help_article',
+    targetId: input.articleId,
+  }),
 });
 
 /** The console: every category and every article (any status) with its feedback counts. */
@@ -388,8 +398,9 @@ export const listHelpQuery = tenantQuery({
         status: helpArticles.status,
         position: helpArticles.position,
         updatedAt: helpArticles.updatedAt,
-        helpfulYes: sql<number>`(select count(*)::int from ${helpFeedback} f where f.article_id = ${helpArticles.id} and f.helpful)`,
-        helpfulNo: sql<number>`(select count(*)::int from ${helpFeedback} f where f.article_id = ${helpArticles.id} and not f.helpful)`,
+        // Qualified in full: inside the subquery a bare "id" would be the feedback row's.
+        helpfulYes: sql<number>`(select count(*)::int from ${helpFeedback} f where f.article_id = "cms"."help_articles"."id" and f.helpful)`,
+        helpfulNo: sql<number>`(select count(*)::int from ${helpFeedback} f where f.article_id = "cms"."help_articles"."id" and not f.helpful)`,
       })
       .from(helpArticles)
       .orderBy(asc(helpArticles.position), asc(helpArticles.title), asc(helpArticles.locale))
@@ -571,9 +582,10 @@ export async function publicHelpArticle(
 }
 
 /** Sitemap entries: every category with a published article and every published article slug. */
-export async function helpSitemapEntries(
-  orgId: string,
-): Promise<{ categories: { slug: string; updatedAt: Date }[]; articles: { slug: string; categorySlug: string; updatedAt: Date }[] }> {
+export async function helpSitemapEntries(orgId: string): Promise<{
+  categories: { slug: string; updatedAt: Date }[];
+  articles: { slug: string; categorySlug: string; updatedAt: Date }[];
+}> {
   return withTenant(publicCtx(orgId), async (tx) => {
     const rows = await tx
       .select({
@@ -600,4 +612,3 @@ export async function helpSitemapEntries(
     };
   });
 }
-

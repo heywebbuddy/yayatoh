@@ -142,7 +142,11 @@ function categoryFields(form: FormData) {
   };
 }
 
-export async function createCategoryAction(org: string, _prev: FormState, form: FormData): Promise<FormState> {
+export async function createCategoryAction(
+  org: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
   const data = await contentConsole(org);
   try {
     const slug = text(form, 'slug').trim();
@@ -156,7 +160,10 @@ export async function createCategoryAction(org: string, _prev: FormState, form: 
     return failure(err);
   }
   refresh(org, data.org.id);
-  return redirect({ href: `/o/${org}/help-center?tab=categories&created=1`, locale: data.ctx.locale ?? 'en' });
+  return redirect({
+    href: `/o/${org}/help-center?tab=categories&created=1`,
+    locale: data.ctx.locale ?? 'en',
+  });
 }
 
 export async function updateCategoryAction(
@@ -188,5 +195,8 @@ export async function deleteCategoryAction(
     return failure(err);
   }
   refresh(org, data.org.id);
-  return redirect({ href: `/o/${org}/help-center?tab=categories&deleted=1`, locale: data.ctx.locale ?? 'en' });
+  return redirect({
+    href: `/o/${org}/help-center?tab=categories&deleted=1`,
+    locale: data.ctx.locale ?? 'en',
+  });
 }

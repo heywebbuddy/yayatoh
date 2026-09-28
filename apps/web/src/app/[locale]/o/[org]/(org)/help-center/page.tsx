@@ -59,7 +59,10 @@ export default async function HelpCenterConsole({
         }
       />
       {canWrite ? null : (
-        <p role="note" className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600">
+        <p
+          role="note"
+          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
+        >
           {tc('readOnly')}
         </p>
       )}
@@ -106,7 +109,9 @@ export default async function HelpCenterConsole({
               {
                 key: 'status',
                 header: tc('columns.status'),
-                cell: (r: HelpArticleRowDto) => <StatusDot status={DOT[r.status]} label={tc(`status.${r.status}`)} />,
+                cell: (r: HelpArticleRowDto) => (
+                  <StatusDot status={DOT[r.status]} label={tc(`status.${r.status}`)} />
+                ),
               },
               {
                 key: 'helpful',
@@ -120,7 +125,11 @@ export default async function HelpCenterConsole({
                 mono: true,
                 align: 'end',
                 cell: (r: HelpArticleRowDto) =>
-                  formatDate(r.updatedAt.toISOString(), f, { year: 'numeric', month: 'short', day: 'numeric' }),
+                  formatDate(r.updatedAt.toISOString(), f, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  }),
               },
             ]}
           />
@@ -140,7 +149,10 @@ export default async function HelpCenterConsole({
                   header: tc('columns.title'),
                   cell: (r: HelpCategoryDto) => (
                     <span className="flex flex-col">
-                      <Link href={`/o/${org}/help-center/categories/${r.id}`} className="underline underline-offset-2">
+                      <Link
+                        href={`/o/${org}/help-center/categories/${r.id}`}
+                        className="underline underline-offset-2"
+                      >
                         {r.title}
                       </Link>
                       <span dir="ltr" className="font-mono text-caption text-zinc-500">
@@ -149,8 +161,18 @@ export default async function HelpCenterConsole({
                     </span>
                   ),
                 },
-                { key: 'audience', header: t('fields.audience'), cell: (r: HelpCategoryDto) => t(`audience.${r.audience}`) },
-                { key: 'position', header: t('fields.position'), mono: true, align: 'end', cell: (r: HelpCategoryDto) => String(r.position) },
+                {
+                  key: 'audience',
+                  header: t('fields.audience'),
+                  cell: (r: HelpCategoryDto) => t(`audience.${r.audience}`),
+                },
+                {
+                  key: 'position',
+                  header: t('fields.position'),
+                  mono: true,
+                  align: 'end',
+                  cell: (r: HelpCategoryDto) => String(r.position),
+                },
               ]}
             />
           )}

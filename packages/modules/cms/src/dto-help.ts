@@ -1,12 +1,7 @@
 import { defineSerializer, LOCALES } from '@yayatoh/contracts';
 import { z } from 'zod';
+import { CONTACT_TOPICS, FEEDBACK_REASONS, HELP_AUDIENCES, SITE_PLACEMENTS } from './domain/help.ts';
 import { ENTRY_STATUSES } from './domain/kinds.ts';
-import {
-  CONTACT_TOPICS,
-  FEEDBACK_REASONS,
-  HELP_AUDIENCES,
-  SITE_PLACEMENTS,
-} from './domain/help.ts';
 import { SLUG_MAX } from './domain/slug.ts';
 
 /** Body length of a help article after sanitizing (the M1.4d Markdown subset, as entries). */
@@ -189,7 +184,10 @@ export const publicHelpArticleSummarySerializer = defineSerializer(
 /** The article corpus the search ranks (published only; the body for matching and excerpts). */
 export const PublicHelpSearchDocDto = PublicHelpArticleSummaryDto.extend({ body: z.string() });
 export type PublicHelpSearchDocDto = z.infer<typeof PublicHelpSearchDocDto>;
-export const publicHelpSearchDocSerializer = defineSerializer('cms.publicHelpSearchDoc', PublicHelpSearchDocDto);
+export const publicHelpSearchDocSerializer = defineSerializer(
+  'cms.publicHelpSearchDoc',
+  PublicHelpSearchDocDto,
+);
 
 export const PublicHelpCenterDto = z.object({
   categories: z.array(PublicHelpCategoryDto),

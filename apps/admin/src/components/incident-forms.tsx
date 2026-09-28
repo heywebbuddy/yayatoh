@@ -23,12 +23,24 @@ export function NewIncidentForm({
   const [state, formAction, pending] = useActionState(action, INITIAL);
   const bad = new Set(state.errors);
   return (
-    <form key={state.ok ? state.stamp : 'form'} action={formAction} noValidate aria-label={t('new.title')} className="flex flex-col gap-4">
+    <form
+      key={state.ok ? state.stamp : 'form'}
+      action={formAction}
+      noValidate
+      aria-label={t('new.title')}
+      className="flex flex-col gap-4"
+    >
       <div aria-live="polite">
         {state.ok ? <Alert tone="info" title={t('new.posted')} /> : null}
         {!state.ok && bad.size > 0 ? <Alert title={t('errors.summary')} /> : null}
       </div>
-      <Input id="incident-title" name="title" maxLength={160} label={t('new.titleField')} error={bad.has('title') ? t('errors.title') : undefined} />
+      <Input
+        id="incident-title"
+        name="title"
+        maxLength={160}
+        label={t('new.titleField')}
+        error={bad.has('title') ? t('errors.title') : undefined}
+      />
       <div className="flex flex-col gap-1.5">
         <label htmlFor="incident-impact" className="text-caption text-zinc-600">
           {t('new.impact')}
@@ -92,7 +104,12 @@ export function IncidentUpdateForm({
   const [state, formAction, pending] = useActionState(action, INITIAL);
   const bad = new Set(state.errors);
   return (
-    <form action={formAction} noValidate aria-label={t('update.label', { title })} className="flex flex-col gap-3">
+    <form
+      action={formAction}
+      noValidate
+      aria-label={t('update.label', { title })}
+      className="flex flex-col gap-3"
+    >
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`status-${id}`} className="text-caption text-zinc-600">
           {t('update.status')}
@@ -119,9 +136,7 @@ export function IncidentUpdateForm({
         />
         {bad.has('body') ? <p className="text-caption text-pink-700">{t('errors.body')}</p> : null}
       </div>
-      <div aria-live="polite">
-        {bad.has('closed') ? <Alert title={t('errors.closed')} /> : null}
-      </div>
+      <div aria-live="polite">{bad.has('closed') ? <Alert title={t('errors.closed')} /> : null}</div>
       <Button type="submit" variant="secondary" size="sm" disabled={pending} className="self-start">
         {t('update.submit')}
       </Button>

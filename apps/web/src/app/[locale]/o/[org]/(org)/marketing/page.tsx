@@ -50,7 +50,8 @@ export default async function MarketingConsole({
     </Link>
   );
   const sections = tab === 'sections' ? await executeQuery(listSiteSectionsQuery, {}, data.ctx, ports) : [];
-  const requests = tab === 'requests' ? await executeQuery(listContactRequestsQuery, {}, data.ctx, ports) : [];
+  const requests =
+    tab === 'requests' ? await executeQuery(listContactRequestsQuery, {}, data.ctx, ports) : [];
   return (
     <>
       <PageHeader
@@ -65,7 +66,10 @@ export default async function MarketingConsole({
         }
       />
       {canWrite ? null : (
-        <p role="note" className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600">
+        <p
+          role="note"
+          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
+        >
           {tc('readOnly')}
         </p>
       )}
@@ -97,7 +101,10 @@ export default async function MarketingConsole({
                         header: t('fields.heading'),
                         cell: (r: SiteSectionDto) => (
                           <span className="flex flex-col">
-                            <Link href={`/o/${org}/marketing/${r.id}`} className="underline underline-offset-2">
+                            <Link
+                              href={`/o/${org}/marketing/${r.id}`}
+                              className="underline underline-offset-2"
+                            >
                               {r.heading}
                             </Link>
                             <span className="text-caption text-zinc-500">
@@ -112,7 +119,9 @@ export default async function MarketingConsole({
                       {
                         key: 'status',
                         header: tc('columns.status'),
-                        cell: (r: SiteSectionDto) => <StatusDot status={DOT[r.status]} label={tc(`status.${r.status}`)} />,
+                        cell: (r: SiteSectionDto) => (
+                          <StatusDot status={DOT[r.status]} label={tc(`status.${r.status}`)} />
+                        ),
                       },
                       {
                         key: 'position',
@@ -140,14 +149,24 @@ export default async function MarketingConsole({
                     {r.name}
                     {r.company ? ` · ${r.company}` : ''}
                   </p>
-                  <StatusDot status={r.status === 'new' ? 'warning' : 'success'} label={t(`requestStatus.${r.status}`)} />
+                  <StatusDot
+                    status={r.status === 'new' ? 'warning' : 'success'}
+                    label={t(`requestStatus.${r.status}`)}
+                  />
                 </div>
                 <p className="text-caption text-zinc-500">
                   {t(`topics.${r.topic}`)} ·{' '}
                   <a href={`mailto:${r.email}`} dir="ltr" className="underline">
                     {r.email}
                   </a>{' '}
-                  · {formatDate(r.createdAt.toISOString(), f, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  ·{' '}
+                  {formatDate(r.createdAt.toISOString(), f, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </p>
                 <p className="text-body break-words whitespace-pre-line">{r.message}</p>
                 {r.status === 'new' ? (

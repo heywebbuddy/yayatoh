@@ -56,7 +56,12 @@ export function SectionEditor({
             <label htmlFor="section-placement" className="text-caption text-zinc-600">
               {t('fields.placement')}
             </label>
-            <select id="section-placement" name="placement" defaultValue={values?.placement ?? 'home'} className={select}>
+            <select
+              id="section-placement"
+              name="placement"
+              defaultValue={values?.placement ?? 'home'}
+              className={select}
+            >
               {SITE_PLACEMENTS.map((p) => (
                 <option key={p} value={p}>
                   {t(`placement.${p}`)}
@@ -68,7 +73,12 @@ export function SectionEditor({
             <label htmlFor="section-locale" className="text-caption text-zinc-600">
               {t('fields.locale')}
             </label>
-            <select id="section-locale" name="locale" defaultValue={values?.locale ?? 'en'} className={select}>
+            <select
+              id="section-locale"
+              name="locale"
+              defaultValue={values?.locale ?? 'en'}
+              className={select}
+            >
               {locales.map((l) => (
                 <option key={l.code} value={l.code} lang={l.code}>
                   {l.name}
@@ -104,7 +114,13 @@ export function SectionEditor({
         label={t('fields.slug')}
         hint={t('slugHint')}
         defaultValue={values?.slug}
-        error={bad.has('slug') ? tc(`slugError.${state.reason === 'taken' || state.reason === 'too_long' ? state.reason : 'format'}`) : undefined}
+        error={
+          bad.has('slug')
+            ? tc(
+                `slugError.${state.reason === 'taken' || state.reason === 'too_long' ? state.reason : 'format'}`,
+              )
+            : undefined
+        }
       />
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -141,7 +157,11 @@ export function SectionEditor({
           hidden={!preview}
           className="rounded-card border border-dashed border-zinc-300 bg-white p-4"
         >
-          {body.trim() ? <Markdown source={body} /> : <p className="text-body text-zinc-500">{tc('previewEmpty')}</p>}
+          {body.trim() ? (
+            <Markdown source={body} />
+          ) : (
+            <p className="text-body text-zinc-500">{tc('previewEmpty')}</p>
+          )}
         </section>
       </div>
       <fieldset className="flex flex-col gap-4 rounded-card border border-zinc-200 p-4">

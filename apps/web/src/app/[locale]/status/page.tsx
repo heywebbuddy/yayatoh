@@ -51,7 +51,14 @@ export default async function StatusPageView({ params }: Props) {
     formatDate(
       d.toISOString(),
       { locale, currency: 'USD', timeZone: 'UTC' },
-      { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' },
+      {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      },
     );
   const componentName = (key: string, name: string) =>
     (STATUS_COMPONENTS as readonly string[]).includes(key) ? t(`components.${key}`) : name;
@@ -75,7 +82,10 @@ export default async function StatusPageView({ params }: Props) {
           ) : null}
         </p>
       </div>
-      <ol aria-label={t('updates', { title: i.title })} className="flex list-none flex-col gap-3 border-s border-zinc-200 p-0 ps-4">
+      <ol
+        aria-label={t('updates', { title: i.title })}
+        className="flex list-none flex-col gap-3 border-s border-zinc-200 p-0 ps-4"
+      >
         {i.updates.map((u) => (
           <li key={`${u.at.toISOString()}-${u.status}`} className="flex flex-col gap-0.5">
             <p className="text-caption text-zinc-500">
@@ -118,7 +128,11 @@ export default async function StatusPageView({ params }: Props) {
               </h2>
               <ul className="flex list-none flex-col divide-y divide-zinc-200 rounded-card border border-zinc-200 p-0">
                 {snapshot.components.map((c) => (
-                  <li key={c.key} data-component={c.key} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
+                  <li
+                    key={c.key}
+                    data-component={c.key}
+                    className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
+                  >
                     <span className="text-body">{componentName(c.key, c.name)}</span>
                     <StatusDot status={DOT[c.status]} label={t(`componentStatus.${c.status}`)} />
                   </li>

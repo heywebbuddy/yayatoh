@@ -54,7 +54,9 @@ export const STARTER_CATEGORIES: readonly StarterCategory[] = [
     title: 'Selling tickets',
     description: 'Ticket types, prices, promo codes and checkout.',
     position: 20,
-    translations: { ar: { title: 'بيع التذاكر', description: 'أنواع التذاكر والأسعار وأكواد الخصم والدفع.' } },
+    translations: {
+      ar: { title: 'بيع التذاكر', description: 'أنواع التذاكر والأسعار وأكواد الخصم والدفع.' },
+    },
   },
   {
     slug: 'seating',
@@ -62,7 +64,9 @@ export const STARTER_CATEGORIES: readonly StarterCategory[] = [
     title: 'Seating',
     description: 'Seating charts, reserved seats and table assignments.',
     position: 30,
-    translations: { ar: { title: 'المقاعد', description: 'مخططات المقاعد والمقاعد المحجوزة وتوزيع الطاولات.' } },
+    translations: {
+      ar: { title: 'المقاعد', description: 'مخططات المقاعد والمقاعد المحجوزة وتوزيع الطاولات.' },
+    },
   },
   {
     slug: 'check-in',
@@ -70,7 +74,9 @@ export const STARTER_CATEGORIES: readonly StarterCategory[] = [
     title: 'Check-in',
     description: 'Scanning tickets at the door, door staff and offline mode.',
     position: 40,
-    translations: { ar: { title: 'تسجيل الدخول', description: 'مسح التذاكر عند الباب وفريق الباب والوضع دون اتصال.' } },
+    translations: {
+      ar: { title: 'تسجيل الدخول', description: 'مسح التذاكر عند الباب وفريق الباب والوضع دون اتصال.' },
+    },
   },
   {
     slug: 'refunds-and-payouts',
@@ -78,7 +84,9 @@ export const STARTER_CATEGORIES: readonly StarterCategory[] = [
     title: 'Refunds and payouts',
     description: 'Refunding orders, refund policies and getting paid.',
     position: 50,
-    translations: { ar: { title: 'الاسترداد والمدفوعات', description: 'استرداد الطلبات وسياسات الاسترداد واستلام أموالك.' } },
+    translations: {
+      ar: { title: 'الاسترداد والمدفوعات', description: 'استرداد الطلبات وسياسات الاسترداد واستلام أموالك.' },
+    },
   },
   {
     slug: 'messaging',
@@ -86,7 +94,9 @@ export const STARTER_CATEGORIES: readonly StarterCategory[] = [
     title: 'Messaging',
     description: 'Announcements and emails to your attendees.',
     position: 60,
-    translations: { ar: { title: 'المراسلة', description: 'الإعلانات ورسائل البريد الإلكتروني إلى الحضور.' } },
+    translations: {
+      ar: { title: 'المراسلة', description: 'الإعلانات ورسائل البريد الإلكتروني إلى الحضور.' },
+    },
   },
   {
     slug: 'your-tickets',
@@ -102,7 +112,9 @@ export const STARTER_CATEGORIES: readonly StarterCategory[] = [
     title: 'Refunds and changes',
     description: 'Refunds, cancelled and postponed events.',
     position: 20,
-    translations: { ar: { title: 'الاسترداد والتغييرات', description: 'الاسترداد والفعاليات الملغاة والمؤجلة.' } },
+    translations: {
+      ar: { title: 'الاسترداد والتغييرات', description: 'الاسترداد والفعاليات الملغاة والمؤجلة.' },
+    },
   },
 ];
 

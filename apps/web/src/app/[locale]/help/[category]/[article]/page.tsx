@@ -1,5 +1,5 @@
-import { markdownToPlainText } from '@yayatoh/contracts';
 import { relatedArticles, slugProblem } from '@yayatoh/cms';
+import { markdownToPlainText } from '@yayatoh/contracts';
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -7,8 +7,8 @@ import { HelpFeedbackForm } from '@/components/help/feedback-form.tsx';
 import { ArticleList, HelpShell, helpArticlePath, helpCategoryPath } from '@/components/help/help-views.tsx';
 import { Markdown } from '@/components/markdown.tsx';
 import { formatDate } from '@/lib/format.ts';
-import { localizedPath } from '@/lib/seo/urls.ts';
 import { jsonLdScript } from '@/lib/seo/jsonld.ts';
+import { localizedPath } from '@/lib/seo/urls.ts';
 import { cachedHelpArticle, cachedHelpCenter, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -51,7 +51,8 @@ export default async function HelpArticle({ params }: Props) {
   if (!found) notFound();
   const a = found.article;
   // The address carries the category: a moved article's old category path forwards.
-  if (a.categorySlug !== category) permanentRedirect(localizedPath(locale, helpArticlePath(a.categorySlug, a.slug)));
+  if (a.categorySlug !== category)
+    permanentRedirect(localizedPath(locale, helpArticlePath(a.categorySlug, a.slug)));
   const t = await getTranslations('help');
   const center = await cachedHelpCenter(found.org.orgId, locale);
   const cat = center.categories.find((c) => c.slug === a.categorySlug);
@@ -61,7 +62,12 @@ export default async function HelpArticle({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: t('title'), item: `${origin}${localizedPath(locale, '/help')}` },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: t('title'),
+        item: `${origin}${localizedPath(locale, '/help')}`,
+      },
       ...(cat
         ? [
             {
@@ -109,7 +115,11 @@ export default async function HelpArticle({ params }: Props) {
           </p>
         </header>
         {a.locale !== locale ? (
-          <p role="note" lang={locale} className="rounded-card border border-zinc-200 px-4 py-3 text-body text-zinc-600">
+          <p
+            role="note"
+            lang={locale}
+            className="rounded-card border border-zinc-200 px-4 py-3 text-body text-zinc-600"
+          >
             {t('notTranslated')}
           </p>
         ) : null}

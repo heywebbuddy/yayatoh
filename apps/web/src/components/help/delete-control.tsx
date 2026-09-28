@@ -54,7 +54,13 @@ export function DeleteControl({
           </form>
         </section>
       ) : (
-        <Button ref={deleteRef} type="button" variant="ghost" className="self-start" onClick={() => setConfirming(true)}>
+        <Button
+          ref={deleteRef}
+          type="button"
+          variant="ghost"
+          className="self-start"
+          onClick={() => setConfirming(true)}
+        >
           {t('actions.delete')}
         </Button>
       )}

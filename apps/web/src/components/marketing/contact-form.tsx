@@ -4,7 +4,7 @@ import { CONTACT_TOPICS } from '@yayatoh/cms/ui';
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
-import { type HumanCheckWidget, HumanCheckField } from '@/components/human-check-field.tsx';
+import { HumanCheckField, type HumanCheckWidget } from '@/components/human-check-field.tsx';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
@@ -32,7 +32,12 @@ export function ContactForm({
   }, [state.ok]);
   if (state.ok)
     return (
-      <div ref={done} tabIndex={-1} role="status" className="flex flex-col gap-2 rounded-card border border-zinc-200 p-5">
+      <div
+        ref={done}
+        tabIndex={-1}
+        role="status"
+        className="flex flex-col gap-2 rounded-card border border-zinc-200 p-5"
+      >
         <p className="text-body font-medium">{t('sentTitle')}</p>
         <p className="text-body text-zinc-600">{t('sentBody')}</p>
       </div>
@@ -59,7 +64,15 @@ export function ContactForm({
           ))}
         </select>
       </div>
-      <Input id="contact-name" name="name" required maxLength={120} autoComplete="name" label={t('fields.name')} error={err('name', 'name')} />
+      <Input
+        id="contact-name"
+        name="name"
+        required
+        maxLength={120}
+        autoComplete="name"
+        label={t('fields.name')}
+        error={err('name', 'name')}
+      />
       <Input
         id="contact-email"
         name="email"

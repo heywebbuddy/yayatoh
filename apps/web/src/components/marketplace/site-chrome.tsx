@@ -14,47 +14,47 @@ export async function SiteHeader({ name, browse = true }: { name?: string; brows
   const t = await getTranslations('market');
   return (
     <>
-    <IncidentBanner variant="site" />
-    <header className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 md:px-6">
-      <Link
-        href="/"
-        className="inline-flex min-h-10 items-center text-[19px] font-semibold tracking-[-0.04em]"
-      >
-        {name ?? t('wordmark')}
-      </Link>
-      <nav aria-label={t('siteNav')}>
-        <ul className="flex list-none flex-wrap items-center gap-4 p-0 text-body">
-          {browse ? (
+      <IncidentBanner variant="site" />
+      <header className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 md:px-6">
+        <Link
+          href="/"
+          className="inline-flex min-h-10 items-center text-[19px] font-semibold tracking-[-0.04em]"
+        >
+          {name ?? t('wordmark')}
+        </Link>
+        <nav aria-label={t('siteNav')}>
+          <ul className="flex list-none flex-wrap items-center gap-4 p-0 text-body">
+            {browse ? (
+              <li>
+                <Link
+                  href="/events"
+                  className="inline-flex min-h-10 items-center underline-offset-4 hover:underline"
+                >
+                  {t('browse')}
+                </Link>
+              </li>
+            ) : null}
             <li>
-              <Link
-                href="/events"
-                className="inline-flex min-h-10 items-center underline-offset-4 hover:underline"
-              >
-                {t('browse')}
+              <Link href="/features" className={navLink}>
+                {t('features')}
               </Link>
             </li>
-          ) : null}
-          <li>
-            <Link href="/features" className={navLink}>
-              {t('features')}
-            </Link>
-          </li>
-          <li>
-            <Link href="/help" className={navLink}>
-              {t('help')}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/sign-in"
-              className="inline-flex min-h-10 items-center underline-offset-4 hover:underline"
-            >
-              {t('forOrganizers')}
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+            <li>
+              <Link href="/help" className={navLink}>
+                {t('help')}
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/sign-in"
+                className="inline-flex min-h-10 items-center underline-offset-4 hover:underline"
+              >
+                {t('forOrganizers')}
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
     </>
   );
 }

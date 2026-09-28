@@ -16,10 +16,6 @@ export {
   sitemapEntries,
   updateEntryCommand,
 } from './cms.ts';
-export { ENTRY_KINDS, ENTRY_STATUSES } from './domain/kinds.ts';
-export { cmsSlug, nextFreeSlug, SLUG_MAX, type SlugProblem, slugProblem } from './domain/slug.ts';
-export * from './dto.ts';
-export { privateColumns } from './private-columns.ts';
 export {
   CONTACT_TOPICS,
   ctaHrefProblem,
@@ -37,6 +33,9 @@ export {
   type SitePlacement,
   searchTerms,
 } from './domain/help.ts';
+export { ENTRY_KINDS, ENTRY_STATUSES } from './domain/kinds.ts';
+export { cmsSlug, nextFreeSlug, SLUG_MAX, type SlugProblem, slugProblem } from './domain/slug.ts';
+export * from './dto.ts';
 export * from './dto-help.ts';
 export {
   createHelpArticleCommand,
@@ -55,6 +54,7 @@ export {
   updateHelpArticleCommand,
   updateHelpCategoryCommand,
 } from './help.ts';
+export { privateColumns } from './private-columns.ts';
 export {
   createSiteSectionCommand,
   deleteSiteSectionCommand,

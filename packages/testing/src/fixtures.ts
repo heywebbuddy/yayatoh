@@ -1042,7 +1042,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(setHelpArticleStatusCommand, { articleId: helpArticle.id, action: 'publish' }, ctx(), ports);
+  await executeCommand(
+    setHelpArticleStatusCommand,
+    { articleId: helpArticle.id, action: 'publish' },
+    ctx(),
+    ports,
+  );
   await executeCommand(
     submitHelpFeedbackCommand,
     { slug: helpArticle.slug, locale: 'en', helpful: true, voterKey: 'f'.repeat(64) },
@@ -1055,10 +1060,20 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(setSiteSectionStatusCommand, { sectionId: section.id, action: 'publish' }, ctx(), ports);
+  await executeCommand(
+    setSiteSectionStatusCommand,
+    { sectionId: section.id, action: 'publish' },
+    ctx(),
+    ports,
+  );
   await executeCommand(
     submitContactRequestCommand,
-    { topic: 'sales', name: 'Fixture Buyer', email: `sales-${slug}@example.test`, message: 'We would like a demo please.' },
+    {
+      topic: 'sales',
+      name: 'Fixture Buyer',
+      email: `sales-${slug}@example.test`,
+      message: 'We would like a demo please.',
+    },
     createCtx({ orgId: org.id }),
     ports,
   );

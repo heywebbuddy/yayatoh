@@ -11,13 +11,20 @@ import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
  * "Was this article helpful?" (M3.11b): Yes / No as two submit buttons (works without
  * JavaScript too); after a No, an optional "what was wrong?" follow-up. The answer is announced.
  */
-export function HelpFeedbackForm({ action }: { action: (prev: FormState, form: FormData) => Promise<FormState> }) {
+export function HelpFeedbackForm({
+  action,
+}: {
+  action: (prev: FormState, form: FormData) => Promise<FormState>;
+}) {
   const t = useTranslations('help.feedback');
   const te = useTranslations();
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const answered = state.ok ? state.reason : undefined;
   return (
-    <section aria-labelledby="help-feedback-title" className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4">
+    <section
+      aria-labelledby="help-feedback-title"
+      className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4"
+    >
       <h2 id="help-feedback-title" className="text-body font-medium">
         {t('question')}
       </h2>
@@ -49,7 +56,11 @@ export function HelpFeedbackForm({ action }: { action: (prev: FormState, form: F
         </form>
       ) : null}
       <div aria-live="polite">
-        {answered ? <p role="status" className="text-body text-zinc-700">{t(answered === 'yes' ? 'thanksYes' : 'thanksNo')}</p> : null}
+        {answered ? (
+          <p role="status" className="text-body text-zinc-700">
+            {t(answered === 'yes' ? 'thanksYes' : 'thanksNo')}
+          </p>
+        ) : null}
         {state.code === 'rate_limited' ? (
           <Alert title={t('rateLimited', { minutes: Number(state.reason ?? 1) })} />
         ) : state.code ? (

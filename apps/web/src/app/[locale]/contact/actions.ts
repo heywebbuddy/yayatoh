@@ -2,6 +2,7 @@
 
 import { CONTACT_TOPICS, submitContactRequestCommand } from '@yayatoh/cms';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
+import { headers } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 import type { FormState } from '@/lib/form-state.ts';
 import { failure, success } from '@/server/form.ts';
@@ -10,7 +11,6 @@ import { ports } from '@/server/ports.ts';
 import { clientIp, limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { getHumanCheck } from '@/server/seat-finder.ts';
-import { headers } from 'next/headers';
 
 /**
  * Contact / sales request (M3.11b). Rate-limited per device, per sender address and per IP;
@@ -18,7 +18,9 @@ import { headers } from 'next/headers';
  * provider exists. Stored in the platform content org for its team.
  */
 export async function contactAction(_prev: FormState, form: FormData): Promise<FormState> {
-  const email = String(form.get('email') ?? '').trim().toLowerCase();
+  const email = String(form.get('email') ?? '')
+    .trim()
+    .toLowerCase();
   const limit = await limitAction('contactRequest', { identity: email || null });
   if (!limit.allowed) return { ok: false, code: 'rate_limited', reason: String(retryAfterMinutes(limit)) };
   const org = await platformContentOrg(await requestHost());
@@ -48,4 +50,3 @@ export async function contactAction(_prev: FormState, form: FormData): Promise<F
   }
   return success();
 }
-

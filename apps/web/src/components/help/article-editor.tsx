@@ -168,7 +168,11 @@ export function ArticleEditor({
           hidden={!preview}
           className="rounded-card border border-dashed border-zinc-300 bg-white p-4"
         >
-          {body.trim() ? <Markdown source={body} /> : <p className="text-body text-zinc-500">{tc('previewEmpty')}</p>}
+          {body.trim() ? (
+            <Markdown source={body} />
+          ) : (
+            <p className="text-body text-zinc-500">{tc('previewEmpty')}</p>
+          )}
         </section>
       </div>
       <Input
@@ -214,7 +218,13 @@ export function ArticleEditor({
       <div aria-live="polite">
         {state.ok ? <Alert tone="info" title={tc('saved')} /> : null}
         {!state.ok && state.code ? (
-          <Alert title={fieldErrors && (state.code === 'validation_failed' || slugError) ? tc('fixErrors') : te(errorMessageKey(state.code))} />
+          <Alert
+            title={
+              fieldErrors && (state.code === 'validation_failed' || slugError)
+                ? tc('fixErrors')
+                : te(errorMessageKey(state.code))
+            }
+          />
         ) : null}
       </div>
       <Button type="submit" disabled={pending} className="self-start">

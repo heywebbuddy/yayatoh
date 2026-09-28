@@ -64,11 +64,10 @@ export async function HelpShell({
 export async function HelpSearchForm({ locale, query }: { locale: string; query?: string }) {
   const t = await getTranslations('help');
   return (
+    <search aria-label={t('search.label')}>
       <form
         action={localizedPath(locale, '/help/search')}
         method="get"
-        role="search"
-        aria-label={t('search.label')}
         className="flex flex-col gap-2 sm:flex-row sm:items-end"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -89,6 +88,7 @@ export async function HelpSearchForm({ locale, query }: { locale: string; query?
           {t('search.submit')}
         </button>
       </form>
+    </search>
   );
 }
 
@@ -98,7 +98,10 @@ export function ArticleList({
   label,
   locale,
 }: {
-  articles: readonly Pick<PublicHelpArticleSummaryDto, 'slug' | 'categorySlug' | 'title' | 'summary' | 'locale'>[];
+  articles: readonly Pick<
+    PublicHelpArticleSummaryDto,
+    'slug' | 'categorySlug' | 'title' | 'summary' | 'locale'
+  >[];
   label: string;
   locale: string;
 }) {

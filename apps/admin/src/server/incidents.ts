@@ -26,11 +26,13 @@ export function incidentProvider(): 'fake' | 'betterstack' {
 }
 
 export async function listIncidents(staff: Staff): Promise<StatusIncident[]> {
-  const rows = await withPlatformReader({ actor: staff.actor, reason: 'staff console: list status incidents' }, (tx) =>
-    tx.execute<FakeIncidentRow>(
-      sql`select id::text as id, title, impact, status, components, updates, started_at, resolved_at
+  const rows = await withPlatformReader(
+    { actor: staff.actor, reason: 'staff console: list status incidents' },
+    (tx) =>
+      tx.execute<FakeIncidentRow>(
+        sql`select id::text as id, title, impact, status, components, updates, started_at, resolved_at
           from platform.status_fake_recent(${STATUS_HISTORY_DAYS})`,
-    ),
+      ),
   );
   return [...rows].map(fakeIncident);
 }

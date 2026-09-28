@@ -50,7 +50,10 @@ const NO_SPACES = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Scrip
  * go through the same folding, so marks never decide a match in any script.
  */
 export function foldText(s: string): string {
-  return s.normalize('NFKD').replace(/\p{M}+/gu, '').toLowerCase();
+  return s
+    .normalize('NFKD')
+    .replace(/\p{M}+/gu, '')
+    .toLowerCase();
 }
 
 const words = (s: string) => s.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
@@ -173,9 +176,15 @@ const keywordSet = (k: string | null) =>
  * Articles to suggest under one: others in its category (by position, then title), then others
  * sharing its keywords (most shared first). Never the article itself; at most `limit`.
  */
-export function relatedArticles<T extends RelatedDoc>(article: RelatedDoc, all: readonly T[], limit = 4): T[] {
+export function relatedArticles<T extends RelatedDoc>(
+  article: RelatedDoc,
+  all: readonly T[],
+  limit = 4,
+): T[] {
   const byOrder = (a: T, b: T) => a.position - b.position || a.title.localeCompare(b.title);
-  const same = all.filter((d) => d.slug !== article.slug && d.categorySlug === article.categorySlug).sort(byOrder);
+  const same = all
+    .filter((d) => d.slug !== article.slug && d.categorySlug === article.categorySlug)
+    .sort(byOrder);
   const mine = keywordSet(article.keywords);
   const shared = (d: T) => [...keywordSet(d.keywords)].filter((k) => mine.has(k)).length;
   const others = all

@@ -1,4 +1,9 @@
-import { PostIncidentInput, postFakeIncident, UpdateIncidentInput, updateFakeIncident } from '@yayatoh/platform';
+import {
+  PostIncidentInput,
+  postFakeIncident,
+  UpdateIncidentInput,
+  updateFakeIncident,
+} from '@yayatoh/platform';
 import { type NextRequest, NextResponse } from 'next/server';
 import { devAuthEnabled } from '@/server/session.ts';
 import { getStatusPage } from '@/server/status.ts';
@@ -9,7 +14,8 @@ import { getStatusPage } from '@/server/status.ts';
  * and the fake provider is in use.
  */
 export async function POST(req: NextRequest) {
-  if (!devAuthEnabled() || getStatusPage()?.provider !== 'fake') return new NextResponse(null, { status: 404 });
+  if (!devAuthEnabled() || getStatusPage()?.provider !== 'fake')
+    return new NextResponse(null, { status: 404 });
   const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
   if (body?.id) {
     const input = UpdateIncidentInput.safeParse(body);

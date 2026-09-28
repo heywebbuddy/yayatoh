@@ -11,7 +11,13 @@ import { z } from 'zod';
  */
 
 /** Component states, least to most severe. */
-export const COMPONENT_STATUSES = ['operational', 'maintenance', 'degraded', 'partial_outage', 'major_outage'] as const;
+export const COMPONENT_STATUSES = [
+  'operational',
+  'maintenance',
+  'degraded',
+  'partial_outage',
+  'major_outage',
+] as const;
 export type ComponentStatus = (typeof COMPONENT_STATUSES)[number];
 
 export const INCIDENT_IMPACTS = ['minor', 'major', 'critical', 'maintenance'] as const;
@@ -200,10 +206,14 @@ export type FakeIncidentRow = {
 /** A row of `platform.status_fake_recent` as an incident (unknown values are dropped). */
 export function fakeIncident(r: FakeIncidentRow): StatusIncident {
   const status = z.enum(INCIDENT_STATUSES).catch('investigating').parse(r.status);
-  const updates = z.array(z.unknown()).catch([]).parse(r.updates).flatMap((u) => {
-    const p = UpdateRow.safeParse(u);
-    return p.success ? [p.data] : [];
-  });
+  const updates = z
+    .array(z.unknown())
+    .catch([])
+    .parse(r.updates)
+    .flatMap((u) => {
+      const p = UpdateRow.safeParse(u);
+      return p.success ? [p.data] : [];
+    });
   return {
     id: r.id,
     title: r.title,
@@ -317,11 +327,11 @@ const list = <T extends z.ZodType>(item: T) =>
     .object({ data: z.array(z.unknown()).catch([]) })
     .catch({ data: [] })
     .transform((v) =>
-    v.data.flatMap((d) => {
-      const p = item.safeParse(d);
-      return p.success ? [p.data as z.infer<T>] : [];
-    }),
-  );
+      v.data.flatMap((d) => {
+        const p = item.safeParse(d);
+        return p.success ? [p.data as z.infer<T>] : [];
+      }),
+    );
 
 /** Map Better Stack's JSON:API documents into our snapshot (pure; see the adapter below). */
 export function betterStackSnapshot(
@@ -412,7 +422,10 @@ export function betterStackStatusPage(opts: {
         .slice(0, 10);
       const updates = new Map<string, unknown>(
         await Promise.all(
-          ids.map(async (id) => [id, await get(`/status-reports/${encodeURIComponent(id)}/status-updates`)] as const),
+          ids.map(
+            async (id) =>
+              [id, await get(`/status-reports/${encodeURIComponent(id)}/status-updates`)] as const,
+          ),
         ),
       );
       const value = betterStackSnapshot(resources, reports, updates, new Date());

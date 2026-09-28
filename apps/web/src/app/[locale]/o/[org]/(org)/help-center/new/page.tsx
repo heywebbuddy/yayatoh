@@ -13,7 +13,11 @@ import { ports } from '@/server/ports.ts';
 import { createArticleAction } from '../actions.ts';
 
 /** A new help article (a draft until published). Viewers and other orgs are refused. */
-export default async function NewHelpArticle({ params }: { params: Promise<{ locale: string; org: string }> }) {
+export default async function NewHelpArticle({
+  params,
+}: {
+  params: Promise<{ locale: string; org: string }>;
+}) {
   const { locale, org } = await params;
   setRequestLocale(locale);
   if (!isPlatformContentOrg(org)) notFound();
@@ -31,7 +35,11 @@ export default async function NewHelpArticle({ params }: { params: Promise<{ loc
       <Card>
         <ArticleEditor
           action={createArticleAction.bind(null, org)}
-          categories={categories.map((c) => ({ id: c.id, title: c.title, audienceLabel: t(`audience.${c.audience}`) }))}
+          categories={categories.map((c) => ({
+            id: c.id,
+            title: c.title,
+            audienceLabel: t(`audience.${c.audience}`),
+          }))}
           locales={LOCALES.map((code) => ({ code, name: localeName(code) }))}
           slugFrozen={false}
           submitLabel={t('createArticle')}

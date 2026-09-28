@@ -21,7 +21,9 @@ export async function IncidentBanner({ variant }: { variant: 'console' | 'site' 
       aria-label={t('banner.label')}
       data-testid="incident-banner"
       className={`flex items-start gap-3 border-b px-4 py-3 ${
-        maintenance ? 'border-zinc-200 bg-zinc-50 text-zinc-800' : 'border-pink-700/30 bg-pink-50 text-pink-700'
+        maintenance
+          ? 'border-zinc-200 bg-zinc-50 text-zinc-800'
+          : 'border-pink-700/30 bg-pink-50 text-pink-700'
       } ${variant === 'console' ? 'md:px-8' : 'md:px-6'}`}
     >
       <Icon aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={1.6} />

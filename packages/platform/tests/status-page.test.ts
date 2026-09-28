@@ -89,7 +89,12 @@ describe('status mapping (M3.11b)', () => {
       ],
       NOW,
     );
-    expect(incidentBanner(s)).toEqual({ title: 'Scanner sync slow', impact: 'major', status: 'investigating', others: 1 });
+    expect(incidentBanner(s)).toEqual({
+      title: 'Scanner sync slow',
+      impact: 'major',
+      status: 'investigating',
+      others: 1,
+    });
     const onlyMaintenance = snapshotFromIncidents(
       'fake',
       COMPONENTS,
@@ -123,9 +128,9 @@ describe('status mapping (M3.11b)', () => {
     expect(PostIncidentInput.safeParse({ title: 'x', impact: 'minor', body: 'y' }).success).toBe(true);
     expect(PostIncidentInput.safeParse({ title: '', impact: 'minor', body: 'y' }).success).toBe(false);
     expect(PostIncidentInput.safeParse({ title: 'x', impact: 'meh', body: 'y' }).success).toBe(false);
-    expect(PostIncidentInput.safeParse({ title: 'x', impact: 'minor', body: 'y', components: ['mars'] }).success).toBe(
-      false,
-    );
+    expect(
+      PostIncidentInput.safeParse({ title: 'x', impact: 'minor', body: 'y', components: ['mars'] }).success,
+    ).toBe(false);
   });
 });
 
@@ -235,7 +240,10 @@ describe('Better Stack mapping (M3.11b)', () => {
       ['r1', 'investigating', true],
       ['r4', 'resolved', false],
     ]);
-    expect(s.incidents.find((i) => i.id === 'r1')?.updates.map((u) => u.body)).toEqual(['Found it', 'Investigating']);
+    expect(s.incidents.find((i) => i.id === 'r1')?.updates.map((u) => u.body)).toEqual([
+      'Found it',
+      'Investigating',
+    ]);
     expect(incidentBanner(s)).toMatchObject({ title: 'Checkout down', impact: 'critical', others: 0 });
   });
 
@@ -246,7 +254,7 @@ describe('Better Stack mapping (M3.11b)', () => {
 
   it('the adapter sends the token, reads updates and caches for the TTL', async () => {
     const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
-      expect((init?.headers as Record<string, string>).authorization).toBe('Bearer tok');
+      expect((init?.headers as Record<string, string> | undefined)?.authorization).toBe('Bearer tok');
       const u = String(url);
       const body = u.endsWith('/resources')
         ? resources
@@ -257,10 +265,17 @@ describe('Better Stack mapping (M3.11b)', () => {
             : { data: [] };
       return new Response(JSON.stringify(body), { status: 200 });
     });
-    const port = betterStackStatusPage({ token: 'tok', statusPageId: 'p 1', fetch: fetchMock as never, ttlMs: 60_000 });
+    const port = betterStackStatusPage({
+      token: 'tok',
+      statusPageId: 'p 1',
+      fetch: fetchMock as never,
+      ttlMs: 60_000,
+    });
     const s = await port.snapshot();
     expect(s.incidents.length).toBe(3);
-    expect(String(fetchMock.mock.calls[0]?.[0])).toBe('https://uptime.betterstack.com/api/v2/status-pages/p%201/resources');
+    expect(String(fetchMock.mock.calls[0]?.[0])).toBe(
+      'https://uptime.betterstack.com/api/v2/status-pages/p%201/resources',
+    );
     const calls = fetchMock.mock.calls.length;
     await port.snapshot();
     expect(fetchMock.mock.calls.length).toBe(calls);

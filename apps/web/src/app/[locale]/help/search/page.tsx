@@ -14,7 +14,8 @@ type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ q?: 
 
 /** Results shown per search (the help center is small: no paging). */
 const MAX_RESULTS = 20;
-const queryOf = (raw: string | string[] | undefined) => (Array.isArray(raw) ? raw[0] : raw)?.slice(0, 120).trim() ?? '';
+const queryOf = (raw: string | string[] | undefined) =>
+  (Array.isArray(raw) ? raw[0] : raw)?.slice(0, 120).trim() ?? '';
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -45,7 +46,11 @@ export default async function HelpSearch({ params, searchParams }: Props) {
   const ranked = searchTerms(q).length > 0 ? rankArticles(q, await cachedHelpDocs(org.orgId, locale)) : [];
   const results = ranked.slice(0, MAX_RESULTS);
   return (
-    <HelpShell locale={locale} query={q} crumbs={[{ label: t('title'), href: '/help' }, { label: t('search.title') }]}>
+    <HelpShell
+      locale={locale}
+      query={q}
+      crumbs={[{ label: t('title'), href: '/help' }, { label: t('search.title') }]}
+    >
       <h1 className="text-[32px] leading-tight font-light tracking-[-0.03em] break-words">
         {q ? t('search.resultsFor', { query: q }) : t('search.title')}
       </h1>
@@ -58,7 +63,11 @@ export default async function HelpSearch({ params, searchParams }: Props) {
       {results.length > 0 ? (
         <ol aria-label={t('search.results')} className="flex list-none flex-col gap-5 p-0">
           {results.map(({ doc }) => (
-            <li key={doc.slug} lang={doc.locale === locale ? undefined : doc.locale} className="flex flex-col gap-1">
+            <li
+              key={doc.slug}
+              lang={doc.locale === locale ? undefined : doc.locale}
+              className="flex flex-col gap-1"
+            >
               <Link
                 href={helpArticlePath(doc.categorySlug, doc.slug)}
                 className="inline-flex min-h-6 items-center text-[17px] break-words underline-offset-4 hover:underline"

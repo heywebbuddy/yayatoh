@@ -35,7 +35,11 @@ export default async function HelpCategoryConsole({
   const localeName = (l: string) => new Intl.DisplayNames([locale], { type: 'language' }).of(l) ?? l;
   return (
     <>
-      <PageHeader eyebrow={t(`audience.${category.audience}`)} title={category.title} description={`/help/${category.slug}`} />
+      <PageHeader
+        eyebrow={t(`audience.${category.audience}`)}
+        title={category.title}
+        description={`/help/${category.slug}`}
+      />
       <Link href={`/o/${org}/help-center?tab=categories`} className="self-start text-body underline">
         {t('back')}
       </Link>

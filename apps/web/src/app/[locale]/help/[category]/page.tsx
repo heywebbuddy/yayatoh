@@ -46,10 +46,7 @@ export default async function HelpCategory({ params }: Props) {
   const t = await getTranslations('help');
   const c = found.category;
   return (
-    <HelpShell
-      locale={locale}
-      crumbs={[{ label: t('title'), href: '/help' }, { label: c.title }]}
-    >
+    <HelpShell locale={locale} crumbs={[{ label: t('title'), href: '/help' }, { label: c.title }]}>
       <header className="flex flex-col gap-2" lang={c.locale === locale ? undefined : c.locale}>
         <p className="text-caption text-zinc-500">{t(`audience.${c.audience}`)}</p>
         <h1 className="text-[40px] leading-tight font-light tracking-[-0.04em] break-words">{c.title}</h1>
