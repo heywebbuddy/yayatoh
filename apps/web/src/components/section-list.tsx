@@ -39,7 +39,14 @@ export function SectionList({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
+  // A move is saving from the click until the server answers (not until the page refresh after
+  // it). A keyboard press in that time is queued, never dropped: people press Enter again as soon
+  // as they hear the first move announced.
+  const saving = useRef(false);
+  const queued = useRef<{ id: string; direction: 'up' | 'down' } | null>(null);
+  const orderNow = useRef(order);
+  orderNow.current = order;
   const buttons = useRef(new Map<string, HTMLButtonElement | null>());
   const [focusTarget, setFocusTarget] = useState<string | null>(null);
   useEffect(() => setOrder(sections), [sections]);
@@ -62,12 +69,17 @@ export function SectionList({
     call: () => Promise<FormState>,
     focusKey: string,
   ) => {
-    const before = order;
+    const before = orderNow.current;
+    orderNow.current = next;
     setOrder(next);
     setError(null);
+    saving.current = true;
     startTransition(async () => {
       const res = await call();
+      saving.current = false;
       if (!res.ok) {
+        queued.current = null;
+        orderNow.current = before;
         setOrder(before);
         setError(te(errorMessageKey(res.code)));
         return;
@@ -82,20 +94,27 @@ export function SectionList({
             ? `${id}:up`
             : focusKey,
       );
+      const again = queued.current;
+      queued.current = null;
+      if (again) step(again.id, again.direction);
     });
   };
   const step = (id: string, direction: 'up' | 'down') => {
-    if (pending) return;
-    const i = order.findIndex((s) => s.id === id);
+    if (saving.current) {
+      queued.current = { id, direction };
+      return;
+    }
+    const current = orderNow.current;
+    const i = current.findIndex((s) => s.id === id);
     const j = direction === 'up' ? i - 1 : i + 1;
-    if (i < 0 || j < 0 || j >= order.length) return;
-    const next = [...order];
+    if (i < 0 || j < 0 || j >= current.length) return;
+    const next = [...current];
     [next[i], next[j]] = [next[j] as SectionItem, next[i] as SectionItem];
     run(next, id, () => move(id, direction), `${id}:${direction}`);
   };
   const drop = (e: DragEvent<HTMLLIElement>, targetId: string) => {
     e.preventDefault();
-    if (pending) return;
+    if (saving.current) return;
     const id = e.dataTransfer.getData(DRAG_TYPE) || dragging;
     setDragging(null);
     if (!id || id === targetId) return;
