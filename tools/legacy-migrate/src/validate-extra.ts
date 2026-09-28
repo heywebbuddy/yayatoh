@@ -20,14 +20,17 @@ export async function v6Vectors(q: Q, instance: string, freezeAt: Date): Promise
       select b.id, btrim(b.order_number) as payload, count(*) over (partition by btrim(b.order_number)) as uses,
              coalesce(b.booking_cancel, 0) < 2 and coalesce(b.status, 1) = 1 and coalesce(b.is_paid, 1) = 1 as active
       from {s}.bookings b where nullif(btrim(b.order_number), '') is not null
+    ), bc as (
+      select tb.payload, count(*) as matches from ticketing.ticket_barcodes tb
+      where tb.format = 'legacy_eventmie' and tb.instance = $1 and tb.active group by tb.payload
+    ), own as (
+      select r.legacy_id, tb.payload from ticketing.ticket_barcodes tb
+      join legacy.ref r on r.new_id = tb.ticket_id and r.instance = $1 and r.entity = 'bookings'
+      where tb.format = 'legacy_eventmie' and tb.instance = $1 and tb.active
     ), hits as (
-      select b.id, b.uses, b.active,
-             (select count(*) from ticketing.ticket_barcodes tb where tb.format = 'legacy_eventmie' and tb.instance = $1
-                and tb.payload = b.payload and tb.active) as matches,
-             exists (select 1 from ticketing.ticket_barcodes tb
-                     join legacy.ref r on r.new_id = tb.ticket_id and r.instance = $1 and r.entity = 'bookings' and r.legacy_id = b.id::text
-                     where tb.format = 'legacy_eventmie' and tb.instance = $1 and tb.payload = b.payload and tb.active) as own
-      from b
+      select b.id, b.uses, b.active, coalesce(bc.matches, 0) as matches, own.legacy_id is not null as own
+      from b left join bc on bc.payload = b.payload
+      left join own on own.legacy_id = b.id::text and own.payload = b.payload
     )
     select count(*) filter (where active and uses = 1) as vectors,
            count(*) filter (where active and uses = 1 and matches = 1 and own) as resolved,

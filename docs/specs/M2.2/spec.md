@@ -435,6 +435,26 @@ Scope: the M2.2b "Later" list minus sessions, speakers, sections and CMS content
 - **V9 URLs.** Every inventoried URL has its planned redirect or page.
 - **V10 checksums.** Every staging table's content and the migrated tables' stable columns are hashed. The same staging input must reproduce an earlier successful run's migrated checksums; new input records a new baseline. Check-ins and participation are excluded, because door scans after a rehearsal change them legitimately.
 
+### Time on the `large` synthetic dataset
+- Same container as M2.2b: Postgres 18 in Docker, 4 vCPU. yay has 1,001,693 legacy rows (26 tables) and abc 266,902. Both instances pass V1–V12.
+- The first timed run spent 497 s in validation. The cause was V6's QR check, which looked barcodes up per booking without a usable index. Rewritten set-based, it takes 1.8 s with identical results.
+- Validation below is the re-run of the fixed checks (`migrate:legacy:validate`).
+- **Total: about 7 min for both instances**, well inside the ≤ 60 min budget.
+
+| Stage (seconds) | yay | abc |
+|---|---|---|
+| Load | 28.4 | 9.9 |
+| T1–T5 + codes (M2.2b stages) | 215.8 | 55.5 |
+| T3 venues/series | 1.7 | 0.5 |
+| T3 seat charts | 15.0 | 3.0 |
+| T6 communications | 7.6 | 2.3 |
+| T8 auth artifacts | 0.9 | 0.3 |
+| T9 derived + replayed events | 26.6 | 6.6 |
+| URL inventory | 0.2 | 0.1 |
+| Analyze | 5.7 | 7.1 |
+| Validation V1–V12 | 23.6 | 11.9 |
+| **Total** | **≈ 326 (5 min 26 s)** | **≈ 97 (1 min 37 s)** |
+
 ### Nightly rehearsal CI (`.github/workflows/legacy-rehearsal.yml`)
 - **Synthetic job (on).** Nightly (and on demand) on the `large` dataset: both instances, a rerun (V10), the order-link dry run, reports uploaded.
 - **Masked job (defined, off).** It turns on when the owner sets `LEGACY_MASKED_DUMPS_READY=true` with the `legacy-ref` environment and the dumps' secrets (owner inbox).
