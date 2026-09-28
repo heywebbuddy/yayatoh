@@ -317,8 +317,8 @@ export const BulkSelection = z
 export const BulkLabelRequest = z
   .object({
     selection: BulkSelection,
-    add: z.array(Label).max(20).default([]),
-    remove: z.array(Label).max(20).default([]),
+    add: z.array(Label).max(20).optional(),
+    remove: z.array(Label).max(20).optional(),
   })
   .openapi('BulkLabelRequest');
 export const BulkEmailRequest = z
@@ -344,7 +344,7 @@ export const BulkSeatRequest = z
     target: BulkSeatTarget,
     overrideRules: z
       .boolean()
-      .default(false)
+      .optional()
       .openapi({ description: 'Use accessible seats an enforced rule keeps back (audited).' }),
   })
   .openapi('BulkSeatRequest');

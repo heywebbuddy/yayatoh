@@ -114,4 +114,51 @@ describe('@yayatoh/sdk against a running /v1', () => {
     );
     expect(pub.slug).toBe(a.event.slug);
   });
+
+  it('runs a bulk action: start with an Idempotency-Key, poll its status, undo it (M1.13d)', async () => {
+    const api = createYayatohClient({ baseUrl, token: a.apiKey });
+    const key = idempotencyKey();
+    const start = () =>
+      unwrap(
+        api.POST('/v1/orgs/{org}/events/{eventId}/bulk/labels', {
+          params: {
+            path: { org: a.org.slug, eventId: a.event.id },
+            header: { 'idempotency-key': key },
+          },
+          body: { selection: { filter: {} }, add: ['sdk'] },
+        }),
+      );
+    const op: Schemas['BulkOperation'] = await start();
+    expect(op).toMatchObject({ kind: 'labels', eventId: a.event.id });
+    expect(op.total).toBeGreaterThan(0);
+    expect((await start()).id).toBe(op.id);
+    // Poll until it settles (small jobs are done inline).
+    let status = op;
+    for (let i = 0; i < 20 && !['done', 'failed'].includes(status.status); i++)
+      status = await unwrap(
+        api.GET('/v1/orgs/{org}/bulk/{kind}/{operationId}', {
+          params: { path: { org: a.org.slug, kind: 'labels', operationId: op.id } },
+        }),
+      );
+    expect(status).toMatchObject({ status: 'done', processed: op.total, failed: 0 });
+    expect(status.undoUntil).toEqual(expect.any(String));
+    const undone = await unwrap(
+      api.POST('/v1/orgs/{org}/bulk/{kind}/{operationId}/undo', {
+        params: {
+          path: { org: a.org.slug, kind: 'labels', operationId: op.id },
+          header: { 'idempotency-key': idempotencyKey() },
+        },
+      }),
+    );
+    expect(undone.status).toBe('undone');
+    // Another org's key can't see it.
+    const other = createYayatohClient({ baseUrl, token: b.apiKey });
+    await expect(
+      unwrap(
+        other.GET('/v1/orgs/{org}/bulk/{kind}/{operationId}', {
+          params: { path: { org: b.org.slug, kind: 'labels', operationId: op.id } },
+        }),
+      ),
+    ).rejects.toMatchObject({ status: 404, code: 'not_found' });
+  });
 });

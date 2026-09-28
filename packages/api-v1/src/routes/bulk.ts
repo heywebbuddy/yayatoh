@@ -173,7 +173,12 @@ export function bulkRoutes(deps: V1Deps) {
     .openapi(routes.labels, async (c) => {
       const { selection, add, remove } = c.req.valid('json');
       const { eventId } = c.req.valid('param');
-      const op = await begin('labels', eventId, { selection, params: { add, remove } }, c.get('ctx'));
+      const op = await begin(
+        'labels',
+        eventId,
+        { selection, params: { add: add ?? [], remove: remove ?? [] } },
+        c.get('ctx'),
+      );
       return c.json(op, 202);
     })
     .openapi(routes.emails, async (c) => {
@@ -193,7 +198,7 @@ export function bulkRoutes(deps: V1Deps) {
       const op = await begin(
         'seat-assignments',
         eventId,
-        { selection, params: { target, overrideRules } },
+        { selection, params: { target, overrideRules: overrideRules ?? false } },
         c.get('ctx'),
       );
       return c.json(op, 202);

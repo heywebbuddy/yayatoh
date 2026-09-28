@@ -3384,10 +3384,8 @@ export interface components {
             subject: string;
         };
         BulkLabelRequest: {
-            /** @default [] */
-            add: string[];
-            /** @default [] */
-            remove: string[];
+            add?: string[];
+            remove?: string[];
             selection: components["schemas"]["BulkSelection"];
         };
         BulkOperation: {
@@ -3432,11 +3430,8 @@ export interface components {
             selection: components["schemas"]["BulkSelection"];
         };
         BulkSeatRequest: {
-            /**
-             * @description Use accessible seats an enforced rule keeps back (audited).
-             * @default false
-             */
-            overrideRules: boolean;
+            /** @description Use accessible seats an enforced rule keeps back (audited). */
+            overrideRules?: boolean;
             selection: components["schemas"]["BulkSelection"];
             target: components["schemas"]["BulkSeatTarget"];
         };

@@ -1714,8 +1714,7 @@
               "minLength": 1,
               "maxLength": 40
             },
-            "maxItems": 20,
-            "default": []
+            "maxItems": 20
           },
           "remove": {
             "type": "array",
@@ -1724,8 +1723,7 @@
               "minLength": 1,
               "maxLength": 40
             },
-            "maxItems": 20,
-            "default": []
+            "maxItems": 20
           }
         },
         "required": [
@@ -1842,7 +1840,6 @@
           },
           "overrideRules": {
             "type": "boolean",
-            "default": false,
             "description": "Use accessible seats an enforced rule keeps back (audited)."
           }
         },
