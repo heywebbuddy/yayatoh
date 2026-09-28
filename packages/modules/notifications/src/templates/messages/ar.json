@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "إشعار تجريبي",
       "intro": "الإشعارات تعمل."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "يودّ {org} معرفة رأيك في {eventName}. لن يستغرق الأمر أكثر من دقيقتين تقريبًا.",
+      "cta": "أجب عن الاستبيان"
+    },
+    "surveys.reminder": {
+      "subject": "تذكير: {title}",
+      "intro": "لم تُجب بعد: لا يزال {org} يودّ معرفة رأيك في {eventName}.",
+      "cta": "أجب عن الاستبيان"
     }
   },
   "roles": {

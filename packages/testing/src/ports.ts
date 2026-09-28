@@ -12,6 +12,7 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
+import { surveyExportAction } from '@yayatoh/surveys';
 import { createOrgAuthorizer } from '@yayatoh/tenancy';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
@@ -32,6 +33,7 @@ export const BULK_ACTIONS = [
   bookingsExportAction,
   auditExportAction,
   dsarExportAction,
+  surveyExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

@@ -93,3 +93,46 @@ describe('answers', () => {
     expect(fieldOf({ note: 'x'.repeat(2001) })).toBe('note');
   });
 });
+
+describe('survey scales (M3.9a)', () => {
+  const survey = FormDefinition.parse({
+    fields: [
+      { key: 'nps', type: 'nps', label: 'Recommend us?', required: true },
+      { key: 'stars', type: 'rating', label: 'Overall' },
+    ],
+  });
+  const fails = (a: Record<string, unknown>) => {
+    try {
+      checkAnswers(survey, a);
+      return null;
+    } catch (e) {
+      return e instanceof AnswerError ? e.field : 'other';
+    }
+  };
+
+  it('accepts whole scores in range (0–10 for NPS, 1–5 for ratings), from form strings too', () => {
+    expect(checkAnswers(survey, { nps: '0', stars: '5' })).toEqual({ nps: 0, stars: 5 });
+    expect(checkAnswers(survey, { nps: 10 })).toEqual({ nps: 10 });
+  });
+
+  it('refuses anything else, and a missing required score', () => {
+    expect(fails({ nps: 11 })).toBe('nps');
+    expect(fails({ nps: -1 })).toBe('nps');
+    expect(fails({ nps: 7.5 })).toBe('nps');
+    expect(fails({ nps: 'high' })).toBe('nps');
+    expect(fails({ nps: 5, stars: 0 })).toBe('stars');
+    expect(fails({ nps: 5, stars: 6 })).toBe('stars');
+    expect(fails({ stars: 3 })).toBe('nps');
+  });
+
+  it('scales have a fixed range and no options', () => {
+    expect(
+      FormDefinition.safeParse({ fields: [{ key: 'n', type: 'nps', label: 'N', max: 5 }] }).success,
+    ).toBe(false);
+    expect(
+      FormDefinition.safeParse({
+        fields: [{ key: 'r', type: 'rating', label: 'R', options: [{ value: 'a', label: 'A' }] }],
+      }).success,
+    ).toBe(false);
+  });
+});

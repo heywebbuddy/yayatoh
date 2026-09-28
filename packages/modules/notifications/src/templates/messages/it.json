@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "Notifica di prova",
       "intro": "Le notifiche funzionano."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} vorrebbe sapere com’è andato {eventName} per te. Ci vogliono circa due minuti.",
+      "cta": "Rispondi al sondaggio"
+    },
+    "surveys.reminder": {
+      "subject": "Promemoria: {title}",
+      "intro": "Non hai ancora risposto: {org} vorrebbe ancora sapere com’è andato {eventName} per te.",
+      "cta": "Rispondi al sondaggio"
     }
   },
   "roles": {

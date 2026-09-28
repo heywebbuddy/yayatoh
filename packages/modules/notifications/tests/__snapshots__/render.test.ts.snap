@@ -2717,6 +2717,526 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · zh
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · ar 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+مرحبًا Amina Diallo،
+
+يودّ Lakeside Events معرفة رأيك في Lakeside Jazz Night. لن يستغرق الأمر أكثر من دقيقتين تقريبًا.
+
+أجب عن الاستبيان: https://app.yayatoh.test/survey/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك هذه الرسالة لأنك على قائمة ضيوف فعالية تنظمها Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · de 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Hallo Amina Diallo,
+
+Lakeside Events möchte gern wissen, wie Ihnen Lakeside Jazz Night gefallen hat. Es dauert etwa zwei Minuten.
+
+Zur Umfrage: https://app.yayatoh.test/survey/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst dies, weil du auf der Gästeliste einer Veranstaltung von Lakeside Events stehst.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · en 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Hi Amina Diallo,
+
+Lakeside Events would like to hear how Lakeside Jazz Night went for you. It takes about two minutes.
+
+Answer the survey: https://app.yayatoh.test/survey/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this because you're on the guest list for an event by Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · es 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Hola, Amina Diallo:
+
+A Lakeside Events le gustaría saber qué te pareció Lakeside Jazz Night. Solo toma unos dos minutos.
+
+Responder la encuesta: https://app.yayatoh.test/survey/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes esto porque estás en la lista de invitados de un evento de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · fr 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Bonjour Amina Diallo,
+
+Lakeside Events aimerait savoir comment s’est passé Lakeside Jazz Night pour vous. Cela prend environ deux minutes.
+
+Répondre à l’enquête: https://app.yayatoh.test/survey/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce message car vous êtes sur la liste des invités d’un événement de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · hi 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+नमस्ते Amina Diallo,
+
+Lakeside Events जानना चाहता है कि Lakeside Jazz Night आपको कैसा लगा। इसमें लगभग दो मिनट लगेंगे।
+
+सर्वे का जवाब दें: https://app.yayatoh.test/survey/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह इसलिए मिला क्योंकि आप Lakeside Events के एक इवेंट की अतिथि सूची में हैं।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · it 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Ciao Amina Diallo,
+
+Lakeside Events vorrebbe sapere com’è andato Lakeside Jazz Night per te. Ci vogliono circa due minuti.
+
+Rispondi al sondaggio: https://app.yayatoh.test/survey/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo messaggio perché sei nella lista ospiti di un evento di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · ja 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Amina Diallo 様
+
+Lakeside Eventsより：Lakeside Jazz Nightのご感想をお聞かせください。所要時間は2分ほどです。
+
+アンケートに回答する: https://app.yayatoh.test/survey/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のイベントのゲストリストに登録されているため、このメールをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · nl 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Hoi Amina Diallo,
+
+Lakeside Events hoort graag hoe je Lakeside Jazz Night vond. Het duurt ongeveer twee minuten.
+
+Vul de enquête in: https://app.yayatoh.test/survey/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt dit omdat je op de gastenlijst staat van een evenement van Lakeside Events.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · pt 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Olá, Amina Diallo!
+
+A Lakeside Events gostaria de saber como foi Lakeside Jazz Night para você. Leva cerca de dois minutos.
+
+Responder à pesquisa: https://app.yayatoh.test/survey/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe isto porque está na lista de convidados de um evento de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · ru 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Здравствуйте, Amina Diallo!
+
+Lakeside Events хотели бы узнать, как вам Lakeside Jazz Night. Это займёт около двух минут.
+
+Пройти опрос: https://app.yayatoh.test/survey/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это письмо, потому что вы в списке гостей мероприятия Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · zh-CN 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Amina Diallo，您好：
+
+Lakeside Events 想了解你对 Lakeside Jazz Night 的感受，大约只需两分钟。
+
+填写问卷: https://app.yayatoh.test/survey/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此邮件，是因为您在 Lakeside Events 某活动的嘉宾名单上。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.invite · zh-TW 1`] = `
+{
+  "subject": "How was Lakeside Jazz Night?",
+  "text": "How was Lakeside Jazz Night?
+
+Amina Diallo，您好：
+
+Lakeside Events 想了解你對 Lakeside Jazz Night 的感受，大約只需兩分鐘。
+
+填寫問卷: https://app.yayatoh.test/survey/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此郵件，是因為您在 Lakeside Events 某活動的賓客名單上。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · ar 1`] = `
+{
+  "subject": "تذكير: How was Lakeside Jazz Night?",
+  "text": "تذكير: How was Lakeside Jazz Night?
+
+مرحبًا Amina Diallo،
+
+لم تُجب بعد: لا يزال Lakeside Events يودّ معرفة رأيك في Lakeside Jazz Night.
+
+أجب عن الاستبيان: https://app.yayatoh.test/survey/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك هذه الرسالة لأنك على قائمة ضيوف فعالية تنظمها Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · de 1`] = `
+{
+  "subject": "Erinnerung: How was Lakeside Jazz Night?",
+  "text": "Erinnerung: How was Lakeside Jazz Night?
+
+Hallo Amina Diallo,
+
+Sie haben noch nicht geantwortet: Lakeside Events möchte weiterhin wissen, wie Ihnen Lakeside Jazz Night gefallen hat.
+
+Zur Umfrage: https://app.yayatoh.test/survey/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst dies, weil du auf der Gästeliste einer Veranstaltung von Lakeside Events stehst.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · en 1`] = `
+{
+  "subject": "Reminder: How was Lakeside Jazz Night?",
+  "text": "Reminder: How was Lakeside Jazz Night?
+
+Hi Amina Diallo,
+
+You haven't answered yet: Lakeside Events would still like to hear how Lakeside Jazz Night went for you.
+
+Answer the survey: https://app.yayatoh.test/survey/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this because you're on the guest list for an event by Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · es 1`] = `
+{
+  "subject": "Recordatorio: How was Lakeside Jazz Night?",
+  "text": "Recordatorio: How was Lakeside Jazz Night?
+
+Hola, Amina Diallo:
+
+Aún no has respondido: a Lakeside Events le sigue interesando saber qué te pareció Lakeside Jazz Night.
+
+Responder la encuesta: https://app.yayatoh.test/survey/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes esto porque estás en la lista de invitados de un evento de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · fr 1`] = `
+{
+  "subject": "Rappel : How was Lakeside Jazz Night?",
+  "text": "Rappel : How was Lakeside Jazz Night?
+
+Bonjour Amina Diallo,
+
+Vous n’avez pas encore répondu : Lakeside Events aimerait toujours savoir comment s’est passé Lakeside Jazz Night pour vous.
+
+Répondre à l’enquête: https://app.yayatoh.test/survey/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce message car vous êtes sur la liste des invités d’un événement de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · hi 1`] = `
+{
+  "subject": "रिमाइंडर: How was Lakeside Jazz Night?",
+  "text": "रिमाइंडर: How was Lakeside Jazz Night?
+
+नमस्ते Amina Diallo,
+
+आपने अभी तक जवाब नहीं दिया है: Lakeside Events अब भी जानना चाहता है कि Lakeside Jazz Night आपको कैसा लगा।
+
+सर्वे का जवाब दें: https://app.yayatoh.test/survey/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह इसलिए मिला क्योंकि आप Lakeside Events के एक इवेंट की अतिथि सूची में हैं।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · it 1`] = `
+{
+  "subject": "Promemoria: How was Lakeside Jazz Night?",
+  "text": "Promemoria: How was Lakeside Jazz Night?
+
+Ciao Amina Diallo,
+
+Non hai ancora risposto: Lakeside Events vorrebbe ancora sapere com’è andato Lakeside Jazz Night per te.
+
+Rispondi al sondaggio: https://app.yayatoh.test/survey/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo messaggio perché sei nella lista ospiti di un evento di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · ja 1`] = `
+{
+  "subject": "リマインダー：How was Lakeside Jazz Night?",
+  "text": "リマインダー：How was Lakeside Jazz Night?
+
+Amina Diallo 様
+
+まだご回答いただいていません。Lakeside EventsはLakeside Jazz Nightのご感想をお待ちしています。
+
+アンケートに回答する: https://app.yayatoh.test/survey/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のイベントのゲストリストに登録されているため、このメールをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · nl 1`] = `
+{
+  "subject": "Herinnering: How was Lakeside Jazz Night?",
+  "text": "Herinnering: How was Lakeside Jazz Night?
+
+Hoi Amina Diallo,
+
+Je hebt nog niet geantwoord: Lakeside Events hoort nog steeds graag hoe je Lakeside Jazz Night vond.
+
+Vul de enquête in: https://app.yayatoh.test/survey/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt dit omdat je op de gastenlijst staat van een evenement van Lakeside Events.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · pt 1`] = `
+{
+  "subject": "Lembrete: How was Lakeside Jazz Night?",
+  "text": "Lembrete: How was Lakeside Jazz Night?
+
+Olá, Amina Diallo!
+
+Você ainda não respondeu: a Lakeside Events ainda gostaria de saber como foi Lakeside Jazz Night para você.
+
+Responder à pesquisa: https://app.yayatoh.test/survey/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe isto porque está na lista de convidados de um evento de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · ru 1`] = `
+{
+  "subject": "Напоминание: How was Lakeside Jazz Night?",
+  "text": "Напоминание: How was Lakeside Jazz Night?
+
+Здравствуйте, Amina Diallo!
+
+Вы ещё не ответили: Lakeside Events по-прежнему хотели бы узнать, как вам Lakeside Jazz Night.
+
+Пройти опрос: https://app.yayatoh.test/survey/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это письмо, потому что вы в списке гостей мероприятия Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · zh-CN 1`] = `
+{
+  "subject": "提醒：How was Lakeside Jazz Night?",
+  "text": "提醒：How was Lakeside Jazz Night?
+
+Amina Diallo，您好：
+
+你还没有填写：Lakeside Events 仍希望了解你对 Lakeside Jazz Night 的感受。
+
+填写问卷: https://app.yayatoh.test/survey/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此邮件，是因为您在 Lakeside Events 某活动的嘉宾名单上。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > surveys.reminder · zh-TW 1`] = `
+{
+  "subject": "提醒：How was Lakeside Jazz Night?",
+  "text": "提醒：How was Lakeside Jazz Night?
+
+Amina Diallo，您好：
+
+你還沒有填寫：Lakeside Events 仍希望了解你對 Lakeside Jazz Night 的感受。
+
+填寫問卷: https://app.yayatoh.test/survey/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此郵件，是因為您在 Lakeside Events 某活動的賓客名單上。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · ar 1`] = `
 {
   "subject": "دعوة للانضمام إلى Lakeside Events على Yayatoh",

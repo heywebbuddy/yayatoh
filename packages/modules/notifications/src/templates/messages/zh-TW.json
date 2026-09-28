@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "測試通知",
       "intro": "通知功能正常。"
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} 想了解你對 {eventName} 的感受，大約只需兩分鐘。",
+      "cta": "填寫問卷"
+    },
+    "surveys.reminder": {
+      "subject": "提醒：{title}",
+      "intro": "你還沒有填寫：{org} 仍希望了解你對 {eventName} 的感受。",
+      "cta": "填寫問卷"
     }
   },
   "roles": {

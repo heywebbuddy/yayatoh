@@ -58,6 +58,18 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     name: 'Amina Diallo',
     replyUrl: 'https://app.yayatoh.test/messages/sample',
   },
+  'surveys.invite': {
+    url: 'https://app.yayatoh.test/survey/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+    title: 'How was Lakeside Jazz Night?',
+  },
+  'surveys.reminder': {
+    url: 'https://app.yayatoh.test/survey/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+    title: 'How was Lakeside Jazz Night?',
+  },
   'sales.order_paid': {
     name: 'Amina Diallo',
     eventName: 'Lakeside Jazz Night',

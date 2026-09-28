@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "Notification de test",
       "intro": "Les notifications fonctionnent."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} aimerait savoir comment s’est passé {eventName} pour vous. Cela prend environ deux minutes.",
+      "cta": "Répondre à l’enquête"
+    },
+    "surveys.reminder": {
+      "subject": "Rappel : {title}",
+      "intro": "Vous n’avez pas encore répondu : {org} aimerait toujours savoir comment s’est passé {eventName} pour vous.",
+      "cta": "Répondre à l’enquête"
     }
   },
   "roles": {

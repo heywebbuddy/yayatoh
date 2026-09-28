@@ -14,11 +14,12 @@ import {
 
 export const formsSchema = pgSchema('forms');
 
-export const FORM_KINDS = ['checkout_questions'] as const;
-export const SUBJECT_TYPES = ['event'] as const;
-export const RESPONDENT_TYPES = ['order'] as const;
+export const FORM_KINDS = ['checkout_questions', 'survey'] as const;
+export const SUBJECT_TYPES = ['event', 'survey'] as const;
+/** `survey_invitation`: one person's signed survey link (M3.9a). */
+export const RESPONDENT_TYPES = ['order', 'survey_invitation'] as const;
 
-/** One form per (kind, subject), e.g. an event's checkout questions. */
+/** One form per (kind, subject), e.g. an event's checkout questions or a survey's questions. */
 export const forms = tenantTable(
   formsSchema,
   'forms',
@@ -30,8 +31,8 @@ export const forms = tenantTable(
   },
   (t) => [
     uniqueIndex('forms_org_kind_subject_key').on(t.orgId, t.kind, t.subjectType, t.subjectId),
-    check('forms_kind_check', sql`kind in ('checkout_questions')`),
-    check('forms_subject_type_check', sql`subject_type in ('event')`),
+    check('forms_kind_check', sql`kind in ('checkout_questions', 'survey')`),
+    check('forms_subject_type_check', sql`subject_type in ('event', 'survey')`),
   ],
 );
 
@@ -80,6 +81,6 @@ export const formResponses = tenantTable(
       columns: [t.orgId, t.formVersionId],
       foreignColumns: [formVersions.orgId, formVersions.id],
     }),
-    check('form_responses_respondent_type_check', sql`respondent_type in ('order')`),
+    check('form_responses_respondent_type_check', sql`respondent_type in ('order', 'survey_invitation')`),
   ],
 );

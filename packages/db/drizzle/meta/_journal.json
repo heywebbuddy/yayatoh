@@ -379,6 +379,13 @@
       "when": 1790568310155,
       "tag": "0053_purple_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1790590980023,
+      "tag": "0054_brave_zaran",
+      "breakpoints": true
     }
   ]
 }

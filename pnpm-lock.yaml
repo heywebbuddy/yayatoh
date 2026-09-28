@@ -483,6 +483,9 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../../packages/modules/seating
+      '@yayatoh/surveys':
+        specifier: workspace:*
+        version: link:../../packages/modules/surveys
       '@yayatoh/templates':
         specifier: workspace:*
         version: link:../../packages/modules/templates
@@ -616,6 +619,9 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../../packages/modules/seating
+      '@yayatoh/surveys':
+        specifier: workspace:*
+        version: link:../../packages/modules/surveys
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../../packages/modules/tenancy
@@ -1574,6 +1580,58 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/modules/surveys:
+    dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../checkin
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../forms
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/modules/templates:
     dependencies:
       '@yayatoh/contracts':
@@ -1886,6 +1944,9 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../modules/seating
+      '@yayatoh/surveys':
+        specifier: workspace:*
+        version: link:../modules/surveys
       '@yayatoh/templates':
         specifier: workspace:*
         version: link:../modules/templates

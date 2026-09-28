@@ -27,6 +27,7 @@ key) inside their own transaction; this module records, gates, renders and sends
   event id (`message_events`, append-only). Hard bounces, complaints and repeated soft bounces put
   the address on `address_suppressions`, which the dispatcher honours for every category,
   transactional included (the message is `suppressed`, reason `bounced`/`complained`).
+- `cancelQueuedTx` cancels queued messages by dedupe key with a reason (a survey reminder once the person answered, M3.9a); sent messages never change.
 - Reminders are the day before at the same wall-clock time in the event's timezone; queued
   reminders are re-planned from the event's (or date's) current start whenever it changes, so
   replays are harmless. Sent messages are never rewritten.

@@ -85,6 +85,22 @@ export const KINDS = {
     urgent: true,
     params: ['body', 'name', 'replyUrl'],
   },
+  // Surveys (M3.9a): event_updates, not marketing. They ask the people who came to one event
+  // about that event, from its organizer (a relationship message, like guest emails and
+  // announcements): no marketing consent is needed, but the recipient can switch event updates
+  // off or unsubscribe, and quiet hours apply. Never transactional: nobody asked for them.
+  'surveys.invite': {
+    category: 'event_updates',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'title'],
+  },
+  'surveys.reminder': {
+    category: 'event_updates',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'title'],
+  },
   'sales.order_paid': {
     category: 'sales',
     channels: ['in_app', 'email', 'push'],

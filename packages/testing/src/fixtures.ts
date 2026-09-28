@@ -91,6 +91,12 @@ import {
   setFinderSettingsCommand,
   setSeatingRulesCommand,
 } from '@yayatoh/seating';
+import {
+  createSurveyCommand,
+  sendSurveyCommand,
+  submitSurveyResponseCommand,
+  surveyToken,
+} from '@yayatoh/surveys';
 import { saveTemplateCommand } from '@yayatoh/templates';
 import {
   AGREEMENT_DOCUMENTS,
@@ -677,6 +683,43 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(contactReportCommand, { token: threadToken(thread.id), reason: 'other' }, anon, ports);
   await executeCommand(reportThreadCommand, { threadId: thread.id, reason: 'spam' }, ctx(), ports);
+  // Surveys (M3.9a): a post-event survey sent the day after the event, and one answer through
+  // its link (survey, send, invitations, response and form rows, isolation coverage).
+  const afterEvent = new Date(event.endsAt.getTime() + 86_400_000);
+  const survey = await executeCommand(
+    createSurveyCommand,
+    {
+      eventId: event.id,
+      kind: 'post_event',
+      title: `How was ${name}?`,
+      definition: {
+        fields: [
+          { key: 'nps', type: 'nps', label: 'Recommend us?', required: true },
+          { key: 'note', type: 'long_text', label: 'Anything else?' },
+        ],
+      },
+    },
+    ctx({ now: afterEvent }),
+    ports,
+  );
+  await executeCommand(
+    sendSurveyCommand,
+    { eventId: event.id, surveyId: survey.id, reminderDays: 3 },
+    ctx({ now: afterEvent, idempotencyKey: `fixture-survey-${slug}` }),
+    ports,
+  );
+  const [invitation] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from surveys.invitations where survey_id = ${survey.id} order by created_at, id limit 1`,
+    ),
+  );
+  if (!invitation) throw new Error('fixture: no survey invitation');
+  await executeCommand(
+    submitSurveyResponseCommand,
+    { token: surveyToken(invitation.id), answers: { nps: 9, note: 'Lovely evening.' } },
+    createCtx({ orgId: org.id, now: afterEvent }),
+    ports,
+  );
   // M1.4b: a weekly event with dates (one cancelled), a series holding both events, and a
   // template saved from the launch event (isolation coverage).
   const weekly = await executeCommand(

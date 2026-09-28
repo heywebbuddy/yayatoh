@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "परीक्षण सूचना",
       "intro": "सूचनाएँ काम कर रही हैं।"
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} जानना चाहता है कि {eventName} आपको कैसा लगा। इसमें लगभग दो मिनट लगेंगे।",
+      "cta": "सर्वे का जवाब दें"
+    },
+    "surveys.reminder": {
+      "subject": "रिमाइंडर: {title}",
+      "intro": "आपने अभी तक जवाब नहीं दिया है: {org} अब भी जानना चाहता है कि {eventName} आपको कैसा लगा।",
+      "cta": "सर्वे का जवाब दें"
     }
   },
   "roles": {

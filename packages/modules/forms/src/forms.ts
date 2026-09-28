@@ -1,9 +1,9 @@
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { keyVault, tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { AnswerError, checkAnswers, FieldDefinition, FormDefinition } from './definition.ts';
+import { AnswerError, checkAnswers, FIELD_TYPES, FieldDefinition, FormDefinition } from './definition.ts';
 import {
   FORM_KINDS,
   formResponses,
@@ -59,6 +59,25 @@ export async function currentFormTx(tx: TenantTx, s: Subject) {
   return row ? { ...row, definition: FormDefinition.parse(row.definition) } : null;
 }
 
+/**
+ * What each kind of form may hold: checkout questions keep the checkout types (no scales);
+ * surveys have no sensitive answers (their reports and exports show every answer).
+ */
+function checkKindRules(kind: Subject['kind'], definition: FormDefinition): void {
+  for (const f of definition.fields) {
+    if (kind === 'checkout_questions' && !(FIELD_TYPES as readonly string[]).includes(f.type))
+      throw new DomainError('validation_failed', 'Not a checkout question type', {
+        reason: 'form_invalid',
+        field: f.key,
+      });
+    if (kind === 'survey' && f.sensitive)
+      throw new DomainError('validation_failed', 'Survey answers cannot be sensitive', {
+        reason: 'form_invalid',
+        field: f.key,
+      });
+  }
+}
+
 /** Public read after the caller resolved the org server-side (e.g. from the event slug). */
 export async function publicForm(orgId: string, s: Subject): Promise<PublicFormDto | null> {
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'forms.public' } });
@@ -78,6 +97,7 @@ export async function publishFormTx(
   definition: FormDefinition,
 ): Promise<{ version: number }> {
   const orgId = requireOrg(ctx);
+  checkKindRules(subject.kind, definition);
   await tx
     .insert(forms)
     .values({ orgId, kind: subject.kind, subjectType: subject.subjectType, subjectId: subject.subjectId })
@@ -145,14 +165,14 @@ export async function submitResponseTx(
     respondentId: string;
     answers: Readonly<Record<string, unknown>>;
   },
-): Promise<void> {
+): Promise<{ id: string; version: number } | null> {
   const orgId = requireOrg(ctx);
   const f = await currentFormTx(tx, input);
   const fields = f?.definition.fields ?? [];
   if (!f || fields.length === 0) {
     if (Object.keys(input.answers).length > 0)
       throw new DomainError('validation_failed', 'This event has no questions', { reason: 'form_invalid' });
-    return;
+    return null;
   }
   let clean: Record<string, unknown>;
   try {
@@ -166,16 +186,103 @@ export async function submitResponseTx(
   const open: Record<string, unknown> = {};
   const secret: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(clean)) (sensitiveKeys.has(k) ? secret : open)[k] = v;
-  await tx.insert(formResponses).values({
-    orgId,
-    formVersionId: f.versionId,
-    respondentType: input.respondentType,
-    respondentId: input.respondentId,
-    answers: open,
-    sensitiveCiphertext: Object.keys(secret).length
-      ? await keyVault().encrypt(orgId, new TextEncoder().encode(JSON.stringify(secret)))
-      : null,
-  });
+  const [row] = await tx
+    .insert(formResponses)
+    .values({
+      orgId,
+      formVersionId: f.versionId,
+      respondentType: input.respondentType,
+      respondentId: input.respondentId,
+      answers: open,
+      sensitiveCiphertext: Object.keys(secret).length
+        ? await keyVault().encrypt(orgId, new TextEncoder().encode(JSON.stringify(secret)))
+        : null,
+    })
+    .returning({ id: formResponses.id });
+  if (!row) throw new DomainError('internal');
+  return { id: row.id, version: f.version };
+}
+
+/** A question as reports label it (from the newest version that has it). */
+export interface QuestionSummary {
+  readonly key: string;
+  readonly type: FieldDefinition['type'];
+  readonly label: string;
+  readonly options: Readonly<Record<string, string>>;
+}
+
+/**
+ * Every non-sensitive response to a subject's form, across all its versions, in the caller's
+ * transaction (survey reports and exports, M3.9a). `questions` lists the current version's
+ * questions first, then questions only older versions had and someone answered (a question added
+ * and removed before anyone answered it is not reported). `respondentIds` narrows the responses,
+ * never the questions, so every chunk of an export has the same columns.
+ */
+export async function subjectResponsesTx(
+  tx: TenantTx,
+  s: Subject,
+  respondentIds?: readonly string[],
+): Promise<{
+  questions: QuestionSummary[];
+  responses: { respondentId: string; version: number; answers: Record<string, unknown>; at: Date }[];
+}> {
+  const versions = await tx
+    .select({ version: formVersions.version, definition: formVersions.definition })
+    .from(formVersions)
+    .innerJoin(forms, eq(forms.id, formVersions.formId))
+    .where(
+      and(eq(forms.kind, s.kind), eq(forms.subjectType, s.subjectType), eq(forms.subjectId, s.subjectId)),
+    )
+    .orderBy(desc(formVersions.version));
+  const answered = new Set(
+    (
+      await tx
+        .selectDistinct({ key: sql<string>`jsonb_object_keys(${formResponses.answers})` })
+        .from(formResponses)
+        .innerJoin(formVersions, eq(formVersions.id, formResponses.formVersionId))
+        .innerJoin(forms, eq(forms.id, formVersions.formId))
+        .where(
+          and(eq(forms.kind, s.kind), eq(forms.subjectType, s.subjectType), eq(forms.subjectId, s.subjectId)),
+        )
+    ).map((r) => r.key),
+  );
+  const questions: QuestionSummary[] = [];
+  const seen = new Set<string>();
+  for (const [i, v] of versions.entries())
+    for (const q of FormDefinition.parse(v.definition).fields)
+      if (!seen.has(q.key) && (i === 0 || answered.has(q.key))) {
+        seen.add(q.key);
+        questions.push({
+          key: q.key,
+          type: q.type,
+          label: q.label,
+          options: Object.fromEntries(q.options.map((o) => [o.value, o.label])),
+        });
+      }
+  if (respondentIds && respondentIds.length === 0) return { questions, responses: [] };
+  const rows = await tx
+    .select({
+      respondentId: formResponses.respondentId,
+      version: formVersions.version,
+      answers: formResponses.answers,
+      at: formResponses.createdAt,
+    })
+    .from(formResponses)
+    .innerJoin(formVersions, eq(formVersions.id, formResponses.formVersionId))
+    .innerJoin(forms, eq(forms.id, formVersions.formId))
+    .where(
+      and(
+        eq(forms.kind, s.kind),
+        eq(forms.subjectType, s.subjectType),
+        eq(forms.subjectId, s.subjectId),
+        respondentIds ? inArray(formResponses.respondentId, [...respondentIds]) : undefined,
+      ),
+    )
+    .orderBy(asc(formResponses.createdAt), asc(formResponses.id));
+  return {
+    questions,
+    responses: rows.map((r) => ({ ...r, answers: r.answers as Record<string, unknown> })),
+  };
 }
 
 export const ResponseDto = z.object({

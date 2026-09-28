@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "テスト通知",
       "intro": "通知は正常に動作しています。"
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org}より：{eventName}のご感想をお聞かせください。所要時間は2分ほどです。",
+      "cta": "アンケートに回答する"
+    },
+    "surveys.reminder": {
+      "subject": "リマインダー：{title}",
+      "intro": "まだご回答いただいていません。{org}は{eventName}のご感想をお待ちしています。",
+      "cta": "アンケートに回答する"
     }
   },
   "roles": {

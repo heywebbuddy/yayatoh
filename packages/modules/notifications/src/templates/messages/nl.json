@@ -80,6 +80,16 @@
     "notifications.test": {
       "subject": "Testmelding",
       "intro": "Meldingen werken."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} hoort graag hoe je {eventName} vond. Het duurt ongeveer twee minuten.",
+      "cta": "Vul de enquête in"
+    },
+    "surveys.reminder": {
+      "subject": "Herinnering: {title}",
+      "intro": "Je hebt nog niet geantwoord: {org} hoort nog steeds graag hoe je {eventName} vond.",
+      "cta": "Vul de enquête in"
     }
   },
   "roles": {
