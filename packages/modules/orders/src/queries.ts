@@ -208,6 +208,8 @@ export const OrganizerTicketDto = z.object({
   holderEmail: z.string(),
   itemName: z.string(),
   seatLabel: z.string().nullable(),
+  /** The date the ticket is for (multi-date events; M1.7g). */
+  occurrenceId: z.uuid().nullable(),
 });
 
 /** One order as the organizer sees it: the order, its tickets (who holds them, void or not). */
@@ -240,6 +242,7 @@ export const orderDetailQuery = tenantQuery({
       holderEmail: t.holderEmail,
       itemName: names.get(t.orderItemId) ?? '',
       seatLabel: t.seatLabel,
+      occurrenceId: t.occurrenceId ?? null,
     }));
     return {
       ...order,

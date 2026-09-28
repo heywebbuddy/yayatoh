@@ -57,12 +57,19 @@ export const layouts = tenantTable(
   ],
 );
 
-/** The event's own copy of a floor plan; seats are materialized from it. */
+/**
+ * The event's own copy of a floor plan; seats are materialized from it. A multi-date event has one
+ * plan for all dates (`occurrence_id` null, the default) and may give a date its own copy
+ * (`occurrence_id` = that date, M1.7g): a chart. Each chart has its own seats, holds and sales.
+ * `(org_id, occurrence_id)` references `events.occurrences` through a hand-written FK.
+ */
 export const eventLayouts = tenantTable(
   seatingSchema,
   'event_layouts',
   {
     eventId: uuid('event_id').notNull(),
+    /** The date this chart is for; null = the event plan (every date without its own chart). */
+    occurrenceId: uuid('occurrence_id'),
     sourceLayoutId: uuid('source_layout_id'),
     doc: jsonb('doc').notNull(),
     checksum: text('checksum').notNull(),
@@ -74,7 +81,10 @@ export const eventLayouts = tenantTable(
     finderMode: text('finder_mode').notNull().default('code'),
   },
   (t) => [
-    uniqueIndex('event_layouts_org_event_key').on(t.orgId, t.eventId),
+    uniqueIndex('event_layouts_org_event_plan_key').on(t.orgId, t.eventId).where(sql`occurrence_id is null`),
+    uniqueIndex('event_layouts_org_event_date_key')
+      .on(t.orgId, t.eventId, t.occurrenceId)
+      .where(sql`occurrence_id is not null`),
     check(
       'event_layouts_status_check',
       sql.raw(`status in (${EVENT_LAYOUT_STATUSES.map((s) => `'${s}'`).join(', ')})`),
@@ -92,6 +102,8 @@ export const eventSeats = tenantTable(
   'event_seats',
   {
     eventId: uuid('event_id').notNull(),
+    /** The chart (M1.7g): null = the event plan, else the date with its own copy of the plan. */
+    occurrenceId: uuid('occurrence_id'),
     seatUuid: uuid('seat_uuid').notNull(),
     label: text('label').notNull(),
     itemId: uuid('item_id').notNull(),
@@ -109,9 +121,22 @@ export const eventSeats = tenantTable(
      * while a member sits in it, so unseating them gives the seat back to their group.
      */
     groupLabel: text('group_label'),
+    /**
+     * The date a held or sold seat of the event plan is for (M1.7g): a date may get its own chart
+     * only while no seat of the plan is held or sold for it (or for an unknown date).
+     */
+    heldForOccurrenceId: uuid('held_for_occurrence_id'),
   },
   (t) => [
-    uniqueIndex('event_seats_org_event_seat_key').on(t.orgId, t.eventId, t.seatUuid),
+    uniqueIndex('event_seats_org_event_plan_seat_key')
+      .on(t.orgId, t.eventId, t.seatUuid)
+      .where(sql`occurrence_id is null`),
+    uniqueIndex('event_seats_org_event_date_seat_key')
+      .on(t.orgId, t.eventId, t.occurrenceId, t.seatUuid)
+      .where(sql`occurrence_id is not null`),
+    index('event_seats_org_held_for_idx')
+      .on(t.orgId, t.eventId, t.heldForOccurrenceId)
+      .where(sql`held_for_occurrence_id is not null`),
     index('event_seats_org_event_status_idx').on(t.orgId, t.eventId, t.status),
     index('event_seats_org_event_group_idx')
       .on(t.orgId, t.eventId, t.groupLabel)
@@ -133,6 +158,10 @@ export const eventSeats = tenantTable(
     ),
     check('event_seats_sold_check', sql`(status = 'sold') = (ticket_id is not null)`),
     check(
+      'event_seats_held_for_check',
+      sql`held_for_occurrence_id is null or (occurrence_id is null and status in ('held', 'sold'))`,
+    ),
+    check(
       'event_seats_group_check',
       sql`(block_reason is distinct from 'group' or group_label is not null) and (group_label is null or length(group_label) between 1 and 40)`,
     ),
@@ -153,6 +182,8 @@ export const seatAssignments = tenantTable(
   'seat_assignments',
   {
     eventId: uuid('event_id').notNull(),
+    /** The chart the seat is on (M1.7g): null = the event plan, else a date's own chart. */
+    occurrenceId: uuid('occurrence_id'),
     attendeeId: uuid('attendee_id').notNull(),
     itemId: uuid('item_id').notNull(),
     seatUuid: uuid('seat_uuid').notNull(),
@@ -160,8 +191,18 @@ export const seatAssignments = tenantTable(
     priorBlock: text('prior_block'),
   },
   (t) => [
-    uniqueIndex('seat_assignments_org_event_attendee_key').on(t.orgId, t.eventId, t.attendeeId),
-    uniqueIndex('seat_assignments_org_event_seat_key').on(t.orgId, t.eventId, t.seatUuid),
+    uniqueIndex('seat_assignments_org_event_plan_attendee_key')
+      .on(t.orgId, t.eventId, t.attendeeId)
+      .where(sql`occurrence_id is null`),
+    uniqueIndex('seat_assignments_org_event_date_attendee_key')
+      .on(t.orgId, t.eventId, t.occurrenceId, t.attendeeId)
+      .where(sql`occurrence_id is not null`),
+    uniqueIndex('seat_assignments_org_event_plan_seat_key')
+      .on(t.orgId, t.eventId, t.seatUuid)
+      .where(sql`occurrence_id is null`),
+    uniqueIndex('seat_assignments_org_event_date_seat_key')
+      .on(t.orgId, t.eventId, t.occurrenceId, t.seatUuid)
+      .where(sql`occurrence_id is not null`),
     index('seat_assignments_org_event_item_idx').on(t.orgId, t.eventId, t.itemId),
     index('seat_assignments_org_attendee_idx').on(t.orgId, t.attendeeId),
     check(

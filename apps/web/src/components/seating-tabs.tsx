@@ -10,15 +10,19 @@ export function SeatingTabs({
   base,
   active,
   finder = false,
+  date = null,
 }: {
   base: string;
   active: 'plan' | 'assign' | 'rules' | 'finder';
   finder?: boolean;
+  /** The date whose chart the plan and guest views show (M1.7g); kept when switching views. */
+  date?: string | null;
 }) {
   const t = useTranslations('seating.tabs');
+  const q = date ? `?date=${date}` : '';
   const tabs = [
-    { key: 'plan', href: base },
-    { key: 'assign', href: `${base}/assign` },
+    { key: 'plan', href: `${base}${q}` },
+    { key: 'assign', href: `${base}/assign${q}` },
     { key: 'rules', href: `${base}/rules` },
     ...(finder ? [{ key: 'finder', href: `${base}/finder` } as const] : []),
   ] as const;

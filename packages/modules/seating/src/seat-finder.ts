@@ -14,6 +14,7 @@ import {
 } from '@yayatoh/platform';
 import { and, desc, eq, gte, inArray, lt } from 'drizzle-orm';
 import { z } from 'zod';
+import { type ChartKey, chartKeyTx, onChart, publicDoc } from './chart.ts';
 import { eventLayouts, eventSeats, FINDER_MODES, finderCodes, seatAssignments } from './schema.ts';
 
 /** Lookups per device (cookie) and event per minute before a challenge (roadmap §6.1). */
@@ -41,12 +42,20 @@ const emailHash = (eventId: string, email: string) =>
   mac('seat-finder-email', `${eventId}:${email}`).toString('hex');
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
-/** The event's plan and finder settings; refused unless the organizer opened the finder. */
-async function openFinderTx(tx: TenantTx, eventId: string, mode: FinderMode | null) {
+/**
+ * The event's plan (for a date, the chart it uses: M1.7g) and the finder settings (kept on the
+ * event plan); refused unless the organizer opened the finder.
+ */
+async function openFinderTx(
+  tx: TenantTx,
+  eventId: string,
+  mode: FinderMode | null,
+  occurrenceId?: string | null,
+) {
   const [l] = await tx
     .select({ doc: eventLayouts.doc, publicMap: eventLayouts.publicMap, mode: eventLayouts.finderMode })
     .from(eventLayouts)
-    .where(eq(eventLayouts.eventId, eventId));
+    .where(onChart(eventLayouts, eventId, null));
   if (!l?.publicMap)
     throw new DomainError('not_found', 'The seat finder is not open for this event', {
       reason: 'finder_closed',
@@ -55,7 +64,16 @@ async function openFinderTx(tx: TenantTx, eventId: string, mode: FinderMode | nu
     throw new DomainError('invalid_state', 'This event looks up seats another way', {
       reason: 'finder_mode',
     });
-  return { doc: FloorplanDoc.parse(l.doc), mode: l.mode as FinderMode };
+  const chart = await chartKeyTx(tx, eventId, occurrenceId);
+  let doc = l.doc;
+  if (chart) {
+    const [own] = await tx
+      .select({ doc: eventLayouts.doc })
+      .from(eventLayouts)
+      .where(onChart(eventLayouts, eventId, chart));
+    doc = own?.doc ?? doc;
+  }
+  return { doc: publicDoc(doc), mode: l.mode as FinderMode, chart };
 }
 
 /** Count this lookup against the device's budget for the event. */
@@ -96,6 +114,7 @@ async function seatsOfTx(
   tx: TenantTx,
   doc: FloorplanDoc,
   eventId: string,
+  chart: ChartKey,
   people: readonly { id: string; ticketId: string | null }[],
 ): Promise<SeatFinderResultDto> {
   const ids = people.map((p) => p.id);
@@ -105,7 +124,7 @@ async function seatsOfTx(
       ? tx
           .select({ attendeeId: seatAssignments.attendeeId, seatUuid: seatAssignments.seatUuid })
           .from(seatAssignments)
-          .where(and(eq(seatAssignments.eventId, eventId), inArray(seatAssignments.attendeeId, ids)))
+          .where(and(onChart(seatAssignments, eventId, chart), inArray(seatAssignments.attendeeId, ids)))
       : [],
     ticketIds.length
       ? tx
@@ -113,7 +132,7 @@ async function seatsOfTx(
           .from(eventSeats)
           .where(
             and(
-              eq(eventSeats.eventId, eventId),
+              onChart(eventSeats, eventId, chart),
               eq(eventSeats.status, 'sold'),
               inArray(eventSeats.ticketId, ticketIds),
             ),
@@ -167,6 +186,7 @@ export const setFinderSettingsCommand = tenantCommand({
       .set({ publicMap: input.publicMap, finderMode: input.mode, updatedAt: ctx.now })
       .where(eq(eventLayouts.eventId, input.eventId))
       .returning({ publicMap: eventLayouts.publicMap, mode: eventLayouts.finderMode });
+    // Every chart of the event carries the same settings (the event plan's are read).
     if (!row) throw new DomainError('not_found', 'This event has no floor plan');
     return { publicMap: row.publicMap, mode: row.mode as FinderMode };
   },
@@ -188,7 +208,7 @@ export const finderSettingsQuery = tenantQuery({
     const [l] = await tx
       .select({ publicMap: eventLayouts.publicMap, mode: eventLayouts.finderMode })
       .from(eventLayouts)
-      .where(eq(eventLayouts.eventId, input.eventId));
+      .where(onChart(eventLayouts, input.eventId, null));
     return l ? { publicMap: l.publicMap, mode: l.mode as FinderMode } : null;
   },
 });
@@ -280,13 +300,14 @@ export const PublicVenueMapDto = z.object({ doc: FloorplanDoc, mode: z.enum(FIND
  */
 export const publicVenueMapQuery = tenantQuery({
   name: 'seating.publicVenueMap',
-  input: z.object({ eventId: z.uuid() }),
+  input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid().nullable().optional() }),
   output: PublicVenueMapDto.nullable(),
   entitlement: 'seat_finder',
   permission: 'public:seat_finder',
   handler: async ({ input, tx }) => {
     try {
-      return await openFinderTx(tx, input.eventId, null);
+      const { doc, mode } = await openFinderTx(tx, input.eventId, null, input.occurrenceId);
+      return { doc, mode };
     } catch (err) {
       if (err instanceof DomainError && err.code === 'not_found') return null;
       throw err;
@@ -447,12 +468,12 @@ export const verifyFinderCodeCommand = tenantCommand({
 /** Public: the seats of the party behind a code verified in the last 24 hours. */
 export const finderResultQuery = tenantQuery({
   name: 'seating.finderResult',
-  input: z.object({ eventId: z.uuid(), codeId: z.uuid() }),
+  input: z.object({ eventId: z.uuid(), codeId: z.uuid(), occurrenceId: z.uuid().nullable().optional() }),
   output: SeatFinderResultDto,
   entitlement: 'seat_finder',
   permission: 'public:seat_finder',
   handler: async ({ input, ctx, tx }) => {
-    const { doc } = await openFinderTx(tx, input.eventId, 'code');
+    const { doc, chart } = await openFinderTx(tx, input.eventId, 'code', input.occurrenceId);
     const [row] = await tx
       .select({ email: finderCodes.email, usedAt: finderCodes.usedAt })
       .from(finderCodes)
@@ -460,7 +481,7 @@ export const finderResultQuery = tenantQuery({
     if (!row?.email || !row.usedAt || row.usedAt.getTime() <= ctx.now.getTime() - FINDER_VIEW_MS)
       throw new DomainError('not_found', 'Look up your seat again');
     const people = await eventAttendeesMatchingTx(tx, input.eventId, { email: row.email });
-    return seatsOfTx(tx, doc, input.eventId, people);
+    return seatsOfTx(tx, doc, input.eventId, chart, people);
   },
 });
 
@@ -473,6 +494,7 @@ export const findSeatByNameCommand = tenantCommand({
   input: z.object({
     eventId: z.uuid(),
     name: z.string().trim().min(1).max(120),
+    occurrenceId: z.uuid().nullable().optional(),
     device: Device,
     human: z.boolean().default(false),
   }),
@@ -480,11 +502,11 @@ export const findSeatByNameCommand = tenantCommand({
   entitlement: 'seat_finder',
   permission: 'public:seat_finder',
   handler: async ({ input, ctx, tx }) => {
-    const { doc } = await openFinderTx(tx, input.eventId, 'name');
+    const { doc, chart } = await openFinderTx(tx, input.eventId, 'name', input.occurrenceId);
     if ((await overLimitTx(tx, ctx, input.eventId, input.device)) && !input.human)
       return { status: 'challenge' as const, result: null };
     const people = await eventAttendeesMatchingTx(tx, input.eventId, { name: input.name });
-    return { status: 'ok' as const, result: await seatsOfTx(tx, doc, input.eventId, people) };
+    return { status: 'ok' as const, result: await seatsOfTx(tx, doc, input.eventId, chart, people) };
   },
   audit: (input, r) => ({
     action: 'seating.finder_name_lookup',

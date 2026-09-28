@@ -1130,7 +1130,9 @@
     "warning": {
       "ada_kept_back": "{count, plural, one {# personne a été placée} other {# personnes ont été placées}} sur des places accessibles réservées.",
       "other": "{count, plural, one {# personne demande} other {# personnes demandent}} une vérification."
-    }
+    },
+    "seatDate": "Pour la date",
+    "seatDatePlan": "Plan de l'événement (dates sans plan propre)"
   },
   "exportColumns": {
     "name": "Nom",
@@ -1144,7 +1146,8 @@
     "registeredAt": "Inscription",
     "checkedIn": "Check-in",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "seat": "Place"
   },
   "import": {
     "title": "Importer des invités",
@@ -4374,6 +4377,89 @@
     "terminated": {
       "title": "Cette organisation est fermée",
       "body": "Le support Yayatoh l’a fermée. Ses pages publiques sont hors ligne et plus rien ne peut être modifié. En tant que propriétaire, vous pouvez toujours l’ouvrir et télécharger vos données, par exemple depuis Activité."
+    }
+  },
+  "seatingDates": {
+    "label": "Plan de salle par date",
+    "intro": "Chaque date utilise le plan de l'événement, sauf si vous lui donnez son propre plan.",
+    "eventPlan": "Plan de l'événement",
+    "eventPlanNote": "Dates sans plan propre",
+    "ownChart": "Plan propre",
+    "usesPlan": "Utilise le plan de l'événement",
+    "cancelled": "Annulée",
+    "dateTitle": "Plan pour le {date}",
+    "ownChartBody": "Cette date a son propre plan : ses places, prix, réservations et ventes sont séparés des autres dates.",
+    "usesPlanBody": "Cette date utilise le plan de l'événement : une place vendue pour cette date est aussi prise pour toutes les autres dates qui l'utilisent.",
+    "planBody": "Vous modifiez le plan de l'événement. Choisissez une date ci-dessus pour lui donner son propre plan.",
+    "give": "Donner à cette date son propre plan",
+    "giveHint": "Le plan commence comme une copie du plan de l'événement, avec ses prix et places bloquées. Rien de vendu ou réservé n'est copié.",
+    "remove": "Utiliser le plan de l'événement pour cette date",
+    "removeHint": "Le plan propre de la date est supprimé et les invités placés dessus perdent leur place. Impossible une fois des places vendues dessus.",
+    "errors": {
+      "seats_in_use": "Des places sont réservées ou vendues pour cette date. Attendez la fin des réservations, ou gardez le plan actuel.",
+      "layout_locked": "Des places ont été vendues sur ce plan : il ne peut plus changer.",
+      "date_has_chart": "Cette date a déjà son propre plan.",
+      "date_cancelled": "Cette date est annulée."
+    },
+    "boxOfficeLabel": "Places pour la date",
+    "boxOfficeIntro": "Certaines dates ont leur propre plan de salle. Choisissez la date pour laquelle vous vendez des places.",
+    "finderLabel": "Choisissez votre date",
+    "finderIntro": "Choisissez la date de votre billet pour voir le bon plan de salle."
+  },
+  "seatingUnderlay": {
+    "title": "Image du plan",
+    "description": "Importez une image du plan du lieu pour dessiner par-dessus. Réglez son échelle à partir de deux points dont vous connaissez la distance.",
+    "file": "Image du plan",
+    "replace": "Remplacer l'image",
+    "fileHint": "JPEG, PNG, GIF, WebP, AVIF ou SVG, jusqu'à 4 Mo. Elle est réencodée et ses métadonnées (lieu, appareil) sont supprimées.",
+    "upload": "Importer l'image",
+    "uploading": "Import de l'image…",
+    "uploaded": "Image ajoutée sous le plan.",
+    "removed": "Image retirée du plan.",
+    "calibrated": "Échelle réglée : 1 pixel = {scale} cm.",
+    "scale": "Échelle : 1 pixel = {scale} cm. L'image couvre {width} m × {height} m.",
+    "size": "L'image couvre {width} m × {height} m.",
+    "calibrate": "Régler l'échelle",
+    "calibrateHint": "Indiquez deux points de l'image (en pixels depuis son coin supérieur gauche) et la distance réelle entre eux. Vous pouvez aussi marquer chaque point en cliquant sur le plan.",
+    "point": {
+      "ax": "Point A : x (px)",
+      "ay": "Point A : y (px)",
+      "bx": "Point B : x (px)",
+      "by": "Point B : y (px)"
+    },
+    "markA": "Marquer A sur le plan",
+    "markB": "Marquer B sur le plan",
+    "markingA": "Cliquez sur le plan à l'emplacement du point A.",
+    "markingB": "Cliquez sur le plan à l'emplacement du point B.",
+    "metres": "Distance entre A et B (m)",
+    "applyScale": "Appliquer l'échelle",
+    "calErrors": {
+      "number": "Indiquez chaque point en nombre de pixels.",
+      "points_too_close": "Les points A et B sont trop proches. Choisissez des points plus éloignés.",
+      "distance_out_of_range": "Indiquez une distance entre 0,01 et 10 000 mètres.",
+      "point_outside_image": "Les deux points doivent être dans l'image."
+    },
+    "position": {
+      "x": "Position de l'image x (cm)",
+      "y": "Position de l'image y (cm)"
+    },
+    "opacity": "Opacité : {percent} %",
+    "lock": "Verrouiller l'image (elle ne peut être ni déplacée ni redimensionnée)",
+    "showOnMap": "L'afficher en transparence sur le plan des acheteurs",
+    "showOnMapHint": "Les acheteurs voient l'image très pâle sous les places. Désactivé par défaut.",
+    "remove": "Retirer l'image",
+    "none": "Aucune image du plan.",
+    "errors": {
+      "no_file": "Choisissez un fichier image.",
+      "unsupported_type": "Ce fichier n'est pas une image prise en charge. Utilisez JPEG, PNG, GIF, WebP, AVIF ou SVG.",
+      "too_large": "Ce fichier est trop volumineux. La limite est de 4 Mo.",
+      "too_many_pixels": "Cette image a trop de pixels (la limite est de 40 mégapixels).",
+      "undecodable": "Ce fichier image est endommagé ou incomplet.",
+      "quota_exceeded": "Votre organisation a utilisé tout son stockage d'images. Supprimez d'abord des images.",
+      "slot_full": "Cet événement a déjà 20 images de plan.",
+      "forbidden": "Vous ne pouvez pas modifier ce plan.",
+      "network": "L'import a échoué. Vérifiez votre connexion et réessayez.",
+      "generic": "L'import a échoué. Réessayez."
     }
   }
 }

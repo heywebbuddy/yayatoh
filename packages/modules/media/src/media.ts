@@ -44,7 +44,7 @@ export const DEFAULT_QUOTA_BYTES = 1024 * 1024 * 1024;
 export const MAX_PER_SLOT = 20;
 const SINGLE_SLOTS: readonly Slot[] = ['cover', 'logo'];
 const OWNER_SLOTS: Readonly<Record<OwnerType, readonly Slot[]>> = {
-  event: ['cover', 'gallery'],
+  event: ['cover', 'gallery', 'floorplan'],
   venue: ['photo'],
   org: ['logo'],
   speaker: ['photo'],
@@ -712,7 +712,9 @@ export async function publicMedia(
       sql`select * from media.public_media(${ownerType}, ${ownerId}::uuid, ${opts.privateOk === true})`,
     ),
   );
-  return rows.map(toPublic);
+  // Floor plan images (M1.7g) are never page images: the seating map shows one when the
+  // organizer chooses, through the media route's own check.
+  return rows.filter((r) => r.slot !== 'floorplan').map(toPublic);
 }
 
 /** Cover images of public events by slug, for listing cards (any org). */
@@ -742,6 +744,8 @@ export interface ServeTarget {
   readonly eventId: string | null;
   /** `public`: anyone; `private_event`: a visitor with the event's access grant; `none`: members only. */
   readonly visibility: 'public' | 'private_event' | 'none';
+  /** The slot (M1.7g: a `floorplan` image is public only where the organizer shows it). */
+  readonly slot: Slot;
 }
 
 /** What a `/media/{org}/{asset}/{file}` request points at (no bytes), or null. */
@@ -759,7 +763,8 @@ export async function serveTarget(
       owner_id: string;
       event_id: string | null;
       visibility: ServeTarget['visibility'];
-    }>(sql`select * from media.serve_target(${orgId}::uuid, ${assetId}::uuid, ${fileName})`),
+      slot: Slot;
+    }>(sql`select * from media.serve_target_v2(${orgId}::uuid, ${assetId}::uuid, ${fileName})`),
   );
   const r = rows[0];
   return r
@@ -771,6 +776,7 @@ export async function serveTarget(
         ownerId: r.owner_id,
         eventId: r.event_id,
         visibility: r.visibility,
+        slot: r.slot,
       }
     : null;
 }

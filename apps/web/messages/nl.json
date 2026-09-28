@@ -1130,7 +1130,9 @@
     "warning": {
       "ada_kept_back": "{count, plural, one {# persoon zit} other {# personen zitten}} op vrijgehouden toegankelijke plaatsen.",
       "other": "{count, plural, one {# persoon vraagt} other {# personen vragen}} om een tweede blik."
-    }
+    },
+    "seatDate": "Voor de datum",
+    "seatDatePlan": "Evenementplan (datums zonder eigen plan)"
   },
   "exportColumns": {
     "name": "Naam",
@@ -1144,7 +1146,8 @@
     "registeredAt": "Geregistreerd",
     "checkedIn": "Ingecheckt",
     "yes": "Ja",
-    "no": "Nee"
+    "no": "Nee",
+    "seat": "Stoel"
   },
   "import": {
     "title": "Gasten importeren",
@@ -4374,6 +4377,89 @@
     "terminated": {
       "title": "Deze organisatie is gesloten",
       "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
+    }
+  },
+  "seatingDates": {
+    "label": "Zaalplan per datum",
+    "intro": "Elke datum gebruikt het evenementplan, tenzij je die datum een eigen plan geeft.",
+    "eventPlan": "Evenementplan",
+    "eventPlanNote": "Datums zonder eigen plan",
+    "ownChart": "Eigen plan",
+    "usesPlan": "Gebruikt het evenementplan",
+    "cancelled": "Geannuleerd",
+    "dateTitle": "Plan voor {date}",
+    "ownChartBody": "Deze datum heeft een eigen plan: stoelen, prijzen, reserveringen en verkopen staan los van de andere datums.",
+    "usesPlanBody": "Deze datum gebruikt het evenementplan: een stoel die voor deze datum verkocht is, is ook bezet op alle andere datums met dit plan.",
+    "planBody": "Je bewerkt het evenementplan. Kies hierboven een datum om die een eigen plan te geven.",
+    "give": "Geef deze datum een eigen plan",
+    "giveHint": "Het plan begint als kopie van het evenementplan, met de prijzen en geblokkeerde stoelen. Niets verkochts of gereserveerds wordt gekopieerd.",
+    "remove": "Gebruik het evenementplan voor deze datum",
+    "removeHint": "Het eigen plan van de datum wordt verwijderd en gasten die erop zitten verliezen hun stoel. Niet mogelijk zodra er stoelen op verkocht zijn.",
+    "errors": {
+      "seats_in_use": "Er zijn stoelen gereserveerd of verkocht voor deze datum. Wacht tot de reserveringen aflopen, of houd het huidige plan.",
+      "layout_locked": "Op dit plan zijn stoelen verkocht, dus het kan niet meer veranderen.",
+      "date_has_chart": "Deze datum heeft al een eigen plan.",
+      "date_cancelled": "Deze datum is geannuleerd."
+    },
+    "boxOfficeLabel": "Stoelen voor datum",
+    "boxOfficeIntro": "Sommige datums hebben een eigen zaalplan. Kies de datum waarvoor je stoelen verkoopt.",
+    "finderLabel": "Kies je datum",
+    "finderIntro": "Kies de datum van je ticket om het juiste zaalplan te zien."
+  },
+  "seatingUnderlay": {
+    "title": "Plattegrondafbeelding",
+    "description": "Upload een afbeelding van de plattegrond om overheen te tekenen. Stel de schaal in met twee punten waarvan je de afstand kent.",
+    "file": "Plattegrondafbeelding",
+    "replace": "Afbeelding vervangen",
+    "fileHint": "JPEG, PNG, GIF, WebP, AVIF of SVG, tot 4 MB. Ze wordt opnieuw gecodeerd en metadata (locatie, camera) worden verwijderd.",
+    "upload": "Afbeelding uploaden",
+    "uploading": "Afbeelding uploaden…",
+    "uploaded": "Afbeelding onder het plan geplaatst.",
+    "removed": "Afbeelding van het plan verwijderd.",
+    "calibrated": "Schaal ingesteld: 1 pixel = {scale} cm.",
+    "scale": "Schaal: 1 pixel = {scale} cm. De afbeelding beslaat {width} m × {height} m.",
+    "size": "De afbeelding beslaat {width} m × {height} m.",
+    "calibrate": "Schaal instellen",
+    "calibrateHint": "Geef twee punten in de afbeelding (in pixels vanaf de linkerbovenhoek) en de werkelijke afstand ertussen. Je kunt elk punt ook markeren door op het plan te klikken.",
+    "point": {
+      "ax": "Punt A: x (px)",
+      "ay": "Punt A: y (px)",
+      "bx": "Punt B: x (px)",
+      "by": "Punt B: y (px)"
+    },
+    "markA": "A op het plan markeren",
+    "markB": "B op het plan markeren",
+    "markingA": "Klik op het plan waar punt A ligt.",
+    "markingB": "Klik op het plan waar punt B ligt.",
+    "metres": "Afstand tussen A en B (m)",
+    "applyScale": "Schaal toepassen",
+    "calErrors": {
+      "number": "Vul elk punt in als een aantal pixels.",
+      "points_too_close": "Punt A en B liggen te dicht bij elkaar. Kies punten verder uit elkaar.",
+      "distance_out_of_range": "Vul een afstand in tussen 0,01 en 10.000 meter.",
+      "point_outside_image": "Beide punten moeten binnen de afbeelding liggen."
+    },
+    "position": {
+      "x": "Positie afbeelding x (cm)",
+      "y": "Positie afbeelding y (cm)"
+    },
+    "opacity": "Dekking: {percent} %",
+    "lock": "Afbeelding vergrendelen (kan niet worden verplaatst of geschaald)",
+    "showOnMap": "Vaag tonen op de stoelkaart van kopers",
+    "showOnMapHint": "Kopers zien de afbeelding heel vaag onder de stoelen. Standaard uit.",
+    "remove": "Afbeelding verwijderen",
+    "none": "Geen plattegrondafbeelding.",
+    "errors": {
+      "no_file": "Kies een afbeeldingsbestand.",
+      "unsupported_type": "Dit bestand is geen ondersteunde afbeelding. Gebruik JPEG, PNG, GIF, WebP, AVIF of SVG.",
+      "too_large": "Dit bestand is te groot. De limiet is 4 MB.",
+      "too_many_pixels": "Deze afbeelding heeft te veel pixels (de limiet is 40 megapixel).",
+      "undecodable": "Dit afbeeldingsbestand is beschadigd of onvolledig.",
+      "quota_exceeded": "Je organisatie heeft alle opslag voor afbeeldingen gebruikt. Verwijder eerst enkele afbeeldingen.",
+      "slot_full": "Dit evenement heeft al 20 plattegrondafbeeldingen.",
+      "forbidden": "Je kunt dit plan niet wijzigen.",
+      "network": "Uploaden mislukt. Controleer je verbinding en probeer het opnieuw.",
+      "generic": "Uploaden mislukt. Probeer het opnieuw."
     }
   }
 }

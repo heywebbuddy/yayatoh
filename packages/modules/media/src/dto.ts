@@ -74,7 +74,7 @@ const UploadFields = z.object({
 export const UploadMediaInput = UploadFields.extend({
   ownerType: z.enum(['event', 'venue']),
   ownerId: z.uuid(),
-  slot: z.enum(['cover', 'gallery', 'photo']),
+  slot: z.enum(['cover', 'gallery', 'photo', 'floorplan']),
 }).refine(altRequired, altIssue);
 export type UploadMediaInput = z.input<typeof UploadMediaInput>;
 

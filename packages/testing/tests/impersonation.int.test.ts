@@ -203,6 +203,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         // Removing a push device (member or buyer, M1.10e).
         'notifications.removePushToken',
         'orders.removePush',
+        // A date's own seating chart goes, with the guests seated on it (M1.7g).
+        'seating.removeDateChart',
       ]),
     );
   });

@@ -1130,7 +1130,9 @@
     "warning": {
       "ada_kept_back": "{count, plural, one {# person was} other {# people were}} seated in accessible seats that are kept back.",
       "other": "{count, plural, one {# person needs} other {# people need}} a second look."
-    }
+    },
+    "seatDate": "For the date",
+    "seatDatePlan": "Event plan (dates without their own chart)"
   },
   "exportColumns": {
     "name": "Name",
@@ -1144,7 +1146,8 @@
     "registeredAt": "Registered",
     "checkedIn": "Checked in",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "seat": "Seat"
   },
   "import": {
     "title": "Import guests",
@@ -4374,6 +4377,89 @@
     "terminated": {
       "title": "This organization is closed",
       "body": "Yayatoh support closed it. Its public pages are offline and nothing can be changed. As an owner you can still open it and download your data, for example from Activity."
+    }
+  },
+  "seatingDates": {
+    "label": "Seating chart by date",
+    "intro": "Every date uses the event plan unless you give it its own chart.",
+    "eventPlan": "Event plan",
+    "eventPlanNote": "Dates without their own chart",
+    "ownChart": "Own chart",
+    "usesPlan": "Uses the event plan",
+    "cancelled": "Cancelled",
+    "dateTitle": "Chart for {date}",
+    "ownChartBody": "This date has its own chart: its seats, prices, holds and sales are separate from the other dates.",
+    "usesPlanBody": "This date uses the event plan: a seat sold for this date is also taken on every other date that uses the plan.",
+    "planBody": "You are editing the event plan. Choose a date above to give it its own chart.",
+    "give": "Give this date its own chart",
+    "giveHint": "The chart starts as a copy of the event plan, with its prices and blocked seats. Nothing sold or held is copied.",
+    "remove": "Use the event plan for this date",
+    "removeHint": "The date's own chart is removed, and guests seated on it lose their seats. Not possible once seats are sold on it.",
+    "errors": {
+      "seats_in_use": "Seats are held or sold for this date. Wait until the holds end, or keep the current chart.",
+      "layout_locked": "Seats have been sold on this chart, so it can't change.",
+      "date_has_chart": "This date already has its own chart.",
+      "date_cancelled": "This date is cancelled."
+    },
+    "boxOfficeLabel": "Seats for date",
+    "boxOfficeIntro": "Some dates have their own seating chart. Choose the date to sell seats for.",
+    "finderLabel": "Choose your date",
+    "finderIntro": "Choose the date of your ticket to see the right seating plan."
+  },
+  "seatingUnderlay": {
+    "title": "Floor plan image",
+    "description": "Upload a picture of the venue's floor plan to draw over. Set its scale from two points you know the distance between.",
+    "file": "Floor plan image",
+    "replace": "Replace the image",
+    "fileHint": "JPEG, PNG, GIF, WebP, AVIF or SVG, up to 4 MB. It is re-encoded and its metadata (location, camera) removed.",
+    "upload": "Upload image",
+    "uploading": "Uploading the image…",
+    "uploaded": "Image added under the plan.",
+    "removed": "Image removed from the plan.",
+    "calibrated": "Scale set: 1 pixel = {scale} cm.",
+    "scale": "Scale: 1 pixel = {scale} cm. The image covers {width} m × {height} m.",
+    "size": "The image covers {width} m × {height} m.",
+    "calibrate": "Set the scale",
+    "calibrateHint": "Give two points on the image (in pixels from its top-left corner) and the real distance between them. You can also mark each point by clicking the plan.",
+    "point": {
+      "ax": "Point A: x (px)",
+      "ay": "Point A: y (px)",
+      "bx": "Point B: x (px)",
+      "by": "Point B: y (px)"
+    },
+    "markA": "Mark A on the plan",
+    "markB": "Mark B on the plan",
+    "markingA": "Click the plan where point A is.",
+    "markingB": "Click the plan where point B is.",
+    "metres": "Distance between A and B (m)",
+    "applyScale": "Apply scale",
+    "calErrors": {
+      "number": "Enter every point as a number of pixels.",
+      "points_too_close": "Points A and B are too close together. Choose points further apart.",
+      "distance_out_of_range": "Enter a distance between 0.01 and 10,000 metres.",
+      "point_outside_image": "Both points must be inside the image."
+    },
+    "position": {
+      "x": "Image position x (cm)",
+      "y": "Image position y (cm)"
+    },
+    "opacity": "Opacity: {percent} %",
+    "lock": "Lock the image (it can't be moved or rescaled)",
+    "showOnMap": "Show it faintly on the buyer's seat map",
+    "showOnMapHint": "Buyers see the image very faint under the seats. Off by default.",
+    "remove": "Remove the image",
+    "none": "No floor plan image.",
+    "errors": {
+      "no_file": "Choose an image file.",
+      "unsupported_type": "This file isn't a supported image. Use JPEG, PNG, GIF, WebP, AVIF or SVG.",
+      "too_large": "This file is too big. The limit is 4 MB.",
+      "too_many_pixels": "This image has too many pixels (the limit is 40 megapixels).",
+      "undecodable": "This image file is damaged or incomplete.",
+      "quota_exceeded": "Your organization has used all its image storage. Remove some images first.",
+      "slot_full": "This event has 20 floor plan images already.",
+      "forbidden": "You can't change this plan.",
+      "network": "The upload failed. Check your connection and try again.",
+      "generic": "The upload failed. Try again."
     }
   }
 }

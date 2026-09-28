@@ -463,6 +463,13 @@
       "when": 1790604648572,
       "tag": "0065_confused_lady_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1790628298827,
+      "tag": "0066_third_gambit",
+      "breakpoints": true
     }
   ]
 }

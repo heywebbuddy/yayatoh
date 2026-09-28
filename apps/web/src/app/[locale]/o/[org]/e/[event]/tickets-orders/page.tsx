@@ -2,7 +2,7 @@ import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
-import { publicSeatMap } from '@yayatoh/seating';
+import { dateChartsQuery, publicSeatMap } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -35,10 +35,13 @@ import {
 
 export default async function TicketsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
+  searchParams: Promise<{ date?: string }>;
 }) {
   const { locale, org, event } = await params;
+  const sp = await searchParams;
   setRequestLocale(locale);
   const { data, event: ev } = await loadEvent(org, event);
   const t = await getTranslations();
@@ -67,8 +70,29 @@ export default async function TicketsPage({
     : null;
   const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
   const canSell = roleCan(data.role, 'orders:sell') && ev.status === 'published' && types.length > 0;
+  // Per-date charts (M1.7g): with dates that have their own chart, the box office picks the date
+  // first (`?date=`) and sells that date's seats; without one chosen, the dates on the event plan.
+  const ownCharts =
+    canSell && dates.length && data.modules.has('seating')
+      ? new Set(
+          (await executeQuery(dateChartsQuery, { eventId: ev.id }, data.ctx, ports)).map(
+            (c) => c.occurrenceId,
+          ),
+        )
+      : new Set<string>();
+  const saleDate = ownCharts.size ? (saleDates.find((d) => d.id === sp.date) ?? null) : null;
+  const boxDates = !ownCharts.size
+    ? saleDates
+    : saleDate
+      ? [saleDate]
+      : saleDates.filter((d) => !ownCharts.has(d.id));
   // Seated events (M1.7f): the box office chooses seats from the same map as buyers, live.
-  const seatMap = canSell ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, { audience: 'staff' }) : null;
+  const seatMap = canSell
+    ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, {
+        audience: 'staff',
+        occurrenceId: saleDate?.id ?? null,
+      })
+    : null;
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
   const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
   const checkout = await executeQuery(checkoutSettingsQuery, { eventId: ev.id }, data.ctx, ports);
@@ -210,6 +234,28 @@ export default async function TicketsPage({
             {t('boxOffice.title')}
           </h2>
           <p className="text-body text-zinc-600">{t('boxOffice.description')}</p>
+          {ownCharts.size ? (
+            <nav aria-label={t('seatingDates.boxOfficeLabel')} className="flex flex-col gap-1.5">
+              <p className="text-caption text-zinc-600">{t('seatingDates.boxOfficeIntro')}</p>
+              <ul className="flex list-none flex-wrap gap-1.5">
+                {[{ id: '', label: t('seatingDates.eventPlan') }, ...saleDates].map((d) => {
+                  const on = (saleDate?.id ?? '') === d.id;
+                  return (
+                    <li key={d.id || 'plan'}>
+                      <Link
+                        href={`/o/${org}/e/${event}/tickets-orders${d.id ? `?date=${d.id}` : ''}#box-office-heading`}
+                        aria-current={on ? 'page' : undefined}
+                        className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                      >
+                        {d.label}
+                        {d.id && ownCharts.has(d.id) ? ` · ${t('seatingDates.ownChart')}` : ''}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          ) : null}
           <Card>
             <BoxOfficeForm
               action={boxOfficeSaleAction.bind(null, org, event)}
@@ -221,11 +267,18 @@ export default async function TicketsPage({
                   seated: seatedTypes.has(tt.id),
                 }))}
               orderHref={`/o/${org}/e/${event}/orders/{id}`}
-              dates={saleDates}
+              key={saleDate?.id ?? 'plan'}
+              dates={boxDates}
               seatMap={seatMap}
               seatStream={
                 seatMap
-                  ? { url: localizedPath(locale, `/o/${org}/e/${event}/seating/stream`), kind: 'staff' }
+                  ? {
+                      url: localizedPath(
+                        locale,
+                        `/o/${org}/e/${event}/seating/stream${saleDate ? `?date=${saleDate.id}` : ''}`,
+                      ),
+                      kind: 'staff',
+                    }
                   : null
               }
               prices={Object.fromEntries(types.map((tt) => [tt.id, fmt(tt.allInMinor)]))}

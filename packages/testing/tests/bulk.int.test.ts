@@ -193,16 +193,17 @@ describe('bulk actions (M1.8b)', () => {
     expect(f.contentType).toBe('text/csv; charset=utf-8');
     const lines = f.content.replace(/^﻿/, '').trimEnd().split('\r\n');
     expect(lines[0]).toBe(
-      'Name,Email,Ticket type,Ticket code,No.,Source,Status,Labels,Registered,Checked in',
+      'Name,Email,Ticket type,Ticket code,No.,Source,Status,Labels,Registered,Checked in,Seat',
     );
     expect(lines).toHaveLength(5);
-    expect(lines.filter((l) => l.startsWith('Ada Lovelace,')).map((l) => l.split(',').at(-1))).toEqual(
+    // Check-in is the last column but one (the seat comes last, empty without a seating plan).
+    expect(lines.filter((l) => l.startsWith('Ada Lovelace,')).map((l) => l.split(',').at(-2))).toEqual(
       expect.arrayContaining(['Yes', 'No']),
     );
     expect(f.content).toContain(`"'=HYPERLINK(""http://evil"")"`);
     expect(f.content).toContain('"Grace, ""Amazing"" Hopper"');
     expect(f.content).not.toContain('contact');
-    expect(lines[1]).toMatch(/,\d{4}-\d{2}-\d{2} \d{2}:\d{2},(Yes|No)$/);
+    expect(lines[1]).toMatch(/,\d{4}-\d{2}-\d{2} \d{2}:\d{2},(Yes|No),$/);
   });
 
   it('csvCell neutralises formulas and quotes separators', () => {

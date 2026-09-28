@@ -4,6 +4,7 @@ import { csvRow } from '@yayatoh/csv';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError } from '@yayatoh/kernel';
 import { bulkCommands, defineBulkAction } from '@yayatoh/platform';
+import { attendeeSeatLabelsTx } from '@yayatoh/seating';
 import { ticketSummariesTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { AttendeeListFilter, resolveAttendeeListIdsTx } from './attendee-list.ts';
@@ -20,6 +21,7 @@ export const ATTENDEE_EXPORT_COLUMNS = [
   'labels',
   'registeredAt',
   'checkedIn',
+  'seat',
 ] as const;
 
 const Text = z.string().trim().min(1).max(60);
@@ -62,6 +64,16 @@ export const attendeeExportAction = defineBulkAction({
     const ticketIds = rows.flatMap((r) => (r.ticketId ? [r.ticketId] : []));
     const tickets = new Map((await ticketSummariesTx(tx, ticketIds)).map((t) => [t.id, t]));
     const admitted = await admittedTicketIdsTx(tx, event.id, ticketIds);
+    // The seat for each attendee's date (M1.7g): bought with the ticket, or given by the organizer.
+    const seats = await attendeeSeatLabelsTx(
+      tx,
+      event.id,
+      rows.map((r) => ({
+        attendeeId: r.id,
+        ticketId: r.ticketId,
+        occurrenceId: (r.ticketId ? tickets.get(r.ticketId)?.occurrenceId : null) ?? null,
+      })),
+    );
     // Excel opens UTF-8 correctly only with a byte-order mark.
     let out = meta.first ? `﻿${csvRow(ATTENDEE_EXPORT_COLUMNS.map((c) => params.headers[c]))}` : '';
     const results = [];
@@ -83,6 +95,7 @@ export const attendeeExportAction = defineBulkAction({
         a.labels.join('; '),
         localStamp(a.createdAt, event.timezone),
         a.ticketId && admitted.has(a.ticketId) ? params.yes : params.no,
+        seats.get(a.id),
       ]);
       results.push({ id, ok: true });
     }

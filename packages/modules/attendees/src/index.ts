@@ -4,6 +4,7 @@ export {
   AttendeeListDto,
   attendeeLabelsQuery,
   attendeesByIdsTx,
+  attendeesByTicketIdsTx,
   cancelAttendeesTx,
   createAttendeesTx,
   eventAttendeesMatchingTx,

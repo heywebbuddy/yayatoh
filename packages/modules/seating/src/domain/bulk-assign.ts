@@ -81,6 +81,8 @@ export interface PriorSeat {
 
 /** What undo needs per seated person: the seat they were given and the one they had. */
 export interface BulkAssignUndo {
+  /** The date's own chart (M1.7g); absent = the event plan. */
+  readonly chart?: string;
   readonly given: string;
   readonly prev: PriorSeat | null;
 }

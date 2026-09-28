@@ -81,7 +81,7 @@ export async function POST(req: Request): Promise<Response> {
               {
                 ownerType: owner,
                 ownerId: ticket.ownerId,
-                slot: ticket.slot as 'cover' | 'gallery' | 'photo',
+                slot: ticket.slot as 'cover' | 'gallery' | 'photo' | 'floorplan',
                 alt,
                 decorative,
                 file: bytes,
@@ -91,7 +91,20 @@ export async function POST(req: Request): Promise<Response> {
             );
     // Console pages render per request; the org layout (header logo) and public pages follow.
     revalidatePath('/', 'layout');
-    return json(200, { ok: true, assetId: result.asset.id, replaced: result.replacedAssetId });
+    // A floor plan image (M1.7g) goes under the seating plan: the editor needs its size and file.
+    const plan =
+      result.asset.slot === 'floorplan'
+        ? {
+            width: result.asset.width,
+            height: result.asset.height,
+            url: (
+              result.asset.variants.filter((v) => v.format === 'webp').sort((a, b) => b.width - a.width)[0] ??
+              result.asset.variants.find((v) => v.fallback) ??
+              result.asset.variants[0]
+            )?.url,
+          }
+        : {};
+    return json(200, { ok: true, assetId: result.asset.id, replaced: result.replacedAssetId, ...plan });
   } catch (err) {
     if (!isDomainError(err)) throw err;
     const details = (err.details ?? {}) as { issues?: { path: string }[]; field?: unknown; reason?: unknown };

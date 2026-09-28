@@ -143,6 +143,8 @@ async function verifyCodeAction(slug: string, prev: FinderState, form: FormData)
 /** Name mode (organizer opt-in): the seats of an exact full name, straight away. */
 export async function findByNameAction(
   slug: string,
+  /** The date chosen on the page (M1.7g): seats on the chart that date uses. */
+  date: string | null,
   _prev: FinderState,
   form: FormData,
 ): Promise<FinderState> {
@@ -155,7 +157,13 @@ export async function findByNameAction(
   try {
     const r = await executeCommand(
       findSeatByNameCommand,
-      { eventId: c.target.eventId, name, device: await deviceKey(), human },
+      {
+        eventId: c.target.eventId,
+        name,
+        occurrenceId: date && /^[0-9a-f-]{36}$/.test(date) ? date : null,
+        device: await deviceKey(),
+        human,
+      },
       c.ctx,
       ports,
     );

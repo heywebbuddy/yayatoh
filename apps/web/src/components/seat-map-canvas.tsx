@@ -1,12 +1,13 @@
 'use client';
 
-import { type FloorplanDoc, hitTest, placedSeats } from '@yayatoh/floorplan';
+import { type FloorplanDoc, hitTest, PUBLIC_UNDERLAY_OPACITY, placedSeats } from '@yayatoh/floorplan';
 import { color } from '@yayatoh/ui';
 import type Konva from 'konva';
 import { useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Text } from 'react-konva';
 import { PanZoomControls, roomPoint, useBoxWidth, usePanZoom } from './pan-zoom.tsx';
 import { type DotStyle, SeatDots } from './seat-dots.tsx';
+import { UnderlayImage } from './underlay-image.tsx';
 
 const SEAT_R = 24;
 const MINE: DotStyle = { fill: color.accent[900], stroke: color.accent[900], strokeWidth: 3 };
@@ -61,6 +62,8 @@ export default function SeatMapCanvas({
       <div
         ref={box}
         data-testid="seat-map"
+        // The organizer's floor plan image, shown faintly under the seats when they chose (M1.7g).
+        data-underlay={doc.underlay ? doc.underlay.url : undefined}
         aria-hidden="true"
         className="w-full overflow-hidden rounded-card border border-zinc-200"
       >
@@ -80,6 +83,9 @@ export default function SeatMapCanvas({
         >
           <Layer listening={false}>
             <Rect width={doc.width} height={doc.height} fill={color.white} />
+            {doc.underlay ? (
+              <UnderlayImage underlay={doc.underlay} opacity={PUBLIC_UNDERLAY_OPACITY} />
+            ) : null}
             {doc.items.map((i) =>
               i.kind === 'object' ? (
                 <Rect

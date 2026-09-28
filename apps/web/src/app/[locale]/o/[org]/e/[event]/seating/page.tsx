@@ -6,15 +6,20 @@ import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { DateChartForm } from '@/components/date-chart-form.tsx';
 import { LiveSeatCounts, SeatStatesProvider } from '@/components/seat-states.tsx';
+import { SeatingDatePicker } from '@/components/seating-dates.tsx';
 import { SeatingEditor } from '@/components/seating-editor.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
+import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
+import { seatingDates } from '@/server/seating-dates.ts';
 import {
   categoryAction,
+  dateChartAction,
   publishSeatingAction,
   quickBuildAction,
   saveDocAction,
@@ -28,18 +33,24 @@ const STATUS_DOT = { draft: 'neutral', published: 'success', locked: 'info' } as
 /** Seating (M1.7b): set up the event's floor plan, edit it, price it and put it on sale. */
 export default async function SeatingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
+  searchParams: Promise<{ date?: string }>;
 }) {
   const { locale, org, event } = await params;
+  const sp = await searchParams;
   setRequestLocale(locale);
   const { data, event: ev } = await loadEvent(org, event);
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'seating')) notFound();
   const t = await getTranslations('seating');
   const canWrite = roleCan(data.role, 'events:write');
+  // Per-date charts (M1.7g): `?date=` shows the chart that date uses.
+  const { dates, date } = await seatingDates(data, ev.id, sp.date);
+  const dateId = date?.id ?? null;
   const [seating, layouts, types] = await Promise.all([
-    executeQuery(eventSeatingQuery, { eventId: ev.id }, data.ctx, ports),
+    executeQuery(eventSeatingQuery, { eventId: ev.id, occurrenceId: dateId }, data.ctx, ports),
     executeQuery(listLayoutsQuery, {}, data.ctx, ports),
     executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
@@ -162,20 +173,42 @@ export default async function SeatingPage({
     );
 
   const locked = seating.status === 'locked' || !canWrite;
+  const base = `/o/${org}/e/${event}/seating`;
+  const when = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: ev.timezone,
+  });
+  const tc = await getTranslations('seatingDates');
+  const underlayTicket = canWrite ? (await mediaPanel(data, 'event', ev.id, 'floorplan')).ticket : null;
   const seatStatus = Object.fromEntries(seating.seats.map((s) => [s.seatUuid, s.state]));
   const priced = seating.seats.filter((s) => s.ticketTypeId).length;
   const items = seating.doc.items.filter((i) => i.kind !== 'object');
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs
-        base={`/o/${org}/e/${event}/seating`}
-        active="plan"
-        finder={data.modules.has('seat_finder')}
-      />
+      <SeatingTabs base={base} active="plan" finder={data.modules.has('seat_finder')} date={dateId} />
+      <SeatingDatePicker base={base} dates={dates} selected={dateId} timeZone={ev.timezone} locale={locale} />
+      {date ? (
+        <Card className="flex flex-col gap-3">
+          <h2 className="text-section">{tc('dateTitle', { date: when.format(date.startsAt) })}</h2>
+          <p className="text-body text-zinc-700" aria-live="polite" data-testid="date-chart-state">
+            {seating.chart ? tc('ownChartBody') : tc('usesPlanBody')}
+          </p>
+          {canWrite && !date.cancelled ? (
+            <DateChartForm
+              key={seating.chart ? 'own' : 'plan'}
+              action={dateChartAction.bind(null, org, event, date.id)}
+              op={seating.chart ? 'remove' : 'give'}
+            />
+          ) : null}
+        </Card>
+      ) : dates.length ? (
+        <p className="text-caption text-zinc-600">{tc('planBody')}</p>
+      ) : null}
       {/* Live (M1.7f): counts and seat colours follow sales, holds and guests as they happen. */}
       <SeatStatesProvider
-        url={localizedPath(locale, `/o/${org}/e/${event}/seating/stream`)}
+        url={localizedPath(locale, `/o/${org}/e/${event}/seating/stream${dateId ? `?date=${dateId}` : ''}`)}
         initialStates={seatStatus}
         initialCounts={seating.counts}
       >
@@ -186,7 +219,7 @@ export default async function SeatingPage({
             {t('priced', { priced, total: seating.seats.length })}
           </span>
           {seating.status === 'draft' && canWrite ? (
-            <form action={publishSeatingAction.bind(null, org, event)} className="ms-auto">
+            <form action={publishSeatingAction.bind(null, org, event, dateId)} className="ms-auto">
               <Button type="submit" size="sm">
                 {t('publish')}
               </Button>
@@ -203,7 +236,8 @@ export default async function SeatingPage({
             initialDoc={seating.doc}
             seatStatus={seatStatus}
             locked={locked}
-            saveDoc={saveDocAction.bind(null, org, event)}
+            saveDoc={saveDocAction.bind(null, org, event, dateId)}
+            underlayTicket={underlayTicket}
           />
         </section>
       </SeatStatesProvider>
@@ -216,7 +250,7 @@ export default async function SeatingPage({
           <p className="text-body text-zinc-600">{t('prices.description')}</p>
           <Card>
             <SettingsForm
-              action={categoryAction.bind(null, org, event)}
+              action={categoryAction.bind(null, org, event, dateId)}
               submitLabel={t('prices.submit')}
               savedLabel={t('prices.done')}
             >

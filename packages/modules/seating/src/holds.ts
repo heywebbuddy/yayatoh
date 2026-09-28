@@ -1,6 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { and, eq, inArray, lte, sql } from 'drizzle-orm';
+import { chartKeyTx, onChart } from './chart.ts';
 import { eventLayouts, eventSeats } from './schema.ts';
 
 /**
@@ -11,23 +12,38 @@ import { eventLayouts, eventSeats } from './schema.ts';
 export async function holdSeatsTx(
   tx: TenantTx,
   ctx: Ctx,
-  h: { eventId: string; seatUuids: readonly string[]; holdId: string; expiresAt: Date },
+  h: {
+    eventId: string;
+    /** The order's date (M1.7g): the seats are on that date's chart. */
+    occurrenceId?: string | null;
+    seatUuids: readonly string[];
+    holdId: string;
+    expiresAt: Date;
+  },
 ): Promise<{ seatUuid: string; ticketTypeId: string | null; label: string }[]> {
   const ids = [...new Set(h.seatUuids)];
   if (ids.length === 0) return [];
+  const key = await chartKeyTx(tx, h.eventId, h.occurrenceId);
   const [layout] = await tx
     .select({ status: eventLayouts.status })
     .from(eventLayouts)
-    .where(eq(eventLayouts.eventId, h.eventId));
+    .where(onChart(eventLayouts, h.eventId, key));
   if (!layout || layout.status === 'draft')
     throw new DomainError('invalid_state', 'Seats are not on sale', { reason: 'seats_not_on_sale' });
   await tx.execute(sql`set local lock_timeout = '2s'`);
   const rows = await tx
     .update(eventSeats)
-    .set({ status: 'held', holdId: h.holdId, holdExpiresAt: h.expiresAt, updatedAt: ctx.now })
+    .set({
+      status: 'held',
+      holdId: h.holdId,
+      holdExpiresAt: h.expiresAt,
+      // On the event plan of a multi-date event, the seat is taken for this date (M1.7g).
+      heldForOccurrenceId: key === null ? (h.occurrenceId ?? null) : null,
+      updatedAt: ctx.now,
+    })
     .where(
       and(
-        eq(eventSeats.eventId, h.eventId),
+        onChart(eventSeats, h.eventId, key),
         inArray(eventSeats.seatUuid, ids),
         eq(eventSeats.status, 'available'),
       ),
@@ -46,15 +62,21 @@ export async function holdSeatsTx(
 export async function sellSeatsTx(
   tx: TenantTx,
   ctx: Ctx,
-  s: { eventId: string; holdId: string; tickets: readonly { seatUuid: string; ticketId: string }[] },
+  s: {
+    eventId: string;
+    occurrenceId?: string | null;
+    holdId: string;
+    tickets: readonly { seatUuid: string; ticketId: string }[];
+  },
 ): Promise<void> {
+  const key = await chartKeyTx(tx, s.eventId, s.occurrenceId);
   for (const t of s.tickets) {
     const rows = await tx
       .update(eventSeats)
       .set({ status: 'sold', ticketId: t.ticketId, holdId: null, holdExpiresAt: null, updatedAt: ctx.now })
       .where(
         and(
-          eq(eventSeats.eventId, s.eventId),
+          onChart(eventSeats, s.eventId, key),
           eq(eventSeats.seatUuid, t.seatUuid),
           eq(eventSeats.holdId, s.holdId),
         ),
@@ -66,14 +88,20 @@ export async function sellSeatsTx(
   await tx
     .update(eventLayouts)
     .set({ status: 'locked', lockedAt: ctx.now, updatedAt: ctx.now })
-    .where(and(eq(eventLayouts.eventId, s.eventId), eq(eventLayouts.status, 'published')));
+    .where(and(onChart(eventLayouts, s.eventId, key), eq(eventLayouts.status, 'published')));
 }
 
 /** Give a hold's seats back (checkout expired or abandoned). */
 export async function releaseSeatHoldTx(tx: TenantTx, ctx: Ctx, holdId: string): Promise<number> {
   const rows = await tx
     .update(eventSeats)
-    .set({ status: 'available', holdId: null, holdExpiresAt: null, updatedAt: ctx.now })
+    .set({
+      status: 'available',
+      holdId: null,
+      holdExpiresAt: null,
+      heldForOccurrenceId: null,
+      updatedAt: ctx.now,
+    })
     .where(and(eq(eventSeats.holdId, holdId), eq(eventSeats.status, 'held')))
     .returning({ id: eventSeats.id });
   return rows.length;
@@ -83,7 +111,7 @@ export async function releaseSeatHoldTx(tx: TenantTx, ctx: Ctx, holdId: string):
 export async function voidSeatTx(tx: TenantTx, ctx: Ctx, ticketId: string): Promise<void> {
   await tx
     .update(eventSeats)
-    .set({ status: 'available', ticketId: null, updatedAt: ctx.now })
+    .set({ status: 'available', ticketId: null, heldForOccurrenceId: null, updatedAt: ctx.now })
     .where(and(eq(eventSeats.ticketId, ticketId), eq(eventSeats.status, 'sold')));
 }
 
@@ -91,18 +119,35 @@ export async function voidSeatTx(tx: TenantTx, ctx: Ctx, ticketId: string): Prom
 export async function releaseExpiredSeatHoldsTx(tx: TenantTx, ctx: Ctx): Promise<number> {
   const rows = await tx
     .update(eventSeats)
-    .set({ status: 'available', holdId: null, holdExpiresAt: null, updatedAt: ctx.now })
+    .set({
+      status: 'available',
+      holdId: null,
+      holdExpiresAt: null,
+      heldForOccurrenceId: null,
+      updatedAt: ctx.now,
+    })
     .where(and(eq(eventSeats.status, 'held'), lte(eventSeats.holdExpiresAt, ctx.now)))
     .returning({ id: eventSeats.id });
   return rows.length;
 }
 
-/** Ticket types sold by seat at this event: those need seats chosen, not quantities. */
-export async function seatedTicketTypesTx(tx: TenantTx, eventId: string): Promise<Set<string>> {
+/**
+ * Ticket types sold by seat at this event: those need seats chosen, not quantities. For a date
+ * (M1.7g), those of the chart it uses; without one, of every chart.
+ */
+export async function seatedTicketTypesTx(
+  tx: TenantTx,
+  eventId: string,
+  occurrenceId?: string | null,
+): Promise<Set<string>> {
+  const where =
+    occurrenceId === undefined
+      ? eq(eventSeats.eventId, eventId)
+      : onChart(eventSeats, eventId, await chartKeyTx(tx, eventId, occurrenceId));
   const rows = await tx
     .selectDistinct({ ticketTypeId: eventSeats.ticketTypeId })
     .from(eventSeats)
-    .where(and(eq(eventSeats.eventId, eventId), sql`${eventSeats.ticketTypeId} is not null`));
+    .where(and(where, sql`${eventSeats.ticketTypeId} is not null`));
   return new Set(rows.flatMap((r) => (r.ticketTypeId ? [r.ticketTypeId] : [])));
 }
 

@@ -94,7 +94,13 @@ export async function seatStreamResponse(
       },
     });
   await live.ready;
-  const watch = await live.feed.watch(opts.orgId, opts.eventId);
+  // The date (M1.7g, `?date=`): the chart that date uses, within the route's own event.
+  const date = new URL(req.url).searchParams.get('date');
+  const watch = await live.feed.watch(
+    opts.orgId,
+    opts.eventId,
+    date && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(date) ? date : null,
+  );
   if (!watch || (opts.kind === 'public' && !watch.isPublic)) {
     watch?.release();
     return new Response(null, { status: 404 });

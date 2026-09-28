@@ -5,9 +5,10 @@ import type { LiveSeatState } from '@yayatoh/seating/client';
 import { color, status as statusColor } from '@yayatoh/ui';
 import type Konva from 'konva';
 import { memo } from 'react';
-import { Circle, Group, Layer, Rect, Stage, Text } from 'react-konva';
+import { Circle, Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
 import { PanZoomControls, useBoxWidth, usePanZoom } from './pan-zoom.tsx';
 import { type DotStyle, SeatDots } from './seat-dots.tsx';
+import { UnderlayImage } from './underlay-image.tsx';
 
 export type SeatStatus = LiveSeatState;
 
@@ -53,6 +54,8 @@ export default function SeatingCanvas({
   onSelect,
   onMove,
   label,
+  onPoint,
+  marks = [],
 }: {
   doc: FloorplanDoc;
   seatStatus: Readonly<Record<string, SeatStatus>>;
@@ -61,9 +64,23 @@ export default function SeatingCanvas({
   onSelect: (id: string | null, additive: boolean) => void;
   onMove: (id: string, x: number, y: number) => void;
   label: string;
+  /**
+   * Calibration (M1.7g): while set, a click or tap anywhere on the plan reports its point in room
+   * centimetres instead of selecting (the form beside the plan does the same by numbers).
+   */
+  onPoint?: ((p: { x: number; y: number }) => void) | undefined;
+  /** Points to mark on the plan (calibration points A and B), in room centimetres. */
+  marks?: readonly { x: number; y: number; label: string }[];
 }) {
   const [box, width] = useBoxWidth(800, 280);
   const view = usePanZoom(doc, width, 720);
+  const pick = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent | Event>) => {
+    const stage = e.target.getStage();
+    const p = stage?.getPointerPosition();
+    if (!onPoint || !p) return false;
+    onPoint({ x: Math.round((p.x - view.x) / view.scale), y: Math.round((p.y - view.y) / view.scale) });
+    return true;
+  };
   return (
     <div className="flex flex-col gap-2">
       {/* Inside the editor's keyboard widget: its keys (arrows, R, Delete) are not for these buttons. */}
@@ -81,7 +98,11 @@ export default function SeatingCanvas({
           y={view.y}
           {...view.stageProps}
           onClick={(e) => {
+            if (pick(e)) return;
             if (e.target === e.target.getStage()) onSelect(null, false);
+          }}
+          onTap={(e) => {
+            pick(e);
           }}
           aria-label={label}
         >
@@ -94,12 +115,21 @@ export default function SeatingCanvas({
               strokeWidth={4}
               listening={false}
             />
+            {doc.underlay ? <UnderlayImage underlay={doc.underlay} /> : null}
+            {marks.map((m) => (
+              <Group key={m.label} x={m.x} y={m.y} listening={false}>
+                <Line points={[-40, 0, 40, 0]} stroke={color.accent[900]} strokeWidth={6 / view.scale} />
+                <Line points={[0, -40, 0, 40]} stroke={color.accent[900]} strokeWidth={6 / view.scale} />
+                <Text text={m.label} x={12} y={-56} fontSize={44} fill={color.accent[900]} />
+              </Group>
+            ))}
             {doc.items.map((item) => (
               <PlanItem
                 key={item.id}
                 item={item}
                 selected={selected.has(item.id)}
-                locked={locked}
+                // While calibrating, clicks mark points: nothing moves.
+                locked={locked || Boolean(onPoint)}
                 seatStatus={seatStatus}
                 seatKey={
                   item.kind === 'object' ? '' : item.seats.map((s) => seatStatus[s.id] ?? 'available').join()

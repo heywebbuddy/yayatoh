@@ -1,15 +1,15 @@
 import { attendeesByIdsTx, eventAttendeesTx } from '@yayatoh/attendees';
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { type ChartKey, chartKeyTx, onChart } from './chart.ts';
 import { ASSIGN_SEAT_STATES, assignSeatState, pickSeats } from './domain/assign.ts';
 import { activeAdaRule } from './domain/rules.ts';
 import type { SeatStatus } from './domain/seat-state.ts';
-import { checkSeatRulesTx, RuleHitDto, seatingRulesTx } from './rules.ts';
+import { checkSeatRulesTx, RuleHitDto, ruleStartTx, seatingRulesTx } from './rules.ts';
 import {
   ASSIGNABLE_BLOCKS,
   EVENT_LAYOUT_STATUSES,
@@ -25,11 +25,11 @@ type Assignable = (typeof ASSIGNABLE_BLOCKS)[number];
 const isAssignableBlock = (r: string | null): r is Assignable =>
   (ASSIGNABLE_BLOCKS as readonly string[]).includes(r ?? '');
 
-async function layoutDocTx(tx: TenantTx, eventId: string) {
+async function layoutDocTx(tx: TenantTx, eventId: string, key: ChartKey) {
   const [row] = await tx
     .select({ doc: eventLayouts.doc, status: eventLayouts.status })
     .from(eventLayouts)
-    .where(eq(eventLayouts.eventId, eventId));
+    .where(onChart(eventLayouts, eventId, key));
   return row ? { doc: FloorplanDoc.parse(row.doc), status: row.status } : null;
 }
 
@@ -44,12 +44,19 @@ export async function releaseAttendeeSeatsTx(
   tx: TenantTx,
   _ctx: Ctx,
   attendeeIds: readonly string[],
+  /** Only their seats on this chart (M1.7g); without it, every seat they have at the event. */
+  chart?: { readonly eventId: string; readonly key: ChartKey },
 ): Promise<number> {
   const ids = [...new Set(attendeeIds)];
   if (ids.length === 0) return 0;
   const gone = await tx
     .delete(seatAssignments)
-    .where(inArray(seatAssignments.attendeeId, ids))
+    .where(
+      and(
+        inArray(seatAssignments.attendeeId, ids),
+        chart ? onChart(seatAssignments, chart.eventId, chart.key) : undefined,
+      ),
+    )
     .returning({ id: seatAssignments.id });
   return gone.length;
 }
@@ -58,17 +65,21 @@ export async function releaseAttendeeSeatsTx(
  * The floor plan changed: assignments whose seat no longer exists are dropped, and the rest
  * follow their seat's table or row (seats keep their ids across edits).
  */
-export async function reconcileAssignmentsTx(tx: TenantTx, eventId: string): Promise<void> {
+export async function reconcileAssignmentsTx(tx: TenantTx, eventId: string, key: ChartKey): Promise<void> {
+  const chart = key ? sql`a.occurrence_id = ${key}` : sql`a.occurrence_id is null`;
   await tx.execute(sql`
     delete from ${seatAssignments} a
-    where a.event_id = ${eventId}
+    where a.event_id = ${eventId} and ${chart}
       and not exists (
-        select 1 from ${eventSeats} s where s.event_id = a.event_id and s.seat_uuid = a.seat_uuid
+        select 1 from ${eventSeats} s
+        where s.event_id = a.event_id and s.occurrence_id is not distinct from a.occurrence_id
+          and s.seat_uuid = a.seat_uuid
       )`);
   await tx.execute(sql`
     update ${seatAssignments} a set item_id = s.item_id
     from ${eventSeats} s
-    where a.event_id = ${eventId} and s.event_id = a.event_id and s.seat_uuid = a.seat_uuid
+    where a.event_id = ${eventId} and ${chart} and s.event_id = a.event_id
+      and s.occurrence_id is not distinct from a.occurrence_id and s.seat_uuid = a.seat_uuid
       and a.item_id <> s.item_id`);
 }
 
@@ -90,6 +101,8 @@ export const assignSeatsCommand = tenantCommand({
   input: z
     .object({
       eventId: z.uuid(),
+      /** The date (M1.7g): the chart it uses. */
+      occurrenceId: z.uuid().nullable().optional(),
       attendeeIds: z.array(z.uuid()).min(1).max(MAX_ASSIGN),
       itemId: z.uuid(),
       seatUuid: z.uuid().optional(),
@@ -105,7 +118,9 @@ export const assignSeatsCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const ids = [...new Set(input.attendeeIds)];
-    const layout = await layoutDocTx(tx, input.eventId);
+    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
+    const chart = { eventId: input.eventId, key };
+    const layout = await layoutDocTx(tx, input.eventId, key);
     if (!layout) throw new DomainError('not_found', 'This event has no floor plan');
     const item = layout.doc.items.find((i) => i.id === input.itemId);
     if (!item || item.kind === 'object')
@@ -157,7 +172,7 @@ export const assignSeatsCommand = tenantCommand({
           accessible: eventSeats.accessible,
         })
         .from(eventSeats)
-        .where(and(eq(eventSeats.eventId, input.eventId), eq(eventSeats.itemId, item.id)))
+        .where(and(onChart(eventSeats, input.eventId, key), eq(eventSeats.itemId, item.id)))
         .orderBy(eventSeats.seatUuid)
         .for('update')
     ).sort((x, y) => (planOrder.get(x.seatUuid) ?? 0) - (planOrder.get(y.seatUuid) ?? 0));
@@ -171,7 +186,7 @@ export const assignSeatsCommand = tenantCommand({
         pinned: seatAssignments.pinned,
       })
       .from(seatAssignments)
-      .where(eq(seatAssignments.eventId, input.eventId));
+      .where(onChart(seatAssignments, input.eventId, key));
     const mine = new Map(current.filter((c) => ids.includes(c.attendeeId)).map((c) => [c.attendeeId, c]));
 
     // Already where they're asked to be: nothing to do for them.
@@ -185,14 +200,15 @@ export const assignSeatsCommand = tenantCommand({
       tx,
       ctx,
       moving.filter((id) => mine.has(id)),
+      chart,
     );
     const freed = new Set(moving.flatMap((id) => mine.get(id)?.seatUuid ?? []));
     const stateOf = (s: { seatUuid: string; status: string; blockReason: string | null }) =>
       freed.has(s.seatUuid) ? 'free' : assignSeatState(s.status as SeatStatus, s.blockReason);
     // An enforced accessibility rule keeps accessible seats out of automatic placement.
     const rules = await seatingRulesTx(tx, input.eventId);
-    const event = rules.length ? await findEventTx(tx, input.eventId) : null;
-    const ada = event ? activeAdaRule(rules, event.startsAt, ctx.now) : null;
+    const startsAt = rules.length ? await ruleStartTx(tx, input.eventId, input.occurrenceId) : null;
+    const ada = startsAt ? activeAdaRule(rules, startsAt, ctx.now) : null;
     const skipAccessible = ada?.severity === 'enforce' && !input.overrideRules;
     const autoFree = (s: {
       seatUuid: string;
@@ -215,7 +231,7 @@ export const assignSeatsCommand = tenantCommand({
         ).seats?.[0];
         if (!holder || holder.pinned || !other)
           throw new DomainError('conflict', 'Someone already sits there', { reason: 'seat_taken' });
-        await releaseAttendeeSeatsTx(tx, ctx, [holder.attendeeId]);
+        await releaseAttendeeSeatsTx(tx, ctx, [holder.attendeeId], chart);
         wanted.push({ attendeeId: holder.attendeeId, seatUuid: other, pinned: false });
       } else if (state !== 'free' && state !== 'reserved')
         throw new DomainError('conflict', 'That seat is not free', {
@@ -240,6 +256,7 @@ export const assignSeatsCommand = tenantCommand({
     // Seating rules (M1.7f): enforced ones refuse unless overridden; warnings go back to the caller.
     const warnings = await checkSeatRulesTx(tx, ctx, {
       eventId: input.eventId,
+      occurrenceId: key,
       seatUuids: wanted.map((w) => w.seatUuid),
       context: 'assign',
       override: input.overrideRules,
@@ -255,7 +272,7 @@ export const assignSeatsCommand = tenantCommand({
         .from(eventSeats)
         .where(
           and(
-            eq(eventSeats.eventId, input.eventId),
+            onChart(eventSeats, input.eventId, key),
             inArray(
               eventSeats.seatUuid,
               wanted.map((w) => w.seatUuid),
@@ -274,7 +291,7 @@ export const assignSeatsCommand = tenantCommand({
         .set({ status: 'blocked', blockReason: 'assigned', updatedAt: ctx.now })
         .where(
           and(
-            eq(eventSeats.eventId, input.eventId),
+            onChart(eventSeats, input.eventId, key),
             inArray(
               eventSeats.seatUuid,
               wanted.map((w) => w.seatUuid),
@@ -289,6 +306,7 @@ export const assignSeatsCommand = tenantCommand({
         wanted.map((w) => ({
           orgId,
           eventId: input.eventId,
+          occurrenceId: key,
           attendeeId: w.attendeeId,
           itemId: item.id,
           seatUuid: w.seatUuid,
@@ -321,6 +339,7 @@ export const assignSeatsCommand = tenantCommand({
     data: {
       itemId: input.itemId,
       seatUuid: input.seatUuid,
+      occurrenceId: input.occurrenceId ?? null,
       count: r?.seated.length,
       ...(input.overrideRules ? { overrideRules: true } : {}),
       ...(r?.warnings.length ? { warnings: r.warnings.map((w) => w.rule) } : {}),
@@ -331,17 +350,22 @@ export const assignSeatsCommand = tenantCommand({
 /** Take people off their seats; the seats go back to what they were. */
 export const unassignSeatsCommand = tenantCommand({
   name: 'seating.unassign',
-  input: z.object({ eventId: z.uuid(), attendeeIds: z.array(z.uuid()).min(1).max(500) }),
+  input: z.object({
+    eventId: z.uuid(),
+    occurrenceId: z.uuid().nullable().optional(),
+    attendeeIds: z.array(z.uuid()).min(1).max(500),
+  }),
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {
+    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx
       .select({ attendeeId: seatAssignments.attendeeId })
       .from(seatAssignments)
       .where(
         and(
-          eq(seatAssignments.eventId, input.eventId),
+          onChart(seatAssignments, input.eventId, key),
           inArray(seatAssignments.attendeeId, input.attendeeIds),
         ),
       );
@@ -350,6 +374,7 @@ export const unassignSeatsCommand = tenantCommand({
         tx,
         ctx,
         rows.map((r) => r.attendeeId),
+        { eventId: input.eventId, key },
       ),
     };
   },
@@ -409,12 +434,13 @@ export type SeatAssignmentsDto = z.infer<typeof SeatAssignmentsDto>;
  */
 export const seatAssignmentsQuery = tenantQuery({
   name: 'seating.assignments',
-  input: z.object({ eventId: z.uuid() }),
+  input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid().nullable().optional() }),
   output: SeatAssignmentsDto.nullable(),
   entitlement: 'seating',
   permission: 'attendees:read',
   handler: async ({ input, tx }) => {
-    const layout = await layoutDocTx(tx, input.eventId);
+    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
+    const layout = await layoutDocTx(tx, input.eventId, key);
     if (!layout) return null;
     const [seats, assigned, people] = await Promise.all([
       tx
@@ -427,7 +453,7 @@ export const seatAssignmentsQuery = tenantQuery({
           accessible: eventSeats.accessible,
         })
         .from(eventSeats)
-        .where(eq(eventSeats.eventId, input.eventId)),
+        .where(onChart(eventSeats, input.eventId, key)),
       tx
         .select({
           attendeeId: seatAssignments.attendeeId,
@@ -435,7 +461,7 @@ export const seatAssignmentsQuery = tenantQuery({
           pinned: seatAssignments.pinned,
         })
         .from(seatAssignments)
-        .where(eq(seatAssignments.eventId, input.eventId)),
+        .where(onChart(seatAssignments, input.eventId, key)),
       eventAttendeesTx(tx, input.eventId),
     ]);
     const person = new Map(people.map((p) => [p.id, p]));

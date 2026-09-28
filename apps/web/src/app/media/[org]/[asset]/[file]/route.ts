@@ -1,5 +1,6 @@
 import { createCtx } from '@yayatoh/kernel';
 import { CONTENT_TYPES, FILE_NAME, readVariant, serveTarget, type VariantFormat } from '@yayatoh/media';
+import { publicUnderlayShown } from '@yayatoh/seating';
 import { memberRole } from '@yayatoh/tenancy';
 import { getSession } from '@/server/session.ts';
 import { currentAccess } from '@/server/visitor.ts';
@@ -15,6 +16,10 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
  * an active org's logo); a visitor holding the event's access grant for a private event; otherwise
  * only signed-in members of that org. Everything else — another org's private image included —
  * is the same 404 as a file that doesn't exist.
+ *
+ * A floor plan image (slot `floorplan`, M1.7g) is public only while the organizer shows it on the
+ * buyer's map of a chart on sale, and then cached briefly (they may hide it again); otherwise it
+ * is for the org's members (the editor).
  *
  * Every response is inert: SVGs are sanitized at upload and are also sent with a CSP that blocks
  * scripts, plugins and loads (`sandbox`), and `nosniff` stops any type guessing.
@@ -55,13 +60,21 @@ export async function GET(
   if (!UUID.test(org) || !UUID.test(asset) || !FILE_NAME.test(file)) return notFound();
   const target = await serveTarget(org, asset, file);
   if (!target) return notFound();
-  const isPublic = target.visibility === 'public';
-  if (!isPublic && !(await allowedPrivately(org, target.eventId, target.visibility))) return notFound();
+  const floorplan = target.slot === 'floorplan';
+  const visibility =
+    floorplan && target.visibility !== 'none' && !(await publicUnderlayShown(org, asset))
+      ? 'none'
+      : target.visibility;
+  const isPublic = visibility === 'public';
+  if (!isPublic && !(await allowedPrivately(org, target.eventId, visibility))) return notFound();
 
   const etag = `"${target.sha256}"`;
   const headers: Record<string, string> = {
     'content-type': CONTENT_TYPES[target.format as VariantFormat] ?? 'application/octet-stream',
-    'cache-control': `${isPublic ? 'public' : 'private'}, max-age=31536000, immutable`,
+    'cache-control':
+      isPublic && floorplan
+        ? 'public, max-age=300'
+        : `${isPublic ? 'public' : 'private'}, max-age=31536000, immutable`,
     etag,
     'content-disposition': `inline; filename="${file}"`,
     'x-content-type-options': 'nosniff',

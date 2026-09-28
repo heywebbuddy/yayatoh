@@ -158,7 +158,7 @@ test.describe('attendees: bulk actions and export', () => {
     expect(res.headers()['content-disposition']).toContain('attachment');
     const csv = await res.text();
     expect(csv).toContain(
-      'Name,Email,Ticket type,Ticket code,No.,Source,Status,Labels,Registered,Checked in',
+      'Name,Email,Ticket type,Ticket code,No.,Source,Status,Labels,Registered,Checked in,Seat',
     );
     for (const who of ['Ann', 'Ben', 'Cy'])
       expect(csv).toContain(`${who} ${stamp},${who.toLowerCase()}.${stamp}@example.test,Pass,`);
