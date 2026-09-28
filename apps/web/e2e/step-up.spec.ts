@@ -320,14 +320,16 @@ test.describe('step-up: money and data leaving', () => {
     await ageSession(page);
     const form = page.getByRole('region', { name: 'Refund', exact: true });
     await form.getByLabel('Reason').selectOption('duplicate');
-    for (const box of await form.getByRole('checkbox').all()) await box.check();
+    // Every ticket, not the owner's "refund outside the policy" box (M1.6e), which renames the note.
+    const tickets = form.getByRole('group', { name: 'Tickets to refund' }).getByRole('checkbox');
+    for (const box of await tickets.all()) await box.check();
     await form.getByLabel('Note (optional, for your team)').fill('Bought twice');
     await form.getByRole('button', { name: 'Refund' }).click();
     await expect(stepUpDialog(page)).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(form.getByLabel('Reason')).toHaveValue('duplicate');
     await expect(form.getByLabel('Note (optional, for your team)')).toHaveValue('Bought twice');
-    for (const box of await form.getByRole('checkbox').all()) await expect(box).toBeChecked();
+    for (const box of await tickets.all()) await expect(box).toBeChecked();
     await expect(page.getByRole('table', { name: 'Refunds' })).toHaveCount(0);
 
     await form.getByRole('button', { name: 'Refund' }).click();
