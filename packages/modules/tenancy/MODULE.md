@@ -10,6 +10,8 @@ Organizations and memberships. Owns Postgres schema `tenancy`.
   `tenancy.resolve_org_slug(slug)` and `tenancy.user_memberships(user_id)`, which return allowlisted columns.
 - Owner, admin and finance (`TWO_FACTOR_ROLES`) must use two-step verification; `twoFactorRequiredBy(userId)` lists the memberships that require it (M1.2c). The console refuses them until it is on.
 - Org status (M1.3f): only platform actors change it (`tenancy.setOrgStatus`); `terminated` is final from the console. Every status change is recorded in `org_status_changes` and emitted as `org.status_changed@1`. `orgStatusGate` (the command pipeline's org gate) makes suspended orgs read-only for members, API keys and the public, and terminated orgs read-only except personal actions and owners' exports.
+- Signup (M3.11a): without a code only while the platform switch `open_signup` is on, read inside the signup transaction through `platform.flag_enabled` (app_user never touches `platform.flags`); self-serve orgs start `limited`. A `limited` org can't start guest bulk messaging (`assertNotPausedTx(tx, 'pause_messaging')` → `org_limited`) and becomes `active` only through `tenancy.completeOnboarding` once the required steps are done.
+- Onboarding progress (`org_onboarding`, M3.11a) is written only by `markOnboardingStepTx`, inside the transaction of the command that did the step (other modules call it down the tiers); a step's first time is kept.
 - Domain changes (add, primary, remove), invitations, role grants/changes/removals and API key creation/revocation are step-up commands (`stepUp: true`).
 
 **Public surface:** `.` (commands, queries, authorizer, DTOs), `./testing` (fixtures).
