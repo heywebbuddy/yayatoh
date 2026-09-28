@@ -208,6 +208,7 @@
     "templates": "Templates",
     "apiKeys": "API keys",
     "publicSite": "Public site",
+    "finance": "Finance",
     "emails": "Email templates",
     "speakers": "Speakers",
     "sponsors": "Sponsors",
@@ -720,7 +721,8 @@
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",
     "chooseDate": "Choose a date first.",
     "dateSoldOut": "This date just sold out. Choose another date.",
-    "dateUnavailable": "This date is no longer available. Choose another date."
+    "dateUnavailable": "This date is no longer available. Choose another date.",
+    "riskBlocked": "We couldn’t take this order. Please contact the organizer."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1296,6 +1298,24 @@
         "failed": "Retrying"
       }
     },
+    "receivables": {
+      "title": "Receivables",
+      "description": "What you owe Yayatoh: refunds or disputes after you were paid, and fees on sales you collected yourself. It is taken back by a transfer reversal where possible, otherwise from your next payout.",
+      "none": "You owe nothing.",
+      "owed": "Owed",
+      "nettedNext": "Taken from your next payout",
+      "history": "Receivable history",
+      "amount": "Amount",
+      "source": {
+        "refund": "Refund after payout · {event}",
+        "dispute": "Dispute · {event}",
+        "dispute_won": "Dispute won · {event}",
+        "organizer_collected_sale": "Fee on a sale you collected · {event}",
+        "transfer_reversal": "Taken back by transfer reversal · {event}",
+        "receivable_netting": "Taken from a payout",
+        "other": "Adjustment · {event}"
+      }
+    },
     "destinationHold": "New payout account: for your security, transfers to it start after {until}. Your organization's owners were emailed."
   },
   "fakeConnect": {
@@ -1391,7 +1411,15 @@
     "done": "Refunded. The buyer gets the money back on their card in a few days.",
     "failed": "The payment provider declined this refund. Nothing was changed.",
     "exceedsRefundable": "That is more than is left to refund on this order.",
-    "ticketRefunded": "One of those tickets is already refunded or being refunded."
+    "ticketRefunded": "One of those tickets is already refunded or being refunded.",
+    "keptCol": "Kept",
+    "overridden": "Outside policy",
+    "policyWindowClosed": "The event’s refund policy closed on {deadline}. Refunds on request are no longer allowed.",
+    "policyNoRefunds": "The event’s refund policy does not allow refunds on request.",
+    "override": "Refund outside the refund policy",
+    "overrideHint": "Owners and admins only. Nothing is kept; the note is required and recorded.",
+    "overrideNote": "Why is the policy overridden? (required)",
+    "overrideNoteRequired": "Say why the refund policy is overridden (at least 3 characters)."
   },
   "disputes": {
     "title": "Disputes",
@@ -1406,7 +1434,38 @@
       "lost": "Lost"
     },
     "dueBy": "Evidence due {date}",
-    "evidence": "Evidence packet (PDF)"
+    "evidence": "Evidence packet (PDF)",
+    "respond": "Review and respond",
+    "submitted": "Evidence submitted",
+    "review": {
+      "title": "Respond to a dispute",
+      "description": "Review the evidence packet, add your statement and submit it to the card network.",
+      "backToOrder": "Back to the order",
+      "respondTitle": "Your response",
+      "summary": "Your statement",
+      "summaryHint": "Say what happened in plain words: when the buyer bought, entered and was told. At least 10 characters; it is sent as written, and the card networks read English.",
+      "sections": "Include in the packet",
+      "sectionsHint": "The dispute, the seller, the event and the order are always included.",
+      "section": {
+        "tickets": "Tickets and check-in",
+        "accessLog": "Access log (every door scan)",
+        "refunds": "Refunds",
+        "messages": "Messages sent to the buyer",
+        "refundPolicy": "Refund policy"
+      },
+      "reviewed": "I read the evidence packet below and it is accurate.",
+      "save": "Save draft",
+      "submit": "Submit evidence",
+      "saved": "Saved.",
+      "summaryTooShort": "Write a statement of at least 10 characters.",
+      "notReviewed": "Confirm that you read the evidence packet before submitting.",
+      "tooLarge": "The packet is over the card networks’ limits (4.5 MB / 19 pages). Leave out a section and try again.",
+      "providerRefused": "The payment provider did not accept the evidence. Nothing was submitted.",
+      "notOpen": "This dispute is no longer open.",
+      "submittedOn": "Evidence submitted on {date}.",
+      "previewTitle": "Evidence packet",
+      "previewHint": "This is exactly what will be sent, in English, the language of the card networks."
+    }
   },
   "evidence": {
     "title": "Dispute evidence · {id}",
@@ -1449,7 +1508,19 @@
     "noRefunds": "No refunds were requested for this order.",
     "refundPolicy": "Refund policy shown to buyers",
     "noPolicy": "The organizer has not published a refund policy.",
-    "policyUpdated": "Last updated {date}"
+    "policyUpdated": "Last updated {date}",
+    "statement": "Statement from the seller",
+    "accessLog": "Access log (door scans)",
+    "noScans": "No door scans were recorded for these tickets.",
+    "time": "Time",
+    "entrance": "Entrance",
+    "result": "Result",
+    "offline": "offline",
+    "messages": "Messages sent to the buyer",
+    "noMessages": "No messages were sent to the buyer about this order.",
+    "message": "Message",
+    "channel": "Channel",
+    "trimmed": "{n, plural, one {# more row left out} other {# more rows left out}} to stay within the card networks’ page limit."
   },
   "boxOffice": {
     "title": "Box office",
@@ -3024,6 +3095,71 @@
       "emptyTitle": "No public events yet",
       "emptyDescription": "Publish an event to get its widget snippet."
     }
+  },
+  "finance": {
+    "title": "Finance",
+    "description": "Each day the money in your ledger is checked against what the payment provider moved. Differences are listed here to check and resolve.",
+    "runsTitle": "Daily checks",
+    "noRuns": "No day has been checked yet. The first check runs the night after your first sale.",
+    "day": "Day",
+    "ledgerCount": "Ledger entries",
+    "providerCount": "Provider movements",
+    "result": "Result",
+    "matched": "Matched",
+    "differences": "{n, plural, one {# difference} other {# differences}}",
+    "openTitle": "Differences to check",
+    "emptyTitle": "No differences",
+    "emptyDescription": "Your ledger matches the payment provider.",
+    "kind": {
+      "missing_at_provider": "Not at the provider",
+      "missing_in_ledger": "Not in the ledger",
+      "amount_mismatch": "Amounts differ"
+    },
+    "ledger": "Ledger",
+    "provider": "Provider",
+    "difference": "Difference",
+    "noResolveAccess": "Only owners, admins and finance can resolve differences.",
+    "resolvedTitle": "Resolved",
+    "what": "What",
+    "reference": "Reference",
+    "note": "Note",
+    "resolveNote": "Why is {reference} resolved?",
+    "noteTooShort": "Write a note of at least 3 characters.",
+    "alreadyResolved": "Someone already resolved this difference.",
+    "resolve": "Resolve"
+  },
+  "risk": {
+    "flagged": "Flagged at checkout",
+    "rules": {
+      "email_velocity_review": "Many orders from this email in an hour",
+      "country_mismatch_review": "Bought from another country than the event’s"
+    }
+  },
+  "refundPolicy": {
+    "title": "Refund policy",
+    "buyerTitle": "Refund policy",
+    "notSet": "No refund policy is set: refunds are at your discretion and buyers see no policy.",
+    "none": "Tickets are not refundable on request.",
+    "always": "Refunds are available on request at any time.",
+    "until": "Refunds are available on request until {deadline}.",
+    "retained": "{amount} per ticket is kept by the organizer.",
+    "feeKept": "The booking fee is not refunded on request.",
+    "minimum": "If the event is cancelled, or postponed by more than 90 days without a new date, you get a full refund including fees.",
+    "kindLegend": "Refunds on request",
+    "kindOption": {
+      "unset": "No policy (at your discretion)",
+      "none": "No refunds",
+      "until": "Until a number of days before the event",
+      "always": "Always"
+    },
+    "daysLabel": "Days before the event",
+    "daysHint": "Counted in calendar days in the event’s time zone; 0 means until the day of the event.",
+    "retainedLabel": "Kept per refunded ticket ({currency}, optional)",
+    "retainedHint": "A cancellation fee you keep; the buyer gets the rest.",
+    "minimumHint": "The platform minimum always applies: a cancelled event, or one postponed by more than 90 days without a new date, is refunded in full.",
+    "save": "Save refund policy",
+    "saved": "Refund policy saved.",
+    "daysInvalid": "Enter a number of days from 0 to 365."
   },
   "emailTemplates": {
     "title": "Email templates",

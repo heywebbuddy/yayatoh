@@ -12,11 +12,19 @@ export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-offi
 export {
   applyProviderEventCommand,
   attachPaymentCommand,
+  checkoutRiskSignals,
   expireOrdersCommand,
   hashManageToken,
   startCheckoutCommand,
 } from './commands/checkout.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
+export {
+  eventRefundPolicyTx,
+  publicRefundPolicy,
+  RefundPolicyDto,
+  refundPolicyQuery,
+  setRefundPolicyCommand,
+} from './commands/refund-policy.ts';
 export {
   completeRefundCommand,
   isLargeRefund,
@@ -24,11 +32,24 @@ export {
   orderRefundsQuery,
   RefundDto,
   RefundPreviewDto,
+  refundPolicyTx,
   refundPreviewQuery,
+  startPolicyOverrideRefundCommand,
   startRefundCommand,
 } from './commands/refunds.ts';
 export { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from './domain/lifecycle.ts';
-export { type RefundReason, refundsFee } from './domain/refund-policy.ts';
+export {
+  DISCRETIONARY_REASONS,
+  evaluateRefundPolicy,
+  isDiscretionary,
+  PLATFORM_MINIMUM_REASONS,
+  type PolicyDecision,
+  REFUND_POLICY_KINDS,
+  type RefundPolicy,
+  type RefundReason,
+  refundDeadline,
+  refundsFee,
+} from './domain/refund-policy.ts';
 export { eraseOrdersDsarTx, ordersDsarTx, redactAbandonedOrdersTx } from './dsar.ts';
 export * from './dto.ts';
 export {

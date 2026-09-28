@@ -208,6 +208,7 @@
     "templates": "Modèles",
     "apiKeys": "Clés d’API",
     "publicSite": "Site public",
+    "finance": "Finances",
     "emails": "Modèles d’e-mail",
     "speakers": "Intervenants",
     "sponsors": "Sponsors",
@@ -720,7 +721,8 @@
     "seatRuleAda": "Les places accessibles sont pour l’instant réservées aux personnes qui en ont besoin. Veuillez choisir d’autres places.",
     "chooseDate": "Choisissez d’abord une date.",
     "dateSoldOut": "Cette date vient d’être complète. Choisissez-en une autre.",
-    "dateUnavailable": "Cette date n’est plus disponible. Choisissez-en une autre."
+    "dateUnavailable": "Cette date n’est plus disponible. Choisissez-en une autre.",
+    "riskBlocked": "Nous ne pouvons pas accepter cette commande. Contactez l’organisateur."
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -1296,6 +1298,24 @@
         "failed": "Nouvelle tentative"
       }
     },
+    "receivables": {
+      "title": "Créances",
+      "description": "Ce que vous devez à Yayatoh : remboursements ou litiges après votre versement, et frais sur les ventes que vous avez encaissées vous-même. C’est repris par annulation de virement si possible, sinon sur votre prochain versement.",
+      "none": "Vous ne devez rien.",
+      "owed": "Dû",
+      "nettedNext": "Déduit de votre prochain versement",
+      "history": "Historique des créances",
+      "amount": "Montant",
+      "source": {
+        "refund": "Remboursement après versement · {event}",
+        "dispute": "Litige · {event}",
+        "dispute_won": "Litige gagné · {event}",
+        "organizer_collected_sale": "Frais sur une vente encaissée par vous · {event}",
+        "transfer_reversal": "Repris par annulation de virement · {event}",
+        "receivable_netting": "Déduit d’un versement",
+        "other": "Ajustement · {event}"
+      }
+    },
     "destinationHold": "Nouveau compte de versement : pour votre sécurité, les virements vers ce compte commencent après le {until}. Les propriétaires de votre organisation ont été prévenus par e-mail."
   },
   "fakeConnect": {
@@ -1391,7 +1411,15 @@
     "done": "Remboursement effectué. L’acheteur récupérera l’argent sur sa carte d’ici quelques jours.",
     "failed": "Le prestataire de paiement a refusé ce remboursement. Rien n’a été modifié.",
     "exceedsRefundable": "C’est plus que le montant restant à rembourser sur cette commande.",
-    "ticketRefunded": "L’un de ces billets est déjà remboursé ou en cours de remboursement."
+    "ticketRefunded": "L’un de ces billets est déjà remboursé ou en cours de remboursement.",
+    "keptCol": "Retenu",
+    "overridden": "Hors politique",
+    "policyWindowClosed": "La politique de remboursement de l’événement a pris fin le {deadline}. Les remboursements sur demande ne sont plus possibles.",
+    "policyNoRefunds": "La politique de remboursement de l’événement n’autorise pas les remboursements sur demande.",
+    "override": "Rembourser hors politique de remboursement",
+    "overrideHint": "Propriétaires et administrateurs uniquement. Rien n’est retenu ; la note est obligatoire et enregistrée.",
+    "overrideNote": "Pourquoi passer outre la politique ? (obligatoire)",
+    "overrideNoteRequired": "Indiquez pourquoi la politique de remboursement est outrepassée (au moins 3 caractères)."
   },
   "disputes": {
     "title": "Litiges",
@@ -1406,7 +1434,38 @@
       "lost": "Perdu"
     },
     "dueBy": "Preuves à fournir avant le {date}",
-    "evidence": "Dossier de preuves (PDF)"
+    "evidence": "Dossier de preuves (PDF)",
+    "respond": "Examiner et répondre",
+    "submitted": "Preuves envoyées",
+    "review": {
+      "title": "Répondre à un litige",
+      "description": "Examinez le dossier de preuves, ajoutez votre déclaration et envoyez-le au réseau de cartes.",
+      "backToOrder": "Retour à la commande",
+      "respondTitle": "Votre réponse",
+      "summary": "Votre déclaration",
+      "summaryHint": "Racontez simplement ce qui s’est passé : quand l’acheteur a acheté, est entré et ce qui lui a été dit. Au moins 10 caractères ; c’est envoyé tel quel, et les réseaux de cartes lisent l’anglais.",
+      "sections": "Inclure dans le dossier",
+      "sectionsHint": "Le litige, le vendeur, l’événement et la commande sont toujours inclus.",
+      "section": {
+        "tickets": "Billets et contrôle d’accès",
+        "accessLog": "Journal d’accès (chaque scan à l’entrée)",
+        "refunds": "Remboursements",
+        "messages": "Messages envoyés à l’acheteur",
+        "refundPolicy": "Politique de remboursement"
+      },
+      "reviewed": "J’ai lu le dossier de preuves ci-dessous et il est exact.",
+      "save": "Enregistrer le brouillon",
+      "submit": "Envoyer les preuves",
+      "saved": "Enregistré.",
+      "summaryTooShort": "Écrivez une déclaration d’au moins 10 caractères.",
+      "notReviewed": "Confirmez avoir lu le dossier de preuves avant de l’envoyer.",
+      "tooLarge": "Le dossier dépasse les limites des réseaux de cartes (4,5 Mo / 19 pages). Retirez une section et réessayez.",
+      "providerRefused": "Le prestataire de paiement n’a pas accepté les preuves. Rien n’a été envoyé.",
+      "notOpen": "Ce litige n’est plus ouvert.",
+      "submittedOn": "Preuves envoyées le {date}.",
+      "previewTitle": "Dossier de preuves",
+      "previewHint": "Voici exactement ce qui sera envoyé, en anglais, la langue des réseaux de cartes."
+    }
   },
   "evidence": {
     "title": "Preuves du litige · {id}",
@@ -1449,7 +1508,19 @@
     "noRefunds": "Aucun remboursement n’a été demandé pour cette commande.",
     "refundPolicy": "Politique de remboursement affichée aux acheteurs",
     "noPolicy": "L’organisateur n’a pas publié de politique de remboursement.",
-    "policyUpdated": "Dernière mise à jour le {date}"
+    "policyUpdated": "Dernière mise à jour le {date}",
+    "statement": "Déclaration du vendeur",
+    "accessLog": "Journal d’accès (scans à l’entrée)",
+    "noScans": "Aucun scan à l’entrée n’a été enregistré pour ces billets.",
+    "time": "Heure",
+    "entrance": "Entrée",
+    "result": "Résultat",
+    "offline": "hors ligne",
+    "messages": "Messages envoyés à l’acheteur",
+    "noMessages": "Aucun message n’a été envoyé à l’acheteur au sujet de cette commande.",
+    "message": "Message",
+    "channel": "Canal",
+    "trimmed": "{n, plural, one {# ligne supplémentaire omise} other {# lignes supplémentaires omises}} pour respecter la limite de pages des réseaux de cartes."
   },
   "boxOffice": {
     "title": "Billetterie sur place",
@@ -3024,6 +3095,71 @@
       "emptyTitle": "Aucun événement public pour l'instant",
       "emptyDescription": "Publiez un événement pour obtenir l'extrait de son widget."
     }
+  },
+  "finance": {
+    "title": "Finances",
+    "description": "Chaque jour, l’argent de votre grand livre est rapproché de ce que le prestataire de paiement a déplacé. Les écarts sont listés ici pour être vérifiés et résolus.",
+    "runsTitle": "Rapprochements quotidiens",
+    "noRuns": "Aucun jour n’a encore été rapproché. Le premier rapprochement a lieu la nuit suivant votre première vente.",
+    "day": "Jour",
+    "ledgerCount": "Écritures",
+    "providerCount": "Mouvements du prestataire",
+    "result": "Résultat",
+    "matched": "Concordant",
+    "differences": "{n, plural, one {# écart} other {# écarts}}",
+    "openTitle": "Écarts à vérifier",
+    "emptyTitle": "Aucun écart",
+    "emptyDescription": "Votre grand livre concorde avec le prestataire de paiement.",
+    "kind": {
+      "missing_at_provider": "Absent chez le prestataire",
+      "missing_in_ledger": "Absent du grand livre",
+      "amount_mismatch": "Montants différents"
+    },
+    "ledger": "Grand livre",
+    "provider": "Prestataire",
+    "difference": "Écart",
+    "noResolveAccess": "Seuls les propriétaires, les administrateurs et la finance peuvent résoudre les écarts.",
+    "resolvedTitle": "Résolus",
+    "what": "Quoi",
+    "reference": "Référence",
+    "note": "Note",
+    "resolveNote": "Pourquoi {reference} est-il résolu ?",
+    "noteTooShort": "Écrivez une note d’au moins 3 caractères.",
+    "alreadyResolved": "Quelqu’un a déjà résolu cet écart.",
+    "resolve": "Résoudre"
+  },
+  "risk": {
+    "flagged": "Signalé au paiement",
+    "rules": {
+      "email_velocity_review": "Nombreuses commandes de cette adresse en une heure",
+      "country_mismatch_review": "Acheté depuis un autre pays que celui de l’événement"
+    }
+  },
+  "refundPolicy": {
+    "title": "Politique de remboursement",
+    "buyerTitle": "Politique de remboursement",
+    "notSet": "Aucune politique de remboursement : les remboursements sont à votre discrétion et les acheteurs ne voient aucune politique.",
+    "none": "Les billets ne sont pas remboursables sur demande.",
+    "always": "Les remboursements sont possibles sur demande à tout moment.",
+    "until": "Les remboursements sont possibles sur demande jusqu’au {deadline}.",
+    "retained": "L’organisateur retient {amount} par billet.",
+    "feeKept": "Les frais de réservation ne sont pas remboursés sur demande.",
+    "minimum": "Si l’événement est annulé, ou reporté de plus de 90 jours sans nouvelle date, vous êtes remboursé intégralement, frais compris.",
+    "kindLegend": "Remboursements sur demande",
+    "kindOption": {
+      "unset": "Aucune politique (à votre discrétion)",
+      "none": "Pas de remboursement",
+      "until": "Jusqu’à un certain nombre de jours avant l’événement",
+      "always": "Toujours"
+    },
+    "daysLabel": "Jours avant l’événement",
+    "daysHint": "Comptés en jours calendaires dans le fuseau de l’événement ; 0 signifie jusqu’au jour de l’événement.",
+    "retainedLabel": "Retenue par billet remboursé ({currency}, facultatif)",
+    "retainedHint": "Des frais d’annulation que vous gardez ; l’acheteur reçoit le reste.",
+    "minimumHint": "Le minimum de la plateforme s’applique toujours : un événement annulé, ou reporté de plus de 90 jours sans nouvelle date, est remboursé intégralement.",
+    "save": "Enregistrer la politique de remboursement",
+    "saved": "Politique de remboursement enregistrée.",
+    "daysInvalid": "Saisissez un nombre de jours entre 0 et 365."
   },
   "emailTemplates": {
     "title": "Modèles d’e-mail",

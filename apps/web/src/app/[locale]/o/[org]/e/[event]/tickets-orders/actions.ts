@@ -8,7 +8,7 @@ import {
   moneyFromDecimal,
   zonedTimeToUtc,
 } from '@yayatoh/kernel';
-import { recordBoxOfficeSaleCommand } from '@yayatoh/orders';
+import { recordBoxOfficeSaleCommand, setRefundPolicyCommand } from '@yayatoh/orders';
 import {
   archiveTicketTypeCommand,
   createPromoCodeCommand,
@@ -17,7 +17,9 @@ import {
 } from '@yayatoh/ticketing';
 import { refresh, revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
+import type { FormState } from '@/lib/form-state.ts';
 import { loadEvent } from '@/server/console.ts';
+import { failure, success } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
 
 export interface TicketFormState {
@@ -277,4 +279,40 @@ export async function boxOfficeSaleAction(
       reason: isDomainError(err) ? String(err.details?.reason ?? '') : undefined,
     };
   }
+}
+
+/** Set (or clear) the event's refund policy (M1.6e). The retained fee is a decimal in the event currency. */
+export async function setRefundPolicyAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const kind = String(form.get('kind') ?? 'unset');
+  let retainedMinor = 0;
+  try {
+    const raw = String(form.get('retained') ?? '').trim();
+    retainedMinor = raw ? moneyFromDecimal(raw.replace(',', '.'), ev.currency).amount : 0;
+  } catch {
+    return { ok: false, code: 'validation_failed', fields: ['retainedMinor'] };
+  }
+  const days = String(form.get('daysBefore') ?? '').trim();
+  try {
+    await executeCommand(
+      setRefundPolicyCommand,
+      {
+        eventId: ev.id,
+        kind,
+        ...(kind === 'until' ? { daysBefore: days === '' ? Number.NaN : Number(days) } : {}),
+        retainedMinor: kind === 'none' ? 0 : retainedMinor,
+      },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
 }

@@ -208,6 +208,7 @@
     "templates": "テンプレート",
     "apiKeys": "API キー",
     "publicSite": "公開サイト",
+    "finance": "財務",
     "emails": "メールテンプレート",
     "speakers": "登壇者",
     "sponsors": "スポンサー",
@@ -720,7 +721,8 @@
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",
     "chooseDate": "まず日程を選んでください。",
     "dateSoldOut": "この日程は完売しました。別の日程を選んでください。",
-    "dateUnavailable": "この日程は利用できなくなりました。別の日程を選んでください。"
+    "dateUnavailable": "この日程は利用できなくなりました。別の日程を選んでください。",
+    "riskBlocked": "このご注文はお受けできませんでした。主催者にお問い合わせください。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -1296,6 +1298,24 @@
         "failed": "再試行中"
       }
     },
+    "receivables": {
+      "title": "未収金",
+      "description": "Yayatoh への未払い額：支払い後に発生した返金やチャージバック、自分で集金した販売の手数料です。可能な場合は送金の取り消しで回収し、それ以外は次回の支払いから差し引きます。",
+      "none": "未払い額はありません。",
+      "owed": "未払い",
+      "nettedNext": "次回の支払いから差し引かれます",
+      "history": "未収金の履歴",
+      "amount": "金額",
+      "source": {
+        "refund": "支払い後の返金 · {event}",
+        "dispute": "チャージバック · {event}",
+        "dispute_won": "チャージバックに勝訴 · {event}",
+        "organizer_collected_sale": "自分で集金した販売の手数料 · {event}",
+        "transfer_reversal": "送金の取り消しで回収 · {event}",
+        "receivable_netting": "支払いから差し引き",
+        "other": "調整 · {event}"
+      }
+    },
     "destinationHold": "新しい支払い口座: 安全のため、この口座への送金は {until} 以降に始まります。組織のオーナーにメールでお知らせしました。"
   },
   "fakeConnect": {
@@ -1391,7 +1411,15 @@
     "done": "返金しました。数日以内に購入者のカードに返金されます。",
     "failed": "決済代行会社がこの返金を拒否しました。変更は行われていません。",
     "exceedsRefundable": "この注文で返金できる残額を超えています。",
-    "ticketRefunded": "これらのチケットのいずれかは、すでに返金済みか返金処理中です。"
+    "ticketRefunded": "これらのチケットのいずれかは、すでに返金済みか返金処理中です。",
+    "keptCol": "控除",
+    "overridden": "ポリシー対象外",
+    "policyWindowClosed": "このイベントの返金受付は {deadline} に終了しました。お客様都合の返金はできません。",
+    "policyNoRefunds": "このイベントの返金ポリシーではお客様都合の返金はできません。",
+    "override": "返金ポリシーの対象外で返金する",
+    "overrideHint": "オーナーと管理者のみ。控除はなく、メモは必須で記録されます。",
+    "overrideNote": "ポリシーを適用しない理由（必須）",
+    "overrideNoteRequired": "返金ポリシーを適用しない理由を入力してください（3 文字以上）。"
   },
   "disputes": {
     "title": "チャージバック",
@@ -1406,7 +1434,38 @@
       "lost": "敗訴"
     },
     "dueBy": "証拠の提出期限：{date}",
-    "evidence": "証拠資料（PDF）"
+    "evidence": "証拠資料（PDF）",
+    "respond": "確認して回答",
+    "submitted": "証拠を提出済み",
+    "review": {
+      "title": "チャージバックへの回答",
+      "description": "証拠一式を確認し、説明を追加してカードネットワークに提出します。",
+      "backToOrder": "注文に戻る",
+      "respondTitle": "あなたの回答",
+      "summary": "あなたの説明",
+      "summaryHint": "何があったかをわかりやすく書いてください（購入日時、入場日時、伝えた内容など）。10 文字以上。入力どおりに送信され、カードネットワークは英語で確認します。",
+      "sections": "証拠一式に含める",
+      "sectionsHint": "チャージバック、販売者、イベント、注文の情報は常に含まれます。",
+      "section": {
+        "tickets": "チケットとチェックイン",
+        "accessLog": "入場ログ（入口でのすべてのスキャン）",
+        "refunds": "返金",
+        "messages": "購入者に送信したメッセージ",
+        "refundPolicy": "返金ポリシー"
+      },
+      "reviewed": "下の証拠一式を読み、内容が正確であることを確認しました。",
+      "save": "下書きを保存",
+      "submit": "証拠を提出",
+      "saved": "保存しました。",
+      "summaryTooShort": "10 文字以上の説明を入力してください。",
+      "notReviewed": "提出前に証拠一式を読んだことを確認してください。",
+      "tooLarge": "証拠一式がカードネットワークの上限（4.5 MB / 19 ページ）を超えています。項目を外してもう一度お試しください。",
+      "providerRefused": "決済プロバイダーが証拠を受け付けませんでした。何も提出されていません。",
+      "notOpen": "このチャージバックはすでに受付を終了しています。",
+      "submittedOn": "{date} に証拠を提出しました。",
+      "previewTitle": "証拠一式",
+      "previewHint": "これが送信される内容そのものです（カードネットワークの言語である英語）。"
+    }
   },
   "evidence": {
     "title": "異議申し立ての証拠 · {id}",
@@ -1449,7 +1508,19 @@
     "noRefunds": "この注文について返金の依頼はありません。",
     "refundPolicy": "購入者に表示された返金ポリシー",
     "noPolicy": "主催者は返金ポリシーを公開していません。",
-    "policyUpdated": "最終更新：{date}"
+    "policyUpdated": "最終更新：{date}",
+    "statement": "販売者の説明",
+    "accessLog": "入場ログ（入口でのスキャン）",
+    "noScans": "これらのチケットの入口スキャンは記録されていません。",
+    "time": "日時",
+    "entrance": "入口",
+    "result": "結果",
+    "offline": "オフライン",
+    "messages": "購入者に送信したメッセージ",
+    "noMessages": "この注文について購入者にメッセージは送信されていません。",
+    "message": "メッセージ",
+    "channel": "チャネル",
+    "trimmed": "カードネットワークのページ上限に収めるため、{n, plural, other {さらに # 行を省略しました}}。"
   },
   "boxOffice": {
     "title": "窓口販売",
@@ -3024,6 +3095,71 @@
       "emptyTitle": "公開イベントはまだありません",
       "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
     }
+  },
+  "finance": {
+    "title": "財務",
+    "description": "毎日、帳簿の金額を決済プロバイダーの入出金と照合します。差異はここに表示され、確認して解決できます。",
+    "runsTitle": "日次照合",
+    "noRuns": "まだ照合された日はありません。最初の照合は初めての販売の翌夜に行われます。",
+    "day": "日付",
+    "ledgerCount": "帳簿の記帳",
+    "providerCount": "プロバイダーの入出金",
+    "result": "結果",
+    "matched": "一致",
+    "differences": "{n, plural, other {差異 # 件}}",
+    "openTitle": "確認が必要な差異",
+    "emptyTitle": "差異はありません",
+    "emptyDescription": "帳簿は決済プロバイダーと一致しています。",
+    "kind": {
+      "missing_at_provider": "プロバイダー側にない",
+      "missing_in_ledger": "帳簿にない",
+      "amount_mismatch": "金額が異なる"
+    },
+    "ledger": "帳簿",
+    "provider": "プロバイダー",
+    "difference": "差額",
+    "noResolveAccess": "差異を解決できるのはオーナー、管理者、財務担当のみです。",
+    "resolvedTitle": "解決済み",
+    "what": "内容",
+    "reference": "参照",
+    "note": "メモ",
+    "resolveNote": "{reference} を解決済みにする理由",
+    "noteTooShort": "3 文字以上のメモを入力してください。",
+    "alreadyResolved": "この差異はすでに解決されています。",
+    "resolve": "解決する"
+  },
+  "risk": {
+    "flagged": "購入時にフラグ付き",
+    "rules": {
+      "email_velocity_review": "このメールから 1 時間に多数の注文",
+      "country_mismatch_review": "イベントと別の国から購入"
+    }
+  },
+  "refundPolicy": {
+    "title": "返金ポリシー",
+    "buyerTitle": "返金ポリシー",
+    "notSet": "返金ポリシーは未設定です。返金は主催者の判断となり、購入者にはポリシーが表示されません。",
+    "none": "お客様都合によるチケットの返金はできません。",
+    "always": "いつでもご依頼に応じて返金できます。",
+    "until": "{deadline} までご依頼に応じて返金できます。",
+    "retained": "チケット 1 枚につき {amount} は主催者が差し引きます。",
+    "feeKept": "お客様都合の返金では予約手数料は返金されません。",
+    "minimum": "イベントが中止された場合、または新しい日程なしに 90 日を超えて延期された場合は、手数料を含めて全額返金されます。",
+    "kindLegend": "お客様都合の返金",
+    "kindOption": {
+      "unset": "ポリシーなし（主催者の判断）",
+      "none": "返金なし",
+      "until": "イベントの数日前まで",
+      "always": "いつでも"
+    },
+    "daysLabel": "イベントの何日前まで",
+    "daysHint": "イベントのタイムゾーンの暦日で数えます。0 はイベント当日までです。",
+    "retainedLabel": "返金チケット 1 枚あたりの控除額（{currency}、任意）",
+    "retainedHint": "主催者が受け取るキャンセル料です。残りは購入者に返金されます。",
+    "minimumHint": "プラットフォームの最低保証は常に適用されます。中止された、または新しい日程なしに 90 日を超えて延期されたイベントは全額返金されます。",
+    "save": "返金ポリシーを保存",
+    "saved": "返金ポリシーを保存しました。",
+    "daysInvalid": "0〜365 の日数を入力してください。"
   },
   "emailTemplates": {
     "title": "メールテンプレート",

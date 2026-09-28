@@ -11,6 +11,7 @@ import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia } from '@yayatoh/media';
+import { publicRefundPolicy } from '@yayatoh/orders';
 import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
@@ -37,6 +38,7 @@ import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
+import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
@@ -120,6 +122,8 @@ export async function PublicEventView({
   ].filter((x) => x.value > 0);
   const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
+  // The event's refund policy (M1.6e), in the buyer's words, before they buy.
+  const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
   // The venue map and seat finder, once the organizer opened them (M1.7e).
   const venue = target ? await openVenueMap(target.orgId, target.eventId) : null;
@@ -549,6 +553,18 @@ export async function PublicEventView({
               ))}
             </ul>
           </>
+        ) : null}
+        {refundPolicy ? (
+          <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-2">
+            <h2 id="refund-policy-heading" className="text-section">
+              {t('refundPolicy.buyerTitle')}
+            </h2>
+            <ul className="flex list-none flex-col gap-1 p-0 text-body text-zinc-600">
+              {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), refundPolicy, locale).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </section>
         ) : null}
         {orgProfile && orgProfile.legalPages.length > 0 ? (
           <nav aria-label={t('legal.organizerPages', { org: ev.organizerName })}>

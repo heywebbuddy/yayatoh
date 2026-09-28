@@ -15,6 +15,7 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
   { key: 'publicSite', path: 'site', group: 'build', module: 'core', icon: 'store' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
+  { key: 'finance', path: 'finance', group: 'build', module: 'core', icon: 'scale' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
   { key: 'emails', path: 'emails', group: 'build', module: 'core', icon: 'mail-check' },
   { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
@@ -25,6 +26,7 @@ const ORG_NAV: readonly NavItem[] = [
 /** Items only some roles may open (the pages refuse everyone else too). */
 const NEEDS: Readonly<Record<string, string>> = {
   messages: 'messages:read',
+  finance: 'finance:read',
   activity: 'audit:read',
   privacy: 'privacy:manage',
 };

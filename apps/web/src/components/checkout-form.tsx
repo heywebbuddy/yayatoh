@@ -100,7 +100,9 @@ export function CheckoutForm({
                               ? t('checkout.dateUnavailable')
                               : state.reason === 'checkout_paused'
                                 ? t('publicEvent.salesPausedTitle')
-                                : t(errorMessageKey(state.code));
+                                : state.reason === 'risk_blocked'
+                                  ? t('checkout.riskBlocked')
+                                  : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
       {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}

@@ -1,6 +1,11 @@
 import { feeScheduleQuery, getEntitlementsQuery } from '@yayatoh/billing';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { disputesQuery, ledgerBalancesQuery, payoutAccountQuery } from '@yayatoh/payments';
+import {
+  disputesQuery,
+  ledgerBalancesQuery,
+  payoutAccountQuery,
+  reconciliationItemsQuery,
+} from '@yayatoh/payments';
 import { MODULE_KEYS } from '@yayatoh/platform';
 import {
   getOrganizationQuery,
@@ -22,6 +27,7 @@ import {
   entitlementAction,
   feeOverrideAction,
   payoutHoldAction,
+  resolveReconciliationAction,
   submitEvidenceAction,
   suspensionAction,
 } from './actions.ts';
@@ -70,7 +76,7 @@ export default async function TenantPage({
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
-  const [members, pauses, payout, entitlements, fee, domains, ledger, disputes] = await Promise.all([
+  const [members, pauses, payout, entitlements, fee, domains, ledger, disputes, recon] = await Promise.all([
     executeQuery(listMembersQuery, {}, ctx, ports),
     executeQuery(suspensionHistoryQuery, {}, ctx, ports),
     executeQuery(payoutAccountQuery, {}, ctx, ports),
@@ -79,6 +85,7 @@ export default async function TenantPage({
     executeQuery(listDomainsQuery, {}, ctx, ports),
     executeQuery(ledgerBalancesQuery, {}, ctx, ports),
     executeQuery(disputesQuery, {}, ctx, ports),
+    executeQuery(reconciliationItemsQuery, { status: 'open' }, ctx, ports),
   ]);
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
@@ -227,6 +234,7 @@ export default async function TenantPage({
                     <textarea
                       id={`summary-${d.id}`}
                       name="summary"
+                      defaultValue={d.evidenceSummary ?? ''}
                       required
                       minLength={20}
                       maxLength={5000}
@@ -239,6 +247,57 @@ export default async function TenantPage({
                     </label>
                     <Button type="submit" className="self-start">
                       {t('disputes.submit')}
+                    </Button>
+                  </form>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Section>
+
+      <Section id="reconciliation" title={t('reconciliation.title')}>
+        <p className="text-caption text-zinc-600">{t('reconciliation.description')}</p>
+        {recon.length === 0 ? (
+          <p className="text-body text-zinc-600">{t('reconciliation.empty')}</p>
+        ) : (
+          <ul className="flex list-none flex-col gap-4 p-0">
+            {recon.map((r) => (
+              <li
+                key={r.id}
+                className="flex flex-col gap-2 border-t border-zinc-100 pt-4 first:border-0 first:pt-0"
+              >
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <StatusDot status="warning" label={t(`reconciliation.kind.${r.kind}`)} />
+                  <span className="text-caption text-zinc-600">{r.day}</span>
+                  <span className="break-all font-mono text-caption">{r.reference}</span>
+                  <span className="font-mono tabular-nums">
+                    {t('reconciliation.amounts', {
+                      ledger: `${r.currency} ${r.ledgerMinor}`,
+                      provider: `${r.currency} ${r.providerMinor}`,
+                    })}
+                  </span>
+                </div>
+                {staff.can('payouts') ? (
+                  <form
+                    action={resolveReconciliationAction.bind(null, id, r.id)}
+                    className="flex flex-wrap items-end gap-3"
+                  >
+                    <div className="flex min-w-60 flex-1 flex-col gap-1.5">
+                      <label htmlFor={`recon-${r.id}`} className="text-caption text-zinc-600">
+                        {t('reconciliation.note')}
+                      </label>
+                      <input
+                        id={`recon-${r.id}`}
+                        name="note"
+                        required
+                        minLength={3}
+                        maxLength={500}
+                        className={field}
+                      />
+                    </div>
+                    <Button type="submit" variant="secondary">
+                      {t('reconciliation.resolve')}
                     </Button>
                   </form>
                 ) : null}

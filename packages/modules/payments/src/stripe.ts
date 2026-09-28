@@ -1,5 +1,7 @@
 import Stripe from 'stripe';
 import type {
+  BalanceTransaction,
+  BalanceTransactionKind,
   ConnectAccountState,
   CreatePaymentInput,
   IgnoredEvent,
@@ -10,6 +12,11 @@ import type {
 
 /** The Stripe API version this adapter is written and tested against (pinned; upgrades are deliberate). */
 export const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
+
+/** The card networks accept evidence up to 4.5 MB (roadmap §5.3). */
+export const EVIDENCE_MAX_BYTES = 4_500_000;
+/** One reconciliation day never needs more; a larger day is reported as truncated by the caller. */
+const BALANCE_TRANSACTIONS_MAX = 10_000;
 
 /** Stripe keeps a Checkout Session open for at least 30 minutes; the order hold is shorter. */
 const SESSION_MINUTES = 30;
@@ -51,7 +58,12 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
     ...(opts.fetch ? { httpClient: Stripe.createFetchHttpClient(opts.fetch) } : {}),
   });
   const now = opts.now ?? (() => new Date());
-  const on = (account: string | null) => (account ? { stripeAccount: account } : {});
+  const on = (account: string | null | undefined) => (account ? { stripeAccount: account } : {});
+  /** Metadata the platform tags on its own writes: reconciliation finds the org and the ledger reference. */
+  const tag = (reference: string, orgId: string | undefined) => ({
+    yayatoh_ref: reference,
+    ...(orgId ? { orgId } : {}),
+  });
 
   /** The PaymentIntent behind an order's Checkout Session. */
   async function paymentIntentOf(sessionId: string, account: string | null): Promise<string> {
@@ -73,6 +85,9 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       const session = await stripe.checkout.sessions.create(
         {
           mode: 'payment',
+          // Tickets are sold by the organizer (organizer_mor) or by Yayatoh (platform_mor), never
+          // by Stripe as merchant of record: accounts can default Managed Payments on (M1.5e3).
+          managed_payments: { enabled: false },
           line_items: [
             {
               quantity: 1,
@@ -104,17 +119,21 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
 
     async createConnectedAccount(i) {
       // A Standard-equivalent account (roadmap §5.3: the organizer is merchant of record, carries
-      // disputes and pays Stripe's fees), tagged with the org so account webhooks find it.
-      const account = await stripe.accounts.create(
+      // disputes and pays Stripe's fees), tagged with the org so account webhooks find it. Created
+      // with Accounts v2: Stripe refuses v1 account creation for new Connect platforms (M1.5e3).
+      // The account stays usable with the v1 APIs (charges, account links, `account.updated`).
+      const account = await stripe.v2.core.accounts.create(
         {
-          country: i.country,
-          email: i.email,
-          controller: {
-            stripe_dashboard: { type: 'full' },
-            fees: { payer: 'account' },
-            losses: { payments: 'stripe' },
+          contact_email: i.email,
+          dashboard: 'full',
+          identity: { country: i.country.toLowerCase() },
+          configuration: {
+            // Direct charges (organizer_mor) …
+            merchant: { capabilities: { card_payments: { requested: true } } },
+            // … and transfers at release (platform_mor, separate charges & transfers).
+            recipient: { capabilities: { stripe_balance: { stripe_transfers: { requested: true } } } },
           },
-          capabilities: { card_payments: { requested: true }, transfers: { requested: true } },
+          defaults: { responsibilities: { fees_collector: 'stripe', losses_collector: 'stripe' } },
           metadata: { orgId: i.orgId },
         },
         { idempotencyKey: `acct:${i.orgId}` },
@@ -152,7 +171,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       const pi = await paymentIntentOf(i.providerPaymentId, account);
       try {
         const r = await stripe.refunds.create(
-          { payment_intent: pi, amount: i.amount.amount },
+          { payment_intent: pi, amount: i.amount.amount, metadata: tag(i.idempotencyKey, i.orgId) },
           { idempotencyKey: i.idempotencyKey, ...on(account) },
         );
         // The policy decides exactly how much of the application fee goes back (not Stripe's
@@ -165,7 +184,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
           if (feeId)
             await stripe.applicationFees.createRefund(
               feeId,
-              { amount: i.refundApplicationFee.amount },
+              { amount: i.refundApplicationFee.amount, metadata: tag(i.idempotencyKey, i.orgId) },
               { idempotencyKey: `${i.idempotencyKey}:fee` },
             );
         }
@@ -195,6 +214,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
             currency: i.amount.currency.toLowerCase(),
             destination: i.destinationAccountId,
             transfer_group: i.transferGroup,
+            metadata: tag(i.idempotencyKey, i.orgId),
           },
           { idempotencyKey: i.idempotencyKey },
         );
@@ -214,7 +234,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       try {
         const r = await stripe.transfers.createReversal(
           i.transferId,
-          { amount: i.amount.amount },
+          { amount: i.amount.amount, metadata: tag(i.idempotencyKey, i.orgId) },
           { idempotencyKey: i.idempotencyKey },
         );
         return { reversalId: r.id, status: 'succeeded' as const };
@@ -228,17 +248,48 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
 
     async submitDisputeEvidence(i) {
       if (!i.summary.trim()) return { status: 'failed' as const };
+      if (i.packet && i.packet.bytes.byteLength > EVIDENCE_MAX_BYTES) return { status: 'failed' as const };
       try {
+        // The reviewed packet goes up first (files.stripe.com), on the account the dispute is on.
+        const file = i.packet
+          ? await stripe.files.create(
+              {
+                purpose: 'dispute_evidence',
+                file: { data: Buffer.from(i.packet.bytes), name: i.packet.filename, type: 'application/pdf' },
+              },
+              { idempotencyKey: `${i.idempotencyKey}:file`, ...on(i.connectedAccountId) },
+            )
+          : null;
         await stripe.disputes.update(
           i.providerDisputeId,
-          { evidence: { uncategorized_text: i.summary.slice(0, 20_000) }, submit: true },
-          { idempotencyKey: i.idempotencyKey },
+          {
+            evidence: {
+              uncategorized_text: i.summary.slice(0, 20_000),
+              ...(file ? { uncategorized_file: file.id } : {}),
+            },
+            submit: true,
+          },
+          { idempotencyKey: i.idempotencyKey, ...on(i.connectedAccountId) },
         );
         return { status: 'submitted' as const };
       } catch (err) {
         if (err instanceof Stripe.errors.StripeInvalidRequestError) return { status: 'failed' as const };
         throw err;
       }
+    },
+
+    async listBalanceTransactions(i) {
+      const out: BalanceTransaction[] = [];
+      const params = {
+        created: { gte: Math.floor(i.from.getTime() / 1000), lt: Math.floor(i.to.getTime() / 1000) },
+        limit: 100,
+        expand: ['data.source'],
+      };
+      for await (const bt of stripe.balanceTransactions.list(params)) {
+        out.push(await normalizeBalanceTransaction(bt));
+        if (out.length >= BALANCE_TRANSACTIONS_MAX) break;
+      }
+      return out;
     },
 
     async verifyWebhook(rawBody: string, headers: Headers): Promise<WebhookEvent> {
@@ -257,6 +308,102 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       return normalize(event);
     },
   };
+
+  /** Order and org from a charge's (or its PaymentIntent's) metadata. */
+  async function chargeTags(
+    charge: Stripe.Charge | string | null | undefined,
+    account: string | null,
+  ): Promise<{ orgId: string | null; orderId: string | null }> {
+    let c = charge;
+    if (typeof c === 'string') c = await stripe.charges.retrieve(c, {}, on(account));
+    if (!c) return { orgId: null, orderId: null };
+    let md: Stripe.Metadata = c.metadata ?? {};
+    if (!md.orderId && c.payment_intent) {
+      const pi =
+        typeof c.payment_intent === 'string'
+          ? await stripe.paymentIntents.retrieve(c.payment_intent, {}, on(account))
+          : c.payment_intent;
+      md = pi.metadata ?? {};
+    }
+    return { orgId: md.orgId ?? null, orderId: md.orderId ?? null };
+  }
+
+  /**
+   * One balance transaction, attributed through the metadata the platform tagged. Keyed on the
+   * transaction's `type`: a transfer reversal's source is the *transfer* and an application-fee
+   * refund's source is the *fee*, so the reversal or refund is found by its balance transaction
+   * (both found against real test-mode payloads, M1.5e3).
+   */
+  async function normalizeBalanceTransaction(bt: Stripe.BalanceTransaction): Promise<BalanceTransaction> {
+    const base = {
+      id: bt.id,
+      amountMinor: bt.amount,
+      currency: bt.currency.toUpperCase(),
+      occurredAt: new Date(bt.created * 1000),
+    };
+    const src = bt.source && typeof bt.source !== 'string' ? bt.source : null;
+    const tagged = (kind: BalanceTransactionKind, md: Stripe.Metadata | null | undefined) => ({
+      ...base,
+      kind,
+      orgId: md?.orgId ?? null,
+      reference: md?.yayatoh_ref ?? null,
+    });
+    const ordered = (kind: BalanceTransactionKind, t: { orgId: string | null; orderId: string | null }) => ({
+      ...base,
+      kind,
+      orgId: t.orgId,
+      reference: t.orderId ? `order:${t.orderId}` : null,
+    });
+    const idOf = (v: string | { id: string } | null | undefined) =>
+      typeof v === 'string' ? v : (v?.id ?? null);
+    switch (bt.type) {
+      case 'charge':
+      case 'payment':
+        return src?.object === 'charge'
+          ? ordered('charge', await chargeTags(src, null))
+          : tagged('charge', null);
+      case 'refund':
+      case 'payment_refund':
+        return tagged('refund', src?.object === 'refund' ? src.metadata : null);
+      case 'transfer':
+        return tagged('transfer', src?.object === 'transfer' ? src.metadata : null);
+      case 'transfer_refund':
+      case 'transfer_cancel':
+      case 'transfer_failure': {
+        if (src?.object !== 'transfer') return tagged('transfer_reversal', null);
+        let rev = src.reversals?.data.find((r) => idOf(r.balance_transaction) === bt.id);
+        if (!rev)
+          for await (const r of stripe.transfers.listReversals(src.id, { limit: 100 }))
+            if (idOf(r.balance_transaction) === bt.id) {
+              rev = r;
+              break;
+            }
+        return tagged('transfer_reversal', rev?.metadata ?? src.metadata);
+      }
+      case 'application_fee': {
+        if (src?.object !== 'application_fee') return tagged('application_fee', null);
+        // The fee's charge lives on the connected account (a direct charge).
+        return ordered('application_fee', await chargeTags(src.charge, idOf(src.account)));
+      }
+      case 'application_fee_refund': {
+        if (src?.object !== 'application_fee') return tagged('application_fee_refund', null);
+        let refund = src.refunds?.data.find((r) => idOf(r.balance_transaction) === bt.id);
+        if (!refund)
+          for await (const r of stripe.applicationFees.listRefunds(src.id, { limit: 100 }))
+            if (idOf(r.balance_transaction) === bt.id) {
+              refund = r;
+              break;
+            }
+        return tagged('application_fee_refund', refund?.metadata);
+      }
+      default:
+        if (src?.object === 'dispute') {
+          const t = await chargeTags(src.charge, null);
+          return { ...base, kind: 'dispute', orgId: t.orgId, reference: `dispute:${src.id}` };
+        }
+        return { ...base, kind: 'other', orgId: null, reference: null };
+    }
+  }
 
   /** Map a verified Stripe event to the port's events (or an explicit "ignored"). */
   async function normalize(event: Stripe.Event): Promise<WebhookEvent> {

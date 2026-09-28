@@ -12,7 +12,9 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "stripe:smoke": "node scripts/stripe-smoke.ts"
+    "stripe:smoke": "node scripts/stripe-smoke.ts",
+    "stripe:contract": "node scripts/stripe-contract.ts",
+    "stripe:test-clocks": "node scripts/stripe-test-clocks.ts"
   },
   "dependencies": {
     "@yayatoh/contracts": "workspace:*",

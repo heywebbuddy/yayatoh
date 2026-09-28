@@ -1,11 +1,9 @@
-import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
-import { disputeEvidenceHtml } from '@yayatoh/pdf';
-import { disputeEvidenceQuery, EVIDENCE_LABELS, evidenceDocument } from '@yayatoh/reports';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { disputeEvidenceQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { getTranslations } from 'next-intl/server';
 import { z } from 'zod';
 import { loadEvent } from '@/server/console.ts';
-import { getPdfRenderer } from '@/server/pdf.ts';
+import { evidencePacketDocument, renderEvidencePdf } from '@/server/evidence.ts';
 import { ports } from '@/server/ports.ts';
 
 /**
@@ -29,20 +27,17 @@ export async function GET(
     throw err;
   }
   if (evidence.order.id !== orderId) return new Response('Not found', { status: 404 });
-  const t = await getTranslations({ locale: 'en', namespace: 'evidence' });
-  const doc = evidenceDocument(evidence, {
-    locale: 'en',
-    label: (k, v) => (EVIDENCE_LABELS.includes(k) ? t(k, v) : k),
-    money: (m, c) => formatMoney(money(m, c), 'en'),
-  });
-  const document = disputeEvidenceHtml(doc);
-  const renderer = getPdfRenderer();
   const headers = { 'cache-control': 'private, no-store', 'x-robots-tag': 'noindex' };
-  if (!renderer)
-    return new Response(document, { headers: { ...headers, 'content-type': 'text/html; charset=utf-8' } });
   try {
-    const pdf = await renderer.render({ html: document });
-    return new Response(new Uint8Array(pdf), {
+    const out = await renderEvidencePdf(await evidencePacketDocument(evidence));
+    if (out.kind === 'html')
+      return new Response(out.html, { headers: { ...headers, 'content-type': 'text/html; charset=utf-8' } });
+    if (out.kind === 'too_large')
+      return new Response('The packet is over the card networks’ limits (4.5 MB / 19 pages).', {
+        status: 422,
+        headers,
+      });
+    return new Response(new Uint8Array(out.bytes), {
       headers: {
         ...headers,
         'content-type': 'application/pdf',

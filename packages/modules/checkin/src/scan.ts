@@ -21,7 +21,7 @@ import {
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
-import { admissions, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
+import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
 import { checkVelocityTx, FraudSignalDto, fraudSignalsTx } from './signals.ts';
 import { actorScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
@@ -393,4 +393,25 @@ export async function admissionsForTicketsTx(tx: TenantTx, ticketIds: readonly s
     .where(and(inArray(admissions.ticketId, [...ticketIds]), isNull(admissions.undoneAt)))
     .orderBy(admissions.admittedAt)
     .limit(500);
+}
+
+/**
+ * The door's scan log for some tickets (every attempt, rejections included, with the entrance):
+ * the "access log" of a dispute evidence packet (M1.6e). Bounded; oldest first.
+ */
+export async function scanLogForTicketsTx(tx: TenantTx, ticketIds: readonly string[], limit = 300) {
+  if (ticketIds.length === 0) return [];
+  return tx
+    .select({
+      ticketId: scans.ticketId,
+      scannedAt: scans.scannedAt,
+      result: scans.result,
+      offline: scans.offline,
+      checkpoint: checkpoints.name,
+    })
+    .from(scans)
+    .leftJoin(checkpoints, and(eq(checkpoints.orgId, scans.orgId), eq(checkpoints.id, scans.checkpointId)))
+    .where(inArray(scans.ticketId, [...ticketIds]))
+    .orderBy(scans.scannedAt)
+    .limit(limit);
 }

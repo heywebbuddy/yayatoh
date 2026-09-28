@@ -208,6 +208,7 @@
     "templates": "Sjablonen",
     "apiKeys": "API-sleutels",
     "publicSite": "Openbare site",
+    "finance": "Financiën",
     "emails": "E-mailsjablonen",
     "speakers": "Sprekers",
     "sponsors": "Sponsors",
@@ -720,7 +721,8 @@
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",
     "chooseDate": "Kies eerst een datum.",
     "dateSoldOut": "Deze datum is net uitverkocht. Kies een andere.",
-    "dateUnavailable": "Deze datum is niet meer beschikbaar. Kies een andere."
+    "dateUnavailable": "Deze datum is niet meer beschikbaar. Kies een andere.",
+    "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1296,6 +1298,24 @@
         "failed": "Nieuwe poging"
       }
     },
+    "receivables": {
+      "title": "Vorderingen",
+      "description": "Wat je Yayatoh verschuldigd bent: terugbetalingen of geschillen nadat je bent uitbetaald, en kosten op verkopen die je zelf hebt geïnd. Dit wordt waar mogelijk teruggehaald met een terugboeking van de overboeking, anders van je volgende uitbetaling.",
+      "none": "Je bent niets verschuldigd.",
+      "owed": "Openstaand",
+      "nettedNext": "Wordt verrekend met je volgende uitbetaling",
+      "history": "Geschiedenis van vorderingen",
+      "amount": "Bedrag",
+      "source": {
+        "refund": "Terugbetaling na uitbetaling · {event}",
+        "dispute": "Geschil · {event}",
+        "dispute_won": "Geschil gewonnen · {event}",
+        "organizer_collected_sale": "Kosten op een verkoop die je zelf inde · {event}",
+        "transfer_reversal": "Teruggehaald met terugboeking · {event}",
+        "receivable_netting": "Verrekend met een uitbetaling",
+        "other": "Correctie · {event}"
+      }
+    },
     "destinationHold": "Nieuwe uitbetaalrekening: voor je veiligheid beginnen overboekingen ernaartoe pas na {until}. De eigenaren van je organisatie zijn gemaild."
   },
   "fakeConnect": {
@@ -1391,7 +1411,15 @@
     "done": "Terugbetaald. De koper krijgt het geld binnen een paar dagen terug op zijn kaart.",
     "failed": "De betaalprovider heeft deze terugbetaling geweigerd. Er is niets gewijzigd.",
     "exceedsRefundable": "Dat is meer dan er op deze bestelling nog terug te betalen is.",
-    "ticketRefunded": "Een van die tickets is al terugbetaald of wordt terugbetaald."
+    "ticketRefunded": "Een van die tickets is al terugbetaald of wordt terugbetaald.",
+    "keptCol": "Ingehouden",
+    "overridden": "Buiten het beleid",
+    "policyWindowClosed": "Het restitutiebeleid van het evenement is gesloten op {deadline}. Terugbetalingen op verzoek zijn niet meer mogelijk.",
+    "policyNoRefunds": "Het restitutiebeleid van het evenement staat geen terugbetalingen op verzoek toe.",
+    "override": "Terugbetalen buiten het restitutiebeleid",
+    "overrideHint": "Alleen eigenaren en beheerders. Er wordt niets ingehouden; de notitie is verplicht en wordt vastgelegd.",
+    "overrideNote": "Waarom wordt het beleid genegeerd? (verplicht)",
+    "overrideNoteRequired": "Geef aan waarom het restitutiebeleid wordt genegeerd (minstens 3 tekens)."
   },
   "disputes": {
     "title": "Betwistingen",
@@ -1406,7 +1434,38 @@
       "lost": "Verloren"
     },
     "dueBy": "Bewijs uiterlijk {date}",
-    "evidence": "Bewijspakket (pdf)"
+    "evidence": "Bewijspakket (pdf)",
+    "respond": "Bekijken en reageren",
+    "submitted": "Bewijs ingediend",
+    "review": {
+      "title": "Reageren op een geschil",
+      "description": "Bekijk het bewijspakket, voeg je verklaring toe en dien het in bij het kaartnetwerk.",
+      "backToOrder": "Terug naar de bestelling",
+      "respondTitle": "Je reactie",
+      "summary": "Je verklaring",
+      "summaryHint": "Beschrijf in gewone woorden wat er gebeurde: wanneer de koper kocht, binnenkwam en wat werd verteld. Minstens 10 tekens; het wordt verstuurd zoals geschreven, en kaartnetwerken lezen Engels.",
+      "sections": "Opnemen in het pakket",
+      "sectionsHint": "Het geschil, de verkoper, het evenement en de bestelling zitten er altijd in.",
+      "section": {
+        "tickets": "Tickets en inchecken",
+        "accessLog": "Toegangslog (elke scan bij de deur)",
+        "refunds": "Terugbetalingen",
+        "messages": "Berichten aan de koper",
+        "refundPolicy": "Restitutiebeleid"
+      },
+      "reviewed": "Ik heb het bewijspakket hieronder gelezen en het klopt.",
+      "save": "Concept opslaan",
+      "submit": "Bewijs indienen",
+      "saved": "Opgeslagen.",
+      "summaryTooShort": "Schrijf een verklaring van minstens 10 tekens.",
+      "notReviewed": "Bevestig dat je het bewijspakket hebt gelezen voordat je indient.",
+      "tooLarge": "Het pakket is groter dan de limiet van de kaartnetwerken (4,5 MB / 19 pagina’s). Laat een onderdeel weg en probeer het opnieuw.",
+      "providerRefused": "De betaalprovider heeft het bewijs niet geaccepteerd. Er is niets ingediend.",
+      "notOpen": "Dit geschil is niet meer open.",
+      "submittedOn": "Bewijs ingediend op {date}.",
+      "previewTitle": "Bewijspakket",
+      "previewHint": "Dit is precies wat wordt verstuurd, in het Engels, de taal van de kaartnetwerken."
+    }
   },
   "evidence": {
     "title": "Bewijs bij betwisting · {id}",
@@ -1449,7 +1508,19 @@
     "noRefunds": "Voor deze bestelling zijn geen terugbetalingen aangevraagd.",
     "refundPolicy": "Terugbetalingsbeleid zoals getoond aan kopers",
     "noPolicy": "De organisator heeft geen terugbetalingsbeleid gepubliceerd.",
-    "policyUpdated": "Laatst bijgewerkt {date}"
+    "policyUpdated": "Laatst bijgewerkt {date}",
+    "statement": "Verklaring van de verkoper",
+    "accessLog": "Toegangslog (scans bij de deur)",
+    "noScans": "Er zijn geen scans bij de deur geregistreerd voor deze tickets.",
+    "time": "Tijd",
+    "entrance": "Ingang",
+    "result": "Resultaat",
+    "offline": "offline",
+    "messages": "Berichten aan de koper",
+    "noMessages": "Er zijn geen berichten over deze bestelling naar de koper gestuurd.",
+    "message": "Bericht",
+    "channel": "Kanaal",
+    "trimmed": "{n, plural, one {# extra rij weggelaten} other {# extra rijen weggelaten}} om binnen de paginalimiet van de kaartnetwerken te blijven."
   },
   "boxOffice": {
     "title": "Kassa",
@@ -3024,6 +3095,71 @@
       "emptyTitle": "Nog geen openbare evenementen",
       "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
     }
+  },
+  "finance": {
+    "title": "Financiën",
+    "description": "Elke dag wordt het geld in je grootboek vergeleken met wat de betaalprovider heeft verplaatst. Verschillen staan hier om te controleren en op te lossen.",
+    "runsTitle": "Dagelijkse controles",
+    "noRuns": "Er is nog geen dag gecontroleerd. De eerste controle draait in de nacht na je eerste verkoop.",
+    "day": "Dag",
+    "ledgerCount": "Boekingen",
+    "providerCount": "Bewegingen bij de provider",
+    "result": "Resultaat",
+    "matched": "Klopt",
+    "differences": "{n, plural, one {# verschil} other {# verschillen}}",
+    "openTitle": "Te controleren verschillen",
+    "emptyTitle": "Geen verschillen",
+    "emptyDescription": "Je grootboek klopt met de betaalprovider.",
+    "kind": {
+      "missing_at_provider": "Niet bij de provider",
+      "missing_in_ledger": "Niet in het grootboek",
+      "amount_mismatch": "Bedragen verschillen"
+    },
+    "ledger": "Grootboek",
+    "provider": "Provider",
+    "difference": "Verschil",
+    "noResolveAccess": "Alleen eigenaren, beheerders en financiën kunnen verschillen oplossen.",
+    "resolvedTitle": "Opgelost",
+    "what": "Wat",
+    "reference": "Referentie",
+    "note": "Notitie",
+    "resolveNote": "Waarom is {reference} opgelost?",
+    "noteTooShort": "Schrijf een notitie van minstens 3 tekens.",
+    "alreadyResolved": "Iemand heeft dit verschil al opgelost.",
+    "resolve": "Oplossen"
+  },
+  "risk": {
+    "flagged": "Gemarkeerd bij het afrekenen",
+    "rules": {
+      "email_velocity_review": "Veel bestellingen van dit e-mailadres binnen een uur",
+      "country_mismatch_review": "Gekocht vanuit een ander land dan dat van het evenement"
+    }
+  },
+  "refundPolicy": {
+    "title": "Restitutiebeleid",
+    "buyerTitle": "Restitutiebeleid",
+    "notSet": "Geen restitutiebeleid ingesteld: terugbetalingen zijn naar eigen inzicht en kopers zien geen beleid.",
+    "none": "Tickets worden op verzoek niet terugbetaald.",
+    "always": "Terugbetaling is op verzoek altijd mogelijk.",
+    "until": "Terugbetaling is op verzoek mogelijk tot {deadline}.",
+    "retained": "De organisator houdt {amount} per ticket in.",
+    "feeKept": "De boekingskosten worden op verzoek niet terugbetaald.",
+    "minimum": "Als het evenement wordt geannuleerd, of zonder nieuwe datum meer dan 90 dagen wordt uitgesteld, krijg je alles terug, inclusief kosten.",
+    "kindLegend": "Terugbetalingen op verzoek",
+    "kindOption": {
+      "unset": "Geen beleid (naar eigen inzicht)",
+      "none": "Geen terugbetalingen",
+      "until": "Tot een aantal dagen voor het evenement",
+      "always": "Altijd"
+    },
+    "daysLabel": "Dagen voor het evenement",
+    "daysHint": "Geteld in kalenderdagen in de tijdzone van het evenement; 0 betekent tot en met de dag van het evenement.",
+    "retainedLabel": "Inhouding per terugbetaald ticket ({currency}, optioneel)",
+    "retainedHint": "Annuleringskosten die je houdt; de koper krijgt de rest.",
+    "minimumHint": "Het platformminimum geldt altijd: een geannuleerd evenement, of een dat zonder nieuwe datum meer dan 90 dagen is uitgesteld, wordt volledig terugbetaald.",
+    "save": "Restitutiebeleid opslaan",
+    "saved": "Restitutiebeleid opgeslagen.",
+    "daysInvalid": "Voer een aantal dagen van 0 tot 365 in."
   },
   "emailTemplates": {
     "title": "E-mailsjablonen",

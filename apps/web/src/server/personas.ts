@@ -7,7 +7,7 @@ export interface Persona {
   readonly name: string;
   /** Empty for a newcomer with no organization yet (the invite-only signup flow). */
   readonly orgSlug: string;
-  readonly role: 'owner' | 'viewer';
+  readonly role: 'owner' | 'viewer' | 'finance';
   /**
    * Two-step verification on (M1.2c; required for owners). The seed enrols it with a dev-only
    * secret derived from DEV_PERSONA_PASSWORD, and /dev/login answers the challenge with it.
@@ -29,6 +29,15 @@ export const PERSONAS: readonly Persona[] = [
     orgSlug: 'lakeside-events',
     role: 'viewer',
     twoFactor: false,
+  },
+  // Finance (M1.6e): refunds, reconciliation and disputes, no event editing. Finance must use
+  // two-step verification (M1.2c).
+  {
+    email: 'fran@lakeside.test',
+    name: 'Fran Ledger',
+    orgSlug: 'lakeside-events',
+    role: 'finance',
+    twoFactor: true,
   },
   {
     email: 'maya@rosewood.test',

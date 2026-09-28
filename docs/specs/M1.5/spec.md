@@ -265,3 +265,44 @@ Roadmap §5.3. `stripePaymentProvider` in `@yayatoh/payments` implements the who
 | AC5 | On a real database: session → signed webhook → order paid once (replay is a duplicate), a mismatched amount is refused, the refund hits the session's PaymentIntent, a dispute finds its order, other apps' events are ignored | `packages/testing/tests/stripe-flow.int.test.ts` |
 | AC6 | In the browser: the payment page names the event; the Stripe webhook endpoint is a 404 while Stripe is off | `apps/web/e2e/checkout.spec.ts` |
 
+
+## M1.5e3 — Stripe TEST-mode verification (done, 2026-09-28)
+
+The owner's Stripe **test** keys were in the session environment (a `sk_test_` secret key and a `pk_test_` publishable key; no webhook secret). Only the manual scripts below called Stripe; automated tests and CI keep the fake provider and a fake Stripe API. No key was printed, written to a file or committed.
+
+**What ran**
+- `PAYMENTS_PROVIDER=stripe pnpm --filter @yayatoh/payments stripe:smoke`: a platform Checkout Session (`cs_test_a1ev3A…`) and a connected account with an onboarding link (`acct_1UKSwh…`, closed afterwards). It failed twice first, which found the two fixes below.
+- New `pnpm --filter @yayatoh/payments stripe:contract [-- --capture] [-- --account acct_…]` (not in CI): exercises every call `stripePaymentProvider` makes and asserts the adapter parses the real answers. **11/11 steps passed** (last run):
+  1. `platform_mor` Checkout Session: amount, metadata, Managed Payments off, hosted URL.
+  2. Connect account (Accounts v2, Standard-equivalent), idempotent per org, `accountState` parses the v1 view, org metadata present, hosted onboarding link on `connect.stripe.com`.
+  3. A test merchant account onboarded **by API with Stripe's test data** (dashboard `none`, platform-collected requirements: test identity, `address_full_match`, SSN `000000000`, `btok_us_verified`, `accessible.stripe.com`) reaches `charges_enabled` + `payouts_enabled`. Stripe's verification takes one to a few minutes once the business name matches the statement descriptor (the helper sets both); `--account` reuses an active one. A full-dashboard (Standard) account cannot be onboarded by API (Stripe owns its requirements and refuses API terms-of-service acceptance): that needs the hosted onboarding.
+  4. `organizer_mor` direct-charge Checkout Session with the application fee, on the connected account.
+  5. `organizer_mor` refund on the connected account plus exactly 200 of the 500 application fee refunded (checked on the fee object).
+  6. `platform_mor` partial refund; replaying the idempotency key returns the same refund.
+  7. Transfer at release to the connected account, an explicit transfer reversal, and an impossible reversal reported as `failed` (the debt stays a receivable).
+  8. A transfer to an account without the transfer capability fails cleanly (`insufficient_capabilities_for_transfer`).
+  9. A test dispute (`pm_card_createDispute`), the evidence packet uploaded to `files.stripe.com` as a PDF and attached (`uncategorized_file`), `submit: true` (Stripe's `winning_evidence` text closes it as won).
+  10. `balance_transactions` (daily reconciliation, M1.6e): every movement of the run attributed to the org and the ledger reference.
+  11. Real event payloads from `events.list` (about 100 across the runs) signed locally with a throwaway secret and run through `verifyWebhook`: none throws; `checkout.session.completed` → paid, `expired` → failed, dispute events → ignored when the payment has no Yayatoh Checkout Session, everything else acknowledged as ignored.
+- `node apps/web/scripts/stripe-hosted-checkout.ts`: **a hosted Checkout Session paid with 4242 4242 4242 4242 in headless Chromium** (`payment_status: paid`). The page needed `checkout.stripe.com`, `js.stripe.com`, `m.stripe.network`, `m.stripe.com`, `r.stripe.com`, `b.stripecdn.com`, `api.stripe.com`, `merchant-ui-api.stripe.com`, `checkout-cookies.stripe.com`, `*.hcaptcha.com`, and for the wallet buttons `applepay.cdn-apple.com`, `smp-paymentservices.apple.com`, Amazon Pay and Klarna hosts: all reachable. Chromium had to trust the egress proxy's CA (added to its NSS store in this container; nothing in the repo). The return URL's host (`example.test`) is not reachable, which is expected.
+- Cleanup: every connected account the runs created was closed (Accounts v2 `close`).
+
+**Bugs found and fixed (with unit tests on captured, redacted payloads in `packages/modules/payments/tests/fixtures/stripe/`)**
+- **Managed Payments.** The account has Stripe's Managed Payments (Stripe as merchant of record) on by default, so Checkout refused sessions without a product tax code. Tickets are never sold by Stripe: sessions now send `managed_payments[enabled]=false` (owner inbox: turn the default off).
+- **Accounts v1 refused.** Stripe no longer lets this platform create v1 connected accounts. `createConnectedAccount` now uses **Accounts v2** (`dashboard: full`, merchant `card_payments` + recipient `stripe_transfers`, Stripe collects fees and carries losses, org metadata). The account id and every v1 call on it (Checkout, refunds, account links, `accounts.retrieve`) work unchanged.
+- **Balance-transaction mapping** (new in M1.6e, caught by the contract before it shipped): a transfer reversal's balance transaction points at the *transfer*, and an application-fee refund's at the *fee*; the adapter now maps by the transaction's `type` and finds the reversal or refund by its balance transaction. `stripe-live-shapes.test.ts` replays the captured list.
+- Evidence packets are now uploaded as files (≤ 4.5 MB, refused above) and submitted on the connected account for `organizer_mor` disputes.
+- Refunds, fee refunds, transfers and reversals carry `metadata.yayatoh_ref` (the ledger reference) and `orgId`, so reconciliation can attribute them.
+
+**Still needs the owner / a public URL**
+- Webhook endpoints (platform + Connect) on a public preview URL and their signing secrets; until then webhooks were proven only by signing real payloads locally.
+- Whether `account.updated` arrives for Accounts v2 accounts on the Connect endpoint (or the v2 thin events are needed).
+- Stripe test clocks for the refund-after-transfer scenarios: `stripe:test-clocks` (M1.6e) passed in test mode. Live money stays gated on D3 and counsel.
+
+### Acceptance (M1.5e3)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Every adapter call works against Stripe test mode and parses the real answers | `packages/modules/payments/scripts/stripe-contract.ts` (manual, 11/11) |
+| AC2 | Real event payloads parse through the webhook verifier; captured shapes are unit fixtures | `stripe-contract.ts`, `packages/modules/payments/tests/stripe-live-shapes.test.ts` |
+| AC3 | Managed Payments off, Accounts v2 creation, evidence file upload on the right account, reconciliation tags | `packages/modules/payments/tests/stripe.test.ts` |
+| AC4 | A hosted Checkout Session is paid with the 4242 card in headless Chromium | `apps/web/scripts/stripe-hosted-checkout.ts` (manual) |

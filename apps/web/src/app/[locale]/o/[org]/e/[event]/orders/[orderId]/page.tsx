@@ -1,6 +1,6 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { orderMessagesQuery } from '@yayatoh/notifications';
-import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
+import { orderDetailQuery, orderRefundsQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -8,6 +8,8 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
 import { RefundForm } from '@/components/refund-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
+import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { refundAction } from './actions.ts';
@@ -40,6 +42,8 @@ export default async function OrderPage({
   const disputes = roleCan(data.role, 'finance:read')
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
     : [];
+  const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
+  const tp = await getTranslations('refundPolicy');
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
@@ -83,6 +87,14 @@ export default async function OrderPage({
         <p className="text-caption text-zinc-600">
           {order.items.map((i) => `${i.quantity} × ${i.name}`).join(', ')}
         </p>
+        {order.riskReview.length > 0 ? (
+          <p className="flex flex-wrap items-center gap-2 text-caption">
+            <StatusDot status="warning" label={t('risk.flagged')} />
+            <span className="text-zinc-600">
+              {order.riskReview.map((r) => (t.has(`risk.rules.${r}`) ? t(`risk.rules.${r}`) : r)).join(' · ')}
+            </span>
+          </p>
+        ) : null}
       </Card>
 
       <section aria-labelledby="tickets-heading" className="flex flex-col gap-3">
@@ -152,6 +164,20 @@ export default async function OrderPage({
                 align: 'end',
               },
               {
+                key: 'kept',
+                header: t('refunds.keptCol'),
+                cell: (r) => (
+                  <span className="flex flex-col items-end">
+                    <span>{fmt(r.retainedMinor)}</span>
+                    {r.policyOverride ? (
+                      <span className="font-sans text-caption text-zinc-500">{t('refunds.overridden')}</span>
+                    ) : null}
+                  </span>
+                ),
+                mono: true,
+                align: 'end',
+              },
+              {
                 key: 'status',
                 header: t('orders.status'),
                 cell: (r) => (
@@ -193,6 +219,16 @@ export default async function OrderPage({
                   >
                     {t('disputes.evidence')}
                   </a>
+                  {d.status === 'open' && roleCan(data.role, 'disputes:respond') ? (
+                    <Link
+                      href={`/o/${org}/e/${event}/orders/${orderId}/disputes/${d.id}`}
+                      className="text-caption underline underline-offset-2"
+                    >
+                      {t('disputes.respond')}
+                    </Link>
+                  ) : d.status === 'evidence_submitted' ? (
+                    <span className="text-caption text-zinc-600">{t('disputes.submitted')}</span>
+                  ) : null}
                 </Card>
               </li>
             ))}
@@ -271,10 +307,24 @@ export default async function OrderPage({
           <h2 id="refund-heading" className="text-section">
             {t('refunds.formTitle')}
           </h2>
-          <Card>
+          <Card className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-caption text-zinc-600">{tp('title')}</p>
+              {policy ? (
+                <ul className="flex list-none flex-col gap-0.5 p-0 text-caption">
+                  {refundPolicyLines(tp, policy, locale).map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-caption">{tp('notSet')}</p>
+              )}
+            </div>
             <RefundForm
               action={refundAction.bind(null, org, event, orderId)}
               currency={order.currency}
+              timeZone={ev.timezone}
+              canOverride={roleCan(data.role, 'orders:refund_override')}
               tickets={active.map((tk) => ({
                 id: tk.id,
                 label: `#${tk.serial} · ${tk.itemName} · ${tk.holderName}`,

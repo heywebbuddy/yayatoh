@@ -1502,6 +1502,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders

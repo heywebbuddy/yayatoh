@@ -3,15 +3,21 @@
 import { accessTarget, checkoutTarget, publicEventBySlug, redeemAccessCodeCommand } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
-import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
+import {
+  attachPaymentCommand,
+  type CheckoutResultDto,
+  checkoutRiskSignals,
+  startCheckoutCommand,
+} from '@yayatoh/orders';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
 import { refresh } from 'next/cache';
+import { headers } from 'next/headers';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import type { FormState } from '@/lib/form-state.ts';
 import { failure } from '@/server/form.ts';
-import { getPaymentProvider } from '@/server/payments.ts';
+import { getCheckoutRisk, getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 import { getSession } from '@/server/session.ts';
@@ -87,6 +93,20 @@ export async function checkoutAction(
       if (v) answers[q.key] = q.type === 'checkbox' ? true : v;
     }
   }
+  // Pre-checkout risk rules (M1.6e), through the risk port before any order exists. The request's
+  // country comes from the host's geo header; the org and event from the server-side lookup.
+  const email = String(form.get('email') ?? '');
+  const geo = (await headers()).get('x-vercel-ip-country');
+  const signals = await checkoutRiskSignals(target.orgId, target.eventId, email, new Date());
+  const risk = await getCheckoutRisk().assess({
+    orgId: target.orgId,
+    eventId: target.eventId,
+    emailOrders: signals.emailOrders,
+    paymentFailures: signals.paymentFailures,
+    ipCountry: geo && /^[A-Z]{2}$/.test(geo) ? geo : null,
+    eventCountry: signals.eventCountry,
+  });
+  if (risk.action === 'block') return { code: 'forbidden', reason: 'risk_blocked' };
   const session = await getSession();
   const ctx = createCtx({
     orgId: target.orgId,
@@ -105,12 +125,13 @@ export async function checkoutAction(
         ...(/^[0-9a-f-]{36}$/.test(String(form.get('occurrenceId') ?? ''))
           ? { occurrenceId: String(form.get('occurrenceId')) }
           : {}),
-        buyer: { email: String(form.get('email') ?? ''), name: String(form.get('name') ?? '') },
+        buyer: { email, name: String(form.get('name') ?? '') },
         marketingOptIn: form.get('marketingOptIn') === '1',
         promoCode: String(form.get('promoCode') ?? '').trim() || undefined,
         ...(grant ? { accessCodeId: grant.codeId } : {}),
         answers,
         locale,
+        riskReview: risk.action === 'review' ? [...risk.rules] : [],
       },
       ctx,
       ports,

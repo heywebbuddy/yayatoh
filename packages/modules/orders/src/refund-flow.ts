@@ -1,8 +1,12 @@
 import type { TenantTx } from '@yayatoh/db';
-import { type CommandPorts, type Ctx, executeCommand } from '@yayatoh/kernel';
+import { type CommandPorts, type Ctx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { type PaymentProvider, recordTransferReversalCommand } from '@yayatoh/payments';
 import type { z } from 'zod';
-import { completeRefundCommand, startRefundCommand } from './commands/refunds.ts';
+import {
+  completeRefundCommand,
+  type startPolicyOverrideRefundCommand,
+  startRefundCommand,
+} from './commands/refunds.ts';
 
 export interface RefundOutcome {
   readonly refundId: string;
@@ -25,7 +29,7 @@ export async function refundOrder(
   ctx: Ctx,
   ports: CommandPorts<TenantTx>,
   provider: PaymentProvider,
-  start: typeof startRefundCommand = startRefundCommand,
+  start: typeof startRefundCommand | typeof startPolicyOverrideRefundCommand = startRefundCommand,
 ): Promise<RefundOutcome> {
   const started = await executeCommand(start, input, ctx, ports);
   const res = await provider.refund({
@@ -37,6 +41,7 @@ export async function refundOrder(
       currency: started.currency,
     },
     idempotencyKey: `refund:${started.refundId}`,
+    orgId: requireOrg(ctx),
   });
   const done = await executeCommand(
     completeRefundCommand,
@@ -49,6 +54,7 @@ export async function refundOrder(
       transferId: done.reversal.transferId,
       amount: { amount: done.reversal.amountMinor, currency: done.reversal.currency },
       idempotencyKey: `reversal:${started.refundId}`,
+      orgId: requireOrg(ctx),
     });
     await executeCommand(
       recordTransferReversalCommand,

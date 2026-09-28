@@ -92,7 +92,8 @@
       "released": "Payout hold released.",
       "fee": "Fee override saved.",
       "entitlement": "Entitlement override saved.",
-      "evidence": "Evidence submitted."
+      "evidence": "Evidence submitted.",
+      "reconciled": "Reconciliation difference resolved."
     },
     "field": {
       "status": "Status",
@@ -180,6 +181,19 @@
       "summary": "Summary for the card network (what was bought, that it was delivered or used)",
       "reviewed": "I reviewed the evidence packet",
       "submit": "Submit evidence"
+    },
+    "reconciliation": {
+      "title": "Reconciliation",
+      "description": "Open differences between this tenant's ledger and the payment provider's balance transactions (daily run). Resolve with a note once explained; the note is audited.",
+      "empty": "No open differences.",
+      "kind": {
+        "missing_at_provider": "Not at the provider",
+        "missing_in_ledger": "Not in the ledger",
+        "amount_mismatch": "Amounts differ"
+      },
+      "amounts": "Ledger {ledger} · provider {provider}",
+      "note": "Resolution note",
+      "resolve": "Resolve"
     }
   },
   "accessLog": {
@@ -230,7 +244,19 @@
     "noRefunds": "No refunds were requested for this order.",
     "refundPolicy": "Refund policy shown to buyers",
     "noPolicy": "The organizer has not published a refund policy.",
-    "policyUpdated": "Last updated {date}"
+    "policyUpdated": "Last updated {date}",
+    "statement": "Statement from the seller",
+    "accessLog": "Access log (door scans)",
+    "noScans": "No door scans were recorded for these tickets.",
+    "time": "Time",
+    "entrance": "Entrance",
+    "result": "Result",
+    "offline": "offline",
+    "messages": "Messages sent to the buyer",
+    "noMessages": "No messages were sent to the buyer about this order.",
+    "message": "Message",
+    "channel": "Channel",
+    "trimmed": "{n, plural, one {# more row left out} other {# more rows left out}} to stay within the card networks’ page limit."
   },
   "commission": {
     "title": "Commission",

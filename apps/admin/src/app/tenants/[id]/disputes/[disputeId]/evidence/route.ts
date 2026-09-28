@@ -1,6 +1,11 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { disputeEvidenceHtml } from '@yayatoh/pdf';
-import { disputeEvidenceQuery, EVIDENCE_LABELS, evidenceDocument } from '@yayatoh/reports';
+import {
+  disputeEvidenceQuery,
+  EVIDENCE_LABELS,
+  evidenceDocument,
+  fitEvidenceDocument,
+} from '@yayatoh/reports';
 import { getTranslations } from 'next-intl/server';
 import { z } from 'zod';
 import { getPdfRenderer } from '@/server/payments.ts';
@@ -22,12 +27,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     throw err;
   }
   const t = await getTranslations('evidence');
+  // The same packet the organizer reviews (their statement and exclusions), fitted to 19 pages.
   const document = disputeEvidenceHtml(
-    evidenceDocument(evidence, {
-      locale: 'en',
-      label: (k, v) => (EVIDENCE_LABELS.includes(k) ? t(k, v) : k),
-      money: (m, c) => formatMoney(money(m, c), 'en'),
-    }),
+    fitEvidenceDocument(
+      evidenceDocument(evidence, {
+        locale: 'en',
+        label: (k, v) => (EVIDENCE_LABELS.includes(k) ? t(k, v) : k),
+        money: (m, c) => formatMoney(money(m, c), 'en'),
+      }),
+      (n) => t('trimmed', { n }),
+    ),
   );
   const headers = { 'cache-control': 'private, no-store', 'x-robots-tag': 'noindex' };
   const renderer = getPdfRenderer();

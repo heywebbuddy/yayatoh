@@ -74,6 +74,8 @@ describe('Stripe adapter — charges (roadmap §5.3)', () => {
       'payment_intent_data[metadata][orderId]': ORDER,
       success_url: payment.returnUrl,
       cancel_url: payment.returnUrl,
+      // Never Stripe as merchant of record (accounts can default Managed Payments on, M1.5e3).
+      'managed_payments[enabled]': 'false',
       // Stripe's minimum session life (30 min), from the injected clock.
       expires_at: String(NOW.getTime() / 1000 + 1800),
     });
@@ -304,11 +306,17 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
     const [retrieve, refund, intent, fee] = calls;
     expect(retrieve?.account).toBe('acct_org');
     expect(refund).toMatchObject({ account: 'acct_org', idempotencyKey: 'refund:r1' });
-    expect(Object.fromEntries(refund?.body ?? [])).toEqual({ payment_intent: 'pi_1', amount: '2500' });
+    // Tagged with the ledger reference (the idempotency key) for daily reconciliation.
+    expect(Object.fromEntries(refund?.body ?? [])).toEqual({
+      payment_intent: 'pi_1',
+      amount: '2500',
+      'metadata[yayatoh_ref]': 'refund:r1',
+    });
     expect([...(intent?.query ?? [])]).toEqual([['expand[0]', 'latest_charge']]);
     // Application fees live on the platform account.
     expect(fee).toMatchObject({ account: null, idempotencyKey: 'refund:r1:fee' });
     expect(fee?.body.get('amount')).toBe('125');
+    expect(fee?.body.get('metadata[yayatoh_ref]')).toBe('refund:r1');
   });
 
   it('platform_mor refund keeps the fee on the platform; pending and rejected refunds are reported', async () => {
@@ -363,7 +371,7 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
       transferGroup: 'event:e1',
       idempotencyKey: 'settle:s1',
     };
-    expect(await provider.createTransfer({ ...t, destinationAccountId: 'acct_org' })).toEqual({
+    expect(await provider.createTransfer({ ...t, destinationAccountId: 'acct_org', orgId: ORG })).toEqual({
       transferId: 'tr_1',
       status: 'succeeded',
     });
@@ -372,6 +380,8 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
       currency: 'usd',
       destination: 'acct_org',
       transfer_group: 'event:e1',
+      'metadata[yayatoh_ref]': 'settle:s1',
+      'metadata[orgId]': ORG,
     });
     expect(calls[0]?.idempotencyKey).toBe('settle:s1');
     expect(await provider.createTransfer({ ...t, destinationAccountId: 'acct_closed' })).toMatchObject({
@@ -409,6 +419,7 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
       'evidence[uncategorized_text]': 'Checked in at 19:02',
       submit: 'true',
     });
+    expect(calls[0]?.account).toBeNull();
     expect(
       await provider.submitDisputeEvidence({
         providerDisputeId: 'dp_1',
@@ -419,9 +430,44 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
     expect(calls).toHaveLength(1);
   });
 
+  it('organizer_mor evidence: the reviewed packet is uploaded and attached on the connected account', async () => {
+    const { provider, calls } = fakeStripe({
+      'POST /v1/files': () => ({ json: { id: 'file_1', object: 'file' } }),
+      'POST /v1/disputes/dp_2': () => ({ json: { id: 'dp_2', object: 'dispute' } }),
+    });
+    const bytes = new TextEncoder().encode('%PDF-1.4 packet');
+    expect(
+      await provider.submitDisputeEvidence({
+        providerDisputeId: 'dp_2',
+        summary: 'Admitted at the north gate',
+        packet: { bytes, filename: 'evidence.pdf' },
+        connectedAccountId: 'acct_org',
+        idempotencyKey: 'evidence:d2',
+      }),
+    ).toEqual({ status: 'submitted' });
+    const [file, update] = calls;
+    expect(file).toMatchObject({
+      path: '/v1/files',
+      account: 'acct_org',
+      idempotencyKey: 'evidence:d2:file',
+    });
+    expect(update).toMatchObject({ account: 'acct_org', idempotencyKey: 'evidence:d2' });
+    expect(update?.body.get('evidence[uncategorized_file]')).toBe('file_1');
+    // Over the networks' 4.5 MB limit: refused before anything is sent.
+    expect(
+      await provider.submitDisputeEvidence({
+        providerDisputeId: 'dp_2',
+        summary: 'x',
+        packet: { bytes: new Uint8Array(4_500_001), filename: 'big.pdf' },
+        idempotencyKey: 'evidence:big',
+      }),
+    ).toEqual({ status: 'failed' });
+    expect(calls).toHaveLength(2);
+  });
+
   it('Connect: a Standard-equivalent account tagged with the org, hosted onboarding, wallet domains once', async () => {
     const { provider, calls } = fakeStripe({
-      'POST /v1/accounts': () => ({ json: { id: 'acct_new', object: 'account' } }),
+      'POST /v2/core/accounts': () => ({ json: { id: 'acct_new', object: 'v2.core.account' } }),
       'POST /v1/account_links': () => ({
         json: { object: 'account_link', url: 'https://connect.stripe.com/setup/s/x' },
       }),
@@ -441,15 +487,17 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
       await provider.createConnectedAccount({ orgId: ORG, country: 'US', email: 'owner@org.test' }),
     ).toEqual({ accountId: 'acct_new' });
     expect(calls[0]?.idempotencyKey).toBe(`acct:${ORG}`);
-    expect(Object.fromEntries(calls[0]?.body ?? [])).toMatchObject({
-      country: 'US',
-      email: 'owner@org.test',
-      'controller[stripe_dashboard][type]': 'full',
-      'controller[fees][payer]': 'account',
-      'controller[losses][payments]': 'stripe',
-      'capabilities[card_payments][requested]': 'true',
-      'capabilities[transfers][requested]': 'true',
-      'metadata[orgId]': ORG,
+    // Accounts v2 (Stripe refuses v1 creation for new Connect platforms, M1.5e3).
+    expect(calls[0]?.json).toEqual({
+      contact_email: 'owner@org.test',
+      dashboard: 'full',
+      identity: { country: 'us' },
+      configuration: {
+        merchant: { capabilities: { card_payments: { requested: true } } },
+        recipient: { capabilities: { stripe_balance: { stripe_transfers: { requested: true } } } },
+      },
+      defaults: { responsibilities: { fees_collector: 'stripe', losses_collector: 'stripe' } },
+      metadata: { orgId: ORG },
     });
     expect(
       await provider.createOnboardingLink({

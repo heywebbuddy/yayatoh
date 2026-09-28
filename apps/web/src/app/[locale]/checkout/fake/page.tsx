@@ -19,7 +19,16 @@ export default async function FakeCheckout({
   const { pi, org, order, amount, currency } = sp;
   if (!pi || !org || !order || !amount || !currency || !sp.return) notFound();
   const t = await getTranslations('fakePay');
-  const p = { pi, org, order, amount, currency, returnUrl: sp.return };
+  // organizer_mor (a connected account): the platform balance only receives the fee.
+  const p = {
+    pi,
+    org,
+    order,
+    amount,
+    currency,
+    returnUrl: sp.return,
+    ...(sp.acct && sp.fee ? { fee: sp.fee } : {}),
+  };
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />

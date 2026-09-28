@@ -208,6 +208,7 @@
     "templates": "範本",
     "apiKeys": "API 金鑰",
     "publicSite": "公開網站",
+    "finance": "財務",
     "emails": "郵件範本",
     "speakers": "演講嘉賓",
     "sponsors": "贊助商",
@@ -720,7 +721,8 @@
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
     "chooseDate": "請先選擇場次。",
     "dateSoldOut": "此場次剛剛售完，請選擇其他場次。",
-    "dateUnavailable": "此場次已無法購買，請選擇其他場次。"
+    "dateUnavailable": "此場次已無法購買，請選擇其他場次。",
+    "riskBlocked": "我們無法接受此訂單。請聯絡主辦單位。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1296,6 +1298,24 @@
         "failed": "重試中"
       }
     },
+    "receivables": {
+      "title": "應收款",
+      "description": "您欠 Yayatoh 的款項：撥款後發生的退款或爭議，以及您自行收款的銷售手續費。盡可能透過撤回轉帳收回，否則從您的下一筆撥款中扣除。",
+      "none": "您沒有欠款。",
+      "owed": "欠款",
+      "nettedNext": "從您的下一筆撥款中扣除",
+      "history": "應收款紀錄",
+      "amount": "金額",
+      "source": {
+        "refund": "撥款後的退款 · {event}",
+        "dispute": "爭議 · {event}",
+        "dispute_won": "爭議勝訴 · {event}",
+        "organizer_collected_sale": "您自行收款的銷售手續費 · {event}",
+        "transfer_reversal": "透過撤回轉帳收回 · {event}",
+        "receivable_netting": "從撥款中扣除",
+        "other": "調整 · {event}"
+      }
+    },
     "destinationHold": "新的撥款帳戶：為了你的安全，匯入此帳戶的轉帳將於 {until} 之後開始。已寄電子郵件通知組織擁有者。"
   },
   "fakeConnect": {
@@ -1391,7 +1411,15 @@
     "done": "已退款。買家將在幾天內收到退回其信用卡的款項。",
     "failed": "金流服務商拒絕了此退款。未做任何變更。",
     "exceedsRefundable": "超出此訂單剩餘可退金額。",
-    "ticketRefunded": "其中一張票券已退款或正在退款。"
+    "ticketRefunded": "其中一張票券已退款或正在退款。",
+    "keptCol": "扣留",
+    "overridden": "超出政策",
+    "policyWindowClosed": "此活動的退款政策已於 {deadline} 截止，不再接受應要求退款。",
+    "policyNoRefunds": "此活動的退款政策不允許應要求退款。",
+    "override": "在退款政策之外退款",
+    "overrideHint": "僅限擁有者和管理員。不扣留任何費用；備註為必填並會被記錄。",
+    "overrideNote": "為什麼不依政策處理？（必填）",
+    "overrideNoteRequired": "請說明為何不依退款政策處理（至少 3 個字元）。"
   },
   "disputes": {
     "title": "拒付爭議",
@@ -1406,7 +1434,38 @@
       "lost": "敗訴"
     },
     "dueBy": "證據截止日期：{date}",
-    "evidence": "證據包（PDF）"
+    "evidence": "證據包（PDF）",
+    "respond": "審核並回應",
+    "submitted": "證據已提交",
+    "review": {
+      "title": "回應爭議",
+      "description": "審核證據包，新增您的陳述並提交給卡組織。",
+      "backToOrder": "返回訂單",
+      "respondTitle": "您的回應",
+      "summary": "您的陳述",
+      "summaryHint": "用簡單的話說明經過：購票者何時購買、入場，以及收到了哪些通知。至少 10 個字元；將按原文送出，卡組織閱讀英文。",
+      "sections": "包含在證據包中",
+      "sectionsHint": "爭議、賣方、活動和訂單資訊始終包含在內。",
+      "section": {
+        "tickets": "票券和驗票",
+        "accessLog": "入場紀錄（每次門口掃碼）",
+        "refunds": "退款",
+        "messages": "傳送給購票者的訊息",
+        "refundPolicy": "退款政策"
+      },
+      "reviewed": "我已閱讀下方證據包，內容正確。",
+      "save": "儲存草稿",
+      "submit": "提交證據",
+      "saved": "已儲存。",
+      "summaryTooShort": "請填寫至少 10 個字元的陳述。",
+      "notReviewed": "提交前請確認您已閱讀證據包。",
+      "tooLarge": "證據包超出卡組織的限制（4.5 MB / 19 頁）。請移除一個部分後重試。",
+      "providerRefused": "金流服務商未接受證據，未提交任何內容。",
+      "notOpen": "此爭議已不再處於開放狀態。",
+      "submittedOn": "證據已於 {date} 提交。",
+      "previewTitle": "證據包",
+      "previewHint": "這正是將要送出的內容，使用卡組織的語言：英文。"
+    }
   },
   "evidence": {
     "title": "爭議證據 · {id}",
@@ -1449,7 +1508,19 @@
     "noRefunds": "此訂單未申請任何退款。",
     "refundPolicy": "向買家顯示的退款政策",
     "noPolicy": "主辦單位尚未發布退款政策。",
-    "policyUpdated": "最後更新：{date}"
+    "policyUpdated": "最後更新：{date}",
+    "statement": "賣方陳述",
+    "accessLog": "入場紀錄（門口掃碼）",
+    "noScans": "這些票券沒有門口掃碼紀錄。",
+    "time": "時間",
+    "entrance": "入口",
+    "result": "結果",
+    "offline": "離線",
+    "messages": "傳送給購票者的訊息",
+    "noMessages": "沒有就此訂單向購票者傳送任何訊息。",
+    "message": "訊息",
+    "channel": "管道",
+    "trimmed": "為符合卡組織的頁數限制，{n, plural, other {另有 # 列未列出}}。"
   },
   "boxOffice": {
     "title": "售票處",
@@ -3024,6 +3095,71 @@
       "emptyTitle": "目前沒有公開活動",
       "emptyDescription": "發布活動即可取得小工具程式碼。"
     }
+  },
+  "finance": {
+    "title": "財務",
+    "description": "每天都會將帳本中的資金與金流服務商的資金異動進行核對。差異列在這裡，供您檢查並處理。",
+    "runsTitle": "每日核對",
+    "noRuns": "尚未核對任何一天。首次核對會在您第一筆銷售後的當晚進行。",
+    "day": "日期",
+    "ledgerCount": "帳本分錄",
+    "providerCount": "服務商資金異動",
+    "result": "結果",
+    "matched": "一致",
+    "differences": "{n, plural, other {# 筆差異}}",
+    "openTitle": "待檢查的差異",
+    "emptyTitle": "沒有差異",
+    "emptyDescription": "您的帳本與金流服務商一致。",
+    "kind": {
+      "missing_at_provider": "服務商無紀錄",
+      "missing_in_ledger": "帳本無紀錄",
+      "amount_mismatch": "金額不一致"
+    },
+    "ledger": "帳本",
+    "provider": "服務商",
+    "difference": "差額",
+    "noResolveAccess": "只有擁有者、管理員和財務可以處理差異。",
+    "resolvedTitle": "已處理",
+    "what": "類型",
+    "reference": "參考編號",
+    "note": "備註",
+    "resolveNote": "{reference} 為什麼已處理？",
+    "noteTooShort": "請填寫至少 3 個字元的備註。",
+    "alreadyResolved": "已有人處理了此差異。",
+    "resolve": "處理"
+  },
+  "risk": {
+    "flagged": "結帳時被標記",
+    "rules": {
+      "email_velocity_review": "此電子郵件一小時內下了多筆訂單",
+      "country_mismatch_review": "購買地與活動所在國家不同"
+    }
+  },
+  "refundPolicy": {
+    "title": "退款政策",
+    "buyerTitle": "退款政策",
+    "notSet": "尚未設定退款政策：退款由您自行決定，購票者看不到任何政策。",
+    "none": "票券不接受應要求退款。",
+    "always": "可隨時應要求退款。",
+    "until": "在 {deadline} 之前可應要求退款。",
+    "retained": "主辦單位每張票券扣留 {amount}。",
+    "feeKept": "應要求退款時不退還訂票費。",
+    "minimum": "如果活動取消，或延期超過 90 天且沒有新日期，您將獲得包括手續費在內的全額退款。",
+    "kindLegend": "應要求退款",
+    "kindOption": {
+      "unset": "無政策（由您決定）",
+      "none": "不退款",
+      "until": "活動開始前若干天之前",
+      "always": "隨時"
+    },
+    "daysLabel": "活動前天數",
+    "daysHint": "按活動所在時區的日曆天計算；0 表示截至活動當天。",
+    "retainedLabel": "每張退款票券扣留金額（{currency}，選填）",
+    "retainedHint": "您保留的取消費；其餘部分退給購票者。",
+    "minimumHint": "平台最低保障始終適用：活動取消，或延期超過 90 天且沒有新日期時，全額退款。",
+    "save": "儲存退款政策",
+    "saved": "退款政策已儲存。",
+    "daysInvalid": "請輸入 0 到 365 之間的天數。"
   },
   "emailTemplates": {
     "title": "郵件範本",
