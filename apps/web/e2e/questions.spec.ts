@@ -13,9 +13,9 @@ test.describe('checkout questions', () => {
     const name = `Questions ${stamp}`;
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
-    await page.getByLabel('Event name').fill(name);
-    await page.getByLabel('Starts').fill('2027-09-01T18:00');
-    await page.getByLabel('Ends').fill('2027-09-01T22:00');
+    await page.getByLabel('Event name', { exact: true }).fill(name);
+    await page.getByLabel('Starts', { exact: true }).fill('2027-09-01T18:00');
+    await page.getByLabel('Ends', { exact: true }).fill('2027-09-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/questions-\d+$/);
     const base = new URL(page.url()).pathname;

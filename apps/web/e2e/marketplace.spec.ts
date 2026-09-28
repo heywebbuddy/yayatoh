@@ -304,11 +304,11 @@ test.describe('projection (M1.11a)', () => {
     const name = `Harbor Pop-up ${test.info().project.name} ${Date.now()}`;
     await signIn(page, 'lee@harbor.test');
     await page.goto('/o/harbor-arts/events/new');
-    await page.getByLabel('Event name').fill(name);
+    await page.getByLabel('Event name', { exact: true }).fill(name);
     await page.getByLabel('Event type').selectOption('concert');
     await page.getByLabel('Time zone').selectOption('America/New_York');
-    await page.getByLabel('Starts').fill('2029-03-05T19:00');
-    await page.getByLabel('Ends').fill('2029-03-05T22:00');
+    await page.getByLabel('Starts', { exact: true }).fill('2029-03-05T19:00');
+    await page.getByLabel('Ends', { exact: true }).fill('2029-03-05T22:00');
     await page.getByLabel('City').fill('Boston');
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page.getByText('Draft ·')).toBeVisible();

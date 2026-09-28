@@ -9,10 +9,10 @@ const tagOf = () => `${test.info().project.name.replace(/[^a-z0-9]/g, '')}${Date
 
 async function createEvent(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
-  await page.getByLabel('Event name').fill(name);
+  await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption('America/Chicago');
-  await page.getByLabel('Starts').fill('2027-09-10T19:00');
-  await page.getByLabel('Ends').fill('2027-09-10T23:00');
+  await page.getByLabel('Starts', { exact: true }).fill('2027-09-10T19:00');
+  await page.getByLabel('Ends', { exact: true }).fill('2027-09-10T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   return new URL(page.url()).pathname;
@@ -145,13 +145,13 @@ test.describe('duplicate and templates', () => {
     await expectAccessible(page);
     const dup = page.getByRole('region', { name: 'Duplicate this event' });
     await expect(dup.getByLabel('Name of the new event')).toHaveValue(`${name} (copy)`);
-    await expect(dup.getByLabel('Starts')).toHaveValue('2027-09-10T19:00');
+    await expect(dup.getByLabel('Starts', { exact: true })).toHaveValue('2027-09-10T19:00');
     // Validation: a one-letter name.
     await dup.getByLabel('Name of the new event').fill('X');
     await dup.getByRole('button', { name: 'Duplicate event' }).click();
     await expect(dup.getByText('Check this value.')).toBeVisible();
     await dup.getByLabel('Name of the new event').fill(`${name} (copy)`);
-    await dup.getByLabel('Starts').fill('2028-09-08T19:00');
+    await dup.getByLabel('Starts', { exact: true }).fill('2028-09-08T19:00');
     await dup.getByRole('button', { name: 'Duplicate event' }).click();
     await expect(page).toHaveURL(new RegExp(`/e/${slug}-copy$`));
     await expect(page.getByText('Draft ·')).toBeVisible();
@@ -196,7 +196,7 @@ test.describe('duplicate and templates', () => {
     await card.getByLabel('Name of the new event').fill(`From Kit ${tag}`);
     await card.getByRole('button', { name: 'Create event' }).click();
     await expect(card.getByText('Check this value.')).toBeVisible();
-    await card.getByLabel('Starts').fill('2028-02-01T18:00');
+    await card.getByLabel('Starts', { exact: true }).fill('2028-02-01T18:00');
     await card.getByRole('button', { name: 'Create event' }).click();
     await expect(page).toHaveURL(/\/e\/from-kit-/);
     await expect(page.getByText('Draft ·')).toBeVisible();

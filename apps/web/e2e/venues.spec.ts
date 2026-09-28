@@ -41,10 +41,10 @@ async function createVenue(page: Page, name: string, opts: { listed?: boolean; c
 /** Create and publish a public event through the UI; returns its console path and slug. */
 async function createEvent(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
-  await page.getByLabel('Event name').fill(name);
+  await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption('America/Chicago');
-  await page.getByLabel('Starts').fill(chicago(24 * 30));
-  await page.getByLabel('Ends').fill(chicago(24 * 30 + 3));
+  await page.getByLabel('Starts', { exact: true }).fill(chicago(24 * 30));
+  await page.getByLabel('Ends', { exact: true }).fill(chicago(24 * 30 + 3));
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   const base = new URL(page.url()).pathname;

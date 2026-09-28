@@ -10,9 +10,9 @@ test.describe('guest list', () => {
     const stamp = Date.now();
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
-    await page.getByLabel('Event name').fill(`Dinner ${stamp}`);
-    await page.getByLabel('Starts').fill('2027-11-01T18:00');
-    await page.getByLabel('Ends').fill('2027-11-01T22:00');
+    await page.getByLabel('Event name', { exact: true }).fill(`Dinner ${stamp}`);
+    await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
+    await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/dinner-\d+$/);
     const base = new URL(page.url()).pathname;

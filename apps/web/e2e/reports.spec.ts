@@ -23,10 +23,10 @@ const cents = (text: string) => Math.round(Number(text.replace(/[^0-9.]/g, '')) 
 /** A fresh published event happening now (check-in open), with its console path. */
 async function newEvent(page: Page, name: string): Promise<string> {
   await page.goto('/o/lakeside-events/events/new');
-  await page.getByLabel('Event name').fill(name);
+  await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption('America/Chicago');
-  await page.getByLabel('Starts').fill(chicago(-1));
-  await page.getByLabel('Ends').fill(chicago(3));
+  await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
+  await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   const base = new URL(page.url()).pathname;

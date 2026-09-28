@@ -117,7 +117,12 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
 
   // Files (and 404s for dotted paths such as /robots.txt) skip routing but still get the headers,
   // so even a not-found page renders under the CSP with this response's nonce.
-  if (FILE.test(path)) return secure(NextResponse.next({ request: { headers: forwarded } }));
+  if (FILE.test(path)) {
+    const res = secure(NextResponse.next({ request: { headers: forwarded } }));
+    // The widget loader (M1.11c) is included by organizers' own websites with <script src>.
+    if (path === '/widget.js') res.headers.set('cross-origin-resource-policy', 'cross-origin');
+    return res;
+  }
 
   const lang = /^\/lang\/([a-z]{2})\/?$/.exec(path);
   if (lang) return secure(languageSwitch(req, lang[1] ?? '', host));

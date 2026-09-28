@@ -9,11 +9,11 @@ test.describe('events', () => {
     await page.goto('/o/lakeside-events/events/new');
     await expectAccessible(page);
     const name = `Autumn Mixer ${Date.now()}`;
-    await page.getByLabel('Event name').fill(name);
+    await page.getByLabel('Event name', { exact: true }).fill(name);
     await page.getByLabel('Event type').selectOption('concert');
     await page.getByLabel('Time zone').selectOption('America/Chicago');
-    await page.getByLabel('Starts').fill('2027-11-05T19:00');
-    await page.getByLabel('Ends').fill('2027-11-05T23:00');
+    await page.getByLabel('Starts', { exact: true }).fill('2027-11-05T19:00');
+    await page.getByLabel('Ends', { exact: true }).fill('2027-11-05T23:00');
     await page.getByLabel('Venue').fill('Riverside Hall');
     await page.getByRole('button', { name: 'Create draft' }).click();
 

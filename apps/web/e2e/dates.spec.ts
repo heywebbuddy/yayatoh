@@ -65,10 +65,10 @@ function chicagoFromNow(offsetH: number): string {
 
 async function createEvent(page: Page, name: string, starts: string, ends: string): Promise<string> {
   await page.goto('/o/lakeside-events/events/new');
-  await page.getByLabel('Event name').fill(name);
+  await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption(TZ);
-  await page.getByLabel('Starts').fill(starts);
-  await page.getByLabel('Ends').fill(ends);
+  await page.getByLabel('Starts', { exact: true }).fill(starts);
+  await page.getByLabel('Ends', { exact: true }).fill(ends);
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   return new URL(page.url()).pathname;
@@ -191,11 +191,11 @@ test.describe('multi-date events', () => {
     const edit = page.getByRole('region', { name: /^Edit / });
     await expect(edit).toBeVisible();
     await expectAccessible(page);
-    await edit.getByLabel('Ends').fill('2027-03-10T17:00');
+    await edit.getByLabel('Ends', { exact: true }).fill('2027-03-10T17:00');
     await edit.getByRole('button', { name: 'Save changes' }).click();
     await expect(edit.getByText('The end must be after the start.')).toBeVisible();
-    await edit.getByLabel('Starts').fill('2027-03-10T18:00');
-    await edit.getByLabel('Ends').fill('2027-03-10T21:00');
+    await edit.getByLabel('Starts', { exact: true }).fill('2027-03-10T18:00');
+    await edit.getByLabel('Ends', { exact: true }).fill('2027-03-10T21:00');
     await expect(edit.getByLabel('This date only')).toBeChecked();
     await edit.getByRole('button', { name: 'Save changes' }).click();
     await expect(edit.getByText('1 date updated')).toBeVisible();
@@ -207,8 +207,8 @@ test.describe('multi-date events', () => {
       .getByRole('link', { name: `Edit ${consoleLabel('2027-03-17T19:00', '2027-03-17T22:00')}` })
       .click();
     const later = page.getByRole('region', { name: /^Edit / });
-    await later.getByLabel('Starts').fill('2027-03-17T20:00');
-    await later.getByLabel('Ends').fill('2027-03-17T23:30');
+    await later.getByLabel('Starts', { exact: true }).fill('2027-03-17T20:00');
+    await later.getByLabel('Ends', { exact: true }).fill('2027-03-17T23:30');
     await later.getByLabel('This date and all later dates').check();
     await later.getByRole('button', { name: 'Save changes' }).click();
     await expect(later.getByText('2 dates updated')).toBeVisible();
@@ -240,8 +240,8 @@ test.describe('multi-date events', () => {
     await addWeekly(page, base, 3);
     // A single extra date with room for one ticket.
     const add = page.getByRole('region', { name: 'Add a date' });
-    await add.getByLabel('Starts').fill('2027-04-01T12:00');
-    await add.getByLabel('Ends').fill('2027-04-01T14:00');
+    await add.getByLabel('Starts', { exact: true }).fill('2027-04-01T12:00');
+    await add.getByLabel('Ends', { exact: true }).fill('2027-04-01T14:00');
     await add.getByLabel('Capacity').fill('1');
     await add.getByRole('button', { name: 'Add date' }).click();
     await expect(add.getByText('1 date added')).toBeVisible();
@@ -325,8 +325,8 @@ test.describe('multi-date events', () => {
     const tonight = [chicagoFromNow(-1), chicagoFromNow(3)] as const;
     const tomorrow = [chicagoFromNow(47), chicagoFromNow(51)] as const;
     for (const [s, e] of [tonight, tomorrow]) {
-      await add.getByLabel('Starts').fill(s);
-      await add.getByLabel('Ends').fill(e);
+      await add.getByLabel('Starts', { exact: true }).fill(s);
+      await add.getByLabel('Ends', { exact: true }).fill(e);
       await add.getByRole('button', { name: 'Add date' }).click();
       await expect(add.getByText('1 date added')).toBeVisible();
     }

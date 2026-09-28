@@ -9,10 +9,10 @@ const unique = (what: string) => `${what} ${Date.now()} ${test.info().project.na
 /** A new gala event (its profile shows Seating) as the Lakeside owner; returns its console path. */
 async function createGala(page: Page, name: string) {
   await page.goto('/o/lakeside-events/events/new');
-  await page.getByLabel('Event name').fill(name);
+  await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Event type').selectOption('gala');
-  await page.getByLabel('Starts').fill('2027-12-04T18:00');
-  await page.getByLabel('Ends').fill('2027-12-04T23:00');
+  await page.getByLabel('Starts', { exact: true }).fill('2027-12-04T18:00');
+  await page.getByLabel('Ends', { exact: true }).fill('2027-12-04T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   return new URL(page.url()).pathname;

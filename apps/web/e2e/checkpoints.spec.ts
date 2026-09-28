@@ -35,10 +35,10 @@ test.describe('entrances and zones', () => {
     const stamp = Date.now();
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
-    await page.getByLabel('Event name').fill(`Gates ${stamp}`);
+    await page.getByLabel('Event name', { exact: true }).fill(`Gates ${stamp}`);
     await page.getByLabel('Time zone').selectOption('America/Chicago');
-    await page.getByLabel('Starts').fill(chicago(-1));
-    await page.getByLabel('Ends').fill(chicago(3));
+    await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
+    await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/gates-\d+$/);
     const base = new URL(page.url()).pathname;

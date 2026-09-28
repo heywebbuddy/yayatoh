@@ -34,10 +34,10 @@ async function createEvent(
 ) {
   const start = opts.startMin ?? 60 * 24 * 30;
   await page.goto(`${ORG}/events/new`);
-  await page.getByLabel('Event name').fill(name);
+  await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption('America/Chicago');
-  await page.getByLabel('Starts').fill(chicago(start));
-  await page.getByLabel('Ends').fill(chicago(start + (opts.lengthMin ?? 180)));
+  await page.getByLabel('Starts', { exact: true }).fill(chicago(start));
+  await page.getByLabel('Ends', { exact: true }).fill(chicago(start + (opts.lengthMin ?? 180)));
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   const base = new URL(page.url()).pathname;

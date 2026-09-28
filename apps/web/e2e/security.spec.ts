@@ -97,12 +97,13 @@ test.describe('security headers and CSP', () => {
     expect(scan?.headers()['content-security-policy']).toContain("'wasm-unsafe-eval'");
   });
 
-  test('robots.txt keeps crawlers out of the console and secret-link pages', async ({ request }) => {
-    // robots.txt is per host (M1.11b). Public hosts (here the marketplace) list the private areas;
-    // the console below /o/{slug} is excluded while the org's public page stays crawlable.
-    const res = await request.get(`${MARKET}/robots.txt`);
-    expect(res.status()).toBe(200);
-    const body = await res.text();
+  test('robots.txt keeps crawlers out of the console and secret-link pages', async ({ page, request }) => {
+    // robots.txt is per host (M1.11b). Public hosts (here the marketplace; the browser resolves
+    // *.localhost, Node does not) list the private areas; the console below /o/{slug} is excluded
+    // while the org's public page stays crawlable.
+    const res = await page.goto(`${MARKET}/robots.txt`);
+    expect(res?.status()).toBe(200);
+    const body = (await res?.text()) ?? '';
     for (const p of ['/o/*/', '/orders/', '/my-tickets/', '/claim/', '/invite/', '/api/'])
       expect(body).toContain(`Disallow: ${p}`);
     // Dev and preview hosts are never crawled at all.
