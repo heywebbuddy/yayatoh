@@ -2,6 +2,7 @@
 
 import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { AnnouncementInput, previewAnnouncementQuery, sendAnnouncementCommand } from '@yayatoh/messaging';
+import { storeEmailPreviewCommand } from '@yayatoh/notifications';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -23,7 +24,8 @@ export type ComposerState =
   | {
       readonly step: 'preview';
       readonly values: ComposerValues;
-      readonly preview: { readonly recipients: number; readonly subject: string; readonly html: string };
+      /** `src`: the stored preview's same-origin URL (served with its own CSP, M1.10d). */
+      readonly preview: { readonly recipients: number; readonly subject: string; readonly src: string };
       readonly key: string;
     };
 
@@ -71,10 +73,15 @@ export async function composerAction(
     }
     const preview = await executeQuery(previewAnnouncementQuery, parsed.data, data.ctx, ports);
     if (preview.recipients === 0) return { step: 'edit', values, errors: {}, code: 'no_recipients' };
+    const stored = await executeCommand(storeEmailPreviewCommand, { html: preview.html }, data.ctx, ports);
     return {
       step: 'preview',
       values,
-      preview: { recipients: preview.recipients, subject: preview.subject, html: preview.html },
+      preview: {
+        recipients: preview.recipients,
+        subject: preview.subject,
+        src: `/api/email-preview/${data.org.slug}/${stored.id}`,
+      },
       key: crypto.randomUUID(),
     };
   } catch (err) {

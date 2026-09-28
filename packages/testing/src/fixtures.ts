@@ -40,9 +40,11 @@ import {
   createNotifier,
   dispatchDue,
   memoryTransports,
+  recordDeliveryEventsCommand,
   registerPushTokenCommand,
   setMyPreferencesCommand,
   setTemplateOverrideCommand,
+  storeEmailPreviewCommand,
   unsubscribeCommand,
   unsubscribeUrls,
 } from '@yayatoh/notifications';
@@ -514,6 +516,28 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     createCtx({ orgId: org.id }),
     ports,
   );
+  // M1.10d: a delivery report (a hard bounce, so a suppressed address) and a stored preview.
+  await executeCommand(
+    recordDeliveryEventsCommand,
+    {
+      provider: 'fake',
+      events: [
+        {
+          id: `fixture-bounce-${slug}`,
+          type: 'bounced',
+          bounceType: 'hard',
+          messageId: sentMessage.id,
+          providerMessageId: null,
+          recipient: null,
+          detail: '550 fixture',
+          occurredAt: new Date(),
+        },
+      ],
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(storeEmailPreviewCommand, { html: `<p>${name}</p>` }, ctx(), ports);
   await withTenant(systemCtx(org.id), (tx) =>
     notifier.enqueue(tx, {
       kind: 'attendees.message',

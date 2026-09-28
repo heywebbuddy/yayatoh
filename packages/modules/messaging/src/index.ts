@@ -6,7 +6,14 @@ export {
   previewAnnouncementQuery,
   sendAnnouncementCommand,
 } from './announcements.ts';
-export { ANNOUNCEMENT_CHANNELS, REPORT_REASONS } from './schema.ts';
+export {
+  EXCERPT_CHARS,
+  EXCERPT_MESSAGES,
+  ReportForReviewDto,
+  reportsForReviewTx,
+  reviewReportCommand,
+} from './review.ts';
+export { ANNOUNCEMENT_CHANNELS, REPORT_REASONS, REPORT_STATUSES } from './schema.ts';
 export {
   blockThreadCommand,
   CONTACT_HOURLY_LIMIT,

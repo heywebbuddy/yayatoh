@@ -85,6 +85,9 @@
       },
       "notifications": {
         "test": "Notifica di prova"
+      },
+      "seating": {
+        "finder-code": "Codice trova-posto"
       }
     },
     "status": {
@@ -103,7 +106,12 @@
       "no_device": "Nessun dispositivo per il push",
       "no_address": "Nessun indirizzo",
       "provider_error": "Il provider email lo ha rifiutato",
-      "retrying": "Nuovo tentativo dopo un errore"
+      "retrying": "Nuovo tentativo dopo un errore",
+      "bounced": "Soppresso: questo indirizzo è già risultato non recapitabile",
+      "complained": "Soppresso: il destinatario ha segnalato un’email precedente come spam",
+      "event_cancelled": "L’evento o la data è stato annullato",
+      "event_started": "L’evento era già iniziato",
+      "event_postponed": "In attesa finché l’evento è rinviato"
     },
     "channels": {
       "email": "Email",
@@ -140,7 +148,20 @@
       "saved": "Impostazioni delle notifiche salvate.",
       "test": "Inviami una notifica di prova",
       "testSent": "Notifica di prova inviata. Controlla la campanella.",
-      "required": "Biglietti, ricevute ed email di sicurezza ti arrivano sempre."
+      "required": "Biglietti, ricevute ed email di sicurezza ti arrivano sempre.",
+      "language": {
+        "title": "Lingua delle email",
+        "label": "Lingua delle email sulle tue organizzazioni",
+        "hint": "Nuovi ordini, messaggi e altre notifiche del team sono scritti in questa lingua.",
+        "save": "Salva lingua",
+        "saved": "Lingua salvata."
+      }
+    },
+    "delivery": {
+      "delivered": "Consegnato",
+      "bounced": "Rimbalzato: l’indirizzo non esiste",
+      "soft_bounced": "Rimbalzato per ora (casella piena o non disponibile)",
+      "complained": "Segnalato come spam dal destinatario"
     }
   },
   "nav": {
@@ -179,7 +200,8 @@
     "series": "Serie",
     "templates": "Modelli",
     "apiKeys": "Chiavi API",
-    "publicSite": "Sito pubblico"
+    "publicSite": "Sito pubblico",
+    "emails": "Modelli email"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -2837,5 +2859,39 @@
       "emptyTitle": "Ancora nessun evento pubblico",
       "emptyDescription": "Pubblica un evento per ottenere lo snippet del widget."
     }
+  },
+  "emailTemplates": {
+    "title": "Modelli email",
+    "description": "Scrivi oggetto e paragrafo iniziale personalizzati per le email che Yayatoh invia per te, in ogni lingua.",
+    "chooseLabel": "Scegli un’email",
+    "kind": "Email",
+    "language": "Lingua",
+    "open": "Apri",
+    "editing": "{kind} · {language}",
+    "formLabel": "Testo dell’email",
+    "readOnly": "Puoi leggere queste email. Solo proprietari e amministratori possono modificarle.",
+    "subject": "Oggetto",
+    "intro": "Paragrafo iniziale",
+    "defaultIs": "Predefinito: {copy}",
+    "placeholdersTitle": "Segnaposto che puoi usare",
+    "emptyMeansDefault": "Lascia un campo vuoto per usare il testo predefinito.",
+    "save": "Salva",
+    "reset": "Ripristina predefinito",
+    "saved": "Salvato. Le nuove email usano questo testo.",
+    "resetDone": "Ripristinato. Le nuove email usano il testo predefinito.",
+    "previewTitle": "Anteprima",
+    "previewUpdating": "Aggiornamento dell’anteprima…",
+    "previewSubject": "Oggetto: {subject}",
+    "previewBlocked": "Correggi i campi evidenziati per vedere l’anteprima.",
+    "previewFrame": "Anteprima dell’email: {subject}",
+    "errors": {
+      "invalid_syntax": "Non valido: ogni parentesi graffa aperta deve avere una chiusa attorno al nome di un segnaposto.",
+      "unknown_placeholder": "Usa solo i segnaposto elencati qui sotto.",
+      "too_long": "È troppo lungo."
+    },
+    "customized": "Email personalizzate",
+    "noneTitle": "Nessuna email personalizzata",
+    "noneDescription": "Tutte le email usano il testo predefinito di Yayatoh.",
+    "changed": "Modificato"
   }
 }

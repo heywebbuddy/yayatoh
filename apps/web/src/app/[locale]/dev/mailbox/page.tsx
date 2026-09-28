@@ -74,7 +74,7 @@ export default async function DevMailboxPage({
                   {m.html ? (
                     <iframe
                       title={t('preview', { subject: m.subject })}
-                      srcDoc={m.html}
+                      src={`/api/dev/mailbox/${m.id}`}
                       sandbox=""
                       className="mt-2 h-[480px] w-full rounded-card border border-zinc-200"
                     />

@@ -85,6 +85,9 @@
       },
       "notifications": {
         "test": "测试通知"
+      },
+      "seating": {
+        "finder-code": "座位查找代码"
       }
     },
     "status": {
@@ -103,7 +106,12 @@
       "no_device": "没有可推送的设备",
       "no_address": "没有地址",
       "provider_error": "邮件服务商拒收",
-      "retrying": "出错后重试中"
+      "retrying": "出错后重试中",
+      "bounced": "已抑制：此地址之前发生过退信",
+      "complained": "已抑制：收件人曾将之前的邮件标记为垃圾邮件",
+      "event_cancelled": "活动或场次已取消",
+      "event_started": "活动已经开始",
+      "event_postponed": "活动延期期间暂缓"
     },
     "channels": {
       "email": "电子邮件",
@@ -140,7 +148,20 @@
       "saved": "通知设置已保存。",
       "test": "给我发送测试通知",
       "testSent": "测试通知已发送，请查看铃铛。",
-      "required": "门票、收据和安全邮件始终会发送给您。"
+      "required": "门票、收据和安全邮件始终会发送给您。",
+      "language": {
+        "title": "邮件语言",
+        "label": "有关你的组织的邮件语言",
+        "hint": "新订单、消息和其他团队通知将使用此语言。",
+        "save": "保存语言",
+        "saved": "语言已保存。"
+      }
+    },
+    "delivery": {
+      "delivered": "已送达",
+      "bounced": "退信：地址不存在",
+      "soft_bounced": "暂时退信（邮箱已满或不可用）",
+      "complained": "收件人标记为垃圾邮件"
     }
   },
   "nav": {
@@ -179,7 +200,8 @@
     "series": "系列",
     "templates": "模板",
     "apiKeys": "API 密钥",
-    "publicSite": "公开网站"
+    "publicSite": "公开网站",
+    "emails": "邮件模板"
   },
   "vocab": {
     "attendee": "参会者",
@@ -2837,5 +2859,39 @@
       "emptyTitle": "暂无公开活动",
       "emptyDescription": "发布活动后即可获取其小组件代码。"
     }
+  },
+  "emailTemplates": {
+    "title": "邮件模板",
+    "description": "为 Yayatoh 代你发送的邮件，按语言编写你自己的主题和开头段落。",
+    "chooseLabel": "选择邮件",
+    "kind": "邮件",
+    "language": "语言",
+    "open": "打开",
+    "editing": "{kind} · {language}",
+    "formLabel": "邮件文案",
+    "readOnly": "你可以查看这些邮件。只有所有者和管理员可以更改。",
+    "subject": "主题",
+    "intro": "开头段落",
+    "defaultIs": "默认：{copy}",
+    "placeholdersTitle": "可用的占位符",
+    "emptyMeansDefault": "留空即使用默认文案。",
+    "save": "保存",
+    "reset": "恢复默认",
+    "saved": "已保存。新邮件将使用此文案。",
+    "resetDone": "已恢复默认。新邮件将使用默认文案。",
+    "previewTitle": "预览",
+    "previewUpdating": "正在更新预览…",
+    "previewSubject": "主题：{subject}",
+    "previewBlocked": "请修正标出的字段以查看预览。",
+    "previewFrame": "邮件预览：{subject}",
+    "errors": {
+      "invalid_syntax": "无效：占位符名称两侧的每个左花括号都需要对应的右花括号。",
+      "unknown_placeholder": "只能使用下方列出的占位符。",
+      "too_long": "内容过长。"
+    },
+    "customized": "已自定义的邮件",
+    "noneTitle": "还没有自定义的邮件",
+    "noneDescription": "所有邮件都使用 Yayatoh 的默认文案。",
+    "changed": "修改时间"
   }
 }

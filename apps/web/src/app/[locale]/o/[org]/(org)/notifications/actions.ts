@@ -1,5 +1,6 @@
 'use server';
 
+import { setUserLocale, USER_LOCALES, type UserLocale } from '@yayatoh/auth';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
   MEMBER_CATEGORIES,
@@ -73,4 +74,24 @@ export async function savePreferencesAction(
   }
   revalidatePath(`/o/${org}/notifications/preferences`);
   return { saved: true, tested: false, code: null };
+}
+
+export type EmailLanguageState = { readonly ok: boolean; readonly code: string | null };
+
+/**
+ * The signed-in person's email language (M1.10d): member notifications (new orders, messages)
+ * render in it, for every org they belong to. Identity data, so it is written through
+ * packages/auth for the session's own user only; an unknown value is refused.
+ */
+export async function saveEmailLanguageAction(
+  org: string,
+  _prev: EmailLanguageState,
+  form: FormData,
+): Promise<EmailLanguageState> {
+  const data = await loadConsole(org);
+  const locale = String(form.get('locale') ?? '');
+  if (!(USER_LOCALES as readonly string[]).includes(locale)) return { ok: false, code: 'validation_failed' };
+  await setUserLocale(data.session.userId, locale as UserLocale);
+  revalidatePath(`/o/${org}/notifications/preferences`);
+  return { ok: true, code: null };
 }

@@ -29,7 +29,8 @@
       "finance": "Finance"
     },
     "commission": "Commission",
-    "apiUsage": "API usage"
+    "apiUsage": "API usage",
+    "reports": "Messaging reports"
   },
   "tenants": {
     "title": "Tenants",
@@ -245,5 +246,58 @@
     "requests": "Requests",
     "lastDay": "Last seen (UTC)",
     "empty": "No /v1 requests recorded in the last 7 days."
+  },
+  "reports": {
+    "title": "Messaging reports",
+    "description": "Conversations that organizers or their contacts reported to Yayatoh. Resolve (you acted on it) or dismiss (no action needed) with a note for the record.",
+    "tabsLabel": "Report status",
+    "tabs": {
+      "open": "Open",
+      "closed": "Closed"
+    },
+    "heading": "{org} · {reason}",
+    "meta": "Reported by the {reporter} · {at} UTC ·",
+    "tenantLink": "Tenant {slug}",
+    "reporter": {
+      "organizer": "organizer",
+      "contact": "contact"
+    },
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuse",
+      "other": "Other"
+    },
+    "note": "Reporter’s note:",
+    "excerpt": "Conversation excerpt",
+    "noMessages": "No messages before the report.",
+    "from": {
+      "contact": "Contact",
+      "organizer": "Organizer"
+    },
+    "announcement": "announcement",
+    "reviewLabel": "Review this report",
+    "reviewNote": "Note (kept in the audit log)",
+    "resolve": "Resolve",
+    "dismiss": "Dismiss",
+    "status": {
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "done": {
+      "resolved": "Report resolved.",
+      "dismissed": "Report dismissed."
+    },
+    "errors": {
+      "note_required": "Add a note before resolving or dismissing a report.",
+      "note_too_long": "Keep the note under 1,000 characters.",
+      "already_reviewed": "Someone already reviewed this report.",
+      "not_found": "That report does not exist.",
+      "other": "Something went wrong ({code})."
+    },
+    "empty": {
+      "open": "No open reports",
+      "closed": "No reviewed reports yet"
+    },
+    "emptyDescription": "Reports from organizers and contacts show up here."
   }
 }

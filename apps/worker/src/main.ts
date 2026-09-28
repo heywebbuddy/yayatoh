@@ -1,7 +1,7 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { runDueBulkOperations } from './bulk.ts';
-import { dispatchNotifications, userEmails, workerTransports } from './notifications.ts';
+import { dispatchNotifications, userEmails, userLocales, workerTransports } from './notifications.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
@@ -99,7 +99,7 @@ let dispatching = false;
 setInterval(() => {
   if (!transports || !release || stopping || dispatching) return;
   dispatching = true;
-  dispatchNotifications({ transports, appOrigin, userEmails })
+  dispatchNotifications({ transports, appOrigin, userEmails, userLocales })
     .catch((err) => console.error('notifications', err))
     .finally(() => {
       dispatching = false;

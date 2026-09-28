@@ -85,6 +85,9 @@
       },
       "notifications": {
         "test": "Notificação de teste"
+      },
+      "seating": {
+        "finder-code": "Código do localizador de lugares"
       }
     },
     "status": {
@@ -103,7 +106,12 @@
       "no_device": "Nenhum dispositivo para push",
       "no_address": "Sem endereço",
       "provider_error": "O provedor de e-mail recusou",
-      "retrying": "Tentando novamente após um erro"
+      "retrying": "Tentando novamente após um erro",
+      "bounced": "Suprimido: este endereço já foi devolvido",
+      "complained": "Suprimido: o destinatário marcou um e-mail anterior como spam",
+      "event_cancelled": "O evento ou a data foi cancelado",
+      "event_started": "O evento já tinha começado",
+      "event_postponed": "Em espera enquanto o evento está adiado"
     },
     "channels": {
       "email": "E-mail",
@@ -140,7 +148,20 @@
       "saved": "Suas configurações de notificação foram salvas.",
       "test": "Enviar uma notificação de teste",
       "testSent": "Notificação de teste enviada. Confira o sino.",
-      "required": "Ingressos, recibos e e-mails de segurança sempre chegam a você."
+      "required": "Ingressos, recibos e e-mails de segurança sempre chegam a você.",
+      "language": {
+        "title": "Idioma dos e-mails",
+        "label": "Idioma dos e-mails sobre as suas organizações",
+        "hint": "Novas encomendas, mensagens e outras notificações da equipa são escritas neste idioma.",
+        "save": "Guardar idioma",
+        "saved": "Idioma guardado."
+      }
+    },
+    "delivery": {
+      "delivered": "Entregue",
+      "bounced": "Devolvido: o endereço não existe",
+      "soft_bounced": "Devolvido por agora (caixa cheia ou indisponível)",
+      "complained": "Marcado como spam pelo destinatário"
     }
   },
   "nav": {
@@ -179,7 +200,8 @@
     "series": "Séries",
     "templates": "Modelos",
     "apiKeys": "Chaves de API",
-    "publicSite": "Site público"
+    "publicSite": "Site público",
+    "emails": "Modelos de e-mail"
   },
   "vocab": {
     "attendee": "Participante",
@@ -2837,5 +2859,39 @@
       "emptyTitle": "Ainda não há eventos públicos",
       "emptyDescription": "Publique um evento para obter o trecho do widget."
     }
+  },
+  "emailTemplates": {
+    "title": "Modelos de e-mail",
+    "description": "Escreva o seu próprio assunto e parágrafo inicial para os e-mails que a Yayatoh envia por si, em cada idioma.",
+    "chooseLabel": "Escolha um e-mail",
+    "kind": "E-mail",
+    "language": "Idioma",
+    "open": "Abrir",
+    "editing": "{kind} · {language}",
+    "formLabel": "Texto do e-mail",
+    "readOnly": "Pode ler estes e-mails. Só proprietários e administradores os podem alterar.",
+    "subject": "Assunto",
+    "intro": "Parágrafo inicial",
+    "defaultIs": "Predefinido: {copy}",
+    "placeholdersTitle": "Marcadores que pode usar",
+    "emptyMeansDefault": "Deixe um campo vazio para usar o texto predefinido.",
+    "save": "Guardar",
+    "reset": "Repor predefinido",
+    "saved": "Guardado. Os novos e-mails usam este texto.",
+    "resetDone": "Reposto. Os novos e-mails usam o texto predefinido.",
+    "previewTitle": "Pré-visualização",
+    "previewUpdating": "A atualizar a pré-visualização…",
+    "previewSubject": "Assunto: {subject}",
+    "previewBlocked": "Corrija os campos assinalados para ver a pré-visualização.",
+    "previewFrame": "Pré-visualização do e-mail: {subject}",
+    "errors": {
+      "invalid_syntax": "Inválido: cada chaveta de abertura precisa de uma de fecho à volta do nome de um marcador.",
+      "unknown_placeholder": "Use apenas os marcadores indicados abaixo.",
+      "too_long": "É demasiado longo."
+    },
+    "customized": "E-mails personalizados",
+    "noneTitle": "Ainda não há e-mails personalizados",
+    "noneDescription": "Todos os e-mails usam o texto predefinido da Yayatoh.",
+    "changed": "Alterado"
   }
 }

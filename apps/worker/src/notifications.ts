@@ -4,6 +4,7 @@ import {
   type DispatchDeps,
   devMailboxTransports,
   dispatchDue,
+  fakeDeliverySecret,
   type Transports,
 } from '@yayatoh/notifications';
 import { sql } from 'drizzle-orm';
@@ -15,11 +16,16 @@ import { sql } from 'drizzle-orm';
  */
 export function workerTransports(env: NodeJS.ProcessEnv = process.env): Transports | null {
   if (env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production') return null;
-  return devMailboxTransports();
+  // The fake provider's delivery reports wait in the mailbox for the dev drain (M1.10d).
+  return devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) });
 }
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>
   new Map([...(await getUsersByIds(ids))].map(([id, u]) => [id, u.email]));
+
+/** Members' email languages (M1.10d): member notifications render in them. */
+export const userLocales: NonNullable<DispatchDeps['userLocales']> = async (ids) =>
+  new Map([...(await getUsersByIds(ids))].map(([id, u]) => [id, u.locale]));
 
 /**
  * One dispatcher tick (leader only): find orgs with due messages through a SECURITY DEFINER

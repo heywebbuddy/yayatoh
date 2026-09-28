@@ -46,7 +46,7 @@ export function AnnouncementComposer({
         </div>
         <iframe
           title={t('previewFrame', { subject: state.preview.subject })}
-          srcDoc={state.preview.html}
+          src={state.preview.src}
           sandbox=""
           className="h-[420px] w-full rounded-card border border-zinc-200"
         />

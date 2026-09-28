@@ -23,6 +23,11 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
               {t('commission')}
             </Link>
           ) : null}
+          {staff.can('reports') ? (
+            <Link href="/reports" className="underline-offset-2 hover:underline">
+              {t('reports')}
+            </Link>
+          ) : null}
           <Link href="/access-log" className="underline-offset-2 hover:underline">
             {t('accessLog')}
           </Link>

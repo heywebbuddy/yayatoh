@@ -85,6 +85,9 @@
       },
       "notifications": {
         "test": "Test notification"
+      },
+      "seating": {
+        "finder-code": "Seat finder code"
       }
     },
     "status": {
@@ -103,7 +106,12 @@
       "no_device": "No device to push to",
       "no_address": "No address",
       "provider_error": "The email provider refused it",
-      "retrying": "Retrying after an error"
+      "retrying": "Retrying after an error",
+      "bounced": "Suppressed: this address bounced earlier",
+      "complained": "Suppressed: the recipient marked earlier mail as spam",
+      "event_cancelled": "The event or date was cancelled",
+      "event_started": "The event had already started",
+      "event_postponed": "On hold while the event is postponed"
     },
     "channels": {
       "email": "Email",
@@ -140,7 +148,20 @@
       "saved": "Your notification settings are saved.",
       "test": "Send me a test notification",
       "testSent": "Test notification sent. Check the bell.",
-      "required": "Tickets, receipts and security emails always reach you."
+      "required": "Tickets, receipts and security emails always reach you.",
+      "language": {
+        "title": "Email language",
+        "label": "Language for emails about your organizations",
+        "hint": "New orders, messages and other team notifications are written in this language.",
+        "save": "Save language",
+        "saved": "Language saved."
+      }
+    },
+    "delivery": {
+      "delivered": "Delivered",
+      "bounced": "Bounced: the address does not exist",
+      "soft_bounced": "Bounced for now (mailbox full or unavailable)",
+      "complained": "Marked as spam by the recipient"
     }
   },
   "nav": {
@@ -179,7 +200,8 @@
     "series": "Series",
     "templates": "Templates",
     "apiKeys": "API keys",
-    "publicSite": "Public site"
+    "publicSite": "Public site",
+    "emails": "Email templates"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -2837,5 +2859,39 @@
       "emptyTitle": "No public events yet",
       "emptyDescription": "Publish an event to get its widget snippet."
     }
+  },
+  "emailTemplates": {
+    "title": "Email templates",
+    "description": "Write your own subject and opening paragraph for the emails Yayatoh sends for you, in each language.",
+    "chooseLabel": "Choose an email",
+    "kind": "Email",
+    "language": "Language",
+    "open": "Open",
+    "editing": "{kind} · {language}",
+    "formLabel": "Email copy",
+    "readOnly": "You can read these emails. Only owners and admins can change them.",
+    "subject": "Subject",
+    "intro": "Opening paragraph",
+    "defaultIs": "Default: {copy}",
+    "placeholdersTitle": "Placeholders you can use",
+    "emptyMeansDefault": "Leave a field empty to use the default.",
+    "save": "Save",
+    "reset": "Reset to default",
+    "saved": "Saved. New emails use this copy.",
+    "resetDone": "Reset. New emails use the default copy.",
+    "previewTitle": "Preview",
+    "previewUpdating": "Updating the preview…",
+    "previewSubject": "Subject: {subject}",
+    "previewBlocked": "Fix the highlighted fields to see the preview.",
+    "previewFrame": "Email preview: {subject}",
+    "errors": {
+      "invalid_syntax": "This isn’t valid: every opening brace needs a closing one around a placeholder name.",
+      "unknown_placeholder": "Use only the placeholders listed below.",
+      "too_long": "This is too long."
+    },
+    "customized": "Customized emails",
+    "noneTitle": "No customized emails yet",
+    "noneDescription": "Every email uses Yayatoh’s default copy.",
+    "changed": "Changed"
   }
 }

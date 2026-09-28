@@ -1,4 +1,15 @@
-import { boolean, index, integer, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import {
+  boolean,
+  check,
+  index,
+  integer,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 /**
  * Identity (Better Auth). Users are global (roadmap §4.1): these tables are listed in
@@ -18,10 +29,18 @@ export const users = identity.table(
     emailVerified: boolean('email_verified').notNull().default(false),
     image: text('image'),
     twoFactorEnabled: boolean('two_factor_enabled').default(false),
+    /** Preferred language for emails about the orgs they work in (M1.10d); null = English. */
+    locale: text('locale'),
     createdAt: ts('created_at').notNull().defaultNow(),
     updatedAt: ts('updated_at').notNull().defaultNow(),
   },
-  (t) => [uniqueIndex('users_email_key').on(t.email)],
+  (t) => [
+    uniqueIndex('users_email_key').on(t.email),
+    check(
+      'users_locale_check',
+      sql`locale is null or locale in ('en', 'es', 'fr', 'de', 'it', 'pt', 'nl', 'ru', 'ar', 'hi', 'ja', 'zh-CN', 'zh-TW')`,
+    ),
+  ],
 );
 
 export const sessions = identity.table(

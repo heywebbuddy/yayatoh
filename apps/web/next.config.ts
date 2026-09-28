@@ -48,8 +48,9 @@ const config: NextConfig = {
       { source: '/:path*', headers: baseline },
       {
         // JSON, webhooks, downloads: nothing may render, frame or sniff them. The /v1 API reference
-        // (an HTML page, M1.13) sends its own strict policy; a second one here would block it.
-        source: '/api/:path((?!v1/docs$).*)',
+        // (an HTML page, M1.13) and email previews (M1.10d: framed by the console, inline styles
+        // only) send their own strict policies; a second one here would block them.
+        source: '/api/:path((?!v1/docs$|email-preview/|dev/mailbox/.).*)',
         headers: [
           {
             key: 'Content-Security-Policy',

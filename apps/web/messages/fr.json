@@ -85,6 +85,9 @@
       },
       "notifications": {
         "test": "Notification de test"
+      },
+      "seating": {
+        "finder-code": "Code de recherche de place"
       }
     },
     "status": {
@@ -103,7 +106,12 @@
       "no_device": "Aucun appareil pour la notification push",
       "no_address": "Aucune adresse",
       "provider_error": "Le fournisseur d’e-mail l’a refusé",
-      "retrying": "Nouvel essai après une erreur"
+      "retrying": "Nouvel essai après une erreur",
+      "bounced": "Supprimé : cette adresse a déjà renvoyé une erreur",
+      "complained": "Supprimé : le destinataire a signalé un e-mail précédent comme spam",
+      "event_cancelled": "L’événement ou la date a été annulé",
+      "event_started": "L’événement avait déjà commencé",
+      "event_postponed": "En attente tant que l’événement est reporté"
     },
     "channels": {
       "email": "E-mail",
@@ -140,7 +148,20 @@
       "saved": "Vos paramètres de notification sont enregistrés.",
       "test": "M’envoyer une notification de test",
       "testSent": "Notification de test envoyée. Regardez la cloche.",
-      "required": "Les billets, reçus et e-mails de sécurité vous parviennent toujours."
+      "required": "Les billets, reçus et e-mails de sécurité vous parviennent toujours.",
+      "language": {
+        "title": "Langue des e-mails",
+        "label": "Langue des e-mails concernant vos organisations",
+        "hint": "Les nouvelles commandes, les messages et les autres notifications de l’équipe sont rédigés dans cette langue.",
+        "save": "Enregistrer la langue",
+        "saved": "Langue enregistrée."
+      }
+    },
+    "delivery": {
+      "delivered": "Distribué",
+      "bounced": "Rejeté : l’adresse n’existe pas",
+      "soft_bounced": "Rejeté pour l’instant (boîte pleine ou indisponible)",
+      "complained": "Signalé comme spam par le destinataire"
     }
   },
   "nav": {
@@ -179,7 +200,8 @@
     "series": "Séries",
     "templates": "Modèles",
     "apiKeys": "Clés d’API",
-    "publicSite": "Site public"
+    "publicSite": "Site public",
+    "emails": "Modèles d’e-mail"
   },
   "vocab": {
     "attendee": "Participant",
@@ -2837,5 +2859,39 @@
       "emptyTitle": "Aucun événement public pour l'instant",
       "emptyDescription": "Publiez un événement pour obtenir l'extrait de son widget."
     }
+  },
+  "emailTemplates": {
+    "title": "Modèles d’e-mail",
+    "description": "Rédigez votre propre objet et premier paragraphe pour les e-mails que Yayatoh envoie pour vous, dans chaque langue.",
+    "chooseLabel": "Choisir un e-mail",
+    "kind": "E-mail",
+    "language": "Langue",
+    "open": "Ouvrir",
+    "editing": "{kind} · {language}",
+    "formLabel": "Texte de l’e-mail",
+    "readOnly": "Vous pouvez lire ces e-mails. Seuls les propriétaires et les administrateurs peuvent les modifier.",
+    "subject": "Objet",
+    "intro": "Premier paragraphe",
+    "defaultIs": "Par défaut : {copy}",
+    "placeholdersTitle": "Espaces réservés disponibles",
+    "emptyMeansDefault": "Laissez un champ vide pour utiliser le texte par défaut.",
+    "save": "Enregistrer",
+    "reset": "Rétablir par défaut",
+    "saved": "Enregistré. Les nouveaux e-mails utilisent ce texte.",
+    "resetDone": "Rétabli. Les nouveaux e-mails utilisent le texte par défaut.",
+    "previewTitle": "Aperçu",
+    "previewUpdating": "Mise à jour de l’aperçu…",
+    "previewSubject": "Objet : {subject}",
+    "previewBlocked": "Corrigez les champs signalés pour voir l’aperçu.",
+    "previewFrame": "Aperçu de l’e-mail : {subject}",
+    "errors": {
+      "invalid_syntax": "Non valide : chaque accolade ouvrante doit avoir une accolade fermante autour d’un nom d’espace réservé.",
+      "unknown_placeholder": "Utilisez uniquement les espaces réservés listés ci-dessous.",
+      "too_long": "C’est trop long."
+    },
+    "customized": "E-mails personnalisés",
+    "noneTitle": "Aucun e-mail personnalisé pour l’instant",
+    "noneDescription": "Tous les e-mails utilisent le texte par défaut de Yayatoh.",
+    "changed": "Modifié"
   }
 }

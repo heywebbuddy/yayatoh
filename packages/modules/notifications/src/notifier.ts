@@ -108,6 +108,7 @@ export function createNotifier(): Notifier {
             timeZone: intent.to.timeZone ?? null,
             orderId: intent.orderId ?? null,
             eventId: intent.eventId ?? null,
+            occurrenceId: intent.occurrenceId ?? null,
             paramsCiphertext,
             ...(intent.sendAfter ? { sendAfter: intent.sendAfter } : {}),
           })
