@@ -183,7 +183,18 @@ export async function bulkAction(
       if (!target) throw new DomainError('validation_failed', 'Choose where to seat them');
       ({ operationId } = await executeCommand(
         seatAssignBulk.start,
-        { eventId: ev.id, selection, params: { target, overrideRules: form.get('overrideRules') === 'on' } },
+        {
+          eventId: ev.id,
+          selection,
+          params: {
+            target,
+            overrideRules: form.get('overrideRules') === 'on',
+            // Per-date charts (M1.7g): the date whose chart they are seated on.
+            occurrenceId: /^[0-9a-f-]{36}$/.test(String(form.get('bulkDate') ?? ''))
+              ? String(form.get('bulkDate'))
+              : null,
+          },
+        },
         data.ctx,
         ports,
       ));

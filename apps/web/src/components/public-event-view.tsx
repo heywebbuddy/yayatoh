@@ -130,9 +130,12 @@ export async function PublicEventView({
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   // The event's refund policy (M1.6e), in the buyer's words, before they buy.
   const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
-  const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
+  // Per-date charts (M1.7g): the chosen date's own chart when it has one, else the event plan.
+  const seatMap = target
+    ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null })
+    : null;
   // The venue map and seat finder, once the organizer opened them (M1.7e).
-  const venue = target ? await openVenueMap(target.orgId, target.eventId) : null;
+  const venue = target ? await openVenueMap(target.orgId, target.eventId, chosen?.id ?? null) : null;
   const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
   const questions = target
     ? ((
@@ -257,7 +260,15 @@ export async function PublicEventView({
           // Live availability (M1.7f): the page's own host serves it (a tenant site rewrites it
           // to its org), so the stream is always this event's.
           seatStream={
-            seatMap ? { url: localizedPath(locale, `/events/${slug}/seats/stream`), kind: 'public' } : null
+            seatMap
+              ? {
+                  url: localizedPath(
+                    locale,
+                    `/events/${slug}/seats/stream${chosen ? `?date=${chosen.id}` : ''}`,
+                  ),
+                  kind: 'public',
+                }
+              : null
           }
           timeZone={ev.timezone}
           action={checkoutAction.bind(null, slug)}

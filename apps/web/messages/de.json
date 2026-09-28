@@ -1104,7 +1104,9 @@
     "warning": {
       "ada_kept_back": "{count, plural, one {# Person sitzt} other {# Personen sitzen}} auf zurückgehaltenen barrierefreien Plätzen.",
       "other": "{count, plural, one {# Person braucht} other {# Personen brauchen}} einen zweiten Blick."
-    }
+    },
+    "seatDate": "Für den Termin",
+    "seatDatePlan": "Veranstaltungsplan (Termine ohne eigenen Plan)"
   },
   "exportColumns": {
     "name": "Name",
@@ -1118,7 +1120,8 @@
     "registeredAt": "Angemeldet am",
     "checkedIn": "Eingecheckt",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "seat": "Platz"
   },
   "import": {
     "title": "Gäste importieren",
@@ -3996,6 +3999,89 @@
     "terminated": {
       "title": "Diese Organisation ist geschlossen",
       "body": "Der Yayatoh-Support hat sie geschlossen. Die öffentlichen Seiten sind offline, und nichts kann mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen, zum Beispiel unter Aktivität."
+    }
+  },
+  "seatingDates": {
+    "label": "Sitzplan nach Termin",
+    "intro": "Jeder Termin nutzt den Veranstaltungsplan, außer Sie geben ihm einen eigenen Plan.",
+    "eventPlan": "Veranstaltungsplan",
+    "eventPlanNote": "Termine ohne eigenen Plan",
+    "ownChart": "Eigener Plan",
+    "usesPlan": "Nutzt den Veranstaltungsplan",
+    "cancelled": "Abgesagt",
+    "dateTitle": "Plan für {date}",
+    "ownChartBody": "Dieser Termin hat einen eigenen Plan: Plätze, Preise, Reservierungen und Verkäufe sind von den anderen Terminen getrennt.",
+    "usesPlanBody": "Dieser Termin nutzt den Veranstaltungsplan: Ein für diesen Termin verkaufter Platz ist auch an allen anderen Terminen mit diesem Plan belegt.",
+    "planBody": "Sie bearbeiten den Veranstaltungsplan. Wählen Sie oben einen Termin, um ihm einen eigenen Plan zu geben.",
+    "give": "Diesem Termin einen eigenen Plan geben",
+    "giveHint": "Der Plan beginnt als Kopie des Veranstaltungsplans mit seinen Preisen und gesperrten Plätzen. Verkauftes oder Reserviertes wird nicht kopiert.",
+    "remove": "Für diesen Termin den Veranstaltungsplan nutzen",
+    "removeHint": "Der eigene Plan des Termins wird entfernt, und darauf platzierte Gäste verlieren ihre Plätze. Nicht möglich, sobald darauf Plätze verkauft sind.",
+    "errors": {
+      "seats_in_use": "Für diesen Termin sind Plätze reserviert oder verkauft. Warten Sie, bis die Reservierungen enden, oder behalten Sie den aktuellen Plan.",
+      "layout_locked": "Auf diesem Plan wurden Plätze verkauft, daher kann er nicht geändert werden.",
+      "date_has_chart": "Dieser Termin hat bereits einen eigenen Plan.",
+      "date_cancelled": "Dieser Termin ist abgesagt."
+    },
+    "boxOfficeLabel": "Plätze für Termin",
+    "boxOfficeIntro": "Einige Termine haben einen eigenen Sitzplan. Wählen Sie den Termin, für den Sie Plätze verkaufen.",
+    "finderLabel": "Wählen Sie Ihren Termin",
+    "finderIntro": "Wählen Sie den Termin Ihres Tickets, um den richtigen Sitzplan zu sehen."
+  },
+  "seatingUnderlay": {
+    "title": "Grundrissbild",
+    "description": "Laden Sie ein Bild des Grundrisses hoch, um darauf zu zeichnen. Legen Sie den Maßstab über zwei Punkte mit bekanntem Abstand fest.",
+    "file": "Grundrissbild",
+    "replace": "Bild ersetzen",
+    "fileHint": "JPEG, PNG, GIF, WebP, AVIF oder SVG, bis 4 MB. Es wird neu kodiert und seine Metadaten (Ort, Kamera) werden entfernt.",
+    "upload": "Bild hochladen",
+    "uploading": "Bild wird hochgeladen…",
+    "uploaded": "Bild unter dem Plan hinzugefügt.",
+    "removed": "Bild aus dem Plan entfernt.",
+    "calibrated": "Maßstab festgelegt: 1 Pixel = {scale} cm.",
+    "scale": "Maßstab: 1 Pixel = {scale} cm. Das Bild umfasst {width} m × {height} m.",
+    "size": "Das Bild umfasst {width} m × {height} m.",
+    "calibrate": "Maßstab festlegen",
+    "calibrateHint": "Geben Sie zwei Punkte im Bild an (in Pixeln ab der oberen linken Ecke) und den tatsächlichen Abstand zwischen ihnen. Sie können jeden Punkt auch durch Klicken auf den Plan markieren.",
+    "point": {
+      "ax": "Punkt A: x (px)",
+      "ay": "Punkt A: y (px)",
+      "bx": "Punkt B: x (px)",
+      "by": "Punkt B: y (px)"
+    },
+    "markA": "A auf dem Plan markieren",
+    "markB": "B auf dem Plan markieren",
+    "markingA": "Klicken Sie auf den Plan, wo Punkt A liegt.",
+    "markingB": "Klicken Sie auf den Plan, wo Punkt B liegt.",
+    "metres": "Abstand zwischen A und B (m)",
+    "applyScale": "Maßstab anwenden",
+    "calErrors": {
+      "number": "Geben Sie jeden Punkt als Anzahl Pixel ein.",
+      "points_too_close": "Die Punkte A und B liegen zu nah beieinander. Wählen Sie weiter entfernte Punkte.",
+      "distance_out_of_range": "Geben Sie einen Abstand zwischen 0,01 und 10.000 Metern ein.",
+      "point_outside_image": "Beide Punkte müssen im Bild liegen."
+    },
+    "position": {
+      "x": "Bildposition x (cm)",
+      "y": "Bildposition y (cm)"
+    },
+    "opacity": "Deckkraft: {percent} %",
+    "lock": "Bild sperren (kann nicht verschoben oder skaliert werden)",
+    "showOnMap": "Schwach auf dem Sitzplan für Käufer zeigen",
+    "showOnMapHint": "Käufer sehen das Bild sehr schwach unter den Plätzen. Standardmäßig aus.",
+    "remove": "Bild entfernen",
+    "none": "Kein Grundrissbild.",
+    "errors": {
+      "no_file": "Wählen Sie eine Bilddatei.",
+      "unsupported_type": "Diese Datei ist kein unterstütztes Bild. Verwenden Sie JPEG, PNG, GIF, WebP, AVIF oder SVG.",
+      "too_large": "Diese Datei ist zu groß. Die Grenze liegt bei 4 MB.",
+      "too_many_pixels": "Dieses Bild hat zu viele Pixel (Grenze: 40 Megapixel).",
+      "undecodable": "Diese Bilddatei ist beschädigt oder unvollständig.",
+      "quota_exceeded": "Ihre Organisation hat ihren Bildspeicher aufgebraucht. Entfernen Sie zuerst einige Bilder.",
+      "slot_full": "Diese Veranstaltung hat bereits 20 Grundrissbilder.",
+      "forbidden": "Sie können diesen Plan nicht ändern.",
+      "network": "Das Hochladen ist fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "generic": "Das Hochladen ist fehlgeschlagen. Versuchen Sie es erneut."
     }
   }
 }

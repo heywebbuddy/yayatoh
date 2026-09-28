@@ -59,6 +59,7 @@ import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { ports } from '@/server/ports.ts';
+import { seatingDates } from '@/server/seating-dates.ts';
 import {
   addGuestAction,
   addLabelAction,
@@ -185,6 +186,7 @@ export default async function AttendeesPage({
       : [];
   // Where "Assign seats" can seat people: the whole plan, each section, table and row, each group block.
   let seatTargets: SeatTarget[] | null = null;
+  let seatDates: SeatTarget[] = [];
   let adaEnforced = false;
   if (hasReal && canSeat) {
     const seating = await executeQuery(eventSeatingQuery, { eventId: real.id }, data.ctx, ports);
@@ -192,6 +194,16 @@ export default async function AttendeesPage({
       const ts = await getTranslations('seating');
       const available = new Set(seating.seats.filter((x) => x.state === 'available').map((x) => x.seatUuid));
       const groups = await executeQuery(seatGroupsQuery, { eventId: real.id }, data.ctx, ports);
+      // Dates with their own chart (M1.7g): "Assign seats" can seat people there instead.
+      const { dates } = await seatingDates(data, real.id, undefined);
+      const day = new Intl.DateTimeFormat(locale, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: real.timezone,
+      });
+      seatDates = dates
+        .filter((d) => d.own && !d.cancelled)
+        .map((d) => ({ value: d.id, label: day.format(d.startsAt) }));
       const rules = await executeQuery(seatingRulesQuery, { eventId: real.id }, data.ctx, ports);
       adaEnforced = activeAdaRule(rules, real.startsAt, data.ctx.now)?.severity === 'enforce';
       const items = seating.doc.items.flatMap((i) => (i.kind === 'object' ? [] : [i]));
@@ -668,6 +680,7 @@ export default async function AttendeesPage({
               canCancel={canCancel}
               labelSuggestions={labelCounts.map((l) => l.label)}
               seatTargets={seatTargets}
+              seatDates={seatDates}
               adaEnforced={adaEnforced}
               matching={live.total}
             />

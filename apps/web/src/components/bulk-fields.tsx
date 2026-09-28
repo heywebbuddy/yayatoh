@@ -25,6 +25,7 @@ export function BulkFields({
   seatTargets,
   adaEnforced,
   matching,
+  seatDates = [],
 }: {
   canWrite: boolean;
   canExport: boolean;
@@ -38,6 +39,8 @@ export function BulkFields({
   adaEnforced: boolean;
   /** How many attendees "All matching" covers. */
   matching: number;
+  /** Dates with their own seating chart (M1.7g): where "Assign seats" seats people. */
+  seatDates?: readonly SeatTarget[];
 }) {
   const t = useTranslations('bulk');
   const seats = canSeat && seatTargets !== null && seatTargets.length > 0;
@@ -135,6 +138,21 @@ export function BulkFields({
       ) : null}
       {what === 'assignSeats' && seats ? (
         <>
+          {seatDates.length ? (
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="bulk-date" className="text-caption text-zinc-600">
+                {t('seatDate')}
+              </label>
+              <select id="bulk-date" name="bulkDate" defaultValue="" className={cls}>
+                <option value="">{t('seatDatePlan')}</option>
+                {seatDates.map((d) => (
+                  <option key={d.value} value={d.value}>
+                    {d.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="bulk-target" className="text-caption text-zinc-600">
               {t('target')}

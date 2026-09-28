@@ -1104,7 +1104,9 @@
     "warning": {
       "ada_kept_back": "{count, plural, one {# pessoa ficou} other {# pessoas ficaram}} em lugares acessíveis reservados.",
       "other": "{count, plural, one {# pessoa precisa} other {# pessoas precisam}} de revisão."
-    }
+    },
+    "seatDate": "Para a data",
+    "seatDatePlan": "Mapa do evento (datas sem mapa próprio)"
   },
   "exportColumns": {
     "name": "Nome",
@@ -1118,7 +1120,8 @@
     "registeredAt": "Inscrição",
     "checkedIn": "Check-in feito",
     "yes": "Sim",
-    "no": "Não"
+    "no": "Não",
+    "seat": "Lugar"
   },
   "import": {
     "title": "Importar convidados",
@@ -3996,6 +3999,89 @@
     "terminated": {
       "title": "Esta organização está encerrada",
       "body": "O suporte da Yayatoh a encerrou. Suas páginas públicas estão offline e nada pode ser alterado. Como proprietário, você ainda pode abri-la e baixar seus dados, por exemplo em Atividade."
+    }
+  },
+  "seatingDates": {
+    "label": "Mapa de lugares por data",
+    "intro": "Cada data usa o mapa do evento, a menos que você lhe dê um mapa próprio.",
+    "eventPlan": "Mapa do evento",
+    "eventPlanNote": "Datas sem mapa próprio",
+    "ownChart": "Mapa próprio",
+    "usesPlan": "Usa o mapa do evento",
+    "cancelled": "Cancelada",
+    "dateTitle": "Mapa para {date}",
+    "ownChartBody": "Esta data tem mapa próprio: seus lugares, preços, reservas e vendas são separados das outras datas.",
+    "usesPlanBody": "Esta data usa o mapa do evento: um lugar vendido para esta data também fica ocupado em todas as outras datas que usam o mapa.",
+    "planBody": "Você está editando o mapa do evento. Escolha uma data acima para lhe dar um mapa próprio.",
+    "give": "Dar a esta data um mapa próprio",
+    "giveHint": "O mapa começa como cópia do mapa do evento, com seus preços e lugares bloqueados. Nada vendido ou reservado é copiado.",
+    "remove": "Usar o mapa do evento para esta data",
+    "removeHint": "O mapa próprio da data é removido e os convidados sentados nele perdem o lugar. Não é possível depois de vendidos lugares nele.",
+    "errors": {
+      "seats_in_use": "Há lugares reservados ou vendidos para esta data. Aguarde o fim das reservas ou mantenha o mapa atual.",
+      "layout_locked": "Foram vendidos lugares neste mapa, então ele não pode mudar.",
+      "date_has_chart": "Esta data já tem mapa próprio.",
+      "date_cancelled": "Esta data está cancelada."
+    },
+    "boxOfficeLabel": "Lugares para a data",
+    "boxOfficeIntro": "Algumas datas têm mapa de lugares próprio. Escolha a data para a qual vende lugares.",
+    "finderLabel": "Escolha sua data",
+    "finderIntro": "Escolha a data do seu ingresso para ver o mapa certo."
+  },
+  "seatingUnderlay": {
+    "title": "Imagem da planta",
+    "description": "Envie uma imagem da planta do local para desenhar por cima. Defina a escala a partir de dois pontos cuja distância você conhece.",
+    "file": "Imagem da planta",
+    "replace": "Substituir a imagem",
+    "fileHint": "JPEG, PNG, GIF, WebP, AVIF ou SVG, até 4 MB. Ela é recodificada e seus metadados (local, câmera) são removidos.",
+    "upload": "Enviar imagem",
+    "uploading": "Enviando a imagem…",
+    "uploaded": "Imagem adicionada sob o mapa.",
+    "removed": "Imagem removida do mapa.",
+    "calibrated": "Escala definida: 1 pixel = {scale} cm.",
+    "scale": "Escala: 1 pixel = {scale} cm. A imagem cobre {width} m × {height} m.",
+    "size": "A imagem cobre {width} m × {height} m.",
+    "calibrate": "Definir a escala",
+    "calibrateHint": "Informe dois pontos da imagem (em pixels a partir do canto superior esquerdo) e a distância real entre eles. Você também pode marcar cada ponto clicando no mapa.",
+    "point": {
+      "ax": "Ponto A: x (px)",
+      "ay": "Ponto A: y (px)",
+      "bx": "Ponto B: x (px)",
+      "by": "Ponto B: y (px)"
+    },
+    "markA": "Marcar A no mapa",
+    "markB": "Marcar B no mapa",
+    "markingA": "Clique no mapa onde fica o ponto A.",
+    "markingB": "Clique no mapa onde fica o ponto B.",
+    "metres": "Distância entre A e B (m)",
+    "applyScale": "Aplicar escala",
+    "calErrors": {
+      "number": "Informe cada ponto como um número de pixels.",
+      "points_too_close": "Os pontos A e B estão muito próximos. Escolha pontos mais afastados.",
+      "distance_out_of_range": "Informe uma distância entre 0,01 e 10.000 metros.",
+      "point_outside_image": "Os dois pontos devem estar dentro da imagem."
+    },
+    "position": {
+      "x": "Posição da imagem x (cm)",
+      "y": "Posição da imagem y (cm)"
+    },
+    "opacity": "Opacidade: {percent} %",
+    "lock": "Travar a imagem (não pode ser movida nem redimensionada)",
+    "showOnMap": "Mostrá-la clara no mapa de lugares do comprador",
+    "showOnMapHint": "Os compradores veem a imagem bem clara sob os lugares. Desativado por padrão.",
+    "remove": "Remover a imagem",
+    "none": "Sem imagem da planta.",
+    "errors": {
+      "no_file": "Escolha um arquivo de imagem.",
+      "unsupported_type": "Este arquivo não é uma imagem compatível. Use JPEG, PNG, GIF, WebP, AVIF ou SVG.",
+      "too_large": "Este arquivo é grande demais. O limite é 4 MB.",
+      "too_many_pixels": "Esta imagem tem pixels demais (o limite é 40 megapixels).",
+      "undecodable": "Este arquivo de imagem está danificado ou incompleto.",
+      "quota_exceeded": "Sua organização usou todo o armazenamento de imagens. Remova algumas imagens primeiro.",
+      "slot_full": "Este evento já tem 20 imagens de planta.",
+      "forbidden": "Você não pode alterar este mapa.",
+      "network": "O envio falhou. Verifique sua conexão e tente de novo.",
+      "generic": "O envio falhou. Tente de novo."
     }
   }
 }

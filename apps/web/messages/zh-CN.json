@@ -1104,7 +1104,9 @@
     "warning": {
       "ada_kept_back": "{count, plural, other {# 人}}被安排在预留的无障碍座位上。",
       "other": "{count, plural, other {# 人}}需要再检查一下。"
-    }
+    },
+    "seatDate": "日期",
+    "seatDatePlan": "活动座位图（没有专属座位图的日期）"
   },
   "exportColumns": {
     "name": "姓名",
@@ -1118,7 +1120,8 @@
     "registeredAt": "报名时间",
     "checkedIn": "已签到",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "seat": "座位"
   },
   "import": {
     "title": "导入宾客",
@@ -3996,6 +3999,89 @@
     "terminated": {
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
+    }
+  },
+  "seatingDates": {
+    "label": "按日期的座位图",
+    "intro": "除非你为某个日期设置专属座位图，否则每个日期都使用活动座位图。",
+    "eventPlan": "活动座位图",
+    "eventPlanNote": "没有专属座位图的日期",
+    "ownChart": "专属座位图",
+    "usesPlan": "使用活动座位图",
+    "cancelled": "已取消",
+    "dateTitle": "{date}的座位图",
+    "ownChartBody": "此日期有专属座位图：其座位、价格、预留和销售与其他日期分开。",
+    "usesPlanBody": "此日期使用活动座位图：为此日期售出的座位，在使用该座位图的其他所有日期也会被占用。",
+    "planBody": "你正在编辑活动座位图。在上方选择一个日期，可为其设置专属座位图。",
+    "give": "为此日期设置专属座位图",
+    "giveHint": "座位图以活动座位图的副本开始，包括其价格和封锁的座位。已售出或预留的座位不会被复制。",
+    "remove": "此日期改用活动座位图",
+    "removeHint": "此日期的专属座位图将被删除，安排在其中的来宾会失去座位。一旦其中有座位售出就无法操作。",
+    "errors": {
+      "seats_in_use": "此日期有预留或已售出的座位。请等预留结束，或保留当前座位图。",
+      "layout_locked": "此座位图上已有座位售出，因此无法更改。",
+      "date_has_chart": "此日期已有专属座位图。",
+      "date_cancelled": "此日期已取消。"
+    },
+    "boxOfficeLabel": "日期的座位",
+    "boxOfficeIntro": "部分日期有专属座位图。请选择要售座的日期。",
+    "finderLabel": "选择你的日期",
+    "finderIntro": "选择你的门票日期，查看正确的座位图。"
+  },
+  "seatingUnderlay": {
+    "title": "平面图图片",
+    "description": "上传场地平面图的图片，在其上绘制。用两个已知距离的点设置比例。",
+    "file": "平面图图片",
+    "replace": "替换图片",
+    "fileHint": "JPEG、PNG、GIF、WebP、AVIF 或 SVG，最大 4 MB。图片会重新编码，并删除其元数据（位置、相机）。",
+    "upload": "上传图片",
+    "uploading": "正在上传图片…",
+    "uploaded": "图片已添加到座位图下方。",
+    "removed": "图片已从座位图移除。",
+    "calibrated": "比例已设置：1 像素 = {scale} 厘米。",
+    "scale": "比例：1 像素 = {scale} 厘米。图片覆盖 {width} 米 × {height} 米。",
+    "size": "图片覆盖 {width} 米 × {height} 米。",
+    "calibrate": "设置比例",
+    "calibrateHint": "输入图片上的两个点（从左上角算起的像素）以及它们之间的实际距离。也可以点击座位图来标记每个点。",
+    "point": {
+      "ax": "点 A：x（像素）",
+      "ay": "点 A：y（像素）",
+      "bx": "点 B：x（像素）",
+      "by": "点 B：y（像素）"
+    },
+    "markA": "在座位图上标记 A",
+    "markB": "在座位图上标记 B",
+    "markingA": "在座位图上点击点 A 所在位置。",
+    "markingB": "在座位图上点击点 B 所在位置。",
+    "metres": "A 与 B 之间的距离（米）",
+    "applyScale": "应用比例",
+    "calErrors": {
+      "number": "请将每个点输入为像素数。",
+      "points_too_close": "点 A 和 B 太近。请选择相距更远的点。",
+      "distance_out_of_range": "请输入 0.01 到 10,000 米之间的距离。",
+      "point_outside_image": "两个点都必须在图片内。"
+    },
+    "position": {
+      "x": "图片位置 x（厘米）",
+      "y": "图片位置 y（厘米）"
+    },
+    "opacity": "不透明度：{percent} %",
+    "lock": "锁定图片（无法移动或缩放）",
+    "showOnMap": "在购票者的座位图上淡淡显示",
+    "showOnMapHint": "购票者会在座位下方看到很淡的图片。默认关闭。",
+    "remove": "移除图片",
+    "none": "没有平面图图片。",
+    "errors": {
+      "no_file": "请选择图片文件。",
+      "unsupported_type": "此文件不是受支持的图片。请使用 JPEG、PNG、GIF、WebP、AVIF 或 SVG。",
+      "too_large": "文件太大。上限为 4 MB。",
+      "too_many_pixels": "此图片像素过多（上限为 4000 万像素）。",
+      "undecodable": "此图片文件已损坏或不完整。",
+      "quota_exceeded": "你的组织已用完图片存储空间。请先删除一些图片。",
+      "slot_full": "此活动已有 20 张平面图图片。",
+      "forbidden": "你无法更改此座位图。",
+      "network": "上传失败。请检查网络连接后重试。",
+      "generic": "上传失败。请重试。"
     }
   }
 }

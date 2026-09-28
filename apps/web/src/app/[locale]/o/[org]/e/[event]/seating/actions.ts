@@ -6,11 +6,13 @@ import {
   allocateGroupSeatsCommand,
   assignSeatCategoryCommand,
   assignSeatsCommand,
+  giveDateOwnChartCommand,
   MAX_GROUP_SEATS,
   MAX_RELEASE_DAYS,
   MAX_SEATS_PER_ORDER,
   publishEventLayoutCommand,
   releaseGroupSeatsCommand,
+  removeDateChartCommand,
   type SeatingRuleDto,
   saveLayoutCommand,
   seatAssignBulk,
@@ -44,6 +46,11 @@ const fail = (err: unknown): SeatingState => {
     problems: Array.isArray(d.problems) ? (d.problems as { code: string; id: string }[]) : undefined,
   };
 };
+/** A date id from a form or the page (M1.7g): anything else is the event plan. */
+const dateOf = (v: unknown): string | null =>
+  typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v)
+    ? v
+    : null;
 const int = (form: FormData, key: string, max: number) =>
   Math.max(0, Math.min(max, Math.trunc(Number(form.get(key) ?? 0) || 0)));
 
@@ -95,11 +102,21 @@ export async function useLayoutAction(
   }
 }
 
-/** The editor's autosave: the whole document, validated by the command. */
-export async function saveDocAction(org: string, event: string, doc: unknown): Promise<SeatingState> {
+/** The editor's autosave: the whole document, validated by the command (the date's chart, M1.7g). */
+export async function saveDocAction(
+  org: string,
+  event: string,
+  date: string | null,
+  doc: unknown,
+): Promise<SeatingState> {
   const { data, event: ev } = await loadEvent(org, event);
   try {
-    await executeCommand(setEventLayoutCommand, { eventId: ev.id, doc }, data.ctx, ports);
+    await executeCommand(
+      setEventLayoutCommand,
+      { eventId: ev.id, occurrenceId: dateOf(date), doc },
+      data.ctx,
+      ports,
+    );
     return { ok: true, code: null };
   } catch (err) {
     return fail(err);
@@ -124,16 +141,47 @@ export async function saveTemplateAction(
   }
 }
 
-export async function publishSeatingAction(org: string, event: string): Promise<void> {
+export async function publishSeatingAction(org: string, event: string, date: string | null): Promise<void> {
   const { data, event: ev } = await loadEvent(org, event);
-  await executeCommand(publishEventLayoutCommand, { eventId: ev.id }, data.ctx, ports);
+  await executeCommand(
+    publishEventLayoutCommand,
+    { eventId: ev.id, occurrenceId: dateOf(date) },
+    data.ctx,
+    ports,
+  );
   revalidatePath(`/o/${org}/e/${event}/seating`);
+}
+
+/**
+ * Per-date charts (M1.7g): give the chosen date its own copy of the event plan, or send it back
+ * to the event plan. Errors come back as state for the page to announce.
+ */
+export async function dateChartAction(
+  org: string,
+  event: string,
+  date: string,
+  _prev: SeatingState,
+  form: FormData,
+): Promise<SeatingState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const occurrenceId = dateOf(date);
+  if (!occurrenceId) return { ok: false, code: 'validation_failed' };
+  try {
+    if (form.get('op') === 'remove')
+      await executeCommand(removeDateChartCommand, { eventId: ev.id, occurrenceId }, data.ctx, ports);
+    else await executeCommand(giveDateOwnChartCommand, { eventId: ev.id, occurrenceId }, data.ctx, ports);
+    revalidatePath(`/o/${org}/e/${event}/seating`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return fail(err);
+  }
 }
 
 /** Price a row or table: its seats sell as this ticket type (or come off sale). */
 export async function categoryAction(
   org: string,
   event: string,
+  date: string | null,
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
@@ -142,7 +190,12 @@ export async function categoryAction(
   try {
     await executeCommand(
       assignSeatCategoryCommand,
-      { eventId: ev.id, itemIds: form.getAll('itemId').map(String), ticketTypeId: ticketTypeId || null },
+      {
+        eventId: ev.id,
+        occurrenceId: dateOf(date),
+        itemIds: form.getAll('itemId').map(String),
+        ticketTypeId: ticketTypeId || null,
+      },
       data.ctx,
       ports,
     );
@@ -198,6 +251,7 @@ const assignFail = (err: unknown): AssignState => {
 export async function assignSeatsAction(
   org: string,
   event: string,
+  date: string | null,
   input: {
     attendeeIds: readonly string[];
     itemId: string;
@@ -211,6 +265,7 @@ export async function assignSeatsAction(
       assignSeatsCommand,
       {
         eventId: ev.id,
+        occurrenceId: dateOf(date),
         attendeeIds: [...input.attendeeIds],
         itemId: input.itemId,
         seatUuid: input.seatUuid || undefined,
@@ -241,13 +296,14 @@ export async function assignSeatsAction(
 export async function unassignSeatAction(
   org: string,
   event: string,
+  date: string | null,
   attendeeId: string,
 ): Promise<AssignState> {
   const { data, event: ev } = await loadEvent(org, event);
   try {
     const r = await executeCommand(
       unassignSeatsCommand,
-      { eventId: ev.id, attendeeIds: [attendeeId] },
+      { eventId: ev.id, occurrenceId: dateOf(date), attendeeIds: [attendeeId] },
       data.ctx,
       ports,
     );
@@ -361,6 +417,7 @@ const groupFail = (err: unknown): GroupState => {
 export async function allocateGroupAction(
   org: string,
   event: string,
+  date: string | null,
   _prev: GroupState,
   form: FormData,
 ): Promise<GroupState> {
@@ -376,7 +433,7 @@ export async function allocateGroupAction(
   try {
     const r = await executeCommand(
       allocateGroupSeatsCommand,
-      { eventId: ev.id, label, itemId, count },
+      { eventId: ev.id, occurrenceId: dateOf(date), label, itemId, count },
       data.ctx,
       ports,
     );
@@ -391,13 +448,19 @@ export async function allocateGroupAction(
 export async function releaseGroupAction(
   org: string,
   event: string,
+  date: string | null,
   _prev: GroupState,
   form: FormData,
 ): Promise<GroupState> {
   const label = String(form.get('label') ?? '');
   const { data, event: ev } = await loadEvent(org, event);
   try {
-    const r = await executeCommand(releaseGroupSeatsCommand, { eventId: ev.id, label }, data.ctx, ports);
+    const r = await executeCommand(
+      releaseGroupSeatsCommand,
+      { eventId: ev.id, occurrenceId: dateOf(date), label },
+      data.ctx,
+      ports,
+    );
     revalidatePath(`/o/${org}/e/${event}/seating/assign`);
     return { ok: true, code: null, done: 'released', count: r.released, label, at: Date.now() };
   } catch (err) {
@@ -412,6 +475,7 @@ export async function releaseGroupAction(
 export async function seatGroupAction(
   org: string,
   event: string,
+  date: string | null,
   _prev: GroupState,
   form: FormData,
 ): Promise<GroupState> {
@@ -424,7 +488,7 @@ export async function seatGroupAction(
       {
         eventId: ev.id,
         selection: { filter: { labels: [label], status: 'active' } },
-        params: { target: { kind: 'group', label } },
+        params: { target: { kind: 'group', label }, occurrenceId: dateOf(date) },
       },
       data.ctx,
       ports,
@@ -434,5 +498,6 @@ export async function seatGroupAction(
   }
   await runBulkInline(data.org.id, operationId);
   const q = new URLSearchParams({ label, op: operationId, opk: 'seats' });
+  if (dateOf(date)) q.set('date', date as string);
   return redirect({ href: `/o/${org}/e/${event}/attendees?${q}`, locale: await getLocale() });
 }

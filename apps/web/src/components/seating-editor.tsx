@@ -9,6 +9,7 @@ import { type KeyboardEvent, useCallback, useEffect, useRef, useState } from 're
 import type { SeatingState } from '@/app/[locale]/o/[org]/e/[event]/seating/actions.ts';
 import { SeatLegend, useSeatStates } from './seat-states.tsx';
 import type { SeatStatus } from './seating-canvas.tsx';
+import { type Marking, planMarks, pointFromPlan, UnderlayPanel } from './seating-underlay.tsx';
 
 // Konva needs the browser: the canvas loads on the client only.
 const SeatingCanvas = dynamic(() => import('./seating-canvas.tsx'), { ssr: false });
@@ -36,11 +37,14 @@ export function SeatingEditor({
   seatStatus,
   locked,
   saveDoc,
+  underlayTicket = null,
 }: {
   initialDoc: FloorplanDoc;
   seatStatus: Readonly<Record<string, SeatStatus>>;
   locked: boolean;
   saveDoc: (doc: FloorplanDoc) => Promise<SeatingState>;
+  /** Upload ticket for floor plan images (M1.7g); null for people who can't change the plan. */
+  underlayTicket?: string | null;
 }) {
   const t = useTranslations('seating.editor');
   // Live seat states (M1.7f) when the page follows the seat stream; else the server's.
@@ -55,6 +59,18 @@ export function SeatingEditor({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [newSeats, setNewSeats] = useState({ row: 10, table: 8 });
   const [objectType, setObjectType] = useState<(typeof OBJECT_TYPES)[number]>('stage');
+  // Calibrating the floor plan image (M1.7g): which point the next click marks, and both points.
+  const [marking, setMarking] = useState<Marking>(null);
+  const [points, setPoints] = useState({ a: { x: '', y: '' }, b: { x: '', y: '' } });
+  const onPoint = useCallback(
+    (p: { x: number; y: number }) => {
+      const q = pointFromPlan(doc.underlay, p);
+      if (!q || !marking) return;
+      setPoints((cur) => ({ ...cur, [marking]: q }));
+      setMarking(marking === 'a' ? 'b' : null);
+    },
+    [doc.underlay, marking],
+  );
 
   const persist = useCallback(
     (next: FloorplanDoc) => {
@@ -304,9 +320,21 @@ export function SeatingEditor({
           label={t('canvas')}
           onSelect={onSelect}
           onMove={onMove}
+          onPoint={marking ? onPoint : undefined}
+          marks={planMarks(doc.underlay, points)}
         />
       </div>
       <SeatLegend />
+      <UnderlayPanel
+        doc={doc}
+        commit={commit}
+        locked={locked}
+        ticket={underlayTicket}
+        marking={marking}
+        setMarking={setMarking}
+        points={points}
+        setPoints={setPoints}
+      />
       <p id="seating-keys" className="text-caption text-zinc-500">
         {t('keys')}
       </p>

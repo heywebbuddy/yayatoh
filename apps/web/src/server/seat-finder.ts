@@ -114,9 +114,12 @@ export async function passedHumanCheck(form: FormData): Promise<boolean | null> 
 }
 
 /** The venue map, only when the organizer opened it; null otherwise (closed, or no module). */
-export async function openVenueMap(orgId: string, eventId: string) {
-  return executeQuery(publicVenueMapQuery, { eventId }, createCtx({ orgId }), ports).catch((err) => {
-    if (isDomainError(err) && err.code === 'module_not_enabled') return null;
-    throw err;
-  });
+export async function openVenueMap(orgId: string, eventId: string, occurrenceId: string | null = null) {
+  // Per-date charts (M1.7g): the plan the chosen date uses.
+  return executeQuery(publicVenueMapQuery, { eventId, occurrenceId }, createCtx({ orgId }), ports).catch(
+    (err) => {
+      if (isDomainError(err) && err.code === 'module_not_enabled') return null;
+      throw err;
+    },
+  );
 }
