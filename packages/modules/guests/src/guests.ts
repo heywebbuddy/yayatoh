@@ -703,7 +703,10 @@ export const guestListQuery = tenantQuery({
         .orderBy(sql`lower(${parties.name})`, asc(parties.createdAt))
         .limit(input.limit)
         .offset(input.offset),
-      tx.select({ id: parties.id, vip: parties.vip }).from(parties).where(eq(parties.eventId, input.eventId)),
+      tx
+        .select({ id: parties.id, name: parties.name, vip: parties.vip })
+        .from(parties)
+        .where(eq(parties.eventId, input.eventId)),
       tx
         .select({
           id: guests.id,
@@ -749,6 +752,7 @@ export const guestListQuery = tenantQuery({
         ...partySerializer.serialize(p),
         guests: orderWithPlusOnes(dtos.filter((g) => g.partyId === p.id)),
       })),
+      partyOptions: allParties.map((p) => ({ id: p.id, name: p.name })).sort((x, y) => sort(x.name, y.name)),
       sides: sides.flatMap((s) => (s.v ? [s.v] : [])).sort(sort),
       tags: normalizeTags(tags.map((t) => t.v)).sort(sort),
     };

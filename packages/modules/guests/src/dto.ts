@@ -58,6 +58,8 @@ export const GuestListDto = z.object({
   /** Parties matching the filters. */
   total: z.number().int(),
   parties: z.array(PartyWithGuestsDto),
+  /** Every party of the event (id and name, by name), for "Move to…". */
+  partyOptions: z.array(z.object({ id: z.uuid(), name: z.string() })),
   /** Sides and tags in use at the event, for the filters. */
   sides: z.array(z.string()),
   tags: z.array(z.string()),
