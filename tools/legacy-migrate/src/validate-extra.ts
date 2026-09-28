@@ -138,7 +138,19 @@ export async function v6Vectors(q: Q, instance: string, freezeAt: Date): Promise
 /** V7: the golden queries, legacy vs migrated, 0 differences. */
 export async function v7Golden(q: Q, instance: string): Promise<Check> {
   const results = [];
+  const present = new Set(
+    (
+      await q(`select table_name from information_schema.tables where table_schema = $1`, [
+        `legacy_${instance}`,
+      ])
+    ).map((r) => String(r.table_name)),
+  );
   for (const g of GOLDEN_QUERIES) {
+    const missing = (g.requires ?? []).filter((t) => !present.has(t));
+    if (missing.length) {
+      results.push({ id: g.id, name: g.name, skipped: `no staging ${missing.join(', ')}`, diffCount: 0 });
+      continue;
+    }
     const rows = await q(g.sql, [instance]).catch((err: unknown) => [
       { key: 'error', legacy: 0, migrated: String(err) },
     ]);
@@ -177,6 +189,28 @@ export async function v9Urls(q: Q, instance: string): Promise<Check> {
     `
     select i.kind, i.planned_status, count(*) as n,
            count(*) filter (where case
+             -- M2.2d: CMS pages/posts and performer tags resolve through the row they were made from.
+             when i.kind in ('page', 'post') then
+               case when i.planned_status = 404 then
+                      not exists (select 1 from marketplace.legacy_redirects r where r.host = i.host and r.source = i.path)
+                      and not exists (select 1 from cms.entries e where e.id = i.entity_id and e.status = 'published')
+                    else exists (
+                      select 1 from cms.entries e join tenancy.organizations o on o.id = e.org_id
+                      where e.id = i.entity_id and e.status = 'published'
+                        and coalesce(i.target, i.path) = case when i.target ~ '/o/' then regexp_replace(i.target, '/o/.*$', '') || '/o/' || o.slug else '' end
+                                                         || case e.kind when 'page' then '/pages/' else '/blogs/' end || e.slug)
+                      and case when i.planned_status = 308 then exists (
+                                 select 1 from marketplace.legacy_redirects r where r.host = i.host and r.source = i.path and r.target = i.target and r.status = 308)
+                               else not exists (select 1 from marketplace.legacy_redirects r where r.host = i.host and r.source = i.path) end
+                    end
+             when i.kind = 'tag' then
+               case when i.planned_status = 404 then
+                      not exists (select 1 from marketplace.legacy_redirects r where r.host = i.host and r.source = i.path)
+                    else exists (
+                      select 1 from program.speakers sp join events.events e on e.id = sp.event_id
+                      where sp.id = i.entity_id and e.status = 'published' and i.target = '/events/' || e.slug || '/speakers/' || sp.id)
+                      and exists (select 1 from marketplace.legacy_redirects r where r.host = i.host and r.source = i.path and r.target = i.target and r.status = 308)
+                    end
              when i.planned_status = 308 then exists (
                select 1 from marketplace.legacy_redirects r where r.host = i.host and r.source = i.path and r.target = i.target and r.status = 308)
                and case
@@ -226,6 +260,24 @@ const MIGRATED_CHECKSUMS: Record<string, string> = {
              from seating.event_seats s join legacy.ref r on r.new_id = s.event_id and r.instance = $1 and r.entity = 'events') t`,
   venues: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', v.id, v.slug, v.name, v.timezone, v.latitude)) as x
              from venues.venues v join legacy.ref r on r.new_id = v.id and r.instance = $1 and r.entity = 'venues') t`,
+  // M2.2d: the program, event content and CMS entries the migration wrote.
+  program_sessions: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.event_id, s.title, s.description, s.starts_at, s.ends_at, s.room_id,
+               (select string_agg(l.speaker_id::text || ':' || l.position, ',' order by l.position) from program.session_speakers l where l.session_id = s.id))) as x
+             from program.sessions s join legacy.ref r on r.new_id = s.id and r.instance = $1 and r.entity = 'event_sessions') t`,
+  program_speakers: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.event_id, s.name, s.title, s.company, s.bio, s.links::text)) as x
+             from program.speakers s join legacy.ref r on r.new_id = s.id and r.instance = $1 and r.entity in ('event_speakers', 'event_tag')) t`,
+  program_exhibitors: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.event_id, s.name, s.description, s.booth_label, s.website_url)) as x
+             from program.exhibitors s join legacy.ref r on r.new_id = s.id and r.instance = $1 and r.entity = 'event_exhibitors') t`,
+  program_sponsors: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.event_id, s.tier_id, s.name, s.website_url)) as x
+             from program.sponsors s join legacy.ref r on r.new_id = s.id and r.instance = $1 and r.entity = 'exhibitor_sponsors') t`,
+  event_announcements: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', a.id, a.event_id, a.title, a.body, a.pinned, a.published_at)) as x
+             from events.event_announcements a join legacy.ref r on r.new_id = a.id and r.instance = $1 and r.entity = 'event_announcements') t`,
+  event_sections: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', s.id, s.event_id, s.kind, s.title, s.position, s.visible, s.content::text)) as x
+             from events.event_sections s join legacy.ref r on r.new_id = s.id and r.instance = $1 and r.entity = 'event_custom_sections') t`,
+  event_private_info: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', p.id, p.event_id, p.body)) as x
+             from events.event_private_info p join legacy.ref r on r.new_id = p.id and r.instance = $1 and r.entity = 'event_private_info') t`,
+  cms_entries: `select md5(string_agg(x, '' order by x)) from (select md5(concat_ws('|', e.id, e.org_id, e.kind, e.slug, e.title, e.body, e.status, e.published_at)) as x
+             from cms.entries e join legacy.ref r on r.new_id = e.id and r.instance = $1 and r.entity in ('pages', 'posts')) t`,
 };
 
 /**

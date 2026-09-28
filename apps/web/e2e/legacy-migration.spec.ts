@@ -26,6 +26,19 @@ interface Handles {
     layout: string | null;
     legacySeats: { name: string; coordinates: string; capacity: number }[];
   };
+  program: {
+    session: string;
+    lateSession: string;
+    room: string;
+    speaker: string;
+    speakerTitle: string;
+    speakerId: string;
+    tagSpeaker: string;
+    exhibitor: string;
+    announcement: string;
+    tagUrl: { path: string; target: string } | null;
+  };
+  page: { slug: string; title: string; legacyPath: string | null; target: string | null };
   urls: {
     host: string;
     organizer: { path: string; target: string } | null;
@@ -407,6 +420,19 @@ test.describe('legacy migration — the migrated organizer', () => {
     await two.context.close();
   });
 
+  test('finds the migrated program in the event console, where it can be edited', async () => {
+    // The event took the conference profile (its console lists the program pages).
+    await page.goto(`${EVENT}/sessions`);
+    await expect(page.getByRole('heading', { name: 'Sessions', level: 1 })).toBeVisible();
+    await expect(page.locator(`[data-session="${h.program.session}"]`)).toBeVisible();
+    await expect(page.locator(`[data-session="${h.program.lateSession}"]`)).toBeVisible();
+    await expectAccessible(page);
+    await page.goto(`${EVENT}/speakers`);
+    await expect(page.getByText(h.program.speaker, { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(h.program.tagSpeaker, { exact: true }).first()).toBeVisible();
+    await expectAccessible(page);
+  });
+
   test('the migrated event renders right-to-left in Arabic', async () => {
     await page.goto(`/ar${EVENT}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
@@ -514,5 +540,98 @@ test.describe('legacy migration — legacy URLs', () => {
     // Redirects are per legacy host: the same path on another host is not rewritten.
     const other = await page.request.get(o.path, { maxRedirects: 0 });
     expect(other.status()).toBe(404);
+  });
+});
+
+test.describe('legacy migration — migrated program and content (M2.2d)', () => {
+  let h: Handles;
+  test.beforeAll(() => {
+    h = handles();
+  });
+
+  test('the event page shows the migrated agenda, speakers, exhibitor, sponsor and announcement', async ({
+    page,
+  }) => {
+    await page.goto(`/events/${h.weekly.slug}`);
+    const agenda = page.getByRole('region', { name: 'Agenda' });
+    await expect(agenda.getByRole('listitem').filter({ hasText: h.program.session })).toContainText(
+      h.program.room,
+    );
+    await expect(agenda.getByText(h.program.lateSession)).toBeVisible();
+    // Legacy session times were the organizer's wall clock: 7:00 pm in the event's timezone.
+    await expect(agenda.getByText('7:00 PM–8:00 PM')).toBeVisible();
+    await expect(agenda.getByText('Times are in America/Chicago.')).toBeVisible();
+    const speakers = page.getByRole('region', { name: 'Speakers' });
+    await expect(speakers.getByRole('link', { name: h.program.speaker })).toBeVisible();
+    await expect(speakers.getByText(h.program.speakerTitle)).toBeVisible();
+    // A legacy performer tag is a speaker of the event it was linked to.
+    await expect(speakers.getByRole('link', { name: h.program.tagSpeaker })).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: 'Exhibitors' }).getByText(h.program.exhibitor, { exact: true }),
+    ).toBeVisible();
+    // Its legacy sponsor level made it a sponsor too.
+    await expect(
+      page.getByRole('region', { name: 'Gold' }).getByRole('link', { name: h.program.exhibitor }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: 'Announcements' }).getByText(h.program.announcement),
+    ).toBeVisible();
+    // Legacy HTML became text: no markup shows through.
+    await expect(page.getByText('<p>')).toHaveCount(0);
+    await expectAccessible(page);
+
+    // Keyboard only: the speaker link in the agenda opens the migrated speaker page.
+    const link = agenda.getByRole('link', { name: h.program.speaker });
+    await link.focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(new RegExp(`/events/${h.weekly.slug}/speakers/${h.program.speakerId}$`));
+    await expect(page.getByRole('heading', { name: h.program.speaker, level: 1 })).toBeVisible();
+    await expect(page.getByText(h.program.speakerTitle)).toBeVisible();
+    // The bio's legacy <strong> is bold Markdown now; an unsafe legacy link was dropped.
+    await expect(page.locator('strong').filter({ hasText: 'SYNTHETIC TEST DATA ONLY' })).toBeVisible();
+    await expect(page.locator('a[href^="javascript:"]')).toHaveCount(0);
+    await expect(page.getByRole('region', { name: 'Sessions' }).getByText(h.program.session)).toBeVisible();
+    await expectAccessible(page);
+  });
+
+  test('a performer tag’s legacy URL 308s to its speaker page', async ({ page }) => {
+    const t = h.program.tagUrl;
+    if (!t) throw new Error('no legacy tag URL in the inventory');
+    const res = await page.goto(`${MARKET}${t.path}`);
+    expect((await res?.request().redirectedFrom()?.response())?.status()).toBe(308);
+    await expect(page).toHaveURL(`${MARKET}${t.target}`);
+    await expect(page.getByRole('heading', { name: h.program.tagSpeaker, level: 1 })).toBeVisible();
+    await expect(page.getByText('Trumpet')).toBeVisible();
+    await expectAccessible(page);
+  });
+
+  test('the organizer’s legacy CMS page 308s to their organizer page and reads as it did', async ({
+    page,
+  }) => {
+    const { legacyPath, target } = h.page;
+    if (!legacyPath || !target) throw new Error('no legacy page URL in the inventory');
+    const res = await page.goto(`${MARKET}${legacyPath}`);
+    expect((await res?.request().redirectedFrom()?.response())?.status()).toBe(308);
+    await expect(page).toHaveURL(`${MARKET}${target}`);
+    expect(res?.status()).toBe(200);
+    await expect(page.getByRole('heading', { name: h.page.title, level: 1 })).toBeVisible();
+    // Legacy HTML → Markdown: bold text and an ordered list, no raw markup.
+    await expect(page.locator('strong').filter({ hasText: 'jazz' })).toBeVisible();
+    await expect(page.getByRole('listitem').filter({ hasText: 'Weekly sets' })).toBeVisible();
+    await expect(page.getByText('<p>')).toHaveCount(0);
+    await expectAccessible(page);
+  });
+
+  test('the migrated program and page render right-to-left in Arabic', async ({ page }) => {
+    test.skip(test.info().project.name !== 'desktop-1280', 'Arabic once, on desktop');
+    await page.goto(`/ar/events/${h.weekly.slug}`);
+    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+    await expect(page.getByText(h.program.session)).toBeVisible();
+    await expect(page.getByRole('link', { name: h.program.speaker }).first()).toBeVisible();
+    await expectAccessible(page);
+    await page.goto(`${MARKET}/ar${h.page.target}`);
+    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+    await expect(page.getByRole('heading', { name: h.page.title, level: 1 })).toBeVisible();
+    await expectAccessible(page);
   });
 });

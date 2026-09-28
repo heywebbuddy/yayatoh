@@ -73,7 +73,7 @@ legacy migration validation — instance yay, run 12: PASS
   ok   V4 Referential integrity (0 orphans)
   ok   V5 Merged users vs distinct emails; pre-hijack guard; no staff from legacy
   ok   V6 QR, token and password vectors (100% pass)
-  ok   V7 Golden queries (14) legacy vs migrated: 0 differences
+  ok   V7 Golden queries (21) legacy vs migrated: 0 differences
   ok   V8 Facade twin diff (0 unexplained) — pending: facade not built
   ok   V9 URL inventory: every legacy URL has its planned status
   ok   V10 Checksums per table (reproduced by a rerun on the same dump)
@@ -94,14 +94,25 @@ legacy migration validation — instance yay, run 12: PASS
   staff), placeholder buyer emails, direct charges without a connected account; and since M2.2c:
   unmapped categories, inferred series, venue coordinates or timezones that could not be read, seats
   booked per date or over capacity, access tokens of users who were not migrated, invalid newsletter
-  addresses, legacy slugs shared by several events (`url_ambiguous_slug`).
+  addresses, legacy slugs shared by several events (`url_ambiguous_slug`); and since M2.2d: session
+  fixes (`session_end_fixed`, `session_outside_event`, `session_speaker_missing`,
+  `session_access_not_migrated`), links and contact fields not carried (`speaker_link_dropped`,
+  `exhibitor_website_dropped`, `exhibitor_contact_not_migrated`, `tag_contact_not_migrated`),
+  switched-off or unlinked performer tags, custom sections with nothing usable or skipped items,
+  events moved to the `conference` profile, CMS slugs that changed and platform content
+  (`cms_slug_changed`, `cms_platform_content`), media without a target yet (`media_no_target`,
+  one row per kind) and the legacy chats, blocks and message reports kept in staging
+  (`chat_not_migrated`, `chat_block_not_migrated`, `chat_report_not_migrated`, one row each).
 - **V6–V10** (M2.2c): V6 checks that every active booking's legacy QR resolves to exactly its ticket,
   a sample of yy1 codes verifies, every live access token and magic link was carried with the right
   hash, and every carried password is one of that person's legacy hashes (remember-me and signed-URL
   vectors need the instances' APP_KEYs: pending). V7 runs 14 golden queries twice (legacy vs new: sales,
   refunds, discounts, valid tickets per org and event, tickets per type, orders, payouts, open balances,
   commission, promo redemptions, events and ticket types, check-ins, buyers). V8 is the facade twin diff:
-  pending until the `/api/v2` facade exists (harness `tools/legacy-migrate/src/facade-diff.ts`). V9 checks
+  pending until the `/api/v2` facade exists (harness `tools/legacy-migrate/src/facade-diff.ts`). Since
+  M2.2d V1, V4, V7 (G15–G21) and V10 also cover the program, announcements, sections, private info
+  and CMS entries the migration wrote (through `legacy.ref`, so rows made on the new platform never
+  count). V9 checks
   each inventoried URL has its planned redirect or page. V10 hashes every staging table and the migrated
   tables' stable columns: the same input must give the same output (a rerun on the same dump reproduces
   the checksums).
@@ -147,7 +158,30 @@ select * from payments.legacy_settlements where kind = 'opening_balance' order b
 - **Series** (`series_inferred` exceptions): events of one organizer with the same title across years are
   grouped; check the list and edit them in the console (Series).
 - **Legacy URLs** (`legacy.url_inventory`): every event, attendee-page, venue and organizer URL with its
-  planned status; the 308s are loaded into `marketplace.legacy_redirects` for the instance host.
+  planned status; the 308s are loaded into `marketplace.legacy_redirects` for the instance host. Since
+  M2.2d also `/pages/{slug}`, `/blogs/{slug}` and `/events/{slug}/tag_{Title}` (performer pages → the
+  event's speaker page).
+- **CMS content** (M2.2d): yayatoh.com's Voyager pages and posts belong to the `yayatoh` platform org.
+  Their unchanged URLs (`/pages/about`) are served by the marketplace only when
+  **`MARKETPLACE_CONTENT_ORG=yayatoh`** is set on the web app at cutover (the redirect table holds only
+  the changed ones). abc's belong to ABC and are served by its tenant site once `abc.yayatoh.com` is
+  active. An organizer's own pages redirect to their organizer page.
+- **Program** (M2.2d): legacy sessions, speakers, exhibitors (with sponsor levels), announcements,
+  custom sections, private info and performer tags are in the event's program and page. Events that
+  gained a program and had the default profile now have the `conference` profile (their console lists
+  Sessions, Speakers, Exhibitors and Sponsors). Legacy session times were saved as the organizer typed
+  them, so they are read in the event's timezone (not the platform one).
+- **Chats** (M2.2d): the legacy attendee-to-attendee chat, its blocks and message reports have no
+  target module and stay in staging (listed, one exception each).
+- **Media manifest** (`legacy.media_refs`, M2.2d): every legacy upload a migrated row references, with the
+  R2 key the media copy writes it to (`legacy/{inst}/storage/…`) and its target. Copy the files with
+  `rclone copy --checksum` to those keys; `media:*` targets (event covers and galleries, venue photos)
+  are then imported through the media pipeline (a reviewed step, not built yet); `underlay:*` are the
+  seat plans' underlays; `none:*` wait for their module to hold images.
+
+  ```sql
+  select target, count(*) from legacy.media_refs where instance = 'yay' group by 1 order by 1;
+  ```
 
 ## 4. Timed rehearsal and cutover
 

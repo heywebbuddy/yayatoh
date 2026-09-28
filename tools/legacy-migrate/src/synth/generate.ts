@@ -93,6 +93,30 @@ export interface SynthSummary {
     readonly newsletter: { email: string; unsubscribed: boolean }[];
     /** Venue slugs in the legacy directory. */
     readonly venueSlugs: string[];
+    /** M2.2d: planted program and content cases (legacy ids). */
+    readonly program: {
+      /** Events with a legacy program (sessions and speakers). */
+      events: number[];
+      /** A session whose end is not after its start (fixed to start + 1 h, listed). */
+      endFixedSession: number | null;
+      /** A session naming a speaker id that does not exist (the link is dropped, listed). */
+      missingSpeakerSession: number | null;
+      /** A paid session (the fee is not carried, listed). */
+      paidSession: number | null;
+      /** An exhibitor whose website has no scheme (dropped, listed). */
+      badWebsiteExhibitor: number | null;
+      /** Exhibitors with a sponsor level (also sponsors). */
+      sponsorExhibitors: number[];
+      /** A switched-off performer tag (not migrated, listed). */
+      inactiveTag: number | null;
+      /** Performer/speaker tags linked to events: `[tag, event]`. */
+      tagLinks: [number, number][];
+    };
+    /** Voyager pages and posts: id, slug, author, status. */
+    readonly pages: { id: number; slug: string; authorId: number; active: boolean }[];
+    readonly posts: { id: number; slug: string; authorId: number; published: boolean }[];
+    /** Attendee chats (no target module: kept in staging, listed). */
+    readonly chats: { chats: number; messages: number; blocks: number; reports: number };
   };
 }
 
@@ -120,6 +144,18 @@ export const DEMO = {
   pastEventTitle: 'Lakeshore Spring Gala',
   buyerEmail: 'ruth.fictional@example.org',
   buyerName: 'Ruth Fictional',
+  /** M2.2d: the weekly event's legacy program and the organizer's legacy CMS page. */
+  program: {
+    session: 'Opening Set',
+    lateSession: 'Late Night Jam',
+    room: 'Main Stage',
+    speaker: 'Mara Quill',
+    speakerTitle: 'Bandleader',
+    tagSpeaker: 'Theo Brass',
+    exhibitor: 'Lakeshore Records',
+    announcement: 'Doors open at 6:30 pm',
+  },
+  page: { slug: 'about-lakeshore-jazz', title: 'About the Lakeshore Jazz Society' },
   scanBuyers: ['mobile-375', 'tablet-768', 'desktop-1280'].map((p) => ({
     project: p,
     email: `door.${p}@example.org`,
@@ -373,6 +409,19 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     magicTokens: [],
     newsletter: [],
     venueSlugs: [],
+    program: {
+      events: [],
+      endFixedSession: null,
+      missingSpeakerSession: null,
+      paidSession: null,
+      badWebsiteExhibitor: null,
+      sponsorExhibitors: [],
+      inactiveTag: null,
+      tagLinks: [],
+    },
+    pages: [],
+    posts: [],
+    chats: { chats: 0, messages: 0, blocks: 0, reports: 0 },
   };
 
   // Platform-tz wall clock of an instant (legacy system timestamps).
@@ -1410,6 +1459,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     slug: str('about'),
     status: str('ACTIVE'),
   });
+  facts.pages.push({ id: 1, slug: 'about', authorId: admin.id, active: true });
 
   // Magic login links (72 h, plain text in the legacy table): one live at the anchor, others expired.
   const magic = new Map<number, { token: string; expires: string }>();
@@ -1565,6 +1615,357 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     await note(c.id, null, { title: 'Booking confirmed', message: 'Your tickets are ready' }, false);
   if (customers[0])
     await note(customers[0].id, null, { title: 'Your account', password: 'invented-guest-password' }, false);
+
+  // --- M2.2d tables (own random stream: every earlier row stays byte-identical) -----------------
+  const rng3 = new Rng((opts.seed ?? 20260927) ^ 0x2d2d ^ (inst === 'yay' ? 0x5eed : 0xabc0));
+  const at = (day: string, time: string) => `${day} ${time}`;
+  const addH = (t: string, h: number) => {
+    const [hh = '0', mm = '00'] = t.split(':');
+    return `${pad(Math.min(23, Number(hh) + h))}:${mm}:00`;
+  };
+  let speakerId = 0;
+  let sessionId = 0;
+  let exhibitorId = 0;
+  let announcementId = 0;
+  let sectionId = 0;
+  let sectionItemId = 0;
+  const ROOMS = ['Main Hall', 'Room A', 'Room B', 'Garden Terrace'];
+  const DESIGNATIONS = ['Keynote Speaker', 'Panelist', 'Curator', 'Performer', 'Host'];
+  const SPONSOR_LEVELS = ['none', 'bronze', 'silver', 'gold', 'platinum'] as const;
+  // Every third event has a program (plus the demo's weekly event with fixed names for e2e).
+  const programEvents = events.filter((e) => e.id % 3 === 1 || e === demoWeekly);
+  for (const ev of programEvents) {
+    facts.program.events.push(ev.id);
+    const created = ev.created;
+    const demo = ev === demoWeekly;
+    const speakers: number[] = [];
+    const nSpeakers = demo ? 2 : rng3.int(1, 3);
+    for (let k = 0; k < nSpeakers; k++) {
+      const id = ++speakerId;
+      speakers.push(id);
+      const name = demo ? (k === 0 ? DEMO.program.speaker : 'Jo Ellison') : person(rng3.int(0, 400));
+      const links: Record<string, string> = { linkedin: `https://example.org/in/speaker-${inst}-${id}` };
+      // A legacy link the new platform refuses (not http(s)): dropped.
+      if (id % 4 === 2) links.twitter = 'javascript:alert(1)';
+      await w('event_speakers').add({
+        id: num(id),
+        event_id: num(ev.id),
+        name: str(name),
+        designation: str(demo && k === 0 ? DEMO.program.speakerTitle : rng3.pick(DESIGNATIONS)),
+        company: str(k % 2 === 0 ? `${rng3.pick(LAST)} Studio` : null),
+        avatar: str(`speakers/${inst}-${id}.jpg`),
+        bio: str(
+          `<p>${name} is an invented speaker. <strong>${SYNTHETIC_MARKER}</strong>.</p><ul><li>Plays <em>jazz</em></li><li>Teaches</li></ul>`,
+        ),
+        social_links: str(JSON.stringify(links)),
+        order: num(k),
+        created_at: str(created),
+        updated_at: str(created),
+      });
+    }
+    const nSessions = demo ? 2 : rng3.int(1, 3);
+    for (let k = 0; k < nSessions; k++) {
+      const id = ++sessionId;
+      // Session times are the organizer's wall clock (the legacy form saved them as typed).
+      const start = demo ? (k === 0 ? '19:00:00' : '22:00:00') : `${pad(rng3.int(9, 18))}:00:00`;
+      let end = addH(start, 1);
+      if (!demo && facts.program.endFixedSession === null && k === 1) {
+        end = start;
+        facts.program.endFixedSession = id;
+      }
+      const ids = demo ? [speakers[k] as number] : speakers.filter(() => rng3.chance(0.6));
+      if (!demo && facts.program.missingSpeakerSession === null && k === 0 && ev.id > 3) {
+        ids.push(900_000 + id);
+        facts.program.missingSpeakerSession = id;
+      }
+      const paid = !demo && facts.program.paidSession === null && ev.id > 6;
+      if (paid) facts.program.paidSession = id;
+      await w('event_sessions').add({
+        id: num(id),
+        event_id: num(ev.id),
+        title: str(
+          demo
+            ? k === 0
+              ? DEMO.program.session
+              : DEMO.program.lateSession
+            : `Session ${k + 1}: ${rng3.pick(KINDS)}`,
+        ),
+        description: str(`<p>An invented session &amp; talk. ${SYNTHETIC_MARKER}.</p>`),
+        start_time: str(at(ev.startDate, start)),
+        end_time: str(at(ev.startDate, end)),
+        room_location: str(demo ? DEMO.program.room : k === 2 ? null : rng3.pick(ROOMS)),
+        thumbnail: str(k === 0 ? `sessions/${inst}-${id}.png` : null),
+        speaker_ids: str(JSON.stringify(ids)),
+        access_type: str(paid ? 'paid' : 'free'),
+        additional_fee: paid ? money(1000) : num(null),
+        access_label: str(paid ? 'Workshop fee' : null),
+        created_at: str(created),
+        updated_at: str(created),
+      });
+    }
+    // Exhibitors (some with a sponsor level) on half of the program events.
+    if (demo || ev.id % 2 === 1) {
+      const n = demo ? 1 : rng3.int(1, 2);
+      for (let k = 0; k < n; k++) {
+        const id = ++exhibitorId;
+        const level = demo ? 'gold' : SPONSOR_LEVELS[id % SPONSOR_LEVELS.length];
+        if (level !== 'none') facts.program.sponsorExhibitors.push(id);
+        const badSite = !demo && facts.program.badWebsiteExhibitor === null;
+        if (badSite) facts.program.badWebsiteExhibitor = id;
+        await w('event_exhibitors').add({
+          id: num(id),
+          event_id: num(ev.id),
+          name: str(demo ? DEMO.program.exhibitor : `${rng3.pick(LAST)} Supplies ${id}`),
+          logo: str(`exhibitors/${inst}-${id}.png`),
+          description: str(`<p>Invented exhibitor. ${SYNTHETIC_MARKER}.</p>`),
+          website: str(badSite ? 'www.example.org/no-scheme' : `https://example.org/exhibitor/${inst}-${id}`),
+          booth_number: str(`Booth #${10 + id}`),
+          staff: str(JSON.stringify([{ name: person(id), email: `staff.${inst}.${id}@example.org` }])),
+          videos: str(JSON.stringify([])),
+          sponsor_type: str(level ?? 'none'),
+          email: str(`exhibitor.${inst}.${id}@example.org`),
+          phone: str('+15555550100'),
+          created_at: str(created),
+          updated_at: str(created),
+        });
+      }
+    }
+    // Announcements: one active (an alert is pinned), sometimes an inactive draft.
+    if (demo || ev.id % 4 === 1) {
+      for (let k = 0; k < (demo ? 1 : 2); k++) {
+        await w('event_announcements').add({
+          id: num(++announcementId),
+          event_id: num(ev.id),
+          title: str(demo ? DEMO.program.announcement : k === 0 ? 'Parking update' : 'Draft note'),
+          message: str(`<p>Invented announcement.<br>Line two. ${SYNTHETIC_MARKER}.</p>`),
+          type: str(k === 0 && !demo ? 'alert' : 'info'),
+          is_active: num(k === 0 ? 1 : 0),
+          created_at: str(created),
+          updated_at: str(created),
+        });
+      }
+    }
+    // Custom sections: an FAQ accordion (one empty item) and a card list.
+    if (!demo && ev.id % 5 === 1) {
+      for (const [k, display] of (['accordion', 'cards'] as const).entries()) {
+        const sid = ++sectionId;
+        await w('event_custom_sections').add({
+          id: num(sid),
+          event_id: num(ev.id),
+          icon: str('fas fa-star'),
+          title: str(display === 'accordion' ? 'Questions' : 'What to bring'),
+          display_type: str(display),
+          is_active: num(1),
+          order: num(k),
+          created_at: str(created),
+          updated_at: str(created),
+        });
+        const items =
+          display === 'accordion'
+            ? [
+                ['Is there parking?', '<p>Yes, <strong>free</strong> after 6 pm.</p>'],
+                ['Can I bring kids?', 'Children under 12 enter free.'],
+                ['Empty question', ''],
+              ]
+            : [
+                ['Ticket', 'On your phone or printed.'],
+                ['Water bottle', null],
+              ];
+        for (const [j, [title, content]] of items.entries())
+          await w('event_custom_section_items').add({
+            id: num(++sectionItemId),
+            section_id: num(sid),
+            event_id: num(ev.id),
+            icon: str('fas fa-check'),
+            title: str(title ?? null),
+            content: str(content ?? null),
+            is_active: num(1),
+            order: num(j),
+            created_at: str(created),
+            updated_at: str(created),
+          });
+      }
+    }
+  }
+  // Performer/speaker tags (organizer-wide, linked to events): each organizer has one, linked to
+  // its first two events; the demo's is "Theo Brass" on the weekly event; one tag is switched off.
+  let tagId = 0;
+  for (const o of inst === 'abc' ? [admin, ...organizers] : organizers) {
+    const own = events.filter((e) => e.ownerId === o.id);
+    if (!own.length) continue;
+    const id = ++tagId;
+    const demo = o === demoOwner;
+    const title = demo ? DEMO.program.tagSpeaker : `${person(rng3.int(0, 400))}`;
+    const off = !demo && facts.program.inactiveTag === null && id > 1;
+    if (off) facts.program.inactiveTag = id;
+    await w('tags').add({
+      id: num(id),
+      title: str(title),
+      type: str(rng3.pick(['performer', 'speaker', 'host'])),
+      organizer_id: num(o.id),
+      description: str(`<p>${title}: an invented performer. ${SYNTHETIC_MARKER}.</p>`),
+      image: str(`tags/${inst}-${id}.jpg`),
+      sub_title: str(demo ? 'Trumpet' : null),
+      website: str(`https://example.org/performer/${inst}-${id}`),
+      is_page: num(1),
+      email: str(`performer.${inst}.${id}@example.org`),
+      phone: str('+15555550101'),
+      facebook: str(null),
+      instagram: str(`https://example.org/ig/${inst}-${id}`),
+      twitter: str(null),
+      linkedin: str(null),
+      status: num(off ? 0 : 1),
+      created_at: str(o.created),
+      updated_at: str(o.created),
+    });
+    const linked = demo ? own.filter((e) => e === demoWeekly) : own.slice(0, 2);
+    for (const e of linked) {
+      await w('event_tag').add({ event_id: num(e.id), tag_id: num(id) });
+      if (!off) facts.program.tagLinks.push([id, e.id]);
+    }
+  }
+  // More Voyager pages: an old-style slug (redirects), an inactive one, and the demo organizer's own.
+  const pageRows: { title: string; slug: string; author: UserRow; active: boolean; body: string }[] = [
+    {
+      title: 'Terms of Service',
+      slug: 'Terms_Of_Service',
+      author: admin,
+      active: true,
+      body: `<h2>Terms</h2><p>Invented terms. <a href="https://example.org/terms">Read more</a>. <script>alert(1)</script>${SYNTHETIC_MARKER}.</p>`,
+    },
+    { title: 'Old promo', slug: 'old-promo', author: admin, active: false, body: '<p>Retired.</p>' },
+  ];
+  if (demoOwner)
+    pageRows.push({
+      title: DEMO.page.title,
+      slug: DEMO.page.slug,
+      author: demoOwner,
+      active: true,
+      body: `<p>We have played <strong>jazz</strong> on the lakeshore since 1998.</p><ol><li>Weekly sets</li><li>A spring gala</li></ol><p>${SYNTHETIC_MARKER}.</p>`,
+    });
+  else if (organizers[0])
+    pageRows.push({
+      title: 'Our story',
+      slug: `our-story-${inst}`,
+      author: organizers[0],
+      active: true,
+      body: `<p>An organizer page. ${SYNTHETIC_MARKER}.</p>`,
+    });
+  for (const [k, pg] of pageRows.entries()) {
+    const id = k + 2;
+    facts.pages.push({ id, slug: pg.slug, authorId: pg.author.id, active: pg.active });
+    await w('pages').add({
+      id: num(id),
+      author_id: num(pg.author.id),
+      title: str(pg.title),
+      excerpt: str(`${pg.title} (invented).`),
+      body: str(pg.body),
+      image: str(k === 0 ? `pages/${inst}-${id}.jpg` : null),
+      slug: str(pg.slug),
+      meta_description: str(`${pg.title}: ${SYNTHETIC_MARKER}.`),
+      meta_keywords: str('synthetic'),
+      status: str(pg.active ? 'ACTIVE' : 'INACTIVE'),
+      created_at: str(wall(daysAgo(300 + k))),
+      updated_at: str(wall(daysAgo(200 + k))),
+    });
+  }
+  // Voyager blog posts: one published, one draft.
+  for (const [k, published] of [true, false].entries()) {
+    const id = k + 1;
+    const slug = `${inst}-news-${id}`;
+    facts.posts.push({ id, slug, authorId: admin.id, published });
+    await w('posts').add({
+      id: num(id),
+      author_id: num(admin.id),
+      category_id: num(null),
+      title: str(published ? 'Season announcement' : 'Unfinished draft'),
+      seo_title: str(null),
+      excerpt: str('An invented post.'),
+      body: str(`<p>Invented news. ${SYNTHETIC_MARKER}.</p>`),
+      image: str(`posts/${inst}-${id}.jpg`),
+      slug: str(slug),
+      meta_description: str(null),
+      meta_keywords: str(null),
+      status: str(published ? 'PUBLISHED' : 'DRAFT'),
+      featured: num(0),
+      created_at: str(wall(daysAgo(120 + k))),
+      updated_at: str(wall(daysAgo(110 + k))),
+    });
+  }
+  // Attendee-to-attendee chats (legacy networking chat), their messages, a block and two reports.
+  let messageId = 0;
+  const chatEvents = events.filter((e) => e.id % 4 === 2).slice(0, 3);
+  for (const [k, ev] of chatEvents.entries()) {
+    const a = customers[(k * 2) % customers.length];
+    const b = customers[(k * 2 + 1) % customers.length];
+    if (!a || !b) continue;
+    const chat = ++facts.chats.chats;
+    await w('chats').add({
+      id: num(chat),
+      event_id: num(ev.id),
+      user_1_id: num(Math.min(a.id, b.id)),
+      user_2_id: num(Math.max(a.id, b.id)),
+      last_message_at: str(wall(daysAgo(30 - k))),
+      created_at: str(wall(daysAgo(31 - k))),
+      updated_at: str(wall(daysAgo(30 - k))),
+    });
+    for (let m = 0; m < 3; m++) {
+      await w('messages').add({
+        id: num(++messageId),
+        chat_id: num(chat),
+        sender_id: num(m % 2 === 0 ? a.id : b.id),
+        message: str(`Invented chat message ${m + 1}. ${SYNTHETIC_MARKER}.`),
+        is_read: num(1),
+        read_at: str(wall(daysAgo(30 - k))),
+        created_at: str(wall(daysAgo(31 - k))),
+        updated_at: str(wall(daysAgo(31 - k))),
+      });
+      facts.chats.messages++;
+    }
+    if (k === 0) {
+      await w('blocked_users').add({
+        id: num(++facts.chats.blocks),
+        blocker_id: num(b.id),
+        blocked_id: num(a.id),
+        event_id: num(ev.id),
+        reason: str('Invented reason'),
+        created_at: str(wall(daysAgo(29))),
+        updated_at: str(wall(daysAgo(29))),
+      });
+      for (const [r, status] of (['pending', 'resolved'] as const).entries())
+        await w('message_reports').add({
+          id: num(++facts.chats.reports),
+          message_id: num(messageId - r),
+          reporter_id: num(b.id),
+          reported_user_id: num(a.id),
+          chat_id: num(chat),
+          event_id: num(ev.id),
+          reason: str(r === 0 ? 'harassment' : 'spam'),
+          details: str('Invented report details.'),
+          status: str(status),
+          reviewed_by: num(status === 'resolved' ? admin.id : null),
+          reviewed_at: str(status === 'resolved' ? wall(daysAgo(28)) : null),
+          action_taken: str(status === 'resolved' ? 'user_warned' : null),
+          admin_notes: str(status === 'resolved' ? 'Invented note' : null),
+          created_at: str(wall(daysAgo(29))),
+          updated_at: str(wall(daysAgo(28))),
+        });
+    }
+  }
+  // Large scale only (a content table may quarantine ≤ 0.5%): one session of an unknown event.
+  if (sessionId >= 400)
+    await w('event_sessions').add({
+      id: num(++sessionId),
+      event_id: num(999_999),
+      title: str('Orphan session'),
+      description: str(null),
+      start_time: str('2025-01-01 10:00:00'),
+      end_time: str('2025-01-01 11:00:00'),
+      speaker_ids: str('[]'),
+      access_type: str('free'),
+      created_at: str('2025-01-01 09:00:00'),
+      updated_at: str('2025-01-01 09:00:00'),
+    });
 
   // Users last (their table is written first in the dump; rows are only complete now).
   for (const u of users)
