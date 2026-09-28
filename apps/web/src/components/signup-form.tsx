@@ -6,6 +6,7 @@ import { useActionState, useEffect, useState } from 'react';
 import type { SignupState } from '@/app/[locale]/signup/actions.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { HumanCheckField, type HumanCheckWidget } from './human-check-field.tsx';
 
 const PROFILES = ['wedding', 'gala', 'concert', 'conference', 'community', 'agency', 'other'] as const;
 
@@ -18,13 +19,21 @@ const slugify = (s: string) =>
     .replace(/^-+|-+$/g, '')
     .slice(0, 63);
 
-/** Create an organization: signup code, name and address, the kind of events, and the terms. */
+/**
+ * Create an organization: signup code (M1.3b; none in open signup, M3.11a), name and address,
+ * the kind of events, the terms, and in open signup the "are you a person?" check.
+ */
 export function SignupForm({
   action,
   code,
+  open = false,
+  humanCheck = null,
 }: {
   action: (prev: SignupState, form: FormData) => Promise<SignupState>;
   code: string;
+  /** Open signup without a code: no code field. */
+  open?: boolean;
+  humanCheck?: HumanCheckWidget | null;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
@@ -36,22 +45,34 @@ export function SignupForm({
   const error =
     state.code === 'invalid_code'
       ? t('signup.invalidCode')
-      : state.code === 'conflict' && state.field === 'slug'
-        ? t('signup.slugTaken')
-        : state.code
-          ? t(errorMessageKey(state.code))
-          : null;
+      : state.code === 'signup_closed'
+        ? t('signup.closedNow')
+        : state.code === 'email_unverified'
+          ? t('signup.verifyEmail')
+          : state.code === 'human_check'
+            ? t('signup.humanCheck')
+            : state.code === 'rate_limited'
+              ? t('errors.rateLimitedRetry', { minutes: state.minutes ?? 60 })
+              : state.code === 'conflict' && state.field === 'slug'
+                ? t('signup.slugTaken')
+                : state.code
+                  ? t(errorMessageKey(state.code))
+                  : null;
   return (
     <form action={formAction} className="flex flex-col gap-5">
       <input type="hidden" name="timezone" value={tz} />
-      <Input
-        name="code"
-        required
-        defaultValue={code}
-        autoComplete="off"
-        spellCheck={false}
-        label={t('signup.code')}
-      />
+      {open && !code ? (
+        <input type="hidden" name="code" value="" />
+      ) : (
+        <Input
+          name="code"
+          required
+          defaultValue={code}
+          autoComplete="off"
+          spellCheck={false}
+          label={t('signup.code')}
+        />
+      )}
       <Input
         name="name"
         required
@@ -123,6 +144,7 @@ export function SignupForm({
           })}
         </span>
       </label>
+      {open && !code && humanCheck ? <HumanCheckField widget={humanCheck} /> : null}
       <div aria-live="polite">{error ? <Alert title={error} /> : null}</div>
       <Button type="submit" disabled={pending} className="self-start">
         {t('signup.submit')}

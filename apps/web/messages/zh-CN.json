@@ -1329,7 +1329,20 @@
       "event": "创建你的第一个活动",
       "team": "邀请团队成员",
       "payouts": "设置收款"
-    }
+    },
+    "finished": "设置完成。您的组织已完全启用。",
+    "incomplete": "请先完成必需的步骤。",
+    "finishFailed": "无法完成设置。请重试。",
+    "setupMode": "您的组织处于设置模式",
+    "setupModeBody": "您现在就可以创建活动和售票。完成这些步骤后，即可向嘉宾群发消息（电子邮件、公告、调查）。",
+    "requiredList": "必需的步骤",
+    "required": {
+      "terms": "接受服务条款",
+      "privacy": "发布隐私声明",
+      "event": "创建您的第一个活动"
+    },
+    "finish": "完成设置",
+    "finishLater": "完成必需的步骤即可解锁嘉宾消息。"
   },
   "signup": {
     "eyebrow": "开始使用",
@@ -1356,7 +1369,17 @@
       "other": "从简单开始，按需开启功能。"
     },
     "terms": "我代表本组织同意<tos>服务条款</tos>和<dpa>数据处理附录</dpa>。",
-    "submit": "创建组织"
+    "submit": "创建组织",
+    "openDescription": "几分钟内创建您的主办方账户和组织。",
+    "comingSoon": "自助注册即将开放",
+    "comingSoonBody": "我们正在准备向所有主办方开放 Yayatoh。在此之前，新组织需通过邀请加入。",
+    "joinWaitlist": "加入等候名单",
+    "useCode": "使用此代码",
+    "seePricing": "查看价格和费用",
+    "openNote": "您的组织将以设置模式开始：接受条款、发布隐私声明并创建第一个活动后，即可向嘉宾发送消息。<pricing>查看价格和费用</pricing>。",
+    "closedNow": "目前仅限受邀注册。请输入您的注册代码。",
+    "verifyEmail": "请先确认您的电子邮件地址。",
+    "humanCheck": "请确认您是真人。"
   },
   "payouts": {
     "title": "收款",
@@ -3205,7 +3228,8 @@
       "events": "{org} 的活动",
       "emptyTitle": "暂无即将举行的活动",
       "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
-    }
+    },
+    "pricing": "价格"
   },
   "widget": {
     "title": "门票：{event}",
@@ -4375,5 +4399,37 @@
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
     }
+  },
+  "pricingPage": {
+    "eyebrow": "面向主办方",
+    "title": "价格和费用",
+    "description": "在 Yayatoh 上售票的成本，数字一目了然。",
+    "currencies": "货币",
+    "feeHeading": "平台费（{currency}）",
+    "feeNone": "目前每张门票不收取平台费",
+    "feePercent": "每张付费门票 {percent}",
+    "feeFixed": "每张付费门票 {fixed}",
+    "feeBoth": "每张付费门票 {percent} + {fixed}",
+    "freeTickets": "免费门票和出席回复永不收费。",
+    "noSubscription": "无订阅、无开通费：仅在售出时付费。",
+    "allInHeading": "全包价格",
+    "allInBody": "从第一个页面到结账，购票者始终看到含费用的完整价格。结账时没有意外。",
+    "passOnExplained": "由购票者承担费用：购票者支付票价加费用，您收到全部票价。",
+    "absorbExplained": "由您承担费用：购票者支付票价，费用从您的收入中扣除。",
+    "exampleCaption": "示例：一张 {face} 的门票",
+    "passOn": "购票者承担",
+    "absorb": "主办方承担",
+    "col": {
+      "mode": "费用承担方式",
+      "face": "票价",
+      "fee": "平台费",
+      "buyerPays": "购票者支付",
+      "youReceive": "您收到"
+    },
+    "exampleNote": "示例仅显示平台费。费用以门票的货币收取。",
+    "unavailable": "价格暂时无法显示。",
+    "startHeading": "开始售票",
+    "startBody": "创建您的组织，准备好第一个活动，准备就绪后即可发布。",
+    "startCta": "创建您的组织"
   }
 }

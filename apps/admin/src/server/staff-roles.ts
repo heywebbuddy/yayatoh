@@ -11,7 +11,8 @@ export type StaffAction =
   | 'impersonate'
   | 'status'
   | 'signupCodes'
-  | 'privacy';
+  | 'privacy'
+  | 'openSignup';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -21,6 +22,8 @@ export type StaffAction =
  * - Admins and support hand out signup codes (onboarding is a support task); finance doesn't.
  * - `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
  *   people's requests; finance has no reason to see or erase personal data (pending owner).
+ * - `openSignup` (M3.11a): the platform switch for self-serve signup is the public launch
+ *   decision (D28), so only admins see or flip it (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -34,6 +37,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'status',
     'signupCodes',
     'privacy',
+    'openSignup',
   ],
   support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy'],
   finance: ['view', 'payouts', 'fees'],

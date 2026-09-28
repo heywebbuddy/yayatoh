@@ -1329,7 +1329,20 @@
       "event": "Maak je eerste evenement aan",
       "team": "Nodig een teamlid uit",
       "payouts": "Stel uitbetalingen in"
-    }
+    },
+    "finished": "Opstarten voltooid. Je organisatie is volledig actief.",
+    "incomplete": "Rond eerst de verplichte stappen af.",
+    "finishFailed": "We konden het opstarten niet afronden. Probeer het opnieuw.",
+    "setupMode": "Je organisatie staat in de opstartmodus",
+    "setupModeBody": "Je kunt nu al evenementen maken en tickets verkopen. Bulkberichten aan gasten (e-mails, aankondigingen, enquêtes) gaan open zodra deze stappen klaar zijn.",
+    "requiredList": "Verplichte stappen",
+    "required": {
+      "terms": "Accepteer de gebruiksvoorwaarden",
+      "privacy": "Publiceer een privacyverklaring",
+      "event": "Maak je eerste evenement aan"
+    },
+    "finish": "Opstarten afronden",
+    "finishLater": "Rond de verplichte stappen af om berichten aan gasten te ontgrendelen."
   },
   "signup": {
     "eyebrow": "Aan de slag",
@@ -1356,7 +1369,17 @@
       "other": "Begin eenvoudig en zet aan wat je nodig hebt."
     },
     "terms": "Ik ga namens deze organisatie akkoord met de <tos>Servicevoorwaarden</tos> en de <dpa>Verwerkersovereenkomst</dpa>.",
-    "submit": "Organisatie aanmaken"
+    "submit": "Organisatie aanmaken",
+    "openDescription": "Maak in een paar minuten je organisatoraccount en je organisatie aan.",
+    "comingSoon": "Zelf aanmelden komt binnenkort",
+    "comingSoonBody": "We bereiden ons voor om Yayatoh voor alle organisatoren open te stellen. Tot die tijd komen nieuwe organisaties erbij op uitnodiging.",
+    "joinWaitlist": "Op de wachtlijst",
+    "useCode": "Deze code gebruiken",
+    "seePricing": "Bekijk prijzen en kosten",
+    "openNote": "Je organisatie begint in de opstartmodus: accepteer de voorwaarden, publiceer een privacyverklaring en maak je eerste evenement aan om gasten berichten te kunnen sturen. <pricing>Bekijk prijzen en kosten</pricing>.",
+    "closedNow": "Aanmelden kan op dit moment alleen op uitnodiging. Vul je aanmeldcode in.",
+    "verifyEmail": "Bevestig eerst je e-mailadres.",
+    "humanCheck": "Bevestig dat je een mens bent."
   },
   "payouts": {
     "title": "Uitbetalingen",
@@ -3205,7 +3228,8 @@
       "events": "Evenementen van {org}",
       "emptyTitle": "Geen komende evenementen",
       "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
-    }
+    },
+    "pricing": "Prijzen"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -4375,5 +4399,37 @@
       "title": "Deze organisatie is gesloten",
       "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Voor organisatoren",
+    "title": "Prijzen en kosten",
+    "description": "Wat het kost om tickets te verkopen op Yayatoh, in heldere cijfers.",
+    "currencies": "Valuta",
+    "feeHeading": "Platformkosten ({currency})",
+    "feeNone": "Op dit moment geen platformkosten per ticket",
+    "feePercent": "{percent} per betaald ticket",
+    "feeFixed": "{fixed} per betaald ticket",
+    "feeBoth": "{percent} + {fixed} per betaald ticket",
+    "freeTickets": "Gratis tickets en aanmeldingen zijn altijd zonder kosten.",
+    "noSubscription": "Geen abonnement en geen opstartkosten: je betaalt alleen als je verkoopt.",
+    "allInHeading": "Allesomvattende prijzen",
+    "allInBody": "Kopers zien altijd de volledige prijs, inclusief kosten, van het eerste scherm tot het afrekenen. Geen verrassingen aan het eind.",
+    "passOnExplained": "Kosten doorberekenen: de koper betaalt de ticketprijs plus de kosten, en jij ontvangt de volledige ticketprijs.",
+    "absorbExplained": "Kosten zelf dragen: de koper betaalt de ticketprijs, en de kosten gaan af van wat jij ontvangt.",
+    "exampleCaption": "Voorbeeld: één ticket van {face}",
+    "passOn": "Kosten doorberekend",
+    "absorb": "Kosten zelf gedragen",
+    "col": {
+      "mode": "Hoe de kosten worden verwerkt",
+      "face": "Ticketprijs",
+      "fee": "Platformkosten",
+      "buyerPays": "Koper betaalt",
+      "youReceive": "Jij ontvangt"
+    },
+    "exampleNote": "Het voorbeeld toont alleen de platformkosten. Kosten worden berekend in de valuta van het ticket.",
+    "unavailable": "Prijzen zijn op dit moment niet beschikbaar.",
+    "startHeading": "Begin met verkopen",
+    "startBody": "Maak je organisatie aan, zet je eerste evenement klaar en publiceer wanneer je er klaar voor bent.",
+    "startCta": "Maak je organisatie aan"
   }
 }

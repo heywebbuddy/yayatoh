@@ -5,6 +5,7 @@ import { tenantCommand } from '@yayatoh/platform';
 import { and, eq, sql } from 'drizzle-orm';
 import { AddMemberInput, ChangeMemberRoleInput, MembershipDto, RemoveMemberInput } from '../dto.ts';
 import { memberships } from '../schema.ts';
+import { markOnboardingStepTx } from './onboarding.ts';
 
 async function ownerCount(tx: TenantTx, orgId: string): Promise<number> {
   const [row] = await tx
@@ -46,6 +47,7 @@ export const addMemberCommand = tenantCommand({
         .values({ orgId, ...input })
         .returning();
       if (!row) throw new DomainError('internal');
+      await markOnboardingStepTx(tx, 'team', ctx.now);
       emit({
         type: 'membership.added',
         version: 1,

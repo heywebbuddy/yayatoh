@@ -39,6 +39,14 @@ export {
 } from './commands/invitations.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
 export {
+  completeOnboardingCommand,
+  markOnboardingStepTx,
+  ONBOARDING_COMPLETED,
+  type Onboarding,
+  OnboardingDto,
+  onboardingQuery,
+} from './commands/onboarding.ts';
+export {
   ORG_STATUS_CHANGED,
   OrgStatusChangeDto,
   orgStatusGate,
@@ -52,6 +60,8 @@ export {
   createOrganizationCommand,
   hashSignupCode,
   NewSignupCodeInput,
+  openSignupEnabled,
+  platformFlagTx,
   randomSignupCode,
   SignUpOrganizationInput,
   signUpOrganization,
@@ -82,6 +92,15 @@ export {
 } from './commands/suspensions.ts';
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
+export {
+  initialOrgStatus,
+  limitedRefusal,
+  missingOnboardingSteps,
+  type OnboardingStep,
+  REQUIRED_ONBOARDING_STEPS,
+  type SignupMode,
+  signupPath,
+} from './domain/onboarding.ts';
 export {
   isOrgLive,
   nextOrgStatus,
@@ -147,10 +166,12 @@ export {
   DOMAIN_STATUSES,
   LEGAL_PAGE_KINDS,
   type LegalPageKind,
+  ONBOARDING_STEPS,
   ORG_KINDS,
   ORG_ROLES,
   ORG_STATUS_ACTIONS,
   ORG_STATUSES,
+  SIGNUP_MODES,
   SUSPENSION_KINDS,
   TEST_KEY_SCOPES,
 } from './schema.ts';

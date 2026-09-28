@@ -112,5 +112,5 @@ export {
   realtimePublisherFromEnv,
   teePublisher,
 } from './realtime.ts';
-export { STAFF_ROLES } from './schema.ts';
+export { PLATFORM_FLAGS, type PlatformFlag, STAFF_ROLES } from './schema.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

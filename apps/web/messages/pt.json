@@ -1329,7 +1329,20 @@
       "event": "Criar seu primeiro evento",
       "team": "Convidar um colega de equipe",
       "payouts": "Configurar os repasses"
-    }
+    },
+    "finished": "Configuração concluída. Sua organização está totalmente ativa.",
+    "incomplete": "Conclua primeiro as etapas obrigatórias.",
+    "finishFailed": "Não foi possível concluir a configuração. Tente novamente.",
+    "setupMode": "Sua organização está no modo de configuração",
+    "setupModeBody": "Você já pode criar eventos e vender ingressos. Mensagens em massa para convidados (e-mails, avisos, pesquisas) são liberadas quando estas etapas forem concluídas.",
+    "requiredList": "Etapas obrigatórias",
+    "required": {
+      "terms": "Aceitar os termos de serviço",
+      "privacy": "Publicar um aviso de privacidade",
+      "event": "Criar seu primeiro evento"
+    },
+    "finish": "Concluir configuração",
+    "finishLater": "Conclua as etapas obrigatórias para liberar mensagens aos convidados."
   },
   "signup": {
     "eyebrow": "Comece agora",
@@ -1356,7 +1369,17 @@
       "other": "Comece simples e ative o que precisar."
     },
     "terms": "Concordo com os <tos>Termos de Serviço</tos> e o <dpa>Adendo de Tratamento de Dados</dpa> em nome desta organização.",
-    "submit": "Criar organização"
+    "submit": "Criar organização",
+    "openDescription": "Crie sua conta de organizador e sua organização em poucos minutos.",
+    "comingSoon": "O cadastro aberto chega em breve",
+    "comingSoonBody": "Estamos nos preparando para abrir o Yayatoh a todos os organizadores. Até lá, novas organizações entram por convite.",
+    "joinWaitlist": "Entrar na lista de espera",
+    "useCode": "Usar este código",
+    "seePricing": "Ver preços e taxas",
+    "openNote": "Sua organização começa no modo de configuração: aceite os termos, publique um aviso de privacidade e crie seu primeiro evento para liberar mensagens aos convidados. <pricing>Ver preços e taxas</pricing>.",
+    "closedNow": "Por enquanto, o cadastro é apenas por convite. Informe seu código de cadastro.",
+    "verifyEmail": "Confirme primeiro seu endereço de e-mail.",
+    "humanCheck": "Confirme que você é uma pessoa."
   },
   "payouts": {
     "title": "Repasses",
@@ -3205,7 +3228,8 @@
       "events": "Eventos de {org}",
       "emptyTitle": "Nenhum próximo evento",
       "emptyDescription": "{org} não tem nada à venda agora. Volte em breve."
-    }
+    },
+    "pricing": "Preços"
   },
   "widget": {
     "title": "Ingressos: {event}",
@@ -4375,5 +4399,37 @@
       "title": "Esta organização está encerrada",
       "body": "O suporte da Yayatoh a encerrou. Suas páginas públicas estão offline e nada pode ser alterado. Como proprietário, você ainda pode abri-la e baixar seus dados, por exemplo em Atividade."
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Para organizadores",
+    "title": "Preços e taxas",
+    "description": "Quanto custa vender ingressos no Yayatoh, em números claros.",
+    "currencies": "Moeda",
+    "feeHeading": "Taxa da plataforma ({currency})",
+    "feeNone": "No momento, nenhuma taxa da plataforma por ingresso",
+    "feePercent": "{percent} por ingresso pago",
+    "feeFixed": "{fixed} por ingresso pago",
+    "feeBoth": "{percent} + {fixed} por ingresso pago",
+    "freeTickets": "Ingressos gratuitos e confirmações de presença nunca têm taxa.",
+    "noSubscription": "Sem assinatura e sem taxa de adesão: você só paga quando vende.",
+    "allInHeading": "Preço final",
+    "allInBody": "Os compradores sempre veem o preço completo, com taxas incluídas, da primeira tela até o pagamento. Sem surpresas no final.",
+    "passOnExplained": "Repassar a taxa: o comprador paga o preço do ingresso mais a taxa, e você recebe o preço integral do ingresso.",
+    "absorbExplained": "Absorver a taxa: o comprador paga o preço do ingresso, e a taxa é descontada do que você recebe.",
+    "exampleCaption": "Exemplo: um ingresso de {face}",
+    "passOn": "Taxa repassada",
+    "absorb": "Taxa absorvida",
+    "col": {
+      "mode": "Como a taxa é tratada",
+      "face": "Preço do ingresso",
+      "fee": "Taxa da plataforma",
+      "buyerPays": "O comprador paga",
+      "youReceive": "Você recebe"
+    },
+    "exampleNote": "O exemplo mostra apenas a taxa da plataforma. As taxas são cobradas na moeda do ingresso.",
+    "unavailable": "Os preços não estão disponíveis no momento.",
+    "startHeading": "Comece a vender",
+    "startBody": "Crie sua organização, prepare seu primeiro evento e publique quando estiver pronto.",
+    "startCta": "Criar sua organização"
   }
 }

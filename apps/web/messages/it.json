@@ -1329,7 +1329,20 @@
       "event": "Crea il tuo primo evento",
       "team": "Invita un membro del team",
       "payouts": "Configura gli accrediti"
-    }
+    },
+    "finished": "Configurazione completata. La tua organizzazione è pienamente attiva.",
+    "incomplete": "Completa prima i passaggi obbligatori.",
+    "finishFailed": "Non è stato possibile completare la configurazione. Riprova.",
+    "setupMode": "La tua organizzazione è in modalità configurazione",
+    "setupModeBody": "Puoi già creare eventi e vendere biglietti. I messaggi di massa agli ospiti (email, annunci, sondaggi) si sbloccano quando hai completato questi passaggi.",
+    "requiredList": "Passaggi obbligatori",
+    "required": {
+      "terms": "Accetta i termini di servizio",
+      "privacy": "Pubblica un'informativa sulla privacy",
+      "event": "Crea il tuo primo evento"
+    },
+    "finish": "Completa la configurazione",
+    "finishLater": "Completa i passaggi obbligatori per sbloccare i messaggi agli ospiti."
   },
   "signup": {
     "eyebrow": "Inizia",
@@ -1356,7 +1369,17 @@
       "other": "Parti in modo semplice e attiva ciò che ti serve."
     },
     "terms": "Accetto i <tos>Termini di servizio</tos> e l’<dpa>Accordo sul trattamento dei dati</dpa> per conto di questa organizzazione.",
-    "submit": "Crea organizzazione"
+    "submit": "Crea organizzazione",
+    "openDescription": "Crea il tuo account organizzatore e la tua organizzazione in pochi minuti.",
+    "comingSoon": "La registrazione libera arriverà presto",
+    "comingSoonBody": "Ci stiamo preparando ad aprire Yayatoh a tutti gli organizzatori. Fino ad allora, le nuove organizzazioni entrano su invito.",
+    "joinWaitlist": "Iscriviti alla lista d'attesa",
+    "useCode": "Usa questo codice",
+    "seePricing": "Vedi prezzi e commissioni",
+    "openNote": "La tua organizzazione parte in modalità configurazione: accetta i termini, pubblica un'informativa sulla privacy e crea il tuo primo evento per poter scrivere agli ospiti. <pricing>Vedi prezzi e commissioni</pricing>.",
+    "closedNow": "Per ora la registrazione è solo su invito. Inserisci il tuo codice di registrazione.",
+    "verifyEmail": "Conferma prima il tuo indirizzo email.",
+    "humanCheck": "Conferma di essere una persona."
   },
   "payouts": {
     "title": "Accrediti",
@@ -3205,7 +3228,8 @@
       "events": "Eventi di {org}",
       "emptyTitle": "Nessun evento in programma",
       "emptyDescription": "{org} non ha nulla in vendita al momento. Torna presto."
-    }
+    },
+    "pricing": "Prezzi"
   },
   "widget": {
     "title": "Biglietti: {event}",
@@ -4375,5 +4399,37 @@
       "title": "Questa organizzazione è chiusa",
       "body": "Il supporto Yayatoh l’ha chiusa. Le sue pagine pubbliche sono offline e non si può modificare nulla. Come proprietario puoi ancora aprirla e scaricare i tuoi dati, per esempio da Attività."
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Per gli organizzatori",
+    "title": "Prezzi e commissioni",
+    "description": "Quanto costa vendere biglietti su Yayatoh, con numeri chiari.",
+    "currencies": "Valuta",
+    "feeHeading": "Commissione della piattaforma ({currency})",
+    "feeNone": "Al momento nessuna commissione della piattaforma per biglietto",
+    "feePercent": "{percent} per biglietto a pagamento",
+    "feeFixed": "{fixed} per biglietto a pagamento",
+    "feeBoth": "{percent} + {fixed} per biglietto a pagamento",
+    "freeTickets": "I biglietti gratuiti e le conferme di partecipazione non hanno mai commissioni.",
+    "noSubscription": "Nessun abbonamento e nessun costo di attivazione: paghi solo quando vendi.",
+    "allInHeading": "Prezzo finale",
+    "allInBody": "Gli acquirenti vedono sempre il prezzo completo, commissioni incluse, dalla prima schermata al pagamento. Nessuna sorpresa alla fine.",
+    "passOnExplained": "Trasferire la commissione: l'acquirente paga il prezzo del biglietto più la commissione e tu ricevi l'intero prezzo del biglietto.",
+    "absorbExplained": "Assorbire la commissione: l'acquirente paga il prezzo del biglietto e la commissione viene detratta da ciò che ricevi.",
+    "exampleCaption": "Esempio: un biglietto da {face}",
+    "passOn": "Commissione trasferita",
+    "absorb": "Commissione assorbita",
+    "col": {
+      "mode": "Gestione della commissione",
+      "face": "Prezzo del biglietto",
+      "fee": "Commissione della piattaforma",
+      "buyerPays": "L'acquirente paga",
+      "youReceive": "Ricevi"
+    },
+    "exampleNote": "L'esempio mostra solo la commissione della piattaforma. Le commissioni sono addebitate nella valuta del biglietto.",
+    "unavailable": "I prezzi non sono disponibili al momento.",
+    "startHeading": "Inizia a vendere",
+    "startBody": "Crea la tua organizzazione, prepara il tuo primo evento e pubblicalo quando sei pronto.",
+    "startCta": "Crea la tua organizzazione"
   }
 }

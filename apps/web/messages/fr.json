@@ -1329,7 +1329,20 @@
       "event": "Créer votre premier événement",
       "team": "Inviter un membre de l’équipe",
       "payouts": "Configurer les versements"
-    }
+    },
+    "finished": "Configuration terminée. Votre organisation est pleinement active.",
+    "incomplete": "Terminez d'abord les étapes obligatoires.",
+    "finishFailed": "Nous n'avons pas pu terminer la configuration. Veuillez réessayer.",
+    "setupMode": "Votre organisation est en mode configuration",
+    "setupModeBody": "Vous pouvez déjà créer des événements et vendre des billets. Les envois groupés aux invités (e-mails, annonces, enquêtes) s'ouvrent une fois ces étapes terminées.",
+    "requiredList": "Étapes obligatoires",
+    "required": {
+      "terms": "Accepter les conditions d'utilisation",
+      "privacy": "Publier une politique de confidentialité",
+      "event": "Créer votre premier événement"
+    },
+    "finish": "Terminer la configuration",
+    "finishLater": "Terminez les étapes obligatoires pour débloquer les messages aux invités."
   },
   "signup": {
     "eyebrow": "Commencer",
@@ -1356,7 +1369,17 @@
       "other": "Commencez simplement et activez ce dont vous avez besoin."
     },
     "terms": "J’accepte les <tos>Conditions d’utilisation</tos> et l’<dpa>Accord de traitement des données</dpa> au nom de cette organisation.",
-    "submit": "Créer l’organisation"
+    "submit": "Créer l’organisation",
+    "openDescription": "Créez votre compte organisateur et votre organisation en quelques minutes.",
+    "comingSoon": "L'inscription libre arrive bientôt",
+    "comingSoonBody": "Nous préparons l'ouverture de Yayatoh à tous les organisateurs. D'ici là, les nouvelles organisations nous rejoignent sur invitation.",
+    "joinWaitlist": "Rejoindre la liste d'attente",
+    "useCode": "Utiliser ce code",
+    "seePricing": "Voir les tarifs et les frais",
+    "openNote": "Votre organisation démarre en mode configuration : acceptez les conditions, publiez une politique de confidentialité et créez votre premier événement pour pouvoir écrire à vos invités. <pricing>Voir les tarifs et les frais</pricing>.",
+    "closedNow": "L'inscription se fait uniquement sur invitation pour le moment. Saisissez votre code d'inscription.",
+    "verifyEmail": "Confirmez d'abord votre adresse e-mail.",
+    "humanCheck": "Veuillez confirmer que vous êtes une personne."
   },
   "payouts": {
     "title": "Versements",
@@ -3205,7 +3228,8 @@
       "events": "Événements de {org}",
       "emptyTitle": "Aucun événement à venir",
       "emptyDescription": "{org} n'a rien en vente pour le moment. Revenez bientôt."
-    }
+    },
+    "pricing": "Tarifs"
   },
   "widget": {
     "title": "Billets : {event}",
@@ -4375,5 +4399,37 @@
       "title": "Cette organisation est fermée",
       "body": "Le support Yayatoh l’a fermée. Ses pages publiques sont hors ligne et plus rien ne peut être modifié. En tant que propriétaire, vous pouvez toujours l’ouvrir et télécharger vos données, par exemple depuis Activité."
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Pour les organisateurs",
+    "title": "Tarifs et frais",
+    "description": "Ce que coûte la vente de billets sur Yayatoh, en chiffres clairs.",
+    "currencies": "Devise",
+    "feeHeading": "Frais de plateforme ({currency})",
+    "feeNone": "Aucuns frais de plateforme par billet pour le moment",
+    "feePercent": "{percent} par billet payant",
+    "feeFixed": "{fixed} par billet payant",
+    "feeBoth": "{percent} + {fixed} par billet payant",
+    "freeTickets": "Les billets gratuits et les réponses aux invitations ne sont jamais facturés.",
+    "noSubscription": "Ni abonnement ni frais de mise en service : vous ne payez que lorsque vous vendez.",
+    "allInHeading": "Prix tout compris",
+    "allInBody": "Les acheteurs voient toujours le prix complet, frais inclus, du premier écran jusqu'au paiement. Aucune surprise à la fin.",
+    "passOnExplained": "Répercuter les frais : l'acheteur paie le prix du billet plus les frais, et vous recevez le prix complet du billet.",
+    "absorbExplained": "Absorber les frais : l'acheteur paie le prix du billet, et les frais sont déduits de ce que vous recevez.",
+    "exampleCaption": "Exemple : un billet à {face}",
+    "passOn": "Frais répercutés",
+    "absorb": "Frais absorbés",
+    "col": {
+      "mode": "Traitement des frais",
+      "face": "Prix du billet",
+      "fee": "Frais de plateforme",
+      "buyerPays": "L'acheteur paie",
+      "youReceive": "Vous recevez"
+    },
+    "exampleNote": "L'exemple ne montre que les frais de plateforme. Les frais sont facturés dans la devise du billet.",
+    "unavailable": "Les tarifs ne sont pas disponibles pour le moment.",
+    "startHeading": "Commencer à vendre",
+    "startBody": "Créez votre organisation, préparez votre premier événement et publiez-le quand vous êtes prêt.",
+    "startCta": "Créer votre organisation"
   }
 }

@@ -369,3 +369,39 @@ export const orgRelationships = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+/** How an org was created (M3.11a): an invite code, open self-serve signup, or directly (staff, tools). */
+export const SIGNUP_MODES = ['code', 'open', 'direct'] as const;
+export const ONBOARDING_STEPS = ['terms', 'privacy', 'brand', 'event', 'payouts', 'team'] as const;
+
+/**
+ * Onboarding progress (M3.11a), one row per org created from this increment on. Each step keeps
+ * the moment it was first done, set in the transaction of the command that does it (so progress
+ * persists even if, say, the teammate later leaves). Open-signup orgs start `limited` and leave
+ * it through `tenancy.completeOnboarding` once the required steps are done (`completed_at`).
+ */
+export const orgOnboarding = tenantTable(
+  tenancy,
+  'org_onboarding',
+  {
+    signupMode: text('signup_mode').notNull(),
+    termsAt: timestamp('terms_at', { withTimezone: true }),
+    privacyAt: timestamp('privacy_at', { withTimezone: true }),
+    brandAt: timestamp('brand_at', { withTimezone: true }),
+    eventAt: timestamp('event_at', { withTimezone: true }),
+    payoutsAt: timestamp('payouts_at', { withTimezone: true }),
+    teamAt: timestamp('team_at', { withTimezone: true }),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+    completedBy: text('completed_by'),
+  },
+  (t) => [
+    uniqueIndex('org_onboarding_org_key').on(t.orgId),
+    check('org_onboarding_signup_mode_check', inList('signup_mode', SIGNUP_MODES)),
+    check('org_onboarding_completed_check', sql`(completed_at is null) = (completed_by is null)`),
+    foreignKey({
+      name: 'org_onboarding_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);

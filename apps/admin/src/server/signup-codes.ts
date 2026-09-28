@@ -33,7 +33,7 @@ export function signupCodeState(
 }
 
 /** `staff:<id>` → the staff member's name; anything else (`staff:cli`) as it is. */
-async function actorNames(actors: readonly string[]): Promise<Map<string, string>> {
+export async function actorNames(actors: readonly string[]): Promise<Map<string, string>> {
   const id = (a: string) => /^staff:([0-9a-f-]{36})$/.exec(a)?.[1] ?? null;
   const users = await getUsersByIds(actors.map(id).filter((x): x is string => x !== null));
   return new Map(actors.map((a) => [a, users.get(id(a) ?? '')?.name ?? a]));

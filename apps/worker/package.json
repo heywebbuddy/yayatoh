@@ -11,6 +11,7 @@
     "start": "node src/main.ts",
     "typecheck": "tsc --noEmit",
     "signup-code": "node scripts/signup-code.ts",
+    "open-signup": "node scripts/open-signup.ts",
     "staff": "node scripts/staff.ts",
     "retention": "node scripts/retention.ts",
     "drill-tickets": "node scripts/drill-tickets.ts"

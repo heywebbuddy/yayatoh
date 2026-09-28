@@ -3,7 +3,8 @@ import { actorId, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
-import { orgSuspensions, SUSPENSION_KINDS } from '../schema.ts';
+import { limitedRefusal } from '../domain/onboarding.ts';
+import { organizations, orgSuspensions, SUSPENSION_KINDS } from '../schema.ts';
 
 export type SuspensionKind = (typeof SUSPENSION_KINDS)[number];
 
@@ -22,7 +23,11 @@ const PAUSED_REASON: Record<SuspensionKind, string> = {
   pause_messaging: 'messaging_paused',
 };
 
-/** Throw `invalid_state` (reason `checkout_paused` etc.) when staff paused this capability. */
+/**
+ * Throw `invalid_state` (reason `checkout_paused` etc.) when staff paused this capability. Guest
+ * messaging is also closed to a `limited` org (M3.11a: self-serve orgs until onboarding is done;
+ * reason `org_limited`).
+ */
 export async function assertNotPausedTx(tx: TenantTx, kind: SuspensionKind): Promise<void> {
   const [row] = await tx
     .select({ id: orgSuspensions.id })
@@ -31,6 +36,13 @@ export async function assertNotPausedTx(tx: TenantTx, kind: SuspensionKind): Pro
     .limit(1);
   if (row)
     throw new DomainError('invalid_state', 'Paused by Yayatoh support', { reason: PAUSED_REASON[kind] });
+  if (kind === 'pause_messaging') {
+    const [org] = await tx.select({ status: organizations.status }).from(organizations).limit(1);
+    if (org && limitedRefusal(org.status, 'bulk_messaging'))
+      throw new DomainError('invalid_state', 'Finish setting up your organization to message guests', {
+        reason: 'org_limited',
+      });
+  }
 }
 
 /**

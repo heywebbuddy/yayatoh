@@ -14,7 +14,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       </a>
       <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-zinc-200 bg-white px-6 py-3">
         <span className="text-[17px] font-semibold tracking-[-0.03em]">{t('product')}</span>
-        <nav aria-label={t('nav')} className="flex gap-4 text-body">
+        <nav aria-label={t('nav')} className="flex flex-wrap gap-x-4 gap-y-1 text-body">
           <Link href="/" className="underline-offset-2 hover:underline">
             {t('tenants')}
           </Link>
@@ -31,6 +31,11 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
           {staff.can('signupCodes') ? (
             <Link href="/signup-codes" className="underline-offset-2 hover:underline">
               {t('signupCodes')}
+            </Link>
+          ) : null}
+          {staff.can('openSignup') ? (
+            <Link href="/open-signup" className="underline-offset-2 hover:underline">
+              {t('openSignup')}
             </Link>
           ) : null}
           {staff.can('privacy') ? (

@@ -1329,7 +1329,20 @@
       "event": "Create your first event",
       "team": "Invite a teammate",
       "payouts": "Set up payouts"
-    }
+    },
+    "finished": "Setup complete. Your organization is fully active.",
+    "incomplete": "Finish the required steps first.",
+    "finishFailed": "We couldn't finish setup. Please try again.",
+    "setupMode": "Your organization is in setup mode",
+    "setupModeBody": "You can build events and sell tickets now. Messaging guests in bulk (emails, announcements, surveys) opens once these steps are done.",
+    "requiredList": "Required steps",
+    "required": {
+      "terms": "Accept the terms of service",
+      "privacy": "Publish a privacy notice",
+      "event": "Create your first event"
+    },
+    "finish": "Finish setup",
+    "finishLater": "Finish the required steps to unlock guest messaging."
   },
   "signup": {
     "eyebrow": "Get started",
@@ -1356,7 +1369,17 @@
       "other": "Start simple and switch on what you need."
     },
     "terms": "I agree to the <tos>Terms of Service</tos> and the <dpa>Data Processing Addendum</dpa> on behalf of this organization.",
-    "submit": "Create organization"
+    "submit": "Create organization",
+    "openDescription": "Create your organizer account and your organization in a few minutes.",
+    "comingSoon": "Self-serve signup is coming soon",
+    "comingSoonBody": "We're getting ready to open Yayatoh to every organizer. Until then, new organizations join by invitation.",
+    "joinWaitlist": "Join the waitlist",
+    "useCode": "Use this code",
+    "seePricing": "See pricing and fees",
+    "openNote": "Your organization starts in setup mode: accept the terms, publish a privacy notice and create your first event to unlock messaging guests. <pricing>See pricing and fees</pricing>.",
+    "closedNow": "Signup is by invitation only right now. Enter your signup code.",
+    "verifyEmail": "Confirm your email address first.",
+    "humanCheck": "Please confirm you're a person."
   },
   "payouts": {
     "title": "Payouts",
@@ -3205,7 +3228,8 @@
       "events": "Events by {org}",
       "emptyTitle": "No upcoming events",
       "emptyDescription": "{org} has nothing on sale right now. Check back soon."
-    }
+    },
+    "pricing": "Pricing"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -4375,5 +4399,37 @@
       "title": "This organization is closed",
       "body": "Yayatoh support closed it. Its public pages are offline and nothing can be changed. As an owner you can still open it and download your data, for example from Activity."
     }
+  },
+  "pricingPage": {
+    "eyebrow": "For organizers",
+    "title": "Pricing and fees",
+    "description": "What it costs to sell tickets on Yayatoh, in plain numbers.",
+    "currencies": "Currency",
+    "feeHeading": "Platform fee ({currency})",
+    "feeNone": "No platform fee per ticket right now",
+    "feePercent": "{percent} per paid ticket",
+    "feeFixed": "{fixed} per paid ticket",
+    "feeBoth": "{percent} + {fixed} per paid ticket",
+    "freeTickets": "Free tickets and RSVPs never carry a fee.",
+    "noSubscription": "No subscription and no setup fee: you pay only when you sell.",
+    "allInHeading": "All-in pricing",
+    "allInBody": "Buyers always see the full price, fees included, from the first screen to checkout. No surprises at the end.",
+    "passOnExplained": "Pass the fee on: the buyer pays the ticket price plus the fee, and you receive the full ticket price.",
+    "absorbExplained": "Absorb the fee: the buyer pays the ticket price, and the fee comes out of what you receive.",
+    "exampleCaption": "Example: one {face} ticket",
+    "passOn": "Fee passed on",
+    "absorb": "Fee absorbed",
+    "col": {
+      "mode": "How the fee is handled",
+      "face": "Ticket price",
+      "fee": "Platform fee",
+      "buyerPays": "Buyer pays",
+      "youReceive": "You receive"
+    },
+    "exampleNote": "The example shows the platform fee only. Fees are charged in the ticket's currency.",
+    "unavailable": "Pricing isn't available right now.",
+    "startHeading": "Start selling",
+    "startBody": "Create your organization, set up your first event and publish when you're ready.",
+    "startCta": "Create your organization"
   }
 }

@@ -21,6 +21,8 @@ export const privateColumns = columnPrivacy('tenancy', {
     payment_method_domain_id: secret(),
     failure_reason: internal(),
   },
+  // Onboarding progress (M3.11a): how the org signed up, and the actor who completed it.
+  org_onboarding: { signup_mode: 'vocab', completed_by: internal() },
   org_relationships: { kind: 'vocab', source: 'vocab' },
   // Staff status changes (M1.3f): the reason and who made it stay in the staff console.
   org_status_changes: {
