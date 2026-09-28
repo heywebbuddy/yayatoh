@@ -405,6 +405,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@yayatoh/ai':
+        specifier: workspace:*
+        version: link:../../packages/modules/ai
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1
@@ -465,6 +468,9 @@ importers:
       '@yayatoh/privacy':
         specifier: workspace:*
         version: link:../../packages/modules/privacy
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../../packages/modules/program
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
