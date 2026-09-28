@@ -22,6 +22,7 @@
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "hono": "catalog:",
@@ -29,7 +30,9 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@yayatoh/billing": "workspace:*",
     "@yayatoh/config": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/testing": "workspace:*",
     "drizzle-orm": "catalog:",
     "typescript": "catalog:"

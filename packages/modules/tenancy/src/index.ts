@@ -42,6 +42,8 @@ export {
   orgStatusGate,
   orgStatusHistoryQuery,
   orgStatusNotice,
+  RestoreOrgInput,
+  restoreOrgCommand,
   SetOrgStatusInput,
   setOrgStatusCommand,
 } from './commands/org-status.ts';
@@ -87,6 +89,7 @@ export {
   type OrgStatusAction,
   orgStatusActions,
   orgWriteRefusal,
+  restoredOrgStatus,
 } from './domain/org-status.ts';
 export {
   EVENT_ROLE_PERMISSIONS,
@@ -148,6 +151,7 @@ export {
   ORG_KINDS,
   ORG_ROLES,
   ORG_STATUS_ACTIONS,
+  ORG_STATUS_CHANGE_ACTIONS,
   ORG_STATUSES,
   SUSPENSION_KINDS,
 } from './schema.ts';

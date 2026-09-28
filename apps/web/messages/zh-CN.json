@@ -3083,6 +3083,7 @@
       "orders_read": "读取订单",
       "orders_refund": "订单退款",
       "attendees_read": "读取参会者",
+      "attendees_write": "修改参会者并重新发送门票",
       "checkin_scan": "扫描门票"
     }
   },

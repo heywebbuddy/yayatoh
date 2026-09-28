@@ -15,6 +15,7 @@ import {
   type OrganizationDto,
   orgStatusActions,
   orgStatusHistoryQuery,
+  restoredOrgStatus,
   SUSPENSION_KINDS,
   suspensionHistoryQuery,
 } from '@yayatoh/tenancy';
@@ -24,6 +25,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { z } from 'zod';
 import { Shell } from '@/components/shell.tsx';
+import { getTwoFactor } from '@/server/auth.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
 import {
@@ -33,13 +35,21 @@ import {
   orgStatusAction,
   payoutHoldAction,
   resolveReconciliationAction,
+  restoreOrgAction,
   startImpersonationAction,
   submitEvidenceAction,
   suspensionAction,
 } from './actions.ts';
 
 /** Refusals of a status change with their own message (others use the generic one). */
-const STATUS_ERRORS = new Set(['status_reason', 'status_confirm', 'status_slug']);
+const STATUS_ERRORS = new Set([
+  'status_reason',
+  'status_confirm',
+  'status_slug',
+  'restore_step_up',
+  'restore_rate_limited',
+  'restore_method',
+]);
 
 const STATUS_DOT = {
   active: 'success',
@@ -122,6 +132,11 @@ export default async function TenantPage({
     getUsersByIds(statusHistory.map((h) => staffIdOf(h.changedBy)).filter((x): x is string => x !== null)),
   ]);
   const changerName = (actor: string) => changers.get(staffIdOf(actor) ?? '')?.name ?? actor;
+  // A terminated org can be restored to the status its termination recorded (newest first).
+  const termination = statusHistory.find((h) => h.to === 'terminated');
+  const restoreTo = restoredOrgStatus(org.status, termination ? { fromStatus: termination.from } : null);
+  const stepUpMethod =
+    org.status === 'terminated' && staff.can('status') ? await getTwoFactor().method(staff.userId) : null;
   const now = new Date();
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
@@ -242,6 +257,81 @@ export default async function TenantPage({
           </ul>
         )}
       </Section>
+
+      {org.status === 'terminated' ? (
+        <Section id="restore" title={t('restore.title')}>
+          {!staff.can('status') ? (
+            <p className="text-caption text-zinc-600">{t('restore.adminsOnly')}</p>
+          ) : !restoreTo ? (
+            <p className="text-caption text-zinc-600">{t('restore.noRecord')}</p>
+          ) : (
+            <form
+              aria-label={t('restore.form')}
+              action={restoreOrgAction.bind(null, id)}
+              className="flex flex-col gap-3"
+            >
+              <p className="text-caption text-zinc-600">{t('restore.description')}</p>
+              <p className="text-caption text-zinc-600">
+                {t('restore.effect', { status: t(`status.value.${restoreTo}`) })}
+              </p>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="restore-reason" className="text-caption text-zinc-600">
+                  {t('reason')}
+                </label>
+                <textarea
+                  id="restore-reason"
+                  name="reason"
+                  required
+                  maxLength={500}
+                  rows={2}
+                  className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="restore-slug" className="text-caption text-zinc-600">
+                  {t('status.typeSlug', { slug: org.slug })}
+                </label>
+                <input
+                  id="restore-slug"
+                  name="confirmSlug"
+                  autoComplete="off"
+                  spellCheck={false}
+                  className={`${field} max-w-sm font-mono`}
+                />
+              </div>
+              {stepUpMethod === 'email' ? (
+                <p className="text-caption text-zinc-600">{t('status.errors.restore_method')}</p>
+              ) : (
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="restore-proof" className="text-caption text-zinc-600">
+                    {stepUpMethod === 'totp' ? t('restore.code') : t('restore.password')}
+                  </label>
+                  {stepUpMethod === 'totp' ? (
+                    <input
+                      id="restore-proof"
+                      name="code"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      className={`${field} max-w-xs`}
+                    />
+                  ) : (
+                    <input
+                      id="restore-proof"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      className={`${field} max-w-xs`}
+                    />
+                  )}
+                </div>
+              )}
+              <Button type="submit" variant="primary" className="self-start">
+                {t('restore.submit')}
+              </Button>
+            </form>
+          )}
+        </Section>
+      ) : null}
 
       <Section id="switches" title={t('switches.title')}>
         <p className="text-caption text-zinc-600">{t('switches.description')}</p>

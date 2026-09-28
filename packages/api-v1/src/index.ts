@@ -9,6 +9,7 @@ import type { Principal, V1Deps, V1Env } from './context.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
 import { memoryRateLimiter, RATE_LIMITS } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
+import { bulkRoutes } from './routes/bulk.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
 import { orgRoutes } from './routes/org.ts';
@@ -163,6 +164,7 @@ export function createV1(deps: V1Deps) {
   v1.route('/', publicRoutes());
   v1.route('/', orgRoutes(deps));
   v1.route('/', salesRoutes(deps, limiter, credentialKey));
+  v1.route('/', bulkRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
   v1.route('/', docsRoutes(basePath));
 

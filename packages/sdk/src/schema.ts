@@ -1004,6 +1004,205 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/bulk/{kind}/{operationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A bulk operation’s progress and results (the scope of its kind)
+         * @description Poll until `status` is `done`, `failed` or `undone`. `failures` and `warnings` list the first 50 attendees, each with a stable code.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    kind: "labels" | "emails" | "seat-assignments" | "ticket-resends" | "ticket-cancellations";
+                    operationId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The operation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/bulk/{kind}/{operationId}/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Undo a finished operation while `undoUntil` is set (the scope of its kind)
+         * @description Once only, within 10 minutes of finishing; otherwise 409 `invalid_state`. People changed since are left alone.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                    "idempotency-key": string;
+                };
+                path: {
+                    kind: "labels" | "seat-assignments";
+                    operationId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The operation, undoing or undone */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/events": {
         parameters: {
             query?: never;
@@ -1536,6 +1735,571 @@ export interface paths {
         };
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/bulk/emails": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Email many attendees about the event (scope `attendees:write`)
+         * @description Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. One email per attending person; the others fail `not_attending`. Refused while messaging is paused for the organization.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                    "idempotency-key": string;
+                };
+                path: {
+                    eventId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BulkEmailRequest"];
+                };
+            };
+            responses: {
+                /** @description The operation after up to 3 s of work; poll it until it settles */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/bulk/labels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add or remove labels on many attendees (scope `attendees:write`)
+         * @description Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Removal wins over addition; an attendee carries at most 20 labels (`too_many_labels`). Undo within 10 minutes restores each attendee's previous labels.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                    "idempotency-key": string;
+                };
+                path: {
+                    eventId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BulkLabelRequest"];
+                };
+            };
+            responses: {
+                /** @description The operation after up to 3 s of work; poll it until it settles */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/bulk/seat-assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Seat many attendees at once (scope `events:write`)
+         * @description Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Seats them at a table or row, in a section, in the best available seats or in their group's block, in plan order. Per-person failures: `not_enough_seats`, `seated_by_ticket`, `attendee_cancelled`, `not_found`; a kept-back accessible seat is a warning (`ada_kept_back`). Undo within 10 minutes puts everyone back.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                    "idempotency-key": string;
+                };
+                path: {
+                    eventId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BulkSeatRequest"];
+                };
+            };
+            responses: {
+                /** @description The operation after up to 3 s of work; poll it until it settles */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/bulk/ticket-cancellations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel tickets without a refund (scope `orders:refund`)
+         * @description Voids the named attendees’ tickets (scanners reject them), cancels the attendees and returns their places and seats to sale. No money moves: refunds stay per order. It cannot be undone, so only explicit `ids` are accepted, never a filter.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                    "idempotency-key": string;
+                };
+                path: {
+                    eventId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BulkCancelRequest"];
+                };
+            };
+            responses: {
+                /** @description The operation after up to 3 s of work; poll it until it settles */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/events/{eventId}/bulk/ticket-resends": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Email attendees their tickets again (scope `attendees:write`)
+         * @description Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Each ticket holder gets one email with a fresh link to their tickets. Guests without a ticket fail `no_ticket`; void tickets fail `ticket_void`.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                    "idempotency-key": string;
+                };
+                path: {
+                    eventId: string;
+                    /** @description Organization id or slug */
+                    org: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["BulkResendRequest"];
+                };
+            };
+            responses: {
+                /** @description The operation after up to 3 s of work; poll it until it settles */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkOperation"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -2599,6 +3363,108 @@ export interface components {
         AttendeePage: {
             data: components["schemas"]["Attendee"][];
             nextCursor: string | null;
+        };
+        BulkAttendeeFilter: {
+            /** @description Carrying any of these labels */
+            labels?: string[];
+            /** @description Name or email contains */
+            search?: string;
+            /** @enum {string} */
+            source?: "ticket" | "registration" | "guest" | "import" | "comp";
+            /** @enum {string} */
+            status?: "active" | "cancelled";
+        };
+        BulkCancelRequest: {
+            selection: components["schemas"]["BulkSelectionByIds"];
+        };
+        BulkEmailRequest: {
+            /** @description Plain text. */
+            body: string;
+            selection: components["schemas"]["BulkSelection"];
+            subject: string;
+        };
+        BulkLabelRequest: {
+            /** @default [] */
+            add: string[];
+            /** @default [] */
+            remove: string[];
+            selection: components["schemas"]["BulkSelection"];
+        };
+        BulkOperation: {
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            eventId: string | null;
+            failed: number;
+            /** @description The first 50 attendees that failed. */
+            failures: {
+                /** Format: uuid */
+                attendeeId: string;
+                /** @description Stable code, e.g. `not_found`, `no_ticket`, `ada_kept_back`. */
+                code: string;
+            }[];
+            /** Format: date-time */
+            finishedAt: string | null;
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            kind: "labels" | "emails" | "seat-assignments" | "ticket-resends" | "ticket-cancellations";
+            processed: number;
+            /** @enum {string} */
+            status: "queued" | "running" | "done" | "failed" | "undoing" | "undone";
+            succeeded: number;
+            total: number;
+            undone: number;
+            /**
+             * Format: date-time
+             * @description Set while the operation can still be undone.
+             */
+            undoUntil: string | null;
+            /** @description The first 50 attendees that succeeded with a caveat. */
+            warnings: {
+                /** Format: uuid */
+                attendeeId: string;
+                /** @description Stable code, e.g. `not_found`, `no_ticket`, `ada_kept_back`. */
+                code: string;
+            }[];
+        };
+        BulkResendRequest: {
+            selection: components["schemas"]["BulkSelection"];
+        };
+        BulkSeatRequest: {
+            /**
+             * @description Use accessible seats an enforced rule keeps back (audited).
+             * @default false
+             */
+            overrideRules: boolean;
+            selection: components["schemas"]["BulkSelection"];
+            target: components["schemas"]["BulkSeatTarget"];
+        };
+        /** @description A table or row (`item`), a section, the best available seats, or a group’s block. */
+        BulkSeatTarget: {
+            /** Format: uuid */
+            itemId: string;
+            /** @enum {string} */
+            kind: "item";
+        } | {
+            /** @enum {string} */
+            kind: "section";
+            /** Format: uuid */
+            sectionId: string;
+        } | {
+            /** @enum {string} */
+            kind: "best";
+        } | {
+            /** @enum {string} */
+            kind: "group";
+            label: string;
+        };
+        BulkSelection: components["schemas"]["BulkSelectionByIds"] | components["schemas"]["BulkSelectionByFilter"];
+        BulkSelectionByFilter: {
+            filter: components["schemas"]["BulkAttendeeFilter"];
+        };
+        BulkSelectionByIds: {
+            ids: string[];
         };
         CreateEventRequest: {
             city?: string | null;

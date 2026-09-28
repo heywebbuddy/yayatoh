@@ -241,6 +241,12 @@ export const orgSuspensions = tenantTable(
 );
 
 export const ORG_STATUS_ACTIONS = ['suspend', 'reactivate', 'terminate'] as const;
+/**
+ * Every kind of recorded status change: the console's actions plus `restore`, the reviewed
+ * un-termination (M1.13d; `docs/runbooks/restore-terminated-org.md`), which puts back the status
+ * the org had when it was terminated.
+ */
+export const ORG_STATUS_CHANGE_ACTIONS = [...ORG_STATUS_ACTIONS, 'restore'] as const;
 
 /**
  * Staff changes of the org's status (M1.3f): suspended (public pages and sales offline, the
@@ -260,7 +266,7 @@ export const orgStatusChanges = tenantTable(
   },
   (t) => [
     index('org_status_changes_org_created_idx').on(t.orgId, t.createdAt),
-    check('org_status_changes_action_check', inList('action', ORG_STATUS_ACTIONS)),
+    check('org_status_changes_action_check', inList('action', ORG_STATUS_CHANGE_ACTIONS)),
     check('org_status_changes_from_check', inList('from_status', ORG_STATUSES)),
     check('org_status_changes_to_check', inList('to_status', ORG_STATUSES)),
     check('org_status_changes_reason_length', sql`length(reason) between 3 and 500`),
@@ -283,6 +289,8 @@ export const API_KEY_SCOPES = [
   'orders:read',
   'orders:refund',
   'attendees:read',
+  /** Bulk attendee and ticket actions on /v1 (labels, email, resend tickets; M1.13d). */
+  'attendees:write',
   'checkin:scan',
 ] as const;
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];

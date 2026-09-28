@@ -5,6 +5,8 @@ import {
   createAuth,
   devPersonaReplayExempt,
   type SecretSealer,
+  type TwoFactorService,
+  twoFactorService,
 } from '@yayatoh/auth';
 import { IDENTITY_KEY_SCOPE, type KeyVault, localKeyVault } from '@yayatoh/platform';
 
@@ -48,4 +50,18 @@ export function getAuth(): Auth {
     });
   }
   return instance;
+}
+
+let twoFactor: TwoFactorService | undefined;
+
+/**
+ * Step-up for staff (M1.13d): the same "confirm it's you" check as the web (authenticator code,
+ * else password), recorded on the console session and audited in packages/auth.
+ */
+export function getTwoFactor(): TwoFactorService {
+  twoFactor ??= twoFactorService(getAuth(), {
+    mailer: consoleMailer,
+    ...(exempt ? { totpReplayExempt: exempt } : {}),
+  });
+  return twoFactor;
 }

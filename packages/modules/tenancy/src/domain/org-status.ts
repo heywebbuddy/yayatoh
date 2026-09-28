@@ -23,6 +23,20 @@ export function nextOrgStatus(from: string, action: OrgStatusAction): OrgStatus 
   return (t.from as readonly string[]).includes(from) ? t.to : null;
 }
 
+/**
+ * Where restoring a terminated org leads (the reviewed un-termination): back to the status it had
+ * when it was terminated, taken from the termination's own history row. Null when the org isn't
+ * terminated, or when no termination is recorded (then nothing says what to restore).
+ */
+export function restoredOrgStatus(
+  current: string,
+  termination: { readonly fromStatus: string } | null,
+): OrgStatus | null {
+  if (current !== 'terminated' || !termination) return null;
+  const back = termination.fromStatus;
+  return back === 'active' || back === 'limited' || back === 'suspended' ? back : null;
+}
+
 /** The actions staff may take from a status (the staff console offers exactly these). */
 export function orgStatusActions(from: string): OrgStatusAction[] {
   return (Object.keys(TRANSITIONS) as OrgStatusAction[]).filter((a) => nextOrgStatus(from, a) !== null);

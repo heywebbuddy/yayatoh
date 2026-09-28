@@ -13,6 +13,7 @@ approved by the owner step by step.
 | [incident.md](incident.md) | Anything user-visible is broken or data may be exposed |
 | [key-rotation.md](key-rotation.md) | Scheduled rotation, a leaked secret, a departing person |
 | [webhook-replay.md](webhook-replay.md) | Payments or other provider events were missed or failed |
+| [restore-terminated-org.md](restore-terminated-org.md) | An org was terminated by mistake and the platform owner approved restoring it |
 
 **Conventions**
 - Commands are copy-paste ready and marked **(local/staging)** or **(production, owner)**.

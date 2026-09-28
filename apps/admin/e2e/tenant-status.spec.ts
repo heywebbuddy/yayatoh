@@ -233,7 +233,7 @@ test('staff suspend an org: public pages 404 (noindex), listing gone, checkout r
   await expect(section.getByText('Status: Terminated')).toBeVisible();
   await expect(section.getByRole('form')).toHaveCount(0);
   await expect(
-    section.getByText("Terminated organizations can't be reactivated from the console."),
+    section.getByText(/^Terminated organizations can't be reactivated with these forms\./),
   ).toBeVisible();
   await expectAccessible(page);
   await replayForm(page, reactivateForm, { reason: 'e2e: replayed', confirm: 'yes' });

@@ -105,6 +105,8 @@ export const PLATFORM_PERMISSIONS = [
   'platform:org.suspend',
   /** Suspend, reactivate or terminate the whole org (M1.3f). */
   'platform:org.status',
+  /** Restore a terminated org (the reviewed un-termination, M1.13d; staff step-up). */
+  'platform:org.restore',
   'platform:payouts.hold',
   'platform:payouts.release',
   'platform:disputes.submit',

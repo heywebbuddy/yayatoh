@@ -3083,6 +3083,7 @@
       "orders_read": "注文の閲覧",
       "orders_refund": "注文の返金",
       "attendees_read": "参加者の閲覧",
+      "attendees_write": "参加者の変更とチケットの再送",
       "checkin_scan": "チケットのスキャン"
     }
   },

@@ -421,6 +421,13 @@
       "when": 1790591367856,
       "tag": "0059_left_zuras",
       "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1790608798206,
+      "tag": "0060_flimsy_talos",
+      "breakpoints": true
     }
   ]
 }

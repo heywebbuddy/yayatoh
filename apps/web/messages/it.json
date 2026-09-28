@@ -3083,6 +3083,7 @@
       "orders_read": "Leggere gli ordini",
       "orders_refund": "Rimborsare gli ordini",
       "attendees_read": "Leggere i partecipanti",
+      "attendees_write": "Modificare i partecipanti e reinviare i biglietti",
       "checkin_scan": "Scansionare i biglietti"
     }
   },

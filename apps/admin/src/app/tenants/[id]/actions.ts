@@ -5,7 +5,9 @@ import {
   getUsersByIds,
   IMPERSONATION_MAX_MS,
   impersonationReason,
+  isTwoFactorError,
   normalizeHandoffHost,
+  type StepUpProof,
   startImpersonation,
 } from '@yayatoh/auth';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
@@ -22,6 +24,7 @@ import {
   getOrganizationQuery,
   ORG_STATUS_ACTIONS,
   type OrgStatusAction,
+  restoreOrgCommand,
   SUSPENSION_KINDS,
   type SuspensionKind,
   setOrgStatusCommand,
@@ -33,6 +36,7 @@ import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { getAuth, getTwoFactor } from '@/server/auth.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff, type StaffAction } from '@/server/staff.ts';
@@ -189,6 +193,74 @@ export async function orgStatusAction(orgId: string, action: OrgStatusAction, fo
   try {
     await executeCommand(setOrgStatusCommand, { action, reason }, ctx, ports);
     outcome = `done=status_${action}`;
+  } catch (err) {
+    outcome = `error=${isDomainError(err) ? err.code : 'internal'}`;
+  }
+  await revalidatePublic(orgId);
+  revalidatePath(back);
+  redirect(`${back}?${outcome}#status`);
+}
+
+/**
+ * Restore a terminated org (M1.13d; runbook `docs/runbooks/restore-terminated-org.md`; admins
+ * only). A reason and the org's address are required, and the staff member confirms it's them
+ * (their authenticator code, else their password) in the same form: the step-up is recorded on
+ * this console session and passed to the command, which checks it itself. The platform access
+ * log records who, which org and why before the command runs.
+ */
+export async function restoreOrgAction(orgId: string, form: FormData) {
+  if (!Id.safeParse(orgId).success) redirect('/');
+  const staff = await requireStaff('status');
+  const back = `/tenants/${orgId}`;
+  const fail = (code: string): never => redirect(`${back}?error=${code}#restore`);
+  const reason = String(form.get('reason') ?? '').trim();
+  if (reason.length < 3 || reason.length > 500) fail('status_reason');
+  let slug: string;
+  try {
+    slug = (await executeQuery(getOrganizationQuery, {}, staff.ctx(orgId), ports)).slug;
+  } catch {
+    redirect('/');
+  }
+  if (
+    String(form.get('confirmSlug') ?? '')
+      .trim()
+      .toLowerCase() !== slug
+  )
+    fail('status_slug');
+
+  // Confirm it's them: the proof they use (authenticator, else password) marks this session.
+  const session = await getAuth().api.getSession({ headers: await headers() });
+  if (!session) redirect('/sign-in');
+  const twoFactor = getTwoFactor();
+  const method = await twoFactor.method(staff.userId);
+  if (method === 'email') fail('restore_method');
+  const proof: StepUpProof =
+    method === 'totp'
+      ? { method: 'totp', code: String(form.get('code') ?? '') }
+      : { method: 'password', password: String(form.get('password') ?? '') };
+  let steppedUpAt: Date | null = null;
+  let stepUpError: string | null = null;
+  try {
+    steppedUpAt = await twoFactor.stepUp({
+      userId: staff.userId,
+      sessionToken: session.session.token,
+      proof,
+    });
+  } catch (err) {
+    if (!isTwoFactorError(err)) throw err;
+    stepUpError = err.code === 'rate_limited' ? 'restore_rate_limited' : 'restore_step_up';
+  }
+  if (stepUpError || !steppedUpAt) fail(stepUpError ?? 'restore_step_up');
+
+  // Platform audit: the access log names the staff member, the org and the reason.
+  await withPlatformReader(
+    { actor: staff.actor, reason: `staff console: restore organization ${slug}: ${reason}` },
+    (tx) => tx.execute(sql`select 1`),
+  );
+  let outcome: string;
+  try {
+    await executeCommand(restoreOrgCommand, { reason }, staff.ctx(orgId, steppedUpAt ?? undefined), ports);
+    outcome = 'done=status_restore';
   } catch (err) {
     outcome = `error=${isDomainError(err) ? err.code : 'internal'}`;
   }

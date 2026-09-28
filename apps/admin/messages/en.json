@@ -99,6 +99,7 @@
       "status_suspend": "Suspended. Its public pages and ticket sales are offline and its console is read-only.",
       "status_reactivate": "Reactivated. Its public pages, listings and ticket sales are back.",
       "status_terminate": "Terminated. Its public pages are offline for good; its owners can still export their data.",
+      "status_restore": "Organization restored to the status it had before it was terminated. Its owners are told.",
       "reconciled": "Reconciliation difference resolved."
     },
     "field": {
@@ -254,20 +255,35 @@
         "terminate": "Terminate organization"
       },
       "adminsOnly": "Only admins can change an organization's status.",
-      "final": "Terminated organizations can't be reactivated from the console.",
+      "final": "Terminated organizations can't be reactivated with these forms. A mistaken termination is restored with the reviewed restore below.",
       "history": "Status history",
       "empty": "No status changes yet.",
       "entry": "{when} · {action} by {who} · “{reason}”",
       "did": {
         "suspend": "Suspended",
         "reactivate": "Reactivated",
-        "terminate": "Terminated"
+        "terminate": "Terminated",
+        "restore": "Restored"
       },
       "errors": {
         "status_reason": "Give a reason of at least 3 characters: it is kept in the audit log.",
         "status_confirm": "Tick the box to confirm.",
-        "status_slug": "Type the organization's address exactly to confirm."
+        "status_slug": "Type the organization's address exactly to confirm.",
+        "restore_step_up": "That password or code isn't right. Confirm it's you and try again.",
+        "restore_rate_limited": "Too many tries. Wait a few minutes before confirming it's you again.",
+        "restore_method": "Set a password or an authenticator app on your account first: restoring needs you to confirm it's you."
       }
+    },
+    "restore": {
+      "title": "Restore a terminated organization",
+      "description": "Only for a termination that was a mistake, after the platform owner approved restoring it in writing (runbook: “Restore a terminated organization”). Put the approval's reference in the reason.",
+      "effect": "Puts back the status it had when it was terminated: {status}. Nothing else changes: kill switches, payout holds, API keys, devices, domains and members stay as they are. Its owners are told (without your reason).",
+      "noRecord": "No termination is recorded for this organization, so there is no status to put back. Don't change it by hand: escalate as the runbook says.",
+      "form": "Restore this organization",
+      "password": "Your password (confirm it's you)",
+      "code": "Code from your authenticator app (confirm it's you)",
+      "submit": "Restore organization",
+      "adminsOnly": "Only admins can restore an organization."
     },
     "reconciliation": {
       "title": "Reconciliation",

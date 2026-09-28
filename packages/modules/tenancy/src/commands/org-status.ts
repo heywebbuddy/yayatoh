@@ -1,12 +1,25 @@
 import type { TenantTx } from '@yayatoh/db';
-import { actorId, type CommandPorts, DomainError, requireOrg } from '@yayatoh/kernel';
+import { actorId, type CommandPorts, DomainError, isStepUpFresh, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { nextOrgStatus, type OrgStatus, orgWriteRefusal } from '../domain/org-status.ts';
+import {
+  isOrgLive,
+  nextOrgStatus,
+  type OrgStatus,
+  orgWriteRefusal,
+  restoredOrgStatus,
+} from '../domain/org-status.ts';
 import type { OrgRole } from '../domain/permissions.ts';
 import { organizationBrandTx } from '../queries.ts';
-import { memberships, ORG_STATUS_ACTIONS, ORG_STATUSES, organizations, orgStatusChanges } from '../schema.ts';
+import {
+  memberships,
+  ORG_STATUS_ACTIONS,
+  ORG_STATUS_CHANGE_ACTIONS,
+  ORG_STATUSES,
+  organizations,
+  orgStatusChanges,
+} from '../schema.ts';
 
 export const ORG_STATUS_CHANGED = 'org.status_changed';
 
@@ -81,8 +94,96 @@ export const setOrgStatusCommand = tenantCommand({
   }),
 });
 
+export const RestoreOrgInput = z.object({
+  /** Staff-only note: the reviewed request (ticket) and why the termination was a mistake. */
+  reason: z.string().trim().min(3).max(500),
+});
+
+/**
+ * Un-terminate an org (M1.13d; runbook `docs/runbooks/restore-terminated-org.md`). Platform actor
+ * only, with a fresh staff step-up (a re-authentication in the last 10 minutes, `ctx.stepUpAt`):
+ * the command itself checks it, because platform actors otherwise pass step-up at their transport.
+ *
+ * It reverses exactly what termination did, which is the status change: the org gets back the
+ * status recorded as the termination's `from` (active, limited or suspended), and the change is
+ * recorded, audited and announced like any other (`org.status_changed@1`, action `restore`), so
+ * the listings projector rebuilds a live org's listings and the owners are told. Termination
+ * deleted nothing and revoked nothing (API keys, devices, domains, members and kill switches were
+ * left as they were and only stopped resolving), so there is nothing else to put back.
+ */
+export const restoreOrgCommand = tenantCommand({
+  name: 'tenancy.restoreOrg',
+  input: RestoreOrgInput,
+  output: z.object({
+    from: z.enum(ORG_STATUSES),
+    to: z.enum(ORG_STATUSES),
+    changeId: z.uuid(),
+    /** The termination this reverses. */
+    terminationId: z.uuid(),
+  }),
+  entitlement: null,
+  permission: 'platform:org.restore',
+  stepUp: true,
+  handler: async ({ input, ctx, tx, emit }) => {
+    if (!isStepUpFresh(ctx.stepUpAt, ctx.now))
+      throw new DomainError('step_up_required', 'Confirm it is you before restoring an organization');
+    const orgId = requireOrg(ctx);
+    const [org] = await tx
+      .select({ status: organizations.status })
+      .from(organizations)
+      .where(eq(organizations.id, orgId))
+      .for('update');
+    if (!org) throw new DomainError('not_found', 'Organization not found');
+    const [termination] = await tx
+      .select({ id: orgStatusChanges.id, fromStatus: orgStatusChanges.fromStatus })
+      .from(orgStatusChanges)
+      .where(eq(orgStatusChanges.toStatus, 'terminated'))
+      .orderBy(desc(orgStatusChanges.createdAt), desc(orgStatusChanges.id))
+      .limit(1);
+    const to = restoredOrgStatus(org.status, termination ?? null);
+    if (!to || !termination)
+      throw new DomainError('invalid_state', `Can't restore an org that is ${org.status}`, {
+        reason: org.status === 'terminated' ? 'no_termination_record' : 'not_terminated',
+        status: org.status,
+      });
+    await tx.update(organizations).set({ status: to, updatedAt: ctx.now }).where(eq(organizations.id, orgId));
+    const [change] = await tx
+      .insert(orgStatusChanges)
+      .values({
+        orgId,
+        action: 'restore',
+        fromStatus: 'terminated',
+        toStatus: to,
+        reason: input.reason,
+        changedBy: actorId(ctx.actor),
+      })
+      .returning({ id: orgStatusChanges.id });
+    if (!change) throw new DomainError('internal');
+    emit({
+      type: ORG_STATUS_CHANGED,
+      version: 1,
+      aggregateType: 'organization',
+      aggregateId: orgId,
+      payload: { orgId, changeId: change.id, action: 'restore', from: 'terminated', to },
+    });
+    return { from: 'terminated' as const, to, changeId: change.id, terminationId: termination.id };
+  },
+  audit: (input, r) => ({
+    action: 'org.status_change',
+    targetType: 'organization',
+    targetId: null,
+    data: {
+      statusAction: 'restore',
+      from: r.from,
+      to: r.to,
+      reasonText: input.reason,
+      terminationId: r.terminationId,
+    },
+  }),
+});
+
 export const OrgStatusChangeDto = z.object({
-  action: z.enum(ORG_STATUS_ACTIONS),
+  action: z.enum(ORG_STATUS_CHANGE_ACTIONS),
   from: z.enum(ORG_STATUSES),
   to: z.enum(ORG_STATUSES),
   reason: z.string(),
@@ -99,7 +200,7 @@ export const orgStatusHistoryQuery = tenantQuery({
   permission: 'platform:org.status',
   handler: async ({ tx }) =>
     (await tx.select().from(orgStatusChanges).orderBy(desc(orgStatusChanges.createdAt))).map((r) => ({
-      action: r.action as (typeof ORG_STATUS_ACTIONS)[number],
+      action: r.action as (typeof ORG_STATUS_CHANGE_ACTIONS)[number],
       from: r.fromStatus as OrgStatus,
       to: r.toStatus as OrgStatus,
       reason: r.reason,
@@ -169,7 +270,8 @@ export function orgStatusNotice(deps: { notifier: Notifier; appOrigin: string })
       const p = ChangedPayload.parse(event.payload);
       const org = await organizationBrandTx(tx, p.orgId);
       if (!org) return;
-      const status = p.to === 'active' ? 'reactivated' : p.to;
+      // Back online (reactivated, or restored to active or limited) reads as "reactivated".
+      const status = isOrgLive(p.to) ? 'reactivated' : p.to;
       await deps.notifier.notifyMembers(tx, {
         kind: 'tenancy.org-status',
         params: { url: `${deps.appOrigin}/o/${org.slug}`, status },

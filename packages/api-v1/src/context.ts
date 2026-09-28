@@ -26,6 +26,8 @@ export interface V1Deps {
   /** Count requests per route × client × app version (on unless false). */
   readonly telemetry?: boolean;
   readonly mobile?: Partial<MobileSettings>;
+  /** How long a new bulk operation runs in the request that starts it (default 3 s; 0: never). */
+  readonly bulkInlineMs?: number;
   /** Where the router is mounted (`/v1` on api.yayatoh.com, `/api/v1` on the web app). */
   readonly basePath?: string;
 }
