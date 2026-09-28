@@ -4,6 +4,7 @@ Owner decisions override everything else (see CLAUDE.md precedence). Newest firs
 
 | Date | Decision | Detail | Roadmap |
 |---|---|---|---|
+| 2026-09-28 | **Standing approval: gitleaks allowlist for test vectors** | Claude Code may add `.gitleaksignore` fingerprints without asking for values that are clearly published test vectors (RFCs, provider docs) or made-up test fixtures, after verifying each one and naming it in the commit. Anything that looks like a real key still goes to the owner | §9 |
 | 2026-09-28 | **Phase 3 builds now, before the yayatoh.com cutover (D28 widened)** | The owner approved `docs/plans/phase-3.md`: all of Phase 3 is built in development behind fakes and feature flags; only the real-event exit criteria and the public launch (M3.11 go-live) wait for B-Y | Phase 3, D28 |
 | 2026-09-28 | **WhatsApp: one port, two adapters** | WhatsApp Cloud API (Embedded Signup) for new tenants; the owner's gateway (`whatsapp.panitechnologies.com`) kept for existing flows until they move | M3.5, D16 |
 | 2026-09-28 | **Realtime: own SSE channel first, Ably later** | The live-update channel proven on the seat map is generalized (M3.1b); an Ably adapter sits behind the same port for when the account exists | M3.1 |
