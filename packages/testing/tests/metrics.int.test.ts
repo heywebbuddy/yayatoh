@@ -605,7 +605,16 @@ describe('sharded counter contention', () => {
     }
     await project(a);
     const at = new Date('2028-06-01T23:10:00Z');
-    for (const tk of tickets.slice(0, 32)) await scan(a, e, tk.short_code, at);
+    // Pick the blocking trio first (40 tickets over 8 shards always give a same-shard pair).
+    const shardOf = (id: string) => metricShardOf(id, 8);
+    const heldTicket = tickets.find((x) => tickets.some((y) => y !== x && shardOf(y.id) === shardOf(x.id)));
+    if (!heldTicket) throw new Error('no same-shard pair');
+    const held = shardOf(heldTicket.id);
+    const same = tickets.find((x) => x !== heldTicket && shardOf(x.id) === held);
+    const other = tickets.find((x) => shardOf(x.id) !== held);
+    if (!same || !other) throw new Error('need tickets on two shards');
+    const crowd = tickets.filter((x) => x !== heldTicket && x !== same && x !== other).slice(0, 32);
+    for (const tk of crowd) await scan(a, e, tk.short_code, at);
     const pending = await admin<PublishedEvent[]>`
       select id, org_id as "orgId", type, version, aggregate_type as "aggregateType",
         aggregate_id as "aggregateId", payload, 0 as "logSeq"
@@ -621,12 +630,6 @@ describe('sharded counter contention', () => {
 
     // Hold one counter shard's lock in another transaction: a check-in on another shard still
     // projects at once, one on the held shard waits until the lock is released.
-    const rest = tickets.slice(32);
-    const shardOf = (id: string) => metricShardOf(id, 8);
-    const held = shardOf((rest[0] as { id: string }).id);
-    const same = rest.find((x, i) => i > 0 && shardOf(x.id) === held);
-    const other = rest.find((x) => shardOf(x.id) !== held);
-    if (!same || !other) throw new Error('need tickets on two shards');
     for (const tk of [same, other]) await scan(a, e, tk.short_code, at);
     const eventFor = async (ticketId: string) =>
       (

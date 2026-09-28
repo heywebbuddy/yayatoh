@@ -31,6 +31,7 @@ let eventId: string;
 let codes: string[] = [];
 let stopping = false;
 let relayLoop: Promise<void> | undefined;
+let backlog: string[] = [];
 const projector = metricsProjector();
 
 async function waitFor(check: () => Promise<boolean>, ms: number) {
@@ -116,6 +117,10 @@ beforeAll(async () => {
   });
   // Publish what earlier test files left in the outbox without delivering it, so the measured
   // queue holds only the stream's scans (this org's set-up is projected already).
+  // Other test files' events published here are handed back to the outbox afterwards (afterAll).
+  const before = await admin<{ id: string }[]>`
+    select id from platform.domain_events where published_at is null`;
+  backlog = before.map((r) => r.id);
   while ((await relayOnce(boss, [], 1000)) > 0);
   // The relay loop exactly as main.ts runs it (50 ms after a busy tick, 500 ms when idle).
   relayLoop = (async () => {
@@ -135,6 +140,10 @@ afterAll(async () => {
   stopping = true;
   await relayLoop;
   await boss?.stop({ graceful: false });
+  // Leave the outbox as found: the backlog was published without delivery, so unpublish it
+  // again (its log_seq stays) and the next relay delivers it to whoever subscribes.
+  if (backlog.length)
+    await admin`update platform.domain_events set published_at = null where id = any(${backlog}::uuid[])`;
   await admin?.end();
   await closePools();
 });
