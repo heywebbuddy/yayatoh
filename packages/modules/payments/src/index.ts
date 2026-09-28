@@ -79,3 +79,4 @@ export {
   type StripeProviderOptions,
   stripePaymentProvider,
 } from './stripe.ts';
+export { privateColumns } from './private-columns.ts';

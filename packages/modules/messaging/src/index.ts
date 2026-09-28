@@ -28,3 +28,4 @@ export {
   threadsQuery,
   threadToken,
 } from './threads.ts';
+export { privateColumns } from './private-columns.ts';

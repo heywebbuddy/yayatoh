@@ -106,3 +106,4 @@ export {
   SUSPENSION_KINDS,
 } from './schema.ts';
 export { invitationMailer } from './subscribers.ts';
+export { privateColumns } from './private-columns.ts';

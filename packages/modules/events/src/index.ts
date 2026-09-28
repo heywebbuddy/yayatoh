@@ -155,3 +155,4 @@ export {
   setEventSeriesCommand,
   updateSeriesCommand,
 } from './series.ts';
+export { privateColumns } from './private-columns.ts';

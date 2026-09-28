@@ -15,3 +15,4 @@ export {
 } from './dsar.ts';
 export { RETENTION, RetentionResult, retentionCommand } from './retention.ts';
 export { DSAR_KINDS } from './schema.ts';
+export { privateColumns } from './private-columns.ts';

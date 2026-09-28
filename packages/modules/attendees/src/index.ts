@@ -46,3 +46,4 @@ export {
   validateImportCommand,
 } from './imports.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES, IMPORT_FIELDS, type ImportField } from './schema.ts';
+export { privateColumns } from './private-columns.ts';

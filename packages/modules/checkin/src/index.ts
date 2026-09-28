@@ -60,3 +60,4 @@ export {
   setDoorStaffCommand,
 } from './staff.ts';
 export { type CheckinScope, checkinFactsTx } from './stats.ts';
+export { privateColumns } from './private-columns.ts';

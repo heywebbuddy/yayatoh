@@ -62,3 +62,4 @@ export {
 export { type RefundOutcome, refundOrder } from './refund-flow.ts';
 export { CHARGE_MODELS, ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
 export { REMINDER_LEAD_MS, refundMailer, ticketMailer } from './subscribers.ts';
+export { privateColumns } from './private-columns.ts';

@@ -16,3 +16,4 @@ export {
   venueDirectory,
   venueSlug,
 } from './venues.ts';
+export { privateColumns } from './private-columns.ts';

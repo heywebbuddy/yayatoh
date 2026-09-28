@@ -7,3 +7,4 @@ export {
   saveTemplateCommand,
   TemplateDto,
 } from './templates.ts';
+export { privateColumns } from './private-columns.ts';

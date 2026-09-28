@@ -118,3 +118,4 @@ export {
   setFinderSettingsCommand,
   verifyFinderCodeCommand,
 } from './seat-finder.ts';
+export { privateColumns } from './private-columns.ts';

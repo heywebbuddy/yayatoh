@@ -92,3 +92,4 @@ export {
   unsubscribeRef,
   unsuppressEmailTx,
 } from './unsubscribe.ts';
+export { privateColumns } from './private-columns.ts';
