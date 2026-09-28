@@ -67,6 +67,25 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'eventName', 'url', 'minutes'],
   },
+  /** M1.5f: sent at once by the web app (never queued: the code is never stored). */
+  'guest.checkout-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'minutes'],
+  },
+  'guest.sign-in': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'url', 'minutes', 'linkMinutes', 'site'],
+  },
+  'orders.order-link': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'reason'],
+  },
   'attendees.message': {
     category: 'event_updates',
     channels: ['email'],

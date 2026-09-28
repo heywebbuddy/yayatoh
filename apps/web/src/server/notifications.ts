@@ -14,7 +14,7 @@ import {
   fakeDeliverySecret,
   takeDevDeliveryEvents,
 } from '@yayatoh/notifications';
-import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
+import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, eventKey, recentEventsTx, type Subscriber } from '@yayatoh/platform';
 import { invitationMailer } from '@yayatoh/tenancy';
@@ -38,6 +38,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
   return [
     invitationMailer({ notifier, appOrigin, secret }),
     ticketMailer({ notifier, appOrigin }),
+    orderLinkMailer({ notifier, appOrigin }),
     refundMailer({ notifier, appOrigin }),
     reminderRescheduler(),
     claimLinkMailer({ notifier, appOrigin }),

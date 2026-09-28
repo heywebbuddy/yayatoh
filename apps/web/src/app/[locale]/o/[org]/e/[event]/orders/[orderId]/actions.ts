@@ -1,11 +1,13 @@
 'use server';
 
-import { isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import {
+  orderDetailQuery,
   REFUND_REASONS,
   type RefundOutcome,
   type RefundReason,
   refundOrder,
+  reissueManageLinkCommand,
   startPolicyOverrideRefundCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
@@ -71,4 +73,30 @@ export async function refundAction(
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
   return done.status === 'failed' ? { ok: false, code: 'refund_failed' } : { ok: true, code: null };
+}
+
+export type ReissueState = { readonly ok: boolean; readonly code: string | null };
+
+/**
+ * M1.5f buyer support: revoke the order's manage link and email the buyer a new one (the old one
+ * stops working at once). `orders:support`; refused for viewers and finance even from a stale page.
+ */
+export async function reissueLinkAction(
+  org: string,
+  event: string,
+  orderId: string,
+  _prev: ReissueState,
+  form: FormData,
+): Promise<ReissueState> {
+  if (form.get('confirm') !== 'yes') return { ok: false, code: 'validation_failed' };
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    const order = await executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
+    if (order.eventId !== ev.id) return { ok: false, code: 'not_found' };
+    await executeCommand(reissueManageLinkCommand, { orderId }, data.ctx, ports);
+  } catch (err) {
+    if (isDomainError(err)) return { ok: false, code: err.code };
+    throw err;
+  }
+  return { ok: true, code: null };
 }

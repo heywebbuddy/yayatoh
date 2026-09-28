@@ -80,6 +80,20 @@
     "notifications.test": {
       "subject": "測試通知",
       "intro": "通知功能正常。"
+    },
+    "guest.checkout-code": {
+      "subject": "{code} 是您的電子郵件確認碼",
+      "intro": "輸入 {code} 以確認您的電子郵件並完成在 {org} 的訂單。驗證碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。"
+    },
+    "guest.sign-in": {
+      "subject": "{code} 是您的「我的票券」驗證碼",
+      "intro": "輸入 {code} 即可在 {site} 查看您的票券，也可以在同一瀏覽器中使用下方按鈕。驗證碼 {minutes} 分鐘後失效，按鈕 {linkMinutes} 分鐘後失效；每個僅能使用一次。如果這不是您本人的要求，請忽略此郵件。",
+      "cta": "開啟我的票券"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {您在 {eventName} 的訂單新連結} other {您在 {eventName} 的訂單連結}}",
+      "intro": "{reason, select, reissued {主辦方已更換您在 {eventName} 的訂單連結。舊連結已失效，請使用此連結。} other {這是您要求的連結，可開啟您在 {eventName} 的訂單和票券。}}",
+      "cta": "開啟我的訂單"
     }
   },
   "roles": {

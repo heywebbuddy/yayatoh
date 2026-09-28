@@ -1,5 +1,5 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
-import { eventAttendeesMatchingTx } from '@yayatoh/attendees';
+import { eventAttendeesMatchingTx, eventAttendeesTx } from '@yayatoh/attendees';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
@@ -190,6 +190,83 @@ export const finderSettingsQuery = tenantQuery({
       .from(eventLayouts)
       .where(eq(eventLayouts.eventId, input.eventId));
     return l ? { publicMap: l.publicMap, mode: l.mode as FinderMode } : null;
+  },
+});
+
+// ─── Organizer: name-list poster ────────────────────────────────────────────────────────────
+
+export const FinderPosterDto = z.object({
+  /** Seated people A–Z by name (the organizer's language decides the order), with their seats. */
+  people: z.array(
+    z.object({
+      name: z.string(),
+      seats: z.array(
+        z.object({ itemKind: z.enum(['row', 'table']), itemLabel: z.string(), seatLabel: z.string() }),
+      ),
+    }),
+  ),
+  /** People on the list with no seat yet (left off the poster). */
+  unseated: z.int().min(0),
+});
+export type FinderPosterDto = z.infer<typeof FinderPosterDto>;
+
+/**
+ * The printable "find your table" poster for the door (M1.5f): every seated guest A–Z with their
+ * table and seat. Organizer-only (it lists names), from the same assignments and bought seats as
+ * the public finder; works whether or not the public finder is open.
+ */
+export const finderPosterQuery = tenantQuery({
+  name: 'seating.finderPoster',
+  input: z.object({ eventId: z.uuid(), locale: z.string().max(16).default('en') }),
+  output: FinderPosterDto,
+  entitlement: 'seat_finder',
+  permission: 'attendees:read',
+  handler: async ({ input, tx }) => {
+    const [l] = await tx
+      .select({ doc: eventLayouts.doc })
+      .from(eventLayouts)
+      .where(eq(eventLayouts.eventId, input.eventId));
+    const people = await eventAttendeesTx(tx, input.eventId);
+    if (!l) return { people: [], unseated: people.length };
+    const doc = FloorplanDoc.parse(l.doc);
+    const [assigned, bought] = await Promise.all([
+      tx
+        .select({ attendeeId: seatAssignments.attendeeId, seatUuid: seatAssignments.seatUuid })
+        .from(seatAssignments)
+        .where(eq(seatAssignments.eventId, input.eventId)),
+      tx
+        .select({ ticketId: eventSeats.ticketId, seatUuid: eventSeats.seatUuid })
+        .from(eventSeats)
+        .where(and(eq(eventSeats.eventId, input.eventId), eq(eventSeats.status, 'sold'))),
+    ]);
+    const where = new Map<string, { itemKind: 'row' | 'table'; itemLabel: string; seatLabel: string }>();
+    for (const item of doc.items)
+      if (item.kind !== 'object')
+        for (const seat of item.seats)
+          where.set(seat.id, { itemKind: item.kind, itemLabel: item.label, seatLabel: seat.label });
+    const byAttendee = new Map<string, string[]>();
+    for (const a of assigned)
+      byAttendee.set(a.attendeeId, [...(byAttendee.get(a.attendeeId) ?? []), a.seatUuid]);
+    const byTicket = new Map<string, string[]>();
+    for (const b of bought)
+      if (b.ticketId) byTicket.set(b.ticketId, [...(byTicket.get(b.ticketId) ?? []), b.seatUuid]);
+    const collator = new Intl.Collator(input.locale, { sensitivity: 'base', numeric: true });
+    const rows = people
+      .map((p) => ({
+        name: p.name,
+        seats: [
+          ...new Set([
+            ...(byAttendee.get(p.id) ?? []),
+            ...(p.ticketId ? (byTicket.get(p.ticketId) ?? []) : []),
+          ]),
+        ].flatMap((id) => {
+          const w = where.get(id);
+          return w ? [w] : [];
+        }),
+      }))
+      .filter((p) => p.seats.length > 0)
+      .sort((a, b) => collator.compare(a.name, b.name));
+    return FinderPosterDto.parse({ people: rows, unseated: people.length - rows.length });
   },
 });
 

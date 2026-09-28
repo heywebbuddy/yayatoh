@@ -80,6 +80,20 @@
     "notifications.test": {
       "subject": "Test notification",
       "intro": "Notifications are working."
+    },
+    "guest.checkout-code": {
+      "subject": "{code} is your code to confirm your email",
+      "intro": "Enter {code} to confirm your email and finish your order with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
+    },
+    "guest.sign-in": {
+      "subject": "{code} is your code for My tickets",
+      "intro": "Enter {code} to see your tickets on {site}, or use the button below in the same browser. The code expires in {minutes, plural, one {# minute} other {# minutes}} and the button in {linkMinutes, plural, one {# minute} other {# minutes}}; each works once. If you didn't ask for it, you can ignore this email.",
+      "cta": "Open My tickets"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Your new link to your order for {eventName}} other {Your link to your order for {eventName}}}",
+      "intro": "{reason, select, reissued {The organizer replaced the link to your order for {eventName}. The old link no longer works; use this one.} other {Here is the link you asked for. It opens your order and tickets for {eventName}.}}",
+      "cta": "Open my order"
     }
   },
   "roles": {

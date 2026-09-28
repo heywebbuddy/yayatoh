@@ -80,6 +80,20 @@
     "notifications.test": {
       "subject": "إشعار تجريبي",
       "intro": "الإشعارات تعمل."
+    },
+    "guest.checkout-code": {
+      "subject": "{code} هو رمز تأكيد بريدك الإلكتروني",
+      "intro": "أدخل {code} لتأكيد بريدك الإلكتروني وإتمام طلبك لدى {org}. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة."
+    },
+    "guest.sign-in": {
+      "subject": "{code} هو رمزك لصفحة تذاكري",
+      "intro": "أدخل {code} لرؤية تذاكرك على {site}، أو استخدم الزر أدناه في المتصفح نفسه. تنتهي صلاحية الرمز خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}} والزر خلال {linkMinutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}؛ ويعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.",
+      "cta": "فتح تذاكري"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {رابطك الجديد إلى طلبك لـ {eventName}} other {رابطك إلى طلبك لـ {eventName}}}",
+      "intro": "{reason, select, reissued {استبدل المنظم رابط طلبك لـ {eventName}. لم يعد الرابط القديم يعمل؛ استخدم هذا الرابط.} other {إليك الرابط الذي طلبته. يفتح طلبك وتذاكرك لـ {eventName}.}}",
+      "cta": "فتح طلبي"
     }
   },
   "roles": {

@@ -96,6 +96,8 @@ export const orders = tenantTable(
   (t) => [
     index('orders_org_event_created_idx').on(t.orgId, t.eventId, t.createdAt),
     index('orders_org_status_expires_idx').on(t.orgId, t.status, t.expiresAt),
+    // M1.5f: a buyer's orders by address (My tickets, resend links).
+    index('orders_org_buyer_email_idx').on(t.orgId, t.buyerEmail),
     index('orders_org_occurrence_status_idx')
       .on(t.orgId, t.occurrenceId, t.status)
       .where(sql`occurrence_id is not null`),
@@ -231,5 +233,90 @@ export const refundPolicies = tenantTable(
       'refund_policies_retained_check',
       sql`retained_minor >= 0 and (kind <> 'none' or retained_minor = 0)`,
     ),
+  ],
+);
+
+/**
+ * Checkout settings per event (M1.5f). No row: the defaults (buyers confirm their email with a
+ * code before ordering; pending owner).
+ */
+export const checkoutSettings = tenantTable(
+  ordersSchema,
+  'checkout_settings',
+  {
+    /** `events.events` (hand-written FK, down the tiers). */
+    eventId: uuid('event_id').notNull(),
+    verifyEmail: boolean('verify_email').notNull().default(true),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [uniqueIndex('checkout_settings_org_event_key').on(t.orgId, t.eventId)],
+);
+
+export const GUEST_CHALLENGE_PURPOSES = ['checkout', 'sign_in'] as const;
+
+// Global (listed in GLOBAL_TABLES): a guest proving an email is not yet anyone's tenant data, and
+// marketplace sign-in spans orgs. Codes, links and browsers are stored as HMACs only.
+/**
+ * One emailed code (and, for sign-in, magic link) proving an address (M1.5f). `scope_org_id` is
+ * the org whose site asked (null: the marketplace). Rows are pruned a day after they expire.
+ */
+export const guestChallenges = ordersSchema.table(
+  'guest_challenges',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    purpose: text('purpose').notNull(),
+    scopeOrgId: uuid('scope_org_id'),
+    emailHash: text('email_hash').notNull(),
+    /** Needed to open the session or check out once verified; gone when the row is pruned. */
+    email: text('email').notNull(),
+    codeHash: text('code_hash').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    expiresAt: ts('expires_at').notNull(),
+    linkHash: text('link_hash'),
+    browserHash: text('browser_hash'),
+    linkExpiresAt: ts('link_expires_at'),
+    usedAt: ts('used_at'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    index('guest_challenges_email_idx').on(t.emailHash, t.purpose, t.createdAt),
+    index('guest_challenges_expires_idx').on(t.expiresAt),
+    uniqueIndex('guest_challenges_link_key').on(t.linkHash),
+    check(
+      'guest_challenges_purpose_check',
+      sql.raw(`purpose in (${GUEST_CHALLENGE_PURPOSES.map((p) => `'${p}'`).join(', ')})`),
+    ),
+    check('guest_challenges_attempts_check', sql`attempts between 0 and 5`),
+    check('guest_challenges_email_lower_check', sql`email = lower(email)`),
+    check(
+      'guest_challenges_link_check',
+      sql`(link_hash is null) = (link_expires_at is null) and (link_hash is null or browser_hash is not null)`,
+    ),
+  ],
+);
+
+/**
+ * Attendee ("My tickets") sessions (M1.5f): separate from organizer sessions (Better Auth), bound
+ * to the host that issued them, for one org's site or the marketplace (null scope). The cookie
+ * holds a random token; only its HMAC is stored.
+ */
+export const guestSessions = ordersSchema.table(
+  'guest_sessions',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    tokenHash: text('token_hash').notNull(),
+    scopeOrgId: uuid('scope_org_id'),
+    host: text('host').notNull(),
+    emailHash: text('email_hash').notNull(),
+    email: text('email').notNull(),
+    expiresAt: ts('expires_at').notNull(),
+    revokedAt: ts('revoked_at'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex('guest_sessions_token_key').on(t.tokenHash),
+    index('guest_sessions_email_idx').on(t.emailHash),
+    index('guest_sessions_expires_idx').on(t.expiresAt),
+    check('guest_sessions_email_lower_check', sql`email = lower(email)`),
   ],
 );

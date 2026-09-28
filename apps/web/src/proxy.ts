@@ -172,6 +172,12 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
 
   if (orgId) {
     if (rest === '/') return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}`, locale));
+    // M1.5f: "My tickets" on the org's site lists that org's orders (the org is the route param).
+    if (rest === '/my-tickets' || rest === '/my-tickets/')
+      return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/my-tickets`, locale));
+    const mt = /^\/my-tickets\/verify\/([^/]+)\/?$/.exec(rest);
+    if (mt)
+      return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/my-tickets/verify/${mt[1]}`, locale));
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);
     if (ev) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${ev[1]}`, locale));
     // The live seat stream of that page (M1.7f): the host's org decides which events it may carry.

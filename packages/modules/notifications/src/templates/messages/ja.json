@@ -80,6 +80,20 @@
     "notifications.test": {
       "subject": "テスト通知",
       "intro": "通知は正常に動作しています。"
+    },
+    "guest.checkout-code": {
+      "subject": "メール確認コードは{code}です",
+      "intro": "{code}を入力してメールアドレスを確認し、{org}でのご注文を完了してください。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。"
+    },
+    "guest.sign-in": {
+      "subject": "マイチケットのコードは{code}です",
+      "intro": "{code}を入力すると{site}でチケットを確認できます。同じブラウザーなら下のボタンも使えます。コードは{minutes}分後、ボタンは{linkMinutes}分後に失効し、それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。",
+      "cta": "マイチケットを開く"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {{eventName}のご注文への新しいリンク} other {{eventName}のご注文へのリンク}}",
+      "intro": "{reason, select, reissued {主催者が{eventName}のご注文へのリンクを差し替えました。以前のリンクは使えません。こちらをご利用ください。} other {ご依頼のリンクです。{eventName}のご注文とチケットを開けます。}}",
+      "cta": "注文を開く"
     }
   },
   "roles": {

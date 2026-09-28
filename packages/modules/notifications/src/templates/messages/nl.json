@@ -80,6 +80,20 @@
     "notifications.test": {
       "subject": "Testmelding",
       "intro": "Meldingen werken."
+    },
+    "guest.checkout-code": {
+      "subject": "{code} is je code om je e-mail te bevestigen",
+      "intro": "Voer {code} in om je e-mail te bevestigen en je bestelling bij {org} af te ronden. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."
+    },
+    "guest.sign-in": {
+      "subject": "{code} is je code voor Mijn tickets",
+      "intro": "Voer {code} in om je tickets op {site} te zien, of gebruik de knop hieronder in dezelfde browser. De code verloopt over {minutes, plural, one {# minuut} other {# minuten}} en de knop over {linkMinutes, plural, one {# minuut} other {# minuten}}; elk werkt één keer. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
+      "cta": "Mijn tickets openen"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Je nieuwe link naar je bestelling voor {eventName}} other {Je link naar je bestelling voor {eventName}}}",
+      "intro": "{reason, select, reissued {De organisator heeft de link naar je bestelling voor {eventName} vervangen. De oude link werkt niet meer; gebruik deze.} other {Hier is de link waar je om vroeg. Hij opent je bestelling en tickets voor {eventName}.}}",
+      "cta": "Mijn bestelling openen"
     }
   },
   "roles": {

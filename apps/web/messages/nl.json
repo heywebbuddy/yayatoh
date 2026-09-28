@@ -64,7 +64,8 @@
     "kinds": {
       "orders": {
         "tickets": "Tickets",
-        "refund": "Terugbetaling"
+        "refund": "Terugbetaling",
+        "order-link": "Bestellink"
       },
       "events": {
         "reminder": "Herinnering evenement"
@@ -95,6 +96,10 @@
       },
       "payments": {
         "destination-changed": "Wijziging van de uitbetaalrekening"
+      },
+      "guest": {
+        "checkout-code": "E-mailcode bij afrekenen",
+        "sign-in": "Inloggen bij Mijn tickets"
       }
     },
     "status": {
@@ -1771,7 +1776,8 @@
       "address": "Adres van de plaatszoeker",
       "openPublic": "Plaatszoeker openen",
       "poster": "Poster plaatszoeker afdrukken",
-      "closedNote": "De plaatszoeker is gesloten. Wie de poster scant, wordt gevraagd later terug te komen."
+      "closedNote": "De plaatszoeker is gesloten. Wie de poster scant, wordt gevraagd later terug te komen.",
+      "namePoster": "Namenlijst-poster afdrukken"
     },
     "map": {
       "zoomIn": "Inzoomen",
@@ -1917,7 +1923,8 @@
       "challengeFailed": "De controle is niet gelukt. Probeer het opnieuw.",
       "challengeUnavailable": "Te veel zoekopdrachten vanaf dit apparaat. Wacht een minuut en probeer het opnieuw.",
       "closed": "De plaatszoeker is niet open voor dit evenement.",
-      "internal": "Er ging bij ons iets mis."
+      "internal": "Er ging bij ons iets mis.",
+      "rateLimited": "Te veel codes aangevraagd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
     }
   },
   "seatFinderPoster": {
@@ -3632,5 +3639,76 @@
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
     "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+  },
+  "guestVerify": {
+    "title": "Bevestig je e-mail",
+    "sent": "We hebben een 6-cijferige code naar {email} gestuurd. Voer die in om je bestelling te plaatsen. De code werkt 10 minuten.",
+    "codeLabel": "Verificatiecode",
+    "submit": "Verifiëren en doorgaan",
+    "resend": "Nieuwe code sturen",
+    "locked": "Te veel verkeerde codes. Vraag een nieuwe code aan.",
+    "expired": "Die code is verlopen of al gebruikt. Vraag een nieuwe code aan.",
+    "cooldown": "We hebben je net een code gestuurd. Kijk in je inbox of vraag straks een nieuwe aan.",
+    "changeEmail": "Verkeerd adres? Pas het hierboven aan en kies opnieuw Doorgaan naar betalen.",
+    "settingTitle": "E-mailcontrole voor kopers",
+    "settingDescription": "Kopers bevestigen hun e-mail met een 6-cijferige code voordat ze bestellen, zodat tickets nooit naar een verkeerd getypt adres gaan. Aanbevolen.",
+    "settingLabel": "Kopers vragen hun e-mail met een code te bevestigen voordat ze bestellen",
+    "settingSave": "E-mailcontrole opslaan",
+    "settingSaved": "E-mailcontrole opgeslagen.",
+    "settingOn": "Kopers bevestigen hun e-mail met een code voordat ze bestellen.",
+    "settingOff": "Kopers bestellen zonder hun e-mail te bevestigen.",
+    "resendIn": "{seconds, plural, one {Je kunt over # seconde een nieuwe code aanvragen.} other {Je kunt over # seconden een nieuwe code aanvragen.}}",
+    "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}"
+  },
+  "attendeeSignIn": {
+    "title": "Mijn tickets",
+    "intro": "Log in met je e-mail om je bestellingen en tickets te zien.",
+    "signedInAs": "Ingelogd als {email}",
+    "signedOut": "Je bent uitgelogd.",
+    "signedOutAll": "Je bent op alle apparaten uitgelogd.",
+    "noneTitle": "Nog geen bestellingen voor dit adres",
+    "noneDescription": "Bestellingen die je met dit e-mailadres plaatst, verschijnen hier.",
+    "ordersLabel": "Je bestellingen",
+    "openOrder": "Bestelling voor {event} openen",
+    "signOut": "Uitloggen",
+    "signOutEverywhere": "Uitloggen op alle apparaten",
+    "email": "Je e-mail",
+    "sendCode": "Stuur me een code",
+    "signIn": "Inloggen",
+    "orLink": "Of open de link uit dezelfde e-mail in deze browser.",
+    "emailInvalid": "Voer een geldig e-mailadres in.",
+    "linkInvalidTitle": "Deze inloglink werkt niet meer",
+    "linkInvalidDescription": "Links werken één keer, 15 minuten lang. Vraag een nieuwe code aan om in te loggen.",
+    "startAgain": "Opnieuw inloggen",
+    "linkReady": "Ga door om de tickets van {email} te zien.",
+    "continue": "Doorgaan naar Mijn tickets",
+    "otherBrowser": "Deze link is geopend in een andere browser dan die hem aanvroeg. Voer ter bescherming van je tickets de 6-cijferige code uit dezelfde e-mail in.",
+    "tickets": "{count, plural, one {# ticket} other {# tickets}}"
+  },
+  "orderLinks": {
+    "title": "Stuur me de links naar mijn bestellingen",
+    "description": "E-mail met je tickets kwijt? We sturen de links naar je bestellingen opnieuw.",
+    "email": "E-mailadres waarmee je bestelde",
+    "submit": "Links naar mijn bestellingen sturen",
+    "sent": "Als er bestellingen voor dat adres zijn, hebben we de links gestuurd.",
+    "organizerTitle": "Bestellink",
+    "organizerDescription": "Is de link van de koper per ongeluk gedeeld? Vervang hem: de oude link werkt niet meer en de koper krijgt een nieuwe per e-mail.",
+    "reissue": "Link intrekken en opnieuw uitgeven",
+    "reissueConfirm": "De huidige link van de koper werkt meteen niet meer, en er gaat een nieuwe naar {email}.",
+    "reissueYes": "Intrekken en nieuwe link sturen",
+    "reissueCancel": "Huidige link houden",
+    "reissued": "Er is een nieuwe link naar {email} gestuurd. De oude link werkt niet meer."
+  },
+  "seatPoster": {
+    "pageTitle": "Namenlijst-poster",
+    "back": "Terug naar de stoelzoeker",
+    "print": "Poster afdrukken",
+    "title": "Vind je tafel",
+    "subtitle": "Gasten van A tot Z met hun tafel en stoel",
+    "emptyTitle": "Nog niemand heeft een plaats",
+    "emptyDescription": "Geef gasten een plaats op de plattegrond en druk dan deze lijst af voor de ingang.",
+    "tableSeat": "Tafel {item} · Stoel {seat}",
+    "rowSeat": "Rij {item} · Stoel {seat}",
+    "unseated": "{count, plural, one {# gast heeft nog geen plaats en staat niet op de poster.} other {# gasten hebben nog geen plaats en staan niet op de poster.}}"
   }
 }

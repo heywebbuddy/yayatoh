@@ -12,6 +12,7 @@ import { refresh } from 'next/cache';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
+import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 import {
   deviceKey,
   forgetFinder,
@@ -32,6 +33,7 @@ export type FinderError =
   | 'invalidName'
   | 'challengeFailed'
   | 'challengeUnavailable'
+  | 'rateLimited'
   | 'closed'
   | 'internal';
 
@@ -41,6 +43,8 @@ export interface FinderState {
   readonly sent?: boolean;
   readonly error?: FinderError;
   readonly attemptsLeft?: number;
+  /** `rateLimited` (M1.5f): minutes until this device or address may ask for another code. */
+  readonly retryMinutes?: number;
   /** Past the device's lookup budget: show the challenge and ask again. */
   readonly challenge?: boolean;
   /** What the guest typed, so a challenge or an error never clears it. */
@@ -85,6 +89,11 @@ async function requestCodeAction(slug: string, _prev: FinderState, form: FormDat
     return { step: 'email', email, error: 'invalidEmail' };
   const { human, failed } = await challengeAnswer(form);
   if (failed) return { step: 'email', email, challenge: true, error: 'challengeFailed' };
+  // M1.5f: every code is an email, so codes are also limited per device and per address (the M1.14
+  // limiter; the same for listed and unlisted addresses, so it reveals nothing).
+  const limit = await limitAction('guestCode', { identity: email.toLowerCase(), scope: 'seat-finder' });
+  if (!limit.allowed)
+    return { step: 'email', email, error: 'rateLimited', retryMinutes: retryAfterMinutes(limit) };
   try {
     const r = await executeCommand(
       requestFinderCodeCommand,

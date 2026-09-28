@@ -64,7 +64,8 @@
     "kinds": {
       "orders": {
         "tickets": "门票",
-        "refund": "退款"
+        "refund": "退款",
+        "order-link": "订单链接"
       },
       "events": {
         "reminder": "活动提醒"
@@ -95,6 +96,10 @@
       },
       "payments": {
         "destination-changed": "收款账户变更"
+      },
+      "guest": {
+        "checkout-code": "结账邮箱验证码",
+        "sign-in": "我的门票登录"
       }
     },
     "status": {
@@ -1771,7 +1776,8 @@
       "address": "座位查询地址",
       "openPublic": "打开座位查询",
       "poster": "打印座位查询海报",
-      "closedNote": "座位查询已关闭。扫描海报的宾客会被提示稍后再来。"
+      "closedNote": "座位查询已关闭。扫描海报的宾客会被提示稍后再来。",
+      "namePoster": "打印姓名列表海报"
     },
     "map": {
       "zoomIn": "放大",
@@ -1917,7 +1923,8 @@
       "challengeFailed": "验证未通过。请重试。",
       "challengeUnavailable": "此设备的查询次数过多。请稍等一分钟后重试。",
       "closed": "此活动的座位查询未开放。",
-      "internal": "我们这边出了点问题。"
+      "internal": "我们这边出了点问题。",
+      "rateLimited": "请求验证码次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
     }
   },
   "seatFinderPoster": {
@@ -3632,5 +3639,76 @@
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
     "unauthenticated": "会话已结束，请重新登录。"
+  },
+  "guestVerify": {
+    "title": "确认您的邮箱",
+    "sent": "我们已向 {email} 发送 6 位验证码。输入后即可下单。验证码 10 分钟内有效。",
+    "codeLabel": "验证码",
+    "submit": "验证并继续",
+    "resend": "发送新验证码",
+    "locked": "错误次数过多。请获取新验证码。",
+    "expired": "该验证码已过期或已被使用。请获取新验证码。",
+    "cooldown": "我们刚刚向您发送了验证码。请查看收件箱，或稍后再获取新验证码。",
+    "changeEmail": "邮箱填错了？请在上方修改，然后再次选择“继续付款”。",
+    "settingTitle": "购票人邮箱验证",
+    "settingDescription": "购票人在下单前用 6 位验证码确认邮箱，门票就不会发到填错的地址。建议开启。",
+    "settingLabel": "要求购票人在下单前用验证码确认邮箱",
+    "settingSave": "保存邮箱验证",
+    "settingSaved": "邮箱验证已保存。",
+    "settingOn": "购票人在下单前用验证码确认邮箱。",
+    "settingOff": "购票人无需确认邮箱即可下单。",
+    "resendIn": "{seconds, plural, other {# 秒后可获取新验证码。}}",
+    "wrong": "{count, plural, other {验证码不正确。还可尝试 # 次。}}"
+  },
+  "attendeeSignIn": {
+    "title": "我的门票",
+    "intro": "使用邮箱登录，查看您购买的订单和门票。",
+    "signedInAs": "已登录：{email}",
+    "signedOut": "您已退出登录。",
+    "signedOutAll": "您已在所有设备上退出登录。",
+    "noneTitle": "此邮箱暂无订单",
+    "noneDescription": "使用此邮箱下的订单会显示在这里。",
+    "ordersLabel": "您的订单",
+    "openOrder": "打开 {event} 的订单",
+    "signOut": "退出登录",
+    "signOutEverywhere": "在所有设备上退出",
+    "email": "您的邮箱",
+    "sendCode": "发送验证码",
+    "signIn": "登录",
+    "orLink": "或在此浏览器中打开同一封邮件中的链接。",
+    "emailInvalid": "请输入有效的邮箱地址。",
+    "linkInvalidTitle": "此登录链接已失效",
+    "linkInvalidDescription": "链接仅可使用一次，有效期 15 分钟。请获取新验证码登录。",
+    "startAgain": "重新登录",
+    "linkReady": "继续查看 {email} 的门票。",
+    "continue": "前往我的门票",
+    "otherBrowser": "此链接在与请求时不同的浏览器中打开。为保护您的门票，请输入同一封邮件中的 6 位验证码。",
+    "tickets": "{count, plural, other {# 张门票}}"
+  },
+  "orderLinks": {
+    "title": "通过邮件发送我的订单链接",
+    "description": "找不到含门票的邮件？我们会再次发送您的订单链接。",
+    "email": "下单时使用的邮箱",
+    "submit": "发送我的订单链接",
+    "sent": "如果该邮箱有订单，我们已发送其链接。",
+    "organizerTitle": "订单链接",
+    "organizerDescription": "如果购票人的链接被误分享，请更换：旧链接将失效，购票人会收到新的链接邮件。",
+    "reissue": "撤销并重新发放链接",
+    "reissueConfirm": "购票人当前的链接将立即失效，新链接将发送至 {email}。",
+    "reissueYes": "撤销并发送新链接",
+    "reissueCancel": "保留当前链接",
+    "reissued": "新链接已发送至 {email}。旧链接已失效。"
+  },
+  "seatPoster": {
+    "pageTitle": "姓名列表海报",
+    "back": "返回座位查询",
+    "print": "打印海报",
+    "title": "查找您的餐桌",
+    "subtitle": "宾客名单（含餐桌与座位）",
+    "emptyTitle": "还没有人入座",
+    "emptyDescription": "在座位图上为宾客安排座位，然后打印此名单放在入口。",
+    "tableSeat": "第 {item} 桌 · {seat} 号座",
+    "rowSeat": "第 {item} 排 · {seat} 号座",
+    "unseated": "{count, plural, other {# 位宾客尚未安排座位，未列入海报。}}"
   }
 }

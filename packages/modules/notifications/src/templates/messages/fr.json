@@ -80,6 +80,20 @@
     "notifications.test": {
       "subject": "Notification de test",
       "intro": "Les notifications fonctionnent."
+    },
+    "guest.checkout-code": {
+      "subject": "{code} est votre code pour confirmer votre e-mail",
+      "intro": "Saisissez {code} pour confirmer votre e-mail et finaliser votre commande avec {org}. Le code ne fonctionne qu'une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, ignorez cet e-mail."
+    },
+    "guest.sign-in": {
+      "subject": "{code} est votre code pour Mes billets",
+      "intro": "Saisissez {code} pour voir vos billets sur {site}, ou utilisez le bouton ci-dessous dans le même navigateur. Le code expire dans {minutes, plural, one {# minute} other {# minutes}} et le bouton dans {linkMinutes, plural, one {# minute} other {# minutes}} ; chacun ne fonctionne qu'une fois. Si vous ne l'avez pas demandé, ignorez cet e-mail.",
+      "cta": "Ouvrir Mes billets"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Votre nouveau lien vers votre commande pour {eventName}} other {Votre lien vers votre commande pour {eventName}}}",
+      "intro": "{reason, select, reissued {L'organisateur a remplacé le lien vers votre commande pour {eventName}. L'ancien lien ne fonctionne plus ; utilisez celui-ci.} other {Voici le lien demandé. Il ouvre votre commande et vos billets pour {eventName}.}}",
+      "cta": "Ouvrir ma commande"
     }
   },
   "roles": {

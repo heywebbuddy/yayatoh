@@ -25,4 +25,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Audit of platform_reader use; append-only through a SECURITY DEFINER function (platform_reader).',
   'platform.api_usage':
     'Request counts per day × /v1 route × client × app version (no tenant, user or IP); incremented through a SECURITY DEFINER function, read by platform_reader.',
+  'orders.guest_challenges':
+    "Guest email codes and magic links (M1.5f; codes, links and browsers as HMACs; the address until the row is pruned a day after expiry); a guest proving an address is no tenant's data yet and marketplace sign-in spans orgs; reached only through @yayatoh/orders (app_user; platform_reader has no access).",
+  'orders.guest_sessions':
+    'Attendee "My tickets" sessions (M1.5f; token HMAC, host-bound, org or marketplace scope); reached only through @yayatoh/orders (app_user; platform_reader has no access).',
 };

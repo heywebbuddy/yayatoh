@@ -64,7 +64,8 @@
     "kinds": {
       "orders": {
         "tickets": "票券",
-        "refund": "退款"
+        "refund": "退款",
+        "order-link": "訂單連結"
       },
       "events": {
         "reminder": "活動提醒"
@@ -95,6 +96,10 @@
       },
       "payments": {
         "destination-changed": "撥款帳戶變更"
+      },
+      "guest": {
+        "checkout-code": "結帳電子郵件驗證碼",
+        "sign-in": "我的票券登入"
       }
     },
     "status": {
@@ -1771,7 +1776,8 @@
       "address": "座位查詢網址",
       "openPublic": "開啟座位查詢",
       "poster": "列印座位查詢海報",
-      "closedNote": "座位查詢已關閉。掃描海報的賓客會被提示稍後再來。"
+      "closedNote": "座位查詢已關閉。掃描海報的賓客會被提示稍後再來。",
+      "namePoster": "列印姓名名單海報"
     },
     "map": {
       "zoomIn": "放大",
@@ -1917,7 +1923,8 @@
       "challengeFailed": "驗證未通過。請再試一次。",
       "challengeUnavailable": "此裝置的查詢次數過多。請稍候一分鐘再試。",
       "closed": "此活動的座位查詢未開放。",
-      "internal": "我們這邊發生了問題。"
+      "internal": "我們這邊發生了問題。",
+      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
     }
   },
   "seatFinderPoster": {
@@ -3632,5 +3639,76 @@
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
     "unauthenticated": "工作階段已結束，請重新登入。"
+  },
+  "guestVerify": {
+    "title": "確認您的電子郵件",
+    "sent": "我們已寄送 6 位數驗證碼至 {email}。輸入後即可下單。驗證碼 10 分鐘內有效。",
+    "codeLabel": "驗證碼",
+    "submit": "驗證並繼續",
+    "resend": "寄送新驗證碼",
+    "locked": "錯誤次數過多。請索取新驗證碼。",
+    "expired": "此驗證碼已過期或已使用。請索取新驗證碼。",
+    "cooldown": "我們剛寄出驗證碼。請查看收件匣，或稍後再索取新驗證碼。",
+    "changeEmail": "電子郵件填錯了？請在上方修改，然後再次選擇「繼續付款」。",
+    "settingTitle": "購票人電子郵件驗證",
+    "settingDescription": "購票人下單前以 6 位數驗證碼確認電子郵件，票券就不會寄到打錯的地址。建議開啟。",
+    "settingLabel": "要求購票人下單前以驗證碼確認電子郵件",
+    "settingSave": "儲存電子郵件驗證",
+    "settingSaved": "已儲存電子郵件驗證。",
+    "settingOn": "購票人下單前以驗證碼確認電子郵件。",
+    "settingOff": "購票人無需確認電子郵件即可下單。",
+    "resendIn": "{seconds, plural, other {# 秒後可索取新驗證碼。}}",
+    "wrong": "{count, plural, other {驗證碼不正確。還可嘗試 # 次。}}"
+  },
+  "attendeeSignIn": {
+    "title": "我的票券",
+    "intro": "使用電子郵件登入，查看您購買的訂單和票券。",
+    "signedInAs": "已登入：{email}",
+    "signedOut": "您已登出。",
+    "signedOutAll": "您已在所有裝置上登出。",
+    "noneTitle": "此電子郵件尚無訂單",
+    "noneDescription": "使用此電子郵件下的訂單會顯示在這裡。",
+    "ordersLabel": "您的訂單",
+    "openOrder": "開啟 {event} 的訂單",
+    "signOut": "登出",
+    "signOutEverywhere": "在所有裝置上登出",
+    "email": "您的電子郵件",
+    "sendCode": "寄送驗證碼",
+    "signIn": "登入",
+    "orLink": "或在此瀏覽器中開啟同一封郵件中的連結。",
+    "emailInvalid": "請輸入有效的電子郵件地址。",
+    "linkInvalidTitle": "此登入連結已失效",
+    "linkInvalidDescription": "連結僅能使用一次，有效期 15 分鐘。請索取新驗證碼登入。",
+    "startAgain": "重新登入",
+    "linkReady": "繼續查看 {email} 的票券。",
+    "continue": "前往我的票券",
+    "otherBrowser": "此連結在與請求時不同的瀏覽器中開啟。為保護您的票券，請輸入同一封郵件中的 6 位數驗證碼。",
+    "tickets": "{count, plural, other {# 張票券}}"
+  },
+  "orderLinks": {
+    "title": "寄送我的訂單連結",
+    "description": "找不到含票券的郵件？我們會再次寄送您的訂單連結。",
+    "email": "下單時使用的電子郵件",
+    "submit": "寄送我的訂單連結",
+    "sent": "如果該電子郵件有訂單，我們已寄出其連結。",
+    "organizerTitle": "訂單連結",
+    "organizerDescription": "如果購票人的連結被誤分享，請更換：舊連結將失效，購票人會收到新的連結郵件。",
+    "reissue": "撤銷並重新發放連結",
+    "reissueConfirm": "購票人目前的連結將立即失效，新連結將寄至 {email}。",
+    "reissueYes": "撤銷並寄送新連結",
+    "reissueCancel": "保留目前連結",
+    "reissued": "新連結已寄至 {email}。舊連結已失效。"
+  },
+  "seatPoster": {
+    "pageTitle": "姓名名單海報",
+    "back": "返回座位查詢",
+    "print": "列印海報",
+    "title": "找到您的桌位",
+    "subtitle": "賓客名單（含桌號與座位）",
+    "emptyTitle": "尚無人入座",
+    "emptyDescription": "在座位圖上為賓客安排座位，再列印此名單放在入口。",
+    "tableSeat": "第 {item} 桌 · {seat} 號座",
+    "rowSeat": "第 {item} 排 · {seat} 號座",
+    "unseated": "{count, plural, other {# 位賓客尚未安排座位，未列入海報。}}"
   }
 }
