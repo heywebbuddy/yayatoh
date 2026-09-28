@@ -6,7 +6,9 @@ import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
 import { OrgHero } from '@/components/marketplace/org-hero.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { originFor } from '@/lib/hosts.ts';
+import { cachedEntries } from '@/server/cms.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { cachedOrganizerListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -49,6 +51,9 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
   const req = await requestHost();
   const site = o.tenantSite && o.primaryHost ? originFor(req, o.primaryHost) : null;
   const path = req.kind === 'marketplace' ? `/o/${o.slug}` : `/organizers/${o.slug}`;
+  // M1.4g: the organizer's blog, when it has published posts.
+  const posts = await cachedEntries(o.orgId, 'post', 1);
+  const tc = await getTranslations('cmsPublic');
   return (
     <div className="min-h-dvh bg-white">
       <SiteHeader />
@@ -58,6 +63,11 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
             <a href={site} className="self-start text-body underline">
               {t('organizer.site')}
             </a>
+          ) : null}
+          {posts.items.length > 0 ? (
+            <Link href={`${path}/blogs`} className="self-start text-body underline">
+              {tc('blog')}
+            </Link>
           ) : null}
         </OrgHero>
         <section

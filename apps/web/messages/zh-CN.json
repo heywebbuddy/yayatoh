@@ -186,7 +186,9 @@
     "series": "系列",
     "templates": "模板",
     "apiKeys": "API 密钥",
-    "publicSite": "公开网站"
+    "publicSite": "公开网站",
+    "siteContent": "页面和博客",
+    "reviews": "评价"
   },
   "vocab": {
     "attendee": "参会者",
@@ -2977,6 +2979,13 @@
       "copied": "已复制。",
       "emptyTitle": "暂无公开活动",
       "emptyDescription": "发布活动后即可获取其小组件代码。"
+    },
+    "navPages": {
+      "title": "网站导航",
+      "description": "在网站页眉中与博客并列显示链接的页面。",
+      "empty": "你还没有页面。请在“页面和博客”中创建。",
+      "hint": "可以链接草稿，发布后才会显示。",
+      "none": "未链接任何页面。"
     }
   },
   "doorStaff": {
@@ -3123,5 +3132,184 @@
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
     "unauthenticated": "会话已结束，请重新登录。"
+  },
+  "cms": {
+    "title": "页面和博客",
+    "description": "你的博客文章和页面，显示在公开网站和主办方页面上。",
+    "readOnly": "你可以阅读团队的页面和文章，但不能修改。",
+    "notAllowed": "你没有撰写页面或文章的权限。",
+    "deleted": "已删除。",
+    "created": "草稿已创建。准备好后再发布。",
+    "saved": "已保存。",
+    "fixErrors": "请检查标出的字段。",
+    "tabsLabel": "内容类型",
+    "tabs": {
+      "post": "博客文章",
+      "page": "页面"
+    },
+    "kind": {
+      "post": "博客文章",
+      "page": "页面"
+    },
+    "newPost": "新文章",
+    "newPage": "新页面",
+    "newDescription": "使用简单的 Markdown 撰写。发布前一直是草稿。",
+    "back": "返回页面和博客",
+    "createDraft": "创建草稿",
+    "save": "保存更改",
+    "emptyPostsTitle": "还没有博客文章",
+    "emptyPagesTitle": "还没有页面",
+    "emptyDescription": "创建一个；发布前一直是草稿。",
+    "emptyDescriptionViewer": "还没有任何内容。",
+    "columns": {
+      "title": "标题",
+      "status": "状态",
+      "updated": "更新时间"
+    },
+    "status": {
+      "draft": "草稿",
+      "published": "已发布",
+      "archived": "已归档"
+    },
+    "publishedOn": "首次发布于 {date}",
+    "neverPublished": "尚未发布",
+    "viewPublic": "在网站上查看",
+    "previewLabel": "预览",
+    "showPreview": "预览",
+    "hidePreview": "隐藏预览",
+    "previewEmpty": "暂无可预览的内容。",
+    "fields": {
+      "title": "标题",
+      "slug": "地址",
+      "excerpt": "摘要",
+      "body": "正文",
+      "seoTitle": "搜索标题",
+      "seoDescription": "搜索描述"
+    },
+    "titleError": "请输入标题（最多 160 个字符）。",
+    "slugHint": "网址中 {prefix} 之后的部分。留空则根据标题生成。",
+    "slugFrozen": "已发布在 {path}。发布后地址不能更改。",
+    "slugError": {
+      "taken": "该地址已被使用。",
+      "format": "请使用小写英文字母、数字和单个连字符。",
+      "too_long": "最多 80 个字符。",
+      "frozen": "发布后地址不能更改。"
+    },
+    "excerptHint": "显示在博客列表和搜索结果中（最多 300 个字符）。",
+    "bodyHint": "Markdown：## 标题、- 列表、**粗体**、*斜体* 和 [链接](https://…)。HTML 会显示为文本。",
+    "seoLegend": "搜索引擎（可选）",
+    "seoTitleHint": "最多 70 个字符。默认使用标题。",
+    "seoDescriptionHint": "最多 160 个字符。默认使用摘要。",
+    "tooLong": "最多 {max} 个字符。",
+    "actions": {
+      "publish": "发布",
+      "unpublish": "取消发布",
+      "archive": "归档",
+      "delete": "删除"
+    },
+    "deleteConfirm": {
+      "title": "删除“{title}”？",
+      "body": "它会立即从你的网站消失，且无法撤销。",
+      "confirm": "确认删除",
+      "cancel": "取消"
+    }
+  },
+  "cmsPublic": {
+    "blog": "博客",
+    "siteNav": "{org} 网站",
+    "organizerNav": "{org} 的页面",
+    "poweredBy": "由 Yayatoh 提供支持",
+    "blogTitle": "{org} 博客",
+    "blogDescription": "来自 {org} 的新闻和故事。",
+    "emptyTitle": "还没有文章",
+    "emptyDescription": "{org} 还没有在这里发布任何内容。",
+    "posts": "文章",
+    "by": "作者：{name}",
+    "allPosts": "全部文章"
+  },
+  "reviews": {
+    "ratingLabel": "评分 {rating}/5",
+    "anonymous": "持票人",
+    "reportReasons": {
+      "spam": "垃圾信息或广告",
+      "offensive": "冒犯或辱骂",
+      "off_topic": "与本活动无关",
+      "personal_info": "泄露个人信息",
+      "other": "其他原因"
+    },
+    "console": {
+      "title": "评价",
+      "description": "持票人在活动结束后的评价。隐藏违反规则的内容；原因会保存在活动日志中。",
+      "readOnly": "你可以查看评价，但不能管理。",
+      "average": "平均评分",
+      "noRating": "没有可见的评价",
+      "visible": "可见评价",
+      "filterLabel": "显示评价",
+      "filters": {
+        "all": "全部",
+        "visible": "可见",
+        "hidden": "已隐藏",
+        "reported": "被举报"
+      },
+      "emptyTitle": "还没有评价",
+      "emptyFilteredTitle": "这里没有评价",
+      "emptyDescription": "活动结束后，持票人可以在订单页面发表评价。",
+      "listLabel": "评价",
+      "reviewBy": "{name} 的评价",
+      "status": {
+        "visible": "可见",
+        "hidden": "已隐藏"
+      },
+      "hiddenBecause": "已隐藏：{reason}",
+      "reports": "{count, plural, =0 {没有待处理的举报} other {# 条待处理的举报}}",
+      "reportStatus": {
+        "open": "待处理",
+        "dismissed": "已驳回",
+        "actioned": "已处理"
+      },
+      "hideReason": "隐藏原因",
+      "unhideReason": "重新显示的原因",
+      "reasonError": "请填写原因（3 到 300 个字符）。",
+      "hide": "隐藏评价",
+      "unhide": "显示评价",
+      "dismissReports": "驳回举报"
+    },
+    "form": {
+      "rating": "你的评分",
+      "stars": "{count, plural, other {# 星}}",
+      "ratingError": "请选择 1 到 5 的评分。",
+      "body": "你的评价（可选）",
+      "bodyHint": "{count}/{max} 个字符。仅限文本；将显示你的名字和姓氏首字母。",
+      "bodyError": "最多 {max} 个字符。",
+      "submit": "发表评价",
+      "rateLimited": "尝试次数过多。请几分钟后再试。",
+      "already": "你已经评价过此活动。",
+      "notEnded": "活动结束后即可评价。"
+    },
+    "report": {
+      "open": "举报",
+      "openFor": "{name} 的评价",
+      "reason": "举报原因",
+      "note": "详情（可选）",
+      "submit": "提交举报",
+      "cancel": "取消",
+      "thanks": "谢谢。主办方会查看。",
+      "rateLimited": "举报过多。请稍后再试。"
+    },
+    "order": {
+      "title": "评价此活动",
+      "yours": "你的评价",
+      "ratingLabel": "你的评分：{rating}/5",
+      "hidden": "主办方已在活动页面隐藏你的评价。",
+      "invite": "感觉如何？评价开放至 {until}。",
+      "opensAt": "活动结束后（{date}）即可评价。",
+      "closed": "此活动的评价已于 {date} 关闭。",
+      "notHeld": "此活动未按计划举行，因此无法评价。"
+    },
+    "public": {
+      "title": "评价",
+      "summary": "{average}/5 · {count, plural, other {# 条评价}}",
+      "recent": "最新评价"
+    }
   }
 }

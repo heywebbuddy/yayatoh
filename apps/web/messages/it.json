@@ -186,7 +186,9 @@
     "series": "Serie",
     "templates": "Modelli",
     "apiKeys": "Chiavi API",
-    "publicSite": "Sito pubblico"
+    "publicSite": "Sito pubblico",
+    "siteContent": "Pagine e blog",
+    "reviews": "Recensioni"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -2977,6 +2979,13 @@
       "copied": "Copiato.",
       "emptyTitle": "Ancora nessun evento pubblico",
       "emptyDescription": "Pubblica un evento per ottenere lo snippet del widget."
+    },
+    "navPages": {
+      "title": "Navigazione del sito",
+      "description": "Pagine da collegare nell’intestazione del tuo sito, accanto al blog.",
+      "empty": "Non hai ancora pagine. Creane una in Pagine e blog.",
+      "hint": "Puoi collegare le bozze; appaiono una volta pubblicate.",
+      "none": "Nessuna pagina collegata."
     }
   },
   "doorStaff": {
@@ -3123,5 +3132,184 @@
     "invalidPassword": "La password non è corretta.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti, poi riprova.",
     "unauthenticated": "La sessione è scaduta. Accedi di nuovo."
+  },
+  "cms": {
+    "title": "Pagine e blog",
+    "description": "I tuoi articoli e le tue pagine, mostrati sul sito pubblico e sulla pagina organizzatore.",
+    "readOnly": "Puoi leggere pagine e articoli del tuo team, ma non modificarli.",
+    "notAllowed": "Non hai il permesso di scrivere pagine o articoli.",
+    "deleted": "Eliminato.",
+    "created": "Bozza creata. Pubblicala quando è pronta.",
+    "saved": "Salvato.",
+    "fixErrors": "Controlla i campi evidenziati.",
+    "tabsLabel": "Tipo di contenuto",
+    "tabs": {
+      "post": "Articoli del blog",
+      "page": "Pagine"
+    },
+    "kind": {
+      "post": "Articolo del blog",
+      "page": "Pagina"
+    },
+    "newPost": "Nuovo articolo",
+    "newPage": "Nuova pagina",
+    "newDescription": "Scrivi in Markdown semplice. Resta una bozza finché non la pubblichi.",
+    "back": "Torna a pagine e blog",
+    "createDraft": "Crea bozza",
+    "save": "Salva modifiche",
+    "emptyPostsTitle": "Ancora nessun articolo",
+    "emptyPagesTitle": "Ancora nessuna pagina",
+    "emptyDescription": "Creane uno; resta una bozza finché non lo pubblichi.",
+    "emptyDescriptionViewer": "Non è stato ancora scritto nulla.",
+    "columns": {
+      "title": "Titolo",
+      "status": "Stato",
+      "updated": "Aggiornato"
+    },
+    "status": {
+      "draft": "Bozza",
+      "published": "Pubblicato",
+      "archived": "Archiviato"
+    },
+    "publishedOn": "Pubblicato per la prima volta il {date}",
+    "neverPublished": "Non ancora pubblicato",
+    "viewPublic": "Vedi sul tuo sito",
+    "previewLabel": "Anteprima",
+    "showPreview": "Anteprima",
+    "hidePreview": "Nascondi anteprima",
+    "previewEmpty": "Ancora niente da mostrare in anteprima.",
+    "fields": {
+      "title": "Titolo",
+      "slug": "Indirizzo",
+      "excerpt": "Riassunto",
+      "body": "Testo",
+      "seoTitle": "Titolo per la ricerca",
+      "seoDescription": "Descrizione per la ricerca"
+    },
+    "titleError": "Inserisci un titolo (fino a 160 caratteri).",
+    "slugHint": "La parte finale dell’indirizzo web, dopo {prefix}. Lascia vuoto per crearla dal titolo.",
+    "slugFrozen": "Pubblicato su {path}. L’indirizzo non può cambiare dopo la pubblicazione.",
+    "slugError": {
+      "taken": "Questo indirizzo è già in uso.",
+      "format": "Usa lettere minuscole, cifre e trattini singoli.",
+      "too_long": "Usa al massimo 80 caratteri.",
+      "frozen": "L’indirizzo non può cambiare dopo la pubblicazione."
+    },
+    "excerptHint": "Mostrato nell’elenco del blog e nei risultati di ricerca (fino a 300 caratteri).",
+    "bodyHint": "Markdown: ## titoli, - elenchi, **grassetto**, *corsivo* e [link](https://…). L’HTML viene mostrato come testo.",
+    "seoLegend": "Motori di ricerca (facoltativo)",
+    "seoTitleHint": "Fino a 70 caratteri. Predefinito: il titolo.",
+    "seoDescriptionHint": "Fino a 160 caratteri. Predefinito: il riassunto.",
+    "tooLong": "Usa al massimo {max} caratteri.",
+    "actions": {
+      "publish": "Pubblica",
+      "unpublish": "Annulla pubblicazione",
+      "archive": "Archivia",
+      "delete": "Elimina"
+    },
+    "deleteConfirm": {
+      "title": "Eliminare «{title}»?",
+      "body": "Scompare subito dal tuo sito. L’operazione è irreversibile.",
+      "confirm": "Sì, elimina",
+      "cancel": "Annulla"
+    }
+  },
+  "cmsPublic": {
+    "blog": "Blog",
+    "siteNav": "Sito di {org}",
+    "organizerNav": "Pagine di {org}",
+    "poweredBy": "Realizzato con Yayatoh",
+    "blogTitle": "Blog di {org}",
+    "blogDescription": "Notizie e storie da {org}.",
+    "emptyTitle": "Ancora nessun articolo",
+    "emptyDescription": "{org} non ha ancora pubblicato nulla qui.",
+    "posts": "Articoli",
+    "by": "di {name}",
+    "allPosts": "Tutti gli articoli"
+  },
+  "reviews": {
+    "ratingLabel": "Valutato {rating} su 5",
+    "anonymous": "Titolare del biglietto",
+    "reportReasons": {
+      "spam": "Spam o pubblicità",
+      "offensive": "Offensivo o abusivo",
+      "off_topic": "Non riguarda questo evento",
+      "personal_info": "Condivide dati personali",
+      "other": "Altro"
+    },
+    "console": {
+      "title": "Recensioni",
+      "description": "Cosa hanno detto i titolari dei biglietti dopo l’evento. Nascondi ciò che viola le tue regole; il motivo resta nel registro attività.",
+      "readOnly": "Puoi leggere le recensioni, ma non moderarle.",
+      "average": "Valutazione media",
+      "noRating": "Nessuna recensione visibile",
+      "visible": "Recensioni visibili",
+      "filterLabel": "Mostra recensioni",
+      "filters": {
+        "all": "Tutte",
+        "visible": "Visibili",
+        "hidden": "Nascoste",
+        "reported": "Segnalate"
+      },
+      "emptyTitle": "Ancora nessuna recensione",
+      "emptyFilteredTitle": "Nessuna recensione qui",
+      "emptyDescription": "I titolari possono recensire l’evento dalla pagina del loro ordine una volta terminato.",
+      "listLabel": "Recensioni",
+      "reviewBy": "Recensione di {name}",
+      "status": {
+        "visible": "Visibile",
+        "hidden": "Nascosta"
+      },
+      "hiddenBecause": "Nascosta: {reason}",
+      "reports": "{count, plural, =0 {Nessuna segnalazione aperta} one {# segnalazione aperta} other {# segnalazioni aperte}}",
+      "reportStatus": {
+        "open": "aperta",
+        "dismissed": "respinta",
+        "actioned": "gestita"
+      },
+      "hideReason": "Motivo per nasconderla",
+      "unhideReason": "Motivo per mostrarla di nuovo",
+      "reasonError": "Indica un motivo (da 3 a 300 caratteri).",
+      "hide": "Nascondi recensione",
+      "unhide": "Mostra recensione",
+      "dismissReports": "Respingi segnalazioni"
+    },
+    "form": {
+      "rating": "La tua valutazione",
+      "stars": "{count, plural, one {# stella} other {# stelle}}",
+      "ratingError": "Scegli una valutazione da 1 a 5.",
+      "body": "La tua recensione (facoltativa)",
+      "bodyHint": "{count} di {max} caratteri. Solo testo; vengono mostrati il tuo nome e l’iniziale del cognome.",
+      "bodyError": "Usa al massimo {max} caratteri.",
+      "submit": "Pubblica recensione",
+      "rateLimited": "Troppi tentativi. Riprova tra qualche minuto.",
+      "already": "Hai già recensito questo evento.",
+      "notEnded": "Potrai recensire quando l’evento sarà terminato."
+    },
+    "report": {
+      "open": "Segnala",
+      "openFor": "recensione di {name}",
+      "reason": "Perché la segnali?",
+      "note": "Dettagli (facoltativo)",
+      "submit": "Invia segnalazione",
+      "cancel": "Annulla",
+      "thanks": "Grazie. L’organizzatore la esaminerà.",
+      "rateLimited": "Troppe segnalazioni. Riprova più tardi."
+    },
+    "order": {
+      "title": "Recensisci questo evento",
+      "yours": "La tua recensione",
+      "ratingLabel": "Hai dato {rating} su 5",
+      "hidden": "L’organizzatore ha nascosto la tua recensione dalla pagina dell’evento.",
+      "invite": "Com’è andata? Le recensioni sono aperte fino al {until}.",
+      "opensAt": "Potrai recensire questo evento quando termina ({date}).",
+      "closed": "Le recensioni di questo evento sono state chiuse il {date}.",
+      "notHeld": "Questo evento non si è svolto come previsto, quindi non può essere recensito."
+    },
+    "public": {
+      "title": "Recensioni",
+      "summary": "{average} su 5 · {count, plural, one {# recensione} other {# recensioni}}",
+      "recent": "Ultime recensioni"
+    }
   }
 }

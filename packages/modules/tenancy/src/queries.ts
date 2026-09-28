@@ -128,6 +128,8 @@ export async function organizationPublicTx(
   poweredByVisible: boolean;
   primaryHost: string | null;
   primaryHostManaged: boolean;
+  /** The org's IANA timezone (dates on its public pages that belong to no event). */
+  timezone: string;
 } | null> {
   const [o] = await tx
     .select({
@@ -136,6 +138,7 @@ export async function organizationPublicTx(
       status: organizations.status,
       brandColor: organizations.brandColor,
       poweredByVisible: organizations.poweredByVisible,
+      timezone: organizations.timezone,
     })
     .from(organizations)
     .where(eq(organizations.id, orgId));

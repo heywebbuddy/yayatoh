@@ -7,6 +7,7 @@ import {
   type SearchParams,
   searchListings,
 } from '@yayatoh/marketplace';
+import { type PublicReviewSummaryDto, publicReviews } from '@yayatoh/reviews';
 import { publicCached } from './public-cache.ts';
 
 type Raw = Record<string, unknown>;
@@ -45,4 +46,19 @@ export const cachedCities = () =>
     ['cities'],
     () => listingCities(),
     (raw) => raw as string[],
+  );
+
+/** An event's public reviews (M1.4g), cached under its org's scope (moderation revalidates it). */
+export const cachedReviews = (orgId: string, eventId: string) =>
+  publicCached(
+    { org: orgId },
+    ['reviews', eventId],
+    () => publicReviews(orgId, eventId),
+    (raw) => {
+      const s = raw as PublicReviewSummaryDto & { recent: Raw[] };
+      return {
+        ...s,
+        recent: s.recent.map((r) => ({ ...r, createdAt: new Date(String(r.createdAt)) })),
+      } as PublicReviewSummaryDto;
+    },
   );

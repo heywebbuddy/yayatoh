@@ -14,6 +14,7 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'templates', path: 'templates', group: 'build', module: 'core', icon: 'copy' },
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
   { key: 'publicSite', path: 'site', group: 'build', module: 'core', icon: 'store' },
+  { key: 'siteContent', path: 'content', group: 'build', module: 'core', icon: 'file-text' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
   { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },

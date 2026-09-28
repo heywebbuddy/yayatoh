@@ -4,13 +4,14 @@ import { accessTarget, checkoutTarget, publicEventBySlug, redeemAccessCodeComman
 import { publicForm } from '@yayatoh/forms';
 import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { attachPaymentCommand, type CheckoutResultDto, startCheckoutCommand } from '@yayatoh/orders';
+import { reportReviewCommand } from '@yayatoh/reviews';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
 import { refresh } from 'next/cache';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import type { FormState } from '@/lib/form-state.ts';
-import { failure } from '@/server/form.ts';
+import { failure, success } from '@/server/form.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
@@ -238,4 +239,33 @@ async function redeem(slug: string, form: FormData): Promise<FormState> {
     throw err;
   }
   return { ok: true, code: null, stamp: Date.now() };
+}
+
+/** Report a public review (M1.4g). Rate-limited per device; one report per device and review. */
+export async function reportReviewAction(
+  slug: string,
+  reviewId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const limit = await limitAction('reviewReport');
+  if (!limit.allowed) return { ok: false, code: 'rate_limited' };
+  const target = await checkoutTarget(slug);
+  if (!target) return { ok: false, code: 'not_found' };
+  try {
+    await executeCommand(
+      reportReviewCommand,
+      {
+        reviewId,
+        reason: String(form.get('reason') ?? '') as never,
+        note: String(form.get('note') ?? ''),
+        clientKey: await clientKey('review-report'),
+      },
+      createCtx({ orgId: target.orgId }),
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  return success();
 }

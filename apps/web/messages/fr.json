@@ -186,7 +186,9 @@
     "series": "Séries",
     "templates": "Modèles",
     "apiKeys": "Clés d’API",
-    "publicSite": "Site public"
+    "publicSite": "Site public",
+    "siteContent": "Pages et blog",
+    "reviews": "Avis"
   },
   "vocab": {
     "attendee": "Participant",
@@ -2977,6 +2979,13 @@
       "copied": "Copié.",
       "emptyTitle": "Aucun événement public pour l'instant",
       "emptyDescription": "Publiez un événement pour obtenir l'extrait de son widget."
+    },
+    "navPages": {
+      "title": "Navigation du site",
+      "description": "Pages à relier dans l’en-tête de votre site, à côté de votre blog.",
+      "empty": "Vous n’avez encore aucune page. Créez-en une dans Pages et blog.",
+      "hint": "Les brouillons peuvent être reliés ; ils apparaissent une fois publiés.",
+      "none": "Aucune page reliée."
     }
   },
   "doorStaff": {
@@ -3123,5 +3132,184 @@
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
     "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+  },
+  "cms": {
+    "title": "Pages et blog",
+    "description": "Vos articles de blog et vos pages, affichés sur votre site public et votre page d’organisateur.",
+    "readOnly": "Vous pouvez lire les pages et articles de votre équipe, mais pas les modifier.",
+    "notAllowed": "Vous n’avez pas l’autorisation d’écrire des pages ou des articles.",
+    "deleted": "Supprimé.",
+    "created": "Brouillon créé. Publiez-le quand il est prêt.",
+    "saved": "Enregistré.",
+    "fixErrors": "Vérifiez les champs signalés.",
+    "tabsLabel": "Type de contenu",
+    "tabs": {
+      "post": "Articles de blog",
+      "page": "Pages"
+    },
+    "kind": {
+      "post": "Article de blog",
+      "page": "Page"
+    },
+    "newPost": "Nouvel article",
+    "newPage": "Nouvelle page",
+    "newDescription": "Écrivez en Markdown simple. Cela reste un brouillon jusqu’à la publication.",
+    "back": "Retour aux pages et au blog",
+    "createDraft": "Créer le brouillon",
+    "save": "Enregistrer les modifications",
+    "emptyPostsTitle": "Aucun article pour l’instant",
+    "emptyPagesTitle": "Aucune page pour l’instant",
+    "emptyDescription": "Créez-en un ; il reste un brouillon jusqu’à sa publication.",
+    "emptyDescriptionViewer": "Rien n’a encore été écrit.",
+    "columns": {
+      "title": "Titre",
+      "status": "Statut",
+      "updated": "Mis à jour"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "published": "Publié",
+      "archived": "Archivé"
+    },
+    "publishedOn": "Publié pour la première fois le {date}",
+    "neverPublished": "Pas encore publié",
+    "viewPublic": "Voir sur votre site",
+    "previewLabel": "Aperçu",
+    "showPreview": "Aperçu",
+    "hidePreview": "Masquer l’aperçu",
+    "previewEmpty": "Rien à prévisualiser pour l’instant.",
+    "fields": {
+      "title": "Titre",
+      "slug": "Adresse",
+      "excerpt": "Résumé",
+      "body": "Texte",
+      "seoTitle": "Titre pour la recherche",
+      "seoDescription": "Description pour la recherche"
+    },
+    "titleError": "Donnez un titre (160 caractères maximum).",
+    "slugHint": "La fin de l’adresse web, après {prefix}. Laissez vide pour la créer à partir du titre.",
+    "slugFrozen": "Publié à l’adresse {path}. L’adresse ne peut plus changer après publication.",
+    "slugError": {
+      "taken": "Cette adresse est déjà utilisée.",
+      "format": "Utilisez des minuscules, des chiffres et des tirets simples.",
+      "too_long": "Utilisez 80 caractères au maximum.",
+      "frozen": "L’adresse ne peut plus changer après publication."
+    },
+    "excerptHint": "Affiché dans la liste du blog et les résultats de recherche (300 caractères maximum).",
+    "bodyHint": "Markdown : ## titres, - listes, **gras**, *italique* et [liens](https://…). Le HTML s’affiche comme du texte.",
+    "seoLegend": "Moteurs de recherche (facultatif)",
+    "seoTitleHint": "70 caractères maximum. Par défaut, le titre.",
+    "seoDescriptionHint": "160 caractères maximum. Par défaut, le résumé.",
+    "tooLong": "Utilisez {max} caractères au maximum.",
+    "actions": {
+      "publish": "Publier",
+      "unpublish": "Dépublier",
+      "archive": "Archiver",
+      "delete": "Supprimer"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer « {title} » ?",
+      "body": "Il disparaît aussitôt de votre site. Cette action est irréversible.",
+      "confirm": "Oui, supprimer",
+      "cancel": "Annuler"
+    }
+  },
+  "cmsPublic": {
+    "blog": "Blog",
+    "siteNav": "Site de {org}",
+    "organizerNav": "Pages de {org}",
+    "poweredBy": "Propulsé par Yayatoh",
+    "blogTitle": "Blog de {org}",
+    "blogDescription": "Actualités et histoires de {org}.",
+    "emptyTitle": "Aucun article pour l’instant",
+    "emptyDescription": "{org} n’a encore rien publié ici.",
+    "posts": "Articles",
+    "by": "par {name}",
+    "allPosts": "Tous les articles"
+  },
+  "reviews": {
+    "ratingLabel": "Noté {rating} sur 5",
+    "anonymous": "Détenteur de billet",
+    "reportReasons": {
+      "spam": "Spam ou publicité",
+      "offensive": "Offensant ou abusif",
+      "off_topic": "Hors sujet",
+      "personal_info": "Divulgue des données personnelles",
+      "other": "Autre chose"
+    },
+    "console": {
+      "title": "Avis",
+      "description": "Ce que les détenteurs de billets ont dit après l’événement. Masquez ce qui enfreint vos règles ; le motif est conservé dans le journal d’activité.",
+      "readOnly": "Vous pouvez lire les avis, mais pas les modérer.",
+      "average": "Note moyenne",
+      "noRating": "Aucun avis visible",
+      "visible": "Avis visibles",
+      "filterLabel": "Afficher les avis",
+      "filters": {
+        "all": "Tous",
+        "visible": "Visibles",
+        "hidden": "Masqués",
+        "reported": "Signalés"
+      },
+      "emptyTitle": "Aucun avis pour l’instant",
+      "emptyFilteredTitle": "Aucun avis ici",
+      "emptyDescription": "Les détenteurs de billets peuvent donner leur avis depuis la page de leur commande une fois l’événement terminé.",
+      "listLabel": "Avis",
+      "reviewBy": "Avis de {name}",
+      "status": {
+        "visible": "Visible",
+        "hidden": "Masqué"
+      },
+      "hiddenBecause": "Masqué : {reason}",
+      "reports": "{count, plural, =0 {Aucun signalement ouvert} one {# signalement ouvert} other {# signalements ouverts}}",
+      "reportStatus": {
+        "open": "ouvert",
+        "dismissed": "rejeté",
+        "actioned": "traité"
+      },
+      "hideReason": "Motif du masquage",
+      "unhideReason": "Motif du réaffichage",
+      "reasonError": "Indiquez un motif (3 à 300 caractères).",
+      "hide": "Masquer l’avis",
+      "unhide": "Afficher l’avis",
+      "dismissReports": "Rejeter les signalements"
+    },
+    "form": {
+      "rating": "Votre note",
+      "stars": "{count, plural, one {# étoile} other {# étoiles}}",
+      "ratingError": "Choisissez une note de 1 à 5.",
+      "body": "Votre avis (facultatif)",
+      "bodyHint": "{count} sur {max} caractères. Texte simple ; votre prénom et l’initiale de votre nom sont affichés.",
+      "bodyError": "Utilisez {max} caractères au maximum.",
+      "submit": "Publier l’avis",
+      "rateLimited": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "already": "Vous avez déjà donné votre avis sur cet événement.",
+      "notEnded": "Vous pourrez donner votre avis une fois l’événement terminé."
+    },
+    "report": {
+      "open": "Signaler",
+      "openFor": "avis de {name}",
+      "reason": "Pourquoi le signalez-vous ?",
+      "note": "Détails (facultatif)",
+      "submit": "Envoyer le signalement",
+      "cancel": "Annuler",
+      "thanks": "Merci. L’organisateur va l’examiner.",
+      "rateLimited": "Trop de signalements. Réessayez plus tard."
+    },
+    "order": {
+      "title": "Donnez votre avis sur cet événement",
+      "yours": "Votre avis",
+      "ratingLabel": "Vous avez noté {rating} sur 5",
+      "hidden": "L’organisateur a masqué votre avis sur la page de l’événement.",
+      "invite": "Comment c’était ? Les avis sont ouverts jusqu’au {until}.",
+      "opensAt": "Vous pourrez donner votre avis une fois l’événement terminé ({date}).",
+      "closed": "Les avis sur cet événement ont été fermés le {date}.",
+      "notHeld": "Cet événement n’a pas eu lieu comme prévu ; il ne peut donc pas être évalué."
+    },
+    "public": {
+      "title": "Avis",
+      "summary": "{average} sur 5 · {count, plural, one {# avis} other {# avis}}",
+      "recent": "Derniers avis"
+    }
   }
 }

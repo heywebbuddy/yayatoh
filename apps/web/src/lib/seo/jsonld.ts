@@ -146,3 +146,77 @@ export const EventJsonLdSchema = z.object({
     )
     .optional(),
 });
+
+export interface JsonLdPostInput {
+  readonly title: string;
+  readonly description: string | null;
+  readonly url: string;
+  readonly image: string;
+  readonly publishedAt: Date;
+  readonly updatedAt: Date;
+  readonly authorName: string | null;
+  readonly publisher: { readonly name: string; readonly url: string };
+}
+
+/** schema.org `BlogPosting` for a published CMS post (M1.4g). Absolute URLs only. */
+export function blogPostingJsonLd(p: JsonLdPostInput) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: p.title.slice(0, 110),
+    ...(p.description ? { description: p.description } : {}),
+    url: p.url,
+    mainEntityOfPage: p.url,
+    image: [p.image],
+    datePublished: p.publishedAt.toISOString(),
+    dateModified: p.updatedAt.toISOString(),
+    // A named member when there is one, else the organization that published it.
+    author: p.authorName
+      ? { '@type': 'Person', name: p.authorName }
+      : { '@type': 'Organization', name: p.publisher.name, url: p.publisher.url },
+    publisher: { '@type': 'Organization', name: p.publisher.name, url: p.publisher.url },
+  };
+}
+
+export const BlogPostingJsonLdSchema = z.object({
+  '@context': z.literal('https://schema.org'),
+  '@type': z.literal('BlogPosting'),
+  headline: z.string().min(1).max(110),
+  description: z.string().optional(),
+  url: absolute,
+  mainEntityOfPage: absolute,
+  image: z.array(absolute).min(1),
+  datePublished: z.iso.datetime(),
+  dateModified: z.iso.datetime(),
+  author: z.union([
+    z.object({ '@type': z.literal('Person'), name: z.string().min(1) }),
+    z.object({ '@type': z.literal('Organization'), name: z.string().min(1), url: absolute }),
+  ]),
+  publisher: z.object({ '@type': z.literal('Organization'), name: z.string().min(1), url: absolute }),
+});
+
+/**
+ * schema.org `AggregateRating` for an event's visible reviews (M1.4g), or null below the
+ * minimum count (thin ratings are noise and search engines treat them as spam).
+ */
+export function aggregateRatingJsonLd(
+  r: { readonly count: number; readonly average: number | null },
+  min: number,
+) {
+  if (r.count < min || r.average === null) return null;
+  return {
+    '@type': 'AggregateRating' as const,
+    ratingValue: r.average.toFixed(1),
+    reviewCount: r.count,
+    bestRating: '5',
+    worstRating: '1',
+  };
+}
+
+export const AggregateRatingSchema = z.object({
+  '@type': z.literal('AggregateRating'),
+  ratingValue: z.string().regex(/^[1-5]\.\d$/),
+  reviewCount: z.number().int().min(1),
+  bestRating: z.literal('5'),
+  worstRating: z.literal('1'),
+});

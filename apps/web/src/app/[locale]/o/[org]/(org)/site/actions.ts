@@ -57,3 +57,25 @@ export async function widgetOriginsAction(
     return fail(err);
   }
 }
+
+/** M1.4g: the CMS pages the tenant site's header links, in the order they are listed. */
+export async function navPagesAction(
+  org: string,
+  _prev: SettingsState,
+  form: FormData,
+): Promise<SettingsState> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(
+      updateSiteSettingsCommand,
+      { navPageIds: form.getAll('navPage').map(String) },
+      data.ctx,
+      ports,
+    );
+    for (const tag of orgChangeTags(data.org.id)) updateTag(tag);
+    revalidatePath(`/o/${org}/site`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return fail(err);
+  }
+}

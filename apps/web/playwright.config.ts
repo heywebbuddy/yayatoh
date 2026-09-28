@@ -40,5 +40,8 @@ export default defineConfig({
         reuseExistingServer: true,
         timeout: 120_000,
         gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
+        // M1.4g: the marketplace's own /blogs and /pages show this org's content (the platform
+        // content org in production); the e2e uses a seeded org.
+        env: { MARKETPLACE_CONTENT_ORG: process.env.MARKETPLACE_CONTENT_ORG ?? 'harbor-arts' },
       },
 });

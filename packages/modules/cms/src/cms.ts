@@ -37,6 +37,7 @@ function slugOrFail(slug: string): string {
   if (problem)
     throw new DomainError('validation_failed', 'Not a valid address', {
       issues: [{ path: 'slug', code: problem }],
+      reason: problem,
     });
   return slug;
 }
@@ -58,6 +59,7 @@ async function takenSlugs(tx: TenantTx, kind: EntryKind, base: string): Promise<
 const slugConflict = () =>
   new DomainError('conflict', 'Another entry already uses this address', {
     issues: [{ path: 'slug', code: 'taken' }],
+    reason: 'taken',
   });
 
 export const createEntryCommand = tenantCommand({
@@ -129,6 +131,7 @@ export const updateEntryCommand = tenantCommand({
       if (current.publishedAt)
         throw new DomainError('invalid_state', 'The address of a published entry cannot change', {
           issues: [{ path: 'slug', code: 'frozen' }],
+          reason: 'frozen',
         });
       slug = slugOrFail(rawSlug);
     }
