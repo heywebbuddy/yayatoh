@@ -395,6 +395,11 @@ describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     const list = await executeQuery(guestListQuery, { eventId: ev.id, search: 'Rules' }, a.ctx(), ports);
     const rules = list.parties.find((p) => p.id === party.id);
     expect(rules?.guests.filter((g) => g.isPrimary).map((g) => g.id)).toEqual([second.id]);
+    // The demoted primary's change is in the history too.
+    const demoted = (await history(party.id)).find(
+      (e) => e.guestId === host.id && e.action === 'guest_updated',
+    );
+    expect(demoted).toMatchObject({ fields: ['isPrimary'], source: 'manual' });
     // A party of another event, or a guest of another event under this event id: not found.
     const foreignParty = await executeCommand(
       createPartyCommand,

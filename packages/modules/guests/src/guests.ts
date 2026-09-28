@@ -225,12 +225,32 @@ async function ensurePrimaryTx(
   ]);
 }
 
-/** Makes `guestId` the party's only primary contact (clears the others first). */
-async function makePrimaryTx(tx: TenantTx, ctx: Ctx, partyId: string, guestId: string) {
-  await tx
+/**
+ * Clears the party's primary contact (other than `keepId`) before another guest takes the role;
+ * each demoted guest's change is recorded.
+ */
+async function clearPrimaryTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  at: { eventId: string; partyId: string; source: GuestSource },
+  keepId: string | null,
+) {
+  const demoted = await tx
     .update(guests)
     .set({ isPrimary: false, updatedAt: ctx.now })
-    .where(and(eq(guests.partyId, partyId), eq(guests.isPrimary, true), ne(guests.id, guestId)));
+    .where(
+      and(
+        eq(guests.partyId, at.partyId),
+        eq(guests.isPrimary, true),
+        ...(keepId ? [ne(guests.id, keepId)] : []),
+      ),
+    )
+    .returning({ id: guests.id });
+  await recordHistoryTx(
+    tx,
+    ctx,
+    demoted.map((d) => ({ ...at, guestId: d.id, action: 'guest_updated' as const, fields: ['isPrimary'] })),
+  );
 }
 
 /** The attendee link: an active guest-list entry of the same event; returns its contact. */
@@ -372,11 +392,7 @@ export const addPartyGuestCommand = tenantCommand({
     const privateCiphertext = await seal(orgId, { dietary, accessibility, address });
     // The first guest of a party becomes its primary contact unless another is chosen later.
     const primary = isPrimary || !(await partyGuests(tx, partyId)).some((g) => g.isPrimary);
-    if (isPrimary)
-      await tx
-        .update(guests)
-        .set({ isPrimary: false, updatedAt: ctx.now })
-        .where(and(eq(guests.partyId, partyId), eq(guests.isPrimary, true)));
+    if (isPrimary) await clearPrimaryTx(tx, ctx, { eventId, partyId, source }, null);
     const [row] = await tx
       .insert(guests)
       .values({
@@ -459,7 +475,8 @@ export const updatePartyGuestCommand = tenantCommand({
     const changed = changedFields({ ...before, ...sealedBefore }, next);
     if (changed.length === 0) return toGuestDto(orgId, before);
     const sealedChanged = changed.some((k) => (SEALED_KEYS as readonly string[]).includes(k));
-    if (isPrimary && !before.isPrimary) await makePrimaryTx(tx, ctx, before.partyId, guestId);
+    if (isPrimary && !before.isPrimary)
+      await clearPrimaryTx(tx, ctx, { eventId, partyId: before.partyId, source }, guestId);
     await tx
       .update(guests)
       .set({
