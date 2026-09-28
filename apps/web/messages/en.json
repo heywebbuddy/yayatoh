@@ -2763,7 +2763,7 @@
     "channel": {
       "email": "Email",
       "push": "Push notification",
-      "sms": "Text message (SMS)"
+      "sms": "SMS"
     },
     "pushHint": "Push reaches attendees who use the app; everyone else gets the email.",
     "preview": "Preview",

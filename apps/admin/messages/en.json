@@ -353,7 +353,7 @@
     "org": "Organization",
     "since": "Paused since",
     "rate": "Complaint rate",
-    "rateValue": "{rate} ({complaints} complaints in {sent} emails)",
+    "rateValue": "{rate} ({complaints, plural, one {# complaint} other {# complaints}} in {sent} emails)",
     "tenantTitle": "Tenant messaging",
     "tenantHeading": "Messaging: {org}",
     "tenantDescription": "Complaint-rate auto-pause and this month's usage against the organization's quotas. Every change is audited.",
