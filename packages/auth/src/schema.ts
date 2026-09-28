@@ -34,6 +34,12 @@ export const users = identity.table(
     twoFactorEnabled: boolean('two_factor_enabled').default(false),
     /** Preferred language for emails about the orgs they work in (M1.10d); null = English. */
     locale: text('locale'),
+    /**
+     * Account deleted (M1.14e): the row is kept so audit entries and org records that name this
+     * id stay consistent, but it is anonymised (email replaced by a hash at `.invalid`, name
+     * cleared); sessions, credentials and two-step verification are gone.
+     */
+    deletedAt: ts('deleted_at'),
     createdAt: ts('created_at').notNull().defaultNow(),
     updatedAt: ts('updated_at').notNull().defaultNow(),
   },

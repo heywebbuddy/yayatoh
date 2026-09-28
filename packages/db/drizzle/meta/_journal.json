@@ -414,6 +414,13 @@
       "when": 1790589892268,
       "tag": "0058_freezing_timeslip",
       "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1790591367856,
+      "tag": "0059_left_zuras",
+      "breakpoints": true
     }
   ]
 }

@@ -1,3 +1,4 @@
+export { eraseUserNotificationsTx, sendAccountNotice, userPreferencesTx } from './account-data.ts';
 export {
   DELIVERY_SIGNATURE_TOLERANCE_S,
   DeliveryEvent,
@@ -12,6 +13,9 @@ export {
 export {
   type DeliveryState,
   deliveryStateOf,
+  type ErasedMailClass,
+  erasedAddressAllows,
+  erasedMailClass,
   nextDeliveryState,
   SOFT_BOUNCE_LIMIT,
   SOFT_BOUNCE_WINDOW_MS,
@@ -95,11 +99,13 @@ export {
   type OrgBrand,
   type RenderedMessage,
   type RenderInput,
+  renderAccountNotice,
   renderMessage,
   textOn,
 } from './templates/render.ts';
 export { SAMPLE_PARAMS } from './templates/samples.ts';
 export {
+  consoleTransport,
   type DevMailboxEntry,
   devMailboxDir,
   devMailboxTransports,

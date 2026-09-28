@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/csv": "workspace:*",
@@ -21,6 +22,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",

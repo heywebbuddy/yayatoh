@@ -110,5 +110,12 @@
     "box_office": "box office",
     "scanner": "scanner",
     "viewer": "viewer"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Your Yayatoh account was deleted",
+      "intro": "As you asked, your Yayatoh account has been deleted. You've been signed out everywhere, and your sign-in details and two-step verification were removed. Organizers you bought from keep their order records, as the law requires.\n\nIf you didn't ask for this, reply to this email at once."
+    },
+    "sentBy": "Sent by Yayatoh about your account."
   }
 }

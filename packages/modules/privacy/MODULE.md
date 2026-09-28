@@ -1,7 +1,7 @@
 # privacy (tier 5)
 
 Data-subject requests and retention (M1.14c). Owns Postgres schema `privacy`
-(`dsar_requests`, the accountability record). Reads and redacts other modules only through
+(`dsar_requests`, the accountability record; `account_requests`, the global record of account DSARs). Reads and redacts other modules only through
 their exported `*DsarTx` / retention functions, inside the caller's tenant transaction.
 
 **Invariants**
@@ -18,5 +18,16 @@ their exported `*DsarTx` / retention functions, inside the caller's tenant trans
   provider ids or internal contact ids.
 - Retention (`retentionCommand`) is idempotent, runs per org as a system actor, and uses the
   defaults in `src/retention.ts` (pending the owner's confirmation).
+
+- Account requests (M1.14e, Yayatoh as controller; `src/account.ts`): the `yayatoh.account/1`
+  document is an allowlist (a Zod schema drops every undeclared key). Self-service export and
+  deletion need a step-up in the last 10 minutes; staff need a reason (10–500 characters). Deletion
+  is refused while the person is the only owner of an org, sends the confirmation to the old
+  address first, detaches the account in each org through `privacy.detachAccount` (a platform
+  command: system actors only, audited in the org's chain), then anonymises the identity (packages/
+  auth), adds the address to the platform-wide erased list and records the request in the global
+  `privacy.account_requests` (hash + masked hint, actor, reason; SECURITY DEFINER insert only).
+- Org-side erasure also removes team invitations addressed to the person and adds the address to
+  the platform-wide erased list (`platform.erased_addresses`).
 
 **Public surface:** `.` only.

@@ -110,5 +110,12 @@
     "box_office": "Abendkasse",
     "scanner": "Einlass",
     "viewer": "Leser"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Ihr Yayatoh-Konto wurde gelöscht",
+      "intro": "Wie gewünscht wurde Ihr Yayatoh-Konto gelöscht. Sie wurden überall abgemeldet, und Ihre Anmeldedaten sowie die Bestätigung in zwei Schritten wurden entfernt. Veranstalter, bei denen Sie gekauft haben, behalten ihre Bestellunterlagen, wie es das Gesetz verlangt.\n\nWenn Sie das nicht veranlasst haben, antworten Sie sofort auf diese E-Mail."
+    },
+    "sentBy": "Von Yayatoh zu Ihrem Konto gesendet."
   }
 }

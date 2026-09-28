@@ -1,4 +1,15 @@
 export {
+  type AccountIdentityData,
+  type AccountUser,
+  accountIdentityData,
+  anonymiseAccount,
+  DELETED_EMAIL_DOMAIN,
+  findUserByEmail,
+  findUserById,
+  type IdentityErasure,
+  recordAccountEvent,
+} from './account.ts';
+export {
   type Auth,
   type AuthOptions,
   consumeTotpStep,

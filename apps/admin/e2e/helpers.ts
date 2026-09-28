@@ -55,11 +55,19 @@ export interface WebUser {
 /**
  * A throwaway account on the web app (dev only, `/api/dev/user`), signed in on `page`'s context.
  * `org` makes it the owner of a new org (two-step verification on, as owners need); `event` also
- * publishes a listed event there; `join` adds it to an existing org (`slug:role`).
+ * publishes a listed event there; `join` adds it to an existing org (`slug:role`); `name` sets
+ * the account's name.
  */
 export async function webUser(
   page: Page,
-  opts: { org?: boolean; event?: boolean; join?: string; signIn?: boolean; twoFactor?: boolean } = {},
+  opts: {
+    org?: boolean;
+    event?: boolean;
+    join?: string;
+    signIn?: boolean;
+    twoFactor?: boolean;
+    name?: string;
+  } = {},
 ): Promise<WebUser> {
   const form = new URLSearchParams();
   if (opts.org) {
@@ -70,6 +78,7 @@ export async function webUser(
   if (opts.event) form.set('event', 'published');
   if (opts.join) form.set('join', opts.join);
   if (opts.signIn === false) form.set('signIn', '0');
+  if (opts.name) form.set('name', opts.name);
   const res = await page.request.post(`${WEB}/api/dev/user`, {
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: form.toString(),

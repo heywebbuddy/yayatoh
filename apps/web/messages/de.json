@@ -124,7 +124,8 @@
       "complained": "Unterdrückt: der Empfänger hat frühere E-Mails als Spam markiert",
       "event_cancelled": "Die Veranstaltung oder der Termin wurde abgesagt",
       "event_started": "Die Veranstaltung hatte bereits begonnen",
-      "event_postponed": "Angehalten, solange die Veranstaltung verschoben ist"
+      "event_postponed": "Angehalten, solange die Veranstaltung verschoben ist",
+      "erased": "Nicht gesendet: Die Daten dieser Person wurden auf ihren Wunsch gelöscht"
     },
     "channels": {
       "email": "E-Mail",
@@ -1149,7 +1150,8 @@
       "invalid_label": "Ein Label ist zu lang (max. 40 Zeichen)",
       "too_many_labels": "Mehr als 20 Labels",
       "duplicate_in_file": "Dieselbe E-Mail steht weiter oben in der Datei",
-      "already_on_list": "Bereits auf der Gästeliste"
+      "already_on_list": "Bereits auf der Gästeliste",
+      "erased": "Die Daten dieser Person wurden auf ihren Wunsch gelöscht"
     },
     "preview": "Erste Zeilen, so wie sie importiert werden",
     "row": "Zeile",
@@ -2275,7 +2277,8 @@
       "holderLinks": "Links zum Ticketzugang",
       "attendees": "Gästelisteneinträge",
       "answers": "Antworten beim Checkout",
-      "admissions": "Check-ins"
+      "admissions": "Check-ins",
+      "invitations": "Team-Einladungen"
     },
     "export": {
       "title": "Daten exportieren",
@@ -3725,6 +3728,28 @@
       "already_enabled": "Die Zwei-Schritt-Verifizierung ist bereits eingeschaltet.",
       "not_enabled": "Die Zwei-Schritt-Verifizierung ist ausgeschaltet."
     },
+    "data": {
+      "title": "Ihre Daten",
+      "explain": "Laden Sie eine Kopie dessen herunter, was Yayatoh zu Ihrem Konto speichert, als JSON-Datei.",
+      "includes": "Sie enthält Ihr Profil, Ihre Anmeldesitzungen und Sicherheitsereignisse, die Organisationen, in denen Sie arbeiten, und Ihre Rollen, Ihre Bestellungen und Tickets, Ihre Benachrichtigungseinstellungen und Einwilligungen.",
+      "excludes": "Sie enthält nie Passwörter, Codes oder andere Geheimnisse. Veranstalter können Ihnen geben, was sie über Sie als Kunde speichern.",
+      "prepare": "Meine Daten herunterladen",
+      "ready": "Ihre Datei ist bereit.",
+      "download": "Datei herunterladen (JSON)"
+    },
+    "delete": {
+      "title": "Konto löschen",
+      "signOut": "Sie werden überall abgemeldet, und Ihr Passwort, Ihre Anmeldecodes und die Bestätigung in zwei Schritten werden entfernt.",
+      "teams": "Sie verlassen alle Organisationen, in denen Sie arbeiten.",
+      "orders": "Veranstalter behalten Ihre Bestellungen und Tickets für ihre Unterlagen, wie es das Gesetz verlangt, aber sie sind nicht mehr mit einem Konto verknüpft.",
+      "final": "Das kann nicht rückgängig gemacht werden. Sie können sich später mit derselben E-Mail-Adresse neu registrieren; für Marketing-E-Mails ist erneut Ihre Einwilligung nötig.",
+      "blockedTitle": "Sie können Ihr Konto noch nicht löschen",
+      "blockedExplain": "{count, plural, one {Sie sind der einzige Inhaber dieser Organisation. Machen Sie zuerst eine andere Person zum Inhaber oder bitten Sie den Yayatoh-Support, sie zu schließen:} other {Sie sind der einzige Inhaber dieser # Organisationen. Machen Sie zuerst eine andere Person zum Inhaber oder bitten Sie den Yayatoh-Support, sie zu schließen:}}",
+      "confirmLabel": "Geben Sie {email} zur Bestätigung ein",
+      "confirmRequired": "Geben Sie zur Bestätigung Ihre E-Mail-Adresse ein.",
+      "confirmMismatch": "Das stimmt nicht überein. Geben Sie zur Bestätigung Ihre eigene E-Mail-Adresse ein.",
+      "submit": "Mein Konto löschen"
+    },
     "impersonating": "Die Kontosicherheit ist nicht verfügbar, solange Yayatoh-Mitarbeitende als dieses Mitglied handeln.",
     "sessionsTitle": "Überall abmelden",
     "sessionsExplain": "Beendet alle deine Sitzungen: auf diesem und anderen Geräten, in Apps und auf den eigenen Websites von Veranstaltern. Danach musst du dich neu anmelden.",
@@ -3752,6 +3777,17 @@
     "invalidPassword": "Dieses Passwort ist nicht richtig.",
     "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
     "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
+  },
+  "accountDeleted": {
+    "metaTitle": "Konto gelöscht",
+    "eyebrow": "Ihr Konto",
+    "title": "Ihr Konto wurde gelöscht",
+    "description": "Sie wurden abgemeldet, und Ihr Yayatoh-Konto existiert nicht mehr.",
+    "email": "Wir haben vor dem Entfernen eine Bestätigung an Ihre E-Mail-Adresse gesendet.",
+    "orders": "Veranstalter, bei denen Sie gekauft haben, behalten ihre Bestellunterlagen; bitten Sie sie, diese ebenfalls zu löschen, wenn Sie das möchten.",
+    "comeBack": "Sie sind jederzeit wieder willkommen: Wenn Sie sich mit Ihrer E-Mail-Adresse anmelden, wird ein neues Konto erstellt.",
+    "home": "Zur Startseite",
+    "signIn": "Anmelden"
   },
   "cms": {
     "title": "Seiten & Blog",

@@ -124,7 +124,8 @@
       "complained": "Suprimido: el destinatario marcó un correo anterior como spam",
       "event_cancelled": "El evento o la fecha se canceló",
       "event_started": "El evento ya había empezado",
-      "event_postponed": "En espera mientras el evento está aplazado"
+      "event_postponed": "En espera mientras el evento está aplazado",
+      "erased": "No enviado: los datos de esta persona se borraron a petición suya"
     },
     "channels": {
       "email": "Correo",
@@ -1149,7 +1150,8 @@
       "invalid_label": "Una etiqueta es demasiado larga (máx. 40 caracteres)",
       "too_many_labels": "Más de 20 etiquetas",
       "duplicate_in_file": "El mismo correo aparece antes en el archivo",
-      "already_on_list": "Ya está en la lista de invitados"
+      "already_on_list": "Ya está en la lista de invitados",
+      "erased": "Los datos de esta persona se borraron a petición suya"
     },
     "preview": "Primeras filas tal como se importarán",
     "row": "Fila",
@@ -2275,7 +2277,8 @@
       "holderLinks": "Enlaces de acceso a entradas",
       "attendees": "Entradas en listas de invitados",
       "answers": "Respuestas del pago",
-      "admissions": "Registros de acceso"
+      "admissions": "Registros de acceso",
+      "invitations": "Invitaciones al equipo"
     },
     "export": {
       "title": "Exportar sus datos",
@@ -3725,6 +3728,28 @@
       "already_enabled": "La verificación en dos pasos ya está activada.",
       "not_enabled": "La verificación en dos pasos está desactivada."
     },
+    "data": {
+      "title": "Tus datos",
+      "explain": "Descarga una copia de lo que Yayatoh guarda sobre tu cuenta, en un archivo JSON.",
+      "includes": "Incluye tu perfil, tus sesiones y eventos de seguridad, las organizaciones en las que trabajas y tus roles, tus pedidos y entradas, tus preferencias de notificación y consentimientos.",
+      "excludes": "Nunca incluye contraseñas, códigos ni otros secretos. Los organizadores pueden darte lo que guardan sobre ti como cliente.",
+      "prepare": "Descargar mis datos",
+      "ready": "Tu archivo está listo.",
+      "download": "Descargar el archivo (JSON)"
+    },
+    "delete": {
+      "title": "Eliminar tu cuenta",
+      "signOut": "Se cerrará tu sesión en todas partes y se eliminarán tu contraseña, tus códigos de acceso y la verificación en dos pasos.",
+      "teams": "Saldrás de todas las organizaciones en las que trabajas.",
+      "orders": "Los organizadores conservan tus pedidos y entradas en sus registros, como exige la ley, pero ya no estarán vinculados a una cuenta.",
+      "final": "No se puede deshacer. Podrás registrarte de nuevo con el mismo correo; los correos de marketing necesitarán otra vez tu consentimiento.",
+      "blockedTitle": "Todavía no puedes eliminar tu cuenta",
+      "blockedExplain": "{count, plural, one {Eres el único propietario de esta organización. Primero nombra a otra persona propietaria o pide al soporte de Yayatoh que la cierre:} other {Eres el único propietario de estas # organizaciones. Primero nombra a otra persona propietaria o pide al soporte de Yayatoh que las cierre:}}",
+      "confirmLabel": "Escribe {email} para confirmar",
+      "confirmRequired": "Escribe tu correo electrónico para confirmar.",
+      "confirmMismatch": "No coincide. Escribe tu propio correo electrónico para confirmar.",
+      "submit": "Eliminar mi cuenta"
+    },
     "impersonating": "La seguridad de la cuenta no está disponible mientras el personal de Yayatoh actúa como este miembro.",
     "sessionsTitle": "Cerrar sesión en todas partes",
     "sessionsExplain": "Cierra todas tus sesiones: en este dispositivo y en otros, en las apps y en los sitios propios de los organizadores. Tendrás que volver a iniciar sesión.",
@@ -3752,6 +3777,17 @@
     "invalidPassword": "Esa contraseña no es correcta.",
     "rateLimited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
     "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión."
+  },
+  "accountDeleted": {
+    "metaTitle": "Cuenta eliminada",
+    "eyebrow": "Tu cuenta",
+    "title": "Tu cuenta se ha eliminado",
+    "description": "Se cerró tu sesión y tu cuenta de Yayatoh ya no existe.",
+    "email": "Te enviamos una confirmación a tu correo antes de borrarlo.",
+    "orders": "Los organizadores a los que compraste conservan sus registros de pedidos; pídeles que los borren si también lo deseas.",
+    "comeBack": "Puedes volver cuando quieras: al iniciar sesión con tu correo se crea una cuenta nueva.",
+    "home": "Ir a la página de inicio",
+    "signIn": "Iniciar sesión"
   },
   "cms": {
     "title": "Páginas y blog",

@@ -1,4 +1,22 @@
 export {
+  ACCOUNT_FORMAT,
+  AccountDocument,
+  type AccountDocumentParts,
+  AccountErasure,
+  type AccountRequestBy,
+  type AccountSummary,
+  accountDeletionBlockers,
+  accountDocument,
+  accountOrgIds,
+  accountSummary,
+  buildAccountDocument,
+  DetachResult,
+  deleteAccount,
+  detachAccountCommand,
+  exportAccount,
+  StaffReason,
+} from './account.ts';
+export {
   collectSubjectTx,
   DsarEmail,
   DsarRequestDto,
@@ -15,4 +33,4 @@ export {
 } from './dsar.ts';
 export { privateColumns } from './private-columns.ts';
 export { RETENTION, RetentionResult, retentionCommand } from './retention.ts';
-export { DSAR_KINDS } from './schema.ts';
+export { ACCOUNT_REQUEST_KINDS, DSAR_KINDS } from './schema.ts';

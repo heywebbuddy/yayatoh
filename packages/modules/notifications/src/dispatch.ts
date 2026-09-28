@@ -1,10 +1,10 @@
-import { normalizeEmail } from '@yayatoh/crm';
+import { consentRegivenSinceTx, normalizeEmail } from '@yayatoh/crm';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
-import { signLinkToken } from '@yayatoh/platform';
+import { erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { and, asc, eq, isNull, lte } from 'drizzle-orm';
-import { suppressedReason } from './delivery-rules.ts';
+import { erasedAddressAllows, erasedMailClass, suppressedReason } from './delivery-rules.ts';
 import { kindOf, type MessageKind } from './kinds.ts';
 import { decryptParams } from './notifier.ts';
 import { preferenceEnabledTx } from './preferences.ts';
@@ -91,6 +91,13 @@ export async function dispatchDueTx(
       ? await deps.userLocales(memberIds)
       : new Map<string, string | null>();
 
+  // The platform-wide erased-address list (M1.14e), looked up once for this batch.
+  const batchEmails = due
+    .filter((r) => r.channel === 'email')
+    .map((r) => r.recipientEmail ?? emails.get(r.recipientUserId ?? '') ?? null)
+    .filter((e): e is string => Boolean(e));
+  const erased = batchEmails.length ? await erasedAddressesTx(tx, batchEmails) : new Map();
+
   const update = (row: Row, set: Partial<Row>) =>
     tx
       .update(messages)
@@ -128,6 +135,23 @@ export async function dispatchDueTx(
         );
       if (blocked) {
         await suppress(row, suppressedReason(blocked.reason));
+        continue;
+      }
+    }
+    // Erased addresses (M1.14e): only order mail, account mail after a new sign-up, and org mail
+    // after a new consent in this org.
+    const erasedEntry = email ? erased.get(normalizeAddress(email)) : undefined;
+    if (email && erasedEntry) {
+      const mailClass = erasedMailClass(row.kind, def);
+      const allowed = erasedAddressAllows({
+        mailClass,
+        accountLiftedAt: erasedEntry.accountLiftedAt,
+        consentRegiven:
+          mailClass === 'org' &&
+          (await consentRegivenSinceTx(tx, normalizeEmail(email), 'email', erasedEntry.erasedAt)),
+      });
+      if (!allowed) {
+        await suppress(row, 'erased');
         continue;
       }
     }

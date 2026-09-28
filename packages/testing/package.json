@@ -13,6 +13,7 @@
   "dependencies": {
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/checkin-engine": "workspace:*",

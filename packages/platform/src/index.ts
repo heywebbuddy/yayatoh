@@ -31,6 +31,17 @@ export {
 export { tenantCommand, tenantQuery } from './commands/define.ts';
 export { createCommandPorts, type PolicyPorts, recentStepUp, withImpersonator } from './commands/ports.ts';
 export {
+  addressHash,
+  type ErasedAddress,
+  erasedAddress,
+  erasedAddressesTx,
+  erasedAddressTx,
+  liftErasedAccountMail,
+  markAddressErased,
+  markAddressErasedTx,
+  normalizeAddress,
+} from './erased-addresses.ts';
+export {
   FAKE_HUMAN_TOKEN,
   fakeHumanCheck,
   type HumanCheck,

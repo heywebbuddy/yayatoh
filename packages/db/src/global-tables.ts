@@ -31,4 +31,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Audit of platform_reader use; append-only through a SECURITY DEFINER function (platform_reader).',
   'platform.api_usage':
     'Request counts per day × /v1 route × client × app version (no tenant, user or IP); incremented through a SECURITY DEFINER function, read by platform_reader.',
+  'platform.erased_addresses':
+    'Platform-wide erased-address suppression (SHA-256 of the normalized email, never the address); no app_user privileges, only the SECURITY DEFINER platform.erased_address_* functions; platform_reader SELECT.',
+  'privacy.account_requests':
+    'Controller-side DSAR record for Yayatoh accounts (hashed subject, masked hint, actor, reason); no app_user privileges, only the SECURITY DEFINER privacy.record_account_request; platform_reader SELECT.',
 };

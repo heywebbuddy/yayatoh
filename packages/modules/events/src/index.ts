@@ -137,6 +137,7 @@ export {
   publicCandidateEventIdsTx,
   publicEventBySlug,
   removeEventRoleTx,
+  removeUserEventRolesTx,
   upsertEventRoleTx,
 } from './queries.ts';
 export {

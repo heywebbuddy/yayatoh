@@ -124,7 +124,8 @@
       "complained": "Suppressed: the recipient marked earlier mail as spam",
       "event_cancelled": "The event or date was cancelled",
       "event_started": "The event had already started",
-      "event_postponed": "On hold while the event is postponed"
+      "event_postponed": "On hold while the event is postponed",
+      "erased": "Suppressed: this person's data was erased at their request"
     },
     "channels": {
       "email": "Email",
@@ -1149,7 +1150,8 @@
       "invalid_label": "A label is too long (max 40 characters)",
       "too_many_labels": "More than 20 labels",
       "duplicate_in_file": "Same email appears earlier in the file",
-      "already_on_list": "Already on the guest list"
+      "already_on_list": "Already on the guest list",
+      "erased": "This person's data was erased at their request"
     },
     "preview": "First rows as they will be imported",
     "row": "Row",
@@ -2275,7 +2277,8 @@
       "holderLinks": "Ticket access links",
       "attendees": "Guest list entries",
       "answers": "Checkout answers",
-      "admissions": "Check-ins"
+      "admissions": "Check-ins",
+      "invitations": "Team invitations"
     },
     "export": {
       "title": "Export their data",
@@ -3725,6 +3728,28 @@
       "already_enabled": "Two-step verification is already on.",
       "not_enabled": "Two-step verification is off."
     },
+    "data": {
+      "title": "Your data",
+      "explain": "Download a copy of what Yayatoh holds about your account, as a JSON file.",
+      "includes": "It includes your profile, sign-in sessions and security events, the organizations you work in and your roles, your orders and tickets, your notification choices and consents.",
+      "excludes": "It never includes passwords, codes or other secrets. Organizers can give you what they hold about you as their customer.",
+      "prepare": "Download my data",
+      "ready": "Your file is ready.",
+      "download": "Download the file (JSON)"
+    },
+    "delete": {
+      "title": "Delete your account",
+      "signOut": "You'll be signed out everywhere, and your password, sign-in codes and two-step verification are removed.",
+      "teams": "You'll leave every organization you work in.",
+      "orders": "Organizers keep your orders and tickets for their records, as the law requires, but they're no longer linked to an account.",
+      "final": "This can't be undone. You can sign up again later with the same email; marketing emails need your consent again.",
+      "blockedTitle": "You can't delete your account yet",
+      "blockedExplain": "{count, plural, one {You're the only owner of this organization. Make someone else an owner first, or ask Yayatoh support to close it:} other {You're the only owner of these # organizations. Make someone else an owner first, or ask Yayatoh support to close them:}}",
+      "confirmLabel": "Type {email} to confirm",
+      "confirmRequired": "Type your email address to confirm.",
+      "confirmMismatch": "That doesn't match. Type your own email address to confirm.",
+      "submit": "Delete my account"
+    },
     "impersonating": "Account security isn't available while Yayatoh staff act as this member.",
     "sessionsTitle": "Sign out everywhere",
     "sessionsExplain": "Ends every session you have: on this device and others, in apps, and on organizers' own sites. You'll need to sign in again.",
@@ -3752,6 +3777,17 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "accountDeleted": {
+    "metaTitle": "Account deleted",
+    "eyebrow": "Your account",
+    "title": "Your account was deleted",
+    "description": "You've been signed out, and your Yayatoh account no longer exists.",
+    "email": "We sent a confirmation to your email address before removing it.",
+    "orders": "Organizers you bought from keep their order records; ask them if you want those erased too.",
+    "comeBack": "You're welcome back anytime: signing in with your email creates a new account.",
+    "home": "Go to the home page",
+    "signIn": "Sign in"
   },
   "cms": {
     "title": "Pages & blog",

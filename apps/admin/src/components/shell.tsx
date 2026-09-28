@@ -33,6 +33,11 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
               {t('signupCodes')}
             </Link>
           ) : null}
+          {staff.can('privacy') ? (
+            <Link href="/people" className="underline-offset-2 hover:underline">
+              {t('people')}
+            </Link>
+          ) : null}
           <Link href="/access-log" className="underline-offset-2 hover:underline">
             {t('accessLog')}
           </Link>

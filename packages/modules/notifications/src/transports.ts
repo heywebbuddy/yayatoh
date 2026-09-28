@@ -229,3 +229,24 @@ export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: stri
   }
   return out;
 }
+
+/**
+ * Until the owner's email provider account exists (SES), platform notices outside development
+ * are logged instead of sent: the subject and a masked recipient only, never the body.
+ */
+export function consoleTransport(): EmailTransport {
+  return {
+    async send(m) {
+      const [local = '', domain = ''] = m.to.split('@');
+      console.info(
+        JSON.stringify({
+          mail: 'notice',
+          to: `${local.slice(0, 1)}•••@${domain}`,
+          subject: m.subject,
+          id: m.idempotencyKey,
+        }),
+      );
+      return { providerMessageId: `console-${m.idempotencyKey}` };
+    },
+  };
+}

@@ -10,7 +10,8 @@ export type StaffAction =
   | 'reports'
   | 'impersonate'
   | 'status'
-  | 'signupCodes';
+  | 'signupCodes'
+  | 'privacy';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -18,6 +19,8 @@ export type StaffAction =
  *   suspending takes every public page offline and terminating can't be undone here, so it is an
  *   account decision; support already has the per-capability kill switches for incidents.
  * - Admins and support hand out signup codes (onboarding is a support task); finance doesn't.
+ * - `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
+ *   people's requests; finance has no reason to see or erase personal data (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -30,8 +33,9 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'impersonate',
     'status',
     'signupCodes',
+    'privacy',
   ],
-  support: ['view', 'suspend', 'reports', 'signupCodes'],
+  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy'],
   finance: ['view', 'payouts', 'fees'],
 };
 

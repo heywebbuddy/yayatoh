@@ -110,5 +110,12 @@
     "box_office": "billetterie",
     "scanner": "contrôleur",
     "viewer": "lecteur"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Votre compte Yayatoh a été supprimé",
+      "intro": "Comme vous l'avez demandé, votre compte Yayatoh a été supprimé. Vous avez été déconnecté partout, et vos identifiants ainsi que la validation en deux étapes ont été supprimés. Les organisateurs auprès de qui vous avez acheté conservent leurs commandes, comme la loi l'exige.\n\nSi vous n'êtes pas à l'origine de cette demande, répondez immédiatement à cet e-mail."
+    },
+    "sentBy": "Envoyé par Yayatoh au sujet de votre compte."
   }
 }

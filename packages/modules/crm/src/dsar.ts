@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL } from '@yayatoh/platform';
-import { asc, eq, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 import { consents, contactStats, contacts, eventParticipation } from './schema.ts';
 
 /** A person's org contact and consent history, allowlisted (M1.14c data-subject access). */
@@ -97,4 +97,41 @@ export async function eraseContactDsarTx(tx: TenantTx, emailNorm: string, now: D
       ).length
     : 0;
   return { contactIds: rows.map((r) => r.id), erased: rows.length, consentsKept: kept };
+}
+
+/** The account is being deleted (M1.14e): the org's contacts stay, unlinked from the account. */
+export async function unlinkContactUserTx(tx: TenantTx, userId: string, now: Date): Promise<number> {
+  const rows = await tx
+    .update(contacts)
+    .set({ userId: null, updatedAt: now })
+    .where(eq(contacts.userId, userId))
+    .returning({ id: contacts.id });
+  return rows.length;
+}
+
+/**
+ * Whether the org holds a marketing consent for this email that was granted after `since` and
+ * is still the latest (M1.14e: after an erasure, consent must be given again before marketing).
+ */
+export async function consentRegivenSinceTx(
+  tx: TenantTx,
+  emailNorm: string,
+  channel: 'email' | 'sms',
+  since: Date,
+): Promise<boolean> {
+  const rows = await tx
+    .select({ status: consents.status, capturedAt: consents.capturedAt })
+    .from(consents)
+    .innerJoin(contacts, and(eq(contacts.orgId, consents.orgId), eq(contacts.id, consents.contactId)))
+    .where(
+      and(
+        eq(contacts.emailNorm, emailNorm),
+        eq(consents.channel, channel),
+        eq(consents.purpose, 'marketing'),
+      ),
+    )
+    .orderBy(desc(consents.capturedAt), desc(consents.id))
+    .limit(1);
+  const latest = rows[0];
+  return Boolean(latest && latest.status === 'granted' && latest.capturedAt > since);
 }

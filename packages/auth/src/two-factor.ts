@@ -59,7 +59,9 @@ export type SecurityAction =
   | 'two_factor.replay_refused'
   | 'step_up.confirmed'
   | 'step_up.failed'
-  | 'sessions.revoked_all';
+  | 'sessions.revoked_all'
+  | 'account.exported'
+  | 'account.deleted';
 
 export interface TwoFactorStatus {
   readonly enabled: boolean;

@@ -124,7 +124,8 @@
       "complained": "已抑制：收件人曾將先前的郵件標為垃圾郵件",
       "event_cancelled": "活動或場次已取消",
       "event_started": "活動已經開始",
-      "event_postponed": "活動延期期間暫緩"
+      "event_postponed": "活動延期期間暫緩",
+      "erased": "未寄送：此人的資料已應其要求刪除"
     },
     "channels": {
       "email": "電子郵件",
@@ -1149,7 +1150,8 @@
       "invalid_label": "標籤過長（最多 40 個字元）",
       "too_many_labels": "標籤超過 20 個",
       "duplicate_in_file": "檔案前面已出現相同的電子郵件",
-      "already_on_list": "已在賓客名單中"
+      "already_on_list": "已在賓客名單中",
+      "erased": "此人的資料已應其要求刪除"
     },
     "preview": "前幾列的匯入結果",
     "row": "列",
@@ -2275,7 +2277,8 @@
       "holderLinks": "票券存取連結",
       "attendees": "賓客名單項目",
       "answers": "結帳時的回答",
-      "admissions": "報到"
+      "admissions": "報到",
+      "invitations": "團隊邀請"
     },
     "export": {
       "title": "匯出其資料",
@@ -3725,6 +3728,28 @@
       "already_enabled": "兩步驟驗證已開啟。",
       "not_enabled": "兩步驟驗證已關閉。"
     },
+    "data": {
+      "title": "你的資料",
+      "explain": "下載 Yayatoh 保存的你帳戶相關資訊副本（JSON 檔案）。",
+      "includes": "包括你的個人資料、登入工作階段與安全事件、你所在的組織與角色、你的訂單與票券、通知偏好以及同意紀錄。",
+      "excludes": "絕不包含密碼、驗證碼或其他機密資訊。主辦單位可以提供他們以客戶身分保存的你的資料。",
+      "prepare": "下載我的資料",
+      "ready": "你的檔案已準備好。",
+      "download": "下載檔案（JSON）"
+    },
+    "delete": {
+      "title": "刪除你的帳戶",
+      "signOut": "你將在所有裝置上登出，你的密碼、登入驗證碼與兩步驟驗證都會移除。",
+      "teams": "你將離開你所在的所有組織。",
+      "orders": "主辦單位會依法在紀錄中保留你的訂單與票券，但它們將不再與帳戶連結。",
+      "final": "此操作無法復原。你之後可以用同一個電子郵件重新註冊；行銷郵件需要你再次同意。",
+      "blockedTitle": "你暫時無法刪除帳戶",
+      "blockedExplain": "{count, plural, other {你是以下 # 個組織的唯一擁有者。請先將其他人設為擁有者，或請 Yayatoh 支援關閉這些組織：}}",
+      "confirmLabel": "輸入 {email} 以確認",
+      "confirmRequired": "請輸入你的電子郵件地址以確認。",
+      "confirmMismatch": "不相符。請輸入你自己的電子郵件地址以確認。",
+      "submit": "刪除我的帳戶"
+    },
     "impersonating": "當 Yayatoh 工作人員以此成員身分操作時，帳戶安全設定無法使用。",
     "sessionsTitle": "在所有地方登出",
     "sessionsExplain": "結束你的所有工作階段：包括此裝置和其他裝置、各個應用程式，以及主辦方自己的網站。之後需要重新登入。",
@@ -3752,6 +3777,17 @@
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
     "unauthenticated": "工作階段已結束，請重新登入。"
+  },
+  "accountDeleted": {
+    "metaTitle": "帳戶已刪除",
+    "eyebrow": "你的帳戶",
+    "title": "你的帳戶已刪除",
+    "description": "你已登出，你的 Yayatoh 帳戶已不存在。",
+    "email": "在刪除之前，我們已寄送確認信到你的電子郵件地址。",
+    "orders": "你購票的主辦單位會保留其訂單紀錄；如需刪除，請聯絡他們。",
+    "comeBack": "歡迎隨時回來：使用你的電子郵件登入即可建立新帳戶。",
+    "home": "前往首頁",
+    "signIn": "登入"
   },
   "cms": {
     "title": "頁面與部落格",

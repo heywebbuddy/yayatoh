@@ -56,6 +56,11 @@ export interface AuthOptions {
    * sessions. Never set in production.
    */
   readonly totpReplayExempt?: (user: { id: string; email: string }, secret: string) => boolean;
+  /**
+   * Called after a new account is created (a first sign-in with an emailed code, an accepted
+   * invitation). The web lifts an erased address's account-mail suppression here (M1.14e).
+   */
+  readonly onUserCreated?: (user: { id: string; email: string }) => Promise<void>;
 }
 
 /**
@@ -324,6 +329,18 @@ export function createAuth(opts: AuthOptions) {
       },
     },
     databaseHooks: {
+      // A new account (M1.14e): the web lifts an erased address's account-mail suppression.
+      ...(opts.onUserCreated
+        ? {
+            user: {
+              create: {
+                after: async (user: { id: string; email: string }) => {
+                  await opts.onUserCreated?.({ id: user.id, email: user.email });
+                },
+              },
+            },
+          }
+        : {}),
       session: {
         create: {
           // Every session is bound to the host it was created on (the Host of the sign-in request).

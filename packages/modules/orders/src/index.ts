@@ -51,7 +51,14 @@ export {
   refundDeadline,
   refundsFee,
 } from './domain/refund-policy.ts';
-export { eraseOrdersDsarTx, ordersDsarTx, redactAbandonedOrdersTx } from './dsar.ts';
+export {
+  buyerOrdersDsarTx,
+  buyerOrgs,
+  eraseOrdersDsarTx,
+  ordersDsarTx,
+  redactAbandonedOrdersTx,
+  unlinkBuyerUserTx,
+} from './dsar.ts';
 export * from './dto.ts';
 export {
   type DaySalesFact,

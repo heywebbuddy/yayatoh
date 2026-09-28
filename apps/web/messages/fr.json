@@ -124,7 +124,8 @@
       "complained": "Supprimé : le destinataire a signalé un e-mail précédent comme spam",
       "event_cancelled": "L’événement ou la date a été annulé",
       "event_started": "L’événement avait déjà commencé",
-      "event_postponed": "En attente tant que l’événement est reporté"
+      "event_postponed": "En attente tant que l’événement est reporté",
+      "erased": "Non envoyé : les données de cette personne ont été effacées à sa demande"
     },
     "channels": {
       "email": "E-mail",
@@ -1149,7 +1150,8 @@
       "invalid_label": "Une étiquette est trop longue (40 caractères max.)",
       "too_many_labels": "Plus de 20 étiquettes",
       "duplicate_in_file": "Le même e-mail figure plus haut dans le fichier",
-      "already_on_list": "Déjà sur la liste des invités"
+      "already_on_list": "Déjà sur la liste des invités",
+      "erased": "Les données de cette personne ont été effacées à sa demande"
     },
     "preview": "Premières lignes telles qu’elles seront importées",
     "row": "Ligne",
@@ -2275,7 +2277,8 @@
       "holderLinks": "Liens d’accès aux billets",
       "attendees": "Entrées de listes d’invités",
       "answers": "Réponses au paiement",
-      "admissions": "Contrôles d’entrée"
+      "admissions": "Contrôles d’entrée",
+      "invitations": "Invitations d'équipe"
     },
     "export": {
       "title": "Exporter ses données",
@@ -3725,6 +3728,28 @@
       "already_enabled": "La validation en deux étapes est déjà activée.",
       "not_enabled": "La validation en deux étapes est désactivée."
     },
+    "data": {
+      "title": "Vos données",
+      "explain": "Téléchargez une copie de ce que Yayatoh conserve sur votre compte, dans un fichier JSON.",
+      "includes": "Elle comprend votre profil, vos sessions et événements de sécurité, les organisations où vous travaillez et vos rôles, vos commandes et billets, vos choix de notification et vos consentements.",
+      "excludes": "Elle ne contient jamais de mots de passe, de codes ni d'autres secrets. Les organisateurs peuvent vous fournir ce qu'ils conservent sur vous en tant que client.",
+      "prepare": "Télécharger mes données",
+      "ready": "Votre fichier est prêt.",
+      "download": "Télécharger le fichier (JSON)"
+    },
+    "delete": {
+      "title": "Supprimer votre compte",
+      "signOut": "Vous serez déconnecté partout, et votre mot de passe, vos codes de connexion et la validation en deux étapes seront supprimés.",
+      "teams": "Vous quitterez toutes les organisations où vous travaillez.",
+      "orders": "Les organisateurs conservent vos commandes et billets dans leurs registres, comme la loi l'exige, mais ils ne seront plus liés à un compte.",
+      "final": "Cette action est définitive. Vous pourrez vous réinscrire avec la même adresse ; les e-mails marketing nécessiteront à nouveau votre consentement.",
+      "blockedTitle": "Vous ne pouvez pas encore supprimer votre compte",
+      "blockedExplain": "{count, plural, one {Vous êtes le seul propriétaire de cette organisation. Nommez d'abord un autre propriétaire, ou demandez au support Yayatoh de la fermer :} other {Vous êtes le seul propriétaire de ces # organisations. Nommez d'abord un autre propriétaire, ou demandez au support Yayatoh de les fermer :}}",
+      "confirmLabel": "Saisissez {email} pour confirmer",
+      "confirmRequired": "Saisissez votre adresse e-mail pour confirmer.",
+      "confirmMismatch": "Cela ne correspond pas. Saisissez votre propre adresse e-mail pour confirmer.",
+      "submit": "Supprimer mon compte"
+    },
     "impersonating": "La sécurité du compte n'est pas disponible pendant que le personnel de Yayatoh agit en tant que ce membre.",
     "sessionsTitle": "Se déconnecter partout",
     "sessionsExplain": "Met fin à toutes vos sessions : sur cet appareil et les autres, dans les applis et sur les sites propres des organisateurs. Vous devrez vous reconnecter.",
@@ -3752,6 +3777,17 @@
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
     "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+  },
+  "accountDeleted": {
+    "metaTitle": "Compte supprimé",
+    "eyebrow": "Votre compte",
+    "title": "Votre compte a été supprimé",
+    "description": "Vous avez été déconnecté et votre compte Yayatoh n'existe plus.",
+    "email": "Nous avons envoyé une confirmation à votre adresse e-mail avant de la supprimer.",
+    "orders": "Les organisateurs auprès de qui vous avez acheté conservent leurs commandes ; demandez-leur de les effacer si vous le souhaitez aussi.",
+    "comeBack": "Vous pouvez revenir quand vous voulez : vous connecter avec votre e-mail crée un nouveau compte.",
+    "home": "Aller à l'accueil",
+    "signIn": "Se connecter"
   },
   "cms": {
     "title": "Pages et blog",

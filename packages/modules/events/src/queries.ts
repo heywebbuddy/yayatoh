@@ -262,3 +262,12 @@ export async function eventIdsEndedBeforeTx(tx: TenantTx, before: Date): Promise
   const rows = await tx.select({ id: events.id }).from(events).where(lt(events.endsAt, before));
   return rows.map((r) => r.id);
 }
+
+/** The account is being deleted (M1.14e): its event roles (door staff, …) in the current org go. */
+export async function removeUserEventRolesTx(tx: TenantTx, userId: string): Promise<number> {
+  const rows = await tx
+    .delete(eventRoleAssignments)
+    .where(eq(eventRoleAssignments.userId, userId))
+    .returning({ id: eventRoleAssignments.id });
+  return rows.length;
+}

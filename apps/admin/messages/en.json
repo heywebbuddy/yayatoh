@@ -48,7 +48,8 @@
     "commission": "Commission",
     "apiUsage": "API usage",
     "signupCodes": "Signup codes",
-    "reports": "Messaging reports"
+    "reports": "Messaging reports",
+    "people": "Privacy requests"
   },
   "tenants": {
     "title": "Tenants",
@@ -476,5 +477,75 @@
       "closed": "No reviewed reports yet"
     },
     "emptyDescription": "Reports from organizers and contacts show up here."
+  },
+  "people": {
+    "metaTitle": "Privacy requests · Yayatoh staff",
+    "title": "Privacy requests",
+    "description": "Requests from people about their Yayatoh account (Yayatoh is the controller): find what the platform holds about an email, export it, or erase it. Every lookup is in the access log; every export and erasure is recorded with your reason.",
+    "reasonHint": "Recorded with the request, e.g. the support ticket and how you checked who is asking (10–500 characters).",
+    "find": {
+      "title": "Find a person",
+      "hint": "Searches accounts, staff, team invitations, orders, signup codes and security events. The address is sent in the request body, never in a link.",
+      "email": "Email address",
+      "submit": "Find"
+    },
+    "result": {
+      "title": "What Yayatoh holds about {email}",
+      "account": "Account",
+      "accountSince": "{name}, since {date}",
+      "noAccount": "No account",
+      "staff": "Staff role",
+      "twoFactor": "Two-step verification",
+      "sessions": "Active sessions",
+      "securityEvents": "Security events",
+      "orders": "Orders as a buyer (all organizers)",
+      "signupCodes": "Signup codes (created or mentioned)",
+      "deletedAccounts": "Earlier deleted accounts",
+      "erasedList": "On the erased-address list since",
+      "memberships": "Organizations",
+      "membership": "{org} · {role}",
+      "invitations": "Team invitations",
+      "invitation": "{org} · {role} · {status}",
+      "none": "None",
+      "yes": "Yes",
+      "no": "No",
+      "nothing": "Nothing found for this email.",
+      "requests": "Earlier requests about this address",
+      "request": "{kind} · {actor} · {date}",
+      "self": "the person",
+      "kinds": {
+        "access": "Access (export)",
+        "erasure": "Erasure"
+      },
+      "erasedSince": "On the erased-address list since {date}."
+    },
+    "export": {
+      "title": "Export (access request)",
+      "hint": "The same JSON file the person can download from their account page: profile, sessions, security events, organizations and roles, orders and tickets, notification choices, consents and invitations. No passwords, codes or other secrets.",
+      "reason": "Reason for this export",
+      "submit": "Export data (JSON)",
+      "download": "Download the file"
+    },
+    "erase": {
+      "title": "Erase (deletion request)",
+      "what": "Their account is anonymised: signed out everywhere, password and two-step verification removed, name cleared and the email replaced by a hash.",
+      "kept": "They leave every organization. Organizers keep orders and tickets (legal hold), unlinked from the account.",
+      "suppression": "The address goes on the platform-wide erased list: no organizer can mail it or import it to a list again unless the person comes back.",
+      "final": "This can't be undone. A confirmation email goes to the address first.",
+      "reason": "Reason for this erasure",
+      "confirm": "Type {email} to confirm",
+      "submit": "Erase this person",
+      "done": "Erased. {orgs, plural, =0 {No organization} one {# organization} other {# organizations}} updated, {sessions, plural, =0 {no sessions} one {# session} other {# sessions}} ended. Request {id}."
+    },
+    "errors": {
+      "invalid_email": "Enter a valid email address.",
+      "reason_required": "Give a reason of 10 to 500 characters.",
+      "confirm_mismatch": "That doesn't match. Type the same email address to confirm.",
+      "last_owner": "They are the only owner of these organizations. Another owner must be added (or the organization closed) first:",
+      "is_staff": "This person is active staff. Revoke their staff role first (owner CLI).",
+      "not_found": "Nothing is held about this email.",
+      "forbidden": "You can't do that.",
+      "internal": "Something went wrong. Try again."
+    }
   }
 }

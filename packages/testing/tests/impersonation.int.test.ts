@@ -184,6 +184,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'media.removeLogo',
         'program.deleteSession',
         'cms.deleteEntry',
+        // Account erasure's per-org part (M1.14e; run by the platform, never as a member).
+        'privacy.detachAccount',
         // Bulk "cancel tickets" voids tickets for good (M1.8f).
         'orders.startCancelTickets',
       ]),

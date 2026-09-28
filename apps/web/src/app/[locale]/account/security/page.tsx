@@ -1,7 +1,9 @@
+import { accountDeletionBlockers } from '@yayatoh/privacy';
 import { twoFactorRequiredBy } from '@yayatoh/tenancy';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AccountDelete, AccountExport } from '@/components/account-data.tsx';
 import { SignOutEverywhere } from '@/components/sign-out-everywhere.tsx';
 import { StepUpProvider } from '@/components/step-up.tsx';
 import { RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
@@ -22,7 +24,7 @@ export async function generateMetadata({
 /**
  * Account security (M1.2c): two-step verification with an authenticator app, backup codes, and
  * turning it off. Owners, admins and finance are sent here until it is on (every console is
- * closed to them before that).
+ * closed to them before that). M1.14e: the person's own data — download it, delete the account.
  */
 export default async function SecurityPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -43,9 +45,10 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
         </Card>
       </main>
     );
-  const [status, requiredBy] = await Promise.all([
+  const [status, requiredBy, blockers] = await Promise.all([
     getTwoFactor().status(session.userId),
     twoFactorRequiredBy(session.userId),
+    accountDeletionBlockers(session.userId),
   ]);
   const required = requiredBy.length > 0;
   const reasons = requiredBy.map((o) =>
@@ -113,6 +116,12 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
           <p className="text-body text-zinc-600">{t('security.sessionsExplain')}</p>
           <SignOutEverywhere />
         </Card>
+        {!required || status.enabled ? (
+          <>
+            <AccountExport />
+            <AccountDelete email={session.email} blockers={blockers.map((b) => b.name)} />
+          </>
+        ) : null}
         {!required || status.enabled ? (
           <Link href="/o" className={buttonClass('ghost', 'sm', 'self-start')}>
             {t('security.backToConsole')}

@@ -110,5 +110,12 @@
     "box_office": "biglietteria",
     "scanner": "controllo accessi",
     "viewer": "lettore"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Il tuo account Yayatoh è stato eliminato",
+      "intro": "Come richiesto, il tuo account Yayatoh è stato eliminato. Sei stato disconnesso ovunque e i tuoi dati di accesso e la verifica in due passaggi sono stati rimossi. Gli organizzatori da cui hai acquistato conservano i loro ordini, come richiesto dalla legge.\n\nSe non l'hai chiesto tu, rispondi subito a questa email."
+    },
+    "sentBy": "Inviato da Yayatoh riguardo al tuo account."
   }
 }

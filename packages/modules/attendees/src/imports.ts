@@ -2,7 +2,14 @@ import { normalizeEmail, upsertContactsTx } from '@yayatoh/crm';
 import { CsvError, csvRow, parseCsv } from '@yayatoh/csv';
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
-import { bulkCommands, defineBulkAction, tenantCommand, tenantQuery } from '@yayatoh/platform';
+import {
+  bulkCommands,
+  defineBulkAction,
+  erasedAddressesTx,
+  normalizeAddress,
+  tenantCommand,
+  tenantQuery,
+} from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { Label, MAX_LABELS } from './attendees.ts';
@@ -15,6 +22,8 @@ export const IMPORT_ERROR_CODES = [
   'too_many_labels',
   'duplicate_in_file',
   'already_on_list',
+  /** The address was erased at someone's request (M1.14e): it can't be added to a list again. */
+  'erased',
 ] as const;
 export type ImportErrorCode = (typeof IMPORT_ERROR_CODES)[number];
 
@@ -181,16 +190,22 @@ export const validateImportCommand = tenantCommand({
           .where(and(eq(attendees.eventId, b.eventId), eq(attendees.status, 'active')))
       ).map((r) => r.email),
     );
+    const mappedRows = rows.map((r) => ({ id: r.id, m: mapRow(r.cells, input.mapping, input.extraLabels) }));
+    // The platform-wide erased-address list (M1.14e): an erased person can't be imported again.
+    const erased = await erasedAddressesTx(
+      tx,
+      mappedRows.filter((r) => !r.m.error).map((r) => r.m.email),
+    );
     const seen = new Set<string>();
     const codes: { id: string; code: string | null }[] = [];
-    for (const r of rows) {
-      const m = mapRow(r.cells, input.mapping, input.extraLabels);
+    for (const { id, m } of mappedRows) {
       let code = m.error;
       const key = normalizeEmail(m.email);
+      if (!code && erased.has(normalizeAddress(m.email))) code = 'erased';
       if (!code && seen.has(key)) code = 'duplicate_in_file';
       if (!code && existing.has(key)) code = 'already_on_list';
       if (!code) seen.add(key);
-      codes.push({ id: r.id, code });
+      codes.push({ id, code });
     }
     for (let i = 0; i < codes.length; i += 1_000) {
       const part = codes.slice(i, i + 1_000);
@@ -369,7 +384,17 @@ export const attendeeImportAction = defineBulkAction({
           )
       ).map((r) => r.email),
     );
-    const go = [...mapped].filter(([, m]) => !m.error && !taken.has(normalizeEmail(m.email)));
+    // Erased since validation (M1.14e): skipped with that reason.
+    const erased = await erasedAddressesTx(
+      tx,
+      [...mapped.values()].filter((m) => !m.error).map((m) => m.email),
+    );
+    const erasedRows = new Set(
+      [...mapped].filter(([, m]) => !m.error && erased.has(normalizeAddress(m.email))).map(([id]) => id),
+    );
+    const go = [...mapped].filter(
+      ([id, m]) => !m.error && !erasedRows.has(id) && !taken.has(normalizeEmail(m.email)),
+    );
     const contactIds = await upsertContactsTx(
       tx,
       ctx,
@@ -392,7 +417,14 @@ export const attendeeImportAction = defineBulkAction({
           labels: m.labels,
         })),
       );
-    const failedRows = [...mapped].filter(([id]) => !attendeeOf.has(id)).map(([id]) => id);
+    const failedRows = [...mapped]
+      .filter(([id]) => !attendeeOf.has(id) && !erasedRows.has(id))
+      .map(([id]) => id);
+    if (erasedRows.size)
+      await tx
+        .update(importRows)
+        .set({ errorCode: 'erased', updatedAt: ctx.now })
+        .where(inArray(importRows.id, [...erasedRows]));
     if (attendeeOf.size)
       await tx.execute(sql`
         update ${importRows} set attendee_id = v.aid, updated_at = ${ctx.now.toISOString()}::timestamptz
@@ -410,6 +442,7 @@ export const attendeeImportAction = defineBulkAction({
       results: ids.map((id) => {
         const aid = attendeeOf.get(id);
         if (aid) return { id, ok: true, undo: { attendeeId: aid } };
+        if (erasedRows.has(id)) return { id, ok: false, code: 'erased' };
         return { id, ok: false, code: mapped.has(id) ? 'already_on_list' : 'not_found' };
       }),
     };
