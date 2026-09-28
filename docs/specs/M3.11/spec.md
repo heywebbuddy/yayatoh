@@ -81,3 +81,8 @@ Help centre, marketing site, status page, launch comms, on-call rota (M3.11b); S
 | AC-11a-13 | In the staff console: an admin opens signup (confirmation required, by keyboard) and the public page follows at once, closes it again, history and access log; axe | `apps/admin/e2e/open-signup.spec.ts` |
 | AC-11a-14 | Support staff and non-staff accounts: no link, page refused | `apps/admin/e2e/open-signup.spec.ts` |
 | AC-11a-15 | Messages in 13 locales, same keys | `apps/web/tests/messages.test.ts` |
+
+### Gate results (M3.11a, 2026-09-28)
+- `pnpm verify`: lint, check:modules, typecheck ok; unit 118 files / 1182 tests; integration 96 files / 797 tests; all passed. `pnpm contracts:check` ok (no `/v1` change).
+- After `pnpm db:bootstrap` and fresh web and admin builds: web e2e **1222 passed, 32 skipped, 0 failed** (all specs, 375/768/1280); staff console e2e **50 passed** (1280/375).
+- Found and fixed on the way: an account created by an emailed code has no name, so the console's avatar (`role="img"`) had an empty label (axe `role-img-alt`); it now falls back to the email address. The canary leak org now finishes its onboarding so `org_onboarding.completed_by` is covered.
