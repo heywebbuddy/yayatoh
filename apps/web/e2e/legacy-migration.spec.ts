@@ -283,11 +283,13 @@ test.describe('legacy migration — the migrated organizer', () => {
     const mine = h.scans[test.info().project.name] ?? h.scans['desktop-1280'];
     if (!mine) throw new Error('no scan handle');
     await page.goto(`${EVENT}/onsite`);
-    // The online test admitted this ticket: undo it, so the device admits it again.
-    const undo = page.getByRole('button', { name: `Undo check-in for ${mine.name}` }).first();
-    if (await undo.isVisible()) {
-      await undo.click();
-      await expect(page.getByRole('button', { name: `Undo check-in for ${mine.name}` })).toHaveCount(0);
+    // The online test admitted this ticket: undo its live admission (older scans of the guest may
+    // still list their own undo). The device decides offline from its own list either way.
+    const undos = page.getByRole('button', { name: `Undo check-in for ${mine.name}` });
+    const before = await undos.count();
+    if (before > 0) {
+      await undos.first().click();
+      await expect(undos).toHaveCount(before - 1);
     }
     await page.getByLabel('Device name').fill(`Legacy door ${test.info().project.name} ${Date.now()}`);
     await page.getByRole('button', { name: 'Add device' }).click();
