@@ -56,4 +56,6 @@ export const EXPORT_ALLOW = {
   dsar: ATTENDEE,
   // The activity log for owners and admins: who did it and to what.
   audit: ['platform.audit_events.actor', 'platform.audit_events.target_id'],
+  // An audience (M3.6a): the contact's name and email; counts, dates and consent codes only.
+  audience: ['crm.contacts.name', 'crm.contacts.email'],
 } as const satisfies Record<string, readonly ColumnId[]>;

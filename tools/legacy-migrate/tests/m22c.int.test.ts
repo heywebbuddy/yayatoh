@@ -242,10 +242,12 @@ describe('T6 communications', () => {
                (select count(*)::int from crm.consents where evidence = 'legacy_newsletter' and status = 'granted') as granted,
                (select count(*)::int from crm.consents where evidence = 'legacy_newsletter_unsubscribe' and status = 'withdrawn') as withdrawn,
                (select count(*)::int from crm.consents where status = 'unknown_legacy') as unknown,
-               -- Migrated contacts only: other test files share this database and record live opt-ins.
+               -- Migrated orgs only: other test files share this database (live opt-ins, fixture rows).
                (select count(*)::int from crm.consents k join crm.contacts c on c.id = k.contact_id
-                 where c.source = 'legacy' and k.status = 'granted' and k.evidence <> 'legacy_newsletter') as granted_other,
+                 where c.org_id in (select new_id from legacy.ref where entity in ('organizers', 'platform_org'))
+                   and k.status = 'granted' and k.evidence <> 'legacy_newsletter') as granted_other,
                (select count(*)::int from crm.contacts c where c.source = 'legacy'
+                  and c.org_id in (select new_id from legacy.ref where entity in ('organizers', 'platform_org'))
                   and not exists (select 1 from crm.consents x where x.contact_id = c.id)) as without`,
     );
     expect(r.platform_kind).toBe('platform');
