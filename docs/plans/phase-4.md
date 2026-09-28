@@ -1,6 +1,6 @@
 # Phase 4 plan — Weddings, galas and social events
 
-Status: **approved by the owner** (2026-09-28): all eight decisions accepted; Wave A started. The owner also asked for gala donations (paddle raise, pledges) to be planned; that plan is being added as a follow-up section. Roadmap: `docs/roadmap.md` Phase 4 (M4.1–M4.7). Owner priority 2.
+Status: **approved by the owner** (2026-09-28): all eight decisions accepted; Wave A started. The owner also asked for gala donations (paddle raise, pledges) to be planned. Section 6 adds that plan: **its decisions P4-9 to P4-17 await the owner's approval**. Roadmap: `docs/roadmap.md` Phase 4 (M4.1–M4.7). Owner priority 2.
 
 ## 1. What I'm asking you to decide
 
@@ -62,7 +62,7 @@ Phases 1–3 already deliver much of what Phase 4 needs.
 
 ## 3. Increments
 
-17 increments in four waves. Each is sized for one agent session and tested end to end (keyboard, axe, Arabic RTL) like Phases 1 and 3. A wave starts when the one before it is merged; increments inside a wave run in parallel. All data lives in a new `packages/modules/guests` (roadmap §5.1: parties, guests, sub_events, invitations, rsvp_history, guest_sites, gallery_items, hosted_tables), with fixture rows for both orgs and every column declared in `private-columns.ts`.
+17 increments in four waves, plus 7 gala donation increments (section 6) that join Waves B–D. Each is sized for one agent session and tested end to end (keyboard, axe, Arabic RTL) like Phases 1 and 3. A wave starts when the one before it is merged; increments inside a wave run in parallel. All data lives in a new `packages/modules/guests` (roadmap §5.1: parties, guests, sub_events, invitations, rsvp_history, guest_sites, gallery_items, hosted_tables), with fixture rows for both orgs and every column declared in `private-columns.ts`.
 
 ### Wave A — guest data and the social workspace (no Phase 3 dependency)
 | Increment | Scope | Acceptance (roadmap) |
@@ -97,11 +97,11 @@ Phases 1–3 already deliver much of what Phase 4 needs.
 | **M4.7a** Mobile-web guest hub | One page per party covering RSVP, seat, tickets and program, installable to the home screen. A Wallet pass port with a fake adapter; live passes need your Apple and Google accounts (M1.5e2) | Lighthouse mobile thresholds met; no app install needed |
 | **M4.x** Hardening | The roadmap §13 wedding journey end to end (RSVP → seating → kiosk → check-in). Load tests: a 400-guest wedding and a 1,000-guest gala. An accessibility sweep. Leak-crawler coverage for every new table. A dress-rehearsal script for the first real event | E2E, k6 and crawler gates green |
 
-**Gala donations:** the gala profile lists a Donations tab, but no donations module exists (only donation ticket types), and no roadmap milestone builds one. The owner asked for it to be planned (2026-09-28); the plan follows as its own section with any decisions it needs.
+**Gala donations:** the gala profile lists a Donations tab, but no donations module exists (only donation ticket types), and no roadmap milestone builds one. The owner asked for it to be planned (2026-09-28). **Section 6** plans it: decisions P4-9 to P4-17 and increments M4.8a–M4.8g, which join Waves B–D.
 
 ## 4. What waits for you
 
-**Decisions:** the eight above, and the D19 row in roadmap §12.
+**Decisions:** the eight above, the D19 row in roadmap §12, and the gala donation decisions P4-9 to P4-17 (section 6).
 
 **Accounts:**
 - Cloudflare R2, needed for gallery uploads larger than 4 MB and in production.
@@ -130,10 +130,85 @@ Phases 1–3 already deliver much of what Phase 4 needs.
 
 The roadmap sized Phase 4 at ~70 small increments over 7–10 weeks for a single-threaded build. At this project's actual pace (2–3.5 hours per cloud increment, 2–4 hours per merge batch including CI fixes), the 17 larger increments above run as **4 waves of about 5–8 hours each**. That is roughly 35–60 agent-hours plus 8–16 hours of merging.
 
-With Phase 3 taking slots first, expect about **1.5–3 weeks of calendar time** if reviews keep pace:
+The 7 gala donation increments (section 6) run inside Waves B–D and add about 15–25 agent-hours plus 2–4 hours of merging. **Phase 4 in total: 24 increments, roughly 50–85 agent-hours plus 10–20 hours of merging.**
+
+With Phase 3 taking slots first, expect about **2–3.5 weeks of calendar time** if reviews keep pace:
 - Wave A can start as soon as you approve.
 - Wave B needs M3.6a merged, or it lands the RSVP projection field itself.
 - Wave C prefers M3.1b merged.
 - Wave D's Command Center pack waits for Phase 3 Wave B.
 
 The exit criterion then depends on the date of a real event.
+
+## 6. Gala donations (added at the owner's request)
+
+Status: **awaiting the owner's approval** (planned 2026-09-28). Roadmap: none yet; this adds M4.8 to Phase 4.
+
+**How gala fundraising works in practice.** Most of a gala's money is raised in the room, not from tickets:
+- **Fund-a-need (paddle raise).** After dinner, the host or a hired auctioneer calls giving levels from the top down ("$10,000 to fund a classroom… $5,000… $1,000… $250"). Guests raise a numbered paddle. Spotters call the paddle numbers; a recorder writes them down. A thermometer on the screens climbs toward the goal. Often a sponsor has promised to **match** gifts up to a cap, which the host announces to lift the room.
+- **Give from the table.** A QR code on the table card or on the screen, or a text keyword, opens a giving page on the guest's phone.
+- **Pledges are promises.** The paddle raise records who promised what. The money is collected afterwards: charged to a card the guest saved at check-in or at ticket purchase, or paid against an invoice or pledge letter. Some pledges arrive as a check, a stock transfer or a donor-advised fund grant weeks later. Some never arrive and have to be chased politely, then written off.
+- **Gift types.** Gifts can be anonymous, made in honor or in memory of someone (a **tribute**, with a note to the family), or matched by the donor's employer.
+- **Acknowledgement and receipts.** US charities must give donors a written acknowledgement for gifts of $250 or more. When the donor received something in return, such as a gala dinner, and paid more than $75, the charity must also state the **fair-market value** of what the donor received; only the rest is deductible. A $500 ticket for a dinner worth $150 gives a $350 deduction. A paddle-raise gift with nothing in return is fully deductible.
+- **After the night.** The charity reconciles pledges to payments and payouts, sends thank-you letters, and exports donors into its own donor CRM.
+
+Silent and live **auctions** are a different feature (items, bidding, winners' checkout, item values on receipts). They are out of scope here (P4-16).
+
+### 6.1 What I'm asking you to decide
+
+| # | Decision | Recommendation |
+|---|---|---|
+| P4-9 | **Merchant of record and funds flow for donations** (roadmap §5.3 hybrid model). A gift to a charity should land in the charity's own Stripe account, under the charity's name, at Stripe's nonprofit rate if the charity has it. If Yayatoh took gifts on its platform account (`platform_mor`) and transferred them later, Yayatoh would hold charitable money. That can make it a regulated "charitable fundraising platform" (for example, California's AB 488 registration) and adds money-transmission questions. | Donations run **only as `organizer_mor` direct charges on the organizer's connected account**, like tickets for connected organizers. **Unconnected organizers** cannot switch on online giving, the giving page, QR-to-give or card charges: the Donations tab asks them to connect Stripe first. They can still run a paddle raise that records pledges and collect them outside Yayatoh (check, their own invoice), recorded as offline payments; no money passes through Yayatoh. Existing donation ticket types keep selling as today under the org's funds flow, but on `platform_mor` they get no tax-deductibility wording. Taking donations under `platform_mor` waits for counsel |
+| P4-10 | **Does Yayatoh take a fee on donations?** Tickets carry today's per-ticket fee. Charities and donors watch fees on gifts closely, and "tip the platform" boxes draw complaints and regulators' attention. **This is your call.** | **No Yayatoh fee on donations** (application fee 0). The donor may tick **"Cover the processing fee"** (off by default, shows the exact amount, goes to the charity). No platform tip. If you want revenue from giving later, model it as a transparent percentage the organizer agrees to in the organizer agreement, shown on the giving page, and switched on per org as an entitlement (the P4-4 pattern), never hidden from the donor. Ticket fees are unchanged |
+| P4-11 | **Tax receipts** (`legal-copy`). Receipts are the charity's statement, not Yayatoh's. | Receipts only for orgs with a **verified charity profile**: legal name, EIN, 501(c)(3) status checked against the IRS exempt-organization list (a public bulk file) and confirmed by staff, plus an optional fiscal sponsor. One receipt per payment (not per pledge): charity name and EIN, donor, date, amount, and either "No goods or services were provided in exchange for this contribution" or a description and good-faith **fair-market value** of what was received, with **deductible amount = amount paid − fair-market value** (never below zero). Ticket types get a fair-market value field; a gala ticket needs one before receipts turn on. Ticket pages over $75 show the quid-pro-quo notice before purchase. Orgs without a verified profile get a plain payment receipt: "This payment is not tax-deductible". US and USD only at first. A year-end giving statement per donor. **All wording is `legal-copy` for your counsel** |
+| P4-12 | **Pledges paid later, and chasing unpaid ones.** | A pledge is a promise, never a charge. Two ways to collect: **(a) card on file** (P4-14): at the end of the night each donor gets a summary ("You pledged $1,000. We will charge your card ending 4242 tomorrow at 9:00"), with a link to change the card or pay another way; the charge runs the next morning in the event's timezone. **(b) Invoice**: a pledge email with a pay link (a Checkout Session on the connected account) and a due date (default 30 days). The host can record offline payments (check, wire, stock, donor-advised fund) or write a pledge off with a note. **Chasing:** transactional reminders at +7, +21 and +28 days that stop the moment it is paid; a declined card is retried once, then gets a pay link; after the due date the host gets an alert. Yayatoh never charges more than pledged, never charges without the saved consent, and never sends pledges to a collection agency |
+| P4-13 | **Anonymity and donor privacy.** | Donors choose how they appear: their name, a custom name ("The Smith Family"), or **Anonymous**. **Screens show totals and gift counts only by default**; a name appears on the thermometer or a shout-out only if the donor opted in. No donor list ever appears on a public page or payload. Spotters' phones see paddle numbers, never names or amounts given before. The organizer always sees who gave (receipts need it); amounts and tribute notes are private columns. The donor list is the charity's: Yayatoh never markets to it, and donors join the charity's own marketing only with a separate consent (the M1.5c2 consent ledger) |
+| P4-14 | **Cards saved for one-tap giving** (`payments` and `legal-copy`: needs your approval). Saving a card turns a raised paddle into collected money and is how gala platforms raise most of their total. | Yes, **opt-in only**, and always on the guest's own device. Two entry points: a "Save my card for tonight's giving" box at ticket checkout, and a QR code at check-in or on the table that opens a card-saving page. Both use a Stripe **SetupIntent on the charity's connected account** for off-session use, and store the consent text version, time and event. Yayatoh stores only the provider's reference, never card data. Staff never type card numbers; card readers (Stripe Terminal) wait for later. Saved cards are used only for gifts at that event, and are removed from the charity's customer 30 days after it |
+| P4-15 | **Text-to-give.** A short code or 10DLC keyword needs a carrier-approved messaging campaign. | **QR-to-give now** (no carrier approval, same giving page). An SMS keyword that replies with the giving link comes later on the M3.5b Twilio adapter, once your 10DLC charity campaign is approved. No carrier-billed giving (charges on the phone bill) |
+| P4-16 | **Silent and live auctions.** | **Out of scope for Phase 4.** Fund-a-need covers most gala giving and needs no item catalogue, bidding engine or item values on receipts. Auctions become their own milestone after Phase 4 if real galas ask for them; `donations.source` leaves room for `auction` |
+| P4-17 | **Matching gifts.** | Build **challenge matches**: a sponsor's pledge to match gifts in a window, up to a cap. The console and screens show "Every gift doubled up to $25,000"; the match is the sponsor's own pledge, collected like any other. **Employer matching**: donors may name their employer, and the charity exports the list. A paid matching-gift database integration (for example Double the Donation) waits until you want it |
+
+### 6.2 Increments
+
+7 increments that join Waves B–D. Each is sized for one agent session and tested end to end (keyboard, axe, Arabic RTL) like the rest. All data lives in a new `packages/modules/donations`: charity profiles, campaigns (appeals with a goal), giving levels, donations, pledges, pledge payments, paddles, matches and receipts. Every table has fixture rows for both orgs, and every column is declared in `private-columns.ts`. Money uses the existing orders, payments and ledger (M1.5, M1.6) through their exports. Every charge carries an idempotency key; webhooks stay verified and deduplicated.
+
+| Increment | Wave | Scope | Acceptance |
+|---|---|---|---|
+| **M4.8a** Donations module and giving page | **B** (after Wave A; needs M4.2a co-host roles) | The `donations` module; the Donations tab replaces its placeholder. Campaigns with a goal; giving levels with a name, amount and optional description ("$1,000 funds a classroom"). A public, mobile-first giving page per event: level buttons or an own amount, one-off gifts, cover the processing fee (P4-10), tribute (in honor or in memory, with an optional note to a named recipient), how the donor's name appears (P4-13), employer name (P4-17). Payment is an order with a `donation` item as a direct charge on the connected account with no application fee (P4-9); unconnected orgs see "Connect Stripe to accept gifts" | A gift charges exactly the chosen amount plus the fee cover, on the connected account, with application fee 0; an unconnected org cannot open the page; anonymous gifts never show a name in any public payload (leak crawler) |
+| **M4.8b** Charity profile and receipts | **B** | Charity profile (legal name, EIN, exempt status, fiscal sponsor), checked by staff against the IRS exempt-organization list. Fair-market value on ticket types. Receipts by email and PDF in every locale, with the deductible amount (P4-11); the quid-pro-quo notice on ticket pages over $75; plain "not tax-deductible" receipts for unverified orgs; a year-end statement per donor. Receipt text comes from a template marked `legal-copy` | A $500 ticket with a $150 fair-market value gives a receipt with $350 deductible; a $100 gift with nothing in return says "No goods or services were provided"; golden PDFs in English and Arabic |
+| **M4.8c** Paddle raise console and spotters | **C** (needs M4.2b guests linked to tickets and tables; **M3.1b** realtime) | Paddle numbers given to guests or parties (bulk by table or at check-in). A host/auctioneer console: arm a level, see the running total and count, close a level, undo. A spotter view on phones: **keyboard-first** (type the paddle number, Enter; big 44 px targets), **offline-tolerant** (entries queued on the device with their own ID and synced exactly once), duplicates flagged for the recorder, never dropped. A recorder review turns recorded paddles into confirmed pledges | 30 spotters recording 400 paddles, half of them offline for 2 minutes, sync with no loss and no duplicates; the keyboard-only path works; a paddle not assigned at this event is refused |
+| **M4.8d** Live screen and QR-to-give | **C** (needs **M3.1b**) | A thermometer screen for the room's projectors (goal, total, gifts, level being called, the active match), over the realtime publisher, with a signed display link and a reconnect snapshot. Names only for donors who opted in (P4-13). QR-to-give on the screen and on table cards opens the M4.8a page tied to the paddle-raise campaign, so gifts from phones join the total live. Reduced-motion and high-contrast modes | A gift made on a phone moves the thermometer within 3 s p95; screens never show an unconsented name (fixture with mixed consents) |
+| **M4.8e** Cards on file and pledge collection | **D** (needs M4.4b check-in; **M3.2b** alerts; **M3.7a** journeys if merged, otherwise today's reminder planner) | Card saving at ticket checkout and by QR at check-in or on the table (SetupIntent on the connected account, consent recorded; P4-14). One-tap giving from the guest's phone with the saved card. End-of-night pledge summaries, then off-session charges next morning (P4-12). Invoices with pay links and due dates; reminders that stop on payment; one retry on a declined card, then a pay link; offline payments and write-offs with a note; an alert "12 pledges ($18,500) unpaid 14 days after the event" | A confirmed pledge with a saved card is charged once, on schedule, exactly the pledged amount (replayed jobs never charge twice); reminders stop once paid; a pledge without saved consent is never charged |
+| **M4.8f** Matching gifts | **D** | Challenge matches: sponsor, window, ratio, cap; matched amounts computed from confirmed gifts and shown on the console and screen; the sponsor's match becomes its own pledge. Employer matching list export (P4-17) | A 1:1 match capped at $25,000 stops at the cap exactly; a refunded gift reduces the match |
+| **M4.8g** Reporting, exports and reconciliation | **D** (extends M1.6e reconciliation) | Reports per donor, per level, per source (online, paddle, QR, ticket donation) and per match; pledged vs collected vs written off. CSV and XLSX exports shaped for common donor CRMs (column mapping, anonymous flag kept). Reconciliation of donations to the connected account's balance transactions and payouts, with differences listed like M1.6e | The fixture gala's report totals equal the ledger memo entries and the provider's balance transactions to the cent; exports never include donors of the other org |
+
+The M4.x hardening pass also covers the gala giving journey end to end (ticket with a saved card → check-in → paddle raise → confirmed pledge → charge → receipt → reconciliation), a 1,000-guest gala load test with 30 spotters and 10 screens, and leak-crawler coverage for every donations table.
+
+### 6.3 What waits for you
+
+**Decisions:** P4-9 to P4-17, above. P4-10 (any fee on donations) is yours alone.
+
+**Accounts:**
+- Live Stripe, as for tickets. Each charity connects its own Stripe account and applies for Stripe's nonprofit pricing itself.
+- A Twilio 10DLC charity campaign, only when you want text-to-give (P4-15).
+
+**Legal** (all `legal-copy`, for your counsel):
+- Receipt and acknowledgement wording, the fair-market-value statement and the quid-pro-quo notice (P4-11).
+- The card-on-file authorization text and the pledge terms (P4-12, P4-14).
+- The donor privacy notice and the consent to the charity's marketing (P4-13).
+- An organizer-agreement clause: the organizer states it is a registered charity where it says so, and that **charitable solicitation registration in each state is the organizer's responsibility**, not Yayatoh's.
+- State rules to confirm: whether Yayatoh is a "charitable fundraising platform" or "professional fundraiser" anywhere under `organizer_mor` (it should not be, since it never holds the money), and commercial co-venturer rules when a business sponsor promotes a match.
+- Counsel's view before donations may ever run under `platform_mor` (P4-9).
+
+**Numbers:**
+- Pledge due date and reminder schedule (defaults: 30 days; +7, +21, +28).
+- When card-on-file pledges are charged (default: next morning at 9:00, event time).
+- How long saved cards are kept (default: 30 days after the event).
+- Default giving levels for new galas.
+- A fee on donations, if you ever want one (P4-10).
+
+**Real-world exit criterion:** one real gala with a paddle raise run on Yayatoh: levels called from the console, spotters on phones, the thermometer on screen, pledges collected and receipts sent. That needs a willing charity with a connected Stripe account and your counsel's receipt wording.
+
+### 6.4 Timing
+
+The 7 increments run inside Waves B–D in parallel with the rest, so they add about **15–25 agent-hours plus 2–4 hours of merging**, and about **half a week of calendar time** to section 5's estimate (now about 2–3.5 weeks for all of Phase 4). M4.8a and M4.8b can start with Wave B. M4.8c and M4.8d need M3.1b merged. M4.8e needs M3.2b merged and, ideally, M3.7a. Live money and receipts still wait for live Stripe, D3 and counsel.
