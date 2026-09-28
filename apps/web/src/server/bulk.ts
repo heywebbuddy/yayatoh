@@ -5,6 +5,7 @@ import { auditExportAction, bulkStepCommand, runBulkOperation } from '@yayatoh/p
 import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
+import { surveyExportAction } from '@yayatoh/surveys';
 import { ticketResendAction } from '@yayatoh/ticketing';
 import { ports } from './ports.ts';
 
@@ -20,6 +21,7 @@ export const BULK_ACTIONS = [
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,
+  surveyExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 

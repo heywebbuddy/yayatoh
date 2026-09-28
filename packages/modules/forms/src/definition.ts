@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+/** Question types for checkout questions (and every form). */
 export const FIELD_TYPES = [
   'short_text',
   'long_text',
@@ -9,7 +10,14 @@ export const FIELD_TYPES = [
   'multi_select',
   'checkbox',
 ] as const;
-export type FieldType = (typeof FIELD_TYPES)[number];
+/**
+ * Survey forms (M3.9a) add two scales: `rating` (1–5) and `nps` (0–10, "How likely are you to
+ * recommend…"). Checkout questions refuse them (`publishFormTx`).
+ */
+export const SURVEY_FIELD_TYPES = [...FIELD_TYPES, 'rating', 'nps'] as const;
+export type FieldType = (typeof SURVEY_FIELD_TYPES)[number];
+export const RATING_MAX = 5;
+export const NPS_MAX = 10;
 
 /**
  * A condition in a safe JsonLogic subset: `{"var": key}`, literals, `==`, `!=`, `>`, `>=`, `<`,
@@ -79,7 +87,7 @@ const Option = z.object({
 export const FieldDefinition = z
   .object({
     key: FieldKey,
-    type: z.enum(FIELD_TYPES),
+    type: z.enum(SURVEY_FIELD_TYPES),
     label: z.string().trim().min(1).max(200),
     help: z.string().trim().max(300).nullable().default(null),
     required: z.boolean().default(false),
@@ -96,6 +104,8 @@ export const FieldDefinition = z
       c.addIssue({ code: 'custom', message: 'Add at least one option', path: ['options'] });
     if (!choice && f.options.length > 0)
       c.addIssue({ code: 'custom', message: 'Only choice fields have options', path: ['options'] });
+    if ((f.type === 'rating' || f.type === 'nps') && (f.min !== null || f.max !== null))
+      c.addIssue({ code: 'custom', message: 'Scales have a fixed range', path: ['max'] });
     if (f.min !== null && f.max !== null && f.max < f.min)
       c.addIssue({ code: 'custom', message: 'max must be ≥ min', path: ['max'] });
     if (new Set(f.options.map((o) => o.value)).size !== f.options.length)
@@ -169,6 +179,13 @@ function normalize(f: FieldDefinition, raw: unknown): unknown {
       if (!vals.every((v) => typeof v === 'string' && f.options.some((o) => o.value === v)))
         throw bad('Choose from the options');
       return [...new Set(vals as string[])];
+    }
+    case 'rating':
+    case 'nps': {
+      const top = f.type === 'rating' ? RATING_MAX : NPS_MAX;
+      const n = typeof raw === 'number' ? raw : Number(String(raw).trim());
+      if (!Number.isInteger(n) || n < (f.type === 'rating' ? 1 : 0) || n > top) throw bad('Choose a score');
+      return n;
     }
     case 'checkbox': {
       if (raw === true || raw === 'true' || raw === 'on' || raw === '1') return true;

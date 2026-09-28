@@ -18,6 +18,7 @@ import { privateColumns as privacy } from '@yayatoh/privacy';
 import { privateColumns as program } from '@yayatoh/program';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
+import { privateColumns as surveys } from '@yayatoh/surveys';
 import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
@@ -48,6 +49,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   program,
   reviews,
   seating,
+  surveys,
   templates,
   tenancy,
   ticketing,

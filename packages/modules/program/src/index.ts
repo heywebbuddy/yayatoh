@@ -44,6 +44,7 @@ export {
   MAX_TRACKS_PER_EVENT,
   programCountsQuery,
   programQuery,
+  sessionsOf,
   UpdateSessionInput,
   updateSessionCommand,
 } from './sessions.ts';

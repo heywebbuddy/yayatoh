@@ -80,6 +80,18 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     replyUrl: 'https://app.yayatoh.test/messages/sample',
   },
   'security.fraud_signal': { signal: 'purchase_velocity', eventName: 'Lakeside Jazz Night' },
+  'surveys.invite': {
+    url: 'https://app.yayatoh.test/survey/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+    title: 'How was Lakeside Jazz Night?',
+  },
+  'surveys.reminder': {
+    url: 'https://app.yayatoh.test/survey/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+    title: 'How was Lakeside Jazz Night?',
+  },
   'sales.order_paid': {
     name: 'Amina Diallo',
     eventName: 'Lakeside Jazz Night',

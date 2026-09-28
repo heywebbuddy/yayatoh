@@ -36,6 +36,7 @@ key) inside their own transaction; this module records, gates, renders and sends
   for every org's email. Order mail (transactional kinds about an order or ticket) goes out; account
   mail (invitations, member notifications) only after the person signed up again; everything else
   is `suppressed` (`erased`) until the org records a marketing consent given after the erasure.
+- `cancelQueuedTx` cancels queued messages by dedupe key with a reason (a survey reminder once the person answered, M3.9a); sent messages never change.
 - Reminders are the day before at the same wall-clock time in the event's timezone; queued
   reminders are re-planned from the event's (or date's) current start whenever it changes, so
   replays are harmless. Sent messages are never rewritten.

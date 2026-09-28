@@ -31,6 +31,7 @@ import * as program from '@yayatoh/program';
 import * as reports from '@yayatoh/reports';
 import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
+import * as surveys from '@yayatoh/surveys';
 import * as templates from '@yayatoh/templates';
 import * as tenancy from '@yayatoh/tenancy';
 import {
@@ -83,6 +84,7 @@ const MODULES = {
   reports,
   reviews,
   seating,
+  surveys,
   templates,
   tenancy,
   ticketing,
@@ -150,6 +152,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'privacy.startDsarExport',
         'reports.startAttendeesCsv',
         'reports.startBookingsCsv',
+        // Survey responses CSV (M3.9a).
+        'surveys.startResponsesCsv',
       ]),
     );
     const files = [...queries.values()].filter((q) => q.category === 'export').map((q) => q.name);
@@ -161,6 +165,7 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'reports.bookingsCsvFile',
         'attendees.importFailures',
         'reports.disputeEvidencePacket',
+        'surveys.responsesCsvFile',
       ]),
     );
     const money = flagged.filter((c) => c.category === 'money').map((c) => c.name);

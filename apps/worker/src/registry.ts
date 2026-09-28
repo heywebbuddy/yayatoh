@@ -9,6 +9,7 @@ import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
+import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
@@ -59,6 +60,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
     programMediaCleaner(),
+    surveyMailer({ notifier, appOrigin }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
 }

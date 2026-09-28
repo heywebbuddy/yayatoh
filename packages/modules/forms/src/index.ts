@@ -7,6 +7,9 @@ export {
   type FieldType,
   FormDefinition,
   type Logic,
+  NPS_MAX,
+  RATING_MAX,
+  SURVEY_FIELD_TYPES,
 } from './definition.ts';
 export { eraseResponsesDsarTx, responsesDsarTx } from './dsar.ts';
 export {
@@ -17,7 +20,9 @@ export {
   publicForm,
   publishFormCommand,
   publishFormTx,
+  type QuestionSummary,
   ResponseDto,
+  subjectResponsesTx,
   submitResponseTx,
 } from './forms.ts';
 export { privateColumns } from './private-columns.ts';

@@ -1,8 +1,8 @@
 import type { TenantTx } from '@yayatoh/db';
-import { and, asc, eq, or } from 'drizzle-orm';
+import { and, asc, eq, inArray, or } from 'drizzle-orm';
 import { decryptParams, encryptParams } from './notifier.ts';
 import { planReminder } from './reminder-time.ts';
-import { messages } from './schema.ts';
+import { MESSAGE_CHANNELS, messages } from './schema.ts';
 
 /** Where a reminder's event (or date) stands now. `null`: leave the reminder as it is. */
 export interface ReminderTarget {
@@ -104,4 +104,31 @@ export async function rescheduleRemindersTx(
     result.rescheduled += 1;
   }
   return result;
+}
+
+/**
+ * Cancel queued messages by their dedupe keys (e.g. a survey reminder once the person answered,
+ * M3.9a), with a reason for the message log. Sent, failed and suppressed messages are history
+ * and never change; a key with no queued message is skipped. Returns how many were canceled.
+ */
+export async function cancelQueuedTx(
+  tx: TenantTx,
+  dedupeKeys: readonly string[],
+  reason: string,
+  now: Date,
+): Promise<number> {
+  if (dedupeKeys.length === 0) return 0;
+  const rows = await tx
+    .update(messages)
+    .set({ status: 'canceled', reason, updatedAt: now })
+    .where(
+      and(
+        // Every channel, spelled out so the (org, channel, dedupe_key) index serves the lookup.
+        inArray(messages.channel, [...MESSAGE_CHANNELS]),
+        inArray(messages.dedupeKey, [...dedupeKeys]),
+        eq(messages.status, 'queued'),
+      ),
+    )
+    .returning({ id: messages.id });
+  return rows.length;
 }

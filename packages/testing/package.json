@@ -38,6 +38,7 @@
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/reviews": "workspace:*",
     "@yayatoh/seating": "workspace:*",
+    "@yayatoh/surveys": "workspace:*",
     "@yayatoh/templates": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",

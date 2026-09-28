@@ -19,6 +19,7 @@ import {
 import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 // The composition root registers the key vault (message params and manage links are encrypted).
@@ -56,6 +57,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     checkoutRiskSignals(),
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
+    surveyMailer({ notifier, appOrigin }),
   ];
 }
 

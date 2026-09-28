@@ -100,6 +100,16 @@
       "subject": "Notificação de teste",
       "intro": "As notificações estão funcionando."
     },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "A {org} gostaria de saber como foi {eventName} para você. Leva cerca de dois minutos.",
+      "cta": "Responder à pesquisa"
+    },
+    "surveys.reminder": {
+      "subject": "Lembrete: {title}",
+      "intro": "Você ainda não respondeu: a {org} ainda gostaria de saber como foi {eventName} para você.",
+      "cta": "Responder à pesquisa"
+    },
     "guest.checkout-code": {
       "subject": "{code} é o seu código para confirmar o seu e-mail",
       "intro": "Digite {code} para confirmar o seu e-mail e concluir o seu pedido com {org}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."

@@ -98,6 +98,12 @@ import {
   setFinderSettingsCommand,
   setSeatingRulesCommand,
 } from '@yayatoh/seating';
+import {
+  createSurveyCommand,
+  sendSurveyCommand,
+  submitSurveyResponseCommand,
+  surveyToken,
+} from '@yayatoh/surveys';
 import { saveTemplateCommand } from '@yayatoh/templates';
 import {
   AGREEMENT_DOCUMENTS,
@@ -747,6 +753,43 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     recentEventsTx(tx, org.id, ['messaging.report_filed'], 3_600_000),
   ))
     await consumeEvent(chatReportSignals(), e);
+  // Surveys (M3.9a): a post-event survey sent the day after the event, and one answer through
+  // its link (survey, send, invitations, response and form rows, isolation coverage).
+  const surveyAt = new Date(event.endsAt.getTime() + 86_400_000);
+  const survey = await executeCommand(
+    createSurveyCommand,
+    {
+      eventId: event.id,
+      kind: 'post_event',
+      title: `How was ${name}?`,
+      definition: {
+        fields: [
+          { key: 'nps', type: 'nps', label: 'Recommend us?', required: true },
+          { key: 'note', type: 'long_text', label: 'Anything else?' },
+        ],
+      },
+    },
+    ctx({ now: surveyAt }),
+    ports,
+  );
+  await executeCommand(
+    sendSurveyCommand,
+    { eventId: event.id, surveyId: survey.id, reminderDays: 3 },
+    ctx({ now: surveyAt, idempotencyKey: `fixture-survey-${slug}` }),
+    ports,
+  );
+  const [invitation] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from surveys.invitations where survey_id = ${survey.id} order by created_at, id limit 1`,
+    ),
+  );
+  if (!invitation) throw new Error('fixture: no survey invitation');
+  await executeCommand(
+    submitSurveyResponseCommand,
+    { token: surveyToken(invitation.id), answers: { nps: 9, note: 'Lovely evening.' } },
+    createCtx({ orgId: org.id, now: surveyAt }),
+    ports,
+  );
   // M1.4b: a weekly event with dates (one cancelled), a series holding both events, and a
   // template saved from the launch event (isolation coverage).
   const weekly = await executeCommand(

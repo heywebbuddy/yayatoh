@@ -110,7 +110,12 @@ export {
 } from './push.ts';
 export { isValidTimeZone, QUIET_END_HOUR, QUIET_START_HOUR, quietHoursRelease } from './quiet-hours.ts';
 export { planReminder, type ReminderPlan, reminderTime } from './reminder-time.ts';
-export { type ReminderTarget, type RescheduleResult, rescheduleRemindersTx } from './reminders.ts';
+export {
+  cancelQueuedTx,
+  type ReminderTarget,
+  type RescheduleResult,
+  rescheduleRemindersTx,
+} from './reminders.ts';
 export {
   CATEGORIES,
   DELIVERY_STATES,

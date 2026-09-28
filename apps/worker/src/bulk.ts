@@ -6,6 +6,7 @@ import { auditExportAction, bulkStepCommand, createCommandPorts, runBulkOperatio
 import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
+import { surveyExportAction } from '@yayatoh/surveys';
 import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
@@ -22,6 +23,7 @@ export const BULK_ACTIONS = [
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,
+  surveyExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 // The org gate (M1.3f) lets system actors through; wired for parity with the apps.
