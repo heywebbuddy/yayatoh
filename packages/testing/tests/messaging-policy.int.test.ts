@@ -552,7 +552,21 @@ describe('policy gate v2: complaint-rate auto-pause', () => {
     // One complaint in 400 (+ the fixture's sends) is 0.25 %: nothing happens.
     expect((await complain(sent[0] as never, 1)).autoPaused).toBe(false);
     expect(await executeQuery(autoPauseQuery, {}, p.ctx(), ports)).toMatchObject({ active: false });
-    // The second makes it 0.5 %: paused.
+    // A spam click on a ticket email does not count (tickets never pause; the rate is optional mail).
+    await enqueue(p.org.id, {
+      kind: 'ticketing.holder-link',
+      to: { email: `ticket-${t}@example.test` },
+      params: { url: `${ORIGIN}/my-tickets/x`, eventName: 'Gala' },
+      dedupeKey: `ticket:${t}`,
+    });
+    await dispatchDue(p.org.id, { transports, appOrigin: ORIGIN, ignoreQuietHours: true });
+    const [ticket] = await withTenant(systemCtx(p.org.id), (tx) =>
+      tx.execute<{ id: string; provider_message_id: string }>(
+        sql`select id, provider_message_id from notifications.messages where dedupe_key = ${`ticket:${t}`}`,
+      ),
+    );
+    expect((await complain(ticket as never, 9)).autoPaused).toBe(false);
+    // The second complaint about optional mail makes it 0.5 %: paused.
     expect((await complain(sent[1] as never, 2)).autoPaused).toBe(true);
     const status = await executeQuery(autoPauseQuery, {}, p.ctx(), ports);
     expect(status).toMatchObject({ active: true, complaints: 2, liftedAt: null });

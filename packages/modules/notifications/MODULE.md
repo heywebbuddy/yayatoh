@@ -39,6 +39,7 @@ key) inside their own transaction; this module records, gates, renders and sends
   message queued with a reason; a quota or cap never drops reminders or updates.
 - Every send is metered in `usage_counters` (SMS by GSM-7/UCS-2 segment). Over the org's quota,
   optional messages wait; transactional messages and members' alerts never do.
-- A complaint rate strictly above 0.3 % (30 days, ≥ 100 emails, since the last auto-pause) switches
+- A complaint rate on optional email strictly above 0.3 % (30 days, ≥ 100 sent, since the last
+  auto-pause) switches
   on the org's `pause_messaging` suspension and records `auto_pauses`; only staff lift it (audited).
 - Frequency caps count by `recipient_key` (an HMAC of channel and address), never a readable phone.

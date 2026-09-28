@@ -42,8 +42,8 @@ export const CAP_LIMITS = { maxMessages: { min: 1, max: 20 }, windowHours: { min
 
 /**
  * Complaint-rate auto-pause (roadmap M3.5 acceptance: above 0.3 % the org pauses). The rate is
- * complaints ÷ emails sent over the rolling window (and since the last auto-pause, so a lifted
- * org starts clean); it needs a minimum volume to mean anything.
+ * complaints ÷ optional (non-transactional) emails sent over the rolling window (and since the
+ * last auto-pause, so a lifted org starts clean); it needs a minimum volume to mean anything.
  */
 export const COMPLAINT_RATE_LIMIT_BPS = 30; // 0.30 %, in basis points
 export const COMPLAINT_WINDOW_DAYS = 30;

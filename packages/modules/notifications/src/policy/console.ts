@@ -7,7 +7,7 @@ import {
   organizationBrandTx,
   pauseCapabilityTx,
 } from '@yayatoh/tenancy';
-import { and, count, desc, eq, gte, inArray, isNull, or, sql } from 'drizzle-orm';
+import { and, count, desc, eq, gte, inArray, isNull, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { MESSAGE_KINDS } from '../kinds.ts';
 import { createNotifier } from '../notifier.ts';
@@ -231,7 +231,7 @@ export const DEFAULT_CAP_LIST = CAP_SCOPES.map((scope) => ({ scope, ...DEFAULT_C
 export const AUTO_PAUSE_ACTOR = 'system:notifications.complaint-rate';
 
 /**
- * After new complaints: the org's complaint rate over emails sent in the window (30 days, and
+ * After new complaints: the org's complaint rate over optional emails sent in the window (30 days, and
  * since its last auto-pause, so a lifted org starts clean). Strictly above 0.3 % with enough
  * volume, optional messaging pauses (the `pause_messaging` suspension every sender honours),
  * the owners and admins are told, and staff see it in the console. Returns whether it paused.
@@ -250,9 +250,12 @@ export async function evaluateComplaintRateTx(
   const windowStart = new Date(
     Math.max(ctx.now.getTime() - COMPLAINT_WINDOW_DAYS * 86_400_000, last?.createdAt.getTime() ?? 0),
   );
+  // Optional email only: the pause stops optional messaging, so it measures what the org chose to
+  // send (a spam click on a ticket email doesn't count; tickets keep going either way).
   const sentInWindow = and(
     eq(messages.channel, 'email'),
     eq(messages.status, 'sent'),
+    ne(messages.category, 'transactional'),
     gte(messages.sentAt, windowStart),
   );
   const [sent] = await tx.select({ n: count() }).from(messages).where(sentInWindow);
