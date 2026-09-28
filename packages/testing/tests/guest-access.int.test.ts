@@ -8,6 +8,7 @@ import {
   consumeGuestLink,
   createGuestSession,
   endGuestSession,
+  eraseOrdersDsarTx,
   GUEST_CODE_TTL_MS,
   GUEST_RESEND_COOLDOWN_MS,
   guestOrders,
@@ -525,5 +526,25 @@ describe('checkout settings', () => {
       ),
     );
     expect(audits).toHaveLength(1);
+  });
+});
+
+describe('privacy', () => {
+  it('erasing a person removes their site sessions and pending codes for that org only', async () => {
+    const email = addr('erase');
+    const onA = await createGuestSession({ email, scopeOrgId: a.org.id, host: 'a.test.example' });
+    const onB = await createGuestSession({ email, scopeOrgId: b.org.id, host: 'b.test.example' });
+    await sent(email);
+    await withTenant(a.ctx(), (tx) => eraseOrdersDsarTx(tx, email, new Date()));
+    expect(await guestSessionByToken(onA.token, { scopeOrgId: a.org.id, host: 'a.test.example' })).toBeNull();
+    expect(
+      await guestSessionByToken(onB.token, { scopeOrgId: b.org.id, host: 'b.test.example' }),
+    ).not.toBeNull();
+    const left = await withoutTenant((tx) =>
+      tx.execute(
+        sql`select 1 from orders.guest_challenges where email = ${email} and scope_org_id = ${a.org.id}`,
+      ),
+    );
+    expect(left).toHaveLength(0);
   });
 });
