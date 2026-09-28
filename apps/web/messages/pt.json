@@ -221,7 +221,8 @@
     "emails": "Modelos de e-mail",
     "speakers": "Palestrantes",
     "sponsors": "Patrocinadores",
-    "media": "Imagens"
+    "media": "Imagens",
+    "audiences": "Públicos"
   },
   "vocab": {
     "attendee": "Participante",
@@ -3996,6 +3997,185 @@
     "terminated": {
       "title": "Esta organização está encerrada",
       "body": "O suporte da Yayatoh a encerrou. Suas páginas públicas estão offline e nada pode ser alterado. Como proprietário, você ainda pode abri-la e baixar seus dados, por exemplo em Atividade."
+    }
+  },
+  "audiences": {
+    "title": "Públicos",
+    "description": "Grupos de pessoas criados a partir do que já aconteceu no Yayatoh: ingressos, lugares, check-ins, gastos, etiquetas e consentimento.",
+    "new": "Novo público",
+    "emptyTitle": "Ainda não há públicos salvos",
+    "emptyDescription": "Crie um a partir de condições ou comece com um modelo abaixo.",
+    "caption": "Públicos salvos",
+    "name": "Nome",
+    "people": "Pessoas",
+    "countUnavailable": "Requer atenção",
+    "updated": "Atualizado",
+    "newTitle": "Novo público",
+    "newDescription": "Adicione condições e grupos. A contagem e as primeiras correspondências são atualizadas à medida que você edita.",
+    "delete": "Excluir",
+    "deleteFor": "Excluir {name}",
+    "eventOption": "{name} ({date})",
+    "templates": {
+      "title": "Começar com um modelo",
+      "description": "Cada modelo preenche o editor com condições que você ainda pode alterar.",
+      "pick": "Modelo",
+      "event": "Evento",
+      "thisYearsEvent": "Evento deste ano",
+      "noEvents": "Ainda não há eventos",
+      "ticketTypes": "Tipos de ingresso",
+      "noTicketTypes": "Este evento não tem tipos de ingresso.",
+      "use": "Usar modelo",
+      "used": "Modelo aplicado: {name}",
+      "start": "Começar",
+      "startFor": "Começar com {name}",
+      "vipsWithoutSeats": {
+        "name": "VIPs sem lugar",
+        "description": "Compraram os tipos de ingresso escolhidos, mas ainda não têm lugar."
+      },
+      "lastYearNotThisYear": {
+        "name": "Ano passado, não este ano",
+        "description": "Fizeram check-in na edição anterior da série e não se inscreveram nesta."
+      },
+      "registeredNotCheckedIn": {
+        "name": "Inscritos, sem check-in",
+        "description": "Na lista do evento, mas ainda sem check-in."
+      }
+    },
+    "builder": {
+      "title": "Condições",
+      "incomplete": "Complete as condições destacadas para ver quem corresponde.",
+      "rootGroup": "Todos que correspondem",
+      "group": "Grupo {n}",
+      "match": "Corresponder a",
+      "all": "todas estas",
+      "any": "qualquer uma destas",
+      "emptyGroup": "Sem condições: todos correspondem.",
+      "remove": "Remover",
+      "removeGroup": "Remover o grupo {n}",
+      "removeCondition": "Remover a condição {n}",
+      "conditionType": "Nova condição",
+      "addCondition": "Adicionar condição",
+      "addGroup": "Adicionar grupo",
+      "condition": "Condição {n}: {type}",
+      "types": {
+        "participation": "Participou de um evento",
+        "spend": "Gastos",
+        "consent": "Consentimento de marketing",
+        "label": "Etiqueta",
+        "totals": "Totais acumulados",
+        "seen": "Visto pela primeira ou última vez"
+      },
+      "did": "Regra",
+      "didYes": "Sim",
+      "didNo": "Não",
+      "role": "Como",
+      "roles": {
+        "attendee": "Participante",
+        "buyer": "Comprador"
+      },
+      "seated": "Tem lugar",
+      "checkedIn": "Fez check-in",
+      "tri": {
+        "any": "Tanto faz",
+        "yes": "Sim",
+        "no": "Não"
+      },
+      "registeredFrom": "Inscrito a partir de",
+      "registeredTo": "Inscrito até",
+      "ticketTypes": "Tipos de ingresso (qualquer um)",
+      "currency": "Moeda",
+      "comparison": "Comparação",
+      "amount": "Valor",
+      "ops": {
+        "gte": "pelo menos",
+        "gt": "mais de",
+        "lte": "no máximo",
+        "lt": "menos de",
+        "eq": "exatamente"
+      },
+      "channel": "Canal",
+      "channels": {
+        "email": "E-mail",
+        "sms": "SMS"
+      },
+      "consentState": "Consentimento",
+      "consentGranted": "Dado",
+      "consentNotGranted": "Não dado",
+      "hadLabel": "Teve a etiqueta",
+      "neverHadLabel": "Nunca teve a etiqueta",
+      "label": "Etiqueta",
+      "metric": "Total",
+      "metrics": {
+        "events": "Eventos inscritos",
+        "eventsAttended": "Eventos frequentados",
+        "tickets": "Ingressos em posse",
+        "orders": "Pedidos feitos"
+      },
+      "value": "Número",
+      "which": "Visto",
+      "firstSeen": "Visto pela primeira vez",
+      "lastSeen": "Visto pela última vez",
+      "from": "De",
+      "to": "Até",
+      "scope": "Eventos",
+      "event": "Evento",
+      "editionOf": "Edição anterior a",
+      "series": "Série",
+      "noSeries": "Ainda não há séries"
+    },
+    "scopes": {
+      "any": "Qualquer evento",
+      "event": "Um evento",
+      "series": "Qualquer evento de uma série",
+      "previousEdition": "Edição anterior (série)",
+      "eventsBetween": "Eventos entre datas"
+    },
+    "preview": {
+      "title": "Quem corresponde",
+      "waiting": "A contagem aparece quando todas as condições estiverem completas.",
+      "counting": "Contando…",
+      "count": "{count, plural, one {# pessoa corresponde} other {# pessoas correspondem}}",
+      "caption": "{shown, plural, one {A primeira correspondência} other {As primeiras # correspondências}}",
+      "name": "Nome",
+      "email": "E-mail",
+      "events": "Eventos",
+      "attended": "Compareceu",
+      "lastSeen": "Visto pela última vez",
+      "noName": "(sem nome)"
+    },
+    "save": {
+      "title": "Salvar",
+      "name": "Nome do público",
+      "update": "Salvar alterações",
+      "submit": "Salvar público",
+      "done": "Público salvo.",
+      "errors": {
+        "taken": "Já existe um público com este nome.",
+        "name": "Informe um nome com até 120 caracteres."
+      }
+    },
+    "export": {
+      "start": "Exportar CSV",
+      "ready": "{count, plural, one {Exportação pronta: # pessoa} other {Exportação pronta: # pessoas}}",
+      "running": "Exportando: {processed} de {total}",
+      "download": "Baixar CSV"
+    },
+    "exportColumns": {
+      "name": "Nome",
+      "email": "E-mail",
+      "events": "Eventos inscritos",
+      "eventsAttended": "Eventos frequentados",
+      "tickets": "Ingressos",
+      "firstSeen": "Visto pela primeira vez",
+      "lastSeen": "Visto pela última vez",
+      "emailConsent": "Consentimento de marketing por e-mail",
+      "smsConsent": "Consentimento de marketing por SMS",
+      "consent": {
+        "granted": "Dado",
+        "withdrawn": "Retirado",
+        "unknown_legacy": "Desconhecido (importado)",
+        "none": "Não dado"
+      }
     }
   }
 }

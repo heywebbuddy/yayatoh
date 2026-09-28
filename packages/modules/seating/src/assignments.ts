@@ -48,14 +48,11 @@ export async function releaseAttendeeSeatsTx(
 ): Promise<number> {
   const ids = [...new Set(attendeeIds)];
   if (ids.length === 0) return 0;
-  const gone = await tx
-    .delete(seatAssignments)
-    .where(inArray(seatAssignments.attendeeId, ids))
-    .returning({
-      id: seatAssignments.id,
-      eventId: seatAssignments.eventId,
-      attendeeId: seatAssignments.attendeeId,
-    });
+  const gone = await tx.delete(seatAssignments).where(inArray(seatAssignments.attendeeId, ids)).returning({
+    id: seatAssignments.id,
+    eventId: seatAssignments.eventId,
+    attendeeId: seatAssignments.attendeeId,
+  });
   await emitAssignmentsChangedTx(tx, ctx, gone);
   return gone.length;
 }

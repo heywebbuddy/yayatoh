@@ -221,7 +221,8 @@
     "emails": "メールテンプレート",
     "speakers": "登壇者",
     "sponsors": "スポンサー",
-    "media": "画像"
+    "media": "画像",
+    "audiences": "オーディエンス"
   },
   "vocab": {
     "attendee": "参加者",
@@ -3996,6 +3997,185 @@
     "terminated": {
       "title": "この組織は閉鎖されています",
       "body": "Yayatoh サポートがこの組織を閉鎖しました。公開ページは停止され、何も変更できません。オーナーは引き続き開いて、アクティビティなどからデータをダウンロードできます。"
+    }
+  },
+  "audiences": {
+    "title": "オーディエンス",
+    "description": "Yayatoh ですでに起きたこと（チケット、座席、チェックイン、支出、ラベル、同意）から作る人のグループです。",
+    "new": "新しいオーディエンス",
+    "emptyTitle": "保存したオーディエンスはまだありません",
+    "emptyDescription": "条件から作成するか、下のテンプレートから始めてください。",
+    "caption": "保存したオーディエンス",
+    "name": "名前",
+    "people": "人数",
+    "countUnavailable": "確認が必要",
+    "updated": "更新日",
+    "newTitle": "新しいオーディエンス",
+    "newDescription": "条件とグループを追加します。人数と最初の該当者は編集に合わせて更新されます。",
+    "delete": "削除",
+    "deleteFor": "{name} を削除",
+    "eventOption": "{name}（{date}）",
+    "templates": {
+      "title": "テンプレートから始める",
+      "description": "各テンプレートは、あとから変更できる条件をビルダーに入力します。",
+      "pick": "テンプレート",
+      "event": "イベント",
+      "thisYearsEvent": "今年のイベント",
+      "noEvents": "イベントはまだありません",
+      "ticketTypes": "チケットの種類",
+      "noTicketTypes": "このイベントにはチケットの種類がありません。",
+      "use": "テンプレートを使う",
+      "used": "テンプレートを適用しました：{name}",
+      "start": "始める",
+      "startFor": "{name} から始める",
+      "vipsWithoutSeats": {
+        "name": "座席未定の VIP",
+        "description": "選んだ種類のチケットを購入したが、まだ座席がない人。"
+      },
+      "lastYearNotThisYear": {
+        "name": "昨年参加、今年未登録",
+        "description": "シリーズの前回開催でチェックインし、今回は登録していない人。"
+      },
+      "registeredNotCheckedIn": {
+        "name": "登録済み・未チェックイン",
+        "description": "イベントのリストにいるが、まだチェックインしていない人。"
+      }
+    },
+    "builder": {
+      "title": "条件",
+      "incomplete": "該当者を表示するには、強調表示された条件を完成させてください。",
+      "rootGroup": "該当するすべての人",
+      "group": "グループ {n}",
+      "match": "一致条件",
+      "all": "すべてに一致",
+      "any": "いずれかに一致",
+      "emptyGroup": "条件がありません。全員が該当します。",
+      "remove": "削除",
+      "removeGroup": "グループ {n} を削除",
+      "removeCondition": "条件 {n} を削除",
+      "conditionType": "新しい条件",
+      "addCondition": "条件を追加",
+      "addGroup": "グループを追加",
+      "condition": "条件 {n}：{type}",
+      "types": {
+        "participation": "イベントへの参加",
+        "spend": "支出",
+        "consent": "マーケティングへの同意",
+        "label": "ラベル",
+        "totals": "累計",
+        "seen": "初回または最終の記録"
+      },
+      "did": "ルール",
+      "didYes": "した",
+      "didNo": "しなかった",
+      "role": "立場",
+      "roles": {
+        "attendee": "参加者",
+        "buyer": "購入者"
+      },
+      "seated": "座席あり",
+      "checkedIn": "チェックイン済み",
+      "tri": {
+        "any": "どちらでも",
+        "yes": "はい",
+        "no": "いいえ"
+      },
+      "registeredFrom": "登録日（開始）",
+      "registeredTo": "登録日（終了）",
+      "ticketTypes": "チケットの種類（いずれか）",
+      "currency": "通貨",
+      "comparison": "比較",
+      "amount": "金額",
+      "ops": {
+        "gte": "以上",
+        "gt": "より多い",
+        "lte": "以下",
+        "lt": "未満",
+        "eq": "ちょうど"
+      },
+      "channel": "チャネル",
+      "channels": {
+        "email": "メール",
+        "sms": "SMS"
+      },
+      "consentState": "同意",
+      "consentGranted": "あり",
+      "consentNotGranted": "なし",
+      "hadLabel": "ラベルがあった",
+      "neverHadLabel": "ラベルがなかった",
+      "label": "ラベル",
+      "metric": "累計項目",
+      "metrics": {
+        "events": "登録したイベント数",
+        "eventsAttended": "参加したイベント数",
+        "tickets": "保有チケット数",
+        "orders": "注文数"
+      },
+      "value": "数値",
+      "which": "記録",
+      "firstSeen": "初回",
+      "lastSeen": "最終",
+      "from": "開始",
+      "to": "終了",
+      "scope": "イベント",
+      "event": "イベント",
+      "editionOf": "この前の開催",
+      "series": "シリーズ",
+      "noSeries": "シリーズはまだありません"
+    },
+    "scopes": {
+      "any": "すべてのイベント",
+      "event": "1 つのイベント",
+      "series": "シリーズ内のイベント",
+      "previousEdition": "前回の開催（シリーズ）",
+      "eventsBetween": "期間内のイベント"
+    },
+    "preview": {
+      "title": "該当者",
+      "waiting": "すべての条件がそろうと人数が表示されます。",
+      "counting": "集計中…",
+      "count": "{count, plural, other {# 人が該当}}",
+      "caption": "{shown, plural, other {最初の # 件}}",
+      "name": "名前",
+      "email": "メール",
+      "events": "イベント",
+      "attended": "参加",
+      "lastSeen": "最終記録",
+      "noName": "（名前なし）"
+    },
+    "save": {
+      "title": "保存",
+      "name": "オーディエンス名",
+      "update": "変更を保存",
+      "submit": "オーディエンスを保存",
+      "done": "オーディエンスを保存しました。",
+      "errors": {
+        "taken": "同じ名前のオーディエンスがすでにあります。",
+        "name": "120 文字以内で名前を入力してください。"
+      }
+    },
+    "export": {
+      "start": "CSV をエクスポート",
+      "ready": "{count, plural, other {エクスポート完了：# 人}}",
+      "running": "エクスポート中：{total} 件中 {processed} 件",
+      "download": "CSV をダウンロード"
+    },
+    "exportColumns": {
+      "name": "名前",
+      "email": "メール",
+      "events": "登録したイベント数",
+      "eventsAttended": "参加したイベント数",
+      "tickets": "チケット数",
+      "firstSeen": "初回記録",
+      "lastSeen": "最終記録",
+      "emailConsent": "メールマーケティングへの同意",
+      "smsConsent": "SMS マーケティングへの同意",
+      "consent": {
+        "granted": "あり",
+        "withdrawn": "撤回",
+        "unknown_legacy": "不明（インポート）",
+        "none": "なし"
+      }
     }
   }
 }

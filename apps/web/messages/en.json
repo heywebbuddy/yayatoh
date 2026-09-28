@@ -221,7 +221,8 @@
     "emails": "Email templates",
     "speakers": "Speakers",
     "sponsors": "Sponsors",
-    "media": "Images"
+    "media": "Images",
+    "audiences": "Audiences"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -3996,6 +3997,185 @@
     "terminated": {
       "title": "This organization is closed",
       "body": "Yayatoh support closed it. Its public pages are offline and nothing can be changed. As an owner you can still open it and download your data, for example from Activity."
+    }
+  },
+  "audiences": {
+    "title": "Audiences",
+    "description": "Groups of people built from what already happened in Yayatoh: tickets, seats, check-ins, spend, labels and consent.",
+    "new": "New audience",
+    "emptyTitle": "No saved audiences yet",
+    "emptyDescription": "Build one from conditions, or start from a template below.",
+    "caption": "Saved audiences",
+    "name": "Name",
+    "people": "People",
+    "countUnavailable": "Needs attention",
+    "updated": "Updated",
+    "newTitle": "New audience",
+    "newDescription": "Add conditions and groups. The count and the first matches update as you go.",
+    "delete": "Delete",
+    "deleteFor": "Delete {name}",
+    "eventOption": "{name} ({date})",
+    "templates": {
+      "title": "Start from a template",
+      "description": "Each template fills the builder with conditions you can still change.",
+      "pick": "Template",
+      "event": "Event",
+      "thisYearsEvent": "This year's event",
+      "noEvents": "No events yet",
+      "ticketTypes": "Ticket types",
+      "noTicketTypes": "This event has no ticket types.",
+      "use": "Use template",
+      "used": "Template applied: {name}",
+      "start": "Start",
+      "startFor": "Start from {name}",
+      "vipsWithoutSeats": {
+        "name": "VIPs without seats",
+        "description": "Bought the chosen ticket types but have no seat yet."
+      },
+      "lastYearNotThisYear": {
+        "name": "Last year, not this year",
+        "description": "Checked in at the previous edition of the series, not registered for this one."
+      },
+      "registeredNotCheckedIn": {
+        "name": "Registered, not checked in",
+        "description": "On the event's list but not checked in yet."
+      }
+    },
+    "builder": {
+      "title": "Conditions",
+      "incomplete": "Finish the highlighted conditions to see who matches.",
+      "rootGroup": "Everyone who matches",
+      "group": "Group {n}",
+      "match": "Match",
+      "all": "all of these",
+      "any": "any of these",
+      "emptyGroup": "No conditions: everyone matches.",
+      "remove": "Remove",
+      "removeGroup": "Remove group {n}",
+      "removeCondition": "Remove condition {n}",
+      "conditionType": "New condition",
+      "addCondition": "Add condition",
+      "addGroup": "Add group",
+      "condition": "Condition {n}: {type}",
+      "types": {
+        "participation": "Took part in an event",
+        "spend": "Spend",
+        "consent": "Marketing consent",
+        "label": "Label",
+        "totals": "Lifetime totals",
+        "seen": "First or last seen"
+      },
+      "did": "Rule",
+      "didYes": "Did",
+      "didNo": "Did not",
+      "role": "As",
+      "roles": {
+        "attendee": "Attendee",
+        "buyer": "Buyer"
+      },
+      "seated": "Has a seat",
+      "checkedIn": "Checked in",
+      "tri": {
+        "any": "Either",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "registeredFrom": "Registered from",
+      "registeredTo": "Registered until",
+      "ticketTypes": "Ticket types (any of)",
+      "currency": "Currency",
+      "comparison": "Comparison",
+      "amount": "Amount",
+      "ops": {
+        "gte": "at least",
+        "gt": "more than",
+        "lte": "at most",
+        "lt": "less than",
+        "eq": "exactly"
+      },
+      "channel": "Channel",
+      "channels": {
+        "email": "Email",
+        "sms": "SMS"
+      },
+      "consentState": "Consent",
+      "consentGranted": "Given",
+      "consentNotGranted": "Not given",
+      "hadLabel": "Had the label",
+      "neverHadLabel": "Never had the label",
+      "label": "Label",
+      "metric": "Total",
+      "metrics": {
+        "events": "Events registered",
+        "eventsAttended": "Events attended",
+        "tickets": "Tickets held",
+        "orders": "Orders placed"
+      },
+      "value": "Number",
+      "which": "Seen",
+      "firstSeen": "First seen",
+      "lastSeen": "Last seen",
+      "from": "From",
+      "to": "Until",
+      "scope": "Events",
+      "event": "Event",
+      "editionOf": "Edition before",
+      "series": "Series",
+      "noSeries": "No series yet"
+    },
+    "scopes": {
+      "any": "Any event",
+      "event": "One event",
+      "series": "Any event in a series",
+      "previousEdition": "Previous edition (series)",
+      "eventsBetween": "Events between dates"
+    },
+    "preview": {
+      "title": "Who matches",
+      "waiting": "The count appears once every condition is complete.",
+      "counting": "Counting…",
+      "count": "{count, plural, one {# person matches} other {# people match}}",
+      "caption": "{shown, plural, one {The first match} other {The first # matches}}",
+      "name": "Name",
+      "email": "Email",
+      "events": "Events",
+      "attended": "Attended",
+      "lastSeen": "Last seen",
+      "noName": "(no name)"
+    },
+    "save": {
+      "title": "Save",
+      "name": "Audience name",
+      "update": "Save changes",
+      "submit": "Save audience",
+      "done": "Audience saved.",
+      "errors": {
+        "taken": "An audience with this name already exists.",
+        "name": "Enter a name of up to 120 characters."
+      }
+    },
+    "export": {
+      "start": "Export CSV",
+      "ready": "{count, plural, one {Export ready: # person} other {Export ready: # people}}",
+      "running": "Exporting: {processed} of {total}",
+      "download": "Download CSV"
+    },
+    "exportColumns": {
+      "name": "Name",
+      "email": "Email",
+      "events": "Events registered",
+      "eventsAttended": "Events attended",
+      "tickets": "Tickets",
+      "firstSeen": "First seen",
+      "lastSeen": "Last seen",
+      "emailConsent": "Email marketing consent",
+      "smsConsent": "SMS marketing consent",
+      "consent": {
+        "granted": "Given",
+        "withdrawn": "Withdrawn",
+        "unknown_legacy": "Unknown (imported)",
+        "none": "Not given"
+      }
     }
   }
 }
