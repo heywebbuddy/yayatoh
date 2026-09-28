@@ -415,3 +415,74 @@ export async function settleOrg(
   }
   return { held, transferred, failed };
 }
+
+export const RECEIVABLE_SOURCES = [
+  'refund',
+  'dispute',
+  'dispute_won',
+  'organizer_collected_sale',
+  'transfer_reversal',
+  'receivable_netting',
+  'other',
+] as const;
+
+export const ReceivablesDto = z.object({
+  /** What the organizer owes the platform now, per currency (positive = owed). */
+  outstanding: z.array(z.object({ currency: z.string(), amountMinor: z.int() })),
+  /** How it arose and how it was paid back, newest first. */
+  entries: z.array(
+    z.object({
+      journalId: z.uuid(),
+      source: z.enum(RECEIVABLE_SOURCES),
+      eventId: z.uuid().nullable(),
+      /** Positive: owed (a refund after payout, a dispute, a box-office fee); negative: paid back. */
+      amountMinor: z.int(),
+      currency: z.string(),
+      occurredAt: z.date(),
+    }),
+  ),
+});
+
+/**
+ * The organizer's receivables (M1.6e): refunds after payout whose transfer reversal failed,
+ * disputes beyond the held funds, fees on organizer-collected sales; and how they were paid back
+ * (a transfer reversal, or netted from the next release). Shown on the settlement view.
+ */
+export const receivablesQuery = tenantQuery({
+  name: 'payments.receivables',
+  input: z.object({ limit: z.int().min(1).max(200).default(50) }),
+  output: ReceivablesDto,
+  entitlement: null,
+  permission: 'finance:read',
+  handler: async ({ input, tx }) => {
+    const outstanding = await tx.execute<{ currency: string; amount: string }>(sql`
+      select currency, sum(amount_minor)::text as amount from payments.postings
+      where account = 'org:receivable' group by currency having sum(amount_minor) <> 0 order by currency`);
+    const entries = await tx.execute<{
+      journal_id: string;
+      kind: string;
+      event_id: string | null;
+      amount: string;
+      currency: string;
+      occurred_at: Date;
+    }>(sql`
+      select j.id as journal_id, j.kind, j.event_id, sum(p.amount_minor)::text as amount, p.currency, j.occurred_at
+      from payments.postings p join payments.journal_entries j on j.id = p.journal_id
+      where p.account = 'org:receivable'
+      group by j.id, j.kind, j.event_id, p.currency, j.occurred_at
+      order by j.occurred_at desc, j.id desc limit ${input.limit}`);
+    return {
+      outstanding: outstanding.map((r) => ({ currency: r.currency, amountMinor: Number(r.amount) })),
+      entries: entries.map((r) => ({
+        journalId: r.journal_id,
+        source: ((RECEIVABLE_SOURCES as readonly string[]).includes(r.kind)
+          ? r.kind
+          : 'other') as (typeof RECEIVABLE_SOURCES)[number],
+        eventId: r.event_id,
+        amountMinor: Number(r.amount),
+        currency: r.currency,
+        occurredAt: new Date(r.occurred_at),
+      })),
+    };
+  },
+});

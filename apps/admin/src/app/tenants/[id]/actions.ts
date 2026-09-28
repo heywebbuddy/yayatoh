@@ -2,7 +2,11 @@
 
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import { type Ctx, executeCommand, isDomainError } from '@yayatoh/kernel';
-import { markEvidenceSubmittedCommand, setPayoutHoldCommand } from '@yayatoh/payments';
+import {
+  markEvidenceSubmittedCommand,
+  resolveReconciliationItemCommand,
+  setPayoutHoldCommand,
+} from '@yayatoh/payments';
 import { SUSPENSION_KINDS, type SuspensionKind, setSuspensionCommand } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -95,4 +99,17 @@ export async function submitEvidenceAction(
     if (r.status !== 'submitted') throw new Error('The provider did not accept the evidence');
     return executeCommand(markEvidenceSubmittedCommand, { disputeId }, ctx, ports);
   });
+}
+
+/** Close a reconciliation difference with a note (staff with payout powers; audited). */
+export async function resolveReconciliationAction(orgId: string, itemId: string, form: FormData) {
+  if (!Id.safeParse(itemId).success) redirect('/');
+  await run(orgId, 'payouts', 'reconciled', (ctx) =>
+    executeCommand(
+      resolveReconciliationItemCommand,
+      { itemId, note: String(form.get('note') ?? '') },
+      ctx,
+      ports,
+    ),
+  );
 }

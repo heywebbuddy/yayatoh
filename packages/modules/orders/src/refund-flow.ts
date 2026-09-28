@@ -2,7 +2,11 @@ import type { TenantTx } from '@yayatoh/db';
 import { type CommandPorts, type Ctx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { type PaymentProvider, recordTransferReversalCommand } from '@yayatoh/payments';
 import type { z } from 'zod';
-import { completeRefundCommand, startRefundCommand } from './commands/refunds.ts';
+import {
+  completeRefundCommand,
+  type startPolicyOverrideRefundCommand,
+  startRefundCommand,
+} from './commands/refunds.ts';
 
 export interface RefundOutcome {
   readonly refundId: string;
@@ -25,7 +29,7 @@ export async function refundOrder(
   ctx: Ctx,
   ports: CommandPorts<TenantTx>,
   provider: PaymentProvider,
-  start: typeof startRefundCommand = startRefundCommand,
+  start: typeof startRefundCommand | typeof startPolicyOverrideRefundCommand = startRefundCommand,
 ): Promise<RefundOutcome> {
   const started = await executeCommand(start, input, ctx, ports);
   const res = await provider.refund({

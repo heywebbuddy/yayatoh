@@ -47,7 +47,24 @@ for (const p of PERSONAS) {
 }
 
 for (const o of SEED_ORGS) {
-  if (await resolveOrgSlug(o.slug)) {
+  const found = await resolveOrgSlug(o.slug);
+  if (found) {
+    // Personas added after the org was first seeded (e.g. finance, M1.6e) join it now.
+    const owner = PERSONAS.find((p) => p.orgSlug === o.slug && p.role === 'owner');
+    const ownerId = owner && ids.get(owner.email);
+    for (const p of PERSONAS.filter((x) => x.orgSlug === o.slug && x.role !== 'owner')) {
+      const userId = ids.get(p.email);
+      if (!ownerId || !userId) continue;
+      await executeCommand(
+        addMemberCommand,
+        { userId, role: p.role },
+        createCtx({ orgId: found.orgId, actor: { type: 'user', userId: ownerId } }),
+        ports,
+      ).then(
+        () => console.info(`seed: ${p.email} joined ${o.slug}`),
+        () => undefined, // already a member
+      );
+    }
     console.info(`seed: ${o.slug} exists`);
     continue;
   }

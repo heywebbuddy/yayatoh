@@ -179,7 +179,8 @@
     "series": "Reihen",
     "templates": "Vorlagen",
     "apiKeys": "API-Schlüssel",
-    "publicSite": "Öffentliche Seite"
+    "publicSite": "Öffentliche Seite",
+    "finance": "Finanzen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -635,7 +636,8 @@
     },
     "chooseDate": "Wähle zuerst einen Termin.",
     "dateSoldOut": "Dieser Termin ist gerade ausverkauft. Wähle einen anderen.",
-    "dateUnavailable": "Dieser Termin ist nicht mehr verfügbar. Wähle einen anderen."
+    "dateUnavailable": "Dieser Termin ist nicht mehr verfügbar. Wähle einen anderen.",
+    "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -1192,6 +1194,24 @@
         "transferred": "Ausgezahlt",
         "failed": "Neuer Versuch läuft"
       }
+    },
+    "receivables": {
+      "title": "Forderungen",
+      "description": "Was du Yayatoh schuldest: Erstattungen oder Zahlungsstreitigkeiten nach deiner Auszahlung und Gebühren auf selbst kassierte Verkäufe. Es wird wenn möglich per Rückbuchung der Überweisung zurückgeholt, sonst von deiner nächsten Auszahlung.",
+      "none": "Du schuldest nichts.",
+      "owed": "Offen",
+      "nettedNext": "Wird mit deiner nächsten Auszahlung verrechnet",
+      "history": "Verlauf der Forderungen",
+      "amount": "Betrag",
+      "source": {
+        "refund": "Erstattung nach Auszahlung · {event}",
+        "dispute": "Zahlungsstreitigkeit · {event}",
+        "dispute_won": "Zahlungsstreitigkeit gewonnen · {event}",
+        "organizer_collected_sale": "Gebühr auf einen selbst kassierten Verkauf · {event}",
+        "transfer_reversal": "Per Rückbuchung der Überweisung zurückgeholt · {event}",
+        "receivable_netting": "Mit einer Auszahlung verrechnet",
+        "other": "Korrektur · {event}"
+      }
     }
   },
   "fakeConnect": {
@@ -1287,7 +1307,15 @@
     "done": "Erstattet. Der Käufer erhält das Geld in ein paar Tagen auf seine Karte zurück.",
     "failed": "Der Zahlungsanbieter hat diese Erstattung abgelehnt. Es wurde nichts geändert.",
     "exceedsRefundable": "Das ist mehr, als bei dieser Bestellung noch erstattet werden kann.",
-    "ticketRefunded": "Eines dieser Tickets ist bereits erstattet oder wird gerade erstattet."
+    "ticketRefunded": "Eines dieser Tickets ist bereits erstattet oder wird gerade erstattet.",
+    "keptCol": "Einbehalten",
+    "overridden": "Außerhalb der Richtlinie",
+    "policyWindowClosed": "Die Erstattungsfrist der Veranstaltung endete am {deadline}. Erstattungen auf Wunsch sind nicht mehr möglich.",
+    "policyNoRefunds": "Die Erstattungsrichtlinie der Veranstaltung erlaubt keine Erstattungen auf Wunsch.",
+    "override": "Außerhalb der Erstattungsrichtlinie erstatten",
+    "overrideHint": "Nur Inhaber und Admins. Es wird nichts einbehalten; die Notiz ist Pflicht und wird protokolliert.",
+    "overrideNote": "Warum wird die Richtlinie übergangen? (Pflicht)",
+    "overrideNoteRequired": "Gib an, warum die Erstattungsrichtlinie übergangen wird (mindestens 3 Zeichen)."
   },
   "disputes": {
     "title": "Rückbuchungen",
@@ -1302,7 +1330,38 @@
       "lost": "Verloren"
     },
     "dueBy": "Nachweise fällig am {date}",
-    "evidence": "Beweispaket (PDF)"
+    "evidence": "Beweispaket (PDF)",
+    "respond": "Prüfen und antworten",
+    "submitted": "Nachweise eingereicht",
+    "review": {
+      "title": "Auf eine Zahlungsstreitigkeit antworten",
+      "description": "Prüfe das Nachweispaket, ergänze deine Stellungnahme und reiche es beim Kartennetzwerk ein.",
+      "backToOrder": "Zurück zur Bestellung",
+      "respondTitle": "Deine Antwort",
+      "summary": "Deine Stellungnahme",
+      "summaryHint": "Beschreib in einfachen Worten, was passiert ist: wann gekauft, eingelassen und was mitgeteilt wurde. Mindestens 10 Zeichen; sie wird so gesendet, wie du sie schreibst, und die Kartennetzwerke lesen Englisch.",
+      "sections": "Ins Paket aufnehmen",
+      "sectionsHint": "Streitfall, Verkäufer, Veranstaltung und Bestellung sind immer enthalten.",
+      "section": {
+        "tickets": "Tickets und Einlass",
+        "accessLog": "Zutrittsprotokoll (jeder Scan am Einlass)",
+        "refunds": "Erstattungen",
+        "messages": "An den Käufer gesendete Nachrichten",
+        "refundPolicy": "Erstattungsrichtlinie"
+      },
+      "reviewed": "Ich habe das Nachweispaket unten gelesen und es ist korrekt.",
+      "save": "Entwurf speichern",
+      "submit": "Nachweise einreichen",
+      "saved": "Gespeichert.",
+      "summaryTooShort": "Schreib eine Stellungnahme mit mindestens 10 Zeichen.",
+      "notReviewed": "Bestätige vor dem Einreichen, dass du das Nachweispaket gelesen hast.",
+      "tooLarge": "Das Paket überschreitet die Grenzen der Kartennetzwerke (4,5 MB / 19 Seiten). Lass einen Abschnitt weg und versuch es erneut.",
+      "providerRefused": "Der Zahlungsanbieter hat die Nachweise nicht angenommen. Es wurde nichts eingereicht.",
+      "notOpen": "Diese Zahlungsstreitigkeit ist nicht mehr offen.",
+      "submittedOn": "Nachweise eingereicht am {date}.",
+      "previewTitle": "Nachweispaket",
+      "previewHint": "Genau das wird gesendet, auf Englisch, der Sprache der Kartennetzwerke."
+    }
   },
   "evidence": {
     "title": "Nachweise zur Rückbuchung · {id}",
@@ -1345,7 +1404,19 @@
     "noRefunds": "Für diese Bestellung wurden keine Erstattungen beantragt.",
     "refundPolicy": "Den Käufern angezeigte Erstattungsrichtlinie",
     "noPolicy": "Der Veranstalter hat keine Erstattungsrichtlinie veröffentlicht.",
-    "policyUpdated": "Zuletzt aktualisiert am {date}"
+    "policyUpdated": "Zuletzt aktualisiert am {date}",
+    "statement": "Stellungnahme des Verkäufers",
+    "accessLog": "Zutrittsprotokoll (Scans am Einlass)",
+    "noScans": "Für diese Tickets wurden keine Scans am Einlass erfasst.",
+    "time": "Zeit",
+    "entrance": "Eingang",
+    "result": "Ergebnis",
+    "offline": "offline",
+    "messages": "An den Käufer gesendete Nachrichten",
+    "noMessages": "Zu dieser Bestellung wurden dem Käufer keine Nachrichten gesendet.",
+    "message": "Nachricht",
+    "channel": "Kanal",
+    "trimmed": "{n, plural, one {# weitere Zeile weggelassen} other {# weitere Zeilen weggelassen}}, um das Seitenlimit der Kartennetzwerke einzuhalten."
   },
   "boxOffice": {
     "title": "Abendkasse",
@@ -2837,5 +2908,70 @@
       "emptyTitle": "Noch keine öffentlichen Veranstaltungen",
       "emptyDescription": "Veröffentlichen Sie eine Veranstaltung, um ihr Widget-Snippet zu erhalten."
     }
+  },
+  "finance": {
+    "title": "Finanzen",
+    "description": "Jeden Tag wird das Geld in deinem Hauptbuch mit den Bewegungen beim Zahlungsanbieter abgeglichen. Abweichungen stehen hier zur Prüfung und Klärung.",
+    "runsTitle": "Tägliche Abgleiche",
+    "noRuns": "Noch kein Tag wurde abgeglichen. Der erste Abgleich läuft in der Nacht nach deinem ersten Verkauf.",
+    "day": "Tag",
+    "ledgerCount": "Buchungen",
+    "providerCount": "Bewegungen beim Anbieter",
+    "result": "Ergebnis",
+    "matched": "Stimmt überein",
+    "differences": "{n, plural, one {# Abweichung} other {# Abweichungen}}",
+    "openTitle": "Zu prüfende Abweichungen",
+    "emptyTitle": "Keine Abweichungen",
+    "emptyDescription": "Dein Hauptbuch stimmt mit dem Zahlungsanbieter überein.",
+    "kind": {
+      "missing_at_provider": "Fehlt beim Anbieter",
+      "missing_in_ledger": "Fehlt im Hauptbuch",
+      "amount_mismatch": "Beträge weichen ab"
+    },
+    "ledger": "Hauptbuch",
+    "provider": "Anbieter",
+    "difference": "Differenz",
+    "noResolveAccess": "Nur Inhaber, Admins und die Finanzabteilung können Abweichungen klären.",
+    "resolvedTitle": "Geklärt",
+    "what": "Was",
+    "reference": "Referenz",
+    "note": "Notiz",
+    "resolveNote": "Warum ist {reference} geklärt?",
+    "noteTooShort": "Schreib eine Notiz mit mindestens 3 Zeichen.",
+    "alreadyResolved": "Jemand hat diese Abweichung bereits geklärt.",
+    "resolve": "Klären"
+  },
+  "risk": {
+    "flagged": "Beim Kauf markiert",
+    "rules": {
+      "email_velocity_review": "Viele Bestellungen mit dieser E-Mail innerhalb einer Stunde",
+      "country_mismatch_review": "Aus einem anderen Land als dem der Veranstaltung gekauft"
+    }
+  },
+  "refundPolicy": {
+    "title": "Erstattungsrichtlinie",
+    "buyerTitle": "Erstattungsrichtlinie",
+    "notSet": "Keine Erstattungsrichtlinie festgelegt: Erstattungen liegen in deinem Ermessen und Käufer sehen keine Richtlinie.",
+    "none": "Tickets werden auf Wunsch nicht erstattet.",
+    "always": "Erstattungen sind jederzeit auf Wunsch möglich.",
+    "until": "Erstattungen sind auf Wunsch bis {deadline} möglich.",
+    "retained": "Der Veranstalter behält {amount} pro Ticket ein.",
+    "feeKept": "Die Buchungsgebühr wird auf Wunsch nicht erstattet.",
+    "minimum": "Wird die Veranstaltung abgesagt oder um mehr als 90 Tage ohne neuen Termin verschoben, bekommst du alles inklusive Gebühren zurück.",
+    "kindLegend": "Erstattungen auf Wunsch",
+    "kindOption": {
+      "unset": "Keine Richtlinie (nach eigenem Ermessen)",
+      "none": "Keine Erstattungen",
+      "until": "Bis einige Tage vor der Veranstaltung",
+      "always": "Immer"
+    },
+    "daysLabel": "Tage vor der Veranstaltung",
+    "daysHint": "Gezählt in Kalendertagen in der Zeitzone der Veranstaltung; 0 heißt bis zum Veranstaltungstag.",
+    "retainedLabel": "Einbehalt pro erstattetem Ticket ({currency}, optional)",
+    "retainedHint": "Eine Stornogebühr, die du behältst; der Käufer bekommt den Rest.",
+    "minimumHint": "Das Plattform-Minimum gilt immer: Eine abgesagte oder um mehr als 90 Tage ohne neuen Termin verschobene Veranstaltung wird voll erstattet.",
+    "save": "Erstattungsrichtlinie speichern",
+    "saved": "Erstattungsrichtlinie gespeichert.",
+    "daysInvalid": "Gib eine Anzahl Tage von 0 bis 365 ein."
   }
 }

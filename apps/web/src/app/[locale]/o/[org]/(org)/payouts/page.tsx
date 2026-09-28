@@ -1,6 +1,6 @@
 import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { payoutAccountQuery, settlementsQuery } from '@yayatoh/payments';
+import { payoutAccountQuery, receivablesQuery, settlementsQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -31,8 +31,9 @@ export default async function PayoutsPage({
   const canManage = roleCan(data.role, 'payouts:manage');
   const canSeeMoney = roleCan(data.role, 'finance:read');
   const settlements = canSeeMoney ? await executeQuery(settlementsQuery, {}, data.ctx, ports) : [];
+  const receivables = canSeeMoney ? await executeQuery(receivablesQuery, {}, data.ctx, ports) : null;
   const eventNames = new Map(
-    settlements.length
+    settlements.length || receivables?.entries.length
       ? (await executeQuery(listEventsQuery, {}, data.ctx, ports)).map((e) => [e.id, e.name])
       : [],
   );
@@ -141,6 +142,54 @@ export default async function PayoutsPage({
               ]}
             />
           )}
+        </section>
+      ) : null}
+      {receivables ? (
+        <section aria-labelledby="receivables-heading" className="flex flex-col gap-3">
+          <h2 id="receivables-heading" className="text-section">
+            {t('receivables.title')}
+          </h2>
+          <p className="text-body text-zinc-600">{t('receivables.description')}</p>
+          {receivables.outstanding.length === 0 ? (
+            <p className="text-caption text-zinc-500">{t('receivables.none')}</p>
+          ) : (
+            <ul className="flex list-none flex-col gap-2 p-0">
+              {receivables.outstanding.map((o) => (
+                <li key={o.currency}>
+                  <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                    <StatusDot status="warning" label={t('receivables.owed')} />
+                    <span className="font-mono tabular-nums">{fmt(o.amountMinor, o.currency)}</span>
+                    <span className="text-caption text-zinc-600">{t('receivables.nettedNext')}</span>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          )}
+          {receivables.entries.length > 0 ? (
+            <Table
+              caption={t('receivables.history')}
+              rowKey={(e) => `${e.journalId}:${e.currency}`}
+              rows={receivables.entries}
+              columns={[
+                { key: 'date', header: t('settlements.date'), cell: (e) => day.format(e.occurredAt) },
+                {
+                  key: 'what',
+                  header: t('settlements.what'),
+                  cell: (e) =>
+                    t(`receivables.source.${e.source}`, {
+                      event: (e.eventId && eventNames.get(e.eventId)) || '—',
+                    }),
+                },
+                {
+                  key: 'amount',
+                  header: t('receivables.amount'),
+                  cell: (e) => fmt(e.amountMinor, e.currency),
+                  mono: true,
+                  align: 'end',
+                },
+              ]}
+            />
+          ) : null}
         </section>
       ) : null}
     </>

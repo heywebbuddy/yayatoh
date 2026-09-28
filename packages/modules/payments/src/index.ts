@@ -17,8 +17,12 @@ export {
   DisputeDto,
   disputesQuery,
   disputeTx,
+  EVIDENCE_OPTIONAL_SECTIONS,
+  EVIDENCE_SUMMARY_MAX,
   markEvidenceSubmittedCommand,
+  markOrgEvidenceSubmittedCommand,
   openDisputeTx,
+  saveEvidenceDraftCommand,
 } from './disputes.ts';
 export {
   type FakeBalanceStore,
@@ -72,6 +76,18 @@ export {
   resolveReconciliationItemCommand,
 } from './reconciliation.ts';
 export {
+  CHECKOUT_RISK_SIGNALS,
+  type CheckoutRiskDecision,
+  type CheckoutRiskInput,
+  type CheckoutRiskProvider,
+  type CheckoutRiskRule,
+  type CheckoutRiskSignal,
+  DEFAULT_CHECKOUT_RISK_RULES,
+  evaluateCheckoutRisk,
+  RISK_WINDOW_MINUTES,
+  rulesRiskProvider,
+} from './risk.ts';
+export {
   DISPUTE_STATUSES,
   LEDGER_ACCOUNTS,
   type LedgerAccount,
@@ -82,7 +98,10 @@ export {
 export {
   addBusinessDays,
   eventTransferTx,
+  RECEIVABLE_SOURCES,
   RELEASE_POLICY,
+  ReceivablesDto,
+  receivablesQuery,
   recordTransferCommand,
   recordTransferReversalCommand,
   releaseDate,
@@ -99,6 +118,7 @@ export {
 } from './stats.ts';
 export {
   accountState,
+  EVIDENCE_MAX_BYTES,
   STRIPE_API_VERSION,
   type StripeProviderOptions,
   stripePaymentProvider,

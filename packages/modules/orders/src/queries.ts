@@ -9,6 +9,7 @@ import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
+import { eventRefundPolicyTx } from './commands/refund-policy.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer } from './dto.ts';
 import { ORDER_STATUSES, orderItems, orders } from './schema.ts';
 
@@ -162,6 +163,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },
         messages: await buyerOrderMessagesTx(tx, ref.order_id, o.buyerEmail),
+        refundPolicy: await eventRefundPolicyTx(tx, o.eventId),
       };
     });
     return publicOrderSerializer.serialize(order);
@@ -218,6 +220,10 @@ export const orderDetailQuery = tenantQuery({
     paymentReference: z.string().nullable(),
     createdVia: z.string(),
     tickets: z.array(OrganizerTicketDto),
+    /** M1.6e: checkout risk rules that asked for a review. */
+    riskReview: z.array(z.string()),
+    /** organizer_mor: the org's own connected account the charge is on (disputes are answered there). */
+    connectedAccountId: z.string().nullable(),
   }),
   entitlement: 'ticketing',
   permission: 'orders:read',
@@ -239,6 +245,7 @@ export const orderDetailQuery = tenantQuery({
       fundsFlow: order.fundsFlow as 'organizer_mor' | 'platform_mor',
       collectedBy: order.collectedBy as 'platform' | 'organizer',
       tickets,
+      riskReview: order.riskReview ?? [],
     };
   },
 });

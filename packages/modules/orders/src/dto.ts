@@ -1,7 +1,7 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import { BuyerMessageDto } from '@yayatoh/notifications';
 import { z } from 'zod';
-import { ORDER_STATUSES } from './schema.ts';
+import { ORDER_STATUSES, REFUND_POLICY_KINDS } from './schema.ts';
 
 export const OrderItemDto = z.object({
   ticketTypeId: z.uuid(),
@@ -69,6 +69,18 @@ export const HolderEventDto = z.object({
   organizerName: z.string(),
 });
 
+/** An event's refund policy as organizers and buyers see it (no internal fields). */
+export const RefundPolicyDto = z.object({
+  kind: z.enum(REFUND_POLICY_KINDS),
+  daysBefore: z.int().nullable(),
+  retainedMinor: z.int(),
+  currency: z.string(),
+  /** `until`: the last instant a discretionary refund is possible (the event's timezone decides the day). */
+  deadline: z.date().nullable(),
+  timezone: z.string(),
+});
+export type RefundPolicyDto = z.infer<typeof RefundPolicyDto>;
+
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   /** Who sold it (roadmap §4.4 seller disclosure): the organizer, or the platform on their behalf. */
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
@@ -80,6 +92,8 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   event: HolderEventDto,
   /** "Emails sent": messages to the buyer's address about this order (notifications log). */
   messages: z.array(BuyerMessageDto),
+  /** M1.6e: the event's refund policy as the buyer bought under it, or null when none is set. */
+  refundPolicy: RefundPolicyDto.nullable(),
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);
@@ -116,4 +130,12 @@ export const StartCheckoutInput = z.object({
   /** Answers to the event's checkout questions (forms module), validated server-side. */
   answers: z.record(z.string().max(40), z.unknown()).default({}),
   locale: z.string().max(10).default('en'),
+  /**
+   * M1.6e: the pre-checkout risk rules that asked for a review (the server action assesses them
+   * through the risk port before the order exists; a block never reaches this command).
+   */
+  riskReview: z
+    .array(z.string().regex(/^[a-z_]{1,60}$/))
+    .max(10)
+    .default([]),
 });

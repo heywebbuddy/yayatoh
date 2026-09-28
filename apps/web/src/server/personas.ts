@@ -7,12 +7,14 @@ export interface Persona {
   readonly name: string;
   /** Empty for a newcomer with no organization yet (the invite-only signup flow). */
   readonly orgSlug: string;
-  readonly role: 'owner' | 'viewer';
+  readonly role: 'owner' | 'viewer' | 'finance';
 }
 
 export const PERSONAS: readonly Persona[] = [
   { email: 'pani@lakeside.test', name: 'Pani Digital', orgSlug: 'lakeside-events', role: 'owner' },
   { email: 'jordan@lakeside.test', name: 'Jordan Lee', orgSlug: 'lakeside-events', role: 'viewer' },
+  // Finance (M1.6e): refunds, reconciliation and disputes, no event editing.
+  { email: 'fran@lakeside.test', name: 'Fran Ledger', orgSlug: 'lakeside-events', role: 'finance' },
   { email: 'maya@rosewood.test', name: 'Maya Chen', orgSlug: 'rosewood-weddings', role: 'owner' },
   { email: 'sam@rosewood.test', name: 'Sam Rivera', orgSlug: 'rosewood-weddings', role: 'viewer' },
   // A public organizer with a tenant site and a full calendar (marketplace, M1.11).

@@ -27,6 +27,7 @@ export {
   CheckinStatusDto,
   checkinStatusQuery,
   ScanOutcomeDto,
+  scanLogForTicketsTx,
   scanTicketCommand,
   undoAdmissionCommand,
 } from './scan.ts';

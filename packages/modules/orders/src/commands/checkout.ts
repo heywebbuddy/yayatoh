@@ -1,10 +1,16 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { recordConsentTx, upsertContactTx } from '@yayatoh/crm';
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { accessGrantTx, findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
-import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
-import { claimProviderEventTx, fundsFlowTx, type ProviderEvent, postSaleTx } from '@yayatoh/payments';
+import { type Ctx, createCtx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import {
+  claimProviderEventTx,
+  fundsFlowTx,
+  type ProviderEvent,
+  postSaleTx,
+  RISK_WINDOW_MINUTES,
+} from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
   extendSeatHoldTx,
@@ -26,7 +32,7 @@ import {
   resolvePromoTx,
   sellHeldTx,
 } from '@yayatoh/ticketing';
-import { and, eq, inArray, lte } from 'drizzle-orm';
+import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
@@ -203,6 +209,7 @@ export const startCheckoutCommand = tenantCommand({
         connectedAccountId: flow.accountId,
         feeSchedule: quote.feeSchedule,
         manageTokenHash: hashManageToken(manageToken),
+        riskReview: input.riskReview,
         manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
         expiresAt,
       })
@@ -442,3 +449,25 @@ export const expireOrdersCommand = tenantCommand({
     data: { expired: r.expired },
   }),
 });
+
+/**
+ * Pre-checkout risk signals for one buyer email in one org (M1.6e): orders in the last hour and
+ * how many of them failed to pay. Read by the server action before it asks the risk port; the
+ * org comes from the event lookup, never from the request.
+ */
+export async function checkoutRiskSignals(
+  orgId: string,
+  eventId: string,
+  email: string,
+  now: Date,
+): Promise<{ emailOrders: number; paymentFailures: number; eventCountry: string | null }> {
+  const since = new Date(now.getTime() - RISK_WINDOW_MINUTES * 60_000);
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'orders.checkout-risk' } });
+  return withTenant(ctx, async (tx) => {
+    const [r] = await tx.execute<{ n: number; failed: number }>(sql`
+      select count(*)::int as n, count(*) filter (where status = 'payment_failed')::int as failed
+      from orders.orders where buyer_email = ${email.trim().toLowerCase()} and created_at >= ${since.toISOString()}::timestamptz`);
+    const event = await findEventTx(tx, eventId);
+    return { emailOrders: r?.n ?? 0, paymentFailures: r?.failed ?? 0, eventCountry: event?.country ?? null };
+  });
+}

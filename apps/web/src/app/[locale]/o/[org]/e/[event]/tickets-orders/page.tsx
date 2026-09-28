@@ -1,7 +1,7 @@
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { listOrdersQuery } from '@yayatoh/orders';
+import { listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -9,9 +9,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoxOfficeForm } from '@/components/box-office-form.tsx';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
+import { RefundPolicyForm } from '@/components/refund-policy-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -24,6 +26,7 @@ import {
   moveQuestionAction,
   removeQuestionAction,
   setPromoCodeActiveAction,
+  setRefundPolicyAction,
 } from './actions.ts';
 
 export default async function TicketsPage({
@@ -59,6 +62,8 @@ export default async function TicketsPage({
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
     : null;
   const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
+  const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
+  const tp = await getTranslations('refundPolicy');
   const subject = { kind: 'checkout_questions', subjectType: 'event', subjectId: ev.id } as const;
   const form = await executeQuery(getFormQuery, subject, data.ctx, ports);
   const fields = form?.definition.fields ?? [];
@@ -355,6 +360,29 @@ export default async function TicketsPage({
             <QuestionForm action={addQuestionAction.bind(null, org, event)} />
           </Card>
         ) : null}
+      </section>
+      <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-3">
+        <h2 id="refund-policy-heading" className="text-section">
+          {tp('title')}
+        </h2>
+        <Card className="flex flex-col gap-3">
+          {policy ? (
+            <ul className="flex list-none flex-col gap-1 p-0 text-body">
+              {refundPolicyLines(tp, policy, locale).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-body text-zinc-600">{tp('notSet')}</p>
+          )}
+          {canWrite ? (
+            <RefundPolicyForm
+              action={setRefundPolicyAction.bind(null, org, event)}
+              policy={policy}
+              currency={ev.currency}
+            />
+          ) : null}
+        </Card>
       </section>
       <section aria-labelledby="promo-heading" className="flex flex-col gap-3">
         <h2 id="promo-heading" className="text-section">

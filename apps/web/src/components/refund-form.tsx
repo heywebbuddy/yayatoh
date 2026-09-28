@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Button } from '@yayatoh/ui';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import type { RefundState } from '@/app/[locale]/o/[org]/e/[event]/orders/[orderId]/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -22,15 +22,31 @@ export function RefundForm({
   action,
   tickets,
   currency,
+  timeZone,
+  canOverride = false,
 }: {
   action: (prev: RefundState, form: FormData) => Promise<RefundState>;
   tickets: readonly { id: string; label: string }[];
   currency: string;
+  /** The event's timezone: refund-policy deadlines are shown in it. */
+  timeZone: string;
+  /** Owners and admins may refund outside the event's refund policy, with a note (M1.6e). */
+  canOverride?: boolean;
 }) {
   const t = useTranslations('refunds');
   const te = useTranslations();
   const [state, formAction, pending] = useActionState(action, { ok: false, code: null });
   const [mode, setMode] = useState<'tickets' | 'amount'>(tickets.length ? 'tickets' : 'amount');
+  const [override, setOverride] = useState(false);
+  const locale = useLocale();
+  const deadline = state.deadline
+    ? new Intl.DateTimeFormat(locale, {
+        dateStyle: 'long',
+        timeStyle: 'short',
+        timeZone,
+        timeZoneName: 'short',
+      }).format(new Date(state.deadline))
+    : '';
   const error =
     state.code === null
       ? null
@@ -40,7 +56,13 @@ export function RefundForm({
           ? t('exceedsRefundable')
           : state.reason === 'ticket_refunded'
             ? t('ticketRefunded')
-            : te(errorMessageKey(state.code));
+            : state.reason === 'policy_window_closed'
+              ? t('policyWindowClosed', { deadline })
+              : state.reason === 'policy_no_refunds'
+                ? t('policyNoRefunds')
+                : state.field === 'note'
+                  ? t('overrideNoteRequired')
+                  : te(errorMessageKey(state.code));
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
@@ -107,11 +129,35 @@ export function RefundForm({
           />
         </div>
       )}
+      {canOverride ? (
+        <label className="flex min-h-6 items-start gap-2 text-body">
+          <input
+            type="checkbox"
+            name="override"
+            value="yes"
+            checked={override}
+            onChange={(e) => setOverride(e.target.checked)}
+            className="mt-0.5 size-5 shrink-0"
+          />
+          <span className="flex flex-col">
+            <span>{t('override')}</span>
+            <span className="text-caption text-zinc-500">{t('overrideHint')}</span>
+          </span>
+        </label>
+      ) : null}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="refund-note" className="text-caption text-zinc-600">
-          {t('note')}
+          {override ? t('overrideNote') : t('note')}
         </label>
-        <input id="refund-note" name="note" maxLength={500} className={field} />
+        <input
+          id="refund-note"
+          name="note"
+          maxLength={500}
+          required={override}
+          minLength={override ? 3 : undefined}
+          aria-invalid={state.field === 'note' || undefined}
+          className={field}
+        />
       </div>
       <div aria-live="polite">
         {state.ok ? <Alert tone="info" title={t('done')} /> : null}

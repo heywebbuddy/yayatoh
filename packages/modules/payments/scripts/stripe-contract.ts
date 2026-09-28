@@ -2,6 +2,7 @@ import { createHash, createHmac, randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import Stripe from 'stripe';
 import { accountState, STRIPE_API_VERSION, stripePaymentProvider } from '../src/stripe.ts';
+import { testMerchantAccount } from './stripe-test-accounts.ts';
 
 /**
  * Contract check of the Stripe adapter against Stripe TEST mode (M1.5e3). Not part of CI: run it
@@ -43,63 +44,6 @@ async function step(name: string, fn: () => Promise<string>) {
 }
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const usd = (amount: number) => ({ amount, currency: 'USD' });
-
-/** A connected account Stripe lets the platform onboard with test data (requirements owned by us). */
-async function testMerchantAccount(): Promise<string> {
-  const a = await stripe.v2.core.accounts.create({
-    contact_email: 'contract-org@example.test',
-    display_name: 'Contract Org',
-    dashboard: 'none',
-    identity: {
-      country: 'us',
-      entity_type: 'individual',
-      attestations: { terms_of_service: { account: { date: new Date().toISOString(), ip: '8.8.8.8' } } },
-      individual: {
-        given_name: 'Jenny',
-        surname: 'Rosen',
-        email: 'contract-org@example.test',
-        phone: '0000000000',
-        date_of_birth: { day: 1, month: 1, year: 1901 },
-        address: {
-          line1: 'address_full_match',
-          city: 'Washington',
-          state: 'DC',
-          postal_code: '20001',
-          country: 'us',
-        },
-        id_numbers: [{ type: 'us_ssn', value: '000000000' }],
-      },
-    },
-    configuration: {
-      merchant: {
-        capabilities: { card_payments: { requested: true } },
-        mcc: '7922',
-        support: { url: 'https://accessible.stripe.com', phone: '0000000000' },
-        statement_descriptor: { descriptor: 'CONTRACT ORG' },
-      },
-      recipient: { capabilities: { stripe_balance: { stripe_transfers: { requested: true } } } },
-    },
-    defaults: {
-      currency: 'usd',
-      responsibilities: { fees_collector: 'application', losses_collector: 'application' },
-    },
-    metadata: { orgId, purpose: 'stripe-contract' },
-  } as Stripe.V2.Core.AccountCreateParams);
-  created.push(a.id);
-  await stripe.accounts.createExternalAccount(a.id, { external_account: 'btok_us_verified' });
-  await stripe.accounts.update(a.id, {
-    business_profile: { url: 'https://accessible.stripe.com', product_description: 'Event tickets' },
-    settings: { payments: { statement_descriptor: 'CONTRACT ORG' } },
-  });
-  for (let i = 0; i < 180; i++) {
-    const s = accountState(await stripe.accounts.retrieve(a.id));
-    if (s.chargesEnabled && s.payoutsEnabled) return a.id;
-    await sleep(5_000);
-  }
-  throw new Error(
-    `${a.id} did not become charges_enabled within 15 minutes (rerun with --account once it is)`,
-  );
-}
 
 /** A confirmed test card payment (what a completed Checkout Session leaves behind). */
 async function paidIntent(opts: {
@@ -190,7 +134,10 @@ await step('test merchant account onboarded with test data', async () => {
   // `--account acct_…` reuses a test merchant account a previous run onboarded (verification of a
   // new one can take several minutes in test mode). It is not closed at the end.
   const reuse = process.argv[process.argv.indexOf('--account') + 1];
-  merchant = process.argv.includes('--account') && reuse ? reuse : await testMerchantAccount();
+  merchant =
+    process.argv.includes('--account') && reuse
+      ? reuse
+      : await testMerchantAccount(stripe, { orgId, onCreated: (id) => created.push(id) });
   const s = accountState(await stripe.accounts.retrieve(merchant));
   check(s.chargesEnabled && s.payoutsEnabled && s.detailsSubmitted, 'active');
   return merchant;

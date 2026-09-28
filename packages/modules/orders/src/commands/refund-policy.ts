@@ -5,20 +5,11 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { REFUND_POLICY_KINDS, refundDeadline } from '../domain/refund-policy.ts';
+import { RefundPolicyDto } from '../dto.ts';
 import { refundPolicies } from '../schema.ts';
 import { refundPolicyTx } from './refunds.ts';
 
-/** An event's refund policy as organizers and buyers see it (no internal fields). */
-export const RefundPolicyDto = z.object({
-  kind: z.enum(REFUND_POLICY_KINDS),
-  daysBefore: z.int().nullable(),
-  retainedMinor: z.int(),
-  currency: z.string(),
-  /** `until`: the last instant a discretionary refund is possible (the event's timezone decides the day). */
-  deadline: z.date().nullable(),
-  timezone: z.string(),
-});
-export type RefundPolicyDto = z.infer<typeof RefundPolicyDto>;
+export { RefundPolicyDto };
 
 const SetRefundPolicy = z
   .object({

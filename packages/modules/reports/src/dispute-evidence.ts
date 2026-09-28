@@ -1,8 +1,9 @@
-import { admissionsForTicketsTx } from '@yayatoh/checkin';
+import { admissionsForTicketsTx, scanLogForTicketsTx } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { orderMessagesQuery } from '@yayatoh/notifications';
 import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
-import { disputeTx } from '@yayatoh/payments';
+import { disputeTx, EVIDENCE_OPTIONAL_SECTIONS } from '@yayatoh/payments';
 import { tenantQuery } from '@yayatoh/platform';
 import { legalPageTx, organizationNameTx } from '@yayatoh/tenancy';
 import { z } from 'zod';
@@ -54,6 +55,28 @@ export const DisputeEvidenceDto = z.object({
     z.object({ amountMinor: z.int(), status: z.string(), createdAt: z.date(), reason: z.string() }),
   ),
   refundPolicy: z.object({ body: z.string(), updatedAt: z.date() }).nullable(),
+  /** M1.6e: every door scan of these tickets (the access log), rejections included. */
+  scans: z.array(
+    z.object({
+      serial: z.int(),
+      at: z.date(),
+      result: z.string(),
+      checkpoint: z.string().nullable(),
+      offline: z.boolean(),
+    }),
+  ),
+  /** M1.6e: what the buyer was sent about the order (no bodies: kind, subject, status). */
+  messages: z.array(
+    z.object({
+      at: z.date(),
+      kind: z.string(),
+      channel: z.string(),
+      status: z.string(),
+      subject: z.string().nullable(),
+    }),
+  ),
+  /** M1.6e: the reviewer's statement and the sections they left out. */
+  review: z.object({ summary: z.string().nullable(), excluded: z.array(z.enum(EVIDENCE_OPTIONAL_SECTIONS)) }),
 });
 export type DisputeEvidenceDto = z.infer<typeof DisputeEvidenceDto>;
 
@@ -80,6 +103,12 @@ export const disputeEvidenceQuery = tenantQuery({
       tickets.map((t) => t.id),
     );
     const refunds = await orderRefundsQuery.handler({ input: { orderId: d.orderId }, ctx, tx });
+    const serialOf = new Map(tickets.map((t) => [t.id, t.serial]));
+    const log = await scanLogForTicketsTx(
+      tx,
+      tickets.map((t) => t.id),
+    );
+    const sent = await orderMessagesQuery.handler({ input: { orderId: d.orderId }, ctx, tx });
     return {
       dispute: {
         id: d.id,
@@ -129,6 +158,26 @@ export const disputeEvidenceQuery = tenantQuery({
         reason: r.reason,
       })),
       refundPolicy: await legalPageTx(tx, 'refund'),
+      scans: log.map((l) => ({
+        serial: serialOf.get(l.ticketId ?? '') ?? 0,
+        at: l.scannedAt,
+        result: l.result,
+        checkpoint: l.checkpoint,
+        offline: l.offline,
+      })),
+      messages: sent.map((m) => ({
+        at: m.at,
+        kind: m.kind,
+        channel: m.channel,
+        status: m.status,
+        subject: m.subject,
+      })),
+      review: {
+        summary: d.evidenceSummary,
+        excluded: d.evidenceExcluded.filter((x): x is (typeof EVIDENCE_OPTIONAL_SECTIONS)[number] =>
+          (EVIDENCE_OPTIONAL_SECTIONS as readonly string[]).includes(x),
+        ),
+      },
     };
   },
 });
@@ -175,6 +224,18 @@ export const EVIDENCE_LABELS = [
   'refundPolicy',
   'noPolicy',
   'policyUpdated',
+  'statement',
+  'accessLog',
+  'noScans',
+  'time',
+  'entrance',
+  'result',
+  'offline',
+  'messages',
+  'noMessages',
+  'message',
+  'channel',
+  'trimmed',
 ] as const;
 export type EvidenceLabel = (typeof EVIDENCE_LABELS)[number];
 
@@ -190,6 +251,8 @@ export interface EvidenceDocument {
   readonly subtitle: string;
   readonly footer: string;
   readonly sections: readonly {
+    /** Which packet section this is (reviewers leave optional ones out). */
+    readonly id?: string;
     readonly title: string;
     readonly rows?: readonly Row[];
     readonly table?: { readonly head: readonly string[]; readonly body: readonly (readonly string[])[] };
@@ -219,85 +282,189 @@ export function evidenceDocument(
     title: l('title', { id: e.dispute.id.slice(-8) }),
     subtitle: l('subtitle', { seller: e.seller.name }),
     footer: l('footer'),
-    sections: [
-      {
-        title: l('dispute'),
-        rows: [
-          [l('reason'), e.dispute.reason],
-          [l('amount'), money(e.dispute.amountMinor, cur)],
-          [l('opened'), at.format(e.dispute.openedAt)],
-          ...(e.dispute.evidenceDueBy ? [[l('dueBy'), at.format(e.dispute.evidenceDueBy)] as Row] : []),
-        ],
-      },
-      {
-        title: l('seller'),
-        rows: [
-          [l('sellerName'), e.seller.name],
-          [l('soldBy'), e.seller.fundsFlow === 'organizer_mor' ? l('soldByOrganizer') : l('soldByPlatform')],
-        ],
-      },
-      {
-        title: l('event'),
-        rows: [
-          [l('eventName'), e.event.name],
-          [l('starts'), at.format(e.event.startsAt)],
-          [l('ends'), at.format(e.event.endsAt)],
-          ...(e.event.venue || e.event.city
-            ? [[l('venue'), [e.event.venue, e.event.city].filter(Boolean).join(', ')] as Row]
-            : []),
-        ],
-      },
-      {
-        title: l('order'),
-        rows: [
-          [l('orderId'), e.order.id],
-          [l('placed'), at.format(e.order.createdAt)],
-          ...(e.order.paidAt ? [[l('paid'), at.format(e.order.paidAt)] as Row] : []),
-          [l('buyer'), `${e.order.buyerName} <${e.order.buyerEmail}>`],
-          [l('total'), money(e.order.totalMinor, cur)],
-          [l('fees'), money(e.order.feeMinor, cur)],
-          [l('status'), e.order.status],
-        ],
-        table: {
-          head: [l('items'), l('qty'), l('price')],
-          body: e.order.items.map((i) => [i.name, String(i.quantity), money(i.unitAllInMinor, cur)]),
+    sections: (
+      [
+        ...(e.review.summary ? [{ id: 'statement', title: l('statement'), text: e.review.summary }] : []),
+        {
+          id: 'dispute',
+          title: l('dispute'),
+          rows: [
+            [l('reason'), e.dispute.reason],
+            [l('amount'), money(e.dispute.amountMinor, cur)],
+            [l('opened'), at.format(e.dispute.openedAt)],
+            ...(e.dispute.evidenceDueBy ? [[l('dueBy'), at.format(e.dispute.evidenceDueBy)] as Row] : []),
+          ],
         },
-      },
-      {
-        title: l('tickets'),
-        table: {
-          head: [l('serial'), l('code'), l('holder'), l('status'), l('admitted')],
-          body: e.tickets.map((t) => [
-            `#${t.serial}`,
-            t.shortCode,
-            t.holderName,
-            t.status,
-            t.admittedAt.length ? t.admittedAt.map((d) => at.format(d)).join('; ') : l('notAdmitted'),
-          ]),
+        {
+          id: 'seller',
+          title: l('seller'),
+          rows: [
+            [l('sellerName'), e.seller.name],
+            [
+              l('soldBy'),
+              e.seller.fundsFlow === 'organizer_mor' ? l('soldByOrganizer') : l('soldByPlatform'),
+            ],
+          ],
         },
-        ...(e.ticketsOmitted > 0 ? { note: l('omitted', { n: e.ticketsOmitted }) } : {}),
-      },
-      e.refunds.length
-        ? {
-            title: l('refunds'),
-            table: {
-              head: [l('opened'), l('amount'), l('status'), l('reason')],
-              body: e.refunds.map((r) => [
-                at.format(r.createdAt),
-                money(r.amountMinor, cur),
-                r.status,
-                r.reason,
-              ]),
-            },
-          }
-        : { title: l('refunds'), text: l('noRefunds') },
-      e.refundPolicy
-        ? {
-            title: l('refundPolicy'),
-            text: e.refundPolicy.body,
-            note: l('policyUpdated', { date: at.format(e.refundPolicy.updatedAt) }),
-          }
-        : { title: l('refundPolicy'), text: l('noPolicy') },
-    ],
+        {
+          id: 'event',
+          title: l('event'),
+          rows: [
+            [l('eventName'), e.event.name],
+            [l('starts'), at.format(e.event.startsAt)],
+            [l('ends'), at.format(e.event.endsAt)],
+            ...(e.event.venue || e.event.city
+              ? [[l('venue'), [e.event.venue, e.event.city].filter(Boolean).join(', ')] as Row]
+              : []),
+          ],
+        },
+        {
+          id: 'order',
+          title: l('order'),
+          rows: [
+            [l('orderId'), e.order.id],
+            [l('placed'), at.format(e.order.createdAt)],
+            ...(e.order.paidAt ? [[l('paid'), at.format(e.order.paidAt)] as Row] : []),
+            [l('buyer'), `${e.order.buyerName} <${e.order.buyerEmail}>`],
+            [l('total'), money(e.order.totalMinor, cur)],
+            [l('fees'), money(e.order.feeMinor, cur)],
+            [l('status'), e.order.status],
+          ],
+          table: {
+            head: [l('items'), l('qty'), l('price')],
+            body: e.order.items.map((i) => [i.name, String(i.quantity), money(i.unitAllInMinor, cur)]),
+          },
+        },
+        {
+          id: 'tickets',
+          title: l('tickets'),
+          table: {
+            head: [l('serial'), l('code'), l('holder'), l('status'), l('admitted')],
+            body: e.tickets.map((t) => [
+              `#${t.serial}`,
+              t.shortCode,
+              t.holderName,
+              t.status,
+              t.admittedAt.length ? t.admittedAt.map((d) => at.format(d)).join('; ') : l('notAdmitted'),
+            ]),
+          },
+          ...(e.ticketsOmitted > 0 ? { note: l('omitted', { n: e.ticketsOmitted }) } : {}),
+        },
+        e.scans.length
+          ? {
+              id: 'accessLog',
+              title: l('accessLog'),
+              table: {
+                head: [l('time'), l('serial'), l('entrance'), l('result')],
+                body: e.scans.map((x) => [
+                  at.format(x.at),
+                  `#${x.serial}`,
+                  x.checkpoint ?? '—',
+                  x.offline ? `${x.result} (${l('offline')})` : x.result,
+                ]),
+              },
+            }
+          : { id: 'accessLog', title: l('accessLog'), text: l('noScans') },
+        e.refunds.length
+          ? {
+              id: 'refunds',
+              title: l('refunds'),
+              table: {
+                head: [l('opened'), l('amount'), l('status'), l('reason')],
+                body: e.refunds.map((r) => [
+                  at.format(r.createdAt),
+                  money(r.amountMinor, cur),
+                  r.status,
+                  r.reason,
+                ]),
+              },
+            }
+          : { id: 'refunds', title: l('refunds'), text: l('noRefunds') },
+        e.messages.length
+          ? {
+              id: 'messages',
+              title: l('messages'),
+              table: {
+                head: [l('time'), l('message'), l('channel'), l('status')],
+                body: e.messages.map((m) => [at.format(m.at), m.subject ?? m.kind, m.channel, m.status]),
+              },
+            }
+          : { id: 'messages', title: l('messages'), text: l('noMessages') },
+        e.refundPolicy
+          ? {
+              id: 'refundPolicy',
+              title: l('refundPolicy'),
+              text: e.refundPolicy.body,
+              note: l('policyUpdated', { date: at.format(e.refundPolicy.updatedAt) }),
+            }
+          : { id: 'refundPolicy', title: l('refundPolicy'), text: l('noPolicy') },
+      ] satisfies EvidenceDocument['sections'][number][]
+    ).filter((sec) => !(e.review.excluded as readonly string[]).includes(sec.id ?? '')),
+  };
+}
+
+/** The card networks' limits for an evidence packet (roadmap §5.3). */
+export const PACKET_LIMITS = { maxBytes: 4_500_000, maxPages: 19 } as const;
+/** A4 at the packet's type size: about this many table rows or wrapped text lines per page. */
+const LINES_PER_PAGE = 40;
+const CHARS_PER_LINE = 95;
+
+const linesOf = (text: string) =>
+  text.split('\n').reduce((n, line) => n + Math.max(1, Math.ceil(line.length / CHARS_PER_LINE)), 0);
+
+/** An estimate of how many A4 pages a packet document fills (headers, rows and wrapped text). */
+export function estimatePages(doc: EvidenceDocument): number {
+  let lines = 4; // title, subtitle, footer
+  for (const s of doc.sections) {
+    lines += 2 + (s.rows?.length ?? 0) + (s.note ? linesOf(s.note) : 0) + (s.text ? linesOf(s.text) : 0);
+    if (s.table) lines += 1 + s.table.body.reduce((n, r) => n + Math.max(1, ...r.map(linesOf)), 0);
+  }
+  return Math.ceil(lines / LINES_PER_PAGE);
+}
+
+/**
+ * Fit a packet into the page limit (M1.6e): the longest tables are cut first — the access log,
+ * then messages, then tickets — keeping their first rows and saying how many were left out; long
+ * texts are cut last. The reviewer sees exactly what will be sent.
+ */
+export function fitEvidenceDocument(
+  doc: EvidenceDocument,
+  trimmedNote: (n: number) => string,
+  maxPages: number = PACKET_LIMITS.maxPages,
+): EvidenceDocument {
+  let sections = doc.sections.map((s) => ({ ...s }));
+  const current = () => estimatePages({ ...doc, sections });
+  for (const id of ['accessLog', 'messages', 'tickets']) {
+    const i = sections.findIndex((s) => s.id === id && s.table);
+    const sec = sections[i];
+    if (!sec?.table || current() <= maxPages) continue;
+    const all = sec.table.body;
+    let keep = all.length;
+    while (keep > 5 && current() > maxPages) {
+      keep = Math.max(5, Math.floor(keep * 0.8));
+      sections[i] = {
+        ...sec,
+        table: { head: sec.table.head, body: all.slice(0, keep) },
+        note: [sec.note, trimmedNote(all.length - keep)].filter(Boolean).join(' '),
+      };
+    }
+  }
+  if (current() > maxPages)
+    sections = sections.map((s) =>
+      s.text && s.text.length > 6_000
+        ? { ...s, text: `${s.text.slice(0, 6_000)}…`, note: trimmedNote(1) }
+        : s,
+    );
+  return { ...doc, sections };
+}
+
+/** Pages and size of a rendered PDF, checked against the networks' limits before submission. */
+export function packetWithinLimits(pdf: Uint8Array): { ok: boolean; bytes: number; pages: number } {
+  const text = new TextDecoder('latin1').decode(pdf);
+  const pages = (text.match(/\/Type\s*\/Page(?![s\w])/g) ?? []).length;
+  return {
+    ok: pdf.byteLength <= PACKET_LIMITS.maxBytes && pages >= 1 && pages <= PACKET_LIMITS.maxPages,
+    bytes: pdf.byteLength,
+    pages,
   };
 }

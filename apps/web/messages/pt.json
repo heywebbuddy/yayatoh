@@ -179,7 +179,8 @@
     "series": "Séries",
     "templates": "Modelos",
     "apiKeys": "Chaves de API",
-    "publicSite": "Site público"
+    "publicSite": "Site público",
+    "finance": "Finanças"
   },
   "vocab": {
     "attendee": "Participante",
@@ -635,7 +636,8 @@
     },
     "chooseDate": "Escolha uma data primeiro.",
     "dateSoldOut": "Esta data acabou de esgotar. Escolha outra.",
-    "dateUnavailable": "Esta data não está mais disponível. Escolha outra."
+    "dateUnavailable": "Esta data não está mais disponível. Escolha outra.",
+    "riskBlocked": "Não foi possível aceitar este pedido. Entre em contacto com o organizador."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -1192,6 +1194,24 @@
         "transferred": "Repassado",
         "failed": "Tentando novamente"
       }
+    },
+    "receivables": {
+      "title": "Valores a receber",
+      "description": "O que deve à Yayatoh: reembolsos ou disputas depois de ter recebido e taxas de vendas que cobrou diretamente. É recuperado por estorno da transferência quando possível; caso contrário, do seu próximo pagamento.",
+      "none": "Não deve nada.",
+      "owed": "Em dívida",
+      "nettedNext": "Descontado do seu próximo pagamento",
+      "history": "Histórico de valores a receber",
+      "amount": "Valor",
+      "source": {
+        "refund": "Reembolso após pagamento · {event}",
+        "dispute": "Disputa · {event}",
+        "dispute_won": "Disputa ganha · {event}",
+        "organizer_collected_sale": "Taxa de uma venda que cobrou · {event}",
+        "transfer_reversal": "Recuperado por estorno da transferência · {event}",
+        "receivable_netting": "Descontado de um pagamento",
+        "other": "Ajuste · {event}"
+      }
     }
   },
   "fakeConnect": {
@@ -1287,7 +1307,15 @@
     "done": "Reembolsado. O comprador recebe o dinheiro de volta no cartão em alguns dias.",
     "failed": "O provedor de pagamentos recusou este reembolso. Nada foi alterado.",
     "exceedsRefundable": "Isso é mais do que resta para reembolsar neste pedido.",
-    "ticketRefunded": "Um desses ingressos já foi reembolsado ou está sendo reembolsado."
+    "ticketRefunded": "Um desses ingressos já foi reembolsado ou está sendo reembolsado.",
+    "keptCol": "Retido",
+    "overridden": "Fora da política",
+    "policyWindowClosed": "A política de reembolso do evento terminou a {deadline}. Já não são permitidos reembolsos a pedido.",
+    "policyNoRefunds": "A política de reembolso do evento não permite reembolsos a pedido.",
+    "override": "Reembolsar fora da política de reembolso",
+    "overrideHint": "Só proprietários e administradores. Nada é retido; a nota é obrigatória e fica registada.",
+    "overrideNote": "Porque é que a política é ignorada? (obrigatório)",
+    "overrideNoteRequired": "Indique porque é que a política de reembolso é ignorada (pelo menos 3 caracteres)."
   },
   "disputes": {
     "title": "Contestações",
@@ -1302,7 +1330,38 @@
       "lost": "Perdida"
     },
     "dueBy": "Evidências até {date}",
-    "evidence": "Pacote de evidências (PDF)"
+    "evidence": "Pacote de evidências (PDF)",
+    "respond": "Rever e responder",
+    "submitted": "Provas enviadas",
+    "review": {
+      "title": "Responder a uma disputa",
+      "description": "Reveja o pacote de provas, acrescente a sua declaração e envie-o à rede de cartões.",
+      "backToOrder": "Voltar à encomenda",
+      "respondTitle": "A sua resposta",
+      "summary": "A sua declaração",
+      "summaryHint": "Explique em palavras simples o que aconteceu: quando o comprador comprou, entrou e o que lhe foi dito. Pelo menos 10 caracteres; é enviada tal como escrita e as redes de cartões leem inglês.",
+      "sections": "Incluir no pacote",
+      "sectionsHint": "A disputa, o vendedor, o evento e a encomenda são sempre incluídos.",
+      "section": {
+        "tickets": "Bilhetes e check-in",
+        "accessLog": "Registo de acessos (cada leitura à entrada)",
+        "refunds": "Reembolsos",
+        "messages": "Mensagens enviadas ao comprador",
+        "refundPolicy": "Política de reembolso"
+      },
+      "reviewed": "Li o pacote de provas abaixo e está correto.",
+      "save": "Guardar rascunho",
+      "submit": "Enviar provas",
+      "saved": "Guardado.",
+      "summaryTooShort": "Escreva uma declaração com pelo menos 10 caracteres.",
+      "notReviewed": "Confirme que leu o pacote de provas antes de enviar.",
+      "tooLarge": "O pacote excede os limites das redes de cartões (4,5 MB / 19 páginas). Retire uma secção e tente novamente.",
+      "providerRefused": "O fornecedor de pagamentos não aceitou as provas. Nada foi enviado.",
+      "notOpen": "Esta disputa já não está aberta.",
+      "submittedOn": "Provas enviadas em {date}.",
+      "previewTitle": "Pacote de provas",
+      "previewHint": "Isto é exatamente o que será enviado, em inglês, a língua das redes de cartões."
+    }
   },
   "evidence": {
     "title": "Evidências da contestação · {id}",
@@ -1345,7 +1404,19 @@
     "noRefunds": "Nenhum reembolso foi solicitado para este pedido.",
     "refundPolicy": "Política de reembolso exibida aos compradores",
     "noPolicy": "O organizador não publicou uma política de reembolso.",
-    "policyUpdated": "Última atualização em {date}"
+    "policyUpdated": "Última atualização em {date}",
+    "statement": "Declaração do vendedor",
+    "accessLog": "Registo de acessos (leituras à entrada)",
+    "noScans": "Não foram registadas leituras à entrada para estes bilhetes.",
+    "time": "Hora",
+    "entrance": "Entrada",
+    "result": "Resultado",
+    "offline": "offline",
+    "messages": "Mensagens enviadas ao comprador",
+    "noMessages": "Não foram enviadas mensagens ao comprador sobre esta encomenda.",
+    "message": "Mensagem",
+    "channel": "Canal",
+    "trimmed": "{n, plural, one {# linha a mais omitida} other {# linhas a mais omitidas}} para respeitar o limite de páginas das redes de cartões."
   },
   "boxOffice": {
     "title": "Bilheteria",
@@ -2837,5 +2908,70 @@
       "emptyTitle": "Ainda não há eventos públicos",
       "emptyDescription": "Publique um evento para obter o trecho do widget."
     }
+  },
+  "finance": {
+    "title": "Finanças",
+    "description": "Todos os dias o dinheiro do seu livro-razão é conferido com o que o fornecedor de pagamentos movimentou. As diferenças aparecem aqui para verificar e resolver.",
+    "runsTitle": "Verificações diárias",
+    "noRuns": "Ainda nenhum dia foi verificado. A primeira verificação corre na noite a seguir à sua primeira venda.",
+    "day": "Dia",
+    "ledgerCount": "Lançamentos",
+    "providerCount": "Movimentos do fornecedor",
+    "result": "Resultado",
+    "matched": "Confere",
+    "differences": "{n, plural, one {# diferença} other {# diferenças}}",
+    "openTitle": "Diferenças a verificar",
+    "emptyTitle": "Sem diferenças",
+    "emptyDescription": "O seu livro-razão confere com o fornecedor de pagamentos.",
+    "kind": {
+      "missing_at_provider": "Não consta no fornecedor",
+      "missing_in_ledger": "Não consta no livro-razão",
+      "amount_mismatch": "Valores diferentes"
+    },
+    "ledger": "Livro-razão",
+    "provider": "Fornecedor",
+    "difference": "Diferença",
+    "noResolveAccess": "Só proprietários, administradores e finanças podem resolver diferenças.",
+    "resolvedTitle": "Resolvidas",
+    "what": "O quê",
+    "reference": "Referência",
+    "note": "Nota",
+    "resolveNote": "Porque é que {reference} fica resolvida?",
+    "noteTooShort": "Escreva uma nota com pelo menos 3 caracteres.",
+    "alreadyResolved": "Alguém já resolveu esta diferença.",
+    "resolve": "Resolver"
+  },
+  "risk": {
+    "flagged": "Assinalado no pagamento",
+    "rules": {
+      "email_velocity_review": "Muitas encomendas deste email numa hora",
+      "country_mismatch_review": "Comprado a partir de outro país que não o do evento"
+    }
+  },
+  "refundPolicy": {
+    "title": "Política de reembolso",
+    "buyerTitle": "Política de reembolso",
+    "notSet": "Não há política de reembolso: os reembolsos ficam ao seu critério e os compradores não veem nenhuma política.",
+    "none": "Os bilhetes não são reembolsáveis a pedido.",
+    "always": "Os reembolsos estão disponíveis a pedido a qualquer momento.",
+    "until": "Os reembolsos estão disponíveis a pedido até {deadline}.",
+    "retained": "O organizador retém {amount} por bilhete.",
+    "feeKept": "A taxa de reserva não é reembolsada a pedido.",
+    "minimum": "Se o evento for cancelado, ou adiado mais de 90 dias sem nova data, recebe o reembolso total, incluindo taxas.",
+    "kindLegend": "Reembolsos a pedido",
+    "kindOption": {
+      "unset": "Sem política (ao seu critério)",
+      "none": "Sem reembolsos",
+      "until": "Até alguns dias antes do evento",
+      "always": "Sempre"
+    },
+    "daysLabel": "Dias antes do evento",
+    "daysHint": "Contados em dias de calendário no fuso horário do evento; 0 significa até ao dia do evento.",
+    "retainedLabel": "Retenção por bilhete reembolsado ({currency}, opcional)",
+    "retainedHint": "Uma taxa de cancelamento que fica consigo; o comprador recebe o resto.",
+    "minimumHint": "O mínimo da plataforma aplica-se sempre: um evento cancelado, ou adiado mais de 90 dias sem nova data, é reembolsado na totalidade.",
+    "save": "Guardar política de reembolso",
+    "saved": "Política de reembolso guardada.",
+    "daysInvalid": "Introduza um número de dias entre 0 e 365."
   }
 }

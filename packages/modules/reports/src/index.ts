@@ -11,7 +11,11 @@ export {
   EVIDENCE_LABELS,
   type EvidenceDocument,
   type EvidenceLabel,
+  estimatePages,
   evidenceDocument,
+  fitEvidenceDocument,
+  PACKET_LIMITS,
+  packetWithinLimits,
 } from './dispute-evidence.ts';
 export {
   EventReportDto,

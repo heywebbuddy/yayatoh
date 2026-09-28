@@ -126,8 +126,22 @@ export const DisputeDto = z.object({
   evidenceSubmittedAt: z.date().nullable(),
   createdAt: z.date(),
   closedAt: z.date().nullable(),
+  /** M1.6e: the reviewer's statement and the packet sections they left out. */
+  evidenceSummary: z.string().nullable(),
+  evidenceExcluded: z.array(z.string()),
 });
 const present = (r: Row) => DisputeDto.parse({ ...r, fundsFlow: r.fundsFlow as FundsFlow, status: r.status });
+
+/** Packet sections a reviewer may leave out; the dispute, seller, event and order always stay. */
+export const EVIDENCE_OPTIONAL_SECTIONS = [
+  'tickets',
+  'accessLog',
+  'refunds',
+  'messages',
+  'refundPolicy',
+] as const;
+/** Stripe accepts up to 20 000 characters of text evidence. */
+export const EVIDENCE_SUMMARY_MAX = 20_000;
 
 /** Disputes of the org, or of one order (finance and staff). */
 export const disputesQuery = tenantQuery({
@@ -184,5 +198,87 @@ export const markEvidenceSubmittedCommand = tenantCommand({
     action: 'dispute.evidence_submitted',
     targetType: 'dispute',
     targetId: input.disputeId,
+  }),
+});
+
+const EvidenceDraft = z.object({
+  disputeId: z.uuid(),
+  summary: z.string().trim().max(EVIDENCE_SUMMARY_MAX),
+  excluded: z.array(z.enum(EVIDENCE_OPTIONAL_SECTIONS)).max(EVIDENCE_OPTIONAL_SECTIONS.length).default([]),
+});
+
+async function openDisputeForUpdateTx(tx: TenantTx, id: string) {
+  const [r] = await tx.select().from(disputes).where(eq(disputes.id, id)).for('update');
+  if (!r) throw new DomainError('not_found', 'Dispute not found');
+  if (r.status !== 'open')
+    throw new DomainError('invalid_state', 'This dispute is no longer open', { reason: 'dispute_not_open' });
+  return r;
+}
+
+/**
+ * The organizer's review of the evidence packet (M1.6e): their statement and the optional
+ * sections to leave out. Saved while the dispute is open; submission is a separate, reviewed step.
+ */
+export const saveEvidenceDraftCommand = tenantCommand({
+  name: 'payments.saveEvidenceDraft',
+  input: EvidenceDraft,
+  output: DisputeDto,
+  entitlement: null,
+  permission: 'disputes:respond',
+  handler: async ({ input, ctx, tx }) => {
+    const r = await openDisputeForUpdateTx(tx, input.disputeId);
+    const [u] = await tx
+      .update(disputes)
+      .set({
+        evidenceSummary: input.summary || null,
+        evidenceExcluded: [...new Set(input.excluded)],
+        updatedAt: ctx.now,
+      })
+      .where(eq(disputes.id, r.id))
+      .returning();
+    if (!u) throw new DomainError('internal');
+    return present(u);
+  },
+  audit: (input) => ({
+    action: 'dispute.evidence_draft',
+    targetType: 'dispute',
+    targetId: input.disputeId,
+    data: { excluded: input.excluded, summaryLength: input.summary.length },
+  }),
+});
+
+/**
+ * The organizer reviewed the packet and the provider accepted it (M1.6e): recorded once, with the
+ * statement that was sent. The caller asks the provider first (outside the transaction), on the
+ * connected account for organizer_mor.
+ */
+export const markOrgEvidenceSubmittedCommand = tenantCommand({
+  name: 'payments.markOrgEvidenceSubmitted',
+  input: EvidenceDraft.extend({ summary: z.string().trim().min(10).max(EVIDENCE_SUMMARY_MAX) }),
+  output: DisputeDto,
+  entitlement: null,
+  permission: 'disputes:respond',
+  handler: async ({ input, ctx, tx }) => {
+    const r = await openDisputeForUpdateTx(tx, input.disputeId);
+    const [u] = await tx
+      .update(disputes)
+      .set({
+        status: 'evidence_submitted',
+        evidenceSummary: input.summary,
+        evidenceExcluded: [...new Set(input.excluded)],
+        evidenceSubmittedAt: ctx.now,
+        evidenceSubmittedBy: actorId(ctx.actor),
+        updatedAt: ctx.now,
+      })
+      .where(eq(disputes.id, r.id))
+      .returning();
+    if (!u) throw new DomainError('internal');
+    return present(u);
+  },
+  audit: (input) => ({
+    action: 'dispute.evidence_submitted',
+    targetType: 'dispute',
+    targetId: input.disputeId,
+    data: { by: 'organizer', excluded: input.excluded, summaryLength: input.summary.length },
   }),
 });

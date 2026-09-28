@@ -12,6 +12,7 @@ export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-offi
 export {
   applyProviderEventCommand,
   attachPaymentCommand,
+  checkoutRiskSignals,
   expireOrdersCommand,
   hashManageToken,
   startCheckoutCommand,

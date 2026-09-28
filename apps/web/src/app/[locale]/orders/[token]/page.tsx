@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { HolderContent } from '@/components/holder-content.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
+import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 
 const DOT = {
@@ -132,6 +133,20 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       ) : null}
       {holderTarget ? (
         <HolderContent target={holderTarget} locale={locale} timeZone={order.event.timezone} />
+      ) : null}
+      {order.refundPolicy ? (
+        <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-2">
+          <h2 id="refund-policy-heading" className="text-section">
+            {t('refundPolicy.buyerTitle')}
+          </h2>
+          <ul className="flex list-none flex-col gap-1 p-0 text-body text-zinc-600">
+            {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), order.refundPolicy, locale).map(
+              (line) => (
+                <li key={line}>{line}</li>
+              ),
+            )}
+          </ul>
+        </section>
       ) : null}
       <section aria-labelledby="emails-heading" className="flex flex-col gap-3">
         <h2 id="emails-heading" className="text-section">
