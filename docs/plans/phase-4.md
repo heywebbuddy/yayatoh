@@ -1,6 +1,6 @@
 # Phase 4 plan — Weddings, galas and social events
 
-Status: **Draft for owner approval** (2026-09-28). Roadmap: `docs/roadmap.md` Phase 4 (M4.1–M4.7). Owner priority 2.
+Status: **approved by the owner** (2026-09-28): all eight decisions accepted; Wave A started. The owner also asked for gala donations (paddle raise, pledges) to be planned; that plan is being added as a follow-up section. Roadmap: `docs/roadmap.md` Phase 4 (M4.1–M4.7). Owner priority 2.
 
 ## 1. What I'm asking you to decide
 
@@ -97,7 +97,7 @@ Phases 1–3 already deliver much of what Phase 4 needs.
 | **M4.7a** Mobile-web guest hub | One page per party covering RSVP, seat, tickets and program, installable to the home screen. A Wallet pass port with a fake adapter; live passes need your Apple and Google accounts (M1.5e2) | Lighthouse mobile thresholds met; no app install needed |
 | **M4.x** Hardening | The roadmap §13 wedding journey end to end (RSVP → seating → kiosk → check-in). Load tests: a 400-guest wedding and a 1,000-guest gala. An accessibility sweep. Leak-crawler coverage for every new table. A dress-rehearsal script for the first real event | E2E, k6 and crawler gates green |
 
-**Out of scope here:** the gala profile lists a Donations tab, but no donations module exists (only donation ticket types), and no Phase 4 milestone builds one. Tell me if galas need paddle-raise or pledge features, and I'll plan them separately.
+**Gala donations:** the gala profile lists a Donations tab, but no donations module exists (only donation ticket types), and no roadmap milestone builds one. The owner asked for it to be planned (2026-09-28); the plan follows as its own section with any decisions it needs.
 
 ## 4. What waits for you
 
