@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { type KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import type { SeatingState } from '@/app/[locale]/o/[org]/e/[event]/seating/actions.ts';
+import { SeatLegend, useSeatStates } from './seat-states.tsx';
 import type { SeatStatus } from './seating-canvas.tsx';
 
 // Konva needs the browser: the canvas loads on the client only.
@@ -14,6 +15,14 @@ const SeatingCanvas = dynamic(() => import('./seating-canvas.tsx'), { ssr: false
 
 const field = 'min-h-8 w-20 rounded-pill border border-zinc-200 bg-white px-3 text-caption';
 const clampRot = (r: number) => ((Math.round(r) % 360) + 360) % 360;
+/** "1, 2, 10" → the labels (case and spacing aside). */
+const labelList = (v: string) =>
+  new Set(
+    v
+      .split(/[,;\s]+/)
+      .map((x) => x.trim().toLowerCase())
+      .filter(Boolean),
+  );
 
 type Save = 'saved' | 'dirty' | 'saving' | 'error';
 
@@ -34,6 +43,9 @@ export function SeatingEditor({
   saveDoc: (doc: FloorplanDoc) => Promise<SeatingState>;
 }) {
   const t = useTranslations('seating.editor');
+  // Live seat states (M1.7f) when the page follows the seat stream; else the server's.
+  const live = useSeatStates();
+  const states = live?.states ?? seatStatus;
   const [doc, setDoc] = useState(initialDoc);
   const [past, setPast] = useState<FloorplanDoc[]>([]);
   const [future, setFuture] = useState<FloorplanDoc[]>([]);
@@ -130,6 +142,20 @@ export function SeatingEditor({
     else return;
     e.preventDefault();
   };
+  // Stable callbacks for the canvas (its rows and tables redraw only when they change).
+  const latest = useRef({ selected, update });
+  latest.current = { selected, update };
+  const onSelect = useCallback((id: string | null, additive: boolean) => {
+    if (!id) return setSelected(new Set());
+    const next = new Set(additive ? latest.current.selected : []);
+    if (additive && next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelected(next);
+  }, []);
+  const onMove = useCallback(
+    (id: string, x: number, y: number) => latest.current.update(id, (i) => ({ ...i, x, y })),
+    [],
+  );
   const numberField = (item: Item, key: 'x' | 'y' | 'rotation', label: string) => (
     <input
       key={`${item.id}:${key}:${item[key]}`}
@@ -272,20 +298,15 @@ export function SeatingEditor({
       >
         <SeatingCanvas
           doc={doc}
-          seatStatus={seatStatus}
+          seatStatus={states}
           selected={selected}
           locked={locked}
           label={t('canvas')}
-          onSelect={(id, additive) => {
-            if (!id) return setSelected(new Set());
-            const next = new Set(additive ? selected : []);
-            if (additive && next.has(id)) next.delete(id);
-            else next.add(id);
-            setSelected(next);
-          }}
-          onMove={(id, x, y) => update(id, (i) => ({ ...i, x, y }))}
+          onSelect={onSelect}
+          onMove={onMove}
         />
       </div>
+      <SeatLegend />
       <p id="seating-keys" className="text-caption text-zinc-500">
         {t('keys')}
       </p>
@@ -306,6 +327,9 @@ export function SeatingEditor({
               </th>
               <th scope="col" className="py-1 pe-3 text-start font-normal">
                 {t('seatsCol')}
+              </th>
+              <th scope="col" className="py-1 pe-3 text-start font-normal">
+                {t('accessibleCol')}
               </th>
               <th scope="col" className="py-1 pe-3 text-start font-normal">
                 x (cm)
@@ -355,6 +379,39 @@ export function SeatingEditor({
                   />
                 </td>
                 <td className="py-1 pe-3 tabular-nums">{item.kind === 'object' ? '—' : item.seats.length}</td>
+                <td className="py-1 pe-3">
+                  {item.kind === 'object' ? (
+                    '—'
+                  ) : (
+                    <input
+                      key={`${item.id}:accessible:${item.seats
+                        .filter((x) => x.accessible)
+                        .map((x) => x.label)
+                        .join(',')}`}
+                      defaultValue={item.seats
+                        .filter((x) => x.accessible)
+                        .map((x) => x.label)
+                        .join(', ')}
+                      maxLength={200}
+                      disabled={locked}
+                      aria-label={t('accessibleOf', { item: item.label })}
+                      aria-describedby="accessible-hint"
+                      className="min-h-8 w-28 rounded-pill border border-zinc-200 bg-white px-3 text-caption"
+                      onBlur={(e) => {
+                        const want = labelList(e.currentTarget.value);
+                        const next = item.seats.map((x) => ({
+                          ...x,
+                          accessible: want.has(x.label.toLowerCase()),
+                        }));
+                        if (next.some((x, i) => x.accessible !== item.seats[i]?.accessible))
+                          update(item.id, (i) => (i.kind === 'object' ? i : { ...i, seats: next }));
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') e.currentTarget.blur();
+                      }}
+                    />
+                  )}
+                </td>
                 <td className="py-1 pe-3">{numberField(item, 'x', 'x')}</td>
                 <td className="py-1 pe-3">{numberField(item, 'y', 'y')}</td>
                 <td className="py-1">{numberField(item, 'rotation', t('rotation'))}</td>
@@ -363,6 +420,9 @@ export function SeatingEditor({
           </tbody>
         </table>
       </div>
+      <p id="accessible-hint" className="text-caption text-zinc-500">
+        {t('accessibleHint')}
+      </p>
       {selectedItems.length ? (
         <p className="text-caption text-zinc-600">{t('selectedCount', { count: selectedItems.length })}</p>
       ) : null}

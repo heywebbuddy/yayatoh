@@ -2,8 +2,9 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation.ts';
 
 /**
- * The Seating page's views: the plan (editor, prices), assigning guests (M1.7d) and, when the org
- * has the seat_finder module, the public seat finder and its poster (M1.7e).
+ * The Seating page's views: the plan (editor, prices), assigning guests (M1.7d), the seating
+ * rules (M1.7f) and, when the org has the seat_finder module, the public seat finder and its
+ * poster (M1.7e).
  */
 export function SeatingTabs({
   base,
@@ -11,13 +12,14 @@ export function SeatingTabs({
   finder = false,
 }: {
   base: string;
-  active: 'plan' | 'assign' | 'finder';
+  active: 'plan' | 'assign' | 'rules' | 'finder';
   finder?: boolean;
 }) {
   const t = useTranslations('seating.tabs');
   const tabs = [
     { key: 'plan', href: base },
     { key: 'assign', href: `${base}/assign` },
+    { key: 'rules', href: `${base}/rules` },
     ...(finder ? [{ key: 'finder', href: `${base}/finder` } as const] : []),
   ] as const;
   return (

@@ -7,6 +7,7 @@ import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { claimProviderEventTx, fundsFlowTx, type ProviderEvent, postSaleTx } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
+  checkSeatRulesTx,
   extendSeatHoldTx,
   heldSeatsTx,
   holdSeatsTx,
@@ -53,7 +54,12 @@ const lines = (items: { ticketTypeId: string; quantity: number }[]) =>
  * each ticket gets one of the order's held seats of its ticket type, the seats are sold to those
  * tickets, and the event's floor plan locks.
  */
-async function issueFor(tx: TenantTx, ctx: Ctx, order: OrderRow, items: (typeof orderItems.$inferSelect)[]) {
+export async function issueFor(
+  tx: TenantTx,
+  ctx: Ctx,
+  order: OrderRow,
+  items: (typeof orderItems.$inferSelect)[],
+) {
   const issued = await issueTicketsTx(tx, ctx, {
     orderId: order.id,
     eventId: order.eventId,
@@ -140,6 +146,9 @@ export const startCheckoutCommand = tenantCommand({
           });
         seatItems.set(s.ticketTypeId, (seatItems.get(s.ticketTypeId) ?? 0) + 1);
       }
+      // Seating rules (M1.7f): an enforced rule refuses (the holds roll back); warnings were shown
+      // to the buyer as they chose.
+      await checkSeatRulesTx(tx, ctx, { eventId: event.id, seatUuids: input.seats, context: 'checkout' });
     }
     const wanted = [
       ...input.items,

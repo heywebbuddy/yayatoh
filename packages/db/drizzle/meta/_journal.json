@@ -330,6 +330,13 @@
       "when": 1790554552948,
       "tag": "0046_clever_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1790556943516,
+      "tag": "0047_huge_kate_bishop",
+      "breakpoints": true
     }
   ]
 }

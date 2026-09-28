@@ -1,12 +1,15 @@
 import { attendeesByIdsTx, eventAttendeesTx } from '@yayatoh/attendees';
 import type { TenantTx } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { ASSIGN_SEAT_STATES, assignSeatState, pickSeats } from './domain/assign.ts';
+import { activeAdaRule } from './domain/rules.ts';
 import type { SeatStatus } from './domain/seat-state.ts';
+import { checkSeatRulesTx, RuleHitDto, seatingRulesTx } from './rules.ts';
 import {
   ASSIGNABLE_BLOCKS,
   EVENT_LAYOUT_STATUSES,
@@ -75,9 +78,12 @@ const AssignedDto = z.object({ attendeeId: z.uuid(), seatUuid: z.uuid(), seatLab
  * Seat people at a table or row (M1.7d). Without `seatUuid` they take the first free seats there
  * (accessible seats last); with it, one person takes that exact seat, even one blocked for a
  * channel or accessibility, and a guest who was placed there automatically moves to another
- * free seat at the same table. Anyone already seated elsewhere moves. Seats taken this way are
- * blocked (`assigned`), so they are off sale; held, sold and killed seats can't be assigned, and
- * ticket holders who chose a seat when buying are already seated by their ticket.
+ * free seat at the same table. Anyone already seated elsewhere moves ("Move to…", M1.7f). Seats
+ * taken this way are blocked (`assigned`), so they are off sale; held, sold and killed seats
+ * can't be assigned, and ticket holders who chose a seat when buying are already seated by their
+ * ticket. Seating rules (M1.7f): while accessible seats are kept back, a guest placed in one is
+ * a warning; when the rule is enforced, automatic placement skips them and choosing one needs
+ * `overrideRules` ("this guest needs an accessible seat", audited).
  */
 export const assignSeatsCommand = tenantCommand({
   name: 'seating.assign',
@@ -87,12 +93,13 @@ export const assignSeatsCommand = tenantCommand({
       attendeeIds: z.array(z.uuid()).min(1).max(MAX_ASSIGN),
       itemId: z.uuid(),
       seatUuid: z.uuid().optional(),
+      overrideRules: z.boolean().default(false),
     })
     .refine((v) => !v.seatUuid || new Set(v.attendeeIds).size === 1, {
       message: 'A seat is for one person',
       path: ['seatUuid'],
     }),
-  output: z.object({ itemLabel: z.string(), seated: z.array(AssignedDto) }),
+  output: z.object({ itemLabel: z.string(), seated: z.array(AssignedDto), warnings: z.array(RuleHitDto) }),
   entitlement: 'seating',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {
@@ -182,6 +189,17 @@ export const assignSeatsCommand = tenantCommand({
     const freed = new Set(moving.flatMap((id) => mine.get(id)?.seatUuid ?? []));
     const stateOf = (s: { seatUuid: string; status: string; blockReason: string | null }) =>
       freed.has(s.seatUuid) ? 'free' : assignSeatState(s.status as SeatStatus, s.blockReason);
+    // An enforced accessibility rule keeps accessible seats out of automatic placement.
+    const rules = await seatingRulesTx(tx, input.eventId);
+    const event = rules.length ? await findEventTx(tx, input.eventId) : null;
+    const ada = event ? activeAdaRule(rules, event.startsAt, ctx.now) : null;
+    const skipAccessible = ada?.severity === 'enforce' && !input.overrideRules;
+    const autoFree = (s: {
+      seatUuid: string;
+      status: string;
+      blockReason: string | null;
+      accessible: boolean;
+    }) => stateOf(s) === 'free' && !(skipAccessible && s.accessible);
 
     const wanted: { attendeeId: string; seatUuid: string; pinned: boolean }[] = [];
     if (input.seatUuid && moving.length) {
@@ -192,7 +210,7 @@ export const assignSeatsCommand = tenantCommand({
         // Someone placed there automatically makes room by moving to another free seat here.
         const holder = current.find((c) => c.seatUuid === seat.seatUuid);
         const other = pickSeats(
-          seatRows.map((s) => ({ ...s, free: stateOf(s) === 'free' && s.seatUuid !== seat.seatUuid })),
+          seatRows.map((s) => ({ ...s, free: autoFree(s) && s.seatUuid !== seat.seatUuid })),
           1,
         ).seats?.[0];
         if (!holder || holder.pinned || !other)
@@ -206,7 +224,7 @@ export const assignSeatsCommand = tenantCommand({
       wanted.push({ attendeeId: moving[0] as string, seatUuid: seat.seatUuid, pinned: true });
     } else if (moving.length) {
       const picked = pickSeats(
-        seatRows.map((s) => ({ ...s, free: stateOf(s) === 'free' })),
+        seatRows.map((s) => ({ ...s, free: autoFree(s) })),
         moving.length,
       );
       if (!picked.seats)
@@ -219,6 +237,13 @@ export const assignSeatsCommand = tenantCommand({
         wanted.push({ attendeeId: moving[i] as string, seatUuid, pinned: false });
     }
 
+    // Seating rules (M1.7f): enforced ones refuse unless overridden; warnings go back to the caller.
+    const warnings = await checkSeatRulesTx(tx, ctx, {
+      eventId: input.eventId,
+      seatUuids: wanted.map((w) => w.seatUuid),
+      context: 'assign',
+      override: input.overrideRules,
+    });
     if (wanted.length) {
       // What each seat was before (a channel or accessibility block comes back on unseating).
       const before = await tx
@@ -286,13 +311,20 @@ export const assignSeatsCommand = tenantCommand({
         const seatUuid = finalSeat.get(id) as string;
         return { attendeeId: id, seatUuid, seatLabel: labelOf.get(seatUuid) ?? '' };
       }),
+      warnings,
     };
   },
   audit: (input, r) => ({
     action: 'seating.assign',
     targetType: 'event',
     targetId: input.eventId,
-    data: { itemId: input.itemId, seatUuid: input.seatUuid, count: r?.seated.length },
+    data: {
+      itemId: input.itemId,
+      seatUuid: input.seatUuid,
+      count: r?.seated.length,
+      ...(input.overrideRules ? { overrideRules: true } : {}),
+      ...(r?.warnings.length ? { warnings: r.warnings.map((w) => w.rule) } : {}),
+    },
   }),
 });
 

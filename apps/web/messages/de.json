@@ -656,8 +656,23 @@
       },
       "seat": "{label} ({price})",
       "accessible": "Barrierefrei",
-      "taken": "Vergeben"
+      "taken": "Vergeben",
+      "dropped": "{count, plural, one {Platz {seats} wurde gerade von jemand anderem gebucht und ist nicht mehr in deiner Auswahl.} other {Die Plätze {seats} wurden gerade von jemand anderem gebucht und sind nicht mehr in deiner Auswahl.}}",
+      "maxReached": "Du kannst bis zu {max} Plätze auf einmal wählen.",
+      "rules": {
+        "adaWarn": "Barrierefreie Plätze sind bis {date} für Gäste reserviert, die sie brauchen. Bitte wähle einen nur, wenn du oder jemand in deiner Begleitung ihn braucht.",
+        "adaEnforced": "Barrierefreie Plätze sind bis {date} für Gäste reserviert, die sie brauchen, und können vorher nicht online gebucht werden. Wende dich an den Veranstalter, wenn du einen brauchst.",
+        "capWarn": "Der Veranstalter bittet um höchstens {max} Plätze pro Bestellung.",
+        "capEnforced": "Bis zu {max} Plätze pro Bestellung.",
+        "capReached": "Mehr geht in einer Bestellung nicht: {max} Plätze.",
+        "adaChosen": "{count, plural, one {{seats} ist ein barrierefreier Platz} other {{seats} sind barrierefreie Plätze}}, reserviert für Gäste, die {count, plural, one {ihn} other {sie}} brauchen. Bitte nur bei Bedarf wählen.",
+        "overCap": "{count} Plätze gewählt: Der Veranstalter bittet um höchstens {max} pro Bestellung.",
+        "keptUntil": "Zurückgehalten bis {date}"
+      },
+      "groupSummary": "{group} — {free} von {total} frei{chosen, plural, =0 {} other { · # gewählt}}"
     },
+    "seatRuleCap": "Das sind mehr Plätze, als eine Bestellung haben darf. Bitte wähle weniger.",
+    "seatRuleAda": "Barrierefreie Plätze sind vorerst für Gäste reserviert, die sie brauchen. Bitte wähle andere Plätze.",
     "chooseDate": "Wähle zuerst einen Termin.",
     "dateSoldOut": "Dieser Termin ist gerade ausverkauft. Wähle einen anderen.",
     "dateUnavailable": "Dieser Termin ist nicht mehr verfügbar. Wähle einen anderen."
@@ -1394,6 +1409,14 @@
     "chooseTickets": "Wähle mindestens ein Ticket aus.",
     "soldOut": "Dafür sind nicht mehr genug Tickets übrig.",
     "collected": "Von dir eingenommen",
+    "seatedPass": "{pass}: Plätze unten wählen",
+    "seatsTaken": "Einige dieser Plätze wurden gerade vergeben. Bitte wähle andere.",
+    "seatRule": "Die Sitzregeln des Veranstalters erlauben diese Auswahl nicht. Kreuze das Feld an, um trotzdem zu verkaufen, oder ändere die Plätze.",
+    "notOnSale": "Diese Plätze sind nicht im Verkauf.",
+    "rulesEnforced": "Diese Auswahl verstößt gegen die Sitzregeln des Veranstalters (siehe oben).",
+    "override": "Trotzdem verkaufen: Diese Person braucht diese Plätze (die Ausnahme wird protokolliert)",
+    "confirmOverride": "Kreuze das Feld an, um trotzdem zu verkaufen, oder ändere die Plätze.",
+    "doneSeats": "{count, plural, one {Verkauf mit # Platz erfasst.} other {Verkauf mit # Plätzen erfasst.}} Die Tickets sind unterwegs.",
     "date": "Termin",
     "chooseDate": "Wähle einen Termin.",
     "dateSoldOut": "Für diesen Termin sind nicht mehr genug Tickets übrig.",
@@ -1425,7 +1448,7 @@
       "published": "Im Verkauf",
       "locked": "Gesperrt – es wurden bereits Plätze verkauft"
     },
-    "counts": "{total} Plätze · {available} verfügbar · {held} reserviert · {sold} verkauft · {blocked} blockiert",
+    "counts": "{total} Plätze · {available} verfügbar · {held} reserviert · {sold} verkauft · {assigned} Gästen zugewiesen · {blocked} blockiert",
     "priced": "{priced} von {total} Plätzen haben einen Preis",
     "publish": "Plätze in den Verkauf bringen",
     "lockedNote": "Es wurden bereits Plätze verkauft, daher lässt sich der Plan nicht mehr ändern. Die Preise nicht verkaufter Plätze kannst du weiterhin ändern.",
@@ -1472,7 +1495,10 @@
         "dance_floor": "Tanzfläche",
         "bar": "Bar",
         "custom": "Sonstiges"
-      }
+      },
+      "accessibleCol": "Barrierefreie Plätze",
+      "accessibleOf": "Barrierefreie Plätze von {item}",
+      "accessibleHint": "Barrierefreie Plätze: Nummern eintragen, z. B. „1, 2“. Sie sind im Plan umrandet, und die Sitzregeln können sie zurückhalten."
     },
     "prices": {
       "title": "Preise",
@@ -1497,7 +1523,8 @@
       "label": "Sitzplan-Ansichten",
       "plan": "Plan",
       "assign": "Gäste platzieren",
-      "finder": "Platzfinder"
+      "finder": "Platzfinder",
+      "rules": "Regeln"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -1528,7 +1555,9 @@
         "anySeat": "Beliebiger freier Platz",
         "seatKept": "{label} (zurückgehalten)",
         "submit": "Platzieren",
-        "submitting": "Wird platziert…"
+        "submitting": "Wird platziert…",
+        "seatAccessible": "{label} · barrierefrei",
+        "needsAccessible": "Dieser Gast braucht einen barrierefreien Platz"
       },
       "errors": {
         "noPeople": "Wählen Sie mindestens eine Person aus.",
@@ -1541,11 +1570,12 @@
         "seatedByTicket": "Diese Person hat bereits einen Platz über ihr Ticket.",
         "cancelled": "Diese Person nimmt nicht mehr teil.",
         "forbidden": "Sie können den Sitzplan ansehen, aber nicht ändern.",
-        "dropMiss": "Legen Sie Namen auf einem Tisch, einer Reihe oder einem Platz ab."
+        "dropMiss": "Legen Sie Namen auf einem Tisch, einer Reihe oder einem Platz ab.",
+        "adaEnforced": "Dieser Platz ist für Gäste reserviert, die einen barrierefreien Platz brauchen. Kreuze „Dieser Gast braucht einen barrierefreien Platz“ an, um ihn dort zu platzieren."
       },
       "canvas": {
         "title": "Plan",
-        "hint": "Ziehen Sie einen Namen (oder die angehakten Namen) auf einen Tisch, eine Reihe oder einen Platz. Alles geht auch mit der Liste und dem Formular.",
+        "hint": "Ziehe einen Namen (oder die angekreuzten) auf einen Tisch, eine Reihe oder einen Platz, oder ziehe den Platz eines Gastes auf einen anderen. Alles geht auch mit den Listen und Formularen.",
         "readOnlyHint": "Wer wo sitzt, als Bild des Raums."
       },
       "state": {
@@ -1563,6 +1593,17 @@
         "empty": "Noch niemand.",
         "remove": "Entfernen",
         "removeLabel": "{name} von {item} entfernen"
+      },
+      "moved": "{name} sitzt jetzt an {item}.",
+      "adaWarning": "Hinweis: {count, plural, one {{seats} ist ein barrierefreier Platz} other {{seats} sind barrierefreie Plätze}}, reserviert bis {date} für Gäste, die sie brauchen.",
+      "adaNote": "Barrierefreie Plätze (umrandet) sind bis {date} für Gäste reserviert, die sie brauchen. Wer dort platziert wird, löst eine Warnung aus.",
+      "adaEnforcedNote": "Barrierefreie Plätze (umrandet) sind bis {date} für Gäste reserviert, die sie brauchen. Die automatische Platzierung überspringt sie; wähle sie nur für Gäste mit Bedarf.",
+      "move": {
+        "open": "Umsetzen…",
+        "label": "{name} auf einen anderen Platz setzen",
+        "title": "{name} umsetzen",
+        "submit": "Umsetzen",
+        "cancel": "Abbrechen"
       }
     },
     "finder": {
@@ -1597,6 +1638,62 @@
       "openPublic": "Platzfinder öffnen",
       "poster": "Platzfinder-Plakat drucken",
       "closedNote": "Der Platzfinder ist geschlossen. Gäste, die das Plakat scannen, werden gebeten, später wiederzukommen."
+    },
+    "map": {
+      "zoomIn": "Vergrößern",
+      "zoomOut": "Verkleinern",
+      "wholeRoom": "Ganzer Saal"
+    },
+    "legend": {
+      "label": "Was die Platzfarben bedeuten",
+      "available": "Verfügbar",
+      "held": "Im Checkout",
+      "sold": "Verkauft",
+      "assigned": "Gastplatz",
+      "blocked": "Blockiert"
+    },
+    "rules": {
+      "title": "Sitzregeln",
+      "description": "Halte barrierefreie Plätze für Gäste frei, die sie brauchen, und begrenze die Plätze pro Bestellung. Regeln warnen Käufer, die Abendkasse und dich – oder verhindern die Auswahl, wenn du willst.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Sitzplan. Erstelle zuerst einen und lege dann hier seine Regeln fest.",
+      "now": "Geltende Regeln",
+      "none": "Keine Regeln: Käufer können jeden freien Platz wählen.",
+      "summary": {
+        "ada": "Barrierefreie Plätze für Gäste mit Bedarf reserviert bis {days, plural, =0 {zum Beginn} one {# Tag vor der Veranstaltung} other {# Tage vor der Veranstaltung}} ({date}) · {severity}",
+        "cap": "Höchstens {max, plural, one {# Platz} other {# Plätze}} pro Bestellung · {severity}"
+      },
+      "severityShort": {
+        "warn": "warnt",
+        "enforce": "verbindlich"
+      },
+      "settingsTitle": "Regeln festlegen",
+      "readOnly": "Du kannst die Regeln sehen, aber nicht ändern.",
+      "forbidden": "Du kannst die Regeln sehen, aber nicht ändern.",
+      "severity": "Wenn die Regel verletzt wird",
+      "severityOption": {
+        "warn": "Warnen (empfohlen)",
+        "enforce": "Durchsetzen"
+      },
+      "severityHint": {
+        "warn": "Käufer und Team sehen eine Warnung und können fortfahren.",
+        "enforce": "Käufer können online nicht fortfahren; die Abendkasse und du nach einer Bestätigung schon."
+      },
+      "ada": {
+        "title": "Barrierefreie Plätze",
+        "on": "Barrierefreie Plätze für Gäste freihalten, die sie brauchen",
+        "days": "Bis wie viele Tage vor der Veranstaltung",
+        "daysHint": "Danach sind sie für alle frei. 0 hält sie bis zum Beginn zurück.",
+        "daysError": "Gib eine ganze Zahl von Tagen zwischen 0 und 365 ein."
+      },
+      "cap": {
+        "title": "Plätze pro Bestellung",
+        "on": "Plätze pro Bestellung begrenzen",
+        "max": "Höchstens",
+        "maxError": "Gib eine ganze Zahl zwischen 1 und 50 ein."
+      },
+      "save": "Regeln speichern",
+      "saved": "Sitzregeln gespeichert.",
+      "fixErrors": "Bitte korrigiere das markierte Feld."
     }
   },
   "venueMap": {

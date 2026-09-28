@@ -1,12 +1,16 @@
 import { createHash } from 'node:crypto';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
 import { canonicalJson, FloorplanDoc, layoutProblems, placedSeats, seatCount } from '@yayatoh/floorplan';
 import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { reconcileAssignmentsTx } from './assignments.ts';
-import { SEAT_STATUSES } from './domain/seat-state.ts';
+import { LIVE_SEAT_STATES, liveSeatState, publicAvailability, seatCounts } from './domain/live.ts';
+import { activeAdaRule } from './domain/rules.ts';
+import { SEAT_STATUSES, type SeatStatus } from './domain/seat-state.ts';
+import { SeatingRuleDto, seatingRulesTx } from './rules.ts';
 import { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, eventLayouts, eventSeats, layouts } from './schema.ts';
 
 /** Parse and check a document; problems come back as `validation_failed` details. */
@@ -295,12 +299,15 @@ export const blockSeatsCommand = tenantCommand({
 export const EventSeatingDto = z.object({
   status: z.enum(EVENT_LAYOUT_STATUSES),
   doc: FloorplanDoc,
-  counts: z.record(z.enum(SEAT_STATUSES), z.int()),
+  /** Seats by state; a guest's seat counts as `assigned`, not `blocked` (M1.7f). */
+  counts: z.record(z.enum(LIVE_SEAT_STATES), z.int()),
   seats: z.array(
     z.object({
       seatUuid: z.uuid(),
       label: z.string(),
       status: z.enum(SEAT_STATUSES),
+      /** The status as the plan shows it: `assigned` apart from `blocked`. */
+      state: z.enum(LIVE_SEAT_STATES),
       ticketTypeId: z.uuid().nullable(),
       accessible: z.boolean(),
     }),
@@ -322,24 +329,35 @@ export const eventSeatingQuery = tenantQuery({
         seatUuid: eventSeats.seatUuid,
         label: eventSeats.label,
         status: eventSeats.status,
+        blockReason: eventSeats.blockReason,
         ticketTypeId: eventSeats.ticketTypeId,
         accessible: eventSeats.accessible,
       })
       .from(eventSeats)
       .where(eq(eventSeats.eventId, input.eventId));
-    const counts = { available: 0, held: 0, sold: 0, blocked: 0 };
-    for (const s of seats) counts[s.status as keyof typeof counts]++;
+    const shown = seats.map((s) => ({
+      seatUuid: s.seatUuid,
+      label: s.label,
+      status: s.status as SeatStatus,
+      state: liveSeatState(s.status as SeatStatus, s.blockReason),
+      ticketTypeId: s.ticketTypeId,
+      accessible: s.accessible,
+    }));
     return {
       status: layout.status as (typeof EVENT_LAYOUT_STATUSES)[number],
       doc: FloorplanDoc.parse(layout.doc),
-      counts,
-      seats: seats.map((s) => ({ ...s, status: s.status as (typeof SEAT_STATUSES)[number] })),
+      counts: seatCounts(shown.map((s) => s.state)),
+      seats: shown,
     };
   },
 });
 
 export const PublicSeatMapDto = z.object({
   doc: FloorplanDoc,
+  /** The event's start (seating rules count days before it). */
+  startsAt: z.date(),
+  /** The organizer's seating rules (their policy, shown to buyers; M1.7f). */
+  rules: z.array(SeatingRuleDto),
   seats: z.array(
     z.object({
       seatUuid: z.uuid(),
@@ -353,12 +371,23 @@ export const PublicSeatMapDto = z.object({
 
 /**
  * The buyer's seat map: the plan and, for each seat on sale, whether it can be chosen. Only
- * published or locked plans; nothing about who holds or bought a seat.
+ * published or locked plans; nothing about who holds or bought a seat. Accessible seats kept back
+ * by an enforced `ada_reserved` rule can't be chosen online until their release (M1.7f).
  */
 export async function publicSeatMap(
   orgId: string,
   eventId: string,
+  opts: {
+    readonly now?: Date;
+    /**
+     * `staff`: the box office's view of the same map (M1.7f) — kept-back accessible seats stay
+     * choosable there, since staff may sell one to a buyer who needs it (the rule still warns
+     * or asks for an override).
+     */
+    readonly audience?: 'buyer' | 'staff';
+  } = {},
 ): Promise<z.infer<typeof PublicSeatMapDto> | null> {
+  const now = opts.now ?? new Date();
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'seating.public-map' } });
   return withTenant(ctx, async (tx) => {
     const layout = await eventLayoutTx(tx, eventId);
@@ -369,18 +398,30 @@ export async function publicSeatMap(
         label: eventSeats.label,
         ticketTypeId: eventSeats.ticketTypeId,
         status: eventSeats.status,
+        blockReason: eventSeats.blockReason,
         accessible: eventSeats.accessible,
       })
       .from(eventSeats)
       .where(and(eq(eventSeats.eventId, eventId), sql`${eventSeats.ticketTypeId} is not null`));
     if (seats.length === 0) return null;
+    const event = await findEventTx(tx, eventId);
+    if (!event) return null;
+    const rules = await seatingRulesTx(tx, eventId);
+    const keptBack =
+      opts.audience !== 'staff' && activeAdaRule(rules, event.startsAt, now)?.severity === 'enforce';
+    const available = publicAvailability(
+      seats.map((s) => ({ ...s, status: s.status as SeatStatus })),
+      { accessibleKeptBack: keptBack },
+    );
     return PublicSeatMapDto.parse({
       doc: layout.doc,
+      startsAt: event.startsAt,
+      rules,
       seats: seats.map((s) => ({
         seatUuid: s.seatUuid,
         label: s.label,
         ticketTypeId: s.ticketTypeId,
-        available: s.status === 'available',
+        available: available.get(s.seatUuid) ?? false,
         accessible: s.accessible,
       })),
     });

@@ -2,6 +2,7 @@ import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { listOrdersQuery } from '@yayatoh/orders';
+import { publicSeatMap } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -12,6 +13,7 @@ import { QuestionForm } from '@/components/question-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -59,6 +61,10 @@ export default async function TicketsPage({
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
     : null;
   const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
+  const canSell = roleCan(data.role, 'orders:sell') && ev.status === 'published' && types.length > 0;
+  // Seated events (M1.7f): the box office chooses seats from the same map as buyers, live.
+  const seatMap = canSell ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, { audience: 'staff' }) : null;
+  const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
   const subject = { kind: 'checkout_questions', subjectType: 'event', subjectId: ev.id } as const;
   const form = await executeQuery(getFormQuery, subject, data.ctx, ports);
   const fields = form?.definition.fields ?? [];
@@ -190,7 +196,7 @@ export default async function TicketsPage({
           ]}
         />
       )}
-      {roleCan(data.role, 'orders:sell') && ev.status === 'published' && types.length > 0 ? (
+      {canSell ? (
         <section aria-labelledby="box-office-heading" className="flex flex-col gap-3">
           <h2 id="box-office-heading" className="text-section">
             {t('boxOffice.title')}
@@ -201,9 +207,21 @@ export default async function TicketsPage({
               action={boxOfficeSaleAction.bind(null, org, event)}
               passes={types
                 .filter((tt) => tt.quantitySold + tt.quantityHeld < tt.quantityTotal && !tt.isDonation)
-                .map((tt) => ({ id: tt.id, label: `${tt.name} · ${fmt(tt.allInMinor)}` }))}
+                .map((tt) => ({
+                  id: tt.id,
+                  label: `${tt.name} · ${fmt(tt.allInMinor)}`,
+                  seated: seatedTypes.has(tt.id),
+                }))}
               orderHref={`/o/${org}/e/${event}/orders/{id}`}
               dates={saleDates}
+              seatMap={seatMap}
+              seatStream={
+                seatMap
+                  ? { url: localizedPath(locale, `/o/${org}/e/${event}/seating/stream`), kind: 'staff' }
+                  : null
+              }
+              prices={Object.fromEntries(types.map((tt) => [tt.id, fmt(tt.allInMinor)]))}
+              timeZone={ev.timezone}
             />
           </Card>
         </section>

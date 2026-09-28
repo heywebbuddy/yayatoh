@@ -656,8 +656,23 @@
       },
       "seat": "{label} ({price})",
       "accessible": "Accessibile",
-      "taken": "Occupato"
+      "taken": "Occupato",
+      "dropped": "{count, plural, one {Il posto {seats} è appena stato preso da qualcun altro e non è più nella tua scelta.} other {I posti {seats} sono appena stati presi da qualcun altro e non sono più nella tua scelta.}}",
+      "maxReached": "Puoi scegliere fino a {max} posti alla volta.",
+      "rules": {
+        "adaWarn": "I posti accessibili sono riservati a chi ne ha bisogno fino al {date}. Sceglilo solo se serve a te o a chi è con te.",
+        "adaEnforced": "I posti accessibili sono riservati a chi ne ha bisogno fino al {date} e prima non si possono prenotare online. Se te ne serve uno, contatta l’organizzatore.",
+        "capWarn": "L’organizzatore chiede al massimo {max} posti per ordine.",
+        "capEnforced": "Fino a {max} posti per ordine.",
+        "capReached": "È il massimo per un ordine: {max} posti.",
+        "adaChosen": "{count, plural, one {{seats} è un posto accessibile} other {{seats} sono posti accessibili}}, riservat{count, plural, one {o} other {i}} a chi ne ha bisogno. Sceglil{count, plural, one {o} other {i}} solo se serve.",
+        "overCap": "{count} posti scelti: l’organizzatore chiede al massimo {max} per ordine.",
+        "keptUntil": "Riservato fino al {date}"
+      },
+      "groupSummary": "{group} — {free} liberi su {total}{chosen, plural, =0 {} one { · # scelto} other { · # scelti}}"
     },
+    "seatRuleCap": "Sono più posti di quanti un ordine ne possa avere. Scegline meno.",
+    "seatRuleAda": "Per ora i posti accessibili sono riservati a chi ne ha bisogno. Scegli altri posti.",
     "chooseDate": "Prima scegli una data.",
     "dateSoldOut": "Questa data è appena esaurita. Scegline un’altra.",
     "dateUnavailable": "Questa data non è più disponibile. Scegline un’altra."
@@ -1394,6 +1409,14 @@
     "chooseTickets": "Scegli almeno un biglietto.",
     "soldOut": "Non ci sono abbastanza biglietti rimasti.",
     "collected": "Incassato da te",
+    "seatedPass": "{pass}: scegli i posti qui sotto",
+    "seatsTaken": "Alcuni di quei posti sono appena stati presi. Scegline altri.",
+    "seatRule": "Le regole dei posti dell’organizzatore non consentono questa scelta. Spunta la casella per vendere comunque o cambia i posti.",
+    "notOnSale": "Quei posti non sono in vendita.",
+    "rulesEnforced": "Questa scelta va contro le regole dei posti dell’organizzatore (vedi sopra).",
+    "override": "Vendi comunque: questo acquirente ha bisogno di questi posti (l’eccezione viene registrata)",
+    "confirmOverride": "Spunta la casella per vendere comunque o cambia i posti.",
+    "doneSeats": "{count, plural, one {Vendita registrata con # posto.} other {Vendita registrata con # posti.}} I biglietti sono in arrivo.",
     "date": "Data",
     "chooseDate": "Scegli una data.",
     "dateSoldOut": "Non ci sono abbastanza biglietti per questa data.",
@@ -1425,7 +1448,7 @@
       "published": "In vendita",
       "locked": "Bloccata: sono già stati venduti dei posti"
     },
-    "counts": "{total} posti · {available} disponibili · {held} trattenuti · {sold} venduti · {blocked} bloccati",
+    "counts": "{total} posti · {available} disponibili · {held} trattenuti · {sold} venduti · {assigned} assegnati a ospiti · {blocked} bloccati",
     "priced": "{priced} posti su {total} hanno un prezzo",
     "publish": "Metti in vendita i posti",
     "lockedNote": "Sono già stati venduti dei posti, quindi la piantina non può più cambiare. I prezzi dei posti invenduti invece sì.",
@@ -1472,7 +1495,10 @@
         "dance_floor": "Pista da ballo",
         "bar": "Bar",
         "custom": "Altro"
-      }
+      },
+      "accessibleCol": "Posti accessibili",
+      "accessibleOf": "Posti accessibili di {item}",
+      "accessibleHint": "Posti accessibili: scrivi i numeri, ad es. «1, 2». Sono evidenziati sulla piantina e le regole dei posti possono riservarli."
     },
     "prices": {
       "title": "Prezzi",
@@ -1497,7 +1523,8 @@
       "label": "Viste dei posti",
       "plan": "Piantina",
       "assign": "Assegna ospiti",
-      "finder": "Trova posto"
+      "finder": "Trova posto",
+      "rules": "Regole"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -1528,7 +1555,9 @@
         "anySeat": "Qualsiasi posto libero",
         "seatKept": "{label} (riservato)",
         "submit": "Fai sedere",
-        "submitting": "Assegnazione…"
+        "submitting": "Assegnazione…",
+        "seatAccessible": "{label} · accessibile",
+        "needsAccessible": "Questo ospite ha bisogno di un posto accessibile"
       },
       "errors": {
         "noPeople": "Scegli almeno una persona.",
@@ -1541,11 +1570,12 @@
         "seatedByTicket": "Ha già un posto con il suo biglietto.",
         "cancelled": "Quella persona non partecipa più.",
         "forbidden": "Puoi vedere i posti, ma non modificarli.",
-        "dropMiss": "Rilascia i nomi su un tavolo, una fila o un posto."
+        "dropMiss": "Rilascia i nomi su un tavolo, una fila o un posto.",
+        "adaEnforced": "Quel posto è riservato a chi ha bisogno di un posto accessibile. Seleziona «Questo ospite ha bisogno di un posto accessibile» per assegnarlo."
       },
       "canvas": {
         "title": "Piantina",
-        "hint": "Trascina un nome (o i nomi spuntati) su un tavolo, una fila o un posto. Tutto si può fare anche con l’elenco e il modulo.",
+        "hint": "Trascina un nome (o quelli spuntati) su un tavolo, una fila o un posto, oppure trascina il posto di un ospite già seduto su un altro. Puoi fare tutto anche con elenchi e moduli.",
         "readOnlyHint": "Chi siede dove, come immagine della sala."
       },
       "state": {
@@ -1563,6 +1593,17 @@
         "empty": "Ancora nessuno.",
         "remove": "Rimuovi",
         "removeLabel": "Rimuovi {name} da {item}"
+      },
+      "moved": "{name} è stato spostato a {item}.",
+      "adaWarning": "Nota: {count, plural, one {{seats} è un posto accessibile riservato} other {{seats} sono posti accessibili riservati}} fino al {date} a chi ne ha bisogno.",
+      "adaNote": "I posti accessibili (evidenziati) sono riservati fino al {date} a chi ne ha bisogno. Assegnarli mostra un avviso.",
+      "adaEnforcedNote": "I posti accessibili (evidenziati) sono riservati fino al {date} a chi ne ha bisogno. L’assegnazione automatica li salta; sceglili solo per un ospite che ne ha bisogno.",
+      "move": {
+        "open": "Sposta a…",
+        "label": "Sposta {name} in un altro posto",
+        "title": "Sposta {name}",
+        "submit": "Sposta",
+        "cancel": "Annulla"
       }
     },
     "finder": {
@@ -1597,6 +1638,62 @@
       "openPublic": "Apri la ricerca del posto",
       "poster": "Stampa il poster per trovare il posto",
       "closedNote": "La ricerca del posto è chiusa. Chi scansiona il poster verrà invitato a tornare più tardi."
+    },
+    "map": {
+      "zoomIn": "Ingrandisci",
+      "zoomOut": "Riduci",
+      "wholeRoom": "Sala intera"
+    },
+    "legend": {
+      "label": "Cosa indicano i colori dei posti",
+      "available": "Disponibile",
+      "held": "In acquisto",
+      "sold": "Venduto",
+      "assigned": "Posto di un ospite",
+      "blocked": "Bloccato"
+    },
+    "rules": {
+      "title": "Regole dei posti",
+      "description": "Riserva i posti accessibili a chi ne ha bisogno e limita quanti posti può avere un ordine. Le regole avvisano acquirenti, biglietteria e te, oppure, se vuoi, bloccano la scelta.",
+      "noPlan": "Questo evento non ha ancora una piantina. Creane una, poi imposta qui le sue regole.",
+      "now": "Regole in vigore",
+      "none": "Nessuna regola: gli acquirenti possono scegliere qualsiasi posto libero.",
+      "summary": {
+        "ada": "Posti accessibili riservati a chi ne ha bisogno fino a {days, plural, =0 {l’inizio dell’evento} one {# giorno prima dell’evento} other {# giorni prima dell’evento}} ({date}) · {severity}",
+        "cap": "Al massimo {max, plural, one {# posto} other {# posti}} per ordine · {severity}"
+      },
+      "severityShort": {
+        "warn": "avvisa",
+        "enforce": "vincolante"
+      },
+      "settingsTitle": "Imposta le regole",
+      "readOnly": "Puoi vedere le regole ma non modificarle.",
+      "forbidden": "Puoi vedere le regole ma non modificarle.",
+      "severity": "Se la regola non è rispettata",
+      "severityOption": {
+        "warn": "Avvisa (consigliato)",
+        "enforce": "Imponi"
+      },
+      "severityHint": {
+        "warn": "Acquirenti e staff vedono un avviso e possono proseguire.",
+        "enforce": "Gli acquirenti non possono proseguire online; la biglietteria e tu sì, dopo aver confermato."
+      },
+      "ada": {
+        "title": "Posti accessibili",
+        "on": "Riserva i posti accessibili a chi ne ha bisogno",
+        "days": "Fino a quanti giorni prima dell’evento",
+        "daysHint": "Poi sono libere per tutti. Con 0 restano riservate fino all’inizio dell’evento.",
+        "daysError": "Inserisci un numero intero di giorni da 0 a 365."
+      },
+      "cap": {
+        "title": "Posti per ordine",
+        "on": "Limita i posti di un ordine",
+        "max": "Al massimo",
+        "maxError": "Inserisci un numero intero da 1 a 50."
+      },
+      "save": "Salva regole",
+      "saved": "Regole dei posti salvate.",
+      "fixErrors": "Correggi il campo evidenziato."
     }
   },
   "venueMap": {

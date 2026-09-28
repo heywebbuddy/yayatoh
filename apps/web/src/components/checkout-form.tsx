@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
-import { type SeatMapView, SeatPicker } from '@/components/seat-picker.tsx';
+import { type SeatMapView, SeatPicker, type SeatStreamSource } from '@/components/seat-picker.tsx';
 import { useCssomStyle } from '@/lib/cssom-style.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
@@ -38,12 +38,18 @@ export function CheckoutForm({
   brand,
   seatMap = null,
   occurrenceId = null,
+  seatStream = null,
+  timeZone,
 }: {
   /** Multi-date events (M1.4b): the date chosen on the page, posted with the order. */
   occurrenceId?: string | null;
   passes: readonly PassView[];
   /** Seated events: the published seat map; its ticket types are bought by choosing seats. */
   seatMap?: SeatMapView | null;
+  /** Its live availability (M1.7f). */
+  seatStream?: SeatStreamSource | null;
+  /** The event's timezone (seating rule dates). */
+  timeZone?: string;
   organizer: string;
   /** Organizer brand colour and its readable text colour (brand kit); default styling when absent. */
   brand?: { background: string; text: string } | null;
@@ -74,25 +80,27 @@ export function CheckoutForm({
           ? t('checkout.seatsTaken')
           : state.reason === 'choose_seats'
             ? t('checkout.chooseSeats')
-            : state.reason === 'sold_out'
-              ? t('checkout.soldOut')
-              : state.reason === 'empty'
-                ? t('checkout.chooseTickets')
-                : state.reason === 'promo_invalid'
-                  ? t('checkout.promoInvalid')
-                  : state.reason === 'donation_amount'
-                    ? t('checkout.donationTooLow')
-                    : state.reason === 'form_invalid'
-                      ? t('checkout.questionsInvalid')
-                      : state.reason === 'choose_date'
-                        ? t('checkout.chooseDate')
-                        : state.reason === 'date_sold_out'
-                          ? t('checkout.dateSoldOut')
-                          : ['date_cancelled', 'date_passed', 'wrong_date'].includes(state.reason ?? '')
-                            ? t('checkout.dateUnavailable')
-                            : state.reason === 'checkout_paused'
-                              ? t('publicEvent.salesPausedTitle')
-                              : t(errorMessageKey(state.code));
+            : state.reason === 'seat_rule'
+              ? t(state.rule === 'max_per_order_seats' ? 'checkout.seatRuleCap' : 'checkout.seatRuleAda')
+              : state.reason === 'sold_out'
+                ? t('checkout.soldOut')
+                : state.reason === 'empty'
+                  ? t('checkout.chooseTickets')
+                  : state.reason === 'promo_invalid'
+                    ? t('checkout.promoInvalid')
+                    : state.reason === 'donation_amount'
+                      ? t('checkout.donationTooLow')
+                      : state.reason === 'form_invalid'
+                        ? t('checkout.questionsInvalid')
+                        : state.reason === 'choose_date'
+                          ? t('checkout.chooseDate')
+                          : state.reason === 'date_sold_out'
+                            ? t('checkout.dateSoldOut')
+                            : ['date_cancelled', 'date_passed', 'wrong_date'].includes(state.reason ?? '')
+                              ? t('checkout.dateUnavailable')
+                              : state.reason === 'checkout_paused'
+                                ? t('publicEvent.salesPausedTitle')
+                                : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
       {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}
@@ -207,7 +215,7 @@ export function CheckoutForm({
       </ul>
       {buyable && seatMap ? (
         <Card>
-          <SeatPicker map={seatMap} prices={prices} />
+          <SeatPicker map={seatMap} prices={prices} stream={seatStream} timeZone={timeZone} />
         </Card>
       ) : null}
       {buyable && questions.length > 0 ? (

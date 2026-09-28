@@ -66,6 +66,7 @@ import {
   saveLayoutCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
+  setSeatingRulesCommand,
 } from '@yayatoh/seating';
 import { saveTemplateCommand } from '@yayatoh/templates';
 import {
@@ -465,6 +466,16 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     assignSeatsCommand,
     { eventId: event.id, attendeeIds: [guest.id], itemId: plan.items[0]?.id ?? '' },
+    ctx(),
+    ports,
+  );
+  // Seating rules (M1.7f): accessible seats kept back a week (a warning), isolation coverage.
+  await executeCommand(
+    setSeatingRulesCommand,
+    {
+      eventId: event.id,
+      rules: [{ kind: 'ada_reserved', severity: 'warn', params: { releaseDays: 7 } }],
+    },
     ctx(),
     ports,
   );

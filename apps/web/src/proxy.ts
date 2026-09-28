@@ -174,6 +174,12 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
     if (rest === '/') return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}`, locale));
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);
     if (ev) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${ev[1]}`, locale));
+    // The live seat stream of that page (M1.7f): the host's org decides which events it may carry.
+    const seats = /^\/events\/([^/]+)\/seats\/stream\/?$/.exec(rest);
+    if (seats)
+      return secure(
+        rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${seats[1]}/seats/stream`, locale),
+      );
   }
 
   // The ticket widget: only the org's allowed origins may frame it (M1.11c). Its CSP is the public

@@ -15,6 +15,25 @@ export {
   pickSeats,
 } from './domain/assign.ts';
 export {
+  availabilityLists,
+  coalesceAvailability,
+  LIVE_SEAT_STATES,
+  type LiveSeatState,
+  liveSeatState,
+  type SeatCounts,
+  seatCounts,
+} from './domain/live.ts';
+export {
+  activeAdaRule,
+  adaReleaseAt,
+  blockingHits,
+  evaluateSeatRules,
+  type RuleContext,
+  type RuleHit,
+  type RuleSeverity,
+  type SeatingRule,
+} from './domain/rules.ts';
+export {
   fromStatuses,
   nextSeatStatus,
   SEAT_EVENTS,
@@ -46,7 +65,39 @@ export {
   saveLayoutCommand,
   setEventLayoutCommand,
 } from './layouts.ts';
-export { BLOCK_REASONS, EVENT_LAYOUT_STATUSES, FINDER_MODES, SEAT_BLOCK_REASONS } from './schema.ts';
+export {
+  createSeatFeed,
+  listenForSeatChanges,
+  loadSeatSnapshot,
+  PublicSeatsData,
+  SEAT_NOTIFY_CHANNEL,
+  type SeatFeed,
+  type SeatFeedOptions,
+  type SeatSnapshot,
+  type SeatStreamKind,
+  type SeatWatch,
+  StaffSeatsData,
+  seatChannels,
+  seatingLiveAccessQuery,
+} from './live.ts';
+export {
+  checkSeatRulesTx,
+  MAX_RELEASE_DAYS,
+  MAX_SEATS_PER_ORDER,
+  RuleHitDto,
+  SeatingRuleDto,
+  seatingRulesQuery,
+  seatingRulesTx,
+  setSeatingRulesCommand,
+} from './rules.ts';
+export {
+  BLOCK_REASONS,
+  EVENT_LAYOUT_STATUSES,
+  FINDER_MODES,
+  RULE_SEVERITIES,
+  SEAT_BLOCK_REASONS,
+  SEATING_RULE_KINDS,
+} from './schema.ts';
 export {
   devFinderCode,
   FINDER_CODE_TTL_MS,

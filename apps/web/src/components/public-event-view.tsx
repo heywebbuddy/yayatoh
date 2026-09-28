@@ -216,6 +216,12 @@ export async function PublicEventView({
           questions={questions}
           seatMap={seatMap}
           occurrenceId={chosen?.id ?? null}
+          // Live availability (M1.7f): the page's own host serves it (a tenant site rewrites it
+          // to its org), so the stream is always this event's.
+          seatStream={
+            seatMap ? { url: localizedPath(locale, `/events/${slug}/seats/stream`), kind: 'public' } : null
+          }
+          timeZone={ev.timezone}
           action={checkoutAction.bind(null, slug)}
         />
       )}

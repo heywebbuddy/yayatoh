@@ -1,17 +1,18 @@
 import { randomBytes } from 'node:crypto';
 import { upsertContactTx } from '@yayatoh/crm';
 import { findEventTx } from '@yayatoh/events';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { postOrganizerCollectedSaleTx } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
-import { seatedTicketTypesTx } from '@yayatoh/seating';
+import { checkSeatRulesTx, holdSeatsTx, RuleHitDto, seatedTicketTypesTx } from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
-import { holdInventoryTx, issueTicketsTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
+import { holdInventoryTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
+import { HOLD_MINUTES } from '../domain/lifecycle.ts';
 import { OrderDto } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
-import { hashManageToken } from './checkout.ts';
+import { hashManageToken, issueFor } from './checkout.ts';
 
 export const PAYMENT_METHODS = ['cash', 'zelle', 'card_terminal', 'other'] as const;
 
@@ -21,6 +22,11 @@ export const PAYMENT_METHODS = ['cash', 'zelle', 'card_terminal', 'other'] as co
  * (hidden passes included), stock is taken atomically, tickets are issued at once and emailed.
  * No charge exists: the platform fee becomes the organizer's receivable, netted from their next
  * release. The receipt says "Payment collected by {Org}".
+ *
+ * Seated passes (M1.7f) are sold by choosing seats, as online: the seats are held under the
+ * order's id and sold to its tickets in the same transaction (all or nothing: a seat taken
+ * meanwhile → `seats_taken`, nothing is sold), and each ticket carries its seat label. Seating
+ * rules apply; staff may override an enforced one on purpose (audited).
  */
 export const recordBoxOfficeSaleCommand = tenantCommand({
   name: 'orders.recordBoxOfficeSale',
@@ -28,8 +34,12 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     eventId: z.uuid(),
     items: z
       .array(z.object({ ticketTypeId: z.uuid(), quantity: z.int().min(1).max(100) }))
-      .min(1)
-      .max(20),
+      .max(20)
+      .default([]),
+    /** Seated events: the chosen seats (their ticket types and prices come from the seat map). */
+    seats: z.array(z.uuid()).max(50).default([]),
+    /** Staff chose to sell despite an enforced seating rule (audited). */
+    overrideRules: z.boolean().default(false),
     buyer: z.object({
       email: z.email().transform((e) => e.toLowerCase()),
       name: z.string().trim().min(1).max(120),
@@ -40,7 +50,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     occurrenceId: z.uuid().optional(),
     locale: z.string().max(10).default('en'),
   }),
-  output: z.object({ order: OrderDto }),
+  output: z.object({ order: OrderDto, warnings: z.array(RuleHitDto) }),
   entitlement: 'ticketing',
   permission: 'orders:sell',
   handler: async ({ input, ctx, tx, emit }) => {
@@ -50,23 +60,52 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     if (!event) throw new DomainError('not_found', 'Event not found');
     if (event.status !== 'published')
       throw new DomainError('invalid_state', 'Sell once the event is published', { reason: 'not_published' });
-    // Seated passes are sold seat by seat online (M1.7c); the box office sells the rest.
+    // Seated passes are sold seat by seat (M1.7c online, M1.7f here): a quantity is refused.
     const seated = await seatedTicketTypesTx(tx, event.id);
     if (input.items.some((i) => seated.has(i.ticketTypeId)))
       throw new DomainError('validation_failed', 'Seated tickets are sold with a seat', {
         reason: 'choose_seats',
       });
+    if (input.items.length === 0 && input.seats.length === 0)
+      throw new DomainError('validation_failed', 'Choose at least one ticket or seat', { reason: 'empty' });
+    // The chosen seats are held under the order's id and sold to its tickets below, in this
+    // transaction: a seat someone else holds or bought makes the whole sale fail.
+    const orderId = uuidv7(ctx.now.getTime());
+    const seatItems = new Map<string, number>();
+    let warnings: Awaited<ReturnType<typeof checkSeatRulesTx>> = [];
+    if (input.seats.length) {
+      const held = await holdSeatsTx(tx, ctx, {
+        eventId: event.id,
+        seatUuids: input.seats,
+        holdId: orderId,
+        expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+      });
+      for (const s of held) {
+        if (!s.ticketTypeId)
+          throw new DomainError('validation_failed', 'That seat is not on sale', {
+            reason: 'seat_not_on_sale',
+          });
+        seatItems.set(s.ticketTypeId, (seatItems.get(s.ticketTypeId) ?? 0) + 1);
+      }
+      warnings = await checkSeatRulesTx(tx, ctx, {
+        eventId: event.id,
+        seatUuids: input.seats,
+        context: 'box_office',
+        override: input.overrideRules,
+      });
+    }
+    const wanted = [
+      ...input.items,
+      ...[...seatItems].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
+    ];
+    // Multi-date events (M1.4b): the sale is for one date, which must have room for all of it.
     const occurrenceId = await claimOccurrenceTx(tx, {
       eventId: event.id,
       occurrenceId: input.occurrenceId,
-      quantity: input.items.reduce((n, i) => n + i.quantity, 0),
+      quantity: wanted.reduce((n, i) => n + i.quantity, 0),
       now: ctx.now,
     });
-    const quote = await quoteTx(tx, event.id, input.items, {
-      now: ctx.now,
-      includeHidden: true,
-      occurrenceId,
-    });
+    const quote = await quoteTx(tx, event.id, wanted, { now: ctx.now, includeHidden: true, occurrenceId });
     const lines = quote.lines.map((l) => ({ ticketTypeId: l.ticketTypeId, quantity: l.quantity }));
     await holdInventoryTx(tx, lines);
     await sellHeldTx(tx, lines);
@@ -79,9 +118,11 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     const [order] = await tx
       .insert(orders)
       .values({
+        id: orderId,
         orgId,
         eventId: event.id,
         occurrenceId,
+        seatUuids: [...new Set(input.seats)],
         status: 'paid',
         buyerEmail: input.buyer.email,
         buyerName: input.buyer.name,
@@ -108,13 +149,8 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       .insert(orderItems)
       .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))
       .returning();
-    await issueTicketsTx(tx, ctx, {
-      orderId: order.id,
-      eventId: event.id,
-      items: items.map((i) => ({ orderItemId: i.id, ticketTypeId: i.ticketTypeId, quantity: i.quantity })),
-      holder: { name: order.buyerName, email: order.buyerEmail },
-      occurrenceId,
-    });
+    // Tickets, each seated one paired with a held seat (sold to it; the plan locks).
+    await issueFor(tx, ctx, order, items);
     await postOrganizerCollectedSaleTx(tx, ctx, {
       orderId: order.id,
       eventId: event.id,
@@ -137,12 +173,18 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
         via: 'box_office',
       },
     });
-    return { order: { ...order, items } };
+    return { order: { ...order, items }, warnings };
   },
   audit: (input, r) => ({
     action: 'order.box_office_sale',
     targetType: 'order',
     targetId: r?.order.id ?? null,
-    data: { eventId: input.eventId, method: input.method, totalMinor: r?.order.totalMinor },
+    data: {
+      eventId: input.eventId,
+      method: input.method,
+      totalMinor: r?.order.totalMinor,
+      ...(input.seats.length ? { seats: input.seats.length } : {}),
+      ...(input.overrideRules ? { overrideRules: true } : {}),
+    },
   }),
 });

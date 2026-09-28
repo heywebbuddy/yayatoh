@@ -656,8 +656,23 @@
       },
       "seat": "{label}（{price}）",
       "accessible": "無障礙座位",
-      "taken": "已售出"
+      "taken": "已售出",
+      "dropped": "{count, plural, other {座位 {seats} 剛剛被他人選走，已從您的選擇中移除。}}",
+      "maxReached": "一次最多可選 {max} 個座位。",
+      "rules": {
+        "adaWarn": "無障礙座位在 {date} 之前為有需要的賓客保留。僅在您或同行者需要時才請選擇。",
+        "adaEnforced": "無障礙座位在 {date} 之前為有需要的賓客保留，在此之前無法線上預訂。如有需要，請聯絡主辦單位。",
+        "capWarn": "主辦單位要求每筆訂單最多 {max} 個座位。",
+        "capEnforced": "每筆訂單最多 {max} 個座位。",
+        "capReached": "這是單筆訂單的上限：{max} 個座位。",
+        "adaChosen": "{count, plural, other {{seats} 是無障礙座位，為有需要的賓客保留。請僅在需要時選擇。}}",
+        "overCap": "已選 {count} 個座位：主辦單位要求每筆訂單最多 {max} 個。",
+        "keptUntil": "保留至 {date}"
+      },
+      "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}"
     },
+    "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
+    "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
     "chooseDate": "請先選擇場次。",
     "dateSoldOut": "此場次剛剛售完，請選擇其他場次。",
     "dateUnavailable": "此場次已無法購買，請選擇其他場次。"
@@ -1394,6 +1409,14 @@
     "chooseTickets": "請至少選擇一張票券。",
     "soldOut": "剩餘票券不足。",
     "collected": "由你收款",
+    "seatedPass": "{pass}：請在下方選位",
+    "seatsTaken": "部分座位剛剛被選走，請選擇其他座位。",
+    "seatRule": "主辦單位的座位規則不允許此選擇。勾選核取方塊以仍然出售，或更換座位。",
+    "notOnSale": "這些座位未開售。",
+    "rulesEnforced": "此選擇違反了主辦單位的座位規則（見上文）。",
+    "override": "仍然出售：該購票者需要這些座位（此例外會被記錄）",
+    "confirmOverride": "勾選核取方塊以仍然出售，或更換座位。",
+    "doneSeats": "{count, plural, other {已記錄售出 # 個座位。}}門票正在傳送。",
     "date": "場次",
     "chooseDate": "請選擇場次。",
     "dateSoldOut": "此場次剩餘門票不足。",
@@ -1425,7 +1448,7 @@
       "published": "販售中",
       "locked": "已鎖定（已有座位售出）"
     },
-    "counts": "共 {total} 個座位 · {available} 個可售 · {held} 個保留中 · {sold} 個已售 · {blocked} 個已封鎖",
+    "counts": "共 {total} 個座位 · {available} 個可售 · {held} 個保留中 · {sold} 個已售 · {assigned} 個已安排賓客 · {blocked} 個已封鎖",
     "priced": "{total} 個座位中有 {priced} 個已定價",
     "publish": "開賣座位",
     "lockedNote": "已有座位售出，座位圖無法再變更。未售出座位的價格仍可修改。",
@@ -1472,7 +1495,10 @@
         "dance_floor": "舞池",
         "bar": "吧檯",
         "custom": "其他"
-      }
+      },
+      "accessibleCol": "無障礙座位",
+      "accessibleOf": "{item} 的無障礙座位",
+      "accessibleHint": "無障礙座位：輸入座位號，例如「1, 2」。它們在座位圖上帶外框顯示，座位規則可以為其保留。"
     },
     "prices": {
       "title": "價格",
@@ -1497,7 +1523,8 @@
       "label": "座位檢視",
       "plan": "座位圖",
       "assign": "安排賓客",
-      "finder": "座位查詢"
+      "finder": "座位查詢",
+      "rules": "規則"
     },
     "assign": {
       "title": "安排賓客",
@@ -1528,7 +1555,9 @@
         "anySeat": "任意空位",
         "seatKept": "{label}（已保留）",
         "submit": "安排入座",
-        "submitting": "正在安排…"
+        "submitting": "正在安排…",
+        "seatAccessible": "{label} · 無障礙",
+        "needsAccessible": "此賓客需要無障礙座位"
       },
       "errors": {
         "noPeople": "請至少選擇一個人。",
@@ -1541,11 +1570,12 @@
         "seatedByTicket": "此人已憑票券擁有座位。",
         "cancelled": "此人已不再參加。",
         "forbidden": "你可以查看座位安排，但無法變更。",
-        "dropMiss": "請把名字放到桌子、排或座位上。"
+        "dropMiss": "請把名字放到桌子、排或座位上。",
+        "adaEnforced": "該座位為需要無障礙座位的賓客保留。勾選「此賓客需要無障礙座位」即可安排。"
       },
       "canvas": {
         "title": "座位圖",
-        "hint": "把名字（或勾選的名字）拖到桌子、排或座位上。這些操作也都可以透過清單和表單完成。",
+        "hint": "將姓名（或已勾選的姓名）拖到桌子、排或座位上，或將已入座賓客的座位拖到另一個座位。以上操作也可透過清單和表單完成。",
         "readOnlyHint": "以場地圖的形式顯示誰坐在哪裡。"
       },
       "state": {
@@ -1563,6 +1593,17 @@
         "empty": "還沒有人。",
         "remove": "移除",
         "removeLabel": "將 {name} 從{item}移除"
+      },
+      "moved": "已將 {name} 移到 {item}。",
+      "adaWarning": "注意：{count, plural, other {{seats} 是在 {date} 之前為有需要的賓客保留的無障礙座位。}}",
+      "adaNote": "無障礙座位（帶外框）在 {date} 之前為有需要的賓客保留。安排賓客到此會顯示提醒。",
+      "adaEnforcedNote": "無障礙座位（帶外框）在 {date} 之前為有需要的賓客保留。自動安排會跳過它們；僅為有需要的賓客選擇。",
+      "move": {
+        "open": "移到…",
+        "label": "將 {name} 移到其他座位",
+        "title": "移動 {name}",
+        "submit": "移動",
+        "cancel": "取消"
       }
     },
     "finder": {
@@ -1597,6 +1638,62 @@
       "openPublic": "開啟座位查詢",
       "poster": "列印座位查詢海報",
       "closedNote": "座位查詢已關閉。掃描海報的賓客會被提示稍後再來。"
+    },
+    "map": {
+      "zoomIn": "放大",
+      "zoomOut": "縮小",
+      "wholeRoom": "整個場地"
+    },
+    "legend": {
+      "label": "座位顏色說明",
+      "available": "可售",
+      "held": "結帳中",
+      "sold": "已售",
+      "assigned": "賓客座位",
+      "blocked": "已封鎖"
+    },
+    "rules": {
+      "title": "座位規則",
+      "description": "為有需要的賓客保留無障礙座位，並限制單筆訂單的座位數。規則會提醒購票者、售票處和您——也可以設定為直接阻止選擇。",
+      "noPlan": "此活動還沒有座位圖。請先建立，再在這裡設定規則。",
+      "now": "目前規則",
+      "none": "無規則：購票者可選擇任何空位。",
+      "summary": {
+        "ada": "無障礙座位為有需要的賓客保留至{days, plural, =0 {活動開始} other {活動前 # 天}}（{date}）· {severity}",
+        "cap": "每筆訂單最多 {max, plural, other {# 個座位}} · {severity}"
+      },
+      "severityShort": {
+        "warn": "提醒",
+        "enforce": "強制"
+      },
+      "settingsTitle": "設定規則",
+      "readOnly": "您可以查看規則，但不能變更。",
+      "forbidden": "您可以查看規則，但不能變更。",
+      "severity": "違反規則時",
+      "severityOption": {
+        "warn": "提醒（推薦）",
+        "enforce": "強制執行"
+      },
+      "severityHint": {
+        "warn": "購票者和工作人員會看到提醒，可以繼續。",
+        "enforce": "購票者無法線上繼續；售票處和您確認後可以繼續。"
+      },
+      "ada": {
+        "title": "無障礙座位",
+        "on": "為有需要的賓客保留無障礙座位",
+        "days": "活動前多少天為止",
+        "daysHint": "之後向所有人開放。填 0 表示保留至活動開始。",
+        "daysError": "請輸入 0 到 365 之間的整數天數。"
+      },
+      "cap": {
+        "title": "每筆訂單座位數",
+        "on": "限制單筆訂單的座位數",
+        "max": "最多",
+        "maxError": "請輸入 1 到 50 之間的整數。"
+      },
+      "save": "儲存規則",
+      "saved": "座位規則已儲存。",
+      "fixErrors": "請修改標出的欄位。"
     }
   },
   "venueMap": {

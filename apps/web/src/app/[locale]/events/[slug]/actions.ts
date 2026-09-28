@@ -20,6 +20,8 @@ import { clientKey, currentAccess, rememberAccess } from '@/server/visitor.ts';
 export interface CheckoutState {
   readonly code: string | null;
   readonly reason?: string;
+  /** A seating rule that refused the seats (M1.7f). */
+  readonly rule?: string;
   /** The question whose answer was rejected (checkout questions). */
   readonly field?: string;
   /** `rate_limited`: minutes until the buyer may try again. */
@@ -121,6 +123,7 @@ export async function checkoutAction(
         code: err.code,
         reason: String(err.details?.reason ?? ''),
         ...(typeof err.details?.field === 'string' ? { field: err.details.field } : {}),
+        ...(typeof err.details?.rule === 'string' ? { rule: err.details.rule } : {}),
       };
     }
     throw err;

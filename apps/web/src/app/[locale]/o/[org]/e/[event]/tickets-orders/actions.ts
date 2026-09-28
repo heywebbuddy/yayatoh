@@ -15,7 +15,7 @@ import {
   createTicketTypeCommand,
   setPromoCodeActiveCommand,
 } from '@yayatoh/ticketing';
-import { revalidatePath } from 'next/cache';
+import { refresh, revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -227,9 +227,14 @@ export interface BoxOfficeState {
   readonly code: string | null;
   readonly reason?: string;
   readonly orderId?: string;
+  /** Seats sold (seated events, M1.7f). */
+  readonly seats?: number;
 }
 
-/** Record a sale taken at the door or by Zelle: tickets are issued and emailed at once. */
+/**
+ * Record a sale taken at the door or by Zelle: tickets are issued and emailed at once. Seated
+ * passes are sold by the chosen seats (M1.7f), held and sold in one go.
+ */
 export async function boxOfficeSaleAction(
   org: string,
   event: string,
@@ -241,13 +246,17 @@ export async function boxOfficeSaleAction(
     .filter(([k]) => k.startsWith('qty:'))
     .map(([k, v]) => ({ ticketTypeId: k.slice(4), quantity: Number(v) }))
     .filter((i) => Number.isInteger(i.quantity) && i.quantity > 0);
-  if (items.length === 0) return { ok: false, code: 'validation_failed', reason: 'empty' };
+  const seats = [...new Set(form.getAll('seat').map(String))].slice(0, 50);
+  if (items.length === 0 && seats.length === 0)
+    return { ok: false, code: 'validation_failed', reason: 'empty' };
   try {
     const { order } = await executeCommand(
       recordBoxOfficeSaleCommand,
       {
         eventId: ev.id,
         items,
+        seats,
+        overrideRules: form.get('overrideRules') === '1',
         buyer: { name: String(form.get('name') ?? ''), email: String(form.get('email') ?? '') },
         method: String(form.get('method') ?? 'cash'),
         reference: String(form.get('reference') ?? '').trim() || undefined,
@@ -258,8 +267,10 @@ export async function boxOfficeSaleAction(
       ports,
     );
     revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
-    return { ok: true, code: null, orderId: order.id };
+    return { ok: true, code: null, orderId: order.id, seats: seats.length || undefined };
   } catch (err) {
+    // Someone took a seat first: the page reloads its map with the answer (the stream also says).
+    if (isDomainError(err) && err.details?.reason === 'seats_taken') refresh();
     return {
       ok: false,
       code: isDomainError(err) ? err.code : 'internal',
