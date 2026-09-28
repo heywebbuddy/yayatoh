@@ -74,7 +74,7 @@
 - **M1.4c:** venues (directory, org-owned, quote requests), categories and tags. **Done, see below.**
 - **M1.4d:** content sections, announcements, the private-info portal, access codes, short URLs, online events. **Done, see below.**
 - **M1.4e:** media pipeline (R2 + re-encode, SVG neutralized; blocked on the owner's Cloudflare account), tenant CMS, reviews.
-- **M1.4f:** lightweight sessions, speakers, exhibitors and sponsors; AI drafting with the credits ledger.
+- **M1.4f:** lightweight sessions, speakers, exhibitors and sponsors; the three-screen wizard and readiness v1; AI drafting with the credits ledger. **Done, see below.**
 - **Authorization for event roles** (`scopeFilter()`) arrives with the first event-role consumer, check-in in M1.9. The assignments are stored now.
 
 ## M1.4c — venues, categories and tags (done)
@@ -176,3 +176,59 @@
 | D5 | Short links: automatic per event, vanity validation, global uniqueness across orgs, 308 to the canonical URL, drafts/archived don't resolve | `events/tests/short-code.test.ts`, `event-content.int.test.ts`, `e2e/event-content.spec.ts` |
 | D6 | Isolation: every new tenant table has fixture rows for both orgs | `isolation.int.test.ts` |
 | D7 | Viewers are denied on every new organizer screen (hidden controls and server refusal); axe on every state; Arabic RTL; no horizontal scroll at 375 | `e2e/venues.spec.ts`, `e2e/event-content.spec.ts` |
+
+## M1.4f — program, creation wizard and readiness, AI drafting (done)
+**Risk tags:** `db-migration`, `tenancy`, `payments` (credits ledger) — owner approval. Migration `0046_living_nighthawk.sql` (renumber on merge).
+
+- **Module `program` (tier 3, schema `program`)**: the roadmap's tier-3 contexts *sessions, speakers, exhibitors, sponsors* start as one lightweight package (M5.2 enrollment and M5.4 portals/leads may split it).
+  - `tracks`, `rooms` (optional capacity), `sessions` (title, Markdown description, start/end instants entered as wall-clock times in the **event's** timezone, optional room, track, capacity, and **date** of a multi-date event), `session_speakers`, `speakers` (name, job title, company, Markdown bio, http(s) links), `exhibitors` (name, booth label, website, description), `sponsor_tiers` (package name + order 1–99) and `sponsors`.
+  - A session on a date must fall inside that scheduled date (`outside_date`, `cancelled`). Rooms, tracks, speakers and tiers must belong to the same event. Names of rooms, tracks and tiers are unique per event (case-insensitive).
+  - **Conflict warnings** (`domain/schedule.ts`, pure): same room at overlapping times, a speaker in two overlapping sessions, a session outside the event. Intervals are half-open (back-to-back is fine). The write always happens; the console shows the warnings (per session, a page summary, and right after saving).
+  - Deleting a room or track keeps its sessions (they lose the room/track); a sponsor tier with sponsors can't be deleted (`tier_in_use`); deleting a speaker unlinks their sessions.
+  - Entitlements `sessions`, `speakers`, `exhibitors`, `sponsors`; reading `events:read`, writing `events:write`. Every write is audited (`program.*`).
+  - **Public** `publicProgram(target)` and `publicSpeaker(target, id)` (allowlist serializers; no capacities, no org data), for events with a public page or a private one an access code opened.
+- **Profiles (no code per profile)**: the conference nav gains **Speakers** and **Sponsors** (Sessions and Exhibitors existed). The pages resolve only when the event's profile lists the item with the org's modules (`navIncludes`); other profiles get a 404 and no nav item.
+- **Console pages** `…/sessions` (the agenda as a keyboard-friendly list grouped by day in the event timezone — list mode is the accessible alternative to any grid; rooms and tracks), `…/speakers`, `…/exhibitors`, `…/sponsors`: add, edit (disclosure per row), delete, field errors, success messages, viewer notice and read-only view.
+- **Public event page**: the demo overlay's agenda and stats are replaced by real data when present — the **agenda grouped by day in the event's timezone** (a chosen date shows its sessions and the ones on no date), **speakers** (each linking to `/events/{slug}/speakers/{id}`, also on tenant sites), **exhibitors** and **sponsors by tier**. Each section renders only with content; "See the agenda" appears only with an agenda.
+- **Readiness engine v1** (`lib/readiness.ts`, pure): name and dates, venue (or online), tagline, description (a visible text section), an upcoming date (single event or a scheduled date), tickets (profiles with a tickets page), agenda and speakers (profiles listing them), published. Each rule names the page that fixes it. A **Setup guide** page (the existing nav item) lists them with "Go to" links; the event home's checklist links open rules; the nav badge counts them.
+- **Three-step wizard** `/o/{org}/events/new/guided` (the org home's "Create event" opens it): **Basics** (name, tagline, type) → **When and where** (time zone, start/end, attendance mode, saved venue or free text) → **Tickets and publishing** (optional first pass, summary, the readiness checklist preview). Back/Next keep every value, each step validates its own fields (the server repeats every check and sends you back to the step of a server error, e.g. a taken name), the stepper is an ordered list with `aria-current="step"`, focus moves to each step's heading, and Enter means Next. Finishing creates the draft (idempotent per wizard) and opens the Setup guide. **The one-page form stays at `/events/new`** (all existing e2e flows), with a link to the wizard.
+- **AI drafting** — module `ai` (tier 6, schema `ai`):
+  - `AiDrafter` port: `fakeDrafter` (deterministic, dev/CI/previews), `anthropicDrafter` (stub behind `AI_PROVIDER=anthropic` + `ANTHROPIC_API_KEY`, owner inbox), `drafterFromEnv` (production without a provider = drafting off, nothing debited).
+  - Content page → **Draft with AI**: tagline, description or FAQ, optional notes. The result is an **editable preview** (focus moves to it); **Accept** saves through the normal commands (tagline → `events.updateEvent`, description → a text section "About", FAQ → a FAQ section), **Reject** discards. Never published by AI.
+  - **Prompt hygiene**: organizer text travels as one JSON data block with `<`, `>`, `&` escaped and instructions never to follow it; outputs are cleaned (`cleanDraft`: one plain line for taglines, the Markdown subset for descriptions, parsed Q&A for FAQs) and sanitized again when saved.
+  - **Credits ledger**: `ai.credit_accounts` (one row per org, `balance >= 0` CHECK, locked `FOR UPDATE` per change) and append-only `ai.credit_ledger` (grant, debit, refund, adjust; UPDATE/DELETE revoked from `app_user`; amounts sum to the balance). Free allowance **20 drafts per org per UTC month (pending owner)**, topped up *to* the allowance on the first use of a month. One draft = one credit; a provider failure, timeout (30 s) or unusable draft refunds it once. **Out of credits** is `invalid_state/out_of_credits`, shown as a clear state with the button disabled. Debits and refunds are audited (`ai.draft.debit`, `ai.draft.refund`). Staff adjustments `ai.adjustCredits` are platform-only (dev/CI: `/api/dev/ai-credits`).
+  - **Rate limited** with the M1.14 limiter, policy `aiDraft` (20 per device per 10 min, 60 per member per hour).
+- **Strings**: every new key in 13 locales (Arabic RTL), ICU plurals per locale.
+
+### Migration `0046_living_nighthawk.sql`
+- New schemas `program` (tracks, rooms, sessions, session_speakers, speakers, exhibitors, sponsor_tiers, sponsors) and `ai` (credit_accounts, credit_ledger). All `tenantTable`: ENABLE + FORCE RLS with the NULLIF policy, `UNIQUE (org_id, id)`, indexes leading with `org_id`, composite FKs inside the module.
+- Hand-written (between `-- hand-written: begin/end`):
+  - Cross-module composite FKs `{tracks,rooms,sessions,speakers,exhibitors,sponsor_tiers,sponsors}_event_fk` → `events.events (org_id, id)` `ON DELETE cascade` (new tables: no `NOT VALID` needed; the existing `(org_id, event_id, …)` indexes cover them).
+  - `sessions_occurrence_fk` → `events.occurrences (org_id, id)` and the partial index `sessions_org_occurrence_idx`.
+  - `REVOKE UPDATE, DELETE, TRUNCATE ON ai.credit_ledger FROM app_user` (append-only; covered by the isolation suite).
+- No existing table changes.
+
+### Later / not yet
+- **Media**: speaker photos, exhibitor and sponsor logos (M1.4e media pipeline).
+- A visual **grid view** of the agenda (list mode is complete and keyboard-accessible); drag to reschedule.
+- **Enrollment**, per-session capacity counters, personal schedules, ICS, waitlists (M5.2); CFP, speaker tasks and the speaker portal; exhibitor staff, booths on the floor plan, lead licenses (M5.4); sponsor entitlements and deliverables (M5.4). Sessions are not copied by Duplicate/templates yet.
+- `/v1` endpoints for the program and AI drafting (the web console only; `/v1` stays additive). The legacy `/api/v2` facade is untouched.
+- The real **Anthropic call** (SDK wiring) once the owner's key exists; per-draft token metering and paid credits (M6.6); a staff console screen for credit adjustments.
+- Program editing by event-scoped roles (speaker, exhibitor_admin) arrives with `scopeFilter()` consumers.
+
+## Acceptance (M1.4f)
+| ID | Criterion | Test |
+|---|---|---|
+| F1 | Schedule conflicts: room and speaker overlaps (half-open), outside the event, deterministic pairs, per-session view; grouping by day in the event timezone | `program/tests/schedule.test.ts` |
+| F2 | Sessions CRUD with rooms, tracks, speakers; validation (times, names, foreign/other-event references, date bounds, cancelled date); conflicts are warnings; deleting a room/track keeps sessions; tier in use | `testing/tests/program.int.test.ts`, `e2e/program.spec.ts` |
+| F3 | Viewer reads but can't write (server refusal, hidden controls, stale form refused); another org can neither read nor change a program; RLS hides rows | `program.int.test.ts`, `e2e/program.spec.ts` |
+| F4 | Profile visibility: conference lists the four pages, other profiles don't (nav hidden, URLs 404); a revoked module hides the item and refuses its commands | `platform/tests/profiles.test.ts`, `program.int.test.ts`, `e2e/program.spec.ts` |
+| F5 | Public agenda by day in the event timezone (a late session stays on its local day), speakers section and speaker page, exhibitors, sponsors by tier; allowlisted payloads; sections only with content; real stats | `program.int.test.ts`, `e2e/program.spec.ts` |
+| F6 | Readiness rules per profile with deep links; Setup guide and dashboard links navigate; fixing a rule marks it done | `apps/web/tests/readiness.test.ts`, `e2e/wizard.spec.ts`, `e2e/ai-draft.spec.ts` |
+| F7 | Wizard: every step's validation, back/next keep values, keyboard only (Enter = Next), server error returns to its step, finish creates the draft with tagline, mode and first pass; viewer 404; one-page form kept | `e2e/wizard.spec.ts` (+ every existing spec using `/events/new`) |
+| F8 | Ledger arithmetic: allowance top-up, debit never negative, refund, ledger sums to the balance | `ai/tests/ledger.test.ts` |
+| F9 | Drafting: preview only (nothing saved), refund on provider failure (once), drafting off spends nothing, out of credits, **10 concurrent drafts on 3 credits → exactly 3**, month rollover, audit, viewer forbidden, isolation, `ai` entitlement, staff-only adjustments | `testing/tests/ai-credits.int.test.ts` |
+| F10 | Prompt hygiene: organizer text can't close the data block, locale sanitized, notes capped; outputs cleaned (plain tagline, Markdown subset, parsed FAQ); fake drafter deterministic; stub adapter refuses; config selects the drafter | `ai/tests/drafts.test.ts` |
+| F11 | AI UI: accept (tagline), edit then accept (description), FAQ with a broken edit refused, reject (keyboard), out of credits (state and server refusal), viewer has no panel and a stale panel is refused | `e2e/ai-draft.spec.ts` |
+| F12 | Fixture covers the new tables for both orgs; the credit ledger is append-only for `app_user` | `testing/tests/isolation.int.test.ts` |
+| F13 | Axe on every new screen and state, Arabic RTL, no horizontal scroll at 375 | `e2e/program.spec.ts`, `e2e/wizard.spec.ts`, `e2e/ai-draft.spec.ts` |
