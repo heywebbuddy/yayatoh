@@ -396,7 +396,7 @@ test('staff review a messaging report: allowlisted excerpt, a note is required, 
 });
 
 test('an organizer account cannot open messaging reports', async ({ page }) => {
-  await signIn(page, NOT_STAFF);
+  await signIn(page, NOT_STAFF, { twoFactor: true });
   await expect(page).toHaveURL(/\/not-staff$/);
   await page.goto('/reports');
   await expect(page).toHaveURL(/\/not-staff$/);
