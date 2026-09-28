@@ -11,8 +11,11 @@ type T = (key: string, values?: Record<string, string | number>) => string;
 export function refundPolicyLines(t: T, policy: RefundPolicyDto, locale: string): string[] {
   const deadline = policy.deadline
     ? new Intl.DateTimeFormat(locale, {
-        dateStyle: 'long',
-        timeStyle: 'short',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
         timeZone: policy.timezone,
         timeZoneName: 'short',
       }).format(policy.deadline)

@@ -256,3 +256,26 @@ test('an organizer account cannot open the commission report or the API usage', 
   await expect(page).toHaveURL(/\/not-staff$/);
   await expect(page.getByRole('heading', { name: 'API usage by app version' })).toHaveCount(0);
 });
+
+test('staff see a tenant’s reconciliation differences and resolve one with a note', async ({ page }) => {
+  const tag = `staff-${Date.now()}`;
+  const day = new Date(Date.UTC(1980, 0, 1) + (Date.now() % 3_000) * 86_400_000).toISOString().slice(0, 10);
+  // The nightly reconciliation (dev route on the web app, fake provider) finds a stray movement.
+  const run = await page.request.post(`${WEB}/api/dev/payments/reconcile`, {
+    form: { org: 'lakeside-events', day, drift: tag, amount: '500' },
+  });
+  expect(run.status()).toBe(200);
+  await signIn(page, STAFF);
+  await page.getByLabel('Search by name or address').fill('lakeside');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  const section = page.getByRole('region', { name: 'Reconciliation' });
+  const item = section.getByRole('listitem').filter({ hasText: `order:drift-${tag}` });
+  await expect(item.getByText('Not in the ledger')).toBeVisible();
+  await expect(item.getByText('Ledger USD 0 · provider USD 500')).toBeVisible();
+  await expectAccessible(page);
+  await item.getByLabel('Resolution note').fill('Stripe test payment, not a Yayatoh order');
+  await item.getByRole('button', { name: 'Resolve' }).click();
+  await expect(page.getByText('Reconciliation difference resolved.')).toBeVisible();
+  await expect(section.getByText(`order:drift-${tag}`)).toHaveCount(0);
+});

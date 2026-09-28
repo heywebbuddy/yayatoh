@@ -41,8 +41,11 @@ export function RefundForm({
   const locale = useLocale();
   const deadline = state.deadline
     ? new Intl.DateTimeFormat(locale, {
-        dateStyle: 'long',
-        timeStyle: 'short',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
         timeZone,
         timeZoneName: 'short',
       }).format(new Date(state.deadline))
