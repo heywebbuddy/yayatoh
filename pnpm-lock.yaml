@@ -610,6 +610,9 @@ importers:
       '@yayatoh/marketplace':
         specifier: workspace:*
         version: link:../../packages/modules/marketplace
+      '@yayatoh/media':
+        specifier: workspace:*
+        version: link:../../packages/modules/media
       '@yayatoh/messaging':
         specifier: workspace:*
         version: link:../../packages/modules/messaging
@@ -1232,6 +1235,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy

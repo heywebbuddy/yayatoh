@@ -1,6 +1,6 @@
-# media (tier 3)
+# media (tier 4)
 
-Uploaded images: event cover and gallery, venue photos, the org logo (M1.4e). Owns Postgres schema `media`.
+Uploaded images: event cover and gallery, venue photos, the org logo (M1.4e); speaker photos, exhibitor and sponsor logos (M1.4h). Owns Postgres schema `media`. Tier 4 so it can check program owners (tier 3); nothing below imports it.
 
 **Invariants**
 - An upload is what its **bytes** are (magic-byte sniffing): JPEG, PNG, GIF, WebP, AVIF or SVG. The file name and Content-Type are never trusted. At most 4 MB (Vercel's request cap; SVG 1 MB) and 40 megapixels.
@@ -10,4 +10,5 @@ Uploaded images: event cover and gallery, venue photos, the org logo (M1.4e). Ow
 - Uploads count against the org's quota (`media.quotas`, default 1 GiB) under a per-org advisory lock; a replacement's old bytes don't count twice. Removing or replacing an image deletes its rows in the command and its files right after commit; a failed upload's files are purged.
 - Permissions: event and venue images need `events:write`; the logo needs `org:update` (it also sets `tenancy.organizations.logo_path/logo_alt` through tenancy's `setOrganizationLogoTx`). Every member may list.
 - Public reads only through the SECURITY DEFINER functions `media.public_media`, `media.public_covers` and `media.serve_target` (via `media.owner_visibility`): event images while the event has a public page (private events only with an access grant the server checked), venue photos of listed live venues, the logo of an active org. Output is allowlisted (`PublicMediaDto`).
-- Events emitted: `media.asset_added@1`, `media.asset_removed@1`.
+- Program images (M1.4h): owner types `speaker` (slot `photo`), `exhibitor` and `sponsor` (slot `logo`), one image each, always described (never decorative). Commands per kind need that kind's program entitlement (`speakers`, `exhibitors`, `sponsors`) and `events:write`. Visibility follows the row's event (`media.owner_event`). A deleted row's images are removed by the subscriber `media.program-owner-cleanup` on `program.{speaker,exhibitor,sponsor}_deleted@1` (rows, then files).
+- Events emitted: `media.asset_added@1`, `media.asset_removed@1`. Consumed: `program.speaker_deleted@1`, `program.exhibitor_deleted@1`, `program.sponsor_deleted@1`.

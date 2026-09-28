@@ -246,6 +246,7 @@ describe('T6 communications', () => {
                   -- migrated orgs only: other suites' fixture orgs (checkout opt-ins) share this database
                   and org_id in (select new_id from legacy.ref where entity in ('organizers', 'platform_org'))) as granted_other,
                (select count(*)::int from crm.contacts c where c.source = 'legacy'
+                  and c.org_id in (select new_id from legacy.ref where entity in ('organizers', 'platform_org'))
                   and not exists (select 1 from crm.consents x where x.contact_id = c.id)) as without`,
     );
     expect(r.platform_kind).toBe('platform');

@@ -33,9 +33,11 @@ function notFound(): Response {
   });
 }
 
-async function allowedPrivately(orgId: string, ownerId: string, visibility: string): Promise<boolean> {
-  if (visibility === 'private_event') {
-    const grant = await currentAccess(orgId, ownerId);
+async function allowedPrivately(orgId: string, eventId: string | null, visibility: string): Promise<boolean> {
+  // The event's access grant also opens its program's images (M1.4h: `eventId` is the event of a
+  // speaker, exhibitor or sponsor).
+  if (visibility === 'private_event' && eventId) {
+    const grant = await currentAccess(orgId, eventId);
     if (grant?.unlocksEvent) return true;
   }
   const session = await getSession();
@@ -54,7 +56,7 @@ export async function GET(
   const target = await serveTarget(org, asset, file);
   if (!target) return notFound();
   const isPublic = target.visibility === 'public';
-  if (!isPublic && !(await allowedPrivately(org, target.ownerId, target.visibility))) return notFound();
+  if (!isPublic && !(await allowedPrivately(org, target.eventId, target.visibility))) return notFound();
 
   const etag = `"${target.sha256}"`;
   const headers: Record<string, string> = {

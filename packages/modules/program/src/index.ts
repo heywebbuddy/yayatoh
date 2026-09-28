@@ -47,3 +47,9 @@ export {
   UpdateSessionInput,
   updateSessionCommand,
 } from './sessions.ts';
+export {
+  PROGRAM_OWNER_KINDS,
+  type ProgramOwnerKind,
+  programOwnerDeleted,
+  programOwnerTx,
+} from './shared.ts';

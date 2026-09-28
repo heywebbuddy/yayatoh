@@ -2,7 +2,11 @@ import type { ExhibitorDto } from '@yayatoh/program';
 import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { defaultProgramAlt } from '@/lib/program-media.ts';
+import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import { createExhibitorAction, deleteExhibitorAction, updateExhibitorAction } from './actions.ts';
 
@@ -14,7 +18,13 @@ export default async function ExhibitorsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { program, canWrite } = await loadProgramPage(org, event, 'exhibitors');
+  const { data, program, canWrite } = await loadProgramPage(org, event, 'exhibitors');
+  const tm = await getTranslations('media');
+  const logos = await programMediaPanels(
+    data,
+    'exhibitor',
+    program.exhibitors.map((x) => x.id),
+  );
   const t = await getTranslations();
   const tp = await getTranslations('program');
   const errors = {
@@ -63,7 +73,10 @@ export default async function ExhibitorsPage({
             {program.exhibitors.map((x) => (
               <li key={x.id}>
                 <Card className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">{x.name}</h3>
+                  <div className="flex items-center gap-3">
+                    <ProgramThumb item={logos.get(x.id)?.items[0]} />
+                    <h3 className="text-body font-medium">{x.name}</h3>
+                  </div>
                   <p className="text-caption text-zinc-600">
                     {[x.boothLabel ? tp('boothNamed', { booth: x.boothLabel }) : null, x.websiteUrl]
                       .filter(Boolean)
@@ -83,6 +96,16 @@ export default async function ExhibitorsPage({
                           submitLabel={tp('save')}
                           successLabel={tp('saved')}
                           errors={errors}
+                        />
+                        <MediaUploader
+                          org={org}
+                          slot="logo"
+                          kind="exhibitor"
+                          headingLevel={4}
+                          title={tm('titleNamed.exhibitor', { name: x.name })}
+                          defaultAlt={defaultProgramAlt('exhibitor', x.name, (name) => name)}
+                          ticket={logos.get(x.id)?.ticket ?? null}
+                          items={logos.get(x.id)?.items ?? []}
                         />
                         <form action={deleteExhibitorAction.bind(null, org, event, x.id)}>
                           <Button type="submit" variant="ghost" size="sm">
@@ -112,6 +135,7 @@ export default async function ExhibitorsPage({
                 errors={errors}
                 reset
               />
+              <p className="text-caption text-zinc-500">{tp('logoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

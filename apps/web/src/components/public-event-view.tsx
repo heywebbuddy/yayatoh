@@ -10,7 +10,7 @@ import {
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
-import { publicMedia } from '@yayatoh/media';
+import { publicMedia, publicProgramMedia } from '@yayatoh/media';
 import { publicRefundPolicy } from '@yayatoh/orders';
 import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
 import { MIN_REVIEWS_FOR_RATING } from '@yayatoh/reviews';
@@ -114,6 +114,12 @@ export async function PublicEventView({
   const fullProgram: PublicProgramDto = contentTarget
     ? await publicProgram(contentTarget)
     : { sessions: [], speakers: [], exhibitors: [], sponsorTiers: [] };
+  // M1.4h: speaker photos, exhibitor and sponsor logos (same visibility as the event's images).
+  const programImages = contentTarget
+    ? Object.fromEntries(
+        await publicProgramMedia(contentTarget.orgId, contentTarget.eventId, { privateOk: unlockedPrivate }),
+      )
+    : {};
   const program: PublicProgramDto = chosen
     ? {
         ...fullProgram,
@@ -339,6 +345,12 @@ export async function PublicEventView({
     attendanceMode: ev.attendanceMode,
     url: canonical,
     image: cover ? `${req.origin}${fallbackOf(cover)?.url}` : `${req.origin}/api/og/event/${slug}`,
+    // M1.4h: speakers as performers, with their photo (the email/OG-safe fallback, absolute).
+    performers: fullProgram.speakers.map((p) => {
+      const photo = programImages[p.id];
+      const url = photo ? fallbackOf(photo)?.url : undefined;
+      return { name: p.name, image: url ? `${req.origin}${url}` : null };
+    }),
     organizer: {
       name: ev.organizerName,
       url: `${apexOrigin(req)}/o/${orgProfile?.slug ?? listing?.orgSlug ?? ''}`,
@@ -511,7 +523,13 @@ export async function PublicEventView({
         </section>
       ) : null}
 
-      <ProgramSections program={program} slug={slug} locale={locale} timeZone={ev.timezone} />
+      <ProgramSections
+        program={program}
+        slug={slug}
+        locale={locale}
+        timeZone={ev.timezone}
+        images={programImages}
+      />
 
       {reviews ? <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} /> : null}
 

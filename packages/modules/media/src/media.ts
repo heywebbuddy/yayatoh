@@ -8,7 +8,14 @@ import {
   executeCommand,
   requireOrg,
 } from '@yayatoh/kernel';
-import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import {
+  catchUpSubscriber,
+  defineSubscriber,
+  type Subscriber,
+  tenantCommand,
+  tenantQuery,
+} from '@yayatoh/platform';
+import { type ProgramOwnerKind, programOwnerTx } from '@yayatoh/program';
 import { setOrganizationLogoTx } from '@yayatoh/tenancy';
 import { findVenueTx } from '@yayatoh/venues';
 import { and, asc, eq, inArray, sql } from 'drizzle-orm';
@@ -19,13 +26,15 @@ import {
   type PublicMediaDto,
   publicMediaSerializer,
   UpdateAltInput,
+  UpdateProgramAltInput,
   UploadLogoInput,
   UploadMediaInput,
+  UploadProgramImageInput,
   UploadResultDto,
 } from './dto.ts';
 import { variantFileName } from './pipeline/plan.ts';
 import { MediaRejected, processImage } from './pipeline/process.ts';
-import { assets, type OwnerType, quotas, type Slot, variants } from './schema.ts';
+import { assets, OWNER_TYPES, type OwnerType, quotas, SLOTS, type Slot, variants } from './schema.ts';
 import { mediaStore } from './storage/config.ts';
 import { storageKey } from './storage/port.ts';
 
@@ -38,7 +47,29 @@ const OWNER_SLOTS: Readonly<Record<OwnerType, readonly Slot[]>> = {
   event: ['cover', 'gallery'],
   venue: ['photo'],
   org: ['logo'],
+  speaker: ['photo'],
+  exhibitor: ['logo'],
+  sponsor: ['logo'],
 };
+/** One image per owner slot (cover, logos, a speaker's photo); galleries and venue photos hold more. */
+const isSingle = (ownerType: OwnerType, slot: Slot) => SINGLE_SLOTS.includes(slot) || ownerType === 'speaker';
+
+/**
+ * M1.4h: program rows that own one image each. The media command family of each kind needs the
+ * program module's entitlement for that kind and `events:write` (like the program's own writes).
+ */
+export const PROGRAM_IMAGES = {
+  speaker: { slot: 'photo', entitlement: 'speakers', command: 'SpeakerPhoto' },
+  exhibitor: { slot: 'logo', entitlement: 'exhibitors', command: 'ExhibitorLogo' },
+  sponsor: { slot: 'logo', entitlement: 'sponsors', command: 'SponsorLogo' },
+} as const satisfies Record<ProgramOwnerKind, { slot: Slot; entitlement: string; command: string }>;
+export type ProgramImageOwner = keyof typeof PROGRAM_IMAGES;
+export const isProgramOwner = (t: string): t is ProgramImageOwner => Object.hasOwn(PROGRAM_IMAGES, t);
+
+/** Which command family may touch an asset: event/venue images, the org logo, or one program kind. */
+export type MediaFamily = 'content' | 'logo' | ProgramImageOwner;
+export const familyOf = (ownerType: OwnerType): MediaFamily =>
+  ownerType === 'org' ? 'logo' : isProgramOwner(ownerType) ? ownerType : 'content';
 
 export const mediaUrl = (orgId: string, assetId: string, fileName: string) =>
   `/media/${orgId}/${assetId}/${fileName}`;
@@ -91,7 +122,9 @@ async function assertOwnerTx(tx: TenantTx, orgId: string, ownerType: OwnerType, 
       ? ownerId === orgId
       : ownerType === 'event'
         ? (await findEventTx(tx, ownerId)) !== null
-        : (await findVenueTx(tx, ownerId)) !== null;
+        : ownerType === 'venue'
+          ? (await findVenueTx(tx, ownerId)) !== null
+          : (await programOwnerTx(tx, ownerType, ownerId)) !== null;
   if (!exists) throw new DomainError('not_found');
 }
 
@@ -149,7 +182,7 @@ async function storeUploadTx(
   if (a.input.replaceAssetId) {
     replaced = inSlot.find((r) => r.id === a.input.replaceAssetId) ?? null;
     if (!replaced) throw new DomainError('not_found', 'The image to replace is not in this slot');
-  } else if (SINGLE_SLOTS.includes(a.slot)) {
+  } else if (isSingle(a.ownerType, a.slot)) {
     replaced = inSlot[0] ?? null;
   } else if (inSlot.length >= MAX_PER_SLOT) {
     throw new DomainError('conflict', 'This slot is full', { reason: 'slot_full', field: 'file' });
@@ -233,7 +266,7 @@ async function storeUploadTx(
 }
 
 const uploadAudit = (
-  input: { assetId: string; alt: string | null; decorative: boolean },
+  input: { assetId: string; alt: string | null; decorative?: boolean },
   r: UploadResultDto,
 ) => ({
   action: 'media.upload',
@@ -281,10 +314,11 @@ export const uploadLogoCommand = tenantCommand({
   audit: uploadAudit,
 });
 
-async function findAssetTx(tx: TenantTx, assetId: string, family: 'content' | 'logo'): Promise<AssetRow> {
+async function findAssetTx(tx: TenantTx, assetId: string, family: MediaFamily): Promise<AssetRow> {
   const [row] = await tx.select().from(assets).where(eq(assets.id, assetId));
-  // The logo belongs to org settings; event and venue images to the event editors.
-  if (!row || (family === 'logo') !== (row.ownerType === 'org')) throw new DomainError('not_found');
+  // The logo belongs to org settings, event and venue images to the event editors, and each
+  // program kind to its own commands (their entitlements differ).
+  if (!row || familyOf(row.ownerType as OwnerType) !== family) throw new DomainError('not_found');
   return row;
 }
 
@@ -360,11 +394,11 @@ async function updateAltTx(tx: TenantTx, ctx: Ctx, row: AssetRow, alt: string | 
   return (await withVariants(tx, [updated]))[0] as MediaAssetDto;
 }
 
-const altAudit = (input: { assetId: string; decorative: boolean }) => ({
+const altAudit = (input: { assetId: string; decorative?: boolean }) => ({
   action: 'media.update_alt',
   targetType: 'media_asset',
   targetId: input.assetId,
-  data: { decorative: input.decorative },
+  data: { decorative: input.decorative ?? false },
 });
 
 export const updateMediaAltCommand = tenantCommand({
@@ -392,13 +426,77 @@ export const updateLogoAltCommand = tenantCommand({
   audit: altAudit,
 });
 
+/* ------------------------------------------------ program images (M1.4h) ---- */
+
+function programImageCommands<K extends ProgramImageOwner>(kind: K) {
+  const spec = PROGRAM_IMAGES[kind];
+  const upload = tenantCommand({
+    name: `media.upload${spec.command}`,
+    input: UploadProgramImageInput,
+    output: UploadResultDto,
+    entitlement: spec.entitlement,
+    permission: 'events:write',
+    handler: ({ input, ctx, tx, emit }) =>
+      storeUploadTx({
+        tx,
+        ctx,
+        emit,
+        ownerType: kind,
+        ownerId: input.ownerId,
+        slot: spec.slot,
+        input: { ...input, decorative: false },
+      }),
+    audit: uploadAudit,
+  });
+  const remove = tenantCommand({
+    name: `media.remove${spec.command}`,
+    // Removing an image deletes its files (impersonating staff may not, M1.2e).
+    category: 'delete',
+    input: RemoveInput,
+    output: Ok,
+    entitlement: spec.entitlement,
+    permission: 'events:write',
+    handler: async ({ input, ctx, tx, emit }) =>
+      removeTx(tx, ctx, emit, await findAssetTx(tx, input.assetId, kind)),
+    audit: removeAudit,
+  });
+  const updateAlt = tenantCommand({
+    name: `media.update${spec.command}Alt`,
+    input: UpdateProgramAltInput,
+    output: MediaAssetDto,
+    entitlement: spec.entitlement,
+    permission: 'events:write',
+    handler: async ({ input, ctx, tx }) =>
+      updateAltTx(tx, ctx, await findAssetTx(tx, input.assetId, kind), input.alt, false),
+    audit: altAudit,
+  });
+  return { upload, remove, updateAlt };
+}
+
+/** Upload, remove and alt-text commands per program kind (speaker photo, exhibitor/sponsor logo). */
+export const programImageCommand = {
+  speaker: programImageCommands('speaker'),
+  exhibitor: programImageCommands('exhibitor'),
+  sponsor: programImageCommands('sponsor'),
+} as const;
+
+/** Change a program image's alt text (never decorative). */
+export function updateProgramImageAlt(
+  kind: ProgramImageOwner,
+  input: UpdateProgramAltInput,
+  ctx: Ctx,
+  ports: CommandPorts<TenantTx>,
+) {
+  return executeCommand(programImageCommand[kind].updateAlt, input, ctx, ports);
+}
+
 /** Images of one owner (optionally one slot), in slot order. Every member of the org may look. */
 export const listMediaQuery = tenantQuery({
   name: 'media.listMedia',
   input: z.object({
-    ownerType: z.enum(['event', 'venue', 'org']),
+    ownerType: z.enum(OWNER_TYPES),
     ownerId: z.uuid(),
-    slot: z.enum(['cover', 'gallery', 'photo', 'logo']).optional(),
+    slot: z.enum(SLOTS).optional(),
   }),
   output: z.array(MediaAssetDto),
   entitlement: 'core',
@@ -414,6 +512,27 @@ export const listMediaQuery = tenantQuery({
           input.slot ? eq(assets.slot, input.slot) : undefined,
         ),
       )
+      .orderBy(asc(assets.slot), asc(assets.position));
+    return withVariants(tx, rows);
+  },
+});
+
+/**
+ * The images of many owners of one type at once (console lists: speaker, exhibitor and sponsor
+ * thumbnails), by owner id. Every member of the org may look.
+ */
+export const listOwnersMediaQuery = tenantQuery({
+  name: 'media.listOwnersMedia',
+  input: z.object({ ownerType: z.enum(OWNER_TYPES), ownerIds: z.array(z.uuid()).max(500) }),
+  output: z.array(MediaAssetDto),
+  entitlement: 'core',
+  permission: 'org:read',
+  handler: async ({ input, tx }) => {
+    if (input.ownerIds.length === 0) return [];
+    const rows = await tx
+      .select()
+      .from(assets)
+      .where(and(eq(assets.ownerType, input.ownerType), inArray(assets.ownerId, input.ownerIds)))
       .orderBy(asc(assets.slot), asc(assets.position));
     return withVariants(tx, rows);
   },
@@ -449,6 +568,18 @@ export async function uploadLogo(
   return runUpload(ctx, (assetId) => executeCommand(uploadLogoCommand, { ...input, assetId }, ctx, ports));
 }
 
+/** A speaker photo or an exhibitor/sponsor logo (replaces the current one; old files purged). */
+export async function uploadProgramImage(
+  ctx: Ctx,
+  kind: ProgramImageOwner,
+  input: Omit<UploadProgramImageInput, 'assetId'>,
+  ports: CommandPorts<TenantTx>,
+): Promise<UploadResultDto> {
+  return runUpload(ctx, (assetId) =>
+    executeCommand(programImageCommand[kind].upload, { ...input, assetId }, ctx, ports),
+  );
+}
+
 async function runUpload(
   ctx: Ctx,
   run: (assetId: string) => Promise<UploadResultDto>,
@@ -473,10 +604,59 @@ export async function removeMedia(
   ctx: Ctx,
   input: { assetId: string },
   ports: CommandPorts<TenantTx>,
-  family: 'content' | 'logo' = 'content',
+  family: MediaFamily = 'content',
 ): Promise<void> {
-  await executeCommand(family === 'logo' ? removeLogoCommand : removeMediaCommand, input, ctx, ports);
+  const command =
+    family === 'logo'
+      ? removeLogoCommand
+      : family === 'content'
+        ? removeMediaCommand
+        : programImageCommand[family].remove;
+  await executeCommand(command, input, ctx, ports);
   await mediaStore().deleteAsset(requireOrg(ctx), input.assetId);
+}
+
+/**
+ * M1.4h: a deleted speaker, exhibitor or sponsor takes its images along. The program module (a
+ * lower tier) emits `program.{kind}_deleted@1`; this subscriber deletes the rows and then the
+ * files (the store is idempotent, so a replay after a failed commit only repeats the purge).
+ * Until it runs, the image is already private: its owner no longer exists, so
+ * `media.owner_visibility` says `none`.
+ */
+export function programMediaCleaner(): Subscriber {
+  return defineSubscriber({
+    name: 'media.program-owner-cleanup',
+    events: ['program.speaker_deleted@1', 'program.exhibitor_deleted@1', 'program.sponsor_deleted@1'],
+    handle: async (tx, event) => {
+      const p = z
+        .object({ kind: z.enum(['speaker', 'exhibitor', 'sponsor']), id: z.uuid() })
+        .parse(event.payload);
+      const gone = await tx
+        .delete(assets)
+        .where(and(eq(assets.ownerType, p.kind), eq(assets.ownerId, p.id)))
+        .returning({ id: assets.id });
+      for (const g of gone) await mediaStore().deleteAsset(event.orgId, g.id);
+    },
+  });
+}
+
+/** Apply the org's pending program deletions now (the web right after a delete; e2e and seeds). */
+export function catchUpProgramMedia(orgId: string): Promise<number> {
+  return catchUpSubscriber(programMediaCleaner(), orgId);
+}
+
+/** The images of an event's program (speakers, exhibitors, sponsors), by owner id. */
+export async function publicProgramMedia(
+  orgId: string,
+  eventId: string,
+  opts: { privateOk?: boolean } = {},
+): Promise<Map<string, PublicMediaDto>> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<PublicRow>(
+      sql`select * from media.public_program_media(${orgId}::uuid, ${eventId}::uuid, ${opts.privateOk === true})`,
+    ),
+  );
+  return new Map(rows.map((r) => [r.owner_id, toPublic(r)]));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -558,6 +738,8 @@ export interface ServeTarget {
   readonly sha256: string;
   readonly ownerType: OwnerType;
   readonly ownerId: string;
+  /** The event whose access grant opens a private image (the event itself, or a program row's event). */
+  readonly eventId: string | null;
   /** `public`: anyone; `private_event`: a visitor with the event's access grant; `none`: members only. */
   readonly visibility: 'public' | 'private_event' | 'none';
 }
@@ -575,6 +757,7 @@ export async function serveTarget(
       sha256: string;
       owner_type: OwnerType;
       owner_id: string;
+      event_id: string | null;
       visibility: ServeTarget['visibility'];
     }>(sql`select * from media.serve_target(${orgId}::uuid, ${assetId}::uuid, ${fileName})`),
   );
@@ -586,6 +769,7 @@ export async function serveTarget(
         sha256: r.sha256,
         ownerType: r.owner_type,
         ownerId: r.owner_id,
+        eventId: r.event_id,
         visibility: r.visibility,
       }
     : null;

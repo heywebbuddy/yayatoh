@@ -2,6 +2,7 @@ import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
+import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
@@ -56,6 +57,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     checkoutRiskSignals(),
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
+    programMediaCleaner(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
 }

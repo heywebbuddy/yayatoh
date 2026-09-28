@@ -15,6 +15,8 @@ export interface JsonLdEventInput {
   readonly attendanceMode?: 'in_person' | 'online' | 'hybrid';
   readonly url: string;
   readonly image: string;
+  /** M1.4h: the program's speakers (`performer`), each with an absolute photo URL when there is one. */
+  readonly performers?: readonly { readonly name: string; readonly image: string | null }[];
   readonly organizer: { readonly name: string; readonly url: string };
   readonly offers: readonly {
     readonly name: string;
@@ -80,6 +82,15 @@ export function eventJsonLd(e: JsonLdEventInput) {
     image: [e.image],
     url: e.url,
     organizer: { '@type': 'Organization', name: e.organizer.name, url: e.organizer.url },
+    ...(e.performers && e.performers.length > 0
+      ? {
+          performer: e.performers.map((p) => ({
+            '@type': 'Person' as const,
+            name: p.name,
+            ...(p.image ? { image: p.image } : {}),
+          })),
+        }
+      : {}),
     ...(e.offers.length > 0
       ? {
           offers: e.offers.map((o) => ({
@@ -133,6 +144,9 @@ export const EventJsonLdSchema = z.object({
   image: z.array(absolute).min(1),
   url: absolute,
   organizer: z.object({ '@type': z.literal('Organization'), name: z.string().min(1), url: absolute }),
+  performer: z
+    .array(z.object({ '@type': z.literal('Person'), name: z.string().min(1), image: absolute.optional() }))
+    .optional(),
   offers: z
     .array(
       z.object({

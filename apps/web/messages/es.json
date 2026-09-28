@@ -3457,7 +3457,9 @@
       "room_overlap": "{room} también está reservada para «{other}» a esa hora.",
       "speaker_overlap": "{speaker} también participa en «{other}» a esa hora.",
       "outside_event": "Esta sesión está fuera del inicio y el fin del evento."
-    }
+    },
+    "photoAfterSave": "Puedes añadir una foto después de guardar al ponente.",
+    "logoAfterSave": "Puedes añadir un logotipo después de guardar."
   },
   "aiDraft": {
     "title": "Redactar con IA",
@@ -3563,19 +3565,28 @@
       "cover": "Imagen de portada",
       "gallery": "Galería",
       "photo": "Fotos del lugar",
-      "logo": "Logotipo"
+      "logo": "Logotipo",
+      "speaker": "Foto del ponente",
+      "exhibitor": "Logotipo del expositor",
+      "sponsor": "Logotipo del patrocinador"
     },
     "hint": {
       "cover": "Se muestra arriba en la página del evento, en las tarjetas de eventos y en las vistas previas de enlaces.",
       "gallery": "Hasta {max} fotos, en la página del evento.",
       "photo": "Hasta {max} fotos, en la página pública del lugar.",
-      "logo": "Se muestra en la consola, en tu página y sitio de organizador y en los correos."
+      "logo": "Se muestra en la consola, en tu página y sitio de organizador y en los correos.",
+      "speaker": "Se muestra en la página del evento, en la página del ponente y junto a sus sesiones en la agenda.",
+      "exhibitor": "Se muestra con el expositor en la página del evento. Los logotipos SVG se ven nítidos a cualquier tamaño.",
+      "sponsor": "Se muestra en el nivel del patrocinador en la página del evento (los niveles superiores muestran logotipos más grandes). Los logotipos SVG se ven nítidos."
     },
     "empty": {
       "cover": "Todavía no hay imagen de portada.",
       "gallery": "Todavía no hay fotos en la galería.",
       "photo": "Todavía no hay fotos del lugar.",
-      "logo": "Todavía no hay logotipo."
+      "logo": "Todavía no hay logotipo.",
+      "speaker": "Aún no hay foto.",
+      "exhibitor": "Aún no hay logotipo.",
+      "sponsor": "Aún no hay logotipo."
     },
     "count": "{count, plural, one {# imagen} other {# imágenes}} de {max}",
     "listLabel": "Imágenes actuales",
@@ -3619,7 +3630,16 @@
       "slot_full": "La galería está llena ({max} imágenes). Quita o sustituye una.",
       "forbidden": "No puedes cambiar estas imágenes.",
       "network": "La subida falló. Revisa tu conexión e inténtalo de nuevo.",
-      "generic": "La subida falló. Inténtalo de nuevo."
+      "generic": "La subida falló. Inténtalo de nuevo.",
+      "alt_missing": "Escribe un texto alternativo que describa la imagen."
+    },
+    "titleNamed": {
+      "speaker": "Foto: {name}",
+      "exhibitor": "Logotipo: {name}",
+      "sponsor": "Logotipo: {name}"
+    },
+    "defaultAlt": {
+      "speaker": "Foto de {name}"
     }
   },
   "doorStaff": {

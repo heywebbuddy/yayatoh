@@ -92,12 +92,15 @@ const MODULES = {
 type AnyCommand = Command<unknown, unknown, unknown, unknown>;
 type AnyQuery = Query<unknown, unknown, unknown, unknown>;
 
-/** Every command and query the modules export (bulk actions export theirs inside an object). */
+/**
+ * Every command and query the modules export (bulk actions export theirs inside an object; program
+ * images one level deeper, per kind: `programImageCommand.speaker.remove`, M1.4h).
+ */
 function registry() {
   const commands = new Map<string, AnyCommand>();
   const queries = new Map<string, AnyQuery>();
   const visit = (v: unknown, depth: number) => {
-    if (!v || typeof v !== 'object' || depth > 1) return;
+    if (!v || typeof v !== 'object' || depth > 2) return;
     const kind = (v as { kind?: unknown }).kind;
     const name = (v as { name?: unknown }).name;
     if (kind === 'command' && typeof name === 'string') commands.set(name, v as AnyCommand);
@@ -182,6 +185,10 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'tenancy.removeDomain',
         'media.removeMedia',
         'media.removeLogo',
+        // Program images (M1.4h).
+        'media.removeSpeakerPhoto',
+        'media.removeExhibitorLogo',
+        'media.removeSponsorLogo',
         'program.deleteSession',
         'cms.deleteEntry',
         // Account erasure's per-org part (M1.14e; run by the platform, never as a member).

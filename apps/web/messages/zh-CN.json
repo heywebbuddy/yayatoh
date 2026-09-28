@@ -3457,7 +3457,9 @@
       "room_overlap": "{room} 在此时间也被“{other}”占用。",
       "speaker_overlap": "{speaker} 在此时间也在“{other}”中演讲。",
       "outside_event": "此环节不在活动的开始和结束时间之内。"
-    }
+    },
+    "photoAfterSave": "保存演讲者后即可添加照片。",
+    "logoAfterSave": "保存后即可添加标志。"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -3563,19 +3565,28 @@
       "cover": "封面图片",
       "gallery": "图库",
       "photo": "场地照片",
-      "logo": "徽标"
+      "logo": "徽标",
+      "speaker": "演讲者照片",
+      "exhibitor": "参展商标志",
+      "sponsor": "赞助商标志"
     },
     "hint": {
       "cover": "显示在活动页面顶部、活动卡片和链接预览中。",
       "gallery": "最多 {max} 张照片，显示在活动页面上。",
       "photo": "最多 {max} 张照片，显示在场地公开页面上。",
-      "logo": "显示在控制台、你的主办方页面和网站以及邮件中。"
+      "logo": "显示在控制台、你的主办方页面和网站以及邮件中。",
+      "speaker": "显示在活动页面、演讲者页面以及议程中其场次旁边。",
+      "exhibitor": "在活动页面上与参展商一起显示。SVG 标志在任何尺寸下都保持清晰。",
+      "sponsor": "显示在活动页面上赞助商所在的级别中（级别越高标志越大）。SVG 标志保持清晰。"
     },
     "empty": {
       "cover": "还没有封面图片。",
       "gallery": "图库中还没有照片。",
       "photo": "还没有场地照片。",
-      "logo": "还没有徽标。"
+      "logo": "还没有徽标。",
+      "speaker": "还没有照片。",
+      "exhibitor": "还没有标志。",
+      "sponsor": "还没有标志。"
     },
     "count": "{count, plural, other {# 张}}，共 {max} 张",
     "listLabel": "当前图片",
@@ -3619,7 +3630,16 @@
       "slot_full": "图库已满（{max} 张）。请移除或替换一张。",
       "forbidden": "你无法更改这些图片。",
       "network": "上传失败。请检查网络连接后重试。",
-      "generic": "上传失败。请重试。"
+      "generic": "上传失败。请重试。",
+      "alt_missing": "请输入描述图片的替代文本。"
+    },
+    "titleNamed": {
+      "speaker": "照片：{name}",
+      "exhibitor": "标志：{name}",
+      "sponsor": "标志：{name}"
+    },
+    "defaultAlt": {
+      "speaker": "{name}的照片"
     }
   },
   "doorStaff": {

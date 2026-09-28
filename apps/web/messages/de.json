@@ -3457,7 +3457,9 @@
       "room_overlap": "{room} ist zu dieser Zeit auch für „{other}“ gebucht.",
       "speaker_overlap": "{speaker} spricht zu dieser Zeit auch in „{other}“.",
       "outside_event": "Diese Session liegt außerhalb von Beginn und Ende des Events."
-    }
+    },
+    "photoAfterSave": "Ein Foto kannst du nach dem Speichern hinzufügen.",
+    "logoAfterSave": "Ein Logo kannst du nach dem Speichern hinzufügen."
   },
   "aiDraft": {
     "title": "Mit KI entwerfen",
@@ -3563,19 +3565,28 @@
       "cover": "Titelbild",
       "gallery": "Galerie",
       "photo": "Fotos der Location",
-      "logo": "Logo"
+      "logo": "Logo",
+      "speaker": "Foto der sprechenden Person",
+      "exhibitor": "Logo des Ausstellers",
+      "sponsor": "Logo des Sponsors"
     },
     "hint": {
       "cover": "Erscheint oben auf der Veranstaltungsseite, auf Veranstaltungskarten und in Linkvorschauen.",
       "gallery": "Bis zu {max} Fotos, auf der Veranstaltungsseite.",
       "photo": "Bis zu {max} Fotos, auf der öffentlichen Seite der Location.",
-      "logo": "Erscheint in der Konsole, auf Ihrer Veranstalterseite und Website und in E-Mails."
+      "logo": "Erscheint in der Konsole, auf Ihrer Veranstalterseite und Website und in E-Mails.",
+      "speaker": "Wird auf der Veranstaltungsseite, der eigenen Seite und neben den Sessions im Programm angezeigt.",
+      "exhibitor": "Wird beim Aussteller auf der Veranstaltungsseite angezeigt. SVG-Logos bleiben in jeder Größe scharf.",
+      "sponsor": "Wird in der Stufe des Sponsors auf der Veranstaltungsseite angezeigt (höhere Stufen zeigen größere Logos). SVG-Logos bleiben scharf."
     },
     "empty": {
       "cover": "Noch kein Titelbild.",
       "gallery": "Noch keine Galeriefotos.",
       "photo": "Noch keine Fotos der Location.",
-      "logo": "Noch kein Logo."
+      "logo": "Noch kein Logo.",
+      "speaker": "Noch kein Foto.",
+      "exhibitor": "Noch kein Logo.",
+      "sponsor": "Noch kein Logo."
     },
     "count": "{count, plural, one {# Bild} other {# Bilder}} von {max}",
     "listLabel": "Aktuelle Bilder",
@@ -3619,7 +3630,16 @@
       "slot_full": "Die Galerie ist voll ({max} Bilder). Entfernen oder ersetzen Sie eines.",
       "forbidden": "Sie können diese Bilder nicht ändern.",
       "network": "Der Upload ist fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
-      "generic": "Der Upload ist fehlgeschlagen. Versuchen Sie es erneut."
+      "generic": "Der Upload ist fehlgeschlagen. Versuchen Sie es erneut.",
+      "alt_missing": "Gib einen Alternativtext ein, der das Bild beschreibt."
+    },
+    "titleNamed": {
+      "speaker": "Foto: {name}",
+      "exhibitor": "Logo: {name}",
+      "sponsor": "Logo: {name}"
+    },
+    "defaultAlt": {
+      "speaker": "Foto von {name}"
     }
   },
   "doorStaff": {

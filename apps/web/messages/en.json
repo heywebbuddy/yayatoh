@@ -3457,7 +3457,9 @@
       "room_overlap": "{room} is also booked for “{other}” at this time.",
       "speaker_overlap": "{speaker} is also speaking in “{other}” at this time.",
       "outside_event": "This session is outside the event's start and end."
-    }
+    },
+    "photoAfterSave": "You can add a photo after saving the speaker.",
+    "logoAfterSave": "You can add a logo after saving."
   },
   "aiDraft": {
     "title": "Draft with AI",
@@ -3563,19 +3565,28 @@
       "cover": "Cover image",
       "gallery": "Gallery",
       "photo": "Venue photos",
-      "logo": "Logo"
+      "logo": "Logo",
+      "speaker": "Speaker photo",
+      "exhibitor": "Exhibitor logo",
+      "sponsor": "Sponsor logo"
     },
     "hint": {
       "cover": "Shown at the top of the event page, on listing cards and in link previews.",
       "gallery": "Up to {max} photos, shown on the event page.",
       "photo": "Up to {max} photos, shown on the public venue page.",
-      "logo": "Shown in the console, on your organizer page and site, and in emails."
+      "logo": "Shown in the console, on your organizer page and site, and in emails.",
+      "speaker": "Shown on the event page, the speaker's own page and next to their sessions in the agenda.",
+      "exhibitor": "Shown with the exhibitor on the event page. SVG logos stay sharp at any size.",
+      "sponsor": "Shown in the sponsor's tier on the event page (higher tiers show bigger logos). SVG logos stay sharp."
     },
     "empty": {
       "cover": "No cover image yet.",
       "gallery": "No gallery photos yet.",
       "photo": "No venue photos yet.",
-      "logo": "No logo yet."
+      "logo": "No logo yet.",
+      "speaker": "No photo yet.",
+      "exhibitor": "No logo yet.",
+      "sponsor": "No logo yet."
     },
     "count": "{count, plural, one {# image} other {# images}} of {max}",
     "listLabel": "Current images",
@@ -3619,7 +3630,16 @@
       "slot_full": "This gallery is full ({max} images). Remove or replace one.",
       "forbidden": "You can't change these images.",
       "network": "The upload failed. Check your connection and try again.",
-      "generic": "The upload failed. Try again."
+      "generic": "The upload failed. Try again.",
+      "alt_missing": "Enter alt text that describes the image."
+    },
+    "titleNamed": {
+      "speaker": "Photo: {name}",
+      "exhibitor": "Logo: {name}",
+      "sponsor": "Logo: {name}"
+    },
+    "defaultAlt": {
+      "speaker": "Photo of {name}"
     }
   },
   "doorStaff": {

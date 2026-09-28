@@ -11,3 +11,4 @@ The lightweight event program (M1.4f): tracks, rooms, sessions, speakers, exhibi
 - Markdown fields (session description, speaker bio, exhibitor/sponsor description) are sanitized with the events module's Markdown subset. Links are http(s) only.
 - Public reads (`publicProgram`, `publicSpeaker`) go through allowlist serializers: no capacities, no org internals.
 - Entitlements: `sessions` (tracks, rooms, sessions), `speakers`, `exhibitors`, `sponsors`. Reading the program needs `events:read`; every write `events:write`.
+- Events emitted (M1.4h): `program.speaker_deleted@1`, `program.exhibitor_deleted@1`, `program.sponsor_deleted@1` (`{ kind, eventId, id }`); media removes the row's photo/logo. `programOwnerTx` lets media check an image owner under RLS.

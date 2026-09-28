@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import type { ProgramFormState } from '@/components/program-form.tsx';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success, textOrNull } from '@/server/form.ts';
+import { purgeDeletedProgramMedia } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 
 const done = (org: string, event: string) => revalidatePath(`/o/${org}/e/${event}/speakers`);
@@ -69,5 +70,7 @@ export async function updateSpeakerAction(
 export async function deleteSpeakerAction(org: string, event: string, speakerId: string): Promise<void> {
   const { data, event: ev } = await loadEvent(org, event);
   await executeCommand(deleteSpeakerCommand, { eventId: ev.id, speakerId }, data.ctx, ports);
+  // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
+  await purgeDeletedProgramMedia(data.org.id);
   done(org, event);
 }

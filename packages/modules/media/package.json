@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 3
+    "tier": 4
   },
   "exports": {
     ".": "./src/index.ts",
@@ -21,6 +21,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/venues": "workspace:*",
     "drizzle-orm": "catalog:",

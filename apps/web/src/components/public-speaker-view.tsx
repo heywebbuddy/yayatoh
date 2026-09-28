@@ -1,8 +1,10 @@
 import { accessTarget, pageTarget, publicEventBySlug } from '@yayatoh/events';
+import { publicProgramMedia } from '@yayatoh/media';
 import { publicSpeaker } from '@yayatoh/program';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
+import { MediaPicture } from '@/components/media-picture.tsx';
 import { SessionRow } from '@/components/program-sections.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { currentAccess } from '@/server/visitor.ts';
@@ -25,16 +27,20 @@ export async function PublicSpeakerView({
 }) {
   let target = await pageTarget(slug);
   let pub = await publicEventBySlug(slug);
+  let privateOk = false;
   if (!target || !pub) {
     const live = await accessTarget(slug);
     const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
     if (live?.visibility !== 'private' || !grant?.unlocksEvent) notFound();
     target = live;
+    privateOk = true;
     pub = await publicEventBySlug(slug, { includePrivate: true });
   }
   if (!pub || (orgId && target.orgId !== orgId)) notFound();
   const page = await publicSpeaker(target, speakerId);
   if (!page) notFound();
+  // M1.4h: speaker photos (this speaker's, and co-speakers' avatars in the session list).
+  const images = Object.fromEntries(await publicProgramMedia(target.orgId, target.eventId, { privateOk }));
   const t = await getTranslations('publicEvent');
   const time = new Intl.DateTimeFormat(locale, {
     timeZone: pub.timezone,
@@ -58,13 +64,23 @@ export async function PublicSpeakerView({
           {t('backToEvent', { name: pub.name })}
         </Link>
       </nav>
-      <header className="flex flex-col gap-1">
-        <h1 className="text-[36px] leading-tight font-normal tracking-[-0.03em]">{speaker.name}</h1>
-        {speaker.title || speaker.company ? (
-          <p className="text-body text-zinc-600">
-            {[speaker.title, speaker.company].filter(Boolean).join(' · ')}
-          </p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        {images[speaker.id] ? (
+          <MediaPicture
+            image={images[speaker.id] as NonNullable<(typeof images)[string]>}
+            sizes="160px"
+            eager
+            className="size-40 shrink-0 rounded-card object-cover"
+          />
         ) : null}
+        <div className="flex flex-col gap-1">
+          <h1 className="text-[36px] leading-tight font-normal tracking-[-0.03em]">{speaker.name}</h1>
+          {speaker.title || speaker.company ? (
+            <p className="text-body text-zinc-600">
+              {[speaker.title, speaker.company].filter(Boolean).join(' · ')}
+            </p>
+          ) : null}
+        </div>
       </header>
       {speaker.bio ? <Markdown source={speaker.bio} /> : null}
       {speaker.links.length > 0 ? (
@@ -96,7 +112,14 @@ export async function PublicSpeakerView({
         ) : (
           <ol className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
             {page.sessions.map((s) => (
-              <SessionRow key={s.id} s={s} slug={slug} time={time} day={day.format(s.startsAt)} />
+              <SessionRow
+                key={s.id}
+                s={s}
+                slug={slug}
+                time={time}
+                day={day.format(s.startsAt)}
+                images={images}
+              />
             ))}
           </ol>
         )}

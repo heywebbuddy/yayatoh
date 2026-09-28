@@ -3457,7 +3457,9 @@
       "room_overlap": "{room} est aussi réservée pour « {other} » à ce moment-là.",
       "speaker_overlap": "{speaker} intervient aussi dans « {other} » à ce moment-là.",
       "outside_event": "Cette session est en dehors du début et de la fin de l'événement."
-    }
+    },
+    "photoAfterSave": "Vous pourrez ajouter une photo après avoir enregistré l’intervenant.",
+    "logoAfterSave": "Vous pourrez ajouter un logo après l’enregistrement."
   },
   "aiDraft": {
     "title": "Rédiger avec l'IA",
@@ -3563,19 +3565,28 @@
       "cover": "Image de couverture",
       "gallery": "Galerie",
       "photo": "Photos du lieu",
-      "logo": "Logo"
+      "logo": "Logo",
+      "speaker": "Photo de l’intervenant",
+      "exhibitor": "Logo de l’exposant",
+      "sponsor": "Logo du sponsor"
     },
     "hint": {
       "cover": "Affichée en haut de la page de l'événement, sur les cartes d'événements et dans les aperçus de liens.",
       "gallery": "Jusqu'à {max} photos, sur la page de l'événement.",
       "photo": "Jusqu'à {max} photos, sur la page publique du lieu.",
-      "logo": "Affiché dans la console, sur votre page et votre site d'organisateur, et dans les e-mails."
+      "logo": "Affiché dans la console, sur votre page et votre site d'organisateur, et dans les e-mails.",
+      "speaker": "Affichée sur la page de l’événement, la page de l’intervenant et à côté de ses sessions dans le programme.",
+      "exhibitor": "Affiché avec l’exposant sur la page de l’événement. Les logos SVG restent nets à toutes les tailles.",
+      "sponsor": "Affiché dans le niveau du sponsor sur la page de l’événement (les niveaux supérieurs ont des logos plus grands). Les logos SVG restent nets."
     },
     "empty": {
       "cover": "Pas encore d’image de couverture.",
       "gallery": "Pas encore de photos dans la galerie.",
       "photo": "Pas encore de photos du lieu.",
-      "logo": "Pas encore de logo."
+      "logo": "Pas encore de logo.",
+      "speaker": "Pas encore de photo.",
+      "exhibitor": "Pas encore de logo.",
+      "sponsor": "Pas encore de logo."
     },
     "count": "{count, plural, one {# image} other {# images}} sur {max}",
     "listLabel": "Images actuelles",
@@ -3619,7 +3630,16 @@
       "slot_full": "La galerie est pleine ({max} images). Retirez-en ou remplacez-en une.",
       "forbidden": "Vous ne pouvez pas modifier ces images.",
       "network": "Le téléversement a échoué. Vérifiez votre connexion et réessayez.",
-      "generic": "Le téléversement a échoué. Réessayez."
+      "generic": "Le téléversement a échoué. Réessayez.",
+      "alt_missing": "Saisissez un texte alternatif qui décrit l’image."
+    },
+    "titleNamed": {
+      "speaker": "Photo : {name}",
+      "exhibitor": "Logo : {name}",
+      "sponsor": "Logo : {name}"
+    },
+    "defaultAlt": {
+      "speaker": "Photo de {name}"
     }
   },
   "doorStaff": {
