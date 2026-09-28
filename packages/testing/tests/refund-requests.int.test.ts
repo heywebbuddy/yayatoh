@@ -327,6 +327,41 @@ describe('buyer refund requests (M3.10b)', () => {
     expect(audit?.data.refundRequestId).toBe(req.id);
   });
 
+  it('a request asked in time is still approved after the window closed (the policy as it stood then)', async () => {
+    const waiting = await buy('waiting@example.test', 1);
+    await request(waiting);
+    const [req] = await requestsOf(waiting.orderId);
+    // Without the request, the same refund after the deadline is refused.
+    expect(
+      await refusal(
+        executeCommand(
+          startRefundCommand,
+          { orderId: waiting.orderId, reason: 'requested_by_customer', ticketIds: waiting.ticketIds },
+          a.ctx({ now: CLOSED }),
+          ports,
+        ),
+      ),
+    ).toMatchObject({ details: { reason: 'policy_window_closed' } });
+    const started = await executeCommand(
+      startRefundCommand,
+      {
+        orderId: waiting.orderId,
+        reason: 'requested_by_customer',
+        ticketIds: waiting.ticketIds,
+        refundRequestId: req?.id,
+      },
+      a.ctx({ now: CLOSED }),
+      ports,
+    );
+    expect(started).toMatchObject({ amountMinor: 4900, retainedMinor: 100 });
+    await executeCommand(
+      completeRefundCommand,
+      { refundId: started.refundId, outcome: 'succeeded', providerRefundId: `fakere_${started.refundId}` },
+      a.ctx(),
+      ports,
+    );
+  });
+
   it('a partial approval the provider declines reopens the request', async () => {
     const r = await request(second);
     expect(r.tickets).toBe(2);
@@ -393,7 +428,8 @@ describe('buyer refund requests (M3.10b)', () => {
 describe('policy tightening applies to future orders only (M3.10b)', () => {
   it('tightening says so and counts the orders that keep their terms', async () => {
     const r = await executeCommand(setRefundPolicyCommand, { eventId, kind: 'none' }, a.ctx(), ports);
-    expect(r).toMatchObject({ kind: 'none', tightened: true, ordersKeepingTerms: 2 });
+    // early, second and waiting (partly refunded) were bought under the old policy.
+    expect(r).toMatchObject({ kind: 'none', tightened: true, ordersKeepingTerms: 3 });
     const loosened = await executeCommand(
       setRefundPolicyCommand,
       { eventId, kind: 'until', daysBefore: 3, retainedMinor: 0 },
@@ -550,7 +586,7 @@ describe('postponement (M3.10b)', () => {
     expect(mine).toHaveLength(1);
     for (const e of mine) await consumeEvent(sub, e);
     for (const e of mine) await consumeEvent(sub, e);
-    // early and second still hold tickets; later was refunded in full.
+    // early and second still hold tickets; waiting and later hold none any more.
     expect(memory.sent.map((s) => s.to.email).sort()).toEqual(['early@example.test', 'second@example.test']);
     expect(memory.sent[0]).toMatchObject({
       kind: 'events.postponed',

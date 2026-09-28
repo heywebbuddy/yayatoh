@@ -80,6 +80,8 @@ export async function computeTx(
   req: Omit<RefundRequest, 'refundRequestId'>,
   lock: boolean,
   override = false,
+  /** M3.10b: evaluate the policy as of this moment (a buyer's request: when they asked). */
+  policyAt: Date = ctx.now,
 ) {
   const q = tx.select().from(orders).where(eq(orders.id, req.orderId));
   const [order] = await (lock ? q.for('update') : q);
@@ -101,7 +103,7 @@ export async function computeTx(
     snapshot: order.refundPolicySnapshot ?? null,
     current: await refundPolicyTx(tx, order.eventId),
     reason: req.reason as RefundReason,
-    now: ctx.now,
+    now: policyAt,
     eventStartsAt: event.startsAt,
     timeZone: event.timezone,
     override,
@@ -275,10 +277,13 @@ function startRefund(opts: { override: boolean }) {
     tx: TenantTx;
     requireStepUp: () => Promise<void>;
   }) => {
-    const { order, c } = await computeTx(tx, ctx, input, true, opts.override);
+    // M3.10b: a buyer's request asked in time is answered under the policy as it stood then.
+    const request = input.refundRequestId
+      ? await openRequestTx(tx, input.refundRequestId, input.orderId)
+      : null;
+    const { order, c } = await computeTx(tx, ctx, input, true, opts.override, request?.createdAt ?? ctx.now);
     // Large refunds (or the whole order) need a recent step-up (M1.2c), overrides included.
     if (isLargeRefund(c.amountMinor, order.totalMinor)) await requireStepUp();
-    const request = input.refundRequestId ? await openRequestTx(tx, input.refundRequestId, order.id) : null;
     const started = await insertRefundTx(tx, ctx, order, c, input);
     // M3.10b: approving a buyer's request is this refund; a declined provider refund reopens it.
     if (request)

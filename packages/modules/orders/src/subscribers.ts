@@ -272,6 +272,8 @@ export function postponementMailer(deps: { notifier: Notifier; appOrigin: string
         .from(orders)
         .where(and(eq(orders.eventId, ev.id), inArray(orders.status, ['paid', 'partially_refunded'])));
       for (const order of sold) {
+        // Only buyers who still hold a live ticket (a fully refunded ticket has nothing to keep).
+        if (!(await ticketsForOrderTx(tx, order.id)).some((t) => t.status === 'active')) continue;
         const url = await manageUrl(deps.appOrigin, p.orgId, order);
         if (!url) continue;
         await deps.notifier.enqueue(tx, {
