@@ -1,7 +1,7 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { disputeEvidenceHtml } from '@yayatoh/pdf';
 import {
-  disputeEvidenceQuery,
+  disputeEvidencePacketQuery,
   EVIDENCE_LABELS,
   evidenceDocument,
   fitEvidenceDocument,
@@ -19,7 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     return new Response('Not found', { status: 404 });
   const staff = await requireStaff('payouts');
   let evidence: Awaited<ReturnType<typeof load>>;
-  const load = () => executeQuery(disputeEvidenceQuery, { disputeId }, staff.ctx(id), ports);
+  const load = () => executeQuery(disputeEvidencePacketQuery, { disputeId }, staff.ctx(id), ports);
   try {
     evidence = await load();
   } catch (err) {

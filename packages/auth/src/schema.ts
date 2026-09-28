@@ -1,5 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
+  type AnyPgColumn,
+  bigint,
   boolean,
   check,
   index,
@@ -59,8 +61,22 @@ export const sessions = identity.table(
     updatedAt: ts('updated_at').notNull().defaultNow(),
     /** Last step-up ("Confirm it's you") in this session; signing in counts too (created_at). */
     stepUpAt: ts('step_up_at'),
+    /**
+     * The host this session was issued for (M1.2d; with the port outside production). A session is
+     * accepted only there: tenant hosts get their own sessions through a handoff code. Null for
+     * bearer sessions (API clients) and sessions from before M1.2d.
+     */
+    host: text('host'),
+    /** Set while platform staff act as this person (M1.2e): the impersonation this session belongs to. */
+    impersonationId: uuid('impersonation_id').references((): AnyPgColumn => impersonations.id, {
+      onDelete: 'cascade',
+    }),
   },
-  (t) => [uniqueIndex('sessions_token_key').on(t.token), index('sessions_user_id_idx').on(t.userId)],
+  (t) => [
+    uniqueIndex('sessions_token_key').on(t.token),
+    index('sessions_user_id_idx').on(t.userId),
+    index('sessions_impersonation_idx').on(t.impersonationId).where(sql`${t.impersonationId} is not null`),
+  ],
 );
 
 export const accounts = identity.table(
@@ -111,6 +127,11 @@ export const twoFactors = identity.table('two_factors', {
   verified: boolean('verified').default(true),
   failedVerificationCount: integer('failed_verification_count').default(0),
   lockedUntil: ts('locked_until'),
+  /**
+   * The last TOTP time step accepted (M1.2c replay protection): a code for this step or an
+   * earlier one is refused, so a code works once even inside its 90-second window.
+   */
+  lastUsedStep: bigint('last_used_step', { mode: 'number' }),
 });
 
 /**
@@ -129,6 +150,74 @@ export const securityEvents = identity.table(
     createdAt: ts('created_at').notNull().defaultNow(),
   },
   (t) => [index('security_events_user_created_idx').on(t.userId, t.createdAt)],
+);
+
+/**
+ * Platform staff acting as an org member (M1.2e): who, as whom, in which org, why, and for how
+ * long (at most one hour). Written by the staff console through packages/auth; the session made
+ * from it carries `impersonation_id`, and ending the impersonation deletes that session.
+ */
+export const impersonations = identity.table(
+  'impersonations',
+  {
+    id: uuid('id').primaryKey(),
+    staffUserId: uuid('staff_user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    /** The org the member is acted as in; the session can open only this org's console. */
+    orgId: uuid('org_id').notNull(),
+    reason: text('reason').notNull(),
+    /** Where "End" sends the staff member back to (the staff console's tenant page). */
+    returnUrl: text('return_url').notNull(),
+    ipAddress: text('ip_address'),
+    startedAt: ts('started_at').notNull().defaultNow(),
+    expiresAt: ts('expires_at').notNull(),
+    endedAt: ts('ended_at'),
+    /** `ended` (the staff member ended it), `expired` (the hour passed) or `revoked`. */
+    endedReason: text('ended_reason'),
+  },
+  (t) => [
+    index('impersonations_org_started_idx').on(t.orgId, t.startedAt),
+    index('impersonations_staff_idx').on(t.staffUserId, t.startedAt),
+    index('impersonations_open_idx').on(t.expiresAt).where(sql`${t.endedAt} is null`),
+  ],
+);
+
+/**
+ * One-time handoff codes (M1.2d): after signing in on the app host, the person is sent to a
+ * tenant host with a code that host redeems for its own session. Only a hash is stored; a code is
+ * bound to its host and person, works once and lives 60 seconds.
+ */
+export const handoffCodes = identity.table(
+  'handoff_codes',
+  {
+    id: uuid('id').primaryKey(),
+    codeHash: text('code_hash').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    /** The host (with port outside production) that may redeem it. */
+    host: text('host').notNull(),
+    /** Where to go on that host once signed in (a path, never another origin). */
+    returnPath: text('return_path').notNull(),
+    /**
+     * Hash of the tenant host's sign-in state cookie: the browser that asked to sign in must be
+     * the one redeeming (no login CSRF). Null for staff impersonation codes.
+     */
+    stateHash: text('state_hash'),
+    impersonationId: uuid('impersonation_id').references(() => impersonations.id, { onDelete: 'cascade' }),
+    expiresAt: ts('expires_at').notNull(),
+    usedAt: ts('used_at'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex('handoff_codes_code_hash_key').on(t.codeHash),
+    index('handoff_codes_user_idx').on(t.userId),
+    index('handoff_codes_expires_idx').on(t.expiresAt),
+  ],
 );
 
 /** Keys match Better Auth model names (drizzle adapter). */

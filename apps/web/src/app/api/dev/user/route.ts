@@ -67,6 +67,8 @@ export async function POST(req: NextRequest) {
     const tf = getTwoFactor();
     await tf.begin(user.id, email, { secret });
     ({ backupCodes } = await tf.confirm(user.id, totp(secretKey(secret), Date.now())));
+    // Enrolling used the current code; the tools' own sign-in below uses it again.
+    await tf.forgetUsedCodes(user.id);
   }
 
   let cookies: string[] = [];
@@ -82,6 +84,8 @@ export async function POST(req: NextRequest) {
       cookies = res.headers.getSetCookie();
     }
   }
+  // The tools used the current authenticator code; the test types that same code next.
+  if (secret) await getTwoFactor().forgetUsedCodes(user.id);
   const res = NextResponse.json({
     email,
     orgSlug,

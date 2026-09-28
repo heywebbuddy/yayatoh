@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import {
+  COMMAND_CATEGORIES,
   type CommandPorts,
   createCtx,
   DomainError,
   defineCommand,
+  defineQuery,
   executeCommand,
+  executeQuery,
   isStepUpFresh,
   STEP_UP_WINDOW_MS,
   stableStringify,
@@ -184,6 +187,93 @@ describe('executeCommand', () => {
 
   it('rejects badly named commands', () => {
     expect(() => defineCommand({ ...rename, name: 'rename' })).toThrow(/module.verbNoun/);
+  });
+});
+
+describe('impersonation (M1.2e)', () => {
+  const impersonatedBy = { staffUserId: 'staff-1', impersonationId: 'imp-1' };
+  const acting = createCtx({ orgId: '00000000-0000-7000-8000-000000000001', impersonatedBy });
+  const plain = (category?: (typeof COMMAND_CATEGORIES)[number], stepUp = false) =>
+    defineCommand<Record<string, never>, { ok: boolean }, { ok: boolean }, FakeTx>({
+      name: 'orders.doSomething',
+      input: z.object({}),
+      output: z.object({ ok: z.boolean() }),
+      entitlement: 'core',
+      permission: 'orders:refund',
+      stepUp,
+      ...(category ? { category } : {}),
+      handler: async () => ({ ok: true }),
+    });
+
+  it('refuses money, export and delete commands before anything runs', async () => {
+    for (const category of COMMAND_CATEGORIES) {
+      const { ports, log } = fakePorts();
+      await expect(executeCommand(plain(category), {}, acting, ports)).rejects.toMatchObject({
+        code: 'impersonation_blocked',
+        details: { reason: category },
+      });
+      expect(log).not.toContain('tx:begin');
+      // Without an impersonator the same command runs.
+      const other = fakePorts();
+      expect(
+        await executeCommand(plain(category), {}, createCtx({ orgId: acting.orgId }), other.ports),
+      ).toEqual({
+        ok: true,
+      });
+    }
+  });
+
+  it('runs uncategorized commands, and the context carries the staff member', async () => {
+    let seen: unknown = null;
+    const { ports } = fakePorts({
+      audit: {
+        record: async (_tx, c) => {
+          seen = c.impersonatedBy;
+        },
+      },
+    });
+    expect(await executeCommand(plain(), {}, acting, ports)).toEqual({ ok: true });
+    expect(seen).toEqual(impersonatedBy);
+  });
+
+  it('never satisfies step-up, even when the session would be fresh', async () => {
+    const { ports, log } = fakePorts();
+    await expect(executeCommand(plain(undefined, true), {}, acting, ports)).rejects.toMatchObject({
+      code: 'impersonation_blocked',
+      details: { reason: 'step_up' },
+    });
+    expect(log).not.toContain('stepUp');
+    const conditional = defineCommand<Record<string, never>, { ok: boolean }, { ok: boolean }, FakeTx>({
+      name: 'orders.refundLarge',
+      input: z.object({}),
+      output: z.object({ ok: z.boolean() }),
+      entitlement: 'core',
+      permission: 'orders:refund',
+      handler: async ({ requireStepUp }) => {
+        await requireStepUp();
+        return { ok: true };
+      },
+    });
+    await expect(executeCommand(conditional, {}, acting, fakePorts().ports)).rejects.toMatchObject({
+      code: 'impersonation_blocked',
+    });
+  });
+
+  it('refuses export queries (a finished file) but not other reads', async () => {
+    const file = defineQuery<Record<string, never>, { ok: boolean }, { ok: boolean }, FakeTx>({
+      name: 'reports.exportFile',
+      input: z.object({}),
+      output: z.object({ ok: z.boolean() }),
+      entitlement: 'core',
+      permission: 'reports:read',
+      category: 'export',
+      handler: async () => ({ ok: true }),
+    });
+    const { ports } = fakePorts();
+    await expect(executeQuery(file, {}, acting, ports)).rejects.toMatchObject({
+      code: 'impersonation_blocked',
+    });
+    expect(await executeQuery({ ...file, category: undefined }, {}, acting, ports)).toEqual({ ok: true });
   });
 });
 

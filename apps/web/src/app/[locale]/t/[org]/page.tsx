@@ -6,6 +6,7 @@ import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
 import { OrgHero } from '@/components/marketplace/org-hero.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter } from '@/components/marketplace/site-chrome.tsx';
+import { TenantAccount } from '@/components/tenant-account.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { cachedTenantListings } from '@/server/public-data.ts';
@@ -49,13 +50,14 @@ export default async function TenantHome({ params, searchParams }: Props) {
   const t = await getTranslations('market');
   return (
     <div className="min-h-dvh bg-white">
-      <header className="mx-auto flex w-full max-w-6xl items-center px-4 py-4 md:px-6">
+      <header className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 md:px-6">
         <Link
           href="/"
           className="inline-flex min-h-10 items-center text-[19px] font-semibold tracking-[-0.04em]"
         >
           {o.name}
         </Link>
+        <TenantAccount locale={locale} path="/" />
       </header>
       <main id="main" className="flex flex-col gap-8">
         <OrgHero orgId={orgId} eyebrow={t('tenant.eyebrow')} name={o.name} brandColor={o.brandColor} />

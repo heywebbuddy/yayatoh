@@ -11,6 +11,10 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'auth.verifications': 'OTP / magic-link / verification tokens; accessed only through packages/auth.',
   'auth.two_factors':
     'TOTP secrets and backup codes (KMS-envelope encrypted); accessed only through packages/auth.',
+  'auth.impersonations':
+    'Platform staff acting as an org member (M1.2e: reason, one hour, start/end); through packages/auth.',
+  'auth.handoff_codes':
+    'Hashed 60-second single-use sign-in handoff codes for tenant hosts (M1.2d); through packages/auth.',
   'auth.security_events':
     'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',

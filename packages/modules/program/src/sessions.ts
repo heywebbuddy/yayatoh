@@ -66,6 +66,7 @@ export const createTrackCommand = tenantCommand({
 
 export const deleteTrackCommand = tenantCommand({
   name: 'program.deleteTrack',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), trackId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sessions',
@@ -132,6 +133,7 @@ export const createRoomCommand = tenantCommand({
 
 export const deleteRoomCommand = tenantCommand({
   name: 'program.deleteRoom',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), roomId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sessions',
@@ -352,6 +354,7 @@ export const updateSessionCommand = tenantCommand({
 
 export const deleteSessionCommand = tenantCommand({
   name: 'program.deleteSession',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), sessionId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sessions',

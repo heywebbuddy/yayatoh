@@ -6,6 +6,7 @@ const TITLES: Record<ErrorCode, string> = {
   unauthenticated: 'Unauthenticated',
   step_up_required: 'Step-up authentication required',
   forbidden: 'Forbidden',
+  impersonation_blocked: 'Not available while acting as a member',
   module_not_enabled: 'Module not enabled',
   not_found: 'Not found',
   conflict: 'Conflict',

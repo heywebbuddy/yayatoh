@@ -2951,6 +2951,240 @@ Lakeside Events 邀請您以經理身分加入團隊。
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · ar 1`] = `
+{
+  "subject": "دعم Yayatoh يتصرف بصفة Jordan Lee في Lakeside Events",
+  "text": "دعم Yayatoh يتصرف بصفة Jordan Lee في Lakeside Events
+
+مرحبًا،
+
+بدأ أحد موظفي Yayatoh التصرف بصفة Jordan Lee في Lakeside Events لتقديم المساعدة. السبب: Support ticket 4312: the organizer asked for help with seating. ينتهي هذا الوصول بحلول 12‏/06‏/2027، 11:00 ص. خلال ذلك لا يمكن استرداد أي مبلغ أو صرفه أو تصدير أي بيانات أو حذفها، ويظهر كل ما يُنفَّذ في سجل النشاط لديك. إذا لم تكن تتوقع ذلك، فتواصل مع دعم Yayatoh فورًا.
+
+عرض النشاط: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · de 1`] = `
+{
+  "subject": "Der Yayatoh-Support handelt als Jordan Lee in Lakeside Events",
+  "text": "Der Yayatoh-Support handelt als Jordan Lee in Lakeside Events
+
+Hallo,
+
+Ein Mitarbeiter von Yayatoh handelt jetzt als Jordan Lee in Lakeside Events, um zu helfen. Grund: Support ticket 4312: the organizer asked for help with seating. Dieser Zugriff endet spätestens 12.06.2027, 11:00. Solange er besteht, kann nichts erstattet, ausgezahlt, exportiert oder gelöscht werden, und alles Getane erscheint in deinem Aktivitätsprotokoll. Wenn du das nicht erwartet hast, wende dich sofort an den Yayatoh-Support.
+
+Aktivität ansehen: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · en 1`] = `
+{
+  "subject": "Yayatoh support is acting as Jordan Lee in Lakeside Events",
+  "text": "Yayatoh support is acting as Jordan Lee in Lakeside Events
+
+Hello,
+
+A Yayatoh staff member started acting as Jordan Lee in Lakeside Events to help. Reason: Support ticket 4312: the organizer asked for help with seating. This access ends by Jun 12, 2027, 11:00 AM. While it lasts, nothing can be refunded, paid out, exported or deleted, and everything done appears in your activity log. If you didn't expect this, contact Yayatoh support right away.
+
+View activity: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · es 1`] = `
+{
+  "subject": "El soporte de Yayatoh está actuando como Jordan Lee en Lakeside Events",
+  "text": "El soporte de Yayatoh está actuando como Jordan Lee en Lakeside Events
+
+Hola:
+
+Un miembro del equipo de Yayatoh empezó a actuar como Jordan Lee en Lakeside Events para ayudar. Motivo: Support ticket 4312: the organizer asked for help with seating. Este acceso termina a más tardar el 12 jun 2027, 11:00. Mientras dure, no se puede reembolsar, pagar, exportar ni eliminar nada, y todo lo que se haga aparece en tu registro de actividad. Si no lo esperabas, contacta con el soporte de Yayatoh de inmediato.
+
+Ver actividad: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · fr 1`] = `
+{
+  "subject": "Le support Yayatoh agit en tant que Jordan Lee dans Lakeside Events",
+  "text": "Le support Yayatoh agit en tant que Jordan Lee dans Lakeside Events
+
+Bonjour,
+
+Un membre de l'équipe Yayatoh a commencé à agir en tant que Jordan Lee dans Lakeside Events pour vous aider. Motif : Support ticket 4312: the organizer asked for help with seating. Cet accès prend fin au plus tard le 12 juin 2027, 11:00. Pendant ce temps, rien ne peut être remboursé, versé, exporté ni supprimé, et tout ce qui est fait apparaît dans votre journal d'activité. Si vous ne vous y attendiez pas, contactez immédiatement le support Yayatoh.
+
+Voir l'activité: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · hi 1`] = `
+{
+  "subject": "Yayatoh सहायता टीम Lakeside Events में Jordan Lee के रूप में काम कर रही है",
+  "text": "Yayatoh सहायता टीम Lakeside Events में Jordan Lee के रूप में काम कर रही है
+
+नमस्ते,
+
+Yayatoh के एक कर्मचारी ने मदद के लिए Lakeside Events में Jordan Lee के रूप में काम करना शुरू किया है। कारण: Support ticket 4312: the organizer asked for help with seating। यह पहुँच 12 जून 2027, 11:00 am तक समाप्त हो जाएगी। इस दौरान कोई रिफ़ंड, भुगतान, निर्यात या हटाना नहीं हो सकता, और किया गया हर काम आपके गतिविधि लॉग में दिखता है। अगर आपको इसकी उम्मीद नहीं थी, तो तुरंत Yayatoh सहायता से संपर्क करें।
+
+गतिविधि देखें: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · it 1`] = `
+{
+  "subject": "Il supporto Yayatoh sta agendo come Jordan Lee in Lakeside Events",
+  "text": "Il supporto Yayatoh sta agendo come Jordan Lee in Lakeside Events
+
+Ciao,
+
+Un membro dello staff di Yayatoh ha iniziato ad agire come Jordan Lee in Lakeside Events per aiutare. Motivo: Support ticket 4312: the organizer asked for help with seating. Questo accesso termina entro il 12 giu 2027, 11:00. Nel frattempo non è possibile rimborsare, pagare, esportare o eliminare nulla, e tutto ciò che viene fatto compare nel registro attività. Se non te lo aspettavi, contatta subito il supporto Yayatoh.
+
+Vedi attività: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · ja 1`] = `
+{
+  "subject": "Yayatoh サポートが Lakeside Events で Jordan Lee として操作しています",
+  "text": "Yayatoh サポートが Lakeside Events で Jordan Lee として操作しています
+
+こんにちは。
+
+Yayatoh のスタッフが、サポートのために Lakeside Events で Jordan Lee として操作を開始しました。理由：Support ticket 4312: the organizer asked for help with seating。このアクセスは 2027/06/12 11:00 までに終了します。この間、返金・支払い・エクスポート・削除は一切できず、行われた操作はすべてアクティビティログに記録されます。心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。
+
+アクティビティを見る: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · nl 1`] = `
+{
+  "subject": "Yayatoh-support handelt als Jordan Lee in Lakeside Events",
+  "text": "Yayatoh-support handelt als Jordan Lee in Lakeside Events
+
+Hallo,
+
+Een medewerker van Yayatoh handelt nu als Jordan Lee in Lakeside Events om te helpen. Reden: Support ticket 4312: the organizer asked for help with seating. Deze toegang eindigt uiterlijk 12 jun 2027, 11:00. Zolang die duurt, kan niets worden terugbetaald, uitbetaald, geëxporteerd of verwijderd, en alles wat er gebeurt staat in je activiteitenlog. Had je dit niet verwacht? Neem dan direct contact op met Yayatoh-support.
+
+Activiteit bekijken: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · pt 1`] = `
+{
+  "subject": "O suporte da Yayatoh está atuando como Jordan Lee em Lakeside Events",
+  "text": "O suporte da Yayatoh está atuando como Jordan Lee em Lakeside Events
+
+Olá!
+
+Um membro da equipe da Yayatoh começou a atuar como Jordan Lee em Lakeside Events para ajudar. Motivo: Support ticket 4312: the organizer asked for help with seating. Este acesso termina até 12 de jun. de 2027, 11:00. Enquanto durar, nada pode ser reembolsado, pago, exportado ou excluído, e tudo o que for feito aparece no seu registro de atividades. Se você não esperava por isso, fale com o suporte da Yayatoh imediatamente.
+
+Ver atividade: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · ru 1`] = `
+{
+  "subject": "Поддержка Yayatoh действует от имени Jordan Lee в Lakeside Events",
+  "text": "Поддержка Yayatoh действует от имени Jordan Lee в Lakeside Events
+
+Здравствуйте!
+
+Сотрудник Yayatoh начал действовать от имени Jordan Lee в Lakeside Events, чтобы помочь. Причина: Support ticket 4312: the organizer asked for help with seating. Этот доступ закончится не позднее 12 июн. 2027 г., 11:00. Пока он действует, нельзя ничего вернуть, выплатить, экспортировать или удалить, а все действия видны в журнале активности. Если вы этого не ожидали, сразу свяжитесь с поддержкой Yayatoh.
+
+Открыть журнал: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · zh-CN 1`] = `
+{
+  "subject": "Yayatoh 支持人员正在以 Jordan Lee 的身份操作 Lakeside Events",
+  "text": "Yayatoh 支持人员正在以 Jordan Lee 的身份操作 Lakeside Events
+
+您好：
+
+一名 Yayatoh 工作人员已开始以 Jordan Lee 的身份在 Lakeside Events 中操作，以提供帮助。原因：Support ticket 4312: the organizer asked for help with seating。此访问将在 2027年6月12日 11:00 前结束。在此期间，无法进行任何退款、付款、导出或删除，所有操作都会记录在你的活动日志中。如果这不在你的预期之内，请立即联系 Yayatoh 支持。
+
+查看活动: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · zh-TW 1`] = `
+{
+  "subject": "Yayatoh 支援人員正以 Jordan Lee 的身分操作 Lakeside Events",
+  "text": "Yayatoh 支援人員正以 Jordan Lee 的身分操作 Lakeside Events
+
+您好：
+
+一名 Yayatoh 工作人員已開始以 Jordan Lee 的身分在 Lakeside Events 中操作，以提供協助。原因：Support ticket 4312: the organizer asked for help with seating。此存取將在 2027年6月12日 上午11:00 前結束。在此期間，無法進行任何退款、付款、匯出或刪除，所有操作都會記錄在你的活動記錄中。如果這不在你的預期之內，請立即聯絡 Yayatoh 支援。
+
+查看活動: https://app.yayatoh.test/o/lakeside-events/activity
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · ar 1`] = `
 {
   "subject": "تذكرة لفعالية Lakeside Jazz Night بانتظارك",

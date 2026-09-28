@@ -425,3 +425,168 @@ test('staff see a tenant’s reconciliation differences and resolve one with a n
   await expect(page.getByText('Reconciliation difference resolved.')).toBeVisible();
   await expect(section.getByText(`order:drift-${tag}`)).toHaveCount(0);
 });
+
+test('staff act as a member for an hour: reason required, banner everywhere, money, exports and confirmations refused, then end', async ({
+  page,
+  browser,
+}) => {
+  // A long journey across both apps (sign-in, a purchase, five pages).
+  test.setTimeout(120_000);
+  const stamp = Date.now();
+  await signIn(page, STAFF);
+  await page.getByLabel('Search by name or address').fill('lakeside');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
+  const tenantUrl = page.url();
+  const section = page.getByRole('region', { name: 'Act as a member' });
+  await expect(section.getByText(/at most one hour/)).toBeVisible();
+  await expectAccessible(page);
+
+  // A blank reason is refused by the server (the owners see the reason).
+  const member = section.getByLabel('Member');
+  await member.selectOption({ label: 'Pani Digital (pani@lakeside.test) · owner' });
+  await section.getByLabel("Reason (shown to the org's owners)").fill('   ');
+  await section.getByRole('button', { name: 'Start acting as member' }).click();
+  await expect(
+    page.getByRole('alert').filter({ hasText: "Give a reason: the org's owners see it." }),
+  ).toBeVisible();
+  await expectAccessible(page);
+
+  // With a reason: signed in on the app host as the member, with the banner.
+  await member.selectOption({ label: 'Pani Digital (pani@lakeside.test) · owner' });
+  await section.getByLabel("Reason (shown to the org's owners)").fill(`e2e support check ${stamp}`);
+  await section.getByRole('button', { name: 'Start acting as member' }).click();
+  await expect(page).toHaveURL(`${WEB}/o/lakeside-events`);
+  const banner = page.getByRole('region', { name: 'Staff access' });
+  await expect(banner).toContainText(
+    /You are acting as Pani Digital \(.+, Yayatoh staff\)\. Refunds, payouts, exports and deletions are turned off\. This ends at/,
+  );
+  await expectAccessible(page);
+
+  // The org's owners are told at once, with the reason (inbox and email; D14).
+  const drained = await page.request.post(`${WEB}/api/dev/outbox/drain`, {
+    form: { org: 'lakeside-events' },
+  });
+  expect(drained.ok()).toBe(true);
+  const mail = await page.request.get(`${WEB}/api/dev/mailbox?to=${encodeURIComponent(NOT_STAFF)}`);
+  const notices = (await mail.json()) as { subject: string; text: string }[];
+  expect(
+    notices.some(
+      (n) =>
+        n.subject === 'Yayatoh support is acting as Pani Digital in Lakeside Events' &&
+        n.text.includes(`e2e support check ${stamp}`),
+    ),
+  ).toBe(true);
+  await page.goto(`${WEB}/o/lakeside-events/notifications`);
+  await expect(
+    page
+      .getByRole('main')
+      .getByRole('link', { name: /^Yayatoh support is acting as Pani Digital until / })
+      .first(),
+  ).toBeVisible();
+
+  // Allowed work goes through and is audited with the staff member next to the member.
+  await page.goto(`${WEB}/o/lakeside-events/e/lakeside-open-house/tickets-orders`);
+  await expect(banner).toBeVisible();
+  const pass = `Staff pass ${stamp}`;
+  await page.getByLabel('Name', { exact: true }).fill(pass);
+  await page.getByLabel('Price (USD)').fill('15');
+  await page.getByLabel('Quantity available').fill('5');
+  await page.getByRole('button', { name: 'Add ticket type' }).click();
+  await expect(page.getByRole('row').filter({ hasText: pass })).toBeVisible();
+
+  // A guest buys; the staff member can't refund it.
+  const guest = await (await browser.newContext({ baseURL: WEB })).newPage();
+  await guest.goto('/events/lakeside-open-house');
+  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await guest.getByLabel('Full name').fill(`Ivy Impersonation ${stamp}`);
+  await guest.getByLabel('Email for your tickets').fill(`ivy+${stamp}@example.test`);
+  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await guest.getByRole('button', { name: /^Pay/ }).click();
+  await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
+  await page.reload();
+  await page.getByRole('link', { name: `Ivy Impersonation ${stamp}` }).click();
+  const refund = page.getByRole('region', { name: 'Refund' });
+  await refund.getByLabel('Reason').selectOption('requested_by_customer');
+  await refund.getByRole('checkbox').first().check();
+  await refund.getByRole('button', { name: 'Refund' }).click();
+  const refused =
+    "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off.";
+  await expect(refund.getByText(refused)).toBeVisible();
+  await expect(page.getByRole('table', { name: 'Refunds' })).toHaveCount(0);
+  await expectAccessible(page);
+
+  // Exports are refused too; the activity log names the staff member on the new pass.
+  await page.goto(`${WEB}/o/lakeside-events/activity`);
+  await expect(page.getByText(/impersonatedBy: staff:/).first()).toBeVisible();
+  await page.getByRole('button', { name: 'Export CSV' }).click();
+  await expect(page.getByText(`The export didn’t start: ${refused}`)).toBeVisible();
+
+  // Confirmations can't be given: granting access is refused with the same message.
+  await page.goto(`${WEB}/o/lakeside-events/team`);
+  await page.getByLabel('Email address').fill(`imp-${stamp}@example.test`);
+  await page.getByRole('button', { name: 'Send invitation' }).click();
+  await expect(page.getByText(refused)).toBeVisible();
+  await expect(page.getByRole('dialog', { name: "Confirm it's you" })).toHaveCount(0);
+
+  // The member's own security settings are out of reach, and so are other orgs.
+  await page.goto(`${WEB}/account/security`);
+  await expect(
+    page.getByText("Account security isn't available while Yayatoh staff act as this member."),
+  ).toBeVisible();
+  expect((await page.goto(`${WEB}/o/harbor-arts`))?.status()).toBe(404);
+
+  // Arabic: the banner renders right to left.
+  await page.goto(`${WEB}/ar/o/lakeside-events`);
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.getByRole('region', { name: 'وصول الموظفين' })).toContainText(
+    'أنت تتصرف بصفة Pani Digital',
+  );
+  await expectAccessible(page);
+  // Back to English (the language choice is remembered in a cookie).
+  await page.goto(`${WEB}/lang/en`);
+
+  // End it from the banner with the keyboard: back to the staff console, the session is gone.
+  await page.goto(`${WEB}/o/lakeside-events`);
+  const end = banner.getByRole('button', { name: 'End acting as Pani Digital' });
+  await end.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(`${tenantUrl}?done=impersonation_ended`);
+  await expect(page.getByText('Acting as the member ended.')).toBeVisible();
+  const history = page.getByRole('list', { name: 'Recent staff access' });
+  await expect(history.getByRole('listitem').filter({ hasText: `e2e support check ${stamp}` })).toContainText(
+    'Ended',
+  );
+  await expectAccessible(page);
+  const after = await page.request.get(`${WEB}/o/lakeside-events`, { maxRedirects: 0 });
+  expect(after.status()).toBe(307);
+});
+
+test('an open impersonation can be ended from the staff console too', async ({ page }) => {
+  const stamp = Date.now();
+  await signIn(page, STAFF);
+  await page.getByLabel('Search by name or address').fill('lakeside');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
+  const tenantUrl = page.url();
+  const section = page.getByRole('region', { name: 'Act as a member' });
+  await section.getByLabel('Member').selectOption({ label: 'Jordan Lee (jordan@lakeside.test) · viewer' });
+  await section.getByLabel("Reason (shown to the org's owners)").fill(`e2e console end ${stamp}`);
+  await section.getByRole('button', { name: 'Start acting as member' }).click();
+  await expect(page).toHaveURL(`${WEB}/o/lakeside-events`);
+  await expect(page.getByRole('region', { name: 'Staff access' })).toContainText('Jordan Lee');
+  await page.goto(tenantUrl);
+  const entry = page
+    .getByRole('list', { name: 'Recent staff access' })
+    .getByRole('listitem')
+    .filter({ hasText: `e2e console end ${stamp}` });
+  await expect(entry).toContainText('Active');
+  await entry.getByRole('button', { name: 'End acting as Jordan Lee' }).click();
+  await expect(page.getByText('Acting as the member ended.')).toBeVisible();
+  await expect(entry).toContainText('Ended');
+  // The web session made for it no longer works.
+  const after = await page.request.get(`${WEB}/o/lakeside-events`, { maxRedirects: 0 });
+  expect(after.status()).toBe(307);
+});

@@ -2,15 +2,14 @@
 
 import { createCtx } from '@yayatoh/kernel';
 import { acceptInvitation } from '@yayatoh/tenancy';
-import { headers } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
-import { getAuth } from '@/server/auth.ts';
 import { ports } from '@/server/ports.ts';
+import { ownAuthSession } from '@/server/session.ts';
 
 export async function acceptInviteAction(token: string): Promise<void> {
   const locale = await getLocale();
-  const session = await getAuth().api.getSession({ headers: await headers() });
+  const session = await ownAuthSession();
   if (!session) return redirect({ href: '/sign-in', locale });
   const ctx = createCtx({ actor: { type: 'user', userId: session.user.id }, locale });
   await acceptInvitation(

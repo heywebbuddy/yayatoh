@@ -1,5 +1,5 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { disputeEvidenceQuery } from '@yayatoh/reports';
+import { disputeEvidencePacketQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
 import { z } from 'zod';
 import { loadEvent } from '@/server/console.ts';
@@ -19,10 +19,16 @@ export async function GET(
   const { data } = await loadEvent(org, event);
   if (!roleCan(data.role, 'finance:read')) return new Response('Not found', { status: 404 });
   let evidence: Awaited<ReturnType<typeof load>>;
-  const load = () => executeQuery(disputeEvidenceQuery, { disputeId }, data.ctx, ports);
+  const load = () => executeQuery(disputeEvidencePacketQuery, { disputeId }, data.ctx, ports);
   try {
     evidence = await load();
   } catch (err) {
+    // Staff acting as a member never take files out (M1.2e).
+    if (isDomainError(err) && err.code === 'impersonation_blocked')
+      return new Response('Not available while acting as a member', {
+        status: 403,
+        headers: { 'cache-control': 'no-store' },
+      });
     if (isDomainError(err) && err.code === 'not_found') return new Response('Not found', { status: 404 });
     throw err;
   }

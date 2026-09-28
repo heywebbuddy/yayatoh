@@ -149,6 +149,7 @@ export const creditLedgerQuery = tenantQuery({
 /** Spend one credit for a draft of `kind` for `eventId`. `invalid_state/out_of_credits` at zero. */
 export const debitDraftCreditCommand = tenantCommand({
   name: 'ai.debitCredit',
+  category: 'money',
   input: z.object({ eventId: z.uuid(), kind: z.enum(DRAFT_KINDS) }),
   output: z.object({ debitId: z.uuid(), balance: z.number().int() }),
   entitlement: 'ai',
@@ -178,6 +179,7 @@ export const debitDraftCreditCommand = tenantCommand({
 /** Give a failed draft's credit back, once (a second refund of the same debit is a no-op). */
 export const refundDraftCreditCommand = tenantCommand({
   name: 'ai.refundCredit',
+  category: 'money',
   input: z.object({ debitId: z.uuid() }),
   output: z.object({ balance: z.number().int(), refunded: z.boolean() }),
   entitlement: 'ai',

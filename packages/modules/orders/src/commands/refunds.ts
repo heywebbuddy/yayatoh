@@ -246,6 +246,7 @@ function startRefund(opts: { override: boolean }) {
  */
 export const startRefundCommand = tenantCommand({
   name: 'orders.startRefund',
+  category: 'money',
   input: RefundRequest,
   output: StartRefundOutput,
   entitlement: 'ticketing',
@@ -271,6 +272,7 @@ export const startRefundCommand = tenantCommand({
  */
 export const startPolicyOverrideRefundCommand = tenantCommand({
   name: 'orders.startPolicyOverrideRefund',
+  category: 'money',
   input: RefundRequest.refine((r) => (r.note ?? '').trim().length >= 3, {
     message: 'Say why the policy is overridden',
     path: ['note'],
@@ -362,6 +364,7 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
  */
 export const completeRefundCommand = tenantCommand({
   name: 'orders.completeRefund',
+  category: 'money',
   input: z.object({
     refundId: z.uuid(),
     outcome: z.enum(['succeeded', 'failed', 'pending']),

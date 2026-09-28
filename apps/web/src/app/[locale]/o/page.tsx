@@ -10,7 +10,10 @@ export default async function OrgPicker({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale);
   const session = await getSession();
   if (!session) return redirect({ href: '/sign-in', locale });
-  const [first] = await myOrganizations(session.userId);
+  const orgs = await myOrganizations(session.userId);
+  // Staff acting as a member (M1.2e) open the org they started from.
+  const imp = session.impersonation;
+  const first = imp ? orgs.find((o) => o.orgId === imp.orgId) : orgs[0];
   if (first) return redirect({ href: `/o/${first.slug}`, locale });
   const t = await getTranslations('orgPicker');
   return (

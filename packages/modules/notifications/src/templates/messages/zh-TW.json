@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {{org} 接收款項的銀行帳戶已變更。} other {已為 {org} 連結收款帳戶。}}為了您的安全，在 {until} 之前不會轉帳至此帳戶。如果這不是您本人所做的變更，請立即聯絡 Yayatoh 支援。",
       "cta": "查看撥款"
     },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh 支援人員正以 {member} 的身分操作 {org}",
+      "intro": "一名 Yayatoh 工作人員已開始以 {member} 的身分在 {org} 中操作，以提供協助。原因：{reason}。此存取將在 {until} 前結束。在此期間，無法進行任何退款、付款、匯出或刪除，所有操作都會記錄在你的活動記錄中。如果這不在你的預期之內，請立即聯絡 Yayatoh 支援。",
+      "cta": "查看活動"
+    },
     "notifications.test": {
       "subject": "測試通知",
       "intro": "通知功能正常。"

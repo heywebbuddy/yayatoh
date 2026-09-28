@@ -59,6 +59,9 @@
       "other": "通知",
       "payments": {
         "destination-changed": "新的撥款帳戶：匯入此帳戶的轉帳將於 {until} 之後開始"
+      },
+      "tenancy": {
+        "staff-access": "Yayatoh 支援人員正以 {member} 的身分操作，直到 {until}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "活動提醒"
       },
       "tenancy": {
-        "invitation": "團隊邀請"
+        "invitation": "團隊邀請",
+        "staff-access": "工作人員存取"
       },
       "ticketing": {
         "claim-link": "票券領取連結",
@@ -282,7 +286,23 @@
     "invited": "邀請已寄出。",
     "pending": "待處理的邀請",
     "expires": "{date} 到期",
-    "revoke": "撤銷"
+    "revoke": "撤銷",
+    "manage": "管理",
+    "roleFor": "{name} 的角色",
+    "saveRole": "儲存角色",
+    "saveRoleFor": "儲存 {name} 的角色",
+    "remove": "移除",
+    "removeName": "移除 {name}",
+    "confirmRemove": "要將 {name} 從此組織移除嗎？對方將立即失去存取權。",
+    "confirmRemoveYes": "是，移除",
+    "cancel": "取消",
+    "roleChanged": "{name} 的角色已變更。",
+    "removed": "已移除 {name}。",
+    "ownerOnly": "只有擁有者可以變更擁有者",
+    "errors": {
+      "last_owner": "組織至少需要一位擁有者。",
+      "owner_only": "只有擁有者才能將他人設為擁有者或變更擁有者。"
+    }
   },
   "dashboard": {
     "previewPage": "預覽頁面",
@@ -528,7 +548,8 @@
     "rate_limited": "嘗試次數過多，請稍候。",
     "internal": "我們這邊發生了問題。",
     "reference": "參考編號：{id}",
-    "rateLimitedRetry": "嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
+    "rateLimitedRetry": "嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+    "impersonation_blocked": "以成員身分操作的工作人員無法執行此操作：退款、付款、匯出、刪除和身分確認皆已關閉。"
   },
   "notFound": {
     "title": "找不到頁面",
@@ -569,7 +590,16 @@
         "expired": "本次登入已過期，請重新登入。"
       }
     },
-    "rateLimited": "登入嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
+    "rateLimited": "登入嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+    "signedOutEverywhere": "你已在所有地方登出。",
+    "handoff": {
+      "title": "繼續前往 {site}",
+      "description": "使用你的 Yayatoh 帳戶登入以繼續前往 {site}。",
+      "signedInAs": "你已以 {name}（{email}）的身分登入。",
+      "continue": "繼續前往 {site}",
+      "otherAccount": "使用其他帳戶",
+      "failed": "無法將你送回 {site}。請再試一次。"
+    }
   },
   "orgPicker": {
     "emptyTitle": "你尚未加入任何組織",
@@ -3610,7 +3640,13 @@
       "required": "你的角色要求使用兩步驟驗證，因此無法關閉。",
       "already_enabled": "兩步驟驗證已開啟。",
       "not_enabled": "兩步驟驗證已關閉。"
-    }
+    },
+    "impersonating": "當 Yayatoh 工作人員以此成員身分操作時，帳戶安全設定無法使用。",
+    "sessionsTitle": "在所有地方登出",
+    "sessionsExplain": "結束你的所有工作階段：包括此裝置和其他裝置、各個應用程式，以及主辦方自己的網站。之後需要重新登入。",
+    "signOutEverywhere": "在所有地方登出",
+    "confirmSignOutEverywhere": "現在從所有裝置和網站登出嗎？",
+    "confirmSignOutEverywhereYes": "是，全部登出"
   },
   "stepUp": {
     "title": "確認是你本人",
@@ -3632,5 +3668,24 @@
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
     "unauthenticated": "工作階段已結束，請重新登入。"
+  },
+  "authError": {
+    "metaTitle": "登入連結無法使用",
+    "eyebrow": "登入",
+    "title": "此登入連結無法使用",
+    "description": "它可能已過期、已被使用，或屬於其他網站。請重新登入以繼續。",
+    "signInAgain": "重新登入",
+    "home": "前往首頁"
+  },
+  "tenantAccount": {
+    "signIn": "登入",
+    "signedInAs": "已以 {name} 的身分登入",
+    "signOut": "登出"
+  },
+  "impersonation": {
+    "label": "工作人員存取",
+    "banner": "你正以 {member} 的身分操作（{staff}，Yayatoh 工作人員）。退款、付款、匯出和刪除皆已關閉。將於 {until} 結束。",
+    "end": "結束",
+    "endLabel": "結束以 {member} 身分操作"
   }
 }

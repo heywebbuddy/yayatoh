@@ -6,12 +6,15 @@ import {
   generateBackupCodes,
   generateTotpSecret,
   hotp,
+  isFreshStep,
+  matchTotpStep,
   normalizeBackupCode,
   normalizeTotp,
   otpauthUri,
   secretKey,
   setupKey,
   totp,
+  totpStep,
   verifyTotp,
 } from '../src/totp.ts';
 
@@ -119,5 +122,27 @@ describe('development persona secret', () => {
     expect(devPersonaTotpSecret('pani@lakeside.test', 'persona-dev-password')).toBe(a);
     expect(devPersonaTotpSecret('maya@rosewood.test', 'persona-dev-password')).not.toBe(a);
     expect(devPersonaTotpSecret('pani@lakeside.test', 'another-password')).not.toBe(a);
+  });
+});
+
+describe('TOTP replay protection (M1.2c leftover)', () => {
+  const secret = 'ReplaySecret0123456789';
+  const key = secretKey(secret);
+  const at = 1_800_000_015_000;
+  const step = totpStep(at);
+
+  it('names the step a code belongs to, one step either side, else null', () => {
+    expect(matchTotpStep(secret, totp(key, at), at)).toBe(step);
+    expect(matchTotpStep(secret, totp(key, at - 30_000), at)).toBe(step - 1);
+    expect(matchTotpStep(secret, totp(key, at + 30_000), at)).toBe(step + 1);
+    expect(matchTotpStep(secret, totp(key, at - 60_000), at)).toBeNull();
+    expect(matchTotpStep(secret, 'abc', at)).toBeNull();
+  });
+
+  it('accepts a step only after the last one used', () => {
+    expect(isFreshStep(step, null)).toBe(true);
+    expect(isFreshStep(step, step - 1)).toBe(true);
+    expect(isFreshStep(step, step)).toBe(false);
+    expect(isFreshStep(step - 1, step)).toBe(false);
   });
 });

@@ -25,10 +25,25 @@ export interface PolicyPorts {
  */
 export const recentStepUp: CommandPorts<TenantTx>['stepUp'] = {
   satisfied: async (ctx: Ctx) => {
+    // Staff acting as a member (M1.2e) can't confirm as that person.
+    if (ctx.impersonatedBy) return false;
     if (ctx.actor.type === 'system') return true;
     return ctx.actor.type === 'user' && isStepUpFresh(ctx.stepUpAt, ctx.now);
   },
 };
+
+/**
+ * Every audit row written while staff act as a member (M1.2e) names the staff member next to the
+ * member (`actor` stays the member): inside `data`, so the hash chain covers it.
+ */
+export function withImpersonator(ctx: Ctx, data: Record<string, unknown>): Record<string, unknown> {
+  if (!ctx.impersonatedBy) return data;
+  return {
+    ...data,
+    impersonatedBy: `staff:${ctx.impersonatedBy.staffUserId}`,
+    impersonationId: ctx.impersonatedBy.impersonationId,
+  };
+}
 
 /**
  * The database-backed ports for executeCommand. Entitlements and authorization come from
@@ -49,7 +64,7 @@ export function createCommandPorts(policy: PolicyPorts): CommandPorts<TenantTx> 
           action: entry.action,
           targetType: entry.targetType,
           targetId: entry.targetId,
-          data: entry.data ?? {},
+          data: withImpersonator(ctx, entry.data ?? {}),
           requestId: ctx.requestId,
         });
       },

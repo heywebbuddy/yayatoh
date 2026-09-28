@@ -1,5 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import {
+  type CommandCategory,
   type CommandPorts,
   type Ctx,
   createCtx,
@@ -62,6 +63,11 @@ export interface BulkAction<P = unknown, F = unknown> {
    * (actions with a `file`): data leaving the platform in bulk.
    */
   readonly stepUp?: boolean;
+  /**
+   * What starting it does (M1.2e): exports (actions with a `file`) are `export` by default; an
+   * action that deletes or moves money says so. Refused while staff act as a member.
+   */
+  readonly category?: CommandCategory;
   /** Resolve a selection to the ids this action may touch (validates scope; caller caps size). */
   resolve(
     tx: TenantTx,
@@ -154,6 +160,12 @@ const Selection = <F>(filter: z.ZodType<F>) =>
  * The organizer-facing commands and queries for one action: start (resolve + snapshot), undo,
  * status and file. Each carries the action's own permission and entitlement.
  */
+/** A bulk action's category: its own, else `export` for actions that write a file. */
+function categoryOf(action: { file?: unknown; category?: CommandCategory }): { category?: CommandCategory } {
+  const category = action.category ?? (action.file !== undefined ? 'export' : undefined);
+  return category ? { category } : {};
+}
+
 export function bulkCommands<P, F>(action: BulkAction<P, F>) {
   // `attendees.label` → attendees.startLabel, attendees.undoLabel, attendees.labelStatus, …
   const [mod, name = ''] = action.key.split('.');
@@ -178,6 +190,7 @@ export function bulkCommands<P, F>(action: BulkAction<P, F>) {
     entitlement: action.entitlement,
     permission: action.permission,
     stepUp: action.stepUp ?? action.file !== undefined,
+    ...categoryOf(action),
     handler: async ({ input, ctx, tx, emit }) => {
       const sel = input.selection as { ids?: string[]; filter?: F };
       const ids = [...new Set(await action.resolve(tx, { eventId: input.eventId, ...sel }))];
@@ -271,6 +284,8 @@ export function bulkCommands<P, F>(action: BulkAction<P, F>) {
     output: z.object({ name: z.string(), contentType: z.string(), content: z.string() }),
     entitlement: action.entitlement,
     permission: action.permission,
+    // Downloading a finished export is data leaving too.
+    category: 'export',
     handler: async ({ input, ctx, tx }) => {
       const op = await load(tx, input.operationId);
       if (!op.fileId) throw new DomainError('not_found', 'No file');

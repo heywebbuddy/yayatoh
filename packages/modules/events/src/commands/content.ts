@@ -152,6 +152,7 @@ export const updateSectionCommand = tenantCommand({
 
 export const deleteSectionCommand = tenantCommand({
   name: 'events.deleteSection',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), sectionId: z.uuid() }),
   output: z.array(EventSectionDto),
   entitlement: 'core',
@@ -347,6 +348,7 @@ export const updateAnnouncementCommand = tenantCommand({
 
 export const deleteAnnouncementCommand = tenantCommand({
   name: 'events.deleteAnnouncement',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), announcementId: z.uuid() }),
   output: z.object({ ok: z.literal(true) }),
   entitlement: 'core',

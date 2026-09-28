@@ -1,8 +1,15 @@
 import 'server-only';
-import { type Auth, consoleMailer, createAuth, type SecretSealer } from '@yayatoh/auth';
+import {
+  type Auth,
+  consoleMailer,
+  createAuth,
+  devPersonaReplayExempt,
+  type SecretSealer,
+} from '@yayatoh/auth';
 import { IDENTITY_KEY_SCOPE, type KeyVault, localKeyVault } from '@yayatoh/platform';
 
 let instance: Auth | undefined;
+const exempt = devPersonaReplayExempt();
 let vault: KeyVault | undefined;
 
 // AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
@@ -36,6 +43,8 @@ export function getAuth(): Auth {
       mailer: consoleMailer,
       cookieNamespace: 'admin',
       sealer,
+      // Dev personas' derived authenticator secrets only (dev auth on, never in production).
+      ...(exempt ? { totpReplayExempt: exempt } : {}),
     });
   }
   return instance;

@@ -20,6 +20,18 @@ export interface Ctx {
   readonly stepUpAt: Date | null;
   /** Client-supplied `Idempotency-Key` for this write, if any. */
   readonly idempotencyKey: string | null;
+  /**
+   * Set while platform staff act as this member (M1.2e): who is really acting, and the
+   * impersonation it belongs to. Commands in a blocked category are refused, step-up can't be
+   * satisfied, and every audit row names the staff member next to the member.
+   */
+  readonly impersonatedBy: Impersonator | null;
+}
+
+/** The staff member behind an impersonated session. */
+export interface Impersonator {
+  readonly staffUserId: string;
+  readonly impersonationId: string;
 }
 
 export interface CtxInit {
@@ -30,6 +42,7 @@ export interface CtxInit {
   requestId?: string;
   stepUpAt?: Date | null;
   idempotencyKey?: string | null;
+  impersonatedBy?: Impersonator | null;
 }
 
 const ANONYMOUS: Actor = { type: 'anonymous' };
@@ -43,6 +56,7 @@ export function createCtx(init: CtxInit = {}): Ctx {
     now: init.now ?? new Date(),
     stepUpAt: init.stepUpAt ?? null,
     idempotencyKey: init.idempotencyKey ?? null,
+    impersonatedBy: init.impersonatedBy ?? null,
   });
 }
 

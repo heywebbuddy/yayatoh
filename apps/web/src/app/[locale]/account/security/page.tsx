@@ -2,6 +2,7 @@ import { twoFactorRequiredBy } from '@yayatoh/tenancy';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { SignOutEverywhere } from '@/components/sign-out-everywhere.tsx';
 import { StepUpProvider } from '@/components/step-up.tsx';
 import { RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
 import { Link, redirect } from '@/i18n/navigation.ts';
@@ -28,11 +29,24 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
   setRequestLocale(locale);
   const session = await getSession();
   if (!session) return redirect({ href: '/sign-in?next=/account/security', locale });
+  const t = await getTranslations();
+  // Staff acting as a member (M1.2e) can't see or change the member's own security settings.
+  if (session.impersonation)
+    return (
+      <main id="main" className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-12 md:px-6">
+        <PageHeader eyebrow={<Label>{t('security.eyebrow')}</Label>} title={t('security.title')} />
+        <Card className="flex flex-col gap-3">
+          <p className="text-body text-zinc-600">{t('security.impersonating')}</p>
+          <Link href="/o" className={buttonClass('secondary', 'sm', 'self-start')}>
+            {t('security.backToConsole')}
+          </Link>
+        </Card>
+      </main>
+    );
   const [status, requiredBy] = await Promise.all([
     getTwoFactor().status(session.userId),
     twoFactorRequiredBy(session.userId),
   ]);
-  const t = await getTranslations();
   const required = requiredBy.length > 0;
   const reasons = requiredBy.map((o) =>
     t('security.requiredFor', { role: t(`roles.${o.role}`), org: o.name }),
@@ -92,6 +106,13 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
             <RegenerateCodes left={status.backupCodesLeft} />
           </Card>
         ) : null}
+        <Card role="region" aria-labelledby="sessions-heading" className="flex flex-col gap-3">
+          <h2 id="sessions-heading" className="text-section">
+            {t('security.sessionsTitle')}
+          </h2>
+          <p className="text-body text-zinc-600">{t('security.sessionsExplain')}</p>
+          <SignOutEverywhere />
+        </Card>
         {!required || status.enabled ? (
           <Link href="/o" className={buttonClass('ghost', 'sm', 'self-start')}>
             {t('security.backToConsole')}

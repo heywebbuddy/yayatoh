@@ -182,6 +182,21 @@ export const disputeEvidenceQuery = tenantQuery({
   },
 });
 
+/**
+ * The same packet taken out as a file (the PDF download and the submission to the provider):
+ * an export, so staff acting as a member can't take it (M1.2e). Viewing it on the dispute page
+ * uses `disputeEvidenceQuery`.
+ */
+export const disputeEvidencePacketQuery = tenantQuery({
+  name: 'reports.disputeEvidencePacket',
+  category: 'export',
+  input: z.object({ disputeId: z.uuid() }),
+  output: DisputeEvidenceDto,
+  entitlement: null,
+  permission: 'finance:read',
+  handler: disputeEvidenceQuery.handler,
+});
+
 export const EVIDENCE_LABELS = [
   'title',
   'subtitle',

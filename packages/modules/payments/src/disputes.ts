@@ -173,6 +173,7 @@ export async function disputeTx(tx: TenantTx, id: string): Promise<z.infer<typeo
  */
 export const markEvidenceSubmittedCommand = tenantCommand({
   name: 'payments.markEvidenceSubmitted',
+  category: 'money',
   input: z.object({ disputeId: z.uuid() }),
   output: DisputeDto,
   entitlement: null,
@@ -254,6 +255,7 @@ export const saveEvidenceDraftCommand = tenantCommand({
  */
 export const markOrgEvidenceSubmittedCommand = tenantCommand({
   name: 'payments.markOrgEvidenceSubmitted',
+  category: 'money',
   input: EvidenceDraft.extend({ summary: z.string().trim().min(10).max(EVIDENCE_SUMMARY_MAX) }),
   output: DisputeDto,
   entitlement: null,

@@ -20,7 +20,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ org:
   if (!session) return new Response(null, { status: 401 });
   const resolved = await resolveOrgSlug(org);
   if (!resolved || resolved.status === 'terminated') return new Response(null, { status: 404 });
-  const ctx = createCtx({ orgId: resolved.orgId, actor: { type: 'user', userId: session.userId } });
+  // Staff acting as a member (M1.2e) see only the org they started from.
+  const imp = session.impersonation;
+  if (imp && imp.orgId !== resolved.orgId) return new Response(null, { status: 404 });
+  const ctx = createCtx({
+    orgId: resolved.orgId,
+    actor: { type: 'user', userId: session.userId },
+    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
+  });
   if (!(await memberRole(ctx))) return new Response(null, { status: 404 });
   try {
     const ev = await executeQuery(getEventBySlugQuery, { slug: event }, ctx, ports);

@@ -59,6 +59,9 @@
       "other": "Notificación",
       "payments": {
         "destination-changed": "Nueva cuenta de pagos: las transferencias a ella empiezan después del {until}"
+      },
+      "tenancy": {
+        "staff-access": "El soporte de Yayatoh actúa como {member} hasta {until}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "Recordatorio del evento"
       },
       "tenancy": {
-        "invitation": "Invitación al equipo"
+        "invitation": "Invitación al equipo",
+        "staff-access": "Acceso del personal"
       },
       "ticketing": {
         "claim-link": "Enlace para reclamar entrada",
@@ -282,7 +286,23 @@
     "invited": "Invitación enviada.",
     "pending": "Invitaciones pendientes",
     "expires": "Caduca el {date}",
-    "revoke": "Revocar"
+    "revoke": "Revocar",
+    "manage": "Gestionar",
+    "roleFor": "Rol de {name}",
+    "saveRole": "Guardar rol",
+    "saveRoleFor": "Guardar el rol de {name}",
+    "remove": "Quitar",
+    "removeName": "Quitar a {name}",
+    "confirmRemove": "¿Quitar a {name} de esta organización? Perderá el acceso de inmediato.",
+    "confirmRemoveYes": "Sí, quitar",
+    "cancel": "Cancelar",
+    "roleChanged": "Se cambió el rol de {name}.",
+    "removed": "Se quitó a {name}.",
+    "ownerOnly": "Solo los propietarios pueden cambiar a otros propietarios",
+    "errors": {
+      "last_owner": "Una organización necesita al menos un propietario.",
+      "owner_only": "Solo un propietario puede nombrar propietario a alguien o cambiar a un propietario."
+    }
   },
   "dashboard": {
     "previewPage": "Vista previa de la página",
@@ -528,7 +548,8 @@
     "rate_limited": "Demasiados intentos. Espera un momento.",
     "internal": "Algo salió mal por nuestra parte.",
     "reference": "Referencia: {id}",
-    "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
+    "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
+    "impersonation_blocked": "El personal que actúa como miembro no puede hacer esto: los reembolsos, pagos, exportaciones, eliminaciones y confirmaciones están desactivados."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -569,7 +590,16 @@
         "expired": "Este inicio de sesión caducó. Vuelve a iniciar sesión."
       }
     },
-    "rateLimited": "Demasiados intentos de inicio de sesión. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
+    "rateLimited": "Demasiados intentos de inicio de sesión. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
+    "signedOutEverywhere": "Has cerrado sesión en todas partes.",
+    "handoff": {
+      "title": "Continuar a {site}",
+      "description": "Inicia sesión con tu cuenta de Yayatoh para continuar a {site}.",
+      "signedInAs": "Has iniciado sesión como {name} ({email}).",
+      "continue": "Continuar a {site}",
+      "otherAccount": "Usar otra cuenta",
+      "failed": "No pudimos devolverte a {site}. Inténtalo de nuevo."
+    }
   },
   "orgPicker": {
     "emptyTitle": "Aún no perteneces a ninguna organización",
@@ -3610,7 +3640,13 @@
       "required": "Tu rol requiere la verificación en dos pasos, así que no se puede desactivar.",
       "already_enabled": "La verificación en dos pasos ya está activada.",
       "not_enabled": "La verificación en dos pasos está desactivada."
-    }
+    },
+    "impersonating": "La seguridad de la cuenta no está disponible mientras el personal de Yayatoh actúa como este miembro.",
+    "sessionsTitle": "Cerrar sesión en todas partes",
+    "sessionsExplain": "Cierra todas tus sesiones: en este dispositivo y en otros, en las apps y en los sitios propios de los organizadores. Tendrás que volver a iniciar sesión.",
+    "signOutEverywhere": "Cerrar sesión en todas partes",
+    "confirmSignOutEverywhere": "¿Cerrar sesión ahora en todos los dispositivos y sitios?",
+    "confirmSignOutEverywhereYes": "Sí, cerrar sesión en todas partes"
   },
   "stepUp": {
     "title": "Confirma que eres tú",
@@ -3632,5 +3668,24 @@
     "invalidPassword": "Esa contraseña no es correcta.",
     "rateLimited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
     "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión."
+  },
+  "authError": {
+    "metaTitle": "No se puede usar el enlace de inicio de sesión",
+    "eyebrow": "Iniciar sesión",
+    "title": "No se puede usar este enlace de inicio de sesión",
+    "description": "Puede que haya caducado, que ya se haya usado o que sea para otro sitio. Vuelve a iniciar sesión para continuar.",
+    "signInAgain": "Volver a iniciar sesión",
+    "home": "Ir a la página de inicio"
+  },
+  "tenantAccount": {
+    "signIn": "Iniciar sesión",
+    "signedInAs": "Sesión iniciada como {name}",
+    "signOut": "Cerrar sesión"
+  },
+  "impersonation": {
+    "label": "Acceso del personal",
+    "banner": "Estás actuando como {member} ({staff}, personal de Yayatoh). Los reembolsos, pagos, exportaciones y eliminaciones están desactivados. Termina a las {until}.",
+    "end": "Terminar",
+    "endLabel": "Dejar de actuar como {member}"
   }
 }

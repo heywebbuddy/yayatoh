@@ -494,3 +494,32 @@ test.describe('two-step verification: Arabic (right to left)', () => {
     await expect(page).toHaveURL(/\/ar\/o$/);
   });
 });
+
+test.describe('two-step verification: each code works once (M1.2c leftover)', () => {
+  test('a code that signed in is refused for the next sign-in within its window; a backup code still works', async ({
+    page,
+  }) => {
+    const user = await newUser(page, { twoFactor: true, signIn: false });
+    const code = codeForKey(user.setupKey ?? '');
+    await signInWithPassword(page, user.email);
+    await page.getByLabel('6-digit code').fill(code);
+    await page.getByRole('button', { name: 'Verify and sign in' }).click();
+    await expect(page).toHaveURL(/\/o$/);
+
+    // Signed out, and the same code again (still inside its 90-second window): refused.
+    await page.context().clearCookies();
+    await signInWithPassword(page, user.email);
+    await page.getByLabel('6-digit code').fill(code);
+    await page.getByRole('button', { name: 'Verify and sign in' }).click();
+    await expect(
+      page.getByRole('alert').filter({ hasText: "That code didn't work. Try again." }),
+    ).toBeVisible();
+    const probe = await page.request.get('/account/security', { maxRedirects: 0 });
+    expect(probe.status()).toBe(307);
+    await expectAccessible(page);
+    await page.getByRole('button', { name: 'Use a backup code instead' }).click();
+    await page.getByLabel('Backup code').fill(user.backupCodes[0] ?? '');
+    await page.getByRole('button', { name: 'Verify and sign in' }).click();
+    await expect(page).toHaveURL(/\/o$/);
+  });
+});

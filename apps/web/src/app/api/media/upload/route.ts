@@ -46,10 +46,14 @@ export async function POST(req: Request): Promise<Response> {
   const alt = String(form.get('alt') ?? '').trim() || null;
   const decorative = form.get('decorative') === '1';
   const replace = String(form.get('replaceAssetId') ?? '').trim() || null;
+  // Staff acting as a member (M1.2e) work in that org only, and every write names them.
+  const imp = session.impersonation;
+  if (imp && imp.orgId !== ticket.orgId) return refuse(403, 'forbidden');
   const ctx = createCtx({
     orgId: ticket.orgId,
     actor: { type: 'user', userId: session.userId },
     locale: String(form.get('locale') ?? 'en'),
+    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
   });
   const bytes = new Uint8Array(await file.arrayBuffer());
   try {

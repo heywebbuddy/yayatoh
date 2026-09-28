@@ -2,18 +2,17 @@
 
 import { createCtx, isDomainError } from '@yayatoh/kernel';
 import { signUpOrganization } from '@yayatoh/tenancy';
-import { headers } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
-import { getAuth } from '@/server/auth.ts';
 import { ports } from '@/server/ports.ts';
+import { ownAuthSession } from '@/server/session.ts';
 
 export type SignupState = { readonly code: string | null; readonly field?: string };
 
 /** Create the organization (signed-in person + signup code + click-wrap), then open it. */
 export async function signupAction(_prev: SignupState, form: FormData): Promise<SignupState> {
   const locale = await getLocale();
-  const session = await getAuth().api.getSession({ headers: await headers() });
+  const session = await ownAuthSession();
   if (!session) return { code: 'unauthenticated' };
   let slug: string;
   try {

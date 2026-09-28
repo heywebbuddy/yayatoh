@@ -59,6 +59,9 @@
       "other": "通知",
       "payments": {
         "destination-changed": "新的收款账户：向该账户的转账将在 {until} 之后开始"
+      },
+      "tenancy": {
+        "staff-access": "Yayatoh 支持人员正以 {member} 的身份操作，直到 {until}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "活动提醒"
       },
       "tenancy": {
-        "invitation": "团队邀请"
+        "invitation": "团队邀请",
+        "staff-access": "工作人员访问"
       },
       "ticketing": {
         "claim-link": "门票领取链接",
@@ -282,7 +286,23 @@
     "invited": "邀请已发送。",
     "pending": "待处理的邀请",
     "expires": "{date} 到期",
-    "revoke": "撤销"
+    "revoke": "撤销",
+    "manage": "管理",
+    "roleFor": "{name} 的角色",
+    "saveRole": "保存角色",
+    "saveRoleFor": "保存 {name} 的角色",
+    "remove": "移除",
+    "removeName": "移除 {name}",
+    "confirmRemove": "要将 {name} 从此组织中移除吗？对方将立即失去访问权限。",
+    "confirmRemoveYes": "是，移除",
+    "cancel": "取消",
+    "roleChanged": "{name} 的角色已更改。",
+    "removed": "已移除 {name}。",
+    "ownerOnly": "只有所有者可以更改所有者",
+    "errors": {
+      "last_owner": "组织至少需要一名所有者。",
+      "owner_only": "只有所有者才能将他人设为所有者或更改所有者。"
+    }
   },
   "dashboard": {
     "previewPage": "预览页面",
@@ -528,7 +548,8 @@
     "rate_limited": "尝试次数过多，请稍候。",
     "internal": "我们这边出了点问题。",
     "reference": "参考编号：{id}",
-    "rateLimitedRetry": "尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+    "rateLimitedRetry": "尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+    "impersonation_blocked": "以成员身份操作的工作人员无法执行此操作：退款、付款、导出、删除和身份确认均已关闭。"
   },
   "notFound": {
     "title": "页面未找到",
@@ -569,7 +590,16 @@
         "expired": "本次登录已过期，请重新登录。"
       }
     },
-    "rateLimited": "登录尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+    "rateLimited": "登录尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+    "signedOutEverywhere": "你已在所有地方退出登录。",
+    "handoff": {
+      "title": "继续前往 {site}",
+      "description": "使用你的 Yayatoh 账户登录以继续前往 {site}。",
+      "signedInAs": "你已以 {name}（{email}）的身份登录。",
+      "continue": "继续前往 {site}",
+      "otherAccount": "使用其他账户",
+      "failed": "无法将你送回 {site}。请重试。"
+    }
   },
   "orgPicker": {
     "emptyTitle": "你还没有加入任何组织",
@@ -3610,7 +3640,13 @@
       "required": "你的角色要求使用两步验证，因此无法关闭。",
       "already_enabled": "两步验证已开启。",
       "not_enabled": "两步验证已关闭。"
-    }
+    },
+    "impersonating": "当 Yayatoh 工作人员以此成员身份操作时，账户安全设置不可用。",
+    "sessionsTitle": "在所有地方退出登录",
+    "sessionsExplain": "结束你的所有会话：包括此设备和其他设备、各个应用，以及主办方自己的网站。之后需要重新登录。",
+    "signOutEverywhere": "在所有地方退出登录",
+    "confirmSignOutEverywhere": "现在从所有设备和网站退出登录吗？",
+    "confirmSignOutEverywhereYes": "是，全部退出"
   },
   "stepUp": {
     "title": "确认是你本人",
@@ -3632,5 +3668,24 @@
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
     "unauthenticated": "会话已结束，请重新登录。"
+  },
+  "authError": {
+    "metaTitle": "登录链接无法使用",
+    "eyebrow": "登录",
+    "title": "此登录链接无法使用",
+    "description": "它可能已过期、已被使用，或属于其他网站。请重新登录以继续。",
+    "signInAgain": "重新登录",
+    "home": "前往首页"
+  },
+  "tenantAccount": {
+    "signIn": "登录",
+    "signedInAs": "已以 {name} 的身份登录",
+    "signOut": "退出登录"
+  },
+  "impersonation": {
+    "label": "工作人员访问",
+    "banner": "你正在以 {member} 的身份操作（{staff}，Yayatoh 工作人员）。退款、付款、导出和删除均已关闭。将于 {until} 结束。",
+    "end": "结束",
+    "endLabel": "结束以 {member} 身份操作"
   }
 }

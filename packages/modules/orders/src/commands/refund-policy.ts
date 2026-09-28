@@ -33,6 +33,7 @@ const SetRefundPolicy = z
  */
 export const setRefundPolicyCommand = tenantCommand({
   name: 'orders.setRefundPolicy',
+  category: 'money',
   input: SetRefundPolicy,
   output: RefundPolicyDto.nullable(),
   entitlement: 'ticketing',

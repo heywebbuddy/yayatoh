@@ -7,6 +7,7 @@ export {
 } from './bookings-export.ts';
 export {
   DisputeEvidenceDto,
+  disputeEvidencePacketQuery,
   disputeEvidenceQuery,
   EVIDENCE_LABELS,
   type EvidenceDocument,

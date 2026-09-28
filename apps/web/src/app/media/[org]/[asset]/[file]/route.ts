@@ -40,6 +40,8 @@ async function allowedPrivately(orgId: string, ownerId: string, visibility: stri
   }
   const session = await getSession();
   if (!session) return false;
+  // Staff acting as a member (M1.2e) see only the org they started from.
+  if (session.impersonation && session.impersonation.orgId !== orgId) return false;
   return (await memberRole(createCtx({ orgId, actor: { type: 'user', userId: session.userId } }))) !== null;
 }
 

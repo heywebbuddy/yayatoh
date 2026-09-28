@@ -112,6 +112,7 @@ export const payoutAccountIdQuery = tenantQuery({
  */
 export const recordPayoutAccountCommand = tenantCommand({
   name: 'payments.recordPayoutAccount',
+  category: 'money',
   input: z.object({
     provider: z.enum(['fake', 'stripe']),
     accountId: z.string().min(3).max(64),
@@ -146,6 +147,7 @@ export const recordPayoutAccountCommand = tenantCommand({
  */
 export const continuePayoutOnboardingCommand = tenantCommand({
   name: 'payments.continuePayoutOnboarding',
+  category: 'money',
   input: z.object({}),
   output: z.object({ accountId: z.string() }),
   entitlement: 'core',
@@ -284,6 +286,7 @@ export const applyAccountEventCommand = tenantCommand({
  */
 export const setPayoutHoldCommand = tenantCommand({
   name: 'payments.setPayoutHold',
+  category: 'money',
   input: z.object({ held: z.boolean(), reason: z.string().trim().min(3).max(500) }),
   output: z.object({ held: z.boolean(), changed: z.boolean() }),
   entitlement: null,

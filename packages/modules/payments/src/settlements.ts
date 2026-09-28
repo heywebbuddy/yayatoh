@@ -72,6 +72,7 @@ async function netReceivableTx(tx: TenantTx, ctx: Ctx, key: string, currency: st
  */
 export const releaseDueSettlementsCommand = tenantCommand({
   name: 'payments.releaseDueSettlements',
+  category: 'money',
   input: z.object({}),
   output: z.object({
     held: z.boolean(),
@@ -233,6 +234,7 @@ export const releaseDueSettlementsCommand = tenantCommand({
 /** Record the provider's answer for a settlement transfer (worker). */
 export const recordTransferCommand = tenantCommand({
   name: 'payments.recordTransfer',
+  category: 'money',
   input: z.object({
     settlementId: z.uuid(),
     outcome: z.enum(['succeeded', 'failed']),
@@ -324,6 +326,7 @@ export async function eventTransferTx(tx: TenantTx, eventId: string): Promise<st
  */
 export const recordTransferReversalCommand = tenantCommand({
   name: 'payments.recordTransferReversal',
+  category: 'money',
   input: z.object({
     refundId: z.uuid(),
     orderId: z.uuid(),

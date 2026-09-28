@@ -29,6 +29,12 @@ export async function GET(
       },
     });
   } catch (err) {
+    // Staff acting as a member never take files out (M1.2e).
+    if (isDomainError(err) && err.code === 'impersonation_blocked')
+      return new Response('Not available while acting as a member', {
+        status: 403,
+        headers: { 'cache-control': 'no-store' },
+      });
     if (isDomainError(err) && ['not_found', 'forbidden', 'invalid_state'].includes(err.code))
       return notFound();
     throw err;

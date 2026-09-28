@@ -22,7 +22,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ org: st
   if (!session) return notFound();
   const resolved = await resolveOrgSlug(org);
   if (!resolved) return notFound();
-  const ctx = createCtx({ orgId: resolved.orgId, actor: { type: 'user', userId: session.userId } });
+  // Staff acting as a member (M1.2e) see only the org they started from.
+  const imp = session.impersonation;
+  if (imp && imp.orgId !== resolved.orgId) return notFound();
+  const ctx = createCtx({
+    orgId: resolved.orgId,
+    actor: { type: 'user', userId: session.userId },
+    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
+  });
   try {
     const { html } = await executeQuery(emailPreviewQuery, { id }, ctx, ports);
     return new Response(html, { headers: PREVIEW_HEADERS });

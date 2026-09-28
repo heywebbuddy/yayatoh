@@ -6,7 +6,7 @@ import { qrPath } from '@yayatoh/pdf';
 import { twoFactorRequiredBy } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { getTwoFactor } from '@/server/auth.ts';
-import { getSession } from '@/server/session.ts';
+import { ownSession } from '@/server/session.ts';
 
 /**
  * Two-step verification for the signed-in person (M1.2c). Starting set-up and replacing backup
@@ -33,7 +33,7 @@ const codeOf = (err: unknown): string => {
 };
 
 export async function beginSetupAction(): Promise<SetupStart> {
-  const session = await getSession();
+  const session = await ownSession();
   if (!session) return { ok: false, code: 'unauthenticated' };
   if (!isStepUpFresh(session.stepUpAt, new Date())) return { ok: false, code: 'step_up_required' };
   try {
@@ -45,7 +45,7 @@ export async function beginSetupAction(): Promise<SetupStart> {
 }
 
 export async function confirmSetupAction(_prev: CodesState, form: FormData): Promise<CodesState> {
-  const session = await getSession();
+  const session = await ownSession();
   if (!session) return { ok: false, code: 'unauthenticated' };
   try {
     const { backupCodes } = await getTwoFactor().confirm(session.userId, String(form.get('code') ?? ''));
@@ -56,7 +56,7 @@ export async function confirmSetupAction(_prev: CodesState, form: FormData): Pro
 }
 
 export async function disableAction(_prev: SecurityState, form: FormData): Promise<SecurityState> {
-  const session = await getSession();
+  const session = await ownSession();
   if (!session) return { ok: false, code: 'unauthenticated' };
   if ((await twoFactorRequiredBy(session.userId)).length > 0) return { ok: false, code: 'required' };
   try {
@@ -69,7 +69,7 @@ export async function disableAction(_prev: SecurityState, form: FormData): Promi
 }
 
 export async function regenerateCodesAction(_prev: CodesState, _form: FormData): Promise<CodesState> {
-  const session = await getSession();
+  const session = await ownSession();
   if (!session) return { ok: false, code: 'unauthenticated' };
   if (!isStepUpFresh(session.stepUpAt, new Date())) return { ok: false, code: 'step_up_required' };
   try {

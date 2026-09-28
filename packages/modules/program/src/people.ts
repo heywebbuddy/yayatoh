@@ -126,6 +126,7 @@ export const updateSpeakerCommand = tenantCommand({
 
 export const deleteSpeakerCommand = tenantCommand({
   name: 'program.deleteSpeaker',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), speakerId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'speakers',
@@ -217,6 +218,7 @@ export const updateExhibitorCommand = tenantCommand({
 
 export const deleteExhibitorCommand = tenantCommand({
   name: 'program.deleteExhibitor',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), exhibitorId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'exhibitors',
@@ -292,6 +294,7 @@ export const createSponsorTierCommand = tenantCommand({
 
 export const deleteSponsorTierCommand = tenantCommand({
   name: 'program.deleteSponsorTier',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), tierId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sponsors',
@@ -389,6 +392,7 @@ export const updateSponsorCommand = tenantCommand({
 
 export const deleteSponsorCommand = tenantCommand({
   name: 'program.deleteSponsor',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), sponsorId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sponsors',

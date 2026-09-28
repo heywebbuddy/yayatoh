@@ -59,6 +59,9 @@
       "other": "Notifica",
       "payments": {
         "destination-changed": "Nuovo conto per i pagamenti: i trasferimenti verso questo conto iniziano dopo il {until}"
+      },
+      "tenancy": {
+        "staff-access": "Il supporto Yayatoh agisce come {member} fino alle {until}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "Promemoria evento"
       },
       "tenancy": {
-        "invitation": "Invito al team"
+        "invitation": "Invito al team",
+        "staff-access": "Accesso dello staff"
       },
       "ticketing": {
         "claim-link": "Link per riscattare il biglietto",
@@ -282,7 +286,23 @@
     "invited": "Invito inviato.",
     "pending": "Inviti in sospeso",
     "expires": "Scade il {date}",
-    "revoke": "Revoca"
+    "revoke": "Revoca",
+    "manage": "Gestisci",
+    "roleFor": "Ruolo di {name}",
+    "saveRole": "Salva ruolo",
+    "saveRoleFor": "Salva il ruolo di {name}",
+    "remove": "Rimuovi",
+    "removeName": "Rimuovi {name}",
+    "confirmRemove": "Rimuovere {name} da questa organizzazione? Perderà subito l'accesso.",
+    "confirmRemoveYes": "Sì, rimuovi",
+    "cancel": "Annulla",
+    "roleChanged": "Il ruolo di {name} è stato cambiato.",
+    "removed": "{name} è stato rimosso.",
+    "ownerOnly": "Solo i proprietari possono modificare i proprietari",
+    "errors": {
+      "last_owner": "Un'organizzazione deve avere almeno un proprietario.",
+      "owner_only": "Solo un proprietario può rendere qualcuno proprietario o modificare un proprietario."
+    }
   },
   "dashboard": {
     "previewPage": "Anteprima pagina",
@@ -528,7 +548,8 @@
     "rate_limited": "Troppi tentativi. Attendi un momento.",
     "internal": "Qualcosa è andato storto da parte nostra.",
     "reference": "Riferimento: {id}",
-    "rateLimitedRetry": "Troppi tentativi. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
+    "rateLimitedRetry": "Troppi tentativi. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+    "impersonation_blocked": "Lo staff che agisce come membro non può farlo: rimborsi, pagamenti, esportazioni, eliminazioni e conferme sono disattivati."
   },
   "notFound": {
     "title": "Pagina non trovata",
@@ -569,7 +590,16 @@
         "expired": "Questo accesso è scaduto. Accedi di nuovo."
       }
     },
-    "rateLimited": "Troppi tentativi di accesso. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
+    "rateLimited": "Troppi tentativi di accesso. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+    "signedOutEverywhere": "Sei uscito ovunque.",
+    "handoff": {
+      "title": "Continua su {site}",
+      "description": "Accedi con il tuo account Yayatoh per continuare su {site}.",
+      "signedInAs": "Hai eseguito l'accesso come {name} ({email}).",
+      "continue": "Continua su {site}",
+      "otherAccount": "Usa un altro account",
+      "failed": "Non siamo riusciti a riportarti su {site}. Riprova."
+    }
   },
   "orgPicker": {
     "emptyTitle": "Non fai ancora parte di un’organizzazione",
@@ -3610,7 +3640,13 @@
       "required": "Il tuo ruolo richiede la verifica in due passaggi, quindi non può essere disattivata.",
       "already_enabled": "La verifica in due passaggi è già attiva.",
       "not_enabled": "La verifica in due passaggi è disattivata."
-    }
+    },
+    "impersonating": "La sicurezza dell'account non è disponibile mentre lo staff di Yayatoh agisce come questo membro.",
+    "sessionsTitle": "Esci ovunque",
+    "sessionsExplain": "Chiude tutte le tue sessioni: su questo e su altri dispositivi, nelle app e sui siti degli organizzatori. Dovrai accedere di nuovo.",
+    "signOutEverywhere": "Esci ovunque",
+    "confirmSignOutEverywhere": "Uscire ora da tutti i dispositivi e i siti?",
+    "confirmSignOutEverywhereYes": "Sì, esci ovunque"
   },
   "stepUp": {
     "title": "Conferma che sei tu",
@@ -3632,5 +3668,24 @@
     "invalidPassword": "La password non è corretta.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti, poi riprova.",
     "unauthenticated": "La sessione è scaduta. Accedi di nuovo."
+  },
+  "authError": {
+    "metaTitle": "Link di accesso non utilizzabile",
+    "eyebrow": "Accedi",
+    "title": "Questo link di accesso non può essere usato",
+    "description": "Potrebbe essere scaduto, già usato o destinato a un altro sito. Accedi di nuovo per continuare.",
+    "signInAgain": "Accedi di nuovo",
+    "home": "Vai alla home page"
+  },
+  "tenantAccount": {
+    "signIn": "Accedi",
+    "signedInAs": "Accesso eseguito come {name}",
+    "signOut": "Esci"
+  },
+  "impersonation": {
+    "label": "Accesso dello staff",
+    "banner": "Stai agendo come {member} ({staff}, staff di Yayatoh). Rimborsi, pagamenti, esportazioni ed eliminazioni sono disattivati. Termina alle {until}.",
+    "end": "Termina",
+    "endLabel": "Smetti di agire come {member}"
   }
 }

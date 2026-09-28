@@ -30,7 +30,7 @@ const owner = (page: Page) => newUser(page, { org: true, twoFactor: true });
 
 async function invite(page: Page, email: string, role: string) {
   await page.getByLabel('Email address').fill(email);
-  await page.getByLabel('Role').selectOption(role);
+  await page.getByLabel('Role', { exact: true }).selectOption(role);
   await page.getByRole('button', { name: 'Send invitation' }).click();
 }
 
@@ -94,7 +94,7 @@ test.describe('step-up: "Confirm it\'s you"', () => {
       page.getByRole('alert').filter({ hasText: "Please confirm it's you to continue." }),
     ).toBeVisible();
     await expect(page.getByLabel('Email address')).toHaveValue(email);
-    await expect(page.getByLabel('Role')).toHaveValue('finance');
+    await expect(page.getByLabel('Role', { exact: true })).toHaveValue('finance');
     await expect(page.getByRole('listitem').filter({ hasText: email })).toHaveCount(0);
 
     // The Cancel button does the same; then confirm with the keyboard alone.

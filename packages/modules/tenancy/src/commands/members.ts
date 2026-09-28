@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { isUniqueViolation } from '@yayatoh/db';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
 import { and, eq, sql } from 'drizzle-orm';
 import { AddMemberInput, ChangeMemberRoleInput, MembershipDto, RemoveMemberInput } from '../dto.ts';
@@ -14,6 +14,21 @@ async function ownerCount(tx: TenantTx, orgId: string): Promise<number> {
   return row?.n ?? 0;
 }
 
+/**
+ * Only an owner may make someone an owner, or change or remove an owner (like invitations): an
+ * admin can't promote themselves or push an owner out. Platform (system) actors are not members.
+ */
+async function assertOwnerIfOwnership(tx: TenantTx, orgId: string, ctx: Ctx) {
+  if (ctx.actor.type === 'system') return;
+  if (ctx.actor.type !== 'user') throw new DomainError('forbidden');
+  const [me] = await tx
+    .select({ role: memberships.role })
+    .from(memberships)
+    .where(and(eq(memberships.orgId, orgId), eq(memberships.userId, ctx.actor.userId)));
+  if (me?.role !== 'owner')
+    throw new DomainError('forbidden', 'Only an owner can change owners', { reason: 'owner_only' });
+}
+
 export const addMemberCommand = tenantCommand({
   name: 'tenancy.addMember',
   input: AddMemberInput,
@@ -24,6 +39,7 @@ export const addMemberCommand = tenantCommand({
   stepUp: true,
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
+    if (input.role === 'owner') await assertOwnerIfOwnership(tx, orgId, ctx);
     try {
       const [row] = await tx
         .insert(memberships)
@@ -68,8 +84,11 @@ export const changeMemberRoleCommand = tenantCommand({
       .from(memberships)
       .where(and(eq(memberships.orgId, orgId), eq(memberships.userId, input.userId)));
     if (!current) throw new DomainError('not_found');
+    if (current.role === 'owner' || input.role === 'owner') await assertOwnerIfOwnership(tx, orgId, ctx);
     if (current.role === 'owner' && input.role !== 'owner' && (await ownerCount(tx, orgId)) <= 1) {
-      throw new DomainError('invalid_state', 'An organization needs at least one owner');
+      throw new DomainError('invalid_state', 'An organization needs at least one owner', {
+        reason: 'last_owner',
+      });
     }
     const [row] = await tx
       .update(memberships)
@@ -89,6 +108,7 @@ export const changeMemberRoleCommand = tenantCommand({
 
 export const removeMemberCommand = tenantCommand({
   name: 'tenancy.removeMember',
+  category: 'delete',
   input: RemoveMemberInput,
   output: MembershipDto,
   entitlement: 'core',
@@ -103,8 +123,11 @@ export const removeMemberCommand = tenantCommand({
       .from(memberships)
       .where(and(eq(memberships.orgId, orgId), eq(memberships.userId, input.userId)));
     if (!current) throw new DomainError('not_found');
+    if (current.role === 'owner') await assertOwnerIfOwnership(tx, orgId, ctx);
     if (current.role === 'owner' && (await ownerCount(tx, orgId)) <= 1) {
-      throw new DomainError('invalid_state', 'An organization needs at least one owner');
+      throw new DomainError('invalid_state', 'An organization needs at least one owner', {
+        reason: 'last_owner',
+      });
     }
     await tx.delete(memberships).where(eq(memberships.id, current.id));
     return current;

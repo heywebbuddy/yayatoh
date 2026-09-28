@@ -317,6 +317,7 @@ const removeAudit = (input: { assetId: string }) => ({
 
 export const removeMediaCommand = tenantCommand({
   name: 'media.removeMedia',
+  category: 'delete',
   input: RemoveInput,
   output: Ok,
   entitlement: 'core',
@@ -328,6 +329,7 @@ export const removeMediaCommand = tenantCommand({
 
 export const removeLogoCommand = tenantCommand({
   name: 'media.removeLogo',
+  category: 'delete',
   input: RemoveInput,
   output: Ok,
   entitlement: 'core',

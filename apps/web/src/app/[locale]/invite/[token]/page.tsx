@@ -1,18 +1,16 @@
 import { lookupInvitation } from '@yayatoh/tenancy';
 import { Alert, buttonClass, Card, Label, PageHeader } from '@yayatoh/ui';
-import { headers } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
-import { getAuth } from '@/server/auth.ts';
+import { ownAuthSession } from '@/server/session.ts';
 import { acceptInviteAction } from './actions.ts';
 
 export default async function InvitePage({ params }: { params: Promise<{ locale: string; token: string }> }) {
   const { locale, token } = await params;
   setRequestLocale(locale);
   const t = await getTranslations();
-  const h = await headers();
   const inv = await lookupInvitation(decodeURIComponent(token));
-  const session = await getAuth().api.getSession({ headers: h });
+  const session = await ownAuthSession();
   const next = `/invite/${token}`;
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">

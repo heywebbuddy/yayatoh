@@ -143,6 +143,7 @@ export const setDoorStaffCommand = tenantCommand({
 
 export const removeDoorStaffCommand = tenantCommand({
   name: 'checkin.removeDoorStaff',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), userId: z.uuid() }),
   output: z.object({ removed: z.boolean() }),
   entitlement: 'checkin',

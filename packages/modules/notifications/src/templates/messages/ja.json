@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {{org} の振込先の銀行口座が変更されました。} other {{org} に振込先口座が接続されました。}}安全のため、{until} より前にこの口座へ送金されることはありません。この変更に心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。",
       "cta": "振込を確認"
     },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh サポートが {org} で {member} として操作しています",
+      "intro": "Yayatoh のスタッフが、サポートのために {org} で {member} として操作を開始しました。理由：{reason}。このアクセスは {until} までに終了します。この間、返金・支払い・エクスポート・削除は一切できず、行われた操作はすべてアクティビティログに記録されます。心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。",
+      "cta": "アクティビティを見る"
+    },
     "notifications.test": {
       "subject": "テスト通知",
       "intro": "通知は正常に動作しています。"

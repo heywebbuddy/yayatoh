@@ -2,7 +2,7 @@
 
 import { isTwoFactorError, type StepUpMethod, type StepUpProof } from '@yayatoh/auth';
 import { getTwoFactor } from './auth.ts';
-import { getSession, sessionToken } from './session.ts';
+import { ownSession, sessionToken } from './session.ts';
 
 export interface StepUpStart {
   readonly ok: boolean;
@@ -14,7 +14,7 @@ export interface StepUpStart {
  * password, else a code we email now). Re-calling it emails a new code.
  */
 export async function beginStepUpAction(): Promise<StepUpStart> {
-  const session = await getSession();
+  const session = await ownSession();
   if (!session) return { ok: false, method: null };
   const tf = getTwoFactor();
   const method = await tf.method(session.userId);
@@ -29,7 +29,7 @@ export interface StepUpState {
 
 /** Check the proof and restart this session's fresh window (10 minutes). Audited in packages/auth. */
 export async function confirmStepUpAction(_prev: StepUpState, form: FormData): Promise<StepUpState> {
-  const session = await getSession();
+  const session = await ownSession();
   const token = await sessionToken();
   if (!session || !token) return { ok: false, code: 'unauthenticated' };
   const method = String(form.get('method') ?? '');

@@ -8,7 +8,7 @@ import {
   markOrgEvidenceSubmittedCommand,
   saveEvidenceDraftCommand,
 } from '@yayatoh/payments';
-import { disputeEvidenceQuery } from '@yayatoh/reports';
+import { disputeEvidencePacketQuery } from '@yayatoh/reports';
 import { revalidatePath } from 'next/cache';
 import type { FormState } from '@/lib/form-state.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -54,7 +54,7 @@ export async function evidenceAction(
     );
     if (!dispute) return { ok: false, code: 'not_found' };
     const order = await executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
-    const evidence = await executeQuery(disputeEvidenceQuery, { disputeId }, data.ctx, ports);
+    const evidence = await executeQuery(disputeEvidencePacketQuery, { disputeId }, data.ctx, ports);
     const packet = await renderEvidencePdf(await evidencePacketDocument(evidence));
     if (packet.kind === 'too_large')
       return { ok: false, code: 'validation_failed', reason: 'packet_too_large' };

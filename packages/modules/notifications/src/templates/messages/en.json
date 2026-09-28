@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {The bank account that receives {org}'s payouts was changed.} other {A payout account was connected to {org}.}} For your security, no money is sent to it before {until}. If you didn't make this change, contact Yayatoh support right away.",
       "cta": "Review payouts"
     },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh support is acting as {member} in {org}",
+      "intro": "A Yayatoh staff member started acting as {member} in {org} to help. Reason: {reason}. This access ends by {until}. While it lasts, nothing can be refunded, paid out, exported or deleted, and everything done appears in your activity log. If you didn't expect this, contact Yayatoh support right away.",
+      "cta": "View activity"
+    },
     "notifications.test": {
       "subject": "Test notification",
       "intro": "Notifications are working."

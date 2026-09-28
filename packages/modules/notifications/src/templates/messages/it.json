@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {Il conto bancario che riceve i pagamenti di {org} è stato modificato.} other {È stato collegato un conto per i pagamenti a {org}.}} Per sicurezza, non verrà inviato denaro prima del {until}. Se non hai effettuato tu questa modifica, contatta subito l'assistenza Yayatoh.",
       "cta": "Controlla i pagamenti"
     },
+    "tenancy.staff-access": {
+      "subject": "Il supporto Yayatoh sta agendo come {member} in {org}",
+      "intro": "Un membro dello staff di Yayatoh ha iniziato ad agire come {member} in {org} per aiutare. Motivo: {reason}. Questo accesso termina entro il {until}. Nel frattempo non è possibile rimborsare, pagare, esportare o eliminare nulla, e tutto ciò che viene fatto compare nel registro attività. Se non te lo aspettavi, contatta subito il supporto Yayatoh.",
+      "cta": "Vedi attività"
+    },
     "notifications.test": {
       "subject": "Notifica di prova",
       "intro": "Le notifiche funzionano."

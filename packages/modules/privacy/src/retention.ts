@@ -56,6 +56,7 @@ export type RetentionResult = z.infer<typeof RetentionResult>;
  */
 export const retentionCommand = tenantCommand({
   name: 'privacy.retention',
+  category: 'delete',
   input: z.object({}),
   output: RetentionResult,
   entitlement: 'core',

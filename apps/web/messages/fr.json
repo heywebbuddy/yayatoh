@@ -59,6 +59,9 @@
       "other": "Notification",
       "payments": {
         "destination-changed": "Nouveau compte de versement : les virements vers ce compte commencent après le {until}"
+      },
+      "tenancy": {
+        "staff-access": "Le support Yayatoh agit en tant que {member} jusqu'à {until}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "Rappel d’événement"
       },
       "tenancy": {
-        "invitation": "Invitation à l’équipe"
+        "invitation": "Invitation à l’équipe",
+        "staff-access": "Accès du personnel"
       },
       "ticketing": {
         "claim-link": "Lien de réclamation de billet",
@@ -282,7 +286,23 @@
     "invited": "Invitation envoyée.",
     "pending": "Invitations en attente",
     "expires": "Expire le {date}",
-    "revoke": "Révoquer"
+    "revoke": "Révoquer",
+    "manage": "Gérer",
+    "roleFor": "Rôle de {name}",
+    "saveRole": "Enregistrer le rôle",
+    "saveRoleFor": "Enregistrer le rôle de {name}",
+    "remove": "Retirer",
+    "removeName": "Retirer {name}",
+    "confirmRemove": "Retirer {name} de cette organisation ? L'accès prend fin immédiatement.",
+    "confirmRemoveYes": "Oui, retirer",
+    "cancel": "Annuler",
+    "roleChanged": "Le rôle de {name} a été modifié.",
+    "removed": "{name} a été retiré.",
+    "ownerOnly": "Seuls les propriétaires peuvent modifier les propriétaires",
+    "errors": {
+      "last_owner": "Une organisation doit avoir au moins un propriétaire.",
+      "owner_only": "Seul un propriétaire peut nommer un propriétaire ou modifier un propriétaire."
+    }
   },
   "dashboard": {
     "previewPage": "Aperçu de la page",
@@ -528,7 +548,8 @@
     "rate_limited": "Trop de tentatives. Veuillez patienter un instant.",
     "internal": "Une erreur s’est produite de notre côté.",
     "reference": "Référence : {id}",
-    "rateLimitedRetry": "Trop de tentatives. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+    "rateLimitedRetry": "Trop de tentatives. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+    "impersonation_blocked": "Un membre du personnel agissant en tant que membre ne peut pas faire cela : remboursements, versements, exports, suppressions et confirmations sont désactivés."
   },
   "notFound": {
     "title": "Page introuvable",
@@ -569,7 +590,16 @@
         "expired": "Cette connexion a expiré. Reconnectez-vous."
       }
     },
-    "rateLimited": "Trop de tentatives de connexion. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+    "rateLimited": "Trop de tentatives de connexion. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+    "signedOutEverywhere": "Vous êtes déconnecté partout.",
+    "handoff": {
+      "title": "Continuer vers {site}",
+      "description": "Connectez-vous avec votre compte Yayatoh pour continuer vers {site}.",
+      "signedInAs": "Vous êtes connecté en tant que {name} ({email}).",
+      "continue": "Continuer vers {site}",
+      "otherAccount": "Utiliser un autre compte",
+      "failed": "Impossible de vous renvoyer vers {site}. Réessayez."
+    }
   },
   "orgPicker": {
     "emptyTitle": "Vous ne faites encore partie d’aucune organisation",
@@ -3610,7 +3640,13 @@
       "required": "Votre rôle exige la validation en deux étapes : elle ne peut pas être désactivée.",
       "already_enabled": "La validation en deux étapes est déjà activée.",
       "not_enabled": "La validation en deux étapes est désactivée."
-    }
+    },
+    "impersonating": "La sécurité du compte n'est pas disponible pendant que le personnel de Yayatoh agit en tant que ce membre.",
+    "sessionsTitle": "Se déconnecter partout",
+    "sessionsExplain": "Met fin à toutes vos sessions : sur cet appareil et les autres, dans les applis et sur les sites propres des organisateurs. Vous devrez vous reconnecter.",
+    "signOutEverywhere": "Se déconnecter partout",
+    "confirmSignOutEverywhere": "Se déconnecter maintenant de tous les appareils et sites ?",
+    "confirmSignOutEverywhereYes": "Oui, me déconnecter partout"
   },
   "stepUp": {
     "title": "Confirmez votre identité",
@@ -3632,5 +3668,24 @@
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
     "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+  },
+  "authError": {
+    "metaTitle": "Lien de connexion inutilisable",
+    "eyebrow": "Connexion",
+    "title": "Ce lien de connexion ne peut pas être utilisé",
+    "description": "Il a peut-être expiré, déjà servi ou été prévu pour un autre site. Reconnectez-vous pour continuer.",
+    "signInAgain": "Se reconnecter",
+    "home": "Aller à la page d'accueil"
+  },
+  "tenantAccount": {
+    "signIn": "Se connecter",
+    "signedInAs": "Connecté en tant que {name}",
+    "signOut": "Se déconnecter"
+  },
+  "impersonation": {
+    "label": "Accès du personnel",
+    "banner": "Vous agissez en tant que {member} ({staff}, équipe Yayatoh). Remboursements, versements, exports et suppressions sont désactivés. Fin à {until}.",
+    "end": "Terminer",
+    "endLabel": "Cesser d'agir en tant que {member}"
   }
 }

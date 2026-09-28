@@ -295,6 +295,7 @@ export const importSummaryQuery = tenantQuery({
  */
 export const importFailuresQuery = tenantQuery({
   name: 'attendees.importFailures',
+  category: 'export',
   input: z.object({
     eventId: z.uuid(),
     batchId: z.uuid(),

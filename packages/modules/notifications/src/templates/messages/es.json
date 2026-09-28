@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {Se cambió la cuenta bancaria que recibe los pagos de {org}.} other {Se conectó una cuenta de pagos a {org}.}} Por tu seguridad, no se le enviará dinero antes del {until}. Si no hiciste este cambio, contacta de inmediato con el soporte de Yayatoh.",
       "cta": "Revisar pagos"
     },
+    "tenancy.staff-access": {
+      "subject": "El soporte de Yayatoh está actuando como {member} en {org}",
+      "intro": "Un miembro del equipo de Yayatoh empezó a actuar como {member} en {org} para ayudar. Motivo: {reason}. Este acceso termina a más tardar el {until}. Mientras dure, no se puede reembolsar, pagar, exportar ni eliminar nada, y todo lo que se haga aparece en tu registro de actividad. Si no lo esperabas, contacta con el soporte de Yayatoh de inmediato.",
+      "cta": "Ver actividad"
+    },
     "notifications.test": {
       "subject": "Notificación de prueba",
       "intro": "Las notificaciones funcionan."
