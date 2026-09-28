@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
+import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
 import { TtlCache } from './lib/ttl-cache.ts';
 
@@ -102,8 +103,11 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);
   forwarded.set('content-security-policy', headers['content-security-policy'] as string);
+  // The noindex guard: never-indexed hosts and private pages say so on every response.
+  const robots = robotsHeader(kind, stripLocale(path, routing.locales));
   const secure = (res: NextResponse) => {
     for (const [k, v] of Object.entries(headers)) res.headers.set(k, v);
+    if (robots) res.headers.set('x-robots-tag', robots);
     if (!isDeviceId(req.cookies.get(DEVICE_COOKIE)?.value))
       res.cookies.set(DEVICE_COOKIE, newDeviceId(), {
         httpOnly: true,

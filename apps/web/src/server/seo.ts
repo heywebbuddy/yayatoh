@@ -1,6 +1,7 @@
 import 'server-only';
 import type { Metadata } from 'next';
-import { apexHost, indexable, originFor } from '@/lib/hosts.ts';
+import { apexHost, originFor } from '@/lib/hosts.ts';
+import { robotsMeta } from '@/lib/seo/robots.ts';
 import { pageAlternates } from '@/lib/seo/urls.ts';
 import type { RequestHost } from './request-origin.ts';
 
@@ -34,7 +35,6 @@ export function publicMetadata(o: {
   index?: boolean;
 }): Metadata {
   const alternates = pageAlternates(o.canonicalOrigin, o.locale, o.path);
-  const index = (o.index ?? true) && indexable(o.req.kind);
   return {
     title: o.title,
     ...(o.description ? { description: o.description } : {}),
@@ -48,6 +48,6 @@ export function publicMetadata(o: {
       images: [{ url: o.image, width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', images: [o.image] },
-    robots: index ? { index: true, follow: true } : { index: false, follow: true },
+    robots: robotsMeta(o.req.kind, o.index),
   };
 }

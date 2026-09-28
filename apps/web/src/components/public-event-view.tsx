@@ -86,8 +86,11 @@ export async function PublicEventView({
   );
   const needsDate = dates.length > 0 && !chosen;
   const target = (await checkoutTarget(slug)) ?? (unlockedPrivate && live ? live : null);
-  if (orgId && target?.orgId !== orgId) notFound();
   const contentTarget = (await pageTarget(slug)) ?? (unlockedPrivate && live ? live : null);
+  // On a tenant site the event must be the host's org's. Ownership comes from the page target
+  // (published or postponed), not the checkout one: a postponed event has no checkout but is
+  // still listed in its site's sitemap (M1.11d noindex guard found it 404ing there).
+  if (orgId && (target ?? contentTarget)?.orgId !== orgId) notFound();
   const content: PublicEventContentDto = contentTarget
     ? await publicEventContent(contentTarget)
     : { sections: [], announcements: [] };
