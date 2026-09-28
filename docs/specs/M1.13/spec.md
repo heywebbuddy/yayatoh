@@ -118,6 +118,7 @@ Roadmap M1.15 ("`/v1` exposes the mobile-ready endpoints (… agenda) with gener
 - **Test keys beyond read-only** (M1.13d built read-only, non-personal test keys): a linked sandbox org whose orders run on the fake provider (Stripe test mode); per-key event lists; key expiry.
 - `X-Yayatoh-Client` 426 handshake against `minimumVersions` (config is served; enforcement arrives with a mobile build); bracket filters, `expand[]`, sparse fields.
 - Mobile endpoints for wallet passes, checkout sessions, seat map, RSVP and personal schedules: their features are not built yet (M4.7, M5.x); scanner manifest/lookup/device commands beyond M1.9's. (The agenda and other content reads are M1.13d.)
+- **Scalar docs page accessibility (open):** axe finds violations inside Scalar 1.72.1's own markup on `/v1/docs`: `button-name` (critical: unnamed collapse buttons), `color-contrast` (sidebar search placeholder), `target-size` (group toggles, the MCP link) and `scrollable-region-focusable` (endpoint lists). None come from our document. Needs a Scalar upgrade/patch or our own reference page; until then the docs e2e checks content only.
 - **M1.13d later:** `/v1` writes for content and the program (the console only for now); access-code unlocks on `/v1` (private events stay 404 publicly); speaker photos and exhibitor/sponsor logos (not in the media pipeline yet); ETags on the pre-M1.13d routes (their `Cache-Control` is unchanged); a CDN purge by tag when public content changes (max-age is 60 s); an ICS feed of the agenda.
 - Upstash rate-limit adapter (owner account).
 
@@ -162,6 +163,6 @@ Roadmap M1.15 ("`/v1` exposes the mobile-ready endpoints (… agenda) with gener
 | Spectral ruleset passes on the committed spec and catches each rule | `apps/api/tests/spectral.test.ts`; `pnpm contracts:check` |
 | Test keys: `yy_test_` prefix, read-only non-personal scopes (command, table CHECK, authorizer), smaller rate limit, prefix tamper → 401 | `content.int.test.ts` "/v1 test keys"; `packages/sdk/tests/sdk.int.test.ts` "reads the agenda (M1.13d)…" |
 | Console: Key type (live/test), refused scopes on the field, Test badge in the list, keyboard only, axe, Arabic RTL | `apps/web/e2e/api-keys.spec.ts` "test keys (M1.13d)" |
-| API docs list the new endpoints (axe) | `api-keys.spec.ts` "lists the mobile-ready content endpoints (M1.13d) and passes axe" |
+| API docs list the new endpoints (axe: **not yet**, Scalar's own markup fails it, see Later) | `api-keys.spec.ts` "lists the mobile-ready content endpoints (M1.13d)" |
 | SDK smoke: the generated client reads the agenda from the built app | e2e `api-content.spec.ts`; `sdk.int.test.ts` |
 | oasdiff clean after the Spectral fixes | `oasdiff breaking` against `m0.5-foundation-ey5gqp`: no breaking changes |

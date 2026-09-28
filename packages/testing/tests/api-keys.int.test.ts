@@ -36,6 +36,7 @@ describe('org API keys (M1.13)', () => {
       orgId: a.org.id,
       keyId: k.id,
       scopes: ['events:read', 'orders:read'],
+      sandbox: false,
     });
   });
 
