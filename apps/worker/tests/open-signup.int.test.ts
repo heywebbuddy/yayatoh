@@ -1,3 +1,4 @@
+import { publicFeeSchedules } from '@yayatoh/billing';
 import { withoutTenant, withTenant } from '@yayatoh/db';
 import { setPlatformAuditSink, withPlatformReader } from '@yayatoh/db/platform';
 import { closePools } from '@yayatoh/db/testing';
@@ -301,5 +302,26 @@ describe('open-signup abuse limits (M3.11a)', () => {
     for (let i = 0; i < RATE_LIMIT_POLICIES.openSignup.device.limit; i++)
       expect((await rl.check('openSignup', { device, identity: uuidv7() })).allowed).toBe(true);
     expect((await rl.check('openSignup', { device, identity: uuidv7() })).allowed).toBe(false);
+  });
+});
+
+describe('the pricing page reads the fee configuration (M3.11a)', () => {
+  it('returns the default plan’s schedule per currency, exactly as configured, and no org overrides', async () => {
+    const configured = await withPlatformReader(
+      { actor: 'staff:test', reason: 'test: fee schedules' },
+      (tx) =>
+        tx.execute<{ currency: string; percent_bps: number; fixed_minor: string }>(
+          sql`select currency, percent_bps, fixed_minor from billing.fee_schedules
+            where plan_key = 'launch_standard' order by currency`,
+        ),
+    );
+    expect(configured.length).toBeGreaterThan(0);
+    expect(await publicFeeSchedules()).toEqual(
+      configured.map((r) => ({
+        currency: r.currency,
+        percentBps: r.percent_bps,
+        fixedMinor: Number(r.fixed_minor),
+      })),
+    );
   });
 });

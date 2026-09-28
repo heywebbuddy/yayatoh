@@ -139,6 +139,15 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Dual-hash grace.** A person with accounts on both instances can sign in with either password for 180 days after the freeze (then only the primary), and is moved to Argon2id at their first sign-in. Label `auth`.
   - **Remember-me and signed-URL vectors** (V6) need each instance's `APP_KEY` in the vault and a vector corpus (audit step 8).
 
+## Public launch (M3.11)
+- [ ] **Flip open signup at launch** (M3.11a, D28; labels `auth`, `tenancy`). Self-serve signup is built and **off**. When the launch gate is met (30 days stable after B-Y, ≥ 2 live events, M3.2 + M3.5 + M3.6 shipped), an admin opens it in the staff console (**Open signup**: a reason and a confirmation box; every change is in the history and the access log) or with `pnpm --filter @yayatoh/worker open-signup -- --on --reason "…"`.
+- [ ] **Open signup: confirm the defaults** (M3.11a, pending owner; labels `auth`, `tenancy`, `db-migration`). Built with these; say if any should change:
+  - **Who flips the switch:** staff **admins** only (support and finance neither see nor change it): it is the launch decision.
+  - **Setup mode (`limited`):** self-serve orgs start `limited` until they accept the terms, publish a privacy notice and create a first event, then press **Finish setup**. While limited they can build, publish and sell (funds stay on the platform until payouts are set up and released, M1.3c), but **cannot send guests bulk messages** (attendee emails, announcements, surveys): the main spam route for unvetted accounts. Brand, a teammate and payouts are on the checklist but don't hold the org back. Orgs made with a signup code start `active` as before.
+  - **Abuse limits:** a verified email (the emailed one-time code creates the account), at most **3 self-serve orgs per account a day**, 5 attempts per device and 20 per IP an hour, and the "are you a person?" check (the fake checkbox until the Turnstile keys from M1.2f are set; without keys in production the rate limits alone apply).
+  - **Waitlist:** while closed, the signup page says self-serve signup is coming soon and offers the signup-code box. "Join the waitlist" appears once you give an address or form: set `SIGNUP_WAITLIST_URL` (an `https:` form or a `mailto:` address). No waitlist data is stored by Yayatoh.
+- [ ] **Pricing page numbers** (M3.11a; label `payments`, `legal-copy`): `/pricing` shows the default plan's fee per currency straight from `billing.fee_schedules` (0 % until you set the platform fee, see Phase 3 plan §4) with a worked all-in example, in the visitor's currency (their pick, else their country from the hosting edge, else USD). Setting the fee is a reviewed migration of those rows. Review the page copy ("no subscription and no setup fee", the explanations of passing on and absorbing the fee); translations are machine drafts.
+
 ## Phase 0 (M0.1–M0.4)
 - [ ] **Accounts** (M0.1):
   - Vercel Pro, Neon, Fly.io, Upstash, Cloudflare (R2), AWS (SES, KMS), Doppler, Sentry, Axiom, Ably.
