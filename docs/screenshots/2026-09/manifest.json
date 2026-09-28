@@ -1,0 +1,377 @@
+{
+  "generated": "2026-09-28",
+  "shots": [
+    {
+      "file": "01-dashboard-full.png",
+      "title": "Organizer dashboard (full page)",
+      "caption": "The home screen for Lakeside Events: a setup checklist, sales for the period, and every event at a glance. An organizer sees what needs doing next the moment they sign in.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events"
+    },
+    {
+      "file": "01-dashboard.png",
+      "title": "Organizer dashboard",
+      "caption": "The home screen for Lakeside Events: a setup checklist, sales for the period, and every event at a glance. An organizer sees what needs doing next the moment they sign in.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events"
+    },
+    {
+      "file": "02-events-list.png",
+      "title": "Events list",
+      "caption": "All of the organization’s events with their status and countdown, filterable by category and tag. Each card opens the event’s own workspace.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events"
+    },
+    {
+      "file": "03-event-overview-full.png",
+      "title": "Event overview (full page)",
+      "caption": "The Midwest Leadership Summit workspace: registrations against goal, gross sales, tickets distributed and people seated, the sales curve compared with past years, items that need attention and the event readiness checklist.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/midwest-leadership-summit-2027"
+    },
+    {
+      "file": "03-event-overview.png",
+      "title": "Event overview",
+      "caption": "The Midwest Leadership Summit workspace: registrations against goal, gross sales, tickets distributed and people seated, the sales curve compared with past years, items that need attention and the event readiness checklist.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/midwest-leadership-summit-2027"
+    },
+    {
+      "file": "04-event-wizard.png",
+      "title": "Create an event — guided setup",
+      "caption": "Step 1 of the three-step guided setup: name, tagline and event type. The event stays a draft until the organizer publishes it, and everything can be changed later.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/events/new/guided"
+    },
+    {
+      "file": "05-tickets-orders-full.png",
+      "title": "Tickets & Orders (full page)",
+      "caption": "Ticket types with price, all-in buyer price and sales against inventory, then the most recent orders. Also here: the box office, checkout questions and the buyer email check.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-open-house/tickets-orders"
+    },
+    {
+      "file": "05-tickets-orders.png",
+      "title": "Tickets & Orders",
+      "caption": "Ticket types with price, all-in buyer price and sales against inventory, then the most recent orders. Also here: the box office, checkout questions and the buyer email check.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-open-house/tickets-orders"
+    },
+    {
+      "file": "06-order-full.png",
+      "title": "Order detail (full page)",
+      "caption": "One order: what was paid, each ticket with its holder and code, fraud signals and every email sent about the order. Further down (full page) is the refund panel, which follows the event’s refund policy.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-open-house/orders/01a0e908-80d3-7971-bf02-968ebe40f185"
+    },
+    {
+      "file": "06-order.png",
+      "title": "Order detail",
+      "caption": "One order: what was paid, each ticket with its holder and code, fraud signals and every email sent about the order. Further down (full page) is the refund panel, which follows the event’s refund policy.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-open-house/orders/01a0e908-80d3-7971-bf02-968ebe40f185"
+    },
+    {
+      "file": "07-attendees-full.png",
+      "title": "Attendees (full page)",
+      "caption": "Everyone attending the summit with ticket type, seat, payment status and order. Quick filters (registered, needs a seat, awaiting payment, waitlist), search and import. (Demo figures for a large conference.)",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/attendees"
+    },
+    {
+      "file": "07-attendees.png",
+      "title": "Attendees",
+      "caption": "Everyone attending the summit with ticket type, seat, payment status and order. Quick filters (registered, needs a seat, awaiting payment, waitlist), search and import. (Demo figures for a large conference.)",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/attendees"
+    },
+    {
+      "file": "07b-attendees-bulk-full.png",
+      "title": "Attendees — bulk actions (full page)",
+      "caption": "Selecting people on the attendee list opens bulk actions, such as assigning seats or messaging a group, applied to all of them at once.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-open-house/attendees"
+    },
+    {
+      "file": "07b-attendees-bulk.png",
+      "title": "Attendees — bulk actions",
+      "caption": "Selecting people on the attendee list opens bulk actions, such as assigning seats or messaging a group, applied to all of them at once.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-open-house/attendees"
+    },
+    {
+      "file": "08-seating-editor-full.png",
+      "title": "Seating chart editor (full page)",
+      "caption": "The seating plan for the Lakeside Charity Gala: rows and round tables around the stage, priced and on sale. Every seat can also be edited from an accessible list, not only by dragging on the map.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-charity-gala-2027/seating"
+    },
+    {
+      "file": "08-seating-editor.png",
+      "title": "Seating chart editor",
+      "caption": "The seating plan for the Lakeside Charity Gala: rows and round tables around the stage, priced and on sale. Every seat can also be edited from an accessible list, not only by dragging on the map.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-charity-gala-2027/seating"
+    },
+    {
+      "file": "09-check-in-full.png",
+      "title": "Check-in (door screen) (full page)",
+      "caption": "Check-in for tonight’s Lakeside Autumn Social: arrivals so far, scan or type a ticket code, recent scans, entrances and zones, and the scanner devices (phones that keep scanning offline).",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-autumn-social/onsite"
+    },
+    {
+      "file": "09-check-in.png",
+      "title": "Check-in (door screen)",
+      "caption": "Check-in for tonight’s Lakeside Autumn Social: arrivals so far, scan or type a ticket code, recent scans, entrances and zones, and the scanner devices (phones that keep scanning offline).",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-autumn-social/onsite"
+    },
+    {
+      "file": "10-announcement-full.png",
+      "title": "Announcement composer (full page)",
+      "caption": "Writing an announcement to everyone attending the Open House, sent by email and push notification, with a preview before sending and a log of past announcements.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-open-house/marketing"
+    },
+    {
+      "file": "10-announcement.png",
+      "title": "Announcement composer",
+      "caption": "Writing an announcement to everyone attending the Open House, sent by email and push notification, with a preview before sending and a log of past announcements.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-open-house/marketing"
+    },
+    {
+      "file": "10b-email-templates-full.png",
+      "title": "Email templates (full page)",
+      "caption": "The organizer can rewrite the subject and opening paragraph of every email Yayatoh sends on their behalf (tickets, refunds, reminders…), in each of the 13 supported languages.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/emails"
+    },
+    {
+      "file": "10b-email-templates.png",
+      "title": "Email templates",
+      "caption": "The organizer can rewrite the subject and opening paragraph of every email Yayatoh sends on their behalf (tickets, refunds, reminders…), in each of the 13 supported languages.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/emails"
+    },
+    {
+      "file": "11-survey-results-full.png",
+      "title": "Post-event survey results (full page)",
+      "caption": "Results of the Spring Supper Club survey: response rate, Net Promoter Score, and a summary of every question, with the written comments. Guests answer from a personal link, no account needed.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/spring-supper-club/marketing/surveys/01a0e908-f1e1-7527-afc9-4cfd6ba095f9"
+    },
+    {
+      "file": "11-survey-results.png",
+      "title": "Post-event survey results",
+      "caption": "Results of the Spring Supper Club survey: response rate, Net Promoter Score, and a summary of every question, with the written comments. Guests answer from a personal link, no account needed.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/spring-supper-club/marketing/surveys/01a0e908-f1e1-7527-afc9-4cfd6ba095f9"
+    },
+    {
+      "file": "12-reports-full.png",
+      "title": "Event analysis (full page)",
+      "caption": "Sales, tickets and check-ins for the Open House, with charts over time and by ticket type. Bookings and a gross-to-net finance view sit on the tabs alongside.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/e/lakeside-open-house/analysis"
+    },
+    {
+      "file": "12-reports.png",
+      "title": "Event analysis",
+      "caption": "Sales, tickets and check-ins for the Open House, with charts over time and by ticket type. Bookings and a gross-to-net finance view sit on the tabs alongside.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-open-house/analysis"
+    },
+    {
+      "file": "12b-reports-finance.png",
+      "title": "Event finance",
+      "caption": "From gross sales to net revenue: refunds, disputes and platform fees, line by line, so the organizer knows exactly what they will receive.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/e/lakeside-open-house/analysis/finance"
+    },
+    {
+      "file": "13-payouts.png",
+      "title": "Payouts and settlements",
+      "caption": "How ticket money reaches the organizer: connect a bank account for direct payouts, or let Yayatoh collect and settle after the event. Settlements and anything owed are listed with dates.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/payouts"
+    },
+    {
+      "file": "14-team.png",
+      "title": "Team",
+      "caption": "Invite teammates by email and give each a role — admin, manager, finance, marketing, box office, scanner or viewer — so everyone sees only what their job needs.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/team"
+    },
+    {
+      "file": "15-settings-brand.png",
+      "title": "Settings — brand",
+      "caption": "Organization settings with the brand kit: brand colour and logo carry through to the organizer’s event pages, tenant site and emails.",
+      "viewport": "1440×900",
+      "path": "/o/lakeside-events/settings"
+    },
+    {
+      "file": "15-settings-full.png",
+      "title": "Settings (full page)",
+      "caption": "All organization settings: agreements, general details (name, language, time zone), brand, legal pages and more.",
+      "viewport": "1440×full",
+      "path": "/o/lakeside-events/settings"
+    },
+    {
+      "file": "16-marketplace-full.png",
+      "title": "Marketplace home (full page)",
+      "caption": "The public Yayatoh marketplace: search upcoming events by name, city, category, price and date. Every price shown includes all fees.",
+      "viewport": "1440×full",
+      "path": "yayatoh.localhost/"
+    },
+    {
+      "file": "16-marketplace.png",
+      "title": "Marketplace home",
+      "caption": "The public Yayatoh marketplace: search upcoming events by name, city, category, price and date. Every price shown includes all fees.",
+      "viewport": "1440×900",
+      "path": "yayatoh.localhost/"
+    },
+    {
+      "file": "17-event-page-full.png",
+      "title": "Public event page (full page)",
+      "caption": "The Midwest Leadership Summit’s public page: key facts, passes with all-in prices, the agenda, and a way for existing ticket holders to get their tickets again.",
+      "viewport": "1440×full",
+      "path": "yayatoh.localhost/events/midwest-leadership-summit-2027"
+    },
+    {
+      "file": "17-event-page.png",
+      "title": "Public event page",
+      "caption": "The Midwest Leadership Summit’s public page: key facts, passes with all-in prices, the agenda, and a way for existing ticket holders to get their tickets again.",
+      "viewport": "1440×900",
+      "path": "yayatoh.localhost/events/midwest-leadership-summit-2027"
+    },
+    {
+      "file": "18-seat-picker-full.png",
+      "title": "Seat picker (full page)",
+      "caption": "The whole gala page with the seat map and the list of seats.",
+      "viewport": "1440×full",
+      "path": "yayatoh.localhost/events/lakeside-charity-gala-2027"
+    },
+    {
+      "file": "18-seat-picker.png",
+      "title": "Seat picker",
+      "caption": "Buyers choose their exact seats for the Lakeside Charity Gala on the seat map (or from a list). Taken seats are greyed out live, and seats are held while the buyer pays.",
+      "viewport": "1440×900",
+      "path": "yayatoh.localhost/events/lakeside-charity-gala-2027"
+    },
+    {
+      "file": "19-checkout-email-code.png",
+      "title": "Guest checkout — email code",
+      "caption": "Guest checkout without an account: before paying, the buyer confirms their email with a 6-digit code, so tickets never go to a mistyped address.",
+      "viewport": "1440×900",
+      "path": "/events/lakeside-open-house"
+    },
+    {
+      "file": "19b-checkout-payment.png",
+      "title": "Checkout — payment",
+      "caption": "The payment step with the order total (test payment page in this preview; live events use the payment provider’s secure card form).",
+      "viewport": "1440×900",
+      "path": "/checkout"
+    },
+    {
+      "file": "20-order-confirmation-full.png",
+      "title": "Order confirmation and tickets (full page)",
+      "caption": "What the buyer sees after paying: the order is confirmed and each ticket has its own QR code to show at the door, with a PDF download and optional push notifications for event updates.",
+      "viewport": "1440×full",
+      "path": "/orders/…"
+    },
+    {
+      "file": "20-order-confirmation.png",
+      "title": "Order confirmation and tickets",
+      "caption": "What the buyer sees after paying: the order is confirmed and each ticket has its own QR code to show at the door, with a PDF download and optional push notifications for event updates.",
+      "viewport": "1440×900",
+      "path": "/orders/…"
+    },
+    {
+      "file": "21-tenant-site-full.png",
+      "title": "Organizer’s own site (full page)",
+      "caption": "Lakeside Events’ own branded site (on its own web address), listing only their events. Organizers can also connect a custom domain.",
+      "viewport": "1440×full",
+      "path": "lakeside-events.yayatoh.events/"
+    },
+    {
+      "file": "21-tenant-site.png",
+      "title": "Organizer’s own site",
+      "caption": "Lakeside Events’ own branded site (on its own web address), listing only their events. Organizers can also connect a custom domain.",
+      "viewport": "1440×900",
+      "path": "lakeside-events.yayatoh.events/"
+    },
+    {
+      "file": "22-mobile-event-page.png",
+      "title": "Mobile — public event page",
+      "caption": "The same event page on a phone. Every public page is designed mobile-first.",
+      "viewport": "375×812",
+      "path": "yayatoh.localhost/events/midwest-leadership-summit-2027"
+    },
+    {
+      "file": "22b-mobile-ticket-full.png",
+      "title": "Mobile — ticket (full page)",
+      "caption": "The buyer’s ticket on a phone, with the QR code ready to scan at the door.",
+      "viewport": "375×full",
+      "path": "/orders/…"
+    },
+    {
+      "file": "22b-mobile-ticket.png",
+      "title": "Mobile — ticket",
+      "caption": "The buyer’s ticket on a phone, with the QR code ready to scan at the door.",
+      "viewport": "375×812",
+      "path": "/orders/…"
+    },
+    {
+      "file": "23-arabic-event-page.png",
+      "title": "Arabic — public event page",
+      "caption": "The event page in Arabic, laid out right to left. Yayatoh ships in 13 languages.",
+      "viewport": "1440×900",
+      "path": "yayatoh.localhost/ar/events/midwest-leadership-summit-2027"
+    },
+    {
+      "file": "23b-arabic-dashboard.png",
+      "title": "Arabic — organizer dashboard",
+      "caption": "The organizer console in Arabic, mirrored right to left, including navigation and numbers.",
+      "viewport": "1440×900",
+      "path": "/ar/o/lakeside-events"
+    },
+    {
+      "file": "24-scan-app.png",
+      "title": "Scan app — ready to scan",
+      "caption": "The door scanner on a phone. It downloads the guest list for offline use, so scanning keeps working if the Wi-Fi drops.",
+      "viewport": "390×844",
+      "path": "/scan"
+    },
+    {
+      "file": "24b-scan-welcome-in.png",
+      "title": "Scan app — “Welcome in”",
+      "caption": "A valid ticket scanned: a big, clear “Welcome in” with the guest’s name and ticket type, confirmed by the server.",
+      "viewport": "390×844",
+      "path": "/scan"
+    },
+    {
+      "file": "25-admin-home.png",
+      "title": "Staff admin — home",
+      "caption": "Yayatoh’s own staff console: every organization on the platform, with search and status, for support and oversight. Every staff action is logged.",
+      "viewport": "1440×900",
+      "path": "admin console /"
+    },
+    {
+      "file": "25b-admin-org-detail-full.png",
+      "title": "Staff admin — organization detail (full page)",
+      "caption": "One organization as Yayatoh staff see it: its details and status, with controls such as suspending or closing it. Every action needs a reason and is kept in the audit log.",
+      "viewport": "1440×full",
+      "path": "admin console /tenants/01a0e907-e7f3-74d5-9895-b4a4798ae2e9"
+    },
+    {
+      "file": "25b-admin-org-detail.png",
+      "title": "Staff admin — organization detail",
+      "caption": "One organization as Yayatoh staff see it: its details and status, with controls such as suspending or closing it. Every action needs a reason and is kept in the audit log.",
+      "viewport": "1440×900",
+      "path": "admin console /tenants/01a0e907-e7f3-74d5-9895-b4a4798ae2e9"
+    }
+  ],
+  "skipped": []
+}
