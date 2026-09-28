@@ -44,7 +44,7 @@ Freed stock comes from any source — a refund, a cancelled ticket, an expired c
 
 **Organizer console** (Tickets & Orders → Waitlists, `/o/{org}/e/{event}/tickets-orders/waitlists`; `orders:support`: owner, admin, manager, box office, event managers; viewers, finance and marketing get 404):
 - One row per pass and date: people and tickets waiting, open offers, checked out, lapsed or declined, free now, automatic offers on/paused.
-- The chosen list's people: open offers, the line in order (position), then history; offer now (any waiting person, out of line order, needs free stock regardless of the line's reserve), remove (an open offer's stock goes back).
+- The chosen list's people: open offers, the line in order (position), then history; offer now (any waiting person, out of line order, needs free stock regardless of the line's reserve), remove (an open offer's stock goes back; category `delete`, refused while staff act as a member).
 - Settings: automatic offers on/paused, offer window in hours (0.25–168).
 - **Export** (CSV: position, name, email, tickets, status, joined in the event's timezone) through the bulk-export path: `attendees:export`, a recent step-up, audited `bulk.start` (`orders.waitlistCsv`), category `export` (refused while staff act as a member), CSV-injection safe, downloadable only for the same event.
 
@@ -63,12 +63,13 @@ Freed stock comes from any source — a refund, a cancelled ticket, an expired c
 | AC8 | Dates: a date needs its own line and its capacity decides; other dates keep selling; the public can't take the date's waited-for place; the offer is for its date only | `waitlist.int.test.ts` |
 | AC9 | Console: counts, pause stops automatic offers, manual offer out of order with the list's window, not enough stock refused, remove releases the offer, resume offers again; audited | `waitlist.int.test.ts` |
 | AC10 | Export: step-up required, viewers forbidden, another org not found, CSV in line order with the event's time and escaped names, `bulk.start` audited | `waitlist.int.test.ts` |
-| AC11 | Permissions and isolation: viewers refused on every console query and command; the public can't sweep; another org sees nothing, can't act on or join, and its sweeper never touches this org's line; link tokens resolve to their own org only; fixture rows for both orgs | `waitlist.int.test.ts`, `isolation.int.test.ts` |
-| AC12 | DSAR erasure deletes the places and releases an open offer | `waitlist.int.test.ts` |
-| AC13 | Browser: join from the sold-out page by keyboard (name required, emailed code), place in line, confirmation email; the organizer cancels a ticket; the offer email arrives; the place stays sold out to others; the guest checks out from the offer (free order); the link then says checked out; axe on each page | `apps/web/e2e/waitlist.spec.ts` |
-| AC14 | Browser: an expired offer passes to the next person and emails the first, who rejoins by keyboard at the back; the next person declines in Arabic (RTL, axe) and the place goes back to the first | `waitlist.spec.ts` |
-| AC15 | Browser: the organizer sees counts, pauses automatic offers (bad window refused), offers by hand out of order by keyboard, is refused without stock, removes someone, exports the CSV after a step-up; a viewer has no link and gets 404 | `waitlist.spec.ts` |
-| AC16 | Email kinds and web strings in 13 locales with valid ICU plurals | `packages/modules/notifications/tests/render.test.ts`, `apps/web/tests/messages.test.ts` |
+| AC11 | Impersonation: the export start and file are `export`, removing people is `delete` | `packages/testing/tests/impersonation.int.test.ts` |
+| AC12 | Permissions and isolation: viewers refused on every console query and command; the public can't sweep; another org sees nothing, can't act on or join, and its sweeper never touches this org's line; link tokens resolve to their own org only; fixture rows for both orgs | `waitlist.int.test.ts`, `isolation.int.test.ts` |
+| AC13 | DSAR erasure deletes the places and releases an open offer | `waitlist.int.test.ts` |
+| AC14 | Browser: join from the sold-out page by keyboard (name required, emailed code), place in line, confirmation email; the organizer cancels a ticket; the offer email arrives; the place stays sold out to others; the guest checks out from the offer (free order); the link then says checked out; axe on each page | `apps/web/e2e/waitlist.spec.ts` |
+| AC15 | Browser: an expired offer passes to the next person and emails the first, who rejoins by keyboard at the back; the next person declines in Arabic (RTL, axe) and the place goes back to the first | `waitlist.spec.ts` |
+| AC16 | Browser: the organizer sees counts, pauses automatic offers (bad window refused), offers by hand out of order by keyboard, is refused without stock, removes someone, exports the CSV after a step-up; a viewer has no link and gets 404 | `waitlist.spec.ts` |
+| AC17 | Email kinds and web strings in 13 locales with valid ICU plurals | `packages/modules/notifications/tests/render.test.ts`, `apps/web/tests/messages.test.ts` |
 
 ### 5. Migration (to be renumbered at merge)
 `packages/db/drizzle/0066_ancient_dazzler.sql`: new tenant tables `orders.waitlists` and `orders.waitlist_entries` (`tenantTable`, ENABLE + FORCE RLS, org-leading indexes, composite FKs `waitlist_entries_waitlist_fk`, `waitlist_entries_order_fk`, partial uniques). Hand-written (between `-- hand-written: begin/end`):

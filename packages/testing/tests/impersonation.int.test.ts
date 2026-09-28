@@ -154,6 +154,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'reports.startBookingsCsv',
         // Survey responses CSV (M3.9a).
         'surveys.startResponsesCsv',
+        // Waitlist CSV (M3.10a).
+        'orders.startWaitlistCsv',
       ]),
     );
     const files = [...queries.values()].filter((q) => q.category === 'export').map((q) => q.name);
@@ -166,6 +168,7 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'attendees.importFailures',
         'reports.disputeEvidencePacket',
         'surveys.responsesCsvFile',
+        'orders.waitlistCsvFile',
       ]),
     );
     const money = flagged.filter((c) => c.category === 'money').map((c) => c.name);
@@ -187,6 +190,7 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
       expect.arrayContaining([
         'privacy.eraseSubject',
         'tenancy.removeMember',
+        'orders.removeWaitlistEntries',
         'tenancy.removeDomain',
         'media.removeMedia',
         'media.removeLogo',

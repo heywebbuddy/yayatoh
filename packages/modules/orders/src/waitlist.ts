@@ -1009,6 +1009,8 @@ export const removeWaitlistEntriesCommand = tenantCommand({
   output: z.object({ removed: z.int() }),
   entitlement: 'ticketing',
   permission: 'orders:support',
+  // Taking people off a list is a deletion for staff acting as a member (M1.2e).
+  category: 'delete',
   handler: async ({ input, ctx, tx }) => {
     let removed = 0;
     for (const id of [...new Set(input.entryIds)].sort()) {
