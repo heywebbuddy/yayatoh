@@ -68,10 +68,13 @@
     "kinds": {
       "orders": {
         "tickets": "Biglietti",
-        "refund": "Rimborso"
+        "refund": "Rimborso",
+        "refund-requested": "Richiesta di rimborso",
+        "refund-declined": "Richiesta di rimborso rifiutata"
       },
       "events": {
-        "reminder": "Promemoria evento"
+        "reminder": "Promemoria evento",
+        "postponed": "Evento rinviato"
       },
       "tenancy": {
         "invitation": "Invito al team",
@@ -221,7 +224,8 @@
     "emails": "Modelli email",
     "speakers": "Relatori",
     "sponsors": "Sponsor",
-    "media": "Immagini"
+    "media": "Immagini",
+    "refundRequests": "Richieste di rimborso"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -3996,6 +4000,196 @@
     "terminated": {
       "title": "Questa organizzazione è chiusa",
       "body": "Il supporto Yayatoh l’ha chiusa. Le sue pagine pubbliche sono offline e non si può modificare nulla. Come proprietario puoi ancora aprirla e scaricare i tuoi dati, per esempio da Attività."
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "Cronologia",
+      "zone": "Orari nel fuso orario dell’evento ({zone}).",
+      "offline": "Scansionato offline",
+      "someone": "Un ex membro del team",
+      "voidReasons": {
+        "refunded": "Rimborsato",
+        "cancelled": "Annullato dall’organizzatore",
+        "dispute_lost": "Chargeback perso"
+      },
+      "kinds": {
+        "order_placed": "Ordine effettuato",
+        "payment_received": "Pagamento ricevuto",
+        "ticket_issued": "Biglietto n. {serial} emesso",
+        "ticket_voided": "Biglietto n. {serial} annullato",
+        "transfer_offered": "Biglietto n. {serial} offerto a un’altra persona",
+        "transfer_claimed": "Biglietto n. {serial} riscattato",
+        "transfer_revoked": "Trasferimento del biglietto n. {serial} ritirato",
+        "check_in": "Biglietto n. {serial} registrato all’ingresso",
+        "scan_refused": "Biglietto n. {serial} rifiutato all’ingresso",
+        "message": "Messaggio inviato",
+        "refund_requested": "L’acquirente ha chiesto un rimborso",
+        "refund_request_approved": "Richiesta di rimborso approvata",
+        "refund_request_declined": "Richiesta di rimborso rifiutata",
+        "refund_started": "Rimborso avviato",
+        "refund_succeeded": "Rimborso completato",
+        "refund_failed": "Rimborso non riuscito",
+        "dispute_opened": "Chargeback aperto",
+        "dispute_evidence_submitted": "Prove del chargeback inviate",
+        "dispute_won": "Chargeback vinto",
+        "dispute_lost": "Chargeback perso",
+        "note": "Nota"
+      }
+    },
+    "notes": {
+      "label": "Aggiungi una nota per il tuo team",
+      "hint": "Le note sono interne: gli acquirenti non le vedono mai.",
+      "add": "Aggiungi nota",
+      "added": "Nota aggiunta.",
+      "invalid": "Scrivi una nota di al massimo 2.000 caratteri."
+    },
+    "request": {
+      "title": "Richiesta di rimborso",
+      "tickets": "{count, plural, =0 {L’intero ordine} one {# biglietto} other {# biglietti}}",
+      "asked": "Richiesta il {date}",
+      "due": "Rispondere entro il {date}",
+      "overdue": "In ritardo",
+      "onTime": "Nei tempi",
+      "message": "Il suo messaggio",
+      "noMessage": "Nessun messaggio.",
+      "readOnly": "Proprietari, amministratori e finanza rispondono alle richieste di rimborso.",
+      "approveLegend": "Approva",
+      "approveFull": "Rimborsa i biglietti richiesti",
+      "approvePartial": "Rimborsa invece un importo (i biglietti restano validi)",
+      "amount": "Importo ({currency})",
+      "approve": "Approva e rimborsa",
+      "approved": "Approvata. L’acquirente riceverà un’email a rimborso completato.",
+      "answered": "Questa richiesta ha già avuto risposta.",
+      "declineLegend": "Rifiuta",
+      "reason": "Motivo (inviato all’acquirente)",
+      "reasonHint": "Da 3 a 500 caratteri.",
+      "reasonInvalid": "Indica un motivo da 3 a 500 caratteri.",
+      "decline": "Rifiuta richiesta",
+      "declined": "Rifiutata. L’acquirente ha ricevuto il tuo motivo via email.",
+      "status": {
+        "open": "Aperta",
+        "approved": "Approvata",
+        "declined": "Rifiutata"
+      }
+    },
+    "queue": {
+      "title": "Richieste di rimborso",
+      "description": "Le richieste di rimborso degli acquirenti dei tuoi eventi. Rispondi a ciascuna entro 5 giorni lavorativi.",
+      "summary": "{open, plural, =0 {Nessuna richiesta aperta} one {# richiesta aperta} other {# richieste aperte}}, {overdue, plural, =0 {nessuna in ritardo} other {# in ritardo}}.",
+      "tabsLabel": "Richieste di rimborso per stato",
+      "caption": "Richieste di rimborso: {status}",
+      "empty": {
+        "open": "Nessuna richiesta di rimborso aperta.",
+        "approved": "Ancora nessuna richiesta di rimborso approvata.",
+        "declined": "Nessuna richiesta di rimborso rifiutata."
+      },
+      "buyer": "Acquirente",
+      "event": "Evento",
+      "tickets": "Biglietti",
+      "asked": "Richiesta",
+      "waiting": "In attesa da",
+      "due": "Rispondere entro",
+      "decided": "Risposta",
+      "outcome": "Esito",
+      "refundStatus": {
+        "pending": "rimborso in corso",
+        "succeeded": "rimborsato",
+        "failed": "rimborso non riuscito"
+      },
+      "age": "{days, plural, =0 {{hours, plural, one {# ora} other {# ore}}} one {# giorno} other {# giorni}}"
+    },
+    "buyer": {
+      "title": "Rimborso",
+      "intro": "Non puoi partecipare? Chiedi un rimborso all’organizzatore. Risponde entro 5 giorni lavorativi, secondo la politica di rimborso indicata sopra.",
+      "tickets": "Biglietti da rimborsare",
+      "ticket": "Biglietto n. {serial} · {type}",
+      "message": "Messaggio per l’organizzatore (facoltativo)",
+      "submit": "Chiedi un rimborso",
+      "sent": "Richiesta inviata. L’organizzatore risponde entro 5 giorni lavorativi.",
+      "open": "Hai chiesto un rimborso il {date}. L’organizzatore risponde entro 5 giorni lavorativi.",
+      "approved": "La tua richiesta di rimborso è stata approvata il {date}.",
+      "declined": "La tua richiesta di rimborso è stata rifiutata il {date}.",
+      "declineReason": "L’organizzatore ha scritto: «{reason}»",
+      "closed": "I rimborsi su richiesta si sono chiusi il {deadline}.",
+      "noRefunds": "La politica di rimborso di questo evento non consente rimborsi su richiesta.",
+      "pickTicket": "Scegli almeno un biglietto.",
+      "noLonger": "La politica di rimborso non consente più un rimborso su richiesta.",
+      "alreadyOpen": "Hai già chiesto il rimborso di questo ordine."
+    },
+    "policy": {
+      "orderTitle": "Politica di rimborso di questo ordine",
+      "tightenHint": "Una politica più restrittiva vale solo per gli ordini effettuati da ora in poi: gli acquirenti mantengono le condizioni con cui hanno acquistato. Una più generosa vale per tutti.",
+      "tightened": "Politica più restrittiva salvata. Vale per gli ordini effettuati da ora in poi; {count, plural, one {# ordine già venduto mantiene le condizioni con cui è stato acquistato} other {# ordini già venduti mantengono le condizioni con cui sono stati acquistati}}."
+    },
+    "wizard": {
+      "link": "Annulla o rinvia",
+      "title": "Annulla o rinvia",
+      "description": "Cosa succede a {name}, e al denaro, prima di cambiare qualcosa.",
+      "choose": "Cosa deve succedere a {name}?",
+      "cancelOption": "Annullarlo e rimborsare tutti gli acquirenti",
+      "cancelHint": "L’evento viene annullato e ogni ordine pagato viene rimborsato per intero, commissioni incluse, in un lotto che puoi mettere in pausa.",
+      "cancelNoRefundHint": "Solo proprietari e amministratori possono annullare un evento con rimborsi.",
+      "postponeOption": "Rinviarlo",
+      "postponeHint": "I biglietti restano validi per la nuova data. Gli acquirenti ricevono un’email e possono chiedere un rimborso secondo la tua politica di rimborso.",
+      "continue": "Continua",
+      "back": "Scegli di nuovo",
+      "notAllowed": "Solo proprietari e amministratori possono annullare un evento con rimborsi.",
+      "previewTitle": "Il denaro",
+      "previewCaption": "Rimborsi in base a come sono stati incassati gli ordini",
+      "orders": "Ordini pagati",
+      "gross": "Vendite lorde",
+      "fees": "Commissioni di prenotazione",
+      "alreadyRefunded": "Già rimborsato",
+      "flowCol": "Incassato",
+      "refundOrders": "Ordini",
+      "refundTotal": "Da rimborsare",
+      "feeBack": "Commissioni restituite",
+      "organizerShare": "Dalla tua quota",
+      "total": "Totale",
+      "disputed": "{count, plural, one {# ordine ha un chargeback aperto} other {# ordini hanno un chargeback aperto}} ({amount}) e {count, plural, one {è escluso} other {sono esclusi}}, così nessuno viene pagato due volte.",
+      "collected": "{count, plural, one {# ordine ti è stato pagato} other {# ordini ti sono stati pagati}} direttamente ({amount}): {count, plural, one {rimborsalo} other {rimborsali}} di persona.",
+      "confirm": "Ho capito: {name} viene annullato e {count, plural, =0 {nessun ordine viene rimborsato} one {# ordine viene rimborsato} other {# ordini vengono rimborsati}} ({amount}). Non si può annullare.",
+      "confirmRefunds": "Ho capito: {count, plural, =0 {nessun ordine viene rimborsato} one {# ordine viene rimborsato} other {# ordini vengono rimborsati}} ({amount}). Non si può annullare.",
+      "start": "Annulla l’evento e rimborsa",
+      "startRefundsOnly": "Rimborsa tutti gli acquirenti",
+      "cancelledAlready": "Questo evento è annullato.",
+      "postponedAlready": "Questo evento è rinviato. Gli acquirenti hanno ricevuto un’email: i loro biglietti restano validi. Riprogrammalo dalla home dell’evento quando avrai una nuova data.",
+      "postponeTitle": "Rinvia {name}",
+      "postponeBody": "I biglietti restano validi. Ogni acquirente che ne ha uno riceve un’email sul rinvio e sulla possibilità di chiedere un rimborso secondo la tua politica. Se viene rinviato di oltre 90 giorni senza una nuova data, spetta un rimborso completo.",
+      "postpone": "Rinvia l’evento"
+    },
+    "run": {
+      "title": "Rimborso agli acquirenti",
+      "status": {
+        "running": "In corso",
+        "paused": "In pausa",
+        "done": "Terminato"
+      },
+      "started": "Avviato il {date}",
+      "progressLabel": "Avanzamento dei rimborsi",
+      "progress": "{processed} di {total} ordini",
+      "refunded": "Rimborsati",
+      "skippedDisputed": "Chargeback aperto",
+      "skipped": "Esclusi",
+      "failed": "Non riusciti",
+      "amount": "Importo rimborsato",
+      "working": "I rimborsi procedono in background. Puoi lasciare questa pagina.",
+      "paused": "In pausa. Non viene rimborsato altro finché non riprendi.",
+      "pause": "Metti in pausa",
+      "resume": "Riprendi",
+      "reconciled": "Riconciliato: la contabilità ha registrato esattamente i rimborsi ({amount}).",
+      "notReconciled": "La contabilità ({ledger}) non corrisponde ai rimborsi ({expected}). La finanza dovrebbe verificare.",
+      "receivable": "Dopo questi rimborsi devi {amount}; viene trattenuto dal tuo prossimo versamento.",
+      "exceptions": "Ordini esclusi o non riusciti",
+      "order": "Ordine",
+      "why": "Motivo",
+      "codes": {
+        "disputed": "Chargeback aperto",
+        "organizer_collected": "Pagato direttamente a te",
+        "nothing_left": "Nulla da rimborsare",
+        "failed": "Il rimborso non è riuscito ({code})"
+      }
     }
   }
 }

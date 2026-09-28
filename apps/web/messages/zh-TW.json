@@ -68,10 +68,13 @@
     "kinds": {
       "orders": {
         "tickets": "票券",
-        "refund": "退款"
+        "refund": "退款",
+        "refund-requested": "退款申請",
+        "refund-declined": "退款申請遭拒"
       },
       "events": {
-        "reminder": "活動提醒"
+        "reminder": "活動提醒",
+        "postponed": "活動延期"
       },
       "tenancy": {
         "invitation": "團隊邀請",
@@ -221,7 +224,8 @@
     "emails": "郵件範本",
     "speakers": "演講嘉賓",
     "sponsors": "贊助商",
-    "media": "圖片"
+    "media": "圖片",
+    "refundRequests": "退款申請"
   },
   "vocab": {
     "attendee": "參加者",
@@ -3996,6 +4000,196 @@
     "terminated": {
       "title": "此組織已關閉",
       "body": "Yayatoh 支援團隊已關閉此組織。其公開頁面已下線，無法再做任何變更。身為擁有者，你仍可開啟它並下載你的資料，例如在「動態」中。"
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "時間軸",
+      "zone": "時間為活動所在時區（{zone}）。",
+      "offline": "離線掃描",
+      "someone": "一位前團隊成員",
+      "voidReasons": {
+        "refunded": "已退款",
+        "cancelled": "主辦單位已取消",
+        "dispute_lost": "爭議款敗訴"
+      },
+      "kinds": {
+        "order_placed": "下單",
+        "payment_received": "收到付款",
+        "ticket_issued": "票券 #{serial} 已開立",
+        "ticket_voided": "票券 #{serial} 已作廢",
+        "transfer_offered": "票券 #{serial} 已轉讓給他人",
+        "transfer_claimed": "票券 #{serial} 已領取",
+        "transfer_revoked": "票券 #{serial} 的轉讓已撤回",
+        "check_in": "票券 #{serial} 已入場",
+        "scan_refused": "票券 #{serial} 於入口被拒",
+        "message": "已傳送訊息",
+        "refund_requested": "買家申請退款",
+        "refund_request_approved": "退款申請已核准",
+        "refund_request_declined": "退款申請已拒絕",
+        "refund_started": "退款已發起",
+        "refund_succeeded": "退款已完成",
+        "refund_failed": "退款失敗",
+        "dispute_opened": "發生爭議款",
+        "dispute_evidence_submitted": "已提交爭議款證據",
+        "dispute_won": "爭議款勝訴",
+        "dispute_lost": "爭議款敗訴",
+        "note": "備註"
+      }
+    },
+    "notes": {
+      "label": "為團隊新增備註",
+      "hint": "備註僅限內部：買家看不到。",
+      "add": "新增備註",
+      "added": "已新增備註。",
+      "invalid": "備註不可超過 2,000 個字元。"
+    },
+    "request": {
+      "title": "退款申請",
+      "tickets": "{count, plural, =0 {整筆訂單} other {# 張票券}}",
+      "asked": "申請於 {date}",
+      "due": "請於 {date} 前回覆",
+      "overdue": "已逾期",
+      "onTime": "未逾期",
+      "message": "買家留言",
+      "noMessage": "沒有留言。",
+      "readOnly": "退款申請由擁有者、管理員與財務回覆。",
+      "approveLegend": "核准",
+      "approveFull": "退還申請的票券",
+      "approvePartial": "改為退還一筆金額（票券仍有效）",
+      "amount": "金額（{currency}）",
+      "approve": "核准並退款",
+      "approved": "已核准。退款完成後買家會收到電子郵件。",
+      "answered": "此申請已回覆。",
+      "declineLegend": "拒絕",
+      "reason": "原因（會寄給買家）",
+      "reasonHint": "3 至 500 個字元。",
+      "reasonInvalid": "請填寫 3 至 500 個字元的原因。",
+      "decline": "拒絕申請",
+      "declined": "已拒絕。已將原因以電子郵件寄給買家。",
+      "status": {
+        "open": "待處理",
+        "approved": "已核准",
+        "declined": "已拒絕"
+      }
+    },
+    "queue": {
+      "title": "退款申請",
+      "description": "各場活動買家的退款申請。每筆請在 5 個工作天內回覆。",
+      "summary": "{open, plural, =0 {沒有待處理的申請} other {# 筆待處理}}，{overdue, plural, =0 {沒有逾期} other {# 筆逾期}}。",
+      "tabsLabel": "依狀態檢視退款申請",
+      "caption": "退款申請：{status}",
+      "empty": {
+        "open": "沒有待處理的退款申請。",
+        "approved": "尚無已核准的退款申請。",
+        "declined": "沒有已拒絕的退款申請。"
+      },
+      "buyer": "買家",
+      "event": "活動",
+      "tickets": "票券",
+      "asked": "申請時間",
+      "waiting": "已等待",
+      "due": "回覆期限",
+      "decided": "回覆時間",
+      "outcome": "結果",
+      "refundStatus": {
+        "pending": "退款處理中",
+        "succeeded": "已退款",
+        "failed": "退款失敗"
+      },
+      "age": "{days, plural, =0 {{hours, plural, other {# 小時}}} other {# 天}}"
+    },
+    "buyer": {
+      "title": "退款",
+      "intro": "無法出席？可以向主辦單位申請退款。主辦單位會依上方的退款政策在 5 個工作天內回覆。",
+      "tickets": "要退的票券",
+      "ticket": "票券 #{serial} · {type}",
+      "message": "給主辦單位的留言（選填）",
+      "submit": "申請退款",
+      "sent": "申請已送出。主辦單位會在 5 個工作天內回覆。",
+      "open": "你已於 {date} 申請退款。主辦單位會在 5 個工作天內回覆。",
+      "approved": "你的退款申請已於 {date} 核准。",
+      "declined": "你的退款申請已於 {date} 遭拒。",
+      "declineReason": "主辦單位表示：「{reason}」",
+      "closed": "依申請退款已於 {deadline} 截止。",
+      "noRefunds": "本活動的退款政策不接受依申請退款。",
+      "pickTicket": "請至少選擇一張票券。",
+      "noLonger": "退款政策已不再接受依申請退款。",
+      "alreadyOpen": "你已經為這筆訂單申請過退款。"
+    },
+    "policy": {
+      "orderTitle": "此訂單的退款政策",
+      "tightenHint": "較嚴格的政策只適用於之後的訂單：買家保有購買時的條件。較寬鬆的政策適用於所有人。",
+      "tightened": "已儲存較嚴格的政策，適用於之後的訂單；已售出的 {count} 筆訂單保有購買時的條件。"
+    },
+    "wizard": {
+      "link": "取消或延期",
+      "title": "取消或延期",
+      "description": "在做任何變更之前，先看看 {name} 與款項會如何。",
+      "choose": "{name} 要怎麼處理？",
+      "cancelOption": "取消活動並為所有買家退款",
+      "cancelHint": "活動將取消，每筆已付款訂單都會全額退款（含費用），分批進行，可隨時暫停。",
+      "cancelNoRefundHint": "只有擁有者與管理員可以取消活動並退款。",
+      "postponeOption": "延期",
+      "postponeHint": "票券在新日期仍然有效。買家會收到電子郵件，並可依你的退款政策申請退款。",
+      "continue": "繼續",
+      "back": "重新選擇",
+      "notAllowed": "只有擁有者與管理員可以取消活動並退款。",
+      "previewTitle": "款項",
+      "previewCaption": "依訂單收款方式的退款",
+      "orders": "已付款訂單",
+      "gross": "銷售總額",
+      "fees": "訂票手續費",
+      "alreadyRefunded": "已退款",
+      "flowCol": "收款方式",
+      "refundOrders": "訂單",
+      "refundTotal": "待退款",
+      "feeBack": "退還的訂票手續費",
+      "organizerShare": "來自你的分潤",
+      "total": "合計",
+      "disputed": "有 {count} 筆訂單有尚未結案的爭議款（{amount}），已排除在外，以免重複付款。",
+      "collected": "有 {count} 筆訂單由你直接收款（{amount}）：請當面退款。",
+      "confirm": "我了解：{name} 將取消，{count, plural, =0 {沒有訂單需要退款} other {將為 # 筆訂單退款}}（{amount}）。此操作無法復原。",
+      "confirmRefunds": "我了解：{count, plural, =0 {沒有訂單需要退款} other {將為 # 筆訂單退款}}（{amount}）。此操作無法復原。",
+      "start": "取消活動並退款",
+      "startRefundsOnly": "為所有買家退款",
+      "cancelledAlready": "此活動已取消。",
+      "postponedAlready": "此活動已延期。已寄信告知買家票券仍然有效。確定新日期後，請在活動首頁重新排程。",
+      "postponeTitle": "延期 {name}",
+      "postponeBody": "票券仍然有效。每位持票買家都會收到電子郵件，告知活動延期，並可依你的政策申請退款。若延期超過 90 天且沒有新日期，需全額退款。",
+      "postpone": "延期活動"
+    },
+    "run": {
+      "title": "正在為買家退款",
+      "status": {
+        "running": "進行中",
+        "paused": "已暫停",
+        "done": "已完成"
+      },
+      "started": "開始於 {date}",
+      "progressLabel": "退款進度",
+      "progress": "{processed} / {total} 筆訂單",
+      "refunded": "已退款",
+      "skippedDisputed": "尚未結案的爭議款",
+      "skipped": "已排除",
+      "failed": "失敗",
+      "amount": "已退款金額",
+      "working": "退款在背景進行。你可以離開此頁面。",
+      "paused": "已暫停。恢復前不會再退款。",
+      "pause": "暫停",
+      "resume": "恢復",
+      "reconciled": "已對帳：帳目記錄的金額與退款完全相符（{amount}）。",
+      "notReconciled": "帳目（{ledger}）與退款（{expected}）不符。請財務核查。",
+      "receivable": "這些退款後你欠款 {amount}，將從下次撥款中扣除。",
+      "exceptions": "被排除或失敗的訂單",
+      "order": "訂單",
+      "why": "原因",
+      "codes": {
+        "disputed": "尚未結案的爭議款",
+        "organizer_collected": "由你直接收款",
+        "nothing_left": "已無可退金額",
+        "failed": "退款失敗（{code}）"
+      }
     }
   }
 }

@@ -68,10 +68,13 @@
     "kinds": {
       "orders": {
         "tickets": "Tickets",
-        "refund": "Erstattung"
+        "refund": "Erstattung",
+        "refund-requested": "Erstattungsanfrage",
+        "refund-declined": "Erstattungsanfrage abgelehnt"
       },
       "events": {
-        "reminder": "Veranstaltungserinnerung"
+        "reminder": "Veranstaltungserinnerung",
+        "postponed": "Veranstaltung verschoben"
       },
       "tenancy": {
         "invitation": "Teameinladung",
@@ -221,7 +224,8 @@
     "emails": "E-Mail-Vorlagen",
     "speakers": "Speaker",
     "sponsors": "Sponsoren",
-    "media": "Bilder"
+    "media": "Bilder",
+    "refundRequests": "Erstattungsanfragen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -3996,6 +4000,196 @@
     "terminated": {
       "title": "Diese Organisation ist geschlossen",
       "body": "Der Yayatoh-Support hat sie geschlossen. Die öffentlichen Seiten sind offline, und nichts kann mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen, zum Beispiel unter Aktivität."
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "Verlauf",
+      "zone": "Zeiten in der Zeitzone der Veranstaltung ({zone}).",
+      "offline": "Offline gescannt",
+      "someone": "Ein ehemaliges Teammitglied",
+      "voidReasons": {
+        "refunded": "Erstattet",
+        "cancelled": "Vom Veranstalter storniert",
+        "dispute_lost": "Rückbuchung verloren"
+      },
+      "kinds": {
+        "order_placed": "Bestellung aufgegeben",
+        "payment_received": "Zahlung eingegangen",
+        "ticket_issued": "Ticket Nr. {serial} ausgestellt",
+        "ticket_voided": "Ticket Nr. {serial} ungültig gemacht",
+        "transfer_offered": "Ticket Nr. {serial} an jemand anderen weitergegeben",
+        "transfer_claimed": "Ticket Nr. {serial} übernommen",
+        "transfer_revoked": "Weitergabe von Ticket Nr. {serial} zurückgezogen",
+        "check_in": "Ticket Nr. {serial} eingecheckt",
+        "scan_refused": "Ticket Nr. {serial} am Einlass abgewiesen",
+        "message": "Nachricht gesendet",
+        "refund_requested": "Der Käufer hat eine Erstattung angefragt",
+        "refund_request_approved": "Erstattungsanfrage genehmigt",
+        "refund_request_declined": "Erstattungsanfrage abgelehnt",
+        "refund_started": "Erstattung gestartet",
+        "refund_succeeded": "Erstattung abgeschlossen",
+        "refund_failed": "Erstattung fehlgeschlagen",
+        "dispute_opened": "Rückbuchung eröffnet",
+        "dispute_evidence_submitted": "Nachweise zur Rückbuchung eingereicht",
+        "dispute_won": "Rückbuchung gewonnen",
+        "dispute_lost": "Rückbuchung verloren",
+        "note": "Notiz"
+      }
+    },
+    "notes": {
+      "label": "Notiz für dein Team hinzufügen",
+      "hint": "Notizen sind intern: Käufer sehen sie nie.",
+      "add": "Notiz hinzufügen",
+      "added": "Notiz hinzugefügt.",
+      "invalid": "Schreibe eine Notiz mit höchstens 2.000 Zeichen."
+    },
+    "request": {
+      "title": "Erstattungsanfrage",
+      "tickets": "{count, plural, =0 {Die ganze Bestellung} one {# Ticket} other {# Tickets}}",
+      "asked": "Angefragt am {date}",
+      "due": "Antwort bis {date}",
+      "overdue": "Überfällig",
+      "onTime": "Im Zeitplan",
+      "message": "Ihre Nachricht",
+      "noMessage": "Keine Nachricht.",
+      "readOnly": "Inhaber, Admins und Finanzen beantworten Erstattungsanfragen.",
+      "approveLegend": "Genehmigen",
+      "approveFull": "Die angefragten Tickets erstatten",
+      "approvePartial": "Stattdessen einen Betrag erstatten (Tickets bleiben gültig)",
+      "amount": "Betrag ({currency})",
+      "approve": "Genehmigen und erstatten",
+      "approved": "Genehmigt. Der Käufer erhält eine E-Mail, sobald die Erstattung durch ist.",
+      "answered": "Diese Anfrage wurde bereits beantwortet.",
+      "declineLegend": "Ablehnen",
+      "reason": "Grund (wird an den Käufer gesendet)",
+      "reasonHint": "3 bis 500 Zeichen.",
+      "reasonInvalid": "Gib einen Grund mit 3 bis 500 Zeichen an.",
+      "decline": "Anfrage ablehnen",
+      "declined": "Abgelehnt. Der Käufer hat deinen Grund per E-Mail erhalten.",
+      "status": {
+        "open": "Offen",
+        "approved": "Genehmigt",
+        "declined": "Abgelehnt"
+      }
+    },
+    "queue": {
+      "title": "Erstattungsanfragen",
+      "description": "Erstattungsanfragen der Käufer deiner Veranstaltungen. Beantworte jede innerhalb von 5 Werktagen.",
+      "summary": "{open, plural, =0 {Keine offenen Anfragen} one {# offene Anfrage} other {# offene Anfragen}}, {overdue, plural, =0 {keine überfällig} other {# überfällig}}.",
+      "tabsLabel": "Erstattungsanfragen nach Status",
+      "caption": "Erstattungsanfragen: {status}",
+      "empty": {
+        "open": "Keine offenen Erstattungsanfragen.",
+        "approved": "Noch keine genehmigten Erstattungsanfragen.",
+        "declined": "Keine abgelehnten Erstattungsanfragen."
+      },
+      "buyer": "Käufer",
+      "event": "Veranstaltung",
+      "tickets": "Tickets",
+      "asked": "Angefragt",
+      "waiting": "Wartet seit",
+      "due": "Antwort bis",
+      "decided": "Beantwortet",
+      "outcome": "Ergebnis",
+      "refundStatus": {
+        "pending": "Erstattung ausstehend",
+        "succeeded": "erstattet",
+        "failed": "Erstattung fehlgeschlagen"
+      },
+      "age": "{days, plural, =0 {{hours, plural, one {# Stunde} other {# Stunden}}} one {# Tag} other {# Tagen}}"
+    },
+    "buyer": {
+      "title": "Erstattung",
+      "intro": "Du kannst nicht kommen? Bitte den Veranstalter um eine Erstattung. Er antwortet innerhalb von 5 Werktagen nach der oben genannten Erstattungsrichtlinie.",
+      "tickets": "Zu erstattende Tickets",
+      "ticket": "Ticket Nr. {serial} · {type}",
+      "message": "Nachricht an den Veranstalter (optional)",
+      "submit": "Erstattung anfragen",
+      "sent": "Anfrage gesendet. Der Veranstalter antwortet innerhalb von 5 Werktagen.",
+      "open": "Du hast am {date} eine Erstattung angefragt. Der Veranstalter antwortet innerhalb von 5 Werktagen.",
+      "approved": "Deine Erstattungsanfrage wurde am {date} genehmigt.",
+      "declined": "Deine Erstattungsanfrage wurde am {date} abgelehnt.",
+      "declineReason": "Der Veranstalter schreibt: „{reason}“",
+      "closed": "Erstattungen auf Anfrage endeten am {deadline}.",
+      "noRefunds": "Die Erstattungsrichtlinie dieser Veranstaltung erlaubt keine Erstattung auf Anfrage.",
+      "pickTicket": "Wähle mindestens ein Ticket.",
+      "noLonger": "Die Erstattungsrichtlinie erlaubt keine Erstattung auf Anfrage mehr.",
+      "alreadyOpen": "Du hast für diese Bestellung bereits eine Erstattung angefragt."
+    },
+    "policy": {
+      "orderTitle": "Erstattungsrichtlinie dieser Bestellung",
+      "tightenHint": "Eine strengere Richtlinie gilt nur für Bestellungen ab jetzt: Käufer behalten die Bedingungen, zu denen sie gekauft haben. Eine großzügigere gilt für alle.",
+      "tightened": "Strengere Richtlinie gespeichert. Sie gilt für Bestellungen ab jetzt; {count, plural, one {# bereits verkaufte Bestellung behält die Bedingungen, zu denen sie gekauft wurde} other {# bereits verkaufte Bestellungen behalten die Bedingungen, zu denen sie gekauft wurden}}."
+    },
+    "wizard": {
+      "link": "Absagen oder verschieben",
+      "title": "Absagen oder verschieben",
+      "description": "Was mit {name} und dem Geld passiert, bevor sich etwas ändert.",
+      "choose": "Was soll mit {name} passieren?",
+      "cancelOption": "Absagen und allen Käufern erstatten",
+      "cancelHint": "Die Veranstaltung wird abgesagt und jede bezahlte Bestellung vollständig inklusive Gebühren erstattet, in einem Stapel, den du pausieren kannst.",
+      "cancelNoRefundHint": "Nur Inhaber und Admins können eine Veranstaltung mit Erstattungen absagen.",
+      "postponeOption": "Verschieben",
+      "postponeHint": "Tickets bleiben für den neuen Termin gültig. Käufer erhalten eine E-Mail und können nach deiner Erstattungsrichtlinie eine Erstattung anfragen.",
+      "continue": "Weiter",
+      "back": "Neu wählen",
+      "notAllowed": "Nur Inhaber und Admins können eine Veranstaltung mit Erstattungen absagen.",
+      "previewTitle": "Das Geld",
+      "previewCaption": "Erstattungen nach Art der Abrechnung",
+      "orders": "Bezahlte Bestellungen",
+      "gross": "Bruttoumsatz",
+      "fees": "Buchungsgebühren",
+      "alreadyRefunded": "Bereits erstattet",
+      "flowCol": "Abgerechnet",
+      "refundOrders": "Bestellungen",
+      "refundTotal": "Zu erstatten",
+      "feeBack": "Erstattete Buchungsgebühren",
+      "organizerShare": "Aus deinem Anteil",
+      "total": "Gesamt",
+      "disputed": "{count, plural, one {# Bestellung hat eine offene Rückbuchung} other {# Bestellungen haben eine offene Rückbuchung}} ({amount}) und {count, plural, one {bleibt} other {bleiben}} außen vor, damit niemand doppelt bezahlt wird.",
+      "collected": "{count, plural, one {# Bestellung wurde} other {# Bestellungen wurden}} direkt an dich bezahlt ({amount}): {count, plural, one {erstatte sie} other {erstatte sie}} persönlich.",
+      "confirm": "Ich verstehe: {name} wird abgesagt und {count, plural, =0 {keine Bestellung wird} one {# Bestellung wird} other {# Bestellungen werden}} erstattet ({amount}). Das lässt sich nicht rückgängig machen.",
+      "confirmRefunds": "Ich verstehe: {count, plural, =0 {keine Bestellung wird} one {# Bestellung wird} other {# Bestellungen werden}} erstattet ({amount}). Das lässt sich nicht rückgängig machen.",
+      "start": "Veranstaltung absagen und erstatten",
+      "startRefundsOnly": "Allen Käufern erstatten",
+      "cancelledAlready": "Diese Veranstaltung ist abgesagt.",
+      "postponedAlready": "Diese Veranstaltung ist verschoben. Käufer wurden per E-Mail informiert, dass ihre Tickets gültig bleiben. Plane sie auf der Veranstaltungsstartseite neu, sobald du einen neuen Termin hast.",
+      "postponeTitle": "{name} verschieben",
+      "postponeBody": "Tickets bleiben gültig. Jeder Käufer mit Ticket erhält eine E-Mail, dass die Veranstaltung verschoben ist und er nach deiner Erstattungsrichtlinie eine Erstattung anfragen kann. Bei einer Verschiebung um mehr als 90 Tage ohne neuen Termin steht eine volle Erstattung zu.",
+      "postpone": "Veranstaltung verschieben"
+    },
+    "run": {
+      "title": "Käufern wird erstattet",
+      "status": {
+        "running": "Läuft",
+        "paused": "Pausiert",
+        "done": "Fertig"
+      },
+      "started": "Gestartet am {date}",
+      "progressLabel": "Fortschritt der Erstattungen",
+      "progress": "{processed} von {total} Bestellungen",
+      "refunded": "Erstattet",
+      "skippedDisputed": "Offene Rückbuchung",
+      "skipped": "Außen vor",
+      "failed": "Fehlgeschlagen",
+      "amount": "Erstatteter Betrag",
+      "working": "Erstattungen laufen im Hintergrund. Du kannst diese Seite verlassen.",
+      "paused": "Pausiert. Bis du fortsetzt, wird nichts mehr erstattet.",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen",
+      "reconciled": "Abgestimmt: Die Buchhaltung hat genau die Erstattungen gebucht ({amount}).",
+      "notReconciled": "Die Buchhaltung ({ledger}) weicht von den Erstattungen ({expected}) ab. Die Finanzabteilung sollte das prüfen.",
+      "receivable": "Nach diesen Erstattungen schuldest du {amount}; das wird mit deiner nächsten Auszahlung verrechnet.",
+      "exceptions": "Ausgelassene oder fehlgeschlagene Bestellungen",
+      "order": "Bestellung",
+      "why": "Warum",
+      "codes": {
+        "disputed": "Offene Rückbuchung",
+        "organizer_collected": "Direkt an dich bezahlt",
+        "nothing_left": "Nichts mehr zu erstatten",
+        "failed": "Die Erstattung ist fehlgeschlagen ({code})"
+      }
     }
   }
 }

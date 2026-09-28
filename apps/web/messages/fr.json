@@ -68,10 +68,13 @@
     "kinds": {
       "orders": {
         "tickets": "Billets",
-        "refund": "Remboursement"
+        "refund": "Remboursement",
+        "refund-requested": "Demande de remboursement",
+        "refund-declined": "Demande de remboursement refusée"
       },
       "events": {
-        "reminder": "Rappel d’événement"
+        "reminder": "Rappel d’événement",
+        "postponed": "Événement reporté"
       },
       "tenancy": {
         "invitation": "Invitation à l’équipe",
@@ -221,7 +224,8 @@
     "emails": "Modèles d’e-mail",
     "speakers": "Intervenants",
     "sponsors": "Sponsors",
-    "media": "Images"
+    "media": "Images",
+    "refundRequests": "Demandes de remboursement"
   },
   "vocab": {
     "attendee": "Participant",
@@ -3996,6 +4000,196 @@
     "terminated": {
       "title": "Cette organisation est fermée",
       "body": "Le support Yayatoh l’a fermée. Ses pages publiques sont hors ligne et plus rien ne peut être modifié. En tant que propriétaire, vous pouvez toujours l’ouvrir et télécharger vos données, par exemple depuis Activité."
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "Chronologie",
+      "zone": "Heures dans le fuseau horaire de l’événement ({zone}).",
+      "offline": "Scanné hors ligne",
+      "someone": "Un ancien membre de l’équipe",
+      "voidReasons": {
+        "refunded": "Remboursé",
+        "cancelled": "Annulé par l’organisateur",
+        "dispute_lost": "Rétrofacturation perdue"
+      },
+      "kinds": {
+        "order_placed": "Commande passée",
+        "payment_received": "Paiement reçu",
+        "ticket_issued": "Billet n° {serial} émis",
+        "ticket_voided": "Billet n° {serial} annulé",
+        "transfer_offered": "Billet n° {serial} proposé à quelqu’un d’autre",
+        "transfer_claimed": "Billet n° {serial} récupéré",
+        "transfer_revoked": "Transfert du billet n° {serial} retiré",
+        "check_in": "Billet n° {serial} enregistré",
+        "scan_refused": "Billet n° {serial} refusé à l’entrée",
+        "message": "Message envoyé",
+        "refund_requested": "L’acheteur a demandé un remboursement",
+        "refund_request_approved": "Demande de remboursement acceptée",
+        "refund_request_declined": "Demande de remboursement refusée",
+        "refund_started": "Remboursement lancé",
+        "refund_succeeded": "Remboursement effectué",
+        "refund_failed": "Remboursement échoué",
+        "dispute_opened": "Rétrofacturation ouverte",
+        "dispute_evidence_submitted": "Preuves de la rétrofacturation envoyées",
+        "dispute_won": "Rétrofacturation gagnée",
+        "dispute_lost": "Rétrofacturation perdue",
+        "note": "Note"
+      }
+    },
+    "notes": {
+      "label": "Ajouter une note pour votre équipe",
+      "hint": "Les notes sont internes : les acheteurs ne les voient jamais.",
+      "add": "Ajouter la note",
+      "added": "Note ajoutée.",
+      "invalid": "Rédigez une note de 2 000 caractères au plus."
+    },
+    "request": {
+      "title": "Demande de remboursement",
+      "tickets": "{count, plural, =0 {Toute la commande} one {# billet} other {# billets}}",
+      "asked": "Demandée le {date}",
+      "due": "Répondre avant le {date}",
+      "overdue": "En retard",
+      "onTime": "Dans les délais",
+      "message": "Son message",
+      "noMessage": "Aucun message.",
+      "readOnly": "Les propriétaires, administrateurs et la finance répondent aux demandes de remboursement.",
+      "approveLegend": "Accepter",
+      "approveFull": "Rembourser les billets demandés",
+      "approvePartial": "Rembourser plutôt un montant (les billets restent valables)",
+      "amount": "Montant ({currency})",
+      "approve": "Accepter et rembourser",
+      "approved": "Acceptée. L’acheteur reçoit un e-mail quand le remboursement aboutit.",
+      "answered": "Cette demande a déjà reçu une réponse.",
+      "declineLegend": "Refuser",
+      "reason": "Motif (envoyé à l’acheteur)",
+      "reasonHint": "De 3 à 500 caractères.",
+      "reasonInvalid": "Indiquez un motif de 3 à 500 caractères.",
+      "decline": "Refuser la demande",
+      "declined": "Refusée. L’acheteur a reçu votre motif par e-mail.",
+      "status": {
+        "open": "Ouverte",
+        "approved": "Acceptée",
+        "declined": "Refusée"
+      }
+    },
+    "queue": {
+      "title": "Demandes de remboursement",
+      "description": "Les demandes de remboursement des acheteurs de vos événements. Répondez à chacune sous 5 jours ouvrés.",
+      "summary": "{open, plural, =0 {Aucune demande ouverte} one {# demande ouverte} other {# demandes ouvertes}}, {overdue, plural, =0 {aucune en retard} one {# en retard} other {# en retard}}.",
+      "tabsLabel": "Demandes de remboursement par statut",
+      "caption": "Demandes de remboursement : {status}",
+      "empty": {
+        "open": "Aucune demande de remboursement ouverte.",
+        "approved": "Aucune demande de remboursement acceptée pour l’instant.",
+        "declined": "Aucune demande de remboursement refusée."
+      },
+      "buyer": "Acheteur",
+      "event": "Événement",
+      "tickets": "Billets",
+      "asked": "Demandée",
+      "waiting": "En attente depuis",
+      "due": "Répondre avant le",
+      "decided": "Répondue",
+      "outcome": "Résultat",
+      "refundStatus": {
+        "pending": "remboursement en cours",
+        "succeeded": "remboursé",
+        "failed": "remboursement échoué"
+      },
+      "age": "{days, plural, =0 {{hours, plural, one {# heure} other {# heures}}} one {# jour} other {# jours}}"
+    },
+    "buyer": {
+      "title": "Remboursement",
+      "intro": "Vous ne pouvez pas venir ? Demandez un remboursement à l’organisateur. Il répond sous 5 jours ouvrés, selon la politique de remboursement ci-dessus.",
+      "tickets": "Billets à rembourser",
+      "ticket": "Billet n° {serial} · {type}",
+      "message": "Message à l’organisateur (facultatif)",
+      "submit": "Demander un remboursement",
+      "sent": "Demande envoyée. L’organisateur répond sous 5 jours ouvrés.",
+      "open": "Vous avez demandé un remboursement le {date}. L’organisateur répond sous 5 jours ouvrés.",
+      "approved": "Votre demande de remboursement a été acceptée le {date}.",
+      "declined": "Votre demande de remboursement a été refusée le {date}.",
+      "declineReason": "L’organisateur a indiqué : « {reason} »",
+      "closed": "Les remboursements sur demande ont pris fin le {deadline}.",
+      "noRefunds": "La politique de remboursement de cet événement ne prévoit pas de remboursement sur demande.",
+      "pickTicket": "Choisissez au moins un billet.",
+      "noLonger": "La politique de remboursement ne permet plus de remboursement sur demande.",
+      "alreadyOpen": "Vous avez déjà demandé le remboursement de cette commande."
+    },
+    "policy": {
+      "orderTitle": "Politique de remboursement de cette commande",
+      "tightenHint": "Une politique plus stricte ne s’applique qu’aux commandes passées à partir de maintenant : les acheteurs gardent les conditions sous lesquelles ils ont acheté. Une politique plus généreuse s’applique à tous.",
+      "tightened": "Politique plus stricte enregistrée. Elle s’applique aux commandes passées à partir de maintenant ; {count, plural, one {# commande déjà vendue garde les conditions sous lesquelles elle a été achetée} other {# commandes déjà vendues gardent les conditions sous lesquelles elles ont été achetées}}."
+    },
+    "wizard": {
+      "link": "Annuler ou reporter",
+      "title": "Annuler ou reporter",
+      "description": "Ce qu’il advient de {name}, et de l’argent, avant tout changement.",
+      "choose": "Que doit-il advenir de {name} ?",
+      "cancelOption": "L’annuler et rembourser tous les acheteurs",
+      "cancelHint": "L’événement est annulé et chaque commande payée est remboursée intégralement, frais compris, par lot, avec possibilité de pause.",
+      "cancelNoRefundHint": "Seuls les propriétaires et administrateurs peuvent annuler un événement avec remboursements.",
+      "postponeOption": "Le reporter",
+      "postponeHint": "Les billets restent valables pour la nouvelle date. Les acheteurs reçoivent un e-mail et peuvent demander un remboursement selon votre politique de remboursement.",
+      "continue": "Continuer",
+      "back": "Choisir à nouveau",
+      "notAllowed": "Seuls les propriétaires et administrateurs peuvent annuler un événement avec remboursements.",
+      "previewTitle": "L’argent",
+      "previewCaption": "Remboursements selon le mode d’encaissement des commandes",
+      "orders": "Commandes payées",
+      "gross": "Ventes brutes",
+      "fees": "Frais de réservation",
+      "alreadyRefunded": "Déjà remboursé",
+      "flowCol": "Encaissé",
+      "refundOrders": "Commandes",
+      "refundTotal": "À rembourser",
+      "feeBack": "Frais de réservation rendus",
+      "organizerShare": "Sur votre part",
+      "total": "Total",
+      "disputed": "{count, plural, one {# commande fait l’objet d’une rétrofacturation ouverte} other {# commandes font l’objet d’une rétrofacturation ouverte}} ({amount}) et {count, plural, one {est exclue} other {sont exclues}}, pour qu’aucun acheteur ne soit payé deux fois.",
+      "collected": "{count, plural, one {# commande vous a été payée} other {# commandes vous ont été payées}} directement ({amount}) : {count, plural, one {remboursez-la} other {remboursez-les}} en personne.",
+      "confirm": "J’ai compris : {name} est annulé et {count, plural, =0 {aucune commande n’est remboursée} one {# commande est remboursée} other {# commandes sont remboursées}} ({amount}). C’est irréversible.",
+      "confirmRefunds": "J’ai compris : {count, plural, =0 {aucune commande n’est remboursée} one {# commande est remboursée} other {# commandes sont remboursées}} ({amount}). C’est irréversible.",
+      "start": "Annuler l’événement et rembourser",
+      "startRefundsOnly": "Rembourser tous les acheteurs",
+      "cancelledAlready": "Cet événement est annulé.",
+      "postponedAlready": "Cet événement est reporté. Les acheteurs ont été prévenus par e-mail que leurs billets restent valables. Reprogrammez-le depuis l’accueil de l’événement quand vous aurez une nouvelle date.",
+      "postponeTitle": "Reporter {name}",
+      "postponeBody": "Les billets restent valables. Chaque acheteur qui en détient un reçoit un e-mail annonçant le report et la possibilité de demander un remboursement selon votre politique. S’il est reporté de plus de 90 jours sans nouvelle date, un remboursement intégral est dû.",
+      "postpone": "Reporter l’événement"
+    },
+    "run": {
+      "title": "Remboursement des acheteurs",
+      "status": {
+        "running": "En cours",
+        "paused": "En pause",
+        "done": "Terminé"
+      },
+      "started": "Lancé le {date}",
+      "progressLabel": "Avancement des remboursements",
+      "progress": "{processed} commandes sur {total}",
+      "refunded": "Remboursées",
+      "skippedDisputed": "Rétrofacturation ouverte",
+      "skipped": "Exclues",
+      "failed": "Échouées",
+      "amount": "Montant remboursé",
+      "working": "Les remboursements sont traités en arrière-plan. Vous pouvez quitter cette page.",
+      "paused": "En pause. Plus rien n’est remboursé tant que vous ne reprenez pas.",
+      "pause": "Mettre en pause",
+      "resume": "Reprendre",
+      "reconciled": "Rapproché : la comptabilité a enregistré exactement les remboursements ({amount}).",
+      "notReconciled": "La comptabilité ({ledger}) ne correspond pas aux remboursements ({expected}). La finance doit vérifier.",
+      "receivable": "Après ces remboursements, vous devez {amount} ; ce montant est retenu sur votre prochain versement.",
+      "exceptions": "Commandes exclues ou échouées",
+      "order": "Commande",
+      "why": "Pourquoi",
+      "codes": {
+        "disputed": "Rétrofacturation ouverte",
+        "organizer_collected": "Payée directement à vous",
+        "nothing_left": "Plus rien à rembourser",
+        "failed": "Le remboursement a échoué ({code})"
+      }
     }
   }
 }

@@ -68,10 +68,13 @@
     "kinds": {
       "orders": {
         "tickets": "门票",
-        "refund": "退款"
+        "refund": "退款",
+        "refund-requested": "退款申请",
+        "refund-declined": "退款申请被拒"
       },
       "events": {
-        "reminder": "活动提醒"
+        "reminder": "活动提醒",
+        "postponed": "活动延期"
       },
       "tenancy": {
         "invitation": "团队邀请",
@@ -221,7 +224,8 @@
     "emails": "邮件模板",
     "speakers": "演讲嘉宾",
     "sponsors": "赞助商",
-    "media": "图片"
+    "media": "图片",
+    "refundRequests": "退款申请"
   },
   "vocab": {
     "attendee": "参会者",
@@ -3996,6 +4000,196 @@
     "terminated": {
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "时间线",
+      "zone": "时间为活动所在时区（{zone}）。",
+      "offline": "离线扫描",
+      "someone": "一位前团队成员",
+      "voidReasons": {
+        "refunded": "已退款",
+        "cancelled": "主办方已取消",
+        "dispute_lost": "拒付败诉"
+      },
+      "kinds": {
+        "order_placed": "下单",
+        "payment_received": "收到付款",
+        "ticket_issued": "门票 #{serial} 已出票",
+        "ticket_voided": "门票 #{serial} 已作废",
+        "transfer_offered": "门票 #{serial} 已转给他人",
+        "transfer_claimed": "门票 #{serial} 已领取",
+        "transfer_revoked": "门票 #{serial} 的转让已撤回",
+        "check_in": "门票 #{serial} 已入场",
+        "scan_refused": "门票 #{serial} 在入口被拒",
+        "message": "已发送消息",
+        "refund_requested": "买家申请退款",
+        "refund_request_approved": "退款申请已批准",
+        "refund_request_declined": "退款申请已拒绝",
+        "refund_started": "退款已发起",
+        "refund_succeeded": "退款已完成",
+        "refund_failed": "退款失败",
+        "dispute_opened": "发生拒付",
+        "dispute_evidence_submitted": "已提交拒付证据",
+        "dispute_won": "拒付胜诉",
+        "dispute_lost": "拒付败诉",
+        "note": "备注"
+      }
+    },
+    "notes": {
+      "label": "为团队添加备注",
+      "hint": "备注仅内部可见：买家看不到。",
+      "add": "添加备注",
+      "added": "备注已添加。",
+      "invalid": "备注不超过 2000 个字符。"
+    },
+    "request": {
+      "title": "退款申请",
+      "tickets": "{count, plural, =0 {整个订单} other {# 张门票}}",
+      "asked": "申请于 {date}",
+      "due": "请在 {date} 前答复",
+      "overdue": "已逾期",
+      "onTime": "未逾期",
+      "message": "买家留言",
+      "noMessage": "无留言。",
+      "readOnly": "退款申请由所有者、管理员和财务答复。",
+      "approveLegend": "批准",
+      "approveFull": "退还申请的门票",
+      "approvePartial": "改为退还一笔金额（门票仍有效）",
+      "amount": "金额（{currency}）",
+      "approve": "批准并退款",
+      "approved": "已批准。退款完成后买家会收到邮件。",
+      "answered": "该申请已答复。",
+      "declineLegend": "拒绝",
+      "reason": "原因（将发送给买家）",
+      "reasonHint": "3 到 500 个字符。",
+      "reasonInvalid": "请填写 3 到 500 个字符的原因。",
+      "decline": "拒绝申请",
+      "declined": "已拒绝。已通过邮件把原因发给买家。",
+      "status": {
+        "open": "待处理",
+        "approved": "已批准",
+        "declined": "已拒绝"
+      }
+    },
+    "queue": {
+      "title": "退款申请",
+      "description": "你各场活动买家的退款申请。每条请在 5 个工作日内答复。",
+      "summary": "{open, plural, =0 {没有待处理的申请} other {# 条待处理}}，{overdue, plural, =0 {无逾期} other {# 条逾期}}。",
+      "tabsLabel": "按状态查看退款申请",
+      "caption": "退款申请：{status}",
+      "empty": {
+        "open": "没有待处理的退款申请。",
+        "approved": "暂无已批准的退款申请。",
+        "declined": "没有已拒绝的退款申请。"
+      },
+      "buyer": "买家",
+      "event": "活动",
+      "tickets": "门票",
+      "asked": "申请时间",
+      "waiting": "已等待",
+      "due": "答复期限",
+      "decided": "答复时间",
+      "outcome": "结果",
+      "refundStatus": {
+        "pending": "退款处理中",
+        "succeeded": "已退款",
+        "failed": "退款失败"
+      },
+      "age": "{days, plural, =0 {{hours, plural, other {# 小时}}} other {# 天}}"
+    },
+    "buyer": {
+      "title": "退款",
+      "intro": "去不了？可以向主办方申请退款。主办方会按上方的退款政策在 5 个工作日内答复。",
+      "tickets": "要退的门票",
+      "ticket": "门票 #{serial} · {type}",
+      "message": "给主办方的留言（可选）",
+      "submit": "申请退款",
+      "sent": "申请已发送。主办方会在 5 个工作日内答复。",
+      "open": "你已于 {date} 申请退款。主办方会在 5 个工作日内答复。",
+      "approved": "你的退款申请已于 {date} 获批。",
+      "declined": "你的退款申请已于 {date} 被拒绝。",
+      "declineReason": "主办方表示：“{reason}”",
+      "closed": "按申请退款已于 {deadline} 截止。",
+      "noRefunds": "本活动的退款政策不支持按申请退款。",
+      "pickTicket": "请至少选择一张门票。",
+      "noLonger": "退款政策已不再支持按申请退款。",
+      "alreadyOpen": "你已经为此订单申请过退款。"
+    },
+    "policy": {
+      "orderTitle": "此订单的退款政策",
+      "tightenHint": "更严格的政策只适用于此后下的订单：买家保留购买时的条件。更宽松的政策适用于所有人。",
+      "tightened": "已保存更严格的政策，适用于此后下的订单；已售出的 {count} 个订单保留购买时的条件。"
+    },
+    "wizard": {
+      "link": "取消或延期",
+      "title": "取消或延期",
+      "description": "在做任何改动之前，先看看 {name} 和款项会怎样。",
+      "choose": "{name} 要怎么处理？",
+      "cancelOption": "取消活动并为所有买家退款",
+      "cancelHint": "活动将被取消，每个已付款订单都会全额退款（含费用），分批进行，可随时暂停。",
+      "cancelNoRefundHint": "只有所有者和管理员可以取消活动并退款。",
+      "postponeOption": "延期",
+      "postponeHint": "门票在新日期仍然有效。买家会收到邮件，并可按你的退款政策申请退款。",
+      "continue": "继续",
+      "back": "重新选择",
+      "notAllowed": "只有所有者和管理员可以取消活动并退款。",
+      "previewTitle": "款项",
+      "previewCaption": "按订单收款方式的退款",
+      "orders": "已付款订单",
+      "gross": "销售总额",
+      "fees": "预订费",
+      "alreadyRefunded": "已退款",
+      "flowCol": "收款方式",
+      "refundOrders": "订单",
+      "refundTotal": "待退款",
+      "feeBack": "退还的预订费",
+      "organizerShare": "来自你的分成",
+      "total": "合计",
+      "disputed": "有 {count} 个订单存在未结拒付（{amount}），已排除在外，以免重复付款。",
+      "collected": "有 {count} 个订单由你直接收款（{amount}）：请当面退款。",
+      "confirm": "我明白：{name} 将被取消，{count, plural, =0 {没有订单需要退款} other {将为 # 个订单退款}}（{amount}）。此操作无法撤销。",
+      "confirmRefunds": "我明白：{count, plural, =0 {没有订单需要退款} other {将为 # 个订单退款}}（{amount}）。此操作无法撤销。",
+      "start": "取消活动并退款",
+      "startRefundsOnly": "为所有买家退款",
+      "cancelledAlready": "此活动已取消。",
+      "postponedAlready": "此活动已延期。已发邮件告知买家门票仍然有效。确定新日期后，请在活动首页重新排期。",
+      "postponeTitle": "延期 {name}",
+      "postponeBody": "门票仍然有效。每位持票买家都会收到邮件，告知活动延期，并可按你的政策申请退款。如延期超过 90 天且没有新日期，需全额退款。",
+      "postpone": "延期活动"
+    },
+    "run": {
+      "title": "正在为买家退款",
+      "status": {
+        "running": "进行中",
+        "paused": "已暂停",
+        "done": "已完成"
+      },
+      "started": "开始于 {date}",
+      "progressLabel": "退款进度",
+      "progress": "{processed} / {total} 个订单",
+      "refunded": "已退款",
+      "skippedDisputed": "未结拒付",
+      "skipped": "已排除",
+      "failed": "失败",
+      "amount": "已退款金额",
+      "working": "退款在后台进行。你可以离开此页面。",
+      "paused": "已暂停。恢复前不会再退款。",
+      "pause": "暂停",
+      "resume": "恢复",
+      "reconciled": "已对账：账目记录的金额与退款完全一致（{amount}）。",
+      "notReconciled": "账目（{ledger}）与退款（{expected}）不一致。请财务核查。",
+      "receivable": "这些退款后你欠款 {amount}，将从下次结算中扣除。",
+      "exceptions": "被排除或失败的订单",
+      "order": "订单",
+      "why": "原因",
+      "codes": {
+        "disputed": "未结拒付",
+        "organizer_collected": "由你直接收款",
+        "nothing_left": "已无可退金额",
+        "failed": "退款失败（{code}）"
+      }
     }
   }
 }
