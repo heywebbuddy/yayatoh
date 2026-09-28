@@ -166,3 +166,5 @@ Roadmap M1.15 ("`/v1` exposes the mobile-ready endpoints (… agenda) with gener
 | API docs list the new endpoints (axe: **not yet**, Scalar's own markup fails it, see Later) | `api-keys.spec.ts` "lists the mobile-ready content endpoints (M1.13d)" |
 | SDK smoke: the generated client reads the agenda from the built app | e2e `api-content.spec.ts`; `sdk.int.test.ts` |
 | oasdiff clean after the Spectral fixes | `oasdiff breaking` against `m0.5-foundation-ey5gqp`: no breaking changes |
+
+**M1.13d gate (2026-09-28):** `pnpm verify` green (849 unit, 602 integration); `pnpm contracts:check` green (openapi current, Spectral clean, SDK current); oasdiff: no breaking changes. Web e2e: 952 passed, 10 skipped, 4 failed; the 4 failures (`receivables.spec.ts` "a refund after release shows as a receivable…" ×3 projects, `ai-draft.spec.ts` "credits running out between page load and click" desktop) fail identically on the base commit `08077c0`, so they are not M1.13d's.
