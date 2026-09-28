@@ -51,10 +51,15 @@ import {
   applyProviderEventCommand,
   attachPaymentCommand,
   completeRefundCommand,
+  setRefundPolicyCommand,
   startCheckoutCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
-import { recordPayoutAccountCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
+import {
+  recordPayoutAccountCommand,
+  recordReconciliationCommand,
+  releaseDueSettlementsCommand,
+} from '@yayatoh/payments';
 import { consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import { attendeeExportBulk } from '@yayatoh/reports';
@@ -298,6 +303,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       failureCode: 'fixture',
     },
     ctx(),
+    ports,
+  );
+  // M1.6e: a refund policy on the event, and a reconciliation day with one open difference.
+  await executeCommand(
+    setRefundPolicyCommand,
+    { eventId: event.id, kind: 'until', daysBefore: 7, retainedMinor: 100 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordReconciliationCommand,
+    {
+      day: '2030-01-01',
+      provider: 'fake',
+      transactions: [
+        {
+          id: `fakebt_${slug}`,
+          kind: 'charge',
+          amountMinor: 999,
+          currency: 'USD',
+          occurredAt: new Date('2030-01-01T12:00:00Z'),
+          reference: `order:${checkout.order.id}`,
+        },
+      ],
+    },
+    systemCtx(org.id),
     ports,
   );
   await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);

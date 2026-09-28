@@ -5,7 +5,15 @@ import { redirect } from 'next/navigation';
 
 /** The fake hosted page's buttons: post a signed webhook to our own endpoint, then return. */
 export async function completeFakePayment(
-  params: { pi: string; org: string; order: string; amount: string; currency: string; returnUrl: string },
+  params: {
+    pi: string;
+    org: string;
+    order: string;
+    amount: string;
+    currency: string;
+    returnUrl: string;
+    fee?: string;
+  },
   outcome: 'succeeded' | 'failed',
 ): Promise<void> {
   const secret = process.env.FAKE_PAYMENTS_SECRET;
@@ -18,6 +26,7 @@ export async function completeFakePayment(
     currency: params.currency,
     orgId: params.org,
     orderId: params.order,
+    ...(params.fee !== undefined ? { applicationFeeMinor: Number(params.fee) } : {}),
   });
   await fetch(`${origin}/api/webhooks/fake`, {
     method: 'POST',

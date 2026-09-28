@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
 import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
-
 import { eventTransferTx, postRefundTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { releaseAttendeeSeatsTx, voidSeatTx } from '@yayatoh/seating';
@@ -8,8 +8,15 @@ import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { orderLifecycle } from '../domain/lifecycle.ts';
-import { type RefundReason, refundsFee, ticketRefund } from '../domain/refund-policy.ts';
-import { orderItems, orders, REFUND_REASONS, REFUND_STATUSES, refunds } from '../schema.ts';
+import {
+  evaluateRefundPolicy,
+  type PolicyDecision,
+  type RefundPolicy,
+  type RefundReason,
+  refundsFee,
+  ticketRefund,
+} from '../domain/refund-policy.ts';
+import { orderItems, orders, REFUND_REASONS, REFUND_STATUSES, refundPolicies, refunds } from '../schema.ts';
 
 type Emit = (e: DomainEvent) => void;
 
@@ -35,10 +42,20 @@ interface Computed {
   amountMinor: number;
   feeRefundedMinor: number;
   refundableMinor: number;
+  retainedMinor: number;
   ticketIds: string[];
+  policy: PolicyDecision & { allowed: true };
 }
 
-async function computeTx(tx: TenantTx, req: RefundRequest, lock: boolean) {
+/** The event's refund policy row, if the organizer set one (M1.6e). */
+export async function refundPolicyTx(tx: TenantTx, eventId: string): Promise<RefundPolicy | null> {
+  const [p] = await tx.select().from(refundPolicies).where(eq(refundPolicies.eventId, eventId));
+  return p
+    ? { kind: p.kind as RefundPolicy['kind'], daysBefore: p.daysBefore, retainedMinor: p.retainedMinor }
+    : null;
+}
+
+async function computeTx(tx: TenantTx, ctx: Ctx, req: RefundRequest, lock: boolean, override = false) {
   const q = tx.select().from(orders).where(eq(orders.id, req.orderId));
   const [order] = await (lock ? q.for('update') : q);
   if (!order) throw new DomainError('not_found', 'Order not found');
@@ -51,6 +68,22 @@ async function computeTx(tx: TenantTx, req: RefundRequest, lock: boolean) {
     .from(refunds)
     .where(and(eq(refunds.orderId, order.id), inArray(refunds.status, ['pending', 'succeeded'])));
   const refundableMinor = order.totalMinor - open.reduce((n, r) => n + r.amount, 0);
+  // The event's refund policy (M1.6e), evaluated in the event's timezone.
+  const event = await findEventTx(tx, order.eventId);
+  if (!event) throw new DomainError('not_found', 'Event not found');
+  const policy = evaluateRefundPolicy({
+    policy: await refundPolicyTx(tx, order.eventId),
+    reason: req.reason as RefundReason,
+    now: ctx.now,
+    eventStartsAt: event.startsAt,
+    timeZone: event.timezone,
+    override,
+  });
+  if (!policy.allowed)
+    throw new DomainError('invalid_state', "The event's refund policy does not allow this refund", {
+      reason: policy.code,
+      ...(policy.deadline ? { deadline: policy.deadline.toISOString() } : {}),
+    });
   let c: Computed;
   if (req.ticketIds) {
     const busy = new Set(open.filter((r) => r.status === 'pending').flatMap((r) => r.ticketIds));
@@ -67,16 +100,34 @@ async function computeTx(tx: TenantTx, req: RefundRequest, lock: boolean) {
     const feeBack = refundsFee(req.reason as RefundReason);
     let amount = 0;
     let fee = 0;
+    let retained = 0;
     for (const t of tickets) {
       const item = items.get(t.orderItemId);
       if (!item) throw new DomainError('internal', 'Ticket without an order item');
       const r = ticketRefund(item, feeBack);
-      amount += r.amountMinor;
+      // The organizer's retained fee comes off what the buyer gets back, never below the fee part.
+      const keep = Math.min(policy.retainedPerTicketMinor, r.amountMinor - r.feeRefundedMinor);
+      amount += r.amountMinor - keep;
       fee += r.feeRefundedMinor;
+      retained += keep;
     }
-    c = { amountMinor: amount, feeRefundedMinor: fee, refundableMinor, ticketIds: tickets.map((t) => t.id) };
+    c = {
+      amountMinor: amount,
+      feeRefundedMinor: fee,
+      refundableMinor,
+      retainedMinor: retained,
+      ticketIds: tickets.map((t) => t.id),
+      policy,
+    };
   } else {
-    c = { amountMinor: req.amountMinor ?? 0, feeRefundedMinor: 0, refundableMinor, ticketIds: [] };
+    c = {
+      amountMinor: req.amountMinor ?? 0,
+      feeRefundedMinor: 0,
+      refundableMinor,
+      retainedMinor: 0,
+      ticketIds: [],
+      policy,
+    };
   }
   if (c.amountMinor <= 0)
     throw new DomainError('validation_failed', 'Nothing to refund', { field: 'amountMinor' });
@@ -92,6 +143,8 @@ export const RefundPreviewDto = z.object({
   amountMinor: z.int(),
   feeRefundedMinor: z.int(),
   refundableMinor: z.int(),
+  /** Kept by the organizer under the event's refund policy. */
+  retainedMinor: z.int(),
   currency: z.string(),
 });
 
@@ -102,40 +155,34 @@ export const refundPreviewQuery = tenantQuery({
   output: RefundPreviewDto,
   entitlement: 'ticketing',
   permission: 'orders:refund',
-  handler: async ({ input, tx }) => {
-    const { order, c } = await computeTx(tx, input, false);
+  handler: async ({ input, ctx, tx }) => {
+    const { order, c } = await computeTx(tx, ctx, input, false);
     return {
       amountMinor: c.amountMinor,
       feeRefundedMinor: c.feeRefundedMinor,
       refundableMinor: c.refundableMinor,
+      retainedMinor: c.retainedMinor,
       currency: order.currency,
     };
   },
 });
 
-/**
- * Start a refund: record it as pending with the policy's amounts. The caller then asks the
- * provider (outside the transaction) and completes it. The provider instructions go to the
- * server action only.
- */
-export const startRefundCommand = tenantCommand({
-  name: 'orders.startRefund',
-  input: RefundRequest,
-  output: z.object({
-    refundId: z.uuid(),
-    amountMinor: z.int(),
-    feeRefundedMinor: z.int(),
-    currency: z.string(),
-    provider: z.object({
-      providerPaymentId: z.string(),
-      fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
-      connectedAccountId: z.string().nullable(),
-    }),
+const StartRefundOutput = z.object({
+  refundId: z.uuid(),
+  amountMinor: z.int(),
+  feeRefundedMinor: z.int(),
+  retainedMinor: z.int(),
+  currency: z.string(),
+  provider: z.object({
+    providerPaymentId: z.string(),
+    fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+    connectedAccountId: z.string().nullable(),
   }),
-  entitlement: 'ticketing',
-  permission: 'orders:refund',
-  handler: async ({ input, ctx, tx }) => {
-    const { order, c } = await computeTx(tx, input, true);
+});
+
+function startRefund(opts: { override: boolean }) {
+  return async ({ input, ctx, tx }: { input: RefundRequest; ctx: Ctx; tx: TenantTx }) => {
+    const { order, c } = await computeTx(tx, ctx, input, true, opts.override);
     if (!order.providerPaymentId)
       throw new DomainError('invalid_state', 'This order has no provider payment', { reason: 'no_payment' });
     const [r] = await tx
@@ -147,6 +194,8 @@ export const startRefundCommand = tenantCommand({
         note: input.note ?? null,
         amountMinor: c.amountMinor,
         feeRefundedMinor: c.feeRefundedMinor,
+        retainedMinor: c.retainedMinor,
+        policyOverride: c.policy.basis === 'override',
         currency: order.currency,
         ticketIds: c.ticketIds,
         requestedBy: actorId(ctx.actor),
@@ -157,6 +206,7 @@ export const startRefundCommand = tenantCommand({
       refundId: r.id,
       amountMinor: c.amountMinor,
       feeRefundedMinor: c.feeRefundedMinor,
+      retainedMinor: c.retainedMinor,
       currency: order.currency,
       provider: {
         providerPaymentId: order.providerPaymentId,
@@ -164,7 +214,22 @@ export const startRefundCommand = tenantCommand({
         connectedAccountId: order.connectedAccountId,
       },
     };
-  },
+  };
+}
+
+/**
+ * Start a refund: record it as pending with the policy's amounts. The caller then asks the
+ * provider (outside the transaction) and completes it. The provider instructions go to the
+ * server action only. The event's refund policy applies (M1.6e): a discretionary refund outside
+ * it is refused with the reason, and the organizer's retained fee comes off each ticket.
+ */
+export const startRefundCommand = tenantCommand({
+  name: 'orders.startRefund',
+  input: RefundRequest,
+  output: StartRefundOutput,
+  entitlement: 'ticketing',
+  permission: 'orders:refund',
+  handler: startRefund({ override: false }),
   audit: (input, r) => ({
     action: 'order.refund_start',
     targetType: 'order',
@@ -173,6 +238,35 @@ export const startRefundCommand = tenantCommand({
       refundId: r?.refundId,
       reason: input.reason,
       amountMinor: r?.amountMinor,
+      retainedMinor: r?.retainedMinor,
+      tickets: input.ticketIds?.length ?? 0,
+    },
+  }),
+});
+
+/**
+ * The same refund outside the event's refund policy (M1.6e): owners, admins and platform staff,
+ * with a note saying why. Nothing is retained. Audited as an override.
+ */
+export const startPolicyOverrideRefundCommand = tenantCommand({
+  name: 'orders.startPolicyOverrideRefund',
+  input: RefundRequest.refine((r) => (r.note ?? '').trim().length >= 3, {
+    message: 'Say why the policy is overridden',
+    path: ['note'],
+  }),
+  output: StartRefundOutput,
+  entitlement: 'ticketing',
+  permission: 'orders:refund_override',
+  handler: startRefund({ override: true }),
+  audit: (input, r) => ({
+    action: 'order.refund_policy_override',
+    targetType: 'order',
+    targetId: input.orderId,
+    data: {
+      refundId: r?.refundId,
+      reason: input.reason,
+      amountMinor: r?.amountMinor,
+      note: input.note,
       tickets: input.ticketIds?.length ?? 0,
     },
   }),
@@ -316,6 +410,8 @@ export const RefundDto = z.object({
   createdAt: z.date(),
   completedAt: z.date().nullable(),
   failureCode: z.string().nullable(),
+  retainedMinor: z.int(),
+  policyOverride: z.boolean(),
 });
 
 export const orderRefundsQuery = tenantQuery({
@@ -343,5 +439,7 @@ export const orderRefundsQuery = tenantQuery({
       createdAt: r.createdAt,
       completedAt: r.completedAt,
       failureCode: r.failureCode,
+      retainedMinor: r.retainedMinor,
+      policyOverride: r.policyOverride,
     })),
 });

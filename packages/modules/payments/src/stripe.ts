@@ -354,11 +354,14 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       orgId: t.orgId,
       reference: t.orderId ? `order:${t.orderId}` : null,
     });
-    const idOf = (v: string | { id: string } | null | undefined) => (typeof v === 'string' ? v : (v?.id ?? null));
+    const idOf = (v: string | { id: string } | null | undefined) =>
+      typeof v === 'string' ? v : (v?.id ?? null);
     switch (bt.type) {
       case 'charge':
       case 'payment':
-        return src?.object === 'charge' ? ordered('charge', await chargeTags(src, null)) : tagged('charge', null);
+        return src?.object === 'charge'
+          ? ordered('charge', await chargeTags(src, null))
+          : tagged('charge', null);
       case 'refund':
       case 'payment_refund':
         return tagged('refund', src?.object === 'refund' ? src.metadata : null);

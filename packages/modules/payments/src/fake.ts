@@ -60,7 +60,15 @@ export function fakePaymentProvider(opts: {
     reference: string | null,
   ) => {
     if (amountMinor !== 0)
-      opts.store?.add({ id: `fakebt_${id}`, kind, amountMinor, currency, occurredAt: now(), orgId, reference });
+      opts.store?.add({
+        id: `fakebt_${id}`,
+        kind,
+        amountMinor,
+        currency,
+        occurredAt: now(),
+        orgId,
+        reference,
+      });
   };
   return {
     name: 'fake',
@@ -99,7 +107,14 @@ export function fakePaymentProvider(opts: {
         const org = i.orgId ?? null;
         // organizer_mor: the refund is on the organizer's account; the platform returns its fee part.
         if (i.connectedAccountId)
-          record(refundId, 'application_fee_refund', -i.refundApplicationFee.amount, i.amount.currency, org, i.idempotencyKey);
+          record(
+            refundId,
+            'application_fee_refund',
+            -i.refundApplicationFee.amount,
+            i.amount.currency,
+            org,
+            i.idempotencyKey,
+          );
         else record(refundId, 'refund', -i.amount.amount, i.amount.currency, org, i.idempotencyKey);
       }
       return { refundId, status };
@@ -117,7 +132,14 @@ export function fakePaymentProvider(opts: {
       const reversalId = `faketrr_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
       // Reversals above 100,000 minor units fail, as if the organizer's balance were empty (tests).
       if (i.amount.amount > 100_000) return { reversalId, status: 'failed' };
-      record(reversalId, 'transfer_reversal', i.amount.amount, i.amount.currency, i.orgId ?? null, i.idempotencyKey);
+      record(
+        reversalId,
+        'transfer_reversal',
+        i.amount.amount,
+        i.amount.currency,
+        i.orgId ?? null,
+        i.idempotencyKey,
+      );
       return { reversalId, status: 'succeeded' };
     },
     async submitDisputeEvidence(i) {

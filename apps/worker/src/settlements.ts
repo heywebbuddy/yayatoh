@@ -1,7 +1,6 @@
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
-import { createCtx, executeCommand } from '@yayatoh/kernel';
-import { type PaymentProvider, recordTransferCommand, releaseDueSettlementsCommand } from '@yayatoh/payments';
+import { type PaymentProvider, settleOrg } from '@yayatoh/payments';
 import { createCommandPorts } from '@yayatoh/platform';
 import { orgAuthorizer } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
@@ -35,29 +34,9 @@ export async function runSettlements(
   let transferred = 0;
   let failed = 0;
   for (const orgId of orgs) {
-    const ctx = () =>
-      createCtx({
-        orgId,
-        actor: { type: 'system', name: 'payments.settlements' },
-        ...(opts.now ? { now: opts.now } : {}),
-      });
-    const { ready } = await executeCommand(releaseDueSettlementsCommand, {}, ctx(), ports);
-    for (const s of ready) {
-      const r = await provider.createTransfer({
-        destinationAccountId: s.destinationAccountId,
-        amount: { amount: s.amountMinor, currency: s.currency },
-        transferGroup: s.transferGroup,
-        idempotencyKey: `settlement:${s.settlementId}`,
-      });
-      await executeCommand(
-        recordTransferCommand,
-        { settlementId: s.settlementId, outcome: r.status, transferId: r.transferId, failure: r.failure },
-        ctx(),
-        ports,
-      );
-      if (r.status === 'succeeded') transferred++;
-      else failed++;
-    }
+    const r = await settleOrg(provider, orgId, ports, opts.now ? { now: opts.now } : {});
+    transferred += r.transferred;
+    failed += r.failed;
   }
   return { orgs: orgs.length, transferred, failed };
 }

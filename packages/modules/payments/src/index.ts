@@ -21,7 +21,10 @@ export {
   openDisputeTx,
 } from './disputes.ts';
 export {
+  type FakeBalanceStore,
   fakePaymentProvider,
+  memoryBalanceStore,
+  processFakeBalanceStore,
   signFakeAccountWebhook,
   signFakeDisputeWebhook,
   signFakeWebhook,
@@ -40,6 +43,8 @@ export {
 } from './ledger.ts';
 export type {
   AccountEvent,
+  BalanceTransaction,
+  BalanceTransactionKind,
   ConnectAccountState,
   CreatePaymentInput,
   CreatePaymentResult,
@@ -51,8 +56,29 @@ export type {
   RefundInput,
   WebhookEvent,
 } from './port.ts';
-export { isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
-export { DISPUTE_STATUSES, LEDGER_ACCOUNTS, type LedgerAccount, SETTLEMENT_STATUSES } from './schema.ts';
+export { BALANCE_TRANSACTION_KINDS, isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
+export {
+  dayBounds,
+  ReconciliationItemDto,
+  ReconciliationRunDto,
+  type ReconDifference,
+  type ReconEntry,
+  reconcileEntries,
+  reconcileOrgDay,
+  reconciliationItemsQuery,
+  reconciliationRunsQuery,
+  reconWindow,
+  recordReconciliationCommand,
+  resolveReconciliationItemCommand,
+} from './reconciliation.ts';
+export {
+  DISPUTE_STATUSES,
+  LEDGER_ACCOUNTS,
+  type LedgerAccount,
+  RECONCILIATION_ITEM_KINDS,
+  RECONCILIATION_ITEM_STATUSES,
+  SETTLEMENT_STATUSES,
+} from './schema.ts';
 export {
   addBusinessDays,
   eventTransferTx,
@@ -63,6 +89,7 @@ export {
   releaseDueSettlementsCommand,
   SettlementDto,
   settlementsQuery,
+  settleOrg,
 } from './settlements.ts';
 export {
   type DisputeScope,

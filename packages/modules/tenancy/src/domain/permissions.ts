@@ -22,6 +22,12 @@ export const PERMISSIONS = [
   'attendees:export',
   'contacts:read',
   'finance:read',
+  /** Resolve reconciliation differences (M1.6e). */
+  'finance:reconcile',
+  /** Review, edit and submit dispute evidence for the org's own disputes (M1.6e). */
+  'disputes:respond',
+  /** Refund outside the event's refund policy, with a note (M1.6e). Owners and admins. */
+  'orders:refund_override',
   /** Connect and change the payout account (KYC, bank). Money leaving the platform. */
   'payouts:manage',
   'marketing:write',
@@ -66,6 +72,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'orders:read',
     'orders:refund',
     'finance:read',
+    'finance:reconcile',
+    'disputes:respond',
     'payouts:manage',
   ],
   marketing: [
@@ -98,6 +106,8 @@ export const PLATFORM_PERMISSIONS = [
   'platform:payouts.hold',
   'platform:payouts.release',
   'platform:disputes.submit',
+  /** The daily reconciliation job (M1.6e). */
+  'platform:payments.reconcile',
   /** Legacy URL redirects (migration tooling, roadmap §7.7). */
   'platform:redirects.manage',
 ] as const;

@@ -1,10 +1,19 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import {
+  type CommandPorts,
+  type Ctx,
+  createCtx,
+  DomainError,
+  executeCommand,
+  requireOrg,
+  uuidv7,
+} from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, inArray, isNotNull, isNull, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { balanceTx, postJournalTx, postTransferReversalTx } from './ledger.ts';
+import type { PaymentProvider } from './port.ts';
 import { paymentAccounts, SETTLEMENT_KINDS, SETTLEMENT_STATUSES, settlements } from './schema.ts';
 
 /**
@@ -366,3 +375,43 @@ export const settlementsQuery = tenantQuery({
       }),
     ),
 });
+
+/**
+ * One org's release run (the worker's Payout Release job, per org; dev tools for one org): release
+ * what is due, then transfer each ready settlement outside any transaction (idempotent per
+ * settlement) and record the provider's answer.
+ */
+export async function settleOrg(
+  provider: PaymentProvider,
+  orgId: string,
+  ports: CommandPorts<TenantTx>,
+  opts: { now?: Date } = {},
+): Promise<{ held: boolean; transferred: number; failed: number }> {
+  const ctx = () =>
+    createCtx({
+      orgId,
+      actor: { type: 'system', name: 'payments.settlements' },
+      ...(opts.now ? { now: opts.now } : {}),
+    });
+  const { held, ready } = await executeCommand(releaseDueSettlementsCommand, {}, ctx(), ports);
+  let transferred = 0;
+  let failed = 0;
+  for (const s of ready) {
+    const r = await provider.createTransfer({
+      destinationAccountId: s.destinationAccountId,
+      amount: { amount: s.amountMinor, currency: s.currency },
+      transferGroup: s.transferGroup,
+      idempotencyKey: `settlement:${s.settlementId}`,
+      orgId,
+    });
+    await executeCommand(
+      recordTransferCommand,
+      { settlementId: s.settlementId, outcome: r.status, transferId: r.transferId, failure: r.failure },
+      ctx(),
+      ports,
+    );
+    if (r.status === 'succeeded') transferred++;
+    else failed++;
+  }
+  return { held, transferred, failed };
+}

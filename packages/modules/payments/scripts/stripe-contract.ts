@@ -14,7 +14,8 @@ import { accountState, STRIPE_API_VERSION, stripePaymentProvider } from '../src/
  * Prints ids only, never keys. Connected accounts it creates are closed at the end.
  */
 const key = process.env.STRIPE_SECRET_KEY ?? '';
-if (!/^(sk|rk)_test_/.test(key)) throw new Error('Set a Stripe TEST key in STRIPE_SECRET_KEY (never a live key)');
+if (!/^(sk|rk)_test_/.test(key))
+  throw new Error('Set a Stripe TEST key in STRIPE_SECRET_KEY (never a live key)');
 const capture = process.argv.includes('--capture');
 
 const stripe = new Stripe(key, { apiVersion: STRIPE_API_VERSION, telemetry: false, maxNetworkRetries: 2 });
@@ -95,7 +96,9 @@ async function testMerchantAccount(): Promise<string> {
     if (s.chargesEnabled && s.payoutsEnabled) return a.id;
     await sleep(5_000);
   }
-  throw new Error(`${a.id} did not become charges_enabled within 15 minutes (rerun with --account once it is)`);
+  throw new Error(
+    `${a.id} did not become charges_enabled within 15 minutes (rerun with --account once it is)`,
+  );
 }
 
 /** A confirmed test card payment (what a completed Checkout Session leaves behind). */
@@ -215,7 +218,13 @@ await step('organizer_mor direct-charge Checkout Session with application fee', 
 
 await step('organizer_mor refund on the connected account with an application-fee refund', async () => {
   check(merchant, 'needs the merchant account');
-  const pi = await paidIntent({ amount: 5000, card: 'pm_card_visa', orderId: directOrder, account: merchant, fee: 500 });
+  const pi = await paidIntent({
+    amount: 5000,
+    card: 'pm_card_visa',
+    orderId: directOrder,
+    account: merchant,
+    fee: 500,
+  });
   check(pi.status === 'succeeded', 'direct charge paid');
   const r = await provider.refund({
     providerPaymentId: pi.id,
@@ -323,7 +332,8 @@ await step('dispute lookup and evidence submission (platform charge)', async () 
 
 await step('balance transactions are attributed to the org and the ledger references', async () => {
   await sleep(5_000);
-  const bts = (await provider.listBalanceTransactions({ from: started, to: new Date(Date.now() + 60_000) })) ?? [];
+  const bts =
+    (await provider.listBalanceTransactions({ from: started, to: new Date(Date.now() + 60_000) })) ?? [];
   const mine = bts.filter((b) => b.orgId === orgId);
   const refs = new Set(mine.map((b) => `${b.kind}:${b.reference}`));
   const want = [
@@ -357,7 +367,10 @@ await step('balance transactions are attributed to the org and the ledger refere
 
 await step('real event payloads parse through the webhook verifier', async () => {
   const events: Stripe.Event[] = [];
-  for await (const e of stripe.events.list({ created: { gte: Math.floor(started.getTime() / 1000) - 3600 }, limit: 100 })) {
+  for await (const e of stripe.events.list({
+    created: { gte: Math.floor(started.getTime() / 1000) - 3600 },
+    limit: 100,
+  })) {
     events.push(e);
     if (events.length >= 300) break;
   }
@@ -367,7 +380,10 @@ await step('real event payloads parse through the webhook verifier', async () =>
     const payload = JSON.stringify(e);
     const t = Math.floor(Date.now() / 1000);
     const sig = createHmac('sha256', THROWAWAY).update(`${t}.${payload}`).digest('hex');
-    const out = await provider.verifyWebhook(payload, new Headers({ 'stripe-signature': `t=${t},v1=${sig}` }));
+    const out = await provider.verifyWebhook(
+      payload,
+      new Headers({ 'stripe-signature': `t=${t},v1=${sig}` }),
+    );
     const k = `${e.type} → ${out.type}${out.type === 'ignored' ? ` (${out.reason})` : ''}`;
     counts.set(k, (counts.get(k) ?? 0) + 1);
     if (!fixtures.has(e.type)) fixtures.set(e.type, redact(e));
@@ -405,10 +421,14 @@ function redact(v: unknown, keyName = ''): unknown {
   if (v && typeof v === 'object')
     return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, redact(x, k)]));
   if (typeof v !== 'string' || keyName === 'object' || keyName === 'type') return v;
-  if (/email|name|phone|url|secret|client_secret|ip|line1|line2|postal_code|city/i.test(keyName)) return 'redacted';
+  if (/email|name|phone|url|secret|client_secret|ip|line1|line2|postal_code|city/i.test(keyName))
+    return 'redacted';
   // Ids become stable stand-ins (the same id maps to the same stand-in), so links survive.
   const h = (x: string) => createHash('sha256').update(x).digest('hex');
-  const m = /^(acct|ch|pi|py|re|tr|trr|txn|evt|cs|cus|pm|fee|fr|du|file|req|ba|card|src|seti|po|sub|in|prod|price|pmd|ich|iauth)_/.exec(v);
+  const m =
+    /^(acct|ch|pi|py|re|tr|trr|txn|evt|cs|cus|pm|fee|fr|du|file|req|ba|card|src|seti|po|sub|in|prod|price|pmd|ich|iauth)_/.exec(
+      v,
+    );
   if (m) return `${m[1]}_${v.startsWith('cs_test_') ? 'test_' : ''}${h(v).slice(0, 16)}`;
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v)) {
     const x = h(v);

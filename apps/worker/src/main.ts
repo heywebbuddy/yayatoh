@@ -2,6 +2,7 @@ import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { runDueBulkOperations } from './bulk.ts';
 import { dispatchNotifications, userEmails, workerTransports } from './notifications.ts';
+import { runReconciliation } from './reconciliation.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
@@ -90,6 +91,25 @@ setInterval(() => {
       settling = false;
     });
 }, 10 * 60_000).unref();
+
+// Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
+// day, so only the first run of a day does work), leader only. The fake provider without a
+// balance store cannot list balance transactions: the job then does nothing.
+let reconciling = false;
+const reconcile = () => {
+  if (!payments || !release || stopping || reconciling) return;
+  reconciling = true;
+  runReconciliation(payments)
+    .then((r) => {
+      if (r?.items || r?.unattributed) console.info(JSON.stringify({ job: 'reconciliation', ...r }));
+    })
+    .catch((err) => console.error('reconciliation', err))
+    .finally(() => {
+      reconciling = false;
+    });
+};
+setTimeout(reconcile, 5 * 60_000).unref();
+setInterval(reconcile, 3_600_000).unref();
 
 // Notifications (M1.10): send due messages every 2 s (leader only; rows are claimed with SKIP LOCKED).
 const transports = workerTransports();

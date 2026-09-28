@@ -10,8 +10,12 @@ import { stripePaymentProvider } from '@yayatoh/payments';
  *   node scripts/stripe-hosted-checkout.ts
  */
 const key = process.env.STRIPE_SECRET_KEY ?? '';
-if (!/^(sk|rk)_test_/.test(key)) throw new Error('Set a Stripe TEST key in STRIPE_SECRET_KEY (never a live key)');
-const provider = stripePaymentProvider({ secretKey: key, webhookSecrets: ['whsec_unused_for_outbound_calls'] });
+if (!/^(sk|rk)_test_/.test(key))
+  throw new Error('Set a Stripe TEST key in STRIPE_SECRET_KEY (never a live key)');
+const provider = stripePaymentProvider({
+  secretKey: key,
+  webhookSecrets: ['whsec_unused_for_outbound_calls'],
+});
 const orderId = randomUUID();
 const session = await provider.createPayment({
   orgId: randomUUID(),
@@ -66,7 +70,9 @@ try {
   if (await zip.isVisible().catch(() => false)) await zip.fill('20001');
   await page.getByTestId('hosted-payment-submit-button').click();
   // The return URL's host need not be reachable: the navigation to it is the success signal.
-  await page.waitForRequest((r) => r.url().startsWith('https://example.test/orders/hosted'), { timeout: 90_000 });
+  await page.waitForRequest((r) => r.url().startsWith('https://example.test/orders/hosted'), {
+    timeout: 90_000,
+  });
   outcome = 'paid: redirected to the return URL';
 } catch (err) {
   if (process.env.SCREENSHOT) await page.screenshot({ path: process.env.SCREENSHOT, fullPage: true });

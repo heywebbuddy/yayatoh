@@ -2,6 +2,7 @@ import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
   bigint,
+  boolean,
   check,
   foreignKey,
   index,
@@ -58,6 +59,8 @@ export const orders = tenantTable(
     provider: text('provider'),
     providerPaymentId: text('provider_payment_id'),
     manageTokenHash: text('manage_token_hash').notNull(),
+    /** M1.6e: checkout risk rules that asked for a review (empty: nothing flagged). */
+    riskReview: text('risk_review').array().notNull().default(sql`'{}'::text[]`),
     /** The manage token, envelope-encrypted (KeyVault) so the worker can email the link. */
     manageTokenCiphertext: text('manage_token_ciphertext'),
     createdVia: text('created_via').notNull().default('web'),
@@ -158,6 +161,10 @@ export const refunds = tenantTable(
     failureCode: text('failure_code'),
     requestedBy: text('requested_by').notNull(),
     completedAt: ts('completed_at'),
+    /** M1.6e: kept by the organizer under the event's refund policy (already taken off the amount). */
+    retainedMinor: minor('retained_minor').notNull().default(0),
+    /** M1.6e: refunded outside the event's refund policy by someone allowed to (audited, with a note). */
+    policyOverride: boolean('policy_override').notNull().default(false),
   },
   (t) => [
     index('refunds_org_order_idx').on(t.orgId, t.orderId),
@@ -169,5 +176,40 @@ export const refunds = tenantTable(
       columns: [t.orgId, t.orderId],
       foreignColumns: [orders.orgId, orders.id],
     }),
+  ],
+);
+
+export const REFUND_POLICY_KINDS = ['none', 'until', 'always'] as const;
+
+/**
+ * An event's refund policy (M1.6e): what buyers are told and what discretionary refunds may do.
+ * No row: refunds are at the organizer's discretion and no policy text is shown. The platform
+ * minimum (cancellation, long postponement) always refunds in full, whatever the policy says.
+ */
+export const refundPolicies = tenantTable(
+  ordersSchema,
+  'refund_policies',
+  {
+    /** `events.events` (hand-written FK, down the tiers). */
+    eventId: uuid('event_id').notNull(),
+    kind: text('kind').notNull(),
+    daysBefore: integer('days_before'),
+    retainedMinor: minor('retained_minor').notNull().default(0),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('refund_policies_org_event_key').on(t.orgId, t.eventId),
+    check(
+      'refund_policies_kind_check',
+      sql.raw(`kind in (${REFUND_POLICY_KINDS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'refund_policies_days_check',
+      sql`(kind = 'until') = (days_before is not null) and (days_before is null or days_before between 0 and 365)`,
+    ),
+    check(
+      'refund_policies_retained_check',
+      sql`retained_minor >= 0 and (kind <> 'none' or retained_minor = 0)`,
+    ),
   ],
 );

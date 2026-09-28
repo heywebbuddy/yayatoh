@@ -4,8 +4,10 @@ import {
   bigint,
   boolean,
   check,
+  date,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgSchema,
   text,
@@ -195,6 +197,10 @@ export const disputes = tenantTable(
     evidenceSubmittedAt: timestamp('evidence_submitted_at', { withTimezone: true }),
     evidenceSubmittedBy: text('evidence_submitted_by'),
     closedAt: timestamp('closed_at', { withTimezone: true }),
+    /** M1.6e: the reviewer's written answer, edited before submission. */
+    evidenceSummary: text('evidence_summary'),
+    /** M1.6e: packet sections the reviewer left out (e.g. `messages`). */
+    evidenceExcluded: text('evidence_excluded').array().notNull().default(sql`'{}'::text[]`),
   },
   (t) => [
     uniqueIndex('disputes_org_provider_key').on(t.orgId, t.provider, t.providerDisputeId),
@@ -204,5 +210,79 @@ export const disputes = tenantTable(
       sql.raw(`status in (${DISPUTE_STATUSES.map((s) => `'${s}'`).join(', ')})`),
     ),
     check('disputes_amount_check', sql`amount_minor > 0`),
+  ],
+);
+
+export const RECONCILIATION_ITEM_KINDS = [
+  'missing_at_provider',
+  'missing_in_ledger',
+  'amount_mismatch',
+] as const;
+export const RECONCILIATION_ITEM_STATUSES = ['open', 'resolved'] as const;
+
+/**
+ * Daily reconciliation (M1.6e): one run per org and UTC day comparing the ledger's platform cash
+ * with the provider's balance transactions. Re-running a day changes nothing.
+ */
+export const reconciliationRuns = tenantTable(
+  paymentsSchema,
+  'reconciliation_runs',
+  {
+    day: date('day', { mode: 'string' }).notNull(),
+    provider: text('provider').notNull(),
+    ledgerCount: integer('ledger_count').notNull(),
+    providerCount: integer('provider_count').notNull(),
+    itemCount: integer('item_count').notNull(),
+  },
+  (t) => [
+    uniqueIndex('reconciliation_runs_org_day_key').on(t.orgId, t.day),
+    check('reconciliation_runs_provider_check', sql`provider in ('fake', 'stripe')`),
+    check(
+      'reconciliation_runs_counts_check',
+      sql`ledger_count >= 0 and provider_count >= 0 and item_count >= 0`,
+    ),
+  ],
+);
+
+/** A difference the run found: what the ledger and the provider say about one reference. */
+export const reconciliationItems = tenantTable(
+  paymentsSchema,
+  'reconciliation_items',
+  {
+    runId: uuid('run_id').notNull(),
+    day: date('day', { mode: 'string' }).notNull(),
+    kind: text('kind').notNull(),
+    /** The shared reference: `order:<id>`, `refund:<id>`, `settlement:<id>`, `reversal:<id>`, `dispute:<id>`. */
+    reference: text('reference').notNull(),
+    currency: text('currency').notNull(),
+    ledgerMinor: bigint('ledger_minor', { mode: 'number' }).notNull(),
+    providerMinor: bigint('provider_minor', { mode: 'number' }).notNull(),
+    status: text('status').notNull().default('open'),
+    resolutionNote: text('resolution_note'),
+    resolvedBy: text('resolved_by'),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('reconciliation_items_org_ref_key').on(t.orgId, t.day, t.reference, t.currency),
+    index('reconciliation_items_org_status_idx').on(t.orgId, t.status, t.day),
+    check(
+      'reconciliation_items_kind_check',
+      sql.raw(`kind in (${RECONCILIATION_ITEM_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check(
+      'reconciliation_items_status_check',
+      sql.raw(`status in (${RECONCILIATION_ITEM_STATUSES.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('reconciliation_items_differs_check', sql`ledger_minor <> provider_minor`),
+    check('reconciliation_items_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check(
+      'reconciliation_items_resolved_check',
+      sql`(status = 'open') = (resolved_at is null) and (status = 'open' or length(resolution_note) between 3 and 500)`,
+    ),
+    foreignKey({
+      name: 'reconciliation_items_run_fk',
+      columns: [t.orgId, t.runId],
+      foreignColumns: [reconciliationRuns.orgId, reconciliationRuns.id],
+    }),
   ],
 );

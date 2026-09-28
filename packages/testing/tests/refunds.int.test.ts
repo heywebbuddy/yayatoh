@@ -115,7 +115,13 @@ describe('refunds (M1.6b)', () => {
       a.ctx(),
       ports,
     );
-    expect(p).toEqual({ amountMinor: 5000, feeRefundedMinor: 0, refundableMinor: total, currency: 'USD' });
+    expect(p).toEqual({
+      amountMinor: 5000,
+      feeRefundedMinor: 0,
+      refundableMinor: total,
+      currency: 'USD',
+      retainedMinor: 0,
+    });
   });
 
   it('refunding a ticket voids it, frees the place, cancels the attendee and books the ledger', async () => {

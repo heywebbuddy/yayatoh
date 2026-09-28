@@ -15,7 +15,11 @@ const SECRET = 'whsec_fixture_0123456789abcdef';
 function adapter(routes: Record<string, StripeRoute>) {
   const api = fakeStripeApi(routes);
   return {
-    provider: stripePaymentProvider({ secretKey: 'sk_test_fake', webhookSecrets: [SECRET], fetch: api.fetch }),
+    provider: stripePaymentProvider({
+      secretKey: 'sk_test_fake',
+      webhookSecrets: [SECRET],
+      fetch: api.fetch,
+    }),
     calls: api.calls,
   };
 }
@@ -37,7 +41,11 @@ describe('balance transactions (daily reconciliation) — real shapes', () => {
         json: {
           id: 'ch_0742e40e3bd09c06',
           object: 'charge',
-          metadata: { orgId: ORG, orderId: '0199a1b2-0000-7000-8000-00000000d1c7', fundsFlow: 'organizer_mor' },
+          metadata: {
+            orgId: ORG,
+            orderId: '0199a1b2-0000-7000-8000-00000000d1c7',
+            fundsFlow: 'organizer_mor',
+          },
         },
       }),
     });
@@ -61,7 +69,9 @@ describe('balance transactions (daily reconciliation) — real shapes', () => {
     expect(out?.every((b) => b.currency === 'USD')).toBe(true);
     const list = calls.find((c) => c.path === '/v1/balance_transactions');
     expect(list?.query.get('expand[0]')).toBe('data.source');
-    expect(calls.find((c) => c.path === '/v1/charges/ch_0742e40e3bd09c06')?.account).toBe('acct_4965237f0d72f3ab');
+    expect(calls.find((c) => c.path === '/v1/charges/ch_0742e40e3bd09c06')?.account).toBe(
+      'acct_4965237f0d72f3ab',
+    );
   });
 });
 
@@ -88,7 +98,11 @@ describe('webhooks — real shapes through the verifier', () => {
   });
 
   it('disputes resolve through the session of their payment; one without a Yayatoh session is ignored', async () => {
-    const session = { id: 'cs_test_x', object: 'checkout.session', metadata: { orgId: 'org-1', orderId: 'o-1' } };
+    const session = {
+      id: 'cs_test_x',
+      object: 'checkout.session',
+      metadata: { orgId: 'org-1', orderId: 'o-1' },
+    };
     let sessions: unknown[] = [session];
     const { provider, calls } = adapter({
       'GET /v1/checkout/sessions': () => ({ json: { object: 'list', data: sessions, has_more: false } }),

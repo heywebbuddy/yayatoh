@@ -446,7 +446,11 @@ describe('Stripe adapter — refunds, transfers, disputes, Connect', () => {
       }),
     ).toEqual({ status: 'submitted' });
     const [file, update] = calls;
-    expect(file).toMatchObject({ path: '/v1/files', account: 'acct_org', idempotencyKey: 'evidence:d2:file' });
+    expect(file).toMatchObject({
+      path: '/v1/files',
+      account: 'acct_org',
+      idempotencyKey: 'evidence:d2:file',
+    });
     expect(update).toMatchObject({ account: 'acct_org', idempotencyKey: 'evidence:d2' });
     expect(update?.body.get('evidence[uncategorized_file]')).toBe('file_1');
     // Over the networks' 4.5 MB limit: refused before anything is sent.

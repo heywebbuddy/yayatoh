@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { type CommandPorts, type Ctx, executeCommand } from '@yayatoh/kernel';
+import { type CommandPorts, type Ctx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { type PaymentProvider, recordTransferReversalCommand } from '@yayatoh/payments';
 import type { z } from 'zod';
 import { completeRefundCommand, startRefundCommand } from './commands/refunds.ts';
@@ -37,6 +37,7 @@ export async function refundOrder(
       currency: started.currency,
     },
     idempotencyKey: `refund:${started.refundId}`,
+    orgId: requireOrg(ctx),
   });
   const done = await executeCommand(
     completeRefundCommand,
@@ -49,6 +50,7 @@ export async function refundOrder(
       transferId: done.reversal.transferId,
       amount: { amount: done.reversal.amountMinor, currency: done.reversal.currency },
       idempotencyKey: `reversal:${started.refundId}`,
+      orgId: requireOrg(ctx),
     });
     await executeCommand(
       recordTransferReversalCommand,
