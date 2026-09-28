@@ -30,9 +30,11 @@ export function publicMetadata(o: {
   path: string;
   title: string;
   description?: string | null;
-  image: string;
+  /** Absolute URL of a generated 1200×630 card, or an uploaded image with its own size (M1.4e). */
+  image: string | { url: string; width: number; height: number; alt: string };
   index?: boolean;
 }): Metadata {
+  const image = typeof o.image === 'string' ? { url: o.image, width: 1200, height: 630 } : o.image;
   const alternates = pageAlternates(o.canonicalOrigin, o.locale, o.path);
   const index = (o.index ?? true) && indexable(o.req.kind);
   return {
@@ -45,9 +47,9 @@ export function publicMetadata(o: {
       url: alternates.canonical,
       type: 'website',
       locale: o.locale,
-      images: [{ url: o.image, width: 1200, height: 630 }],
+      images: [image],
     },
-    twitter: { card: 'summary_large_image', images: [o.image] },
+    twitter: { card: 'summary_large_image', images: [image.url] },
     robots: index ? { index: true, follow: true } : { index: false, follow: true },
   };
 }

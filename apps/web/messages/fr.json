@@ -186,7 +186,8 @@
     "series": "Séries",
     "templates": "Modèles",
     "apiKeys": "Clés d’API",
-    "publicSite": "Site public"
+    "publicSite": "Site public",
+    "media": "Images"
   },
   "vocab": {
     "attendee": "Participant",
@@ -447,7 +448,8 @@
     "dateSoldOut": "Complet",
     "ticketsFor": "Billets pour le {date}",
     "pickDateTitle": "Choisissez d’abord une date",
-    "pickDateDescription": "Choisissez une date ci-dessus pour voir ses billets."
+    "pickDateDescription": "Choisissez une date ci-dessus pour voir ses billets.",
+    "gallery": "Galerie"
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -2343,7 +2345,8 @@
     "noEventsTitle": "Aucun événement public à venir",
     "noEventsDescription": "Revenez plus tard ou demandez un devis pour votre propre événement.",
     "quoteTitle": "Demander un devis",
-    "quoteDescription": "Présentez votre événement à {org}, qui vous répondra par e-mail."
+    "quoteDescription": "Présentez votre événement à {org}, qui vous répondra par e-mail.",
+    "photos": "Photos"
   },
   "quote": {
     "name": "Votre nom",
@@ -2977,6 +2980,74 @@
       "copied": "Copié.",
       "emptyTitle": "Aucun événement public pour l'instant",
       "emptyDescription": "Publiez un événement pour obtenir l'extrait de son widget."
+    }
+  },
+  "eventMedia": {
+    "title": "Images",
+    "subtitle": "La couverture apparaît en haut de la page de l'événement, sur les cartes d'événements et dans les aperçus de liens ; la galerie, sur la page de l'événement."
+  },
+  "media": {
+    "title": {
+      "cover": "Image de couverture",
+      "gallery": "Galerie",
+      "photo": "Photos du lieu",
+      "logo": "Logo"
+    },
+    "hint": {
+      "cover": "Affichée en haut de la page de l'événement, sur les cartes d'événements et dans les aperçus de liens.",
+      "gallery": "Jusqu'à {max} photos, sur la page de l'événement.",
+      "photo": "Jusqu'à {max} photos, sur la page publique du lieu.",
+      "logo": "Affiché dans la console, sur votre page et votre site d'organisateur, et dans les e-mails."
+    },
+    "empty": {
+      "cover": "Pas encore d’image de couverture.",
+      "gallery": "Pas encore de photos dans la galerie.",
+      "photo": "Pas encore de photos du lieu.",
+      "logo": "Pas encore de logo."
+    },
+    "count": "{count, plural, one {# image} other {# images}} sur {max}",
+    "listLabel": "Images actuelles",
+    "file": "Fichier d'image",
+    "formats": "JPEG, PNG, GIF, WebP, AVIF ou SVG, jusqu'à {size}. Les images sont converties pour le web et les données de localisation supprimées.",
+    "dropHint": "Vous pouvez aussi déposer un fichier ici.",
+    "chosen": "Sélectionné : {name}",
+    "alt": "Texte alternatif",
+    "altHint": "Décrivez ce que montre l'image pour les personnes qui ne peuvent pas la voir.",
+    "decorative": "Image décorative (pas de description nécessaire)",
+    "decorativeBadge": "Décorative",
+    "decorativeName": "image décorative",
+    "addTitle": "Ajouter une image",
+    "replaceSingleTitle": "Remplacer l'image",
+    "replacingTitle": "Remplacement : {name}",
+    "upload": "Téléverser l'image",
+    "replaceSubmit": "Remplacer l'image",
+    "cancelReplace": "Annuler",
+    "replace": "Remplacer",
+    "remove": "Retirer",
+    "editAlt": "Modifier le texte alternatif",
+    "save": "Enregistrer",
+    "altSaved": "Texte alternatif enregistré.",
+    "uploading": "Téléversement… {percent} %",
+    "processing": "Traitement de l'image…",
+    "uploaded": "Image téléversée.",
+    "progress": "Progression du téléversement",
+    "viewerNotice": "Seuls les propriétaires, administrateurs et gestionnaires peuvent modifier ces images.",
+    "viewerNoticeLogo": "Seuls les propriétaires et administrateurs peuvent modifier le logo.",
+    "errors": {
+      "no_file": "Choisissez un fichier d'image.",
+      "alt_required": "Décrivez l'image ou marquez-la comme décorative.",
+      "unsupported_type": "Ce fichier n'est pas une image prise en charge. Utilisez JPEG, PNG, GIF, WebP, AVIF ou SVG.",
+      "too_large": "Ce fichier est trop volumineux. La limite est de {size}.",
+      "too_many_pixels": "Cette image a trop de pixels (la limite est de 40 mégapixels).",
+      "undecodable": "Ce fichier d'image est endommagé ou incomplet.",
+      "svg_malformed": "Ce fichier SVG n'est pas valide.",
+      "svg_not_svg": "Ce fichier n'est pas une image SVG.",
+      "svg_too_complex": "Ce SVG est trop complexe.",
+      "quota_exceeded": "Votre organisation a utilisé tout son espace d'images. Retirez d'abord des images.",
+      "slot_full": "La galerie est pleine ({max} images). Retirez-en ou remplacez-en une.",
+      "forbidden": "Vous ne pouvez pas modifier ces images.",
+      "network": "Le téléversement a échoué. Vérifiez votre connexion et réessayez.",
+      "generic": "Le téléversement a échoué. Réessayez."
     }
   },
   "doorStaff": {

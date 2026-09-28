@@ -89,9 +89,11 @@ export {
   myOrganizations,
   organizationBrandTx,
   organizationDefaultsTx,
+  organizationLogoTx,
   organizationNameTx,
   organizationPublicTx,
   resolveOrgSlug,
+  setOrganizationLogoTx,
   twoFactorRequiredBy,
 } from './queries.ts';
 export {

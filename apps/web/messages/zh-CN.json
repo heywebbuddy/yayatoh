@@ -186,7 +186,8 @@
     "series": "系列",
     "templates": "模板",
     "apiKeys": "API 密钥",
-    "publicSite": "公开网站"
+    "publicSite": "公开网站",
+    "media": "图片"
   },
   "vocab": {
     "attendee": "参会者",
@@ -447,7 +448,8 @@
     "dateSoldOut": "已售罄",
     "ticketsFor": "{date} 的门票",
     "pickDateTitle": "请先选择场次",
-    "pickDateDescription": "在上方选择一个场次即可查看门票。"
+    "pickDateDescription": "在上方选择一个场次即可查看门票。",
+    "gallery": "图库"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -2343,7 +2345,8 @@
     "noEventsTitle": "暂无即将举行的公开活动",
     "noEventsDescription": "请稍后再来查看，或为你自己的活动发起询价。",
     "quoteTitle": "发起询价",
-    "quoteDescription": "向 {org} 介绍你的活动，对方会通过电子邮件回复你。"
+    "quoteDescription": "向 {org} 介绍你的活动，对方会通过电子邮件回复你。",
+    "photos": "照片"
   },
   "quote": {
     "name": "你的姓名",
@@ -2977,6 +2980,74 @@
       "copied": "已复制。",
       "emptyTitle": "暂无公开活动",
       "emptyDescription": "发布活动后即可获取其小组件代码。"
+    }
+  },
+  "eventMedia": {
+    "title": "图片",
+    "subtitle": "封面显示在活动页面顶部、活动卡片和链接预览中；图库显示在活动页面上。"
+  },
+  "media": {
+    "title": {
+      "cover": "封面图片",
+      "gallery": "图库",
+      "photo": "场地照片",
+      "logo": "徽标"
+    },
+    "hint": {
+      "cover": "显示在活动页面顶部、活动卡片和链接预览中。",
+      "gallery": "最多 {max} 张照片，显示在活动页面上。",
+      "photo": "最多 {max} 张照片，显示在场地公开页面上。",
+      "logo": "显示在控制台、你的主办方页面和网站以及邮件中。"
+    },
+    "empty": {
+      "cover": "还没有封面图片。",
+      "gallery": "图库中还没有照片。",
+      "photo": "还没有场地照片。",
+      "logo": "还没有徽标。"
+    },
+    "count": "{count, plural, other {# 张}}，共 {max} 张",
+    "listLabel": "当前图片",
+    "file": "图片文件",
+    "formats": "JPEG、PNG、GIF、WebP、AVIF 或 SVG，最大 {size}。图片会转换为网页格式，并移除位置信息。",
+    "dropHint": "也可以把文件拖放到这里。",
+    "chosen": "已选择：{name}",
+    "alt": "替代文本",
+    "altHint": "为看不到图片的人描述图片内容。",
+    "decorative": "装饰性图片（无需描述）",
+    "decorativeBadge": "装饰性",
+    "decorativeName": "装饰性图片",
+    "addTitle": "添加图片",
+    "replaceSingleTitle": "替换图片",
+    "replacingTitle": "正在替换：{name}",
+    "upload": "上传图片",
+    "replaceSubmit": "替换图片",
+    "cancelReplace": "取消",
+    "replace": "替换",
+    "remove": "移除",
+    "editAlt": "编辑替代文本",
+    "save": "保存",
+    "altSaved": "替代文本已保存。",
+    "uploading": "正在上传… {percent}%",
+    "processing": "正在处理图片…",
+    "uploaded": "图片已上传。",
+    "progress": "上传进度",
+    "viewerNotice": "只有所有者、管理员和经理可以更改这些图片。",
+    "viewerNoticeLogo": "只有所有者和管理员可以更改徽标。",
+    "errors": {
+      "no_file": "请选择图片文件。",
+      "alt_required": "请描述图片，或将其标记为装饰性图片。",
+      "unsupported_type": "此文件不是支持的图片。请使用 JPEG、PNG、GIF、WebP、AVIF 或 SVG。",
+      "too_large": "文件太大。上限为 {size}。",
+      "too_many_pixels": "此图片像素过多（上限为 4000 万像素）。",
+      "undecodable": "此图片文件已损坏或不完整。",
+      "svg_malformed": "此 SVG 文件无效。",
+      "svg_not_svg": "此文件不是 SVG 图片。",
+      "svg_too_complex": "此 SVG 过于复杂。",
+      "quota_exceeded": "你的组织已用完图片存储空间。请先移除一些图片。",
+      "slot_full": "图库已满（{max} 张）。请移除或替换一张。",
+      "forbidden": "你无法更改这些图片。",
+      "network": "上传失败。请检查网络连接后重试。",
+      "generic": "上传失败。请重试。"
     }
   },
   "doorStaff": {

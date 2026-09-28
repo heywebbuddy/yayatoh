@@ -22,6 +22,7 @@
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/media": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",

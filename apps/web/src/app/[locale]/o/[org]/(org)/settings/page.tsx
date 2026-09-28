@@ -10,9 +10,11 @@ import {
 import { buttonClass, Card, color, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
+import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { acceptAction, brandAction, generalAction, legalAction } from './actions.ts';
 
@@ -42,6 +44,7 @@ export default async function SettingsPage({
   const o = data.org;
   const legal = await executeQuery(legalPagesQuery, {}, data.ctx, ports);
   const agreements = await executeQuery(agreementsQuery, {}, data.ctx, ports);
+  const logo = await mediaPanel(data, 'org', o.id, 'logo');
   const canAccept = roleCan(data.role, 'members:manage');
   const zones = Intl.supportedValuesOf('timeZone');
   const labelled = (id: string, label: string, control: React.ReactNode) => (
@@ -234,6 +237,10 @@ export default async function SettingsPage({
           </SettingsForm>
         </Card>
       </section>
+
+      <Card size="panel">
+        <MediaUploader org={org} slot="logo" ticket={logo.ticket} items={logo.items} />
+      </Card>
 
       <section aria-labelledby="legal-heading" className="flex flex-col gap-3">
         <h2 id="legal-heading" className="text-section">

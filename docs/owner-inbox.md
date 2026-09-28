@@ -55,6 +55,18 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Name a translation owner** (M1.1). The 12 non-English locales are machine-drafted by Claude Code and need a native-speaker review, Arabic first. Tolgee is the planned workflow once accounts exist.
 - [ ] **Review the M1.1 screens** in the CI `e2e-report` artifact (screenshots at 375/768/1280 in English and Arabic) or on the preview once Vercel exists.
 
+- [ ] **Media storage: Cloudflare R2** (M1.4e, label: `infra`). Uploads work today with files kept in Postgres (dev, preview, CI); production refuses that store. When the Cloudflare account exists:
+  - Create a private R2 bucket (for example `yayatoh-media`, no public access, no public `r2.dev` URL: images are always served through the app's `/media/…` route, which checks permissions) and an R2 API token with Object Read & Write on that bucket only.
+  - Put `MEDIA_STORE=r2`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` and `R2_MEDIA_BUCKET` in Doppler (production and preview).
+  - Later (not blocking): Object Lock / versioning policy for the bucket, and whether Cloudflare Images or a CDN sits in front (roadmap §2).
+- [ ] **Media defaults, pending owner** (M1.4e, labels: `infra`, `tenancy`). Built with these; say if any should change:
+  - **Upload limit 4 MB** per image (Vercel functions accept at most 4.5 MB per request). Direct-to-R2 uploads can raise it (for example to 10–20 MB) once the bucket exists.
+  - **Storage quota 1 GB per organization** across all image files (staff can raise it per org; no admin screen yet).
+  - **At most 20 images** per event gallery and per venue; one cover per event; one logo per organization.
+  - **SVG uploads are allowed** (logos): they are sanitized to a safe subset and served with a sandboxing Content-Security-Policy; a PNG is also made for emails and link previews.
+  - **Animated GIFs become still images** (the first frame).
+  - Public images are cached for a year by browsers and CDNs (their URLs change whenever the file changes). An image removed from a public page can stay in someone's cache; nothing private is ever cached publicly.
+
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
 - [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).

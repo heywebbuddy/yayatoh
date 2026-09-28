@@ -186,7 +186,8 @@
     "series": "Series",
     "templates": "Templates",
     "apiKeys": "API keys",
-    "publicSite": "Public site"
+    "publicSite": "Public site",
+    "media": "Images"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -447,7 +448,8 @@
     "dateSoldOut": "Sold out",
     "ticketsFor": "Tickets for {date}",
     "pickDateTitle": "Choose a date first",
-    "pickDateDescription": "Pick one of the dates above to see its tickets."
+    "pickDateDescription": "Pick one of the dates above to see its tickets.",
+    "gallery": "Gallery"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -2343,7 +2345,8 @@
     "noEventsTitle": "No upcoming public events",
     "noEventsDescription": "Check back later, or request a quote for your own event.",
     "quoteTitle": "Request a quote",
-    "quoteDescription": "Tell {org} about your event and they'll get back to you by email."
+    "quoteDescription": "Tell {org} about your event and they'll get back to you by email.",
+    "photos": "Photos"
   },
   "quote": {
     "name": "Your name",
@@ -2977,6 +2980,74 @@
       "copied": "Copied.",
       "emptyTitle": "No public events yet",
       "emptyDescription": "Publish an event to get its widget snippet."
+    }
+  },
+  "eventMedia": {
+    "title": "Images",
+    "subtitle": "The cover appears at the top of the event page, on listing cards and in link previews; the gallery on the event page."
+  },
+  "media": {
+    "title": {
+      "cover": "Cover image",
+      "gallery": "Gallery",
+      "photo": "Venue photos",
+      "logo": "Logo"
+    },
+    "hint": {
+      "cover": "Shown at the top of the event page, on listing cards and in link previews.",
+      "gallery": "Up to {max} photos, shown on the event page.",
+      "photo": "Up to {max} photos, shown on the public venue page.",
+      "logo": "Shown in the console, on your organizer page and site, and in emails."
+    },
+    "empty": {
+      "cover": "No cover image yet.",
+      "gallery": "No gallery photos yet.",
+      "photo": "No venue photos yet.",
+      "logo": "No logo yet."
+    },
+    "count": "{count, plural, one {# image} other {# images}} of {max}",
+    "listLabel": "Current images",
+    "file": "Image file",
+    "formats": "JPEG, PNG, GIF, WebP, AVIF or SVG, up to {size}. Images are converted for the web and location data is removed.",
+    "dropHint": "You can also drop a file here.",
+    "chosen": "Selected: {name}",
+    "alt": "Alt text",
+    "altHint": "Describe what the image shows for people who can't see it.",
+    "decorative": "Decorative image (no description needed)",
+    "decorativeBadge": "Decorative",
+    "decorativeName": "decorative image",
+    "addTitle": "Add an image",
+    "replaceSingleTitle": "Replace the image",
+    "replacingTitle": "Replacing: {name}",
+    "upload": "Upload image",
+    "replaceSubmit": "Replace image",
+    "cancelReplace": "Cancel",
+    "replace": "Replace",
+    "remove": "Remove",
+    "editAlt": "Edit alt text",
+    "save": "Save",
+    "altSaved": "Alt text saved.",
+    "uploading": "Uploading… {percent}%",
+    "processing": "Processing the image…",
+    "uploaded": "Image uploaded.",
+    "progress": "Upload progress",
+    "viewerNotice": "Only owners, admins and managers can change these images.",
+    "viewerNoticeLogo": "Only owners and admins can change the logo.",
+    "errors": {
+      "no_file": "Choose an image file.",
+      "alt_required": "Describe the image, or mark it as decorative.",
+      "unsupported_type": "This file isn't a supported image. Use JPEG, PNG, GIF, WebP, AVIF or SVG.",
+      "too_large": "This file is too big. The limit is {size}.",
+      "too_many_pixels": "This image has too many pixels (the limit is 40 megapixels).",
+      "undecodable": "This image file is damaged or incomplete.",
+      "svg_malformed": "This SVG file isn't valid.",
+      "svg_not_svg": "This file isn't an SVG image.",
+      "svg_too_complex": "This SVG is too complex.",
+      "quota_exceeded": "Your organization has used all its image storage. Remove some images first.",
+      "slot_full": "This gallery is full ({max} images). Remove or replace one.",
+      "forbidden": "You can't change these images.",
+      "network": "The upload failed. Check your connection and try again.",
+      "generic": "The upload failed. Try again."
     }
   },
   "doorStaff": {

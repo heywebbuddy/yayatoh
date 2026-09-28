@@ -10,6 +10,7 @@ import {
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { listingBySlug } from '@yayatoh/marketplace';
+import { publicMedia } from '@yayatoh/media';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
@@ -29,6 +30,7 @@ import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
+import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -91,6 +93,12 @@ export async function PublicEventView({
   const content: PublicEventContentDto = contentTarget
     ? await publicEventContent(contentTarget)
     : { sections: [], announcements: [] };
+  // Cover and gallery (M1.4e): public events, or a private one this visitor's code opened.
+  const images = contentTarget
+    ? await publicMedia('event', contentTarget.eventId, { privateOk: unlockedPrivate })
+    : [];
+  const cover = images.find((m) => m.slot === 'cover') ?? null;
+  const gallery = images.filter((m) => m.slot === 'gallery');
   const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   const seatMap = target ? await publicSeatMap(target.orgId, target.eventId) : null;
@@ -297,7 +305,7 @@ export async function PublicEventView({
     country: listing?.country ?? null,
     attendanceMode: ev.attendanceMode,
     url: canonical,
-    image: `${req.origin}/api/og/event/${slug}`,
+    image: cover ? `${req.origin}${fallbackOf(cover)?.url}` : `${req.origin}/api/og/event/${slug}`,
     organizer: {
       name: ev.organizerName,
       url: `${apexOrigin(req)}/o/${orgProfile?.slug ?? listing?.orgSlug ?? ''}`,
@@ -319,6 +327,12 @@ export async function PublicEventView({
         />
       ) : null}
       <section className="relative m-2 overflow-hidden rounded-panel bg-black px-6 pt-28 pb-10 text-white md:px-16 md:pt-32">
+        {cover ? (
+          // Dimmed on the black hero so the white text keeps its contrast.
+          <div data-testid="event-cover" className="absolute inset-0">
+            <MediaPicture image={cover} sizes="100vw" eager className="size-full object-cover opacity-40" />
+          </div>
+        ) : null}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -end-24 -top-10 size-[560px] rounded-full bg-[radial-gradient(circle,var(--color-accent-900)_0%,var(--color-accent-700)_38%,transparent_70%)] opacity-50 md:end-[120px]"
@@ -439,6 +453,25 @@ export async function PublicEventView({
       ) : null}
 
       <EventSections sections={content.sections} />
+
+      {gallery.length > 0 ? (
+        <section aria-labelledby="gallery-heading" className="flex flex-col gap-4 px-6 pb-10 md:px-16">
+          <h2 id="gallery-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+            {t('publicEvent.gallery')}
+          </h2>
+          <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {gallery.map((g) => (
+              <li key={g.id}>
+                <MediaPicture
+                  image={g}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="aspect-[4/3] w-full rounded-card bg-zinc-50 object-cover"
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {venue ? (
         <section

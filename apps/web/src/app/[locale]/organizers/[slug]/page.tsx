@@ -53,7 +53,7 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
     <div className="min-h-dvh bg-white">
       <SiteHeader />
       <main id="main" className="flex flex-col gap-8">
-        <OrgHero eyebrow={t('organizer.eyebrow')} name={o.name} brandColor={o.brandColor}>
+        <OrgHero orgId={o.orgId} eyebrow={t('organizer.eyebrow')} name={o.name} brandColor={o.brandColor}>
           {site ? (
             <a href={site} className="self-start text-body underline">
               {t('organizer.site')}

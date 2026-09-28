@@ -1,17 +1,22 @@
 import { formatMoney, money } from '@yayatoh/kernel';
 import type { ListingDto } from '@yayatoh/marketplace';
+import type { PublicMediaDto } from '@yayatoh/media';
 import { Calendar, MapPin } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
+import { MediaPicture } from '../media-picture.tsx';
 
 /** One event in a list: name (the link), dates in the event's time zone, place, price, organizer. */
 export async function ListingCard({
   listing: l,
+  cover = null,
   locale,
   organizerHref,
 }: {
   listing: ListingDto;
+  /** The event's cover image, when it has one (M1.4e). */
+  cover?: PublicMediaDto | null;
   locale: string;
   /** Where the organizer name links (the marketplace's /o/{slug}); none on a tenant site. */
   organizerHref: string | null;
@@ -34,6 +39,15 @@ export async function ListingCard({
   const place = [l.venueName, l.city].filter(Boolean).join(' · ');
   return (
     <article className="relative flex h-full flex-col gap-3 rounded-card border border-zinc-200 bg-white p-5 focus-within:border-zinc-900">
+      {cover ? (
+        <div data-testid="listing-cover" className="-mx-5 -mt-5 overflow-hidden rounded-t-card">
+          <MediaPicture
+            image={cover}
+            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="aspect-video w-full bg-zinc-50 object-cover"
+          />
+        </div>
+      ) : null}
       <div className="flex flex-wrap items-center gap-2">
         <span className="font-mono text-label text-zinc-500 uppercase">{t(`category.${l.profile}`)}</span>
         {l.status === 'postponed' ? (

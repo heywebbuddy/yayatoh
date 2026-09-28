@@ -40,8 +40,10 @@ const config: NextConfig = {
     '@yayatoh/api-v1',
     '@yayatoh/notifications',
     '@yayatoh/messaging',
+    '@yayatoh/media',
   ],
-  serverExternalPackages: ['postgres', '@node-rs/argon2'],
+  // sharp (media re-encoding) loads its native libvips build at runtime.
+  serverExternalPackages: ['postgres', '@node-rs/argon2', 'sharp'],
   experimental: { taint: true, serverActions: { allowedOrigins } },
   async headers() {
     return [

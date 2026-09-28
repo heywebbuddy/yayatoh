@@ -61,11 +61,12 @@ const seating = item('seating', 'build', 'seating', 'armchair');
 const marketing = item('marketing', 'build', 'marketing', 'megaphone');
 const onsite = item('onsite', 'run', 'checkin', 'scan');
 const libraries = item('libraries', 'run', 'core', 'library');
-// M1.4c/d: venue, category, tags and short links; page content and announcements; private info
-// and access codes. Every profile has them, after its own build items.
+// M1.4c/d/e: venue, category, tags and short links; page content and announcements; cover and
+// gallery images; private info and access codes. Every profile has them, after its own build items.
 const EVENT_CONTENT: readonly NavItem[] = [
   item('details', 'build', 'core', 'map-pin'),
   item('content', 'build', 'core', 'file-text'),
+  item('media', 'build', 'core', 'image'),
   item('access', 'build', 'core', 'lock'),
 ];
 function withContent(nav: readonly NavItem[]): readonly NavItem[] {

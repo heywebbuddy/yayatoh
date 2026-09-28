@@ -186,7 +186,8 @@
     "series": "シリーズ",
     "templates": "テンプレート",
     "apiKeys": "API キー",
-    "publicSite": "公開サイト"
+    "publicSite": "公開サイト",
+    "media": "画像"
   },
   "vocab": {
     "attendee": "参加者",
@@ -447,7 +448,8 @@
     "dateSoldOut": "完売",
     "ticketsFor": "{date}のチケット",
     "pickDateTitle": "まず日程を選んでください",
-    "pickDateDescription": "上の日程から1つ選ぶとチケットが表示されます。"
+    "pickDateDescription": "上の日程から1つ選ぶとチケットが表示されます。",
+    "gallery": "ギャラリー"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -2343,7 +2345,8 @@
     "noEventsTitle": "今後の公開イベントはありません",
     "noEventsDescription": "後でもう一度ご確認いただくか、ご自身のイベントの見積もりを依頼してください。",
     "quoteTitle": "見積もりを依頼",
-    "quoteDescription": "イベントについて {org} にお伝えください。メールで返信が届きます。"
+    "quoteDescription": "イベントについて {org} にお伝えください。メールで返信が届きます。",
+    "photos": "写真"
   },
   "quote": {
     "name": "お名前",
@@ -2977,6 +2980,74 @@
       "copied": "コピーしました。",
       "emptyTitle": "公開イベントはまだありません",
       "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
+    }
+  },
+  "eventMedia": {
+    "title": "画像",
+    "subtitle": "カバー画像はイベントページの上部、イベントカード、リンクのプレビューに表示されます。ギャラリーはイベントページに表示されます。"
+  },
+  "media": {
+    "title": {
+      "cover": "カバー画像",
+      "gallery": "ギャラリー",
+      "photo": "会場の写真",
+      "logo": "ロゴ"
+    },
+    "hint": {
+      "cover": "イベントページの上部、イベントカード、リンクのプレビューに表示されます。",
+      "gallery": "最大{max}枚。イベントページに表示されます。",
+      "photo": "最大{max}枚。会場の公開ページに表示されます。",
+      "logo": "コンソール、主催者ページとサイト、メールに表示されます。"
+    },
+    "empty": {
+      "cover": "カバー画像はまだありません。",
+      "gallery": "ギャラリーの写真はまだありません。",
+      "photo": "会場の写真はまだありません。",
+      "logo": "ロゴはまだありません。"
+    },
+    "count": "{count, plural, other {#枚}}／{max}枚",
+    "listLabel": "現在の画像",
+    "file": "画像ファイル",
+    "formats": "JPEG、PNG、GIF、WebP、AVIF、SVG（{size}まで）。画像はウェブ用に変換され、位置情報は削除されます。",
+    "dropHint": "ここにファイルをドロップすることもできます。",
+    "chosen": "選択中: {name}",
+    "alt": "代替テキスト",
+    "altHint": "画像が見えない人のために、画像に写っているものを説明してください。",
+    "decorative": "装飾用の画像（説明は不要）",
+    "decorativeBadge": "装飾",
+    "decorativeName": "装飾用の画像",
+    "addTitle": "画像を追加",
+    "replaceSingleTitle": "画像を差し替え",
+    "replacingTitle": "差し替え中: {name}",
+    "upload": "画像をアップロード",
+    "replaceSubmit": "画像を差し替え",
+    "cancelReplace": "キャンセル",
+    "replace": "差し替え",
+    "remove": "削除",
+    "editAlt": "代替テキストを編集",
+    "save": "保存",
+    "altSaved": "代替テキストを保存しました。",
+    "uploading": "アップロード中… {percent}%",
+    "processing": "画像を処理しています…",
+    "uploaded": "画像をアップロードしました。",
+    "progress": "アップロードの進行状況",
+    "viewerNotice": "これらの画像を変更できるのはオーナー、管理者、マネージャーのみです。",
+    "viewerNoticeLogo": "ロゴを変更できるのはオーナーと管理者のみです。",
+    "errors": {
+      "no_file": "画像ファイルを選択してください。",
+      "alt_required": "画像を説明するか、装飾用として指定してください。",
+      "unsupported_type": "このファイルは対応している画像ではありません。JPEG、PNG、GIF、WebP、AVIF、SVGを使用してください。",
+      "too_large": "ファイルが大きすぎます。上限は{size}です。",
+      "too_many_pixels": "この画像はピクセル数が多すぎます（上限は4,000万ピクセル）。",
+      "undecodable": "この画像ファイルは破損しているか不完全です。",
+      "svg_malformed": "このSVGファイルは有効ではありません。",
+      "svg_not_svg": "このファイルはSVG画像ではありません。",
+      "svg_too_complex": "このSVGは複雑すぎます。",
+      "quota_exceeded": "組織の画像ストレージを使い切りました。先にいくつかの画像を削除してください。",
+      "slot_full": "ギャラリーがいっぱいです（{max}枚）。1枚削除するか差し替えてください。",
+      "forbidden": "これらの画像を変更する権限がありません。",
+      "network": "アップロードに失敗しました。接続を確認してもう一度お試しください。",
+      "generic": "アップロードに失敗しました。もう一度お試しください。"
     }
   },
   "doorStaff": {

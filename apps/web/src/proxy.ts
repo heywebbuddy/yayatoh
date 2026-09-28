@@ -210,6 +210,7 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
   return secure(res);
 }
 
+// `/media/…` (M1.4e) sets its own headers: images are not pages (no nonce, no page CSP).
 export const config = {
-  matcher: ['/((?!api|_next|_vercel).*)'],
+  matcher: ['/((?!api|_next|_vercel|media/).*)'],
 };

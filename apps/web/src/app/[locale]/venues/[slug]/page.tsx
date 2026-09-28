@@ -1,9 +1,11 @@
 import { publicEventsAtVenue } from '@yayatoh/events';
+import { publicMedia } from '@yayatoh/media';
 import { Card, EmptyState } from '@yayatoh/ui';
-import { publicVenue } from '@yayatoh/venues';
+import { publicVenue, quoteTarget } from '@yayatoh/venues';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { MediaPicture } from '@/components/media-picture.tsx';
 import { QuoteForm } from '@/components/quote-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
@@ -36,6 +38,9 @@ export default async function PublicVenuePage({
   const venue = await publicVenue(slug);
   if (!venue) notFound();
   const events = await publicEventsAtVenue(slug);
+  // Photos (M1.4e): the venue's id is resolved server-side, never taken from the request.
+  const target = await quoteTarget(slug);
+  const photos = target ? await publicMedia('venue', target.venueId) : [];
   const t = await getTranslations('venuePage');
   const region = new Intl.DisplayNames([locale], { type: 'region' });
   const address = [
@@ -96,6 +101,24 @@ export default async function PublicVenuePage({
           ) : null}
         </Card>
       </section>
+      {photos.length > 0 ? (
+        <section aria-labelledby="venue-photos" className="flex flex-col gap-3">
+          <h2 id="venue-photos" className="text-section">
+            {t('photos')}
+          </h2>
+          <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {photos.map((p) => (
+              <li key={p.id}>
+                <MediaPicture
+                  image={p}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="aspect-[4/3] w-full rounded-card bg-zinc-50 object-cover"
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       <section aria-labelledby="venue-events" className="flex flex-col gap-3">
         <h2 id="venue-events" className="text-section">
           {t('upcoming')}

@@ -186,7 +186,8 @@
     "series": "Series",
     "templates": "Plantillas",
     "apiKeys": "Claves de API",
-    "publicSite": "Sitio público"
+    "publicSite": "Sitio público",
+    "media": "Imágenes"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -447,7 +448,8 @@
     "dateSoldOut": "Agotada",
     "ticketsFor": "Entradas para el {date}",
     "pickDateTitle": "Primero elige una fecha",
-    "pickDateDescription": "Elige una de las fechas de arriba para ver sus entradas."
+    "pickDateDescription": "Elige una de las fechas de arriba para ver sus entradas.",
+    "gallery": "Galería"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -2343,7 +2345,8 @@
     "noEventsTitle": "No hay próximos eventos públicos",
     "noEventsDescription": "Vuelve más tarde o pide presupuesto para tu propio evento.",
     "quoteTitle": "Pedir presupuesto",
-    "quoteDescription": "Cuéntale a {org} sobre tu evento y te responderá por correo electrónico."
+    "quoteDescription": "Cuéntale a {org} sobre tu evento y te responderá por correo electrónico.",
+    "photos": "Fotos"
   },
   "quote": {
     "name": "Tu nombre",
@@ -2977,6 +2980,74 @@
       "copied": "Copiado.",
       "emptyTitle": "Aún no hay eventos públicos",
       "emptyDescription": "Publica un evento para obtener su fragmento del widget."
+    }
+  },
+  "eventMedia": {
+    "title": "Imágenes",
+    "subtitle": "La portada aparece arriba en la página del evento, en las tarjetas de eventos y en las vistas previas de enlaces; la galería, en la página del evento."
+  },
+  "media": {
+    "title": {
+      "cover": "Imagen de portada",
+      "gallery": "Galería",
+      "photo": "Fotos del lugar",
+      "logo": "Logotipo"
+    },
+    "hint": {
+      "cover": "Se muestra arriba en la página del evento, en las tarjetas de eventos y en las vistas previas de enlaces.",
+      "gallery": "Hasta {max} fotos, en la página del evento.",
+      "photo": "Hasta {max} fotos, en la página pública del lugar.",
+      "logo": "Se muestra en la consola, en tu página y sitio de organizador y en los correos."
+    },
+    "empty": {
+      "cover": "Todavía no hay imagen de portada.",
+      "gallery": "Todavía no hay fotos en la galería.",
+      "photo": "Todavía no hay fotos del lugar.",
+      "logo": "Todavía no hay logotipo."
+    },
+    "count": "{count, plural, one {# imagen} other {# imágenes}} de {max}",
+    "listLabel": "Imágenes actuales",
+    "file": "Archivo de imagen",
+    "formats": "JPEG, PNG, GIF, WebP, AVIF o SVG, hasta {size}. Las imágenes se convierten para la web y se eliminan los datos de ubicación.",
+    "dropHint": "También puedes soltar un archivo aquí.",
+    "chosen": "Seleccionado: {name}",
+    "alt": "Texto alternativo",
+    "altHint": "Describe lo que muestra la imagen para quienes no pueden verla.",
+    "decorative": "Imagen decorativa (no necesita descripción)",
+    "decorativeBadge": "Decorativa",
+    "decorativeName": "imagen decorativa",
+    "addTitle": "Añadir una imagen",
+    "replaceSingleTitle": "Sustituir la imagen",
+    "replacingTitle": "Sustituyendo: {name}",
+    "upload": "Subir imagen",
+    "replaceSubmit": "Sustituir imagen",
+    "cancelReplace": "Cancelar",
+    "replace": "Sustituir",
+    "remove": "Quitar",
+    "editAlt": "Editar texto alternativo",
+    "save": "Guardar",
+    "altSaved": "Texto alternativo guardado.",
+    "uploading": "Subiendo… {percent} %",
+    "processing": "Procesando la imagen…",
+    "uploaded": "Imagen subida.",
+    "progress": "Progreso de la subida",
+    "viewerNotice": "Solo propietarios, administradores y gestores pueden cambiar estas imágenes.",
+    "viewerNoticeLogo": "Solo propietarios y administradores pueden cambiar el logotipo.",
+    "errors": {
+      "no_file": "Elige un archivo de imagen.",
+      "alt_required": "Describe la imagen o márcala como decorativa.",
+      "unsupported_type": "Este archivo no es una imagen compatible. Usa JPEG, PNG, GIF, WebP, AVIF o SVG.",
+      "too_large": "Este archivo es demasiado grande. El límite es {size}.",
+      "too_many_pixels": "Esta imagen tiene demasiados píxeles (el límite es 40 megapíxeles).",
+      "undecodable": "Este archivo de imagen está dañado o incompleto.",
+      "svg_malformed": "Este archivo SVG no es válido.",
+      "svg_not_svg": "Este archivo no es una imagen SVG.",
+      "svg_too_complex": "Este SVG es demasiado complejo.",
+      "quota_exceeded": "Tu organización ha usado todo su almacenamiento de imágenes. Quita algunas imágenes primero.",
+      "slot_full": "La galería está llena ({max} imágenes). Quita o sustituye una.",
+      "forbidden": "No puedes cambiar estas imágenes.",
+      "network": "La subida falló. Revisa tu conexión e inténtalo de nuevo.",
+      "generic": "La subida falló. Inténtalo de nuevo."
     }
   },
   "doorStaff": {

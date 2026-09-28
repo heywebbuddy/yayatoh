@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
+import { MediaPicture } from './media-picture.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
@@ -43,6 +44,14 @@ async function SidebarContent({
       </Link>
       <details className="group relative mb-3">
         <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2.5 rounded-[14px] border border-zinc-200 bg-zinc-50 px-3 py-2.5 [&::-webkit-details-marker]:hidden">
+          {data.logo ? (
+            <span
+              data-testid="console-logo"
+              className="flex size-8 shrink-0 items-center overflow-hidden rounded-[8px] bg-white"
+            >
+              <MediaPicture image={data.logo} sizes="32px" className="size-8 object-contain" eager />
+            </span>
+          ) : null}
           <span className="flex min-w-0 flex-1 flex-col gap-0.5">
             <span className="truncate font-mono text-[10px] uppercase tracking-[0.06em] text-zinc-500">
               {context.eyebrow}

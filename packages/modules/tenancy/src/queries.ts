@@ -125,6 +125,8 @@ export async function organizationPublicTx(
   name: string;
   status: string;
   brandColor: string | null;
+  logoPath: string | null;
+  logoAlt: string | null;
   poweredByVisible: boolean;
   primaryHost: string | null;
   primaryHostManaged: boolean;
@@ -135,6 +137,8 @@ export async function organizationPublicTx(
       name: organizations.name,
       status: organizations.status,
       brandColor: organizations.brandColor,
+      logoPath: organizations.logoPath,
+      logoAlt: organizations.logoAlt,
       poweredByVisible: organizations.poweredByVisible,
     })
     .from(organizations)
@@ -167,6 +171,8 @@ export async function organizationBrandTx(
   slug: string;
   name: string;
   brandColor: string | null;
+  logoPath: string | null;
+  logoAlt: string | null;
   poweredByVisible: boolean;
   timezone: string;
   status: string;
@@ -176,6 +182,8 @@ export async function organizationBrandTx(
       slug: organizations.slug,
       name: organizations.name,
       brandColor: organizations.brandColor,
+      logoPath: organizations.logoPath,
+      logoAlt: organizations.logoAlt,
       poweredByVisible: organizations.poweredByVisible,
       timezone: organizations.timezone,
       status: organizations.status,
@@ -191,4 +199,31 @@ export async function organizationBrandTx(
  */
 export async function twoFactorRequiredBy(userId: string): Promise<MyOrganizationDto[]> {
   return (await myOrganizations(userId)).filter((o) => roleRequiresTwoFactor(o.role));
+}
+
+/**
+ * Set or clear the org's logo reference (M1.4e), inside the media module's command transaction.
+ * The path is the logo's email-safe fallback variant under `/media/…`.
+ */
+export async function setOrganizationLogoTx(
+  tx: TenantTx,
+  orgId: string,
+  logo: { path: string; alt: string } | null,
+): Promise<void> {
+  await tx
+    .update(organizations)
+    .set({ logoPath: logo?.path ?? null, logoAlt: logo?.alt ?? null, updatedAt: new Date() })
+    .where(eq(organizations.id, orgId));
+}
+
+/** The org's logo reference (console header), inside its tenant transaction. */
+export async function organizationLogoTx(
+  tx: TenantTx,
+  orgId: string,
+): Promise<{ path: string; alt: string } | null> {
+  const [row] = await tx
+    .select({ path: organizations.logoPath, alt: organizations.logoAlt })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row?.path && row.alt ? { path: row.path, alt: row.alt } : null;
 }
