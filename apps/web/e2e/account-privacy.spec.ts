@@ -239,7 +239,7 @@ test.describe('organizer privacy requests: team invitations and erased addresses
     const email = `invited+${stampOf()}@example.test`;
     await page.goto('/o/lakeside-events/team');
     await page.getByLabel('Email address').fill(email);
-    await page.getByLabel('Role').selectOption('scanner');
+    await page.getByLabel('Role', { exact: true }).selectOption('scanner');
     await page.getByRole('button', { name: 'Send invitation' }).click();
     await expect(page.getByText('Invitation sent.')).toBeVisible();
 

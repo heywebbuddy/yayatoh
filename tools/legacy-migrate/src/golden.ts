@@ -97,6 +97,7 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = c.event_id::text
        where c.status = 1 and c.transferred = 1 group by 1`,
       `select s.org_id::text as key, sum(s.transferred_minor) as v from payments.legacy_settlements s
+       join legacy.ref r on r.instance = $1 and r.entity = 'events' and r.new_id = s.event_id
        where s.kind = 'event_statement' and s.instance = $1 group by 1`,
     ),
   },
@@ -121,6 +122,7 @@ export const GOLDEN_QUERIES: readonly GoldenQuery[] = [
        join legacy.ref ev on ev.instance = $1 and ev.entity = 'events' and ev.legacy_id = c.event_id::text
        where c.status = 1 group by 1`,
       `select s.org_id::text as key, sum(s.commission_minor) as v from payments.legacy_settlements s
+       join legacy.ref r on r.instance = $1 and r.entity = 'events' and r.new_id = s.event_id
        where s.kind = 'event_statement' and s.instance = $1 group by 1`,
     ),
   },
