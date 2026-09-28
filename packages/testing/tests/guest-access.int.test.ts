@@ -43,7 +43,10 @@ const addr = (tag: string) => `guest.${tag}.${run}@example.test`;
 const limits = (d = device()) => ({ limiter, subject: { device: d, ip: null } });
 /** Each call is 31 s after the previous one, so cooldowns never get in the way unless meant to. */
 let clock = Date.now();
-const later = () => new Date((clock += GUEST_RESEND_COOLDOWN_MS + 1_000));
+const later = () => {
+  clock += GUEST_RESEND_COOLDOWN_MS + 1_000;
+  return new Date(clock);
+};
 
 async function freeEvent(org: OrgFixture, name: string) {
   const e = await executeCommand(

@@ -1,12 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import {
-  continueToPayment,
-  expectAccessible,
-  lastEmailedCode,
-  signIn,
-  verifyCheckoutEmail,
-  wrongCode,
-} from './helpers.ts';
+import { continueToPayment, expectAccessible, lastEmailedCode, signIn, wrongCode } from './helpers.ts';
 import { addTicketType, createGala, publishEvent, unique } from './seating-helpers.ts';
 
 /**
