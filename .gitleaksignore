@@ -2,3 +2,5 @@
 62fc24a8ff543a848140ec60dcf54cef8520a0ab:packages/auth/tests/legacy.test.ts:generic-api-key:41
 819bf64ed350ed4ac9c2261dd1a1561c491acb77:apps/web/src/components/scanner.tsx:generic-api-key:21
 f564acf4b740717e6991ed464d2d6ba2674b6cc9:packages/testing/tests/stripe-flow.int.test.ts:generic-api-key:32
+8ae31dcaac793dd0b78192b9b92e9f0d2eb98f90:packages/testing/tests/reconciliation.int.test.ts:generic-api-key:31
+482e02878b16392a18e77508a789cb8f2b511508:packages/modules/payments/tests/stripe-live-shapes.test.ts:generic-api-key:13
