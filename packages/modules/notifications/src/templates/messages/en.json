@@ -72,6 +72,11 @@
       "subject": "New message from {name}",
       "intro": "{name} wrote to you about {eventName}."
     },
+    "payments.destination-changed": {
+      "subject": "A new payout account for {org}",
+      "intro": "{reason, select, bank_changed {The bank account that receives {org}'s payouts was changed.} other {A payout account was connected to {org}.}} For your security, no money is sent to it before {until}. If you didn't make this change, contact Yayatoh support right away.",
+      "cta": "Review payouts"
+    },
     "notifications.test": {
       "subject": "Test notification",
       "intro": "Notifications are working."

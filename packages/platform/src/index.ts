@@ -36,7 +36,7 @@ export {
   type HumanCheck,
   turnstileHumanCheck,
 } from './human-check.ts';
-export { type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
+export { IDENTITY_KEY_SCOPE, type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
 export { isModuleKey, MODULE_KEYS, type ModuleKey } from './modules.ts';
 export {
   type MemberNotificationIntent,

@@ -266,7 +266,11 @@ describe('settlements and transfers at release (M1.6c)', () => {
       systemCtx(a.org.id),
       ports,
     );
-    expect(await release('2028-09-01T00:00:00Z')).toEqual({ held: true, ready: [] });
+    expect(await release('2028-09-01T00:00:00Z')).toEqual({
+      held: true,
+      ready: [],
+      destinationHoldUntil: null,
+    });
     await executeCommand(
       setPayoutHoldCommand,
       { held: false, reason: 'cleared' },

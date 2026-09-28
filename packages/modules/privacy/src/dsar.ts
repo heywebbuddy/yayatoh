@@ -266,6 +266,8 @@ export const eraseSubjectCommand = tenantCommand({
   output: EraseResult,
   entitlement: 'core',
   permission: 'privacy:manage',
+  // Erasure cannot be undone: a recent sign-in is required (step-up, roadmap §9; M1.2c).
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     const email = normalizeEmail(input.email);
     if (normalizeEmail(input.confirm) !== email)

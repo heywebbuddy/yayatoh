@@ -4,6 +4,7 @@ import { listingsProjector } from '@yayatoh/marketplace';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import { refundMailer, ticketMailer } from '@yayatoh/orders';
+import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { invitationMailer } from '@yayatoh/tenancy';
@@ -38,6 +39,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
     releaseCancelledSeats(),
+    payoutDestinationMailer({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];

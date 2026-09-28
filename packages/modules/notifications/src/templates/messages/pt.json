@@ -72,6 +72,11 @@
       "subject": "Nova mensagem de {name}",
       "intro": "{name} escreveu para você sobre {eventName}."
     },
+    "payments.destination-changed": {
+      "subject": "Nova conta de repasses para {org}",
+      "intro": "{reason, select, bank_changed {A conta bancária que recebe os repasses de {org} foi alterada.} other {Uma conta de repasses foi conectada a {org}.}} Para sua segurança, nenhum dinheiro será enviado a ela antes de {until}. Se você não fez essa alteração, entre em contato com o suporte da Yayatoh imediatamente.",
+      "cta": "Ver repasses"
+    },
     "notifications.test": {
       "subject": "Notificação de teste",
       "intro": "As notificações estão funcionando."

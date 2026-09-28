@@ -4,6 +4,7 @@ import { Alert, Button, buttonClass, Card, EmptyState, Input } from '@yayatoh/ui
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useState } from 'react';
 import type { EraseState, ExportState, FindState } from '@/app/[locale]/o/[org]/(org)/privacy/actions.ts';
+import { useStepUpActionState } from '@/components/step-up.tsx';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 const CATEGORIES = [
@@ -37,8 +38,11 @@ export function PrivacyConsole({
 }) {
   const t = useTranslations();
   const [found, findAction, finding] = useActionState(find, { kind: 'idle' });
-  const [exported, exportAction, exporting] = useActionState(exportData, { kind: 'idle' });
-  const [erased, eraseAction, erasing] = useActionState(erase, { kind: 'idle' });
+  // Exporting and erasing need a recent sign-in (M1.2c): the dialog confirms, then resends.
+  const [exported, exportAction, exporting, exportForm] = useStepUpActionState<ExportState>(exportData, {
+    kind: 'idle',
+  });
+  const [erased, eraseAction, erasing, eraseForm] = useStepUpActionState<EraseState>(erase, { kind: 'idle' });
   const [subject, setSubject] = useState<string | null>(null);
   const confirmId = useId();
   // A new search starts a new request: older export/erase results belong to the previous person.
@@ -102,7 +106,7 @@ export function PrivacyConsole({
             <Card className="flex flex-col gap-3">
               <h2 className="text-section">{t('privacy.export.title')}</h2>
               <p className="text-body text-zinc-600">{t('privacy.export.hint')}</p>
-              <form action={exportAction}>
+              <form ref={exportForm} action={exportAction}>
                 <input type="hidden" name="email" value={current.email} />
                 <Button type="submit" variant="secondary" disabled={exporting}>
                   {t('privacy.export.submit')}
@@ -135,7 +139,7 @@ export function PrivacyConsole({
                 <li>{t('privacy.erase.tickets', { active: current.summary.activeTickets })}</li>
                 <li>{t('privacy.erase.final')}</li>
               </ul>
-              <form action={eraseAction} className="flex flex-col gap-3" noValidate>
+              <form ref={eraseForm} action={eraseAction} className="flex flex-col gap-3" noValidate>
                 <input type="hidden" name="email" value={current.email} />
                 <Input
                   id={confirmId}

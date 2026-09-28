@@ -7,6 +7,7 @@ import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier, type DispatchDeps, devMailboxTransports, dispatchDue } from '@yayatoh/notifications';
 import { refundMailer, ticketMailer } from '@yayatoh/orders';
+import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, eventKey, recentEventsTx, type Subscriber } from '@yayatoh/platform';
 import { invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
@@ -31,6 +32,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
+    payoutDestinationMailer({ notifier, appOrigin }),
   ];
 }
 

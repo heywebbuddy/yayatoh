@@ -49,6 +49,8 @@ export const createApiKeyCommand = tenantCommand({
   output: ApiKeyDto.extend({ key: z.string() }),
   entitlement: 'core',
   permission: 'api_keys:manage',
+  // Step-up (roadmap §10): a key is standing access to the org's data.
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     // A key never carries more than its creator holds.
     const role = await roleInTx(tx, ctx);
@@ -88,6 +90,8 @@ export const revokeApiKeyCommand = tenantCommand({
   output: ApiKeyDto,
   entitlement: 'core',
   permission: 'api_keys:manage',
+  // Step-up (roadmap §10): API keys are managed only by someone who just proved it's them.
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     const [current] = await tx.select().from(apiKeys).where(eq(apiKeys.id, input.apiKeyId));
     if (!current) throw new DomainError('not_found', 'API key not found');

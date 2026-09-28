@@ -72,6 +72,11 @@
       "subject": "Neue Nachricht von {name}",
       "intro": "{name} hat dir zu {eventName} geschrieben."
     },
+    "payments.destination-changed": {
+      "subject": "Neues Auszahlungskonto für {org}",
+      "intro": "{reason, select, bank_changed {Das Bankkonto, auf das {org} Auszahlungen erhält, wurde geändert.} other {Ein Auszahlungskonto wurde mit {org} verbunden.}} Zu deiner Sicherheit wird vor dem {until} kein Geld darauf überwiesen. Wenn du diese Änderung nicht vorgenommen hast, wende dich sofort an den Yayatoh-Support.",
+      "cta": "Auszahlungen prüfen"
+    },
     "notifications.test": {
       "subject": "Testbenachrichtigung",
       "intro": "Benachrichtigungen funktionieren."

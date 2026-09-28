@@ -26,7 +26,8 @@
     "switchContext": "Wissel van organisatie of evenement",
     "yourOrganizations": "Je organisaties",
     "organization": "Organisatie",
-    "signOut": "Uitloggen"
+    "signOut": "Uitloggen",
+    "security": "Accountbeveiliging"
   },
   "notifications": {
     "open": "Meldingen",
@@ -55,7 +56,10 @@
       "notifications": {
         "test": "Testmelding: meldingen werken"
       },
-      "other": "Melding"
+      "other": "Melding",
+      "payments": {
+        "destination-changed": "Nieuwe uitbetaalrekening: overboekingen ernaartoe beginnen pas na {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -85,6 +89,9 @@
       },
       "notifications": {
         "test": "Testmelding"
+      },
+      "payments": {
+        "destination-changed": "Wijziging van de uitbetaalrekening"
       }
     },
     "status": {
@@ -499,6 +506,24 @@
     "invalidCode": "Deze code is onjuist of verlopen.",
     "failed": "We konden geen code versturen. Probeer het opnieuw.",
     "devPersonas": "Ontwikkelpersona’s",
+    "challenge": {
+      "title": "Verificatie in twee stappen",
+      "explainTotp": "Voer de 6-cijferige code uit je authenticator-app in.",
+      "explainBackup": "Voer een van je back-upcodes in. Elke code werkt één keer.",
+      "totpLabel": "6-cijferige code",
+      "backupLabel": "Back-upcode",
+      "backupHint": "Bijvoorbeeld: abcde-12345",
+      "verify": "Controleren en inloggen",
+      "useBackup": "Een back-upcode gebruiken",
+      "useTotp": "De authenticator-app gebruiken",
+      "startOver": "Opnieuw inloggen",
+      "errors": {
+        "invalid_code": "Die code werkte niet. Probeer het opnieuw.",
+        "too_many_attempts": "Te veel foute codes. Log opnieuw in om het nog eens te proberen.",
+        "locked": "Te veel mislukte pogingen. Probeer het over 15 minuten opnieuw.",
+        "expired": "Deze aanmelding is verlopen. Log opnieuw in."
+      }
+    },
     "rateLimited": "Te veel inlogpogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
   },
   "orgPicker": {
@@ -1192,7 +1217,8 @@
         "transferred": "Uitbetaald",
         "failed": "Nieuwe poging"
       }
-    }
+    },
+    "destinationHold": "Nieuwe uitbetaalrekening: voor je veiligheid beginnen overboekingen ernaartoe pas na {until}. De eigenaren van je organisatie zijn gemaild."
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -2837,5 +2863,75 @@
       "emptyTitle": "Nog geen openbare evenementen",
       "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
     }
+  },
+  "security": {
+    "metaTitle": "Accountbeveiliging",
+    "eyebrow": "Je account",
+    "title": "Beveiliging",
+    "description": "Bescherm je Yayatoh-account met verificatie in twee stappen.",
+    "requiredTitle": "Verificatie in twee stappen is verplicht",
+    "requiredExplain": "Wie geld kan verplaatsen, uitbetalingen en domeinen kan wijzigen of anderen toegang kan geven, moet verificatie in twee stappen gebruiken. Stel het in om je console te openen.",
+    "requiredFor": "{role} bij {org}",
+    "appTitle": "Authenticator-app",
+    "statusOn": "Aan",
+    "statusOff": "Uit",
+    "appExplain": "Na je wachtwoord of de code per e-mail voer je een 6-cijferige code in uit een authenticator-app op je telefoon.",
+    "setUp": "Authenticator-app instellen",
+    "step1": "Scan deze QR-code met je authenticator-app.",
+    "qrLabel": "QR-code voor je authenticator-app. Lukt scannen niet, voer dan de instelsleutel eronder in.",
+    "manualKeyLabel": "Lukt scannen niet? Voer deze instelsleutel in de app in:",
+    "copyKey": "Instelsleutel kopiëren",
+    "copied": "Gekopieerd.",
+    "step2": "Voer de 6-cijferige code in die je app toont.",
+    "codeLabel": "6-cijferige code",
+    "verify": "Controleren en inschakelen",
+    "cancel": "Annuleren",
+    "enabledNow": "Verificatie in twee stappen staat aan.",
+    "codesTitle": "Back-upcodes",
+    "codesExplain": "Ben je je telefoon kwijt, log dan in met een van deze codes. Elke code werkt één keer. Bewaar ze op een veilige plek: we tonen ze niet nog eens.",
+    "copyCodes": "Codes kopiëren",
+    "downloadCodes": "Codes downloaden",
+    "codesSaved": "Ik heb mijn codes bewaard",
+    "codesFileHeader": "Yayatoh-back-upcodes. Elke code werkt één keer.",
+    "continueToConsole": "Verder naar je console",
+    "turnOff": "Verificatie in twee stappen uitschakelen",
+    "turnOffExplain": "Voer een code uit je authenticator-app of een back-upcode in om het uit te schakelen.",
+    "currentCodeLabel": "Code",
+    "turnOffConfirm": "Uitschakelen",
+    "cannotTurnOff": "Je rol vereist verificatie in twee stappen, dus die kan niet uit: {reasons}.",
+    "codesLeft": "{count, plural, =0 {Geen back-upcodes meer} one {Nog # back-upcode} other {Nog # back-upcodes}}",
+    "regenerate": "Nieuwe back-upcodes maken",
+    "regenerateWarning": "Je huidige back-upcodes werken dan niet meer.",
+    "regenerateConfirm": "Mijn codes vervangen",
+    "backToConsole": "Terug naar je console",
+    "errors": {
+      "invalid_code": "Die code werkte niet. Controleer of je telefoon de tijd automatisch instelt en probeer het opnieuw.",
+      "rate_limited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
+      "not_pending": "Begin opnieuw met instellen.",
+      "required": "Je rol vereist verificatie in twee stappen, dus die kan niet uit.",
+      "already_enabled": "Verificatie in twee stappen staat al aan.",
+      "not_enabled": "Verificatie in twee stappen staat uit."
+    }
+  },
+  "stepUp": {
+    "title": "Bevestig dat jij het bent",
+    "why": "Gevoelige wijzigingen vragen om een recente aanmelding. Na bevestiging vragen we het 10 minuten niet opnieuw.",
+    "explain": {
+      "totp": "Voer de 6-cijferige code uit je authenticator-app of een back-upcode in.",
+      "password": "Voer je wachtwoord in.",
+      "email": "We hebben je een 6-cijferige code gemaild. Die verloopt over 10 minuten."
+    },
+    "loading": "Even geduld…",
+    "codeLabel": "Code",
+    "codeHint": "6 cijfers, of een back-upcode",
+    "passwordLabel": "Wachtwoord",
+    "confirm": "Bevestigen",
+    "cancel": "Annuleren",
+    "resend": "Stuur me een nieuwe code",
+    "resent": "We hebben een nieuwe code gestuurd.",
+    "invalidCode": "Die code werkte niet. Probeer het opnieuw.",
+    "invalidPassword": "Dat wachtwoord klopt niet.",
+    "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
+    "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
   }
 }

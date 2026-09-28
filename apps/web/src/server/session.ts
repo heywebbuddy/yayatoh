@@ -4,27 +4,48 @@ import { cache } from 'react';
 import { getAuth } from './auth.ts';
 import { initialsOf } from './personas.ts';
 
-/** The persona shortcut (/dev/login) is on only when explicitly enabled and never in production. */
-export function devAuthEnabled(): boolean {
-  return process.env.YAYATOH_DEV_AUTH === '1' && process.env.VERCEL_ENV !== 'production';
-}
+export { devAuthEnabled } from './dev.ts';
 
 export interface Session {
   readonly userId: string;
   readonly name: string;
   readonly email: string;
   readonly initials: string;
+  readonly twoFactorEnabled: boolean;
+  /**
+   * The last re-authentication in this session: the sign-in itself or a later step-up ("Confirm
+   * it's you"), whichever is newer. Commands marked `stepUp` need it within 10 minutes.
+   */
+  readonly stepUpAt: Date;
 }
+
+const loadSession = cache(async () => {
+  // Read request headers first: it marks the route dynamic before auth is initialised, so builds
+  // never need BETTER_AUTH_SECRET.
+  const h = await headers();
+  return getAuth().api.getSession({ headers: h });
+});
 
 /**
  * The signed-in user from this host's Better Auth session cookie. The tenant is never taken from
  * the session here; it comes from the route's org param and is checked against membership.
  */
 export const getSession = cache(async (): Promise<Session | null> => {
-  // Read request headers first: it marks the route dynamic before auth is initialised, so builds
-  // never need BETTER_AUTH_SECRET.
-  const h = await headers();
-  const s = await getAuth().api.getSession({ headers: h });
+  const s = await loadSession();
   if (!s) return null;
-  return { userId: s.user.id, name: s.user.name, email: s.user.email, initials: initialsOf(s.user.name) };
+  const created = new Date(s.session.createdAt);
+  const steppedUp = s.session.stepUpAt ? new Date(s.session.stepUpAt) : null;
+  return {
+    userId: s.user.id,
+    name: s.user.name,
+    email: s.user.email,
+    initials: initialsOf(s.user.name),
+    twoFactorEnabled: Boolean((s.user as { twoFactorEnabled?: boolean | null }).twoFactorEnabled),
+    stepUpAt: steppedUp && steppedUp > created ? steppedUp : created,
+  };
 });
+
+/** Server only: the current session's token (to record a step-up on it). Never sent to a client. */
+export async function sessionToken(): Promise<string | null> {
+  return (await loadSession())?.session.token ?? null;
+}

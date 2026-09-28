@@ -16,6 +16,8 @@ export const inviteMemberCommand = tenantCommand({
   output: InvitationDto,
   entitlement: 'core',
   permission: 'members:manage',
+  // Step-up (roadmap §10): an invitation grants a role.
+  stepUp: true,
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     if (ctx.actor.type !== 'user') throw new DomainError('forbidden');

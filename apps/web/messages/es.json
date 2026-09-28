@@ -26,7 +26,8 @@
     "switchContext": "Cambiar de organización o evento",
     "yourOrganizations": "Tus organizaciones",
     "organization": "Organización",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "security": "Seguridad de la cuenta"
   },
   "notifications": {
     "open": "Notificaciones",
@@ -55,7 +56,10 @@
       "notifications": {
         "test": "Notificación de prueba: las notificaciones funcionan"
       },
-      "other": "Notificación"
+      "other": "Notificación",
+      "payments": {
+        "destination-changed": "Nueva cuenta de pagos: las transferencias a ella empiezan después del {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -85,6 +89,9 @@
       },
       "notifications": {
         "test": "Notificación de prueba"
+      },
+      "payments": {
+        "destination-changed": "Cambio de cuenta de pagos"
       }
     },
     "status": {
@@ -499,6 +506,24 @@
     "invalidCode": "Ese código es incorrecto o ha caducado.",
     "failed": "No pudimos enviar el código. Inténtalo de nuevo.",
     "devPersonas": "Perfiles de desarrollo",
+    "challenge": {
+      "title": "Verificación en dos pasos",
+      "explainTotp": "Introduce el código de 6 dígitos de tu app de autenticación.",
+      "explainBackup": "Introduce uno de tus códigos de respaldo. Cada código sirve una vez.",
+      "totpLabel": "Código de 6 dígitos",
+      "backupLabel": "Código de respaldo",
+      "backupHint": "Por ejemplo: abcde-12345",
+      "verify": "Verificar e iniciar sesión",
+      "useBackup": "Usar un código de respaldo",
+      "useTotp": "Usar la app de autenticación",
+      "startOver": "Volver a iniciar sesión",
+      "errors": {
+        "invalid_code": "Ese código no funcionó. Inténtalo de nuevo.",
+        "too_many_attempts": "Demasiados códigos incorrectos. Vuelve a iniciar sesión para intentarlo otra vez.",
+        "locked": "Demasiados intentos fallidos. Inténtalo de nuevo en 15 minutos.",
+        "expired": "Este inicio de sesión caducó. Vuelve a iniciar sesión."
+      }
+    },
     "rateLimited": "Demasiados intentos de inicio de sesión. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "orgPicker": {
@@ -1192,7 +1217,8 @@
         "transferred": "Pagado",
         "failed": "Reintentando"
       }
-    }
+    },
+    "destinationHold": "Nueva cuenta de pagos: por tu seguridad, las transferencias a ella empiezan después del {until}. Avisamos por correo a los propietarios de tu organización."
   },
   "fakeConnect": {
     "eyebrow": "Modo de prueba",
@@ -2837,5 +2863,75 @@
       "emptyTitle": "Aún no hay eventos públicos",
       "emptyDescription": "Publica un evento para obtener su fragmento del widget."
     }
+  },
+  "security": {
+    "metaTitle": "Seguridad de la cuenta",
+    "eyebrow": "Tu cuenta",
+    "title": "Seguridad",
+    "description": "Protege tu cuenta de Yayatoh con la verificación en dos pasos.",
+    "requiredTitle": "La verificación en dos pasos es obligatoria",
+    "requiredExplain": "Quienes pueden mover dinero, cambiar pagos y dominios o dar acceso a otras personas deben usar la verificación en dos pasos. Actívala para abrir tu consola.",
+    "requiredFor": "{role} en {org}",
+    "appTitle": "App de autenticación",
+    "statusOn": "Activada",
+    "statusOff": "Desactivada",
+    "appExplain": "Después de tu contraseña o del código por correo, introduces un código de 6 dígitos de una app de autenticación en tu teléfono.",
+    "setUp": "Configurar la app de autenticación",
+    "step1": "Escanea este código QR con tu app de autenticación.",
+    "qrLabel": "Código QR para tu app de autenticación. Si no puedes escanearlo, introduce la clave de configuración que aparece debajo.",
+    "manualKeyLabel": "¿No puedes escanearlo? Introduce esta clave de configuración en la app:",
+    "copyKey": "Copiar la clave",
+    "copied": "Copiado.",
+    "step2": "Introduce el código de 6 dígitos que muestra tu app.",
+    "codeLabel": "Código de 6 dígitos",
+    "verify": "Verificar y activar",
+    "cancel": "Cancelar",
+    "enabledNow": "La verificación en dos pasos está activada.",
+    "codesTitle": "Códigos de respaldo",
+    "codesExplain": "Si pierdes tu teléfono, inicia sesión con uno de estos códigos. Cada código sirve una vez. Guárdalos en un lugar seguro: no volveremos a mostrarlos.",
+    "copyCodes": "Copiar códigos",
+    "downloadCodes": "Descargar códigos",
+    "codesSaved": "Ya guardé mis códigos",
+    "codesFileHeader": "Códigos de respaldo de Yayatoh. Cada código sirve una vez.",
+    "continueToConsole": "Continuar a tu consola",
+    "turnOff": "Desactivar la verificación en dos pasos",
+    "turnOffExplain": "Introduce un código de tu app de autenticación o un código de respaldo para desactivarla.",
+    "currentCodeLabel": "Código",
+    "turnOffConfirm": "Desactivar",
+    "cannotTurnOff": "Tu rol requiere la verificación en dos pasos, así que no se puede desactivar: {reasons}.",
+    "codesLeft": "{count, plural, =0 {No quedan códigos de respaldo} one {Queda # código de respaldo} other {Quedan # códigos de respaldo}}",
+    "regenerate": "Obtener nuevos códigos de respaldo",
+    "regenerateWarning": "Tus códigos de respaldo actuales dejarán de funcionar.",
+    "regenerateConfirm": "Reemplazar mis códigos",
+    "backToConsole": "Volver a tu consola",
+    "errors": {
+      "invalid_code": "Ese código no funcionó. Comprueba que tu teléfono ajuste la hora automáticamente e inténtalo de nuevo.",
+      "rate_limited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
+      "not_pending": "Vuelve a empezar la configuración.",
+      "required": "Tu rol requiere la verificación en dos pasos, así que no se puede desactivar.",
+      "already_enabled": "La verificación en dos pasos ya está activada.",
+      "not_enabled": "La verificación en dos pasos está desactivada."
+    }
+  },
+  "stepUp": {
+    "title": "Confirma que eres tú",
+    "why": "Los cambios sensibles requieren un inicio de sesión reciente. Después de confirmar, no te lo volveremos a pedir durante 10 minutos.",
+    "explain": {
+      "totp": "Introduce el código de 6 dígitos de tu app de autenticación o un código de respaldo.",
+      "password": "Introduce tu contraseña.",
+      "email": "Te enviamos por correo un código de 6 dígitos. Caduca en 10 minutos."
+    },
+    "loading": "Un momento…",
+    "codeLabel": "Código",
+    "codeHint": "6 dígitos o un código de respaldo",
+    "passwordLabel": "Contraseña",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "resend": "Enviarme un código nuevo",
+    "resent": "Te enviamos un código nuevo.",
+    "invalidCode": "Ese código no funcionó. Inténtalo de nuevo.",
+    "invalidPassword": "Esa contraseña no es correcta.",
+    "rateLimited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
+    "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión."
   }
 }

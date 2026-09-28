@@ -1,11 +1,30 @@
 import 'server-only';
-import { type Auth, consoleMailer, createAuth } from '@yayatoh/auth';
+import { type Auth, consoleMailer, createAuth, type SecretSealer } from '@yayatoh/auth';
+import { IDENTITY_KEY_SCOPE, type KeyVault, localKeyVault } from '@yayatoh/platform';
 
 let instance: Auth | undefined;
+let vault: KeyVault | undefined;
+
+// AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
+function identityVault(): KeyVault {
+  if (!vault) {
+    const key = process.env.LOCAL_KMS_KEY;
+    if (!key) throw new Error('LOCAL_KMS_KEY is not set (see .env.example)');
+    vault = localKeyVault(key);
+  }
+  return vault;
+}
+
+/** TOTP seeds are sealed with the same key vault as the web (one identity store). */
+const sealer: SecretSealer = {
+  seal: async (plaintext) => identityVault().encrypt(IDENTITY_KEY_SCOPE, new TextEncoder().encode(plaintext)),
+  open: async (sealed) => new TextDecoder().decode(await identityVault().decrypt(IDENTITY_KEY_SCOPE, sealed)),
+};
 
 /**
  * Better Auth for the staff console (admin.yayatoh.com): its own session cookie, so a web
- * session never signs anyone in here. Staff still need an entry in `platform.staff`.
+ * session never signs anyone in here. Staff still need an entry in `platform.staff`. People with
+ * two-step verification on answer the same challenge here (M1.2c).
  */
 export function getAuth(): Auth {
   if (!instance) {
@@ -16,6 +35,7 @@ export function getAuth(): Auth {
       secret,
       mailer: consoleMailer,
       cookieNamespace: 'admin',
+      sealer,
     });
   }
   return instance;

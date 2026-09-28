@@ -18,7 +18,7 @@ export function SignOutButton() {
         router.replace('/sign-in');
         router.refresh();
       }}
-      className="ms-auto flex size-8 shrink-0 items-center justify-center rounded-pill text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+      className="flex size-8 shrink-0 items-center justify-center rounded-pill text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
     >
       <LogOut aria-hidden="true" className="size-4" strokeWidth={1.6} />
     </button>

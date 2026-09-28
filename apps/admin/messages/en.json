@@ -8,7 +8,24 @@
     "email": "Email",
     "password": "Password",
     "submit": "Sign in",
-    "invalid": "That email and password don't match."
+    "invalid": "That email and password don't match.",
+    "challenge": {
+      "title": "Two-step verification",
+      "explainTotp": "Enter the 6-digit code from your authenticator app.",
+      "explainBackup": "Enter one of your backup codes. Each code works once.",
+      "totpLabel": "6-digit code",
+      "backupLabel": "Backup code",
+      "verify": "Verify and sign in",
+      "useBackup": "Use a backup code instead",
+      "useTotp": "Use your authenticator app instead",
+      "startOver": "Sign in again",
+      "errors": {
+        "invalid_code": "That code didn't work. Try again.",
+        "too_many_attempts": "Too many wrong codes. Sign in again to get another try.",
+        "locked": "Too many failed attempts. Try again in 15 minutes.",
+        "expired": "This sign-in has expired. Sign in again."
+      }
+    }
   },
   "notStaff": {
     "title": "Not a staff account",

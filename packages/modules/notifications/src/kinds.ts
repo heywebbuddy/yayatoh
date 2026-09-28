@@ -99,6 +99,15 @@ export const KINDS = {
     audience: MESSAGES_TEAM,
     params: ['name', 'eventName'],
   },
+  // A payout account was connected or its bank changed (M1.2c): the owners hear about it at once,
+  // so a takeover is noticed inside the 24 h hold before any money moves to it.
+  'payments.destination-changed': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner'],
+    params: ['url', 'reason', 'holdUntil', 'timeZone'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app'],

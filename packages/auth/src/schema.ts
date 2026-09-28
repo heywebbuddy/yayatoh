@@ -1,4 +1,14 @@
-import { boolean, index, integer, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  integer,
+  jsonb,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 /**
  * Identity (Better Auth). Users are global (roadmap §4.1): these tables are listed in
@@ -37,6 +47,8 @@ export const sessions = identity.table(
       .references(() => users.id, { onDelete: 'cascade' }),
     createdAt: ts('created_at').notNull().defaultNow(),
     updatedAt: ts('updated_at').notNull().defaultNow(),
+    /** Last step-up ("Confirm it's you") in this session; signing in counts too (created_at). */
+    stepUpAt: ts('step_up_at'),
   },
   (t) => [uniqueIndex('sessions_token_key').on(t.token), index('sessions_user_id_idx').on(t.userId)],
 );
@@ -90,6 +102,24 @@ export const twoFactors = identity.table('two_factors', {
   failedVerificationCount: integer('failed_verification_count').default(0),
   lockedUntil: ts('locked_until'),
 });
+
+/**
+ * Security audit for a person (not an org): two-step verification set up or turned off, backup
+ * codes used or replaced, sign-in challenges passed and step-ups. Append-only from packages/auth.
+ */
+export const securityEvents = identity.table(
+  'security_events',
+  {
+    id: uuid('id').primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    action: text('action').notNull(),
+    data: jsonb('data').$type<Record<string, unknown>>().notNull().default({}),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [index('security_events_user_created_idx').on(t.userId, t.createdAt)],
+);
 
 /** Keys match Better Auth model names (drizzle adapter). */
 export const authSchema = {

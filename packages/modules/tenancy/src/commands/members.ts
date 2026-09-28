@@ -20,6 +20,8 @@ export const addMemberCommand = tenantCommand({
   output: MembershipDto,
   entitlement: 'core',
   permission: 'members:manage',
+  // Step-up (roadmap §10): role grants and removals.
+  stepUp: true,
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     try {
@@ -55,6 +57,8 @@ export const changeMemberRoleCommand = tenantCommand({
   output: MembershipDto,
   entitlement: 'core',
   permission: 'members:manage',
+  // Step-up (roadmap §10): role grants and removals.
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     // Serialize role changes per org so the last-owner rule cannot race.
@@ -89,6 +93,8 @@ export const removeMemberCommand = tenantCommand({
   output: MembershipDto,
   entitlement: 'core',
   permission: 'members:manage',
+  // Step-up (roadmap §10): role grants and removals.
+  stepUp: true,
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     await tx.execute(sql`select pg_advisory_xact_lock(hashtext('tenancy.owners:' || ${orgId}))`);

@@ -26,7 +26,8 @@
     "switchContext": "Trocar de organização ou evento",
     "yourOrganizations": "Suas organizações",
     "organization": "Organização",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "security": "Segurança da conta"
   },
   "notifications": {
     "open": "Notificações",
@@ -55,7 +56,10 @@
       "notifications": {
         "test": "Notificação de teste: as notificações estão funcionando"
       },
-      "other": "Notificação"
+      "other": "Notificação",
+      "payments": {
+        "destination-changed": "Nova conta de repasse: as transferências para ela começam depois de {until}"
+      }
     },
     "kinds": {
       "orders": {
@@ -85,6 +89,9 @@
       },
       "notifications": {
         "test": "Notificação de teste"
+      },
+      "payments": {
+        "destination-changed": "Alteração da conta de repasse"
       }
     },
     "status": {
@@ -499,6 +506,24 @@
     "invalidCode": "Esse código está incorreto ou expirou.",
     "failed": "Não foi possível enviar o código. Tente novamente.",
     "devPersonas": "Personas de desenvolvimento",
+    "challenge": {
+      "title": "Verificação em duas etapas",
+      "explainTotp": "Digite o código de 6 dígitos do seu app autenticador.",
+      "explainBackup": "Digite um dos seus códigos de backup. Cada código funciona uma vez.",
+      "totpLabel": "Código de 6 dígitos",
+      "backupLabel": "Código de backup",
+      "backupHint": "Por exemplo: abcde-12345",
+      "verify": "Verificar e entrar",
+      "useBackup": "Usar um código de backup",
+      "useTotp": "Usar o app autenticador",
+      "startOver": "Entrar de novo",
+      "errors": {
+        "invalid_code": "Esse código não funcionou. Tente de novo.",
+        "too_many_attempts": "Códigos errados demais. Entre de novo para tentar outra vez.",
+        "locked": "Tentativas falhas demais. Tente de novo em 15 minutos.",
+        "expired": "Este login expirou. Entre de novo."
+      }
+    },
     "rateLimited": "Demasiadas tentativas de início de sessão. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
   },
   "orgPicker": {
@@ -1192,7 +1217,8 @@
         "transferred": "Repassado",
         "failed": "Tentando novamente"
       }
-    }
+    },
+    "destinationHold": "Nova conta de repasse: para sua segurança, as transferências para ela começam depois de {until}. Os proprietários da sua organização foram avisados por e-mail."
   },
   "fakeConnect": {
     "eyebrow": "Modo de teste",
@@ -2837,5 +2863,75 @@
       "emptyTitle": "Ainda não há eventos públicos",
       "emptyDescription": "Publique um evento para obter o trecho do widget."
     }
+  },
+  "security": {
+    "metaTitle": "Segurança da conta",
+    "eyebrow": "Sua conta",
+    "title": "Segurança",
+    "description": "Proteja sua conta Yayatoh com a verificação em duas etapas.",
+    "requiredTitle": "A verificação em duas etapas é obrigatória",
+    "requiredExplain": "Quem pode movimentar dinheiro, alterar repasses e domínios ou dar acesso a outras pessoas precisa usar a verificação em duas etapas. Ative-a para abrir seu console.",
+    "requiredFor": "{role} em {org}",
+    "appTitle": "App autenticador",
+    "statusOn": "Ativada",
+    "statusOff": "Desativada",
+    "appExplain": "Depois da senha ou do código por e-mail, você digita um código de 6 dígitos de um app autenticador no seu celular.",
+    "setUp": "Configurar o app autenticador",
+    "step1": "Escaneie este QR code com seu app autenticador.",
+    "qrLabel": "QR code para o seu app autenticador. Se não conseguir escanear, digite a chave de configuração mostrada abaixo.",
+    "manualKeyLabel": "Não consegue escanear? Digite esta chave de configuração no app:",
+    "copyKey": "Copiar a chave",
+    "copied": "Copiado.",
+    "step2": "Digite o código de 6 dígitos que o app mostra.",
+    "codeLabel": "Código de 6 dígitos",
+    "verify": "Verificar e ativar",
+    "cancel": "Cancelar",
+    "enabledNow": "A verificação em duas etapas está ativada.",
+    "codesTitle": "Códigos de backup",
+    "codesExplain": "Se perder o celular, entre com um destes códigos. Cada código funciona uma vez. Guarde-os em um lugar seguro: não vamos mostrá-los de novo.",
+    "copyCodes": "Copiar códigos",
+    "downloadCodes": "Baixar códigos",
+    "codesSaved": "Já salvei meus códigos",
+    "codesFileHeader": "Códigos de backup do Yayatoh. Cada código funciona uma vez.",
+    "continueToConsole": "Continuar para o seu console",
+    "turnOff": "Desativar a verificação em duas etapas",
+    "turnOffExplain": "Digite um código do app autenticador, ou um código de backup, para desativá-la.",
+    "currentCodeLabel": "Código",
+    "turnOffConfirm": "Desativar",
+    "cannotTurnOff": "Sua função exige a verificação em duas etapas, então ela não pode ser desativada: {reasons}.",
+    "codesLeft": "{count, plural, =0 {Nenhum código de backup restante} one {# código de backup restante} other {# códigos de backup restantes}}",
+    "regenerate": "Gerar novos códigos de backup",
+    "regenerateWarning": "Seus códigos de backup atuais vão parar de funcionar.",
+    "regenerateConfirm": "Substituir meus códigos",
+    "backToConsole": "Voltar ao seu console",
+    "errors": {
+      "invalid_code": "Esse código não funcionou. Confira se o celular ajusta a hora automaticamente e tente de novo.",
+      "rate_limited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
+      "not_pending": "Comece a configuração de novo.",
+      "required": "Sua função exige a verificação em duas etapas, então ela não pode ser desativada.",
+      "already_enabled": "A verificação em duas etapas já está ativada.",
+      "not_enabled": "A verificação em duas etapas está desativada."
+    }
+  },
+  "stepUp": {
+    "title": "Confirme que é você",
+    "why": "Mudanças sensíveis exigem um login recente. Depois de confirmar, não vamos pedir de novo por 10 minutos.",
+    "explain": {
+      "totp": "Digite o código de 6 dígitos do seu app autenticador, ou um código de backup.",
+      "password": "Digite sua senha.",
+      "email": "Enviamos um código de 6 dígitos para o seu e-mail. Ele expira em 10 minutos."
+    },
+    "loading": "Um momento…",
+    "codeLabel": "Código",
+    "codeHint": "6 dígitos, ou um código de backup",
+    "passwordLabel": "Senha",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "resend": "Enviar um novo código",
+    "resent": "Enviamos um novo código.",
+    "invalidCode": "Esse código não funcionou. Tente de novo.",
+    "invalidPassword": "Essa senha não está correta.",
+    "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
+    "unauthenticated": "Sua sessão terminou. Entre de novo."
   }
 }

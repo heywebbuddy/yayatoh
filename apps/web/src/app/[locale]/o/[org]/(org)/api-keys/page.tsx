@@ -3,6 +3,7 @@ import { API_KEY_SCOPES, listApiKeysQuery, roleCan } from '@yayatoh/tenancy';
 import { Button, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ApiKeyForm } from '@/components/api-key-form.tsx';
+import { StepUpForm } from '@/components/step-up.tsx';
 import { scopeKey } from '@/lib/api-keys.ts';
 import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
@@ -75,7 +76,7 @@ export default async function ApiKeysPage({ params }: { params: Promise<{ locale
             align: 'end',
             cell: (k) =>
               k.revokedAt ? null : (
-                <form action={revokeApiKeyAction.bind(null, org, k.id)}>
+                <StepUpForm action={revokeApiKeyAction.bind(null, org, k.id)}>
                   <Button
                     type="submit"
                     variant="secondary"
@@ -84,7 +85,7 @@ export default async function ApiKeysPage({ params }: { params: Promise<{ locale
                   >
                     {t('apiKeys.revoke')}
                   </Button>
-                </form>
+                </StepUpForm>
               ),
           },
         ]}

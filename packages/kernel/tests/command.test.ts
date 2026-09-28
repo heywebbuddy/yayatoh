@@ -6,6 +6,8 @@ import {
   DomainError,
   defineCommand,
   executeCommand,
+  isStepUpFresh,
+  STEP_UP_WINDOW_MS,
   stableStringify,
 } from '../src/index.ts';
 
@@ -129,6 +131,30 @@ describe('executeCommand', () => {
     });
   });
 
+  it('lets a handler require step-up from what it reads, rolling the write back', async () => {
+    const conditional = defineCommand<{ amount: number }, { ok: boolean }, { ok: boolean }, FakeTx>({
+      name: 'orders.refundSomething',
+      input: z.object({ amount: z.int() }),
+      output: z.object({ ok: z.boolean() }),
+      entitlement: 'core',
+      permission: 'orders:refund',
+      handler: async ({ input, requireStepUp }) => {
+        if (input.amount >= 100) await requireStepUp();
+        return { ok: true };
+      },
+    });
+    const stale = fakePorts({ stepUp: { satisfied: async () => false } });
+    expect(await executeCommand(conditional, { amount: 5 }, ctx, stale.ports)).toEqual({ ok: true });
+    stale.log.length = 0;
+    await expect(executeCommand(conditional, { amount: 500 }, ctx, stale.ports)).rejects.toMatchObject({
+      code: 'step_up_required',
+    });
+    expect(stale.log).toContain('tx:begin');
+    expect(stale.log).not.toContain('tx:commit');
+    const fresh = fakePorts();
+    expect(await executeCommand(conditional, { amount: 500 }, ctx, fresh.ports)).toEqual({ ok: true });
+  });
+
   it('requires a tenant for tenant-scoped commands', async () => {
     const { ports } = fakePorts();
     await expect(
@@ -158,6 +184,20 @@ describe('executeCommand', () => {
 
   it('rejects badly named commands', () => {
     expect(() => defineCommand({ ...rename, name: 'rename' })).toThrow(/module.verbNoun/);
+  });
+});
+
+describe('isStepUpFresh', () => {
+  const now = new Date('2026-09-27T12:00:00Z');
+  it('is fresh for ten minutes after a re-authentication, and never without one', () => {
+    expect(isStepUpFresh(null, now)).toBe(false);
+    expect(isStepUpFresh(new Date(now.getTime() - 9 * 60_000), now)).toBe(true);
+    expect(isStepUpFresh(new Date(now.getTime() - STEP_UP_WINDOW_MS), now)).toBe(false);
+    expect(isStepUpFresh(new Date(now.getTime() - 11 * 60_000), now)).toBe(false);
+  });
+  it('tolerates a little clock skew but not a timestamp from the future', () => {
+    expect(isStepUpFresh(new Date(now.getTime() + 2_000), now)).toBe(true);
+    expect(isStepUpFresh(new Date(now.getTime() + 5 * 60_000), now)).toBe(false);
   });
 });
 

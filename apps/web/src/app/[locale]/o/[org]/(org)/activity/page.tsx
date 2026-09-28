@@ -5,6 +5,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import { Button, buttonClass, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -181,14 +182,14 @@ export default async function ActivityPage({
           {t('activity.showing', { count: log.entries.length })}
         </p>
         {log.entries.length > 0 ? (
-          <form action={exportActivityAction.bind(null, org)}>
+          <StepUpForm action={exportActivityAction.bind(null, org)}>
             {Object.entries(values).map(([k, v]) => (
               <input key={k} type="hidden" name={k} value={v} />
             ))}
             <Button type="submit" variant="secondary" size="sm">
               {t('activity.export')}
             </Button>
-          </form>
+          </StepUpForm>
         ) : null}
       </div>
       {sp.exportError ? (

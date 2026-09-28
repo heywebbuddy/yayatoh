@@ -16,5 +16,7 @@ settings and the legacy URL map. Owns Postgres schema `marketplace`.
   that return allowlisted columns; tenant sites read their own rows under RLS.
 - Canonical host (roadmap §4.2): verified custom domain, else the tenant-apex subdomain when the
   org runs a tenant site, else null (the marketplace apex).
+- Adding a website to the widget's embed origins grants it access to checkout: it needs a recent
+  step-up (M1.2c). Removing origins and the other site settings do not.
 - `legacy_redirects` rows are written only with the platform permission
   `platform:redirects.manage` (migration tooling); `(host, source)` is globally unique on purpose.

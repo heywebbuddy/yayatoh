@@ -26,7 +26,8 @@
     "switchContext": "組織またはイベントを切り替え",
     "yourOrganizations": "所属する組織",
     "organization": "組織",
-    "signOut": "サインアウト"
+    "signOut": "サインアウト",
+    "security": "アカウントのセキュリティ"
   },
   "notifications": {
     "open": "通知",
@@ -55,7 +56,10 @@
       "notifications": {
         "test": "テスト通知：通知は正常に動作しています"
       },
-      "other": "通知"
+      "other": "通知",
+      "payments": {
+        "destination-changed": "新しい支払い口座: この口座への送金は {until} 以降に始まります"
+      }
     },
     "kinds": {
       "orders": {
@@ -85,6 +89,9 @@
       },
       "notifications": {
         "test": "テスト通知"
+      },
+      "payments": {
+        "destination-changed": "支払い口座の変更"
       }
     },
     "status": {
@@ -499,6 +506,24 @@
     "invalidCode": "コードが正しくないか、有効期限が切れています。",
     "failed": "コードを送信できませんでした。もう一度お試しください。",
     "devPersonas": "開発用ペルソナ",
+    "challenge": {
+      "title": "2 段階認証",
+      "explainTotp": "認証アプリの 6 桁のコードを入力してください。",
+      "explainBackup": "バックアップコードを 1 つ入力してください。各コードは 1 回だけ使えます。",
+      "totpLabel": "6 桁のコード",
+      "backupLabel": "バックアップコード",
+      "backupHint": "例: abcde-12345",
+      "verify": "確認してサインイン",
+      "useBackup": "バックアップコードを使う",
+      "useTotp": "認証アプリを使う",
+      "startOver": "もう一度サインイン",
+      "errors": {
+        "invalid_code": "コードが正しくありません。もう一度お試しください。",
+        "too_many_attempts": "間違ったコードが多すぎます。もう一度サインインしてからお試しください。",
+        "locked": "失敗が多すぎます。15 分後にもう一度お試しください。",
+        "expired": "このサインインは期限切れです。もう一度サインインしてください。"
+      }
+    },
     "rateLimited": "サインインの試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
   },
   "orgPicker": {
@@ -1192,7 +1217,8 @@
         "transferred": "入金済み",
         "failed": "再試行中"
       }
-    }
+    },
+    "destinationHold": "新しい支払い口座: 安全のため、この口座への送金は {until} 以降に始まります。組織のオーナーにメールでお知らせしました。"
   },
   "fakeConnect": {
     "eyebrow": "テストモード",
@@ -2837,5 +2863,75 @@
       "emptyTitle": "公開イベントはまだありません",
       "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
     }
+  },
+  "security": {
+    "metaTitle": "アカウントのセキュリティ",
+    "eyebrow": "あなたのアカウント",
+    "title": "セキュリティ",
+    "description": "2 段階認証で Yayatoh アカウントを保護します。",
+    "requiredTitle": "2 段階認証が必要です",
+    "requiredExplain": "お金の移動、支払いやドメインの変更、他の人へのアクセス付与ができる方は、2 段階認証を使う必要があります。設定するとコンソールを開けます。",
+    "requiredFor": "{org} の {role}",
+    "appTitle": "認証アプリ",
+    "statusOn": "オン",
+    "statusOff": "オフ",
+    "appExplain": "パスワードまたはメールのコードの後に、スマートフォンの認証アプリに表示される 6 桁のコードを入力します。",
+    "setUp": "認証アプリを設定",
+    "step1": "認証アプリでこの QR コードをスキャンしてください。",
+    "qrLabel": "認証アプリ用の QR コード。スキャンできない場合は、下に表示されているセットアップキーを入力してください。",
+    "manualKeyLabel": "スキャンできない場合は、代わりにこのセットアップキーをアプリに入力してください:",
+    "copyKey": "セットアップキーをコピー",
+    "copied": "コピーしました。",
+    "step2": "アプリに表示された 6 桁のコードを入力してください。",
+    "codeLabel": "6 桁のコード",
+    "verify": "確認してオンにする",
+    "cancel": "キャンセル",
+    "enabledNow": "2 段階認証がオンになりました。",
+    "codesTitle": "バックアップコード",
+    "codesExplain": "スマートフォンをなくした場合は、これらのコードのいずれかでサインインします。各コードは 1 回だけ使えます。安全な場所に保存してください。再表示はされません。",
+    "copyCodes": "コードをコピー",
+    "downloadCodes": "コードをダウンロード",
+    "codesSaved": "コードを保存しました",
+    "codesFileHeader": "Yayatoh のバックアップコード。各コードは 1 回だけ使えます。",
+    "continueToConsole": "コンソールへ進む",
+    "turnOff": "2 段階認証をオフにする",
+    "turnOffExplain": "オフにするには、認証アプリのコードまたはバックアップコードを入力してください。",
+    "currentCodeLabel": "コード",
+    "turnOffConfirm": "オフにする",
+    "cannotTurnOff": "あなたの役割には 2 段階認証が必要なため、オフにできません: {reasons}。",
+    "codesLeft": "{count, plural, =0 {バックアップコードは残っていません} other {バックアップコード残り # 個}}",
+    "regenerate": "新しいバックアップコードを発行",
+    "regenerateWarning": "現在のバックアップコードは使えなくなります。",
+    "regenerateConfirm": "コードを置き換える",
+    "backToConsole": "コンソールに戻る",
+    "errors": {
+      "invalid_code": "コードが正しくありません。スマートフォンの時刻が自動設定になっているか確認して、もう一度お試しください。",
+      "rate_limited": "試行回数が多すぎます。15 分待ってから、もう一度お試しください。",
+      "not_pending": "設定を最初からやり直してください。",
+      "required": "あなたの役割には 2 段階認証が必要なため、オフにできません。",
+      "already_enabled": "2 段階認証はすでにオンです。",
+      "not_enabled": "2 段階認証はオフです。"
+    }
+  },
+  "stepUp": {
+    "title": "本人確認",
+    "why": "重要な変更には最近のサインインが必要です。確認後 10 分間は再度求められません。",
+    "explain": {
+      "totp": "認証アプリの 6 桁のコード、またはバックアップコードを入力してください。",
+      "password": "パスワードを入力してください。",
+      "email": "6 桁のコードをメールで送信しました。有効期限は 10 分です。"
+    },
+    "loading": "少々お待ちください…",
+    "codeLabel": "コード",
+    "codeHint": "6 桁の数字、またはバックアップコード",
+    "passwordLabel": "パスワード",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "resend": "新しいコードを送信",
+    "resent": "新しいコードを送信しました。",
+    "invalidCode": "コードが正しくありません。もう一度お試しください。",
+    "invalidPassword": "パスワードが正しくありません。",
+    "rateLimited": "試行回数が多すぎます。15 分待ってから、もう一度お試しください。",
+    "unauthenticated": "セッションが終了しました。もう一度サインインしてください。"
   }
 }

@@ -69,6 +69,8 @@ export {
   type Permission,
   ROLE_PERMISSIONS,
   roleCan,
+  roleRequiresTwoFactor,
+  TWO_FACTOR_ROLES,
 } from './domain/permissions.ts';
 export * from './dto.ts';
 export { managedHostname, normalizeHostname, reservedHostname, tenantApex } from './hosting/hostnames.ts';
@@ -89,6 +91,7 @@ export {
   organizationNameTx,
   organizationPublicTx,
   resolveOrgSlug,
+  twoFactorRequiredBy,
 } from './queries.ts';
 export {
   API_KEY_SCOPES,

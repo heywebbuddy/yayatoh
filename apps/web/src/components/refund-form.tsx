@@ -2,9 +2,10 @@
 
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useState } from 'react';
+import { useState } from 'react';
 import type { RefundState } from '@/app/[locale]/o/[org]/e/[event]/orders/[orderId]/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { useStepUpActionState } from './step-up.tsx';
 
 const REASONS = [
   'requested_by_customer',
@@ -29,7 +30,8 @@ export function RefundForm({
 }) {
   const t = useTranslations('refunds');
   const te = useTranslations();
-  const [state, formAction, pending] = useActionState(action, { ok: false, code: null });
+  // Large refunds (or the whole order) need a recent step-up (M1.2c).
+  const [state, formAction, pending, formRef] = useStepUpActionState(action, { ok: false, code: null });
   const [mode, setMode] = useState<'tickets' | 'amount'>(tickets.length ? 'tickets' : 'amount');
   const error =
     state.code === null
@@ -42,7 +44,7 @@ export function RefundForm({
             ? t('ticketRefunded')
             : te(errorMessageKey(state.code));
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form ref={formRef} action={formAction} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <label htmlFor="refund-reason" className="text-caption text-zinc-600">
           {t('reason')}

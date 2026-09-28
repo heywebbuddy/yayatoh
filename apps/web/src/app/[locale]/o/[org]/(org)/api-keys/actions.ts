@@ -34,8 +34,17 @@ export async function createApiKeyAction(
   }
 }
 
-export async function revokeApiKeyAction(org: string, apiKeyId: string): Promise<void> {
+/** Revoke a key (a step-up command: answers `step_up_required` when the session is not fresh). */
+export async function revokeApiKeyAction(
+  org: string,
+  apiKeyId: string,
+  _form?: FormData,
+): Promise<{ code: string } | undefined> {
   const data = await loadConsole(org);
-  await executeCommand(revokeApiKeyCommand, { apiKeyId }, data.ctx, ports);
+  try {
+    await executeCommand(revokeApiKeyCommand, { apiKeyId }, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
   revalidatePath(`/o/${org}/api-keys`);
 }

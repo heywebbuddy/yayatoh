@@ -2,10 +2,11 @@
 
 import { Alert, Button, Card, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useState } from 'react';
+import { useState } from 'react';
 import type { ApiKeyState } from '@/app/[locale]/o/[org]/(org)/api-keys/actions.ts';
 import { scopeKey } from '@/lib/api-keys.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { useStepUpActionState } from './step-up.tsx';
 
 export function ApiKeyForm({
   scopes,
@@ -15,7 +16,8 @@ export function ApiKeyForm({
   action: (prev: ApiKeyState, form: FormData) => Promise<ApiKeyState>;
 }) {
   const t = useTranslations();
-  const [state, formAction, pending] = useActionState(action, { kind: 'idle' } as ApiKeyState);
+  // Creating a key is a step-up command (M1.2c): "Confirm it's you" opens and the form resubmits.
+  const [state, formAction, pending, formRef] = useStepUpActionState(action, { kind: 'idle' } as ApiKeyState);
   const [copied, setCopied] = useState<string | null>(null);
   const invalid = (f: 'name' | 'scopes') => state.kind === 'error' && state.fields.includes(f);
   const copy = async (key: string) => {
@@ -30,7 +32,7 @@ export function ApiKeyForm({
     <Card className="flex flex-col gap-4">
       <h2 className="text-section">{t('apiKeys.createTitle')}</h2>
       {/* Server validation owns the messages (the same rules as the API). */}
-      <form action={formAction} noValidate className="flex flex-col gap-4">
+      <form ref={formRef} action={formAction} noValidate className="flex flex-col gap-4">
         <Input
           name="name"
           maxLength={60}

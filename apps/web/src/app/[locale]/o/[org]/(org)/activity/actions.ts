@@ -4,6 +4,7 @@ import { getUsersByIds } from '@yayatoh/auth';
 import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { AUDIT_EXPORT_COLUMNS, auditExportBulk, auditLogQuery } from '@yayatoh/platform';
 import { getLocale, getTranslations } from 'next-intl/server';
+import type { StepUpActionResult } from '@/components/step-up.tsx';
 import { redirect } from '@/i18n/navigation.ts';
 import { runBulkInline } from '@/server/bulk.ts';
 import { loadConsole } from '@/server/console.ts';
@@ -11,7 +12,7 @@ import { ports } from '@/server/ports.ts';
 import { resolveActivityFilter } from './filters.ts';
 
 /** Export what the Activity filters match as CSV (M1.14b), through the bulk framework. */
-export async function exportActivityAction(org: string, form: FormData): Promise<void> {
+export async function exportActivityAction(org: string, form: FormData): Promise<StepUpActionResult> {
   const locale = await getLocale();
   const data = await loadConsole(org);
   const sp = {
@@ -50,7 +51,10 @@ export async function exportActivityAction(org: string, form: FormData): Promise
       ports,
     ));
   } catch (err) {
-    return redirect({ href: `${back}exportError=${isDomainError(err) ? err.code : 'internal'}`, locale });
+    const code = isDomainError(err) ? err.code : 'internal';
+    // An export needs a recent sign-in (M1.2c): the form asks the person to confirm, then resends.
+    if (code === 'step_up_required') return { code };
+    return redirect({ href: `${back}exportError=${code}`, locale });
   }
   await runBulkInline(data.org.id, operationId);
   redirect({ href: `${back}op=${operationId}`, locale });

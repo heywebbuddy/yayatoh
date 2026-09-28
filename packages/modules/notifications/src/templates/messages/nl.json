@@ -72,6 +72,11 @@
       "subject": "Nieuw bericht van {name}",
       "intro": "{name} schreef je over {eventName}."
     },
+    "payments.destination-changed": {
+      "subject": "Nieuwe uitbetalingsrekening voor {org}",
+      "intro": "{reason, select, bank_changed {De bankrekening waarop {org} uitbetalingen ontvangt, is gewijzigd.} other {Er is een uitbetalingsrekening gekoppeld aan {org}.}} Voor je veiligheid wordt er vóór {until} geen geld naar overgemaakt. Heb je deze wijziging niet zelf gedaan? Neem dan meteen contact op met Yayatoh-support.",
+      "cta": "Uitbetalingen bekijken"
+    },
     "notifications.test": {
       "subject": "Testmelding",
       "intro": "Meldingen werken."

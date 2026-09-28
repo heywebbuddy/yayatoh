@@ -66,5 +66,11 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     currency: 'USD',
   },
   'messaging.contact_replied': { name: 'Amina Diallo', eventName: 'Lakeside Jazz Night' },
+  'payments.destination-changed': {
+    url: 'https://app.yayatoh.test/o/lakeside-events/payouts',
+    reason: 'connected',
+    holdUntil: '2027-06-13T15:00:00.000Z',
+    timeZone: 'America/Chicago',
+  },
   'notifications.test': {},
 };

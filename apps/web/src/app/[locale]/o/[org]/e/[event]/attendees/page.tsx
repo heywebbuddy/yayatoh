@@ -33,6 +33,7 @@ import { BulkFields } from '@/components/bulk-fields.tsx';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { GuestForm } from '@/components/guest-form.tsx';
 import { LabelForm } from '@/components/label-form.tsx';
+import { StepUpForm } from '@/components/step-up.tsx';
 import type { AttendeeStatus, DemoAttendee } from '@/demo/events.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -472,7 +473,7 @@ export default async function AttendeesPage({
           </p>
         ) : null}
         {canBulk && rows.length > 0 ? (
-          <form
+          <StepUpForm
             id="bulk-form"
             action={bulkAction.bind(null, org, event)}
             aria-label={t('bulk.formLabel')}
@@ -509,7 +510,7 @@ export default async function AttendeesPage({
             <Button type="submit" variant="secondary">
               {t('bulk.apply')}
             </Button>
-          </form>
+          </StepUpForm>
         ) : null}
 
         {(demo ? ev.attendees.length === 0 : !hasReal) ? (

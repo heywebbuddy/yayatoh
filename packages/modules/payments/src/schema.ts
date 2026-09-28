@@ -53,6 +53,11 @@ export const paymentAccounts = tenantTable(
     payoutsHeld: boolean('payouts_held').notNull().default(false),
     holdReason: text('hold_reason'),
     lastEventAt: timestamp('last_event_at', { withTimezone: true, mode: 'date' }),
+    /**
+     * A new payout destination (the account connected, or its bank changed) waits until this time
+     * before any transfer goes to it (roadmap §10: 24 h hold on payout-destination changes).
+     */
+    destinationHoldUntil: timestamp('destination_hold_until', { withTimezone: true, mode: 'date' }),
   },
   (t) => [
     uniqueIndex('payment_accounts_org_key').on(t.orgId),

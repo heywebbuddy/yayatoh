@@ -22,7 +22,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Org selection** is a path segment, `/v1/orgs/{org}/…`, checked against the key's org or the user's membership, instead of the `Yayatoh-Org` header in roadmap §6.1 (the tenancy rules forbid taking the tenant from a header).
   - **API keys** are org-owned tenant rows (hashed, scoped, revocable) rather than the Better Auth api-key plugin's user-bound keys. A key keeps working if its creator leaves; revoke it then.
   - **Mobile sessions** are Better Auth's 14-day sliding sessions used as bearer tokens. The 15-minute JWT with rotating refresh families (§6.1) is planned before a mobile build ships.
-  - **Step-up** (re-enter password or 2FA) before creating a key is not enforced yet: no step-up flow exists in the web app so far.
+  - **Step-up** (re-enter password or 2FA) is required to create or revoke a key (M1.2c). Keys themselves never pass step-up, so a large refund through `/v1` is refused with `step_up_required` — say if keys with the refund scope should be allowed (see M1.2c below).
   - **TypeScript SDK** uses openapi-typescript + openapi-fetch instead of `@hey-api/openapi-ts` (smaller, no generated runtime). Swift/Kotlin use openapi-generator configs, run locally only.
 - [ ] **Rate limits in production** (M1.13): an Upstash Redis database (account under Accounts) for the `/v1` token buckets; until then limits are per server instance (in memory). Label: `infra`.
 - [ ] **Golden HARs for the `/api/v2` facade** (M1.13, M1.15): record the Yayatoh and ABC store builds against the legacy API (login → browse → buy → ticket → scan, organizer screens) so the frozen facade can be built and diffed. The facade is not built yet. Label: `mobile-contract`.

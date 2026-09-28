@@ -72,6 +72,11 @@
       "subject": "Nouveau message de {name}",
       "intro": "{name} vous a écrit au sujet de {eventName}."
     },
+    "payments.destination-changed": {
+      "subject": "Nouveau compte de versement pour {org}",
+      "intro": "{reason, select, bank_changed {Le compte bancaire qui reçoit les versements de {org} a été modifié.} other {Un compte de versement a été associé à {org}.}} Par sécurité, aucun virement n'y sera effectué avant le {until}. Si vous n'êtes pas à l'origine de ce changement, contactez immédiatement l'assistance Yayatoh.",
+      "cta": "Voir les versements"
+    },
     "notifications.test": {
       "subject": "Notification de test",
       "intro": "Les notifications fonctionnent."

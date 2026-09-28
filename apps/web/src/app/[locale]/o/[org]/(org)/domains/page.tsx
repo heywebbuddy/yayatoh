@@ -3,6 +3,7 @@ import { listDomainsQuery, managedHostname, roleCan } from '@yayatoh/tenancy';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SettingsForm } from '@/components/settings-form.tsx';
+import { StepUpForm } from '@/components/step-up.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -108,20 +109,20 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
                     </form>
                   ) : null}
                   {d.status === 'active' && !d.isPrimary ? (
-                    <form action={setPrimaryDomainAction.bind(null, org, d.id)}>
+                    <StepUpForm action={setPrimaryDomainAction.bind(null, org, d.id)}>
                       <Button type="submit" variant="secondary" size="sm">
                         {t('makePrimary')}
                         <span className="sr-only"> {d.hostname}</span>
                       </Button>
-                    </form>
+                    </StepUpForm>
                   ) : null}
                   {!d.managed ? (
-                    <form action={removeDomainAction.bind(null, org, d.id)}>
+                    <StepUpForm action={removeDomainAction.bind(null, org, d.id)}>
                       <Button type="submit" variant="secondary" size="sm">
                         {t('remove')}
                         <span className="sr-only"> {d.hostname}</span>
                       </Button>
-                    </form>
+                    </StepUpForm>
                   ) : null}
                 </div>
               ) : null}

@@ -70,7 +70,11 @@ const pick = <T extends string>(list: readonly T[], v: FormDataEntryValue | null
  * Start a bulk action on the selected attendees, or on everything matching the list's current
  * filters, run it for a few seconds inline, then show its progress panel.
  */
-export async function bulkAction(org: string, event: string, form: FormData): Promise<void> {
+export async function bulkAction(
+  org: string,
+  event: string,
+  form: FormData,
+): Promise<{ code: string } | undefined> {
   const { data, event: ev } = await loadEvent(org, event);
   const locale = await getLocale();
   const base = `/o/${org}/e/${event}/attendees`;
@@ -131,6 +135,8 @@ export async function bulkAction(org: string, event: string, form: FormData): Pr
     }
   } catch (err) {
     const code = isDomainError(err) ? err.code : 'internal';
+    // Exports are step-up commands: the form asks the person to confirm and sends it again.
+    if (code === 'step_up_required') return { code };
     return redirect({ href: `${base}?bulkError=${code}`, locale });
   }
   await runBulkInline(data.org.id, operationId);

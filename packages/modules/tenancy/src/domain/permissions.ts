@@ -102,6 +102,17 @@ export const PLATFORM_PERMISSIONS = [
   'platform:redirects.manage',
 ] as const;
 
+/**
+ * Org roles that must use two-step verification (roadmap §10 Phase 1, decision D14): they can
+ * move money, change payouts and domains, or grant access. A member holding one in any org
+ * sets it up before using any console.
+ */
+export const TWO_FACTOR_ROLES = ['owner', 'admin', 'finance'] as const satisfies readonly OrgRole[];
+
+export function roleRequiresTwoFactor(role: string): boolean {
+  return (TWO_FACTOR_ROLES as readonly string[]).includes(role);
+}
+
 export function roleCan(role: OrgRole, permission: string): boolean {
   return (ROLE_PERMISSIONS[role] as readonly string[]).includes(permission);
 }

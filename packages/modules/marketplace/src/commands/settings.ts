@@ -30,7 +30,7 @@ export const updateSiteSettingsCommand = tenantCommand({
   output: SiteSettingsDto,
   entitlement: 'core',
   permission: 'org:update',
-  handler: async ({ input, ctx, tx, emit }) => {
+  handler: async ({ input, ctx, tx, emit, requireStepUp }) => {
     const orgId = requireOrg(ctx);
     let embedOrigins: string[] | undefined;
     if (input.embedOrigins) {
@@ -47,6 +47,9 @@ export const updateSiteSettingsCommand = tenantCommand({
       }
     }
     const current = await settingsTx(tx);
+    // Letting a new website embed checkout grants it access (roadmap §10): a step-up, M1.2c.
+    // Removing websites never needs one.
+    if (embedOrigins?.some((o) => !current.embedOrigins.includes(o))) await requireStepUp();
     const next = {
       listOnMarketplace: input.listOnMarketplace ?? current.listOnMarketplace,
       tenantSite: input.tenantSite ?? current.tenantSite,
