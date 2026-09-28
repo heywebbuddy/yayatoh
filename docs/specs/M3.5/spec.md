@@ -84,6 +84,8 @@ All new tables: `tenantTable()` (FORCE RLS, NULLIF policy, org-leading indexes),
 | Lift a suppression (audited); complaints support-only | int "address suppressions…"; e2e "the organizer lifts a bounce with a note; a complaint is support-only" |
 | Tenant isolation of the new tables | `packages/testing/tests/isolation.int.test.ts` (fixture rows in both orgs) plus cross-org checks in the int suite |
 
+**Gate (2026-09-28):** `pnpm verify` green (876 unit, 594 integration). Web e2e on a fresh database: 952 passed, 10 skipped, 4 failed — the same 4 fail on the base commit without M3.5a (`receivables.spec.ts:10` ×3, `ai-draft.spec.ts:171` desktop). Admin e2e: 22 passed.
+
 ### 5. Pending the owner
 - **Quota numbers** (placeholders): email 10,000 · SMS 500 segments · WhatsApp 500 · push 50,000 per org per month; transactional messages are never held by a quota (still counted).
 - **Frequency-cap defaults**: reminders 3/24 h, event updates 3/24 h, news and offers 2/7 days, all optional 5/24 h per recipient per channel.
