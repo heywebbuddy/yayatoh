@@ -2,6 +2,7 @@ import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { type DeliveryEvent, signFakeDeliveryEvents } from './delivery.ts';
+import type { Urgency } from './web-push.ts';
 
 /**
  * Channel adapters (roadmap §6.4 `ChannelAdapter`). Production adapters need the owner's
@@ -36,18 +37,36 @@ export interface SmsTransport {
 
 export interface OutboundPush {
   readonly platform: 'fcm' | 'apns' | 'webpush';
+  /** The device token; for web push the subscription's endpoint URL. */
   readonly token: string;
+  /** Web push only: the subscription's `p256dh` and `auth` (RFC 8291). */
+  readonly keys?: { readonly p256dh: string; readonly auth: string } | null;
   readonly title: string;
   readonly body: string;
+  /** A link on our own origin, or null. */
   readonly url: string | null;
   readonly idempotencyKey: string;
+  /** How long the push service may hold it (RFC 8030 TTL), seconds. */
+  readonly ttlSeconds?: number;
+  readonly urgency?: Urgency;
+  /** Collapses retries of one message on the push service (RFC 8030 Topic). */
+  readonly topic?: string | null;
+  /** Language and direction of the text (the notification renders RTL for Arabic). */
+  readonly lang?: string;
+  readonly dir?: 'ltr' | 'rtl';
 }
 
+export type PushSendResult =
+  | { readonly providerMessageId: string }
+  /** The device is gone (FCM UNREGISTERED, APNs 410, web push 404/410): disable the token. */
+  | { readonly error: 'invalid_token'; readonly status?: number }
+  /** Rate limited or the service is down (429, 5xx, network): try later. */
+  | { readonly error: 'retry'; readonly status?: number; readonly retryAfterMs?: number | null }
+  /** The service refused this message for good (400, 403, 413…): don't retry it. */
+  | { readonly error: 'rejected'; readonly status?: number; readonly detail?: string };
+
 export interface PushTransport {
-  /** `invalid_token` tells the dispatcher to disable the token (FCM UNREGISTERED, APNs 410). */
-  send(
-    message: OutboundPush,
-  ): Promise<{ readonly providerMessageId: string } | { readonly error: 'invalid_token' }>;
+  send(message: OutboundPush): Promise<PushSendResult>;
 }
 
 export interface Transports {
@@ -65,6 +84,9 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
   const sms: OutboundSms[] = [];
   const pushes: OutboundPush[] = [];
   const invalid = new Set<string>();
+  /** Tokens whose service answers 429 (with this Retry-After in ms), or refuses the message. */
+  const busy = new Map<string, number | null>();
+  const rejected = new Set<string>();
   const wait = () => (opts.delayMs ? new Promise((r) => setTimeout(r, opts.delayMs)) : Promise.resolve());
   const transports: Transports = {
     email: {
@@ -82,13 +104,17 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
     },
     push: {
       async send(m) {
-        if (invalid.has(m.token)) return { error: 'invalid_token' as const };
+        if (invalid.has(m.token)) return { error: 'invalid_token' as const, status: 410 };
+        if (busy.has(m.token))
+          return { error: 'retry' as const, status: 429, retryAfterMs: busy.get(m.token) ?? null };
+        if (rejected.has(m.token)) return { error: 'rejected' as const, status: 413 };
+        await wait();
         pushes.push(m);
         return { providerMessageId: `mem-push-${pushes.length}` };
       },
     },
   };
-  return { transports, emails, sms, pushes, invalid };
+  return { transports, emails, sms, pushes, invalid, busy, rejected };
 }
 
 export interface DevMailboxEntry extends OutboundEmail {

@@ -3,15 +3,23 @@ import { type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
 import { signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
-import { and, asc, eq, isNull, lte } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, lte, or } from 'drizzle-orm';
 import { suppressedReason } from './delivery-rules.ts';
 import { kindOf, type MessageKind } from './kinds.ts';
 import { decryptParams } from './notifier.ts';
 import { preferenceEnabledTx } from './preferences.ts';
 import { isValidTimeZone, quietHoursRelease } from './quiet-hours.ts';
-import { addressSuppressions, messages, pushTokens, suppressions, templateOverrides } from './schema.ts';
+import {
+  addressSuppressions,
+  messages,
+  pushDeliveries,
+  pushTokens,
+  suppressions,
+  templateOverrides,
+} from './schema.ts';
 import { emailLocale, renderMessage } from './templates/render.ts';
-import { PLATFORM_SENDER, type Transports } from './transports.ts';
+import { PLATFORM_SENDER, type PushTransport, type Transports } from './transports.ts';
+import { pushTopic, type Urgency } from './web-push.ts';
 
 export const UNSUBSCRIBE_PURPOSE = 'notifications.unsubscribe';
 export const MAX_ATTEMPTS = 5;
@@ -131,12 +139,18 @@ export async function dispatchDueTx(
         continue;
       }
     }
-    if (optional && email) {
+    // Unsubscribes (and a contact blocking the organizer) are per address and category: they stop
+    // push to that person too (M1.10e).
+    const optedOutAddress = email ?? (row.channel === 'push' ? row.recipientEmail : null);
+    if (optional && optedOutAddress) {
       const [s] = await tx
         .select({ id: suppressions.id })
         .from(suppressions)
         .where(
-          and(eq(suppressions.emailNorm, normalizeEmail(email)), eq(suppressions.category, def.category)),
+          and(
+            eq(suppressions.emailNorm, normalizeEmail(optedOutAddress)),
+            eq(suppressions.category, def.category),
+          ),
         );
       if (s) {
         await suppress(row, 'unsubscribed');
@@ -156,8 +170,12 @@ export async function dispatchDueTx(
       await suppress(row, 'preference');
       continue;
     }
+    // Push: the recipient's active devices (members by user, buyers by email) and, for quiet
+    // hours, the timezone their most recent device reported.
+    const devices = row.channel === 'push' ? await pushDevicesOf(tx, row) : [];
     if (!def.urgent && !deps.ignoreQuietHours) {
-      const tz = isValidTimeZone(row.timeZone) ? row.timeZone : org.timezone;
+      const deviceTz = devices.find((d) => isValidTimeZone(d.timeZone))?.timeZone;
+      const tz = deviceTz ?? (isValidTimeZone(row.timeZone) ? row.timeZone : org.timezone);
       const release = quietHoursRelease(now, tz);
       if (release) {
         await update(row, { sendAfter: release, reason: 'quiet_hours' });
@@ -216,37 +234,52 @@ export async function dispatchDueTx(
         }));
       } else if (row.channel === 'push') {
         const push = deps.transports.push;
-        const tokens = await tx
-          .select()
-          .from(pushTokens)
-          .where(and(eq(pushTokens.userId, row.recipientUserId ?? ''), isNull(pushTokens.disabledAt)));
         if (!push) throw new Error('no push adapter configured');
-        if (tokens.length === 0) {
+        const outcome = await sendPushTx(tx, orgId, row, devices, push, now, {
+          title: rendered.subject,
+          body: typeof params.body === 'string' && params.body ? params.body : rendered.preview,
+          url: link,
+          lang: rendered.lang,
+          dir: rendered.dir,
+          ...pushOptions(row.kind as MessageKind),
+        });
+        if (outcome.kind === 'retry') {
+          const attempts = row.attempts + 1;
+          if (attempts >= MAX_ATTEMPTS) {
+            await update(row, {
+              attempts,
+              status: 'failed',
+              reason: 'provider_error',
+              lastError: 'push: rate limited',
+            });
+            result.failed += 1;
+          } else {
+            const backoff = 2 ** attempts * 60_000;
+            await update(row, {
+              attempts,
+              reason: 'retrying',
+              lastError: `push: HTTP ${outcome.status ?? 'network'}`,
+              sendAfter: new Date(now.getTime() + Math.max(backoff, outcome.retryAfterMs ?? 0)),
+            });
+            result.held += 1;
+          }
+          continue;
+        }
+        if (outcome.kind === 'none') {
           await suppress(row, 'no_device');
           continue;
         }
-        const ids: string[] = [];
-        for (const t of tokens) {
-          const r = await push.send({
-            platform: t.platform as 'fcm' | 'apns' | 'webpush',
-            token: t.token,
-            title: rendered.subject,
-            body: rendered.preview,
-            url: link,
-            idempotencyKey: `${row.id}:${t.id}`,
+        if (outcome.kind === 'rejected') {
+          await update(row, {
+            status: 'failed',
+            reason: 'provider_error',
+            attempts: row.attempts + 1,
+            lastError: 'push: refused by the push service',
           });
-          if ('error' in r)
-            await tx
-              .update(pushTokens)
-              .set({ disabledAt: now, updatedAt: now })
-              .where(eq(pushTokens.id, t.id));
-          else ids.push(r.providerMessageId);
-        }
-        if (ids.length === 0) {
-          await suppress(row, 'no_device');
+          result.failed += 1;
           continue;
         }
-        providerMessageId = ids.join(',');
+        providerMessageId = outcome.providerMessageId;
       } else {
         const sms = deps.transports.sms;
         const phone = typeof params._phone === 'string' ? params._phone : null;
@@ -290,6 +323,166 @@ export async function dispatchDueTx(
     }
   }
   return result;
+}
+
+type Device = typeof pushTokens.$inferSelect;
+
+/** The recipient's active push devices, most recently seen first. */
+async function pushDevicesOf(tx: TenantTx, row: Row): Promise<Device[]> {
+  const owners = [
+    ...(row.recipientUserId ? [eq(pushTokens.userId, row.recipientUserId)] : []),
+    ...(row.recipientEmail ? [eq(pushTokens.emailNorm, normalizeEmail(row.recipientEmail))] : []),
+  ];
+  if (owners.length === 0) return [];
+  return tx
+    .select()
+    .from(pushTokens)
+    .where(and(or(...owners), isNull(pushTokens.disabledAt)))
+    .orderBy(desc(pushTokens.lastSeenAt), asc(pushTokens.id));
+}
+
+/** How long a push may wait on the push service, and how urgently it is delivered (RFC 8030). */
+export function pushOptions(kind: MessageKind): { ttlSeconds: number; urgency: Urgency } {
+  if (kind === 'notifications.test') return { ttlSeconds: 300, urgency: 'high' };
+  if (kind === 'events.reminder') return { ttlSeconds: 12 * 3600, urgency: 'normal' };
+  return kindOf(kind).urgent
+    ? { ttlSeconds: 4 * 3600, urgency: 'high' }
+    : { ttlSeconds: 86_400, urgency: 'normal' };
+}
+
+export type PushRowOutcome =
+  | { readonly kind: 'sent'; readonly providerMessageId: string }
+  | { readonly kind: 'retry'; readonly status: number | null; readonly retryAfterMs: number | null }
+  | { readonly kind: 'rejected' }
+  | { readonly kind: 'none' };
+
+/**
+ * What a push message's devices add up to: sent once any device got it and none waits for a
+ * retry; retry while any device was rate limited (the others keep their `sent` log row and are
+ * skipped next time, so nobody gets it twice); rejected when every live device refused it; none
+ * when no device is left (all expired).
+ */
+export function pushRowOutcome(
+  deliveries: ReadonlyArray<{
+    status: 'sent' | 'expired' | 'rejected' | 'retrying';
+    providerMessageId?: string | null;
+    httpStatus?: number | null;
+    retryAfterMs?: number | null;
+  }>,
+): PushRowOutcome {
+  const retrying = deliveries.filter((d) => d.status === 'retrying');
+  if (retrying.length > 0)
+    return {
+      kind: 'retry',
+      status: retrying[0]?.httpStatus ?? null,
+      retryAfterMs: Math.max(0, ...retrying.map((d) => d.retryAfterMs ?? 0)) || null,
+    };
+  const sent = deliveries.filter((d) => d.status === 'sent');
+  if (sent.length > 0)
+    return { kind: 'sent', providerMessageId: sent.map((d) => d.providerMessageId ?? 'push').join(',') };
+  if (deliveries.some((d) => d.status === 'rejected')) return { kind: 'rejected' };
+  return { kind: 'none' };
+}
+
+/**
+ * Send one push message to each of the recipient's devices it has not reached yet, recording
+ * every attempt in `push_deliveries`. Expired subscriptions (404/410) are pruned (disabled).
+ */
+async function sendPushTx(
+  tx: TenantTx,
+  orgId: string,
+  row: Row,
+  devices: readonly Device[],
+  push: PushTransport,
+  now: Date,
+  content: {
+    title: string;
+    body: string;
+    url: string | null;
+    lang: string;
+    dir: 'ltr' | 'rtl';
+    ttlSeconds: number;
+    urgency: Urgency;
+  },
+): Promise<PushRowOutcome> {
+  const earlier = devices.length
+    ? await tx
+        .select()
+        .from(pushDeliveries)
+        .where(
+          and(
+            eq(pushDeliveries.messageId, row.id),
+            inArray(
+              pushDeliveries.pushTokenId,
+              devices.map((d) => d.id),
+            ),
+          ),
+        )
+    : [];
+  const byToken = new Map(earlier.map((d) => [d.pushTokenId, d]));
+  const topic = pushTopic(row.id);
+  const results: Parameters<typeof pushRowOutcome>[0][number][] = [];
+  for (const d of devices) {
+    const prior = byToken.get(d.id);
+    if (prior && prior.status !== 'retrying') {
+      results.push({
+        status: prior.status as 'sent' | 'expired' | 'rejected',
+        providerMessageId: prior.providerMessageId,
+      });
+      continue;
+    }
+    const r = await push.send({
+      platform: d.platform as 'fcm' | 'apns' | 'webpush',
+      token: d.token,
+      keys: d.p256dh && d.authSecret ? { p256dh: d.p256dh, auth: d.authSecret } : null,
+      ...content,
+      topic,
+      idempotencyKey: `${row.id}:${d.id}`,
+    });
+    const status =
+      'providerMessageId' in r
+        ? ('sent' as const)
+        : r.error === 'invalid_token'
+          ? ('expired' as const)
+          : r.error === 'retry'
+            ? ('retrying' as const)
+            : ('rejected' as const);
+    const providerMessageId = 'providerMessageId' in r ? r.providerMessageId.slice(0, 200) : null;
+    const httpStatus = 'error' in r ? (r.status ?? null) : null;
+    await tx
+      .insert(pushDeliveries)
+      .values({
+        orgId,
+        messageId: row.id,
+        pushTokenId: d.id,
+        platform: d.platform,
+        status,
+        httpStatus,
+        providerMessageId,
+        sentAt: status === 'sent' ? now : null,
+      })
+      .onConflictDoUpdate({
+        target: [pushDeliveries.orgId, pushDeliveries.messageId, pushDeliveries.pushTokenId],
+        set: {
+          status,
+          httpStatus,
+          providerMessageId,
+          sentAt: status === 'sent' ? now : null,
+          attempts: (prior?.attempts ?? 0) + 1,
+          updatedAt: now,
+        },
+      });
+    // Gone for good (FCM UNREGISTERED, APNs 410, web push 404/410): prune the subscription.
+    if (status === 'expired')
+      await tx.update(pushTokens).set({ disabledAt: now, updatedAt: now }).where(eq(pushTokens.id, d.id));
+    results.push({
+      status,
+      providerMessageId,
+      httpStatus,
+      retryAfterMs: 'error' in r && r.error === 'retry' ? (r.retryAfterMs ?? null) : null,
+    });
+  }
+  return pushRowOutcome(results);
 }
 
 /** One org's dispatch in its own tenant transaction (worker tick, dev drain). */
