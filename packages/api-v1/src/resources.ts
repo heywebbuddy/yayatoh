@@ -325,6 +325,98 @@ export const MobileConfig = z
 
 export const ApiKeyScopes = z.array(z.enum(API_KEY_SCOPES));
 
+/** Bulk actions on `/v1` (M1.13d): one path segment per registered M1.8 bulk action. */
+export const BULK_KINDS = [
+  'labels',
+  'emails',
+  'seat-assignments',
+  'ticket-resends',
+  'ticket-cancellations',
+] as const;
+export type BulkKind = (typeof BULK_KINDS)[number];
+const BULK_OPERATION_STATUSES = ['queued', 'running', 'done', 'failed', 'undoing', 'undone'] as const;
+export const BulkKindSchema = z.enum(BULK_KINDS).openapi('BulkKind');
+export const BulkOperationStatus = z.enum(BULK_OPERATION_STATUSES).openapi('BulkOperationStatus');
+const MAX_BULK_IDS = 50_000;
+
+const BulkItem = z.object({
+  attendeeId: z.uuid(),
+  code: z.string().openapi({ description: 'Stable code, e.g. `not_found`, `no_ticket`, `ada_kept_back`.' }),
+});
+
+export const BulkOperation = z
+  .object({
+    id: z.uuid(),
+    kind: BulkKindSchema,
+    eventId: z.uuid().nullable(),
+    status: BulkOperationStatus,
+    total: z.int(),
+    processed: z.int(),
+    succeeded: z.int(),
+    failed: z.int(),
+    undone: z.int(),
+    createdAt: DateTime,
+    finishedAt: DateTime.nullable(),
+    undoUntil: DateTime.nullable().openapi({ description: 'Set while the operation can still be undone.' }),
+    failures: z.array(BulkItem).openapi({ description: 'The first 50 attendees that failed.' }),
+    warnings: z
+      .array(BulkItem)
+      .openapi({ description: 'The first 50 attendees that succeeded with a caveat.' }),
+  })
+  .openapi('BulkOperation');
+
+const Label = z.string().min(1).max(40);
+/** The attendee list filters a selection may use ("everything matching"). */
+export const BulkAttendeeFilter = z
+  .object({
+    search: z.string().max(200).optional().openapi({ description: 'Name or email contains' }),
+    labels: z.array(Label).max(20).optional().openapi({ description: 'Carrying any of these labels' }),
+    source: AttendeeSource.optional(),
+    status: AttendeeStatus.optional(),
+  })
+  .openapi('BulkAttendeeFilter');
+const ByIds = z.object({ ids: z.array(z.uuid()).min(1).max(MAX_BULK_IDS) }).openapi('BulkSelectionByIds');
+export const BulkSelection = z
+  .union([ByIds, z.object({ filter: BulkAttendeeFilter }).openapi('BulkSelectionByFilter')])
+  .openapi('BulkSelection');
+
+export const BulkLabelRequest = z
+  .object({
+    selection: BulkSelection,
+    add: z.array(Label).max(20).optional(),
+    remove: z.array(Label).max(20).optional(),
+  })
+  .openapi('BulkLabelRequest');
+export const BulkEmailRequest = z
+  .object({
+    selection: BulkSelection,
+    subject: z.string().min(1).max(150),
+    body: z.string().min(1).max(5_000).openapi({ description: 'Plain text.' }),
+  })
+  .openapi('BulkEmailRequest');
+export const BulkSeatTarget = z
+  .discriminatedUnion('kind', [
+    z.object({ kind: z.literal('item'), itemId: z.uuid() }),
+    z.object({ kind: z.literal('section'), sectionId: z.uuid() }),
+    z.object({ kind: z.literal('best') }),
+    z.object({ kind: z.literal('group'), label: Label }),
+  ])
+  .openapi('BulkSeatTarget', {
+    description: 'A table or row (`item`), a section, the best available seats, or a group’s block.',
+  });
+export const BulkSeatRequest = z
+  .object({
+    selection: BulkSelection,
+    target: BulkSeatTarget,
+    overrideRules: z
+      .boolean()
+      .optional()
+      .openapi({ description: 'Use accessible seats an enforced rule keeps back (audited).' }),
+  })
+  .openapi('BulkSeatRequest');
+export const BulkResendRequest = z.object({ selection: BulkSelection }).openapi('BulkResendRequest');
+export const BulkCancelRequest = z.object({ selection: ByIds }).openapi('BulkCancelRequest');
+
 /** `{ data, nextCursor }`: pass `nextCursor` back as `cursor`; null means the last page. */
 export function pageSchema<T extends z.ZodType>(item: T, name: string) {
   return z.object({ data: z.array(item), nextCursor: z.string().nullable() }).openapi(name);

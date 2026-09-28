@@ -10,6 +10,7 @@ import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
 import { memoryRateLimiter, RATE_LIMITS } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
+import { bulkRoutes } from './routes/bulk.ts';
 import { contentRoutes } from './routes/content.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
@@ -52,6 +53,10 @@ const API_TAGS = [
   { name: 'ticket types', description: 'Passes and their prices.' },
   { name: 'orders', description: 'Orders, tickets and refunds.' },
   { name: 'attendees', description: 'Attendees and search.' },
+  {
+    name: 'bulk actions',
+    description: 'Label, email, seat, resend or cancel many attendees at once; progress and undo.',
+  },
   { name: 'check-in', description: 'Online scans with an API key or session.' },
   { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
 ];
@@ -214,6 +219,7 @@ export function createV1(deps: V1Deps) {
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
   v1.route('/', salesRoutes(deps, limiter, credentialKey));
+  v1.route('/', bulkRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
   v1.route('/', docsRoutes(basePath));
 

@@ -31,6 +31,8 @@ export interface V1Deps {
    * request's origin, right for the web mount; `apps/api` sets `NEXT_PUBLIC_APP_ORIGIN`.
    */
   readonly publicOrigin?: string;
+  /** How long a new bulk operation runs in the request that starts it (default 3 s; 0: never). */
+  readonly bulkInlineMs?: number;
   /** Where the router is mounted (`/v1` on api.yayatoh.com, `/api/v1` on the web app). */
   readonly basePath?: string;
 }

@@ -3140,6 +3140,7 @@
       "orders_read": "讀取訂單",
       "orders_refund": "訂單退款",
       "attendees_read": "讀取參加者",
+      "attendees_write": "修改參加者並重新寄送票券",
       "checkin_scan": "掃描門票"
     }
   },

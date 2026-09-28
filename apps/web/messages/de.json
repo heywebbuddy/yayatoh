@@ -3140,6 +3140,7 @@
       "orders_read": "Bestellungen lesen",
       "orders_refund": "Bestellungen erstatten",
       "attendees_read": "Teilnehmende lesen",
+      "attendees_write": "Teilnehmende ändern und Tickets erneut senden",
       "checkin_scan": "Tickets scannen"
     }
   },

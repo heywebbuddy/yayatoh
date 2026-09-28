@@ -59,6 +59,10 @@
       "description": "Attendees and search."
     },
     {
+      "name": "bulk actions",
+      "description": "Label, email, seat, resend or cancel many attendees at once; progress and undo."
+    },
+    {
       "name": "check-in",
       "description": "Online scans with an API key or session."
     },
@@ -3547,6 +3551,384 @@
         "required": [
           "code"
         ]
+      },
+      "BulkOperation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/BulkKind"
+          },
+          "eventId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BulkOperationStatus"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "processed": {
+            "type": "integer"
+          },
+          "succeeded": {
+            "type": "integer"
+          },
+          "failed": {
+            "type": "integer"
+          },
+          "undone": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "undoUntil": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Set while the operation can still be undone."
+          },
+          "failures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "attendeeId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "code": {
+                  "type": "string",
+                  "description": "Stable code, e.g. `not_found`, `no_ticket`, `ada_kept_back`."
+                }
+              },
+              "required": [
+                "attendeeId",
+                "code"
+              ]
+            },
+            "description": "The first 50 attendees that failed."
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "attendeeId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "code": {
+                  "type": "string",
+                  "description": "Stable code, e.g. `not_found`, `no_ticket`, `ada_kept_back`."
+                }
+              },
+              "required": [
+                "attendeeId",
+                "code"
+              ]
+            },
+            "description": "The first 50 attendees that succeeded with a caveat."
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "eventId",
+          "status",
+          "total",
+          "processed",
+          "succeeded",
+          "failed",
+          "undone",
+          "createdAt",
+          "finishedAt",
+          "undoUntil",
+          "failures",
+          "warnings"
+        ]
+      },
+      "BulkKind": {
+        "type": "string",
+        "enum": [
+          "labels",
+          "emails",
+          "seat-assignments",
+          "ticket-resends",
+          "ticket-cancellations"
+        ]
+      },
+      "BulkOperationStatus": {
+        "type": "string",
+        "enum": [
+          "queued",
+          "running",
+          "done",
+          "failed",
+          "undoing",
+          "undone"
+        ]
+      },
+      "BulkLabelRequest": {
+        "type": "object",
+        "properties": {
+          "selection": {
+            "$ref": "#/components/schemas/BulkSelection"
+          },
+          "add": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "maxItems": 20
+          },
+          "remove": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "maxItems": 20
+          }
+        },
+        "required": [
+          "selection"
+        ]
+      },
+      "BulkSelection": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BulkSelectionByIds"
+          },
+          {
+            "$ref": "#/components/schemas/BulkSelectionByFilter"
+          }
+        ]
+      },
+      "BulkSelectionByIds": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 50000
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "BulkSelectionByFilter": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "$ref": "#/components/schemas/BulkAttendeeFilter"
+          }
+        },
+        "required": [
+          "filter"
+        ]
+      },
+      "BulkAttendeeFilter": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Name or email contains"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "maxItems": 20,
+            "description": "Carrying any of these labels"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AttendeeSource"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AttendeeStatus"
+          }
+        }
+      },
+      "BulkEmailRequest": {
+        "type": "object",
+        "properties": {
+          "selection": {
+            "$ref": "#/components/schemas/BulkSelection"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000,
+            "description": "Plain text."
+          }
+        },
+        "required": [
+          "selection",
+          "subject",
+          "body"
+        ]
+      },
+      "BulkSeatRequest": {
+        "type": "object",
+        "properties": {
+          "selection": {
+            "$ref": "#/components/schemas/BulkSelection"
+          },
+          "target": {
+            "$ref": "#/components/schemas/BulkSeatTarget"
+          },
+          "overrideRules": {
+            "type": "boolean",
+            "description": "Use accessible seats an enforced rule keeps back (audited)."
+          }
+        },
+        "required": [
+          "selection",
+          "target"
+        ]
+      },
+      "BulkSeatTarget": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "item"
+                ]
+              },
+              "itemId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "kind",
+              "itemId"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "section"
+                ]
+              },
+              "sectionId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "kind",
+              "sectionId"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "best"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "group"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              }
+            },
+            "required": [
+              "kind",
+              "label"
+            ]
+          }
+        ],
+        "description": "A table or row (`item`), a section, the best available seats, or a group’s block."
+      },
+      "BulkResendRequest": {
+        "type": "object",
+        "properties": {
+          "selection": {
+            "$ref": "#/components/schemas/BulkSelection"
+          }
+        },
+        "required": [
+          "selection"
+        ]
+      },
+      "BulkCancelRequest": {
+        "type": "object",
+        "properties": {
+          "selection": {
+            "$ref": "#/components/schemas/BulkSelectionByIds"
+          }
+        },
+        "required": [
+          "selection"
+        ]
+      },
+      "UndoableBulkKind": {
+        "type": "string",
+        "enum": [
+          "labels",
+          "seat-assignments"
+        ],
+        "description": "A kind of bulk action that can be undone"
       },
       "UnknownTicketPolicy": {
         "type": "string",
@@ -8419,6 +8801,1015 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ScanVerdict"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/bulk/labels": {
+      "post": {
+        "operationId": "bulkLabelAttendees",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "Add or remove labels on many attendees (scope `attendees:write`)",
+        "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Removal wins over addition; an attendee carries at most 20 labels (`too_many_labels`). Undo within 10 minutes restores each attendee's previous labels.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkLabelRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "The operation after up to 3 s of work; poll it until it settles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/bulk/emails": {
+      "post": {
+        "operationId": "bulkEmailAttendees",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "Email many attendees about the event (scope `attendees:write`)",
+        "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. One email per attending person; the others fail `not_attending`. Refused while messaging is paused for the organization.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkEmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "The operation after up to 3 s of work; poll it until it settles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/bulk/seat-assignments": {
+      "post": {
+        "operationId": "bulkAssignSeats",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "Seat many attendees at once (scope `events:write`)",
+        "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Seats them at a table or row, in a section, in the best available seats or in their group's block, in plan order. Per-person failures: `not_enough_seats`, `seated_by_ticket`, `attendee_cancelled`, `not_found`; a kept-back accessible seat is a warning (`ada_kept_back`). Undo within 10 minutes puts everyone back.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkSeatRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "The operation after up to 3 s of work; poll it until it settles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/bulk/ticket-resends": {
+      "post": {
+        "operationId": "bulkResendTickets",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "Email attendees their tickets again (scope `attendees:write`)",
+        "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Each ticket holder gets one email with a fresh link to their tickets. Guests without a ticket fail `no_ticket`; void tickets fail `ticket_void`.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkResendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "The operation after up to 3 s of work; poll it until it settles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/bulk/ticket-cancellations": {
+      "post": {
+        "operationId": "bulkCancelTickets",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "Cancel tickets without a refund (scope `orders:refund`)",
+        "description": "Voids the named attendees’ tickets (scanners reject them), cancels the attendees and returns their places and seats to sale. No money moves: refunds stay per order. It cannot be undone, so only explicit `ids` are accepted, never a filter.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkCancelRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "The operation after up to 3 s of work; poll it until it settles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/bulk/{kind}/{operationId}": {
+      "get": {
+        "operationId": "getBulkOperation",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "A bulk operation’s progress and results (the scope of its kind)",
+        "description": "Poll until `status` is `done`, `failed` or `undone`. `failures` and `warnings` list the first 50 attendees, each with a stable code.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/BulkKind"
+                },
+                {
+                  "description": "The kind of bulk action the operation was started as"
+                }
+              ]
+            },
+            "required": true,
+            "description": "The kind of bulk action the operation was started as",
+            "name": "kind",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The bulk operation id"
+            },
+            "required": true,
+            "description": "The bulk operation id",
+            "name": "operationId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/bulk/{kind}/{operationId}/undo": {
+      "post": {
+        "operationId": "undoBulkOperation",
+        "tags": [
+          "bulk actions"
+        ],
+        "summary": "Undo a finished operation while `undoUntil` is set (the scope of its kind)",
+        "description": "Once only, within 10 minutes of finishing; otherwise 409 `invalid_state`. People changed since are left alone.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/UndoableBulkKind"
+            },
+            "required": true,
+            "description": "A kind of bulk action that can be undone",
+            "name": "kind",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The bulk operation id"
+            },
+            "required": true,
+            "description": "The bulk operation id",
+            "name": "operationId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The operation, undoing or undone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkOperation"
                 }
               }
             }

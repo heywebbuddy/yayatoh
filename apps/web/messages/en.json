@@ -3140,6 +3140,7 @@
       "orders_read": "Read orders",
       "orders_refund": "Refund orders",
       "attendees_read": "Read attendees",
+      "attendees_write": "Change attendees and resend tickets",
       "checkin_scan": "Scan tickets"
     }
   },

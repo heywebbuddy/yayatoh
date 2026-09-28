@@ -3140,6 +3140,7 @@
       "orders_read": "قراءة الطلبات",
       "orders_refund": "استرداد الطلبات",
       "attendees_read": "قراءة الحضور",
+      "attendees_write": "تعديل الحضور وإعادة إرسال التذاكر",
       "checkin_scan": "مسح التذاكر"
     }
   },

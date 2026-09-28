@@ -3140,6 +3140,7 @@
       "orders_read": "Ler pedidos",
       "orders_refund": "Reembolsar pedidos",
       "attendees_read": "Ler participantes",
+      "attendees_write": "Alterar participantes e reenviar ingressos",
       "checkin_scan": "Escanear ingressos"
     }
   },

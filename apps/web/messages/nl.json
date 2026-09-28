@@ -3140,6 +3140,7 @@
       "orders_read": "Bestellingen lezen",
       "orders_refund": "Bestellingen terugbetalen",
       "attendees_read": "Deelnemers lezen",
+      "attendees_write": "Deelnemers wijzigen en tickets opnieuw versturen",
       "checkin_scan": "Tickets scannen"
     }
   },

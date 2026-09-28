@@ -725,6 +725,9 @@ importers:
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../modules/program
+      '@yayatoh/seating':
+        specifier: workspace:*
+        version: link:../modules/seating
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../modules/tenancy
@@ -744,9 +747,15 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../modules/billing
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../config
+      '@yayatoh/floorplan':
+        specifier: workspace:*
+        version: link:../floorplan
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../testing

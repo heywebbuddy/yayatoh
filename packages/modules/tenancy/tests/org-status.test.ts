@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { isOrgLive, nextOrgStatus, orgStatusActions, orgWriteRefusal } from '../src/index.ts';
+import {
+  isOrgLive,
+  nextOrgStatus,
+  orgStatusActions,
+  orgWriteRefusal,
+  restoredOrgStatus,
+} from '../src/index.ts';
 
 describe('org status transitions (M1.3f)', () => {
   it('suspend, reactivate and terminate move between the right states only', () => {
@@ -66,5 +72,16 @@ describe('writes while suspended or terminated', () => {
     );
     expect(w('terminated', 'notifications.markInboxRead', { role: 'viewer' })).toBeNull();
     expect(w('terminated', 'messaging.contactReport', { actorType: 'anonymous', role: null })).toBeNull();
+  });
+});
+
+describe('restoring a terminated org (M1.13d)', () => {
+  it('goes back to the status the termination recorded, only from terminated and only with a record', () => {
+    for (const back of ['active', 'limited', 'suspended'])
+      expect(restoredOrgStatus('terminated', { fromStatus: back })).toBe(back);
+    expect(restoredOrgStatus('terminated', null)).toBeNull();
+    expect(restoredOrgStatus('terminated', { fromStatus: 'terminated' })).toBeNull();
+    for (const current of ['active', 'limited', 'suspended'])
+      expect(restoredOrgStatus(current, { fromStatus: 'active' })).toBeNull();
   });
 });

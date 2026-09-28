@@ -21,8 +21,11 @@ export interface Staff {
   /** The audited actor string for platform reads and commands. */
   readonly actor: string;
   can(action: StaffAction): boolean;
-  /** A command context for one org, acting as this staff member (a platform actor). */
-  ctx(orgId: string): Ctx;
+  /**
+   * A command context for one org, acting as this staff member (a platform actor). `stepUpAt`:
+   * when they last confirmed it's them (commands that check it themselves, M1.13d).
+   */
+  ctx(orgId: string, stepUpAt?: Date): Ctx;
 }
 
 /** The signed-in person, if they are active staff; `null` for anyone else. */
@@ -45,7 +48,8 @@ export const currentStaff = cache(async (): Promise<Staff | 'signed_out' | null>
     role,
     actor,
     can: (a) => staffCan(role, a),
-    ctx: (orgId) => createCtx({ orgId, actor: { type: 'system', name: actor } }),
+    ctx: (orgId, stepUpAt) =>
+      createCtx({ orgId, actor: { type: 'system', name: actor }, ...(stepUpAt ? { stepUpAt } : {}) }),
   };
 });
 
