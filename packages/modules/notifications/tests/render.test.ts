@@ -44,6 +44,31 @@ describe('renderMessage: every kind in all 13 locales', () => {
 });
 
 describe('renderMessage details', () => {
+  it('shows the org logo from its absolute URL with its alt text (M1.4e), never a relative or script URL', () => {
+    const logoUrl =
+      'https://app.yayatoh.test/media/0190f2a4-1c2b-7cde-8f00-000000000001/0190f2a4-1c2b-7cde-8f00-00000000000a/640-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png';
+    const params = { subject: 'S', body: 'B', name: 'N', eventName: 'E' };
+    const withLogo = renderMessage({
+      kind: 'attendees.message',
+      locale: 'en',
+      params,
+      org: { ...org, logoUrl, logoAlt: 'Lakeside "Events" logo' },
+    });
+    expect(withLogo.html).toContain(`<img src="${logoUrl}" alt="Lakeside &quot;Events&quot; logo"`);
+    for (const bad of ['/media/x.png', 'javascript:alert(1)']) {
+      const r = renderMessage({
+        kind: 'attendees.message',
+        locale: 'en',
+        params,
+        org: { ...org, logoUrl: bad },
+      });
+      expect(r.html).not.toContain('<img');
+    }
+    expect(renderMessage({ kind: 'attendees.message', locale: 'en', params, org }).html).not.toContain(
+      '<img',
+    );
+  });
+
   it('escapes organizer-written text and keeps its line breaks', () => {
     const r = renderMessage({
       kind: 'attendees.message',

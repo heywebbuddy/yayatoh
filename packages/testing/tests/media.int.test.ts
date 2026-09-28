@@ -315,7 +315,7 @@ describe('media: serving permissions', () => {
     const f = fileOf(asset.variants[0]?.url ?? '');
     expect((await serveTarget(f.org, f.asset, f.file))?.visibility).toBe('none');
     expect(await publicMedia('event', ev.id)).toEqual([]);
-    expect((await publicCovers([ev.id])).size).toBe(0);
+    expect((await publicCovers([ev.slug])).size).toBe(0);
 
     await executeCommand(transitionEventCommand, { eventId: ev.id, transition: 'publish' }, a.ctx(), ports);
     expect((await serveTarget(f.org, f.asset, f.file))?.visibility).toBe('public');
@@ -325,13 +325,13 @@ describe('media: serving permissions', () => {
     expect(Object.keys(pub[0] ?? {}).sort()).toEqual(
       ['alt', 'decorative', 'height', 'id', 'ownerId', 'position', 'slot', 'variants', 'width'].sort(),
     );
-    expect((await publicCovers([ev.id, uuidv7()])).get(ev.id)?.id).toBe(asset.id);
+    expect((await publicCovers([ev.slug, 'no-such-event'])).get(ev.slug)?.id).toBe(asset.id);
 
     await executeCommand(updateEventCommand, { eventId: ev.id, visibility: 'private' }, a.ctx(), ports);
     expect((await serveTarget(f.org, f.asset, f.file))?.visibility).toBe('private_event');
     expect(await publicMedia('event', ev.id)).toEqual([]);
     expect(await publicMedia('event', ev.id, { privateOk: true })).toHaveLength(1);
-    expect((await publicCovers([ev.id])).size).toBe(0);
+    expect((await publicCovers([ev.slug])).size).toBe(0);
 
     await executeCommand(updateEventCommand, { eventId: ev.id, visibility: 'unlisted' }, a.ctx(), ports);
     await executeCommand(transitionEventCommand, { eventId: ev.id, transition: 'unpublish' }, a.ctx(), ports);

@@ -2,6 +2,7 @@ import 'server-only';
 import { effectiveModules } from '@yayatoh/billing';
 import { getEventBySlugQuery } from '@yayatoh/events';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { listMediaQuery } from '@yayatoh/media';
 import { isProfileKey, type ProfileKey } from '@yayatoh/platform';
 import { getOrganizationQuery, memberRole, myOrganizations, resolveOrgSlug } from '@yayatoh/tenancy';
 import { notFound } from 'next/navigation';
@@ -25,13 +26,15 @@ export const loadConsole = cache(async (orgSlug: string) => {
   const ctx = createCtx({ orgId: resolved.orgId, actor: { type: 'user', userId: session.userId }, locale });
   const role = await memberRole(ctx);
   if (!role) notFound();
-  const [org, modules, orgs] = await Promise.all([
+  const [org, modules, orgs, logos] = await Promise.all([
     executeQuery(getOrganizationQuery, {}, ctx, ports),
     effectiveModules(ctx),
     myOrganizations(session.userId),
+    // The brand kit logo (M1.4e), shown in the console header.
+    executeQuery(listMediaQuery, { ownerType: 'org', ownerId: resolved.orgId, slot: 'logo' }, ctx, ports),
   ]);
   const profile: ProfileKey = isProfileKey(org.defaultProfile) ? org.defaultProfile : 'other';
-  return { session, ctx, org, role, modules, orgs, profile };
+  return { session, ctx, org, role, modules, orgs, profile, logo: logos[0] ?? null };
 });
 
 export type ConsoleData = Awaited<ReturnType<typeof loadConsole>>;

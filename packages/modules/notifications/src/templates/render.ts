@@ -44,6 +44,9 @@ export interface OrgBrand {
   /** #rrggbb or null for the platform ink. */
   readonly brandColor: string | null;
   readonly poweredByVisible: boolean;
+  /** Absolute URL of the org's logo (its PNG/JPEG fallback variant, M1.4e), and its alt text. */
+  readonly logoUrl?: string | null;
+  readonly logoAlt?: string | null;
 }
 
 export interface TemplateOverride {
@@ -185,7 +188,11 @@ export function renderMessage(input: RenderInput): RenderedMessage {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${color.zinc[100]};">
 <tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${color.white};border-radius:${radius.card};overflow:hidden;text-align:start;">
-<tr><td style="background:${brand};color:${onBrand};padding:18px 28px;font-size:16px;font-weight:600;">${input.org.name}</td></tr>
+<tr><td style="background:${brand};color:${onBrand};padding:18px 28px;font-size:16px;font-weight:600;">${
+    input.org.logoUrl && /^https?:\/\//.test(input.org.logoUrl)
+      ? html`<img src="${input.org.logoUrl}" alt="${input.org.logoAlt ?? input.org.name}" height="40" style="display:block;height:40px;width:auto;max-width:200px;border:0;margin:0 0 8px;background:${color.white};border-radius:6px;padding:4px;">`
+      : ''
+  }${input.org.name}</td></tr>
 <tr><td style="padding:28px 28px 8px;">
 <h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:400;color:${color.ink};">${subject}</h1>
 <p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${greeting}</p>

@@ -14,8 +14,12 @@ import type { SourceType } from './sniff.ts';
 export const STANDARD_WIDTHS = [320, 640, 1280, 1920] as const;
 export const FALLBACK_MAX_WIDTH = 1280;
 
-/** Upload limits. Bytes are checked before anything is decoded; pixels before anything is resized. */
-export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+/**
+ * Upload limits. Bytes are checked before anything is decoded; pixels before anything is resized.
+ * 4 MB fits Vercel's 4.5 MB request-body cap for functions; direct-to-R2 uploads (presigned, the
+ * upload ticket's shape) can raise it once the owner's bucket exists.
+ */
+export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 export const MAX_SVG_BYTES = 1024 * 1024;
 export const MAX_INPUT_PIXELS = 40_000_000;
 

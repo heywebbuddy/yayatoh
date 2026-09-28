@@ -145,7 +145,8 @@ export async function dispatchDueTx(
         kind: row.kind as MessageKind,
         locale: row.locale,
         params,
-        org,
+        // The brand kit logo (M1.4e) as an absolute URL on the app origin (email clients fetch it).
+        org: { ...org, logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null },
         recipientName: row.recipientName,
         unsubscribeUrl: unsub?.page ?? null,
         override: override ?? null,

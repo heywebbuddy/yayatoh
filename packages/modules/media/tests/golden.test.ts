@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 import { RASTER_FIXTURES, REFUSED } from '../scripts/make-fixtures.ts';
+import { MAX_UPLOAD_BYTES } from '../src/pipeline/plan.ts';
 import { MediaRejected, processImage } from '../src/pipeline/process.ts';
 
 /**
@@ -77,8 +78,8 @@ describe('golden transforms', () => {
     await expect(processImage(read(name))).rejects.toMatchObject({ reason });
   });
 
-  it('refuses more than 10 MB before decoding anything', async () => {
-    const big = new Uint8Array(10 * 1024 * 1024 + 1);
+  it('refuses more than 4 MB before decoding anything', async () => {
+    const big = new Uint8Array(MAX_UPLOAD_BYTES + 1);
     big.set([0xff, 0xd8, 0xff]);
     await expect(processImage(big)).rejects.toBeInstanceOf(MediaRejected);
     await expect(processImage(big)).rejects.toMatchObject({ reason: 'too_large' });

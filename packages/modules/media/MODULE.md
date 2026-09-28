@@ -3,7 +3,7 @@
 Uploaded images: event cover and gallery, venue photos, the org logo (M1.4e). Owns Postgres schema `media`.
 
 **Invariants**
-- An upload is what its **bytes** are (magic-byte sniffing): JPEG, PNG, GIF, WebP, AVIF or SVG. The file name and Content-Type are never trusted. At most 10 MB (SVG 1 MB) and 40 megapixels.
+- An upload is what its **bytes** are (magic-byte sniffing): JPEG, PNG, GIF, WebP, AVIF or SVG. The file name and Content-Type are never trusted. At most 4 MB (Vercel's request cap; SVG 1 MB) and 40 megapixels.
 - Nothing is served as uploaded. Rasters are decoded (first frame), auto-oriented and **re-encoded** to AVIF and WebP at the standard widths (320/640/1280/1920, never enlarged) plus one PNG/JPEG fallback (≤1280 px) for email and OG images; encoders write no metadata, so EXIF/GPS, XMP, IPTC and ICC never survive. SVGs are **sanitized** to an allowlisted subset (no script, handlers, `javascript:`, `foreignObject`, animation, external references, DOCTYPE/entities) and also rasterized from the sanitized document.
 - `media.assets` / `media.variants` are tenant rows (FORCE RLS). Alt text is required unless the image is marked decorative (CHECK). `cover` and `logo` hold one image; `gallery` and `photo` at most 20.
 - Files live in the `MediaStore` port under `{org}/{asset}/{width}-{sha256[:32]}.{ext}` (content-hashed, immutable). Adapters: `postgres` (dev/CI, `media.blobs`) and `r2` (production; owner inbox). Every store call names the org and refuses keys outside its prefix.

@@ -58,7 +58,7 @@ export default async function TenantHome({ params, searchParams }: Props) {
         </Link>
       </header>
       <main id="main" className="flex flex-col gap-8">
-        <OrgHero eyebrow={t('tenant.eyebrow')} name={o.name} brandColor={o.brandColor} />
+        <OrgHero orgId={orgId} eyebrow={t('tenant.eyebrow')} name={o.name} brandColor={o.brandColor} />
         <section
           aria-labelledby="upcoming-heading"
           className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 md:px-6"

@@ -4,11 +4,13 @@ import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, StatusDot } f
 import { getVenueQuery, listQuoteRequestsQuery, type VenueDto } from '@yayatoh/venues';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
+import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { setQuoteStatusAction, setVenueArchivedAction, updateVenueAction } from '../actions.ts';
 
@@ -37,6 +39,7 @@ export default async function VenuePage({
   const canWrite = roleCan(data.role, 'events:write');
   // Contact data: only people who can act on quotes see them.
   const quotes = canWrite ? await executeQuery(listQuoteRequestsQuery, { venueId }, data.ctx, ports) : null;
+  const photos = await mediaPanel(data, 'venue', venue.id, 'photo');
   const dateFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' });
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
@@ -80,6 +83,9 @@ export default async function VenuePage({
           defaultTimezone={venue.timezone}
           disabled={!canWrite}
         />
+      </Card>
+      <Card size="panel">
+        <MediaUploader org={org} slot="photo" ticket={photos.ticket} items={photos.items} />
       </Card>
       <section aria-labelledby="quotes-heading" className="flex flex-col gap-3">
         <h2 id="quotes-heading" className="text-section">

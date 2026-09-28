@@ -444,6 +444,9 @@ importers:
       '@yayatoh/marketplace':
         specifier: workspace:*
         version: link:../../packages/modules/marketplace
+      '@yayatoh/media':
+        specifier: workspace:*
+        version: link:../../packages/modules/media
       '@yayatoh/messaging':
         specifier: workspace:*
         version: link:../../packages/modules/messaging

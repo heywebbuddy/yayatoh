@@ -140,23 +140,25 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
 $$;--> statement-breakpoint
 REVOKE ALL ON FUNCTION media.public_media(text, uuid, boolean) FROM PUBLIC;--> statement-breakpoint
 GRANT EXECUTE ON FUNCTION media.public_media(text, uuid, boolean) TO app_user;--> statement-breakpoint
--- Cover images of public events (listing cards across orgs).
-CREATE FUNCTION media.public_covers(p_event_ids uuid[])
+-- Cover images of public events by slug (listing cards across orgs).
+CREATE FUNCTION media.public_covers(p_event_slugs text[])
 RETURNS TABLE (
   org_id uuid, asset_id uuid, owner_id uuid, slot text, "position" integer, width integer, height integer,
-  alt text, decorative boolean, variants jsonb
+  alt text, decorative boolean, variants jsonb, event_slug text
 )
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
   SELECT a.org_id, a.id, a.owner_id, a.slot, a.position, a.width, a.height, a.alt, a.decorative,
          (SELECT jsonb_agg(jsonb_build_object('format', v.format, 'width', v.width, 'height', v.height,
                                               'file_name', v.file_name, 'fallback', v.fallback))
-          FROM media.variants v WHERE v.org_id = a.org_id AND v.asset_id = a.id)
-  FROM media.assets a
-  WHERE a.owner_type = 'event' AND a.slot = 'cover' AND a.owner_id = ANY (p_event_ids[1:500])
+          FROM media.variants v WHERE v.org_id = a.org_id AND v.asset_id = a.id),
+         e.slug
+  FROM events.events e
+  JOIN media.assets a ON a.org_id = e.org_id AND a.owner_type = 'event' AND a.owner_id = e.id AND a.slot = 'cover'
+  WHERE e.slug = ANY (p_event_slugs[1:500])
     AND media.owner_visibility(a.org_id, 'event', a.owner_id) = 'public'
 $$;--> statement-breakpoint
-REVOKE ALL ON FUNCTION media.public_covers(uuid[]) FROM PUBLIC;--> statement-breakpoint
-GRANT EXECUTE ON FUNCTION media.public_covers(uuid[]) TO app_user;--> statement-breakpoint
+REVOKE ALL ON FUNCTION media.public_covers(text[]) FROM PUBLIC;--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION media.public_covers(text[]) TO app_user;--> statement-breakpoint
 -- What /media/{org}/{asset}/{file} points at (metadata only; the server decides and reads the bytes).
 CREATE FUNCTION media.serve_target(p_org uuid, p_asset uuid, p_file text)
 RETURNS TABLE (format text, bytes integer, sha256 text, owner_type text, owner_id uuid, visibility text)

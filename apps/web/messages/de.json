@@ -179,7 +179,8 @@
     "series": "Reihen",
     "templates": "Vorlagen",
     "apiKeys": "API-Schlüssel",
-    "publicSite": "Öffentliche Seite"
+    "publicSite": "Öffentliche Seite",
+    "media": "Bilder"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -440,7 +441,8 @@
     "dateSoldOut": "Ausverkauft",
     "ticketsFor": "Tickets für {date}",
     "pickDateTitle": "Wähle zuerst einen Termin",
-    "pickDateDescription": "Wähle oben einen Termin, um seine Tickets zu sehen."
+    "pickDateDescription": "Wähle oben einen Termin, um seine Tickets zu sehen.",
+    "gallery": "Galerie"
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -2202,7 +2204,8 @@
     "noEventsTitle": "Keine kommenden öffentlichen Events",
     "noEventsDescription": "Schau später wieder vorbei oder frage ein Angebot für dein eigenes Event an.",
     "quoteTitle": "Angebot anfragen",
-    "quoteDescription": "Erzähl {org} von deinem Event – du bekommst eine Antwort per E-Mail."
+    "quoteDescription": "Erzähl {org} von deinem Event – du bekommst eine Antwort per E-Mail.",
+    "photos": "Fotos"
   },
   "quote": {
     "name": "Dein Name",
@@ -2836,6 +2839,74 @@
       "copied": "Kopiert.",
       "emptyTitle": "Noch keine öffentlichen Veranstaltungen",
       "emptyDescription": "Veröffentlichen Sie eine Veranstaltung, um ihr Widget-Snippet zu erhalten."
+    }
+  },
+  "eventMedia": {
+    "title": "Bilder",
+    "subtitle": "Das Titelbild erscheint oben auf der Veranstaltungsseite, auf Veranstaltungskarten und in Linkvorschauen; die Galerie auf der Veranstaltungsseite."
+  },
+  "media": {
+    "title": {
+      "cover": "Titelbild",
+      "gallery": "Galerie",
+      "photo": "Fotos der Location",
+      "logo": "Logo"
+    },
+    "hint": {
+      "cover": "Erscheint oben auf der Veranstaltungsseite, auf Veranstaltungskarten und in Linkvorschauen.",
+      "gallery": "Bis zu {max} Fotos, auf der Veranstaltungsseite.",
+      "photo": "Bis zu {max} Fotos, auf der öffentlichen Seite der Location.",
+      "logo": "Erscheint in der Konsole, auf Ihrer Veranstalterseite und Website und in E-Mails."
+    },
+    "empty": {
+      "cover": "Noch kein Titelbild.",
+      "gallery": "Noch keine Galeriefotos.",
+      "photo": "Noch keine Fotos der Location.",
+      "logo": "Noch kein Logo."
+    },
+    "count": "{count, plural, one {# Bild} other {# Bilder}} von {max}",
+    "listLabel": "Aktuelle Bilder",
+    "file": "Bilddatei",
+    "formats": "JPEG, PNG, GIF, WebP, AVIF oder SVG, bis {size}. Bilder werden fürs Web umgewandelt und Standortdaten entfernt.",
+    "dropHint": "Sie können eine Datei auch hier ablegen.",
+    "chosen": "Ausgewählt: {name}",
+    "alt": "Alternativtext",
+    "altHint": "Beschreiben Sie, was das Bild zeigt, für Menschen, die es nicht sehen können.",
+    "decorative": "Dekoratives Bild (keine Beschreibung nötig)",
+    "decorativeBadge": "Dekorativ",
+    "decorativeName": "dekoratives Bild",
+    "addTitle": "Bild hinzufügen",
+    "replaceSingleTitle": "Bild ersetzen",
+    "replacingTitle": "Wird ersetzt: {name}",
+    "upload": "Bild hochladen",
+    "replaceSubmit": "Bild ersetzen",
+    "cancelReplace": "Abbrechen",
+    "replace": "Ersetzen",
+    "remove": "Entfernen",
+    "editAlt": "Alternativtext bearbeiten",
+    "save": "Speichern",
+    "altSaved": "Alternativtext gespeichert.",
+    "uploading": "Wird hochgeladen … {percent} %",
+    "processing": "Bild wird verarbeitet …",
+    "uploaded": "Bild hochgeladen.",
+    "progress": "Upload-Fortschritt",
+    "viewerNotice": "Nur Inhaber, Admins und Manager können diese Bilder ändern.",
+    "viewerNoticeLogo": "Nur Inhaber und Admins können das Logo ändern.",
+    "errors": {
+      "no_file": "Wählen Sie eine Bilddatei.",
+      "alt_required": "Beschreiben Sie das Bild oder markieren Sie es als dekorativ.",
+      "unsupported_type": "Diese Datei ist kein unterstütztes Bild. Verwenden Sie JPEG, PNG, GIF, WebP, AVIF oder SVG.",
+      "too_large": "Diese Datei ist zu groß. Das Limit liegt bei {size}.",
+      "too_many_pixels": "Dieses Bild hat zu viele Pixel (Limit: 40 Megapixel).",
+      "undecodable": "Diese Bilddatei ist beschädigt oder unvollständig.",
+      "svg_malformed": "Diese SVG-Datei ist ungültig.",
+      "svg_not_svg": "Diese Datei ist kein SVG-Bild.",
+      "svg_too_complex": "Diese SVG-Datei ist zu komplex.",
+      "quota_exceeded": "Ihre Organisation hat ihren Bildspeicher aufgebraucht. Entfernen Sie zuerst einige Bilder.",
+      "slot_full": "Die Galerie ist voll ({max} Bilder). Entfernen oder ersetzen Sie eines.",
+      "forbidden": "Sie können diese Bilder nicht ändern.",
+      "network": "Der Upload ist fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "generic": "Der Upload ist fehlgeschlagen. Versuchen Sie es erneut."
     }
   }
 }

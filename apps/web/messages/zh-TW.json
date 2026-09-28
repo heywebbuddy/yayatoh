@@ -179,7 +179,8 @@
     "series": "系列",
     "templates": "範本",
     "apiKeys": "API 金鑰",
-    "publicSite": "公開網站"
+    "publicSite": "公開網站",
+    "media": "圖片"
   },
   "vocab": {
     "attendee": "參加者",
@@ -440,7 +441,8 @@
     "dateSoldOut": "已售完",
     "ticketsFor": "{date} 的門票",
     "pickDateTitle": "請先選擇場次",
-    "pickDateDescription": "在上方選擇一個場次即可查看門票。"
+    "pickDateDescription": "在上方選擇一個場次即可查看門票。",
+    "gallery": "相簿"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -2202,7 +2204,8 @@
     "noEventsTitle": "目前沒有即將舉行的公開活動",
     "noEventsDescription": "請稍後再回來查看，或為你自己的活動索取報價。",
     "quoteTitle": "索取報價",
-    "quoteDescription": "向 {org} 介紹你的活動，對方會以電子郵件回覆你。"
+    "quoteDescription": "向 {org} 介紹你的活動，對方會以電子郵件回覆你。",
+    "photos": "照片"
   },
   "quote": {
     "name": "你的姓名",
@@ -2836,6 +2839,74 @@
       "copied": "已複製。",
       "emptyTitle": "目前沒有公開活動",
       "emptyDescription": "發布活動即可取得小工具程式碼。"
+    }
+  },
+  "eventMedia": {
+    "title": "圖片",
+    "subtitle": "封面會顯示在活動頁面頂端、活動卡片和連結預覽中；相簿顯示在活動頁面上。"
+  },
+  "media": {
+    "title": {
+      "cover": "封面圖片",
+      "gallery": "相簿",
+      "photo": "場地照片",
+      "logo": "標誌"
+    },
+    "hint": {
+      "cover": "顯示在活動頁面頂端、活動卡片和連結預覽中。",
+      "gallery": "最多 {max} 張照片，顯示在活動頁面上。",
+      "photo": "最多 {max} 張照片，顯示在場地公開頁面上。",
+      "logo": "顯示在主控台、你的主辦單位頁面和網站，以及電子郵件中。"
+    },
+    "empty": {
+      "cover": "還沒有封面圖片。",
+      "gallery": "相簿中還沒有照片。",
+      "photo": "還沒有場地照片。",
+      "logo": "還沒有標誌。"
+    },
+    "count": "{count, plural, other {# 張}}，共 {max} 張",
+    "listLabel": "目前的圖片",
+    "file": "圖片檔案",
+    "formats": "JPEG、PNG、GIF、WebP、AVIF 或 SVG，最大 {size}。圖片會轉換為網頁格式，並移除位置資料。",
+    "dropHint": "也可以把檔案拖放到這裡。",
+    "chosen": "已選取：{name}",
+    "alt": "替代文字",
+    "altHint": "為看不到圖片的人描述圖片內容。",
+    "decorative": "裝飾性圖片（不需描述）",
+    "decorativeBadge": "裝飾性",
+    "decorativeName": "裝飾性圖片",
+    "addTitle": "新增圖片",
+    "replaceSingleTitle": "更換圖片",
+    "replacingTitle": "正在更換：{name}",
+    "upload": "上傳圖片",
+    "replaceSubmit": "更換圖片",
+    "cancelReplace": "取消",
+    "replace": "更換",
+    "remove": "移除",
+    "editAlt": "編輯替代文字",
+    "save": "儲存",
+    "altSaved": "替代文字已儲存。",
+    "uploading": "正在上傳… {percent}%",
+    "processing": "正在處理圖片…",
+    "uploaded": "圖片已上傳。",
+    "progress": "上傳進度",
+    "viewerNotice": "只有擁有者、管理員和經理可以變更這些圖片。",
+    "viewerNoticeLogo": "只有擁有者和管理員可以變更標誌。",
+    "errors": {
+      "no_file": "請選擇圖片檔案。",
+      "alt_required": "請描述圖片，或將其標示為裝飾性圖片。",
+      "unsupported_type": "此檔案不是支援的圖片。請使用 JPEG、PNG、GIF、WebP、AVIF 或 SVG。",
+      "too_large": "檔案太大。上限為 {size}。",
+      "too_many_pixels": "此圖片像素過多（上限為 4000 萬像素）。",
+      "undecodable": "此圖片檔案已損毀或不完整。",
+      "svg_malformed": "此 SVG 檔案無效。",
+      "svg_not_svg": "此檔案不是 SVG 圖片。",
+      "svg_too_complex": "此 SVG 過於複雜。",
+      "quota_exceeded": "你的組織已用完圖片儲存空間。請先移除一些圖片。",
+      "slot_full": "相簿已滿（{max} 張）。請移除或更換一張。",
+      "forbidden": "你無法變更這些圖片。",
+      "network": "上傳失敗。請檢查網路連線後再試一次。",
+      "generic": "上傳失敗。請再試一次。"
     }
   }
 }

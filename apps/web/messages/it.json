@@ -179,7 +179,8 @@
     "series": "Serie",
     "templates": "Modelli",
     "apiKeys": "Chiavi API",
-    "publicSite": "Sito pubblico"
+    "publicSite": "Sito pubblico",
+    "media": "Immagini"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -440,7 +441,8 @@
     "dateSoldOut": "Esaurita",
     "ticketsFor": "Biglietti per {date}",
     "pickDateTitle": "Prima scegli una data",
-    "pickDateDescription": "Scegli una delle date qui sopra per vederne i biglietti."
+    "pickDateDescription": "Scegli una delle date qui sopra per vederne i biglietti.",
+    "gallery": "Galleria"
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -2202,7 +2204,8 @@
     "noEventsTitle": "Nessun evento pubblico in programma",
     "noEventsDescription": "Torna più tardi oppure richiedi un preventivo per il tuo evento.",
     "quoteTitle": "Richiedi un preventivo",
-    "quoteDescription": "Racconta il tuo evento a {org}: ti risponderanno via email."
+    "quoteDescription": "Racconta il tuo evento a {org}: ti risponderanno via email.",
+    "photos": "Foto"
   },
   "quote": {
     "name": "Il tuo nome",
@@ -2836,6 +2839,74 @@
       "copied": "Copiato.",
       "emptyTitle": "Ancora nessun evento pubblico",
       "emptyDescription": "Pubblica un evento per ottenere lo snippet del widget."
+    }
+  },
+  "eventMedia": {
+    "title": "Immagini",
+    "subtitle": "La copertina appare in cima alla pagina dell'evento, nelle schede degli eventi e nelle anteprime dei link; la galleria, nella pagina dell'evento."
+  },
+  "media": {
+    "title": {
+      "cover": "Immagine di copertina",
+      "gallery": "Galleria",
+      "photo": "Foto della location",
+      "logo": "Logo"
+    },
+    "hint": {
+      "cover": "Mostrata in cima alla pagina dell'evento, nelle schede degli eventi e nelle anteprime dei link.",
+      "gallery": "Fino a {max} foto, nella pagina dell'evento.",
+      "photo": "Fino a {max} foto, nella pagina pubblica della location.",
+      "logo": "Mostrato nella console, nella tua pagina e nel tuo sito di organizzatore e nelle email."
+    },
+    "empty": {
+      "cover": "Ancora nessuna immagine di copertina.",
+      "gallery": "Ancora nessuna foto nella galleria.",
+      "photo": "Ancora nessuna foto della location.",
+      "logo": "Ancora nessun logo."
+    },
+    "count": "{count, plural, one {# immagine} other {# immagini}} su {max}",
+    "listLabel": "Immagini attuali",
+    "file": "File immagine",
+    "formats": "JPEG, PNG, GIF, WebP, AVIF o SVG, fino a {size}. Le immagini vengono convertite per il web e i dati di posizione rimossi.",
+    "dropHint": "Puoi anche trascinare un file qui.",
+    "chosen": "Selezionato: {name}",
+    "alt": "Testo alternativo",
+    "altHint": "Descrivi cosa mostra l'immagine per chi non può vederla.",
+    "decorative": "Immagine decorativa (nessuna descrizione necessaria)",
+    "decorativeBadge": "Decorativa",
+    "decorativeName": "immagine decorativa",
+    "addTitle": "Aggiungi un'immagine",
+    "replaceSingleTitle": "Sostituisci l'immagine",
+    "replacingTitle": "In sostituzione: {name}",
+    "upload": "Carica immagine",
+    "replaceSubmit": "Sostituisci immagine",
+    "cancelReplace": "Annulla",
+    "replace": "Sostituisci",
+    "remove": "Rimuovi",
+    "editAlt": "Modifica testo alternativo",
+    "save": "Salva",
+    "altSaved": "Testo alternativo salvato.",
+    "uploading": "Caricamento… {percent}%",
+    "processing": "Elaborazione dell'immagine…",
+    "uploaded": "Immagine caricata.",
+    "progress": "Avanzamento del caricamento",
+    "viewerNotice": "Solo proprietari, amministratori e manager possono modificare queste immagini.",
+    "viewerNoticeLogo": "Solo proprietari e amministratori possono modificare il logo.",
+    "errors": {
+      "no_file": "Scegli un file immagine.",
+      "alt_required": "Descrivi l'immagine o segnala come decorativa.",
+      "unsupported_type": "Questo file non è un’immagine supportata. Usa JPEG, PNG, GIF, WebP, AVIF o SVG.",
+      "too_large": "Questo file è troppo grande. Il limite è {size}.",
+      "too_many_pixels": "Questa immagine ha troppi pixel (il limite è 40 megapixel).",
+      "undecodable": "Questo file immagine è danneggiato o incompleto.",
+      "svg_malformed": "Questo file SVG non è valido.",
+      "svg_not_svg": "Questo file non è un'immagine SVG.",
+      "svg_too_complex": "Questo SVG è troppo complesso.",
+      "quota_exceeded": "La tua organizzazione ha esaurito lo spazio per le immagini. Rimuovi prima alcune immagini.",
+      "slot_full": "La galleria è piena ({max} immagini). Rimuovine o sostituiscine una.",
+      "forbidden": "Non puoi modificare queste immagini.",
+      "network": "Il caricamento non è riuscito. Controlla la connessione e riprova.",
+      "generic": "Il caricamento non è riuscito. Riprova."
     }
   }
 }

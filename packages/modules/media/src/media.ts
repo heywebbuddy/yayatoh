@@ -533,18 +533,20 @@ export async function publicMedia(
   return rows.map(toPublic);
 }
 
-/** Cover images of public events, for listing cards (any org). */
-export async function publicCovers(eventIds: readonly string[]): Promise<Map<string, PublicMediaDto>> {
+/** Cover images of public events by slug, for listing cards (any org). */
+export async function publicCovers(eventSlugs: readonly string[]): Promise<Map<string, PublicMediaDto>> {
   const out = new Map<string, PublicMediaDto>();
-  if (eventIds.length === 0) return out;
-  const ids = sql.join(
-    eventIds.map((id) => sql`${id}::uuid`),
+  if (eventSlugs.length === 0) return out;
+  const slugs = sql.join(
+    eventSlugs.map((s) => sql`${s}`),
     sql`, `,
   );
   const rows = await withoutTenant((tx) =>
-    tx.execute<PublicRow>(sql`select * from media.public_covers(array[${ids}]::uuid[])`),
+    tx.execute<PublicRow & { event_slug: string }>(
+      sql`select * from media.public_covers(array[${slugs}]::text[])`,
+    ),
   );
-  for (const r of rows) out.set(r.owner_id, toPublic(r));
+  for (const r of rows) out.set(r.event_slug, toPublic(r));
   return out;
 }
 
