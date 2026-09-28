@@ -19,7 +19,7 @@ try {
   const dir = new URL('./.generated/', import.meta.url);
   mkdirSync(dir, { recursive: true });
   writeFileSync(new URL('canary.json', dir), `${JSON.stringify(org, null, 2)}\n`);
-  console.log(`canary org ${org.slug}: ${Object.keys(org.filled).length} private columns filled`);
+  process.stdout.write(`canary org ${org.slug}: ${Object.keys(org.filled).length} private columns filled\n`);
 } finally {
   await admin.end();
   await closePools();
