@@ -601,7 +601,9 @@
         "too_many_attempts": "Demasiados códigos incorrectos. Vuelve a iniciar sesión para intentarlo otra vez.",
         "locked": "Demasiados intentos fallidos. Inténtalo de nuevo en 15 minutos.",
         "expired": "Este inicio de sesión caducó. Vuelve a iniciar sesión."
-      }
+      },
+      "checking": "Comprobando este dispositivo…",
+      "trust": "Confiar en este dispositivo durante 30 días (no pedir código aquí)"
     },
     "rateLimited": "Demasiados intentos de inicio de sesión. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
     "signedOutEverywhere": "Has cerrado sesión en todas partes.",
@@ -612,6 +614,22 @@
       "continue": "Continuar a {site}",
       "otherAccount": "Usar otra cuenta",
       "failed": "No pudimos devolverte a {site}. Inténtalo de nuevo."
+    },
+    "forgot": "¿Olvidaste tu contraseña?",
+    "humanRequired": "Completa la verificación de seguridad y vuelve a intentarlo.",
+    "humanFailed": "La verificación de seguridad no funcionó. Inténtalo de nuevo.",
+    "passwordReset": "Tu contraseña se cambió. Inicia sesión con la nueva.",
+    "social": {
+      "continueWith": {
+        "google": "Continuar con Google",
+        "apple": "Continuar con Apple"
+      },
+      "or": "o",
+      "failed": "No se pudo iniciar sesión con esa cuenta. Inténtalo de nuevo o usa tu correo.",
+      "cancelled": "Se canceló el inicio de sesión.",
+      "email_unverified": "El proveedor no ha verificado el correo de esa cuenta. Verifícalo allí o inicia sesión con tu correo.",
+      "no_email": "Esa cuenta no compartió un correo, así que no podemos crear una cuenta de Yayatoh con ella.",
+      "unavailable": "Esa opción de inicio de sesión no está disponible ahora."
     }
   },
   "orgPicker": {
@@ -3755,7 +3773,45 @@
     "sessionsExplain": "Cierra todas tus sesiones: en este dispositivo y en otros, en las apps y en los sitios propios de los organizadores. Tendrás que volver a iniciar sesión.",
     "signOutEverywhere": "Cerrar sesión en todas partes",
     "confirmSignOutEverywhere": "¿Cerrar sesión ahora en todos los dispositivos y sitios?",
-    "confirmSignOutEverywhereYes": "Sí, cerrar sesión en todas partes"
+    "confirmSignOutEverywhereYes": "Sí, cerrar sesión en todas partes",
+    "methods": {
+      "title": "Métodos de inicio de sesión",
+      "explain": "Inicia sesión con Google o Apple además de tu correo. Para vincular o desvincular te pediremos que confirmes que eres tú.",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "Vinculada el {date}",
+      "notLinked": "Sin vincular",
+      "link": "Vincular {provider}",
+      "unlink": "Desvincular {provider}",
+      "messages": {
+        "not_linked": "Esa cuenta no está vinculada.",
+        "last_method": "No puedes desvincularla: es tu única forma de iniciar sesión. Vincula otra cuenta o crea una contraseña primero.",
+        "linked": "Vinculada. Ya puedes iniciar sesión con ella.",
+        "already_linked": "Esa cuenta ya estaba vinculada.",
+        "linked_elsewhere": "Esa cuenta está vinculada a otra cuenta de Yayatoh.",
+        "provider_taken": "Ya hay otra cuenta de ese proveedor vinculada. Desvincúlala primero.",
+        "failed": "No se pudo vincular. Inténtalo de nuevo.",
+        "cancelled": "Se canceló la vinculación.",
+        "unavailable": "Esa opción de inicio de sesión no está disponible ahora.",
+        "unlinked": "Desvinculada."
+      }
+    },
+    "devices": {
+      "title": "Dispositivos de confianza",
+      "explain": "Los navegadores en los que elegiste «Confiar en este dispositivo» no piden tu código durante 30 días. Cambiar tu contraseña los elimina todos.",
+      "none": "No hay dispositivos de confianza.",
+      "trustedOn": "De confianza desde el {date}",
+      "lastUsed": "último uso {date}",
+      "neverUsed": "aún sin usar",
+      "until": "hasta el {date}",
+      "revoke": "Revocar",
+      "revokeNamed": "Revocar {device}",
+      "revokeAll": "Revocar todos los dispositivos de confianza",
+      "revoked": "Revocado. Ese dispositivo volverá a pedir tu código.",
+      "revokedAll": "Todos los dispositivos de confianza revocados. Todos volverán a pedir tu código."
+    }
   },
   "stepUp": {
     "title": "Confirma que eres tú",
@@ -3979,7 +4035,10 @@
   "tenantAccount": {
     "signIn": "Iniciar sesión",
     "signedInAs": "Sesión iniciada como {name}",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "label": "Tu cuenta",
+    "tickets": "Tus entradas",
+    "console": "Consola del organizador"
   },
   "impersonation": {
     "label": "Acceso del personal",
@@ -3996,6 +4055,97 @@
     "terminated": {
       "title": "Esta organización está cerrada",
       "body": "El soporte de Yayatoh la cerró. Sus páginas públicas están desconectadas y no se puede cambiar nada. Como propietario aún puedes abrirla y descargar tus datos, por ejemplo desde Actividad."
+    }
+  },
+  "humanCheck": {
+    "legend": "Verificación de seguridad",
+    "explain": "Confirma que eres una persona. Así frenamos los registros automáticos y el spam.",
+    "fakeLabel": "Soy una persona (verificación de prueba)",
+    "unavailable": "La verificación de seguridad no se cargó. Recarga la página o permite challenges.cloudflare.com en tu navegador. Si sigue sin cargar, escribe a support@yayatoh.com.",
+    "required": "Primero completa la verificación de seguridad.",
+    "failed": "La verificación de seguridad no funcionó. Inténtalo de nuevo."
+  },
+  "fakeSocial": {
+    "metaTitle": "Proveedor de inicio de sesión de prueba",
+    "eyebrow": "Proveedor de prueba (solo desarrollo)",
+    "title": "Iniciar sesión con {provider}",
+    "description": "Esta página sustituye a {provider} en desarrollo y pruebas. Introduce la cuenta que compartiría {provider}.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "Correo electrónico",
+    "name": "Nombre",
+    "verified": "El proveedor ha verificado este correo",
+    "hideEmail": "Ocultar mi correo (dirección de reenvío privada)",
+    "continue": "Continuar",
+    "cancel": "Cancelar",
+    "errors": {
+      "email_required": "Introduce un correo electrónico."
+    }
+  },
+  "socialLink": {
+    "metaTitle": "Confirma tu correo",
+    "eyebrow": "Un paso más",
+    "title": "Vincula tu cuenta de {provider}",
+    "description": "Ya hay una cuenta de Yayatoh con {email}. Para vincular {provider}, introduce el código de 6 dígitos que acabamos de enviar a esa dirección.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "Código de 6 dígitos",
+    "codeHint": "El código caduca en 10 minutos.",
+    "confirm": "Confirmar e iniciar sesión",
+    "startOver": "Volver a iniciar sesión",
+    "expired": "Esta solicitud ha caducado. Inicia sesión de nuevo para recibir otro código.",
+    "errors": {
+      "invalid_code": "Ese código no funcionó. Revisa el correo e inténtalo de nuevo.",
+      "expired": "Esta solicitud ha caducado. Inicia sesión de nuevo para recibir otro código.",
+      "too_many_attempts": "Demasiados códigos incorrectos. Inicia sesión de nuevo para recibir otro.",
+      "linked_elsewhere": "Esa cuenta ya está vinculada a otra cuenta de Yayatoh."
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "Tu cuenta",
+    "forgotMetaTitle": "¿Olvidaste tu contraseña?",
+    "forgotTitle": "Restablece tu contraseña",
+    "forgotDescription": "Introduce tu correo y te enviaremos un enlace para elegir una contraseña nueva.",
+    "email": "Correo electrónico",
+    "send": "Enviarme un enlace",
+    "sent": "Si hay una cuenta con ese correo, te hemos enviado un enlace para elegir una contraseña nueva. Funciona una vez, durante 30 minutos.",
+    "backToSignIn": "Volver a iniciar sesión",
+    "resetMetaTitle": "Elige una contraseña nueva",
+    "resetTitle": "Elige una contraseña nueva",
+    "newPassword": "Contraseña nueva",
+    "passwordHint": "Al menos 8 caracteres.",
+    "confirmPassword": "Escríbela otra vez",
+    "save": "Guardar contraseña nueva",
+    "askAgain": "Pedir un enlace nuevo",
+    "errors": {
+      "email": "Introduce un correo válido.",
+      "human_required": "Primero completa la verificación de seguridad.",
+      "human_failed": "La verificación de seguridad no funcionó. Inténtalo de nuevo.",
+      "rate_limited": "Demasiadas solicitudes. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}.",
+      "too_short": "Usa al menos 8 caracteres.",
+      "too_long": "Usa como máximo 128 caracteres.",
+      "mismatch": "Las dos contraseñas no coinciden.",
+      "invalid_token": "Este enlace caducó o ya se usó. Pide uno nuevo."
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "Tus entradas",
+    "title": "Tus entradas",
+    "signedOut": "Inicia sesión para ver las entradas que compraste a {org}.",
+    "signIn": "Iniciar sesión",
+    "emptyTitle": "Aún no tienes entradas",
+    "emptyDescription": "Aquí aparecen los pedidos que hagas en {org} con la sesión iniciada. Para otros pedidos, usa el enlace del correo de confirmación.",
+    "open": "Ver pedido",
+    "openNamed": "Ver el pedido de {event}",
+    "status": {
+      "paid": "Pagado",
+      "partially_refunded": "Reembolsado en parte",
+      "refunded": "Reembolsado",
+      "awaiting_payment": "Pendiente de pago"
     }
   }
 }

@@ -601,7 +601,9 @@
         "too_many_attempts": "错误验证码过多。请重新登录后再试。",
         "locked": "失败次数过多。请 15 分钟后重试。",
         "expired": "本次登录已过期，请重新登录。"
-      }
+      },
+      "checking": "正在检查此设备…",
+      "trust": "信任此设备 30 天（在此不再要求验证码）"
     },
     "rateLimited": "登录尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
     "signedOutEverywhere": "你已在所有地方退出登录。",
@@ -612,6 +614,22 @@
       "continue": "继续前往 {site}",
       "otherAccount": "使用其他账户",
       "failed": "无法将你送回 {site}。请重试。"
+    },
+    "forgot": "忘记密码？",
+    "humanRequired": "请完成安全验证后再试。",
+    "humanFailed": "安全验证未通过，请重试。",
+    "passwordReset": "你的密码已更改。请用新密码登录。",
+    "social": {
+      "continueWith": {
+        "google": "使用 Google 继续",
+        "apple": "使用 Apple 继续"
+      },
+      "or": "或",
+      "failed": "无法使用该账号登录。请重试，或使用你的电子邮件。",
+      "cancelled": "登录已取消。",
+      "email_unverified": "该账号的电子邮件尚未在服务商处验证。请先在那里验证，或使用电子邮件登录。",
+      "no_email": "该账号未提供电子邮件地址，因此无法为其创建 Yayatoh 账号。",
+      "unavailable": "此登录方式目前不可用。"
     }
   },
   "orgPicker": {
@@ -3755,7 +3773,45 @@
     "sessionsExplain": "结束你的所有会话：包括此设备和其他设备、各个应用，以及主办方自己的网站。之后需要重新登录。",
     "signOutEverywhere": "在所有地方退出登录",
     "confirmSignOutEverywhere": "现在从所有设备和网站退出登录吗？",
-    "confirmSignOutEverywhereYes": "是，全部退出"
+    "confirmSignOutEverywhereYes": "是，全部退出",
+    "methods": {
+      "title": "登录方式",
+      "explain": "除电子邮件外，还可使用 Google 或 Apple 登录。关联或解除关联时需要确认是你本人。",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "关联于 {date}",
+      "notLinked": "未关联",
+      "link": "关联 {provider}",
+      "unlink": "解除关联 {provider}",
+      "messages": {
+        "not_linked": "该账号未关联。",
+        "last_method": "无法解除：这是你唯一的登录方式。请先关联其他账号或设置密码。",
+        "linked": "已关联。现在可以用它登录。",
+        "already_linked": "该账号已经关联。",
+        "linked_elsewhere": "该账号已关联到另一个 Yayatoh 账号。",
+        "provider_taken": "该服务商的另一个账号已关联。请先解除关联。",
+        "failed": "关联失败，请重试。",
+        "cancelled": "关联已取消。",
+        "unavailable": "此登录方式目前不可用。",
+        "unlinked": "已解除关联。"
+      }
+    },
+    "devices": {
+      "title": "受信任的设备",
+      "explain": "你选择了“信任此设备”的浏览器在 30 天内不会要求验证码。更改密码会移除所有受信任设备。",
+      "none": "没有受信任的设备。",
+      "trustedOn": "自 {date} 起信任",
+      "lastUsed": "上次使用 {date}",
+      "neverUsed": "尚未使用",
+      "until": "至 {date}",
+      "revoke": "撤销",
+      "revokeNamed": "撤销 {device}",
+      "revokeAll": "撤销所有受信任的设备",
+      "revoked": "已撤销。该设备将再次要求验证码。",
+      "revokedAll": "已撤销所有受信任的设备。每台设备都将再次要求验证码。"
+    }
   },
   "stepUp": {
     "title": "确认是你本人",
@@ -3979,7 +4035,10 @@
   "tenantAccount": {
     "signIn": "登录",
     "signedInAs": "已以 {name} 的身份登录",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "label": "你的账号",
+    "tickets": "你的门票",
+    "console": "主办方控制台"
   },
   "impersonation": {
     "label": "工作人员访问",
@@ -3996,6 +4055,97 @@
     "terminated": {
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
+    }
+  },
+  "humanCheck": {
+    "legend": "安全验证",
+    "explain": "请确认你是真人。这有助于我们阻止自动注册和垃圾信息。",
+    "fakeLabel": "我是真人（测试验证）",
+    "unavailable": "安全验证未能加载。请刷新页面，或在浏览器中允许 challenges.cloudflare.com。如仍无法加载，请发邮件至 support@yayatoh.com。",
+    "required": "请先完成安全验证。",
+    "failed": "安全验证未通过，请重试。"
+  },
+  "fakeSocial": {
+    "metaTitle": "测试登录服务商",
+    "eyebrow": "测试服务商（仅限开发）",
+    "title": "使用 {provider} 登录",
+    "description": "此页面在开发和测试中代替 {provider}。请输入 {provider} 会提供的账号。",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "电子邮件",
+    "name": "姓名",
+    "verified": "服务商已验证此电子邮件",
+    "hideEmail": "隐藏我的电子邮件（私人转发地址）",
+    "continue": "继续",
+    "cancel": "取消",
+    "errors": {
+      "email_required": "请输入电子邮件地址。"
+    }
+  },
+  "socialLink": {
+    "metaTitle": "确认你的电子邮件",
+    "eyebrow": "还差一步",
+    "title": "关联你的 {provider} 账号",
+    "description": "{email} 已被一个 Yayatoh 账号使用。要关联 {provider}，请输入我们刚刚发送到该地址的 6 位验证码。",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "6 位验证码",
+    "codeHint": "验证码 10 分钟后失效。",
+    "confirm": "确认并登录",
+    "startOver": "返回登录",
+    "expired": "此请求已过期。请重新登录以获取新验证码。",
+    "errors": {
+      "invalid_code": "验证码不正确。请查看邮件后重试。",
+      "expired": "此请求已过期。请重新登录以获取新验证码。",
+      "too_many_attempts": "错误次数过多。请重新登录以获取新验证码。",
+      "linked_elsewhere": "该账号已关联到另一个 Yayatoh 账号。"
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "你的账号",
+    "forgotMetaTitle": "忘记密码？",
+    "forgotTitle": "重置密码",
+    "forgotDescription": "输入你的电子邮件，我们会发送一个设置新密码的链接。",
+    "email": "电子邮件",
+    "send": "发送链接",
+    "sent": "如果有账号使用该电子邮件，我们已发送设置新密码的链接。该链接 30 分钟内可用一次。",
+    "backToSignIn": "返回登录",
+    "resetMetaTitle": "设置新密码",
+    "resetTitle": "设置新密码",
+    "newPassword": "新密码",
+    "passwordHint": "至少 8 个字符。",
+    "confirmPassword": "再输入一次",
+    "save": "保存新密码",
+    "askAgain": "重新申请链接",
+    "errors": {
+      "email": "请输入有效的电子邮件地址。",
+      "human_required": "请先完成安全验证。",
+      "human_failed": "安全验证未通过，请重试。",
+      "rate_limited": "请求过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+      "too_short": "至少使用 8 个字符。",
+      "too_long": "最多使用 128 个字符。",
+      "mismatch": "两次输入的密码不一致。",
+      "invalid_token": "此链接已过期或已被使用。请重新申请。"
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "你的门票",
+    "title": "你的门票",
+    "signedOut": "登录后即可查看你在 {org} 购买的门票。",
+    "signIn": "登录",
+    "emptyTitle": "还没有门票",
+    "emptyDescription": "登录状态下在 {org} 下的订单会显示在这里。其他订单请使用确认邮件中的链接。",
+    "open": "查看订单",
+    "openNamed": "查看 {event} 的订单",
+    "status": {
+      "paid": "已支付",
+      "partially_refunded": "部分退款",
+      "refunded": "已退款",
+      "awaiting_payment": "待付款"
     }
   }
 }

@@ -47,7 +47,7 @@ export async function TenantHeader({ org, current }: { org: PublicOrganizer; cur
           </ul>
         </nav>
       ) : null}
-      <TenantAccount locale={locale} path={current ?? '/'} />
+      <TenantAccount locale={locale} path={current ?? '/'} orgId={org.orgId} />
     </header>
   );
 }

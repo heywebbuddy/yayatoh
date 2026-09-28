@@ -9,6 +9,7 @@ import { MediaPicture } from '@/components/media-picture.tsx';
 import { QuoteForm } from '@/components/quote-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
+import { humanCheckWidget } from '@/server/human-check.ts';
 import { requestQuoteAction } from './actions.ts';
 
 export async function generateMetadata({
@@ -152,7 +153,11 @@ export default async function PublicVenuePage({
         </h2>
         <p className="text-body text-zinc-500">{t('quoteDescription', { org: venue.organizerName })}</p>
         <Card size="panel">
-          <QuoteForm action={requestQuoteAction.bind(null, slug)} />
+          <QuoteForm
+            action={requestQuoteAction.bind(null, slug)}
+            humanCheck={humanCheckWidget()}
+            locale={locale}
+          />
         </Card>
       </section>
     </main>

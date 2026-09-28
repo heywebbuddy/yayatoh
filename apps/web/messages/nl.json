@@ -601,7 +601,9 @@
         "too_many_attempts": "Te veel foute codes. Log opnieuw in om het nog eens te proberen.",
         "locked": "Te veel mislukte pogingen. Probeer het over 15 minuten opnieuw.",
         "expired": "Deze aanmelding is verlopen. Log opnieuw in."
-      }
+      },
+      "checking": "Dit apparaat wordt gecontroleerd…",
+      "trust": "Dit apparaat 30 dagen vertrouwen (hier niet om een code vragen)"
     },
     "rateLimited": "Te veel inlogpogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
     "signedOutEverywhere": "Je bent overal afgemeld.",
@@ -612,6 +614,22 @@
       "continue": "Doorgaan naar {site}",
       "otherAccount": "Een ander account gebruiken",
       "failed": "We konden je niet terugsturen naar {site}. Probeer het opnieuw."
+    },
+    "forgot": "Wachtwoord vergeten?",
+    "humanRequired": "Rond de beveiligingscontrole af en probeer het opnieuw.",
+    "humanFailed": "De beveiligingscontrole is niet gelukt. Probeer het opnieuw.",
+    "passwordReset": "Je wachtwoord is gewijzigd. Log in met je nieuwe wachtwoord.",
+    "social": {
+      "continueWith": {
+        "google": "Doorgaan met Google",
+        "apple": "Doorgaan met Apple"
+      },
+      "or": "of",
+      "failed": "Inloggen met dat account is niet gelukt. Probeer het opnieuw of gebruik je e-mail.",
+      "cancelled": "Inloggen is geannuleerd.",
+      "email_unverified": "Het e-mailadres van dat account is niet bevestigd bij de aanbieder. Bevestig het daar of log in met je e-mail.",
+      "no_email": "Dat account heeft geen e-mailadres gedeeld, dus we kunnen er geen Yayatoh-account voor maken.",
+      "unavailable": "Deze inlogoptie is nu niet beschikbaar."
     }
   },
   "orgPicker": {
@@ -3755,7 +3773,45 @@
     "sessionsExplain": "Beëindigt al je sessies: op dit en andere apparaten, in apps en op de eigen sites van organisatoren. Je moet daarna opnieuw inloggen.",
     "signOutEverywhere": "Overal uitloggen",
     "confirmSignOutEverywhere": "Nu uitloggen op alle apparaten en sites?",
-    "confirmSignOutEverywhereYes": "Ja, overal uitloggen"
+    "confirmSignOutEverywhereYes": "Ja, overal uitloggen",
+    "methods": {
+      "title": "Inlogmethoden",
+      "explain": "Log naast je e-mail ook in met Google of Apple. Voor koppelen of ontkoppelen vragen we je te bevestigen dat jij het bent.",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "Gekoppeld op {date}",
+      "notLinked": "Niet gekoppeld",
+      "link": "{provider} koppelen",
+      "unlink": "{provider} ontkoppelen",
+      "messages": {
+        "not_linked": "Dat account is niet gekoppeld.",
+        "last_method": "Ontkoppelen kan niet: het is je enige manier om in te loggen. Koppel eerst een ander account of stel een wachtwoord in.",
+        "linked": "Gekoppeld. Je kunt er nu mee inloggen.",
+        "already_linked": "Dat account was al gekoppeld.",
+        "linked_elsewhere": "Dat account is gekoppeld aan een ander Yayatoh-account.",
+        "provider_taken": "Er is al een ander account van die aanbieder gekoppeld. Ontkoppel dat eerst.",
+        "failed": "Koppelen is niet gelukt. Probeer het opnieuw.",
+        "cancelled": "Koppelen is geannuleerd.",
+        "unavailable": "Deze inlogoptie is nu niet beschikbaar.",
+        "unlinked": "Ontkoppeld."
+      }
+    },
+    "devices": {
+      "title": "Vertrouwde apparaten",
+      "explain": "Browsers waarin je „Dit apparaat vertrouwen” koos, vragen 30 dagen niet om je code. Je wachtwoord wijzigen verwijdert ze allemaal.",
+      "none": "Geen vertrouwde apparaten.",
+      "trustedOn": "Vertrouwd sinds {date}",
+      "lastUsed": "laatst gebruikt {date}",
+      "neverUsed": "nog niet gebruikt",
+      "until": "tot {date}",
+      "revoke": "Intrekken",
+      "revokeNamed": "{device} intrekken",
+      "revokeAll": "Alle vertrouwde apparaten intrekken",
+      "revoked": "Ingetrokken. Dat apparaat vraagt weer om je code.",
+      "revokedAll": "Alle vertrouwde apparaten zijn ingetrokken. Elk apparaat vraagt weer om je code."
+    }
   },
   "stepUp": {
     "title": "Bevestig dat jij het bent",
@@ -3979,7 +4035,10 @@
   "tenantAccount": {
     "signIn": "Inloggen",
     "signedInAs": "Ingelogd als {name}",
-    "signOut": "Uitloggen"
+    "signOut": "Uitloggen",
+    "label": "Je account",
+    "tickets": "Je tickets",
+    "console": "Organisatorconsole"
   },
   "impersonation": {
     "label": "Toegang door medewerkers",
@@ -3996,6 +4055,97 @@
     "terminated": {
       "title": "Deze organisatie is gesloten",
       "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
+    }
+  },
+  "humanCheck": {
+    "legend": "Beveiligingscontrole",
+    "explain": "Bevestig dat je een mens bent. Zo houden we automatische aanmeldingen en spam tegen.",
+    "fakeLabel": "Ik ben een mens (testcontrole)",
+    "unavailable": "De beveiligingscontrole is niet geladen. Laad de pagina opnieuw of sta challenges.cloudflare.com toe in je browser. Lukt het nog steeds niet, mail dan naar support@yayatoh.com.",
+    "required": "Rond eerst de beveiligingscontrole af.",
+    "failed": "De beveiligingscontrole is niet gelukt. Probeer het opnieuw."
+  },
+  "fakeSocial": {
+    "metaTitle": "Test-inlogaanbieder",
+    "eyebrow": "Testaanbieder (alleen ontwikkeling)",
+    "title": "Inloggen met {provider}",
+    "description": "Deze pagina vervangt {provider} bij ontwikkeling en tests. Vul het account in dat {provider} zou delen.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "E-mail",
+    "name": "Naam",
+    "verified": "De aanbieder heeft dit e-mailadres bevestigd",
+    "hideEmail": "Mijn e-mail verbergen (privé-doorstuuradres)",
+    "continue": "Doorgaan",
+    "cancel": "Annuleren",
+    "errors": {
+      "email_required": "Vul een e-mailadres in."
+    }
+  },
+  "socialLink": {
+    "metaTitle": "Bevestig je e-mail",
+    "eyebrow": "Nog één stap",
+    "title": "Koppel je {provider}-account",
+    "description": "Er is al een Yayatoh-account met {email}. Vul de 6-cijferige code in die we net naar dat adres hebben gestuurd om {provider} te koppelen.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "6-cijferige code",
+    "codeHint": "De code verloopt over 10 minuten.",
+    "confirm": "Bevestigen en inloggen",
+    "startOver": "Terug naar inloggen",
+    "expired": "Dit verzoek is verlopen. Log opnieuw in voor een nieuwe code.",
+    "errors": {
+      "invalid_code": "Die code werkte niet. Controleer de e-mail en probeer het opnieuw.",
+      "expired": "Dit verzoek is verlopen. Log opnieuw in voor een nieuwe code.",
+      "too_many_attempts": "Te veel verkeerde codes. Log opnieuw in voor een nieuwe code.",
+      "linked_elsewhere": "Dat account is al gekoppeld aan een ander Yayatoh-account."
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "Je account",
+    "forgotMetaTitle": "Wachtwoord vergeten?",
+    "forgotTitle": "Wachtwoord opnieuw instellen",
+    "forgotDescription": "Vul je e-mail in en we sturen je een link om een nieuw wachtwoord te kiezen.",
+    "email": "E-mail",
+    "send": "Stuur me een link",
+    "sent": "Als er een account met dat e-mailadres is, hebben we een link gestuurd om een nieuw wachtwoord te kiezen. Hij werkt één keer, 30 minuten lang.",
+    "backToSignIn": "Terug naar inloggen",
+    "resetMetaTitle": "Kies een nieuw wachtwoord",
+    "resetTitle": "Kies een nieuw wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "passwordHint": "Minstens 8 tekens.",
+    "confirmPassword": "Nogmaals invullen",
+    "save": "Nieuw wachtwoord opslaan",
+    "askAgain": "Vraag een nieuwe link aan",
+    "errors": {
+      "email": "Vul een geldig e-mailadres in.",
+      "human_required": "Rond eerst de beveiligingscontrole af.",
+      "human_failed": "De beveiligingscontrole is niet gelukt. Probeer het opnieuw.",
+      "rate_limited": "Te veel verzoeken. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+      "too_short": "Gebruik minstens 8 tekens.",
+      "too_long": "Gebruik hoogstens 128 tekens.",
+      "mismatch": "De twee wachtwoorden komen niet overeen.",
+      "invalid_token": "Deze link is verlopen of al gebruikt. Vraag een nieuwe aan."
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "Je tickets",
+    "title": "Je tickets",
+    "signedOut": "Log in om de tickets te zien die je bij {org} hebt gekocht.",
+    "signIn": "Inloggen",
+    "emptyTitle": "Nog geen tickets",
+    "emptyDescription": "Bestellingen die je ingelogd bij {org} plaatst, verschijnen hier. Gebruik voor andere bestellingen de link in je bevestigingsmail.",
+    "open": "Bestelling bekijken",
+    "openNamed": "Bestelling voor {event} bekijken",
+    "status": {
+      "paid": "Betaald",
+      "partially_refunded": "Deels terugbetaald",
+      "refunded": "Terugbetaald",
+      "awaiting_payment": "Wacht op betaling"
     }
   }
 }

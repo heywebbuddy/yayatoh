@@ -1,14 +1,7 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
-import {
-  FAKE_HUMAN_TOKEN,
-  fakeHumanCheck,
-  type HumanCheck,
-  signLinkToken,
-  turnstileHumanCheck,
-  verifyLinkToken,
-} from '@yayatoh/platform';
+import { signLinkToken, verifyLinkToken } from '@yayatoh/platform';
 import { DEVICE_COOKIE } from '@yayatoh/platform/security';
 import { publicVenueMapQuery } from '@yayatoh/seating';
 import { cookies } from 'next/headers';
@@ -70,48 +63,8 @@ export async function forgetFinder(eventId: string) {
   jar.delete(viewCookie(eventId));
 }
 
-let humanCheck: HumanCheck | null | undefined;
-
-/**
- * The challenge shown past the rate limit: Cloudflare Turnstile when its keys are set
- * (`HUMAN_CHECK_PROVIDER=turnstile`, owner account), otherwise the fake checkbox in dev, preview
- * and CI. Production without Turnstile has no challenge (null): over-limit lookups wait instead.
- */
-export function getHumanCheck(): HumanCheck | null {
-  if (humanCheck !== undefined) return humanCheck;
-  const production = process.env.VERCEL_ENV === 'production';
-  const provider = process.env.HUMAN_CHECK_PROVIDER || (production ? 'turnstile' : 'fake');
-  const siteKey = process.env.TURNSTILE_SITE_KEY;
-  const secretKey = process.env.TURNSTILE_SECRET_KEY;
-  humanCheck =
-    provider === 'turnstile'
-      ? siteKey && secretKey
-        ? turnstileHumanCheck({ siteKey, secretKey })
-        : null
-      : production
-        ? null
-        : fakeHumanCheck;
-  return humanCheck;
-}
-
-/** What the browser needs to show the challenge. */
-export function humanCheckWidget(): {
-  provider: 'fake' | 'turnstile';
-  siteKey: string | null;
-  fakeToken: string;
-} | null {
-  const h = getHumanCheck();
-  return h
-    ? { provider: h.provider, siteKey: h.siteKey, fakeToken: h.provider === 'fake' ? FAKE_HUMAN_TOKEN : '' }
-    : null;
-}
-
-/** Did this form carry a solved challenge? */
-export async function passedHumanCheck(form: FormData): Promise<boolean | null> {
-  const token = String(form.get('cf-turnstile-response') ?? form.get('human') ?? '');
-  if (!token) return null;
-  return (await getHumanCheck()?.verify(token)) ?? false;
-}
+// The challenge moved to ./human-check.ts (M1.2f: sign-in, codes, resets and quotes use it too).
+export { getHumanCheck, humanCheckWidget, passedHumanCheck } from './human-check.ts';
 
 /** The venue map, only when the organizer opened it; null otherwise (closed, or no module). */
 export async function openVenueMap(orgId: string, eventId: string) {

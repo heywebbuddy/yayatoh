@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { FAKE_HUMAN_TOKEN, fakeHumanCheck, turnstileHumanCheck } from '../src/human-check.ts';
+import {
+  FAKE_HUMAN_FAIL_TOKEN,
+  FAKE_HUMAN_TOKEN,
+  fakeHumanCheck,
+  turnstileHumanCheck,
+} from '../src/human-check.ts';
 import { windowStart } from '../src/rate-limit.ts';
 
 describe('human check port', () => {
@@ -7,6 +12,8 @@ describe('human check port', () => {
     expect(await fakeHumanCheck.verify(FAKE_HUMAN_TOKEN)).toBe(true);
     expect(await fakeHumanCheck.verify('')).toBe(false);
     expect(await fakeHumanCheck.verify('anything')).toBe(false);
+    // M1.2f: the always-fail token tests use for the "check failed" path.
+    expect(await fakeHumanCheck.verify(FAKE_HUMAN_FAIL_TOKEN)).toBe(false);
     expect(fakeHumanCheck.siteKey).toBeNull();
   });
 

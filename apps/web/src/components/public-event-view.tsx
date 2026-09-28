@@ -36,6 +36,7 @@ import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
 import { EventReviews } from '@/components/reviews/event-reviews.tsx';
+import { TenantAccount } from '@/components/tenant-account.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -359,6 +360,12 @@ export async function PublicEventView({
           // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
           dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
         />
+      ) : null}
+      {orgId ? (
+        // M1.2f: the account corner on the org's own site (this host's session; no other org shown).
+        <div className="flex justify-end px-4 pt-3 md:px-6">
+          <TenantAccount locale={locale} path={`/events/${slug}`} orgId={orgId} />
+        </div>
       ) : null}
       <section className="relative m-2 overflow-hidden rounded-panel bg-black px-6 pt-28 pb-10 text-white md:px-16 md:pt-32">
         {cover ? (

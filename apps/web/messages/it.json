@@ -601,7 +601,9 @@
         "too_many_attempts": "Troppi codici errati. Accedi di nuovo per riprovare.",
         "locked": "Troppi tentativi non riusciti. Riprova tra 15 minuti.",
         "expired": "Questo accesso è scaduto. Accedi di nuovo."
-      }
+      },
+      "checking": "Controllo di questo dispositivo…",
+      "trust": "Considera attendibile questo dispositivo per 30 giorni (non chiedere il codice qui)"
     },
     "rateLimited": "Troppi tentativi di accesso. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
     "signedOutEverywhere": "Sei uscito ovunque.",
@@ -612,6 +614,22 @@
       "continue": "Continua su {site}",
       "otherAccount": "Usa un altro account",
       "failed": "Non siamo riusciti a riportarti su {site}. Riprova."
+    },
+    "forgot": "Password dimenticata?",
+    "humanRequired": "Completa il controllo di sicurezza e riprova.",
+    "humanFailed": "Il controllo di sicurezza non è riuscito. Riprova.",
+    "passwordReset": "La password è stata cambiata. Accedi con quella nuova.",
+    "social": {
+      "continueWith": {
+        "google": "Continua con Google",
+        "apple": "Continua con Apple"
+      },
+      "or": "oppure",
+      "failed": "L'accesso con quell'account non è riuscito. Riprova o usa la tua email.",
+      "cancelled": "L'accesso è stato annullato.",
+      "email_unverified": "L'email di quell'account non è verificata presso il fornitore. Verificala lì o accedi con la tua email.",
+      "no_email": "Quell'account non ha condiviso un indirizzo email, quindi non possiamo creare un account Yayatoh.",
+      "unavailable": "Questa opzione di accesso non è disponibile ora."
     }
   },
   "orgPicker": {
@@ -3755,7 +3773,45 @@
     "sessionsExplain": "Chiude tutte le tue sessioni: su questo e su altri dispositivi, nelle app e sui siti degli organizzatori. Dovrai accedere di nuovo.",
     "signOutEverywhere": "Esci ovunque",
     "confirmSignOutEverywhere": "Uscire ora da tutti i dispositivi e i siti?",
-    "confirmSignOutEverywhereYes": "Sì, esci ovunque"
+    "confirmSignOutEverywhereYes": "Sì, esci ovunque",
+    "methods": {
+      "title": "Metodi di accesso",
+      "explain": "Accedi con Google o Apple oltre che con la tua email. Per collegare o scollegare ti chiederemo di confermare che sei tu.",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "Collegato il {date}",
+      "notLinked": "Non collegato",
+      "link": "Collega {provider}",
+      "unlink": "Scollega {provider}",
+      "messages": {
+        "not_linked": "Quell'account non è collegato.",
+        "last_method": "Non puoi scollegarlo: è l'unico modo per accedere. Collega prima un altro account o imposta una password.",
+        "linked": "Collegato. Ora puoi accedere con questo account.",
+        "already_linked": "Quell'account era già collegato.",
+        "linked_elsewhere": "Quell'account è collegato a un altro account Yayatoh.",
+        "provider_taken": "Un altro account di quel fornitore è già collegato. Scollegalo prima.",
+        "failed": "Il collegamento non è riuscito. Riprova.",
+        "cancelled": "Il collegamento è stato annullato.",
+        "unavailable": "Questa opzione di accesso non è disponibile ora.",
+        "unlinked": "Scollegato."
+      }
+    },
+    "devices": {
+      "title": "Dispositivi attendibili",
+      "explain": "I browser in cui hai scelto «Considera attendibile questo dispositivo» non chiedono il codice per 30 giorni. Cambiare la password li rimuove tutti.",
+      "none": "Nessun dispositivo attendibile.",
+      "trustedOn": "Attendibile dal {date}",
+      "lastUsed": "ultimo uso {date}",
+      "neverUsed": "non ancora usato",
+      "until": "fino al {date}",
+      "revoke": "Revoca",
+      "revokeNamed": "Revoca {device}",
+      "revokeAll": "Revoca tutti i dispositivi attendibili",
+      "revoked": "Revocato. Quel dispositivo chiederà di nuovo il codice.",
+      "revokedAll": "Tutti i dispositivi attendibili sono stati revocati. Ogni dispositivo chiederà di nuovo il codice."
+    }
   },
   "stepUp": {
     "title": "Conferma che sei tu",
@@ -3979,7 +4035,10 @@
   "tenantAccount": {
     "signIn": "Accedi",
     "signedInAs": "Accesso eseguito come {name}",
-    "signOut": "Esci"
+    "signOut": "Esci",
+    "label": "Il tuo account",
+    "tickets": "I tuoi biglietti",
+    "console": "Console dell'organizzatore"
   },
   "impersonation": {
     "label": "Accesso dello staff",
@@ -3996,6 +4055,97 @@
     "terminated": {
       "title": "Questa organizzazione è chiusa",
       "body": "Il supporto Yayatoh l’ha chiusa. Le sue pagine pubbliche sono offline e non si può modificare nulla. Come proprietario puoi ancora aprirla e scaricare i tuoi dati, per esempio da Attività."
+    }
+  },
+  "humanCheck": {
+    "legend": "Controllo di sicurezza",
+    "explain": "Conferma di essere una persona. Ci aiuta a bloccare registrazioni automatiche e spam.",
+    "fakeLabel": "Sono una persona (controllo di prova)",
+    "unavailable": "Il controllo di sicurezza non si è caricato. Ricarica la pagina o consenti challenges.cloudflare.com nel browser. Se ancora non si carica, scrivi a support@yayatoh.com.",
+    "required": "Completa prima il controllo di sicurezza.",
+    "failed": "Il controllo di sicurezza non è riuscito. Riprova."
+  },
+  "fakeSocial": {
+    "metaTitle": "Fornitore di accesso di prova",
+    "eyebrow": "Fornitore di prova (solo sviluppo)",
+    "title": "Accedi con {provider}",
+    "description": "Questa pagina sostituisce {provider} in sviluppo e nei test. Inserisci l'account che {provider} condividerebbe.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "Email",
+    "name": "Nome",
+    "verified": "Il fornitore ha verificato questa email",
+    "hideEmail": "Nascondi la mia email (indirizzo di inoltro privato)",
+    "continue": "Continua",
+    "cancel": "Annulla",
+    "errors": {
+      "email_required": "Inserisci un indirizzo email."
+    }
+  },
+  "socialLink": {
+    "metaTitle": "Conferma la tua email",
+    "eyebrow": "Ancora un passaggio",
+    "title": "Collega il tuo account {provider}",
+    "description": "Un account Yayatoh usa già {email}. Per collegare {provider}, inserisci il codice a 6 cifre che abbiamo appena inviato a quell'indirizzo.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "Codice a 6 cifre",
+    "codeHint": "Il codice scade tra 10 minuti.",
+    "confirm": "Conferma e accedi",
+    "startOver": "Torna all'accesso",
+    "expired": "Questa richiesta è scaduta. Accedi di nuovo per ricevere un nuovo codice.",
+    "errors": {
+      "invalid_code": "Quel codice non ha funzionato. Controlla l'email e riprova.",
+      "expired": "Questa richiesta è scaduta. Accedi di nuovo per ricevere un nuovo codice.",
+      "too_many_attempts": "Troppi codici errati. Accedi di nuovo per ricevere un nuovo codice.",
+      "linked_elsewhere": "Quell'account è già collegato a un altro account Yayatoh."
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "Il tuo account",
+    "forgotMetaTitle": "Password dimenticata?",
+    "forgotTitle": "Reimposta la password",
+    "forgotDescription": "Inserisci la tua email e ti invieremo un link per scegliere una nuova password.",
+    "email": "Email",
+    "send": "Inviami un link",
+    "sent": "Se un account usa quell'email, abbiamo inviato un link per scegliere una nuova password. Funziona una volta, per 30 minuti.",
+    "backToSignIn": "Torna all'accesso",
+    "resetMetaTitle": "Scegli una nuova password",
+    "resetTitle": "Scegli una nuova password",
+    "newPassword": "Nuova password",
+    "passwordHint": "Almeno 8 caratteri.",
+    "confirmPassword": "Riscrivila",
+    "save": "Salva la nuova password",
+    "askAgain": "Chiedi un nuovo link",
+    "errors": {
+      "email": "Inserisci un indirizzo email valido.",
+      "human_required": "Completa prima il controllo di sicurezza.",
+      "human_failed": "Il controllo di sicurezza non è riuscito. Riprova.",
+      "rate_limited": "Troppe richieste. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+      "too_short": "Usa almeno 8 caratteri.",
+      "too_long": "Usa al massimo 128 caratteri.",
+      "mismatch": "Le due password non coincidono.",
+      "invalid_token": "Questo link è scaduto o è già stato usato. Chiedine uno nuovo."
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "I tuoi biglietti",
+    "title": "I tuoi biglietti",
+    "signedOut": "Accedi per vedere i biglietti acquistati da {org}.",
+    "signIn": "Accedi",
+    "emptyTitle": "Ancora nessun biglietto",
+    "emptyDescription": "Qui compaiono gli ordini fatti su {org} dopo l'accesso. Per gli altri ordini usa il link nell'email di conferma.",
+    "open": "Vedi l'ordine",
+    "openNamed": "Vedi l'ordine per {event}",
+    "status": {
+      "paid": "Pagato",
+      "partially_refunded": "Rimborsato in parte",
+      "refunded": "Rimborsato",
+      "awaiting_payment": "In attesa di pagamento"
     }
   }
 }
