@@ -1,6 +1,6 @@
 # Phase 4 plan — Weddings, galas and social events
 
-Status: **approved by the owner** (2026-09-28): all eight decisions accepted; Wave A started. The owner also asked for gala donations (paddle raise, pledges) to be planned. Section 6 adds that plan: **its decisions P4-9 to P4-17 await the owner's approval**. Roadmap: `docs/roadmap.md` Phase 4 (M4.1–M4.7). Owner priority 2.
+Status: **approved by the owner** (2026-09-28): all eight decisions accepted; Wave A started. The owner also asked for gala donations (paddle raise, pledges) to be planned. Section 6 adds that plan; the owner approved its decisions P4-9 to P4-17 (2026-09-28). Roadmap: `docs/roadmap.md` Phase 4 (M4.1–M4.7). Owner priority 2.
 
 ## 1. What I'm asking you to decide
 
@@ -142,7 +142,7 @@ The exit criterion then depends on the date of a real event.
 
 ## 6. Gala donations (added at the owner's request)
 
-Status: **awaiting the owner's approval** (planned 2026-09-28). Roadmap: none yet; this adds M4.8 to Phase 4.
+Status: **approved by the owner** (2026-09-28): decisions P4-9 to P4-17 accepted as recommended. Roadmap: none yet; this adds M4.8 to Phase 4.
 
 **How gala fundraising works in practice.** Most of a gala's money is raised in the room, not from tickets:
 - **Fund-a-need (paddle raise).** After dinner, the host or a hired auctioneer calls giving levels from the top down ("$10,000 to fund a classroom… $5,000… $1,000… $250"). Guests raise a numbered paddle. Spotters call the paddle numbers; a recorder writes them down. A thermometer on the screens climbs toward the goal. Often a sponsor has promised to **match** gifts up to a cap, which the host announces to lift the room.
