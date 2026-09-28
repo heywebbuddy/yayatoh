@@ -90,6 +90,9 @@
       "notifications": {
         "test": "測試通知"
       },
+      "seating": {
+        "finder-code": "座位查詢代碼"
+      },
       "payments": {
         "destination-changed": "撥款帳戶變更"
       }
@@ -110,7 +113,12 @@
       "no_device": "沒有可推播的裝置",
       "no_address": "沒有地址",
       "provider_error": "郵件服務商拒收",
-      "retrying": "發生錯誤後重試中"
+      "retrying": "發生錯誤後重試中",
+      "bounced": "已抑制：此地址先前曾退信",
+      "complained": "已抑制：收件人曾將先前的郵件標為垃圾郵件",
+      "event_cancelled": "活動或場次已取消",
+      "event_started": "活動已經開始",
+      "event_postponed": "活動延期期間暫緩"
     },
     "channels": {
       "email": "電子郵件",
@@ -147,7 +155,20 @@
       "saved": "通知設定已儲存。",
       "test": "傳送測試通知給我",
       "testSent": "已傳送測試通知，請查看鈴鐺。",
-      "required": "票券、收據與安全性郵件一律會寄給您。"
+      "required": "票券、收據與安全性郵件一律會寄給您。",
+      "language": {
+        "title": "郵件語言",
+        "label": "有關你的組織的郵件語言",
+        "hint": "新訂單、訊息和其他團隊通知將使用此語言。",
+        "save": "儲存語言",
+        "saved": "語言已儲存。"
+      }
+    },
+    "delivery": {
+      "delivered": "已送達",
+      "bounced": "退信：地址不存在",
+      "soft_bounced": "暫時退信（信箱已滿或無法使用）",
+      "complained": "收件人標為垃圾郵件"
     }
   },
   "nav": {
@@ -187,6 +208,7 @@
     "templates": "範本",
     "apiKeys": "API 金鑰",
     "publicSite": "公開網站",
+    "emails": "郵件範本",
     "speakers": "演講嘉賓",
     "sponsors": "贊助商",
     "media": "圖片"
@@ -3002,6 +3024,40 @@
       "emptyTitle": "目前沒有公開活動",
       "emptyDescription": "發布活動即可取得小工具程式碼。"
     }
+  },
+  "emailTemplates": {
+    "title": "郵件範本",
+    "description": "為 Yayatoh 代你寄送的郵件，依語言撰寫你自己的主旨和開頭段落。",
+    "chooseLabel": "選擇郵件",
+    "kind": "郵件",
+    "language": "語言",
+    "open": "開啟",
+    "editing": "{kind} · {language}",
+    "formLabel": "郵件文案",
+    "readOnly": "你可以查看這些郵件。只有擁有者和管理員可以變更。",
+    "subject": "主旨",
+    "intro": "開頭段落",
+    "defaultIs": "預設：{copy}",
+    "placeholdersTitle": "可用的預留位置",
+    "emptyMeansDefault": "留空即使用預設文案。",
+    "save": "儲存",
+    "reset": "恢復預設",
+    "saved": "已儲存。新郵件將使用此文案。",
+    "resetDone": "已恢復預設。新郵件將使用預設文案。",
+    "previewTitle": "預覽",
+    "previewUpdating": "正在更新預覽…",
+    "previewSubject": "主旨：{subject}",
+    "previewBlocked": "請修正標示的欄位以查看預覽。",
+    "previewFrame": "郵件預覽：{subject}",
+    "errors": {
+      "invalid_syntax": "無效：預留位置名稱兩側的每個左大括號都需要對應的右大括號。",
+      "unknown_placeholder": "只能使用下方列出的預留位置。",
+      "too_long": "內容過長。"
+    },
+    "customized": "已自訂的郵件",
+    "noneTitle": "尚無自訂的郵件",
+    "noneDescription": "所有郵件都使用 Yayatoh 的預設文案。",
+    "changed": "修改時間"
   },
   "setupGuide": {
     "title": "設定指南",

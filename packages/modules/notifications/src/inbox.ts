@@ -141,6 +141,8 @@ export const MessageLogDto = z.object({
   channel: z.enum(['email', 'sms', 'push']),
   status: z.enum(['queued', 'scheduled', 'sent', 'suppressed', 'failed', 'canceled']),
   reason: z.string().nullable(),
+  /** The provider's latest delivery report (M1.10d), for sent messages. */
+  delivery: z.enum(['delivered', 'bounced', 'soft_bounced', 'complained']).nullable(),
   recipient: z.string().nullable(),
   subject: z.string().nullable(),
   at: z.date(),
@@ -156,6 +158,7 @@ const toLog = (now: Date) => (r: typeof messages.$inferSelect) => ({
       ? ('scheduled' as const)
       : (r.status as 'queued' | 'sent' | 'suppressed' | 'failed' | 'canceled'),
   reason: r.reason,
+  delivery: (r.delivery as 'delivered' | 'bounced' | 'soft_bounced' | 'complained' | null) ?? null,
   recipient: r.recipientEmail,
   subject: r.subject,
   at: r.status === 'sent' && r.sentAt ? r.sentAt : r.status === 'queued' ? r.sendAfter : r.updatedAt,

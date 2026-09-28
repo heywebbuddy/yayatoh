@@ -22,4 +22,11 @@ export {
   twoFactorService,
   verifySignInChallenge,
 } from './two-factor.ts';
-export { getUsersByIds, type UserSummary } from './users.ts';
+export {
+  getUserLocale,
+  getUsersByIds,
+  setUserLocale,
+  USER_LOCALES,
+  type UserLocale,
+  type UserSummary,
+} from './users.ts';

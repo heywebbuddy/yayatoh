@@ -88,6 +88,16 @@ describe('page types and headers', () => {
   it('sets the full header set per page type', () => {
     const console = securityHeaders('console', { nonce, https: true });
     expect(console['x-frame-options']).toBe('DENY');
+    // M1.10d: the console frames same-origin email previews (their own sandboxed policy) and
+    // nothing else; other page types still frame nothing. Styles stay nonce-only either way.
+    const consoleCsp = parseCsp(console['content-security-policy'] as string);
+    expect(consoleCsp.get('frame-src')).toEqual(["'self'"]);
+    expect(consoleCsp.get('style-src-attr')).toEqual(["'none'"]);
+    expect(consoleCsp.get('style-src')).not.toContain("'unsafe-inline'");
+    for (const t of ['checkout', 'token', 'scan', 'public'] as const)
+      expect(
+        parseCsp(securityHeaders(t, { nonce })['content-security-policy'] as string).get('frame-src'),
+      ).toEqual(["'none'"]);
     expect(console['referrer-policy']).toBe('same-origin');
     expect(console['strict-transport-security']).toMatch(/max-age=63072000/);
     expect(console['cross-origin-opener-policy']).toBe('same-origin');

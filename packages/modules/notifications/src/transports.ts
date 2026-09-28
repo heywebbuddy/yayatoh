@@ -1,6 +1,7 @@
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { type DeliveryEvent, signFakeDeliveryEvents } from './delivery.ts';
 
 /**
  * Channel adapters (roadmap §6.4 `ChannelAdapter`). Production adapters need the owner's
@@ -98,11 +99,36 @@ export interface DevMailboxEntry extends OutboundEmail {
 
 export const devMailboxDir = () => process.env.DEV_MAILBOX_DIR ?? join(tmpdir(), 'yayatoh-dev-mailbox');
 
+const EVENTS_DIR = 'delivery-events';
+
+/**
+ * What the fake provider reports for an address (like SES's mailbox simulator): the local part
+ * before any `+tag` decides. `bounce@` hard-bounces, `softbounce@` soft-bounces, `complaint@` is
+ * delivered and then complained about; everything else is delivered.
+ */
+export function fakeOutcome(address: string): Array<Pick<DeliveryEvent, 'type' | 'bounceType' | 'detail'>> {
+  const local = (address.split('@')[0] ?? '').split('+')[0]?.toLowerCase() ?? '';
+  if (local === 'bounce') return [{ type: 'bounced', bounceType: 'hard', detail: '550 5.1.1 user unknown' }];
+  if (local === 'softbounce')
+    return [{ type: 'bounced', bounceType: 'soft', detail: '452 4.2.2 mailbox full' }];
+  if (local === 'complaint')
+    return [
+      { type: 'delivered', bounceType: null, detail: null },
+      { type: 'complained', bounceType: null, detail: 'abuse' },
+    ];
+  return [{ type: 'delivered', bounceType: null, detail: null }];
+}
+
 /**
  * Development and CI: every message is written as JSON to a local folder that the web app's
- * dev mailbox (`/dev/mailbox`, dev auth only) reads. Refuses to run in production.
+ * dev mailbox (`/dev/mailbox`, dev auth only) reads. Refuses to run in production. With a
+ * `deliverySecret`, each email also leaves the fake provider's signed delivery report
+ * (`fakeOutcome`) in `delivery-events/`, which the dev drain posts through the webhook path.
  */
-export function devMailboxTransports(dir = devMailboxDir()): Transports {
+export function devMailboxTransports(
+  dir = devMailboxDir(),
+  opts: { deliverySecret?: string | null } = {},
+): Transports {
   if (process.env.VERCEL_ENV === 'production')
     throw new Error('The dev mailbox is not allowed in production');
   mkdirSync(dir, { recursive: true });
@@ -114,7 +140,21 @@ export function devMailboxTransports(dir = devMailboxDir()): Transports {
       join(dir, `${id}.json`),
       JSON.stringify({ ...m, id, at, channel } satisfies DevMailboxEntry),
     );
-    return { providerMessageId: `dev-${id}` };
+    const providerMessageId = `dev-${id}`;
+    if (channel === 'email' && opts.deliverySecret && /^[0-9a-f-]{36}$/.test(m.idempotencyKey)) {
+      mkdirSync(join(dir, EVENTS_DIR), { recursive: true });
+      const signed = signFakeDeliveryEvents(
+        opts.deliverySecret,
+        fakeOutcome(m.to).map((o) => ({
+          ...o,
+          messageId: m.idempotencyKey,
+          providerMessageId,
+          recipient: m.to,
+        })),
+      );
+      writeFileSync(join(dir, EVENTS_DIR, `${id}.json`), JSON.stringify(signed));
+    }
+    return { providerMessageId };
   };
   const blank = { from: { name: '', address: '' }, html: '', headers: {} };
   return {
@@ -136,9 +176,9 @@ export function devMailboxTransports(dir = devMailboxDir()): Transports {
   };
 }
 
-/** Newest first; optionally only messages to one address. */
+/** Newest first; optionally only messages to one address, or the one entry with `id`. */
 export function readDevMailbox(
-  opts: { to?: string; limit?: number } = {},
+  opts: { to?: string; limit?: number; id?: string } = {},
   dir = devMailboxDir(),
 ): DevMailboxEntry[] {
   let files: string[];
@@ -147,6 +187,12 @@ export function readDevMailbox(
   } catch {
     return [];
   }
+  if (opts.id !== undefined) {
+    const file = `${opts.id}.json`;
+    return /^[A-Za-z0-9-]+$/.test(opts.id) && files.includes(file)
+      ? [JSON.parse(readFileSync(join(dir, file), 'utf8')) as DevMailboxEntry]
+      : [];
+  }
   const to = opts.to?.trim().toLowerCase();
   const out: DevMailboxEntry[] = [];
   for (const f of files.sort().reverse()) {
@@ -154,6 +200,32 @@ export function readDevMailbox(
     if (to && entry.to.toLowerCase() !== to) continue;
     out.push(entry);
     if (out.length >= (opts.limit ?? 50)) break;
+  }
+  return out;
+}
+
+/**
+ * Dev/CI: take the fake provider's pending delivery reports (each once: a file is claimed by
+ * renaming it, so two drains never post the same report; the webhook dedupes anyway).
+ */
+export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: string; signature: string }> {
+  const folder = join(dir, EVENTS_DIR);
+  let files: string[];
+  try {
+    files = readdirSync(folder).filter((f) => f.endsWith('.json'));
+  } catch {
+    return [];
+  }
+  const out: Array<{ body: string; signature: string }> = [];
+  for (const f of files.sort()) {
+    const claimed = join(folder, `${f}.${process.pid}.claimed`);
+    try {
+      renameSync(join(folder, f), claimed);
+    } catch {
+      continue;
+    }
+    out.push(JSON.parse(readFileSync(claimed, 'utf8')));
+    rmSync(claimed, { force: true });
   }
   return out;
 }

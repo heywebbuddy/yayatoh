@@ -15,3 +15,6 @@ attendees and events down the tiers.
   stop) and report it. Reports wait for platform staff review.
 - Contacts can write at most `CONTACT_HOURLY_LIMIT` messages per hour into one conversation.
 - The public view of a conversation is allowlisted: no staff names, user ids or internal ids.
+- Platform staff review reports (M1.10d) through `reportsForReviewTx` (a platform_reader read in
+  apps/admin, allowlisted: no contact addresses or internal ids) and `reviewReportCommand` (a
+  platform actor; resolved or dismissed with a note, audited in the org; once only).

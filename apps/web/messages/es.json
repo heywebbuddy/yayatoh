@@ -90,6 +90,9 @@
       "notifications": {
         "test": "Notificación de prueba"
       },
+      "seating": {
+        "finder-code": "Código del buscador de asientos"
+      },
       "payments": {
         "destination-changed": "Cambio de cuenta de pagos"
       }
@@ -110,7 +113,12 @@
       "no_device": "No hay dispositivo para enviar",
       "no_address": "Sin dirección",
       "provider_error": "El proveedor de correo lo rechazó",
-      "retrying": "Reintentando tras un error"
+      "retrying": "Reintentando tras un error",
+      "bounced": "Suprimido: esta dirección rebotó antes",
+      "complained": "Suprimido: el destinatario marcó un correo anterior como spam",
+      "event_cancelled": "El evento o la fecha se canceló",
+      "event_started": "El evento ya había empezado",
+      "event_postponed": "En espera mientras el evento está aplazado"
     },
     "channels": {
       "email": "Correo",
@@ -147,7 +155,20 @@
       "saved": "Tus ajustes de notificaciones se guardaron.",
       "test": "Enviarme una notificación de prueba",
       "testSent": "Notificación de prueba enviada. Revisa la campana.",
-      "required": "Las entradas, los recibos y los correos de seguridad siempre te llegan."
+      "required": "Las entradas, los recibos y los correos de seguridad siempre te llegan.",
+      "language": {
+        "title": "Idioma de los correos",
+        "label": "Idioma de los correos sobre tus organizaciones",
+        "hint": "Los nuevos pedidos, mensajes y otros avisos del equipo se escriben en este idioma.",
+        "save": "Guardar idioma",
+        "saved": "Idioma guardado."
+      }
+    },
+    "delivery": {
+      "delivered": "Entregado",
+      "bounced": "Rebotado: la dirección no existe",
+      "soft_bounced": "Rebotado por ahora (buzón lleno o no disponible)",
+      "complained": "El destinatario lo marcó como spam"
     }
   },
   "nav": {
@@ -187,6 +208,7 @@
     "templates": "Plantillas",
     "apiKeys": "Claves de API",
     "publicSite": "Sitio público",
+    "emails": "Plantillas de correo",
     "speakers": "Ponentes",
     "sponsors": "Patrocinadores",
     "media": "Imágenes"
@@ -3002,6 +3024,40 @@
       "emptyTitle": "Aún no hay eventos públicos",
       "emptyDescription": "Publica un evento para obtener su fragmento del widget."
     }
+  },
+  "emailTemplates": {
+    "title": "Plantillas de correo",
+    "description": "Escribe tu propio asunto y párrafo inicial para los correos que Yayatoh envía por ti, en cada idioma.",
+    "chooseLabel": "Elige un correo",
+    "kind": "Correo",
+    "language": "Idioma",
+    "open": "Abrir",
+    "editing": "{kind} · {language}",
+    "formLabel": "Texto del correo",
+    "readOnly": "Puedes leer estos correos. Solo los propietarios y administradores pueden cambiarlos.",
+    "subject": "Asunto",
+    "intro": "Párrafo inicial",
+    "defaultIs": "Predeterminado: {copy}",
+    "placeholdersTitle": "Marcadores que puedes usar",
+    "emptyMeansDefault": "Deja un campo vacío para usar el texto predeterminado.",
+    "save": "Guardar",
+    "reset": "Restablecer predeterminado",
+    "saved": "Guardado. Los nuevos correos usan este texto.",
+    "resetDone": "Restablecido. Los nuevos correos usan el texto predeterminado.",
+    "previewTitle": "Vista previa",
+    "previewUpdating": "Actualizando la vista previa…",
+    "previewSubject": "Asunto: {subject}",
+    "previewBlocked": "Corrige los campos marcados para ver la vista previa.",
+    "previewFrame": "Vista previa del correo: {subject}",
+    "errors": {
+      "invalid_syntax": "No es válido: cada llave de apertura necesita una de cierre alrededor del nombre de un marcador.",
+      "unknown_placeholder": "Usa solo los marcadores indicados abajo.",
+      "too_long": "Es demasiado largo."
+    },
+    "customized": "Correos personalizados",
+    "noneTitle": "Aún no hay correos personalizados",
+    "noneDescription": "Todos los correos usan el texto predeterminado de Yayatoh.",
+    "changed": "Modificado"
   },
   "setupGuide": {
     "title": "Guía de configuración",

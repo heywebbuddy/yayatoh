@@ -90,6 +90,9 @@
       "notifications": {
         "test": "Testbenachrichtigung"
       },
+      "seating": {
+        "finder-code": "Sitzplatzfinder-Code"
+      },
       "payments": {
         "destination-changed": "Änderung des Auszahlungskontos"
       }
@@ -110,7 +113,12 @@
       "no_device": "Kein Gerät für Push",
       "no_address": "Keine Adresse",
       "provider_error": "Der E-Mail-Anbieter hat sie abgelehnt",
-      "retrying": "Neuer Versuch nach einem Fehler"
+      "retrying": "Neuer Versuch nach einem Fehler",
+      "bounced": "Unterdrückt: diese Adresse ist zuvor unzustellbar gewesen",
+      "complained": "Unterdrückt: der Empfänger hat frühere E-Mails als Spam markiert",
+      "event_cancelled": "Die Veranstaltung oder der Termin wurde abgesagt",
+      "event_started": "Die Veranstaltung hatte bereits begonnen",
+      "event_postponed": "Angehalten, solange die Veranstaltung verschoben ist"
     },
     "channels": {
       "email": "E-Mail",
@@ -147,7 +155,20 @@
       "saved": "Deine Benachrichtigungseinstellungen sind gespeichert.",
       "test": "Testbenachrichtigung senden",
       "testSent": "Testbenachrichtigung gesendet. Sieh in der Glocke nach.",
-      "required": "Tickets, Belege und Sicherheits-E-Mails erreichen dich immer."
+      "required": "Tickets, Belege und Sicherheits-E-Mails erreichen dich immer.",
+      "language": {
+        "title": "Sprache der E-Mails",
+        "label": "Sprache der E-Mails zu Ihren Organisationen",
+        "hint": "Neue Bestellungen, Nachrichten und andere Team-Benachrichtigungen werden in dieser Sprache verfasst.",
+        "save": "Sprache speichern",
+        "saved": "Sprache gespeichert."
+      }
+    },
+    "delivery": {
+      "delivered": "Zugestellt",
+      "bounced": "Unzustellbar: die Adresse existiert nicht",
+      "soft_bounced": "Vorerst unzustellbar (Postfach voll oder nicht erreichbar)",
+      "complained": "Vom Empfänger als Spam markiert"
     }
   },
   "nav": {
@@ -187,6 +208,7 @@
     "templates": "Vorlagen",
     "apiKeys": "API-Schlüssel",
     "publicSite": "Öffentliche Seite",
+    "emails": "E-Mail-Vorlagen",
     "speakers": "Speaker",
     "sponsors": "Sponsoren",
     "media": "Bilder"
@@ -3002,6 +3024,40 @@
       "emptyTitle": "Noch keine öffentlichen Veranstaltungen",
       "emptyDescription": "Veröffentlichen Sie eine Veranstaltung, um ihr Widget-Snippet zu erhalten."
     }
+  },
+  "emailTemplates": {
+    "title": "E-Mail-Vorlagen",
+    "description": "Schreiben Sie für jede Sprache Ihren eigenen Betreff und ersten Absatz für die E-Mails, die Yayatoh für Sie versendet.",
+    "chooseLabel": "E-Mail auswählen",
+    "kind": "E-Mail",
+    "language": "Sprache",
+    "open": "Öffnen",
+    "editing": "{kind} · {language}",
+    "formLabel": "E-Mail-Text",
+    "readOnly": "Sie können diese E-Mails lesen. Nur Inhaber und Administratoren können sie ändern.",
+    "subject": "Betreff",
+    "intro": "Erster Absatz",
+    "defaultIs": "Standard: {copy}",
+    "placeholdersTitle": "Verfügbare Platzhalter",
+    "emptyMeansDefault": "Lassen Sie ein Feld leer, um den Standardtext zu verwenden.",
+    "save": "Speichern",
+    "reset": "Auf Standard zurücksetzen",
+    "saved": "Gespeichert. Neue E-Mails verwenden diesen Text.",
+    "resetDone": "Zurückgesetzt. Neue E-Mails verwenden den Standardtext.",
+    "previewTitle": "Vorschau",
+    "previewUpdating": "Vorschau wird aktualisiert…",
+    "previewSubject": "Betreff: {subject}",
+    "previewBlocked": "Korrigieren Sie die markierten Felder, um die Vorschau zu sehen.",
+    "previewFrame": "E-Mail-Vorschau: {subject}",
+    "errors": {
+      "invalid_syntax": "Ungültig: jede öffnende geschweifte Klammer braucht eine schließende um einen Platzhalternamen.",
+      "unknown_placeholder": "Verwenden Sie nur die unten aufgeführten Platzhalter.",
+      "too_long": "Das ist zu lang."
+    },
+    "customized": "Angepasste E-Mails",
+    "noneTitle": "Noch keine angepassten E-Mails",
+    "noneDescription": "Alle E-Mails verwenden den Standardtext von Yayatoh.",
+    "changed": "Geändert"
   },
   "setupGuide": {
     "title": "Einrichtungshilfe",

@@ -19,6 +19,8 @@ const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date'
 
 export const ANNOUNCEMENT_CHANNELS = ['email', 'push'] as const;
 export const REPORT_REASONS = ['spam', 'abuse', 'other'] as const;
+/** `open` until platform staff resolve (acted on) or dismiss (no action) it (M1.10d). */
+export const REPORT_STATUSES = ['open', 'resolved', 'dismissed'] as const;
 
 /** An organizer's announcement to an event's attendees (the sent log). Immutable once sent. */
 export const announcements = tenantTable(
@@ -119,6 +121,10 @@ export const reports = tenantTable(
     reason: text('reason').notNull(),
     note: text('note'),
     status: text('status').notNull().default('open'),
+    /** Staff review (apps/admin): who (the `staff:<userId>` actor), when and why. */
+    reviewedBy: text('reviewed_by'),
+    reviewedAt: tsz('reviewed_at'),
+    reviewNote: text('review_note'),
   },
   (t) => [
     index('reports_org_thread_idx').on(t.orgId, t.threadId),
@@ -129,7 +135,13 @@ export const reports = tenantTable(
     }).onDelete('cascade'),
     check('reports_reporter_check', sql`reporter in ('organizer', 'contact')`),
     check('reports_reason_check', sql`reason in ('spam', 'abuse', 'other')`),
-    check('reports_status_check', sql`status in ('open', 'reviewed')`),
+    check('reports_status_check', sql`status in ('open', 'resolved', 'dismissed')`),
+    check(
+      'reports_review_check',
+      sql`(status = 'open' and reviewed_at is null) or (status <> 'open' and reviewed_at is not null and reviewed_by is not null and review_note is not null)`,
+    ),
+    check('reports_review_note_length', sql`review_note is null or length(review_note) between 1 and 1000`),
+    index('reports_open_created_idx').on(t.createdAt, t.orgId).where(sql`status = 'open'`),
     check('reports_note_length', sql`note is null or length(note) <= 1000`),
   ],
 );

@@ -26,6 +26,8 @@ const config: NextConfig = {
     '@yayatoh/crm',
     '@yayatoh/forms',
     '@yayatoh/csv',
+    '@yayatoh/messaging',
+    '@yayatoh/notifications',
   ],
   serverExternalPackages: ['postgres', '@node-rs/argon2'],
   experimental: { taint: true },

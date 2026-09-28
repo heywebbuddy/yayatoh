@@ -90,6 +90,9 @@
       "notifications": {
         "test": "テスト通知"
       },
+      "seating": {
+        "finder-code": "座席検索コード"
+      },
       "payments": {
         "destination-changed": "支払い口座の変更"
       }
@@ -110,7 +113,12 @@
       "no_device": "プッシュ先の端末がありません",
       "no_address": "アドレスがありません",
       "provider_error": "メール配信サービスに拒否されました",
-      "retrying": "エラーのため再試行中"
+      "retrying": "エラーのため再試行中",
+      "bounced": "停止: このアドレスは以前にバウンスしました",
+      "complained": "停止: 受信者が以前のメールを迷惑メールとして報告しました",
+      "event_cancelled": "イベントまたは日程が中止されました",
+      "event_started": "イベントはすでに始まっていました",
+      "event_postponed": "イベントの延期中は保留"
     },
     "channels": {
       "email": "メール",
@@ -147,7 +155,20 @@
       "saved": "通知設定を保存しました。",
       "test": "テスト通知を送信",
       "testSent": "テスト通知を送信しました。ベルを確認してください。",
-      "required": "チケット、領収書、セキュリティに関するメールは常に届きます。"
+      "required": "チケット、領収書、セキュリティに関するメールは常に届きます。",
+      "language": {
+        "title": "メールの言語",
+        "label": "あなたの組織に関するメールの言語",
+        "hint": "新しい注文、メッセージ、その他のチーム通知はこの言語で届きます。",
+        "save": "言語を保存",
+        "saved": "言語を保存しました。"
+      }
+    },
+    "delivery": {
+      "delivered": "配信済み",
+      "bounced": "バウンス: アドレスが存在しません",
+      "soft_bounced": "一時的にバウンス (メールボックスが満杯または利用不可)",
+      "complained": "受信者が迷惑メールとして報告"
     }
   },
   "nav": {
@@ -187,6 +208,7 @@
     "templates": "テンプレート",
     "apiKeys": "API キー",
     "publicSite": "公開サイト",
+    "emails": "メールテンプレート",
     "speakers": "登壇者",
     "sponsors": "スポンサー",
     "media": "画像"
@@ -3002,6 +3024,40 @@
       "emptyTitle": "公開イベントはまだありません",
       "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
     }
+  },
+  "emailTemplates": {
+    "title": "メールテンプレート",
+    "description": "Yayatoh があなたに代わって送るメールの件名と冒頭の段落を、言語ごとに設定できます。",
+    "chooseLabel": "メールを選択",
+    "kind": "メール",
+    "language": "言語",
+    "open": "開く",
+    "editing": "{kind} · {language}",
+    "formLabel": "メールの文面",
+    "readOnly": "これらのメールは閲覧できます。変更できるのはオーナーと管理者のみです。",
+    "subject": "件名",
+    "intro": "冒頭の段落",
+    "defaultIs": "既定: {copy}",
+    "placeholdersTitle": "使用できるプレースホルダー",
+    "emptyMeansDefault": "既定の文面を使うには空欄のままにします。",
+    "save": "保存",
+    "reset": "既定に戻す",
+    "saved": "保存しました。新しいメールにこの文面が使われます。",
+    "resetDone": "既定に戻しました。新しいメールには既定の文面が使われます。",
+    "previewTitle": "プレビュー",
+    "previewUpdating": "プレビューを更新中…",
+    "previewSubject": "件名: {subject}",
+    "previewBlocked": "プレビューを表示するには、強調表示された項目を修正してください。",
+    "previewFrame": "メールのプレビュー: {subject}",
+    "errors": {
+      "invalid_syntax": "無効です: プレースホルダー名を囲む開き波括弧には閉じ波括弧が必要です。",
+      "unknown_placeholder": "下に記載されたプレースホルダーのみ使用できます。",
+      "too_long": "長すぎます。"
+    },
+    "customized": "カスタマイズしたメール",
+    "noneTitle": "カスタマイズしたメールはまだありません",
+    "noneDescription": "すべてのメールに Yayatoh の既定の文面が使われています。",
+    "changed": "変更日"
   },
   "setupGuide": {
     "title": "セットアップガイド",

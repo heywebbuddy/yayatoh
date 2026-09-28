@@ -5,7 +5,7 @@ import { devAuthEnabled } from '@/server/session.ts';
 
 /**
  * Dev/CI only: deliver an org's pending messages now (what the worker's relay and dispatcher do
- * every couple of seconds), into the dev mailbox. 404 unless dev auth is on; never in production.
+ * every couple of seconds), into the dev mailbox; `scheduled=1` also sends reminders not yet due. 404 unless dev auth is on; never in production.
  */
 export async function POST(req: NextRequest) {
   if (!devAuthEnabled()) return new NextResponse(null, { status: 404 });
@@ -13,5 +13,7 @@ export async function POST(req: NextRequest) {
   const slug = String(form.get('org') ?? '');
   const org = /^[a-z0-9-]{1,63}$/.test(slug) ? await resolveOrgSlug(slug) : null;
   if (!org) return NextResponse.json({ error: 'unknown_org' }, { status: 404 });
-  return NextResponse.json(await drainOrgMessages(org.orgId, new URL(req.url).origin));
+  return NextResponse.json(
+    await drainOrgMessages(org.orgId, new URL(req.url).origin, { scheduled: form.get('scheduled') === '1' }),
+  );
 }

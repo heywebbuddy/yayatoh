@@ -65,6 +65,9 @@ export interface SecurityHeaderOptions {
 /** Every header a page response carries, by page type. */
 export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Record<string, string> {
   const framed = type === 'public';
+  // The console frames same-origin email previews (M1.10d), which carry their own sandboxed
+  // policy; everything else still may frame nothing.
+  const frames = type === 'console' ? ["'self'", ...(o.extra?.frame ?? [])] : o.extra?.frame;
   const csp = buildCsp({
     profile: PROFILE_OF[type],
     nonce: o.nonce,
@@ -73,7 +76,7 @@ export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Recor
     frameAncestors: framed ? ["'self'"] : ["'none'"],
     reportUri: CSP_REPORT_PATH,
     upgradeInsecure: o.https,
-    extra: o.extra,
+    extra: frames ? { ...o.extra, frame: frames } : o.extra,
   });
   const h: Record<string, string> = {
     'content-security-policy': csp,

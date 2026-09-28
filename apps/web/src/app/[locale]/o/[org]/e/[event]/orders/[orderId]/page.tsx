@@ -253,6 +253,11 @@ export default async function OrderPage({
                           : m.reason}
                       </span>
                     ) : null}
+                    {m.status === 'sent' && m.delivery ? (
+                      <span className="text-caption text-zinc-500">
+                        {t(`notifications.delivery.${m.delivery}`)}
+                      </span>
+                    ) : null}
                   </span>
                 ),
               },

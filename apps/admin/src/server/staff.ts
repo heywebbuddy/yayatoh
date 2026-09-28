@@ -15,11 +15,11 @@ export type StaffRole = (typeof STAFF_ROLES)[number];
 
 /** What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only). */
 const CAN: Record<StaffRole, readonly StaffAction[]> = {
-  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements'],
-  support: ['view', 'suspend'],
+  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'reports'],
+  support: ['view', 'suspend', 'reports'],
   finance: ['view', 'payouts', 'fees'],
 };
-export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements';
+export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements' | 'reports';
 
 export interface Staff {
   readonly userId: string;

@@ -90,6 +90,9 @@
       "notifications": {
         "test": "Testmelding"
       },
+      "seating": {
+        "finder-code": "Code voor de stoelzoeker"
+      },
       "payments": {
         "destination-changed": "Wijziging van de uitbetaalrekening"
       }
@@ -110,7 +113,12 @@
       "no_device": "Geen apparaat voor push",
       "no_address": "Geen adres",
       "provider_error": "De e-mailprovider weigerde het",
-      "retrying": "Opnieuw proberen na een fout"
+      "retrying": "Opnieuw proberen na een fout",
+      "bounced": "Onderdrukt: dit adres is eerder gebounced",
+      "complained": "Onderdrukt: de ontvanger markeerde eerdere mail als spam",
+      "event_cancelled": "Het evenement of de datum is geannuleerd",
+      "event_started": "Het evenement was al begonnen",
+      "event_postponed": "In de wacht zolang het evenement is uitgesteld"
     },
     "channels": {
       "email": "E-mail",
@@ -147,7 +155,20 @@
       "saved": "Je meldingsinstellingen zijn opgeslagen.",
       "test": "Stuur me een testmelding",
       "testSent": "Testmelding verstuurd. Kijk bij de bel.",
-      "required": "Tickets, bonnen en beveiligingsmails krijg je altijd."
+      "required": "Tickets, bonnen en beveiligingsmails krijg je altijd.",
+      "language": {
+        "title": "Taal van e-mails",
+        "label": "Taal van e-mails over je organisaties",
+        "hint": "Nieuwe bestellingen, berichten en andere teammeldingen worden in deze taal geschreven.",
+        "save": "Taal opslaan",
+        "saved": "Taal opgeslagen."
+      }
+    },
+    "delivery": {
+      "delivered": "Afgeleverd",
+      "bounced": "Gebounced: het adres bestaat niet",
+      "soft_bounced": "Tijdelijk gebounced (mailbox vol of niet beschikbaar)",
+      "complained": "Door de ontvanger als spam gemarkeerd"
     }
   },
   "nav": {
@@ -187,6 +208,7 @@
     "templates": "Sjablonen",
     "apiKeys": "API-sleutels",
     "publicSite": "Openbare site",
+    "emails": "E-mailsjablonen",
     "speakers": "Sprekers",
     "sponsors": "Sponsors",
     "media": "Afbeeldingen"
@@ -3002,6 +3024,40 @@
       "emptyTitle": "Nog geen openbare evenementen",
       "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
     }
+  },
+  "emailTemplates": {
+    "title": "E-mailsjablonen",
+    "description": "Schrijf je eigen onderwerp en openingsalinea voor de e-mails die Yayatoh namens jou verstuurt, in elke taal.",
+    "chooseLabel": "Kies een e-mail",
+    "kind": "E-mail",
+    "language": "Taal",
+    "open": "Openen",
+    "editing": "{kind} · {language}",
+    "formLabel": "E-mailtekst",
+    "readOnly": "Je kunt deze e-mails lezen. Alleen eigenaren en beheerders kunnen ze wijzigen.",
+    "subject": "Onderwerp",
+    "intro": "Openingsalinea",
+    "defaultIs": "Standaard: {copy}",
+    "placeholdersTitle": "Plaatshouders die je kunt gebruiken",
+    "emptyMeansDefault": "Laat een veld leeg om de standaardtekst te gebruiken.",
+    "save": "Opslaan",
+    "reset": "Standaard herstellen",
+    "saved": "Opgeslagen. Nieuwe e-mails gebruiken deze tekst.",
+    "resetDone": "Hersteld. Nieuwe e-mails gebruiken de standaardtekst.",
+    "previewTitle": "Voorbeeld",
+    "previewUpdating": "Voorbeeld bijwerken…",
+    "previewSubject": "Onderwerp: {subject}",
+    "previewBlocked": "Herstel de gemarkeerde velden om het voorbeeld te zien.",
+    "previewFrame": "E-mailvoorbeeld: {subject}",
+    "errors": {
+      "invalid_syntax": "Ongeldig: elke openingsaccolade heeft een sluitaccolade rond een plaatshoudernaam nodig.",
+      "unknown_placeholder": "Gebruik alleen de plaatshouders hieronder.",
+      "too_long": "Dit is te lang."
+    },
+    "customized": "Aangepaste e-mails",
+    "noneTitle": "Nog geen aangepaste e-mails",
+    "noneDescription": "Alle e-mails gebruiken de standaardtekst van Yayatoh.",
+    "changed": "Gewijzigd"
   },
   "setupGuide": {
     "title": "Instelgids",

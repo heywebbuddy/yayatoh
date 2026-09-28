@@ -4,11 +4,12 @@ import { createCtx } from '@yayatoh/kernel';
 import { signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { and, asc, eq, isNull, lte } from 'drizzle-orm';
+import { suppressedReason } from './delivery-rules.ts';
 import { kindOf, type MessageKind } from './kinds.ts';
 import { decryptParams } from './notifier.ts';
 import { preferenceEnabledTx } from './preferences.ts';
 import { isValidTimeZone, quietHoursRelease } from './quiet-hours.ts';
-import { messages, pushTokens, suppressions, templateOverrides } from './schema.ts';
+import { addressSuppressions, messages, pushTokens, suppressions, templateOverrides } from './schema.ts';
 import { emailLocale, renderMessage } from './templates/render.ts';
 import { PLATFORM_SENDER, type Transports } from './transports.ts';
 
@@ -21,8 +22,12 @@ export interface DispatchDeps {
   readonly appOrigin: string;
   /** Resolves member emails for messages addressed to a user id (identity lives in packages/auth). */
   readonly userEmails?: (userIds: readonly string[]) => Promise<ReadonlyMap<string, string>>;
+  /** Members' preferred languages (M1.10d); member emails render in them, else in English. */
+  readonly userLocales?: (userIds: readonly string[]) => Promise<ReadonlyMap<string, string | null>>;
   /** Dev tool only: send messages held for quiet hours now. */
   readonly ignoreQuietHours?: boolean;
+  /** Dev tool only: send scheduled messages (reminders) now instead of at their time. */
+  readonly includeScheduled?: boolean;
   readonly now?: () => Date;
 }
 
@@ -65,7 +70,9 @@ export async function dispatchDueTx(
   const due = await tx
     .select()
     .from(messages)
-    .where(and(eq(messages.status, 'queued'), lte(messages.sendAfter, now)))
+    .where(
+      and(eq(messages.status, 'queued'), deps.includeScheduled ? undefined : lte(messages.sendAfter, now)),
+    )
     .orderBy(asc(messages.sendAfter), asc(messages.id))
     .limit(limit)
     .for('update', { skipLocked: true });
@@ -74,10 +81,15 @@ export async function dispatchDueTx(
   if (!org) return result;
   const paused = (await activeSuspensionsTx(tx)).has('pause_messaging');
   const needEmails = due.filter((r) => r.channel === 'email' && !r.recipientEmail && r.recipientUserId);
+  const memberIds = [...new Set(needEmails.map((r) => r.recipientUserId as string))];
   const emails =
-    needEmails.length && deps.userEmails
-      ? await deps.userEmails([...new Set(needEmails.map((r) => r.recipientUserId as string))])
-      : new Map<string, string>();
+    memberIds.length && deps.userEmails ? await deps.userEmails(memberIds) : new Map<string, string>();
+  // Member notifications (no address of their own) render in the member's language, looked up at
+  // send time so a change applies to messages already queued.
+  const locales =
+    memberIds.length && deps.userLocales
+      ? await deps.userLocales(memberIds)
+      : new Map<string, string | null>();
 
   const update = (row: Row, set: Partial<Row>) =>
     tx
@@ -99,6 +111,26 @@ export async function dispatchDueTx(
     }
     const email =
       row.channel === 'email' ? (row.recipientEmail ?? emails.get(row.recipientUserId ?? '') ?? null) : null;
+    // Bounces and complaints (M1.10d): the address can't or mustn't receive mail, whatever the
+    // category, transactional included; the message log shows why.
+    const phoneOf = async () => {
+      if (row.channel !== 'sms') return null;
+      const p = (await decryptParams(orgId, row.paramsCiphertext))._phone;
+      return typeof p === 'string' ? p : null;
+    };
+    const address = email ? normalizeEmail(email) : await phoneOf();
+    if (address && row.channel !== 'push') {
+      const [blocked] = await tx
+        .select({ reason: addressSuppressions.reason })
+        .from(addressSuppressions)
+        .where(
+          and(eq(addressSuppressions.channel, row.channel), eq(addressSuppressions.addressNorm, address)),
+        );
+      if (blocked) {
+        await suppress(row, suppressedReason(blocked.reason));
+        continue;
+      }
+    }
     if (optional && email) {
       const [s] = await tx
         .select({ id: suppressions.id })
@@ -135,15 +167,18 @@ export async function dispatchDueTx(
     }
     try {
       const params = await decryptParams(orgId, row.paramsCiphertext);
+      const memberLocale =
+        !row.recipientEmail && row.recipientUserId ? locales.get(row.recipientUserId) : undefined;
+      const locale = memberLocale ? emailLocale(memberLocale) : row.locale;
       const [override] = await tx
         .select({ subject: templateOverrides.subject, intro: templateOverrides.intro })
         .from(templateOverrides)
-        .where(and(eq(templateOverrides.kind, row.kind), eq(templateOverrides.locale, row.locale)));
-      const unsub = optional ? unsubscribeUrls(deps.appOrigin, row.id, emailLocale(row.locale)) : null;
+        .where(and(eq(templateOverrides.kind, row.kind), eq(templateOverrides.locale, locale)));
+      const unsub = optional ? unsubscribeUrls(deps.appOrigin, row.id, emailLocale(locale)) : null;
       const href = typeof params._href === 'string' && params._href ? params._href : null;
       const rendered = renderMessage({
         kind: row.kind as MessageKind,
-        locale: row.locale,
+        locale,
         params,
         // The brand kit logo (M1.4e) as an absolute URL on the app origin (email clients fetch it).
         org: { ...org, logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null },
@@ -231,6 +266,7 @@ export async function dispatchDueTx(
       }
       await update(row, {
         status: 'sent',
+        locale,
         sentAt: now,
         providerMessageId: providerMessageId.slice(0, 500),
         subject: rendered.subject.slice(0, 300),

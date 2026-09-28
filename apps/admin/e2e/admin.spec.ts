@@ -295,3 +295,110 @@ test('an organizer account cannot open the commission report or the API usage', 
   await expect(page).toHaveURL(/\/not-staff$/);
   await expect(page.getByRole('heading', { name: 'API usage by app version' })).toHaveCount(0);
 });
+
+test('staff review a messaging report: allowlisted excerpt, a note is required, resolve, closed list, access log', async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180_000);
+  const stamp = `${Date.now()}${test.info().project.name.slice(0, 1)}`;
+  const guestName = `Rex ${stamp}`;
+  const email = `rex.${stamp}@example.test`;
+  const subject = `Parking ${stamp}`;
+
+  // On the web: an organizer announces to one attendee, who opens the conversation and reports it.
+  const web = await (await browser.newContext({ baseURL: WEB })).newPage();
+  const login = await web.request.post('/api/dev/login', {
+    form: { email: NOT_STAFF, locale: 'en' },
+    maxRedirects: 0,
+  });
+  expect(login.status()).toBe(303);
+  await web.goto('/o/lakeside-events/events/new');
+  await web.getByLabel('Event name', { exact: true }).fill(`Reported ${stamp}`);
+  await web.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
+  await web.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
+  await web.getByRole('button', { name: 'Create draft' }).click();
+  await expect(web).toHaveURL(/\/o\/lakeside-events\/e\/reported-\d+/);
+  const base = new URL(web.url()).pathname;
+  await web.goto(`${base}/attendees`);
+  await web
+    .getByText(/^Add (attendee|guest)/i)
+    .first()
+    .click();
+  await web.getByLabel('Full name').fill(guestName);
+  await web.getByLabel('Email', { exact: true }).fill(email);
+  await web.getByRole('button', { name: 'Add to the list' }).click();
+  await expect(web.getByRole('row').filter({ hasText: guestName })).toBeVisible();
+  await web.goto(`${base}/marketing`);
+  const composer = web.getByRole('form', { name: 'New announcement' });
+  await composer.getByLabel('Subject').fill(subject);
+  await composer.getByLabel('Message').fill('Lot B is closed.');
+  await composer.getByRole('button', { name: 'Preview' }).click();
+  await web.getByRole('button', { name: 'Send to 1 person' }).click();
+  await expect(web.getByText('Sent to 1 person. Delivery continues in the background.')).toBeVisible();
+  expect((await web.request.post('/api/dev/outbox/drain', { form: { org: 'lakeside-events' } })).ok()).toBe(
+    true,
+  );
+  const mails = (await (
+    await web.request.get(`/api/dev/mailbox?to=${encodeURIComponent(email)}`)
+  ).json()) as {
+    html: string;
+  }[];
+  const replyLink = /href="(https?:\/\/[^"]+\/messages\/[^"]+)"/.exec(mails[0]?.html ?? '')?.[1] ?? '';
+  expect(replyLink).toMatch(/\/messages\//);
+  const guest = await (await browser.newContext({ baseURL: WEB })).newPage();
+  await guest.goto(new URL(replyLink).pathname);
+  const theirs = guest.getByRole('region', { name: 'Block or report' });
+  await theirs.getByLabel('Reason').selectOption('abuse');
+  await theirs.getByLabel('Details (optional)').fill(`Rude ${stamp}`);
+  await theirs.getByRole('button', { name: 'Report to Yayatoh' }).click();
+  await expect(theirs.getByText('Thanks. Yayatoh will review this conversation.')).toBeVisible();
+
+  // Staff: the open list shows it with the reporter's side, reason, note and an excerpt.
+  await signIn(page, STAFF);
+  await page.getByRole('link', { name: 'Messaging reports' }).click();
+  await expect(page.getByRole('heading', { name: 'Messaging reports' })).toBeVisible();
+  const card = page.getByRole('article').filter({ hasText: `Rude ${stamp}` });
+  await expect(card.getByRole('heading', { name: 'Lakeside Events · Abuse' })).toBeVisible();
+  await expect(card).toContainText('Reported by the contact');
+  await expect(card.getByRole('region', { name: 'Conversation excerpt' })).toContainText(subject);
+  await expect(card.getByRole('region', { name: 'Conversation excerpt' })).toContainText('Organizer');
+  // Allowlisted: the contact's address never appears.
+  await expect(card).not.toContainText(email);
+  await expectAccessible(page);
+
+  // A note is required.
+  await card.getByRole('button', { name: 'Resolve' }).click();
+  const again = page.getByRole('article').filter({ hasText: `Rude ${stamp}` });
+  await expect(again.getByText('Add a note before resolving or dismissing a report.')).toBeVisible();
+  await expect(again.getByLabel('Note (kept in the audit log)')).toHaveAttribute('aria-invalid', 'true');
+  await expectAccessible(page);
+  // Keyboard: type the note, Tab to Resolve, Enter.
+  await again.getByLabel('Note (kept in the audit log)').fill(`Warned the organizer ${stamp}`);
+  await page.keyboard.press('Tab');
+  await expect(again.getByRole('button', { name: 'Resolve' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Report resolved.')).toBeVisible();
+  await expect(page.getByRole('article').filter({ hasText: `Rude ${stamp}` })).toHaveCount(0);
+
+  await page.getByRole('link', { name: 'Closed' }).click();
+  const closed = page.getByRole('article').filter({ hasText: `Rude ${stamp}` });
+  await expect(closed).toContainText('Resolved');
+  await expect(closed).toContainText(`Warned the organizer ${stamp}`);
+  await expect(closed.getByRole('button', { name: 'Resolve' })).toHaveCount(0);
+  await expectAccessible(page);
+
+  // Every cross-org read is in the access log.
+  await page.getByRole('link', { name: 'Access log' }).click();
+  await expect(
+    page.getByRole('cell', { name: 'staff console: messaging reports (open)' }).first(),
+  ).toBeVisible();
+});
+
+test('an organizer account cannot open messaging reports', async ({ page }) => {
+  await signIn(page, NOT_STAFF);
+  await expect(page).toHaveURL(/\/not-staff$/);
+  await page.goto('/reports');
+  await expect(page).toHaveURL(/\/not-staff$/);
+  await expect(page.getByRole('heading', { name: 'Messaging reports' })).toHaveCount(0);
+});

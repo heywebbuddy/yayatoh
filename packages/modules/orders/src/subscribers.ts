@@ -1,4 +1,5 @@
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, findOccurrenceTx, occurrencesOfEventTx } from '@yayatoh/events';
+import { type ReminderTarget, reminderTime, rescheduleRemindersTx } from '@yayatoh/notifications';
 import { defineSubscriber, keyVault, type Notifier } from '@yayatoh/platform';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { eq } from 'drizzle-orm';
@@ -15,7 +16,10 @@ const RefundPayload = z.object({
   fully: z.boolean(),
 });
 
-/** How long before the start the event reminder goes out (roadmap M1.10: reminder idempotency). */
+/**
+ * How long before the start the event reminder goes out (roadmap M1.10: reminder idempotency): a
+ * day, as the same wall-clock time the day before in the event's timezone (`reminderTime`).
+ */
 export const REMINDER_LEAD_MS = 24 * 60 * 60 * 1000;
 
 // The locale came from the request; only a well-formed tag goes into a URL.
@@ -62,8 +66,11 @@ export function ticketMailer(deps: { notifier: Notifier; appOrigin: string }) {
           orderId: order.id,
           eventId: order.eventId,
         });
-        const remindAt = ev ? new Date(ev.startsAt.getTime() - REMINDER_LEAD_MS) : null;
-        if (ev && remindAt && remindAt.getTime() > Date.now())
+        // Multi-date events (M1.4b): the reminder is about the date the buyer chose.
+        const date = order.occurrenceId ? await findOccurrenceTx(tx, order.occurrenceId) : null;
+        const startsAt = date?.startsAt ?? ev?.startsAt ?? null;
+        const remindAt = ev && startsAt ? reminderTime(startsAt, ev.timezone) : null;
+        if (ev && startsAt && remindAt && remindAt.getTime() > Date.now())
           await deps.notifier.enqueue(tx, {
             kind: 'events.reminder',
             to,
@@ -71,13 +78,14 @@ export function ticketMailer(deps: { notifier: Notifier; appOrigin: string }) {
               url,
               name: order.buyerName,
               eventName: ev.name,
-              startsAt: ev.startsAt.toISOString(),
+              startsAt: startsAt.toISOString(),
               timeZone: ev.timezone,
               venue: ev.venueName ?? '',
             },
-            dedupeKey: `event-reminder:${ev.id}:${order.buyerEmail.trim().toLowerCase()}`,
+            dedupeKey: `event-reminder:${ev.id}:${date ? `${date.id}:` : ''}${order.buyerEmail.trim().toLowerCase()}`,
             orderId: order.id,
             eventId: ev.id,
+            occurrenceId: date?.id ?? null,
             sendAfter: remindAt,
           });
       }
@@ -131,6 +139,53 @@ export function refundMailer(deps: { notifier: Notifier; appOrigin: string }) {
         orderId: order.id,
         eventId: order.eventId,
       });
+    },
+  });
+}
+
+const EventPayload = z.object({ orgId: z.uuid(), eventId: z.uuid() });
+
+/**
+ * Reminders follow reschedules (M1.10d): when an event's (or one of its dates') start time
+ * changes, or the event or a date is cancelled, its queued reminders are re-planned from the start
+ * time as it is now. Idempotent: replaying any of these events changes nothing further.
+ */
+export function reminderRescheduler() {
+  return defineSubscriber({
+    name: 'orders.reminder-rescheduler',
+    events: [
+      'event.updated@1',
+      'event.rescheduled@1',
+      'event.postponed@1',
+      'event.cancelled@1',
+      'event.occurrences_updated@1',
+      'event.occurrence_cancelled@1',
+    ],
+    handle: async (tx, event) => {
+      const p = EventPayload.parse(event.payload);
+      const ev = await findEventTx(tx, p.eventId);
+      if (!ev) return;
+      const dates = new Map((await occurrencesOfEventTx(tx, ev.id)).map((d) => [d.id, d]));
+      const base = { timeZone: ev.timezone, eventName: ev.name, venue: ev.venueName ?? '' };
+      const eventCancelled = ev.status === 'cancelled';
+      const postponed = ev.status === 'postponed';
+      await rescheduleRemindersTx(
+        tx,
+        p.orgId,
+        ev.id,
+        (occurrenceId): ReminderTarget | null => {
+          if (!occurrenceId) return { ...base, startsAt: ev.startsAt, cancelled: eventCancelled, postponed };
+          const d = dates.get(occurrenceId);
+          if (!d) return null;
+          return {
+            ...base,
+            startsAt: d.startsAt,
+            cancelled: eventCancelled || d.status === 'cancelled',
+            postponed,
+          };
+        },
+        new Date(),
+      );
     },
   });
 }

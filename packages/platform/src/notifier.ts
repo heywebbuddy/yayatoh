@@ -34,6 +34,8 @@ export interface NotificationIntent {
   /** Links the message to an order (the per-order message log) and/or an event. */
   readonly orderId?: string | null;
   readonly eventId?: string | null;
+  /** Multi-date events: the date the message is about (reminders follow its start time). */
+  readonly occurrenceId?: string | null;
   /** Not before this time (reminders). */
   readonly sendAfter?: Date | null;
 }

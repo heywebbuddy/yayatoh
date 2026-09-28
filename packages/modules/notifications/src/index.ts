@@ -1,4 +1,25 @@
 export {
+  DELIVERY_SIGNATURE_TOLERANCE_S,
+  DeliveryEvent,
+  type DeliveryWebhookAdapter,
+  FAKE_DELIVERY_SIGNATURE_HEADER,
+  fakeDeliveryAdapter,
+  fakeDeliverySecret,
+  orgOfMessage,
+  recordDeliveryEventsCommand,
+  signFakeDeliveryEvents,
+} from './delivery.ts';
+export {
+  type DeliveryState,
+  deliveryStateOf,
+  nextDeliveryState,
+  SOFT_BOUNCE_LIMIT,
+  SOFT_BOUNCE_WINDOW_MS,
+  type SuppressionReason,
+  suppressedReason,
+  suppressionFor,
+} from './delivery-rules.ts';
+export {
   type DispatchDeps,
   type DispatchResult,
   dispatchDue,
@@ -48,10 +69,20 @@ export {
   preferenceEnabledTx,
   setMyPreferencesCommand,
 } from './preferences.ts';
+export {
+  emailPreviewQuery,
+  PREVIEW_HEADERS,
+  PREVIEW_MAX_BYTES,
+  PREVIEW_TTL_MS,
+  storeEmailPreviewCommand,
+} from './previews.ts';
 export { importLegacyPushTokensTx, type LegacyDeviceRow, registerPushTokenCommand } from './push.ts';
 export { isValidTimeZone, QUIET_END_HOUR, QUIET_START_HOUR, quietHoursRelease } from './quiet-hours.ts';
+export { planReminder, type ReminderPlan, reminderTime } from './reminder-time.ts';
+export { type ReminderTarget, type RescheduleResult, rescheduleRemindersTx } from './reminders.ts';
 export {
   CATEGORIES,
+  DELIVERY_STATES,
   MESSAGE_CHANNELS,
   MESSAGE_STATUSES,
   PREFERENCE_CHANNELS,
@@ -72,6 +103,7 @@ export {
   devMailboxDir,
   devMailboxTransports,
   type EmailTransport,
+  fakeOutcome,
   memoryTransports,
   type OutboundEmail,
   type OutboundPush,
@@ -81,6 +113,7 @@ export {
   readDevMailbox,
   type SmsTransport,
   type Transports,
+  takeDevDeliveryEvents,
 } from './transports.ts';
 export {
   maskEmail,

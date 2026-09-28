@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -30,6 +31,11 @@ export const CATEGORIES = [
 export const PREFERENCE_CHANNELS = ['in_app', 'email', 'sms', 'push'] as const;
 export const PUSH_PLATFORMS = ['fcm', 'apns', 'webpush'] as const;
 export const SUPPRESSION_SOURCES = ['one_click', 'page', 'legacy', 'block'] as const;
+/** What the provider last told us about a sent message (M1.10d delivery events). */
+export const DELIVERY_STATES = ['delivered', 'bounced', 'soft_bounced', 'complained'] as const;
+export const DELIVERY_EVENT_TYPES = ['delivered', 'bounced', 'complained'] as const;
+export const BOUNCE_TYPES = ['hard', 'soft'] as const;
+export const ADDRESS_SUPPRESSION_REASONS = ['hard_bounce', 'soft_bounce', 'complaint'] as const;
 
 const inList = (col: string, values: readonly string[]) =>
   sql.raw(`${col} in (${values.map((v) => `'${v}'`).join(', ')})`);
@@ -65,9 +71,21 @@ export const messages = tenantTable(
     providerMessageId: text('provider_message_id'),
     subject: text('subject'),
     sentAt: tsz('sent_at'),
+    /** Multi-date events (M1.4b): the date a reminder is about (reminders follow its start time). */
+    occurrenceId: uuid('occurrence_id'),
+    /** The provider's latest delivery report (delivered, bounced, soft_bounced, complained). */
+    delivery: text('delivery'),
+    deliveryAt: tsz('delivery_at'),
   },
   (t) => [
     uniqueIndex('messages_org_channel_dedupe_key').on(t.orgId, t.channel, t.dedupeKey),
+    index('messages_org_event_queued_idx')
+      .on(t.orgId, t.eventId, t.kind)
+      .where(sql`status = 'queued' and event_id is not null`),
+    index('messages_org_provider_message_idx')
+      .on(t.orgId, t.providerMessageId)
+      .where(sql`provider_message_id is not null`),
+    check('messages_delivery_check', sql`delivery is null or ${inList('delivery', DELIVERY_STATES)}`),
     index('messages_org_order_idx').on(t.orgId, t.orderId, t.createdAt).where(sql`order_id is not null`),
     index('messages_org_due_idx').on(t.orgId, t.sendAfter).where(sql`status = 'queued'`),
     index('messages_due_orgs_idx').on(t.sendAfter, t.orgId).where(sql`status = 'queued'`),
@@ -185,5 +203,85 @@ export const templateOverrides = tenantTable(
     uniqueIndex('template_overrides_org_kind_locale_key').on(t.orgId, t.kind, t.locale),
     check('template_overrides_subject_length', sql`subject is null or length(subject) between 1 and 200`),
     check('template_overrides_intro_length', sql`intro is null or length(intro) between 1 and 2000`),
+  ],
+);
+
+/**
+ * Provider delivery reports (M1.10d): one row per provider event, deduplicated by the provider's
+ * event id, so a webhook retried or replayed is recorded once.
+ */
+export const messageEvents = tenantTable(
+  notificationsSchema,
+  'message_events',
+  {
+    messageId: uuid('message_id').notNull(),
+    provider: text('provider').notNull(),
+    providerEventId: text('provider_event_id').notNull(),
+    type: text('type').notNull(),
+    bounceType: text('bounce_type'),
+    /** Short diagnostic from the provider (never the message body). */
+    detail: text('detail'),
+    occurredAt: tsz('occurred_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('message_events_org_provider_event_key').on(t.orgId, t.provider, t.providerEventId),
+    index('message_events_org_message_idx').on(t.orgId, t.messageId, t.occurredAt),
+    foreignKey({
+      name: 'message_events_message_fk',
+      columns: [t.orgId, t.messageId],
+      foreignColumns: [messages.orgId, messages.id],
+    }),
+    check('message_events_type_check', inList('type', DELIVERY_EVENT_TYPES)),
+    check(
+      'message_events_bounce_type_check',
+      sql`(type = 'bounced' and bounce_type in ('hard', 'soft')) or (type <> 'bounced' and bounce_type is null)`,
+    ),
+    check('message_events_provider_check', sql`provider ~ '^[a-z0-9_-]{1,32}$'`),
+    check('message_events_provider_event_id_length', sql`length(provider_event_id) between 1 and 255`),
+    check('message_events_detail_length', sql`detail is null or length(detail) <= 500`),
+  ],
+);
+
+/**
+ * Addresses the provider says can't (hard bounce, repeated soft bounces) or mustn't (complaint)
+ * receive mail. Unlike unsubscribes this covers every category, transactional included: the
+ * dispatcher marks such messages `suppressed` and the order's message log says why.
+ */
+export const addressSuppressions = tenantTable(
+  notificationsSchema,
+  'address_suppressions',
+  {
+    channel: text('channel').notNull(),
+    addressNorm: text('address_norm').notNull(),
+    reason: text('reason').notNull(),
+    messageId: uuid('message_id'),
+  },
+  (t) => [
+    uniqueIndex('address_suppressions_org_channel_address_key').on(t.orgId, t.channel, t.addressNorm),
+    check('address_suppressions_channel_check', sql`channel in ('email', 'sms')`),
+    check('address_suppressions_reason_check', inList('reason', ADDRESS_SUPPRESSION_REASONS)),
+    check(
+      'address_suppressions_address_check',
+      sql`(channel = 'email' and address_norm = lower(btrim(address_norm)) and address_norm like '%@%') or (channel = 'sms' and address_norm ~ '^\\+[0-9]{6,15}$')`,
+    ),
+  ],
+);
+
+/**
+ * Rendered email previews (M1.10d), served from a same-origin URL with their own CSP so the
+ * email's inline styles render while the console keeps its strict policy. The draft never travels
+ * in the URL; rows live ten minutes and only their creator can open them.
+ */
+export const emailPreviews = tenantTable(
+  notificationsSchema,
+  'email_previews',
+  {
+    createdBy: uuid('created_by').notNull(),
+    html: text('html').notNull(),
+    expiresAt: tsz('expires_at').notNull(),
+  },
+  (t) => [
+    index('email_previews_org_expires_idx').on(t.orgId, t.expiresAt),
+    check('email_previews_html_length', sql`length(html) between 1 and 524288`),
   ],
 );
