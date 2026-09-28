@@ -61,6 +61,8 @@ test.describe('checkpoint-scoped door staff', () => {
     page,
     browser,
   }, info) => {
+    // A long journey (an event, staff, a scoped device and scans from two roles).
+    test.setTimeout(90_000);
     const stamp = `${Date.now()}-${info.project.name}`;
     await signIn(page);
     const { base, codes } = await eventWithTickets(page, browser, `Scoped ${stamp}`, 3);
