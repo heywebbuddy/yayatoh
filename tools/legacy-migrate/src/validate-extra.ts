@@ -76,13 +76,16 @@ export async function v6Vectors(q: Q, instance: string, freezeAt: Date): Promise
       (select count(*) from {s}.personal_access_tokens p
          join auth.legacy_tokens l on l.instance = $1 and l.kind = 'personal_access' and l.legacy_id = p.id::text
          join legacy.ref u on u.instance = $1 and u.entity = 'users' and u.legacy_id = p.tokenable_id::text and u.new_id = l.user_id
-        where l.token_hash = lower(btrim(p.token))) as pat_carried,
+        where l.token_hash = lower(btrim(p.token))
+          -- live at this freeze: an earlier rehearsal (another freeze) may have carried more
+          and (p.expires_at is null or (p.expires_at at time zone s.platform_tz) > $2::timestamptz)) as pat_carried,
       (select count(*) from {s}.users x join legacy.ref u on u.instance = $1 and u.entity = 'users' and u.legacy_id = x.id::text
         where length(btrim(coalesce(x.magic_login_token, ''))) >= 32
           and (x.magic_login_expires_at at time zone s.platform_tz) > $2::timestamptz) as magic_live,
       (select count(*) from {s}.users x
          join auth.legacy_tokens l on l.instance = $1 and l.kind = 'magic_login' and l.legacy_id = x.id::text
-        where l.token_hash = encode(sha256(convert_to(btrim(x.magic_login_token), 'UTF8')), 'hex')) as magic_carried,
+        where l.token_hash = encode(sha256(convert_to(btrim(x.magic_login_token), 'UTF8')), 'hex')
+          and (x.magic_login_expires_at at time zone s.platform_tz) > $2::timestamptz) as magic_carried,
       (select count(*) from auth.accounts a
          join (select distinct new_id from legacy.ref where instance = $1 and entity = 'users') r on r.new_id = a.user_id
         where a.provider_id = 'credential' and a.password ~ '^\\$2[aby]\\$'

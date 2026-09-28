@@ -28,6 +28,10 @@ beforeAll(async () => {
     jobs: [],
     subscribers: [recorder],
   });
+  // Earlier integration files share this database and leave their events unpublished. Publish
+  // that backlog at the relay's normal batch size first, so the racing drain below works on
+  // this file's own events rather than on however many the rest of the suite produced.
+  while ((await relayOnce(boss, [recorder])) > 0);
 });
 
 afterAll(async () => {

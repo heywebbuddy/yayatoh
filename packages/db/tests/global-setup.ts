@@ -58,6 +58,9 @@ export default async function setup(project: TestProject): Promise<void> {
       ADMIN_DATABASE_URL: adminTestDb.toString(),
       // Per-run signing secret for invitation tokens in tests.
       APP_TOKEN_SECRET: randomBytes(32).toString('hex'),
+      // One key-vault key for the whole run: files share the database, so a secret one file
+      // sealed (a migrated org's signing key) must open in the next.
+      LOCAL_KMS_KEY: randomBytes(32).toString('hex'),
     };
     await runMigrations(urls.MIGRATOR_DATABASE_URL);
     project.provide('dbUrls', urls);

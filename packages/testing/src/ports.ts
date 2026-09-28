@@ -26,8 +26,9 @@ export const ports = createCommandPorts({
   orgGate: orgStatusGate,
 });
 
-// Tests get a per-run local key vault (ticket signing keys are envelope-encrypted).
-setKeyVault(localKeyVault(randomBytes(32).toString('hex')));
+// Tests get a per-run local key vault (ticket signing keys are envelope-encrypted). Integration
+// runs share one key across files (the global setup provides it); unit runs draw their own.
+setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex')));
 
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [
