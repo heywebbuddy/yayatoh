@@ -14,7 +14,7 @@ import { failure } from '@/server/form.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
-import { getSession } from '@/server/session.ts';
+import { ownSession } from '@/server/session.ts';
 import { clientKey, currentAccess, rememberAccess } from '@/server/visitor.ts';
 
 export interface CheckoutState {
@@ -87,7 +87,7 @@ export async function checkoutAction(
       if (v) answers[q.key] = q.type === 'checkbox' ? true : v;
     }
   }
-  const session = await getSession();
+  const session = await ownSession();
   const ctx = createCtx({
     orgId: target.orgId,
     actor: session ? { type: 'user', userId: session.userId } : { type: 'anonymous' },

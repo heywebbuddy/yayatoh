@@ -108,6 +108,15 @@ export const KINDS = {
     audience: ['owner'],
     params: ['url', 'reason', 'holdUntil', 'timeZone'],
   },
+  // Platform staff started acting as a member (M1.2e, decision D14): the owners hear at once,
+  // with the reason and when it ends.
+  'tenancy.staff-access': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner'],
+    params: ['url', 'member', 'reason', 'until', 'timeZone'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app'],

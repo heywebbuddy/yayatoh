@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {Le compte bancaire qui reçoit les versements de {org} a été modifié.} other {Un compte de versement a été associé à {org}.}} Par sécurité, aucun virement n'y sera effectué avant le {until}. Si vous n'êtes pas à l'origine de ce changement, contactez immédiatement l'assistance Yayatoh.",
       "cta": "Voir les versements"
     },
+    "tenancy.staff-access": {
+      "subject": "Le support Yayatoh agit en tant que {member} dans {org}",
+      "intro": "Un membre de l'équipe Yayatoh a commencé à agir en tant que {member} dans {org} pour vous aider. Motif : {reason}. Cet accès prend fin au plus tard le {until}. Pendant ce temps, rien ne peut être remboursé, versé, exporté ni supprimé, et tout ce qui est fait apparaît dans votre journal d'activité. Si vous ne vous y attendiez pas, contactez immédiatement le support Yayatoh.",
+      "cta": "Voir l'activité"
+    },
     "notifications.test": {
       "subject": "Notification de test",
       "intro": "Les notifications fonctionnent."

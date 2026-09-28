@@ -72,5 +72,12 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     holdUntil: '2027-06-13T15:00:00.000Z',
     timeZone: 'America/Chicago',
   },
+  'tenancy.staff-access': {
+    url: 'https://app.yayatoh.test/o/lakeside-events/activity',
+    member: 'Jordan Lee',
+    reason: 'Support ticket 4312: the organizer asked for help with seating',
+    until: '2027-06-12T16:00:00.000Z',
+    timeZone: 'America/Chicago',
+  },
   'notifications.test': {},
 };

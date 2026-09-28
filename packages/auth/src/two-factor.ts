@@ -3,16 +3,16 @@ import { identityDatabase } from '@yayatoh/db/identity';
 import { uuidv7 } from '@yayatoh/kernel';
 import { symmetricDecrypt, symmetricEncrypt } from 'better-auth/crypto';
 import { desc, eq } from 'drizzle-orm';
-import type { Auth } from './auth.ts';
+import { type Auth, consumeTotpStep } from './auth.ts';
 import type { AuthMailer } from './mailer.ts';
-import { securityEvents } from './schema.ts';
+import { securityEvents, twoFactors } from './schema.ts';
 import {
   generateBackupCodes,
   generateTotpSecret,
+  matchTotpStep,
   normalizeBackupCode,
   otpauthUri,
   setupKey,
-  verifyTotp,
 } from './totp.ts';
 
 /**
@@ -56,8 +56,10 @@ export type SecurityAction =
   | 'two_factor.backup_codes_regenerated'
   | 'two_factor.backup_code_used'
   | 'two_factor.challenge_passed'
+  | 'two_factor.replay_refused'
   | 'step_up.confirmed'
-  | 'step_up.failed';
+  | 'step_up.failed'
+  | 'sessions.revoked_all';
 
 export interface TwoFactorStatus {
   readonly enabled: boolean;
@@ -93,6 +95,8 @@ export interface TwoFactorServiceOptions {
   readonly mailer: AuthMailer;
   readonly issuer?: string;
   readonly now?: () => Date;
+  /** Development only: people whose codes may be reused (see AuthOptions.totpReplayExempt). */
+  readonly totpReplayExempt?: (user: { id: string; email: string }, secret: string) => boolean;
 }
 
 export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
@@ -177,9 +181,33 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
     await c.internalAdapter.deleteVerificationByIdentifier(limiterKey(userId));
   }
 
+  /**
+   * A TOTP code whose time step hasn't been used yet (replay protection: each code works once,
+   * even inside its window). A reused code is refused and audited.
+   */
+  async function totpAccepted(r: TwoFactorRow, input: string, purpose: string): Promise<boolean | null> {
+    const secret = await secretOf(r);
+    const step = matchTotpStep(secret, input, now().getTime());
+    if (step === null) return null;
+    if (opts.totpReplayExempt) {
+      const c = await context();
+      const user = await c.internalAdapter.findUserById(r.userId);
+      if (user && opts.totpReplayExempt({ id: user.id, email: user.email }, secret)) return true;
+    }
+    if (await consumeTotpStep(r.userId, step)) return true;
+    await record(r.userId, 'two_factor.replay_refused', { purpose });
+    return false;
+  }
+
   /** A TOTP code, or a backup code (spent on use). Returns which one matched, or null. */
-  async function checkCode(r: TwoFactorRow, input: string): Promise<'totp' | 'backup_code' | null> {
-    if (verifyTotp(await secretOf(r), input, now().getTime())) return 'totp';
+  async function checkCode(
+    r: TwoFactorRow,
+    input: string,
+    purpose: string,
+  ): Promise<'totp' | 'backup_code' | null> {
+    const totpOk = await totpAccepted(r, input, purpose);
+    if (totpOk) return 'totp';
+    if (totpOk === false) return null;
     const backup = normalizeBackupCode(input);
     if (!backup) return null;
     const codes = await backupCodesOf(r);
@@ -246,6 +274,11 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
           update: data,
         });
       else await c.adapter.create({ model: 'twoFactor', data: { ...data, userId } });
+      // A new secret starts with no used codes.
+      await identityDatabase()
+        .update(twoFactors)
+        .set({ lastUsedStep: null })
+        .where(eq(twoFactors.userId, userId));
       await record(userId, 'two_factor.setup_started');
       return { setupKey: setupKey(secret), uri: otpauthUri({ issuer, account: email, secret }) };
     },
@@ -255,7 +288,7 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
       await assertNotLimited(userId);
       const r = await row(userId);
       if (r?.verified !== false) throw new TwoFactorError('not_pending');
-      if (!verifyTotp(await secretOf(r), code, now().getTime())) return failed(userId, 'invalid_code');
+      if (!(await totpAccepted(r, code, 'setup'))) return failed(userId, 'invalid_code');
       const c = await context();
       const backupCodes = generateBackupCodes();
       await c.adapter.update({
@@ -277,7 +310,7 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
       await assertNotLimited(userId);
       const r = await row(userId);
       if (!r || !(await enabled(userId))) throw new TwoFactorError('not_enabled');
-      const used = await checkCode(r, code);
+      const used = await checkCode(r, code, 'disable');
       if (!used) return failed(userId, 'invalid_code');
       const c = await context();
       await c.adapter.delete({ model: 'twoFactor', where: [{ field: 'userId', value: userId }] });
@@ -329,7 +362,7 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
       let used: string;
       if (proof.method === 'totp') {
         const r = await row(userId);
-        const matched = r ? await checkCode(r, proof.code) : null;
+        const matched = r ? await checkCode(r, proof.code, 'step_up') : null;
         if (!matched) {
           await record(userId, 'step_up.failed', { method: 'totp' });
           return failed(userId, 'invalid_code');
@@ -366,6 +399,28 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
       await succeeded(userId);
       await record(userId, 'step_up.confirmed', { method: used });
       return at;
+    },
+
+    /**
+     * Sign out everywhere: every session of this person on every host (the app, tenant sites,
+     * API clients) ends, including the current one. Audited.
+     */
+    async signOutEverywhere(userId: string): Promise<void> {
+      const c = await context();
+      await c.internalAdapter.deleteUserSessions(userId);
+      await record(userId, 'sessions.revoked_all');
+    },
+
+    /**
+     * Development tools only (`/api/dev/*`, 404 outside dev auth): forget which authenticator
+     * codes this person used, as if their last one was long ago. Test accounts are enrolled and
+     * signed in by the tools with the same current code the test then types.
+     */
+    async forgetUsedCodes(userId: string): Promise<void> {
+      await identityDatabase()
+        .update(twoFactors)
+        .set({ lastUsedStep: null })
+        .where(eq(twoFactors.userId, userId));
     },
 
     /** Recent security events for a person (newest first). */

@@ -26,6 +26,8 @@ export const AUDIT_DETAIL_KEYS = [
   'ticketTypeId',
   'orderId',
   'reason',
+  /** `staff:<id>` when platform staff acted as the member (M1.2e). */
+  'impersonatedBy',
 ] as const;
 
 const Detail = z.union([z.string().max(80), z.number(), z.boolean()]);

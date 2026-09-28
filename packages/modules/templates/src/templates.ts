@@ -206,6 +206,7 @@ export const createFromTemplateCommand = tenantCommand({
 
 export const deleteTemplateCommand = tenantCommand({
   name: 'templates.deleteTemplate',
+  category: 'delete',
   input: z.object({ templateId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'core',

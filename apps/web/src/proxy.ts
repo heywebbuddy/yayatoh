@@ -170,6 +170,10 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
   // Internal segments are never addressable from outside.
   if (rest === '/t' || rest.startsWith('/t/')) return secure(notFound(req, forwarded, locale));
 
+  // Central login (M1.2d): a tenant host's "Sign in" starts a handoff to the app host.
+  if (orgId && rest === '/sign-in')
+    return secure(rewrite(req, forwarded, res, `/${locale}/auth/start`, locale));
+
   if (orgId) {
     if (rest === '/') return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}`, locale));
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);

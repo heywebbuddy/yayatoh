@@ -1,6 +1,14 @@
 import { LOCALES } from '@yayatoh/contracts';
 import { describe, expect, it } from 'vitest';
-import { apexHost, bareHost, classifyHost, indexable, originFor } from '../src/lib/hosts.ts';
+import {
+  apexHost,
+  bareHost,
+  classifyHost,
+  indexable,
+  originFor,
+  parseTenantReturn,
+  sessionHostAccepted,
+} from '../src/lib/hosts.ts';
 import { decimalPrice, EventJsonLdSchema, eventJsonLd, jsonLdScript } from '../src/lib/seo/jsonld.ts';
 import { robotsTxt } from '../src/lib/seo/robots.ts';
 import { latest, localeSitemapXml, sitemapIndexXml } from '../src/lib/seo/sitemap.ts';
@@ -163,5 +171,41 @@ describe('ticket widget snippet (M1.11c)', () => {
     expect(s).toContain('title="Tickets: &quot;Gala&quot; &lt;2027>"');
     expect(s).toContain('data-yayatoh-widget');
     expect(s).toContain('<script src="https://yayatoh.com/widget.js" async></script>');
+  });
+});
+
+describe('central login hosts (M1.2d)', () => {
+  const env = { MARKETPLACE_HOSTS: 'yayatoh.com,yayatoh.localhost', APP_HOSTS: 'app.yayatoh.com' };
+
+  it('accepts a session only on the host it was issued for', () => {
+    expect(sessionHostAccepted('harbor.yayatoh.events', 'harbor.yayatoh.events', 'tenant')).toBe(true);
+    expect(sessionHostAccepted('harbor.yayatoh.events', 'lakeside.yayatoh.events', 'tenant')).toBe(false);
+    expect(sessionHostAccepted('app.yayatoh.com', 'harbor.yayatoh.events', 'tenant')).toBe(false);
+    expect(sessionHostAccepted('localhost:3100', 'localhost:3100', 'dev')).toBe(true);
+    // Unbound sessions (API clients, older sessions): never on a tenant host.
+    expect(sessionHostAccepted(null, 'harbor.yayatoh.events', 'tenant')).toBe(false);
+    expect(sessionHostAccepted(null, 'app.yayatoh.com', 'app')).toBe(true);
+  });
+
+  it('takes only tenant return URLs with the app’s scheme and port', () => {
+    const app = 'https://app.yayatoh.com';
+    expect(parseTenantReturn('https://harbor.yayatoh.events/events/gala?x=1', app, env)).toEqual({
+      origin: 'https://harbor.yayatoh.events',
+      host: 'harbor.yayatoh.events',
+      hostname: 'harbor.yayatoh.events',
+      path: '/events/gala?x=1',
+    });
+    expect(parseTenantReturn('http://harbor.yayatoh.events/', app, env)).toBeNull();
+    expect(parseTenantReturn('https://app.yayatoh.com/o', app, env)).toBeNull();
+    expect(parseTenantReturn('https://yayatoh.com/', app, env)).toBeNull();
+    expect(parseTenantReturn('https://user:pw@harbor.yayatoh.events/', app, env)).toBeNull();
+    expect(parseTenantReturn('https://harbor.yayatoh.events:8443/', app, env)).toBeNull();
+    expect(parseTenantReturn('javascript:alert(1)', app, env)).toBeNull();
+    expect(parseTenantReturn('/relative', app, env)).toBeNull();
+    const dev = 'http://localhost:3100';
+    expect(parseTenantReturn('http://harbor.yayatoh.events:3100/', dev, env)?.host).toBe(
+      'harbor.yayatoh.events:3100',
+    );
+    expect(parseTenantReturn('http://localhost:3100/', dev, env)).toBeNull();
   });
 });

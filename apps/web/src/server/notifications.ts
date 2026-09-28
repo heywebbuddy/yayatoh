@@ -9,7 +9,7 @@ import { createNotifier, type DispatchDeps, devMailboxTransports, dispatchDue } 
 import { refundMailer, ticketMailer } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, eventKey, recentEventsTx, type Subscriber } from '@yayatoh/platform';
-import { invitationMailer } from '@yayatoh/tenancy';
+import { impersonationNotice, invitationMailer } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import './ports.ts';
@@ -33,6 +33,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
     payoutDestinationMailer({ notifier, appOrigin }),
+    impersonationNotice({ notifier, appOrigin }),
   ];
 }
 

@@ -59,6 +59,9 @@
       "other": "Melding",
       "payments": {
         "destination-changed": "Nieuwe uitbetaalrekening: overboekingen ernaartoe beginnen pas na {until}"
+      },
+      "tenancy": {
+        "staff-access": "Yayatoh-support handelt tot {until} als {member}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "Herinnering evenement"
       },
       "tenancy": {
-        "invitation": "Teamuitnodiging"
+        "invitation": "Teamuitnodiging",
+        "staff-access": "Toegang door medewerkers"
       },
       "ticketing": {
         "claim-link": "Link om ticket te claimen",
@@ -256,7 +260,23 @@
     "invited": "Uitnodiging verstuurd.",
     "pending": "Openstaande uitnodigingen",
     "expires": "Verloopt op {date}",
-    "revoke": "Intrekken"
+    "revoke": "Intrekken",
+    "manage": "Beheren",
+    "roleFor": "Rol van {name}",
+    "saveRole": "Rol opslaan",
+    "saveRoleFor": "Rol van {name} opslaan",
+    "remove": "Verwijderen",
+    "removeName": "{name} verwijderen",
+    "confirmRemove": "{name} uit deze organisatie verwijderen? De toegang stopt meteen.",
+    "confirmRemoveYes": "Ja, verwijderen",
+    "cancel": "Annuleren",
+    "roleChanged": "De rol van {name} is gewijzigd.",
+    "removed": "{name} is verwijderd.",
+    "ownerOnly": "Alleen eigenaren kunnen eigenaren wijzigen",
+    "errors": {
+      "last_owner": "Een organisatie heeft minstens één eigenaar nodig.",
+      "owner_only": "Alleen een eigenaar kan iemand eigenaar maken of een eigenaar wijzigen."
+    }
   },
   "dashboard": {
     "previewPage": "Voorbeeld pagina",
@@ -483,7 +503,8 @@
     "rate_limited": "Te veel pogingen. Wacht even.",
     "internal": "Er ging bij ons iets mis.",
     "reference": "Referentie: {id}",
-    "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+    "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+    "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -524,7 +545,16 @@
         "expired": "Deze aanmelding is verlopen. Log opnieuw in."
       }
     },
-    "rateLimited": "Te veel inlogpogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+    "rateLimited": "Te veel inlogpogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+    "signedOutEverywhere": "Je bent overal afgemeld.",
+    "handoff": {
+      "title": "Doorgaan naar {site}",
+      "description": "Log in met je Yayatoh-account om door te gaan naar {site}.",
+      "signedInAs": "Je bent ingelogd als {name} ({email}).",
+      "continue": "Doorgaan naar {site}",
+      "otherAccount": "Een ander account gebruiken",
+      "failed": "We konden je niet terugsturen naar {site}. Probeer het opnieuw."
+    }
   },
   "orgPicker": {
     "emptyTitle": "Je bent nog geen lid van een organisatie",
@@ -3008,7 +3038,13 @@
       "required": "Je rol vereist verificatie in twee stappen, dus die kan niet uit.",
       "already_enabled": "Verificatie in twee stappen staat al aan.",
       "not_enabled": "Verificatie in twee stappen staat uit."
-    }
+    },
+    "impersonating": "Accountbeveiliging is niet beschikbaar zolang Yayatoh-medewerkers als dit lid handelen.",
+    "sessionsTitle": "Overal uitloggen",
+    "sessionsExplain": "Beëindigt al je sessies: op dit en andere apparaten, in apps en op de eigen sites van organisatoren. Je moet daarna opnieuw inloggen.",
+    "signOutEverywhere": "Overal uitloggen",
+    "confirmSignOutEverywhere": "Nu uitloggen op alle apparaten en sites?",
+    "confirmSignOutEverywhereYes": "Ja, overal uitloggen"
   },
   "stepUp": {
     "title": "Bevestig dat jij het bent",
@@ -3030,5 +3066,24 @@
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
     "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+  },
+  "authError": {
+    "metaTitle": "Inloglink kan niet worden gebruikt",
+    "eyebrow": "Inloggen",
+    "title": "Deze inloglink kan niet worden gebruikt",
+    "description": "Hij is misschien verlopen, al gebruikt of bedoeld voor een andere site. Log opnieuw in om door te gaan.",
+    "signInAgain": "Opnieuw inloggen",
+    "home": "Naar de homepage"
+  },
+  "tenantAccount": {
+    "signIn": "Inloggen",
+    "signedInAs": "Ingelogd als {name}",
+    "signOut": "Uitloggen"
+  },
+  "impersonation": {
+    "label": "Toegang door medewerkers",
+    "banner": "Je handelt als {member} ({staff}, Yayatoh-team). Terugbetalingen, uitbetalingen, exports en verwijderingen staan uit. Dit eindigt om {until}.",
+    "end": "Beëindigen",
+    "endLabel": "Stoppen met handelen als {member}"
   }
 }

@@ -59,6 +59,9 @@
       "other": "Benachrichtigung",
       "payments": {
         "destination-changed": "Neues Auszahlungskonto: Überweisungen darauf beginnen erst nach {until}"
+      },
+      "tenancy": {
+        "staff-access": "Der Yayatoh-Support handelt bis {until} als {member}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "Veranstaltungserinnerung"
       },
       "tenancy": {
-        "invitation": "Teameinladung"
+        "invitation": "Teameinladung",
+        "staff-access": "Zugriff durch Mitarbeitende"
       },
       "ticketing": {
         "claim-link": "Link zum Abholen eines Tickets",
@@ -256,7 +260,23 @@
     "invited": "Einladung gesendet.",
     "pending": "Offene Einladungen",
     "expires": "Läuft am {date} ab",
-    "revoke": "Widerrufen"
+    "revoke": "Widerrufen",
+    "manage": "Verwalten",
+    "roleFor": "Rolle für {name}",
+    "saveRole": "Rolle speichern",
+    "saveRoleFor": "Rolle für {name} speichern",
+    "remove": "Entfernen",
+    "removeName": "{name} entfernen",
+    "confirmRemove": "{name} aus dieser Organisation entfernen? Der Zugriff endet sofort.",
+    "confirmRemoveYes": "Ja, entfernen",
+    "cancel": "Abbrechen",
+    "roleChanged": "Die Rolle von {name} wurde geändert.",
+    "removed": "{name} wurde entfernt.",
+    "ownerOnly": "Nur Inhaber können Inhaber ändern",
+    "errors": {
+      "last_owner": "Eine Organisation braucht mindestens einen Inhaber.",
+      "owner_only": "Nur ein Inhaber kann jemanden zum Inhaber machen oder einen Inhaber ändern."
+    }
   },
   "dashboard": {
     "previewPage": "Seitenvorschau",
@@ -483,7 +503,8 @@
     "rate_limited": "Zu viele Versuche. Bitte warte einen Moment.",
     "internal": "Bei uns ist etwas schiefgelaufen.",
     "reference": "Referenz: {id}",
-    "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+    "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+    "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht: Erstattungen, Auszahlungen, Exporte, Löschungen und Bestätigungen sind aus."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -524,7 +545,16 @@
         "expired": "Diese Anmeldung ist abgelaufen. Melde dich erneut an."
       }
     },
-    "rateLimited": "Zu viele Anmeldeversuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+    "rateLimited": "Zu viele Anmeldeversuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+    "signedOutEverywhere": "Du bist überall abgemeldet.",
+    "handoff": {
+      "title": "Weiter zu {site}",
+      "description": "Melde dich mit deinem Yayatoh-Konto an, um zu {site} weiterzugehen.",
+      "signedInAs": "Du bist als {name} ({email}) angemeldet.",
+      "continue": "Weiter zu {site}",
+      "otherAccount": "Anderes Konto verwenden",
+      "failed": "Wir konnten dich nicht zu {site} zurückbringen. Versuche es noch einmal."
+    }
   },
   "orgPicker": {
     "emptyTitle": "Du bist noch in keiner Organisation",
@@ -3008,7 +3038,13 @@
       "required": "Deine Rolle erfordert die Zwei-Schritt-Verifizierung, deshalb kann sie nicht ausgeschaltet werden.",
       "already_enabled": "Die Zwei-Schritt-Verifizierung ist bereits eingeschaltet.",
       "not_enabled": "Die Zwei-Schritt-Verifizierung ist ausgeschaltet."
-    }
+    },
+    "impersonating": "Die Kontosicherheit ist nicht verfügbar, solange Yayatoh-Mitarbeitende als dieses Mitglied handeln.",
+    "sessionsTitle": "Überall abmelden",
+    "sessionsExplain": "Beendet alle deine Sitzungen: auf diesem und anderen Geräten, in Apps und auf den eigenen Websites von Veranstaltern. Danach musst du dich neu anmelden.",
+    "signOutEverywhere": "Überall abmelden",
+    "confirmSignOutEverywhere": "Jetzt auf allen Geräten und Websites abmelden?",
+    "confirmSignOutEverywhereYes": "Ja, überall abmelden"
   },
   "stepUp": {
     "title": "Bestätige, dass du es bist",
@@ -3030,5 +3066,24 @@
     "invalidPassword": "Dieses Passwort ist nicht richtig.",
     "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
     "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
+  },
+  "authError": {
+    "metaTitle": "Anmeldelink nicht verwendbar",
+    "eyebrow": "Anmelden",
+    "title": "Dieser Anmeldelink kann nicht verwendet werden",
+    "description": "Er ist vielleicht abgelaufen, wurde schon benutzt oder gilt für eine andere Website. Melde dich erneut an, um fortzufahren.",
+    "signInAgain": "Erneut anmelden",
+    "home": "Zur Startseite"
+  },
+  "tenantAccount": {
+    "signIn": "Anmelden",
+    "signedInAs": "Angemeldet als {name}",
+    "signOut": "Abmelden"
+  },
+  "impersonation": {
+    "label": "Zugriff durch Mitarbeitende",
+    "banner": "Du handelst als {member} ({staff}, Yayatoh-Team). Erstattungen, Auszahlungen, Exporte und Löschungen sind aus. Endet um {until}.",
+    "end": "Beenden",
+    "endLabel": "Handeln als {member} beenden"
   }
 }

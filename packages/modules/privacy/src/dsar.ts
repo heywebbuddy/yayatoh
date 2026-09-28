@@ -262,6 +262,7 @@ export const EraseResult = z.object({
  */
 export const eraseSubjectCommand = tenantCommand({
   name: 'privacy.eraseSubject',
+  category: 'delete',
   input: z.object({ email: DsarEmail, confirm: z.string().max(320) }),
   output: EraseResult,
   entitlement: 'core',

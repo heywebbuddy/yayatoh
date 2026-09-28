@@ -28,16 +28,22 @@ export const loadConsole = cache(async (orgSlug: string) => {
   const locale = await getLocale();
   const session = await getSession();
   if (!session) return redirect({ href: '/sign-in', locale });
-  const orgs = await myOrganizations(session.userId);
-  if (!session.twoFactorEnabled && orgs.some((o) => roleRequiresTwoFactor(o.role)))
+  const imp = session.impersonation;
+  const allOrgs = await myOrganizations(session.userId);
+  // Staff acting as a member (M1.2e) see only the org they started from; their own sign-in asked
+  // for the second step, so the member's set-up requirement doesn't apply to them.
+  const orgs = imp ? allOrgs.filter((o) => o.orgId === imp.orgId) : allOrgs;
+  if (!imp && !session.twoFactorEnabled && orgs.some((o) => roleRequiresTwoFactor(o.role)))
     return redirect({ href: '/account/security?required=1', locale });
   const resolved = await resolveOrgSlug(orgSlug);
   if (!resolved || resolved.status === 'terminated') notFound();
+  if (imp && resolved.orgId !== imp.orgId) notFound();
   const ctx = createCtx({
     orgId: resolved.orgId,
     actor: { type: 'user', userId: session.userId },
     locale,
     stepUpAt: session.stepUpAt,
+    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
   });
   const role = await memberRole(ctx);
   if (!role) notFound();

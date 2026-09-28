@@ -128,6 +128,7 @@ export const updateSeriesCommand = tenantCommand({
 /** Delete a series; its events stay (they just leave the series). */
 export const deleteSeriesCommand = tenantCommand({
   name: 'events.deleteSeries',
+  category: 'delete',
   input: z.object({ seriesId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'core',

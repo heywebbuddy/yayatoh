@@ -59,6 +59,9 @@
       "other": "通知",
       "payments": {
         "destination-changed": "新しい支払い口座: この口座への送金は {until} 以降に始まります"
+      },
+      "tenancy": {
+        "staff-access": "Yayatoh サポートが {until} まで {member} として操作しています"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "イベントのリマインダー"
       },
       "tenancy": {
-        "invitation": "チームへの招待"
+        "invitation": "チームへの招待",
+        "staff-access": "スタッフのアクセス"
       },
       "ticketing": {
         "claim-link": "チケット受け取りリンク",
@@ -256,7 +260,23 @@
     "invited": "招待を送信しました。",
     "pending": "保留中の招待",
     "expires": "有効期限：{date}",
-    "revoke": "取り消す"
+    "revoke": "取り消す",
+    "manage": "管理",
+    "roleFor": "{name} の役割",
+    "saveRole": "役割を保存",
+    "saveRoleFor": "{name} の役割を保存",
+    "remove": "削除",
+    "removeName": "{name} を削除",
+    "confirmRemove": "{name} をこの組織から削除しますか？すぐにアクセスできなくなります。",
+    "confirmRemoveYes": "はい、削除します",
+    "cancel": "キャンセル",
+    "roleChanged": "{name} の役割を変更しました。",
+    "removed": "{name} を削除しました。",
+    "ownerOnly": "オーナーを変更できるのはオーナーだけです",
+    "errors": {
+      "last_owner": "組織には少なくとも 1 人のオーナーが必要です。",
+      "owner_only": "オーナーを任命・変更できるのはオーナーだけです。"
+    }
   },
   "dashboard": {
     "previewPage": "ページをプレビュー",
@@ -483,7 +503,8 @@
     "rate_limited": "試行回数が多すぎます。しばらくお待ちください。",
     "internal": "システム側で問題が発生しました。",
     "reference": "参照番号: {id}",
-    "rateLimitedRetry": "試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
+    "rateLimitedRetry": "試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
+    "impersonation_blocked": "メンバーとして操作中のスタッフはこれを実行できません。返金・支払い・エクスポート・削除・本人確認は無効です。"
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -524,7 +545,16 @@
         "expired": "このサインインは期限切れです。もう一度サインインしてください。"
       }
     },
-    "rateLimited": "サインインの試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
+    "rateLimited": "サインインの試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
+    "signedOutEverywhere": "すべての場所からサインアウトしました。",
+    "handoff": {
+      "title": "{site} に進む",
+      "description": "Yayatoh アカウントでサインインして {site} に進みます。",
+      "signedInAs": "{name}（{email}）としてサインインしています。",
+      "continue": "{site} に進む",
+      "otherAccount": "別のアカウントを使う",
+      "failed": "{site} に戻れませんでした。もう一度お試しください。"
+    }
   },
   "orgPicker": {
     "emptyTitle": "まだどの組織にも所属していません",
@@ -3008,7 +3038,13 @@
       "required": "あなたの役割には 2 段階認証が必要なため、オフにできません。",
       "already_enabled": "2 段階認証はすでにオンです。",
       "not_enabled": "2 段階認証はオフです。"
-    }
+    },
+    "impersonating": "Yayatoh スタッフがこのメンバーとして操作している間は、アカウントのセキュリティ設定を利用できません。",
+    "sessionsTitle": "すべての場所からサインアウト",
+    "sessionsExplain": "このデバイスや他のデバイス、アプリ、主催者の独自サイトなど、すべてのセッションを終了します。もう一度サインインが必要になります。",
+    "signOutEverywhere": "すべての場所からサインアウト",
+    "confirmSignOutEverywhere": "今すぐすべてのデバイスとサイトからサインアウトしますか？",
+    "confirmSignOutEverywhereYes": "はい、すべてからサインアウト"
   },
   "stepUp": {
     "title": "本人確認",
@@ -3030,5 +3066,24 @@
     "invalidPassword": "パスワードが正しくありません。",
     "rateLimited": "試行回数が多すぎます。15 分待ってから、もう一度お試しください。",
     "unauthenticated": "セッションが終了しました。もう一度サインインしてください。"
+  },
+  "authError": {
+    "metaTitle": "サインインリンクを使用できません",
+    "eyebrow": "サインイン",
+    "title": "このサインインリンクは使用できません",
+    "description": "有効期限が切れたか、すでに使用されたか、別のサイト用の可能性があります。続けるにはもう一度サインインしてください。",
+    "signInAgain": "もう一度サインイン",
+    "home": "ホームページへ"
+  },
+  "tenantAccount": {
+    "signIn": "サインイン",
+    "signedInAs": "{name} としてサインイン中",
+    "signOut": "サインアウト"
+  },
+  "impersonation": {
+    "label": "スタッフのアクセス",
+    "banner": "{member} として操作しています（{staff}、Yayatoh スタッフ）。返金・支払い・エクスポート・削除は無効です。{until} に終了します。",
+    "end": "終了",
+    "endLabel": "{member} としての操作を終了"
   }
 }

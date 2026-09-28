@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { getAuth } from '@/server/auth.ts';
-import { devAuthEnabled, sessionToken } from '@/server/session.ts';
+import { getAuth, getTwoFactor } from '@/server/auth.ts';
+import { devAuthEnabled, getSession, sessionToken } from '@/server/session.ts';
 
 /**
  * Development only: move this session's last re-authentication into the past (default 11
- * minutes), so the 10-minute step-up window can be tested without waiting. 404 unless enabled.
+ * minutes), so the 10-minute step-up window can be tested without waiting. The authenticator
+ * code last used is then that long ago too (TOTP replay protection forgets it). 404 unless enabled.
  */
 export async function POST(req: NextRequest) {
   if (!devAuthEnabled()) return new NextResponse(null, { status: 404 });
@@ -15,5 +16,7 @@ export async function POST(req: NextRequest) {
   const at = new Date(Date.now() - minutes * 60_000);
   const ctx = await getAuth().$context;
   await ctx.internalAdapter.updateSession(token, { createdAt: at, stepUpAt: null });
+  const session = await getSession();
+  if (session) await getTwoFactor().forgetUsedCodes(session.userId);
   return new NextResponse(null, { status: 204 });
 }

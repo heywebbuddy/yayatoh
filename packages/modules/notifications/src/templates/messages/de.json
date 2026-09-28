@@ -77,6 +77,11 @@
       "intro": "{reason, select, bank_changed {Das Bankkonto, auf das {org} Auszahlungen erhält, wurde geändert.} other {Ein Auszahlungskonto wurde mit {org} verbunden.}} Zu deiner Sicherheit wird vor dem {until} kein Geld darauf überwiesen. Wenn du diese Änderung nicht vorgenommen hast, wende dich sofort an den Yayatoh-Support.",
       "cta": "Auszahlungen prüfen"
     },
+    "tenancy.staff-access": {
+      "subject": "Der Yayatoh-Support handelt als {member} in {org}",
+      "intro": "Ein Mitarbeiter von Yayatoh handelt jetzt als {member} in {org}, um zu helfen. Grund: {reason}. Dieser Zugriff endet spätestens {until}. Solange er besteht, kann nichts erstattet, ausgezahlt, exportiert oder gelöscht werden, und alles Getane erscheint in deinem Aktivitätsprotokoll. Wenn du das nicht erwartet hast, wende dich sofort an den Yayatoh-Support.",
+      "cta": "Aktivität ansehen"
+    },
     "notifications.test": {
       "subject": "Testbenachrichtigung",
       "intro": "Benachrichtigungen funktionieren."

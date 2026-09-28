@@ -93,14 +93,28 @@ const same = (a: string, b: string) =>
 
 /** Whether `code` is valid for `secret` at `atMs`, one step either side (constant-time compare). */
 export function verifyTotp(secret: string, code: string, atMs: number): boolean {
+  return matchTotpStep(secret, code, atMs) !== null;
+}
+
+/**
+ * The time step `code` belongs to (one step either side of `atMs`), or null if it matches none.
+ * Replay protection keeps the last accepted step per person and refuses that step or an earlier
+ * one, so a code works once even inside its 90-second window (RFC 6238 §5.2).
+ */
+export function matchTotpStep(secret: string, code: string, atMs: number): number | null {
   const c = normalizeTotp(code);
-  if (!c) return false;
+  if (!c) return null;
   const key = secretKey(secret);
   const step = totpStep(atMs);
-  let ok = false;
-  for (let d = -TOTP_WINDOW; d <= TOTP_WINDOW; d++) ok = same(hotp(key, step + d), c) || ok;
-  return ok;
+  let matched: number | null = null;
+  // Every candidate is compared (constant time); the newest matching step wins.
+  for (let d = -TOTP_WINDOW; d <= TOTP_WINDOW; d++) if (same(hotp(key, step + d), c)) matched = step + d;
+  return matched;
 }
+
+/** Whether a code for `step` may still be accepted after `lastUsed` (replay protection). */
+export const isFreshStep = (step: number, lastUsed: number | null | undefined) =>
+  lastUsed === null || lastUsed === undefined || step > lastUsed;
 
 /** `otpauth://` URI for authenticator apps (and the QR code). */
 export function otpauthUri(opts: { issuer: string; account: string; secret: string }): string {

@@ -59,3 +59,55 @@ export function originFor(req: RequestOrigin, host: string): string {
 
 /** Hosts whose pages may be indexed. Dashboards, previews and localhost never are. */
 export const indexable = (kind: HostKind) => kind === 'marketplace' || kind === 'tenant';
+
+/**
+ * Whether a session may be used on this request's host (M1.2d: "a tenant cookie is valid only on
+ * its host"). A session bound to a host (`host:port` outside production) works there only; an
+ * unbound one (API clients, sessions from before M1.2d) never works on a tenant host.
+ */
+export function sessionHostAccepted(
+  sessionHost: string | null | undefined,
+  requestHost: string | null,
+  kind: HostKind,
+): boolean {
+  if (sessionHost) return sessionHost === requestHost;
+  return kind !== 'tenant';
+}
+
+export interface TenantReturn {
+  /** `https://tickets.example.com` (with the port outside production). */
+  readonly origin: string;
+  /** The host a handoff code is bound to: hostname plus port when there is one. */
+  readonly host: string;
+  readonly hostname: string;
+  /** Path and query to land on there. */
+  readonly path: string;
+}
+
+/**
+ * A tenant site's "come back here" URL, as the app host's sign-in receives it (M1.2d). Only a
+ * tenant host qualifies (never the app, the marketplace or a preview), with the app's own scheme
+ * (https in production) and port; no credentials. Whether the host is one of an org's verified
+ * hosts is checked by the caller (`resolveHost`).
+ */
+export function parseTenantReturn(
+  raw: string | null | undefined,
+  appOrigin: string,
+  env: Record<string, string | undefined> = process.env,
+): TenantReturn | null {
+  if (!raw || raw.length > 2048) return null;
+  let url: URL;
+  let app: URL;
+  try {
+    url = new URL(raw);
+    app = new URL(appOrigin);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== app.protocol || url.username || url.password) return null;
+  if (url.port !== app.port) return null;
+  const hostname = bareHost(url.hostname);
+  if (!hostname || classifyHost(hostname, env) !== 'tenant') return null;
+  const host = url.port ? `${hostname}:${url.port}` : hostname;
+  return { origin: `${url.protocol}//${host}`, host, hostname, path: `${url.pathname}${url.search}` };
+}

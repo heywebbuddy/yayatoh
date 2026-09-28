@@ -79,6 +79,7 @@ export const addGuestCommand = tenantCommand({
  */
 export const removeGuestCommand = tenantCommand({
   name: 'attendees.removeGuest',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), attendeeId: z.uuid() }),
   output: z.object({ ok: z.boolean() }),
   entitlement: 'attendees',

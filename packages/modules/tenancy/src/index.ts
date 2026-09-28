@@ -22,6 +22,14 @@ export {
   setPrimaryDomainCommand,
 } from './commands/domains.ts';
 export {
+  EndImpersonationInput,
+  endImpersonationCommand,
+  IMPERSONATION_STARTED,
+  impersonationNotice,
+  StartImpersonationInput,
+  startImpersonationCommand,
+} from './commands/impersonation.ts';
+export {
   acceptInvitation,
   inviteMemberCommand,
   lookupInvitation,

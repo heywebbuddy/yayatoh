@@ -1,6 +1,7 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { runDueBulkOperations } from './bulk.ts';
+import { endExpiredImpersonations } from './impersonations.ts';
 import { dispatchNotifications, userEmails, workerTransports } from './notifications.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
@@ -54,6 +55,12 @@ setInterval(() => {
   if (!release || stopping) return;
   sweepExpiredHolds().catch((err) => console.error('sweeper', err));
 }, 30_000).unref();
+
+// Staff impersonations end after an hour (M1.2e): record the end in the org's audit log (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  endExpiredImpersonations().catch((err) => console.error('impersonations', err));
+}, 60_000).unref();
 
 // Bulk actions and exports (M1.8b): keep unfinished operations moving (leader only).
 let bulkBusy = false;

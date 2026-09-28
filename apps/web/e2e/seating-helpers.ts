@@ -12,8 +12,8 @@ export async function createGala(
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name').fill(name);
   await page.getByLabel('Event type').selectOption('gala');
-  await page.getByLabel('Starts').fill(starts);
-  await page.getByLabel('Ends').fill(ends);
+  await page.getByLabel('Starts', { exact: true }).fill(starts);
+  await page.getByLabel('Ends', { exact: true }).fill(ends);
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
   return new URL(page.url()).pathname;

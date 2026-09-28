@@ -59,6 +59,9 @@
       "other": "Notification",
       "payments": {
         "destination-changed": "New payout account: transfers to it start after {until}"
+      },
+      "tenancy": {
+        "staff-access": "Yayatoh support is acting as {member} until {until}"
       }
     },
     "kinds": {
@@ -70,7 +73,8 @@
         "reminder": "Event reminder"
       },
       "tenancy": {
-        "invitation": "Team invitation"
+        "invitation": "Team invitation",
+        "staff-access": "Staff access"
       },
       "ticketing": {
         "claim-link": "Ticket claim link",
@@ -256,7 +260,23 @@
     "invited": "Invitation sent.",
     "pending": "Pending invitations",
     "expires": "Expires {date}",
-    "revoke": "Revoke"
+    "revoke": "Revoke",
+    "manage": "Manage",
+    "roleFor": "Role for {name}",
+    "saveRole": "Save role",
+    "saveRoleFor": "Save role for {name}",
+    "remove": "Remove",
+    "removeName": "Remove {name}",
+    "confirmRemove": "Remove {name} from this organization? They lose access at once.",
+    "confirmRemoveYes": "Yes, remove",
+    "cancel": "Cancel",
+    "roleChanged": "{name}'s role was changed.",
+    "removed": "{name} was removed.",
+    "ownerOnly": "Only owners can change owners",
+    "errors": {
+      "last_owner": "An organization needs at least one owner.",
+      "owner_only": "Only an owner can make someone an owner or change an owner."
+    }
   },
   "dashboard": {
     "previewPage": "Preview page",
@@ -483,7 +503,8 @@
     "rate_limited": "Too many attempts. Please wait a moment.",
     "internal": "Something went wrong on our side.",
     "reference": "Reference: {id}",
-    "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+    "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+    "impersonation_blocked": "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off."
   },
   "notFound": {
     "title": "Page not found",
@@ -524,7 +545,16 @@
         "expired": "This sign-in has expired. Sign in again."
       }
     },
-    "rateLimited": "Too many sign-in attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+    "rateLimited": "Too many sign-in attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+    "signedOutEverywhere": "You're signed out everywhere.",
+    "handoff": {
+      "title": "Continue to {site}",
+      "description": "Sign in with your Yayatoh account to continue to {site}.",
+      "signedInAs": "You're signed in as {name} ({email}).",
+      "continue": "Continue to {site}",
+      "otherAccount": "Use a different account",
+      "failed": "We couldn't send you back to {site}. Try again."
+    }
   },
   "orgPicker": {
     "emptyTitle": "You're not in an organization yet",
@@ -3008,7 +3038,13 @@
       "required": "Your role requires two-step verification, so it can't be turned off.",
       "already_enabled": "Two-step verification is already on.",
       "not_enabled": "Two-step verification is off."
-    }
+    },
+    "impersonating": "Account security isn't available while Yayatoh staff act as this member.",
+    "sessionsTitle": "Sign out everywhere",
+    "sessionsExplain": "Ends every session you have: on this device and others, in apps, and on organizers' own sites. You'll need to sign in again.",
+    "signOutEverywhere": "Sign out everywhere",
+    "confirmSignOutEverywhere": "Sign out of every device and site now?",
+    "confirmSignOutEverywhereYes": "Yes, sign out everywhere"
   },
   "stepUp": {
     "title": "Confirm it's you",
@@ -3030,5 +3066,24 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "authError": {
+    "metaTitle": "Sign-in link can't be used",
+    "eyebrow": "Sign in",
+    "title": "This sign-in link can't be used",
+    "description": "It may have expired, been used already, or be meant for another site. Sign in again to continue.",
+    "signInAgain": "Sign in again",
+    "home": "Go to the home page"
+  },
+  "tenantAccount": {
+    "signIn": "Sign in",
+    "signedInAs": "Signed in as {name}",
+    "signOut": "Sign out"
+  },
+  "impersonation": {
+    "label": "Staff access",
+    "banner": "You are acting as {member} ({staff}, Yayatoh staff). Refunds, payouts, exports and deletions are turned off. This ends at {until}.",
+    "end": "End",
+    "endLabel": "End acting as {member}"
   }
 }

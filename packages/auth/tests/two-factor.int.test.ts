@@ -10,6 +10,7 @@ import {
   type SecretSealer,
   TwoFactorError,
   twoFactorService,
+  verifySignInChallenge,
 } from '../src/index.ts';
 import { sessions } from '../src/schema.ts';
 import { base32Decode, secretKey, setupKey, totp } from '../src/totp.ts';
@@ -79,8 +80,17 @@ async function enrolled(label: string) {
   const u = await newUser(label);
   const secret = `S${randomBytes(12).toString('hex')}`.slice(0, 20);
   await tf.begin(u.id, u.email, { secret });
-  const { backupCodes } = await tf.confirm(u.id, totp(secretKey(secret), Date.now()));
-  return { ...u, secret, backupCodes, code: () => totp(secretKey(secret), Date.now()) };
+  // Confirmed with the previous step's code (still inside the window), so the current code is
+  // unused for the test: each code works once (replay protection).
+  const { backupCodes } = await tf.confirm(u.id, totp(secretKey(secret), Date.now() - 30_000));
+  return {
+    ...u,
+    secret,
+    backupCodes,
+    code: () => totp(secretKey(secret), Date.now()),
+    /** The next time step's code (accepted one step early): a second fresh code right now. */
+    nextCode: () => totp(secretKey(secret), Date.now() + 30_000),
+  };
 }
 
 async function passwordSignIn(email: string) {
@@ -261,10 +271,14 @@ describe('two-step verification: step-up, turning off, backup codes', () => {
       tf.stepUp({ userId: u.id, sessionToken: token, proof: { method: 'totp', code: '000000' } }),
     ).rejects.toMatchObject({ code: 'invalid_code' });
     expect(await stepUpAt(token)).toBeNull();
+    // The sign-in spent the current code: a step-up needs a later one (replay protection).
+    await expect(
+      tf.stepUp({ userId: u.id, sessionToken: token, proof: { method: 'totp', code: u.code() } }),
+    ).rejects.toMatchObject({ code: 'invalid_code' });
     const at = await tf.stepUp({
       userId: u.id,
       sessionToken: token,
-      proof: { method: 'totp', code: u.code() },
+      proof: { method: 'totp', code: u.nextCode() },
     });
     expect((await stepUpAt(token))?.getTime()).toBe(at.getTime());
     // The session reports it (the web builds ctx.stepUpAt from it).
@@ -349,5 +363,65 @@ describe('two-step verification: step-up, turning off, backup codes', () => {
     expect(await actions(u.id)).toEqual(
       expect.arrayContaining(['two_factor.backup_codes_regenerated', 'two_factor.disabled']),
     );
+  });
+});
+
+describe('TOTP replay protection (M1.2c leftover)', () => {
+  it('a sign-in code works once: the same code is refused for a second sign-in within its window', async () => {
+    const u = await enrolled('replay-signin');
+    const code = u.code();
+    const first = await passwordSignIn(u.email);
+    expect(first.body.twoFactorRedirect).toBe(true);
+    const ok = await verifySignInChallenge(auth, first.j.headers(), { kind: 'totp', code });
+    expect(ok).toMatchObject({ ok: true, userId: u.id });
+    const second = await passwordSignIn(u.email);
+    const replay = await verifySignInChallenge(auth, second.j.headers(), { kind: 'totp', code });
+    expect(replay).toEqual({ ok: false, error: 'invalid_code' });
+    // A later code still works for that challenge.
+    const later = await verifySignInChallenge(auth, second.j.headers(), { kind: 'totp', code: u.nextCode() });
+    expect(later).toMatchObject({ ok: true });
+    expect(await actions(u.id)).toContain('two_factor.replay_refused');
+  });
+
+  it('a right code refused for another reason is not spent', async () => {
+    const u = await enrolled('replay-spent');
+    const first = await passwordSignIn(u.email);
+    for (let i = 0; i < CODE_ATTEMPTS; i++)
+      await verifySignInChallenge(auth, first.j.headers(), { kind: 'totp', code: '000000' });
+    const spent = await verifySignInChallenge(auth, first.j.headers(), { kind: 'totp', code: u.code() });
+    expect(spent.ok).toBe(false);
+    const again = await passwordSignIn(u.email);
+    expect(
+      await verifySignInChallenge(auth, again.j.headers(), { kind: 'totp', code: u.code() }),
+    ).toMatchObject({
+      ok: true,
+    });
+  });
+
+  it('step-up and turning off refuse a code already used, and an older one', async () => {
+    const u = await enrolled('replay-stepup');
+    const s = await passwordSignIn(u.email);
+    const r = await verifySignInChallenge(auth, s.j.headers(), { kind: 'totp', code: u.code() });
+    expect(r.ok).toBe(true);
+    const token = (await auth.api.getSession({ headers: s.j.headers() }))?.session.token ?? '';
+    const previous = totp(secretKey(u.secret), Date.now() - 30_000);
+    for (const code of [u.code(), previous])
+      await expect(
+        tf.stepUp({ userId: u.id, sessionToken: token, proof: { method: 'totp', code } }),
+      ).rejects.toMatchObject({ code: 'invalid_code' });
+    await expect(tf.disable(u.id, u.code())).rejects.toMatchObject({ code: 'invalid_code' });
+    await tf.disable(u.id, u.nextCode());
+    expect((await tf.status(u.id)).enabled).toBe(false);
+  });
+
+  it('two requests with the same code: exactly one signs in', async () => {
+    const u = await enrolled('replay-race');
+    const [a, b] = await Promise.all([passwordSignIn(u.email), passwordSignIn(u.email)]);
+    const code = u.code();
+    const results = await Promise.all([
+      verifySignInChallenge(auth, a.j.headers(), { kind: 'totp', code }),
+      verifySignInChallenge(auth, b.j.headers(), { kind: 'totp', code }),
+    ]);
+    expect(results.filter((x) => x.ok)).toHaveLength(1);
   });
 });

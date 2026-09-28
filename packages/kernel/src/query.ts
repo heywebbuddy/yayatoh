@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import type { CommandPorts } from './command.ts';
+import { type CommandCategory, type CommandPorts, impersonationRefusal } from './command.ts';
 import type { Ctx } from './ctx.ts';
 import { DomainError } from './errors.ts';
 
@@ -10,6 +10,8 @@ export interface QueryDefinition<I, O, R, Tx> {
   readonly output: z.ZodType<O>;
   readonly entitlement: string | null;
   readonly permission: string;
+  /** `export` for reads that hand out a file (a finished bulk export): refused while impersonating. */
+  readonly category?: CommandCategory;
   readonly handler: (args: { input: I; ctx: Ctx; tx: Tx }) => Promise<R>;
   readonly present?: (result: R) => unknown;
 }
@@ -34,6 +36,8 @@ export async function executeQuery<I, O, R, Tx>(
   ctx: Ctx,
   ports: QueryPorts<Tx>,
 ): Promise<O> {
+  const refusal = impersonationRefusal(ctx, query.category);
+  if (refusal) throw refusal;
   const parsed = query.input.safeParse(rawInput);
   if (!parsed.success) throw new DomainError('validation_failed', 'Invalid input');
   if (!ctx.orgId) throw new DomainError('forbidden', 'Tenant context required');

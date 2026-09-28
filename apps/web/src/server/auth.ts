@@ -3,6 +3,7 @@ import {
   type AuthMailer,
   consoleMailer,
   createAuth,
+  devPersonaReplayExempt,
   type SecretSealer,
   type TwoFactorService,
   twoFactorService,
@@ -53,6 +54,9 @@ const mailer: AuthMailer = {
   sendMagicLink: (to, url) => consoleMailer.sendMagicLink(to, url),
 };
 
+/** TOTP replay protection skips only the seeded dev personas' derived secrets, with dev auth on. */
+const totpReplayExempt = devPersonaReplayExempt();
+
 /** Better Auth for this host, created on first use (the build never needs the secret). */
 export function getAuth(): Auth {
   if (!instance) {
@@ -63,6 +67,7 @@ export function getAuth(): Auth {
       secret,
       mailer,
       sealer,
+      ...(totpReplayExempt ? { totpReplayExempt } : {}),
     });
   }
   return instance;
@@ -70,6 +75,6 @@ export function getAuth(): Auth {
 
 /** Two-step verification and step-up for people on this host. */
 export function getTwoFactor(): TwoFactorService {
-  twoFactor ??= twoFactorService(getAuth(), { mailer });
+  twoFactor ??= twoFactorService(getAuth(), { mailer, ...(totpReplayExempt ? { totpReplayExempt } : {}) });
   return twoFactor;
 }

@@ -7,6 +7,8 @@ export const ERROR_STATUS = {
   unauthenticated: 401,
   step_up_required: 401,
   forbidden: 403,
+  /** Refused while platform staff act as a member (money, exports, deletions, step-up; M1.2e). */
+  impersonation_blocked: 403,
   module_not_enabled: 403,
   not_found: 404,
   conflict: 409,

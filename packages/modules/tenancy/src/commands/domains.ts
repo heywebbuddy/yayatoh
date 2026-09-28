@@ -310,6 +310,7 @@ export const setPrimaryDomainCommand = tenantCommand({
 /** Remove a custom domain (frees the hostname); the web then removes it at the provider. */
 export const removeDomainCommand = tenantCommand({
   name: 'tenancy.removeDomain',
+  category: 'delete',
   input: z.object({ domainId: z.uuid() }),
   output: z.object({ hostname: z.string() }),
   entitlement: 'core',

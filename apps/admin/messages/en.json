@@ -91,7 +91,8 @@
       "released": "Payout hold released.",
       "fee": "Fee override saved.",
       "entitlement": "Entitlement override saved.",
-      "evidence": "Evidence submitted."
+      "evidence": "Evidence submitted.",
+      "impersonation_ended": "Acting as the member ended."
     },
     "field": {
       "status": "Status",
@@ -179,6 +180,36 @@
       "summary": "Summary for the card network (what was bought, that it was delivered or used)",
       "reviewed": "I reviewed the evidence packet",
       "submit": "Submit evidence"
+    },
+    "impersonate": {
+      "title": "Act as a member",
+      "description": "Open the organizer console as one of this org's members to help them, for at most one hour. Refunds, payouts, exports, deletions and confirmations stay off. The org's owners are told at once, and everything you do is in their activity log with your name.",
+      "member": "Member",
+      "choose": "Choose a member",
+      "option": "{name} ({email}) · {role}",
+      "reason": "Reason (shown to the org's owners)",
+      "reasonHint": "For example the support ticket and what you will check. Required.",
+      "start": "Start acting as member",
+      "adminsOnly": "Only admin staff can act as a member.",
+      "history": "Recent staff access",
+      "empty": "No staff have acted as a member of this org.",
+      "entry": "{staff} as {member}: {reason}",
+      "until": "until {at}",
+      "endedHow": {
+        "ended": "ended {at}",
+        "expired": "expired {at}"
+      },
+      "open": "Active",
+      "closed": "Ended",
+      "end": "End",
+      "endFor": "End acting as {member}",
+      "errors": {
+        "reason_required": "Give a reason: the org's owners see it.",
+        "member_required": "Choose the member to act as.",
+        "self": "You can't act as yourself.",
+        "staff_target": "Platform staff can't be acted as.",
+        "not_found": "That person isn't a member of this org."
+      }
     }
   },
   "accessLog": {

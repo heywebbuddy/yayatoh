@@ -4,11 +4,12 @@ import { listInvitationsQuery, listMembersQuery, roleCan } from '@yayatoh/tenanc
 import { Avatar, Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { InviteForm } from '@/components/invite-form.tsx';
+import { MemberControls, TeamNotices } from '@/components/member-controls.tsx';
 import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
 import { initialsOf } from '@/server/personas.ts';
 import { ports } from '@/server/ports.ts';
-import { inviteAction, revokeAction } from './actions.ts';
+import { changeRoleAction, inviteAction, removeMemberAction, revokeAction } from './actions.ts';
 
 export default async function TeamPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
   const { locale, org } = await params;
@@ -23,6 +24,7 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
     return { ...m, name, initials: initialsOf(name) };
   });
   const canManage = roleCan(data.role, 'members:manage');
+  const canOwn = data.role === 'owner';
   const invitations = canManage ? await executeQuery(listInvitationsQuery, {}, data.ctx, ports) : [];
   return (
     <>
@@ -33,33 +35,52 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
           <InviteForm action={inviteAction.bind(null, org)} />
         </Card>
       ) : null}
-      <Table
-        caption={t('nav.team')}
-        rowKey={(r) => r.userId}
-        rows={rows}
-        empty={t('team.empty')}
-        columns={[
-          {
-            key: 'name',
-            header: t('team.name'),
-            cell: (r) => (
-              <span className="flex items-center gap-2.5">
-                <Avatar initials={r.initials} label={r.name} size={28} />
-                {r.name}
-              </span>
-            ),
-          },
-          { key: 'role', header: t('team.role'), cell: (r) => t(`roles.${r.role}`) },
-          {
-            key: 'since',
-            header: t('team.since'),
-            cell: (r) =>
-              formatDate(r.createdAt.toISOString(), f, { year: 'numeric', month: 'short', day: 'numeric' }),
-            mono: true,
-            align: 'end',
-          },
-        ]}
-      />
+      <TeamNotices>
+        <Table
+          caption={t('nav.team')}
+          rowKey={(r) => r.userId}
+          rows={rows}
+          empty={t('team.empty')}
+          columns={[
+            {
+              key: 'name',
+              header: t('team.name'),
+              cell: (r) => (
+                <span className="flex items-center gap-2.5">
+                  <Avatar initials={r.initials} label={r.name} size={28} />
+                  {r.name}
+                </span>
+              ),
+            },
+            { key: 'role', header: t('team.role'), cell: (r) => t(`roles.${r.role}`) },
+            {
+              key: 'since',
+              header: t('team.since'),
+              cell: (r) =>
+                formatDate(r.createdAt.toISOString(), f, { year: 'numeric', month: 'short', day: 'numeric' }),
+              mono: true,
+              align: 'end',
+            },
+            ...(canManage
+              ? [
+                  {
+                    key: 'manage',
+                    header: t('team.manage'),
+                    cell: (r: (typeof rows)[number]) => (
+                      <MemberControls
+                        name={r.name}
+                        role={r.role}
+                        canOwn={canOwn}
+                        changeRole={changeRoleAction.bind(null, org, r.userId)}
+                        remove={removeMemberAction.bind(null, org, r.userId)}
+                      />
+                    ),
+                  },
+                ]
+              : []),
+          ]}
+        />
+      </TeamNotices>
       {invitations.length > 0 ? (
         <section aria-labelledby="pending-heading" className="flex flex-col gap-3">
           <h2 id="pending-heading" className="text-section">

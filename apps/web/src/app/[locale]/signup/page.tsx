@@ -1,10 +1,9 @@
 import { signupCodeValid } from '@yayatoh/tenancy';
 import { buttonClass, Card, Label, PageHeader } from '@yayatoh/ui';
-import { headers } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SignupForm } from '@/components/signup-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { getAuth } from '@/server/auth.ts';
+import { ownAuthSession } from '@/server/session.ts';
 import { signupAction } from './actions.ts';
 
 /**
@@ -22,7 +21,7 @@ export default async function SignupPage({
   const code = ((await searchParams).code ?? '').trim().slice(0, 64);
   setRequestLocale(locale);
   const t = await getTranslations();
-  const session = await getAuth().api.getSession({ headers: await headers() });
+  const session = await ownAuthSession();
   const valid = code ? await signupCodeValid(code) : false;
   const here = `/signup?code=${encodeURIComponent(code)}`;
   return (

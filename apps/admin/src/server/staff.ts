@@ -15,11 +15,12 @@ export type StaffRole = (typeof STAFF_ROLES)[number];
 
 /** What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only). */
 const CAN: Record<StaffRole, readonly StaffAction[]> = {
-  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements'],
+  // Only admins may act as an org member (M1.2e, roadmap §10: restrict impersonation to admins).
+  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'impersonate'],
   support: ['view', 'suspend'],
   finance: ['view', 'payouts', 'fees'],
 };
-export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements';
+export type StaffAction = 'view' | 'suspend' | 'payouts' | 'fees' | 'entitlements' | 'impersonate';
 
 export interface Staff {
   readonly userId: string;

@@ -1,7 +1,12 @@
 'use server';
 
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
-import { inviteMemberCommand, revokeInvitationCommand } from '@yayatoh/tenancy';
+import {
+  changeMemberRoleCommand,
+  inviteMemberCommand,
+  removeMemberCommand,
+  revokeInvitationCommand,
+} from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -32,4 +37,57 @@ export async function revokeAction(org: string, invitationId: string): Promise<v
   const data = await loadConsole(org);
   await executeCommand(revokeInvitationCommand, { invitationId }, data.ctx, ports);
   revalidatePath(`/o/${org}/team`);
+}
+
+export interface MemberState {
+  readonly ok: boolean;
+  readonly code: string | null;
+  /** `last_owner`, `owner_only`: why a change was refused. */
+  readonly reason?: string;
+  readonly stamp?: number;
+}
+
+const refusal = (err: unknown): MemberState => {
+  if (!isDomainError(err)) throw err;
+  const reason = (err.details as { reason?: unknown } | undefined)?.reason;
+  return { ok: false, code: err.code, ...(typeof reason === 'string' ? { reason } : {}) };
+};
+
+/** Change a member's role (M1.2c leftover): step-up, owners only for ownership, never the last owner. */
+export async function changeRoleAction(
+  org: string,
+  userId: string,
+  _prev: MemberState,
+  form: FormData,
+): Promise<MemberState> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(
+      changeMemberRoleCommand,
+      { userId, role: String(form.get('role') ?? '') },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return refusal(err);
+  }
+  revalidatePath(`/o/${org}/team`);
+  return { ok: true, code: null, stamp: Date.now() };
+}
+
+/** Remove a member (M1.2c leftover): step-up and a confirmation; never the last owner. */
+export async function removeMemberAction(
+  org: string,
+  userId: string,
+  _prev: MemberState,
+  _form: FormData,
+): Promise<MemberState> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(removeMemberCommand, { userId }, data.ctx, ports);
+  } catch (err) {
+    return refusal(err);
+  }
+  revalidatePath(`/o/${org}/team`);
+  return { ok: true, code: null, stamp: Date.now() };
 }

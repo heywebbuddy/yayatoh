@@ -129,6 +129,7 @@ export const refundPreviewQuery = tenantQuery({
  */
 export const startRefundCommand = tenantCommand({
   name: 'orders.startRefund',
+  category: 'money',
   input: RefundRequest,
   output: z.object({
     refundId: z.uuid(),
@@ -257,6 +258,7 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
  */
 export const completeRefundCommand = tenantCommand({
   name: 'orders.completeRefund',
+  category: 'money',
   input: z.object({
     refundId: z.uuid(),
     outcome: z.enum(['succeeded', 'failed', 'pending']),

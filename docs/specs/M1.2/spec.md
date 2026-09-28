@@ -2,7 +2,7 @@
 
 **Roadmap:** Phase 1 → M1.2; ADR 0010. **Risk tags:** `auth` (owner approval).
 
-M1.2 is split into increments. **M1.2a (this change)** adds the identity core and the legacy verifiers. The rest is listed below with what blocks it.
+M1.2 is split into increments. M1.2a added the identity core and the legacy verifiers; M1.2b–e are done (below). What is left is listed at the end with what blocks it.
 
 ## M1.2a — in this change
 - **Better Auth 1.7** on Postgres (`auth` schema: users, sessions, accounts, verifications, two_factors):
@@ -86,9 +86,9 @@ Roadmap M1.2 ("TOTP for owners, admins and finance"), §10 security Phase 1 ("TO
 ### Later / not yet
 - **Bank-account changes reported by the provider** (Stripe `account.external_account.*`) should start the same hold with reason `bank_changed` (the event and email already carry it); needs the owner's Stripe account.
 - **Large refunds and step-up through `/v1`:** decide whether API keys with `orders:refund` may make large refunds (today: refused). Pending owner.
-- **Member role changes and removals in the console:** the commands are step-up already; the team page has no controls for them yet (only invitations).
+- ~~Member role changes and removals in the console~~ (done in M1.2d/e below).
 - **Passkeys for staff** (roadmap §10) and "trust this device" for 30 days.
-- **TOTP replay protection** (a code accepted once is accepted again within its 90-second window) and a recovery flow for people who lose both phone and backup codes (support-assisted, with impersonation rules from M1.2e).
+- ~~TOTP replay protection~~ (done below). A recovery flow for people who lose both phone and backup codes (support-assisted, with the impersonation rules from M1.2e) is still to come.
 - **AWS KMS** instead of the local key vault (owner's AWS account).
 
 ## Acceptance (M1.2c)
@@ -109,7 +109,76 @@ Roadmap M1.2 ("TOTP for owners, admins and finance"), §10 security Phase 1 ("TO
 | AC-2c-13 | Every new screen and state passes axe; Arabic renders right to left | `two-factor.spec.ts`, `step-up.spec.ts` |
 | AC-2c-14 | The new notification kind renders in all 13 locales | `packages/modules/notifications/tests/render.test.ts` |
 
+## M1.2d — central login with handoff codes (done)
+
+Roadmap §4.2 ("Each host uses its own `__Host-` cookie with no Domain … Tenant-host preview uses a 60-second single-use handoff code"), M1.2 acceptance "A tenant cookie is valid only on its host". **Risk tags:** `auth`, `tenancy`, `db-migration`.
+
+### What was built
+- **Tenant hosts don't sign anyone in.** On a tenant host (custom domain or `{slug}.yayatoh.events`), `/sign-in` is rewritten by the proxy to `/auth/start`, which sets a host-only **state cookie** (`__Host-yy.handoff` on HTTPS, 10 minutes, 256 random bits) and sends the browser to the **app host's** `/sign-in?return=<tenant URL>&state=<state>`. Tenant home pages have a "Sign in" link (and, signed in, "Signed in as …" with "Sign out").
+- **Return URLs are allowlisted.** The app host honours `return` only for a tenant host with the app's own scheme and port that `tenancy.org_by_host` resolves to an org **and is its canonical host** (a non-primary host would redirect and lose the session). Anything else (another site, the marketplace, the app host, an unknown `*.yayatoh.events`) is ignored and the sign-in simply opens the console.
+- **Handoff codes** (`auth.handoff_codes`, `packages/auth/src/handoff.ts`): after the sign-in (including the two-step challenge) the app host issues a code: 32 random bytes (base64url), **only its SHA-256 stored**, bound to the **target host** (host:port outside production), the **person** and the tenant's **state**, **single use**, **60 seconds**. The browser goes to `https://{tenant host}/auth/handoff?code=…`. People already signed in on the app host see "Continue to {site}" (as that account) or "Use a different account".
+- **Redemption** (`/auth/handoff`, server-side): a Better Auth endpoint (`/handoff/redeem`, closed over HTTP, called in-process) spends the code in the same statement that finds it (two requests can never both redeem it; any attempt spends it), then checks expiry, host and the state cookie, creates a session **bound to that host** and sets this host's own cookie (`__Host-yy.session` on HTTPS: Secure, Path=/, no Domain). Refusals (unknown, used/replayed, expired, wrong host, wrong browser, ended impersonation) all land on one generic page ("This sign-in link can't be used") and are **audited** in `auth.security_events` (`handoff.refused` with the reason; `handoff.redeemed` on success).
+- **Host-bound sessions.** Every session now records the host it was created on (`auth.sessions.host`, set by a database hook from the sign-in request's Host). The web accepts a session only on that host; an unbound session (API clients, sessions from before M1.2d) never on a tenant host. So a cookie copied from host A to host B (or to the app host) opens nothing.
+- **Sign out.** On a tenant host, "Sign out" (a same-origin POST to `/auth/sign-out`) ends that host's session only. **Sign out everywhere** is on the account's security page (asks first; Escape cancels): every session of the person on every host and device ends (audited `sessions.revoked_all`), then the sign-in page says so.
+- **Own-session rules.** Pages that act on the person's own account (security settings, step-up, signup, accepting invitations, checkout as a signed-in buyer, continuing to a tenant site) use the person's **own** session, never an impersonation (M1.2e).
+
+### Data model and migration (shared with M1.2e and the TOTP leftover)
+`packages/db/drizzle/0048_brainy_mordo.sql` (generated). Hand edits:
+1. Two header comment lines.
+2. `sessions_impersonation_id_impersonations_id_fk` on the existing `auth.sessions` is added `NOT VALID` and then `VALIDATE CONSTRAINT` (brief lock), with a comment line above it.
+
+Contents: new global tables `auth.handoff_codes` (id, code_hash unique, user_id → users, host, return_path, state_hash, impersonation_id → impersonations, expires_at, used_at, created_at) and `auth.impersonations` (id, staff_user_id → users, user_id → users, org_id, reason, return_url, ip_address, started_at, expires_at, ended_at, ended_reason; indexes on org+started, staff+started, and open ones by expiry); nullable columns `auth.sessions.host`, `auth.sessions.impersonation_id` (partial index), `auth.two_factors.last_used_step`. All listed in `GLOBAL_TABLES` (no tenant rows, so no RLS or isolation fixture).
+
+### Later / not yet
+- The app host is `BETTER_AUTH_URL` (app.yayatoh.com in production, the dev host locally). Serving the console only on the app host (redirecting `/o/*` on tenant hosts) and tenant-host previews of drafts come with the pages that need a tenant-host session.
+- Passkeys (rpID `yayatoh.com`) and Google/Apple sign-in (M1.2f) will run the same handoff.
+- Tenant event pages don't show the account corner yet (the site home does).
+
+## M1.2e — staff impersonation (done)
+
+Roadmap M1.2 ("Impersonation (audited, 1 h, blocks money, export and delete)"), acceptance "An impersonator cannot refund", §10 ("restrict impersonation to admins"), decision **D14** (reason + org notice; the roadmap's recommended default, **pending the owner**). **Risk tags:** `auth`, `payments`, `tenancy`, `db-migration`.
+
+### What was built
+- **Start (staff console, `apps/admin`, tenant page → "Act as a member").** Only staff with the **admin** role (`impersonate`; support and finance see the history only). Choose a member and give a **reason** (required, ≤ 500 characters, shown to the owners). Platform staff can't be acted as, nor can anyone act as themselves. The console records `auth.impersonations` (1 hour), writes the tenant audit row `impersonation.start` through `tenancy.startImpersonation` (a platform command: the member must belong to the org), and sends the browser to the **app host** with a handoff code (M1.2d) bound to the app host and the impersonation.
+- **The session.** Redeeming makes a session for the member that carries `impersonation_id`, **expires with the impersonation** (never refreshed), and opens **only that org's console** (other orgs are 404). A session whose impersonation ended or expired is no session.
+- **Banner** on every console page: "You are acting as {member} ({staff}, Yayatoh staff). Refunds, payouts, exports and deletions are turned off. This ends at {time}." with an **End** button. The account-security link and the sign-out button are hidden while acting (End is the way out); the account security page says it isn't available.
+- **Refusals in the command pipeline.** `Ctx.impersonatedBy` (`{ staffUserId, impersonationId }`) plus a declarative **`category`** on commands and queries (`money` | `export` | `delete`): `executeCommand`/`executeQuery` refuse any categorized command before validation with the new error `impersonation_blocked` (403, `details.reason` = the category), shown everywhere as "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off." Flagged:
+  - **money:** `orders.startRefund`, `orders.completeRefund`, `payments.recordPayoutAccount`, `payments.continuePayoutOnboarding`, `payments.recordTransfer`, `payments.recordTransferReversal`, `payments.releaseDueSettlements`, `payments.setPayoutHold`;
+  - **export:** every bulk action that writes a file (their `start…` command, by default) **and** downloading a finished file (`…File` queries; the download routes answer 403) — attendee and bookings CSV, the activity CSV and the **DSAR export**;
+  - **delete:** `attendees.removeGuest`, `events.deleteAnnouncement`, `events.deleteSection`, `events.deleteSeries`, `privacy.eraseSubject`, `privacy.retention`, `templates.deleteTemplate`, `tenancy.removeDomain`, `tenancy.removeMember`.
+- **Step-up can't be satisfied** while acting: `step-up` commands and data-decided step-ups (large refunds, embed origins) answer `impersonation_blocked` (`reason: step_up`) instead of opening "Confirm it's you", and the step-up actions refuse too. So grants (invitations, roles), domains, API keys and payouts are off as well.
+- **Audit.** Every command run while acting writes its usual audit row with the member as `actor` and **`impersonatedBy: staff:<id>`** plus `impersonationId` in `data` (inside the hash chain); the org's Activity page shows it. Start and end are tenant audit rows (`impersonation.start`, `impersonation.end` with `reason: ended|expired`, actor `system:staff:<id>` or the expiry job), and security events for both people (`impersonation.started`, `impersonation.started_as_you`, `impersonation.ended`).
+- **End.** From the banner (back to the staff console with "Acting as the member ended."), from the console's history list, or after the hour: the worker ends expired impersonations every minute (`auth.impersonation-expiry`, recording the end in the org) and purges handoff codes older than a day. Ending deletes the session.
+- **Org notice (D14).** New notification kind `tenancy.staff-access` (transactional, urgent, in-app + email, audience **owner**; 13 locales): "Yayatoh support is acting as {member} in {org}", with the reason, the end time (org time zone) and a link to the activity log. Subscriber `tenancy.impersonation-notice` in the worker and the dev drain.
+
+### Later / not yet
+- **Owner approval** before staff access (instead of a notice) for enterprise orgs: open question in D14.
+- Public pages (marketplace, tenant sites) show no banner: the impersonation session belongs to the app host and opens only the console.
+- A `support` staff role that may impersonate read-only: not offered (admins only).
+
+## M1.2c leftovers (done)
+- **Team page controls:** change a member's role (a role picker and "Save role" per member) and remove a member ("Remove" asks first; focus moves into the question and back on Cancel/Escape). Both are step-up commands (`useStepUpActionState`); results are announced above the table. **Owners only** may make someone an owner or change or remove an owner (new rule in `changeMemberRole`, `removeMember`, `addMember`, like invitations: an admin can't promote themselves or push out an owner); admins see "Only owners can change owners" on owner rows and no owner option. The **last owner** can't step down or leave ("An organization needs at least one owner."). Viewers see no controls, and the actions refuse them.
+- **TOTP replay protection** (RFC 6238 §5.2): the last accepted time step is kept per person (`auth.two_factors.last_used_step`); a code for that step or an earlier one is refused (audited `two_factor.replay_refused`) in the sign-in challenge, step-up, turning off and set-up. In the sign-in challenge the check runs before Better Auth and the step is spent after a successful sign-in (a right code refused for another reason is not spent; of two concurrent sign-ins with the same code, exactly one wins). Development only: the seeded personas' derived secrets are exempt (parallel e2e sessions share them), and the dev tools that enrol or age a test session forget the used step.
+
+## Acceptance (M1.2d, M1.2e, M1.2c leftovers)
+| ID | Criterion | Test |
+|---|---|---|
+| AC-2d-01 | Codes are 256-bit, stored as SHA-256 only, expire after exactly 60 s; hosts and return paths are normalized | `packages/auth/tests/handoff.test.ts` (unit) |
+| AC-2d-02 | A code signs in once on its own host; replay, wrong host (then spent), expiry, wrong/missing state and ended impersonations are refused and audited; the endpoint is closed over HTTP | `packages/auth/tests/handoff.int.test.ts` |
+| AC-2d-03 | Sign-in on a tenant host goes through the app host (password, two-step challenge, or "Continue as") and lands back signed in; keyboard only; axe | `apps/web/e2e/central-login.spec.ts` |
+| AC-2d-04 | A replayed code, a code for another site, and a code in another browser are refused | `central-login.spec.ts` |
+| AC-2d-05 | A tenant cookie is valid only on its host: host-only cookie, not sent to another host, refused when copied there or to the app host | `central-login.spec.ts`, `apps/web/tests/seo.test.ts` (unit), `handoff.int.test.ts` |
+| AC-2d-06 | Only verified, canonical tenant hosts can be returned to | `central-login.spec.ts`, `seo.test.ts` |
+| AC-2d-07 | Sign out on a tenant host ends only that host; sign out everywhere ends all (asks first, Escape cancels) | `central-login.spec.ts` |
+| AC-2e-01 | Money, export and delete commands (and export downloads) are refused while impersonating; the registry-wide test enumerates every flagged command and checks naming coverage | `packages/testing/tests/impersonation.int.test.ts`, `packages/kernel/tests/command.test.ts` (unit) |
+| AC-2e-02 | An impersonator cannot refund a real paid order; the owner can | `impersonation.int.test.ts`, `apps/admin/e2e/admin.spec.ts` |
+| AC-2e-03 | Step-up can't be satisfied while impersonating | `impersonation.int.test.ts`, `command.test.ts`, `admin.spec.ts` |
+| AC-2e-04 | Audit rows name the staff member next to the member; start and end are audited in the org and for both people | `impersonation.int.test.ts`, `handoff.int.test.ts`, `admin.spec.ts` |
+| AC-2e-05 | Admin staff start with a reason (blank refused), for at most an hour; the banner shows on every console page (Arabic RTL, axe); other orgs 404; account security closed; End (keyboard) returns to the console and kills the session; the console can end it too | `admin.spec.ts`, `handoff.int.test.ts` |
+| AC-2e-06 | Expired impersonations are ended by the worker and recorded once | `apps/worker/tests/impersonations.int.test.ts` |
+| AC-2e-07 | The owners are told at once (inbox + email) with the reason; the kind renders in 13 locales | `impersonation.int.test.ts`, `admin.spec.ts`, `packages/modules/notifications/tests/render.test.ts` |
+| AC-2c-15 | Team: role change and removal with step-up, confirmation, keyboard, Arabic; last owner kept; only owners change owners; viewers see no controls and a replayed action is refused | `apps/web/e2e/team.spec.ts`, `impersonation.int.test.ts` |
+| AC-2c-16 | TOTP replay: a code works once (sign-in, step-up, turn off, set-up); a right code refused for another reason isn't spent; concurrent use signs in once | `packages/auth/tests/two-factor.int.test.ts`, `packages/auth/tests/totp.test.ts`, `apps/web/e2e/two-factor.spec.ts` |
+
 ## Remaining increments
-- **M1.2d** — central login on `app.yayatoh.com` with 60-second single-use handoff codes for tenant hosts.
-- **M1.2e** — impersonation: platform staff only, audited, 1 h, and it blocks money, export and delete.
 - **M1.2f** — Google and Apple sign-in, and Turnstile. **Blocked on the owner:** OAuth client credentials and a Cloudflare account (owner inbox M0.1).

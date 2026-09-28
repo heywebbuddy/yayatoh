@@ -3,23 +3,59 @@
 import { authClient } from '@yayatoh/auth/client';
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { type FormEvent, useActionState, useEffect, useId, useState } from 'react';
+import { type FormEvent, useActionState, useEffect, useId, useRef, useState } from 'react';
 import { type ChallengeState, verifyChallengeAction } from '@/app/[locale]/sign-in/actions.ts';
 import { useRouter } from '@/i18n/navigation.ts';
+import { continueToSiteAction, signOutHereAction } from '@/server/session-actions.ts';
 
 type Mode = 'password' | 'code';
 
 /** Better Auth client errors carry the HTTP status and our 429 body (`retryAfter` seconds). */
 type AuthError = { status?: number; retryAfter?: unknown } | null;
 
+/** Signing in for a tenant site (M1.2d): where to hand the person back to. */
+export interface Handoff {
+  readonly returnUrl: string;
+  readonly state: string;
+  /** The site's host, shown to the person. */
+  readonly site: string;
+}
+
+/**
+ * After signing in: back to the tenant site with a one-time code when signing in for one, else
+ * to `next` on this host.
+ */
+function useFinish(next: string, handoff: Handoff | undefined) {
+  const router = useRouter();
+  return async () => {
+    if (handoff) {
+      const r = await continueToSiteAction(handoff.returnUrl, handoff.state);
+      if (r.url) {
+        window.location.assign(r.url);
+        return;
+      }
+    }
+    router.replace(next);
+    router.refresh();
+  };
+}
+
 /**
  * Email + password, or a one-time code by email (M1.2). People with two-step verification then
  * enter a code from their authenticator app or a backup code (M1.2c). Errors map to localized
- * messages.
+ * messages. Signing in for a tenant site hands the person back there (M1.2d).
  */
-export function SignInForm({ next, challenge = false }: { next: string; challenge?: boolean }) {
+export function SignInForm({
+  next,
+  challenge = false,
+  handoff,
+}: {
+  next: string;
+  challenge?: boolean;
+  handoff?: Handoff;
+}) {
   const t = useTranslations('signIn');
-  const router = useRouter();
+  const finish = useFinish(next, handoff);
   const [mode, setMode] = useState<Mode>('password');
   const [step, setStep] = useState<'credentials' | 'challenge'>(challenge ? 'challenge' : 'credentials');
   const [codeSent, setCodeSent] = useState(false);
@@ -36,7 +72,7 @@ export function SignInForm({ next, challenge = false }: { next: string; challeng
   if (step === 'challenge')
     return (
       <ChallengeForm
-        next={next}
+        finish={finish}
         onRestart={() => {
           setStep('credentials');
           setCodeSent(false);
@@ -76,8 +112,7 @@ export function SignInForm({ next, challenge = false }: { next: string; challeng
         twoFactor = Boolean((data as { twoFactorRedirect?: boolean } | null)?.twoFactorRedirect);
       }
       if (twoFactor) return setStep('challenge');
-      router.replace(next);
-      router.refresh();
+      await finish();
     } finally {
       setBusy(false);
     }
@@ -126,20 +161,20 @@ export function SignInForm({ next, challenge = false }: { next: string; challeng
 }
 
 /** Second step: a code from the authenticator app, or a backup code (each works once). */
-function ChallengeForm({ next, onRestart }: { next: string; onRestart: () => void }) {
+function ChallengeForm({ finish, onRestart }: { finish: () => Promise<void>; onRestart: () => void }) {
   const t = useTranslations('signIn.challenge');
-  const router = useRouter();
   const headingId = useId();
   const [kind, setKind] = useState<'totp' | 'backup_code'>('totp');
   const [state, formAction, pending] = useActionState<ChallengeState, FormData>(verifyChallengeAction, {
     ok: false,
     code: null,
   });
+  const finished = useRef(false);
   useEffect(() => {
-    if (!state.ok) return;
-    router.replace(next);
-    router.refresh();
-  }, [state.ok, next, router]);
+    if (!state.ok || finished.current) return;
+    finished.current = true;
+    void finish();
+  }, [state.ok, finish]);
   const restart = state.code === 'too_many_attempts' || state.code === 'expired';
   return (
     <form action={formAction} aria-labelledby={headingId} className="flex flex-col gap-4" noValidate>
@@ -171,5 +206,47 @@ function ChallengeForm({ next, onRestart }: { next: string; onRestart: () => voi
         {kind === 'totp' ? t('useBackup') : t('useTotp')}
       </Button>
     </form>
+  );
+}
+
+/**
+ * Already signed in on the app host, asked to sign in for a tenant site (M1.2d): continue as this
+ * account (a one-time code takes the person back), or sign out here and use another one.
+ */
+export function ContinueToSite({ handoff, name, email }: { handoff: Handoff; name: string; email: string }) {
+  const t = useTranslations('signIn.handoff');
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="text-body text-zinc-600">{t('signedInAs', { name, email })}</p>
+      <div aria-live="polite">{failed ? <Alert title={t('failed', { site: handoff.site })} /> : null}</div>
+      <Button
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          setFailed(false);
+          const r = await continueToSiteAction(handoff.returnUrl, handoff.state);
+          if (r.url) return window.location.assign(r.url);
+          setFailed(true);
+          setBusy(false);
+        }}
+      >
+        {t('continue', { site: handoff.site })}
+      </Button>
+      <Button
+        variant="ghost"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          await signOutHereAction();
+          router.refresh();
+          setBusy(false);
+        }}
+      >
+        {t('otherAccount')}
+      </Button>
+    </div>
   );
 }

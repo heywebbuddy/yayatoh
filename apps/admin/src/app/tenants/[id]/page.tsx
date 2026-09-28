@@ -1,3 +1,4 @@
+import { getUsersByIds, isImpersonationActive, listImpersonations } from '@yayatoh/auth';
 import { feeScheduleQuery, getEntitlementsQuery } from '@yayatoh/billing';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { disputesQuery, ledgerBalancesQuery, payoutAccountQuery } from '@yayatoh/payments';
@@ -19,12 +20,23 @@ import { Shell } from '@/components/shell.tsx';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
 import {
+  endImpersonationAction,
   entitlementAction,
   feeOverrideAction,
   payoutHoldAction,
+  startImpersonationAction,
   submitEvidenceAction,
   suspensionAction,
 } from './actions.ts';
+
+/** Refusals of "Act as a member" with their own message (others use the generic one). */
+const IMPERSONATE_ERRORS = new Set([
+  'reason_required',
+  'member_required',
+  'self',
+  'staff_target',
+  'not_found',
+]);
 
 const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
 
@@ -80,6 +92,11 @@ export default async function TenantPage({
     executeQuery(ledgerBalancesQuery, {}, ctx, ports),
     executeQuery(disputesQuery, {}, ctx, ports),
   ]);
+  const [people, impersonations] = await Promise.all([
+    getUsersByIds(members.map((m) => m.userId)),
+    listImpersonations(id),
+  ]);
+  const now = new Date();
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
   return (
@@ -87,7 +104,13 @@ export default async function TenantPage({
       <PageHeader eyebrow={<span className="font-mono text-caption">{org.slug}</span>} title={org.name} />
       <div aria-live="polite">
         {done ? <Alert tone="info" title={t(`done.${done}`)} /> : null}
-        {error ? <Alert title={t('error', { code: error })} /> : null}
+        {error ? (
+          <Alert
+            title={
+              IMPERSONATE_ERRORS.has(error) ? t(`impersonate.errors.${error}`) : t('error', { code: error })
+            }
+          />
+        ) : null}
       </div>
       <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-body md:grid-cols-4">
         {(
@@ -372,6 +395,101 @@ export default async function TenantPage({
             <Button type="submit">{t('entitlements.save')}</Button>
           </form>
         ) : null}
+      </Section>
+
+      <Section id="impersonate" title={t('impersonate.title')}>
+        <p className="text-caption text-zinc-600">{t('impersonate.description')}</p>
+        {staff.can('impersonate') ? (
+          <form action={startImpersonationAction.bind(null, id)} className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="imp-member" className="text-caption text-zinc-600">
+                {t('impersonate.member')}
+              </label>
+              <select id="imp-member" name="userId" required defaultValue="" className={field}>
+                <option value="" disabled>
+                  {t('impersonate.choose')}
+                </option>
+                {members.map((m) => (
+                  <option key={m.userId} value={m.userId}>
+                    {t('impersonate.option', {
+                      name: people.get(m.userId)?.name ?? m.userId,
+                      email: people.get(m.userId)?.email ?? '',
+                      role: m.role,
+                    })}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="imp-reason" className="text-caption text-zinc-600">
+                {t('impersonate.reason')}
+              </label>
+              <textarea
+                id="imp-reason"
+                name="reason"
+                required
+                maxLength={500}
+                rows={2}
+                aria-describedby="imp-reason-hint"
+                className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+              />
+              <p id="imp-reason-hint" className="text-caption text-zinc-500">
+                {t('impersonate.reasonHint')}
+              </p>
+            </div>
+            <Button type="submit" className="self-start">
+              {t('impersonate.start')}
+            </Button>
+          </form>
+        ) : (
+          <p className="text-caption text-zinc-600">{t('impersonate.adminsOnly')}</p>
+        )}
+        <h3 className="text-body font-medium">{t('impersonate.history')}</h3>
+        {impersonations.length === 0 ? (
+          <p className="text-caption text-zinc-600">{t('impersonate.empty')}</p>
+        ) : (
+          <ul
+            aria-label={t('impersonate.history')}
+            className="flex list-none flex-col divide-y divide-zinc-100 p-0"
+          >
+            {impersonations.map((i) => {
+              const open = isImpersonationActive(i, now);
+              return (
+                <li key={i.id} className="flex flex-wrap items-center gap-3 py-2 text-body">
+                  <span className="min-w-0 flex-1">
+                    {t('impersonate.entry', { staff: i.staffName, member: i.memberName, reason: i.reason })}
+                  </span>
+                  <span className="text-caption text-zinc-600">
+                    {when.format(i.startedAt)} ·{' '}
+                    {open
+                      ? t('impersonate.until', { at: when.format(i.expiresAt) })
+                      : i.endedAt
+                        ? t(`impersonate.endedHow.${i.endedReason === 'expired' ? 'expired' : 'ended'}`, {
+                            at: when.format(i.endedAt),
+                          })
+                        : t('impersonate.endedHow.expired', { at: when.format(i.expiresAt) })}
+                  </span>
+                  <StatusDot
+                    status={open ? 'warning' : 'neutral'}
+                    label={open ? t('impersonate.open') : t('impersonate.closed')}
+                  />
+                  {open && staff.can('impersonate') ? (
+                    <form action={endImpersonationAction.bind(null, id, i.id)}>
+                      <Button
+                        type="submit"
+                        variant="secondary"
+                        size="sm"
+                        aria-label={t('impersonate.endFor', { member: i.memberName })}
+                      >
+                        {t('impersonate.end')}
+                      </Button>
+                    </form>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </Section>
 
       <Section id="domains" title={t('domains.title')}>

@@ -31,6 +31,26 @@ export interface HandlerArgs<I, Tx> {
   readonly requireStepUp: () => Promise<void>;
 }
 
+/**
+ * What kind of thing a command does, for rules that apply to a whole kind rather than a list of
+ * pages (M1.2e): `money` moves money or changes where it goes (refunds, payouts, payout accounts,
+ * transfers); `export` lets data leave in bulk (every bulk action with a file, DSAR exports);
+ * `delete` deletes or erases. Commands of these kinds are refused while staff act as a member.
+ */
+export type CommandCategory = 'money' | 'export' | 'delete';
+export const COMMAND_CATEGORIES: readonly CommandCategory[] = ['money', 'export', 'delete'];
+
+/** Refused while platform staff act as a member (roadmap M1.2: blocks money, export and delete). */
+export const IMPERSONATION_BLOCKED: ReadonlySet<CommandCategory> = new Set(COMMAND_CATEGORIES);
+
+/** The refusal for a command (or query) of `category` under an impersonated context, if any. */
+export function impersonationRefusal(ctx: Ctx, category: CommandCategory | undefined): DomainError | null {
+  if (!ctx.impersonatedBy || !category || !IMPERSONATION_BLOCKED.has(category)) return null;
+  return new DomainError('impersonation_blocked', 'Not available while acting as a member', {
+    reason: category,
+  });
+}
+
 export interface CommandDefinition<I, O, R, Tx> {
   /** `module.verbNoun`, e.g. `tenancy.createOrganization`. Unique across the app. */
   readonly name: string;
@@ -43,6 +63,8 @@ export interface CommandDefinition<I, O, R, Tx> {
   readonly permission: string;
   /** Require a recent step-up (re-authentication). */
   readonly stepUp?: boolean;
+  /** What kind of thing this command does (money, export, delete): see CommandCategory. */
+  readonly category?: CommandCategory;
   /** Require an Idempotency-Key and replay the stored result on retry. Default: false. */
   readonly idempotent?: boolean;
   /** Tenant-scoped commands run in `withTenant`; platform commands need `orgId === null` explicitly. */
@@ -122,7 +144,7 @@ function reviveAt(root: unknown, path: readonly PropertyKey[]): void {
 
 /**
  * The single write pipeline. Steps run in this order, always:
- * 1 validate · 2 entitlement · 3 authorize · 4 step-up · 5 idempotency ·
+ * (impersonation refusal) · 1 validate · 2 entitlement · 3 authorize · 4 step-up · 5 idempotency ·
  * 6 tenant transaction · 7 handler · 8 outbox · 9 audit · 10 serialize.
  */
 export async function executeCommand<I, O, R, Tx>(
@@ -131,6 +153,11 @@ export async function executeCommand<I, O, R, Tx>(
   ctx: Ctx,
   ports: CommandPorts<Tx>,
 ): Promise<O> {
+  // Staff acting as a member (M1.2e) never move money, export or delete: whatever the input or
+  // the member's role, before anything else runs.
+  const refusal = impersonationRefusal(ctx, command.category);
+  if (refusal) throw refusal;
+
   // 1. Validate
   const parsed = command.input.safeParse(rawInput);
   if (!parsed.success) {
@@ -155,8 +182,12 @@ export async function executeCommand<I, O, R, Tx>(
     throw new DomainError('forbidden', 'Not allowed');
   }
 
-  // 4. Step-up
+  // 4. Step-up (never satisfied while staff act as a member: the person isn't there to confirm)
   const requireStepUp = async () => {
+    if (ctx.impersonatedBy)
+      throw new DomainError('impersonation_blocked', 'Not available while acting as a member', {
+        reason: 'step_up',
+      });
     if (!(await ports.stepUp.satisfied(ctx)))
       throw new DomainError('step_up_required', 'Re-authentication required');
   };
