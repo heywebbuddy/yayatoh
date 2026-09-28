@@ -276,6 +276,11 @@ Temporary working tables are analyzed explicitly, because autovacuum never analy
   - both CHECKs on existing tables are added `NOT VALID` and then validated
   - the cross-module composite FK `legacy_settlements (org_id, event_id) → events.events (org_id, id)`
 
+### Gates touched (strengthened, not relaxed)
+- **Schema guard** (`packages/db/src/guard.ts`, `isMigrationSchema`): the `legacy` and `legacy_{inst}` schemas are exempt from the tenant-table rules only while `app_user` and `platform_reader` have no USAGE on them. Otherwise the guard reports a violation (tested). The isolation suite skips them for the same reason.
+- **check-modules**: new rule `migrator-access` with its canary.
+- **docker-compose**: Postgres gets `shm_size: 256mb`. Parallel queries at rehearsal scale ran out of Docker's default 64 MB.
+
 ### Pending owner (defaults chosen as below; also in docs/owner-inbox.md)
 - **Event clock.** The roadmap says event wall-clock fields are venue-local. The legacy code shows they were saved in the platform timezone (`serverTimezone()`), so the default is `--event-clock=platform`, with the event rendered in the venue's zone. Confirm with M0.4 data, or switch to `venue`.
 - **System timezone.** System timestamps are read in `regional.timezone_default` from each dump (yay America/New_York, abc America/Chicago in the synthetic data), overridable with `--system-timezone`. The roadmap expects America/New_York; confirm per instance.
