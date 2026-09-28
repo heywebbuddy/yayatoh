@@ -233,6 +233,9 @@ test.describe('multi-date events', () => {
     page,
     browser,
   }) => {
+    // A long flow (set up dates, two purchases, cancel a date): ~17 s alone, more beside the other
+    // projects, so it gets its own budget like the other end-to-end journeys.
+    test.setTimeout(90_000);
     const tag = tagOf();
     await signIn(page);
     const base = await createEvent(page, `Picked ${tag}`, '2027-03-03T19:00', '2027-03-03T22:00');
