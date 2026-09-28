@@ -41,16 +41,23 @@ async function drain(page: Page) {
   expect(res.status()).toBe(200);
 }
 
-/** The newest dev-mailbox message to an address whose subject matches. */
-async function mailTo(page: Page, email: string, subject: RegExp) {
+/**
+ * The newest dev-mailbox message to an address whose subject matches. Queued messages (order
+ * links) need the dev drain: `drainFirst` runs it on each try, so a busy database only waits.
+ */
+async function mailTo(page: Page, email: string, subject: RegExp, drainFirst = false) {
   let found: { subject: string; text: string } | undefined;
   await expect
-    .poll(async () => {
-      const res = await page.request.get(`/api/dev/mailbox?to=${encodeURIComponent(email)}`);
-      const list = (await res.json()) as { subject: string; text: string }[];
-      found = list.find((m) => subject.test(m.subject));
-      return Boolean(found);
-    })
+    .poll(
+      async () => {
+        if (drainFirst) await drain(page);
+        const res = await page.request.get(`/api/dev/mailbox?to=${encodeURIComponent(email)}`);
+        const list = (await res.json()) as { subject: string; text: string }[];
+        found = list.find((m) => subject.test(m.subject));
+        return Boolean(found);
+      },
+      { timeout: 30_000 },
+    )
     .toBe(true);
   return found as { subject: string; text: string };
 }
@@ -400,8 +407,7 @@ test.describe('order links', () => {
     await form.getByRole('button', { name: 'Email my order links' }).click();
     await expect(form.getByText(answer)).toBeVisible();
     await expectAccessible(site);
-    await drain(page);
-    const mail = await mailTo(page, email, /^Your link to your order for Resend links/);
+    const mail = await mailTo(page, email, /^Your link to your order for Resend links/, true);
     const link = firstUrl(mail.text, /\/orders\//);
     expect(new URL(link).pathname).toBe(orderPath);
     await site.goto(link);
@@ -441,8 +447,7 @@ test.describe('order links', () => {
     await expectAccessible(page);
 
     expect((await buyer.request.get(oldPath)).status()).toBe(404);
-    await drain(page);
-    const mail = await mailTo(page, email, /^Your new link to your order for Reissue link/);
+    const mail = await mailTo(page, email, /^Your new link to your order for Reissue link/, true);
     const fresh = firstUrl(mail.text, /\/orders\//);
     expect(new URL(fresh).pathname).not.toBe(oldPath);
     await buyer.goto(fresh);
