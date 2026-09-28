@@ -48,7 +48,7 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Red
 - `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss + the single-leader outbox relay), `tools/check-modules` (with gate canaries).
 
 **Recipes**
-- New tenant table: `tenantTable(schema, name, cols, extra)` in the module's `src/schema.ts` → `pnpm db:generate` → add fixture rows → `pnpm test:int`.
+- New tenant table: `tenantTable(schema, name, cols, extra)` in the module's `src/schema.ts` → `pnpm db:generate` → add fixture rows → declare every text/jsonb/text[] column in the module's `src/private-columns.ts` (public, vocab or a private class; the canary coverage test names the line) → `pnpm test:int`.
 - Cross-tenant reads (slug → org, "my orgs") only through SECURITY DEFINER functions granted in a migration; they return allowlisted columns.
 - New command: `tenantCommand({ name, input, output, entitlement, permission, handler, audit })`; run with `executeCommand(cmd, input, ctx, ports)`.
 
