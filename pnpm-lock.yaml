@@ -559,6 +559,9 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3

@@ -147,6 +147,117 @@ test.describe('org API keys (M1.13)', () => {
   });
 });
 
+test.describe('test keys (M1.13d)', () => {
+  async function createTestKey(page: Page, name: string, scopes: string[]) {
+    await page.getByLabel('Name', { exact: true }).fill(name);
+    for (const sc of scopes) await page.getByRole('checkbox', { name: sc }).check();
+    await page.getByRole('radio', { name: 'Test key' }).check();
+    await page.getByRole('button', { name: 'Create key' }).click();
+    await expect(page.getByText(`Key “${name}” created.`)).toBeVisible();
+    const key = (await page.getByTestId('new-api-key').textContent()) ?? '';
+    expect(key).toMatch(/^yy_test_[A-Za-z0-9_-]{43}$/);
+    return key;
+  }
+
+  test('an owner creates a test key: badged in the list, read-only, no personal data', async ({ page }) => {
+    await signIn(page);
+    await page.goto(PAGE);
+    // Live is the default; each type explains itself.
+    await expect(page.getByRole('radio', { name: 'Live key' })).toBeChecked();
+    await expect(page.getByRole('radio', { name: 'Test key' })).toHaveAccessibleDescription(
+      /Read-only, with no personal data/,
+    );
+    const name = keyName('Sandbox');
+    const key = await createTestKey(page, name, ['Read the organization', 'Read events and ticket types']);
+    await expect(page.getByText('This is a test key: read-only, without personal data.')).toBeVisible();
+    await expectAccessible(page);
+    const row = page.getByRole('row').filter({ hasText: name });
+    await expect(row.getByTestId('test-key-badge')).toHaveText('Test');
+    await expect(row).toContainText(`${key.slice(0, 12)}…`);
+    // A live key has no badge.
+    const live = keyName('Live');
+    await createKey(page, live, ['Read the organization']);
+    await expect(page.getByRole('row').filter({ hasText: live }).getByTestId('test-key-badge')).toHaveCount(
+      0,
+    );
+    await page.reload();
+    await expect(page.getByRole('row').filter({ hasText: name }).getByTestId('test-key-badge')).toBeVisible();
+
+    // Against /v1: reads events with a smaller budget; never orders, attendees or writes.
+    const auth = { authorization: `Bearer ${key}` };
+    const events = await page.request.get('/api/v1/orgs/lakeside-events/events?limit=1', { headers: auth });
+    expect(events.status()).toBe(200);
+    expect(events.headers()['ratelimit-limit']).toBe('120');
+    const eventId = (await events.json()).data[0].id as string;
+    for (const path of [`/events/${eventId}/orders`, `/events/${eventId}/attendees`]) {
+      const denied = await page.request.get(`/api/v1/orgs/lakeside-events${path}`, { headers: auth });
+      expect(denied.status(), path).toBe(403);
+    }
+    const write = await page.request.post('/api/v1/orgs/lakeside-events/events', {
+      headers: { ...auth, 'idempotency-key': `e2e-${Date.now()}-test-key` },
+      data: {
+        name: 'Nope',
+        timezone: 'UTC',
+        startsAt: '2030-01-01T10:00:00Z',
+        endsAt: '2030-01-01T11:00:00Z',
+      },
+    });
+    expect(write.status()).toBe(403);
+  });
+
+  test('a test key with write or personal-data scopes is refused, with the reason on the scopes', async ({
+    page,
+  }) => {
+    await signIn(page);
+    await page.goto(PAGE);
+    await page.getByLabel('Name', { exact: true }).fill(keyName('Too much'));
+    await page.getByRole('checkbox', { name: 'Read attendees' }).check();
+    await page.getByRole('radio', { name: 'Test key' }).check();
+    await page.getByRole('button', { name: 'Create key' }).click();
+    const message = page.getByText('A test key can only read the organization and events.');
+    await expect(message).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Scopes' })).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByTestId('new-api-key')).toHaveCount(0);
+    await expectAccessible(page);
+  });
+
+  test('works with the keyboard alone: arrow keys pick the key type', async ({ page }) => {
+    await signIn(page);
+    await page.goto(PAGE);
+    const name = keyName('Keyboard test');
+    await page.getByLabel('Name', { exact: true }).focus();
+    await page.keyboard.type(name);
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    await expect(page.getByRole('checkbox', { name: 'Read the organization' })).toBeChecked();
+    await page.getByRole('radio', { name: 'Live key' }).focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('radio', { name: 'Test key' })).toBeChecked();
+    await expect(page.getByRole('radio', { name: 'Test key' })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Create key' })).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByText(`Key “${name}” created.`)).toBeVisible();
+    expect(await page.getByTestId('new-api-key').textContent()).toMatch(/^yy_test_/);
+    await expect(page.getByRole('row').filter({ hasText: name }).getByTestId('test-key-badge')).toBeVisible();
+  });
+
+  test('renders the key type and the badge right-to-left in Arabic', async ({ page }) => {
+    await signIn(page);
+    await page.goto(PAGE);
+    const name = keyName('Arabic test');
+    await createTestKey(page, name, ['Read events and ticket types']);
+    await page.goto(`/ar${PAGE}`);
+    await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+    await expect(page.getByRole('group', { name: 'نوع المفتاح' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'مفتاح اختبار' })).toBeVisible();
+    await expect(page.getByRole('row').filter({ hasText: name }).getByTestId('test-key-badge')).toHaveText(
+      'اختبار',
+    );
+    await expectAccessible(page);
+  });
+});
+
 test.describe('API reference (Scalar)', () => {
   test('loads from our own origin and lists the endpoints', async ({ page }) => {
     // Nothing third-party loads: Scalar's hosted fonts are stopped by the page's CSP.
@@ -181,5 +292,26 @@ test.describe('API reference (Scalar)', () => {
     expect(body.servers[0].url).toMatch(/\/api$/);
     expect(Object.keys(body.paths)).toContain('/v1/orgs/{org}/events');
     expect(foreign).toEqual([]);
+  });
+
+  test('lists the mobile-ready content endpoints (M1.13d) and passes axe', async ({ page }) => {
+    await page.goto('/api/v1/docs');
+    await expect(page.getByText('Yayatoh API', { exact: true }).first()).toBeVisible({ timeout: 20_000 });
+    for (const group of ['public content', 'event content', 'venues'])
+      await expect(page.getByText(group, { exact: true }).first()).toBeAttached();
+    for (const summary of ['A public event’s agenda', 'A public event’s speakers', 'The venue directory'])
+      await expect(page.getByText(summary, { exact: true }).first()).toBeAttached();
+    const body = await (await page.request.get('/api/v1/openapi.json')).json();
+    for (const path of [
+      '/v1/public/events/{slug}/agenda',
+      '/v1/public/events/{slug}/speakers/{speakerId}',
+      '/v1/public/events/{slug}/images',
+      '/v1/public/venues/{slug}',
+      '/v1/orgs/{org}/events/{eventId}/agenda',
+      '/v1/orgs/{org}/venues',
+    ])
+      expect(Object.keys(body.paths)).toContain(path);
+    expect(body.paths['/v1/public/events/{slug}/agenda'].get.operationId).toBe('getPublicEventAgenda');
+    await expectAccessible(page);
   });
 });

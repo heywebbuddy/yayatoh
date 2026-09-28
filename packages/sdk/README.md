@@ -26,5 +26,20 @@ Errors throw `YayatohApiError` (`status`, stable `code`, `requestId`, `retryAfte
 
 - `pnpm --filter @yayatoh/sdk generate` regenerates `src/schema.ts` after `/v1` changes
   (`pnpm contracts:check` fails while it is stale).
-- `scripts/generate-mobile.sh` generates the Swift 6 and Kotlin clients with openapi-generator
-  (Docker, local only; `mobile/*.yaml` hold the settings). Mobile apps are deferred (roadmap §8.3).
+- `pnpm --filter @yayatoh/sdk generate:mobile` (`scripts/generate-mobile.sh`) generates the Swift 6
+  and Kotlin clients with openapi-generator (Docker, local only; `mobile/*.yaml` hold the settings;
+  output in `mobile/out/`, git-ignored). Mobile apps are deferred (roadmap §8.3). Every operation
+  has an `operationId` and every enum is a named schema (Spectral, `pnpm contracts:check`), so the
+  generated methods and types have stable names.
+
+Content reads for a future app (M1.13d), all public without a credential:
+
+```ts
+const agenda = await unwrap(api.GET('/v1/public/events/{slug}/agenda', { params: { path: { slug } } }));
+for (const day of agenda.days) for (const s of day.sessions) console.log(day.date, s.title, s.room);
+// Also: …/sections, …/announcements, …/dates, …/speakers(/{speakerId}), …/exhibitors,
+// …/sponsors, …/images (absolute, immutable URLs), /v1/public/venues(/{slug}).
+```
+
+Test keys (`yy_test_…`) are read-only and see no personal data: build against one, ship with a
+live key.

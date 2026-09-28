@@ -62,9 +62,33 @@ export function ApiKeyForm({
           </div>
           {invalid('scopes') ? (
             <p id="scopes-error" className="text-caption text-pink-700">
-              {t('apiKeys.scopesRequired')}
+              {state.kind === 'error' && state.reason === 'test_key_scope'
+                ? t('apiKeys.testScopesInvalid')
+                : t('apiKeys.scopesRequired')}
             </p>
           ) : null}
+        </fieldset>
+        {/* M1.13d: a test key (`yy_test_…`) is read-only and never sees personal data. */}
+        <fieldset className="flex flex-col gap-2">
+          <legend className="text-caption text-zinc-600">{t('apiKeys.mode')}</legend>
+          {(['live', 'test'] as const).map((m) => (
+            <label key={m} className="flex min-h-10 items-start gap-2.5 text-body">
+              <input
+                type="radio"
+                name="mode"
+                value={m}
+                defaultChecked={m === 'live'}
+                aria-describedby={`mode-${m}-hint`}
+                className="mt-1 size-4 accent-zinc-900"
+              />
+              <span className="flex flex-col">
+                <span>{t(m === 'live' ? 'apiKeys.modeLive' : 'apiKeys.modeTest')}</span>
+                <span id={`mode-${m}-hint`} className="text-caption text-zinc-600">
+                  {t(m === 'live' ? 'apiKeys.modeLiveHint' : 'apiKeys.modeTestHint')}
+                </span>
+              </span>
+            </label>
+          ))}
         </fieldset>
         <div>
           <Button type="submit" disabled={pending}>
@@ -77,6 +101,7 @@ export function ApiKeyForm({
           <div className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-zinc-50 p-4">
             <p className="text-body font-medium">{t('apiKeys.created', { name: state.name })}</p>
             <p className="text-body">{t('apiKeys.shownOnce')}</p>
+            {state.sandbox ? <p className="text-body">{t('apiKeys.createdTest')}</p> : null}
             <code
               data-testid="new-api-key"
               className="break-all rounded-card bg-white px-3 py-2 font-mono text-caption"

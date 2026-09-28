@@ -99,7 +99,9 @@ const routes = {
       params: EventParams,
       query: PageQuery.extend({
         search: z.string().max(200).optional().openapi({ description: 'Name or email contains' }),
-        status: AttendeeStatus.optional().openapi({ param: { description: 'Only attendees with this status' } }),
+        status: AttendeeStatus.optional().openapi({
+          param: { description: 'Only attendees with this status' },
+        }),
       }),
     },
     responses: { 200: json(AttendeePage, 'A page of attendees'), ...problems },

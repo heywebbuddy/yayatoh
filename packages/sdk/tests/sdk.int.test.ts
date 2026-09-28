@@ -114,4 +114,50 @@ describe('@yayatoh/sdk against a running /v1', () => {
     );
     expect(pub.slug).toBe(a.event.slug);
   });
+
+  it('reads the agenda (M1.13d): public by slug, and the org view with a test key', async () => {
+    const anon = createYayatohClient({ baseUrl });
+    const agenda = await unwrap(
+      anon.GET('/v1/public/events/{slug}/agenda', { params: { path: { slug: a.event.slug } } }),
+    );
+    expect(agenda.timezone).toBe('America/Chicago');
+    const sessions = agenda.days.flatMap((d) => d.sessions);
+    expect(sessions.map((s) => s.title)).toContain('Opening keynote');
+    expect(sessions.find((s) => s.title === 'Opening keynote')).toMatchObject({
+      room: 'Hall A',
+      track: 'Main track',
+    });
+    const sandbox = createYayatohClient({ baseUrl, token: a.testKey });
+    const org = await unwrap(
+      sandbox.GET('/v1/orgs/{org}/events/{eventId}/agenda', {
+        params: { path: { org: a.org.slug, eventId: a.event.id } },
+      }),
+    );
+    expect(org.rooms.map((r) => r.capacity)).toEqual([200]);
+    const speakers: Schemas['Speaker'][] = [];
+    for await (const s of paginate((cursor) =>
+      unwrap(
+        sandbox.GET('/v1/orgs/{org}/events/{eventId}/speakers', {
+          params: { path: { org: a.org.slug, eventId: a.event.id }, query: { limit: 1, cursor } },
+        }),
+      ),
+    ))
+      speakers.push(s);
+    expect(speakers.map((s) => s.name)).toEqual([`${a.org.name} Speaker`]);
+    // A test key never reads orders, and another org's key never reads this org.
+    await expect(
+      unwrap(
+        sandbox.GET('/v1/orgs/{org}/events/{eventId}/orders', {
+          params: { path: { org: a.org.slug, eventId: a.event.id } },
+        }),
+      ),
+    ).rejects.toMatchObject({ status: 403, code: 'forbidden' });
+    await expect(
+      unwrap(
+        createYayatohClient({ baseUrl, token: b.testKey }).GET('/v1/orgs/{org}/events/{eventId}/agenda', {
+          params: { path: { org: a.org.slug, eventId: a.event.id } },
+        }),
+      ),
+    ).rejects.toMatchObject({ status: 404 });
+  });
 });

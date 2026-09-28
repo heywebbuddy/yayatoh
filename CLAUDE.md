@@ -46,7 +46,7 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Red
 - `packages/modules/program` (tier 3, M1.4f): tracks, rooms, sessions, speakers, exhibitors, sponsors; pure conflict checks in `domain/schedule.ts`. Pages appear only for profiles whose nav lists them (`navIncludes`).
 - `packages/modules/ai` (tier 6, M1.4f): the `AiDrafter` port (fake in dev/CI) and the per-org credits ledger (append-only; the account row is the lock).
 - `packages/testing`: `twoOrgs()` fixture, the composed `ports`, the isolation suite. **Every new tenant table must get rows for both orgs in `createOrgFixture`** — the isolation suite fails otherwise.
-- `packages/api-v1`: the `/v1` router (`createV1`), mounted by `apps/api` at `/v1` and by the web at `/api/v1`. Org resources under `/v1/orgs/{org}`; wire allowlists in `src/resources.ts`. `packages/sdk`: the generated TypeScript client (`pnpm --filter @yayatoh/sdk generate` after `/v1` changes).
+- `packages/api-v1`: the `/v1` router (`createV1`), mounted by `apps/api` at `/v1` and by the web at `/api/v1`. Org resources under `/v1/orgs/{org}`; wire allowlists in `src/resources.ts`. Content reads (M1.13d) in `src/routes/content.ts` (keyset `pageByKey`, `cachedJson` ETags); mark a route `deprecated()` for `Deprecation`/`Sunset` headers. `pnpm contracts:check` also runs Spectral (`apps/api/spectral/`): every operation needs an `operationId`, tags and descriptions, and every enum a `.openapi('Name')`. `packages/sdk`: the generated TypeScript client (`pnpm --filter @yayatoh/sdk generate` after `/v1` changes).
 - `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss + the single-leader outbox relay), `tools/check-modules` (with gate canaries).
 
 **Recipes**
