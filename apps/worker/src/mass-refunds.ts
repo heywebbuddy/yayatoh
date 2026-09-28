@@ -54,8 +54,13 @@ export async function dueMassRefunds(limit = 50): Promise<{ orgId: string; runId
  * Queue a job for each running mass refund (leader, every few seconds). The `exclusive` queue
  * drops a send while that run's job is still queued or active.
  */
-export async function enqueueDueMassRefunds(boss: Pick<PgBoss, 'send'>): Promise<number> {
-  const due = await dueMassRefunds();
-  for (const d of due) await boss.send(MASS_REFUND_JOB, d, { singletonKey: d.runId });
-  return due.length;
+export async function enqueueDueMassRefunds(
+  boss: Pick<PgBoss, 'send'>,
+  /** Tests: only these orgs (other test files' runs are left alone). */
+  onlyOrgs?: ReadonlySet<string>,
+): Promise<number> {
+  const due = (await dueMassRefunds()).filter((d) => !onlyOrgs || onlyOrgs.has(d.orgId));
+  let queued = 0;
+  for (const d of due) if (await boss.send(MASS_REFUND_JOB, d, { singletonKey: d.runId })) queued += 1;
+  return queued;
 }
