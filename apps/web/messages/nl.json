@@ -4398,7 +4398,6 @@
     "joinedHint": "We hebben je een link gemaild om je plek te bekijken of de wachtlijst te verlaten.",
     "seeMyPlace": "Mijn plek in de rij bekijken",
     "joinLink": "Op de wachtlijst",
-    "joinDateLink": "Op de wachtlijst voor {date}",
     "eyebrow": "Wachtlijst · {org}",
     "summary": "{count, plural, one {# ticket} other {# tickets}} · {pass}",
     "forDate": "{summary} · {date}",

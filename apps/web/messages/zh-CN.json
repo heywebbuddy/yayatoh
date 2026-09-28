@@ -4398,7 +4398,6 @@
     "joinedHint": "我们已通过邮件向你发送链接，可用于查看排位或退出候补名单。",
     "seeMyPlace": "查看我的排位",
     "joinLink": "加入候补名单",
-    "joinDateLink": "加入 {date} 的候补名单",
     "eyebrow": "候补名单 · {org}",
     "summary": "{count, plural, other {# 张门票}} · {pass}",
     "forDate": "{summary} · {date}",

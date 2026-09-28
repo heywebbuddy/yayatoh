@@ -4398,7 +4398,6 @@
     "joinedHint": "Te enviamos por correo un enlace para ver tu lugar o salir de la lista de espera.",
     "seeMyPlace": "Ver mi lugar en la fila",
     "joinLink": "Unirme a la lista de espera",
-    "joinDateLink": "Unirme a la lista de espera para {date}",
     "eyebrow": "Lista de espera · {org}",
     "summary": "{count, plural, one {# entrada} other {# entradas}} · {pass}",
     "forDate": "{summary} · {date}",

@@ -108,15 +108,21 @@ async function mailbox(page: Page, to: string): Promise<Mail[]> {
   return res.json();
 }
 
-/** The waitlist link in the newest email to `to` whose subject starts with `subject`. */
+/**
+ * The waitlist link in the newest email to `to` whose subject starts with `subject`. The dev drain
+ * works through the whole seeded org's recent events, which takes a while when the full suite runs.
+ */
 async function linkFromMail(page: Page, to: string, subject: string): Promise<string> {
   let link = '';
   await expect
-    .poll(async () => {
-      const mail = (await mailbox(page, to)).filter((m) => m.subject.startsWith(subject)).at(-1);
-      link = /href="(https?:\/\/[^"]+\/waitlist\/[^"]+)"/.exec(mail?.html ?? '')?.[1] ?? '';
-      return link;
-    })
+    .poll(
+      async () => {
+        const mail = (await mailbox(page, to)).filter((m) => m.subject.startsWith(subject)).at(-1);
+        link = /href="(https?:\/\/[^"]+\/waitlist\/[^"]+)"/.exec(mail?.html ?? '')?.[1] ?? '';
+        return link;
+      },
+      { timeout: 30_000 },
+    )
     .toMatch(/\/waitlist\/[0-9a-f-]{36}~/);
   return new URL(link.replace(/&amp;/g, '&')).pathname;
 }

@@ -4398,7 +4398,6 @@
     "joinedHint": "順番の確認やキャンセル待ちの取り消しができるリンクをメールでお送りしました。",
     "seeMyPlace": "自分の順番を見る",
     "joinLink": "キャンセル待ちに登録",
-    "joinDateLink": "{date}のキャンセル待ちに登録",
     "eyebrow": "キャンセル待ち · {org}",
     "summary": "{count, plural, other {#枚}} · {pass}",
     "forDate": "{summary} · {date}",

@@ -4398,7 +4398,6 @@
     "joinedHint": "We've emailed you a link to see your place or leave the waitlist.",
     "seeMyPlace": "See my place in line",
     "joinLink": "Join the waitlist",
-    "joinDateLink": "Join the waitlist for {date}",
     "eyebrow": "Waitlist · {org}",
     "summary": "{count, plural, one {# ticket} other {# tickets}} · {pass}",
     "forDate": "{summary} · {date}",

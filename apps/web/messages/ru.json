@@ -4398,7 +4398,6 @@
     "joinedHint": "Мы отправили вам по email ссылку, по которой можно посмотреть своё место или выйти из листа ожидания.",
     "seeMyPlace": "Моё место в очереди",
     "joinLink": "Встать в лист ожидания",
-    "joinDateLink": "Встать в лист ожидания на {date}",
     "eyebrow": "Лист ожидания · {org}",
     "summary": "{count, plural, one {# билет} few {# билета} many {# билетов} other {# билета}} · {pass}",
     "forDate": "{summary} · {date}",

@@ -58,12 +58,15 @@ export async function DatePicker({
               <li key={d.id}>
                 {unavailable ? (
                   <span className="inline-flex min-h-11 flex-col justify-center rounded-card border border-zinc-200 bg-zinc-50 px-4 py-2 text-caption text-zinc-500">
-                    <span className="line-through">{label}</span>
+                    <span id={`date-${d.id}`} className="line-through">
+                      {label}
+                    </span>
                     <span>{unavailable}</span>
                     {waitlist && d.status === 'scheduled' && d.soldOut ? (
                       <Link
                         href={`/events/${slug}/waitlist?date=${d.id}`}
-                        aria-label={tw('joinDateLink', { date: label })}
+                        // Named like the pass links; the date it is for is its description.
+                        aria-describedby={`date-${d.id}`}
                         className="inline-flex min-h-6 items-center text-zinc-900 underline underline-offset-2"
                       >
                         {tw('joinLink')}

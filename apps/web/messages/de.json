@@ -4398,7 +4398,6 @@
     "joinedHint": "Wir haben dir per E-Mail einen Link geschickt, mit dem du deinen Platz sehen oder die Warteliste verlassen kannst.",
     "seeMyPlace": "Meinen Platz in der Reihe ansehen",
     "joinLink": "Auf die Warteliste",
-    "joinDateLink": "Auf die Warteliste für {date}",
     "eyebrow": "Warteliste · {org}",
     "summary": "{count, plural, one {# Ticket} other {# Tickets}} · {pass}",
     "forDate": "{summary} · {date}",

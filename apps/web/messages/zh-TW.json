@@ -4398,7 +4398,6 @@
     "joinedHint": "我們已透過電子郵件寄送連結給你，可用來查看順位或退出候補名單。",
     "seeMyPlace": "查看我的順位",
     "joinLink": "加入候補名單",
-    "joinDateLink": "加入 {date} 的候補名單",
     "eyebrow": "候補名單 · {org}",
     "summary": "{count, plural, other {# 張票券}} · {pass}",
     "forDate": "{summary} · {date}",
