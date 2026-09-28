@@ -35,6 +35,8 @@ test.describe('series', () => {
     page,
     browser,
   }) => {
+    // A long journey through several pages: more than the default 30 s with parallel workers.
+    test.setTimeout(90_000);
     const tag = tagOf();
     await signIn(page);
     await page.goto(`${ORG}/series`);

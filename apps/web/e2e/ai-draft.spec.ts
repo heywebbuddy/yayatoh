@@ -178,7 +178,8 @@ test.describe('AI drafting with the credits ledger (M1.4f)', () => {
     await signIn(page, 'lee@harbor.test');
     await page.goto('/o/harbor-arts');
     const first = page.locator('a[href^="/o/harbor-arts/e/"]').first();
-    const href = await first.getAttribute('href');
+    // The org home also links into events (activity such as new orders): keep the event's base.
+    const href = (await first.getAttribute('href'))?.match(/^\/o\/harbor-arts\/e\/[^/]+/)?.[0];
     await page.goto(`${href}/content`);
     await setCredits(request, 'harbor-arts', 0);
     const ai = panel(page);

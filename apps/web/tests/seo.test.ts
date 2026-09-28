@@ -288,6 +288,29 @@ describe('noindex guard (M1.11d)', () => {
     expect(isPrivatePage('dev', '/o/lakeside')).toBe(true);
   });
 
+  it('an organizer’s blog and pages on the marketplace are public, as its sitemap lists them (M1.4g)', () => {
+    for (const p of [
+      '/o/lakeside/blogs',
+      '/o/lakeside/blogs/',
+      '/o/lakeside/blogs/first-post',
+      '/o/lakeside/pages/about',
+    ])
+      expect([p, robotsHeader('marketplace', p)]).toEqual([p, null]);
+    for (const p of [
+      '/o/lakeside/pages',
+      '/o/lakeside/blogs/a/b',
+      '/o/lakeside/content',
+      '/o/lakeside/pages/about/edit',
+    ])
+      expect([p, robotsHeader('marketplace', p)]).toEqual([p, NOINDEX]);
+    // Elsewhere `/o/…` is the console.
+    expect(robotsHeader('tenant', '/o/lakeside/blogs/first-post')).toBe(NOINDEX);
+    const txt = robotsTxt('marketplace', 'https://yayatoh.com');
+    expect(txt).toContain('Allow: /o/*/blogs\n');
+    expect(txt).toContain('Allow: /o/*/pages/\n');
+    expect(robotsTxt('tenant', 'https://x.yayatoh.events')).not.toContain('Allow: /o/');
+  });
+
   it('dashboard, localhost and preview hosts are noindex on every page, header and meta', () => {
     for (const kind of ['app', 'dev'] as const) {
       for (const p of [...PUBLIC, ...PRIVATE]) expect(robotsHeader(kind, p)).toBe(NOINDEX);

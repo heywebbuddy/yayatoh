@@ -31,7 +31,8 @@ export const PRIVATE_PATHS = [
 export function robotsTxt(kind: HostKind, origin: string): string {
   if (kind === 'app' || kind === 'dev') return 'User-agent: *\nDisallow: /\n';
   const lines = ['User-agent: *', 'Allow: /', ...PRIVATE_PATHS.map((p) => `Disallow: ${p}`)];
-  if (kind === 'marketplace') lines.push('Disallow: /organizers/');
+  // An organizer's blog and pages on the marketplace (M1.4g) are public and in its sitemap.
+  if (kind === 'marketplace') lines.push('Allow: /o/*/blogs', 'Allow: /o/*/pages/', 'Disallow: /organizers/');
   return `${lines.join('\n')}\n\nSitemap: ${origin}/sitemap.xml\n`;
 }
 
@@ -41,11 +42,13 @@ export const NOINDEX = 'noindex, nofollow';
 /**
  * Private pages (path without the locale): the console, checkout, secret-link pages, the scanner,
  * sign-in, the widget frame, unlock, message and unsubscribe links, the account, internal
- * segments. On the marketplace `/o/{slug}` itself is the public organizer page; anywhere else
- * `/o/…` is the console.
+ * segments. On the marketplace `/o/{slug}` itself is the public organizer page, with its blog and
+ * pages (`/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}`: the paths the proxy rewrites to
+ * them); anywhere else `/o/…` is the console.
  */
 export function isPrivatePage(kind: HostKind, path: string): boolean {
-  if (kind === 'marketplace' && /^\/o\/[^/]+\/?$/.test(path)) return false;
+  if (kind === 'marketplace' && /^\/o\/[^/]+(?:\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.test(path))
+    return false;
   if (pageTypeOf(path) !== 'public') return true;
   return /^\/(?:embed|messages|unsubscribe|account|dev|t|organizers|api)(?:\/|$)|^\/events\/[^/]+\/unlock\/?$/.test(
     path,

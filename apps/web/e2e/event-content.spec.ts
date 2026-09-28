@@ -249,6 +249,8 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     page,
     browser,
   }) => {
+    // A long journey through several pages: more than the default 30 s with parallel workers.
+    test.setTimeout(90_000);
     const s = stamp();
     const canary = `WIFI-CANARY-${s}`;
     const joinUrl = `https://meet.example.com/room-${s}`;
@@ -327,6 +329,8 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     page,
     browser,
   }) => {
+    // A long journey through several pages: more than the default 30 s with parallel workers.
+    test.setTimeout(90_000);
     const s = stamp();
     const code = `FRIENDS${s}`.slice(0, 32);
     await signIn(page);

@@ -51,6 +51,8 @@ const feedback = (page: Page) => page.locator('[aria-live="polite"]').getByRole(
 
 test.describe('seat assignment (M1.7d)', () => {
   test('keyboard only: pick people from the queue, seat them at a table, remove one', async ({ page }) => {
+    // A long journey through several pages: more than the default 30 s with parallel workers.
+    test.setTimeout(90_000);
     const name = unique('Keyboard Gala');
     const [ann, ben, cat] = ['Ann', 'Ben', 'Cat'].map((n) => `${n} ${name}`) as [string, string, string];
     await signIn(page);
