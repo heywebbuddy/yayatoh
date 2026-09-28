@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { ageSession, confirmStepUp, expectAccessible, lastEmailedCode, personaCode, signIn } from './helpers.ts';
+import {
+  ageSession,
+  confirmStepUp,
+  expectAccessible,
+  lastEmailedCode,
+  personaCode,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M3.10a waitlists with timed offers: join a sold-out pass from the event page (email code), the
@@ -86,8 +93,11 @@ async function joinFromEventPage(page: Page, slug: string, who: string, opts: { 
   return { text, link: new URL(page.url()).pathname };
 }
 
-async function sweep(page: Page, hours = 0) {
-  const res = await page.request.post('/api/dev/waitlist/sweep', { form: { org: ORG, hours: String(hours) } });
+/** Run the waitlist sweeper for this event only (`hours` later), as the worker would. */
+async function sweep(page: Page, slug: string, hours = 0) {
+  const res = await page.request.post('/api/dev/waitlist/sweep', {
+    form: { org: ORG, event: slug, hours: String(hours) },
+  });
   expect(res.ok()).toBe(true);
   return (await res.json()) as { expired: number; offered: number };
 }
@@ -153,7 +163,7 @@ test.describe('waitlists (M3.10a)', () => {
 
     // The organizer cancels the buyer's ticket: the sweeper offers the place to Amy.
     await cancelTicketOf(page, base, buyer);
-    expect((await sweep(page)).offered).toBeGreaterThanOrEqual(1);
+    expect((await sweep(page, slug)).offered).toBeGreaterThanOrEqual(1);
     const offerLink = await linkFromMail(guest, emailOf(amy), `Tickets are free for ${name}`);
     expect(offerLink).toBe(joined.link);
     // Nobody else can buy the held place meanwhile.
@@ -192,7 +202,7 @@ test.describe('waitlists (M3.10a)', () => {
     expect(b.text).toContain('number 2 in line');
 
     await cancelTicketOf(page, base, buyer);
-    await sweep(page);
+    await sweep(page, slug);
     const guest = await guestPage(browser);
     await guest.goto(a.link);
     await expect(guest.getByRole('heading', { name: '1 Pass ticket is held for you' })).toBeVisible();
@@ -200,7 +210,7 @@ test.describe('waitlists (M3.10a)', () => {
     await expect(guest.getByRole('heading', { name: "You're number 1 in line" })).toBeVisible();
 
     // A day later Amy's offer has lapsed: Ben gets it, Amy is told and may rejoin.
-    await sweep(page, 25);
+    await sweep(page, slug, 25);
     await linkFromMail(guest, emailOf(amy), `Your offer for ${name} has ended`);
     await guest.goto(a.link);
     await expect(guest.getByRole('heading', { name: 'Your offer has ended' })).toBeVisible();
@@ -215,15 +225,13 @@ test.describe('waitlists (M3.10a)', () => {
     await ar.goto(`/ar${b.link}`);
     await expect(ar.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(ar.locator('html')).toHaveAttribute('lang', 'ar');
-    await expect(ar.getByRole('form')).toHaveCount(2);
+    await expect(ar.getByRole('form', { name: 'أتمّ شراء عرضك' })).toBeVisible();
     await expectAccessible(ar);
-    await ar.getByRole('button').last().click();
-    await expect(ar.getByRole('button')).toHaveCount(1);
+    await ar.getByRole('button', { name: 'لا شكرًا، حرّر التذاكر' }).click();
+    await expect(ar.getByRole('heading', { name: 'حرّرت التذاكر' })).toBeVisible();
     await expectAccessible(ar);
-    await ar.goto(b.link);
-    await expect(ar.getByRole('heading', { name: 'You released the tickets' })).toBeVisible();
     // The place goes to Amy, back in line.
-    await sweep(page);
+    await sweep(page, slug);
     await guest.goto(a.link);
     await expect(guest.getByRole('heading', { name: '1 Pass ticket is held for you' })).toBeVisible();
   });
@@ -246,7 +254,7 @@ test.describe('waitlists (M3.10a)', () => {
     await page.getByRole('link', { name: 'Waitlists', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Waitlists', level: 1 })).toBeVisible();
     const lists = page.getByRole('table', { name: 'Waitlists' });
-    await expect(lists.getByRole('row').filter({ hasText: 'Pass' })).toContainText('2 people · 2 tickets');
+    await expect(lists.getByRole('row').nth(1)).toContainText('2 people · 2 tickets');
     const people = page.getByRole('table', { name: 'People on Pass' });
     await expect(people.getByRole('row').nth(1)).toContainText(amy);
     await expect(people.getByRole('row').nth(2)).toContainText(ben);
@@ -262,14 +270,14 @@ test.describe('waitlists (M3.10a)', () => {
     await settings.getByRole('button', { name: 'Save' }).click();
     await expect(settings.getByText('Saved.')).toBeVisible();
     await page.reload();
-    await expect(lists.getByRole('row').filter({ hasText: 'Pass' })).toContainText('Paused');
+    await expect(lists.getByRole('row').nth(1)).toContainText('Paused');
 
     // Nothing free yet: a manual offer is refused.
     await page.getByRole('button', { name: `Offer now to ${ben}` }).click();
     await expect(page.getByText('Not enough tickets are free for this offer.')).toBeVisible();
     // Free a place; paused, so the sweeper offers nothing; the organizer offers Ben (second) by keyboard.
     await cancelTicketOf(page, base, buyer);
-    expect((await sweep(page)).offered).toBe(0);
+    expect((await sweep(page, slug)).offered).toBe(0);
     await page.goto(`${base}/tickets-orders/waitlists`);
     await page.getByRole('button', { name: `Offer now to ${ben}` }).focus();
     await page.keyboard.press('Enter');

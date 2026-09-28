@@ -152,7 +152,7 @@ export default async function WaitlistsPage({
               </h2>
               <Card>
                 <WaitlistSettingsForm
-                  key={`${chosen.id}:${chosen.autoOffer}:${chosen.offerMinutes}`}
+                  key={chosen.id}
                   action={updateWaitlistAction.bind(null, org, event, chosen.id)}
                   autoOffer={chosen.autoOffer}
                   offerHours={Math.round((chosen.offerMinutes / 60) * 100) / 100}

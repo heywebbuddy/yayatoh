@@ -389,11 +389,23 @@ async function offerRoomTx(tx: TenantTx, list: ListRow, now: Date): Promise<numb
 }
 
 /** Offers lapsed by `now`: their stock is released and the person is told they may rejoin. */
-async function expireOffersTx(tx: TenantTx, ctx: Ctx, emit: (e: DomainEvent) => void, limit: number) {
+async function expireOffersTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: (e: DomainEvent) => void,
+  limit: number,
+  eventId?: string,
+) {
   const due = await tx
     .select()
     .from(waitlistEntries)
-    .where(and(eq(waitlistEntries.status, 'offered'), lte(waitlistEntries.offerExpiresAt, ctx.now)))
+    .where(
+      and(
+        eq(waitlistEntries.status, 'offered'),
+        lte(waitlistEntries.offerExpiresAt, ctx.now),
+        eventId ? eq(waitlistEntries.eventId, eventId) : undefined,
+      ),
+    )
     .orderBy(asc(waitlistEntries.offerExpiresAt))
     .limit(limit)
     .for('update', { skipLocked: true });
@@ -415,13 +427,24 @@ async function expireOffersTx(tx: TenantTx, ctx: Ctx, emit: (e: DomainEvent) => 
 }
 
 /** Offer freed stock on every list that offers automatically, in line order. */
-async function autoOfferTx(tx: TenantTx, ctx: Ctx, emit: (e: DomainEvent) => void): Promise<number> {
+async function autoOfferTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: (e: DomainEvent) => void,
+  eventId?: string,
+): Promise<number> {
   // Lists with people waiting, the line whose front joined first going first.
   const lists = await tx
     .select({ id: waitlistEntries.waitlistId, first: sql<Date>`min(${waitlistEntries.positionAt})` })
     .from(waitlistEntries)
     .innerJoin(waitlists, eq(waitlists.id, waitlistEntries.waitlistId))
-    .where(and(eq(waitlistEntries.status, 'waiting'), eq(waitlists.autoOffer, true)))
+    .where(
+      and(
+        eq(waitlistEntries.status, 'waiting'),
+        eq(waitlists.autoOffer, true),
+        eventId ? eq(waitlistEntries.eventId, eventId) : undefined,
+      ),
+    )
     .groupBy(waitlistEntries.waitlistId)
     .orderBy(sql`min(${waitlistEntries.positionAt})`)
     .limit(200);
@@ -458,13 +481,17 @@ async function autoOfferTx(tx: TenantTx, ctx: Ctx, emit: (e: DomainEvent) => voi
  */
 export const sweepWaitlistsCommand = tenantCommand({
   name: 'orders.sweepWaitlists',
-  input: z.object({ limit: z.int().min(1).max(500).default(200) }),
+  input: z.object({
+    limit: z.int().min(1).max(500).default(200),
+    /** Only this event's lists (the dev/CI route; the worker sweeps the whole org). */
+    eventId: z.uuid().optional(),
+  }),
   output: z.object({ expired: z.int(), offered: z.int() }),
   entitlement: null,
   permission: 'platform:orders.sweep',
   handler: async ({ input, ctx, tx, emit }) => {
-    const expired = await expireOffersTx(tx, ctx, emit, input.limit);
-    const offered = await autoOfferTx(tx, ctx, emit);
+    const expired = await expireOffersTx(tx, ctx, emit, input.limit, input.eventId);
+    const offered = await autoOfferTx(tx, ctx, emit, input.eventId);
     return { expired, offered };
   },
   audit: (_i, r) => ({ action: 'waitlist.sweep', targetType: 'waitlist', targetId: null, data: r }),

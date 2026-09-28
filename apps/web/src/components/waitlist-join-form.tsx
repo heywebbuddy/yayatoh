@@ -75,8 +75,10 @@ export function WaitlistJoinForm({
       </div>
     );
   }
+  // Name and email problems show under their field (and focus it); anything else here.
+  const inline = state.field === 'name' || state.field === 'email';
   const error =
-    state.code === null || state.code === 'verify_email'
+    state.code === null || state.code === 'verify_email' || inline
       ? null
       : state.code === 'rate_limited'
         ? tr('errors.rateLimitedRetry', { minutes: state.retryMinutes ?? 1 })

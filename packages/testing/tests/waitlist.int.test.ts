@@ -367,11 +367,10 @@ describe('waitlists: timed offers', () => {
     await lapseHold();
     await sweep();
     expect(await statusOf(s, amy.entryId)).toBe('offered');
-    // A day later Amy's offer has lapsed: Ben gets the place in the same sweep (the org's other
-    // scenarios' offers lapse too).
-    const swept = await sweep(later(25 * HOUR));
-    expect(swept.expired).toBeGreaterThanOrEqual(1);
-    expect(swept.offered).toBeGreaterThanOrEqual(1);
+    // A day later Amy's offer has lapsed: Ben gets the place in the same sweep (scoped to this event).
+    expect(
+      await executeCommand(sweepWaitlistsCommand, { eventId: s.eventId }, sys(later(25 * HOUR)), ports),
+    ).toEqual({ expired: 1, offered: 1 });
     expect(await statusOf(s, amy.entryId)).toBe('expired');
     expect(await statusOf(s, ben.entryId)).toBe('offered');
     expect(await stock(s)).toEqual({ sold: 0, held: 1 });
