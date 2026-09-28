@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import sharp from 'sharp';
+import sharp, { type Metadata, type Sharp } from 'sharp';
 import {
   CONTENT_TYPES,
   MAX_INPUT_PIXELS,
@@ -55,7 +55,7 @@ export interface ProcessedImage {
 
 const sha256 = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
 
-function encode(img: sharp.Sharp, v: PlannedVariant): sharp.Sharp {
+function encode(img: Sharp, v: PlannedVariant): Sharp {
   const resized = img
     .clone()
     .resize({ width: v.width, height: v.height, fit: 'fill', withoutEnlargement: false });
@@ -106,7 +106,7 @@ export async function processImage(bytes: Uint8Array): Promise<ProcessedImage> {
     animated: false,
     autoOrient: true,
   });
-  let meta: sharp.Metadata;
+  let meta: Metadata;
   try {
     meta = await img.metadata();
   } catch (err) {

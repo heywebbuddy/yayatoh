@@ -28,6 +28,7 @@ import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
+import { uploadLogo, uploadMedia } from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -108,6 +109,14 @@ export const userCtx = (userId: string, orgId: string | null = null, extra: Part
   createCtx({ orgId, actor: { type: 'user', userId }, ...extra });
 
 export const systemCtx = (orgId: string) => createCtx({ orgId, actor: { type: 'system', name: 'fixture' } });
+
+/** Small PNGs for the fixture's media rows (a cover and a logo). */
+const FIXTURE_PNG = {
+  cover:
+    'iVBORw0KGgoAAAANSUhEUgAAADAAAAAgCAIAAADbtmxLAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAASUlEQVRYhe2WAQkAQAwC18lOpr1QH2PPOFgAET03KV/drCuIgtChmqHYMtbxE8GIDtUMxZaxDqH4oKFDNUOxZcghBGOdjhwe1wfNjF55zyzI+QAAAABJRU5ErkJggg==',
+  logo: 'iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAACXBIWXMAAAPoAAAD6AG1e1JrAAAASUlEQVRYhe3YwQkAMAxC0c7iTi7plN2hl14e5B6QxI+epV/mWBxSz3HVO4WBjGUWJAKLhcXA4mCxsBhYHCxKixXMo4qY8qXPGlzD8A6qpKqyHgAAAABJRU5ErkJggg==',
+} as const;
+const fixturePng = (k: keyof typeof FIXTURE_PNG) => new Uint8Array(Buffer.from(FIXTURE_PNG[k], 'base64'));
 
 /**
  * One org with an owner and a viewer, and at least one row in every tenant table the kernel
@@ -670,6 +679,17 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runBulk(org.id, dsar.operationId);
+  // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
+  // and a quota override row.
+  await uploadMedia(
+    ctx(),
+    { ownerType: 'event', ownerId: event.id, slot: 'cover', alt: `${name} cover`, file: fixturePng('cover') },
+    ports,
+  );
+  await uploadLogo(ctx(), { alt: `${name} logo`, file: fixturePng('logo') }, ports);
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into media.quotas (org_id, bytes_limit) values (${org.id}, ${512 * 1024 * 1024})`),
+  );
   return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 

@@ -86,9 +86,11 @@ export {
   myOrganizations,
   organizationBrandTx,
   organizationDefaultsTx,
+  organizationLogoTx,
   organizationNameTx,
   organizationPublicTx,
   resolveOrgSlug,
+  setOrganizationLogoTx,
 } from './queries.ts';
 export {
   API_KEY_SCOPES,

@@ -46,6 +46,12 @@ export const organizations = tenantTable(
     poweredByVisible: boolean('powered_by_visible').notNull().default(true),
     /** Brand kit: the accent colour on public pages (#RRGGBB); text on it is chosen for contrast. */
     brandColor: text('brand_color'),
+    /**
+     * Brand kit logo (M1.4e): the app-origin path of its PNG/JPEG fallback variant (email-safe),
+     * and its alt text. Set only by the media module's logo commands, in their transaction.
+     */
+    logoPath: text('logo_path'),
+    logoAlt: text('logo_alt'),
     legacyInstance: text('legacy_instance'),
   },
   () => [
@@ -55,6 +61,10 @@ export const organizations = tenantTable(
     check('organizations_status_check', inList('status', ORG_STATUSES)),
     check('organizations_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
     check('organizations_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
+    check(
+      'organizations_logo_check',
+      sql`(logo_path is null and logo_alt is null) or (logo_path ~ '^/media/[0-9a-f-]{36}/[0-9a-f-]{36}/[0-9]{1,5}-[0-9a-f]{32}[.](png|jpg)$' and length(btrim(logo_alt)) between 1 and 300)`,
+    ),
   ],
 );
 

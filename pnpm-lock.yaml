@@ -1113,6 +1113,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
@@ -1122,6 +1125,9 @@ importers:
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy
+      '@yayatoh/venues':
+        specifier: workspace:*
+        version: link:../venues
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -1749,6 +1755,9 @@ importers:
       '@yayatoh/marketplace':
         specifier: workspace:*
         version: link:../modules/marketplace
+      '@yayatoh/media':
+        specifier: workspace:*
+        version: link:../modules/media
       '@yayatoh/messaging':
         specifier: workspace:*
         version: link:../modules/messaging
