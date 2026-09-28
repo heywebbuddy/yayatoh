@@ -13,7 +13,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/auth": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/legacy-mask": "workspace:*",
     "@yayatoh/orders": "workspace:*",

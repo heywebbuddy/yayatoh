@@ -13,6 +13,12 @@ export interface StepContext {
   readonly currency: string;
   readonly commissionBps: number;
   readonly eventClock: EventClock;
+  /**
+   * The freeze instant (cutover T−0; a rehearsal's run time unless given): what was live then is
+   * carried (magic links until expiry, resets under 60 minutes, unexpired access tokens), and the
+   * buyer order-link plan only covers events that had not ended.
+   */
+  readonly freezeAt: Date;
   readonly log: (message: string) => void;
 }
 
@@ -20,7 +26,7 @@ const lit = (s: string) => `'${s.replace(/'/g, "''")}'`;
 
 /**
  * Expand a step's SQL template: `{s}` the staging schema, `{inst}` the instance literal, `{run}` the
- * run id, `{tz}` the platform timezone literal, `{cur}` the default currency literal. Values are
+ * run id, `{tz}` the platform timezone literal, `{cur}` the default currency literal, `{freeze}` the freeze instant. Values are
  * quoted literals or identifiers; nothing from the dump is spliced into SQL text.
  */
 export function expand(ctx: StepContext, text: string): string {
@@ -30,7 +36,8 @@ export function expand(ctx: StepContext, text: string): string {
     .replaceAll('{run}', String(ctx.runId))
     .replaceAll('{tz}', lit(ctx.platformTz))
     .replaceAll('{cur}', lit(ctx.currency))
-    .replaceAll('{clock}', lit(ctx.eventClock));
+    .replaceAll('{clock}', lit(ctx.eventClock))
+    .replaceAll('{freeze}', `${lit(ctx.freezeAt.toISOString())}::timestamptz`);
 }
 
 export async function exec(ctx: StepContext, text: string): Promise<number> {
@@ -60,6 +67,14 @@ export async function hasTable(ctx: StepContext, table: string): Promise<boolean
   const [r] = await ctx.sql<{ ok: boolean }[]>`
     select exists (select 1 from information_schema.tables
                    where table_schema = ${stagingSchema(ctx.instance)} and table_name = ${table}) as ok`;
+  return r?.ok === true;
+}
+
+/** Does the staging table have this column (older dumps predate some legacy migrations)? */
+export async function hasColumn(ctx: StepContext, table: string, column: string): Promise<boolean> {
+  const [r] = await ctx.sql<{ ok: boolean }[]>`
+    select exists (select 1 from information_schema.columns
+                   where table_schema = ${`legacy_${ctx.instance}`} and table_name = ${table} and column_name = ${column}) as ok`;
   return r?.ok === true;
 }
 

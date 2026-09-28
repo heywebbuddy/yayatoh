@@ -915,7 +915,11 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       repetitive: num(ev.repetitive ? 1 : 0),
       featured: num(0),
       status: num(ev.id % 97 === 0 ? 0 : 1),
-      category_id: num(((cat: number) => (ev.id % 13 === 0 ? 5 : cat))(R(ev).int(1, categories.length))),
+      category_id: num(
+        ((cat: number) => (ev.id % 13 === 0 ? 5 : ev.id % 17 === 0 ? 6 : cat))(
+          R(ev).int(1, categories.length),
+        ),
+      ),
       user_id: num(ev.ownerId),
       created_at: str(ev.created),
       updated_at: str(ev.created),
@@ -1417,7 +1421,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
   }
 
   // --- M2.2c tables ---------------------------------------------------------------------------
-  const extraCategories = ['Hackathons'];
+  const extraCategories = ['Hackathons', 'Miscellany'];
   for (const [i, n] of extraCategories.entries())
     await w('categories').add({
       id: num(categories.length + i + 1),
@@ -1584,6 +1588,15 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       settings: str('{"locale":"en"}'),
       role_id: num(u.roleId),
       organisation: str(u.organisation),
+      // The organizer's public page path (`/{organisation_url}`), unique in the legacy table.
+      organisation_url: str(
+        u.roleId === 3 && u.organisation
+          ? `${u.organisation
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')}${u.id % 3 === 0 ? `-${u.id}` : ''}`
+          : null,
+      ),
       phone: str(null),
       status: num(1),
       stripe_account_id: str(u.stripeAccount),

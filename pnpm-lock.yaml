@@ -1845,9 +1845,18 @@ importers:
 
   tools/legacy-migrate:
     dependencies:
+      '@yayatoh/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../../packages/modules/events
+      '@yayatoh/floorplan':
+        specifier: workspace:*
+        version: link:../../packages/floorplan
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel

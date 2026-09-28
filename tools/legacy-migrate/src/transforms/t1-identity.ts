@@ -93,7 +93,7 @@ export async function t1Identity(ctx: StepContext): Promise<void> {
     beta as (
       -- A pre-existing account that is not only a legacy import (it has a non-bcrypt credential).
       select a.user_id from auth.accounts a join touched t using (user_id)
-      where a.provider_id = 'credential' and a.password is not null and a.password !~ '^\\$2[aby]\\$'
+      where a.provider_id = 'credential' and a.password is not null and a.password !~ '^\\$(2[aby]|yydual)\\$'
     )
     select r.user_id, r.password_hash, r.eligible, r.sources, r.instance, r.legacy_user_id,
            (r.sources > 1 or exists (select 1 from beta b where b.user_id = r.user_id)) as merged,

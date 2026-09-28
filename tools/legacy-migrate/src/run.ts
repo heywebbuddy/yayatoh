@@ -6,8 +6,14 @@ import { issueCodes } from './transforms/issue.ts';
 import { t1Identity } from './transforms/t1-identity.ts';
 import { t2Orgs } from './transforms/t2-orgs.ts';
 import { t3Catalog } from './transforms/t3-catalog.ts';
+import { t3Seating } from './transforms/t3-seating.ts';
+import { t3VenuesSeries } from './transforms/t3-venues-series.ts';
 import { t4Commerce } from './transforms/t4-commerce.ts';
 import { t5Checkins } from './transforms/t5-checkins.ts';
+import { t6Comms } from './transforms/t6-comms.ts';
+import { t8Auth } from './transforms/t8-auth.ts';
+import { t9Derived } from './transforms/t9-derived.ts';
+import { urlInventory } from './transforms/url-inventory.ts';
 import { summarize, type ValidationReport, validate } from './validate.ts';
 
 export interface RunOptions {
@@ -19,6 +25,10 @@ export interface RunOptions {
   readonly eventClock?: EventClock;
   /** Platform timezone override; default: the dump's `regional.timezone_default` setting. */
   readonly systemTimezone?: string;
+  /** The freeze instant (cutover T−0); default: now. What was live then is carried (T8, T6 plan). */
+  readonly freezeAt?: Date;
+  /** Extra hosts the URL inventory's redirects are loaded for (e.g. a dev host for e2e). */
+  readonly extraHosts?: readonly string[];
   readonly log?: (message: string) => void;
 }
 
@@ -42,6 +52,12 @@ export const STAGES = [
   't4_commerce',
   't5_checkins',
   'issue_codes',
+  't3_venues_series',
+  't3_seating',
+  't6_comms',
+  't8_auth',
+  't9_derived',
+  'url_inventory',
 ] as const;
 
 async function instanceSettings(sql: MigratorSql, instance: Instance, override?: string) {
@@ -87,6 +103,8 @@ export async function runMigration(opts: RunOptions): Promise<RunResult> {
   const [run] = await sql<{ id: string }[]>`
     insert into legacy.runs (instance, mode, stage) values (${opts.instance}, ${opts.mode}, 'load') returning id`;
   const runId = Number(run?.id);
+  const freezeAt = opts.freezeAt ?? new Date();
+  await sql`update legacy.runs set freeze_at = ${freezeAt.toISOString()} where id = ${runId}`;
   let loaded: LoadResult | null = null;
   try {
     if (opts.dump) {
@@ -128,6 +146,7 @@ export async function runMigration(opts: RunOptions): Promise<RunResult> {
         runId,
         ...settings,
         eventClock,
+        freezeAt,
         log,
       };
       const stages: Record<(typeof STAGES)[number], (c: StepContext) => Promise<void>> = {
@@ -137,6 +156,12 @@ export async function runMigration(opts: RunOptions): Promise<RunResult> {
         t4_commerce: t4Commerce,
         t5_checkins: t5Checkins,
         issue_codes: issueCodes,
+        t3_venues_series: t3VenuesSeries,
+        t3_seating: t3Seating,
+        t6_comms: t6Comms,
+        t8_auth: t8Auth,
+        t9_derived: t9Derived,
+        url_inventory: (c) => urlInventory(c, opts.extraHosts),
       };
       for (const name of STAGES) {
         const t = Date.now();
@@ -162,7 +187,11 @@ export async function runMigration(opts: RunOptions): Promise<RunResult> {
     await sql.unsafe('analyze');
     timings.analyze = Date.now() - ta;
     const t = Date.now();
-    const report = await validate(sql, opts.instance, runId, { platformTz: settings.platformTz, eventClock });
+    const report = await validate(sql, opts.instance, runId, {
+      platformTz: settings.platformTz,
+      eventClock,
+      freezeAt,
+    });
     timings.validate = Date.now() - t;
     const totalMs = Date.now() - started;
     const full = {
@@ -192,9 +221,15 @@ export async function revalidate(instance: Instance): Promise<RunResult> {
   const sql = migratorSql();
   await ensureControlSchema(sql);
   const [run] = await sql<
-    { id: string; mode: string; dump_sha256: string | null; timings: Record<string, number> }[]
+    {
+      id: string;
+      mode: string;
+      dump_sha256: string | null;
+      timings: Record<string, number>;
+      freeze_at: Date | null;
+    }[]
   >`
-    select id, mode, dump_sha256, timings from legacy.runs where instance = ${instance} order by id desc limit 1`;
+    select id, mode, dump_sha256, timings, freeze_at from legacy.runs where instance = ${instance} order by id desc limit 1`;
   const [settings] = await sql<{ platform_tz: string; event_clock: EventClock }[]>`
     select platform_tz, event_clock from legacy.instance_settings where instance = ${instance}`;
   if (!run || !settings) throw new Error(`no migration run for instance ${instance}`);
@@ -202,6 +237,7 @@ export async function revalidate(instance: Instance): Promise<RunResult> {
   const report = await validate(sql, instance, runId, {
     platformTz: settings.platform_tz,
     eventClock: settings.event_clock,
+    freezeAt: run.freeze_at ? new Date(run.freeze_at) : new Date(),
   });
   const full = {
     ...report,

@@ -92,6 +92,7 @@ export const SYNTH_TABLES: readonly SynthTable[] = [
       c('settings', 'text'),
       c('role_id', 'int unsigned'),
       c('organisation', 'varchar(256)'),
+      c('organisation_url', 'varchar(256)'),
       c('phone', 'varchar(512)'),
       c('status', 'int'),
       c('stripe_account_id', 'varchar(255)'),

@@ -3,9 +3,10 @@ import type { MigratorSql } from '@yayatoh/db/migration';
 import { createCtx } from '@yayatoh/kernel';
 import { sql as dsql } from 'drizzle-orm';
 import { ident, stagingSchema } from './sql.ts';
+import { v6Vectors, v7Golden, v8Facade, v9Urls, v10Checksums } from './validate-extra.ts';
 
 /**
- * Validation (roadmap §7.5 V1–V12; this milestone: V1–V5, V11, V12 and the quarantine gate). The
+ * Validation (roadmap §7.5 V1–V12 and the quarantine gate; V6–V10 in validate-extra.ts, M2.2c). The
  * legacy side is always recomputed from the staging schema, never from the transforms' own working
  * tables, so a transform bug cannot validate itself. Any failed check fails the run.
  */
@@ -54,7 +55,7 @@ export async function validate(
   sql: MigratorSql,
   instance: 'yay' | 'abc',
   runId: number | null,
-  opts: { platformTz: string; eventClock: 'platform' | 'venue' },
+  opts: { platformTz: string; eventClock: 'platform' | 'venue'; freezeAt?: Date },
 ): Promise<ValidationReport> {
   const S = ident(stagingSchema(instance));
   const q = async (text: string, params: unknown[] = []) =>
@@ -319,6 +320,13 @@ export async function validate(
     pass: n(v5?.merged_users) === n(v5?.distinct_emails) && n(v5?.prehijack_violations) === 0,
     details: Object.fromEntries(Object.entries(v5 ?? {}).map(([k, v]) => [k, n(v)])),
   });
+
+  // ---- V6–V10 (M2.2c) ----------------------------------------------------------------------------
+  checks.push(await v6Vectors(q, instance, opts.freezeAt ?? new Date()));
+  checks.push(await v7Golden(q, instance));
+  checks.push(v8Facade());
+  checks.push(await v9Urls(q, instance));
+  checks.push(await v10Checksums(q, instance, runId, stagingSchema(instance)));
 
   // ---- V11 RLS flags + two-org probe ---------------------------------------------------------------
   const rls = await q(

@@ -67,3 +67,25 @@ export function slugify(text: string, max = 60): string {
     .replace(/-+$/g, '');
   return s || 'event';
 }
+
+/** RFC 4122 name-based UUID (version 5, SHA-1). */
+export function uuidv5(namespace: string, name: string): string {
+  const ns = Buffer.from(namespace.replace(/-/g, ''), 'hex');
+  if (ns.length !== 16) throw new Error(`uuidv5: bad namespace ${namespace}`);
+  const h = createHash('sha1').update(ns).update(name, 'utf8').digest();
+  h[6] = ((h[6] as number) & 0x0f) | 0x50;
+  h[8] = ((h[8] as number) & 0x3f) | 0x80;
+  const hex = h.subarray(0, 16).toString('hex');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+/** Namespace of migrated seat-chart ids (uuidv5 of the URL namespace and `yayatoh:legacy-seats`). */
+export const SEAT_NAMESPACE = uuidv5('6ba7b811-9dad-11d1-80b4-00c04fd430c8', 'yayatoh:legacy-seats');
+
+/**
+ * A migrated seat's stable id (roadmap §7.5: `seat_uuid = uuidv5(ns, "{inst}:seat:{id}")`). A legacy
+ * table (a seat with capacity N) becomes N places: place 1 keeps the seat's own id, places 2…N
+ * append `:{k}`.
+ */
+export const legacySeatUuid = (instance: string, seatId: number | string, place = 1) =>
+  uuidv5(SEAT_NAMESPACE, place === 1 ? `${instance}:seat:${seatId}` : `${instance}:seat:${seatId}:${place}`);
