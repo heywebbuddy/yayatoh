@@ -214,6 +214,8 @@
     "templates": "Modelos",
     "apiKeys": "Chaves de API",
     "publicSite": "Site público",
+    "siteContent": "Páginas e blog",
+    "reviews": "Avaliações",
     "finance": "Finanças",
     "emails": "Modelos de e-mail",
     "speakers": "Palestrantes",
@@ -3199,6 +3201,13 @@
       "copied": "Copiado.",
       "emptyTitle": "Ainda não há eventos públicos",
       "emptyDescription": "Publique um evento para obter o trecho do widget."
+    },
+    "navPages": {
+      "title": "Navegação do site",
+      "description": "Páginas a vincular no cabeçalho do seu site, ao lado do blog.",
+      "empty": "Você ainda não tem páginas. Crie uma em Páginas e blog.",
+      "hint": "Rascunhos podem ser vinculados; aparecem quando forem publicados.",
+      "none": "Nenhuma página vinculada."
     }
   },
   "finance": {
@@ -3743,6 +3752,185 @@
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
     "unauthenticated": "Sua sessão terminou. Entre de novo."
+  },
+  "cms": {
+    "title": "Páginas e blog",
+    "description": "Seus posts e páginas, exibidos no seu site público e na sua página de organizador.",
+    "readOnly": "Você pode ler as páginas e posts da sua equipe, mas não alterá-los.",
+    "notAllowed": "Você não tem permissão para escrever páginas ou posts.",
+    "deleted": "Excluído.",
+    "created": "Rascunho criado. Publique quando estiver pronto.",
+    "saved": "Salvo.",
+    "fixErrors": "Verifique os campos destacados.",
+    "tabsLabel": "Tipo de conteúdo",
+    "tabs": {
+      "post": "Posts do blog",
+      "page": "Páginas"
+    },
+    "kind": {
+      "post": "Post do blog",
+      "page": "Página"
+    },
+    "newPost": "Novo post",
+    "newPage": "Nova página",
+    "newDescription": "Escreva em Markdown simples. Fica como rascunho até você publicar.",
+    "back": "Voltar para páginas e blog",
+    "createDraft": "Criar rascunho",
+    "save": "Salvar alterações",
+    "emptyPostsTitle": "Nenhum post ainda",
+    "emptyPagesTitle": "Nenhuma página ainda",
+    "emptyDescription": "Crie um; fica como rascunho até você publicar.",
+    "emptyDescriptionViewer": "Nada foi escrito ainda.",
+    "columns": {
+      "title": "Título",
+      "status": "Status",
+      "updated": "Atualizado"
+    },
+    "status": {
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "archived": "Arquivado"
+    },
+    "publishedOn": "Publicado pela primeira vez em {date}",
+    "neverPublished": "Ainda não publicado",
+    "viewPublic": "Ver no seu site",
+    "previewLabel": "Pré-visualização",
+    "showPreview": "Pré-visualizar",
+    "hidePreview": "Ocultar pré-visualização",
+    "previewEmpty": "Nada para pré-visualizar ainda.",
+    "fields": {
+      "title": "Título",
+      "slug": "Endereço",
+      "excerpt": "Resumo",
+      "body": "Texto",
+      "seoTitle": "Título para buscadores",
+      "seoDescription": "Descrição para buscadores"
+    },
+    "titleError": "Dê um título (até 160 caracteres).",
+    "slugHint": "O final do endereço web, depois de {prefix}. Deixe vazio para gerar a partir do título.",
+    "slugFrozen": "Publicado em {path}. O endereço não pode mudar depois de publicado.",
+    "slugError": {
+      "taken": "Este endereço já está em uso.",
+      "format": "Use letras minúsculas, dígitos e hifens simples.",
+      "too_long": "Use no máximo 80 caracteres.",
+      "frozen": "O endereço não pode mudar depois de publicado."
+    },
+    "excerptHint": "Exibido na lista do blog e nos resultados de busca (até 300 caracteres).",
+    "bodyHint": "Markdown: ## títulos, - listas, **negrito**, *itálico* e [links](https://…). HTML aparece como texto.",
+    "seoLegend": "Buscadores (opcional)",
+    "seoTitleHint": "Até 70 caracteres. Padrão: o título.",
+    "seoDescriptionHint": "Até 160 caracteres. Padrão: o resumo.",
+    "tooLong": "Use no máximo {max} caracteres.",
+    "actions": {
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "archive": "Arquivar",
+      "delete": "Excluir"
+    },
+    "deleteConfirm": {
+      "title": "Excluir \"{title}\"?",
+      "body": "Some do seu site na hora. Isso não pode ser desfeito.",
+      "confirm": "Sim, excluir",
+      "cancel": "Cancelar"
+    }
+  },
+  "cmsPublic": {
+    "blog": "Blog",
+    "siteNav": "Site de {org}",
+    "organizerNav": "Páginas de {org}",
+    "poweredBy": "Desenvolvido por Yayatoh",
+    "blogTitle": "Blog de {org}",
+    "blogDescription": "Notícias e histórias de {org}.",
+    "emptyTitle": "Nenhum post ainda",
+    "emptyDescription": "{org} ainda não publicou nada aqui.",
+    "posts": "Posts",
+    "by": "por {name}",
+    "allPosts": "Todos os posts"
+  },
+  "reviews": {
+    "ratingLabel": "Avaliado com {rating} de 5",
+    "anonymous": "Portador do ingresso",
+    "reportReasons": {
+      "spam": "Spam ou propaganda",
+      "offensive": "Ofensivo ou abusivo",
+      "off_topic": "Não é sobre este evento",
+      "personal_info": "Compartilha dados pessoais",
+      "other": "Outro motivo"
+    },
+    "console": {
+      "title": "Avaliações",
+      "description": "O que os portadores de ingressos disseram após o evento. Oculte o que viola suas regras; o motivo fica no registro de atividades.",
+      "readOnly": "Você pode ler as avaliações, mas não moderá-las.",
+      "average": "Avaliação média",
+      "noRating": "Nenhuma avaliação visível",
+      "visible": "Avaliações visíveis",
+      "filterLabel": "Mostrar avaliações",
+      "filters": {
+        "all": "Todas",
+        "visible": "Visíveis",
+        "hidden": "Ocultas",
+        "reported": "Denunciadas"
+      },
+      "emptyTitle": "Nenhuma avaliação ainda",
+      "emptyFilteredTitle": "Nenhuma avaliação aqui",
+      "emptyDescription": "Os portadores podem avaliar o evento na página do pedido depois que ele terminar.",
+      "listLabel": "Avaliações",
+      "reviewBy": "Avaliação de {name}",
+      "status": {
+        "visible": "Visível",
+        "hidden": "Oculta"
+      },
+      "hiddenBecause": "Oculta: {reason}",
+      "reports": "{count, plural, =0 {Nenhuma denúncia aberta} one {# denúncia aberta} other {# denúncias abertas}}",
+      "reportStatus": {
+        "open": "aberta",
+        "dismissed": "descartada",
+        "actioned": "tratada"
+      },
+      "hideReason": "Motivo para ocultar",
+      "unhideReason": "Motivo para mostrar de novo",
+      "reasonError": "Informe um motivo (de 3 a 300 caracteres).",
+      "hide": "Ocultar avaliação",
+      "unhide": "Mostrar avaliação",
+      "dismissReports": "Descartar denúncias"
+    },
+    "form": {
+      "rating": "Sua nota",
+      "stars": "{count, plural, one {# estrela} other {# estrelas}}",
+      "ratingError": "Escolha uma nota de 1 a 5.",
+      "body": "Sua avaliação (opcional)",
+      "bodyHint": "{count} de {max} caracteres. Só texto; seu primeiro nome e a inicial do sobrenome aparecem.",
+      "bodyError": "Use no máximo {max} caracteres.",
+      "submit": "Publicar avaliação",
+      "rateLimited": "Muitas tentativas. Tente novamente em alguns minutos.",
+      "already": "Você já avaliou este evento.",
+      "notEnded": "Você poderá avaliar quando o evento terminar."
+    },
+    "report": {
+      "open": "Denunciar",
+      "openFor": "avaliação de {name}",
+      "reason": "Por que você está denunciando?",
+      "note": "Detalhes (opcional)",
+      "submit": "Enviar denúncia",
+      "cancel": "Cancelar",
+      "thanks": "Obrigado. O organizador vai analisar.",
+      "rateLimited": "Muitas denúncias. Tente novamente mais tarde."
+    },
+    "order": {
+      "title": "Avalie este evento",
+      "yours": "Sua avaliação",
+      "ratingLabel": "Você deu {rating} de 5",
+      "hidden": "O organizador ocultou sua avaliação da página do evento.",
+      "invite": "Como foi? As avaliações ficam abertas até {until}.",
+      "opensAt": "Você poderá avaliar este evento quando ele terminar ({date}).",
+      "closed": "As avaliações deste evento foram encerradas em {date}.",
+      "notHeld": "Este evento não aconteceu como planejado, então não pode ser avaliado."
+    },
+    "public": {
+      "title": "Avaliações",
+      "summary": "{average} de 5 · {count, plural, one {# avaliação} other {# avaliações}}",
+      "recent": "Avaliações mais recentes"
+    }
   },
   "authError": {
     "metaTitle": "Link de acesso não pode ser usado",

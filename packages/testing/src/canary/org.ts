@@ -1,4 +1,5 @@
 import { enrollDeviceCommand } from '@yayatoh/checkin';
+import { createEntryCommand } from '@yayatoh/cms';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -8,6 +9,7 @@ import { createNotifier, dispatchDue, memoryTransports } from '@yayatoh/notifica
 import { auditExportBulk, consumeEvent, keyVault, recentEventsTx } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import { attendeeExportBulk, BOOKING_EXPORT_COLUMNS, bookingsExportBulk } from '@yayatoh/reports';
+import { hideReviewCommand } from '@yayatoh/reviews';
 import { API_KEY_SCOPES, createApiKeyCommand } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { createOrgFixture, EXPORT_PARAMS, systemCtx, userCtx } from '../fixtures.ts';
@@ -65,7 +67,8 @@ const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')
  * The canary org (roadmap §9 seed `canary`): a separate org (the isolation suite's two orgs are
  * untouched) with everything `createOrgFixture` builds (a published public event, tickets, an
  * order, attendees, seating, content, a venue, messages, notifications, exports …), a tenant site,
- * the widget enabled, a holders-only announcement and a retired signing key; then every registered
+ * the widget enabled, a holders-only announcement, a draft page, a hidden review and a retired
+ * signing key; then every registered
  * private column is overwritten with `__CANARY_<schema>.<table>.<column>__` (shaped for emails,
  * phones and URLs; sealed through the org's key vault where the app stores ciphertext).
  *
@@ -141,6 +144,25 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
   await executeCommand(
     createAnnouncementCommand,
     { eventId, title: 'Holders only', body: 'Bring your ticket.', audience: 'holders', publish: true },
+    ctx(),
+    ports,
+  );
+  // M1.4g: a draft page (drafts are private; published entries are public) and the fixture's
+  // review hidden by the organizer (a hidden review's name and text are private).
+  await executeCommand(
+    createEntryCommand,
+    { kind: 'page', title: 'Draft page', body: 'Not yet.', authorName: 'Canary Owner' },
+    ctx(),
+    ports,
+  );
+  const [review] = await admin.unsafe(
+    `select id::text as id, event_id::text as event_id from reviews.reviews where org_id = $1 limit 1`,
+    [orgId],
+  );
+  if (!review) throw new Error('canary: the fixture has no review to hide');
+  await executeCommand(
+    hideReviewCommand,
+    { eventId: review.event_id as string, reviewId: review.id as string, reason: 'Canary: hidden review' },
     ctx(),
     ports,
   );

@@ -214,6 +214,8 @@
     "templates": "Sjablonen",
     "apiKeys": "API-sleutels",
     "publicSite": "Openbare site",
+    "siteContent": "Pagina’s & blog",
+    "reviews": "Beoordelingen",
     "finance": "Financiën",
     "emails": "E-mailsjablonen",
     "speakers": "Sprekers",
@@ -3199,6 +3201,13 @@
       "copied": "Gekopieerd.",
       "emptyTitle": "Nog geen openbare evenementen",
       "emptyDescription": "Publiceer een evenement om het widgetfragment te krijgen."
+    },
+    "navPages": {
+      "title": "Sitenavigatie",
+      "description": "Pagina’s die in de kop van je site naast je blog worden gelinkt.",
+      "empty": "Je hebt nog geen pagina’s. Maak er een onder Pagina’s & blog.",
+      "hint": "Concepten kunnen worden gelinkt; ze verschijnen zodra ze gepubliceerd zijn.",
+      "none": "Geen pagina’s gelinkt."
     }
   },
   "finance": {
@@ -3743,6 +3752,185 @@
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
     "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+  },
+  "cms": {
+    "title": "Pagina’s & blog",
+    "description": "Je blogberichten en pagina’s, op je openbare site en je organisatorpagina.",
+    "readOnly": "Je kunt de pagina’s en berichten van je team lezen, maar niet wijzigen.",
+    "notAllowed": "Je hebt geen toestemming om pagina’s of berichten te schrijven.",
+    "deleted": "Verwijderd.",
+    "created": "Concept gemaakt. Publiceer het als het klaar is.",
+    "saved": "Opgeslagen.",
+    "fixErrors": "Controleer de gemarkeerde velden.",
+    "tabsLabel": "Soort inhoud",
+    "tabs": {
+      "post": "Blogberichten",
+      "page": "Pagina’s"
+    },
+    "kind": {
+      "post": "Blogbericht",
+      "page": "Pagina"
+    },
+    "newPost": "Nieuw bericht",
+    "newPage": "Nieuwe pagina",
+    "newDescription": "Schrijf in eenvoudige Markdown. Het blijft een concept tot je het publiceert.",
+    "back": "Terug naar pagina’s & blog",
+    "createDraft": "Concept maken",
+    "save": "Wijzigingen opslaan",
+    "emptyPostsTitle": "Nog geen blogberichten",
+    "emptyPagesTitle": "Nog geen pagina’s",
+    "emptyDescription": "Maak er een; het blijft een concept tot je het publiceert.",
+    "emptyDescriptionViewer": "Er is nog niets geschreven.",
+    "columns": {
+      "title": "Titel",
+      "status": "Status",
+      "updated": "Bijgewerkt"
+    },
+    "status": {
+      "draft": "Concept",
+      "published": "Gepubliceerd",
+      "archived": "Gearchiveerd"
+    },
+    "publishedOn": "Voor het eerst gepubliceerd op {date}",
+    "neverPublished": "Nog niet gepubliceerd",
+    "viewPublic": "Bekijk op je site",
+    "previewLabel": "Voorbeeld",
+    "showPreview": "Voorbeeld",
+    "hidePreview": "Voorbeeld verbergen",
+    "previewEmpty": "Nog niets om te tonen.",
+    "fields": {
+      "title": "Titel",
+      "slug": "Adres",
+      "excerpt": "Samenvatting",
+      "body": "Tekst",
+      "seoTitle": "Zoektitel",
+      "seoDescription": "Zoekbeschrijving"
+    },
+    "titleError": "Geef een titel (maximaal 160 tekens).",
+    "slugHint": "Het einde van het webadres, na {prefix}. Laat leeg om het uit de titel te maken.",
+    "slugFrozen": "Gepubliceerd op {path}. Het adres kan na publicatie niet meer veranderen.",
+    "slugError": {
+      "taken": "Dit adres wordt al gebruikt.",
+      "format": "Gebruik kleine letters, cijfers en enkele koppeltekens.",
+      "too_long": "Gebruik maximaal 80 tekens.",
+      "frozen": "Het adres kan na publicatie niet meer veranderen."
+    },
+    "excerptHint": "Getoond in de bloglijst en in zoekresultaten (maximaal 300 tekens).",
+    "bodyHint": "Markdown: ## koppen, - lijsten, **vet**, *cursief* en [links](https://…). HTML wordt als tekst getoond.",
+    "seoLegend": "Zoekmachines (optioneel)",
+    "seoTitleHint": "Maximaal 70 tekens. Standaard de titel.",
+    "seoDescriptionHint": "Maximaal 160 tekens. Standaard de samenvatting.",
+    "tooLong": "Gebruik maximaal {max} tekens.",
+    "actions": {
+      "publish": "Publiceren",
+      "unpublish": "Publicatie intrekken",
+      "archive": "Archiveren",
+      "delete": "Verwijderen"
+    },
+    "deleteConfirm": {
+      "title": "‘{title}’ verwijderen?",
+      "body": "Het verdwijnt meteen van je site. Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Ja, verwijderen",
+      "cancel": "Annuleren"
+    }
+  },
+  "cmsPublic": {
+    "blog": "Blog",
+    "siteNav": "Site van {org}",
+    "organizerNav": "Pagina’s van {org}",
+    "poweredBy": "Mogelijk gemaakt door Yayatoh",
+    "blogTitle": "Blog van {org}",
+    "blogDescription": "Nieuws en verhalen van {org}.",
+    "emptyTitle": "Nog geen berichten",
+    "emptyDescription": "{org} heeft hier nog niets gepubliceerd.",
+    "posts": "Berichten",
+    "by": "door {name}",
+    "allPosts": "Alle berichten"
+  },
+  "reviews": {
+    "ratingLabel": "Beoordeeld met {rating} van 5",
+    "anonymous": "Tickethouder",
+    "reportReasons": {
+      "spam": "Spam of reclame",
+      "offensive": "Beledigend of kwetsend",
+      "off_topic": "Niet over dit evenement",
+      "personal_info": "Deelt persoonlijke gegevens",
+      "other": "Iets anders"
+    },
+    "console": {
+      "title": "Beoordelingen",
+      "description": "Wat tickethouders na het evenement zeiden. Verberg wat je regels overtreedt; de reden blijft in het activiteitenlogboek.",
+      "readOnly": "Je kunt beoordelingen lezen, maar niet modereren.",
+      "average": "Gemiddelde beoordeling",
+      "noRating": "Geen zichtbare beoordelingen",
+      "visible": "Zichtbare beoordelingen",
+      "filterLabel": "Beoordelingen tonen",
+      "filters": {
+        "all": "Alle",
+        "visible": "Zichtbaar",
+        "hidden": "Verborgen",
+        "reported": "Gemeld"
+      },
+      "emptyTitle": "Nog geen beoordelingen",
+      "emptyFilteredTitle": "Hier geen beoordelingen",
+      "emptyDescription": "Tickethouders kunnen het evenement na afloop beoordelen vanaf hun bestelpagina.",
+      "listLabel": "Beoordelingen",
+      "reviewBy": "Beoordeling van {name}",
+      "status": {
+        "visible": "Zichtbaar",
+        "hidden": "Verborgen"
+      },
+      "hiddenBecause": "Verborgen: {reason}",
+      "reports": "{count, plural, =0 {Geen open meldingen} one {# open melding} other {# open meldingen}}",
+      "reportStatus": {
+        "open": "open",
+        "dismissed": "afgewezen",
+        "actioned": "afgehandeld"
+      },
+      "hideReason": "Reden om te verbergen",
+      "unhideReason": "Reden om weer te tonen",
+      "reasonError": "Geef een reden (3 tot 300 tekens).",
+      "hide": "Beoordeling verbergen",
+      "unhide": "Beoordeling tonen",
+      "dismissReports": "Meldingen afwijzen"
+    },
+    "form": {
+      "rating": "Je beoordeling",
+      "stars": "{count, plural, one {# ster} other {# sterren}}",
+      "ratingError": "Kies een beoordeling van 1 tot 5.",
+      "body": "Je recensie (optioneel)",
+      "bodyHint": "{count} van {max} tekens. Alleen tekst; je voornaam en de eerste letter van je achternaam worden getoond.",
+      "bodyError": "Gebruik maximaal {max} tekens.",
+      "submit": "Beoordeling plaatsen",
+      "rateLimited": "Te veel pogingen. Probeer het over een paar minuten opnieuw.",
+      "already": "Je hebt dit evenement al beoordeeld.",
+      "notEnded": "Je kunt beoordelen zodra het evenement voorbij is."
+    },
+    "report": {
+      "open": "Melden",
+      "openFor": "beoordeling van {name}",
+      "reason": "Waarom meld je deze?",
+      "note": "Details (optioneel)",
+      "submit": "Melding versturen",
+      "cancel": "Annuleren",
+      "thanks": "Bedankt. De organisator bekijkt het.",
+      "rateLimited": "Te veel meldingen. Probeer het later opnieuw."
+    },
+    "order": {
+      "title": "Beoordeel dit evenement",
+      "yours": "Je beoordeling",
+      "ratingLabel": "Je gaf {rating} van 5",
+      "hidden": "De organisator heeft je beoordeling op de evenementpagina verborgen.",
+      "invite": "Hoe was het? Beoordelen kan tot {until}.",
+      "opensAt": "Je kunt dit evenement beoordelen zodra het afgelopen is ({date}).",
+      "closed": "Beoordelingen voor dit evenement zijn gesloten op {date}.",
+      "notHeld": "Dit evenement ging niet door zoals gepland, dus het kan niet worden beoordeeld."
+    },
+    "public": {
+      "title": "Beoordelingen",
+      "summary": "{average} van 5 · {count, plural, one {# beoordeling} other {# beoordelingen}}",
+      "recent": "Nieuwste beoordelingen"
+    }
   },
   "authError": {
     "metaTitle": "Inloglink kan niet worden gebruikt",

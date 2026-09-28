@@ -37,7 +37,12 @@ export const ORG_STATUS_EVENTS = ['org.status_changed@1'] as const;
 export async function settingsTx(tx: TenantTx) {
   const [row] = await tx.select().from(siteSettings);
   return row
-    ? { listOnMarketplace: row.listOnMarketplace, tenantSite: row.tenantSite, embedOrigins: row.embedOrigins }
+    ? {
+        listOnMarketplace: row.listOnMarketplace,
+        tenantSite: row.tenantSite,
+        embedOrigins: row.embedOrigins,
+        navPageIds: row.navPageIds,
+      }
     : DEFAULT_SITE_SETTINGS;
 }
 

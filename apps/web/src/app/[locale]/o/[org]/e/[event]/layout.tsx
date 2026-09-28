@@ -12,6 +12,8 @@ import { loadReadiness } from '@/server/readiness.ts';
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
   { key: 'copy', path: 'copy', group: 'build', module: 'core', icon: 'copy' },
+  // M1.4g: ticket holders' reviews and their moderation.
+  { key: 'reviews', path: 'reviews', group: 'build', module: 'core', icon: 'star' },
 ];
 
 export default async function EventLayout({

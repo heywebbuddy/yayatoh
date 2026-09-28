@@ -214,6 +214,8 @@
     "templates": "Templates",
     "apiKeys": "API keys",
     "publicSite": "Public site",
+    "siteContent": "Pages & blog",
+    "reviews": "Reviews",
     "finance": "Finance",
     "emails": "Email templates",
     "speakers": "Speakers",
@@ -3199,6 +3201,13 @@
       "copied": "Copied.",
       "emptyTitle": "No public events yet",
       "emptyDescription": "Publish an event to get its widget snippet."
+    },
+    "navPages": {
+      "title": "Site navigation",
+      "description": "Pages to link from your tenant site's header, next to your blog.",
+      "empty": "You have no pages yet. Create one under Pages & blog.",
+      "hint": "Drafts can be linked; they appear once published.",
+      "none": "No pages linked."
     }
   },
   "finance": {
@@ -3743,6 +3752,185 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "cms": {
+    "title": "Pages & blog",
+    "description": "Your blog posts and pages, shown on your public site and organizer page.",
+    "readOnly": "You can read your team's pages and posts but not change them.",
+    "notAllowed": "You don't have permission to write pages or posts.",
+    "deleted": "Deleted.",
+    "created": "Draft created. Publish it when it's ready.",
+    "saved": "Saved.",
+    "fixErrors": "Check the highlighted fields.",
+    "tabsLabel": "Content type",
+    "tabs": {
+      "post": "Blog posts",
+      "page": "Pages"
+    },
+    "kind": {
+      "post": "Blog post",
+      "page": "Page"
+    },
+    "newPost": "New post",
+    "newPage": "New page",
+    "newDescription": "Write in simple Markdown. It stays a draft until you publish it.",
+    "back": "Back to pages & blog",
+    "createDraft": "Create draft",
+    "save": "Save changes",
+    "emptyPostsTitle": "No blog posts yet",
+    "emptyPagesTitle": "No pages yet",
+    "emptyDescription": "Create one; it stays a draft until you publish it.",
+    "emptyDescriptionViewer": "Nothing has been written yet.",
+    "columns": {
+      "title": "Title",
+      "status": "Status",
+      "updated": "Updated"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "publishedOn": "First published {date}",
+    "neverPublished": "Not published yet",
+    "viewPublic": "View on your site",
+    "previewLabel": "Preview",
+    "showPreview": "Preview",
+    "hidePreview": "Hide preview",
+    "previewEmpty": "Nothing to preview yet.",
+    "fields": {
+      "title": "Title",
+      "slug": "Address",
+      "excerpt": "Summary",
+      "body": "Text",
+      "seoTitle": "Search title",
+      "seoDescription": "Search description"
+    },
+    "titleError": "Give it a title (up to 160 characters).",
+    "slugHint": "The end of the web address, after {prefix}. Leave empty to make one from the title.",
+    "slugFrozen": "Published at {path}. The address can't change once published.",
+    "slugError": {
+      "taken": "Another one already uses this address.",
+      "format": "Use lowercase letters, digits and single hyphens.",
+      "too_long": "Use at most 80 characters.",
+      "frozen": "The address can't change once published."
+    },
+    "excerptHint": "Shown in the blog list and search results (up to 300 characters).",
+    "bodyHint": "Markdown: ## headings, - lists, **bold**, *italic* and [links](https://…). HTML is shown as text.",
+    "seoLegend": "Search engines (optional)",
+    "seoTitleHint": "Up to 70 characters. Defaults to the title.",
+    "seoDescriptionHint": "Up to 160 characters. Defaults to the summary.",
+    "tooLong": "Use at most {max} characters.",
+    "actions": {
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "archive": "Archive",
+      "delete": "Delete"
+    },
+    "deleteConfirm": {
+      "title": "Delete \"{title}\"?",
+      "body": "It disappears from your site at once. This can't be undone.",
+      "confirm": "Yes, delete",
+      "cancel": "Cancel"
+    }
+  },
+  "cmsPublic": {
+    "blog": "Blog",
+    "siteNav": "{org} site",
+    "organizerNav": "{org} pages",
+    "poweredBy": "Powered by Yayatoh",
+    "blogTitle": "{org} blog",
+    "blogDescription": "News and stories from {org}.",
+    "emptyTitle": "No posts yet",
+    "emptyDescription": "{org} hasn't published anything here yet.",
+    "posts": "Posts",
+    "by": "by {name}",
+    "allPosts": "All posts"
+  },
+  "reviews": {
+    "ratingLabel": "Rated {rating} out of 5",
+    "anonymous": "Ticket holder",
+    "reportReasons": {
+      "spam": "Spam or advertising",
+      "offensive": "Offensive or abusive",
+      "off_topic": "Not about this event",
+      "personal_info": "Shares personal information",
+      "other": "Something else"
+    },
+    "console": {
+      "title": "Reviews",
+      "description": "What ticket holders said after the event. Hide what breaks your rules; the reason is kept in the activity log.",
+      "readOnly": "You can read reviews but not moderate them.",
+      "average": "Average rating",
+      "noRating": "No visible reviews",
+      "visible": "Visible reviews",
+      "filterLabel": "Show reviews",
+      "filters": {
+        "all": "All",
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "reported": "Reported"
+      },
+      "emptyTitle": "No reviews yet",
+      "emptyFilteredTitle": "No reviews here",
+      "emptyDescription": "Ticket holders can review the event from their order page once it has ended.",
+      "listLabel": "Reviews",
+      "reviewBy": "Review by {name}",
+      "status": {
+        "visible": "Visible",
+        "hidden": "Hidden"
+      },
+      "hiddenBecause": "Hidden: {reason}",
+      "reports": "{count, plural, =0 {No open reports} one {# open report} other {# open reports}}",
+      "reportStatus": {
+        "open": "open",
+        "dismissed": "dismissed",
+        "actioned": "handled"
+      },
+      "hideReason": "Reason for hiding",
+      "unhideReason": "Reason for showing again",
+      "reasonError": "Give a reason (3 to 300 characters).",
+      "hide": "Hide review",
+      "unhide": "Show review",
+      "dismissReports": "Dismiss reports"
+    },
+    "form": {
+      "rating": "Your rating",
+      "stars": "{count, plural, one {# star} other {# stars}}",
+      "ratingError": "Choose a rating from 1 to 5.",
+      "body": "Your review (optional)",
+      "bodyHint": "{count} of {max} characters. Plain text; your first name and last initial are shown.",
+      "bodyError": "Use at most {max} characters.",
+      "submit": "Post review",
+      "rateLimited": "Too many attempts. Try again in a few minutes.",
+      "already": "You have already reviewed this event.",
+      "notEnded": "You can review once the event has ended."
+    },
+    "report": {
+      "open": "Report",
+      "openFor": "review by {name}",
+      "reason": "Why are you reporting it?",
+      "note": "Details (optional)",
+      "submit": "Send report",
+      "cancel": "Cancel",
+      "thanks": "Thanks. The organizer will look at it.",
+      "rateLimited": "Too many reports. Try again later."
+    },
+    "order": {
+      "title": "Review this event",
+      "yours": "Your review",
+      "ratingLabel": "You rated it {rating} out of 5",
+      "hidden": "The organizer has hidden your review from the event page.",
+      "invite": "How was it? Reviews are open until {until}.",
+      "opensAt": "You can review this event once it ends ({date}).",
+      "closed": "Reviews for this event closed on {date}.",
+      "notHeld": "This event didn't take place as planned, so it can't be reviewed."
+    },
+    "public": {
+      "title": "Reviews",
+      "summary": "{average} out of 5 · {count, plural, one {# review} other {# reviews}}",
+      "recent": "Latest reviews"
+    }
   },
   "authError": {
     "metaTitle": "Sign-in link can't be used",

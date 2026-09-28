@@ -2,6 +2,7 @@ import * as ai from '@yayatoh/ai';
 import * as attendees from '@yayatoh/attendees';
 import * as billing from '@yayatoh/billing';
 import * as checkin from '@yayatoh/checkin';
+import * as cms from '@yayatoh/cms';
 import * as crm from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
@@ -28,6 +29,7 @@ import { auditLogQuery, consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import * as privacy from '@yayatoh/privacy';
 import * as program from '@yayatoh/program';
 import * as reports from '@yayatoh/reports';
+import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
 import * as templates from '@yayatoh/templates';
 import * as tenancy from '@yayatoh/tenancy';
@@ -65,6 +67,7 @@ const MODULES = {
   attendees,
   billing,
   checkin,
+  cms,
   crm,
   events,
   forms,
@@ -78,6 +81,7 @@ const MODULES = {
   privacy,
   program,
   reports,
+  reviews,
   seating,
   templates,
   tenancy,
@@ -179,6 +183,7 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'media.removeMedia',
         'media.removeLogo',
         'program.deleteSession',
+        'cms.deleteEntry',
         // Bulk "cancel tickets" voids tickets for good (M1.8f).
         'orders.startCancelTickets',
       ]),

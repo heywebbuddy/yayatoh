@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/cms": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",

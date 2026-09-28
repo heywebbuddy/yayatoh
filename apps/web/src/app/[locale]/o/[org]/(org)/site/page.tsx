@@ -1,3 +1,4 @@
+import { listEntriesQuery } from '@yayatoh/cms';
 import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { siteSettingsQuery } from '@yayatoh/marketplace';
@@ -11,7 +12,7 @@ import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin } from '@/server/seo.ts';
-import { publicSiteAction, widgetOriginsAction } from './actions.ts';
+import { navPagesAction, publicSiteAction, widgetOriginsAction } from './actions.ts';
 
 /**
  * Public site (M1.11): marketplace enrollment (owner D13, opt-in), the tenant site, and the
@@ -27,6 +28,14 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
     (e) => (e.status === 'published' || e.status === 'postponed') && e.visibility !== 'private',
   );
   const canManage = roleCan(data.role, 'org:update');
+  // M1.4g: pages the tenant site's header may link (linked ones first, in their saved order).
+  const pages = await executeQuery(listEntriesQuery, { kind: 'page' }, data.ctx, ports);
+  const linked = new Set(settings.navPageIds);
+  const pageRows = [
+    ...settings.navPageIds.flatMap((id) => pages.filter((p) => p.id === id)),
+    ...pages.filter((p) => !linked.has(p.id)).sort((x, y) => x.title.localeCompare(y.title)),
+  ];
+  const tc = await getTranslations('cms');
   const origin = apexOrigin(await requestHost());
   const snippet = (slug: string, name: string) =>
     widgetSnippet(origin, slug, t('widget.frameTitle', { event: name }));
@@ -99,6 +108,55 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
                 t('listing.tenantSiteHint'),
               )}
             </div>
+          )}
+        </Card>
+      </section>
+
+      <section aria-labelledby="nav-pages-heading" className="flex flex-col gap-3">
+        <h2 id="nav-pages-heading" className="text-section">
+          {t('navPages.title')}
+        </h2>
+        <p className="text-body text-zinc-600">{t('navPages.description')}</p>
+        <Card>
+          {pageRows.length === 0 ? (
+            <p className="text-body text-zinc-600">{t('navPages.empty')}</p>
+          ) : canManage ? (
+            <SettingsForm
+              action={navPagesAction.bind(null, org)}
+              submitLabel={t('save')}
+              savedLabel={t('saved')}
+            >
+              <fieldset className="flex flex-col gap-3">
+                <legend className="sr-only">{t('navPages.title')}</legend>
+                {pageRows.map((p) => (
+                  <label key={p.id} className="flex min-h-6 items-center gap-3 text-body">
+                    <input
+                      type="checkbox"
+                      name="navPage"
+                      value={p.id}
+                      defaultChecked={linked.has(p.id)}
+                      className="size-5 accent-ink"
+                    />
+                    <span>
+                      {p.title}
+                      {p.status === 'published' ? null : (
+                        <span className="text-caption text-zinc-500"> · {tc(`status.${p.status}`)}</span>
+                      )}
+                    </span>
+                  </label>
+                ))}
+              </fieldset>
+              <p className="text-caption text-zinc-500">{t('navPages.hint')}</p>
+            </SettingsForm>
+          ) : (
+            <ul className="flex list-none flex-col gap-1 p-0 text-body">
+              {pageRows
+                .filter((p) => linked.has(p.id))
+                .map((p) => (
+                  <li key={p.id}>{p.title}</li>
+                ))}
+              {settings.navPageIds.length === 0 ? <li>{t('navPages.none')}</li> : null}
+            </ul>
           )}
         </Card>
       </section>

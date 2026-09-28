@@ -82,10 +82,13 @@ export const siteSettings = tenantTable(
     listOnMarketplace: boolean('list_on_marketplace').notNull().default(false),
     tenantSite: boolean('tenant_site').notNull().default(false),
     embedOrigins: text('embed_origins').array().notNull().default(sql`'{}'::text[]`),
+    /** M1.4g: CMS pages linked from the tenant site's navigation, in order (at most 8). */
+    navPageIds: uuid('nav_page_ids').array().notNull().default(sql`'{}'::uuid[]`),
   },
   (t) => [
     uniqueIndex('site_settings_org_key').on(t.orgId),
     check('site_settings_embed_origins_check', sql`cardinality(embed_origins) <= 10`),
+    check('site_settings_nav_page_ids_check', sql`cardinality(nav_page_ids) <= 8`),
   ],
 );
 

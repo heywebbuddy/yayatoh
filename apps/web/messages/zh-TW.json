@@ -214,6 +214,8 @@
     "templates": "範本",
     "apiKeys": "API 金鑰",
     "publicSite": "公開網站",
+    "siteContent": "頁面與部落格",
+    "reviews": "評價",
     "finance": "財務",
     "emails": "郵件範本",
     "speakers": "演講嘉賓",
@@ -3199,6 +3201,13 @@
       "copied": "已複製。",
       "emptyTitle": "目前沒有公開活動",
       "emptyDescription": "發布活動即可取得小工具程式碼。"
+    },
+    "navPages": {
+      "title": "網站導覽",
+      "description": "在網站頁首與部落格並列顯示連結的頁面。",
+      "empty": "你還沒有頁面。請在「頁面與部落格」中建立。",
+      "hint": "可以連結草稿，發布後才會顯示。",
+      "none": "未連結任何頁面。"
     }
   },
   "finance": {
@@ -3743,6 +3752,185 @@
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
     "unauthenticated": "工作階段已結束，請重新登入。"
+  },
+  "cms": {
+    "title": "頁面與部落格",
+    "description": "你的部落格文章與頁面，顯示在公開網站與主辦方頁面上。",
+    "readOnly": "你可以閱讀團隊的頁面與文章，但無法修改。",
+    "notAllowed": "你沒有撰寫頁面或文章的權限。",
+    "deleted": "已刪除。",
+    "created": "草稿已建立。準備好後再發布。",
+    "saved": "已儲存。",
+    "fixErrors": "請檢查標示的欄位。",
+    "tabsLabel": "內容類型",
+    "tabs": {
+      "post": "部落格文章",
+      "page": "頁面"
+    },
+    "kind": {
+      "post": "部落格文章",
+      "page": "頁面"
+    },
+    "newPost": "新文章",
+    "newPage": "新頁面",
+    "newDescription": "使用簡單的 Markdown 撰寫。發布前一直是草稿。",
+    "back": "返回頁面與部落格",
+    "createDraft": "建立草稿",
+    "save": "儲存變更",
+    "emptyPostsTitle": "還沒有部落格文章",
+    "emptyPagesTitle": "還沒有頁面",
+    "emptyDescription": "建立一個；發布前一直是草稿。",
+    "emptyDescriptionViewer": "還沒有任何內容。",
+    "columns": {
+      "title": "標題",
+      "status": "狀態",
+      "updated": "更新時間"
+    },
+    "status": {
+      "draft": "草稿",
+      "published": "已發布",
+      "archived": "已封存"
+    },
+    "publishedOn": "首次發布於 {date}",
+    "neverPublished": "尚未發布",
+    "viewPublic": "在網站上檢視",
+    "previewLabel": "預覽",
+    "showPreview": "預覽",
+    "hidePreview": "隱藏預覽",
+    "previewEmpty": "目前沒有可預覽的內容。",
+    "fields": {
+      "title": "標題",
+      "slug": "網址",
+      "excerpt": "摘要",
+      "body": "內文",
+      "seoTitle": "搜尋標題",
+      "seoDescription": "搜尋描述"
+    },
+    "titleError": "請輸入標題（最多 160 個字元）。",
+    "slugHint": "網址中 {prefix} 之後的部分。留空則依標題產生。",
+    "slugFrozen": "已發布於 {path}。發布後網址無法變更。",
+    "slugError": {
+      "taken": "此網址已被使用。",
+      "format": "請使用小寫英文字母、數字與單一連字號。",
+      "too_long": "最多 80 個字元。",
+      "frozen": "發布後網址無法變更。"
+    },
+    "excerptHint": "顯示在部落格列表與搜尋結果中（最多 300 個字元）。",
+    "bodyHint": "Markdown：## 標題、- 清單、**粗體**、*斜體* 與 [連結](https://…)。HTML 會顯示為文字。",
+    "seoLegend": "搜尋引擎（選填）",
+    "seoTitleHint": "最多 70 個字元。預設使用標題。",
+    "seoDescriptionHint": "最多 160 個字元。預設使用摘要。",
+    "tooLong": "最多 {max} 個字元。",
+    "actions": {
+      "publish": "發布",
+      "unpublish": "取消發布",
+      "archive": "封存",
+      "delete": "刪除"
+    },
+    "deleteConfirm": {
+      "title": "刪除「{title}」？",
+      "body": "它會立即從你的網站消失，且無法復原。",
+      "confirm": "確認刪除",
+      "cancel": "取消"
+    }
+  },
+  "cmsPublic": {
+    "blog": "部落格",
+    "siteNav": "{org} 網站",
+    "organizerNav": "{org} 的頁面",
+    "poweredBy": "由 Yayatoh 提供技術支援",
+    "blogTitle": "{org} 部落格",
+    "blogDescription": "來自 {org} 的新聞與故事。",
+    "emptyTitle": "還沒有文章",
+    "emptyDescription": "{org} 尚未在此發布任何內容。",
+    "posts": "文章",
+    "by": "作者：{name}",
+    "allPosts": "所有文章"
+  },
+  "reviews": {
+    "ratingLabel": "評分 {rating}/5",
+    "anonymous": "持票人",
+    "reportReasons": {
+      "spam": "垃圾訊息或廣告",
+      "offensive": "冒犯或辱罵",
+      "off_topic": "與本活動無關",
+      "personal_info": "洩漏個人資料",
+      "other": "其他原因"
+    },
+    "console": {
+      "title": "評價",
+      "description": "持票人在活動結束後的評價。隱藏違反規則的內容；原因會保存在活動紀錄中。",
+      "readOnly": "你可以檢視評價，但無法管理。",
+      "average": "平均評分",
+      "noRating": "沒有可見的評價",
+      "visible": "可見評價",
+      "filterLabel": "顯示評價",
+      "filters": {
+        "all": "全部",
+        "visible": "可見",
+        "hidden": "已隱藏",
+        "reported": "被檢舉"
+      },
+      "emptyTitle": "還沒有評價",
+      "emptyFilteredTitle": "這裡沒有評價",
+      "emptyDescription": "活動結束後，持票人可以在訂單頁面發表評價。",
+      "listLabel": "評價",
+      "reviewBy": "{name} 的評價",
+      "status": {
+        "visible": "可見",
+        "hidden": "已隱藏"
+      },
+      "hiddenBecause": "已隱藏：{reason}",
+      "reports": "{count, plural, =0 {沒有待處理的檢舉} other {# 則待處理的檢舉}}",
+      "reportStatus": {
+        "open": "待處理",
+        "dismissed": "已駁回",
+        "actioned": "已處理"
+      },
+      "hideReason": "隱藏原因",
+      "unhideReason": "重新顯示的原因",
+      "reasonError": "請填寫原因（3 到 300 個字元）。",
+      "hide": "隱藏評價",
+      "unhide": "顯示評價",
+      "dismissReports": "駁回檢舉"
+    },
+    "form": {
+      "rating": "你的評分",
+      "stars": "{count, plural, other {# 顆星}}",
+      "ratingError": "請選擇 1 到 5 的評分。",
+      "body": "你的評價（選填）",
+      "bodyHint": "{count}/{max} 個字元。僅限文字；會顯示你的名字與姓氏首字母。",
+      "bodyError": "最多 {max} 個字元。",
+      "submit": "發表評價",
+      "rateLimited": "嘗試次數過多。請幾分鐘後再試。",
+      "already": "你已評價過此活動。",
+      "notEnded": "活動結束後即可評價。"
+    },
+    "report": {
+      "open": "檢舉",
+      "openFor": "{name} 的評價",
+      "reason": "檢舉原因",
+      "note": "詳細說明（選填）",
+      "submit": "送出檢舉",
+      "cancel": "取消",
+      "thanks": "謝謝。主辦方會查看。",
+      "rateLimited": "檢舉次數過多。請稍後再試。"
+    },
+    "order": {
+      "title": "評價此活動",
+      "yours": "你的評價",
+      "ratingLabel": "你的評分：{rating}/5",
+      "hidden": "主辦方已在活動頁面隱藏你的評價。",
+      "invite": "感覺如何？評價開放至 {until}。",
+      "opensAt": "活動結束後（{date}）即可評價。",
+      "closed": "此活動的評價已於 {date} 關閉。",
+      "notHeld": "此活動未依計畫舉行，因此無法評價。"
+    },
+    "public": {
+      "title": "評價",
+      "summary": "{average}/5 · {count, plural, other {# 則評價}}",
+      "recent": "最新評價"
+    }
   },
   "authError": {
     "metaTitle": "登入連結無法使用",

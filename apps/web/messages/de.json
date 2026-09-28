@@ -214,6 +214,8 @@
     "templates": "Vorlagen",
     "apiKeys": "API-Schlüssel",
     "publicSite": "Öffentliche Seite",
+    "siteContent": "Seiten & Blog",
+    "reviews": "Bewertungen",
     "finance": "Finanzen",
     "emails": "E-Mail-Vorlagen",
     "speakers": "Speaker",
@@ -3199,6 +3201,13 @@
       "copied": "Kopiert.",
       "emptyTitle": "Noch keine öffentlichen Veranstaltungen",
       "emptyDescription": "Veröffentlichen Sie eine Veranstaltung, um ihr Widget-Snippet zu erhalten."
+    },
+    "navPages": {
+      "title": "Website-Navigation",
+      "description": "Seiten, die im Kopfbereich Ihrer Website neben Ihrem Blog verlinkt werden.",
+      "empty": "Sie haben noch keine Seiten. Erstellen Sie eine unter Seiten & Blog.",
+      "hint": "Entwürfe können verlinkt werden; sie erscheinen nach der Veröffentlichung.",
+      "none": "Keine Seiten verlinkt."
     }
   },
   "finance": {
@@ -3743,6 +3752,185 @@
     "invalidPassword": "Dieses Passwort ist nicht richtig.",
     "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
     "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
+  },
+  "cms": {
+    "title": "Seiten & Blog",
+    "description": "Ihre Blogbeiträge und Seiten, angezeigt auf Ihrer öffentlichen Website und Veranstalterseite.",
+    "readOnly": "Sie können die Seiten und Beiträge Ihres Teams lesen, aber nicht ändern.",
+    "notAllowed": "Sie haben keine Berechtigung, Seiten oder Beiträge zu schreiben.",
+    "deleted": "Gelöscht.",
+    "created": "Entwurf erstellt. Veröffentlichen Sie ihn, wenn er fertig ist.",
+    "saved": "Gespeichert.",
+    "fixErrors": "Prüfen Sie die markierten Felder.",
+    "tabsLabel": "Inhaltstyp",
+    "tabs": {
+      "post": "Blogbeiträge",
+      "page": "Seiten"
+    },
+    "kind": {
+      "post": "Blogbeitrag",
+      "page": "Seite"
+    },
+    "newPost": "Neuer Beitrag",
+    "newPage": "Neue Seite",
+    "newDescription": "Schreiben Sie in einfachem Markdown. Bis zur Veröffentlichung bleibt es ein Entwurf.",
+    "back": "Zurück zu Seiten & Blog",
+    "createDraft": "Entwurf erstellen",
+    "save": "Änderungen speichern",
+    "emptyPostsTitle": "Noch keine Blogbeiträge",
+    "emptyPagesTitle": "Noch keine Seiten",
+    "emptyDescription": "Erstellen Sie einen; bis zur Veröffentlichung bleibt er ein Entwurf.",
+    "emptyDescriptionViewer": "Es wurde noch nichts geschrieben.",
+    "columns": {
+      "title": "Titel",
+      "status": "Status",
+      "updated": "Aktualisiert"
+    },
+    "status": {
+      "draft": "Entwurf",
+      "published": "Veröffentlicht",
+      "archived": "Archiviert"
+    },
+    "publishedOn": "Erstmals veröffentlicht am {date}",
+    "neverPublished": "Noch nicht veröffentlicht",
+    "viewPublic": "Auf Ihrer Website ansehen",
+    "previewLabel": "Vorschau",
+    "showPreview": "Vorschau",
+    "hidePreview": "Vorschau ausblenden",
+    "previewEmpty": "Noch nichts für die Vorschau.",
+    "fields": {
+      "title": "Titel",
+      "slug": "Adresse",
+      "excerpt": "Zusammenfassung",
+      "body": "Text",
+      "seoTitle": "Suchtitel",
+      "seoDescription": "Suchbeschreibung"
+    },
+    "titleError": "Geben Sie einen Titel an (bis zu 160 Zeichen).",
+    "slugHint": "Das Ende der Webadresse nach {prefix}. Leer lassen, um sie aus dem Titel zu bilden.",
+    "slugFrozen": "Veröffentlicht unter {path}. Die Adresse kann nach der Veröffentlichung nicht mehr geändert werden.",
+    "slugError": {
+      "taken": "Diese Adresse wird bereits verwendet.",
+      "format": "Verwenden Sie Kleinbuchstaben, Ziffern und einzelne Bindestriche.",
+      "too_long": "Verwenden Sie höchstens 80 Zeichen.",
+      "frozen": "Die Adresse kann nach der Veröffentlichung nicht mehr geändert werden."
+    },
+    "excerptHint": "Wird in der Blogliste und in Suchergebnissen angezeigt (bis zu 300 Zeichen).",
+    "bodyHint": "Markdown: ## Überschriften, - Listen, **fett**, *kursiv* und [Links](https://…). HTML wird als Text angezeigt.",
+    "seoLegend": "Suchmaschinen (optional)",
+    "seoTitleHint": "Bis zu 70 Zeichen. Standard ist der Titel.",
+    "seoDescriptionHint": "Bis zu 160 Zeichen. Standard ist die Zusammenfassung.",
+    "tooLong": "Verwenden Sie höchstens {max} Zeichen.",
+    "actions": {
+      "publish": "Veröffentlichen",
+      "unpublish": "Veröffentlichung aufheben",
+      "archive": "Archivieren",
+      "delete": "Löschen"
+    },
+    "deleteConfirm": {
+      "title": "„{title}“ löschen?",
+      "body": "Es verschwindet sofort von Ihrer Website. Dies kann nicht rückgängig gemacht werden.",
+      "confirm": "Ja, löschen",
+      "cancel": "Abbrechen"
+    }
+  },
+  "cmsPublic": {
+    "blog": "Blog",
+    "siteNav": "Website von {org}",
+    "organizerNav": "Seiten von {org}",
+    "poweredBy": "Bereitgestellt von Yayatoh",
+    "blogTitle": "Blog von {org}",
+    "blogDescription": "Neuigkeiten und Geschichten von {org}.",
+    "emptyTitle": "Noch keine Beiträge",
+    "emptyDescription": "{org} hat hier noch nichts veröffentlicht.",
+    "posts": "Beiträge",
+    "by": "von {name}",
+    "allPosts": "Alle Beiträge"
+  },
+  "reviews": {
+    "ratingLabel": "Bewertet mit {rating} von 5",
+    "anonymous": "Ticketinhaber",
+    "reportReasons": {
+      "spam": "Spam oder Werbung",
+      "offensive": "Beleidigend oder missbräuchlich",
+      "off_topic": "Nicht zu dieser Veranstaltung",
+      "personal_info": "Enthält persönliche Daten",
+      "other": "Etwas anderes"
+    },
+    "console": {
+      "title": "Bewertungen",
+      "description": "Was Ticketinhaber nach der Veranstaltung gesagt haben. Blenden Sie aus, was gegen Ihre Regeln verstößt; der Grund wird im Aktivitätsprotokoll gespeichert.",
+      "readOnly": "Sie können Bewertungen lesen, aber nicht moderieren.",
+      "average": "Durchschnittsbewertung",
+      "noRating": "Keine sichtbaren Bewertungen",
+      "visible": "Sichtbare Bewertungen",
+      "filterLabel": "Bewertungen anzeigen",
+      "filters": {
+        "all": "Alle",
+        "visible": "Sichtbar",
+        "hidden": "Ausgeblendet",
+        "reported": "Gemeldet"
+      },
+      "emptyTitle": "Noch keine Bewertungen",
+      "emptyFilteredTitle": "Hier keine Bewertungen",
+      "emptyDescription": "Ticketinhaber können die Veranstaltung nach ihrem Ende auf ihrer Bestellseite bewerten.",
+      "listLabel": "Bewertungen",
+      "reviewBy": "Bewertung von {name}",
+      "status": {
+        "visible": "Sichtbar",
+        "hidden": "Ausgeblendet"
+      },
+      "hiddenBecause": "Ausgeblendet: {reason}",
+      "reports": "{count, plural, =0 {Keine offenen Meldungen} one {# offene Meldung} other {# offene Meldungen}}",
+      "reportStatus": {
+        "open": "offen",
+        "dismissed": "verworfen",
+        "actioned": "erledigt"
+      },
+      "hideReason": "Grund für das Ausblenden",
+      "unhideReason": "Grund für das erneute Anzeigen",
+      "reasonError": "Geben Sie einen Grund an (3 bis 300 Zeichen).",
+      "hide": "Bewertung ausblenden",
+      "unhide": "Bewertung anzeigen",
+      "dismissReports": "Meldungen verwerfen"
+    },
+    "form": {
+      "rating": "Ihre Bewertung",
+      "stars": "{count, plural, one {# Stern} other {# Sterne}}",
+      "ratingError": "Wählen Sie eine Bewertung von 1 bis 5.",
+      "body": "Ihre Rezension (optional)",
+      "bodyHint": "{count} von {max} Zeichen. Nur Text; Ihr Vorname und der Anfangsbuchstabe Ihres Nachnamens werden angezeigt.",
+      "bodyError": "Verwenden Sie höchstens {max} Zeichen.",
+      "submit": "Bewertung veröffentlichen",
+      "rateLimited": "Zu viele Versuche. Versuchen Sie es in ein paar Minuten erneut.",
+      "already": "Sie haben diese Veranstaltung bereits bewertet.",
+      "notEnded": "Sie können bewerten, sobald die Veranstaltung beendet ist."
+    },
+    "report": {
+      "open": "Melden",
+      "openFor": "Bewertung von {name}",
+      "reason": "Warum melden Sie sie?",
+      "note": "Details (optional)",
+      "submit": "Meldung senden",
+      "cancel": "Abbrechen",
+      "thanks": "Danke. Der Veranstalter wird sie prüfen.",
+      "rateLimited": "Zu viele Meldungen. Versuchen Sie es später erneut."
+    },
+    "order": {
+      "title": "Diese Veranstaltung bewerten",
+      "yours": "Ihre Bewertung",
+      "ratingLabel": "Sie haben mit {rating} von 5 bewertet",
+      "hidden": "Der Veranstalter hat Ihre Bewertung auf der Veranstaltungsseite ausgeblendet.",
+      "invite": "Wie war es? Bewertungen sind bis {until} möglich.",
+      "opensAt": "Sie können diese Veranstaltung bewerten, sobald sie endet ({date}).",
+      "closed": "Bewertungen für diese Veranstaltung wurden am {date} geschlossen.",
+      "notHeld": "Diese Veranstaltung hat nicht wie geplant stattgefunden und kann daher nicht bewertet werden."
+    },
+    "public": {
+      "title": "Bewertungen",
+      "summary": "{average} von 5 · {count, plural, one {# Bewertung} other {# Bewertungen}}",
+      "recent": "Neueste Bewertungen"
+    }
   },
   "authError": {
     "metaTitle": "Anmeldelink nicht verwendbar",

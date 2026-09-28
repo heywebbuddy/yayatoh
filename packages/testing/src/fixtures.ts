@@ -12,6 +12,7 @@ import {
   scanTicketCommand,
   setDetectionSettingsCommand,
 } from '@yayatoh/checkin';
+import { createEntryCommand, setEntryStatusCommand } from '@yayatoh/cms';
 import { withTenant } from '@yayatoh/db';
 import {
   addRecurringOccurrencesCommand,
@@ -81,6 +82,7 @@ import {
   createTrackCommand,
 } from '@yayatoh/program';
 import { attendeeExportBulk } from '@yayatoh/reports';
+import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
   assignSeatsCommand,
   holdSeatsTx,
@@ -864,6 +866,45 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M1.4g: a published page (linked from the tenant site's navigation) and a published post; a
+  // review by the fixture buyer after the event ended, and one report of it.
+  const page = await executeCommand(
+    createEntryCommand,
+    {
+      kind: 'page',
+      title: `About ${name}`,
+      body: '## Who we are\n\nFixture page.',
+      authorName: 'Fixture Owner',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setEntryStatusCommand, { entryId: page.id, action: 'publish' }, ctx(), ports);
+  const post = await executeCommand(
+    createEntryCommand,
+    { kind: 'post', title: `${name} news`, body: 'Fixture post.', authorName: 'Fixture Owner' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setEntryStatusCommand, { entryId: post.id, action: 'publish' }, ctx(), ports);
+  await executeCommand(updateSiteSettingsCommand, { navPageIds: [page.id] }, ctx(), ports);
+  const afterEvent = new Date('2027-10-20T12:00:00Z');
+  await executeCommand(
+    submitReviewCommand,
+    { manageToken: checkout.manageToken, rating: 4, body: 'Great fixture event.' },
+    createCtx({ orgId: org.id, now: afterEvent }),
+    ports,
+  );
+  const [review] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(sql`select id from reviews.reviews order by created_at limit 1`),
+  );
+  if (review)
+    await executeCommand(
+      reportReviewCommand,
+      { reviewId: review.id, reason: 'spam', clientKey: `fixture-device-${slug}` },
+      createCtx({ orgId: org.id }),
+      ports,
+    );
   return { org, ownerId, viewerId, event, apiKey, ctx };
 }
 

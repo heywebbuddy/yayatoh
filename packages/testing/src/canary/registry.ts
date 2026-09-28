@@ -2,6 +2,7 @@ import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as billing } from '@yayatoh/billing';
 import { privateColumns as checkin } from '@yayatoh/checkin';
+import { privateColumns as cms } from '@yayatoh/cms';
 import { privateColumns as crm } from '@yayatoh/crm';
 import type { CanarySeed, ColumnRule, PrivateClass, PrivateColumn, SchemaPrivacy } from '@yayatoh/db';
 import { privateColumns as events } from '@yayatoh/events';
@@ -15,6 +16,7 @@ import { privateColumns as payments } from '@yayatoh/payments';
 import { privateColumns as platform } from '@yayatoh/platform';
 import { privateColumns as privacy } from '@yayatoh/privacy';
 import { privateColumns as program } from '@yayatoh/program';
+import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
 import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
@@ -31,6 +33,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   attendees,
   billing,
   checkin,
+  cms,
   crm,
   events,
   forms,
@@ -43,6 +46,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   platform,
   privacy,
   program,
+  reviews,
   seating,
   templates,
   tenancy,

@@ -214,6 +214,8 @@
     "templates": "テンプレート",
     "apiKeys": "API キー",
     "publicSite": "公開サイト",
+    "siteContent": "ページとブログ",
+    "reviews": "レビュー",
     "finance": "財務",
     "emails": "メールテンプレート",
     "speakers": "登壇者",
@@ -3199,6 +3201,13 @@
       "copied": "コピーしました。",
       "emptyTitle": "公開イベントはまだありません",
       "emptyDescription": "イベントを公開するとウィジェットのスニペットを取得できます。"
+    },
+    "navPages": {
+      "title": "サイトナビゲーション",
+      "description": "サイトのヘッダーにブログと並べてリンクするページ。",
+      "empty": "まだページがありません。「ページとブログ」で作成してください。",
+      "hint": "下書きもリンクできます。公開されると表示されます。",
+      "none": "リンクされたページはありません。"
     }
   },
   "finance": {
@@ -3743,6 +3752,185 @@
     "invalidPassword": "パスワードが正しくありません。",
     "rateLimited": "試行回数が多すぎます。15 分待ってから、もう一度お試しください。",
     "unauthenticated": "セッションが終了しました。もう一度サインインしてください。"
+  },
+  "cms": {
+    "title": "ページとブログ",
+    "description": "公開サイトと主催者ページに表示されるブログ記事とページ。",
+    "readOnly": "チームのページと記事を閲覧できますが、変更はできません。",
+    "notAllowed": "ページや記事を作成する権限がありません。",
+    "deleted": "削除しました。",
+    "created": "下書きを作成しました。準備ができたら公開してください。",
+    "saved": "保存しました。",
+    "fixErrors": "強調表示された項目を確認してください。",
+    "tabsLabel": "コンテンツの種類",
+    "tabs": {
+      "post": "ブログ記事",
+      "page": "ページ"
+    },
+    "kind": {
+      "post": "ブログ記事",
+      "page": "ページ"
+    },
+    "newPost": "新しい記事",
+    "newPage": "新しいページ",
+    "newDescription": "シンプルな Markdown で書きます。公開するまでは下書きです。",
+    "back": "ページとブログに戻る",
+    "createDraft": "下書きを作成",
+    "save": "変更を保存",
+    "emptyPostsTitle": "ブログ記事はまだありません",
+    "emptyPagesTitle": "ページはまだありません",
+    "emptyDescription": "作成してください。公開するまでは下書きのままです。",
+    "emptyDescriptionViewer": "まだ何も書かれていません。",
+    "columns": {
+      "title": "タイトル",
+      "status": "状態",
+      "updated": "更新日"
+    },
+    "status": {
+      "draft": "下書き",
+      "published": "公開中",
+      "archived": "アーカイブ済み"
+    },
+    "publishedOn": "初回公開日 {date}",
+    "neverPublished": "未公開",
+    "viewPublic": "サイトで見る",
+    "previewLabel": "プレビュー",
+    "showPreview": "プレビュー",
+    "hidePreview": "プレビューを閉じる",
+    "previewEmpty": "プレビューする内容がまだありません。",
+    "fields": {
+      "title": "タイトル",
+      "slug": "アドレス",
+      "excerpt": "概要",
+      "body": "本文",
+      "seoTitle": "検索用タイトル",
+      "seoDescription": "検索用説明"
+    },
+    "titleError": "タイトルを入力してください（160 文字以内）。",
+    "slugHint": "{prefix} の後に続くウェブアドレス。空欄にするとタイトルから作成されます。",
+    "slugFrozen": "{path} で公開中です。公開後はアドレスを変更できません。",
+    "slugError": {
+      "taken": "このアドレスはすでに使われています。",
+      "format": "半角英小文字、数字、単一のハイフンを使ってください。",
+      "too_long": "80 文字以内にしてください。",
+      "frozen": "公開後はアドレスを変更できません。"
+    },
+    "excerptHint": "ブログ一覧と検索結果に表示されます（300 文字以内）。",
+    "bodyHint": "Markdown: ## 見出し、- 箇条書き、**太字**、*斜体*、[リンク](https://…)。HTML はテキストとして表示されます。",
+    "seoLegend": "検索エンジン（任意）",
+    "seoTitleHint": "70 文字以内。既定はタイトルです。",
+    "seoDescriptionHint": "160 文字以内。既定は概要です。",
+    "tooLong": "{max} 文字以内にしてください。",
+    "actions": {
+      "publish": "公開",
+      "unpublish": "非公開にする",
+      "archive": "アーカイブ",
+      "delete": "削除"
+    },
+    "deleteConfirm": {
+      "title": "「{title}」を削除しますか？",
+      "body": "サイトからすぐに消えます。元に戻せません。",
+      "confirm": "削除する",
+      "cancel": "キャンセル"
+    }
+  },
+  "cmsPublic": {
+    "blog": "ブログ",
+    "siteNav": "{org} のサイト",
+    "organizerNav": "{org} のページ",
+    "poweredBy": "Powered by Yayatoh",
+    "blogTitle": "{org} のブログ",
+    "blogDescription": "{org} のニュースとストーリー。",
+    "emptyTitle": "記事はまだありません",
+    "emptyDescription": "{org} はまだここに何も公開していません。",
+    "posts": "記事",
+    "by": "{name}",
+    "allPosts": "すべての記事"
+  },
+  "reviews": {
+    "ratingLabel": "5 段階中 {rating} の評価",
+    "anonymous": "チケット保有者",
+    "reportReasons": {
+      "spam": "スパム・広告",
+      "offensive": "不快・攻撃的",
+      "off_topic": "このイベントと無関係",
+      "personal_info": "個人情報を含む",
+      "other": "その他"
+    },
+    "console": {
+      "title": "レビュー",
+      "description": "イベント後にチケット保有者が寄せた声です。ルールに反するものは非表示にできます。理由はアクティビティログに残ります。",
+      "readOnly": "レビューは閲覧できますが、管理はできません。",
+      "average": "平均評価",
+      "noRating": "表示中のレビューはありません",
+      "visible": "表示中のレビュー",
+      "filterLabel": "レビューを表示",
+      "filters": {
+        "all": "すべて",
+        "visible": "表示中",
+        "hidden": "非表示",
+        "reported": "報告あり"
+      },
+      "emptyTitle": "レビューはまだありません",
+      "emptyFilteredTitle": "該当するレビューはありません",
+      "emptyDescription": "イベント終了後、チケット保有者は注文ページからレビューできます。",
+      "listLabel": "レビュー",
+      "reviewBy": "{name} のレビュー",
+      "status": {
+        "visible": "表示中",
+        "hidden": "非表示"
+      },
+      "hiddenBecause": "非表示：{reason}",
+      "reports": "{count, plural, =0 {未対応の報告はありません} other {未対応の報告 # 件}}",
+      "reportStatus": {
+        "open": "未対応",
+        "dismissed": "却下",
+        "actioned": "対応済み"
+      },
+      "hideReason": "非表示にする理由",
+      "unhideReason": "再表示する理由",
+      "reasonError": "理由を入力してください（3〜300 文字）。",
+      "hide": "レビューを非表示",
+      "unhide": "レビューを表示",
+      "dismissReports": "報告を却下"
+    },
+    "form": {
+      "rating": "評価",
+      "stars": "{count, plural, other {星 #}}",
+      "ratingError": "1〜5 の評価を選んでください。",
+      "body": "レビュー（任意）",
+      "bodyHint": "{count} / {max} 文字。テキストのみ。名前と姓の頭文字が表示されます。",
+      "bodyError": "{max} 文字以内にしてください。",
+      "submit": "レビューを投稿",
+      "rateLimited": "試行回数が多すぎます。数分後にもう一度お試しください。",
+      "already": "このイベントはすでにレビュー済みです。",
+      "notEnded": "イベント終了後にレビューできます。"
+    },
+    "report": {
+      "open": "報告",
+      "openFor": "{name} のレビュー",
+      "reason": "報告する理由",
+      "note": "詳細（任意）",
+      "submit": "報告を送信",
+      "cancel": "キャンセル",
+      "thanks": "ありがとうございます。主催者が確認します。",
+      "rateLimited": "報告が多すぎます。後でもう一度お試しください。"
+    },
+    "order": {
+      "title": "このイベントをレビュー",
+      "yours": "あなたのレビュー",
+      "ratingLabel": "5 段階中 {rating} と評価しました",
+      "hidden": "主催者がイベントページであなたのレビューを非表示にしました。",
+      "invite": "いかがでしたか？レビューは {until} まで受け付けています。",
+      "opensAt": "イベント終了後（{date}）にレビューできます。",
+      "closed": "このイベントのレビュー受付は {date} に終了しました。",
+      "notHeld": "このイベントは予定どおり開催されなかったため、レビューできません。"
+    },
+    "public": {
+      "title": "レビュー",
+      "summary": "5 段階中 {average} · {count, plural, other {レビュー # 件}}",
+      "recent": "最新のレビュー"
+    }
   },
   "authError": {
     "metaTitle": "サインインリンクを使用できません",

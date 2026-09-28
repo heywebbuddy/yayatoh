@@ -137,6 +137,8 @@ export interface PublicOrganizer {
   readonly primaryHost: string | null;
   /** The org runs a tenant site (switched on, or a custom domain is its primary host). */
   readonly tenantSite: boolean;
+  /** IANA timezone for dates that belong to no event (CMS posts, M1.4g). */
+  readonly timezone: string;
 }
 
 /** The public face of an organizer by id (tenant sites), or null for unknown or inactive orgs. */
@@ -153,6 +155,7 @@ export async function publicOrganizerById(orgId: string): Promise<PublicOrganize
       brandColor: org.brandColor,
       poweredByVisible: org.poweredByVisible,
       primaryHost: org.primaryHost,
+      timezone: org.timezone,
       tenantSite: settings.tenantSite || (org.primaryHost !== null && !org.primaryHostManaged),
     };
   });

@@ -13,6 +13,7 @@ import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia } from '@yayatoh/media';
 import { publicRefundPolicy } from '@yayatoh/orders';
 import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
+import { MIN_REVIEWS_FOR_RATING } from '@yayatoh/reviews';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
@@ -34,14 +35,16 @@ import { EventSections } from '@/components/event-sections.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
+import { EventReviews } from '@/components/reviews/event-reviews.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
-import { eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
+import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
+import { cachedReviews } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { openVenueMap } from '@/server/seat-finder.ts';
 import { apexOrigin, eventOrigin } from '@/server/seo.ts';
@@ -320,8 +323,11 @@ export async function PublicEventView({
   }
   const listing = await listingBySlug(slug);
   const req = await requestHost();
+  // M1.4g: holders' reviews (visible only); the rating reaches JSON-LD from MIN_REVIEWS_FOR_RATING.
+  const reviews = target ? await cachedReviews(target.orgId, target.eventId) : null;
+  const rating = reviews ? aggregateRatingJsonLd(reviews, MIN_REVIEWS_FOR_RATING) : null;
   const canonical = `${eventOrigin(req, listing?.canonicalHost ?? null)}/events/${slug}`;
-  const ld = eventJsonLd({
+  const baseLd = eventJsonLd({
     name: ev.name,
     description: ev.tagline,
     status: ev.status,
@@ -344,6 +350,7 @@ export async function PublicEventView({
       availability: p.availability,
     })),
   });
+  const ld = rating ? { ...baseLd, aggregateRating: rating } : baseLd;
   return (
     <div className="min-h-dvh bg-white">
       {ev.visibility === 'public' ? (
@@ -505,6 +512,8 @@ export async function PublicEventView({
       ) : null}
 
       <ProgramSections program={program} slug={slug} locale={locale} timeZone={ev.timezone} />
+
+      {reviews ? <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} /> : null}
 
       {venue ? (
         <section

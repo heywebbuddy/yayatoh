@@ -4,6 +4,7 @@ import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { HolderContent } from '@/components/holder-content.tsx';
+import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
@@ -130,6 +131,14 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             ))}
           </ul>
         </section>
+      ) : null}
+      {holderTarget ? (
+        <OrderReview
+          orgId={holderTarget.orgId}
+          token={token}
+          locale={locale}
+          timeZone={order.event.timezone}
+        />
       ) : null}
       {holderTarget ? (
         <HolderContent target={holderTarget} locale={locale} timeZone={order.event.timezone} />

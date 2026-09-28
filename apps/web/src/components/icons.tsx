@@ -33,6 +33,7 @@ import {
   Search,
   Settings,
   ShieldCheck,
+  Star,
   Store,
   Ticket,
   Users,
@@ -76,6 +77,7 @@ const ICONS: Record<string, LucideIcon> = {
   building: Building2,
   history: History,
   shield: ShieldCheck,
+  star: Star,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {
