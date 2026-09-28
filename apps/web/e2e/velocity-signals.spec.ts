@@ -149,8 +149,15 @@ test.describe('velocity fraud signals', () => {
     await expect(velocity.getByRole('status')).toHaveText('Acknowledged: the team can see someone is on it.');
     await expect(velocity).toContainText('Acknowledged');
     await expect(velocity.getByRole('button')).toHaveCount(0);
+    // Dismissing needs a reason (M1.9e): refused without one, then saved with the note.
+    await burst.getByRole('button', { name: /^Dismiss: Several invalid codes/ }).click();
+    await expect(burst.getByText("Say why you're dismissing it (at least 3 characters).")).toBeVisible();
+    await expect(burst.getByLabel('Note', { exact: true })).toHaveAttribute('aria-invalid', 'true');
+    await expectAccessible(page);
+    await burst.getByLabel('Note', { exact: true }).fill('Staff testing the scanner');
     await burst.getByRole('button', { name: /^Dismiss: Several invalid codes/ }).click();
     await expect(burst.getByRole('status')).toHaveText('Dismissed.');
+    await refused.getByLabel('Note', { exact: true }).fill('Same test');
     await refused.getByRole('button', { name: /^Dismiss: Many refused scans/ }).click();
     await expect(refused.getByRole('status')).toHaveText('Dismissed.');
     await expect(page.getByText('Nothing open')).toBeVisible();
@@ -158,6 +165,7 @@ test.describe('velocity fraud signals', () => {
     await page.reload();
     await expect(velocity).toContainText('Acknowledged');
     await expect(burst).toContainText('Dismissed');
+    await expect(burst).toContainText('Note: Staff testing the scanner');
     await expect(refused).toContainText('Dismissed');
 
     // Checkpoint locations feed the impossible-travel rule: both or neither, in range.

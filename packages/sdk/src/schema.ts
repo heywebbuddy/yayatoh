@@ -512,6 +512,7 @@ export interface paths {
                                 emailHash: string;
                                 holderName: string;
                                 issuedAt: string;
+                                legacyHashes?: string[];
                                 /** Format: uuid */
                                 occurrenceId: string | null;
                                 rev: number;
@@ -2509,6 +2510,7 @@ export interface paths {
                         "application/json": {
                             duplicatesOffline: number;
                             results: {
+                                openSignals?: number;
                                 result: string;
                                 /** Format: uuid */
                                 scanId: string;

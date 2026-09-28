@@ -203,6 +203,85 @@ test.describe('legacy migration — the migrated organizer', () => {
     await expectAccessible(page);
   });
 
+  test('offline: two devices let the same migrated ticket in; the duplicate is flagged within 60 s of reconnect', async () => {
+    // M1.9e: the manifest carries legacy QR payloads as salted hashes, so migrated tickets scan
+    // offline; on reconnect the server's first-wins still flags the cross-device duplicate.
+    test.setTimeout(150_000);
+    const mine = h.scans[test.info().project.name] ?? h.scans['desktop-1280'];
+    if (!mine) throw new Error('no scan handle');
+    await page.goto(`${EVENT}/onsite`);
+    // Start from "not in yet": undo today's admission (the online test, or an earlier run).
+    const field = page.getByLabel('Ticket code');
+    const result = page.getByRole('status').filter({ has: page.locator('[data-result]') });
+    await field.fill(mine.shortCode);
+    await field.press('Enter');
+    await expect(result).toContainText(/Welcome in|Already checked in/);
+    await page
+      .getByRole('button', { name: `Undo check-in for ${mine.name}` })
+      .first()
+      .click();
+    await expect(page.getByRole('button', { name: `Undo check-in for ${mine.name}` })).toHaveCount(0);
+
+    const device = async (label: string) => {
+      await page.getByLabel('Device name').fill(label);
+      await page.getByRole('button', { name: 'Add device' }).click();
+      const link = await page.getByTestId('scan-link').getAttribute('href');
+      const context = await page.context().browser()?.newContext();
+      if (!context) throw new Error('no browser');
+      const p = await context.newPage();
+      await p.goto(link ?? '');
+      await expect(p.getByText(/tickets? on this device/)).toBeVisible({ timeout: 30_000 });
+      return { context, page: p };
+    };
+    const stamp = `${Date.now()}-${test.info().project.name}`;
+    const one = await device(`Legacy A ${stamp}`);
+    const two = await device(`Legacy B ${stamp}`);
+    await one.context.setOffline(true);
+    await two.context.setOffline(true);
+    const scanOn = async (d: typeof one) => {
+      const code = d.page.getByLabel('Ticket code');
+      await code.fill(mine.legacyCode);
+      await code.press('Enter');
+      const shown = d.page.getByRole('status').filter({ has: d.page.locator('[data-result]') });
+      await expect(shown).toContainText('Welcome in');
+      await expect(shown).toContainText(`${mine.name} · Season Pass`);
+      await expect(shown).toContainText('will be confirmed when synced');
+      return shown;
+    };
+    const time = (d: Date) =>
+      new Intl.DateTimeFormat('en', {
+        timeZone: 'America/Chicago',
+        hour: 'numeric',
+        minute: '2-digit',
+      }).format(d);
+    await scanOn(one);
+    const before = new Date();
+    const second = await scanOn(two);
+    const after = new Date();
+    await expect(two.page.getByTestId('scan-queue')).toHaveText('1 scan waiting to sync');
+
+    // Reconnect: the first device's scan wins; the second is flagged within 60 s.
+    const reconnect = Date.now();
+    await one.context.setOffline(false);
+    await expect(one.page.getByTestId('scan-queue')).toHaveText('All scans synced', { timeout: 15_000 });
+    await two.context.setOffline(false);
+    await expect(two.page.getByTestId('scan-queue')).toHaveText('All scans synced', { timeout: 15_000 });
+    await expect(second).toContainText('Checked in on another device first');
+    const alerts = page.getByRole('region', { name: /let in twice while offline/ });
+    await expect(
+      alerts
+        .getByRole('listitem')
+        .filter({ hasText: mine.name })
+        .filter({
+          hasText: new RegExp(`^(${time(before)}|${time(after)}) ·`),
+        }),
+    ).not.toHaveCount(0, { timeout: 60_000 - (Date.now() - reconnect) });
+    expect(Date.now() - reconnect).toBeLessThan(60_000);
+    await expectAccessible(page);
+    await one.context.close();
+    await two.context.close();
+  });
+
   test('the migrated event renders right-to-left in Arabic', async () => {
     await page.goto(`/ar${EVENT}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');

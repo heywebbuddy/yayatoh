@@ -38,7 +38,7 @@ export function SignalItem({
         <StatusDot status={SEVERITY_DOT[s.severity]} label={t(`signals.severity.${s.severity}`)} />
         <span className="text-caption text-zinc-600">{when.format(s.at)}</span>
         <span className="text-caption text-zinc-600">{t(`fraudSignals.source.${s.source}`)}</span>
-        <span className="text-caption text-zinc-600" data-status={s.status}>
+        <span className="text-caption text-zinc-600" data-signal-status={s.status}>
           {t(`signals.status.${s.status}`)}
         </span>
       </div>

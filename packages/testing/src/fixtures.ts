@@ -7,6 +7,7 @@ import {
 } from '@yayatoh/attendees';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
+  chatReportSignals,
   createCheckpointCommand,
   enrollDeviceCommand,
   scanTicketCommand,
@@ -677,6 +678,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(contactReportCommand, { token: threadToken(thread.id), reason: 'other' }, anon, ports);
   await executeCommand(reportThreadCommand, { threadId: thread.id, reason: 'spam' }, ctx(), ports);
+  // M1.9e: the organizer's report becomes a chat-sourced fraud signal (isolation coverage of the
+  // one signal model's new columns); the contact's report raises none.
+  for (const e of await withTenant(systemCtx(org.id), (tx) =>
+    recentEventsTx(tx, org.id, ['messaging.report_filed'], 3_600_000),
+  ))
+    await consumeEvent(chatReportSignals(), e);
   // M1.4b: a weekly event with dates (one cancelled), a series holding both events, and a
   // template saved from the launch event (isolation coverage).
   const weekly = await executeCommand(

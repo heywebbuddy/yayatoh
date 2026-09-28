@@ -160,12 +160,13 @@ describe('checkpoint-scoped door staff (M1.9d)', () => {
   it('online: a scoped member admits at their checkpoint and gets wrong_checkpoint elsewhere', async () => {
     expect(await scanAs(viewer(at(1)), t(0).shortCode, north)).toMatchObject({ result: 'admitted' });
     const refused = await scanAs(viewer(at(2)), t(1).shortCode, south);
-    // The refusal says nothing about the ticket, and nothing is admitted.
+    // The refusal says nothing about the ticket (not even its open signals), and nothing is admitted.
     expect(refused).toEqual({
       result: 'wrong_checkpoint',
       ticket: null,
       admissionId: null,
       firstAdmittedAt: null,
+      openSignals: 0,
     });
     expect((await scanAs(viewer(at(3)), t(1).code)).result).toBe('wrong_checkpoint');
     expect((await scanAs(viewer(at(4)), t(1).shortCode, lounge)).result).toBe('wrong_checkpoint');

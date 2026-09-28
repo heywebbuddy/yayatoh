@@ -4423,6 +4423,12 @@
                           },
                           "issuedAt": {
                             "type": "string"
+                          },
+                          "legacyHashes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "required": [
@@ -4667,6 +4673,9 @@
                           },
                           "stored": {
                             "type": "boolean"
+                          },
+                          "openSignals": {
+                            "type": "integer"
                           }
                         },
                         "required": [
