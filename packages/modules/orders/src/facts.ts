@@ -231,3 +231,40 @@ export async function salesByEventTx(tx: TenantTx, scope: FactScope): Promise<Ev
     grossMinor: n(r.gross),
   }));
 }
+
+export interface OrderOutcomeFact {
+  readonly orderId: string;
+  readonly eventId: string;
+  readonly status: (typeof ORDER_STATUSES)[number];
+  /** Sold at some point (paid, partially refunded or refunded). */
+  readonly sold: boolean;
+  readonly totalMinor: number;
+  readonly currency: string;
+  readonly createdAt: Date;
+}
+
+/**
+ * Status and totals of given orders (M3.8a attribution reports and the attribution hook). At most
+ * 5,000 ids per call; unknown ids (or another org's, hidden by RLS) are simply absent.
+ */
+export async function orderOutcomesTx(
+  tx: TenantTx,
+  orderIds: readonly string[],
+): Promise<OrderOutcomeFact[]> {
+  if (orderIds.length === 0) return [];
+  if (orderIds.length > 5000) throw new Error('orderOutcomesTx: at most 5000 ids');
+  const ids = sql.raw(`'{${orderIds.filter((id) => /^[0-9a-f-]{36}$/.test(id)).join(',')}}'`);
+  const rows = await tx.execute<Record<string, unknown>>(sql`
+    select o.id, o.event_id, o.status, o.total_minor::text as total, o.currency, o.created_at
+    from orders.orders o where o.id = any(${ids}::uuid[])`);
+  const sold = new Set<string>(SOLD_STATUSES);
+  return rows.map((r) => ({
+    orderId: String(r.id),
+    eventId: String(r.event_id),
+    status: String(r.status) as (typeof ORDER_STATUSES)[number],
+    sold: sold.has(String(r.status)),
+    totalMinor: n(r.total),
+    currency: String(r.currency),
+    createdAt: r.created_at instanceof Date ? r.created_at : new Date(String(r.created_at)),
+  }));
+}

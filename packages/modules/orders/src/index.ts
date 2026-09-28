@@ -56,6 +56,8 @@ export {
   type DaySalesFact,
   type EventSalesFact,
   type FactScope,
+  type OrderOutcomeFact,
+  orderOutcomesTx,
   orderStatusCountsTx,
   type PromoSalesFact,
   type RefundFact,

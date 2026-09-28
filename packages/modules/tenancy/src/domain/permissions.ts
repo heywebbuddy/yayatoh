@@ -30,6 +30,8 @@ export const PERMISSIONS = [
   'orders:refund_override',
   /** Connect and change the payout account (KYC, bank). Money leaving the platform. */
   'payouts:manage',
+  /** Tracked links and their clicks, attributed orders and revenue (M3.8a). */
+  'marketing:read',
   'marketing:write',
   'checkin:scan',
   /** Create and revoke org API keys (/v1). */
@@ -60,6 +62,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'attendees:write',
     'attendees:export',
     'contacts:read',
+    'marketing:read',
     'marketing:write',
     'checkin:scan',
     'messages:read',
@@ -75,11 +78,13 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'finance:reconcile',
     'disputes:respond',
     'payouts:manage',
+    'marketing:read',
   ],
   marketing: [
     'org:read',
     'events:read',
     'contacts:read',
+    'marketing:read',
     'marketing:write',
     'messages:read',
     'messages:send',
@@ -95,7 +100,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'messages:read',
   ],
   scanner: ['org:read', 'checkin:scan'],
-  viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read'],
+  viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read', 'marketing:read'],
 };
 
 /** Platform permissions are not granted by org roles; they need a platform actor. */
