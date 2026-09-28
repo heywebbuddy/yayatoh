@@ -1,4 +1,7 @@
 import { execFileSync } from 'node:child_process';
+import { closeSync, openSync, statSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 import { type Browser, expect, type Page } from '@playwright/test';
@@ -169,4 +172,42 @@ export async function continueToPayment(guest: Page, email: string) {
     .toMatch(/^\d{6}$/);
   await field.fill(code ?? '');
   await guest.getByRole('button', { name: 'Verify and continue' }).click();
+}
+
+const SIGNUP_LOCK = join(tmpdir(), 'yayatoh-open-signup.lock');
+
+/**
+ * Hold the platform-wide open-signup switch (M3.11a) while `fn` flips it in the console: the web
+ * suite's signup specs take the same lock file. Starts and always ends closed (the staff CLI).
+ */
+export async function withOpenSignupLock<T>(fn: () => Promise<T>): Promise<T> {
+  const deadline = Date.now() + 240_000;
+  for (;;) {
+    try {
+      closeSync(openSync(SIGNUP_LOCK, 'wx'));
+      break;
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
+      try {
+        if (Date.now() - statSync(SIGNUP_LOCK).mtimeMs > 300_000) unlinkSync(SIGNUP_LOCK);
+      } catch {}
+      if (Date.now() > deadline) throw new Error('timed out waiting for the open-signup lock');
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  const close = () =>
+    execFileSync('node', ['scripts/open-signup.ts', '--off', '--reason', 'e2e run', '--by', 'staff:e2e'], {
+      cwd: fileURLToPath(new URL('../../worker/', import.meta.url)),
+      env: process.env,
+    });
+  try {
+    close();
+    return await fn();
+  } finally {
+    try {
+      close();
+    } finally {
+      unlinkSync(SIGNUP_LOCK);
+    }
+  }
 }

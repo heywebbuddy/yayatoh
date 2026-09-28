@@ -1,3 +1,8 @@
+import { execFileSync } from 'node:child_process';
+import { closeSync, openSync, statSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 import { type BrowserContext, expect, type Page } from '@playwright/test';
 import { base32Decode, devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
@@ -165,4 +170,47 @@ export async function verifyCheckoutEmail(page: Page, email: string) {
   await expect(field).toBeVisible();
   await field.fill(await lastEmailedCode(page, email));
   await page.getByRole('button', { name: 'Verify and continue' }).click();
+}
+
+const SIGNUP_LOCK = join(tmpdir(), 'yayatoh-open-signup.lock');
+
+/** Flip the platform-wide open-signup switch through the staff CLI (M3.11a; audited). */
+export function setOpenSignup(open: boolean) {
+  execFileSync(
+    'node',
+    ['scripts/open-signup.ts', open ? '--on' : '--off', '--reason', 'e2e run', '--by', 'staff:e2e'],
+    { cwd: fileURLToPath(new URL('../../worker/', import.meta.url)), env: process.env },
+  );
+}
+
+/**
+ * Run `fn` with open signup switched `open`, then closed again. The switch is platform-wide, so
+ * tests that depend on it (here and in the staff console suite) take turns through a lock file;
+ * a lock older than five minutes is from a crashed run and is taken over.
+ */
+export async function withOpenSignup<T>(open: boolean, fn: () => Promise<T>): Promise<T> {
+  const deadline = Date.now() + 240_000;
+  for (;;) {
+    try {
+      closeSync(openSync(SIGNUP_LOCK, 'wx'));
+      break;
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
+      try {
+        if (Date.now() - statSync(SIGNUP_LOCK).mtimeMs > 300_000) unlinkSync(SIGNUP_LOCK);
+      } catch {}
+      if (Date.now() > deadline) throw new Error('timed out waiting for the open-signup lock');
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  try {
+    setOpenSignup(open);
+    return await fn();
+  } finally {
+    try {
+      setOpenSignup(false);
+    } finally {
+      unlinkSync(SIGNUP_LOCK);
+    }
+  }
 }
