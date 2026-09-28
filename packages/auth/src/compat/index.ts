@@ -1,4 +1,5 @@
 export { isLegacyBcrypt, verifyLegacyBcrypt } from './bcrypt.ts';
+export { dualHash, GRACE_DAYS, isDualHash, parseDualHash, verifyDualHash } from './dual.ts';
 export {
   decryptLaravelCookie,
   laravelDecrypt,

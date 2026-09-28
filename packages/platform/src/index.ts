@@ -55,6 +55,7 @@ export {
   type PublishedEvent,
   recentEventsTx,
   type Subscriber,
+  subscribes,
 } from './outbox/outbox.ts';
 export {
   clearFinishedBulkParamsTx,

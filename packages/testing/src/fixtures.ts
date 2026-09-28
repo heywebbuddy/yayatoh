@@ -801,6 +801,22 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
         customer_paid_minor, commission_minor, admin_tax_minor, organizer_earning_minor,
         transferred_minor, open_minor, source_rows)
       values (${org.id}, 'event_statement', 'yay', ${event.id}, 'USD', 'open', 10000, 1000, 0, 9000, 0, 9000, 4)`);
+    // Legacy migration (M2.2c): the history projections (participation, contact totals, monthly metrics).
+    await tx.execute(sql`
+      with c as (
+        insert into crm.contacts (org_id, email, email_norm, name, source)
+        values (${org.id}, ${`history-${slug}@example.test`}, ${`history-${slug}@example.test`}, 'History Fixture', 'legacy')
+        returning id
+      ), p as (
+        insert into crm.event_participation (org_id, contact_id, event_id, tickets, checked_in, registered_at, spend_minor, currency, source)
+        select ${org.id}, id, ${event.id}, 2, true, now(), 5000, 'USD', 'legacy' from c
+      )
+      insert into crm.contact_stats (org_id, contact_id, currency, orders, tickets, events, events_attended, spend_minor,
+                                     first_seen_at, last_seen_at, source)
+      select ${org.id}, id, 'USD', 1, 2, 1, 1, 5000, now(), now(), 'legacy' from c`);
+    await tx.execute(sql`
+      insert into platform.metric_timeseries (org_id, metric, bucket, currency, value, source)
+      values (${org.id}, 'sales.gross', '2025-01-01', 'USD', 5000, 'legacy')`);
   });
   // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
   // and a quota override row.

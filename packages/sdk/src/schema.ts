@@ -512,6 +512,7 @@ export interface paths {
                                 emailHash: string;
                                 holderName: string;
                                 issuedAt: string;
+                                legacyCodes?: string[];
                                 /** Format: uuid */
                                 occurrenceId: string | null;
                                 rev: number;

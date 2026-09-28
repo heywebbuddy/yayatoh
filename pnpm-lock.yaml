@@ -2075,9 +2075,18 @@ importers:
 
   tools/legacy-migrate:
     dependencies:
+      '@yayatoh/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../../packages/modules/events
+      '@yayatoh/floorplan':
+        specifier: workspace:*
+        version: link:../../packages/floorplan
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -2109,6 +2118,12 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../../packages/modules/notifications
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../../packages/testing

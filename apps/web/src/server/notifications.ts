@@ -16,7 +16,7 @@ import {
 } from '@yayatoh/notifications';
 import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
-import { consumeEvent, eventKey, recentEventsTx, type Subscriber } from '@yayatoh/platform';
+import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 // The composition root registers the key vault (message params and manage links are encrypted).
@@ -68,8 +68,7 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
   const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
   let consumed = 0;
   for (const event of events) {
-    for (const s of subs)
-      if (s.events.includes(eventKey(event)) && (await consumeEvent(s, event))) consumed += 1;
+    for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) consumed += 1;
   }
   const deps: DispatchDeps = {
     transports: devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret() }),

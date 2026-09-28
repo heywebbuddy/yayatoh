@@ -31,6 +31,8 @@ export interface PublishedEvent {
   readonly aggregateId: string;
   readonly payload: unknown;
   readonly logSeq: number;
+  /** Backfilled history (legacy migration T9): skipped unless the subscriber opts in. */
+  readonly replayed?: boolean;
 }
 
 export interface Subscriber {
@@ -39,6 +41,11 @@ export interface Subscriber {
   /** `type@version` keys, e.g. `organization.created@1`. */
   readonly events: readonly string[];
   readonly handle: (tx: TenantTx, event: PublishedEvent) => Promise<void>;
+  /**
+   * Projectors that rebuild history from the log opt in to `replayed` events. Everything else
+   * (mailers, notifications, journeys, automations) never sees them (ADR 0008).
+   */
+  readonly acceptsReplayed?: boolean;
 }
 
 export function defineSubscriber(s: Subscriber): Subscriber {
@@ -49,6 +56,10 @@ export function defineSubscriber(s: Subscriber): Subscriber {
 }
 
 export const eventKey = (e: { type: string; version: number }) => `${e.type}@${e.version}`;
+
+/** Does this subscriber take this event (its type and version, and replayed history only if it opts in)? */
+export const subscribes = (s: Subscriber, e: PublishedEvent) =>
+  s.events.includes(eventKey(e)) && (!e.replayed || s.acceptsReplayed === true);
 
 /**
  * This org's recent outbox events of the given types (dev tooling: the web app's dev drain
@@ -78,5 +89,6 @@ export async function recentEventsTx(
     aggregateId: r.aggregateId,
     payload: r.payload,
     logSeq: r.logSeq ?? 0,
+    replayed: r.replayed,
   }));
 }

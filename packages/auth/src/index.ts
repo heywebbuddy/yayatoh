@@ -36,6 +36,13 @@ export {
   openImpersonationsOf,
   startImpersonation,
 } from './impersonation.ts';
+export {
+  consumeLegacyMagicLink,
+  type LegacyTokenIdentity,
+  legacyTokenCounts,
+  revokeLegacyTokens,
+  verifyLegacyAccessToken,
+} from './legacy-tokens.ts';
 export { type AuthMailer, consoleMailer, memoryMailer } from './mailer.ts';
 export { hashPassword, verifyPassword } from './password.ts';
 export { type BearerSession, type BearerSessions, bearerSessions, type SignInResult } from './sessions.ts';

@@ -4,7 +4,9 @@ Cross-cutting kernel services. Owns Postgres schema `platform`.
 
 **Invariants**
 - `domain_events`, `processed_events` and `audit_events` are append-only for `app_user` (UPDATE/DELETE revoked).
-- `log_seq` is stamped only by `platform.relay_stamp` under a transaction advisory lock: global, gap-free, monotonic.
+- `log_seq` is stamped only under the `platform.relay_stamp` transaction advisory lock (the relay, and the legacy migration's backfill, which takes the same lock): global, gap-free, monotonic.
+- Backfilled history is written with `replayed = true` (legacy migration T9): it is logged and published, but the relay never enqueues it and `consumeEvent` records it without running the handler, unless the subscriber sets `acceptsReplayed` (projectors that rebuild history). Mailers, notifications, journeys and automations never opt in.
+- `metric_timeseries`: monthly metric history per org (`source` legacy or live).
 - A subscriber handles each event at most once (`processed_events` unique on org × consumer × event, same transaction as the handler).
 - Event payloads are versioned contracts (`type@version`); a breaking change is a new version.
 - Code checks module keys (`MODULE_KEYS`), never plan or profile names.

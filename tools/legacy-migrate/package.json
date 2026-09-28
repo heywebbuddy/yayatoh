@@ -13,7 +13,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/auth": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/legacy-mask": "workspace:*",
     "@yayatoh/orders": "workspace:*",
@@ -26,6 +29,8 @@
     "@types/node": "catalog:",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/config": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/testing": "workspace:*",
     "typescript": "catalog:"
   }

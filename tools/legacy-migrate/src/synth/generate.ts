@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { once } from 'node:events';
 import {
   closeSync,
@@ -74,8 +75,33 @@ export interface SynthSummary {
     readonly dstEvents: { id: number; kind: 'fold' | 'gap' }[];
     readonly sharedEmails: string[];
     readonly hijackEmails: string[];
+    /** M2.2c: legacy seat charts (per ticket type) and their seats. */
+    readonly seatCharts: {
+      chartId: number;
+      eventId: number;
+      ticketId: number;
+      seats: number;
+      repetitive: boolean;
+    }[];
+    /** Events of one org that share a normalized title across years (series inference). */
+    readonly seriesGroups: number[][];
+    /** Sanctum personal access tokens: the bearer's plain part (`{id}|{plain}`) and whether it is live. */
+    readonly accessTokens: { id: number; userId: number; plain: string; expired: boolean; orphan: boolean }[];
+    /** Magic login tokens (stored in plain text by the legacy app) and their expiry (UTC ISO). */
+    readonly magicTokens: { userId: number; token: string; expiresAt: string }[];
+    /** Newsletter subscribers (email as stored; unsubscribed or not). */
+    readonly newsletter: { email: string; unsubscribed: boolean }[];
+    /** Venue slugs in the legacy directory. */
+    readonly venueSlugs: string[];
   };
 }
+
+const sha256hex = (s: string) => createHash('sha256').update(s).digest('hex');
+/** The plain part of synthetic Sanctum token n (Sanctum stores sha256 of it). */
+export const synthAccessTokenPlain = (inst: Instance, n: number) =>
+  sha256hex(`pat|${inst}|${n}`).slice(0, 40);
+/** A synthetic magic login token (the legacy app stores it as is: 64 hex characters). */
+export const synthMagicToken = (inst: Instance, userId: number) => sha256hex(`magic|${inst}|${userId}`);
 
 export const SYNTHETIC_MARKER = 'SYNTHETIC TEST DATA ONLY';
 /** bcrypt ($2y$, cost 10) of `synthetic-password`: every synthetic user's password. */
@@ -309,6 +335,8 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
   const scale = typeof opts.scale === 'object' ? opts.scale : SCALES[opts.scale ?? 'small']?.[inst];
   if (!scale) throw new Error(`unknown scale ${String(opts.scale)}`);
   const rng = new Rng((opts.seed ?? 20260927) ^ (inst === 'yay' ? 0x5eed : 0xabc0));
+  // M2.2c additions draw from their own stream, so the M2.2b rows stay byte-identical.
+  const rng2 = new Rng((opts.seed ?? 20260927) ^ 0x2c2c ^ (inst === 'yay' ? 0x5eed : 0xabc0));
   const tz = PLATFORM_TZ[inst];
   const anchor = opts.anchor ?? '2026-09-01';
   const anchorMs = Date.parse(`${anchor}T12:00:00Z`);
@@ -339,6 +367,12 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     dstEvents: [],
     sharedEmails: [],
     hijackEmails: [],
+    seatCharts: [],
+    seriesGroups: [],
+    accessTokens: [],
+    magicTokens: [],
+    newsletter: [],
+    venueSlugs: [],
   };
 
   // Platform-tz wall clock of an instant (legacy system timestamps).
@@ -514,10 +548,10 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
   let ticketId = 0;
   let scheduleId = 0;
   let serversideId = 0;
-  const placeFor = () => {
+  const placeFor = (R: Rng) => {
     const places = PLACES[inst];
     const total = places.reduce((a, p) => a + p.weight, 0);
-    let r = rng.next() * total;
+    let r = R.next() * total;
     for (const p of places) {
       r -= p.weight;
       if (r <= 0) return p;
@@ -528,9 +562,10 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
   const makeTickets = (
     ev: EventRow,
     specs: { title: string; price: number; qty: number; donation?: boolean }[],
+    R: Rng = rng,
   ) => {
     for (const s of specs) {
-      const sale = !ev.free && !s.donation && rng.chance(0.15);
+      const sale = !ev.free && !s.donation && R.chance(0.15);
       ev.tickets.push({
         id: ++ticketId,
         eventId: ev.id,
@@ -540,15 +575,16 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
         salePriceCents: sale ? Math.round(s.price * 0.8) : null,
         saleEnd: sale ? wall(Date.parse(`${ev.startDate}T12:00:00Z`) - 20 * 86_400_000) : null,
         isDonation: s.donation ?? false,
-        limit: rng.chance(0.3) ? 6 : null,
+        limit: R.chance(0.3) ? 6 : null,
       });
     }
   };
   const addEvent = (
     owner: UserRow,
     spec: Partial<EventRow> & { title: string; startDate: string },
+    R: Rng = rng,
   ): EventRow => {
-    const place = spec.city ? { city: spec.city, state: spec.state ?? 'IL' } : placeFor();
+    const place = spec.city ? { city: spec.city, state: spec.state ?? 'IL' } : placeFor(R);
     let slug =
       spec.slug ??
       spec.title
@@ -558,7 +594,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     const seen = slugs.get(slug) ?? 0;
     slugs.set(slug, seen + 1);
     // Legacy slugs are not unique: keep a few duplicates on purpose.
-    if (seen > 0 && !rng.chance(0.3)) slug = `${slug}-${seen + 1}`;
+    if (seen > 0 && !R.chance(0.3)) slug = `${slug}-${seen + 1}`;
     const ev: EventRow = {
       id: ++eventId,
       ownerId: owner.id,
@@ -566,16 +602,15 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       slug,
       startDate: spec.startDate,
       endDate: spec.endDate ?? spec.startDate,
-      startTime: spec.startTime ?? `${pad(rng.int(10, 20))}:00:00`,
+      startTime: spec.startTime ?? `${pad(R.int(10, 20))}:00:00`,
       endTime: spec.endTime ?? '23:00:00',
       repetitive: spec.repetitive ?? false,
       occurrences: spec.occurrences ?? [spec.startDate],
-      currency: spec.currency ?? (inst === 'yay' && rng.chance(0.05) ? 'CAD' : 'USD'),
-      taxBps: spec.taxBps ?? (rng.chance(0.2) ? 500 : 0),
-      commissionBps: spec.commissionBps !== undefined ? spec.commissionBps : rng.chance(0.25) ? 500 : null,
-      free: spec.free ?? rng.chance(0.08),
-      created:
-        spec.created ?? wall(Date.parse(`${spec.startDate}T12:00:00Z`) - rng.int(30, 200) * 86_400_000),
+      currency: spec.currency ?? (inst === 'yay' && R.chance(0.05) ? 'CAD' : 'USD'),
+      taxBps: spec.taxBps ?? (R.chance(0.2) ? 500 : 0),
+      commissionBps: spec.commissionBps !== undefined ? spec.commissionBps : R.chance(0.25) ? 500 : null,
+      free: spec.free ?? R.chance(0.08),
+      created: spec.created ?? wall(Date.parse(`${spec.startDate}T12:00:00Z`) - R.int(30, 200) * 86_400_000),
       tickets: [],
       city: place.city,
       state: place.state,
@@ -614,7 +649,8 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     ]);
     demoGala = addEvent(demoOwner, {
       title: DEMO.pastEventTitle,
-      slug: 'lakeshore-spring-gala',
+      // An old-style slug the new platform cannot keep: its legacy URL redirects (V9, e2e).
+      slug: 'Lakeshore_Spring_Gala',
       startDate: '2026-04-18',
       startTime: '18:30:00',
       endTime: '23:30:00',
@@ -696,6 +732,166 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     facts.dstEvents.push({ id: fold.id, kind: 'fold' });
   }
 
+  // --- M2.2c: series, seat charts, venues (own random stream; the rows above are unchanged) ----
+  const baseEventCount = events.length;
+  // A recurring event of one org across years (series inference), and the same title at another
+  // org (never grouped with it).
+  const seriesHost = hosts.find((h) => h !== admin) ?? hosts[0];
+  if (seriesHost) {
+    const label = seriesHost.organisation?.split(' ')[0] ?? 'Series';
+    const group: number[] = [];
+    for (const year of [2024, 2025]) {
+      const ev = addEvent(
+        seriesHost,
+        {
+          title: `${label} Winter Gala ${year}`,
+          startDate: `${year}-12-0${year - 2019}`,
+          city: 'Chicago',
+          state: 'IL',
+        },
+        rng2,
+      );
+      makeTickets(ev, [{ title: 'General Admission', price: 3000, qty: 150 }], rng2);
+      group.push(ev.id);
+    }
+    facts.seriesGroups.push(group);
+    const other = hosts.find((h) => h !== seriesHost && h !== admin);
+    if (other) {
+      const ev = addEvent(
+        other,
+        { title: `${label} Winter Gala 2025`, startDate: '2025-12-12', city: 'Chicago', state: 'IL' },
+        rng2,
+      );
+      makeTickets(ev, [{ title: 'General Admission', price: 3000, qty: 150 }], rng2);
+    }
+  }
+  const R = (ev: EventRow) => (ev.id > baseEventCount ? rng2 : rng);
+
+  // Seat charts: one per seated ticket type (legacy `seatcharts.ticket_id`), drawn on an image;
+  // seats are "Xpx,Ypx" points (one in the older `{left, top}` form), a table is a seat with a
+  // capacity, and one seat is disabled. The demo gala, every event with id % 5 = 2 that is not
+  // free or repetitive, and one repetitive event (per-date bookings) are seated.
+  interface ChartSeat {
+    id: number;
+    name: string;
+    capacity: number;
+    status: number;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    json: boolean;
+  }
+  const charts = new Map<number, { id: number; ev: EventRow; ticket: TicketRow; seats: ChartSeat[] }>();
+  let chartId = 0;
+  let seatId = 0;
+  const firstRepetitive = events.find((e) => e.repetitive && e !== demoWeekly && !e.free);
+  for (const ev of events) {
+    const seated =
+      ev === demoGala ||
+      ev === firstRepetitive ||
+      (!ev.repetitive && !ev.free && ev.id % 5 === 2 && ev !== demoWeekly);
+    const ticket = ev.tickets.find((t) => !t.isDonation);
+    if (!seated || !ticket) continue;
+    const seats: ChartSeat[] = [];
+    for (const [r, row] of ['A', 'B', 'C', 'D'].entries())
+      for (let i = 1; i <= 10; i++)
+        seats.push({
+          id: ++seatId,
+          name: `${row}${i}`,
+          capacity: 1,
+          status: row === 'A' && i === 5 ? 0 : 1,
+          x: 40 + (i - 1) * 36,
+          y: 60 + r * 40,
+          w: 20,
+          h: 20,
+          json: row === 'D' && i === 10,
+        });
+    for (const [k, y] of [80, 220].entries())
+      seats.push({
+        id: ++seatId,
+        name: `T${k + 1}`,
+        capacity: 8,
+        status: 1,
+        x: 520,
+        y,
+        w: 60,
+        h: 60,
+        json: false,
+      });
+    charts.set(ticket.id, { id: ++chartId, ev, ticket, seats });
+    facts.seatCharts.push({
+      chartId,
+      eventId: ev.id,
+      ticketId: ticket.id,
+      seats: seats.length,
+      repetitive: ev.repetitive,
+    });
+  }
+  // Seats are taken in chart order per (ticket, date); a table takes up to its capacity.
+  const seatCursor = new Map<string, { seat: number; used: number }>();
+  const allocSeat = (ticketId: number, day: string): number | null => {
+    const chart = charts.get(ticketId);
+    if (!chart) return null;
+    const key = `${ticketId}|${day}`;
+    const cur = seatCursor.get(key) ?? { seat: 0, used: 0 };
+    while (cur.seat < chart.seats.length) {
+      const s = chart.seats[cur.seat] as ChartSeat;
+      if (s.status === 1 && cur.used < s.capacity) {
+        cur.used++;
+        seatCursor.set(key, cur);
+        return s.id;
+      }
+      cur.seat++;
+      cur.used = 0;
+    }
+    seatCursor.set(key, cur);
+    return null;
+  };
+
+  // The legacy venues directory: every other organizer lists a venue and links its first two
+  // events. The first venue's slug is the same on both instances (the second one gets a suffix).
+  const venueRows: {
+    id: number;
+    title: string;
+    slug: string;
+    ownerId: number;
+    status: number;
+    lat: string | null;
+    lng: string | null;
+    city: string;
+    state: string;
+  }[] = [];
+  const eventVenue: [number, number][] = [];
+  const venueOwners = organizers.filter((o, i) => i % 2 === 0 || o === demoOwner);
+  for (const [i, o] of venueOwners.entries()) {
+    const title =
+      o === demoOwner
+        ? 'Lakeshore Hall'
+        : o === venueOwners.find((x) => x !== demoOwner)
+          ? 'Union Depot'
+          : `${VENUES[(i * 3) % VENUES.length]} ${o.id}`;
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    const place = o === demoOwner ? { city: 'Chicago', state: 'IL' } : placeFor(rng2);
+    const v = {
+      id: i + 1,
+      title,
+      slug,
+      ownerId: o.id,
+      status: i === 1 ? 0 : 1,
+      lat: i === 2 ? 'n/a' : (41.8 + i / 100).toFixed(4),
+      lng: i === 2 ? 'n/a' : (-87.6 - i / 100).toFixed(4),
+      city: place.city,
+      state: place.state,
+    };
+    venueRows.push(v);
+    facts.venueSlugs.push(slug);
+    for (const e of events.filter((x) => x.ownerId === o.id).slice(0, 2)) eventVenue.push([e.id, v.id]);
+  }
+
   // Invalid JSON in a content column (events.images): at most 1 in 400 events (under 0.5%).
   const invalidJsonEvery = 400;
   for (const ev of events) {
@@ -707,11 +903,11 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       title: str(ev.title),
       description: str(`<p>${ev.title}: an invented event. ${SYNTHETIC_MARKER}.</p>`),
       images: str(bad ? '["events/broken.jpg",' : JSON.stringify([`events/${ev.id}/cover.jpg`])),
-      venue: str(rng.pick(VENUES)),
-      address: str(`${rng.int(1, 999)} Imaginary Ave`),
+      venue: str(R(ev).pick(VENUES)),
+      address: str(`${R(ev).int(1, 999)} Imaginary Ave`),
       city: str(ev.city),
       state: str(ev.state),
-      zipcode: str(pad(rng.int(10000, 99999), 5)),
+      zipcode: str(pad(R(ev).int(10000, 99999), 5)),
       country_id: num(countryId),
       start_date: str(ev.startDate),
       end_date: str(ev.endDate),
@@ -720,7 +916,11 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       repetitive: num(ev.repetitive ? 1 : 0),
       featured: num(0),
       status: num(ev.id % 97 === 0 ? 0 : 1),
-      category_id: num(rng.int(1, categories.length)),
+      category_id: num(
+        ((cat: number) => (ev.id % 13 === 0 ? 5 : ev.id % 17 === 0 ? 6 : cat))(
+          R(ev).int(1, categories.length),
+        ),
+      ),
       user_id: num(ev.ownerId),
       created_at: str(ev.created),
       updated_at: str(ev.created),
@@ -862,6 +1062,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       checkedIn: boolean;
       duplicateNumber: boolean;
       attendeeOverride?: { name: string; email: string };
+      rng: Rng;
     },
   ) => {
     const owner = users[ev.ownerId - 1] as UserRow;
@@ -892,7 +1093,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
         const unit = ev.free
           ? 0
           : line.ticket.isDonation
-            ? line.ticket.priceCents + rng.int(0, 4) * 500
+            ? line.ticket.priceCents + o.rng.int(0, 4) * 500
             : onSale
               ? (line.ticket.salePriceCents as number)
               : line.ticket.priceCents;
@@ -994,7 +1195,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
         const status = r.isPaid && r.cancel < 2 && !disabled ? 1 : 0;
         const past = Date.parse(`${ev.endDate}T00:00:00Z`) < anchorMs;
         const transferred =
-          status === 1 ? (past && rng.chance(0.7) ? 1 : 0) : r.cancel === 3 && rng.chance(0.3) ? 1 : 0;
+          status === 1 ? (past && o.rng.chance(0.7) ? 1 : 0) : r.cancel === 3 && o.rng.chance(0.3) ? 1 : 0;
         await w('commissions').add({
           id: num(++commissionId),
           organiser_id: num(owner.id),
@@ -1009,7 +1210,7 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
           updated_at: str(created),
           event_id: num(ev.id),
           admin_tax: money(0),
-          settled: num(status === 0 && transferred === 1 && rng.chance(0.5) ? 1 : 0),
+          settled: num(status === 0 && transferred === 1 && o.rng.chance(0.5) ? 1 : 0),
         });
       }
       // Attendees: one per person; the email lives in `address`. Distributable rows start
@@ -1017,16 +1218,16 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       for (let u = 0; u < r.qty; u++) {
         const guest =
           o.attendeeOverride ??
-          ((u === 0 && rowIndex === 0) || !rng.chance(0.5)
+          ((u === 0 && rowIndex === 0) || !o.rng.chance(0.5)
             ? { name: buyer.name, email: buyer.email.trim() }
             : {
-                name: person(rng.int(0, 300)),
+                name: person(o.rng.int(0, 300)),
                 email: ++guestCount % 12 === 5 ? 'N/A' : `plus.${r.id}.${u}@example.net`,
               });
-        const handOn = r.distributable && u > 0 && u <= 2 && rng.chance(0.5);
+        const handOn = r.distributable && u > 0 && u <= 2 && o.rng.chance(0.5);
         if (handOn) {
           // A hand-on: a new booking row for the recipient (auto-registered customer).
-          const recipient = rng.pick(buyerPool);
+          const recipient = o.rng.pick(buyerPool);
           const child = ++bookingId;
           const at = o.created + 2 * 86_400_000;
           await w('bookings').add({
@@ -1089,11 +1290,16 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
           id: num(++attendeeId),
           user_id: num(buyer.id),
           ticket_id: num(r.t.id),
+          seat_id: num(
+            !r.distributable && r.cancel < 2 && !disabled && r.isPaid
+              ? allocSeat(r.t.id, o.occurrence)
+              : null,
+          ),
           event_date: str(o.occurrence),
           event_id: num(ev.id),
           booking_id: num(r.id),
           name: str(guest.name),
-          phone: str(rng.chance(0.3) ? `+1555${pad(rng.int(0, 9_999_999), 7)}` : null),
+          phone: str(o.rng.chance(0.3) ? `+1555${pad(o.rng.int(0, 9_999_999), 7)}` : null),
           address: str(r.distributable ? buyer.email.trim() : guest.email),
           status: num(1),
           assignment_status: str(r.distributable ? 'unassigned' : 'assigned'),
@@ -1107,9 +1313,9 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       if (o.checkedIn && r.isPaid && r.cancel < 2 && !disabled) {
         const local = `${o.occurrence} ${ev.startTime}`;
         const start = wallToInstant(local, tz).ms;
-        const scan = start + rng.int(-20, 90) * 60_000;
+        const scan = start + o.rng.int(-20, 90) * 60_000;
         const iso = new Date(scan).toISOString();
-        const rowsToWrite = rng.chance(0.02) ? 2 : 1;
+        const rowsToWrite = o.rng.chance(0.02) ? 2 : 1;
         for (let k = 0; k < rowsToWrite; k++)
           await w('checkins').add({
             id: num(++checkinId),
@@ -1132,39 +1338,39 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
   let orderCount = 0;
   for (const ev of events) {
     const isDemo = ev === demoWeekly || ev === demoGala;
-    const nOrders = isDemo ? 6 : rng.int(scale.ordersPerEvent[0], scale.ordersPerEvent[1]);
+    const nOrders = isDemo ? 6 : R(ev).int(scale.ordersPerEvent[0], scale.ordersPerEvent[1]);
     const past = Date.parse(`${ev.endDate}T00:00:00Z`) < anchorMs;
     const owner = users[ev.ownerId - 1] as UserRow;
     const sellable = ev.tickets.filter((t) => !t.isDonation);
     for (let k = 0; k < nOrders; k++) {
-      const buyer = isDemo && k < demoBuyers.length ? (demoBuyers[k] as UserRow) : rng.pick(buyerPool);
+      const buyer = isDemo && k < demoBuyers.length ? (demoBuyers[k] as UserRow) : R(ev).pick(buyerPool);
       const occurrence = ev.repetitive
-        ? (rng.pick(
+        ? (R(ev).pick(
             ev.occurrences
               .filter((d) => Date.parse(`${d}T00:00:00Z`) < anchorMs + 90 * 86_400_000)
               .slice(-20),
           ) ?? ev.startDate)
         : ev.startDate;
       const lines: Line[] = [];
-      const typeCount = rng.chance(0.25) ? 2 : 1;
+      const typeCount = R(ev).chance(0.25) ? 2 : 1;
       for (let i = 0; i < typeCount && i < sellable.length; i++) {
         const t = sellable[(k + i) % sellable.length] as TicketRow;
-        lines.push({ ticket: t, qty: rng.int(1, 3), distributable: !isDemo && rng.chance(0.08) });
+        lines.push({ ticket: t, qty: R(ev).int(1, 3), distributable: !isDemo && R(ev).chance(0.08) });
       }
       const donation = ev.tickets.find((t) => t.isDonation);
-      if (donation && rng.chance(0.2)) lines.push({ ticket: donation, qty: 1, distributable: false });
+      if (donation && R(ev).chance(0.2)) lines.push({ ticket: donation, qty: 1, distributable: false });
       if (isDemo) {
         lines.length = 0;
         lines.push({ ticket: ev.tickets[0] as TicketRow, qty: k === 0 ? 2 : 1, distributable: false });
       }
       const seq = isDemo ? -1 : orderCount + 1;
-      const r = rng.next();
+      const r = R(ev).next();
       const gateway =
         seq % 20 === 9 && !ev.free
           ? 'Offline'
           : ev.free
             ? 'Offline'
-            : owner.stripeAccount && rng.chance(0.7)
+            : owner.stripeAccount && R(ev).chance(0.7)
               ? 'Stripe Direct'
               : r < 0.12
                 ? 'PayPal'
@@ -1178,18 +1384,19 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
         created: isDemo
           ? daysAgo(60 - k)
           : Math.min(
-              Date.parse(`${ev.startDate}T12:00:00Z`) - rng.int(1, 60) * 86_400_000,
-              anchorMs - rng.int(60, 2000) * 60_000,
+              Date.parse(`${ev.startDate}T12:00:00Z`) - R(ev).int(1, 60) * 86_400_000,
+              anchorMs - R(ev).int(60, 2000) * 60_000,
             ),
         occurrence: isDemo && ev.repetitive ? '2026-06-02' : occurrence,
         gateway,
-        paid: gateway === 'Offline' && !ev.free ? rng.chance(0.5) && seq % 20 !== 9 : true,
+        paid: gateway === 'Offline' && !ev.free ? R(ev).chance(0.5) && seq % 20 !== 9 : true,
         cancel,
         partialRefund: seq % 30 === 14 && lines.reduce((a, l) => a + (l.distributable ? 1 : l.qty), 0) > 1,
-        disabled: !isDemo && rng.chance(0.004),
-        promo: !isDemo && rng.chance(0.1),
-        checkedIn: isDemo ? k === 0 : past && rng.chance(0.65),
+        disabled: !isDemo && R(ev).chance(0.004),
+        promo: !isDemo && R(ev).chance(0.1),
+        checkedIn: isDemo ? k === 0 : past && R(ev).chance(0.65),
         duplicateNumber: !isDemo && ++orderCount % dupEvery === 17,
+        rng: R(ev),
       });
     }
   }
@@ -1203,6 +1410,161 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     slug: str('about'),
     status: str('ACTIVE'),
   });
+
+  // Magic login links (72 h, plain text in the legacy table): one live at the anchor, others expired.
+  const magic = new Map<number, { token: string; expires: string }>();
+  for (const c of customers.filter((x) => x.id % 11 === 0)) {
+    const live = c.id % 22 === 0;
+    const expiresMs = anchorMs + (live ? 48 : -5 * 24) * 3_600_000;
+    const token = synthMagicToken(inst, c.id);
+    magic.set(c.id, { token, expires: wall(expiresMs) });
+    facts.magicTokens.push({ userId: c.id, token, expiresAt: new Date(expiresMs).toISOString() });
+  }
+
+  // --- M2.2c tables ---------------------------------------------------------------------------
+  const extraCategories = ['Hackathons', 'Miscellany'];
+  for (const [i, n] of extraCategories.entries())
+    await w('categories').add({
+      id: num(categories.length + i + 1),
+      name: str(n),
+      slug: str(n.toLowerCase()),
+      status: num(1),
+    });
+  for (const v of venueRows)
+    await w('venues').add({
+      id: num(v.id),
+      title: str(v.title),
+      description: str(`${v.title}: an invented venue. ${SYNTHETIC_MARKER}.`),
+      venue_type: str('Hall'),
+      slug: str(v.slug),
+      address: str(`${v.id * 10} Imaginary Blvd`),
+      city: str(v.city),
+      country_id: num(231),
+      state: str(v.state),
+      zipcode: str('60601'),
+      glat: str(v.lat),
+      glong: str(v.lng),
+      images: str(JSON.stringify([`venues/${v.id}/front.jpg`])),
+      organizer_id: num(v.ownerId),
+      status: num(v.status),
+      created_at: str(wall(daysAgo(500))),
+      updated_at: str(wall(daysAgo(500))),
+    });
+  for (const [e, v] of eventVenue) await w('event_venue').add({ event_id: num(e), venue_id: num(v) });
+  for (const chart of charts.values()) {
+    await w('seatcharts').add({
+      id: num(chart.id),
+      ticket_id: num(chart.ticket.id),
+      event_id: num(chart.ev.id),
+      status: num(1),
+      chart_image: str(`seatcharts/${inst}-${chart.id}.png`),
+      created_at: str(chart.ev.created),
+      updated_at: str(chart.ev.created),
+    });
+    for (const seat of chart.seats)
+      await w('seats').add({
+        id: num(seat.id),
+        seatchart_id: num(chart.id),
+        ticket_id: num(chart.ticket.id),
+        event_id: num(chart.ev.id),
+        status: num(seat.status),
+        coordinates: str(
+          seat.json ? JSON.stringify({ left: seat.x, top: seat.y }) : `${seat.x}px,${seat.y}px`,
+        ),
+        name: str(seat.name),
+        capacity: num(seat.capacity),
+        created_at: str(chart.ev.created),
+        updated_at: str(chart.ev.created),
+        width: str(String(seat.w)),
+        height: str(String(seat.h)),
+        border: str('50'),
+        font_size: str('8'),
+      });
+  }
+  // Sanctum personal access tokens (the table stores sha256 of the plain part): organizers,
+  // scanners and some customers; a quarter expired; one whose user no longer exists.
+  const tokenOwners = users.filter(
+    (u) => u.roleId === 3 || u.roleId === 5 || (u.roleId === 2 && u.id % 6 === 0),
+  );
+  let patId = 0;
+  for (const u of [...tokenOwners, null]) {
+    const id = ++patId;
+    const plain = synthAccessTokenPlain(inst, id);
+    const expired = id % 4 === 3;
+    facts.accessTokens.push({ id, userId: u?.id ?? 999_999, plain, expired, orphan: u === null });
+    await w('personal_access_tokens').add({
+      id: num(id),
+      tokenable_type: str('App\\Models\\User'),
+      tokenable_id: num(u?.id ?? 999_999),
+      name: str(u?.roleId === 5 ? 'scanner-app' : 'mobile-app'),
+      token: str(sha256hex(plain)),
+      abilities: str('["*"]'),
+      expires_at: str(expired ? wall(anchorMs - 10 * 86_400_000) : null),
+      last_used_at: str(wall(anchorMs - 2 * 86_400_000)),
+      created_at: str(wall(anchorMs - 90 * 86_400_000)),
+      updated_at: str(wall(anchorMs - 2 * 86_400_000)),
+    });
+  }
+  // Password resets (the masking tool empties this table; a cutover dump has the live ones):
+  // one 30 minutes before the anchor (kept), one three days old (dropped).
+  for (const [k, c] of customers.slice(0, 2).entries())
+    await w('password_resets').add({
+      email: str(c.email.trim()),
+      token: str(SYNTH_PASSWORD_HASH),
+      created_at: str(wall(anchorMs - (k === 0 ? 30 * 60_000 : 3 * 86_400_000))),
+    });
+  // The platform newsletter: a third of the customers (some unsubscribed), a few people without
+  // an account, and one invalid address.
+  let newsId = 0;
+  const news: { name: string; email: string; unsub: boolean }[] = [
+    ...customers
+      .filter((_, i) => i % 3 === 0)
+      .map((c, i) => ({
+        name: c.name,
+        email: i % 4 === 1 ? c.email.trim().toUpperCase() : c.email.trim(),
+        unsub: i % 3 === 2,
+      })),
+    ...[1, 2, 3].map((k) => ({ name: `Reader ${k}`, email: `news.${inst}.${k}@example.org`, unsub: false })),
+    { name: 'Broken Address', email: 'not-an-email', unsub: false },
+  ];
+  for (const n of news) {
+    facts.newsletter.push({ email: n.email, unsubscribed: n.unsub });
+    await w('newsletter_subscribers').add({
+      id: num(++newsId),
+      name: str(n.name),
+      email: str(n.email),
+      phone: str(null),
+      ip_address: str(`192.0.2.${newsId % 250}`),
+      unsubscribed_at: str(n.unsub ? wall(anchorMs - 20 * 86_400_000) : null),
+      created_at: str(wall(anchorMs - (100 + newsId) * 86_400_000)),
+      updated_at: str(wall(anchorMs - 20 * 86_400_000)),
+    });
+  }
+  // Database notifications: organizers about their events; customers about their bookings. One
+  // carries a generated guest password in its data (a legacy defect): it must never be copied.
+  let noteId = 0;
+  const note = async (userId: number, eventId: number | null, data: Record<string, string>, read: boolean) =>
+    w('notifications').add({
+      id: str(`00000000-0000-4000-8000-${pad(++noteId, 12)}`),
+      type: str('App\\Notifications\\MailNotification'),
+      notifiable_type: str('App\\Models\\User'),
+      notifiable_id: num(userId),
+      data: str(JSON.stringify(data)),
+      event_id: num(eventId),
+      read_at: str(read ? wall(anchorMs - 86_400_000) : null),
+      created_at: str(wall(anchorMs - (3 + noteId) * 3_600_000)),
+      updated_at: str(wall(anchorMs - (3 + noteId) * 3_600_000)),
+      n_type: str('bookings'),
+    });
+  for (const o of organizers) {
+    const e = events.find((x) => x.ownerId === o.id);
+    if (e)
+      await note(o.id, e.id, { title: 'New booking', message: `A booking for ${e.title}` }, noteId % 2 === 0);
+  }
+  for (const c of customers.filter((x) => x.id % 7 === 0).slice(0, 10))
+    await note(c.id, null, { title: 'Booking confirmed', message: 'Your tickets are ready' }, false);
+  if (customers[0])
+    await note(customers[0].id, null, { title: 'Your account', password: 'invented-guest-password' }, false);
 
   // Users last (their table is written first in the dump; rows are only complete now).
   for (const u of users)
@@ -1227,11 +1589,29 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       settings: str('{"locale":"en"}'),
       role_id: num(u.roleId),
       organisation: str(u.organisation),
+      // The organizer's public page path (`/{organisation_url}`), unique in the legacy table.
+      organisation_url: str(
+        u.roleId === 3 && u.organisation
+          ? `${u.organisation
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')}${u.id % 3 === 0 ? `-${u.id}` : ''}`
+          : null,
+      ),
       phone: str(null),
       status: num(1),
       stripe_account_id: str(u.stripeAccount),
       organizer_id: num(u.organizerId),
       country: str('US'),
+      // Device tokens (the legacy app registered both; APNs tokens are 64 hex characters).
+      fcm_token: str(
+        (u.roleId === 2 && u.id % 5 === 0) || (u.roleId === 3 && u.id % 2 === 0)
+          ? `fcm-SYNTH-${inst}-${pad(u.id, 6)}-${sha256hex(`fcm|${u.id}`).slice(0, 24)}`
+          : null,
+      ),
+      apn_token: str(u.id % 9 === 0 ? sha256hex(`apn|${inst}|${u.id}`) : null),
+      magic_login_token: str(magic.get(u.id)?.token ?? null),
+      magic_login_expires_at: str(magic.get(u.id)?.expires ?? null),
     });
   for (const s of subAccounts)
     await w('user_roles').add({ user_id: num(s.id), role_id: num(s.roleId), event_id: num(null) });

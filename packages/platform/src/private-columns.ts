@@ -29,6 +29,8 @@ export const privateColumns = columnPrivacy('platform', {
   file_parts: { data: internal() },
   files: { name: internal(), content_type: 'vocab' },
   idempotency_keys: { scope: 'vocab', key: internal(), fingerprint: secret(), response: internal() },
+  // Org-level metric buckets (M2.2c; legacy backfill or live): metric keys and ISO codes.
+  metric_timeseries: { metric: 'vocab', currency: 'vocab', source: 'vocab' },
   processed_events: { consumer: 'vocab' },
   rate_limits: { bucket: internal() },
 });

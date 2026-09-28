@@ -1,5 +1,6 @@
 export {
   admittedKey,
+  legacyCodePayload,
   lookupHash,
   MANIFEST_VERSION,
   type ManifestCheckpoint,

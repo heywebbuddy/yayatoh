@@ -220,6 +220,42 @@ export const handoffCodes = identity.table(
   ],
 );
 
+export const LEGACY_TOKEN_KINDS = ['personal_access', 'magic_login', 'password_reset'] as const;
+
+/**
+ * Legacy auth artifacts carried over by the migration (M2.2c, roadmap §7.5 T8), per instance.
+ * Only hashes are stored: Sanctum's SHA-256 of the personal access token's secret (as the legacy
+ * table held it), the SHA-256 of a magic login token (the legacy app stored it in plain text), and
+ * the bcrypt hash of a password reset token. A token is live until `expires_at` (null: no expiry)
+ * and until it is revoked or used (`revoked_at`; magic links and resets are single-use).
+ */
+export const legacyTokens = identity.table(
+  'legacy_tokens',
+  {
+    id: uuid('id').primaryKey(),
+    instance: text('instance').notNull(),
+    kind: text('kind').notNull(),
+    legacyId: text('legacy_id').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    tokenHash: text('token_hash').notNull(),
+    name: text('name'),
+    abilities: jsonb('abilities').$type<string[]>(),
+    lastUsedAt: ts('last_used_at'),
+    expiresAt: ts('expires_at'),
+    revokedAt: ts('revoked_at'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex('legacy_tokens_instance_kind_legacy_key').on(t.instance, t.kind, t.legacyId),
+    uniqueIndex('legacy_tokens_kind_hash_key').on(t.kind, t.tokenHash).where(sql`kind <> 'password_reset'`),
+    index('legacy_tokens_user_idx').on(t.userId),
+    check('legacy_tokens_instance_check', sql`instance in ('yay', 'abc')`),
+    check('legacy_tokens_kind_check', sql`kind in ('personal_access', 'magic_login', 'password_reset')`),
+  ],
+);
+
 /** Keys match Better Auth model names (drizzle adapter). */
 export const authSchema = {
   user: users,

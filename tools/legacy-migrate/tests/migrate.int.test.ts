@@ -516,7 +516,12 @@ describe('quarantine rules', () => {
       });
       expect(bad.pass).toBe(false);
     } finally {
-      await sql()`update legacy_abc.users set social_links = null where id > 100000`;
+      // Remove the fillers everywhere, so later runs (and other test files) see the dump's users only.
+      await sql()`delete from legacy.credentials where instance = 'abc' and legacy_user_id > 100000`;
+      await sql()`delete from auth.users u using legacy.ref r
+                  where r.new_id = u.id and r.instance = 'abc' and r.entity = 'users' and r.legacy_id ~ '^[0-9]+$' and r.legacy_id::bigint > 100000`;
+      await sql()`delete from legacy.ref where instance = 'abc' and entity = 'users' and legacy_id ~ '^[0-9]+$' and legacy_id::bigint > 100000`;
+      await sql()`delete from legacy_abc.users where id > 100000`;
     }
   });
 });

@@ -1,6 +1,18 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
-import { check, foreignKey, index, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  bigint,
+  boolean,
+  check,
+  foreignKey,
+  index,
+  integer,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 export const crmSchema = pgSchema('crm');
 
@@ -55,5 +67,81 @@ export const consents = tenantTable(
     check('consents_channel_check', sql`channel in ('email', 'sms')`),
     check('consents_purpose_check', sql`purpose in ('marketing')`),
     check('consents_status_check', sql`status in ('granted', 'withdrawn', 'unknown_legacy')`),
+  ],
+);
+
+const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
+export const PROJECTION_SOURCES = ['legacy', 'live'] as const;
+
+/**
+ * One row per contact × event (roadmap §5.1 `event_participation`): tickets held, their types,
+ * whether they had a seat and checked in, when they registered and what they spent (`currency`
+ * is the event's). M2.2c backfills legacy history (`source = 'legacy'`); the live projector is
+ * M3.6. `(org_id, event_id)` references `events.events` through a hand-written migration, so this
+ * module never imports the events schema.
+ */
+export const eventParticipation = tenantTable(
+  crmSchema,
+  'event_participation',
+  {
+    contactId: uuid('contact_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    ticketTypeIds: uuid('ticket_type_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    tickets: integer('tickets').notNull().default(0),
+    hasSeat: boolean('has_seat').notNull().default(false),
+    checkedIn: boolean('checked_in').notNull().default(false),
+    registeredAt: tsz('registered_at').notNull(),
+    spendMinor: bigint('spend_minor', { mode: 'number' }).notNull().default(0),
+    currency: text('currency').notNull(),
+    source: text('source').notNull(),
+  },
+  (t) => [
+    uniqueIndex('event_participation_org_contact_event_key').on(t.orgId, t.contactId, t.eventId),
+    index('event_participation_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'event_participation_contact_fk',
+      columns: [t.orgId, t.contactId],
+      foreignColumns: [contacts.orgId, contacts.id],
+    }).onDelete('cascade'),
+    check('event_participation_counts_check', sql`tickets >= 0 and spend_minor >= 0`),
+    check('event_participation_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('event_participation_source_check', sql`source in ('legacy', 'live')`),
+  ],
+);
+
+/**
+ * Per-contact totals (roadmap §5.1 `contact_stats`, the part the migration can know): orders,
+ * tickets, events registered and attended, lifetime spend per currency, first and last seen.
+ * LTV/RFM scoring is M6.1.
+ */
+export const contactStats = tenantTable(
+  crmSchema,
+  'contact_stats',
+  {
+    contactId: uuid('contact_id').notNull(),
+    currency: text('currency').notNull(),
+    orders: integer('orders').notNull().default(0),
+    tickets: integer('tickets').notNull().default(0),
+    events: integer('events').notNull().default(0),
+    eventsAttended: integer('events_attended').notNull().default(0),
+    spendMinor: bigint('spend_minor', { mode: 'number' }).notNull().default(0),
+    firstSeenAt: tsz('first_seen_at').notNull(),
+    lastSeenAt: tsz('last_seen_at').notNull(),
+    source: text('source').notNull(),
+  },
+  (t) => [
+    uniqueIndex('contact_stats_org_contact_currency_key').on(t.orgId, t.contactId, t.currency),
+    foreignKey({
+      name: 'contact_stats_contact_fk',
+      columns: [t.orgId, t.contactId],
+      foreignColumns: [contacts.orgId, contacts.id],
+    }).onDelete('cascade'),
+    check(
+      'contact_stats_counts_check',
+      sql`orders >= 0 and tickets >= 0 and events >= 0 and events_attended >= 0`,
+    ),
+    check('contact_stats_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('contact_stats_seen_check', sql`last_seen_at >= first_seen_at`),
+    check('contact_stats_source_check', sql`source in ('legacy', 'live')`),
   ],
 );

@@ -27,6 +27,7 @@ create table if not exists legacy.runs (
   timings jsonb not null default '{}'::jsonb,
   report jsonb
 );
+alter table legacy.runs add column if not exists freeze_at timestamptz;
 
 -- Legacy id ↔ new id, per instance (roadmap §5.1 legacy_ref / compat_ids). compat_id is the
 -- legacy integer id where the old apps and URLs use one (e.g. a booking's id for its ticket).
@@ -81,6 +82,47 @@ create table if not exists legacy.credentials (
   primary key (instance, legacy_user_id)
 );
 create index if not exists credentials_user_idx on legacy.credentials (user_id);
+
+-- The media manifest's image sizes (audit step 9; loaded by the owner next to the media copy):
+-- a seat chart's natural pixel size, when known, sets its plan's scale (M2.2c).
+create table if not exists legacy.media_images (
+  instance text not null,
+  path text not null,
+  width_px integer not null check (width_px > 0),
+  height_px integer not null check (height_px > 0),
+  sha256 text,
+  primary key (instance, path)
+);
+
+-- T6: the buyers' "your new order link" plan (built, never sent by the migration). One row per
+-- migrated order of an event that has not ended at the freeze; status is planned or skipped (with
+-- the reason). The send is a reviewed runbook step (docs/runbooks/legacy-migration.md).
+create table if not exists legacy.order_link_plan (
+  instance text not null,
+  order_id uuid not null,
+  org_id uuid not null,
+  event_id uuid not null,
+  buyer_email text not null,
+  locale text not null,
+  event_ends_at timestamptz not null,
+  active_tickets integer not null,
+  status text not null check (status in ('planned', 'skipped')),
+  skip_reason text,
+  run_id bigint not null,
+  primary key (instance, order_id)
+);
+
+-- V9: the legacy URL inventory (DB-derived URLs; roadmap §7.7) and each URL's planned status.
+create table if not exists legacy.url_inventory (
+  instance text not null,
+  host text not null,
+  path text not null,
+  kind text not null,
+  planned_status integer not null,
+  target text,
+  org_id uuid,
+  primary key (instance, host, path)
+);
 
 create table if not exists legacy.venue_tz (
   country text not null,

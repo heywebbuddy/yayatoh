@@ -15,6 +15,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Platform staff acting as an org member (M1.2e: reason, one hour, start/end); through packages/auth.',
   'auth.handoff_codes':
     'Hashed 60-second single-use sign-in handoff codes for tenant hosts (M1.2d); through packages/auth.',
+  'auth.legacy_tokens':
+    'Hashed legacy personal access tokens, magic links and resets per instance (migration T8); accessed only through packages/auth.',
   'auth.security_events':
     'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',

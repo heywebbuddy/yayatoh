@@ -1,0 +1,148 @@
+name: Legacy migration rehearsal
+
+# Roadmap §7.5 step 6: nightly rehearsals of the legacy migration (M2.2c).
+# - synthetic: always on. Generates the large synthetic dumps of both instances (tools/legacy-migrate)
+#   and runs the full pipeline, V1–V12, the order-link dry run and the timings.
+# - masked: disabled until the owner provides masked dumps (docs/owner-inbox.md, "Masked dumps for
+#   nightly rehearsals"). It turns on when the repository variable LEGACY_MASKED_DUMPS_READY is
+#   'true' and the dumps' location and key are configured as secrets. Never production data: only
+#   the masked dumps the owner exported with tools/legacy-mask.
+on:
+  schedule:
+    - cron: "17 6 * * *" # 06:17 UTC (01:17 ET), outside business hours
+  workflow_dispatch:
+    inputs:
+      scale:
+        description: Synthetic scale (small | demo | large)
+        default: large
+
+concurrency:
+  group: legacy-rehearsal
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic:
+    name: synthetic rehearsal (yay + abc, V1–V12)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: yayatoh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30 --shm-size=256mb
+    env:
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Throwaway roles and migrations
+        run: |
+          MIG=$(openssl rand -hex 12); APP=$(openssl rand -hex 12); PR=$(openssl rand -hex 12); KMS=$(openssl rand -hex 32)
+          echo "::add-mask::$KMS"
+          {
+            echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
+            echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
+            echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
+            echo "LOCAL_KMS_KEY=$KMS"
+          } >> "$GITHUB_ENV"
+          export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
+          export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
+          export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          pnpm db:bootstrap && pnpm db:migrate
+      - name: Generate the synthetic dumps
+        run: |
+          SCALE="${{ github.event.inputs.scale || 'large' }}"
+          pnpm migrate:legacy:synth --instance=yay --scale="$SCALE" --out "$RUNNER_TEMP/yay.sql.gz"
+          pnpm migrate:legacy:synth --instance=abc --scale="$SCALE" --out "$RUNNER_TEMP/abc.sql.gz"
+      - name: Migrate and validate (yay, then abc; a rerun must reproduce V10)
+        run: |
+          mkdir -p reports
+          pnpm migrate:legacy --instance=yay --mode=rehearsal --dump "$RUNNER_TEMP/yay.sql.gz" --report reports/yay.json
+          pnpm migrate:legacy --instance=abc --mode=rehearsal --dump "$RUNNER_TEMP/abc.sql.gz" --report reports/abc.json
+          pnpm migrate:legacy --instance=yay --mode=rehearsal --dump "$RUNNER_TEMP/yay.sql.gz" --report reports/yay-rerun.json
+      - name: Order-link plan (dry run, nothing is sent)
+        run: |
+          pnpm migrate:legacy:order-links --instance=yay --report reports/yay-order-links.json
+          pnpm migrate:legacy:order-links --instance=abc --report reports/abc-order-links.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legacy-rehearsal-synthetic
+          path: reports
+          retention-days: 30
+
+  masked:
+    name: masked rehearsal (disabled until masked dumps exist)
+    if: ${{ vars.LEGACY_MASKED_DUMPS_READY == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    environment: legacy-ref
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: yayatoh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30 --shm-size=256mb
+    env:
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Throwaway roles and migrations
+        run: |
+          MIG=$(openssl rand -hex 12); APP=$(openssl rand -hex 12); PR=$(openssl rand -hex 12); KMS=$(openssl rand -hex 32)
+          echo "::add-mask::$KMS"
+          {
+            echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
+            echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
+            echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
+            echo "LOCAL_KMS_KEY=$KMS"
+          } >> "$GITHUB_ENV"
+          export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
+          export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
+          export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          pnpm db:bootstrap && pnpm db:migrate
+      - name: Fetch the masked dumps (owner-provided, read-only credentials)
+        env:
+          LEGACY_MASKED_DUMP_YAY_URL: ${{ secrets.LEGACY_MASKED_DUMP_YAY_URL }}
+          LEGACY_MASKED_DUMP_ABC_URL: ${{ secrets.LEGACY_MASKED_DUMP_ABC_URL }}
+        run: |
+          test -n "$LEGACY_MASKED_DUMP_YAY_URL" && test -n "$LEGACY_MASKED_DUMP_ABC_URL" || { echo "::error::masked dump locations are not configured"; exit 1; }
+          curl -fsSL "$LEGACY_MASKED_DUMP_YAY_URL" -o "$RUNNER_TEMP/yay.sql.gz"
+          curl -fsSL "$LEGACY_MASKED_DUMP_ABC_URL" -o "$RUNNER_TEMP/abc.sql.gz"
+      - name: Migrate and validate
+        run: |
+          mkdir -p reports
+          pnpm migrate:legacy --instance=yay --mode=rehearsal --dump "$RUNNER_TEMP/yay.sql.gz" --report reports/yay.json
+          pnpm migrate:legacy --instance=abc --mode=rehearsal --dump "$RUNNER_TEMP/abc.sql.gz" --report reports/abc.json
+          pnpm migrate:legacy:order-links --instance=yay --report reports/yay-order-links.json
+          pnpm migrate:legacy:order-links --instance=abc --report reports/abc-order-links.json
+      - name: Remove the dumps
+        if: always()
+        run: rm -f "$RUNNER_TEMP"/*.sql.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legacy-rehearsal-masked
+          path: reports
+          retention-days: 14
