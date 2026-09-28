@@ -56,7 +56,79 @@ export {
 } from './legacy-tokens.ts';
 export { type AuthMailer, consoleMailer, memoryMailer } from './mailer.ts';
 export { hashPassword, verifyPassword } from './password.ts';
-export { type BearerSession, type BearerSessions, bearerSessions, type SignInResult } from './sessions.ts';
+export {
+  ACCESS_TOKEN_TTL_MS,
+  hashRefreshToken,
+  isAccessToken,
+  isRefreshToken,
+  newRefreshToken,
+  REFRESH_TOKEN_TTL_MS,
+  type RefreshRefusal,
+  type RefreshResult,
+  type RefreshTokenService,
+  refreshTokenService,
+  revokeAllRefreshTokens,
+  type TokenPair,
+} from './refresh-tokens.ts';
+export {
+  type BearerSession,
+  type BearerSessions,
+  bearerSessions,
+  type SignInResult,
+  type TokenSignInResult,
+} from './sessions.ts';
+export {
+  clearSignInFailures,
+  recordSignInFailure,
+  SIGN_IN_FAILURE_WINDOW_MS,
+  SIGN_IN_FAILURES_BEFORE_CHECK,
+  signInNeedsHumanCheck,
+} from './sign-in-guard.ts';
+export {
+  appleProvider,
+  confirmLinkProof,
+  createSocialUser,
+  FAKE_CODE_TTL_MS,
+  type FakeConsent,
+  fakeRelayEmail,
+  fakeSocialProvider,
+  fakeSubject,
+  googleProvider,
+  isPrivateRelayEmail,
+  isSocialProvider,
+  LINK_PROOF_ATTEMPTS,
+  LINK_PROOF_TTL_MS,
+  type LinkedProvider,
+  type LinkOutcome,
+  type LinkProofResult,
+  linkSocialAccount,
+  listSocialAccounts,
+  openFakeCode,
+  pendingLinkProof,
+  resolveSocialSignIn,
+  SOCIAL_PROVIDERS,
+  type SocialProfile,
+  type SocialProvider,
+  type SocialProviderId,
+  type SocialResolution,
+  signFakeCode,
+  startLinkProof,
+  type UnlinkOutcome,
+  unlinkSocialAccount,
+} from './social.ts';
+export {
+  deviceLabel,
+  isTrustedDevice,
+  listTrustedDevices,
+  parseTrustedDeviceCookie,
+  revokeAllTrustedDevices,
+  revokeTrustedDevice,
+  TRUSTED_DEVICE_TTL_MS,
+  type TrustedDeviceItem,
+  type TrustedDeviceRevocation,
+  trustDevice,
+  trustedDeviceCookie,
+} from './trusted-devices.ts';
 export {
   type ChallengeError,
   CODE_ATTEMPTS,

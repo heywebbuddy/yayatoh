@@ -2,15 +2,28 @@
 
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
+import { HumanCheckGroup, type HumanCheckWidget } from './human-check-field.tsx';
 
 /** Public quote request for a directory venue (M1.4c). */
-export function QuoteForm({ action }: { action: (prev: FormState, form: FormData) => Promise<FormState> }) {
+export function QuoteForm({
+  action,
+  humanCheck = null,
+  locale,
+}: {
+  action: (prev: FormState, form: FormData) => Promise<FormState>;
+  /** "Are you a person?" (M1.2f), or null when none is configured. */
+  humanCheck?: HumanCheckWidget | null;
+  locale?: string;
+}) {
   const t = useTranslations('quote');
   const te = useTranslations();
+  const th = useTranslations('humanCheck');
+  // A challenge answer works once: a fresh widget after each submission.
+  const [tries, setTries] = useState(0);
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const ref = useRef<HTMLFormElement>(null);
   useEffect(() => {
@@ -21,7 +34,10 @@ export function QuoteForm({ action }: { action: (prev: FormState, form: FormData
     <form
       ref={ref}
       action={formAction}
-      onSubmit={keepValues(formAction)}
+      onSubmit={(e) => {
+        keepValues(formAction)(e);
+        setTries((n) => n + 1);
+      }}
       className="grid grid-cols-1 gap-4 md:grid-cols-2"
       noValidate
     >
@@ -84,6 +100,11 @@ export function QuoteForm({ action }: { action: (prev: FormState, form: FormData
           </p>
         )}
       </div>
+      {humanCheck ? (
+        <div className="md:col-span-2">
+          <HumanCheckGroup key={tries} widget={humanCheck} locale={locale} />
+        </div>
+      ) : null}
       <div aria-live="polite" className="flex flex-col gap-2 md:col-span-2">
         {state.ok && !pending ? <Alert tone="info" title={t('sent')} /> : null}
         {state.code ? (
@@ -91,9 +112,11 @@ export function QuoteForm({ action }: { action: (prev: FormState, form: FormData
             title={
               state.code === 'rate_limited'
                 ? t('errors.rateLimited')
-                : state.code === 'validation_failed'
-                  ? t('errors.summary')
-                  : te(errorMessageKey(state.code))
+                : state.code === 'human_required' || state.code === 'human_failed'
+                  ? th(state.code === 'human_required' ? 'required' : 'failed')
+                  : state.code === 'validation_failed'
+                    ? t('errors.summary')
+                    : te(errorMessageKey(state.code))
             }
           />
         ) : null}

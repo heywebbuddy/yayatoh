@@ -2,7 +2,17 @@ import { createHash } from 'node:crypto';
 import { identityDatabase } from '@yayatoh/db/identity';
 import { uuidv7 } from '@yayatoh/kernel';
 import { and, asc, desc, eq, ilike, isNull, or, sql } from 'drizzle-orm';
-import { accounts, securityEvents, sessions, twoFactors, users, verifications } from './schema.ts';
+import {
+  accounts,
+  passkeys,
+  refreshTokens,
+  securityEvents,
+  sessions,
+  trustedDevices,
+  twoFactors,
+  users,
+  verifications,
+} from './schema.ts';
 
 /**
  * A person's own account as data (M1.14e, Yayatoh as controller): what we hold, allowlisted for
@@ -155,7 +165,8 @@ export interface IdentityErasure {
 /**
  * Anonymise an account (the person asked to delete it). In one transaction: a security event
  * `account.deleted` is written first (kept, under the pseudonymous id); every session is revoked;
- * credentials, two-step verification and pending codes are deleted; the row keeps its id (audit
+ * credentials, two-step verification, passkeys, refresh tokens and pending codes are deleted and
+ * trusted devices revoked; the row keeps its id (audit
  * entries and org records that name it stay consistent) but its email becomes a hash at
  * `.invalid` and the name, picture and language are cleared. The same address can sign up again
  * as a new account.
@@ -179,6 +190,14 @@ export async function anonymiseAccount(
       .values({ id: uuidv7(), userId, action: 'account.deleted', data: { by: opts.by }, createdAt: now });
     const s = await tx.delete(sessions).where(eq(sessions.userId, userId)).returning({ id: sessions.id });
     const c = await tx.delete(accounts).where(eq(accounts.userId, userId)).returning({ id: accounts.id });
+    // M1.2f: trusted devices are revoked (kept for the audit trail), passkeys and /v1 refresh
+    // tokens are gone.
+    await tx
+      .update(trustedDevices)
+      .set({ revokedAt: now, revokedReason: 'account_deleted' })
+      .where(and(eq(trustedDevices.userId, userId), isNull(trustedDevices.revokedAt)));
+    await tx.delete(passkeys).where(eq(passkeys.userId, userId));
+    await tx.delete(refreshTokens).where(eq(refreshTokens.userId, userId));
     const t = await tx
       .delete(twoFactors)
       .where(eq(twoFactors.userId, userId))

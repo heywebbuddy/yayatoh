@@ -39,6 +39,25 @@ export async function rememberDevCode(email: string, code: string) {
   });
 }
 
+/** Development only: the last password-reset link "emailed" to an address (e2e, M1.2f). */
+const devLinkKey = (email: string) => `yy-dev-link:${email.toLowerCase()}`;
+
+async function rememberDevLink(email: string, url: string) {
+  const c = await getAuth().$context;
+  await c.internalAdapter.deleteVerificationByIdentifier(devLinkKey(email));
+  await c.internalAdapter.createVerificationValue({
+    identifier: devLinkKey(email),
+    value: url,
+    expiresAt: new Date(Date.now() + 30 * 60_000),
+  });
+}
+
+export async function devLastLink(email: string): Promise<string | null> {
+  if (!devAuthEnabled()) return null;
+  const c = await getAuth().$context;
+  return (await c.internalAdapter.findVerificationValue(devLinkKey(email)))?.value ?? null;
+}
+
 export async function devLastCode(email: string): Promise<string | null> {
   if (!devAuthEnabled()) return null;
   const c = await getAuth().$context;
@@ -46,12 +65,16 @@ export async function devLastCode(email: string): Promise<string | null> {
 }
 
 // SES arrives with M1.10 (owner account pending); until then codes are logged in dev only.
-const mailer: AuthMailer = {
+export const authMailer: AuthMailer = {
   async sendOtp(to, otp, purpose) {
     if (devAuthEnabled()) await rememberDevCode(to, otp);
     await consoleMailer.sendOtp(to, otp, purpose);
   },
   sendMagicLink: (to, url) => consoleMailer.sendMagicLink(to, url),
+  async sendPasswordReset(to, url) {
+    if (devAuthEnabled()) await rememberDevLink(to, url);
+    await consoleMailer.sendPasswordReset?.(to, url);
+  },
 };
 
 /** TOTP replay protection skips only the seeded dev personas' derived secrets, with dev auth on. */
@@ -65,7 +88,7 @@ export function getAuth(): Auth {
     instance = createAuth({
       baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
       secret,
-      mailer,
+      mailer: authMailer,
       sealer,
       ...(totpReplayExempt ? { totpReplayExempt } : {}),
       // Someone whose address was erased signs up again (M1.14e): account mail reaches them again;
@@ -80,6 +103,9 @@ export function getAuth(): Auth {
 
 /** Two-step verification and step-up for people on this host. */
 export function getTwoFactor(): TwoFactorService {
-  twoFactor ??= twoFactorService(getAuth(), { mailer, ...(totpReplayExempt ? { totpReplayExempt } : {}) });
+  twoFactor ??= twoFactorService(getAuth(), {
+    mailer: authMailer,
+    ...(totpReplayExempt ? { totpReplayExempt } : {}),
+  });
   return twoFactor;
 }

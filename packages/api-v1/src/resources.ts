@@ -90,6 +90,23 @@ export const Session = z
   })
   .openapi('Session');
 
+/** M1.2f: a short-lived access token and a rotating refresh token (`POST /v1/auth/token`). */
+export const TokenPair = z
+  .object({
+    accessToken: z.string().openapi({
+      description: 'Send as `Authorization: Bearer <accessToken>`. Lasts 15 minutes and is never extended.',
+    }),
+    tokenType: z.literal('bearer'),
+    accessTokenExpiresAt: DateTime,
+    refreshToken: z.string().openapi({
+      description:
+        'Single use: exchange it for a new pair before the access token ends. Presenting a spent refresh token again revokes the whole chain (reuse detection).',
+    }),
+    refreshTokenExpiresAt: DateTime,
+    user: User,
+  })
+  .openapi('TokenPair');
+
 export const Membership = z
   .object({ id: z.uuid(), slug: z.string(), name: z.string(), role: OrgRole })
   .openapi('Membership');

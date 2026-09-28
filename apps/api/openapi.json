@@ -3,7 +3,7 @@
   "info": {
     "title": "Yayatoh API",
     "version": "0.2.0",
-    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user session token from `POST /v1/auth/login`. No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
+    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user token: `POST /v1/auth/token` (15-minute access token and a\n  rotating refresh token; recommended) or `POST /v1/auth/login` (a 14-day session). No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
   },
   "tags": [
     {
@@ -82,7 +82,7 @@
       "bearerSession": {
         "type": "http",
         "scheme": "bearer",
-        "description": "A user session token from `POST /v1/auth/login`."
+        "description": "A user access token from `POST /v1/auth/token`, or a session token from `POST /v1/auth/login`."
       }
     },
     "schemas": {
@@ -117,12 +117,12 @@
           "degraded"
         ]
       },
-      "Session": {
+      "TokenPair": {
         "type": "object",
         "properties": {
-          "token": {
+          "accessToken": {
             "type": "string",
-            "description": "Send as `Authorization: Bearer <token>`."
+            "description": "Send as `Authorization: Bearer <accessToken>`. Lasts 15 minutes and is never extended."
           },
           "tokenType": {
             "type": "string",
@@ -130,7 +130,15 @@
               "bearer"
             ]
           },
-          "expiresAt": {
+          "accessTokenExpiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Single use: exchange it for a new pair before the access token ends. Presenting a spent refresh token again revokes the whole chain (reuse detection)."
+          },
+          "refreshTokenExpiresAt": {
             "type": "string",
             "format": "date-time"
           },
@@ -139,9 +147,11 @@
           }
         },
         "required": [
-          "token",
+          "accessToken",
           "tokenType",
-          "expiresAt",
+          "accessTokenExpiresAt",
+          "refreshToken",
+          "refreshTokenExpiresAt",
           "user"
         ]
       },
@@ -194,6 +204,97 @@
           "title",
           "status",
           "code"
+        ]
+      },
+      "TokenRequest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "password"
+                ]
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 254,
+                "format": "email"
+              },
+              "password": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "grantType",
+              "email",
+              "password"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "refresh_token"
+                ]
+              },
+              "refreshToken": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            },
+            "required": [
+              "grantType",
+              "refreshToken"
+            ]
+          }
+        ]
+      },
+      "RevokeRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Send as `Authorization: Bearer <token>`."
+          },
+          "tokenType": {
+            "type": "string",
+            "enum": [
+              "bearer"
+            ]
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "required": [
+          "token",
+          "tokenType",
+          "expiresAt",
+          "user"
         ]
       },
       "LoginRequest": {
@@ -1229,7 +1330,8 @@
           "cover",
           "gallery",
           "photo",
-          "logo"
+          "logo",
+          "floorplan"
         ]
       },
       "ImageVariant": {
@@ -3501,6 +3603,163 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/token": {
+      "post": {
+        "operationId": "issueToken",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Sign in (grantType password) or refresh (grantType refresh_token): a 15-minute access token and a rotating refresh token",
+        "description": "Each refresh spends the refresh token and returns a new pair; the previous access token ends. A spent refresh token presented again revokes its whole chain (every access token issued from it ends), answering `401` with `reason: refresh_token_reused`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/revoke": {
+      "post": {
+        "operationId": "revokeToken",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Sign out a refresh token: its chain and every access token issued from it end",
+        "description": "Revokes the refresh token’s whole chain: every access token issued from it stops working. Unknown or already revoked tokens also answer `204`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Revoked (unknown tokens too)"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }

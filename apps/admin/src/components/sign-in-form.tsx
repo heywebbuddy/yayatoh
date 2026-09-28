@@ -1,6 +1,7 @@
 'use client';
 
 import { authClient } from '@yayatoh/auth/client';
+import { staffAuthClient } from '@yayatoh/auth/passkey-client';
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -36,15 +37,47 @@ export function SignInForm() {
       setBusy(false);
     }
   }
+  /**
+   * M1.2f: a passkey that verifies the person (PIN, biometrics) is both factors at once, so it
+   * signs in without the authenticator-app step.
+   */
+  async function withPasskey() {
+    setBusy(true);
+    setError(null);
+    try {
+      const { error: err } = await staffAuthClient.signIn.passkey();
+      if (err) return setError(t('passkeyFailed'));
+      router.replace('/');
+      router.refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
-      {error ? <Alert title={error} /> : null}
-      <Input name="email" type="email" autoComplete="email" required label={t('email')} />
-      <Input name="password" type="password" autoComplete="current-password" required label={t('password')} />
-      <Button type="submit" disabled={busy}>
-        {t('submit')}
+    <div className="flex flex-col gap-4">
+      <div aria-live="polite">{error ? <Alert title={error} /> : null}</div>
+      <Button variant="secondary" disabled={busy} onClick={withPasskey}>
+        {t('passkey')}
       </Button>
-    </form>
+      <p className="flex items-center gap-3 text-caption text-zinc-500">
+        <span aria-hidden="true" className="h-px flex-1 bg-zinc-200" />
+        {t('or')}
+        <span aria-hidden="true" className="h-px flex-1 bg-zinc-200" />
+      </p>
+      <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+        <Input name="email" type="email" autoComplete="email webauthn" required label={t('email')} />
+        <Input
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          label={t('password')}
+        />
+        <Button type="submit" disabled={busy}>
+          {t('submit')}
+        </Button>
+      </form>
+    </div>
   );
 }
 

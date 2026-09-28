@@ -4,14 +4,19 @@ import { authClient } from '@yayatoh/auth/client';
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useActionState, useEffect, useId, useRef, useState } from 'react';
-import { type ChallengeState, verifyChallengeAction } from '@/app/[locale]/sign-in/actions.ts';
-import { useRouter } from '@/i18n/navigation.ts';
+import {
+  type ChallengeState,
+  skipChallengeOnTrustedDevice,
+  verifyChallengeAction,
+} from '@/app/[locale]/sign-in/actions.ts';
+import { Link, useRouter } from '@/i18n/navigation.ts';
 import { continueToSiteAction, signOutHereAction } from '@/server/session-actions.ts';
+import { HumanCheckGroup, type HumanCheckWidget } from './human-check-field.tsx';
 
 type Mode = 'password' | 'code';
 
 /** Better Auth client errors carry the HTTP status and our 429 body (`retryAfter` seconds). */
-type AuthError = { status?: number; retryAfter?: unknown } | null;
+type AuthError = { status?: number; retryAfter?: unknown; code?: unknown } | null;
 
 /** Signing in for a tenant site (M1.2d): where to hand the person back to. */
 export interface Handoff {
@@ -49,10 +54,15 @@ export function SignInForm({
   next,
   challenge = false,
   handoff,
+  humanCheck = null,
+  locale,
 }: {
   next: string;
   challenge?: boolean;
   handoff?: Handoff;
+  /** The "are you a person?" widget (M1.2f), or null when none is configured. */
+  humanCheck?: HumanCheckWidget | null;
+  locale?: string;
 }) {
   const t = useTranslations('signIn');
   const finish = useFinish(next, handoff);
@@ -61,6 +71,25 @@ export function SignInForm({
   const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // M1.2f: the check is always asked before a code is emailed, and for passwords after failures.
+  const [needHuman, setNeedHuman] = useState(false);
+  const [humanToken, setHumanToken] = useState('');
+  const [humanKey, setHumanKey] = useState(0);
+  const showHuman =
+    Boolean(humanCheck) && ((mode === 'code' && !codeSent) || (mode === 'password' && needHuman));
+  const fetchOptions = () => ({
+    headers: humanToken ? { 'x-human-check': humanToken } : undefined,
+    onError: (ctx: { response: Response }) => {
+      if (ctx.response.headers.get('x-human-check') === 'required') setNeedHuman(true);
+    },
+  });
+  /** The check was refused or missing (403 from the route): say which, and show a fresh one. */
+  const humanRefused = (err: AuthError) => {
+    if (err?.status !== 403) return false;
+    setNeedHuman(true);
+    setError(err.code === 'HUMAN_CHECK_FAILED' ? t('humanFailed') : t('humanRequired'));
+    return true;
+  };
 
   /** A 429 from the rate limiter (M1.14a): say how long to wait, in the user's language. */
   const limited = (err: AuthError) => {
@@ -87,19 +116,24 @@ export function SignInForm({
     const email = String(form.get('email') ?? '');
     setBusy(true);
     setError(null);
+    const usedHuman = Boolean(humanToken);
     try {
       let twoFactor = false;
       if (mode === 'password') {
-        const { data, error: err } = await authClient.signIn.email({
-          email,
-          password: String(form.get('password') ?? ''),
-        });
-        if (limited(err)) return;
+        const { data, error: err } = await authClient.signIn.email(
+          { email, password: String(form.get('password') ?? '') },
+          fetchOptions(),
+        );
+        if (limited(err) || humanRefused(err)) return;
         if (err) return setError(t('invalid'));
         twoFactor = Boolean((data as { twoFactorRedirect?: boolean } | null)?.twoFactorRedirect);
       } else if (!codeSent) {
-        const { error: err } = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
-        if (limited(err)) return;
+        if (humanCheck && !humanToken) return setError(t('humanRequired'));
+        const { error: err } = await authClient.emailOtp.sendVerificationOtp(
+          { email, type: 'sign-in' },
+          fetchOptions(),
+        );
+        if (limited(err) || humanRefused(err)) return;
         if (err) return setError(t('failed'));
         return setCodeSent(true);
       } else {
@@ -115,6 +149,11 @@ export function SignInForm({
       await finish();
     } finally {
       setBusy(false);
+      // A challenge answer works once: a new widget for the next try.
+      if (usedHuman) {
+        setHumanToken('');
+        setHumanKey((k) => k + 1);
+      }
     }
   }
 
@@ -143,6 +182,9 @@ export function SignInForm({
           hint={t('codeHint')}
         />
       ) : null}
+      {showHuman && humanCheck ? (
+        <HumanCheckGroup key={humanKey} widget={humanCheck} onToken={setHumanToken} locale={locale} />
+      ) : null}
       <Button type="submit" disabled={busy}>
         {mode === 'password' ? t('submit') : codeSent ? t('verify') : t('sendCode')}
       </Button>
@@ -156,6 +198,14 @@ export function SignInForm({
       >
         {mode === 'password' ? t('useCode') : t('usePassword')}
       </Button>
+      {mode === 'password' ? (
+        <Link
+          href="/forgot-password"
+          className="inline-flex min-h-6 items-center self-center text-caption underline underline-offset-4"
+        >
+          {t('forgot')}
+        </Link>
+      ) : null}
     </form>
   );
 }
@@ -170,12 +220,39 @@ function ChallengeForm({ finish, onRestart }: { finish: () => Promise<void>; onR
     code: null,
   });
   const finished = useRef(false);
+  // M1.2f: a browser this person trusts skips the code; otherwise the form shows.
+  const [checking, setChecking] = useState(true);
+  const finishRef = useRef(finish);
+  finishRef.current = finish;
+  useEffect(() => {
+    let live = true;
+    skipChallengeOnTrustedDevice()
+      .catch(() => false)
+      .then((skipped) => {
+        if (!live) return;
+        if (skipped && !finished.current) {
+          finished.current = true;
+          void finishRef.current();
+          return;
+        }
+        setChecking(false);
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
   useEffect(() => {
     if (!state.ok || finished.current) return;
     finished.current = true;
     void finish();
   }, [state.ok, finish]);
   const restart = state.code === 'too_many_attempts' || state.code === 'expired';
+  if (checking)
+    return (
+      <p role="status" className="text-body text-zinc-600">
+        {t('checking')}
+      </p>
+    );
   return (
     <form action={formAction} aria-labelledby={headingId} className="flex flex-col gap-4" noValidate>
       <h2 id={headingId} className="text-section">
@@ -195,6 +272,10 @@ function ChallengeForm({ finish, onRestart }: { finish: () => Promise<void>; onR
         label={kind === 'totp' ? t('totpLabel') : t('backupLabel')}
         hint={kind === 'backup_code' ? t('backupHint') : undefined}
       />
+      <label className="flex min-h-6 items-center gap-2 text-body">
+        <input type="checkbox" name="trust" value="yes" className="size-5" />
+        {t('trust')}
+      </label>
       {restart ? (
         <Button onClick={onRestart}>{t('startOver')}</Button>
       ) : (

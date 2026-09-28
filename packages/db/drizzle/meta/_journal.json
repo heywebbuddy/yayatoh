@@ -470,6 +470,13 @@
       "when": 1790628298827,
       "tag": "0066_third_gambit",
       "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1790628691457,
+      "tag": "0067_petite_onslaught",
+      "breakpoints": true
     }
   ]
 }

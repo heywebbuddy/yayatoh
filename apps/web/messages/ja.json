@@ -622,7 +622,9 @@
         "too_many_attempts": "間違ったコードが多すぎます。もう一度サインインしてからお試しください。",
         "locked": "失敗が多すぎます。15 分後にもう一度お試しください。",
         "expired": "このサインインは期限切れです。もう一度サインインしてください。"
-      }
+      },
+      "checking": "このデバイスを確認しています…",
+      "trust": "このデバイスを30日間信頼する（ここではコードを求めない）"
     },
     "rateLimited": "サインインの試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
     "signedOutEverywhere": "すべての場所からサインアウトしました。",
@@ -633,6 +635,22 @@
       "continue": "{site} に進む",
       "otherAccount": "別のアカウントを使う",
       "failed": "{site} に戻れませんでした。もう一度お試しください。"
+    },
+    "forgot": "パスワードをお忘れですか？",
+    "humanRequired": "セキュリティチェックを完了してから、もう一度お試しください。",
+    "humanFailed": "セキュリティチェックに失敗しました。もう一度お試しください。",
+    "passwordReset": "パスワードを変更しました。新しいパスワードでサインインしてください。",
+    "social": {
+      "continueWith": {
+        "google": "Googleで続行",
+        "apple": "Appleで続行"
+      },
+      "or": "または",
+      "failed": "そのアカウントでサインインできませんでした。もう一度試すか、メールアドレスをご利用ください。",
+      "cancelled": "サインインはキャンセルされました。",
+      "email_unverified": "そのアカウントのメールアドレスはプロバイダーで確認されていません。そちらで確認するか、メールアドレスでサインインしてください。",
+      "no_email": "そのアカウントはメールアドレスを共有しなかったため、Yayatohアカウントを作成できません。",
+      "unavailable": "このサインイン方法は現在利用できません。"
     }
   },
   "orgPicker": {
@@ -3816,7 +3834,45 @@
     "sessionsExplain": "このデバイスや他のデバイス、アプリ、主催者の独自サイトなど、すべてのセッションを終了します。もう一度サインインが必要になります。",
     "signOutEverywhere": "すべての場所からサインアウト",
     "confirmSignOutEverywhere": "今すぐすべてのデバイスとサイトからサインアウトしますか？",
-    "confirmSignOutEverywhereYes": "はい、すべてからサインアウト"
+    "confirmSignOutEverywhereYes": "はい、すべてからサインアウト",
+    "methods": {
+      "title": "サインイン方法",
+      "explain": "メールアドレスに加えてGoogleやAppleでもサインインできます。連携や解除の際は本人確認が必要です。",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "{date}に連携",
+      "notLinked": "未連携",
+      "link": "{provider}を連携",
+      "unlink": "{provider}の連携を解除",
+      "messages": {
+        "not_linked": "そのアカウントは連携されていません。",
+        "last_method": "唯一のサインイン方法なので解除できません。先に別のアカウントを連携するか、パスワードを設定してください。",
+        "linked": "連携しました。これでサインインできます。",
+        "already_linked": "そのアカウントはすでに連携済みです。",
+        "linked_elsewhere": "そのアカウントは別のYayatohアカウントに連携されています。",
+        "provider_taken": "そのプロバイダーの別のアカウントがすでに連携されています。先に解除してください。",
+        "failed": "連携できませんでした。もう一度お試しください。",
+        "cancelled": "連携はキャンセルされました。",
+        "unavailable": "このサインイン方法は現在利用できません。",
+        "unlinked": "連携を解除しました。"
+      }
+    },
+    "devices": {
+      "title": "信頼済みデバイス",
+      "explain": "「このデバイスを信頼する」を選んだブラウザでは、30日間コードを求められません。パスワードを変更するとすべて解除されます。",
+      "none": "信頼済みデバイスはありません。",
+      "trustedOn": "{date}から信頼",
+      "lastUsed": "最終使用 {date}",
+      "neverUsed": "未使用",
+      "until": "{date}まで",
+      "revoke": "取り消す",
+      "revokeNamed": "{device}を取り消す",
+      "revokeAll": "すべての信頼済みデバイスを取り消す",
+      "revoked": "取り消しました。そのデバイスでは再びコードが求められます。",
+      "revokedAll": "すべての信頼済みデバイスを取り消しました。どのデバイスでも再びコードが求められます。"
+    }
   },
   "stepUp": {
     "title": "本人確認",
@@ -4360,7 +4416,10 @@
   "tenantAccount": {
     "signIn": "サインイン",
     "signedInAs": "{name} としてサインイン中",
-    "signOut": "サインアウト"
+    "signOut": "サインアウト",
+    "label": "あなたのアカウント",
+    "tickets": "あなたのチケット",
+    "console": "主催者コンソール"
   },
   "impersonation": {
     "label": "スタッフのアクセス",
@@ -4460,6 +4519,97 @@
       "forbidden": "この座席表は変更できません。",
       "network": "アップロードに失敗しました。接続を確認してもう一度お試しください。",
       "generic": "アップロードに失敗しました。もう一度お試しください。"
+    }
+  },
+  "humanCheck": {
+    "legend": "セキュリティチェック",
+    "explain": "人間であることを確認してください。自動登録やスパムを防ぐためです。",
+    "fakeLabel": "私は人間です（テスト用チェック）",
+    "unavailable": "セキュリティチェックを読み込めませんでした。ページを再読み込みするか、ブラウザでchallenges.cloudflare.comを許可してください。それでも読み込めない場合は support@yayatoh.com までご連絡ください。",
+    "required": "先にセキュリティチェックを完了してください。",
+    "failed": "セキュリティチェックに失敗しました。もう一度お試しください。"
+  },
+  "fakeSocial": {
+    "metaTitle": "テスト用サインインプロバイダー",
+    "eyebrow": "テスト用プロバイダー（開発専用）",
+    "title": "{provider}でサインイン",
+    "description": "このページは開発とテストで{provider}の代わりに使います。{provider}が共有するアカウントを入力してください。",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "メールアドレス",
+    "name": "名前",
+    "verified": "プロバイダーがこのメールアドレスを確認済み",
+    "hideEmail": "メールを非公開にする（プライベートリレーアドレス）",
+    "continue": "続行",
+    "cancel": "キャンセル",
+    "errors": {
+      "email_required": "メールアドレスを入力してください。"
+    }
+  },
+  "socialLink": {
+    "metaTitle": "メールアドレスの確認",
+    "eyebrow": "あと1ステップ",
+    "title": "{provider}アカウントを連携",
+    "description": "{email} はすでにYayatohアカウントで使われています。{provider}を連携するには、このアドレスに送信した6桁のコードを入力してください。",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "6桁のコード",
+    "codeHint": "コードの有効期限は10分です。",
+    "confirm": "確認してサインイン",
+    "startOver": "サインインに戻る",
+    "expired": "このリクエストは期限切れです。もう一度サインインして新しいコードを受け取ってください。",
+    "errors": {
+      "invalid_code": "そのコードは使えませんでした。メールを確認して、もう一度お試しください。",
+      "expired": "このリクエストは期限切れです。もう一度サインインして新しいコードを受け取ってください。",
+      "too_many_attempts": "間違ったコードが多すぎます。もう一度サインインして新しいコードを受け取ってください。",
+      "linked_elsewhere": "そのアカウントはすでに別のYayatohアカウントに連携されています。"
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "あなたのアカウント",
+    "forgotMetaTitle": "パスワードをお忘れですか？",
+    "forgotTitle": "パスワードの再設定",
+    "forgotDescription": "メールアドレスを入力すると、新しいパスワードを設定するリンクをお送りします。",
+    "email": "メールアドレス",
+    "send": "リンクを送信",
+    "sent": "このメールアドレスのアカウントがあれば、新しいパスワードを設定するリンクを送信しました。30分以内に1回だけ使えます。",
+    "backToSignIn": "サインインに戻る",
+    "resetMetaTitle": "新しいパスワードの設定",
+    "resetTitle": "新しいパスワードを設定",
+    "newPassword": "新しいパスワード",
+    "passwordHint": "8文字以上。",
+    "confirmPassword": "もう一度入力",
+    "save": "新しいパスワードを保存",
+    "askAgain": "新しいリンクをリクエスト",
+    "errors": {
+      "email": "有効なメールアドレスを入力してください。",
+      "human_required": "先にセキュリティチェックを完了してください。",
+      "human_failed": "セキュリティチェックに失敗しました。もう一度お試しください。",
+      "rate_limited": "リクエストが多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
+      "too_short": "8文字以上にしてください。",
+      "too_long": "128文字以内にしてください。",
+      "mismatch": "2つのパスワードが一致しません。",
+      "invalid_token": "このリンクは期限切れか、すでに使用されています。新しいリンクをリクエストしてください。"
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "あなたのチケット",
+    "title": "あなたのチケット",
+    "signedOut": "{org}で購入したチケットを見るにはサインインしてください。",
+    "signIn": "サインイン",
+    "emptyTitle": "まだチケットはありません",
+    "emptyDescription": "サインインした状態で{org}に注文すると、ここに表示されます。その他の注文は確認メールのリンクをご利用ください。",
+    "open": "注文を見る",
+    "openNamed": "{event}の注文を見る",
+    "status": {
+      "paid": "支払い済み",
+      "partially_refunded": "一部返金済み",
+      "refunded": "返金済み",
+      "awaiting_payment": "支払い待ち"
     }
   }
 }

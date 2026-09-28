@@ -186,6 +186,9 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
     const mt = /^\/my-tickets\/verify\/([^/]+)\/?$/.exec(rest);
     if (mt)
       return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/my-tickets/verify/${mt[1]}`, locale));
+    // M1.2f: the signed-in person's tickets at this organizer.
+    if (rest === '/tickets' || rest === '/tickets/')
+      return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/tickets`, locale));
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);
     if (ev) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${ev[1]}`, locale));
     // The org's CMS (M1.4g): its blog, posts and pages (the legacy Voyager paths).

@@ -622,7 +622,9 @@
         "too_many_attempts": "錯誤驗證碼過多。請重新登入後再試。",
         "locked": "失敗次數過多。請 15 分鐘後再試。",
         "expired": "本次登入已過期，請重新登入。"
-      }
+      },
+      "checking": "正在檢查此裝置…",
+      "trust": "信任此裝置 30 天（在此不再要求驗證碼）"
     },
     "rateLimited": "登入嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
     "signedOutEverywhere": "你已在所有地方登出。",
@@ -633,6 +635,22 @@
       "continue": "繼續前往 {site}",
       "otherAccount": "使用其他帳戶",
       "failed": "無法將你送回 {site}。請再試一次。"
+    },
+    "forgot": "忘記密碼？",
+    "humanRequired": "請完成安全驗證後再試。",
+    "humanFailed": "安全驗證未通過，請再試一次。",
+    "passwordReset": "你的密碼已變更。請用新密碼登入。",
+    "social": {
+      "continueWith": {
+        "google": "使用 Google 繼續",
+        "apple": "使用 Apple 繼續"
+      },
+      "or": "或",
+      "failed": "無法使用該帳號登入。請再試一次，或使用你的電子郵件。",
+      "cancelled": "登入已取消。",
+      "email_unverified": "該帳號的電子郵件尚未在服務商處驗證。請先到那裡驗證，或使用電子郵件登入。",
+      "no_email": "該帳號未提供電子郵件地址，因此無法為它建立 Yayatoh 帳號。",
+      "unavailable": "此登入方式目前無法使用。"
     }
   },
   "orgPicker": {
@@ -3816,7 +3834,45 @@
     "sessionsExplain": "結束你的所有工作階段：包括此裝置和其他裝置、各個應用程式，以及主辦方自己的網站。之後需要重新登入。",
     "signOutEverywhere": "在所有地方登出",
     "confirmSignOutEverywhere": "現在從所有裝置和網站登出嗎？",
-    "confirmSignOutEverywhereYes": "是，全部登出"
+    "confirmSignOutEverywhereYes": "是，全部登出",
+    "methods": {
+      "title": "登入方式",
+      "explain": "除了電子郵件，也可以使用 Google 或 Apple 登入。連結或取消連結時需要確認是你本人。",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "連結於 {date}",
+      "notLinked": "未連結",
+      "link": "連結 {provider}",
+      "unlink": "取消連結 {provider}",
+      "messages": {
+        "not_linked": "該帳號未連結。",
+        "last_method": "無法取消連結：這是你唯一的登入方式。請先連結其他帳號或設定密碼。",
+        "linked": "已連結。現在可以用它登入。",
+        "already_linked": "該帳號已經連結。",
+        "linked_elsewhere": "該帳號已連結到另一個 Yayatoh 帳號。",
+        "provider_taken": "該服務商的另一個帳號已連結。請先取消連結。",
+        "failed": "連結失敗，請再試一次。",
+        "cancelled": "連結已取消。",
+        "unavailable": "此登入方式目前無法使用。",
+        "unlinked": "已取消連結。"
+      }
+    },
+    "devices": {
+      "title": "受信任的裝置",
+      "explain": "你選擇「信任此裝置」的瀏覽器在 30 天內不會要求驗證碼。變更密碼會移除所有受信任裝置。",
+      "none": "沒有受信任的裝置。",
+      "trustedOn": "自 {date} 起信任",
+      "lastUsed": "上次使用 {date}",
+      "neverUsed": "尚未使用",
+      "until": "至 {date}",
+      "revoke": "撤銷",
+      "revokeNamed": "撤銷 {device}",
+      "revokeAll": "撤銷所有受信任的裝置",
+      "revoked": "已撤銷。該裝置將再次要求驗證碼。",
+      "revokedAll": "已撤銷所有受信任的裝置。每台裝置都會再次要求驗證碼。"
+    }
   },
   "stepUp": {
     "title": "確認是你本人",
@@ -4360,7 +4416,10 @@
   "tenantAccount": {
     "signIn": "登入",
     "signedInAs": "已以 {name} 的身分登入",
-    "signOut": "登出"
+    "signOut": "登出",
+    "label": "你的帳號",
+    "tickets": "你的票券",
+    "console": "主辦方主控台"
   },
   "impersonation": {
     "label": "工作人員存取",
@@ -4460,6 +4519,97 @@
       "forbidden": "你無法更改此座位圖。",
       "network": "上傳失敗。請檢查網路連線後重試。",
       "generic": "上傳失敗。請重試。"
+    }
+  },
+  "humanCheck": {
+    "legend": "安全驗證",
+    "explain": "請確認你是真人。這能幫助我們阻擋自動註冊和垃圾訊息。",
+    "fakeLabel": "我是真人（測試驗證）",
+    "unavailable": "安全驗證未能載入。請重新整理頁面，或在瀏覽器中允許 challenges.cloudflare.com。如果仍無法載入，請寄信至 support@yayatoh.com。",
+    "required": "請先完成安全驗證。",
+    "failed": "安全驗證未通過，請再試一次。"
+  },
+  "fakeSocial": {
+    "metaTitle": "測試登入服務商",
+    "eyebrow": "測試服務商（僅限開發）",
+    "title": "使用 {provider} 登入",
+    "description": "此頁面在開發和測試中代替 {provider}。請輸入 {provider} 會提供的帳號。",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "電子郵件",
+    "name": "姓名",
+    "verified": "服務商已驗證此電子郵件",
+    "hideEmail": "隱藏我的電子郵件（私人轉寄地址）",
+    "continue": "繼續",
+    "cancel": "取消",
+    "errors": {
+      "email_required": "請輸入電子郵件地址。"
+    }
+  },
+  "socialLink": {
+    "metaTitle": "確認你的電子郵件",
+    "eyebrow": "還差一步",
+    "title": "連結你的 {provider} 帳號",
+    "description": "{email} 已被一個 Yayatoh 帳號使用。若要連結 {provider}，請輸入我們剛寄到該地址的 6 位數驗證碼。",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "6 位數驗證碼",
+    "codeHint": "驗證碼 10 分鐘後失效。",
+    "confirm": "確認並登入",
+    "startOver": "返回登入",
+    "expired": "此請求已過期。請重新登入以取得新驗證碼。",
+    "errors": {
+      "invalid_code": "驗證碼不正確。請查看郵件後再試一次。",
+      "expired": "此請求已過期。請重新登入以取得新驗證碼。",
+      "too_many_attempts": "錯誤次數過多。請重新登入以取得新驗證碼。",
+      "linked_elsewhere": "該帳號已連結到另一個 Yayatoh 帳號。"
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "你的帳號",
+    "forgotMetaTitle": "忘記密碼？",
+    "forgotTitle": "重設密碼",
+    "forgotDescription": "輸入你的電子郵件，我們會寄送設定新密碼的連結。",
+    "email": "電子郵件",
+    "send": "寄送連結",
+    "sent": "如果有帳號使用該電子郵件，我們已寄出設定新密碼的連結。連結在 30 分鐘內可使用一次。",
+    "backToSignIn": "返回登入",
+    "resetMetaTitle": "設定新密碼",
+    "resetTitle": "設定新密碼",
+    "newPassword": "新密碼",
+    "passwordHint": "至少 8 個字元。",
+    "confirmPassword": "再輸入一次",
+    "save": "儲存新密碼",
+    "askAgain": "重新申請連結",
+    "errors": {
+      "email": "請輸入有效的電子郵件地址。",
+      "human_required": "請先完成安全驗證。",
+      "human_failed": "安全驗證未通過，請再試一次。",
+      "rate_limited": "請求過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+      "too_short": "至少使用 8 個字元。",
+      "too_long": "最多使用 128 個字元。",
+      "mismatch": "兩次輸入的密碼不一致。",
+      "invalid_token": "此連結已過期或已被使用。請重新申請。"
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "你的票券",
+    "title": "你的票券",
+    "signedOut": "登入後即可查看你在 {org} 購買的票券。",
+    "signIn": "登入",
+    "emptyTitle": "還沒有票券",
+    "emptyDescription": "登入狀態下在 {org} 下的訂單會顯示在這裡。其他訂單請使用確認郵件中的連結。",
+    "open": "查看訂單",
+    "openNamed": "查看 {event} 的訂單",
+    "status": {
+      "paid": "已付款",
+      "partially_refunded": "部分退款",
+      "refunded": "已退款",
+      "awaiting_payment": "待付款"
     }
   }
 }

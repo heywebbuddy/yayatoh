@@ -622,7 +622,9 @@
         "too_many_attempts": "Zu viele falsche Codes. Melde dich erneut an, um es noch einmal zu versuchen.",
         "locked": "Zu viele fehlgeschlagene Versuche. Versuche es in 15 Minuten erneut.",
         "expired": "Diese Anmeldung ist abgelaufen. Melde dich erneut an."
-      }
+      },
+      "checking": "Dieses Gerät wird geprüft …",
+      "trust": "Diesem Gerät 30 Tage vertrauen (hier nicht nach einem Code fragen)"
     },
     "rateLimited": "Zu viele Anmeldeversuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
     "signedOutEverywhere": "Du bist überall abgemeldet.",
@@ -633,6 +635,22 @@
       "continue": "Weiter zu {site}",
       "otherAccount": "Anderes Konto verwenden",
       "failed": "Wir konnten dich nicht zu {site} zurückbringen. Versuche es noch einmal."
+    },
+    "forgot": "Passwort vergessen?",
+    "humanRequired": "Schließen Sie die Sicherheitsprüfung ab und versuchen Sie es erneut.",
+    "humanFailed": "Die Sicherheitsprüfung hat nicht geklappt. Versuchen Sie es erneut.",
+    "passwordReset": "Ihr Passwort wurde geändert. Melden Sie sich mit dem neuen Passwort an.",
+    "social": {
+      "continueWith": {
+        "google": "Weiter mit Google",
+        "apple": "Weiter mit Apple"
+      },
+      "or": "oder",
+      "failed": "Die Anmeldung mit diesem Konto hat nicht geklappt. Versuchen Sie es erneut oder nutzen Sie Ihre E-Mail.",
+      "cancelled": "Die Anmeldung wurde abgebrochen.",
+      "email_unverified": "Die E-Mail-Adresse dieses Kontos ist beim Anbieter nicht bestätigt. Bestätigen Sie sie dort oder melden Sie sich mit Ihrer E-Mail an.",
+      "no_email": "Dieses Konto hat keine E-Mail-Adresse geteilt, daher können wir kein Yayatoh-Konto dafür anlegen.",
+      "unavailable": "Diese Anmeldeoption ist gerade nicht verfügbar."
     }
   },
   "orgPicker": {
@@ -3816,7 +3834,45 @@
     "sessionsExplain": "Beendet alle deine Sitzungen: auf diesem und anderen Geräten, in Apps und auf den eigenen Websites von Veranstaltern. Danach musst du dich neu anmelden.",
     "signOutEverywhere": "Überall abmelden",
     "confirmSignOutEverywhere": "Jetzt auf allen Geräten und Websites abmelden?",
-    "confirmSignOutEverywhereYes": "Ja, überall abmelden"
+    "confirmSignOutEverywhereYes": "Ja, überall abmelden",
+    "methods": {
+      "title": "Anmeldemethoden",
+      "explain": "Melden Sie sich zusätzlich zu Ihrer E-Mail mit Google oder Apple an. Zum Verknüpfen oder Trennen bestätigen Sie, dass Sie es sind.",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "Verknüpft am {date}",
+      "notLinked": "Nicht verknüpft",
+      "link": "{provider} verknüpfen",
+      "unlink": "{provider} trennen",
+      "messages": {
+        "not_linked": "Dieses Konto ist nicht verknüpft.",
+        "last_method": "Trennen ist nicht möglich: Es ist Ihre einzige Anmeldemöglichkeit. Verknüpfen Sie zuerst ein anderes Konto oder legen Sie ein Passwort fest.",
+        "linked": "Verknüpft. Sie können sich jetzt damit anmelden.",
+        "already_linked": "Dieses Konto war bereits verknüpft.",
+        "linked_elsewhere": "Dieses Konto ist mit einem anderen Yayatoh-Konto verknüpft.",
+        "provider_taken": "Ein anderes Konto dieses Anbieters ist bereits verknüpft. Trennen Sie es zuerst.",
+        "failed": "Das Verknüpfen hat nicht geklappt. Versuchen Sie es erneut.",
+        "cancelled": "Das Verknüpfen wurde abgebrochen.",
+        "unavailable": "Diese Anmeldeoption ist gerade nicht verfügbar.",
+        "unlinked": "Getrennt."
+      }
+    },
+    "devices": {
+      "title": "Vertrauenswürdige Geräte",
+      "explain": "Browser, in denen Sie „Diesem Gerät vertrauen“ gewählt haben, fragen 30 Tage lang nicht nach Ihrem Code. Eine Passwortänderung entfernt sie alle.",
+      "none": "Keine vertrauenswürdigen Geräte.",
+      "trustedOn": "Vertraut seit {date}",
+      "lastUsed": "zuletzt genutzt {date}",
+      "neverUsed": "noch nicht genutzt",
+      "until": "bis {date}",
+      "revoke": "Widerrufen",
+      "revokeNamed": "{device} widerrufen",
+      "revokeAll": "Alle vertrauenswürdigen Geräte widerrufen",
+      "revoked": "Widerrufen. Dieses Gerät fragt wieder nach Ihrem Code.",
+      "revokedAll": "Alle vertrauenswürdigen Geräte widerrufen. Jedes Gerät fragt wieder nach Ihrem Code."
+    }
   },
   "stepUp": {
     "title": "Bestätige, dass du es bist",
@@ -4360,7 +4416,10 @@
   "tenantAccount": {
     "signIn": "Anmelden",
     "signedInAs": "Angemeldet als {name}",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "label": "Ihr Konto",
+    "tickets": "Ihre Tickets",
+    "console": "Veranstalter-Konsole"
   },
   "impersonation": {
     "label": "Zugriff durch Mitarbeitende",
@@ -4460,6 +4519,97 @@
       "forbidden": "Sie können diesen Plan nicht ändern.",
       "network": "Das Hochladen ist fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       "generic": "Das Hochladen ist fehlgeschlagen. Versuchen Sie es erneut."
+    }
+  },
+  "humanCheck": {
+    "legend": "Sicherheitsprüfung",
+    "explain": "Bestätigen Sie, dass Sie ein Mensch sind. So stoppen wir automatische Registrierungen und Spam.",
+    "fakeLabel": "Ich bin ein Mensch (Testprüfung)",
+    "unavailable": "Die Sicherheitsprüfung wurde nicht geladen. Laden Sie die Seite neu oder erlauben Sie challenges.cloudflare.com in Ihrem Browser. Wenn es weiterhin nicht klappt, schreiben Sie an support@yayatoh.com.",
+    "required": "Schließen Sie zuerst die Sicherheitsprüfung ab.",
+    "failed": "Die Sicherheitsprüfung hat nicht geklappt. Versuchen Sie es erneut."
+  },
+  "fakeSocial": {
+    "metaTitle": "Test-Anmeldeanbieter",
+    "eyebrow": "Testanbieter (nur Entwicklung)",
+    "title": "Mit {provider} anmelden",
+    "description": "Diese Seite ersetzt {provider} in Entwicklung und Tests. Geben Sie das Konto ein, das {provider} teilen würde.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "E-Mail",
+    "name": "Name",
+    "verified": "Der Anbieter hat diese E-Mail bestätigt",
+    "hideEmail": "E-Mail verbergen (private Weiterleitungsadresse)",
+    "continue": "Weiter",
+    "cancel": "Abbrechen",
+    "errors": {
+      "email_required": "Geben Sie eine E-Mail-Adresse ein."
+    }
+  },
+  "socialLink": {
+    "metaTitle": "E-Mail bestätigen",
+    "eyebrow": "Noch ein Schritt",
+    "title": "Ihr {provider}-Konto verknüpfen",
+    "description": "Ein Yayatoh-Konto nutzt bereits {email}. Um {provider} damit zu verknüpfen, geben Sie den 6-stelligen Code ein, den wir gerade an diese Adresse gesendet haben.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "6-stelliger Code",
+    "codeHint": "Der Code läuft in 10 Minuten ab.",
+    "confirm": "Bestätigen und anmelden",
+    "startOver": "Zurück zur Anmeldung",
+    "expired": "Diese Anfrage ist abgelaufen. Melden Sie sich erneut an, um einen neuen Code zu erhalten.",
+    "errors": {
+      "invalid_code": "Dieser Code hat nicht funktioniert. Prüfen Sie die E-Mail und versuchen Sie es erneut.",
+      "expired": "Diese Anfrage ist abgelaufen. Melden Sie sich erneut an, um einen neuen Code zu erhalten.",
+      "too_many_attempts": "Zu viele falsche Codes. Melden Sie sich erneut an, um einen neuen Code zu erhalten.",
+      "linked_elsewhere": "Dieses Konto ist bereits mit einem anderen Yayatoh-Konto verknüpft."
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "Ihr Konto",
+    "forgotMetaTitle": "Passwort vergessen?",
+    "forgotTitle": "Passwort zurücksetzen",
+    "forgotDescription": "Geben Sie Ihre E-Mail ein, und wir senden Ihnen einen Link, um ein neues Passwort zu wählen.",
+    "email": "E-Mail",
+    "send": "Link senden",
+    "sent": "Wenn ein Konto diese E-Mail nutzt, haben wir einen Link für ein neues Passwort gesendet. Er funktioniert einmal, 30 Minuten lang.",
+    "backToSignIn": "Zurück zur Anmeldung",
+    "resetMetaTitle": "Neues Passwort wählen",
+    "resetTitle": "Neues Passwort wählen",
+    "newPassword": "Neues Passwort",
+    "passwordHint": "Mindestens 8 Zeichen.",
+    "confirmPassword": "Noch einmal eingeben",
+    "save": "Neues Passwort speichern",
+    "askAgain": "Neuen Link anfordern",
+    "errors": {
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "human_required": "Schließen Sie zuerst die Sicherheitsprüfung ab.",
+      "human_failed": "Die Sicherheitsprüfung hat nicht geklappt. Versuchen Sie es erneut.",
+      "rate_limited": "Zu viele Anfragen. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+      "too_short": "Verwenden Sie mindestens 8 Zeichen.",
+      "too_long": "Verwenden Sie höchstens 128 Zeichen.",
+      "mismatch": "Die beiden Passwörter stimmen nicht überein.",
+      "invalid_token": "Dieser Link ist abgelaufen oder wurde schon verwendet. Fordern Sie einen neuen an."
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "Ihre Tickets",
+    "title": "Ihre Tickets",
+    "signedOut": "Melden Sie sich an, um Ihre bei {org} gekauften Tickets zu sehen.",
+    "signIn": "Anmelden",
+    "emptyTitle": "Noch keine Tickets",
+    "emptyDescription": "Bestellungen, die Sie angemeldet bei {org} aufgeben, erscheinen hier. Für andere Bestellungen nutzen Sie den Link in Ihrer Bestätigungs-E-Mail.",
+    "open": "Bestellung ansehen",
+    "openNamed": "Bestellung für {event} ansehen",
+    "status": {
+      "paid": "Bezahlt",
+      "partially_refunded": "Teilweise erstattet",
+      "refunded": "Erstattet",
+      "awaiting_payment": "Zahlung ausstehend"
     }
   }
 }

@@ -1,3 +1,4 @@
+import { passkey } from '@better-auth/passkey';
 import { identityDatabase } from '@yayatoh/db/identity';
 import { uuidv7 } from '@yayatoh/kernel';
 import { betterAuth } from 'better-auth';
@@ -19,8 +20,10 @@ import {
 import { getImpersonation, isImpersonationActive } from './impersonation.ts';
 import type { AuthMailer } from './mailer.ts';
 import { hashPassword, needsRehash, verifyPassword } from './password.ts';
+import { revokeAllRefreshTokens } from './refresh-tokens.ts';
 import { authSchema, securityEvents, twoFactors } from './schema.ts';
 import { devPersonaTotpSecret, matchTotpStep } from './totp.ts';
+import { isTrustedDevice, revokeAllTrustedDevices } from './trusted-devices.ts';
 
 /**
  * Envelope encryption for identity secrets (roadmap §10: KMS envelope encryption for TOTP seeds).
@@ -61,6 +64,11 @@ export interface AuthOptions {
    * invitation). The web lifts an erased address's account-mail suppression here (M1.14e).
    */
   readonly onUserCreated?: (user: { id: string; email: string }) => Promise<void>;
+  /**
+   * Passkeys (M1.2f; the staff console). `rpID` is the registrable domain (`yayatoh.com` in
+   * production, `localhost` in development); `origin` the console's origin. Off when absent.
+   */
+  readonly passkey?: { readonly rpID: string; readonly origin: string; readonly rpName?: string };
 }
 
 /**
@@ -124,10 +132,15 @@ async function startChallenge(ctx: Any, data: { session: { token: string }; user
   deleteSessionCookie(ctx, true);
   await ctx.context.internalAdapter.deleteSession(data.session.token);
   ctx.context.setNewSession(null);
+  await openChallenge(ctx, data.user.id);
+}
+
+/** A pending second step for a person: the signed `two_factor` cookie and its attempt counter. */
+async function openChallenge(ctx: Any, userId: string) {
   const cookie = ctx.context.createAuthCookie('two_factor', { maxAge: CHALLENGE_MAX_AGE_S });
   const identifier = `2fa-${generateRandomString(20)}`;
   const expiresAt = new Date(Date.now() + CHALLENGE_MAX_AGE_S * 1000);
-  await ctx.context.internalAdapter.createVerificationValue({ value: data.user.id, identifier, expiresAt });
+  await ctx.context.internalAdapter.createVerificationValue({ value: userId, identifier, expiresAt });
   await ctx.context.internalAdapter.createVerificationValue({
     value: '0',
     identifier: `2fa-attempts-${identifier}`,
@@ -292,6 +305,75 @@ function handoffPlugin() {
   } as const;
 }
 
+const SocialSessionBody = z.object({ userId: z.string().uuid() });
+const TrustedBody = z.object({ cookie: z.string().max(200).nullish(), host: z.string().max(300) });
+
+/**
+ * M1.2f, server-only (closed over HTTP; the app's routes and actions call them in-process):
+ *  - `/social/session`: a Google/Apple sign-in the app has resolved to a person (see social.ts)
+ *    becomes a session on this host, or the second-step challenge when the person uses two-step
+ *    verification (a provider sign-in is one factor, like an emailed code);
+ *  - `/trusted-device/redeem`: a pending challenge on a browser this person trusts (its cookie
+ *    matches, not revoked or expired, same host) completes without a code.
+ */
+function signInExtrasPlugin() {
+  return {
+    id: 'yy-sign-in-extras',
+    endpoints: {
+      socialSession: createAuthEndpoint(
+        '/social/session',
+        { method: 'POST', body: SocialSessionBody },
+        async (ctx) => {
+          const user = await ctx.context.internalAdapter.findUserById(ctx.body.userId);
+          if (!user || (user as { deletedAt?: Date | null }).deletedAt)
+            throw new APIError('BAD_REQUEST', { code: 'UNKNOWN_USER', message: 'unknown user' });
+          if ((user as { twoFactorEnabled?: boolean | null }).twoFactorEnabled) {
+            await openChallenge(ctx, user.id);
+            return ctx.json({ challenge: true });
+          }
+          const session = await ctx.context.internalAdapter.createSession(user.id, false);
+          await setSessionCookie(ctx, { session, user });
+          return ctx.json({ challenge: false });
+        },
+      ),
+      redeemTrustedDevice: createAuthEndpoint(
+        '/trusted-device/redeem',
+        { method: 'POST', body: TrustedBody },
+        async (ctx) => {
+          const cookie = ctx.context.createAuthCookie('two_factor');
+          const identifier = await ctx.getSignedCookie(cookie.name, ctx.context.secret);
+          const pending = identifier
+            ? await ctx.context.internalAdapter.findVerificationValue(identifier)
+            : null;
+          const userId: string | undefined =
+            pending && new Date(pending.expiresAt) > new Date() ? pending.value : undefined;
+          if (!identifier || !userId) return ctx.json({ ok: false });
+          const trusted = await isTrustedDevice({ cookie: ctx.body.cookie, userId, host: ctx.body.host });
+          if (!trusted) return ctx.json({ ok: false });
+          const user = await ctx.context.internalAdapter.findUserById(userId);
+          if (!user) return ctx.json({ ok: false });
+          await ctx.context.internalAdapter.deleteVerificationByIdentifier(identifier);
+          await ctx.context.internalAdapter.deleteVerificationByIdentifier(`2fa-attempts-${identifier}`);
+          const session = await ctx.context.internalAdapter.createSession(user.id, false);
+          await setSessionCookie(ctx, { session, user });
+          ctx.setCookie(cookie.name, '', { ...cookie.attributes, maxAge: 0 });
+          await audit(user.id, 'two_factor.skipped_trusted_device', {
+            host: normalizeHandoffHost(ctx.body.host),
+          });
+          return ctx.json({ ok: true, userId: user.id });
+        },
+      ),
+    },
+  } as const;
+}
+
+/** A password change or reset: trusted devices and /v1 refresh tokens end with it. */
+async function passwordChanged(userId: string, how: 'reset' | 'changed') {
+  await revokeAllTrustedDevices(userId, 'password_changed');
+  await revokeAllRefreshTokens(userId);
+  await audit(userId, how === 'reset' ? 'password.reset' : 'password.changed', {});
+}
+
 /**
  * Identity for one host (ADR 0010). Sessions use a `__Host-` cookie on HTTPS: Secure, Path=/,
  * no Domain, so a session is valid only on the host that issued it. Passwords hash with
@@ -315,6 +397,15 @@ export function createAuth(opts: AuthOptions) {
       minPasswordLength: 8,
       maxPasswordLength: 128,
       password: { hash: hashPassword, verify: verifyPassword },
+      // M1.2f: "Forgot your password?" (the app's action checks the human challenge first).
+      resetPasswordTokenExpiresIn: 60 * 30,
+      revokeSessionsOnPasswordReset: true,
+      sendResetPassword: async ({ user, url }) => {
+        await opts.mailer.sendPasswordReset?.(user.email, url);
+      },
+      onPasswordReset: async ({ user }) => {
+        await passwordChanged(user.id, 'reset');
+      },
     },
     session: {
       expiresIn: 60 * 60 * 24 * 14,
@@ -378,7 +469,13 @@ export function createAuth(opts: AuthOptions) {
       // Two-step verification is managed through packages/auth (the app's rules and audit), and
       // the sign-in challenge through the app's server actions: closed over HTTP.
       before: createAuthMiddleware(async (ctx) => {
-        if (ctx.request && (ctx.path.startsWith('/two-factor/') || ctx.path.startsWith('/handoff/')))
+        if (
+          ctx.request &&
+          (ctx.path.startsWith('/two-factor/') ||
+            ctx.path.startsWith('/handoff/') ||
+            ctx.path.startsWith('/social/') ||
+            ctx.path.startsWith('/trusted-device/'))
+        )
           throw new APIError('NOT_FOUND');
         if (ctx.path === '/two-factor/verify-totp') await refuseUsedTotp(ctx, opts.totpReplayExempt);
       }),
@@ -401,6 +498,22 @@ export function createAuth(opts: AuthOptions) {
           await startChallenge(ctx, fresh);
           if (ctx.path === '/magic-link/verify') throw ctx.redirect(`${signInPath}?challenge=1`);
           return ctx.json({ twoFactorRedirect: true, twoFactorMethods: ['totp'] });
+        }
+        // A password change (signed in): trusted devices and refresh tokens end (M1.2f).
+        if (ctx.path === '/change-password') {
+          const userId = (ctx.context.session as { user?: { id?: string } } | null)?.user?.id;
+          if (userId && !(ctx.context.returned instanceof Error)) await passwordChanged(userId, 'changed');
+          return;
+        }
+        // Passkeys (M1.2f): audited.
+        if (ctx.path === '/passkey/verify-authentication' && fresh) {
+          await audit(fresh.user.id, 'passkey.signed_in', {});
+          return;
+        }
+        if (ctx.path === '/passkey/verify-registration' && !(ctx.context.returned instanceof Error)) {
+          const userId = (ctx.context.session as { user?: { id?: string } } | null)?.user?.id;
+          if (userId) await audit(userId, 'passkey.added', {});
+          return;
         }
         // Replay protection: the authenticator code's time step is spent with the sign-in.
         if (ctx.path === '/two-factor/verify-totp' && fresh) await spendTotpStep(ctx, opts.totpReplayExempt);
@@ -433,6 +546,28 @@ export function createAuth(opts: AuthOptions) {
       }),
       bearer(),
       handoffPlugin(),
+      signInExtrasPlugin(),
+      ...(opts.passkey
+        ? [
+            passkey({
+              rpID: opts.passkey.rpID,
+              rpName: opts.passkey.rpName ?? 'Yayatoh',
+              origin: opts.passkey.origin,
+              // A passkey is the staff console's second step too, so it must verify the person
+              // (PIN, biometrics), not just be present.
+              authenticatorSelection: { residentKey: 'required', userVerification: 'required' },
+              authentication: {
+                afterVerification: async ({ verification }: Any) => {
+                  if (!verification?.authenticationInfo?.userVerified)
+                    throw new APIError('UNAUTHORIZED', {
+                      code: 'USER_NOT_VERIFIED',
+                      message: 'user not verified',
+                    });
+                },
+              },
+            }),
+          ]
+        : []),
       nextCookies(),
     ],
   });

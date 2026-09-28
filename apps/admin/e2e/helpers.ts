@@ -31,7 +31,7 @@ export async function signInStaff(page: Page, email = STAFF) {
   await page.goto('/sign-in');
   await page.getByLabel('Email', { exact: true }).fill(email);
   await page.getByLabel('Password', { exact: true }).fill(devPassword());
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).not.toHaveURL(/\/sign-in$/);
 }
 

@@ -21,6 +21,11 @@ export const PRIVATE_PATHS = [
   '/invite/',
   '/connect/',
   '/embed/',
+  // M1.2f: password reset, provider sign-in and a person's own tickets on a tenant site.
+  '/forgot-password',
+  '/reset-password',
+  '/auth/',
+  '/tickets',
 ];
 
 /**
@@ -50,7 +55,7 @@ export function isPrivatePage(kind: HostKind, path: string): boolean {
   if (kind === 'marketplace' && /^\/o\/[^/]+(?:\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.test(path))
     return false;
   if (pageTypeOf(path) !== 'public') return true;
-  return /^\/(?:embed|messages|unsubscribe|account|dev|t|organizers|api)(?:\/|$)|^\/events\/[^/]+\/unlock\/?$/.test(
+  return /^\/(?:embed|messages|unsubscribe|account|dev|t|organizers|api|forgot-password|reset-password|auth|tickets)(?:\/|$)|^\/events\/[^/]+\/unlock\/?$/.test(
     path,
   );
 }

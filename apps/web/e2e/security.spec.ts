@@ -214,11 +214,12 @@ test.describe('rate limits', () => {
   }) => {
     const page = await (await ipContext(browser)).newPage();
     await page.goto('/sign-in');
-    const email = `limit-${unique()}@example.test`;
-    await page.getByLabel('Email').fill(email);
     await page.getByLabel('Password').fill('wrong-password-1');
     const submit = page.getByRole('button', { name: 'Sign in', exact: true });
+    // A different email each time: this is the per-device limit. (Three failures for one email
+    // turn on the human check first, M1.2f; human-check.spec.ts covers that.)
     for (let i = 0; i < 10; i++) {
+      await page.getByLabel('Email').fill(`limit-${i}-${unique()}@example.test`);
       const res = page.waitForResponse((r) => r.url().includes('/api/auth/sign-in/email'));
       await submit.click();
       expect((await res).status()).toBe(401);
@@ -268,7 +269,8 @@ test.describe('rate limits', () => {
         data: { email: who, password: 'x-wrong-password' },
         headers,
       });
-    for (let i = 0; i < 10; i++) expect((await attempt(a)).status()).toBe(401);
+    // Distinct emails: the device bucket, not the per-email human check (M1.2f), is under test.
+    for (let i = 0; i < 10; i++) expect((await attempt(a, `${i}-${email}`)).status()).toBe(401);
     const blocked = await attempt(a);
     expect(blocked.status()).toBe(429);
     expect(await blocked.json()).toMatchObject({ code: 'RATE_LIMITED' });

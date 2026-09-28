@@ -622,7 +622,9 @@
         "too_many_attempts": "Too many wrong codes. Sign in again to get another try.",
         "locked": "Too many failed attempts. Try again in 15 minutes.",
         "expired": "This sign-in has expired. Sign in again."
-      }
+      },
+      "checking": "Checking this device…",
+      "trust": "Trust this device for 30 days (don't ask for a code here)"
     },
     "rateLimited": "Too many sign-in attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
     "signedOutEverywhere": "You're signed out everywhere.",
@@ -633,6 +635,22 @@
       "continue": "Continue to {site}",
       "otherAccount": "Use a different account",
       "failed": "We couldn't send you back to {site}. Try again."
+    },
+    "forgot": "Forgot your password?",
+    "humanRequired": "Complete the security check, then try again.",
+    "humanFailed": "The security check didn't work. Try it again.",
+    "passwordReset": "Your password was changed. Sign in with your new password.",
+    "social": {
+      "continueWith": {
+        "google": "Continue with Google",
+        "apple": "Continue with Apple"
+      },
+      "or": "or",
+      "failed": "Signing in with that account didn't work. Try again, or use your email.",
+      "cancelled": "Signing in was cancelled.",
+      "email_unverified": "That account's email address isn't verified with the provider. Verify it there, or sign in with your email.",
+      "no_email": "That account didn't share an email address, so we can't create a Yayatoh account for it.",
+      "unavailable": "That sign-in option isn't available right now."
     }
   },
   "orgPicker": {
@@ -3816,7 +3834,45 @@
     "sessionsExplain": "Ends every session you have: on this device and others, in apps, and on organizers' own sites. You'll need to sign in again.",
     "signOutEverywhere": "Sign out everywhere",
     "confirmSignOutEverywhere": "Sign out of every device and site now?",
-    "confirmSignOutEverywhereYes": "Yes, sign out everywhere"
+    "confirmSignOutEverywhereYes": "Yes, sign out everywhere",
+    "methods": {
+      "title": "Sign-in methods",
+      "explain": "Sign in with Google or Apple as well as your email. Linking or unlinking asks you to confirm it’s you.",
+      "provider": {
+        "google": "Google",
+        "apple": "Apple"
+      },
+      "linkedOn": "Linked on {date}",
+      "notLinked": "Not linked",
+      "link": "Link {provider}",
+      "unlink": "Unlink {provider}",
+      "messages": {
+        "not_linked": "That account isn't linked.",
+        "last_method": "You can't unlink it: it's your only way to sign in. Link another account or set a password first.",
+        "linked": "Linked. You can now sign in with it.",
+        "already_linked": "That account was already linked.",
+        "linked_elsewhere": "That account is linked to another Yayatoh account.",
+        "provider_taken": "Another account from that provider is already linked. Unlink it first.",
+        "failed": "Linking didn't work. Try again.",
+        "cancelled": "Linking was cancelled.",
+        "unavailable": "That sign-in option isn't available right now.",
+        "unlinked": "Unlinked."
+      }
+    },
+    "devices": {
+      "title": "Trusted devices",
+      "explain": "Browsers where you chose “Trust this device” don't ask for your code for 30 days. Changing your password removes them all.",
+      "none": "No trusted devices.",
+      "trustedOn": "Trusted on {date}",
+      "lastUsed": "last used {date}",
+      "neverUsed": "not used yet",
+      "until": "until {date}",
+      "revoke": "Revoke",
+      "revokeNamed": "Revoke {device}",
+      "revokeAll": "Revoke all trusted devices",
+      "revoked": "Revoked. That device will ask for your code again.",
+      "revokedAll": "All trusted devices revoked. Every device will ask for your code again."
+    }
   },
   "stepUp": {
     "title": "Confirm it's you",
@@ -4360,7 +4416,10 @@
   "tenantAccount": {
     "signIn": "Sign in",
     "signedInAs": "Signed in as {name}",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "label": "Your account",
+    "tickets": "Your tickets",
+    "console": "Organizer console"
   },
   "impersonation": {
     "label": "Staff access",
@@ -4460,6 +4519,97 @@
       "forbidden": "You can't change this plan.",
       "network": "The upload failed. Check your connection and try again.",
       "generic": "The upload failed. Try again."
+    }
+  },
+  "humanCheck": {
+    "legend": "Security check",
+    "explain": "Confirm you're a person. This helps us stop automated sign-ups and spam.",
+    "fakeLabel": "I'm a person (test check)",
+    "unavailable": "The security check didn't load. Reload the page, or allow challenges.cloudflare.com in your browser. If it still won't load, email support@yayatoh.com.",
+    "required": "Complete the security check first.",
+    "failed": "The security check didn't work. Try it again."
+  },
+  "fakeSocial": {
+    "metaTitle": "Test sign-in provider",
+    "eyebrow": "Test provider (development only)",
+    "title": "Sign in with {provider}",
+    "description": "This page stands in for {provider} in development and tests. Enter the account {provider} would share.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "email": "Email",
+    "name": "Name",
+    "verified": "The provider has verified this email",
+    "hideEmail": "Hide my email (private relay address)",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "errors": {
+      "email_required": "Enter an email address."
+    }
+  },
+  "socialLink": {
+    "metaTitle": "Confirm your email",
+    "eyebrow": "One more step",
+    "title": "Link your {provider} account",
+    "description": "A Yayatoh account already uses {email}. To link {provider} to it, enter the 6-digit code we just sent to that address.",
+    "provider": {
+      "google": "Google",
+      "apple": "Apple"
+    },
+    "codeLabel": "6-digit code",
+    "codeHint": "The code expires in 10 minutes.",
+    "confirm": "Confirm and sign in",
+    "startOver": "Back to sign in",
+    "expired": "This link request has expired. Sign in again to get a new code.",
+    "errors": {
+      "invalid_code": "That code didn't work. Check the email and try again.",
+      "expired": "This request has expired. Sign in again to get a new code.",
+      "too_many_attempts": "Too many wrong codes. Sign in again to get a new code.",
+      "linked_elsewhere": "That account is already linked to another Yayatoh account."
+    }
+  },
+  "passwordReset": {
+    "eyebrow": "Your account",
+    "forgotMetaTitle": "Forgot your password?",
+    "forgotTitle": "Reset your password",
+    "forgotDescription": "Enter your email and we'll send you a link to choose a new password.",
+    "email": "Email",
+    "send": "Send me a link",
+    "sent": "If an account uses that email, we've sent a link to choose a new password. It works once, for 30 minutes.",
+    "backToSignIn": "Back to sign in",
+    "resetMetaTitle": "Choose a new password",
+    "resetTitle": "Choose a new password",
+    "newPassword": "New password",
+    "passwordHint": "At least 8 characters.",
+    "confirmPassword": "Type it again",
+    "save": "Save new password",
+    "askAgain": "Ask for a new link",
+    "errors": {
+      "email": "Enter a valid email address.",
+      "human_required": "Complete the security check first.",
+      "human_failed": "The security check didn't work. Try it again.",
+      "rate_limited": "Too many requests. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "too_short": "Use at least 8 characters.",
+      "too_long": "Use at most 128 characters.",
+      "mismatch": "The two passwords don't match.",
+      "invalid_token": "This link has expired or was already used. Ask for a new one."
+    }
+  },
+  "yourTickets": {
+    "metaTitle": "Your tickets",
+    "title": "Your tickets",
+    "signedOut": "Sign in to see the tickets you bought from {org}.",
+    "signIn": "Sign in",
+    "emptyTitle": "No tickets yet",
+    "emptyDescription": "Orders you place at {org} while signed in appear here. For other orders, use the link in your confirmation email.",
+    "open": "View order",
+    "openNamed": "View order for {event}",
+    "status": {
+      "paid": "Paid",
+      "partially_refunded": "Partly refunded",
+      "refunded": "Refunded",
+      "awaiting_payment": "Awaiting payment"
     }
   }
 }

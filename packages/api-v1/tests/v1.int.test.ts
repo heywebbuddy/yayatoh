@@ -539,6 +539,93 @@ describe('/v1 user sessions (bearer)', () => {
   });
 });
 
+describe('/v1 access and refresh tokens (M1.2f)', () => {
+  it('password grant: a 15-minute access token and a refresh token; the access token reads /me', async () => {
+    const t = await call('POST', '/auth/token', undefined, {
+      grantType: 'password',
+      email: viewerEmail,
+      password,
+    });
+    expect(t.status).toBe(200);
+    expect(t.res.headers.get('set-cookie')).toBeNull();
+    expect(t.body).toMatchObject({ tokenType: 'bearer', user: { email: viewerEmail } });
+    expect(String(t.body.refreshToken)).toMatch(/^yyr_/);
+    const ttl = Date.parse(String(t.body.accessTokenExpiresAt)) - Date.now();
+    expect(ttl).toBeGreaterThan(0);
+    expect(ttl).toBeLessThanOrEqual(15 * 60_000);
+    const me = await call('GET', '/me', String(t.body.accessToken));
+    expect(me.body.email).toBe(viewerEmail);
+    // Another org is still a 404 for this person (isolation is unchanged by the token kind).
+    expect((await call('GET', `/orgs/${b.org.slug}`, String(t.body.accessToken))).status).toBe(404);
+  });
+
+  it('refresh rotates the pair; the old access token ends; a reused refresh token revokes the chain', async () => {
+    const t0 = await call('POST', '/auth/token', undefined, {
+      grantType: 'password',
+      email: viewerEmail,
+      password,
+    });
+    const r1 = await call('POST', '/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: t0.body.refreshToken,
+    });
+    expect(r1.status).toBe(200);
+    expect(r1.body.refreshToken).not.toBe(t0.body.refreshToken);
+    expect((await call('GET', '/me', String(t0.body.accessToken))).status).toBe(401);
+    expect((await call('GET', '/me', String(r1.body.accessToken))).status).toBe(200);
+    // The spent token again: reuse. The whole chain ends, including the newest access token.
+    const reuse = await call('POST', '/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: t0.body.refreshToken,
+    });
+    expect(reuse.status).toBe(401);
+    expect(reuse.body).toMatchObject({
+      code: 'unauthenticated',
+      details: { reason: 'refresh_token_reused' },
+    });
+    expect((await call('GET', '/me', String(r1.body.accessToken))).status).toBe(401);
+    const after = await call('POST', '/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: r1.body.refreshToken,
+    });
+    expect(after.status).toBe(401);
+  });
+
+  it('revoke signs a chain out; unknown tokens and wrong passwords are refused', async () => {
+    // A person of their own: the per-account sign-in limit (5 per 15 min) is shared across grants.
+    const x = await signUp('tokens', 'viewer', a);
+    const t = await call('POST', '/auth/token', undefined, {
+      grantType: 'password',
+      email: x.email,
+      password,
+    });
+    expect(
+      (await call('POST', '/auth/revoke', undefined, { refreshToken: t.body.refreshToken })).status,
+    ).toBe(204);
+    expect((await call('GET', '/me', String(t.body.accessToken))).status).toBe(401);
+    const again = await call('POST', '/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: t.body.refreshToken,
+    });
+    expect(again.status).toBe(401);
+    expect(again.body).toMatchObject({ details: { reason: 'refresh_token_revoked' } });
+    expect((await call('POST', '/auth/revoke', undefined, { refreshToken: 'yyr_unknown' })).status).toBe(204);
+    const unknown = await call('POST', '/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: 'yyr_unknown',
+    });
+    expect(unknown.body).toMatchObject({ details: { reason: 'refresh_token_invalid' } });
+    const wrong = await call('POST', '/auth/token', undefined, {
+      grantType: 'password',
+      email: x.email,
+      password: 'nope-nope-nope',
+    });
+    expect(wrong.status).toBe(401);
+    const bad = await call('POST', '/auth/token', undefined, { grantType: 'magic' });
+    expect(bad.status).toBe(400);
+  });
+});
+
 describe('/v1 public and mobile', () => {
   it('serves a published event and its passes to anyone; drafts are 404', async () => {
     const pub = await call('GET', `/public/events/${a.event.slug}`);

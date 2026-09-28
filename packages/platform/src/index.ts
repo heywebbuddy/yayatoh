@@ -42,6 +42,7 @@ export {
   normalizeAddress,
 } from './erased-addresses.ts';
 export {
+  FAKE_HUMAN_FAIL_TOKEN,
   FAKE_HUMAN_TOKEN,
   fakeHumanCheck,
   type HumanCheck,

@@ -17,6 +17,12 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Hashed 60-second single-use sign-in handoff codes for tenant hosts (M1.2d); through packages/auth.',
   'auth.legacy_tokens':
     'Hashed legacy personal access tokens, magic links and resets per instance (migration T8); accessed only through packages/auth.',
+  'auth.passkeys':
+    'WebAuthn passkey public keys (M1.2f; staff sign-in); accessed only through packages/auth.',
+  'auth.trusted_devices':
+    'Hashed 30-day trusted-device secrets after two-step sign-in (M1.2f); through packages/auth.',
+  'auth.refresh_tokens':
+    'Hashed rotating /v1 refresh tokens with reuse detection per family (M1.2f); through packages/auth.',
   'auth.security_events':
     'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',

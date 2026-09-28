@@ -8,6 +8,7 @@ import {
   lastEmailedCode,
   newUser,
   ownClientIp,
+  passHumanCheck,
   signIn,
   stepUpDialog,
 } from './helpers.ts';
@@ -161,6 +162,8 @@ test.describe('delete my account', () => {
     // Coming back: an emailed code creates a new, empty account.
     await page.getByRole('button', { name: 'Use a one-time code instead' }).click();
     await page.getByLabel('Email', { exact: true }).fill(user.email);
+    // M1.2f: an emailed code (which can create an account) needs the human check.
+    await passHumanCheck(page);
     await page.getByRole('button', { name: 'Email me a code' }).click();
     await page.getByLabel('6-digit code', { exact: true }).fill(await lastEmailedCode(page, user.email));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();

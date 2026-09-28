@@ -13,6 +13,11 @@ export interface HumanCheck {
 
 /** The fake challenge's only valid answer (the dev checkbox posts it). */
 export const FAKE_HUMAN_TOKEN = 'fake-human-pass';
+/**
+ * A token the fake adapter always refuses (M1.2f): tests post it to see the "check failed" path
+ * (any other value fails too; this one names the intent).
+ */
+export const FAKE_HUMAN_FAIL_TOKEN = 'fake-human-fail';
 
 /** Development/test adapter: any request carrying the fake token passes. Never in production. */
 export const fakeHumanCheck: HumanCheck = {
