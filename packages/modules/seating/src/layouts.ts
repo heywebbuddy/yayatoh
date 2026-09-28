@@ -149,6 +149,7 @@ export const setEventLayoutCommand = tenantCommand({
             ticketTypeId: eventSeats.ticketTypeId,
             status: eventSeats.status,
             blockReason: eventSeats.blockReason,
+            groupLabel: eventSeats.groupLabel,
           })
           .from(eventSeats)
           .where(eq(eventSeats.eventId, input.eventId))
@@ -169,6 +170,7 @@ export const setEventLayoutCommand = tenantCommand({
           ticketTypeId: kept.get(s.seatId)?.ticketTypeId ?? null,
           status: kept.get(s.seatId)?.status === 'blocked' ? ('blocked' as const) : ('available' as const),
           blockReason: kept.get(s.seatId)?.status === 'blocked' ? kept.get(s.seatId)?.blockReason : null,
+          groupLabel: kept.get(s.seatId)?.groupLabel ?? null,
         })),
       );
     // Guests keep seats that still exist (and follow them to their table); others are unseated.
@@ -275,7 +277,8 @@ export const blockSeatsCommand = tenantCommand({
           .returning({ id: eventSeats.id })
       : await tx
           .update(eventSeats)
-          .set({ status: 'available', blockReason: null, updatedAt: ctx.now })
+          // Unblocking a group's seat by hand gives it back to sale (and out of the group).
+          .set({ status: 'available', blockReason: null, groupLabel: null, updatedAt: ctx.now })
           .where(
             and(
               eq(eventSeats.eventId, input.eventId),

@@ -3652,3 +3652,445 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
 ",
 }
 `;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · ar 1`] = `
+{
+  "subject": "أُلغيت تذكرتك لـ Lakeside Jazz Night",
+  "text": "أُلغيت تذكرتك لـ Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+ألغى منظّم Lakeside Jazz Night تذكرتك K7M2Q9XW. لم تعد تتيح لك الدخول. إذا كانت لديك أسئلة، فردّ على المنظّم.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · de 1`] = `
+{
+  "subject": "Dein Ticket für Lakeside Jazz Night wurde storniert",
+  "text": "Dein Ticket für Lakeside Jazz Night wurde storniert
+
+Hallo Amina Diallo,
+
+Der Veranstalter von Lakeside Jazz Night hat dein Ticket K7M2Q9XW storniert. Es gewährt keinen Einlass mehr. Bei Fragen antworte dem Veranstalter.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · en 1`] = `
+{
+  "subject": "Your ticket for Lakeside Jazz Night was cancelled",
+  "text": "Your ticket for Lakeside Jazz Night was cancelled
+
+Hi Amina Diallo,
+
+The organizer of Lakeside Jazz Night cancelled your ticket K7M2Q9XW. It no longer admits you. If you have questions, reply to the organizer.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · es 1`] = `
+{
+  "subject": "Tu entrada para Lakeside Jazz Night ha sido cancelada",
+  "text": "Tu entrada para Lakeside Jazz Night ha sido cancelada
+
+Hola, Amina Diallo:
+
+El organizador de Lakeside Jazz Night ha cancelado tu entrada K7M2Q9XW. Ya no da acceso al evento. Si tienes preguntas, responde al organizador.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · fr 1`] = `
+{
+  "subject": "Votre billet pour Lakeside Jazz Night a été annulé",
+  "text": "Votre billet pour Lakeside Jazz Night a été annulé
+
+Bonjour Amina Diallo,
+
+L'organisateur de Lakeside Jazz Night a annulé votre billet K7M2Q9XW. Il ne donne plus accès à l'événement. Pour toute question, répondez à l'organisateur.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night के लिए आपका टिकट रद्द कर दिया गया",
+  "text": "Lakeside Jazz Night के लिए आपका टिकट रद्द कर दिया गया
+
+नमस्ते Amina Diallo,
+
+Lakeside Jazz Night के आयोजक ने आपका टिकट K7M2Q9XW रद्द कर दिया है। अब इससे प्रवेश नहीं मिलेगा। कोई सवाल हो तो आयोजक को जवाब दें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · it 1`] = `
+{
+  "subject": "Il tuo biglietto per Lakeside Jazz Night è stato annullato",
+  "text": "Il tuo biglietto per Lakeside Jazz Night è stato annullato
+
+Ciao Amina Diallo,
+
+L'organizzatore di Lakeside Jazz Night ha annullato il tuo biglietto K7M2Q9XW. Non dà più accesso all'evento. Per domande, rispondi all'organizzatore.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night のチケットがキャンセルされました",
+  "text": "Lakeside Jazz Night のチケットがキャンセルされました
+
+Amina Diallo 様
+
+Lakeside Jazz Night の主催者がチケット K7M2Q9XW をキャンセルしました。このチケットでは入場できません。ご質問は主催者に返信してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · nl 1`] = `
+{
+  "subject": "Je ticket voor Lakeside Jazz Night is geannuleerd",
+  "text": "Je ticket voor Lakeside Jazz Night is geannuleerd
+
+Hoi Amina Diallo,
+
+De organisator van Lakeside Jazz Night heeft je ticket K7M2Q9XW geannuleerd. Het geeft geen toegang meer. Heb je vragen, antwoord dan de organisator.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · pt 1`] = `
+{
+  "subject": "O seu ingresso para Lakeside Jazz Night foi cancelado",
+  "text": "O seu ingresso para Lakeside Jazz Night foi cancelado
+
+Olá, Amina Diallo!
+
+O organizador de Lakeside Jazz Night cancelou o seu ingresso K7M2Q9XW. Ele já não dá acesso ao evento. Se tiver dúvidas, responda ao organizador.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · ru 1`] = `
+{
+  "subject": "Ваш билет на Lakeside Jazz Night отменён",
+  "text": "Ваш билет на Lakeside Jazz Night отменён
+
+Здравствуйте, Amina Diallo!
+
+Организатор Lakeside Jazz Night отменил ваш билет K7M2Q9XW. По нему больше нельзя пройти. Если у вас есть вопросы, ответьте организатору.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · zh-CN 1`] = `
+{
+  "subject": "您的 Lakeside Jazz Night 门票已取消",
+  "text": "您的 Lakeside Jazz Night 门票已取消
+
+Amina Diallo，您好：
+
+Lakeside Jazz Night 的主办方已取消您的门票 K7M2Q9XW，该门票已无法入场。如有疑问，请回复主办方。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.ticket-cancelled · zh-TW 1`] = `
+{
+  "subject": "您的 Lakeside Jazz Night 票券已取消",
+  "text": "您的 Lakeside Jazz Night 票券已取消
+
+Amina Diallo，您好：
+
+Lakeside Jazz Night 的主辦單位已取消您的票券 K7M2Q9XW，此票券已無法入場。如有疑問，請回覆主辦單位。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · ar 1`] = `
+{
+  "subject": "تذكرتك لـ Lakeside Jazz Night",
+  "text": "تذكرتك لـ Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+أعاد منظّم Lakeside Jazz Night إرسال تذكرتك K7M2Q9XW إليك. يفتح الزر أدناه تذاكرك في أي وقت.
+
+فتح تذاكري: https://app.yayatoh.test/my-tickets/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · de 1`] = `
+{
+  "subject": "Dein Ticket für Lakeside Jazz Night",
+  "text": "Dein Ticket für Lakeside Jazz Night
+
+Hallo Amina Diallo,
+
+Der Veranstalter von Lakeside Jazz Night hat dir dein Ticket K7M2Q9XW erneut geschickt. Über die Schaltfläche unten öffnest du deine Tickets jederzeit.
+
+Meine Tickets öffnen: https://app.yayatoh.test/my-tickets/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · en 1`] = `
+{
+  "subject": "Your ticket for Lakeside Jazz Night",
+  "text": "Your ticket for Lakeside Jazz Night
+
+Hi Amina Diallo,
+
+The organizer of Lakeside Jazz Night sent you your ticket K7M2Q9XW again. The button below opens your tickets anytime.
+
+Open my tickets: https://app.yayatoh.test/my-tickets/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · es 1`] = `
+{
+  "subject": "Tu entrada para Lakeside Jazz Night",
+  "text": "Tu entrada para Lakeside Jazz Night
+
+Hola, Amina Diallo:
+
+El organizador de Lakeside Jazz Night te ha vuelto a enviar tu entrada K7M2Q9XW. El botón de abajo abre tus entradas en cualquier momento.
+
+Abrir mis entradas: https://app.yayatoh.test/my-tickets/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · fr 1`] = `
+{
+  "subject": "Votre billet pour Lakeside Jazz Night",
+  "text": "Votre billet pour Lakeside Jazz Night
+
+Bonjour Amina Diallo,
+
+L'organisateur de Lakeside Jazz Night vous a renvoyé votre billet K7M2Q9XW. Le bouton ci-dessous ouvre vos billets à tout moment.
+
+Ouvrir mes billets: https://app.yayatoh.test/my-tickets/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night के लिए आपका टिकट",
+  "text": "Lakeside Jazz Night के लिए आपका टिकट
+
+नमस्ते Amina Diallo,
+
+Lakeside Jazz Night के आयोजक ने आपका टिकट K7M2Q9XW फिर से भेजा है। नीचे दिया गया बटन आपके टिकट कभी भी खोलता है।
+
+मेरे टिकट खोलें: https://app.yayatoh.test/my-tickets/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · it 1`] = `
+{
+  "subject": "Il tuo biglietto per Lakeside Jazz Night",
+  "text": "Il tuo biglietto per Lakeside Jazz Night
+
+Ciao Amina Diallo,
+
+L'organizzatore di Lakeside Jazz Night ti ha inviato di nuovo il biglietto K7M2Q9XW. Il pulsante qui sotto apre i tuoi biglietti in qualsiasi momento.
+
+Apri i miei biglietti: https://app.yayatoh.test/my-tickets/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night のチケット",
+  "text": "Lakeside Jazz Night のチケット
+
+Amina Diallo 様
+
+Lakeside Jazz Night の主催者がチケット K7M2Q9XW を再送しました。下のボタンからいつでもチケットを開けます。
+
+チケットを開く: https://app.yayatoh.test/my-tickets/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · nl 1`] = `
+{
+  "subject": "Je ticket voor Lakeside Jazz Night",
+  "text": "Je ticket voor Lakeside Jazz Night
+
+Hoi Amina Diallo,
+
+De organisator van Lakeside Jazz Night heeft je ticket K7M2Q9XW opnieuw gestuurd. Met de knop hieronder open je je tickets wanneer je wilt.
+
+Mijn tickets openen: https://app.yayatoh.test/my-tickets/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · pt 1`] = `
+{
+  "subject": "O seu ingresso para Lakeside Jazz Night",
+  "text": "O seu ingresso para Lakeside Jazz Night
+
+Olá, Amina Diallo!
+
+O organizador de Lakeside Jazz Night enviou novamente o seu ingresso K7M2Q9XW. O botão abaixo abre os seus ingressos a qualquer momento.
+
+Abrir os meus ingressos: https://app.yayatoh.test/my-tickets/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · ru 1`] = `
+{
+  "subject": "Ваш билет на Lakeside Jazz Night",
+  "text": "Ваш билет на Lakeside Jazz Night
+
+Здравствуйте, Amina Diallo!
+
+Организатор Lakeside Jazz Night повторно отправил вам билет K7M2Q9XW. Кнопка ниже открывает ваши билеты в любое время.
+
+Открыть мои билеты: https://app.yayatoh.test/my-tickets/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · zh-CN 1`] = `
+{
+  "subject": "您的 Lakeside Jazz Night 门票",
+  "text": "您的 Lakeside Jazz Night 门票
+
+Amina Diallo，您好：
+
+Lakeside Jazz Night 的主办方重新向您发送了门票 K7M2Q9XW。点击下方按钮可随时打开您的门票。
+
+打开我的门票: https://app.yayatoh.test/my-tickets/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.tickets-resent · zh-TW 1`] = `
+{
+  "subject": "您的 Lakeside Jazz Night 票券",
+  "text": "您的 Lakeside Jazz Night 票券
+
+Amina Diallo，您好：
+
+Lakeside Jazz Night 的主辦單位重新寄送了您的票券 K7M2Q9XW。點選下方按鈕即可隨時開啟您的票券。
+
+開啟我的票券: https://app.yayatoh.test/my-tickets/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;

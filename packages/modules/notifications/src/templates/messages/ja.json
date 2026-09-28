@@ -45,6 +45,15 @@
       "intro": "ご依頼のリンクです。{eventName} のチケットが開きます。",
       "cta": "チケットを開く"
     },
+    "ticketing.tickets-resent": {
+      "subject": "{eventName} のチケット",
+      "intro": "{eventName} の主催者がチケット {code} を再送しました。下のボタンからいつでもチケットを開けます。",
+      "cta": "チケットを開く"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "{eventName} のチケットがキャンセルされました",
+      "intro": "{eventName} の主催者がチケット {code} をキャンセルしました。このチケットでは入場できません。ご質問は主催者に返信してください。"
+    },
     "seating.finder-code": {
       "subject": "{eventName}の座席検索コードは{code}です",
       "intro": "座席検索に{code}を入力すると座席が表示されます。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。",

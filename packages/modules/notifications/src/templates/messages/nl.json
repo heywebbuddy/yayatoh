@@ -45,6 +45,15 @@
       "intro": "Hier is de link die je vroeg. Hij opent je tickets voor {eventName}.",
       "cta": "Mijn tickets openen"
     },
+    "ticketing.tickets-resent": {
+      "subject": "Je ticket voor {eventName}",
+      "intro": "De organisator van {eventName} heeft je ticket {code} opnieuw gestuurd. Met de knop hieronder open je je tickets wanneer je wilt.",
+      "cta": "Mijn tickets openen"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Je ticket voor {eventName} is geannuleerd",
+      "intro": "De organisator van {eventName} heeft je ticket {code} geannuleerd. Het geeft geen toegang meer. Heb je vragen, antwoord dan de organisator."
+    },
     "seating.finder-code": {
       "subject": "{code} is je code voor de plaatszoeker van {eventName}",
       "intro": "Voer {code} in bij de plaatszoeker om je plaats te zien. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren.",

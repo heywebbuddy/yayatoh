@@ -45,6 +45,15 @@
       "intro": "Here is the link you asked for. It opens your tickets for {eventName}.",
       "cta": "Open my tickets"
     },
+    "ticketing.tickets-resent": {
+      "subject": "Your ticket for {eventName}",
+      "intro": "The organizer of {eventName} sent you your ticket {code} again. The button below opens your tickets anytime.",
+      "cta": "Open my tickets"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Your ticket for {eventName} was cancelled",
+      "intro": "The organizer of {eventName} cancelled your ticket {code}. It no longer admits you. If you have questions, reply to the organizer."
+    },
     "seating.finder-code": {
       "subject": "{code} is your seat finder code for {eventName}",
       "intro": "Enter {code} on the seat finder to see your seat. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email.",

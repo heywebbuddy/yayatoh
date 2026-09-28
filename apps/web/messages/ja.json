@@ -413,7 +413,15 @@
     "showing": "{from}–{to}件（全{total}件）",
     "filtered": "絞り込み中",
     "previous": "前へ",
-    "next": "次へ"
+    "next": "次へ",
+    "anyTicketType": "すべてのチケット種別",
+    "checkIn": "チェックイン",
+    "anyCheckIn": "チェックイン状況を問わない",
+    "checkedIn": {
+      "today": "本日チェックイン済み",
+      "any": "チェックイン済み（日付を問わない）",
+      "never": "未チェックイン"
+    }
   },
   "attendeeStatus": {
     "paid": "支払い済み",
@@ -1034,7 +1042,10 @@
       "label": "ラベルの一括編集",
       "export": "参加者のエクスポート",
       "import": "ゲストリストのインポート",
-      "email": "ゲストへのメール"
+      "email": "ゲストへのメール",
+      "seats": "座席の割り当て",
+      "resend": "チケットの再送",
+      "cancel": "キャンセルされたチケット"
     },
     "status": {
       "queued": "開始を待っています…",
@@ -1052,10 +1063,42 @@
       "too_many_labels": "ラベルがすでに20件あります",
       "not_found": "このリストにもう含まれていません",
       "other": "予期しないエラー",
-      "not_attending": "リストに含まれていません"
+      "not_attending": "リストに含まれていません",
+      "not_enough_seats": "そこに空席がありません",
+      "seated_by_ticket": "チケットで既に席があります",
+      "attendee_cancelled": "参加を取りやめました",
+      "no_ticket": "チケットなし（ゲストリストのみ）",
+      "ticket_void": "チケットはすでにキャンセル済み"
     },
     "download": "CSVをダウンロード",
-    "undo": "取り消す"
+    "undo": "取り消す",
+    "assignSeats": "座席を割り当てる",
+    "resend": "チケットを再送",
+    "cancelTickets": "チケットをキャンセル（返金なし）",
+    "target": "座席の場所",
+    "targetBest": "空いている最適な席 — 空き {free}",
+    "targetSection": "セクション {section}",
+    "targetGroup": "グループ枠：{group} — 残り{unused, plural, other {#席}}",
+    "overrideRules": "アクセシブル席が必要（確保中の席を使う）",
+    "assignHint": "座席は配置図の順に割り当てられます。すでにそこに座っている人はそのままです。入りきらなかった人は後で一覧表示されます。10分間は元に戻せます。",
+    "resendHint": "チケットを持っている人全員に、チケットへのリンク付きのメールで再送します。",
+    "cancelHint": "チケットは入口で使えなくなり、席と枠は再び販売されます。返金はされません（返金は注文ごとに行ってください）。元に戻せません。",
+    "cancelReview": "キャンセル内容を確認…",
+    "confirmCancel": {
+      "title": "{count, plural, other {#人}}のチケットをキャンセルしますか？",
+      "body": "チケットはすぐに無効になり、本人にメールで通知されます。返金はなく、元に戻せません。",
+      "confirm": "{count, plural, other {#人}}のチケットをキャンセル",
+      "keep": "チケットを残す",
+      "none": "先に1人以上選んでください。"
+    },
+    "seatsDone": "{total}人中{count, plural, other {#人}}に席を割り当てました。",
+    "resendDone": "{count, plural, other {#枚のチケット}}を再送しました。",
+    "cancelDone": "{count, plural, other {#枚のチケット}}をキャンセルしました。",
+    "progress": "進捗：{total}件中{processed}件",
+    "warning": {
+      "ada_kept_back": "{count, plural, other {#人}}を確保中のアクセシブル席に割り当てました。",
+      "other": "{count, plural, other {#人}}の確認が必要です。"
+    }
   },
   "exportColumns": {
     "name": "名前",
@@ -1858,6 +1901,34 @@
       "save": "ルールを保存",
       "saved": "座席ルールを保存しました。",
       "fixErrors": "表示された項目を修正してください。"
+    },
+    "groups": {
+      "title": "グループ枠",
+      "description": "同じラベルを持つグループ（会社や家族など）のために席を確保します。メンバーをまとめて枠に割り当て、使われなかった席は販売に戻します。",
+      "empty": "まだ席を確保したグループはありません。",
+      "list": "席を確保したグループ",
+      "summary": "{where}に{seats, plural, other {#席}} · 着席 {seated} · 未使用 {unused}",
+      "seatMembers": "グループ「{label}」を着席させる",
+      "release": "「{label}」の未使用席を解放",
+      "released": "「{label}」の{count, plural, other {#席}}を販売に戻しました。",
+      "allocated": "{item}に「{label}」用の{count, plural, other {#席}}を確保しました。",
+      "form": {
+        "title": "グループの席を確保",
+        "label": "グループ（ラベル）",
+        "labelHint": "このラベルを持つ人がメンバーです。",
+        "item": "確保する場所",
+        "count": "席数",
+        "countHint": "空欄にすると、そこにある空席をすべて確保します。",
+        "submit": "席を確保"
+      },
+      "errors": {
+        "label": "グループのラベルを入力してください（40文字以内）。",
+        "itemId": "席を確保する場所を選んでください。",
+        "count": "席数は1〜2,000で入力するか、空欄にしてください。",
+        "notEnough": "{fits, plural, =0 {そこに空席はありません。} other {そこの空席は#席だけです。}}",
+        "forbidden": "グループは閲覧のみ可能で、変更はできません。",
+        "noMembers": "リストにラベル「{label}」を持つ人はまだいません。"
+      }
     }
   },
   "venueMap": {

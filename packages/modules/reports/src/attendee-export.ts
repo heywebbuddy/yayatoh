@@ -1,4 +1,4 @@
-import { AttendeeFilter, attendeesForExportTx, resolveAttendeeIdsTx } from '@yayatoh/attendees';
+import { attendeesForExportTx } from '@yayatoh/attendees';
 import { admittedTicketIdsTx } from '@yayatoh/checkin';
 import { csvRow } from '@yayatoh/csv';
 import { findEventTx } from '@yayatoh/events';
@@ -6,6 +6,7 @@ import { DomainError } from '@yayatoh/kernel';
 import { bulkCommands, defineBulkAction } from '@yayatoh/platform';
 import { ticketSummariesTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
+import { AttendeeListFilter, resolveAttendeeListIdsTx } from './attendee-list.ts';
 import { localStamp } from './format.ts';
 
 export const ATTENDEE_EXPORT_COLUMNS = [
@@ -37,20 +38,21 @@ const ExportParams = z.object({
 
 /**
  * The attendee list as CSV (an allowlist of columns), written chunk by chunk into the
- * operation's file. Registration times use the event's timezone.
+ * operation's file. Registration times use the event's timezone. "Everything matching" takes the
+ * list's full filter, ticket type and check-in included (M1.8f).
  */
 export const attendeeExportAction = defineBulkAction({
   key: 'reports.attendeesCsv',
   entitlement: 'attendees',
   permission: 'attendees:export',
   params: ExportParams,
-  filter: AttendeeFilter,
+  filter: AttendeeListFilter,
   chunkSize: 1_000,
   file: {
     contentType: 'text/csv; charset=utf-8',
     name: (_p, now) => `attendees-${now.toISOString().slice(0, 10)}.csv`,
   },
-  resolve: resolveAttendeeIdsTx,
+  resolve: resolveAttendeeListIdsTx,
   run: async (tx, _ctx, ids, params, meta) => {
     if (!meta.eventId) throw new DomainError('validation_failed', 'An event is required');
     const event = await findEventTx(tx, meta.eventId);

@@ -413,7 +413,15 @@
     "showing": "{from}–{to} de {total}",
     "filtered": "filtrado",
     "previous": "Anterior",
-    "next": "Próxima"
+    "next": "Próxima",
+    "anyTicketType": "Qualquer tipo de ingresso",
+    "checkIn": "Check-in",
+    "anyCheckIn": "Com ou sem check-in",
+    "checkedIn": {
+      "today": "Fizeram check-in hoje",
+      "any": "Fizeram check-in (qualquer dia)",
+      "never": "Sem check-in"
+    }
   },
   "attendeeStatus": {
     "paid": "Pago",
@@ -1034,7 +1042,10 @@
       "label": "Etiquetas em massa",
       "export": "Exportação de participantes",
       "import": "Importação da lista de convidados",
-      "email": "E-mail para convidados"
+      "email": "E-mail para convidados",
+      "seats": "Atribuição de lugares",
+      "resend": "Ingressos reenviados",
+      "cancel": "Ingressos cancelados"
     },
     "status": {
       "queued": "Aguardando início…",
@@ -1052,10 +1063,42 @@
       "too_many_labels": "já têm 20 etiquetas",
       "not_found": "não estão mais nesta lista",
       "other": "erro inesperado",
-      "not_attending": "não estão mais na lista"
+      "not_attending": "não estão mais na lista",
+      "not_enough_seats": "não há mais lugares livres ali",
+      "seated_by_ticket": "já têm lugar pelo ingresso",
+      "attendee_cancelled": "já não participam",
+      "no_ticket": "sem ingresso (só lista de convidados)",
+      "ticket_void": "ingresso já cancelado"
     },
     "download": "Baixar CSV",
-    "undo": "Desfazer"
+    "undo": "Desfazer",
+    "assignSeats": "Atribuir lugares",
+    "resend": "Reenviar ingressos",
+    "cancelTickets": "Cancelar ingressos (sem reembolso)",
+    "target": "Sentá-los em",
+    "targetBest": "Melhores lugares disponíveis — {free} livres",
+    "targetSection": "Setor {section}",
+    "targetGroup": "Bloco do grupo: {group} — {unused, plural, one {# lugar restante} other {# lugares restantes}}",
+    "overrideRules": "Precisam de lugares acessíveis (usar os reservados)",
+    "assignHint": "Os lugares são atribuídos pela ordem do mapa. Quem já está sentado ali mantém o lugar; quem não couber aparece depois. Pode desfazer durante 10 minutos.",
+    "resendHint": "Cada pessoa com ingresso recebe-o novamente por e-mail, com um link para os seus ingressos.",
+    "cancelHint": "Os ingressos deixam de funcionar à entrada e os lugares voltam a estar à venda. Nenhum dinheiro é reembolsado: reembolse os pedidos um a um. Não pode ser desfeito.",
+    "cancelReview": "Rever o cancelamento…",
+    "confirmCancel": {
+      "title": "Cancelar os ingressos de {count, plural, one {# pessoa} other {# pessoas}}?",
+      "body": "Os ingressos são anulados de imediato e as pessoas são avisadas por e-mail. Ninguém é reembolsado e não pode ser desfeito.",
+      "confirm": "Cancelar ingressos de {count, plural, one {# pessoa} other {# pessoas}}",
+      "keep": "Manter os ingressos",
+      "none": "Selecione primeiro pelo menos uma pessoa."
+    },
+    "seatsDone": "{count, plural, one {# pessoa sentada} other {# pessoas sentadas}} de {total}.",
+    "resendDone": "Reenviados: {count, plural, one {# ingresso} other {# ingressos}}.",
+    "cancelDone": "Cancelados: {count, plural, one {# ingresso} other {# ingressos}}.",
+    "progress": "Progresso: {processed} de {total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, one {# pessoa ficou} other {# pessoas ficaram}} em lugares acessíveis reservados.",
+      "other": "{count, plural, one {# pessoa precisa} other {# pessoas precisam}} de revisão."
+    }
   },
   "exportColumns": {
     "name": "Nome",
@@ -1858,6 +1901,34 @@
       "save": "Salvar regras",
       "saved": "Regras de lugares salvas.",
       "fixErrors": "Corrija o campo destacado."
+    },
+    "groups": {
+      "title": "Blocos de grupo",
+      "description": "Reserve lugares para um grupo: pessoas com a mesma etiqueta, como uma empresa ou uma família. Sente os membros no bloco de uma só vez e depois liberte os lugares que ninguém usou.",
+      "empty": "Ainda nenhum grupo tem lugares reservados.",
+      "list": "Grupos com lugares reservados",
+      "summary": "{seats, plural, one {# lugar} other {# lugares}} em {where} · {seated} ocupados · {unused} por usar",
+      "seatMembers": "Sentar o grupo {label}",
+      "release": "Libertar os lugares por usar de {label}",
+      "released": "{count, plural, one {# lugar} other {# lugares}} de {label} de novo à venda.",
+      "allocated": "Reservados {count, plural, one {# lugar} other {# lugares}} em {item} para {label}.",
+      "form": {
+        "title": "Reservar lugares para um grupo",
+        "label": "Grupo (etiqueta)",
+        "labelHint": "Todas as pessoas com esta etiqueta são membros.",
+        "item": "Reservar lugares em",
+        "count": "Número de lugares",
+        "countHint": "Deixe vazio para reservar todos os lugares livres ali.",
+        "submit": "Reservar lugares"
+      },
+      "errors": {
+        "label": "Escreva a etiqueta do grupo (até 40 caracteres).",
+        "itemId": "Escolha onde reservar os lugares.",
+        "count": "Escreva um número de lugares entre 1 e 2000, ou deixe vazio.",
+        "notEnough": "{fits, plural, =0 {Não há lugares livres ali.} one {Só # lugar está livre ali.} other {Só # lugares estão livres ali.}}",
+        "forbidden": "Pode ver os grupos, mas não alterá-los.",
+        "noMembers": "Ainda ninguém na lista tem a etiqueta {label}."
+      }
     }
   },
   "venueMap": {

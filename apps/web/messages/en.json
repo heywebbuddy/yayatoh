@@ -413,7 +413,15 @@
     "showing": "{from}–{to} of {total}",
     "filtered": "filtered",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "anyTicketType": "Any ticket type",
+    "checkIn": "Check-in",
+    "anyCheckIn": "Any check-in",
+    "checkedIn": {
+      "today": "Checked in today",
+      "any": "Checked in (any day)",
+      "never": "Not checked in"
+    }
   },
   "attendeeStatus": {
     "paid": "Paid",
@@ -1034,7 +1042,10 @@
       "label": "Bulk labels",
       "export": "Attendee export",
       "import": "Guest-list import",
-      "email": "Email to guests"
+      "email": "Email to guests",
+      "seats": "Seat assignment",
+      "resend": "Resent tickets",
+      "cancel": "Cancelled tickets"
     },
     "status": {
       "queued": "Waiting to start…",
@@ -1052,10 +1063,42 @@
       "too_many_labels": "they already have 20 labels",
       "not_found": "no longer in this list",
       "other": "unexpected error",
-      "not_attending": "no longer on the list"
+      "not_attending": "no longer on the list",
+      "not_enough_seats": "no free seat left there",
+      "seated_by_ticket": "already seated by their ticket",
+      "attendee_cancelled": "no longer attending",
+      "no_ticket": "no ticket (guest list only)",
+      "ticket_void": "ticket already cancelled"
     },
     "download": "Download CSV",
-    "undo": "Undo"
+    "undo": "Undo",
+    "assignSeats": "Assign seats",
+    "resend": "Resend tickets",
+    "cancelTickets": "Cancel tickets (no refund)",
+    "target": "Seat them in",
+    "targetBest": "Best available seats — {free} free",
+    "targetSection": "Section {section}",
+    "targetGroup": "Group block: {group} — {unused, plural, one {# seat left} other {# seats left}}",
+    "overrideRules": "They need accessible seats (use kept-back seats)",
+    "assignHint": "Seats are given in plan order. People already seated there keep their seat; anyone who doesn’t fit is listed afterwards. You can undo for 10 minutes.",
+    "resendHint": "Everyone with a ticket gets it again by email, with a link to their tickets.",
+    "cancelHint": "Their tickets stop working at the door, and their seats and places go back on sale. No money is refunded: refund orders one by one. This can’t be undone.",
+    "cancelReview": "Review cancellation…",
+    "confirmCancel": {
+      "title": "Cancel the tickets of {count, plural, one {# person} other {# people}}?",
+      "body": "Their tickets are voided at once and they are told by email. Nobody is refunded, and this can’t be undone.",
+      "confirm": "Cancel tickets for {count, plural, one {# person} other {# people}}",
+      "keep": "Keep the tickets",
+      "none": "Select at least one person first."
+    },
+    "seatsDone": "Seated {count, plural, one {# person} other {# people}} of {total}.",
+    "resendDone": "Sent {count, plural, one {# ticket} other {# tickets}} again.",
+    "cancelDone": "Cancelled {count, plural, one {# ticket} other {# tickets}}.",
+    "progress": "Progress: {processed} of {total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, one {# person was} other {# people were}} seated in accessible seats that are kept back.",
+      "other": "{count, plural, one {# person needs} other {# people need}} a second look."
+    }
   },
   "exportColumns": {
     "name": "Name",
@@ -1858,6 +1901,34 @@
       "save": "Save rules",
       "saved": "Seating rules saved.",
       "fixErrors": "Please fix the highlighted field."
+    },
+    "groups": {
+      "title": "Group blocks",
+      "description": "Keep seats for a group — people who share a label, like a company or a family. Seat its members into the block in one go, then give back the seats nobody used.",
+      "empty": "No group has seats kept yet.",
+      "list": "Groups with kept seats",
+      "summary": "{seats, plural, one {# seat} other {# seats}} at {where} · {seated} seated · {unused} unused",
+      "seatMembers": "Seat the {label} group",
+      "release": "Release unused seats of {label}",
+      "released": "{count, plural, one {# seat} other {# seats}} of {label} back on sale.",
+      "allocated": "Kept {count, plural, one {# seat} other {# seats}} at {item} for {label}.",
+      "form": {
+        "title": "Keep seats for a group",
+        "label": "Group (label)",
+        "labelHint": "Everyone with this label is a member.",
+        "item": "Keep seats at",
+        "count": "Number of seats",
+        "countHint": "Leave empty to keep every free seat there.",
+        "submit": "Keep seats"
+      },
+      "errors": {
+        "label": "Enter the group’s label (up to 40 characters).",
+        "itemId": "Choose where to keep the seats.",
+        "count": "Enter a number of seats from 1 to 2,000, or leave it empty.",
+        "notEnough": "{fits, plural, =0 {No seats are free there.} one {Only # seat is free there.} other {Only # seats are free there.}}",
+        "forbidden": "You can see the groups but not change them.",
+        "noMembers": "No one on the list has the label {label} yet."
+      }
     }
   },
   "venueMap": {

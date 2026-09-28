@@ -45,6 +45,15 @@
       "intro": "这是您请求的链接，可打开您的 {eventName} 门票。",
       "cta": "打开我的门票"
     },
+    "ticketing.tickets-resent": {
+      "subject": "您的 {eventName} 门票",
+      "intro": "{eventName} 的主办方重新向您发送了门票 {code}。点击下方按钮可随时打开您的门票。",
+      "cta": "打开我的门票"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "您的 {eventName} 门票已取消",
+      "intro": "{eventName} 的主办方已取消您的门票 {code}，该门票已无法入场。如有疑问，请回复主办方。"
+    },
     "seating.finder-code": {
       "subject": "{code} 是您在 {eventName} 的座位查询码",
       "intro": "在座位查询中输入 {code} 即可查看您的座位。此代码仅可使用一次，{minutes} 分钟后失效。如果这不是您本人的请求，请忽略此邮件。",

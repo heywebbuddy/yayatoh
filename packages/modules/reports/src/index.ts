@@ -1,5 +1,14 @@
 export { ATTENDEE_EXPORT_COLUMNS, attendeeExportAction, attendeeExportBulk } from './attendee-export.ts';
 export {
+  AttendeeListFilter,
+  attendeeListExtensionTx,
+  attendeeListQuery,
+  CHECKED_IN_FILTERS,
+  type CheckedInFilter,
+  matchingAttendeeIdsQuery,
+  resolveAttendeeListIdsTx,
+} from './attendee-list.ts';
+export {
   BOOKING_EXPORT_COLUMNS,
   bookingsExportAction,
   bookingsExportBulk,

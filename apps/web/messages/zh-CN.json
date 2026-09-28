@@ -413,7 +413,15 @@
     "showing": "第 {from}–{to} 条，共 {total} 条",
     "filtered": "已筛选",
     "previous": "上一页",
-    "next": "下一页"
+    "next": "下一页",
+    "anyTicketType": "任意门票类型",
+    "checkIn": "签到",
+    "anyCheckIn": "不限签到状态",
+    "checkedIn": {
+      "today": "今天已签到",
+      "any": "已签到（任意一天）",
+      "never": "未签到"
+    }
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -1034,7 +1042,10 @@
       "label": "批量标签",
       "export": "参会者导出",
       "import": "宾客名单导入",
-      "email": "发送给宾客的邮件"
+      "email": "发送给宾客的邮件",
+      "seats": "座位分配",
+      "resend": "重新发送的门票",
+      "cancel": "已取消的门票"
     },
     "status": {
       "queued": "等待开始…",
@@ -1052,10 +1063,42 @@
       "too_many_labels": "已有 20 个标签",
       "not_found": "已不在此列表中",
       "other": "意外错误",
-      "not_attending": "已不在名单中"
+      "not_attending": "已不在名单中",
+      "not_enough_seats": "那里已无空位",
+      "seated_by_ticket": "已凭门票有座位",
+      "attendee_cancelled": "已不再参加",
+      "no_ticket": "无门票（仅在宾客名单中）",
+      "ticket_void": "门票已取消"
     },
     "download": "下载 CSV",
-    "undo": "撤销"
+    "undo": "撤销",
+    "assignSeats": "分配座位",
+    "resend": "重新发送门票",
+    "cancelTickets": "取消门票（不退款）",
+    "target": "安排在",
+    "targetBest": "最佳空余座位 — 空余 {free}",
+    "targetSection": "区域 {section}",
+    "targetGroup": "团体座位区：{group} — 剩余{unused, plural, other {# 个座位}}",
+    "overrideRules": "他们需要无障碍座位（使用预留座位）",
+    "assignHint": "座位按平面图顺序分配。已经坐在那里的人保留座位；坐不下的人会在之后列出。10 分钟内可以撤销。",
+    "resendHint": "每位持票人都会再次通过邮件收到门票及其门票链接。",
+    "cancelHint": "他们的门票将无法入场，座位和名额重新开放销售。不会退款：请逐个订单退款。此操作无法撤销。",
+    "cancelReview": "检查取消内容…",
+    "confirmCancel": {
+      "title": "取消 {count, plural, other {# 人}}的门票？",
+      "body": "他们的门票会立即作废，并通过邮件通知本人。不会退款，且无法撤销。",
+      "confirm": "取消 {count, plural, other {# 人}}的门票",
+      "keep": "保留门票",
+      "none": "请先至少选择一人。"
+    },
+    "seatsDone": "已为 {total} 人中的{count, plural, other {# 人}}安排座位。",
+    "resendDone": "已重新发送{count, plural, other {# 张门票}}。",
+    "cancelDone": "已取消{count, plural, other {# 张门票}}。",
+    "progress": "进度：{processed}/{total}",
+    "warning": {
+      "ada_kept_back": "{count, plural, other {# 人}}被安排在预留的无障碍座位上。",
+      "other": "{count, plural, other {# 人}}需要再检查一下。"
+    }
   },
   "exportColumns": {
     "name": "姓名",
@@ -1858,6 +1901,34 @@
       "save": "保存规则",
       "saved": "座位规则已保存。",
       "fixErrors": "请修改标出的字段。"
+    },
+    "groups": {
+      "title": "团体座位区",
+      "description": "为团体（带相同标签的人，如同一公司或家庭）预留座位。一次性把成员安排进座位区，再释放无人使用的座位。",
+      "empty": "还没有团体预留座位。",
+      "list": "有预留座位的团体",
+      "summary": "{where}共{seats, plural, other {# 个座位}} · 已坐 {seated} · 未用 {unused}",
+      "seatMembers": "为 {label} 团体安排座位",
+      "release": "释放 {label} 的未用座位",
+      "released": "{label} 的{count, plural, other {# 个座位}}已重新开放销售。",
+      "allocated": "已在{item}为 {label} 预留{count, plural, other {# 个座位}}。",
+      "form": {
+        "title": "为团体预留座位",
+        "label": "团体（标签）",
+        "labelHint": "带此标签的人都是成员。",
+        "item": "预留位置",
+        "count": "座位数",
+        "countHint": "留空则预留那里的所有空位。",
+        "submit": "预留座位"
+      },
+      "errors": {
+        "label": "请输入团体标签（最多 40 个字符）。",
+        "itemId": "请选择预留座位的位置。",
+        "count": "请输入 1 到 2000 之间的座位数，或留空。",
+        "notEnough": "{fits, plural, =0 {那里没有空位。} other {那里只有 # 个空位。}}",
+        "forbidden": "你可以查看团体，但不能更改。",
+        "noMembers": "名单中还没有人带有标签 {label}。"
+      }
     }
   },
   "venueMap": {

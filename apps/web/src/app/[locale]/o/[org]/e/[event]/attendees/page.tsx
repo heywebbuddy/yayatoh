@@ -7,13 +7,30 @@ import {
   attendeeLabelBulk,
   attendeeLabelsQuery,
   getAttendeeQuery,
-  listAttendeesQuery,
 } from '@yayatoh/attendees';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
+import { ticketCancelBulk } from '@yayatoh/orders';
 import { type BulkOperationDto, isProfileKey, term } from '@yayatoh/platform';
-import { attendeeExportBulk, contactTimelineQuery } from '@yayatoh/reports';
+import {
+  attendeeExportBulk,
+  attendeeListQuery,
+  CHECKED_IN_FILTERS,
+  contactTimelineQuery,
+} from '@yayatoh/reports';
+import {
+  activeAdaRule,
+  eventSeatingQuery,
+  seatAssignBulk,
+  seatGroupsQuery,
+  seatingRulesQuery,
+} from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
-import { listClaimLinksQuery, ticketSummariesQuery } from '@yayatoh/ticketing';
+import {
+  listClaimLinksQuery,
+  listTicketTypesQuery,
+  ticketResendBulk,
+  ticketSummariesQuery,
+} from '@yayatoh/ticketing';
 import {
   Avatar,
   Button,
@@ -29,7 +46,7 @@ import {
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
-import { BulkFields } from '@/components/bulk-fields.tsx';
+import { BulkFields, type SeatTarget } from '@/components/bulk-fields.tsx';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { GuestForm } from '@/components/guest-form.tsx';
 import { LabelForm } from '@/components/label-form.tsx';
@@ -57,6 +74,19 @@ const PAGE_SIZE = 50;
 const asArray = (v: string | string[] | undefined) => (v === undefined ? [] : Array.isArray(v) ? v : [v]);
 const oneOf = <T extends string>(list: readonly T[], v: unknown): T | undefined =>
   list.includes(v as T) ? (v as T) : undefined;
+
+/** Per-item failure and warning codes the progress panel explains (others read "unexpected error"). */
+const KNOWN_CODES = new Set([
+  'too_many_labels',
+  'not_found',
+  'not_attending',
+  'not_enough_seats',
+  'seated_by_ticket',
+  'attendee_cancelled',
+  'no_ticket',
+  'ticket_void',
+]);
+const OP_KINDS: readonly BulkKind[] = ['export', 'label', 'import', 'email', 'seats', 'resend', 'cancel'];
 
 const STATUS_DOT: Record<AttendeeStatus, 'success' | 'warning' | 'danger'> = {
   paid: 'success',
@@ -98,6 +128,8 @@ export default async function AttendeesPage({
     label?: string | string[];
     source?: string;
     status?: string;
+    type?: string;
+    checkin?: string;
     page?: string;
     op?: string;
     opk?: string;
@@ -111,6 +143,8 @@ export default async function AttendeesPage({
   const labels = asArray(sp.label).slice(0, 20);
   const source = oneOf(ATTENDEE_SOURCES, sp.source);
   const status = oneOf(ATTENDEE_STATUSES, sp.status);
+  const ticketTypeId = sp.type && /^[0-9a-f-]{36}$/.test(sp.type) ? sp.type : undefined;
+  const checkedIn = oneOf(CHECKED_IN_FILTERS, sp.checkin);
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
   const { data, event: real } = await loadEvent(org, event);
@@ -119,7 +153,7 @@ export default async function AttendeesPage({
   const needle = q.trim().toLowerCase();
   // Real attendees (created at ticket issue) win; seeded showcase events without any keep a demo list.
   const list = (extra: Record<string, unknown>) =>
-    executeQuery(listAttendeesQuery, { eventId: real.id, ...extra }, data.ctx, ports);
+    executeQuery(attendeeListQuery, { eventId: real.id, ...extra }, data.ctx, ports);
   const overall = roleCan(data.role, 'attendees:read') ? await list({ limit: 1 }) : { items: [], total: 0 };
   const hasReal = overall.total > 0;
   const live = hasReal
@@ -128,6 +162,8 @@ export default async function AttendeesPage({
         labels,
         source,
         status,
+        ticketTypeIds: ticketTypeId ? [ticketTypeId] : [],
+        checkedIn,
         limit: PAGE_SIZE,
         offset: (page - 1) * PAGE_SIZE,
       })
@@ -137,34 +173,76 @@ export default async function AttendeesPage({
     : [];
   const canWrite = roleCan(data.role, 'attendees:write');
   const canExport = roleCan(data.role, 'attendees:export');
-  const canBulk = hasReal && (canWrite || canExport);
+  const ticketing = data.modules.has('ticketing');
+  const canResend = canWrite && ticketing;
+  const canCancel = roleCan(data.role, 'orders:refund') && ticketing;
+  const canSeat = roleCan(data.role, 'events:write') && data.modules.has('seating');
+  const canBulk = hasReal && (canWrite || canExport || canCancel || canSeat);
+  const ticketTypes =
+    hasReal && ticketing
+      ? await executeQuery(listTicketTypesQuery, { eventId: real.id }, data.ctx, ports)
+      : [];
+  // Where "Assign seats" can seat people: the whole plan, each section, table and row, each group block.
+  let seatTargets: SeatTarget[] | null = null;
+  let adaEnforced = false;
+  if (hasReal && canSeat) {
+    const seating = await executeQuery(eventSeatingQuery, { eventId: real.id }, data.ctx, ports);
+    if (seating) {
+      const ts = await getTranslations('seating');
+      const available = new Set(seating.seats.filter((x) => x.state === 'available').map((x) => x.seatUuid));
+      const groups = await executeQuery(seatGroupsQuery, { eventId: real.id }, data.ctx, ports);
+      const rules = await executeQuery(seatingRulesQuery, { eventId: real.id }, data.ctx, ports);
+      adaEnforced = activeAdaRule(rules, real.startsAt, data.ctx.now)?.severity === 'enforce';
+      const items = seating.doc.items.flatMap((i) => (i.kind === 'object' ? [] : [i]));
+      seatTargets = [
+        { value: 'best', label: t('bulk.targetBest', { free: available.size }) },
+        ...seating.doc.sections.map((sec) => ({
+          value: `section:${sec.id}`,
+          label: t('bulk.targetSection', { section: sec.label }),
+        })),
+        ...items.map((i) => ({
+          value: `item:${i.id}`,
+          label: ts('assign.form.option', {
+            item: ts(`prices.item.${i.kind}`, { label: i.label }),
+            free: i.seats.filter((x) => available.has(x.id)).length,
+            capacity: i.seats.length,
+          }),
+        })),
+        ...groups.map((g) => ({
+          value: `group:${g.label}`,
+          label: t('bulk.targetGroup', { group: g.label, unused: g.unused }),
+        })),
+      ];
+    }
+  }
   // The bulk operation the page was sent back to (progress, failures, undo, download).
-  const opKind: BulkKind | null =
-    sp.opk === 'export' || sp.opk === 'label' || sp.opk === 'import' || sp.opk === 'email' ? sp.opk : null;
+  const opKind: BulkKind | null = oneOf(OP_KINDS, sp.opk) ?? null;
   let op: BulkOperationDto | null = null;
   if (opKind && sp.op && /^[0-9a-f-]{36}$/.test(sp.op)) {
-    const q =
-      opKind === 'export'
-        ? attendeeExportBulk.status
-        : opKind === 'import'
-          ? attendeeImportBulk.status
-          : opKind === 'email'
-            ? attendeeEmailBulk.status
-            : attendeeLabelBulk.status;
+    const q = {
+      export: attendeeExportBulk.status,
+      import: attendeeImportBulk.status,
+      email: attendeeEmailBulk.status,
+      label: attendeeLabelBulk.status,
+      seats: seatAssignBulk.status,
+      resend: ticketResendBulk.status,
+      cancel: ticketCancelBulk.status,
+    }[opKind];
     op = await executeQuery(q, { operationId: sp.op }, data.ctx, ports).catch((err) => {
       if (isDomainError(err) && (err.code === 'not_found' || err.code === 'forbidden')) return null;
       throw err;
     });
   }
   const opActive = op ? ['queued', 'running', 'undoing'].includes(op.status) : false;
-  const failureCodes = op
-    ? Object.entries(
-        op.failures.reduce<Record<string, number>>((acc, f) => {
-          acc[f.code] = (acc[f.code] ?? 0) + 1;
-          return acc;
-        }, {}),
-      )
-    : [];
+  const tally = (items: readonly { code: string }[]) =>
+    Object.entries(
+      items.reduce<Record<string, number>>((acc, f) => {
+        acc[f.code] = (acc[f.code] ?? 0) + 1;
+        return acc;
+      }, {}),
+    );
+  const failureCodes = op ? tally(op.failures) : [];
+  const warningCodes = op ? tally(op.warnings) : [];
   const liveById = new Map<string, AttendeeDto>(live.items.map((x) => [x.id, x]));
   // The profile panel opens from search results too, so it can't rely on the current page.
   if (hasReal && selectedId && !liveById.has(selectedId) && /^[0-9a-f-]{36}$/.test(selectedId)) {
@@ -226,6 +304,8 @@ export default async function AttendeesPage({
       label: labels,
       source,
       status,
+      type: ticketTypeId,
+      checkin: checkedIn,
       page: page > 1 ? String(page) : undefined,
       ...p,
     };
@@ -254,7 +334,7 @@ export default async function AttendeesPage({
       ? await executeQuery(contactTimelineQuery, { attendeeId: selectedRecord.id }, data.ctx, ports)
       : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
-  const filtered = Boolean(needle || labels.length || source || status);
+  const filtered = Boolean(needle || labels.length || source || status || ticketTypeId || checkedIn);
   const from = live.total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const to = Math.min(live.total, page * PAGE_SIZE);
 
@@ -370,6 +450,42 @@ export default async function AttendeesPage({
                     </option>
                   ))}
                 </select>
+                {ticketing ? (
+                  <>
+                    <label htmlFor="attendee-type" className="sr-only">
+                      {t('attendees.ticketType')}
+                    </label>
+                    <select
+                      id="attendee-type"
+                      name="type"
+                      defaultValue={ticketTypeId ?? ''}
+                      className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                    >
+                      <option value="">{t('attendees.anyTicketType')}</option>
+                      {ticketTypes.map((x) => (
+                        <option key={x.id} value={x.id}>
+                          {x.name}
+                        </option>
+                      ))}
+                    </select>
+                    <label htmlFor="attendee-checkin" className="sr-only">
+                      {t('attendees.checkIn')}
+                    </label>
+                    <select
+                      id="attendee-checkin"
+                      name="checkin"
+                      defaultValue={checkedIn ?? ''}
+                      className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                    >
+                      <option value="">{t('attendees.anyCheckIn')}</option>
+                      {CHECKED_IN_FILTERS.map((x) => (
+                        <option key={x} value={x}>
+                          {t(`attendees.checkedIn.${x}`)}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : null}
               </>
             ) : null}
             <button type="submit" className={buttonClass('secondary')}>
@@ -415,6 +531,15 @@ export default async function AttendeesPage({
             <h2 id="bulk-status-heading" className="text-section">
               {t(`bulk.title.${opKind}`)}
             </h2>
+            <progress
+              value={op.status === 'undone' ? op.total : op.processed}
+              max={Math.max(1, op.total)}
+              aria-label={t('bulk.progress', {
+                processed: formatNumber(op.processed, locale),
+                total: formatNumber(op.total, locale),
+              })}
+              className="h-2 w-full accent-ink"
+            />
             <p className="text-body" role="status">
               {opKind === 'export' && op.status === 'done'
                 ? t('bulk.exportDone', { succeeded: formatNumber(op.succeeded, locale) })
@@ -422,13 +547,16 @@ export default async function AttendeesPage({
                   ? t('bulk.emailDone', { succeeded: formatNumber(op.succeeded, locale) })
                   : opKind === 'import' && op.status === 'done'
                     ? t('bulk.importDone', { succeeded: formatNumber(op.succeeded, locale) })
-                    : t(`bulk.status.${op.status}`, {
-                        processed: formatNumber(op.processed, locale),
-                        total: formatNumber(op.total, locale),
-                        succeeded: formatNumber(op.succeeded, locale),
-                        failed: formatNumber(op.failed, locale),
-                        undone: formatNumber(op.undone, locale),
-                      })}
+                    : (opKind === 'seats' || opKind === 'resend' || opKind === 'cancel') &&
+                        op.status === 'done'
+                      ? t(`bulk.${opKind}Done`, { count: op.succeeded, total: op.total })
+                      : t(`bulk.status.${op.status}`, {
+                          processed: formatNumber(op.processed, locale),
+                          total: formatNumber(op.total, locale),
+                          succeeded: formatNumber(op.succeeded, locale),
+                          failed: formatNumber(op.failed, locale),
+                          undone: formatNumber(op.undone, locale),
+                        })}
             </p>
             {failureCodes.length ? (
               <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
@@ -436,10 +564,17 @@ export default async function AttendeesPage({
                   <li key={code}>
                     {t('bulk.failure', {
                       count: n,
-                      reason: t(
-                        `bulk.code.${code === 'too_many_labels' || code === 'not_found' ? code : 'other'}`,
-                      ),
+                      reason: t(`bulk.code.${KNOWN_CODES.has(code) ? code : 'other'}`),
                     })}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            {warningCodes.length ? (
+              <ul className="flex list-none flex-col gap-1 p-0 text-caption text-zinc-700">
+                {warningCodes.map(([code, n]) => (
+                  <li key={code}>
+                    {t(`bulk.warning.${code === 'ada_kept_back' ? code : 'other'}`, { count: n })}
                   </li>
                 ))}
               </ul>
@@ -454,7 +589,7 @@ export default async function AttendeesPage({
                   {t('bulk.download')}
                 </a>
               ) : null}
-              {opKind !== 'export' && op.undoUntil && canWrite ? (
+              {opKind !== 'export' && op.undoUntil && (opKind === 'seats' ? canSeat : canWrite) ? (
                 <form action={undoBulkAction.bind(null, org, event, opKind, op.id)}>
                   <Button type="submit" variant="secondary" size="sm">
                     {t('bulk.undo')}
@@ -485,6 +620,8 @@ export default async function AttendeesPage({
             ))}
             <input type="hidden" name="f_source" value={source ?? ''} />
             <input type="hidden" name="f_status" value={status ?? ''} />
+            <input type="hidden" name="f_type" value={ticketTypeId ?? ''} />
+            <input type="hidden" name="f_checkin" value={checkedIn ?? ''} />
             <fieldset className="flex flex-wrap items-center gap-x-4 gap-y-1">
               <legend className="sr-only">{t('bulk.applyTo')}</legend>
               <label className="flex min-h-6 items-center gap-2 text-body">
@@ -505,11 +642,14 @@ export default async function AttendeesPage({
             <BulkFields
               canWrite={canWrite}
               canExport={canExport}
+              canSeat={canSeat}
+              canResend={canResend}
+              canCancel={canCancel}
               labelSuggestions={labelCounts.map((l) => l.label)}
+              seatTargets={seatTargets}
+              adaEnforced={adaEnforced}
+              matching={live.total}
             />
-            <Button type="submit" variant="secondary">
-              {t('bulk.apply')}
-            </Button>
           </StepUpForm>
         ) : null}
 

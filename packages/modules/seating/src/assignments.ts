@@ -279,7 +279,7 @@ export const assignSeatsCommand = tenantCommand({
               eventSeats.seatUuid,
               wanted.map((w) => w.seatUuid),
             ),
-            sql`(${eventSeats.status} = 'available' or (${eventSeats.status} = 'blocked' and ${eventSeats.blockReason} in ('channel', 'ada')))`,
+            sql`(${eventSeats.status} = 'available' or (${eventSeats.status} = 'blocked' and ${eventSeats.blockReason} in ('channel', 'ada', 'group')))`,
           ),
         )
         .returning({ seatUuid: eventSeats.seatUuid });

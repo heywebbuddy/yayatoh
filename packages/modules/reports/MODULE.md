@@ -13,3 +13,4 @@ framework.
 - Every number a report, dashboard or export shows comes from the metric registry (`src/metrics/registry.ts`): one definition per key, each value stamped with `asOf`. Money is per currency and never summed across currencies.
 - Reports read other modules only through their exported read functions (`*FactsTx`, `salesBy*Tx`, …) inside the caller's tenant transaction; they never import another module's schema.
 - Finance figures (platform fees, disputes, net revenue) need `finance:read`; sales and counts need `orders:read`.
+- **Attendee list (M1.8f):** `reports.attendeeList` adds ticket-type and check-in (today in the event's time zone / any day / never) filters to the attendees module's own, as subqueries from ticketing and check-in. Exports and "everything matching" selections (`reports.matchingAttendeeIds`) use the same filter.

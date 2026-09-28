@@ -2,7 +2,7 @@ import { KeysetAfter } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, or, type SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { AttendeeDto, attendeeSerializer } from './dto.ts';
 import { ATTENDEE_SOURCES, ATTENDEE_STATUSES, attendees } from './schema.ts';
@@ -125,6 +125,16 @@ export async function attendeesByIdsTx(tx: TenantTx, ids: readonly string[]) {
 
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
+/**
+ * Name or email contains the text (ILIKE, wildcards literal). The match runs in
+ * `attendees.search_ids` (migration 0051): under row-level security the planner can't use the
+ * trigram indexes for ILIKE, so that function applies the same ILIKE to the caller's own org and
+ * returns ids; the rest of the query stays under RLS. Same rows as a plain ILIKE, served by the
+ * indexes (M1.8f).
+ */
+const nameOrEmailContains = (text: string) =>
+  sql`${attendees.id} in (select attendees.search_ids(${`%${escapeLike(text)}%`}))`;
+
 /** Labels are short free text: trimmed, inner whitespace collapsed, 1–40 characters. */
 export const Label = z
   .string()
@@ -157,49 +167,77 @@ export const AttendeeFilter = z.object({
 });
 export type AttendeeFilter = z.input<typeof AttendeeFilter>;
 
-export function filterWhere(eventId: string, f: z.output<typeof AttendeeFilter>) {
-  const q = f.search ? `%${escapeLike(f.search)}%` : null;
+/**
+ * Filters on data higher tiers own (ticket type, check-in, M1.8f), as ticket-id subqueries those
+ * modules build over their own tables: attendees whose ticket is in each `ticketIn` subquery, and
+ * in none of the `ticketNotIn` ones (people without a ticket count as "not in").
+ */
+export interface TicketFilterExtension {
+  readonly ticketIn?: readonly SQL[];
+  readonly ticketNotIn?: readonly SQL[];
+}
+
+export function filterWhere(
+  eventId: string,
+  f: z.output<typeof AttendeeFilter>,
+  ext: TicketFilterExtension = {},
+) {
   return and(
     eq(attendees.eventId, eventId),
-    q ? or(ilike(attendees.name, q), ilike(attendees.email, q)) : undefined,
+    f.search ? nameOrEmailContains(f.search) : undefined,
     f.labels.length ? sql`${attendees.labels} && ${textArray(f.labels)}` : undefined,
     f.source ? eq(attendees.source, f.source) : undefined,
     f.status ? eq(attendees.status, f.status) : undefined,
+    ...(ext.ticketIn ?? []).map((sub) => sql`${attendees.ticketId} in (${sub})`),
+    ...(ext.ticketNotIn ?? []).map(
+      (sub) => sql`(${attendees.ticketId} is null or ${attendees.ticketId} not in (${sub}))`,
+    ),
   );
+}
+
+export const ListAttendeesInput = AttendeeFilter.extend({
+  eventId: z.uuid(),
+  limit: z.int().min(1).max(500).default(200),
+  offset: z.int().min(0).max(1_000_000).default(0),
+  /** Keyset position (newest first) for /v1 cursors; used instead of `offset`. */
+  after: KeysetAfter.optional(),
+});
+
+export const AttendeeListDto = z.object({ items: z.array(AttendeeDto), total: z.int() });
+
+/** One page of an event's attendees, newest first, with the filtered total. */
+export async function listAttendeesTx(
+  tx: TenantTx,
+  input: z.output<typeof ListAttendeesInput>,
+  ext: TicketFilterExtension = {},
+): Promise<z.output<typeof AttendeeListDto>> {
+  const where = filterWhere(input.eventId, input, ext);
+  const createdMs = sql`date_trunc('milliseconds', ${attendees.createdAt})`;
+  const rows = await tx
+    .select()
+    .from(attendees)
+    .where(
+      input.after
+        ? and(
+            where,
+            sql`(${createdMs}, ${attendees.id}) < (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`,
+          )
+        : where,
+    )
+    .orderBy(desc(createdMs), desc(attendees.id))
+    .limit(input.limit)
+    .offset(input.offset);
+  const [count] = await tx.select({ n: sql<number>`count(*)::int` }).from(attendees).where(where);
+  return { items: rows.map((r) => attendeeSerializer.serialize(r)), total: count?.n ?? 0 };
 }
 
 export const listAttendeesQuery = tenantQuery({
   name: 'attendees.listAttendees',
-  input: AttendeeFilter.extend({
-    eventId: z.uuid(),
-    limit: z.int().min(1).max(500).default(200),
-    offset: z.int().min(0).max(1_000_000).default(0),
-    /** Keyset position (newest first) for /v1 cursors; used instead of `offset`. */
-    after: KeysetAfter.optional(),
-  }),
-  output: z.object({ items: z.array(AttendeeDto), total: z.int() }),
+  input: ListAttendeesInput,
+  output: AttendeeListDto,
   entitlement: 'attendees',
   permission: 'attendees:read',
-  handler: async ({ input, tx }) => {
-    const where = filterWhere(input.eventId, input);
-    const createdMs = sql`date_trunc('milliseconds', ${attendees.createdAt})`;
-    const rows = await tx
-      .select()
-      .from(attendees)
-      .where(
-        input.after
-          ? and(
-              where,
-              sql`(${createdMs}, ${attendees.id}) < (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`,
-            )
-          : where,
-      )
-      .orderBy(desc(createdMs), desc(attendees.id))
-      .limit(input.limit)
-      .offset(input.offset);
-    const [count] = await tx.select({ n: sql<number>`count(*)::int` }).from(attendees).where(where);
-    return { items: rows.map((r) => attendeeSerializer.serialize(r)), total: count?.n ?? 0 };
-  },
+  handler: ({ input, tx }) => listAttendeesTx(tx, input),
 });
 
 export const getAttendeeQuery = tenantQuery({
@@ -308,7 +346,6 @@ export const searchAttendeesQuery = tenantQuery({
   entitlement: 'attendees',
   permission: 'attendees:read',
   handler: async ({ input, tx }) => {
-    const q = `%${escapeLike(input.q)}%`;
     const rows = await tx
       .select({
         id: attendees.id,
@@ -320,8 +357,7 @@ export const searchAttendeesQuery = tenantQuery({
       .from(attendees)
       .where(
         or(
-          ilike(attendees.name, q),
-          ilike(attendees.email, q),
+          nameOrEmailContains(input.q),
           input.ticketIds.length ? inArray(attendees.ticketId, input.ticketIds) : undefined,
         ),
       )

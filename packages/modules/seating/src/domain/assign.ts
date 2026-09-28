@@ -5,16 +5,16 @@ export const ASSIGN_SEAT_STATES = ['free', 'reserved', 'blocked', 'held', 'sold'
 export type AssignSeatState = (typeof ASSIGN_SEAT_STATES)[number];
 
 /**
- * A seat's state for assignment: `free` (available), `reserved` (blocked for a channel or
- * accessibility — an organizer may still seat someone there by choosing it), `blocked` (killed),
- * `held` / `sold` (a buyer's), `assigned` (a guest's).
+ * A seat's state for assignment: `free` (available), `reserved` (blocked for a channel,
+ * accessibility or a group — an organizer may still seat someone there by choosing it), `blocked`
+ * (killed), `held` / `sold` (a buyer's), `assigned` (a guest's).
  */
 export function assignSeatState(status: SeatStatus, blockReason: string | null): AssignSeatState {
   if (status === 'available') return 'free';
   if (status === 'blocked')
     return blockReason === 'assigned'
       ? 'assigned'
-      : blockReason === 'channel' || blockReason === 'ada'
+      : blockReason === 'channel' || blockReason === 'ada' || blockReason === 'group'
         ? 'reserved'
         : 'blocked';
   return status;

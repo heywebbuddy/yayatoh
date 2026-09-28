@@ -7,6 +7,7 @@ export {
   seatAssignmentsQuery,
   unassignSeatsCommand,
 } from './assignments.ts';
+export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
 export {
   ASSIGN_SEAT_STATES,
@@ -14,6 +15,16 @@ export {
   assignSeatState,
   pickSeats,
 } from './domain/assign.ts';
+export {
+  BULK_ASSIGN_FAILURES,
+  BULK_ASSIGN_WARNINGS,
+  BULK_TARGET_KINDS,
+  type BulkAssignFailure,
+  type BulkAssignUndo,
+  type BulkTargetKind,
+  planChunk,
+  planUndo,
+} from './domain/bulk-assign.ts';
 export {
   availabilityLists,
   coalesceAvailability,
@@ -41,6 +52,13 @@ export {
   type SeatEvent,
   type SeatStatus,
 } from './domain/seat-state.ts';
+export {
+  allocateGroupSeatsCommand,
+  MAX_GROUP_SEATS,
+  releaseGroupSeatsCommand,
+  SeatGroupDto,
+  seatGroupsQuery,
+} from './groups.ts';
 export {
   extendSeatHoldTx,
   heldSeatsTx,
@@ -94,6 +112,7 @@ export {
   BLOCK_REASONS,
   EVENT_LAYOUT_STATUSES,
   FINDER_MODES,
+  MAX_GROUP_LABEL,
   RULE_SEVERITIES,
   SEAT_BLOCK_REASONS,
   SEATING_RULE_KINDS,

@@ -179,6 +179,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'media.removeMedia',
         'media.removeLogo',
         'program.deleteSession',
+        // Bulk "cancel tickets" voids tickets for good (M1.8f).
+        'orders.startCancelTickets',
       ]),
     );
   });

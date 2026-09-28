@@ -1,4 +1,14 @@
 export {
+  attendeeTicketsTx,
+  BULK_TICKET_FAILURES,
+  ticketCancelledMailer,
+  ticketIdsOfTypesSql,
+  ticketResendAction,
+  ticketResendBulk,
+  ticketResendMailer,
+  ticketsByIdsTx,
+} from './bulk.ts';
+export {
   archiveTicketTypeCommand,
   createTicketTypeCommand,
   eventPriceRangeTx,
@@ -18,6 +28,7 @@ export {
   HolderTicketsDto,
   holderContext,
   holderTicketsQuery,
+  issueHolderLinkTx,
   listClaimLinksQuery,
   PublicClaimDto,
   requestHolderLinkCommand,

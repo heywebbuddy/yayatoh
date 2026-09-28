@@ -11,7 +11,7 @@ import {
   ticketForLegacyCodeTx,
   ticketForScanTx,
 } from '@yayatoh/ticketing';
-import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNull, type SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   checkInvalidBurstTx,
@@ -414,4 +414,16 @@ export async function scanLogForTicketsTx(tx: TenantTx, ticketIds: readonly stri
     .where(inArray(scans.ticketId, [...ticketIds]))
     .orderBy(scans.scannedAt)
     .limit(limit);
+}
+
+/**
+ * The tickets admitted at this event (live admissions; on one event-timezone day when `day` is
+ * given), as a subquery for attendee filters (M1.8f: checked in today / ever / never).
+ */
+export function admittedTicketIdsSql(eventId: string, day?: string): SQL {
+  return sql`select ${admissions.ticketId} from ${admissions} where ${and(
+    eq(admissions.eventId, eventId),
+    isNull(admissions.undoneAt),
+    day ? eq(admissions.day, day) : undefined,
+  )}`;
 }

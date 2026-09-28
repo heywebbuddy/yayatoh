@@ -40,6 +40,10 @@ export const attendees = tenantTable(
     index('attendees_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
     index('attendees_org_contact_idx').on(t.orgId, t.contactId),
     uniqueIndex('attendees_org_ticket_key').on(t.orgId, t.ticketId).where(sql`ticket_id is not null`),
+    // Search (M1.8f): trigram indexes serve the `ILIKE '%…%'` name/email search unchanged
+    // (pg_trgm lives in the `extensions` schema; the migration qualifies the operator class).
+    index('attendees_name_trgm_idx').using('gin', t.name.op('gin_trgm_ops')),
+    index('attendees_email_trgm_idx').using('gin', t.email.op('gin_trgm_ops')),
     check('attendees_source_check', sql`source in ('ticket', 'registration', 'guest', 'import', 'comp')`),
     check('attendees_status_check', sql`status in ('active', 'cancelled')`),
     check('attendees_labels_check', sql`cardinality(labels) <= 20`),

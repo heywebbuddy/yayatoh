@@ -9,6 +9,7 @@ Roadmap: M1.8. This milestone is delivered in increments:
 | c | Import pipeline | map, preview, job, failure report, undo; 5k rows ≤60 s, ≥97% accepted | db-migration |
 | d | Distribution and self-service | claim links, association tags, email (SMS/WhatsApp behind ports), revoke; magic-link attendee self-service; a claimed ticket's old QR is rejected | auth, db-migration |
 | e | Guest lists and the contact timeline | guest lists with bulk email; contact timeline v1 | — |
+| f | Bulk seats and tickets, the last filters, group blocks, faster search | bulk seat assignment with undo; resend and cancel tickets; ticket-type and check-in filters; group seat blocks; trigram search | db-migration, tenancy (definer search functions), payments-adjacent (cancel without refund) |
 
 ## M1.8a — filters, labels and org-wide search (done)
 - **Attendee list** (`attendees.listAttendees`), filtered on the server:
@@ -42,8 +43,8 @@ Roadmap: M1.8. This milestone is delivered in increments:
 | AC6 | In the console: label a guest, filter by the label, remove it; Ctrl+K focuses search; name, code and email searches land on the right person; axe passes | `apps/web/e2e/attendees.spec.ts` |
 
 ### Not yet
-- Ticket-type and checked-in filters need data from higher tiers (ticketing, check-in). The export already carries both columns; list filters on them come with the `reports` module's list queries (M1.12).
-- Search uses `ILIKE`. A trigram index (`pg_trgm`) is added when real data volumes need it (M1.14 performance pass).
+- Ticket-type and checked-in filters need data from higher tiers (ticketing, check-in). The export already carries both columns; list filters on them come with the `reports` module's list queries (M1.12). **Done in M1.8f** (`reports.attendeeList`).
+- Search uses `ILIKE`. A trigram index (`pg_trgm`) is added when real data volumes need it (M1.14 performance pass). **Done in M1.8f** (indexes plus org-scoped search functions, same results).
 
 ## M1.8b — bulk-action framework and exports as jobs (done)
 - **Framework** (`@yayatoh/platform`, tier 0): `defineBulkAction` + `bulkCommands(action)` give each action its own start, undo, status and file commands, with the action's own permission and entitlement.
@@ -165,6 +166,96 @@ Roadmap: M1.8. This milestone is delivered in increments:
 | AC3 | The timeline spans events (ticket, order, check-in, guest list), newest first; viewers are forbidden; org B gets `not_found` | `guests.int.test.ts` |
 | AC4 | In the console: add two guests (a duplicate is refused), email everyone matching, see History, remove one; axe passes | `apps/web/e2e/guests.spec.ts` |
 
+## M1.8f — bulk seat assignment, bulk ticket actions, the last filters, group blocks and faster search (done)
+- **Bulk framework additions** (`@yayatoh/platform`):
+  - An item can succeed with a caveat (`BulkItemResult.warning`, stored as the code of a successful item). `BulkOperationDto.warnings` lists the first 50, next to `failures`.
+  - `auditParams(params)` lets an action say what of its params the `bulk.start` audit row records (never message bodies).
+  - A bulk action's `category` (M1.2e: `money` | `export` | `delete`; actions with a `file` default to `export`) makes the pipeline refuse starting it while platform staff act as a member. Cancel tickets is `delete`.
+- **Bulk seat assignment** (`seating.bulkAssign`, `events:write`, 100 per chunk, undo within 10 minutes):
+  - Seats the selected attendees, or everyone matching the list's filters. The target can be a table or row, a section, the best available seats of the whole plan, or a group's block.
+  - Seats are taken in plan order: items in drawing order, seats in their item's order, accessible seats last.
+  - People already seated in the target stay where they are. For "best available", anyone already seated stays. People seated elsewhere move.
+  - Partial failures are reported per person: `not_enough_seats`, `seated_by_ticket`, `attendee_cancelled`, `not_found`.
+  - Seating rules (M1.7f): while accessible seats are kept back, each placement in one is a warning (`ada_kept_back`). An enforced rule keeps them out of reach unless the organizer ticks the override, which is recorded in the `bulk.start` audit row.
+  - Seats change through the same statements as one-by-one assignment (blocked `assigned`, with `prior_block` remembered), so the M1.7f live feed publishes every chunk.
+  - Undo unseats everyone still in the seat the operation gave them. It then puts each person back in their previous seat, with its pinned flag and its channel, accessibility or group block, if that seat is still free. Anyone moved since is left alone (`planUndo`).
+  - The pure planning (`planChunk`, `planUndo`) is unit-tested.
+- **Group seat blocks** (M1.8d's "association tags" for seating):
+  - A group is an attendee label, for example a company. `seating.allocateGroup` (`events:write`) keeps the next free seats of a table or row for the group. It takes every free seat there, or a given number. The seats become `blocked` with the new reason `group`, and the name goes in `event_seats.group_label`. Asking for more seats than are free refuses the whole request with `not_enough_seats` and how many would fit.
+  - "Seat the group" runs a bulk assignment. It selects everyone active with the label and targets the block, and its progress shows on the attendee list filtered to the group.
+  - `seating.releaseGroup` gives the unused seats back to sale.
+  - A seated member keeps the label on their seat, so unseating them returns the seat to the group rather than to sale.
+  - Unblocking a group seat by hand frees it and clears the label.
+  - `seating.groups` lists each group's seats, how many are seated and unused, and its tables and rows. Viewers can read it.
+- **Resend tickets** (`ticketing.resendTickets`, `attendees:write`, 200 per chunk):
+  - Each chunk emits `ticket.resend_requested@1` with the operation and ticket ids.
+  - The worker's `ticketing.resend-mailer` sends one email per still-active ticket to its holder (new kind `ticketing.tickets-resent`, all 13 locales). Each email carries a fresh holder link to "My tickets". The public 3-per-hour limit doesn't apply, because the organizer asked.
+  - The dedupe key is `ticket-resend:{operation}:{ticket}`, and the consumer is exactly-once, so a replay sends nothing. A new operation is a new resend.
+  - Guests without a ticket fail `no_ticket`. Void tickets fail `ticket_void`.
+- **Cancel tickets without a refund** (`orders.cancelTickets`, 100 per chunk, not undoable):
+  - Voids the tickets with reason `cancelled`. Scanners reject them.
+  - Cancels the attendees and returns the places to inventory.
+  - Frees a bought seat (`voidSeatTx`) and any seat the organizer gave the holder.
+  - Emits `tickets.cancelled@1`. The `ticketing.cancelled-mailer` tells each holder once (`ticket-cancelled:{ticket}`, new kind `ticketing.ticket-cancelled`).
+  - No money moves: orders keep their status and payments. Refunds stay per order (M1.6).
+  - The console asks first, in a dialog that names how many people are covered ("Cancel the tickets of 3 people?"). The server re-checks the count against the actual selection and refuses (`invalid_state`) if it changed.
+  - **Pending the owner:** the permission is `orders:refund` (owner, admin, finance), on the grounds that voiding paid tickets is as consequential as refunding them. Managers can't cancel.
+- **Attendee list filters** (`reports.attendeeList`, `attendees:read`):
+  - Adds ticket type (any of) and check-in: today (the event's calendar day in its time zone), any day, or never. People without a ticket count as never.
+  - Both run on the server and combine with search, labels, source and status.
+  - They are built as ticket-id subqueries over ticketing's and check-in's own tables (`ticketIdsOfTypesSql`, `admittedTicketIdsSql`). The attendees module takes them as a `TicketFilterExtension`, so it never reads a higher tier's schema.
+  - Exports take the full filter (`AttendeeListFilter`).
+  - Actions of lower tiers resolve "everything matching" to ids through `reports.matchingAttendeeIds`, so labels, email, seats and resend follow the same filters.
+  - After a bulk action the list comes back with its filters.
+- **Search** (migration 0055_smiling_microchip):
+  - `pg_trgm` in a new `extensions` schema, with GIN trigram indexes on attendee name and email and on order buyer name and email.
+  - Under row-level security Postgres never uses an index for `ILIKE`, because the operator isn't LEAKPROOF and may not run before the tenant policy.
+  - So `attendees.search_ids(pattern)` and `orders.search_ids(pattern)` (SECURITY DEFINER, `search_path = pg_catalog`, EXECUTE for `app_user` only) run the same `ILIKE` for the caller's own org and return ids. They read the org from the `app.org_id` setting the policy reads, and return nothing when it is unset.
+  - The list, `attendees.search` and `orders.search` keep their queries under RLS and add `id IN (those ids)`. The results are identical to the plain `ILIKE`, with wildcards still literal.
+  - `CREATE INDEX CONCURRENTLY` isn't possible here: drizzle's migrator applies migrations in one transaction. The migration uses `IF NOT EXISTS`, so on a large production table the owner's runbook creates the four indexes `CONCURRENTLY` first under the same names, and the migration then does nothing.
+  - **Perf note** (local, Postgres 18, 200,000 attendees in two orgs, 100,000 in the searched org):
+    - A plain `ILIKE '%…%'` under RLS takes 130–340 ms (parallel sequential scan).
+    - Through `search_ids` it takes 3.4 ms for a rare 5-character string and 20 ms for `guest12345`, a string with many trigram hits.
+    - Result counts are identical.
+    - Two-character searches can't use trigrams and cost the same as before.
+- **Migrations:**
+  - 0055_smiling_microchip (0050 + 0051 on the branch, combined at merge) adds `event_seats.group_label`, a partial index `(org_id, event_id, group_label)`, and the check `event_seats_group_check`. It widens `event_seats_block_check` (+ `group`) and `seat_assignments_prior_block_check` (+ `group`); all three constraints go on `NOT VALID` and are then validated.
+  - The same migration adds pg_trgm, the four trigram indexes and the two search functions.
+  - Both are hand-edited (see the files' `hand-written` blocks). There are no new tables.
+- **Console:**
+  - The attendee list gets **Ticket type** and **Check-in** filters.
+  - The bulk form gets **Assign seats** (where to seat them, plus the accessible-seat override when an enforced rule applies), **Resend tickets** and **Cancel tickets (no refund)** with its confirmation dialog.
+  - The progress panel gains a progress bar, done messages per action, failures by reason and warnings.
+  - The seating **Assign guests** page gets **Group blocks**: the list, keep seats for a group (with messages for each field), seat the group, and release unused seats.
+
+### Acceptance (M1.8f)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | **Assigning 1,000 seats in bulk shows progress, and undo restores it** (progress after the first chunk; all 1,000 seated in plan order; undo restores every previous seat exactly, pinned and all; about 1.1 s to assign and 0.8 s to undo locally) | `packages/testing/tests/bulk-seats.int.test.ts` |
+| AC2 | Partial failures per person (not enough seats, seated by ticket, cancelled); seats go off sale on the live feed; undo frees them | `bulk-seats.int.test.ts` |
+| AC3 | Seating rules: warn → used last and flagged; enforced → skipped; override → used, flagged and audited | `bulk-seats.int.test.ts` |
+| AC4 | Group blocks: allocate (normalized label, off sale live, too many refused), seat members by label, release unused, an unseated member's seat returns to the group; undo restores a group seat and a pinned seat exactly | `bulk-seats.int.test.ts` |
+| AC5 | Viewers can't bulk-seat, allocate or release; org B can't seat, allocate, read or undo in org A's event | `bulk-seats.int.test.ts` |
+| AC6 | Chunk planning (plan order, accessible last, enforced skip, partial failures) and the undo mapping | `packages/modules/seating/tests/bulk-assign.test.ts` |
+| AC7 | Resend: one email per ticket and operation, guests `no_ticket`, a replay (or a re-run handler) sends nothing more; viewers forbidden; org B refused | `packages/testing/tests/bulk-tickets.int.test.ts` |
+| AC8 | Cancel: tickets void (`cancelled`), bought and given seats freed, places back in inventory, attendees cancelled, orders still paid with no refund, holders told once, audited, not undoable, a cancelled code doesn't scan; viewers forbidden; org B refused | `bulk-tickets.int.test.ts` |
+| AC9 | Filters: ticket type, check-in today (event day) / any / never, combined with the others, paged; "everything matching" and exports follow them; org B sees nothing | `bulk-tickets.int.test.ts` |
+| AC10 | Search: the trigram indexes exist and are valid; results are identical to a plain ILIKE (wildcards literal); the search functions are org-scoped and served by the index | `bulk-tickets.int.test.ts`, `attendees.int.test.ts` |
+| AC11 | New email kinds render in 13 locales | `packages/modules/notifications/tests/render.test.ts` |
+| AC12 | In the console, keyboard only: seat everyone matching at a table, see the progress bar and the person who didn't fit, reload, undo; an empty selection is refused; axe passes | `apps/web/e2e/bulk-actions.spec.ts` |
+| AC13 | Resend: 2 sent, the guest reported; no undo; axe passes | `bulk-actions.spec.ts` |
+| AC14 | Cancel: nothing selected is refused; the dialog names the count; Escape and "Keep the tickets" change nothing; confirming cancels one, persisted after reload; a cancelled ticket doesn't admit at the door; axe passes | `bulk-actions.spec.ts` |
+| AC15 | Filters: ticket type, check-in, combined, kept after reload, empty state, export and labels of everything matching follow them; axe passes | `bulk-actions.spec.ts` |
+| AC16 | Group blocks: every validation message, keep 3 seats by keyboard, persisted, seat the group (progress on the list), release the unused seat; axe passes | `bulk-actions.spec.ts` |
+| AC17 | Viewers: no bulk form, checkboxes or group form (they can still filter); stale owner pages are refused on the server for both bulk seats and groups | `bulk-actions.spec.ts` |
+| AC18 | Arabic RTL: filters, bulk actions, the cancel review and group blocks render right to left; axe passes | `bulk-actions.spec.ts` |
+
+### Later / not yet (M1.8f)
+- The impersonation guard (M1.2e) refuses cancel tickets (`category: 'delete'`); covered by `packages/testing/tests/impersonation.int.test.ts`.
+- A seat column in the attendee list (the list still shows "—"). The seating views show who sits where.
+- Bulk ticket actions from the /v1 API (console only for now).
+- Very large plans: bulk seat assignment re-reads and locks the target's seats for each chunk. That is fast at the tested 1,000 seats, but a per-operation seat cursor would scale further for 20,000-seat plans.
+
 ### M1.8 status
 - All roadmap items are done except the owner-gated delivery channels: SMS and WhatsApp, and real email through SES, both waiting on M1.10 accounts.
-- Acceptance: the 5,000-row import is well under 60 s with ≥97% accepted (M1.8c). The 1,000-seat bulk assignment arrives with seating (M1.7) on this framework. A claimed ticket's old QR is rejected (M1.8d).
+- Acceptance: the 5,000-row import is well under 60 s with ≥97% accepted (M1.8c). Assigning 1,000 seats in bulk shows progress and undo restores it (M1.8f). A claimed ticket's old QR is rejected (M1.8d).

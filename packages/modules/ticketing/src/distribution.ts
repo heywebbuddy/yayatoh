@@ -237,7 +237,6 @@ async function createHolderLinkTx(
   eventId: string,
   email: string,
 ): Promise<{ id: string; token: string } | null> {
-  const orgId = requireOrg(ctx);
   const emailNorm = normalizeEmail(email);
   const [recent] = await tx
     .select({ n: count() })
@@ -250,11 +249,30 @@ async function createHolderLinkTx(
       ),
     );
   if ((recent?.n ?? 0) >= HOLDER_LINKS_PER_HOUR) return null;
+  return issueHolderLinkTx(tx, ctx, eventId, email);
+}
+
+/**
+ * A holder link the organizer sends (resend tickets, M1.8f): the public request limit does not
+ * apply, since the organizer, not an anonymous visitor, asked for it.
+ */
+export async function issueHolderLinkTx(
+  tx: Tx,
+  ctx: Ctx,
+  eventId: string,
+  email: string,
+): Promise<{ id: string; token: string }> {
   const [link] = await tx
     .insert(holderLinks)
-    .values({ orgId, eventId, emailNorm, expiresAt: new Date(ctx.now.getTime() + HOLDER_LINK_TTL_MS) })
+    .values({
+      orgId: requireOrg(ctx),
+      eventId,
+      emailNorm: normalizeEmail(email),
+      expiresAt: new Date(ctx.now.getTime() + HOLDER_LINK_TTL_MS),
+    })
     .returning({ id: holderLinks.id });
-  return link ? { id: link.id, token: signLinkToken(HOLDER_PURPOSE, link.id) } : null;
+  if (!link) throw new DomainError('internal');
+  return { id: link.id, token: signLinkToken(HOLDER_PURPOSE, link.id) };
 }
 
 /**

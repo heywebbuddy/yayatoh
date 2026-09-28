@@ -23,6 +23,7 @@ export {
 export { admissionsDsarTx, purgeScansBeforeTx } from './dsar.ts';
 export {
   admissionsForTicketsTx,
+  admittedTicketIdsSql,
   admittedTicketIdsTx,
   CheckinStatusDto,
   checkinStatusQuery,

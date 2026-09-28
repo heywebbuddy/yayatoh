@@ -45,6 +45,15 @@
       "intro": "إليك الرابط الذي طلبته. يفتح تذاكرك لفعالية {eventName}.",
       "cta": "فتح تذاكري"
     },
+    "ticketing.tickets-resent": {
+      "subject": "تذكرتك لـ {eventName}",
+      "intro": "أعاد منظّم {eventName} إرسال تذكرتك {code} إليك. يفتح الزر أدناه تذاكرك في أي وقت.",
+      "cta": "فتح تذاكري"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "أُلغيت تذكرتك لـ {eventName}",
+      "intro": "ألغى منظّم {eventName} تذكرتك {code}. لم تعد تتيح لك الدخول. إذا كانت لديك أسئلة، فردّ على المنظّم."
+    },
     "seating.finder-code": {
       "subject": "{code} هو رمز البحث عن مقعدك في {eventName}",
       "intro": "أدخل {code} في أداة البحث عن المقعد لمعرفة مقعدك. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.",
