@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { codeForKey, expectAccessible } from './helpers.ts';
 
@@ -33,6 +33,33 @@ function handles(): Handles {
   return cached;
 }
 
+/**
+ * The migrated owner is one account shared by the three viewport projects (they run in parallel).
+ * Owners must use two-step verification (M1.2c, D14): exactly one project sets it up at the
+ * owner's first sign-in (an exclusive lock file for this run's migrated data) and saves the setup
+ * key; the others wait for the key and answer the sign-in challenge with it.
+ */
+function runTag() {
+  return String(Math.floor(statSync(FILE).mtimeMs));
+}
+const lockFile = () => new URL(`./.generated/legacy-owner-2fa-${runTag()}.lock`, import.meta.url);
+const keyFile = () => new URL(`./.generated/legacy-owner-2fa-${runTag()}.key`, import.meta.url);
+function claimSetUp(): boolean {
+  try {
+    closeSync(openSync(lockFile(), 'wx'));
+    return true;
+  } catch {
+    return false;
+  }
+}
+async function setUpKey(): Promise<string> {
+  for (let i = 0; i < 120; i++) {
+    if (existsSync(keyFile())) return readFileSync(keyFile(), 'utf8');
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error('the migrated owner never finished setting up two-step verification');
+}
+
 /** Sign in through the real form, keyboard only, with the migrated account's legacy password. */
 async function signInWithLegacyPassword(page: Page, email: string, password: string) {
   await page.goto('/sign-in');
@@ -61,21 +88,34 @@ test.describe('legacy migration — the migrated organizer', () => {
   });
 
   test('signs in with their legacy password and lands in their migrated org', async () => {
+    test.setTimeout(90_000);
+    const first = claimSetUp();
+    // The others sign in once the first project has turned two-step verification on.
+    const known = first ? null : await setUpKey();
     await signInWithLegacyPassword(page, h.owner.email, h.owner.password);
-    // Owners must use two-step verification (M1.2c, D14): a migrated owner sets it up at their
-    // first sign-in, then continues to their org.
-    await expect(page).toHaveURL(/\/account\/security\?required=1$/);
-    await expect(page.getByRole('heading', { name: 'Two-step verification is required' })).toBeVisible();
-    await page
-      .getByRole('region', { name: 'Authenticator app' })
-      .getByRole('button', { name: 'Set up authenticator app' })
-      .click();
-    const key = (await page.getByTestId('setup-key').textContent()) ?? '';
-    await page.getByLabel('6-digit code').fill(codeForKey(key));
-    await page.getByRole('button', { name: 'Verify and turn on' }).click();
-    await expect(page.getByRole('status').filter({ hasText: 'Two-step verification is on.' })).toBeVisible();
-    await page.getByRole('button', { name: "I've saved my codes" }).click();
-    await page.goto(`/o/${h.org.slug}`);
+    if (first) {
+      // Owners must use two-step verification (M1.2c, D14): the migrated owner sets it up at
+      // their first sign-in, then continues to their org.
+      await expect(page).toHaveURL(/\/account\/security\?required=1$/);
+      await expect(page.getByRole('heading', { name: 'Two-step verification is required' })).toBeVisible();
+      await page
+        .getByRole('region', { name: 'Authenticator app' })
+        .getByRole('button', { name: 'Set up authenticator app' })
+        .click();
+      const key = (await page.getByTestId('setup-key').textContent()) ?? '';
+      await page.getByLabel('6-digit code').fill(codeForKey(key));
+      await page.getByRole('button', { name: 'Verify and turn on' }).click();
+      await expect(
+        page.getByRole('status').filter({ hasText: 'Two-step verification is on.' }),
+      ).toBeVisible();
+      await page.getByRole('button', { name: "I've saved my codes" }).click();
+      writeFileSync(keyFile(), key);
+      await page.goto(`/o/${h.org.slug}`);
+    } else {
+      // Two-step verification is on: the legacy password, then a code from the app.
+      await page.getByLabel('6-digit code').fill(codeForKey(known ?? ''));
+      await page.getByRole('button', { name: 'Verify and sign in' }).click();
+    }
     await expect(page).toHaveURL(new RegExp(`/o/${h.org.slug}$`));
     await expect(page.getByRole('heading', { level: 1 })).toContainText(h.owner.name.split(' ')[0] as string);
     await expect(page.getByText(h.weekly.name)).toBeVisible();
