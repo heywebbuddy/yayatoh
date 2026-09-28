@@ -122,6 +122,33 @@ describe('realtime fan-out (M3.1b)', () => {
     expect(got).toEqual(['6', '5', '7', '8']);
   });
 
+  it('without LISTEN, a resync replays a followed channel from the id its stream caught up to', async () => {
+    const hub = memoryRealtimeHub();
+    const log = fakeLog();
+    const got: string[] = [];
+    hub.subscribe(CA, (m) => got.push(m.id));
+    const fanout = createRealtimeFanout({ hub, load: log.load, replay: log.replay, batchMs: 1 });
+    log.add(A, CA, 5);
+    // The stream sent a snapshot at id 5; nothing was ever notified (no LISTEN).
+    fanout.baseline(CA, '5');
+    fanout.baseline(CA, '1'); // a second stream never moves the point back
+    fanout.baseline('not-a-channel', '1');
+    log.add(A, CA, 6);
+    log.add(A, CA, 7);
+    fanout.resync();
+    await fanout.idle();
+    expect(got).toEqual(['6', '7']);
+    // A channel that had no messages at all ('0') gets everything after it.
+    const CB2 = `org:${B}:event:${E}:checkins`;
+    const gotB: string[] = [];
+    hub.subscribe(CB2, (m) => gotB.push(m.id));
+    fanout.baseline(CB2, '0');
+    log.add(B, CB2, 8);
+    fanout.resync();
+    await fanout.idle();
+    expect(gotB).toEqual(['8']);
+  });
+
   it('a failing fetch is logged and does not stop later deliveries', async () => {
     const hub = memoryRealtimeHub();
     const log = fakeLog();

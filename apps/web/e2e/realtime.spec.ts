@@ -1,5 +1,6 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import { expectAccessible, signIn } from './helpers.ts';
+import { seatedGala, unique } from './seating-helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const LAKESIDE = `http://lakeside-events.yayatoh.events:${PORT}`;
@@ -259,6 +260,40 @@ test.describe('realtime channels (M3.1b)', () => {
     await expect(page.getByText('2 of 2 tickets checked in today')).toBeVisible({ timeout: 15_000 });
     await expect(page.getByTestId('live-checkins')).toHaveAttribute('data-live', 'live');
     await doorContext.close();
+  });
+
+  test('the seat map’s channels are served by the same endpoint, with the same rules', async ({
+    page,
+    browser,
+  }) => {
+    await signIn(page);
+    const { base } = await seatedGala(page, unique('Channel Gala'));
+    // The event's ids, from its door screen's check-in channel.
+    const checkins = decodeURIComponent((await doorScreen(page, base)).split('/').pop() ?? '');
+    const seats = `/api/realtime/${encodeURIComponent(checkins.replace(/:checkins$/, ':seats'))}`;
+    const states = `/api/realtime/${encodeURIComponent(checkins.replace(/:checkins$/, ':seat-states'))}`;
+    const anonContext = await browser.newContext();
+    const anon = await anonContext.newPage();
+    await anon.goto('/');
+    // Public availability: anyone, seat ids and on/off only.
+    const pub = await peek(anon, seats);
+    expect(pub.status).toBe(200);
+    expect(pub.text).toMatch(/event: snapshot\ndata: \{"on":\[/);
+    expect(pub.text).not.toMatch(/@|name|email|order|ticket|held|sold/i);
+    // Seat states and counts: members who may read events only.
+    expect((await peek(anon, states)).status).toBe(401);
+    const staff = await peek(page, states);
+    expect(staff.status).toBe(200);
+    expect(staff.text).toContain('"counts"');
+    const otherContext = await browser.newContext();
+    const other = await otherContext.newPage();
+    await signIn(other, 'lee@harbor.test');
+    await other.goto('/o/harbor-arts');
+    expect((await peek(other, states)).status).toBe(403);
+    // Another org's site carries neither.
+    await anon.goto(`${HARBOR}/`);
+    expect((await peek(anon, seats)).status).toBe(403);
+    await Promise.all([anonContext.close(), otherContext.close()]);
   });
 
   test('the live status reads right to left in Arabic', async ({ page, browser }) => {

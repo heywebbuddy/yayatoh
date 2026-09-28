@@ -1,7 +1,7 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
-import { withTenant } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import {
@@ -16,6 +16,7 @@ import {
   listenForRealtime,
   memoryRealtimeHub,
   type RealtimeChannelDef,
+  type RealtimeFanout,
   type RealtimeHub,
   type RealtimeMessage,
   type ResolvedChannel,
@@ -67,6 +68,7 @@ const maxPerOrg = () => Math.max(1, Number(process.env.REALTIME_MAX_STREAMS_PER_
 
 interface Live {
   readonly hub: RealtimeHub;
+  readonly fanout: RealtimeFanout;
   readonly limits: StreamLimits;
   readonly seatFeed: SeatFeed;
   readonly seatReady: Promise<void>;
@@ -102,6 +104,7 @@ function realtimeLive(): Live {
     );
     g.__yyRealtime = {
       hub,
+      fanout,
       limits: new StreamLimits({ perProcess: MAX_STREAMS, perOrg: maxPerOrg() }),
       seatFeed,
       seatReady,
@@ -122,10 +125,8 @@ const systemCtx = (orgId: string) => createCtx({ orgId, actor: { type: 'system',
 
 // --- Snapshots and public rules per channel ---------------------------------------------------
 
-type Tx = Parameters<Parameters<typeof withTenant>[1]>[0];
-
 /** What a client that can't be caught up by id gets: the channel's current state (allowlisted). */
-const SNAPSHOTS: Record<string, (tx: Tx, channel: ResolvedChannel) => Promise<unknown>> = {
+const SNAPSHOTS: Record<string, (tx: TenantTx, channel: ResolvedChannel) => Promise<unknown>> = {
   'event.checkins': async (tx, c) => {
     const f = await checkinFactsTx(tx, { eventId: c.eventId ?? undefined });
     return { admitted: f.admissions, tickets: f.tickets };
@@ -139,8 +140,13 @@ function logSource(channel: ResolvedChannel): SseSource {
     catchUp: (lastEventId) =>
       withTenant(systemCtx(channel.orgId), async (tx): Promise<RealtimeMessage[]> => {
         const missed = await realtimeCatchUpTx(tx, channel.name, lastEventId);
-        if (missed) return missed;
+        // Without LISTEN (or after it reconnects) the fan-out replays this channel from here.
+        if (missed) {
+          live.fanout.baseline(channel.name, missed.at(-1)?.id ?? lastEventId ?? '0');
+          return missed;
+        }
         const id = (await latestRealtimeIdTx(tx, channel.name)) ?? '0';
+        live.fanout.baseline(channel.name, id);
         const snapshot = SNAPSHOTS[channel.def.key];
         return [{ id, event: 'snapshot', data: snapshot ? await snapshot(tx, channel) : {} }];
       }),

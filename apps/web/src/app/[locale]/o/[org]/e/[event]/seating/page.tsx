@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventSeatingQuery, listLayoutsQuery, seatChannels } from '@yayatoh/seating';
+import { eventSeatingQuery, listLayoutsQuery } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
@@ -10,7 +10,7 @@ import { LiveSeatCounts, SeatStatesProvider } from '@/components/seat-states.tsx
 import { SeatingEditor } from '@/components/seating-editor.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
-import { realtimeUrl } from '@/lib/realtime-url.ts';
+import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -175,7 +175,7 @@ export default async function SeatingPage({
       />
       {/* Live (M1.7f): counts and seat colours follow sales, holds and guests as they happen. */}
       <SeatStatesProvider
-        url={realtimeUrl(seatChannels(data.org.id, ev.id).staff)}
+        url={localizedPath(locale, `/o/${org}/e/${event}/seating/stream`)}
         initialStates={seatStatus}
         initialCounts={seating.counts}
       >

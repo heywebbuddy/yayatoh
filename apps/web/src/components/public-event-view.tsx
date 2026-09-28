@@ -13,7 +13,7 @@ import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia } from '@yayatoh/media';
 import { publicRefundPolicy } from '@yayatoh/orders';
 import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
-import { publicSeatMap, seatChannels } from '@yayatoh/seating';
+import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import { Alert, brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
@@ -38,7 +38,6 @@ import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
-import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
@@ -249,12 +248,11 @@ export async function PublicEventView({
           questions={questions}
           seatMap={seatMap}
           occurrenceId={chosen?.id ?? null}
-          // Live availability (M1.7f, on the realtime endpoint since M3.1b): this event's public
-          // seat channel; a tenant host serves only its own org's channels.
+          // Live availability (M1.7f): the page's own host serves it (a tenant site rewrites it
+          // to its org), so the stream is always this event's. Since M3.1b this URL is an alias of
+          // the event's public seat channel on the shared realtime core.
           seatStream={
-            seatMap && target
-              ? { url: realtimeUrl(seatChannels(target.orgId, target.eventId).public), kind: 'public' }
-              : null
+            seatMap ? { url: localizedPath(locale, `/events/${slug}/seats/stream`), kind: 'public' } : null
           }
           timeZone={ev.timezone}
           action={checkoutAction.bind(null, slug)}

@@ -162,6 +162,11 @@ export interface RealtimeFanout {
   notify(payload: string): void;
   /** After the LISTEN connection (re)connects: replay what listeners may have missed. */
   resync(): void;
+  /**
+   * A stream just caught a client up to `id` on `channel`: a later resync replays from there
+   * (unless messages past it were already delivered here).
+   */
+  baseline(channel: string, id: string): void;
   /** Resolves when every notification received so far has been delivered (tests). */
   idle(): Promise<void>;
   close(): void;
@@ -187,6 +192,8 @@ export interface RealtimeFanoutOptions {
 
 /** Ids remembered per channel to drop duplicates (a resync overlapping live delivery). */
 const RECENT_IDS = 1_000;
+/** Channels remembered before those without local followers are forgotten. */
+const MAX_CHANNELS = 2_000;
 const NOTIFY_PAYLOAD = /^([1-9]\d{0,14}) (org:[0-9a-f-]{36}:[a-z0-9:_-]{1,120})$/;
 
 const systemCtx = (orgId: string) => createCtx({ orgId, actor: { type: 'system', name: 'realtime.fanout' } });
@@ -228,6 +235,7 @@ export function createRealtimeFanout(opts: RealtimeFanoutOptions): RealtimeFanou
     const seq = Number(m.id);
     let d = delivered.get(channel);
     if (!d) {
+      forget();
       d = { max: 0, recent: new Set() };
       delivered.set(channel, d);
     }
@@ -241,6 +249,12 @@ export function createRealtimeFanout(opts: RealtimeFanoutOptions): RealtimeFanou
     d.max = Math.max(d.max, seq);
     await opts.hub.publish(channel, m);
     if (opts.publisher) await opts.publisher.publish(channel, m);
+  }
+
+  /** Keep the per-channel memory bounded: drop channels nobody here follows any more. */
+  function forget(): void {
+    if (delivered.size < MAX_CHANNELS) return;
+    for (const c of delivered.keys()) if (!interested(c)) delivered.delete(c);
   }
 
   function run(task: () => Promise<void>): void {
@@ -293,6 +307,11 @@ export function createRealtimeFanout(opts: RealtimeFanoutOptions): RealtimeFanou
             await deliver(channel, m);
         }
       });
+    },
+    baseline(channel, id) {
+      if (closed || delivered.has(channel) || !parseRealtimeChannel(channel)) return;
+      forget();
+      delivered.set(channel, { max: parseRealtimeId(id) ?? 0, recent: new Set() });
     },
     async idle() {
       if (timer) {

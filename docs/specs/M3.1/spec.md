@@ -43,8 +43,10 @@ and the M3.2/M3.3 Command Center next.
   channels), `GET {tenant host}/realtime/{channel}` (proxy rewrite to
   `/[locale]/t/[org]/realtime/[channel]`), `GET /api/realtime/{channel}/token` (Ably only).
 - Seat map migrated: `event.seats` / `event.seat-states` registry entries served by the seat feed
-  through the same core; seat pickers, the box office and the seating page now use
-  `/api/realtime/…`; the M1.7f URLs stay as aliases.
+  through the same core (same rate limits, resume ids, snapshots and 404 rules). The seat pickers,
+  the box office and the seating page keep their M1.7f URLs, which are now aliases of those
+  channels, so nothing changes for them; the same channels are also reachable at
+  `/api/realtime/{channel}`.
 - Channels for the next wave: `event.checkins` (published by check-in now), `event.devices`,
   `event.metrics` (placeholder for M3.1a), `org.alerts` — defined and tested, minimal payloads.
 - Ably adapter: `ablyTokenRequest` (locally signed TokenRequest, `ablySubscribeCapability`),
@@ -70,7 +72,7 @@ touches:
   - packages/testing/src/fixtures.ts, tests/realtime.int.test.ts
   - apps/web/src/server/{realtime,realtime-host}.ts (seat-stream.ts removed)
   - apps/web/src/app/api/realtime/**, apps/web/src/app/[locale]/t/[org]/realtime/**
-  - apps/web/src/app/api/dev/seat-streams/route.ts, seat stream routes, proxy.ts
+  - apps/web/src/app/api/dev/seat-streams/route.ts, the three seat stream routes (import only), proxy.ts, onsite page
   - apps/web/src/lib/{use-realtime,use-seat-stream,realtime-url}.ts, components/live-checkins.tsx
   - apps/web/messages/*.json (checkinLive), apps/web/e2e/realtime.spec.ts
   - apps/worker/src/main.ts (5-minute purge)
