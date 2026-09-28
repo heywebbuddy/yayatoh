@@ -255,3 +255,48 @@ export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: stri
   }
   return out;
 }
+
+/** What the dev/CI fake push service received for one subscription (M1.10e). */
+export interface FakePushEntry {
+  readonly at: string;
+  /** The encrypted `aes128gcm` body, base64url: tests decrypt it with the browser's keys. */
+  readonly body: string;
+  readonly ttl: string | null;
+  readonly urgency: string | null;
+  readonly topic: string | null;
+  readonly contentEncoding: string | null;
+  /** The verified VAPID `sub` claim. */
+  readonly subject: string;
+}
+
+const PUSH_SERVICE_DIR = 'push-service';
+const FAKE_PUSH_ID = /^[A-Za-z0-9_-]{8,64}$/;
+
+/** Dev/CI: keep one received push for a fake subscription id (refused in production). */
+export function recordFakePush(id: string, entry: FakePushEntry, dir = devMailboxDir()): void {
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The fake push service is not allowed in production');
+  if (!FAKE_PUSH_ID.test(id)) throw new Error('bad fake push id');
+  const folder = join(dir, PUSH_SERVICE_DIR, id);
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(
+    join(
+      folder,
+      `${entry.at.replace(/[:.]/g, '-')}-${process.pid}-${Math.random().toString(36).slice(2)}.json`,
+    ),
+    JSON.stringify(entry),
+  );
+}
+
+/** Dev/CI: what the fake push service received for this id, oldest first. */
+export function readFakePushes(id: string, dir = devMailboxDir()): FakePushEntry[] {
+  if (!FAKE_PUSH_ID.test(id)) return [];
+  const folder = join(dir, PUSH_SERVICE_DIR, id);
+  let files: string[];
+  try {
+    files = readdirSync(folder).filter((f) => f.endsWith('.json'));
+  } catch {
+    return [];
+  }
+  return files.sort().map((f) => JSON.parse(readFileSync(join(folder, f), 'utf8')) as FakePushEntry);
+}

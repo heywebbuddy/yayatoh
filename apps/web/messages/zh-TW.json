@@ -3632,5 +3632,31 @@
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
     "unauthenticated": "工作階段已結束，請重新登入。"
+  },
+  "webPush": {
+    "title": "推播通知",
+    "buyerHint": "即使關閉此頁面，也能在此裝置上收到{org}關於此活動的最新消息。",
+    "memberHint": "即使關閉 Yayatoh，也能在此裝置上收到{org}的新訂單和訊息。",
+    "checking": "正在檢查此瀏覽器…",
+    "on": "此裝置已開啟通知。",
+    "off": "此裝置已關閉通知。",
+    "turnOn": "開啟通知",
+    "turnOff": "在此裝置上關閉",
+    "turnedOn": "已開啟通知。最新消息將傳送到此裝置。",
+    "turnedOff": "此裝置已關閉通知。",
+    "blocked": "此網站的通知已遭封鎖。請在瀏覽器的網站設定中允許通知，然後重新載入此頁面。",
+    "notAllowed": "未允許通知，因此沒有任何變更。",
+    "unsupported": "此瀏覽器無法接收推播通知。",
+    "unavailable": "推播通知尚無法使用。",
+    "failed": "無法開啟通知，請再試一次。",
+    "tooMany": "接收通知的裝置過多。請移除一個後再試一次。",
+    "devices": "你的裝置",
+    "devicesNone": "目前還沒有裝置接收通知。",
+    "thisDevice": "（此裝置）",
+    "since": "自 {date} 起",
+    "remove": "移除",
+    "removeLabel": "移除{label}",
+    "removed": "已移除裝置。",
+    "unknownDevice": "瀏覽器"
   }
 }

@@ -38,6 +38,15 @@ describe('CSP builder', () => {
     expect(csp.get('frame-ancestors')).toEqual(["'self'"]);
   });
 
+  it("service workers (scanner, web push M1.10e) load from 'self' on every profile, never from elsewhere", () => {
+    for (const profile of ['strict', 'public'] as const) {
+      const csp = parseCsp(
+        buildCsp({ profile, nonce, extra: { script: [], connect: ['https://x.example'] } }),
+      );
+      expect(csp.get('worker-src')).toEqual(["'self'", 'blob:']);
+    }
+  });
+
   it('dev adds unsafe-eval; wasm adds wasm-unsafe-eval only', () => {
     expect(parseCsp(buildCsp({ profile: 'strict', nonce, dev: true })).get('script-src')).toContain(
       "'unsafe-eval'",

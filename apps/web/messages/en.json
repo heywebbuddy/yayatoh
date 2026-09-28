@@ -3632,5 +3632,31 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "webPush": {
+    "title": "Push notifications",
+    "buyerHint": "Get updates from {org} about this event on this device, even when this page is closed.",
+    "memberHint": "Get new orders and messages for {org} on this device, even when Yayatoh is closed.",
+    "checking": "Checking this browser…",
+    "on": "Notifications are on for this device.",
+    "off": "Notifications are off for this device.",
+    "turnOn": "Turn on notifications",
+    "turnOff": "Turn off on this device",
+    "turnedOn": "Notifications are on. Updates will arrive on this device.",
+    "turnedOff": "Notifications are off for this device.",
+    "blocked": "Notifications are blocked for this site. Allow them in your browser's site settings, then reload this page.",
+    "notAllowed": "Notifications weren't allowed, so nothing changed.",
+    "unsupported": "This browser can't receive push notifications.",
+    "unavailable": "Push notifications aren't available yet.",
+    "failed": "We couldn't turn on notifications. Please try again.",
+    "tooMany": "Too many devices get notifications. Remove one, then try again.",
+    "devices": "Your devices",
+    "devicesNone": "No devices get notifications yet.",
+    "thisDevice": "(this device)",
+    "since": "Since {date}",
+    "remove": "Remove",
+    "removeLabel": "Remove {label}",
+    "removed": "Device removed.",
+    "unknownDevice": "Browser"
   }
 }

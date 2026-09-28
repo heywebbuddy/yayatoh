@@ -204,10 +204,14 @@ export async function dispatchDueTx(
         unsubscribeUrl: unsub?.page ?? null,
         override: override ?? null,
       });
+      // The message's own link: its page (tickets, order), the conversation (announcements,
+      // replies) or, for member notifications, the console page.
       const link =
         typeof params.url === 'string' && params.url
           ? params.url
-          : href
+          : typeof params.replyUrl === 'string' && params.replyUrl
+            ? params.replyUrl
+            : href
             ? `${deps.appOrigin}/o/${org.slug}${href}`
             : null;
       let providerMessageId: string;

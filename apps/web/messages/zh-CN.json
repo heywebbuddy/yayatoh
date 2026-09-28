@@ -3632,5 +3632,31 @@
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
     "unauthenticated": "会话已结束，请重新登录。"
+  },
+  "webPush": {
+    "title": "推送通知",
+    "buyerHint": "即使关闭此页面，也能在此设备上收到{org}关于此活动的最新消息。",
+    "memberHint": "即使关闭 Yayatoh，也能在此设备上收到{org}的新订单和消息。",
+    "checking": "正在检查此浏览器…",
+    "on": "此设备已开启通知。",
+    "off": "此设备已关闭通知。",
+    "turnOn": "开启通知",
+    "turnOff": "在此设备上关闭",
+    "turnedOn": "已开启通知。最新消息将发送到此设备。",
+    "turnedOff": "此设备已关闭通知。",
+    "blocked": "此网站的通知已被阻止。请在浏览器的网站设置中允许通知，然后重新加载此页面。",
+    "notAllowed": "未允许通知，因此没有任何更改。",
+    "unsupported": "此浏览器无法接收推送通知。",
+    "unavailable": "推送通知暂不可用。",
+    "failed": "无法开启通知，请重试。",
+    "tooMany": "接收通知的设备过多。请移除一个后重试。",
+    "devices": "你的设备",
+    "devicesNone": "目前还没有设备接收通知。",
+    "thisDevice": "（此设备）",
+    "since": "自 {date} 起",
+    "remove": "移除",
+    "removeLabel": "移除{label}",
+    "removed": "已移除设备。",
+    "unknownDevice": "浏览器"
   }
 }

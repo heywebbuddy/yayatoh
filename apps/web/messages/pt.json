@@ -3632,5 +3632,31 @@
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
     "unauthenticated": "Sua sessão terminou. Entre de novo."
+  },
+  "webPush": {
+    "title": "Notificações push",
+    "buyerHint": "Receba neste dispositivo as novidades de {org} sobre este evento, mesmo com esta página fechada.",
+    "memberHint": "Receba neste dispositivo os novos pedidos e mensagens de {org}, mesmo com o Yayatoh fechado.",
+    "checking": "Verificando este navegador…",
+    "on": "As notificações estão ativadas neste dispositivo.",
+    "off": "As notificações estão desativadas neste dispositivo.",
+    "turnOn": "Ativar notificações",
+    "turnOff": "Desativar neste dispositivo",
+    "turnedOn": "Notificações ativadas. As novidades chegarão a este dispositivo.",
+    "turnedOff": "As notificações estão desativadas neste dispositivo.",
+    "blocked": "As notificações estão bloqueadas para este site. Permita-as nas configurações do site no seu navegador e recarregue esta página.",
+    "notAllowed": "As notificações não foram permitidas, então nada mudou.",
+    "unsupported": "Este navegador não pode receber notificações push.",
+    "unavailable": "As notificações push ainda não estão disponíveis.",
+    "failed": "Não foi possível ativar as notificações. Tente novamente.",
+    "tooMany": "Há dispositivos demais recebendo notificações. Remova um e tente novamente.",
+    "devices": "Seus dispositivos",
+    "devicesNone": "Nenhum dispositivo recebe notificações ainda.",
+    "thisDevice": "(este dispositivo)",
+    "since": "Desde {date}",
+    "remove": "Remover",
+    "removeLabel": "Remover {label}",
+    "removed": "Dispositivo removido.",
+    "unknownDevice": "Navegador"
   }
 }

@@ -6,11 +6,20 @@ import {
   MEMBER_CATEGORIES,
   markInboxReadCommand,
   PREFERENCE_CHANNELS,
+  registerPushTokenCommand,
+  removePushTokenCommand,
   sendTestNotificationCommand,
   setMyPreferencesCommand,
 } from '@yayatoh/notifications';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 import { z } from 'zod';
+import type {
+  PushActionResult,
+  PushSubscriptionInput,
+  RemoveDeviceState,
+} from '@/components/web-push-control.tsx';
+import { deviceLabel } from '@/lib/device-label.ts';
 import { loadConsole } from '@/server/console.ts';
 import { type InboxView, loadInbox } from '@/server/inbox.ts';
 import { ports } from '@/server/ports.ts';
@@ -94,4 +103,72 @@ export async function saveEmailLanguageAction(
   await setUserLocale(data.session.userId, locale as UserLocale);
   revalidatePath(`/o/${org}/notifications/preferences`);
   return { ok: true, code: null };
+}
+
+const pushCode = (err: unknown) =>
+  isDomainError(err)
+    ? (err.details as { reason?: string } | undefined)?.reason === 'too_many_devices'
+      ? 'too_many_devices'
+      : err.code
+    : 'internal';
+
+/** Opt this browser in to push for the signed-in member in this org (M1.10e). */
+export async function subscribeMemberPushAction(
+  org: string,
+  sub: PushSubscriptionInput,
+): Promise<PushActionResult> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(
+      registerPushTokenCommand,
+      {
+        platform: 'webpush',
+        subscription: {
+          endpoint: sub.endpoint,
+          keys: sub.keys,
+          timeZone: sub.timeZone,
+          label: deviceLabel((await headers()).get('user-agent')),
+        },
+      },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return { ok: false, code: pushCode(err) };
+  }
+  revalidatePath(`/o/${org}/notifications`, 'layout');
+  return { ok: true, code: null };
+}
+
+/** "Turn off on this device" for the member. */
+export async function unsubscribeMemberPushAction(org: string, endpoint: string): Promise<PushActionResult> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(removePushTokenCommand, { endpoint }, data.ctx, ports);
+  } catch (err) {
+    return { ok: false, code: pushCode(err) };
+  }
+  revalidatePath(`/o/${org}/notifications`, 'layout');
+  return { ok: true, code: null };
+}
+
+/** Remove one of the member's own devices from the list. */
+export async function removeMemberDeviceAction(
+  org: string,
+  _prev: RemoveDeviceState,
+  form: FormData,
+): Promise<RemoveDeviceState> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(
+      removePushTokenCommand,
+      { deviceId: String(form.get('deviceId') ?? '') },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return { removed: false, code: pushCode(err) };
+  }
+  revalidatePath(`/o/${org}/notifications`, 'layout');
+  return { removed: true, code: null };
 }

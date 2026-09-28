@@ -1,12 +1,15 @@
 import { formatMoney, money } from '@yayatoh/kernel';
-import { orderByManageToken, orderHolderTarget } from '@yayatoh/orders';
+import { orderByManageToken, orderHolderTarget, orderPushDevices } from '@yayatoh/orders';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { HolderContent } from '@/components/holder-content.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
+import { WebPushControl } from '@/components/web-push-control.tsx';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
+import { webPushPublicKey } from '@/server/web-push.ts';
+import { removeOrderDeviceAction, subscribeOrderPushAction, unsubscribeOrderPushAction } from './actions.ts';
 
 const DOT = {
   paid: 'success',
@@ -46,6 +49,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   });
   // M1.4d: the manage link proves ticket holding; holder-only content needs a live ticket.
   const holderTarget = await orderHolderTarget(token);
+  // M1.10e: this browser can get the organizer's updates (announcements) as push notifications.
+  const devices = (await orderPushDevices(token)) ?? [];
+  const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
       <PageHeader
@@ -148,6 +154,26 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </ul>
         </section>
       ) : null}
+      <section aria-labelledby="push-heading" className="flex flex-col gap-3">
+        <h2 id="push-heading" className="text-section">
+          {t('webPush.title')}
+        </h2>
+        <Card size="panel">
+          <WebPushControl
+            publicKey={webPushPublicKey()}
+            devices={devices.map((d) => ({
+              id: d.id,
+              label: d.label,
+              ref: d.ref,
+              since: sinceFmt.format(d.since),
+            }))}
+            subscribe={subscribeOrderPushAction.bind(null, token)}
+            unsubscribe={unsubscribeOrderPushAction.bind(null, token)}
+            remove={removeOrderDeviceAction.bind(null, token)}
+            hint={t('webPush.buyerHint', { org: order.event.organizerName })}
+          />
+        </Card>
+      </section>
       <section aria-labelledby="emails-heading" className="flex flex-col gap-3">
         <h2 id="emails-heading" className="text-section">
           {t('order.emailsSent')}

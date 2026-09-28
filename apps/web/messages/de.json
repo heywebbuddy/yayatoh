@@ -3632,5 +3632,31 @@
     "invalidPassword": "Dieses Passwort ist nicht richtig.",
     "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
     "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
+  },
+  "webPush": {
+    "title": "Push-Benachrichtigungen",
+    "buyerHint": "Erhalte Neuigkeiten von {org} zu dieser Veranstaltung auf diesem Gerät, auch wenn diese Seite geschlossen ist.",
+    "memberHint": "Erhalte neue Bestellungen und Nachrichten für {org} auf diesem Gerät, auch wenn Yayatoh geschlossen ist.",
+    "checking": "Dieser Browser wird geprüft …",
+    "on": "Benachrichtigungen sind auf diesem Gerät an.",
+    "off": "Benachrichtigungen sind auf diesem Gerät aus.",
+    "turnOn": "Benachrichtigungen einschalten",
+    "turnOff": "Auf diesem Gerät ausschalten",
+    "turnedOn": "Benachrichtigungen sind an. Neuigkeiten kommen auf diesem Gerät an.",
+    "turnedOff": "Benachrichtigungen sind auf diesem Gerät aus.",
+    "blocked": "Benachrichtigungen sind für diese Website blockiert. Erlaube sie in den Website-Einstellungen deines Browsers und lade diese Seite neu.",
+    "notAllowed": "Benachrichtigungen wurden nicht erlaubt, daher hat sich nichts geändert.",
+    "unsupported": "Dieser Browser kann keine Push-Benachrichtigungen empfangen.",
+    "unavailable": "Push-Benachrichtigungen sind noch nicht verfügbar.",
+    "failed": "Benachrichtigungen konnten nicht eingeschaltet werden. Bitte versuche es erneut.",
+    "tooMany": "Zu viele Geräte erhalten Benachrichtigungen. Entferne eines und versuche es erneut.",
+    "devices": "Deine Geräte",
+    "devicesNone": "Noch erhält kein Gerät Benachrichtigungen.",
+    "thisDevice": "(dieses Gerät)",
+    "since": "Seit {date}",
+    "remove": "Entfernen",
+    "removeLabel": "{label} entfernen",
+    "removed": "Gerät entfernt.",
+    "unknownDevice": "Browser"
   }
 }

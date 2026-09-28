@@ -48,6 +48,8 @@ const config: NextConfig = {
   async headers() {
     return [
       { source: '/:path*', headers: baseline },
+      // The push service worker (M1.10e): browsers must see a new version at once.
+      { source: '/push-sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
       {
         // JSON, webhooks, downloads: nothing may render, frame or sniff them. The /v1 API reference
         // (an HTML page, M1.13) and email previews (M1.10d: framed by the console, inline styles
