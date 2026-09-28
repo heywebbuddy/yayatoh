@@ -200,22 +200,19 @@ export async function dispatchDueTx(
         .where(and(eq(templateOverrides.kind, row.kind), eq(templateOverrides.locale, locale)));
       const unsub = optional ? unsubscribeUrls(deps.appOrigin, row.id, emailLocale(locale)) : null;
       const href = typeof params._href === 'string' && params._href ? params._href : null;
+      // Member alerts link into the console: their button uses the same link as push (M1.9e).
+      const consoleLink = href ? `${deps.appOrigin}/o/${org.slug}${href}` : null;
       const rendered = renderMessage({
         kind: row.kind as MessageKind,
         locale,
-        params,
+        params: consoleLink && !params.url ? { ...params, url: consoleLink } : params,
         // The brand kit logo (M1.4e) as an absolute URL on the app origin (email clients fetch it).
         org: { ...org, logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null },
         recipientName: row.recipientName,
         unsubscribeUrl: unsub?.page ?? null,
         override: override ?? null,
       });
-      const link =
-        typeof params.url === 'string' && params.url
-          ? params.url
-          : href
-            ? `${deps.appOrigin}/o/${org.slug}${href}`
-            : null;
+      const link = typeof params.url === 'string' && params.url ? params.url : consoleLink;
       let providerMessageId: string;
       if (row.channel === 'email') {
         if (!email) {

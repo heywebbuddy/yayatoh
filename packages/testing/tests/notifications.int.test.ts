@@ -459,7 +459,13 @@ describe('notifications: member inbox and preferences', () => {
     await executeCommand(addMemberCommand, { userId, role: 'finance' }, a.ctx(), ports);
     const me = userCtx(userId, a.org.id);
     const grid = await executeQuery(myPreferencesQuery, {}, me, ports);
-    expect(grid).toHaveLength(12);
+    // 4 member categories (sales, messages, security since M1.9e, marketing) × 4 channels.
+    expect(grid).toHaveLength(16);
+    expect(grid.filter((p) => p.category === 'security' && p.enabled).map((p) => p.channel)).toEqual([
+      'in_app',
+      'email',
+      'push',
+    ]);
     expect(grid.find((p) => p.category === 'sales' && p.channel === 'in_app')).toMatchObject({
       enabled: true,
       isDefault: true,

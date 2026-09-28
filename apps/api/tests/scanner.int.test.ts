@@ -57,7 +57,8 @@ describe('/v1 scanner endpoints', () => {
         body: JSON.stringify({ eventId: a.event.id, scans: [scan] }),
       });
     const first = (await (await post()).json()) as { results: { result: string; stored: boolean }[] };
-    expect(first.results).toEqual([{ scanId: scan.scanId, result: 'invalid', stored: true }]);
+    // An invalid code describes no ticket, so it has no open signals (M1.9e, additive field).
+    expect(first.results).toEqual([{ scanId: scan.scanId, result: 'invalid', stored: true, openSignals: 0 }]);
     const again = (await (await post()).json()) as { results: { stored: boolean }[] };
     expect(again.results[0]?.stored).toBe(false);
 

@@ -3,14 +3,9 @@
 import { Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { SignalBanner } from '@/components/signal-banner.tsx';
 import { canUseCamera, createDecoder } from '@/scan/camera.ts';
-import {
-  ScanClient,
-  type ScanConfig,
-  type ScanOutcome,
-  ScanSyncError,
-  type ServerResult,
-} from '@/scan/client.ts';
+import { ScanClient, type ScanConfig, type ScanOutcome, ScanSyncError } from '@/scan/client.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
 
@@ -79,11 +74,10 @@ export function ScanApp() {
       try {
         await c.sync();
         const results = await c.flush();
-        setLast((prev) =>
-          prev && results.has(prev.scanId)
-            ? { ...prev, server: results.get(prev.scanId) as ServerResult }
-            : prev,
-        );
+        setLast((prev) => {
+          const r = prev ? results.get(prev.scanId) : undefined;
+          return prev && r ? { ...prev, server: r.result, openSignals: r.openSignals } : prev;
+        });
         setError(null);
         setOnline(true);
       } catch (err) {
@@ -349,6 +343,7 @@ export function ScanApp() {
               </p>
             ) : null}
             <p className="text-caption">{last.server ? t('scan.confirmed') : t('scan.pending')}</p>
+            <SignalBanner count={last.openSignals ?? 0} />
           </div>
         ) : null}
       </div>

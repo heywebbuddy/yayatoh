@@ -1,6 +1,11 @@
 'use server';
 
-import { resolveFraudSignalCommand, setDetectionSettingsCommand } from '@yayatoh/checkin';
+import {
+  FRAUD_NOTE_MAX,
+  FRAUD_NOTE_MIN_DISMISS,
+  resolveFraudSignalCommand,
+  setDetectionSettingsCommand,
+} from '@yayatoh/checkin';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
@@ -9,24 +14,42 @@ import { ports } from '@/server/ports.ts';
 export type SignalActionState =
   | { readonly kind: 'idle' }
   | { readonly kind: 'done'; readonly status: 'acknowledged' | 'dismissed' }
-  | { readonly kind: 'error'; readonly code: string };
+  | {
+      readonly kind: 'error';
+      readonly code: string;
+      /** `note`: a dismissal without a reason (kept, so the person can fix it). */
+      readonly field?: 'note';
+      readonly note: string;
+    };
 
-/** Acknowledge (someone is on it) or dismiss (not a problem). Audited by the command. */
+/**
+ * Acknowledge (someone is on it) or dismiss (not a problem, with a reason) one of the event's
+ * signals: the fraud list and the order timeline share it (M1.9e). Audited by the command, which
+ * also refuses members without `events:write` (viewers see no buttons, and are refused here too).
+ */
 export async function resolveSignalAction(
   org: string,
   event: string,
   signalId: string,
-  status: 'acknowledged' | 'dismissed',
   _prev: SignalActionState,
-  _form: FormData,
+  form: FormData,
 ): Promise<SignalActionState> {
   const { data, event: ev } = await loadEvent(org, event);
+  const status = form.get('status') === 'dismissed' ? 'dismissed' : 'acknowledged';
+  const note = String(form.get('note') ?? '').trim();
+  if (status === 'dismissed' && note.length < FRAUD_NOTE_MIN_DISMISS)
+    return { kind: 'error', code: 'validation_failed', field: 'note', note };
   try {
-    await executeCommand(resolveFraudSignalCommand, { eventId: ev.id, signalId, status }, data.ctx, ports);
-    revalidatePath(`/o/${org}/e/${event}/onsite`, 'layout');
+    await executeCommand(
+      resolveFraudSignalCommand,
+      { eventId: ev.id, signalId, status, ...(note ? { note: note.slice(0, FRAUD_NOTE_MAX) } : {}) },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}`, 'layout');
     return { kind: 'done', status };
   } catch (err) {
-    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal' };
+    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal', note };
   }
 }
 

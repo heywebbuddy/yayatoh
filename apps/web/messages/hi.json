@@ -60,6 +60,9 @@
       "payments": {
         "destination-changed": "नया भुगतान खाता: इस खाते में ट्रांसफ़र {until} के बाद शुरू होंगे"
       },
+      "security": {
+        "fraud_signal": "धोखाधड़ी अलर्ट: {signal, select, two_entrances {एक ही टिकट दो प्रवेश द्वारों पर} impossible_travel {चेकपॉइंट के बीच असंभव यात्रा} device_velocity {बहुत तेज़ी से स्कैन करता स्कैनर} invalid_burst {अमान्य कोड की झड़ी} rejected_burst {अस्वीकृत स्कैन की झड़ी} purchase_velocity {एक ही खरीदार के कई ऑर्डर} country_mismatch {किसी दूसरे देश में खरीदार} checkout_blocked {रोका गया चेकआउट} card_testing {संभावित कार्ड टेस्टिंग} chat_abuse {रिपोर्ट की गई बातचीत} other {धोखाधड़ी संकेत}}{eventName, select, none {} other { · {eventName}}}"
+      },
       "tenancy": {
         "staff-access": "Yayatoh सहायता {until} तक {member} के रूप में काम कर रही है",
         "org-status": "{status, select, suspended {Yayatoh ने इस संगठन को निलंबित किया} reactivated {यह संगठन फिर से ऑनलाइन है} other {Yayatoh ने इस संगठन को बंद किया}}"
@@ -101,6 +104,9 @@
       },
       "payments": {
         "destination-changed": "भुगतान खाते में बदलाव"
+      },
+      "security": {
+        "fraud_signal": "धोखाधड़ी अलर्ट"
       }
     },
     "status": {
@@ -152,6 +158,10 @@
         "messages": {
           "name": "संदेश",
           "hint": "कोई ग्राहक आपके संगठन को लिखता है।"
+        },
+        "security": {
+          "name": "धोखाधड़ी और सुरक्षा अलर्ट",
+          "hint": "उच्च-गंभीरता धोखाधड़ी संकेत: प्रवेश द्वार, चेकआउट और रिपोर्ट की गई बातचीत।"
         },
         "marketing": {
           "name": "Yayatoh की खबरें",
@@ -1003,7 +1013,12 @@
       "invalid_burst": "लगातार कई अमान्य कोड",
       "device_velocity": "इंसान की क्षमता से तेज़ स्कैनिंग",
       "impossible_travel": "बहुत दूर की दो जगहों पर एक ही टिकट से प्रवेश",
-      "rejected_burst": "लगातार कई अस्वीकृत स्कैन"
+      "rejected_burst": "लगातार कई अस्वीकृत स्कैन",
+      "purchase_velocity": "एक ही खरीदार के कई ऑर्डर",
+      "country_mismatch": "किसी दूसरे देश से खरीदा गया",
+      "checkout_blocked": "जोखिम नियमों ने चेकआउट रोका",
+      "card_testing": "संभावित कार्ड टेस्टिंग",
+      "chat_abuse": "बातचीत रिपोर्ट की गई"
     },
     "chooseStand": "अपना चेकपॉइंट चुनें",
     "location": "स्थान (वैकल्पिक)",
@@ -3249,7 +3264,9 @@
     "flagged": "चेकआउट पर चिह्नित",
     "rules": {
       "email_velocity_review": "एक घंटे में इस ईमेल से कई ऑर्डर",
-      "country_mismatch_review": "कार्यक्रम के देश से अलग देश से खरीदा गया"
+      "country_mismatch_review": "कार्यक्रम के देश से अलग देश से खरीदा गया",
+      "email_velocity_block": "एक घंटे में इस ईमेल से बहुत ज़्यादा ऑर्डर",
+      "payment_failures_block": "इस ईमेल से बहुत ज़्यादा विफल भुगतान"
     }
   },
   "refundPolicy": {
@@ -3777,6 +3794,52 @@
     "invalidPassword": "वह पासवर्ड सही नहीं है।",
     "rateLimited": "बहुत ज़्यादा कोशिशें। 15 मिनट रुकें, फिर दोबारा कोशिश करें।",
     "unauthenticated": "आपका सत्र समाप्त हो गया है। फिर से साइन इन करें।"
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, one {इस टिकट पर # खुला उच्च-गंभीरता संकेत} other {इस टिकट पर # खुले उच्च-गंभीरता संकेत}}",
+      "action": "अंदर जाने देने से पहले किसी सुपरवाइज़र से पूछें।"
+    },
+    "note": {
+      "label": "नोट",
+      "hint": "स्वीकार करने के लिए वैकल्पिक; खारिज करने के लिए ज़रूरी।",
+      "required": "बताएँ कि आप इसे क्यों खारिज कर रहे हैं (कम से कम 3 अक्षर)।",
+      "shown": "नोट: {note}"
+    },
+    "filter": {
+      "title": "संकेत फ़िल्टर करें",
+      "kind": "प्रकार",
+      "allKinds": "सभी प्रकार",
+      "severity": "गंभीरता",
+      "allSeverities": "सभी गंभीरता",
+      "status": "स्थिति",
+      "allStatuses": "सभी स्थितियाँ",
+      "apply": "फ़िल्टर करें",
+      "clear": "फ़िल्टर हटाएँ",
+      "showing": "{count, plural, =0 {फ़िल्टर से कोई संकेत मेल नहीं खाता} one {# संकेत फ़िल्टर से मेल खाता है} other {# संकेत फ़िल्टर से मेल खाते हैं}}",
+      "emptyTitle": "कोई मेल खाता संकेत नहीं",
+      "emptyDescription": "कोई दूसरा प्रकार, गंभीरता या स्थिति आज़माएँ।"
+    },
+    "source": {
+      "checkin": "प्रवेश द्वार पर",
+      "checkout": "चेकआउट पर",
+      "chat": "चैट रिपोर्ट"
+    },
+    "summary": {
+      "orders": "{count, plural, one {एक घंटे में इस ईमेल से # ऑर्डर} other {एक घंटे में इस ईमेल से # ऑर्डर}}",
+      "failures": "{count, plural, one {# विफल भुगतान} other {# विफल भुगतान}}",
+      "reason": {
+        "spam": "स्पैम के रूप में रिपोर्ट किया गया",
+        "abuse": "अपमानजनक के रूप में रिपोर्ट किया गया",
+        "other": "किसी अन्य कारण से रिपोर्ट किया गया"
+      }
+    },
+    "openOrder": "ऑर्डर खोलें",
+    "openConversation": "बातचीत खोलें",
+    "timeline": {
+      "title": "संकेत",
+      "empty": "इस ऑर्डर पर कोई धोखाधड़ी संकेत नहीं।"
+    }
   },
   "accountDeleted": {
     "metaTitle": "खाता हटा दिया गया",

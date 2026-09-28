@@ -2510,6 +2510,7 @@ export interface paths {
                         "application/json": {
                             duplicatesOffline: number;
                             results: {
+                                openSignals?: number;
                                 result: string;
                                 /** Format: uuid */
                                 scanId: string;

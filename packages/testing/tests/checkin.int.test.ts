@@ -121,6 +121,7 @@ describe('check-in', () => {
       ticket: null,
       admissionId: null,
       firstAdmittedAt: null,
+      openSignals: 0,
     });
   });
 

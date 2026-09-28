@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import {
   eventDay,
+  legacyPayloadHash,
   lookupHash,
   MANIFEST_VERSION,
   type ManifestHeader,
@@ -29,7 +30,7 @@ import { z } from 'zod';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
-import { checkVelocityTx } from './signals.ts';
+import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -154,7 +155,10 @@ const ManifestRowDto = z.object({
   holderName: z.string(),
   emailHash: z.string(),
   issuedAt: z.string(),
-  /** Migrated tickets: lookup hashes of their legacy QR payloads (offline scanning, M2.2c). */
+  /**
+   * Migrated tickets: their legacy QR payloads as `legacyPayloadHash(salt, payload)` only
+   * (case-sensitive, domain-separated; offline scanning, M2.2c/M1.9e).
+   */
   legacyCodes: z.array(z.string()).optional(),
 });
 
@@ -277,7 +281,7 @@ export const deviceManifestQuery = tenantQuery({
         emailHash: await lookupHash(salt, t.holderEmail),
         issuedAt: t.createdAt.toISOString(),
         ...(t.legacyCodes.length
-          ? { legacyCodes: await Promise.all(t.legacyCodes.map((c) => lookupHash(salt, c))) }
+          ? { legacyCodes: await Promise.all(t.legacyCodes.map((c) => legacyPayloadHash(salt, c))) }
           : {}),
       });
     }
@@ -339,7 +343,15 @@ const DEVICE_VERDICTS = [
 ] as const;
 
 export const SyncResultDto = z.object({
-  results: z.array(z.object({ scanId: z.uuid(), result: z.string(), stored: z.boolean() })),
+  results: z.array(
+    z.object({
+      scanId: z.uuid(),
+      result: z.string(),
+      stored: z.boolean(),
+      /** Open high-severity fraud signals about the scanned ticket or its order (M1.9e, additive). */
+      openSignals: z.int().optional(),
+    }),
+  ),
   duplicatesOffline: z.int(),
 });
 
@@ -545,7 +557,12 @@ export const syncScansCommand = tenantCommand({
           checkpointId: checkpoint?.id ?? null,
         })
         .onConflictDoNothing();
-      results.push({ scanId: s.scanId, result, stored: true });
+      results.push({
+        scanId: s.scanId,
+        result,
+        stored: true,
+        openSignals: ticket && inScope ? await openHighSignalCountTx(tx, ticket) : 0,
+      });
       if (ticket && OK_RESULTS.has(result)) okTickets.push(ticket.id);
     }
     // Velocity rules over the uploaded log (corrected times), alongside the online ones.

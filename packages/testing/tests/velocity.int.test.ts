@@ -254,10 +254,23 @@ describe('the fraud list and triage', () => {
     expect(list[0]?.checkpointName).toBe('Hall');
     expect(list[0]?.fromCheckpointName).toBe('North gate');
     expect(list.find((s) => s.kind === 'rejected_burst')?.deviceLabel).toBe('Refusing phone');
-    // Only allowlisted numbers leave: no scan ids, no checkpoint ids in the detail.
+    // Only allowlisted fields leave: no scan ids, no checkpoint ids in the detail (M1.9e adds the
+    // checkout counts, known rule ids and a chat report's reason, all empty for door signals).
     expect(Object.keys(list[0]?.detail ?? {}).sort()).toEqual(
-      ['count', 'distanceM', 'kmh', 'limit', 'seconds', 'windowSeconds'].sort(),
+      [
+        'count',
+        'distanceM',
+        'kmh',
+        'limit',
+        'seconds',
+        'windowSeconds',
+        'orders',
+        'failures',
+        'rules',
+        'reason',
+      ].sort(),
     );
+    expect(list[0]?.detail).toMatchObject({ orders: null, failures: null, rules: [], reason: null });
   });
 
   it('managers acknowledge or dismiss (audited); viewers and door staff cannot; another org cannot', async () => {
@@ -265,8 +278,14 @@ describe('the fraud list and triage', () => {
     const travel = list.find((s) => s.kind === 'impossible_travel');
     const burst = list.find((s) => s.kind === 'rejected_burst');
     if (!travel || !burst) throw new Error('signals missing');
+    // A dismissal carries its reason (M1.9e).
     const resolve = (signalId: string, status: 'acknowledged' | 'dismissed', ctx = a.ctx()) =>
-      executeCommand(resolveFraudSignalCommand, { eventId, signalId, status }, ctx, ports);
+      executeCommand(
+        resolveFraudSignalCommand,
+        { eventId, signalId, status, ...(status === 'dismissed' ? { note: 'Checked at the door' } : {}) },
+        ctx,
+        ports,
+      );
     const viewer = userCtx(a.viewerId, a.org.id);
     await expect(resolve(travel.id, 'dismissed', viewer)).rejects.toMatchObject({ code: 'forbidden' });
     await executeCommand(

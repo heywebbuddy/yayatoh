@@ -60,6 +60,9 @@
       "payments": {
         "destination-changed": "حساب دفعات جديد: تبدأ التحويلات إليه بعد {until}"
       },
+      "security": {
+        "fraud_signal": "تنبيه احتيال: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}{eventName, select, none {} other { · {eventName}}}"
+      },
       "tenancy": {
         "staff-access": "دعم Yayatoh يتصرف بصفة {member} حتى {until}",
         "org-status": "{status, select, suspended {علّقت Yayatoh هذه المؤسسة} reactivated {عادت هذه المؤسسة إلى العمل} other {أغلقت Yayatoh هذه المؤسسة}}"
@@ -101,6 +104,9 @@
       },
       "payments": {
         "destination-changed": "تغيير حساب الدفعات"
+      },
+      "security": {
+        "fraud_signal": "تنبيه احتيال"
       }
     },
     "status": {
@@ -152,6 +158,10 @@
         "messages": {
           "name": "الرسائل",
           "hint": "عميل يكتب إلى مؤسستك."
+        },
+        "security": {
+          "name": "تنبيهات الاحتيال والأمان",
+          "hint": "إشارات احتيال عالية الخطورة: عند الباب وعند الدفع والمحادثات المُبلَّغ عنها."
         },
         "marketing": {
           "name": "أخبار Yayatoh",
@@ -1003,7 +1013,12 @@
       "invalid_burst": "عدة رموز غير صالحة متتالية",
       "device_velocity": "مسح أسرع مما يستطيعه شخص",
       "impossible_travel": "تذكرة دخلت من مكانين متباعدين جداً",
-      "rejected_burst": "عمليات مسح مرفوضة كثيرة متتالية"
+      "rejected_burst": "عمليات مسح مرفوضة كثيرة متتالية",
+      "purchase_velocity": "طلبات كثيرة من مشترٍ واحد",
+      "country_mismatch": "شراء من بلد آخر",
+      "checkout_blocked": "الدفع محظور بقواعد المخاطر",
+      "card_testing": "اختبار بطاقات محتمل",
+      "chat_abuse": "تم الإبلاغ عن محادثة"
     },
     "chooseStand": "اختر نقطة التفتيش الخاصة بك",
     "location": "الموقع (اختياري)",
@@ -3249,7 +3264,9 @@
     "flagged": "مُعلَّم عند الدفع",
     "rules": {
       "email_velocity_review": "طلبات كثيرة من هذا البريد خلال ساعة",
-      "country_mismatch_review": "تم الشراء من بلد غير بلد الفعالية"
+      "country_mismatch_review": "تم الشراء من بلد غير بلد الفعالية",
+      "email_velocity_block": "طلبات كثيرة جدًا من هذا البريد خلال ساعة",
+      "payment_failures_block": "مدفوعات فاشلة كثيرة جدًا من هذا البريد"
     }
   },
   "refundPolicy": {
@@ -3777,6 +3794,52 @@
     "invalidPassword": "كلمة المرور غير صحيحة.",
     "rateLimited": "محاولات كثيرة جدًا. انتظر 15 دقيقة ثم حاول مرة أخرى.",
     "unauthenticated": "انتهت جلستك. سجّل الدخول مرة أخرى."
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, zero {لا توجد إشارات مفتوحة عالية الخطورة على هذه التذكرة} one {إشارة مفتوحة واحدة عالية الخطورة على هذه التذكرة} two {إشارتان مفتوحتان عاليتا الخطورة على هذه التذكرة} few {# إشارات مفتوحة عالية الخطورة على هذه التذكرة} many {# إشارة مفتوحة عالية الخطورة على هذه التذكرة} other {# إشارة مفتوحة عالية الخطورة على هذه التذكرة}}",
+      "action": "اطلب من المشرف المراجعة قبل السماح بالدخول."
+    },
+    "note": {
+      "label": "ملاحظة",
+      "hint": "اختيارية للتأكيد، ومطلوبة للتجاهل.",
+      "required": "اذكر سبب التجاهل (3 أحرف على الأقل).",
+      "shown": "ملاحظة: {note}"
+    },
+    "filter": {
+      "title": "تصفية الإشارات",
+      "kind": "النوع",
+      "allKinds": "كل الأنواع",
+      "severity": "الخطورة",
+      "allSeverities": "كل مستويات الخطورة",
+      "status": "الحالة",
+      "allStatuses": "كل الحالات",
+      "apply": "تصفية",
+      "clear": "مسح عوامل التصفية",
+      "showing": "{count, plural, =0 {لا توجد إشارات مطابقة} zero {لا توجد إشارات مطابقة} one {إشارة واحدة مطابقة} two {إشارتان مطابقتان} few {# إشارات مطابقة} many {# إشارة مطابقة} other {# إشارة مطابقة}}",
+      "emptyTitle": "لا توجد إشارات مطابقة",
+      "emptyDescription": "جرّب نوعًا أو خطورة أو حالة أخرى."
+    },
+    "source": {
+      "checkin": "عند الباب",
+      "checkout": "عند الدفع",
+      "chat": "بلاغ محادثة"
+    },
+    "summary": {
+      "orders": "{count, plural, zero {لا طلبات من هذا البريد خلال ساعة} one {طلب واحد من هذا البريد خلال ساعة} two {طلبان من هذا البريد خلال ساعة} few {# طلبات من هذا البريد خلال ساعة} many {# طلبًا من هذا البريد خلال ساعة} other {# طلب من هذا البريد خلال ساعة}}",
+      "failures": "{count, plural, zero {لا مدفوعات فاشلة} one {دفعة واحدة فاشلة} two {دفعتان فاشلتان} few {# دفعات فاشلة} many {# دفعة فاشلة} other {# دفعة فاشلة}}",
+      "reason": {
+        "spam": "تم الإبلاغ عنها كرسائل مزعجة",
+        "abuse": "تم الإبلاغ عنها كإساءة",
+        "other": "تم الإبلاغ عنها لسبب آخر"
+      }
+    },
+    "openOrder": "فتح الطلب",
+    "openConversation": "فتح المحادثة",
+    "timeline": {
+      "title": "الإشارات",
+      "empty": "لا توجد إشارات احتيال لهذا الطلب."
+    }
   },
   "accountDeleted": {
     "metaTitle": "تم حذف الحساب",

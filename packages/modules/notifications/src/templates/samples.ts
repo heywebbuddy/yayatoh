@@ -65,6 +65,7 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     name: 'Amina Diallo',
     replyUrl: 'https://app.yayatoh.test/messages/sample',
   },
+  'security.fraud_signal': { signal: 'purchase_velocity', eventName: 'Lakeside Jazz Night' },
   'sales.order_paid': {
     name: 'Amina Diallo',
     eventName: 'Lakeside Jazz Night',

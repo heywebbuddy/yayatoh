@@ -60,6 +60,9 @@
       "payments": {
         "destination-changed": "Nova conta de repasse: as transferências para ela começam depois de {until}"
       },
+      "security": {
+        "fraud_signal": "Alerta de fraude: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}{eventName, select, none {} other { · {eventName}}}"
+      },
       "tenancy": {
         "staff-access": "O suporte da Yayatoh está atuando como {member} até {until}",
         "org-status": "{status, select, suspended {A Yayatoh suspendeu esta organização} reactivated {Esta organização está online novamente} other {A Yayatoh encerrou esta organização}}"
@@ -101,6 +104,9 @@
       },
       "payments": {
         "destination-changed": "Alteração da conta de repasse"
+      },
+      "security": {
+        "fraud_signal": "Alerta de fraude"
       }
     },
     "status": {
@@ -152,6 +158,10 @@
         "messages": {
           "name": "Mensagens",
           "hint": "Um cliente escreve para sua organização."
+        },
+        "security": {
+          "name": "Alertas de fraude e segurança",
+          "hint": "Sinais de fraude de gravidade alta: à entrada, no pagamento e conversas denunciadas."
         },
         "marketing": {
           "name": "Novidades da Yayatoh",
@@ -1003,7 +1013,12 @@
       "invalid_burst": "Vários códigos inválidos seguidos",
       "device_velocity": "Сканирование быстрее, чем может человек",
       "impossible_travel": "Билет пропущен в двух слишком удалённых местах",
-      "rejected_burst": "Много отказов подряд"
+      "rejected_burst": "Много отказов подряд",
+      "purchase_velocity": "Muitas encomendas do mesmo comprador",
+      "country_mismatch": "Comprado a partir de outro país",
+      "checkout_blocked": "Pagamento bloqueado pelas regras de risco",
+      "card_testing": "Possível teste de cartões",
+      "chat_abuse": "Conversa denunciada"
     },
     "chooseStand": "Выберите свой пункт проверки",
     "location": "Местоположение (необязательно)",
@@ -3249,7 +3264,9 @@
     "flagged": "Assinalado no pagamento",
     "rules": {
       "email_velocity_review": "Muitas encomendas deste email numa hora",
-      "country_mismatch_review": "Comprado a partir de outro país que não o do evento"
+      "country_mismatch_review": "Comprado a partir de outro país que não o do evento",
+      "email_velocity_block": "Demasiadas encomendas deste email numa hora",
+      "payment_failures_block": "Demasiados pagamentos falhados deste email"
     }
   },
   "refundPolicy": {
@@ -3777,6 +3794,52 @@
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
     "unauthenticated": "Sua sessão terminou. Entre de novo."
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, one {# sinal aberto de gravidade alta neste bilhete} other {# sinais abertos de gravidade alta neste bilhete}}",
+      "action": "Peça a um supervisor antes de deixar entrar."
+    },
+    "note": {
+      "label": "Nota",
+      "hint": "Opcional para confirmar; obrigatória para descartar.",
+      "required": "Indique porque o descarta (pelo menos 3 caracteres).",
+      "shown": "Nota: {note}"
+    },
+    "filter": {
+      "title": "Filtrar sinais",
+      "kind": "Tipo",
+      "allKinds": "Todos os tipos",
+      "severity": "Gravidade",
+      "allSeverities": "Todas as gravidades",
+      "status": "Estado",
+      "allStatuses": "Todos os estados",
+      "apply": "Filtrar",
+      "clear": "Limpar filtros",
+      "showing": "{count, plural, =0 {Nenhum sinal corresponde ao filtro} one {# sinal corresponde ao filtro} other {# sinais correspondem ao filtro}}",
+      "emptyTitle": "Nenhum sinal corresponde",
+      "emptyDescription": "Experimente outro tipo, gravidade ou estado."
+    },
+    "source": {
+      "checkin": "À entrada",
+      "checkout": "No pagamento",
+      "chat": "Denúncia de conversa"
+    },
+    "summary": {
+      "orders": "{count, plural, one {# encomenda deste email numa hora} other {# encomendas deste email numa hora}}",
+      "failures": "{count, plural, one {# pagamento falhado} other {# pagamentos falhados}}",
+      "reason": {
+        "spam": "Denunciado como spam",
+        "abuse": "Denunciado como abusivo",
+        "other": "Denunciado por outro motivo"
+      }
+    },
+    "openOrder": "Abrir a encomenda",
+    "openConversation": "Abrir a conversa",
+    "timeline": {
+      "title": "Sinais",
+      "empty": "Não há sinais de fraude sobre esta encomenda."
+    }
   },
   "accountDeleted": {
     "metaTitle": "Conta eliminada",

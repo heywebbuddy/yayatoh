@@ -4673,6 +4673,9 @@
                           },
                           "stored": {
                             "type": "boolean"
+                          },
+                          "openSignals": {
+                            "type": "integer"
                           }
                         },
                         "required": [

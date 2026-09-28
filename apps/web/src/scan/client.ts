@@ -1,6 +1,7 @@
 import {
   admittedKey,
   eventDay,
+  legacyIndex,
   MANIFEST_VERSION,
   type ManifestHeader,
   type ManifestRow,
@@ -64,6 +65,14 @@ export interface ScanOutcome {
   readonly typeName: string | null;
   /** Set once the server has reconciled this scan (it may disagree with the local verdict). */
   readonly server: ServerResult | null;
+  /** Open high-severity fraud signals the server knows about this ticket (M1.9e; online only). */
+  readonly openSignals?: number;
+}
+
+/** The server's answer for one queued scan. */
+export interface ServerScan {
+  readonly result: ServerResult;
+  readonly openSignals: number;
 }
 
 /** Stop scanning with the downloaded list this long after the event ends (roadmap §5.4). */
@@ -79,6 +88,7 @@ export class ScanClient {
   private snapshot: Snapshot | null = null;
   private byId = new Map<string, ManifestRow>();
   private byShort = new Map<string, ManifestRow>();
+  /** Migrated tickets by their legacy QR payload hashes (M1.9e). */
   private byLegacy = new Map<string, ManifestRow>();
   private admitted = new Set<string>();
   /** server time − device time, measured at each sync. */
@@ -154,9 +164,7 @@ export class ScanClient {
     const s = this.snapshot;
     this.byId = new Map((s?.rows ?? []).map((r) => [r.ticketId, r]));
     this.byShort = new Map((s?.rows ?? []).map((r) => [r.shortCode, r]));
-    this.byLegacy = new Map(
-      (s?.rows ?? []).flatMap((r) => (r.legacyCodes ?? []).map((c) => [c, r] as const)),
-    );
+    this.byLegacy = legacyIndex(s?.rows ?? []);
     this.admitted = new Set(s?.admitted ?? []);
   }
 
@@ -199,10 +207,8 @@ export class ScanClient {
         // working offline too.
         const prev = this.byId.get(r.ticketId);
         if (prev && prev.shortCode !== r.shortCode) this.byShort.delete(prev.shortCode);
-        for (const c of prev?.legacyCodes ?? []) this.byLegacy.delete(c);
         this.byId.set(r.ticketId, r);
         this.byShort.set(r.shortCode, r);
-        for (const c of r.legacyCodes ?? []) this.byLegacy.set(c, r);
       }
       cursor = page.cursor;
       first = false;
@@ -220,6 +226,7 @@ export class ScanClient {
       lastSyncAt: header.serverTime,
       admitted: [...this.admitted],
     };
+    this.byLegacy = legacyIndex(this.byId.values());
     await this.persist();
   }
 
@@ -267,8 +274,8 @@ export class ScanClient {
   }
 
   /** Send queued scans; returns the server's result per scan id. Offline → throws, queue kept. */
-  async flush(): Promise<Map<string, ServerResult>> {
-    const out = new Map<string, ServerResult>();
+  async flush(): Promise<Map<string, ServerScan>> {
+    const out = new Map<string, ServerScan>();
     const queued = await queueAll();
     for (let i = 0; i < queued.length; i += BATCH) {
       const chunk = queued.slice(i, i + BATCH);
@@ -278,8 +285,10 @@ export class ScanClient {
         body: JSON.stringify({ eventId: this.config.eventId, scans: chunk }),
       });
       if (!res.ok) throw new Error(`sync ${res.status}`);
-      const body = (await res.json()) as { results: { scanId: string; result: ServerResult }[] };
-      for (const r of body.results) out.set(r.scanId, r.result);
+      const body = (await res.json()) as {
+        results: { scanId: string; result: ServerResult; openSignals?: number }[];
+      };
+      for (const r of body.results) out.set(r.scanId, { result: r.result, openSignals: r.openSignals ?? 0 });
       await queueRemove(chunk.map((c) => c.scanId));
     }
     return out;

@@ -414,8 +414,8 @@ Scope: the M2.2b "Later" list minus sessions, speakers, sections and CMS content
 - The 308s go into `marketplace.legacy_redirects` for the instance host (`yayatoh.com`, `abc.yayatoh.com`; the e2e demo adds `yayatoh.localhost`). The web proxy serves them.
 
 ### Offline scanning of legacy QR codes
-- A manifest row now carries `legacyCodes`: salted lookup hashes of the ticket's active legacy payloads.
-- The Scan PWA indexes them. `offlineVerdict` reads a raw or JSON legacy payload (`legacyCodePayload`) before short codes, as online does.
+- A manifest row now carries `legacyCodes`: salted hashes of the ticket's active legacy payloads (since the M1.9e merge, `legacyPayloadHash`: case-sensitive and domain-separated from the email hash).
+- The Scan PWA indexes them. `offlineVerdict` reads a raw or JSON legacy payload (`legacyQrPayload`, from `@yayatoh/ticket-crypto` since M1.9e) before short codes, as online does.
 - The device batch sync resolves legacy payloads on the server (`code_kind = 'legacy'`).
 - `/v1` change: an optional field on the manifest row (additive; `openapi.json` and the SDK regenerated).
 

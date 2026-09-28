@@ -2717,6 +2717,227 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · zh
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · ar 1`] = `
+{
+  "subject": "تنبيه احتيال: طلبات كثيرة من مشترٍ واحد",
+  "text": "تنبيه احتيال: طلبات كثيرة من مشترٍ واحد
+
+مرحبًا،
+
+توجد إشارة عالية الخطورة تحتاج إلى مراجعة في Lakeside Events (Lakeside Jazz Night): طلبات كثيرة من مشترٍ واحد. افتحها لتأكيدها أو تجاهلها.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · de 1`] = `
+{
+  "subject": "Betrugswarnung: viele Bestellungen von einer Person",
+  "text": "Betrugswarnung: viele Bestellungen von einer Person
+
+Hallo,
+
+Ein Signal mit hohem Schweregrad bei Lakeside Events (Lakeside Jazz Night) muss geprüft werden: viele Bestellungen von einer Person. Öffne es, um es zu übernehmen oder zu verwerfen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · en 1`] = `
+{
+  "subject": "Fraud alert: many orders from one buyer",
+  "text": "Fraud alert: many orders from one buyer
+
+Hello,
+
+A high-severity signal needs a look at Lakeside Events (Lakeside Jazz Night): many orders from one buyer. Open it to acknowledge or dismiss it.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · es 1`] = `
+{
+  "subject": "Alerta de fraude: muchos pedidos de un mismo comprador",
+  "text": "Alerta de fraude: muchos pedidos de un mismo comprador
+
+Hola:
+
+Una señal de gravedad alta requiere revisión en Lakeside Events (Lakeside Jazz Night): muchos pedidos de un mismo comprador. Ábrela para confirmarla o descartarla.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · fr 1`] = `
+{
+  "subject": "Alerte fraude : de nombreuses commandes d’un même acheteur",
+  "text": "Alerte fraude : de nombreuses commandes d’un même acheteur
+
+Bonjour,
+
+Un signal de gravité élevée est à examiner chez Lakeside Events (Lakeside Jazz Night) : de nombreuses commandes d’un même acheteur. Ouvrez-le pour le prendre en charge ou l’écarter.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · hi 1`] = `
+{
+  "subject": "धोखाधड़ी अलर्ट: एक ही खरीदार के कई ऑर्डर",
+  "text": "धोखाधड़ी अलर्ट: एक ही खरीदार के कई ऑर्डर
+
+नमस्ते,
+
+Lakeside Events (Lakeside Jazz Night) में एक उच्च-गंभीरता संकेत को देखना ज़रूरी है: एक ही खरीदार के कई ऑर्डर। इसे स्वीकार या खारिज करने के लिए खोलें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · it 1`] = `
+{
+  "subject": "Avviso di frode: molti ordini dallo stesso acquirente",
+  "text": "Avviso di frode: molti ordini dallo stesso acquirente
+
+Ciao,
+
+Un segnale di gravità alta va controllato presso Lakeside Events (Lakeside Jazz Night): molti ordini dallo stesso acquirente. Aprilo per prenderlo in carico o archiviarlo.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · ja 1`] = `
+{
+  "subject": "不正アラート: 同じ購入者からの多数の注文",
+  "text": "不正アラート: 同じ購入者からの多数の注文
+
+こんにちは。
+
+Lakeside Events（Lakeside Jazz Night）で重要度の高いシグナルの確認が必要です: 同じ購入者からの多数の注文。開いて対応済みにするか却下してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · nl 1`] = `
+{
+  "subject": "Fraudemelding: veel bestellingen van één koper",
+  "text": "Fraudemelding: veel bestellingen van één koper
+
+Hallo,
+
+Een signaal met hoge ernst bij Lakeside Events (Lakeside Jazz Night) moet bekeken worden: veel bestellingen van één koper. Open het om het op te pakken of te negeren.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · pt 1`] = `
+{
+  "subject": "Alerta de fraude: muitas encomendas do mesmo comprador",
+  "text": "Alerta de fraude: muitas encomendas do mesmo comprador
+
+Olá!
+
+Um sinal de gravidade alta precisa de atenção em Lakeside Events (Lakeside Jazz Night): muitas encomendas do mesmo comprador. Abra-o para confirmar ou descartar.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · ru 1`] = `
+{
+  "subject": "Сигнал мошенничества: много заказов от одного покупателя",
+  "text": "Сигнал мошенничества: много заказов от одного покупателя
+
+Здравствуйте!
+
+В Lakeside Events (Lakeside Jazz Night) нужно проверить сигнал высокой важности: много заказов от одного покупателя. Откройте его, чтобы взять в работу или отклонить.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · zh-CN 1`] = `
+{
+  "subject": "欺诈警报：同一买家的大量订单",
+  "text": "欺诈警报：同一买家的大量订单
+
+您好：
+
+Lakeside Events（Lakeside Jazz Night）有一个高严重性信号需要查看：同一买家的大量订单。打开它以确认或忽略。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · zh-TW 1`] = `
+{
+  "subject": "詐欺警示：同一買家的大量訂單",
+  "text": "詐欺警示：同一買家的大量訂單
+
+您好：
+
+Lakeside Events（Lakeside Jazz Night）有一個高嚴重性訊號需要查看：同一買家的大量訂單。開啟以確認或忽略。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · ar 1`] = `
 {
   "subject": "دعوة للانضمام إلى Lakeside Events على Yayatoh",

@@ -19,6 +19,8 @@ export interface KindDefinition {
 
 const SALES_TEAM: readonly OrgRole[] = ['owner', 'admin', 'manager', 'finance', 'box_office'];
 const MESSAGES_TEAM: readonly OrgRole[] = ['owner', 'admin', 'manager', 'marketing', 'box_office'];
+/** Who can triage fraud signals (`events:write`). */
+const SECURITY_TEAM: readonly OrgRole[] = ['owner', 'admin', 'manager'];
 
 /**
  * The message kinds registry (M1.10). Every message the platform sends is one of these; the
@@ -139,6 +141,15 @@ export const KINDS = {
     audience: ['owner'],
     params: ['url', 'status'],
   },
+  // A high-severity fraud signal (M1.9e: door scans, checkout risk, chat reports). Not urgent: the
+  // email waits out the member's quiet hours; in-app is immediate. One per subject per hour.
+  'security.fraud_signal': {
+    category: 'security',
+    channels: ['in_app', 'email', 'push'],
+    urgent: false,
+    audience: SECURITY_TEAM,
+    params: ['signal', 'eventName'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app'],
@@ -164,11 +175,18 @@ export function kindOf(kind: string): KindDefinition {
 }
 
 /** Categories a person can switch off (never transactional). */
-export const OPTIONAL_CATEGORIES = ['reminders', 'event_updates', 'marketing', 'sales', 'messages'] as const;
+export const OPTIONAL_CATEGORIES = [
+  'reminders',
+  'event_updates',
+  'marketing',
+  'sales',
+  'messages',
+  'security',
+] as const;
 export type OptionalCategory = (typeof OPTIONAL_CATEGORIES)[number];
 
 /** Categories shown on a member's preferences page. */
-export const MEMBER_CATEGORIES = ['sales', 'messages', 'marketing'] as const;
+export const MEMBER_CATEGORIES = ['sales', 'messages', 'security', 'marketing'] as const;
 
 /**
  * Defaults when a person has no row: in-app everything; email and push for conversations;

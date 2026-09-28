@@ -13,18 +13,21 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { ticketForScanTx } from '@yayatoh/ticketing';
-import { and, desc, eq, gte, inArray, isNull, lte, or, type SQL } from 'drizzle-orm';
+import { ticketForScanTx, ticketsForOrderTx } from '@yayatoh/ticketing';
+import { and, asc, count, desc, eq, gte, inArray, isNull, lte, or, type SQL } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx, raiseSignalTx } from './checkpoints.ts';
 import {
   detectionSettings,
   devices,
+  FRAUD_NOTE_MAX,
   FRAUD_SEVERITIES,
   FRAUD_SIGNAL_KINDS,
+  FRAUD_SOURCES,
   FRAUD_STATUSES,
   type FraudSeverity,
   type FraudSignalKind,
+  type FraudSource,
   type FraudStatus,
   fraudSignals,
   scans,
@@ -187,9 +190,25 @@ export async function checkVelocityTx(
   return raised;
 }
 
+/** Checkout risk rule ids shown on a signal (the allowlist; anything else is dropped). */
+const RULE_IDS = [
+  'email_velocity_review',
+  'email_velocity_block',
+  'payment_failures_block',
+  'country_mismatch_review',
+] as const;
+const CHAT_REASONS = ['spam', 'abuse', 'other'] as const;
+
 export const FraudSignalDto = z.object({
   id: z.uuid(),
   at: z.date(),
+  /** Null for org-level signals (a chat report with no event). */
+  eventId: z.uuid().nullable(),
+  source: z.enum(FRAUD_SOURCES),
+  /** Checkout signals with an order (reviews); blocked checkouts have none. */
+  orderId: z.uuid().nullable(),
+  /** Chat reports: the conversation (the console links to it for members who read messages). */
+  threadId: z.uuid().nullable(),
   kind: z.enum(FRAUD_SIGNAL_KINDS),
   severity: z.enum(FRAUD_SEVERITIES),
   status: z.enum(FRAUD_STATUSES),
@@ -209,29 +228,63 @@ export const FraudSignalDto = z.object({
     kmh: z.int().nullable(),
     distanceM: z.int().nullable(),
     seconds: z.int().nullable(),
+    /** Checkout: orders from the buyer's email in the hour, and failed payments among them. */
+    orders: z.int().nullable(),
+    failures: z.int().nullable(),
+    /** Checkout: the risk rules that fired (known ids only). */
+    rules: z.array(z.enum(RULE_IDS)),
+    /** Chat: the report's reason (never its note or the messages). */
+    reason: z.enum(CHAT_REASONS).nullable(),
   }),
   resolvedAt: z.date().nullable(),
+  /** Why it was acknowledged or dismissed. */
+  resolutionNote: z.string().nullable(),
 });
 export type FraudSignalDto = z.infer<typeof FraudSignalDto>;
 
 const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? Math.round(v) : null);
 const SEVERITY_RANK: Record<FraudSeverity, number> = { high: 0, medium: 1, low: 2 };
 
-/** Signals of one event, newest first (open ones only, or every status). */
+export interface SignalFilter {
+  readonly status?: FraudStatus | 'all';
+  readonly kind?: FraudSignalKind;
+  readonly severity?: FraudSeverity;
+  readonly source?: FraudSource;
+}
+
+/** Signals of one event, newest first (open ones only, or every status), optionally filtered. */
 export async function fraudSignalsTx(
   tx: TenantTx,
   eventId: string,
-  opts: { openOnly: boolean; limit: number },
+  opts: { openOnly: boolean; limit: number; filter?: SignalFilter },
 ): Promise<FraudSignalDto[]> {
+  const f = opts.filter ?? {};
   const rows = await tx
     .select()
     .from(fraudSignals)
     .where(
-      and(eq(fraudSignals.eventId, eventId), opts.openOnly ? eq(fraudSignals.status, 'open') : undefined),
+      and(
+        eq(fraudSignals.eventId, eventId),
+        opts.openOnly ? eq(fraudSignals.status, 'open') : undefined,
+        f.status && f.status !== 'all' ? eq(fraudSignals.status, f.status) : undefined,
+        f.kind ? eq(fraudSignals.kind, f.kind) : undefined,
+        f.severity ? eq(fraudSignals.severity, f.severity) : undefined,
+        f.source ? eq(fraudSignals.source, f.source) : undefined,
+      ),
     )
     .orderBy(desc(fraudSignals.raisedAt), desc(fraudSignals.id))
     .limit(opts.limit);
-  const cpName = new Map((await checkpointsTx(tx, eventId, true)).map((c) => [c.id, c.name]));
+  return presentSignalsTx(tx, rows);
+}
+
+/** Rows → the allowlisted DTO: names for checkpoints, devices and ticket holders; numbers only. */
+async function presentSignalsTx(
+  tx: TenantTx,
+  rows: (typeof fraudSignals.$inferSelect)[],
+): Promise<FraudSignalDto[]> {
+  const eventIds = [...new Set(rows.flatMap((r) => (r.eventId ? [r.eventId] : [])))];
+  const cpName = new Map<string, string>();
+  for (const id of eventIds) for (const c of await checkpointsTx(tx, id, true)) cpName.set(c.id, c.name);
   const deviceIds = [...new Set(rows.flatMap((r) => (r.deviceId ? [r.deviceId] : [])))];
   const labels = new Map(
     deviceIds.length
@@ -251,9 +304,14 @@ export async function fraudSignalsTx(
   return rows.map((r) => {
     const h = r.ticketId ? holders.get(r.ticketId) : undefined;
     const from = typeof r.detail.fromCheckpointId === 'string' ? r.detail.fromCheckpointId : null;
+    const rules = typeof r.detail.rules === 'string' ? r.detail.rules.split(',') : [];
     return {
       id: r.id,
       at: r.raisedAt,
+      eventId: r.eventId,
+      source: r.source as FraudSource,
+      orderId: r.orderId,
+      threadId: r.threadId,
       kind: r.kind as FraudSignalKind,
       severity: r.severity as FraudSeverity,
       status: r.status as FraudStatus,
@@ -270,8 +328,17 @@ export async function fraudSignalsTx(
         kmh: num(r.detail.kmh),
         distanceM: num(r.detail.distanceM),
         seconds: num(r.detail.seconds),
+        orders: num(r.detail.orders),
+        failures: num(r.detail.failures),
+        rules: rules.filter((x): x is (typeof RULE_IDS)[number] =>
+          (RULE_IDS as readonly string[]).includes(x),
+        ),
+        reason: (CHAT_REASONS as readonly string[]).includes(String(r.detail.reason))
+          ? (r.detail.reason as (typeof CHAT_REASONS)[number])
+          : null,
       },
       resolvedAt: r.resolvedAt,
+      resolutionNote: r.resolutionNote,
     };
   });
 }
@@ -279,12 +346,21 @@ export async function fraudSignalsTx(
 /** The event's fraud list: every signal, open ones first, then by severity and time. */
 export const listFraudSignalsQuery = tenantQuery({
   name: 'checkin.listFraudSignals',
-  input: z.object({ eventId: z.uuid(), status: z.enum(['open', 'all']).default('all') }),
+  input: z.object({
+    eventId: z.uuid(),
+    status: z.enum(['open', 'acknowledged', 'dismissed', 'all']).default('all'),
+    kind: z.enum(FRAUD_SIGNAL_KINDS).optional(),
+    severity: z.enum(FRAUD_SEVERITIES).optional(),
+  }),
   output: z.array(FraudSignalDto),
   entitlement: 'checkin',
   permission: 'checkin:scan',
   handler: async ({ input, tx }) => {
-    const list = await fraudSignalsTx(tx, input.eventId, { openOnly: input.status === 'open', limit: 500 });
+    const list = await fraudSignalsTx(tx, input.eventId, {
+      openOnly: false,
+      limit: 500,
+      filter: { status: input.status, kind: input.kind, severity: input.severity },
+    });
     return list.sort(
       (a, b) =>
         Number(a.status !== 'open') - Number(b.status !== 'open') ||
@@ -294,39 +370,48 @@ export const listFraudSignalsQuery = tenantQuery({
   },
 });
 
-/** Acknowledge (someone is on it) or dismiss (not a problem) an open signal. Audited. */
+/** A dismissal needs a reason; an acknowledgement may carry one. */
+export const FRAUD_NOTE_MIN_DISMISS = 3;
+
+/**
+ * Acknowledge (someone is on it) or dismiss (not a problem) an open signal, with a note (required
+ * to dismiss). Audited with the note. `eventId` scopes it (event roles apply); org-level signals
+ * (a chat report with no event) are resolved without one, by org roles only.
+ */
 export const resolveFraudSignalCommand = tenantCommand({
   name: 'checkin.resolveFraudSignal',
-  input: z.object({
-    eventId: z.uuid(),
-    signalId: z.uuid(),
-    status: z.enum(['acknowledged', 'dismissed']),
-  }),
+  input: z
+    .object({
+      eventId: z.uuid().optional(),
+      signalId: z.uuid(),
+      status: z.enum(['acknowledged', 'dismissed']),
+      note: z.string().trim().max(FRAUD_NOTE_MAX).optional(),
+    })
+    .superRefine((v, c) => {
+      if (v.status === 'dismissed' && (v.note ?? '').length < FRAUD_NOTE_MIN_DISMISS)
+        c.addIssue({ code: 'custom', path: ['note'], message: 'Say why the signal is dismissed' });
+    }),
   output: z.object({ id: z.uuid(), status: z.enum(FRAUD_STATUSES) }),
   entitlement: 'checkin',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {
+    const scope = input.eventId ? eq(fraudSignals.eventId, input.eventId) : isNull(fraudSignals.eventId);
     const [row] = await tx
       .update(fraudSignals)
       .set({
         status: input.status,
         resolvedAt: ctx.now,
         resolvedBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        resolutionNote: input.note ? input.note : null,
         updatedAt: ctx.now,
       })
-      .where(
-        and(
-          eq(fraudSignals.id, input.signalId),
-          eq(fraudSignals.eventId, input.eventId),
-          eq(fraudSignals.status, 'open'),
-        ),
-      )
+      .where(and(eq(fraudSignals.id, input.signalId), scope, eq(fraudSignals.status, 'open')))
       .returning({ id: fraudSignals.id, status: fraudSignals.status });
     if (!row) {
       const [exists] = await tx
         .select({ id: fraudSignals.id })
         .from(fraudSignals)
-        .where(and(eq(fraudSignals.id, input.signalId), eq(fraudSignals.eventId, input.eventId)));
+        .where(and(eq(fraudSignals.id, input.signalId), scope));
       throw exists
         ? new DomainError('conflict', 'This signal was already handled')
         : new DomainError('not_found', 'Signal not found');
@@ -337,9 +422,57 @@ export const resolveFraudSignalCommand = tenantCommand({
     action: input.status === 'acknowledged' ? 'fraud_signal.acknowledge' : 'fraud_signal.dismiss',
     targetType: 'fraud_signal',
     targetId: input.signalId,
-    data: { eventId: input.eventId },
+    data: { eventId: input.eventId ?? null, note: input.note || null },
   }),
 });
+
+/**
+ * The order timeline's signals (M1.9e): signals about the order itself (checkout risk) and about
+ * any of its tickets (door), oldest first. Anyone who can read orders sees them.
+ */
+export const orderSignalsQuery = tenantQuery({
+  name: 'checkin.orderSignals',
+  input: z.object({ orderId: z.uuid() }),
+  output: z.array(FraudSignalDto),
+  entitlement: 'checkin',
+  permission: 'orders:read',
+  handler: async ({ input, tx }) => {
+    const ticketIds = (await ticketsForOrderTx(tx, input.orderId)).map((t) => t.id);
+    const rows = await tx
+      .select()
+      .from(fraudSignals)
+      .where(
+        or(
+          eq(fraudSignals.orderId, input.orderId),
+          ticketIds.length ? inArray(fraudSignals.ticketId, ticketIds) : undefined,
+        ),
+      )
+      .orderBy(asc(fraudSignals.raisedAt), asc(fraudSignals.id))
+      .limit(200);
+    return presentSignalsTx(tx, rows);
+  },
+});
+
+/**
+ * Open high-severity signals about a ticket or its order (M1.9e): the number the door sees on a
+ * scan. Only the count leaves (the scanner shows no buyer details beyond the holder's name).
+ */
+export async function openHighSignalCountTx(
+  tx: TenantTx,
+  t: { readonly id: string; readonly orderId: string },
+): Promise<number> {
+  const [r] = await tx
+    .select({ n: count() })
+    .from(fraudSignals)
+    .where(
+      and(
+        eq(fraudSignals.status, 'open'),
+        eq(fraudSignals.severity, 'high'),
+        or(eq(fraudSignals.ticketId, t.id), eq(fraudSignals.orderId, t.orderId)),
+      ),
+    );
+  return r?.n ?? 0;
+}
 
 export const DetectionSettingsDto = z.object({
   maxScansPerMinute: z.int(),

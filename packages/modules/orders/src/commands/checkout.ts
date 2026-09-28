@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto';
-import { recordConsentTx, upsertContactTx } from '@yayatoh/crm';
+import { contactIdByEmailTx, recordConsentTx, upsertContactTx } from '@yayatoh/crm';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { accessGrantTx, findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
@@ -249,6 +249,22 @@ export const startCheckoutCommand = tenantCommand({
         currency: order.currency,
       },
     });
+    // M1.9e: a checkout the risk rules asked to review becomes a fraud signal on the order
+    // (check-in's subscriber raises it and alerts the team). Rule ids only; no buyer details.
+    if (input.riskReview.length > 0)
+      emit({
+        type: 'order.risk_flagged',
+        version: 1,
+        aggregateType: 'order',
+        aggregateId: order.id,
+        payload: {
+          orgId,
+          orderId: order.id,
+          eventId: event.id,
+          contactId: contact.id,
+          rules: [...input.riskReview],
+        },
+      });
     let final = order;
     if (free) {
       await sellHeldTx(tx, lines(items));
@@ -456,6 +472,56 @@ export const expireOrdersCommand = tenantCommand({
     targetType: 'order',
     targetId: null,
     data: { expired: r.expired },
+  }),
+});
+
+/**
+ * A checkout the risk rules refused (M1.9e): nothing is sold and no order exists, but the attempt
+ * is recorded as `order.checkout_blocked@1` for check-in's fraud signals (card testing, order
+ * velocity) and the team's alert. The email only resolves the CRM contact here; the event carries
+ * the contact id, the rule ids and the counts that tripped them, never the address.
+ */
+export const recordCheckoutBlockCommand = tenantCommand({
+  name: 'orders.recordCheckoutBlock',
+  input: z.object({
+    eventId: z.uuid(),
+    email: z.string().trim().max(320),
+    rules: z
+      .array(z.string().regex(/^[a-z_]{1,60}$/))
+      .min(1)
+      .max(10),
+    emailOrders: z.int().min(0).max(100_000),
+    paymentFailures: z.int().min(0).max(100_000),
+  }),
+  output: z.object({ recorded: z.boolean() }),
+  entitlement: 'ticketing',
+  permission: 'public:checkout',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const orgId = requireOrg(ctx);
+    const event = await findEventTx(tx, input.eventId);
+    if (!event) throw new DomainError('not_found', 'Event not found');
+    const contactId = input.email ? await contactIdByEmailTx(tx, input.email) : null;
+    emit({
+      type: 'order.checkout_blocked',
+      version: 1,
+      aggregateType: 'event',
+      aggregateId: event.id,
+      payload: {
+        orgId,
+        eventId: event.id,
+        contactId,
+        rules: [...input.rules],
+        emailOrders: input.emailOrders,
+        paymentFailures: input.paymentFailures,
+      },
+    });
+    return { recorded: true };
+  },
+  audit: (input) => ({
+    action: 'order.checkout_blocked',
+    targetType: 'event',
+    targetId: input.eventId,
+    data: { rules: input.rules, emailOrders: input.emailOrders, paymentFailures: input.paymentFailures },
   }),
 });
 

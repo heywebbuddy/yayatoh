@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { ScanState } from '@/app/[locale]/o/[org]/e/[event]/onsite/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { SignalBanner } from './signal-banner.tsx';
 
 const TONE = {
   admitted: 'border-green-600 bg-green-50 text-green-900',
@@ -142,6 +143,7 @@ export function Scanner({
                 {t('checkin.firstAt', { time: time(state.outcome.firstAdmittedAt) })}
               </p>
             ) : null}
+            <SignalBanner count={state.outcome.openSignals} />
           </div>
         ) : state.kind === 'error' ? (
           <div className={`rounded-panel border-2 px-6 py-5 ${TONE.invalid}`}>

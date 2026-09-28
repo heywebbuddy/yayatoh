@@ -1,4 +1,10 @@
-import { CODE_PREFIX, verifyStatement, verifyTicketCode } from '@yayatoh/ticket-crypto';
+import {
+  CODE_PREFIX,
+  legacyPayloadHash,
+  legacyQrPayload,
+  verifyStatement,
+  verifyTicketCode,
+} from '@yayatoh/ticket-crypto';
 import { type EventWindow, eventDay, ruleResult } from './rules.ts';
 
 /** One manifest row (roadmap §5.4). Contact details only as per-event salted hashes. */
@@ -16,8 +22,10 @@ export interface ManifestRow {
   readonly emailHash: string;
   readonly issuedAt: string;
   /**
-   * Migrated tickets (M2.2c): the legacy QR payloads that still admit this ticket, as lookup
-   * hashes (`lookupHash(salt, payload)`), so old printed and app QR codes scan offline too.
+   * Migrated tickets (M2.2c, M1.9e): the legacy QR payloads that still admit this ticket, as
+   * `legacyPayloadHash(salt, payload)` (case-sensitive, domain-separated from the email lookup
+   * hash), never the payloads, so old printed and app QR codes scan offline too. Absent on
+   * tickets without one.
    */
   readonly legacyCodes?: readonly string[];
 }
@@ -129,7 +137,7 @@ export interface OfflineState {
   readonly header: ManifestHeader;
   readonly byId: ReadonlyMap<string, ManifestRow>;
   readonly byShortCode: ReadonlyMap<string, ManifestRow>;
-  /** Legacy QR payload lookup hash → row (migrated tickets; see `ManifestRow.legacyCodes`). */
+  /** Legacy payload hash → row (`legacyIndex`; see `ManifestRow.legacyCodes`); absent = no lookup. */
   readonly byLegacyCode?: ReadonlyMap<string, ManifestRow>;
   /** `${ticketId}:${day}` admitted on this device. */
   readonly admitted: ReadonlySet<string>;
@@ -203,10 +211,9 @@ async function entranceVerdict(
     if (v.rev < row.rev) return { verdict: 'superseded', ticketId: row.ticketId, row };
     if (v.rev > row.rev) return { verdict: 'provisional', ticketId: row.ticketId, row };
   } else {
-    // Legacy QR payloads first (as online), then short codes.
-    const legacy = legacyCodePayload(rawCode);
-    if (legacy && state.byLegacyCode?.size)
-      row = state.byLegacyCode.get(await lookupHash(h.salt, legacy)) ?? null;
+    // A migrated ticket's legacy QR (case-sensitive), before short codes, as on the server.
+    const legacy = state.byLegacyCode?.size ? legacyQrPayload(rawCode) : null;
+    if (legacy) row = state.byLegacyCode?.get(await legacyPayloadHash(h.salt, legacy)) ?? null;
     row ??= state.byShortCode.get(code) ?? null;
     if (!row) return { verdict: 'invalid', ticketId: null, row: null };
   }
@@ -232,22 +239,11 @@ async function entranceVerdict(
   return { verdict: 'admit', ticketId: row.ticketId, row };
 }
 
-/**
- * A legacy (Eventmie) QR payload: the booking's `order_number`, raw or inside a JSON object
- * (`{"order_number": …}`). Null when the text cannot be one. Same rule as the ticketing module's
- * online lookup (`legacyQrPayload`).
- */
-export function legacyCodePayload(raw: string): string | null {
-  const text = raw.trim();
-  if (text.startsWith('{')) {
-    try {
-      const v = (JSON.parse(text) as Record<string, unknown>).order_number;
-      return typeof v === 'string' || typeof v === 'number' ? legacyCodePayload(String(v)) : null;
-    } catch {
-      return null;
-    }
-  }
-  return /^[0-9A-Za-z_-]{6,64}$/.test(text) ? text : null;
+/** Index manifest rows by their legacy payload hashes (`legacyCodes`): the offline lookup for migrated tickets. */
+export function legacyIndex(rows: Iterable<ManifestRow>): Map<string, ManifestRow> {
+  const out = new Map<string, ManifestRow>();
+  for (const r of rows) for (const h of r.legacyCodes ?? []) out.set(h, r);
+  return out;
 }
 
 /** SHA-256 of `salt:value`, hex — the manifest's offline lookup hash for a normalized email. */

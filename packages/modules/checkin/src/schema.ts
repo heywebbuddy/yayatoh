@@ -175,6 +175,17 @@ export const FRAUD_SIGNAL_KINDS = [
   'impossible_travel',
   /** Many refused scans in a short window from one device (M1.9d). */
   'rejected_burst',
+  // M1.9e: signals from other modules, raised by outbox subscribers here (one model).
+  /** Checkout risk review: many orders from one email within the hour (an order got through). */
+  'purchase_velocity',
+  /** Checkout risk review: the buyer's country differs from the event's. */
+  'country_mismatch',
+  /** A checkout refused by the risk rules for order velocity (no order exists). */
+  'checkout_blocked',
+  /** A checkout refused after repeated payment failures: likely card testing (no order exists). */
+  'card_testing',
+  /** The organizer reported a conversation with a contact (M1.10 chat report). */
+  'chat_abuse',
 ] as const;
 export type FraudSignalKind = (typeof FRAUD_SIGNAL_KINDS)[number];
 
@@ -188,18 +199,36 @@ export const FRAUD_SEVERITY: Readonly<Record<FraudSignalKind, FraudSeverity>> = 
   device_velocity: 'medium',
   invalid_burst: 'medium',
   rejected_burst: 'low',
+  purchase_velocity: 'high',
+  card_testing: 'high',
+  checkout_blocked: 'high',
+  country_mismatch: 'medium',
+  // Chat reports take their severity from the reason (see `chatReportSignal`); this is `other`.
+  chat_abuse: 'low',
 };
+
+/** Where a signal came from (M1.9e): the door, checkout risk rules, or a chat report. */
+export const FRAUD_SOURCES = ['checkin', 'checkout', 'chat'] as const;
+export type FraudSource = (typeof FRAUD_SOURCES)[number];
+
+/** Resolution notes (acknowledge or dismiss) are at most this long. */
+export const FRAUD_NOTE_MAX = 500;
 
 /** open → acknowledged (someone is on it) or dismissed (not a problem). Both are audited. */
 export const FRAUD_STATUSES = ['open', 'acknowledged', 'dismissed'] as const;
 export type FraudStatus = (typeof FRAUD_STATUSES)[number];
 
-/** Fraud and misuse signals, raised during scanning and shown on the door screen. */
+/**
+ * Fraud and misuse signals: raised during scanning (door screen) and, since M1.9e, by outbox
+ * subscribers for checkout risk outcomes and chat reports. One model: kind, severity, subject
+ * (ticket, order, device/scanner or contact), allowlisted detail and a triage status.
+ */
 export const fraudSignals = tenantTable(
   checkinSchema,
   'fraud_signals',
   {
-    eventId: uuid('event_id').notNull(),
+    /** Null only for org-level signals (a chat report about a contact with no event). */
+    eventId: uuid('event_id'),
     kind: text('kind').notNull(),
     ticketId: uuid('ticket_id'),
     checkpointId: uuid('checkpoint_id'),
@@ -212,9 +241,25 @@ export const fraudSignals = tenantTable(
     status: text('status').notNull().default('open'),
     resolvedAt: ts('resolved_at'),
     resolvedBy: uuid('resolved_by'),
+    /** M1.9e: where it came from, and the outbox event that raised it (idempotency). */
+    source: text('source').notNull().default('checkin'),
+    sourceEventId: uuid('source_event_id'),
+    /** Subject: the order (checkout risk), the CRM contact and conversation (chat reports). */
+    orderId: uuid('order_id'),
+    contactId: uuid('contact_id'),
+    threadId: uuid('thread_id'),
+    /** Why it was acknowledged or dismissed (audited with the triage). */
+    resolutionNote: text('resolution_note'),
+    /** When this signal alerted the team (high severity; one alert per subject per hour). */
+    alertedAt: ts('alerted_at'),
   },
   (t) => [
     index('fraud_signals_org_event_raised_idx').on(t.orgId, t.eventId, t.raisedAt),
+    index('fraud_signals_org_order_idx').on(t.orgId, t.orderId),
+    index('fraud_signals_org_ticket_idx').on(t.orgId, t.ticketId),
+    uniqueIndex('fraud_signals_org_source_event_key')
+      .on(t.orgId, t.sourceEventId)
+      .where(sql`source_event_id is not null`),
     check(
       'fraud_signals_kind_check',
       sql.raw(`kind in (${FRAUD_SIGNAL_KINDS.map((k) => `'${k}'`).join(', ')})`),
@@ -222,6 +267,15 @@ export const fraudSignals = tenantTable(
     check('fraud_signals_severity_check', sql`severity in ('low', 'medium', 'high')`),
     check('fraud_signals_status_check', sql`status in ('open', 'acknowledged', 'dismissed')`),
     check('fraud_signals_resolved_check', sql`(status = 'open') = (resolved_at is null)`),
+    check(
+      'fraud_signals_source_check',
+      sql.raw(`source in (${FRAUD_SOURCES.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('fraud_signals_event_check', sql`event_id is not null or source = 'chat'`),
+    check(
+      'fraud_signals_note_check',
+      sql.raw(`resolution_note is null or length(resolution_note) between 1 and ${FRAUD_NOTE_MAX}`),
+    ),
   ],
 );
 

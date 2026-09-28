@@ -60,6 +60,9 @@
       "payments": {
         "destination-changed": "New payout account: transfers to it start after {until}"
       },
+      "security": {
+        "fraud_signal": "Fraud alert: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}{eventName, select, none {} other { · {eventName}}}"
+      },
       "tenancy": {
         "staff-access": "Yayatoh support is acting as {member} until {until}",
         "org-status": "{status, select, suspended {Yayatoh suspended this organization} reactivated {This organization is back online} other {Yayatoh closed this organization}}"
@@ -101,6 +104,9 @@
       },
       "payments": {
         "destination-changed": "Payout account change"
+      },
+      "security": {
+        "fraud_signal": "Fraud alert"
       }
     },
     "status": {
@@ -152,6 +158,10 @@
         "messages": {
           "name": "Messages",
           "hint": "A customer writes to your organization."
+        },
+        "security": {
+          "name": "Fraud and security alerts",
+          "hint": "High-severity fraud signals: at the door, at checkout and reported conversations."
         },
         "marketing": {
           "name": "News from Yayatoh",
@@ -1003,7 +1013,12 @@
       "invalid_burst": "Several invalid codes in a row",
       "device_velocity": "Scanning faster than a person can",
       "impossible_travel": "Ticket let in at two places too far apart",
-      "rejected_burst": "Many refused scans in a row"
+      "rejected_burst": "Many refused scans in a row",
+      "purchase_velocity": "Many orders from one buyer",
+      "country_mismatch": "Bought from another country",
+      "checkout_blocked": "Checkout blocked by the risk rules",
+      "card_testing": "Possible card testing",
+      "chat_abuse": "Conversation reported"
     },
     "chooseStand": "Choose your checkpoint",
     "location": "Location (optional)",
@@ -3249,7 +3264,9 @@
     "flagged": "Flagged at checkout",
     "rules": {
       "email_velocity_review": "Many orders from this email in an hour",
-      "country_mismatch_review": "Bought from another country than the event’s"
+      "country_mismatch_review": "Bought from another country than the event’s",
+      "email_velocity_block": "Too many orders from this email in an hour",
+      "payment_failures_block": "Too many failed payments from this email"
     }
   },
   "refundPolicy": {
@@ -3777,6 +3794,52 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, one {# open high-severity signal on this ticket} other {# open high-severity signals on this ticket}}",
+      "action": "Ask a supervisor before letting them in."
+    },
+    "note": {
+      "label": "Note",
+      "hint": "Optional to acknowledge; required to dismiss.",
+      "required": "Say why you're dismissing it (at least 3 characters).",
+      "shown": "Note: {note}"
+    },
+    "filter": {
+      "title": "Filter signals",
+      "kind": "Kind",
+      "allKinds": "All kinds",
+      "severity": "Severity",
+      "allSeverities": "All severities",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "apply": "Filter",
+      "clear": "Clear filters",
+      "showing": "{count, plural, =0 {No signals match the filter} one {# signal matches the filter} other {# signals match the filter}}",
+      "emptyTitle": "No signals match",
+      "emptyDescription": "Try another kind, severity or status."
+    },
+    "source": {
+      "checkin": "At the door",
+      "checkout": "At checkout",
+      "chat": "Chat report"
+    },
+    "summary": {
+      "orders": "{count, plural, one {# order from this email in an hour} other {# orders from this email in an hour}}",
+      "failures": "{count, plural, one {# failed payment} other {# failed payments}}",
+      "reason": {
+        "spam": "Reported as spam",
+        "abuse": "Reported as abusive",
+        "other": "Reported for another reason"
+      }
+    },
+    "openOrder": "Open the order",
+    "openConversation": "Open the conversation",
+    "timeline": {
+      "title": "Signals",
+      "empty": "No fraud signals about this order."
+    }
   },
   "accountDeleted": {
     "metaTitle": "Account deleted",

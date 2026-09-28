@@ -60,6 +60,9 @@
       "payments": {
         "destination-changed": "新的收款账户：向该账户的转账将在 {until} 之后开始"
       },
+      "security": {
+        "fraud_signal": "欺诈警报：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}{eventName, select, none {} other { · {eventName}}}"
+      },
       "tenancy": {
         "staff-access": "Yayatoh 支持人员正以 {member} 的身份操作，直到 {until}",
         "org-status": "{status, select, suspended {Yayatoh 已暂停此组织} reactivated {此组织已恢复上线} other {Yayatoh 已关闭此组织}}"
@@ -101,6 +104,9 @@
       },
       "payments": {
         "destination-changed": "收款账户变更"
+      },
+      "security": {
+        "fraud_signal": "欺诈警报"
       }
     },
     "status": {
@@ -152,6 +158,10 @@
         "messages": {
           "name": "消息",
           "hint": "有客户联系您的组织。"
+        },
+        "security": {
+          "name": "欺诈与安全警报",
+          "hint": "高严重性欺诈信号：入口、结账和被举报的对话。"
         },
         "marketing": {
           "name": "Yayatoh 资讯",
@@ -1003,7 +1013,12 @@
       "invalid_burst": "连续出现多个无效代码",
       "device_velocity": "扫描速度超出人工可能",
       "impossible_travel": "同一门票在相距过远的两处被放行",
-      "rejected_burst": "连续多次扫描被拒"
+      "rejected_burst": "连续多次扫描被拒",
+      "purchase_velocity": "同一买家的大量订单",
+      "country_mismatch": "从其他国家购买",
+      "checkout_blocked": "结账被风险规则拦截",
+      "card_testing": "疑似盗刷测试",
+      "chat_abuse": "对话被举报"
     },
     "chooseStand": "选择你的检查点",
     "location": "位置(可选)",
@@ -3249,7 +3264,9 @@
     "flagged": "结账时被标记",
     "rules": {
       "email_velocity_review": "该邮箱一小时内下了多笔订单",
-      "country_mismatch_review": "购买地与活动所在国家不同"
+      "country_mismatch_review": "购买地与活动所在国家不同",
+      "email_velocity_block": "此邮箱一小时内的订单过多",
+      "payment_failures_block": "此邮箱的付款失败次数过多"
     }
   },
   "refundPolicy": {
@@ -3777,6 +3794,52 @@
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
     "unauthenticated": "会话已结束，请重新登录。"
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, other {此票有 # 个未处理的高严重性信号}}",
+      "action": "放行前请先询问主管。"
+    },
+    "note": {
+      "label": "备注",
+      "hint": "确认时可选；忽略时必填。",
+      "required": "请说明忽略的原因（至少 3 个字符）。",
+      "shown": "备注：{note}"
+    },
+    "filter": {
+      "title": "筛选信号",
+      "kind": "类型",
+      "allKinds": "所有类型",
+      "severity": "严重性",
+      "allSeverities": "所有严重性",
+      "status": "状态",
+      "allStatuses": "所有状态",
+      "apply": "筛选",
+      "clear": "清除筛选",
+      "showing": "{count, plural, =0 {没有符合筛选条件的信号} other {# 个信号符合筛选条件}}",
+      "emptyTitle": "没有匹配的信号",
+      "emptyDescription": "请尝试其他类型、严重性或状态。"
+    },
+    "source": {
+      "checkin": "入口",
+      "checkout": "结账时",
+      "chat": "聊天举报"
+    },
+    "summary": {
+      "orders": "{count, plural, other {此邮箱一小时内下了 # 个订单}}",
+      "failures": "{count, plural, other {# 次付款失败}}",
+      "reason": {
+        "spam": "被举报为垃圾信息",
+        "abuse": "被举报为辱骂",
+        "other": "因其他原因被举报"
+      }
+    },
+    "openOrder": "打开订单",
+    "openConversation": "打开对话",
+    "timeline": {
+      "title": "信号",
+      "empty": "此订单没有欺诈信号。"
+    }
   },
   "accountDeleted": {
     "metaTitle": "账户已删除",

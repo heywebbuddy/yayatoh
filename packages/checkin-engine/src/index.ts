@@ -1,6 +1,7 @@
+export { legacyPayloadHash, legacyQrPayload } from '@yayatoh/ticket-crypto';
 export {
   admittedKey,
-  legacyCodePayload,
+  legacyIndex,
   lookupHash,
   MANIFEST_VERSION,
   type ManifestCheckpoint,

@@ -99,6 +99,11 @@
     "notifications.test": {
       "subject": "Testbenachrichtigung",
       "intro": "Benachrichtigungen funktionieren."
+    },
+    "security.fraud_signal": {
+      "subject": "Betrugswarnung: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}",
+      "intro": "Ein Signal mit hohem Schweregrad bei {org}{eventName, select, none {} other { ({eventName})}} muss geprüft werden: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}. Öffne es, um es zu übernehmen oder zu verwerfen.",
+      "cta": "Signal prüfen"
     }
   },
   "roles": {

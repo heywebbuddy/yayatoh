@@ -99,6 +99,11 @@
     "notifications.test": {
       "subject": "测试通知",
       "intro": "通知功能正常。"
+    },
+    "security.fraud_signal": {
+      "subject": "欺诈警报：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}",
+      "intro": "{org}{eventName, select, none {} other {（{eventName}）}}有一个高严重性信号需要查看：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}。打开它以确认或忽略。",
+      "cta": "查看信号"
     }
   },
   "roles": {

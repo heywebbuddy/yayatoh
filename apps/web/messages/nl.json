@@ -60,6 +60,9 @@
       "payments": {
         "destination-changed": "Nieuwe uitbetaalrekening: overboekingen ernaartoe beginnen pas na {until}"
       },
+      "security": {
+        "fraud_signal": "Fraudemelding: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}{eventName, select, none {} other { · {eventName}}}"
+      },
       "tenancy": {
         "staff-access": "Yayatoh-support handelt tot {until} als {member}",
         "org-status": "{status, select, suspended {Yayatoh heeft deze organisatie opgeschort} reactivated {Deze organisatie is weer online} other {Yayatoh heeft deze organisatie gesloten}}"
@@ -101,6 +104,9 @@
       },
       "payments": {
         "destination-changed": "Wijziging van de uitbetaalrekening"
+      },
+      "security": {
+        "fraud_signal": "Fraudemelding"
       }
     },
     "status": {
@@ -152,6 +158,10 @@
         "messages": {
           "name": "Berichten",
           "hint": "Een klant schrijft je organisatie."
+        },
+        "security": {
+          "name": "Fraude- en beveiligingsmeldingen",
+          "hint": "Fraudesignalen met hoge ernst: bij de ingang, bij het afrekenen en gemelde gesprekken."
         },
         "marketing": {
           "name": "Nieuws van Yayatoh",
@@ -1003,7 +1013,12 @@
       "invalid_burst": "Meerdere ongeldige codes achter elkaar",
       "device_velocity": "Escaneando mais rápido do que uma pessoa consegue",
       "impossible_travel": "Ingresso admitido em dois lugares distantes demais",
-      "rejected_burst": "Muitos escaneamentos recusados seguidos"
+      "rejected_burst": "Muitos escaneamentos recusados seguidos",
+      "purchase_velocity": "Veel bestellingen van één koper",
+      "country_mismatch": "Gekocht vanuit een ander land",
+      "checkout_blocked": "Afrekenen geblokkeerd door de risicoregels",
+      "card_testing": "Mogelijk testen van kaarten",
+      "chat_abuse": "Gesprek gemeld"
     },
     "chooseStand": "Escolha seu ponto de controle",
     "location": "Localização (opcional)",
@@ -3249,7 +3264,9 @@
     "flagged": "Gemarkeerd bij het afrekenen",
     "rules": {
       "email_velocity_review": "Veel bestellingen van dit e-mailadres binnen een uur",
-      "country_mismatch_review": "Gekocht vanuit een ander land dan dat van het evenement"
+      "country_mismatch_review": "Gekocht vanuit een ander land dan dat van het evenement",
+      "email_velocity_block": "Te veel bestellingen van dit e-mailadres in een uur",
+      "payment_failures_block": "Te veel mislukte betalingen van dit e-mailadres"
     }
   },
   "refundPolicy": {
@@ -3777,6 +3794,52 @@
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
     "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+  },
+  "fraudSignals": {
+    "door": {
+      "title": "{count, plural, one {# open signaal met hoge ernst op dit ticket} other {# open signalen met hoge ernst op dit ticket}}",
+      "action": "Vraag een leidinggevende voordat je iemand binnenlaat."
+    },
+    "note": {
+      "label": "Notitie",
+      "hint": "Optioneel om op te pakken; verplicht om te negeren.",
+      "required": "Geef aan waarom je het negeert (minstens 3 tekens).",
+      "shown": "Notitie: {note}"
+    },
+    "filter": {
+      "title": "Signalen filteren",
+      "kind": "Soort",
+      "allKinds": "Alle soorten",
+      "severity": "Ernst",
+      "allSeverities": "Alle ernstniveaus",
+      "status": "Status",
+      "allStatuses": "Alle statussen",
+      "apply": "Filteren",
+      "clear": "Filters wissen",
+      "showing": "{count, plural, =0 {Geen signalen voldoen aan het filter} one {# signaal voldoet aan het filter} other {# signalen voldoen aan het filter}}",
+      "emptyTitle": "Geen passende signalen",
+      "emptyDescription": "Probeer een andere soort, ernst of status."
+    },
+    "source": {
+      "checkin": "Bij de ingang",
+      "checkout": "Bij het afrekenen",
+      "chat": "Chatmelding"
+    },
+    "summary": {
+      "orders": "{count, plural, one {# bestelling van dit e-mailadres in een uur} other {# bestellingen van dit e-mailadres in een uur}}",
+      "failures": "{count, plural, one {# mislukte betaling} other {# mislukte betalingen}}",
+      "reason": {
+        "spam": "Gemeld als spam",
+        "abuse": "Gemeld als misbruik",
+        "other": "Gemeld om een andere reden"
+      }
+    },
+    "openOrder": "Bestelling openen",
+    "openConversation": "Gesprek openen",
+    "timeline": {
+      "title": "Signalen",
+      "empty": "Geen fraudesignalen over deze bestelling."
+    }
   },
   "accountDeleted": {
     "metaTitle": "Account verwijderd",

@@ -9,6 +9,14 @@ export const privateColumns = columnPrivacy('checkin', {
   // Checkpoint names are staff-facing (the door manifest carries them).
   checkpoints: { name: internal(), kind: 'vocab' },
   devices: { label: internal(), token_hash: secret() },
-  fraud_signals: { kind: 'vocab', detail: internal(), severity: 'vocab', status: 'vocab' },
+  // Triage notes are staff-written (acknowledge/dismiss, M1.9e).
+  fraud_signals: {
+    kind: 'vocab',
+    detail: internal(),
+    severity: 'vocab',
+    status: 'vocab',
+    source: 'vocab',
+    resolution_note: internal(),
+  },
   scans: { result: 'vocab', code_kind: 'vocab', client_scan_id: internal() },
 });

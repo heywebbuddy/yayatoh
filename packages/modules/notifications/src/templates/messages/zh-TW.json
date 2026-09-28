@@ -99,6 +99,11 @@
     "notifications.test": {
       "subject": "測試通知",
       "intro": "通知功能正常。"
+    },
+    "security.fraud_signal": {
+      "subject": "詐欺警示：{signal, select, two_entrances {同一張票出現在兩個入口} impossible_travel {檢查點之間不可能的移動} device_velocity {掃描過快的掃描裝置} invalid_burst {一連串無效代碼} rejected_burst {一連串被拒絕的掃描} purchase_velocity {同一買家的大量訂單} country_mismatch {買家位於其他國家} checkout_blocked {被攔截的結帳} card_testing {疑似盜刷測試} chat_abuse {被檢舉的對話} other {詐欺訊號}}",
+      "intro": "{org}{eventName, select, none {} other {（{eventName}）}}有一個高嚴重性訊號需要查看：{signal, select, two_entrances {同一張票出現在兩個入口} impossible_travel {檢查點之間不可能的移動} device_velocity {掃描過快的掃描裝置} invalid_burst {一連串無效代碼} rejected_burst {一連串被拒絕的掃描} purchase_velocity {同一買家的大量訂單} country_mismatch {買家位於其他國家} checkout_blocked {被攔截的結帳} card_testing {疑似盜刷測試} chat_abuse {被檢舉的對話} other {詐欺訊號}}。開啟以確認或忽略。",
+      "cta": "查看訊號"
     }
   },
   "roles": {
