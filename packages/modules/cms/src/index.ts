@@ -20,3 +20,50 @@ export { ENTRY_KINDS, ENTRY_STATUSES } from './domain/kinds.ts';
 export { cmsSlug, nextFreeSlug, SLUG_MAX, type SlugProblem, slugProblem } from './domain/slug.ts';
 export * from './dto.ts';
 export { privateColumns } from './private-columns.ts';
+export {
+  CONTACT_TOPICS,
+  ctaHrefProblem,
+  FALLBACK_LOCALE,
+  FEEDBACK_REASONS,
+  foldText,
+  HELP_AUDIENCES,
+  type HelpAudience,
+  pickLocale,
+  plainExcerpt,
+  type Ranked,
+  rankArticles,
+  relatedArticles,
+  SITE_PLACEMENTS,
+  type SitePlacement,
+  searchTerms,
+} from './domain/help.ts';
+export * from './dto-help.ts';
+export {
+  createHelpArticleCommand,
+  createHelpCategoryCommand,
+  deleteHelpArticleCommand,
+  deleteHelpCategoryCommand,
+  getHelpArticleQuery,
+  getHelpCategoryQuery,
+  helpSitemapEntries,
+  listHelpQuery,
+  publicHelpArticle,
+  publicHelpCenter,
+  publicHelpSearchDocs,
+  setHelpArticleStatusCommand,
+  submitHelpFeedbackCommand,
+  updateHelpArticleCommand,
+  updateHelpCategoryCommand,
+} from './help.ts';
+export {
+  createSiteSectionCommand,
+  deleteSiteSectionCommand,
+  getSiteSectionQuery,
+  listContactRequestsQuery,
+  listSiteSectionsQuery,
+  markContactHandledCommand,
+  publicSiteSections,
+  setSiteSectionStatusCommand,
+  submitContactRequestCommand,
+  updateSiteSectionCommand,
+} from './site.ts';
