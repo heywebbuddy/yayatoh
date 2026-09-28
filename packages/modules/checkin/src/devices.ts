@@ -14,7 +14,7 @@ import {
 import { withoutTenant } from '@yayatoh/db';
 import { findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
-import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { CHECKINS_CHANNEL, publishRealtimeTx, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { memberRoleTx } from '@yayatoh/tenancy';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { manifestTicketsTx, publicKeysTx, signForScannersTx, ticketForScanTx } from '@yayatoh/ticketing';
@@ -375,6 +375,7 @@ export const syncScansCommand = tenantCommand({
     const ordered = [...input.scans].sort((a, b) => corrected(a).getTime() - corrected(b).getTime());
     const results: z.infer<typeof SyncResultDto>['results'] = [];
     let duplicatesOffline = 0;
+    let newAdmissions = 0;
 
     for (const s of ordered) {
       const at = corrected(s);
@@ -428,6 +429,7 @@ export const syncScansCommand = tenantCommand({
           .returning({ id: admissions.id });
         if (adm) {
           admissionId = adm.id;
+          newAdmissions += 1;
         } else {
           const [live] = await tx
             .select()
@@ -543,6 +545,13 @@ export const syncScansCommand = tenantCommand({
         to: corrected(last),
         deviceId,
         ticketIds: okTickets,
+      });
+    // Door screens follow along (M3.1b): one message per synced batch that admitted anyone.
+    if (newAdmissions > 0)
+      await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+        eventId: event.id,
+        event: 'admission',
+        data: { change: 'synced', checkpointId: null, count: newAdmissions, at: ctx.now.toISOString() },
       });
     // Answer in the device's order.
     const order = new Map(input.scans.map((s, i) => [s.scanId, i]));

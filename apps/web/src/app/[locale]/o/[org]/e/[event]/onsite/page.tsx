@@ -8,7 +8,7 @@ import {
 } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { composeNav, isProfileKey } from '@yayatoh/platform';
+import { CHECKINS_CHANNEL, composeNav, isProfileKey, realtimeChannelName } from '@yayatoh/platform';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
@@ -17,10 +17,12 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { CheckpointForm } from '@/components/checkpoint-form.tsx';
 import { DeviceEnrollForm } from '@/components/device-enroll-form.tsx';
+import { LiveCheckins } from '@/components/live-checkins.tsx';
 import { Scanner } from '@/components/scanner.tsx';
 import { SEVERITY_DOT, signalSummary } from '@/components/signal-summary.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -123,6 +125,7 @@ export default async function OnsitePage({
         })}
       />
       <AutoRefresh seconds={10} />
+      <LiveCheckins url={realtimeUrl(realtimeChannelName(CHECKINS_CHANNEL, data.org.id, ev.id))} />
       {status.byCheckpoint.length > 0 ? (
         <ul className="flex list-none flex-wrap gap-2 p-0" aria-label={t('checkpoints.perEntrance')}>
           {status.byCheckpoint.map((c) => (

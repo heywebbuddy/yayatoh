@@ -2,7 +2,7 @@ import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
-import { publicSeatMap } from '@yayatoh/seating';
+import { publicSeatMap, seatChannels } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -14,8 +14,8 @@ import { RefundPolicyForm } from '@/components/refund-policy-form.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
-import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -221,9 +221,7 @@ export default async function TicketsPage({
               dates={saleDates}
               seatMap={seatMap}
               seatStream={
-                seatMap
-                  ? { url: localizedPath(locale, `/o/${org}/e/${event}/seating/stream`), kind: 'staff' }
-                  : null
+                seatMap ? { url: realtimeUrl(seatChannels(data.org.id, ev.id).staff), kind: 'staff' } : null
               }
               prices={Object.fromEntries(types.map((tt) => [tt.id, fmt(tt.allInMinor)]))}
               timeZone={ev.timezone}

@@ -71,6 +71,8 @@ export {
   loadSeatSnapshot,
   PublicSeatsData,
   SEAT_NOTIFY_CHANNEL,
+  SEAT_STATES_CHANNEL,
+  SEATS_CHANNEL,
   type SeatFeed,
   type SeatFeedOptions,
   type SeatSnapshot,

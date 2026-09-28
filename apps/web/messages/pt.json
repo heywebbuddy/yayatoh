@@ -887,6 +887,15 @@
     "wrongCheckpointHint": "Вы сканируете здесь: {places}. Выберите это в «Сканирую в».",
     "noCheckpointsHint": "Вам здесь не назначен ни один пункт проверки. Обратитесь к организатору."
   },
+  "checkinLive": {
+    "state": {
+      "live": "Ao vivo",
+      "connecting": "Conectando…",
+      "offline": "Reconectando…"
+    },
+    "since": "{count, plural, one {# check-in} other {# check-ins}} desde que você abriu esta página",
+    "waiting": "Os check-ins de todos os leitores aparecem aqui na hora."
+  },
   "devices": {
     "title": "Dispositivos de leitura",
     "description": "Celulares e tablets que fazem leituras offline. Cada um tem sua própria chave; revogue um dispositivo perdido ou apague a lista de convidados baixada nele.",

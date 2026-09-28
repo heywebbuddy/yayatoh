@@ -131,6 +131,7 @@ export {
   findEventTx,
   getEventBySlugQuery,
   getEventQuery,
+  isPublicEvent,
   listEventsQuery,
   publicEventBySlug,
   removeEventRoleTx,

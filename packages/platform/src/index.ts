@@ -87,8 +87,10 @@ export {
 } from './rate-limit.ts';
 export { postgresRateLimitStore, purgeRateLimits } from './rate-limit-store.ts';
 export {
+  type AblyTokenRequest,
   ablyRealtimePublisher,
   ablySubscribeCapability,
+  ablyTokenRequest,
   channelOrg,
   memoryRealtimeHub,
   orgChannel,
@@ -96,8 +98,58 @@ export {
   type RealtimeListener,
   type RealtimeMessage,
   type RealtimePublisher,
+  realtimeProvider,
   realtimePublisherFromEnv,
   teePublisher,
 } from './realtime.ts';
+export {
+  ALERTS_CHANNEL,
+  CHECKINS_CHANNEL,
+  CORE_REALTIME_CHANNELS,
+  createRealtimeRegistry,
+  DEVICES_CHANNEL,
+  decideRealtimeAccess,
+  defineRealtimeChannel,
+  METRICS_CHANNEL,
+  type ParsedChannel,
+  parseRealtimeChannel,
+  type RealtimeAccess,
+  type RealtimeCaller,
+  type RealtimeChannelDef,
+  type RealtimeDecision,
+  type RealtimeEvents,
+  type RealtimeRegistry,
+  type RealtimeScope,
+  type ResolvedChannel,
+  realtimeChannelName,
+  realtimePayload,
+} from './realtime-channels.ts';
+export {
+  createRealtimeFanout,
+  type LoggedMessage,
+  latestRealtimeIdTx,
+  listenForRealtime,
+  parseRealtimeId,
+  publishRealtimeTx,
+  purgeRealtimeMessages,
+  REALTIME_NOTIFY_CHANNEL,
+  REALTIME_REPLAY_LIMIT,
+  type RealtimeFanout,
+  type RealtimeFanoutOptions,
+  type RealtimePublish,
+  realtimeCatchUpTx,
+  realtimeMessagesByIdTx,
+  realtimeSubscriber,
+} from './realtime-log.ts';
+export {
+  formatSse,
+  lastEventIdOf,
+  SSE_HEADERS,
+  type SseOptions,
+  type SseSource,
+  type SseStream,
+  StreamLimits,
+  sseStream,
+} from './realtime-sse.ts';
 export { STAFF_ROLES } from './schema.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

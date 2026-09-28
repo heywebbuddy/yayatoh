@@ -887,6 +887,15 @@
     "wrongCheckpointHint": "Você escaneia em {places}. Escolha em “Escaneando em”.",
     "noCheckpointsHint": "Você não tem ponto de controle atribuído aqui. Fale com o organizador."
   },
+  "checkinLive": {
+    "state": {
+      "live": "Live",
+      "connecting": "Verbinden…",
+      "offline": "Opnieuw verbinden…"
+    },
+    "since": "{count, plural, one {# check-in} other {# check-ins}} sinds je deze pagina opende",
+    "waiting": "Check-ins van alle scanners verschijnen hier meteen."
+  },
   "devices": {
     "title": "Scanapparaten",
     "description": "Telefoons en tablets die offline scannen. Elk krijgt een eigen sleutel; trek een verloren apparaat in of wis de gedownloade gastenlijst.",

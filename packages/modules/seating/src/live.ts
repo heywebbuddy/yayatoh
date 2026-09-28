@@ -1,7 +1,13 @@
 import { type Listener, listenChannel, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
-import { orgChannel, type RealtimeMessage, type RealtimePublisher, tenantQuery } from '@yayatoh/platform';
+import {
+  defineRealtimeChannel,
+  orgChannel,
+  type RealtimeMessage,
+  type RealtimePublisher,
+  tenantQuery,
+} from '@yayatoh/platform';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import {
@@ -65,6 +71,29 @@ export const StaffSeatsData = z.object({
     blocked: z.int(),
   }),
   seats: z.record(z.uuid(), z.enum(['available', 'held', 'sold', 'assigned', 'blocked'])),
+});
+
+/**
+ * The seat map's realtime channels (M3.1b registry entries). Served by the seat feed below, not
+ * the message log; every message still leaves through these allowlists.
+ */
+export const SEATS_CHANNEL = defineRealtimeChannel({
+  scope: 'event',
+  topic: 'seats',
+  source: 'feed',
+  description: 'Which seats of an on-sale map buyers may choose (never who holds them)',
+  access: { public: true },
+  events: { snapshot: PublicSeatsData, delta: PublicSeatsData, refresh: z.object({}) },
+});
+
+export const SEAT_STATES_CHANNEL = defineRealtimeChannel({
+  scope: 'event',
+  topic: 'seat-states',
+  source: 'feed',
+  description: "Each seat's state and the counts, for the organizer and the box office",
+  entitlement: 'seating',
+  access: { permission: 'events:read' },
+  events: { snapshot: StaffSeatsData, delta: StaffSeatsData, refresh: z.object({}) },
 });
 
 /** Read an event's seats as the live feed sees them (system actor, under the org's RLS). */

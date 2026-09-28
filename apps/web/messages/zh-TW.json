@@ -887,6 +887,15 @@
     "wrongCheckpointHint": "你負責 {places}。請在「掃描位置」中選擇。",
     "noCheckpointsHint": "你在這裡沒有分配檢查點。請詢問主辦方。"
   },
+  "checkinLive": {
+    "state": {
+      "live": "即時",
+      "connecting": "連線中…",
+      "offline": "重新連線中…"
+    },
+    "since": "自開啟此頁面以來 {count, plural, other {# 次報到}}",
+    "waiting": "所有掃描裝置的報到會即時顯示在這裡。"
+  },
   "devices": {
     "title": "掃描裝置",
     "description": "可離線掃描的手機和平板。每台裝置都有專屬金鑰；可撤銷遺失的裝置，或清除其已下載的賓客名單。",

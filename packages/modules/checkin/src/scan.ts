@@ -2,7 +2,7 @@ import { eventDay, ruleResult, zoneAllows } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
 import { eventStaffTx, findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
-import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { CHECKINS_CHANNEL, publishRealtimeTx, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import {
   activeTicketCountTx,
@@ -136,6 +136,17 @@ export const scanTicketCommand = tenantCommand({
           aggregateId: ticket.id,
           payload: { orgId, eventId: event.id, ticketId: ticket.id, admissionId: adm.id, day },
         });
+        // Door screens follow along (M3.1b): delivered after commit, no ticket or holder in it.
+        await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+          eventId: event.id,
+          event: 'admission',
+          data: {
+            change: 'admitted',
+            checkpointId: checkpoint?.id ?? null,
+            count: 1,
+            at: ctx.now.toISOString(),
+          },
+        });
       } else {
         result = 'duplicate';
         const [live] = await tx
@@ -235,8 +246,18 @@ export const undoAdmissionCommand = tenantCommand({
           isNull(admissions.undoneAt),
         ),
       )
-      .returning({ id: admissions.id });
+      .returning({ id: admissions.id, checkpointId: admissions.checkpointId });
     if (rows.length === 0) throw new DomainError('not_found', 'Admission not found or already undone');
+    await publishRealtimeTx(tx, requireOrg(ctx), CHECKINS_CHANNEL, {
+      eventId: input.eventId,
+      event: 'admission',
+      data: {
+        change: 'undone',
+        checkpointId: rows[0]?.checkpointId ?? null,
+        count: 1,
+        at: ctx.now.toISOString(),
+      },
+    });
     return { undone: true };
   },
   audit: (input) => ({ action: 'checkin.undo', targetType: 'admission', targetId: input.admissionId }),

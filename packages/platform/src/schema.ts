@@ -323,3 +323,33 @@ export const rateLimitWindows = platform.table(
   },
   (t) => [index('rate_limit_windows_expires_idx').on(t.expiresAt)],
 );
+
+/**
+ * The realtime message log (M3.1b). `publishRealtimeTx` inserts a row inside the caller's
+ * transaction; an AFTER INSERT trigger NOTIFYs `realtime_messages` with "{seq} {channel}" (never
+ * the payload), which Postgres delivers only on commit. Each web process LISTENs once, fetches
+ * the rows it has subscribers for by `seq`, and fans them out to its SSE streams (and Ably). The
+ * rows also serve Last-Event-ID resumption; they are derived data, pruned after an hour
+ * (`platform.purge_realtime_messages`), and a client that fell further behind gets a snapshot.
+ */
+export const realtimeMessages = tenantTable(
+  platform,
+  'realtime_messages',
+  {
+    seq: bigint('seq', { mode: 'number' }).notNull().generatedAlwaysAsIdentity(),
+    channel: text('channel').notNull(),
+    event: text('event').notNull(),
+    data: jsonb('data').notNull(),
+  },
+  (t) => [
+    uniqueIndex('realtime_messages_org_seq_key').on(t.orgId, t.seq),
+    index('realtime_messages_org_channel_seq_idx').on(t.orgId, t.channel, t.seq),
+    index('realtime_messages_org_created_at_idx').on(t.orgId, t.createdAt),
+    check(
+      'realtime_messages_channel_org',
+      sql`channel like 'org:' || org_id::text || ':%' and length(channel) <= 160`,
+    ),
+    check('realtime_messages_event_length', sql`length(event) between 1 and 40`),
+    check('realtime_messages_data_size', sql`pg_column_size(data) <= 16384`),
+  ],
+);

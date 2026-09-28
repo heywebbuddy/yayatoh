@@ -4,7 +4,7 @@ import { seatingLiveAccessQuery } from '@yayatoh/seating';
 import { memberRole, resolveOrgSlug } from '@yayatoh/tenancy';
 import type { NextRequest } from 'next/server';
 import { ports } from '@/server/ports.ts';
-import { seatStreamResponse } from '@/server/seat-stream.ts';
+import { seatStreamResponse } from '@/server/realtime.ts';
 import { getSession } from '@/server/session.ts';
 
 export const dynamic = 'force-dynamic';
