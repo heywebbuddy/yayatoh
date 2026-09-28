@@ -1,6 +1,7 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import type {
   AccountEvent,
+  BalanceTransaction,
   CreatePaymentInput,
   DisputeEvent,
   PaymentProvider,
@@ -9,14 +10,58 @@ import type {
 } from './port.ts';
 
 /**
+ * What the fake provider's "platform balance" saw (M1.6e reconciliation). Without a store the fake
+ * cannot list balance transactions and reconciliation is skipped.
+ */
+export interface FakeBalanceStore {
+  add(t: BalanceTransaction): void;
+  list(from: Date, to: Date): readonly BalanceTransaction[];
+}
+
+export function memoryBalanceStore(): FakeBalanceStore {
+  const rows = new Map<string, BalanceTransaction>();
+  return {
+    add: (t) => {
+      rows.set(t.id, t);
+    },
+    list: (from, to) => [...rows.values()].filter((t) => t.occurredAt >= from && t.occurredAt < to),
+  };
+}
+
+/** One store per process (the web's dev tools and its fake provider share it). */
+export function processFakeBalanceStore(): FakeBalanceStore {
+  const g = globalThis as { __yayatohFakeBalance?: FakeBalanceStore };
+  g.__yayatohFakeBalance ??= memoryBalanceStore();
+  return g.__yayatohFakeBalance;
+}
+
+/**
  * Fake provider for dev, preview and CI (no Stripe account yet — owner inbox). Payments are
  * "completed" on a hosted fake page that posts an HMAC-signed webhook, so the real webhook path
  * (raw-body verification, dedupe, fulfilment) is exercised end to end.
  */
-export function fakePaymentProvider(opts: { secret: string; appOrigin: string }): PaymentProvider {
+export function fakePaymentProvider(opts: {
+  secret: string;
+  appOrigin: string;
+  store?: FakeBalanceStore;
+  /** Tests: the clock stamped on balance transactions. */
+  now?: () => Date;
+}): PaymentProvider {
   if (process.env.VERCEL_ENV === 'production')
     throw new Error('The fake payment provider is not allowed in production');
   if (opts.secret.length < 32) throw new Error('fake provider secret must be ≥32 chars');
+  const now = opts.now ?? (() => new Date());
+  const record = (
+    id: string,
+    kind: BalanceTransaction['kind'],
+    amountMinor: number,
+    currency: string,
+    orgId: string | null,
+    reference: string | null,
+  ) => {
+    if (amountMinor !== 0)
+      opts.store?.add({ id: `fakebt_${id}`, kind, amountMinor, currency, occurredAt: now(), orgId, reference });
+  };
   return {
     name: 'fake',
     async createPayment(i: CreatePaymentInput) {
@@ -49,23 +94,39 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
       if (i.amount.amount <= 0) throw new Error('refund amount must be positive');
       // The fake refunds anything; `fakepi_decline*` payments refuse refunds (tests).
       const refundId = `fakere_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
-      return { refundId, status: i.providerPaymentId.startsWith('fakepi_decline') ? 'failed' : 'succeeded' };
+      const status = i.providerPaymentId.startsWith('fakepi_decline') ? 'failed' : 'succeeded';
+      if (status === 'succeeded') {
+        const org = i.orgId ?? null;
+        // organizer_mor: the refund is on the organizer's account; the platform returns its fee part.
+        if (i.connectedAccountId)
+          record(refundId, 'application_fee_refund', -i.refundApplicationFee.amount, i.amount.currency, org, i.idempotencyKey);
+        else record(refundId, 'refund', -i.amount.amount, i.amount.currency, org, i.idempotencyKey);
+      }
+      return { refundId, status };
     },
     async createTransfer(i) {
       if (i.amount.amount <= 0) throw new Error('transfer amount must be positive');
       const transferId = `faketr_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
       // `fakeacct_nopayouts*` accounts refuse transfers (tests).
-      return i.destinationAccountId.startsWith('fakeacct_nopayouts')
-        ? { transferId, status: 'failed', failure: 'account_closed' }
-        : { transferId, status: 'succeeded' };
+      if (i.destinationAccountId.startsWith('fakeacct_nopayouts'))
+        return { transferId, status: 'failed', failure: 'account_closed' };
+      record(transferId, 'transfer', -i.amount.amount, i.amount.currency, i.orgId ?? null, i.idempotencyKey);
+      return { transferId, status: 'succeeded' };
     },
     async reverseTransfer(i) {
       const reversalId = `faketrr_${createHmac('sha256', opts.secret).update(i.idempotencyKey).digest('hex').slice(0, 24)}`;
       // Reversals above 100,000 minor units fail, as if the organizer's balance were empty (tests).
-      return { reversalId, status: i.amount.amount > 100_000 ? 'failed' : 'succeeded' };
+      if (i.amount.amount > 100_000) return { reversalId, status: 'failed' };
+      record(reversalId, 'transfer_reversal', i.amount.amount, i.amount.currency, i.orgId ?? null, i.idempotencyKey);
+      return { reversalId, status: 'succeeded' };
     },
     async submitDisputeEvidence(i) {
+      // Like Stripe: an empty answer or a packet over 4.5 MB is refused.
+      if (i.packet && i.packet.bytes.byteLength > 4_500_000) return { status: 'failed' };
       return { status: i.summary.trim() ? 'submitted' : 'failed' };
+    },
+    async listBalanceTransactions(i) {
+      return opts.store ? opts.store.list(i.from, i.to) : null;
     },
     async registerPaymentMethodDomain(i) {
       const key = `pmd:${i.hostname}:${i.accountId ?? 'platform'}`;
@@ -86,8 +147,21 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
       const a = Buffer.from(sig);
       const b = Buffer.from(expected);
       if (a.length !== b.length || !timingSafeEqual(a, b)) throw new Error('invalid fake webhook signature');
-      const e = JSON.parse(rawBody) as WebhookEvent;
-      return { ...e, provider: 'fake' };
+      const e = JSON.parse(rawBody) as WebhookEvent & { applicationFeeMinor?: number };
+      if (e.type === 'payment.succeeded') {
+        // organizer_mor: the platform balance only receives the application fee.
+        const fee = e.applicationFeeMinor;
+        record(
+          e.id,
+          fee === undefined ? 'charge' : 'application_fee',
+          fee ?? e.amountMinor,
+          e.currency,
+          e.orgId,
+          `order:${e.orderId}`,
+        );
+      }
+      const { applicationFeeMinor: _fee, ...event } = e;
+      return { ...event, provider: 'fake' } as WebhookEvent;
     },
   };
 }
@@ -95,7 +169,11 @@ export function fakePaymentProvider(opts: { secret: string; appOrigin: string })
 /** Build and sign a fake webhook (used by the fake hosted page and by tests). */
 export function signFakeWebhook(
   secret: string,
-  e: Omit<ProviderEvent, 'provider' | 'id'> & { id?: string },
+  e: Omit<ProviderEvent, 'provider' | 'id'> & {
+    id?: string;
+    /** organizer_mor: the application fee the platform received (reconciliation). */
+    applicationFeeMinor?: number;
+  },
 ): { body: string; signature: string } {
   const body = JSON.stringify({ id: e.id ?? `fakeevt_${randomUUID()}`, ...e, provider: 'fake' });
   return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };

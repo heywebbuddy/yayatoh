@@ -9,6 +9,8 @@ export interface StripeCall {
   readonly path: string;
   readonly query: URLSearchParams;
   readonly body: URLSearchParams;
+  /** A JSON body (Stripe's v2 APIs, e.g. Accounts v2), parsed; null for form bodies. */
+  readonly json: unknown;
   /** The `Stripe-Account` header (a connected account), or null for the platform account. */
   readonly account: string | null;
   readonly idempotencyKey: string | null;
@@ -30,6 +32,13 @@ export function fakeStripeApi(routes: Record<string, StripeRoute>) {
       path: url.pathname,
       query: url.searchParams,
       body: new URLSearchParams(typeof init?.body === 'string' ? init.body : ''),
+      json: (() => {
+        try {
+          return typeof init?.body === 'string' && init.body.startsWith('{') ? JSON.parse(init.body) : null;
+        } catch {
+          return null;
+        }
+      })(),
       account: headers.get('stripe-account'),
       idempotencyKey: headers.get('idempotency-key'),
     };

@@ -134,6 +134,8 @@ export interface PaymentProvider {
     /** Groups the event's charges and transfers (Stripe `transfer_group`). */
     transferGroup: string;
     idempotencyKey: string;
+    /** Tagged on the transfer so reconciliation can attribute it. */
+    orgId?: string;
   }): Promise<{ transferId: string; status: 'succeeded' | 'failed'; failure?: string }>;
   /**
    * Take money back from a transfer (a refund after release). `reverse_transfer` does not apply to
@@ -144,14 +146,56 @@ export interface PaymentProvider {
     transferId: string;
     amount: Money;
     idempotencyKey: string;
+    orgId?: string;
   }): Promise<{ reversalId: string; status: 'succeeded' | 'failed' }>;
-  /** Submit a reviewed evidence packet for a dispute on the platform account (platform_mor). */
+  /**
+   * Submit a reviewed evidence packet for a dispute: on the platform account (platform_mor) or on
+   * the organizer's connected account (organizer_mor, `connectedAccountId`).
+   */
   submitDisputeEvidence(input: {
     providerDisputeId: string;
-    /** Plain-text summary; the packet PDF is attached by the Stripe adapter (file upload). */
+    /** Plain-text summary written or edited by the reviewer. */
     summary: string;
+    /** The reviewed packet (PDF), uploaded with the evidence (≤ 4.5 MB). */
+    packet?: { readonly bytes: Uint8Array; readonly filename: string } | null;
+    connectedAccountId?: string | null;
     idempotencyKey: string;
   }): Promise<{ status: 'submitted' | 'failed' }>;
+  /**
+   * Daily reconciliation (M1.6e): the platform balance's movements in `[from, to)`, normalized and
+   * attributed to an org and a reference where the platform tagged the object. `null` when the
+   * adapter cannot list them (the fake provider without a store): reconciliation is skipped.
+   */
+  listBalanceTransactions(input: { from: Date; to: Date }): Promise<readonly BalanceTransaction[] | null>;
+}
+
+export const BALANCE_TRANSACTION_KINDS = [
+  'charge',
+  'refund',
+  'application_fee',
+  'application_fee_refund',
+  'transfer',
+  'transfer_reversal',
+  'dispute',
+  'other',
+] as const;
+export type BalanceTransactionKind = (typeof BALANCE_TRANSACTION_KINDS)[number];
+
+/** One movement of the platform balance (Stripe `balance_transactions`), normalized. */
+export interface BalanceTransaction {
+  readonly id: string;
+  readonly kind: BalanceTransactionKind;
+  /** Signed effect on the platform balance, gross of the provider's own fees; integer minor units. */
+  readonly amountMinor: number;
+  readonly currency: string;
+  readonly occurredAt: Date;
+  /** The org the platform tagged on the object (metadata), when it did. */
+  readonly orgId: string | null;
+  /**
+   * What the ledger calls the same money: `order:<id>` (a charge or application fee),
+   * `refund:<id>`, `settlement:<id>` (a transfer), `reversal:<refundId>`, `dispute:<providerId>`.
+   */
+  readonly reference: string | null;
 }
 
 export interface RefundInput {
@@ -161,5 +205,8 @@ export interface RefundInput {
   readonly connectedAccountId: string | null;
   /** organizer_mor: how much of the application fee goes back (0 keeps it). */
   readonly refundApplicationFee: Money;
+  /** `refund:<refundId>`; also tagged on the refund as its reconciliation reference. */
   readonly idempotencyKey: string;
+  /** Tagged on the refund so reconciliation can attribute it. */
+  readonly orgId?: string;
 }

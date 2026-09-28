@@ -1,0 +1,705 @@
+[
+  {
+    "id": "txn_35c3605e8722ed2c",
+    "object": "balance_transaction",
+    "amount": -1500,
+    "available_on": 1790557146,
+    "balance_type": "payments",
+    "created": 1790557146,
+    "currency": "usd",
+    "description": "redacted",
+    "exchange_rate": null,
+    "fee": 1500,
+    "fee_details": [
+      {
+        "amount": 1500,
+        "application": null,
+        "currency": "usd",
+        "description": "redacted",
+        "type": "stripe_fee"
+      }
+    ],
+    "net": -3000,
+    "reporting_category": "dispute",
+    "source": {
+      "id": "du_3847eea1cbf0eb53",
+      "object": "dispute",
+      "amount": 1500,
+      "balance_transaction": "txn_35c3605e8722ed2c",
+      "balance_transactions": [
+        {
+          "id": "txn_35c3605e8722ed2c",
+          "object": "balance_transaction",
+          "amount": -1500,
+          "available_on": 1790557146,
+          "balance_type": "payments",
+          "created": 1790557146,
+          "currency": "usd",
+          "description": "redacted",
+          "exchange_rate": null,
+          "fee": 1500,
+          "fee_details": [
+            {
+              "amount": 1500,
+              "application": null,
+              "currency": "usd",
+              "description": "redacted",
+              "type": "stripe_fee"
+            }
+          ],
+          "net": -3000,
+          "reporting_category": "dispute",
+          "source": "du_3847eea1cbf0eb53",
+          "status": "available",
+          "type": "adjustment"
+        },
+        {
+          "id": "txn_7dc3d16511e6352b",
+          "object": "balance_transaction",
+          "amount": 1500,
+          "available_on": 1791158400,
+          "balance_type": "payments",
+          "created": 1790557153,
+          "currency": "usd",
+          "description": "redacted",
+          "exchange_rate": null,
+          "fee": 0,
+          "fee_details": [],
+          "net": 1500,
+          "reporting_category": "dispute_reversal",
+          "source": "du_3847eea1cbf0eb53",
+          "status": "pending",
+          "type": "adjustment"
+        }
+      ],
+      "charge": "ch_655ff8fc7ec8591e",
+      "created": 1790557146,
+      "currency": "usd",
+      "enhanced_eligibility_types": [],
+      "evidence": {
+        "access_activity_log": null,
+        "billing_address": null,
+        "cancellation_policy": null,
+        "cancellation_policy_disclosure": null,
+        "cancellation_rebuttal": null,
+        "customer_communication": null,
+        "customer_email_address": null,
+        "customer_name": null,
+        "customer_purchase_ip": null,
+        "customer_signature": null,
+        "duplicate_charge_documentation": null,
+        "duplicate_charge_explanation": null,
+        "duplicate_charge_id": null,
+        "enhanced_evidence": {},
+        "product_description": null,
+        "receipt": null,
+        "refund_policy": null,
+        "refund_policy_disclosure": null,
+        "refund_refusal_explanation": null,
+        "service_date": null,
+        "service_documentation": null,
+        "shipping_address": null,
+        "shipping_carrier": null,
+        "shipping_date": null,
+        "shipping_documentation": null,
+        "shipping_tracking_number": null,
+        "uncategorized_file": "file_5f69870cc186273b",
+        "uncategorized_text": "winning_evidence"
+      },
+      "evidence_details": {
+        "due_by": 1791331199,
+        "enhanced_eligibility": {},
+        "has_evidence": true,
+        "past_due": false,
+        "submission_count": 1
+      },
+      "is_charge_refundable": true,
+      "livemode": false,
+      "metadata": {},
+      "payment_intent": "pi_7c3f4ac077cf98b4",
+      "payment_method_details": {
+        "card": {
+          "brand": "visa",
+          "case_type": "chargeback",
+          "network": "visa",
+          "network_reason_code": "10.4"
+        },
+        "type": "card"
+      },
+      "reason": "fraudulent",
+      "status": "won"
+    },
+    "status": "available",
+    "type": "adjustment"
+  },
+  {
+    "id": "txn_46a25b2db6e23f49",
+    "object": "balance_transaction",
+    "amount": 1500,
+    "available_on": 1791158400,
+    "balance_type": "payments",
+    "created": 1790557145,
+    "currency": "usd",
+    "description": null,
+    "exchange_rate": null,
+    "fee": 74,
+    "fee_details": [
+      {
+        "amount": 74,
+        "application": null,
+        "currency": "usd",
+        "description": "redacted",
+        "type": "stripe_fee"
+      }
+    ],
+    "net": 1426,
+    "reporting_category": "charge",
+    "source": {
+      "id": "ch_655ff8fc7ec8591e",
+      "object": "charge",
+      "amount": 1500,
+      "amount_captured": 1500,
+      "amount_refunded": 0,
+      "application": null,
+      "application_fee": null,
+      "application_fee_amount": null,
+      "balance_transaction": "txn_46a25b2db6e23f49",
+      "billing_details": {
+        "address": {
+          "city": null,
+          "country": null,
+          "line1": null,
+          "line2": null,
+          "postal_code": null,
+          "state": null
+        },
+        "email": null,
+        "name": null,
+        "phone": null,
+        "tax_id": null
+      },
+      "calculated_statement_descriptor": "redacted",
+      "captured": true,
+      "created": 1790557145,
+      "currency": "usd",
+      "customer": null,
+      "description": null,
+      "destination": null,
+      "dispute": "du_3847eea1cbf0eb53",
+      "disputed": true,
+      "failure_balance_transaction": null,
+      "failure_code": null,
+      "failure_message": null,
+      "fraud_details": {},
+      "livemode": false,
+      "metadata": {
+        "fundsFlow": "platform_mor",
+        "orderId": "13783952-642f-7398-8b5a-21794f23f81a",
+        "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f"
+      },
+      "on_behalf_of": null,
+      "order": null,
+      "outcome": {
+        "advice_code": null,
+        "network_advice_code": null,
+        "network_decline_code": null,
+        "network_status": "approved_by_network",
+        "reason": null,
+        "risk_level": "normal",
+        "risk_score": 57,
+        "seller_message": "Payment complete.",
+        "type": "authorized"
+      },
+      "paid": true,
+      "payment_intent": "pi_7c3f4ac077cf98b4",
+      "payment_method": "pm_3b615405f3beea59",
+      "payment_method_details": {
+        "card": {
+          "amount_authorized": 1500,
+          "authorization_code": "769306",
+          "brand": "visa",
+          "checks": {
+            "address_line1_check": null,
+            "address_postal_code_check": null,
+            "cvc_check": "pass"
+          },
+          "country": "US",
+          "electronic_commerce_indicator": "07",
+          "exp_month": 9,
+          "exp_year": 2027,
+          "extended_authorization": {
+            "status": "disabled"
+          },
+          "fingerprint": "QoerKmn0GgBq8vzj",
+          "funding": "credit",
+          "incremental_authorization": {
+            "status": "unavailable"
+          },
+          "installments": null,
+          "last4": "0259",
+          "mandate": null,
+          "multicapture": {
+            "status": "unavailable"
+          },
+          "network": "visa",
+          "network_token": {
+            "used": false
+          },
+          "network_transaction_id": "811111011147510",
+          "overcapture": {
+            "maximum_amount_capturable": 1500,
+            "status": "unavailable"
+          },
+          "regulated_status": "unregulated",
+          "three_d_secure": null,
+          "transaction_link_id": null,
+          "wallet": null
+        },
+        "type": "card"
+      },
+      "radar_options": {},
+      "receipt_email": null,
+      "receipt_number": null,
+      "receipt_url": "redacted",
+      "refunded": false,
+      "review": null,
+      "shipping": null,
+      "source": null,
+      "source_transfer": null,
+      "statement_descriptor": null,
+      "statement_descriptor_suffix": null,
+      "status": "succeeded",
+      "transfer_data": null,
+      "transfer_group": null
+    },
+    "status": "pending",
+    "type": "charge"
+  },
+  {
+    "id": "txn_5f46dc198bf20560",
+    "object": "balance_transaction",
+    "amount": 1000,
+    "available_on": 1790557144,
+    "balance_type": "payments",
+    "created": 1790557144,
+    "currency": "usd",
+    "description": "redacted",
+    "exchange_rate": null,
+    "fee": 0,
+    "fee_details": [],
+    "net": 1000,
+    "reporting_category": "transfer_reversal",
+    "source": {
+      "id": "tr_d14c9338015b67d8",
+      "object": "transfer",
+      "amount": 3000,
+      "amount_reversed": 1000,
+      "balance_transaction": "txn_7aa3c65c78828750",
+      "created": 1790557143,
+      "currency": "usd",
+      "description": null,
+      "destination": "acct_4965237f0d72f3ab",
+      "destination_payment": "py_f95932b52ad392f2",
+      "livemode": false,
+      "metadata": {
+        "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+        "yayatoh_ref": "settlement:16d8694f-cbf3-7735-80c3-25ee3d51f8cc"
+      },
+      "reversals": {
+        "object": "list",
+        "data": [
+          {
+            "id": "trr_bed7111196bdd851",
+            "object": "transfer_reversal",
+            "amount": 1000,
+            "balance_transaction": "txn_5f46dc198bf20560",
+            "created": 1790557144,
+            "currency": "usd",
+            "destination_payment_refund": "pyr_1UKSuKE5zR9KcqiYuF7CjujP",
+            "metadata": {
+              "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+              "yayatoh_ref": "reversal:ea8d8ccb-936f-7685-8910-fc89aaf971f1"
+            },
+            "source_refund": null,
+            "transfer": "tr_d14c9338015b67d8"
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "redacted"
+      },
+      "reversed": false,
+      "source_transaction": null,
+      "source_type": "card",
+      "transfer_group": "event:082c8d4b-7349-70c8-8b3b-e20fec3b54c6"
+    },
+    "status": "available",
+    "type": "transfer_refund"
+  },
+  {
+    "id": "txn_7aa3c65c78828750",
+    "object": "balance_transaction",
+    "amount": -3000,
+    "available_on": 1790557143,
+    "balance_type": "payments",
+    "created": 1790557143,
+    "currency": "usd",
+    "description": null,
+    "exchange_rate": null,
+    "fee": 0,
+    "fee_details": [],
+    "net": -3000,
+    "reporting_category": "transfer",
+    "source": {
+      "id": "tr_d14c9338015b67d8",
+      "object": "transfer",
+      "amount": 3000,
+      "amount_reversed": 1000,
+      "balance_transaction": "txn_7aa3c65c78828750",
+      "created": 1790557143,
+      "currency": "usd",
+      "description": null,
+      "destination": "acct_4965237f0d72f3ab",
+      "destination_payment": "py_f95932b52ad392f2",
+      "livemode": false,
+      "metadata": {
+        "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+        "yayatoh_ref": "settlement:16d8694f-cbf3-7735-80c3-25ee3d51f8cc"
+      },
+      "reversals": {
+        "object": "list",
+        "data": [
+          {
+            "id": "trr_bed7111196bdd851",
+            "object": "transfer_reversal",
+            "amount": 1000,
+            "balance_transaction": "txn_5f46dc198bf20560",
+            "created": 1790557144,
+            "currency": "usd",
+            "destination_payment_refund": "pyr_1UKSuKE5zR9KcqiYuF7CjujP",
+            "metadata": {
+              "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+              "yayatoh_ref": "reversal:ea8d8ccb-936f-7685-8910-fc89aaf971f1"
+            },
+            "source_refund": null,
+            "transfer": "tr_d14c9338015b67d8"
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "redacted"
+      },
+      "reversed": false,
+      "source_transaction": null,
+      "source_type": "card",
+      "transfer_group": "event:082c8d4b-7349-70c8-8b3b-e20fec3b54c6"
+    },
+    "status": "available",
+    "type": "transfer"
+  },
+  {
+    "id": "txn_b2fa3328fc2d8266",
+    "object": "balance_transaction",
+    "amount": -1000,
+    "available_on": 1790557143,
+    "balance_type": "payments",
+    "created": 1790557143,
+    "currency": "usd",
+    "description": "redacted",
+    "exchange_rate": null,
+    "fee": 0,
+    "fee_details": [],
+    "net": -1000,
+    "reporting_category": "refund",
+    "source": {
+      "id": "re_2c33a593f4523caf",
+      "object": "refund",
+      "amount": 1000,
+      "balance_transaction": "txn_b2fa3328fc2d8266",
+      "charge": "ch_488d541c48bbe52d",
+      "created": 1790557143,
+      "currency": "usd",
+      "customer": null,
+      "customer_account": null,
+      "destination_details": {
+        "card": {
+          "reference": "7099720800725915",
+          "reference_status": "available",
+          "reference_type": "acquirer_reference_number",
+          "type": "refund"
+        },
+        "type": "card"
+      },
+      "metadata": {
+        "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+        "yayatoh_ref": "refund:b53e82c2-5c66-7d15-8398-6aa1e77b200a"
+      },
+      "payment_intent": "pi_3a584ffc0e9e834b",
+      "payment_method": "pm_74fddd888d462da9",
+      "reason": null,
+      "receipt_number": null,
+      "source_transfer_reversal": null,
+      "status": "succeeded",
+      "transfer_reversal": null
+    },
+    "status": "available",
+    "type": "refund"
+  },
+  {
+    "id": "txn_53c6a615c7d75ce5",
+    "object": "balance_transaction",
+    "amount": 10000,
+    "available_on": 1790557142,
+    "balance_type": "payments",
+    "created": 1790557142,
+    "currency": "usd",
+    "description": null,
+    "exchange_rate": null,
+    "fee": 320,
+    "fee_details": [
+      {
+        "amount": 320,
+        "application": null,
+        "currency": "usd",
+        "description": "redacted",
+        "type": "stripe_fee"
+      }
+    ],
+    "net": 9680,
+    "reporting_category": "charge",
+    "source": {
+      "id": "ch_488d541c48bbe52d",
+      "object": "charge",
+      "amount": 10000,
+      "amount_captured": 10000,
+      "amount_refunded": 1000,
+      "application": null,
+      "application_fee": null,
+      "application_fee_amount": null,
+      "balance_transaction": "txn_53c6a615c7d75ce5",
+      "billing_details": {
+        "address": {
+          "city": null,
+          "country": null,
+          "line1": null,
+          "line2": null,
+          "postal_code": null,
+          "state": null
+        },
+        "email": null,
+        "name": null,
+        "phone": null,
+        "tax_id": null
+      },
+      "calculated_statement_descriptor": "redacted",
+      "captured": true,
+      "created": 1790557142,
+      "currency": "usd",
+      "customer": null,
+      "description": null,
+      "destination": null,
+      "dispute": null,
+      "disputed": false,
+      "failure_balance_transaction": null,
+      "failure_code": null,
+      "failure_message": null,
+      "fraud_details": {},
+      "livemode": false,
+      "metadata": {
+        "fundsFlow": "platform_mor",
+        "orderId": "5e72af5c-44f5-7649-8874-3372f69df546",
+        "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f"
+      },
+      "on_behalf_of": null,
+      "order": null,
+      "outcome": {
+        "advice_code": null,
+        "network_advice_code": null,
+        "network_decline_code": null,
+        "network_status": "approved_by_network",
+        "reason": null,
+        "risk_level": "normal",
+        "risk_score": 17,
+        "seller_message": "Payment complete.",
+        "type": "authorized"
+      },
+      "paid": true,
+      "payment_intent": "pi_3a584ffc0e9e834b",
+      "payment_method": "pm_74fddd888d462da9",
+      "payment_method_details": {
+        "card": {
+          "amount_authorized": 10000,
+          "authorization_code": "424597",
+          "brand": "visa",
+          "checks": {
+            "address_line1_check": null,
+            "address_postal_code_check": null,
+            "cvc_check": "pass"
+          },
+          "country": "US",
+          "electronic_commerce_indicator": "07",
+          "exp_month": 9,
+          "exp_year": 2027,
+          "extended_authorization": {
+            "status": "disabled"
+          },
+          "fingerprint": "htXBwWoFX2SDkIt4",
+          "funding": "credit",
+          "incremental_authorization": {
+            "status": "unavailable"
+          },
+          "installments": null,
+          "last4": "0077",
+          "mandate": null,
+          "multicapture": {
+            "status": "unavailable"
+          },
+          "network": "visa",
+          "network_token": {
+            "used": false
+          },
+          "network_transaction_id": "104116886611987",
+          "overcapture": {
+            "maximum_amount_capturable": 10000,
+            "status": "unavailable"
+          },
+          "regulated_status": "unregulated",
+          "three_d_secure": null,
+          "transaction_link_id": null,
+          "wallet": null
+        },
+        "type": "card"
+      },
+      "radar_options": {},
+      "receipt_email": null,
+      "receipt_number": null,
+      "receipt_url": "redacted",
+      "refunded": false,
+      "review": null,
+      "shipping": null,
+      "source": null,
+      "source_transfer": null,
+      "statement_descriptor": null,
+      "statement_descriptor_suffix": null,
+      "status": "succeeded",
+      "transfer_data": null,
+      "transfer_group": null
+    },
+    "status": "available",
+    "type": "charge"
+  },
+  {
+    "id": "txn_fb2b746980aafee6",
+    "object": "balance_transaction",
+    "amount": -200,
+    "available_on": 1791158400,
+    "balance_type": "payments",
+    "created": 1790557141,
+    "currency": "usd",
+    "description": "redacted",
+    "exchange_rate": null,
+    "fee": 0,
+    "fee_details": [],
+    "net": -200,
+    "reporting_category": "platform_earning_refund",
+    "source": {
+      "id": "fee_457d97cb4ec98bef",
+      "object": "application_fee",
+      "account": "acct_4965237f0d72f3ab",
+      "amount": 500,
+      "amount_refunded": 200,
+      "application": "ca_VGhTR7eloKJZelwzN00HF8b9UIJgWpjW",
+      "balance_transaction": "txn_545f025e3e5743ae",
+      "charge": "ch_0742e40e3bd09c06",
+      "created": 1790557139,
+      "currency": "usd",
+      "fee_source": {
+        "charge": "ch_0742e40e3bd09c06",
+        "type": "charge"
+      },
+      "livemode": false,
+      "originating_transaction": null,
+      "refunded": false,
+      "refunds": {
+        "object": "list",
+        "data": [
+          {
+            "id": "fr_54b2da684cbb03bf",
+            "object": "fee_refund",
+            "amount": 200,
+            "balance_transaction": "txn_fb2b746980aafee6",
+            "created": 1790557141,
+            "currency": "usd",
+            "fee": "fee_457d97cb4ec98bef",
+            "metadata": {
+              "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+              "yayatoh_ref": "refund:48cf932c-7e5a-7b9b-8047-60ff31205e2f"
+            }
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "redacted"
+      }
+    },
+    "status": "pending",
+    "type": "application_fee_refund"
+  },
+  {
+    "id": "txn_545f025e3e5743ae",
+    "object": "balance_transaction",
+    "amount": 500,
+    "available_on": 1791158400,
+    "balance_type": "payments",
+    "created": 1790557139,
+    "currency": "usd",
+    "description": "redacted",
+    "exchange_rate": null,
+    "fee": 0,
+    "fee_details": [],
+    "net": 500,
+    "reporting_category": "platform_earning",
+    "source": {
+      "id": "fee_457d97cb4ec98bef",
+      "object": "application_fee",
+      "account": "acct_4965237f0d72f3ab",
+      "amount": 500,
+      "amount_refunded": 200,
+      "application": "ca_VGhTR7eloKJZelwzN00HF8b9UIJgWpjW",
+      "balance_transaction": "txn_545f025e3e5743ae",
+      "charge": "ch_0742e40e3bd09c06",
+      "created": 1790557139,
+      "currency": "usd",
+      "fee_source": {
+        "charge": "ch_0742e40e3bd09c06",
+        "type": "charge"
+      },
+      "livemode": false,
+      "originating_transaction": null,
+      "refunded": false,
+      "refunds": {
+        "object": "list",
+        "data": [
+          {
+            "id": "fr_54b2da684cbb03bf",
+            "object": "fee_refund",
+            "amount": 200,
+            "balance_transaction": "txn_fb2b746980aafee6",
+            "created": 1790557141,
+            "currency": "usd",
+            "fee": "fee_457d97cb4ec98bef",
+            "metadata": {
+              "orgId": "f79302d1-446c-7662-87db-bf1d7d17a85f",
+              "yayatoh_ref": "refund:48cf932c-7e5a-7b9b-8047-60ff31205e2f"
+            }
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "redacted"
+      }
+    },
+    "status": "pending",
+    "type": "application_fee"
+  }
+]

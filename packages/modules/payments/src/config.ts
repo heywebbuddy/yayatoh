@@ -1,4 +1,4 @@
-import { fakePaymentProvider } from './fake.ts';
+import { fakePaymentProvider, processFakeBalanceStore } from './fake.ts';
 import type { PaymentProvider } from './port.ts';
 import { stripePaymentProvider } from './stripe.ts';
 
@@ -28,7 +28,7 @@ export function paymentProviderFromEnv(
     const secret = env.FAKE_PAYMENTS_SECRET;
     if (!secret)
       throw new Error('No payment provider configured (FAKE_PAYMENTS_SECRET, or PAYMENTS_PROVIDER=stripe)');
-    return fakePaymentProvider({ secret, appOrigin });
+    return fakePaymentProvider({ secret, appOrigin, store: processFakeBalanceStore() });
   }
   throw new Error(`Unknown PAYMENTS_PROVIDER "${which}" (fake or stripe)`);
 }
