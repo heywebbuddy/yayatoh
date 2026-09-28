@@ -32,7 +32,8 @@ export const OPENAPI_INFO = {
       'Yayatoh `/v1`. Changes are additive only (oasdiff gate).',
       '',
       '- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under',
-      '  Settings → API keys) or a user session token from `POST /v1/auth/login`. No cookies.',
+      '  Settings → API keys) or a user token: `POST /v1/auth/token` (15-minute access token and a',
+      '  rotating refresh token; recommended) or `POST /v1/auth/login` (a 14-day session). No cookies.',
       '- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the',
       '  user must be a member. It is never read from a header.',
       '- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).',
@@ -175,7 +176,8 @@ export function createV1(deps: V1Deps) {
   v1.openAPIRegistry.registerComponent('securitySchemes', 'bearerSession', {
     type: 'http',
     scheme: 'bearer',
-    description: 'A user session token from `POST /v1/auth/login`.',
+    description:
+      'A user access token from `POST /v1/auth/token`, or a session token from `POST /v1/auth/login`.',
   });
   // The served document matches the committed one (paths under `/v1`); `servers` points at this
   // mount, so the web app's copy (`/api/v1`) is callable from the docs page too.

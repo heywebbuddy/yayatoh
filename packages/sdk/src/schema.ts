@@ -246,6 +246,177 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign out a refresh token: its chain and every access token issued from it end */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RevokeRequest"];
+                };
+            };
+            responses: {
+                /** @description Revoked (unknown tokens too) */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign in (grantType password) or refresh (grantType refresh_token): a 15-minute access token and a rotating refresh token
+         * @description Each refresh spends the refresh token and returns a new pair; the previous access token ends. A spent refresh token presented again revokes its whole chain (every access token issued from it ends), answering `401` with `reason: refresh_token_reused`.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["TokenRequest"];
+                };
+            };
+            responses: {
+                /** @description Tokens */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TokenPair"];
+                    };
+                };
+                /** @description Validation failed (`validation_failed`) */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Not found, or not visible to this credential (`not_found`) */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Too many requests (`rate_limited`); see `Retry-After` */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/checkins": {
         parameters: {
             query?: never;
@@ -2827,6 +2998,9 @@ export interface components {
             reason: "requested_by_customer" | "event_cancelled" | "event_postponed" | "duplicate" | "fraudulent" | "goodwill";
             ticketIds?: string[];
         };
+        RevokeRequest: {
+            refreshToken: string;
+        };
         ScanRequest: {
             /** Format: uuid */
             checkpointId?: string;
@@ -2893,6 +3067,30 @@ export interface components {
         };
         TicketTypeList: {
             data: components["schemas"]["TicketType"][];
+        };
+        TokenPair: {
+            /** @description Send as `Authorization: Bearer <accessToken>`. Lasts 15 minutes and is never extended. */
+            accessToken: string;
+            /** Format: date-time */
+            accessTokenExpiresAt: string;
+            /** @description Single use: exchange it for a new pair before the access token ends. Presenting a spent refresh token again revokes the whole chain (reuse detection). */
+            refreshToken: string;
+            /** Format: date-time */
+            refreshTokenExpiresAt: string;
+            /** @enum {string} */
+            tokenType: "bearer";
+            user: components["schemas"]["User"];
+        };
+        TokenRequest: {
+            /** Format: email */
+            email: string;
+            /** @enum {string} */
+            grantType: "password";
+            password: string;
+        } | {
+            /** @enum {string} */
+            grantType: "refresh_token";
+            refreshToken: string;
         };
         UpdateEventRequest: {
             city?: string | null;
