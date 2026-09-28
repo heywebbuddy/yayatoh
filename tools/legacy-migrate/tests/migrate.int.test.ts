@@ -419,7 +419,10 @@ describe('T5 check-ins and the legacy QR', () => {
     const r = await one(
       sql()<{ scans: number; kinds: string; dup: number }[]>`
         select count(*)::int as scans, string_agg(distinct code_kind || '/' || result, ',') as kinds,
-               (select count(*)::int from (select ticket_id, day from checkin.admissions group by 1, 2 having count(*) > 1) x) as dup
+               -- Tickets with imported scans only: other test files share this database (live undo + re-admit).
+               (select count(*)::int from (select a.ticket_id, a.day from checkin.admissions a
+                  where exists (select 1 from checkin.scans l where l.ticket_id = a.ticket_id and l.client_scan_id like 'legacy:%')
+                  group by 1, 2 having count(*) > 1) x) as dup
         from checkin.scans where client_scan_id like 'legacy:%'`,
     );
     expect(r.scans).toBeGreaterThan(10);
