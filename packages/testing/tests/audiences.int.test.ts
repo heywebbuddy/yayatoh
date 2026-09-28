@@ -1,4 +1,4 @@
-import { addGuestCommand, removeGuestCommand, setAttendeeLabelsCommand } from '@yayatoh/attendees';
+import { setAttendeeLabelsCommand } from '@yayatoh/attendees';
 import {
   audienceExportBulk,
   catchUpParticipation,
@@ -11,98 +11,41 @@ import {
   saveSegmentCommand,
   templateDefinition,
 } from '@yayatoh/audiences';
-import { scanTicketCommand } from '@yayatoh/checkin';
-import type { SegmentDefinition } from '@yayatoh/crm';
-import { recordConsentTx } from '@yayatoh/crm';
+import { recordConsentTx, type SegmentDefinition } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
-import {
-  assignEventRoleCommand,
-  createEventCommand,
-  createSeriesCommand,
-  setEventSeriesCommand,
-  transitionEventCommand,
-} from '@yayatoh/events';
-import { buildRow } from '@yayatoh/floorplan';
-import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
-import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
+import { assignEventRoleCommand } from '@yayatoh/events';
+import { type Ctx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { consumeEvent } from '@yayatoh/platform';
-import { assignSeatsCommand, setEventLayoutCommand } from '@yayatoh/seating';
+import { assignSeatsCommand } from '@yayatoh/seating';
 import { addMemberCommand } from '@yayatoh/tenancy';
-import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { type OrgFixture, ports, runBulk, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
+import {
+  type AudienceScenario,
+  audienceScenario,
+  type OrgFixture,
+  ports,
+  runBulk,
+  systemCtx,
+  twoOrgs,
+  userCtx,
+} from '../src/index.ts';
 
 let a: OrgFixture;
 let b: OrgFixture;
-const tag = uuidv7().slice(-8);
-// Two editions of one series: "last year" (2027) and "this year" (2028).
-const LAST = {
-  startsAt: '2027-06-05T18:00:00Z',
-  endsAt: '2027-06-05T23:00:00Z',
-  during: '2027-06-05T19:00:00Z',
-};
-const THIS = {
-  startsAt: '2028-06-03T18:00:00Z',
-  endsAt: '2028-06-03T23:00:00Z',
-  during: '2028-06-03T19:00:00Z',
-};
+let sa: AudienceScenario;
+let sb: AudienceScenario;
 let lastYear: string;
 let thisYear: string;
 let vip: string;
-let ga: string;
-let lastPass: string;
 let seriesId: string;
-const row = buildRow({ label: 'A', count: 6, x: 100, y: 100 });
-const people = new Map<string, { email: string; attendeeIds: string[]; codes: string[] }>();
-const email = (who: string) => `${who.toLowerCase()}.${tag}@audience.test`;
-
-async function buy(f: OrgFixture, eventId: string, ticketTypeId: string, who: string) {
-  const r = await executeCommand(
-    startCheckoutCommand,
-    { eventId, items: [{ ticketTypeId, quantity: 1 }], buyer: { email: email(who), name: who } },
-    createCtx({ orgId: f.org.id }),
-    ports,
-  );
-  const tickets = (await orderByManageToken(r.manageToken))?.tickets ?? [];
-  const p = people.get(who) ?? { email: email(who), attendeeIds: [], codes: [] };
-  for (const t of tickets) {
-    p.codes.push(t.code);
-    const [att] = await withTenant(f.ctx(), (tx) =>
-      tx.execute<{ id: string }>(sql`select id from attendees.attendees where ticket_id = ${t.id}`),
-    );
-    if (att) p.attendeeIds.push(att.id);
-  }
-  people.set(who, p);
-}
-
-const scan = (eventId: string, who: string, at: string) =>
-  executeCommand(
-    scanTicketCommand,
-    { eventId, code: people.get(who)?.codes.at(-1) ?? '' },
-    a.ctx({ now: new Date(at) }),
-    ports,
-  );
-
-async function event(f: OrgFixture, name: string, when: typeof LAST) {
-  const e = await executeCommand(
-    createEventCommand,
-    { name: `${name} ${tag}`, timezone: 'America/Chicago', startsAt: when.startsAt, endsAt: when.endsAt },
-    f.ctx(),
-    ports,
-  );
-  return e.id;
-}
-const ticketType = async (f: OrgFixture, eventId: string, name: string, priceMinor = 0) =>
-  (
-    await executeCommand(
-      createTicketTypeCommand,
-      { eventId, name, priceMinor, quantityTotal: 50 },
-      f.ctx(),
-      ports,
-    )
-  ).id;
+let rowId: string;
+const tag = uuidv7().slice(-8);
+const email = (who: string) => sa.email(who);
+const people = {
+  get: (who: string) => sa.people.get(who),
+};
 
 const preview = (definition: SegmentDefinition, ctx: Ctx = a.ctx(), eventId: string | null = null) =>
   executeQuery(previewAudienceQuery, { definition, eventId, limit: 100 }, ctx, ports);
@@ -124,64 +67,10 @@ async function participationRows(f: OrgFixture, eventId: string) {
 
 beforeAll(async () => {
   ({ a, b } = await twoOrgs());
-  lastYear = await event(a, 'Harbor Gala 2027', LAST);
-  thisYear = await event(a, 'Harbor Gala 2028', THIS);
-  seriesId = (await executeCommand(createSeriesCommand, { name: `Harbor Gala ${tag}` }, a.ctx(), ports)).id;
-  for (const id of [lastYear, thisYear])
-    await executeCommand(setEventSeriesCommand, { eventId: id, seriesId }, a.ctx(), ports);
-  lastPass = await ticketType(a, lastYear, 'Pass');
-  vip = await ticketType(a, thisYear, 'VIP');
-  ga = await ticketType(a, thisYear, 'General');
-  await executeCommand(
-    setEventLayoutCommand,
-    { eventId: thisYear, doc: { version: 1, width: 1600, height: 1000, items: [row] } },
-    a.ctx(),
-    ports,
-  );
-  for (const id of [lastYear, thisYear])
-    await executeCommand(transitionEventCommand, { eventId: id, transition: 'publish' }, a.ctx(), ports);
-
-  // Last year: Ava, Gus and Ivy were checked in; Hal registered but never came.
-  for (const who of ['Ava', 'Gus', 'Hal', 'Ivy']) await buy(a, lastYear, lastPass, who);
-  for (const who of ['Ava', 'Gus', 'Ivy']) await scan(lastYear, who, LAST.during);
-  // This year: Ava (VIP, seated by the organizer), Ben (VIP, unseated, checked in), Dee (VIP, then
-  // her guest record is cancelled with her ticket below), Cy and Ivy (General), Fin (a guest).
-  for (const who of ['Ava', 'Ben', 'Dee']) await buy(a, thisYear, vip, who);
-  for (const who of ['Cy', 'Ivy']) await buy(a, thisYear, ga, who);
-  const fin = await executeCommand(
-    addGuestCommand,
-    { eventId: thisYear, name: 'Fin', email: email('Fin'), labels: ['press'] },
-    a.ctx(),
-    ports,
-  );
-  people.set('Fin', { email: email('Fin'), attendeeIds: [fin.id], codes: [] });
-  const eve = await executeCommand(
-    addGuestCommand,
-    { eventId: thisYear, name: 'Eve', email: email('Eve'), labels: ['press'] },
-    a.ctx(),
-    ports,
-  );
-  await executeCommand(removeGuestCommand, { eventId: thisYear, attendeeId: eve.id }, a.ctx(), ports);
-  await executeCommand(
-    assignSeatsCommand,
-    { eventId: thisYear, attendeeIds: people.get('Ava')?.attendeeIds.slice(-1) ?? [], itemId: row.id },
-    a.ctx(),
-    ports,
-  );
-  await scan(thisYear, 'Ben', THIS.during);
-  // Dee's attendee record is cancelled (as a voided ticket does): she leaves the list, still a buyer.
-  await withTenant(a.ctx(), async (tx) => {
-    const { cancelAttendeesTx } = await import('@yayatoh/attendees');
-    await cancelAttendeesTx(tx, a.ctx(), people.get('Dee')?.attendeeIds ?? []);
-  });
-  // Bravo has look-alike people at its own event (isolation).
-  const bEvent = await event(b, 'Bravo Gala', THIS);
-  const bType = await ticketType(b, bEvent, 'VIP');
-  await executeCommand(transitionEventCommand, { eventId: bEvent, transition: 'publish' }, b.ctx(), ports);
-  await buy(b, bEvent, bType, 'Zed');
-
-  await catchUpParticipation(a.org.id);
-  await catchUpParticipation(b.org.id);
+  sa = await audienceScenario(a.org.id);
+  // Bravo has look-alike people (same names) at its own events: isolation.
+  sb = await audienceScenario(b.org.id);
+  ({ lastYear, thisYear, vip, seriesId, rowId } = sa);
 });
 afterAll(closePools);
 
@@ -189,19 +78,18 @@ describe('the three vision audiences (M3.6 acceptance)', () => {
   it('VIPs who bought but have not selected seats', async () => {
     expect(
       await namesOf(templateDefinition('vipsWithoutSeats', { eventId: thisYear, ticketTypeIds: [vip] })),
-    ).toEqual(['Ben']);
+    ).toEqual([...sa.expected.vipsWithoutSeats]);
   });
 
   it("last year's attendees not registered this year (series-relative)", async () => {
-    expect(await namesOf(templateDefinition('lastYearNotThisYear', { eventId: thisYear }))).toEqual(['Gus']);
+    expect(await namesOf(templateDefinition('lastYearNotThisYear', { eventId: thisYear }))).toEqual([
+      ...sa.expected.lastYearNotThisYear,
+    ]);
   });
 
   it('registered but not checked in', async () => {
     expect(await namesOf(templateDefinition('registeredNotCheckedIn', { eventId: thisYear }))).toEqual([
-      'Ava',
-      'Cy',
-      'Fin',
-      'Ivy',
+      ...sa.expected.registeredNotCheckedIn,
     ]);
   });
 
@@ -297,7 +185,7 @@ describe('participation projection', () => {
   it('follows changes: a seat, a label and a consent move people between audiences', async () => {
     await executeCommand(
       assignSeatsCommand,
-      { eventId: thisYear, attendeeIds: people.get('Ben')?.attendeeIds ?? [], itemId: row.id },
+      { eventId: thisYear, attendeeIds: people.get('Ben')?.attendeeIds ?? [], itemId: rowId },
       a.ctx(),
       ports,
     );
@@ -403,12 +291,21 @@ describe('segments: storage, scope and permissions', () => {
   it("is tenant-isolated: another org's event ids match nothing, and its people never show", async () => {
     const def = templateDefinition('registeredNotCheckedIn', { eventId: thisYear });
     expect((await preview(def, b.ctx())).count).toBe(0);
-    const everyone = await namesOf(
+    // Bravo's own copy of the scenario gives Bravo's people only.
+    const own = await preview(
+      templateDefinition('registeredNotCheckedIn', { eventId: sb.thisYear }),
+      b.ctx(),
+    );
+    expect(own.rows.map((r) => r.email).sort()).toEqual(
+      sb.expected.registeredNotCheckedIn.map((n) => sb.email(n)).sort(),
+    );
+    const everyone = await preview(
       { version: 1, root: { type: 'group', op: 'and', conditions: [] } },
       b.ctx(),
     );
-    expect(everyone).toContain('Zed');
-    expect(everyone).not.toContain('Ava');
+    const emails = everyone.rows.map((r) => r.email);
+    expect(emails).toContain(sb.email('Ava'));
+    expect(emails.some((e) => e.includes(sa.tag))).toBe(false);
   });
 
   it('viewing needs messages:read and building needs messages:send', async () => {

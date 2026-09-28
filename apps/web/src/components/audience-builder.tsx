@@ -15,7 +15,7 @@ import {
   TOTAL_METRICS,
   templateDefinition,
 } from '@yayatoh/audiences/client';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Table } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type ReactNode, useActionState, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { PreviewResult, SaveAudienceState } from '@/app/[locale]/o/[org]/(org)/audiences/actions.ts';
@@ -225,45 +225,33 @@ export function AudienceBuilder({
                   : t('preview.counting')}
         </p>
         {result?.ok && result.preview.rows.length > 0 ? (
-          <div className="overflow-x-auto rounded-card border border-zinc-200 bg-white">
-            <table className="w-full text-start text-body">
-              <caption className="px-4 py-2 text-start text-caption text-zinc-500">
-                {t('preview.caption', { shown: result.preview.rows.length })}
-              </caption>
-              <thead>
-                <tr className="border-b border-zinc-200 text-caption text-zinc-500">
-                  <th scope="col" className="px-4 py-2 text-start font-normal">
-                    {t('preview.name')}
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-start font-normal">
-                    {t('preview.email')}
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-end font-normal">
-                    {t('preview.events')}
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-end font-normal">
-                    {t('preview.attended')}
-                  </th>
-                  <th scope="col" className="px-4 py-2 text-start font-normal">
-                    {t('preview.lastSeen')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.preview.rows.map((r) => (
-                  <tr key={r.contactId} className="border-b border-zinc-100 last:border-0">
-                    <td className="px-4 py-2">{r.name ?? t('preview.noName')}</td>
-                    <td className="px-4 py-2">
-                      <bdi>{r.email}</bdi>
-                    </td>
-                    <td className="px-4 py-2 text-end font-mono">{nf.format(r.events)}</td>
-                    <td className="px-4 py-2 text-end font-mono">{nf.format(r.eventsAttended)}</td>
-                    <td className="px-4 py-2">{r.lastSeenAt ? df.format(new Date(r.lastSeenAt)) : '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            caption={t('preview.caption', { shown: result.preview.rows.length })}
+            captionHidden={false}
+            rowKey={(r) => r.contactId}
+            rows={result.preview.rows}
+            columns={[
+              { key: 'name', header: t('preview.name'), cell: (r) => r.name ?? t('preview.noName') },
+              { key: 'email', header: t('preview.email'), cell: (r) => <bdi>{r.email}</bdi> },
+              {
+                key: 'events',
+                header: t('preview.events'),
+                align: 'end',
+                cell: (r) => <span className="font-mono">{nf.format(r.events)}</span>,
+              },
+              {
+                key: 'attended',
+                header: t('preview.attended'),
+                align: 'end',
+                cell: (r) => <span className="font-mono">{nf.format(r.eventsAttended)}</span>,
+              },
+              {
+                key: 'lastSeen',
+                header: t('preview.lastSeen'),
+                cell: (r) => (r.lastSeenAt ? df.format(new Date(r.lastSeenAt)) : '—'),
+              },
+            ]}
+          />
         ) : null}
       </section>
 
