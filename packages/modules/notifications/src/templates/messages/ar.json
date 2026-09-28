@@ -100,6 +100,20 @@
       "subject": "إشعار تجريبي",
       "intro": "الإشعارات تعمل."
     },
+    "guest.checkout-code": {
+      "subject": "{code} هو رمز تأكيد بريدك الإلكتروني",
+      "intro": "أدخل {code} لتأكيد بريدك الإلكتروني وإتمام طلبك لدى {org}. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة."
+    },
+    "guest.sign-in": {
+      "subject": "{code} هو رمزك لصفحة تذاكري",
+      "intro": "أدخل {code} لرؤية تذاكرك على {site}، أو استخدم الزر أدناه في المتصفح نفسه. تنتهي صلاحية الرمز خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}} والزر خلال {linkMinutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}؛ ويعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.",
+      "cta": "فتح تذاكري"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {رابطك الجديد إلى طلبك لـ {eventName}} other {رابطك إلى طلبك لـ {eventName}}}",
+      "intro": "{reason, select, reissued {استبدل المنظم رابط طلبك لـ {eventName}. لم يعد الرابط القديم يعمل؛ استخدم هذا الرابط.} other {إليك الرابط الذي طلبته. يفتح طلبك وتذاكرك لـ {eventName}.}}",
+      "cta": "فتح طلبي"
+    },
     "security.fraud_signal": {
       "subject": "تنبيه احتيال: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}",
       "intro": "توجد إشارة عالية الخطورة تحتاج إلى مراجعة في {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}. افتحها لتأكيدها أو تجاهلها.",

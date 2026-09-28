@@ -71,7 +71,8 @@
     "kinds": {
       "orders": {
         "tickets": "Tickets",
-        "refund": "Refund"
+        "refund": "Refund",
+        "order-link": "Order link"
       },
       "events": {
         "reminder": "Event reminder"
@@ -104,6 +105,10 @@
       },
       "payments": {
         "destination-changed": "Payout account change"
+      },
+      "guest": {
+        "checkout-code": "Checkout email code",
+        "sign-in": "My tickets sign-in"
       },
       "security": {
         "fraud_signal": "Fraud alert"
@@ -1867,7 +1872,8 @@
       "address": "Seat finder address",
       "openPublic": "Open the seat finder",
       "poster": "Print seat-finder poster",
-      "closedNote": "The seat finder is closed. Guests who scan the poster are asked to check back later."
+      "closedNote": "The seat finder is closed. Guests who scan the poster are asked to check back later.",
+      "namePoster": "Print name list poster"
     },
     "map": {
       "zoomIn": "Zoom in",
@@ -2041,7 +2047,8 @@
       "challengeFailed": "The check didn't pass. Please try again.",
       "challengeUnavailable": "Too many lookups from this device. Please wait a minute and try again.",
       "closed": "The seat finder isn't open for this event.",
-      "internal": "Something went wrong on our side."
+      "internal": "Something went wrong on our side.",
+      "rateLimited": "Too many codes asked for. Try again in {minutes, plural, one {# minute} other {# minutes}}."
     }
   },
   "seatFinderPoster": {
@@ -3822,6 +3829,77 @@
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
     "unauthenticated": "Your session has ended. Sign in again."
+  },
+  "guestVerify": {
+    "title": "Confirm your email",
+    "sent": "We emailed a 6-digit code to {email}. Enter it to place your order. It works for 10 minutes.",
+    "codeLabel": "Verification code",
+    "submit": "Verify and continue",
+    "resend": "Send a new code",
+    "locked": "Too many wrong codes. Ask for a new code.",
+    "expired": "That code has expired or was already used. Ask for a new code.",
+    "cooldown": "We've just sent you a code. Check your inbox, or ask for a new one in a moment.",
+    "changeEmail": "Wrong address? Change it above, then choose Continue to payment again.",
+    "settingTitle": "Buyer email check",
+    "settingDescription": "Buyers confirm their email with a 6-digit code before ordering, so tickets never go to a mistyped address. Recommended.",
+    "settingLabel": "Ask buyers to confirm their email with a code before ordering",
+    "settingSave": "Save email check",
+    "settingSaved": "Email check saved.",
+    "settingOn": "Buyers confirm their email with a code before ordering.",
+    "settingOff": "Buyers order without confirming their email.",
+    "resendIn": "{seconds, plural, one {You can ask for a new code in # second.} other {You can ask for a new code in # seconds.}}",
+    "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}"
+  },
+  "attendeeSignIn": {
+    "title": "My tickets",
+    "intro": "Sign in with your email to see the orders and tickets you bought.",
+    "signedInAs": "Signed in as {email}",
+    "signedOut": "You're signed out.",
+    "signedOutAll": "You're signed out on every device.",
+    "noneTitle": "No orders for this address yet",
+    "noneDescription": "Orders you place with this email address will appear here.",
+    "ordersLabel": "Your orders",
+    "openOrder": "Open order for {event}",
+    "signOut": "Sign out",
+    "signOutEverywhere": "Sign out on all devices",
+    "email": "Your email",
+    "sendCode": "Email me a code",
+    "signIn": "Sign in",
+    "orLink": "Or open the link in the same email, in this browser.",
+    "emailInvalid": "Enter a valid email address.",
+    "linkInvalidTitle": "This sign-in link no longer works",
+    "linkInvalidDescription": "Links work once, for 15 minutes. Ask for a new code to sign in.",
+    "startAgain": "Sign in again",
+    "linkReady": "Continue to see the tickets for {email}.",
+    "continue": "Continue to My tickets",
+    "otherBrowser": "This link was opened in a different browser from the one that asked for it. To keep your tickets safe, enter the 6-digit code from the same email.",
+    "tickets": "{count, plural, one {# ticket} other {# tickets}}"
+  },
+  "orderLinks": {
+    "title": "Email me my order links",
+    "description": "Lost the email with your tickets? We'll send the links to your orders again.",
+    "email": "Email you ordered with",
+    "submit": "Email my order links",
+    "sent": "If there are orders for that address, we've emailed their links.",
+    "organizerTitle": "Order link",
+    "organizerDescription": "If the buyer's link was shared by mistake, replace it: the old link stops working and the buyer is emailed a new one.",
+    "reissue": "Revoke and reissue link",
+    "reissueConfirm": "The buyer's current link stops working at once, and a new one is emailed to {email}.",
+    "reissueYes": "Revoke and send new link",
+    "reissueCancel": "Keep the current link",
+    "reissued": "A new link was emailed to {email}. The old link no longer works."
+  },
+  "seatPoster": {
+    "pageTitle": "Name list poster",
+    "back": "Back to seat finder",
+    "print": "Print poster",
+    "title": "Find your table",
+    "subtitle": "Guests A–Z with their table and seat",
+    "emptyTitle": "No one is seated yet",
+    "emptyDescription": "Seat guests on the plan, then print this list for the door.",
+    "tableSeat": "Table {item} · Seat {seat}",
+    "rowSeat": "Row {item} · Seat {seat}",
+    "unseated": "{count, plural, one {# guest has no seat yet and is not on the poster.} other {# guests have no seat yet and are not on the poster.}}"
   },
   "webPush": {
     "title": "Push notifications",

@@ -1,7 +1,7 @@
 import { createECDH, randomBytes, randomUUID } from 'node:crypto';
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { decryptPayload } from '@yayatoh/notifications';
-import { expectAccessible, newUser, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, newUser, OPEN_HOUSE, signIn } from './helpers.ts';
 
 /**
  * Web push (M1.10e). Headless Chromium has no connection to a real push service, so the page's
@@ -111,7 +111,7 @@ async function buyTicket(guest: Page, pass: string, email: string) {
   await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
   await guest.getByLabel('Full name').fill(`Pia ${email.split('@')[0]}`);
   await guest.getByLabel('Email for your tickets').fill(email);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, email);
   await guest.getByRole('button', { name: /^Pay/ }).click();
   await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
   return new URL(guest.url()).pathname;

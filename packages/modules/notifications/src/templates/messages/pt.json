@@ -100,6 +100,20 @@
       "subject": "Notificação de teste",
       "intro": "As notificações estão funcionando."
     },
+    "guest.checkout-code": {
+      "subject": "{code} é o seu código para confirmar o seu e-mail",
+      "intro": "Digite {code} para confirmar o seu e-mail e concluir o seu pedido com {org}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."
+    },
+    "guest.sign-in": {
+      "subject": "{code} é o seu código para Meus ingressos",
+      "intro": "Digite {code} para ver os seus ingressos em {site}, ou use o botão abaixo no mesmo navegador. O código expira em {minutes, plural, one {# minuto} other {# minutos}} e o botão em {linkMinutes, plural, one {# minuto} other {# minutos}}; cada um funciona uma vez. Se não o pediu, pode ignorar este e-mail.",
+      "cta": "Abrir Meus ingressos"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {O seu novo link para o pedido de {eventName}} other {O seu link para o pedido de {eventName}}}",
+      "intro": "{reason, select, reissued {O organizador substituiu o link do seu pedido para {eventName}. O link antigo já não funciona; use este.} other {Aqui está o link que pediu. Ele abre o seu pedido e os ingressos para {eventName}.}}",
+      "cta": "Abrir o meu pedido"
+    },
     "security.fraud_signal": {
       "subject": "Alerta de fraude: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}",
       "intro": "Um sinal de gravidade alta precisa de atenção em {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}. Abra-o para confirmar ou descartar.",

@@ -216,6 +216,28 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 5, windowMs: 15 * MIN },
     ipCeiling: { limit: 100, windowMs: 10 * MIN },
   },
+  /** Guest email codes (M1.5f: checkout verification, "My tickets" sign-in, seat finder). Each one
+   * sends an email: per device, per destination address, and a generous shared-IP ceiling. */
+  guestCode: {
+    device: { limit: 10, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    identity: { limit: 5, windowMs: 15 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
+  /** Guest code checks (each code also locks after 5 wrong tries). */
+  guestVerify: {
+    device: { limit: 30, windowMs: 10 * MIN },
+    anonymousIp: { limit: 60, windowMs: 10 * MIN },
+    identity: { limit: 20, windowMs: 15 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
+  /** "Email me my order links again" (each one may send several emails). */
+  guestLinks: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 15, windowMs: 10 * MIN },
+    identity: { limit: 3, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
   /** Starting a checkout (creates holds on inventory). */
   checkoutStart: {
     device: { limit: 20, windowMs: 10 * MIN },

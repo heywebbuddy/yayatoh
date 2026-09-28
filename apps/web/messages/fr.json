@@ -71,7 +71,8 @@
     "kinds": {
       "orders": {
         "tickets": "Billets",
-        "refund": "Remboursement"
+        "refund": "Remboursement",
+        "order-link": "Lien de la commande"
       },
       "events": {
         "reminder": "Rappel d’événement"
@@ -104,6 +105,10 @@
       },
       "payments": {
         "destination-changed": "Changement de compte de versement"
+      },
+      "guest": {
+        "checkout-code": "Code e-mail au paiement",
+        "sign-in": "Connexion à Mes billets"
       },
       "security": {
         "fraud_signal": "Alerte fraude"
@@ -1867,7 +1872,8 @@
       "address": "Adresse de la recherche de place",
       "openPublic": "Ouvrir la recherche de place",
       "poster": "Imprimer l'affiche",
-      "closedNote": "La recherche de place est fermée. Les invités qui scannent l'affiche sont invités à revenir plus tard."
+      "closedNote": "La recherche de place est fermée. Les invités qui scannent l'affiche sont invités à revenir plus tard.",
+      "namePoster": "Imprimer l'affiche des noms"
     },
     "map": {
       "zoomIn": "Zoom avant",
@@ -2041,7 +2047,8 @@
       "challengeFailed": "La vérification a échoué. Veuillez réessayer.",
       "challengeUnavailable": "Trop de recherches depuis cet appareil. Patientez une minute puis réessayez.",
       "closed": "La recherche de place n'est pas ouverte pour cet événement.",
-      "internal": "Un problème est survenu de notre côté."
+      "internal": "Un problème est survenu de notre côté.",
+      "rateLimited": "Trop de codes demandés. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
     }
   },
   "seatFinderPoster": {
@@ -3822,6 +3829,77 @@
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
     "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+  },
+  "guestVerify": {
+    "title": "Confirmez votre e-mail",
+    "sent": "Nous avons envoyé un code à 6 chiffres à {email}. Saisissez-le pour passer commande. Il est valable 10 minutes.",
+    "codeLabel": "Code de vérification",
+    "submit": "Vérifier et continuer",
+    "resend": "Envoyer un nouveau code",
+    "locked": "Trop de codes erronés. Demandez un nouveau code.",
+    "expired": "Ce code a expiré ou a déjà été utilisé. Demandez un nouveau code.",
+    "cooldown": "Nous venons de vous envoyer un code. Vérifiez votre boîte de réception, ou demandez-en un autre dans un instant.",
+    "changeEmail": "Mauvaise adresse ? Modifiez-la ci-dessus, puis choisissez à nouveau Continuer vers le paiement.",
+    "settingTitle": "Vérification de l'e-mail de l'acheteur",
+    "settingDescription": "Les acheteurs confirment leur e-mail avec un code à 6 chiffres avant de commander, pour que les billets n'aillent jamais à une adresse mal saisie. Recommandé.",
+    "settingLabel": "Demander aux acheteurs de confirmer leur e-mail avec un code avant de commander",
+    "settingSave": "Enregistrer la vérification",
+    "settingSaved": "Vérification de l'e-mail enregistrée.",
+    "settingOn": "Les acheteurs confirment leur e-mail avec un code avant de commander.",
+    "settingOff": "Les acheteurs commandent sans confirmer leur e-mail.",
+    "resendIn": "{seconds, plural, one {Vous pourrez demander un nouveau code dans # seconde.} other {Vous pourrez demander un nouveau code dans # secondes.}}",
+    "wrong": "{count, plural, one {Ce code n'est pas bon. Il reste # essai.} other {Ce code n'est pas bon. Il reste # essais.}}"
+  },
+  "attendeeSignIn": {
+    "title": "Mes billets",
+    "intro": "Connectez-vous avec votre e-mail pour voir les commandes et billets achetés.",
+    "signedInAs": "Connecté en tant que {email}",
+    "signedOut": "Vous êtes déconnecté.",
+    "signedOutAll": "Vous êtes déconnecté sur tous les appareils.",
+    "noneTitle": "Aucune commande pour cette adresse",
+    "noneDescription": "Les commandes passées avec cette adresse apparaîtront ici.",
+    "ordersLabel": "Vos commandes",
+    "openOrder": "Ouvrir la commande pour {event}",
+    "signOut": "Se déconnecter",
+    "signOutEverywhere": "Se déconnecter de tous les appareils",
+    "email": "Votre e-mail",
+    "sendCode": "M'envoyer un code",
+    "signIn": "Se connecter",
+    "orLink": "Ou ouvrez le lien du même e-mail dans ce navigateur.",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "linkInvalidTitle": "Ce lien de connexion ne fonctionne plus",
+    "linkInvalidDescription": "Les liens fonctionnent une fois, pendant 15 minutes. Demandez un nouveau code pour vous connecter.",
+    "startAgain": "Se reconnecter",
+    "linkReady": "Continuez pour voir les billets de {email}.",
+    "continue": "Continuer vers Mes billets",
+    "otherBrowser": "Ce lien a été ouvert dans un autre navigateur que celui qui l'a demandé. Pour protéger vos billets, saisissez le code à 6 chiffres du même e-mail.",
+    "tickets": "{count, plural, one {# billet} other {# billets}}"
+  },
+  "orderLinks": {
+    "title": "M'envoyer les liens de mes commandes",
+    "description": "Vous avez perdu l'e-mail de vos billets ? Nous vous renverrons les liens de vos commandes.",
+    "email": "E-mail utilisé pour commander",
+    "submit": "Envoyer les liens de mes commandes",
+    "sent": "S'il existe des commandes pour cette adresse, nous avons envoyé leurs liens.",
+    "organizerTitle": "Lien de la commande",
+    "organizerDescription": "Si le lien de l'acheteur a été partagé par erreur, remplacez-le : l'ancien lien cesse de fonctionner et l'acheteur reçoit un nouveau lien par e-mail.",
+    "reissue": "Révoquer et renvoyer le lien",
+    "reissueConfirm": "Le lien actuel de l'acheteur cesse de fonctionner immédiatement et un nouveau lien est envoyé à {email}.",
+    "reissueYes": "Révoquer et envoyer un nouveau lien",
+    "reissueCancel": "Garder le lien actuel",
+    "reissued": "Un nouveau lien a été envoyé à {email}. L'ancien lien ne fonctionne plus."
+  },
+  "seatPoster": {
+    "pageTitle": "Affiche des noms",
+    "back": "Retour au localisateur de places",
+    "print": "Imprimer l'affiche",
+    "title": "Trouvez votre table",
+    "subtitle": "Invités de A à Z avec leur table et leur place",
+    "emptyTitle": "Personne n'est encore placé",
+    "emptyDescription": "Placez les invités sur le plan, puis imprimez cette liste pour l'entrée.",
+    "tableSeat": "Table {item} · Place {seat}",
+    "rowSeat": "Rang {item} · Place {seat}",
+    "unseated": "{count, plural, one {# invité n'a pas encore de place et ne figure pas sur l'affiche.} other {# invités n'ont pas encore de place et ne figurent pas sur l'affiche.}}"
   },
   "webPush": {
     "title": "Notifications push",

@@ -97,6 +97,14 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Animated GIFs become still images** (the first frame).
   - Public images are cached for a year by browsers and CDNs (their URLs change whenever the file changes). An image removed from a public page can stay in someone's cache; nothing private is ever cached publicly.
 
+- [ ] **Guest checkout with email OTP: confirm the defaults** (M1.5f, labels: `auth`, `payments`, `tenancy`, `db-migration`). Built with these; say if any should change:
+  - **Buyer email check is on by default for every event** (per-event switch on Tickets & Orders). It follows your 2026-09-28 decision and stops tickets going to a mistyped address; organizers can turn it off per event.
+  - The code is asked for **before the order is placed** (so the 10-minute hold never runs while the buyer reads their email, and a mistyped address never holds stock). Codes: 6 random digits, 10 minutes, one use, 5 wrong tries lock it, a new code at most every **30 seconds**; at most 5 codes per address per 15 minutes and 10 per device per 10 minutes.
+  - A proved address skips the code for **30 minutes** in the same browser (host-only cookie).
+  - **My tickets** sessions last **7 days**; sign-in links last **15 minutes** and only work in the browser that asked (anywhere else the page asks for the code).
+  - Organizer "Revoke and reissue link" is allowed for owners, admins, managers, box office and event managers (new permission `orders:support`); viewers and finance cannot.
+- [ ] **SES for guest codes** (M1.5f, label: `infra`): checkout and My tickets codes are sent at once by the web app (never queued, so the code is never stored). In production there is no email provider yet, so **these flows cannot work in production until SES is set up** (see the M1.10 SES item); dev/preview/CI use the dev mailbox.
+
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
 - [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).

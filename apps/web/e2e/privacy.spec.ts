@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 /**
  * M1.14c privacy: data-subject requests (find, export, erase) in the organizer console, and the
@@ -25,7 +25,7 @@ async function buyFreeTicket(page: Page, browser: Browser, email: string, stamp:
   await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
   await guest.getByLabel('Full name').fill(`Ada Private ${stamp}`);
   await guest.getByLabel('Email for your tickets').fill(email);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, email);
   await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
   await guest.close();
 }

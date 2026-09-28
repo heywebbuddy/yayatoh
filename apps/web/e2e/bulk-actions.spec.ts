@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 import { addGuests, createGala, quickPlan, unique } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -49,10 +49,9 @@ async function buy(browser: Browser, base: string, type: string, who: string) {
   await buyer.goto(`/events/${base.split('/').pop()}`);
   await buyer.getByLabel(`Quantity — ${type}`).selectOption('1');
   await buyer.getByLabel('Full name').fill(who);
-  await buyer
-    .getByLabel('Email for your tickets')
-    .fill(`${who.toLowerCase().replace(/\W+/g, '.')}@example.test`);
-  await buyer.getByRole('button', { name: 'Continue to payment' }).click();
+  const email = `${who.toLowerCase().replace(/\W+/g, '.')}@example.test`;
+  await buyer.getByLabel('Email for your tickets').fill(email);
+  await continueToPayment(buyer, email);
   await expect(buyer).toHaveURL(/\/orders\//);
   const code = (await buyer.locator('.tracking-\\[0\\.2em\\]').first().textContent())?.trim() ?? '';
   await buyer.close();

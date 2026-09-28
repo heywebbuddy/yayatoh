@@ -3,7 +3,7 @@ import { enrollDeviceCommand } from '@yayatoh/checkin';
 import { closePools, withTenant } from '@yayatoh/db';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
-import { startCheckoutCommand } from '@yayatoh/orders';
+import { setCheckoutSettingsCommand, startCheckoutCommand } from '@yayatoh/orders';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { createTicketTypeCommand, listTicketTypesQuery, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { getAuth } from '../src/server/auth.ts';
@@ -52,6 +52,9 @@ const pass =
     ctx,
     ports,
   ));
+// M1.5f: the checkout profile measures holding and paying; its buyers can't read emailed codes, so
+// the load event turns the buyer email check off (the code step is rate limited on its own).
+await executeCommand(setCheckoutSettingsCommand, { eventId: event.id, verifyEmail: false }, ctx, ports);
 const codes: string[] = [];
 for (let i = 0; codes.length < TICKETS; i++) {
   const r = await executeCommand(

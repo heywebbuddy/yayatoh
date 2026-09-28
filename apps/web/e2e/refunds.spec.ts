@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('refunds', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -25,7 +25,7 @@ test.describe('refunds', () => {
     await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`rita+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `rita+${stamp}@example.test`);
     await guest.getByRole('button', { name: /^Pay/ }).click();
     await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
     const orderUrl = guest.url();

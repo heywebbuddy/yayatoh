@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 import {
   addGuests,
   createGala,
@@ -162,8 +162,9 @@ test.describe('seating rules (M1.7f)', () => {
     await expectAccessible(buyer);
     // Warnings never stop the buyer.
     await buyer.getByLabel('Full name').fill(`Wendy Warned ${Date.now()}`);
-    await buyer.getByLabel('Email for your tickets').fill(`wendy.${Date.now()}@example.test`);
-    await buyer.getByRole('button', { name: 'Continue to payment' }).click();
+    const wendy = `wendy.${Date.now()}@example.test`;
+    await buyer.getByLabel('Email for your tickets').fill(wendy);
+    await continueToPayment(buyer, wendy);
     await expect(buyer.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
 
     // Enforced: a buyer watching sees the kept-back seat go, live.

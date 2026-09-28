@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -20,7 +20,7 @@ async function buy(guest: Page, slug: string, type: string, name: string): Promi
   await guest.getByLabel(`Quantity — ${type}`).selectOption('1');
   await guest.getByLabel('Full name').fill(name);
   await guest.getByLabel('Email for your tickets').fill(`${name.replace(/\s/g, '.')}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, `${name.replace(/\s/g, '.')}@example.test`);
   await expect(guest).toHaveURL(/\/orders\//);
   return (await guest.locator('.tracking-\\[0\\.2em\\]').first().textContent())?.trim() ?? '';
 }

@@ -100,6 +100,20 @@
       "subject": "Notification de test",
       "intro": "Les notifications fonctionnent."
     },
+    "guest.checkout-code": {
+      "subject": "{code} est votre code pour confirmer votre e-mail",
+      "intro": "Saisissez {code} pour confirmer votre e-mail et finaliser votre commande avec {org}. Le code ne fonctionne qu'une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, ignorez cet e-mail."
+    },
+    "guest.sign-in": {
+      "subject": "{code} est votre code pour Mes billets",
+      "intro": "Saisissez {code} pour voir vos billets sur {site}, ou utilisez le bouton ci-dessous dans le même navigateur. Le code expire dans {minutes, plural, one {# minute} other {# minutes}} et le bouton dans {linkMinutes, plural, one {# minute} other {# minutes}} ; chacun ne fonctionne qu'une fois. Si vous ne l'avez pas demandé, ignorez cet e-mail.",
+      "cta": "Ouvrir Mes billets"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Votre nouveau lien vers votre commande pour {eventName}} other {Votre lien vers votre commande pour {eventName}}}",
+      "intro": "{reason, select, reissued {L'organisateur a remplacé le lien vers votre commande pour {eventName}. L'ancien lien ne fonctionne plus ; utilisez celui-ci.} other {Voici le lien demandé. Il ouvre votre commande et vos billets pour {eventName}.}}",
+      "cta": "Ouvrir ma commande"
+    },
     "security.fraud_signal": {
       "subject": "Alerte fraude : {signal, select, two_entrances {le même billet à deux entrées} impossible_travel {un trajet impossible entre points de contrôle} device_velocity {un scanner trop rapide} invalid_burst {une rafale de codes invalides} rejected_burst {une rafale de scans refusés} purchase_velocity {de nombreuses commandes d’un même acheteur} country_mismatch {un acheteur dans un autre pays} checkout_blocked {un paiement bloqué} card_testing {un possible test de cartes} chat_abuse {une conversation signalée} other {un signal de fraude}}",
       "intro": "Un signal de gravité élevée est à examiner chez {org}{eventName, select, none {} other { ({eventName})}} : {signal, select, two_entrances {le même billet à deux entrées} impossible_travel {un trajet impossible entre points de contrôle} device_velocity {un scanner trop rapide} invalid_burst {une rafale de codes invalides} rejected_burst {une rafale de scans refusés} purchase_velocity {de nombreuses commandes d’un même acheteur} country_mismatch {un acheteur dans un autre pays} checkout_blocked {un paiement bloqué} card_testing {un possible test de cartes} chat_abuse {une conversation signalée} other {un signal de fraude}}. Ouvrez-le pour le prendre en charge ou l’écarter.",

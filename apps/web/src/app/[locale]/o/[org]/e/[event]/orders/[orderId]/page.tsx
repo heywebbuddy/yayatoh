@@ -11,13 +11,14 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
 import { RefundForm } from '@/components/refund-form.tsx';
+import { ReissueLinkForm } from '@/components/reissue-link-form.tsx';
 import { SignalItem } from '@/components/signal-item.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { resolveSignalAction } from '../../onsite/signals/actions.ts';
-import { refundAction } from './actions.ts';
+import { refundAction, reissueLinkAction } from './actions.ts';
 
 /** One order for the organizer: buyer, tickets (and who holds them), refunds, and the refund form. */
 export default async function OrderPage({
@@ -106,6 +107,19 @@ export default async function OrderPage({
           </p>
         ) : null}
       </Card>
+
+      {roleCan(data.role, 'orders:support') ? (
+        <section aria-labelledby="order-link-heading" className="flex flex-col gap-3">
+          <h2 id="order-link-heading" className="text-section">
+            {t('orderLinks.organizerTitle')}
+          </h2>
+          <p className="text-body text-zinc-600">{t('orderLinks.organizerDescription')}</p>
+          <ReissueLinkForm
+            action={reissueLinkAction.bind(null, org, event, orderId)}
+            email={order.buyerEmail}
+          />
+        </section>
+      ) : null}
 
       <section aria-labelledby="tickets-heading" className="flex flex-col gap-3">
         <h2 id="tickets-heading" className="text-section">

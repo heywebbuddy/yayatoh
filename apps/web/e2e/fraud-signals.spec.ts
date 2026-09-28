@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 /**
  * M1.9e fraud signals: checkout risk and chat reports join the door's signals in one model (via
@@ -78,7 +78,8 @@ async function risky(browser: Browser, base: string, stamp: string) {
     await guest.getByLabel('Quantity — Door pass').selectOption('1');
     await guest.getByLabel('Full name').fill(`Rapid ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(email);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    // The first checkout proves the address; this browser remembers it (M1.5f).
+    await continueToPayment(guest, email, { verify: i === 0 });
     await expect(guest).toHaveURL(/\/orders\//);
     codes.push(((await guest.locator('.tracking-\\[0\\.2em\\]').first().textContent()) ?? '').trim());
   }
@@ -190,7 +191,7 @@ test.describe('fraud signals: checkout risk on the order timeline', () => {
     await guest.getByLabel('Quantity — Door pass').selectOption('1');
     await guest.getByLabel('Full name').fill(`Calm ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`calm.${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `calm.${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/orders\//);
     await guest.context().close();
     await drain(page);

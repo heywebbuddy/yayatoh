@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 test.describe('promo codes', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -36,7 +36,7 @@ test.describe('promo codes', () => {
       await guest.getByLabel('Full name').fill(`${name} ${stamp}`);
       await guest.getByLabel('Email for your tickets').fill(`${name.toLowerCase()}+${stamp}@example.test`);
       await guest.getByLabel('Promo code').fill(code.toLowerCase());
-      await guest.getByRole('button', { name: 'Continue to payment' }).click();
+      await continueToPayment(guest, `${name.toLowerCase()}+${stamp}@example.test`);
       return guest;
     };
 

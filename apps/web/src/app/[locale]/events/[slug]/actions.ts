@@ -13,9 +13,14 @@ import {
   attachPaymentCommand,
   type CheckoutResultDto,
   checkoutRiskSignals,
+  checkoutVerificationRequired,
+  GUEST_CODE_TTL_MS,
   recordCheckoutBlockCommand,
+  requestGuestChallenge,
   startCheckoutCommand,
+  verifyGuestChallenge,
 } from '@yayatoh/orders';
+import { signLinkToken, verifyLinkToken } from '@yayatoh/platform';
 import { reportReviewCommand } from '@yayatoh/reviews';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
 import { refresh } from 'next/cache';
@@ -25,6 +30,7 @@ import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import type { FormState } from '@/lib/form-state.ts';
 import { failure, success } from '@/server/form.ts';
+import { emailVerifiedHere, guestLimits, rememberVerifiedEmail, sendGuestEmail } from '@/server/guest.ts';
 import { getCheckoutRisk, getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
@@ -40,6 +46,98 @@ export interface CheckoutState {
   readonly field?: string;
   /** `rate_limited`: minutes until the buyer may try again. */
   readonly retryMinutes?: number;
+  /** `verify_email` (M1.5f): the buyer must enter the code emailed to this address. */
+  readonly verify?: {
+    readonly email: string;
+    /** What just happened: a code went out, or the last attempt's outcome. */
+    readonly status: 'sent' | 'cooldown' | 'wrong' | 'locked' | 'expired' | 'used';
+    readonly attemptsLeft?: number | null;
+    /** When a new code may be asked for (epoch ms), when known. */
+    readonly resendAt?: number | null;
+    /** The pending code's challenge id, signed; posted back with the code. */
+    readonly token?: string;
+  };
+}
+
+/**
+ * Buyer email verification (M1.5f), before anything is held or charged: the first submit emails
+ * a code (the order is not placed); the next submit carries the code. Returns null once this
+ * browser has proved the address (now, or in the last 30 minutes), otherwise the state to show.
+ * Placed before the order so the 10-minute hold never runs while the buyer reads their email,
+ * and a mistyped address never holds stock.
+ */
+const PENDING_PURPOSE = 'guest-checkout';
+
+async function verifyBuyerEmail(
+  orgId: string,
+  email: string,
+  locale: string,
+  form: FormData,
+): Promise<CheckoutState | null> {
+  const limits = await guestLimits();
+  const code = String(form.get('verifyCode') ?? '').replace(/\s/g, '');
+  // The pending code travels in the form as a signed token (not a cookie: setting a cookie here
+  // would re-render the page, and a seat map refreshed mid-step would drop the buyer's seats).
+  const pending = verifyLinkToken(PENDING_PURPOSE, String(form.get('verifyToken') ?? ''));
+  if (code && form.get('verifyIntent') !== 'resend' && pending) {
+    const r = await verifyGuestChallenge(
+      { challengeId: pending, code, purpose: 'checkout', scopeOrgId: orgId, email },
+      limits,
+    );
+    if (r.status === 'ok') {
+      await rememberVerifiedEmail(email);
+      return null;
+    }
+    if (r.status === 'rate_limited')
+      return {
+        code: 'rate_limited',
+        retryMinutes: Math.max(1, Math.ceil((r.retryAfterMs ?? 60_000) / 60_000)),
+      };
+    return {
+      code: 'verify_email',
+      verify: {
+        email,
+        status: r.status,
+        attemptsLeft: r.attemptsLeft,
+        token: signLinkToken(PENDING_PURPOSE, pending),
+      },
+    };
+  }
+  let sent: Awaited<ReturnType<typeof requestGuestChallenge>>;
+  try {
+    sent = await requestGuestChallenge({ purpose: 'checkout', scopeOrgId: orgId, email }, limits);
+  } catch (err) {
+    if (isDomainError(err)) return { code: err.code, reason: String(err.details?.reason ?? '') };
+    throw err;
+  }
+  if (sent.status === 'rate_limited')
+    return { code: 'rate_limited', retryMinutes: Math.max(1, Math.ceil(sent.retryAfterMs / 60_000)) };
+  if (sent.status === 'cooldown')
+    return {
+      code: 'verify_email',
+      verify: {
+        email,
+        status: 'cooldown',
+        resendAt: sent.resendAt.getTime(),
+        token: signLinkToken(PENDING_PURPOSE, sent.challengeId),
+      },
+    };
+  await sendGuestEmail({
+    kind: 'guest.checkout-code',
+    to: email,
+    locale,
+    orgId,
+    params: { code: sent.code, minutes: GUEST_CODE_TTL_MS / 60_000 },
+  });
+  return {
+    code: 'verify_email',
+    verify: {
+      email,
+      status: 'sent',
+      resendAt: sent.resendAt.getTime(),
+      token: signLinkToken(PENDING_PURPOSE, sent.challengeId),
+    },
+  };
 }
 
 /**
@@ -105,9 +203,16 @@ export async function checkoutAction(
       if (v) answers[q.key] = q.type === 'checkbox' ? true : v;
     }
   }
+  const email = String(form.get('email') ?? '');
+  // M1.5f: the buyer proves the address their tickets go to (organizer setting, on by default).
+  if (email.trim() && (await checkoutVerificationRequired(target.orgId, target.eventId))) {
+    if (!(await emailVerifiedHere(email, target.orgId))) {
+      const step = await verifyBuyerEmail(target.orgId, email.trim(), locale, form);
+      if (step) return step;
+    }
+  }
   // Pre-checkout risk rules (M1.6e), through the risk port before any order exists. The request's
   // country comes from the host's geo header; the org and event from the server-side lookup.
-  const email = String(form.get('email') ?? '');
   const geo = (await headers()).get('x-vercel-ip-country');
   const signals = await checkoutRiskSignals(target.orgId, target.eventId, email, new Date());
   const risk = await getCheckoutRisk().assess({

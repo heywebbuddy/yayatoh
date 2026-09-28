@@ -449,6 +449,13 @@
       "when": 1790603632459,
       "tag": "0063_legal_hawkeye",
       "breakpoints": true
+    },
+    {
+      "idx": 64,
+      "version": "7",
+      "when": 1790604016366,
+      "tag": "0064_cold_black_widow",
+      "breakpoints": true
     }
   ]
 }

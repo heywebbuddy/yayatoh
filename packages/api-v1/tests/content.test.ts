@@ -377,6 +377,7 @@ describe('M1.13d wire allowlists', () => {
         company: null,
         bio: '',
         links: [],
+        image: null,
         email: 'x',
       }),
     ).not.toHaveProperty('email');

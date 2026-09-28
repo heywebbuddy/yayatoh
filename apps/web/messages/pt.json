@@ -71,7 +71,8 @@
     "kinds": {
       "orders": {
         "tickets": "Ingressos",
-        "refund": "Reembolso"
+        "refund": "Reembolso",
+        "order-link": "Link do pedido"
       },
       "events": {
         "reminder": "Lembrete do evento"
@@ -104,6 +105,10 @@
       },
       "payments": {
         "destination-changed": "Alteração da conta de repasse"
+      },
+      "guest": {
+        "checkout-code": "Código de e-mail no pagamento",
+        "sign-in": "Acesso a Meus ingressos"
       },
       "security": {
         "fraud_signal": "Alerta de fraude"
@@ -1867,7 +1872,8 @@
       "address": "Endereço do localizador de assentos",
       "openPublic": "Abrir o localizador de assentos",
       "poster": "Imprimir cartaz do localizador",
-      "closedNote": "O localizador de assentos está fechado. Quem escanear o cartaz verá um pedido para voltar mais tarde."
+      "closedNote": "O localizador de assentos está fechado. Quem escanear o cartaz verá um pedido para voltar mais tarde.",
+      "namePoster": "Imprimir cartaz com a lista de nomes"
     },
     "map": {
       "zoomIn": "Aproximar",
@@ -2041,7 +2047,8 @@
       "challengeFailed": "A verificação não passou. Tente de novo.",
       "challengeUnavailable": "Muitas buscas a partir deste dispositivo. Aguarde um minuto e tente de novo.",
       "closed": "O localizador de assentos não está aberto para este evento.",
-      "internal": "Algo deu errado do nosso lado."
+      "internal": "Algo deu errado do nosso lado.",
+      "rateLimited": "Foram pedidos demasiados códigos. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
     }
   },
   "seatFinderPoster": {
@@ -3822,6 +3829,77 @@
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
     "unauthenticated": "Sua sessão terminou. Entre de novo."
+  },
+  "guestVerify": {
+    "title": "Confirme o seu e-mail",
+    "sent": "Enviámos um código de 6 dígitos para {email}. Digite-o para fazer o pedido. Funciona durante 10 minutos.",
+    "codeLabel": "Código de verificação",
+    "submit": "Verificar e continuar",
+    "resend": "Enviar um novo código",
+    "locked": "Demasiados códigos errados. Peça um novo código.",
+    "expired": "Esse código expirou ou já foi usado. Peça um novo código.",
+    "cooldown": "Acabámos de lhe enviar um código. Verifique a sua caixa de entrada ou peça outro daqui a pouco.",
+    "changeEmail": "Endereço errado? Altere-o acima e escolha novamente Continuar para o pagamento.",
+    "settingTitle": "Verificação do e-mail do comprador",
+    "settingDescription": "Os compradores confirmam o e-mail com um código de 6 dígitos antes de encomendar, para que os ingressos nunca vão para um endereço mal escrito. Recomendado.",
+    "settingLabel": "Pedir aos compradores que confirmem o e-mail com um código antes de encomendar",
+    "settingSave": "Guardar verificação de e-mail",
+    "settingSaved": "Verificação de e-mail guardada.",
+    "settingOn": "Os compradores confirmam o e-mail com um código antes de encomendar.",
+    "settingOff": "Os compradores encomendam sem confirmar o e-mail.",
+    "resendIn": "{seconds, plural, one {Pode pedir um novo código dentro de # segundo.} other {Pode pedir um novo código dentro de # segundos.}}",
+    "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}"
+  },
+  "attendeeSignIn": {
+    "title": "Meus ingressos",
+    "intro": "Entre com o seu e-mail para ver os pedidos e ingressos que comprou.",
+    "signedInAs": "Sessão iniciada como {email}",
+    "signedOut": "Terminou a sessão.",
+    "signedOutAll": "Terminou a sessão em todos os dispositivos.",
+    "noneTitle": "Ainda não há pedidos para este endereço",
+    "noneDescription": "Os pedidos feitos com este e-mail aparecerão aqui.",
+    "ordersLabel": "Os seus pedidos",
+    "openOrder": "Abrir o pedido de {event}",
+    "signOut": "Terminar sessão",
+    "signOutEverywhere": "Terminar sessão em todos os dispositivos",
+    "email": "O seu e-mail",
+    "sendCode": "Enviar-me um código",
+    "signIn": "Entrar",
+    "orLink": "Ou abra o link do mesmo e-mail neste navegador.",
+    "emailInvalid": "Digite um endereço de e-mail válido.",
+    "linkInvalidTitle": "Este link de acesso já não funciona",
+    "linkInvalidDescription": "Os links funcionam uma vez, durante 15 minutos. Peça um novo código para entrar.",
+    "startAgain": "Entrar novamente",
+    "linkReady": "Continue para ver os ingressos de {email}.",
+    "continue": "Continuar para Meus ingressos",
+    "otherBrowser": "Este link foi aberto num navegador diferente do que o pediu. Para proteger os seus ingressos, digite o código de 6 dígitos do mesmo e-mail.",
+    "tickets": "{count, plural, one {# ingresso} other {# ingressos}}"
+  },
+  "orderLinks": {
+    "title": "Enviar-me os links dos meus pedidos",
+    "description": "Perdeu o e-mail com os seus ingressos? Enviaremos novamente os links dos seus pedidos.",
+    "email": "E-mail usado na compra",
+    "submit": "Enviar os links dos meus pedidos",
+    "sent": "Se houver pedidos para esse endereço, enviámos os respetivos links.",
+    "organizerTitle": "Link do pedido",
+    "organizerDescription": "Se o link do comprador foi partilhado por engano, substitua-o: o link antigo deixa de funcionar e o comprador recebe um novo por e-mail.",
+    "reissue": "Revogar e reemitir o link",
+    "reissueConfirm": "O link atual do comprador deixa de funcionar imediatamente e um novo é enviado para {email}.",
+    "reissueYes": "Revogar e enviar novo link",
+    "reissueCancel": "Manter o link atual",
+    "reissued": "Foi enviado um novo link para {email}. O link antigo já não funciona."
+  },
+  "seatPoster": {
+    "pageTitle": "Cartaz com a lista de nomes",
+    "back": "Voltar ao localizador de lugares",
+    "print": "Imprimir cartaz",
+    "title": "Encontre a sua mesa",
+    "subtitle": "Convidados de A a Z com mesa e lugar",
+    "emptyTitle": "Ainda ninguém tem lugar",
+    "emptyDescription": "Atribua lugares na planta e depois imprima esta lista para a entrada.",
+    "tableSeat": "Mesa {item} · Lugar {seat}",
+    "rowSeat": "Fila {item} · Lugar {seat}",
+    "unseated": "{count, plural, one {# convidado ainda não tem lugar e não aparece no cartaz.} other {# convidados ainda não têm lugar e não aparecem no cartaz.}}"
   },
   "webPush": {
     "title": "Notificações push",

@@ -35,4 +35,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Platform-wide erased-address suppression (SHA-256 of the normalized email, never the address); no app_user privileges, only the SECURITY DEFINER platform.erased_address_* functions; platform_reader SELECT.',
   'privacy.account_requests':
     'Controller-side DSAR record for Yayatoh accounts (hashed subject, masked hint, actor, reason); no app_user privileges, only the SECURITY DEFINER privacy.record_account_request; platform_reader SELECT.',
+  'orders.guest_challenges':
+    "Guest email codes and magic links (M1.5f; codes, links and browsers as HMACs; the address until the row is pruned a day after expiry); a guest proving an address is no tenant's data yet and marketplace sign-in spans orgs; reached only through @yayatoh/orders (app_user; platform_reader has no access).",
+  'orders.guest_sessions':
+    'Attendee "My tickets" sessions (M1.5f; token HMAC, host-bound, org or marketplace scope); reached only through @yayatoh/orders (app_user; platform_reader has no access).',
 };

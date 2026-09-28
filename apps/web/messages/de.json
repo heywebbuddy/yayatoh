@@ -71,7 +71,8 @@
     "kinds": {
       "orders": {
         "tickets": "Tickets",
-        "refund": "Erstattung"
+        "refund": "Erstattung",
+        "order-link": "Bestelllink"
       },
       "events": {
         "reminder": "Veranstaltungserinnerung"
@@ -104,6 +105,10 @@
       },
       "payments": {
         "destination-changed": "Änderung des Auszahlungskontos"
+      },
+      "guest": {
+        "checkout-code": "E-Mail-Code beim Bezahlen",
+        "sign-in": "Anmeldung bei Meine Tickets"
       },
       "security": {
         "fraud_signal": "Betrugswarnung"
@@ -1867,7 +1872,8 @@
       "address": "Adresse des Platzfinders",
       "openPublic": "Platzfinder öffnen",
       "poster": "Platzfinder-Plakat drucken",
-      "closedNote": "Der Platzfinder ist geschlossen. Gäste, die das Plakat scannen, werden gebeten, später wiederzukommen."
+      "closedNote": "Der Platzfinder ist geschlossen. Gäste, die das Plakat scannen, werden gebeten, später wiederzukommen.",
+      "namePoster": "Namensliste drucken"
     },
     "map": {
       "zoomIn": "Vergrößern",
@@ -2041,7 +2047,8 @@
       "challengeFailed": "Die Prüfung war nicht erfolgreich. Bitte versuchen Sie es erneut.",
       "challengeUnavailable": "Zu viele Anfragen von diesem Gerät. Bitte warten Sie eine Minute und versuchen Sie es erneut.",
       "closed": "Der Platzfinder ist für diese Veranstaltung nicht geöffnet.",
-      "internal": "Bei uns ist etwas schiefgelaufen."
+      "internal": "Bei uns ist etwas schiefgelaufen.",
+      "rateLimited": "Zu viele Codes angefordert. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
     }
   },
   "seatFinderPoster": {
@@ -3822,6 +3829,77 @@
     "invalidPassword": "Dieses Passwort ist nicht richtig.",
     "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
     "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
+  },
+  "guestVerify": {
+    "title": "Bestätigen Sie Ihre E-Mail",
+    "sent": "Wir haben einen 6-stelligen Code an {email} gesendet. Geben Sie ihn ein, um zu bestellen. Er gilt 10 Minuten.",
+    "codeLabel": "Bestätigungscode",
+    "submit": "Bestätigen und weiter",
+    "resend": "Neuen Code senden",
+    "locked": "Zu viele falsche Codes. Fordern Sie einen neuen Code an.",
+    "expired": "Dieser Code ist abgelaufen oder wurde schon verwendet. Fordern Sie einen neuen Code an.",
+    "cooldown": "Wir haben Ihnen gerade einen Code gesendet. Sehen Sie in Ihrem Posteingang nach oder fordern Sie gleich einen neuen an.",
+    "changeEmail": "Falsche Adresse? Ändern Sie sie oben und wählen Sie erneut Weiter zur Zahlung.",
+    "settingTitle": "E-Mail-Prüfung für Käufer",
+    "settingDescription": "Käufer bestätigen ihre E-Mail mit einem 6-stelligen Code, bevor sie bestellen, damit Tickets nie an eine vertippte Adresse gehen. Empfohlen.",
+    "settingLabel": "Käufer vor der Bestellung ihre E-Mail mit einem Code bestätigen lassen",
+    "settingSave": "E-Mail-Prüfung speichern",
+    "settingSaved": "E-Mail-Prüfung gespeichert.",
+    "settingOn": "Käufer bestätigen ihre E-Mail vor der Bestellung mit einem Code.",
+    "settingOff": "Käufer bestellen, ohne ihre E-Mail zu bestätigen.",
+    "resendIn": "{seconds, plural, one {Sie können in # Sekunde einen neuen Code anfordern.} other {Sie können in # Sekunden einen neuen Code anfordern.}}",
+    "wrong": "{count, plural, one {Dieser Code stimmt nicht. Noch # Versuch.} other {Dieser Code stimmt nicht. Noch # Versuche.}}"
+  },
+  "attendeeSignIn": {
+    "title": "Meine Tickets",
+    "intro": "Melden Sie sich mit Ihrer E-Mail an, um Ihre Bestellungen und Tickets zu sehen.",
+    "signedInAs": "Angemeldet als {email}",
+    "signedOut": "Sie sind abgemeldet.",
+    "signedOutAll": "Sie sind auf allen Geräten abgemeldet.",
+    "noneTitle": "Noch keine Bestellungen für diese Adresse",
+    "noneDescription": "Bestellungen mit dieser E-Mail-Adresse erscheinen hier.",
+    "ordersLabel": "Ihre Bestellungen",
+    "openOrder": "Bestellung für {event} öffnen",
+    "signOut": "Abmelden",
+    "signOutEverywhere": "Auf allen Geräten abmelden",
+    "email": "Ihre E-Mail",
+    "sendCode": "Code per E-Mail senden",
+    "signIn": "Anmelden",
+    "orLink": "Oder öffnen Sie den Link aus derselben E-Mail in diesem Browser.",
+    "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+    "linkInvalidTitle": "Dieser Anmeldelink funktioniert nicht mehr",
+    "linkInvalidDescription": "Links gelten einmal, 15 Minuten lang. Fordern Sie einen neuen Code an, um sich anzumelden.",
+    "startAgain": "Erneut anmelden",
+    "linkReady": "Weiter, um die Tickets für {email} zu sehen.",
+    "continue": "Weiter zu Meine Tickets",
+    "otherBrowser": "Dieser Link wurde in einem anderen Browser geöffnet als dem, der ihn angefordert hat. Zum Schutz Ihrer Tickets geben Sie den 6-stelligen Code aus derselben E-Mail ein.",
+    "tickets": "{count, plural, one {# Ticket} other {# Tickets}}"
+  },
+  "orderLinks": {
+    "title": "Links zu meinen Bestellungen senden",
+    "description": "E-Mail mit Ihren Tickets verloren? Wir senden Ihnen die Links zu Ihren Bestellungen erneut.",
+    "email": "E-Mail, mit der Sie bestellt haben",
+    "submit": "Bestelllinks senden",
+    "sent": "Wenn es Bestellungen für diese Adresse gibt, haben wir ihre Links gesendet.",
+    "organizerTitle": "Bestelllink",
+    "organizerDescription": "Wurde der Link des Käufers versehentlich geteilt, ersetzen Sie ihn: Der alte Link funktioniert nicht mehr und der Käufer erhält einen neuen per E-Mail.",
+    "reissue": "Link widerrufen und neu ausstellen",
+    "reissueConfirm": "Der aktuelle Link des Käufers funktioniert sofort nicht mehr, und ein neuer wird an {email} gesendet.",
+    "reissueYes": "Widerrufen und neuen Link senden",
+    "reissueCancel": "Aktuellen Link behalten",
+    "reissued": "Ein neuer Link wurde an {email} gesendet. Der alte Link funktioniert nicht mehr."
+  },
+  "seatPoster": {
+    "pageTitle": "Namensliste zum Aushängen",
+    "back": "Zurück zur Platzsuche",
+    "print": "Aushang drucken",
+    "title": "Finden Sie Ihren Tisch",
+    "subtitle": "Gäste von A bis Z mit Tisch und Platz",
+    "emptyTitle": "Noch niemand hat einen Platz",
+    "emptyDescription": "Weisen Sie den Gästen im Plan Plätze zu und drucken Sie dann diese Liste für den Eingang.",
+    "tableSeat": "Tisch {item} · Platz {seat}",
+    "rowSeat": "Reihe {item} · Platz {seat}",
+    "unseated": "{count, plural, one {# Gast hat noch keinen Platz und steht nicht auf dem Aushang.} other {# Gäste haben noch keinen Platz und stehen nicht auf dem Aushang.}}"
   },
   "webPush": {
     "title": "Push-Benachrichtigungen",

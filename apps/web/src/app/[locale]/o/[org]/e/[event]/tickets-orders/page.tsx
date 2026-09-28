@@ -1,13 +1,14 @@
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
+import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { publicSeatMap } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoxOfficeForm } from '@/components/box-office-form.tsx';
+import { CheckoutVerificationForm } from '@/components/checkout-verification-form.tsx';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
 import { RefundPolicyForm } from '@/components/refund-policy-form.tsx';
@@ -27,6 +28,7 @@ import {
   createTicketTypeAction,
   moveQuestionAction,
   removeQuestionAction,
+  setCheckoutVerificationAction,
   setPromoCodeActiveAction,
   setRefundPolicyAction,
 } from './actions.ts';
@@ -69,6 +71,7 @@ export default async function TicketsPage({
   const seatMap = canSell ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, { audience: 'staff' }) : null;
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
   const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
+  const checkout = await executeQuery(checkoutSettingsQuery, { eventId: ev.id }, data.ctx, ports);
   const tp = await getTranslations('refundPolicy');
   const subject = { kind: 'checkout_questions', subjectType: 'event', subjectId: ev.id } as const;
   const form = await executeQuery(getFormQuery, subject, data.ctx, ports);
@@ -378,6 +381,24 @@ export default async function TicketsPage({
             <QuestionForm action={addQuestionAction.bind(null, org, event)} />
           </Card>
         ) : null}
+      </section>
+      <section aria-labelledby="buyer-email-heading" className="flex flex-col gap-3">
+        <h2 id="buyer-email-heading" className="text-section">
+          {t('guestVerify.settingTitle')}
+        </h2>
+        <Card className="flex flex-col gap-3">
+          <p className="text-body text-zinc-600">{t('guestVerify.settingDescription')}</p>
+          {canWrite ? (
+            <CheckoutVerificationForm
+              action={setCheckoutVerificationAction.bind(null, org, event)}
+              verifyEmail={checkout.verifyEmail}
+            />
+          ) : (
+            <p className="text-body">
+              {checkout.verifyEmail ? t('guestVerify.settingOn') : t('guestVerify.settingOff')}
+            </p>
+          )}
+        </Card>
       </section>
       <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-3">
         <h2 id="refund-policy-heading" className="text-section">

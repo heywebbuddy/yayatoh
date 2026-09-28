@@ -109,7 +109,11 @@ function FinderBody({
     s.error ? (
       <Alert
         title={
-          s.error === 'wrong' ? t('errors.wrong', { left: s.attemptsLeft ?? 0 }) : t(`errors.${s.error}`)
+          s.error === 'wrong'
+            ? t('errors.wrong', { left: s.attemptsLeft ?? 0 })
+            : s.error === 'rateLimited'
+              ? t('errors.rateLimited', { minutes: s.retryMinutes ?? 1 })
+              : t(`errors.${s.error}`)
         }
       />
     ) : null;

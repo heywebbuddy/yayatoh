@@ -100,6 +100,20 @@
       "subject": "Testbenachrichtigung",
       "intro": "Benachrichtigungen funktionieren."
     },
+    "guest.checkout-code": {
+      "subject": "{code} ist Ihr Code zur Bestätigung Ihrer E-Mail",
+      "intro": "Geben Sie {code} ein, um Ihre E-Mail zu bestätigen und Ihre Bestellung bei {org} abzuschließen. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
+    },
+    "guest.sign-in": {
+      "subject": "{code} ist Ihr Code für Meine Tickets",
+      "intro": "Geben Sie {code} ein, um Ihre Tickets auf {site} zu sehen, oder nutzen Sie die Schaltfläche unten im selben Browser. Der Code läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab, die Schaltfläche in {linkMinutes, plural, one {# Minute} other {# Minuten}}; beide gelten einmal. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Meine Tickets öffnen"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Ihr neuer Link zu Ihrer Bestellung für {eventName}} other {Ihr Link zu Ihrer Bestellung für {eventName}}}",
+      "intro": "{reason, select, reissued {Der Veranstalter hat den Link zu Ihrer Bestellung für {eventName} ersetzt. Der alte Link funktioniert nicht mehr; verwenden Sie diesen.} other {Hier ist der angeforderte Link. Er öffnet Ihre Bestellung und Tickets für {eventName}.}}",
+      "cta": "Meine Bestellung öffnen"
+    },
     "security.fraud_signal": {
       "subject": "Betrugswarnung: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}",
       "intro": "Ein Signal mit hohem Schweregrad bei {org}{eventName, select, none {} other { ({eventName})}} muss geprüft werden: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}. Öffne es, um es zu übernehmen oder zu verwerfen.",

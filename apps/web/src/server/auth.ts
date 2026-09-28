@@ -29,7 +29,7 @@ const sealer: SecretSealer = {
  */
 const devMailboxKey = (email: string) => `yy-dev-mailbox:${email.toLowerCase()}`;
 
-async function rememberDevCode(email: string, code: string) {
+export async function rememberDevCode(email: string, code: string) {
   const c = await getAuth().$context;
   await c.internalAdapter.deleteVerificationByIdentifier(devMailboxKey(email));
   await c.internalAdapter.createVerificationValue({

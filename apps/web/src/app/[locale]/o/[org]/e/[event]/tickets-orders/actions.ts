@@ -8,7 +8,11 @@ import {
   moneyFromDecimal,
   zonedTimeToUtc,
 } from '@yayatoh/kernel';
-import { recordBoxOfficeSaleCommand, setRefundPolicyCommand } from '@yayatoh/orders';
+import {
+  recordBoxOfficeSaleCommand,
+  setCheckoutSettingsCommand,
+  setRefundPolicyCommand,
+} from '@yayatoh/orders';
 import {
   archiveTicketTypeCommand,
   createPromoCodeCommand,
@@ -307,6 +311,28 @@ export async function setRefundPolicyAction(
         ...(kind === 'until' ? { daysBefore: days === '' ? Number.NaN : Number(days) } : {}),
         retainedMinor: kind === 'none' ? 0 : retainedMinor,
       },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
+}
+
+/** M1.5f: ask buyers to confirm their email with a code before ordering (on by default). */
+export async function setCheckoutVerificationAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  try {
+    await executeCommand(
+      setCheckoutSettingsCommand,
+      { eventId: ev.id, verifyEmail: form.get('verifyEmail') === '1' },
       data.ctx,
       ports,
     );

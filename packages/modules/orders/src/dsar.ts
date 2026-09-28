@@ -1,7 +1,7 @@
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull, lt, ne, or, type SQL, sql } from 'drizzle-orm';
-import { orderItems, orders, refunds } from './schema.ts';
+import { guestChallenges, guestSessions, orderItems, orders, refunds } from './schema.ts';
 
 /** Orders that were ever paid: kept for tax and accounting (legal hold), only redacted. */
 const SOLD = ['paid', 'partially_refunded', 'refunded'] as const;
@@ -93,6 +93,15 @@ export async function eraseOrdersDsarTx(tx: TenantTx, emailNorm: string, now: Da
     .where(eq(orders.buyerEmail, emailNorm))
     .returning({ id: orders.id, status: orders.status });
   const ids = rows.map((r) => r.id);
+  // M1.5f: this org's site sign-ins and pending codes for the address go too (global rows, scoped
+  // to the org in the transaction).
+  const thisOrg = sql`(select nullif(current_setting('app.org_id', true), '')::uuid)`;
+  await tx
+    .delete(guestSessions)
+    .where(and(eq(guestSessions.email, emailNorm), eq(guestSessions.scopeOrgId, thisOrg)));
+  await tx
+    .delete(guestChallenges)
+    .where(and(eq(guestChallenges.email, emailNorm), eq(guestChallenges.scopeOrgId, thisOrg)));
   if (ids.length)
     await tx
       .update(refunds)

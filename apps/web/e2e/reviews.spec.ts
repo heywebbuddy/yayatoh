@@ -1,6 +1,6 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import { AggregateRatingSchema } from '../src/lib/seo/jsonld.ts';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -49,10 +49,9 @@ async function buy(browser: Browser, slug: string, name: string): Promise<Page> 
   await guest.goto(`/events/${slug}`);
   await guest.getByLabel('Quantity — Entry').selectOption('1');
   await guest.getByLabel('Full name').fill(name);
-  await guest
-    .getByLabel('Email for your tickets')
-    .fill(`${name.replace(/\W+/g, '.').toLowerCase()}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  const email = `${name.replace(/\W+/g, '.').toLowerCase()}@example.test`;
+  await guest.getByLabel('Email for your tickets').fill(email);
+  await continueToPayment(guest, email);
   await expect(guest).toHaveURL(/\/orders\//);
   return guest;
 }

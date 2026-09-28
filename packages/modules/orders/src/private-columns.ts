@@ -31,6 +31,8 @@ export const privateColumns = columnPrivacy('orders', {
     risk_review: internal(),
   },
   refund_policies: { kind: 'vocab', updated_by: internal() },
+  // Guest email verification per event (M1.5f): who last changed it (a user id or actor type).
+  checkout_settings: { updated_by: internal() },
   refunds: {
     status: 'vocab',
     reason: 'vocab',

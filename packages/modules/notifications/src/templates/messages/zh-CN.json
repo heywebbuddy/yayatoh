@@ -100,6 +100,20 @@
       "subject": "测试通知",
       "intro": "通知功能正常。"
     },
+    "guest.checkout-code": {
+      "subject": "{code} 是您的邮箱确认码",
+      "intro": "输入 {code} 以确认您的邮箱并完成在 {org} 的订单。验证码仅可使用一次，{minutes} 分钟后失效。如果这不是您本人的请求，请忽略此邮件。"
+    },
+    "guest.sign-in": {
+      "subject": "{code} 是您的“我的门票”验证码",
+      "intro": "输入 {code} 即可在 {site} 查看您的门票，也可以在同一浏览器中使用下方按钮。验证码 {minutes} 分钟后失效，按钮 {linkMinutes} 分钟后失效；每个仅可使用一次。如果这不是您本人的请求，请忽略此邮件。",
+      "cta": "打开我的门票"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {您在 {eventName} 的订单新链接} other {您在 {eventName} 的订单链接}}",
+      "intro": "{reason, select, reissued {主办方已更换您在 {eventName} 的订单链接。旧链接已失效，请使用此链接。} other {这是您请求的链接，可打开您在 {eventName} 的订单和门票。}}",
+      "cta": "打开我的订单"
+    },
     "security.fraud_signal": {
       "subject": "欺诈警报：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}",
       "intro": "{org}{eventName, select, none {} other {（{eventName}）}}有一个高严重性信号需要查看：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}。打开它以确认或忽略。",

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -46,7 +46,7 @@ test.describe('Scan PWA', () => {
     await guest.getByLabel('Quantity — Gate pass').selectOption('2');
     await guest.getByLabel('Full name').fill(`Ida ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ida+${stamp}@example.test`);
-    await guest.getByRole('button', { name: 'Continue to payment' }).click();
+    await continueToPayment(guest, `ida+${stamp}@example.test`);
     await expect(guest).toHaveURL(/\/orders\//);
     const codes = (await guest.locator('.tracking-\\[0\\.2em\\]').allTextContents()).map((c) => c.trim());
     expect(codes).toHaveLength(2);

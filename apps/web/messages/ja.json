@@ -71,7 +71,8 @@
     "kinds": {
       "orders": {
         "tickets": "チケット",
-        "refund": "返金"
+        "refund": "返金",
+        "order-link": "注文リンク"
       },
       "events": {
         "reminder": "イベントのリマインダー"
@@ -104,6 +105,10 @@
       },
       "payments": {
         "destination-changed": "支払い口座の変更"
+      },
+      "guest": {
+        "checkout-code": "購入時のメール確認コード",
+        "sign-in": "マイチケットのサインイン"
       },
       "security": {
         "fraud_signal": "不正アラート"
@@ -1867,7 +1872,8 @@
       "address": "座席検索のアドレス",
       "openPublic": "座席検索を開く",
       "poster": "座席検索ポスターを印刷",
-      "closedNote": "座席検索は非公開です。ポスターをスキャンしたゲストには、後で再度アクセスするよう案内されます。"
+      "closedNote": "座席検索は非公開です。ポスターをスキャンしたゲストには、後で再度アクセスするよう案内されます。",
+      "namePoster": "名前一覧ポスターを印刷"
     },
     "map": {
       "zoomIn": "拡大",
@@ -2041,7 +2047,8 @@
       "challengeFailed": "確認に失敗しました。もう一度お試しください。",
       "challengeUnavailable": "この端末からの検索が多すぎます。1分ほど待ってからもう一度お試しください。",
       "closed": "このイベントの座席検索は公開されていません。",
-      "internal": "システム側で問題が発生しました。"
+      "internal": "システム側で問題が発生しました。",
+      "rateLimited": "コードの請求が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
     }
   },
   "seatFinderPoster": {
@@ -3822,6 +3829,77 @@
     "invalidPassword": "パスワードが正しくありません。",
     "rateLimited": "試行回数が多すぎます。15 分待ってから、もう一度お試しください。",
     "unauthenticated": "セッションが終了しました。もう一度サインインしてください。"
+  },
+  "guestVerify": {
+    "title": "メールアドレスの確認",
+    "sent": "{email}に6桁のコードを送信しました。入力すると注文できます。有効期間は10分です。",
+    "codeLabel": "確認コード",
+    "submit": "確認して続ける",
+    "resend": "新しいコードを送信",
+    "locked": "誤ったコードが多すぎます。新しいコードを請求してください。",
+    "expired": "このコードは期限切れか、すでに使用されています。新しいコードを請求してください。",
+    "cooldown": "コードを送信したところです。受信トレイを確認するか、少し待ってから新しいコードを請求してください。",
+    "changeEmail": "アドレスが違う場合は、上で修正してから、もう一度「支払いへ進む」を選んでください。",
+    "settingTitle": "購入者メールの確認",
+    "settingDescription": "購入者は注文前に6桁のコードでメールアドレスを確認します。入力ミスのアドレスにチケットが送られることはありません。推奨。",
+    "settingLabel": "注文前に購入者にコードでメールアドレスを確認してもらう",
+    "settingSave": "メール確認を保存",
+    "settingSaved": "メール確認を保存しました。",
+    "settingOn": "購入者は注文前にコードでメールアドレスを確認します。",
+    "settingOff": "購入者はメールアドレスを確認せずに注文します。",
+    "resendIn": "{seconds, plural, other {#秒後に新しいコードを請求できます。}}",
+    "wrong": "{count, plural, other {コードが正しくありません。あと#回試せます。}}"
+  },
+  "attendeeSignIn": {
+    "title": "マイチケット",
+    "intro": "メールアドレスでサインインすると、購入した注文とチケットを確認できます。",
+    "signedInAs": "{email}でサインイン中",
+    "signedOut": "サインアウトしました。",
+    "signedOutAll": "すべてのデバイスでサインアウトしました。",
+    "noneTitle": "このアドレスの注文はまだありません",
+    "noneDescription": "このメールアドレスで注文すると、ここに表示されます。",
+    "ordersLabel": "あなたの注文",
+    "openOrder": "{event}の注文を開く",
+    "signOut": "サインアウト",
+    "signOutEverywhere": "すべてのデバイスでサインアウト",
+    "email": "メールアドレス",
+    "sendCode": "コードをメールで送信",
+    "signIn": "サインイン",
+    "orLink": "または、同じメールのリンクをこのブラウザーで開いてください。",
+    "emailInvalid": "有効なメールアドレスを入力してください。",
+    "linkInvalidTitle": "このサインインリンクは使えなくなりました",
+    "linkInvalidDescription": "リンクは15分間、1回だけ有効です。新しいコードを請求してサインインしてください。",
+    "startAgain": "もう一度サインイン",
+    "linkReady": "続けると{email}のチケットが表示されます。",
+    "continue": "マイチケットへ進む",
+    "otherBrowser": "このリンクは、請求したブラウザーとは別のブラウザーで開かれました。チケットを守るため、同じメールに記載された6桁のコードを入力してください。",
+    "tickets": "{count, plural, other {チケット#枚}}"
+  },
+  "orderLinks": {
+    "title": "注文リンクをメールで受け取る",
+    "description": "チケットのメールをなくしましたか？注文へのリンクをもう一度お送りします。",
+    "email": "注文時のメールアドレス",
+    "submit": "注文リンクを送信",
+    "sent": "このアドレスの注文があれば、リンクをメールで送信しました。",
+    "organizerTitle": "注文リンク",
+    "organizerDescription": "購入者のリンクが誤って共有された場合は差し替えてください。以前のリンクは使えなくなり、購入者に新しいリンクがメールで届きます。",
+    "reissue": "リンクを無効にして再発行",
+    "reissueConfirm": "購入者の現在のリンクはすぐに使えなくなり、新しいリンクが{email}に送信されます。",
+    "reissueYes": "無効にして新しいリンクを送信",
+    "reissueCancel": "現在のリンクを残す",
+    "reissued": "{email}に新しいリンクを送信しました。以前のリンクは使えません。"
+  },
+  "seatPoster": {
+    "pageTitle": "名前一覧ポスター",
+    "back": "座席検索に戻る",
+    "print": "ポスターを印刷",
+    "title": "テーブルを探す",
+    "subtitle": "ゲスト一覧（テーブルと席つき）",
+    "emptyTitle": "まだ誰も着席していません",
+    "emptyDescription": "座席表でゲストに席を割り当ててから、入口用にこの一覧を印刷してください。",
+    "tableSeat": "テーブル{item} · 席{seat}",
+    "rowSeat": "列{item} · 席{seat}",
+    "unseated": "{count, plural, other {まだ席のないゲスト#人はポスターに載っていません。}}"
   },
   "webPush": {
     "title": "プッシュ通知",

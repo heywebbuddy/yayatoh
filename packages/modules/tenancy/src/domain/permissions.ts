@@ -15,6 +15,8 @@ export const PERMISSIONS = [
   'orders:refund',
   /** Record box-office sales the organizer collected themselves (cash, Zelle, card terminal). */
   'orders:sell',
+  /** Buyer support (M1.5f): revoke a buyer's order link and send them a new one. */
+  'orders:support',
   'attendees:read',
   /** Label, tag and (later) edit attendees. */
   'attendees:write',
@@ -56,6 +58,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:write',
     'orders:read',
     'orders:sell',
+    'orders:support',
     'attendees:read',
     'attendees:write',
     'attendees:export',
@@ -89,6 +92,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'events:read',
     'orders:read',
     'orders:sell',
+    'orders:support',
     'attendees:read',
     'attendees:write',
     'checkin:scan',
@@ -139,6 +143,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'events:write',
     'orders:read',
     'orders:sell',
+    'orders:support',
     'attendees:read',
     'attendees:write',
     'attendees:export',

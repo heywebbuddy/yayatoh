@@ -136,6 +136,11 @@ export default async function SeatFinderSettingsPage({
                 <Link href={`${publicPath}/poster`} className={buttonClass('primary', 'sm')}>
                   {t('finder.poster')}
                 </Link>
+                {roleCan(data.role, 'attendees:read') ? (
+                  <Link href={`/o/${org}/seat-poster/${event}`} className={buttonClass('secondary', 'sm')}>
+                    {t('finder.namePoster')}
+                  </Link>
+                ) : null}
               </div>
               {settings.publicMap ? null : (
                 <p className="text-caption text-zinc-600">{t('finder.closedNote')}</p>

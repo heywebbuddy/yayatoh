@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -66,7 +66,7 @@ async function buyFree(guest: Page, slug: string, pass: string, who: string) {
   await guest
     .getByLabel('Email for your tickets')
     .fill(`${who.replace(/\W+/g, '.').toLowerCase()}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, `${who.replace(/\W+/g, '.').toLowerCase()}@example.test`);
   await expect(guest).toHaveURL(/\/orders\//);
 }
 

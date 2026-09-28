@@ -100,6 +100,20 @@
       "subject": "Notifica di prova",
       "intro": "Le notifiche funzionano."
     },
+    "guest.checkout-code": {
+      "subject": "{code} è il tuo codice per confermare l'email",
+      "intro": "Inserisci {code} per confermare la tua email e completare l'ordine con {org}. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, ignora questa email."
+    },
+    "guest.sign-in": {
+      "subject": "{code} è il tuo codice per I miei biglietti",
+      "intro": "Inserisci {code} per vedere i tuoi biglietti su {site}, oppure usa il pulsante qui sotto nello stesso browser. Il codice scade tra {minutes, plural, one {# minuto} other {# minuti}} e il pulsante tra {linkMinutes, plural, one {# minuto} other {# minuti}}; ciascuno vale una volta. Se non l'hai richiesto, ignora questa email.",
+      "cta": "Apri I miei biglietti"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Il tuo nuovo link all'ordine per {eventName}} other {Il tuo link all'ordine per {eventName}}}",
+      "intro": "{reason, select, reissued {L'organizzatore ha sostituito il link al tuo ordine per {eventName}. Il vecchio link non funziona più; usa questo.} other {Ecco il link che hai richiesto. Apre il tuo ordine e i biglietti per {eventName}.}}",
+      "cta": "Apri il mio ordine"
+    },
     "security.fraud_signal": {
       "subject": "Avviso di frode: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}",
       "intro": "Un segnale di gravità alta va controllato presso {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}. Aprilo per prenderlo in carico o archiviarlo.",

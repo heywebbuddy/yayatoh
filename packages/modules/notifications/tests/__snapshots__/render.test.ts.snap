@@ -559,6 +559,448 @@ Amina Diallo，您好：
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · ar 1`] = `
+{
+  "subject": "305117 هو رمز تأكيد بريدك الإلكتروني",
+  "text": "305117 هو رمز تأكيد بريدك الإلكتروني
+
+مرحبًا،
+
+أدخل 305117 لتأكيد بريدك الإلكتروني وإتمام طلبك لدى Lakeside Events. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · de 1`] = `
+{
+  "subject": "305117 ist Ihr Code zur Bestätigung Ihrer E-Mail",
+  "text": "305117 ist Ihr Code zur Bestätigung Ihrer E-Mail
+
+Hallo,
+
+Geben Sie 305117 ein, um Ihre E-Mail zu bestätigen und Ihre Bestellung bei Lakeside Events abzuschließen. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · en 1`] = `
+{
+  "subject": "305117 is your code to confirm your email",
+  "text": "305117 is your code to confirm your email
+
+Hello,
+
+Enter 305117 to confirm your email and finish your order with Lakeside Events. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · es 1`] = `
+{
+  "subject": "305117 es tu código para confirmar tu correo",
+  "text": "305117 es tu código para confirmar tu correo
+
+Hola:
+
+Introduce 305117 para confirmar tu correo y terminar tu pedido con Lakeside Events. El código se usa una sola vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · fr 1`] = `
+{
+  "subject": "305117 est votre code pour confirmer votre e-mail",
+  "text": "305117 est votre code pour confirmer votre e-mail
+
+Bonjour,
+
+Saisissez 305117 pour confirmer votre e-mail et finaliser votre commande avec Lakeside Events. Le code ne fonctionne qu'une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, ignorez cet e-mail.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · hi 1`] = `
+{
+  "subject": "305117 आपका ईमेल पुष्टि कोड है",
+  "text": "305117 आपका ईमेल पुष्टि कोड है
+
+नमस्ते,
+
+अपना ईमेल पुष्ट करने और Lakeside Events के साथ अपना ऑर्डर पूरा करने के लिए 305117 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · it 1`] = `
+{
+  "subject": "305117 è il tuo codice per confermare l'email",
+  "text": "305117 è il tuo codice per confermare l'email
+
+Ciao,
+
+Inserisci 305117 per confermare la tua email e completare l'ordine con Lakeside Events. Il codice vale una volta e scade tra 10 minuti. Se non l'hai richiesto, ignora questa email.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · ja 1`] = `
+{
+  "subject": "メール確認コードは305117です",
+  "text": "メール確認コードは305117です
+
+こんにちは。
+
+305117を入力してメールアドレスを確認し、Lakeside Eventsでのご注文を完了してください。コードは1回限り有効で、10分後に失効します。心当たりがない場合は、このメールを無視してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · nl 1`] = `
+{
+  "subject": "305117 is je code om je e-mail te bevestigen",
+  "text": "305117 is je code om je e-mail te bevestigen
+
+Hallo,
+
+Voer 305117 in om je e-mail te bevestigen en je bestelling bij Lakeside Events af te ronden. De code werkt één keer en verloopt over 10 minuten. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · pt 1`] = `
+{
+  "subject": "305117 é o seu código para confirmar o seu e-mail",
+  "text": "305117 é o seu código para confirmar o seu e-mail
+
+Olá!
+
+Digite 305117 para confirmar o seu e-mail e concluir o seu pedido com Lakeside Events. O código funciona uma vez e expira em 10 minutos. Se não o pediu, pode ignorar este e-mail.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · ru 1`] = `
+{
+  "subject": "305117 — ваш код для подтверждения почты",
+  "text": "305117 — ваш код для подтверждения почты
+
+Здравствуйте!
+
+Введите 305117, чтобы подтвердить почту и завершить заказ у Lakeside Events. Код действует один раз и истекает через 10 минут. Если вы его не запрашивали, просто проигнорируйте это письмо.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · zh-CN 1`] = `
+{
+  "subject": "305117 是您的邮箱确认码",
+  "text": "305117 是您的邮箱确认码
+
+您好：
+
+输入 305117 以确认您的邮箱并完成在 Lakeside Events 的订单。验证码仅可使用一次，10 分钟后失效。如果这不是您本人的请求，请忽略此邮件。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · zh-TW 1`] = `
+{
+  "subject": "305117 是您的電子郵件確認碼",
+  "text": "305117 是您的電子郵件確認碼
+
+您好：
+
+輸入 305117 以確認您的電子郵件並完成在 Lakeside Events 的訂單。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · ar 1`] = `
+{
+  "subject": "305117 هو رمزك لصفحة تذاكري",
+  "text": "305117 هو رمزك لصفحة تذاكري
+
+مرحبًا،
+
+أدخل 305117 لرؤية تذاكرك على Lakeside Events، أو استخدم الزر أدناه في المتصفح نفسه. تنتهي صلاحية الرمز خلال 10 دقائق والزر خلال 15 دقيقة؛ ويعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+فتح تذاكري: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · de 1`] = `
+{
+  "subject": "305117 ist Ihr Code für Meine Tickets",
+  "text": "305117 ist Ihr Code für Meine Tickets
+
+Hallo,
+
+Geben Sie 305117 ein, um Ihre Tickets auf Lakeside Events zu sehen, oder nutzen Sie die Schaltfläche unten im selben Browser. Der Code läuft in 10 Minuten ab, die Schaltfläche in 15 Minuten; beide gelten einmal. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+Meine Tickets öffnen: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · en 1`] = `
+{
+  "subject": "305117 is your code for My tickets",
+  "text": "305117 is your code for My tickets
+
+Hello,
+
+Enter 305117 to see your tickets on Lakeside Events, or use the button below in the same browser. The code expires in 10 minutes and the button in 15 minutes; each works once. If you didn't ask for it, you can ignore this email.
+
+Open My tickets: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · es 1`] = `
+{
+  "subject": "305117 es tu código para Mis entradas",
+  "text": "305117 es tu código para Mis entradas
+
+Hola:
+
+Introduce 305117 para ver tus entradas en Lakeside Events, o usa el botón de abajo en el mismo navegador. El código caduca en 10 minutos y el botón en 15 minutos; cada uno funciona una vez. Si no lo pediste, puedes ignorar este correo.
+
+Abrir Mis entradas: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · fr 1`] = `
+{
+  "subject": "305117 est votre code pour Mes billets",
+  "text": "305117 est votre code pour Mes billets
+
+Bonjour,
+
+Saisissez 305117 pour voir vos billets sur Lakeside Events, ou utilisez le bouton ci-dessous dans le même navigateur. Le code expire dans 10 minutes et le bouton dans 15 minutes ; chacun ne fonctionne qu'une fois. Si vous ne l'avez pas demandé, ignorez cet e-mail.
+
+Ouvrir Mes billets: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · hi 1`] = `
+{
+  "subject": "305117 मेरे टिकट के लिए आपका कोड है",
+  "text": "305117 मेरे टिकट के लिए आपका कोड है
+
+नमस्ते,
+
+Lakeside Events पर अपने टिकट देखने के लिए 305117 दर्ज करें, या उसी ब्राउज़र में नीचे दिए बटन का उपयोग करें। कोड 10 मिनट में और बटन 15 मिनट में समाप्त होता है; हर एक एक बार काम करता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+मेरे टिकट खोलें: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · it 1`] = `
+{
+  "subject": "305117 è il tuo codice per I miei biglietti",
+  "text": "305117 è il tuo codice per I miei biglietti
+
+Ciao,
+
+Inserisci 305117 per vedere i tuoi biglietti su Lakeside Events, oppure usa il pulsante qui sotto nello stesso browser. Il codice scade tra 10 minuti e il pulsante tra 15 minuti; ciascuno vale una volta. Se non l'hai richiesto, ignora questa email.
+
+Apri I miei biglietti: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · ja 1`] = `
+{
+  "subject": "マイチケットのコードは305117です",
+  "text": "マイチケットのコードは305117です
+
+こんにちは。
+
+305117を入力するとLakeside Eventsでチケットを確認できます。同じブラウザーなら下のボタンも使えます。コードは10分後、ボタンは15分後に失効し、それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。
+
+マイチケットを開く: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · nl 1`] = `
+{
+  "subject": "305117 is je code voor Mijn tickets",
+  "text": "305117 is je code voor Mijn tickets
+
+Hallo,
+
+Voer 305117 in om je tickets op Lakeside Events te zien, of gebruik de knop hieronder in dezelfde browser. De code verloopt over 10 minuten en de knop over 15 minuten; elk werkt één keer. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
+
+Mijn tickets openen: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · pt 1`] = `
+{
+  "subject": "305117 é o seu código para Meus ingressos",
+  "text": "305117 é o seu código para Meus ingressos
+
+Olá!
+
+Digite 305117 para ver os seus ingressos em Lakeside Events, ou use o botão abaixo no mesmo navegador. O código expira em 10 minutos e o botão em 15 minutos; cada um funciona uma vez. Se não o pediu, pode ignorar este e-mail.
+
+Abrir Meus ingressos: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · ru 1`] = `
+{
+  "subject": "305117 — ваш код для раздела «Мои билеты»",
+  "text": "305117 — ваш код для раздела «Мои билеты»
+
+Здравствуйте!
+
+Введите 305117, чтобы увидеть свои билеты на Lakeside Events, или нажмите кнопку ниже в том же браузере. Код истекает через 10 минут, кнопка — через 15 минут; каждый действует один раз. Если вы его не запрашивали, просто проигнорируйте это письмо.
+
+Открыть «Мои билеты»: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · zh-CN 1`] = `
+{
+  "subject": "305117 是您的“我的门票”验证码",
+  "text": "305117 是您的“我的门票”验证码
+
+您好：
+
+输入 305117 即可在 Lakeside Events 查看您的门票，也可以在同一浏览器中使用下方按钮。验证码 10 分钟后失效，按钮 15 分钟后失效；每个仅可使用一次。如果这不是您本人的请求，请忽略此邮件。
+
+打开我的门票: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.sign-in · zh-TW 1`] = `
+{
+  "subject": "305117 是您的「我的票券」驗證碼",
+  "text": "305117 是您的「我的票券」驗證碼
+
+您好：
+
+輸入 305117 即可在 Lakeside Events 查看您的票券，也可以在同一瀏覽器中使用下方按鈕。驗證碼 10 分鐘後失效，按鈕 15 分鐘後失效；每個僅能使用一次。如果這不是您本人的要求，請忽略此郵件。
+
+開啟我的票券: https://app.yayatoh.test/my-tickets/verify/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > messaging.announcement · ar 1`] = `
 {
   "subject": "Doors open at 7",
@@ -1552,6 +1994,240 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · zh-
 您好：
 
 通知功能正常。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · ar 1`] = `
+{
+  "subject": "رابطك إلى طلبك لـ Lakeside Jazz Night",
+  "text": "رابطك إلى طلبك لـ Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+إليك الرابط الذي طلبته. يفتح طلبك وتذاكرك لـ Lakeside Jazz Night.
+
+فتح طلبي: https://app.yayatoh.test/orders/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · de 1`] = `
+{
+  "subject": "Ihr Link zu Ihrer Bestellung für Lakeside Jazz Night",
+  "text": "Ihr Link zu Ihrer Bestellung für Lakeside Jazz Night
+
+Hallo Amina Diallo,
+
+Hier ist der angeforderte Link. Er öffnet Ihre Bestellung und Tickets für Lakeside Jazz Night.
+
+Meine Bestellung öffnen: https://app.yayatoh.test/orders/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · en 1`] = `
+{
+  "subject": "Your link to your order for Lakeside Jazz Night",
+  "text": "Your link to your order for Lakeside Jazz Night
+
+Hi Amina Diallo,
+
+Here is the link you asked for. It opens your order and tickets for Lakeside Jazz Night.
+
+Open my order: https://app.yayatoh.test/orders/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · es 1`] = `
+{
+  "subject": "Tu enlace a tu pedido para Lakeside Jazz Night",
+  "text": "Tu enlace a tu pedido para Lakeside Jazz Night
+
+Hola, Amina Diallo:
+
+Aquí tienes el enlace que pediste. Abre tu pedido y tus entradas para Lakeside Jazz Night.
+
+Abrir mi pedido: https://app.yayatoh.test/orders/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · fr 1`] = `
+{
+  "subject": "Votre lien vers votre commande pour Lakeside Jazz Night",
+  "text": "Votre lien vers votre commande pour Lakeside Jazz Night
+
+Bonjour Amina Diallo,
+
+Voici le lien demandé. Il ouvre votre commande et vos billets pour Lakeside Jazz Night.
+
+Ouvrir ma commande: https://app.yayatoh.test/orders/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night के आपके ऑर्डर का लिंक",
+  "text": "Lakeside Jazz Night के आपके ऑर्डर का लिंक
+
+नमस्ते Amina Diallo,
+
+यह वह लिंक है जो आपने माँगा था। यह Lakeside Jazz Night के लिए आपका ऑर्डर और टिकट खोलता है।
+
+मेरा ऑर्डर खोलें: https://app.yayatoh.test/orders/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · it 1`] = `
+{
+  "subject": "Il tuo link all'ordine per Lakeside Jazz Night",
+  "text": "Il tuo link all'ordine per Lakeside Jazz Night
+
+Ciao Amina Diallo,
+
+Ecco il link che hai richiesto. Apre il tuo ordine e i biglietti per Lakeside Jazz Night.
+
+Apri il mio ordine: https://app.yayatoh.test/orders/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Nightのご注文へのリンク",
+  "text": "Lakeside Jazz Nightのご注文へのリンク
+
+Amina Diallo 様
+
+ご依頼のリンクです。Lakeside Jazz Nightのご注文とチケットを開けます。
+
+注文を開く: https://app.yayatoh.test/orders/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · nl 1`] = `
+{
+  "subject": "Je link naar je bestelling voor Lakeside Jazz Night",
+  "text": "Je link naar je bestelling voor Lakeside Jazz Night
+
+Hoi Amina Diallo,
+
+Hier is de link waar je om vroeg. Hij opent je bestelling en tickets voor Lakeside Jazz Night.
+
+Mijn bestelling openen: https://app.yayatoh.test/orders/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · pt 1`] = `
+{
+  "subject": "O seu link para o pedido de Lakeside Jazz Night",
+  "text": "O seu link para o pedido de Lakeside Jazz Night
+
+Olá, Amina Diallo!
+
+Aqui está o link que pediu. Ele abre o seu pedido e os ingressos para Lakeside Jazz Night.
+
+Abrir o meu pedido: https://app.yayatoh.test/orders/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · ru 1`] = `
+{
+  "subject": "Ссылка на ваш заказ на Lakeside Jazz Night",
+  "text": "Ссылка на ваш заказ на Lakeside Jazz Night
+
+Здравствуйте, Amina Diallo!
+
+Вот ссылка, которую вы запросили. Она открывает ваш заказ и билеты на Lakeside Jazz Night.
+
+Открыть заказ: https://app.yayatoh.test/orders/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · zh-CN 1`] = `
+{
+  "subject": "您在 Lakeside Jazz Night 的订单链接",
+  "text": "您在 Lakeside Jazz Night 的订单链接
+
+Amina Diallo，您好：
+
+这是您请求的链接，可打开您在 Lakeside Jazz Night 的订单和门票。
+
+打开我的订单: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.order-link · zh-TW 1`] = `
+{
+  "subject": "您在 Lakeside Jazz Night 的訂單連結",
+  "text": "您在 Lakeside Jazz Night 的訂單連結
+
+Amina Diallo，您好：
+
+這是您要求的連結，可開啟您在 Lakeside Jazz Night 的訂單和票券。
+
+開啟我的訂單: https://app.yayatoh.test/orders/sample
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。

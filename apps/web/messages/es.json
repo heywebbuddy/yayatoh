@@ -71,7 +71,8 @@
     "kinds": {
       "orders": {
         "tickets": "Entradas",
-        "refund": "Reembolso"
+        "refund": "Reembolso",
+        "order-link": "Enlace del pedido"
       },
       "events": {
         "reminder": "Recordatorio del evento"
@@ -104,6 +105,10 @@
       },
       "payments": {
         "destination-changed": "Cambio de cuenta de pagos"
+      },
+      "guest": {
+        "checkout-code": "Código de correo en el pago",
+        "sign-in": "Acceso a Mis entradas"
       },
       "security": {
         "fraud_signal": "Alerta de fraude"
@@ -1867,7 +1872,8 @@
       "address": "Dirección del buscador de asientos",
       "openPublic": "Abrir el buscador de asientos",
       "poster": "Imprimir cartel del buscador",
-      "closedNote": "El buscador de asientos está cerrado. A quien escanee el cartel se le pedirá que vuelva más tarde."
+      "closedNote": "El buscador de asientos está cerrado. A quien escanee el cartel se le pedirá que vuelva más tarde.",
+      "namePoster": "Imprimir cartel con la lista de nombres"
     },
     "map": {
       "zoomIn": "Acercar",
@@ -2041,7 +2047,8 @@
       "challengeFailed": "La comprobación no se superó. Inténtalo de nuevo.",
       "challengeUnavailable": "Demasiadas búsquedas desde este dispositivo. Espera un minuto e inténtalo de nuevo.",
       "closed": "El buscador de asientos no está abierto para este evento.",
-      "internal": "Algo ha fallado por nuestra parte."
+      "internal": "Algo ha fallado por nuestra parte.",
+      "rateLimited": "Se pidieron demasiados códigos. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}."
     }
   },
   "seatFinderPoster": {
@@ -3822,6 +3829,77 @@
     "invalidPassword": "Esa contraseña no es correcta.",
     "rateLimited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
     "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión."
+  },
+  "guestVerify": {
+    "title": "Confirma tu correo",
+    "sent": "Te enviamos un código de 6 dígitos a {email}. Introdúcelo para hacer tu pedido. Funciona durante 10 minutos.",
+    "codeLabel": "Código de verificación",
+    "submit": "Verificar y continuar",
+    "resend": "Enviar un código nuevo",
+    "locked": "Demasiados códigos incorrectos. Pide un código nuevo.",
+    "expired": "Ese código ha caducado o ya se usó. Pide un código nuevo.",
+    "cooldown": "Acabamos de enviarte un código. Revisa tu bandeja de entrada o pide otro en un momento.",
+    "changeEmail": "¿Dirección incorrecta? Cámbiala arriba y vuelve a elegir Continuar al pago.",
+    "settingTitle": "Verificación del correo del comprador",
+    "settingDescription": "Los compradores confirman su correo con un código de 6 dígitos antes de pedir, para que las entradas nunca vayan a una dirección mal escrita. Recomendado.",
+    "settingLabel": "Pedir a los compradores que confirmen su correo con un código antes de pedir",
+    "settingSave": "Guardar verificación de correo",
+    "settingSaved": "Verificación de correo guardada.",
+    "settingOn": "Los compradores confirman su correo con un código antes de pedir.",
+    "settingOff": "Los compradores piden sin confirmar su correo.",
+    "resendIn": "{seconds, plural, one {Puedes pedir un código nuevo en # segundo.} other {Puedes pedir un código nuevo en # segundos.}}",
+    "wrong": "{count, plural, one {Ese código no es correcto. Queda # intento.} other {Ese código no es correcto. Quedan # intentos.}}"
+  },
+  "attendeeSignIn": {
+    "title": "Mis entradas",
+    "intro": "Inicia sesión con tu correo para ver los pedidos y entradas que compraste.",
+    "signedInAs": "Sesión iniciada como {email}",
+    "signedOut": "Has cerrado sesión.",
+    "signedOutAll": "Has cerrado sesión en todos los dispositivos.",
+    "noneTitle": "Aún no hay pedidos para esta dirección",
+    "noneDescription": "Los pedidos que hagas con este correo aparecerán aquí.",
+    "ordersLabel": "Tus pedidos",
+    "openOrder": "Abrir el pedido de {event}",
+    "signOut": "Cerrar sesión",
+    "signOutEverywhere": "Cerrar sesión en todos los dispositivos",
+    "email": "Tu correo",
+    "sendCode": "Envíame un código",
+    "signIn": "Iniciar sesión",
+    "orLink": "O abre el enlace del mismo correo en este navegador.",
+    "emailInvalid": "Introduce un correo válido.",
+    "linkInvalidTitle": "Este enlace de acceso ya no funciona",
+    "linkInvalidDescription": "Los enlaces funcionan una vez, durante 15 minutos. Pide un código nuevo para iniciar sesión.",
+    "startAgain": "Iniciar sesión de nuevo",
+    "linkReady": "Continúa para ver las entradas de {email}.",
+    "continue": "Continuar a Mis entradas",
+    "otherBrowser": "Este enlace se abrió en un navegador distinto del que lo pidió. Para proteger tus entradas, introduce el código de 6 dígitos del mismo correo.",
+    "tickets": "{count, plural, one {# entrada} other {# entradas}}"
+  },
+  "orderLinks": {
+    "title": "Envíame los enlaces de mis pedidos",
+    "description": "¿Perdiste el correo con tus entradas? Te volveremos a enviar los enlaces de tus pedidos.",
+    "email": "Correo con el que pediste",
+    "submit": "Enviar los enlaces de mis pedidos",
+    "sent": "Si hay pedidos para esa dirección, te hemos enviado sus enlaces.",
+    "organizerTitle": "Enlace del pedido",
+    "organizerDescription": "Si el enlace del comprador se compartió por error, reemplázalo: el enlace anterior deja de funcionar y el comprador recibe uno nuevo por correo.",
+    "reissue": "Revocar y reemitir el enlace",
+    "reissueConfirm": "El enlace actual del comprador deja de funcionar de inmediato y se envía uno nuevo a {email}.",
+    "reissueYes": "Revocar y enviar enlace nuevo",
+    "reissueCancel": "Mantener el enlace actual",
+    "reissued": "Se envió un enlace nuevo a {email}. El enlace anterior ya no funciona."
+  },
+  "seatPoster": {
+    "pageTitle": "Cartel con la lista de nombres",
+    "back": "Volver al buscador de asientos",
+    "print": "Imprimir cartel",
+    "title": "Encuentra tu mesa",
+    "subtitle": "Invitados de la A a la Z con su mesa y asiento",
+    "emptyTitle": "Aún no hay nadie sentado",
+    "emptyDescription": "Asigna asientos en el plano y luego imprime esta lista para la entrada.",
+    "tableSeat": "Mesa {item} · Asiento {seat}",
+    "rowSeat": "Fila {item} · Asiento {seat}",
+    "unseated": "{count, plural, one {# invitado aún no tiene asiento y no aparece en el cartel.} other {# invitados aún no tienen asiento y no aparecen en el cartel.}}"
   },
   "webPush": {
     "title": "Notificaciones push",

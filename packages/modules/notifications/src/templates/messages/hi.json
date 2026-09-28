@@ -100,6 +100,20 @@
       "subject": "परीक्षण सूचना",
       "intro": "सूचनाएँ काम कर रही हैं।"
     },
+    "guest.checkout-code": {
+      "subject": "{code} आपका ईमेल पुष्टि कोड है",
+      "intro": "अपना ईमेल पुष्ट करने और {org} के साथ अपना ऑर्डर पूरा करने के लिए {code} दर्ज करें। कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।"
+    },
+    "guest.sign-in": {
+      "subject": "{code} मेरे टिकट के लिए आपका कोड है",
+      "intro": "{site} पर अपने टिकट देखने के लिए {code} दर्ज करें, या उसी ब्राउज़र में नीचे दिए बटन का उपयोग करें। कोड {minutes, plural, one {# मिनट} other {# मिनट}} में और बटन {linkMinutes, plural, one {# मिनट} other {# मिनट}} में समाप्त होता है; हर एक एक बार काम करता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।",
+      "cta": "मेरे टिकट खोलें"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {{eventName} के आपके ऑर्डर का नया लिंक} other {{eventName} के आपके ऑर्डर का लिंक}}",
+      "intro": "{reason, select, reissued {आयोजक ने {eventName} के आपके ऑर्डर का लिंक बदल दिया है। पुराना लिंक अब काम नहीं करता; यह लिंक इस्तेमाल करें।} other {यह वह लिंक है जो आपने माँगा था। यह {eventName} के लिए आपका ऑर्डर और टिकट खोलता है।}}",
+      "cta": "मेरा ऑर्डर खोलें"
+    },
     "security.fraud_signal": {
       "subject": "धोखाधड़ी अलर्ट: {signal, select, two_entrances {एक ही टिकट दो प्रवेश द्वारों पर} impossible_travel {चेकपॉइंट के बीच असंभव यात्रा} device_velocity {बहुत तेज़ी से स्कैन करता स्कैनर} invalid_burst {अमान्य कोड की झड़ी} rejected_burst {अस्वीकृत स्कैन की झड़ी} purchase_velocity {एक ही खरीदार के कई ऑर्डर} country_mismatch {किसी दूसरे देश में खरीदार} checkout_blocked {रोका गया चेकआउट} card_testing {संभावित कार्ड टेस्टिंग} chat_abuse {रिपोर्ट की गई बातचीत} other {धोखाधड़ी संकेत}}",
       "intro": "{org}{eventName, select, none {} other { ({eventName})}} में एक उच्च-गंभीरता संकेत को देखना ज़रूरी है: {signal, select, two_entrances {एक ही टिकट दो प्रवेश द्वारों पर} impossible_travel {चेकपॉइंट के बीच असंभव यात्रा} device_velocity {बहुत तेज़ी से स्कैन करता स्कैनर} invalid_burst {अमान्य कोड की झड़ी} rejected_burst {अस्वीकृत स्कैन की झड़ी} purchase_velocity {एक ही खरीदार के कई ऑर्डर} country_mismatch {किसी दूसरे देश में खरीदार} checkout_blocked {रोका गया चेकआउट} card_testing {संभावित कार्ड टेस्टिंग} chat_abuse {रिपोर्ट की गई बातचीत} other {धोखाधड़ी संकेत}}। इसे स्वीकार या खारिज करने के लिए खोलें।",
