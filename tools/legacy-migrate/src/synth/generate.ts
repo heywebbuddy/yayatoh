@@ -649,7 +649,8 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
     ]);
     demoGala = addEvent(demoOwner, {
       title: DEMO.pastEventTitle,
-      slug: 'lakeshore-spring-gala',
+      // An old-style slug the new platform cannot keep: its legacy URL redirects (V9, e2e).
+      slug: 'Lakeshore_Spring_Gala',
       startDate: '2026-04-18',
       startTime: '18:30:00',
       endTime: '23:30:00',

@@ -417,6 +417,8 @@ export interface ManifestTicket {
   readonly holderEmail: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
+  /** Active legacy QR payloads of a migrated ticket (M2.2c). */
+  readonly legacyCodes: readonly string[];
 }
 
 /**
@@ -443,6 +445,10 @@ export async function manifestTicketsTx(
       holderEmail: tickets.holderEmail,
       createdAt: tickets.createdAt,
       updatedAt: tickets.updatedAt,
+      legacyCodes: sql<
+        string[]
+      >`coalesce((select array_agg(b.payload order by b.payload) from ${ticketBarcodes} b
+        where b.org_id = ${tickets.orgId} and b.ticket_id = ${tickets.id} and b.format = 'legacy_eventmie' and b.active), '{}')`,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))

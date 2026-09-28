@@ -5,6 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { demoHandles } from './src/demo.ts';
+import { orderLinkReport } from './src/order-links.ts';
 import { revalidate, runMigration } from './src/run.ts';
 import { generateDumpFile, SCALES } from './src/synth/generate.ts';
 
@@ -13,6 +14,8 @@ import { generateDumpFile, SCALES } from './src/synth/generate.ts';
  *
  *   pnpm migrate:legacy --instance=yay|abc --mode=rehearsal|cutover --dump <file.sql[.gz]>
  *        [--event-clock=platform|venue] [--system-timezone=America/New_York] [--report report.json]
+ *        [--freeze-at=2026-11-03T07:00:00Z]   (cutover T−0; default: now)
+ *   pnpm migrate:legacy:order-links --instance=yay|abc [--report plan.json]   (dry run, never sends)
  *   pnpm migrate:legacy:validate --instance=yay|abc [--report report.json]
  *   pnpm migrate:legacy:synth --instance=yay|abc --out <file.sql[.gz]> [--scale=small|demo|large] [--seed=N] [--demo]
  *   pnpm migrate:legacy:demo      (synthetic yay + abc → migrated; writes the e2e handles)
@@ -69,6 +72,8 @@ async function main(): Promise<number> {
       if (clock !== 'platform' && clock !== 'venue') fail('--event-clock=platform|venue');
       if (!args.get('dump') && !args.has('skip-load'))
         fail('--dump <file> is required (or --skip-load to re-transform staging)');
+      const freeze = args.get('freeze-at');
+      if (freeze !== undefined && Number.isNaN(Date.parse(freeze))) fail('--freeze-at=<ISO instant>');
       keyVaultFromEnv();
       const r = await runMigration({
         instance,
@@ -76,6 +81,7 @@ async function main(): Promise<number> {
         dump: args.get('dump'),
         eventClock: clock,
         systemTimezone: args.get('system-timezone'),
+        freezeAt: freeze ? new Date(freeze) : undefined,
       });
       writeReport(r.report);
       console.info(r.summary);
@@ -86,6 +92,14 @@ async function main(): Promise<number> {
       writeReport(r.report);
       console.info(r.summary);
       return r.pass ? 0 : 1;
+    }
+    case 'order-links': {
+      const r = await orderLinkReport(instanceArg());
+      writeReport(r);
+      console.info(
+        `migrate:legacy:order-links ${r.instance} (dry run): ${r.planned} order links planned for ${r.buyers} buyers (${r.tickets} tickets), ${r.skipped} skipped ${JSON.stringify(r.skipped)}`,
+      );
+      return 0;
     }
     case 'synth': {
       const instance = instanceArg();
@@ -109,7 +123,15 @@ async function main(): Promise<number> {
         for (const instance of ['yay', 'abc'] as const) {
           const dump = join(dir, `${instance}.sql`);
           await generateDumpFile(dump, { instance, scale: 'demo', demo: instance === 'yay' });
-          const r = await runMigration({ instance, mode: 'rehearsal', dump, log: () => {} });
+          const r = await runMigration({
+            instance,
+            mode: 'rehearsal',
+            dump,
+            log: () => {},
+            // The e2e browser reaches the marketplace as yayatoh.localhost: load yay's legacy
+            // redirects for it too.
+            extraHosts: instance === 'yay' ? ['yayatoh.localhost'] : [],
+          });
           console.info(r.summary);
           ok &&= r.pass;
         }
@@ -123,7 +145,7 @@ async function main(): Promise<number> {
       return ok ? 0 : 1;
     }
     default:
-      fail('commands: run | validate | synth | demo');
+      fail('commands: run | validate | synth | demo | order-links');
   }
 }
 

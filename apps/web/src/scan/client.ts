@@ -79,6 +79,7 @@ export class ScanClient {
   private snapshot: Snapshot | null = null;
   private byId = new Map<string, ManifestRow>();
   private byShort = new Map<string, ManifestRow>();
+  private byLegacy = new Map<string, ManifestRow>();
   private admitted = new Set<string>();
   /** server time − device time, measured at each sync. */
   clockOffsetMs = 0;
@@ -153,6 +154,9 @@ export class ScanClient {
     const s = this.snapshot;
     this.byId = new Map((s?.rows ?? []).map((r) => [r.ticketId, r]));
     this.byShort = new Map((s?.rows ?? []).map((r) => [r.shortCode, r]));
+    this.byLegacy = new Map(
+      (s?.rows ?? []).flatMap((r) => (r.legacyCodes ?? []).map((c) => [c, r] as const)),
+    );
     this.admitted = new Set(s?.admitted ?? []);
   }
 
@@ -172,6 +176,7 @@ export class ScanClient {
     if (!current) {
       this.byId = new Map();
       this.byShort = new Map();
+      this.byLegacy = new Map();
     }
     let first = true;
     let header: ManifestHeader | null = null;
@@ -194,8 +199,10 @@ export class ScanClient {
         // working offline too.
         const prev = this.byId.get(r.ticketId);
         if (prev && prev.shortCode !== r.shortCode) this.byShort.delete(prev.shortCode);
+        for (const c of prev?.legacyCodes ?? []) this.byLegacy.delete(c);
         this.byId.set(r.ticketId, r);
         this.byShort.set(r.shortCode, r);
+        for (const c of r.legacyCodes ?? []) this.byLegacy.set(c, r);
       }
       cursor = page.cursor;
       first = false;
@@ -225,6 +232,7 @@ export class ScanClient {
         header: this.snapshot.header,
         byId: this.byId,
         byShortCode: this.byShort,
+        byLegacyCode: this.byLegacy,
         admitted: this.admitted,
         lastSyncAt: new Date(this.snapshot.lastSyncAt),
       },

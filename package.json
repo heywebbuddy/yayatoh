@@ -24,6 +24,7 @@
     "migrate:legacy:validate": "node tools/legacy-migrate/cli.ts validate",
     "migrate:legacy:synth": "node tools/legacy-migrate/cli.ts synth",
     "migrate:legacy:demo": "node tools/legacy-migrate/cli.ts demo",
+    "migrate:legacy:order-links": "node tools/legacy-migrate/cli.ts order-links",
     "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/sdk generate:check",
     "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
   },

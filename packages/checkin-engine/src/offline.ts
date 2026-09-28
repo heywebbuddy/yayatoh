@@ -15,6 +15,11 @@ export interface ManifestRow {
   readonly holderName: string;
   readonly emailHash: string;
   readonly issuedAt: string;
+  /**
+   * Migrated tickets (M2.2c): the legacy QR payloads that still admit this ticket, as lookup
+   * hashes (`lookupHash(salt, payload)`), so old printed and app QR codes scan offline too.
+   */
+  readonly legacyCodes?: readonly string[];
 }
 
 export interface ManifestHeader {
@@ -124,6 +129,8 @@ export interface OfflineState {
   readonly header: ManifestHeader;
   readonly byId: ReadonlyMap<string, ManifestRow>;
   readonly byShortCode: ReadonlyMap<string, ManifestRow>;
+  /** Legacy QR payload lookup hash → row (migrated tickets; see `ManifestRow.legacyCodes`). */
+  readonly byLegacyCode?: ReadonlyMap<string, ManifestRow>;
   /** `${ticketId}:${day}` admitted on this device. */
   readonly admitted: ReadonlySet<string>;
   /** When this device last completed a manifest sync. */
@@ -196,7 +203,11 @@ async function entranceVerdict(
     if (v.rev < row.rev) return { verdict: 'superseded', ticketId: row.ticketId, row };
     if (v.rev > row.rev) return { verdict: 'provisional', ticketId: row.ticketId, row };
   } else {
-    row = state.byShortCode.get(code) ?? null;
+    // Legacy QR payloads first (as online), then short codes.
+    const legacy = legacyCodePayload(rawCode);
+    if (legacy && state.byLegacyCode?.size)
+      row = state.byLegacyCode.get(await lookupHash(h.salt, legacy)) ?? null;
+    row ??= state.byShortCode.get(code) ?? null;
     if (!row) return { verdict: 'invalid', ticketId: null, row: null };
   }
   const occ = row.occurrenceId ? h.occurrences?.find((o) => o.id === row.occurrenceId) : undefined;
@@ -219,6 +230,24 @@ async function entranceVerdict(
   if (state.admitted.has(admittedKey(row.ticketId, day)))
     return { verdict: 'duplicate', ticketId: row.ticketId, row };
   return { verdict: 'admit', ticketId: row.ticketId, row };
+}
+
+/**
+ * A legacy (Eventmie) QR payload: the booking's `order_number`, raw or inside a JSON object
+ * (`{"order_number": …}`). Null when the text cannot be one. Same rule as the ticketing module's
+ * online lookup (`legacyQrPayload`).
+ */
+export function legacyCodePayload(raw: string): string | null {
+  const text = raw.trim();
+  if (text.startsWith('{')) {
+    try {
+      const v = (JSON.parse(text) as Record<string, unknown>).order_number;
+      return typeof v === 'string' || typeof v === 'number' ? legacyCodePayload(String(v)) : null;
+    } catch {
+      return null;
+    }
+  }
+  return /^[0-9A-Za-z_-]{6,64}$/.test(text) ? text : null;
 }
 
 /** SHA-256 of `salt:value`, hex — the manifest's offline lookup hash for a normalized email. */

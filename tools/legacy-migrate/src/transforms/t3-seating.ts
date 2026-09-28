@@ -72,7 +72,7 @@ export async function t3Seating(ctx: StepContext): Promise<void> {
       published: boolean;
       repetitive: boolean;
       name: string;
-      charts: { label: string; converted: ConvertedChart; chartId: number }[];
+      charts: { label: string; converted: ConvertedChart; layoutId: string }[];
     }
   >();
   const exceptions: { kind: string; legacy_id: string; detail: Record<string, unknown> }[] = [];
@@ -132,7 +132,7 @@ export async function t3Seating(ctx: StepContext): Promise<void> {
       name: c.event_name ?? '',
       charts: [],
     };
-    ev.charts.push({ label, converted, chartId: c.id });
+    ev.charts.push({ label, converted, layoutId });
     perEvent.set(c.event_id, ev);
   }
 
@@ -150,10 +150,7 @@ export async function t3Seating(ctx: StepContext): Promise<void> {
     }
     const doc = mergeCharts(inst, eventId, ev.charts);
     const planId = detUuid(null, legacyKey(inst, 'event_layouts', eventId));
-    const sourceLayout =
-      ev.charts.length === 1
-        ? detUuid(null, legacyKey(inst, 'seatcharts', ev.charts[0]?.chartId ?? 0))
-        : null;
+    const sourceLayout = ev.charts.length === 1 ? (ev.charts[0]?.layoutId ?? null) : null;
     const placed = placedSeats(doc);
     await ctx.sql`delete from seating.event_seats where event_id = ${eventId} and org_id = ${ev.org}`;
     await ctx.sql`
