@@ -221,7 +221,8 @@ describe('attendee list filters: ticket type and check-in (M1.8f)', () => {
     const f = await executeQuery(attendeeExportBulk.file, { operationId: op.operationId }, a.ctx(), ports);
     const lines = f.content.replace(/^﻿/, '').trimEnd().split('\r\n').slice(1);
     expect(lines.map((l) => l.split(',')[0]).sort()).toEqual(['Ada', 'Cal']);
-    expect(lines.every((l) => l.endsWith(',Yes'))).toBe(true);
+    // Checked in (then the Seat column, empty here: no seating plan).
+    expect(lines.every((l) => l.endsWith(',Yes,'))).toBe(true);
   });
 
   it("viewers can filter; org B sees none of org A's attendees", async () => {

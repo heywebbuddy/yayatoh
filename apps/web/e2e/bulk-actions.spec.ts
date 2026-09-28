@@ -336,7 +336,8 @@ test.describe('attendee filters: ticket type and check-in (M1.8f)', () => {
     expect(csv).toContain(`${ben},`);
     expect(csv).not.toContain(cy);
     expect(csv.trim().split('\r\n')).toHaveLength(2);
-    expect(csv.trim().endsWith(',Yes')).toBe(true);
+    // Checked in, then the Seat column (empty: no seating plan here).
+    expect(csv.trim().endsWith(',Yes,')).toBe(true);
 
     // Labels on "everything matching" follow the check-in filter too.
     await bulk.getByLabel('The 1 matching').check();
