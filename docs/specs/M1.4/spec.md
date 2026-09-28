@@ -73,7 +73,8 @@
 - **M1.4b:** done (above).
 - **M1.4c:** venues (directory, org-owned, quote requests), categories and tags. **Done, see below.**
 - **M1.4d:** content sections, announcements, the private-info portal, access codes, short URLs, online events. **Done, see below.**
-- **M1.4e:** media pipeline (R2 + re-encode, SVG neutralized; blocked on the owner's Cloudflare account), tenant CMS, reviews.
+- **M1.4e:** media pipeline (R2 + re-encode, SVG neutralized; blocked on the owner's Cloudflare account).
+- **M1.4g:** tenant CMS (pages and blog) and event reviews. **Done, see below.**
 - **M1.4f:** lightweight sessions, speakers, exhibitors and sponsors; AI drafting with the credits ledger.
 - **Authorization for event roles** (`scopeFilter()`) arrives with the first event-role consumer, check-in in M1.9. The assignments are stored now.
 
@@ -176,3 +177,65 @@
 | D5 | Short links: automatic per event, vanity validation, global uniqueness across orgs, 308 to the canonical URL, drafts/archived don't resolve | `events/tests/short-code.test.ts`, `event-content.int.test.ts`, `e2e/event-content.spec.ts` |
 | D6 | Isolation: every new tenant table has fixture rows for both orgs | `isolation.int.test.ts` |
 | D7 | Viewers are denied on every new organizer screen (hidden controls and server refusal); axe on every state; Arabic RTL; no horizontal scroll at 375 | `e2e/venues.spec.ts`, `e2e/event-content.spec.ts` |
+
+## M1.4g — tenant CMS (pages and blog) and event reviews (done)
+**Risk tags:** `db-migration`, `tenancy` (owner approval). Defaults pending the owner are listed in `docs/owner-inbox.md` ("Tenant CMS and reviews").
+
+**Legacy (reference only):** yayatoh.com and abc.yayatoh.com run Voyager `posts` and `pages` as the CMS: `/blogs` (12 per page), `/blogs/{slug}`, `/pages/{slug}`; abc uses posts as landing pages ("Become a vendor", "Book your hotel"). Reviews are a `reviews` table with a per-event `show_reviews` switch and organizer ratings (research/10). The new paths are the same, so abc URLs stay identical.
+
+### Module `cms` (tier 1, schema `cms`)
+- **Tier:** the roadmap's "content" slot (§3.5). It needs no other module: the author is the acting member (`ctx.actor`) with a display-name snapshot from the console session. Marketplace (tier 6) reads it for the navigation and sitemaps.
+- **`cms.entries`** (tenant table): `kind` page | post, `slug`, `title` (1–160), `excerpt` (≤ 300), `body` (≤ 20,000, the M1.4d Markdown subset), `status` draft | published | archived, `published_at`, `seo_title` (≤ 70), `seo_description` (≤ 160), `author_user_id`, `author_name`. CHECKs on every length and enum; `UNIQUE (org_id, kind, slug)`.
+- **Slugs:** lowercase `a-z0-9` with single hyphens, ≤ 80. Derived from the title (accents folded) with a `-2`, `-3` suffix on a clash when left empty; a typed slug must be free (`conflict`, reason `taken`) and well formed (reason `format` / `too_long`). **Frozen once first published** (reason `frozen`).
+- **Bodies** are sanitized on every write (`sanitizeMarkdown`: control and bidi-override characters stripped, length capped) and parsed to React elements on every render (raw HTML stays text; only http(s)/mailto links). The Markdown subset moved from `events` to `@yayatoh/contracts` so tier 1 can use it; `events` re-exports it unchanged.
+- **Lifecycle:** draft → published ⇄ draft (unpublish), draft/published → archived, archived → published. Re-publishing keeps the first `published_at`. Delete removes the row.
+- **Commands** (`tenantCommand`, audited): `createEntry`, `updateEntry`, `setEntryStatus` (publish / unpublish / archive), `deleteEntry`. Permission `marketing:write` (owner, admin, manager, marketing); reads `org:read` (viewers included). **Events:** `cms.entry_created@1`, `cms.page_published@1`, `cms.post_published@1`, `cms.entry_unpublished@1`, `cms.entry_archived@1`, `cms.entry_deleted@1` (payload org, entry id, kind, slug).
+- **Public reads** (under the org's RLS; the org comes from the host or the organizer slug, never the request): `publicEntries` (12 per page, newest first), `publicEntry`, `navPages`, `sitemapEntries`, through allowlisted DTOs (no ids, no author account). Drafts and archived entries are 404.
+- **Hook (M1.4e):** no cover image yet. The media pipeline adds `cover_media_id` and a `cover` field on the public DTOs; the JSON-LD `image` uses the org's OG image until then.
+
+### Web: CMS
+- **Console** "Pages & blog" (`/o/{org}/content`, org nav `siteContent`): Blog posts / Pages tabs, status and update date, "New post / New page", the editor (title, address, summary, Markdown text with a **Preview** toggle that renders exactly like the public page, search title and description), field errors next to their fields, Publish / Unpublish / Archive, **Delete with a confirmation step** (focus moves to "Yes, delete"; Cancel returns it). Viewers see a read-only note and the rendered text, no controls; `/content/new` refuses them; a stale form is refused by the server.
+- **Public routes** (the legacy paths): tenant sites `{host}/blogs`, `/blogs/{slug}`, `/pages/{slug}` (proxy rewrites to `/t/{org}/…`); organizer pages on the marketplace `yayatoh.com/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}` (`/organizers/…` 308s there); the marketplace's own `/blogs`, `/blogs/{slug}`, `/pages/{slug}` show the org named in `MARKETPLACE_CONTENT_ORG` (the platform org at ELT; unset = 404).
+- **Canonical** (as events, roadmap §4.2): the content org → the apex; an org with a tenant site → its primary host; otherwise the apex organizer path. 13 hreflang + x-default; later blog-index pages are `noindex`. **JSON-LD `BlogPosting`** on posts (headline, dates, author Person or the org, publisher, canonical URL; `<` escaped). Post dates in the org's timezone.
+- **Sitemaps:** a tenant host lists its org's `/blogs` and entries when it is their canonical home; the marketplace lists `/o/{slug}/…` content of listed organizers without a tenant site, and the content org's `/blogs` and `/pages/…`.
+- **Caching:** every public CMS read goes through `publicCached({ org })` (org-scoped key and tag); every console write calls `updateTag` on the org's tags (and the marketplace's), so publishing shows at once.
+- **Navigation:** Public site → **Site navigation** lists the org's pages (drafts marked); checked ones are stored in `marketplace.site_settings.nav_page_ids` (≤ 8, validated as this org's pages by `pageIdsTx`) and appear in the tenant site header after "Blog" once published. The organizer page links "Blog" when there are posts.
+
+### Module `reviews` (tier 5, schema `reviews`)
+- **Tier:** eligibility reads the buyer's order and tickets (`orders`, tier 4, via the new `orderHoldingTx`) and the event (`events`, tier 2) inside the review's own tenant transaction. Composite FKs point down: `reviews → events.events`, `reviews → orders.orders`.
+- **`reviews.reviews`:** event, order, `author_key` = SHA-256(org id ∶ normalized buyer email), `author_display` ("First L."), `rating` 1–5, `body` (plain text ≤ 1,000, control/bidi characters stripped), `status` visible | hidden, `hidden_reason` (required when hidden, ≤ 300), `moderated_at/by`. **`UNIQUE (org_id, event_id, author_key)`**: one review per holder per event, also under concurrency and across several orders of the same person. **`reviews.review_reports`:** reason (spam, offensive, off-topic, personal info, other), note ≤ 500, reporter key (hashed device), status open | dismissed | actioned; one per reporter per review.
+- **Eligibility** (`domain/eligibility.ts`, pure): the buyer still holds a live ticket; the event took place (published, completed or archived: not cancelled or postponed); **the ticket's date has ended** (an instant: a multi-date ticket uses its own date, else the event's end), so a late evening in Los Angeles is still "not ended" on the next UTC day; the window closes at **the end of the local calendar day 90 days after the last date's end, in the event's timezone**. **A valid ticket qualifies without check-in (pending owner)**: many events never scan, and a no-show still paid.
+- **Commands:** `submitReview` (`public:review_submit`; the manage-link token is re-verified under the org's RLS; refusals carry `reason` not_ended / window_closed / not_held / no_ticket / already_reviewed), `hideReview` / `unhideReview` (reason required, `events:write`, so event managers too; audited with the reason), `dismissReports`, `reportReview` (`public:review_report`, visible reviews only). `listReviewsQuery` (`events:read`: viewers read) with filters all / visible / hidden / reported. **Events:** `review.submitted@1`, `review.hidden@1`, `review.unhidden@1`, `review.reported@1`.
+- **Public read** `publicReviews(org, event)`: count and mean of visible reviews (one decimal) and the 5 latest through `PublicReviewDto` (rating, text, "First L.", date, and an id to report it). **No email, order or full name** ever leaves.
+
+### Web: reviews
+- **Order page** (`/orders/{token}`, M1.5 manage link): "Review this event" with the window's closing date, a 1–5 radio group (arrow keys) and optional text with a character count; "you can review once it ends ({date})" before the end; "closed on {date}" after; the buyer's own review afterwards (with a note if the organizer hid it). Submissions are rate-limited (`reviewSubmit`: 5 per device per 10 min, 5 per order per hour).
+- **Public event page:** a "Reviews" section (stars, "4.5 out of 5 · 2 reviews", the latest reviews, **Report** per review with an inline form; `reviewReport`: 10 per device per 10 min). **JSON-LD `aggregateRating` only from 3 visible reviews** (`MIN_REVIEWS_FOR_RATING`, pending owner). Cached under the org's tag; submissions and moderation revalidate it.
+- **Console** event nav **Reviews** (`/o/{org}/e/{event}/reviews`): average and visible count, filters, each review with its reports; Hide / Show with a reason, Dismiss reports. Viewers see a read-only note and no controls; a stale form is refused.
+
+### Migration `0050_common_stardust.sql` (renumber on merge)
+- New schemas `cms` (`entries`) and `reviews` (`reviews`, `review_reports`): tenantTable, ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, composite FK `review_reports → reviews`.
+- Existing table: `marketplace.site_settings.nav_page_ids uuid[] NOT NULL DEFAULT '{}'` (metadata-only).
+- **Hand edits** (between `-- hand-written: begin/end`): (1) `site_settings_nav_page_ids_check` added `NOT VALID` then `VALIDATE`; (2) `entries_org_fk`, `reviews_org_fk`, `review_reports_org_fk` → `tenancy.organizations` (cascade); (3) cross-module composite FKs `reviews_event_fk` → `events.events (org_id, id)` and `reviews_order_fk` → `orders.orders (org_id, id)` (cascade; new tables, so no `NOT VALID` needed).
+
+### Later / not yet (M1.4g)
+- Cover images and inline images in posts (M1.4e media pipeline); rich-text editing beyond the Markdown subset; scheduled publishing; revisions; per-locale translations of a post.
+- A per-event "show reviews" switch (legacy `show_reviews`, mapped at ELT) and organizer-level ratings on the organizer page (legacy profile ratings); a buyer editing or deleting their review; reviews from signed-in accounts without the manage link (no buyer account area exists yet); organizer replies; a "verified attendee" badge from check-ins.
+- **DSAR** coverage of reviews: `privacy` is tier 5 like `reviews`, so its export/erase can't import it; it needs a port registered in the composition root. Reviews hold no email (only a per-org hash and "First L."), so erasure by email needs that hash computed there. Legacy reviews and posts are imported by the ELT (M2.x).
+- `/v1` endpoints for CMS and reviews; notifications to the organizer on new reviews and reports (M1.10 subscribes to `review.submitted@1` / `review.reported@1`).
+- The marketplace sitemap covers organizer content only for organizers with listings (it has no cross-tenant CMS index); a SECURITY DEFINER sitemap function comes with the content org at ELT if needed.
+
+### Acceptance (M1.4g)
+| ID | Criterion | Test |
+|---|---|---|
+| G1 | Slug rules (derive, suffix, validation, frozen after publish), sanitizer on CMS bodies, input schemas | `packages/modules/cms/tests/slug.test.ts`, `packages/testing/tests/cms.int.test.ts` |
+| G2 | CMS lifecycle: drafts/archived are 404 publicly, publish keeps the first date, unpublish, delete; allowlisted public DTO | `cms.int.test.ts`, `apps/web/e2e/cms.spec.ts` |
+| G3 | CMS permissions: viewers read only (hidden controls, `/content/new` refused, stale form refused), marketing writes, another org can't read or change | `cms.int.test.ts`, `cms.spec.ts` |
+| G4 | Audit on every CMS write; `cms.post_published@1` etc. in the outbox | `cms.int.test.ts` |
+| G5 | Public render on tenant site, organizer page and marketplace `/blogs`; blog index; sanitized Markdown; JSON-LD `BlogPosting` valid; canonical + 13 hreflang + x-default; sitemap entry added on publish and removed on unpublish; keyboard delete with confirmation; axe; Arabic RTL; no horizontal scroll at 375 | `cms.spec.ts`, `apps/web/tests/cms-seo.test.ts` |
+| G6 | Tenant-site navigation links this org's pages only (drafts hidden until published); persists | `cms.int.test.ts`, `cms.spec.ts` |
+| G7 | Eligibility: not ended (instant, UTC-day trap), window closes at the local day boundary (Honolulu, DST), multi-date, no ticket, not held, already reviewed; "First L." | `packages/modules/reviews/tests/eligibility.test.ts` |
+| G8 | One review per holder under concurrency and across two orders; unknown tokens and other orgs refused; no email stored or shown | `packages/testing/tests/reviews.int.test.ts` |
+| G9 | Moderation: hide/unhide need a reason, audited with it, `review.hidden@1`; viewers read only; other org refused; reports once per device, dismiss, hiding actions them | `reviews.int.test.ts`, `apps/web/e2e/reviews.spec.ts` |
+| G10 | In the browser: future event refused with the opening date; past event allowed; validation; keyboard rating; duplicate refused from a stale tab; public aggregate and JSON-LD `aggregateRating` only from 3; report; hide removes it from the aggregate; viewer denied; axe on every state; Arabic RTL | `reviews.spec.ts`, `cms-seo.test.ts` |
+| G11 | Isolation: every new tenant table has rows for both fixture orgs; RLS FORCE | `packages/testing/tests/isolation.int.test.ts` |

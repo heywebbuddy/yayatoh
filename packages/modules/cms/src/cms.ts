@@ -20,8 +20,8 @@ import {
 } from './dto.ts';
 import { entries } from './schema.ts';
 
-/** Entries shown per page of a public blog index. */
-export const POSTS_PER_PAGE = 10;
+/** Entries shown per page of a public blog index (12, as the legacy Voyager blog). */
+export const POSTS_PER_PAGE = 12;
 /** Pages a tenant site's navigation may link (site settings). */
 export const MAX_NAV_PAGES = 8;
 
