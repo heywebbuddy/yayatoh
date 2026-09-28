@@ -1,24 +1,24 @@
 import { AttendeeLabel } from '@yayatoh/attendees';
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { DomainError } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray, isNotNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { type ChartKey, chartKeyTx, onChart } from './chart.ts';
 import { pickSeats } from './domain/assign.ts';
 import { activeAdaRule } from './domain/rules.ts';
-import { seatingRulesTx } from './rules.ts';
+import { ruleStartTx, seatingRulesTx } from './rules.ts';
 import { eventLayouts, eventSeats } from './schema.ts';
 
 /** At most this many seats go to a group in one allocation (a whole room of tables). */
 export const MAX_GROUP_SEATS = 2_000;
 
-async function planItemsTx(tx: TenantTx, eventId: string) {
+async function planItemsTx(tx: TenantTx, eventId: string, key: ChartKey) {
   const [row] = await tx
     .select({ doc: eventLayouts.doc })
     .from(eventLayouts)
-    .where(eq(eventLayouts.eventId, eventId));
+    .where(onChart(eventLayouts, eventId, key));
   if (!row) throw new DomainError('not_found', 'This event has no floor plan');
   return FloorplanDoc.parse(row.doc).items;
 }
@@ -34,6 +34,8 @@ export const allocateGroupSeatsCommand = tenantCommand({
   name: 'seating.allocateGroup',
   input: z.object({
     eventId: z.uuid(),
+    /** The date (M1.7g): the chart it uses. */
+    occurrenceId: z.uuid().nullable().optional(),
     label: AttendeeLabel,
     itemId: z.uuid(),
     count: z.int().min(1).max(MAX_GROUP_SEATS).optional(),
@@ -42,7 +44,8 @@ export const allocateGroupSeatsCommand = tenantCommand({
   entitlement: 'seating',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {
-    const items = await planItemsTx(tx, input.eventId);
+    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
+    const items = await planItemsTx(tx, input.eventId, key);
     const item = items.find((i) => i.id === input.itemId);
     if (!item || item.kind === 'object')
       throw new DomainError('not_found', 'No such table or row', { field: 'itemId' });
@@ -56,13 +59,13 @@ export const allocateGroupSeatsCommand = tenantCommand({
           accessible: eventSeats.accessible,
         })
         .from(eventSeats)
-        .where(and(eq(eventSeats.eventId, input.eventId), eq(eventSeats.itemId, item.id)))
+        .where(and(onChart(eventSeats, input.eventId, key), eq(eventSeats.itemId, item.id)))
         .orderBy(eventSeats.seatUuid)
         .for('update')
     ).sort((x, y) => (planOrder.get(x.seatUuid) ?? 0) - (planOrder.get(y.seatUuid) ?? 0));
     const rules = await seatingRulesTx(tx, input.eventId);
-    const event = rules.length ? await findEventTx(tx, input.eventId) : null;
-    const ada = event ? activeAdaRule(rules, event.startsAt, ctx.now) : null;
+    const startsAt = rules.length ? await ruleStartTx(tx, input.eventId, input.occurrenceId) : null;
+    const ada = startsAt ? activeAdaRule(rules, startsAt, ctx.now) : null;
     const skipAccessible = ada?.severity === 'enforce';
     const candidates = rows.map((r) => ({
       seatUuid: r.seatUuid,
@@ -83,7 +86,7 @@ export const allocateGroupSeatsCommand = tenantCommand({
       .set({ status: 'blocked', blockReason: 'group', groupLabel: input.label, updatedAt: ctx.now })
       .where(
         and(
-          eq(eventSeats.eventId, input.eventId),
+          onChart(eventSeats, input.eventId, key),
           eq(eventSeats.status, 'available'),
           inArray(eventSeats.seatUuid, picked.seats),
         ),
@@ -97,24 +100,30 @@ export const allocateGroupSeatsCommand = tenantCommand({
     action: 'seating.group_allocate',
     targetType: 'event',
     targetId: input.eventId,
-    data: { label: input.label, itemId: input.itemId, allocated: r?.allocated },
+    data: {
+      label: input.label,
+      itemId: input.itemId,
+      allocated: r?.allocated,
+      occurrenceId: input.occurrenceId ?? null,
+    },
   }),
 });
 
 /** Give a group's unused seats back to sale. Seats its members sit in stay theirs. */
 export const releaseGroupSeatsCommand = tenantCommand({
   name: 'seating.releaseGroup',
-  input: z.object({ eventId: z.uuid(), label: AttendeeLabel }),
+  input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid().nullable().optional(), label: AttendeeLabel }),
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {
+    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx
       .update(eventSeats)
       .set({ status: 'available', blockReason: null, groupLabel: null, updatedAt: ctx.now })
       .where(
         and(
-          eq(eventSeats.eventId, input.eventId),
+          onChart(eventSeats, input.eventId, key),
           eq(eventSeats.status, 'blocked'),
           eq(eventSeats.blockReason, 'group'),
           eq(eventSeats.groupLabel, input.label),
@@ -128,7 +137,7 @@ export const releaseGroupSeatsCommand = tenantCommand({
     action: 'seating.group_release',
     targetType: 'event',
     targetId: input.eventId,
-    data: { label: input.label, released: r?.released },
+    data: { label: input.label, released: r?.released, occurrenceId: input.occurrenceId ?? null },
   }),
 });
 
@@ -148,11 +157,12 @@ export type SeatGroupDto = z.infer<typeof SeatGroupDto>;
 /** An event's groups and their seat blocks (organizer console). */
 export const seatGroupsQuery = tenantQuery({
   name: 'seating.groups',
-  input: z.object({ eventId: z.uuid() }),
+  input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid().nullable().optional() }),
   output: z.array(SeatGroupDto),
   entitlement: 'seating',
   permission: 'events:read',
   handler: async ({ input, tx }) => {
+    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx
       .select({
         label: eventSeats.groupLabel,
@@ -161,9 +171,9 @@ export const seatGroupsQuery = tenantQuery({
         blockReason: eventSeats.blockReason,
       })
       .from(eventSeats)
-      .where(and(eq(eventSeats.eventId, input.eventId), isNotNull(eventSeats.groupLabel)));
+      .where(and(onChart(eventSeats, input.eventId, key), isNotNull(eventSeats.groupLabel)));
     if (rows.length === 0) return [];
-    const items = await planItemsTx(tx, input.eventId);
+    const items = await planItemsTx(tx, input.eventId, key);
     const order = new Map(items.map((i, n) => [i.id, n]));
     const itemOf = new Map(
       items.flatMap((i) => (i.kind === 'object' ? [] : [[i.id, { kind: i.kind, label: i.label }] as const])),

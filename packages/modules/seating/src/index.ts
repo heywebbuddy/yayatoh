@@ -8,6 +8,7 @@ export {
   unassignSeatsCommand,
 } from './assignments.ts';
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
+export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
 export {
   ASSIGN_SEAT_STATES,
@@ -72,18 +73,25 @@ export {
 export {
   assignSeatCategoryCommand,
   blockSeatsCommand,
+  copySeat,
+  DateChartDto,
+  dateChartsQuery,
   EventSeatingDto,
   eventSeatingQuery,
   getLayoutQuery,
+  giveDateOwnChartCommand,
   LayoutSummaryDto,
   listLayoutsQuery,
   PublicSeatMapDto,
   publicSeatMap,
+  publicUnderlayShown,
   publishEventLayoutCommand,
   saveLayoutCommand,
   setEventLayoutCommand,
+  useEventPlanForDateCommand,
 } from './layouts.ts';
 export {
+  chartForDate,
   createSeatFeed,
   listenForSeatChanges,
   loadSeatSnapshot,
@@ -138,3 +146,9 @@ export {
   setFinderSettingsCommand,
   verifyFinderCodeCommand,
 } from './seat-finder.ts';
+export {
+  attendeeSeatLabelsQuery,
+  attendeeSeatLabelsTx,
+  SeatPerson,
+  seatLabelWithSection,
+} from './seat-labels.ts';

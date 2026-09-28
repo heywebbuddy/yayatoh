@@ -13,7 +13,7 @@ export const UploadTicket = z.object({
   orgId: z.uuid(),
   ownerType: z.enum(['event', 'venue', 'org']),
   ownerId: z.uuid(),
-  slot: z.enum(['cover', 'gallery', 'photo', 'logo']),
+  slot: z.enum(['cover', 'gallery', 'photo', 'logo', 'floorplan']),
   userId: z.string().min(1).max(100),
   /** Unix seconds. */
   expiresAt: z.number().int(),

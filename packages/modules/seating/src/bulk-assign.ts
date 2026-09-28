@@ -1,15 +1,15 @@
 import { AttendeeFilter, AttendeeLabel, attendeesByIdsTx, resolveAttendeeIdsTx } from '@yayatoh/attendees';
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { bulkCommands, defineBulkAction } from '@yayatoh/platform';
-import { and, eq, inArray, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { releaseAttendeeSeatsTx } from './assignments.ts';
+import { type ChartKey, chartKeyTx, onChart } from './chart.ts';
 import { type BulkAssignUndo, type ChunkPerson, planChunk, planUndo } from './domain/bulk-assign.ts';
 import { activeAdaRule } from './domain/rules.ts';
-import { seatingRulesTx } from './rules.ts';
+import { ruleStartTx, seatingRulesTx } from './rules.ts';
 import { ASSIGNABLE_BLOCKS, eventLayouts, eventSeats, seatAssignments } from './schema.ts';
 
 /** Where a bulk assignment seats people: a table or row, a section, anywhere, or a group's block. */
@@ -23,6 +23,8 @@ export type BulkAssignTarget = z.infer<typeof BulkAssignTarget>;
 
 const Params = z.object({
   target: BulkAssignTarget,
+  /** The date (M1.7g): people are seated on the chart it uses. Omitted = the event plan. */
+  occurrenceId: z.uuid().nullable().optional(),
   /** Staff chose to use kept-back accessible seats on purpose (audited). */
   overrideRules: z.boolean().default(false),
 });
@@ -32,13 +34,18 @@ const PriorSeatJson = z.object({
   pinned: z.boolean(),
   priorBlock: z.enum(ASSIGNABLE_BLOCKS).nullable(),
 });
-const UndoJson = z.object({ given: z.uuid(), prev: PriorSeatJson.nullable() });
+const UndoJson = z.object({
+  /** The date's own chart the operation seated people on (M1.7g); absent = the event plan. */
+  chart: z.uuid().optional(),
+  given: z.uuid(),
+  prev: PriorSeatJson.nullable(),
+});
 
-async function planTx(tx: TenantTx, eventId: string) {
+async function planTx(tx: TenantTx, eventId: string, key: ChartKey) {
   const [row] = await tx
     .select({ doc: eventLayouts.doc })
     .from(eventLayouts)
-    .where(eq(eventLayouts.eventId, eventId));
+    .where(onChart(eventLayouts, eventId, key));
   if (!row) throw new DomainError('not_found', 'This event has no floor plan');
   return FloorplanDoc.parse(row.doc);
 }
@@ -99,13 +106,16 @@ export const seatAssignAction = defineBulkAction({
     target: p.target.kind,
     ...(p.target.kind === 'group' ? { group: p.target.label } : {}),
     ...(p.overrideRules ? { overrideRules: true } : {}),
+    ...(p.occurrenceId ? { occurrenceId: p.occurrenceId } : {}),
   }),
   resolve: resolveAttendeeIdsTx,
   run: async (tx, ctx, ids, params, meta) => {
     if (!meta.eventId) throw new DomainError('validation_failed', 'An event is required');
     const eventId = meta.eventId;
     const orgId = requireOrg(ctx);
-    const doc = await planTx(tx, eventId);
+    const key = await chartKeyTx(tx, eventId, params.occurrenceId);
+    const chart = { eventId, key };
+    const doc = await planTx(tx, eventId, key);
     const inTarget = targetWhere(doc, params.target);
     const order = planOrderOf(doc);
 
@@ -142,7 +152,7 @@ export const seatAssignAction = defineBulkAction({
           accessible: eventSeats.accessible,
         })
         .from(eventSeats)
-        .where(and(eq(eventSeats.eventId, eventId), inTarget))
+        .where(and(onChart(eventSeats, eventId, key), inTarget))
         .orderBy(eventSeats.seatUuid)
         .for('update')
     ).sort((x, y) => (order.get(x.seatUuid) ?? 0) - (order.get(y.seatUuid) ?? 0));
@@ -157,7 +167,7 @@ export const seatAssignAction = defineBulkAction({
             priorBlock: seatAssignments.priorBlock,
           })
           .from(seatAssignments)
-          .where(and(eq(seatAssignments.eventId, eventId), inArray(seatAssignments.attendeeId, [...ids])))
+          .where(and(onChart(seatAssignments, eventId, key), inArray(seatAssignments.attendeeId, [...ids])))
       ).map((c) => [c.attendeeId, c]),
     );
 
@@ -178,8 +188,8 @@ export const seatAssignAction = defineBulkAction({
     });
 
     const rules = await seatingRulesTx(tx, eventId);
-    const event = rules.length ? await findEventTx(tx, eventId) : null;
-    const ada = event ? activeAdaRule(rules, event.startsAt, ctx.now) : null;
+    const startsAt = rules.length ? await ruleStartTx(tx, eventId, params.occurrenceId) : null;
+    const ada = startsAt ? activeAdaRule(rules, startsAt, ctx.now) : null;
     const plan = planChunk(
       seats.map((s) => ({
         seatUuid: s.seatUuid,
@@ -195,7 +205,7 @@ export const seatAssignAction = defineBulkAction({
 
     // Movers leave their old seats first; the release trigger gives each back what it had.
     const moving = plan.placements.map((p) => p.attendeeId).filter((id) => current.has(id));
-    await releaseAttendeeSeatsTx(tx, ctx, moving);
+    await releaseAttendeeSeatsTx(tx, ctx, moving, chart);
     const seatOf = new Map(seats.map((s) => [s.seatUuid, s]));
     if (plan.placements.length) {
       const wanted = plan.placements.map((p) => p.seatUuid);
@@ -204,7 +214,7 @@ export const seatAssignAction = defineBulkAction({
         .set({ status: 'blocked', blockReason: 'assigned', updatedAt: ctx.now })
         .where(
           and(
-            eq(eventSeats.eventId, eventId),
+            onChart(eventSeats, eventId, key),
             inArray(eventSeats.seatUuid, wanted),
             sql`(${eventSeats.status} = 'available' or (${eventSeats.status} = 'blocked' and ${eventSeats.blockReason} = 'group'))`,
           ),
@@ -218,6 +228,7 @@ export const seatAssignAction = defineBulkAction({
           return {
             orgId,
             eventId,
+            occurrenceId: key,
             attendeeId: p.attendeeId,
             itemId: s?.itemId as string,
             seatUuid: p.seatUuid,
@@ -237,6 +248,7 @@ export const seatAssignAction = defineBulkAction({
         if (!seatUuid) return { id, ok: true };
         const c = current.get(id);
         const undo: BulkAssignUndo = {
+          ...(key ? { chart: key } : {}),
           given: seatUuid,
           prev: c ? { seatUuid: c.seatUuid, pinned: c.pinned, priorBlock: c.priorBlock } : null,
         };
@@ -247,72 +259,100 @@ export const seatAssignAction = defineBulkAction({
   },
   undo: async (tx, ctx, items, _params) => {
     if (items.length === 0) return;
-    const orgId = requireOrg(ctx);
-    const parsed = items.map((i) => ({ attendeeId: i.id, undo: UndoJson.parse(i.undo) }));
-    const current = await tx
-      .select({
-        attendeeId: seatAssignments.attendeeId,
-        seatUuid: seatAssignments.seatUuid,
-        eventId: seatAssignments.eventId,
-      })
-      .from(seatAssignments)
-      .where(
+    // One operation seats people on one chart (M1.7g).
+    const byChart = new Map<ChartKey, { attendeeId: string; undo: z.infer<typeof UndoJson> }[]>();
+    for (const i of items) {
+      const undo = UndoJson.parse(i.undo);
+      const key = undo.chart ?? null;
+      byChart.set(key, [...(byChart.get(key) ?? []), { attendeeId: i.id, undo }]);
+    }
+    for (const [key, parsed] of byChart) await undoChartTx(tx, ctx, key, parsed);
+  },
+});
+
+async function undoChartTx(
+  tx: TenantTx,
+  ctx: Parameters<typeof releaseAttendeeSeatsTx>[1],
+  key: ChartKey,
+  parsed: { attendeeId: string; undo: z.infer<typeof UndoJson> }[],
+): Promise<void> {
+  const orgId = requireOrg(ctx);
+  const chartWhere = key ? eq(seatAssignments.occurrenceId, key) : isNull(seatAssignments.occurrenceId);
+  const current = await tx
+    .select({
+      attendeeId: seatAssignments.attendeeId,
+      seatUuid: seatAssignments.seatUuid,
+      eventId: seatAssignments.eventId,
+    })
+    .from(seatAssignments)
+    .where(
+      and(
+        chartWhere,
         inArray(
           seatAssignments.attendeeId,
           parsed.map((p) => p.attendeeId),
         ),
-      );
-    const plan = planUndo(parsed, new Map(current.map((c) => [c.attendeeId, c.seatUuid])));
-    const eventOf = new Map(current.map((c) => [c.attendeeId, c.eventId]));
-    await releaseAttendeeSeatsTx(tx, ctx, plan.release);
-    if (plan.restore.length === 0) return;
-    await tx.execute(sql`set local lock_timeout = '5s'`);
-    // Back to the previous seat, if it is still what they left behind (free, or its block).
-    const seats = await tx
-      .select({
-        seatUuid: eventSeats.seatUuid,
-        eventId: eventSeats.eventId,
-        itemId: eventSeats.itemId,
-        status: eventSeats.status,
-        blockReason: eventSeats.blockReason,
-      })
-      .from(eventSeats)
-      .where(
-        and(
-          inArray(eventSeats.eventId, [...new Set(eventOf.values())]),
-          inArray(
-            eventSeats.seatUuid,
-            plan.restore.map((r) => r.prev.seatUuid),
-          ),
+      ),
+    );
+  const plan = planUndo(parsed, new Map(current.map((c) => [c.attendeeId, c.seatUuid])));
+  const eventOf = new Map(current.map((c) => [c.attendeeId, c.eventId]));
+  for (const [eventId, ids] of groupBy(plan.release, (id) => eventOf.get(id) as string))
+    await releaseAttendeeSeatsTx(tx, ctx, ids, { eventId, key });
+  if (plan.restore.length === 0) return;
+  await tx.execute(sql`set local lock_timeout = '5s'`);
+  // Back to the previous seat, if it is still what they left behind (free, or its block).
+  const seats = await tx
+    .select({
+      seatUuid: eventSeats.seatUuid,
+      eventId: eventSeats.eventId,
+      itemId: eventSeats.itemId,
+      status: eventSeats.status,
+      blockReason: eventSeats.blockReason,
+    })
+    .from(eventSeats)
+    .where(
+      and(
+        inArray(eventSeats.eventId, [...new Set(eventOf.values())]),
+        key ? eq(eventSeats.occurrenceId, key) : isNull(eventSeats.occurrenceId),
+        inArray(
+          eventSeats.seatUuid,
+          plan.restore.map((r) => r.prev.seatUuid),
         ),
-      )
-      .orderBy(eventSeats.seatUuid)
-      .for('update');
-    const bySeat = new Map(seats.map((s) => [`${s.eventId}:${s.seatUuid}`, s]));
-    for (const r of plan.restore) {
-      const eventId = eventOf.get(r.attendeeId) as string;
-      const s = bySeat.get(`${eventId}:${r.prev.seatUuid}`);
-      const back =
-        s &&
-        (r.prev.priorBlock === null
-          ? s.status === 'available'
-          : s.status === 'blocked' && s.blockReason === r.prev.priorBlock);
-      if (!s || !back) continue;
-      await tx
-        .update(eventSeats)
-        .set({ status: 'blocked', blockReason: 'assigned', updatedAt: ctx.now })
-        .where(and(eq(eventSeats.eventId, eventId), eq(eventSeats.seatUuid, s.seatUuid)));
-      await tx.insert(seatAssignments).values({
-        orgId,
-        eventId,
-        attendeeId: r.attendeeId,
-        itemId: s.itemId,
-        seatUuid: s.seatUuid,
-        pinned: r.prev.pinned,
-        priorBlock: r.prev.priorBlock,
-      });
-    }
-  },
-});
+      ),
+    )
+    .orderBy(eventSeats.seatUuid)
+    .for('update');
+  const bySeat = new Map(seats.map((s) => [`${s.eventId}:${s.seatUuid}`, s]));
+  for (const r of plan.restore) {
+    const eventId = eventOf.get(r.attendeeId) as string;
+    const s = bySeat.get(`${eventId}:${r.prev.seatUuid}`);
+    const back =
+      s &&
+      (r.prev.priorBlock === null
+        ? s.status === 'available'
+        : s.status === 'blocked' && s.blockReason === r.prev.priorBlock);
+    if (!s || !back) continue;
+    await tx
+      .update(eventSeats)
+      .set({ status: 'blocked', blockReason: 'assigned', updatedAt: ctx.now })
+      .where(and(onChart(eventSeats, eventId, key), eq(eventSeats.seatUuid, s.seatUuid)));
+    await tx.insert(seatAssignments).values({
+      orgId,
+      eventId,
+      occurrenceId: key,
+      attendeeId: r.attendeeId,
+      itemId: s.itemId,
+      seatUuid: s.seatUuid,
+      pinned: r.prev.pinned,
+      priorBlock: r.prev.priorBlock,
+    });
+  }
+}
+
+function groupBy<T>(xs: readonly T[], keyOf: (x: T) => string): Map<string, T[]> {
+  const out = new Map<string, T[]>();
+  for (const x of xs) out.set(keyOf(x), [...(out.get(keyOf(x)) ?? []), x]);
+  return out;
+}
 
 export const seatAssignBulk = bulkCommands(seatAssignAction);

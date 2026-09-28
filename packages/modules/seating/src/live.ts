@@ -1,9 +1,9 @@
 import { type Listener, listenChannel, withTenant } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { orgChannel, type RealtimeMessage, type RealtimePublisher, tenantQuery } from '@yayatoh/platform';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { type ChartKey, chartKeyTx, onChart } from './chart.ts';
 import {
   availabilityLists,
   changedEntries,
@@ -17,7 +17,7 @@ import {
 } from './domain/live.ts';
 import { activeAdaRule } from './domain/rules.ts';
 import type { SeatStatus } from './domain/seat-state.ts';
-import { seatingRulesTx } from './rules.ts';
+import { ruleStartTx, seatingRulesTx } from './rules.ts';
 import { type EVENT_LAYOUT_STATUSES, eventLayouts, eventSeats } from './schema.ts';
 
 /**
@@ -35,11 +35,27 @@ import { type EVENT_LAYOUT_STATUSES, eventLayouts, eventSeats } from './schema.t
  */
 export const SEAT_NOTIFY_CHANNEL = 'seating_seats';
 
-export function seatChannels(orgId: string, eventId: string) {
+/**
+ * A chart's channels. The event plan keeps the event's channels; a date's own chart (M1.7g) has
+ * `org:{o}:event:{e}:date:{d}:seats` and `…:seat-states`.
+ */
+export function seatChannels(orgId: string, eventId: string, chart: ChartKey = null) {
+  const base = chart ? ['event', eventId, 'date', chart] : ['event', eventId];
   return {
-    public: orgChannel(orgId, 'event', eventId, 'seats'),
-    staff: orgChannel(orgId, 'event', eventId, 'seat-states'),
+    public: orgChannel(orgId, ...base, 'seats'),
+    staff: orgChannel(orgId, ...base, 'seat-states'),
   } as const;
+}
+
+/** The chart a date uses (system actor, under the org's RLS): its own, or the event plan. */
+export async function chartForDate(
+  orgId: string,
+  eventId: string,
+  occurrenceId: string | null | undefined,
+): Promise<ChartKey> {
+  if (!occurrenceId) return null;
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'seating.live' } });
+  return withTenant(ctx, (tx) => chartKeyTx(tx, eventId, occurrenceId));
 }
 
 export type SeatStreamKind = 'public' | 'staff';
@@ -67,18 +83,19 @@ export const StaffSeatsData = z.object({
   seats: z.record(z.uuid(), z.enum(['available', 'held', 'sold', 'assigned', 'blocked'])),
 });
 
-/** Read an event's seats as the live feed sees them (system actor, under the org's RLS). */
+/** Read a chart's seats as the live feed sees them (system actor, under the org's RLS). */
 export async function loadSeatSnapshot(
   orgId: string,
   eventId: string,
   now: Date = new Date(),
+  chart: ChartKey = null,
 ): Promise<SeatSnapshot | null> {
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'seating.live' } });
   return withTenant(ctx, async (tx) => {
     const [layout] = await tx
       .select({ status: eventLayouts.status })
       .from(eventLayouts)
-      .where(eq(eventLayouts.eventId, eventId));
+      .where(onChart(eventLayouts, eventId, chart));
     if (!layout) return null;
     const rows = (
       await tx
@@ -90,14 +107,14 @@ export async function loadSeatSnapshot(
           accessible: eventSeats.accessible,
         })
         .from(eventSeats)
-        .where(eq(eventSeats.eventId, eventId))
+        .where(onChart(eventSeats, eventId, chart))
         .orderBy(eventSeats.seatUuid)
     ).map((r) => ({ ...r, status: r.status as SeatStatus }));
     const rules = await seatingRulesTx(tx, eventId);
     let keptBack = false;
     if (rules.some((r) => r.kind === 'ada_reserved')) {
-      const event = await findEventTx(tx, eventId);
-      keptBack = event ? activeAdaRule(rules, event.startsAt, now)?.severity === 'enforce' : false;
+      const startsAt = await ruleStartTx(tx, eventId, chart);
+      keptBack = startsAt ? activeAdaRule(rules, startsAt, now)?.severity === 'enforce' : false;
     }
     const states = new Map(rows.map((r) => [r.seatUuid, liveSeatState(r.status, r.blockReason)] as const));
     return {
@@ -145,9 +162,12 @@ export interface SeatWatch {
 
 export interface SeatFeed {
   readonly epoch: string;
-  /** Start (or join) watching an event; null when it has no floor plan. */
-  watch(orgId: string, eventId: string): Promise<SeatWatch | null>;
-  /** A `seating_seats` notification ("org:event"). */
+  /**
+   * Start (or join) watching an event's chart for a date (M1.7g: its own chart, else the event
+   * plan); null when it has no floor plan.
+   */
+  watch(orgId: string, eventId: string, occurrenceId?: string | null): Promise<SeatWatch | null>;
+  /** A `seating_seats` notification ("org:event"): every watched chart of the event re-reads. */
   notify(payload: string): void;
   /** Re-read every watched event (after the LISTEN connection (re)connects). */
   resync(): void;
@@ -157,7 +177,9 @@ export interface SeatFeed {
 
 export interface SeatFeedOptions {
   readonly publisher: RealtimePublisher;
-  readonly load?: (orgId: string, eventId: string) => Promise<SeatSnapshot | null>;
+  readonly load?: (orgId: string, eventId: string, chart: ChartKey) => Promise<SeatSnapshot | null>;
+  /** Which chart a date uses (default: read it from the database). */
+  readonly resolveChart?: (orgId: string, eventId: string, occurrenceId: string) => Promise<ChartKey>;
   /** Wait this long after the first change of a burst before reading (collects the burst). */
   readonly coalesceMs?: number;
   /** At most one message per event per this interval. */
@@ -179,6 +201,7 @@ interface Buffered {
 interface Entry {
   readonly orgId: string;
   readonly eventId: string;
+  readonly chart: ChartKey;
   readonly channels: { readonly public: string; readonly staff: string };
   base: SeatSnapshot | null;
   /** The id of the state `base` represents. */
@@ -209,7 +232,9 @@ function staffData(s: SeatSnapshot, seats: Iterable<[string, LiveSeatState]>) {
 }
 
 export function createSeatFeed(opts: SeatFeedOptions): SeatFeed {
-  const load = opts.load ?? ((o: string, e: string) => loadSeatSnapshot(o, e));
+  const load = opts.load ?? ((o: string, e: string, c: ChartKey) => loadSeatSnapshot(o, e, new Date(), c));
+  const resolveChart = opts.resolveChart ?? chartForDate;
+  const keyOf = (o: string, e: string, c: ChartKey) => `${o}:${e}:${c ?? ''}`;
   const coalesceMs = opts.coalesceMs ?? 100;
   const minIntervalMs = opts.minIntervalMs ?? 500;
   const graceMs = opts.graceMs ?? 60_000;
@@ -226,8 +251,8 @@ export function createSeatFeed(opts: SeatFeedOptions): SeatFeed {
     e.flushing = true;
     e.dirty = false;
     try {
-      const next = await load(e.orgId, e.eventId);
-      if (entries.get(`${e.orgId}:${e.eventId}`) === e) await publishChanges(e, next);
+      const next = await load(e.orgId, e.eventId, e.chart);
+      if (entries.get(keyOf(e.orgId, e.eventId, e.chart)) === e) await publishChanges(e, next);
     } catch (err) {
       console.warn(`seat feed ${e.eventId}: ${(err as Error).message}`);
     } finally {
@@ -311,22 +336,23 @@ export function createSeatFeed(opts: SeatFeedOptions): SeatFeed {
           setTimeout(() => {
             if (e.refs > 0) return;
             if (e.timer) clearTimeout(e.timer);
-            entries.delete(`${e.orgId}:${e.eventId}`);
+            entries.delete(keyOf(e.orgId, e.eventId, e.chart));
           }, graceMs),
         );
       },
     };
   }
 
-  async function open(orgId: string, eventId: string): Promise<Entry | null> {
-    const base = await load(orgId, eventId);
+  async function open(orgId: string, eventId: string, chart: ChartKey): Promise<Entry | null> {
+    const base = await load(orgId, eventId, chart);
     if (!base) return null;
     // A fresh id for the state read now: ids from before (another entry) never replay into it.
     seq += 1;
     const e: Entry = {
       orgId,
       eventId,
-      channels: seatChannels(orgId, eventId),
+      chart,
+      channels: seatChannels(orgId, eventId, chart),
       base,
       seq,
       trimmedThrough: seq,
@@ -338,7 +364,7 @@ export function createSeatFeed(opts: SeatFeedOptions): SeatFeed {
       dirty: false,
       lastFlushAt: clock(),
     };
-    entries.set(`${orgId}:${eventId}`, e);
+    entries.set(keyOf(orgId, eventId, chart), e);
     // A change committed while the first read ran would be missed: read once more shortly.
     schedule(e);
     return e;
@@ -354,13 +380,14 @@ export function createSeatFeed(opts: SeatFeedOptions): SeatFeed {
 
   return {
     epoch,
-    async watch(orgId, eventId) {
-      const key = `${orgId}:${eventId}`;
+    async watch(orgId, eventId, occurrenceId) {
+      const chart = occurrenceId ? await resolveChart(orgId, eventId, occurrenceId) : null;
+      const key = keyOf(orgId, eventId, chart);
       let e = entries.get(key) ?? null;
       if (!e) {
         let pending = loading.get(key);
         if (!pending) {
-          pending = open(orgId, eventId).finally(() => loading.delete(key));
+          pending = open(orgId, eventId, chart).finally(() => loading.delete(key));
           loading.set(key, pending);
         }
         e = await pending;
@@ -376,8 +403,9 @@ export function createSeatFeed(opts: SeatFeedOptions): SeatFeed {
     notify(payload) {
       const m = PAYLOAD.exec(payload);
       if (!m) return;
-      const e = entries.get(`${m[1]}:${m[2]}`);
-      if (e) schedule(e);
+      // Every watched chart of the event (the notification names the event, not the chart).
+      const prefix = `${m[1]}:${m[2]}:`;
+      for (const [k, e] of entries) if (k.startsWith(prefix)) schedule(e);
     },
     resync() {
       for (const e of entries.values()) schedule(e);

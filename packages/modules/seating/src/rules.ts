@@ -1,9 +1,10 @@
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, findOccurrenceTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
+import { chartKeyTx, onChart } from './chart.ts';
 import {
   blockingHits,
   evaluateSeatRules,
@@ -48,6 +49,22 @@ export const RuleHitDto = z.discriminatedUnion('rule', [
   }),
 ]);
 
+/**
+ * When "days before the event" count from: the chosen date's start for a multi-date event
+ * (M1.7g), else the event's. Null when the event (or that date of it) doesn't exist.
+ */
+export async function ruleStartTx(
+  tx: TenantTx,
+  eventId: string,
+  occurrenceId?: string | null,
+): Promise<Date | null> {
+  if (occurrenceId) {
+    const occ = await findOccurrenceTx(tx, occurrenceId);
+    if (occ && occ.eventId === eventId) return occ.startsAt;
+  }
+  return (await findEventTx(tx, eventId))?.startsAt ?? null;
+}
+
 /** The event's seating rules (valid rows only; a malformed row is ignored rather than trusted). */
 export async function seatingRulesTx(tx: TenantTx, eventId: string): Promise<SeatingRule[]> {
   const rows = await tx
@@ -85,7 +102,7 @@ export const setSeatingRulesCommand = tenantCommand({
     const [layout] = await tx
       .select({ id: eventLayouts.id })
       .from(eventLayouts)
-      .where(eq(eventLayouts.eventId, input.eventId));
+      .where(onChart(eventLayouts, input.eventId, null));
     if (!layout) throw new DomainError('not_found', 'This event has no floor plan');
     const kinds = input.rules.map((r) => r.kind);
     const current = await tx
@@ -134,6 +151,8 @@ export async function checkSeatRulesTx(
   ctx: Ctx,
   check: {
     eventId: string;
+    /** The date the seats are for (M1.7g): its chart and its start. */
+    occurrenceId?: string | null;
     seatUuids: readonly string[];
     context: RuleContext;
     override?: boolean;
@@ -143,16 +162,17 @@ export async function checkSeatRulesTx(
   if (ids.length === 0) return [];
   const rules = await seatingRulesTx(tx, check.eventId);
   if (rules.length === 0) return [];
-  const event = await findEventTx(tx, check.eventId);
-  if (!event) throw new DomainError('not_found', 'Event not found');
+  const startsAt = await ruleStartTx(tx, check.eventId, check.occurrenceId);
+  if (!startsAt) throw new DomainError('not_found', 'Event not found');
+  const key = await chartKeyTx(tx, check.eventId, check.occurrenceId);
   const seats = await tx
     .select({ seatUuid: eventSeats.seatUuid, accessible: eventSeats.accessible })
     .from(eventSeats)
-    .where(and(eq(eventSeats.eventId, check.eventId), inArray(eventSeats.seatUuid, ids)));
+    .where(and(onChart(eventSeats, check.eventId, key), inArray(eventSeats.seatUuid, ids)));
   const hits = evaluateSeatRules(rules, {
     context: check.context,
     seats,
-    startsAt: event.startsAt,
+    startsAt,
     now: ctx.now,
   });
   const [blocking] = blockingHits(hits, { context: check.context, override: check.override ?? false });

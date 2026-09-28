@@ -61,7 +61,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     if (event.status !== 'published')
       throw new DomainError('invalid_state', 'Sell once the event is published', { reason: 'not_published' });
     // Seated passes are sold seat by seat (M1.7c online, M1.7f here): a quantity is refused.
-    const seated = await seatedTicketTypesTx(tx, event.id);
+    const seated = await seatedTicketTypesTx(tx, event.id, input.occurrenceId ?? null);
     if (input.items.some((i) => seated.has(i.ticketTypeId)))
       throw new DomainError('validation_failed', 'Seated tickets are sold with a seat', {
         reason: 'choose_seats',
@@ -76,6 +76,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     if (input.seats.length) {
       const held = await holdSeatsTx(tx, ctx, {
         eventId: event.id,
+        occurrenceId: input.occurrenceId ?? null,
         seatUuids: input.seats,
         holdId: orderId,
         expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
@@ -89,6 +90,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       }
       warnings = await checkSeatRulesTx(tx, ctx, {
         eventId: event.id,
+        occurrenceId: input.occurrenceId ?? null,
         seatUuids: input.seats,
         context: 'box_office',
         override: input.overrideRules,

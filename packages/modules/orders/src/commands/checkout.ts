@@ -87,7 +87,12 @@ export async function issueFor(
   }
   if (pairs.length !== order.seatUuids.length)
     throw new DomainError('conflict', 'The seat hold was lost', { reason: 'hold_lost' });
-  await sellSeatsTx(tx, ctx, { eventId: order.eventId, holdId: order.id, tickets: pairs });
+  await sellSeatsTx(tx, ctx, {
+    eventId: order.eventId,
+    occurrenceId: order.occurrenceId,
+    holdId: order.id,
+    tickets: pairs,
+  });
   await assignTicketSeatsTx(tx, ctx, pairs);
   return issued;
 }
@@ -134,13 +139,14 @@ export const startCheckoutCommand = tenantCommand({
     // their ticket types; a seated ticket type cannot be bought without choosing seats.
     const orderId = uuidv7(ctx.now.getTime());
     const expiresAt = new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000);
-    const seatedTypes = await seatedTicketTypesTx(tx, event.id);
+    const seatedTypes = await seatedTicketTypesTx(tx, event.id, input.occurrenceId ?? null);
     if (input.items.some((i) => seatedTypes.has(i.ticketTypeId)))
       throw new DomainError('validation_failed', 'Choose seats for this ticket', { reason: 'choose_seats' });
     const seatItems = new Map<string, number>();
     if (input.seats.length) {
       const held = await holdSeatsTx(tx, ctx, {
         eventId: event.id,
+        occurrenceId: input.occurrenceId ?? null,
         seatUuids: input.seats,
         holdId: orderId,
         expiresAt,
@@ -154,7 +160,12 @@ export const startCheckoutCommand = tenantCommand({
       }
       // Seating rules (M1.7f): an enforced rule refuses (the holds roll back); warnings were shown
       // to the buyer as they chose.
-      await checkSeatRulesTx(tx, ctx, { eventId: event.id, seatUuids: input.seats, context: 'checkout' });
+      await checkSeatRulesTx(tx, ctx, {
+        eventId: event.id,
+        occurrenceId: input.occurrenceId ?? null,
+        seatUuids: input.seats,
+        context: 'checkout',
+      });
     }
     const wanted = [
       ...input.items,
@@ -366,6 +377,7 @@ export const applyProviderEventCommand = tenantCommand({
         if (order.seatUuids.length)
           await holdSeatsTx(tx, ctx, {
             eventId: order.eventId,
+            occurrenceId: order.occurrenceId,
             seatUuids: order.seatUuids,
             holdId: order.id,
             expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),

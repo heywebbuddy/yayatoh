@@ -18,7 +18,8 @@ export const mediaSchema = pgSchema('media');
 
 export const OWNER_TYPES = ['event', 'venue', 'org'] as const;
 export type OwnerType = (typeof OWNER_TYPES)[number];
-export const SLOTS = ['cover', 'gallery', 'photo', 'logo'] as const;
+/** `floorplan`: an event's floor plan images, drawn under its seating plans (M1.7g). */
+export const SLOTS = ['cover', 'gallery', 'photo', 'logo', 'floorplan'] as const;
 export type Slot = (typeof SLOTS)[number];
 
 const list = (col: string, values: readonly string[]) =>
@@ -62,7 +63,7 @@ export const assets = tenantTable(
     check('assets_slot_check', list('slot', SLOTS)),
     check(
       'assets_owner_slot_check',
-      sql`(owner_type = 'event' and slot in ('cover', 'gallery')) or (owner_type = 'venue' and slot = 'photo') or (owner_type = 'org' and slot = 'logo' and owner_id = org_id)`,
+      sql`(owner_type = 'event' and slot in ('cover', 'gallery', 'floorplan')) or (owner_type = 'venue' and slot = 'photo') or (owner_type = 'org' and slot = 'logo' and owner_id = org_id)`,
     ),
     check('assets_source_type_check', sql`source_type in ('jpeg', 'png', 'gif', 'webp', 'avif', 'svg')`),
     check('assets_dimensions_check', sql`width > 0 and height > 0`),

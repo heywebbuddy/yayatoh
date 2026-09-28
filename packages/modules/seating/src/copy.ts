@@ -1,8 +1,8 @@
 import type { TenantTx } from '@yayatoh/db';
 import { placedSeats } from '@yayatoh/floorplan';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
-import { eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { onChart } from './chart.ts';
 import { validDoc } from './layouts.ts';
 import { BLOCK_REASONS, eventLayouts, eventSeats } from './schema.ts';
 
@@ -29,7 +29,11 @@ const isBlock = (r: string | null): r is (typeof BLOCK_REASONS)[number] =>
   r !== null && (BLOCK_REASONS as readonly string[]).includes(r);
 
 export async function seatingSnapshotTx(tx: TenantTx, eventId: string): Promise<SeatingSnapshot> {
-  const [layout] = await tx.select().from(eventLayouts).where(eq(eventLayouts.eventId, eventId));
+  // The event plan only: dates aren't copied, so neither are their own charts (M1.7g).
+  const [layout] = await tx
+    .select()
+    .from(eventLayouts)
+    .where(onChart(eventLayouts, eventId, null));
   if (!layout) return null;
   const seats = await tx
     .select({
@@ -38,7 +42,7 @@ export async function seatingSnapshotTx(tx: TenantTx, eventId: string): Promise<
       blockReason: eventSeats.blockReason,
     })
     .from(eventSeats)
-    .where(eq(eventSeats.eventId, eventId));
+    .where(onChart(eventSeats, eventId, null));
   return {
     doc: layout.doc,
     seats: seats.map((s) => ({
