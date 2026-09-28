@@ -66,7 +66,7 @@ describe('seating (M1.7a)', () => {
     await executeCommand(setEventLayoutCommand, { eventId, layoutId: l.id }, a.ctx(), ports);
     const s = await seating();
     expect(s?.status).toBe('draft');
-    expect(s?.counts).toEqual({ available: 18, held: 0, sold: 0, blocked: 0 });
+    expect(s?.counts).toEqual({ available: 18, held: 0, sold: 0, assigned: 0, blocked: 0 });
     expect(s?.seats.find((x) => x.seatUuid === seat(0))?.label).toBe('Row A · 1');
   });
 

@@ -15,8 +15,13 @@ import { TtlCache } from './lib/ttl-cache.ts';
  * never a header. Legacy URLs (roadmap §7.7) 3xx from `legacy_redirects`. Then locale routing.
  */
 const intl = createMiddleware(routing);
-/** The public seat finder's pages (and the legacy `/events/{slug}/attendee` poster URL). */
-const SEAT_FINDER = /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?events\/[^/]+\/(?:seat-finder|attendee)(?:\/|$)/;
+/**
+ * Pages that key a rate limit by an anonymous device cookie: the public seat finder (and the
+ * legacy `/events/{slug}/attendee` poster URL, M1.7e) and the event page, whose live seat stream
+ * counts reconnections per device (M1.7f).
+ */
+const DEVICE_PAGES =
+  /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?events\/[^/]+(?:\/?$|\/(?:seat-finder|attendee)(?:\/|$))/;
 const DEVICE_COOKIE = 'yy_device';
 const hosts = new TtlCache<{ orgId: string; primaryHost: string | null } | null>(1000, 30_000);
 const redirects = new TtlCache<{ location: string; status: number } | null>(5000, 60_000);
@@ -112,8 +117,9 @@ export default async function proxy(req: NextRequest) {
 
   const res = intl(req);
   if (res.headers.has('location')) return res;
-  // The seat finder's pages get an anonymous device cookie, which keys its rate limit (M1.7e).
-  if (SEAT_FINDER.test(path) && !req.cookies.has(DEVICE_COOKIE))
+  // The seat finder's and event pages get an anonymous device cookie, which keys their rate
+  // limits (M1.7e lookups, M1.7f live seat streams).
+  if (DEVICE_PAGES.test(path) && !req.cookies.has(DEVICE_COOKIE))
     res.cookies.set(DEVICE_COOKIE, crypto.randomUUID(), {
       httpOnly: true,
       sameSite: 'lax',
@@ -132,6 +138,9 @@ export default async function proxy(req: NextRequest) {
     if (rest === '/') return rewrite(req, res, `/${locale}/t/${orgId}`, locale);
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);
     if (ev) return rewrite(req, res, `/${locale}/t/${orgId}/events/${ev[1]}`, locale);
+    // The live seat stream of that page: the host's org decides which events it may carry.
+    const seats = /^\/events\/([^/]+)\/seats\/stream\/?$/.exec(rest);
+    if (seats) return rewrite(req, res, `/${locale}/t/${orgId}/events/${seats[1]}/seats/stream`, locale);
   }
 
   // The ticket widget: only the org's allowed origins may frame it (M1.11c).

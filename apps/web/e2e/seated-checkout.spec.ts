@@ -84,6 +84,9 @@ test.describe('seated checkout', () => {
       ),
     );
     if (!one || !two) throw new Error('no pages');
+    // The second buyer's live availability is down (a stale page; M1.7f otherwise drops a taken
+    // seat live): the server still lets only one of them hold it.
+    await two.route('**/seats/stream', (r) => r.abort());
     await Promise.all([one.goto(JAZZ), two.goto(JAZZ)]);
     const [seat] = await freeSeats(one, 1, 'back');
     for (const [p, name] of [

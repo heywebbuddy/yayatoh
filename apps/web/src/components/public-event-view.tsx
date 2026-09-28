@@ -150,6 +150,12 @@ export async function PublicEventView({
           brand={brand ? { background: brand.background, text: brand.text } : null}
           questions={questions}
           seatMap={seatMap}
+          // Live availability (M1.7f): the page's own host serves it (a tenant site rewrites it
+          // to its org), so the stream is always this event's.
+          seatStream={
+            seatMap ? { url: localizedPath(locale, `/events/${slug}/seats/stream`), kind: 'public' } : null
+          }
+          timeZone={ev.timezone}
           action={checkoutAction.bind(null, slug)}
         />
       )}

@@ -590,8 +590,23 @@
       },
       "seat": "{label} ({price})",
       "accessible": "Toegankelijk",
-      "taken": "Bezet"
-    }
+      "taken": "Bezet",
+      "dropped": "{count, plural, one {Plaats {seats} is net door iemand anders genomen en zit niet meer in je keuze.} other {Plaatsen {seats} zijn net door iemand anders genomen en zitten niet meer in je keuze.}}",
+      "maxReached": "Je kunt maximaal {max} plaatsen tegelijk kiezen.",
+      "rules": {
+        "adaWarn": "Toegankelijke plaatsen worden tot {date} vrijgehouden voor gasten die ze nodig hebben. Kies er alleen een als jij of iemand in je gezelschap die nodig heeft.",
+        "adaEnforced": "Toegankelijke plaatsen worden tot {date} vrijgehouden voor gasten die ze nodig hebben en zijn tot dan niet online te boeken. Neem contact op met de organisator als je er een nodig hebt.",
+        "capWarn": "De organisator vraagt om maximaal {max} plaatsen per bestelling.",
+        "capEnforced": "Maximaal {max} plaatsen per bestelling.",
+        "capReached": "Meer kan niet in één bestelling: {max} plaatsen.",
+        "adaChosen": "{count, plural, one {{seats} is een toegankelijke plaats} other {{seats} zijn toegankelijke plaatsen}}, vrijgehouden voor gasten die ze nodig hebben. Kies {count, plural, one {hem} other {ze}} alleen als het nodig is.",
+        "overCap": "{count} plaatsen gekozen: de organisator vraagt om maximaal {max} per bestelling.",
+        "keptUntil": "Vrijgehouden tot {date}"
+      },
+      "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}"
+    },
+    "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
+    "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1319,7 +1334,15 @@
     "openOrder": "Bestelling openen",
     "chooseTickets": "Kies minstens één ticket.",
     "soldOut": "Daarvoor zijn niet genoeg tickets meer over.",
-    "collected": "Door jou ontvangen"
+    "collected": "Door jou ontvangen",
+    "seatedPass": "{pass}: kies hieronder de plaatsen",
+    "seatsTaken": "Sommige van die plaatsen zijn net bezet. Kies andere plaatsen.",
+    "seatRule": "De zaalregels van de organisator staan deze keuze niet toe. Vink het vakje aan om toch te verkopen, of kies andere plaatsen.",
+    "notOnSale": "Die plaatsen zijn niet te koop.",
+    "rulesEnforced": "Deze keuze gaat in tegen de zaalregels van de organisator (zie hierboven).",
+    "override": "Toch verkopen: deze koper heeft deze plaatsen nodig (de uitzondering wordt vastgelegd)",
+    "confirmOverride": "Vink het vakje aan om toch te verkopen, of kies andere plaatsen.",
+    "doneSeats": "{count, plural, one {Verkoop met # plaats vastgelegd.} other {Verkoop met # plaatsen vastgelegd.}} De tickets zijn onderweg."
   },
   "seating": {
     "title": "Zitplaatsen",
@@ -1346,7 +1369,7 @@
       "published": "In de verkoop",
       "locked": "Vergrendeld: er zijn al plaatsen verkocht"
     },
-    "counts": "{total} plaatsen · {available} beschikbaar · {held} vastgehouden · {sold} verkocht · {blocked} geblokkeerd",
+    "counts": "{total} plaatsen · {available} beschikbaar · {held} vastgehouden · {sold} verkocht · {assigned} aan gasten toegewezen · {blocked} geblokkeerd",
     "priced": "{priced} van {total} plaatsen hebben een prijs",
     "publish": "Plaatsen in de verkoop zetten",
     "lockedNote": "Er zijn al plaatsen verkocht, dus het zaalplan kan niet meer veranderen. De prijzen van onverkochte plaatsen wel.",
@@ -1393,7 +1416,10 @@
         "dance_floor": "Dansvloer",
         "bar": "Bar",
         "custom": "Overig"
-      }
+      },
+      "accessibleCol": "Toegankelijke plaatsen",
+      "accessibleOf": "Toegankelijke plaatsen van {item}",
+      "accessibleHint": "Toegankelijke plaatsen: typ hun nummers, bijv. ‘1, 2’. Ze zijn omlijnd op de plattegrond en de zaalregels kunnen ze vrijhouden."
     },
     "prices": {
       "title": "Prijzen",
@@ -1418,7 +1444,8 @@
       "label": "Weergaven van de zaalindeling",
       "plan": "Plattegrond",
       "assign": "Gasten plaatsen",
-      "finder": "Plaatszoeker"
+      "finder": "Plaatszoeker",
+      "rules": "Regels"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -1449,7 +1476,9 @@
         "anySeat": "Elke vrije plaats",
         "seatKept": "{label} (achtergehouden)",
         "submit": "Plaatsen",
-        "submitting": "Bezig met plaatsen…"
+        "submitting": "Bezig met plaatsen…",
+        "seatAccessible": "{label} · toegankelijk",
+        "needsAccessible": "Deze gast heeft een toegankelijke plaats nodig"
       },
       "errors": {
         "noPeople": "Kies minstens één persoon.",
@@ -1462,11 +1491,12 @@
         "seatedByTicket": "Deze persoon heeft al een plaats via het ticket.",
         "cancelled": "Deze persoon komt niet meer.",
         "forbidden": "Je kunt de zaalindeling bekijken, maar niet wijzigen.",
-        "dropMiss": "Zet namen neer op een tafel, een rij of een plaats."
+        "dropMiss": "Zet namen neer op een tafel, een rij of een plaats.",
+        "adaEnforced": "Die plaats wordt vrijgehouden voor gasten die een toegankelijke plaats nodig hebben. Vink ‘Deze gast heeft een toegankelijke plaats nodig’ aan om hem daar te plaatsen."
       },
       "canvas": {
         "title": "Plattegrond",
-        "hint": "Sleep een naam (of de aangevinkte namen) naar een tafel, rij of plaats. Alles kan ook met de lijst en het formulier.",
+        "hint": "Sleep een naam (of de aangevinkte namen) naar een tafel, rij of plaats, of sleep de plaats van een geplaatste gast naar een andere. Alles kan ook met de lijsten en formulieren.",
         "readOnlyHint": "Wie waar zit, als afbeelding van de zaal."
       },
       "state": {
@@ -1484,6 +1514,17 @@
         "empty": "Nog niemand.",
         "remove": "Verwijderen",
         "removeLabel": "{name} verwijderen van {item}"
+      },
+      "moved": "{name} is verplaatst naar {item}.",
+      "adaWarning": "Let op: {count, plural, one {{seats} is een toegankelijke plaats} other {{seats} zijn toegankelijke plaatsen}}, vrijgehouden tot {date} voor gasten die ze nodig hebben.",
+      "adaNote": "Toegankelijke plaatsen (omlijnd) worden tot {date} vrijgehouden voor gasten die ze nodig hebben. Iemand daar plaatsen geeft een waarschuwing.",
+      "adaEnforcedNote": "Toegankelijke plaatsen (omlijnd) worden tot {date} vrijgehouden voor gasten die ze nodig hebben. Automatisch plaatsen slaat ze over; kies er alleen een voor een gast die hem nodig heeft.",
+      "move": {
+        "open": "Verplaatsen…",
+        "label": "{name} naar een andere plaats verplaatsen",
+        "title": "{name} verplaatsen",
+        "submit": "Verplaatsen",
+        "cancel": "Annuleren"
       }
     },
     "finder": {
@@ -1518,6 +1559,62 @@
       "openPublic": "Plaatszoeker openen",
       "poster": "Poster plaatszoeker afdrukken",
       "closedNote": "De plaatszoeker is gesloten. Wie de poster scant, wordt gevraagd later terug te komen."
+    },
+    "map": {
+      "zoomIn": "Inzoomen",
+      "zoomOut": "Uitzoomen",
+      "wholeRoom": "Hele zaal"
+    },
+    "legend": {
+      "label": "Wat de kleuren van de plaatsen betekenen",
+      "available": "Beschikbaar",
+      "held": "In afrekening",
+      "sold": "Verkocht",
+      "assigned": "Plaats van een gast",
+      "blocked": "Geblokkeerd"
+    },
+    "rules": {
+      "title": "Zaalregels",
+      "description": "Houd toegankelijke plaatsen vrij voor gasten die ze nodig hebben en beperk hoeveel plaatsen één bestelling mag nemen. Regels waarschuwen kopers, de kassa en jou – of houden de keuze tegen als je dat wilt.",
+      "noPlan": "Dit evenement heeft nog geen zaalindeling. Maak er eerst een en stel hier daarna de regels in.",
+      "now": "Geldende regels",
+      "none": "Geen regels: kopers kunnen elke vrije plaats kiezen.",
+      "summary": {
+        "ada": "Toegankelijke plaatsen vrijgehouden voor gasten die ze nodig hebben tot {days, plural, =0 {het begin} one {# dag voor het evenement} other {# dagen voor het evenement}} ({date}) · {severity}",
+        "cap": "Maximaal {max, plural, one {# plaats} other {# plaatsen}} per bestelling · {severity}"
+      },
+      "severityShort": {
+        "warn": "waarschuwt",
+        "enforce": "afgedwongen"
+      },
+      "settingsTitle": "Regels instellen",
+      "readOnly": "Je kunt de regels zien, maar niet wijzigen.",
+      "forbidden": "Je kunt de regels zien, maar niet wijzigen.",
+      "severity": "Als de regel wordt overtreden",
+      "severityOption": {
+        "warn": "Waarschuwen (aanbevolen)",
+        "enforce": "Afdwingen"
+      },
+      "severityHint": {
+        "warn": "Kopers en medewerkers zien een waarschuwing en kunnen doorgaan.",
+        "enforce": "Kopers kunnen online niet verder; de kassa en jij wel, na bevestiging."
+      },
+      "ada": {
+        "title": "Toegankelijke plaatsen",
+        "on": "Toegankelijke plaatsen vrijhouden voor gasten die ze nodig hebben",
+        "days": "Tot hoeveel dagen voor het evenement",
+        "daysHint": "Daarna zijn ze voor iedereen vrij. 0 houdt ze vrij tot het evenement begint.",
+        "daysError": "Vul een heel aantal dagen in van 0 tot 365."
+      },
+      "cap": {
+        "title": "Plaatsen per bestelling",
+        "on": "Plaatsen per bestelling beperken",
+        "max": "Maximaal",
+        "maxError": "Vul een heel getal in van 1 tot 50."
+      },
+      "save": "Regels opslaan",
+      "saved": "Zaalregels opgeslagen.",
+      "fixErrors": "Corrigeer het gemarkeerde veld."
     }
   },
   "venueMap": {

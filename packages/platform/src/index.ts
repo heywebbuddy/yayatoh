@@ -61,5 +61,18 @@ export {
   type RateLimitRule,
   windowStart,
 } from './rate-limit.ts';
+export {
+  ablyRealtimePublisher,
+  ablySubscribeCapability,
+  channelOrg,
+  memoryRealtimeHub,
+  orgChannel,
+  type RealtimeHub,
+  type RealtimeListener,
+  type RealtimeMessage,
+  type RealtimePublisher,
+  realtimePublisherFromEnv,
+  teePublisher,
+} from './realtime.ts';
 export { STAFF_ROLES } from './schema.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

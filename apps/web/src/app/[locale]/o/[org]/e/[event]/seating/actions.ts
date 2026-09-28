@@ -5,10 +5,14 @@ import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
   assignSeatCategoryCommand,
   assignSeatsCommand,
+  MAX_RELEASE_DAYS,
+  MAX_SEATS_PER_ORDER,
   publishEventLayoutCommand,
+  type SeatingRuleDto,
   saveLayoutCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
+  setSeatingRulesCommand,
   unassignSeatsCommand,
 } from '@yayatoh/seating';
 import { revalidatePath } from 'next/cache';
@@ -150,25 +154,49 @@ export interface AssignState {
   readonly fits?: number;
   readonly asked?: number;
   readonly count?: number;
+  /** The table or row they were seated at, and the seats (labels). */
+  readonly itemLabel?: string;
+  /** A seating rule that refused the seat (M1.7f), and whether staff may override it. */
+  readonly rule?: string;
+  readonly overridable?: boolean;
+  /** Seating rules that warned: kept-back accessible seats used (labels), until when. */
+  readonly adaWarning?: { readonly seats: readonly string[]; readonly releaseAt: string } | null;
 }
 
 const assignFail = (err: unknown): AssignState => {
   if (!isDomainError(err)) return { ok: false, code: 'internal' };
-  const d = (err.details ?? {}) as { reason?: unknown; fits?: unknown; asked?: unknown };
+  const d = (err.details ?? {}) as {
+    reason?: unknown;
+    fits?: unknown;
+    asked?: unknown;
+    rule?: unknown;
+    overridable?: unknown;
+  };
   return {
     ok: false,
     code: err.code,
     reason: typeof d.reason === 'string' ? d.reason : undefined,
     fits: typeof d.fits === 'number' ? d.fits : undefined,
     asked: typeof d.asked === 'number' ? d.asked : undefined,
+    rule: typeof d.rule === 'string' ? d.rule : undefined,
+    overridable: d.overridable === true,
   };
 };
 
-/** Seat people at a table or row (M1.7d): the list's "Seat them" and a drop on the plan. */
+/**
+ * Seat people at a table or row (M1.7d): the list's "Seat them", a drop on the plan, and moving
+ * someone already seated ("Move to…", or dragging them; M1.7f). `overrideRules`: the organizer
+ * confirmed the guest needs a kept-back accessible seat.
+ */
 export async function assignSeatsAction(
   org: string,
   event: string,
-  input: { attendeeIds: readonly string[]; itemId: string; seatUuid?: string | null },
+  input: {
+    attendeeIds: readonly string[];
+    itemId: string;
+    seatUuid?: string | null;
+    overrideRules?: boolean;
+  },
 ): Promise<AssignState> {
   const { data, event: ev } = await loadEvent(org, event);
   try {
@@ -179,12 +207,24 @@ export async function assignSeatsAction(
         attendeeIds: [...input.attendeeIds],
         itemId: input.itemId,
         seatUuid: input.seatUuid || undefined,
+        overrideRules: input.overrideRules === true,
       },
       data.ctx,
       ports,
     );
     revalidatePath(`/o/${org}/e/${event}/seating/assign`);
-    return { ok: true, code: null, count: r.seated.length };
+    const labelOf = new Map(r.seated.map((x) => [x.seatUuid, x.seatLabel]));
+    const ada = r.warnings.find((w) => w.rule === 'ada_reserved');
+    return {
+      ok: true,
+      code: null,
+      count: r.seated.length,
+      itemLabel: r.itemLabel,
+      adaWarning:
+        ada && ada.rule === 'ada_reserved'
+          ? { seats: ada.seats.map((s) => labelOf.get(s) ?? ''), releaseAt: ada.releaseAt.toISOString() }
+          : null,
+    };
   } catch (err) {
     return assignFail(err);
   }
@@ -234,5 +274,50 @@ export async function finderSettingsAction(
     return { ok: true, code: null };
   } catch (err) {
     return fail(err);
+  }
+}
+
+export interface RulesState {
+  readonly ok: boolean;
+  readonly code: string | null;
+  /** The field whose value was refused. */
+  readonly field?: 'adaDays' | 'capMax';
+}
+
+/**
+ * Seating rules (M1.7f): keep accessible seats back until some days before the event, and cap
+ * the seats in one order; each warns (the default, decision D18) or is enforced.
+ */
+export async function seatingRulesAction(
+  org: string,
+  event: string,
+  _prev: RulesState,
+  form: FormData,
+): Promise<RulesState> {
+  const { data, event: ev } = await loadEvent(org, event);
+  const num = (key: string) => {
+    const raw = String(form.get(key) ?? '').trim();
+    return /^\d{1,4}$/.test(raw) ? Number(raw) : Number.NaN;
+  };
+  const severity = (key: string) => (form.get(key) === 'enforce' ? ('enforce' as const) : ('warn' as const));
+  const rules: SeatingRuleDto[] = [];
+  if (form.get('ada') === 'on') {
+    const releaseDays = num('adaDays');
+    if (!(releaseDays >= 0 && releaseDays <= MAX_RELEASE_DAYS))
+      return { ok: false, code: 'validation_failed', field: 'adaDays' };
+    rules.push({ kind: 'ada_reserved', severity: severity('adaSeverity'), params: { releaseDays } });
+  }
+  if (form.get('cap') === 'on') {
+    const max = num('capMax');
+    if (!(max >= 1 && max <= MAX_SEATS_PER_ORDER))
+      return { ok: false, code: 'validation_failed', field: 'capMax' };
+    rules.push({ kind: 'max_per_order_seats', severity: severity('capSeverity'), params: { max } });
+  }
+  try {
+    await executeCommand(setSeatingRulesCommand, { eventId: ev.id, rules }, data.ctx, ports);
+    revalidatePath(`/o/${org}/e/${event}/seating/rules`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return { ok: false, code: isDomainError(err) ? err.code : 'internal' };
   }
 }

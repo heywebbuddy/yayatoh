@@ -28,6 +28,13 @@ export const BLOCK_REASONS = ['channel', 'ada', 'kill'] as const;
 export const SEAT_BLOCK_REASONS = [...BLOCK_REASONS, 'assigned'] as const;
 /** Blocks a seat assignment may take over (and gives back when the guest is unseated). */
 export const ASSIGNABLE_BLOCKS = ['channel', 'ada'] as const;
+/**
+ * Seating rules (M1.7f): `ada_reserved` keeps accessible seats back until some days before the
+ * event; `max_per_order_seats` caps the seats in one order.
+ */
+export const SEATING_RULE_KINDS = ['ada_reserved', 'max_per_order_seats'] as const;
+/** Decision D18: rules warn by default; `enforce` refuses (staff may override, audited). */
+export const RULE_SEVERITIES = ['warn', 'enforce'] as const;
 
 /** Reusable floor plans (the venue's rooms), per org. */
 export const layouts = tenantTable(
@@ -171,5 +178,33 @@ export const finderCodes = tenantTable(
     index('finder_codes_org_event_email_idx').on(t.orgId, t.eventId, t.emailHash, t.createdAt),
     index('finder_codes_org_expires_idx').on(t.orgId, t.expiresAt),
     check('finder_codes_attempts_check', sql`attempts between 0 and 5`),
+  ],
+);
+
+/**
+ * An event's seating rules (M1.7f): at most one of each kind, with its parameters and whether it
+ * warns (the default, decision D18) or is enforced. Checkout, the box office and the organizer's
+ * assign view evaluate them (`evaluateSeatRules`).
+ */
+export const seatingRules = tenantTable(
+  seatingSchema,
+  'seating_rules',
+  {
+    eventId: uuid('event_id').notNull(),
+    kind: text('kind').notNull(),
+    severity: text('severity').notNull().default('warn'),
+    params: jsonb('params').notNull().default(sql`'{}'::jsonb`),
+  },
+  (t) => [
+    uniqueIndex('seating_rules_org_event_kind_key').on(t.orgId, t.eventId, t.kind),
+    check(
+      'seating_rules_kind_check',
+      sql.raw(`kind in (${SEATING_RULE_KINDS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'seating_rules_severity_check',
+      sql.raw(`severity in (${RULE_SEVERITIES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('seating_rules_params_check', sql`jsonb_typeof(params) = 'object'`),
   ],
 );

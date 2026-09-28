@@ -590,8 +590,23 @@
       },
       "seat": "{label} ({price})",
       "accessible": "Accessible",
-      "taken": "Taken"
-    }
+      "taken": "Taken",
+      "dropped": "{count, plural, one {Seat {seats} was just taken by someone else and is no longer in your choice.} other {Seats {seats} were just taken by someone else and are no longer in your choice.}}",
+      "maxReached": "You can choose up to {max} seats at a time.",
+      "rules": {
+        "adaWarn": "Accessible seats are kept for guests who need them until {date}. Please choose one only if you or someone with you needs it.",
+        "adaEnforced": "Accessible seats are kept for guests who need them until {date} and can't be booked online before then. Contact the organizer if you need one.",
+        "capWarn": "The organizer asks for at most {max} seats per order.",
+        "capEnforced": "Up to {max} seats per order.",
+        "capReached": "That's the most one order can have: {max} seats.",
+        "adaChosen": "{count, plural, one {{seats} is an accessible seat} other {{seats} are accessible seats}}, kept for guests who need them. Please choose {count, plural, one {it} other {them}} only if needed.",
+        "overCap": "{count} seats chosen: the organizer asks for at most {max} per order.",
+        "keptUntil": "Kept back until {date}"
+      },
+      "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}"
+    },
+    "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
+    "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1319,7 +1334,15 @@
     "openOrder": "Open the order",
     "chooseTickets": "Choose at least one ticket.",
     "soldOut": "Not enough tickets left for that.",
-    "collected": "Collected by you"
+    "collected": "Collected by you",
+    "seatedPass": "{pass}: choose seats below",
+    "seatsTaken": "Some of those seats were just taken. Please choose others.",
+    "seatRule": "The organizer's seating rules don't allow this choice. Tick the box to sell anyway, or change the seats.",
+    "notOnSale": "Those seats are not on sale.",
+    "rulesEnforced": "This choice goes against the organizer's seating rules (see above).",
+    "override": "Sell anyway: this buyer needs these seats (the override is recorded)",
+    "confirmOverride": "Tick the box to sell anyway, or change the seats.",
+    "doneSeats": "{count, plural, one {Sale recorded with # seat.} other {Sale recorded with # seats.}} The tickets are on their way."
   },
   "seating": {
     "title": "Seating",
@@ -1346,7 +1369,7 @@
       "published": "On sale",
       "locked": "Locked — seats have been sold"
     },
-    "counts": "{total} seats · {available} available · {held} held · {sold} sold · {blocked} blocked",
+    "counts": "{total} seats · {available} available · {held} held · {sold} sold · {assigned} assigned to guests · {blocked} blocked",
     "priced": "{priced} of {total} seats have a price",
     "publish": "Put seats on sale",
     "lockedNote": "Seats have been sold, so the plan can no longer change. Prices of unsold seats still can.",
@@ -1393,7 +1416,10 @@
         "dance_floor": "Dance floor",
         "bar": "Bar",
         "custom": "Other"
-      }
+      },
+      "accessibleCol": "Accessible seats",
+      "accessibleOf": "Accessible seats of {item}",
+      "accessibleHint": "Accessible seats: type their numbers, e.g. “1, 2”. They are outlined on the plan, and the seating rules can keep them back."
     },
     "prices": {
       "title": "Prices",
@@ -1418,7 +1444,8 @@
       "label": "Seating views",
       "plan": "Plan",
       "assign": "Assign guests",
-      "finder": "Seat finder"
+      "finder": "Seat finder",
+      "rules": "Rules"
     },
     "assign": {
       "title": "Assign guests",
@@ -1449,7 +1476,9 @@
         "anySeat": "Any free seat",
         "seatKept": "{label} (kept back)",
         "submit": "Seat them",
-        "submitting": "Seating…"
+        "submitting": "Seating…",
+        "seatAccessible": "{label} · accessible",
+        "needsAccessible": "This guest needs an accessible seat"
       },
       "errors": {
         "noPeople": "Choose at least one person to seat.",
@@ -1462,11 +1491,12 @@
         "seatedByTicket": "They already have a seat from their ticket.",
         "cancelled": "That person is no longer attending.",
         "forbidden": "You can see the seating but not change it.",
-        "dropMiss": "Drop names onto a table, a row or a seat."
+        "dropMiss": "Drop names onto a table, a row or a seat.",
+        "adaEnforced": "That seat is kept for guests who need an accessible seat. Tick “This guest needs an accessible seat” to seat them there."
       },
       "canvas": {
         "title": "Plan",
-        "hint": "Drag a name (or the ticked names) onto a table, row or seat. Everything here can also be done with the list and form.",
+        "hint": "Drag a name (or the ticked names) onto a table, row or seat, or drag a seated guest's seat to another one. Everything here can also be done with the lists and forms.",
         "readOnlyHint": "Who sits where, as a picture of the room."
       },
       "state": {
@@ -1484,6 +1514,17 @@
         "empty": "No one yet.",
         "remove": "Remove",
         "removeLabel": "Remove {name} from {item}"
+      },
+      "moved": "{name} moved to {item}.",
+      "adaWarning": "Note: {count, plural, one {{seats} is an accessible seat} other {{seats} are accessible seats}} kept for guests who need them until {date}.",
+      "adaNote": "Accessible seats (outlined) are kept for guests who need them until {date}. Seating someone there shows a warning.",
+      "adaEnforcedNote": "Accessible seats (outlined) are kept for guests who need them until {date}. Automatic seating skips them; choose one only for a guest who needs it.",
+      "move": {
+        "open": "Move to…",
+        "label": "Move {name} to another seat",
+        "title": "Move {name}",
+        "submit": "Move",
+        "cancel": "Cancel"
       }
     },
     "finder": {
@@ -1518,6 +1559,62 @@
       "openPublic": "Open the seat finder",
       "poster": "Print seat-finder poster",
       "closedNote": "The seat finder is closed. Guests who scan the poster are asked to check back later."
+    },
+    "map": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "wholeRoom": "Whole room"
+    },
+    "legend": {
+      "label": "What the seat colours mean",
+      "available": "Available",
+      "held": "In checkout",
+      "sold": "Sold",
+      "assigned": "Guest's seat",
+      "blocked": "Blocked"
+    },
+    "rules": {
+      "title": "Seating rules",
+      "description": "Keep accessible seats for the guests who need them, and limit how many seats one order may take. Rules warn buyers, the box office and you — or, if you choose, stop the choice.",
+      "noPlan": "This event has no seating plan yet. Create one first, then set its rules here.",
+      "now": "Rules in force",
+      "none": "No rules: buyers can choose any free seat.",
+      "summary": {
+        "ada": "Accessible seats kept for guests who need them until {days, plural, =0 {the event starts} one {# day before the event} other {# days before the event}} ({date}) · {severity}",
+        "cap": "At most {max, plural, one {# seat} other {# seats}} per order · {severity}"
+      },
+      "severityShort": {
+        "warn": "warns",
+        "enforce": "enforced"
+      },
+      "settingsTitle": "Set the rules",
+      "readOnly": "You can see the rules but not change them.",
+      "forbidden": "You can see the rules but not change them.",
+      "severity": "When the rule is broken",
+      "severityOption": {
+        "warn": "Warn (recommended)",
+        "enforce": "Enforce"
+      },
+      "severityHint": {
+        "warn": "Buyers and staff see a warning and can go ahead.",
+        "enforce": "Buyers can't go ahead online; the box office and you can, after confirming."
+      },
+      "ada": {
+        "title": "Accessible seats",
+        "on": "Keep accessible seats for guests who need them",
+        "days": "Until how many days before the event",
+        "daysHint": "Then they are released to everyone. 0 keeps them until the event starts.",
+        "daysError": "Enter a whole number of days from 0 to 365."
+      },
+      "cap": {
+        "title": "Seats per order",
+        "on": "Limit the seats in one order",
+        "max": "At most",
+        "maxError": "Enter a whole number from 1 to 50."
+      },
+      "save": "Save rules",
+      "saved": "Seating rules saved.",
+      "fixErrors": "Please fix the highlighted field."
     }
   },
   "venueMap": {

@@ -452,8 +452,9 @@ describe('seat assignment and plan edits (M1.7d)', () => {
     expect(at(t1.id)).toEqual(['Hal']);
     expect(at(t3.id)).toEqual([]);
     expect(v?.unseated.map((p) => p.name)).toEqual(['Ida']);
-    // Hal's seat stays off sale; nothing else is blocked.
+    // Hal's seat stays off sale (a guest's seat: assigned, not blocked); nothing else is blocked.
     const s = await executeQuery(eventSeatingQuery, { eventId: ev }, a.ctx(), ports);
-    expect(s?.counts).toMatchObject({ blocked: 1, available: 7 });
+    expect(s?.counts).toMatchObject({ assigned: 1, blocked: 0, available: 7 });
+    expect(s?.seats.find((x) => x.state === 'assigned')?.status).toBe('blocked');
   });
 });

@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventSeatingQuery, seatAssignmentsQuery } from '@yayatoh/seating';
+import { eventSeatingQuery, seatAssignmentsQuery, seatingRulesQuery } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -8,6 +8,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SeatAssignments } from '@/components/seat-assignments.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { assignSeatsAction, unassignSeatAction } from '../actions.ts';
@@ -32,6 +33,7 @@ export default async function AssignSeatsPage({
     executeQuery(seatAssignmentsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(eventSeatingQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
+  const rules = seating ? await executeQuery(seatingRulesQuery, { eventId: ev.id }, data.ctx, ports) : [];
   return (
     <>
       <PageHeader title={t('assign.title')} description={t('assign.description')} />
@@ -43,6 +45,10 @@ export default async function AssignSeatsPage({
           canWrite={roleCan(data.role, 'events:write')}
           assign={assignSeatsAction.bind(null, org, event)}
           unassign={unassignSeatAction.bind(null, org, event)}
+          rules={rules}
+          startsAt={ev.startsAt}
+          timeZone={ev.timezone}
+          streamUrl={localizedPath(locale, `${base}/stream`)}
         />
       ) : (
         <EmptyState

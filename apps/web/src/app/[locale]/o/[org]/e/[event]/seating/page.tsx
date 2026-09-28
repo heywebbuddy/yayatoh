@@ -6,9 +6,11 @@ import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { LiveSeatCounts, SeatStatesProvider } from '@/components/seat-states.tsx';
 import { SeatingEditor } from '@/components/seating-editor.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
+import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -160,7 +162,7 @@ export default async function SeatingPage({
     );
 
   const locked = seating.status === 'locked' || !canWrite;
-  const seatStatus = Object.fromEntries(seating.seats.map((s) => [s.seatUuid, s.status]));
+  const seatStatus = Object.fromEntries(seating.seats.map((s) => [s.seatUuid, s.state]));
   const priced = seating.seats.filter((s) => s.ticketTypeId).length;
   const items = seating.doc.items.filter((i) => i.kind !== 'object');
   return (
@@ -171,33 +173,40 @@ export default async function SeatingPage({
         active="plan"
         finder={data.modules.has('seat_finder')}
       />
-      <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
-        <StatusDot status={STATUS_DOT[seating.status]} label={t(`status.${seating.status}`)} />
-        <span className="text-body">{t('counts', { ...seating.counts, total: seating.seats.length })}</span>
-        <span className="text-caption text-zinc-600">
-          {t('priced', { priced, total: seating.seats.length })}
-        </span>
-        {seating.status === 'draft' && canWrite ? (
-          <form action={publishSeatingAction.bind(null, org, event)} className="ms-auto">
-            <Button type="submit" size="sm">
-              {t('publish')}
-            </Button>
-          </form>
-        ) : null}
-      </Card>
-      {seating.status === 'locked' ? <p className="text-caption text-zinc-600">{t('lockedNote')}</p> : null}
+      {/* Live (M1.7f): counts and seat colours follow sales, holds and guests as they happen. */}
+      <SeatStatesProvider
+        url={localizedPath(locale, `/o/${org}/e/${event}/seating/stream`)}
+        initialStates={seatStatus}
+        initialCounts={seating.counts}
+      >
+        <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <StatusDot status={STATUS_DOT[seating.status]} label={t(`status.${seating.status}`)} />
+          <LiveSeatCounts />
+          <span className="text-caption text-zinc-600">
+            {t('priced', { priced, total: seating.seats.length })}
+          </span>
+          {seating.status === 'draft' && canWrite ? (
+            <form action={publishSeatingAction.bind(null, org, event)} className="ms-auto">
+              <Button type="submit" size="sm">
+                {t('publish')}
+              </Button>
+            </form>
+          ) : null}
+        </Card>
+        {seating.status === 'locked' ? <p className="text-caption text-zinc-600">{t('lockedNote')}</p> : null}
 
-      <section aria-labelledby="editor-heading" className="flex flex-col gap-3">
-        <h2 id="editor-heading" className="text-section">
-          {t('editor.title')}
-        </h2>
-        <SeatingEditor
-          initialDoc={seating.doc}
-          seatStatus={seatStatus}
-          locked={locked}
-          saveDoc={saveDocAction.bind(null, org, event)}
-        />
-      </section>
+        <section aria-labelledby="editor-heading" className="flex flex-col gap-3">
+          <h2 id="editor-heading" className="text-section">
+            {t('editor.title')}
+          </h2>
+          <SeatingEditor
+            initialDoc={seating.doc}
+            seatStatus={seatStatus}
+            locked={locked}
+            saveDoc={saveDocAction.bind(null, org, event)}
+          />
+        </section>
+      </SeatStatesProvider>
 
       {canWrite && items.length ? (
         <section aria-labelledby="prices-heading" className="flex flex-col gap-3">

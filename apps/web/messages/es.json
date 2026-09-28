@@ -590,8 +590,23 @@
       },
       "seat": "{label} ({price})",
       "accessible": "Accesible",
-      "taken": "Ocupado"
-    }
+      "taken": "Ocupado",
+      "dropped": "{count, plural, one {Alguien acaba de ocupar el asiento {seats}; ya no está en tu selección.} other {Alguien acaba de ocupar los asientos {seats}; ya no están en tu selección.}}",
+      "maxReached": "Puedes elegir hasta {max} asientos a la vez.",
+      "rules": {
+        "adaWarn": "Los asientos accesibles se reservan hasta el {date} para quienes los necesitan. Elige uno solo si tú o alguien que te acompaña lo necesita.",
+        "adaEnforced": "Los asientos accesibles se reservan hasta el {date} para quienes los necesitan y no se pueden reservar en línea antes. Si necesitas uno, contacta con el organizador.",
+        "capWarn": "El organizador pide un máximo de {max} asientos por pedido.",
+        "capEnforced": "Hasta {max} asientos por pedido.",
+        "capReached": "Es el máximo por pedido: {max} asientos.",
+        "adaChosen": "{count, plural, one {{seats} es un asiento accesible} other {{seats} son asientos accesibles}}, reservado{count, plural, one {} other {s}} para quienes los necesitan. Elígelo{count, plural, one {} other {s}} solo si hace falta.",
+        "overCap": "{count} asientos elegidos: el organizador pide un máximo de {max} por pedido.",
+        "keptUntil": "Reservado hasta el {date}"
+      },
+      "groupSummary": "{group} — {free} de {total} libres{chosen, plural, =0 {} one { · # elegido} other { · # elegidos}}"
+    },
+    "seatRuleCap": "Son más asientos de los permitidos en un pedido. Elige menos, por favor.",
+    "seatRuleAda": "Por ahora, los asientos accesibles están reservados para quienes los necesitan. Elige otros asientos."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -1319,7 +1334,15 @@
     "openOrder": "Abrir el pedido",
     "chooseTickets": "Elige al menos una entrada.",
     "soldOut": "No quedan suficientes entradas para eso.",
-    "collected": "Cobrado por ti"
+    "collected": "Cobrado por ti",
+    "seatedPass": "{pass}: elige los asientos abajo",
+    "seatsTaken": "Algunos de esos asientos se acaban de ocupar. Elige otros, por favor.",
+    "seatRule": "Las reglas de asientos del organizador no permiten esta elección. Marca la casilla para vender igualmente o cambia los asientos.",
+    "notOnSale": "Esos asientos no están a la venta.",
+    "rulesEnforced": "Esta elección va en contra de las reglas de asientos del organizador (ver arriba).",
+    "override": "Vender igualmente: este comprador necesita estos asientos (la excepción queda registrada)",
+    "confirmOverride": "Marca la casilla para vender igualmente o cambia los asientos.",
+    "doneSeats": "{count, plural, one {Venta registrada con # asiento.} other {Venta registrada con # asientos.}} Las entradas van de camino."
   },
   "seating": {
     "title": "Asientos",
@@ -1346,7 +1369,7 @@
       "published": "A la venta",
       "locked": "Bloqueado: ya se han vendido asientos"
     },
-    "counts": "{total} asientos · {available} disponibles · {held} retenidos · {sold} vendidos · {blocked} bloqueados",
+    "counts": "{total} asientos · {available} disponibles · {held} retenidos · {sold} vendidos · {assigned} asignados a invitados · {blocked} bloqueados",
     "priced": "{priced} de {total} asientos tienen precio",
     "publish": "Poner los asientos a la venta",
     "lockedNote": "Ya se han vendido asientos, así que el plano ya no puede cambiar. Los precios de los asientos no vendidos sí.",
@@ -1393,7 +1416,10 @@
         "dance_floor": "Pista de baile",
         "bar": "Barra",
         "custom": "Otro"
-      }
+      },
+      "accessibleCol": "Asientos accesibles",
+      "accessibleOf": "Asientos accesibles de {item}",
+      "accessibleHint": "Asientos accesibles: escribe sus números, p. ej. «1, 2». Se resaltan en el plano y las reglas de asientos pueden reservarlos."
     },
     "prices": {
       "title": "Precios",
@@ -1418,7 +1444,8 @@
       "label": "Vistas de asientos",
       "plan": "Plano",
       "assign": "Asignar invitados",
-      "finder": "Buscador de asientos"
+      "finder": "Buscador de asientos",
+      "rules": "Reglas"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -1449,7 +1476,9 @@
         "anySeat": "Cualquier asiento libre",
         "seatKept": "{label} (reservado)",
         "submit": "Sentarlos",
-        "submitting": "Asignando…"
+        "submitting": "Asignando…",
+        "seatAccessible": "{label} · accesible",
+        "needsAccessible": "Este invitado necesita un asiento accesible"
       },
       "errors": {
         "noPeople": "Elige al menos una persona.",
@@ -1462,11 +1491,12 @@
         "seatedByTicket": "Ya tiene asiento por su entrada.",
         "cancelled": "Esa persona ya no asiste.",
         "forbidden": "Puedes ver los asientos, pero no cambiarlos.",
-        "dropMiss": "Suelta los nombres sobre una mesa, una fila o un asiento."
+        "dropMiss": "Suelta los nombres sobre una mesa, una fila o un asiento.",
+        "adaEnforced": "Ese asiento está reservado para quienes necesitan un asiento accesible. Marca «Este invitado necesita un asiento accesible» para sentarlo allí."
       },
       "canvas": {
         "title": "Plano",
-        "hint": "Arrastra un nombre (o los nombres marcados) a una mesa, fila o asiento. Todo esto también se puede hacer con la lista y el formulario.",
+        "hint": "Arrastra un nombre (o los marcados) a una mesa, fila o asiento, o arrastra el asiento de un invitado ya sentado a otro. Todo esto también se puede hacer con las listas y formularios.",
         "readOnlyHint": "Quién se sienta dónde, como imagen de la sala."
       },
       "state": {
@@ -1484,6 +1514,17 @@
         "empty": "Nadie todavía.",
         "remove": "Quitar",
         "removeLabel": "Quitar a {name} de {item}"
+      },
+      "moved": "{name} se ha movido a {item}.",
+      "adaWarning": "Nota: {count, plural, one {{seats} es un asiento accesible reservado} other {{seats} son asientos accesibles reservados}} hasta el {date} para quienes los necesitan.",
+      "adaNote": "Los asientos accesibles (resaltados) se reservan hasta el {date} para quienes los necesitan. Sentar a alguien allí muestra un aviso.",
+      "adaEnforcedNote": "Los asientos accesibles (resaltados) se reservan hasta el {date} para quienes los necesitan. La asignación automática los omite; elige uno solo para un invitado que lo necesite.",
+      "move": {
+        "open": "Mover a…",
+        "label": "Mover a {name} a otro asiento",
+        "title": "Mover a {name}",
+        "submit": "Mover",
+        "cancel": "Cancelar"
       }
     },
     "finder": {
@@ -1518,6 +1559,62 @@
       "openPublic": "Abrir el buscador de asientos",
       "poster": "Imprimir cartel del buscador",
       "closedNote": "El buscador de asientos está cerrado. A quien escanee el cartel se le pedirá que vuelva más tarde."
+    },
+    "map": {
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar",
+      "wholeRoom": "Sala completa"
+    },
+    "legend": {
+      "label": "Qué significan los colores de los asientos",
+      "available": "Disponible",
+      "held": "En compra",
+      "sold": "Vendido",
+      "assigned": "Asiento de invitado",
+      "blocked": "Bloqueado"
+    },
+    "rules": {
+      "title": "Reglas de asientos",
+      "description": "Reserva los asientos accesibles para quienes los necesitan y limita cuántos asientos puede llevar un pedido. Las reglas avisan a compradores, taquilla y a ti, o, si lo prefieres, impiden la elección.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero y luego define aquí sus reglas.",
+      "now": "Reglas vigentes",
+      "none": "Sin reglas: los compradores pueden elegir cualquier asiento libre.",
+      "summary": {
+        "ada": "Asientos accesibles reservados para quienes los necesitan hasta {days, plural, =0 {el inicio del evento} one {# día antes del evento} other {# días antes del evento}} ({date}) · {severity}",
+        "cap": "Máximo {max, plural, one {# asiento} other {# asientos}} por pedido · {severity}"
+      },
+      "severityShort": {
+        "warn": "avisa",
+        "enforce": "obligatoria"
+      },
+      "settingsTitle": "Definir las reglas",
+      "readOnly": "Puedes ver las reglas, pero no cambiarlas.",
+      "forbidden": "Puedes ver las reglas, pero no cambiarlas.",
+      "severity": "Si no se cumple la regla",
+      "severityOption": {
+        "warn": "Avisar (recomendado)",
+        "enforce": "Imponer"
+      },
+      "severityHint": {
+        "warn": "Compradores y personal ven un aviso y pueden continuar.",
+        "enforce": "Los compradores no pueden continuar en línea; la taquilla y tú sí, tras confirmarlo."
+      },
+      "ada": {
+        "title": "Asientos accesibles",
+        "on": "Reservar los asientos accesibles para quienes los necesitan",
+        "days": "Hasta cuántos días antes del evento",
+        "daysHint": "Después quedan libres para todos. Con 0 se reservan hasta que empiece el evento.",
+        "daysError": "Introduce un número entero de días entre 0 y 365."
+      },
+      "cap": {
+        "title": "Asientos por pedido",
+        "on": "Limitar los asientos de un pedido",
+        "max": "Como máximo",
+        "maxError": "Introduce un número entero entre 1 y 50."
+      },
+      "save": "Guardar reglas",
+      "saved": "Reglas de asientos guardadas.",
+      "fixErrors": "Corrige el campo marcado, por favor."
     }
   },
   "venueMap": {
