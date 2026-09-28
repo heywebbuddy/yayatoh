@@ -2,9 +2,9 @@ import { scanTicketCommand } from '@yayatoh/checkin';
 import { setPlatformAuditSink } from '@yayatoh/db/platform';
 import { type AdminSql, adminClient, closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
-import { createCtx, executeCommand } from '@yayatoh/kernel';
+import { createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
-import { catchUpMetrics, METRIC_EVENTS, METRICS_CONSUMER, metricsProjector } from '@yayatoh/reports';
+import { catchUpMetrics, METRICS_CONSUMER, metricsProjector } from '@yayatoh/reports';
 import { type OrgFixture, ports, systemCtx, twoOrgs } from '@yayatoh/testing';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import type { PgBoss } from 'pg-boss';
@@ -42,16 +42,6 @@ async function waitFor(check: () => Promise<boolean>, ms: number) {
   return false;
 }
 
-/** Every relayed metric event (any org) has been handled by the projector. */
-const backlogDone = async () => {
-  const [r] = await admin<{ n: number }[]>`
-    select count(*)::int as n from platform.domain_events d
-    where d.published_at is not null and d.type || '@' || d.version = any(${[...METRIC_EVENTS]})
-      and not exists (select 1 from platform.processed_events p
-        where p.org_id = d.org_id and p.consumer = ${METRICS_CONSUMER} and p.event_id = d.id)`;
-  return r?.n === 0;
-};
-
 beforeAll(async () => {
   setPlatformAuditSink(async () => {});
   admin = adminClient();
@@ -61,6 +51,8 @@ beforeAll(async () => {
       createEventCommand,
       {
         name: 'Door rush',
+        // Event addresses are global: never collide with other test files' events.
+        slug: `lag-${uuidv7().slice(-12)}`,
         timezone: 'UTC',
         startsAt: '2028-06-01T23:00:00Z',
         endsAt: '2028-06-02T03:00:00Z',
@@ -122,6 +114,9 @@ beforeAll(async () => {
     jobs: [],
     subscribers: [projector],
   });
+  // Publish what earlier test files left in the outbox without delivering it, so the measured
+  // queue holds only the stream's scans (this org's set-up is projected already).
+  while ((await relayOnce(boss, [], 1000)) > 0);
   // The relay loop exactly as main.ts runs it (50 ms after a busy tick, 500 ms when idle).
   relayLoop = (async () => {
     while (!stopping) {
@@ -134,8 +129,6 @@ beforeAll(async () => {
       await new Promise((r) => setTimeout(r, n > 0 ? 50 : 500));
     }
   })();
-  // Drain whatever earlier test files left unpublished before measuring.
-  expect(await waitFor(backlogDone, 120_000)).toBe(true);
 }, 240_000);
 
 afterAll(async () => {

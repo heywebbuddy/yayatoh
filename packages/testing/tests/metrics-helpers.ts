@@ -20,7 +20,15 @@ export const anon = (orgId: string) => createCtx({ orgId });
 export async function newEvent(f: OrgFixture, name: string, currency = 'USD', timezone = 'America/Chicago') {
   const e = await executeCommand(
     createEventCommand,
-    { name, timezone, currency, startsAt: '2028-06-01T23:00:00Z', endsAt: '2028-06-02T03:00:00Z' },
+    {
+      name,
+      // Event addresses are global: never collide with other test files' events.
+      slug: `metrics-${uuidv7().slice(-12)}`,
+      timezone,
+      currency,
+      startsAt: '2028-06-01T23:00:00Z',
+      endsAt: '2028-06-02T03:00:00Z',
+    },
     f.ctx(),
     ports,
   );

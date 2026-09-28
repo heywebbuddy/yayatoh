@@ -12,6 +12,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
 ## Design
+- [ ] **Metrics pipeline defaults, pending owner** (M3.1a; labels: `db-migration`). Built with these defaults; say if any should change:
+  - **Devices online** counts a check-in device whose last heartbeat is within **90 seconds** (the roadmap's "offline alert within 90 s"). Until M3.3 adds a sweep, the value is as of the last device event (each value carries its `asOf`).
+  - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).
+  - **Retention:** projector lag samples 7 days; the Postgres analytics sink 13 months (dropped by monthly partition once partitioned, M6.2 picks ClickHouse or Tinybird per P3-4).
+  - **Deploy step:** after the M3.1a migration, run `pnpm --filter @yayatoh/worker metrics:rebuild` once per environment so events that existed before get their projections and history. Until then their dashboards read live (same numbers).
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
