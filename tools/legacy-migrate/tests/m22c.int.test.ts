@@ -242,7 +242,10 @@ describe('T6 communications', () => {
                (select count(*)::int from crm.consents where evidence = 'legacy_newsletter' and status = 'granted') as granted,
                (select count(*)::int from crm.consents where evidence = 'legacy_newsletter_unsubscribe' and status = 'withdrawn') as withdrawn,
                (select count(*)::int from crm.consents where status = 'unknown_legacy') as unknown,
-               (select count(*)::int from crm.consents where status = 'granted' and evidence <> 'legacy_newsletter') as granted_other,
+               -- Migrated contacts only: other test files' fixture orgs check out with a
+               -- marketing opt-in at the same time, in the same database.
+               (select count(*)::int from crm.consents x join crm.contacts c on c.id = x.contact_id and c.org_id = x.org_id
+                  where c.source = 'legacy' and x.status = 'granted' and x.evidence <> 'legacy_newsletter') as granted_other,
                (select count(*)::int from crm.contacts c where c.source = 'legacy'
                   and not exists (select 1 from crm.consents x where x.contact_id = c.id)) as without`,
     );
