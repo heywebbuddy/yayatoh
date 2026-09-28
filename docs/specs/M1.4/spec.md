@@ -197,7 +197,7 @@
   - Content page → **Draft with AI**: tagline, description or FAQ, optional notes. The result is an **editable preview** (focus moves to it); **Accept** saves through the normal commands (tagline → `events.updateEvent`, description → a text section "About", FAQ → a FAQ section), **Reject** discards. Never published by AI.
   - **Prompt hygiene**: organizer text travels as one JSON data block with `<`, `>`, `&` escaped and instructions never to follow it; outputs are cleaned (`cleanDraft`: one plain line for taglines, the Markdown subset for descriptions, parsed Q&A for FAQs) and sanitized again when saved.
   - **Credits ledger**: `ai.credit_accounts` (one row per org, `balance >= 0` CHECK, locked `FOR UPDATE` per change) and append-only `ai.credit_ledger` (grant, debit, refund, adjust; UPDATE/DELETE revoked from `app_user`; amounts sum to the balance). Free allowance **20 drafts per org per UTC month (pending owner)**, topped up *to* the allowance on the first use of a month. One draft = one credit; a provider failure, timeout (30 s) or unusable draft refunds it once. **Out of credits** is `invalid_state/out_of_credits`, shown as a clear state with the button disabled. Debits and refunds are audited (`ai.draft.debit`, `ai.draft.refund`). Staff adjustments `ai.adjustCredits` are platform-only (dev/CI: `/api/dev/ai-credits`).
-  - **Rate limited** with the M1.14 limiter, policy `aiDraft` (20 per device per 10 min, 60 per member per hour).
+  - **Rate limited** with the M1.14 limiter, policy `aiDraft` (20 per device per 10 min, 60 per member per event per hour; the monthly credits are the per-org cap).
 - **Strings**: every new key in 13 locales (Arabic RTL), ICU plurals per locale.
 
 ### Migration `0046_living_nighthawk.sql`

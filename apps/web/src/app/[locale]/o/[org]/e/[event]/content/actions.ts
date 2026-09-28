@@ -219,7 +219,8 @@ export async function draftWithAiAction(
   notes: string,
 ): Promise<AiDraftState> {
   const { data, event: ev } = await loadEvent(org, event);
-  const limit = await limitAction('aiDraft', { identity: `${data.org.id}:${data.session.userId}` });
+  // Bursts: per device, and per member per event (monthly credits are the hard cap per org).
+  const limit = await limitAction('aiDraft', { identity: `${data.org.id}:${data.session.userId}:${ev.id}` });
   if (!limit.allowed) return { ok: false, code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };
   try {
     const res = await draftEventCopy(data.ctx, ports, aiDrafter(), {
