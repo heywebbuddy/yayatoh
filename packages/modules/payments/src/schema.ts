@@ -211,3 +211,70 @@ export const disputes = tenantTable(
     check('disputes_amount_check', sql`amount_minor > 0`),
   ],
 );
+
+export const LEGACY_SETTLEMENT_KINDS = ['event_statement', 'opening_balance'] as const;
+export const LEGACY_SETTLEMENT_STATUSES = ['settled', 'open', 'pending_signoff', 'signed_off'] as const;
+
+/**
+ * Legacy payouts carried over by the migration (roadmap §7.5 T4, ADR 0005): one `event_statement`
+ * per org × event × currency summing the legacy `commissions` rows, and one `opening_balance` per
+ * org × currency for what was still owed to the organizer at the freeze. Opening balances need the
+ * owner's sign-off before any release (they never enter the ledger on their own).
+ */
+export const legacySettlements = tenantTable(
+  paymentsSchema,
+  'legacy_settlements',
+  {
+    kind: text('kind').notNull(),
+    /** `yay` or `abc`. */
+    instance: text('instance').notNull(),
+    /** Event statements only (`events.events`, composite FK in the migration). */
+    eventId: uuid('event_id'),
+    currency: text('currency').notNull(),
+    status: text('status').notNull(),
+    /** What buyers paid the organizer (legacy `customer_paid`, platform tax excluded). */
+    customerPaidMinor: bigint('customer_paid_minor', { mode: 'number' }).notNull(),
+    /** The platform's commission (legacy `admin_commission`). */
+    commissionMinor: bigint('commission_minor', { mode: 'number' }).notNull(),
+    /** The platform's own tax portion (legacy `admin_tax`). */
+    adminTaxMinor: bigint('admin_tax_minor', { mode: 'number' }).notNull(),
+    /** The organizer's share (legacy `organiser_earning`). */
+    organizerEarningMinor: bigint('organizer_earning_minor', { mode: 'number' }).notNull(),
+    /** Already paid out in the legacy app (`transferred = 1`). */
+    transferredMinor: bigint('transferred_minor', { mode: 'number' }).notNull(),
+    /** Still owed to the organizer (`status = 1`, `transferred = 0`). */
+    openMinor: bigint('open_minor', { mode: 'number' }).notNull(),
+    /** Refunded after payout and not yet clawed back (`status = 0`, `transferred = 1`, `settled = 0`). */
+    clawbackMinor: bigint('clawback_minor', { mode: 'number' }).notNull().default(0),
+    /** How many legacy commission rows this row sums. */
+    sourceRows: bigint('source_rows', { mode: 'number' }).notNull(),
+    signedOffBy: uuid('signed_off_by'),
+    signedOffAt: timestamp('signed_off_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('legacy_settlements_org_event_idx').on(t.orgId, t.eventId),
+    uniqueIndex('legacy_settlements_org_statement_key').on(
+      t.orgId,
+      t.kind,
+      t.instance,
+      sql`coalesce(event_id, '00000000-0000-0000-0000-000000000000'::uuid)`,
+      t.currency,
+    ),
+    check(
+      'legacy_settlements_kind_check',
+      sql.raw(`kind in (${LEGACY_SETTLEMENT_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check(
+      'legacy_settlements_status_check',
+      sql.raw(`status in (${LEGACY_SETTLEMENT_STATUSES.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('legacy_settlements_instance_check', sql`instance in ('yay', 'abc')`),
+    check('legacy_settlements_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('legacy_settlements_event_check', sql`(kind = 'event_statement') = (event_id is not null)`),
+    check(
+      'legacy_settlements_amounts_check',
+      sql`customer_paid_minor >= 0 and commission_minor >= 0 and admin_tax_minor >= 0 and organizer_earning_minor >= 0 and transferred_minor >= 0 and open_minor >= 0 and clawback_minor >= 0 and source_rows >= 0`,
+    ),
+    check('legacy_settlements_signoff_check', sql`(status = 'signed_off') = (signed_off_at is not null)`),
+  ],
+);

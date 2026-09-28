@@ -35,6 +35,8 @@ const RAW_DB_CLIENTS = [
   'drizzle-orm/neon-http',
 ];
 const PLATFORM_READER_APPS = ['apps/admin', 'apps/worker'];
+/** The legacy ELT (roadmap §7.5) is the only code that may write as `migrator`. */
+const MIGRATION_TOOLS = ['tools/legacy-migrate'];
 /** Files allowed to hold raw colour literals (ADR 0018: tokens are the only source). */
 /** The one file allowed to call Next's cache primitives: every entry is keyed and tagged by org. */
 const CACHE_HELPER = 'apps/web/src/server/public-cache.ts';
@@ -210,6 +212,9 @@ export function checkModules(root: string): Violation[] {
       }
       if (spec === '@yayatoh/db/platform' && !PLATFORM_READER_APPS.some((a) => rel.startsWith(`${a}/`))) {
         add('platform-reader', 'platform_reader access is limited to apps/admin and apps/worker');
+      }
+      if (spec === '@yayatoh/db/migration' && !MIGRATION_TOOLS.some((a) => rel.startsWith(`${a}/`))) {
+        add('migrator-access', 'the migrator connection is limited to tools/legacy-migrate');
       }
       if (spec === '@yayatoh/db/identity' && pkg?.name !== '@yayatoh/auth') {
         add('identity-db', 'the identity database handle is for packages/auth only');

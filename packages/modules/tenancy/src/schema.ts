@@ -277,3 +277,37 @@ export const apiKeys = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+export const ORG_RELATIONSHIP_KINDS = ['agency_client', 'host_affiliate', 'venue_partner'] as const;
+
+/**
+ * Parent → child org links (roadmap §4.1). Owned by the parent (`org_id`): e.g. the ABC org hosts
+ * its affiliates' events on abc.yayatoh.com (`host_affiliate`, created by the legacy migration).
+ * Access grants, commission and billing modes land with agencies (M3.x).
+ */
+export const orgRelationships = tenantTable(
+  tenancy,
+  'org_relationships',
+  {
+    childOrgId: uuid('child_org_id').notNull(),
+    kind: text('kind').notNull(),
+    /** Where the link came from, e.g. `legacy:abc` for the migration. */
+    source: text('source').notNull(),
+    detachedAt: timestamp('detached_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('org_relationships_org_child_kind_key').on(t.orgId, t.childOrgId, t.kind),
+    check('org_relationships_kind_check', inList('kind', ORG_RELATIONSHIP_KINDS)),
+    check('org_relationships_not_self', sql`child_org_id <> org_id`),
+    foreignKey({
+      name: 'org_relationships_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'org_relationships_child_fk',
+      columns: [t.childOrgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);

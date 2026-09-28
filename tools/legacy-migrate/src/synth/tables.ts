@@ -1,0 +1,354 @@
+/**
+ * The legacy tables the synthetic generator writes, with MySQL column types as `mysqldump` prints
+ * them. Column names, types and nullability follow the legacy migrations (read for this spec only;
+ * nothing is copied): the tables the M2.2b transforms read, plus two content tables (`pages`,
+ * `serverside_dates`) that are loaded to staging and left for T7.
+ */
+export interface SynthColumn {
+  readonly name: string;
+  /** MySQL type as dumped, e.g. `int unsigned`, `varchar(255)`, `decimal(10,2)`, `tinyint(1)`. */
+  readonly type: string;
+  readonly notNull?: boolean;
+}
+
+export interface SynthTable {
+  readonly name: string;
+  readonly columns: readonly SynthColumn[];
+  /** PRIMARY KEY column, if any. */
+  readonly pk?: string;
+}
+
+const c = (name: string, type: string, notNull = false): SynthColumn => ({ name, type, notNull });
+const stamps = [c('created_at', 'timestamp'), c('updated_at', 'timestamp')];
+
+export const SYNTH_TABLES: readonly SynthTable[] = [
+  {
+    name: 'settings',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('key', 'varchar(255)', true),
+      c('display_name', 'varchar(255)', true),
+      c('value', 'text'),
+      c('details', 'text'),
+      c('type', 'varchar(255)', true),
+      c('order', 'int', true),
+      c('group', 'varchar(255)'),
+    ],
+  },
+  {
+    name: 'roles',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('name', 'varchar(255)', true),
+      c('display_name', 'varchar(255)', true),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'countries',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('country_code', 'varchar(2)', true),
+      c('country_name', 'varchar(128)', true),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'categories',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('name', 'varchar(64)', true),
+      c('slug', 'varchar(128)', true),
+      ...stamps,
+      c('status', 'tinyint(1)', true),
+    ],
+  },
+  {
+    name: 'users',
+    pk: 'id',
+    columns: [
+      c('id', 'bigint unsigned', true),
+      c('name', 'varchar(255)', true),
+      c('first_name', 'varchar(191)'),
+      c('last_name', 'varchar(191)'),
+      c('social_links', 'text'),
+      c('email', 'varchar(255)', true),
+      c('apple_id', 'varchar(255)'),
+      c('email_verified_at', 'timestamp'),
+      c('password', 'varchar(255)', true),
+      c('remember_token', 'varchar(100)'),
+      ...stamps,
+      c('stripe_id', 'varchar(255)'),
+      c('avatar', 'varchar(255)'),
+      c('settings', 'text'),
+      c('role_id', 'int unsigned'),
+      c('organisation', 'varchar(256)'),
+      c('phone', 'varchar(512)'),
+      c('status', 'int'),
+      c('stripe_account_id', 'varchar(255)'),
+      c('organizer_id', 'bigint'),
+      c('country', 'varchar(5)'),
+      c('city', 'varchar(255)'),
+      c('deleted_at', 'timestamp'),
+    ],
+  },
+  {
+    name: 'user_roles',
+    columns: [
+      c('user_id', 'bigint unsigned', true),
+      c('role_id', 'int unsigned', true),
+      c('event_id', 'int'),
+    ],
+  },
+  {
+    name: 'events',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('title', 'varchar(256)'),
+      c('description', 'text'),
+      c('images', 'text'),
+      c('venue', 'varchar(256)'),
+      c('address', 'varchar(512)'),
+      c('city', 'varchar(256)'),
+      c('state', 'varchar(256)'),
+      c('zipcode', 'varchar(64)'),
+      c('country_id', 'int'),
+      c('start_date', 'date'),
+      c('end_date', 'date'),
+      c('start_time', 'time'),
+      c('end_time', 'time'),
+      c('repetitive', 'tinyint(1)'),
+      c('featured', 'tinyint(1)'),
+      c('status', 'tinyint(1)'),
+      c('category_id', 'int'),
+      c('user_id', 'int'),
+      ...stamps,
+      c('slug', 'varchar(512)', true),
+      c('price_type', 'tinyint(1)', true),
+      c('publish', 'tinyint(1)'),
+      c('is_publishable', 'varchar(512)'),
+      c('merge_schedule', 'tinyint(1)', true),
+      c('e_admin_commission', 'decimal(10,2) unsigned'),
+      c('currency', 'varchar(255)'),
+      c('is_private', 'tinyint(1)', true),
+      c('private_info', 'json'),
+    ],
+  },
+  {
+    name: 'schedules',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('repetitive_type', 'tinyint(1)', true),
+      c('repetitive_days', 'varchar(256)'),
+      c('repetitive_dates', 'varchar(256)'),
+      c('from_date', 'date'),
+      c('to_date', 'date'),
+      c('from_time', 'time'),
+      c('to_time', 'time'),
+      c('event_id', 'int', true),
+      c('user_id', 'int', true),
+      c('status', 'tinyint(1)', true),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'serverside_dates',
+    pk: 'id',
+    columns: [
+      c('id', 'bigint unsigned', true),
+      c('from_date', 'date', true),
+      c('dates', 'longtext', true),
+      c('event_id', 'int unsigned', true),
+      c('user_id', 'bigint unsigned', true),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'tickets',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('title', 'varchar(64)', true),
+      c('price', 'decimal(10,2)', true),
+      c('quantity', 'int', true),
+      c('description', 'varchar(512)'),
+      c('event_id', 'int', true),
+      ...stamps,
+      c('status', 'tinyint(1)', true),
+      c('access_dates', 'json'),
+      c('customer_limit', 'int'),
+      c('sale_start_date', 'timestamp'),
+      c('sale_end_date', 'timestamp'),
+      c('sale_price', 'decimal(10,2)'),
+      c('is_donation', 'tinyint(1)', true),
+      c('order', 'int', true),
+    ],
+  },
+  {
+    name: 'promocodes',
+    pk: 'id',
+    columns: [
+      c('id', 'bigint unsigned', true),
+      c('organizer_id', 'bigint unsigned'),
+      c('code', 'varchar(32)', true),
+      c('reward', 'double(10,2)'),
+      c('quantity', 'int'),
+      c('p_type', 'varchar(32)', true),
+      c('expires_at', 'timestamp'),
+      c('status', 'tinyint(1)', true),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'ticket_promocode',
+    columns: [c('promocode_id', 'int unsigned', true), c('ticket_id', 'int unsigned', true)],
+  },
+  {
+    name: 'transactions',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('amount_paid', 'decimal(10,2) unsigned', true),
+      c('item_sku', 'bigint unsigned', true),
+      c('order_number', 'varchar(255)'),
+      c('txn_id', 'varchar(512)'),
+      c('payer_reference', 'varchar(512)'),
+      c('currency_code', 'varchar(512)'),
+      c('payment_status', 'varchar(512)'),
+      c('payment_gateway', 'varchar(128)'),
+      c('status', 'tinyint(1)', true),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'bookings',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('customer_id', 'int unsigned', true),
+      c('organiser_id', 'int unsigned'),
+      c('event_id', 'int unsigned', true),
+      c('ticket_id', 'int unsigned', true),
+      c('quantity', 'int unsigned', true),
+      c('price', 'decimal(10,2) unsigned', true),
+      c('tax', 'decimal(10,2)'),
+      c('net_price', 'decimal(10,2)'),
+      c('status', 'tinyint(1)', true),
+      ...stamps,
+      c('event_title', 'varchar(256)', true),
+      c('event_start_date', 'date'),
+      c('event_end_date', 'date'),
+      c('event_start_time', 'time'),
+      c('event_end_time', 'time'),
+      c('event_repetitive', 'int unsigned', true),
+      c('ticket_title', 'varchar(256)', true),
+      c('ticket_price', 'decimal(10,2) unsigned', true),
+      c('event_category', 'varchar(256)', true),
+      c('booking_cancel', 'int'),
+      c('order_number', 'varchar(255)'),
+      c('transaction_id', 'int unsigned', true),
+      c('customer_name', 'varchar(256)', true),
+      c('customer_email', 'varchar(256)', true),
+      c('currency', 'varchar(5)'),
+      c('checked_in', 'tinyint', true),
+      c('payment_type', 'varchar(256)', true),
+      c('is_paid', 'tinyint(1)', true),
+      c('is_bulk', 'tinyint(1)', true),
+      c('is_distributable', 'tinyint', true),
+      c('distributed_by', 'bigint unsigned'),
+      c('distributed_from_booking_id', 'int unsigned'),
+      c('promocode_id', 'int unsigned'),
+      c('promocode', 'varchar(64)'),
+      c('pos_id', 'int'),
+      c('scanner_id', 'int'),
+      c('common_order', 'varchar(255)', true),
+      c('promocode_reward', 'varchar(255)'),
+      c('distributor_tag', 'varchar(255)'),
+      c('checked_in_time', 'datetime'),
+    ],
+  },
+  {
+    name: 'commissions',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('organiser_id', 'int unsigned', true),
+      c('booking_id', 'int unsigned'),
+      c('admin_commission', 'decimal(10,2) unsigned', true),
+      c('customer_paid', 'decimal(10,2) unsigned', true),
+      c('organiser_earning', 'decimal(10,2) unsigned', true),
+      c('transferred', 'tinyint(1)', true),
+      c('month_year', 'varchar(10)', true),
+      c('status', 'tinyint(1)', true),
+      ...stamps,
+      c('event_id', 'int unsigned'),
+      c('admin_tax', 'decimal(10,2)', true),
+      c('settled', 'tinyint(1)', true),
+    ],
+  },
+  {
+    name: 'attendees',
+    pk: 'id',
+    columns: [
+      c('id', 'bigint unsigned', true),
+      c('user_id', 'bigint unsigned'),
+      c('ticket_id', 'int unsigned'),
+      c('event_date', 'date'),
+      c('event_id', 'int unsigned', true),
+      c('booking_id', 'int unsigned'),
+      c('name', 'varchar(255)'),
+      c('phone', 'varchar(255)'),
+      c('address', 'varchar(255)'),
+      c('status', 'tinyint(1)', true),
+      c('assignment_status', 'varchar(20)', true),
+      c('checked_in', 'tinyint(1)', true),
+      ...stamps,
+      c('common_order', 'varchar(255)'),
+    ],
+  },
+  {
+    name: 'checkins',
+    pk: 'id',
+    columns: [
+      c('id', 'bigint unsigned', true),
+      c('booking_id', 'int unsigned', true),
+      c('event_id', 'int unsigned', true),
+      c('event_start_date', 'date'),
+      c('check_in_time', 'time'),
+      c('kids_count', 'int unsigned', true),
+      c('user_id', 'bigint unsigned'),
+      ...stamps,
+    ],
+  },
+  {
+    name: 'pages',
+    pk: 'id',
+    columns: [
+      c('id', 'int unsigned', true),
+      c('author_id', 'int', true),
+      c('title', 'varchar(255)', true),
+      c('body', 'mediumtext'),
+      c('slug', 'varchar(255)', true),
+      c('status', "enum('ACTIVE','INACTIVE')", true),
+      ...stamps,
+    ],
+  },
+];
+
+/** `CREATE TABLE` exactly as mysqldump (MySQL 8) prints it. */
+export function createTableSql(t: SynthTable): string {
+  const cols = t.columns.map((col) => {
+    const coll = /char|text|enum/.test(col.type) ? ' COLLATE utf8mb4_unicode_ci' : '';
+    const nn = col.notNull ? ' NOT NULL' : ' DEFAULT NULL';
+    const auto = t.pk === col.name && col.name === 'id' ? ' AUTO_INCREMENT' : '';
+    return `  \`${col.name}\` ${col.type}${coll}${col.notNull ? nn : col.type === 'text' || col.type.endsWith('text') || col.type === 'json' ? '' : nn}${auto}`;
+  });
+  if (t.pk) cols.push(`  PRIMARY KEY (\`${t.pk}\`)`);
+  return `CREATE TABLE \`${t.name}\` (\n${cols.join(',\n')}\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;\n`;
+}

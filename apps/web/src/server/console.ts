@@ -58,7 +58,9 @@ export const loadEvent = cache(async (orgSlug: string, eventSlug: string) => {
     const event = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, data.ctx, ports);
     return { data, event };
   } catch (err) {
-    if (isDomainError(err) && err.code === 'not_found') notFound();
+    // A member whose role cannot read events (e.g. a scanner) gets the not-found page, which
+    // says they may not have access, instead of an error page.
+    if (isDomainError(err) && (err.code === 'not_found' || err.code === 'forbidden')) notFound();
     throw err;
   }
 });

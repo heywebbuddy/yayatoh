@@ -8,6 +8,12 @@ export interface GuardViolation {
 
 const SYSTEM_SCHEMAS = ['pg_catalog', 'information_schema', 'drizzle', 'pgboss', 'public'];
 
+/**
+ * The legacy ELT's platform-owned schemas (M2.2b): `legacy` (control) and `legacy_{inst}` (staging,
+ * raw legacy rows). They are not tenant tables; instead the runtime roles must have no access at all.
+ */
+export const isMigrationSchema = (schema: string) => schema === 'legacy' || /^legacy_[a-z]+$/.test(schema);
+
 /** Normalise a policy expression for comparison with the canonical tenant predicate. */
 function normalise(expr: string | null): string {
   return (expr ?? '')
@@ -59,9 +65,17 @@ export async function schemaGuard(
     join pg_attribute a on a.attrelid = t.oid and a.attnum = i.indkey[0]`;
 
   const violations: GuardViolation[] = [];
+  const migrationSchemas = [...new Set(tables.map((t) => t.schema).filter(isMigrationSchema))];
+  for (const schema of migrationSchemas) {
+    const [access] = await sql<{ app: boolean; reader: boolean }[]>`
+      select has_schema_privilege(${ROLE.appUser}, ${schema}, 'usage') as app,
+             has_schema_privilege(${ROLE.platformReader}, ${schema}, 'usage') as reader`;
+    if (access?.app || access?.reader)
+      violations.push({ table: `${schema}.*`, problem: 'migration schema is visible to a runtime role' });
+  }
   for (const t of tables) {
     const key = `${t.schema}.${t.name}`;
-    if (key in globalTables) continue;
+    if (key in globalTables || isMigrationSchema(t.schema)) continue;
     const v = (problem: string) => violations.push({ table: key, problem });
     if (t.org_col !== 'uuid') v('missing org_id uuid column');
     else if (!t.org_notnull) v('org_id must be NOT NULL');

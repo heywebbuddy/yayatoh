@@ -4,7 +4,13 @@ import { eventStaffTx, findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
-import { activeTicketCountTx, publicKeysTx, type ScannableTicket, ticketForScanTx } from '@yayatoh/ticketing';
+import {
+  activeTicketCountTx,
+  publicKeysTx,
+  type ScannableTicket,
+  ticketForLegacyCodeTx,
+  ticketForScanTx,
+} from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
@@ -40,7 +46,7 @@ export type ScanOutcomeDto = z.infer<typeof ScanOutcomeDto>;
 async function resolveCode(
   tx: TenantTx,
   raw: string,
-): Promise<{ kind: 'yy1' | 'short' | 'unknown'; ticket: ScannableTicket | null }> {
+): Promise<{ kind: 'yy1' | 'short' | 'legacy' | 'unknown'; ticket: ScannableTicket | null }> {
   const code = raw.trim().toUpperCase();
   if (code.startsWith(CODE_PREFIX)) {
     const v = await verifyTicketCode(code, await publicKeysTx(tx));
@@ -49,6 +55,9 @@ async function resolveCode(
     // A reissued ticket (new rev) makes older codes for it invalid.
     return { kind: 'yy1', ticket: t && t.rev === v.rev ? t : null };
   }
+  // Migrated tickets keep their legacy QR (roadmap §7.5): checked before short codes.
+  const legacy = await ticketForLegacyCodeTx(tx, raw);
+  if (legacy) return { kind: 'legacy', ticket: legacy };
   if (SHORT_CODE.test(code)) return { kind: 'short', ticket: await ticketForScanTx(tx, { shortCode: code }) };
   return { kind: 'unknown', ticket: null };
 }

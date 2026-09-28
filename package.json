@@ -20,6 +20,10 @@
     "db:generate": "pnpm --filter @yayatoh/db generate",
     "db:migrate": "pnpm --filter @yayatoh/db migrate",
     "seed": "pnpm --filter @yayatoh/web seed",
+    "migrate:legacy": "node tools/legacy-migrate/cli.ts run",
+    "migrate:legacy:validate": "node tools/legacy-migrate/cli.ts validate",
+    "migrate:legacy:synth": "node tools/legacy-migrate/cli.ts synth",
+    "migrate:legacy:demo": "node tools/legacy-migrate/cli.ts demo",
     "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/sdk generate:check",
     "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
   },

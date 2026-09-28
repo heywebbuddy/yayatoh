@@ -30,6 +30,10 @@ describe('check-modules gate canaries', () => {
     expect(rules('platform-reader')).toContain('platform-reader');
   });
 
+  it('the migrator connection outside tools/legacy-migrate fails', () => {
+    expect(rules('migrator-access')).toContain('migrator-access');
+  });
+
   it('literal UI strings in the web app fail', () => {
     const v = checkModules(here('../canaries/literal-strings')).filter((x) => x.rule === 'i18n-literal');
     expect(v.map((x) => x.message)).toEqual([

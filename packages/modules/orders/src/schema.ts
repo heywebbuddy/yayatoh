@@ -27,6 +27,20 @@ export const ORDER_STATUSES = [
   'refunded',
 ] as const;
 
+/**
+ * How a migrated payment was charged in the legacy app (roadmap §5.3 "Legacy carry-over"), so a
+ * refund routes correctly (e.g. with the `Stripe-Account` header for direct charges). Null for
+ * orders taken by this platform.
+ */
+export const CHARGE_MODELS = [
+  'legacy_platform',
+  'legacy_direct_connected',
+  'legacy_destination',
+  'paypal',
+  'offline',
+  'sct',
+] as const;
+
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 const minor = (name: string) => bigint(name, { mode: 'number' });
 
@@ -66,6 +80,8 @@ export const orders = tenantTable(
     /** Organizer-collected sales: how it was paid and any reference (e.g. a Zelle confirmation). */
     paymentMethod: text('payment_method'),
     paymentReference: text('payment_reference'),
+    /** Migrated orders only: the legacy charge model (see CHARGE_MODELS). */
+    chargeModel: text('charge_model'),
     /** Seated checkout: the chosen seats (held under the order's id until paid or expired). */
     seatUuids: uuid('seat_uuids').array().notNull().default(sql`'{}'::uuid[]`),
     /** Multi-date events (M1.4b): the chosen date (`events.occurrences`, hand-written FK). */
@@ -98,6 +114,10 @@ export const orders = tenantTable(
     check(
       'orders_payment_method_check',
       sql`payment_method is null or payment_method in ('cash', 'zelle', 'card_terminal', 'other')`,
+    ),
+    check(
+      'orders_charge_model_check',
+      sql.raw(`charge_model is null or charge_model in (${CHARGE_MODELS.map((m) => `'${m}'`).join(', ')})`),
     ),
   ],
 );

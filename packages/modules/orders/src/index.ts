@@ -60,5 +60,5 @@ export {
   searchOrdersQuery,
 } from './queries.ts';
 export { type RefundOutcome, refundOrder } from './refund-flow.ts';
-export { ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
+export { CHARGE_MODELS, ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
 export { REMINDER_LEAD_MS, refundMailer, ticketMailer } from './subscribers.ts';

@@ -1,5 +1,12 @@
 import { GLOBAL_TABLES, withoutTenant, withTenant } from '@yayatoh/db';
-import { type AdminSql, adminClient, closePools, roleGuard, schemaGuard } from '@yayatoh/db/testing';
+import {
+  type AdminSql,
+  adminClient,
+  closePools,
+  isMigrationSchema,
+  roleGuard,
+  schemaGuard,
+} from '@yayatoh/db/testing';
 import { createCtx } from '@yayatoh/kernel';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -18,7 +25,10 @@ beforeAll(async () => {
     where c.relkind in ('r','p') and not c.relispartition
       and n.nspname not in ('pg_catalog','information_schema','drizzle','pgboss','public') and n.nspname not like 'pg\\_%'
     order by 1`;
-  tables = rows.map((r) => r.t).filter((t) => !(t in GLOBAL_TABLES));
+  // Migration schemas are not tenant tables; the schema guard checks app_user cannot reach them.
+  tables = rows
+    .map((r) => r.t)
+    .filter((t) => !(t in GLOBAL_TABLES) && !isMigrationSchema(t.split('.')[0] ?? ''));
 });
 
 afterAll(async () => {

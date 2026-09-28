@@ -98,7 +98,7 @@ export const scans = tenantTable(
       .on(t.orgId, t.clientScanId)
       .where(sql`client_scan_id is not null`),
     check('scans_result_check', sql.raw(`result in (${SCAN_RESULTS.map((r) => `'${r}'`).join(', ')})`)),
-    check('scans_code_kind_check', sql`code_kind in ('yy1', 'short', 'unknown')`),
+    check('scans_code_kind_check', sql`code_kind in ('yy1', 'short', 'legacy', 'unknown')`),
   ],
 );
 

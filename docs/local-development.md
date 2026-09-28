@@ -11,6 +11,8 @@
 6. **Run:** `pnpm dev`.
 7. **Gate:** `pnpm verify` before every PR.
 
+**Legacy migration (M2.2b):** `pnpm migrate:legacy:demo` generates a synthetic legacy dataset (both instances) and migrates it into your database as `migrator`; the web e2e global setup runs it too, so `LOCAL_KMS_KEY` must be set when you run Playwright. See `docs/runbooks/legacy-migration.md` for real (masked) dumps.
+
 Integration tests don't need step 4: they create a throwaway `yayatoh_test` database with random role passwords from `ADMIN_DATABASE_URL`, which defaults to the compose service. They refuse to run against any host other than `localhost` or `postgres`.
 
 **Never** point any variable at production. Development uses masked snapshots only (CLAUDE.md → Safety).

@@ -43,3 +43,6 @@ blob-report/
 k6/.data/
 zap/zap-report.*
 zap/zap.yaml
+
+# migrate:legacy:demo handles for the e2e suite (synthetic, throwaway database)
+apps/web/e2e/.generated/
