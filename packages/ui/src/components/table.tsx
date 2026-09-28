@@ -25,7 +25,8 @@ export function Table<Row>({ caption, columns, rows, rowKey, empty, captionHidde
       aria-label={caption}
       // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1)
       tabIndex={0}
-      className="overflow-x-auto rounded-card border border-zinc-200 bg-white"
+      // `relative`: absolutely positioned content (sr-only labels) is clipped by the scroller too.
+      className="relative overflow-x-auto rounded-card border border-zinc-200 bg-white"
     >
       <table className="w-full min-w-[36rem] border-collapse text-body">
         <caption className={captionHidden ? 'sr-only' : 'p-4 text-start text-section'}>{caption}</caption>

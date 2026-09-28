@@ -1,9 +1,11 @@
-import { setPlatformAuditSink } from '@yayatoh/db/platform';
+import { withoutTenant } from '@yayatoh/db';
+import { setPlatformAuditSink, withPlatformReader } from '@yayatoh/db/platform';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { agreementsQuery, listMembersQuery, signUpOrganization, signupCodeValid } from '@yayatoh/tenancy';
 import { ports } from '@yayatoh/testing';
+import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createSignupCode, randomSignupCode } from '../src/signup-codes.ts';
 
@@ -85,5 +87,90 @@ describe('invite-only signup (M1.3b)', () => {
     await expect(signUpOrganization(person(), input(code, 'legal'), ports)).rejects.toMatchObject({
       code: 'validation_failed',
     });
+  });
+});
+
+async function rejectsWith(p: Promise<unknown>, re: RegExp) {
+  const err = await p.then(
+    () => null,
+    (e: unknown) => e as { message?: string; cause?: { message?: string } },
+  );
+  expect(err).not.toBeNull();
+  expect(`${err?.message} ${err?.cause?.message ?? ''}`).toMatch(re);
+}
+
+describe('signup codes in the staff console (M1.3f)', () => {
+  const list = () =>
+    withPlatformReader({ actor: 'staff:test', reason: 'test: list signup codes' }, (tx) =>
+      tx.execute<Record<string, unknown>>(sql`select * from platform.list_signup_codes(500)`),
+    );
+  const revoke = (id: string) =>
+    withPlatformReader(
+      { actor: 'staff:test', reason: `test: revoke ${id}` },
+      (tx) =>
+        tx.execute<{ revoked: boolean }>(
+          sql`select platform.revoke_signup_code(${id}::uuid, 'staff:revoker') as revoked`,
+        ),
+      { callsWritingFunctions: true },
+    );
+
+  it('lists codes with uses, expiry, note and creator but never the hash', async () => {
+    const note = `listed-${uuidv7().slice(-8)}`;
+    const { id } = await createSignupCode({ maxUses: 3, days: 5, note, createdBy: 'staff:test' });
+    const row = (await list()).find((r) => r.id === id);
+    expect(row).toMatchObject({ max_uses: 3, uses: 0, note, created_by: 'staff:test', revoked_at: null });
+    expect(Object.keys(row ?? {}).sort()).toEqual(
+      [
+        'created_at',
+        'created_by',
+        'expires_at',
+        'id',
+        'max_uses',
+        'note',
+        'revoked_at',
+        'revoked_by',
+        'uses',
+      ].sort(),
+    );
+  });
+
+  it('a revoked code stops working at once, is revoked once, and records who revoked it', async () => {
+    const { id, code } = await createSignupCode({
+      maxUses: 5,
+      days: 5,
+      note: 'to revoke',
+      createdBy: 'staff:test',
+    });
+    expect(await signupCodeValid(code)).toBe(true);
+    expect((await revoke(id))[0]?.revoked).toBe(true);
+    expect((await revoke(id))[0]?.revoked).toBe(false);
+    expect(await signupCodeValid(code)).toBe(false);
+    await expect(
+      signUpOrganization(person(), input(code, `rv-${uuidv7().slice(-8)}`), ports),
+    ).rejects.toMatchObject({ code: 'validation_failed', details: { field: 'code' } });
+    expect((await list()).find((r) => r.id === id)).toMatchObject({ revoked_by: 'staff:revoker' });
+    expect(audited).toContain(`test: revoke ${id}`);
+  });
+
+  it('the runtime role can neither list nor revoke; platform_reader still has no table access', async () => {
+    await rejectsWith(
+      withoutTenant((tx) => tx.execute(sql`select * from platform.list_signup_codes(10)`)),
+      /permission denied/,
+    );
+    await rejectsWith(
+      withoutTenant((tx) => tx.execute(sql`select platform.revoke_signup_code(${uuidv7()}::uuid, 'x')`)),
+      /permission denied/,
+    );
+    await rejectsWith(
+      withPlatformReader({ actor: 'staff:test', reason: 'test: raw table' }, (tx) =>
+        tx.execute(sql`select code_hash from platform.signup_codes limit 1`),
+      ),
+      /permission denied/,
+    );
+  });
+
+  it('generated codes use the unambiguous alphabet', () => {
+    for (let i = 0; i < 50; i++)
+      expect(randomSignupCode()).toMatch(/^YY-[A-HJKMNP-Z2-9]{4}-[A-HJKMNP-Z2-9]{4}-[A-HJKMNP-Z2-9]{4}$/);
   });
 });

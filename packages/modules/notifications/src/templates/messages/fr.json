@@ -91,6 +91,11 @@
       "intro": "Un membre de l'équipe Yayatoh a commencé à agir en tant que {member} dans {org} pour vous aider. Motif : {reason}. Cet accès prend fin au plus tard le {until}. Pendant ce temps, rien ne peut être remboursé, versé, exporté ni supprimé, et tout ce qui est fait apparaît dans votre journal d'activité. Si vous ne vous y attendiez pas, contactez immédiatement le support Yayatoh.",
       "cta": "Voir l'activité"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh a suspendu {org}} reactivated {{org} est de nouveau en ligne} other {Yayatoh a fermé {org}}}",
+      "intro": "{status, select, suspended {Le support Yayatoh a suspendu {org}. Ses pages publiques et la vente de billets sont hors ligne et la console est en lecture seule. Les billets déjà vendus restent valables et peuvent toujours être scannés à l’entrée. Contactez le support Yayatoh pour en savoir plus.} reactivated {Le support Yayatoh a réactivé {org}. Ses pages publiques, ses annonces et la vente de billets sont de retour, et la console fonctionne comme avant.} other {Le support Yayatoh a fermé {org}. Ses pages publiques sont hors ligne et elle ne peut plus être modifiée. En tant que propriétaire, vous pouvez toujours l’ouvrir et télécharger vos données. Contactez le support Yayatoh si vous pensez qu’il s’agit d’une erreur.}}",
+      "cta": "Ouvrir la console"
+    },
     "notifications.test": {
       "subject": "Notification de test",
       "intro": "Les notifications fonctionnent."

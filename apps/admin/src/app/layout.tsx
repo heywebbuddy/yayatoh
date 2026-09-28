@@ -1,6 +1,7 @@
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
+import { connection } from 'next/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -12,7 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title'), robots: { index: false, follow: false } };
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  // Render per request so every page carries this response's CSP nonce (M1.3f, src/proxy.ts).
+  await connection();
   return (
     <html lang="en" dir="ltr" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-dvh bg-zinc-50 text-zinc-900 antialiased">

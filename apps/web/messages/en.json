@@ -61,7 +61,8 @@
         "destination-changed": "New payout account: transfers to it start after {until}"
       },
       "tenancy": {
-        "staff-access": "Yayatoh support is acting as {member} until {until}"
+        "staff-access": "Yayatoh support is acting as {member} until {until}",
+        "org-status": "{status, select, suspended {Yayatoh suspended this organization} reactivated {This organization is back online} other {Yayatoh closed this organization}}"
       }
     },
     "kinds": {
@@ -74,7 +75,8 @@
       },
       "tenancy": {
         "invitation": "Team invitation",
-        "staff-access": "Staff access"
+        "staff-access": "Staff access",
+        "org-status": "Organization status"
       },
       "ticketing": {
         "claim-link": "Ticket claim link",
@@ -760,6 +762,7 @@
     "chooseDate": "Choose a date first.",
     "dateSoldOut": "This date just sold out. Choose another date.",
     "dateUnavailable": "This date is no longer available. Choose another date.",
+    "orgUnavailable": "This organizer isn't selling tickets right now. Tickets already bought stay valid.",
     "riskBlocked": "We couldn’t take this order. Please contact the organizer."
   },
   "fakePay": {
@@ -1417,6 +1420,7 @@
       "unknown": "We could not verify this domain. Check its DNS records and try again."
     },
     "recordsIntro": "Add these records at the company that manages your domain's DNS, then check again. Changes can take up to a day.",
+    "autoCheck": "We also check again on our own every few minutes, so this page updates without you.",
     "recordsCaption": "DNS records for {host}",
     "recordType": "Type",
     "recordName": "Name",
@@ -3758,5 +3762,16 @@
     "banner": "You are acting as {member} ({staff}, Yayatoh staff). Refunds, payouts, exports and deletions are turned off. This ends at {until}.",
     "end": "End",
     "endLabel": "End acting as {member}"
+  },
+  "orgStatus": {
+    "label": "Organization status",
+    "suspended": {
+      "title": "This organization is suspended",
+      "body": "Yayatoh support suspended it. Your public pages and ticket sales are offline and the console is read-only: you can look at everything and download exports, but not change anything. Tickets already sold stay valid and still scan at the door. Contact Yayatoh support to find out more."
+    },
+    "terminated": {
+      "title": "This organization is closed",
+      "body": "Yayatoh support closed it. Its public pages are offline and nothing can be changed. As an owner you can still open it and download your data, for example from Activity."
+    }
   }
 }

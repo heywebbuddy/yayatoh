@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { disputeEvidenceHtml } from '@yayatoh/pdf';
 import {
@@ -38,7 +39,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       (n) => t('trimmed', { n }),
     ),
   );
-  const headers = { 'cache-control': 'private, no-store', 'x-robots-tag': 'noindex' };
+  const headers = {
+    'cache-control': 'private, no-store',
+    'x-robots-tag': 'noindex',
+    // A static document (M1.3f): no scripts at all; only its own <style> block, by hash.
+    'content-security-policy': documentCsp(document),
+    'x-content-type-options': 'nosniff',
+    'x-frame-options': 'DENY',
+  };
   const renderer = getPdfRenderer();
   if (!renderer)
     return new Response(document, { headers: { ...headers, 'content-type': 'text/html; charset=utf-8' } });
@@ -50,4 +58,23 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       'content-disposition': `inline; filename="dispute-evidence-${disputeId.slice(-8)}.pdf"`,
     },
   });
+}
+
+/** No scripts, no network; the document's inline <style> blocks are allowed by their SHA-256. */
+function documentCsp(doc: string): string {
+  const styles = [...doc.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(
+    (m) =>
+      `'sha256-${createHash('sha256')
+        .update(m[1] ?? '')
+        .digest('base64')}'`,
+  );
+  return [
+    "default-src 'none'",
+    `style-src ${styles.length ? styles.join(' ') : "'none'"}`,
+    "style-src-attr 'none'",
+    'img-src data:',
+    "base-uri 'none'",
+    "form-action 'none'",
+    "frame-ancestors 'none'",
+  ].join('; ');
 }

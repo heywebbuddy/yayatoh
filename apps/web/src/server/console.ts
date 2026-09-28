@@ -37,7 +37,7 @@ export const loadConsole = cache(async (orgSlug: string) => {
   if (!imp && !session.twoFactorEnabled && orgs.some((o) => roleRequiresTwoFactor(o.role)))
     return redirect({ href: '/account/security?required=1', locale });
   const resolved = await resolveOrgSlug(orgSlug);
-  if (!resolved || resolved.status === 'terminated') notFound();
+  if (!resolved) notFound();
   if (imp && resolved.orgId !== imp.orgId) notFound();
   const ctx = createCtx({
     orgId: resolved.orgId,
@@ -47,7 +47,8 @@ export const loadConsole = cache(async (orgSlug: string) => {
     impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
   });
   const role = await memberRole(ctx);
-  if (!role) notFound();
+  // A closed org (M1.3f) stays open to its owners only, read-only, so they can take their data out.
+  if (!role || (resolved.status === 'terminated' && role !== 'owner')) notFound();
   const [org, modules, logos] = await Promise.all([
     executeQuery(getOrganizationQuery, {}, ctx, ports),
     effectiveModules(ctx),

@@ -1,33 +1,17 @@
 import 'server-only';
 import { databaseAuditSink, setPlatformAuditSink, withPlatformReader } from '@yayatoh/db/platform';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
-import type { STAFF_ROLES } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { getAuth } from './auth.ts';
+import { type StaffAction, type StaffRole, staffCan } from './staff-roles.ts';
 
 // Every platform_reader use from the console lands in platform.access_log before it runs.
 setPlatformAuditSink(databaseAuditSink);
 
-export type StaffRole = (typeof STAFF_ROLES)[number];
-
-/** What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only). */
-const CAN: Record<StaffRole, readonly StaffAction[]> = {
-  // Only admins may act as an org member (M1.2e, roadmap §10: restrict impersonation to admins).
-  admin: ['view', 'suspend', 'payouts', 'fees', 'entitlements', 'reports', 'impersonate'],
-  support: ['view', 'suspend', 'reports'],
-  finance: ['view', 'payouts', 'fees'],
-};
-export type StaffAction =
-  | 'view'
-  | 'suspend'
-  | 'payouts'
-  | 'fees'
-  | 'entitlements'
-  | 'reports'
-  | 'impersonate';
+export type { StaffAction, StaffRole } from './staff-roles.ts';
 
 export interface Staff {
   readonly userId: string;
@@ -60,7 +44,7 @@ export const currentStaff = cache(async (): Promise<Staff | 'signed_out' | null>
     email: s.user.email,
     role,
     actor,
-    can: (a) => CAN[role].includes(a),
+    can: (a) => staffCan(role, a),
     ctx: (orgId) => createCtx({ orgId, actor: { type: 'system', name: actor } }),
   };
 });

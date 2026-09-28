@@ -91,6 +91,11 @@
       "intro": "一名 Yayatoh 工作人員已開始以 {member} 的身分在 {org} 中操作，以提供協助。原因：{reason}。此存取將在 {until} 前結束。在此期間，無法進行任何退款、付款、匯出或刪除，所有操作都會記錄在你的活動記錄中。如果這不在你的預期之內，請立即聯絡 Yayatoh 支援。",
       "cta": "查看活動"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh 已暫停 {org}} reactivated {{org} 已恢復上線} other {Yayatoh 已關閉 {org}}}",
+      "intro": "{status, select, suspended {Yayatoh 支援團隊已暫停 {org}。其公開頁面和售票已下線，主控台為唯讀。已售出的票券仍然有效，仍可在入口掃描。如需了解詳情，請聯絡 Yayatoh 支援。} reactivated {Yayatoh 支援團隊已恢復 {org}。公開頁面、活動列表和售票已恢復，主控台照常使用。} other {Yayatoh 支援團隊已關閉 {org}。其公開頁面已下線，且無法再進行變更。身為擁有者，你仍可開啟它並下載你的資料。如果你認為這是錯誤，請聯絡 Yayatoh 支援。}}",
+      "cta": "開啟主控台"
+    },
     "notifications.test": {
       "subject": "測試通知",
       "intro": "通知功能正常。"

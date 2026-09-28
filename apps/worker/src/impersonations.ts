@@ -2,9 +2,14 @@ import { dueImpersonations, endImpersonation, purgeHandoffCodes } from '@yayatoh
 import { billingEntitlements } from '@yayatoh/billing';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { createCommandPorts } from '@yayatoh/platform';
-import { endImpersonationCommand, orgAuthorizer } from '@yayatoh/tenancy';
+import { endImpersonationCommand, orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 
-const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+// The org gate (M1.3f) lets system actors through; wired for parity with the apps.
+const ports = createCommandPorts({
+  entitlements: billingEntitlements,
+  authorizer: orgAuthorizer,
+  orgGate: orgStatusGate,
+});
 
 /**
  * Staff impersonations end after one hour (M1.2e). Their sessions already expire with them; this

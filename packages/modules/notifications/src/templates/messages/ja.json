@@ -91,6 +91,11 @@
       "intro": "Yayatoh のスタッフが、サポートのために {org} で {member} として操作を開始しました。理由：{reason}。このアクセスは {until} までに終了します。この間、返金・支払い・エクスポート・削除は一切できず、行われた操作はすべてアクティビティログに記録されます。心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。",
       "cta": "アクティビティを見る"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh が {org} を停止しました} reactivated {{org} が再開しました} other {Yayatoh が {org} を閉鎖しました}}",
+      "intro": "{status, select, suspended {Yayatoh サポートが {org} を停止しました。公開ページとチケット販売は停止中で、コンソールは閲覧のみです。販売済みのチケットは引き続き有効で、入口でスキャンできます。詳しくは Yayatoh サポートにお問い合わせください。} reactivated {Yayatoh サポートが {org} を再開しました。公開ページ、掲載、チケット販売が戻り、コンソールも以前どおり使えます。} other {Yayatoh サポートが {org} を閉鎖しました。公開ページは停止され、今後は変更できません。オーナーは引き続き開いてデータをダウンロードできます。誤りだと思われる場合は Yayatoh サポートにお問い合わせください。}}",
+      "cta": "コンソールを開く"
+    },
     "notifications.test": {
       "subject": "テスト通知",
       "intro": "通知は正常に動作しています。"

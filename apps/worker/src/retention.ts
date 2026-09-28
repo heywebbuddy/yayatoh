@@ -3,10 +3,15 @@ import { withPlatformReader } from '@yayatoh/db/platform';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { createCommandPorts, purgeRateLimits } from '@yayatoh/platform';
 import { type RetentionResult, retentionCommand } from '@yayatoh/privacy';
-import { orgAuthorizer } from '@yayatoh/tenancy';
+import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
-const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+// The org gate (M1.3f) lets system actors through; wired for parity with the apps.
+const ports = createCommandPorts({
+  entitlements: billingEntitlements,
+  authorizer: orgAuthorizer,
+  orgGate: orgStatusGate,
+});
 
 export interface RetentionRun {
   readonly orgs: number;

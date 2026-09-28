@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import type { TenantTx } from '@yayatoh/db';
 import { isUniqueViolation, withoutTenant } from '@yayatoh/db';
 import {
@@ -61,6 +61,27 @@ export const hashSignupCode = (code: string) =>
   createHash('sha256')
     .update(`signup:${code.toUpperCase().replace(/[^A-Z0-9]/g, '')}`)
     .digest('hex');
+
+const SIGNUP_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+
+/** A human-friendly signup code, e.g. YY-7KQ4-M2XR-P9TD (12 characters of 31: ~59 bits). */
+export function randomSignupCode(): string {
+  const chars: string[] = [];
+  // Rejection sampling keeps every character equally likely (256 is not a multiple of 31).
+  const limit = 256 - (256 % SIGNUP_ALPHABET.length);
+  while (chars.length < 12)
+    for (const b of randomBytes(16))
+      if (b < limit && chars.length < 12) chars.push(SIGNUP_ALPHABET[b % SIGNUP_ALPHABET.length] as string);
+  const c = chars.join('');
+  return `YY-${c.slice(0, 4)}-${c.slice(4, 8)}-${c.slice(8, 12)}`;
+}
+
+/** What staff give when they create a code in the console (M1.3f). */
+export const NewSignupCodeInput = z.object({
+  maxUses: z.coerce.number().int().min(1).max(1000),
+  days: z.coerce.number().int().min(1).max(365),
+  note: z.string().trim().min(1).max(200),
+});
 
 /** Is this signup code usable right now (not expired, revoked or used up)? */
 export async function signupCodeValid(code: string): Promise<boolean> {

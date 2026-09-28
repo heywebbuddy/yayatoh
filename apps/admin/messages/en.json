@@ -47,6 +47,7 @@
     },
     "commission": "Commission",
     "apiUsage": "API usage",
+    "signupCodes": "Signup codes",
     "reports": "Messaging reports"
   },
   "tenants": {
@@ -94,6 +95,9 @@
       "entitlement": "Entitlement override saved.",
       "evidence": "Evidence submitted.",
       "impersonation_ended": "Acting as the member ended.",
+      "status_suspend": "Suspended. Its public pages and ticket sales are offline and its console is read-only.",
+      "status_reactivate": "Reactivated. Its public pages, listings and ticket sales are back.",
+      "status_terminate": "Terminated. Its public pages are offline for good; its owners can still export their data.",
       "reconciled": "Reconciliation difference resolved."
     },
     "field": {
@@ -213,6 +217,57 @@
         "not_found": "That person isn't a member of this org."
       }
     },
+    "status": {
+      "title": "Organization status",
+      "current": "Status: {status}",
+      "value": {
+        "active": "Active",
+        "limited": "Limited",
+        "suspended": "Suspended",
+        "terminated": "Terminated"
+      },
+      "explain": {
+        "active": "Public pages, listings and ticket sales are on.",
+        "limited": "Public pages, listings and ticket sales are on, with limits.",
+        "suspended": "Public pages, listings, the widget and ticket sales are offline and the console is read-only for its members. Tickets already sold stay valid and still scan.",
+        "terminated": "Closed. Public pages are offline, nothing can be changed, and only its owners can still open the console to export their data. No data was deleted."
+      },
+      "form": {
+        "suspend": "Suspend this organization",
+        "reactivate": "Reactivate this organization",
+        "terminate": "Terminate this organization"
+      },
+      "effect": {
+        "suspend": "Takes its public pages, marketplace listings, tenant site, widget and checkout offline at once and makes its console read-only. Existing orders stay valid and tickets still scan. The owners are told (without your reason).",
+        "reactivate": "Brings its public pages, listings and checkout back and makes its console writable again. The owners are told.",
+        "terminate": "Closes it for good: public pages go offline, ticket scanning stops and members lose the console, except owners, who can still export their data. This can't be undone from the console. Nothing is deleted."
+      },
+      "confirm": {
+        "suspend": "I understand its public pages go offline and its console becomes read-only.",
+        "reactivate": "I understand its public pages and checkout come back."
+      },
+      "typeSlug": "Type its address ({slug}) to confirm",
+      "submit": {
+        "suspend": "Suspend organization",
+        "reactivate": "Reactivate organization",
+        "terminate": "Terminate organization"
+      },
+      "adminsOnly": "Only admins can change an organization's status.",
+      "final": "Terminated organizations can't be reactivated from the console.",
+      "history": "Status history",
+      "empty": "No status changes yet.",
+      "entry": "{when} · {action} by {who} · “{reason}”",
+      "did": {
+        "suspend": "Suspended",
+        "reactivate": "Reactivated",
+        "terminate": "Terminated"
+      },
+      "errors": {
+        "status_reason": "Give a reason of at least 3 characters: it is kept in the audit log.",
+        "status_confirm": "Tick the box to confirm.",
+        "status_slug": "Type the organization's address exactly to confirm."
+      }
+    },
     "reconciliation": {
       "title": "Reconciliation",
       "description": "Open differences between this tenant's ledger and the payment provider's balance transactions (daily run). Resolve with a note once explained; the note is audited.",
@@ -320,6 +375,54 @@
     "requests": "Requests",
     "lastDay": "Last seen (UTC)",
     "empty": "No /v1 requests recorded in the last 7 days."
+  },
+  "signupCodes": {
+    "title": "Signup codes",
+    "description": "Signup is invite-only: a code lets someone create an organization. Give each code a note so you know who it's for.",
+    "list": "Signup codes",
+    "empty": "No signup codes yet.",
+    "noNote": "(no note)",
+    "col": {
+      "note": "Note",
+      "state": "State",
+      "usesLeft": "Uses left",
+      "expires": "Expires (UTC)",
+      "createdBy": "Created by",
+      "actions": "Actions"
+    },
+    "state": {
+      "active": "Active",
+      "used_up": "Used up",
+      "expired": "Expired",
+      "revoked": "Revoked"
+    },
+    "usesLeft": "{left} of {max}",
+    "revoke": "Revoke",
+    "revokeFor": "Revoke the code “{note}”",
+    "revokedBy": "Revoked by {who} on {date}",
+    "done": {
+      "revoked": "Code revoked. It no longer works for new signups.",
+      "already_revoked": "That code was already revoked."
+    },
+    "create": {
+      "title": "Create a signup code",
+      "uses": "Uses",
+      "days": "Valid for (days)",
+      "note": "Note",
+      "noteHint": "Who it's for, e.g. the organizer's name. Kept in the access log.",
+      "submit": "Create code"
+    },
+    "created": {
+      "label": "New signup code",
+      "intro": "Here is the new code. Copy it now: it won't be shown again.",
+      "expires": "It works until {date} (UTC)."
+    },
+    "errors": {
+      "summary": "Some details need fixing.",
+      "maxUses": "Uses must be a whole number from 1 to 1000.",
+      "days": "Days must be a whole number from 1 to 365.",
+      "note": "Add a note of up to 200 characters."
+    }
   },
   "reports": {
     "title": "Messaging reports",

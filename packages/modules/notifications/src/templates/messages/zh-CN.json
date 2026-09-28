@@ -91,6 +91,11 @@
       "intro": "一名 Yayatoh 工作人员已开始以 {member} 的身份在 {org} 中操作，以提供帮助。原因：{reason}。此访问将在 {until} 前结束。在此期间，无法进行任何退款、付款、导出或删除，所有操作都会记录在你的活动日志中。如果这不在你的预期之内，请立即联系 Yayatoh 支持。",
       "cta": "查看活动"
     },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh 已暂停 {org}} reactivated {{org} 已恢复上线} other {Yayatoh 已关闭 {org}}}",
+      "intro": "{status, select, suspended {Yayatoh 支持团队已暂停 {org}。其公开页面和售票已下线，控制台为只读。已售出的门票仍然有效，仍可在入口扫描。如需了解详情，请联系 Yayatoh 支持。} reactivated {Yayatoh 支持团队已恢复 {org}。公开页面、活动列表和售票已恢复，控制台照常使用。} other {Yayatoh 支持团队已关闭 {org}。其公开页面已下线，且无法再进行更改。作为所有者，你仍可打开它并下载你的数据。如果你认为这是错误，请联系 Yayatoh 支持。}}",
+      "cta": "打开控制台"
+    },
     "notifications.test": {
       "subject": "测试通知",
       "intro": "通知功能正常。"

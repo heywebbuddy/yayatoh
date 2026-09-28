@@ -61,7 +61,8 @@
         "destination-changed": "新しい支払い口座: この口座への送金は {until} 以降に始まります"
       },
       "tenancy": {
-        "staff-access": "Yayatoh サポートが {until} まで {member} として操作しています"
+        "staff-access": "Yayatoh サポートが {until} まで {member} として操作しています",
+        "org-status": "{status, select, suspended {Yayatoh がこの組織を停止しました} reactivated {この組織が再開しました} other {Yayatoh がこの組織を閉鎖しました}}"
       }
     },
     "kinds": {
@@ -74,7 +75,8 @@
       },
       "tenancy": {
         "invitation": "チームへの招待",
-        "staff-access": "スタッフのアクセス"
+        "staff-access": "スタッフのアクセス",
+        "org-status": "組織のステータス"
       },
       "ticketing": {
         "claim-link": "チケット受け取りリンク",
@@ -760,6 +762,7 @@
     "chooseDate": "まず日程を選んでください。",
     "dateSoldOut": "この日程は完売しました。別の日程を選んでください。",
     "dateUnavailable": "この日程は利用できなくなりました。別の日程を選んでください。",
+    "orgUnavailable": "この主催者は現在チケットを販売していません。購入済みのチケットは引き続き有効です。",
     "riskBlocked": "このご注文はお受けできませんでした。主催者にお問い合わせください。"
   },
   "fakePay": {
@@ -1417,6 +1420,7 @@
       "unknown": "このドメインを確認できませんでした。DNS レコードを確認して、もう一度お試しください。"
     },
     "recordsIntro": "ドメインの DNS を管理している会社でこれらのレコードを追加し、もう一度確認してください。変更の反映には最大 1 日かかることがあります。",
+    "autoCheck": "数分ごとに自動でも再確認するため、このページはあなたが操作しなくても更新されます。",
     "recordsCaption": "{host} の DNS レコード",
     "recordType": "タイプ",
     "recordName": "名前",
@@ -3758,5 +3762,16 @@
     "banner": "{member} として操作しています（{staff}、Yayatoh スタッフ）。返金・支払い・エクスポート・削除は無効です。{until} に終了します。",
     "end": "終了",
     "endLabel": "{member} としての操作を終了"
+  },
+  "orgStatus": {
+    "label": "組織のステータス",
+    "suspended": {
+      "title": "この組織は停止されています",
+      "body": "Yayatoh サポートがこの組織を停止しました。公開ページとチケット販売は停止中で、コンソールは閲覧のみです。すべて表示し、エクスポートをダウンロードできますが、変更はできません。販売済みのチケットは引き続き有効で、入口でスキャンできます。詳しくは Yayatoh サポートにお問い合わせください。"
+    },
+    "terminated": {
+      "title": "この組織は閉鎖されています",
+      "body": "Yayatoh サポートがこの組織を閉鎖しました。公開ページは停止され、何も変更できません。オーナーは引き続き開いて、アクティビティなどからデータをダウンロードできます。"
+    }
   }
 }

@@ -2,10 +2,15 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { type PaymentProvider, settleOrg } from '@yayatoh/payments';
 import { createCommandPorts } from '@yayatoh/platform';
-import { orgAuthorizer } from '@yayatoh/tenancy';
+import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
-const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+// The org gate (M1.3f) lets system actors through; wired for parity with the apps.
+const ports = createCommandPorts({
+  entitlements: billingEntitlements,
+  authorizer: orgAuthorizer,
+  orgGate: orgStatusGate,
+});
 
 /**
  * The Payout Release job (roadmap §5.3, M1.6c; leader only). Finds orgs with held funds, reserves

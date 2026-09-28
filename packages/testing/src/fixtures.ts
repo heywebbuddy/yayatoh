@@ -104,6 +104,7 @@ import {
   PLATFORM_AGREEMENTS,
   revokeApiKeyCommand,
   setLegalPageCommand,
+  setOrgStatusCommand,
   setSuspensionCommand,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
@@ -501,6 +502,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       systemCtx(org.id),
       ports,
     );
+  // Org status history (M1.3f): suspended and reactivated at once (isolation coverage).
+  for (const action of ['suspend', 'reactivate'] as const)
+    await executeCommand(setOrgStatusCommand, { action, reason: 'fixture' }, systemCtx(org.id), ports);
   // Seating: a floor plan, the event's copy of it, and one held seat (isolation coverage).
   const plan = {
     version: 1,

@@ -86,5 +86,6 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     until: '2027-06-12T16:00:00.000Z',
     timeZone: 'America/Chicago',
   },
+  'tenancy.org-status': { url: 'https://app.yayatoh.test/o/lakeside-events', status: 'suspended' },
   'notifications.test': {},
 };

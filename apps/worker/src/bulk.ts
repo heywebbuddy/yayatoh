@@ -6,7 +6,7 @@ import { auditExportAction, bulkStepCommand, createCommandPorts, runBulkOperatio
 import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
-import { orgAuthorizer } from '@yayatoh/tenancy';
+import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 
@@ -24,7 +24,12 @@ export const BULK_ACTIONS = [
   ticketCancelAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
-const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+// The org gate (M1.3f) lets system actors through; wired for parity with the apps.
+const ports = createCommandPorts({
+  entitlements: billingEntitlements,
+  authorizer: orgAuthorizer,
+  orgGate: orgStatusGate,
+});
 
 /**
  * Bulk runner tick (leader only): finds unfinished operations through a SECURITY DEFINER

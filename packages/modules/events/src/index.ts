@@ -132,6 +132,8 @@ export {
   getEventBySlugQuery,
   getEventQuery,
   listEventsQuery,
+  orgUnavailableForEvent,
+  publicCandidateEventIdsTx,
   publicEventBySlug,
   removeEventRoleTx,
   upsertEventRoleTx,

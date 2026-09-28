@@ -64,6 +64,9 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
               {d.status !== 'active' && d.records.length > 0 ? (
                 <div className="flex flex-col gap-2">
                   <p className="text-caption text-zinc-600">{t('recordsIntro')}</p>
+                  {d.status === 'pending_dns' || d.status === 'verifying' ? (
+                    <p className="text-caption text-zinc-600">{t('autoCheck')}</p>
+                  ) : null}
                   <div className="overflow-x-auto">
                     <table className="w-full text-start text-caption">
                       <caption className="sr-only">{t('recordsCaption', { host: d.hostname })}</caption>

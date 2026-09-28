@@ -102,6 +102,17 @@ export interface CommandPorts<Tx> {
   readonly transaction: <T>(ctx: Ctx, fn: (tx: Tx) => Promise<T>) => Promise<T>;
   readonly outbox: { emit(tx: Tx, ctx: Ctx, events: readonly DomainEvent[]): Promise<void> };
   readonly audit: { record(tx: Tx, ctx: Ctx, entry: AuditEntry): Promise<void> };
+  /**
+   * The org's own state may refuse a write (M1.3f: a suspended or terminated org is read-only for
+   * its members). Runs inside the tenant transaction, before the handler, for tenant commands.
+   */
+  readonly orgGate?: { check(tx: Tx, ctx: Ctx, command: OrgGateSubject): Promise<void> };
+}
+
+/** What the org gate sees of a command. */
+export interface OrgGateSubject {
+  readonly name: string;
+  readonly category?: CommandCategory;
 }
 
 /** Stable JSON (sorted keys) for idempotency fingerprints. */
@@ -204,6 +215,10 @@ export async function executeCommand<I, O, R, Tx>(
 
   // 6. Tenant transaction
   return ports.transaction(ctx, async (tx) => {
+    // The org's state (suspended, terminated) may refuse the write, in the same transaction.
+    if (ctx.orgId && ports.orgGate)
+      await ports.orgGate.check(tx, ctx, { name: command.name, category: command.category });
+
     // 7. Handler
     const events: DomainEvent[] = [];
     const result = await command.handler({

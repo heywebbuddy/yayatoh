@@ -3,12 +3,17 @@ import { withPlatformReader } from '@yayatoh/db/platform';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand } from '@yayatoh/orders';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
-import { orgAuthorizer } from '@yayatoh/tenancy';
+import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
 if (process.env.LOCAL_KMS_KEY) setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY));
 
-const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+// The org gate (M1.3f) lets system actors through; wired for parity with the apps.
+const ports = createCommandPorts({
+  entitlements: billingEntitlements,
+  authorizer: orgAuthorizer,
+  orgGate: orgStatusGate,
+});
 
 /**
  * Hold sweeper (roadmap §5.2: every 30 s). Finds orgs with lapsed holds through a

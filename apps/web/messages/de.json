@@ -61,7 +61,8 @@
         "destination-changed": "Neues Auszahlungskonto: Überweisungen darauf beginnen erst nach {until}"
       },
       "tenancy": {
-        "staff-access": "Der Yayatoh-Support handelt bis {until} als {member}"
+        "staff-access": "Der Yayatoh-Support handelt bis {until} als {member}",
+        "org-status": "{status, select, suspended {Yayatoh hat diese Organisation gesperrt} reactivated {Diese Organisation ist wieder online} other {Yayatoh hat diese Organisation geschlossen}}"
       }
     },
     "kinds": {
@@ -74,7 +75,8 @@
       },
       "tenancy": {
         "invitation": "Teameinladung",
-        "staff-access": "Zugriff durch Mitarbeitende"
+        "staff-access": "Zugriff durch Mitarbeitende",
+        "org-status": "Status der Organisation"
       },
       "ticketing": {
         "claim-link": "Link zum Abholen eines Tickets",
@@ -760,6 +762,7 @@
     "chooseDate": "Wähle zuerst einen Termin.",
     "dateSoldOut": "Dieser Termin ist gerade ausverkauft. Wähle einen anderen.",
     "dateUnavailable": "Dieser Termin ist nicht mehr verfügbar. Wähle einen anderen.",
+    "orgUnavailable": "Dieser Veranstalter verkauft gerade keine Tickets. Bereits gekaufte Tickets bleiben gültig.",
     "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter."
   },
   "fakePay": {
@@ -1417,6 +1420,7 @@
       "unknown": "Wir konnten diese Domain nicht verifizieren. Prüfe ihre DNS-Einträge und versuche es erneut."
     },
     "recordsIntro": "Füge diese Einträge bei dem Unternehmen hinzu, das die DNS deiner Domain verwaltet, und prüfe dann erneut. Änderungen können bis zu einem Tag dauern.",
+    "autoCheck": "Wir prüfen außerdem alle paar Minuten selbst nach, sodass sich diese Seite ohne dich aktualisiert.",
     "recordsCaption": "DNS-Einträge für {host}",
     "recordType": "Typ",
     "recordName": "Name",
@@ -3758,5 +3762,16 @@
     "banner": "Du handelst als {member} ({staff}, Yayatoh-Team). Erstattungen, Auszahlungen, Exporte und Löschungen sind aus. Endet um {until}.",
     "end": "Beenden",
     "endLabel": "Handeln als {member} beenden"
+  },
+  "orgStatus": {
+    "label": "Status der Organisation",
+    "suspended": {
+      "title": "Diese Organisation ist gesperrt",
+      "body": "Der Yayatoh-Support hat sie gesperrt. Deine öffentlichen Seiten und der Ticketverkauf sind offline, und die Konsole ist schreibgeschützt: Du kannst alles ansehen und Exporte herunterladen, aber nichts ändern. Bereits verkaufte Tickets bleiben gültig und können weiterhin am Eingang gescannt werden. Wende dich an den Yayatoh-Support, um mehr zu erfahren."
+    },
+    "terminated": {
+      "title": "Diese Organisation ist geschlossen",
+      "body": "Der Yayatoh-Support hat sie geschlossen. Die öffentlichen Seiten sind offline, und nichts kann mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen, zum Beispiel unter Aktivität."
+    }
   }
 }

@@ -2,10 +2,15 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { type PaymentProvider, reconcileOrgDay, reconWindow } from '@yayatoh/payments';
 import { createCommandPorts } from '@yayatoh/platform';
-import { orgAuthorizer } from '@yayatoh/tenancy';
+import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
-const ports = createCommandPorts({ entitlements: billingEntitlements, authorizer: orgAuthorizer });
+// The org gate (M1.3f) lets system actors through; wired for parity with the apps.
+const ports = createCommandPorts({
+  entitlements: billingEntitlements,
+  authorizer: orgAuthorizer,
+  orgGate: orgStatusGate,
+});
 
 /** The UTC day before `now` (`YYYY-MM-DD`): the day the nightly run reconciles. */
 export const previousDay = (now: Date) => new Date(now.getTime() - 86_400_000).toISOString().slice(0, 10);

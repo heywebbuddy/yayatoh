@@ -4,6 +4,7 @@ import {
   boolean,
   check,
   foreignKey,
+  index,
   jsonb,
   pgSchema,
   text,
@@ -233,6 +234,38 @@ export const orgSuspensions = tenantTable(
     check('org_suspensions_reason_length', sql`length(reason) between 3 and 500`),
     foreignKey({
       name: 'org_suspensions_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export const ORG_STATUS_ACTIONS = ['suspend', 'reactivate', 'terminate'] as const;
+
+/**
+ * Staff changes of the org's status (M1.3f): suspended (public pages and sales offline, the
+ * console read-only), reactivated, terminated (irreversible from the console). The staff reason
+ * stays here and in the audit log; organizers never see it. Rows are history: never updated.
+ */
+export const orgStatusChanges = tenantTable(
+  tenancy,
+  'org_status_changes',
+  {
+    action: text('action').notNull(),
+    fromStatus: text('from_status').notNull(),
+    toStatus: text('to_status').notNull(),
+    /** Staff-only note (never shown to the organizer). */
+    reason: text('reason').notNull(),
+    changedBy: text('changed_by').notNull(),
+  },
+  (t) => [
+    index('org_status_changes_org_created_idx').on(t.orgId, t.createdAt),
+    check('org_status_changes_action_check', inList('action', ORG_STATUS_ACTIONS)),
+    check('org_status_changes_from_check', inList('from_status', ORG_STATUSES)),
+    check('org_status_changes_to_check', inList('to_status', ORG_STATUSES)),
+    check('org_status_changes_reason_length', sql`length(reason) between 3 and 500`),
+    foreignKey({
+      name: 'org_status_changes_org_fk',
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),

@@ -61,7 +61,8 @@
         "destination-changed": "Nouveau compte de versement : les virements vers ce compte commencent après le {until}"
       },
       "tenancy": {
-        "staff-access": "Le support Yayatoh agit en tant que {member} jusqu'à {until}"
+        "staff-access": "Le support Yayatoh agit en tant que {member} jusqu'à {until}",
+        "org-status": "{status, select, suspended {Yayatoh a suspendu cette organisation} reactivated {Cette organisation est de nouveau en ligne} other {Yayatoh a fermé cette organisation}}"
       }
     },
     "kinds": {
@@ -74,7 +75,8 @@
       },
       "tenancy": {
         "invitation": "Invitation à l’équipe",
-        "staff-access": "Accès du personnel"
+        "staff-access": "Accès du personnel",
+        "org-status": "Statut de l’organisation"
       },
       "ticketing": {
         "claim-link": "Lien de réclamation de billet",
@@ -760,6 +762,7 @@
     "chooseDate": "Choisissez d’abord une date.",
     "dateSoldOut": "Cette date vient d’être complète. Choisissez-en une autre.",
     "dateUnavailable": "Cette date n’est plus disponible. Choisissez-en une autre.",
+    "orgUnavailable": "Cet organisateur ne vend pas de billets pour le moment. Les billets déjà achetés restent valables.",
     "riskBlocked": "Nous ne pouvons pas accepter cette commande. Contactez l’organisateur."
   },
   "fakePay": {
@@ -1417,6 +1420,7 @@
       "unknown": "Nous n’avons pas pu vérifier ce domaine. Contrôlez ses enregistrements DNS et réessayez."
     },
     "recordsIntro": "Ajoutez ces enregistrements auprès de la société qui gère le DNS de votre domaine, puis vérifiez à nouveau. Les modifications peuvent prendre jusqu’à un jour.",
+    "autoCheck": "Nous vérifions aussi de nous-mêmes toutes les quelques minutes : cette page se met à jour sans vous.",
     "recordsCaption": "Enregistrements DNS pour {host}",
     "recordType": "Type",
     "recordName": "Nom",
@@ -3758,5 +3762,16 @@
     "banner": "Vous agissez en tant que {member} ({staff}, équipe Yayatoh). Remboursements, versements, exports et suppressions sont désactivés. Fin à {until}.",
     "end": "Terminer",
     "endLabel": "Cesser d'agir en tant que {member}"
+  },
+  "orgStatus": {
+    "label": "Statut de l’organisation",
+    "suspended": {
+      "title": "Cette organisation est suspendue",
+      "body": "Le support Yayatoh l’a suspendue. Vos pages publiques et la vente de billets sont hors ligne et la console est en lecture seule : vous pouvez tout consulter et télécharger des exports, mais rien modifier. Les billets déjà vendus restent valables et peuvent toujours être scannés à l’entrée. Contactez le support Yayatoh pour en savoir plus."
+    },
+    "terminated": {
+      "title": "Cette organisation est fermée",
+      "body": "Le support Yayatoh l’a fermée. Ses pages publiques sont hors ligne et plus rien ne peut être modifié. En tant que propriétaire, vous pouvez toujours l’ouvrir et télécharger vos données, par exemple depuis Activité."
+    }
   }
 }

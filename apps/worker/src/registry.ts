@@ -7,7 +7,7 @@ import { refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
-import { impersonationNotice, invitationMailer } from '@yayatoh/tenancy';
+import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
   holderLinkMailer,
@@ -49,6 +49,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     releaseCancelledSeats(),
     payoutDestinationMailer({ notifier, appOrigin }),
     impersonationNotice({ notifier, appOrigin }),
+    orgStatusNotice({ notifier, appOrigin }),
     finderCodeMailer({ notifier, appOrigin }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];

@@ -236,6 +236,8 @@ export const signupCodes = platform.table(
     uses: integer('uses').notNull().default(0),
     expiresAt: tsz('expires_at').notNull(),
     revokedAt: tsz('revoked_at'),
+    /** Who revoked it (staff actor), M1.3f. */
+    revokedBy: text('revoked_by'),
     note: text('note').notNull().default(''),
     createdBy: text('created_by').notNull(),
     createdAt: tsz('created_at').notNull().defaultNow(),

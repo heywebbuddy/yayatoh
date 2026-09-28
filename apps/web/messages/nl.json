@@ -61,7 +61,8 @@
         "destination-changed": "Nieuwe uitbetaalrekening: overboekingen ernaartoe beginnen pas na {until}"
       },
       "tenancy": {
-        "staff-access": "Yayatoh-support handelt tot {until} als {member}"
+        "staff-access": "Yayatoh-support handelt tot {until} als {member}",
+        "org-status": "{status, select, suspended {Yayatoh heeft deze organisatie opgeschort} reactivated {Deze organisatie is weer online} other {Yayatoh heeft deze organisatie gesloten}}"
       }
     },
     "kinds": {
@@ -74,7 +75,8 @@
       },
       "tenancy": {
         "invitation": "Teamuitnodiging",
-        "staff-access": "Toegang door medewerkers"
+        "staff-access": "Toegang door medewerkers",
+        "org-status": "Status van de organisatie"
       },
       "ticketing": {
         "claim-link": "Link om ticket te claimen",
@@ -760,6 +762,7 @@
     "chooseDate": "Kies eerst een datum.",
     "dateSoldOut": "Deze datum is net uitverkocht. Kies een andere.",
     "dateUnavailable": "Deze datum is niet meer beschikbaar. Kies een andere.",
+    "orgUnavailable": "Deze organisator verkoopt op dit moment geen tickets. Al gekochte tickets blijven geldig.",
     "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator."
   },
   "fakePay": {
@@ -1417,6 +1420,7 @@
       "unknown": "We konden dit domein niet verifiëren. Controleer de DNS-records en probeer het opnieuw."
     },
     "recordsIntro": "Voeg deze records toe bij het bedrijf dat de DNS van je domein beheert en controleer daarna opnieuw. Wijzigingen kunnen tot een dag duren.",
+    "autoCheck": "We controleren ook zelf om de paar minuten opnieuw, dus deze pagina wordt zonder jou bijgewerkt.",
     "recordsCaption": "DNS-records voor {host}",
     "recordType": "Type",
     "recordName": "Naam",
@@ -3758,5 +3762,16 @@
     "banner": "Je handelt als {member} ({staff}, Yayatoh-team). Terugbetalingen, uitbetalingen, exports en verwijderingen staan uit. Dit eindigt om {until}.",
     "end": "Beëindigen",
     "endLabel": "Stoppen met handelen als {member}"
+  },
+  "orgStatus": {
+    "label": "Status van de organisatie",
+    "suspended": {
+      "title": "Deze organisatie is opgeschort",
+      "body": "Yayatoh-support heeft haar opgeschort. Je openbare pagina's en ticketverkoop zijn offline en de console is alleen-lezen: je kunt alles bekijken en exports downloaden, maar niets wijzigen. Al verkochte tickets blijven geldig en kunnen nog steeds bij de ingang worden gescand. Neem contact op met Yayatoh-support voor meer informatie."
+    },
+    "terminated": {
+      "title": "Deze organisatie is gesloten",
+      "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
+    }
   }
 }
