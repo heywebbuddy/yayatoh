@@ -119,6 +119,25 @@
       "intro": "Saisissez {code} pour voir vos billets sur {site}, ou utilisez le bouton ci-dessous dans le même navigateur. Le code expire dans {minutes, plural, one {# minute} other {# minutes}} et le bouton dans {linkMinutes, plural, one {# minute} other {# minutes}} ; chacun ne fonctionne qu'une fois. Si vous ne l'avez pas demandé, ignorez cet e-mail.",
       "cta": "Ouvrir Mes billets"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} est votre code pour rejoindre la liste d'attente",
+      "intro": "Saisissez {code} pour confirmer votre e-mail et rejoindre la liste d'attente de {eventName} avec {org}. Le code ne fonctionne qu'une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, ignorez cet e-mail."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Vous êtes sur la liste d'attente de {eventName}",
+      "intro": "Vous êtes numéro {position} dans la file pour {count, plural, one {# billet {passName}} other {# billets {passName}}} pour {eventName}. Si des billets se libèrent, nous vous enverrons par e-mail une offre pour finaliser votre commande ; elle réserve les billets pendant une durée limitée. Utilisez le lien ci-dessous pour voir votre place ou quitter la liste d'attente.",
+      "cta": "Voir ma place dans la file"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Des billets se sont libérés pour {eventName} : commandez avant {until}",
+      "intro": "Bonne nouvelle : {org} vous réserve {count, plural, one {# billet {passName}} other {# billets {passName}}} pour {eventName} jusqu'à {until}. Finalisez votre commande d'ici là ; ensuite, les billets iront à la personne suivante dans la file.",
+      "cta": "Commander maintenant"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Votre offre pour {eventName} a pris fin",
+      "intro": "Le délai pour commander vos billets {passName} pour {eventName} est écoulé ; ils sont donc passés à la personne suivante dans la file. Vous pouvez rejoindre à nouveau la liste d'attente, en fin de file, depuis le lien ci-dessous.",
+      "cta": "Rejoindre à nouveau la liste d'attente"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {Votre nouveau lien vers votre commande pour {eventName}} other {Votre lien vers votre commande pour {eventName}}}",
       "intro": "{reason, select, reissued {L'organisateur a remplacé le lien vers votre commande pour {eventName}. L'ancien lien ne fonctionne plus ; utilisez celui-ci.} other {Voici le lien demandé. Il ouvre votre commande et vos billets pour {eventName}.}}",

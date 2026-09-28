@@ -5,7 +5,13 @@ import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
-import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
+import {
+  orderLinkMailer,
+  refundMailer,
+  reminderRescheduler,
+  ticketMailer,
+  waitlistMailer,
+} from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
@@ -61,6 +67,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     fraudSignalAlerts({ notifier }),
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
+    waitlistMailer({ notifier, appOrigin }),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
   ];
 }

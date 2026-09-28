@@ -2,6 +2,7 @@ import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull, lt, ne, or, type SQL, sql } from 'drizzle-orm';
 import { guestChallenges, guestSessions, orderItems, orders, refunds } from './schema.ts';
+import { eraseWaitlistDsarTx } from './waitlist.ts';
 
 /** Orders that were ever paid: kept for tax and accounting (legal hold), only redacted. */
 const SOLD = ['paid', 'partially_refunded', 'refunded'] as const;
@@ -102,6 +103,8 @@ export async function eraseOrdersDsarTx(tx: TenantTx, emailNorm: string, now: Da
   await tx
     .delete(guestChallenges)
     .where(and(eq(guestChallenges.email, emailNorm), eq(guestChallenges.scopeOrgId, thisOrg)));
+  // M3.10a: the person's places in waitlists go (an open offer's stock goes back first).
+  await eraseWaitlistDsarTx(tx, emailNorm);
   if (ids.length)
     await tx
       .update(refunds)

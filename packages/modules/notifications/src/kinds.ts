@@ -95,6 +95,30 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'url', 'minutes', 'linkMinutes', 'site'],
   },
+  'guest.waitlist-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'minutes', 'eventName'],
+  },
+  'orders.waitlist-joined': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'passName', 'count', 'position'],
+  },
+  'orders.waitlist-offer': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'passName', 'count', 'until', 'timeZone'],
+  },
+  'orders.waitlist-expired': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'passName'],
+  },
   'orders.order-link': {
     category: 'transactional',
     channels: ['email'],

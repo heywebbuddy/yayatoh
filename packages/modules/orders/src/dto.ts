@@ -127,6 +127,11 @@ export const StartCheckoutInput = z.object({
    * here: it may open a private event and hidden passes while it is active and unexpired.
    */
   accessCodeId: z.uuid().optional(),
+  /**
+   * M3.10a: the waitlist link of an open offer. The order buys the offer's held stock (its pass,
+   * at most its quantity, its date, by its address) instead of taking new stock.
+   */
+  waitlistToken: z.string().min(10).max(200).optional(),
   /** Answers to the event's checkout questions (forms module), validated server-side. */
   answers: z.record(z.string().max(40), z.unknown()).default({}),
   locale: z.string().max(10).default('en'),

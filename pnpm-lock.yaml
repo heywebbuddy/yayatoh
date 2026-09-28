@@ -1391,6 +1391,9 @@ importers:
       '@yayatoh/crm':
         specifier: workspace:*
         version: link:../crm
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db

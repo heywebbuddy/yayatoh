@@ -10,7 +10,7 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { sweepExpiredHolds } from './sweeper.ts';
+import { sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { startWorker } from './worker.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
@@ -56,7 +56,11 @@ void loop();
 // Release lapsed checkout holds every 30 s (leader only, so one sweeper runs at a time).
 setInterval(() => {
   if (!release || stopping) return;
-  sweepExpiredHolds().catch((err) => console.error('sweeper', err));
+  // Then waitlists (M3.10a): stock a lapsed hold just freed goes to the next person in line.
+  sweepExpiredHolds()
+    .catch((err) => console.error('sweeper', err))
+    .then(() => sweepWaitlists())
+    .catch((err) => console.error('waitlist sweeper', err));
 }, 30_000).unref();
 
 // Staff impersonations end after an hour (M1.2e): record the end in the org's audit log (leader only).

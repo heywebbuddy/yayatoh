@@ -119,6 +119,25 @@
       "intro": "Inserisci {code} per vedere i tuoi biglietti su {site}, oppure usa il pulsante qui sotto nello stesso browser. Il codice scade tra {minutes, plural, one {# minuto} other {# minuti}} e il pulsante tra {linkMinutes, plural, one {# minuto} other {# minuti}}; ciascuno vale una volta. Se non l'hai richiesto, ignora questa email.",
       "cta": "Apri I miei biglietti"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} è il tuo codice per entrare nella lista d'attesa",
+      "intro": "Inserisci {code} per confermare la tua email ed entrare nella lista d'attesa di {eventName} con {org}. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, ignora questa email."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Sei nella lista d'attesa di {eventName}",
+      "intro": "Sei il numero {position} in coda per {count, plural, one {# biglietto {passName}} other {# biglietti {passName}}} di {eventName}. Se si liberano biglietti, ti invieremo via email un'offerta per completare l'acquisto; i biglietti restano riservati per un tempo limitato. Usa il link qui sotto per vedere la tua posizione o lasciare la lista d'attesa.",
+      "cta": "Vedi la mia posizione in coda"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Biglietti disponibili per {eventName}: completa l'acquisto entro {until}",
+      "intro": "Buone notizie: {org} tiene da parte per te {count, plural, one {# biglietto {passName}} other {# biglietti {passName}}} per {eventName} fino a {until}. Completa l'acquisto entro quel momento; dopo, i biglietti passeranno alla persona successiva in coda.",
+      "cta": "Acquista ora"
+    },
+    "orders.waitlist-expired": {
+      "subject": "La tua offerta per {eventName} è scaduta",
+      "intro": "Il tempo per acquistare i tuoi biglietti {passName} per {eventName} è scaduto, quindi sono passati alla persona successiva in coda. Puoi rientrare nella lista d'attesa, in fondo alla coda, dal link qui sotto.",
+      "cta": "Rientra nella lista d'attesa"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {Il tuo nuovo link all'ordine per {eventName}} other {Il tuo link all'ordine per {eventName}}}",
       "intro": "{reason, select, reissued {L'organizzatore ha sostituito il link al tuo ordine per {eventName}. Il vecchio link non funziona più; usa questo.} other {Ecco il link che hai richiesto. Apre il tuo ordine e i biglietti per {eventName}.}}",

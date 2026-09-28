@@ -16,7 +16,13 @@ import {
   takeDevDeliveryEvents,
   withWebPush,
 } from '@yayatoh/notifications';
-import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
+import {
+  orderLinkMailer,
+  refundMailer,
+  reminderRescheduler,
+  ticketMailer,
+  waitlistMailer,
+} from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -58,6 +64,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
     surveyMailer({ notifier, appOrigin }),
+    waitlistMailer({ notifier, appOrigin }),
   ];
 }
 

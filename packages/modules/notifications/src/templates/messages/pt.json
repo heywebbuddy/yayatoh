@@ -119,6 +119,25 @@
       "intro": "Digite {code} para ver os seus ingressos em {site}, ou use o botão abaixo no mesmo navegador. O código expira em {minutes, plural, one {# minuto} other {# minutos}} e o botão em {linkMinutes, plural, one {# minuto} other {# minutos}}; cada um funciona uma vez. Se não o pediu, pode ignorar este e-mail.",
       "cta": "Abrir Meus ingressos"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} é o seu código para entrar na lista de espera",
+      "intro": "Digite {code} para confirmar o seu e-mail e entrar na lista de espera de {eventName} com {org}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Está na lista de espera de {eventName}",
+      "intro": "É o número {position} na fila para {count, plural, one {# ingresso {passName}} other {# ingressos {passName}}} de {eventName}. Se houver ingressos liberados, enviaremos por e-mail uma oferta para concluir a compra; ela reserva os ingressos por tempo limitado. Use o link abaixo para ver a sua posição ou sair da lista de espera.",
+      "cta": "Ver a minha posição na fila"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Ingressos liberados para {eventName}: conclua a compra até {until}",
+      "intro": "Boas notícias: {org} está reservando {count, plural, one {# ingresso {passName}} other {# ingressos {passName}}} de {eventName} para si até {until}. Conclua a compra antes disso; depois, os ingressos passam para a próxima pessoa da fila.",
+      "cta": "Concluir a compra agora"
+    },
+    "orders.waitlist-expired": {
+      "subject": "A sua oferta para {eventName} terminou",
+      "intro": "O prazo para concluir a compra dos seus ingressos {passName} de {eventName} acabou, por isso eles passaram para a próxima pessoa da fila. Pode voltar a entrar na lista de espera, no fim da fila, pelo link abaixo.",
+      "cta": "Voltar à lista de espera"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {O seu novo link para o pedido de {eventName}} other {O seu link para o pedido de {eventName}}}",
       "intro": "{reason, select, reissued {O organizador substituiu o link do seu pedido para {eventName}. O link antigo já não funciona; use este.} other {Aqui está o link que pediu. Ele abre o seu pedido e os ingressos para {eventName}.}}",

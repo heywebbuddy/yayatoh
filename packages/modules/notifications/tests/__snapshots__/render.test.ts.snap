@@ -1001,6 +1001,214 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · zh-TW 1`
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · ar 1`] = `
+{
+  "subject": "305117 هو رمزك للانضمام إلى قائمة الانتظار",
+  "text": "305117 هو رمزك للانضمام إلى قائمة الانتظار
+
+مرحبًا،
+
+أدخل 305117 لتأكيد بريدك الإلكتروني والانضمام إلى قائمة انتظار Lakeside Jazz Night لدى Lakeside Events. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · de 1`] = `
+{
+  "subject": "305117 ist Ihr Code für die Warteliste",
+  "text": "305117 ist Ihr Code für die Warteliste
+
+Hallo,
+
+Geben Sie 305117 ein, um Ihre E-Mail zu bestätigen und sich bei Lakeside Events auf die Warteliste für Lakeside Jazz Night zu setzen. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · en 1`] = `
+{
+  "subject": "305117 is your code to join the waitlist",
+  "text": "305117 is your code to join the waitlist
+
+Hello,
+
+Enter 305117 to confirm your email and join the waitlist for Lakeside Jazz Night with Lakeside Events. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · es 1`] = `
+{
+  "subject": "305117 es tu código para unirte a la lista de espera",
+  "text": "305117 es tu código para unirte a la lista de espera
+
+Hola:
+
+Introduce 305117 para confirmar tu correo y unirte a la lista de espera de Lakeside Jazz Night con Lakeside Events. El código se usa una sola vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · fr 1`] = `
+{
+  "subject": "305117 est votre code pour rejoindre la liste d'attente",
+  "text": "305117 est votre code pour rejoindre la liste d'attente
+
+Bonjour,
+
+Saisissez 305117 pour confirmer votre e-mail et rejoindre la liste d'attente de Lakeside Jazz Night avec Lakeside Events. Le code ne fonctionne qu'une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, ignorez cet e-mail.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · hi 1`] = `
+{
+  "subject": "305117 प्रतीक्षा सूची में शामिल होने के लिए आपका कोड है",
+  "text": "305117 प्रतीक्षा सूची में शामिल होने के लिए आपका कोड है
+
+नमस्ते,
+
+अपना ईमेल पुष्ट करने और Lakeside Events के साथ Lakeside Jazz Night की प्रतीक्षा सूची में शामिल होने के लिए 305117 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · it 1`] = `
+{
+  "subject": "305117 è il tuo codice per entrare nella lista d'attesa",
+  "text": "305117 è il tuo codice per entrare nella lista d'attesa
+
+Ciao,
+
+Inserisci 305117 per confermare la tua email ed entrare nella lista d'attesa di Lakeside Jazz Night con Lakeside Events. Il codice vale una volta e scade tra 10 minuti. Se non l'hai richiesto, ignora questa email.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · ja 1`] = `
+{
+  "subject": "キャンセル待ち登録コードは305117です",
+  "text": "キャンセル待ち登録コードは305117です
+
+こんにちは。
+
+305117を入力してメールアドレスを確認し、Lakeside EventsのLakeside Jazz Nightのキャンセル待ちに登録してください。コードは1回限り有効で、10分後に失効します。心当たりがない場合は、このメールを無視してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · nl 1`] = `
+{
+  "subject": "305117 is je code om op de wachtlijst te komen",
+  "text": "305117 is je code om op de wachtlijst te komen
+
+Hallo,
+
+Voer 305117 in om je e-mail te bevestigen en bij Lakeside Events op de wachtlijst voor Lakeside Jazz Night te komen. De code werkt één keer en verloopt over 10 minuten. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · pt 1`] = `
+{
+  "subject": "305117 é o seu código para entrar na lista de espera",
+  "text": "305117 é o seu código para entrar na lista de espera
+
+Olá!
+
+Digite 305117 para confirmar o seu e-mail e entrar na lista de espera de Lakeside Jazz Night com Lakeside Events. O código funciona uma vez e expira em 10 minutos. Se não o pediu, pode ignorar este e-mail.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · ru 1`] = `
+{
+  "subject": "305117 — ваш код для записи в лист ожидания",
+  "text": "305117 — ваш код для записи в лист ожидания
+
+Здравствуйте!
+
+Введите 305117, чтобы подтвердить почту и записаться в лист ожидания на Lakeside Jazz Night у Lakeside Events. Код действует один раз и истекает через 10 минут. Если вы его не запрашивали, просто проигнорируйте это письмо.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · zh-CN 1`] = `
+{
+  "subject": "305117 是您加入候补名单的验证码",
+  "text": "305117 是您加入候补名单的验证码
+
+您好：
+
+输入 305117 以确认您的邮箱并加入 Lakeside Events 的 Lakeside Jazz Night 候补名单。验证码仅可使用一次，10 分钟后失效。如果这不是您本人的请求，请忽略此邮件。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · zh-TW 1`] = `
+{
+  "subject": "305117 是您加入候補名單的驗證碼",
+  "text": "305117 是您加入候補名單的驗證碼
+
+您好：
+
+輸入 305117 以確認您的電子郵件並加入 Lakeside Events 的 Lakeside Jazz Night 候補名單。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > messaging.announcement · ar 1`] = `
 {
   "subject": "Doors open at 7",
@@ -2696,6 +2904,708 @@ Amina Diallo，您好：
 您的 2 張票券已準備好。請保留此郵件：點擊下方按鈕即可隨時開啟票券。
 
 查看我的票券: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · ar 1`] = `
+{
+  "subject": "انتهى عرضك لـ Lakeside Jazz Night",
+  "text": "انتهى عرضك لـ Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+انتهى وقت إتمام شراء تذاكرك من فئة General Admission لـ Lakeside Jazz Night، لذا ذهبت إلى الشخص التالي في الدور. يمكنك الانضمام مجددًا إلى قائمة الانتظار في آخر الدور من الرابط أدناه.
+
+الانضمام مجددًا إلى قائمة الانتظار: https://app.yayatoh.test/waitlist/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · de 1`] = `
+{
+  "subject": "Ihr Angebot für Lakeside Jazz Night ist abgelaufen",
+  "text": "Ihr Angebot für Lakeside Jazz Night ist abgelaufen
+
+Hallo Amina Diallo,
+
+Die Zeit zum Bestellen Ihrer General Admission-Tickets für Lakeside Jazz Night ist abgelaufen, daher gingen sie an die nächste Person in der Warteschlange. Über den Link unten können Sie sich erneut am Ende der Warteliste eintragen.
+
+Erneut auf die Warteliste: https://app.yayatoh.test/waitlist/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · en 1`] = `
+{
+  "subject": "Your offer for Lakeside Jazz Night has ended",
+  "text": "Your offer for Lakeside Jazz Night has ended
+
+Hi Amina Diallo,
+
+The time to check out your General Admission tickets to Lakeside Jazz Night ran out, so they went to the next person in line. You can rejoin the waitlist at the back of the line from the link below.
+
+Rejoin the waitlist: https://app.yayatoh.test/waitlist/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · es 1`] = `
+{
+  "subject": "Tu oferta para Lakeside Jazz Night ha terminado",
+  "text": "Tu oferta para Lakeside Jazz Night ha terminado
+
+Hola, Amina Diallo:
+
+Se acabó el tiempo para comprar tus entradas General Admission para Lakeside Jazz Night, así que pasaron a la siguiente persona de la fila. Puedes volver a unirte a la lista de espera, al final de la fila, desde el enlace de abajo.
+
+Volver a la lista de espera: https://app.yayatoh.test/waitlist/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · fr 1`] = `
+{
+  "subject": "Votre offre pour Lakeside Jazz Night a pris fin",
+  "text": "Votre offre pour Lakeside Jazz Night a pris fin
+
+Bonjour Amina Diallo,
+
+Le délai pour commander vos billets General Admission pour Lakeside Jazz Night est écoulé ; ils sont donc passés à la personne suivante dans la file. Vous pouvez rejoindre à nouveau la liste d'attente, en fin de file, depuis le lien ci-dessous.
+
+Rejoindre à nouveau la liste d'attente: https://app.yayatoh.test/waitlist/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night के लिए आपका ऑफ़र समाप्त हो गया है",
+  "text": "Lakeside Jazz Night के लिए आपका ऑफ़र समाप्त हो गया है
+
+नमस्ते Amina Diallo,
+
+Lakeside Jazz Night के आपके General Admission टिकटों का चेकआउट करने का समय समाप्त हो गया, इसलिए वे कतार में अगले व्यक्ति को चले गए। आप नीचे दिए लिंक से कतार के अंत में फिर से प्रतीक्षा सूची में शामिल हो सकते हैं।
+
+फिर से प्रतीक्षा सूची में शामिल हों: https://app.yayatoh.test/waitlist/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · it 1`] = `
+{
+  "subject": "La tua offerta per Lakeside Jazz Night è scaduta",
+  "text": "La tua offerta per Lakeside Jazz Night è scaduta
+
+Ciao Amina Diallo,
+
+Il tempo per acquistare i tuoi biglietti General Admission per Lakeside Jazz Night è scaduto, quindi sono passati alla persona successiva in coda. Puoi rientrare nella lista d'attesa, in fondo alla coda, dal link qui sotto.
+
+Rientra nella lista d'attesa: https://app.yayatoh.test/waitlist/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Nightのご案内の期限が終了しました",
+  "text": "Lakeside Jazz Nightのご案内の期限が終了しました
+
+Amina Diallo 様
+
+Lakeside Jazz NightのGeneral Admissionチケットの購入手続きの期限が過ぎたため、チケットは次の順番の方に回りました。下のリンクから、最後尾でキャンセル待ちに再登録できます。
+
+キャンセル待ちに再登録する: https://app.yayatoh.test/waitlist/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · nl 1`] = `
+{
+  "subject": "Je aanbod voor Lakeside Jazz Night is verlopen",
+  "text": "Je aanbod voor Lakeside Jazz Night is verlopen
+
+Hoi Amina Diallo,
+
+De tijd om je General Admission-tickets voor Lakeside Jazz Night af te rekenen is verstreken, dus ze zijn naar de volgende in de rij gegaan. Via de link hieronder kun je je opnieuw achteraan op de wachtlijst zetten.
+
+Opnieuw op de wachtlijst: https://app.yayatoh.test/waitlist/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · pt 1`] = `
+{
+  "subject": "A sua oferta para Lakeside Jazz Night terminou",
+  "text": "A sua oferta para Lakeside Jazz Night terminou
+
+Olá, Amina Diallo!
+
+O prazo para concluir a compra dos seus ingressos General Admission de Lakeside Jazz Night acabou, por isso eles passaram para a próxima pessoa da fila. Pode voltar a entrar na lista de espera, no fim da fila, pelo link abaixo.
+
+Voltar à lista de espera: https://app.yayatoh.test/waitlist/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · ru 1`] = `
+{
+  "subject": "Ваше предложение на Lakeside Jazz Night истекло",
+  "text": "Ваше предложение на Lakeside Jazz Night истекло
+
+Здравствуйте, Amina Diallo!
+
+Время на оформление заказа билетов General Admission на Lakeside Jazz Night истекло, поэтому они перешли следующему в очереди. По ссылке ниже можно снова записаться в лист ожидания — в конец очереди.
+
+Снова записаться в лист ожидания: https://app.yayatoh.test/waitlist/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · zh-CN 1`] = `
+{
+  "subject": "您的 Lakeside Jazz Night 购票邀请已结束",
+  "text": "您的 Lakeside Jazz Night 购票邀请已结束
+
+Amina Diallo，您好：
+
+您的 Lakeside Jazz Night General Admission 门票结账时间已过，门票已转给下一位排队者。您可以通过下方链接重新加入候补名单，排在队尾。
+
+重新加入候补名单: https://app.yayatoh.test/waitlist/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-expired · zh-TW 1`] = `
+{
+  "subject": "您的 Lakeside Jazz Night 購票邀請已結束",
+  "text": "您的 Lakeside Jazz Night 購票邀請已結束
+
+Amina Diallo，您好：
+
+您的 Lakeside Jazz Night General Admission 票券結帳時間已過，票券已轉給下一位排隊者。您可以透過下方連結重新加入候補名單，排在隊尾。
+
+重新加入候補名單: https://app.yayatoh.test/waitlist/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · ar 1`] = `
+{
+  "subject": "أنت على قائمة انتظار Lakeside Jazz Night",
+  "text": "أنت على قائمة انتظار Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+ترتيبك 3 في الدور للحصول على تذكرتين من فئة General Admission لـ Lakeside Jazz Night. إذا توفرت تذاكر، فسنرسل إليك عرضًا بالبريد الإلكتروني لإتمام الشراء؛ ويحجز العرض التذاكر لفترة محدودة. استخدم الرابط أدناه لمعرفة مكانك في الدور أو مغادرة قائمة الانتظار.
+
+عرض مكاني في الدور: https://app.yayatoh.test/waitlist/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · de 1`] = `
+{
+  "subject": "Sie stehen auf der Warteliste für Lakeside Jazz Night",
+  "text": "Sie stehen auf der Warteliste für Lakeside Jazz Night
+
+Hallo Amina Diallo,
+
+Sie sind Nummer 3 in der Warteschlange für 2 General Admission-Tickets für Lakeside Jazz Night. Werden Tickets frei, schicken wir Ihnen per E-Mail ein Angebot zum Bestellen; es hält die Tickets für begrenzte Zeit für Sie bereit. Über den Link unten sehen Sie Ihren Platz oder verlassen die Warteliste.
+
+Meinen Platz ansehen: https://app.yayatoh.test/waitlist/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · en 1`] = `
+{
+  "subject": "You're on the waitlist for Lakeside Jazz Night",
+  "text": "You're on the waitlist for Lakeside Jazz Night
+
+Hi Amina Diallo,
+
+You're number 3 in line for 2 General Admission tickets to Lakeside Jazz Night. If tickets free up, we'll email you an offer to check out; it holds the tickets for a limited time. Use the link below to see your place or leave the waitlist.
+
+See my place in line: https://app.yayatoh.test/waitlist/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · es 1`] = `
+{
+  "subject": "Estás en la lista de espera de Lakeside Jazz Night",
+  "text": "Estás en la lista de espera de Lakeside Jazz Night
+
+Hola, Amina Diallo:
+
+Eres el número 3 en la fila para 2 entradas General Admission de Lakeside Jazz Night. Si se liberan entradas, te enviaremos por correo una oferta para completar la compra; reserva las entradas durante un tiempo limitado. Usa el enlace de abajo para ver tu lugar o salir de la lista de espera.
+
+Ver mi lugar en la fila: https://app.yayatoh.test/waitlist/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · fr 1`] = `
+{
+  "subject": "Vous êtes sur la liste d'attente de Lakeside Jazz Night",
+  "text": "Vous êtes sur la liste d'attente de Lakeside Jazz Night
+
+Bonjour Amina Diallo,
+
+Vous êtes numéro 3 dans la file pour 2 billets General Admission pour Lakeside Jazz Night. Si des billets se libèrent, nous vous enverrons par e-mail une offre pour finaliser votre commande ; elle réserve les billets pendant une durée limitée. Utilisez le lien ci-dessous pour voir votre place ou quitter la liste d'attente.
+
+Voir ma place dans la file: https://app.yayatoh.test/waitlist/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · hi 1`] = `
+{
+  "subject": "आप Lakeside Jazz Night की प्रतीक्षा सूची में हैं",
+  "text": "आप Lakeside Jazz Night की प्रतीक्षा सूची में हैं
+
+नमस्ते Amina Diallo,
+
+आप Lakeside Jazz Night के 2 General Admission टिकट के लिए कतार में 3 नंबर पर हैं। अगर टिकट उपलब्ध होते हैं, तो हम आपको चेकआउट करने का ऑफ़र ईमेल करेंगे; यह टिकटों को सीमित समय के लिए रोककर रखता है। कतार में अपनी जगह देखने या प्रतीक्षा सूची छोड़ने के लिए नीचे दिए लिंक का उपयोग करें।
+
+कतार में मेरी जगह देखें: https://app.yayatoh.test/waitlist/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · it 1`] = `
+{
+  "subject": "Sei nella lista d'attesa di Lakeside Jazz Night",
+  "text": "Sei nella lista d'attesa di Lakeside Jazz Night
+
+Ciao Amina Diallo,
+
+Sei il numero 3 in coda per 2 biglietti General Admission di Lakeside Jazz Night. Se si liberano biglietti, ti invieremo via email un'offerta per completare l'acquisto; i biglietti restano riservati per un tempo limitato. Usa il link qui sotto per vedere la tua posizione o lasciare la lista d'attesa.
+
+Vedi la mia posizione in coda: https://app.yayatoh.test/waitlist/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Nightのキャンセル待ちに登録されました",
+  "text": "Lakeside Jazz Nightのキャンセル待ちに登録されました
+
+Amina Diallo 様
+
+Lakeside Jazz NightのGeneral Admissionチケット2 枚のキャンセル待ちで、現在3番目です。チケットに空きが出たら、購入手続きのご案内をメールでお送りします。ご案内のチケットは一定時間お取り置きされます。順番の確認やキャンセル待ちの取り消しは、下のリンクから行えます。
+
+順番を確認する: https://app.yayatoh.test/waitlist/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · nl 1`] = `
+{
+  "subject": "Je staat op de wachtlijst voor Lakeside Jazz Night",
+  "text": "Je staat op de wachtlijst voor Lakeside Jazz Night
+
+Hoi Amina Diallo,
+
+Je bent nummer 3 in de rij voor 2 General Admission-tickets voor Lakeside Jazz Night. Komen er tickets vrij, dan mailen we je een aanbod om af te rekenen; dat houdt de tickets een beperkte tijd voor je vast. Gebruik de link hieronder om je plek te zien of de wachtlijst te verlaten.
+
+Mijn plek in de rij bekijken: https://app.yayatoh.test/waitlist/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · pt 1`] = `
+{
+  "subject": "Está na lista de espera de Lakeside Jazz Night",
+  "text": "Está na lista de espera de Lakeside Jazz Night
+
+Olá, Amina Diallo!
+
+É o número 3 na fila para 2 ingressos General Admission de Lakeside Jazz Night. Se houver ingressos liberados, enviaremos por e-mail uma oferta para concluir a compra; ela reserva os ingressos por tempo limitado. Use o link abaixo para ver a sua posição ou sair da lista de espera.
+
+Ver a minha posição na fila: https://app.yayatoh.test/waitlist/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · ru 1`] = `
+{
+  "subject": "Вы в листе ожидания на Lakeside Jazz Night",
+  "text": "Вы в листе ожидания на Lakeside Jazz Night
+
+Здравствуйте, Amina Diallo!
+
+Ваш номер в очереди на 2 билета General Admission на Lakeside Jazz Night — 3. Если билеты освободятся, мы пришлём вам на почту предложение оформить заказ; билеты будут закреплены за вами на ограниченное время. По ссылке ниже можно посмотреть своё место или покинуть лист ожидания.
+
+Моё место в очереди: https://app.yayatoh.test/waitlist/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · zh-CN 1`] = `
+{
+  "subject": "您已加入 Lakeside Jazz Night 的候补名单",
+  "text": "您已加入 Lakeside Jazz Night 的候补名单
+
+Amina Diallo，您好：
+
+您正在排队等候 Lakeside Jazz Night 的 2 张 General Admission 门票，当前排在第 3 位。如有门票释出，我们会通过邮件向您发送结账邀请；门票将为您保留一段时间。使用下方链接查看您的排位或退出候补名单。
+
+查看我的排位: https://app.yayatoh.test/waitlist/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-joined · zh-TW 1`] = `
+{
+  "subject": "您已加入 Lakeside Jazz Night 的候補名單",
+  "text": "您已加入 Lakeside Jazz Night 的候補名單
+
+Amina Diallo，您好：
+
+您正在排隊等候 Lakeside Jazz Night 的 2 張 General Admission 票券，目前排在第 3 位。如有票券釋出，我們會透過電子郵件向您發送結帳邀請；票券將為您保留一段時間。使用下方連結查看您的排位或退出候補名單。
+
+查看我的排位: https://app.yayatoh.test/waitlist/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · ar 1`] = `
+{
+  "subject": "تذاكر متاحة لـ Lakeside Jazz Night: أتمّ الشراء قبل 13‏/10‏/2027، 6:00 م",
+  "text": "تذاكر متاحة لـ Lakeside Jazz Night: أتمّ الشراء قبل 13‏/10‏/2027، 6:00 م
+
+مرحبًا Amina Diallo،
+
+أخبار سارة: يحجز Lakeside Events لك تذكرتين من فئة General Admission لـ Lakeside Jazz Night حتى 13‏/10‏/2027، 6:00 م. أتمّ الشراء قبل ذلك؛ وبعده تذهب التذاكر إلى الشخص التالي في الدور.
+
+أتمّ الشراء الآن: https://app.yayatoh.test/waitlist/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · de 1`] = `
+{
+  "subject": "Tickets für Lakeside Jazz Night frei: bis 13.10.2027, 18:00 bestellen",
+  "text": "Tickets für Lakeside Jazz Night frei: bis 13.10.2027, 18:00 bestellen
+
+Hallo Amina Diallo,
+
+Gute Nachricht: Lakeside Events hält 2 General Admission-Tickets für Lakeside Jazz Night bis 13.10.2027, 18:00 für Sie bereit. Schließen Sie Ihre Bestellung vorher ab; danach gehen die Tickets an die nächste Person in der Warteschlange.
+
+Jetzt bestellen: https://app.yayatoh.test/waitlist/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · en 1`] = `
+{
+  "subject": "Tickets are free for Lakeside Jazz Night: check out by Oct 13, 2027, 6:00 PM",
+  "text": "Tickets are free for Lakeside Jazz Night: check out by Oct 13, 2027, 6:00 PM
+
+Hi Amina Diallo,
+
+Good news: Lakeside Events is holding 2 General Admission tickets to Lakeside Jazz Night for you until Oct 13, 2027, 6:00 PM. Check out before then; after that, the tickets go to the next person in line.
+
+Check out now: https://app.yayatoh.test/waitlist/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · es 1`] = `
+{
+  "subject": "Hay entradas libres para Lakeside Jazz Night: completa la compra antes de 13 oct 2027, 18:00",
+  "text": "Hay entradas libres para Lakeside Jazz Night: completa la compra antes de 13 oct 2027, 18:00
+
+Hola, Amina Diallo:
+
+Buenas noticias: Lakeside Events te reserva 2 entradas General Admission para Lakeside Jazz Night hasta 13 oct 2027, 18:00. Completa la compra antes; después, las entradas pasarán a la siguiente persona de la fila.
+
+Comprar ahora: https://app.yayatoh.test/waitlist/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · fr 1`] = `
+{
+  "subject": "Des billets se sont libérés pour Lakeside Jazz Night : commandez avant 13 oct. 2027, 18:00",
+  "text": "Des billets se sont libérés pour Lakeside Jazz Night : commandez avant 13 oct. 2027, 18:00
+
+Bonjour Amina Diallo,
+
+Bonne nouvelle : Lakeside Events vous réserve 2 billets General Admission pour Lakeside Jazz Night jusqu'à 13 oct. 2027, 18:00. Finalisez votre commande d'ici là ; ensuite, les billets iront à la personne suivante dans la file.
+
+Commander maintenant: https://app.yayatoh.test/waitlist/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night के टिकट उपलब्ध हैं: 13 अक्टू॰ 2027, 6:00 pm तक चेकआउट करें",
+  "text": "Lakeside Jazz Night के टिकट उपलब्ध हैं: 13 अक्टू॰ 2027, 6:00 pm तक चेकआउट करें
+
+नमस्ते Amina Diallo,
+
+अच्छी खबर: Lakeside Events आपके लिए Lakeside Jazz Night के 2 General Admission टिकट 13 अक्टू॰ 2027, 6:00 pm तक रोककर रख रहा है। उससे पहले चेकआउट करें; उसके बाद टिकट कतार में अगले व्यक्ति को चले जाएँगे।
+
+अभी चेकआउट करें: https://app.yayatoh.test/waitlist/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · it 1`] = `
+{
+  "subject": "Biglietti disponibili per Lakeside Jazz Night: completa l'acquisto entro 13 ott 2027, 18:00",
+  "text": "Biglietti disponibili per Lakeside Jazz Night: completa l'acquisto entro 13 ott 2027, 18:00
+
+Ciao Amina Diallo,
+
+Buone notizie: Lakeside Events tiene da parte per te 2 biglietti General Admission per Lakeside Jazz Night fino a 13 ott 2027, 18:00. Completa l'acquisto entro quel momento; dopo, i biglietti passeranno alla persona successiva in coda.
+
+Acquista ora: https://app.yayatoh.test/waitlist/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Nightのチケットに空きが出ました: 2027/10/13 18:00までにご購入ください",
+  "text": "Lakeside Jazz Nightのチケットに空きが出ました: 2027/10/13 18:00までにご購入ください
+
+Amina Diallo 様
+
+朗報です。Lakeside EventsがLakeside Jazz NightのGeneral Admissionチケット2 枚を2027/10/13 18:00までお取り置きしています。それまでに購入手続きを完了してください。期限を過ぎると、チケットは次の順番の方に回ります。
+
+今すぐ購入する: https://app.yayatoh.test/waitlist/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · nl 1`] = `
+{
+  "subject": "Tickets vrij voor Lakeside Jazz Night: reken af vóór 13 okt 2027, 18:00",
+  "text": "Tickets vrij voor Lakeside Jazz Night: reken af vóór 13 okt 2027, 18:00
+
+Hoi Amina Diallo,
+
+Goed nieuws: Lakeside Events houdt 2 General Admission-tickets voor Lakeside Jazz Night tot 13 okt 2027, 18:00 voor je vast. Reken vóór die tijd af; daarna gaan de tickets naar de volgende in de rij.
+
+Nu afrekenen: https://app.yayatoh.test/waitlist/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · pt 1`] = `
+{
+  "subject": "Ingressos liberados para Lakeside Jazz Night: conclua a compra até 13 de out. de 2027, 18:00",
+  "text": "Ingressos liberados para Lakeside Jazz Night: conclua a compra até 13 de out. de 2027, 18:00
+
+Olá, Amina Diallo!
+
+Boas notícias: Lakeside Events está reservando 2 ingressos General Admission de Lakeside Jazz Night para si até 13 de out. de 2027, 18:00. Conclua a compra antes disso; depois, os ingressos passam para a próxima pessoa da fila.
+
+Concluir a compra agora: https://app.yayatoh.test/waitlist/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · ru 1`] = `
+{
+  "subject": "Освободились билеты на Lakeside Jazz Night: оформите заказ до 13 окт. 2027 г., 18:00",
+  "text": "Освободились билеты на Lakeside Jazz Night: оформите заказ до 13 окт. 2027 г., 18:00
+
+Здравствуйте, Amina Diallo!
+
+Хорошие новости: Lakeside Events держит для вас 2 билета General Admission на Lakeside Jazz Night до 13 окт. 2027 г., 18:00. Оформите заказ до этого времени; после этого билеты перейдут следующему в очереди.
+
+Оформить заказ: https://app.yayatoh.test/waitlist/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night 有门票释出：请在 2027年10月13日 18:00 前结账",
+  "text": "Lakeside Jazz Night 有门票释出：请在 2027年10月13日 18:00 前结账
+
+Amina Diallo，您好：
+
+好消息：Lakeside Events 为您保留了 Lakeside Jazz Night 的 2 张 General Admission 门票，保留至 2027年10月13日 18:00。请在此之前完成结账；逾期后，门票将转给下一位排队者。
+
+立即结账: https://app.yayatoh.test/waitlist/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.waitlist-offer · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night 有票券釋出：請在 2027年10月13日 下午6:00 前結帳",
+  "text": "Lakeside Jazz Night 有票券釋出：請在 2027年10月13日 下午6:00 前結帳
+
+Amina Diallo，您好：
+
+好消息：Lakeside Events 為您保留了 Lakeside Jazz Night 的 2 張 General Admission 票券，保留至 2027年10月13日 下午6:00。請在此之前完成結帳；逾期後，票券將轉給下一位排隊者。
+
+立即結帳: https://app.yayatoh.test/waitlist/sample
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。

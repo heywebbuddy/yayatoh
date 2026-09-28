@@ -39,6 +39,14 @@ import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../doma
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
+import {
+  attachWaitlistOrderTx,
+  claimWaitlistOfferTx,
+  keepOfferHoldTx,
+  reclaimOfferHoldTx,
+  type WaitlistClaim,
+  waitlistReserveTx,
+} from '../waitlist.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
 
@@ -160,19 +168,41 @@ export const startCheckoutCommand = tenantCommand({
       ...input.items,
       ...[...seatItems].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
     ];
+    // M3.10a: an open waitlist offer is bought with the stock it holds; otherwise the public only
+    // buys beyond what waitlists wait for.
+    const offer: WaitlistClaim | null = input.waitlistToken
+      ? await claimWaitlistOfferTx(tx, {
+          token: input.waitlistToken,
+          eventId: event.id,
+          items: wanted,
+          seats: input.seats,
+          occurrenceId: input.occurrenceId,
+          email: input.buyer.email,
+          now: ctx.now,
+        })
+      : null;
     const occurrenceId = await claimOccurrenceTx(tx, {
       eventId: event.id,
       occurrenceId: input.occurrenceId,
       quantity: wanted.reduce((n, w) => n + w.quantity, 0),
       now: ctx.now,
+      waitlistReserve: !offer,
     });
     const quote = await quoteTx(tx, event.id, wanted, {
       now: ctx.now,
-      includeHidden: new Set(grant?.ticketTypeIds ?? []),
+      includeHidden: new Set([...(grant?.ticketTypeIds ?? []), ...(offer ? [offer.ticketTypeId] : [])]),
       promo,
       occurrenceId,
     });
-    await holdInventoryTx(tx, lines([...quote.lines]));
+    if (!offer)
+      await holdInventoryTx(
+        tx,
+        lines([...quote.lines]),
+        await waitlistReserveTx(
+          tx,
+          quote.lines.map((l) => l.ticketTypeId),
+        ),
+      );
     // Counted with the hold, returned if the hold lapses.
     if (promo) await claimPromoTx(tx, promo.id);
     const manageToken = randomBytes(32).toString('base64url');
@@ -236,6 +266,13 @@ export const startCheckoutCommand = tenantCommand({
       .insert(orderItems)
       .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))
       .returning();
+    if (offer)
+      await attachWaitlistOrderTx(
+        tx,
+        offer,
+        order.id,
+        items.reduce((n, i) => n + i.quantity, 0),
+      );
     emit({
       type: 'order.reserved',
       version: 1,
@@ -377,7 +414,8 @@ export const applyProviderEventCommand = tenantCommand({
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       let stockHeld = false;
       try {
-        await holdInventoryTx(tx, lines(order.items));
+        // M3.10a: an offer order whose offer still holds the stock takes that stock back.
+        if (!(await reclaimOfferHoldTx(tx, order.id, ctx.now))) await holdInventoryTx(tx, lines(order.items));
         stockHeld = true;
         if (order.seatUuids.length)
           await holdSeatsTx(tx, ctx, {
@@ -453,7 +491,8 @@ export const expireOrdersCommand = tenantCommand({
       .for('update', { skipLocked: true });
     for (const { id } of due) {
       const order = await loadOrderTx(tx, id);
-      await releaseHoldTx(tx, lines(order.items));
+      // M3.10a: an order from a waitlist offer gives its stock back to the offer while it is open.
+      if (!(await keepOfferHoldTx(tx, order, ctx.now))) await releaseHoldTx(tx, lines(order.items));
       if (order.seatUuids.length) await releaseSeatHoldTx(tx, ctx, order.id);
       if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
       await setStatus(tx, order, 'expire', ctx.now);

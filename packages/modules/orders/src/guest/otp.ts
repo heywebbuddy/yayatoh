@@ -16,7 +16,7 @@ export const GUEST_VERIFIED_MS = 30 * 60_000;
 /** Attendee ("My tickets") sessions last this long, then sign in again (pending owner). */
 export const GUEST_SESSION_MS = 7 * 24 * 3_600_000;
 
-export const GUEST_PURPOSES = ['checkout', 'sign_in'] as const;
+export const GUEST_PURPOSES = ['checkout', 'sign_in', 'waitlist'] as const;
 export type GuestPurpose = (typeof GUEST_PURPOSES)[number];
 
 export const GUEST_VERIFY_STATUSES = ['ok', 'wrong', 'locked', 'expired', 'used', 'rate_limited'] as const;

@@ -153,3 +153,44 @@ export {
 export { type RefundOutcome, refundOrder } from './refund-flow.ts';
 export { CHARGE_MODELS, ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
 export { REMINDER_LEAD_MS, refundMailer, reminderRescheduler, ticketMailer } from './subscribers.ts';
+export {
+  ACTIVE_STATUSES as WAITLIST_ACTIVE_STATUSES,
+  canRejoin,
+  compareQueue,
+  DEFAULT_OFFER_MINUTES,
+  MAX_OFFER_MINUTES,
+  MIN_OFFER_MINUTES,
+  offerExpiresAt,
+  offerOpen,
+  planOffers,
+  queuePosition,
+  sortQueue,
+} from './domain/waitlist.ts';
+export { WAITLIST_ENTRY_STATUSES } from './schema.ts';
+export {
+  declineWaitlistOfferCommand,
+  eraseWaitlistDsarTx,
+  JoinWaitlistInput,
+  JoinWaitlistResultDto,
+  joinWaitlistCommand,
+  leaveWaitlistCommand,
+  listWaitlistsQuery,
+  offerWaitlistEntryCommand,
+  PublicWaitlistEntryDto,
+  publicWaitlistEntry,
+  rejoinWaitlistCommand,
+  removeWaitlistEntriesCommand,
+  sweepWaitlistsCommand,
+  updateWaitlistCommand,
+  WAITLIST_PURPOSE,
+  WaitlistEntryDto,
+  WaitlistSummaryDto,
+  waitlistDsarTx,
+  waitlistEntriesQuery,
+  waitlistExportAction,
+  waitlistExportBulk,
+  waitlistHeldBack,
+  waitlistMailer,
+  waitlistRef,
+  waitlistToken,
+} from './waitlist.ts';

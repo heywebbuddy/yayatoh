@@ -119,6 +119,25 @@
       "intro": "{code}を入力すると{site}でチケットを確認できます。同じブラウザーなら下のボタンも使えます。コードは{minutes}分後、ボタンは{linkMinutes}分後に失効し、それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。",
       "cta": "マイチケットを開く"
     },
+    "guest.waitlist-code": {
+      "subject": "キャンセル待ち登録コードは{code}です",
+      "intro": "{code}を入力してメールアドレスを確認し、{org}の{eventName}のキャンセル待ちに登録してください。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。"
+    },
+    "orders.waitlist-joined": {
+      "subject": "{eventName}のキャンセル待ちに登録されました",
+      "intro": "{eventName}の{passName}チケット{count, plural, other {# 枚}}のキャンセル待ちで、現在{position}番目です。チケットに空きが出たら、購入手続きのご案内をメールでお送りします。ご案内のチケットは一定時間お取り置きされます。順番の確認やキャンセル待ちの取り消しは、下のリンクから行えます。",
+      "cta": "順番を確認する"
+    },
+    "orders.waitlist-offer": {
+      "subject": "{eventName}のチケットに空きが出ました: {until}までにご購入ください",
+      "intro": "朗報です。{org}が{eventName}の{passName}チケット{count, plural, other {# 枚}}を{until}までお取り置きしています。それまでに購入手続きを完了してください。期限を過ぎると、チケットは次の順番の方に回ります。",
+      "cta": "今すぐ購入する"
+    },
+    "orders.waitlist-expired": {
+      "subject": "{eventName}のご案内の期限が終了しました",
+      "intro": "{eventName}の{passName}チケットの購入手続きの期限が過ぎたため、チケットは次の順番の方に回りました。下のリンクから、最後尾でキャンセル待ちに再登録できます。",
+      "cta": "キャンセル待ちに再登録する"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {{eventName}のご注文への新しいリンク} other {{eventName}のご注文へのリンク}}",
       "intro": "{reason, select, reissued {主催者が{eventName}のご注文へのリンクを差し替えました。以前のリンクは使えません。こちらをご利用ください。} other {ご依頼のリンクです。{eventName}のご注文とチケットを開けます。}}",

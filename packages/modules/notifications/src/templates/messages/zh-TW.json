@@ -119,6 +119,25 @@
       "intro": "輸入 {code} 即可在 {site} 查看您的票券，也可以在同一瀏覽器中使用下方按鈕。驗證碼 {minutes} 分鐘後失效，按鈕 {linkMinutes} 分鐘後失效；每個僅能使用一次。如果這不是您本人的要求，請忽略此郵件。",
       "cta": "開啟我的票券"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} 是您加入候補名單的驗證碼",
+      "intro": "輸入 {code} 以確認您的電子郵件並加入 {org} 的 {eventName} 候補名單。驗證碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。"
+    },
+    "orders.waitlist-joined": {
+      "subject": "您已加入 {eventName} 的候補名單",
+      "intro": "您正在排隊等候 {eventName} 的 {count, plural, other {# 張}} {passName} 票券，目前排在第 {position} 位。如有票券釋出，我們會透過電子郵件向您發送結帳邀請；票券將為您保留一段時間。使用下方連結查看您的排位或退出候補名單。",
+      "cta": "查看我的排位"
+    },
+    "orders.waitlist-offer": {
+      "subject": "{eventName} 有票券釋出：請在 {until} 前結帳",
+      "intro": "好消息：{org} 為您保留了 {eventName} 的 {count, plural, other {# 張}} {passName} 票券，保留至 {until}。請在此之前完成結帳；逾期後，票券將轉給下一位排隊者。",
+      "cta": "立即結帳"
+    },
+    "orders.waitlist-expired": {
+      "subject": "您的 {eventName} 購票邀請已結束",
+      "intro": "您的 {eventName} {passName} 票券結帳時間已過，票券已轉給下一位排隊者。您可以透過下方連結重新加入候補名單，排在隊尾。",
+      "cta": "重新加入候補名單"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {您在 {eventName} 的訂單新連結} other {您在 {eventName} 的訂單連結}}",
       "intro": "{reason, select, reissued {主辦方已更換您在 {eventName} 的訂單連結。舊連結已失效，請使用此連結。} other {這是您要求的連結，可開啟您在 {eventName} 的訂單和票券。}}",
