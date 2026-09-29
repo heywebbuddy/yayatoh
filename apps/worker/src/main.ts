@@ -1,8 +1,8 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
+import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
-import { createNotifier } from '@yayatoh/notifications';
 import { sweepAlerts } from './alerts.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';

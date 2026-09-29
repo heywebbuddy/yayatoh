@@ -10,7 +10,10 @@ import { sql } from 'drizzle-orm';
  * SECURITY DEFINER function (ids only); each org is evaluated under its own RLS, one failure never
  * stops the others.
  */
-export async function sweepAlerts(deps: AlertDeps, opts: { full: boolean }): Promise<{ orgs: number; changes: number }> {
+export async function sweepAlerts(
+  deps: AlertDeps,
+  opts: { full: boolean },
+): Promise<{ orgs: number; changes: number }> {
   const orgs = await withPlatformReader(
     { actor: 'system:alerts', reason: 'find orgs with alerts or events to evaluate' },
     (tx) => tx.execute<{ org_id: string }>(sql`select org_id from alerts.orgs_to_evaluate(500)`),

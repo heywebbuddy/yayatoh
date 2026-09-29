@@ -52,8 +52,8 @@ const anon = (orgId: string) => createCtx({ orgId });
 
 /**
  * The M3.2b alert fixture, built through the real commands in one org (integration tests and e2e
- * share it): an event starting within the hour (live mode) with a published plan of seven rows of
- * twenty; six buyers of 21 free tickets (126 attendees, 120 of the tickets still held by their
+ * share it): an event starting within the hour (live mode) with a published plan of five rows of
+ * twenty and one of forty; six buyers of 21 free tickets (126 attendees, 120 of the tickets still held by their
  * buyers beyond the one each keeps); 89 of them seated by the organizer (37 without a seat); 14
  * card payments that failed and were not retried; four check-in devices, three of them silent for
  * ten minutes. Then the alert engine evaluates it, as the worker would.
@@ -71,6 +71,8 @@ export async function alertScenario(
     {
       name: eventName,
       slug: `alerts-${tag}`,
+      // A gala: its console has the Seating pages the unseated alert links to.
+      profile: 'gala',
       timezone: 'America/Chicago',
       startsAt: new Date(now + 60 * 60_000).toISOString(),
       endsAt: new Date(now + 5 * 3_600_000).toISOString(),
@@ -90,12 +92,13 @@ export async function alertScenario(
     ctx,
     ports,
   );
-  const rows = Array.from({ length: 7 }, (_, i) =>
-    buildRow({ label: String.fromCharCode(65 + i), count: 20, x: 100, y: 100 + i * 60 }),
+  // Rows A–E of twenty, and row F of forty (room for everyone still to seat, in one go).
+  const rows = Array.from({ length: 6 }, (_, i) =>
+    buildRow({ label: String.fromCharCode(65 + i), count: i === 5 ? 40 : 20, x: 100, y: 100 + i * 60 }),
   );
   await executeCommand(
     setEventLayoutCommand,
-    { eventId: event.id, doc: { version: 1, width: 1600, height: 1000, items: rows } },
+    { eventId: event.id, doc: { version: 1, width: 3200, height: 1000, items: rows } },
     ctx,
     ports,
   );
@@ -196,17 +199,14 @@ export async function alertScenario(
     offlineDeviceTokens,
     seatEveryone: async () => {
       const left = await attendeeIds(false);
-      for (const [i, row] of rows.slice(4).entries()) {
-        const room = i === 0 ? 20 - (ALERT_FIXTURE.seated - 80) : 20;
-        const batch = left.splice(0, room);
-        if (batch.length)
-          await executeCommand(
-            assignSeatsCommand,
-            { eventId: event.id, attendeeIds: batch, itemId: row.id },
-            ctx,
-            ports,
-          );
-      }
+      const last = rows[5];
+      if (left.length && last)
+        await executeCommand(
+          assignSeatsCommand,
+          { eventId: event.id, attendeeIds: left, itemId: last.id },
+          ctx,
+          ports,
+        );
     },
     distributeTickets: async () => {
       const extra = await withTenant(ctx, (tx) =>

@@ -12,7 +12,8 @@ const SNOOZE = [60, 240, 1440] as const;
 
 /**
  * Acknowledge or snooze one alert (M3.2b). Plain forms (keyboard: Tab to a control, Enter or
- * Space to submit); the outcome is announced politely and stays after the list re-renders.
+ * Space to submit); the outcome is announced politely and stays after the list re-renders (the
+ * page keys this by the alert, and the controls follow the alert's new state).
  */
 export function AlertActions({
   alertId,
@@ -38,10 +39,9 @@ export function AlertActions({
     new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
       new Date(iso),
     );
-  const done = state.kind === 'acknowledged' || state.kind === 'snoozed';
   return (
     <div className="flex flex-col gap-2">
-      {!done && (canAcknowledge || canSnooze) ? (
+      {canAcknowledge || canSnooze ? (
         <div className="flex flex-wrap items-end gap-2">
           {canAcknowledge ? (
             <form action={formAction}>

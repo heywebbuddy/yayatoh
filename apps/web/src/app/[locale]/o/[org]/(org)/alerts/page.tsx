@@ -177,7 +177,7 @@ export default async function AlertsPage({
                   ) : null}
                   {a.state !== 'resolved' && canManage ? (
                     <AlertActions
-                      key={`${a.id}:${a.state}`}
+                      key={a.id}
                       alertId={a.id}
                       title={title}
                       canAcknowledge={a.state === 'open'}

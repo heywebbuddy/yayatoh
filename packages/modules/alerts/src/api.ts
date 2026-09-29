@@ -92,7 +92,10 @@ async function toDtosTx(tx: TenantTx, rows: (typeof alerts.$inferSelect)[]): Pro
         severity: r.severity as AlertDto['severity'],
         state: r.state as AlertDto['state'],
         count: r.count,
-        params: r.params ?? {},
+        // Numbers only (the allowlist): anything else in the column never leaves.
+        params: Object.fromEntries(
+          Object.entries(r.params ?? {}).filter((e): e is [string, number] => typeof e[1] === 'number'),
+        ),
         eventId: r.eventId,
         eventSlug: e?.slug ?? null,
         eventName: e?.name ?? null,

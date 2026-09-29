@@ -42,7 +42,7 @@ const title = (x: Pick<AlertDto, 'rule' | 'count'>) =>
     kind: 'alerts.alert',
     locale: 'en',
     params: { rule: x.rule, count: x.count, severity: 'warning', eventName: 'E' },
-    org: { name: 'Org' },
+    org: { name: 'Org', brandColor: null, poweredByVisible: false },
   }).subject;
 
 beforeAll(async () => {

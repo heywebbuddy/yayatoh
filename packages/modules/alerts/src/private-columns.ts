@@ -8,7 +8,7 @@ export const privateColumns = columnPrivacy('alerts', {
   // Rule keys, groups, severities and states are fixed vocabularies; `params` holds numbers only.
   alerts: {
     rule: 'vocab',
-    scope_key: internal(),
+    scope_key: internal('none', { why: 'the event id or "org" by CHECK constraint; no free text' }),
     category: 'vocab',
     severity: 'vocab',
     state: 'vocab',
