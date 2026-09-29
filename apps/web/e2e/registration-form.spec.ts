@@ -353,11 +353,6 @@ test('the builder in Arabic, a stale tab refused, and a viewer who cannot edit i
   browser,
 }) => {
   await signIn(page);
-  await page.goto(`/ar${base}/registration-form`);
-  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(page.getByRole('heading', { name: 'نموذج التسجيل', level: 1 })).toBeVisible();
-  await expectAccessible(page);
-
   // Two tabs: the one showing an older version cannot overwrite the newer one.
   await page.goto(`${base}/registration-form`);
   const other = await page.context().newPage();
@@ -372,6 +367,11 @@ test('the builder in Arabic, a stale tab refused, and a viewer who cannot edit i
   await expect(pageCard(page, 2, 'Workshops')).toBeVisible();
   await expect(pageCard(page, 3, 'Membership')).toBeVisible();
   await other.close();
+
+  await page.goto(`/ar${base}/registration-form`);
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.getByRole('heading', { name: 'نموذج التسجيل', level: 1 })).toBeVisible();
+  await expectAccessible(page);
 
   const viewer = await (await browser.newContext()).newPage();
   await signIn(viewer, VIEWER);
