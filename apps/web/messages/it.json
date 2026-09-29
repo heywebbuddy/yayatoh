@@ -261,7 +261,8 @@
     "trackedLinks": "Link tracciati",
     "messagingHealth": "Limiti di invio",
     "audiences": "Pubblici",
-    "refundRequests": "Richieste di rimborso"
+    "refundRequests": "Richieste di rimborso",
+    "commandCenter": "Centro di comando"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -5315,6 +5316,141 @@
         "offerHours": "Inserisci un valore tra 0,25 e 168 ore.",
         "not_enough_stock": "Non ci sono abbastanza biglietti liberi per questa offerta.",
         "not_on_sale": "Questo pass o questa data non è in vendita."
+      }
+    }
+  },
+  "commandCenter": {
+    "title": "Centro di comando",
+    "widgets": "Widget",
+    "overviewTitle": "Centro di comando",
+    "overviewDescription": "Eventi in corso, in partenza, in pianificazione o in chiusura. Prima quelli in corso.",
+    "overviewEmpty": {
+      "title": "Niente da seguire al momento",
+      "description": "Gli eventi compaiono qui durante la pianificazione, il giorno stesso e per una settimana dopo."
+    },
+    "columns": {
+      "event": "Evento",
+      "mode": "Modalità",
+      "starts": "Inizio",
+      "readiness": "Preparazione"
+    },
+    "manual": "Impostata a mano",
+    "role": {
+      "owner": "Vista titolare",
+      "ops": "Vista operazioni",
+      "finance": "Vista finanza",
+      "door": "Vista ingresso",
+      "marketing": "Vista marketing"
+    },
+    "mode": {
+      "label": "Modalità",
+      "planning": "Pianificazione",
+      "pre_show": "Vigilia",
+      "live": "In corso",
+      "wrap": "Chiusura"
+    },
+    "next": {
+      "planning": "Torna alla pianificazione {time}",
+      "pre_show": "La vigilia inizia {time}",
+      "live": "La modalità in corso inizia {time}",
+      "wrap": "La chiusura inizia {time}",
+      "none": "La chiusura termina {time}",
+      "settled": "Questo evento è concluso."
+    },
+    "override": {
+      "label": "Imposta la modalità",
+      "automatic": "Automatica ({mode})",
+      "submit": "Imposta modalità",
+      "saved": "Modalità aggiornata.",
+      "manualNote": "Impostata a mano. In automatico sarebbe: {mode}.",
+      "autoNote": "Gli orari seguono il fuso orario dell’evento ({timeZone})."
+    },
+    "customize": "Personalizza layout",
+    "done": "Fatto",
+    "reset": "Ripristina predefinito",
+    "resetDone": "Layout ripristinato.",
+    "saveFailed": "Impossibile salvare il layout. Riprova.",
+    "moveUp": "Sposta su {widget}",
+    "moveDown": "Sposta giù {widget}",
+    "hide": "Nascondi {widget}",
+    "show": "Mostra {widget}",
+    "drag": "Trascina {widget} per riordinare",
+    "hiddenTitle": "Widget nascosti",
+    "hiddenNone": "Nessun widget nascosto.",
+    "moved": "{widget} spostato in posizione {position}. Layout salvato.",
+    "hiddenMsg": "{widget} nascosto. Layout salvato.",
+    "shownMsg": "{widget} visibile. Layout salvato.",
+    "live": {
+      "live": "Aggiornamenti in tempo reale attivi",
+      "connecting": "Connessione…",
+      "offline": "Offline, nuovo tentativo…",
+      "polling": "Aggiornamento ogni 30 secondi"
+    },
+    "loading": "Caricamento…",
+    "unavailable": "Impossibile caricare questo widget.",
+    "noAccess": {
+      "title": "Nessun centro di comando per il tuo ruolo",
+      "description": "Chiedi l’accesso a questo evento a un titolare o a un amministratore."
+    },
+    "empty": {
+      "title": "Nessun widget visibile",
+      "description": "Personalizza il layout per mostrare i widget."
+    },
+    "meter": "{value} su {max}",
+    "widget": {
+      "readiness": {
+        "title": "Preparazione",
+        "score": "Preparazione {score}%",
+        "blocking": "Bloccante",
+        "todo": "Da fare inoltre",
+        "allDone": "Tutto pronto."
+      },
+      "sales": {
+        "title": "Vendite",
+        "today": "Oggi: {amount}",
+        "refunds": "Rimborsato: {amount}",
+        "orders": "{count, plural, one {# ordine} other {# ordini}}"
+      },
+      "tickets": {
+        "title": "Biglietti venduti",
+        "ofCapacity": "su {capacity}",
+        "noCapacity": "Ancora nessun biglietto in vendita",
+        "comps": "{count, plural, one {# omaggio} other {# omaggi}}"
+      },
+      "checkins": {
+        "title": "Ingressi",
+        "today": "entrati oggi",
+        "total": "{total} biglietti su {valid} registrati"
+      },
+      "seatFill": {
+        "title": "Occupazione posti",
+        "ofSeats": "{occupied} posti su {total} occupati",
+        "noSeats": "Ancora nessuna mappa dei posti"
+      },
+      "devices": {
+        "title": "Dispositivi online",
+        "ofEnrolled": "{count, plural, one {su # dispositivo registrato} other {su # dispositivi registrati}}",
+        "lowBattery": "{count, plural, one {# dispositivo con batteria scarica} other {# dispositivi con batteria scarica}}",
+        "none": "Ancora nessun dispositivo di controllo"
+      },
+      "timeline": {
+        "title": "In arrivo",
+        "empty": "Nient’altro in programma.",
+        "kind": {
+          "preShow": "Inizia la vigilia",
+          "live": "Inizia la modalità in corso",
+          "start": "Inizia l’evento",
+          "end": "Finisce l’evento",
+          "wrap": "Inizia la chiusura",
+          "wrapEnd": "Finisce la chiusura",
+          "date": "Prossima data",
+          "session": "Sessione: {title}"
+        }
+      },
+      "alerts": {
+        "title": "Avvisi",
+        "pending": "Gli avvisi compariranno qui quando le regole di avviso saranno attive.",
+        "none": "Nessun avviso aperto."
       }
     }
   }

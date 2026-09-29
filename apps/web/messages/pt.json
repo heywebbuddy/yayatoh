@@ -261,7 +261,8 @@
     "trackedLinks": "Links rastreados",
     "messagingHealth": "Limites de envio",
     "audiences": "Públicos",
-    "refundRequests": "Pedidos de reembolso"
+    "refundRequests": "Pedidos de reembolso",
+    "commandCenter": "Centro de comando"
   },
   "vocab": {
     "attendee": "Participante",
@@ -5315,6 +5316,141 @@
         "offerHours": "Digite um valor entre 0,25 e 168 horas.",
         "not_enough_stock": "Não há ingressos livres suficientes para esta oferta.",
         "not_on_sale": "Este passe ou data não está à venda."
+      }
+    }
+  },
+  "commandCenter": {
+    "title": "Centro de comando",
+    "widgets": "Widgets",
+    "overviewTitle": "Centro de comando",
+    "overviewDescription": "Eventos ao vivo, prestes a começar, em planejamento ou em encerramento. Ao vivo primeiro.",
+    "overviewEmpty": {
+      "title": "Nada para acompanhar agora",
+      "description": "Os eventos aparecem aqui durante o planejamento, no dia e por uma semana depois."
+    },
+    "columns": {
+      "event": "Evento",
+      "mode": "Modo",
+      "starts": "Início",
+      "readiness": "Preparação"
+    },
+    "manual": "Definido manualmente",
+    "role": {
+      "owner": "Visão do proprietário",
+      "ops": "Visão de operações",
+      "finance": "Visão financeira",
+      "door": "Visão da entrada",
+      "marketing": "Visão de marketing"
+    },
+    "mode": {
+      "label": "Modo",
+      "planning": "Planejamento",
+      "pre_show": "Véspera",
+      "live": "Ao vivo",
+      "wrap": "Encerramento"
+    },
+    "next": {
+      "planning": "Volta ao planejamento {time}",
+      "pre_show": "A véspera começa {time}",
+      "live": "O modo ao vivo começa {time}",
+      "wrap": "O encerramento começa {time}",
+      "none": "O encerramento termina {time}",
+      "settled": "Este evento terminou."
+    },
+    "override": {
+      "label": "Definir o modo",
+      "automatic": "Automático ({mode})",
+      "submit": "Definir modo",
+      "saved": "Modo atualizado.",
+      "manualNote": "Definido manualmente. O automático seria: {mode}.",
+      "autoNote": "Os horários seguem o fuso horário do evento ({timeZone})."
+    },
+    "customize": "Personalizar layout",
+    "done": "Concluído",
+    "reset": "Restaurar padrão",
+    "resetDone": "Layout restaurado ao padrão.",
+    "saveFailed": "Não foi possível salvar o layout. Tente novamente.",
+    "moveUp": "Mover {widget} para cima",
+    "moveDown": "Mover {widget} para baixo",
+    "hide": "Ocultar {widget}",
+    "show": "Mostrar {widget}",
+    "drag": "Arraste {widget} para reordenar",
+    "hiddenTitle": "Widgets ocultos",
+    "hiddenNone": "Nenhum widget oculto.",
+    "moved": "{widget} movido para a posição {position}. Layout salvo.",
+    "hiddenMsg": "{widget} oculto. Layout salvo.",
+    "shownMsg": "{widget} visível. Layout salvo.",
+    "live": {
+      "live": "Atualizações ao vivo ativas",
+      "connecting": "Conectando…",
+      "offline": "Offline, tentando novamente…",
+      "polling": "Atualiza a cada 30 segundos"
+    },
+    "loading": "Carregando…",
+    "unavailable": "Não foi possível carregar este widget.",
+    "noAccess": {
+      "title": "Sem centro de comando para a sua função",
+      "description": "Peça acesso a este evento a um proprietário ou administrador."
+    },
+    "empty": {
+      "title": "Nenhum widget visível",
+      "description": "Personalize o layout para mostrar widgets."
+    },
+    "meter": "{value} de {max}",
+    "widget": {
+      "readiness": {
+        "title": "Preparação",
+        "score": "Preparação {score}%",
+        "blocking": "Bloqueante",
+        "todo": "Também a fazer",
+        "allDone": "Tudo pronto."
+      },
+      "sales": {
+        "title": "Vendas",
+        "today": "Hoje: {amount}",
+        "refunds": "Reembolsado: {amount}",
+        "orders": "{count, plural, one {# pedido} other {# pedidos}}"
+      },
+      "tickets": {
+        "title": "Ingressos vendidos",
+        "ofCapacity": "de {capacity}",
+        "noCapacity": "Ainda não há ingressos à venda",
+        "comps": "{count, plural, one {# cortesia} other {# cortesias}}"
+      },
+      "checkins": {
+        "title": "Check-ins",
+        "today": "check-ins hoje",
+        "total": "{total} de {valid} ingressos com check-in"
+      },
+      "seatFill": {
+        "title": "Ocupação de lugares",
+        "ofSeats": "{occupied} de {total} lugares ocupados",
+        "noSeats": "Ainda não há mapa de lugares"
+      },
+      "devices": {
+        "title": "Dispositivos online",
+        "ofEnrolled": "{count, plural, one {de # dispositivo registrado} other {de # dispositivos registrados}}",
+        "lowBattery": "{count, plural, one {# dispositivo com bateria fraca} other {# dispositivos com bateria fraca}}",
+        "none": "Ainda não há dispositivos de check-in"
+      },
+      "timeline": {
+        "title": "A seguir",
+        "empty": "Nada mais programado.",
+        "kind": {
+          "preShow": "Começa a véspera",
+          "live": "Começa o modo ao vivo",
+          "start": "Começa o evento",
+          "end": "Termina o evento",
+          "wrap": "Começa o encerramento",
+          "wrapEnd": "Termina o encerramento",
+          "date": "Próxima data",
+          "session": "Sessão: {title}"
+        }
+      },
+      "alerts": {
+        "title": "Alertas",
+        "pending": "Os alertas aparecerão aqui quando as regras de alerta forem ativadas.",
+        "none": "Nenhum alerta aberto."
       }
     }
   }

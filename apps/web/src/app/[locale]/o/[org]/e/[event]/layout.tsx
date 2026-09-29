@@ -17,6 +17,15 @@ const TRACKED_LINKS: NavItem = {
   icon: 'link',
 };
 
+/** M3.2a: the event's Command Center, right after the home page (every profile). */
+const COMMAND_CENTER: NavItem = {
+  key: 'commandCenter',
+  path: 'command-center',
+  group: 'overview',
+  module: 'core',
+  icon: 'gauge',
+};
+
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
@@ -48,9 +57,9 @@ export default async function EventLayout({
         profile,
         // The Marketing section holds announcements: hidden without access to messages.
         items: [
-          ...composeNav(profile, data.modules).filter(
-            (i) => i.key !== 'marketing' || roleCan(data.role, 'messages:read'),
-          ),
+          ...composeNav(profile, data.modules)
+            .filter((i) => i.key !== 'marketing' || roleCan(data.role, 'messages:read'))
+            .flatMap((i) => (i.key === 'home' ? [i, COMMAND_CENTER] : [i])),
           ...(data.modules.has('marketing') && roleCan(data.role, 'marketing:read') ? [TRACKED_LINKS] : []),
           ...COPY_NAV,
         ],

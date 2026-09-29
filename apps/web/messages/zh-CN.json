@@ -261,7 +261,8 @@
     "trackedLinks": "追踪链接",
     "messagingHealth": "消息发送限制",
     "audiences": "受众",
-    "refundRequests": "退款申请"
+    "refundRequests": "退款申请",
+    "commandCenter": "指挥中心"
   },
   "vocab": {
     "attendee": "参会者",
@@ -5315,6 +5316,141 @@
         "offerHours": "请输入 0.25 到 168 小时之间的值。",
         "not_enough_stock": "空余门票不足，无法发出此邀请。",
         "not_on_sale": "此通行证或场次未在销售。"
+      }
+    }
+  },
+  "commandCenter": {
+    "title": "指挥中心",
+    "widgets": "小组件",
+    "overviewTitle": "指挥中心",
+    "overviewDescription": "正在进行、即将开始、计划中或收尾中的活动。进行中的排在最前。",
+    "overviewEmpty": {
+      "title": "目前没有需要关注的活动",
+      "description": "活动在筹备期间、活动当天及之后一周内显示在这里。"
+    },
+    "columns": {
+      "event": "活动",
+      "mode": "模式",
+      "starts": "开始时间",
+      "readiness": "准备度"
+    },
+    "manual": "手动设置",
+    "role": {
+      "owner": "所有者视图",
+      "ops": "运营视图",
+      "finance": "财务视图",
+      "door": "入口视图",
+      "marketing": "营销视图"
+    },
+    "mode": {
+      "label": "模式",
+      "planning": "筹备",
+      "pre_show": "预热",
+      "live": "进行中",
+      "wrap": "收尾"
+    },
+    "next": {
+      "planning": "{time} 回到筹备",
+      "pre_show": "{time} 开始预热",
+      "live": "{time} 进入进行中模式",
+      "wrap": "{time} 开始收尾",
+      "none": "{time} 收尾结束",
+      "settled": "此活动已结束。"
+    },
+    "override": {
+      "label": "设置模式",
+      "automatic": "自动（{mode}）",
+      "submit": "设置模式",
+      "saved": "模式已更新。",
+      "manualNote": "手动设置。自动模式应为：{mode}。",
+      "autoNote": "时间按活动时区（{timeZone}）显示。"
+    },
+    "customize": "自定义布局",
+    "done": "完成",
+    "reset": "恢复默认",
+    "resetDone": "布局已恢复默认。",
+    "saveFailed": "无法保存布局，请重试。",
+    "moveUp": "上移{widget}",
+    "moveDown": "下移{widget}",
+    "hide": "隐藏{widget}",
+    "show": "显示{widget}",
+    "drag": "拖动{widget}以重新排序",
+    "hiddenTitle": "已隐藏的小组件",
+    "hiddenNone": "没有隐藏的小组件。",
+    "moved": "{widget}已移到第 {position} 位。布局已保存。",
+    "hiddenMsg": "{widget}已隐藏。布局已保存。",
+    "shownMsg": "{widget}已显示。布局已保存。",
+    "live": {
+      "live": "实时更新已开启",
+      "connecting": "正在连接…",
+      "offline": "离线，正在重试…",
+      "polling": "每 30 秒更新一次"
+    },
+    "loading": "正在加载…",
+    "unavailable": "无法加载此小组件。",
+    "noAccess": {
+      "title": "你的角色没有指挥中心",
+      "description": "请向所有者或管理员申请此活动的访问权限。"
+    },
+    "empty": {
+      "title": "没有显示任何小组件",
+      "description": "自定义布局以显示小组件。"
+    },
+    "meter": "{value}/{max}",
+    "widget": {
+      "readiness": {
+        "title": "准备度",
+        "score": "准备度 {score}%",
+        "blocking": "阻碍项",
+        "todo": "其他待办",
+        "allDone": "一切就绪。"
+      },
+      "sales": {
+        "title": "销售额",
+        "today": "今日：{amount}",
+        "refunds": "已退款：{amount}",
+        "orders": "{count, plural, other {# 笔订单}}"
+      },
+      "tickets": {
+        "title": "已售门票",
+        "ofCapacity": "共 {capacity}",
+        "noCapacity": "尚无在售门票",
+        "comps": "{count, plural, other {# 张赠票}}"
+      },
+      "checkins": {
+        "title": "签到",
+        "today": "今日已签到",
+        "total": "{valid} 张门票中已签到 {total} 张"
+      },
+      "seatFill": {
+        "title": "座位占用",
+        "ofSeats": "{total} 个座位中已占用 {occupied} 个",
+        "noSeats": "尚无座位图"
+      },
+      "devices": {
+        "title": "在线设备",
+        "ofEnrolled": "{count, plural, other {共 # 台已登记设备}}",
+        "lowBattery": "{count, plural, other {# 台设备电量低}}",
+        "none": "尚无签到设备"
+      },
+      "timeline": {
+        "title": "接下来",
+        "empty": "没有其他安排。",
+        "kind": {
+          "preShow": "开始预热",
+          "live": "进入进行中模式",
+          "start": "活动开始",
+          "end": "活动结束",
+          "wrap": "开始收尾",
+          "wrapEnd": "收尾结束",
+          "date": "下一场日期",
+          "session": "场次：{title}"
+        }
+      },
+      "alerts": {
+        "title": "提醒",
+        "pending": "启用提醒规则后，提醒会显示在这里。",
+        "none": "没有未处理的提醒。"
       }
     }
   }

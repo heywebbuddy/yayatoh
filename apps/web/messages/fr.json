@@ -261,7 +261,8 @@
     "trackedLinks": "Liens suivis",
     "messagingHealth": "Limites d'envoi",
     "audiences": "Audiences",
-    "refundRequests": "Demandes de remboursement"
+    "refundRequests": "Demandes de remboursement",
+    "commandCenter": "Centre de commande"
   },
   "vocab": {
     "attendee": "Participant",
@@ -5315,6 +5316,141 @@
         "offerHours": "Saisissez une valeur entre 0,25 et 168 heures.",
         "not_enough_stock": "Il n’y a pas assez de billets libres pour cette offre.",
         "not_on_sale": "Ce pass ou cette date n’est pas en vente."
+      }
+    }
+  },
+  "commandCenter": {
+    "title": "Centre de commande",
+    "widgets": "Widgets",
+    "overviewTitle": "Centre de commande",
+    "overviewDescription": "Les événements en direct, sur le point de commencer, en préparation ou en clôture. Le direct d’abord.",
+    "overviewEmpty": {
+      "title": "Rien à surveiller pour l’instant",
+      "description": "Les événements apparaissent ici pendant leur préparation, le jour J et la semaine qui suit."
+    },
+    "columns": {
+      "event": "Événement",
+      "mode": "Mode",
+      "starts": "Début",
+      "readiness": "Préparation"
+    },
+    "manual": "Réglé à la main",
+    "role": {
+      "owner": "Vue propriétaire",
+      "ops": "Vue opérations",
+      "finance": "Vue finances",
+      "door": "Vue accueil",
+      "marketing": "Vue marketing"
+    },
+    "mode": {
+      "label": "Mode",
+      "planning": "Préparation",
+      "pre_show": "Veille",
+      "live": "Direct",
+      "wrap": "Clôture"
+    },
+    "next": {
+      "planning": "Retour à la préparation {time}",
+      "pre_show": "La veille commence {time}",
+      "live": "Le mode direct commence {time}",
+      "wrap": "La clôture commence {time}",
+      "none": "La clôture se termine {time}",
+      "settled": "Cet événement est terminé."
+    },
+    "override": {
+      "label": "Régler le mode",
+      "automatic": "Automatique ({mode})",
+      "submit": "Régler le mode",
+      "saved": "Mode mis à jour.",
+      "manualNote": "Réglé à la main. En automatique, ce serait : {mode}.",
+      "autoNote": "Les heures suivent le fuseau horaire de l’événement ({timeZone})."
+    },
+    "customize": "Personnaliser la disposition",
+    "done": "Terminé",
+    "reset": "Rétablir par défaut",
+    "resetDone": "Disposition rétablie par défaut.",
+    "saveFailed": "Impossible d’enregistrer la disposition. Réessayez.",
+    "moveUp": "Monter {widget}",
+    "moveDown": "Descendre {widget}",
+    "hide": "Masquer {widget}",
+    "show": "Afficher {widget}",
+    "drag": "Faites glisser {widget} pour le déplacer",
+    "hiddenTitle": "Widgets masqués",
+    "hiddenNone": "Aucun widget masqué.",
+    "moved": "{widget} déplacé en position {position}. Disposition enregistrée.",
+    "hiddenMsg": "{widget} masqué. Disposition enregistrée.",
+    "shownMsg": "{widget} affiché. Disposition enregistrée.",
+    "live": {
+      "live": "Mises à jour en direct",
+      "connecting": "Connexion…",
+      "offline": "Hors ligne, nouvelle tentative…",
+      "polling": "Mise à jour toutes les 30 secondes"
+    },
+    "loading": "Chargement…",
+    "unavailable": "Ce widget n’a pas pu être chargé.",
+    "noAccess": {
+      "title": "Pas de centre de commande pour votre rôle",
+      "description": "Demandez l’accès à cet événement à un propriétaire ou un administrateur."
+    },
+    "empty": {
+      "title": "Aucun widget affiché",
+      "description": "Personnalisez la disposition pour afficher des widgets."
+    },
+    "meter": "{value} sur {max}",
+    "widget": {
+      "readiness": {
+        "title": "Préparation",
+        "score": "Préparation {score} %",
+        "blocking": "Bloquant",
+        "todo": "Reste à faire",
+        "allDone": "Tout est prêt."
+      },
+      "sales": {
+        "title": "Ventes",
+        "today": "Aujourd’hui : {amount}",
+        "refunds": "Remboursé : {amount}",
+        "orders": "{count, plural, one {# commande} other {# commandes}}"
+      },
+      "tickets": {
+        "title": "Billets vendus",
+        "ofCapacity": "sur {capacity}",
+        "noCapacity": "Aucun billet en vente pour l’instant",
+        "comps": "{count, plural, one {# invitation} other {# invitations}}"
+      },
+      "checkins": {
+        "title": "Entrées",
+        "today": "entrées aujourd’hui",
+        "total": "{total} billets sur {valid} contrôlés"
+      },
+      "seatFill": {
+        "title": "Remplissage des places",
+        "ofSeats": "{occupied} places sur {total} occupées",
+        "noSeats": "Pas encore de plan de salle"
+      },
+      "devices": {
+        "title": "Appareils en ligne",
+        "ofEnrolled": "{count, plural, one {sur # appareil enregistré} other {sur # appareils enregistrés}}",
+        "lowBattery": "{count, plural, one {# appareil avec batterie faible} other {# appareils avec batterie faible}}",
+        "none": "Aucun appareil de contrôle pour l’instant"
+      },
+      "timeline": {
+        "title": "À venir",
+        "empty": "Rien d’autre de prévu.",
+        "kind": {
+          "preShow": "Début de la veille",
+          "live": "Début du mode direct",
+          "start": "Début de l’événement",
+          "end": "Fin de l’événement",
+          "wrap": "Début de la clôture",
+          "wrapEnd": "Fin de la clôture",
+          "date": "Prochaine date",
+          "session": "Session : {title}"
+        }
+      },
+      "alerts": {
+        "title": "Alertes",
+        "pending": "Les alertes apparaîtront ici dès que les règles d’alerte seront activées.",
+        "none": "Aucune alerte ouverte."
       }
     }
   }

@@ -261,7 +261,8 @@
     "trackedLinks": "追蹤連結",
     "messagingHealth": "訊息傳送限制",
     "audiences": "受眾",
-    "refundRequests": "退款申請"
+    "refundRequests": "退款申請",
+    "commandCenter": "指揮中心"
   },
   "vocab": {
     "attendee": "參加者",
@@ -5315,6 +5316,141 @@
         "offerHours": "請輸入 0.25 到 168 小時之間的值。",
         "not_enough_stock": "空餘票券不足，無法發出此邀請。",
         "not_on_sale": "此通行證或場次未在販售。"
+      }
+    }
+  },
+  "commandCenter": {
+    "title": "指揮中心",
+    "widgets": "小工具",
+    "overviewTitle": "指揮中心",
+    "overviewDescription": "正在進行、即將開始、規劃中或收尾中的活動。進行中的排在最前。",
+    "overviewEmpty": {
+      "title": "目前沒有需要關注的活動",
+      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。"
+    },
+    "columns": {
+      "event": "活動",
+      "mode": "模式",
+      "starts": "開始時間",
+      "readiness": "準備度"
+    },
+    "manual": "手動設定",
+    "role": {
+      "owner": "擁有者檢視",
+      "ops": "營運檢視",
+      "finance": "財務檢視",
+      "door": "入口檢視",
+      "marketing": "行銷檢視"
+    },
+    "mode": {
+      "label": "模式",
+      "planning": "籌備",
+      "pre_show": "預熱",
+      "live": "進行中",
+      "wrap": "收尾"
+    },
+    "next": {
+      "planning": "{time} 回到籌備",
+      "pre_show": "{time} 開始預熱",
+      "live": "{time} 進入進行中模式",
+      "wrap": "{time} 開始收尾",
+      "none": "{time} 收尾結束",
+      "settled": "此活動已結束。"
+    },
+    "override": {
+      "label": "設定模式",
+      "automatic": "自動（{mode}）",
+      "submit": "設定模式",
+      "saved": "模式已更新。",
+      "manualNote": "手動設定。自動模式應為：{mode}。",
+      "autoNote": "時間依活動時區（{timeZone}）顯示。"
+    },
+    "customize": "自訂版面",
+    "done": "完成",
+    "reset": "恢復預設",
+    "resetDone": "版面已恢復預設。",
+    "saveFailed": "無法儲存版面，請再試一次。",
+    "moveUp": "上移{widget}",
+    "moveDown": "下移{widget}",
+    "hide": "隱藏{widget}",
+    "show": "顯示{widget}",
+    "drag": "拖曳{widget}以重新排序",
+    "hiddenTitle": "已隱藏的小工具",
+    "hiddenNone": "沒有隱藏的小工具。",
+    "moved": "{widget}已移到第 {position} 位。版面已儲存。",
+    "hiddenMsg": "{widget}已隱藏。版面已儲存。",
+    "shownMsg": "{widget}已顯示。版面已儲存。",
+    "live": {
+      "live": "即時更新已開啟",
+      "connecting": "正在連線…",
+      "offline": "離線，正在重試…",
+      "polling": "每 30 秒更新一次"
+    },
+    "loading": "正在載入…",
+    "unavailable": "無法載入此小工具。",
+    "noAccess": {
+      "title": "你的角色沒有指揮中心",
+      "description": "請向擁有者或管理員申請此活動的存取權限。"
+    },
+    "empty": {
+      "title": "沒有顯示任何小工具",
+      "description": "自訂版面以顯示小工具。"
+    },
+    "meter": "{value}/{max}",
+    "widget": {
+      "readiness": {
+        "title": "準備度",
+        "score": "準備度 {score}%",
+        "blocking": "阻礙項目",
+        "todo": "其他待辦",
+        "allDone": "一切就緒。"
+      },
+      "sales": {
+        "title": "銷售額",
+        "today": "今日：{amount}",
+        "refunds": "已退款：{amount}",
+        "orders": "{count, plural, other {# 筆訂單}}"
+      },
+      "tickets": {
+        "title": "已售票券",
+        "ofCapacity": "共 {capacity}",
+        "noCapacity": "尚無販售中的票券",
+        "comps": "{count, plural, other {# 張招待票}}"
+      },
+      "checkins": {
+        "title": "報到",
+        "today": "今日已報到",
+        "total": "{valid} 張票券中已報到 {total} 張"
+      },
+      "seatFill": {
+        "title": "座位占用",
+        "ofSeats": "{total} 個座位中已占用 {occupied} 個",
+        "noSeats": "尚無座位圖"
+      },
+      "devices": {
+        "title": "線上裝置",
+        "ofEnrolled": "{count, plural, other {共 # 台已登記裝置}}",
+        "lowBattery": "{count, plural, other {# 台裝置電量低}}",
+        "none": "尚無報到裝置"
+      },
+      "timeline": {
+        "title": "接下來",
+        "empty": "沒有其他安排。",
+        "kind": {
+          "preShow": "開始預熱",
+          "live": "進入進行中模式",
+          "start": "活動開始",
+          "end": "活動結束",
+          "wrap": "開始收尾",
+          "wrapEnd": "收尾結束",
+          "date": "下一場日期",
+          "session": "場次：{title}"
+        }
+      },
+      "alerts": {
+        "title": "提醒",
+        "pending": "啟用提醒規則後，提醒會顯示在這裡。",
+        "none": "沒有未處理的提醒。"
       }
     }
   }

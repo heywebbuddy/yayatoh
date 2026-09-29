@@ -261,7 +261,8 @@
     "trackedLinks": "トラッキングリンク",
     "messagingHealth": "メッセージ送信の上限",
     "audiences": "オーディエンス",
-    "refundRequests": "返金リクエスト"
+    "refundRequests": "返金リクエスト",
+    "commandCenter": "コマンドセンター"
   },
   "vocab": {
     "attendee": "参加者",
@@ -5315,6 +5316,141 @@
         "offerHours": "0.25〜168時間の範囲で入力してください。",
         "not_enough_stock": "このご案内に必要な空きチケットが足りません。",
         "not_on_sale": "このパスまたは日程は販売されていません。"
+      }
+    }
+  },
+  "commandCenter": {
+    "title": "コマンドセンター",
+    "widgets": "ウィジェット",
+    "overviewTitle": "コマンドセンター",
+    "overviewDescription": "開催中、まもなく開始、計画中、または終了処理中のイベント。開催中が先頭です。",
+    "overviewEmpty": {
+      "title": "今は見守るものがありません",
+      "description": "イベントは計画中、当日、そして終了後1週間ここに表示されます。"
+    },
+    "columns": {
+      "event": "イベント",
+      "mode": "モード",
+      "starts": "開始",
+      "readiness": "準備状況"
+    },
+    "manual": "手動で設定",
+    "role": {
+      "owner": "オーナー表示",
+      "ops": "運営表示",
+      "finance": "経理表示",
+      "door": "受付表示",
+      "marketing": "マーケティング表示"
+    },
+    "mode": {
+      "label": "モード",
+      "planning": "計画",
+      "pre_show": "前日",
+      "live": "開催中",
+      "wrap": "終了処理"
+    },
+    "next": {
+      "planning": "計画に戻る: {time}",
+      "pre_show": "前日モード開始: {time}",
+      "live": "開催中モード開始: {time}",
+      "wrap": "終了処理開始: {time}",
+      "none": "終了処理終了: {time}",
+      "settled": "このイベントは終了しました。"
+    },
+    "override": {
+      "label": "モードを設定",
+      "automatic": "自動（{mode}）",
+      "submit": "モードを設定",
+      "saved": "モードを更新しました。",
+      "manualNote": "手動で設定中。自動なら: {mode}。",
+      "autoNote": "時刻はイベントのタイムゾーン（{timeZone}）です。"
+    },
+    "customize": "レイアウトを編集",
+    "done": "完了",
+    "reset": "既定に戻す",
+    "resetDone": "レイアウトを既定に戻しました。",
+    "saveFailed": "レイアウトを保存できませんでした。もう一度お試しください。",
+    "moveUp": "{widget}を上へ",
+    "moveDown": "{widget}を下へ",
+    "hide": "{widget}を非表示",
+    "show": "{widget}を表示",
+    "drag": "{widget}をドラッグして並べ替え",
+    "hiddenTitle": "非表示のウィジェット",
+    "hiddenNone": "非表示のウィジェットはありません。",
+    "moved": "{widget}を{position}番目に移動しました。レイアウトを保存しました。",
+    "hiddenMsg": "{widget}を非表示にしました。レイアウトを保存しました。",
+    "shownMsg": "{widget}を表示しました。レイアウトを保存しました。",
+    "live": {
+      "live": "ライブ更新中",
+      "connecting": "接続中…",
+      "offline": "オフライン、再試行中…",
+      "polling": "30秒ごとに更新"
+    },
+    "loading": "読み込み中…",
+    "unavailable": "このウィジェットを読み込めませんでした。",
+    "noAccess": {
+      "title": "あなたのロールにはコマンドセンターがありません",
+      "description": "このイベントへのアクセスをオーナーまたは管理者に依頼してください。"
+    },
+    "empty": {
+      "title": "表示中のウィジェットはありません",
+      "description": "レイアウトを編集してウィジェットを表示してください。"
+    },
+    "meter": "{max}中{value}",
+    "widget": {
+      "readiness": {
+        "title": "準備状況",
+        "score": "準備状況 {score}%",
+        "blocking": "要対応",
+        "todo": "その他の作業",
+        "allDone": "準備完了です。"
+      },
+      "sales": {
+        "title": "売上",
+        "today": "本日: {amount}",
+        "refunds": "返金済み: {amount}",
+        "orders": "{count, plural, other {# 件の注文}}"
+      },
+      "tickets": {
+        "title": "販売済みチケット",
+        "ofCapacity": "/ {capacity}",
+        "noCapacity": "販売中のチケットはまだありません",
+        "comps": "{count, plural, other {招待 # 枚}}"
+      },
+      "checkins": {
+        "title": "チェックイン",
+        "today": "本日のチェックイン",
+        "total": "{valid} 枚中 {total} 枚チェックイン済み"
+      },
+      "seatFill": {
+        "title": "座席の埋まり具合",
+        "ofSeats": "{total} 席中 {occupied} 席が埋まっています",
+        "noSeats": "座席表はまだありません"
+      },
+      "devices": {
+        "title": "オンラインの端末",
+        "ofEnrolled": "{count, plural, other {登録済み # 台中}}",
+        "lowBattery": "{count, plural, other {バッテリー残量が少ない端末 # 台}}",
+        "none": "チェックイン端末はまだありません"
+      },
+      "timeline": {
+        "title": "今後の予定",
+        "empty": "ほかに予定はありません。",
+        "kind": {
+          "preShow": "前日モード開始",
+          "live": "開催中モード開始",
+          "start": "イベント開始",
+          "end": "イベント終了",
+          "wrap": "終了処理開始",
+          "wrapEnd": "終了処理終了",
+          "date": "次の日程",
+          "session": "セッション: {title}"
+        }
+      },
+      "alerts": {
+        "title": "アラート",
+        "pending": "アラートルールが有効になると、ここにアラートが表示されます。",
+        "none": "未対応のアラートはありません。"
       }
     }
   }

@@ -99,13 +99,7 @@ describe('role layouts', () => {
         .map((s) => s.key);
     expect(await view('finance')).toEqual(['sales', 'tickets', 'alerts', 'timeline']);
     expect(await view('marketing')).toEqual(['tickets', 'readiness', 'alerts', 'timeline']);
-    expect(await view('manager')).toEqual([
-      'readiness',
-      'alerts',
-      'devices',
-      'tickets',
-      'timeline',
-    ]);
+    expect(await view('manager')).toEqual(['readiness', 'alerts', 'devices', 'tickets', 'timeline']);
     // A member without event access (a scanner) has no Command Center.
     await expect(
       executeQuery(eventViewQuery, { eventId: a.event.id }, as('scanner'), ports),
@@ -461,7 +455,12 @@ describe('realtime channel scoping', () => {
     );
     const device = await deviceContext(token);
     if (!device) throw new Error('device token did not resolve');
-    await executeCommand(heartbeatCommand, { batteryPct: 15, queueDepth: 2, clockOffsetMs: 0 }, device.ctx, ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 15, queueDepth: 2, clockOffsetMs: 0 },
+      device.ctx,
+      ports,
+    );
     await catchUpSubscriber(deviceBoardPublisher(), a.org.id);
     const live = await messages(a.org.id, `org:${a.org.id}:event:${liveEvent}:devices`);
     expect(
