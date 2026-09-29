@@ -7,7 +7,6 @@ import {
   validateImportCommand,
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
-import { saveLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   chatReportSignals,
@@ -17,6 +16,7 @@ import {
   setDetectionSettingsCommand,
 } from '@yayatoh/checkin';
 import { createEntryCommand, setEntryStatusCommand } from '@yayatoh/cms';
+import { saveWidgetLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
   addRecurringOccurrencesCommand,
@@ -1178,7 +1178,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // M3.2a Command Center: the owner's own layout and a manual mode (isolation coverage).
   await executeCommand(
-    saveLayoutCommand,
+    saveWidgetLayoutCommand,
     { eventId: event.id, order: ['sales', 'readiness'], hidden: ['timeline'] },
     ctx(),
     ports,

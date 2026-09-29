@@ -132,7 +132,13 @@ export function computeEventMode(input: ModeInput): ModeResult {
     return { mode: 'wrap', window: prev, nextChangeAt, nextMode, settled: false };
   }
   if (next)
-    return { mode: 'planning', window: next, nextChangeAt: next.preShowAt, nextMode: 'pre_show', settled: false };
+    return {
+      mode: 'planning',
+      window: next,
+      nextChangeAt: next.preShowAt,
+      nextMode: 'pre_show',
+      settled: false,
+    };
   // Every date is over and its wrap too.
   const last = windows[windows.length - 1] as ModeWindow;
   return { mode: 'wrap', window: last, nextChangeAt: null, nextMode: null, settled: true };

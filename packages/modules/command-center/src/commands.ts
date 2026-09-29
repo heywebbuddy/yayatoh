@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { callerScopeTx } from './access.ts';
 import { EVENT_MODES } from './domain/modes.ts';
 import { WIDGET_KEYS, WIDGET_META, widgetAllowed } from './domain/widgets.ts';
-import { eventModeTx } from './view.ts';
 import { layouts, modeOverrides } from './schema.ts';
+import { eventModeTx } from './view.ts';
 
 const Keys = z
   .array(z.enum(WIDGET_KEYS))
@@ -18,7 +18,7 @@ const Keys = z
  * widgets they hid. Only widgets the registry allows their role may be listed (a door member can't
  * store the revenue widget); the row is theirs alone (per user, per event).
  */
-export const saveLayoutCommand = tenantCommand({
+export const saveWidgetLayoutCommand = tenantCommand({
   name: 'commandCenter.saveLayout',
   input: z.object({ eventId: z.uuid(), order: Keys, hidden: Keys }),
   output: z.object({ order: z.array(z.enum(WIDGET_KEYS)), hidden: z.array(z.enum(WIDGET_KEYS)) }),
@@ -53,7 +53,7 @@ export const saveLayoutCommand = tenantCommand({
 });
 
 /** Back to the role's default layout (the member's own row is removed). */
-export const resetLayoutCommand = tenantCommand({
+export const resetWidgetLayoutCommand = tenantCommand({
   name: 'commandCenter.resetLayout',
   input: z.object({ eventId: z.uuid() }),
   output: z.object({ reset: z.boolean() }),
@@ -78,7 +78,11 @@ export const resetLayoutCommand = tenantCommand({
 export const setModeOverrideCommand = tenantCommand({
   name: 'commandCenter.setMode',
   input: z.object({ eventId: z.uuid(), mode: z.enum(EVENT_MODES).nullable() }),
-  output: z.object({ mode: z.enum(EVENT_MODES), computed: z.enum(EVENT_MODES), override: z.enum(EVENT_MODES).nullable() }),
+  output: z.object({
+    mode: z.enum(EVENT_MODES),
+    computed: z.enum(EVENT_MODES),
+    override: z.enum(EVENT_MODES).nullable(),
+  }),
   entitlement: 'core',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {

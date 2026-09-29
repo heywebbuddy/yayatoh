@@ -27,7 +27,11 @@ export async function publishMetricsChangedTx(tx: TenantTx, orgId: string, event
   });
 }
 
-export const DEVICE_BOARD_EVENTS = ['device.enrolled@1', 'device.state_changed@1', 'device.heartbeat@1'] as const;
+export const DEVICE_BOARD_EVENTS = [
+  'device.enrolled@1',
+  'device.state_changed@1',
+  'device.heartbeat@1',
+] as const;
 
 const DevicePayload = z.object({ deviceId: z.uuid() });
 /** Events whose span is this close to now can be in pre-show or live (checked exactly after). */
@@ -45,7 +49,10 @@ export function deviceBoardPublisher(): Subscriber {
     handle: async (tx, event) => {
       const parsed = DevicePayload.safeParse(event.payload);
       if (!parsed.success) return;
-      const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'command-center.devices' } });
+      const ctx = createCtx({
+        orgId: event.orgId,
+        actor: { type: 'system', name: 'command-center.devices' },
+      });
       const device = (await listDevicesQuery.handler({ input: {}, ctx, tx })).find(
         (d) => d.id === parsed.data.deviceId,
       );
@@ -58,12 +65,14 @@ export function deviceBoardPublisher(): Subscriber {
           : device.lastSeenAt && now - device.lastSeenAt.getTime() <= DEVICE_ONLINE_WINDOW_MS
             ? 'online'
             : 'offline';
-      const near = (await listEventsQuery.handler({ input: {}, ctx, tx })).map((e) => EventDto.parse(e)).filter(
-        (e) =>
-          !['cancelled', 'archived'].includes(e.status) &&
-          e.startsAt.getTime() - NEAR_MS <= now &&
-          e.endsAt.getTime() + NEAR_MS >= now,
-      );
+      const near = (await listEventsQuery.handler({ input: {}, ctx, tx }))
+        .map((e) => EventDto.parse(e))
+        .filter(
+          (e) =>
+            !['cancelled', 'archived'].includes(e.status) &&
+            e.startsAt.getTime() - NEAR_MS <= now &&
+            e.endsAt.getTime() + NEAR_MS >= now,
+        );
       for (const ev of near) {
         const mode = await eventModeTx(tx, ctx, ev);
         if (mode.mode !== 'pre_show' && mode.mode !== 'live') continue;

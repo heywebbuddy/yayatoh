@@ -156,11 +156,21 @@ function localMidnight(now: Date, timeZone: string): Date {
   return new Date(Math.max(midnight.getTime(), now.getTime() - 24 * 3_600_000 + 60_000));
 }
 
-export const readinessWidget = defineWidget(WIDGET_META.readiness, ReadinessWidgetDto, async ({ tx, ctx, scope }) => {
-  const s = readinessScore(await readinessRulesTx(tx, ctx, scope));
-  const link = (r: { key: string; path: string }) => ({ key: r.key, path: r.path });
-  return { score: s.score, done: s.done, total: s.total, blocking: s.blocking.map(link), todo: s.todo.map(link) };
-});
+export const readinessWidget = defineWidget(
+  WIDGET_META.readiness,
+  ReadinessWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const s = readinessScore(await readinessRulesTx(tx, ctx, scope));
+    const link = (r: { key: string; path: string }) => ({ key: r.key, path: r.path });
+    return {
+      score: s.score,
+      done: s.done,
+      total: s.total,
+      blocking: s.blocking.map(link),
+      todo: s.todo.map(link),
+    };
+  },
+);
 
 export const salesWidget = defineWidget(WIDGET_META.sales, SalesWidgetDto, async ({ tx, ctx, scope }) => {
   const ev = scope.event;
@@ -193,28 +203,49 @@ export const salesWidget = defineWidget(WIDGET_META.sales, SalesWidgetDto, async
   };
 });
 
-export const ticketsWidget = defineWidget(WIDGET_META.tickets, TicketsWidgetDto, async ({ tx, ctx, scope }) => {
-  const { value } = await metricsTx(tx, ctx, scope.event.id, ['tickets.sold', 'tickets.comp', 'tickets.capacity']);
-  return {
-    sold: value('tickets.sold'),
-    comp: value('tickets.comp'),
-    capacity: value('tickets.capacity'),
-    asOf: ctx.now.toISOString(),
-  };
-});
+export const ticketsWidget = defineWidget(
+  WIDGET_META.tickets,
+  TicketsWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const { value } = await metricsTx(tx, ctx, scope.event.id, [
+      'tickets.sold',
+      'tickets.comp',
+      'tickets.capacity',
+    ]);
+    return {
+      sold: value('tickets.sold'),
+      comp: value('tickets.comp'),
+      capacity: value('tickets.capacity'),
+      asOf: ctx.now.toISOString(),
+    };
+  },
+);
 
-export const checkinsWidget = defineWidget(WIDGET_META.checkins, CheckinsWidgetDto, async ({ tx, ctx, scope }) => {
-  const ev = scope.event;
-  const total = await checkinFactsTx(tx, { eventId: ev.id });
-  const today = await checkinFactsTx(tx, { eventId: ev.id, from: localMidnight(ctx.now, ev.timezone) });
-  const { value } = await metricsTx(tx, ctx, ev.id, ['tickets.valid']);
-  return { today: today.tickets, total: total.tickets, valid: value('tickets.valid'), asOf: ctx.now.toISOString() };
-});
+export const checkinsWidget = defineWidget(
+  WIDGET_META.checkins,
+  CheckinsWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const ev = scope.event;
+    const total = await checkinFactsTx(tx, { eventId: ev.id });
+    const today = await checkinFactsTx(tx, { eventId: ev.id, from: localMidnight(ctx.now, ev.timezone) });
+    const { value } = await metricsTx(tx, ctx, ev.id, ['tickets.valid']);
+    return {
+      today: today.tickets,
+      total: total.tickets,
+      valid: value('tickets.valid'),
+      asOf: ctx.now.toISOString(),
+    };
+  },
+);
 
-export const seatFillWidget = defineWidget(WIDGET_META.seatFill, SeatFillWidgetDto, async ({ tx, ctx, scope }) => {
-  const fill = await seatFillTx(tx, scope.event.id);
-  return { ...fill, asOf: ctx.now.toISOString() };
-});
+export const seatFillWidget = defineWidget(
+  WIDGET_META.seatFill,
+  SeatFillWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const fill = await seatFillTx(tx, scope.event.id);
+    return { ...fill, asOf: ctx.now.toISOString() };
+  },
+);
 
 /** Battery at or below this is "low" on the devices widget. */
 export const LOW_BATTERY_PCT = 20;
@@ -229,24 +260,34 @@ export const devicesWidget = defineWidget(WIDGET_META.devices, DevicesWidgetDto,
   };
 });
 
-export const timelineWidget = defineWidget(WIDGET_META.timeline, TimelineWidgetDto, async ({ tx, ctx, scope }) => {
-  const ev = scope.event;
-  const occurrences = await listOccurrencesQuery.handler({ input: { eventId: ev.id }, ctx, tx });
-  const input = { startsAt: ev.startsAt, endsAt: ev.endsAt, timeZone: ev.timezone, occurrences, now: ctx.now };
-  const sessions = navIncludes(scope.profile, scope.modules, 'sessions')
-    ? (await programQuery.handler({ input: { eventId: ev.id }, ctx, tx })).sessions
-    : [];
-  const items = timelineItems({
-    mode: computeEventMode(input),
-    windows: modeWindows(input),
-    sessions: sessions.map((s) => ({ title: s.title, startsAt: s.startsAt })),
-    now: ctx.now,
-  });
-  return {
-    timeZone: ev.timezone,
-    items: items.map((i) => ({ kind: i.kind, at: i.at.toISOString(), title: i.title })),
-  };
-});
+export const timelineWidget = defineWidget(
+  WIDGET_META.timeline,
+  TimelineWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const ev = scope.event;
+    const occurrences = await listOccurrencesQuery.handler({ input: { eventId: ev.id }, ctx, tx });
+    const input = {
+      startsAt: ev.startsAt,
+      endsAt: ev.endsAt,
+      timeZone: ev.timezone,
+      occurrences,
+      now: ctx.now,
+    };
+    const sessions = navIncludes(scope.profile, scope.modules, 'sessions')
+      ? (await programQuery.handler({ input: { eventId: ev.id }, ctx, tx })).sessions
+      : [];
+    const items = timelineItems({
+      mode: computeEventMode(input),
+      windows: modeWindows(input),
+      sessions: sessions.map((s) => ({ title: s.title, startsAt: s.startsAt })),
+      now: ctx.now,
+    });
+    return {
+      timeZone: ev.timezone,
+      items: items.map((i) => ({ kind: i.kind, at: i.at.toISOString(), title: i.title })),
+    };
+  },
+);
 
 /** The alerts slot until M3.2b registers its engine (`withWidget(registry, alertsWidget)`). */
 export const alertsSlotWidget = defineWidget(WIDGET_META.alerts, AlertsWidgetDto, async () => ({

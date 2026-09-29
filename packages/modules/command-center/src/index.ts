@@ -1,6 +1,6 @@
 export { type CallerScope, callerScopeTx, orgScopeTx } from './access.ts';
 export * from './client.ts';
-export { resetLayoutCommand, saveLayoutCommand, setModeOverrideCommand } from './commands.ts';
+export { resetWidgetLayoutCommand, saveWidgetLayoutCommand, setModeOverrideCommand } from './commands.ts';
 export { privateColumns } from './private-columns.ts';
 export { readinessRulesTx } from './readiness.ts';
 export { DEVICE_BOARD_EVENTS, deviceBoardPublisher, publishMetricsChangedTx } from './realtime.ts';
@@ -16,9 +16,10 @@ export {
 } from './view.ts';
 export {
   AlertsWidgetDto,
+  type AnyWidgetDef,
   alertsSlotWidget,
-  COMMAND_CENTER_WIDGETS,
   CheckinsWidgetDto,
+  COMMAND_CENTER_WIDGETS,
   checkinsWidget,
   createWidgetRegistry,
   DevicesWidgetDto,
@@ -35,7 +36,6 @@ export {
   TimelineWidgetDto,
   ticketsWidget,
   timelineWidget,
-  type AnyWidgetDef,
   type WidgetDef,
   type WidgetLoadArgs,
   type WidgetRegistry,

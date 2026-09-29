@@ -5,7 +5,13 @@ import { tenantQuery } from '@yayatoh/platform';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { callerScopeTx, orgScopeTx, profileOf } from './access.ts';
-import { computeEventMode, EVENT_MODES, type EventMode, isEventMode, type ModeResult } from './domain/modes.ts';
+import {
+  computeEventMode,
+  EVENT_MODES,
+  type EventMode,
+  isEventMode,
+  type ModeResult,
+} from './domain/modes.ts';
 import { readinessScore } from './domain/readiness.ts';
 import { CC_ROLES } from './domain/roles.ts';
 import { resolveLayout, WIDGET_KEYS, WIDGET_META, WIDGET_SIZES, widgetAllowed } from './domain/widgets.ts';

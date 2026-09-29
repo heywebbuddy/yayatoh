@@ -121,7 +121,10 @@ export async function seatsOccupiedTx(tx: TenantTx, eventId: string): Promise<nu
  * Seat fill of one event (M3.2 Command Center): occupied seats (as `seatsOccupiedTx`) and all
  * seats of its charts. Counts only.
  */
-export async function seatFillTx(tx: TenantTx, eventId: string): Promise<{ occupied: number; total: number }> {
+export async function seatFillTx(
+  tx: TenantTx,
+  eventId: string,
+): Promise<{ occupied: number; total: number }> {
   const [r] = await tx.execute<{ total: number }>(sql`
     select count(*)::int as total from seating.event_seats s where s.event_id = ${eventId}::uuid`);
   return { occupied: await seatsOccupiedTx(tx, eventId), total: Number(r?.total ?? 0) };

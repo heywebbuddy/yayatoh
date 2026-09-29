@@ -8,12 +8,12 @@ import {
   DEFAULT_LAYOUTS,
   EVENT_MODES,
   type ModeDate,
+  modeWindows,
   moveWidget,
   type ReadinessRule,
   readinessScore,
   resolveLayout,
   timelineItems,
-  modeWindows,
   WIDGET_KEYS,
   WIDGET_META,
   type WidgetScope,
@@ -51,7 +51,11 @@ describe('event modes', () => {
   });
 
   it('uses doors when set (live two hours before the doors)', () => {
-    const r = computeEventMode({ ...single, doorsAt: at('2027-06-10T23:00:00Z'), now: at('2027-06-10T21:30:00Z') });
+    const r = computeEventMode({
+      ...single,
+      doorsAt: at('2027-06-10T23:00:00Z'),
+      now: at('2027-06-10T21:30:00Z'),
+    });
     expect(r.mode).toBe('live');
     expect(r.window.liveAt).toEqual(at('2027-06-10T21:00:00Z'));
   });
@@ -70,7 +74,14 @@ describe('event modes', () => {
     expect(r.window.preShowAt).toEqual(at('2027-03-14T00:00:00Z'));
     expect(start.getTime() - r.window.preShowAt.getTime()).toBe(23 * H);
     expect(r.mode).toBe('pre_show');
-    expect(computeEventMode({ ...r.window, timeZone: 'America/New_York', occurrences: [], now: at('2027-03-13T23:59:00Z') }).mode).toBe('planning');
+    expect(
+      computeEventMode({
+        ...r.window,
+        timeZone: 'America/New_York',
+        occurrences: [],
+        now: at('2027-03-13T23:59:00Z'),
+      }).mode,
+    ).toBe('planning');
   });
 
   it('and across the autumn change (25 real hours); the wrap ends seven wall-clock days later', () => {
@@ -109,15 +120,32 @@ describe('event modes', () => {
   });
 
   it('keeps seconds when shifting wall-clock days', () => {
-    expect(addZonedDays(at('2027-06-10T12:00:30.500Z'), 1, 'Europe/Berlin')).toEqual(at('2027-06-11T12:00:30.500Z'));
+    expect(addZonedDays(at('2027-06-10T12:00:30.500Z'), 1, 'Europe/Berlin')).toEqual(
+      at('2027-06-11T12:00:30.500Z'),
+    );
     expect(addZonedDays(at('2027-03-27T12:00:00Z'), 1, 'Europe/Berlin')).toEqual(at('2027-03-28T11:00:00Z'));
   });
 
   describe('multi-date events use the current date', () => {
     const dates: ModeDate[] = [
-      { id: '00000000-0000-7000-8000-000000000001', startsAt: at('2027-06-11T00:00:00Z'), endsAt: at('2027-06-11T04:00:00Z'), status: 'scheduled' },
-      { id: '00000000-0000-7000-8000-000000000002', startsAt: at('2027-06-18T00:00:00Z'), endsAt: at('2027-06-18T04:00:00Z'), status: 'scheduled' },
-      { id: '00000000-0000-7000-8000-000000000003', startsAt: at('2027-06-12T00:00:00Z'), endsAt: at('2027-06-12T04:00:00Z'), status: 'cancelled' },
+      {
+        id: '00000000-0000-7000-8000-000000000001',
+        startsAt: at('2027-06-11T00:00:00Z'),
+        endsAt: at('2027-06-11T04:00:00Z'),
+        status: 'scheduled',
+      },
+      {
+        id: '00000000-0000-7000-8000-000000000002',
+        startsAt: at('2027-06-18T00:00:00Z'),
+        endsAt: at('2027-06-18T04:00:00Z'),
+        status: 'scheduled',
+      },
+      {
+        id: '00000000-0000-7000-8000-000000000003',
+        startsAt: at('2027-06-12T00:00:00Z'),
+        endsAt: at('2027-06-12T04:00:00Z'),
+        status: 'cancelled',
+      },
     ];
     const series = (now: string) =>
       computeEventMode({
@@ -144,10 +172,13 @@ describe('event modes', () => {
       expect(series('2027-06-01T00:00:00Z')).toMatchObject({ mode: 'planning' });
       const far = [
         dates[0] as ModeDate,
-        { ...(dates[1] as ModeDate), startsAt: at('2027-07-18T00:00:00Z'), endsAt: at('2027-07-18T04:00:00Z') },
+        {
+          ...(dates[1] as ModeDate),
+          startsAt: at('2027-07-18T00:00:00Z'),
+          endsAt: at('2027-07-18T04:00:00Z'),
+        },
       ];
-      const r = (now: string) =>
-        computeEventMode({ ...single, occurrences: far, now: at(now) });
+      const r = (now: string) => computeEventMode({ ...single, occurrences: far, now: at(now) });
       expect(r('2027-06-12T00:00:00Z')).toMatchObject({ mode: 'wrap', nextMode: 'planning' });
       expect(r('2027-06-12T00:00:00Z').nextChangeAt).toEqual(at('2027-06-18T04:00:00Z'));
       expect(r('2027-06-20T00:00:00Z')).toMatchObject({ mode: 'planning', nextMode: 'pre_show' });
@@ -191,7 +222,11 @@ describe('command center roles', () => {
 });
 
 describe('widget registry and layouts', () => {
-  const scope = (role: WidgetScope['role'], profile: WidgetScope['profile'] = 'concert', modules = ALL_MODULES): WidgetScope => ({
+  const scope = (
+    role: WidgetScope['role'],
+    profile: WidgetScope['profile'] = 'concert',
+    modules = ALL_MODULES,
+  ): WidgetScope => ({
     role,
     profile,
     modules,
@@ -202,7 +237,11 @@ describe('widget registry and layouts', () => {
       for (const profile of ['concert', 'gala', 'conference', 'wedding'] as const) {
         const keys = availableWidgets(WIDGET_META, scope('door', profile), mode).map((m) => m.key);
         expect(keys).not.toContain('sales');
-        expect(resolveLayout(WIDGET_META, scope('door', profile), mode, { order: ['sales'], hidden: [] }).map((s) => s.key)).not.toContain('sales');
+        expect(
+          resolveLayout(WIDGET_META, scope('door', profile), mode, { order: ['sales'], hidden: [] }).map(
+            (s) => s.key,
+          ),
+        ).not.toContain('sales');
       }
     // Even if a registration listed the door role, the revenue flag still refuses it.
     expect(widgetAllowed({ ...WIDGET_META.sales, roles: ['door'] }, scope('door'))).toBe(false);
@@ -215,7 +254,9 @@ describe('widget registry and layouts', () => {
     expect(widgetAllowed(WIDGET_META.sales, scope('owner', 'wedding'))).toBe(false);
     expect(widgetAllowed(WIDGET_META.seatFill, scope('owner', 'concert'))).toBe(false);
     expect(widgetAllowed(WIDGET_META.seatFill, scope('owner', 'gala'))).toBe(true);
-    expect(widgetAllowed(WIDGET_META.sales, scope('owner', 'concert', new Set(['core', 'ticketing'])))).toBe(false);
+    expect(widgetAllowed(WIDGET_META.sales, scope('owner', 'concert', new Set(['core', 'ticketing'])))).toBe(
+      false,
+    );
     expect(widgetAllowed(undefined, scope('owner'))).toBe(false);
     const planning = availableWidgets(WIDGET_META, scope('owner'), 'planning').map((m) => m.key);
     expect(planning).toContain('readiness');
@@ -241,7 +282,15 @@ describe('widget registry and layouts', () => {
         .filter((s) => !s.hidden)
         .map((s) => s.key);
     expect(keys('planning')).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
-    expect(keys('live')).toEqual(['checkins', 'alerts', 'devices', 'seatFill', 'sales', 'tickets', 'timeline']);
+    expect(keys('live')).toEqual([
+      'checkins',
+      'alerts',
+      'devices',
+      'seatFill',
+      'sales',
+      'tickets',
+      'timeline',
+    ]);
     expect(keys('wrap')[0]).toBe('sales');
   });
 
@@ -250,7 +299,15 @@ describe('widget registry and layouts', () => {
       order: ['timeline', 'bogus', 'readiness', 'sales', 'timeline'],
       hidden: ['sales'],
     });
-    expect(r.map((s) => s.key)).toEqual(['timeline', 'sales', 'checkins', 'alerts', 'devices', 'seatFill', 'tickets']);
+    expect(r.map((s) => s.key)).toEqual([
+      'timeline',
+      'sales',
+      'checkins',
+      'alerts',
+      'devices',
+      'seatFill',
+      'tickets',
+    ]);
     expect(r.find((s) => s.key === 'sales')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'checkins')?.hidden).toBe(false);
     // Available in the mode but not in the role's default list: offered hidden.
@@ -268,7 +325,11 @@ describe('widget registry and layouts', () => {
 });
 
 describe('readiness score', () => {
-  const rule = (key: string, done: boolean): ReadinessRule => ({ key, done, path: key === 'published' ? '' : key });
+  const rule = (key: string, done: boolean): ReadinessRule => ({
+    key,
+    done,
+    path: key === 'published' ? '' : key,
+  });
 
   it('weighs blocking rules double and lists them with their fix links', () => {
     const s = readinessScore([
@@ -306,11 +367,22 @@ describe('timeline', () => {
     const items = timelineItems({
       mode: computeEventMode(input),
       windows: modeWindows(input),
-      sessions: [{ title: 'Keynote', startsAt: at('2027-06-11T00:30:00Z') }, { title: 'Past', startsAt: at('2027-06-01T00:00:00Z') }],
+      sessions: [
+        { title: 'Keynote', startsAt: at('2027-06-11T00:30:00Z') },
+        { title: 'Past', startsAt: at('2027-06-01T00:00:00Z') },
+      ],
       now: input.now,
     });
     expect(items.map((i) => i.kind)).toEqual(['live', 'start', 'session', 'end', 'wrap', 'wrapEnd']);
     expect(items.find((i) => i.kind === 'session')?.title).toBe('Keynote');
-    expect(timelineItems({ mode: computeEventMode(input), windows: modeWindows(input), sessions: [], now: input.now, limit: 2 })).toHaveLength(2);
+    expect(
+      timelineItems({
+        mode: computeEventMode(input),
+        windows: modeWindows(input),
+        sessions: [],
+        now: input.now,
+        limit: 2,
+      }),
+    ).toHaveLength(2);
   });
 });

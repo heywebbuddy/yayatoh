@@ -100,7 +100,8 @@ export interface ReadinessScore {
 }
 
 export function readinessScore(rules: readonly ReadinessRule[]): ReadinessScore {
-  const weight = (r: ReadinessRule) => ((BLOCKING_READINESS_KEYS as readonly string[]).includes(r.key) ? 2 : 1);
+  const weight = (r: ReadinessRule) =>
+    (BLOCKING_READINESS_KEYS as readonly string[]).includes(r.key) ? 2 : 1;
   const total = rules.reduce((s, r) => s + weight(r), 0);
   const done = rules.reduce((s, r) => s + (r.done ? weight(r) : 0), 0);
   const open = rules.filter((r) => !r.done);

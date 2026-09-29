@@ -4,7 +4,16 @@ import type { ModeResult, ModeWindow } from './modes.ts';
  * The "upcoming" timeline widget (M3.2): the next mode changes of the current date, the event's
  * next dates and its next program sessions, soonest first. Pure.
  */
-export const TIMELINE_KINDS = ['preShow', 'live', 'start', 'end', 'wrap', 'wrapEnd', 'date', 'session'] as const;
+export const TIMELINE_KINDS = [
+  'preShow',
+  'live',
+  'start',
+  'end',
+  'wrap',
+  'wrapEnd',
+  'date',
+  'session',
+] as const;
 export type TimelineKind = (typeof TIMELINE_KINDS)[number];
 
 export interface TimelineItem {
