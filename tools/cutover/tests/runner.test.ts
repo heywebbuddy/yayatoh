@@ -289,7 +289,8 @@ describe('cutover orchestrator (M2.5a)', () => {
   });
 });
 
-describe('cutover CLI safety', () => {
+// Each case starts the CLI as a subprocess (module loading takes seconds under a parallel run).
+describe('cutover CLI safety', { timeout: 60_000 }, () => {
   const root = fileURLToPath(new URL('../../../', import.meta.url));
   const cli = (args: string[], env: Record<string, string> = {}) =>
     spawnSync(process.execPath, ['tools/cutover/cli.ts', ...args], {
