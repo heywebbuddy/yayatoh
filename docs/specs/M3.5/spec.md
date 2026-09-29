@@ -163,6 +163,8 @@ The two new indexes on `notifications.messages` are built in the migration trans
 | Staff provider health and switch-on checklist; dedicated senders | e2e `apps/admin/e2e/providers.spec.ts` (health from real dev traffic, checklists, access log, keyboard, axe; SID validation, 10DLC status, WhatsApp route, the organizer's view in English and Arabic; finance staff and signed-out refused); `apps/worker/tests/provider-health.int.test.ts` (counts, access log, config names only, app_user has no table access) |
 | Tenant isolation | `packages/testing/tests/isolation.int.test.ts` (fixture rows in both orgs for the three new tenant tables); int: events and suppressions stay in their org; a STOP to one org's number leaves the other org alone |
 
+**Gate (2026-09-29):** `pnpm verify` green (1516 unit, 973 integration). Web e2e on a fresh database: 1425 passed, 34 skipped, 2 failed — both outside M3.5b and both pass on rerun (`tenant-account-corner.spec.ts:97` desktop: the tenant-site sign-in stayed on `/sign-in`; `tracked-links.spec.ts:323` desktop: `socket hang up` on `/api/dev/login` under load). The new specs (`sending-setup.spec.ts`, `messaging-followups.spec.ts`) 33/33. Admin e2e: 64 passed.
+
 ### 5. Pending the owner
 - Accounts and switch-on per provider (SES production access and `mail.yayatoh.com`; Twilio toll-free + 10DLC; Meta business verification, templates; the gateway's API contract): `docs/owner-inbox.md` "Messaging providers".
 - The fallback chains per category and the triggers (reachability only); STOP semantics (per org answered, or every org on the shared number; transactional texts blocked too; START restores informational only); the HELP text and `MESSAGING_HELP_URL`.
