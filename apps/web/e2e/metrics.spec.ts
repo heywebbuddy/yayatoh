@@ -177,7 +177,10 @@ test.describe('metrics projection behind the dashboard (M3.1a)', () => {
 
     // Undo the check-in: the counter goes back.
     await page.goto(`${base}/onsite`);
-    await page.getByRole('button', { name: `Undo check-in for Cal Comp ${stamp}` }).click();
+    const undo = page.getByRole('button', { name: `Undo check-in for Cal Comp ${stamp}` });
+    await undo.click();
+    // The undo committed once the door screen drops it (navigating sooner can cancel the action).
+    await expect(undo).toHaveCount(0);
     await page.goto(base);
     await expect(tile(page, 'Checked in')).toContainText('0% of 3 valid tickets');
     await expectAccessible(page);

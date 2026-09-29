@@ -27,7 +27,7 @@ async function signIn(page: Page, email: string, opts: { twoFactor?: boolean } =
   await expect(page).toHaveURL(/\/sign-in$/);
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password').fill(devPassword());
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   if (!opts.twoFactor) return;
   await page
     .getByLabel('6-digit code')
