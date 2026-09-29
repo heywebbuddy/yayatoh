@@ -5516,7 +5516,7 @@
       "formLabel": "{name} の譲渡ルール",
       "allowed": "保有者による譲渡を許可",
       "cutoff": "締め切り(何時間前)",
-      "cutoffHint": "空欄: 開始時まで。",
+      "cutoffHint": "空欄: イベント終了まで。",
       "fee": "手数料({currency})",
       "feeHint": "空欄: 無料。",
       "save": "ルールを保存",

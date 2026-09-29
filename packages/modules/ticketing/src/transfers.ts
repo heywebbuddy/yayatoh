@@ -486,7 +486,7 @@ export async function holderTransferOptionsTx(
           reason: d.ok ? null : d.reason,
           feeMinor: r.transferFeeMinor,
           currency: r.currency,
-          deadline: transferDeadline(r, event.startsAt),
+          deadline: transferDeadline(r, event.startsAt, event.endsAt),
           pendingTransferId: p?.id ?? null,
           pendingTransferTo: p?.toName ?? null,
         },

@@ -5516,7 +5516,7 @@
       "formLabel": "Reglas de transferencia de {name}",
       "allowed": "Los titulares pueden transferir",
       "cutoff": "Cierre (horas antes)",
-      "cutoffHint": "Vacío: al inicio.",
+      "cutoffHint": "Vacío: hasta que termine el evento.",
       "fee": "Tarifa ({currency})",
       "feeHint": "Vacío: gratis.",
       "save": "Guardar reglas",

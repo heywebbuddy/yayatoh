@@ -6,7 +6,7 @@
  */
 export interface TransferRules {
   readonly transfersAllowed: boolean;
-  /** Holder transfers close this many hours before the start (null: at the start). */
+  /** Holder transfers close this many hours before the start (null: when the event ends). */
   readonly transferCutoffHours: number | null;
   readonly transferFeeMinor: number;
 }
@@ -19,9 +19,14 @@ export type TransferDecision =
 
 const HOUR = 3_600_000;
 
-/** The moment holder transfers close for this ticket type. */
-export function transferDeadline(rules: TransferRules, startsAt: Date): Date {
-  return new Date(startsAt.getTime() - (rules.transferCutoffHours ?? 0) * HOUR);
+/**
+ * The moment holder transfers close for this ticket type: the cutoff before the start, or the
+ * event's end when there is none (a ticket can be passed on at the door, as M1.8 links always could).
+ */
+export function transferDeadline(rules: TransferRules, startsAt: Date, endsAt: Date): Date {
+  return rules.transferCutoffHours === null
+    ? endsAt
+    : new Date(startsAt.getTime() - rules.transferCutoffHours * HOUR);
 }
 
 export function decideTransfer(
@@ -38,7 +43,7 @@ export function decideTransfer(
   if (at.now >= at.endsAt) return { ok: false, reason: 'event_ended' };
   if (at.by === 'organizer') return { ok: true, feeMinor: 0 };
   if (!rules.transfersAllowed) return { ok: false, reason: 'not_allowed' };
-  const deadline = transferDeadline(rules, at.startsAt);
+  const deadline = transferDeadline(rules, at.startsAt, at.endsAt);
   if (at.now >= deadline) return { ok: false, reason: 'deadline_passed', deadline };
   return { ok: true, feeMinor: rules.transferFeeMinor };
 }

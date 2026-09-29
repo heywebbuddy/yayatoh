@@ -5516,7 +5516,7 @@
       "formLabel": "Transfer rules for {name}",
       "allowed": "Holders may transfer",
       "cutoff": "Close (hours before)",
-      "cutoffHint": "Empty: at the start.",
+      "cutoffHint": "Empty: until the event ends.",
       "fee": "Fee ({currency})",
       "feeHint": "Empty: free.",
       "save": "Save rules",

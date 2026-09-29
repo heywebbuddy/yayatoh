@@ -5516,7 +5516,7 @@
       "formLabel": "Règles de transfert pour {name}",
       "allowed": "Les détenteurs peuvent transférer",
       "cutoff": "Fermeture (heures avant)",
-      "cutoffHint": "Vide : au début.",
+      "cutoffHint": "Vide : jusqu’à la fin de l’événement.",
       "fee": "Frais ({currency})",
       "feeHint": "Vide : gratuit.",
       "save": "Enregistrer les règles",

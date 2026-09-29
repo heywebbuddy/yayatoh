@@ -5516,7 +5516,7 @@
       "formLabel": "{name} 的转让规则",
       "allowed": "允许持票人转让",
       "cutoff": "截止(提前小时数)",
-      "cutoffHint": "留空:开始时截止。",
+      "cutoffHint": "留空:活动结束前均可。",
       "fee": "费用({currency})",
       "feeHint": "留空:免费。",
       "save": "保存规则",

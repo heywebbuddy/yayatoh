@@ -5516,7 +5516,7 @@
       "formLabel": "{name} 的轉讓規則",
       "allowed": "允許持票人轉讓",
       "cutoff": "截止(提前小時數)",
-      "cutoffHint": "留空:開始時截止。",
+      "cutoffHint": "留空:活動結束前皆可。",
       "fee": "費用({currency})",
       "feeHint": "留空:免費。",
       "save": "儲存規則",

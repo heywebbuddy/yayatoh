@@ -188,13 +188,13 @@ test.describe('support tools (M3.10c)', () => {
     await late.goto(new URL(lateLink).pathname);
     await expect(late.getByRole('button', { name: 'Claim ticket' })).toHaveCount(0);
 
-    // The event has started: holder transfers closed at the start (the default rule).
+    // The new holder passes it on by name at the door (no cutoff: open until the event ends).
     await claimer.reload();
-    await expect(
-      claimer
-        .getByRole('region', { name: 'Transfer this ticket' })
-        .getByText('Transfers for this ticket have closed.'),
-    ).toBeVisible();
+    const own = claimer.getByRole('region', { name: 'Transfer this ticket' });
+    await own.getByLabel('Their name').fill(`Pal ${stamp}`);
+    await own.getByLabel('Their email').fill(`pal+${stamp}@example.test`);
+    await own.getByRole('button', { name: 'Send transfer' }).click();
+    await expect(own.getByText(`Waiting for Pal ${stamp} to claim it.`)).toBeVisible();
     await expectAccessible(claimer);
 
     // Arabic, right to left.

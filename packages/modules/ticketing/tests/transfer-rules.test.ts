@@ -19,17 +19,15 @@ const at = (iso: string, by: 'organizer' | 'holder' = 'holder', ticketActive = t
 });
 
 describe('transfer rules (M3.10c)', () => {
-  it('lets a holder transfer for free until the start by default', () => {
-    expect(decideTransfer(rules(), at('2027-10-14T17:59:59Z'))).toEqual({ ok: true, feeMinor: 0 });
-    expect(decideTransfer(rules(), at('2027-10-14T18:00:00Z'))).toMatchObject({
-      ok: false,
-      reason: 'deadline_passed',
-    });
+  it('lets a holder transfer for free until the event ends by default', () => {
+    expect(transferDeadline(rules(), startsAt, endsAt)).toEqual(endsAt);
+    expect(decideTransfer(rules(), at('2027-10-14T20:00:00Z'))).toEqual({ ok: true, feeMinor: 0 });
+    expect(decideTransfer(rules(), at('2027-10-14T23:00:00Z'))).toEqual({ ok: false, reason: 'event_ended' });
   });
 
   it('closes holder transfers the cutoff hours before the start and reports the deadline', () => {
     const r = rules({ transferCutoffHours: 48 });
-    expect(transferDeadline(r, startsAt)).toEqual(new Date('2027-10-12T18:00:00Z'));
+    expect(transferDeadline(r, startsAt, endsAt)).toEqual(new Date('2027-10-12T18:00:00Z'));
     expect(decideTransfer(r, at('2027-10-12T17:00:00Z')).ok).toBe(true);
     expect(decideTransfer(r, at('2027-10-12T18:00:00Z'))).toEqual({
       ok: false,

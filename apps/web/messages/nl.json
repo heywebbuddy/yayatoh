@@ -5516,7 +5516,7 @@
       "formLabel": "Overdrachtsregels voor {name}",
       "allowed": "Houders mogen overdragen",
       "cutoff": "Sluiten (uur vooraf)",
-      "cutoffHint": "Leeg: bij de start.",
+      "cutoffHint": "Leeg: tot het einde van het evenement.",
       "fee": "Kosten ({currency})",
       "feeHint": "Leeg: gratis.",
       "save": "Regels opslaan",

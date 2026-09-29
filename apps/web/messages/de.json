@@ -5516,7 +5516,7 @@
       "formLabel": "Übertragungsregeln für {name}",
       "allowed": "Inhaber dürfen übertragen",
       "cutoff": "Schluss (Stunden vorher)",
-      "cutoffHint": "Leer: zum Beginn.",
+      "cutoffHint": "Leer: bis zum Ende der Veranstaltung.",
       "fee": "Gebühr ({currency})",
       "feeHint": "Leer: kostenlos.",
       "save": "Regeln speichern",
