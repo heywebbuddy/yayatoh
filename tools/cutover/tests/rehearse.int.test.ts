@@ -14,7 +14,9 @@ import { rehearse } from '../src/rehearse.ts';
  * SCT sale and scan, with the refund through the fake provider. Timed reports; flags cleared after.
  */
 const dir = mkdtempSync(join(tmpdir(), 'cutover-rehearsal-'));
-setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? ''));
+// The legacy suites share the synthetic orgs in the test database: one fixed test vault for all of
+// them (as tools/legacy-migrate/tests/migrate.int.test.ts; batch 3c merge).
+setKeyVault(localKeyVault('5e'.repeat(32)));
 
 afterAll(async () => {
   rmSync(dir, { recursive: true, force: true });

@@ -12,13 +12,14 @@ import {
   startCheckoutCommand,
 } from '@yayatoh/orders';
 import { fakePaymentProvider, memoryBalanceStore, signFakeWebhook } from '@yayatoh/payments';
+import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { ports } from '@yayatoh/testing';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { legacyFreezeProbe } from '../src/freeze-probe.ts';
 import { reverseEtl, rollbackSql } from '../src/reverse-etl.ts';
 import { rollbackRefunds } from '../src/rollback-refunds.ts';
 import { runMigration } from '../src/run.ts';
-import { generateDumpFile } from '../src/synth/generate.ts';
+import { DEMO, generateDumpFile } from '../src/synth/generate.ts';
 
 /**
  * M2.5a reverse ETL and the rollback refund, on the synthetic legacy dataset (both instances, yay
@@ -27,6 +28,12 @@ import { generateDumpFile } from '../src/synth/generate.ts';
  * ETL writes all of it back in the legacy shape with ids ≥ 10M, reconciles to the cent, and a rerun
  * changes nothing. Then the rollback script refunds the SCT order at the provider exactly once.
  */
+// The legacy suites share the synthetic orgs (deterministic ids) in the test database, so they all
+// seal and open those orgs' ticket keys under one fixed test vault (as migrate.int does; batch 3c
+// merge: this suite used the per-run vault and failed whenever migrate.int sealed the keys first).
+setKeyVault(localKeyVault('5e'.repeat(32)));
+
+const DEMO_SCAN_EMAILS = DEMO.scanBuyers.map((b) => b.email);
 const SECRET = 'reverse-etl-secret-0123456789abcdef0123';
 const store = memoryBalanceStore();
 const fake = fakePaymentProvider({ secret: SECRET, appOrigin: 'http://localhost', store });
@@ -118,6 +125,8 @@ beforeAll(async () => {
     legacyEventId: Number(t.legacy_event_id),
   };
   // A migrated, active, one-ticket booking of the same event (its legacy QR is the order number).
+  // Never a demo scan buyer's: migrate.int admits those itself on the same shared data (batch 3c
+  // merge: the two suites raced for the same ticket).
   const m = await one(sql()<{ ticket_id: string; booking_id: string; code: string }[]>`
     select u.new_id as ticket_id, b.id as booking_id, b.order_number as code
     from legacy.ref u
@@ -127,6 +136,7 @@ beforeAll(async () => {
       and k.status = 'active' and k.event_id = ${target.eventId} and b.checked_in = 0
       and not exists (select 1 from checkin.admissions a where a.ticket_id = k.id and a.undone_at is null)
       and (select count(*) from legacy_yay.bookings d where d.order_number = b.order_number) = 1
+      and b.customer_email <> all(${DEMO_SCAN_EMAILS})
     order by b.id limit 1`);
   migrated = { ticketId: m.ticket_id, bookingId: Number(m.booking_id), code: m.code };
 
