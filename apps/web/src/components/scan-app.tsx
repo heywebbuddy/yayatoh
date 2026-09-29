@@ -3,11 +3,18 @@
 import { Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { KioskScreen } from '@/components/scan-kiosk.tsx';
+import { StaffPanel } from '@/components/scan-staff.tsx';
+import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
 import { SignalBanner } from '@/components/signal-banner.tsx';
-import { canUseCamera, createDecoder } from '@/scan/camera.ts';
+import { canUseCamera } from '@/scan/camera.ts';
 import { ScanClient, type ScanConfig, type ScanOutcome, ScanSyncError } from '@/scan/client.ts';
+import { markScanFeedback, markScanStart } from '@/scan/feedback.ts';
+import { followChannel } from '@/scan/stream.ts';
+import { useCameraScan } from '@/scan/use-camera.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
+type View = 'scan' | 'staff' | 'supervisor';
 
 /** Local verdicts and server results share the door screen's `checkin.result.*` messages. */
 const RESULT_KEY: Record<string, string> = {
@@ -44,7 +51,7 @@ const tone = (key: string) => TONE[key] ?? 'border-pink-700 bg-pink-50 text-pink
  * network is back. Setup comes from the enrollment link (`#e=<event>&k=<key>`); the fragment
  * never reaches a server log.
  */
-export function ScanApp() {
+export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const t = useTranslations();
   const [phase, setPhase] = useState<Phase>('boot');
   const [client, setClient] = useState<ScanClient | null>(null);
@@ -60,6 +67,16 @@ export function ScanApp() {
   useEffect(() => setHasCamera(canUseCamera()), []);
   const input = useRef<HTMLInputElement>(null);
   const video = useRef<HTMLVideoElement>(null);
+  const [view, setView] = useState<View>('scan');
+  const [kiosk, setKiosk] = useState(false);
+  /** Bumped when the realtime channels say something changed: staff screens re-read. */
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [live, setLive] = useState(false);
+  const [selfId, setSelfId] = useState<string | null>(null);
+  const [channels, setChannels] = useState<{ checkins: string; devices: string } | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const markRef = useRef<{ id: string; scanId: string } | null>(null);
+  const seq = useRef(0);
 
   const refresh = useCallback(async (c: ScanClient) => {
     setCheckpointId(c.checkpoint?.id ?? '');
@@ -126,25 +143,39 @@ export function ScanApp() {
       void navigator.serviceWorker.register('/scan-sw.js').catch(() => undefined);
   }, [start]);
 
-  // Heartbeat + sync every 30 s; flush as soon as the network is back.
+  /** Heartbeat (and the directives it brings back), then sync. */
+  const tick = useCallback(async () => {
+    if (!client) return;
+    try {
+      const battery =
+        'getBattery' in navigator
+          ? await (navigator as unknown as { getBattery(): Promise<{ level: number }> }).getBattery()
+          : null;
+      const hb = await client.heartbeat(battery ? Math.round(battery.level * 100) : null);
+      if (hb.wiped) {
+        setPhase('wiped');
+        return;
+      }
+      if (hb.kioskChanged) setKiosk(client.kiosk !== null);
+      if (hb.movedTo !== undefined)
+        setNotice(
+          t('scanStaff.movedNotice', {
+            place: client.checkpoints.find((c) => c.id === hb.movedTo)?.name ?? t('checkpoints.wholeEvent'),
+          }),
+        );
+      if (hb.synced) setNotice(t('scanStaff.syncedNotice'));
+    } catch {
+      setOnline(false);
+    }
+    await syncNow(client);
+  }, [client, syncNow, t]);
+
+  // Heartbeat + sync now and every 30 s; flush as soon as the network is back.
   useEffect(() => {
     if (!client || phase !== 'ready') return;
-    const tick = async () => {
-      try {
-        const battery =
-          'getBattery' in navigator
-            ? await (navigator as unknown as { getBattery(): Promise<{ level: number }> }).getBattery()
-            : null;
-        if (await client.heartbeat(battery ? Math.round(battery.level * 100) : null)) {
-          setPhase('wiped');
-          return;
-        }
-      } catch {
-        setOnline(false);
-      }
-      await syncNow(client);
-    };
-    const id = window.setInterval(tick, 30_000);
+    setKiosk(client.kiosk !== null);
+    void tick();
+    const id = window.setInterval(() => void tick(), 30_000);
     const onOnline = () => void syncNow(client);
     const onOffline = () => setOnline(false);
     window.addEventListener('online', onOnline);
@@ -154,12 +185,53 @@ export function ScanApp() {
       window.removeEventListener('online', onOnline);
       window.removeEventListener('offline', onOffline);
     };
-  }, [client, phase, syncNow]);
+  }, [client, phase, syncNow, tick]);
+
+  // Learn this event's realtime channels (and this device's id) from the staff screen's data.
+  useEffect(() => {
+    if (!client || phase !== 'ready' || channels) return;
+    void client.staffOverview().then((r) => {
+      if (!r) return;
+      setChannels(r.view.channels);
+      setSelfId(r.view.devices.find((d) => d.self)?.id ?? null);
+    });
+  }, [client, phase, channels]);
+
+  // Live: check-ins and the device board re-read the staff screens; a supervisor's poke for this
+  // device makes it heartbeat at once (sync now, new entrance, kiosk on/off).
+  useEffect(() => {
+    if (!client || !channels) return;
+    const bump = () => setRefreshKey((k) => k + 1);
+    const stops = [
+      followChannel({
+        channel: channels.checkins,
+        token: client.token,
+        onMessage: bump,
+        onStatus: (st) => setLive(st === 'live'),
+      }),
+      followChannel({
+        channel: channels.devices,
+        token: client.token,
+        onMessage: (event, data) => {
+          const d = data as { deviceId?: string; state?: string } | null;
+          // A supervisor's poke, or this device revoked: heartbeat now (a revoked key wipes).
+          if (d?.deviceId === selfId && (event === 'command' || d?.state === 'revoked')) void tick();
+          bump();
+        },
+      }),
+    ];
+    return () => {
+      for (const stop of stops) stop();
+    };
+  }, [client, channels, selfId, tick]);
 
   const scan = useCallback(
     async (code: string) => {
       if (!client || !code.trim()) return;
+      const mark = `scan-${++seq.current}`;
+      markScanStart(mark);
       const outcome = await client.scan(code);
+      markRef.current = { id: mark, scanId: outcome.scanId };
       setLast(outcome);
       await refresh(client);
       if (navigator.onLine) void syncNow(client);
@@ -167,39 +239,21 @@ export function ScanApp() {
     [client, refresh, syncNow],
   );
 
-  // Camera scanning: BarcodeDetector, or the zxing-wasm fallback (iOS Safari).
+  // Feedback is on screen once React has painted the verdict (M3.4a: within 300 ms).
   useEffect(() => {
-    if (!camera) return;
-    let stream: MediaStream | null = null;
-    let stop = false;
-    let lastCode = '';
-    void (async () => {
-      const decode = await createDecoder();
-      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-      if (stop || !video.current) {
-        // Closed while the permission prompt was up: release the camera now.
-        for (const track of stream.getTracks()) track.stop();
-        return;
-      }
-      video.current.srcObject = stream;
-      await video.current.play();
-      while (!stop && video.current) {
-        const code = await decode(video.current);
-        if (code && code !== lastCode) {
-          lastCode = code;
-          await scan(code);
-        }
-        await new Promise((r) => setTimeout(r, 250));
-      }
-    })().catch(() => {
-      setCamera(false);
-      setError(t('scan.cameraFailed'));
-    });
-    return () => {
-      stop = true;
-      for (const track of stream?.getTracks() ?? []) track.stop();
-    };
-  }, [camera, scan, t]);
+    const m = markRef.current;
+    if (!last || !m || m.scanId !== last.scanId) return;
+    markRef.current = null;
+    const raf = requestAnimationFrame(() => markScanFeedback(m.id));
+    return () => cancelAnimationFrame(raf);
+  }, [last]);
+
+  // Camera scanning: BarcodeDetector, or the zxing-wasm fallback (iOS Safari).
+  const onCameraError = useCallback(() => {
+    setCamera(false);
+    setError(t('scan.cameraFailed'));
+  }, [t]);
+  useCameraScan(camera, video, scan, onCameraError);
 
   if (phase === 'boot') return <p className="text-body text-zinc-500">{t('common.loading')}</p>;
 
@@ -239,8 +293,28 @@ export function ScanApp() {
     );
   }
 
+  if (client && kiosk && client.kiosk)
+    return (
+      <KioskScreen
+        client={client}
+        hasCamera={hasCamera}
+        afterScan={() => {
+          void refresh(client);
+          if (navigator.onLine) void syncNow(client);
+        }}
+        onExit={() => {
+          void client.leaveKiosk().then(() => setKiosk(false));
+        }}
+      />
+    );
+
   const shown = last ? (last.server ?? RESULT_KEY[last.verdict] ?? 'invalid') : null;
   const resultKey = shown ? (RESULT_KEY[shown] ?? 'invalid') : null;
+  const views: { key: View; label: string }[] = [
+    { key: 'scan', label: t('scanStaff.viewScan') },
+    { key: 'staff', label: t('scanStaff.viewStaff') },
+    { key: 'supervisor', label: t('scanStaff.viewSupervisor') },
+  ];
   return (
     <div className="flex flex-col gap-4">
       <header className="flex flex-col gap-1">
@@ -251,102 +325,145 @@ export function ScanApp() {
           <span data-testid="scan-queue">{t('scan.queued', { count: queue })}</span>
           {lastSync ? <span>{t('scan.lastSync', { time: lastSync.toLocaleTimeString() })}</span> : null}
         </p>
+        {notice ? (
+          <p role="status" className="text-body font-medium" data-testid="scan-notice">
+            {notice}
+          </p>
+        ) : null}
       </header>
-      {client && (client.checkpoints.length > 0 || client.scoped) ? (
-        <div className="flex flex-col gap-1.5 self-start">
-          <label htmlFor="scan-app-checkpoint" className="text-caption text-zinc-600">
-            {t('checkpoints.scanningAt')}
-          </label>
-          <select
-            id="scan-app-checkpoint"
-            value={checkpointId}
-            onChange={(e) => {
-              const id = e.target.value;
-              setCheckpointId(id);
-              void client.setCheckpoint(id || null);
+      <nav aria-label={t('scanStaff.modes')} className="flex flex-wrap gap-2">
+        {views.map((v) => (
+          <Button
+            key={v.key}
+            type="button"
+            variant={view === v.key ? 'primary' : 'secondary'}
+            aria-pressed={view === v.key}
+            onClick={() => setView(v.key)}
+          >
+            {v.label}
+          </Button>
+        ))}
+      </nav>
+      {client && view === 'staff' ? (
+        <StaffPanel client={client} refreshKey={refreshKey} live={live && online} publicKey={publicKey} />
+      ) : null}
+      {client && view === 'supervisor' ? (
+        <SupervisorPanel client={client} refreshKey={refreshKey} selfId={selfId} />
+      ) : null}
+      {view === 'scan' ? (
+        <ScanView>
+          {client && (client.checkpoints.length > 0 || client.scoped) ? (
+            <div className="flex flex-col gap-1.5 self-start">
+              <label htmlFor="scan-app-checkpoint" className="text-caption text-zinc-600">
+                {t('checkpoints.scanningAt')}
+              </label>
+              <select
+                id="scan-app-checkpoint"
+                value={checkpointId}
+                onChange={(e) => {
+                  const id = e.target.value;
+                  setCheckpointId(id);
+                  void client.setCheckpoint(id || null);
+                  input.current?.focus();
+                }}
+                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+              >
+                <option value="">
+                  {client.scoped ? t('checkpoints.chooseStand') : t('checkpoints.wholeEvent')}
+                </option>
+                {client.checkpoints.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
+          <form
+            className="flex flex-wrap items-end gap-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const value = input.current?.value ?? '';
+              if (input.current) input.current.value = '';
+              void scan(value);
               input.current?.focus();
             }}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
           >
-            <option value="">
-              {client.scoped ? t('checkpoints.chooseStand') : t('checkpoints.wholeEvent')}
-            </option>
-            {client.checkpoints.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      ) : null}
-      <form
-        className="flex flex-wrap items-end gap-3"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const value = input.current?.value ?? '';
-          if (input.current) input.current.value = '';
-          void scan(value);
-          input.current?.focus();
-        }}
-      >
-        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="scan-app-code" className="text-caption text-zinc-600">
-            {t('checkin.codeLabel')}
-          </label>
-          <input
-            ref={input}
-            id="scan-app-code"
-            required
-            // biome-ignore lint/a11y/noAutofocus: the scanner screen exists to receive scans.
-            autoFocus
-            autoComplete="off"
-            autoCapitalize="characters"
-            spellCheck={false}
-            className="min-h-14 w-full rounded-pill border border-zinc-300 bg-white px-5 font-mono text-[18px] tracking-[0.08em]"
-          />
-        </div>
-        <Button type="submit" className="min-h-14">
-          {t('checkin.check')}
-        </Button>
-        {hasCamera ? (
-          <Button type="button" variant="secondary" className="min-h-14" onClick={() => setCamera((v) => !v)}>
-            {camera ? t('scan.stopCamera') : t('scan.camera')}
-          </Button>
-        ) : null}
-      </form>
-      {error ? <p className="text-body text-pink-700">{error}</p> : null}
-      {camera ? (
-        <video ref={video} className="aspect-video w-full max-w-md rounded-card bg-black" playsInline muted />
-      ) : null}
-      <div role="status" aria-live="polite" aria-atomic="true">
-        {last && resultKey ? (
-          <div
-            data-result={resultKey}
-            className={`flex flex-col gap-1 rounded-panel border-2 px-6 py-5 ${tone(resultKey)}`}
-          >
-            <p className="text-[28px] leading-tight font-medium tracking-[-0.02em]">
-              {t(`checkin.result.${resultKey}`)}
-            </p>
-            {resultKey === 'wrong_checkpoint' && client ? (
-              <p className="text-body">
-                {client.checkpoints.length > 0
-                  ? t('checkin.wrongCheckpointHint', {
-                      places: client.checkpoints.map((c) => c.name).join(', '),
-                    })
-                  : t('checkin.noCheckpointsHint')}
-              </p>
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <label htmlFor="scan-app-code" className="text-caption text-zinc-600">
+                {t('checkin.codeLabel')}
+              </label>
+              <input
+                ref={input}
+                id="scan-app-code"
+                required
+                // biome-ignore lint/a11y/noAutofocus: the scanner screen exists to receive scans.
+                autoFocus
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellCheck={false}
+                className="min-h-14 w-full rounded-pill border border-zinc-300 bg-white px-5 font-mono text-[18px] tracking-[0.08em]"
+              />
+            </div>
+            <Button type="submit" className="min-h-14">
+              {t('checkin.check')}
+            </Button>
+            {hasCamera ? (
+              <Button
+                type="button"
+                variant="secondary"
+                className="min-h-14"
+                onClick={() => setCamera((v) => !v)}
+              >
+                {camera ? t('scan.stopCamera') : t('scan.camera')}
+              </Button>
             ) : null}
-            {last.holderName ? (
-              <p className="text-body">
-                {last.holderName}
-                {last.typeName ? ` · ${last.typeName}` : ''}
-              </p>
+          </form>
+          {error ? <p className="text-body text-pink-700">{error}</p> : null}
+          {camera ? (
+            <video
+              ref={video}
+              className="aspect-video w-full max-w-md rounded-card bg-black"
+              playsInline
+              muted
+            />
+          ) : null}
+          <div role="status" aria-live="polite" aria-atomic="true">
+            {last && resultKey ? (
+              <div
+                data-result={resultKey}
+                className={`flex flex-col gap-1 rounded-panel border-2 px-6 py-5 ${tone(resultKey)}`}
+              >
+                <p className="text-[28px] leading-tight font-medium tracking-[-0.02em]">
+                  {t(`checkin.result.${resultKey}`)}
+                </p>
+                {resultKey === 'wrong_checkpoint' && client ? (
+                  <p className="text-body">
+                    {client.checkpoints.length > 0
+                      ? t('checkin.wrongCheckpointHint', {
+                          places: client.checkpoints.map((c) => c.name).join(', '),
+                        })
+                      : t('checkin.noCheckpointsHint')}
+                  </p>
+                ) : null}
+                {last.holderName ? (
+                  <p className="text-body">
+                    {last.holderName}
+                    {last.typeName ? ` · ${last.typeName}` : ''}
+                  </p>
+                ) : null}
+                <p className="text-caption">{last.server ? t('scan.confirmed') : t('scan.pending')}</p>
+                <SignalBanner count={last.openSignals ?? 0} />
+              </div>
             ) : null}
-            <p className="text-caption">{last.server ? t('scan.confirmed') : t('scan.pending')}</p>
-            <SignalBanner count={last.openSignals ?? 0} />
           </div>
-        ) : null}
-      </div>
+        </ScanView>
+      ) : null}
     </div>
   );
+}
+
+/** The scanner itself (the default view). */
+function ScanView({ children }: { children: React.ReactNode }) {
+  return <div className="flex flex-col gap-4">{children}</div>;
 }

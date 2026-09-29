@@ -458,7 +458,9 @@ describe('staff mode: overview, device board and alerts', () => {
       title: 'Nearly full',
       body: '100% are in',
     });
-    expect(sentTo.find((m) => m.token.endsWith('/gone-boss') && m.body === 'Gone stopped reporting')).toMatchObject({ lang: 'ar', dir: 'rtl' });
+    expect(
+      sentTo.find((m) => m.token.endsWith('/gone-boss') && m.body === 'Gone stopped reporting'),
+    ).toMatchObject({ lang: 'ar', dir: 'rtl' });
     // Sending again sends nothing (each alert once per device); the expired one is disabled.
     const before = sentTo.length;
     await sendStaffAlertPushes(a.org.id, sender);

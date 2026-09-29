@@ -84,5 +84,17 @@ ALTER TABLE "checkin"."devices" VALIDATE CONSTRAINT "devices_checkpoint_fk";--> 
 ALTER TABLE "checkin"."devices" ADD CONSTRAINT "devices_requested_checkpoint_fk" FOREIGN KEY ("org_id","requested_checkpoint_id") REFERENCES "checkin"."checkpoints"("org_id","id") NOT VALID;--> statement-breakpoint
 ALTER TABLE "checkin"."devices" VALIDATE CONSTRAINT "devices_requested_checkpoint_fk";--> statement-breakpoint
 ALTER TABLE "checkin"."devices" ADD CONSTRAINT "devices_kiosk_checkpoint_fk" FOREIGN KEY ("org_id","kiosk_checkpoint_id") REFERENCES "checkin"."checkpoints"("org_id","id") NOT VALID;--> statement-breakpoint
-ALTER TABLE "checkin"."devices" VALIDATE CONSTRAINT "devices_kiosk_checkpoint_fk";
+ALTER TABLE "checkin"."devices" VALIDATE CONSTRAINT "devices_kiosk_checkpoint_fk";--> statement-breakpoint
+-- The worker's staff push sender finds orgs with pushes to send (ids only), as notifications do.
+CREATE FUNCTION checkin.orgs_with_queued_staff_pushes(p_limit integer)
+RETURNS TABLE (org_id uuid)
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
+  SELECT DISTINCT p.org_id FROM checkin.staff_alert_pushes p
+  WHERE p.status IN ('queued', 'retrying') AND p.attempts < 5
+  LIMIT p_limit
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION checkin.orgs_with_queued_staff_pushes(integer) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION checkin.orgs_with_queued_staff_pushes(integer) TO platform_reader;
 -- hand-written: end

@@ -1,6 +1,12 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
-import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
+import {
+  chatReportSignals,
+  checkoutRiskSignals,
+  derivedStaffAlerts,
+  fraudSignalAlerts,
+  staffAlertsSubscriber,
+} from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner } from '@yayatoh/media';
@@ -73,6 +79,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     checkoutRiskSignals(),
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
+    // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
+    // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
+    staffAlertsSubscriber(derivedStaffAlerts),
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),

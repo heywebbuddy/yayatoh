@@ -1,4 +1,5 @@
 import { getUsersByIds } from '@yayatoh/auth';
+import { sendStaffAlertPushes } from '@yayatoh/checkin';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import {
   type DispatchDeps,
@@ -50,5 +51,23 @@ export async function dispatchNotifications(deps: DispatchDeps): Promise<number>
   );
   let sent = 0;
   for (const { org_id } of orgs) sent += (await dispatchDue(org_id, deps, 100)).sent;
+  return sent;
+}
+
+/**
+ * Staff alert pushes (M3.4a): orgs with queued pushes (SECURITY DEFINER, ids only), then each
+ * org's pushes under its RLS. Rows are claimed with SKIP LOCKED, so overlapping ticks are harmless.
+ */
+export async function dispatchStaffPushes(transports: Transports): Promise<number> {
+  const push = transports.push;
+  if (!push) return 0;
+  const orgs = await withPlatformReader(
+    { actor: 'system:staff-push', reason: 'find orgs with staff alert pushes to send' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`select org_id from checkin.orgs_with_queued_staff_pushes(100)`),
+  );
+  let sent = 0;
+  for (const { org_id } of orgs)
+    sent += (await sendStaffAlertPushes(org_id, { send: (m) => push.send(m) })).sent;
   return sent;
 }
