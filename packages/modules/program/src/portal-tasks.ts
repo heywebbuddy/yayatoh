@@ -510,7 +510,7 @@ export async function emitOverdueTasks(orgId: string, now = new Date()): Promise
           lte(portalTasks.dueAt, now),
         ),
       )
-      .for('update', { of: portalTaskAssignees, skipLocked: true })
+      .for('update', { skipLocked: true })
       .limit(500);
     const due = rows.filter((r) => isOverdue(r.a, r.t.dueAt, now));
     if (due.length === 0) return 0;
