@@ -575,6 +575,13 @@
       "when": 1790701945495,
       "tag": "0081_early_emma_frost",
       "breakpoints": true
+    },
+    {
+      "idx": 82,
+      "version": "7",
+      "when": 1790715653589,
+      "tag": "0082_far_jean_grey",
+      "breakpoints": true
     }
   ]
 }

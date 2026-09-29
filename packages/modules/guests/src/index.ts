@@ -46,3 +46,45 @@ export {
   HISTORY_ACTIONS,
   type HistoryAction,
 } from './schema.ts';
+// M4.1c: sub-events and invitations.
+export {
+  cellKey,
+  groupState,
+  type InviteGuest,
+  type InviteParty,
+  type InviteSubEvent,
+  type InviteTarget,
+  invitedBySubEvent,
+  inviteeOf,
+  isInvited,
+  moveInOrder,
+  partyMatches,
+  planInvitations,
+  subEventWindow,
+  targetGuests,
+  uninvitedWith,
+  windowInputs,
+} from './domain/invitations.ts';
+export {
+  assertInvitedTx,
+  InvitationMatrixDto,
+  invitationMatrixQuery,
+  MatrixGuestDto,
+  recordSubEventResponseCommand,
+  SubEventHistoryEntryDto,
+  setInvitationsCommand,
+  subEventHistoryQuery,
+} from './invitations.ts';
+export { RESPONSE_STATUSES, type ResponseStatus, SUB_EVENT_KINDS, type SubEventKind } from './schema.ts';
+export {
+  CreateSubEventInput,
+  createSubEventCommand,
+  MAX_SUB_EVENTS_PER_EVENT,
+  moveSubEventCommand,
+  removeSubEventCommand,
+  SubEventDto,
+  SubEventSummaryDto,
+  subEventsOfEventTx,
+  subEventsQuery,
+  updateSubEventCommand,
+} from './sub-events.ts';

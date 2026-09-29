@@ -68,7 +68,7 @@ export type GuestListDto = z.infer<typeof GuestListDto>;
 
 export const HistoryEntryDto = z.object({
   id: z.uuid(),
-  partyId: z.uuid(),
+  partyId: z.uuid().nullable(),
   guestId: z.uuid().nullable(),
   action: z.enum(HISTORY_ACTIONS),
   source: z.enum(GUEST_SOURCES),
