@@ -148,4 +148,14 @@ org removes the member's layouts). New tables only; nothing destructive.
 | AC13 | Every new screen and state passes axe; Arabic RTL renders; empty states (no widgets shown; no access) | e2e `command-center.spec.ts` |
 
 ### Gate results (M3.2a)
-See the final commit message of `agent/m3.2a` (verify, integration and e2e counts).
+- `pnpm verify`: lint, check:modules, typecheck, 1471 unit tests (132 files; 20 new in
+  `command-center/tests/domain.test.ts`), 971 integration tests (112 files; 16 new in
+  `command-center.int.test.ts`) — all pass.
+- Web e2e: `command-center.spec.ts` 12/12 (4 tests × 3 viewports). Whole suite (1455 tests):
+  the first run was cut by a session time limit at 1278; of those, 5 failed: the new overview
+  check (the shared dev org had more than 30 live test events; fixed: the test uses a fresh org
+  and the overview now lists 50 with a "showing N of M" note) and two long journeys that hit their
+  30 s timeout under full parallel load (`attendees.spec.ts:7` tablet, `distribution.spec.ts:21`
+  tablet and desktop; they pass on the other viewports and on rerun). The remaining 181 desktop
+  tests (`seat-assignment` … `wizard`) and a rerun of `command-center`, `attendees` and
+  `distribution` on all viewports all pass (181/181, 24/24).
