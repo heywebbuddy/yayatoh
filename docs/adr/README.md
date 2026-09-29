@@ -26,3 +26,4 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0017](0017-pdf-engine.md) | PDF engine: Gotenberg (Chromium) behind `packages/pdf` (spike done) | §3.1 |
 | [0018](0018-design-system-superpower-style.md) | Design system: Superpower style | §3.1 |
 | [0019](0019-typescript-6-until-tooling-supports-7.md) | TypeScript 6.0 until tooling supports 7 | §3.1 |
+| [0021](0021-conference-module-layout.md) | Conference module layout: `registration`/`badges` (tier 5), `engagement` (tier 4), program grows unsplit; registration cells are managed ticket types | §3.5 |
