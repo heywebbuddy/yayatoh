@@ -155,10 +155,10 @@ test.describe('journeys (M3.7a)', () => {
 
     // Search the history for the person; persistence after reload.
     await page.goto(path);
-    await page.getByLabel('Find a person by name or email').fill('nobody-here');
+    await page.getByRole('searchbox', { name: 'Find a person by name or email' }).fill('nobody-here');
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(page.getByText('Nobody matches “nobody-here”.')).toBeVisible();
-    await page.getByLabel('Find a person by name or email').fill(`jo.${s}`);
+    await page.getByRole('searchbox', { name: 'Find a person by name or email' }).fill(`jo.${s}`);
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(page.getByRole('row').filter({ hasText: email })).toBeVisible();
     await page.reload();
