@@ -14,9 +14,10 @@ if ! node --version 2>/dev/null | grep -q '^v24'; then
 fi
 node --version
 
-# pnpm via corepack (version pinned by packageManager in package.json once M0.5 lands)
-corepack enable
-corepack prepare pnpm@12.6.0 --activate || npm install -g pnpm@12.6.0
+# pnpm from npm, not corepack: corepack's pinned signing keys went stale (2026-09-29,
+# "Cannot find matching keyid") and failed every new session under set -e.
+export COREPACK_ENABLE_STRICT=0
+npm install -g --force pnpm@12.6.0
 pnpm --version
 
 # Service images for integration and tenant-isolation tests (Postgres 18, Redis, Mailpit)
