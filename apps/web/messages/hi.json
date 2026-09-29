@@ -130,6 +130,9 @@
       },
       "marketing": {
         "message": "खबरें और ऑफ़र"
+      },
+      "campaigns": {
+        "test": "अभियान परीक्षण"
       }
     },
     "status": {

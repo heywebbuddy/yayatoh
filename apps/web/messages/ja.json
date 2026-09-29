@@ -130,6 +130,9 @@
       },
       "marketing": {
         "message": "お知らせとオファー"
+      },
+      "campaigns": {
+        "test": "キャンペーンのテスト"
       }
     },
     "status": {

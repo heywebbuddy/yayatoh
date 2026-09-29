@@ -130,6 +130,9 @@
       },
       "marketing": {
         "message": "新闻和优惠"
+      },
+      "campaigns": {
+        "test": "营销活动测试"
       }
     },
     "status": {

@@ -130,6 +130,9 @@
       },
       "marketing": {
         "message": "أخبار وعروض"
+      },
+      "campaigns": {
+        "test": "تجربة الحملة"
       }
     },
     "status": {

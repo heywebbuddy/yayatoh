@@ -130,6 +130,9 @@
       },
       "marketing": {
         "message": "新聞與優惠"
+      },
+      "campaigns": {
+        "test": "行銷活動測試"
       }
     },
     "status": {

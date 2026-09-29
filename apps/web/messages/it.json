@@ -130,6 +130,9 @@
       },
       "marketing": {
         "message": "Novità e offerte"
+      },
+      "campaigns": {
+        "test": "Prova di campagna"
       }
     },
     "status": {
