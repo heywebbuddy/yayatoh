@@ -2298,6 +2298,18 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../packages/kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
+      '@yayatoh/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

@@ -112,6 +112,8 @@ export function buildBundle(input: BundleInput): BundleResult {
   const date = input.now.toISOString().slice(0, 10);
   const dir = join(input.outDir, `evidence-${date}`);
   if (existsSync(dir)) throw new Error(`${dir} exists; refusing to overwrite a bundle`);
+  // Checked before anything is written: a bad sample leaves no partial bundle behind.
+  const audit = checkAuditSamples(input.auditSamples, input.allowedOrgs);
   const write = (rel: string, body: string) => {
     const p = join(dir, rel);
     mkdirSync(dirname(p), { recursive: true });
@@ -146,7 +148,7 @@ export function buildBundle(input: BundleInput): BundleResult {
   }
 
   // 4. Audit-log samples from the seeded CI database only.
-  write('audit/audit-samples.json', json(checkAuditSamples(input.auditSamples, input.allowedOrgs)));
+  write('audit/audit-samples.json', json(audit));
 
   // 5. VPAT draft from the e2e shards' reports.
   const criteria = parseCriteria(readFileSync(join(input.root, 'compliance/vpat/wcag22.yaml'), 'utf8'));

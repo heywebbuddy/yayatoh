@@ -35,6 +35,42 @@ export interface AuditSampleOptions {
   readonly slugs?: readonly string[];
   readonly perOrg?: number;
   readonly now?: Date;
+  /** The owner's production run (runbook): stamped so it can never enter the CI bundle. */
+  readonly production?: boolean;
+}
+
+/** The confirmation the owner sets for a production read (docs/runbooks/evidence-production.md). */
+export const PRODUCTION_CONFIRM = 'owner-approved';
+
+/**
+ * CLI arguments of `scripts/audit-sample.ts`. By default only the seeded orgs of a local or CI
+ * database. `--production` needs `--orgs` (the orgs the auditor picked) and
+ * `EVIDENCE_PRODUCTION_READ=owner-approved`: it is the owner's step, never CI's.
+ */
+export function parseSampleArgs(argv: readonly string[], env: Readonly<Record<string, string | undefined>>) {
+  const args = argv.filter((a) => a !== '--');
+  const value = (name: string) => {
+    const i = args.indexOf(`--${name}`);
+    return i >= 0 ? args[i + 1] : undefined;
+  };
+  const out = value('out');
+  if (!out) throw new Error('--out <file> is required');
+  const production = args.includes('--production');
+  const orgs = value('orgs')
+    ?.split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const perOrg = Number(value('per-org') ?? 25);
+  if (!Number.isInteger(perOrg) || perOrg < 1 || perOrg > 100) throw new Error('--per-org must be 1–100');
+  if (production) {
+    if (env.EVIDENCE_PRODUCTION_READ !== PRODUCTION_CONFIRM)
+      throw new Error(`--production needs EVIDENCE_PRODUCTION_READ=${PRODUCTION_CONFIRM} (owner only)`);
+    if (!orgs?.length) throw new Error('--production needs --orgs: the orgs the auditor sampled');
+    return { out, production, slugs: orgs, perOrg };
+  }
+  if (orgs) throw new Error('--orgs is only for --production; CI samples the seeded orgs');
+  assertLocalDatabase([env.DATABASE_URL, env.PLATFORM_READER_DATABASE_URL]);
+  return { out, production, slugs: [...SEEDED_ORG_SLUGS], perOrg };
 }
 
 /**
@@ -47,7 +83,12 @@ export async function sampleAuditLog(o: AuditSampleOptions = {}) {
   const slugs = [...(o.slugs ?? SEEDED_ORG_SLUGS)];
   const perOrg = o.perOrg ?? 25;
   const orgs = await withPlatformReader(
-    { actor: 'system:evidence', reason: 'SOC 2 evidence bundle: audit-log sample of seeded orgs' },
+    {
+      actor: 'system:evidence',
+      reason: o.production
+        ? 'SOC 2 evidence: owner-run audit-log sample of auditor-selected orgs'
+        : 'SOC 2 evidence bundle: audit-log sample of seeded orgs',
+    },
     (tx) =>
       tx.execute<{ id: string; slug: string }>(
         sql`select id, slug from tenancy.organizations where slug in (${sql.join(
@@ -75,7 +116,7 @@ export async function sampleAuditLog(o: AuditSampleOptions = {}) {
     });
   }
   return {
-    source: 'seeded-ci-database' as const,
+    source: o.production ? ('production-owner-run' as const) : ('seeded-ci-database' as const),
     generatedAt: (o.now ?? new Date()).toISOString(),
     perOrg,
     orgs: out,

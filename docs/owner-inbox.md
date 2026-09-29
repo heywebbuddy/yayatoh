@@ -151,6 +151,34 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Who sees it:** new `marketing:read` permission for owners, admins, managers, marketing, finance and viewers (viewers see revenue per link, as they already see orders). Creating links and the window: `marketing:write`. Door staff and scanners see nothing.
   - **Bots and floods** (link-preview fetchers, crawlers, HTTP tools, over 30 clicks per device per 10 minutes) are redirected but not counted.
 
+## Enterprise readiness (M5.11, P5-6)
+Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
+`compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
+steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
+- [ ] **Vanta** (D26): sign the contract at or after launch (roadmap estimate ~$800–2,000/month,
+  UNVERIFIED), connect GitHub and the hosting accounts, and upload the weekly evidence bundle
+  (download the `evidence-<run>` artifact from Actions → Evidence; verify `sha256sum -c SHA256SUMS`).
+  Nothing in the repo calls Vanta.
+- [ ] **Auditor** for SOC 2 Type I, 6–9 months after launch (D26). Share `compliance/controls.yaml`;
+  the auditor and Vanta may re-map criteria. Tell Claude Code what they change so the file follows.
+- [ ] **Pen test** ($5–15k, roadmap §3.6) **after Phase 5 Waves 1–3 merge**, so the portals, lead
+  retrieval and chat are in scope. Findings come back as issues for Claude Code to fix.
+- [ ] **VPAT sign-off**: each weekly bundle has `vpat/vpat.md`, a draft generated from the e2e axe,
+  keyboard and Arabic RTL suites. Criteria marked "Not Evaluated" need a person (NVDA and
+  VoiceOver passes, 200% zoom, 320 px reflow); "Not Applicable" rows need your confirmation.
+  Sign only after those reviews.
+- [ ] **Data Privacy Framework** self-certification (EU-U.S., UK extension, Swiss-U.S.) with the
+  Department of Commerce, once counsel has reviewed the privacy notice.
+- [ ] **Approve the seven policy drafts** in `compliance/policies/` (information security, access
+  control, change management, incident response, vendor management, data retention per D11,
+  business continuity): edit, then sign each approval row. Confirm the vendor inventory.
+- [ ] **Quarterly access review** of GitHub, Doppler, Vercel, Neon, Fly, AWS, Cloudflare, Stripe and
+  the staff list, and the admin-only GitHub exports (collaborators, branch protection) the
+  read-only workflow can't read. Runbook steps 2–3.
+- [ ] **Branch protection on `main`**: the change-management export flags merged PRs without an
+  independent approval. If build sessions open PRs under your account, add a second reviewer (the
+  contracted backup) or accept and document the exception in `docs/decisions.md`.
+
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
 - [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).

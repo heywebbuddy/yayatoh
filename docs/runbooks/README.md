@@ -14,6 +14,7 @@ approved by the owner step by step.
 | [key-rotation.md](key-rotation.md) | Scheduled rotation, a leaked secret, a departing person |
 | [webhook-replay.md](webhook-replay.md) | Payments or other provider events were missed or failed |
 | [restore-terminated-org.md](restore-terminated-org.md) | An org was terminated by mistake and the platform owner approved restoring it |
+| [evidence-production.md](evidence-production.md) | SOC 2 evidence: download the weekly bundle, quarterly access reviews, production audit samples (owner) |
 
 **Conventions**
 - Commands are copy-paste ready and marked **(local/staging)** or **(production, owner)**.

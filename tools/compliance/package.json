@@ -18,6 +18,10 @@
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:"
   }
