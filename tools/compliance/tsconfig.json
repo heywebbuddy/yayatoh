@@ -1,0 +1,4 @@
+{
+  "extends": "@yayatoh/config/tsconfig/library.json",
+  "include": ["src", "tests", "cli.ts"]
+}
