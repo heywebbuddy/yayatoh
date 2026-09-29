@@ -1,4 +1,4 @@
-import { type Problem, problem, problemFor } from '@yayatoh/platform/http';
+import { type Problem, problem, problemFor, problemHeaders } from '@yayatoh/platform/http';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
@@ -7,6 +7,7 @@ export { problem };
 function send(c: Context, body: Problem) {
   return c.body(JSON.stringify(body), body.status as ContentfulStatusCode, {
     'content-type': 'application/problem+json',
+    ...problemHeaders(body),
   });
 }
 

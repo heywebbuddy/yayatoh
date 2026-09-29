@@ -583,7 +583,8 @@
     "internal": "Er ging bij ons iets mis.",
     "reference": "Referentie: {id}",
     "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
-    "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit."
+    "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit.",
+    "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Er is niets opgeslagen; probeer het opnieuw als het klaar is."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -4612,5 +4613,11 @@
       "refunded": "Terugbetaald",
       "awaiting_payment": "Wacht op betaling"
     }
+  },
+  "maintenance": {
+    "label": "Onderhoud",
+    "title": "Gepland onderhoud: wijzigingen zijn gepauzeerd",
+    "body": "Yayatoh is in alleen-lezen onderhoud terwijl we naar het nieuwe platform overstappen. U kunt nog steeds alles bekijken, exports downloaden en tickets bij de ingang scannen, en uw openbare pagina’s blijven online. Wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn gepauzeerd tot het klaar is.",
+    "bodyUntil": "Yayatoh is in alleen-lezen onderhoud terwijl we naar het nieuwe platform overstappen, tot ongeveer {until}. U kunt nog steeds alles bekijken, exports downloaden en tickets bij de ingang scannen, en uw openbare pagina’s blijven online. Wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn tot dan gepauzeerd."
   }
 }

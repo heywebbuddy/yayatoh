@@ -8,6 +8,7 @@ import type { ConsoleData } from '@/server/console.ts';
 import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
 import { ImpersonationBanner } from './impersonation-banner.tsx';
+import { MaintenanceBanner } from './maintenance-banner.tsx';
 import { MediaPicture } from './media-picture.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { OrgStatusBanner } from './org-status-banner.tsx';
@@ -147,6 +148,7 @@ export async function ConsoleShell({
       </nav>
       <div className="flex min-w-0 flex-1 flex-col">
         <ImpersonationBanner session={data.session} locale={data.ctx.locale} timeZone={data.org.timezone} />
+        <MaintenanceBanner orgId={data.org.id} locale={data.ctx.locale} timeZone={data.org.timezone} />
         <OrgStatusBanner status={data.org.status} />
         <header className="flex flex-wrap items-center gap-3 px-4 pt-4 md:px-8 md:pt-[26px]">
           <details className="lg:hidden">

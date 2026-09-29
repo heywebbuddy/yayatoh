@@ -583,7 +583,8 @@
     "internal": "Algo salió mal por nuestra parte.",
     "reference": "Referencia: {id}",
     "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
-    "impersonation_blocked": "El personal que actúa como miembro no puede hacer esto: los reembolsos, pagos, exportaciones, eliminaciones y confirmaciones están desactivados."
+    "impersonation_blocked": "El personal que actúa como miembro no puede hacer esto: los reembolsos, pagos, exportaciones, eliminaciones y confirmaciones están desactivados.",
+    "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. No se guardó nada; inténtalo de nuevo cuando termine."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -4612,5 +4613,11 @@
       "refunded": "Reembolsado",
       "awaiting_payment": "Pendiente de pago"
     }
+  },
+  "maintenance": {
+    "label": "Mantenimiento",
+    "title": "Mantenimiento programado: los cambios están en pausa",
+    "body": "Yayatoh está en mantenimiento de solo lectura mientras pasamos a la nueva plataforma. Puedes seguir viéndolo todo, descargar exportaciones y escanear entradas en la puerta, y tus páginas públicas siguen en línea. Guardar cambios, las nuevas ventas y los reembolsos quedan en pausa hasta que termine.",
+    "bodyUntil": "Yayatoh está en mantenimiento de solo lectura mientras pasamos a la nueva plataforma, hasta aproximadamente {until}. Puedes seguir viéndolo todo, descargar exportaciones y escanear entradas en la puerta, y tus páginas públicas siguen en línea. Guardar cambios, las nuevas ventas y los reembolsos quedan en pausa hasta entonces."
   }
 }

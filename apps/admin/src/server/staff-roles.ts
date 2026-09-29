@@ -11,7 +11,8 @@ export type StaffAction =
   | 'impersonate'
   | 'status'
   | 'signupCodes'
-  | 'privacy';
+  | 'privacy'
+  | 'maintenance';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -21,6 +22,7 @@ export type StaffAction =
  * - Admins and support hand out signup codes (onboarding is a support task); finance doesn't.
  * - `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
  *   people's requests; finance has no reason to see or erase personal data (pending owner).
+ * - `maintenance` (M2.5a): the read-only freeze stops every organizer's writes: admins only.
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -34,6 +36,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'status',
     'signupCodes',
     'privacy',
+    'maintenance',
   ],
   support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy'],
   finance: ['view', 'payouts', 'fees'],

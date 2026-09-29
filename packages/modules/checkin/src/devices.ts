@@ -125,6 +125,8 @@ export const setDeviceStateCommand = tenantCommand({
 
 export const heartbeatCommand = tenantCommand({
   name: 'checkin.heartbeat',
+  // Doors stay open during a read-only freeze (M2.5a): scans are never refused by it.
+  duringFreeze: 'allowed',
   input: z.object({
     batteryPct: z.int().min(0).max(100).nullable().default(null),
     queueDepth: z.int().min(0).max(1_000_000),
@@ -363,6 +365,8 @@ export const SyncResultDto = z.object({
  */
 export const syncScansCommand = tenantCommand({
   name: 'checkin.syncScans',
+  // Doors stay open during a read-only freeze (M2.5a): scans are never refused by it.
+  duringFreeze: 'allowed',
   input: z.object({
     eventId: z.uuid(),
     scans: z

@@ -53,7 +53,8 @@
     "signupCodes": "Signup codes",
     "reports": "Messaging reports",
     "people": "Privacy requests",
-    "passkeys": "Passkeys"
+    "passkeys": "Passkeys",
+    "maintenance": "Maintenance"
   },
   "tenants": {
     "title": "Tenants",
@@ -584,5 +585,70 @@
     "addFailed": "The passkey wasn't added. Try again.",
     "notFresh": "For your security, sign in again (in the last 10 minutes) before adding a passkey.",
     "deleted": "Passkey removed."
+  },
+  "maintenance": {
+    "title": "Maintenance",
+    "description": "The read-only freeze of the new platform and the cutover host routes (runbook: “Cutover”). Starting or ending a freeze needs a reason and you confirming it's you; both are logged.",
+    "reason": "Reason (kept in the change history and the access log)",
+    "password": "Your password (confirm it's you)",
+    "code": "Code from your authenticator app (confirm it's you)",
+    "done": {
+      "started": "Read-only freeze is on. Every write is refused until you end it; scans and public pages keep working.",
+      "ended": "Read-only freeze ended. Writes work again."
+    },
+    "errors": {
+      "reason": "Give a reason of at least 3 characters: it is kept in the change history.",
+      "scope": "Choose platform-wide or listed organizations.",
+      "orgs": "List the organizations' addresses, separated by commas (at most 100).",
+      "orgs_unknown": "No organization has these addresses: {slugs}.",
+      "expected_end": "The expected end must be a time in the future.",
+      "confirm_platform": "Tick the box to confirm a platform-wide freeze.",
+      "step_up": "That password or code isn't right. Confirm it's you and try again.",
+      "step_up_rate_limited": "Too many tries. Wait a few minutes before confirming it's you again.",
+      "step_up_method": "Set a password or an authenticator app on your account first: a freeze needs you to confirm it's you.",
+      "generic": "That didn't work ({code})."
+    },
+    "freeze": {
+      "title": "Read-only freeze",
+      "off": "Off: writes work normally",
+      "onPlatform": "On for the whole platform",
+      "onOrgs": "On for listed organizations",
+      "since": "Since {when} UTC, by {by}",
+      "until": "expected to end {when} UTC",
+      "frozenOrgs": "Frozen organizations",
+      "reason": "Reason: {reason}",
+      "effect": "While it is on, every change is refused with a maintenance message (saving, sales, refunds, invitations, imports, API writes) and organizers see a banner in their language. Reads, exports, check-in scans (online and offline) and public pages keep working. Refunds already sent to the payment provider still complete."
+    },
+    "start": {
+      "form": "Start or change the read-only freeze",
+      "scope": "Who is frozen",
+      "scopeOrgs": "Listed organizations",
+      "scopePlatform": "The whole platform",
+      "orgs": "Organization addresses, separated by commas (for listed organizations)",
+      "confirmPlatform": "I understand a platform-wide freeze stops every organizer's changes and every sale.",
+      "expectedEnd": "Expected end, UTC (optional; shown in the banner and used for Retry-After)",
+      "submit": "Start read-only freeze",
+      "update": "Change read-only freeze"
+    },
+    "end": {
+      "form": "End the read-only freeze",
+      "submit": "End read-only freeze"
+    },
+    "routes": {
+      "title": "Host routing",
+      "description": "Where each host's traffic goes during a cutover. The cutover tool flips these (runbook step “Switch host routing”); a host with no entry is served by the new platform.",
+      "empty": "No host is routed: every host is served by the new platform.",
+      "next": "new platform",
+      "legacy": "legacy app",
+      "by": "set by {by}, {when} UTC"
+    },
+    "history": {
+      "title": "Change history",
+      "empty": "Nothing has been changed yet.",
+      "freezeOn": "Read-only freeze on ({summary})",
+      "freezeOff": "Read-only freeze off",
+      "route": "Host {host} → {summary}",
+      "meta": "{who} · {when} UTC · {reason}"
+    }
   }
 }

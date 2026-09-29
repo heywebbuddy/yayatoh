@@ -1,5 +1,6 @@
 import { LOCALES } from '@yayatoh/contracts';
 import { frameAncestors, matchLegacyRedirect, widgetOrigins } from '@yayatoh/marketplace';
+import { hostRoute } from '@yayatoh/platform';
 import {
   DEVICE_COOKIE,
   generateNonce,
@@ -13,6 +14,7 @@ import { resolveHost } from '@yayatoh/tenancy';
 import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing.ts';
+import { CANARY_COOKIE, frontDoor, LEGACY_COOKIE, parseLegacyOrigins } from './lib/front-door.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
@@ -32,6 +34,9 @@ const FILE = /\/[^/]*\.[^/]+$/;
 const hosts = new TtlCache<{ orgId: string; primaryHost: string | null } | null>(1000, 30_000);
 const redirects = new TtlCache<{ location: string; status: number } | null>(5000, 60_000);
 const LOCALE_SET = new Set<string>(LOCALES);
+// Cutover host routing (M2.5a): a flip applies within 5 seconds on every instance.
+const routes = new TtlCache<'next' | 'legacy' | null>(1000, 5_000);
+const legacyOrigins = parseLegacyOrigins(process.env.LEGACY_ORIGINS);
 
 function splitLocale(path: string): { locale: string; rest: string } {
   const [, first = '', ...more] = path.split('/');
@@ -118,6 +123,35 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
       });
     return res;
   };
+
+  // Cutover host routing (M2.5a, roadmap §7.8): a host still on the legacy app is rewritten to its
+  // origin with the front-door secret; the route flag is the switch (no DNS change).
+  let route = routes.get(host);
+  if (route === undefined) {
+    route = await hostRoute(host).catch(() => null);
+    routes.set(host, route);
+  }
+  const door = frontDoor({
+    route,
+    host,
+    cookies: { canary: req.cookies.get(CANARY_COOKIE)?.value, legacy: req.cookies.get(LEGACY_COOKIE)?.value },
+    origins: legacyOrigins,
+  });
+  if (door.kind === 'legacy') {
+    const upstream = new Headers(req.headers);
+    const secret = process.env.LEGACY_ORIGIN_SECRET;
+    if (secret) upstream.set('x-front-door-secret', secret);
+    return NextResponse.rewrite(new URL(req.nextUrl.pathname + req.nextUrl.search, door.origin), {
+      request: { headers: upstream },
+    });
+  }
+  if (door.kind === 'unavailable')
+    return secure(
+      new NextResponse('Maintenance in progress', {
+        status: 503,
+        headers: { 'content-type': 'text/plain', 'retry-after': '300' },
+      }),
+    );
 
   // Files (and 404s for dotted paths such as /robots.txt) skip routing but still get the headers,
   // so even a not-found page renders under the CSP with this response's nonce.

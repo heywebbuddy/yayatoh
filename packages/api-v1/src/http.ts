@@ -1,4 +1,4 @@
-import { type Problem, problem, problemFor } from '@yayatoh/platform/http';
+import { type Problem, problem, problemFor, problemHeaders } from '@yayatoh/platform/http';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
@@ -17,5 +17,5 @@ export function onV1Error(err: Error, c: Context) {
   const p = problemFor(err);
   if (p.code === 'internal') console.error(err);
   const retry = p.code === 'rate_limited' ? (p.details?.retryAfter as number | undefined) : undefined;
-  return sendProblem(c, p, retry ? { 'retry-after': String(retry) } : {});
+  return sendProblem(c, p, retry ? { 'retry-after': String(retry) } : problemHeaders(p));
 }

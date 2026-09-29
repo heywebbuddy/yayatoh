@@ -8,6 +8,7 @@ import {
   requireOrg,
 } from '@yayatoh/kernel';
 import { and, eq, gt, sql } from 'drizzle-orm';
+import { freezeGate } from '../freeze.ts';
 import { emitEvents } from '../outbox/outbox.ts';
 import { auditEvents, idempotencyKeys } from '../schema.ts';
 
@@ -17,6 +18,8 @@ export interface PolicyPorts {
   readonly stepUp?: CommandPorts<TenantTx>['stepUp'];
   /** The org's own state refusing writes (tenancy's `orgStatusGate`, M1.3f). */
   readonly orgGate?: CommandPorts<TenantTx>['orgGate'];
+  /** The read-only freeze (M2.5a). Default: `freezeGate` (platform.ops_flags), in every app. */
+  readonly freeze?: CommandPorts<TenantTx>['freeze'];
 }
 
 /**
@@ -57,6 +60,7 @@ export function createCommandPorts(policy: PolicyPorts): CommandPorts<TenantTx> 
     authorizer: policy.authorizer,
     stepUp: policy.stepUp ?? recentStepUp,
     ...(policy.orgGate ? { orgGate: policy.orgGate } : {}),
+    freeze: policy.freeze ?? freezeGate,
     transaction: (ctx, fn) => withTenant(ctx, fn),
     outbox: { emit: emitEvents },
     audit: {

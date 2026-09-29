@@ -583,7 +583,8 @@
     "internal": "Qualcosa è andato storto da parte nostra.",
     "reference": "Riferimento: {id}",
     "rateLimitedRetry": "Troppi tentativi. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
-    "impersonation_blocked": "Lo staff che agisce come membro non può farlo: rimborsi, pagamenti, esportazioni, eliminazioni e conferme sono disattivati."
+    "impersonation_blocked": "Lo staff che agisce come membro non può farlo: rimborsi, pagamenti, esportazioni, eliminazioni e conferme sono disattivati.",
+    "read_only_freeze": "Le modifiche sono sospese durante la manutenzione programmata. Non è stato salvato nulla; riprova al termine."
   },
   "notFound": {
     "title": "Pagina non trovata",
@@ -4612,5 +4613,11 @@
       "refunded": "Rimborsato",
       "awaiting_payment": "In attesa di pagamento"
     }
+  },
+  "maintenance": {
+    "label": "Manutenzione",
+    "title": "Manutenzione programmata: le modifiche sono sospese",
+    "body": "Yayatoh è in manutenzione in sola lettura mentre passiamo alla nuova piattaforma. Puoi ancora vedere tutto, scaricare esportazioni e scansionare i biglietti all’ingresso, e le tue pagine pubbliche restano online. Salvataggio delle modifiche, nuove vendite e rimborsi sono sospesi fino alla fine.",
+    "bodyUntil": "Yayatoh è in manutenzione in sola lettura mentre passiamo alla nuova piattaforma, fino a circa {until}. Puoi ancora vedere tutto, scaricare esportazioni e scansionare i biglietti all’ingresso, e le tue pagine pubbliche restano online. Salvataggio delle modifiche, nuove vendite e rimborsi sono sospesi fino ad allora."
   }
 }
