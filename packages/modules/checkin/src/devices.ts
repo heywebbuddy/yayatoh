@@ -191,10 +191,10 @@ export const heartbeatCommand = tenantCommand({
     /** M3.4a: the event the device works and where it scans (the device board). */
     eventId: z.uuid().optional(),
     checkpointId: z.uuid().nullable().optional(),
-    /** M3.3a: the app's build, for the device board (letters, digits and `.+-_`, ≤ 40). */
+    /** M3.3a: the app's build, for the device board (letters, digits and `.+-_`, ≤ 64). */
     appVersion: z
       .string()
-      .regex(/^[A-Za-z0-9._+-]{1,40}$/)
+      .regex(/^[A-Za-z0-9._+-]{1,64}$/)
       .optional(),
   }),
   output: z.object({

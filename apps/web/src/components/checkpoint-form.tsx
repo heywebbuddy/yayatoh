@@ -66,11 +66,7 @@ export function CheckpointForm({
       ) : null}
       <Input
         name="capacity"
-        type="number"
         inputMode="numeric"
-        min={1}
-        max={1000000}
-        step={1}
         label={t('checkpoints.capacity')}
         hint={t('checkpoints.capacityHint')}
         error={capacityError}

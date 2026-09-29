@@ -9,5 +9,10 @@ export const privateColumns = columnPrivacy('command_center', {
   layouts: { widget_order: 'vocab', hidden_widgets: 'vocab' },
   mode_overrides: { mode: 'vocab' },
   // M3.3a TV mode: the staff-chosen screen name, and the hash of the link's token.
-  display_links: { label: internal(), token_hash: secret() },
+  display_links: {
+    label: internal(),
+    token_hash: secret('none', {
+      why: 'CHECK requires a 64-char hex SHA-256; only resolveDisplayLink compares it (live-mode.int.test)',
+    }),
+  },
 });

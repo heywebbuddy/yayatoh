@@ -114,7 +114,7 @@ const HeartbeatBody = z.object({
     .openapi({ description: 'Where the device scans; null for the whole event.' }),
   appVersion: z
     .string()
-    .regex(/^[A-Za-z0-9._+-]{1,40}$/)
+    .regex(/^[A-Za-z0-9._+-]{1,64}$/)
     .optional()
     .openapi({ description: 'The scanner app build, shown on the device board.' }),
 });

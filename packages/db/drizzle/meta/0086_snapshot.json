@@ -7697,7 +7697,7 @@
         },
         "devices_app_version_check": {
           "name": "devices_app_version_check",
-          "value": "app_version is null or app_version ~ '^[A-Za-z0-9._+-]{1,40}$'"
+          "value": "app_version is null or app_version ~ '^[A-Za-z0-9._+-]{1,64}$'"
         }
       },
       "isRLSEnabled": true
