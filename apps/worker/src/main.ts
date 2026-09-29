@@ -1,7 +1,9 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { fakePaymentProvider } from '@yayatoh/payments';
+import { gotenbergRenderer } from '@yayatoh/pdf';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
+import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
@@ -43,8 +45,14 @@ const payments = fakeSecret
   : null;
 
 const SUBSCRIBERS = subscribers();
-// Mass refunds (M3.10b) need the payment provider.
-const jobs = payments ? [...JOBS, massRefundJob(payments)] : JOBS;
+// Mass refunds (M3.10b) need the payment provider; badge batch PDFs (M5.5a) need Gotenberg.
+const gotenbergUrl = process.env.GOTENBERG_URL;
+if (!gotenbergUrl) console.warn('badges: GOTENBERG_URL is not set; badge batch PDFs stay queued');
+const jobs = [
+  ...JOBS,
+  ...(payments ? [massRefundJob(payments)] : []),
+  ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
+];
 const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 
@@ -120,6 +128,19 @@ setInterval(() => {
     .catch((err) => console.error('mass-refunds', err))
     .finally(() => {
       queueingRefunds = false;
+    });
+}, 3_000).unref();
+
+// Badge batch PDFs (M5.5a): queue a job for each unfinished batch every 3 s (leader only); the
+// exclusive queue keeps one job per batch.
+let queueingBadges = false;
+setInterval(() => {
+  if (!gotenbergUrl || !release || stopping || queueingBadges) return;
+  queueingBadges = true;
+  enqueueDueBadgeBatches(boss)
+    .catch((err) => console.error('badges', err))
+    .finally(() => {
+      queueingBadges = false;
     });
 }, 3_000).unref();
 

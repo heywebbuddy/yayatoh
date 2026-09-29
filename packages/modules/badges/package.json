@@ -28,8 +28,9 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "pdfjs-dist": "5.4.296",
     "typescript": "catalog:"
   }
 }

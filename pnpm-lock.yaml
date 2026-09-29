@@ -610,6 +610,9 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@yayatoh/badges':
+        specifier: workspace:*
+        version: link:../../packages/modules/badges
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing
@@ -1107,6 +1110,9 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../config
+      pdfjs-dist:
+        specifier: 5.4.296
+        version: 5.4.296
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

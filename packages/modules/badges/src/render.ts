@@ -86,7 +86,8 @@ export function badgesHtml(input: BadgesHtmlInput): string {
   .badge { position: relative; overflow: hidden; break-after: page; }
   .badge:last-child { break-after: auto; }
   .face { position: absolute; inset-inline-start: 0; overflow: hidden; transform-origin: center; }
-  .el { position: absolute; display: flex; align-items: center; overflow: hidden; line-height: 1.15; }
+  /* Boxes are placed physically (RTL is already mirrored); the text keeps its own direction. */
+  .el { position: absolute; display: flex; align-items: center; overflow: hidden; line-height: 1.15; direction: ltr; }
   .el span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; unicode-bidi: plaintext; }
   .ribbon { padding-inline: 2mm; letter-spacing: 0.04em; }
   .qr, .logo { position: absolute; }
