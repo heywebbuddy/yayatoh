@@ -109,5 +109,7 @@ No new domain events. Consumer `alerts.evaluator` of `order.paid/payment_failed/
 | AC8 | Rule evaluation, thresholds, event modes, routing defaults, catalogue; number spelling per locale | unit `packages/modules/alerts/tests/rules.test.ts`, `packages/modules/notifications/tests/numbers.test.ts`, `packages/modules/notifications/tests/render.test.ts` |
 | AC9 | End to end: the four alerts with exact text; keyboard acknowledge and snooze; history; reload; badge; seating the attendees from the "Seat them" link resolves the alert live in another tab; deep links for distribution, payments and devices; event home list; viewer without controls and read-only routing; scanner 404; empty states; settings (validation, routing, target, persistence); axe on every screen; Arabic RTL | `apps/web/e2e/alerts.spec.ts` (×3 viewports) |
 
-### 10. Gate results
-See the final commit message of `agent/m3.2b`.
+### 10. Gate results (M3.2b)
+- `pnpm verify`: lint, check:modules, typecheck, 1,506 unit tests (134 files), 978 integration tests (113 files) — all pass.
+- New tests: unit `alerts/tests/rules.test.ts` + `lifecycle.test.ts` (26), `notifications/tests/numbers.test.ts` (2), render snapshots for the two new kinds × 13 locales (26), `tenancy` permissions (+1); integration `alerts.int.test.ts` (11) and `alerts-rules.int.test.ts` (12); e2e `alerts.spec.ts` 7 tests × 3 viewports = 21, all pass.
+- Whole web e2e suite: 1,426 passed, 34 skipped, 2 failed, 2 did not run. The two failures pass on re-run and are load/timing tests unrelated to alerts: `seating-perf.spec.ts:165` (desktop, frame-rate probe `editorPanZoomed` under the full parallel run; passes alone) and `legacy-migration.spec.ts:344` (desktop, two offline devices' duplicate flag; the whole serial spec passes 20/20 on re-run).
