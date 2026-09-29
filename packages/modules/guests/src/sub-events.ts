@@ -180,6 +180,13 @@ async function renumberTx(tx: TenantTx, ids: readonly string[], now: Date) {
     await tx.update(subEvents).set({ position, updatedAt: now }).where(eq(subEvents.id, id));
 }
 
+/** Instants compared by value (`changedFields` compares by identity). */
+const comparable = <T extends { startsAt: Date; endsAt: Date }>(v: T) => ({
+  ...v,
+  startsAt: v.startsAt.getTime(),
+  endsAt: v.endsAt.getTime(),
+});
+
 const EMPTY = {
   name: '',
   kind: 'custom',
@@ -245,7 +252,7 @@ export const updateSubEventCommand = tenantCommand({
     const { eventId, subEventId, source, ...fields } = input;
     const before = await subEventOfTx(tx, eventId, subEventId, true);
     await checkRefs(tx, eventId, fields, before);
-    const changed = changedFields(before, fields);
+    const changed = changedFields(comparable(before), comparable(fields));
     if (changed.length === 0) return toDto(before);
     const [row] = await tx
       .update(subEvents)

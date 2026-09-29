@@ -310,6 +310,23 @@ describe('sub-events and invitations (M4.1c)', () => {
     ).rejects.toMatchObject({ code: 'validation_failed' });
     const one = await sub(a, ev, 'One');
     const two = await sub(a, ev, 'Two', { place: 'The barn' });
+    // Saving unchanged values records nothing; a changed time records only that field.
+    const same = {
+      eventId: ev.id,
+      subEventId: two.id,
+      name: 'Two',
+      startsAt: at(0),
+      endsAt: at(1),
+      place: 'The barn',
+    };
+    await executeCommand(updateSubEventCommand, same, a.ctx(), ports);
+    await executeCommand(updateSubEventCommand, { ...same, endsAt: at(2) }, a.ctx(), ports);
+    expect(
+      (await historyRows(ev.id)).filter((x) => x.sub_event_id === two.id).map((x) => [x.action, x.fields]),
+    ).toEqual([
+      ['sub_event_created', ['name', 'startsAt', 'endsAt', 'place']],
+      ['sub_event_updated', ['endsAt']],
+    ]);
     const three = await sub(a, ev, 'Three');
     expect([one.position, two.position, three.position]).toEqual([0, 1, 2]);
     await executeCommand(
