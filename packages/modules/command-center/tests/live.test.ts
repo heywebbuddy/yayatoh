@@ -4,8 +4,8 @@ import {
   CAPACITY_OVER_PCT,
   capacityGauge,
   medianGapSeconds,
-  minutesToClear,
   minuteSeries,
+  minutesToClear,
   SPEED_WINDOW_MS,
   scansPerMinute,
   speedByGroup,
@@ -103,15 +103,39 @@ describe('capacity gauges (M3.3a)', () => {
   });
 
   it('reports in, remaining and level: ok below 95 %, near from 95 %, over from 100 %', () => {
-    expect(capacityGauge(10, null)).toEqual({ inside: 10, capacity: null, remaining: null, percent: null, level: 'none' });
+    expect(capacityGauge(10, null)).toEqual({
+      inside: 10,
+      capacity: null,
+      remaining: null,
+      percent: null,
+      level: 'none',
+    });
     expect(capacityGauge(10, 0).level).toBe('none');
-    expect(capacityGauge(94, 100)).toEqual({ inside: 94, capacity: 100, remaining: 6, percent: 94, level: 'ok' });
+    expect(capacityGauge(94, 100)).toEqual({
+      inside: 94,
+      capacity: 100,
+      remaining: 6,
+      percent: 94,
+      level: 'ok',
+    });
     expect(capacityGauge(95, 100).level).toBe('near');
     // Floored like the alert rule: 949 of 1000 is 94 %.
     expect(capacityGauge(949, 1000).level).toBe('ok');
     expect(capacityGauge(99, 100).level).toBe('near');
-    expect(capacityGauge(100, 100)).toEqual({ inside: 100, capacity: 100, remaining: 0, percent: 100, level: 'over' });
-    expect(capacityGauge(130, 100)).toEqual({ inside: 130, capacity: 100, remaining: 0, percent: 130, level: 'over' });
+    expect(capacityGauge(100, 100)).toEqual({
+      inside: 100,
+      capacity: 100,
+      remaining: 0,
+      percent: 100,
+      level: 'over',
+    });
+    expect(capacityGauge(130, 100)).toEqual({
+      inside: 130,
+      capacity: 100,
+      remaining: 0,
+      percent: 130,
+      level: 'over',
+    });
   });
 });
 

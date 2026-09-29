@@ -139,10 +139,14 @@ describe('tiles fed from scans and projector events', () => {
       executeCommand(scanTicketCommand, { eventId, code, checkpointId }, ctx, ports);
     // Three in at the north gate from the device, one at the south gate from the door screen.
     for (const [i, code] of codes.slice(0, 3).entries())
-      expect((await scan(code, north, deviceCtx(deviceId, at(-5 * MIN + i * 20_000)))).result).toBe('admitted');
+      expect((await scan(code, north, deviceCtx(deviceId, at(-5 * MIN + i * 20_000)))).result).toBe(
+        'admitted',
+      );
     expect((await scan(codes[3] as string, south, owner(at(-4 * MIN)))).result).toBe('admitted');
     // A pass shown twice, a bad code, and a lounge visit.
-    expect((await scan(codes[0] as string, north, deviceCtx(deviceId, at(-3 * MIN)))).result).toBe('duplicate');
+    expect((await scan(codes[0] as string, north, deviceCtx(deviceId, at(-3 * MIN)))).result).toBe(
+      'duplicate',
+    );
     expect((await scan('ZZZZZZZZ', north, deviceCtx(deviceId, at(-2 * MIN)))).result).toBe('invalid');
     expect((await scan(codes[1] as string, vip, owner(at(-2 * MIN)))).result).toBe('granted');
     // Undone at the south gate (they left), then back in: a re-entry.
@@ -160,9 +164,9 @@ describe('tiles fed from scans and projector events', () => {
     const kinds = feed.items.map((i) => `${i.kind}:${i.reason}`);
     expect(kinds).toEqual([
       'reentry:admitted',
+      'duplicate:duplicate',
       'checkin:granted',
       'invalid:invalid',
-      'duplicate:duplicate',
       'duplicate:duplicate',
       'checkin:admitted',
       'checkin:admitted',
@@ -177,7 +181,11 @@ describe('tiles fed from scans and projector events', () => {
       ['alert', 'at', 'checkpoint', 'device', 'id', 'kind', 'offline', 'reason'].sort(),
     );
     expect(JSON.stringify(feed)).not.toContain('Livia');
-    expect(feed.options.checkpoints.map((c) => c.name).sort()).toEqual(['North gate', 'South gate', 'VIP lounge']);
+    expect(feed.options.checkpoints.map((c) => c.name).sort()).toEqual([
+      'North gate',
+      'South gate',
+      'VIP lounge',
+    ]);
     expect(feed.options.devices).toEqual([{ id: deviceId, label: 'Door 1' }]);
 
     // Filters: by outcome, by entrance (device transitions are not at an entrance), by device.
@@ -191,42 +199,62 @@ describe('tiles fed from scans and projector events', () => {
     expect(atNorth.items.every((i) => i.checkpoint === 'North gate')).toBe(true);
     expect(atNorth.items).toHaveLength(5);
     const onDevice = await load(liveFeedWidget(null), owner(), { device: deviceId });
-    expect(onDevice.items.map((i) => i.kind)).toEqual(['invalid', 'duplicate', 'checkin', 'checkin', 'checkin', 'device']);
+    expect(onDevice.items.map((i) => i.kind)).toEqual([
+      'invalid',
+      'duplicate',
+      'checkin',
+      'checkin',
+      'checkin',
+      'device',
+    ]);
     expect(await load(liveFeedWidget(null), owner(), { kind: 'device' })).toMatchObject({
       items: [{ kind: 'device', reason: 'online', device: 'Door 1' }],
     });
     // Unknown filter values are ignored.
-    expect((await load(liveFeedWidget(null), owner(), { kind: 'bogus', checkpoint: 'x' })).items).toHaveLength(10);
+    expect(
+      (await load(liveFeedWidget(null), owner(), { kind: 'bogus', checkpoint: 'x' })).items,
+    ).toHaveLength(10);
     // Alerts come from the app's alert source, and only without an entrance or device filter.
     const withAlerts = liveFeedWidget(async () => [
-      { id: uuidv7(), rule: 'devicesOffline', severity: 'critical', state: 'open', count: 1, at: at(-10_000) },
+      {
+        id: uuidv7(),
+        rule: 'devicesOffline',
+        severity: 'critical',
+        state: 'open',
+        count: 1,
+        at: at(-10_000),
+      },
     ]);
     expect((await load(withAlerts, owner())).items[0]).toMatchObject({
       kind: 'alert',
       reason: 'devicesOffline',
       alert: { severity: 'critical', state: 'open', count: 1 },
     });
-    expect((await load(withAlerts, owner(), { checkpoint: north })).items.some((i) => i.kind === 'alert')).toBe(
-      false,
-    );
+    expect(
+      (await load(withAlerts, owner(), { checkpoint: north })).items.some((i) => i.kind === 'alert'),
+    ).toBe(false);
   });
 
   it('shows check-in speed per entrance and device, with the per-minute series from the metric projection', async () => {
     await catchUpMetrics(a.org.id);
     const speed = await load(checkinSpeedWidget, owner());
-    // 9 scans in the last five minutes (the lounge and refusals count as work at the door).
+    // 8 scans in the last five minutes (the lounge and refusals count as work at the door; the
+    // first one, exactly five minutes ago, is out of the window).
     expect(speed.windowMin).toBe(5);
-    expect(speed.scansPerMin).toBe(1.8);
+    expect(speed.scansPerMin).toBe(1.6);
     expect(speed.remaining).toBe(6);
     expect(speed.queueMin).toBe(4);
     expect(speed.entrances.map((e) => [e.name, e.scansPerMin])).toEqual([
-      ['North gate', 1],
+      ['North gate', 0.8],
       ['South gate', 0.6],
     ]);
-    // The north gate's three device scans 20 s apart, then 2 min and 1 min later: median 20 s… plus.
-    expect(speed.entrances[0]?.medianGapS).toBe(40);
+    // North gate in the window: 4:40 and 4:20 ago, then 3:00 and 2:00 ago → gaps 20, 80, 60 s.
+    expect(speed.entrances[0]?.medianGapS).toBe(60);
+    // The six guests still expected split like today's admissions (3 : 1): 4.5 at the north
+    // gate at 0.8 a minute, 1.5 at the south gate at 0.6 a minute.
+    expect(speed.entrances.map((e) => e.queueMin)).toEqual([6, 3]);
     expect(speed.devices.map((d) => [d.name, d.scansPerMin])).toEqual([
-      ['Door 1', 1],
+      ['Door 1', 0.8],
       [null, 0.8],
     ]);
     // The chart: admissions per minute from the projection's `checkins.tickets` series.
@@ -243,7 +271,12 @@ describe('tiles fed from scans and projector events', () => {
     expect([issues.duplicates, issues.refused]).toEqual([2, 1]);
     expect(issues.recent.map((r) => r.result)).toEqual(['duplicate', 'invalid', 'duplicate']);
     expect(issues.recent[0]?.orderId).toMatch(/^[0-9a-f-]{36}$/);
-    expect(issues.recent[1]).toMatchObject({ result: 'invalid', orderId: null, checkpoint: 'North gate', device: 'Door 1' });
+    expect(issues.recent[1]).toMatchObject({
+      result: 'invalid',
+      orderId: null,
+      checkpoint: 'North gate',
+      device: 'Door 1',
+    });
     // The door sees the same counts, never a link into orders.
     const atDoor = await load(scanIssuesWidget, door());
     expect(atDoor.duplicates).toBe(2);
@@ -258,13 +291,34 @@ describe('tiles fed from scans and projector events', () => {
       venue: { inside: 4, out: 1, capacity: 20, remaining: 16, percent: 20, level: 'ok' },
     });
     expect(cap.areas).toEqual([
-      { name: 'North gate', kind: 'entrance', inside: 3, capacity: 5, remaining: 2, percent: 60, level: 'ok' },
-      { name: 'South gate', kind: 'entrance', inside: 1, capacity: null, remaining: null, percent: null, level: 'none' },
+      {
+        name: 'North gate',
+        kind: 'entrance',
+        inside: 3,
+        capacity: 5,
+        remaining: 2,
+        percent: 60,
+        level: 'ok',
+      },
+      {
+        name: 'South gate',
+        kind: 'entrance',
+        inside: 1,
+        capacity: null,
+        remaining: null,
+        percent: null,
+        level: 'none',
+      },
       { name: 'VIP lounge', kind: 'zone', inside: 1, capacity: 2, remaining: 1, percent: 50, level: 'ok' },
     ]);
     // Two more through the north gate: at capacity (over); the event stays ok.
     for (const code of codes.slice(4, 6))
-      await executeCommand(scanTicketCommand, { eventId, code, checkpointId: north }, owner(at(-20_000)), ports);
+      await executeCommand(
+        scanTicketCommand,
+        { eventId, code, checkpointId: north },
+        owner(at(-20_000)),
+        ports,
+      );
     const full = await load(capacityWidget, owner());
     expect(full.areas[0]).toMatchObject({ inside: 5, remaining: 0, percent: 100, level: 'over' });
     expect(full.venue.level).toBe('ok');
@@ -273,10 +327,20 @@ describe('tiles fed from scans and projector events', () => {
   it('shows each device’s app version and last scan on the device board', async () => {
     const board = await load(deviceBoardWidget, owner());
     const d = board.devices.find((x) => x.id === deviceId);
-    expect(d).toMatchObject({ label: 'Door 1', appVersion: '1.4.2', checkpoint: 'North gate', online: false });
+    expect(d).toMatchObject({
+      label: 'Door 1',
+      appVersion: '1.4.2',
+      checkpoint: 'North gate',
+      online: false,
+    });
     expect(d?.lastScanAt).toBe(at(-2 * MIN).toISOString());
     // A heartbeat without a version keeps the last one; an invalid one is refused.
-    await executeCommand(heartbeatCommand, { batteryPct: 70, queueDepth: 0, clockOffsetMs: 0 }, deviceCtx(deviceId, at(0)), ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 70, queueDepth: 0, clockOffsetMs: 0 },
+      deviceCtx(deviceId, at(0)),
+      ports,
+    );
     expect((await load(deviceBoardWidget, owner())).devices.find((x) => x.id === deviceId)).toMatchObject({
       appVersion: '1.4.2',
       online: true,
@@ -293,26 +357,37 @@ describe('tiles fed from scans and projector events', () => {
 
   it('lists staff presence: door screens and handed-out devices, expiring after two minutes', async () => {
     await executeCommand(reportPresenceCommand, { eventId, checkpointId: south }, owner(at(-30_000)), ports);
-    const names = async (ids: readonly string[]) => new Map(ids.map((id) => [id, id === manager ? 'Mona' : 'Pat']));
+    const names = async (ids: readonly string[]) =>
+      new Map(ids.map((id) => [id, id === manager ? 'Mona' : 'Pat']));
     const people = await load(staffPresenceWidget(names), door());
     expect(people.people.map((p) => [p.name, p.source, p.device, p.checkpoint])).toEqual([
       ['Mona', 'device', 'Door 1', 'North gate'],
       ['Pat', 'door_screen', null, 'South gate'],
     ]);
     // Unknown or archived checkpoints mean the whole event; the viewer (door staff) may report too.
-    await executeCommand(reportPresenceCommand, { eventId, checkpointId: uuidv7() }, door(at(-10_000)), ports);
+    await executeCommand(
+      reportPresenceCommand,
+      { eventId, checkpointId: uuidv7() },
+      door(at(-10_000)),
+      ports,
+    );
     // A scanner-less member can't report presence.
     const finance = uuidv7();
     await executeCommand(addMemberCommand, { userId: finance, role: 'finance' }, a.ctx(), ports);
     await expect(
-      executeCommand(reportPresenceCommand, { eventId, checkpointId: null }, userCtx(finance, a.org.id), ports),
+      executeCommand(
+        reportPresenceCommand,
+        { eventId, checkpointId: null },
+        userCtx(finance, a.org.id),
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'forbidden' });
     const three = await load(staffPresenceWidget(null), owner());
     expect(three.people).toHaveLength(3);
     expect(three.people.find((p) => p.userId === a.viewerId)?.checkpoint).toBeNull();
-    // Two minutes after the last ping, gone.
-    const later = await load(staffPresenceWidget(null), owner(at(2 * MIN + 1)));
-    expect(later.people.map((p) => p.userId)).toEqual([a.viewerId]);
+    // Two minutes after each one's last ping, gone: the owner (30 s ago) first.
+    const later = await load(staffPresenceWidget(null), owner(at(100_000)));
+    expect(later.people.map((p) => p.userId)).toEqual([manager, a.viewerId]);
     expect((await load(staffPresenceWidget(null), owner(at(3 * MIN)))).people).toEqual([]);
   });
 
@@ -320,7 +395,12 @@ describe('tiles fed from scans and projector events', () => {
     expect(await load(assistanceSlotWidget, door())).toEqual({ engine: 'pending', open: 0 });
     const finance = uuidv7();
     await executeCommand(addMemberCommand, { userId: finance, role: 'finance' }, a.ctx(), ports);
-    for (const w of [liveFeedWidget(null), checkinSpeedWidget, scanIssuesWidget, capacityWidget])
+    for (const w of [
+      liveFeedWidget(null),
+      checkinSpeedWidget,
+      scanIssuesWidget,
+      capacityWidget,
+    ] as WidgetDef<unknown>[])
       await expect(load(w, userCtx(finance, a.org.id))).rejects.toMatchObject({ code: 'forbidden' });
   });
 });
@@ -328,7 +408,12 @@ describe('tiles fed from scans and projector events', () => {
 describe('offline detection (fake clock)', () => {
   it('records the device going quiet and raises "devices offline" within 90 s of its last heartbeat', async () => {
     const hb = at(10 * MIN);
-    await executeCommand(heartbeatCommand, { batteryPct: 70, queueDepth: 0, clockOffsetMs: 0 }, deviceCtx(deviceId, hb), ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 70, queueDepth: 0, clockOffsetMs: 0 },
+      deviceCtx(deviceId, hb),
+      ports,
+    );
     await catchUpAlerts(a.org.id, deps);
     const offlineAlert = async (now: Date) =>
       (await executeQuery(listAlertsQuery, { eventId, limit: 50 }, a.ctx({ now }), ports)).find(
@@ -348,9 +433,14 @@ describe('offline detection (fake clock)', () => {
     expect(r.changes.some((c) => c.rule === 'devicesOffline' && c.eventId === eventId)).toBe(true);
     const alert = await offlineAlert(past);
     expect(alert).toMatchObject({ state: 'open', severity: 'critical', count: 1 });
-    expect((alert?.openedAt.getTime() ?? 0) - hb.getTime()).toBeLessThanOrEqual(DEVICE_ONLINE_WINDOW_MS + 1_000);
+    expect((alert?.openedAt.getTime() ?? 0) - hb.getTime()).toBeLessThanOrEqual(
+      DEVICE_ONLINE_WINDOW_MS + 1_000,
+    );
     const feed = await load(liveFeedWidget(null), owner(past), { kind: 'device' });
-    expect(feed.items[0]).toMatchObject({ reason: 'offline', at: new Date(hb.getTime() + DEVICE_ONLINE_WINDOW_MS).toISOString() });
+    expect(feed.items[0]).toMatchObject({
+      reason: 'offline',
+      at: new Date(hb.getTime() + DEVICE_ONLINE_WINDOW_MS).toISOString(),
+    });
     // The device board hears it over `event.devices` (ids and state only).
     const [msg] = await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute<{ data: Record<string, unknown> }>(sql`
@@ -358,14 +448,27 @@ describe('offline detection (fake clock)', () => {
         where channel = ${`org:${a.org.id}:event:${eventId}:devices`} and data->>'state' = 'offline'
         order by seq desc limit 1`),
     );
-    expect(Object.keys(msg?.data ?? {}).sort()).toEqual(['at', 'batteryPct', 'deviceId', 'queueDepth', 'state']);
+    expect(Object.keys(msg?.data ?? {}).sort()).toEqual([
+      'at',
+      'batteryPct',
+      'deviceId',
+      'queueDepth',
+      'state',
+    ]);
     // Idempotent: a second look records nothing more.
-    expect((await watchQuietDevices(a.org.id, deps, { now: new Date(past.getTime() + 1_000) })).quiet).toBe(0);
+    expect((await watchQuietDevices(a.org.id, deps, { now: new Date(past.getTime() + 1_000) })).quiet).toBe(
+      0,
+    );
     // Back online: an "online" transition; the alert resolves at the next evaluation.
     const back = new Date(past.getTime() + 5_000);
-    await executeCommand(heartbeatCommand, { batteryPct: 70, queueDepth: 0, clockOffsetMs: 0 }, deviceCtx(deviceId, back), ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 70, queueDepth: 0, clockOffsetMs: 0 },
+      deviceCtx(deviceId, back),
+      ports,
+    );
     await evaluateOrgNow(a.org.id, deps, { now: back, full: false });
-    expect((await offlineAlert(back))).toBeUndefined();
+    expect(await offlineAlert(back)).toBeUndefined();
     const again = await load(liveFeedWidget(null), owner(back), { kind: 'device' });
     expect(again.items.slice(0, 2).map((i) => i.reason)).toEqual(['online', 'offline']);
   });
@@ -374,12 +477,27 @@ describe('offline detection (fake clock)', () => {
 describe('live-critical escalation', () => {
   it('texts on-duty staff at once (no quiet hours), and again when an acknowledgement times out', async () => {
     const e = await liveEvent(a, 'Escalation night');
-    await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+1 555 010 0222' }, userCtx(manager, a.org.id), ports);
+    await executeCommand(
+      setMyAlertPhoneCommand,
+      { smsPhone: '+1 555 010 0222' },
+      userCtx(manager, a.org.id),
+      ports,
+    );
     await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+1 555 010 0223' }, a.ctx(), ports);
     // The manager is at this event's doors; the owner isn't.
-    await executeCommand(reportPresenceCommand, { eventId: e, checkpointId: null }, userCtx(manager, a.org.id, { now: at(20 * MIN) }), ports);
+    await executeCommand(
+      reportPresenceCommand,
+      { eventId: e, checkpointId: null },
+      userCtx(manager, a.org.id, { now: at(20 * MIN) }),
+      ports,
+    );
     const d = await executeCommand(enrollDeviceCommand, { label: 'Door 9' }, a.ctx(), ports);
-    await executeCommand(heartbeatCommand, { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0 }, deviceCtx(d.deviceId, at(19 * MIN)), ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0 },
+      deviceCtx(d.deviceId, at(19 * MIN)),
+      ports,
+    );
     const when = at(20 * MIN + 30_000);
     const r = await watchQuietDevices(a.org.id, deps, { now: when });
     expect(r.quiet).toBeGreaterThanOrEqual(1);
@@ -406,19 +524,36 @@ describe('live-critical escalation', () => {
     expect(inbox.map((i) => who(i.user_id))).toContain('manager');
 
     // Acknowledged, still offline: after 10 minutes (live-critical) it opens and is sent again.
-    await executeCommand(acknowledgeAlertCommand, { alertId: alert?.id as string }, userCtx(manager, a.org.id, { now: when }), ports);
-    await executeCommand(reportPresenceCommand, { eventId: e, checkpointId: null }, userCtx(manager, a.org.id, { now: at(29 * MIN) }), ports);
+    await executeCommand(
+      acknowledgeAlertCommand,
+      { alertId: alert?.id as string },
+      userCtx(manager, a.org.id, { now: when }),
+      ports,
+    );
+    await executeCommand(
+      reportPresenceCommand,
+      { eventId: e, checkpointId: null },
+      userCtx(manager, a.org.id, { now: at(29 * MIN) }),
+      ports,
+    );
     await evaluateOrgNow(a.org.id, deps, { now: at(29 * MIN), full: false });
     expect((await texts()).filter((t) => t.kind === 'alerts.alert-urgent-text')).toHaveLength(1);
     await evaluateOrgNow(a.org.id, deps, { now: at(30 * MIN + 31_000), full: false });
     const after = await texts();
     expect(after.filter((t) => t.kind === 'alerts.alert-urgent-text')).toHaveLength(2);
     // The manager left the doors (presence lapsed): the next re-send is an ordinary text.
-    await executeCommand(acknowledgeAlertCommand, { alertId: alert?.id as string }, userCtx(manager, a.org.id, { now: at(31 * MIN) }), ports);
+    await executeCommand(
+      acknowledgeAlertCommand,
+      { alertId: alert?.id as string },
+      userCtx(manager, a.org.id, { now: at(31 * MIN) }),
+      ports,
+    );
     await evaluateOrgNow(a.org.id, deps, { now: at(41 * MIN + 1_000), full: false });
     const third = await texts();
     expect(third.filter((t) => t.kind === 'alerts.alert-urgent-text')).toHaveLength(2);
-    expect(third.filter((t) => t.kind === 'alerts.alert-text' && who(t.user_id) === 'manager')).toHaveLength(1);
+    expect(third.filter((t) => t.kind === 'alerts.alert-text' && who(t.user_id) === 'manager')).toHaveLength(
+      1,
+    );
     await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute(sql`update checkin.devices set revoked_at = now() where id = ${d.deviceId}::uuid`),
     );
@@ -427,22 +562,36 @@ describe('live-critical escalation', () => {
 
 describe('TV mode display links', () => {
   it('opens the board with the token alone, read-only, and stops at revocation', async () => {
-    const link = await executeCommand(createDisplayLinkCommand, { eventId, label: 'Lobby screen' }, a.ctx(), ports);
+    const link = await executeCommand(
+      createDisplayLinkCommand,
+      { eventId, label: 'Main hall screen' },
+      a.ctx(),
+      ports,
+    );
     expect(link.token).toMatch(/^yytv_[A-Za-z0-9_-]{43}$/);
     // Only the hash is stored; the audit row never holds the token.
     const stored = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ token_hash: string }>(sql`select token_hash from command_center.display_links where id = ${link.id}::uuid`),
+      tx.execute<{ token_hash: string }>(
+        sql`select token_hash from command_center.display_links where id = ${link.id}::uuid`,
+      ),
     );
     expect(stored[0]?.token_hash).toMatch(/^[0-9a-f]{64}$/);
     const audit = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ data: unknown }>(sql`select data from platform.audit_events where action = 'commandCenter.display.create' and data->>'linkId' = ${link.id}`),
+      tx.execute<{ data: unknown }>(
+        sql`select data from platform.audit_events where action = 'commandCenter.display.create' and data->>'linkId' = ${link.id}`,
+      ),
     );
     expect(JSON.stringify(audit)).not.toContain(link.token);
 
     const opened = await resolveDisplayLink(link.token);
     expect(opened).toMatchObject({ eventId, linkId: link.id });
     expect(opened?.ctx.orgId).toBe(a.org.id);
-    const board = await executeQuery(tvBoardQuery, { eventId }, { ...(opened?.ctx as Ctx), now: at(0) }, ports);
+    const board = await executeQuery(
+      tvBoardQuery,
+      { eventId },
+      { ...(opened?.ctx as Ctx), now: at(0) },
+      ports,
+    );
     expect(board).toMatchObject({
       eventName: 'Live mode night',
       mode: 'live',
@@ -475,10 +624,14 @@ describe('TV mode display links', () => {
     await expect(
       executeCommand(createDisplayLinkCommand, { eventId, label: 'Nope' }, viewer, ports),
     ).rejects.toMatchObject({ code: 'forbidden' });
-    expect(await executeCommand(revokeDisplayLinkCommand, { eventId, linkId: link.id }, a.ctx(), ports)).toEqual({
+    expect(
+      await executeCommand(revokeDisplayLinkCommand, { eventId, linkId: link.id }, a.ctx(), ports),
+    ).toEqual({
       revoked: true,
     });
-    expect(await executeCommand(revokeDisplayLinkCommand, { eventId, linkId: link.id }, a.ctx(), ports)).toEqual({
+    expect(
+      await executeCommand(revokeDisplayLinkCommand, { eventId, linkId: link.id }, a.ctx(), ports),
+    ).toEqual({
       revoked: false,
     });
     expect(await resolveDisplayLink(link.token)).toBeNull();
@@ -497,7 +650,13 @@ describe('TV mode display links', () => {
 describe('isolation', () => {
   it('keeps another org’s live mode, presence, device transitions and display links apart', async () => {
     // Another org's owner reads nothing of this event.
-    for (const w of [liveFeedWidget(null), checkinSpeedWidget, scanIssuesWidget, capacityWidget, staffPresenceWidget(null)])
+    for (const w of [
+      liveFeedWidget(null),
+      checkinSpeedWidget,
+      scanIssuesWidget,
+      capacityWidget,
+      staffPresenceWidget(null),
+    ] as WidgetDef<unknown>[])
       await expect(load(w, b.ctx())).rejects.toMatchObject({ code: 'not_found' });
     await expect(
       executeCommand(reportPresenceCommand, { eventId, checkpointId: null }, b.ctx(), ports),
@@ -506,11 +665,16 @@ describe('isolation', () => {
       executeCommand(createDisplayLinkCommand, { eventId, label: 'Theirs' }, b.ctx(), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
     const links = await executeQuery(displayLinksQuery, { eventId: b.event.id }, b.ctx(), ports);
-    const theirLink = await executeCommand(createDisplayLinkCommand, { eventId: b.event.id, label: 'B' }, b.ctx(), ports);
+    const theirLink = await executeCommand(
+      createDisplayLinkCommand,
+      { eventId: b.event.id, label: 'B' },
+      b.ctx(),
+      ports,
+    );
     await expect(
       executeCommand(revokeDisplayLinkCommand, { eventId, linkId: theirLink.id }, a.ctx(), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
-    expect(links.every((l) => l.label !== 'Lobby screen')).toBe(true);
+    expect(links.every((l) => l.label !== 'Main hall screen')).toBe(true);
     // B's display context reading A's event: not found (RLS scopes the org).
     const theirs = await resolveDisplayLink(theirLink.token);
     await expect(executeQuery(tvBoardQuery, { eventId }, theirs?.ctx as Ctx, ports)).rejects.toMatchObject({
@@ -531,7 +695,15 @@ describe('isolation', () => {
         syncScansCommand,
         {
           eventId,
-          scans: [{ scanId: uuidv7(), code: codes[9] as string, deviceTs: new Date(), clockOffsetMs: 0, verdict: 'admit' }],
+          scans: [
+            {
+              scanId: uuidv7(),
+              code: codes[9] as string,
+              deviceTs: new Date(),
+              clockOffsetMs: 0,
+              verdict: 'admit',
+            },
+          ],
         },
         deviceCtx(bd.deviceId, at(0), b),
         ports,
