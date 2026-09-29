@@ -427,10 +427,7 @@ function DeliverabilityBody({ d, c }: { d: Deliverability; c: Ctx }) {
   return (
     <div className="flex flex-col gap-2">
       {d.paused ? <StatusDot status="danger" label={t('paused')} /> : null}
-      <StatusDot
-        status={over ? 'warning' : 'success'}
-        label={over ? t('attention') : t('healthy')}
-      />
+      <StatusDot status={over ? 'warning' : 'success'} label={over ? t('attention') : t('healthy')} />
       <p className="text-body tabular-nums" data-testid="cc-deliverability-rates">
         {t('rates', {
           bounce: bpsPct(d.bounceBps, c.locale),

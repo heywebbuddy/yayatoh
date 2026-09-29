@@ -56,14 +56,21 @@ export default async function CampaignAnalyticsPage({
   const base = `/o/${org}/marketing-analytics`;
   const prefix = locale === 'en' ? '' : `/${locale}`;
   const n = new Intl.NumberFormat(locale);
-  const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: d.timeZone });
+  const when = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: d.timeZone,
+  });
   const canOrders = roleCan(data.role, 'orders:read');
   const name = d.name ?? t('unnamed');
   const rangeQs = new URLSearchParams({ from: d.fromDay, to: d.toDay }).toString();
   return (
     <>
       <PageHeader eyebrow={t(`kind.${d.kind}`)} title={name} />
-      <Link href={`${base}?${rangeQs}`} className="inline-flex min-h-6 items-center self-start text-body underline">
+      <Link
+        href={`${base}?${rangeQs}`}
+        className="inline-flex min-h-6 items-center self-start text-body underline"
+      >
         {t('detail.back')}
       </Link>
       <RangeForm
@@ -74,7 +81,12 @@ export default async function CampaignAnalyticsPage({
         currency={d.currency}
         error={error}
       />
-      <FigureTiles figures={d.figures} currency={d.currency} locale={locale} label={t('detail.figuresLabel')} />
+      <FigureTiles
+        figures={d.figures}
+        currency={d.currency}
+        locale={locale}
+        label={t('detail.figuresLabel')}
+      />
 
       {d.delivery ? (
         <section aria-labelledby="delivery-heading" className="flex flex-col gap-3">
@@ -100,7 +112,10 @@ export default async function CampaignAnalyticsPage({
               ))}
             </dl>
             {roleCan(data.role, 'messages:read') ? (
-              <Link href={`${base}/deliverability`} className="inline-flex min-h-6 items-center self-start underline">
+              <Link
+                href={`${base}/deliverability`}
+                className="inline-flex min-h-6 items-center self-start underline"
+              >
                 {t('openDeliverability')}
               </Link>
             ) : null}
@@ -145,7 +160,10 @@ export default async function CampaignAnalyticsPage({
               key: 'touch',
               header: t('detail.credit'),
               cell: (o) => (
-                <StatusDot status={o.touch === 'both' ? 'success' : 'neutral'} label={t(`detail.touch.${o.touch}`)} />
+                <StatusDot
+                  status={o.touch === 'both' ? 'success' : 'neutral'}
+                  label={t(`detail.touch.${o.touch}`)}
+                />
               ),
             },
             {

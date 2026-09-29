@@ -23,7 +23,11 @@ type Rates = DeliverabilityDto['org'];
  * sending domain and each campaign, against the M3.2b deliverability alert's thresholds; the
  * complaint auto-pause (M3.5a) and the open alert, with the way to the suppression list.
  */
-export default async function DeliverabilityPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
+export default async function DeliverabilityPage({
+  params,
+}: {
+  params: Promise<{ locale: string; org: string }>;
+}) {
   const { locale, org } = await params;
   setRequestLocale(locale);
   const data = await loadConsole(org);
@@ -38,7 +42,11 @@ export default async function DeliverabilityPage({ params }: { params: Promise<{
   const alert = alerts.find((a) => a.rule === 'deliverability') ?? null;
   const suppressions = data.modules.has('messaging') ? `/o/${org}/messaging#suppressions` : null;
   const n = new Intl.NumberFormat(locale);
-  const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: data.org.timezone });
+  const when = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: data.org.timezone,
+  });
   const status = (r: Rates) =>
     r.bounceOver || r.complaintOver ? (
       <StatusDot status="danger" label={t('statusOver')} />
@@ -48,7 +56,13 @@ export default async function DeliverabilityPage({ params }: { params: Promise<{
       <StatusDot status="neutral" label={t('statusFew', { min: d.thresholds.minSent })} />
     );
   const rateColumns = [
-    { key: 'sent', header: t('sent'), cell: (r: Rates) => n.format(r.sent), mono: true, align: 'end' as const },
+    {
+      key: 'sent',
+      header: t('sent'),
+      cell: (r: Rates) => n.format(r.sent),
+      mono: true,
+      align: 'end' as const,
+    },
     {
       key: 'delivered',
       header: t('delivered'),
@@ -73,17 +87,21 @@ export default async function DeliverabilityPage({ params }: { params: Promise<{
     { key: 'status', header: t('status'), cell: status },
   ];
   const suppressionLink = suppressions ? (
-    <Link href={suppressions} className="inline-flex min-h-6 items-center self-start underline" data-testid="suppressions-link">
+    <Link
+      href={suppressions}
+      className="inline-flex min-h-6 items-center self-start underline"
+      data-testid="suppressions-link"
+    >
       {t('openSuppressions')}
     </Link>
   ) : null;
   return (
     <>
-      <PageHeader
-        title={t('title')}
-        description={t('description', { days: d.thresholds.windowDays })}
-      />
-      <Link href={`/o/${org}/marketing-analytics`} className="inline-flex min-h-6 items-center self-start text-body underline">
+      <PageHeader title={t('title')} description={t('description', { days: d.thresholds.windowDays })} />
+      <Link
+        href={`/o/${org}/marketing-analytics`}
+        className="inline-flex min-h-6 items-center self-start text-body underline"
+      >
         {t('back')}
       </Link>
       {d.autoPause?.active ? (

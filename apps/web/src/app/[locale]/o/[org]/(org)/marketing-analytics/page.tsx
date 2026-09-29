@@ -1,7 +1,12 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { type AnalyticsReportDto, analyticsReportQuery, DIMENSIONS, type Dimension } from '@yayatoh/marketing';
+import {
+  type AnalyticsReportDto,
+  analyticsReportQuery,
+  DIMENSIONS,
+  type Dimension,
+} from '@yayatoh/marketing';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, PageHeader, buttonClass } from '@yayatoh/ui';
+import { buttonClass, Card, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -87,7 +92,12 @@ export default async function MarketingAnalyticsPage({
         error={error}
         hidden={{ view }}
       />
-      <FigureTiles figures={report.totals} currency={report.currency} locale={locale} label={t('summaryLabel')} />
+      <FigureTiles
+        figures={report.totals}
+        currency={report.currency}
+        locale={locale}
+        label={t('summaryLabel')}
+      />
       {report.totals.otherCurrencyOrders > 0 ? (
         <p className="text-caption text-zinc-600">
           {t('otherCurrency', { count: report.totals.otherCurrencyOrders })}
@@ -126,7 +136,10 @@ export default async function MarketingAnalyticsPage({
         <Card className="flex flex-col gap-2">
           <h2 className="text-section">{t('deliverabilityLink')}</h2>
           <p className="text-body text-zinc-600">{t('deliverabilityTeaser')}</p>
-          <Link href={`${base}/deliverability`} className="inline-flex min-h-6 items-center self-start underline">
+          <Link
+            href={`${base}/deliverability`}
+            className="inline-flex min-h-6 items-center self-start underline"
+          >
             {t('openDeliverability')}
           </Link>
         </Card>

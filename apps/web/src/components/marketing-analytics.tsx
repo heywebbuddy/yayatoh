@@ -211,7 +211,13 @@ export async function AnalyticsRows({
             mono: true,
             align: 'end',
           },
-          { key: 'clicks', header: t('figures.clicks'), cell: (r) => n.format(r.clicks), mono: true, align: 'end' },
+          {
+            key: 'clicks',
+            header: t('figures.clicks'),
+            cell: (r) => n.format(r.clicks),
+            mono: true,
+            align: 'end',
+          },
           {
             key: 'unique',
             header: t('figures.uniqueClickers'),
