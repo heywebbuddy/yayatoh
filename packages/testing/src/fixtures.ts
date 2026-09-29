@@ -69,11 +69,15 @@ import {
   unsubscribeUrls,
 } from '@yayatoh/notifications';
 import {
+  addOrderNoteCommand,
   applyDisputeEventCommand,
   applyProviderEventCommand,
   attachPaymentCommand,
   completeRefundCommand,
+  declineRefundRequestCommand,
+  refundRequestsQuery,
   registerOrderPushCommand,
+  requestRefundCommand,
   setCheckoutSettingsCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
@@ -425,6 +429,45 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { eventId: event.id, kind: 'until', daysBefore: 7, retainedMinor: 100 },
     ctx(),
     ports,
+  );
+  // M3.10b: the buyer asked for a refund (declined with a reason) and asked again (open), a note
+  // on the order, and a finished mass refund with one skipped order (isolation coverage).
+  const buyerCtx = createCtx({ orgId: org.id });
+  await executeCommand(
+    requestRefundCommand,
+    { manageToken: checkout.manageToken, message: 'I cannot attend any more.' },
+    buyerCtx,
+    ports,
+  );
+  const [firstRequest] = await executeQuery(refundRequestsQuery, {}, ctx(), ports);
+  if (!firstRequest) throw new Error('fixture: no refund request');
+  await executeCommand(
+    declineRefundRequestCommand,
+    { requestId: firstRequest.id, reason: 'The refund window is not open for this.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    requestRefundCommand,
+    { manageToken: checkout.manageToken, message: 'Asking once more, please.' },
+    buyerCtx,
+    ports,
+  );
+  await executeCommand(
+    addOrderNoteCommand,
+    { orderId: checkout.order.id, body: 'Called the buyer about their request.' },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`
+      with run as (
+        insert into orders.mass_refunds
+          (org_id, event_id, reason, status, currency, total, processed, skipped, requested_by, finished_at)
+        values (${org.id}, ${event.id}, 'event_cancelled', 'done', 'USD', 1, 1, 1, 'system:fixture', now())
+        returning id)
+      insert into orders.mass_refund_items (org_id, run_id, order_id, position, status, code)
+      select ${org.id}, run.id, ${checkout.order.id}, 0, 'skipped', 'fixture' from run`),
   );
   await executeCommand(
     recordReconciliationCommand,

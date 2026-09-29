@@ -5,8 +5,9 @@ import type { RefundPolicyDto } from '@yayatoh/orders';
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
+import type { RefundPolicyFormState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
-import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
+import { INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
 const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
 const KINDS = ['unset', 'none', 'until', 'always'] as const;
@@ -17,13 +18,14 @@ export function RefundPolicyForm({
   policy,
   currency,
 }: {
-  action: (prev: FormState, form: FormData) => Promise<FormState>;
+  action: (prev: RefundPolicyFormState, form: FormData) => Promise<RefundPolicyFormState>;
   policy: RefundPolicyDto | null;
   currency: string;
 }) {
   const t = useTranslations('refundPolicy');
   const te = useTranslations();
-  const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
+  const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE as RefundPolicyFormState);
+  const tr = useTranslations('refundOps.policy');
   const [kind, setKind] = useState<(typeof KINDS)[number]>(policy?.kind ?? 'unset');
   const bad = (f: string) => state.fields?.includes(f) ?? false;
   return (
@@ -88,8 +90,16 @@ export function RefundPolicyForm({
         </div>
       ) : null}
       <p className="text-caption text-zinc-500">{t('minimumHint')}</p>
+      <p className="text-caption text-zinc-500">{tr('tightenHint')}</p>
       <div aria-live="polite">
-        {state.ok ? <Alert tone="info" title={t('saved')} /> : null}
+        {state.ok ? (
+          <Alert
+            tone="info"
+            title={
+              typeof state.keptTerms === 'number' ? tr('tightened', { count: state.keptTerms }) : t('saved')
+            }
+          />
+        ) : null}
         {state.code ? (
           <Alert title={bad('daysBefore') ? t('daysInvalid') : te(errorMessageKey(state.code))} />
         ) : null}

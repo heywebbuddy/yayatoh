@@ -73,10 +73,13 @@
       "orders": {
         "tickets": "Entradas",
         "refund": "Reembolso",
-        "order-link": "Enlace del pedido"
+        "order-link": "Enlace del pedido",
+        "refund-requested": "Solicitud de reembolso",
+        "refund-declined": "Solicitud de reembolso rechazada"
       },
       "events": {
-        "reminder": "Recordatorio del evento"
+        "reminder": "Recordatorio del evento",
+        "postponed": "Evento aplazado"
       },
       "tenancy": {
         "invitation": "Invitación al equipo",
@@ -257,7 +260,8 @@
     "media": "Imágenes",
     "trackedLinks": "Enlaces rastreados",
     "messagingHealth": "Límites de mensajería",
-    "audiences": "Audiencias"
+    "audiences": "Audiencias",
+    "refundRequests": "Solicitudes de reembolso"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -4995,6 +4999,198 @@
         "withdrawn": "Retirado",
         "unknown_legacy": "Desconocido (importado)",
         "none": "No otorgado"
+      }
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "Cronología",
+      "zone": "Horas en la zona horaria del evento ({zone}).",
+      "offline": "Escaneado sin conexión",
+      "someone": "Un antiguo miembro del equipo",
+      "voidReasons": {
+        "refunded": "Reembolsada",
+        "cancelled": "Cancelada por el organizador",
+        "dispute_lost": "Contracargo perdido"
+      },
+      "kinds": {
+        "order_placed": "Pedido realizado",
+        "payment_received": "Pago recibido",
+        "ticket_issued": "Entrada n.º {serial} emitida",
+        "ticket_voided": "Entrada n.º {serial} anulada",
+        "transfer_offered": "Entrada n.º {serial} ofrecida a otra persona",
+        "transfer_claimed": "Entrada n.º {serial} reclamada",
+        "transfer_revoked": "Transferencia de la entrada n.º {serial} retirada",
+        "check_in": "Entrada n.º {serial} registrada",
+        "scan_refused": "Entrada n.º {serial} rechazada en la puerta",
+        "message": "Mensaje enviado",
+        "refund_requested": "El comprador pidió un reembolso",
+        "refund_request_approved": "Solicitud de reembolso aprobada",
+        "refund_request_declined": "Solicitud de reembolso rechazada",
+        "refund_started": "Reembolso iniciado",
+        "refund_succeeded": "Reembolso completado",
+        "refund_failed": "Reembolso fallido",
+        "dispute_opened": "Contracargo abierto",
+        "dispute_evidence_submitted": "Pruebas del contracargo enviadas",
+        "dispute_won": "Contracargo ganado",
+        "dispute_lost": "Contracargo perdido",
+        "note": "Nota"
+      }
+    },
+    "notes": {
+      "label": "Añade una nota para tu equipo",
+      "hint": "Las notas son internas: los compradores nunca las ven.",
+      "add": "Añadir nota",
+      "added": "Nota añadida.",
+      "invalid": "Escribe una nota de hasta 2000 caracteres."
+    },
+    "request": {
+      "title": "Solicitud de reembolso",
+      "tickets": "{count, plural, =0 {Todo el pedido} one {# entrada} other {# entradas}}",
+      "asked": "Solicitada el {date}",
+      "due": "Responder antes del {date}",
+      "overdue": "Vencida",
+      "onTime": "A tiempo",
+      "message": "Su mensaje",
+      "noMessage": "Sin mensaje.",
+      "readOnly": "Propietarios, administradores y finanzas responden a las solicitudes de reembolso.",
+      "approveLegend": "Aprobar",
+      "approveFull": "Reembolsar las entradas que pidió",
+      "approvePartial": "Reembolsar un importe (las entradas siguen siendo válidas)",
+      "amount": "Importe ({currency})",
+      "approve": "Aprobar y reembolsar",
+      "approved": "Aprobada. El comprador recibirá un correo cuando se complete el reembolso.",
+      "answered": "Esta solicitud ya fue respondida.",
+      "declineLegend": "Rechazar",
+      "reason": "Motivo (se envía al comprador)",
+      "reasonHint": "De 3 a 500 caracteres.",
+      "reasonInvalid": "Indica un motivo de 3 a 500 caracteres.",
+      "decline": "Rechazar solicitud",
+      "declined": "Rechazada. El comprador recibió tu motivo por correo.",
+      "status": {
+        "open": "Abierta",
+        "approved": "Aprobada",
+        "declined": "Rechazada"
+      },
+      "answeredApproved": "Aprobada el {date}.",
+      "answeredDeclined": "Rechazada el {date}: «{reason}»"
+    },
+    "queue": {
+      "title": "Solicitudes de reembolso",
+      "description": "Solicitudes de reembolso de los compradores de tus eventos. Responde cada una en un plazo de 5 días hábiles.",
+      "summary": "{open, plural, =0 {Ninguna solicitud abierta} one {# solicitud abierta} other {# solicitudes abiertas}}, {overdue, plural, =0 {ninguna vencida} one {# vencida} other {# vencidas}}.",
+      "tabsLabel": "Solicitudes de reembolso por estado",
+      "caption": "Solicitudes de reembolso: {status}",
+      "empty": {
+        "open": "No hay solicitudes de reembolso abiertas.",
+        "approved": "Aún no hay solicitudes de reembolso aprobadas.",
+        "declined": "No hay solicitudes de reembolso rechazadas."
+      },
+      "buyer": "Comprador",
+      "event": "Evento",
+      "tickets": "Entradas",
+      "asked": "Solicitada",
+      "waiting": "Esperando",
+      "due": "Responder antes del",
+      "decided": "Respondida",
+      "outcome": "Resultado",
+      "refundStatus": {
+        "pending": "reembolso pendiente",
+        "succeeded": "reembolsada",
+        "failed": "reembolso fallido"
+      },
+      "age": "{days, plural, =0 {{hours, plural, one {# hora} other {# horas}}} one {# día} other {# días}}"
+    },
+    "buyer": {
+      "title": "Reembolso",
+      "intro": "¿No puedes asistir? Pide un reembolso al organizador. Responde en un plazo de 5 días hábiles, según la política de reembolso indicada arriba.",
+      "tickets": "Entradas a reembolsar",
+      "ticket": "Entrada n.º {serial} · {type}",
+      "message": "Mensaje para el organizador (opcional)",
+      "submit": "Pedir un reembolso",
+      "sent": "Solicitud enviada. El organizador responde en un plazo de 5 días hábiles.",
+      "open": "Pediste un reembolso el {date}. El organizador responde en un plazo de 5 días hábiles.",
+      "approved": "Tu solicitud de reembolso fue aprobada el {date}.",
+      "declined": "Tu solicitud de reembolso fue rechazada el {date}.",
+      "declineReason": "El organizador dijo: «{reason}»",
+      "closed": "Los reembolsos a petición cerraron el {deadline}.",
+      "noRefunds": "La política de reembolso de este evento no permite reembolsos a petición.",
+      "pickTicket": "Elige al menos una entrada.",
+      "noLonger": "La política de reembolso ya no permite un reembolso a petición.",
+      "alreadyOpen": "Ya pediste un reembolso de este pedido."
+    },
+    "policy": {
+      "orderTitle": "Política de reembolso de este pedido",
+      "tightenHint": "Una política más estricta solo se aplica a los pedidos realizados a partir de ahora: los compradores conservan las condiciones con las que compraron. Una más generosa se aplica a todos.",
+      "tightened": "Política más estricta guardada. Se aplica a los pedidos realizados a partir de ahora; {count, plural, one {# pedido ya vendido conserva las condiciones con las que se compró} other {# pedidos ya vendidos conservan las condiciones con las que se compraron}}."
+    },
+    "wizard": {
+      "link": "Cancelar o aplazar",
+      "title": "Cancelar o aplazar",
+      "description": "Qué pasa con {name} y con el dinero, antes de cambiar nada.",
+      "choose": "¿Qué debe pasar con {name}?",
+      "cancelOption": "Cancelarlo y reembolsar a todos los compradores",
+      "cancelHint": "El evento se cancela y cada pedido pagado se reembolsa por completo, cargos incluidos, en un lote que puedes pausar.",
+      "cancelNoRefundHint": "Solo los propietarios y administradores pueden cancelar un evento con reembolsos.",
+      "postponeOption": "Aplazarlo",
+      "postponeHint": "Las entradas siguen siendo válidas para la nueva fecha. Los compradores reciben un correo y pueden pedir un reembolso según tu política de reembolso.",
+      "continue": "Continuar",
+      "back": "Elegir de nuevo",
+      "notAllowed": "Solo los propietarios y administradores pueden cancelar un evento con reembolsos.",
+      "previewTitle": "El dinero",
+      "previewCaption": "Reembolsos según cómo se cobraron los pedidos",
+      "orders": "Pedidos pagados",
+      "gross": "Ventas brutas",
+      "fees": "Cargos de reserva",
+      "alreadyRefunded": "Ya reembolsado",
+      "flowCol": "Cobrado",
+      "refundOrders": "Pedidos",
+      "refundTotal": "A reembolsar",
+      "feeBack": "Cargos de reserva devueltos",
+      "organizerShare": "De tu parte",
+      "total": "Total",
+      "disputed": "{count, plural, one {# pedido tiene un contracargo abierto} other {# pedidos tienen un contracargo abierto}} ({amount}) y {count, plural, one {queda excluido} other {quedan excluidos}}, para que nadie cobre dos veces.",
+      "collected": "{count, plural, one {# pedido se te pagó} other {# pedidos se te pagaron}} directamente ({amount}): {count, plural, one {reembólsalo} other {reembólsalos}} en persona.",
+      "confirm": "Lo entiendo: {name} se cancela y {count, plural, =0 {no se reembolsa ningún pedido} one {se reembolsa # pedido} other {se reembolsan # pedidos}} ({amount}). No se puede deshacer.",
+      "confirmRefunds": "Lo entiendo: {count, plural, =0 {no se reembolsa ningún pedido} one {se reembolsa # pedido} other {se reembolsan # pedidos}} ({amount}). No se puede deshacer.",
+      "start": "Cancelar el evento y reembolsar",
+      "startRefundsOnly": "Reembolsar a todos los compradores",
+      "cancelledAlready": "Este evento está cancelado.",
+      "postponedAlready": "Este evento está aplazado. Los compradores recibieron un correo indicando que sus entradas siguen siendo válidas. Reprográmalo desde el inicio del evento cuando tengas una nueva fecha.",
+      "postponeTitle": "Aplazar {name}",
+      "postponeBody": "Las entradas siguen siendo válidas. Cada comprador que tenga una recibe un correo indicando que el evento se aplaza y que puede pedir un reembolso según tu política de reembolso. Si se aplaza más de 90 días sin nueva fecha, se debe un reembolso completo.",
+      "postpone": "Aplazar el evento"
+    },
+    "run": {
+      "title": "Reembolsando a los compradores",
+      "status": {
+        "running": "En curso",
+        "paused": "En pausa",
+        "done": "Terminado"
+      },
+      "started": "Iniciado el {date}",
+      "progressLabel": "Progreso de los reembolsos",
+      "progress": "{processed} de {total} pedidos",
+      "refunded": "Reembolsados",
+      "skippedDisputed": "Contracargo abierto",
+      "skipped": "Excluidos",
+      "failed": "Fallidos",
+      "amount": "Importe reembolsado",
+      "working": "Los reembolsos se procesan en segundo plano. Puedes salir de esta página.",
+      "paused": "En pausa. No se reembolsa nada más hasta que lo reanudes.",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "reconciled": "Conciliado: la contabilidad movió exactamente lo reembolsado ({amount}).",
+      "notReconciled": "La contabilidad ({ledger}) no coincide con los reembolsos ({expected}). Finanzas debería revisarlo.",
+      "receivable": "Tras estos reembolsos debes {amount}; se descuenta de tu próximo pago.",
+      "exceptions": "Pedidos excluidos o fallidos",
+      "order": "Pedido",
+      "why": "Motivo",
+      "codes": {
+        "disputed": "Contracargo abierto",
+        "organizer_collected": "Pagado directamente a ti",
+        "nothing_left": "No queda nada por reembolsar",
+        "failed": "El reembolso falló ({code})"
       }
     }
   }

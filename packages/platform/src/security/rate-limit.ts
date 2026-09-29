@@ -258,6 +258,13 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 5, windowMs: 60 * MIN },
     ipCeiling: { limit: 200, windowMs: 10 * MIN },
   },
+  /** Refund requests from order pages (M3.10b); identity = the order's manage token. */
+  refundRequest: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 5, windowMs: 60 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
   /** Reports of public reviews (M1.4g). */
   reviewReport: {
     device: { limit: 10, windowMs: 10 * MIN },

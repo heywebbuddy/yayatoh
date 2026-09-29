@@ -16,6 +16,18 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     currency: 'USD',
     fully: 'no',
   },
+  'orders.refund-requested': { name: 'Amina Diallo', eventName: 'Lakeside Jazz Night', count: 2 },
+  'orders.refund-declined': {
+    url: 'https://app.yayatoh.test/orders/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+    reason: 'The refund window closed a week before the event.',
+  },
+  'events.postponed': {
+    url: 'https://app.yayatoh.test/orders/sample',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+  },
   'events.reminder': {
     url: 'https://app.yayatoh.test/orders/sample',
     name: 'Amina Diallo',

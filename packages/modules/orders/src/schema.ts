@@ -89,6 +89,17 @@ export const orders = tenantTable(
     seatUuids: uuid('seat_uuids').array().notNull().default(sql`'{}'::uuid[]`),
     /** Multi-date events (M1.4b): the chosen date (`events.occurrences`, hand-written FK). */
     occurrenceId: uuid('occurrence_id'),
+    /**
+     * M3.10b: the event's refund policy as the buyer saw it at purchase (kind, days before, kept
+     * per ticket; `unset` when there was none). Null: the order predates M3.10b (the current
+     * policy applies). Tightening the policy later never applies to this order; loosening it does
+     * (the buyer gets the better of the two).
+     */
+    refundPolicySnapshot: jsonb('refund_policy_snapshot').$type<{
+      kind: 'unset' | 'none' | 'until' | 'always';
+      daysBefore: number | null;
+      retainedMinor: number;
+    }>(),
     expiresAt: ts('expires_at'),
     paidAt: ts('paid_at'),
     cancelledAt: ts('cancelled_at'),
@@ -321,5 +332,186 @@ export const guestSessions = ordersSchema.table(
     index('guest_sessions_email_idx').on(t.emailHash),
     index('guest_sessions_expires_idx').on(t.expiresAt),
     check('guest_sessions_email_lower_check', sql`email = lower(email)`),
+  ],
+);
+
+export const REFUND_REQUEST_STATUSES = ['open', 'approved', 'declined'] as const;
+
+/**
+ * Buyer refund requests (M3.10b): asked from the order page (manage link) within the refund
+ * policy, answered by the organizer before `due_at` (the SLA). At most one open request per
+ * order. Approving runs the normal refund command (`refund_id`); declining needs a reason, which
+ * the buyer is sent.
+ */
+export const refundRequests = tenantTable(
+  ordersSchema,
+  'refund_requests',
+  {
+    orderId: uuid('order_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    status: text('status').notNull().default('open'),
+    /** The tickets the buyer asked about (their own live tickets); empty: the whole order. */
+    ticketIds: uuid('ticket_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    /** What the buyer wrote (optional). */
+    message: text('message'),
+    /** When the organizer should have answered (the SLA, 5 business days: pending owner). */
+    dueAt: ts('due_at').notNull(),
+    declineReason: text('decline_reason'),
+    decidedBy: text('decided_by'),
+    decidedAt: ts('decided_at'),
+    /** Approved: the refund it started (`refunds`). */
+    refundId: uuid('refund_id'),
+  },
+  (t) => [
+    index('refund_requests_org_status_due_idx').on(t.orgId, t.status, t.dueAt),
+    index('refund_requests_org_order_idx').on(t.orgId, t.orderId),
+    index('refund_requests_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    uniqueIndex('refund_requests_org_order_open_key').on(t.orgId, t.orderId).where(sql`status = 'open'`),
+    check(
+      'refund_requests_status_check',
+      sql.raw(`status in (${REFUND_REQUEST_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('refund_requests_message_check', sql`message is null or length(message) between 1 and 1000`),
+    check(
+      'refund_requests_decline_check',
+      sql`(status = 'declined') = (decline_reason is not null) and (decline_reason is null or length(decline_reason) between 3 and 500)`,
+    ),
+    check('refund_requests_decided_check', sql`(status = 'open') = (decided_at is null)`),
+    check('refund_requests_refund_check', sql`status = 'approved' or refund_id is null`),
+    foreignKey({
+      name: 'refund_requests_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    foreignKey({
+      name: 'refund_requests_refund_fk',
+      columns: [t.orgId, t.refundId],
+      foreignColumns: [refunds.orgId, refunds.id],
+    }),
+  ],
+);
+
+/** Internal notes on an order (M3.10b): support context for the team, shown on the order timeline. */
+export const orderNotes = tenantTable(
+  ordersSchema,
+  'order_notes',
+  {
+    orderId: uuid('order_id').notNull(),
+    body: text('body').notNull(),
+    authorId: text('author_id').notNull(),
+  },
+  (t) => [
+    index('order_notes_org_order_idx').on(t.orgId, t.orderId, t.createdAt),
+    check('order_notes_body_check', sql`length(body) between 1 and 2000`),
+    foreignKey({
+      name: 'order_notes_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+  ],
+);
+
+export const MASS_REFUND_STATUSES = ['running', 'paused', 'done'] as const;
+export const MASS_REFUND_ITEM_STATUSES = [
+  'pending',
+  'refunded',
+  'skipped_disputed',
+  'skipped',
+  'failed',
+] as const;
+
+/**
+ * A mass refund (M3.10b): every paid order of a cancelled event refunded in a resumable batch
+ * (pg-boss job `orders.mass-refund`). Items are snapshotted at the start, one per order; each is
+ * refunded at most once (its refund is recorded with the item, and the provider call is keyed by
+ * the refund). Disputed charges are skipped. Pausing stops the job between orders; resuming picks
+ * up where it stopped. At the end the run is reconciled against the ledger.
+ */
+export const massRefunds = tenantTable(
+  ordersSchema,
+  'mass_refunds',
+  {
+    eventId: uuid('event_id').notNull(),
+    /** The refund reason: the platform minimum (roadmap §5.3) refunds face and fee. */
+    reason: text('reason').notNull(),
+    status: text('status').notNull().default('running'),
+    currency: text('currency').notNull(),
+    total: integer('total').notNull(),
+    processed: integer('processed').notNull().default(0),
+    refunded: integer('refunded').notNull().default(0),
+    skippedDisputed: integer('skipped_disputed').notNull().default(0),
+    skipped: integer('skipped').notNull().default(0),
+    failed: integer('failed').notNull().default(0),
+    refundedMinor: minor('refunded_minor').notNull().default(0),
+    requestedBy: text('requested_by').notNull(),
+    pausedAt: ts('paused_at'),
+    finishedAt: ts('finished_at'),
+    /** Reconciliation at the end: cash the ledger moved for these refunds vs what they refunded. */
+    reconciledAt: ts('reconciled_at'),
+    reconciled: boolean('reconciled'),
+    ledgerCashMinor: minor('ledger_cash_minor'),
+    expectedCashMinor: minor('expected_cash_minor'),
+    receivableMinor: minor('receivable_minor'),
+  },
+  (t) => [
+    index('mass_refunds_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('mass_refunds_org_status_idx').on(t.orgId, t.status),
+    uniqueIndex('mass_refunds_org_event_live_key')
+      .on(t.orgId, t.eventId)
+      .where(sql`status in ('running', 'paused')`),
+    check(
+      'mass_refunds_status_check',
+      sql.raw(`status in (${MASS_REFUND_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('mass_refunds_reason_check', sql`reason in ('event_cancelled', 'event_postponed')`),
+    check(
+      'mass_refunds_counts_check',
+      sql`total >= 0 and processed between 0 and total and refunded + skipped_disputed + skipped + failed = processed and refunded_minor >= 0`,
+    ),
+    check('mass_refunds_done_check', sql`(status = 'done') = (finished_at is not null)`),
+  ],
+);
+
+export const massRefundItems = tenantTable(
+  ordersSchema,
+  'mass_refund_items',
+  {
+    runId: uuid('run_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    /** Processing order (orders oldest first). */
+    position: integer('position').notNull(),
+    status: text('status').notNull().default('pending'),
+    /** The refund this item started; set in the same transaction, so a retry resumes it. */
+    refundId: uuid('refund_id'),
+    amountMinor: minor('amount_minor').notNull().default(0),
+    /** Skipped or failed: why (a stable code shown to the organizer). */
+    code: text('code'),
+  },
+  (t) => [
+    uniqueIndex('mass_refund_items_org_run_order_key').on(t.orgId, t.runId, t.orderId),
+    uniqueIndex('mass_refund_items_org_run_position_key').on(t.orgId, t.runId, t.position),
+    index('mass_refund_items_org_run_status_idx').on(t.orgId, t.runId, t.status, t.position),
+    index('mass_refund_items_org_order_idx').on(t.orgId, t.orderId),
+    check(
+      'mass_refund_items_status_check',
+      sql.raw(`status in (${MASS_REFUND_ITEM_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('mass_refund_items_amount_check', sql`amount_minor >= 0`),
+    check('mass_refund_items_code_check', sql`code is null or code ~ '^[a-z_]{1,60}$'`),
+    foreignKey({
+      name: 'mass_refund_items_run_fk',
+      columns: [t.orgId, t.runId],
+      foreignColumns: [massRefunds.orgId, massRefunds.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'mass_refund_items_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    foreignKey({
+      name: 'mass_refund_items_refund_fk',
+      columns: [t.orgId, t.refundId],
+      foreignColumns: [refunds.orgId, refunds.id],
+    }),
   ],
 );

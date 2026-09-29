@@ -2,9 +2,9 @@ import { findEventTx, findOccurrenceTx, occurrencesOfEventTx } from '@yayatoh/ev
 import { type ReminderTarget, reminderTime, rescheduleRemindersTx } from '@yayatoh/notifications';
 import { defineSubscriber, keyVault, type Notifier } from '@yayatoh/platform';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
-import { eq } from 'drizzle-orm';
+import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
-import { orders } from './schema.ts';
+import { orders, refundRequests } from './schema.ts';
 
 const Payload = z.object({ orgId: z.uuid(), orderId: z.uuid() });
 const RefundPayload = z.object({
@@ -186,6 +186,111 @@ export function reminderRescheduler() {
         },
         new Date(),
       );
+    },
+  });
+}
+
+const RequestPayload = z.object({ orgId: z.uuid(), orderId: z.uuid(), requestId: z.uuid() });
+
+/**
+ * A buyer asked for a refund (M3.10b): owners, admins and finance hear about it, with a link to
+ * the queue (the SLA clock runs from now).
+ */
+export function refundRequestNotifier(deps: { notifier: Notifier }) {
+  return defineSubscriber({
+    name: 'orders.refund-request-notifier',
+    events: ['order.refund_requested@1'],
+    handle: async (tx, event) => {
+      const p = RequestPayload.parse(event.payload);
+      const [order] = await tx.select().from(orders).where(eq(orders.id, p.orderId));
+      const [req] = await tx.select().from(refundRequests).where(eq(refundRequests.id, p.requestId));
+      if (!order || !req) return;
+      const ev = await findEventTx(tx, order.eventId);
+      await deps.notifier.notifyMembers(tx, {
+        kind: 'orders.refund-requested',
+        params: { name: order.buyerName, eventName: ev?.name ?? '', count: req.ticketIds.length },
+        dedupeKey: `refund-requested:${req.id}`,
+        href: '/refund-requests',
+        orderId: order.id,
+        eventId: order.eventId,
+      });
+    },
+  });
+}
+
+/** The organizer declined a buyer's refund request (M3.10b): the buyer is sent the reason. */
+export function refundDeclineMailer(deps: { notifier: Notifier; appOrigin: string }) {
+  return defineSubscriber({
+    name: 'orders.refund-decline-mailer',
+    events: ['order.refund_request_declined@1'],
+    handle: async (tx, event) => {
+      const p = RequestPayload.parse(event.payload);
+      const [order] = await tx.select().from(orders).where(eq(orders.id, p.orderId));
+      const [req] = await tx.select().from(refundRequests).where(eq(refundRequests.id, p.requestId));
+      if (!order || !req || req.status !== 'declined') return;
+      const ev = await findEventTx(tx, order.eventId);
+      await deps.notifier.enqueue(tx, {
+        kind: 'orders.refund-declined',
+        to: {
+          email: order.buyerEmail,
+          name: order.buyerName,
+          userId: order.buyerUserId,
+          locale: order.locale,
+          timeZone: ev?.timezone ?? null,
+        },
+        params: {
+          url: (await manageUrl(deps.appOrigin, p.orgId, order)) ?? '',
+          name: order.buyerName,
+          eventName: ev?.name ?? '',
+          reason: req.declineReason ?? '',
+        },
+        dedupeKey: `refund-declined:${req.id}`,
+        orderId: order.id,
+        eventId: order.eventId,
+      });
+    },
+  });
+}
+
+const PostponedPayload = z.object({ orgId: z.uuid(), eventId: z.uuid() });
+
+/**
+ * An event was postponed (M3.10b): every buyer with a live order hears that their tickets stay
+ * valid and that they can ask for a refund under the refund policy from their order page. One
+ * message per order and postponement.
+ */
+export function postponementMailer(deps: { notifier: Notifier; appOrigin: string }) {
+  return defineSubscriber({
+    name: 'orders.postponement-mailer',
+    events: ['event.postponed@1'],
+    handle: async (tx, event) => {
+      const p = PostponedPayload.parse(event.payload);
+      const ev = await findEventTx(tx, p.eventId);
+      if (ev?.status !== 'postponed') return;
+      const sold = await tx
+        .select()
+        .from(orders)
+        .where(and(eq(orders.eventId, ev.id), inArray(orders.status, ['paid', 'partially_refunded'])));
+      for (const order of sold) {
+        // Only buyers who still hold a live ticket (a fully refunded ticket has nothing to keep).
+        if (!(await ticketsForOrderTx(tx, order.id)).some((t) => t.status === 'active')) continue;
+        const url = await manageUrl(deps.appOrigin, p.orgId, order);
+        if (!url) continue;
+        await deps.notifier.enqueue(tx, {
+          kind: 'events.postponed',
+          to: {
+            email: order.buyerEmail,
+            name: order.buyerName,
+            userId: order.buyerUserId,
+            locale: order.locale,
+            timeZone: ev.timezone,
+          },
+          params: { url, name: order.buyerName, eventName: ev.name },
+          dedupeKey: `event-postponed:${event.id}:${order.id}`,
+          orderId: order.id,
+          eventId: ev.id,
+        });
+      }
     },
   });
 }

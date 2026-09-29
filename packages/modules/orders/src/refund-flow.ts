@@ -1,12 +1,15 @@
-import type { TenantTx } from '@yayatoh/db';
-import { type CommandPorts, type Ctx, executeCommand, requireOrg } from '@yayatoh/kernel';
+import { type TenantTx, withTenant } from '@yayatoh/db';
+import { type CommandPorts, type Ctx, createCtx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { type PaymentProvider, recordTransferReversalCommand } from '@yayatoh/payments';
+import { eq } from 'drizzle-orm';
 import type { z } from 'zod';
+import { nextMassRefundStepCommand, settleMassRefundItemCommand } from './commands/mass-refunds.ts';
 import {
   completeRefundCommand,
   type startPolicyOverrideRefundCommand,
   startRefundCommand,
 } from './commands/refunds.ts';
+import { massRefunds } from './schema.ts';
 
 export interface RefundOutcome {
   readonly refundId: string;
@@ -32,6 +35,34 @@ export async function refundOrder(
   start: typeof startRefundCommand | typeof startPolicyOverrideRefundCommand = startRefundCommand,
 ): Promise<RefundOutcome> {
   const started = await executeCommand(start, input, ctx, ports);
+  return refundAtProvider(started, ctx, ports, provider);
+}
+
+/** A recorded (pending) refund and how to ask the provider for it. */
+export interface StartedRefund {
+  readonly refundId: string;
+  readonly amountMinor: number;
+  readonly feeRefundedMinor: number;
+  readonly currency: string;
+  readonly provider: {
+    readonly providerPaymentId: string;
+    readonly fundsFlow: 'organizer_mor' | 'platform_mor';
+    readonly connectedAccountId: string | null;
+  };
+}
+
+/**
+ * Ask the provider for a recorded refund (keyed by the refund id, so a retry never refunds
+ * twice), record its answer, and after a payout take the organizer's share back from the
+ * transfer (explicit reversal; a failed one stays a receivable). Shared by single refunds and the
+ * mass refund batch.
+ */
+export async function refundAtProvider(
+  started: StartedRefund,
+  ctx: Ctx,
+  ports: CommandPorts<TenantTx>,
+  provider: PaymentProvider,
+): Promise<RefundOutcome> {
   const res = await provider.refund({
     providerPaymentId: started.provider.providerPaymentId,
     amount: { amount: started.amountMinor, currency: started.currency },
@@ -78,4 +109,69 @@ export async function refundOrder(
     feeRefundedMinor: started.feeRefundedMinor,
     currency: started.currency,
   };
+}
+
+export interface MassRefundSlice {
+  /** Items settled in this slice (refunded, skipped or failed). */
+  readonly settled: number;
+  /** Why the slice stopped: out of budget, paused, finished, or waiting on the provider. */
+  readonly stoppedBy: 'budget' | 'paused' | 'done' | 'waiting';
+}
+
+/**
+ * Work a mass refund for a while (M3.10b; the `orders.mass-refund` job, or the dev runner): step
+ * by step, each order in its own transactions, the provider asked outside them. Stops when the
+ * run is paused or finished, after `maxItems` orders, or when `budgetMs` has passed. Safe to run
+ * again at any point: a crash between the provider and the database leaves the item's refund
+ * pending, and the next slice asks the provider again with the same key.
+ */
+export async function runMassRefund(
+  provider: PaymentProvider,
+  ports: CommandPorts<TenantTx>,
+  orgId: string,
+  runId: string,
+  opts: { budgetMs?: number; maxItems?: number; now?: () => Date } = {},
+): Promise<MassRefundSlice> {
+  const deadline = Date.now() + (opts.budgetMs ?? 20_000);
+  const max = opts.maxItems ?? Number.POSITIVE_INFINITY;
+  const ctx = () =>
+    createCtx({
+      orgId,
+      actor: { type: 'system', name: 'orders.mass-refund' },
+      ...(opts.now ? { now: opts.now() } : {}),
+    });
+  let settled = 0;
+  while (settled < max && Date.now() < deadline) {
+    const step = await executeCommand(nextMassRefundStepCommand, { runId }, ctx(), ports);
+    if (step.state === 'paused' || step.state === 'done' || step.state === 'waiting')
+      return { settled, stoppedBy: step.state };
+    if (step.state === 'refund') {
+      const c = ctx();
+      await refundAtProvider(step.refund, c, ports, provider);
+      const r = await executeCommand(settleMassRefundItemCommand, { itemId: step.itemId }, c, ports);
+      // Still pending at the provider: its webhook completes it; move on to the next order.
+      if (r.status === 'pending') continue;
+    }
+    settled += 1;
+  }
+  return { settled, stoppedBy: 'budget' };
+}
+
+/**
+ * Work every running mass refund of one org (dev and CI: what the worker's job does, run from
+ * the web's dev route so browser journeys need no worker).
+ */
+export async function runOrgMassRefunds(
+  provider: PaymentProvider,
+  ports: CommandPorts<TenantTx>,
+  orgId: string,
+  opts: { budgetMs?: number; maxItems?: number } = {},
+): Promise<{ runs: number; settled: number }> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'orders.mass-refund' } });
+  const running = await withTenant(ctx, (tx) =>
+    tx.select({ id: massRefunds.id }).from(massRefunds).where(eq(massRefunds.status, 'running')),
+  );
+  let settled = 0;
+  for (const r of running) settled += (await runMassRefund(provider, ports, orgId, r.id, opts)).settled;
+  return { runs: running.length, settled };
 }

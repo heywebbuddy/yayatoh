@@ -6,7 +6,15 @@ import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
-import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
+import {
+  orderLinkMailer,
+  postponementMailer,
+  refundDeclineMailer,
+  refundMailer,
+  refundRequestNotifier,
+  reminderRescheduler,
+  ticketMailer,
+} from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
@@ -43,6 +51,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     ticketMailer({ notifier, appOrigin }),
     orderLinkMailer({ notifier, appOrigin }),
     refundMailer({ notifier, appOrigin }),
+    refundRequestNotifier({ notifier }),
+    refundDeclineMailer({ notifier, appOrigin }),
+    postponementMailer({ notifier, appOrigin }),
     reminderRescheduler(),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),

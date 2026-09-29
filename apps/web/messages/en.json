@@ -73,10 +73,13 @@
       "orders": {
         "tickets": "Tickets",
         "refund": "Refund",
-        "order-link": "Order link"
+        "order-link": "Order link",
+        "refund-requested": "Refund request",
+        "refund-declined": "Refund request declined"
       },
       "events": {
-        "reminder": "Event reminder"
+        "reminder": "Event reminder",
+        "postponed": "Event postponed"
       },
       "tenancy": {
         "invitation": "Team invitation",
@@ -257,7 +260,8 @@
     "media": "Images",
     "trackedLinks": "Tracked links",
     "messagingHealth": "Messaging limits",
-    "audiences": "Audiences"
+    "audiences": "Audiences",
+    "refundRequests": "Refund requests"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -4995,6 +4999,198 @@
         "withdrawn": "Withdrawn",
         "unknown_legacy": "Unknown (imported)",
         "none": "Not given"
+      }
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "Timeline",
+      "zone": "Times are in the event’s time zone ({zone}).",
+      "offline": "Scanned offline",
+      "someone": "A former team member",
+      "voidReasons": {
+        "refunded": "Refunded",
+        "cancelled": "Cancelled by the organizer",
+        "dispute_lost": "Chargeback lost"
+      },
+      "kinds": {
+        "order_placed": "Order placed",
+        "payment_received": "Payment received",
+        "ticket_issued": "Ticket #{serial} issued",
+        "ticket_voided": "Ticket #{serial} voided",
+        "transfer_offered": "Ticket #{serial} offered to someone else",
+        "transfer_claimed": "Ticket #{serial} claimed",
+        "transfer_revoked": "Transfer of ticket #{serial} withdrawn",
+        "check_in": "Ticket #{serial} checked in",
+        "scan_refused": "Ticket #{serial} refused at the door",
+        "message": "Message sent",
+        "refund_requested": "The buyer asked for a refund",
+        "refund_request_approved": "Refund request approved",
+        "refund_request_declined": "Refund request declined",
+        "refund_started": "Refund started",
+        "refund_succeeded": "Refund completed",
+        "refund_failed": "Refund failed",
+        "dispute_opened": "Chargeback opened",
+        "dispute_evidence_submitted": "Chargeback evidence submitted",
+        "dispute_won": "Chargeback won",
+        "dispute_lost": "Chargeback lost",
+        "note": "Note"
+      }
+    },
+    "notes": {
+      "label": "Add a note for your team",
+      "hint": "Notes are internal: buyers never see them.",
+      "add": "Add note",
+      "added": "Note added.",
+      "invalid": "Write a note of up to 2,000 characters."
+    },
+    "request": {
+      "title": "Refund request",
+      "tickets": "{count, plural, =0 {The whole order} one {# ticket} other {# tickets}}",
+      "asked": "Asked {date}",
+      "due": "Answer by {date}",
+      "overdue": "Overdue",
+      "onTime": "On time",
+      "message": "Their message",
+      "noMessage": "No message.",
+      "readOnly": "Owners, admins and finance answer refund requests.",
+      "approveLegend": "Approve",
+      "approveFull": "Refund the tickets they asked for",
+      "approvePartial": "Refund an amount instead (tickets stay valid)",
+      "amount": "Amount ({currency})",
+      "approve": "Approve and refund",
+      "approved": "Approved. The buyer is emailed when the refund goes through.",
+      "answered": "This request was already answered.",
+      "declineLegend": "Decline",
+      "reason": "Reason (sent to the buyer)",
+      "reasonHint": "3 to 500 characters.",
+      "reasonInvalid": "Give a reason of 3 to 500 characters.",
+      "decline": "Decline request",
+      "declined": "Declined. The buyer was emailed your reason.",
+      "status": {
+        "open": "Open",
+        "approved": "Approved",
+        "declined": "Declined"
+      },
+      "answeredApproved": "Approved {date}.",
+      "answeredDeclined": "Declined {date}: “{reason}”"
+    },
+    "queue": {
+      "title": "Refund requests",
+      "description": "Buyers’ refund requests across your events. Answer each within 5 business days.",
+      "summary": "{open, plural, =0 {No open requests} one {# open request} other {# open requests}}, {overdue, plural, =0 {none overdue} other {# overdue}}.",
+      "tabsLabel": "Refund requests by status",
+      "caption": "Refund requests: {status}",
+      "empty": {
+        "open": "No open refund requests.",
+        "approved": "No approved refund requests yet.",
+        "declined": "No declined refund requests."
+      },
+      "buyer": "Buyer",
+      "event": "Event",
+      "tickets": "Tickets",
+      "asked": "Asked",
+      "waiting": "Waiting",
+      "due": "Answer by",
+      "decided": "Answered",
+      "outcome": "Outcome",
+      "refundStatus": {
+        "pending": "refund pending",
+        "succeeded": "refunded",
+        "failed": "refund failed"
+      },
+      "age": "{days, plural, =0 {{hours, plural, one {# hour} other {# hours}}} one {# day} other {# days}}"
+    },
+    "buyer": {
+      "title": "Refund",
+      "intro": "Can’t make it? Ask the organizer for a refund. They answer within 5 business days, under the refund policy above.",
+      "tickets": "Tickets to refund",
+      "ticket": "Ticket #{serial} · {type}",
+      "message": "Message to the organizer (optional)",
+      "submit": "Ask for a refund",
+      "sent": "Request sent. The organizer answers within 5 business days.",
+      "open": "You asked for a refund on {date}. The organizer answers within 5 business days.",
+      "approved": "Your refund request was approved on {date}.",
+      "declined": "Your refund request was declined on {date}.",
+      "declineReason": "The organizer said: “{reason}”",
+      "closed": "Refunds on request closed on {deadline}.",
+      "noRefunds": "This event’s refund policy does not allow refunds on request.",
+      "pickTicket": "Choose at least one ticket.",
+      "noLonger": "The refund policy no longer allows a refund on request.",
+      "alreadyOpen": "You already asked for a refund of this order."
+    },
+    "policy": {
+      "orderTitle": "Refund policy for this order",
+      "tightenHint": "A stricter policy applies only to orders placed from now on: buyers keep the terms they bought under. A more generous one applies to everyone.",
+      "tightened": "Stricter policy saved. It applies to orders placed from now on; {count, plural, one {# order already sold keeps the terms it was bought under} other {# orders already sold keep the terms they were bought under}}."
+    },
+    "wizard": {
+      "link": "Cancel or postpone",
+      "title": "Cancel or postpone",
+      "description": "What happens to {name}, and to the money, before anything changes.",
+      "choose": "What should happen to {name}?",
+      "cancelOption": "Cancel it and refund every buyer",
+      "cancelHint": "The event is cancelled and each paid order is refunded in full, fees included, in a batch you can pause.",
+      "cancelNoRefundHint": "Only owners and admins can cancel an event with refunds.",
+      "postponeOption": "Postpone it",
+      "postponeHint": "Tickets stay valid for the new date. Buyers are emailed and can ask for a refund under your refund policy.",
+      "continue": "Continue",
+      "back": "Choose again",
+      "notAllowed": "Only owners and admins can cancel an event with refunds.",
+      "previewTitle": "The money",
+      "previewCaption": "Refunds by how the orders were charged",
+      "orders": "Paid orders",
+      "gross": "Gross sales",
+      "fees": "Booking fees",
+      "alreadyRefunded": "Already refunded",
+      "flowCol": "Charged",
+      "refundOrders": "Orders",
+      "refundTotal": "To refund",
+      "feeBack": "Booking fees returned",
+      "organizerShare": "From your share",
+      "total": "Total",
+      "disputed": "{count, plural, one {# order has an open chargeback} other {# orders have an open chargeback}} ({amount}) and {count, plural, one {is} other {are}} left out, so no buyer is paid twice.",
+      "collected": "{count, plural, one {# order was} other {# orders were}} paid to you directly ({amount}): refund {count, plural, one {it} other {them}} in person.",
+      "confirm": "I understand: {name} is cancelled and {count, plural, =0 {no orders are} one {# order is} other {# orders are}} refunded ({amount}). This cannot be undone.",
+      "confirmRefunds": "I understand: {count, plural, =0 {no orders are} one {# order is} other {# orders are}} refunded ({amount}). This cannot be undone.",
+      "start": "Cancel event and refund",
+      "startRefundsOnly": "Refund every buyer",
+      "cancelledAlready": "This event is cancelled.",
+      "postponedAlready": "This event is postponed. Buyers were emailed that their tickets stay valid. Reschedule it from the event home when you have a new date.",
+      "postponeTitle": "Postpone {name}",
+      "postponeBody": "Tickets stay valid. Every buyer who holds one is emailed that the event is postponed and that they can ask for a refund under your refund policy. If it is postponed by more than 90 days without a new date, buyers are owed a full refund.",
+      "postpone": "Postpone event"
+    },
+    "run": {
+      "title": "Refunding buyers",
+      "status": {
+        "running": "Running",
+        "paused": "Paused",
+        "done": "Finished"
+      },
+      "started": "Started {date}",
+      "progressLabel": "Refund progress",
+      "progress": "{processed} of {total} orders",
+      "refunded": "Refunded",
+      "skippedDisputed": "Open chargeback",
+      "skipped": "Left out",
+      "failed": "Failed",
+      "amount": "Refunded amount",
+      "working": "Refunds go out in the background. You can leave this page.",
+      "paused": "Paused. Nothing more is refunded until you resume.",
+      "pause": "Pause",
+      "resume": "Resume",
+      "reconciled": "Reconciled: the books moved exactly what was refunded ({amount}).",
+      "notReconciled": "The books ({ledger}) differ from the refunds ({expected}). Finance should check.",
+      "receivable": "After these refunds you owe {amount}; it is taken from your next payout.",
+      "exceptions": "Orders left out or failed",
+      "order": "Order",
+      "why": "Why",
+      "codes": {
+        "disputed": "Open chargeback",
+        "organizer_collected": "Paid to you directly",
+        "nothing_left": "Nothing left to refund",
+        "failed": "The refund failed ({code})"
       }
     }
   }

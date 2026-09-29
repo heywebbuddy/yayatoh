@@ -137,6 +137,20 @@
     "messaging.auto_paused": {
       "subject": "{org}のメッセージ送信を一時停止しました",
       "intro": "{org}のメールへの苦情が{rate}に達し、上限の0.3%を超えたため、Yayatohはリマインダー、お知らせ、マーケティングの送信を一時停止しました。チケット、領収書、返信は引き続き送信されます。送信を再開する前に、Yayatohサポートが一緒に確認します。"
+    },
+    "orders.refund-requested": {
+      "subject": "返金リクエスト：{name}",
+      "intro": "{name} さんが {eventName} の{count, plural, =0 {注文} other {チケット # 枚}}の返金をリクエストしました。5 営業日以内に対応してください。"
+    },
+    "orders.refund-declined": {
+      "subject": "{eventName} の返金リクエストについて",
+      "intro": "{eventName} の主催者が返金リクエストをお断りしました：「{reason}」チケットは引き続き有効です。",
+      "cta": "注文を見る"
+    },
+    "events.postponed": {
+      "subject": "{eventName} は延期されました",
+      "intro": "{eventName} は延期されました。チケットは新しい日程でも有効です。参加できない場合は、主催者の返金ポリシーに従い、注文ページから返金をリクエストできます。",
+      "cta": "注文を見る"
     }
   },
   "roles": {

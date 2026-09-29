@@ -22,6 +22,20 @@ export {
 } from './commands/checkout.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
 export {
+  CancellationPreviewDto,
+  cancellationPreviewQuery,
+  MassRefundDto,
+  type MassRefundStep,
+  massRefundStatusQuery,
+  massRefundsQuery,
+  nextMassRefundStepCommand,
+  pauseMassRefundCommand,
+  resumeMassRefundCommand,
+  settleMassRefundItemCommand,
+  startMassRefundCommand,
+} from './commands/mass-refunds.ts';
+export { addOrderNoteCommand, OrderNoteDto, orderNotesQuery } from './commands/order-notes.ts';
+export {
   manageTokenOrg,
   orderPushDevices,
   registerOrderPushCommand,
@@ -29,11 +43,21 @@ export {
 } from './commands/push.ts';
 export {
   eventRefundPolicyTx,
+  orderRefundPolicyTx,
   publicRefundPolicy,
   RefundPolicyDto,
   refundPolicyQuery,
+  SetRefundPolicyResultDto,
   setRefundPolicyCommand,
 } from './commands/refund-policy.ts';
+export {
+  declineRefundRequestCommand,
+  REFUND_REQUEST_SLA_BUSINESS_DAYS,
+  RefundRequestDto,
+  refundRequestCountsQuery,
+  refundRequestsQuery,
+  requestRefundCommand,
+} from './commands/refund-requests.ts';
 export {
   completeRefundCommand,
   isLargeRefund,
@@ -48,11 +72,26 @@ export {
 } from './commands/refunds.ts';
 export { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from './domain/lifecycle.ts';
 export {
+  type CancellationPreview,
+  cancellationPreview,
+  cancellationRefund,
+  type OrderRefundPlan,
+  type PreviewOrder,
+} from './domain/mass-refund.ts';
+export {
   DISCRETIONARY_REASONS,
+  displayedOrderPolicy,
+  evaluateOrderRefundPolicy,
   evaluateRefundPolicy,
+  isAtLeastAsGenerous,
   isDiscretionary,
+  isTighter,
+  keepsTermsUnder,
+  orderPolicies,
   PLATFORM_MINIMUM_REASONS,
   type PolicyDecision,
+  type PolicySnapshot,
+  policySnapshot,
   REFUND_POLICY_KINDS,
   type RefundPolicy,
   type RefundReason,
@@ -161,6 +200,30 @@ export {
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';
-export { type RefundOutcome, refundOrder } from './refund-flow.ts';
-export { CHARGE_MODELS, ORDER_STATUSES, REFUND_REASONS, REFUND_STATUSES } from './schema.ts';
-export { REMINDER_LEAD_MS, refundMailer, reminderRescheduler, ticketMailer } from './subscribers.ts';
+export {
+  type MassRefundSlice,
+  type RefundOutcome,
+  refundAtProvider,
+  refundOrder,
+  runMassRefund,
+  runOrgMassRefunds,
+  type StartedRefund,
+} from './refund-flow.ts';
+export {
+  CHARGE_MODELS,
+  MASS_REFUND_ITEM_STATUSES,
+  MASS_REFUND_STATUSES,
+  ORDER_STATUSES,
+  REFUND_REASONS,
+  REFUND_REQUEST_STATUSES,
+  REFUND_STATUSES,
+} from './schema.ts';
+export {
+  postponementMailer,
+  REMINDER_LEAD_MS,
+  refundDeclineMailer,
+  refundMailer,
+  refundRequestNotifier,
+  reminderRescheduler,
+  ticketMailer,
+} from './subscribers.ts';

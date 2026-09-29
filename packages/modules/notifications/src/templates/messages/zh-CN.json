@@ -137,6 +137,20 @@
     "messaging.auto_paused": {
       "subject": "{org} 的消息发送已暂停",
       "intro": "针对 {org} 邮件的投诉率达到 {rate}，超过 0.3% 的上限，因此 Yayatoh 已暂停你的提醒、动态和营销消息。门票、收据和回复仍会照常发送。恢复发送前，Yayatoh 支持团队会与你一起核查。"
+    },
+    "orders.refund-requested": {
+      "subject": "退款申请：{name}",
+      "intro": "{name} 申请退还 {eventName} 的{count, plural, =0 {订单} other {# 张门票}}。请在 5 个工作日内处理。"
+    },
+    "orders.refund-declined": {
+      "subject": "您对 {eventName} 的退款申请",
+      "intro": "{eventName} 的主办方拒绝了您的退款申请：“{reason}”您的门票仍然有效。",
+      "cta": "查看我的订单"
+    },
+    "events.postponed": {
+      "subject": "{eventName} 已延期",
+      "intro": "{eventName} 已延期。您的门票在新日期仍然有效。如无法参加，可根据主办方的退款政策在订单页面申请退款。",
+      "cta": "查看我的订单"
     }
   },
   "roles": {

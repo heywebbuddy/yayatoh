@@ -73,10 +73,13 @@
       "orders": {
         "tickets": "Tickets",
         "refund": "Terugbetaling",
-        "order-link": "Bestellink"
+        "order-link": "Bestellink",
+        "refund-requested": "Terugbetalingsverzoek",
+        "refund-declined": "Terugbetalingsverzoek afgewezen"
       },
       "events": {
-        "reminder": "Herinnering evenement"
+        "reminder": "Herinnering evenement",
+        "postponed": "Evenement uitgesteld"
       },
       "tenancy": {
         "invitation": "Teamuitnodiging",
@@ -257,7 +260,8 @@
     "media": "Afbeeldingen",
     "trackedLinks": "Trackinglinks",
     "messagingHealth": "Verzendlimieten",
-    "audiences": "Doelgroepen"
+    "audiences": "Doelgroepen",
+    "refundRequests": "Terugbetalingsverzoeken"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -4995,6 +4999,198 @@
         "withdrawn": "Ingetrokken",
         "unknown_legacy": "Onbekend (geïmporteerd)",
         "none": "Niet gegeven"
+      }
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "Tijdlijn",
+      "zone": "Tijden in de tijdzone van het evenement ({zone}).",
+      "offline": "Offline gescand",
+      "someone": "Een voormalig teamlid",
+      "voidReasons": {
+        "refunded": "Terugbetaald",
+        "cancelled": "Geannuleerd door de organisator",
+        "dispute_lost": "Terugboeking verloren"
+      },
+      "kinds": {
+        "order_placed": "Bestelling geplaatst",
+        "payment_received": "Betaling ontvangen",
+        "ticket_issued": "Ticket nr. {serial} uitgegeven",
+        "ticket_voided": "Ticket nr. {serial} ongeldig gemaakt",
+        "transfer_offered": "Ticket nr. {serial} aan iemand anders aangeboden",
+        "transfer_claimed": "Ticket nr. {serial} opgeëist",
+        "transfer_revoked": "Overdracht van ticket nr. {serial} ingetrokken",
+        "check_in": "Ticket nr. {serial} ingecheckt",
+        "scan_refused": "Ticket nr. {serial} geweigerd bij de ingang",
+        "message": "Bericht verstuurd",
+        "refund_requested": "De koper vroeg om terugbetaling",
+        "refund_request_approved": "Terugbetalingsverzoek goedgekeurd",
+        "refund_request_declined": "Terugbetalingsverzoek afgewezen",
+        "refund_started": "Terugbetaling gestart",
+        "refund_succeeded": "Terugbetaling voltooid",
+        "refund_failed": "Terugbetaling mislukt",
+        "dispute_opened": "Terugboeking geopend",
+        "dispute_evidence_submitted": "Bewijs voor de terugboeking ingediend",
+        "dispute_won": "Terugboeking gewonnen",
+        "dispute_lost": "Terugboeking verloren",
+        "note": "Notitie"
+      }
+    },
+    "notes": {
+      "label": "Voeg een notitie voor je team toe",
+      "hint": "Notities zijn intern: kopers zien ze nooit.",
+      "add": "Notitie toevoegen",
+      "added": "Notitie toegevoegd.",
+      "invalid": "Schrijf een notitie van maximaal 2.000 tekens."
+    },
+    "request": {
+      "title": "Terugbetalingsverzoek",
+      "tickets": "{count, plural, =0 {De hele bestelling} one {# ticket} other {# tickets}}",
+      "asked": "Gevraagd op {date}",
+      "due": "Antwoorden vóór {date}",
+      "overdue": "Te laat",
+      "onTime": "Op tijd",
+      "message": "Hun bericht",
+      "noMessage": "Geen bericht.",
+      "readOnly": "Eigenaren, beheerders en financiën beantwoorden terugbetalingsverzoeken.",
+      "approveLegend": "Goedkeuren",
+      "approveFull": "De gevraagde tickets terugbetalen",
+      "approvePartial": "In plaats daarvan een bedrag terugbetalen (tickets blijven geldig)",
+      "amount": "Bedrag ({currency})",
+      "approve": "Goedkeuren en terugbetalen",
+      "approved": "Goedgekeurd. De koper krijgt een e-mail zodra de terugbetaling rond is.",
+      "answered": "Dit verzoek is al beantwoord.",
+      "declineLegend": "Afwijzen",
+      "reason": "Reden (wordt naar de koper gestuurd)",
+      "reasonHint": "3 tot 500 tekens.",
+      "reasonInvalid": "Geef een reden van 3 tot 500 tekens.",
+      "decline": "Verzoek afwijzen",
+      "declined": "Afgewezen. De koper heeft je reden per e-mail ontvangen.",
+      "status": {
+        "open": "Open",
+        "approved": "Goedgekeurd",
+        "declined": "Afgewezen"
+      },
+      "answeredApproved": "Goedgekeurd op {date}.",
+      "answeredDeclined": "Afgewezen op {date}: ‘{reason}’"
+    },
+    "queue": {
+      "title": "Terugbetalingsverzoeken",
+      "description": "Terugbetalingsverzoeken van kopers van je evenementen. Beantwoord elk verzoek binnen 5 werkdagen.",
+      "summary": "{open, plural, =0 {Geen open verzoeken} one {# open verzoek} other {# open verzoeken}}, {overdue, plural, =0 {geen te laat} other {# te laat}}.",
+      "tabsLabel": "Terugbetalingsverzoeken per status",
+      "caption": "Terugbetalingsverzoeken: {status}",
+      "empty": {
+        "open": "Geen open terugbetalingsverzoeken.",
+        "approved": "Nog geen goedgekeurde terugbetalingsverzoeken.",
+        "declined": "Geen afgewezen terugbetalingsverzoeken."
+      },
+      "buyer": "Koper",
+      "event": "Evenement",
+      "tickets": "Tickets",
+      "asked": "Gevraagd",
+      "waiting": "Wacht al",
+      "due": "Antwoorden vóór",
+      "decided": "Beantwoord",
+      "outcome": "Uitkomst",
+      "refundStatus": {
+        "pending": "terugbetaling bezig",
+        "succeeded": "terugbetaald",
+        "failed": "terugbetaling mislukt"
+      },
+      "age": "{days, plural, =0 {{hours, plural, one {# uur} other {# uur}}} one {# dag} other {# dagen}}"
+    },
+    "buyer": {
+      "title": "Terugbetaling",
+      "intro": "Kun je niet komen? Vraag de organisator om terugbetaling. Die antwoordt binnen 5 werkdagen, volgens het terugbetalingsbeleid hierboven.",
+      "tickets": "Terug te betalen tickets",
+      "ticket": "Ticket nr. {serial} · {type}",
+      "message": "Bericht aan de organisator (optioneel)",
+      "submit": "Om terugbetaling vragen",
+      "sent": "Verzoek verstuurd. De organisator antwoordt binnen 5 werkdagen.",
+      "open": "Je vroeg op {date} om terugbetaling. De organisator antwoordt binnen 5 werkdagen.",
+      "approved": "Je terugbetalingsverzoek is op {date} goedgekeurd.",
+      "declined": "Je terugbetalingsverzoek is op {date} afgewezen.",
+      "declineReason": "De organisator schreef: ‘{reason}’",
+      "closed": "Terugbetalingen op verzoek sloten op {deadline}.",
+      "noRefunds": "Het terugbetalingsbeleid van dit evenement staat geen terugbetaling op verzoek toe.",
+      "pickTicket": "Kies minstens één ticket.",
+      "noLonger": "Het terugbetalingsbeleid staat geen terugbetaling op verzoek meer toe.",
+      "alreadyOpen": "Je hebt al om terugbetaling van deze bestelling gevraagd."
+    },
+    "policy": {
+      "orderTitle": "Terugbetalingsbeleid voor deze bestelling",
+      "tightenHint": "Een strenger beleid geldt alleen voor bestellingen vanaf nu: kopers houden de voorwaarden waaronder ze kochten. Een ruimer beleid geldt voor iedereen.",
+      "tightened": "Strenger beleid opgeslagen. Het geldt voor bestellingen vanaf nu; {count, plural, one {# al verkochte bestelling houdt de voorwaarden waaronder ze werd gekocht} other {# al verkochte bestellingen houden de voorwaarden waaronder ze werden gekocht}}."
+    },
+    "wizard": {
+      "link": "Annuleren of uitstellen",
+      "title": "Annuleren of uitstellen",
+      "description": "Wat er met {name} en het geld gebeurt, voordat er iets verandert.",
+      "choose": "Wat moet er met {name} gebeuren?",
+      "cancelOption": "Annuleren en alle kopers terugbetalen",
+      "cancelHint": "Het evenement wordt geannuleerd en elke betaalde bestelling wordt volledig terugbetaald, kosten inbegrepen, in een batch die je kunt pauzeren.",
+      "cancelNoRefundHint": "Alleen eigenaren en beheerders kunnen een evenement met terugbetalingen annuleren.",
+      "postponeOption": "Uitstellen",
+      "postponeHint": "Tickets blijven geldig voor de nieuwe datum. Kopers krijgen een e-mail en kunnen om terugbetaling vragen volgens je terugbetalingsbeleid.",
+      "continue": "Doorgaan",
+      "back": "Opnieuw kiezen",
+      "notAllowed": "Alleen eigenaren en beheerders kunnen een evenement met terugbetalingen annuleren.",
+      "previewTitle": "Het geld",
+      "previewCaption": "Terugbetalingen naar hoe de bestellingen zijn afgerekend",
+      "orders": "Betaalde bestellingen",
+      "gross": "Brutoverkoop",
+      "fees": "Boekingskosten",
+      "alreadyRefunded": "Al terugbetaald",
+      "flowCol": "Afgerekend",
+      "refundOrders": "Bestellingen",
+      "refundTotal": "Terug te betalen",
+      "feeBack": "Teruggegeven boekingskosten",
+      "organizerShare": "Uit jouw deel",
+      "total": "Totaal",
+      "disputed": "{count, plural, one {# bestelling heeft een open terugboeking} other {# bestellingen hebben een open terugboeking}} ({amount}) en {count, plural, one {blijft} other {blijven}} buiten beschouwing, zodat niemand dubbel wordt betaald.",
+      "collected": "{count, plural, one {# bestelling is} other {# bestellingen zijn}} rechtstreeks aan jou betaald ({amount}): betaal {count, plural, one {die} other {die}} persoonlijk terug.",
+      "confirm": "Ik begrijp het: {name} wordt geannuleerd en {count, plural, =0 {er wordt geen bestelling} one {# bestelling wordt} other {# bestellingen worden}} terugbetaald ({amount}). Dit kan niet ongedaan worden gemaakt.",
+      "confirmRefunds": "Ik begrijp het: {count, plural, =0 {er wordt geen bestelling} one {# bestelling wordt} other {# bestellingen worden}} terugbetaald ({amount}). Dit kan niet ongedaan worden gemaakt.",
+      "start": "Evenement annuleren en terugbetalen",
+      "startRefundsOnly": "Alle kopers terugbetalen",
+      "cancelledAlready": "Dit evenement is geannuleerd.",
+      "postponedAlready": "Dit evenement is uitgesteld. Kopers kregen een e-mail dat hun tickets geldig blijven. Plan het opnieuw vanaf de evenementpagina zodra je een nieuwe datum hebt.",
+      "postponeTitle": "{name} uitstellen",
+      "postponeBody": "Tickets blijven geldig. Elke koper met een ticket krijgt een e-mail dat het evenement is uitgesteld en dat hij om terugbetaling kan vragen volgens je beleid. Bij uitstel van meer dan 90 dagen zonder nieuwe datum is volledige terugbetaling verschuldigd.",
+      "postpone": "Evenement uitstellen"
+    },
+    "run": {
+      "title": "Kopers worden terugbetaald",
+      "status": {
+        "running": "Bezig",
+        "paused": "Gepauzeerd",
+        "done": "Klaar"
+      },
+      "started": "Gestart op {date}",
+      "progressLabel": "Voortgang van de terugbetalingen",
+      "progress": "{processed} van {total} bestellingen",
+      "refunded": "Terugbetaald",
+      "skippedDisputed": "Open terugboeking",
+      "skipped": "Buiten beschouwing",
+      "failed": "Mislukt",
+      "amount": "Terugbetaald bedrag",
+      "working": "Terugbetalingen lopen op de achtergrond. Je kunt deze pagina verlaten.",
+      "paused": "Gepauzeerd. Er wordt niets meer terugbetaald tot je hervat.",
+      "pause": "Pauzeren",
+      "resume": "Hervatten",
+      "reconciled": "Afgestemd: de boekhouding boekte precies de terugbetalingen ({amount}).",
+      "notReconciled": "De boekhouding ({ledger}) wijkt af van de terugbetalingen ({expected}). Financiën moet dit nakijken.",
+      "receivable": "Na deze terugbetalingen ben je {amount} verschuldigd; dat gaat af van je volgende uitbetaling.",
+      "exceptions": "Overgeslagen of mislukte bestellingen",
+      "order": "Bestelling",
+      "why": "Waarom",
+      "codes": {
+        "disputed": "Open terugboeking",
+        "organizer_collected": "Rechtstreeks aan jou betaald",
+        "nothing_left": "Niets meer terug te betalen",
+        "failed": "De terugbetaling is mislukt ({code})"
       }
     }
   }

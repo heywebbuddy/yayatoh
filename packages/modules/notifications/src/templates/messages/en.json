@@ -137,6 +137,20 @@
     "messaging.auto_paused": {
       "subject": "Messaging paused for {org}",
       "intro": "Complaints about {org}'s emails reached {rate}, above the 0.3% limit, so Yayatoh paused your reminders, updates and marketing. Tickets, receipts and replies still go out. Yayatoh support will review it with you before messaging resumes."
+    },
+    "orders.refund-requested": {
+      "subject": "Refund request: {name}",
+      "intro": "{name} asked for a refund of {count, plural, =0 {their order} one {# ticket} other {# tickets}} for {eventName}. Answer it within 5 business days."
+    },
+    "orders.refund-declined": {
+      "subject": "Your refund request for {eventName}",
+      "intro": "The organizer of {eventName} declined your refund request: “{reason}” Your tickets stay valid.",
+      "cta": "View my order"
+    },
+    "events.postponed": {
+      "subject": "{eventName} is postponed",
+      "intro": "{eventName} has been postponed. Your tickets stay valid for the new date. If you can’t make it, you can ask for a refund from your order page under the organizer’s refund policy.",
+      "cta": "View my order"
     }
   },
   "roles": {

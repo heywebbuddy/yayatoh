@@ -137,6 +137,20 @@
     "messaging.auto_paused": {
       "subject": "Messages suspendus pour {org}",
       "intro": "Les plaintes concernant les e-mails de {org} ont atteint {rate}, au-delà de la limite de 0,3 %, donc Yayatoh a suspendu vos rappels, actualités et envois marketing. Les billets, reçus et réponses partent toujours. Le support Yayatoh examinera la situation avec vous avant la reprise des envois."
+    },
+    "orders.refund-requested": {
+      "subject": "Demande de remboursement : {name}",
+      "intro": "{name} a demandé le remboursement de {count, plural, =0 {sa commande} one {# billet} other {# billets}} pour {eventName}. Répondez sous 5 jours ouvrés."
+    },
+    "orders.refund-declined": {
+      "subject": "Votre demande de remboursement pour {eventName}",
+      "intro": "L’organisateur de {eventName} a refusé votre demande de remboursement : « {reason} » Vos billets restent valables.",
+      "cta": "Voir ma commande"
+    },
+    "events.postponed": {
+      "subject": "{eventName} est reporté",
+      "intro": "{eventName} a été reporté. Vos billets restent valables pour la nouvelle date. Si vous ne pouvez pas venir, vous pouvez demander un remboursement depuis la page de votre commande, selon la politique de remboursement de l’organisateur.",
+      "cta": "Voir ma commande"
     }
   },
   "roles": {

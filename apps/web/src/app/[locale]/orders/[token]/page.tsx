@@ -3,6 +3,7 @@ import { orderByManageToken, orderHolderTarget, orderPushDevices } from '@yayato
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { BuyerRefundRequestForm } from '@/components/buyer-refund-request.tsx';
 import { HolderContent } from '@/components/holder-content.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
@@ -10,7 +11,12 @@ import { WebPushControl } from '@/components/web-push-control.tsx';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
-import { removeOrderDeviceAction, subscribeOrderPushAction, unsubscribeOrderPushAction } from './actions.ts';
+import {
+  removeOrderDeviceAction,
+  requestRefundAction,
+  subscribeOrderPushAction,
+  unsubscribeOrderPushAction,
+} from './actions.ts';
 
 const DOT = {
   paid: 'success',
@@ -183,6 +189,50 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           />
         </Card>
       </section>
+      {order.refundRequest.latest || (order.tickets.length > 0 && order.collectedBy === 'platform') ? (
+        <section aria-labelledby="refund-request-heading" className="flex flex-col gap-3">
+          <h2 id="refund-request-heading" className="text-section">
+            {t('refundOps.buyer.title')}
+          </h2>
+          {order.refundRequest.latest ? (
+            <div className="flex flex-col gap-1 text-body">
+              <p>
+                {t(`refundOps.buyer.${order.refundRequest.latest.status}`, {
+                  date: when.format(
+                    order.refundRequest.latest.decidedAt ?? order.refundRequest.latest.createdAt,
+                  ),
+                })}
+              </p>
+              {order.refundRequest.latest.declineReason ? (
+                <p className="whitespace-pre-line break-words text-zinc-600">
+                  {t('refundOps.buyer.declineReason', { reason: order.refundRequest.latest.declineReason })}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+          {order.refundRequest.canRequest ? (
+            <>
+              <p className="text-body text-zinc-600">{t('refundOps.buyer.intro')}</p>
+              <BuyerRefundRequestForm
+                action={requestRefundAction.bind(null, token)}
+                tickets={order.tickets.map((tk) => ({
+                  id: tk.id,
+                  label: t('refundOps.buyer.ticket', {
+                    serial: tk.serial,
+                    type: typeName.get(tk.ticketTypeId) ?? '',
+                  }),
+                }))}
+              />
+            </>
+          ) : order.refundRequest.refusal === 'policy_window_closed' && order.refundRequest.deadline ? (
+            <p className="text-body text-zinc-600">
+              {t('refundOps.buyer.closed', { deadline: when.format(order.refundRequest.deadline) })}
+            </p>
+          ) : order.refundRequest.refusal === 'policy_no_refunds' ? (
+            <p className="text-body text-zinc-600">{t('refundOps.buyer.noRefunds')}</p>
+          ) : null}
+        </section>
+      ) : null}
       <section aria-labelledby="emails-heading" className="flex flex-col gap-3">
         <h2 id="emails-heading" className="text-section">
           {t('order.emailsSent')}

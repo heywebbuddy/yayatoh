@@ -16,7 +16,15 @@ import {
   takeDevDeliveryEvents,
   withWebPush,
 } from '@yayatoh/notifications';
-import { orderLinkMailer, refundMailer, reminderRescheduler, ticketMailer } from '@yayatoh/orders';
+import {
+  orderLinkMailer,
+  postponementMailer,
+  refundDeclineMailer,
+  refundMailer,
+  refundRequestNotifier,
+  reminderRescheduler,
+  ticketMailer,
+} from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -44,6 +52,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     ticketMailer({ notifier, appOrigin }),
     orderLinkMailer({ notifier, appOrigin }),
     refundMailer({ notifier, appOrigin }),
+    refundRequestNotifier({ notifier }),
+    refundDeclineMailer({ notifier, appOrigin }),
+    postponementMailer({ notifier, appOrigin }),
     reminderRescheduler(),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),

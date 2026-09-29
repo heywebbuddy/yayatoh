@@ -42,6 +42,27 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'fully'],
   },
+  // M3.10b: a buyer asked for a refund (owners, admins and finance answer it within the SLA), the
+  // organizer declined one (the buyer gets the reason), an event was postponed (tickets stay valid).
+  'orders.refund-requested': {
+    category: 'sales',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin', 'finance'],
+    params: ['name', 'eventName', 'count'],
+  },
+  'orders.refund-declined': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'reason'],
+  },
+  'events.postponed': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName'],
+  },
   'events.reminder': {
     category: 'reminders',
     channels: ['email', 'push'],

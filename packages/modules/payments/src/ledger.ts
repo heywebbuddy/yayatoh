@@ -254,3 +254,30 @@ export const ledgerBalancesQuery = tenantQuery({
     }));
   },
 });
+
+/**
+ * What the ledger booked for a set of refunds (M3.10b reconciliation of a mass refund): the
+ * platform cash that moved (`refund:<id>` journals; debit positive, so refunds are negative), the
+ * organizer debt they created (receivables) less what explicit transfer reversals recovered
+ * (`reversal:<id>`), and how many refund journals exist.
+ */
+export async function refundJournalTotalsTx(
+  tx: TenantTx,
+  refundIds: readonly string[],
+): Promise<{ cashMinor: number; receivableMinor: number; journals: number }> {
+  if (refundIds.length === 0) return { cashMinor: 0, receivableMinor: 0, journals: 0 };
+  const keys = refundIds.flatMap((id) => [`refund:${id}`, `reversal:${id}`]);
+  const [r] = await tx.execute<{ cash: string | null; receivable: string | null; journals: string }>(sql`
+    select
+      sum(p.amount_minor) filter (where p.account = 'platform:stripe_cash' and j.kind = 'refund')::text as cash,
+      sum(p.amount_minor) filter (where p.account = 'org:receivable')::text as receivable,
+      count(distinct j.id) filter (where j.kind = 'refund')::text as journals
+    from payments.journal_entries j
+    join payments.postings p on p.journal_id = j.id
+    where j.idempotency_key = any(${sql.param(keys)}::text[])`);
+  return {
+    cashMinor: Number(r?.cash ?? 0),
+    receivableMinor: Number(r?.receivable ?? 0),
+    journals: Number(r?.journals ?? 0),
+  };
+}

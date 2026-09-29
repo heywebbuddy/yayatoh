@@ -4,15 +4,18 @@ import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { orderAttributionQuery } from '@yayatoh/marketing';
 import { orderMessagesQuery } from '@yayatoh/notifications';
-import { orderDetailQuery, orderRefundsQuery, refundPolicyQuery } from '@yayatoh/orders';
+import { orderDetailQuery, orderRefundsQuery, refundRequestsQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
+import { disputeTimelineItems, orderTimelineQuery, sortTimeline } from '@yayatoh/reports';
 import { ticketSeatLabelsQuery } from '@yayatoh/seating';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
+import { OrderTimeline } from '@/components/order-timeline.tsx';
 import { RefundForm } from '@/components/refund-form.tsx';
+import { OrderNoteForm, RefundRequestPanel } from '@/components/refund-request-panel.tsx';
 import { ReissueLinkForm } from '@/components/reissue-link-form.tsx';
 import { SignalItem } from '@/components/signal-item.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -20,9 +23,19 @@ import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { resolveSignalAction } from '../../onsite/signals/actions.ts';
-import { refundAction, reissueLinkAction } from './actions.ts';
+import {
+  addNoteAction,
+  approveRequestAction,
+  declineRequestAction,
+  refundAction,
+  reissueLinkAction,
+} from './actions.ts';
 
-/** One order for the organizer: buyer, tickets (and who holds them), refunds, and the refund form. */
+/**
+ * One order for the organizer: buyer, tickets (and who holds them), the buyer's refund request
+ * (M3.10b: approve or decline), refunds, disputes, messages, the unified timeline with notes, and
+ * the refund form.
+ */
 export default async function OrderPage({
   params,
 }: {
@@ -50,7 +63,8 @@ export default async function OrderPage({
   const disputes = roleCan(data.role, 'finance:read')
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
     : [];
-  const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
+  // M3.10b: the policy this order is under (bought under, or a looser current one).
+  const policy = order.refundPolicy;
   // M1.9e order timeline: fraud signals about the order and its tickets, oldest first.
   const signals = await executeQuery(orderSignalsQuery, { orderId }, data.ctx, ports);
   const scanners = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
@@ -61,6 +75,27 @@ export default async function OrderPage({
     ? await executeQuery(orderAttributionQuery, { orderId }, data.ctx, ports)
     : null;
   const tp = await getTranslations('refundPolicy');
+  const tr = await getTranslations('refundOps');
+  const requests = await executeQuery(refundRequestsQuery, { orderId }, data.ctx, ports);
+  const openRequest = requests.find((r) => r.status === 'open') ?? null;
+  // Answered: the latest request stays in view with its outcome.
+  const lastAnswered = openRequest ? null : (requests[0] ?? null);
+  const timeline = await executeQuery(orderTimelineQuery, { orderId }, data.ctx, ports);
+  // Disputes are finance data: only members who may see them get them on the timeline.
+  const fullTimeline = {
+    ...timeline,
+    items: sortTimeline([...timeline.items, ...disputeTimelineItems(disputes)]),
+  };
+  const authors = timeline.items.flatMap((i) =>
+    i.kind === 'note' && i.who?.startsWith('user:') ? [i.who.slice(5)] : [],
+  );
+  const people = authors.length ? await getUsersByIds([...new Set(authors)]) : new Map();
+  const memberNames = new Map([...people].map(([id, u]) => [`user:${id}`, u.name] as const));
+  const eventWhen = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: ev.timezone,
+  });
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
@@ -245,6 +280,66 @@ export default async function OrderPage({
         )}
       </section>
 
+      {openRequest ? (
+        <section aria-labelledby="request-heading" className="flex flex-col gap-3">
+          <h2 id="request-heading" className="text-section">
+            {tr('request.title')}
+          </h2>
+          <Card className="flex flex-col gap-4">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <StatusDot
+                status={openRequest.overdue ? 'danger' : 'warning'}
+                label={openRequest.overdue ? tr('request.overdue') : tr('request.onTime')}
+              />
+              <span className="text-body">{tr('request.tickets', { count: openRequest.tickets })}</span>
+              <span className="text-caption text-zinc-600">
+                {tr('request.asked', { date: eventWhen.format(openRequest.createdAt) })}
+              </span>
+              <span className="text-caption text-zinc-600">
+                {tr('request.due', { date: eventWhen.format(openRequest.dueAt) })}
+              </span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-caption text-zinc-600">{tr('request.message')}</p>
+              <p className="whitespace-pre-line break-words text-body">
+                {openRequest.message ?? tr('request.noMessage')}
+              </p>
+            </div>
+            {roleCan(data.role, 'orders:refund') ? (
+              <RefundRequestPanel
+                approve={approveRequestAction.bind(null, org, event, orderId, openRequest.id)}
+                decline={declineRequestAction.bind(null, org, event, openRequest.id)}
+                currency={order.currency}
+              />
+            ) : (
+              <p className="text-caption text-zinc-600">{tr('request.readOnly')}</p>
+            )}
+          </Card>
+        </section>
+      ) : lastAnswered ? (
+        <section aria-labelledby="request-heading" className="flex flex-col gap-3">
+          <h2 id="request-heading" className="text-section">
+            {tr('request.title')}
+          </h2>
+          <Card className="flex flex-col gap-2">
+            <StatusDot
+              status={lastAnswered.status === 'approved' ? 'success' : 'neutral'}
+              label={tr(`request.status.${lastAnswered.status}`)}
+            />
+            <p className="whitespace-pre-line break-words text-body">
+              {lastAnswered.status === 'approved'
+                ? tr('request.answeredApproved', {
+                    date: eventWhen.format(lastAnswered.decidedAt ?? lastAnswered.createdAt),
+                  })
+                : tr('request.answeredDeclined', {
+                    date: eventWhen.format(lastAnswered.decidedAt ?? lastAnswered.createdAt),
+                    reason: lastAnswered.declineReason ?? '',
+                  })}
+            </p>
+          </Card>
+        </section>
+      ) : null}
+
       {refunds.length > 0 ? (
         <section aria-labelledby="refunds-heading" className="flex flex-col gap-3">
           <h2 id="refunds-heading" className="text-section">
@@ -410,6 +505,18 @@ export default async function OrderPage({
         )}
       </section>
 
+      <section aria-labelledby="timeline-heading" className="flex flex-col gap-3">
+        <h2 id="timeline-heading" className="text-section">
+          {tr('timeline.title')}
+        </h2>
+        <Card className="flex flex-col gap-4">
+          <OrderTimeline timeline={fullTimeline} locale={locale} memberNames={memberNames} />
+          {roleCan(data.role, 'orders:note') ? (
+            <OrderNoteForm action={addNoteAction.bind(null, org, event, orderId)} />
+          ) : null}
+        </Card>
+      </section>
+
       {canRefund ? (
         <section aria-labelledby="refund-heading" className="flex flex-col gap-3">
           <h2 id="refund-heading" className="text-section">
@@ -417,7 +524,7 @@ export default async function OrderPage({
           </h2>
           <Card className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <p className="text-caption text-zinc-600">{tp('title')}</p>
+              <p className="text-caption text-zinc-600">{tr('policy.orderTitle')}</p>
               {policy ? (
                 <ul className="flex list-none flex-col gap-0.5 p-0 text-caption">
                   {refundPolicyLines(tp, policy, locale).map((line) => (

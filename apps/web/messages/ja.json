@@ -73,10 +73,13 @@
       "orders": {
         "tickets": "チケット",
         "refund": "返金",
-        "order-link": "注文リンク"
+        "order-link": "注文リンク",
+        "refund-requested": "返金リクエスト",
+        "refund-declined": "返金リクエストのお断り"
       },
       "events": {
-        "reminder": "イベントのリマインダー"
+        "reminder": "イベントのリマインダー",
+        "postponed": "イベント延期"
       },
       "tenancy": {
         "invitation": "チームへの招待",
@@ -257,7 +260,8 @@
     "media": "画像",
     "trackedLinks": "トラッキングリンク",
     "messagingHealth": "メッセージ送信の上限",
-    "audiences": "オーディエンス"
+    "audiences": "オーディエンス",
+    "refundRequests": "返金リクエスト"
   },
   "vocab": {
     "attendee": "参加者",
@@ -4995,6 +4999,198 @@
         "withdrawn": "撤回",
         "unknown_legacy": "不明（インポート）",
         "none": "なし"
+      }
+    }
+  },
+  "refundOps": {
+    "timeline": {
+      "title": "タイムライン",
+      "zone": "時刻はイベントのタイムゾーン（{zone}）です。",
+      "offline": "オフラインでスキャン",
+      "someone": "元チームメンバー",
+      "voidReasons": {
+        "refunded": "返金済み",
+        "cancelled": "主催者がキャンセル",
+        "dispute_lost": "チャージバック敗訴"
+      },
+      "kinds": {
+        "order_placed": "注文",
+        "payment_received": "支払い完了",
+        "ticket_issued": "チケット #{serial} 発行",
+        "ticket_voided": "チケット #{serial} 無効化",
+        "transfer_offered": "チケット #{serial} を他の人に譲渡申請",
+        "transfer_claimed": "チケット #{serial} 受け取り",
+        "transfer_revoked": "チケット #{serial} の譲渡を取り消し",
+        "check_in": "チケット #{serial} チェックイン",
+        "scan_refused": "チケット #{serial} 入場拒否",
+        "message": "メッセージ送信",
+        "refund_requested": "購入者が返金をリクエスト",
+        "refund_request_approved": "返金リクエスト承認",
+        "refund_request_declined": "返金リクエストお断り",
+        "refund_started": "返金開始",
+        "refund_succeeded": "返金完了",
+        "refund_failed": "返金失敗",
+        "dispute_opened": "チャージバック発生",
+        "dispute_evidence_submitted": "チャージバックの証拠を提出",
+        "dispute_won": "チャージバック勝訴",
+        "dispute_lost": "チャージバック敗訴",
+        "note": "メモ"
+      }
+    },
+    "notes": {
+      "label": "チーム向けのメモを追加",
+      "hint": "メモは社内用です。購入者には表示されません。",
+      "add": "メモを追加",
+      "added": "メモを追加しました。",
+      "invalid": "2,000 文字以内でメモを書いてください。"
+    },
+    "request": {
+      "title": "返金リクエスト",
+      "tickets": "{count, plural, =0 {注文全体} other {チケット # 枚}}",
+      "asked": "{date} にリクエスト",
+      "due": "{date} までに回答",
+      "overdue": "期限超過",
+      "onTime": "期限内",
+      "message": "購入者のメッセージ",
+      "noMessage": "メッセージなし。",
+      "readOnly": "返金リクエストにはオーナー、管理者、経理が回答します。",
+      "approveLegend": "承認",
+      "approveFull": "リクエストされたチケットを返金",
+      "approvePartial": "代わりに金額を返金（チケットは有効のまま）",
+      "amount": "金額（{currency}）",
+      "approve": "承認して返金",
+      "approved": "承認しました。返金が完了すると購入者にメールが届きます。",
+      "answered": "このリクエストはすでに回答済みです。",
+      "declineLegend": "お断り",
+      "reason": "理由（購入者に送信されます）",
+      "reasonHint": "3〜500 文字。",
+      "reasonInvalid": "3〜500 文字で理由を入力してください。",
+      "decline": "リクエストをお断り",
+      "declined": "お断りしました。購入者に理由をメールしました。",
+      "status": {
+        "open": "未対応",
+        "approved": "承認済み",
+        "declined": "お断り済み"
+      },
+      "answeredApproved": "{date} に承認。",
+      "answeredDeclined": "{date} にお断り：「{reason}」"
+    },
+    "queue": {
+      "title": "返金リクエスト",
+      "description": "イベント購入者からの返金リクエストです。それぞれ 5 営業日以内に回答してください。",
+      "summary": "{open, plural, =0 {未対応のリクエストはありません} other {未対応 # 件}}、{overdue, plural, =0 {期限超過なし} other {期限超過 # 件}}。",
+      "tabsLabel": "ステータス別の返金リクエスト",
+      "caption": "返金リクエスト：{status}",
+      "empty": {
+        "open": "未対応の返金リクエストはありません。",
+        "approved": "承認済みの返金リクエストはまだありません。",
+        "declined": "お断りした返金リクエストはありません。"
+      },
+      "buyer": "購入者",
+      "event": "イベント",
+      "tickets": "チケット",
+      "asked": "リクエスト日時",
+      "waiting": "待機時間",
+      "due": "回答期限",
+      "decided": "回答日時",
+      "outcome": "結果",
+      "refundStatus": {
+        "pending": "返金処理中",
+        "succeeded": "返金済み",
+        "failed": "返金失敗"
+      },
+      "age": "{days, plural, =0 {{hours, plural, other {# 時間}}} other {# 日}}"
+    },
+    "buyer": {
+      "title": "返金",
+      "intro": "参加できなくなりましたか？主催者に返金をリクエストできます。上記の返金ポリシーに従い、5 営業日以内に回答があります。",
+      "tickets": "返金するチケット",
+      "ticket": "チケット #{serial}・{type}",
+      "message": "主催者へのメッセージ（任意）",
+      "submit": "返金をリクエスト",
+      "sent": "リクエストを送信しました。主催者は 5 営業日以内に回答します。",
+      "open": "{date} に返金をリクエストしました。主催者は 5 営業日以内に回答します。",
+      "approved": "返金リクエストは {date} に承認されました。",
+      "declined": "返金リクエストは {date} にお断りされました。",
+      "declineReason": "主催者からのコメント：「{reason}」",
+      "closed": "リクエストによる返金は {deadline} に締め切られました。",
+      "noRefunds": "このイベントの返金ポリシーでは、リクエストによる返金はできません。",
+      "pickTicket": "チケットを 1 枚以上選んでください。",
+      "noLonger": "返金ポリシーにより、リクエストによる返金はできなくなりました。",
+      "alreadyOpen": "この注文の返金はすでにリクエスト済みです。"
+    },
+    "policy": {
+      "orderTitle": "この注文の返金ポリシー",
+      "tightenHint": "厳しいポリシーはこれ以降の注文にのみ適用されます。購入者は購入時の条件を維持します。緩やかなポリシーは全員に適用されます。",
+      "tightened": "厳しいポリシーを保存しました。これ以降の注文に適用されます。販売済みの注文 {count} 件は購入時の条件を維持します。"
+    },
+    "wizard": {
+      "link": "中止または延期",
+      "title": "中止または延期",
+      "description": "変更の前に、{name} とお金がどうなるかを確認します。",
+      "choose": "{name} をどうしますか？",
+      "cancelOption": "中止して購入者全員に返金する",
+      "cancelHint": "イベントを中止し、支払い済みの注文を手数料も含めて全額返金します。返金は一時停止できるバッチで行われます。",
+      "cancelNoRefundHint": "返金を伴う中止はオーナーと管理者のみ行えます。",
+      "postponeOption": "延期する",
+      "postponeHint": "チケットは新しい日程でも有効です。購入者にメールが届き、返金ポリシーに従って返金をリクエストできます。",
+      "continue": "次へ",
+      "back": "選び直す",
+      "notAllowed": "返金を伴う中止はオーナーと管理者のみ行えます。",
+      "previewTitle": "お金",
+      "previewCaption": "決済方法別の返金",
+      "orders": "支払い済みの注文",
+      "gross": "総売上",
+      "fees": "予約手数料",
+      "alreadyRefunded": "返金済み",
+      "flowCol": "決済",
+      "refundOrders": "注文",
+      "refundTotal": "返金額",
+      "feeBack": "返還する予約手数料",
+      "organizerShare": "あなたの取り分から",
+      "total": "合計",
+      "disputed": "チャージバック対応中の注文 {count} 件（{amount}）は、二重払いを防ぐため対象外です。",
+      "collected": "あなたが直接受け取った注文 {count} 件（{amount}）は、直接返金してください。",
+      "confirm": "{name} を中止し、{count, plural, =0 {返金する注文はありません} other {注文 # 件を返金します}}（{amount}）。取り消せないことを理解しました。",
+      "confirmRefunds": "{count, plural, =0 {返金する注文はありません} other {注文 # 件を返金します}}（{amount}）。取り消せないことを理解しました。",
+      "start": "イベントを中止して返金",
+      "startRefundsOnly": "購入者全員に返金",
+      "cancelledAlready": "このイベントは中止されました。",
+      "postponedAlready": "このイベントは延期中です。購入者にはチケットが引き続き有効である旨をメールしました。新しい日程が決まったら、イベントのホームから再設定してください。",
+      "postponeTitle": "{name} を延期",
+      "postponeBody": "チケットは有効のままです。チケットを持つ購入者全員に、延期と返金ポリシーに沿った返金リクエストについてメールが届きます。新しい日程のないまま 90 日を超えて延期した場合は、全額返金が必要です。",
+      "postpone": "イベントを延期"
+    },
+    "run": {
+      "title": "購入者への返金",
+      "status": {
+        "running": "実行中",
+        "paused": "一時停止中",
+        "done": "完了"
+      },
+      "started": "{date} に開始",
+      "progressLabel": "返金の進捗",
+      "progress": "{total} 件中 {processed} 件",
+      "refunded": "返金済み",
+      "skippedDisputed": "チャージバック対応中",
+      "skipped": "対象外",
+      "failed": "失敗",
+      "amount": "返金額",
+      "working": "返金はバックグラウンドで進みます。このページを離れても大丈夫です。",
+      "paused": "一時停止中です。再開するまで返金は行われません。",
+      "pause": "一時停止",
+      "resume": "再開",
+      "reconciled": "照合済み：帳簿には返金額どおりの記録があります（{amount}）。",
+      "notReconciled": "帳簿（{ledger}）と返金額（{expected}）が一致しません。経理が確認してください。",
+      "receivable": "これらの返金により {amount} の未払いが生じました。次回の支払いから差し引かれます。",
+      "exceptions": "対象外または失敗した注文",
+      "order": "注文",
+      "why": "理由",
+      "codes": {
+        "disputed": "チャージバック対応中",
+        "organizer_collected": "あなたが直接受領",
+        "nothing_left": "返金できる残額なし",
+        "failed": "返金に失敗しました（{code}）"
       }
     }
   }

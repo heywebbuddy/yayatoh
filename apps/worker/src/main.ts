@@ -5,6 +5,7 @@ import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
+import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import { dispatchNotifications, userEmails, userLocales, workerTransports } from './notifications.ts';
 import { runReconciliation } from './reconciliation.ts';
 import { JOBS, subscribers } from './registry.ts';
@@ -32,9 +33,20 @@ setInterval(() => {
   counts.clear();
 }, 60_000).unref();
 
+// Stripe arrives with the owner's account; until then dev/preview use the fake provider.
+const fakeSecret = process.env.FAKE_PAYMENTS_SECRET;
+const payments = fakeSecret
+  ? fakePaymentProvider({
+      secret: fakeSecret,
+      appOrigin: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
+    })
+  : null;
+
 const SUBSCRIBERS = subscribers();
-const boss = await startWorker({ connectionString, jobs: JOBS, subscribers: SUBSCRIBERS });
-console.info(`worker started: ${JOBS.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
+// Mass refunds (M3.10b) need the payment provider.
+const jobs = payments ? [...JOBS, massRefundJob(payments)] : JOBS;
+const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
+console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 
 let release: (() => Promise<void>) | null = null;
 let stopping = false;
@@ -79,14 +91,6 @@ setInterval(() => {
 }, 2_000).unref();
 
 // Payout Release job (M1.6c): release due funds and transfer them, every 10 minutes (leader only).
-// Stripe arrives with the owner's account; until then dev/preview use the fake provider.
-const fakeSecret = process.env.FAKE_PAYMENTS_SECRET;
-const payments = fakeSecret
-  ? fakePaymentProvider({
-      secret: fakeSecret,
-      appOrigin: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
-    })
-  : null;
 if (!payments) console.warn('settlements: no payment provider configured; the release job is off');
 let settling = false;
 setInterval(() => {
@@ -101,6 +105,19 @@ setInterval(() => {
       settling = false;
     });
 }, 10 * 60_000).unref();
+
+// Mass refunds (M3.10b): queue a batch job for each running run every 3 s (leader only); the
+// exclusive queue keeps one job per run, and a paused run is simply not queued.
+let queueingRefunds = false;
+setInterval(() => {
+  if (!payments || !release || stopping || queueingRefunds) return;
+  queueingRefunds = true;
+  enqueueDueMassRefunds(boss)
+    .catch((err) => console.error('mass-refunds', err))
+    .finally(() => {
+      queueingRefunds = false;
+    });
+}, 3_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a

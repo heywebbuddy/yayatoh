@@ -137,6 +137,20 @@
     "messaging.auto_paused": {
       "subject": "Mensajes en pausa para {org}",
       "intro": "Las quejas sobre los correos de {org} llegaron al {rate}, por encima del límite del 0,3 %, así que Yayatoh pausó tus recordatorios, novedades y marketing. Las entradas, los recibos y las respuestas se siguen enviando. El soporte de Yayatoh lo revisará contigo antes de reanudar los mensajes."
+    },
+    "orders.refund-requested": {
+      "subject": "Solicitud de reembolso: {name}",
+      "intro": "{name} pidió el reembolso de {count, plural, =0 {su pedido} one {# entrada} other {# entradas}} para {eventName}. Respóndela en un plazo de 5 días hábiles."
+    },
+    "orders.refund-declined": {
+      "subject": "Tu solicitud de reembolso para {eventName}",
+      "intro": "El organizador de {eventName} rechazó tu solicitud de reembolso: «{reason}» Tus entradas siguen siendo válidas.",
+      "cta": "Ver mi pedido"
+    },
+    "events.postponed": {
+      "subject": "{eventName} se ha aplazado",
+      "intro": "{eventName} se ha aplazado. Tus entradas siguen siendo válidas para la nueva fecha. Si no puedes asistir, puedes pedir un reembolso desde la página de tu pedido según la política de reembolso del organizador.",
+      "cta": "Ver mi pedido"
     }
   },
   "roles": {

@@ -20,7 +20,11 @@ export async function startWorker({
   boss.on('error', (err) => console.error('pg-boss error', err));
   await boss.start();
   for (const job of jobs) {
-    await boss.createQueue(job.name, { retryLimit: job.retryLimit ?? 5, retryBackoff: true });
+    await boss.createQueue(job.name, {
+      retryLimit: job.retryLimit ?? 5,
+      retryBackoff: true,
+      ...(job.policy ? { policy: job.policy } : {}),
+    });
     await boss.work(job.name, { batchSize: 10, pollingIntervalSeconds: 1 }, async (batch) => {
       for (const j of batch) await job.handler(parseJobPayload(job, j.data), { id: j.id, name: j.name });
     });

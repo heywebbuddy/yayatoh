@@ -1,7 +1,7 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import { BuyerMessageDto } from '@yayatoh/notifications';
 import { z } from 'zod';
-import { ORDER_STATUSES, REFUND_POLICY_KINDS } from './schema.ts';
+import { ORDER_STATUSES, REFUND_POLICY_KINDS, REFUND_REQUEST_STATUSES } from './schema.ts';
 
 export const OrderItemDto = z.object({
   ticketTypeId: z.uuid(),
@@ -81,6 +81,27 @@ export const RefundPolicyDto = z.object({
 });
 export type RefundPolicyDto = z.infer<typeof RefundPolicyDto>;
 
+/** A buyer's refund request as the buyer sees it on the order page (no internal fields). */
+export const BuyerRefundRequestDto = z.object({
+  status: z.enum(REFUND_REQUEST_STATUSES),
+  tickets: z.int(),
+  createdAt: z.date(),
+  decidedAt: z.date().nullable(),
+  /** Declined: the organizer's reason, sent to the buyer. */
+  declineReason: z.string().nullable(),
+});
+export type BuyerRefundRequestDto = z.infer<typeof BuyerRefundRequestDto>;
+
+/** The refund-request panel of a buyer's order page: the latest request and whether they may ask now. */
+export const BuyerRefundPanelDto = z.object({
+  latest: BuyerRefundRequestDto.nullable(),
+  canRequest: z.boolean(),
+  /** Why not (when `canRequest` is false and there is a reason worth saying). */
+  refusal: z.enum(['request_open', 'policy_no_refunds', 'policy_window_closed']).nullable(),
+  deadline: z.date().nullable(),
+});
+export type BuyerRefundPanelDto = z.infer<typeof BuyerRefundPanelDto>;
+
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   /** Who sold it (roadmap §4.4 seller disclosure): the organizer, or the platform on their behalf. */
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
@@ -92,8 +113,13 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   event: HolderEventDto,
   /** "Emails sent": messages to the buyer's address about this order (notifications log). */
   messages: z.array(BuyerMessageDto),
-  /** M1.6e: the event's refund policy as the buyer bought under it, or null when none is set. */
+  /**
+   * M1.6e: the event's refund policy as the buyer bought under it, or null when none is set.
+   * M3.10b: the policy snapshotted at purchase, or the current one when it is as generous.
+   */
   refundPolicy: RefundPolicyDto.nullable(),
+  /** M3.10b: the buyer's latest refund request and whether they may ask for one now. */
+  refundRequest: BuyerRefundPanelDto,
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);

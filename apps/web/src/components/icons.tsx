@@ -38,6 +38,7 @@ import {
   Star,
   Store,
   Ticket,
+  Undo2,
   Users,
 } from 'lucide-react';
 
@@ -82,6 +83,7 @@ const ICONS: Record<string, LucideIcon> = {
   shield: ShieldCheck,
   link: Link2,
   star: Star,
+  undo: Undo2,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {
