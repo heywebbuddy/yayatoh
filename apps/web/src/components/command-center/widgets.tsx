@@ -29,6 +29,25 @@ type Checkins = { today: number; total: number; valid: number };
 type SeatFill = { occupied: number; total: number };
 type Devices = { online: number; enrolled: number; lowBattery: number };
 type Timeline = { timeZone: string; items: { kind: string; at: string; title: string | null }[] };
+type Entrances = {
+  timeZone: string;
+  checkedIn: number;
+  expected: number;
+  byEntrance: { name: string; checkedIn: number }[];
+  byDate: { day: string; checkedIn: number }[];
+};
+type DeviceBoard = {
+  devices: {
+    id: string;
+    label: string;
+    online: boolean;
+    lastSeenAt: string | null;
+    batteryPct: number | null;
+    queueDepth: number | null;
+    checkpoint: string | null;
+    kiosk: boolean;
+  }[];
+};
 type Alerts = {
   engine: 'pending' | 'ready';
   alerts: {
@@ -203,6 +222,78 @@ function TimelineBody({ d, c }: { d: Timeline; c: Ctx }) {
   );
 }
 
+/** M3.4a staff view (batch 3d merge): the Scan PWA's live counts, in its own words. */
+function EntrancesBody({ d, c }: { d: Entrances; c: Ctx }) {
+  const t = useTranslations('scanStaff');
+  const day = new Intl.DateTimeFormat(c.locale, { dateStyle: 'medium', timeZone: 'UTC' });
+  return (
+    <div className="flex flex-col gap-3">
+      <p className="text-body" data-testid="cc-entrances-today">
+        {t('checkedIn', { checkedIn: num(d.checkedIn, c.locale), expected: num(d.expected, c.locale) })}
+      </p>
+      {d.byEntrance.length > 0 ? (
+        <div className="flex flex-col gap-1">
+          <h3 className="text-caption text-zinc-600">{t('byEntrance')}</h3>
+          <ul className="flex list-none flex-col gap-1 p-0">
+            {d.byEntrance.map((e) => (
+              <li key={e.name} className="flex justify-between gap-3 text-body">
+                <span>{e.name}</span>
+                <span className="tabular-nums">{num(e.checkedIn, c.locale)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {d.byDate.length > 1 ? (
+        <div className="flex flex-col gap-1">
+          <h3 className="text-caption text-zinc-600">{t('byDate')}</h3>
+          <ul className="flex list-none flex-col gap-1 p-0">
+            {d.byDate.map((r) => (
+              <li key={r.day} className="flex justify-between gap-3 text-body">
+                <time dateTime={r.day}>{day.format(new Date(`${r.day}T00:00:00Z`))}</time>
+                <span className="tabular-nums">{num(r.checkedIn, c.locale)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/** M3.4a staff view (batch 3d merge): each device at the event, as the Scan PWA's board shows it. */
+function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
+  const t = useTranslations('scanStaff');
+  const time = new Intl.DateTimeFormat(c.locale, { timeStyle: 'short', timeZone: c.timeZone });
+  if (d.devices.length === 0) return <p className="text-body text-zinc-600">{t('noDevices')}</p>;
+  return (
+    <ul className="flex list-none flex-col gap-2 p-0" data-testid="cc-device-board">
+      {d.devices.map((v) => (
+        <li key={v.id} className="flex flex-col gap-0.5">
+          <span className="flex flex-wrap items-center gap-2 text-body">
+            <span className="font-medium">{v.label}</span>
+            {v.kiosk ? <span className="text-caption text-zinc-600">{t('kiosk')}</span> : null}
+            <StatusDot
+              status={v.online ? 'success' : 'danger'}
+              label={v.online ? t('online') : t('offline')}
+            />
+          </span>
+          <span className="text-caption text-zinc-600">
+            {[
+              v.checkpoint ?? t('wholeEvent'),
+              v.lastSeenAt ? t('lastSeen', { time: time.format(new Date(v.lastSeenAt)) }) : t('neverSeen'),
+              v.batteryPct !== null ? t('battery', { percent: v.batteryPct }) : null,
+              v.queueDepth !== null ? t('backlog', { count: v.queueDepth }) : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.alerts');
   const ta = useTranslations('alerts');
@@ -249,5 +340,9 @@ export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unk
       return <TimelineBody d={data as Timeline} c={ctx} />;
     case 'alerts':
       return <AlertsBody d={data as Alerts} c={ctx} />;
+    case 'entrances':
+      return <EntrancesBody d={data as Entrances} c={ctx} />;
+    case 'deviceBoard':
+      return <DeviceBoardBody d={data as DeviceBoard} c={ctx} />;
   }
 }

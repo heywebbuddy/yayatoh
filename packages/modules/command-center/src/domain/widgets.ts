@@ -17,6 +17,9 @@ export const WIDGET_KEYS = [
   'devices',
   'timeline',
   'alerts',
+  // Batch 3d merge: M3.4a's staff views (the Scan PWA's staff mode) on the Command Center.
+  'entrances',
+  'deviceBoard',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -121,6 +124,28 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     size: 'md',
     channel: null,
   },
+  // M3.4a staff views: today's check-ins per entrance and per date, and the device board (each
+  // device's state, battery, backlog and where it scans). Door work: never revenue.
+  entrances: {
+    key: 'entrances',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['pre_show', 'live', 'wrap'],
+    size: 'md',
+    channel: 'event.checkins',
+  },
+  deviceBoard: {
+    key: 'deviceBoard',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['pre_show', 'live'],
+    size: 'lg',
+    channel: 'event.devices',
+  },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {
     key: 'alerts',
@@ -147,8 +172,8 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   },
   ops: {
     planning: ['readiness', 'tickets', 'sales', 'alerts', 'timeline'],
-    pre_show: ['readiness', 'alerts', 'devices', 'tickets', 'seatFill', 'timeline'],
-    live: ['checkins', 'devices', 'alerts', 'seatFill', 'tickets', 'timeline'],
+    pre_show: ['readiness', 'alerts', 'devices', 'tickets', 'seatFill', 'deviceBoard', 'timeline'],
+    live: ['checkins', 'devices', 'alerts', 'seatFill', 'tickets', 'entrances', 'deviceBoard', 'timeline'],
     wrap: ['checkins', 'tickets', 'sales', 'alerts', 'timeline'],
   },
   finance: {
@@ -159,8 +184,8 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   },
   door: {
     planning: ['timeline', 'alerts'],
-    pre_show: ['devices', 'checkins', 'seatFill', 'alerts', 'timeline'],
-    live: ['checkins', 'devices', 'seatFill', 'alerts', 'timeline'],
+    pre_show: ['devices', 'checkins', 'seatFill', 'alerts', 'deviceBoard', 'timeline'],
+    live: ['checkins', 'devices', 'seatFill', 'alerts', 'entrances', 'deviceBoard', 'timeline'],
     wrap: ['checkins', 'timeline'],
   },
   marketing: {

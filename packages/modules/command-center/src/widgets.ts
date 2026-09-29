@@ -1,4 +1,10 @@
-import { checkinFactsTx, devicesOnlineTx, listDevicesQuery } from '@yayatoh/checkin';
+import {
+  checkinFactsTx,
+  devicesOnlineTx,
+  LOW_BATTERY_PCT,
+  listDevicesQuery,
+  staffBoardTx,
+} from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { type Ctx, DomainError, type Query, utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
@@ -124,6 +130,34 @@ export const DevicesWidgetDto = z.object({
 export const TimelineWidgetDto = z.object({
   timeZone: z.string(),
   items: z.array(z.object({ kind: z.enum(TIMELINE_KINDS), at: iso, title: z.string().nullable() })),
+});
+
+/** M3.4a staff view: today's check-ins per entrance and per event date (multi-day events). */
+export const EntrancesWidgetDto = z.object({
+  timeZone: z.string(),
+  checkedIn: Count,
+  expected: Count,
+  byEntrance: z.array(z.object({ name: z.string(), checkedIn: Count })),
+  byDate: z.array(z.object({ day: z.string(), checkedIn: Count })),
+  asOf: iso,
+});
+
+/** M3.4a staff view: the devices at this event (online, last seen, battery, backlog, where). */
+export const DeviceBoardWidgetDto = z.object({
+  devices: z.array(
+    z.object({
+      id: z.uuid(),
+      label: z.string(),
+      online: z.boolean(),
+      lastSeenAt: iso.nullable(),
+      batteryPct: z.int().nullable(),
+      queueDepth: z.int().nullable(),
+      /** The checkpoint it scans at, or null for the whole event. */
+      checkpoint: z.string().nullable(),
+      kiosk: z.boolean(),
+    }),
+  ),
+  asOf: iso,
 });
 
 /**
@@ -253,8 +287,8 @@ export const seatFillWidget = defineWidget(
   },
 );
 
-/** Battery at or below this is "low" on the devices widget. */
-export const LOW_BATTERY_PCT = 20;
+/** Battery at or below this is "low" on the devices widget: the staff alerts' number (M3.4a). */
+export { LOW_BATTERY_PCT };
 
 export const devicesWidget = defineWidget(WIDGET_META.devices, DevicesWidgetDto, async ({ tx, ctx }) => {
   const list = (await listDevicesQuery.handler({ input: {}, ctx, tx })).filter((d) => !d.revoked);
@@ -295,6 +329,43 @@ export const timelineWidget = defineWidget(
   },
 );
 
+export const entrancesWidget = defineWidget(
+  WIDGET_META.entrances,
+  EntrancesWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const b = await staffBoardTx(tx, scope.event.id, ctx.now);
+    return {
+      timeZone: b.timezone,
+      checkedIn: b.checkedIn,
+      expected: b.expected,
+      byEntrance: b.byEntrance.map((e) => ({ name: e.name, checkedIn: e.checkedIn })),
+      byDate: b.byDate,
+      asOf: ctx.now.toISOString(),
+    };
+  },
+);
+
+export const deviceBoardWidget = defineWidget(
+  WIDGET_META.deviceBoard,
+  DeviceBoardWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const b = await staffBoardTx(tx, scope.event.id, ctx.now);
+    return {
+      devices: b.devices.map((d) => ({
+        id: d.id,
+        label: d.label,
+        online: d.online,
+        lastSeenAt: d.lastSeenAt?.toISOString() ?? null,
+        batteryPct: d.batteryPct,
+        queueDepth: d.queueDepth,
+        checkpoint: b.checkpointName(d.checkpointId),
+        kiosk: d.mode === 'kiosk',
+      })),
+      asOf: ctx.now.toISOString(),
+    };
+  },
+);
+
 /** The alerts slot until M3.2b registers its engine (`withWidget(registry, alertsWidget)`). */
 export const alertsSlotWidget = defineWidget(WIDGET_META.alerts, AlertsWidgetDto, async () => ({
   engine: 'pending' as const,
@@ -310,4 +381,6 @@ export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   devicesWidget,
   timelineWidget,
   alertsSlotWidget,
+  entrancesWidget,
+  deviceBoardWidget,
 ]);

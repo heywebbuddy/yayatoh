@@ -18,10 +18,15 @@ import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@y
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   chatReportSignals,
+  claimStaffPushCommand,
   createCheckpointCommand,
   enrollDeviceCommand,
+  heartbeatCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
+  stageStaffAlertPushesTx,
+  startKioskCommand,
+  subscribeStaffPushCommand,
 } from '@yayatoh/checkin';
 import {
   createEntryCommand,
@@ -524,7 +529,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
-  await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
+  const door = await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
   // Org API keys: one live with every scope, one test key (M1.13d), one revoked (isolation coverage).
   const { key: apiKey } = await executeCommand(
     createApiKeyCommand,
@@ -572,6 +577,68 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ports,
     );
   }
+  // Staff mode (M3.4a): the door device reports in at the main gate, opts in to staff alerts,
+  // and is taken by the owner as a supervisor's phone; a capacity alert is queued for it.
+  // Dated at event time, so the fixture device doesn't count as online now (devices.online metric).
+  const deviceCtx = createCtx({
+    orgId: org.id,
+    actor: { type: 'system', name: `device:${door.deviceId}` },
+    now: new Date('2027-10-14T14:55:00Z'),
+  });
+  await executeCommand(
+    heartbeatCommand,
+    { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0, eventId: event.id, checkpointId: mainGate },
+    deviceCtx,
+    ports,
+  );
+  const pushKey = createECDH('prime256v1');
+  pushKey.generateKeys();
+  const copy = { title: 'Alert', body: '{label} {percent}' };
+  await executeCommand(
+    subscribeStaffPushCommand(() => true),
+    {
+      endpoint: `https://push.example.test/fixture-${slug}`,
+      keys: { p256dh: pushKey.getPublicKey().toString('base64url'), auth: 'AAAAAAAAAAAAAAAAAAAAAA' },
+      locale: 'en',
+      copy: { device_offline: copy, device_low_battery: copy, device_backlog: copy, capacity_near: copy },
+    },
+    deviceCtx,
+    ports,
+  );
+  await executeCommand(
+    claimStaffPushCommand,
+    { eventId: event.id, deviceId: door.deviceId, supervisor: true },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    stageStaffAlertPushesTx(
+      tx,
+      {
+        list: async () => [
+          {
+            key: `capacity_near:${event.id}:fixture`,
+            kind: 'capacity_near',
+            severity: 'warning',
+            deviceId: null,
+            deviceLabel: null,
+            percent: 91,
+            count: null,
+            since: new Date(),
+            supervisorOnly: false,
+          },
+        ],
+      },
+      event.id,
+      new Date(),
+    ),
+  );
+  await executeCommand(
+    startKioskCommand,
+    { eventId: event.id, deviceId: door.deviceId, checkpointId: sideGate, pin: '2468' },
+    ctx(),
+    ports,
+  );
   // Per-event velocity rule settings (M1.9d), for isolation coverage.
   await executeCommand(
     setDetectionSettingsCommand,

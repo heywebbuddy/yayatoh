@@ -35,14 +35,11 @@ import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
-/** Devices act as a system actor named after the device; authorization happened at the token. */
-const DEVICE_ACTOR = /^device:([0-9a-f-]{36})$/;
 
-export function deviceIdOf(ctx: Ctx): string {
-  const m = ctx.actor.type === 'system' ? DEVICE_ACTOR.exec(ctx.actor.name) : null;
-  if (!m?.[1]) throw new DomainError('forbidden', 'Device credentials required');
-  return m[1];
-}
+import { deviceIdOf } from './device-actor.ts';
+import { recordDevicePresenceTx } from './staff-mode.ts';
+
+export { deviceIdOf };
 
 /**
  * Resolve a device bearer token to a device context (org from the token, never from headers).
@@ -189,20 +186,45 @@ export const heartbeatCommand = tenantCommand({
     batteryPct: z.int().min(0).max(100).nullable().default(null),
     queueDepth: z.int().min(0).max(1_000_000),
     clockOffsetMs: z.int().min(-86_400_000).max(86_400_000),
+    /** M3.4a: the event the device works and where it scans (the device board). */
+    eventId: z.uuid().optional(),
+    checkpointId: z.uuid().nullable().optional(),
   }),
-  output: z.object({ serverTime: z.date(), commands: z.array(z.enum(['wipe'])) }),
+  output: z.object({
+    serverTime: z.date(),
+    commands: z.array(z.enum(['wipe'])),
+    /** M3.4a directives (additive): sync now, switch checkpoint, kiosk mode. */
+    syncRequestedAt: z.date().nullable(),
+    checkpoint: z.object({ id: z.uuid().nullable(), requestedAt: z.date() }).nullable(),
+    kiosk: z
+      .object({
+        eventId: z.uuid(),
+        checkpointId: z.uuid().nullable(),
+        pinHash: z.string(),
+        startedAt: z.date(),
+      })
+      .nullable(),
+  }),
   entitlement: 'checkin',
   permission: 'checkin:device',
   handler: async ({ input, ctx, tx, emit }) => {
+    const { eventId, checkpointId, ...health } = input;
     const [d] = await tx
       .update(devices)
-      .set({ ...input, lastSeenAt: ctx.now, updatedAt: ctx.now })
+      .set({ ...health, lastSeenAt: ctx.now, updatedAt: ctx.now })
       .where(and(eq(devices.id, deviceIdOf(ctx)), isNull(devices.revokedAt)))
       .returning({ wipe: devices.wipeRequestedAt });
     if (!d) throw new DomainError('forbidden', 'Device revoked');
+    const directives = await recordDevicePresenceTx(
+      tx,
+      ctx,
+      deviceIdOf(ctx),
+      { eventId, checkpointId },
+      { batteryPct: input.batteryPct, queueDepth: input.queueDepth },
+    );
     // Devices-online and the device board (M3.1/M3.3) follow heartbeats through the outbox.
     emit(deviceEvent('device.heartbeat', requireOrg(ctx), deviceIdOf(ctx)));
-    return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [] };
+    return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [], ...directives };
   },
 });
 
@@ -450,6 +472,12 @@ export const syncScansCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const deviceId = deviceIdOf(ctx);
+    // One sync per event at a time (M3.4a): a retried batch racing its first attempt, or two
+    // devices admitting the same tickets in different orders, can neither double-apply a scan
+    // nor deadlock on the admissions index. Batches are short; devices simply wait their turn.
+    await tx.execute(
+      sql`select pg_advisory_xact_lock(hashtextextended(${`checkin.sync:${input.eventId}`}, 0))`,
+    );
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
     const keys = await publicKeysTx(tx);

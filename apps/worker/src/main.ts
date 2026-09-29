@@ -8,7 +8,13 @@ import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
-import { dispatchNotifications, userEmails, userLocales, workerTransports } from './notifications.ts';
+import {
+  dispatchNotifications,
+  dispatchStaffPushes,
+  userEmails,
+  userLocales,
+  workerTransports,
+} from './notifications.ts';
 import { runReconciliation } from './reconciliation.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
@@ -181,6 +187,17 @@ setInterval(() => {
       dispatching = false;
     });
 }, 2_000).unref();
+// Staff alert pushes (M3.4a): every 5 s (leader only; rows claimed with SKIP LOCKED).
+let pushingStaff = false;
+setInterval(() => {
+  if (!transports || !release || stopping || pushingStaff) return;
+  pushingStaff = true;
+  dispatchStaffPushes(transports)
+    .catch((err) => console.error('staff pushes', err))
+    .finally(() => {
+      pushingStaff = false;
+    });
+}, 5_000).unref();
 // Retention (M1.14c): once a day, first run 10 minutes after start (leader only).
 let retaining = false;
 const retain = () => {

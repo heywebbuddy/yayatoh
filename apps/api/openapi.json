@@ -10653,7 +10653,7 @@
         "tags": [
           "scanner"
         ],
-        "summary": "Device health every 30 s; returns pending commands (wipe)",
+        "summary": "Device health every 30 s; returns pending commands (wipe, sync, checkpoint, kiosk)",
         "description": "Reports the device’s health about every 30 seconds and returns pending commands such as `wipe`. Device token only.",
         "security": [
           {
@@ -10681,6 +10681,19 @@
                   },
                   "clockOffsetMs": {
                     "type": "integer"
+                  },
+                  "eventId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The event the device is working (device board)."
+                  },
+                  "checkpointId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "uuid",
+                    "description": "Where the device scans; null for the whole event."
                   }
                 },
                 "required": [
@@ -10711,6 +10724,71 @@
                           "wipe"
                         ]
                       }
+                    },
+                    "syncRequestedAt": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time",
+                      "description": "A supervisor asked for a sync at this time; sync if not done since."
+                    },
+                    "checkpoint": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "uuid"
+                        },
+                        "requestedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "requestedAt"
+                      ],
+                      "description": "A supervisor moved the device to this checkpoint (null: the whole event)."
+                    },
+                    "kiosk": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "eventId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "checkpointId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "uuid"
+                        },
+                        "pinHash": {
+                          "type": "string"
+                        },
+                        "startedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "eventId",
+                        "checkpointId",
+                        "pinHash",
+                        "startedAt"
+                      ],
+                      "description": "Kiosk mode: self check-in locked to this event and entrance; PIN (PBKDF2) to exit."
                     }
                   },
                   "required": [

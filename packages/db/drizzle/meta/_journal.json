@@ -589,6 +589,13 @@
       "when": 1790715974048,
       "tag": "0083_chemical_skullbuster",
       "breakpoints": true
+    },
+    {
+      "idx": 84,
+      "version": "7",
+      "when": 1790716675954,
+      "tag": "0084_pale_mordo",
+      "breakpoints": true
     }
   ]
 }

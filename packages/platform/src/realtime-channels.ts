@@ -223,6 +223,8 @@ export const DEVICES_CHANNEL = defineRealtimeChannel({
       queueDepth: z.int().min(0).nullable(),
       at: isoTime,
     }),
+    /** A supervisor changed something for this device (M3.4a): it heartbeats now to pick it up. */
+    command: z.object({ deviceId: z.uuid(), at: isoTime }),
   },
 });
 

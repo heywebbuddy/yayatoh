@@ -4,6 +4,7 @@ import {
   boolean,
   check,
   doublePrecision,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -125,11 +126,129 @@ export const devices = tenantTable(
      * member's checkpoint scope. Null = an org device that may scan anywhere.
      */
     assignedUserId: uuid('assigned_user_id'),
+    // --- Staff mode (M3.4a) ---
+    /** The event the device last reported working (heartbeat): the event's device board. */
+    eventId: uuid('event_id'),
+    /** Where the device reported scanning (null = the whole event). */
+    checkpointId: uuid('checkpoint_id'),
+    /** A supervisor asked for a sync now: delivered by heartbeat until the device applied it. */
+    syncRequestedAt: ts('sync_requested_at'),
+    /** A supervisor moved the device (null checkpoint = the whole event), delivered by heartbeat. */
+    checkpointRequestedAt: ts('checkpoint_requested_at'),
+    requestedCheckpointId: uuid('requested_checkpoint_id'),
+    /** `scanner`, or `kiosk`: self check-in locked to one event and entrance, PIN to exit. */
+    mode: text('mode').notNull().default('scanner'),
+    kioskEventId: uuid('kiosk_event_id'),
+    kioskCheckpointId: uuid('kiosk_checkpoint_id'),
+    /** `pbkdf2-sha256$<iterations>$<salt b64url>$<hash b64url>`; never the PIN itself. */
+    kioskPinHash: text('kiosk_pin_hash'),
+    kioskStartedAt: ts('kiosk_started_at'),
+    kioskStartedBy: uuid('kiosk_started_by'),
   },
   (t) => [
     // Global: the token alone resolves the device (and so the org) through a definer function.
     uniqueIndex('devices_token_hash_key').on(t.tokenHash),
+    index('devices_org_event_idx').on(t.orgId, t.eventId),
     check('devices_battery_check', sql`battery_pct is null or battery_pct between 0 and 100`),
+    check('devices_mode_check', sql`mode in ('scanner', 'kiosk')`),
+    check(
+      'devices_kiosk_check',
+      sql`(mode = 'kiosk') = (kiosk_event_id is not null and kiosk_pin_hash is not null and kiosk_started_at is not null)`,
+    ),
+    check(
+      'devices_kiosk_pin_check',
+      sql`kiosk_pin_hash is null or kiosk_pin_hash ~ '^pbkdf2-sha256[$][0-9]{4,7}[$][A-Za-z0-9_-]{22}[$][A-Za-z0-9_-]{43}$'`,
+    ),
+  ],
+);
+
+/** Staff alert kinds a device can be pushed (M3.4a). Supervisor-only kinds need `checkin:supervise`. */
+export const STAFF_ALERT_KINDS = [
+  'device_offline',
+  'device_low_battery',
+  'device_backlog',
+  'capacity_near',
+] as const;
+export type StaffAlertKind = (typeof STAFF_ALERT_KINDS)[number];
+
+/**
+ * Staff web push (M3.4a), opted in per device from the Scan PWA's staff mode. One subscription per
+ * device. `supervisor_user_id` is the signed-in supervisor who opted in for device alerts (their
+ * permission is re-checked at every alert); without one the device gets staff alerts only.
+ * `copy` is the notification text per alert kind in the device's language, as the PWA rendered it
+ * from its messages (placeholders `{label}` and `{percent}`), so the server holds no UI strings.
+ */
+export const staffPushSubscriptions = tenantTable(
+  checkinSchema,
+  'staff_push_subscriptions',
+  {
+    deviceId: uuid('device_id').notNull(),
+    endpoint: text('endpoint').notNull(),
+    p256dh: text('p256dh').notNull(),
+    authSecret: text('auth_secret').notNull(),
+    locale: text('locale').notNull(),
+    copy: jsonb('copy').$type<Record<string, { title: string; body: string }>>().notNull(),
+    supervisorUserId: uuid('supervisor_user_id'),
+    disabledAt: ts('disabled_at'),
+  },
+  (t) => [
+    uniqueIndex('staff_push_subscriptions_org_device_key').on(t.orgId, t.deviceId),
+    foreignKey({
+      name: 'staff_push_subscriptions_device_fk',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    check(
+      'staff_push_subscriptions_endpoint_check',
+      sql`endpoint ~ '^https?://' and length(endpoint) <= 2048`,
+    ),
+    check('staff_push_subscriptions_p256dh_check', sql`p256dh ~ '^[A-Za-z0-9_-]{87}$'`),
+    check('staff_push_subscriptions_auth_check', sql`auth_secret ~ '^[A-Za-z0-9_-]{22}$'`),
+    check('staff_push_subscriptions_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
+  ],
+);
+
+export const STAFF_PUSH_STATUSES = ['queued', 'sent', 'expired', 'rejected', 'retrying'] as const;
+
+/**
+ * Each staff alert reaches each subscribed device at most once (`alert_key` per episode, e.g. a
+ * device's offline spell), queued in the evaluating transaction and sent after it.
+ */
+export const staffAlertPushes = tenantTable(
+  checkinSchema,
+  'staff_alert_pushes',
+  {
+    subscriptionId: uuid('subscription_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    alertKey: text('alert_key').notNull(),
+    kind: text('kind').notNull(),
+    /** Allowlisted placeholders only: the device label and a percentage. */
+    params: jsonb('params')
+      .$type<{ label?: string; percent?: number; count?: number }>()
+      .notNull()
+      .default({}),
+    status: text('status').notNull().default('queued'),
+    httpStatus: integer('http_status'),
+    attempts: integer('attempts').notNull().default(0),
+    sentAt: ts('sent_at'),
+  },
+  (t) => [
+    uniqueIndex('staff_alert_pushes_org_sub_key').on(t.orgId, t.subscriptionId, t.alertKey),
+    index('staff_alert_pushes_org_status_idx').on(t.orgId, t.status),
+    foreignKey({
+      name: 'staff_alert_pushes_subscription_fk',
+      columns: [t.orgId, t.subscriptionId],
+      foreignColumns: [staffPushSubscriptions.orgId, staffPushSubscriptions.id],
+    }).onDelete('cascade'),
+    check(
+      'staff_alert_pushes_kind_check',
+      sql.raw(`kind in (${STAFF_ALERT_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check(
+      'staff_alert_pushes_status_check',
+      sql.raw(`status in (${STAFF_PUSH_STATUSES.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('staff_alert_pushes_key_check', sql`length(alert_key) between 3 and 200`),
   ],
 );
 

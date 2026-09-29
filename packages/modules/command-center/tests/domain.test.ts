@@ -307,12 +307,16 @@ describe('widget registry and layouts', () => {
       'devices',
       'seatFill',
       'tickets',
+      // Batch 3d merge: M3.4a's staff views are offered to owners (hidden until shown).
+      'entrances',
+      'deviceBoard',
     ]);
     expect(r.find((s) => s.key === 'sales')?.hidden).toBe(true);
+    expect(r.find((s) => s.key === 'deviceBoard')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'checkins')?.hidden).toBe(false);
     // Available in the mode but not in the role's default list: offered hidden.
     const door = resolveLayout(WIDGET_META, scope('door', 'gala'), 'wrap', null);
-    expect(door.filter((s) => s.hidden).map((s) => s.key)).toEqual(['seatFill', 'alerts']);
+    expect(door.filter((s) => s.hidden).map((s) => s.key)).toEqual(['seatFill', 'alerts', 'entrances']);
   });
 
   it('moves widgets up and down (the keyboard alternative to dragging)', () => {

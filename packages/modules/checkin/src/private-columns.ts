@@ -8,7 +8,14 @@ export const privateColumns = columnPrivacy('checkin', {
   admissions: { day: 'vocab' },
   // Checkpoint names are staff-facing (the door manifest carries them).
   checkpoints: { name: internal(), kind: 'vocab' },
-  devices: { label: internal(), token_hash: secret() },
+  devices: {
+    label: internal(),
+    token_hash: secret(),
+    mode: 'vocab',
+    kiosk_pin_hash: secret('none', {
+      why: 'CHECK requires the pbkdf2 format; only the kiosk device gets it (staff-mode.int.test)',
+    }),
+  },
   // Triage notes are staff-written (acknowledge/dismiss, M1.9e).
   fraud_signals: {
     kind: 'vocab',
@@ -18,5 +25,18 @@ export const privateColumns = columnPrivacy('checkin', {
     source: 'vocab',
     resolution_note: internal(),
   },
+  // Staff push (M3.4a): the endpoint and keys are credentials of the device's browser.
+  staff_push_subscriptions: {
+    endpoint: secret('url'),
+    p256dh: secret('none', {
+      why: 'CHECK requires an 87-char base64url P-256 key; never selected into a DTO',
+    }),
+    auth_secret: secret('none', {
+      why: 'CHECK requires a 22-char base64url secret; never selected into a DTO',
+    }),
+    locale: 'vocab',
+    copy: internal(),
+  },
+  staff_alert_pushes: { alert_key: internal(), kind: 'vocab', params: internal(), status: 'vocab' },
   scans: { result: 'vocab', code_kind: 'vocab', client_scan_id: internal() },
 });

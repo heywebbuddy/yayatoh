@@ -22,6 +22,7 @@ import {
   sealJson,
   wipeAll,
 } from './store.ts';
+import { chunk, dedupeQueue, isNewDirective, singleFlight } from './sync-queue.ts';
 
 export interface ScanConfig {
   readonly eventId: string;
@@ -76,6 +77,61 @@ export interface ServerScan {
   readonly openSignals: number;
 }
 
+/** The staff mode screen as `/api/scan/staff` returns it (dates as ISO strings). */
+export interface StaffView {
+  readonly eventId: string;
+  readonly eventName: string;
+  readonly timezone: string;
+  readonly day: string;
+  readonly asOf: string;
+  readonly checkedIn: number;
+  readonly expected: number;
+  readonly byEntrance: readonly { checkpointId: string; name: string; checkedIn: number }[];
+  readonly byDate: readonly { day: string; checkedIn: number }[];
+  readonly devices: readonly {
+    id: string;
+    label: string;
+    online: boolean;
+    lastSeenAt: string | null;
+    batteryPct: number | null;
+    queueDepth: number | null;
+    checkpointId: string | null;
+    mode: 'scanner' | 'kiosk';
+    self: boolean;
+  }[];
+  readonly alerts: readonly {
+    key: string;
+    kind: 'device_offline' | 'device_low_battery' | 'device_backlog' | 'capacity_near';
+    severity: 'warning' | 'critical';
+    deviceId: string | null;
+    deviceLabel: string | null;
+    percent: number | null;
+    count: number | null;
+    since: string;
+  }[];
+  readonly channels: { readonly checkins: string; readonly devices: string };
+  /** This device's id (for the supervisor's pokes on the devices channel). */
+  readonly deviceId: string;
+}
+
+/** Kiosk mode as the server handed it to this device (M3.4a). */
+export interface KioskConfig {
+  readonly eventId: string;
+  readonly checkpointId: string | null;
+  readonly pinHash: string;
+  readonly startedAt: string;
+}
+
+/** What a heartbeat changed on this device. */
+export interface HeartbeatOutcome {
+  readonly wiped: boolean;
+  /** A supervisor asked for a sync: done. */
+  readonly synced: boolean;
+  /** A supervisor moved the device: the new checkpoint (null = whole event). */
+  readonly movedTo?: string | null;
+  readonly kioskChanged: boolean;
+}
+
 /** Stop scanning with the downloaded list this long after the event ends (roadmap §5.4). */
 const EXPIRY_MS = 24 * 3_600_000;
 const BATCH = 500;
@@ -96,8 +152,14 @@ export class ScanClient {
   clockOffsetMs = 0;
   /** Where this device stands (an entrance or zone), or null for the whole event. */
   checkpointId: string | null = null;
+  /** Kiosk mode (M3.4a), or null: set by a supervisor, left with the PIN. */
+  kiosk: KioskConfig | null = null;
 
   constructor(readonly config: ScanConfig) {}
+
+  get token(): string {
+    return this.config.token;
+  }
 
   static async stored(): Promise<ScanConfig | null> {
     return (await kvGet<ScanConfig>('config')) ?? null;
@@ -156,8 +218,12 @@ export class ScanClient {
         return false;
       }
     }
+    // The admitted set is kept on its own (small, sealed): saving a scan never re-seals the list.
+    const admitted = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('admitted');
+    if (admitted) this.admitted = new Set(await openJson<string[]>(this.config.token, admitted));
     this.clockOffsetMs = (await kvGet<number>('clockOffsetMs')) ?? 0;
     this.checkpointId = (await kvGet<string | null>('checkpointId')) ?? null;
+    this.kiosk = (await kvGet<KioskConfig | null>('kiosk')) ?? null;
     return true;
   }
 
@@ -174,6 +240,10 @@ export class ScanClient {
     this.snapshot.rows = [...this.byId.values()];
     this.snapshot.admitted = [...this.admitted];
     await kvSet('manifest', await sealJson(this.config.token, this.snapshot));
+  }
+
+  private async persistAdmitted() {
+    await kvSet('admitted', await sealJson(this.config.token, [...this.admitted]));
   }
 
   /** Pull manifest changes since the last sync (first page overlaps a minute). */
@@ -257,7 +327,7 @@ export class ScanClient {
     );
     if ((verdict === 'admit' || verdict === 'provisional') && ticketId) {
       this.admitted.add(admittedKey(ticketId, eventDay(now, this.snapshot.header.event.timezone)));
-      await this.persist();
+      await this.persistAdmitted();
     }
     const scan: QueuedScan = {
       scanId: uuidv7(),
@@ -281,29 +351,36 @@ export class ScanClient {
     return (await queueAll()).length;
   }
 
-  /** Send queued scans; returns the server's result per scan id. Offline → throws, queue kept. */
-  async flush(): Promise<Map<string, ServerScan>> {
+  /**
+   * Send queued scans; returns the server's result per scan id. Offline → throws, queue kept.
+   * One flush at a time (the `online` event, a scan and the tick may ask together); each scan
+   * leaves the queue only once the server has answered for it, and the server applies each
+   * `scanId` once, so a flush cut off half-way is simply sent again.
+   */
+  readonly flush = singleFlight(async (): Promise<Map<string, ServerScan>> => {
     const out = new Map<string, ServerScan>();
-    const queued = await queueAll();
-    for (let i = 0; i < queued.length; i += BATCH) {
-      const chunk = queued.slice(i, i + BATCH);
+    for (const batch of chunk(dedupeQueue(await queueAll()), BATCH)) {
       const res = await fetch('/api/v1/scans/batch', {
         method: 'POST',
         ...this.api,
-        body: JSON.stringify({ eventId: this.config.eventId, scans: chunk }),
+        body: JSON.stringify({ eventId: this.config.eventId, scans: batch }),
       });
       if (!res.ok) throw new Error(`sync ${res.status}`);
       const body = (await res.json()) as {
         results: { scanId: string; result: ServerResult; openSignals?: number }[];
       };
       for (const r of body.results) out.set(r.scanId, { result: r.result, openSignals: r.openSignals ?? 0 });
-      await queueRemove(chunk.map((c) => c.scanId));
+      await queueRemove(batch.map((c) => c.scanId));
     }
     return out;
-  }
+  });
 
-  /** Health every 30 s. Returns true when the server asked for a wipe (already done). */
-  async heartbeat(batteryPct: number | null): Promise<boolean> {
+  /**
+   * Health every 30 s (and when a supervisor pokes this device): reports where it works and
+   * applies what the server hands back — wipe, a sync now, a new checkpoint, kiosk mode.
+   */
+  async heartbeat(batteryPct: number | null): Promise<HeartbeatOutcome> {
+    const none = { wiped: false, synced: false, kioskChanged: false };
     const res = await fetch('/api/v1/devices/heartbeat', {
       method: 'POST',
       ...this.api,
@@ -311,23 +388,118 @@ export class ScanClient {
         batteryPct,
         queueDepth: await this.queueDepth(),
         clockOffsetMs: this.clockOffsetMs,
+        eventId: this.config.eventId,
+        checkpointId: this.kiosk ? this.kiosk.checkpointId : (this.checkpoint?.id ?? null),
       }),
     });
     if (res.status === 401) {
       await this.wipe();
-      return true;
+      return { ...none, wiped: true };
     }
-    if (!res.ok) return false;
-    const body = (await res.json()) as { commands: string[] };
+    if (!res.ok) return none;
+    const body = (await res.json()) as {
+      commands: string[];
+      syncRequestedAt?: string | null;
+      checkpoint?: { id: string | null; requestedAt: string } | null;
+      kiosk?: KioskConfig | null;
+    };
     if (body.commands.includes('wipe')) {
       await this.wipe();
-      return true;
+      return { ...none, wiped: true };
     }
-    return false;
+    let synced = false;
+    if (isNewDirective(body.syncRequestedAt, await kvGet<string>('appliedSyncAt'))) {
+      await this.sync();
+      await this.flush();
+      await kvSet('appliedSyncAt', body.syncRequestedAt);
+      synced = true;
+    }
+    let movedTo: string | null | undefined;
+    if (
+      body.checkpoint &&
+      isNewDirective(body.checkpoint.requestedAt, await kvGet<string>('appliedCheckpointAt'))
+    ) {
+      // A checkpoint this device can't scan at (not in its manifest) falls back to the whole event.
+      movedTo = this.checkpoints.some((c) => c.id === body.checkpoint?.id) ? body.checkpoint.id : null;
+      await this.setCheckpoint(movedTo);
+      await kvSet('appliedCheckpointAt', body.checkpoint.requestedAt);
+    }
+    // Kiosk: follow the server, except a session this device already left with the PIN (its exit
+    // report is sent again until the server has it).
+    const exited = await kvGet<string>('kioskExited');
+    let next = body.kiosk ?? null;
+    if (next && exited === next.startedAt) {
+      await this.reportKioskExit(next.startedAt);
+      next = null;
+    }
+    const kioskChanged = (next?.startedAt ?? null) !== (this.kiosk?.startedAt ?? null);
+    if (kioskChanged) {
+      this.kiosk = next;
+      await kvSet('kiosk', next);
+      if (next) await this.setCheckpoint(next.checkpointId);
+    }
+    return { wiped: false, synced, ...(movedTo !== undefined ? { movedTo } : {}), kioskChanged };
+  }
+
+  /** Leave kiosk mode after the PIN checked out on the device (works offline; reported later). */
+  async leaveKiosk(): Promise<void> {
+    const k = this.kiosk;
+    if (!k) return;
+    await kvSet('kioskExited', k.startedAt);
+    this.kiosk = null;
+    await kvSet('kiosk', null);
+    await this.reportKioskExit(k.startedAt).catch(() => undefined);
+  }
+
+  private async reportKioskExit(startedAt: string): Promise<void> {
+    const res = await fetch('/api/scan/kiosk/exit', {
+      method: 'POST',
+      ...this.api,
+      body: JSON.stringify({ startedAt }),
+    });
+    if (!res.ok) throw new Error(`kiosk exit ${res.status}`);
+  }
+
+  /** Staff mode: counts, device board and alerts; kept for offline ("last updated"). */
+  async staffOverview(): Promise<{ view: StaffView; fetchedAt: string; fresh: boolean } | null> {
+    try {
+      const res = await fetch(`/api/scan/staff?eventId=${encodeURIComponent(this.config.eventId)}`, this.api);
+      if (res.status === 401) return null;
+      if (!res.ok) throw new Error(`staff ${res.status}`);
+      const saved = { view: (await res.json()) as StaffView, fetchedAt: new Date().toISOString() };
+      await kvSet('staffOverview', saved);
+      return { ...saved, fresh: true };
+    } catch {
+      const cached = await kvGet<{ view: StaffView; fetchedAt: string }>('staffOverview');
+      return cached ? { ...cached, fresh: false } : null;
+    }
+  }
+
+  async pushStatus(): Promise<{ subscribed: boolean; supervisor: boolean; endpoint: string | null } | null> {
+    const res = await fetch('/api/scan/push', this.api);
+    return res.ok
+      ? ((await res.json()) as { subscribed: boolean; supervisor: boolean; endpoint: string | null })
+      : null;
+  }
+
+  async subscribePush(body: {
+    endpoint: string;
+    keys: { p256dh: string; auth: string };
+    locale: string;
+    copy: Record<string, { title: string; body: string }>;
+  }): Promise<string | null> {
+    const res = await fetch('/api/scan/push', { method: 'POST', ...this.api, body: JSON.stringify(body) });
+    if (res.ok) return null;
+    return ((await res.json().catch(() => ({}))) as { code?: string }).code ?? 'internal';
+  }
+
+  async unsubscribePush(): Promise<boolean> {
+    return (await fetch('/api/scan/push', { method: 'DELETE', ...this.api })).ok;
   }
 
   async wipe(): Promise<void> {
     this.snapshot = null;
+    this.kiosk = null;
     this.index();
     await wipeAll();
   }

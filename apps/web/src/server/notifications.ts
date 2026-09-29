@@ -2,7 +2,13 @@ import 'server-only';
 import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
-import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
+import {
+  chatReportSignals,
+  checkoutRiskSignals,
+  fraudSignalAlerts,
+  sendStaffAlertPushes,
+  staffAlertsSubscriber,
+} from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
@@ -35,6 +41,7 @@ import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import './ports.ts';
 import { deliveryAdapter, ingestDeliveryEvents } from './delivery-webhooks.ts';
+import { staffAlertSource, staffPushSender } from './scan-staff.ts';
 import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
@@ -70,6 +77,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     checkoutRiskSignals(),
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
+    // M3.4a: staff alerts for the Scan PWA (web push per device).
+    staffAlertsSubscriber(staffAlertSource),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier }),
@@ -123,6 +132,9 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     sent += r.sent;
     if (r.sent + r.suppressed + r.failed === 0) break;
   }
+  // Staff alert pushes (M3.4a), through the same web push adapter.
+  const staffSender = staffPushSender(appOrigin);
+  if (staffSender) sent += (await sendStaffAlertPushes(orgId, staffSender)).sent;
   let reports = 0;
   const adapter = deliveryAdapter('fake');
   if (adapter)

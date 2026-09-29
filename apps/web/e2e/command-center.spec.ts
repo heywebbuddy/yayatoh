@@ -201,7 +201,18 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(cc).toHaveAttribute('data-role', 'door');
     await expect(cc).toHaveAttribute('data-mode', 'live');
     await expect(door.getByText('Door view')).toBeVisible();
-    expect(await shown(door)).toEqual(['checkins', 'devices', 'seatFill', 'alerts', 'timeline']);
+    expect(await shown(door)).toEqual([
+      'checkins',
+      'devices',
+      'seatFill',
+      'alerts',
+      'entrances',
+      'deviceBoard',
+      'timeline',
+    ]);
+    // Batch 3d merge: M3.4a's staff views (live counts per entrance, the device board) for the door.
+    await expect(door.getByTestId('cc-entrances-today')).toHaveText('0 of 2 checked in today');
+    await expect(door.getByTestId('cc-widget-deviceBoard')).toBeVisible();
     await expect(door.getByTestId('cc-widget-sales')).toHaveCount(0);
     await expect(door.getByText('Sales', { exact: true })).toHaveCount(0);
     await expect(cc).not.toContainText('$');

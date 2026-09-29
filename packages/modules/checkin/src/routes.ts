@@ -106,15 +106,46 @@ const HeartbeatBody = z.object({
   batteryPct: z.int().min(0).max(100).nullable().optional(),
   queueDepth: z.int().min(0),
   clockOffsetMs: z.int(),
+  eventId: z.uuid().optional().openapi({ description: 'The event the device is working (device board).' }),
+  checkpointId: z
+    .uuid()
+    .nullable()
+    .optional()
+    .openapi({ description: 'Where the device scans; null for the whole event.' }),
 });
-const HeartbeatResponse = z.object({ serverTime: z.iso.datetime(), commands: z.array(z.enum(['wipe'])) });
+const HeartbeatResponse = z.object({
+  serverTime: z.iso.datetime(),
+  commands: z.array(z.enum(['wipe'])),
+  syncRequestedAt: z.iso
+    .datetime()
+    .nullable()
+    .optional()
+    .openapi({ description: 'A supervisor asked for a sync at this time; sync if not done since.' }),
+  checkpoint: z
+    .object({ id: z.uuid().nullable(), requestedAt: z.iso.datetime() })
+    .nullable()
+    .optional()
+    .openapi({ description: 'A supervisor moved the device to this checkpoint (null: the whole event).' }),
+  kiosk: z
+    .object({
+      eventId: z.uuid(),
+      checkpointId: z.uuid().nullable(),
+      pinHash: z.string(),
+      startedAt: z.iso.datetime(),
+    })
+    .nullable()
+    .optional()
+    .openapi({
+      description: 'Kiosk mode: self check-in locked to this event and entrance; PIN (PBKDF2) to exit.',
+    }),
+});
 
 const heartbeat = createRoute({
   method: 'post',
   path: '/devices/heartbeat',
   operationId: 'deviceHeartbeat',
   tags: ['scanner'],
-  summary: 'Device health every 30 s; returns pending commands (wipe)',
+  summary: 'Device health every 30 s; returns pending commands (wipe, sync, checkpoint, kiosk)',
   description:
     'Reports the device’s health about every 30 seconds and returns pending commands such as `wipe`. Device token only.',
   security,
@@ -219,7 +250,18 @@ export function scannerRoutes(ports: CommandPorts<TenantTx>) {
     })
     .openapi(heartbeat, async (c) => {
       const r = await executeCommand(heartbeatCommand, c.req.valid('json'), c.get('device'), ports);
-      return c.json({ serverTime: r.serverTime.toISOString(), commands: r.commands }, 200);
+      return c.json(
+        {
+          serverTime: r.serverTime.toISOString(),
+          commands: r.commands,
+          syncRequestedAt: r.syncRequestedAt?.toISOString() ?? null,
+          checkpoint: r.checkpoint
+            ? { id: r.checkpoint.id, requestedAt: r.checkpoint.requestedAt.toISOString() }
+            : null,
+          kiosk: r.kiosk ? { ...r.kiosk, startedAt: r.kiosk.startedAt.toISOString() } : null,
+        },
+        200,
+      );
     })
     .openapi(checkin, async (c) => {
       const v = await executeCommand(

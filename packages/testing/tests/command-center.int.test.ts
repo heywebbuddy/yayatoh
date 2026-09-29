@@ -7,7 +7,9 @@ import {
   DEVICE_BOARD_EVENTS,
   defineWidget,
   deviceBoardPublisher,
+  deviceBoardWidget,
   devicesWidget,
+  entrancesWidget,
   eventViewQuery,
   orgOverviewQuery,
   publishMetricsChangedTx,
@@ -87,6 +89,8 @@ describe('role layouts', () => {
       'devices',
       'checkins',
       'alerts',
+      // Batch 3d merge: M3.4a's device board on the door's pre-show layout.
+      'deviceBoard',
       'timeline',
     ]);
     expect(door.customized).toBe(false);
@@ -99,7 +103,14 @@ describe('role layouts', () => {
         .map((s) => s.key);
     expect(await view('finance')).toEqual(['sales', 'tickets', 'alerts', 'timeline']);
     expect(await view('marketing')).toEqual(['tickets', 'readiness', 'alerts', 'timeline']);
-    expect(await view('manager')).toEqual(['readiness', 'alerts', 'devices', 'tickets', 'timeline']);
+    expect(await view('manager')).toEqual([
+      'readiness',
+      'alerts',
+      'devices',
+      'tickets',
+      'deviceBoard',
+      'timeline',
+    ]);
     // A member without event access (a scanner) has no Command Center.
     await expect(
       executeQuery(eventViewQuery, { eventId: a.event.id }, as('scanner'), ports),
@@ -122,6 +133,27 @@ describe('widget loaders refuse what the registry does not allow', () => {
     });
     // Registered widgets for other roles are refused too.
     await expect(load(readinessWidget, a.event.id, door)).rejects.toMatchObject({ code: 'forbidden' });
+  });
+
+  it('serves M3.4a staff views to the door and refuses them to finance (batch 3d merge)', async () => {
+    const door = userCtx(a.viewerId, a.org.id);
+    const board = await load(deviceBoardWidget, a.event.id, door);
+    // The fixture's enrolled device reported at this event (M3.4a heartbeat fixture).
+    expect(board.devices.length).toBeGreaterThan(0);
+    expect(Object.keys(board.devices[0] ?? {}).sort()).toEqual(
+      ['batteryPct', 'checkpoint', 'id', 'kiosk', 'label', 'lastSeenAt', 'online', 'queueDepth'].sort(),
+    );
+    const entrances = await load(entrancesWidget, a.event.id, door);
+    expect(entrances.checkedIn).toBeGreaterThanOrEqual(0);
+    expect(entrances.timeZone).toBe(a.event.timezone);
+    await expect(load(deviceBoardWidget, a.event.id, as('finance'))).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    await expect(load(entrancesWidget, a.event.id, as('marketing'))).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    // Another org's event is not found under this org's RLS.
+    await expect(load(deviceBoardWidget, b.event.id, door)).rejects.toMatchObject({ code: 'not_found' });
   });
 
   it('checks roles and permissions for every widget', async () => {

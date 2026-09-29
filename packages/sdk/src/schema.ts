@@ -131,7 +131,7 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Device health every 30 s; returns pending commands (wipe)
+         * Device health every 30 s; returns pending commands (wipe, sync, checkpoint, kiosk)
          * @description Reports the device’s health about every 30 seconds and returns pending commands such as `wipe`. Device token only.
          */
         post: operations["deviceHeartbeat"];
@@ -2629,7 +2629,17 @@ export interface operations {
             content: {
                 "application/json": {
                     batteryPct?: number | null;
+                    /**
+                     * Format: uuid
+                     * @description Where the device scans; null for the whole event.
+                     */
+                    checkpointId?: string | null;
                     clockOffsetMs: number;
+                    /**
+                     * Format: uuid
+                     * @description The event the device is working (device board).
+                     */
+                    eventId?: string;
                     queueDepth: number;
                 };
             };
@@ -2642,9 +2652,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @description A supervisor moved the device to this checkpoint (null: the whole event). */
+                        checkpoint?: {
+                            /** Format: uuid */
+                            id: string | null;
+                            /** Format: date-time */
+                            requestedAt: string;
+                        } | null;
                         commands: "wipe"[];
+                        /** @description Kiosk mode: self check-in locked to this event and entrance; PIN (PBKDF2) to exit. */
+                        kiosk?: {
+                            /** Format: uuid */
+                            checkpointId: string | null;
+                            /** Format: uuid */
+                            eventId: string;
+                            pinHash: string;
+                            /** Format: date-time */
+                            startedAt: string;
+                        } | null;
                         /** Format: date-time */
                         serverTime: string;
+                        /**
+                         * Format: date-time
+                         * @description A supervisor asked for a sync at this time; sync if not done since.
+                         */
+                        syncRequestedAt?: string | null;
                     };
                 };
             };
