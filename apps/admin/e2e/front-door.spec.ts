@@ -82,7 +82,7 @@ test('admins move a route with a step-up; the change is audited, persists and ta
     .getByRole('link', { name: 'Front door' })
     .click();
   await expect(page.getByRole('heading', { name: 'Front door', level: 1 })).toBeVisible();
-  await expect(page.getByText('Route table version 1.')).toBeVisible();
+  await expect(page.getByText('Route table version 2.')).toBeVisible();
   await expect(page.getByRole('list', { name: 'Legacy hosts' })).toContainText(FD_YAY_HOST);
   await expect(page.getByRole('list', { name: 'Legacy hosts' })).toContainText(
     'Legacy origin set: front door on',
@@ -181,9 +181,13 @@ test('the page lays out with logical properties (right to left)', async ({ page 
   await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
   const nav = await page.getByRole('navigation', { name: 'Staff console' }).boundingBox();
   const who = await page.getByText('Omar Ops · Admin', { exact: true }).boundingBox();
-  expect(nav && who).toBeTruthy();
-  // `ms-auto` pushes "signed in as" to the inline end: the left side when right to left.
-  if (nav && who && (page.viewportSize()?.width ?? 0) >= 1024) expect(who.x).toBeLessThan(nav.x);
+  const product = await page.locator('header').getByText('Yayatoh staff', { exact: true }).boundingBox();
+  expect(nav && who && product).toBeTruthy();
+  // `ms-auto` pushes "signed in as" to the inline end: the left side when right to left. Batch 3c
+  // merge: the staff nav now fills a row of its own (openSignup, incidents, front door,
+  // maintenance…), so the reference is the product name at the inline start of the header.
+  if (who && product && (page.viewportSize()?.width ?? 0) >= 1024)
+    expect(who.x + who.width).toBeLessThan(product.x);
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
