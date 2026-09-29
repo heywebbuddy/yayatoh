@@ -120,10 +120,11 @@ jobs:
 
   e2e:
     # Sharded: the suite outgrew one 20-minute runner (M1.11), then three (M1.2c–M2.2b). Each shard
-    # gets its own database and seed, so shards never share state.
+    # gets its own database and seed, so shards never share state. 30 minutes since batch 3b
+    # (M3.x): shard 6 also runs the staff console suite and passed 20 minutes.
     name: e2e + axe · shard ${{ matrix.shard }}/6
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
