@@ -44,7 +44,7 @@ const publicResolver: Resolver = async () => [{ address: '142.250.1.1', family: 
 
 /** Google's export: a redirect to the content host, then the CSV. */
 function googleTransport(body: Uint8Array, seen: TransportRequest[] = []): Transport {
-  return async (req) => {
+  return async (req): Promise<{ status: number; headers: Record<string, string>; body: Uint8Array }> => {
     seen.push(req);
     if (req.url.hostname === 'docs.google.com')
       return {

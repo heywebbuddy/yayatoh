@@ -311,7 +311,17 @@ export default async function GuestsPage({
 
   return (
     <>
-      <PageHeader title={t(navLabelKey(profile, nav))} description={tp('subtitle')} />
+      <PageHeader
+        title={t(navLabelKey(profile, nav))}
+        description={tp('subtitle')}
+        actions={
+          canWrite ? (
+            <Link href={`/o/${org}/e/${event}/guests/import`} className={buttonClass('secondary')}>
+              {t('guestImport.importLink')}
+            </Link>
+          ) : null
+        }
+      />
       {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">
@@ -527,7 +537,7 @@ export default async function GuestsPage({
                                     </span>
                                   ) : null}
                                 </span>
-                                {g.meal || g.dietary || g.accessibility || g.address ? (
+                                {g.meal || g.dietary || g.accessibility || g.address || g.email || g.phone ? (
                                   <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-caption text-zinc-600">
                                     {(
                                       [
@@ -535,6 +545,8 @@ export default async function GuestsPage({
                                         ['dietary', g.dietary],
                                         ['accessibility', g.accessibility],
                                         ['address', g.address],
+                                        ['email', g.email],
+                                        ['phone', g.phone],
                                       ] as const
                                     ).map(([k, v]) =>
                                       v ? (
