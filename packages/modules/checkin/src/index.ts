@@ -25,6 +25,19 @@ export {
 } from './devices.ts';
 export { admissionsDsarTx, purgeScansBeforeTx } from './dsar.ts';
 export {
+  ALERT_WINDOW_MS,
+  alertsFor,
+  BLOCK_REPEAT_WINDOW_MS,
+  CHAT_REPORT_SEVERITY,
+  chatReportSignal,
+  checkoutRiskSignal,
+  type MappedSignal,
+  type SubjectType,
+  shouldAlert,
+  signalSubject,
+} from './fraud-rules.ts';
+export { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from './fraud-sources.ts';
+export {
   admittedTodayByCheckpointTx,
   capacityFactsTx,
   DEVICE_IN_USE_MS,
@@ -49,19 +62,6 @@ export {
   scanWindowTx,
   staffPresenceTx,
 } from './live.ts';
-export {
-  ALERT_WINDOW_MS,
-  alertsFor,
-  BLOCK_REPEAT_WINDOW_MS,
-  CHAT_REPORT_SEVERITY,
-  chatReportSignal,
-  checkoutRiskSignal,
-  type MappedSignal,
-  type SubjectType,
-  shouldAlert,
-  signalSubject,
-} from './fraud-rules.ts';
-export { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from './fraud-sources.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   admissionsForTicketsTx,

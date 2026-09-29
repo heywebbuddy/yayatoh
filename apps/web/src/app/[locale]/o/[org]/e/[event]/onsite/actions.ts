@@ -3,6 +3,7 @@
 import {
   createCheckpointCommand,
   enrollDeviceCommand,
+  reportPresenceCommand,
   type ScanOutcomeDto,
   scanTicketCommand,
   setCheckpointArchivedCommand,
@@ -119,6 +120,11 @@ export async function createCheckpointAction(
     (latitude !== null && Math.abs(latitude) > 90) ||
     (longitude !== null && Math.abs(longitude) > 180);
   if (badLocation) return { ok: false, code: 'validation_failed', field: 'location' };
+  // M3.3a: how many people the area holds (blank = not limited), a whole number from 1.
+  const rawCapacity = String(form.get('capacity') ?? '').trim();
+  const capacity = rawCapacity === '' ? null : Number(rawCapacity);
+  if (capacity !== null && (!Number.isInteger(capacity) || capacity < 1 || capacity > 1_000_000))
+    return { ok: false, code: 'validation_failed', field: 'capacity' };
   try {
     await executeCommand(
       createCheckpointCommand,
@@ -129,6 +135,7 @@ export async function createCheckpointAction(
         ticketTypeIds: form.get('kind') === 'zone' ? form.getAll('ticketTypeIds').map(String) : [],
         latitude,
         longitude,
+        capacity,
       },
       data.ctx,
       ports,
@@ -154,4 +161,21 @@ export async function checkpointArchivedAction(
     ports,
   );
   revalidatePath(`/o/${org}/e/${event}/onsite`);
+}
+
+/**
+ * The door screen reports its member's presence (M3.3a staff presence), every 30 s while open.
+ * Quiet on failure: the next ping tries again.
+ */
+export async function reportPresenceAction(
+  org: string,
+  event: string,
+  checkpointId: string | null,
+): Promise<void> {
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
+  try {
+    await executeCommand(reportPresenceCommand, { eventId: ev.id, checkpointId }, data.ctx, ports);
+  } catch (err) {
+    if (!isDomainError(err)) throw err;
+  }
 }

@@ -30,6 +30,7 @@ import {
   createCheckpointAction,
   deviceStateAction,
   enrollDeviceAction,
+  reportPresenceAction,
   scanAction,
   undoAction,
 } from './actions.ts';
@@ -143,6 +144,7 @@ export default async function OnsitePage({
         timeZone={ev.timezone}
         checkpoints={standable.map((c) => ({ id: c.id, name: c.name }))}
         scoped={scope.checkpointIds !== null}
+        presence={reportPresenceAction.bind(null, org, event)}
       />
       {status.signals.length > 0 ? (
         <section
@@ -278,6 +280,7 @@ export default async function OnsitePage({
                               : t('checkpoints.zoneFor', {
                                   types: c.ticketTypeIds.map((id) => typeName.get(id) ?? '—').join(', '),
                                 })}
+                        {c.capacity !== null ? ` · ${t('checkpoints.holds', { count: c.capacity })}` : ''}
                         {c.latitude !== null && c.longitude !== null
                           ? ` · ${t('checkpoints.located', { lat: c.latitude.toFixed(5), lng: c.longitude.toFixed(5) })}`
                           : ''}

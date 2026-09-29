@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} other {تنبيه}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} other {تنبيه}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} other {تنبيه}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} other {تنبيه}}"
       }
     },
     "kinds": {
@@ -138,7 +139,8 @@
       },
       "alerts": {
         "alert": "تنبيه",
-        "alert-text": "رسالة تنبيه نصية"
+        "alert-text": "رسالة تنبيه نصية",
+        "alert-urgent-text": "رسالة تنبيه عاجلة"
       }
     },
     "status": {
@@ -1127,7 +1129,11 @@
     "latitude": "خط العرض",
     "longitude": "خط الطول",
     "locationError": "أدخل خط العرض (−90 إلى 90) وخط الطول (−180 إلى 180) كأرقام، أو اترك الحقلين فارغين.",
-    "located": "عند {lat}، {lng}"
+    "located": "عند {lat}، {lng}",
+    "capacity": "السعة (اختياري)",
+    "capacityHint": "عدد الأشخاص الذين تتسع لهم المنطقة، لمؤشرات السعة.",
+    "capacityError": "أدخل عددًا صحيحًا من 1 إلى 1,000,000، أو اترك الحقل فارغًا.",
+    "holds": "{count, plural, zero {تتسع لـ #} one {تتسع لشخص واحد} two {تتسع لشخصين} few {تتسع لـ # أشخاص} many {تتسع لـ # شخصًا} other {تتسع لـ # شخص}}"
   },
   "search": {
     "title": "البحث",
@@ -6082,8 +6088,150 @@
         "title": "تسجيلات الدخول حسب المدخل"
       },
       "deviceBoard": {
-        "title": "لوحة الأجهزة"
+        "title": "لوحة الأجهزة",
+        "lastScan": "آخر مسح {time}",
+        "appVersion": "التطبيق {version}"
+      },
+      "liveFeed": {
+        "title": "النشاط المباشر",
+        "filters": "تصفية النشاط",
+        "entrance": "المدخل",
+        "allEntrances": "كل المداخل",
+        "device": "الجهاز",
+        "allDevices": "كل الأجهزة",
+        "outcome": "النتيجة",
+        "allOutcomes": "الكل",
+        "filter": {
+          "checkin": "تسجيلات الدخول",
+          "reentry": "إعادات الدخول",
+          "duplicate": "المكررة",
+          "invalid": "المسحات المرفوضة",
+          "device": "أحداث الأجهزة",
+          "alert": "التنبيهات"
+        },
+        "pause": "إيقاف مؤقت",
+        "resume": "استئناف",
+        "paused": "متوقف مؤقتًا. لا يتم تحديث النشاط.",
+        "pausedNews": "متوقف مؤقتًا. هناك نشاط جديد: استأنف لرؤيته.",
+        "none": "لا شيء بعد. تظهر هنا المسحات والأجهزة والتنبيهات فور حدوثها.",
+        "noneFiltered": "لا شيء يطابق عوامل التصفية هذه بعد.",
+        "listLabel": "أحدث نشاط، الأحدث أولًا",
+        "offline": "مُسح دون اتصال",
+        "unknownDevice": "جهاز",
+        "alert": "تنبيه {state, select, resolved {تمت معالجته} other {جديد}}: {title}",
+        "deviceEvent": "{device}: {change, select, online {عاد متصلًا} offline {انقطع اتصاله} low_battery {بطاريته منخفضة} revoked {أُلغي} wiped {مُسحت بياناته} other {تغيّر}}",
+        "kind": {
+          "checkin": "{reason, select, granted {سُمح بدخول المنطقة} provisional {سُمح بالدخول (بانتظار التأكيد)} other {سُجّل الدخول}}",
+          "reentry": "إعادة دخول",
+          "duplicate": "{reason, select, duplicate_offline {مكرر (مُسح دون اتصال)} other {مكرر: سُجّل دخوله من قبل}}",
+          "invalid": "مرفوض: {reason, select, invalid {رمز غير صالح} void {تذكرة ملغاة} wrong_event {تذكرة فعالية أخرى} not_today {غير صالحة اليوم} outside_window {خارج وقت الفعالية} wrong_date {لتاريخ آخر} superseded {رمز مستبدَل} no_access {لا يحق له دخول هذه المنطقة} wrong_checkpoint {مدخل خاطئ} other {مرفوض}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "سرعة تسجيل الدخول",
+        "rateLabel": "مسحات في الدقيقة (آخر {minutes} دقائق)",
+        "medianGapValue": "{value} ث بين المسحات (الوسيط)",
+        "remaining": "{count, plural, zero {لا ضيوف متوقعون بعد الآن} one {ضيف واحد لا يزال متوقعًا} two {ضيفان لا يزالان متوقعَين} few {# ضيوف لا يزالون متوقعين} many {# ضيفًا لا يزالون متوقعين} other {# ضيف لا يزالون متوقعين}}",
+        "queueValue": "{count, plural, =0 {دخل كل الضيوف المتوقعين} zero {دخل كل الضيوف المتوقعين} one {نحو دقيقة واحدة لإدخال الجميع} two {نحو دقيقتين لإدخال الجميع} few {نحو # دقائق لإدخال الجميع} many {نحو # دقيقة لإدخال الجميع} other {نحو # دقيقة لإدخال الجميع}}",
+        "queueStopped": "لا مسحات في آخر 5 دقائق",
+        "chartTitle": "تسجيلات الدخول في الدقيقة، آخر 15 دقيقة",
+        "showTable": "عرض كجدول",
+        "minute": "الدقيقة",
+        "checkedIn": "سُجّل دخولهم",
+        "byEntrance": "حسب المدخل",
+        "byDevice": "حسب الجهاز",
+        "entrance": "المدخل",
+        "device": "الجهاز",
+        "perMinute": "مسحات في الدقيقة",
+        "medianGap": "الوقت بين المسحات",
+        "queue": "الوقت حتى إخلاء الطابور",
+        "seconds": "{value} ث",
+        "minutes": "{count, plural, zero {# د} one {# د} two {# د} few {# د} many {# د} other {# د}}",
+        "notMoving": "متوقف",
+        "noEntrance": "لم يُختر مدخل",
+        "noDevice": "شاشة الدخول"
+      },
+      "scanIssues": {
+        "title": "المسحات المكررة والمرفوضة",
+        "summary": "اليوم: {duplicates, plural, zero {لا مسحات مكررة} one {مسحة مكررة واحدة} two {مسحتان مكررتان} few {# مسحات مكررة} many {# مسحة مكررة} other {# مسحة مكررة}}، {refused, plural, zero {لا مسحات مرفوضة} one {مسحة مرفوضة واحدة} two {مسحتان مرفوضتان} few {# مسحات مرفوضة} many {# مسحة مرفوضة} other {# مسحة مرفوضة}}",
+        "byReason": "حسب السبب",
+        "none": "لا مسحات مكررة أو مرفوضة اليوم.",
+        "recent": "الأحدث",
+        "openOrder": "فتح الطلب",
+        "reason": {
+          "admitted": "سُجّل الدخول",
+          "granted": "سُمح بدخول المنطقة",
+          "provisional": "سُمح بالدخول (بانتظار التأكيد)",
+          "duplicate": "سُجّل دخوله من قبل",
+          "duplicate_offline": "مكرر (مُسح دون اتصال)",
+          "invalid": "رمز غير صالح",
+          "void": "تذكرة ملغاة",
+          "wrong_event": "تذكرة فعالية أخرى",
+          "not_today": "غير صالحة اليوم",
+          "outside_window": "خارج وقت الفعالية",
+          "wrong_date": "لتاريخ آخر",
+          "superseded": "رمز مستبدَل",
+          "no_access": "لا يحق له دخول هذه المنطقة",
+          "wrong_checkpoint": "مدخل خاطئ",
+          "other": "أخرى"
+        }
+      },
+      "capacity": {
+        "title": "السعة",
+        "venue": "{inside} في الداخل من أصل {capacity}",
+        "venueNoCap": "{inside} في الداخل (لم تُحدَّد سعة)",
+        "meter": "{name}: السعة المستخدمة",
+        "event": "الفعالية",
+        "out": "{count, plural, zero {لا خروج مسجّل} one {خروج واحد مسجّل} two {خروجان مسجّلان} few {# حالات خروج مسجّلة} many {# حالة خروج مسجّلة} other {# حالة خروج مسجّلة}}",
+        "left": "{count, plural, zero {لا أماكن متبقية} one {مكان واحد متبقٍ} two {مكانان متبقيان} few {# أماكن متبقية} many {# مكانًا متبقيًا} other {# مكان متبقٍ}}",
+        "areas": "حسب المنطقة",
+        "area": "المنطقة",
+        "in": "في الداخل",
+        "capacity": "السعة",
+        "leftHeader": "المتبقي",
+        "status": "الحالة",
+        "level": {
+          "none": "لم تُحدَّد سعة",
+          "ok": "أقل من {near}٪",
+          "near": "شبه ممتلئ ({near}٪ أو أكثر)",
+          "over": "بلغت السعة أو تجاوزتها"
+        }
+      },
+      "staffPresence": {
+        "title": "الطاقم عند المداخل",
+        "none": "لا أحد مسجّل الدخول عند المداخل الآن.",
+        "unknown": "عضو في الفريق",
+        "onDevice": "على {device}",
+        "onDoorScreen": "على شاشة الدخول",
+        "wholeEvent": "الفعالية كلها",
+        "since": "منذ {time}"
+      },
+      "assistance": {
+        "title": "مساعدة الضيوف",
+        "pending": "ستظهر هنا طلبات المساعدة من الضيوف وطاقم المداخل.",
+        "open": "{count, plural, zero {لا طلبات مفتوحة} one {طلب مفتوح واحد} two {طلبان مفتوحان} few {# طلبات مفتوحة} many {# طلبًا مفتوحًا} other {# طلب مفتوح}}"
       }
+    },
+    "tv": {
+      "open": "وضع الشاشة",
+      "title": "وضع الشاشة",
+      "back": "العودة إلى مركز القيادة",
+      "description": "لوحات للقراءة فقط لشاشات {event}. يرى أي شخص لديه الرابط اللوحة دون تسجيل الدخول، لذلك لا تعرض أبدًا أي مبالغ أو أسماء ضيوف.",
+      "noAccessTitle": "وضع الشاشة غير متاح لدورك",
+      "noAccess": "اطلب الوصول من المالك أو المسؤول.",
+      "newTitle": "رابط شاشة جديد",
+      "label": "اسم الشاشة",
+      "labelHint": "مثل شاشة الردهة أو شاشة البوابة ب.",
+      "labelError": "أعطِ الشاشة اسمًا (حتى 60 حرفًا).",
+      "create": "إنشاء الرابط",
+      "createdOnce": "رابط {label}. افتحه على الشاشة الآن: لن يظهر إلا مرة واحدة.",
+      "listTitle": "روابط الشاشات",
+      "emptyTitle": "لا توجد روابط شاشات بعد",
+      "emptyDescription": "أنشئ رابطًا لعرض اللوحة المباشرة على شاشة في المكان.",
+      "createdAt": "أُنشئ {time}",
+      "revokedAt": "أُوقف {time}",
+      "revoke": "إيقاف",
+      "revokeLabel": "إيقاف {label}"
     }
   },
   "alerts": {
@@ -6459,5 +6607,41 @@
       "messages": "رسائل العملاء لفريقك",
       "security": "تنبيهات الأمان لفريقك"
     }
+  },
+  "tv": {
+    "offTitle": "رابط هذه الشاشة متوقف",
+    "offDescription": "اطلب رابطًا جديدًا من فريق الفعالية.",
+    "eyebrow": "مباشر من المداخل",
+    "updated": "تم التحديث {time}",
+    "stale": "غير متصل، آخر تحديث {time}",
+    "fullScreen": "ملء الشاشة",
+    "checkedIn": "سُجّل دخولهم اليوم",
+    "ofValid": "{total} من أصل {valid} تذكرة سُجّل دخولها",
+    "capacity": "السعة",
+    "inside": "{inside} في الداخل من أصل {capacity}",
+    "insideNoCap": "{inside} في الداخل",
+    "level": {
+      "none": "لم تُحدَّد سعة",
+      "ok": "يتسع لمزيد",
+      "near": "شبه ممتلئ",
+      "over": "ممتلئ"
+    },
+    "speed": "مسحات في الدقيقة",
+    "perMinute": "{minutes, plural, =0 {دخل كل الضيوف المتوقعين} zero {دخل كل الضيوف المتوقعين} one {نحو دقيقة واحدة لإدخال الجميع} two {نحو دقيقتين لإدخال الجميع} few {نحو # دقائق لإدخال الجميع} many {نحو # دقيقة لإدخال الجميع} other {نحو # دقيقة لإدخال الجميع}}",
+    "perMinuteStopped": "لا مسحات في آخر 5 دقائق",
+    "devices": "الأجهزة المتصلة",
+    "devicesValue": "{online} من {total}",
+    "issues": "اليوم عند المداخل",
+    "issuesValue": "{duplicates, plural, zero {لا مسحات مكررة} one {مسحة مكررة واحدة} two {مسحتان مكررتان} few {# مسحات مكررة} many {# مسحة مكررة} other {# مسحة مكررة}}، {refused, plural, zero {لا مسحات مرفوضة} one {مسحة مرفوضة واحدة} two {مسحتان مرفوضتان} few {# مسحات مرفوضة} many {# مسحة مرفوضة} other {# مسحة مرفوضة}}",
+    "entrances": "حسب المدخل",
+    "entrance": "المدخل",
+    "entrancePerMinute": "في الدقيقة",
+    "entranceQueue": "حتى الإخلاء",
+    "noEntrance": "لم يُختر مدخل",
+    "minutes": "{count, plural, zero {# د} one {# د} two {# د} few {# د} many {# د} other {# د}}",
+    "chartTitle": "تسجيلات الدخول في الدقيقة، آخر 15 دقيقة",
+    "showTable": "عرض كجدول",
+    "minute": "الدقيقة",
+    "checkedInColumn": "سُجّل دخولهم"
   }
 }

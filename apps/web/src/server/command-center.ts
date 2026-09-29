@@ -1,12 +1,17 @@
 import 'server-only';
 import { listAlertsQuery, RULES } from '@yayatoh/alerts';
+import { getUsersByIds } from '@yayatoh/auth';
 import {
   AlertsWidgetDto,
   COMMAND_CENTER_WIDGETS,
   defineWidget,
+  type FeedAlert,
   isWidgetKey,
+  liveFeedWidget,
+  staffPresenceWidget,
   WIDGET_META,
   type WidgetKey,
+  type WidgetLoadArgs,
   type WidgetRegistry,
   withWidget,
 } from '@yayatoh/command-center';
@@ -39,7 +44,39 @@ import { getSession } from './session.ts';
  * engine replaces the `alerts` slot with `withWidget`), the dev clock, and the realtime channels a
  * member may follow.
  */
-export const WIDGETS: WidgetRegistry = withWidget(COMMAND_CENTER_WIDGETS, alertsEngineWidget());
+export const WIDGETS: WidgetRegistry = [
+  alertsEngineWidget(),
+  // M3.3a: the live feed's alert entries come from the alert engine; presence names from auth.
+  liveFeedWidget(feedAlerts),
+  staffPresenceWidget(memberNames),
+].reduce(withWidget, COMMAND_CENTER_WIDGETS);
+
+/**
+ * The live feed's alert entries (M3.3a): the event's alerts the member may see, as "opened" at
+ * their opening and "resolved" at their resolution; for the door, door alerts only (no payments).
+ */
+async function feedAlerts({ tx, ctx, scope }: WidgetLoadArgs): Promise<FeedAlert[]> {
+  const read = (status: 'active' | 'resolved') =>
+    listAlertsQuery.handler({ input: { status, eventId: scope.event.id, limit: 20 }, ctx, tx });
+  const out: FeedAlert[] = [];
+  for (const a of [...(await read('active')), ...(await read('resolved'))]) {
+    if (scope.role === 'door' && RULES[a.rule].category !== 'door') continue;
+    out.push({
+      id: a.id,
+      rule: a.rule,
+      severity: a.severity,
+      state: a.state,
+      count: a.count,
+      at: a.state === 'resolved' && a.resolvedAt ? a.resolvedAt : a.openedAt,
+    });
+  }
+  return out;
+}
+
+async function memberNames(ids: readonly string[]): Promise<ReadonlyMap<string, string>> {
+  const people = await getUsersByIds([...new Set(ids)]);
+  return new Map([...people].map(([id, u]) => [id, u.name]));
+}
 
 /**
  * The Alerts widget filled by the M3.2b alert engine (batch 3d merge): the event's active alerts
@@ -93,13 +130,34 @@ export async function commandCenterCtx(ctx: Ctx): Promise<Ctx> {
 }
 
 /** Widgets whose numbers come from the metric projection: apply unpublished events first. */
-const PROJECTED: ReadonlySet<WidgetKey> = new Set(['sales', 'tickets', 'checkins', 'seatFill']);
+const PROJECTED: ReadonlySet<WidgetKey> = new Set([
+  'sales',
+  'tickets',
+  'checkins',
+  'seatFill',
+  'checkinSpeed',
+]);
 
-export async function loadWidget(key: WidgetKey, eventId: string, ctx: Ctx): Promise<unknown> {
+export async function loadWidget(
+  key: WidgetKey,
+  eventId: string,
+  ctx: Ctx,
+  params: Record<string, string> = {},
+): Promise<unknown> {
   const def = WIDGETS[key];
   if (!def) return null;
   if (PROJECTED.has(key) && ctx.orgId) await applyUnpublishedMetricEvents(ctx.orgId);
-  return executeQuery(def.loader, { eventId }, ctx, ports);
+  return executeQuery(def.loader, { eventId, params }, ctx, ports);
+}
+
+/** Widget options from the query string (the live feed's filters): short plain values only. */
+export function widgetParams(search: URLSearchParams): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const k of ['checkpoint', 'device', 'kind']) {
+    const v = search.get(k);
+    if (v && /^[A-Za-z0-9_-]{1,64}$/.test(v)) out[k] = v;
+  }
+  return out;
 }
 
 /**
@@ -141,6 +199,7 @@ export async function widgetResponse(
   orgSlug: string,
   eventSlug: string,
   widget: string,
+  params: Record<string, string> = {},
 ): Promise<WidgetResponse> {
   const session = await getSession();
   if (!session) return { status: 401, body: { error: 'unauthenticated' } };
@@ -162,7 +221,7 @@ export async function widgetResponse(
   const ctx = await commandCenterCtx(base);
   try {
     const ev = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, ctx, ports);
-    return { status: 200, body: { widget, data: await loadWidget(widget, ev.id, ctx) } };
+    return { status: 200, body: { widget, data: await loadWidget(widget, ev.id, ctx, params) } };
   } catch (err) {
     if (!isDomainError(err)) throw err;
     if (err.code === 'forbidden') return { status: 403, body: { error: 'forbidden' } };

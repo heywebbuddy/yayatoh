@@ -46,4 +46,5 @@ export {
   alertTargetsTx,
   catchUpAlerts,
   evaluateOrgNow,
+  watchQuietDevices,
 } from './subscriber.ts';

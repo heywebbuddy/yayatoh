@@ -1,5 +1,5 @@
 import 'server-only';
-import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
+import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import {
@@ -111,7 +111,9 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     consumed += fresh;
     if (fresh === 0) break;
   }
-  // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now.
+  // The live device watchdog (M3.3a) and the alert engine's scheduled pass (M3.2b), as the
+  // worker would run them now.
+  await watchQuietDevices(orgId, { notifier });
   await evaluateOrgNow(orgId, { notifier });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints

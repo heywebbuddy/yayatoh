@@ -31,7 +31,8 @@ export function medianGapSeconds(times: readonly number[]): number | null {
   for (let i = 1; i < sorted.length; i++) gaps.push((sorted[i] as number) - (sorted[i - 1] as number));
   gaps.sort((a, b) => a - b);
   const mid = gaps.length >> 1;
-  const median = gaps.length % 2 ? (gaps[mid] as number) : ((gaps[mid - 1] as number) + (gaps[mid] as number)) / 2;
+  const median =
+    gaps.length % 2 ? (gaps[mid] as number) : ((gaps[mid - 1] as number) + (gaps[mid] as number)) / 2;
   return round1(median / 1000);
 }
 
@@ -129,7 +130,8 @@ export interface CapacityGauge {
 
 /** A capacity gauge: who is in, what is left, and the level (none when there is no capacity). */
 export function capacityGauge(inside: number, capacity: number | null): CapacityGauge {
-  if (!capacity || capacity <= 0) return { inside, capacity: null, remaining: null, percent: null, level: 'none' };
+  if (!capacity || capacity <= 0)
+    return { inside, capacity: null, remaining: null, percent: null, level: 'none' };
   const percent = Math.floor((inside * 100) / capacity);
   return {
     inside,

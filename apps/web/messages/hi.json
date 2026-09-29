@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}"
       }
     },
     "kinds": {
@@ -138,7 +139,8 @@
       },
       "alerts": {
         "alert": "अलर्ट",
-        "alert-text": "अलर्ट SMS"
+        "alert-text": "अलर्ट SMS",
+        "alert-urgent-text": "तुरंत भेजा जाने वाला अलर्ट SMS"
       }
     },
     "status": {
@@ -1127,7 +1129,11 @@
     "latitude": "अक्षांश",
     "longitude": "देशांतर",
     "locationError": "अक्षांश (−90 से 90) और देशांतर (−180 से 180) दोनों संख्या में लिखें, या दोनों खाली छोड़ दें।",
-    "located": "{lat}, {lng} पर"
+    "located": "{lat}, {lng} पर",
+    "capacity": "क्षमता (वैकल्पिक)",
+    "capacityHint": "क्षेत्र में कितने लोग आ सकते हैं, क्षमता संकेतकों के लिए।",
+    "capacityError": "1 से 1,000,000 तक की पूर्ण संख्या लिखें, या खाली छोड़ दें।",
+    "holds": "{count, plural, one {# लोगों की जगह} other {# लोगों की जगह}}"
   },
   "search": {
     "title": "खोजें",
@@ -6082,8 +6088,150 @@
         "title": "प्रवेश द्वार के अनुसार चेक-इन"
       },
       "deviceBoard": {
-        "title": "डिवाइस बोर्ड"
+        "title": "डिवाइस बोर्ड",
+        "lastScan": "आख़िरी स्कैन {time}",
+        "appVersion": "ऐप {version}"
+      },
+      "liveFeed": {
+        "title": "लाइव फ़ीड",
+        "filters": "फ़ीड फ़िल्टर करें",
+        "entrance": "प्रवेश द्वार",
+        "allEntrances": "सभी प्रवेश द्वार",
+        "device": "डिवाइस",
+        "allDevices": "सभी डिवाइस",
+        "outcome": "नतीजा",
+        "allOutcomes": "सब कुछ",
+        "filter": {
+          "checkin": "चेक-इन",
+          "reentry": "दोबारा प्रवेश",
+          "duplicate": "डुप्लिकेट",
+          "invalid": "अस्वीकार किए गए स्कैन",
+          "device": "डिवाइस की घटनाएँ",
+          "alert": "अलर्ट"
+        },
+        "pause": "रोकें",
+        "resume": "फिर से चलाएँ",
+        "paused": "रुका हुआ है। फ़ीड अपडेट नहीं हो रहा।",
+        "pausedNews": "रुका हुआ है। नई गतिविधि है: देखने के लिए फिर से चलाएँ।",
+        "none": "अभी कुछ नहीं। स्कैन, डिवाइस और अलर्ट होते ही यहाँ दिखते हैं।",
+        "noneFiltered": "इन फ़िल्टर से अभी कुछ मेल नहीं खाता।",
+        "listLabel": "ताज़ा गतिविधि, सबसे नई पहले",
+        "offline": "ऑफ़लाइन स्कैन हुआ",
+        "unknownDevice": "एक डिवाइस",
+        "alert": "अलर्ट {state, select, resolved {सुलझ गया} other {खुला}}: {title}",
+        "deviceEvent": "{device} {change, select, online {फिर से ऑनलाइन है} offline {ऑफ़लाइन हो गया} low_battery {की बैटरी कम है} revoked {रद्द कर दिया गया} wiped {मिटा दिया गया} other {बदल गया}}",
+        "kind": {
+          "checkin": "{reason, select, granted {ज़ोन में जाने दिया} provisional {अंदर जाने दिया (पुष्टि बाकी)} other {चेक-इन हुआ}}",
+          "reentry": "दोबारा प्रवेश",
+          "duplicate": "{reason, select, duplicate_offline {डुप्लिकेट (ऑफ़लाइन स्कैन)} other {डुप्लिकेट: पहले ही चेक-इन हो चुका}}",
+          "invalid": "अस्वीकार: {reason, select, invalid {मान्य कोड नहीं} void {टिकट रद्द} wrong_event {किसी दूसरे इवेंट का टिकट} not_today {आज मान्य नहीं} outside_window {इवेंट के समय से बाहर} wrong_date {किसी दूसरी तारीख़ का} superseded {बदला हुआ कोड} no_access {इस ज़ोन में पहुँच नहीं} wrong_checkpoint {गलत प्रवेश द्वार} other {अस्वीकार}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "चेक-इन की रफ़्तार",
+        "rateLabel": "स्कैन प्रति मिनट (पिछले {minutes} मिनट)",
+        "medianGapValue": "स्कैन के बीच {value} सेकंड (माध्यिका)",
+        "remaining": "{count, plural, one {# मेहमान अभी आना बाकी} other {# मेहमान अभी आने बाकी}}",
+        "queueValue": "{count, plural, =0 {सभी अपेक्षित मेहमान अंदर हैं} one {सबको अंदर करने में लगभग # मिनट} other {सबको अंदर करने में लगभग # मिनट}}",
+        "queueStopped": "पिछले 5 मिनट में कोई स्कैन नहीं",
+        "chartTitle": "प्रति मिनट चेक-इन, पिछले 15 मिनट",
+        "showTable": "तालिका के रूप में दिखाएँ",
+        "minute": "मिनट",
+        "checkedIn": "चेक-इन",
+        "byEntrance": "प्रवेश द्वार के अनुसार",
+        "byDevice": "डिवाइस के अनुसार",
+        "entrance": "प्रवेश द्वार",
+        "device": "डिवाइस",
+        "perMinute": "स्कैन प्रति मिनट",
+        "medianGap": "स्कैन के बीच का समय",
+        "queue": "कतार खाली होने में समय",
+        "seconds": "{value} सेकंड",
+        "minutes": "{count, plural, one {# मिनट} other {# मिनट}}",
+        "notMoving": "रुका हुआ",
+        "noEntrance": "कोई प्रवेश द्वार नहीं चुना",
+        "noDevice": "प्रवेश स्क्रीन"
+      },
+      "scanIssues": {
+        "title": "डुप्लिकेट और अस्वीकार किए गए स्कैन",
+        "summary": "आज: {duplicates, plural, one {# डुप्लिकेट} other {# डुप्लिकेट}}, {refused, plural, one {# अस्वीकार स्कैन} other {# अस्वीकार स्कैन}}",
+        "byReason": "कारण के अनुसार",
+        "none": "आज कोई डुप्लिकेट या अस्वीकार स्कैन नहीं।",
+        "recent": "सबसे हाल के",
+        "openOrder": "ऑर्डर खोलें",
+        "reason": {
+          "admitted": "चेक-इन हुआ",
+          "granted": "ज़ोन में जाने दिया",
+          "provisional": "अंदर जाने दिया (पुष्टि बाकी)",
+          "duplicate": "पहले ही चेक-इन हो चुका",
+          "duplicate_offline": "डुप्लिकेट (ऑफ़लाइन स्कैन)",
+          "invalid": "मान्य कोड नहीं",
+          "void": "टिकट रद्द",
+          "wrong_event": "किसी दूसरे इवेंट का टिकट",
+          "not_today": "आज मान्य नहीं",
+          "outside_window": "इवेंट के समय से बाहर",
+          "wrong_date": "किसी दूसरी तारीख़ का",
+          "superseded": "बदला हुआ कोड",
+          "no_access": "इस ज़ोन में पहुँच नहीं",
+          "wrong_checkpoint": "गलत प्रवेश द्वार",
+          "other": "अन्य"
+        }
+      },
+      "capacity": {
+        "title": "क्षमता",
+        "venue": "{capacity} में से {inside} अंदर",
+        "venueNoCap": "{inside} अंदर (क्षमता तय नहीं)",
+        "meter": "{name}: इस्तेमाल हुई क्षमता",
+        "event": "इवेंट",
+        "out": "{count, plural, one {# चेक-आउट} other {# चेक-आउट}}",
+        "left": "{count, plural, one {# जगह बाकी} other {# जगहें बाकी}}",
+        "areas": "क्षेत्र के अनुसार",
+        "area": "क्षेत्र",
+        "in": "अंदर",
+        "capacity": "क्षमता",
+        "leftHeader": "बाकी",
+        "status": "स्थिति",
+        "level": {
+          "none": "क्षमता तय नहीं",
+          "ok": "{near}% से कम",
+          "near": "लगभग भरा ({near}% या ज़्यादा)",
+          "over": "क्षमता पूरी या उससे ज़्यादा"
+        }
+      },
+      "staffPresence": {
+        "title": "प्रवेश द्वार पर स्टाफ़",
+        "none": "अभी प्रवेश द्वार पर कोई साइन इन नहीं है।",
+        "unknown": "टीम सदस्य",
+        "onDevice": "{device} पर",
+        "onDoorScreen": "प्रवेश स्क्रीन पर",
+        "wholeEvent": "पूरा इवेंट",
+        "since": "{time} से"
+      },
+      "assistance": {
+        "title": "मेहमानों की मदद",
+        "pending": "मेहमानों और प्रवेश स्टाफ़ के मदद के अनुरोध यहाँ दिखेंगे।",
+        "open": "{count, plural, one {# खुला अनुरोध} other {# खुले अनुरोध}}"
       }
+    },
+    "tv": {
+      "open": "टीवी मोड",
+      "title": "टीवी मोड",
+      "back": "कमांड सेंटर पर वापस जाएँ",
+      "description": "{event} की स्क्रीन के लिए सिर्फ़ पढ़ने वाले बोर्ड। लिंक वाला कोई भी व्यक्ति साइन इन किए बिना बोर्ड देख सकता है, इसलिए इसमें कभी पैसे या मेहमानों के नाम नहीं दिखते।",
+      "noAccessTitle": "आपकी भूमिका के लिए टीवी मोड नहीं है",
+      "noAccess": "पहुँच के लिए मालिक या एडमिन से पूछें।",
+      "newTitle": "नया स्क्रीन लिंक",
+      "label": "स्क्रीन का नाम",
+      "labelHint": "जैसे लॉबी स्क्रीन या गेट B मॉनिटर।",
+      "labelError": "स्क्रीन को एक नाम दें (60 अक्षरों तक)।",
+      "create": "लिंक बनाएँ",
+      "createdOnce": "{label} के लिए लिंक। इसे अभी स्क्रीन पर खोलें: यह सिर्फ़ एक बार दिखता है।",
+      "listTitle": "स्क्रीन लिंक",
+      "emptyTitle": "अभी कोई स्क्रीन लिंक नहीं",
+      "emptyDescription": "वेन्यू की स्क्रीन पर लाइव बोर्ड दिखाने के लिए एक लिंक बनाएँ।",
+      "createdAt": "{time} को बनाया",
+      "revokedAt": "{time} को बंद किया",
+      "revoke": "बंद करें",
+      "revokeLabel": "{label} बंद करें"
     }
   },
   "alerts": {
@@ -6459,5 +6607,41 @@
       "messages": "आपकी टीम के लिए ग्राहक संदेश",
       "security": "आपकी टीम के लिए सुरक्षा अलर्ट"
     }
+  },
+  "tv": {
+    "offTitle": "यह स्क्रीन लिंक बंद है",
+    "offDescription": "इवेंट टीम से नया लिंक माँगें।",
+    "eyebrow": "प्रवेश द्वार से लाइव",
+    "updated": "{time} पर अपडेट हुआ",
+    "stale": "ऑफ़लाइन, आख़िरी अपडेट {time}",
+    "fullScreen": "पूरी स्क्रीन",
+    "checkedIn": "आज चेक-इन",
+    "ofValid": "{valid} में से {total} टिकट चेक-इन",
+    "capacity": "क्षमता",
+    "inside": "{capacity} में से {inside} अंदर",
+    "insideNoCap": "{inside} अंदर",
+    "level": {
+      "none": "क्षमता तय नहीं",
+      "ok": "जगह है",
+      "near": "लगभग भरा",
+      "over": "पूरा भरा"
+    },
+    "speed": "स्कैन प्रति मिनट",
+    "perMinute": "{minutes, plural, =0 {सभी अपेक्षित मेहमान अंदर हैं} one {सबको अंदर करने में लगभग # मिनट} other {सबको अंदर करने में लगभग # मिनट}}",
+    "perMinuteStopped": "पिछले 5 मिनट में कोई स्कैन नहीं",
+    "devices": "ऑनलाइन डिवाइस",
+    "devicesValue": "{total} में से {online}",
+    "issues": "आज प्रवेश द्वार पर",
+    "issuesValue": "{duplicates, plural, one {# डुप्लिकेट} other {# डुप्लिकेट}}, {refused, plural, one {# अस्वीकार स्कैन} other {# अस्वीकार स्कैन}}",
+    "entrances": "प्रवेश द्वार के अनुसार",
+    "entrance": "प्रवेश द्वार",
+    "entrancePerMinute": "प्रति मिनट",
+    "entranceQueue": "खाली होने में",
+    "noEntrance": "कोई प्रवेश द्वार नहीं चुना",
+    "minutes": "{count, plural, one {# मिनट} other {# मिनट}}",
+    "chartTitle": "प्रति मिनट चेक-इन, पिछले 15 मिनट",
+    "showTable": "तालिका के रूप में दिखाएँ",
+    "minute": "मिनट",
+    "checkedInColumn": "चेक-इन"
   }
 }

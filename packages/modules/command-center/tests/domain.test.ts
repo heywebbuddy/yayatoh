@@ -282,10 +282,19 @@ describe('widget registry and layouts', () => {
         .filter((s) => !s.hidden)
         .map((s) => s.key);
     expect(keys('planning')).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
+    // M3.3a live mode: the feed, speed, capacity, the duplicate/invalid monitor, the device board,
+    // staff presence and the guest-assistance slot join the owner's live layout.
     expect(keys('live')).toEqual([
       'checkins',
       'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
       'devices',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
       'seatFill',
       'sales',
       'tickets',
@@ -304,19 +313,30 @@ describe('widget registry and layouts', () => {
       'sales',
       'checkins',
       'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
       'devices',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
       'seatFill',
       'tickets',
-      // Batch 3d merge: M3.4a's staff views are offered to owners (hidden until shown).
+      // Batch 3d merge: M3.4a's counts per entrance are offered to owners (hidden until shown).
       'entrances',
-      'deviceBoard',
     ]);
     expect(r.find((s) => s.key === 'sales')?.hidden).toBe(true);
-    expect(r.find((s) => s.key === 'deviceBoard')?.hidden).toBe(true);
+    expect(r.find((s) => s.key === 'entrances')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'checkins')?.hidden).toBe(false);
     // Available in the mode but not in the role's default list: offered hidden.
     const door = resolveLayout(WIDGET_META, scope('door', 'gala'), 'wrap', null);
-    expect(door.filter((s) => s.hidden).map((s) => s.key)).toEqual(['seatFill', 'alerts', 'entrances']);
+    expect(door.filter((s) => s.hidden).map((s) => s.key)).toEqual([
+      'seatFill',
+      'alerts',
+      'entrances',
+      'scanIssues',
+    ]);
   });
 
   it('moves widgets up and down (the keyboard alternative to dragging)', () => {

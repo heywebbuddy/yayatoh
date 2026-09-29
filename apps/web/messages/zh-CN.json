@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}"
       }
     },
     "kinds": {
@@ -138,7 +139,8 @@
       },
       "alerts": {
         "alert": "提醒",
-        "alert-text": "提醒短信"
+        "alert-text": "提醒短信",
+        "alert-urgent-text": "紧急警报短信"
       }
     },
     "status": {
@@ -1127,7 +1129,11 @@
     "latitude": "纬度",
     "longitude": "经度",
     "locationError": "请同时以数字填写纬度(−90 到 90)和经度(−180 到 180),或都留空。",
-    "located": "位于 {lat}, {lng}"
+    "located": "位于 {lat}, {lng}",
+    "capacity": "容量（可选）",
+    "capacityHint": "该区域可容纳的人数，用于容量仪表。",
+    "capacityError": "请输入 1 到 1,000,000 之间的整数，或留空。",
+    "holds": "{count, plural, other {可容纳 # 人}}"
   },
   "search": {
     "title": "搜索",
@@ -6082,8 +6088,150 @@
         "title": "按入口签到"
       },
       "deviceBoard": {
-        "title": "设备面板"
+        "title": "设备面板",
+        "lastScan": "上次扫码 {time}",
+        "appVersion": "应用 {version}"
+      },
+      "liveFeed": {
+        "title": "实时动态",
+        "filters": "筛选动态",
+        "entrance": "入口",
+        "allEntrances": "所有入口",
+        "device": "设备",
+        "allDevices": "所有设备",
+        "outcome": "结果",
+        "allOutcomes": "全部",
+        "filter": {
+          "checkin": "签到",
+          "reentry": "再次入场",
+          "duplicate": "重复",
+          "invalid": "被拒扫码",
+          "device": "设备事件",
+          "alert": "警报"
+        },
+        "pause": "暂停",
+        "resume": "继续",
+        "paused": "已暂停。动态不会更新。",
+        "pausedNews": "已暂停。有新动态：继续即可查看。",
+        "none": "暂无内容。扫码、设备和警报发生时会显示在这里。",
+        "noneFiltered": "暂时没有符合这些筛选条件的内容。",
+        "listLabel": "最新动态，最新的在前",
+        "offline": "离线扫码",
+        "unknownDevice": "一台设备",
+        "alert": "警报{state, select, resolved {已解除} other {已触发}}：{title}",
+        "deviceEvent": "{device}{change, select, online {重新上线} offline {已离线} low_battery {电量低} revoked {已被吊销} wiped {已被清除} other {有变化}}",
+        "kind": {
+          "checkin": "{reason, select, granted {已进入区域} provisional {已放行（待确认）} other {已签到}}",
+          "reentry": "再次入场",
+          "duplicate": "{reason, select, duplicate_offline {重复（离线扫码）} other {重复：已签到}}",
+          "invalid": "已拒绝：{reason, select, invalid {无效的码} void {票已取消} wrong_event {其他活动的票} not_today {今天无效} outside_window {不在活动时间内} wrong_date {其他日期的票} superseded {已被替换的码} no_access {无权进入此区域} wrong_checkpoint {入口不对} other {已拒绝}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "签到速度",
+        "rateLabel": "每分钟扫码次数（最近 {minutes} 分钟）",
+        "medianGapValue": "扫码间隔 {value} 秒（中位数）",
+        "remaining": "{count, plural, other {还有 # 位来宾未到}}",
+        "queueValue": "{count, plural, =0 {预期来宾已全部入场} other {约 # 分钟可让所有人入场}}",
+        "queueStopped": "最近 5 分钟没有扫码",
+        "chartTitle": "每分钟签到人数（最近 15 分钟）",
+        "showTable": "以表格显示",
+        "minute": "时间",
+        "checkedIn": "签到人数",
+        "byEntrance": "按入口",
+        "byDevice": "按设备",
+        "entrance": "入口",
+        "device": "设备",
+        "perMinute": "每分钟扫码",
+        "medianGap": "扫码间隔",
+        "queue": "排队清空所需时间",
+        "seconds": "{value} 秒",
+        "minutes": "{count, plural, other {# 分钟}}",
+        "notMoving": "停滞",
+        "noEntrance": "未选择入口",
+        "noDevice": "入口屏幕"
+      },
+      "scanIssues": {
+        "title": "重复和被拒扫码",
+        "summary": "今天：重复 {duplicates, plural, other {# 次}}，被拒 {refused, plural, other {# 次}}",
+        "byReason": "按原因",
+        "none": "今天没有重复或被拒的扫码。",
+        "recent": "最近",
+        "openOrder": "打开订单",
+        "reason": {
+          "admitted": "已签到",
+          "granted": "已进入区域",
+          "provisional": "已放行（待确认）",
+          "duplicate": "已签到过",
+          "duplicate_offline": "重复（离线扫码）",
+          "invalid": "无效的码",
+          "void": "票已取消",
+          "wrong_event": "其他活动的票",
+          "not_today": "今天无效",
+          "outside_window": "不在活动时间内",
+          "wrong_date": "其他日期的票",
+          "superseded": "已被替换的码",
+          "no_access": "无权进入此区域",
+          "wrong_checkpoint": "入口不对",
+          "other": "其他"
+        }
+      },
+      "capacity": {
+        "title": "容量",
+        "venue": "已入场 {inside} / {capacity}",
+        "venueNoCap": "已入场 {inside}（未设置容量）",
+        "meter": "{name}：已用容量",
+        "event": "活动",
+        "out": "{count, plural, other {已签出 # 人}}",
+        "left": "{count, plural, other {剩余 # 个名额}}",
+        "areas": "按区域",
+        "area": "区域",
+        "in": "已入场",
+        "capacity": "容量",
+        "leftHeader": "剩余",
+        "status": "状态",
+        "level": {
+          "none": "未设置容量",
+          "ok": "低于 {near}%",
+          "near": "接近满员（{near}% 或以上）",
+          "over": "已满员或超员"
+        }
+      },
+      "staffPresence": {
+        "title": "入口工作人员",
+        "none": "目前入口没有人登录。",
+        "unknown": "团队成员",
+        "onDevice": "使用 {device}",
+        "onDoorScreen": "使用入口屏幕",
+        "wholeEvent": "整个活动",
+        "since": "自 {time} 起"
+      },
+      "assistance": {
+        "title": "来宾协助",
+        "pending": "来宾和入口工作人员的求助请求会显示在这里。",
+        "open": "{count, plural, other {# 个待处理请求}}"
       }
+    },
+    "tv": {
+      "open": "电视模式",
+      "title": "电视模式",
+      "back": "返回指挥中心",
+      "description": "{event} 场地屏幕使用的只读看板。任何拿到链接的人无需登录即可查看，因此看板从不显示金额或来宾姓名。",
+      "noAccessTitle": "你的角色无法使用电视模式",
+      "noAccess": "请向所有者或管理员申请访问权限。",
+      "newTitle": "新的屏幕链接",
+      "label": "屏幕名称",
+      "labelHint": "例如：大厅屏幕、B 门显示器。",
+      "labelError": "请为屏幕命名（最多 60 个字符）。",
+      "create": "创建链接",
+      "createdOnce": "{label} 的链接。请现在在屏幕上打开：它只显示一次。",
+      "listTitle": "屏幕链接",
+      "emptyTitle": "还没有屏幕链接",
+      "emptyDescription": "创建一个链接，在场地屏幕上显示实时看板。",
+      "createdAt": "创建于 {time}",
+      "revokedAt": "停用于 {time}",
+      "revoke": "停用",
+      "revokeLabel": "停用 {label}"
     }
   },
   "alerts": {
@@ -6459,5 +6607,41 @@
       "messages": "团队的客户消息",
       "security": "团队的安全提醒"
     }
+  },
+  "tv": {
+    "offTitle": "此屏幕链接已停用",
+    "offDescription": "请向活动团队索取新链接。",
+    "eyebrow": "入口实时情况",
+    "updated": "更新于 {time}",
+    "stale": "离线，最后更新于 {time}",
+    "fullScreen": "全屏",
+    "checkedIn": "今日签到",
+    "ofValid": "{valid} 张票中已签到 {total} 张",
+    "capacity": "容量",
+    "inside": "已入场 {inside} / {capacity}",
+    "insideNoCap": "已入场 {inside}",
+    "level": {
+      "none": "未设置容量",
+      "ok": "尚有空位",
+      "near": "接近满员",
+      "over": "已满员"
+    },
+    "speed": "每分钟扫码",
+    "perMinute": "{minutes, plural, =0 {预期来宾已全部入场} other {约 # 分钟可让所有人入场}}",
+    "perMinuteStopped": "最近 5 分钟没有扫码",
+    "devices": "在线设备",
+    "devicesValue": "{online} / {total}",
+    "issues": "今日入口情况",
+    "issuesValue": "重复 {duplicates, plural, other {# 次}}，被拒 {refused, plural, other {# 次}}",
+    "entrances": "按入口",
+    "entrance": "入口",
+    "entrancePerMinute": "每分钟",
+    "entranceQueue": "清空所需",
+    "noEntrance": "未选择入口",
+    "minutes": "{count, plural, other {# 分钟}}",
+    "chartTitle": "每分钟签到人数（最近 15 分钟）",
+    "showTable": "以表格显示",
+    "minute": "时间",
+    "checkedInColumn": "签到人数"
   }
 }

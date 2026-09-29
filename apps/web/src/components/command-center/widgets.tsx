@@ -8,12 +8,35 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { SEVERITY_DOT } from '../alerts-list.tsx';
+import {
+  type Assistance,
+  AssistanceBody,
+  type Capacity,
+  CapacityBody,
+  type CheckinSpeed,
+  CheckinSpeedBody,
+  type LiveFeed,
+  LiveFeedBody,
+  type ScanIssues,
+  ScanIssuesBody,
+  type StaffPresence,
+  StaffPresenceBody,
+} from './live-widgets.tsx';
 
 /** Widget bodies (M3.2a). Each renders one loader's allowlisted DTO; nothing else reaches them. */
 interface Ctx {
   readonly locale: string;
   readonly timeZone: string;
   readonly base: string;
+}
+
+/** What the board lets a widget control (M3.3a): its options (the feed's filters) and pausing. */
+export interface WidgetControls {
+  readonly params: Readonly<Record<string, string>>;
+  readonly setParams: (next: Readonly<Record<string, string>>) => void;
+  readonly paused: boolean;
+  readonly waiting: boolean;
+  readonly togglePause: () => void;
 }
 
 type Readiness = {
@@ -46,6 +69,8 @@ type DeviceBoard = {
     queueDepth: number | null;
     checkpoint: string | null;
     kiosk: boolean;
+    appVersion?: string | null;
+    lastScanAt?: string | null;
   }[];
 };
 type Alerts = {
@@ -264,6 +289,7 @@ function EntrancesBody({ d, c }: { d: Entrances; c: Ctx }) {
 /** M3.4a staff view (batch 3d merge): each device at the event, as the Scan PWA's board shows it. */
 function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
   const t = useTranslations('scanStaff');
+  const tl = useTranslations('commandCenter.widget.deviceBoard');
   const time = new Intl.DateTimeFormat(c.locale, { timeStyle: 'short', timeZone: c.timeZone });
   if (d.devices.length === 0) return <p className="text-body text-zinc-600">{t('noDevices')}</p>;
   return (
@@ -284,6 +310,8 @@ function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
               v.lastSeenAt ? t('lastSeen', { time: time.format(new Date(v.lastSeenAt)) }) : t('neverSeen'),
               v.batteryPct !== null ? t('battery', { percent: v.batteryPct }) : null,
               v.queueDepth !== null ? t('backlog', { count: v.queueDepth }) : null,
+              v.lastScanAt ? tl('lastScan', { time: time.format(new Date(v.lastScanAt)) }) : null,
+              v.appVersion ? tl('appVersion', { version: v.appVersion }) : null,
             ]
               .filter(Boolean)
               .join(' · ')}
@@ -322,8 +350,30 @@ function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   );
 }
 
-export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unknown; ctx: Ctx }) {
+export function WidgetBody({
+  widget,
+  data,
+  ctx,
+  controls,
+}: {
+  widget: WidgetKey;
+  data: unknown;
+  ctx: Ctx;
+  controls: WidgetControls;
+}) {
   switch (widget) {
+    case 'liveFeed':
+      return <LiveFeedBody d={data as LiveFeed} c={ctx} controls={controls} />;
+    case 'checkinSpeed':
+      return <CheckinSpeedBody d={data as CheckinSpeed} c={ctx} />;
+    case 'scanIssues':
+      return <ScanIssuesBody d={data as ScanIssues} c={ctx} />;
+    case 'capacity':
+      return <CapacityBody d={data as Capacity} c={ctx} />;
+    case 'staffPresence':
+      return <StaffPresenceBody d={data as StaffPresence} c={ctx} />;
+    case 'assistance':
+      return <AssistanceBody d={data as Assistance} />;
     case 'readiness':
       return <ReadinessBody d={data as Readiness} c={ctx} />;
     case 'sales':

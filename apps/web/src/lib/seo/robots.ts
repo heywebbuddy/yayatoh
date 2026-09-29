@@ -26,6 +26,8 @@ export const PRIVATE_PATHS = [
   '/reset-password',
   '/auth/',
   '/tickets',
+  // M3.3a: TV display links.
+  '/tv/',
 ];
 
 /**

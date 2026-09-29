@@ -38,7 +38,7 @@ export type WidgetSize = (typeof WIDGET_SIZES)[number];
 export type WidgetChannel = 'event.checkins' | 'event.devices' | 'event.metrics' | 'org.alerts';
 
 /** Every channel a widget follows (its own, then the extra ones). */
-export function widgetChannels(meta: Pick<WidgetMeta, 'channel' | 'alsoFollows'>): WidgetChannel[] {
+export function followedChannels(meta: Pick<WidgetMeta, 'channel' | 'alsoFollows'>): WidgetChannel[] {
   return [...(meta.channel ? [meta.channel] : []), ...(meta.alsoFollows ?? [])];
 }
 

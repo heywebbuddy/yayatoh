@@ -28,6 +28,8 @@ const PREFIXES: readonly [string, PageType][] = [
   ['/orders', 'token'],
   ['/claim', 'token'],
   ['/invite', 'token'],
+  // M3.3a TV mode: a display link's token in the path.
+  ['/tv', 'token'],
   ['/scan', 'scan'],
 ];
 

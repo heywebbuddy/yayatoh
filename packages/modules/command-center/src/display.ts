@@ -147,9 +147,18 @@ export const TvBoardDto = z.object({
   checkins: z.object({ today: Count, total: Count, valid: Count }),
   capacity: CapacityWidgetDto.shape.venue,
   areas: CapacityWidgetDto.shape.areas,
-  speed: CheckinSpeedWidgetDto.pick({ scansPerMin: true, queueMin: true, remaining: true, series: true }).extend({
+  speed: CheckinSpeedWidgetDto.pick({
+    scansPerMin: true,
+    queueMin: true,
+    remaining: true,
+    series: true,
+  }).extend({
     entrances: z.array(
-      z.object({ name: z.string().nullable(), scansPerMin: z.number().min(0), queueMin: z.int().min(0).nullable() }),
+      z.object({
+        name: z.string().nullable(),
+        scansPerMin: z.number().min(0),
+        queueMin: z.int().min(0).nullable(),
+      }),
     ),
   }),
   devices: z.object({ online: Count, total: Count }),

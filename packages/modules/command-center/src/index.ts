@@ -1,9 +1,40 @@
 export { type CallerScope, callerScopeTx, orgScopeTx } from './access.ts';
 export * from './client.ts';
 export { resetWidgetLayoutCommand, saveWidgetLayoutCommand, setModeOverrideCommand } from './commands.ts';
+export {
+  createDisplayLinkCommand,
+  DisplayLinkDto,
+  displayLinksQuery,
+  hashDisplayToken,
+  resolveDisplayLink,
+  revokeDisplayLinkCommand,
+  TvBoardDto,
+  tvBoardQuery,
+} from './display.ts';
+export {
+  AssistanceWidgetDto,
+  assistanceSlotWidget,
+  CapacityWidgetDto,
+  CheckinSpeedWidgetDto,
+  capacityWidget,
+  checkinSpeedWidget,
+  type FeedAlert,
+  type FeedAlertSource,
+  feedFilters,
+  LIVE_FEED_KINDS,
+  type LiveFeedKind,
+  LiveFeedWidgetDto,
+  liveFeedWidget,
+  type MemberNames,
+  ScanIssuesWidgetDto,
+  StaffPresenceWidgetDto,
+  scanIssuesWidget,
+  staffPresenceWidget,
+} from './live-widgets.ts';
 export { privateColumns } from './private-columns.ts';
 export { readinessRulesTx } from './readiness.ts';
 export { DEVICE_BOARD_EVENTS, deviceBoardPublisher, publishMetricsChangedTx } from './realtime.ts';
+export { COMMAND_CENTER_WIDGETS } from './registry.ts';
 export {
   EventViewDto,
   eventModeTx,
@@ -45,34 +76,3 @@ export {
   type WidgetRegistry,
   withWidget,
 } from './widgets.ts';
-export {
-  AssistanceWidgetDto,
-  assistanceSlotWidget,
-  CapacityWidgetDto,
-  CheckinSpeedWidgetDto,
-  capacityWidget,
-  checkinSpeedWidget,
-  type FeedAlert,
-  type FeedAlertSource,
-  feedFilters,
-  LIVE_FEED_KINDS,
-  LiveFeedWidgetDto,
-  type LiveFeedKind,
-  liveFeedWidget,
-  type MemberNames,
-  ScanIssuesWidgetDto,
-  StaffPresenceWidgetDto,
-  scanIssuesWidget,
-  staffPresenceWidget,
-} from './live-widgets.ts';
-export { COMMAND_CENTER_WIDGETS } from './registry.ts';
-export {
-  createDisplayLinkCommand,
-  DisplayLinkDto,
-  displayLinksQuery,
-  hashDisplayToken,
-  resolveDisplayLink,
-  revokeDisplayLinkCommand,
-  TvBoardDto,
-  tvBoardQuery,
-} from './display.ts';

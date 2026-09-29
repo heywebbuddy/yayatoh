@@ -188,7 +188,13 @@ export async function onDutyStaffTx(
 async function deviceEventTx(
   tx: TenantTx,
   ctx: Ctx,
-  row: { deviceId: string; eventId: string | null; kind: DeviceEventKind; at: Date; batteryPct?: number | null },
+  row: {
+    deviceId: string;
+    eventId: string | null;
+    kind: DeviceEventKind;
+    at: Date;
+    batteryPct?: number | null;
+  },
 ) {
   await tx.insert(deviceEvents).values({
     orgId: requireOrg(ctx),
@@ -295,7 +301,10 @@ export async function lastScanByDeviceTx(tx: TenantTx, eventId: string): Promise
 }
 
 /** App version per device (the device board). */
-export async function deviceAppVersionsTx(tx: TenantTx, ids: readonly string[]): Promise<Map<string, string>> {
+export async function deviceAppVersionsTx(
+  tx: TenantTx,
+  ids: readonly string[],
+): Promise<Map<string, string>> {
   if (ids.length === 0) return new Map();
   const rows = await tx
     .select({ id: devices.id, v: devices.appVersion })

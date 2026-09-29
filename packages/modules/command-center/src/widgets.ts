@@ -2,8 +2,8 @@ import {
   checkinFactsTx,
   deviceAppVersionsTx,
   devicesOnlineTx,
-  lastScanByDeviceTx,
   LOW_BATTERY_PCT,
+  lastScanByDeviceTx,
   listDevicesQuery,
   staffBoardTx,
 } from '@yayatoh/checkin';

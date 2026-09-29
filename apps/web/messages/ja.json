@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}"
       }
     },
     "kinds": {
@@ -138,7 +139,8 @@
       },
       "alerts": {
         "alert": "アラート",
-        "alert-text": "アラートSMS"
+        "alert-text": "アラートSMS",
+        "alert-urgent-text": "緊急アラートSMS"
       }
     },
     "status": {
@@ -1127,7 +1129,11 @@
     "latitude": "Breedtegraad",
     "longitude": "Lengtegraad",
     "locationError": "Vul breedtegraad (−90 tot 90) en lengtegraad (−180 tot 180) in als getallen, of laat beide leeg.",
-    "located": "op {lat}, {lng}"
+    "located": "op {lat}, {lng}",
+    "capacity": "収容人数（任意）",
+    "capacityHint": "エリアに入れる人数。収容人数のメーターに使います。",
+    "capacityError": "1〜1,000,000 の整数を入力するか、空欄のままにしてください。",
+    "holds": "{count, plural, other {定員 # 人}}"
   },
   "search": {
     "title": "検索",
@@ -6082,8 +6088,150 @@
         "title": "入口別のチェックイン"
       },
       "deviceBoard": {
-        "title": "デバイス一覧"
+        "title": "デバイス一覧",
+        "lastScan": "最終スキャン {time}",
+        "appVersion": "アプリ {version}"
+      },
+      "liveFeed": {
+        "title": "ライブフィード",
+        "filters": "フィードを絞り込む",
+        "entrance": "入口",
+        "allEntrances": "すべての入口",
+        "device": "端末",
+        "allDevices": "すべての端末",
+        "outcome": "結果",
+        "allOutcomes": "すべて",
+        "filter": {
+          "checkin": "チェックイン",
+          "reentry": "再入場",
+          "duplicate": "重複",
+          "invalid": "拒否されたスキャン",
+          "device": "端末のイベント",
+          "alert": "アラート"
+        },
+        "pause": "一時停止",
+        "resume": "再開",
+        "paused": "一時停止中です。フィードは更新されません。",
+        "pausedNews": "一時停止中です。新しい動きがあります。再開すると表示されます。",
+        "none": "まだ何もありません。スキャン、端末、アラートは発生するとここに表示されます。",
+        "noneFiltered": "この条件に一致するものはまだありません。",
+        "listLabel": "最近の動き（新しい順）",
+        "offline": "オフラインでスキャン",
+        "unknownDevice": "端末",
+        "alert": "アラート{state, select, resolved {解決} other {発生}}：{title}",
+        "deviceEvent": "{device}：{change, select, online {オンラインに復帰} offline {オフラインになりました} low_battery {バッテリー残量低下} revoked {無効化されました} wiped {消去されました} other {変更がありました}}",
+        "kind": {
+          "checkin": "{reason, select, granted {エリアに入場} provisional {入場（確認待ち）} other {チェックイン}}",
+          "reentry": "再入場",
+          "duplicate": "{reason, select, duplicate_offline {重複（オフラインでスキャン）} other {重複：チェックイン済み}}",
+          "invalid": "拒否：{reason, select, invalid {無効なコード} void {キャンセルされたチケット} wrong_event {別のイベントのチケット} not_today {本日は無効} outside_window {イベント時間外} wrong_date {別の日程} superseded {置き換えられたコード} no_access {このエリアへの入場権なし} wrong_checkpoint {入口が違います} other {拒否}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "チェックインの速さ",
+        "rateLabel": "1分あたりのスキャン数（直近 {minutes} 分）",
+        "medianGapValue": "スキャン間隔 {value} 秒（中央値）",
+        "remaining": "{count, plural, other {来場予定の残り # 人}}",
+        "queueValue": "{count, plural, =0 {予定の全員が入場済み} other {全員の入場まで約 # 分}}",
+        "queueStopped": "直近5分間スキャンなし",
+        "chartTitle": "1分あたりのチェックイン数（直近15分）",
+        "showTable": "表で表示",
+        "minute": "時刻",
+        "checkedIn": "チェックイン数",
+        "byEntrance": "入口別",
+        "byDevice": "端末別",
+        "entrance": "入口",
+        "device": "端末",
+        "perMinute": "1分あたりのスキャン",
+        "medianGap": "スキャン間隔",
+        "queue": "列が解消するまで",
+        "seconds": "{value} 秒",
+        "minutes": "{count, plural, other {# 分}}",
+        "notMoving": "停滞中",
+        "noEntrance": "入口の指定なし",
+        "noDevice": "入口スクリーン"
+      },
+      "scanIssues": {
+        "title": "重複と拒否されたスキャン",
+        "summary": "本日：重複 {duplicates, plural, other {# 件}}、拒否 {refused, plural, other {# 件}}",
+        "byReason": "理由別",
+        "none": "本日は重複や拒否されたスキャンはありません。",
+        "recent": "最近のもの",
+        "openOrder": "注文を開く",
+        "reason": {
+          "admitted": "チェックイン",
+          "granted": "エリアに入場",
+          "provisional": "入場（確認待ち）",
+          "duplicate": "チェックイン済み",
+          "duplicate_offline": "重複（オフラインでスキャン）",
+          "invalid": "無効なコード",
+          "void": "キャンセルされたチケット",
+          "wrong_event": "別のイベントのチケット",
+          "not_today": "本日は無効",
+          "outside_window": "イベント時間外",
+          "wrong_date": "別の日程",
+          "superseded": "置き換えられたコード",
+          "no_access": "このエリアへの入場権なし",
+          "wrong_checkpoint": "入口が違います",
+          "other": "その他"
+        }
+      },
+      "capacity": {
+        "title": "収容人数",
+        "venue": "{capacity} 人中 {inside} 人が入場",
+        "venueNoCap": "{inside} 人が入場（収容人数未設定）",
+        "meter": "{name}：収容の使用状況",
+        "event": "イベント",
+        "out": "{count, plural, other {退場 # 人}}",
+        "left": "{count, plural, other {残り # 人分}}",
+        "areas": "エリア別",
+        "area": "エリア",
+        "in": "入場",
+        "capacity": "収容人数",
+        "leftHeader": "残り",
+        "status": "状態",
+        "level": {
+          "none": "収容人数未設定",
+          "ok": "{near}% 未満",
+          "near": "ほぼ満員（{near}% 以上）",
+          "over": "満員または超過"
+        }
+      },
+      "staffPresence": {
+        "title": "入口のスタッフ",
+        "none": "現在、入口でサインインしている人はいません。",
+        "unknown": "チームメンバー",
+        "onDevice": "{device} を使用",
+        "onDoorScreen": "入口スクリーンを使用",
+        "wholeEvent": "イベント全体",
+        "since": "{time} から"
+      },
+      "assistance": {
+        "title": "ゲスト対応",
+        "pending": "ゲストや入口スタッフからのヘルプ依頼がここに表示されます。",
+        "open": "{count, plural, other {未対応の依頼 # 件}}"
       }
+    },
+    "tv": {
+      "open": "TVモード",
+      "title": "TVモード",
+      "back": "コマンドセンターに戻る",
+      "description": "{event} の会場スクリーン用の閲覧専用ボードです。リンクを知っている人はサインインなしでボードを見られるため、金額やゲストの名前は表示しません。",
+      "noAccessTitle": "このロールではTVモードを使えません",
+      "noAccess": "オーナーまたは管理者にアクセスを依頼してください。",
+      "newTitle": "新しいスクリーンリンク",
+      "label": "スクリーン名",
+      "labelHint": "例：ロビーのスクリーン、Bゲートのモニター",
+      "labelError": "スクリーンに名前を付けてください（60文字以内）。",
+      "create": "リンクを作成",
+      "createdOnce": "{label} のリンクです。今すぐスクリーンで開いてください。表示されるのは一度だけです。",
+      "listTitle": "スクリーンリンク",
+      "emptyTitle": "スクリーンリンクはまだありません",
+      "emptyDescription": "会場のスクリーンにライブボードを表示するには、リンクを作成してください。",
+      "createdAt": "{time} に作成",
+      "revokedAt": "{time} に無効化",
+      "revoke": "無効にする",
+      "revokeLabel": "{label} を無効にする"
     }
   },
   "alerts": {
@@ -6459,5 +6607,41 @@
       "messages": "チーム向けの顧客メッセージ",
       "security": "チーム向けのセキュリティ通知"
     }
+  },
+  "tv": {
+    "offTitle": "このスクリーンリンクは無効です",
+    "offDescription": "イベントチームに新しいリンクを依頼してください。",
+    "eyebrow": "入口のライブ状況",
+    "updated": "{time} に更新",
+    "stale": "オフライン、最終更新 {time}",
+    "fullScreen": "全画面",
+    "checkedIn": "本日のチェックイン",
+    "ofValid": "{valid} 枚中 {total} 枚がチェックイン済み",
+    "capacity": "収容人数",
+    "inside": "{capacity} 人中 {inside} 人が入場",
+    "insideNoCap": "{inside} 人が入場",
+    "level": {
+      "none": "収容人数未設定",
+      "ok": "余裕あり",
+      "near": "ほぼ満員",
+      "over": "満員"
+    },
+    "speed": "1分あたりのスキャン",
+    "perMinute": "{minutes, plural, =0 {予定の全員が入場済み} other {全員の入場まで約 # 分}}",
+    "perMinuteStopped": "直近5分間スキャンなし",
+    "devices": "オンラインの端末",
+    "devicesValue": "{total} 台中 {online} 台",
+    "issues": "本日の入口",
+    "issuesValue": "重複 {duplicates, plural, other {# 件}}、拒否 {refused, plural, other {# 件}}",
+    "entrances": "入口別",
+    "entrance": "入口",
+    "entrancePerMinute": "1分あたり",
+    "entranceQueue": "解消まで",
+    "noEntrance": "入口の指定なし",
+    "minutes": "{count, plural, other {# 分}}",
+    "chartTitle": "1分あたりのチェックイン数（直近15分）",
+    "showTable": "表で表示",
+    "minute": "時刻",
+    "checkedInColumn": "チェックイン数"
   }
 }

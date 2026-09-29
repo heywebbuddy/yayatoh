@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}"
       }
     },
     "kinds": {
@@ -138,7 +139,8 @@
       },
       "alerts": {
         "alert": "Melding",
-        "alert-text": "Meldings-sms"
+        "alert-text": "Meldings-sms",
+        "alert-urgent-text": "Dringende meldingssms"
       }
     },
     "status": {
@@ -1127,7 +1129,11 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "locationError": "Informe latitude (−90 a 90) e longitude (−180 a 180) como números, ou deixe ambas vazias.",
-    "located": "em {lat}, {lng}"
+    "located": "em {lat}, {lng}",
+    "capacity": "Capaciteit (optioneel)",
+    "capacityHint": "Hoeveel mensen de zone kan hebben, voor de capaciteitsmeters.",
+    "capacityError": "Vul een heel getal van 1 tot 1.000.000 in, of laat het leeg.",
+    "holds": "{count, plural, one {biedt plaats aan #} other {biedt plaats aan #}}"
   },
   "search": {
     "title": "Zoeken",
@@ -6082,8 +6088,150 @@
         "title": "Check-ins per ingang"
       },
       "deviceBoard": {
-        "title": "Apparatenoverzicht"
+        "title": "Apparatenoverzicht",
+        "lastScan": "laatste scan {time}",
+        "appVersion": "app {version}"
+      },
+      "liveFeed": {
+        "title": "Live feed",
+        "filters": "Feed filteren",
+        "entrance": "Ingang",
+        "allEntrances": "Alle ingangen",
+        "device": "Apparaat",
+        "allDevices": "Alle apparaten",
+        "outcome": "Resultaat",
+        "allOutcomes": "Alles",
+        "filter": {
+          "checkin": "Check-ins",
+          "reentry": "Herintredes",
+          "duplicate": "Dubbele scans",
+          "invalid": "Geweigerde scans",
+          "device": "Apparaatgebeurtenissen",
+          "alert": "Meldingen"
+        },
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "paused": "Gepauzeerd. De feed wordt niet bijgewerkt.",
+        "pausedNews": "Gepauzeerd. Er is nieuwe activiteit: hervat om die te zien.",
+        "none": "Nog niets. Scans, apparaten en meldingen verschijnen hier zodra ze gebeuren.",
+        "noneFiltered": "Nog niets past bij deze filters.",
+        "listLabel": "Laatste activiteit, nieuwste eerst",
+        "offline": "offline gescand",
+        "unknownDevice": "Een apparaat",
+        "alert": "Melding {state, select, resolved {opgelost} other {geopend}}: {title}",
+        "deviceEvent": "{device} {change, select, online {is weer online} offline {is offline gegaan} low_battery {heeft een bijna lege batterij} revoked {is ingetrokken} wiped {is gewist} other {is veranderd}}",
+        "kind": {
+          "checkin": "{reason, select, granted {Toegelaten tot de zone} provisional {Binnengelaten (nog te bevestigen)} other {Ingecheckt}}",
+          "reentry": "Herintrede",
+          "duplicate": "{reason, select, duplicate_offline {Dubbel (offline gescand)} other {Dubbel: al ingecheckt}}",
+          "invalid": "Geweigerd: {reason, select, invalid {geen geldige code} void {ticket geannuleerd} wrong_event {ticket van een ander evenement} not_today {vandaag niet geldig} outside_window {buiten de tijden van het evenement} wrong_date {voor een andere datum} superseded {vervangen code} no_access {geen toegang tot deze zone} wrong_checkpoint {verkeerde ingang} other {geweigerd}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "Check-insnelheid",
+        "rateLabel": "scans per minuut (laatste {minutes} minuten)",
+        "medianGapValue": "{value} s tussen scans (mediaan)",
+        "remaining": "{count, plural, one {# gast nog verwacht} other {# gasten nog verwacht}}",
+        "queueValue": "{count, plural, =0 {alle verwachte gasten zijn binnen} one {ongeveer # minuut tot iedereen binnen is} other {ongeveer # minuten tot iedereen binnen is}}",
+        "queueStopped": "geen scans in de laatste 5 minuten",
+        "chartTitle": "Check-ins per minuut, laatste 15 minuten",
+        "showTable": "Als tabel tonen",
+        "minute": "Minuut",
+        "checkedIn": "Ingecheckt",
+        "byEntrance": "Per ingang",
+        "byDevice": "Per apparaat",
+        "entrance": "Ingang",
+        "device": "Apparaat",
+        "perMinute": "Scans per minuut",
+        "medianGap": "Tijd tussen scans",
+        "queue": "Tijd tot iedereen binnen is",
+        "seconds": "{value} s",
+        "minutes": "{count, plural, one {# min} other {# min}}",
+        "notMoving": "Staat stil",
+        "noEntrance": "Geen ingang gekozen",
+        "noDevice": "Toegangsscherm"
+      },
+      "scanIssues": {
+        "title": "Dubbele en geweigerde scans",
+        "summary": "Vandaag: {duplicates, plural, one {# dubbele} other {# dubbele}}, {refused, plural, one {# geweigerde scan} other {# geweigerde scans}}",
+        "byReason": "Per reden",
+        "none": "Vandaag geen dubbele of geweigerde scans.",
+        "recent": "Meest recent",
+        "openOrder": "Bestelling openen",
+        "reason": {
+          "admitted": "Ingecheckt",
+          "granted": "Toegelaten tot de zone",
+          "provisional": "Binnengelaten (nog te bevestigen)",
+          "duplicate": "Al ingecheckt",
+          "duplicate_offline": "Dubbel (offline gescand)",
+          "invalid": "Geen geldige code",
+          "void": "Ticket geannuleerd",
+          "wrong_event": "Ticket van een ander evenement",
+          "not_today": "Vandaag niet geldig",
+          "outside_window": "Buiten de tijden van het evenement",
+          "wrong_date": "Voor een andere datum",
+          "superseded": "Vervangen code",
+          "no_access": "Geen toegang tot deze zone",
+          "wrong_checkpoint": "Verkeerde ingang",
+          "other": "Overig"
+        }
+      },
+      "capacity": {
+        "title": "Capaciteit",
+        "venue": "{inside} binnen, van {capacity}",
+        "venueNoCap": "{inside} binnen (geen capaciteit ingesteld)",
+        "meter": "{name}: gebruikte capaciteit",
+        "event": "Evenement",
+        "out": "{count, plural, one {# uitgecheckt} other {# uitgecheckt}}",
+        "left": "{count, plural, one {# plek vrij} other {# plekken vrij}}",
+        "areas": "Per zone",
+        "area": "Zone",
+        "in": "Binnen",
+        "capacity": "Capaciteit",
+        "leftHeader": "Vrij",
+        "status": "Status",
+        "level": {
+          "none": "Geen capaciteit ingesteld",
+          "ok": "Onder {near}%",
+          "near": "Bijna vol ({near}% of meer)",
+          "over": "Capaciteit bereikt of overschreden"
+        }
+      },
+      "staffPresence": {
+        "title": "Personeel bij de ingang",
+        "none": "Er is nu niemand ingelogd bij de ingang.",
+        "unknown": "Teamlid",
+        "onDevice": "Op {device}",
+        "onDoorScreen": "Op het toegangsscherm",
+        "wholeEvent": "Heel het evenement",
+        "since": "sinds {time}"
+      },
+      "assistance": {
+        "title": "Hulp voor gasten",
+        "pending": "Hulpvragen van gasten en ingangspersoneel verschijnen hier.",
+        "open": "{count, plural, one {# open verzoek} other {# open verzoeken}}"
       }
+    },
+    "tv": {
+      "open": "Tv-modus",
+      "title": "Tv-modus",
+      "back": "Terug naar het commandocentrum",
+      "description": "Alleen-lezen-borden voor schermen bij {event}. Iedereen met een link ziet het bord zonder in te loggen, dus het toont nooit geld of namen van gasten.",
+      "noAccessTitle": "Geen tv-modus voor jouw rol",
+      "noAccess": "Vraag een eigenaar of beheerder om toegang.",
+      "newTitle": "Nieuwe schermlink",
+      "label": "Naam van het scherm",
+      "labelHint": "Bijvoorbeeld Scherm in de hal of Monitor poort B.",
+      "labelError": "Geef het scherm een naam (maximaal 60 tekens).",
+      "create": "Link maken",
+      "createdOnce": "Link voor {label}. Open hem nu op het scherm: hij wordt maar één keer getoond.",
+      "listTitle": "Schermlinks",
+      "emptyTitle": "Nog geen schermlinks",
+      "emptyDescription": "Maak er een om het live bord op een scherm op locatie te tonen.",
+      "createdAt": "Gemaakt {time}",
+      "revokedAt": "Uitgezet {time}",
+      "revoke": "Uitzetten",
+      "revokeLabel": "{label} uitzetten"
     }
   },
   "alerts": {
@@ -6459,5 +6607,41 @@
       "messages": "Klantberichten voor je team",
       "security": "Beveiligingsmeldingen voor je team"
     }
+  },
+  "tv": {
+    "offTitle": "Deze schermlink staat uit",
+    "offDescription": "Vraag het team van het evenement om een nieuwe link.",
+    "eyebrow": "Live bij de ingang",
+    "updated": "Bijgewerkt {time}",
+    "stale": "Offline, laatst bijgewerkt {time}",
+    "fullScreen": "Volledig scherm",
+    "checkedIn": "Vandaag ingecheckt",
+    "ofValid": "{total} van {valid} tickets ingecheckt",
+    "capacity": "Capaciteit",
+    "inside": "{inside} binnen, van {capacity}",
+    "insideNoCap": "{inside} binnen",
+    "level": {
+      "none": "Geen capaciteit ingesteld",
+      "ok": "Nog plek genoeg",
+      "near": "Bijna vol",
+      "over": "Vol"
+    },
+    "speed": "Scans per minuut",
+    "perMinute": "{minutes, plural, =0 {Alle verwachte gasten zijn binnen} one {Ongeveer # minuut tot iedereen binnen is} other {Ongeveer # minuten tot iedereen binnen is}}",
+    "perMinuteStopped": "Geen scans in de laatste 5 minuten",
+    "devices": "Apparaten online",
+    "devicesValue": "{online} van {total}",
+    "issues": "Vandaag bij de ingang",
+    "issuesValue": "{duplicates, plural, one {# dubbele} other {# dubbele}}, {refused, plural, one {# geweigerde scan} other {# geweigerde scans}}",
+    "entrances": "Per ingang",
+    "entrance": "Ingang",
+    "entrancePerMinute": "Per minuut",
+    "entranceQueue": "Tot iedereen binnen is",
+    "noEntrance": "Geen ingang gekozen",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "chartTitle": "Check-ins per minuut, laatste 15 minuten",
+    "showTable": "Als tabel tonen",
+    "minute": "Minuut",
+    "checkedInColumn": "Ingecheckt"
   }
 }

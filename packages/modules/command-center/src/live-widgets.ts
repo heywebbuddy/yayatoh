@@ -22,13 +22,13 @@ import {
   CAPACITY_NEAR_PCT,
   CAPACITY_OVER_PCT,
   capacityGauge,
+  medianGapSeconds,
   minuteSeries,
+  minutesToClear,
   SPEED_SERIES_MINUTES,
   SPEED_WINDOW_MS,
   scansPerMinute,
   speedByGroup,
-  medianGapSeconds,
-  minutesToClear,
 } from './domain/live.ts';
 import { WIDGET_META } from './domain/widgets.ts';
 import { defineWidget, localMidnight, type WidgetLoadArgs } from './widgets.ts';
@@ -99,7 +99,8 @@ const FEED_LIMIT = 50;
 /** The feed's filters from the board's params; anything unknown is ignored (no filter). */
 export function feedFilters(params: Readonly<Record<string, string>>) {
   const id = (v: string | undefined) => (v && UUID.test(v) ? v : null);
-  const kind = params.kind && (LIVE_FEED_KINDS as readonly string[]).includes(params.kind) ? params.kind : null;
+  const kind =
+    params.kind && (LIVE_FEED_KINDS as readonly string[]).includes(params.kind) ? params.kind : null;
   return {
     checkpointId: id(params.checkpoint),
     deviceId: id(params.device),
@@ -152,17 +153,13 @@ export function liveFeedWidget(alerts: FeedAlertSource | null) {
           alert: { severity: a.severity, state: a.state, count: a.count },
         });
     items.sort((a, b) => b.at.localeCompare(a.at) || b.id.localeCompare(a.id));
-    const deviceIds = new Set(
-      labels.devices.filter((d) => d.eventId === ev.id).map((d) => d.id),
-    );
+    const deviceIds = new Set(labels.devices.filter((d) => d.eventId === ev.id).map((d) => d.id));
     return {
       items: items.slice(0, FEED_LIMIT),
       filters,
       options: {
         checkpoints: labels.checkpoints.filter((c) => !c.archived).map((c) => ({ id: c.id, name: c.name })),
-        devices: labels.devices
-          .filter((d) => deviceIds.has(d.id))
-          .map((d) => ({ id: d.id, label: d.label })),
+        devices: labels.devices.filter((d) => deviceIds.has(d.id)).map((d) => ({ id: d.id, label: d.label })),
       },
       asOf: ctx.now.toISOString(),
     };
@@ -200,63 +197,63 @@ export async function checkinSpeedTx(
   ctx: Ctx,
   ev: Pick<EventDto, 'id' | 'timezone'>,
 ): Promise<z.infer<typeof CheckinSpeedWidgetDto>> {
-    const now = ctx.now.getTime();
-    const scans = await scanWindowTx(tx, ev.id, new Date(now - SPEED_WINDOW_MS), ctx.now);
-    const labels = await liveLabelsTx(tx, ev.id);
-    const admittedTotal = (await checkinFactsTx(tx, { eventId: ev.id })).tickets;
-    const valid = (await ticketTypeStatsTx(tx, ev.id)).reduce((s, t) => s + t.valid, 0);
-    const remaining = Math.max(valid - admittedTotal, 0);
-    const times = scans.map((s) => s.at.getTime());
-    const rate = scansPerMinute(times, now);
-    const admittedToday = await admittedTodayByCheckpointTx(tx, ev.id, eventDay(ctx.now, ev.timezone));
+  const now = ctx.now.getTime();
+  const scans = await scanWindowTx(tx, ev.id, new Date(now - SPEED_WINDOW_MS), ctx.now);
+  const labels = await liveLabelsTx(tx, ev.id);
+  const admittedTotal = (await checkinFactsTx(tx, { eventId: ev.id })).tickets;
+  const valid = (await ticketTypeStatsTx(tx, ev.id)).reduce((s, t) => s + t.valid, 0);
+  const remaining = Math.max(valid - admittedTotal, 0);
+  const times = scans.map((s) => s.at.getTime());
+  const rate = scansPerMinute(times, now);
+  const admittedToday = await admittedTodayByCheckpointTx(tx, ev.id, eventDay(ctx.now, ev.timezone));
 
-    const entranceKeys: (string | null)[] = labels.checkpoints
-      .filter((c) => c.kind === 'entrance' && (!c.archived || scans.some((s) => s.checkpointId === c.id)))
-      .map((c) => c.id);
-    if (scans.some((s) => s.checkpointId === null)) entranceKeys.push(null);
-    const cpName = new Map(labels.checkpoints.map((c) => [c.id, c.name]));
-    const entrances = speedByGroup(
-      scans.map((s) => ({ at: s.at.getTime(), key: s.checkpointId })),
-      entranceKeys,
-      { now, remaining, admitted: admittedToday },
-    ).map((r) => ({ ...r, id: r.key, name: r.key ? (cpName.get(r.key) ?? null) : null }));
+  const entranceKeys: (string | null)[] = labels.checkpoints
+    .filter((c) => c.kind === 'entrance' && (!c.archived || scans.some((s) => s.checkpointId === c.id)))
+    .map((c) => c.id);
+  if (scans.some((s) => s.checkpointId === null)) entranceKeys.push(null);
+  const cpName = new Map(labels.checkpoints.map((c) => [c.id, c.name]));
+  const entrances = speedByGroup(
+    scans.map((s) => ({ at: s.at.getTime(), key: s.checkpointId })),
+    entranceKeys,
+    { now, remaining, admitted: admittedToday },
+  ).map((r) => ({ ...r, id: r.key, name: r.key ? (cpName.get(r.key) ?? null) : null }));
 
-    const devLabel = new Map(labels.devices.map((d) => [d.id, d.label]));
-    const deviceKeys: (string | null)[] = labels.devices
-      .filter((d) => d.eventId === ev.id || scans.some((s) => s.deviceId === d.id))
-      .map((d) => d.id);
-    if (scans.some((s) => s.deviceId === null)) deviceKeys.push(null);
-    const devices = speedByGroup(
-      scans.map((s) => ({ at: s.at.getTime(), key: s.deviceId })),
-      deviceKeys,
-      { now, remaining },
-    ).map((r) => ({ ...r, id: r.key, name: r.key ? (devLabel.get(r.key) ?? null) : null }));
+  const devLabel = new Map(labels.devices.map((d) => [d.id, d.label]));
+  const deviceKeys: (string | null)[] = labels.devices
+    .filter((d) => d.eventId === ev.id || scans.some((s) => s.deviceId === d.id))
+    .map((d) => d.id);
+  if (scans.some((s) => s.deviceId === null)) deviceKeys.push(null);
+  const devices = speedByGroup(
+    scans.map((s) => ({ at: s.at.getTime(), key: s.deviceId })),
+    deviceKeys,
+    { now, remaining },
+  ).map((r) => ({ ...r, id: r.key, name: r.key ? (devLabel.get(r.key) ?? null) : null }));
 
-    const series = await eventTimeseriesQuery.handler({
-      input: {
-        eventId: ev.id,
-        key: 'checkins.tickets',
-        bucket: 'minute',
-        from: new Date(now - SPEED_SERIES_MINUTES * 60_000),
-        to: new Date(now + 60_000),
-      },
-      ctx,
-      tx,
-    });
-    return {
-      windowMin: SPEED_WINDOW_MS / 60_000,
-      series: minuteSeries(
-        series.points.map((p) => ({ at: p.bucketStart.getTime(), value: p.value })),
-        now,
-      ).map((p) => ({ at: new Date(p.at).toISOString(), count: Math.max(p.count, 0) })),
-      scansPerMin: rate,
-      medianGapS: medianGapSeconds(times.filter((t) => t > now - SPEED_WINDOW_MS)),
-      queueMin: minutesToClear(remaining, 1, rate),
-      remaining,
-      entrances,
-      devices,
-      asOf: ctx.now.toISOString(),
-    };
+  const series = await eventTimeseriesQuery.handler({
+    input: {
+      eventId: ev.id,
+      key: 'checkins.tickets',
+      bucket: 'minute',
+      from: new Date(now - SPEED_SERIES_MINUTES * 60_000),
+      to: new Date(now + 60_000),
+    },
+    ctx,
+    tx,
+  });
+  return {
+    windowMin: SPEED_WINDOW_MS / 60_000,
+    series: minuteSeries(
+      series.points.map((p) => ({ at: p.bucketStart.getTime(), value: p.value })),
+      now,
+    ).map((p) => ({ at: new Date(p.at).toISOString(), count: Math.max(p.count, 0) })),
+    scansPerMin: rate,
+    medianGapS: medianGapSeconds(times.filter((t) => t > now - SPEED_WINDOW_MS)),
+    queueMin: minutesToClear(remaining, 1, rate),
+    remaining,
+    entrances,
+    devices,
+    asOf: ctx.now.toISOString(),
+  };
 }
 
 export const checkinSpeedWidget = defineWidget(
@@ -342,22 +339,24 @@ export async function capacityTx(
   ctx: Ctx,
   eventId: string,
 ): Promise<z.infer<typeof CapacityWidgetDto>> {
-    const f = await capacityFactsTx(tx, eventId, ctx.now);
-    // The alert engine's capacity: places for sale on the live ticket types (M3.2b capacity rule).
-    const capacity = (await ticketTypeStatsTx(tx, eventId))
-      .filter((t) => !t.archived)
-      .reduce((s, t) => s + t.capacity, 0);
-    return {
-      nearPct: CAPACITY_NEAR_PCT,
-      overPct: CAPACITY_OVER_PCT,
-      venue: { ...capacityGauge(f.inside, capacity || null), out: f.out },
-      areas: f.areas.map((a) => ({ ...capacityGauge(a.inside, a.capacity), name: a.name, kind: a.kind })),
-      asOf: ctx.now.toISOString(),
-    };
+  const f = await capacityFactsTx(tx, eventId, ctx.now);
+  // The alert engine's capacity: places for sale on the live ticket types (M3.2b capacity rule).
+  const capacity = (await ticketTypeStatsTx(tx, eventId))
+    .filter((t) => !t.archived)
+    .reduce((s, t) => s + t.capacity, 0);
+  return {
+    nearPct: CAPACITY_NEAR_PCT,
+    overPct: CAPACITY_OVER_PCT,
+    venue: { ...capacityGauge(f.inside, capacity || null), out: f.out },
+    areas: f.areas.map((a) => ({ ...capacityGauge(a.inside, a.capacity), name: a.name, kind: a.kind })),
+    asOf: ctx.now.toISOString(),
+  };
 }
 
-export const capacityWidget = defineWidget(WIDGET_META.capacity, CapacityWidgetDto, async ({ tx, ctx, scope }) =>
-  capacityTx(tx, ctx, scope.event.id),
+export const capacityWidget = defineWidget(
+  WIDGET_META.capacity,
+  CapacityWidgetDto,
+  async ({ tx, ctx, scope }) => capacityTx(tx, ctx, scope.event.id),
 );
 
 // --- Staff presence ------------------------------------------------------------------------------

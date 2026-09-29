@@ -20,9 +20,9 @@ import {
   scanCheckpointTx,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+import { scanningDeviceOf } from './live.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
-import { scanningDeviceOf } from './live.ts';
 import { checkVelocityTx, FraudSignalDto, fraudSignalsTx, openHighSignalCountTx } from './signals.ts';
 import { actorScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 

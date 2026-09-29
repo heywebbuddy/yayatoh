@@ -25,6 +25,8 @@ const TONE = {
 } as const;
 
 const newScanId = () => `web:${crypto.randomUUID()}`;
+/** The door screen's presence ping (the check-in module's `PRESENCE_PING_MS`). */
+const PRESENCE_PING_MS = 30_000;
 
 /**
  * The code field keeps focus, so USB/Bluetooth scanners (which type the code and press Enter)
@@ -35,8 +37,11 @@ export function Scanner({
   timeZone,
   checkpoints,
   scoped = false,
+  presence,
 }: {
   action: (prev: ScanState, form: FormData) => Promise<ScanState>;
+  /** M3.3a staff presence: tells the Command Center this member is at the doors (and where). */
+  presence?: (checkpointId: string | null) => Promise<void>;
   timeZone: string;
   /** Live entrances and zones; the choice stays put between scans. */
   checkpoints: readonly { id: string; name: string }[];
@@ -49,6 +54,14 @@ export function Scanner({
   const stand = checkpoints.some((c) => c.id === checkpointId) ? checkpointId : '';
   const [scanId, setScanId] = useState(newScanId);
   const input = useRef<HTMLInputElement>(null);
+  // While the door screen is open, report presence now, every 30 s and when the entrance changes.
+  useEffect(() => {
+    if (!presence) return;
+    const ping = () => void presence(stand || null).catch(() => undefined);
+    ping();
+    const id = setInterval(ping, PRESENCE_PING_MS);
+    return () => clearInterval(id);
+  }, [presence, stand]);
   useEffect(() => {
     if (state.kind === 'idle') return;
     setScanId(newScanId());
