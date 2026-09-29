@@ -127,6 +127,7 @@ export {
   type EventRoleGrant,
   eventIdsEndedBeforeTx,
   eventIdsTx,
+  eventRoleAssignmentIdTx,
   eventRoleGrantsTx,
   eventRolesOf,
   eventStaffTx,
