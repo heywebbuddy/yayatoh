@@ -492,10 +492,13 @@ describe('batch PDF', () => {
           const i = ((Number(m[2]) * scale + dy) * width + Number(m[1]) * scale + dx) * 4;
           data[i] = data[i + 1] = data[i + 2] = 0;
         }
-    const [hit] = await readBarcodes({ data, width, height: width, colorSpace: 'srgb' } as ImageData, {
-      formats: ['QRCode'],
-      maxNumberOfSymbols: 1,
-    });
+    const [hit] = await readBarcodes(
+      { data, width, height: width, colorSpace: 'srgb' } as unknown as Parameters<typeof readBarcodes>[0],
+      {
+        formats: ['QRCode'],
+        maxNumberOfSymbols: 1,
+      },
+    );
     expect(hit?.text).toBe(t.code);
     const keys = await withTenant(a.ctx(), (tx) => publicKeysTx(tx));
     const v = await verifyTicketCode(hit?.text ?? '', keys);
