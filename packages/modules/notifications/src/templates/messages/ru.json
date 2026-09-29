@@ -36,6 +36,11 @@
       "intro": "{orgName} приглашает вас в команду на роль «{role}».",
       "cta": "Принять приглашение"
     },
+    "tenancy.event-invitation": {
+      "subject": "Вас пригласили помочь с событием «{eventName}»",
+      "intro": "{orgName} пригласил вас в «{eventName}» в роли: {role}. Вы увидите только это событие.",
+      "cta": "Принять приглашение"
+    },
     "ticketing.claim-link": {
       "subject": "Вас ждёт билет на {eventName}",
       "intro": "Вам передали билет на {eventName}. Получите его, чтобы у вас был собственный QR-код.",
@@ -180,7 +185,10 @@
     "marketing": "маркетинг",
     "box_office": "касса",
     "scanner": "контролёр",
-    "viewer": "наблюдатель"
+    "viewer": "наблюдатель",
+    "co_host": "соорганизатор",
+    "planner": "планировщик",
+    "collaborator": "участник события"
   },
   "account": {
     "deleted": {

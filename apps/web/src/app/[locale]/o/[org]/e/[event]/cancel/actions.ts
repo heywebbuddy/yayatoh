@@ -25,7 +25,7 @@ export async function cancelAndRefundAction(
   event: string,
   form: FormData,
 ): Promise<StepUpActionResult> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'home');
   if (form.get('confirm') !== 'yes') return { code: 'validation_failed' };
   // Staff acting as a member never move money (M1.2e); everyone else confirms it's them first.
   if (data.ctx.impersonatedBy) return { code: 'impersonation_blocked' };
@@ -48,7 +48,7 @@ export async function postponeAction(
   event: string,
   _form: FormData,
 ): Promise<StepUpActionResult> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'home');
   try {
     await executeCommand(transitionEventCommand, { eventId: ev.id, transition: 'postpone' }, data.ctx, ports);
   } catch (err) {
@@ -66,7 +66,7 @@ export async function steerRunAction(
   to: 'pause' | 'resume',
   _form: FormData,
 ): Promise<StepUpActionResult> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'home');
   try {
     await executeCommand(
       to === 'pause' ? pauseMassRefundCommand : resumeMassRefundCommand,

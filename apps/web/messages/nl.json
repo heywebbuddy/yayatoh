@@ -269,7 +269,8 @@
     "audiences": "Doelgroepen",
     "refundRequests": "Terugbetalingsverzoeken",
     "helpCenter": "Helpcentrum",
-    "marketingSite": "Marketingsite"
+    "marketingSite": "Marketingsite",
+    "tablesSponsors": "Tafels & sponsors"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -283,7 +284,11 @@
     "registration": "Registratie",
     "rsvp": "RSVP",
     "ticket": "Ticket",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "organizer": "Organisator",
+    "organizers": "Organisatoren",
+    "host": "Gastheer",
+    "hosts": "Gastheren"
   },
   "roles": {
     "owner": "Eigenaar",
@@ -293,7 +298,8 @@
     "marketing": "Marketing",
     "box_office": "Kassa",
     "scanner": "Scanner",
-    "viewer": "Alleen lezen"
+    "viewer": "Alleen lezen",
+    "collaborator": "Evenementmedewerker"
   },
   "profiles": {
     "wedding": "Bruiloft",
@@ -354,7 +360,8 @@
     "ownerOnly": "Alleen eigenaren kunnen eigenaren wijzigen",
     "errors": {
       "last_owner": "Een organisatie heeft minstens één eigenaar nodig.",
-      "owner_only": "Alleen een eigenaar kan iemand eigenaar maken of een eigenaar wijzigen."
+      "owner_only": "Alleen een eigenaar kan iemand eigenaar maken of een eigenaar wijzigen.",
+      "pending_invitation": "Er staat al een uitnodiging open voor dit adres. Trek die eerst in of wacht tot ze is geaccepteerd."
     }
   },
   "dashboard": {
@@ -433,7 +440,13 @@
     "datesUpcoming": "Een komende datum",
     "ticketsCreated": "Tickets aangemaakt",
     "agendaAdded": "Programma toegevoegd",
-    "speakersAdded": "Sprekers toegevoegd"
+    "speakersAdded": "Sprekers toegevoegd",
+    "comingSoon": "Binnenkort",
+    "guestsAdded": "Gastenlijst toegevoegd",
+    "rsvpDeadlineSet": "RSVP-deadline ingesteld",
+    "floorPlanChosen": "Plattegrond gekozen",
+    "guestSitePublished": "Gastenwebsite gepubliceerd",
+    "tablesSponsors": "Tafels en sponsors ingericht"
   },
   "segments": {
     "all": "Alle",
@@ -699,7 +712,9 @@
       "revoked": "Deze uitnodiging is ingetrokken.",
       "expired": "Deze uitnodiging is verlopen. Vraag om een nieuwe.",
       "unavailable": "Deze organisatie is momenteel niet beschikbaar."
-    }
+    },
+    "eventTitle": "Help mee met {event}",
+    "joinEvent": "Je sluit je aan bij {event} ({org}) als {role}. Je ziet alleen dit evenement."
   },
   "eventStatus": {
     "draft": "Concept",
@@ -3465,7 +3480,12 @@
       "ticketsCreated": "Maak minstens één tickettype aan.",
       "agendaAdded": "Voeg de eerste sessie toe aan het programma.",
       "speakersAdded": "Voeg de eerste spreker toe.",
-      "published": "Publiceer het evenement vanaf de startpagina als alles klaar is."
+      "published": "Publiceer het evenement vanaf de startpagina als alles klaar is.",
+      "guestsAdded": "Voeg je gasten en hun gezelschappen toe.",
+      "rsvpDeadlineSet": "Kies de datum waarop RSVP’s sluiten.",
+      "floorPlanChosen": "Kies een plattegrond voor de zaal of maak er een op basis van aantallen.",
+      "guestSitePublished": "Publiceer de met een wachtwoord beveiligde website voor je gasten.",
+      "tablesSponsors": "Geef je tafels en hun sponsors een naam."
     }
   },
   "program": {
@@ -5795,6 +5815,97 @@
       "hasPlusOne": "Deze persoon heeft al een introducé.",
       "plusOneOfPlusOne": "Een introducé kan geen introducé meenemen.",
       "plusOneMoves": "Een introducé verhuist mee met de gast die hem meeneemt."
+    }
+  },
+  "eventRoles": {
+    "co_host": "Medegastheer",
+    "planner": "Planner"
+  },
+  "eventTeam": {
+    "title": "Evenementteam",
+    "subtitle": "Medegastheren en planners werken alleen aan dit evenement. Ze zien nooit andere evenementen, uitbetalingen of organisatie-instellingen.",
+    "rolesTitle": "Wie mag wat",
+    "explain": {
+      "co_host": "Alles over dit evenement: gasten, RSVP, plaatsen, website, galerij, berichten, de grote dag en tickets. Kan de rest van het team uitnodigen.",
+      "planner": "Gasten, RSVP, plaatsen, website, galerij, berichten en de grote dag. Geen uitbetalingen, terugbetalingen of financiële rapporten."
+    },
+    "inviteTitle": "Uitnodigen voor dit evenement",
+    "emptyTitle": "Nog geen medegastheren of planners",
+    "emptyDescription": "Nodig iemand uit per e-mail. Diegene krijgt alleen toegang tot dit evenement.",
+    "revokeFor": "Uitnodiging voor {email} intrekken"
+  },
+  "myEvents": {
+    "title": "Jouw evenementen",
+    "description": "De evenementen waar je bij {org} aan meehelpt.",
+    "emptyTitle": "Op dit moment geen evenementen",
+    "emptyDescription": "Als iemand je uitnodigt voor een evenement, verschijnt het hier.",
+    "open": "{name} openen"
+  },
+  "starters": {
+    "title": "Startsjablonen",
+    "label": "Startsjabloon",
+    "yours": "Jouw sjablonen",
+    "use": "Evenement maken vanuit {name}",
+    "sections": "Onderdelen: {list}",
+    "checklist": "Checklist: {list}",
+    "wedding": {
+      "name": "Bruiloft",
+      "description": "Gasten, RSVP, plaatsen, een privé-gastenwebsite, galerij, berichten en de grote dag. Nooit openbaar vermeld."
+    },
+    "gala": {
+      "name": "Gala",
+      "description": "Tickets, tafels en sponsors, plaatsen, donaties en inchecken ter plaatse."
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "RSVP’s en plaatsen verschijnen hier zodra je gasten antwoorden."
+      },
+      "details": {
+        "attendanceHint": "Voor online en hybride evenementen voeg je de link toe onder Toegang. Alleen je gasten zien hem."
+      },
+      "dates": {
+        "capacityHint": "Optioneel. Het maximale aantal gasten dat deze datum kan ontvangen."
+      },
+      "copy": {
+        "description": "Hergebruik dit evenement. Een kopie neemt instellingen, vragen en plattegrond over — nooit gasten, RSVP’s, check-ins of uitbetalingen."
+      },
+      "announcements": {
+        "pushHint": "Push bereikt gasten die meldingen hebben aangezet; alle anderen krijgen de e-mail."
+      },
+      "eventAnnouncements": {
+        "explainer": "Openbare mededelingen staan op de evenementpagina; mededelingen alleen voor gasten op de pagina’s van je gasten.",
+        "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten.",
+        "audienceHolders": "Alleen gasten",
+        "holdersOnly": "Alleen gasten"
+      },
+      "access": {
+        "subtitle": "Privé-informatie voor je gasten, de online link en toegangscodes."
+      },
+      "privateInfo": {
+        "explainer": "Alleen je geverifieerde gasten zien dit. Het verschijnt nooit op de openbare evenementpagina.",
+        "body": "Informatie voor gasten"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "Met toegangscodes openen je gasten de privé-evenementpagina."
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "Alles over dit evenement: gasten, RSVP, plaatsen, website, galerij, berichten en de grote dag. Kan de rest van het team uitnodigen."
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "Hergebruik dit evenement. Een kopie neemt instellingen, tickettypen, bestelvragen en plattegrond over — nooit bestellingen, gasten, tickets, check-ins of uitbetalingen."
+      },
+      "announcements": {
+        "pushHint": "Push bereikt gasten die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail."
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten."
+      }
     }
   }
 }

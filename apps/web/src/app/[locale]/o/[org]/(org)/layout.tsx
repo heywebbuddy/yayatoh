@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
 import { isPlatformContentOrg } from '@/server/cms.ts';
-import { loadConsole } from '@/server/console.ts';
+import { loadConsoleBase } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
@@ -53,7 +53,8 @@ export default async function OrgLayout({
 }) {
   const { locale, org } = await params;
   setRequestLocale(locale);
-  const data = await loadConsole(org);
+  // The org home serves collaborators too (their events); every other org page refuses them.
+  const data = await loadConsoleBase(org);
   const t = await getTranslations('shell');
   return (
     <ConsoleShell
@@ -65,6 +66,7 @@ export default async function OrgLayout({
         items: ORG_NAV.filter(
           (i) =>
             data.modules.has(i.module) &&
+            (data.role !== 'collaborator' || i.key === 'home') &&
             (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)) &&
             (!CONTENT_ORG_ONLY.has(i.key) || isPlatformContentOrg(data.org.slug)),
         ),

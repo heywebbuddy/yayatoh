@@ -271,7 +271,7 @@ export const createPartyCommand = tenantCommand({
   input: PartyFields.extend({ eventId: z.uuid() }),
   output: PartyDto,
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     await eventOf(tx, input.eventId);
     if ((await countOf(tx, eq(parties.eventId, input.eventId), parties)) >= MAX_PARTIES_PER_EVENT)
@@ -309,7 +309,7 @@ export const updatePartyCommand = tenantCommand({
   input: PartyFields.extend({ eventId: z.uuid(), partyId: z.uuid() }),
   output: PartyDto,
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     const { eventId, partyId, source, ...fields } = input;
     const before = await partyOf(tx, eventId, partyId);
@@ -339,7 +339,7 @@ export const removePartyCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), partyId: z.uuid(), source: Source }),
   output: z.object({ removed: z.boolean() }),
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     await partyOf(tx, input.eventId, input.partyId);
     const gone = await tx
@@ -380,7 +380,7 @@ export const addPartyGuestCommand = tenantCommand({
   input: GuestFields.extend({ eventId: z.uuid(), partyId: z.uuid() }),
   output: GuestDto,
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const { eventId, partyId, source, dietary, accessibility, address, attendeeId, isPrimary, ...fields } =
@@ -459,7 +459,7 @@ export const updatePartyGuestCommand = tenantCommand({
   input: GuestFields.extend({ eventId: z.uuid(), guestId: z.uuid() }),
   output: GuestDto,
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const { eventId, guestId, source, dietary, accessibility, address, attendeeId, isPrimary, ...fields } =
@@ -527,7 +527,7 @@ export const addPlusOneCommand = tenantCommand({
   }),
   output: GuestDto,
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const host = await guestOf(tx, input.eventId, input.hostGuestId);
@@ -587,7 +587,7 @@ export const removePartyGuestCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), guestId: z.uuid(), source: Source }),
   output: z.object({ removed: z.number().int() }),
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     const g = await guestOf(tx, input.eventId, input.guestId);
     const gone = await tx
@@ -625,7 +625,7 @@ export const moveGuestCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), guestId: z.uuid(), toPartyId: z.uuid(), source: Source }),
   output: z.object({ moved: z.number().int() }),
   entitlement: 'guests',
-  permission: 'attendees:write',
+  permission: 'guests:write',
   handler: async ({ input, ctx, tx }) => {
     const g = await guestOf(tx, input.eventId, input.guestId);
     if (g.partyId === input.toPartyId) throw invalid('toPartyId', 'same_party');
@@ -690,7 +690,7 @@ export const guestListQuery = tenantQuery({
   input: GuestListInput,
   output: GuestListDto,
   entitlement: 'guests',
-  permission: 'attendees:read',
+  permission: 'guests:read',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const conds: SQL[] = [eq(parties.eventId, input.eventId)];
@@ -786,7 +786,7 @@ export const partyHistoryQuery = tenantQuery({
   }),
   output: z.array(HistoryEntryDto),
   entitlement: 'guests',
-  permission: 'attendees:read',
+  permission: 'guests:read',
   handler: async ({ input, tx }) => {
     const rows = await tx
       .select()

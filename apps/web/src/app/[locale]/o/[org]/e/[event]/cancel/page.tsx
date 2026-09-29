@@ -30,7 +30,7 @@ export default async function CancelWizardPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'home');
   if (!roleCan(data.role, 'events:write')) notFound();
   const sp = await searchParams;
   const t = await getTranslations('refundOps');

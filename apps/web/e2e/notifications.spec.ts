@@ -1,12 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import {
-  continueToPayment,
-  expectAccessible,
-  OPEN_HOUSE,
-  signIn,
-  WEDDING,
-  WEDDING_OWNER,
-} from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn, WEDDING_OWNER } from './helpers.ts';
 
 interface Captured {
   to: string;
@@ -88,10 +81,21 @@ test.describe('notifications: emails sent and the message log', () => {
   });
 
   test('before any delivery, the organizer sees an empty message log', async ({ page }) => {
-    // Rosewood: no spec delivers its messages, so a new order stays undelivered.
+    // Rosewood: no spec delivers its messages, so a new order stays undelivered. A ticketed event
+    // of its own (M4.2a: the seeded wedding has no Tickets & Orders page).
     const stamp = `${Date.now()}${test.info().project.name.slice(0, 1)}`;
     await signIn(page, WEDDING_OWNER);
-    await page.goto(`${WEDDING}/tickets-orders`);
+    await page.goto('/o/rosewood-weddings/events/new');
+    await page.getByLabel('Event name', { exact: true }).fill(`Quiet night ${stamp}`);
+    await page.getByLabel('Event type').selectOption('other');
+    await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
+    await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
+    await page.getByRole('button', { name: 'Create draft' }).click();
+    await expect(page).toHaveURL(/\/o\/rosewood-weddings\/e\/quiet-night-[0-9a-z-]+$/);
+    const base = new URL(page.url()).pathname;
+    await page.getByRole('button', { name: 'Publish' }).click();
+    await expect(page.getByText('Published ·')).toBeVisible();
+    await page.goto(`${base}/tickets-orders`);
     await page.getByLabel('Name', { exact: true }).fill(`Quiet ${stamp}`);
     await page.getByLabel('Price (USD)').fill('20');
     await page.getByLabel('Quantity available').fill('5');

@@ -85,7 +85,7 @@ export async function createSessionAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     const res = await executeCommand(
       createSessionCommand,
@@ -106,7 +106,7 @@ export async function updateSessionAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     const res = await executeCommand(
       updateSessionCommand,
@@ -121,7 +121,7 @@ export async function updateSessionAction(
 }
 
 export async function deleteSessionAction(org: string, event: string, sessionId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   await executeCommand(deleteSessionCommand, { eventId: ev.id, sessionId }, data.ctx, ports);
   done(org, event);
 }
@@ -132,7 +132,7 @@ export async function createTrackAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     await executeCommand(
       createTrackCommand,
@@ -148,7 +148,7 @@ export async function createTrackAction(
 }
 
 export async function deleteTrackAction(org: string, event: string, trackId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   await executeCommand(deleteTrackCommand, { eventId: ev.id, trackId }, data.ctx, ports);
   done(org, event);
 }
@@ -159,7 +159,7 @@ export async function createRoomAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     await executeCommand(
       createRoomCommand,
@@ -175,7 +175,7 @@ export async function createRoomAction(
 }
 
 export async function deleteRoomAction(org: string, event: string, roomId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   await executeCommand(deleteRoomCommand, { eventId: ev.id, roomId }, data.ctx, ports);
   done(org, event);
 }

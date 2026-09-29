@@ -13,7 +13,7 @@ export async function transitionAction(
   event: string,
   transition: EventTransition,
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'home');
   try {
     await executeCommand(transitionEventCommand, { eventId: ev.id, transition }, data.ctx, ports);
   } catch (err) {

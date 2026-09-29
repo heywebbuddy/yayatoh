@@ -81,15 +81,18 @@ export {
 export { privateColumns } from './private-columns.ts';
 export {
   composeNav,
+  forbiddenTerms,
   isProfileKey,
   type NavGroup,
   type NavItem,
   navIncludes,
   navLabelKey,
+  PROFILE_INDEPENDENT_SECTIONS,
   PROFILE_KEYS,
   PROFILES,
   type Profile,
   type ProfileKey,
+  profileOpensSection,
   term,
   VOCAB_TERMS,
   type VocabTerm,

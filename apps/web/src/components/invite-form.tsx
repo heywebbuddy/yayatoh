@@ -20,8 +20,15 @@ const ROLES = [
 
 export function InviteForm({
   action,
+  roles = ROLES,
+  defaultRole = 'manager',
+  labels = 'roles',
 }: {
   action: (prev: ActionState, form: FormData) => Promise<ActionState>;
+  /** M4.2a: an event team invites co-hosts and planners. */
+  roles?: readonly string[];
+  defaultRole?: string;
+  labels?: 'roles' | 'eventRoles';
 }) {
   const t = useTranslations();
   // Inviting grants a role: a step-up command (M1.2c).
@@ -38,12 +45,12 @@ export function InviteForm({
         <select
           id="invite-role"
           name="role"
-          defaultValue="manager"
+          defaultValue={defaultRole}
           className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
         >
-          {ROLES.map((r) => (
+          {roles.map((r) => (
             <option key={r} value={r}>
-              {t(`roles.${r}`)}
+              {t(`${labels}.${r}`)}
             </option>
           ))}
         </select>
@@ -53,7 +60,15 @@ export function InviteForm({
       </Button>
       <div aria-live="polite" className="md:basis-full">
         {state.ok ? <Alert tone="info" title={t('team.invited')} /> : null}
-        {state.code ? <Alert title={t(errorMessageKey(state.code))} /> : null}
+        {state.code ? (
+          <Alert
+            title={
+              state.reason === 'pending_invitation'
+                ? t('team.errors.pending_invitation')
+                : t(errorMessageKey(state.code))
+            }
+          />
+        ) : null}
       </div>
     </form>
   );

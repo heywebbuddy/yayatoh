@@ -34,7 +34,7 @@ export async function resolveSignalAction(
   _prev: SignalActionState,
   form: FormData,
 ): Promise<SignalActionState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const status = form.get('status') === 'dismissed' ? 'dismissed' : 'acknowledged';
   const note = String(form.get('note') ?? '').trim();
   if (status === 'dismissed' && note.length < FRAUD_NOTE_MIN_DISMISS)
@@ -69,7 +69,7 @@ export async function saveDetectionAction(
   prev: DetectionFormState,
   form: FormData,
 ): Promise<DetectionFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const seq = (prev.kind === 'idle' ? 0 : prev.seq) + 1;
   const maxScansPerMinute = whole(form.get('maxScansPerMinute'));
   const maxTravelKmh = whole(form.get('maxTravelKmh'));

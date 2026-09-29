@@ -19,7 +19,7 @@ import { failure, success, textOrNull } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
 
 /**
- * Guests page (M4.1a) actions. Every write goes through a guests command (`attendees:write`), so
+ * Guests page (M4.1a) actions. Every write goes through a guests command (`guests:write`), so
  * a viewer submitting an open form is refused by the server, not just the missing button.
  */
 type State = ProgramFormState;
@@ -57,7 +57,7 @@ async function run(
   event: string,
   write: (eventId: string, ctx: Parameters<typeof executeCommand>[2]) => Promise<unknown>,
 ): Promise<State> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'guests');
   try {
     await write(ev.id, data.ctx);
   } catch (err) {

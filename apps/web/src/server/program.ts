@@ -1,8 +1,7 @@
 import 'server-only';
 import { executeQuery } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes } from '@yayatoh/platform';
+import { navIncludes } from '@yayatoh/platform';
 import { type ProgramDto, programQuery, type ScheduleWarningDto } from '@yayatoh/program';
-import { roleCan } from '@yayatoh/tenancy';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { loadEvent } from './console.ts';
@@ -15,11 +14,10 @@ export type ProgramSection = 'sessions' | 'speakers' | 'exhibitors' | 'sponsors'
  * modules). Other profiles, foreign and unknown events are a 404.
  */
 export async function loadProgramPage(org: string, event: string, section: ProgramSection) {
-  const { data, event: ev } = await loadEvent(org, event);
-  const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
+  const { data, event: ev, profile, can } = await loadEvent(org, event, section);
   if (!navIncludes(profile, data.modules, section)) notFound();
   const program = await executeQuery(programQuery, { eventId: ev.id }, data.ctx, ports);
-  return { data, ev, program, canWrite: roleCan(data.role, 'events:write') };
+  return { data, ev, program, canWrite: can('events:write') };
 }
 
 /** Localized schedule warnings (M1.4f conflicts), naming the other session, room or speaker. */

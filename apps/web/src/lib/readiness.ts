@@ -25,6 +25,12 @@ export interface ReadinessFacts {
   readonly speakers: number;
   /** Nav keys the event's profile shows (with the org's modules). */
   readonly nav: ReadonlySet<string>;
+  /** M4.2a: the profile's own checklist items (`Profile.checklist`). */
+  readonly checklist?: readonly string[];
+  /** M4.2a: the event has a floor plan (a seating layout). */
+  readonly floorPlan?: boolean;
+  /** M4.1a: guests on the event's guest list (placeholder plus-ones included). */
+  readonly guests?: number;
   readonly now: Date;
 }
 
@@ -32,7 +38,40 @@ export interface ReadinessRule {
   readonly key: string;
   readonly done: boolean;
   readonly path: string;
+  /**
+   * M4.2a: the page that fixes it is a placeholder (the feature is not built yet): the item is
+   * shown as "coming soon", links to that placeholder and never counts toward readiness.
+   */
+  readonly comingSoon?: boolean;
 }
+
+/**
+ * Event sections that are placeholder pages for now (`[section]`: "coming soon"). A milestone that
+ * builds one removes it here and gives its checklist item a real fact. `apps/web/tests/readiness`
+ * checks the list against the routes on disk.
+ */
+export const PLACEHOLDER_SECTIONS = [
+  'rsvp',
+  'website',
+  'gallery',
+  'messages',
+  'day-of',
+  'tables-sponsors',
+  'branding',
+  'donations',
+  'registration',
+  'communications',
+  'libraries',
+] as const;
+
+/** Profile checklist items (M4.2a): each names the page that fixes it and, once built, its fact. */
+const PROFILE_ITEMS: Readonly<Record<string, { path: string; done: (f: ReadinessFacts) => boolean }>> = {
+  guestsAdded: { path: 'guests', done: (f) => (f.guests ?? 0) > 0 },
+  rsvpDeadlineSet: { path: 'rsvp', done: () => false },
+  floorPlanChosen: { path: 'seating', done: (f) => f.floorPlan === true },
+  guestSitePublished: { path: 'website', done: () => false },
+  tablesSponsors: { path: 'tables-sponsors', done: () => false },
+};
 
 export const READINESS_KEYS = [
   'detailsAdded',
@@ -43,6 +82,11 @@ export const READINESS_KEYS = [
   'ticketsCreated',
   'agendaAdded',
   'speakersAdded',
+  'guestsAdded',
+  'rsvpDeadlineSet',
+  'floorPlanChosen',
+  'guestSitePublished',
+  'tablesSponsors',
   'published',
 ] as const;
 
@@ -62,6 +106,17 @@ export function readinessRules(f: ReadinessFacts): ReadinessRule[] {
     rules.push({ key: 'ticketsCreated', done: f.ticketTypes > 0, path: 'tickets-orders' });
   if (f.nav.has('sessions')) rules.push({ key: 'agendaAdded', done: f.sessions > 0, path: 'sessions' });
   if (f.nav.has('speakers')) rules.push({ key: 'speakersAdded', done: f.speakers > 0, path: 'speakers' });
+  for (const key of f.checklist ?? []) {
+    const item = PROFILE_ITEMS[key];
+    if (!item) continue;
+    const comingSoon = (PLACEHOLDER_SECTIONS as readonly string[]).includes(item.path);
+    rules.push({
+      key,
+      done: !comingSoon && item.done(f),
+      path: item.path,
+      ...(comingSoon ? { comingSoon } : {}),
+    });
+  }
   rules.push({
     key: 'published',
     done: ['published', 'postponed', 'completed'].includes(f.status),
@@ -70,7 +125,10 @@ export function readinessRules(f: ReadinessFacts): ReadinessRule[] {
   return rules;
 }
 
-/** Share of rules done, 0–100. */
-export function readinessPercent(rules: readonly ReadinessRule[]): number {
-  return rules.length === 0 ? 100 : Math.round((rules.filter((r) => r.done).length / rules.length) * 100);
+/** Share of rules done, 0–100. "Coming soon" items don't count (M4.2a). */
+export function readinessPercent(rules: readonly Pick<ReadinessRule, 'done' | 'comingSoon'>[]): number {
+  const counted = rules.filter((r) => !r.comingSoon);
+  return counted.length === 0
+    ? 100
+    : Math.round((counted.filter((r) => r.done).length / counted.length) * 100);
 }

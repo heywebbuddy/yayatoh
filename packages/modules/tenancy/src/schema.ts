@@ -26,6 +26,7 @@ export const ORG_ROLES = [
   'box_office',
   'scanner',
   'viewer',
+  'collaborator',
 ] as const;
 
 const inList = (col: string, values: readonly string[]) =>
@@ -102,6 +103,13 @@ export const invitations = tenantTable(
     acceptedAt: timestamp('accepted_at', { withTimezone: true }),
     acceptedBy: uuid('accepted_by'),
     revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    /**
+     * M4.2a: an event invitation (co-host or planner of one event). The invitee joins the org as
+     * `collaborator` unless already a member, and gets `event_role` on that event. The composite
+     * FK to events.events is hand-written in the migration (tier 1 can't import tier 2).
+     */
+    eventId: uuid('event_id'),
+    eventRole: text('event_role'),
   },
   (t) => [
     uniqueIndex('invitations_org_email_pending_key')
@@ -114,6 +122,11 @@ export const invitations = tenantTable(
     }).onDelete('cascade'),
     check('invitations_role_check', inList('role', ORG_ROLES)),
     check('invitations_email_lower_check', sql`email = lower(email)`),
+    check(
+      'invitations_event_role_check',
+      sql`(event_id is null and event_role is null) or (event_id is not null and event_role in ('co_host', 'planner'))`,
+    ),
+    index('invitations_org_event_idx').on(t.orgId, t.eventId),
   ],
 );
 

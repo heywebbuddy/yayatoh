@@ -42,7 +42,7 @@ export const allocateGroupSeatsCommand = tenantCommand({
   }),
   output: z.object({ label: z.string(), itemLabel: z.string(), allocated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const items = await planItemsTx(tx, input.eventId, key);
@@ -115,7 +115,7 @@ export const releaseGroupSeatsCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid().nullable().optional(), label: AttendeeLabel }),
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx

@@ -33,8 +33,13 @@ export {
 } from './commands/impersonation.ts';
 export {
   acceptInvitation,
+  createEventInvitationTx,
+  type EventRoleGranter,
+  eventInvitationsTx,
   inviteMemberCommand,
   lookupInvitation,
+  removeIdleCollaboratorTx,
+  revokeEventInvitationTx,
   revokeInvitationCommand,
 } from './commands/invitations.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
@@ -116,13 +121,18 @@ export {
 } from './domain/org-status.ts';
 export {
   EVENT_ROLE_PERMISSIONS,
+  EVENT_ROLE_SECTIONS,
   eventRoleCan,
+  eventRolesOpenSection,
+  GRANTABLE_ORG_ROLES,
   type OrgRole,
   PERMISSIONS,
   type Permission,
   ROLE_PERMISSIONS,
   roleCan,
   roleRequiresTwoFactor,
+  TEAM_EVENT_ROLES,
+  type TeamEventRole,
   TWO_FACTOR_ROLES,
 } from './domain/permissions.ts';
 export {

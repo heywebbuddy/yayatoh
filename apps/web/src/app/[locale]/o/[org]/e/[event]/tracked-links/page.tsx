@@ -29,7 +29,7 @@ export default async function TrackedLinksPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'trackedLinks');
   if (!data.modules.has('marketing') || !roleCan(data.role, 'marketing:read')) notFound();
   const t = await getTranslations('trackedLinks');
   const canWrite = roleCan(data.role, 'marketing:write');

@@ -9,7 +9,6 @@ import {
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -66,14 +65,13 @@ export default async function GuestsPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !roleCan(data.role, 'attendees:read'))
-    notFound();
+  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
   const t = await getTranslations();
   const tp = await getTranslations('parties');
-  const canWrite = roleCan(data.role, 'attendees:write');
+  const canWrite = can('guests:write');
 
   const q = (sp.q ?? '').trim().slice(0, 100);
   const side = (sp.side ?? '').trim().slice(0, 40);

@@ -28,7 +28,7 @@ export default async function DisputeReviewPage({
   const { locale, org, event, orderId, disputeId } = await params;
   setRequestLocale(locale);
   if (!z.uuid().safeParse(disputeId).success || !z.uuid().safeParse(orderId).success) notFound();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   if (!roleCan(data.role, 'disputes:respond')) notFound();
   const t = await getTranslations('disputes');
   let evidence: Awaited<ReturnType<typeof load>>;

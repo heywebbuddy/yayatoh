@@ -96,7 +96,7 @@ export const setSeatingRulesCommand = tenantCommand({
   }),
   output: z.array(SeatingRuleDto),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const [layout] = await tx

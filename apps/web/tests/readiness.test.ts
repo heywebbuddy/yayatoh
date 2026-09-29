@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { type ReadinessFacts, readinessPercent, readinessRules } from '../src/lib/readiness.ts';
+import {
+  PLACEHOLDER_SECTIONS,
+  READINESS_KEYS,
+  type ReadinessFacts,
+  readinessPercent,
+  readinessRules,
+} from '../src/lib/readiness.ts';
 
 const now = new Date('2030-01-01T00:00:00Z');
 const base: ReadinessFacts = {
@@ -95,5 +101,81 @@ describe('readiness rules v1 (M1.4f)', () => {
 
   it('percent of an empty list is 100', () => {
     expect(readinessPercent([])).toBe(100);
+  });
+});
+
+describe('profile checklists (M4.2a)', () => {
+  const wedding: ReadinessFacts = {
+    ...base,
+    nav: new Set(['home', 'guests', 'rsvp', 'seating', 'website']),
+    checklist: ['guestsAdded', 'rsvpDeadlineSet', 'floorPlanChosen', 'guestSitePublished'],
+  };
+
+  it('a wedding asks for guests, an RSVP deadline, a floor plan and the guest site, never tickets', () => {
+    expect(keys(wedding)).toEqual([
+      'detailsAdded',
+      'venueSet',
+      'taglineWritten',
+      'descriptionAdded',
+      'datesUpcoming',
+      'guestsAdded',
+      'rsvpDeadlineSet',
+      'floorPlanChosen',
+      'guestSitePublished',
+      'published',
+    ]);
+  });
+
+  it('items for features not built yet are "coming soon", link to their placeholder and never count', () => {
+    const rules = readinessRules(wedding);
+    const soon = rules.filter((r) => r.comingSoon).map((r) => [r.key, r.path]);
+    // Guests are built (M4.1a, batch 3c merge): that item counts; RSVP and the guest site are not.
+    expect(soon).toEqual([
+      ['rsvpDeadlineSet', 'rsvp'],
+      ['guestSitePublished', 'website'],
+    ]);
+    for (const [, path] of soon) expect(PLACEHOLDER_SECTIONS).toContain(path);
+    // 2 of the 8 counted rules done (name + dates): coming-soon items don't drag it down.
+    expect(readinessPercent(rules)).toBe(25);
+    const planned = readinessRules({ ...wedding, floorPlan: true });
+    expect(planned.find((r) => r.key === 'floorPlanChosen')).toMatchObject({ done: true, path: 'seating' });
+    expect(readinessPercent(planned)).toBe(38);
+    const guests = readinessRules({ ...wedding, floorPlan: true, guests: 2 });
+    expect(guests.find((r) => r.key === 'guestsAdded')).toMatchObject({ done: true, path: 'guests' });
+    expect(readinessPercent(guests)).toBe(50);
+  });
+
+  it('a gala asks for tables and sponsors (coming soon), tickets and a floor plan', () => {
+    const gala = readinessRules({
+      ...base,
+      nav: new Set(['home', 'ticketsOrders', 'seating', 'tablesSponsors']),
+      checklist: ['tablesSponsors', 'floorPlanChosen'],
+    });
+    expect(gala.map((r) => r.key)).toEqual([
+      'detailsAdded',
+      'venueSet',
+      'taglineWritten',
+      'descriptionAdded',
+      'datesUpcoming',
+      'ticketsCreated',
+      'tablesSponsors',
+      'floorPlanChosen',
+      'published',
+    ]);
+    expect(gala.find((r) => r.key === 'tablesSponsors')).toMatchObject({
+      comingSoon: true,
+      path: 'tables-sponsors',
+    });
+  });
+
+  it('every checklist key has a label and a hint in English', async () => {
+    const en = (await import('../messages/en.json')).default as {
+      readiness: Record<string, string>;
+      setupGuide: { hint: Record<string, string> };
+    };
+    for (const k of READINESS_KEYS) {
+      expect(en.readiness[k]).toBeTruthy();
+      expect(en.setupGuide.hint[k]).toBeTruthy();
+    }
   });
 });

@@ -27,7 +27,7 @@ export async function updateWaitlistAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   const hours = Number(String(form.get('offerHours') ?? '').replace(',', '.'));
   if (!Number.isFinite(hours) || hours <= 0)
     return { ok: false, code: 'validation_failed', fields: ['offerHours'] };
@@ -54,7 +54,7 @@ export async function offerEntryAction(
   _prev: FormState,
   _form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   try {
     await executeCommand(offerWaitlistEntryCommand, { entryId }, data.ctx, ports);
   } catch (err) {
@@ -72,7 +72,7 @@ export async function removeEntryAction(
   _prev: FormState,
   _form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   try {
     await executeCommand(removeWaitlistEntriesCommand, { entryIds: [entryId] }, data.ctx, ports);
   } catch (err) {
@@ -93,7 +93,7 @@ export async function exportWaitlistAction(
   _form: FormData,
 ): Promise<{ code: string } | undefined> {
   const locale = await getLocale();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const t = await getTranslations('waitlist.console');
   const back = `${base(org, event)}?list=${waitlistId}`;
   let operationId: string;

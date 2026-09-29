@@ -30,12 +30,13 @@ import {
 } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type ReactNode, Suspense } from 'react';
+import { MyTeamEvents } from '@/components/my-team-events.tsx';
 import { OrgSales } from '@/components/org-sales.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { eventPhase, greetingKey } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { resolvePeriod } from '@/lib/period.ts';
-import { loadConsole } from '@/server/console.ts';
+import { loadConsole, loadConsoleBase } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { completeOnboardingAction } from './onboarding-actions.ts';
 
@@ -67,7 +68,9 @@ export default async function OrgHome({
   const { locale, org } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const data = await loadConsole(org);
+  const data = await loadConsoleBase(org);
+  // M4.2a: someone invited to specific events lands on a console listing just those events.
+  if (data.role === 'collaborator') return <MyTeamEvents data={data} org={org} locale={locale} />;
   const t = await getTranslations();
   const firstName = data.session.name.split(' ')[0] ?? data.session.name;
   const canWrite = roleCan(data.role, 'events:write');

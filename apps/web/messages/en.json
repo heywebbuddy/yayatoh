@@ -269,7 +269,8 @@
     "audiences": "Audiences",
     "refundRequests": "Refund requests",
     "helpCenter": "Help center",
-    "marketingSite": "Marketing site"
+    "marketingSite": "Marketing site",
+    "tablesSponsors": "Tables & Sponsors"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -283,7 +284,11 @@
     "registration": "Registration",
     "rsvp": "RSVP",
     "ticket": "Ticket",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "organizer": "Organizer",
+    "organizers": "Organizers",
+    "host": "Host",
+    "hosts": "Hosts"
   },
   "roles": {
     "owner": "Owner",
@@ -293,7 +298,8 @@
     "marketing": "Marketing",
     "box_office": "Box office",
     "scanner": "Scanner",
-    "viewer": "Viewer"
+    "viewer": "Viewer",
+    "collaborator": "Event collaborator"
   },
   "profiles": {
     "wedding": "Wedding",
@@ -354,7 +360,8 @@
     "ownerOnly": "Only owners can change owners",
     "errors": {
       "last_owner": "An organization needs at least one owner.",
-      "owner_only": "Only an owner can make someone an owner or change an owner."
+      "owner_only": "Only an owner can make someone an owner or change an owner.",
+      "pending_invitation": "An invitation is already pending for this address. Withdraw it first or wait until it's accepted."
     }
   },
   "dashboard": {
@@ -433,7 +440,13 @@
     "datesUpcoming": "An upcoming date",
     "ticketsCreated": "Tickets created",
     "agendaAdded": "Agenda added",
-    "speakersAdded": "Speakers added"
+    "speakersAdded": "Speakers added",
+    "comingSoon": "Coming soon",
+    "guestsAdded": "Guest list added",
+    "rsvpDeadlineSet": "RSVP deadline set",
+    "floorPlanChosen": "Floor plan chosen",
+    "guestSitePublished": "Guest website published",
+    "tablesSponsors": "Tables and sponsors set up"
   },
   "segments": {
     "all": "All",
@@ -699,7 +712,9 @@
       "revoked": "This invitation was withdrawn.",
       "expired": "This invitation has expired. Ask for a new one.",
       "unavailable": "This organization isn't available right now."
-    }
+    },
+    "eventTitle": "Help with {event}",
+    "joinEvent": "You'll join {event} ({org}) as {role}. You'll see this event only."
   },
   "eventStatus": {
     "draft": "Draft",
@@ -3465,7 +3480,12 @@
       "ticketsCreated": "Create at least one ticket type.",
       "agendaAdded": "Add the first session to the agenda.",
       "speakersAdded": "Add the first speaker.",
-      "published": "Publish the event from its home page when everything is ready."
+      "published": "Publish the event from its home page when everything is ready.",
+      "guestsAdded": "Add your guests and their parties.",
+      "rsvpDeadlineSet": "Choose the date RSVPs close.",
+      "floorPlanChosen": "Pick a floor plan for the room, or build one from numbers.",
+      "guestSitePublished": "Publish the password-protected website your guests open.",
+      "tablesSponsors": "Name your hosted tables and their sponsors."
     }
   },
   "program": {
@@ -5795,6 +5815,97 @@
       "hasPlusOne": "They already have a plus-one.",
       "plusOneOfPlusOne": "A plus-one can't bring a plus-one.",
       "plusOneMoves": "A plus-one moves with the guest who brought them."
+    }
+  },
+  "eventRoles": {
+    "co_host": "Co-host",
+    "planner": "Planner"
+  },
+  "eventTeam": {
+    "title": "Event team",
+    "subtitle": "Co-hosts and planners work on this event only. They never see other events, payouts or organization settings.",
+    "rolesTitle": "Who can do what",
+    "explain": {
+      "co_host": "Everything about this event: guests, RSVP, seating, website, gallery, messages, day-of and tickets. Can invite the rest of the team.",
+      "planner": "Guests, RSVP, seating, website, gallery, messages and day-of. No payouts, refunds or finance reports."
+    },
+    "inviteTitle": "Invite to this event",
+    "emptyTitle": "No co-hosts or planners yet",
+    "emptyDescription": "Invite someone by email. They get access to this event only.",
+    "revokeFor": "Withdraw the invitation for {email}"
+  },
+  "myEvents": {
+    "title": "Your events",
+    "description": "The events you help with at {org}.",
+    "emptyTitle": "No events right now",
+    "emptyDescription": "When someone invites you to an event, it appears here.",
+    "open": "Open {name}"
+  },
+  "starters": {
+    "title": "Starter templates",
+    "label": "Starter",
+    "yours": "Your templates",
+    "use": "Create an event from {name}",
+    "sections": "Sections: {list}",
+    "checklist": "Checklist: {list}",
+    "wedding": {
+      "name": "Wedding",
+      "description": "Guests, RSVP, seating, a private guest website, gallery, messages and the day itself. Never listed publicly."
+    },
+    "gala": {
+      "name": "Gala",
+      "description": "Tickets, tables and sponsors, seating, donations and on-site check-in."
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "RSVPs and seating appear here once your guests start answering."
+      },
+      "details": {
+        "attendanceHint": "For online and hybrid events, add the join link under Access. Only your guests see it."
+      },
+      "dates": {
+        "capacityHint": "Optional. The most guests this date can welcome."
+      },
+      "copy": {
+        "description": "Reuse this event. A copy takes its settings, questions and floor plan — never its guests, RSVPs, check-ins or payouts."
+      },
+      "announcements": {
+        "pushHint": "Push reaches guests who turned on notifications; everyone else gets the email."
+      },
+      "eventAnnouncements": {
+        "explainer": "Public announcements appear on the event page; guests-only ones appear on your guests' pages.",
+        "emptyDescription": "Post news, schedule changes or reminders for your guests.",
+        "audienceHolders": "Guests only",
+        "holdersOnly": "Guests only"
+      },
+      "access": {
+        "subtitle": "Private information for your guests, the online join link, and access codes."
+      },
+      "privateInfo": {
+        "explainer": "Only your verified guests see this. It never appears on the public event page.",
+        "body": "Information for guests"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "Access codes let your guests open the private event page."
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "Everything about this event: guests, RSVP, seating, website, gallery, messages and day-of. Can invite the rest of the team."
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "Reuse this event. A copy takes its settings, ticket types, checkout questions and floor plan — never its orders, guests, tickets, check-ins or payouts."
+      },
+      "announcements": {
+        "pushHint": "Push reaches guests who turned on notifications on their order page or in the app; everyone else gets the email."
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "Post news, schedule changes or reminders for your guests."
+      }
     }
   }
 }

@@ -269,7 +269,8 @@
     "audiences": "オーディエンス",
     "refundRequests": "返金リクエスト",
     "helpCenter": "ヘルプセンター",
-    "marketingSite": "マーケティングサイト"
+    "marketingSite": "マーケティングサイト",
+    "tablesSponsors": "テーブルとスポンサー"
   },
   "vocab": {
     "attendee": "参加者",
@@ -283,7 +284,11 @@
     "registration": "登録",
     "rsvp": "出欠確認",
     "ticket": "チケット",
-    "tickets": "チケット"
+    "tickets": "チケット",
+    "organizer": "主催者",
+    "organizers": "主催者",
+    "host": "ホスト",
+    "hosts": "ホスト"
   },
   "roles": {
     "owner": "オーナー",
@@ -293,7 +298,8 @@
     "marketing": "マーケティング",
     "box_office": "チケット窓口",
     "scanner": "入場スキャン担当",
-    "viewer": "閲覧のみ"
+    "viewer": "閲覧のみ",
+    "collaborator": "イベント協力者"
   },
   "profiles": {
     "wedding": "結婚式",
@@ -354,7 +360,8 @@
     "ownerOnly": "オーナーを変更できるのはオーナーだけです",
     "errors": {
       "last_owner": "組織には少なくとも 1 人のオーナーが必要です。",
-      "owner_only": "オーナーを任命・変更できるのはオーナーだけです。"
+      "owner_only": "オーナーを任命・変更できるのはオーナーだけです。",
+      "pending_invitation": "このアドレスには保留中の招待がすでにあります。先に取り消すか、承諾されるまでお待ちください。"
     }
   },
   "dashboard": {
@@ -433,7 +440,13 @@
     "datesUpcoming": "今後の日程あり",
     "ticketsCreated": "チケット作成済み",
     "agendaAdded": "プログラム追加済み",
-    "speakersAdded": "登壇者追加済み"
+    "speakersAdded": "登壇者追加済み",
+    "comingSoon": "近日公開",
+    "guestsAdded": "ゲストリストを追加済み",
+    "rsvpDeadlineSet": "出欠の締め切りを設定済み",
+    "floorPlanChosen": "フロアプランを選択済み",
+    "guestSitePublished": "ゲスト用サイトを公開済み",
+    "tablesSponsors": "テーブルとスポンサーを設定済み"
   },
   "segments": {
     "all": "すべて",
@@ -699,7 +712,9 @@
       "revoked": "この招待は取り消されました。",
       "expired": "この招待は有効期限が切れています。新しい招待を依頼してください。",
       "unavailable": "この組織は現在利用できません。"
-    }
+    },
+    "eventTitle": "{event} のお手伝い",
+    "joinEvent": "{event}（{org}）に{role}として参加します。表示されるのはこのイベントだけです。"
   },
   "eventStatus": {
     "draft": "下書き",
@@ -3465,7 +3480,12 @@
       "ticketsCreated": "チケットの種類を少なくとも1つ作成してください。",
       "agendaAdded": "プログラムに最初のセッションを追加してください。",
       "speakersAdded": "最初の登壇者を追加してください。",
-      "published": "準備が整ったら、イベントのホームから公開してください。"
+      "published": "準備が整ったら、イベントのホームから公開してください。",
+      "guestsAdded": "ゲストとそのグループを追加します。",
+      "rsvpDeadlineSet": "出欠の受付を締め切る日を選びます。",
+      "floorPlanChosen": "会場のフロアプランを選ぶか、数値から作成します。",
+      "guestSitePublished": "ゲストが開くパスワード保護されたサイトを公開します。",
+      "tablesSponsors": "テーブルとスポンサーに名前を付けます。"
     }
   },
   "program": {
@@ -5795,6 +5815,97 @@
       "hasPlusOne": "すでに同伴者がいます。",
       "plusOneOfPlusOne": "同伴者はさらに同伴者を連れて来られません。",
       "plusOneMoves": "同伴者は連れて来たゲストと一緒に移動します。"
+    }
+  },
+  "eventRoles": {
+    "co_host": "共同ホスト",
+    "planner": "プランナー"
+  },
+  "eventTeam": {
+    "title": "イベントチーム",
+    "subtitle": "共同ホストとプランナーはこのイベントだけを担当します。他のイベント、入金、組織の設定は表示されません。",
+    "rolesTitle": "できること",
+    "explain": {
+      "co_host": "このイベントのすべて: ゲスト、出欠、座席、ウェブサイト、ギャラリー、メッセージ、当日、チケット。チームの他のメンバーを招待できます。",
+      "planner": "ゲスト、出欠、座席、ウェブサイト、ギャラリー、メッセージ、当日。入金、返金、財務レポートは対象外です。"
+    },
+    "inviteTitle": "このイベントに招待",
+    "emptyTitle": "共同ホストやプランナーはまだいません",
+    "emptyDescription": "メールで招待してください。このイベントにだけアクセスできます。",
+    "revokeFor": "{email} への招待を取り消す"
+  },
+  "myEvents": {
+    "title": "あなたのイベント",
+    "description": "{org} であなたが手伝っているイベントです。",
+    "emptyTitle": "現在イベントはありません",
+    "emptyDescription": "イベントに招待されると、ここに表示されます。",
+    "open": "{name} を開く"
+  },
+  "starters": {
+    "title": "スターターテンプレート",
+    "label": "スターター",
+    "yours": "あなたのテンプレート",
+    "use": "{name} からイベントを作成",
+    "sections": "セクション: {list}",
+    "checklist": "チェックリスト: {list}",
+    "wedding": {
+      "name": "結婚式",
+      "description": "ゲスト、出欠、座席、ゲスト専用の非公開サイト、ギャラリー、メッセージ、当日。一般には掲載されません。"
+    },
+    "gala": {
+      "name": "ガラ",
+      "description": "チケット、テーブルとスポンサー、座席、寄付、会場でのチェックイン。"
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "ゲストの回答が始まると、出欠と座席がここに表示されます。"
+      },
+      "details": {
+        "attendanceHint": "オンラインやハイブリッドのイベントでは、参加リンクを「アクセス」に追加します。表示されるのはゲストだけです。"
+      },
+      "dates": {
+        "capacityHint": "任意。この日程で迎えられるゲストの上限です。"
+      },
+      "copy": {
+        "description": "このイベントを再利用します。コピーには設定、質問、フロアプランが引き継がれます。ゲスト、出欠、チェックイン、入金は引き継がれません。"
+      },
+      "announcements": {
+        "pushHint": "プッシュ通知は通知をオンにしたゲストに届きます。それ以外の方にはメールが届きます。"
+      },
+      "eventAnnouncements": {
+        "explainer": "公開のお知らせはイベントページに、ゲスト限定のお知らせはゲストのページに表示されます。",
+        "emptyDescription": "ゲストに向けてニュース、時間の変更、リマインダーを投稿します。",
+        "audienceHolders": "ゲストのみ",
+        "holdersOnly": "ゲストのみ"
+      },
+      "access": {
+        "subtitle": "ゲスト向けの非公開情報、オンライン参加リンク、アクセスコード。"
+      },
+      "privateInfo": {
+        "explainer": "確認済みのゲストだけが表示できます。公開イベントページには表示されません。",
+        "body": "ゲスト向けの情報"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "アクセスコードでゲストは非公開のイベントページを開けます。"
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "このイベントのすべて: ゲスト、出欠、座席、ウェブサイト、ギャラリー、メッセージ、当日。チームの他のメンバーを招待できます。"
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "このイベントを再利用します。コピーには設定、チケットの種類、注文時の質問、フロアプランが引き継がれます。注文、ゲスト、チケット、チェックイン、入金は引き継がれません。"
+      },
+      "announcements": {
+        "pushHint": "プッシュ通知は注文ページやアプリで通知をオンにしたゲストに届きます。それ以外の方にはメールが届きます。"
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "ゲストに向けてニュース、時間の変更、リマインダーを投稿します。"
+      }
     }
   }
 }

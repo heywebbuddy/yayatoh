@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { AGE_CLASSES, GUEST_KINDS, GUEST_SOURCES, HISTORY_ACTIONS } from './schema.ts';
 
 /**
- * A guest as the host's console shows it (organizer roles with `attendees:read`). The sealed
+ * A guest as the host's console shows it (organizer roles with `guests:read`). The sealed
  * answers are opened for this allowlist only; no public or guest-facing DTO carries them.
  */
 export const GuestDto = z.object({

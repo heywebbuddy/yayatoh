@@ -368,7 +368,8 @@
           "marketing",
           "box_office",
           "scanner",
-          "viewer"
+          "viewer",
+          "collaborator"
         ]
       },
       "MobileConfig": {

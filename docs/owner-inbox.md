@@ -26,6 +26,14 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
   - "Complimentary" means a paid order with a zero total (free passes, 100 % codes). Legacy bulk comp codes arrive with the ELT; tell us if the legacy report counted anything else as complimentary.
+- [ ] **Co-host and planner defaults, pending owner** (M4.2a, P4-8; labels: `auth`, `tenancy`, `db-migration`). Built with these defaults; say if any should change:
+  - **Co-host** (the couple, the gala chair): everything about their event, including its tickets, refunds (`orders:refund`), the event's own reports (`finance:read` for that event) and inviting the rest of the event team. Never org settings, payouts, billing, members, API keys, the activity log, privacy requests, dispute responses or out-of-policy refunds.
+  - **Planner:** guests, RSVP, seating, website, gallery, messages and day-of. No orders, refunds, finance reports, exports (`attendees:export`), event details, dates, team or the setup guide.
+  - Someone invited to an event who isn't in the org joins it as an **event collaborator** (they see only the org's name and their events); removing their last event removes them from the org. Members who are invited keep their org role.
+  - **Who manages an event team:** owners, admins and the event's co-hosts; each change asks for step-up and is audited. Viewers and managers see the team read-only.
+  - One pending invitation per address per org (the existing rule): inviting an address with a pending invitation (to the org or another event) is refused until it's accepted or withdrawn.
+  - Weddings made from the starter template are **private** (never on the marketplace, P4-3); galas are public.
+  - Refunds and order pages are keyed by the order, not the event, so a co-host can't refund from their event yet (the command refuses anyone without an org-wide role). Say if co-hosts should refund; it needs the order's event resolved in the authorizer.
 - [ ] **`/v1` API choices, pending owner** (M1.13, labels: `auth`, `tenancy`, `mobile-contract`). Built with these defaults; say if any should change:
   - **D21 (public API exposure):** the roadmap default "private until M6.3" is applied as: no public developer portal, partner OAuth or outbound webhooks until M6.3; owners and admins can create org API keys in the console now (Settings → API keys), and the reference is at `/v1/docs`.
   - **Org selection** is a path segment, `/v1/orgs/{org}/…`, checked against the key's org or the user's membership, instead of the `Yayatoh-Org` header in roadmap §6.1 (the tenancy rules forbid taking the tenant from a header).

@@ -269,7 +269,8 @@
     "audiences": "受眾",
     "refundRequests": "退款申請",
     "helpCenter": "說明中心",
-    "marketingSite": "行銷網站"
+    "marketingSite": "行銷網站",
+    "tablesSponsors": "桌位與贊助商"
   },
   "vocab": {
     "attendee": "參加者",
@@ -283,7 +284,11 @@
     "registration": "報名",
     "rsvp": "出席回覆",
     "ticket": "票券",
-    "tickets": "票券"
+    "tickets": "票券",
+    "organizer": "主辦方",
+    "organizers": "主辦方",
+    "host": "主人",
+    "hosts": "主人"
   },
   "roles": {
     "owner": "擁有者",
@@ -293,7 +298,8 @@
     "marketing": "行銷",
     "box_office": "售票處",
     "scanner": "驗票員",
-    "viewer": "唯讀"
+    "viewer": "唯讀",
+    "collaborator": "活動協作者"
   },
   "profiles": {
     "wedding": "婚禮",
@@ -354,7 +360,8 @@
     "ownerOnly": "只有擁有者可以變更擁有者",
     "errors": {
       "last_owner": "組織至少需要一位擁有者。",
-      "owner_only": "只有擁有者才能將他人設為擁有者或變更擁有者。"
+      "owner_only": "只有擁有者才能將他人設為擁有者或變更擁有者。",
+      "pending_invitation": "此地址已有一份待處理的邀請。請先撤回，或等待對方接受。"
     }
   },
   "dashboard": {
@@ -433,7 +440,13 @@
     "datesUpcoming": "有即將到來的日期",
     "ticketsCreated": "已建立門票",
     "agendaAdded": "已新增日程",
-    "speakersAdded": "已新增演講嘉賓"
+    "speakersAdded": "已新增演講嘉賓",
+    "comingSoon": "即將推出",
+    "guestsAdded": "已新增賓客名單",
+    "rsvpDeadlineSet": "已設定回覆截止日期",
+    "floorPlanChosen": "已選擇平面圖",
+    "guestSitePublished": "已發布賓客網站",
+    "tablesSponsors": "已設定桌位和贊助商"
   },
   "segments": {
     "all": "全部",
@@ -699,7 +712,9 @@
       "revoked": "此邀請已被撤回。",
       "expired": "此邀請已過期，請要求新的邀請。",
       "unavailable": "此組織目前無法使用。"
-    }
+    },
+    "eventTitle": "協助 {event}",
+    "joinEvent": "您將以{role}身分加入 {event}（{org}）。您只會看到這個活動。"
   },
   "eventStatus": {
     "draft": "草稿",
@@ -3465,7 +3480,12 @@
       "ticketsCreated": "至少建立一種門票類型。",
       "agendaAdded": "向日程新增第一個環節。",
       "speakersAdded": "新增第一位演講嘉賓。",
-      "published": "一切就緒後,在活動主頁發佈活動。"
+      "published": "一切就緒後,在活動主頁發佈活動。",
+      "guestsAdded": "新增賓客及其同行者。",
+      "rsvpDeadlineSet": "選擇回覆截止的日期。",
+      "floorPlanChosen": "為場地選擇平面圖，或依數量產生一個。",
+      "guestSitePublished": "發布賓客開啟的密碼保護網站。",
+      "tablesSponsors": "為桌位和贊助商命名。"
     }
   },
   "program": {
@@ -5795,6 +5815,97 @@
       "hasPlusOne": "此人已有同伴。",
       "plusOneOfPlusOne": "同伴不能再帶同伴。",
       "plusOneMoves": "同伴會隨帶他來的賓客一起移動。"
+    }
+  },
+  "eventRoles": {
+    "co_host": "共同主辦人",
+    "planner": "策劃人"
+  },
+  "eventTeam": {
+    "title": "活動團隊",
+    "subtitle": "共同主辦人和策劃人只負責這個活動，永遠看不到其他活動、撥款或組織設定。",
+    "rolesTitle": "誰能做什麼",
+    "explain": {
+      "co_host": "這個活動的一切：賓客、回覆、座位、網站、相簿、訊息、當天安排和門票。可以邀請團隊其他成員。",
+      "planner": "賓客、回覆、座位、網站、相簿、訊息和當天安排。不含撥款、退款或財務報告。"
+    },
+    "inviteTitle": "邀請加入此活動",
+    "emptyTitle": "還沒有共同主辦人或策劃人",
+    "emptyDescription": "透過電子郵件邀請他人。對方只能存取這個活動。",
+    "revokeFor": "撤回寄給 {email} 的邀請"
+  },
+  "myEvents": {
+    "title": "您的活動",
+    "description": "您在 {org} 協助的活動。",
+    "emptyTitle": "目前沒有活動",
+    "emptyDescription": "有人邀請您參加活動後，它會顯示在這裡。",
+    "open": "開啟 {name}"
+  },
+  "starters": {
+    "title": "入門範本",
+    "label": "入門",
+    "yours": "您的範本",
+    "use": "從{name}建立活動",
+    "sections": "區塊：{list}",
+    "checklist": "清單：{list}",
+    "wedding": {
+      "name": "婚禮",
+      "description": "賓客、回覆、座位、私密賓客網站、相簿、訊息和婚禮當天。從不公開展示。"
+    },
+    "gala": {
+      "name": "晚宴",
+      "description": "門票、桌位與贊助商、座位、捐款和現場報到。"
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "賓客開始回覆後，回覆和座位會顯示在這裡。"
+      },
+      "details": {
+        "attendanceHint": "線上和混合活動請在「存取」中新增參加連結。只有您的賓客能看到。"
+      },
+      "dates": {
+        "capacityHint": "選填。此日期最多可接待的賓客人數。"
+      },
+      "copy": {
+        "description": "重複使用此活動。副本會帶上設定、問題和平面圖——絕不包括賓客、回覆、報到或撥款。"
+      },
+      "announcements": {
+        "pushHint": "推播會傳給開啟了通知的賓客；其他人會收到電子郵件。"
+      },
+      "eventAnnouncements": {
+        "explainer": "公開公告顯示在活動頁面；僅限賓客的公告顯示在賓客的頁面上。",
+        "emptyDescription": "為賓客發布消息、時間變更或提醒。",
+        "audienceHolders": "僅限賓客",
+        "holdersOnly": "僅限賓客"
+      },
+      "access": {
+        "subtitle": "給賓客的私密資訊、線上參加連結和存取碼。"
+      },
+      "privateInfo": {
+        "explainer": "只有經過驗證的賓客能看到。絕不會出現在公開的活動頁面上。",
+        "body": "給賓客的資訊"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "存取碼讓您的賓客開啟私密活動頁面。"
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "這個活動的一切：賓客、回覆、座位、網站、相簿、訊息和當天安排。可以邀請團隊其他成員。"
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "重複使用此活動。副本會帶上設定、票種、下單問題和平面圖——絕不包括訂單、賓客、門票、報到或撥款。"
+      },
+      "announcements": {
+        "pushHint": "推播會傳給在訂單頁面或應用程式中開啟了通知的賓客；其他人會收到電子郵件。"
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "為賓客發布消息、時間變更或提醒。"
+      }
     }
   }
 }

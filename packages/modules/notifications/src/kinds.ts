@@ -75,6 +75,13 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'role', 'orgName'],
   },
+  // M4.2a: an invitation to one event as co-host or planner.
+  'tenancy.event-invitation': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'role', 'orgName', 'eventName'],
+  },
   'ticketing.claim-link': {
     category: 'transactional',
     channels: ['email'],

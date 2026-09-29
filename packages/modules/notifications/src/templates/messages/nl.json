@@ -36,6 +36,11 @@
       "intro": "{orgName} nodigt je uit voor hun team als {role}.",
       "cta": "Uitnodiging accepteren"
     },
+    "tenancy.event-invitation": {
+      "subject": "Je bent uitgenodigd voor {eventName}",
+      "intro": "{orgName} heeft je uitgenodigd voor {eventName} als {role}. Je ziet alleen dit evenement.",
+      "cta": "Uitnodiging accepteren"
+    },
     "ticketing.claim-link": {
       "subject": "Er wacht een ticket voor {eventName} op je",
       "intro": "Iemand heeft je een ticket voor {eventName} gegeven. Claim het voor je eigen QR-code.",
@@ -180,7 +185,10 @@
     "marketing": "marketing",
     "box_office": "kassa",
     "scanner": "scanner",
-    "viewer": "lezer"
+    "viewer": "lezer",
+    "co_host": "medegastheer",
+    "planner": "planner",
+    "collaborator": "evenementmedewerker"
   },
   "account": {
     "deleted": {

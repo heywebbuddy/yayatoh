@@ -29,7 +29,7 @@ increment builds on (import, sub-events, RSVP, seating, gallery).
 - **Moves** between parties of the same event (with the plus-one).
 - **`rsvp_history`** (append-only for `app_user`): one row per change to a party or guest with action, source (`manual` / `paper` from the console; `import`, `collector`, `rsvp` reserved for M4.1b/f/d), actor, the changed field **names** (never values) and structural detail (`fromPartyId`, `hostGuestId`, `guests` removed). Written by `recordHistoryTx` inside each command's transaction.
 - **Guests page** (`/o/{org}/e/{event}/guests`) replacing the wedding "coming soon" placeholder: counts (parties, guests, adults, children, infants, plus-ones to name, VIP parties) for the whole event; search (party, envelope or guest name) and side/tag/VIP filters; add/edit/remove party; add/edit/remove guest; add a plus-one; move; per-party history ("Show history of …") naming action, guest, source, actor and time in the event's zone; pagination (50 parties per page). Everything is native forms, disclosures and links (keyboard operable, 24 px targets), tokens only, 13 locales, Arabic right to left.
-- Permissions: reads `attendees:read`, writes `attendees:write`, entitlement `guests`; every command takes `eventId` so event-scoped roles (M4.2a) authorize per event. Viewers see the list read-only; direct actions are refused by the server.
+- Permissions: reads `guests:read`, writes `guests:write` (at the batch 3c merge; given to every org role that has `attendees:read`/`attendees:write`, and to co-hosts and planners on their events through `guests:*`), entitlement `guests`; every command takes `eventId` so event-scoped roles (M4.2a) authorize per event. Viewers see the list read-only; direct actions are refused by the server.
 
 **Later / not yet:**
 - Import (M4.1b), sub-events and the invitation matrix (M4.1c), RSVP states and the public RSVP page (M4.1d), RSVP questions and a meal menu (M4.1e), contact collector and invitations (M4.1f).
@@ -71,7 +71,7 @@ touches:
 
 ### 6. API diff
 - **`/v1`:** none.
-- **Commands** (all `tenantCommand`, entitlement `guests`, permission `attendees:write`, audited): `guests.createParty`, `guests.updateParty`, `guests.removeParty` (delete), `guests.addGuest`, `guests.updateGuest`, `guests.addPlusOne`, `guests.moveGuest`, `guests.removeGuest` (delete). Queries (`attendees:read`): `guests.guestList`, `guests.partyHistory`.
+- **Commands** (all `tenantCommand`, entitlement `guests`, permission `guests:write`, audited): `guests.createParty`, `guests.updateParty`, `guests.removeParty` (delete), `guests.addGuest`, `guests.updateGuest`, `guests.addPlusOne`, `guests.moveGuest`, `guests.removeGuest` (delete). Queries (`guests:read`): `guests.guestList`, `guests.partyHistory`.
 - **`/api/v2`:** none.
 
 ### 7. Events

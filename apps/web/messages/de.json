@@ -269,7 +269,8 @@
     "audiences": "Zielgruppen",
     "refundRequests": "Erstattungsanfragen",
     "helpCenter": "Hilfecenter",
-    "marketingSite": "Marketing-Website"
+    "marketingSite": "Marketing-Website",
+    "tablesSponsors": "Tische & Sponsoren"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -283,7 +284,11 @@
     "registration": "Anmeldung",
     "rsvp": "RSVP",
     "ticket": "Ticket",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "organizer": "Veranstalter",
+    "organizers": "Veranstalter",
+    "host": "Gastgeber",
+    "hosts": "Gastgeber"
   },
   "roles": {
     "owner": "Inhaber",
@@ -293,7 +298,8 @@
     "marketing": "Marketing",
     "box_office": "Kasse",
     "scanner": "Einlasskontrolle",
-    "viewer": "Nur Lesen"
+    "viewer": "Nur Lesen",
+    "collaborator": "Veranstaltungsmitarbeiter"
   },
   "profiles": {
     "wedding": "Hochzeit",
@@ -354,7 +360,8 @@
     "ownerOnly": "Nur Inhaber können Inhaber ändern",
     "errors": {
       "last_owner": "Eine Organisation braucht mindestens einen Inhaber.",
-      "owner_only": "Nur ein Inhaber kann jemanden zum Inhaber machen oder einen Inhaber ändern."
+      "owner_only": "Nur ein Inhaber kann jemanden zum Inhaber machen oder einen Inhaber ändern.",
+      "pending_invitation": "Für diese Adresse ist bereits eine Einladung offen. Ziehen Sie sie zuerst zurück oder warten Sie, bis sie angenommen wird."
     }
   },
   "dashboard": {
@@ -433,7 +440,13 @@
     "datesUpcoming": "Ein kommender Termin",
     "ticketsCreated": "Tickets angelegt",
     "agendaAdded": "Programm hinzugefügt",
-    "speakersAdded": "Speaker hinzugefügt"
+    "speakersAdded": "Speaker hinzugefügt",
+    "comingSoon": "Demnächst",
+    "guestsAdded": "Gästeliste angelegt",
+    "rsvpDeadlineSet": "Antwortfrist festgelegt",
+    "floorPlanChosen": "Raumplan gewählt",
+    "guestSitePublished": "Gäste-Website veröffentlicht",
+    "tablesSponsors": "Tische und Sponsoren eingerichtet"
   },
   "segments": {
     "all": "Alle",
@@ -699,7 +712,9 @@
       "revoked": "Diese Einladung wurde zurückgezogen.",
       "expired": "Diese Einladung ist abgelaufen. Bitte um eine neue.",
       "unavailable": "Diese Organisation ist derzeit nicht verfügbar."
-    }
+    },
+    "eventTitle": "Bei {event} mithelfen",
+    "joinEvent": "Sie treten {event} ({org}) als {role} bei. Sie sehen nur diese Veranstaltung."
   },
   "eventStatus": {
     "draft": "Entwurf",
@@ -3465,7 +3480,12 @@
       "ticketsCreated": "Lege mindestens einen Tickettyp an.",
       "agendaAdded": "Füge die erste Session zum Programm hinzu.",
       "speakersAdded": "Füge den ersten Speaker hinzu.",
-      "published": "Veröffentliche das Event auf seiner Startseite, wenn alles bereit ist."
+      "published": "Veröffentliche das Event auf seiner Startseite, wenn alles bereit ist.",
+      "guestsAdded": "Fügen Sie Ihre Gäste und ihre Gruppen hinzu.",
+      "rsvpDeadlineSet": "Wählen Sie das Datum, an dem die Antworten schließen.",
+      "floorPlanChosen": "Wählen Sie einen Raumplan oder erstellen Sie einen aus Zahlen.",
+      "guestSitePublished": "Veröffentlichen Sie die passwortgeschützte Website für Ihre Gäste.",
+      "tablesSponsors": "Benennen Sie Ihre Tische und deren Sponsoren."
     }
   },
   "program": {
@@ -5795,6 +5815,97 @@
       "hasPlusOne": "Diese Person hat schon eine Begleitung.",
       "plusOneOfPlusOne": "Eine Begleitung kann keine Begleitung mitbringen.",
       "plusOneMoves": "Eine Begleitung wird mit dem Gast verschoben, der sie mitbringt."
+    }
+  },
+  "eventRoles": {
+    "co_host": "Co-Gastgeber",
+    "planner": "Planer"
+  },
+  "eventTeam": {
+    "title": "Veranstaltungsteam",
+    "subtitle": "Co-Gastgeber und Planer arbeiten nur an dieser Veranstaltung. Andere Veranstaltungen, Auszahlungen und Organisationseinstellungen sehen sie nie.",
+    "rolesTitle": "Wer darf was",
+    "explain": {
+      "co_host": "Alles zu dieser Veranstaltung: Gäste, Zusagen, Sitzplätze, Website, Galerie, Nachrichten, der große Tag und Tickets. Kann den Rest des Teams einladen.",
+      "planner": "Gäste, Zusagen, Sitzplätze, Website, Galerie, Nachrichten und der große Tag. Keine Auszahlungen, Erstattungen oder Finanzberichte."
+    },
+    "inviteTitle": "Zu dieser Veranstaltung einladen",
+    "emptyTitle": "Noch keine Co-Gastgeber oder Planer",
+    "emptyDescription": "Laden Sie jemanden per E-Mail ein. Er erhält nur Zugriff auf diese Veranstaltung.",
+    "revokeFor": "Einladung für {email} zurückziehen"
+  },
+  "myEvents": {
+    "title": "Ihre Veranstaltungen",
+    "description": "Die Veranstaltungen, bei denen Sie bei {org} mithelfen.",
+    "emptyTitle": "Derzeit keine Veranstaltungen",
+    "emptyDescription": "Wenn Sie jemand zu einer Veranstaltung einlädt, erscheint sie hier.",
+    "open": "{name} öffnen"
+  },
+  "starters": {
+    "title": "Startvorlagen",
+    "label": "Startvorlage",
+    "yours": "Ihre Vorlagen",
+    "use": "Veranstaltung aus {name} erstellen",
+    "sections": "Bereiche: {list}",
+    "checklist": "Checkliste: {list}",
+    "wedding": {
+      "name": "Hochzeit",
+      "description": "Gäste, Zusagen, Sitzplätze, eine private Gäste-Website, Galerie, Nachrichten und der große Tag. Nie öffentlich gelistet."
+    },
+    "gala": {
+      "name": "Gala",
+      "description": "Tickets, Tische und Sponsoren, Sitzplätze, Spenden und Check-in vor Ort."
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "Zusagen und Sitzplätze erscheinen hier, sobald Ihre Gäste antworten."
+      },
+      "details": {
+        "attendanceHint": "Für Online- und Hybridveranstaltungen fügen Sie den Link unter Zugang hinzu. Nur Ihre Gäste sehen ihn."
+      },
+      "dates": {
+        "capacityHint": "Optional. Die meisten Gäste, die dieser Termin empfangen kann."
+      },
+      "copy": {
+        "description": "Diese Veranstaltung wiederverwenden. Eine Kopie übernimmt Einstellungen, Fragen und Raumplan — nie ihre Gäste, Zusagen, Check-ins oder Auszahlungen."
+      },
+      "announcements": {
+        "pushHint": "Push erreicht Gäste, die Benachrichtigungen eingeschaltet haben; alle anderen bekommen die E-Mail."
+      },
+      "eventAnnouncements": {
+        "explainer": "Öffentliche Mitteilungen erscheinen auf der Veranstaltungsseite; solche nur für Gäste auf den Seiten Ihrer Gäste.",
+        "emptyDescription": "Veröffentlichen Sie Neuigkeiten, Zeitänderungen oder Erinnerungen für Ihre Gäste.",
+        "audienceHolders": "Nur Gäste",
+        "holdersOnly": "Nur Gäste"
+      },
+      "access": {
+        "subtitle": "Private Informationen für Ihre Gäste, der Online-Link und Zugangscodes."
+      },
+      "privateInfo": {
+        "explainer": "Nur Ihre bestätigten Gäste sehen dies. Es erscheint nie auf der öffentlichen Veranstaltungsseite.",
+        "body": "Informationen für Gäste"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "Mit Zugangscodes öffnen Ihre Gäste die private Veranstaltungsseite."
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "Alles zu dieser Veranstaltung: Gäste, Zusagen, Sitzplätze, Website, Galerie, Nachrichten und der große Tag. Kann den Rest des Teams einladen."
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "Diese Veranstaltung wiederverwenden. Eine Kopie übernimmt Einstellungen, Ticketarten, Bestellfragen und Raumplan — nie ihre Bestellungen, Gäste, Tickets, Check-ins oder Auszahlungen."
+      },
+      "announcements": {
+        "pushHint": "Push erreicht Gäste, die Benachrichtigungen auf ihrer Bestellseite oder in der App eingeschaltet haben; alle anderen bekommen die E-Mail."
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "Veröffentlichen Sie Neuigkeiten, Zeitänderungen oder Erinnerungen für Ihre Gäste."
+      }
     }
   }
 }

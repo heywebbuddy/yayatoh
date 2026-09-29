@@ -61,7 +61,7 @@ export async function quickBuildAction(
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const doc = quickLayout({
     rows: int(form, 'rows', 100),
     seatsPerRow: int(form, 'seatsPerRow', 200),
@@ -87,7 +87,7 @@ export async function useLayoutAction(
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await executeCommand(
       setEventLayoutCommand,
@@ -109,7 +109,7 @@ export async function saveDocAction(
   date: string | null,
   doc: unknown,
 ): Promise<SeatingState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await executeCommand(
       setEventLayoutCommand,
@@ -131,7 +131,7 @@ export async function saveTemplateAction(
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'seating');
   try {
     await executeCommand(saveLayoutCommand, { name: String(form.get('name') ?? ''), doc }, data.ctx, ports);
     revalidatePath(`/o/${org}/e/${event}/seating`);
@@ -142,7 +142,7 @@ export async function saveTemplateAction(
 }
 
 export async function publishSeatingAction(org: string, event: string, date: string | null): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   await executeCommand(
     publishEventLayoutCommand,
     { eventId: ev.id, occurrenceId: dateOf(date) },
@@ -163,7 +163,7 @@ export async function dateChartAction(
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const occurrenceId = dateOf(date);
   if (!occurrenceId) return { ok: false, code: 'validation_failed' };
   try {
@@ -185,7 +185,7 @@ export async function categoryAction(
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const ticketTypeId = String(form.get('ticketTypeId') ?? '');
   try {
     await executeCommand(
@@ -259,7 +259,7 @@ export async function assignSeatsAction(
     overrideRules?: boolean;
   },
 ): Promise<AssignState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     const r = await executeCommand(
       assignSeatsCommand,
@@ -299,7 +299,7 @@ export async function unassignSeatAction(
   date: string | null,
   attendeeId: string,
 ): Promise<AssignState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     const r = await executeCommand(
       unassignSeatsCommand,
@@ -321,7 +321,7 @@ export async function finderSettingsAction(
   _prev: SeatingState,
   form: FormData,
 ): Promise<SeatingState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await executeCommand(
       setFinderSettingsCommand,
@@ -357,7 +357,7 @@ export async function seatingRulesAction(
   _prev: RulesState,
   form: FormData,
 ): Promise<RulesState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const num = (key: string) => {
     const raw = String(form.get(key) ?? '').trim();
     return /^\d{1,4}$/.test(raw) ? Number(raw) : Number.NaN;
@@ -429,7 +429,7 @@ export async function allocateGroupAction(
   const count = rawCount ? Number(rawCount) : undefined;
   if (count !== undefined && !(Number.isInteger(count) && count >= 1 && count <= MAX_GROUP_SEATS))
     return { ok: false, code: 'validation_failed', field: 'count' };
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     const r = await executeCommand(
       allocateGroupSeatsCommand,
@@ -453,7 +453,7 @@ export async function releaseGroupAction(
   form: FormData,
 ): Promise<GroupState> {
   const label = String(form.get('label') ?? '');
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     const r = await executeCommand(
       releaseGroupSeatsCommand,
@@ -480,7 +480,7 @@ export async function seatGroupAction(
   form: FormData,
 ): Promise<GroupState> {
   const label = String(form.get('label') ?? '');
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   let operationId: string;
   try {
     ({ operationId } = await executeCommand(
