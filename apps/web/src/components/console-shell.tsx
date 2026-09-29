@@ -37,7 +37,7 @@ async function SidebarContent({
   const t = await getTranslations();
   const groups = GROUP_ORDER.map((g) => nav.items.filter((i) => i.group === g)).filter((g) => g.length > 0);
   return (
-    <div className="flex h-full flex-col gap-px">
+    <div className="flex min-h-full flex-col gap-px">
       <Link
         href="/"
         className="px-2.5 pt-1.5 pb-[18px] text-[21px] font-semibold tracking-[-0.04em] text-zinc-900"
@@ -141,7 +141,7 @@ export async function ConsoleShell({
       </a>
       <nav
         aria-label={t('navigation')}
-        className="sticky top-0 hidden h-dvh w-[248px] shrink-0 border-e border-zinc-200 bg-white px-3 py-[18px] lg:block"
+        className="sticky top-0 hidden h-dvh w-[248px] shrink-0 overflow-y-auto border-e border-zinc-200 bg-white px-3 py-[18px] lg:block"
       >
         {sidebar}
       </nav>
