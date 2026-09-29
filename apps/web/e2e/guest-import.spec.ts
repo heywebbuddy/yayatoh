@@ -151,9 +151,9 @@ test.describe('guests: import (M4.1b)', () => {
     const party = page.getByRole('region', { name: 'The Garcias', exact: true });
     await expect(party.getByText('Luis Garcia', { exact: true })).toBeVisible();
     await expect(party.getByText('Guest of Luis Garcia', { exact: true })).toBeVisible();
-    await expect(party.getByText('No nuts')).toBeVisible();
+    await expect(party.getByRole('definition').filter({ hasText: 'No nuts' })).toBeVisible();
     await expect(
-      page.getByRole('region', { name: 'Ana Kim', exact: true }).getByText('Jamie Lee'),
+      page.getByRole('region', { name: 'Ana Kim', exact: true }).getByText('Jamie Lee', { exact: true }),
     ).toBeVisible();
     await party.getByRole('link', { name: 'Show history of The Garcias' }).click();
     const history = page.getByRole('region', { name: 'History of The Garcias' });
@@ -211,9 +211,11 @@ test.describe('guests: import (M4.1b)', () => {
     for (const name of ['The Garcias', 'Ana Kim', 'Okafor family'])
       await expect(page.getByRole('region', { name, exact: true })).toBeVisible();
     await expect(
-      page.getByRole('region', { name: 'Okafor family', exact: true }).getByText('Guest of Chidi Okafor'),
+      page
+        .getByRole('region', { name: 'Okafor family', exact: true })
+        .getByText('Guest of Chidi Okafor', { exact: true }),
     ).toBeVisible();
-    await expect(page.getByText('luis@example.test')).toBeVisible();
+    await expect(page.getByRole('definition').filter({ hasText: 'luis@example.test' })).toBeVisible();
   });
 
   test('keyboard only: paste, check and import', async ({ page }) => {

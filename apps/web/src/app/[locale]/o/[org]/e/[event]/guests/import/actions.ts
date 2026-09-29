@@ -125,7 +125,7 @@ export async function validateImportAction(org: string, event: string, batchId: 
   } catch (err) {
     return redirect({ href: `${href}&error=${errorOf(err)}`, locale });
   }
-  redirect({ href: `${href}#check`, locale });
+  redirect({ href: `${href}&checked=1`, locale });
 }
 
 /** Step 3: import the planned parties (a bulk job; small lists finish before the page loads). */
