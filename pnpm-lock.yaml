@@ -432,6 +432,9 @@ importers:
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../../packages/modules/assistance
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../../packages/modules/attendees
@@ -981,6 +984,9 @@ importers:
 
   packages/modules/alerts:
     dependencies:
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../assistance
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
@@ -1291,6 +1297,9 @@ importers:
 
   packages/modules/command-center:
     dependencies:
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../assistance
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing

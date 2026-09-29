@@ -20,6 +20,8 @@ export const WIDGET_KEYS = [
   // Batch 3d merge: M3.4a's staff views (the Scan PWA's staff mode) on the Command Center.
   'entrances',
   'deviceBoard',
+  // M3.3b: the event's help queue (guest and staff requests), for live mode to place.
+  'assistance',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -27,7 +29,12 @@ export const WIDGET_SIZES = ['sm', 'md', 'lg'] as const;
 export type WidgetSize = (typeof WIDGET_SIZES)[number];
 
 /** Realtime channels (M3.1b registry keys) a widget follows. */
-export type WidgetChannel = 'event.checkins' | 'event.devices' | 'event.metrics' | 'org.alerts';
+export type WidgetChannel =
+  | 'event.checkins'
+  | 'event.devices'
+  | 'event.metrics'
+  | 'org.alerts'
+  | 'event.assistance';
 
 export function isWidgetKey(v: unknown): v is WidgetKey {
   return typeof v === 'string' && (WIDGET_KEYS as readonly string[]).includes(v);
@@ -145,6 +152,18 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     modes: ['pre_show', 'live'],
     size: 'lg',
     channel: 'event.devices',
+  },
+  // M3.3b guest assistance: waiting, assigned, in progress and overdue help requests, the most
+  // urgent first. Not in a default layout yet: M3.3a live mode places it; members can show it.
+  assistance: {
+    key: 'assistance',
+    module: 'checkin',
+    permission: 'assistance:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['pre_show', 'live'],
+    size: 'md',
+    channel: 'event.assistance',
   },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {

@@ -61,6 +61,22 @@ type Alerts = {
   }[];
 };
 
+type Assistance = {
+  waiting: number;
+  assigned: number;
+  inProgress: number;
+  overdue: number;
+  top: {
+    id: string;
+    number: number;
+    source: 'guest' | 'staff';
+    reason: string;
+    priority: 'urgent' | 'high' | 'normal';
+    state: string;
+    overdue: boolean;
+  }[];
+};
+
 const num = (n: number, locale: string) => new Intl.NumberFormat(locale).format(n);
 const pct = (part: number, whole: number, locale: string) =>
   new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 }).format(
@@ -322,6 +338,47 @@ function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   );
 }
 
+/** M3.3b: the help queue in numbers and its most urgent open requests, linking to the queue. */
+function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
+  const t = useTranslations('assistance');
+  return (
+    <div className="flex flex-col gap-3" data-testid="cc-assistance">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-body sm:grid-cols-4">
+        {(['waiting', 'assigned', 'inProgress', 'overdue'] as const).map((k) => (
+          <div key={k} className="flex flex-col">
+            <dt className="text-caption text-zinc-600">{t(`widget.${k}`)}</dt>
+            <dd
+              className={`tabular-nums ${k === 'overdue' && d.overdue > 0 ? 'font-medium text-pink-700' : ''}`}
+            >
+              {num(d[k], c.locale)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {d.top.length === 0 ? (
+        <p className="text-body text-zinc-600">{t('widget.none')}</p>
+      ) : (
+        <ul className="flex list-none flex-col gap-1 p-0">
+          {d.top.map((r) => (
+            <li key={r.id} className="flex flex-wrap items-baseline gap-x-2 text-body">
+              <span className="font-medium">{t('number', { number: r.number })}</span>
+              <span>{t(`reason.${r.reason}`)}</span>
+              <span className="text-caption text-zinc-600">
+                {[t(`priority.${r.priority}`), t(`state.${r.state}`), r.overdue ? t('overdue') : null]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <Link href={`${c.base}/assistance`} className="self-start text-body underline underline-offset-2">
+        {t('widget.open')}
+      </Link>
+    </div>
+  );
+}
+
 export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unknown; ctx: Ctx }) {
   switch (widget) {
     case 'readiness':
@@ -344,5 +401,7 @@ export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unk
       return <EntrancesBody d={data as Entrances} c={ctx} />;
     case 'deviceBoard':
       return <DeviceBoardBody d={data as DeviceBoard} c={ctx} />;
+    case 'assistance':
+      return <AssistanceBody d={data as Assistance} c={ctx} />;
   }
 }

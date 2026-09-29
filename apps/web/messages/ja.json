@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh がこの組織を停止しました} reactivated {この組織が再開しました} other {Yayatoh がこの組織を閉鎖しました}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} other {アラート}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} other {アラート}}"
       }
     },
     "kinds": {
@@ -285,7 +285,8 @@
     "tablesSponsors": "テーブルとスポンサー",
     "commandCenter": "コマンドセンター",
     "alerts": "アラート",
-    "sendingSetup": "送信設定"
+    "sendingSetup": "送信設定",
+    "assistance": "ヘルプ依頼"
   },
   "vocab": {
     "attendee": "参加者",
@@ -6083,6 +6084,9 @@
       },
       "deviceBoard": {
         "title": "デバイス一覧"
+      },
+      "assistance": {
+        "title": "ヘルプ依頼"
       }
     }
   },
@@ -6172,7 +6176,8 @@
       "domain": "ドメインを修正",
       "payoutsPastDue": "受取アカウントを更新",
       "deliverability": "メッセージ状況を開く",
-      "automationFailed": "メッセージ状況を開く"
+      "automationFailed": "メッセージ状況を開く",
+      "assistanceOverdue": "ヘルプ依頼を開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -6191,7 +6196,8 @@
       "domain": "{count, plural, other {{countWords}件のカスタムドメインに問題があります}}",
       "payoutsPastDue": "{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}",
       "deliverability": "メールの到達率に注意が必要です",
-      "automationFailed": "{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}"
+      "automationFailed": "{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}",
+      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}"
     },
     "widget": {
       "title": "アラート",
@@ -6305,7 +6311,9 @@
       "backlogTitle": "同期待ちのスキャン",
       "backlogBody": "{label}に同期待ちのスキャンが{count}件あります。",
       "capacityNearTitle": "まもなく満員",
-      "capacityNearBody": "予定ゲストの{percent}%が入場済みです。"
+      "capacityNearBody": "予定ゲストの{percent}%が入場済みです。",
+      "assistanceTitle": "今すぐ助けが必要です",
+      "assistanceBody": "緊急のヘルプ依頼 {label}。スタッフ画面を開いて引き受けてください。"
     },
     "supervisorSignIn": "スーパーバイザーモードを使うには、このスマートフォンでスーパーバイザーがサインインする必要があります。",
     "signIn": "スーパーバイザーとしてサインイン",
@@ -6458,6 +6466,189 @@
       "sales": "チーム向けの販売通知",
       "messages": "チーム向けの顧客メッセージ",
       "security": "チーム向けのセキュリティ通知"
+    }
+  },
+  "assistance": {
+    "pageTitle": "ヘルプ依頼",
+    "description": "{event} の座席検索からの来場者の「助けが必要」依頼と入口スタッフからの依頼。緊急度の高い順です。",
+    "noAccessTitle": "ヘルプ依頼にアクセスできません",
+    "noAccess": "あなたの役割ではこのイベントのヘルプ依頼を表示できません。",
+    "statusLabel": "依頼を表示",
+    "tab": {
+      "open": "対応中",
+      "closed": "完了"
+    },
+    "readOnly": "依頼は閲覧できますが、あなたの役割では引き受けたり変更したりできません。",
+    "empty": {
+      "openTitle": "対応中のヘルプ依頼はありません",
+      "openDescription": "来場者や入口スタッフからの新しい依頼は届き次第ここに表示されます。",
+      "closedTitle": "まだ完了したものはありません",
+      "closedDescription": "解決・取り消しされた依頼はここに表示されます。"
+    },
+    "title": "#{number} · {reason}",
+    "number": "#{number}",
+    "reason": {
+      "seat": "座席の問題",
+      "accessibility": "アクセシビリティ",
+      "medical": "医療",
+      "lost_item": "落とし物",
+      "other": "その他",
+      "backup": "応援",
+      "supervisor": "責任者",
+      "security": "警備",
+      "device": "端末の問題"
+    },
+    "priority": {
+      "urgent": "緊急",
+      "high": "優先度高",
+      "normal": "優先度通常"
+    },
+    "state": {
+      "new": "待機中",
+      "assigned": "担当者決定",
+      "in_progress": "対応中",
+      "resolved": "解決済み",
+      "cancelled": "取り消し"
+    },
+    "mineState": "自分の担当",
+    "overdue": "期限超過",
+    "sla": {
+      "takeWithin": "あと {time} で引き受け",
+      "overdueBy": "{time} 超過"
+    },
+    "source": {
+      "guest": "来場者から",
+      "staff": "入口スタッフから"
+    },
+    "askedAt": "{time} に依頼",
+    "unassigned": "担当者なし",
+    "assignedTo": "担当: {name}",
+    "aDevice": "スキャナー",
+    "you": "あなた",
+    "unknownPerson": "元チームメンバー",
+    "guest": {
+      "title": "お困りですか？",
+      "description": "必要なことをイベントスタッフにお知らせください。スタッフがお伺いします。",
+      "closedTitle": "ヘルプ依頼は受け付けていません",
+      "closedDescription": "このイベントではここでヘルプ依頼を受け付けていません。お近くのスタッフにお声がけください。",
+      "invalidTitle": "このチケットリンクはこのイベントでは無効です",
+      "invalidDescription": "チケットのリンクから座席検索を開くか、お近くのスタッフにお声がけください。",
+      "back": "座席検索に戻る",
+      "reasonLegend": "どのようなお手伝いが必要ですか？",
+      "emergencyTitle": "緊急時はすぐに助けを呼んでください",
+      "emergencyBody": "重傷者がいる、または危険な状況の場合は、まず地域の緊急通報番号（日本では 119、米国では 911）に電話し、その後この依頼を送信してスタッフがあなたを見つけられるようにしてください。",
+      "locationLabel": "どこにいますか？（任意）",
+      "locationHint": "座席、列、テーブル、または近くの目印。",
+      "noteLabel": "スタッフに伝えたいことはありますか？（任意）",
+      "privacy": "この内容はお手伝いのためにイベントスタッフだけが見ます。マーケティングには一切使用されません。",
+      "submit": "ヘルプを依頼",
+      "errors": {
+        "reason": "必要なお手伝いを選んでください。",
+        "noteTooLong": "メモは500文字未満にしてください。",
+        "locationTooLong": "場所は120文字未満にしてください。",
+        "invalidTicket": "このチケットリンクはこのイベントでは無効です。",
+        "tooMany": "すでに3件の依頼が待機中です。スタッフが向かっています。",
+        "rateLimited": "この端末からの依頼が多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。",
+        "closed": "このイベントは現在ヘルプ依頼を受け付けていません。",
+        "internal": "問題が発生しました。お近くのスタッフにお声がけください。"
+      },
+      "statusTitle": "ヘルプ依頼 #{number}",
+      "askedAbout": "依頼内容: {reason}",
+      "state": {
+        "new": "スタッフを待っています",
+        "assigned": "スタッフが向かっています",
+        "in_progress": "スタッフが対応しています",
+        "resolved": "解決済み",
+        "cancelled": "スタッフが終了しました"
+      },
+      "stateHint": {
+        "new": "依頼は順番待ちです。できればその場でお待ちください。",
+        "assigned": "チームのスタッフが依頼を受け、向かっています。",
+        "in_progress": "スタッフが対応しています。",
+        "resolved": "スタッフが依頼を解決済みにしました。まだお困りでしたら再度ご依頼ください。",
+        "cancelled": "スタッフが依頼を終了しました。まだお困りでしたら再度ご依頼ください。"
+      },
+      "lastUpdate": "最終更新 {time}",
+      "emergencyShort": "緊急時はすぐに地域の緊急通報番号に電話してください。",
+      "refresh": "状況を更新",
+      "needHelp": "お困りですか？",
+      "needTicketLink": "イベントスタッフにヘルプを依頼するには、チケットのリンクから座席検索を開いてください。",
+      "needHelpHint": "座席、アクセシビリティ、体調、落とし物についてイベントスタッフに助けを求められます。",
+      "askButton": "ヘルプを依頼",
+      "ticketLink": "会場で: 座席を探す・ヘルプを依頼する",
+      "ticketLinkLabel": "会場で座席を探す・ヘルプを依頼する（チケット {serial}）"
+    },
+    "where": "場所: {place}",
+    "atEntrance": "{name}",
+    "fromDevice": "{device} から送信",
+    "activityTitle": "{count, plural, other {# 件の更新}}",
+    "actor": {
+      "guest": "来場者",
+      "member": "チームメンバー",
+      "device": "スキャナー",
+      "system": "システム"
+    },
+    "activity": {
+      "created": "{who} がヘルプを依頼",
+      "assigned": "{who} が {to} に割り当て",
+      "started": "{who} が対応開始",
+      "resolved": "{who} が解決",
+      "cancelled": "{who} が取り消し",
+      "note": "{who}: {note}"
+    },
+    "take": "引き受ける",
+    "takeLabel": "{title} を引き受ける",
+    "start": "開始",
+    "startLabel": "{title} を開始",
+    "resolve": "解決",
+    "resolveLabel": "{title} を解決",
+    "cancel": "依頼を取り消す",
+    "cancelLabel": "{title} を取り消す",
+    "assign": "割り当て",
+    "assignLabel": "{title} の担当者",
+    "choosePerson": "担当者を選択",
+    "noteLabel": "{title} のメモ",
+    "addNote": "メモを追加",
+    "done": {
+      "take": "{title} を引き受けました。",
+      "assign": "{title} を割り当てました。",
+      "start": "{title} は対応中です。",
+      "resolve": "{title} を解決しました。",
+      "cancel": "{title} を取り消しました。",
+      "note": "{title} にメモを追加しました。"
+    },
+    "changed": "この依頼はその間に変更されました。一覧は最新です。もう一度お試しください。",
+    "failed": "うまくいきませんでした。もう一度お試しください。",
+    "errors": {
+      "assignee": "割り当てる相手を選んでください。",
+      "note": "先にメモを入力してください。"
+    },
+    "live": {
+      "connecting": "接続中…",
+      "live": "ライブ",
+      "offline": "オフライン — 最新の情報は再読み込みしてください"
+    },
+    "widget": {
+      "waiting": "待機中",
+      "assigned": "担当者決定",
+      "inProgress": "対応中",
+      "overdue": "期限超過",
+      "none": "対応中のヘルプ依頼はありません。",
+      "open": "ヘルプ依頼を開く"
+    },
+    "scan": {
+      "queueTitle": "ヘルプ依頼",
+      "loading": "ヘルプ依頼を読み込み中…",
+      "unavailable": "現在ヘルプ依頼を読み込めません。",
+      "none": "対応中のヘルプ依頼はありません。",
+      "askTitle": "ヘルプを依頼",
+      "askHint": "依頼はこの端末とスキャン中の入口の情報とともにイベントチームに届きます。",
+      "reasonLabel": "何が必要ですか？",
+      "noteLabel": "メモ（任意）",
+      "send": "依頼を送信",
+      "sent": "ヘルプ依頼 #{number} を送信しました。",
+      "offline": "オフラインです。端末がオンラインに戻ったらもう一度お試しください。",
+      "invalid": "必要なものを選んでください。"
     }
   }
 }

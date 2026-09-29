@@ -8,7 +8,13 @@ import { StaffPanel } from '@/components/scan-staff.tsx';
 import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
 import { SignalBanner } from '@/components/signal-banner.tsx';
 import { canUseCamera } from '@/scan/camera.ts';
-import { ScanClient, type ScanConfig, type ScanOutcome, ScanSyncError } from '@/scan/client.ts';
+import {
+  ScanClient,
+  type ScanConfig,
+  type ScanOutcome,
+  ScanSyncError,
+  type StaffView,
+} from '@/scan/client.ts';
 import { markScanFeedback, markScanStart } from '@/scan/feedback.ts';
 import { followChannel } from '@/scan/stream.ts';
 import { useCameraScan } from '@/scan/use-camera.ts';
@@ -73,7 +79,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [live, setLive] = useState(false);
   const [selfId, setSelfId] = useState<string | null>(null);
-  const [channels, setChannels] = useState<{ checkins: string; devices: string } | null>(null);
+  const [channels, setChannels] = useState<StaffView['channels'] | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const markRef = useRef<{ id: string; scanId: string } | null>(null);
   const seq = useRef(0);
@@ -220,6 +226,10 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           bump();
         },
       }),
+      // M3.3b: help requests raised, taken or closed re-read the staff screen's queue.
+      ...(channels.assistance
+        ? [followChannel({ channel: channels.assistance, token: client.token, onMessage: bump })]
+        : []),
     ];
     return () => {
       for (const stop of stops) stop();

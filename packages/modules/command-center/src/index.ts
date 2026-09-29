@@ -17,7 +17,9 @@ export {
 export {
   AlertsWidgetDto,
   type AnyWidgetDef,
+  AssistanceWidgetDto,
   alertsSlotWidget,
+  assistanceWidget,
   CheckinsWidgetDto,
   COMMAND_CENTER_WIDGETS,
   checkinsWidget,

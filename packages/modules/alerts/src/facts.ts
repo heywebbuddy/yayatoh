@@ -1,3 +1,4 @@
+import { assistanceOverdueTx } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceHealthTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, findEventTx } from '@yayatoh/events';
@@ -26,7 +27,7 @@ export async function eventFactsTx(
   if (!event) return null;
   const mode = eventMode(now, event.startsAt, event.endsAt);
   const around = mode === 'live' || mode === 'pre_show';
-  const [unseated, dist, pay, devices, types, admitted, [target]] = await Promise.all([
+  const [unseated, dist, pay, devices, types, admitted, [target], help] = await Promise.all([
     unseatedAttendeesTx(tx, eventId),
     undistributedTicketsTx(tx, eventId),
     paymentAlertFactsTx(tx, eventId, now, {
@@ -43,6 +44,7 @@ export async function eventFactsTx(
     ticketTypeStatsTx(tx, eventId),
     mode === 'live' ? checkinFactsTx(tx, { eventId }).then((c) => c.tickets) : Promise.resolve(0),
     tx.select({ tickets: salesTargets.tickets }).from(salesTargets).where(eq(salesTargets.eventId, eventId)),
+    assistanceOverdueTx(tx, eventId, now),
   ]);
   const live = types.filter((t) => !t.archived);
   return {
@@ -66,6 +68,8 @@ export async function eventFactsTx(
       admitted,
       salesTarget: target?.tickets ?? null,
       ticketTypes: live.length,
+      assistanceOverdue: help.overdue,
+      assistanceUrgent: help.urgent,
     },
   };
 }

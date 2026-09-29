@@ -272,6 +272,14 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 5, windowMs: 60 * MIN },
     ipCeiling: { limit: 200, windowMs: 10 * MIN },
   },
+  /** Guests' help requests from the seat finder (M3.3b); identity = the ticket. Each one may push
+   * staff phones, so bursts are cut early (a ticket also has at most 3 open requests). */
+  assistanceRequest: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 5, windowMs: 30 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
   /** Reports of public reviews (M1.4g). */
   reviewReport: {
     device: { limit: 10, windowMs: 10 * MIN },

@@ -109,12 +109,36 @@ export interface StaffView {
     count: number | null;
     since: string;
   }[];
-  readonly channels: { readonly checkins: string; readonly devices: string };
+  readonly channels: { readonly checkins: string; readonly devices: string; readonly assistance?: string };
   /** This device's id (for the supervisor's pokes on the devices channel). */
   readonly deviceId: string;
 }
 
 /** Kiosk mode as the server handed it to this device (M3.4a). */
+/** One help request on the staff screen (M3.3b): what the device may show and act on. */
+export interface HelpRequest {
+  readonly id: string;
+  readonly number: number;
+  readonly source: 'guest' | 'staff';
+  readonly reason: string;
+  readonly priority: 'urgent' | 'high' | 'normal';
+  readonly state: 'new' | 'assigned' | 'in_progress' | 'resolved' | 'cancelled';
+  readonly note: string;
+  readonly location: string;
+  readonly guest: { readonly name: string; readonly ticket: string } | null;
+  readonly device: string | null;
+  readonly checkpoint: string | null;
+  readonly assignee: {
+    readonly kind: 'user' | 'device';
+    readonly id: string;
+    readonly label: string | null;
+  } | null;
+  readonly mine: boolean;
+  readonly createdAt: string;
+  readonly dueAt: string;
+  readonly overdue: boolean;
+}
+
 export interface KioskConfig {
   readonly eventId: string;
   readonly checkpointId: string | null;
@@ -472,6 +496,55 @@ export class ScanClient {
     } catch {
       const cached = await kvGet<{ view: StaffView; fetchedAt: string }>('staffOverview');
       return cached ? { ...cached, fresh: false } : null;
+    }
+  }
+
+  /** The event's open help requests (M3.3b); null offline or refused. */
+  async helpRequests(): Promise<HelpRequest[] | null> {
+    try {
+      const res = await fetch(
+        `/api/scan/assistance?eventId=${encodeURIComponent(this.config.eventId)}`,
+        this.api,
+      );
+      if (!res.ok) return null;
+      return ((await res.json()) as { requests: HelpRequest[] }).requests;
+    } catch {
+      return null;
+    }
+  }
+
+  /** Ask for help from this device, at the entrance it scans at. Returns the request number or an error code. */
+  async askForHelp(body: { reason: string; note: string }): Promise<{ number: number } | { code: string }> {
+    try {
+      const res = await fetch('/api/scan/assistance', {
+        method: 'POST',
+        ...this.api,
+        body: JSON.stringify({ ...body, eventId: this.config.eventId, checkpointId: this.checkpointId }),
+      });
+      const json = (await res.json().catch(() => ({}))) as { number?: number; code?: string };
+      return res.ok && typeof json.number === 'number'
+        ? { number: json.number }
+        : { code: json.code ?? 'internal' };
+    } catch {
+      return { code: 'offline' };
+    }
+  }
+
+  /** Take (for this device), start, resolve or cancel a help request; null on success, else a code. */
+  async helpAction(
+    requestId: string,
+    action: 'take' | 'start' | 'resolve' | 'cancel',
+  ): Promise<string | null> {
+    try {
+      const res = await fetch(`/api/scan/assistance/${encodeURIComponent(requestId)}`, {
+        method: 'POST',
+        ...this.api,
+        body: JSON.stringify({ eventId: this.config.eventId, action }),
+      });
+      if (res.ok) return null;
+      return ((await res.json().catch(() => ({}))) as { code?: string }).code ?? 'internal';
+    } catch {
+      return 'offline';
     }
   }
 

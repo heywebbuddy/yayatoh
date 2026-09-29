@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh ha sospeso questa organizzazione} reactivated {Questa organizzazione è di nuovo online} other {Yayatoh ha chiuso questa organizzazione}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} other {Avviso}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} other {Avviso}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} other {Avviso}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} other {Avviso}}"
       }
     },
     "kinds": {
@@ -285,7 +285,8 @@
     "tablesSponsors": "Tavoli e sponsor",
     "commandCenter": "Centro di comando",
     "alerts": "Avvisi",
-    "sendingSetup": "Impostazioni di invio"
+    "sendingSetup": "Impostazioni di invio",
+    "assistance": "Richieste di aiuto"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -6083,6 +6084,9 @@
       },
       "deviceBoard": {
         "title": "Quadro dei dispositivi"
+      },
+      "assistance": {
+        "title": "Richieste di aiuto"
       }
     }
   },
@@ -6172,7 +6176,8 @@
       "domain": "Correggi i domini",
       "payoutsPastDue": "Aggiorna l’account di pagamento",
       "deliverability": "Apri lo stato dei messaggi",
-      "automationFailed": "Apri lo stato dei messaggi"
+      "automationFailed": "Apri lo stato dei messaggi",
+      "assistanceOverdue": "Apri le richieste di aiuto"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -6191,7 +6196,8 @@
       "domain": "{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}",
       "payoutsPastDue": "{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}",
       "deliverability": "Il recapito delle email richiede attenzione",
-      "automationFailed": "{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}"
+      "automationFailed": "{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}"
     },
     "widget": {
       "title": "Avvisi",
@@ -6305,7 +6311,9 @@
       "backlogTitle": "Scansioni in attesa",
       "backlogBody": "{label} ha {count} scansioni in attesa di sincronizzazione.",
       "capacityNearTitle": "Quasi pieno",
-      "capacityNearBody": "È entrato il {percent}% degli ospiti previsti."
+      "capacityNearBody": "È entrato il {percent}% degli ospiti previsti.",
+      "assistanceTitle": "Serve aiuto ora",
+      "assistanceBody": "Richiesta di aiuto urgente {label}. Apri Personale per prenderla."
     },
     "supervisorSignIn": "La modalità supervisore richiede un supervisore connesso su questo telefono.",
     "signIn": "Accedi come supervisore",
@@ -6458,6 +6466,189 @@
       "sales": "Avvisi di vendita per il tuo team",
       "messages": "Messaggi dei clienti per il tuo team",
       "security": "Avvisi di sicurezza per il tuo team"
+    }
+  },
+  "assistance": {
+    "pageTitle": "Richieste di aiuto",
+    "description": "Richieste «Serve aiuto» dei partecipanti dal trova-posto e richieste del personale agli ingressi di {event}, prima le più urgenti.",
+    "noAccessTitle": "Nessun accesso alle richieste di aiuto",
+    "noAccess": "Il tuo ruolo non può vedere le richieste di aiuto di questo evento.",
+    "statusLabel": "Mostra richieste",
+    "tab": {
+      "open": "Aperte",
+      "closed": "Chiuse"
+    },
+    "readOnly": "Puoi vedere le richieste; il tuo ruolo non può prenderle né modificarle.",
+    "empty": {
+      "openTitle": "Nessuna richiesta di aiuto aperta",
+      "openDescription": "Le nuove richieste di partecipanti e personale agli ingressi compaiono qui appena arrivano.",
+      "closedTitle": "Ancora niente di chiuso",
+      "closedDescription": "Qui trovi le richieste risolte e annullate."
+    },
+    "title": "n. {number} · {reason}",
+    "number": "n. {number}",
+    "reason": {
+      "seat": "Problema con il posto",
+      "accessibility": "Accessibilità",
+      "medical": "Medico",
+      "lost_item": "Oggetto smarrito",
+      "other": "Altro",
+      "backup": "Rinforzi",
+      "supervisor": "Un responsabile",
+      "security": "Sicurezza",
+      "device": "Problema del dispositivo"
+    },
+    "priority": {
+      "urgent": "Urgente",
+      "high": "Priorità alta",
+      "normal": "Priorità normale"
+    },
+    "state": {
+      "new": "In attesa",
+      "assigned": "Assegnata",
+      "in_progress": "In corso",
+      "resolved": "Risolta",
+      "cancelled": "Annullata"
+    },
+    "mineState": "Tua",
+    "overdue": "In ritardo",
+    "sla": {
+      "takeWithin": "Da prendere entro {time}",
+      "overdueBy": "In ritardo di {time}"
+    },
+    "source": {
+      "guest": "Da un partecipante",
+      "staff": "Dal personale agli ingressi"
+    },
+    "askedAt": "Richiesta alle {time}",
+    "unassigned": "Ancora nessuno",
+    "assignedTo": "Con {name}",
+    "aDevice": "uno scanner",
+    "you": "te",
+    "unknownPerson": "un ex membro del team",
+    "guest": {
+      "title": "Ti serve aiuto?",
+      "description": "Di’ al personale dell’evento di cosa hai bisogno. Verrà da te.",
+      "closedTitle": "Le richieste di aiuto sono chiuse",
+      "closedDescription": "Questo evento non accetta richieste di aiuto qui. Chiedi a un membro del personale vicino a te.",
+      "invalidTitle": "Questo link del biglietto non è valido per questo evento",
+      "invalidDescription": "Apri il trova-posto dal link sul tuo biglietto o chiedi a un membro del personale vicino a te.",
+      "back": "Torna al trova-posto",
+      "reasonLegend": "Per cosa ti serve aiuto?",
+      "emergencyTitle": "In caso di emergenza, chiama subito i soccorsi",
+      "emergencyBody": "Se qualcuno è gravemente ferito o in pericolo, chiama prima il numero di emergenza locale (112 in Europa, 911 negli Stati Uniti), poi invia questa richiesta perché il personale ti trovi.",
+      "locationLabel": "Dove ti trovi? (facoltativo)",
+      "locationHint": "Il tuo posto, la fila, il tavolo o un punto di riferimento vicino.",
+      "noteLabel": "Altro che il personale dovrebbe sapere? (facoltativo)",
+      "privacy": "Solo il personale dell’evento lo vede, per aiutarti. Non viene mai usato per il marketing.",
+      "submit": "Chiedi aiuto",
+      "errors": {
+        "reason": "Scegli per cosa ti serve aiuto.",
+        "noteTooLong": "La nota deve avere meno di 500 caratteri.",
+        "locationTooLong": "La posizione deve avere meno di 120 caratteri.",
+        "invalidTicket": "Questo link del biglietto non è valido per questo evento.",
+        "tooMany": "Hai già 3 richieste in attesa. Il personale sta arrivando.",
+        "rateLimited": "Troppe richieste da questo dispositivo. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+        "closed": "Questo evento non accetta richieste di aiuto in questo momento.",
+        "internal": "Qualcosa è andato storto. Chiedi a un membro del personale vicino a te."
+      },
+      "statusTitle": "Richiesta di aiuto n. {number}",
+      "askedAbout": "Hai chiesto per: {reason}",
+      "state": {
+        "new": "In attesa del personale",
+        "assigned": "Un membro del personale sta arrivando",
+        "in_progress": "Un membro del personale è con te",
+        "resolved": "Risolta",
+        "cancelled": "Chiusa dal personale"
+      },
+      "stateHint": {
+        "new": "La tua richiesta è in coda. Resta dove sei, se puoi.",
+        "assigned": "Qualcuno del team ha la tua richiesta e sta arrivando.",
+        "in_progress": "Il personale ti sta aiutando ora.",
+        "resolved": "Il personale ha segnato la richiesta come risolta. Chiedi di nuovo se ti serve ancora aiuto.",
+        "cancelled": "Il personale ha chiuso la richiesta. Chiedi di nuovo se ti serve ancora aiuto."
+      },
+      "lastUpdate": "Ultimo aggiornamento {time}",
+      "emergencyShort": "In caso di emergenza, chiama subito il numero di emergenza locale.",
+      "refresh": "Aggiorna stato",
+      "needHelp": "Ti serve aiuto?",
+      "needTicketLink": "Apri il trova-posto dal link sul tuo biglietto per chiedere aiuto al personale dell’evento.",
+      "needHelpHint": "Chiedi aiuto al personale per il tuo posto, l’accessibilità, un problema medico o un oggetto smarrito.",
+      "askButton": "Chiedi aiuto",
+      "ticketLink": "All’evento: trova il tuo posto o chiedi aiuto",
+      "ticketLinkLabel": "Trova il tuo posto o chiedi aiuto all’evento (biglietto {serial})"
+    },
+    "where": "Dove: {place}",
+    "atEntrance": "A {name}",
+    "fromDevice": "Inviata da {device}",
+    "activityTitle": "{count, plural, one {# aggiornamento} other {# aggiornamenti}}",
+    "actor": {
+      "guest": "Il partecipante",
+      "member": "Un membro del team",
+      "device": "Uno scanner",
+      "system": "Il sistema"
+    },
+    "activity": {
+      "created": "{who} ha chiesto aiuto",
+      "assigned": "{who} l’ha affidata a {to}",
+      "started": "{who} ha iniziato",
+      "resolved": "{who} l’ha risolta",
+      "cancelled": "{who} l’ha annullata",
+      "note": "{who}: {note}"
+    },
+    "take": "Prendila",
+    "takeLabel": "Prendi {title}",
+    "start": "Inizia",
+    "startLabel": "Inizia {title}",
+    "resolve": "Risolvi",
+    "resolveLabel": "Risolvi {title}",
+    "cancel": "Annulla richiesta",
+    "cancelLabel": "Annulla {title}",
+    "assign": "Assegna",
+    "assignLabel": "Assegna {title} a",
+    "choosePerson": "Scegli una persona",
+    "noteLabel": "Nota su {title}",
+    "addNote": "Aggiungi nota",
+    "done": {
+      "take": "Hai preso {title}.",
+      "assign": "{title} è assegnata.",
+      "start": "{title} è in corso.",
+      "resolve": "{title} è risolta.",
+      "cancel": "{title} è annullata.",
+      "note": "Nota aggiunta a {title}."
+    },
+    "changed": "Questa richiesta è cambiata nel frattempo. L’elenco è aggiornato; riprova.",
+    "failed": "Non ha funzionato. Riprova.",
+    "errors": {
+      "assignee": "Scegli a chi affidarla.",
+      "note": "Scrivi prima una nota."
+    },
+    "live": {
+      "connecting": "Connessione…",
+      "live": "In diretta",
+      "offline": "Offline — ricarica per gli ultimi dati"
+    },
+    "widget": {
+      "waiting": "In attesa",
+      "assigned": "Assegnate",
+      "inProgress": "In corso",
+      "overdue": "In ritardo",
+      "none": "Nessuna richiesta di aiuto aperta.",
+      "open": "Apri le richieste di aiuto"
+    },
+    "scan": {
+      "queueTitle": "Richieste di aiuto",
+      "loading": "Caricamento delle richieste di aiuto…",
+      "unavailable": "Al momento non è possibile caricare le richieste di aiuto.",
+      "none": "Nessuna richiesta di aiuto aperta.",
+      "askTitle": "Chiedi aiuto",
+      "askHint": "La richiesta arriva al team dell’evento con questo dispositivo e l’ingresso dove scansiona.",
+      "reasonLabel": "Di cosa hai bisogno?",
+      "noteLabel": "Nota (facoltativa)",
+      "send": "Invia richiesta",
+      "sent": "Richiesta di aiuto n. {number} inviata.",
+      "offline": "Sei offline. Riprova quando il dispositivo torna online.",
+      "invalid": "Scegli di cosa hai bisogno."
     }
   }
 }

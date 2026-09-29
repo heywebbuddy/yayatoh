@@ -310,7 +310,10 @@ describe('widget registry and layouts', () => {
       // Batch 3d merge: M3.4a's staff views are offered to owners (hidden until shown).
       'entrances',
       'deviceBoard',
+      // M3.3b: the help queue is offered too (hidden until shown; live mode places it).
+      'assistance',
     ]);
+    expect(r.find((s) => s.key === 'assistance')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'sales')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'deviceBoard')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'checkins')?.hidden).toBe(false);

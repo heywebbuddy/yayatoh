@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh suspended this organization} reactivated {This organization is back online} other {Yayatoh closed this organization}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} other {Alert}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} other {Alert}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} other {Alert}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} other {Alert}}"
       }
     },
     "kinds": {
@@ -285,7 +285,8 @@
     "tablesSponsors": "Tables & Sponsors",
     "commandCenter": "Command Center",
     "alerts": "Alerts",
-    "sendingSetup": "Sending setup"
+    "sendingSetup": "Sending setup",
+    "assistance": "Help requests"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -6083,6 +6084,9 @@
       },
       "deviceBoard": {
         "title": "Device board"
+      },
+      "assistance": {
+        "title": "Help requests"
       }
     }
   },
@@ -6172,7 +6176,8 @@
       "domain": "Fix domains",
       "payoutsPastDue": "Update the payout account",
       "deliverability": "Open messaging health",
-      "automationFailed": "Open messaging health"
+      "automationFailed": "Open messaging health",
+      "assistanceOverdue": "Open the help queue"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -6191,7 +6196,8 @@
       "domain": "{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}",
       "payoutsPastDue": "{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}",
       "deliverability": "Email deliverability needs attention",
-      "automationFailed": "{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}"
+      "automationFailed": "{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}"
     },
     "widget": {
       "title": "Alerts",
@@ -6305,7 +6311,9 @@
       "backlogTitle": "Scans waiting",
       "backlogBody": "{label} has {count} scans waiting to sync.",
       "capacityNearTitle": "Nearly full",
-      "capacityNearBody": "{percent}% of expected guests are in."
+      "capacityNearBody": "{percent}% of expected guests are in.",
+      "assistanceTitle": "Help needed now",
+      "assistanceBody": "Urgent help request {label}. Open Staff to take it."
     },
     "supervisorSignIn": "Supervisor mode needs a supervisor signed in on this phone.",
     "signIn": "Sign in as a supervisor",
@@ -6458,6 +6466,189 @@
       "sales": "Sales alerts for your team",
       "messages": "Customer messages for your team",
       "security": "Security alerts for your team"
+    }
+  },
+  "assistance": {
+    "pageTitle": "Help requests",
+    "description": "Guests' “Need help” requests from the seat finder and requests from door staff at {event}, most urgent first.",
+    "noAccessTitle": "No access to help requests",
+    "noAccess": "Your role can't see this event's help requests.",
+    "statusLabel": "Show requests",
+    "tab": {
+      "open": "Open",
+      "closed": "Closed"
+    },
+    "readOnly": "You can see the requests; your role can't take or change them.",
+    "empty": {
+      "openTitle": "No open help requests",
+      "openDescription": "New requests from guests and door staff appear here as they come in.",
+      "closedTitle": "Nothing closed yet",
+      "closedDescription": "Resolved and cancelled requests are listed here."
+    },
+    "title": "#{number} · {reason}",
+    "number": "#{number}",
+    "reason": {
+      "seat": "Seat problem",
+      "accessibility": "Accessibility",
+      "medical": "Medical",
+      "lost_item": "Lost item",
+      "other": "Something else",
+      "backup": "Backup",
+      "supervisor": "A supervisor",
+      "security": "Security",
+      "device": "Device problem"
+    },
+    "priority": {
+      "urgent": "Urgent",
+      "high": "High priority",
+      "normal": "Normal priority"
+    },
+    "state": {
+      "new": "Waiting",
+      "assigned": "Assigned",
+      "in_progress": "In progress",
+      "resolved": "Resolved",
+      "cancelled": "Cancelled"
+    },
+    "mineState": "Yours",
+    "overdue": "Overdue",
+    "sla": {
+      "takeWithin": "Take within {time}",
+      "overdueBy": "Overdue by {time}"
+    },
+    "source": {
+      "guest": "From a guest",
+      "staff": "From door staff"
+    },
+    "askedAt": "Asked at {time}",
+    "unassigned": "Nobody has it yet",
+    "assignedTo": "With {name}",
+    "aDevice": "a scanner",
+    "you": "you",
+    "unknownPerson": "a former team member",
+    "guest": {
+      "title": "Need help?",
+      "description": "Tell the event's staff what you need. They'll come to you.",
+      "closedTitle": "Help requests are closed",
+      "closedDescription": "This event isn't taking help requests here. Please ask a member of staff nearby.",
+      "invalidTitle": "This ticket link isn't valid for this event",
+      "invalidDescription": "Open the seat finder from the link on your ticket, or ask a member of staff nearby.",
+      "back": "Back to the seat finder",
+      "reasonLegend": "What do you need help with?",
+      "emergencyTitle": "In an emergency, call for help now",
+      "emergencyBody": "If someone is seriously hurt or in danger, call your local emergency number (911 in the US) first, then send this request so staff can find you.",
+      "locationLabel": "Where are you? (optional)",
+      "locationHint": "Your seat, row, table or a landmark nearby.",
+      "noteLabel": "Anything else staff should know? (optional)",
+      "privacy": "Only the event's staff see this, to help you. It is never used for marketing.",
+      "submit": "Ask for help",
+      "errors": {
+        "reason": "Choose what you need help with.",
+        "noteTooLong": "Keep the note under 500 characters.",
+        "locationTooLong": "Keep where you are under 120 characters.",
+        "invalidTicket": "This ticket link isn't valid for this event.",
+        "tooMany": "You already have 3 requests waiting. Staff are on their way.",
+        "rateLimited": "Too many requests from this device. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+        "closed": "This event isn't taking help requests right now.",
+        "internal": "Something went wrong. Please ask a member of staff nearby."
+      },
+      "statusTitle": "Help request #{number}",
+      "askedAbout": "You asked about: {reason}",
+      "state": {
+        "new": "Waiting for staff",
+        "assigned": "A staff member is on the way",
+        "in_progress": "A staff member is with you",
+        "resolved": "Resolved",
+        "cancelled": "Closed by staff"
+      },
+      "stateHint": {
+        "new": "Your request is in the queue. Stay where you are if you can.",
+        "assigned": "Someone from the team has your request and is coming.",
+        "in_progress": "Staff are helping you now.",
+        "resolved": "Staff marked your request as resolved. Ask again if you still need help.",
+        "cancelled": "Staff closed your request. Ask again if you still need help."
+      },
+      "lastUpdate": "Last update {time}",
+      "emergencyShort": "In an emergency, call your local emergency number now.",
+      "refresh": "Refresh status",
+      "needHelp": "Need help?",
+      "needTicketLink": "Open the seat finder from the link on your ticket to ask the event's staff for help.",
+      "needHelpHint": "Ask the event's staff for help with your seat, accessibility, a medical issue or a lost item.",
+      "askButton": "Ask for help",
+      "ticketLink": "At the event: find your seat or ask for help",
+      "ticketLinkLabel": "Find your seat or ask for help at the event (ticket {serial})"
+    },
+    "where": "Where: {place}",
+    "atEntrance": "At {name}",
+    "fromDevice": "Sent from {device}",
+    "activityTitle": "{count, plural, one {# update} other {# updates}}",
+    "actor": {
+      "guest": "The guest",
+      "member": "A team member",
+      "device": "A scanner",
+      "system": "The system"
+    },
+    "activity": {
+      "created": "{who} asked for help",
+      "assigned": "{who} gave it to {to}",
+      "started": "{who} started",
+      "resolved": "{who} resolved it",
+      "cancelled": "{who} cancelled it",
+      "note": "{who}: {note}"
+    },
+    "take": "Take it",
+    "takeLabel": "Take {title}",
+    "start": "Start",
+    "startLabel": "Start {title}",
+    "resolve": "Resolve",
+    "resolveLabel": "Resolve {title}",
+    "cancel": "Cancel request",
+    "cancelLabel": "Cancel {title}",
+    "assign": "Assign",
+    "assignLabel": "Assign {title} to",
+    "choosePerson": "Choose a person",
+    "noteLabel": "Note on {title}",
+    "addNote": "Add note",
+    "done": {
+      "take": "You took {title}.",
+      "assign": "{title} is assigned.",
+      "start": "{title} is in progress.",
+      "resolve": "{title} is resolved.",
+      "cancel": "{title} is cancelled.",
+      "note": "Note added to {title}."
+    },
+    "changed": "This request changed meanwhile. The list is up to date now; try again.",
+    "failed": "That didn't work. Try again.",
+    "errors": {
+      "assignee": "Choose who to give it to.",
+      "note": "Write a note first."
+    },
+    "live": {
+      "connecting": "Connecting…",
+      "live": "Live",
+      "offline": "Offline — reload for the latest"
+    },
+    "widget": {
+      "waiting": "Waiting",
+      "assigned": "Assigned",
+      "inProgress": "In progress",
+      "overdue": "Overdue",
+      "none": "No open help requests.",
+      "open": "Open the help queue"
+    },
+    "scan": {
+      "queueTitle": "Help requests",
+      "loading": "Loading help requests…",
+      "unavailable": "Help requests can't be loaded right now.",
+      "none": "No open help requests.",
+      "askTitle": "Ask for help",
+      "askHint": "Your request goes to the event's team with this device and the entrance it scans at.",
+      "reasonLabel": "What do you need?",
+      "noteLabel": "Note (optional)",
+      "send": "Send request",
+      "sent": "Help request #{number} sent.",
+      "offline": "You're offline. Try again when the device is back online.",
+      "invalid": "Choose what you need."
     }
   }
 }

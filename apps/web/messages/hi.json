@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh ने इस संगठन को निलंबित किया} reactivated {यह संगठन फिर से ऑनलाइन है} other {Yayatoh ने इस संगठन को बंद किया}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} other {अलर्ट}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} other {अलर्ट}}"
       }
     },
     "kinds": {
@@ -285,7 +285,8 @@
     "tablesSponsors": "टेबल और प्रायोजक",
     "commandCenter": "कमांड सेंटर",
     "alerts": "अलर्ट",
-    "sendingSetup": "भेजने की सेटिंग"
+    "sendingSetup": "भेजने की सेटिंग",
+    "assistance": "सहायता अनुरोध"
   },
   "vocab": {
     "attendee": "प्रतिभागी",
@@ -6083,6 +6084,9 @@
       },
       "deviceBoard": {
         "title": "डिवाइस बोर्ड"
+      },
+      "assistance": {
+        "title": "सहायता अनुरोध"
       }
     }
   },
@@ -6172,7 +6176,8 @@
       "domain": "डोमेन ठीक करें",
       "payoutsPastDue": "भुगतान खाता अपडेट करें",
       "deliverability": "मैसेजिंग स्थिति खोलें",
-      "automationFailed": "मैसेजिंग स्थिति खोलें"
+      "automationFailed": "मैसेजिंग स्थिति खोलें",
+      "assistanceOverdue": "सहायता अनुरोध खोलें"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}",
@@ -6191,7 +6196,8 @@
       "domain": "{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}",
       "payoutsPastDue": "{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}",
       "deliverability": "ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है",
-      "automationFailed": "{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}"
+      "automationFailed": "{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}"
     },
     "widget": {
       "title": "अलर्ट",
@@ -6305,7 +6311,9 @@
       "backlogTitle": "स्कैन बाकी",
       "backlogBody": "{label} पर {count} स्कैन सिंक होने बाकी हैं।",
       "capacityNearTitle": "लगभग भर गया",
-      "capacityNearBody": "{percent}% अपेक्षित मेहमान अंदर आ चुके हैं।"
+      "capacityNearBody": "{percent}% अपेक्षित मेहमान अंदर आ चुके हैं।",
+      "assistanceTitle": "अभी मदद चाहिए",
+      "assistanceBody": "अत्यावश्यक सहायता अनुरोध {label}। लेने के लिए स्टाफ़ खोलें।"
     },
     "supervisorSignIn": "सुपरवाइज़र मोड के लिए इस फ़ोन पर किसी सुपरवाइज़र का साइन इन होना ज़रूरी है।",
     "signIn": "सुपरवाइज़र के रूप में साइन इन करें",
@@ -6458,6 +6466,189 @@
       "sales": "आपकी टीम के लिए बिक्री अलर्ट",
       "messages": "आपकी टीम के लिए ग्राहक संदेश",
       "security": "आपकी टीम के लिए सुरक्षा अलर्ट"
+    }
+  },
+  "assistance": {
+    "pageTitle": "सहायता अनुरोध",
+    "description": "{event} में सीट खोजक से मेहमानों के “मदद चाहिए” अनुरोध और प्रवेश द्वार स्टाफ़ के अनुरोध, सबसे ज़रूरी पहले।",
+    "noAccessTitle": "सहायता अनुरोधों तक पहुँच नहीं",
+    "noAccess": "आपकी भूमिका इस इवेंट के सहायता अनुरोध नहीं देख सकती।",
+    "statusLabel": "अनुरोध दिखाएँ",
+    "tab": {
+      "open": "खुले",
+      "closed": "बंद"
+    },
+    "readOnly": "आप अनुरोध देख सकते हैं; आपकी भूमिका उन्हें ले या बदल नहीं सकती।",
+    "empty": {
+      "openTitle": "कोई खुला सहायता अनुरोध नहीं",
+      "openDescription": "मेहमानों और प्रवेश द्वार स्टाफ़ के नए अनुरोध आते ही यहाँ दिखते हैं।",
+      "closedTitle": "अभी कुछ बंद नहीं हुआ",
+      "closedDescription": "हल और रद्द किए गए अनुरोध यहाँ दिखते हैं।"
+    },
+    "title": "#{number} · {reason}",
+    "number": "#{number}",
+    "reason": {
+      "seat": "सीट की समस्या",
+      "accessibility": "सुगम्यता",
+      "medical": "चिकित्सा",
+      "lost_item": "खोया सामान",
+      "other": "कुछ और",
+      "backup": "अतिरिक्त मदद",
+      "supervisor": "सुपरवाइज़र",
+      "security": "सुरक्षा",
+      "device": "डिवाइस की समस्या"
+    },
+    "priority": {
+      "urgent": "अत्यावश्यक",
+      "high": "उच्च प्राथमिकता",
+      "normal": "सामान्य प्राथमिकता"
+    },
+    "state": {
+      "new": "प्रतीक्षा में",
+      "assigned": "सौंपा गया",
+      "in_progress": "जारी",
+      "resolved": "हल हुआ",
+      "cancelled": "रद्द"
+    },
+    "mineState": "आपका",
+    "overdue": "देर हो चुकी",
+    "sla": {
+      "takeWithin": "{time} में लें",
+      "overdueBy": "{time} की देर"
+    },
+    "source": {
+      "guest": "एक मेहमान से",
+      "staff": "प्रवेश द्वार स्टाफ़ से"
+    },
+    "askedAt": "{time} पर माँगा गया",
+    "unassigned": "अभी किसी ने नहीं लिया",
+    "assignedTo": "{name} के पास",
+    "aDevice": "एक स्कैनर",
+    "you": "आप",
+    "unknownPerson": "टीम का पूर्व सदस्य",
+    "guest": {
+      "title": "मदद चाहिए?",
+      "description": "इवेंट स्टाफ़ को बताएँ कि आपको क्या चाहिए। वे आपके पास आएँगे।",
+      "closedTitle": "सहायता अनुरोध बंद हैं",
+      "closedDescription": "यह इवेंट यहाँ सहायता अनुरोध नहीं ले रहा। कृपया पास के किसी स्टाफ़ सदस्य से पूछें।",
+      "invalidTitle": "यह टिकट लिंक इस इवेंट के लिए मान्य नहीं है",
+      "invalidDescription": "अपने टिकट के लिंक से सीट खोजक खोलें, या पास के किसी स्टाफ़ सदस्य से पूछें।",
+      "back": "सीट खोजक पर वापस जाएँ",
+      "reasonLegend": "आपको किस चीज़ में मदद चाहिए?",
+      "emergencyTitle": "आपात स्थिति में अभी मदद बुलाएँ",
+      "emergencyBody": "अगर कोई गंभीर रूप से घायल है या खतरे में है, तो पहले अपना स्थानीय आपात नंबर (भारत में 112, अमेरिका में 911) डायल करें, फिर यह अनुरोध भेजें ताकि स्टाफ़ आपको ढूँढ सके।",
+      "locationLabel": "आप कहाँ हैं? (वैकल्पिक)",
+      "locationHint": "आपकी सीट, पंक्ति, टेबल या पास का कोई पहचान चिह्न।",
+      "noteLabel": "स्टाफ़ को और कुछ जानना चाहिए? (वैकल्पिक)",
+      "privacy": "इसे सिर्फ़ इवेंट स्टाफ़ आपकी मदद के लिए देखता है। इसका उपयोग कभी मार्केटिंग के लिए नहीं होता।",
+      "submit": "मदद माँगें",
+      "errors": {
+        "reason": "चुनें कि आपको किसमें मदद चाहिए।",
+        "noteTooLong": "नोट 500 अक्षरों से कम रखें।",
+        "locationTooLong": "जगह का विवरण 120 अक्षरों से कम रखें।",
+        "invalidTicket": "यह टिकट लिंक इस इवेंट के लिए मान्य नहीं है।",
+        "tooMany": "आपके 3 अनुरोध पहले से प्रतीक्षा में हैं। स्टाफ़ आ रहा है।",
+        "rateLimited": "इस डिवाइस से बहुत अधिक अनुरोध। {minutes, plural, one {# मिनट} other {# मिनट}} बाद फिर कोशिश करें।",
+        "closed": "यह इवेंट अभी सहायता अनुरोध नहीं ले रहा।",
+        "internal": "कुछ गलत हो गया। कृपया पास के किसी स्टाफ़ सदस्य से पूछें।"
+      },
+      "statusTitle": "सहायता अनुरोध #{number}",
+      "askedAbout": "आपने इसके बारे में पूछा: {reason}",
+      "state": {
+        "new": "स्टाफ़ की प्रतीक्षा",
+        "assigned": "स्टाफ़ सदस्य आ रहा है",
+        "in_progress": "स्टाफ़ सदस्य आपके साथ है",
+        "resolved": "हल हुआ",
+        "cancelled": "स्टाफ़ ने बंद किया"
+      },
+      "stateHint": {
+        "new": "आपका अनुरोध कतार में है। हो सके तो जहाँ हैं वहीं रहें।",
+        "assigned": "टीम के किसी सदस्य के पास आपका अनुरोध है और वह आ रहा है।",
+        "in_progress": "स्टाफ़ अभी आपकी मदद कर रहा है।",
+        "resolved": "स्टाफ़ ने आपका अनुरोध हल के रूप में चिह्नित किया। अब भी मदद चाहिए तो फिर से माँगें।",
+        "cancelled": "स्टाफ़ ने आपका अनुरोध बंद कर दिया। अब भी मदद चाहिए तो फिर से माँगें।"
+      },
+      "lastUpdate": "अंतिम अपडेट {time}",
+      "emergencyShort": "आपात स्थिति में अभी अपना स्थानीय आपात नंबर डायल करें।",
+      "refresh": "स्थिति ताज़ा करें",
+      "needHelp": "मदद चाहिए?",
+      "needTicketLink": "इवेंट स्टाफ़ से मदद माँगने के लिए अपने टिकट के लिंक से सीट खोजक खोलें।",
+      "needHelpHint": "अपनी सीट, सुगम्यता, किसी चिकित्सा समस्या या खोए सामान के लिए इवेंट स्टाफ़ से मदद माँगें।",
+      "askButton": "मदद माँगें",
+      "ticketLink": "इवेंट में: अपनी सीट खोजें या मदद माँगें",
+      "ticketLinkLabel": "इवेंट में अपनी सीट खोजें या मदद माँगें (टिकट {serial})"
+    },
+    "where": "कहाँ: {place}",
+    "atEntrance": "{name} पर",
+    "fromDevice": "{device} से भेजा गया",
+    "activityTitle": "{count, plural, one {# अपडेट} other {# अपडेट}}",
+    "actor": {
+      "guest": "मेहमान",
+      "member": "टीम का एक सदस्य",
+      "device": "एक स्कैनर",
+      "system": "सिस्टम"
+    },
+    "activity": {
+      "created": "{who} ने मदद माँगी",
+      "assigned": "{who} ने इसे {to} को सौंपा",
+      "started": "{who} ने शुरू किया",
+      "resolved": "{who} ने इसे हल किया",
+      "cancelled": "{who} ने इसे रद्द किया",
+      "note": "{who}: {note}"
+    },
+    "take": "लें",
+    "takeLabel": "{title} लें",
+    "start": "शुरू करें",
+    "startLabel": "{title} शुरू करें",
+    "resolve": "हल करें",
+    "resolveLabel": "{title} हल करें",
+    "cancel": "अनुरोध रद्द करें",
+    "cancelLabel": "{title} रद्द करें",
+    "assign": "सौंपें",
+    "assignLabel": "{title} इन्हें सौंपें",
+    "choosePerson": "व्यक्ति चुनें",
+    "noteLabel": "{title} पर नोट",
+    "addNote": "नोट जोड़ें",
+    "done": {
+      "take": "आपने {title} लिया।",
+      "assign": "{title} सौंपा गया।",
+      "start": "{title} जारी है।",
+      "resolve": "{title} हल हुआ।",
+      "cancel": "{title} रद्द हुआ।",
+      "note": "{title} में नोट जोड़ा गया।"
+    },
+    "changed": "इस बीच यह अनुरोध बदल गया। सूची अब अद्यतन है; फिर से कोशिश करें।",
+    "failed": "यह काम नहीं किया। फिर से कोशिश करें।",
+    "errors": {
+      "assignee": "चुनें कि इसे किसे सौंपना है।",
+      "note": "पहले नोट लिखें।"
+    },
+    "live": {
+      "connecting": "कनेक्ट हो रहा है…",
+      "live": "लाइव",
+      "offline": "ऑफ़लाइन — ताज़ा जानकारी के लिए रीलोड करें"
+    },
+    "widget": {
+      "waiting": "प्रतीक्षा में",
+      "assigned": "सौंपे गए",
+      "inProgress": "जारी",
+      "overdue": "देर हो चुकी",
+      "none": "कोई खुला सहायता अनुरोध नहीं।",
+      "open": "सहायता अनुरोध खोलें"
+    },
+    "scan": {
+      "queueTitle": "सहायता अनुरोध",
+      "loading": "सहायता अनुरोध लोड हो रहे हैं…",
+      "unavailable": "अभी सहायता अनुरोध लोड नहीं हो सकते।",
+      "none": "कोई खुला सहायता अनुरोध नहीं।",
+      "askTitle": "मदद माँगें",
+      "askHint": "आपका अनुरोध इस डिवाइस और जिस प्रवेश द्वार पर यह स्कैन करता है, उसके साथ इवेंट टीम को जाता है।",
+      "reasonLabel": "आपको क्या चाहिए?",
+      "noteLabel": "नोट (वैकल्पिक)",
+      "send": "अनुरोध भेजें",
+      "sent": "सहायता अनुरोध #{number} भेजा गया।",
+      "offline": "आप ऑफ़लाइन हैं। डिवाइस के फिर से ऑनलाइन होने पर कोशिश करें।",
+      "invalid": "चुनें कि आपको क्या चाहिए।"
     }
   }
 }

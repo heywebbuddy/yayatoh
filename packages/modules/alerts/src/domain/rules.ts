@@ -28,6 +28,9 @@ export interface EventFacts {
   /** The organizer's sales target in tickets, if set. */
   readonly salesTarget: number | null;
   readonly ticketTypes: number;
+  /** M3.3b: help requests still unassigned past their SLA, and how many of them are urgent. */
+  readonly assistanceOverdue: number;
+  readonly assistanceUrgent: number;
 }
 
 /** Everything the org rules read. */
@@ -120,6 +123,15 @@ export function evaluateEventRules(
         out.salesPace = fire('warning', pace, { sold: f.sold, target: f.salesTarget, expected });
     }
   }
+
+  // Guests or door staff waiting for help past the SLA (the queue sets the SLA per priority).
+  if (f.assistanceOverdue > 0)
+    out.assistanceOverdue = fire(
+      f.assistanceUrgent > 0 ? 'critical' : 'warning',
+      f.assistanceOverdue,
+      { urgent: f.assistanceUrgent },
+      live,
+    );
 
   const untilStart = f.startsAt.getTime() - now.getTime();
   if (untilStart > 0 && untilStart <= t.readinessWindowMs) {
