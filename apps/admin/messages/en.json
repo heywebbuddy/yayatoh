@@ -53,7 +53,8 @@
     "signupCodes": "Signup codes",
     "reports": "Messaging reports",
     "people": "Privacy requests",
-    "passkeys": "Passkeys"
+    "passkeys": "Passkeys",
+    "frontDoor": "Front door"
   },
   "tenants": {
     "title": "Tenants",
@@ -584,5 +585,94 @@
     "addFailed": "The passkey wasn't added. Try again.",
     "notFresh": "For your security, sign in again (in the last 10 minutes) before adding a passkey.",
     "deleted": "Passkey removed."
+  },
+  "frontDoor": {
+    "title": "Front door",
+    "description": "During the move from the legacy site, the new app answers every request on yayatoh.com and abc.yayatoh.com and sends anything it doesn't serve yet to the legacy site. Move read pages one route and one host at a time.",
+    "summary": "Route table version {version}. Counters cover the last {days, plural, one {# day} other {# days}} (UTC).",
+    "done": "Route updated. It applies to new requests within a few seconds.",
+    "errors": {
+      "invalid": "Choose a host and a route that exists for it.",
+      "reason": "Give a reason (3 to 500 characters).",
+      "step_up": "That code or password isn't right. Nothing changed.",
+      "rate_limited": "Too many attempts. Wait a few minutes and try again.",
+      "method": "Set up an authenticator or a password on your account to confirm it's you before moving routes."
+    },
+    "hosts": {
+      "title": "Legacy hosts",
+      "configured": "Legacy origin set: front door on",
+      "off": "No legacy origin: front door off"
+    },
+    "instance": {
+      "yay": "yayatoh.com instance",
+      "abc": "abc.yayatoh.com instance"
+    },
+    "routes": {
+      "title": "Moved routes",
+      "description": "Read pages that can move to the new app. Anything not listed here stays on the legacy site."
+    },
+    "col": {
+      "host": "Host",
+      "route": "Route",
+      "stage": "Stage",
+      "state": "Served by",
+      "requests": "Requests",
+      "notFound": "404s",
+      "proxyErrors": "Proxy errors",
+      "upstream5xx": "Legacy 5xx",
+      "latency": "Latency (avg / max)",
+      "changed": "Last change",
+      "servedBy": "Served by",
+      "path": "Path",
+      "count": "Count"
+    },
+    "state": {
+      "legacy": "Legacy",
+      "canary": "Canary (yy_canary cookie only)",
+      "next": "New app"
+    },
+    "servedBy": {
+      "legacy": "Legacy",
+      "next": "New app"
+    },
+    "bucket": {
+      "legacy": "Everything else (legacy)",
+      "platform": "New app's own pages"
+    },
+    "latency": "{avg} / {max}",
+    "ms": "{ms} ms",
+    "none": "–",
+    "never": "Never changed",
+    "changedBy": "{who}, {date}",
+    "change": {
+      "title": "Move a route",
+      "adminsOnly": "Only admins can move routes.",
+      "description": "Choose the host, the route and who serves it. Canary serves the new app only to browsers with the yy_canary=next cookie. Anyone with yy_legacy=1 always gets the legacy site.",
+      "host": "Host",
+      "route": "Route",
+      "routeOption": "{key} ({shape}){only, select, yay { · yayatoh.com only} abc { · abc only} other {}}",
+      "state": "Served by",
+      "stateHelp": "Legacy is the default. Move back to legacy at any time.",
+      "reason": "Reason",
+      "code": "Authenticator code",
+      "password": "Your password",
+      "submit": "Move route"
+    },
+    "other": {
+      "title": "Other traffic",
+      "description": "Requests outside the moved routes: pages the legacy site still serves, and the new app's own paths.",
+      "empty": "No requests recorded yet."
+    },
+    "notFound": {
+      "title": "404 top list",
+      "description": "The most requested missing pages over the last {days, plural, one {# day} other {# days}}, by who served them.",
+      "empty": "No 404s recorded."
+    },
+    "changes": {
+      "title": "Recent changes",
+      "empty": "No route has been moved yet.",
+      "item": "{host}: {route} from {from} to {to}",
+      "meta": "{who}, {date}: {reason}"
+    }
   }
 }
