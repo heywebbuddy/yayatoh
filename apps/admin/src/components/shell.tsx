@@ -46,6 +46,11 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
               {paused ? t('messagingCount', { count: paused }) : t('messaging')}
             </Link>
           ) : null}
+          {staff.can('messaging') ? (
+            <Link href="/providers" className="underline-offset-2 hover:underline">
+              {t('providers')}
+            </Link>
+          ) : null}
           <Link href="/access-log" className="underline-offset-2 hover:underline">
             {t('accessLog')}
           </Link>

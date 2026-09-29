@@ -162,7 +162,10 @@
       "whatsapp_marketing_us": "ブロック: 米国の番号へのWhatsAppマーケティングは許可されていません",
       "state_quiet_hours": "州の通話可能時間まで保留(例: テキサス州の日曜正午前)",
       "frequency_cap": "保留またはスキップ: この方は最近多くのメッセージを受け取っています",
-      "quota_reached": "待機中: 今月の上限に達しました"
+      "quota_reached": "待機中: 今月の上限に達しました",
+      "not_on_whatsapp": "WhatsApp を利用していません",
+      "invalid_number": "この番号は SMS を受信できません",
+      "opted_out": "停止中：受信者が STOP と返信しました"
     },
     "channels": {
       "email": "メール",
@@ -267,7 +270,8 @@
     "trackedLinks": "トラッキングリンク",
     "messagingHealth": "メッセージ送信の上限",
     "audiences": "オーディエンス",
-    "refundRequests": "返金リクエスト"
+    "refundRequests": "返金リクエスト",
+    "sendingSetup": "送信設定"
   },
   "vocab": {
     "attendee": "参加者",
@@ -4774,7 +4778,8 @@
     "suppressionReason": {
       "hard_bounce": "バウンス(アドレスが存在しません)",
       "soft_bounce": "繰り返しバウンス(受信箱がいっぱいまたは利用不可)",
-      "complaint": "迷惑メールとして報告"
+      "complaint": "迷惑メールとして報告",
+      "opt_out": "STOP と返信"
     },
     "liftNote": "{address}の停止を解除する理由",
     "lift": "解除",
@@ -4799,7 +4804,8 @@
     "saveCaps": "上限を保存",
     "capsSaved": "上限を保存しました。",
     "maxInvalid": "1から20までの整数を入力してください。",
-    "windowInvalid": "1から720までの整数(時間)を入力してください。"
+    "windowInvalid": "1から720までの整数(時間)を入力してください。",
+    "personOnly": "本人が START と返信した場合のみ解除されます"
   },
   "preferenceCenter": {
     "metaTitle": "メッセージの受信設定",
@@ -5322,6 +5328,103 @@
         "not_enough_stock": "このご案内に必要な空きチケットが足りません。",
         "not_on_sale": "このパスまたは日程は販売されていません。"
       }
+    }
+  },
+  "sendingSetup": {
+    "title": "送信設定",
+    "description": "メールとテキストメッセージの送信元、そしてメッセージがそのチャネルで届かなかったときの動作です。",
+    "domainTitle": "メール送信ドメイン",
+    "noDomain": "メールは組織名を付けて notifications@mail.yayatoh.com から送信されています。独自ドメインを追加すると、あなたのアドレスから送信されます。",
+    "unavailable": "送信ドメインはまだ利用できません。",
+    "readOnly": "変更できるのはオーナーと管理者のみです。",
+    "addTitle": "送信ドメインを追加",
+    "domainLabel": "送信ドメイン",
+    "domainHint": "他のメールを送信していないサブドメイン（例：mail.yourdomain.com）を使用してください。",
+    "add": "ドメインを追加",
+    "errors": {
+      "required": "ドメインを入力してください。",
+      "invalid": "mail.yourdomain.com のようなドメイン名を入力してください（Yayatoh のアドレスは不可）。",
+      "already_set": "この組織にはすでに送信ドメインがあります。先に削除してください。",
+      "domain_taken": "このドメインは別の組織で使用されています。",
+      "unavailable": "送信ドメインはまだ利用できません。",
+      "forbidden": "変更できるのはオーナーと管理者のみです。",
+      "internal": "問題が発生しました。もう一度お試しください。"
+    },
+    "status": {
+      "verified": "確認済み",
+      "pending": "DNS 待ち",
+      "failed": "失敗"
+    },
+    "sendingFrom": "メールは現在 {address} から送信されています。",
+    "notYet": "DKIM と SPF が確認されると、メールは {address} から送信されます。それまでは組織名を付けて Yayatoh のアドレスから送信されます。",
+    "checksCaption": "{domain} の DNS チェック",
+    "check": "チェック",
+    "statusHeader": "状態",
+    "checks": {
+      "dkim": "DKIM（署名）",
+      "spf": "SPF（バウンスドメイン）",
+      "dmarc": "DMARC（ポリシー）"
+    },
+    "checkStatus": {
+      "verified": "確認済み",
+      "pending": "待機中",
+      "failed": "失敗",
+      "missing": "未設定"
+    },
+    "dmarcPolicy": "検出（p={policy}）",
+    "recordsIntro": "これらのレコードを DNS プロバイダーで公開してから、もう一度チェックしてください。DNS の変更には最大 48 時間かかることがあります。",
+    "recordsCaption": "{domain} の DNS レコード",
+    "recordType": "タイプ",
+    "recordName": "名前",
+    "recordValue": "値",
+    "recordFor": "用途",
+    "lastChecked": "最終チェック {when}",
+    "checkNow": "今すぐ DNS をチェック",
+    "checkForm": "送信ドメインをチェック",
+    "remove": "ドメインを削除",
+    "removeForm": "送信ドメインを削除",
+    "done": {
+      "added": "ドメインを追加しました。下の DNS レコードを公開してください。",
+      "checked": "DNS をチェックしました。",
+      "removed": "送信ドメインを削除しました。メールは再び Yayatoh のアドレスから送信されます。",
+      "forbidden": "変更できるのはオーナーと管理者のみです。",
+      "error": "うまくいきませんでした。もう一度お試しください。"
+    },
+    "textsTitle": "テキストメッセージ",
+    "smsSender": "SMS",
+    "ownNumber": "独自の番号 {number}",
+    "ending": "末尾 {hint}",
+    "sharedNumber": "Yayatoh の共有番号",
+    "campaign": "10DLC キャンペーン",
+    "campaignStatus": {
+      "verified": "確認済み",
+      "pending": "審査中",
+      "failed": "却下",
+      "not_registered": "未登録"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "あなたの WhatsApp Business 番号（Cloud API）",
+      "gateway": "Pani WhatsApp ゲートウェイ",
+      "default": "Yayatoh の WhatsApp 番号"
+    },
+    "textsNote": "専用番号は Yayatoh サポートが設定します。受信者はどのテキストにも STOP と返信して配信を停止したり、HELP と返信してヘルプを受けたりできます。",
+    "campaignPending": "独自の番号は 10DLC キャンペーンが確認されると使用されます。それまではテキストに Yayatoh の共有番号が使われます。",
+    "fallbackTitle": "代替チャネル",
+    "fallbackDescription": "メッセージがそのチャネルで届かない場合（WhatsApp アカウントがない、SMS を受信できない番号、プロバイダーが拒否した）、次のチャネルで一度だけ送信されます。本人の選択（配信停止）が別のチャネルに移ることはありません。",
+    "fallbackCaption": "メッセージの種類ごとの代替チャネルの順序",
+    "category": "メッセージ",
+    "chain": "順序",
+    "arrow": " → ",
+    "noFallback": "代替なし",
+    "categories": {
+      "transactional": "チケットと注文のメッセージ",
+      "reminders": "リマインダー",
+      "event_updates": "イベントのお知らせ",
+      "marketing": "ニュースとお得な情報",
+      "sales": "チーム向けの販売通知",
+      "messages": "チーム向けの顧客メッセージ",
+      "security": "チーム向けのセキュリティ通知"
     }
   }
 }

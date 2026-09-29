@@ -8,6 +8,7 @@ import {
   integer,
   jsonb,
   pgSchema,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -37,7 +38,31 @@ export const SUPPRESSION_SOURCES = ['one_click', 'page', 'legacy', 'block'] as c
 export const DELIVERY_STATES = ['delivered', 'bounced', 'soft_bounced', 'complained'] as const;
 export const DELIVERY_EVENT_TYPES = ['delivered', 'bounced', 'complained'] as const;
 export const BOUNCE_TYPES = ['hard', 'soft'] as const;
-export const ADDRESS_SUPPRESSION_REASONS = ['hard_bounce', 'soft_bounce', 'complaint'] as const;
+/** `opt_out`: the person texted STOP to one of our senders (M3.5b); START lifts it. */
+export const ADDRESS_SUPPRESSION_REASONS = ['hard_bounce', 'soft_bounce', 'complaint', 'opt_out'] as const;
+/** Which adapter handed a message to its provider (M3.5b; provider health, inbound STOP). */
+export const MESSAGE_PROVIDERS = [
+  'ses',
+  'twilio',
+  'whatsapp_cloud',
+  'whatsapp_gateway',
+  'fake',
+  'dev',
+  'memory',
+  'webpush',
+] as const;
+/** Why a message moved to the category's next channel (M3.5b fallback chains). */
+export const FALLBACK_REASONS = [
+  'no_address',
+  'not_on_whatsapp',
+  'invalid_number',
+  'provider_error',
+  'undelivered',
+  'consent_missing',
+  'whatsapp_marketing_us',
+  'no_device',
+  'bounced',
+] as const;
 
 const inList = (col: string, values: readonly string[]) =>
   sql.raw(`${col} in (${values.map((v) => `'${v}'`).join(', ')})`);
@@ -89,6 +114,11 @@ export const messages = tenantTable(
     recipientKey: text('recipient_key'),
     /** SMS segments (GSM-7/UCS-2) billed for the sent text; metering counts them. */
     segments: integer('segments'),
+    /** The adapter that sent it (M3.5b): provider health, and inbound STOP routing. */
+    provider: text('provider'),
+    /** Fallback chains (M3.5b): the message on the previous channel this one replaces, and why. */
+    fallbackOf: uuid('fallback_of'),
+    fallbackReason: text('fallback_reason'),
   },
   (t) => [
     uniqueIndex('messages_org_channel_dedupe_key').on(t.orgId, t.channel, t.dedupeKey),
@@ -118,6 +148,21 @@ export const messages = tenantTable(
       sql`recipient_region is null or recipient_region ~ '^[A-Z]{2}-[A-Z0-9]{1,3}$'`,
     ),
     check('messages_segments_check', sql`segments is null or segments between 0 and 100`),
+    check('messages_provider_check', sql`provider is null or ${inList('provider', MESSAGE_PROVIDERS)}`),
+    check(
+      'messages_fallback_check',
+      sql`(fallback_of is null and fallback_reason is null) or (fallback_of is not null and ${inList('fallback_reason', FALLBACK_REASONS)})`,
+    ),
+    foreignKey({
+      name: 'messages_fallback_fk',
+      columns: [t.orgId, t.fallbackOf],
+      foreignColumns: [t.orgId, t.id],
+    }),
+    index('messages_org_fallback_idx').on(t.orgId, t.fallbackOf).where(sql`fallback_of is not null`),
+    // Inbound STOP on the shared senders (M3.5b): which orgs texted this number.
+    index('messages_recipient_key_texts_idx')
+      .on(t.recipientKey, t.orgId)
+      .where(sql`channel in ('sms', 'whatsapp') and recipient_key is not null`),
   ],
 );
 
@@ -342,11 +387,11 @@ export const addressSuppressions = tenantTable(
   },
   (t) => [
     uniqueIndex('address_suppressions_org_channel_address_key').on(t.orgId, t.channel, t.addressNorm),
-    check('address_suppressions_channel_check', sql`channel in ('email', 'sms')`),
+    check('address_suppressions_channel_check', sql`channel in ('email', 'sms', 'whatsapp')`),
     check('address_suppressions_reason_check', inList('reason', ADDRESS_SUPPRESSION_REASONS)),
     check(
       'address_suppressions_address_check',
-      sql`(channel = 'email' and address_norm = lower(btrim(address_norm)) and address_norm like '%@%') or (channel = 'sms' and address_norm ~ '^\\+[0-9]{6,15}$')`,
+      sql`(channel = 'email' and address_norm = lower(btrim(address_norm)) and address_norm like '%@%') or (channel in ('sms', 'whatsapp') and address_norm ~ '^\\+[0-9]{6,15}$')`,
     ),
   ],
 );
@@ -455,5 +500,156 @@ export const autoPauses = tenantTable(
       'auto_pauses_lift_check',
       sql`(lifted_at is null and lifted_by is null and lift_note is null) or (lifted_at is not null and lifted_by is not null and length(lift_note) between 3 and 500)`,
     ),
+  ],
+);
+
+export const IDENTITY_CHECK_STATUSES = ['pending', 'verified', 'failed', 'missing'] as const;
+export const SENDING_DOMAIN_STATUSES = ['pending', 'verified', 'failed'] as const;
+
+/**
+ * The org's own sending domain for email (M3.5b, roadmap §4.4): an SES identity with Easy DKIM,
+ * a custom MAIL FROM (`bounce.{domain}`, SPF) and a DMARC check. Until it is verified the org's
+ * mail goes out from the platform sender with its display name. One per org; a domain belongs to
+ * one org platform-wide (DNS is global, like `tenancy.org_domains`).
+ */
+export const sendingDomains = tenantTable(
+  notificationsSchema,
+  'sending_domains',
+  {
+    domain: text('domain').notNull(),
+    status: text('status').notNull().default('pending'),
+    dkimStatus: text('dkim_status').notNull().default('pending'),
+    spfStatus: text('spf_status').notNull().default('pending'),
+    dmarcStatus: text('dmarc_status').notNull().default('pending'),
+    /** `none`, `quarantine` or `reject` when a DMARC record was found. */
+    dmarcPolicy: text('dmarc_policy'),
+    /** DNS records to publish (public DNS data: DKIM CNAMEs, MAIL FROM MX/SPF, DMARC). */
+    records: jsonb('records').notNull().default(sql`'[]'::jsonb`),
+    /** Which identity adapter holds it (`ses`, or `fake` in development and CI). */
+    provider: text('provider').notNull(),
+    providerRef: text('provider_ref'),
+    createdBy: text('created_by').notNull(),
+    lastCheckedAt: tsz('last_checked_at'),
+    verifiedAt: tsz('verified_at'),
+  },
+  (t) => [
+    uniqueIndex('sending_domains_org_key').on(t.orgId),
+    uniqueIndex('sending_domains_domain_key').on(t.domain),
+    check('sending_domains_status_check', inList('status', SENDING_DOMAIN_STATUSES)),
+    check('sending_domains_dkim_check', inList('dkim_status', IDENTITY_CHECK_STATUSES)),
+    check('sending_domains_spf_check', inList('spf_status', IDENTITY_CHECK_STATUSES)),
+    check('sending_domains_dmarc_check', inList('dmarc_status', IDENTITY_CHECK_STATUSES)),
+    check(
+      'sending_domains_dmarc_policy_check',
+      sql`dmarc_policy is null or dmarc_policy in ('none', 'quarantine', 'reject')`,
+    ),
+    check('sending_domains_provider_check', sql`provider in ('ses', 'fake')`),
+    check(
+      'sending_domains_domain_check',
+      sql`domain = lower(domain) and length(domain) between 4 and 253 and domain ~ '^[a-z0-9]([a-z0-9-]*[a-z0-9])?([.][a-z0-9]([a-z0-9-]*[a-z0-9])?)+$'`,
+    ),
+    check(
+      'sending_domains_verified_check',
+      sql`(status = 'verified') = (verified_at is not null and dkim_status = 'verified' and spf_status = 'verified')`,
+    ),
+    check('sending_domains_provider_ref_length', sql`provider_ref is null or length(provider_ref) <= 300`),
+  ],
+);
+
+export const SENDER_CHANNELS = ['sms', 'whatsapp'] as const;
+export const SENDER_PROVIDERS = ['twilio', 'whatsapp_cloud', 'whatsapp_gateway'] as const;
+export const CAMPAIGN_STATUS_VALUES = ['not_registered', 'pending', 'verified', 'failed'] as const;
+
+/**
+ * An org's dedicated sender per channel (M3.5b), set by Yayatoh staff: a Twilio Messaging
+ * Service with its own 10DLC campaign, or the org's WhatsApp route (the Cloud API with its own
+ * phone number id, or the owner's gateway, decision P3-2). No row: the platform's shared sender.
+ * A sender belongs to one org platform-wide (inbound STOP/HELP finds the org by it).
+ */
+export const channelSenders = tenantTable(
+  notificationsSchema,
+  'channel_senders',
+  {
+    channel: text('channel').notNull(),
+    provider: text('provider').notNull(),
+    /** Messaging Service SID (`MG…`), Cloud API phone number id, or the gateway's sender id. */
+    senderRef: text('sender_ref'),
+    /** The number people see (E.164), when known. */
+    displayNumber: text('display_number'),
+    /** 10DLC campaign review (SMS only). */
+    campaignStatus: text('campaign_status'),
+    lastCheckedAt: tsz('last_checked_at'),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('channel_senders_org_channel_key').on(t.orgId, t.channel),
+    uniqueIndex('channel_senders_provider_ref_key')
+      .on(t.provider, t.senderRef)
+      .where(sql`sender_ref is not null`),
+    check('channel_senders_channel_check', inList('channel', SENDER_CHANNELS)),
+    check(
+      'channel_senders_provider_check',
+      sql`(channel = 'sms' and provider = 'twilio' and sender_ref ~ '^MG[0-9a-f]{32}$' and campaign_status in ('not_registered', 'pending', 'verified', 'failed')) or (channel = 'whatsapp' and campaign_status is null and ((provider = 'whatsapp_cloud' and sender_ref ~ '^[0-9]{5,30}$') or (provider = 'whatsapp_gateway' and (sender_ref is null or sender_ref ~ '^[A-Za-z0-9_-]{1,64}$'))))`,
+    ),
+    check(
+      'channel_senders_display_number_check',
+      sql`display_number is null or display_number ~ '^\\+[1-9][0-9]{6,14}$'`,
+    ),
+  ],
+);
+
+export const KEYWORD_VALUES = ['stop', 'start', 'help'] as const;
+
+/**
+ * Inbound STOP / START / HELP (M3.5b), once per provider message id, per org the keyword applied
+ * to. The number is kept only as the same keyed hash the caps use (`recipient_key`).
+ */
+export const inboundKeywords = tenantTable(
+  notificationsSchema,
+  'inbound_keywords',
+  {
+    channel: text('channel').notNull(),
+    provider: text('provider').notNull(),
+    providerEventId: text('provider_event_id').notNull(),
+    keyword: text('keyword').notNull(),
+    recipientKey: text('recipient_key').notNull(),
+    /** How many of the org's contacts had that number (their consent changed). */
+    contacts: integer('contacts').notNull().default(0),
+    receivedAt: tsz('received_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('inbound_keywords_org_provider_event_key').on(t.orgId, t.provider, t.providerEventId),
+    index('inbound_keywords_org_recipient_idx').on(t.orgId, t.recipientKey, t.receivedAt),
+    check('inbound_keywords_channel_check', inList('channel', SENDER_CHANNELS)),
+    check('inbound_keywords_keyword_check', inList('keyword', KEYWORD_VALUES)),
+    check('inbound_keywords_provider_check', sql`provider ~ '^[a-z0-9_-]{1,32}$'`),
+    check('inbound_keywords_event_id_length', sql`length(provider_event_id) between 1 and 255`),
+    check('inbound_keywords_contacts_check', sql`contacts >= 0`),
+  ],
+);
+
+/**
+ * Provider health (M3.5b; a platform table, no tenant): per provider and UTC hour, sends and send
+ * errors, verified and refused webhooks, the last webhook and the last error code. Counters only:
+ * no org, address or message id. Written through `notifications.record_provider_health`
+ * (SECURITY DEFINER); read by staff through platform_reader.
+ */
+export const providerHealth = notificationsSchema.table(
+  'provider_health',
+  {
+    provider: text('provider').notNull(),
+    hour: tsz('hour').notNull(),
+    sends: integer('sends').notNull().default(0),
+    sendErrors: integer('send_errors').notNull().default(0),
+    webhooks: integer('webhooks').notNull().default(0),
+    webhooksRejected: integer('webhooks_rejected').notNull().default(0),
+    lastWebhookAt: tsz('last_webhook_at'),
+    lastErrorAt: tsz('last_error_at'),
+    lastError: text('last_error'),
+  },
+  (t) => [
+    primaryKey({ columns: [t.provider, t.hour] }),
+    check('provider_health_provider_check', sql`provider ~ '^[a-z0-9_-]{1,32}$'`),
+    check('provider_health_last_error_length', sql`last_error is null or length(last_error) <= 100`),
   ],
 );

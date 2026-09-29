@@ -162,7 +162,10 @@
       "whatsapp_marketing_us": "Bloccato: il marketing WhatsApp verso numeri statunitensi non è consentito",
       "state_quiet_hours": "In attesa degli orari di chiamata dello Stato (ad esempio in Texas la domenica prima di mezzogiorno)",
       "frequency_cap": "In attesa o saltato: questa persona ha ricevuto molti messaggi di recente",
-      "quota_reached": "In attesa: la quota di questo mese è esaurita"
+      "quota_reached": "In attesa: la quota di questo mese è esaurita",
+      "not_on_whatsapp": "Non è su WhatsApp",
+      "invalid_number": "Il numero non può ricevere SMS",
+      "opted_out": "Soppresso: la persona ha risposto STOP"
     },
     "channels": {
       "email": "Email",
@@ -267,7 +270,8 @@
     "trackedLinks": "Link tracciati",
     "messagingHealth": "Limiti di invio",
     "audiences": "Pubblici",
-    "refundRequests": "Richieste di rimborso"
+    "refundRequests": "Richieste di rimborso",
+    "sendingSetup": "Impostazioni di invio"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -4774,7 +4778,8 @@
     "suppressionReason": {
       "hard_bounce": "Rimbalzato (l'indirizzo non esiste)",
       "soft_bounce": "Rimbalzato più volte (casella piena o non disponibile)",
-      "complaint": "Segnalato come spam"
+      "complaint": "Segnalato come spam",
+      "opt_out": "Ha risposto STOP"
     },
     "liftNote": "Perché rimuoverla per {address}?",
     "lift": "Rimuovi",
@@ -4799,7 +4804,8 @@
     "saveCaps": "Salva limiti",
     "capsSaved": "Limiti salvati.",
     "maxInvalid": "Inserisci un numero intero da 1 a 20.",
-    "windowInvalid": "Inserisci un numero intero di ore da 1 a 720."
+    "windowInvalid": "Inserisci un numero intero di ore da 1 a 720.",
+    "personOnly": "Solo la persona può revocarlo, rispondendo START"
   },
   "preferenceCenter": {
     "metaTitle": "Le tue preferenze sui messaggi",
@@ -5322,6 +5328,103 @@
         "not_enough_stock": "Non ci sono abbastanza biglietti liberi per questa offerta.",
         "not_on_sale": "Questo pass o questa data non è in vendita."
       }
+    }
+  },
+  "sendingSetup": {
+    "title": "Impostazioni di invio",
+    "description": "Da dove partono le tue email e i tuoi SMS, e cosa succede quando un messaggio non può essere consegnato sul suo canale.",
+    "domainTitle": "Dominio di invio email",
+    "noDomain": "Le tue email partono da notifications@mail.yayatoh.com con il nome della tua organizzazione. Aggiungi il tuo dominio perché partano dal tuo indirizzo.",
+    "unavailable": "I domini di invio non sono ancora disponibili.",
+    "readOnly": "Solo i proprietari e gli amministratori possono modificarlo.",
+    "addTitle": "Aggiungi un dominio di invio",
+    "domainLabel": "Dominio di invio",
+    "domainHint": "Usa un sottodominio da cui non invii altra posta, come mail.tuodominio.it.",
+    "add": "Aggiungi dominio",
+    "errors": {
+      "required": "Inserisci un dominio.",
+      "invalid": "Inserisci un nome di dominio come mail.tuodominio.it (non un indirizzo Yayatoh).",
+      "already_set": "La tua organizzazione ha già un dominio di invio. Rimuovilo prima.",
+      "domain_taken": "Un'altra organizzazione usa già questo dominio.",
+      "unavailable": "I domini di invio non sono ancora disponibili.",
+      "forbidden": "Solo i proprietari e gli amministratori possono modificarlo.",
+      "internal": "Qualcosa è andato storto. Riprova."
+    },
+    "status": {
+      "verified": "Verificato",
+      "pending": "In attesa del DNS",
+      "failed": "Non riuscito"
+    },
+    "sendingFrom": "Le tue email ora partono da {address}.",
+    "notYet": "Quando DKIM e SPF saranno verificati, le tue email partiranno da {address}. Fino ad allora partono dall'indirizzo di Yayatoh con il nome della tua organizzazione.",
+    "checksCaption": "Controlli DNS per {domain}",
+    "check": "Controllo",
+    "statusHeader": "Stato",
+    "checks": {
+      "dkim": "DKIM (firma)",
+      "spf": "SPF (dominio di ritorno)",
+      "dmarc": "DMARC (criterio)"
+    },
+    "checkStatus": {
+      "verified": "Verificato",
+      "pending": "In attesa",
+      "failed": "Non riuscito",
+      "missing": "Mancante"
+    },
+    "dmarcPolicy": "Trovato (p={policy})",
+    "recordsIntro": "Pubblica questi record presso il tuo provider DNS, poi controlla di nuovo. Le modifiche DNS possono richiedere fino a 48 ore.",
+    "recordsCaption": "Record DNS per {domain}",
+    "recordType": "Tipo",
+    "recordName": "Nome",
+    "recordValue": "Valore",
+    "recordFor": "Per",
+    "lastChecked": "Ultimo controllo {when}",
+    "checkNow": "Controlla il DNS ora",
+    "checkForm": "Controlla il dominio di invio",
+    "remove": "Rimuovi dominio",
+    "removeForm": "Rimuovi il dominio di invio",
+    "done": {
+      "added": "Il dominio è stato aggiunto. Pubblica i record DNS qui sotto.",
+      "checked": "DNS controllato.",
+      "removed": "Il dominio di invio è stato rimosso. Le email tornano a partire dall'indirizzo di Yayatoh.",
+      "forbidden": "Solo i proprietari e gli amministratori possono modificarlo.",
+      "error": "Non ha funzionato. Riprova."
+    },
+    "textsTitle": "Messaggi di testo",
+    "smsSender": "SMS",
+    "ownNumber": "Il tuo numero {number}",
+    "ending": "che termina con {hint}",
+    "sharedNumber": "Numero condiviso di Yayatoh",
+    "campaign": "Campagna 10DLC",
+    "campaignStatus": {
+      "verified": "Verificata",
+      "pending": "In revisione",
+      "failed": "Rifiutata",
+      "not_registered": "Non registrata"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "Il tuo numero WhatsApp Business (Cloud API)",
+      "gateway": "Gateway WhatsApp di Pani",
+      "default": "Numero WhatsApp di Yayatoh"
+    },
+    "textsNote": "Il supporto Yayatoh configura i numeri dedicati. Chiunque può rispondere STOP a qualsiasi SMS per annullare l'iscrizione, o HELP per ricevere aiuto.",
+    "campaignPending": "Il tuo numero viene usato quando la sua campagna 10DLC è verificata; fino ad allora gli SMS usano il numero condiviso di Yayatoh.",
+    "fallbackTitle": "Canali di riserva",
+    "fallbackDescription": "Quando un messaggio non raggiunge qualcuno sul suo canale (nessun account WhatsApp, un numero che non riceve SMS, un provider che l'ha rifiutato), parte una volta sul canale successivo. Le scelte delle persone (disiscrizioni) non passano mai a un altro canale.",
+    "fallbackCaption": "Ordine dei canali di riserva per tipo di messaggio",
+    "category": "Messaggi",
+    "chain": "Ordine",
+    "arrow": " → ",
+    "noFallback": "Nessun canale di riserva",
+    "categories": {
+      "transactional": "Biglietti e messaggi degli ordini",
+      "reminders": "Promemoria",
+      "event_updates": "Aggiornamenti sull'evento",
+      "marketing": "Novità e offerte",
+      "sales": "Avvisi di vendita per il tuo team",
+      "messages": "Messaggi dei clienti per il tuo team",
+      "security": "Avvisi di sicurezza per il tuo team"
     }
   }
 }

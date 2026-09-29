@@ -162,7 +162,10 @@
       "whatsapp_marketing_us": "Blocked: WhatsApp marketing isn't allowed to US numbers",
       "state_quiet_hours": "Held for state calling hours (for example Texas Sundays before noon)",
       "frequency_cap": "Held or skipped: this person got many messages recently",
-      "quota_reached": "Waiting: this month's quota is used up"
+      "quota_reached": "Waiting: this month's quota is used up",
+      "not_on_whatsapp": "Not on WhatsApp",
+      "invalid_number": "The number can't receive texts",
+      "opted_out": "Suppressed: the recipient replied STOP"
     },
     "channels": {
       "email": "Email",
@@ -267,7 +270,8 @@
     "trackedLinks": "Tracked links",
     "messagingHealth": "Messaging limits",
     "audiences": "Audiences",
-    "refundRequests": "Refund requests"
+    "refundRequests": "Refund requests",
+    "sendingSetup": "Sending setup"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -4774,7 +4778,8 @@
     "suppressionReason": {
       "hard_bounce": "Bounced (address doesn't exist)",
       "soft_bounce": "Bounced repeatedly (mailbox full or unavailable)",
-      "complaint": "Marked as spam"
+      "complaint": "Marked as spam",
+      "opt_out": "Replied STOP"
     },
     "liftNote": "Why lift it for {address}?",
     "lift": "Lift",
@@ -4799,7 +4804,8 @@
     "saveCaps": "Save caps",
     "capsSaved": "Caps saved.",
     "maxInvalid": "Enter a whole number from 1 to 20.",
-    "windowInvalid": "Enter a whole number of hours from 1 to 720."
+    "windowInvalid": "Enter a whole number of hours from 1 to 720.",
+    "personOnly": "Only the person can lift this, by replying START"
   },
   "preferenceCenter": {
     "metaTitle": "Your message preferences",
@@ -5322,6 +5328,103 @@
         "not_enough_stock": "Not enough tickets are free for this offer.",
         "not_on_sale": "This pass or date is not on sale."
       }
+    }
+  },
+  "sendingSetup": {
+    "title": "Sending setup",
+    "description": "Where your emails and texts come from, and what happens when a message can't be delivered on its channel.",
+    "domainTitle": "Email sending domain",
+    "noDomain": "Your emails go out from notifications@mail.yayatoh.com with your organization's name. Add your own domain so they come from your address.",
+    "unavailable": "Sending domains aren't available yet.",
+    "readOnly": "Only owners and admins can change this.",
+    "addTitle": "Add a sending domain",
+    "domainLabel": "Sending domain",
+    "domainHint": "Use a subdomain you don't send other mail from, such as mail.yourdomain.com.",
+    "add": "Add domain",
+    "errors": {
+      "required": "Enter a domain.",
+      "invalid": "Enter a domain name such as mail.yourdomain.com (not a Yayatoh address).",
+      "already_set": "Your organization already has a sending domain. Remove it first.",
+      "domain_taken": "Another organization already uses this domain.",
+      "unavailable": "Sending domains aren't available yet.",
+      "forbidden": "Only owners and admins can change this.",
+      "internal": "Something went wrong. Try again."
+    },
+    "status": {
+      "verified": "Verified",
+      "pending": "Waiting for DNS",
+      "failed": "Failed"
+    },
+    "sendingFrom": "Your emails now come from {address}.",
+    "notYet": "Once DKIM and SPF are verified, your emails will come from {address}. Until then they come from Yayatoh's address with your organization's name.",
+    "checksCaption": "DNS checks for {domain}",
+    "check": "Check",
+    "statusHeader": "Status",
+    "checks": {
+      "dkim": "DKIM (signature)",
+      "spf": "SPF (bounce domain)",
+      "dmarc": "DMARC (policy)"
+    },
+    "checkStatus": {
+      "verified": "Verified",
+      "pending": "Waiting",
+      "failed": "Failed",
+      "missing": "Missing"
+    },
+    "dmarcPolicy": "Found (p={policy})",
+    "recordsIntro": "Publish these records at your DNS provider, then check again. DNS changes can take up to 48 hours.",
+    "recordsCaption": "DNS records for {domain}",
+    "recordType": "Type",
+    "recordName": "Name",
+    "recordValue": "Value",
+    "recordFor": "For",
+    "lastChecked": "Last checked {when}",
+    "checkNow": "Check DNS now",
+    "checkForm": "Check the sending domain",
+    "remove": "Remove domain",
+    "removeForm": "Remove the sending domain",
+    "done": {
+      "added": "The domain was added. Publish the DNS records below.",
+      "checked": "DNS checked.",
+      "removed": "The sending domain was removed. Emails come from Yayatoh's address again.",
+      "forbidden": "Only owners and admins can change this.",
+      "error": "That didn't work. Try again."
+    },
+    "textsTitle": "Text messages",
+    "smsSender": "SMS",
+    "ownNumber": "Your own number {number}",
+    "ending": "ending {hint}",
+    "sharedNumber": "Yayatoh's shared number",
+    "campaign": "10DLC campaign",
+    "campaignStatus": {
+      "verified": "Verified",
+      "pending": "In review",
+      "failed": "Rejected",
+      "not_registered": "Not registered"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "Your WhatsApp Business number (Cloud API)",
+      "gateway": "Pani WhatsApp gateway",
+      "default": "Yayatoh's WhatsApp number"
+    },
+    "textsNote": "Yayatoh support sets up dedicated numbers. People can reply STOP to any text to opt out, or HELP for help.",
+    "campaignPending": "Your own number is used once its 10DLC campaign is verified; until then texts use Yayatoh's shared number.",
+    "fallbackTitle": "Fallbacks",
+    "fallbackDescription": "When a message can't reach someone on its channel (no WhatsApp account, a number that can't get texts, a provider that refused it), it goes out on the next channel, once. People's own choices (opt-outs, unsubscribes) never move to another channel.",
+    "fallbackCaption": "Fallback order per message type",
+    "category": "Messages",
+    "chain": "Order",
+    "arrow": " → ",
+    "noFallback": "No fallback",
+    "categories": {
+      "transactional": "Tickets and order messages",
+      "reminders": "Reminders",
+      "event_updates": "Event updates",
+      "marketing": "News and offers",
+      "sales": "Sales alerts for your team",
+      "messages": "Customer messages for your team",
+      "security": "Security alerts for your team"
     }
   }
 }

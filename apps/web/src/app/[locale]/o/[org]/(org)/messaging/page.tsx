@@ -186,7 +186,9 @@ export default async function MessagingLimitsPage({
                           address={s.address}
                         />
                       ) : (
-                        <span className="text-caption text-zinc-600">{t('supportOnly')}</span>
+                        <span className="text-caption text-zinc-600">
+                          {s.reason === 'opt_out' ? t('personOnly') : t('supportOnly')}
+                        </span>
                       ),
                   },
                 ]

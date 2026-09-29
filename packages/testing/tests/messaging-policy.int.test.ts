@@ -202,9 +202,17 @@ describe('policy gate v2: consent for texts', () => {
     });
     const { transports, sms } = memoryTransports();
     await dispatchDue(a.org.id, { transports, appOrigin: ORIGIN, now: at(WEEKDAY) });
-    expect(await rows(a.org.id, sql`dedupe_key = ${`upd1:${t}`}`)).toMatchObject([
+    // The text is blocked with its reason; the update goes to the category's next channel
+    // (M3.5b fallback chains: SMS → email), recorded with why.
+    expect(await rows(a.org.id, sql`dedupe_key = ${`upd1:${t}`} and channel = 'sms'`)).toMatchObject([
       { status: 'suppressed', reason: 'consent_missing' },
     ]);
+    expect(
+      await rows(
+        a.org.id,
+        sql`dedupe_key = ${`upd1:${t}`} and channel = 'email' and fallback_reason = 'consent_missing'`,
+      ),
+    ).toHaveLength(1);
     expect(sms.filter((m) => m.to === phone).map((m) => m.body.split('\n')[0])).toEqual([
       'Alpha Events: Your link to your tickets for Gala',
     ]);

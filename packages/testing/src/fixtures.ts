@@ -54,12 +54,17 @@ import {
   threadToken,
 } from '@yayatoh/messaging';
 import {
+  addSendingDomainCommand,
   createNotifier,
   dispatchDue,
+  fakeIdentityPort,
   memoryTransports,
   recordDeliveryEventsCommand,
+  recordInboundKeywordCommand,
+  recordSendingDomainCheckCommand,
   registerPushTokenCommand,
   sendTestNotificationCommand,
+  setChannelSenderCommand,
   setFrequencyCapsCommand,
   setMyPreferencesCommand,
   setQuotaLimitCommand,
@@ -848,6 +853,60 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     tx.execute(sql`insert into notifications.auto_pauses
       (org_id, complaints, sent, rate_bps, window_start, lifted_at, lifted_by, lift_note)
       values (${org.id}, 2, 400, 50, now() - interval '1 day', now(), 'system:fixture', 'fixture lift')`),
+  );
+  // Provider adapters (M3.5b): a verified sending domain, dedicated SMS and WhatsApp senders (ids
+  // derived from the org id, so unique platform-wide) and an inbound STOP (isolation coverage).
+  const sending = await executeCommand(
+    addSendingDomainCommand,
+    { domain: `mail.${slug}.example.test`, provider: 'fake' },
+    ctx(),
+    ports,
+  );
+  const identity = await fakeIdentityPort().status(sending.domain);
+  await executeCommand(
+    recordSendingDomainCheckCommand,
+    {
+      id: sending.id,
+      dkim: identity.dkim,
+      spf: identity.spf,
+      dmarc: 'verified',
+      dmarcPolicy: 'none',
+      records: identity.records,
+      providerRef: identity.providerRef,
+    },
+    ctx(),
+    ports,
+  );
+  const hex = org.id.replace(/-/g, '');
+  await executeCommand(
+    setChannelSenderCommand,
+    { kind: 'sms', messagingServiceSid: `MG${hex}`, displayNumber: null, campaignStatus: 'verified' },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    setChannelSenderCommand,
+    {
+      kind: 'whatsapp',
+      route: 'cloud',
+      senderRef: BigInt(`0x${hex.slice(-13)}`).toString(),
+      displayNumber: null,
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    recordInboundKeywordCommand,
+    {
+      provider: 'twilio',
+      id: `fixture-stop-${slug}`,
+      channel: 'sms',
+      keyword: 'stop',
+      from: '+19995550100',
+      receivedAt: new Date(),
+    },
+    systemCtx(org.id),
+    ports,
   );
   // Messaging (M1.10c): an announcement fanned out to the event's attendees, a contact's reply,
   // and a report from each side (isolation coverage).

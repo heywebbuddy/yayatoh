@@ -8,7 +8,7 @@
  */
 export type DeliveryEventType = 'delivered' | 'bounced' | 'complained';
 export type BounceType = 'hard' | 'soft';
-export type SuppressionReason = 'hard_bounce' | 'soft_bounce' | 'complaint';
+export type SuppressionReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'opt_out';
 export type DeliveryState = 'delivered' | 'bounced' | 'soft_bounced' | 'complained';
 
 export interface DeliveryFact {
@@ -59,7 +59,8 @@ export function nextDeliveryState(current: string | null, event: DeliveryFact): 
 }
 
 /** The dispatcher's reason for a message to a suppressed address (shown in the message log). */
-export function suppressedReason(reason: string): 'bounced' | 'complained' {
+export function suppressedReason(reason: string): 'bounced' | 'complained' | 'opted_out' {
+  if (reason === 'opt_out') return 'opted_out';
   return reason === 'complaint' ? 'complained' : 'bounced';
 }
 

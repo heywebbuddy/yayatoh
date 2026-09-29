@@ -13,6 +13,7 @@ import {
   dispatchDue,
   FAKE_DELIVERY_SIGNATURE_HEADER,
   fakeDeliverySecret,
+  handleProviderWebhook,
   takeDevDeliveryEvents,
   withWebPush,
 } from '@yayatoh/notifications';
@@ -31,9 +32,9 @@ import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yaya
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
+import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
-import './ports.ts';
-import { deliveryAdapter, ingestDeliveryEvents } from './delivery-webhooks.ts';
+import { ports } from './ports.ts';
 import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
@@ -120,11 +121,21 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     if (r.sent + r.suppressed + r.failed === 0) break;
   }
   let reports = 0;
-  const adapter = deliveryAdapter('fake');
+  // The fake provider's reports go through the same webhook pipeline (verified, deduplicated,
+  // counted in provider health) as a real provider's.
+  const adapter = webhookAdapter('email', 'fake');
   if (adapter)
     for (const d of takeDevDeliveryEvents()) {
-      const verified = adapter.verify(d.body, new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }));
-      reports += (await ingestDeliveryEvents(adapter.name, verified)).recorded;
+      const out = await handleProviderWebhook(
+        adapter,
+        {
+          rawBody: d.body,
+          headers: new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }),
+          url: `${appOrigin}/api/webhooks/email/fake`,
+        },
+        ports,
+      );
+      reports += out.result?.recorded ?? 0;
     }
   return { consumed, sent, reports };
 }

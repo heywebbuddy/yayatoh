@@ -162,7 +162,10 @@
       "whatsapp_marketing_us": "已封鎖：不允許向美國號碼傳送 WhatsApp 行銷訊息",
       "state_quiet_hours": "等待州規定的通話時間（例如德州週日中午前）",
       "frequency_cap": "等待或已略過：此人最近收到很多訊息",
-      "quota_reached": "等待中：本月配額已用完"
+      "quota_reached": "等待中：本月配額已用完",
+      "not_on_whatsapp": "未使用 WhatsApp",
+      "invalid_number": "此號碼無法接收簡訊",
+      "opted_out": "已封鎖：收件人回覆了 STOP"
     },
     "channels": {
       "email": "電子郵件",
@@ -267,7 +270,8 @@
     "trackedLinks": "追蹤連結",
     "messagingHealth": "訊息傳送限制",
     "audiences": "受眾",
-    "refundRequests": "退款申請"
+    "refundRequests": "退款申請",
+    "sendingSetup": "傳送設定"
   },
   "vocab": {
     "attendee": "參加者",
@@ -4774,7 +4778,8 @@
     "suppressionReason": {
       "hard_bounce": "退信（地址不存在）",
       "soft_bounce": "多次退信（信箱已滿或無法使用）",
-      "complaint": "被標記為垃圾郵件"
+      "complaint": "被標記為垃圾郵件",
+      "opt_out": "回覆了 STOP"
     },
     "liftNote": "為什麼要解除 {address} 的停止？",
     "lift": "解除",
@@ -4799,7 +4804,8 @@
     "saveCaps": "儲存上限",
     "capsSaved": "上限已儲存。",
     "maxInvalid": "請輸入 1 到 20 的整數。",
-    "windowInvalid": "請輸入 1 到 720 的整數小時數。"
+    "windowInvalid": "請輸入 1 到 720 的整數小時數。",
+    "personOnly": "只有本人回覆 START 才能解除"
   },
   "preferenceCenter": {
     "metaTitle": "你的訊息偏好",
@@ -5322,6 +5328,103 @@
         "not_enough_stock": "空餘票券不足，無法發出此邀請。",
         "not_on_sale": "此通行證或場次未在販售。"
       }
+    }
+  },
+  "sendingSetup": {
+    "title": "傳送設定",
+    "description": "你的電子郵件和簡訊從哪裡寄出，以及訊息無法透過其管道送達時會如何處理。",
+    "domainTitle": "電子郵件寄件網域",
+    "noDomain": "你的電子郵件以組織名稱從 notifications@mail.yayatoh.com 寄出。新增你自己的網域，讓郵件從你的地址寄出。",
+    "unavailable": "寄件網域尚未開放。",
+    "readOnly": "只有擁有者和管理員可以變更。",
+    "addTitle": "新增寄件網域",
+    "domainLabel": "寄件網域",
+    "domainHint": "請使用不寄送其他郵件的子網域，例如 mail.yourdomain.com。",
+    "add": "新增網域",
+    "errors": {
+      "required": "請輸入網域。",
+      "invalid": "請輸入像 mail.yourdomain.com 這樣的網域名稱（不能是 Yayatoh 地址）。",
+      "already_set": "你的組織已有寄件網域，請先移除。",
+      "domain_taken": "其他組織已在使用此網域。",
+      "unavailable": "寄件網域尚未開放。",
+      "forbidden": "只有擁有者和管理員可以變更。",
+      "internal": "發生錯誤，請再試一次。"
+    },
+    "status": {
+      "verified": "已驗證",
+      "pending": "等待 DNS",
+      "failed": "失敗"
+    },
+    "sendingFrom": "你的電子郵件現在從 {address} 寄出。",
+    "notYet": "DKIM 和 SPF 驗證通過後，你的電子郵件將從 {address} 寄出。在此之前，郵件以你的組織名稱從 Yayatoh 的地址寄出。",
+    "checksCaption": "{domain} 的 DNS 檢查",
+    "check": "檢查項目",
+    "statusHeader": "狀態",
+    "checks": {
+      "dkim": "DKIM（簽章）",
+      "spf": "SPF（退信網域）",
+      "dmarc": "DMARC（政策）"
+    },
+    "checkStatus": {
+      "verified": "已驗證",
+      "pending": "等待中",
+      "failed": "失敗",
+      "missing": "缺少"
+    },
+    "dmarcPolicy": "已找到（p={policy}）",
+    "recordsIntro": "請在你的 DNS 供應商發布這些記錄，然後再檢查一次。DNS 變更最多可能需要 48 小時生效。",
+    "recordsCaption": "{domain} 的 DNS 記錄",
+    "recordType": "類型",
+    "recordName": "名稱",
+    "recordValue": "值",
+    "recordFor": "用途",
+    "lastChecked": "上次檢查 {when}",
+    "checkNow": "立即檢查 DNS",
+    "checkForm": "檢查寄件網域",
+    "remove": "移除網域",
+    "removeForm": "移除寄件網域",
+    "done": {
+      "added": "已新增網域。請發布下方的 DNS 記錄。",
+      "checked": "DNS 已檢查。",
+      "removed": "已移除寄件網域。郵件重新從 Yayatoh 的地址寄出。",
+      "forbidden": "只有擁有者和管理員可以變更。",
+      "error": "操作未成功，請再試一次。"
+    },
+    "textsTitle": "簡訊",
+    "smsSender": "簡訊",
+    "ownNumber": "你自己的號碼 {number}",
+    "ending": "末碼 {hint}",
+    "sharedNumber": "Yayatoh 共用號碼",
+    "campaign": "10DLC 活動",
+    "campaignStatus": {
+      "verified": "已驗證",
+      "pending": "審核中",
+      "failed": "已拒絕",
+      "not_registered": "未註冊"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "你的 WhatsApp Business 號碼（Cloud API）",
+      "gateway": "Pani WhatsApp 閘道",
+      "default": "Yayatoh 的 WhatsApp 號碼"
+    },
+    "textsNote": "專用號碼由 Yayatoh 支援團隊設定。任何人都可以回覆任一簡訊 STOP 以取消訂閱，或回覆 HELP 取得協助。",
+    "campaignPending": "你自己的號碼會在其 10DLC 活動驗證通過後使用；在此之前簡訊使用 Yayatoh 共用號碼。",
+    "fallbackTitle": "備用管道",
+    "fallbackDescription": "當訊息無法透過其管道送達某人時（沒有 WhatsApp 帳號、號碼無法接收簡訊、供應商拒絕），會透過下一個管道寄送一次。使用者自己的選擇（取消訂閱）絕不會轉到其他管道。",
+    "fallbackCaption": "各類訊息的備用管道順序",
+    "category": "訊息",
+    "chain": "順序",
+    "arrow": " → ",
+    "noFallback": "無備用管道",
+    "categories": {
+      "transactional": "票券和訂單訊息",
+      "reminders": "提醒",
+      "event_updates": "活動消息",
+      "marketing": "新聞與優惠",
+      "sales": "團隊的銷售通知",
+      "messages": "團隊的顧客訊息",
+      "security": "團隊的安全通知"
     }
   }
 }

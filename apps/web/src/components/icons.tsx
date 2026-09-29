@@ -33,6 +33,7 @@ import {
   Scale,
   ScanLine,
   Search,
+  Send,
   Settings,
   ShieldCheck,
   Star,
@@ -84,6 +85,7 @@ const ICONS: Record<string, LucideIcon> = {
   link: Link2,
   star: Star,
   undo: Undo2,
+  send: Send,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

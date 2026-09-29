@@ -162,7 +162,10 @@
       "whatsapp_marketing_us": "Blockiert: WhatsApp-Marketing an US-Nummern ist nicht erlaubt",
       "state_quiet_hours": "Wartet auf die Anrufzeiten des Bundesstaats (z. B. sonntags in Texas vor 12 Uhr)",
       "frequency_cap": "Wartet oder übersprungen: diese Person hat zuletzt viele Nachrichten erhalten",
-      "quota_reached": "Wartet: das Kontingent dieses Monats ist aufgebraucht"
+      "quota_reached": "Wartet: das Kontingent dieses Monats ist aufgebraucht",
+      "not_on_whatsapp": "Nicht bei WhatsApp",
+      "invalid_number": "Die Nummer kann keine SMS empfangen",
+      "opted_out": "Unterdrückt: Die Person hat mit STOP geantwortet"
     },
     "channels": {
       "email": "E-Mail",
@@ -267,7 +270,8 @@
     "trackedLinks": "Tracking-Links",
     "messagingHealth": "Versandlimits",
     "audiences": "Zielgruppen",
-    "refundRequests": "Erstattungsanfragen"
+    "refundRequests": "Erstattungsanfragen",
+    "sendingSetup": "Versand-Einrichtung"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -4774,7 +4778,8 @@
     "suppressionReason": {
       "hard_bounce": "Unzustellbar (Adresse existiert nicht)",
       "soft_bounce": "Mehrfach unzustellbar (Postfach voll oder nicht verfügbar)",
-      "complaint": "Als Spam markiert"
+      "complaint": "Als Spam markiert",
+      "opt_out": "Mit STOP geantwortet"
     },
     "liftNote": "Warum für {address} aufheben?",
     "lift": "Aufheben",
@@ -4799,7 +4804,8 @@
     "saveCaps": "Limits speichern",
     "capsSaved": "Limits gespeichert.",
     "maxInvalid": "Geben Sie eine ganze Zahl von 1 bis 20 ein.",
-    "windowInvalid": "Geben Sie eine ganze Stundenzahl von 1 bis 720 ein."
+    "windowInvalid": "Geben Sie eine ganze Stundenzahl von 1 bis 720 ein.",
+    "personOnly": "Nur die Person selbst kann dies aufheben, indem sie START antwortet"
   },
   "preferenceCenter": {
     "metaTitle": "Ihre Nachrichteneinstellungen",
@@ -5322,6 +5328,103 @@
         "not_enough_stock": "Für dieses Angebot sind nicht genug Tickets frei.",
         "not_on_sale": "Dieser Pass oder Termin ist nicht im Verkauf."
       }
+    }
+  },
+  "sendingSetup": {
+    "title": "Versand-Einrichtung",
+    "description": "Von wo Ihre E-Mails und SMS kommen und was passiert, wenn eine Nachricht auf ihrem Kanal nicht zugestellt werden kann.",
+    "domainTitle": "E-Mail-Versanddomain",
+    "noDomain": "Ihre E-Mails werden von notifications@mail.yayatoh.com mit dem Namen Ihrer Organisation gesendet. Fügen Sie Ihre eigene Domain hinzu, damit sie von Ihrer Adresse kommen.",
+    "unavailable": "Versanddomains sind noch nicht verfügbar.",
+    "readOnly": "Nur Inhaber und Administratoren können dies ändern.",
+    "addTitle": "Versanddomain hinzufügen",
+    "domainLabel": "Versanddomain",
+    "domainHint": "Verwenden Sie eine Subdomain, von der Sie keine andere Post senden, z. B. mail.ihredomain.de.",
+    "add": "Domain hinzufügen",
+    "errors": {
+      "required": "Geben Sie eine Domain ein.",
+      "invalid": "Geben Sie einen Domainnamen wie mail.ihredomain.de ein (keine Yayatoh-Adresse).",
+      "already_set": "Ihre Organisation hat bereits eine Versanddomain. Entfernen Sie diese zuerst.",
+      "domain_taken": "Eine andere Organisation verwendet diese Domain bereits.",
+      "unavailable": "Versanddomains sind noch nicht verfügbar.",
+      "forbidden": "Nur Inhaber und Administratoren können dies ändern.",
+      "internal": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "status": {
+      "verified": "Verifiziert",
+      "pending": "Wartet auf DNS",
+      "failed": "Fehlgeschlagen"
+    },
+    "sendingFrom": "Ihre E-Mails kommen jetzt von {address}.",
+    "notYet": "Sobald DKIM und SPF verifiziert sind, kommen Ihre E-Mails von {address}. Bis dahin kommen sie von der Yayatoh-Adresse mit dem Namen Ihrer Organisation.",
+    "checksCaption": "DNS-Prüfungen für {domain}",
+    "check": "Prüfung",
+    "statusHeader": "Status",
+    "checks": {
+      "dkim": "DKIM (Signatur)",
+      "spf": "SPF (Bounce-Domain)",
+      "dmarc": "DMARC (Richtlinie)"
+    },
+    "checkStatus": {
+      "verified": "Verifiziert",
+      "pending": "Ausstehend",
+      "failed": "Fehlgeschlagen",
+      "missing": "Fehlt"
+    },
+    "dmarcPolicy": "Gefunden (p={policy})",
+    "recordsIntro": "Veröffentlichen Sie diese Einträge bei Ihrem DNS-Anbieter und prüfen Sie dann erneut. DNS-Änderungen können bis zu 48 Stunden dauern.",
+    "recordsCaption": "DNS-Einträge für {domain}",
+    "recordType": "Typ",
+    "recordName": "Name",
+    "recordValue": "Wert",
+    "recordFor": "Für",
+    "lastChecked": "Zuletzt geprüft {when}",
+    "checkNow": "DNS jetzt prüfen",
+    "checkForm": "Versanddomain prüfen",
+    "remove": "Domain entfernen",
+    "removeForm": "Versanddomain entfernen",
+    "done": {
+      "added": "Die Domain wurde hinzugefügt. Veröffentlichen Sie die DNS-Einträge unten.",
+      "checked": "DNS geprüft.",
+      "removed": "Die Versanddomain wurde entfernt. E-Mails kommen wieder von der Yayatoh-Adresse.",
+      "forbidden": "Nur Inhaber und Administratoren können dies ändern.",
+      "error": "Das hat nicht funktioniert. Versuchen Sie es erneut."
+    },
+    "textsTitle": "Textnachrichten",
+    "smsSender": "SMS",
+    "ownNumber": "Ihre eigene Nummer {number}",
+    "ending": "endet auf {hint}",
+    "sharedNumber": "Gemeinsame Nummer von Yayatoh",
+    "campaign": "10DLC-Kampagne",
+    "campaignStatus": {
+      "verified": "Verifiziert",
+      "pending": "In Prüfung",
+      "failed": "Abgelehnt",
+      "not_registered": "Nicht registriert"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "Ihre WhatsApp-Business-Nummer (Cloud API)",
+      "gateway": "Pani-WhatsApp-Gateway",
+      "default": "WhatsApp-Nummer von Yayatoh"
+    },
+    "textsNote": "Der Yayatoh-Support richtet eigene Nummern ein. Empfänger können auf jede SMS mit STOP antworten, um sich abzumelden, oder mit HELP für Hilfe.",
+    "campaignPending": "Ihre eigene Nummer wird verwendet, sobald ihre 10DLC-Kampagne verifiziert ist; bis dahin nutzen SMS die gemeinsame Nummer von Yayatoh.",
+    "fallbackTitle": "Ausweichkanäle",
+    "fallbackDescription": "Wenn eine Nachricht jemanden auf ihrem Kanal nicht erreicht (kein WhatsApp-Konto, eine Nummer ohne SMS-Empfang, ein Anbieter hat sie abgelehnt), wird sie einmal über den nächsten Kanal gesendet. Eigene Entscheidungen der Personen (Abmeldungen) wechseln nie den Kanal.",
+    "fallbackCaption": "Reihenfolge der Ausweichkanäle je Nachrichtenart",
+    "category": "Nachrichten",
+    "chain": "Reihenfolge",
+    "arrow": " → ",
+    "noFallback": "Kein Ausweichkanal",
+    "categories": {
+      "transactional": "Tickets und Bestellnachrichten",
+      "reminders": "Erinnerungen",
+      "event_updates": "Event-Updates",
+      "marketing": "Neuigkeiten und Angebote",
+      "sales": "Verkaufshinweise für Ihr Team",
+      "messages": "Kundennachrichten für Ihr Team",
+      "security": "Sicherheitshinweise für Ihr Team"
     }
   }
 }

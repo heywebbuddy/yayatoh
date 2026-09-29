@@ -1,5 +1,10 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { autoPauseQuery, DEFAULT_MONTHLY_QUOTAS, messagingUsageQuery } from '@yayatoh/notifications';
+import {
+  autoPauseQuery,
+  DEFAULT_MONTHLY_QUOTAS,
+  messagingUsageQuery,
+  sendingSetupQuery,
+} from '@yayatoh/notifications';
 import { getOrganizationQuery, type OrganizationDto } from '@yayatoh/tenancy';
 import { Alert, Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import Link from 'next/link';
@@ -9,7 +14,7 @@ import { z } from 'zod';
 import { Shell } from '@/components/shell.tsx';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
-import { liftAutoPauseAction, quotaAction } from './actions.ts';
+import { liftAutoPauseAction, quotaAction, smsSenderAction, whatsappSenderAction } from './actions.ts';
 
 const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
 
@@ -43,9 +48,10 @@ export default async function TenantMessagingPage({
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
-  const [usage, pause] = await Promise.all([
+  const [usage, pause, setup] = await Promise.all([
     executeQuery(messagingUsageQuery, {}, ctx, ports),
     executeQuery(autoPauseQuery, {}, ctx, ports),
+    executeQuery(sendingSetupQuery, {}, ctx, ports),
   ]);
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const pct = new Intl.NumberFormat('en', { style: 'percent', maximumFractionDigits: 2 });
@@ -108,6 +114,109 @@ export default async function TenantMessagingPage({
               }
             />
           )}
+        </Card>
+      </section>
+
+      <section aria-labelledby="senders-heading" className="flex flex-col gap-3">
+        <h2 id="senders-heading" className="text-section">
+          {t('sendersTitle')}
+        </h2>
+        <p className="text-body text-zinc-600">{t('sendersDescription')}</p>
+        <Card className="flex flex-col gap-4">
+          <p className="text-body">
+            {setup.sms.dedicated
+              ? t('smsDedicated', {
+                  hint: setup.sms.refHint ?? '',
+                  status: t(`campaignStatus.${setup.sms.campaignStatus ?? 'not_registered'}`),
+                })
+              : t('smsShared')}
+          </p>
+          {staff.can('messaging') ? (
+            <form
+              action={smsSenderAction.bind(null, id)}
+              aria-label={t('smsForm')}
+              className="flex flex-wrap items-end gap-3"
+            >
+              <div className="flex min-w-60 flex-1 flex-col gap-1.5">
+                <label htmlFor="sms-sid" className="text-caption text-zinc-600">
+                  {t('smsSid')}
+                </label>
+                <input
+                  id="sms-sid"
+                  name="sid"
+                  autoComplete="off"
+                  spellCheck={false}
+                  className={`${field} font-mono`}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="sms-number" className="text-caption text-zinc-600">
+                  {t('displayNumber')}
+                </label>
+                <input id="sms-number" name="number" inputMode="tel" className={`${field} w-48 font-mono`} />
+              </div>
+              <Button type="submit" name="intent" value="save" variant="secondary">
+                {t('smsSave')}
+              </Button>
+              {setup.sms.dedicated ? (
+                <Button type="submit" name="intent" value="clear" variant="ghost">
+                  {t('smsClear')}
+                </Button>
+              ) : null}
+            </form>
+          ) : null}
+        </Card>
+        <Card className="flex flex-col gap-4">
+          <p className="text-body">
+            {setup.whatsapp.dedicated
+              ? t(setup.whatsapp.provider === 'whatsapp_gateway' ? 'waGateway' : 'waCloud', {
+                  hint: setup.whatsapp.refHint ?? '',
+                })
+              : t('waDefault')}
+          </p>
+          {staff.can('messaging') ? (
+            <form
+              action={whatsappSenderAction.bind(null, id)}
+              aria-label={t('waForm')}
+              className="flex flex-wrap items-end gap-3"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="wa-route" className="text-caption text-zinc-600">
+                  {t('waRoute')}
+                </label>
+                <select id="wa-route" name="route" className={field}>
+                  <option value="cloud">{t('routeCloud')}</option>
+                  <option value="gateway">{t('routeGateway')}</option>
+                </select>
+              </div>
+              <div className="flex min-w-60 flex-1 flex-col gap-1.5">
+                <label htmlFor="wa-ref" className="text-caption text-zinc-600">
+                  {t('waRef')}
+                </label>
+                <input
+                  id="wa-ref"
+                  name="ref"
+                  autoComplete="off"
+                  spellCheck={false}
+                  className={`${field} font-mono`}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="wa-number" className="text-caption text-zinc-600">
+                  {t('displayNumber')}
+                </label>
+                <input id="wa-number" name="number" inputMode="tel" className={`${field} w-48 font-mono`} />
+              </div>
+              <Button type="submit" name="intent" value="save" variant="secondary">
+                {t('waSave')}
+              </Button>
+              {setup.whatsapp.dedicated ? (
+                <Button type="submit" name="intent" value="clear" variant="ghost">
+                  {t('waClear')}
+                </Button>
+              ) : null}
+            </form>
+          ) : null}
         </Card>
       </section>
 
