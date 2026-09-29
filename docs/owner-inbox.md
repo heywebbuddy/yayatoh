@@ -11,6 +11,14 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [x] **Install the Claude GitHub App** on `Pani-Digital-Services-LLC`, for the `yayatoh` and `yayatoh-legacy` repos only. See `docs/cloud-environment.md` §1.
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
+- [ ] **Front door, pending owner** (M2.4a; labels: `infra`, `db-migration`, `auth`). Built with these defaults; say if any should change:
+  - **ADR 0020 (proposed):** the new app's proxy forwards to Laravel with `fetch` (full control of cookies, headers and counters) instead of the platform rewrite or a Cloudflare Worker. Needs your Vercel preview for the spike (25 MB upload, 150 s response, 60 MB stream) before any DNS change; the Worker stays the fallback.
+  - **Who moves routes:** admins only, with a password or authenticator step-up and a reason; support and finance see the page read-only.
+  - **Route states:** Legacy / Canary (browsers with the `yy_canary=next` cookie) / New app. No percentage rollout yet; say if you want one.
+  - **Uploads** through the front door are limited to 64 MiB (413 above); legacy dashboard uploads are expected to be far smaller.
+  - **Laravel changes for your developer** (runbook `docs/runbooks/front-door.md` §0): nginx secret header on `origin-yay.` / `origin-abc.yayatoh.com`, `TrustProxies`, `SESSION_DOMAIN` unset, no cookie names starting with `yy`.
+  - **Legacy route list:** confirm no legacy page lives under `/auth`, `/sign-in`, `/signup`, `/my-tickets`, `/claim`, `/invite`, `/survey`, `/embed` or `/sub-processors` (the new app keeps those paths).
+
 ## Design
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
