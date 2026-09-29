@@ -2211,6 +2211,9 @@ importers:
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../../packages/modules/orders
+      '@yayatoh/payments':
+        specifier: workspace:*
+        version: link:../../packages/modules/payments
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform

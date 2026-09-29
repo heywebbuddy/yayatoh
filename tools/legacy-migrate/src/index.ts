@@ -1,4 +1,5 @@
 export { demoHandles } from './demo.ts';
+export { FREEZE_WRITE_TABLES, type FreezeProbeResult, legacyFreezeProbe } from './freeze-probe.ts';
 export {
   detUuid,
   EMAIL_PATTERN,
@@ -10,6 +11,20 @@ export {
   slugify,
 } from './ids.ts';
 export { type ColumnDef, convertValue, type LoadResult, loadDump, mapColumn, parseCreate } from './load.ts';
+export {
+  type ReverseCheck,
+  type ReverseOptions,
+  type ReverseReport,
+  reverseEtl,
+  rollbackSql,
+  summarizeReverse,
+} from './reverse-etl.ts';
+export {
+  type RollbackRefundItem,
+  type RollbackRefundOptions,
+  type RollbackRefundReport,
+  rollbackRefunds,
+} from './rollback-refunds.ts';
 export { type RunOptions, type RunResult, revalidate, runMigration, STAGES } from './run.ts';
 export { CONTROL_VERSION, ensureControlSchema, stagingSchema } from './sql.ts';
 export {
@@ -25,6 +40,14 @@ export {
   type SynthOptions,
   type SynthSummary,
 } from './synth/generate.ts';
+export {
+  checkTarget,
+  DATABASE_URL_VARS,
+  LOCAL_HOSTS,
+  type Target,
+  type TargetDecision,
+  TargetRefused,
+} from './target.ts';
 export {
   checkinInstant,
   type LocalKind,
