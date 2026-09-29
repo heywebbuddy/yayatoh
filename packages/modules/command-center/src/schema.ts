@@ -60,7 +60,6 @@ export const displayLinks = tenantTable(
     createdBy: uuid('created_by'),
     revokedAt: ts('revoked_at'),
     revokedBy: uuid('revoked_by'),
-    lastUsedAt: ts('last_used_at'),
   },
   (t) => [
     uniqueIndex('display_links_token_hash_key').on(t.tokenHash),

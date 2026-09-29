@@ -272,6 +272,14 @@ export const KINDS = {
     urgent: false,
     params: ['rule', 'count', 'severity', 'eventName'],
   },
+  // M3.3a live-critical escalation: the same text to a member on duty at the event's doors, sent
+  // at once (devices offline, capacity reached, a payment outage while the doors are open).
+  'alerts.alert-urgent-text': {
+    category: 'transactional',
+    channels: ['sms'],
+    urgent: true,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],

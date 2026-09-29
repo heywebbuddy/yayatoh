@@ -112,6 +112,11 @@ const HeartbeatBody = z.object({
     .nullable()
     .optional()
     .openapi({ description: 'Where the device scans; null for the whole event.' }),
+  appVersion: z
+    .string()
+    .regex(/^[A-Za-z0-9._+-]{1,40}$/)
+    .optional()
+    .openapi({ description: 'The scanner app build, shown on the device board.' }),
 });
 const HeartbeatResponse = z.object({
   serverTime: z.iso.datetime(),

@@ -25,6 +25,31 @@ export {
 } from './devices.ts';
 export { admissionsDsarTx, purgeScansBeforeTx } from './dsar.ts';
 export {
+  admittedTodayByCheckpointTx,
+  capacityFactsTx,
+  DEVICE_IN_USE_MS,
+  deviceAppVersionsTx,
+  FEED_KINDS,
+  type FeedFilter,
+  type FeedItem,
+  type FeedKind,
+  feedKindOf,
+  lastScanByDeviceTx,
+  liveFeedTx,
+  liveLabelsTx,
+  markQuietDevicesTx,
+  onDutyStaffTx,
+  PRESENCE_PING_MS,
+  PRESENCE_TTL_MS,
+  type PresenceRow,
+  presenceActive,
+  reportPresenceCommand,
+  type ScanIssue,
+  scanIssuesTx,
+  scanWindowTx,
+  staffPresenceTx,
+} from './live.ts';
+export {
   ALERT_WINDOW_MS,
   alertsFor,
   BLOCK_REPEAT_WINDOW_MS,
@@ -52,6 +77,8 @@ export {
 export {
   CHECKPOINT_KINDS,
   type CheckpointKind,
+  DEVICE_EVENT_KINDS,
+  type DeviceEventKind,
   FRAUD_NOTE_MAX,
   FRAUD_SEVERITIES,
   FRAUD_SEVERITY,

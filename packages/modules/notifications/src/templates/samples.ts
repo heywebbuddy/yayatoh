@@ -169,5 +169,11 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     severity: 'critical',
     eventName: 'Lakeside Jazz Night',
   },
+  'alerts.alert-urgent-text': {
+    rule: 'capacityFull',
+    count: 100,
+    severity: 'critical',
+    eventName: 'Lakeside Jazz Night',
+  },
   'notifications.test': {},
 };

@@ -45,7 +45,6 @@ CREATE TABLE "command_center"."display_links" (
 	"created_by" uuid,
 	"revoked_at" timestamp with time zone,
 	"revoked_by" uuid,
-	"last_used_at" timestamp with time zone,
 	CONSTRAINT "display_links_org_id_id_key" UNIQUE("org_id","id"),
 	CONSTRAINT "display_links_label_check" CHECK (length(label) between 1 and 60),
 	CONSTRAINT "display_links_token_hash_check" CHECK (token_hash ~ '^[0-9a-f]{64}$')

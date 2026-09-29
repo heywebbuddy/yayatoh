@@ -10183,12 +10183,6 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
-        },
-        "last_used_at": {
-          "name": "last_used_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {

@@ -17,6 +17,7 @@ import { and, asc, eq, inArray, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx } from './checkpoints.ts';
 import { deviceIdOf } from './device-actor.ts';
+import { deviceStateEventTx } from './live.ts';
 import {
   admissions,
   devices,
@@ -402,6 +403,7 @@ export const revokeDeviceCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const d = await actionableDeviceTx(tx, input.deviceId, input.eventId);
     await tx.update(devices).set({ revokedAt: ctx.now, updatedAt: ctx.now }).where(eq(devices.id, d.id));
+    await deviceStateEventTx(tx, ctx, d.id, 'revoked');
     const orgId = requireOrg(ctx);
     emit(deviceChanged(orgId, d.id));
     await publishRealtimeTx(tx, orgId, DEVICES_CHANNEL, {

@@ -1,6 +1,8 @@
 import {
   checkinFactsTx,
+  deviceAppVersionsTx,
   devicesOnlineTx,
+  lastScanByDeviceTx,
   LOW_BATTERY_PCT,
   listDevicesQuery,
   staffBoardTx,
@@ -28,16 +30,21 @@ import { readinessRulesTx } from './readiness.ts';
  * layout: the door role asking for revenue gets `forbidden`.
  */
 export interface WidgetDef<O = unknown> extends WidgetMeta {
-  readonly loader: Query<{ eventId: string }, O, O, TenantTx>;
+  readonly loader: Query<{ eventId: string; params?: Record<string, string> | undefined }, O, O, TenantTx>;
 }
 
 export interface WidgetLoadArgs {
   readonly tx: TenantTx;
   readonly ctx: Ctx;
   readonly scope: CallerScope;
+  /** Widget options from the board (the live feed's filters); validated by the widget. */
+  readonly params: Readonly<Record<string, string>>;
 }
 
-const WidgetInput = z.object({ eventId: z.uuid() });
+const WidgetInput = z.object({
+  eventId: z.uuid(),
+  params: z.record(z.string().max(32), z.string().max(64)).optional(),
+});
 
 /** Pair a widget's metadata with its loader (a tenant query that checks the registry's rule). */
 export function defineWidget<O>(
@@ -55,7 +62,7 @@ export function defineWidget<O>(
       const scope = await callerScopeTx(tx, ctx, input.eventId);
       if (!widgetAllowed(meta, scope))
         throw new DomainError('forbidden', 'This widget is not available to your role');
-      return load({ tx, ctx, scope });
+      return load({ tx, ctx, scope, params: input.params ?? {} });
     },
   });
   return { ...meta, loader };
@@ -155,6 +162,9 @@ export const DeviceBoardWidgetDto = z.object({
       /** The checkpoint it scans at, or null for the whole event. */
       checkpoint: z.string().nullable(),
       kiosk: z.boolean(),
+      /** M3.3a: the scanner app's build and the device's last scan at this event. */
+      appVersion: z.string().nullable(),
+      lastScanAt: iso.nullable(),
     }),
   ),
   asOf: iso,
@@ -191,7 +201,7 @@ async function metricsTx(tx: TenantTx, ctx: Ctx, eventId: string, keys: Projecte
 }
 
 /** Midnight today in the event's time zone (at most 24 hours back, for minute buckets). */
-function localMidnight(now: Date, timeZone: string): Date {
+export function localMidnight(now: Date, timeZone: string): Date {
   const midnight = zonedTimeToUtc(`${utcToZonedInput(now, timeZone).slice(0, 10)}T00:00`, timeZone);
   return new Date(Math.max(midnight.getTime(), now.getTime() - 24 * 3_600_000 + 60_000));
 }
@@ -350,6 +360,11 @@ export const deviceBoardWidget = defineWidget(
   DeviceBoardWidgetDto,
   async ({ tx, ctx, scope }) => {
     const b = await staffBoardTx(tx, scope.event.id, ctx.now);
+    const lastScan = await lastScanByDeviceTx(tx, scope.event.id);
+    const versions = await deviceAppVersionsTx(
+      tx,
+      b.devices.map((d) => d.id),
+    );
     return {
       devices: b.devices.map((d) => ({
         id: d.id,
@@ -360,6 +375,8 @@ export const deviceBoardWidget = defineWidget(
         queueDepth: d.queueDepth,
         checkpoint: b.checkpointName(d.checkpointId),
         kiosk: d.mode === 'kiosk',
+        appVersion: versions.get(d.id) ?? null,
+        lastScanAt: lastScan.get(d.id)?.toISOString() ?? null,
       })),
       asOf: ctx.now.toISOString(),
     };
@@ -371,16 +388,3 @@ export const alertsSlotWidget = defineWidget(WIDGET_META.alerts, AlertsWidgetDto
   engine: 'pending' as const,
   alerts: [],
 }));
-
-export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
-  readinessWidget,
-  salesWidget,
-  ticketsWidget,
-  checkinsWidget,
-  seatFillWidget,
-  devicesWidget,
-  timelineWidget,
-  alertsSlotWidget,
-  entrancesWidget,
-  deviceBoardWidget,
-]);
