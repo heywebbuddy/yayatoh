@@ -1102,8 +1102,9 @@ export const waitlistExportAction = defineBulkAction({
           .where(and(inArray(waitlistEntries.id, [...ids]), eq(waitlistEntries.eventId, event.id)))
       : [];
     const byId = new Map(rows.map((r) => [r.id, r]));
-    // Positions count the line across chunks: the waiting people before this chunk.
-    const first = rows.find((r) => r.status === 'waiting');
+    // Positions count the line across chunks: the waiting people before this chunk. The chunk's
+    // first waiting entry in line order (`ids` order; the rows above come back in any order).
+    const first = ids.map((id) => byId.get(id)).find((r) => r?.status === 'waiting');
     let pos = first ? ((await positionTx(tx, first)) ?? 1) - 1 : 0;
     let out = meta.first
       ? `﻿${csvRow([
