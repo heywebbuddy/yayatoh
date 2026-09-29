@@ -47,6 +47,16 @@ export const privateColumns = columnPrivacy('orders', {
   refund_policies: { kind: 'vocab', updated_by: internal() },
   // Guest email verification per event (M1.5f): who last changed it (a user id or actor type).
   checkout_settings: { updated_by: internal() },
+  // Waitlists (M3.10a): who last changed a list's settings (a user id or actor type).
+  waitlists: { updated_by: internal() },
+  // The person in line: name and email are theirs; everything else is vocabulary.
+  waitlist_entries: {
+    name: personal(),
+    email: personal('email'),
+    locale: 'vocab',
+    status: 'vocab',
+    offered_by: 'vocab',
+  },
   refunds: {
     status: 'vocab',
     reason: 'vocab',

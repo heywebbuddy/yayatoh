@@ -266,7 +266,107 @@ export const checkoutSettings = tenantTable(
   (t) => [uniqueIndex('checkout_settings_org_event_key').on(t.orgId, t.eventId)],
 );
 
-export const GUEST_CHALLENGE_PURPOSES = ['checkout', 'sign_in'] as const;
+export const WAITLIST_ENTRY_STATUSES = [
+  'waiting',
+  'offered',
+  'accepted',
+  'expired',
+  'declined',
+  'left',
+  'removed',
+] as const;
+
+/**
+ * Waitlists (M3.10a): one per ticket type and date (`occurrence_id` null for a single-date event
+ * or a pass valid on every date). Created when the first person joins. `auto_offer` off pauses
+ * the sweeper's offers (the organizer still offers by hand); `offer_minutes` is how long an offer
+ * holds its stock (default 24 h, pending owner).
+ */
+export const waitlists = tenantTable(
+  ordersSchema,
+  'waitlists',
+  {
+    /** `events.events`, `ticketing.ticket_types`, `events.occurrences` (hand-written FKs, down the tiers). */
+    eventId: uuid('event_id').notNull(),
+    ticketTypeId: uuid('ticket_type_id').notNull(),
+    occurrenceId: uuid('occurrence_id'),
+    autoOffer: boolean('auto_offer').notNull().default(true),
+    offerMinutes: integer('offer_minutes').notNull().default(1440),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [
+    index('waitlists_org_event_idx').on(t.orgId, t.eventId),
+    uniqueIndex('waitlists_org_type_key').on(t.orgId, t.ticketTypeId).where(sql`occurrence_id is null`),
+    uniqueIndex('waitlists_org_type_date_key')
+      .on(t.orgId, t.ticketTypeId, t.occurrenceId)
+      .where(sql`occurrence_id is not null`),
+    check('waitlists_offer_minutes_check', sql`offer_minutes between 15 and 10080`),
+  ],
+);
+
+/**
+ * One person in line (M3.10a). The queue order is `(position_at, id)`: joining sets it, and
+ * rejoining after an expired or declined offer moves it to the back. An offer holds
+ * `offered_quantity` of the ticket type's stock (`quantity_held`) until `offer_expires_at`;
+ * accepting it moves that stock to the order (`order_id`).
+ */
+export const waitlistEntries = tenantTable(
+  ordersSchema,
+  'waitlist_entries',
+  {
+    waitlistId: uuid('waitlist_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    ticketTypeId: uuid('ticket_type_id').notNull(),
+    occurrenceId: uuid('occurrence_id'),
+    name: text('name').notNull(),
+    email: text('email').notNull(),
+    quantity: integer('quantity').notNull(),
+    locale: text('locale').notNull().default('en'),
+    status: text('status').notNull().default('waiting'),
+    positionAt: ts('position_at').notNull(),
+    offeredQuantity: integer('offered_quantity'),
+    offeredAt: ts('offered_at'),
+    offerExpiresAt: ts('offer_expires_at'),
+    /** How many offers this entry has had (the offer email's dedupe key). */
+    offerCount: integer('offer_count').notNull().default(0),
+    /** Who made the last offer: the sweeper (`auto`) or the organizer (`manual`). */
+    offeredBy: text('offered_by'),
+    orderId: uuid('order_id'),
+    endedAt: ts('ended_at'),
+  },
+  (t) => [
+    index('waitlist_entries_org_queue_idx').on(t.orgId, t.waitlistId, t.status, t.positionAt, t.id),
+    index('waitlist_entries_org_offer_idx').on(t.orgId, t.offerExpiresAt).where(sql`status = 'offered'`),
+    index('waitlist_entries_org_email_idx').on(t.orgId, t.email),
+    index('waitlist_entries_org_order_idx').on(t.orgId, t.orderId).where(sql`order_id is not null`),
+    uniqueIndex('waitlist_entries_org_active_email_key')
+      .on(t.orgId, t.waitlistId, t.email)
+      .where(sql`status in ('waiting', 'offered')`),
+    foreignKey({
+      name: 'waitlist_entries_waitlist_fk',
+      columns: [t.orgId, t.waitlistId],
+      foreignColumns: [waitlists.orgId, waitlists.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'waitlist_entries_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check(
+      'waitlist_entries_status_check',
+      sql.raw(`status in (${WAITLIST_ENTRY_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('waitlist_entries_quantity_check', sql`quantity between 1 and 100`),
+    check(
+      'waitlist_entries_offer_check',
+      sql`status <> 'offered' or (offered_quantity between 1 and quantity and offer_expires_at is not null and offered_at is not null)`,
+    ),
+    check('waitlist_entries_offered_by_check', sql`offered_by is null or offered_by in ('auto', 'manual')`),
+    check('waitlist_entries_email_lower_check', sql`email = lower(email)`),
+  ],
+);
+
+export const GUEST_CHALLENGE_PURPOSES = ['checkout', 'sign_in', 'waitlist'] as const;
 
 // Global (listed in GLOBAL_TABLES): a guest proving an email is not yet anyone's tenant data, and
 // marketplace sign-in spans orgs. Codes, links and browsers are stored as HMACs only.

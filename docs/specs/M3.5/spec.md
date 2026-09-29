@@ -7,7 +7,7 @@
 
 ## M3.5a — policy gate v2 (built)
 
-Migration: `packages/db/drizzle/0054_abnormal_black_widow.sql` (renumbered at merge): four new tenant tables in `notifications`, four columns on `notifications.messages`, changed CHECKs on `notifications.messages`, `crm.consents` and `messaging.announcements` (hand-written block below).
+Migration: `packages/db/drizzle/0072_abnormal_black_widow.sql`: four new tenant tables in `notifications`, four columns on `notifications.messages`, changed CHECKs on `notifications.messages`, `crm.consents` and `messaging.announcements` (hand-written block below).
 
 ### 1. Goal and users
 Organizers message attendees by email, push and now text; the platform must keep them inside the law and inside what Yayatoh pays for. A text without consent never goes out and the organizer sees why; texts wait for state calling hours (e.g. Texas Sundays); one person is not flooded; a tenant whose recipients complain too much pauses itself; each org has monthly quotas staff can set; recipients choose what they get from each org.

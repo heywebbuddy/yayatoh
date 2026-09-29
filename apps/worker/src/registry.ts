@@ -14,6 +14,7 @@ import {
   refundRequestNotifier,
   reminderRescheduler,
   ticketMailer,
+  waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
@@ -74,6 +75,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     fraudSignalAlerts({ notifier }),
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
+    waitlistMailer({ notifier, appOrigin }),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

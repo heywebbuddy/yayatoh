@@ -58,7 +58,7 @@ touches:
   - packages/modules/orders/src/index.ts
   - packages/modules/tenancy/src/domain/permissions.ts   # marketing:read
   - packages/platform/src/security/rate-limit.ts          # trackedClick policy
-  - packages/db/drizzle/0054_*.sql (+ meta)
+  - packages/db/drizzle/0071_youthful_krista_starr.sql (+ meta)
   - packages/testing/src/fixtures.ts, packages/testing/tests/marketing.int.test.ts
   - apps/web/src/proxy.ts                        # /r rewrite, device id hand-over, landing capture
   - apps/web/src/lib/attribution-capture.ts, apps/web/src/lib/tracked-links.ts
@@ -86,7 +86,7 @@ touches:
 - [x] Rows for both orgs in `createOrgFixture` (a link, a click, the fixture order's attribution, a settings row).
 - [x] No `@private` columns: the hashes are one-way and never leave the module.
 
-**Migration:** `packages/db/drizzle/0054_youthful_krista_starr.sql` (renumbered at merge). New schema and tables only, so it is additive. Hand-written between the markers:
+**Migration:** `packages/db/drizzle/0071_youthful_krista_starr.sql`. New schema and tables only, so it is additive. Hand-written between the markers:
 - `tracking_links_event_fk`, `link_clicks_event_fk` and `attributions_event_fk` → `events.events(org_id, id)` ON DELETE CASCADE.
 - `attributions_order_fk` → `orders.orders(org_id, id)` ON DELETE CASCADE (orders are never deleted).
 - `CREATE FUNCTION marketing.tracked_link_target(text)` (SECURITY DEFINER, `search_path = pg_catalog`), then REVOKE from PUBLIC and GRANT EXECUTE to `app_user`.

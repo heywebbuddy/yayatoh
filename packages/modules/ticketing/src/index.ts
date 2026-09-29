@@ -55,6 +55,7 @@ export {
   releaseHoldTx,
   returnSoldTx,
   sellHeldTx,
+  ticketTypeStockTx,
 } from './inventory.ts';
 export {
   activeTicketCountTx,

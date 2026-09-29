@@ -120,6 +120,25 @@
       "intro": "Voer {code} in om je tickets op {site} te zien, of gebruik de knop hieronder in dezelfde browser. De code verloopt over {minutes, plural, one {# minuut} other {# minuten}} en de knop over {linkMinutes, plural, one {# minuut} other {# minuten}}; elk werkt één keer. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
       "cta": "Mijn tickets openen"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} is je code om op de wachtlijst te komen",
+      "intro": "Voer {code} in om je e-mail te bevestigen en bij {org} op de wachtlijst voor {eventName} te komen. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Je staat op de wachtlijst voor {eventName}",
+      "intro": "Je bent nummer {position} in de rij voor {count, plural, one {# {passName}-ticket} other {# {passName}-tickets}} voor {eventName}. Komen er tickets vrij, dan mailen we je een aanbod om af te rekenen; dat houdt de tickets een beperkte tijd voor je vast. Gebruik de link hieronder om je plek te zien of de wachtlijst te verlaten.",
+      "cta": "Mijn plek in de rij bekijken"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Tickets vrij voor {eventName}: reken af vóór {until}",
+      "intro": "Goed nieuws: {org} houdt {count, plural, one {# {passName}-ticket} other {# {passName}-tickets}} voor {eventName} tot {until} voor je vast. Reken vóór die tijd af; daarna gaan de tickets naar de volgende in de rij.",
+      "cta": "Nu afrekenen"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Je aanbod voor {eventName} is verlopen",
+      "intro": "De tijd om je {passName}-tickets voor {eventName} af te rekenen is verstreken, dus ze zijn naar de volgende in de rij gegaan. Via de link hieronder kun je je opnieuw achteraan op de wachtlijst zetten.",
+      "cta": "Opnieuw op de wachtlijst"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {Je nieuwe link naar je bestelling voor {eventName}} other {Je link naar je bestelling voor {eventName}}}",
       "intro": "{reason, select, reissued {De organisator heeft de link naar je bestelling voor {eventName} vervangen. De oude link werkt niet meer; gebruik deze.} other {Hier is de link waar je om vroeg. Hij opent je bestelling en tickets voor {eventName}.}}",

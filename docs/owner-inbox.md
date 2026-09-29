@@ -136,6 +136,12 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - A proved address skips the code for **30 minutes** in the same browser (host-only cookie).
   - **My tickets** sessions last **7 days**; sign-in links last **15 minutes** and only work in the browser that asked (anywhere else the page asks for the code).
   - Organizer "Revoke and reissue link" is allowed for owners, admins, managers, box office and event managers (new permission `orders:support`); viewers and finance cannot.
+- [ ] **Waitlist defaults, pending owner** (M3.10a, labels: `payments`, `tenancy`, `db-migration`). Built with these; say if any should change (details in `docs/specs/M3.10/spec.md` §7):
+  - An offer holds the tickets for **24 hours** by default; organizers may set 15 minutes to 7 days per list.
+  - An expired or declined offer may **rejoin at the back of the line** (not keep its place).
+  - Offers go in **strict line order**: the person at the front must fit before anyone behind them is offered. Paused lists still keep freed tickets for their line (the organizer offers by hand).
+  - Waitlists open for **every public pass that sells out** (no per-event switch yet); not for seated, choose-your-amount or hidden passes, or private events. The box office is not held back by waitlists.
+  - Joining is limited to 10 per device per 10 minutes and 10 per address per hour.
 - [ ] **SES for guest codes** (M1.5f, label: `infra`): checkout and My tickets codes are sent at once by the web app (never queued, so the code is never stored). In production there is no email provider yet, so **these flows cannot work in production until SES is set up** (see the M1.10 SES item); dev/preview/CI use the dev mailbox.
 - [ ] **Click tracking and attribution: confirm the M3.8a defaults (pending owner)** (labels: `db-migration`, `tenancy`, `legal-copy`). Built with these defaults; say if any should change:
   - **Attribution window: 30 days** before the order, per org (organizers can set 1–90 days on the event's Tracked links page; a change applies to new orders only). Both first touch and last touch are stored on every order; reports credit orders and revenue to the **last** touch and also show first-touch counts.

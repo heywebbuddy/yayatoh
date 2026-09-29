@@ -63,7 +63,7 @@ dashboard tiles (tiers only call down).
 - **Seed:** catches up and rebuilds the seeded orgs' projections.
 
 ### Migration
-`packages/db/drizzle/0054_supreme_tyrannus.sql` (to be renumbered at merge): creates the `reports`
+`packages/db/drizzle/0069_supreme_tyrannus.sql`: creates the `reports`
 schema and the four tables (generated, with the FORCE RLS post-step); adds
 `platform.domain_events.replayed boolean NOT NULL DEFAULT false` (metadata-only on Postgres 18;
 `migrate.ts` sets `lock_timeout`). Hand-written section: composite FKs from `metric_snapshots` and
@@ -165,7 +165,7 @@ touches:
   - packages/modules/checkin/src/{scan,devices}.ts, MODULE.md
   - packages/modules/seating/src/{live,index}.ts
   - packages/modules/events/src/{queries,index}.ts
-  - packages/db/drizzle/0054_realtime_messages.sql (+ meta)
+  - packages/db/drizzle/0070_realtime_messages.sql (+ meta)
   - packages/testing/src/fixtures.ts, tests/realtime.int.test.ts
   - apps/web/src/server/{realtime,realtime-host}.ts (seat-stream.ts removed)
   - apps/web/src/app/api/realtime/**, apps/web/src/app/[locale]/t/[org]/realtime/**
@@ -187,7 +187,7 @@ touches:
 - **Append-only for the app:** `REVOKE UPDATE, DELETE … FROM app_user`; only
   `platform.purge_realtime_messages()` (SECURITY DEFINER) deletes rows older than 1 hour.
 - Fixture rows for both orgs (`createOrgFixture`: one `org.alerts` message).
-- **Migration** `0054_realtime_messages.sql` (renumbered at merge). New table only (no locks on
+- **Migration** `0070_realtime_messages.sql`. New table only (no locks on
   existing tables). Hand-written block: the REVOKE, the NOTIFY trigger function and trigger, the
   purge function (+ grants), and `events.public_event_target(org, event)` (SECURITY DEFINER, same
   rule as `events.checkout_target(slug)`, returns ids only).

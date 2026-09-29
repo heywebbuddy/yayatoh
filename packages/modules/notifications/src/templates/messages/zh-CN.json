@@ -120,6 +120,25 @@
       "intro": "输入 {code} 即可在 {site} 查看您的门票，也可以在同一浏览器中使用下方按钮。验证码 {minutes} 分钟后失效，按钮 {linkMinutes} 分钟后失效；每个仅可使用一次。如果这不是您本人的请求，请忽略此邮件。",
       "cta": "打开我的门票"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} 是您加入候补名单的验证码",
+      "intro": "输入 {code} 以确认您的邮箱并加入 {org} 的 {eventName} 候补名单。验证码仅可使用一次，{minutes} 分钟后失效。如果这不是您本人的请求，请忽略此邮件。"
+    },
+    "orders.waitlist-joined": {
+      "subject": "您已加入 {eventName} 的候补名单",
+      "intro": "您正在排队等候 {eventName} 的 {count, plural, other {# 张}} {passName} 门票，当前排在第 {position} 位。如有门票释出，我们会通过邮件向您发送结账邀请；门票将为您保留一段时间。使用下方链接查看您的排位或退出候补名单。",
+      "cta": "查看我的排位"
+    },
+    "orders.waitlist-offer": {
+      "subject": "{eventName} 有门票释出：请在 {until} 前结账",
+      "intro": "好消息：{org} 为您保留了 {eventName} 的 {count, plural, other {# 张}} {passName} 门票，保留至 {until}。请在此之前完成结账；逾期后，门票将转给下一位排队者。",
+      "cta": "立即结账"
+    },
+    "orders.waitlist-expired": {
+      "subject": "您的 {eventName} 购票邀请已结束",
+      "intro": "您的 {eventName} {passName} 门票结账时间已过，门票已转给下一位排队者。您可以通过下方链接重新加入候补名单，排在队尾。",
+      "cta": "重新加入候补名单"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {您在 {eventName} 的订单新链接} other {您在 {eventName} 的订单链接}}",
       "intro": "{reason, select, reissued {主办方已更换您在 {eventName} 的订单链接。旧链接已失效，请使用此链接。} other {这是您请求的链接，可打开您在 {eventName} 的订单和门票。}}",

@@ -423,6 +423,16 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // M1.5f: the event's checkout settings (buyer email verification off, not the default).
   await executeCommand(setCheckoutSettingsCommand, { eventId: event.id, verifyEmail: false }, ctx(), ports);
+  // M3.10a: a waitlist on the pass with one person waiting (isolation coverage; inserted directly
+  // so the pass stays on sale for the tests that buy it).
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [list] = await tx.execute<{ id: string }>(sql`
+      insert into orders.waitlists (org_id, event_id, ticket_type_id, updated_by)
+      values (${org.id}, ${event.id}, ${ga.id}, 'fixture') returning id`);
+    await tx.execute(sql`
+      insert into orders.waitlist_entries (org_id, waitlist_id, event_id, ticket_type_id, name, email, quantity, position_at, status, ended_at)
+      values (${org.id}, ${list?.id}, ${event.id}, ${ga.id}, 'Fixture Waiter', ${`waiter@${slug}.test`}, 2, now(), 'left', now())`);
+  });
   // M1.6e: a refund policy on the event, and a reconciliation day with one open difference.
   await executeCommand(
     setRefundPolicyCommand,

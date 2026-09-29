@@ -174,7 +174,7 @@ function guestTransports(): Transports | null {
 
 /** Send a guest code or sign-in email in the visitor's language, branded for the org's site. */
 export async function sendGuestEmail(input: {
-  readonly kind: Extract<MessageKind, 'guest.checkout-code' | 'guest.sign-in'>;
+  readonly kind: Extract<MessageKind, 'guest.checkout-code' | 'guest.sign-in' | 'guest.waitlist-code'>;
   readonly to: string;
   readonly locale: string;
   readonly orgId: string | null;

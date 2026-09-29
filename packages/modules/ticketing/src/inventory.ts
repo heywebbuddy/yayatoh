@@ -174,8 +174,17 @@ export async function quoteTx(
  * stock is free, so concurrent buyers can never oversell. Lines are locked in id order to avoid
  * deadlocks. Throws `conflict` (sold out) and the caller's transaction rolls back every line.
  */
-export async function holdInventoryTx(tx: TenantTx, lines: readonly LineRequest[]): Promise<void> {
+export async function holdInventoryTx(
+  tx: TenantTx,
+  lines: readonly LineRequest[],
+  /**
+   * Places kept back per ticket type (M3.10a: people on its waitlist come first). The hold only
+   * takes stock beyond them; the waitlist's own offers pass none.
+   */
+  reserve?: ReadonlyMap<string, number>,
+): Promise<void> {
   for (const l of [...lines].sort((a, b) => (a.ticketTypeId < b.ticketTypeId ? -1 : 1))) {
+    const kept = reserve?.get(l.ticketTypeId) ?? 0;
     const updated = await tx
       .update(ticketTypes)
       .set({ quantityHeld: sql`${ticketTypes.quantityHeld} + ${l.quantity}` })
@@ -183,7 +192,7 @@ export async function holdInventoryTx(tx: TenantTx, lines: readonly LineRequest[
         and(
           eq(ticketTypes.id, l.ticketTypeId),
           isNull(ticketTypes.archivedAt),
-          sql`${ticketTypes.quantityTotal} - ${ticketTypes.quantitySold} - ${ticketTypes.quantityHeld} >= ${l.quantity}`,
+          sql`${ticketTypes.quantityTotal} - ${ticketTypes.quantitySold} - ${ticketTypes.quantityHeld} - ${kept} >= ${l.quantity}`,
         ),
       )
       .returning({ id: ticketTypes.id });
@@ -227,4 +236,30 @@ export async function returnSoldTx(tx: TenantTx, lines: readonly LineRequest[]):
       .set({ quantitySold: sql`${ticketTypes.quantitySold} - ${l.quantity}` })
       .where(eq(ticketTypes.id, l.ticketTypeId));
   }
+}
+
+/** A ticket type's stock and sale rules (M3.10a waitlists), optionally locked for the transaction. */
+export async function ticketTypeStockTx(tx: TenantTx, ticketTypeId: string, forUpdate = false) {
+  const q = tx
+    .select({
+      id: ticketTypes.id,
+      eventId: ticketTypes.eventId,
+      name: ticketTypes.name,
+      quantityTotal: ticketTypes.quantityTotal,
+      quantitySold: ticketTypes.quantitySold,
+      quantityHeld: ticketTypes.quantityHeld,
+      minPerOrder: ticketTypes.minPerOrder,
+      maxPerOrder: ticketTypes.maxPerOrder,
+      salesStartAt: ticketTypes.salesStartAt,
+      salesEndAt: ticketTypes.salesEndAt,
+      visibility: ticketTypes.visibility,
+      archivedAt: ticketTypes.archivedAt,
+      isDonation: ticketTypes.isDonation,
+      occurrenceIds: ticketTypes.occurrenceIds,
+    })
+    .from(ticketTypes)
+    .where(eq(ticketTypes.id, ticketTypeId));
+  const [row] = forUpdate ? await q.for('update') : await q;
+  if (!row) return null;
+  return { ...row, free: row.quantityTotal - row.quantitySold - row.quantityHeld };
 }

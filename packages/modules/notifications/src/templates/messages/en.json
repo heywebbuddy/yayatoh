@@ -120,6 +120,25 @@
       "intro": "Enter {code} to see your tickets on {site}, or use the button below in the same browser. The code expires in {minutes, plural, one {# minute} other {# minutes}} and the button in {linkMinutes, plural, one {# minute} other {# minutes}}; each works once. If you didn't ask for it, you can ignore this email.",
       "cta": "Open My tickets"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} is your code to join the waitlist",
+      "intro": "Enter {code} to confirm your email and join the waitlist for {eventName} with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
+    },
+    "orders.waitlist-joined": {
+      "subject": "You're on the waitlist for {eventName}",
+      "intro": "You're number {position} in line for {count, plural, one {# {passName} ticket} other {# {passName} tickets}} to {eventName}. If tickets free up, we'll email you an offer to check out; it holds the tickets for a limited time. Use the link below to see your place or leave the waitlist.",
+      "cta": "See my place in line"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Tickets are free for {eventName}: check out by {until}",
+      "intro": "Good news: {org} is holding {count, plural, one {# {passName} ticket} other {# {passName} tickets}} to {eventName} for you until {until}. Check out before then; after that, the tickets go to the next person in line.",
+      "cta": "Check out now"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Your offer for {eventName} has ended",
+      "intro": "The time to check out your {passName} tickets to {eventName} ran out, so they went to the next person in line. You can rejoin the waitlist at the back of the line from the link below.",
+      "cta": "Rejoin the waitlist"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {Your new link to your order for {eventName}} other {Your link to your order for {eventName}}}",
       "intro": "{reason, select, reissued {The organizer replaced the link to your order for {eventName}. The old link no longer works; use this one.} other {Here is the link you asked for. It opens your order and tickets for {eventName}.}}",

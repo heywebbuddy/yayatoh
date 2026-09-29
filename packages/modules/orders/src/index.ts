@@ -99,6 +99,19 @@ export {
   refundsFee,
 } from './domain/refund-policy.ts';
 export {
+  ACTIVE_STATUSES as WAITLIST_ACTIVE_STATUSES,
+  canRejoin,
+  compareQueue,
+  DEFAULT_OFFER_MINUTES,
+  MAX_OFFER_MINUTES,
+  MIN_OFFER_MINUTES,
+  offerExpiresAt,
+  offerOpen,
+  planOffers,
+  queuePosition,
+  sortQueue,
+} from './domain/waitlist.ts';
+export {
   buyerOrdersDsarTx,
   buyerOrgs,
   eraseOrdersDsarTx,
@@ -217,6 +230,7 @@ export {
   REFUND_REASONS,
   REFUND_REQUEST_STATUSES,
   REFUND_STATUSES,
+  WAITLIST_ENTRY_STATUSES,
 } from './schema.ts';
 export {
   postponementMailer,
@@ -227,3 +241,30 @@ export {
   reminderRescheduler,
   ticketMailer,
 } from './subscribers.ts';
+export {
+  declineWaitlistOfferCommand,
+  eraseWaitlistDsarTx,
+  JoinWaitlistInput,
+  JoinWaitlistResultDto,
+  joinWaitlistCommand,
+  leaveWaitlistCommand,
+  listWaitlistsQuery,
+  offerWaitlistEntryCommand,
+  PublicWaitlistEntryDto,
+  publicWaitlistEntry,
+  rejoinWaitlistCommand,
+  removeWaitlistEntriesCommand,
+  sweepWaitlistsCommand,
+  updateWaitlistCommand,
+  WAITLIST_PURPOSE,
+  WaitlistEntryDto,
+  WaitlistSummaryDto,
+  waitlistDsarTx,
+  waitlistEntriesQuery,
+  waitlistExportAction,
+  waitlistExportBulk,
+  waitlistHeldBack,
+  waitlistMailer,
+  waitlistRef,
+  waitlistToken,
+} from './waitlist.ts';

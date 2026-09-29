@@ -120,6 +120,25 @@
       "intro": "Introduce {code} para ver tus entradas en {site}, o usa el botón de abajo en el mismo navegador. El código caduca en {minutes, plural, one {# minuto} other {# minutos}} y el botón en {linkMinutes, plural, one {# minuto} other {# minutos}}; cada uno funciona una vez. Si no lo pediste, puedes ignorar este correo.",
       "cta": "Abrir Mis entradas"
     },
+    "guest.waitlist-code": {
+      "subject": "{code} es tu código para unirte a la lista de espera",
+      "intro": "Introduce {code} para confirmar tu correo y unirte a la lista de espera de {eventName} con {org}. El código se usa una sola vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Estás en la lista de espera de {eventName}",
+      "intro": "Eres el número {position} en la fila para {count, plural, one {# entrada {passName}} other {# entradas {passName}}} de {eventName}. Si se liberan entradas, te enviaremos por correo una oferta para completar la compra; reserva las entradas durante un tiempo limitado. Usa el enlace de abajo para ver tu lugar o salir de la lista de espera.",
+      "cta": "Ver mi lugar en la fila"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Hay entradas libres para {eventName}: completa la compra antes de {until}",
+      "intro": "Buenas noticias: {org} te reserva {count, plural, one {# entrada {passName}} other {# entradas {passName}}} para {eventName} hasta {until}. Completa la compra antes; después, las entradas pasarán a la siguiente persona de la fila.",
+      "cta": "Comprar ahora"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Tu oferta para {eventName} ha terminado",
+      "intro": "Se acabó el tiempo para comprar tus entradas {passName} para {eventName}, así que pasaron a la siguiente persona de la fila. Puedes volver a unirte a la lista de espera, al final de la fila, desde el enlace de abajo.",
+      "cta": "Volver a la lista de espera"
+    },
     "orders.order-link": {
       "subject": "{reason, select, reissued {Tu nuevo enlace a tu pedido para {eventName}} other {Tu enlace a tu pedido para {eventName}}}",
       "intro": "{reason, select, reissued {El organizador reemplazó el enlace a tu pedido para {eventName}. El enlace anterior ya no funciona; usa este.} other {Aquí tienes el enlace que pediste. Abre tu pedido y tus entradas para {eventName}.}}",
