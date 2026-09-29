@@ -2186,6 +2186,9 @@ importers:
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../modules/billing
+      '@yayatoh/campaigns':
+        specifier: workspace:*
+        version: link:../modules/campaigns
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../modules/checkin

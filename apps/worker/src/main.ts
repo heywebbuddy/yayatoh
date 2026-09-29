@@ -3,6 +3,7 @@ import { fakePaymentProvider } from '@yayatoh/payments';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { runDueBulkOperations } from './bulk.ts';
+import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
@@ -44,7 +45,7 @@ const payments = fakeSecret
 
 const SUBSCRIBERS = subscribers();
 // Mass refunds (M3.10b) need the payment provider.
-const jobs = payments ? [...JOBS, massRefundJob(payments)] : JOBS;
+const jobs = payments ? [...JOBS, campaignReleaseJob, massRefundJob(payments)] : [...JOBS, campaignReleaseJob];
 const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 
@@ -177,6 +178,19 @@ setInterval(() => {
     .catch((err) => console.error('notifications', err))
     .finally(() => {
       dispatching = false;
+    });
+}, 2_000).unref();
+// Campaigns (M3.6b): every 2 s the leader starts due schedules, hands out recipients to sending
+// campaigns with the fair scheduler (pg-boss `campaigns.release` jobs) and finalizes finished ones.
+let campaigning = false;
+let campaignTicks = 0;
+setInterval(() => {
+  if (!release || stopping || campaigning) return;
+  campaigning = true;
+  campaignTick({ tick: campaignTicks++, release: bossRelease(boss) })
+    .catch((err) => console.error('campaigns', err))
+    .finally(() => {
+      campaigning = false;
     });
 }, 2_000).unref();
 // Retention (M1.14c): once a day, first run 10 minutes after start (leader only).

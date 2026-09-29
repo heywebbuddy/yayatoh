@@ -102,6 +102,8 @@ export const campaignRecipients = tenantTable(
   (t) => [
     uniqueIndex('campaign_recipients_org_campaign_contact_key').on(t.orgId, t.campaignId, t.contactId),
     index('campaign_recipients_org_campaign_status_idx').on(t.orgId, t.campaignId, t.status),
+    // The contact FK (hand-written, to crm.contacts) cascades an erased contact's rows.
+    index('campaign_recipients_org_contact_idx').on(t.orgId, t.contactId),
     index('campaign_recipients_org_released_idx')
       .on(t.orgId, t.releasedAt)
       .where(sql`released_at is not null`),
@@ -131,6 +133,7 @@ export const campaignLinks = tenantTable(
   },
   (t) => [
     uniqueIndex('campaign_links_org_campaign_block_key').on(t.orgId, t.campaignId, t.blockId),
+    index('campaign_links_org_link_idx').on(t.orgId, t.linkId),
     foreignKey({
       name: 'campaign_links_campaign_fk',
       columns: [t.orgId, t.campaignId],
