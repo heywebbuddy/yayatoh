@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "此活動的範本數量已達上限。",
       "stale": "其他人在此期間儲存了此範本。請重新載入頁面以查看其版本。",
       "questionNotAllowed": "此問題無法列印在名牌上。"
-    }
+    },
+    "elements": "此面的元素"
   }
 }

@@ -94,28 +94,26 @@ function Guide({
   );
 }
 
+/**
+ * One element on the preview: a pointer target only (drag to move). Keyboard and assistive
+ * technology use the element list next to it, which has the same selection.
+ */
 function PreviewElement({
   el,
   selected,
   qr,
-  label,
   canMove,
   onSelect,
-  onKey,
   onDrag,
-  describedBy,
 }: {
-  describedBy: string;
   el: ResolvedElement;
   selected: boolean;
   qr: Props['sampleQr'];
-  label: string;
   canMove: boolean;
   onSelect: () => void;
-  onKey: (e: KeyboardEvent<HTMLButtonElement>) => void;
-  onDrag: (dxMm: number, dyMm: number, done: boolean) => void;
+  onDrag: (dxMm: number, dyMm: number) => void;
 }) {
-  const ref = usePlaced<HTMLButtonElement>({
+  const ref = usePlaced<HTMLDivElement>({
     left: px(el.x),
     top: px(el.y),
     width: px(el.w),
@@ -127,38 +125,36 @@ function PreviewElement({
     color: el.color ?? '',
   });
   const drag = useRef<{ x: number; y: number } | null>(null);
-  const down = (e: PointerEvent<HTMLButtonElement>) => {
+  const down = (e: PointerEvent<HTMLDivElement>) => {
     onSelect();
     if (!canMove) return;
     drag.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
-  const move = (e: PointerEvent<HTMLButtonElement>, done = false) => {
+  const move = (e: PointerEvent<HTMLDivElement>, done = false) => {
     const start = drag.current;
     if (!start) return;
     const dx = (e.clientX - start.x) / SCALE;
     const dy = (e.clientY - start.y) / SCALE;
     if (done) drag.current = null;
-    if (Math.abs(dx) >= 0.5 || Math.abs(dy) >= 0.5 || done) {
+    if (Math.abs(dx) >= 0.5 || Math.abs(dy) >= 0.5) {
       if (!done) drag.current = { x: e.clientX, y: e.clientY };
-      onDrag(Math.round(dx * 2) / 2, Math.round(dy * 2) / 2, done);
+      onDrag(Math.round(dx * 2) / 2, Math.round(dy * 2) / 2);
     }
   };
   return (
-    <button
+    <div
       ref={ref}
-      type="button"
-      aria-pressed={selected}
-      aria-label={label}
-      aria-describedby={describedBy}
-      onClick={onSelect}
-      onKeyDown={onKey}
+      aria-hidden="true"
+      data-element={el.id}
       onPointerDown={down}
       onPointerMove={(e) => move(e)}
       onPointerUp={(e) => move(e, true)}
-      className={`absolute flex min-h-6 min-w-6 touch-none items-center overflow-hidden whitespace-nowrap leading-tight outline-offset-1 ${
-        selected ? 'outline-2 outline-accent-900' : 'outline-1 outline-zinc-300 outline-dashed'
-      } ${el.empty ? 'opacity-40' : ''}`}
+      className={`absolute flex touch-none items-center overflow-hidden whitespace-nowrap leading-tight outline-offset-1 ${
+        canMove ? 'cursor-move' : 'cursor-pointer'
+      } ${selected ? 'outline-2 outline-accent-900' : 'outline-1 outline-zinc-300 outline-dashed'} ${
+        el.empty ? 'opacity-40' : ''
+      }`}
     >
       {el.kind === 'qr' ? (
         <svg
@@ -174,7 +170,7 @@ function PreviewElement({
           {el.text}
         </span>
       )}
-    </button>
+    </div>
   );
 }
 
@@ -319,12 +315,14 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
     });
 
   const num = (
+    key: string,
     label: string,
     value: number,
     onChange: (v: number) => void,
     opts: { step?: number; min?: number; max?: number } = {},
   ) => (
     <Input
+      id={`${uid}-${key}`}
       label={label}
       type="number"
       inputMode="decimal"
@@ -356,6 +354,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Input
+          id={`${uid}-name`}
           label={t('templateName')}
           value={name}
           maxLength={80}
@@ -471,21 +470,39 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
               />
               {resolved.map((el) => (
                 <PreviewElement
-                  describedBy={`${uid}-keys`}
                   key={el.id}
                   el={el}
                   qr={sampleQr}
                   selected={el.id === selected}
-                  label={describe(el)}
                   canMove={canWrite}
                   onSelect={() => setSelected(el.id)}
-                  onKey={onKey(el.id)}
                   onDrag={(dx, dy) => moveBy(el.id, dx, dy)}
                 />
               ))}
             </Face>
           </div>
           <p className="text-caption text-zinc-500">{t('guidesHint')}</p>
+          <h3 id={`${uid}-list`} className="text-body font-medium">
+            {t('elements')}
+          </h3>
+          <ul aria-labelledby={`${uid}-list`} className="flex list-none flex-col gap-1.5 p-0">
+            {resolved.map((el) => (
+              <li key={el.id}>
+                <button
+                  type="button"
+                  aria-pressed={el.id === selected}
+                  aria-describedby={`${uid}-keys`}
+                  onClick={() => setSelected(el.id)}
+                  onKeyDown={onKey(el.id)}
+                  className={`min-h-10 w-full rounded-pill border px-4 text-start text-body ${
+                    el.id === selected ? 'border-ink bg-zinc-100' : 'border-zinc-200 bg-white'
+                  }`}
+                >
+                  {describe(el)}
+                </button>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {canWrite ? (
@@ -496,19 +513,21 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
             {current ? (
               <div className="flex flex-col gap-3">
                 <div className="grid grid-cols-2 gap-3">
-                  {num(t('x'), current.x, (v) =>
+                  {num('x', t('x'), current.x, (v) =>
                     patch(current.id, clampBox({ ...current, x: v }, design.size)),
                   )}
-                  {num(t('y'), current.y, (v) =>
+                  {num('y', t('y'), current.y, (v) =>
                     patch(current.id, clampBox({ ...current, y: v }, design.size)),
                   )}
                   {num(
+                    'width',
                     t('width'),
                     current.w,
                     (v) => patch(current.id, clampBox({ ...current, w: v }, design.size)),
                     { min: 2 },
                   )}
                   {num(
+                    'height',
                     t('height'),
                     current.h,
                     (v) => patch(current.id, clampBox({ ...current, h: v }, design.size)),
@@ -518,6 +537,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                 {isText ? (
                   <>
                     {num(
+                      'fontSize',
                       t('fontSize'),
                       current.fontSizePt,
                       (v) => patch(current.id, { fontSizePt: Math.min(96, Math.max(6, v)) }),
@@ -565,6 +585,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                 ) : null}
                 {current.kind === 'text' ? (
                   <Input
+                    id={`${uid}-text`}
                     label={t('freeText')}
                     value={current.text}
                     maxLength={120}
@@ -652,6 +673,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                       </div>
                       {r ? (
                         <Input
+                          id={`${uid}-rl-${tt.id}`}
                           label={t('ribbonLabel', { type: tt.name })}
                           value={r.label}
                           maxLength={40}

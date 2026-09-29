@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "Cet événement a atteint le nombre maximal de modèles.",
       "stale": "Quelqu’un d’autre a enregistré ce modèle entre-temps. Rechargez la page pour voir sa version.",
       "questionNotAllowed": "Cette question ne peut pas être imprimée sur les badges."
-    }
+    },
+    "elements": "Éléments de cette face"
   }
 }

@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "此活动的模板数量已达上限。",
       "stale": "其他人在此期间保存了该模板。请重新加载页面查看其版本。",
       "questionNotAllowed": "该问题不能打印在胸卡上。"
-    }
+    },
+    "elements": "此面的元素"
   }
 }

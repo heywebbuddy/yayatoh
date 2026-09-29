@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "Questo evento ha già il numero massimo di modelli.",
       "stale": "Qualcun altro ha salvato questo modello nel frattempo. Ricarica la pagina per vedere la sua versione.",
       "questionNotAllowed": "Quella domanda non può essere stampata sui badge."
-    }
+    },
+    "elements": "Elementi su questo lato"
   }
 }

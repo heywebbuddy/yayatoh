@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "Este evento atingiu o limite de modelos.",
       "stale": "Outra pessoa salvou este modelo enquanto isso. Recarregue a página para ver a versão dela.",
       "questionNotAllowed": "Essa pergunta não pode ser impressa nos crachás."
-    }
+    },
+    "elements": "Elementos deste lado"
   }
 }

@@ -21,6 +21,8 @@ export default async function BadgeDesignerPage({
   if (!template) notFound();
   const tb = await getTranslations('badges');
   const base = `/o/${org}/e/${event}/badges`;
+  // Route handlers (PDFs) are linked directly: the default locale has no prefix.
+  const raw = `${locale === 'en' ? '' : `/${locale}`}${base}`;
   return (
     <>
       <PageHeader
@@ -35,10 +37,10 @@ export default async function BadgeDesignerPage({
         <Link href={base} className="underline underline-offset-2">
           {tb('backToBadges')}
         </Link>
-        <a href={`/${locale}${base}/preview/${template.id}?lang=en`} className="underline underline-offset-2">
+        <a href={`${raw}/preview/${template.id}?lang=en`} className="underline underline-offset-2">
           {tb('previewPdfEnglish', { name: template.name })}
         </a>
-        <a href={`/${locale}${base}/preview/${template.id}?lang=ar`} className="underline underline-offset-2">
+        <a href={`${raw}/preview/${template.id}?lang=ar`} className="underline underline-offset-2">
           {tb('previewPdfArabic', { name: template.name })}
         </a>
       </p>

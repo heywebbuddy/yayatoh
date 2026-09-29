@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "Dit evenement heeft het maximale aantal sjablonen.",
       "stale": "Iemand anders heeft dit sjabloon intussen opgeslagen. Laad de pagina opnieuw om die versie te zien.",
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
-    }
+    },
+    "elements": "Elementen aan deze kant"
   }
 }

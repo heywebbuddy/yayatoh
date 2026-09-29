@@ -5417,6 +5417,7 @@
     "keyboardHint": "Select an element by clicking it or with Tab. Arrow keys move it 1 mm (with Shift, 5 mm); Alt or Option with the arrow keys resizes it. You can also type its position and size.",
     "selectHint": "Select an element to see its details.",
     "guidesHint": "Green dashes: the safe area. Pink dashes: the trim edge; colour may run past it into the bleed.",
+    "elements": "Elements on this side",
     "elementLabel": "{kind}: {text}",
     "selected": "Selected: {kind}",
     "nothingSelected": "No element selected",

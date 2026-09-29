@@ -45,6 +45,8 @@ export default async function BadgesPage({
   const tb = await getTranslations('badges');
   const format = await getFormatter();
   const base = `/o/${org}/e/${event}/badges`;
+  // Route handlers (PDFs) are linked directly: the default locale has no prefix.
+  const raw = `${locale === 'en' ? '' : `/${locale}`}${base}`;
   const errors = {
     name: tb('errors.name'),
     'conflict.name': tb('errors.nameTaken'),
@@ -93,16 +95,10 @@ export default async function BadgesPage({
                     <Link href={`${base}/${x.id}`} className={buttonClass('secondary', 'sm')}>
                       {canWrite ? tb('openDesigner', { name: x.name }) : tb('openPreview', { name: x.name })}
                     </Link>
-                    <a
-                      href={`/${locale}${base}/preview/${x.id}?lang=en`}
-                      className={buttonClass('ghost', 'sm')}
-                    >
+                    <a href={`${raw}/preview/${x.id}?lang=en`} className={buttonClass('ghost', 'sm')}>
                       {tb('previewPdfEnglish', { name: x.name })}
                     </a>
-                    <a
-                      href={`/${locale}${base}/preview/${x.id}?lang=ar`}
-                      className={buttonClass('ghost', 'sm')}
-                    >
+                    <a href={`${raw}/preview/${x.id}?lang=ar`} className={buttonClass('ghost', 'sm')}>
                       {tb('previewPdfArabic', { name: x.name })}
                     </a>
                   </div>
@@ -311,7 +307,7 @@ export default async function BadgesPage({
                     <div className="flex flex-wrap gap-2">
                       {b.status === 'done' && !b.expired ? (
                         <a
-                          href={`/${locale}${base}/batches/${b.id}/download`}
+                          href={`${raw}/batches/${b.id}/download`}
                           className={buttonClass('secondary', 'sm')}
                         >
                           {tb('download')}
@@ -339,11 +335,7 @@ export default async function BadgesPage({
             {tb('oneBadge')}
           </h2>
           <p className="max-w-prose text-caption text-zinc-500">{tb('oneBadgeHint')}</p>
-          <form
-            method="get"
-            className="flex flex-wrap items-end gap-3"
-            action={`/${locale}${base}#one-heading`}
-          >
+          <form method="get" className="flex flex-wrap items-end gap-3" action={`${raw}#one-heading`}>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="badge-q" className="text-caption text-zinc-600">
                 {tb('findHolder')}
@@ -371,7 +363,7 @@ export default async function BadgesPage({
                     <span className="text-body">
                       {f.holderName} · {f.typeName} · {tb('serial', { serial: f.serial })}
                     </span>
-                    <a href={`/${locale}${base}/ticket/${f.id}`} className={buttonClass('ghost', 'sm')}>
+                    <a href={`${raw}/ticket/${f.id}`} className={buttonClass('ghost', 'sm')}>
                       {tb('badgePdf', { name: f.holderName })}
                     </a>
                   </li>

@@ -22,6 +22,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - "Last year's event" is the **previous edition** of the series (the series event that started last before the chosen one), not a calendar year.
   - Exporting an audience (CSV of contacts) needs `attendees:export` (owners, admins, managers); the marketing role can build, preview and save audiences but not export them.
   - A person holding both a seated and an unseated ticket at an event counts as seated.
+- [ ] **Badges defaults, pending owner** (M5.5a, labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - **Company and job title** come from a checkout question the organizer maps on each template (short-text, non-sensitive questions only). Registration types (M5.1a/b) will add proper profile fields in Wave 2.
+  - **First and last name** are split from the ticket holder's full name: "Last, First" with a comma, otherwise the first word is the first name and the rest the last name. Sorting by last name ignores particles (van, de, al-, ال…).
+  - **Who may do what:** designing and assigning templates needs `events:write`; batch PDFs need `attendees:export` and a recent sign-in (names leave the platform in bulk, like every export); one-badge PDFs at the desk need `attendees:write` (owners, admins, managers, box office); everyone who can see the event can preview templates with sample people.
+  - **Files:** batch PDFs are kept 7 days (like other exports); a download link works for 15 minutes. Badge PDFs are stored in the media store and are not counted against the org's media quota yet.
+  - **Brother QL presets:** 62 mm continuous tape cut at 100 mm, and 102 × 152 mm (4 in) die-cut labels. Say if your customers use other Brother stock.
+  - **Gotenberg in production:** the worker needs `GOTENBERG_URL` for badge batch PDFs (the web app already uses it for ticket PDFs); without it batches stay queued.
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.

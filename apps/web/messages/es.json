@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "Este evento ya tiene el máximo de plantillas permitido.",
       "stale": "Otra persona guardó esta plantilla mientras tanto. Recarga la página para ver su versión.",
       "questionNotAllowed": "Esa pregunta no se puede imprimir en las credenciales."
-    }
+    },
+    "elements": "Elementos de este lado"
   }
 }

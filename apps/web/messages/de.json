@@ -5484,6 +5484,7 @@
       "tooManyTemplates": "Diese Veranstaltung hat bereits die maximale Anzahl an Vorlagen.",
       "stale": "Jemand anderes hat diese Vorlage inzwischen gespeichert. Laden Sie die Seite neu, um diese Version zu sehen.",
       "questionNotAllowed": "Diese Frage kann nicht auf Badges gedruckt werden."
-    }
+    },
+    "elements": "Elemente auf dieser Seite"
   }
 }
