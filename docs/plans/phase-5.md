@@ -1,6 +1,6 @@
 # Phase 5 plan — Conference and enterprise
 
-Status: **Draft: awaiting owner approval** (2026-09-29). Roadmap: `docs/roadmap.md` Phase 5 (M5.1–M5.11). Owner priority 3. Exit (roadmap): a conference of ≥ 500 attendees runs with registration types, agenda, session check-in, badges and lead retrieval, and a SOC 2 Type I report is in hand. Target customer (D20): associations and conventions of 500–5,000, per-exhibitor lead licenses, bring-your-own printers.
+Status: **approved by the owner** (2026-09-29): all eleven decisions (P5-1 to P5-11) accepted as recommended; Wave 1 starts as cloud slots free (Phase 3 first, then Phase 4). Roadmap: `docs/roadmap.md` Phase 5 (M5.1–M5.11). Owner priority 3. Exit (roadmap): a conference of ≥ 500 attendees runs with registration types, agenda, session check-in, badges and lead retrieval, and a SOC 2 Type I report is in hand. Target customer (D20): associations and conventions of 500–5,000, per-exhibitor lead licenses, bring-your-own printers.
 
 ## 1. What I'm asking you to decide
 
