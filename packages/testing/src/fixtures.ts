@@ -7,6 +7,12 @@ import {
   validateImportCommand,
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
+import {
+  assignTemplateCommand,
+  createTemplateCommand,
+  runBadgeBatch,
+  startBatchCommand,
+} from '@yayatoh/badges';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   chatReportSignals,
@@ -374,6 +380,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(setAttributionWindowCommand, { windowDays: 30 }, ctx(), ports);
+  // M5.5a badges: a template (and its version) assigned to the pass, and a batch with one
+  // rendered part left running (a fake renderer: no Gotenberg in the fixture).
+  const badgeTemplate = await executeCommand(
+    createTemplateCommand,
+    { eventId: event.id, name: 'Fixture badge', size: 'fold_4x3' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignTemplateCommand,
+    { eventId: event.id, ticketTypeId: ga.id, templateId: badgeTemplate.id },
+    ctx(),
+    ports,
+  );
+  const badgeBatch = await executeCommand(
+    startBatchCommand,
+    { eventId: event.id, requestKey: `fixture-${slug}`, sort: 'last_name' },
+    ctx(),
+    ports,
+  );
+  await runBadgeBatch(
+    { ports, renderer: { render: async () => new TextEncoder().encode('%PDF-fixture') } },
+    org.id,
+    badgeBatch.id,
+    { maxChunks: 1 },
+  );
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],

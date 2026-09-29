@@ -15,6 +15,7 @@
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
+    "@yayatoh/badges": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/checkin-engine": "workspace:*",
@@ -49,8 +50,10 @@
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "@yayatoh/config": "workspace:*",
+    "pdfjs-dist": "5.4.296",
+    "typescript": "catalog:",
+    "zxing-wasm": "3.1.4"
   }
 }
