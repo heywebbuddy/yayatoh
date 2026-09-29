@@ -17,6 +17,7 @@
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "drizzle-orm": "catalog:",

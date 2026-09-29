@@ -11,6 +11,7 @@ import {
   type SessionDto,
   type SpeakerDto,
 } from './dto.ts';
+import { unlistedExhibitorIdsTx } from './exhibitor-portal.ts';
 import { exhibitorsOf, speakersOf, sponsorsOf, sponsorTiersOf } from './people.ts';
 import { rooms, tracks } from './schema.ts';
 import { sessionsOf } from './sessions.ts';
@@ -31,7 +32,9 @@ export async function publicProgram(target: EventTarget): Promise<PublicProgramD
       .orderBy(asc(tracks.name));
     const list = await sessionsOf(tx, eventId);
     const people = await speakersOf(tx, eventId);
-    const exhibitorList = await exhibitorsOf(tx, eventId);
+    // M5.4a: exhibitors the organizer unlisted never reach the public page.
+    const unlisted = await unlistedExhibitorIdsTx(tx, eventId);
+    const exhibitorList = (await exhibitorsOf(tx, eventId)).filter((x) => !unlisted.has(x.id));
     const tiers = await sponsorTiersOf(tx, eventId);
     const sponsorList = await sponsorsOf(tx, eventId);
     const sessions = list.map((s) => toPublicSession(s, roomRows, trackRows, people));

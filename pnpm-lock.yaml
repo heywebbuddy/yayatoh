@@ -1669,6 +1669,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/floorplan':
+        specifier: workspace:*
+        version: link:../../floorplan
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel

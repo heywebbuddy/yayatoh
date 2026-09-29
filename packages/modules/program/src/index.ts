@@ -54,3 +54,60 @@ export {
   programOwnerDeleted,
   programOwnerTx,
 } from './shared.ts';
+// M5.4a: exhibitor portal (members, invitations, profile approval) and booths.
+export {
+  assignBoothCommand,
+  boothAssigned,
+  boothPlanQuery,
+  deleteBoothCommand,
+  MAX_BOOTHS_PER_EVENT,
+  publicExhibitorMap,
+  saveBoothCommand,
+  unassignBoothCommand,
+} from './booths.ts';
+export {
+  allowanceUse,
+  BOOTH_WARNING_KINDS,
+  type BoothWarningKind,
+  boothWarnings,
+  DEFAULT_STAFF_ALLOWANCE,
+  holdsPlace,
+  memberExpiry,
+  nextPrimary,
+  PORTAL_GRACE_MS,
+  planAssignment,
+  staffAllowance,
+} from './domain/exhibitors.ts';
+export {
+  newPortalSecret,
+  parsePortalLinkToken,
+  parsePortalSessionToken,
+  portalLinkToken,
+  portalSecretHash,
+  portalSessionToken,
+  portalSiteToken,
+  verifyPortalSiteToken,
+} from './domain/portal-token.ts';
+export * from './exhibitor-dto.ts';
+export {
+  decideProfileChangeCommand,
+  endPortalSession,
+  exhibitorPortalAdminQuery,
+  exhibitorPortalQuery,
+  inviteExhibitorMemberCommand,
+  MAX_MEMBERS_PER_EXHIBITOR,
+  openExhibitorLinkCommand,
+  PORTAL_SESSION_MS,
+  PORTAL_SIGN_IN_LINK_MS,
+  portalInviteStaffCommand,
+  portalPrincipalBySession,
+  portalRevokeStaffCommand,
+  portalSaveProfileCommand,
+  requestExhibitorLinkCommand,
+  resendExhibitorInviteCommand,
+  revokeExhibitorMemberCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
+  staffInvited,
+} from './exhibitor-portal.ts';
+export { EXHIBITOR_MEMBER_ROLES, EXHIBITOR_MEMBER_STATUSES } from './schema.ts';
