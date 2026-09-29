@@ -130,7 +130,11 @@ sync exactly once, and a scan shows its verdict within 300 ms.
 - The real-device checks (owner drill): ≤ 300 ms on a mid-tier Android and iOS Safari; 600 scans on
   three phones.
 
-### 7. Acceptance
+### 7. Gate results (M3.4a)
+- `pnpm verify`: lint, check:modules, typecheck, 1,465 unit tests (133 files), 962 integration tests (112 files) — all pass.
+- Web e2e, whole suite (3 viewports): 1,426 passed, 34 skipped, 1 failed — `seating-perf.spec.ts:165` (5,000-seat fps benchmark, desktop) under full-suite load; it passes when run alone (`1 passed`). `staff-mode.spec.ts`: 18/18 (6 tests × 3 viewports). Admin untouched.
+
+### 8. Acceptance
 | ID | Criterion | Test |
 |---|---|---|
 | AC1 | **600 offline scans** across 3 devices (skewed clocks, cross-device duplicates incl. earlier takeovers, same-device repeats, bad codes), every batch sent twice concurrently and again later: 600 scan rows, 400 admissions, 400 `ticket.admitted` events, first-wins on corrected time | `packages/testing/tests/staff-mode.int.test.ts` |
