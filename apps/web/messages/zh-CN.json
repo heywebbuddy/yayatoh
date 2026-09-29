@@ -285,7 +285,8 @@
     "tablesSponsors": "桌位与赞助商",
     "commandCenter": "指挥中心",
     "alerts": "提醒",
-    "sendingSetup": "发送设置"
+    "sendingSetup": "发送设置",
+    "marketingAnalytics": "营销分析"
   },
   "vocab": {
     "attendee": "参会者",
@@ -6083,6 +6084,30 @@
       },
       "deviceBoard": {
         "title": "设备面板"
+      },
+      "campaigns": {
+        "title": "活动成效",
+        "summary": "{orders, plural, other {# 个订单}} · {clicks, plural, other {# 次点击}} · 转化率 {conversion}",
+        "firstTouch": "首次触达：{orders, plural, other {# 个订单}}，{amount}",
+        "chartTitle": "按活动的末次触达收入",
+        "campaign": "活动",
+        "clicks": "点击",
+        "orders": "订单",
+        "revenue": "收入",
+        "unnamed": "（无）",
+        "none": "此活动场次还没有营销活动或跟踪链接。",
+        "more": "另有 {count, plural, other {# 个活动}}",
+        "open": "打开营销分析"
+      },
+      "deliverability": {
+        "title": "邮件送达率",
+        "paused": "消息已暂停（投诉）",
+        "attention": "需要关注",
+        "healthy": "在阈值内",
+        "rates": "退信 {bounce} · 投诉 {complaint}",
+        "window": "过去 {days} 天 {sent, plural, other {# 封邮件}}",
+        "over": "超过阈值：{domains, plural, other {# 个发件域名}}，{campaigns, plural, other {# 个活动}}",
+        "open": "打开邮件送达率"
       }
     }
   },
@@ -6171,7 +6196,7 @@
       "readiness": "打开设置指南",
       "domain": "修复域名",
       "payoutsPastDue": "更新收款账户",
-      "deliverability": "打开消息健康状况",
+      "deliverability": "打开屏蔽列表",
       "automationFailed": "打开消息健康状况"
     },
     "rules": {
@@ -6458,6 +6483,140 @@
       "sales": "团队的销售提醒",
       "messages": "团队的客户消息",
       "security": "团队的安全提醒"
+    }
+  },
+  "marketingAnalytics": {
+    "title": "营销分析",
+    "description": "你的活动、渠道和跟踪链接带来的成效：已发送的消息、点击，以及随后的订单和收入，按首次触达和末次触达统计。",
+    "rangeLegend": "日期范围",
+    "from": "开始",
+    "to": "结束",
+    "apply": "应用",
+    "rangeNote": "日期按 {timeZone} 计算。订单按下单当天计入；收入以 {currency} 计。",
+    "rangeErrors": {
+      "invalid_date": "请输入有效日期。",
+      "from_after_to": "开始日期必须早于或等于结束日期。",
+      "range_too_long": "范围最多 366 天。"
+    },
+    "summaryLabel": "范围内合计",
+    "figures": {
+      "sends": "已发送",
+      "deliveries": "已送达",
+      "clicks": "点击",
+      "uniqueClickers": "独立点击者",
+      "lastOrders": "订单（末次触达）",
+      "lastRevenue": "收入（末次触达）",
+      "firstOrders": "订单（首次触达）",
+      "firstRevenue": "收入（首次触达）",
+      "conversion": "转化率"
+    },
+    "otherCurrency": "{count, plural, other {# 个订单使用其他货币：已计数，但未计入收入。}}",
+    "viewLabel": "结果分组方式",
+    "view": {
+      "campaign": "活动",
+      "channel": "渠道",
+      "link": "链接"
+    },
+    "chartTitle": {
+      "campaign": "按活动的末次触达收入",
+      "channel": "按渠道的末次触达收入",
+      "link": "按链接的末次触达收入"
+    },
+    "showData": "显示数据",
+    "tableCaption": {
+      "campaign": "活动：发送、点击、订单和收入",
+      "channel": "渠道：发送、点击、订单和收入",
+      "link": "跟踪链接：点击、订单和收入"
+    },
+    "columns": {
+      "name": "名称"
+    },
+    "kind": {
+      "campaign": "消息活动",
+      "utm": "UTM 活动"
+    },
+    "unnamed": "（无）",
+    "empty": "暂无数据。请在活动的“跟踪链接”页面创建链接，或发送一次营销活动。",
+    "creditNote": "每个订单按首次触达计一次、按末次触达计一次。转化率为每次点击的末次触达订单数。",
+    "export": "导出 CSV",
+    "deliverabilityLink": "邮件送达率",
+    "deliverabilityTeaser": "你的组织、每个发件域名和每个活动的退信率和投诉率。",
+    "openDeliverability": "打开邮件送达率",
+    "csv": {
+      "name": "名称",
+      "event": "活动场次",
+      "source": "来源",
+      "medium": "媒介",
+      "campaign": "活动",
+      "code": "链接代码",
+      "sends": "已发送",
+      "deliveries": "已送达",
+      "clicks": "点击",
+      "uniqueClickers": "独立点击者",
+      "firstTouchOrders": "首次触达订单",
+      "firstTouchRevenueMinor": "首次触达收入（最小单位）",
+      "lastTouchOrders": "末次触达订单",
+      "lastTouchRevenueMinor": "末次触达收入（最小单位）",
+      "otherCurrencyOrders": "其他货币订单",
+      "conversionPct": "转化率（%）",
+      "currency": "货币",
+      "total": "合计"
+    },
+    "detail": {
+      "title": "活动成效",
+      "back": "返回营销分析",
+      "figuresLabel": "范围内的活动合计",
+      "deliveryTitle": "送达",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "bounced": "退信",
+      "complained": "投诉",
+      "bounceRate": "退信率",
+      "complaintRate": "投诉率",
+      "linksTitle": "跟踪链接",
+      "ordersTitle": "带来的订单",
+      "noOrders": "此范围内没有订单。",
+      "order": "订单",
+      "event": "活动场次",
+      "credit": "归因",
+      "total": "金额",
+      "placed": "下单时间",
+      "touch": {
+        "first": "首次触达",
+        "last": "末次触达",
+        "both": "首次和末次触达"
+      }
+    },
+    "deliverability": {
+      "title": "邮件送达率",
+      "description": "过去 {days} 天你的组织、每个发件域名和每个活动的退信率和投诉率。超过阈值时，你的团队会收到提醒。",
+      "back": "返回营销分析",
+      "paused": "消息已暂停：{since} 投诉率达到 {rate}（{sent} 封中有 {complaints} 封）。",
+      "pausedBody": "可选消息会等待，直到 Yayatoh 支持解除暂停。请先从名单中移除投诉的地址。",
+      "alertOpen": "{state, select, acknowledged {送达率提醒：已确认} snoozed {送达率提醒：已延后} other {送达率提醒：未处理}}",
+      "alertBody": "超过阈值：{domains, plural, other {# 个发件域名}}，{campaigns, plural, other {# 个活动}}。",
+      "openSuppressions": "打开屏蔽列表",
+      "openAlerts": "打开提醒",
+      "thresholds": "提醒阈值：{days} 天内发送至少 {min} 封邮件时，退信率达到 {bounce} 或投诉率达到 {complaint}。",
+      "orgTitle": "你的组织",
+      "domainsTitle": "发件域名",
+      "campaignsTitle": "活动",
+      "scope": "组织",
+      "domain": "域名",
+      "campaign": "活动",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "bounceRate": "退信率",
+      "complaintRate": "投诉率",
+      "status": "状态",
+      "statusOver": "超过阈值",
+      "statusOk": "在阈值内",
+      "statusFew": "少于 {min} 封：数量太少，无法判断",
+      "platformSender": "{domain}（Yayatoh 共享发件人）",
+      "unrecorded": "未记录（在记录域名之前发送）",
+      "unnamedCampaign": "未命名的活动",
+      "noEmail": "过去 {days} 天没有邮件。",
+      "noCampaigns": "过去 {days} 天没有活动邮件。"
     }
   }
 }

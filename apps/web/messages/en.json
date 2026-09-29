@@ -285,7 +285,8 @@
     "tablesSponsors": "Tables & Sponsors",
     "commandCenter": "Command Center",
     "alerts": "Alerts",
-    "sendingSetup": "Sending setup"
+    "sendingSetup": "Sending setup",
+    "marketingAnalytics": "Marketing analytics"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -6083,6 +6084,30 @@
       },
       "deviceBoard": {
         "title": "Device board"
+      },
+      "campaigns": {
+        "title": "Campaign results",
+        "summary": "{orders, plural, one {# order} other {# orders}} · {clicks, plural, one {# click} other {# clicks}} · {conversion} conversion",
+        "firstTouch": "First touch: {orders, plural, one {# order} other {# orders}}, {amount}",
+        "chartTitle": "Last-touch revenue by campaign",
+        "campaign": "Campaign",
+        "clicks": "Clicks",
+        "orders": "Orders",
+        "revenue": "Revenue",
+        "unnamed": "(none)",
+        "none": "No campaigns or tracked links for this event yet.",
+        "more": "{count, plural, one {and # more campaign} other {and # more campaigns}}",
+        "open": "Open marketing analytics"
+      },
+      "deliverability": {
+        "title": "Email deliverability",
+        "paused": "Messaging is paused (complaints)",
+        "attention": "Needs attention",
+        "healthy": "Within the thresholds",
+        "rates": "Bounces {bounce} · complaints {complaint}",
+        "window": "{sent, plural, one {# email} other {# emails}} in the last {days} days",
+        "over": "{domains, plural, one {# sending domain} other {# sending domains}} and {campaigns, plural, one {# campaign} other {# campaigns}} over the thresholds",
+        "open": "Open email deliverability"
       }
     }
   },
@@ -6171,7 +6196,7 @@
       "readiness": "Open the setup guide",
       "domain": "Fix domains",
       "payoutsPastDue": "Update the payout account",
-      "deliverability": "Open messaging health",
+      "deliverability": "Open the suppression list",
       "automationFailed": "Open messaging health"
     },
     "rules": {
@@ -6458,6 +6483,140 @@
       "sales": "Sales alerts for your team",
       "messages": "Customer messages for your team",
       "security": "Security alerts for your team"
+    }
+  },
+  "marketingAnalytics": {
+    "title": "Marketing analytics",
+    "description": "What your campaigns, channels and tracked links brought in: messages sent, clicks, and the orders and revenue that followed, first and last touch.",
+    "rangeLegend": "Date range",
+    "from": "From",
+    "to": "To",
+    "apply": "Apply",
+    "rangeNote": "Days in {timeZone}. Orders count on the day they were placed; revenue is in {currency}.",
+    "rangeErrors": {
+      "invalid_date": "Enter valid dates.",
+      "from_after_to": "The start date must be on or before the end date.",
+      "range_too_long": "Choose a range of 366 days at most."
+    },
+    "summaryLabel": "Totals for the range",
+    "figures": {
+      "sends": "Sent",
+      "deliveries": "Delivered",
+      "clicks": "Clicks",
+      "uniqueClickers": "Unique clickers",
+      "lastOrders": "Orders (last touch)",
+      "lastRevenue": "Revenue (last touch)",
+      "firstOrders": "Orders (first touch)",
+      "firstRevenue": "Revenue (first touch)",
+      "conversion": "Conversion"
+    },
+    "otherCurrency": "{count, plural, one {# order was in another currency: counted, but not in the revenue.} other {# orders were in other currencies: counted, but not in the revenue.}}",
+    "viewLabel": "Group results by",
+    "view": {
+      "campaign": "Campaigns",
+      "channel": "Channels",
+      "link": "Links"
+    },
+    "chartTitle": {
+      "campaign": "Last-touch revenue by campaign",
+      "channel": "Last-touch revenue by channel",
+      "link": "Last-touch revenue by link"
+    },
+    "showData": "Show the data",
+    "tableCaption": {
+      "campaign": "Campaigns: sends, clicks, orders and revenue",
+      "channel": "Channels: sends, clicks, orders and revenue",
+      "link": "Tracked links: clicks, orders and revenue"
+    },
+    "columns": {
+      "name": "Name"
+    },
+    "kind": {
+      "campaign": "Messaging campaign",
+      "utm": "UTM campaign"
+    },
+    "unnamed": "(none)",
+    "empty": "Nothing yet. Create tracked links on an event's Tracked links page, or send a campaign.",
+    "creditNote": "Each order counts once for its first touch and once for its last touch. Conversion is last-touch orders per click.",
+    "export": "Export CSV",
+    "deliverabilityLink": "Email deliverability",
+    "deliverabilityTeaser": "Bounce and complaint rates for your organization, each sending domain and each campaign.",
+    "openDeliverability": "Open email deliverability",
+    "csv": {
+      "name": "Name",
+      "event": "Event",
+      "source": "Source",
+      "medium": "Medium",
+      "campaign": "Campaign",
+      "code": "Link code",
+      "sends": "Sent",
+      "deliveries": "Delivered",
+      "clicks": "Clicks",
+      "uniqueClickers": "Unique clickers",
+      "firstTouchOrders": "First-touch orders",
+      "firstTouchRevenueMinor": "First-touch revenue (minor units)",
+      "lastTouchOrders": "Last-touch orders",
+      "lastTouchRevenueMinor": "Last-touch revenue (minor units)",
+      "otherCurrencyOrders": "Orders in other currencies",
+      "conversionPct": "Conversion (%)",
+      "currency": "Currency",
+      "total": "Total"
+    },
+    "detail": {
+      "title": "Campaign results",
+      "back": "Back to marketing analytics",
+      "figuresLabel": "Campaign totals for the range",
+      "deliveryTitle": "Delivery",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "bounced": "Bounced",
+      "complained": "Complaints",
+      "bounceRate": "Bounce rate",
+      "complaintRate": "Complaint rate",
+      "linksTitle": "Tracked links",
+      "ordersTitle": "Orders it led to",
+      "noOrders": "No orders in this range.",
+      "order": "Order",
+      "event": "Event",
+      "credit": "Credit",
+      "total": "Total",
+      "placed": "Placed",
+      "touch": {
+        "first": "First touch",
+        "last": "Last touch",
+        "both": "First and last touch"
+      }
+    },
+    "deliverability": {
+      "title": "Email deliverability",
+      "description": "Bounce and complaint rates over the last {days} days for your organization, each sending domain and each campaign. Over a threshold, your team gets an alert.",
+      "back": "Back to marketing analytics",
+      "paused": "Messaging is paused: the complaint rate reached {rate} ({complaints} of {sent} emails) on {since}.",
+      "pausedBody": "Optional messages wait until Yayatoh support lifts the pause. Remove the complaining addresses from your lists first.",
+      "alertOpen": "{state, select, acknowledged {Deliverability alert: acknowledged} snoozed {Deliverability alert: snoozed} other {Deliverability alert: open}}",
+      "alertBody": "{domains, plural, one {# sending domain} other {# sending domains}} and {campaigns, plural, one {# campaign} other {# campaigns}} over the thresholds.",
+      "openSuppressions": "Open the suppression list",
+      "openAlerts": "Open alerts",
+      "thresholds": "Alert thresholds: bounces at or above {bounce}, or complaints at or above {complaint}, from {min} emails sent in {days} days.",
+      "orgTitle": "Your organization",
+      "domainsTitle": "Sending domains",
+      "campaignsTitle": "Campaigns",
+      "scope": "Organization",
+      "domain": "Domain",
+      "campaign": "Campaign",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "bounceRate": "Bounce rate",
+      "complaintRate": "Complaint rate",
+      "status": "Status",
+      "statusOver": "Over a threshold",
+      "statusOk": "Within the thresholds",
+      "statusFew": "Fewer than {min} emails: too few to judge",
+      "platformSender": "{domain} (Yayatoh shared sender)",
+      "unrecorded": "Not recorded (sent before domains were tracked)",
+      "unnamedCampaign": "Unnamed campaign",
+      "noEmail": "No email in the last {days} days.",
+      "noCampaigns": "No campaign email in the last {days} days."
     }
   }
 }

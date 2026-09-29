@@ -285,7 +285,8 @@
     "tablesSponsors": "Tafels & sponsors",
     "commandCenter": "Commandocentrum",
     "alerts": "Meldingen",
-    "sendingSetup": "Verzendinstellingen"
+    "sendingSetup": "Verzendinstellingen",
+    "marketingAnalytics": "Marketinganalyse"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -6083,6 +6084,30 @@
       },
       "deviceBoard": {
         "title": "Apparatenoverzicht"
+      },
+      "campaigns": {
+        "title": "Campagneresultaten",
+        "summary": "{orders, plural, one {# bestelling} other {# bestellingen}} · {clicks, plural, one {# klik} other {# klikken}} · {conversion} conversie",
+        "firstTouch": "Eerste contact: {orders, plural, one {# bestelling} other {# bestellingen}}, {amount}",
+        "chartTitle": "Omzet bij laatste contact per campagne",
+        "campaign": "Campagne",
+        "clicks": "Klikken",
+        "orders": "Bestellingen",
+        "revenue": "Omzet",
+        "unnamed": "(geen)",
+        "none": "Nog geen campagnes of trackinglinks voor dit evenement.",
+        "more": "{count, plural, one {en nog # campagne} other {en nog # campagnes}}",
+        "open": "Marketinganalyse openen"
+      },
+      "deliverability": {
+        "title": "E-mailbezorgbaarheid",
+        "paused": "Berichten gepauzeerd (klachten)",
+        "attention": "Vraagt aandacht",
+        "healthy": "Binnen de drempels",
+        "rates": "Bounces {bounce} · klachten {complaint}",
+        "window": "{sent, plural, one {# e-mail} other {# e-mails}} in de afgelopen {days} dagen",
+        "over": "{domains, plural, one {# verzenddomein} other {# verzenddomeinen}} en {campaigns, plural, one {# campagne} other {# campagnes}} boven de drempels",
+        "open": "E-mailbezorgbaarheid openen"
       }
     }
   },
@@ -6171,7 +6196,7 @@
       "readiness": "Instellingsgids openen",
       "domain": "Domeinen herstellen",
       "payoutsPastDue": "Uitbetalingsaccount bijwerken",
-      "deliverability": "Berichtenstatus openen",
+      "deliverability": "Blokkeerlijst openen",
       "automationFailed": "Berichtenstatus openen"
     },
     "rules": {
@@ -6458,6 +6483,140 @@
       "sales": "Verkoopmeldingen voor je team",
       "messages": "Klantberichten voor je team",
       "security": "Beveiligingsmeldingen voor je team"
+    }
+  },
+  "marketingAnalytics": {
+    "title": "Marketinganalyse",
+    "description": "Wat je campagnes, kanalen en trackinglinks hebben opgeleverd: verzonden berichten, klikken en de bestellingen en omzet die volgden, bij eerste en laatste contact.",
+    "rangeLegend": "Periode",
+    "from": "Van",
+    "to": "Tot en met",
+    "apply": "Toepassen",
+    "rangeNote": "Dagen in {timeZone}. Bestellingen tellen op de dag dat ze zijn geplaatst; omzet is in {currency}.",
+    "rangeErrors": {
+      "invalid_date": "Vul geldige datums in.",
+      "from_after_to": "De begindatum moet op of vóór de einddatum liggen.",
+      "range_too_long": "Kies een periode van maximaal 366 dagen."
+    },
+    "summaryLabel": "Totalen voor de periode",
+    "figures": {
+      "sends": "Verzonden",
+      "deliveries": "Afgeleverd",
+      "clicks": "Klikken",
+      "uniqueClickers": "Unieke klikkers",
+      "lastOrders": "Bestellingen (laatste contact)",
+      "lastRevenue": "Omzet (laatste contact)",
+      "firstOrders": "Bestellingen (eerste contact)",
+      "firstRevenue": "Omzet (eerste contact)",
+      "conversion": "Conversie"
+    },
+    "otherCurrency": "{count, plural, one {# bestelling was in een andere valuta: geteld, maar niet in de omzet.} other {# bestellingen waren in andere valuta: geteld, maar niet in de omzet.}}",
+    "viewLabel": "Resultaten groeperen per",
+    "view": {
+      "campaign": "Campagnes",
+      "channel": "Kanalen",
+      "link": "Links"
+    },
+    "chartTitle": {
+      "campaign": "Omzet bij laatste contact per campagne",
+      "channel": "Omzet bij laatste contact per kanaal",
+      "link": "Omzet bij laatste contact per link"
+    },
+    "showData": "Gegevens tonen",
+    "tableCaption": {
+      "campaign": "Campagnes: verzonden, klikken, bestellingen en omzet",
+      "channel": "Kanalen: verzonden, klikken, bestellingen en omzet",
+      "link": "Trackinglinks: klikken, bestellingen en omzet"
+    },
+    "columns": {
+      "name": "Naam"
+    },
+    "kind": {
+      "campaign": "Berichtencampagne",
+      "utm": "UTM-campagne"
+    },
+    "unnamed": "(geen)",
+    "empty": "Nog niets. Maak trackinglinks op de pagina Trackinglinks van een evenement of verstuur een campagne.",
+    "creditNote": "Elke bestelling telt één keer voor het eerste en één keer voor het laatste contact. Conversie is het aantal bestellingen bij laatste contact per klik.",
+    "export": "CSV exporteren",
+    "deliverabilityLink": "E-mailbezorgbaarheid",
+    "deliverabilityTeaser": "Bounce- en klachtpercentages voor je organisatie, elk verzenddomein en elke campagne.",
+    "openDeliverability": "E-mailbezorgbaarheid openen",
+    "csv": {
+      "name": "Naam",
+      "event": "Evenement",
+      "source": "Bron",
+      "medium": "Medium",
+      "campaign": "Campagne",
+      "code": "Linkcode",
+      "sends": "Verzonden",
+      "deliveries": "Afgeleverd",
+      "clicks": "Klikken",
+      "uniqueClickers": "Unieke klikkers",
+      "firstTouchOrders": "Bestellingen eerste contact",
+      "firstTouchRevenueMinor": "Omzet eerste contact (kleinste eenheid)",
+      "lastTouchOrders": "Bestellingen laatste contact",
+      "lastTouchRevenueMinor": "Omzet laatste contact (kleinste eenheid)",
+      "otherCurrencyOrders": "Bestellingen in andere valuta",
+      "conversionPct": "Conversie (%)",
+      "currency": "Valuta",
+      "total": "Totaal"
+    },
+    "detail": {
+      "title": "Campagneresultaten",
+      "back": "Terug naar marketinganalyse",
+      "figuresLabel": "Campagnetotalen voor de periode",
+      "deliveryTitle": "Bezorging",
+      "sent": "Verzonden",
+      "delivered": "Afgeleverd",
+      "bounced": "Gebounced",
+      "complained": "Klachten",
+      "bounceRate": "Bouncepercentage",
+      "complaintRate": "Klachtpercentage",
+      "linksTitle": "Trackinglinks",
+      "ordersTitle": "Bestellingen die eruit voortkwamen",
+      "noOrders": "Geen bestellingen in deze periode.",
+      "order": "Bestelling",
+      "event": "Evenement",
+      "credit": "Toeschrijving",
+      "total": "Totaal",
+      "placed": "Geplaatst",
+      "touch": {
+        "first": "Eerste contact",
+        "last": "Laatste contact",
+        "both": "Eerste en laatste contact"
+      }
+    },
+    "deliverability": {
+      "title": "E-mailbezorgbaarheid",
+      "description": "Bounce- en klachtpercentages van de afgelopen {days} dagen voor je organisatie, elk verzenddomein en elke campagne. Boven een drempel krijgt je team een melding.",
+      "back": "Terug naar marketinganalyse",
+      "paused": "Berichten zijn gepauzeerd: het klachtpercentage bereikte {rate} ({complaints} van {sent} e-mails) op {since}.",
+      "pausedBody": "Optionele berichten wachten tot de support van Yayatoh de pauze opheft. Haal eerst de klagende adressen uit je lijsten.",
+      "alertOpen": "{state, select, acknowledged {Bezorgbaarheidsmelding: bevestigd} snoozed {Bezorgbaarheidsmelding: uitgesteld} other {Bezorgbaarheidsmelding: open}}",
+      "alertBody": "{domains, plural, one {# verzenddomein} other {# verzenddomeinen}} en {campaigns, plural, one {# campagne} other {# campagnes}} boven de drempels.",
+      "openSuppressions": "Blokkeerlijst openen",
+      "openAlerts": "Meldingen openen",
+      "thresholds": "Meldingsdrempels: bounces vanaf {bounce} of klachten vanaf {complaint}, vanaf {min} verzonden e-mails in {days} dagen.",
+      "orgTitle": "Je organisatie",
+      "domainsTitle": "Verzenddomeinen",
+      "campaignsTitle": "Campagnes",
+      "scope": "Organisatie",
+      "domain": "Domein",
+      "campaign": "Campagne",
+      "sent": "Verzonden",
+      "delivered": "Afgeleverd",
+      "bounceRate": "Bouncepercentage",
+      "complaintRate": "Klachtpercentage",
+      "status": "Status",
+      "statusOver": "Boven een drempel",
+      "statusOk": "Binnen de drempels",
+      "statusFew": "Minder dan {min} e-mails: te weinig om te beoordelen",
+      "platformSender": "{domain} (gedeelde afzender van Yayatoh)",
+      "unrecorded": "Niet vastgelegd (verzonden voordat domeinen werden bijgehouden)",
+      "unnamedCampaign": "Naamloze campagne",
+      "noEmail": "Geen e-mail in de afgelopen {days} dagen.",
+      "noCampaigns": "Geen campagne-e-mail in de afgelopen {days} dagen."
     }
   }
 }
