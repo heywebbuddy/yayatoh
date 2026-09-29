@@ -277,7 +277,7 @@ test.describe('Command Center (M3.2a)', () => {
       'Check-in speed',
       'Capacity',
       'Duplicates and refused scans',
-      'Check-ins by entrance',
+      'Entrances',
       'Device board',
       'Staff at the doors',
       'Guest assistance',
