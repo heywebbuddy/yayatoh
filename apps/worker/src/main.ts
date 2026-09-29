@@ -1,5 +1,6 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { fakePaymentProvider } from '@yayatoh/payments';
+import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';
@@ -171,6 +172,12 @@ const retain = () => {
 };
 setTimeout(retain, 10 * 60_000).unref();
 setInterval(retain, 24 * 3_600_000).unref();
+
+// Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  purgeRealtimeMessages().catch((err) => console.error('realtime purge', err));
+}, 5 * 60_000).unref();
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, async () => {

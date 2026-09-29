@@ -130,6 +130,19 @@ export async function orgUnavailableForEvent(slug: string): Promise<boolean> {
   return rows[0]?.unavailable === true;
 }
 
+/**
+ * The same rule as `checkoutTarget`, by ids (a public realtime channel names its org and event):
+ * true when the event is published, listed, and its org active.
+ */
+export async function isPublicEvent(orgId: string, eventId: string): Promise<boolean> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ event_id: string }>(
+      sql`select event_id from events.public_event_target(${orgId}::uuid, ${eventId}::uuid)`,
+    ),
+  );
+  return rows.length > 0;
+}
+
 /** The signed-in actor's live event-scoped roles for one event (the tenancy authorizer's port). */
 export async function eventRolesOf(ctx: Ctx, eventId: string): Promise<string[]> {
   if (ctx.actor.type !== 'user') return [];

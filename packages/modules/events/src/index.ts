@@ -133,6 +133,7 @@ export {
   findEventTx,
   getEventBySlugQuery,
   getEventQuery,
+  isPublicEvent,
   listEventsQuery,
   orgUnavailableForEvent,
   publicCandidateEventIdsTx,

@@ -1,7 +1,7 @@
 import { checkoutTarget } from '@yayatoh/events';
 import { DEVICE_COOKIE } from '@yayatoh/platform/security';
 import type { NextRequest } from 'next/server';
-import { seatStreamResponse } from '@/server/seat-stream.ts';
+import { seatStreamResponse } from '@/server/realtime.ts';
 import { tenantOrgParam } from '@/server/tenant-site.ts';
 
 export const dynamic = 'force-dynamic';

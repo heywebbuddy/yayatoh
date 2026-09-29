@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "Vous scannez à {places}. Choisissez-le dans « Scan à ».",
     "noCheckpointsHint": "Aucun point de contrôle ne vous est attribué ici. Demandez à l’organisateur."
   },
+  "checkinLive": {
+    "state": {
+      "live": "En direct",
+      "connecting": "Connexion…",
+      "offline": "Reconnexion…"
+    },
+    "since": "{count, plural, one {# entrée} other {# entrées}} depuis l’ouverture de cette page",
+    "waiting": "Les entrées de tous les scanners s’affichent ici en temps réel."
+  },
   "devices": {
     "title": "Appareils de scan",
     "description": "Téléphones et tablettes qui scannent hors ligne. Chacun a sa propre clé ; révoquez un appareil perdu ou effacez sa liste d’invités téléchargée.",

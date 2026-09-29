@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "Scansioni a {places}. Sceglilo in «Scansione presso».",
     "noCheckpointsHint": "Non hai varchi assegnati qui. Chiedi all’organizzatore."
   },
+  "checkinLive": {
+    "state": {
+      "live": "In diretta",
+      "connecting": "Connessione…",
+      "offline": "Riconnessione…"
+    },
+    "since": "{count, plural, one {# ingresso} other {# ingressi}} da quando hai aperto questa pagina",
+    "waiting": "Gli ingressi di tutti gli scanner compaiono qui in tempo reale."
+  },
   "devices": {
     "title": "Dispositivi di scansione",
     "description": "Telefoni e tablet che scansionano offline. Ognuno ha la propria chiave; revoca un dispositivo smarrito o cancella la lista ospiti scaricata.",

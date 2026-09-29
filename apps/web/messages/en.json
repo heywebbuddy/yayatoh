@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "You scan at {places}. Choose it under Scanning at.",
     "noCheckpointsHint": "You aren't assigned to any checkpoint here. Ask the organizer."
   },
+  "checkinLive": {
+    "state": {
+      "live": "Live",
+      "connecting": "Connecting…",
+      "offline": "Reconnecting…"
+    },
+    "since": "{count, plural, one {# check-in} other {# check-ins}} since you opened this page",
+    "waiting": "Check-ins from every scanner show up here as they happen."
+  },
   "devices": {
     "title": "Scanner devices",
     "description": "Phones and tablets that scan offline. Each gets its own key; revoke a lost device, or wipe its downloaded guest list.",

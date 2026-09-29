@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "Du scannst an: {places}. Wähle es unter „Scannen bei“.",
     "noCheckpointsHint": "Dir ist hier kein Kontrollpunkt zugewiesen. Frag den Veranstalter."
   },
+  "checkinLive": {
+    "state": {
+      "live": "Live",
+      "connecting": "Verbindung wird hergestellt…",
+      "offline": "Verbindung wird wiederhergestellt…"
+    },
+    "since": "{count, plural, one {# Check-in} other {# Check-ins}} seit dem Öffnen dieser Seite",
+    "waiting": "Check-ins von allen Scannern erscheinen hier sofort."
+  },
   "devices": {
     "title": "Scan-Geräte",
     "description": "Smartphones und Tablets, die offline scannen. Jedes bekommt einen eigenen Schlüssel; widerrufe ein verlorenes Gerät oder lösche seine heruntergeladene Gästeliste.",

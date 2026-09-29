@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "你负责 {places}。请在“扫描位置”中选择。",
     "noCheckpointsHint": "你在这里没有分配检查点。请询问主办方。"
   },
+  "checkinLive": {
+    "state": {
+      "live": "实时",
+      "connecting": "正在连接…",
+      "offline": "正在重新连接…"
+    },
+    "since": "自打开此页面以来 {count, plural, other {# 次签到}}",
+    "waiting": "所有扫描设备的签到会实时显示在这里。"
+  },
   "devices": {
     "title": "扫描设备",
     "description": "可离线扫描的手机和平板。每台设备都有独立的密钥；可撤销丢失的设备，或清除其已下载的宾客名单。",

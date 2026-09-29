@@ -1,12 +1,16 @@
+import { createHmac, randomBytes } from 'node:crypto';
+
 /**
  * Realtime publishing (ADR 0009): live features push small, derived messages to channels.
  * Postgres stays the system of record; a lost message is repaired by the next snapshot.
  *
  * - `memoryRealtimeHub()` fans messages out inside one process. The web app's SSE endpoints
- *   subscribe to it (dev, CI, and the SSE fallback in production).
+ *   subscribe to it (dev, CI, and the SSE transport in production).
  * - `ablyRealtimePublisher()` publishes the same messages to Ably over its REST API when
- *   `REALTIME_PROVIDER=ably` and `ABLY_API_KEY` are set (owner account; token auth for browsers
- *   comes with it). Until then SSE is the transport everywhere.
+ *   `REALTIME_PROVIDER=ably` and `ABLY_API_KEY` are set (owner account), and `ablyTokenRequest()`
+ *   signs browser token requests locally. Until then SSE is the transport everywhere.
+ * - M3.1b adds the channel registry (`realtime-channels.ts`), the message log and its
+ *   LISTEN/NOTIFY fan-out (`realtime-log.ts`), and the shared SSE core (`realtime-sse.ts`).
  *
  * Channels are always scoped to an org (`org:{orgId}:…`), so a token or a stream for one org can
  * never name another org's channel.
@@ -124,6 +128,48 @@ export function ablySubscribeCapability(channels: readonly string[]): Record<str
       return [c, ['subscribe'] as ['subscribe']];
     }),
   );
+}
+
+export interface AblyTokenRequest {
+  readonly keyName: string;
+  readonly ttl: number;
+  readonly capability: string;
+  readonly clientId?: string;
+  readonly timestamp: number;
+  readonly nonce: string;
+  readonly mac: string;
+}
+
+/**
+ * A signed Ably TokenRequest (token auth, M3.1b): the browser exchanges it with Ably for a token
+ * that may only subscribe to the listed channels. Signed locally with the API key's secret
+ * (HMAC-SHA256 over the documented field order), so issuing one never calls Ably, and the secret
+ * never reaches the browser. The app issues one only after its own channel authorization.
+ */
+export function ablyTokenRequest(opts: {
+  apiKey: string;
+  channels: readonly string[];
+  clientId?: string;
+  ttlMs?: number;
+  now?: number;
+  nonce?: string;
+}): AblyTokenRequest {
+  const m = /^([^:\s]+):([^\s]+)$/.exec(opts.apiKey);
+  if (!m?.[1] || !m[2]) throw new Error('ABLY_API_KEY must look like "appId.keyId:secret"');
+  const keyName = m[1];
+  const ttl = Math.min(Math.max(opts.ttlMs ?? 3_600_000, 60_000), 86_400_000);
+  const capability = JSON.stringify(ablySubscribeCapability(opts.channels));
+  const timestamp = opts.now ?? Date.now();
+  const nonce = opts.nonce ?? randomBytes(16).toString('hex');
+  const clientId = opts.clientId ?? '';
+  const signed = `${keyName}\n${ttl}\n${capability}\n${clientId}\n${timestamp}\n${nonce}\n`;
+  const mac = createHmac('sha256', m[2]).update(signed).digest('base64');
+  return { keyName, ttl, capability, ...(clientId ? { clientId } : {}), timestamp, nonce, mac };
+}
+
+/** The realtime transport the app is configured for (`REALTIME_PROVIDER`, default SSE). */
+export function realtimeProvider(env: Record<string, string | undefined> = process.env): 'sse' | 'ably' {
+  return env.REALTIME_PROVIDER === 'ably' && env.ABLY_API_KEY ? 'ably' : 'sse';
 }
 
 /** Publish to several transports (the in-process hub and Ably). */

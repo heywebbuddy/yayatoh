@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "Escaneas en {places}. Elígelo en «Escaneando en».",
     "noCheckpointsHint": "No tienes ningún punto de control asignado aquí. Pregunta al organizador."
   },
+  "checkinLive": {
+    "state": {
+      "live": "En directo",
+      "connecting": "Conectando…",
+      "offline": "Reconectando…"
+    },
+    "since": "{count, plural, one {# registro de entrada} other {# registros de entrada}} desde que abriste esta página",
+    "waiting": "Los registros de entrada de todos los escáneres aparecen aquí al momento."
+  },
   "devices": {
     "title": "Dispositivos de escaneo",
     "description": "Teléfonos y tabletas que escanean sin conexión. Cada uno tiene su propia clave; revoca un dispositivo perdido o borra la lista de invitados que descargó.",

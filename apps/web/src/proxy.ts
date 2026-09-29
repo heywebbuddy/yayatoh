@@ -6,6 +6,7 @@ import {
   isDeviceId,
   newDeviceId,
   pageTypeOf,
+  realtimeConnectSources,
   securityHeaders,
   stripLocale,
 } from '@yayatoh/platform/security';
@@ -99,6 +100,8 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
     nonce,
     dev: process.env.NODE_ENV === 'development',
     https,
+    // Ably (M3.1b) when it is the configured transport; SSE is same-origin.
+    extra: { connect: realtimeConnectSources() },
   });
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);
@@ -200,6 +203,10 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
       return secure(
         rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${seats[1]}/seats/stream`, locale),
       );
+    // Realtime channels on the org's site (M3.1b): the host's org is the only one it may carry.
+    const live = /^\/realtime\/([^/]+)\/?$/.exec(rest);
+    if (live)
+      return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/realtime/${live[1]}`, locale));
     // M1.4f: speaker pages stay on the org's site (another org's event is a 404 there).
     const sp = /^\/events\/([^/]+)\/speakers\/([^/]+)\/?$/.exec(rest);
     if (sp)

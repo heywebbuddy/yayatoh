@@ -33,4 +33,13 @@ export const privateColumns = columnPrivacy('platform', {
   metric_timeseries: { metric: 'vocab', currency: 'vocab', source: 'vocab' },
   processed_events: { consumer: 'vocab' },
   rate_limits: { bucket: internal() },
+  // Realtime message log (M3.1b): the channel name is ids and a topic (a CHECK ties it to the
+  // row's org); payloads pass the channel's allowlist again on the way out.
+  realtime_messages: {
+    channel: internal('none', {
+      why: "CHECK: 'org:{org_id}:…' naming the row's own org; ids and a topic only",
+    }),
+    event: 'vocab',
+    data: internal(),
+  },
 });

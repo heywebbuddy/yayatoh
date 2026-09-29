@@ -970,6 +970,15 @@
     "wrongCheckpointHint": "Jij scant bij {places}. Kies het onder ‘Scannen bij’.",
     "noCheckpointsHint": "Je bent hier aan geen controlepunt toegewezen. Vraag het de organisator."
   },
+  "checkinLive": {
+    "state": {
+      "live": "ライブ",
+      "connecting": "接続中…",
+      "offline": "再接続中…"
+    },
+    "since": "このページを開いてから {count, plural, other {# 件のチェックイン}}",
+    "waiting": "すべてのスキャナーのチェックインがここにすぐ表示されます。"
+  },
   "devices": {
     "title": "スキャン端末",
     "description": "オフラインでスキャンするスマートフォンやタブレットです。端末ごとに専用のキーが発行されます。紛失した端末は取り消すか、ダウンロード済みのゲストリストを消去できます。",

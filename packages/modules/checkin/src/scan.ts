@@ -2,7 +2,7 @@ import { eventDay, ruleResult, zoneAllows } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
 import { eventStaffTx, findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
-import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { CHECKINS_CHANNEL, publishRealtimeTx, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import {
   activeTicketCountTx,
@@ -150,6 +150,17 @@ export const scanTicketCommand = tenantCommand({
             admittedAt: ctx.now.toISOString(),
           },
         });
+        // Door screens follow along (M3.1b): delivered after commit, no ticket or holder in it.
+        await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+          eventId: event.id,
+          event: 'admission',
+          data: {
+            change: 'admitted',
+            checkpointId: checkpoint?.id ?? null,
+            count: 1,
+            at: ctx.now.toISOString(),
+          },
+        });
       } else {
         result = 'duplicate';
         const [live] = await tx
@@ -251,7 +262,12 @@ export const undoAdmissionCommand = tenantCommand({
           isNull(admissions.undoneAt),
         ),
       )
-      .returning({ id: admissions.id, ticketId: admissions.ticketId, admittedAt: admissions.admittedAt });
+      .returning({
+        id: admissions.id,
+        ticketId: admissions.ticketId,
+        admittedAt: admissions.admittedAt,
+        checkpointId: admissions.checkpointId,
+      });
     const [undone] = rows;
     if (!undone) throw new DomainError('not_found', 'Admission not found or already undone');
     emit({
@@ -265,6 +281,17 @@ export const undoAdmissionCommand = tenantCommand({
         ticketId: undone.ticketId,
         admissionId: undone.id,
         admittedAt: undone.admittedAt.toISOString(),
+      },
+    });
+    // Door screens follow along (M3.1b): delivered after commit, no ticket or holder in it.
+    await publishRealtimeTx(tx, requireOrg(ctx), CHECKINS_CHANNEL, {
+      eventId: input.eventId,
+      event: 'admission',
+      data: {
+        change: 'undone',
+        checkpointId: undone.checkpointId ?? null,
+        count: 1,
+        at: ctx.now.toISOString(),
       },
     });
     return { undone: true };

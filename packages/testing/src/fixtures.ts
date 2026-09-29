@@ -75,7 +75,14 @@ import {
   recordReconciliationCommand,
   releaseDueSettlementsCommand,
 } from '@yayatoh/payments';
-import { catchUpSubscriber, consumeEvent, defineSubscriber, recentEventsTx } from '@yayatoh/platform';
+import {
+  ALERTS_CHANNEL,
+  catchUpSubscriber,
+  consumeEvent,
+  defineSubscriber,
+  publishRealtimeTx,
+  recentEventsTx,
+} from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
   createExhibitorCommand,
@@ -242,6 +249,19 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     tx.execute(
       sql`insert into platform.idempotency_keys (org_id, scope, key, fingerprint, response) values (${org.id}, 'fixture', ${slug}, 'f', '{}')`,
     ),
+  );
+  // realtime_messages (M3.1b): one logged message on the org's alerts channel.
+  await withTenant(systemCtx(org.id), (tx) =>
+    publishRealtimeTx(tx, org.id, ALERTS_CHANNEL, {
+      event: 'alert',
+      data: {
+        alertId: uuidv7(),
+        eventId: null,
+        state: 'open',
+        severity: 'info',
+        at: new Date().toISOString(),
+      },
+    }),
   );
   const event = await executeCommand(
     createEventCommand,

@@ -265,7 +265,8 @@ export async function PublicEventView({
           seatMap={seatMap}
           occurrenceId={chosen?.id ?? null}
           // Live availability (M1.7f): the page's own host serves it (a tenant site rewrites it
-          // to its org), so the stream is always this event's.
+          // to its org), so the stream is always this event's. Since M3.1b this URL is an alias of
+          // the event's public seat channel on the shared realtime core.
           seatStream={
             seatMap
               ? {
