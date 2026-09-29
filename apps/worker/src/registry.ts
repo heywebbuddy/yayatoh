@@ -17,8 +17,8 @@ import {
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
-import { registrationCapacity } from '@yayatoh/registration';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';

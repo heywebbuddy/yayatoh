@@ -111,7 +111,6 @@ import {
   registrationSetupQuery,
   seedRegistrationDefaultsCommand,
   setCellCommand,
-  startRegistrationCommand,
 } from '@yayatoh/registration';
 import {
   analyticsForwarder,
@@ -1132,7 +1131,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
   // M5.1a registration: the default types and items (activating the conference pack), a code-only
-  // and a domain-only type, one cell per type, and one free registration (a capacity claim).
+  // and a domain-only type, one cell per type, and a capacity claim.
   await executeCommand(seedRegistrationDefaultsCommand, { eventId: event.id, names: {} }, ctx(), ports);
   const regSetup = await executeQuery(registrationSetupQuery, { eventId: event.id }, ctx(), ports);
   const fullPass = regSetup.items.find((i) => i.key === 'full_pass');
@@ -1172,16 +1171,11 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
         ctx(),
         ports,
       );
-    await executeCommand(
-      startRegistrationCommand,
-      {
-        eventId: event.id,
-        registrationTypeId: member.id,
-        itemIds: [fullPass.id],
-        buyer: { email: `member+${slug}@example.test`, name: 'Fixture Member' },
-      },
-      createCtx({ orgId: org.id }),
-      ports,
+    // A capacity claim on the fixture's order (counting nothing): no second order, so tests that
+    // count the fixture's orders are unchanged.
+    await withTenant(systemCtx(org.id), (tx) =>
+      tx.execute(sql`insert into registration.capacity_claims (org_id, event_id, registration_type_id, order_id)
+        values (${org.id}, ${event.id}, ${member.id}, ${checkout.order.id})`),
     );
   }
   // M1.4g: a published page (linked from the tenant site's navigation) and a published post; a

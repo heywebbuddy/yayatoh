@@ -695,6 +695,8 @@ export async function publicWaitlistEntry(
         const q = await quoteTx(tx, event.id, [{ ticketTypeId: stock.id, quantity: stock.minPerOrder }], {
           now,
           includeHidden: true,
+          // A managed pass's offer (M5.1a) is priced like its manager sells it (display only).
+          ...(stock.managedBy ? { manager: stock.managedBy as TicketTypeManager } : {}),
         });
         unit = q.lines[0]?.unitAllInMinor ?? 0;
       } catch {

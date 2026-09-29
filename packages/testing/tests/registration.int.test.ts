@@ -643,6 +643,54 @@ describe('per-type waitlist (M3.10a lines and timed offers)', () => {
     expect(await statusOf(second.entryId)).toBe('accepted');
   });
 
+  it('an offer on a code-only type is bought with its link alone, only by the address it was made to', async () => {
+    const c = await conference();
+    const press = await executeCommand(
+      createRegistrationTypeCommand,
+      {
+        eventId: c.eventId,
+        name: 'Press',
+        eligibility: 'access_code',
+        accessCode: 'PRESS-OFFER',
+        capacity: 1,
+      },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(
+      setCellCommand,
+      { eventId: c.eventId, registrationTypeId: press.id, admissionItemId: c.fullPass, priceMinor: 1000 },
+      a.ctx(),
+      ports,
+    );
+    const p = { ...c, typeId: press.id };
+    await register(p, 'holder@example.test', { accessCode: 'PRESS-OFFER' });
+    const entry = await executeCommand(
+      joinRegistrationWaitlistCommand,
+      {
+        eventId: c.eventId,
+        registrationTypeId: press.id,
+        admissionItemId: c.fullPass,
+        name: 'Reporter',
+        email: 'reporter@example.test',
+        accessCode: 'press-offer',
+      },
+      anon(),
+      ports,
+    );
+    await lapse();
+    await drain();
+    expect(await counter(c, press.id)).toMatchObject({ held: 0, offered: 1 });
+    const link = waitlistToken(entry.entryId);
+    await expect(register(p, 'someone.else@example.test', { waitlistToken: link })).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    await expect(register(p, 'reporter@example.test', { waitlistToken: link })).resolves.toMatchObject({
+      registrationTypeId: press.id,
+    });
+    expect(await counter(c, press.id)).toMatchObject({ held: 1, offered: 0 });
+  });
+
   it('refuses to join while places are open, and raising the capacity offers the next place', async () => {
     const c = await conference({ capacity: 1 });
     const join = (email: string) =>

@@ -261,3 +261,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - Move the iOS privacy URL off `staging.yayatoh.com`.
   - Correct the privacy labels.
   - Resolve the ABC "In-App Purchases" flag.
+
+## M5.1a — registration types (2026-09-29, pending owner)
+- [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
+- [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
