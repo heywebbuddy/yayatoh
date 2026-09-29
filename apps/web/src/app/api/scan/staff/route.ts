@@ -1,3 +1,4 @@
+import { deviceIdOf } from '@yayatoh/checkin';
 import { executeQuery } from '@yayatoh/kernel';
 import { CHECKINS_CHANNEL, DEVICES_CHANNEL, realtimeChannelName } from '@yayatoh/platform';
 import { problem, problemFor, problemResponse } from '@yayatoh/platform/http';
@@ -23,7 +24,10 @@ export async function GET(req: Request) {
       checkins: realtimeChannelName(CHECKINS_CHANNEL, orgId, eventId),
       devices: realtimeChannelName(DEVICES_CHANNEL, orgId, eventId),
     };
-    return Response.json({ ...view, channels }, { headers: { 'cache-control': 'no-store' } });
+    return Response.json(
+      { ...view, channels, deviceId: deviceIdOf(device.ctx) },
+      { headers: { 'cache-control': 'no-store' } },
+    );
   } catch (err) {
     return problemResponse(problemFor(err));
   }

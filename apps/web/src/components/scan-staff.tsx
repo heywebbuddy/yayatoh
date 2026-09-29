@@ -42,11 +42,14 @@ export function StaffPanel({
   client,
   refreshKey,
   live,
+  online,
   publicKey,
 }: {
   client: ScanClient;
   refreshKey: number;
   live: boolean;
+  /** The network as the scanner sees it: going offline or back re-reads (or falls back to the cache). */
+  online: boolean;
   publicKey: string | null;
 }) {
   const t = useTranslations('scanStaff');
@@ -62,7 +65,7 @@ export function StaffPanel({
   // refreshKey is the realtime trigger: re-read when it changes.
   useEffect(() => {
     void load();
-  }, [load, refreshKey, live]);
+  }, [load, refreshKey, online]);
   useEffect(() => {
     const id = window.setInterval(() => void load(), 30_000);
     return () => window.clearInterval(id);

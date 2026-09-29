@@ -176,7 +176,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     setKiosk(client.kiosk !== null);
     void tick();
     const id = window.setInterval(() => void tick(), 30_000);
-    const onOnline = () => void syncNow(client);
+    // Back online: heartbeat (pending reports such as a kiosk exit) and sync.
+    const onOnline = () => void tick();
     const onOffline = () => setOnline(false);
     window.addEventListener('online', onOnline);
     window.addEventListener('offline', onOffline);
@@ -193,7 +194,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     void client.staffOverview().then((r) => {
       if (!r) return;
       setChannels(r.view.channels);
-      setSelfId(r.view.devices.find((d) => d.self)?.id ?? null);
+      setSelfId(r.view.deviceId);
     });
   }, [client, phase, channels]);
 
@@ -345,7 +346,13 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
         ))}
       </nav>
       {client && view === 'staff' ? (
-        <StaffPanel client={client} refreshKey={refreshKey} live={live && online} publicKey={publicKey} />
+        <StaffPanel
+          client={client}
+          refreshKey={refreshKey}
+          live={live && online}
+          online={online}
+          publicKey={publicKey}
+        />
       ) : null}
       {client && view === 'supervisor' ? (
         <SupervisorPanel client={client} refreshKey={refreshKey} selfId={selfId} />
@@ -363,7 +370,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                 onChange={(e) => {
                   const id = e.target.value;
                   setCheckpointId(id);
-                  void client.setCheckpoint(id || null);
+                  // Tell the device board at once (the next heartbeat would take up to 30 s).
+                  void client.setCheckpoint(id || null).then(() => tick());
                   input.current?.focus();
                 }}
                 className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"

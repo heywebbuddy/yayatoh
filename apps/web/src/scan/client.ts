@@ -109,6 +109,8 @@ export interface StaffView {
     since: string;
   }[];
   readonly channels: { readonly checkins: string; readonly devices: string };
+  /** This device's id (for the supervisor's pokes on the devices channel). */
+  readonly deviceId: string;
 }
 
 /** Kiosk mode as the server handed it to this device (M3.4a). */
