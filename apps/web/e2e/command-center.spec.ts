@@ -260,7 +260,16 @@ test.describe('Command Center (M3.2a)', () => {
     // Hiding every widget leaves the empty state, with the way back.
     await door.goto(`${base}/command-center`);
     await door.getByRole('button', { name: 'Customize layout' }).click();
-    for (const title of ['Check-ins', 'Devices online', 'Seat fill', 'Alerts', 'Coming up']) {
+    for (const title of [
+      'Check-ins',
+      'Devices online',
+      'Seat fill',
+      'Alerts',
+      // Batch 3d merge: M3.4a's staff views on the door layout.
+      'Entrances',
+      'Device board',
+      'Coming up',
+    ]) {
       await door.getByRole('button', { name: `Hide ${title}` }).click();
       await expect(door.getByText(`${title} hidden. Layout saved.`)).toBeVisible();
     }
