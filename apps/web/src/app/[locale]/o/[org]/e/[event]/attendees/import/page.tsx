@@ -1,6 +1,5 @@
 import { IMPORT_ERROR_CODES, importSummaryQuery } from '@yayatoh/attendees';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
 import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
@@ -31,10 +30,10 @@ export default async function ImportPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'attendees');
   const t = await getTranslations();
   const back = `/o/${org}/e/${event}/attendees`;
-  if (!roleCan(data.role, 'attendees:write') || !data.modules.has('attendees')) {
+  if (!can('attendees:write') || !data.modules.has('attendees')) {
     return (
       <>
         <PageHeader title={t('import.title')} />

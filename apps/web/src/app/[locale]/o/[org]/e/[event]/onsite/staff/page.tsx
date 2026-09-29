@@ -23,7 +23,7 @@ export default async function DoorStaffPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'onsite');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'onsite')) notFound();
   const t = await getTranslations();
@@ -32,7 +32,7 @@ export default async function DoorStaffPage({
       {t('doorStaff.back')}
     </Link>
   );
-  if (!roleCan(data.role, 'events:read')) {
+  if (!can('events:read')) {
     return (
       <>
         <PageHeader title={t('doorStaff.title')} />
@@ -40,7 +40,7 @@ export default async function DoorStaffPage({
       </>
     );
   }
-  const canManage = roleCan(data.role, 'members:manage');
+  const canManage = can('members:manage');
   const { staff, checkpoints } = await executeQuery(doorStaffQuery, { eventId: ev.id }, data.ctx, ports);
   const cpName = new Map(checkpoints.map((c) => [c.id, c.name]));
   const members = canManage ? await executeQuery(listMembersQuery, {}, data.ctx, ports) : [];

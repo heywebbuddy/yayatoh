@@ -1422,7 +1422,7 @@ export interface components {
             timezone: string;
         };
         /** @enum {string} */
-        OrgRole: "owner" | "admin" | "manager" | "finance" | "marketing" | "box_office" | "scanner" | "viewer";
+        OrgRole: "owner" | "admin" | "manager" | "finance" | "marketing" | "box_office" | "scanner" | "viewer" | "collaborator";
         Problem: {
             /** @description Stable machine code, e.g. `forbidden`, `rate_limited`. */
             code: string;

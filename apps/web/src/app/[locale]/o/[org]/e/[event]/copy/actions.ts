@@ -33,7 +33,7 @@ export async function duplicateAction(
   _prev: CopyFormState,
   form: FormData,
 ): Promise<CopyFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'copy');
   const startsAt = String(form.get('startsAt') ?? '').trim();
   let slug: string;
   try {
@@ -61,7 +61,7 @@ export async function saveTemplateAction(
   _prev: CopyFormState,
   form: FormData,
 ): Promise<CopyFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'copy');
   try {
     await executeCommand(
       saveTemplateCommand,

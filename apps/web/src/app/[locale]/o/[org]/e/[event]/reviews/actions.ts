@@ -14,7 +14,7 @@ async function run(
   event: string,
   fn: (ctx: Awaited<ReturnType<typeof loadEvent>>) => Promise<unknown>,
 ): Promise<FormState> {
-  const loaded = await loadEvent(org, event);
+  const loaded = await loadEvent(org, event, 'reviews');
   try {
     await fn(loaded);
   } catch (err) {

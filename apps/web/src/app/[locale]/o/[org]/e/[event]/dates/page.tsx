@@ -1,6 +1,5 @@
 import { listOccurrencesQuery, listSeriesQuery, type OccurrenceDto } from '@yayatoh/events';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
 import { occurrenceSalesQuery } from '@yayatoh/ticketing';
 import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -31,9 +30,9 @@ export default async function DatesPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'dates');
   const t = await getTranslations();
-  const canWrite = roleCan(data.role, 'events:write');
+  const canWrite = can('events:write');
   const dates = await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports);
   const ticketing = data.modules.has('ticketing');
   const sold = new Map(
@@ -82,7 +81,7 @@ export default async function DatesPage({
               <form action={cancelDateAction.bind(null, org, event, cancelling.id)}>
                 <Button type="submit">{t('dates.confirmCancel')}</Button>
               </form>
-              {ticketing && roleCan(data.role, 'orders:read') ? (
+              {ticketing && can('orders:read') ? (
                 <Link href={`${base}/tickets-orders#orders-heading`} className={buttonClass('secondary')}>
                   {t('dates.reviewOrders')}
                 </Link>

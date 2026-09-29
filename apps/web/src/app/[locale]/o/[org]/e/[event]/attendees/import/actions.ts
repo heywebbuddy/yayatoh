@@ -18,7 +18,7 @@ const errorOf = (err: unknown) => {
 
 /** Step 1: read the uploaded CSV and stage it; then the mapping step. */
 export async function uploadImportAction(org: string, event: string, form: FormData): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const locale = await getLocale();
   const base = `/o/${org}/e/${event}/attendees/import`;
   const file = form.get('file');
@@ -46,7 +46,7 @@ const col = (v: FormDataEntryValue | null) => {
 
 /** Step 2: apply the column mapping and check every row. */
 export async function validateImportAction(org: string, event: string, batchId: string, form: FormData) {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const locale = await getLocale();
   const base = `/o/${org}/e/${event}/attendees/import?batch=${batchId}`;
   const extra = String(form.get('extraLabel') ?? '').trim();
@@ -74,7 +74,7 @@ export async function validateImportAction(org: string, event: string, batchId: 
 
 /** Step 3: import the valid rows (a bulk job; small files finish before the page loads). */
 export async function startImportAction(org: string, event: string, batchId: string) {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const locale = await getLocale();
   let operationId: string;
   try {

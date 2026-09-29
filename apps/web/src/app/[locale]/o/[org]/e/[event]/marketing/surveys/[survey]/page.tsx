@@ -1,7 +1,6 @@
 import { executeQuery, isDomainError, uuidv7 } from '@yayatoh/kernel';
 import type { BulkOperationDto } from '@yayatoh/platform';
 import { type SurveyDetailDto, surveyExportBulk, surveyQuery } from '@yayatoh/surveys';
-import { roleCan } from '@yayatoh/tenancy';
 import { BarChart, Button, buttonClass, Card, ChartTable, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -32,8 +31,8 @@ type Params = Promise<{ locale: string; org: string; event: string; survey: stri
 
 async function load(params: Params) {
   const { org, event, survey } = await params;
-  const { data, event: ev } = await loadEvent(org, event);
-  if (!data.modules.has('messaging') || !roleCan(data.role, 'messages:read')) notFound();
+  const { data, event: ev, can } = await loadEvent(org, event, 'marketing');
+  if (!data.modules.has('messaging') || !can('messages:read')) notFound();
   if (!/^[0-9a-f-]{36}$/.test(survey)) notFound();
   const detail = await executeQuery(surveyQuery, { eventId: ev.id, surveyId: survey }, data.ctx, ports).catch(
     (err) => {
@@ -41,7 +40,7 @@ async function load(params: Params) {
       throw err;
     },
   );
-  return { data, ev, detail };
+  return { data, ev, detail, can };
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
@@ -62,12 +61,12 @@ export default async function SurveyPage({
   const { locale, org, event, survey } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
-  const { data, ev, detail } = await load(params);
+  const { data, ev, detail, can } = await load(params);
   const t = await getTranslations('surveys');
   const tb = await getTranslations('bulk');
   const s = detail.survey;
-  const canSend = roleCan(data.role, 'messages:send');
-  const canExport = roleCan(data.role, 'attendees:export');
+  const canSend = can('messages:send');
+  const canExport = can('attendees:export');
   const base = `/o/${org}/e/${event}/marketing/surveys`;
   const n = new Intl.NumberFormat(locale);
   const pct = (part: number, whole: number) => (whole ? Math.round((100 * part) / whole) : 0);

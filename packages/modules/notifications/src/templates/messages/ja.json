@@ -35,6 +35,11 @@
       "intro": "{orgName} から {role} としてチームへの招待が届いています。",
       "cta": "招待を承諾する"
     },
+    "tenancy.event-invitation": {
+      "subject": "{eventName} へのご招待",
+      "intro": "{orgName} から {eventName} の{role}として招待されました。表示されるのはこのイベントのみです。",
+      "cta": "招待を承諾する"
+    },
     "ticketing.claim-link": {
       "subject": "{eventName} のチケットが届いています",
       "intro": "{eventName} のチケットが譲渡されました。受け取ると自分専用の QR コードが発行されます。",
@@ -138,7 +143,10 @@
     "marketing": "マーケティング",
     "box_office": "ボックスオフィス",
     "scanner": "スキャナー",
-    "viewer": "閲覧者"
+    "viewer": "閲覧者",
+    "co_host": "共同ホスト",
+    "planner": "プランナー",
+    "collaborator": "イベント協力者"
   },
   "account": {
     "deleted": {

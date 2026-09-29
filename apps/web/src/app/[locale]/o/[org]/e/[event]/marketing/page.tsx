@@ -1,6 +1,5 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { announcementsQuery } from '@yayatoh/messaging';
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, PageHeader, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -24,8 +23,8 @@ export default async function MarketingPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
-  if (!data.modules.has('messaging') || !roleCan(data.role, 'messages:read')) notFound();
+  const { data, event: ev, can } = await loadEvent(org, event, 'marketing');
+  if (!data.modules.has('messaging') || !can('messages:read')) notFound();
   const t = await getTranslations('announcements');
   const ts = await getTranslations('surveys');
   const log = await executeQuery(announcementsQuery, { eventId: ev.id }, data.ctx, ports);
@@ -46,7 +45,7 @@ export default async function MarketingPage({
           {ts('open')}
         </Link>
       </Card>
-      {roleCan(data.role, 'messages:send') ? (
+      {can('messages:send') ? (
         <section aria-labelledby="compose-heading" className="flex flex-col gap-3">
           <h2 id="compose-heading" className="text-section">
             {t('composeTitle')}

@@ -1,6 +1,5 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { listReviewsQuery, REVIEW_FILTERS } from '@yayatoh/reviews';
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ReviewModeration } from '@/components/reviews/review-moderation.tsx';
@@ -25,10 +24,10 @@ export default async function ReviewsPage({
   setRequestLocale(locale);
   const raw = (await searchParams).filter;
   const filter: Filter = (REVIEW_FILTERS as readonly string[]).includes(raw ?? '') ? (raw as Filter) : 'all';
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'reviews');
   const t = await getTranslations('reviews');
   // Moderation is an events:write power (event managers included, through the event's roles).
-  const canModerate = roleCan(data.role, 'events:write');
+  const canModerate = can('events:write');
   const list = await executeQuery(listReviewsQuery, { eventId: ev.id, filter }, data.ctx, ports);
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const base = `/o/${org}/e/${event}/reviews`;

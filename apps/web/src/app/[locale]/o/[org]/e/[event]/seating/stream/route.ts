@@ -1,7 +1,7 @@
-import { getEventBySlugQuery } from '@yayatoh/events';
+import { eventRolesOf, getEventBySlugQuery, teamEventBySlugQuery } from '@yayatoh/events';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { seatingLiveAccessQuery } from '@yayatoh/seating';
-import { memberRole, resolveOrgSlug } from '@yayatoh/tenancy';
+import { eventRolesOpenSection, memberRole, resolveOrgSlug, roleCan } from '@yayatoh/tenancy';
 import type { NextRequest } from 'next/server';
 import { ports } from '@/server/ports.ts';
 import { seatStreamResponse } from '@/server/seat-stream.ts';
@@ -28,9 +28,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ org:
     actor: { type: 'user', userId: session.userId },
     impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
   });
-  if (!(await memberRole(ctx))) return new Response(null, { status: 404 });
+  const role = await memberRole(ctx);
+  if (!role) return new Response(null, { status: 404 });
   try {
-    const ev = await executeQuery(getEventBySlugQuery, { slug: event }, ctx, ports);
+    // M4.2a: someone on the event's team (a co-host or planner) reads it through their role; a
+    // collaborator must hold a role that opens Seating.
+    const ev = roleCan(role, 'events:read')
+      ? await executeQuery(getEventBySlugQuery, { slug: event }, ctx, ports)
+      : await executeQuery(teamEventBySlugQuery, { slug: event }, ctx, ports);
+    if (role === 'collaborator' && !eventRolesOpenSection(await eventRolesOf(ctx, ev.id), 'seating'))
+      return new Response(null, { status: 404 });
     await executeQuery(seatingLiveAccessQuery, { eventId: ev.id }, ctx, ports);
     return seatStreamResponse(req, {
       orgId: resolved.orgId,

@@ -24,7 +24,7 @@ export async function createExhibitorAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'exhibitors');
   try {
     await executeCommand(createExhibitorCommand, { eventId: ev.id, ...fields(form) }, data.ctx, ports);
   } catch (err) {
@@ -41,7 +41,7 @@ export async function updateExhibitorAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'exhibitors');
   try {
     await executeCommand(
       updateExhibitorCommand,
@@ -57,7 +57,7 @@ export async function updateExhibitorAction(
 }
 
 export async function deleteExhibitorAction(org: string, event: string, exhibitorId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'exhibitors');
   await executeCommand(deleteExhibitorCommand, { eventId: ev.id, exhibitorId }, data.ctx, ports);
   // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
   await purgeDeletedProgramMedia(data.org.id);

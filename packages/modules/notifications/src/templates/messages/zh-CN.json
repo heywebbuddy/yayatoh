@@ -35,6 +35,11 @@
       "intro": "{orgName} 邀请您以{role}身份加入团队。",
       "cta": "接受邀请"
     },
+    "tenancy.event-invitation": {
+      "subject": "邀请您参与 {eventName}",
+      "intro": "{orgName} 邀请您以{role}身份参与 {eventName}。您只会看到这个活动。",
+      "cta": "接受邀请"
+    },
     "ticketing.claim-link": {
       "subject": "有一张 {eventName} 的门票在等您",
       "intro": "有人转给您一张 {eventName} 的门票。领取后即可获得您自己的二维码。",
@@ -138,7 +143,10 @@
     "marketing": "市场",
     "box_office": "售票处",
     "scanner": "检票员",
-    "viewer": "查看者"
+    "viewer": "查看者",
+    "co_host": "联合主办人",
+    "planner": "策划人",
+    "collaborator": "活动协作者"
   },
   "account": {
     "deleted": {

@@ -1,6 +1,5 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { eventFinanceQuery } from '@yayatoh/reports';
-import { roleCan } from '@yayatoh/tenancy';
 import { EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { FinanceWaterfall } from '@/components/finance-waterfall.tsx';
@@ -16,17 +15,15 @@ export default async function FinancePage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'analysis');
   const t = await getTranslations();
   const base = `/o/${org}/e/${event}/analysis`;
-  const finance = roleCan(data.role, 'finance:read');
+  const finance = can('finance:read');
   if (!data.modules.has('reports') || !finance) {
     return (
       <>
         <PageHeader title={t('reports.tabs.finance')} description={ev.name} />
-        {roleCan(data.role, 'orders:read') ? (
-          <ReportTabs base={base} current="finance" finance={false} />
-        ) : null}
+        {can('orders:read') ? <ReportTabs base={base} current="finance" finance={false} /> : null}
         <EmptyState
           title={t('reports.financeNoAccessTitle')}
           description={t('reports.financeNoAccessDescription')}

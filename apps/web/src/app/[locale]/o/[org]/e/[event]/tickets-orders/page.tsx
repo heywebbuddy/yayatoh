@@ -3,7 +3,6 @@ import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { publicSeatMap } from '@yayatoh/seating';
-import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -40,7 +39,7 @@ export default async function TicketsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
   const t = await getTranslations();
   const types = await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports);
   // Multi-date events (M1.4b): ticket types may be limited to dates; the box office sells one date.
@@ -61,12 +60,12 @@ export default async function TicketsPage({
   const saleDates = dateOptions.filter(
     (o) => (dates.find((d) => d.id === o.id)?.endsAt.getTime() ?? 0) > nowMs,
   );
-  const canWrite = roleCan(data.role, 'events:write');
-  const orders = roleCan(data.role, 'orders:read')
+  const canWrite = can('events:write');
+  const orders = can('orders:read')
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
     : null;
   const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
-  const canSell = roleCan(data.role, 'orders:sell') && ev.status === 'published' && types.length > 0;
+  const canSell = can('orders:sell') && ev.status === 'published' && types.length > 0;
   // Seated events (M1.7f): the box office chooses seats from the same map as buyers, live.
   const seatMap = canSell ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, { audience: 'staff' }) : null;
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);

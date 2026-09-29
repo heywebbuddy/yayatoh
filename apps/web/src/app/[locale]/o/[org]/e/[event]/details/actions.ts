@@ -20,7 +20,7 @@ export async function saveDetailsAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'details');
   const venueId = String(form.get('venueId') ?? '');
   const category = String(form.get('category') ?? '');
   const visibility = String(form.get('visibility') ?? ev.visibility);
@@ -57,7 +57,7 @@ export async function setVanityAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'details');
   const code = String(form.get('code') ?? '').trim();
   try {
     await executeCommand(setVanityShortLinkCommand, { eventId: ev.id, code: code || null }, data.ctx, ports);
@@ -69,7 +69,7 @@ export async function setVanityAction(
 }
 
 export async function ensureShortLinkAction(org: string, event: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'details');
   await executeCommand(ensureShortLinkCommand, { eventId: ev.id }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/details`);
 }

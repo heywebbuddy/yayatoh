@@ -48,7 +48,7 @@ export const saveLayoutCommand = tenantCommand({
   input: z.object({ id: z.uuid().optional(), name: z.string().trim().min(1).max(120), doc: z.unknown() }),
   output: LayoutSummaryDto,
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const { doc, checksum } = validDoc(input.doc);
     const values = { name: input.name, doc, checksum, seatCount: seatCount(doc), updatedAt: ctx.now };
@@ -66,7 +66,9 @@ export const saveLayoutCommand = tenantCommand({
 
 export const listLayoutsQuery = tenantQuery({
   name: 'seating.listLayouts',
-  input: z.object({}),
+  // `eventId` (optional) scopes the authorization to that event: a planner picking a floor plan
+  // for their event reads the org's plans through their event role (M4.2a).
+  input: z.object({ eventId: z.uuid().optional() }),
   output: z.array(LayoutSummaryDto),
   entitlement: 'seating',
   permission: 'events:read',
@@ -81,7 +83,7 @@ export const listLayoutsQuery = tenantQuery({
 
 export const getLayoutQuery = tenantQuery({
   name: 'seating.getLayout',
-  input: z.object({ id: z.uuid() }),
+  input: z.object({ id: z.uuid(), eventId: z.uuid().optional() }),
   output: LayoutSummaryDto.extend({ doc: FloorplanDoc }),
   entitlement: 'seating',
   permission: 'events:read',
@@ -119,7 +121,7 @@ export const setEventLayoutCommand = tenantCommand({
     }),
   output: z.object({ eventId: z.uuid(), seatCount: z.int(), status: z.enum(EVENT_LAYOUT_STATUSES) }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const current = await eventLayoutTx(tx, input.eventId, true);
@@ -202,7 +204,7 @@ export const publishEventLayoutCommand = tenantCommand({
   input: z.object({ eventId: z.uuid() }),
   output: z.object({ status: z.enum(EVENT_LAYOUT_STATUSES) }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const current = await eventLayoutTx(tx, input.eventId, true);
     if (!current) throw new DomainError('not_found', 'This event has no floor plan');
@@ -242,7 +244,7 @@ export const assignSeatCategoryCommand = tenantCommand({
   input: Selection.extend({ ticketTypeId: z.uuid().nullable() }),
   output: z.object({ updated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const rows = await tx
       .update(eventSeats)
@@ -265,7 +267,7 @@ export const blockSeatsCommand = tenantCommand({
   input: Selection.extend({ reason: z.enum(BLOCK_REASONS).nullable() }),
   output: z.object({ updated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const rows = input.reason
       ? await tx

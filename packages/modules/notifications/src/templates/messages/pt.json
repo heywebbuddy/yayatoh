@@ -35,6 +35,11 @@
       "intro": "{orgName} convidou você para a equipe como {role}.",
       "cta": "Aceitar o convite"
     },
+    "tenancy.event-invitation": {
+      "subject": "Você foi convidado para ajudar em {eventName}",
+      "intro": "{orgName} convidou você para {eventName} como {role}. Você verá apenas este evento.",
+      "cta": "Aceitar o convite"
+    },
     "ticketing.claim-link": {
       "subject": "Um ingresso para {eventName} espera por você",
       "intro": "Alguém passou um ingresso para {eventName} para você. Resgate-o para receber seu próprio QR code.",
@@ -138,7 +143,10 @@
     "marketing": "marketing",
     "box_office": "bilheteria",
     "scanner": "leitor de ingressos",
-    "viewer": "visualizador"
+    "viewer": "visualizador",
+    "co_host": "coanfitrião",
+    "planner": "planejador",
+    "collaborator": "colaborador do evento"
   },
   "account": {
     "deleted": {

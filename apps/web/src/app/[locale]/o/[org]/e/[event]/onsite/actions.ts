@@ -25,7 +25,7 @@ export async function scanAction(
   prev: ScanState,
   form: FormData,
 ): Promise<ScanState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const seq = (prev.kind === 'idle' ? 0 : prev.seq) + 1;
   try {
     const outcome = await executeCommand(
@@ -48,7 +48,7 @@ export async function scanAction(
 }
 
 export async function undoAction(org: string, event: string, admissionId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   await executeCommand(undoAdmissionCommand, { eventId: ev.id, admissionId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/onsite`);
 }
@@ -65,7 +65,7 @@ export async function enrollDeviceAction(
   _prev: EnrollState,
   form: FormData,
 ): Promise<EnrollState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'onsite');
   const label = String(form.get('label') ?? '').trim();
   const assignedUserId = String(form.get('assignedUserId') ?? '') || null;
   try {
@@ -83,7 +83,7 @@ export async function deviceStateAction(
   deviceId: string,
   action: 'revoke' | 'wipe',
 ): Promise<void> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'onsite');
   await executeCommand(setDeviceStateCommand, { deviceId, action }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/onsite`);
 }
@@ -109,7 +109,7 @@ export async function createCheckpointAction(
   _prev: CheckpointFormState,
   form: FormData,
 ): Promise<CheckpointFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const latitude = coordinate(form.get('latitude'));
   const longitude = coordinate(form.get('longitude'));
   const badLocation =
@@ -146,7 +146,7 @@ export async function checkpointArchivedAction(
   checkpointId: string,
   archived: boolean,
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   await executeCommand(
     setCheckpointArchivedCommand,
     { eventId: ev.id, checkpointId, archived },

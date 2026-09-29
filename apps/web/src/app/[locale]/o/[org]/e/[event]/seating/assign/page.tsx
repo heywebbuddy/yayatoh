@@ -7,7 +7,6 @@ import {
   seatGroupsQuery,
   seatingRulesQuery,
 } from '@yayatoh/seating';
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -37,7 +36,7 @@ export default async function AssignSeatsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'seating')) notFound();
   const t = await getTranslations('seating');
@@ -55,7 +54,7 @@ export default async function AssignSeatsPage({
           : Promise.resolve([]),
       ])
     : [[], []];
-  const canWrite = roleCan(data.role, 'events:write');
+  const canWrite = can('seating:write');
   return (
     <>
       <PageHeader title={t('assign.title')} description={t('assign.description')} />

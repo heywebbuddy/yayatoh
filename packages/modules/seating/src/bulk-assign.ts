@@ -90,7 +90,7 @@ function targetWhere(doc: FloorplanDoc, t: BulkAssignTarget) {
 export const seatAssignAction = defineBulkAction({
   key: 'seating.bulkAssign',
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   params: Params,
   filter: AttendeeFilter,
   chunkSize: 100,

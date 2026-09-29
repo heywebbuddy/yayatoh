@@ -1,8 +1,8 @@
-import { composeNav, isProfileKey, navLabelKey } from '@yayatoh/platform';
+import { composeNav, navLabelKey } from '@yayatoh/platform';
 import { EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { loadEvent } from '@/server/console.ts';
+import { loadEventBase } from '@/server/console.ts';
 
 /**
  * Sections of the event console that later milestones fill in. Only sections the profile's
@@ -15,10 +15,10 @@ export default async function SectionPage({
 }) {
   const { locale, org, event, section } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
-  const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
+  const { data, profile, opens } = await loadEventBase(org, event);
   const item = composeNav(profile, data.modules).find((i) => i.path === section);
-  if (!item) notFound();
+  // M4.2a: a planner opens only their sections; anything else is a 404 like an unknown section.
+  if (!item || !opens(item.key)) notFound();
   const t = await getTranslations();
   return (
     <>

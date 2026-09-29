@@ -242,7 +242,8 @@
     "emails": "Plantillas de correo",
     "speakers": "Ponentes",
     "sponsors": "Patrocinadores",
-    "media": "Imágenes"
+    "media": "Imágenes",
+    "tablesSponsors": "Mesas y patrocinadores"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -256,7 +257,11 @@
     "registration": "Inscripción",
     "rsvp": "RSVP",
     "ticket": "Entrada",
-    "tickets": "Entradas"
+    "tickets": "Entradas",
+    "organizer": "Organizador",
+    "organizers": "Organizadores",
+    "host": "Anfitrión",
+    "hosts": "Anfitriones"
   },
   "roles": {
     "owner": "Propietario",
@@ -266,7 +271,8 @@
     "marketing": "Marketing",
     "box_office": "Taquilla",
     "scanner": "Control de acceso",
-    "viewer": "Solo lectura"
+    "viewer": "Solo lectura",
+    "collaborator": "Colaborador de evento"
   },
   "profiles": {
     "wedding": "Boda",
@@ -327,7 +333,8 @@
     "ownerOnly": "Solo los propietarios pueden cambiar a otros propietarios",
     "errors": {
       "last_owner": "Una organización necesita al menos un propietario.",
-      "owner_only": "Solo un propietario puede nombrar propietario a alguien o cambiar a un propietario."
+      "owner_only": "Solo un propietario puede nombrar propietario a alguien o cambiar a un propietario.",
+      "pending_invitation": "Ya hay una invitación pendiente para esta dirección. Retírala primero o espera a que la acepten."
     }
   },
   "dashboard": {
@@ -406,7 +413,13 @@
     "datesUpcoming": "Una fecha próxima",
     "ticketsCreated": "Entradas creadas",
     "agendaAdded": "Agenda añadida",
-    "speakersAdded": "Ponentes añadidos"
+    "speakersAdded": "Ponentes añadidos",
+    "comingSoon": "Próximamente",
+    "guestsAdded": "Lista de invitados añadida",
+    "rsvpDeadlineSet": "Fecha límite de RSVP fijada",
+    "floorPlanChosen": "Plano elegido",
+    "guestSitePublished": "Sitio de invitados publicado",
+    "tablesSponsors": "Mesas y patrocinadores configurados"
   },
   "segments": {
     "all": "Todos",
@@ -654,7 +667,9 @@
       "revoked": "Esta invitación fue retirada.",
       "expired": "Esta invitación ha caducado. Pide una nueva.",
       "unavailable": "Esta organización no está disponible en este momento."
-    }
+    },
+    "eventTitle": "Colabora en {event}",
+    "joinEvent": "Te unirás a {event} ({org}) como {role}. Solo verás este evento."
   },
   "eventStatus": {
     "draft": "Borrador",
@@ -3367,7 +3382,12 @@
       "ticketsCreated": "Crea al menos un tipo de entrada.",
       "agendaAdded": "Añade la primera sesión a la agenda.",
       "speakersAdded": "Añade el primer ponente.",
-      "published": "Publica el evento desde su página de inicio cuando todo esté listo."
+      "published": "Publica el evento desde su página de inicio cuando todo esté listo.",
+      "guestsAdded": "Añade a tus invitados y sus grupos.",
+      "rsvpDeadlineSet": "Elige la fecha en que se cierran los RSVP.",
+      "floorPlanChosen": "Elige un plano para el salón o crea uno a partir de números.",
+      "guestSitePublished": "Publica el sitio web protegido con contraseña que abren tus invitados.",
+      "tablesSponsors": "Pon nombre a tus mesas y a sus patrocinadores."
     }
   },
   "program": {
@@ -4374,6 +4394,97 @@
     "terminated": {
       "title": "Esta organización está cerrada",
       "body": "El soporte de Yayatoh la cerró. Sus páginas públicas están desconectadas y no se puede cambiar nada. Como propietario aún puedes abrirla y descargar tus datos, por ejemplo desde Actividad."
+    }
+  },
+  "eventRoles": {
+    "co_host": "Coanfitrión",
+    "planner": "Planificador"
+  },
+  "eventTeam": {
+    "title": "Equipo del evento",
+    "subtitle": "Los coanfitriones y planificadores trabajan solo en este evento. Nunca ven otros eventos, pagos ni la configuración de la organización.",
+    "rolesTitle": "Quién puede hacer qué",
+    "explain": {
+      "co_host": "Todo sobre este evento: invitados, RSVP, asientos, sitio web, galería, mensajes, el gran día y entradas. Puede invitar al resto del equipo.",
+      "planner": "Invitados, RSVP, asientos, sitio web, galería, mensajes y el gran día. Sin pagos, reembolsos ni informes financieros."
+    },
+    "inviteTitle": "Invitar a este evento",
+    "emptyTitle": "Aún no hay coanfitriones ni planificadores",
+    "emptyDescription": "Invita a alguien por correo. Solo tendrá acceso a este evento.",
+    "revokeFor": "Retirar la invitación de {email}"
+  },
+  "myEvents": {
+    "title": "Tus eventos",
+    "description": "Los eventos en los que colaboras en {org}.",
+    "emptyTitle": "No hay eventos por ahora",
+    "emptyDescription": "Cuando alguien te invite a un evento, aparecerá aquí.",
+    "open": "Abrir {name}"
+  },
+  "starters": {
+    "title": "Plantillas de inicio",
+    "label": "Plantilla de inicio",
+    "yours": "Tus plantillas",
+    "use": "Crear un evento desde {name}",
+    "sections": "Secciones: {list}",
+    "checklist": "Lista de verificación: {list}",
+    "wedding": {
+      "name": "Boda",
+      "description": "Invitados, RSVP, asientos, un sitio privado para invitados, galería, mensajes y el gran día. Nunca aparece en público."
+    },
+    "gala": {
+      "name": "Gala",
+      "description": "Entradas, mesas y patrocinadores, asientos, donaciones y registro en el lugar."
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "Los RSVP y los asientos aparecen aquí cuando tus invitados empiezan a responder."
+      },
+      "details": {
+        "attendanceHint": "Para eventos en línea e híbridos, añade el enlace en Acceso. Solo tus invitados lo ven."
+      },
+      "dates": {
+        "capacityHint": "Opcional. El máximo de invitados que puede recibir esta fecha."
+      },
+      "copy": {
+        "description": "Reutiliza este evento. Una copia toma su configuración, preguntas y plano — nunca sus invitados, RSVP, registros de entrada ni pagos."
+      },
+      "announcements": {
+        "pushHint": "Las notificaciones push llegan a los invitados que las activaron; los demás reciben el correo."
+      },
+      "eventAnnouncements": {
+        "explainer": "Los anuncios públicos aparecen en la página del evento; los de solo invitados aparecen en las páginas de tus invitados.",
+        "emptyDescription": "Publica noticias, cambios de horario o recordatorios para tus invitados.",
+        "audienceHolders": "Solo invitados",
+        "holdersOnly": "Solo invitados"
+      },
+      "access": {
+        "subtitle": "Información privada para tus invitados, el enlace para unirse en línea y los códigos de acceso."
+      },
+      "privateInfo": {
+        "explainer": "Solo tus invitados verificados ven esto. Nunca aparece en la página pública del evento.",
+        "body": "Información para los invitados"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "Los códigos de acceso permiten a tus invitados abrir la página privada del evento."
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "Todo sobre este evento: invitados, RSVP, asientos, sitio web, galería, mensajes y el gran día. Puede invitar al resto del equipo."
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "Reutiliza este evento. Una copia toma su configuración, tipos de entrada, preguntas de compra y plano — nunca sus pedidos, invitados, entradas, registros de entrada ni pagos."
+      },
+      "announcements": {
+        "pushHint": "Las notificaciones push llegan a los invitados que las activaron en su página de pedido o en la app; los demás reciben el correo."
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "Publica noticias, cambios de horario o recordatorios para tus invitados."
+      }
     }
   }
 }

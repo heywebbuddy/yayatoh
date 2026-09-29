@@ -8,7 +8,6 @@ import {
   formatScheduleText,
 } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AiDraftPanel } from '@/components/ai-draft-panel.tsx';
@@ -17,6 +16,7 @@ import { Markdown } from '@/components/markdown.tsx';
 import { SectionForm, type SectionValues } from '@/components/section-form.tsx';
 import { SectionList } from '@/components/section-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { profileT } from '@/lib/profile-copy.ts';
 import { aiDrafter } from '@/server/ai.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -58,9 +58,11 @@ export default async function ContentPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can, profile } = await loadEvent(org, event, 'content');
   const t = await getTranslations();
-  const canWrite = roleCan(data.role, 'events:write');
+  // M4.2a: a wedding's announcements go to guests, not ticket holders.
+  const tp = profileT(t, profile);
+  const canWrite = can('events:write');
   const [sections, announcements] = await Promise.all([
     executeQuery(eventSectionsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(announcementsQuery, { eventId: ev.id }, data.ctx, ports),
@@ -171,11 +173,11 @@ export default async function ContentPage({
         <h2 id="announcements-heading" className="text-section">
           {t('eventAnnouncements.heading')}
         </h2>
-        <p className="text-body text-zinc-500">{t('eventAnnouncements.explainer')}</p>
+        <p className="text-body text-zinc-500">{tp('eventAnnouncements.explainer')}</p>
         {announcements.length === 0 ? (
           <EmptyState
             title={t('eventAnnouncements.emptyTitle')}
-            description={t('eventAnnouncements.emptyDescription')}
+            description={tp('eventAnnouncements.emptyDescription')}
           />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
@@ -188,7 +190,7 @@ export default async function ContentPage({
                     </Label>
                     <Label>
                       {a.audience === 'holders'
-                        ? t('eventAnnouncements.holdersOnly')
+                        ? tp('eventAnnouncements.holdersOnly')
                         : t('eventAnnouncements.public')}
                     </Label>
                     {a.pinned ? <Label>{t('eventAnnouncements.pinned')}</Label> : null}

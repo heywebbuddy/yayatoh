@@ -242,7 +242,8 @@
     "emails": "邮件模板",
     "speakers": "演讲嘉宾",
     "sponsors": "赞助商",
-    "media": "图片"
+    "media": "图片",
+    "tablesSponsors": "桌位与赞助商"
   },
   "vocab": {
     "attendee": "参会者",
@@ -256,7 +257,11 @@
     "registration": "报名",
     "rsvp": "回复确认",
     "ticket": "门票",
-    "tickets": "门票"
+    "tickets": "门票",
+    "organizer": "主办方",
+    "organizers": "主办方",
+    "host": "主人",
+    "hosts": "主人"
   },
   "roles": {
     "owner": "所有者",
@@ -266,7 +271,8 @@
     "marketing": "营销",
     "box_office": "售票处",
     "scanner": "检票员",
-    "viewer": "只读"
+    "viewer": "只读",
+    "collaborator": "活动协作者"
   },
   "profiles": {
     "wedding": "婚礼",
@@ -327,7 +333,8 @@
     "ownerOnly": "只有所有者可以更改所有者",
     "errors": {
       "last_owner": "组织至少需要一名所有者。",
-      "owner_only": "只有所有者才能将他人设为所有者或更改所有者。"
+      "owner_only": "只有所有者才能将他人设为所有者或更改所有者。",
+      "pending_invitation": "此地址已有一份待处理的邀请。请先撤回，或等待对方接受。"
     }
   },
   "dashboard": {
@@ -406,7 +413,13 @@
     "datesUpcoming": "有即将到来的日期",
     "ticketsCreated": "已创建门票",
     "agendaAdded": "已添加日程",
-    "speakersAdded": "已添加演讲嘉宾"
+    "speakersAdded": "已添加演讲嘉宾",
+    "comingSoon": "即将推出",
+    "guestsAdded": "已添加宾客名单",
+    "rsvpDeadlineSet": "已设置回复截止日期",
+    "floorPlanChosen": "已选择平面图",
+    "guestSitePublished": "已发布宾客网站",
+    "tablesSponsors": "已设置桌位和赞助商"
   },
   "segments": {
     "all": "全部",
@@ -654,7 +667,9 @@
       "revoked": "此邀请已被撤回。",
       "expired": "此邀请已过期，请申请新的邀请。",
       "unavailable": "该组织目前不可用。"
-    }
+    },
+    "eventTitle": "协助 {event}",
+    "joinEvent": "您将以{role}身份加入 {event}（{org}）。您只会看到这个活动。"
   },
   "eventStatus": {
     "draft": "草稿",
@@ -3367,7 +3382,12 @@
       "ticketsCreated": "至少创建一种门票类型。",
       "agendaAdded": "向日程添加第一个环节。",
       "speakersAdded": "添加第一位演讲嘉宾。",
-      "published": "一切就绪后,在活动主页发布活动。"
+      "published": "一切就绪后,在活动主页发布活动。",
+      "guestsAdded": "添加宾客及其同行人。",
+      "rsvpDeadlineSet": "选择回复截止的日期。",
+      "floorPlanChosen": "为场地选择平面图，或按数量生成一个。",
+      "guestSitePublished": "发布宾客打开的密码保护网站。",
+      "tablesSponsors": "为桌位和赞助商命名。"
     }
   },
   "program": {
@@ -4374,6 +4394,97 @@
     "terminated": {
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
+    }
+  },
+  "eventRoles": {
+    "co_host": "联合主办人",
+    "planner": "策划人"
+  },
+  "eventTeam": {
+    "title": "活动团队",
+    "subtitle": "联合主办人和策划人只负责这个活动，永远看不到其他活动、付款或组织设置。",
+    "rolesTitle": "谁能做什么",
+    "explain": {
+      "co_host": "这个活动的一切：宾客、回复、座位、网站、相册、消息、当天安排和门票。可以邀请团队其他成员。",
+      "planner": "宾客、回复、座位、网站、相册、消息和当天安排。不含付款、退款或财务报告。"
+    },
+    "inviteTitle": "邀请加入此活动",
+    "emptyTitle": "还没有联合主办人或策划人",
+    "emptyDescription": "通过电子邮件邀请他人。对方只能访问这个活动。",
+    "revokeFor": "撤回发给 {email} 的邀请"
+  },
+  "myEvents": {
+    "title": "您的活动",
+    "description": "您在 {org} 协助的活动。",
+    "emptyTitle": "暂无活动",
+    "emptyDescription": "有人邀请您参加活动后，它会显示在这里。",
+    "open": "打开 {name}"
+  },
+  "starters": {
+    "title": "入门模板",
+    "label": "入门",
+    "yours": "您的模板",
+    "use": "从{name}创建活动",
+    "sections": "板块：{list}",
+    "checklist": "清单：{list}",
+    "wedding": {
+      "name": "婚礼",
+      "description": "宾客、回复、座位、私密宾客网站、相册、消息和婚礼当天。从不公开展示。"
+    },
+    "gala": {
+      "name": "晚宴",
+      "description": "门票、桌位与赞助商、座位、捐款和现场签到。"
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "宾客开始回复后，回复和座位会显示在这里。"
+      },
+      "details": {
+        "attendanceHint": "线上和混合活动请在“访问”中添加参加链接。只有您的宾客能看到。"
+      },
+      "dates": {
+        "capacityHint": "可选。此日期最多可接待的宾客人数。"
+      },
+      "copy": {
+        "description": "重复使用此活动。副本会带上设置、问题和平面图——绝不包括宾客、回复、签到或付款。"
+      },
+      "announcements": {
+        "pushHint": "推送会发给开启了通知的宾客；其他人会收到电子邮件。"
+      },
+      "eventAnnouncements": {
+        "explainer": "公开公告显示在活动页面；仅限宾客的公告显示在宾客的页面上。",
+        "emptyDescription": "为宾客发布新闻、时间变更或提醒。",
+        "audienceHolders": "仅限宾客",
+        "holdersOnly": "仅限宾客"
+      },
+      "access": {
+        "subtitle": "给宾客的私密信息、线上参加链接和访问码。"
+      },
+      "privateInfo": {
+        "explainer": "只有经过验证的宾客能看到。绝不会出现在公开的活动页面上。",
+        "body": "给宾客的信息"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "访问码让您的宾客打开私密活动页面。"
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "这个活动的一切：宾客、回复、座位、网站、相册、消息和当天安排。可以邀请团队其他成员。"
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "重复使用此活动。副本会带上设置、票种、下单问题和平面图——绝不包括订单、宾客、门票、签到或付款。"
+      },
+      "announcements": {
+        "pushHint": "推送会发给在订单页面或应用中开启了通知的宾客；其他人会收到电子邮件。"
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "为宾客发布新闻、时间变更或提醒。"
+      }
     }
   }
 }

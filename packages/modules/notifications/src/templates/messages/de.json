@@ -35,6 +35,11 @@
       "intro": "{orgName} lädt dich ein, dem Team als {role} beizutreten.",
       "cta": "Einladung annehmen"
     },
+    "tenancy.event-invitation": {
+      "subject": "Sie sind zu {eventName} eingeladen",
+      "intro": "{orgName} hat Sie zu {eventName} als {role} eingeladen. Sie sehen nur diese Veranstaltung.",
+      "cta": "Einladung annehmen"
+    },
     "ticketing.claim-link": {
       "subject": "Ein Ticket für {eventName} wartet auf dich",
       "intro": "Jemand hat dir ein Ticket für {eventName} weitergegeben. Hol es dir, um deinen eigenen QR-Code zu erhalten.",
@@ -138,7 +143,10 @@
     "marketing": "Marketing",
     "box_office": "Abendkasse",
     "scanner": "Einlass",
-    "viewer": "Leser"
+    "viewer": "Leser",
+    "co_host": "Co-Gastgeber",
+    "planner": "Planer",
+    "collaborator": "Veranstaltungsmitarbeiter"
   },
   "account": {
     "deleted": {

@@ -32,7 +32,7 @@ export default async function SeatPosterPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   if (!roleCan(data.role, 'attendees:read') || !data.modules.has('seat_finder')) notFound();
   const t = await getTranslations('seatPoster');
   const poster = await executeQuery(finderPosterQuery, { eventId: ev.id, locale }, data.ctx, ports).catch(

@@ -35,6 +35,11 @@
       "intro": "دعتك {orgName} للانضمام إلى فريقها بدور {role}.",
       "cta": "قبول الدعوة"
     },
+    "tenancy.event-invitation": {
+      "subject": "أنت مدعو للمساعدة في {eventName}",
+      "intro": "دعاك {orgName} إلى {eventName} بصفة {role}. سترى هذه المناسبة فقط.",
+      "cta": "قبول الدعوة"
+    },
     "ticketing.claim-link": {
       "subject": "تذكرة لفعالية {eventName} بانتظارك",
       "intro": "أرسل إليك أحدهم تذكرة لفعالية {eventName}. استلمها لتحصل على رمز QR الخاص بك.",
@@ -138,7 +143,10 @@
     "marketing": "تسويق",
     "box_office": "شباك التذاكر",
     "scanner": "ماسح التذاكر",
-    "viewer": "مشاهد"
+    "viewer": "مشاهد",
+    "co_host": "مضيف مشارك",
+    "planner": "منسق",
+    "collaborator": "متعاون في المناسبة"
   },
   "account": {
     "deleted": {

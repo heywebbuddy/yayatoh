@@ -35,6 +35,11 @@
       "intro": "{orgName} invited you to join their team as {role}.",
       "cta": "Accept the invitation"
     },
+    "tenancy.event-invitation": {
+      "subject": "You're invited to help with {eventName}",
+      "intro": "{orgName} invited you to {eventName} as {role}. You'll see this event only.",
+      "cta": "Accept the invitation"
+    },
     "ticketing.claim-link": {
       "subject": "A ticket for {eventName} is waiting for you",
       "intro": "Someone passed you a ticket for {eventName}. Claim it to get your own QR code.",
@@ -138,7 +143,10 @@
     "marketing": "marketing",
     "box_office": "box office",
     "scanner": "scanner",
-    "viewer": "viewer"
+    "viewer": "viewer",
+    "co_host": "co-host",
+    "planner": "planner",
+    "collaborator": "event collaborator"
   },
   "account": {
     "deleted": {

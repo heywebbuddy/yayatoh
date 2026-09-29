@@ -35,6 +35,11 @@
       "intro": "{orgName} 邀請您以{role}身分加入團隊。",
       "cta": "接受邀請"
     },
+    "tenancy.event-invitation": {
+      "subject": "邀請您參與 {eventName}",
+      "intro": "{orgName} 邀請您以{role}身分參與 {eventName}。您只會看到這個活動。",
+      "cta": "接受邀請"
+    },
     "ticketing.claim-link": {
       "subject": "有一張 {eventName} 的票券在等您",
       "intro": "有人轉給您一張 {eventName} 的票券。領取後即可取得您專屬的 QR 碼。",
@@ -138,7 +143,10 @@
     "marketing": "行銷",
     "box_office": "售票處",
     "scanner": "驗票員",
-    "viewer": "檢視者"
+    "viewer": "檢視者",
+    "co_host": "共同主辦人",
+    "planner": "策劃人",
+    "collaborator": "活動協作者"
   },
   "account": {
     "deleted": {

@@ -1,7 +1,6 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { disputesQuery } from '@yayatoh/payments';
 import { disputeEvidenceQuery } from '@yayatoh/reports';
-import { roleCan } from '@yayatoh/tenancy';
 import { Alert, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -28,8 +27,8 @@ export default async function DisputeReviewPage({
   const { locale, org, event, orderId, disputeId } = await params;
   setRequestLocale(locale);
   if (!z.uuid().safeParse(disputeId).success || !z.uuid().safeParse(orderId).success) notFound();
-  const { data, event: ev } = await loadEvent(org, event);
-  if (!roleCan(data.role, 'disputes:respond')) notFound();
+  const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
+  if (!can('disputes:respond')) notFound();
   const t = await getTranslations('disputes');
   let evidence: Awaited<ReturnType<typeof load>>;
   const load = () => executeQuery(disputeEvidenceQuery, { disputeId }, data.ctx, ports);

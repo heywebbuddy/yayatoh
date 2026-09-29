@@ -17,12 +17,12 @@ export default async function SetupGuidePage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  await loadEvent(org, event);
+  await loadEvent(org, event, 'setupGuide');
   const rules = await loadReadiness(org, event);
   const t = await getTranslations();
   const percent = readinessPercent(rules);
   const base = `/o/${org}/e/${event}`;
-  const left = rules.filter((r) => !r.done).length;
+  const left = rules.filter((r) => !r.done && !r.comingSoon).length;
   return (
     <>
       <PageHeader title={t('setupGuide.title')} description={t('setupGuide.subtitle')} />
@@ -54,6 +54,11 @@ export default async function SetupGuidePage({
                   <span className="text-caption text-zinc-500">
                     {r.done ? t('readiness.done') : t(`setupGuide.hint.${r.key}`)}
                   </span>
+                  {r.comingSoon ? (
+                    <span data-coming-soon className="text-caption font-medium text-zinc-600">
+                      {t('readiness.comingSoon')}
+                    </span>
+                  ) : null}
                 </span>
               </span>
               {r.done ? null : (

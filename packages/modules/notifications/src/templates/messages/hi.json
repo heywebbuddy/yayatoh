@@ -35,6 +35,11 @@
       "intro": "{orgName} ने आपको अपनी टीम में {role} के रूप में आमंत्रित किया है।",
       "cta": "निमंत्रण स्वीकार करें"
     },
+    "tenancy.event-invitation": {
+      "subject": "आपको {eventName} में मदद के लिए आमंत्रित किया गया है",
+      "intro": "{orgName} ने आपको {eventName} में {role} के रूप में आमंत्रित किया है। आपको केवल यही इवेंट दिखेगा।",
+      "cta": "आमंत्रण स्वीकार करें"
+    },
     "ticketing.claim-link": {
       "subject": "{eventName} का एक टिकट आपका इंतज़ार कर रहा है",
       "intro": "किसी ने आपको {eventName} का टिकट भेजा है। अपना QR कोड पाने के लिए इसे क्लेम करें।",
@@ -138,7 +143,10 @@
     "marketing": "मार्केटिंग",
     "box_office": "बॉक्स ऑफ़िस",
     "scanner": "स्कैनर",
-    "viewer": "दर्शक"
+    "viewer": "दर्शक",
+    "co_host": "सह-मेज़बान",
+    "planner": "योजनाकार",
+    "collaborator": "इवेंट सहयोगी"
   },
   "account": {
     "deleted": {

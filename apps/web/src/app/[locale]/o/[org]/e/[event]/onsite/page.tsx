@@ -9,7 +9,7 @@ import {
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
+import { eventRoleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -57,13 +57,13 @@ export default async function OnsitePage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'onsite');
   // Same gate as other sections: only when the profile's nav shows it and the org is entitled.
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'onsite')) notFound();
   const t = await getTranslations();
   // Org roles scan every event; event-scoped door staff scan this one. Devices are org-level.
-  const manageDevices = roleCan(data.role, 'checkin:scan');
+  const manageDevices = can('checkin:scan');
   const canScan = manageDevices || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'checkin:scan');
   if (!canScan) {
     return (
@@ -76,7 +76,7 @@ export default async function OnsitePage({
   const status = await executeQuery(checkinStatusQuery, { eventId: ev.id }, data.ctx, ports);
   const devices = manageDevices ? await executeQuery(listDevicesQuery, {}, data.ctx, ports) : [];
   // Setting up the venue is event management; picking where you stand is for every scanner.
-  const manageCheckpoints = roleCan(data.role, 'events:write');
+  const manageCheckpoints = can('events:write');
   const checkpoints = await executeQuery(
     listCheckpointsQuery,
     { eventId: ev.id, includeArchived: manageCheckpoints },
@@ -93,7 +93,7 @@ export default async function OnsitePage({
     (c) => !c.archived && (scope.checkpointIds === null || scope.checkpointIds.includes(c.id)),
   );
   const doorStaff =
-    manageDevices && roleCan(data.role, 'events:read')
+    manageDevices && can('events:read')
       ? (await executeQuery(doorStaffQuery, { eventId: ev.id }, data.ctx, ports)).staff
       : [];
   const people = await getUsersByIds([
@@ -192,7 +192,7 @@ export default async function OnsitePage({
               </li>
             ))}
         </ul>
-        {roleCan(data.role, 'events:read') ? (
+        {can('events:read') ? (
           <Link href={`${base}/staff`} className={buttonClass('secondary', 'sm', 'self-start')}>
             {t('doorStaff.manage')}
           </Link>

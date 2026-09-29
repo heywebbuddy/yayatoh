@@ -62,7 +62,7 @@ export async function addSectionAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   const kind = String(form.get('kind') ?? '') as SectionKind;
   if (!SECTION_KINDS.includes(kind)) return { ok: false, code: 'validation_failed', fields: ['kind'] };
   try {
@@ -87,7 +87,7 @@ export async function updateSectionAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   try {
     await executeCommand(
       updateSectionCommand,
@@ -109,7 +109,7 @@ export async function updateSectionAction(
 }
 
 export async function deleteSectionAction(org: string, event: string, sectionId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   await executeCommand(deleteSectionCommand, { eventId: ev.id, sectionId }, data.ctx, ports);
   done(org, event);
 }
@@ -121,7 +121,7 @@ export async function moveSectionAction(
   sectionId: string,
   move: 'up' | 'down',
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   try {
     await executeCommand(reorderSectionsCommand, { eventId: ev.id, sectionId, move }, data.ctx, ports);
   } catch (err) {
@@ -133,7 +133,7 @@ export async function moveSectionAction(
 
 /** Drag-and-drop path: the whole new order. */
 export async function reorderSectionsAction(org: string, event: string, order: string[]): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   try {
     await executeCommand(reorderSectionsCommand, { eventId: ev.id, order }, data.ctx, ports);
   } catch (err) {
@@ -149,7 +149,7 @@ export async function createAnnouncementAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   try {
     await executeCommand(
       createAnnouncementCommand,
@@ -177,7 +177,7 @@ export async function updateAnnouncementAction(
   announcementId: string,
   change: { published?: boolean; pinned?: boolean },
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   await executeCommand(
     updateAnnouncementCommand,
     { eventId: ev.id, announcementId, ...change },
@@ -192,7 +192,7 @@ export async function deleteAnnouncementAction(
   event: string,
   announcementId: string,
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   await executeCommand(deleteAnnouncementCommand, { eventId: ev.id, announcementId }, data.ctx, ports);
   done(org, event);
 }
@@ -218,7 +218,7 @@ export async function draftWithAiAction(
   kind: DraftKind,
   notes: string,
 ): Promise<AiDraftState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   // Bursts: per device, and per member per event (monthly credits are the hard cap per org).
   const limit = await limitAction('aiDraft', { identity: `${data.org.id}:${data.session.userId}:${ev.id}` });
   if (!limit.allowed) return { ok: false, code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };
@@ -243,7 +243,7 @@ export async function acceptDraftAction(
   kind: DraftKind,
   text: string,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'content');
   // Arguments of a Server Action come from the browser: check them like form fields.
   if (!DRAFT_KINDS.includes(kind) || typeof text !== 'string')
     return { ok: false, code: 'validation_failed', fields: ['text'] };

@@ -40,7 +40,7 @@ export const allocateGroupSeatsCommand = tenantCommand({
   }),
   output: z.object({ label: z.string(), itemLabel: z.string(), allocated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const items = await planItemsTx(tx, input.eventId);
     const item = items.find((i) => i.id === input.itemId);
@@ -107,7 +107,7 @@ export const releaseGroupSeatsCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), label: AttendeeLabel }),
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const rows = await tx
       .update(eventSeats)

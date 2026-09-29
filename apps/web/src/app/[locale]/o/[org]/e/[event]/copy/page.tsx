@@ -1,8 +1,8 @@
 import { utcToZonedInput } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
 import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm, SaveTemplateForm } from '@/components/copy-forms.tsx';
+import { profileT } from '@/lib/profile-copy.ts';
 import { loadEvent } from '@/server/console.ts';
 import { duplicateAction, saveTemplateAction } from './actions.ts';
 
@@ -17,9 +17,11 @@ export default async function CopyPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { event: ev, can, profile } = await loadEvent(org, event, 'copy');
   const t = await getTranslations();
-  if (!roleCan(data.role, 'events:write'))
+  // M4.2a: a wedding copies guests' settings, never "tickets".
+  const tp = profileT(t, profile);
+  if (!can('events:write'))
     return (
       <>
         <PageHeader title={t('copy.title')} />
@@ -28,7 +30,7 @@ export default async function CopyPage({
     );
   return (
     <>
-      <PageHeader title={t('copy.title')} description={t('copy.description')} />
+      <PageHeader title={t('copy.title')} description={tp('copy.description')} />
       <section aria-labelledby="duplicate-heading" className="flex flex-col gap-3">
         <h2 id="duplicate-heading" className="text-section">
           {t('copy.duplicate')}

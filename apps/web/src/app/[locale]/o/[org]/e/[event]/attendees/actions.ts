@@ -37,7 +37,7 @@ export async function addLabelAction(
   _prev: LabelState,
   form: FormData,
 ): Promise<LabelState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   try {
     await executeCommand(
       setAttendeeLabelsCommand,
@@ -58,7 +58,7 @@ export async function removeLabelAction(
   attendeeId: string,
   label: string,
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   await executeCommand(
     setAttendeeLabelsCommand,
     { eventId: ev.id, attendeeIds: [attendeeId], remove: [label] },
@@ -112,7 +112,7 @@ export async function bulkAction(
   event: string,
   form: FormData,
 ): Promise<{ code: string } | undefined> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const locale = await getLocale();
   const base = `/o/${org}/e/${event}/attendees`;
   const what = String(form.get('bulk') ?? '');
@@ -234,7 +234,7 @@ export async function undoBulkAction(
   kind: BulkKind,
   operationId: string,
 ): Promise<void> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'attendees');
   await executeCommand(
     kind === 'import'
       ? attendeeImportBulk.undo
@@ -257,7 +257,7 @@ export async function sendTicketAction(
   _prev: ClaimLinkState,
   form: FormData,
 ): Promise<ClaimLinkState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const email = String(form.get('email') ?? '').trim();
   try {
     const [link] = await executeCommand(
@@ -276,7 +276,7 @@ export async function sendTicketAction(
 }
 
 export async function revokeClaimAction(org: string, event: string, claimId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   await executeCommand(revokeClaimLinkCommand, { eventId: ev.id, claimId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }
@@ -289,7 +289,7 @@ export async function addGuestAction(
   _prev: GuestState,
   form: FormData,
 ): Promise<GuestState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const label = String(form.get('label') ?? '').trim();
   try {
     await executeCommand(
@@ -311,7 +311,7 @@ export async function addGuestAction(
 }
 
 export async function removeGuestAction(org: string, event: string, attendeeId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'attendees');
   await executeCommand(removeGuestCommand, { eventId: ev.id, attendeeId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/attendees`);
 }
