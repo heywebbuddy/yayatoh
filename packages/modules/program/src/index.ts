@@ -66,6 +66,7 @@ export {
   deletePortalTaskCommand,
   emitOverdueTasks,
   MAX_TASKS_PER_EVENT,
+  portalSpeakerCleanup,
   portalTaskBoardQuery,
   remindMissingCommand,
   speakerPortalQuery,

@@ -1,5 +1,10 @@
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { livePortalAccountsTx, type PortalAccountDto, portalAccountLinkTx } from '@yayatoh/events';
+import {
+  livePortalAccountsTx,
+  type PortalAccountDto,
+  portalAccountLinkTx,
+  revokePortalAccountTx,
+} from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { cancelQueuedTx } from '@yayatoh/notifications';
 import { defineSubscriber, emitEvents, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
@@ -250,7 +255,8 @@ export const portalTaskBoardQuery = tenantQuery({
     return tasks.map((t) => ({
       ...t,
       assignees: rows
-        .filter((a) => a.taskId === t.id)
+        // A deleted speaker's row stays until the cleanup subscriber runs: never shown.
+        .filter((a) => a.taskId === t.id && people.some((p) => p.id === a.subjectId))
         .map((a) => ({
           ...a,
           subjectName: people.find((p) => p.id === a.subjectId)?.name ?? '',
@@ -274,7 +280,12 @@ export const remindMissingCommand = tenantCommand({
   permission: 'events:write',
   handler: async ({ input, ctx, tx, emit }) => {
     const t = await taskOf(tx, input.eventId, input.taskId);
-    const rows = await tx.select().from(portalTaskAssignees).where(eq(portalTaskAssignees.taskId, t.id));
+    const rows = await tx
+      .select({ a: portalTaskAssignees })
+      .from(portalTaskAssignees)
+      .innerJoin(speakers, eq(speakers.id, portalTaskAssignees.subjectId))
+      .where(eq(portalTaskAssignees.taskId, t.id))
+      .then((r) => r.map((x) => x.a));
     const contacts = await livePortalAccountsTx(
       tx,
       t.eventId,
@@ -503,6 +514,7 @@ export async function emitOverdueTasks(orgId: string, now = new Date()): Promise
       .select({ a: portalTaskAssignees, t: portalTasks })
       .from(portalTaskAssignees)
       .innerJoin(portalTasks, eq(portalTasks.id, portalTaskAssignees.taskId))
+      .innerJoin(speakers, eq(speakers.id, portalTaskAssignees.subjectId))
       .where(
         and(
           eq(portalTaskAssignees.status, 'open'),
@@ -655,6 +667,31 @@ export function taskReminderMailer(deps: { notifier: Notifier; appOrigin: string
         for (const c of accounts.filter((x) => x.subjectId === a.subjectId))
           await send(t, a, c, preDueKey(a.id, c.id, t.dueAt), at);
       }
+    },
+  });
+}
+
+/**
+ * A deleted speaker (`program.speaker_deleted@1`) leaves the portal: their task rows go and their
+ * portal accounts are revoked (links, codes and sessions stop). Until this runs, every portal
+ * command already refuses the account (its speaker is gone) and the board hides the rows.
+ */
+export function portalSpeakerCleanup() {
+  return defineSubscriber({
+    name: 'program.portal-speaker-cleanup',
+    events: ['program.speaker_deleted@1'],
+    handle: async (tx, event) => {
+      const p = z.object({ eventId: z.uuid(), id: z.uuid() }).parse(event.payload);
+      await tx
+        .delete(portalTaskAssignees)
+        .where(and(eq(portalTaskAssignees.eventId, p.eventId), eq(portalTaskAssignees.subjectId, p.id)));
+      const ctx = createCtx({
+        orgId: event.orgId,
+        actor: { type: 'system', name: 'program.portal-cleanup' },
+      });
+      const accounts = await livePortalAccountsTx(tx, p.eventId, 'speaker', [p.id], ctx.now);
+      for (const a of accounts)
+        await revokePortalAccountTx(tx, ctx, { eventId: p.eventId, accountId: a.id, subjectKind: 'speaker' });
     },
   });
 }

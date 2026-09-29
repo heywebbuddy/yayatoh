@@ -33,6 +33,7 @@ import {
   deleteSpeakerCommand,
   emitOverdueTasks,
   inviteSpeakerCommand,
+  portalSpeakerCleanup,
   portalTaskBoardQuery,
   programQuery,
   proposeProfileChangeCommand,
@@ -777,6 +778,15 @@ describe('tasks and "remind whoever is missing X"', () => {
     await expect(executeQuery(speakerPortalQuery, {}, portalCtx(p), ports)).rejects.toMatchObject({
       code: 'forbidden',
     });
+    // The board never shows their rows; the cleanup removes them and revokes the account.
+    const board = await executeQuery(portalTaskBoardQuery, { eventId }, a.ctx(), ports);
+    expect(board.flatMap((t) => t.assignees).some((x) => x.subjectId === spk.id)).toBe(false);
+    await catchUpSubscriber(portalSpeakerCleanup(), a.org.id);
+    const left = await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute(sql`select 1 from program.portal_task_assignees where subject_id = ${spk.id}`),
+    );
+    expect(left).toHaveLength(0);
+    expect((await portalInviteByToken(await inviteTokenOf(a, p.accountId)))?.status).toBe('revoked');
   });
 });
 

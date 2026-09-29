@@ -7,7 +7,7 @@ import {
   portalCtx,
   portalPrincipalBySession,
 } from '@yayatoh/events';
-import { type Ctx, DomainError, executeQuery } from '@yayatoh/kernel';
+import { type Ctx, DomainError, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { signLinkToken, verifyLinkToken } from '@yayatoh/platform';
 import { DEVICE_COOKIE } from '@yayatoh/platform/security';
 import { speakerPortalQuery } from '@yayatoh/program';
@@ -108,6 +108,11 @@ export const loadSpeakerPortal = cache(async () => {
   const principal = await currentPortalPrincipal();
   if (principal?.role !== 'speaker') return null;
   const ctx = await portalRequestCtx(principal);
-  const data = await executeQuery(speakerPortalQuery, {}, ctx, ports);
-  return { principal, data };
+  try {
+    return { principal, data: await executeQuery(speakerPortalQuery, {}, ctx, ports) };
+  } catch (err) {
+    // The account's speaker was deleted (or the module switched off): nothing to show.
+    if (isDomainError(err) && (err.code === 'forbidden' || err.code === 'module_not_enabled')) return null;
+    throw err;
+  }
 });

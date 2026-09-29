@@ -18,7 +18,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
-import { taskReminderMailer } from '@yayatoh/program';
+import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -79,6 +79,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
     speakerPhotoApprover(),
+    portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
     // M3.6a: contact × event participation and contact profiles for audiences.
