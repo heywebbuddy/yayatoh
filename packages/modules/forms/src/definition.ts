@@ -78,8 +78,8 @@ export function evaluate(l: Logic, answers: Answers): unknown {
   }
 }
 
-const FieldKey = z.string().regex(/^[a-z][a-z0-9_]{0,39}$/, 'Keys are lower-case letters, digits and _');
-const Option = z.object({
+export const FieldKey = z.string().regex(/^[a-z][a-z0-9_]{0,39}$/, 'Keys are lower-case letters, digits and _');
+export const Option = z.object({
   value: z.string().trim().min(1).max(80),
   label: z.string().trim().min(1).max(120),
 });
@@ -151,7 +151,8 @@ export function checkAnswers(def: FormDefinition, input: Answers): Record<string
   return out;
 }
 
-function normalize(f: FieldDefinition, raw: unknown): unknown {
+/** One answer, normalized for its question's type (shared with the registration kind). */
+export function normalize(f: FieldDefinition, raw: unknown): unknown {
   const bad = (m: string) => new AnswerError(f.key, m);
   switch (f.type) {
     case 'short_text':
