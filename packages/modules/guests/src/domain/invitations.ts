@@ -150,7 +150,10 @@ export function planInvitations(
  * guest and their plus-one (who came as their guest).
  */
 export function uninvitedWith(guestId: string, guests: readonly InviteGuest[]): string[] {
-  return [guestId, ...guests.filter((g) => g.kind === 'plus_one' && g.hostGuestId === guestId).map((g) => g.id)];
+  return [
+    guestId,
+    ...guests.filter((g) => g.kind === 'plus_one' && g.hostGuestId === guestId).map((g) => g.id),
+  ];
 }
 
 /** A tri-state for a group of cells (a whole party or a whole sub-event). */

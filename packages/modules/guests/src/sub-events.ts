@@ -13,7 +13,7 @@ import {
   guests,
   type HistoryAction,
   invitations,
-  RESPONSE_STATUSES,
+  type RESPONSE_STATUSES,
   rsvpHistory,
   SUB_EVENT_KINDS,
   subEventResponses,
@@ -147,7 +147,10 @@ const timeOrder = (v: { startsAt: Date; endsAt: Date }) =>
   !Number.isNaN(v.startsAt.getTime()) && !Number.isNaN(v.endsAt.getTime()) && v.endsAt > v.startsAt;
 const timeMessage = { message: 'endsAt must be after startsAt', path: ['endsAt'] };
 
-export const CreateSubEventInput = SubEventFields.extend({ eventId: z.uuid() }).refine(timeOrder, timeMessage);
+export const CreateSubEventInput = SubEventFields.extend({ eventId: z.uuid() }).refine(
+  timeOrder,
+  timeMessage,
+);
 export type CreateSubEventInput = z.input<typeof CreateSubEventInput>;
 export const UpdateSubEventInput = SubEventFields.extend({ eventId: z.uuid(), subEventId: z.uuid() }).refine(
   timeOrder,
@@ -404,10 +407,7 @@ export async function subEventSummariesTx(tx: TenantTx, eventId: string): Promis
   if (list.length === 0) return [];
   const ids = list.map((s) => s.id);
   const [all, named, plusOnes, answers] = await Promise.all([
-    tx
-      .select({ n: sql<number>`count(*)::int` })
-      .from(guests)
-      .where(eq(guests.eventId, input.eventId)),
+    tx.select({ n: sql<number>`count(*)::int` }).from(guests).where(eq(guests.eventId, input.eventId)),
     tx
       .select({ subEventId: invitations.subEventId, n: sql<number>`count(*)::int` })
       .from(invitations)

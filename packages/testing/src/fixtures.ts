@@ -50,7 +50,10 @@ import {
   addPartyGuestCommand,
   addPlusOneCommand,
   createPartyCommand,
+  createSubEventCommand,
   moveGuestCommand,
+  recordSubEventResponseCommand,
+  setInvitationsCommand,
   updatePartyGuestCommand,
 } from '@yayatoh/guests';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
@@ -132,6 +135,7 @@ import {
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
   assignSeatsCommand,
+  giveSubEventOwnChartCommand,
   holdSeatsTx,
   publishEventLayoutCommand,
   requestFinderCodeCommand,
@@ -1213,6 +1217,63 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     moveGuestCommand,
     { eventId: event.id, guestId: friend.id, toPartyId: party.id },
+    ctx(),
+    ports,
+  );
+  // M4.1c: a ceremony (everyone invited) and a reception (the named host invited, so their
+  // plus-one follows) with its own chart, and a paper response.
+  const ceremony = await executeCommand(
+    createSubEventCommand,
+    {
+      eventId: event.id,
+      name: 'Ceremony',
+      kind: 'ceremony',
+      startsAt: event.startsAt,
+      endsAt: new Date(event.startsAt.getTime() + 3_600_000),
+      place: 'The garden',
+      inviteAll: true,
+    },
+    ctx(),
+    ports,
+  );
+  const reception = await executeCommand(
+    createSubEventCommand,
+    {
+      eventId: event.id,
+      name: 'Reception',
+      kind: 'reception',
+      startsAt: new Date(event.startsAt.getTime() + 3_600_000),
+      endsAt: new Date(event.startsAt.getTime() + 4 * 3_600_000),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setInvitationsCommand,
+    {
+      eventId: event.id,
+      subEventIds: [reception.id],
+      target: { kind: 'guests', guestIds: [host.id] },
+      invited: true,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordSubEventResponseCommand,
+    { eventId: event.id, guestId: host.id, subEventId: reception.id, status: 'attending', source: 'paper' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordSubEventResponseCommand,
+    { eventId: event.id, guestId: host.id, subEventId: ceremony.id, status: 'declined' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    giveSubEventOwnChartCommand,
+    { eventId: event.id, subEventId: reception.id, layoutId: layout.id },
     ctx(),
     ports,
   );

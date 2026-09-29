@@ -75,12 +75,7 @@ export async function assertInvitedTx(
     : await tx
         .select({ subEventId: invitations.subEventId, guestId: invitations.guestId })
         .from(invitations)
-        .where(
-          and(
-            eq(invitations.subEventId, subEvent.id),
-            eq(invitations.guestId, inviteeOf(invitee)),
-          ),
-        );
+        .where(and(eq(invitations.subEventId, subEvent.id), eq(invitations.guestId, inviteeOf(invitee))));
   const set = new Set(rows.map((r) => cellKey(r.subEventId, r.guestId)));
   if (!isInvited(invitee, subEvent, set))
     throw new DomainError('invalid_state', 'This guest is not invited to this sub-event', {
@@ -272,7 +267,11 @@ export const recordSubEventResponseCommand = tenantCommand({
         set: { status: input.status, source: input.source, updatedAt: ctx.now },
       });
     await recordSubEventHistoryTx(tx, ctx, [
-      { ...at, action: 'response_recorded', fields: before?.status === input.status ? ['source'] : ['status'] },
+      {
+        ...at,
+        action: 'response_recorded',
+        fields: before?.status === input.status ? ['source'] : ['status'],
+      },
     ]);
     return { status: input.status };
   },
@@ -357,10 +356,7 @@ export const invitationMatrixQuery = tenantQuery({
         .from(parties)
         .where(and(...conds))
         .orderBy(sql`lower(${parties.name})`, asc(parties.createdAt)),
-      tx
-        .select({ n: sql<number>`count(*)::int` })
-        .from(parties)
-        .where(eq(parties.eventId, input.eventId)),
+      tx.select({ n: sql<number>`count(*)::int` }).from(parties).where(eq(parties.eventId, input.eventId)),
       tx
         .select({
           id: guests.id,

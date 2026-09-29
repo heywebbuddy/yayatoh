@@ -14,6 +14,25 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+// M4.1c: sub-events and invitations.
+export {
+  cellKey,
+  groupState,
+  type InviteGuest,
+  type InviteParty,
+  type InviteSubEvent,
+  type InviteTarget,
+  invitedBySubEvent,
+  inviteeOf,
+  isInvited,
+  moveInOrder,
+  partyMatches,
+  planInvitations,
+  subEventWindow,
+  targetGuests,
+  uninvitedWith,
+  windowInputs,
+} from './domain/invitations.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -34,6 +53,16 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  assertInvitedTx,
+  InvitationMatrixDto,
+  invitationMatrixQuery,
+  MatrixGuestDto,
+  recordSubEventResponseCommand,
+  SubEventHistoryEntryDto,
+  setInvitationsCommand,
+  subEventHistoryQuery,
+} from './invitations.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   AGE_CLASSES,
@@ -45,37 +74,11 @@ export {
   type GuestSource,
   HISTORY_ACTIONS,
   type HistoryAction,
+  RESPONSE_STATUSES,
+  type ResponseStatus,
+  SUB_EVENT_KINDS,
+  type SubEventKind,
 } from './schema.ts';
-// M4.1c: sub-events and invitations.
-export {
-  cellKey,
-  groupState,
-  type InviteGuest,
-  type InviteParty,
-  type InviteSubEvent,
-  type InviteTarget,
-  invitedBySubEvent,
-  inviteeOf,
-  isInvited,
-  moveInOrder,
-  partyMatches,
-  planInvitations,
-  subEventWindow,
-  targetGuests,
-  uninvitedWith,
-  windowInputs,
-} from './domain/invitations.ts';
-export {
-  assertInvitedTx,
-  InvitationMatrixDto,
-  invitationMatrixQuery,
-  MatrixGuestDto,
-  recordSubEventResponseCommand,
-  SubEventHistoryEntryDto,
-  setInvitationsCommand,
-  subEventHistoryQuery,
-} from './invitations.ts';
-export { RESPONSE_STATUSES, type ResponseStatus, SUB_EVENT_KINDS, type SubEventKind } from './schema.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,

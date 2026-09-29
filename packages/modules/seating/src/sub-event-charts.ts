@@ -116,8 +116,7 @@ export const giveSubEventOwnChartCommand = tenantCommand({
     } else {
       const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
       const chart = await eventLayoutTx(tx, input.eventId, key);
-      if (!chart)
-        throw new DomainError('invalid_state', 'There is no chart to copy', { reason: 'no_chart' });
+      if (!chart) throw new DomainError('invalid_state', 'There is no chart to copy', { reason: 'no_chart' });
       raw = chart.doc;
     }
     const { doc, checksum } = validDoc(raw, orgId);
@@ -180,4 +179,3 @@ export const removeSubEventChartCommand = tenantCommand({
     data: { subEventId: input.subEventId },
   }),
 });
-
