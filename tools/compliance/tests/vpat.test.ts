@@ -113,6 +113,31 @@ describe('VPAT draft from a fixture Playwright report', () => {
     expect(md.split('\n').filter((l) => /^\| \d\.\d\.\d/.test(l))).toHaveLength(55);
   });
 
+  it('a viewport signal counts only tests where axe ran at that width', () => {
+    const v = buildVpat(
+      criteria(),
+      [
+        {
+          title: 'checkout times out',
+          file: 'checkout.spec.ts',
+          project: 'mobile-375',
+          status: 'unexpected',
+          axe: [],
+        },
+        {
+          title: 'org home passes axe',
+          file: 'a11y.spec.ts',
+          project: 'mobile-375',
+          status: 'expected',
+          axe: [{ passes: [], violations: [], incomplete: [] }],
+        },
+      ],
+      NOW,
+    );
+    const reflow = v.criteria.find((c) => c.id === '1.4.10');
+    expect(reflow).toMatchObject({ status: 'Supports', tests: { passed: 1, failed: 0 } });
+  });
+
   it('with no e2e reports every criterion is Not Evaluated or Not Applicable', () => {
     const v = buildVpat(criteria(), [], NOW);
     expect(v.summary.Supports).toBe(0);

@@ -145,7 +145,10 @@ export interface Vpat {
 const FAIL_IMPACTS = new Set(['serious', 'critical']);
 
 function matchesSignal(t: E2eTest, pattern: string): boolean {
-  if (pattern.startsWith('@project:')) return t.project === pattern.slice('@project:'.length);
+  // A viewport signal is evidence only where axe judged the page at that width; a functional
+  // test that happens to run in that project says nothing about reflow or orientation.
+  if (pattern.startsWith('@project:'))
+    return t.project === pattern.slice('@project:'.length) && t.axe.length > 0;
   return new RegExp(pattern, 'i').test(t.title);
 }
 
