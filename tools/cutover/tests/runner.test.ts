@@ -127,6 +127,9 @@ describe('cutover orchestrator (M2.5a)', () => {
     // Manual and decision steps count at their budgets in a rehearsal: 21 min of the window.
     expect(report.projectedFreezeWindowMs).toBeGreaterThan(21 * 60_000);
     expect(report.verdicts.map((v) => v.id)).toEqual(['forward', 'freeze_window', 'rehearsal_share']);
+    expect(report.verdicts.find((v) => v.id === 'freeze_window')?.detail).toMatch(
+      /with the manual steps at their budgets \(measured/,
+    );
   });
 
   it('resumes after a failure: done steps are skipped, the failed step runs again', async () => {

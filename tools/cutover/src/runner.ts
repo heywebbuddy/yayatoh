@@ -182,19 +182,23 @@ export function buildReport(
       detail: forwardDone ? 'every step done' : 'not every step done',
     },
   ];
-  if (freezeWindowMs !== null) {
+  if (freezeWindowMs !== null && projectedFreezeWindowMs !== null) {
+    const measured = `measured ${(freezeWindowMs / 60_000).toFixed(2)} min`;
     verdicts.push({
       id: 'freeze_window',
-      pass: freezeWindowMs <= FREEZE_TARGET_MS,
-      detail: `${(freezeWindowMs / 60_000).toFixed(2)} min (target ≤ 45, abort at 90)`,
+      pass: projectedFreezeWindowMs <= FREEZE_TARGET_MS,
+      detail:
+        state.mode === 'rehearsal'
+          ? `${(projectedFreezeWindowMs / 60_000).toFixed(2)} min with the manual steps at their budgets (${measured}; target ≤ 45, abort at 90)`
+          : `${measured} (target ≤ 45, abort at 90)`,
     });
     if (state.mode === 'rehearsal')
       verdicts.push({
         id: 'rehearsal_share',
-        pass: freezeWindowMs <= FREEZE_TARGET_MS * REHEARSAL_WINDOW_SHARE,
-        detail: `${Math.round((freezeWindowMs / FREEZE_TARGET_MS) * 100)} % of the 45 min window (≤ 70 %)`,
+        pass: projectedFreezeWindowMs <= FREEZE_TARGET_MS * REHEARSAL_WINDOW_SHARE,
+        detail: `${Math.round((projectedFreezeWindowMs / FREEZE_TARGET_MS) * 100)} % of the 45 min window (≤ 70 %)`,
       });
-    if (freezeWindowMs >= FREEZE_ABORT_MS)
+    if (projectedFreezeWindowMs >= FREEZE_ABORT_MS)
       verdicts.push({
         id: 'abort_threshold',
         pass: false,
