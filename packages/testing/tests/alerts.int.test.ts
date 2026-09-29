@@ -88,7 +88,9 @@ describe('the acceptance fixture (M3.2b)', () => {
 
   it('evaluating again, or replaying the outbox, changes and sends nothing', async () => {
     const before = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from notifications.messages where kind like 'alerts.%'`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from notifications.messages where kind like 'alerts.%'`,
+      ),
     );
     const history = await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute<{ n: number }>(sql`select count(*)::int as n from alerts.alert_history`),
@@ -99,7 +101,12 @@ describe('the acceptance fixture (M3.2b)', () => {
     expect(changes).toEqual([]);
     // Every outbox event again, under new ids (a duplicated delivery): nothing new.
     const events = await withTenant(systemCtx(a.org.id), (tx) =>
-      recentEventsTx(tx, a.org.id, ['seating.assignments_changed', 'order.payment_failed', 'device.heartbeat'], 3_600_000),
+      recentEventsTx(
+        tx,
+        a.org.id,
+        ['seating.assignments_changed', 'order.payment_failed', 'device.heartbeat'],
+        3_600_000,
+      ),
     );
     expect(events.length).toBeGreaterThan(0);
     for (const e of events.slice(0, 20)) {
@@ -107,7 +114,9 @@ describe('the acceptance fixture (M3.2b)', () => {
       expect(await consumeEvent(alertEvaluator(deps), { ...e, id: uuidv7() })).toBe(true);
     }
     const after = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from notifications.messages where kind like 'alerts.%'`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from notifications.messages where kind like 'alerts.%'`,
+      ),
     );
     const historyAfter = await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute<{ n: number }>(sql`select count(*)::int as n from alerts.alert_history`),
@@ -198,7 +207,12 @@ describe('permissions and isolation', () => {
       executeCommand(acknowledgeAlertCommand, { alertId: one.id }, userCtx(a.viewerId, a.org.id), ports),
     ).rejects.toMatchObject({ code: 'forbidden' });
     await expect(
-      executeCommand(snoozeAlertCommand, { alertId: one.id, minutes: 60 }, userCtx(a.viewerId, a.org.id), ports),
+      executeCommand(
+        snoozeAlertCommand,
+        { alertId: one.id, minutes: 60 },
+        userCtx(a.viewerId, a.org.id),
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'forbidden' });
   });
 
@@ -224,12 +238,17 @@ describe('permissions and isolation', () => {
     await executeCommand(addMemberCommand, { userId: finance, role: 'finance' }, a.ctx(), ports);
     await executeCommand(addMemberCommand, { userId: scanner, role: 'scanner' }, a.ctx(), ports);
     const all = await executeQuery(listAlertsQuery, { status: 'resolved' }, a.ctx(), ports);
-    const fin = await executeQuery(listAlertsQuery, { status: 'resolved' }, userCtx(finance, a.org.id), ports);
+    const fin = await executeQuery(
+      listAlertsQuery,
+      { status: 'resolved' },
+      userCtx(finance, a.org.id),
+      ports,
+    );
     expect(all.some((x) => x.rule === 'undistributed')).toBe(true);
     expect(fin.some((x) => x.rule === 'undistributed')).toBe(false);
     expect(fin.some((x) => x.rule === 'paymentsFailed')).toBe(true);
-    await expect(
-      executeQuery(listAlertsQuery, {}, userCtx(scanner, a.org.id), ports),
-    ).rejects.toMatchObject({ code: 'forbidden' });
+    await expect(executeQuery(listAlertsQuery, {}, userCtx(scanner, a.org.id), ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
   });
 });

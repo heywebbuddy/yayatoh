@@ -112,7 +112,11 @@ export function evaluateEventRules(
       const elapsedPct = Math.floor((elapsed * 100) / run);
       const expected = Math.max(1, Math.floor((f.salesTarget * elapsed) / run));
       const pace = pct(f.sold, expected);
-      if (elapsedPct >= t.paceMinElapsedPct && pace <= t.paceMaxPct && f.sold < f.salesTarget)
+      if (
+        elapsedPct >= t.paceMinElapsedPct &&
+        f.sold * 100 <= t.paceMaxPct * expected &&
+        f.sold < f.salesTarget
+      )
         out.salesPace = fire('warning', pace, { sold: f.sold, target: f.salesTarget, expected });
     }
   }

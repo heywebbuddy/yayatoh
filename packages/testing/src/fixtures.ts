@@ -1,4 +1,5 @@
 import { createECDH } from 'node:crypto';
+import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
 import {
   acknowledgeAlertCommand,
   evaluateEventAlertsTx,
@@ -7,7 +8,6 @@ import {
   setMyAlertPhoneCommand,
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
-import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
 import {
   attendeeImportBulk,
   attendeeLabelBulk,
@@ -1191,7 +1191,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // the worker would, a day before the event), the owner acknowledges it; one routing row, the
   // owner's alert number and a sales target (isolation coverage of every alerts table).
   const alertCtx = { ...systemCtx(org.id), now: new Date(event.startsAt.getTime() - 86_400_000 * 3) };
-  await withTenant(alertCtx, (tx) => evaluateEventAlertsTx(tx, alertCtx, event.id, { notifier: createNotifier() }));
+  await withTenant(alertCtx, (tx) =>
+    evaluateEventAlertsTx(tx, alertCtx, event.id, { notifier: createNotifier() }),
+  );
   const [fixtureAlert] = await executeQuery(listAlertsQuery, { eventId: event.id }, ctx(), ports);
   if (!fixtureAlert) throw new Error('fixture: the fixture event raised no alert');
   await executeCommand(acknowledgeAlertCommand, { alertId: fixtureAlert.id }, ctx(), ports);

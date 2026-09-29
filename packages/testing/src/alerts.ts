@@ -7,7 +7,12 @@ import { type Ctx, createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
 import { createNotifier } from '@yayatoh/notifications';
 import { applyProviderEventCommand, attachPaymentCommand, startCheckoutCommand } from '@yayatoh/orders';
 import { assignSeatsCommand, publishEventLayoutCommand, setEventLayoutCommand } from '@yayatoh/seating';
-import { claimContext, claimTicketCommand, createClaimLinksCommand, createTicketTypeCommand } from '@yayatoh/ticketing';
+import {
+  claimContext,
+  claimTicketCommand,
+  createClaimLinksCommand,
+  createTicketTypeCommand,
+} from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { ports } from './ports.ts';
 
@@ -195,7 +200,12 @@ export async function alertScenario(
         const room = i === 0 ? 20 - (ALERT_FIXTURE.seated - 80) : 20;
         const batch = left.splice(0, room);
         if (batch.length)
-          await executeCommand(assignSeatsCommand, { eventId: event.id, attendeeIds: batch, itemId: row.id }, ctx, ports);
+          await executeCommand(
+            assignSeatsCommand,
+            { eventId: event.id, attendeeIds: batch, itemId: row.id },
+            ctx,
+            ports,
+          );
       }
     },
     distributeTickets: async () => {
@@ -245,7 +255,12 @@ async function heartbeat(token: string) {
 /** A card payment through the fake provider that succeeds or fails. */
 async function pay(orgId: string, orderId: string, totalMinor: number, outcome: 'succeed' | 'fail') {
   const pi = `fakepi_alerts_${uuidv7()}`;
-  await executeCommand(attachPaymentCommand, { orderId, provider: 'fake', providerPaymentId: pi }, anon(orgId), ports);
+  await executeCommand(
+    attachPaymentCommand,
+    { orderId, provider: 'fake', providerPaymentId: pi },
+    anon(orgId),
+    ports,
+  );
   await executeCommand(
     applyProviderEventCommand,
     {
