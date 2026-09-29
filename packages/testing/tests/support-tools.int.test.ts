@@ -3,7 +3,7 @@ import { scanTicketCommand } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
-import { createCtx, type Ctx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
+import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   applyDisputeEventCommand,
   applyProviderEventCommand,
@@ -130,13 +130,17 @@ async function buy(
     );
   }
   const ticketIds = (
-    await q<{ id: string }>(sql`select id from ticketing.tickets where order_id = ${c.order.id} order by serial`)
+    await q<{ id: string }>(
+      sql`select id from ticketing.tickets where order_id = ${c.order.id} order by serial`,
+    )
   ).map((r) => r.id);
   return { orderId: c.order.id, token: c.manageToken, ticketIds, total: c.order.totalMinor, pi };
 }
 
 async function drain(sub: Subscriber, types: string[]) {
-  const events = await withTenant(systemCtx(a.org.id), (tx) => recentEventsTx(tx, a.org.id, types, 3_600_000));
+  const events = await withTenant(systemCtx(a.org.id), (tx) =>
+    recentEventsTx(tx, a.org.id, types, 3_600_000),
+  );
   for (const e of events) if (sub.events.includes(eventKey(e))) await consumeEvent(sub, e);
 }
 
@@ -203,7 +207,12 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
     oldCode = code?.payload ?? '';
     const started = await executeCommand(
       startTransferCommand,
-      { orderId: order.orderId, ticketId: order.ticketIds[0], toName: 'Noor Haddad', toEmail: 'Noor@Example.test' },
+      {
+        orderId: order.orderId,
+        ticketId: order.ticketIds[0],
+        toName: 'Noor Haddad',
+        toEmail: 'Noor@Example.test',
+      },
       manager(),
       ports,
     );
@@ -222,8 +231,16 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
       sql`select holder_email from ticketing.tickets where id = ${order.ticketIds[0]}`,
     );
     expect(holder?.holder_email).toBe('holder@example.test');
-    const details = await executeQuery(claimDetailsQuery, { claimId: await tokenId(token) }, publicCtx(), ports);
-    expect(details).toMatchObject({ state: 'open', transfer: { fromName: 'Buyer holder', toName: 'Noor Haddad' } });
+    const details = await executeQuery(
+      claimDetailsQuery,
+      { claimId: await tokenId(token) },
+      publicCtx(),
+      ports,
+    );
+    expect(details).toMatchObject({
+      state: 'open',
+      transfer: { fromName: 'Buyer holder', toName: 'Noor Haddad' },
+    });
   });
 
   it('viewers and other orgs cannot start or cancel transfers', async () => {
@@ -237,7 +254,9 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
         ),
       ),
     ).toMatchObject({ code: 'forbidden' });
-    expect(await refusal(executeCommand(cancelTransferCommand, { transferId }, viewer(), ports))).toMatchObject({
+    expect(
+      await refusal(executeCommand(cancelTransferCommand, { transferId }, viewer(), ports)),
+    ).toMatchObject({
       code: 'forbidden',
     });
     expect(
@@ -250,7 +269,9 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
         ),
       ),
     ).toMatchObject({ code: 'not_found' });
-    expect(await refusal(executeCommand(cancelTransferCommand, { transferId }, b.ctx(), ports))).toMatchObject({
+    expect(
+      await refusal(executeCommand(cancelTransferCommand, { transferId }, b.ctx(), ports)),
+    ).toMatchObject({
       code: 'not_found',
     });
     expect(await executeQuery(orderTransfersQuery, { orderId: order.orderId }, b.ctx(), ports)).toEqual([]);
@@ -260,7 +281,12 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
     const claimId = await tokenId(token);
     expect(
       await refusal(
-        executeCommand(claimTicketCommand, { claimId, name: 'Noor', email: 'someone@example.test' }, publicCtx(), ports),
+        executeCommand(
+          claimTicketCommand,
+          { claimId, name: 'Noor', email: 'someone@example.test' },
+          publicCtx(),
+          ports,
+        ),
       ),
     ).toMatchObject({ code: 'validation_failed', details: { reason: 'email_mismatch' } });
     await executeCommand(
@@ -272,13 +298,23 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
     // A second claim (a double click, a replayed link) is refused and changes nothing.
     expect(
       await refusal(
-        executeCommand(claimTicketCommand, { claimId, name: 'Noor Haddad', email: 'noor@example.test' }, publicCtx(), ports),
+        executeCommand(
+          claimTicketCommand,
+          { claimId, name: 'Noor Haddad', email: 'noor@example.test' },
+          publicCtx(),
+          ports,
+        ),
       ),
     ).toMatchObject({ code: 'invalid_state', details: { state: 'claimed' } });
     const [ticket] = await q<{ holder_name: string; holder_email: string; rev: number; status: string }>(
       sql`select holder_name, holder_email, rev, status from ticketing.tickets where id = ${order.ticketIds[0]}`,
     );
-    expect(ticket).toEqual({ holder_name: 'Noor Haddad', holder_email: 'noor@example.test', rev: 1, status: 'active' });
+    expect(ticket).toEqual({
+      holder_name: 'Noor Haddad',
+      holder_email: 'noor@example.test',
+      rev: 1,
+      status: 'active',
+    });
     const codes = await q<{ rev: number; active: boolean }>(
       sql`select rev, active from ticketing.ticket_barcodes where ticket_id = ${order.ticketIds[0]} order by rev`,
     );
@@ -288,10 +324,10 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
     ]);
     const [t] = await executeQuery(orderTransfersQuery, { orderId: order.orderId }, a.ctx(), ports);
     expect(t).toMatchObject({ id: transferId, state: 'claimed' });
-    const [{ n }] = (await q<{ n: number }>(
+    const [claimed] = await q<{ n: number }>(
       sql`select count(*)::int as n from platform.domain_events where type = 'ticket.transferred' and aggregate_id = ${order.ticketIds[0]}`,
-    )) as [{ n: number }];
-    expect(n).toBe(1);
+    );
+    expect(claimed?.n).toBe(1);
     // Wallet: the new holder's pass for the new code (the provider hears after commit).
     expect(await executeQuery(orderWalletPassesQuery, { orderId: order.orderId }, a.ctx(), ports)).toEqual([
       { ticketId: order.ticketIds[0], rev: 1, status: 'active', pushed: false },
@@ -305,7 +341,12 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
     const [code] = await q<{ payload: string }>(
       sql`select payload from ticketing.ticket_barcodes where ticket_id = ${order.ticketIds[0]} and active`,
     );
-    const fresh = await executeCommand(scanTicketCommand, { eventId, code: code?.payload ?? '' }, door, ports);
+    const fresh = await executeCommand(
+      scanTicketCommand,
+      { eventId, code: code?.payload ?? '' },
+      door,
+      ports,
+    );
     expect(fresh.result).toBe('admitted');
   });
 
@@ -329,15 +370,20 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
     expect(wallet.pushes.filter((p) => p.serial.includes(order.ticketIds[0] ?? '-'))).toEqual([
       { op: 'upsert', serial: `yy-${order.ticketIds[0]}-1`, holderName: 'Noor Haddad' },
     ]);
-    expect((await executeQuery(orderWalletPassesQuery, { orderId: order.orderId }, a.ctx(), ports))[0]?.pushed).toBe(
-      true,
-    );
+    expect(
+      (await executeQuery(orderWalletPassesQuery, { orderId: order.orderId }, a.ctx(), ports))[0]?.pushed,
+    ).toBe(true);
   });
 
   it('a second transfer voids the previous pass; the offer email reaches the recipient', async () => {
     const again = await executeCommand(
       startTransferCommand,
-      { orderId: order.orderId, ticketId: order.ticketIds[0], toName: 'Sam Lee', toEmail: 'sam@example.test' },
+      {
+        orderId: order.orderId,
+        ticketId: order.ticketIds[0],
+        toName: 'Sam Lee',
+        toEmail: 'sam@example.test',
+      },
       a.ctx(),
       ports,
     );
@@ -367,7 +413,12 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
   it('cancelled before the claim: the link stops working; an expired link is refused', async () => {
     const t = await executeCommand(
       startTransferCommand,
-      { orderId: order.orderId, ticketId: order.ticketIds[1], toName: 'Late Friend', toEmail: 'late@example.test' },
+      {
+        orderId: order.orderId,
+        ticketId: order.ticketIds[1],
+        toName: 'Late Friend',
+        toEmail: 'late@example.test',
+      },
       a.ctx(),
       ports,
     );
@@ -382,12 +433,17 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
         ),
       ),
     ).toMatchObject({ code: 'invalid_state', details: { state: 'revoked' } });
-    expect(await refusal(executeCommand(cancelTransferCommand, { transferId: t.transferId }, a.ctx(), ports))).toMatchObject(
-      { code: 'invalid_state' },
-    );
+    expect(
+      await refusal(executeCommand(cancelTransferCommand, { transferId: t.transferId }, a.ctx(), ports)),
+    ).toMatchObject({ code: 'invalid_state' });
     const t2 = await executeCommand(
       startTransferCommand,
-      { orderId: order.orderId, ticketId: order.ticketIds[1], toName: 'Slow Friend', toEmail: 'slow@example.test' },
+      {
+        orderId: order.orderId,
+        ticketId: order.ticketIds[1],
+        toName: 'Slow Friend',
+        toEmail: 'slow@example.test',
+      },
       a.ctx(),
       ports,
     );
@@ -429,8 +485,16 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
         publicCtx(now),
         ports,
       );
-    await executeCommand(updateTicketTypeCommand, { ticketTypeId: typeId, transfersAllowed: false }, a.ctx(), ports);
-    expect(await refusal(holderTransfer())).toMatchObject({ code: 'invalid_state', details: { reason: 'not_allowed' } });
+    await executeCommand(
+      updateTicketTypeCommand,
+      { ticketTypeId: typeId, transfersAllowed: false },
+      a.ctx(),
+      ports,
+    );
+    expect(await refusal(holderTransfer())).toMatchObject({
+      code: 'invalid_state',
+      details: { reason: 'not_allowed' },
+    });
     const listed = await executeQuery(holderTicketsQuery, { linkId }, publicCtx(), ports);
     expect(listed.tickets[0]?.transfer).toMatchObject({ allowed: false, reason: 'not_allowed' });
     // Past the cutoff: a year before the start is already behind us.
@@ -444,14 +508,21 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
       code: 'invalid_state',
       details: { reason: 'deadline_passed', deadline: '2026-06-12T23:00:00.000Z' },
     });
-    await executeCommand(updateTicketTypeCommand, { ticketTypeId: typeId, transferCutoffHours: 48 }, a.ctx(), ports);
+    await executeCommand(
+      updateTicketTypeCommand,
+      { ticketTypeId: typeId, transferCutoffHours: 48 },
+      a.ctx(),
+      ports,
+    );
     // A fee must be agreed; an open give-away link cannot dodge it.
     expect(await refusal(holderTransfer())).toMatchObject({
       code: 'validation_failed',
       details: { reason: 'fee_not_accepted' },
     });
     expect(
-      await refusal(executeCommand(giveTicketCommand, { linkId, ticketId: h.ticketIds[0] }, publicCtx(), ports)),
+      await refusal(
+        executeCommand(giveTicketCommand, { linkId, ticketId: h.ticketIds[0] }, publicCtx(), ports),
+      ),
     ).toMatchObject({ code: 'invalid_state', details: { reason: 'fee_required' } });
     expect(await refusal(holderTransfer({ toEmail: 'selfserve@example.test' }))).toMatchObject({
       details: { reason: 'same_holder' },
@@ -471,9 +542,18 @@ describe('ticket transfers with a claim step (M3.10c)', () => {
         ),
       ),
     ).toMatchObject({ code: 'not_found' });
-    await executeCommand(cancelHolderTransferCommand, { linkId, transferId: ok.transferId }, publicCtx(), ports);
+    await executeCommand(
+      cancelHolderTransferCommand,
+      { linkId, transferId: ok.transferId },
+      publicCtx(),
+      ports,
+    );
     const after = await executeQuery(holderTicketsQuery, { linkId }, publicCtx(), ports);
-    expect(after.tickets[0]?.transfer).toMatchObject({ allowed: true, feeMinor: 350, pendingTransferId: null });
+    expect(after.tickets[0]?.transfer).toMatchObject({
+      allowed: true,
+      feeMinor: 350,
+      pendingTransferId: null,
+    });
     await executeCommand(
       updateTicketTypeCommand,
       { ticketTypeId: typeId, transferCutoffHours: null, transferFeeMinor: 0 },
@@ -519,12 +599,23 @@ describe('credit notes (M3.10c)', () => {
       a.ctx({ idempotencyKey: key() }),
       ports,
     );
-    expect(full).toMatchObject({ number: firstNumber + 1, amountMinor: order.total - 2000, balanceMinor: 0, code: null });
+    expect(full).toMatchObject({
+      number: firstNumber + 1,
+      amountMinor: order.total - 2000,
+      balanceMinor: 0,
+      code: null,
+    });
     expect(
       await refusal(
         executeCommand(
           issueCreditNoteCommand,
-          { orderId: order.orderId, kind: 'partial', amountMinor: 1, disposition: 'refunded', reason: 'More?' },
+          {
+            orderId: order.orderId,
+            kind: 'partial',
+            amountMinor: 1,
+            disposition: 'refunded',
+            reason: 'More?',
+          },
           a.ctx({ idempotencyKey: key() }),
           ports,
         ),
@@ -535,7 +626,13 @@ describe('credit notes (M3.10c)', () => {
       await refusal(
         executeCommand(
           issueCreditNoteCommand,
-          { orderId: other.orderId, kind: 'partial', amountMinor: other.total + 1, disposition: 'refunded', reason: 'Too much' },
+          {
+            orderId: other.orderId,
+            kind: 'partial',
+            amountMinor: other.total + 1,
+            disposition: 'refunded',
+            reason: 'Too much',
+          },
           a.ctx({ idempotencyKey: key() }),
           ports,
         ),
@@ -544,10 +641,17 @@ describe('credit notes (M3.10c)', () => {
   });
 
   it('only finance roles issue them; other orgs see nothing', async () => {
-    const input = { orderId: order.orderId, kind: 'full' as const, disposition: 'refunded' as const, reason: 'Nope' };
+    const input = {
+      orderId: order.orderId,
+      kind: 'full' as const,
+      disposition: 'refunded' as const,
+      reason: 'Nope',
+    };
     for (const ctx of [viewer(), manager()])
       expect(
-        await refusal(executeCommand(issueCreditNoteCommand, input, { ...ctx, idempotencyKey: key() }, ports)),
+        await refusal(
+          executeCommand(issueCreditNoteCommand, input, { ...ctx, idempotencyKey: key() }, ports),
+        ),
       ).toMatchObject({ code: 'forbidden' });
     expect(
       await refusal(executeCommand(issueCreditNoteCommand, input, b.ctx({ idempotencyKey: key() }), ports)),
@@ -556,7 +660,12 @@ describe('credit notes (M3.10c)', () => {
   });
 
   it('store credit pays part of a later order at the same org, and comes back if that order lapses', async () => {
-    const lapsed = await buy('credit@example.test', 1, { event: otherEventId, type: otherTypeId, code, pay: false });
+    const lapsed = await buy('credit@example.test', 1, {
+      event: otherEventId,
+      type: otherTypeId,
+      code,
+      pay: false,
+    });
     const [line] = await q<{ unit_discount_minor: number; unit_all_in_minor: number }>(
       sql`select unit_discount_minor::int, unit_all_in_minor::int from orders.order_items where order_id = ${lapsed.orderId}`,
     );
@@ -566,7 +675,9 @@ describe('credit notes (M3.10c)', () => {
     );
     expect(bal?.balance_minor).toBe(0);
     // Spent: the code no longer works.
-    expect(await refusal(buy('credit@example.test', 1, { event: otherEventId, type: otherTypeId, code }))).toMatchObject({
+    expect(
+      await refusal(buy('credit@example.test', 1, { event: otherEventId, type: otherTypeId, code })),
+    ).toMatchObject({
       details: { reason: 'credit_invalid' },
     });
     await executeCommand(
@@ -580,11 +691,19 @@ describe('credit notes (M3.10c)', () => {
     );
     expect(back?.balance_minor).toBe(2000);
     // Spent for real on a paid order (three tickets: 666 off each, 2 minor units stay on the note).
-    const paid = await buy('credit@example.test', 3, { event: otherEventId, type: otherTypeId, code: code.toLowerCase() });
+    const paid = await buy('credit@example.test', 3, {
+      event: otherEventId,
+      type: otherTypeId,
+      code: code.toLowerCase(),
+    });
     const [row] = await q<{ discount_minor: number; promo_code: string; status: string }>(
       sql`select discount_minor::int, promo_code, status from orders.orders where id = ${paid.orderId}`,
     );
-    expect(row).toMatchObject({ discount_minor: 1998, status: 'paid', promo_code: `CN-${String(firstNumber).padStart(5, '0')}` });
+    expect(row).toMatchObject({
+      discount_minor: 1998,
+      status: 'paid',
+      promo_code: `CN-${String(firstNumber).padStart(5, '0')}`,
+    });
     const [left] = await q<{ balance_minor: number }>(
       sql`select balance_minor::int from orders.credit_notes where code = ${code}`,
     );
@@ -616,7 +735,9 @@ describe('credit notes (M3.10c)', () => {
     const totals = await executeQuery(creditNoteTotalsQuery, { eventId }, finance(), ports);
     const usd = totals.find((t) => t.currency === 'USD');
     expect(usd).toMatchObject({ storeCreditMinor: 2000, appliedMinor: 1998, outstandingMinor: 2 });
-    expect(await refusal(executeQuery(creditNoteTotalsQuery, {}, viewer(), ports))).toMatchObject({ code: 'forbidden' });
+    expect(await refusal(executeQuery(creditNoteTotalsQuery, {}, viewer(), ports))).toMatchObject({
+      code: 'forbidden',
+    });
     const memory = memoryNotifier();
     await drain(creditNoteMailer({ notifier: memory.notifier, appOrigin: 'https://app.test' }), [
       'order.credit_note_issued',
@@ -633,7 +754,13 @@ describe('credit notes (M3.10c)', () => {
 describe('dispute queue, deadline alerts and evidence (M3.10c)', () => {
   let order: Bought;
   let disputeId: string;
-  const dispute = (type: 'dispute.created' | 'dispute.closed', o: Bought, id: string, due?: string, outcome?: 'won' | 'lost') =>
+  const dispute = (
+    type: 'dispute.created' | 'dispute.closed',
+    o: Bought,
+    id: string,
+    due?: string,
+    outcome?: 'won' | 'lost',
+  ) =>
     executeCommand(
       applyDisputeEventCommand,
       {
@@ -682,7 +809,9 @@ describe('dispute queue, deadline alerts and evidence (M3.10c)', () => {
     const closedTab = await executeQuery(disputeQueueQuery, { tab: 'closed' }, finance(), ports);
     expect(closedTab.items.find((i) => i.orderId === closed.orderId)?.status).toBe('lost');
     expect(open.counts.dueSoon).toBeGreaterThanOrEqual(1);
-    expect(await refusal(executeQuery(disputeQueueQuery, {}, viewer(), ports))).toMatchObject({ code: 'forbidden' });
+    expect(await refusal(executeQuery(disputeQueueQuery, {}, viewer(), ports))).toMatchObject({
+      code: 'forbidden',
+    });
     const theirs = await executeQuery(disputeQueueQuery, { tab: 'open' }, b.ctx(), ports);
     expect(theirs.items.some((i) => i.orderId === order.orderId)).toBe(false);
   });
@@ -692,7 +821,11 @@ describe('dispute queue, deadline alerts and evidence (M3.10c)', () => {
       executeCommand(alertDisputeDeadlinesCommand, {}, { ...systemCtx(a.org.id), now }, ports);
     expect((await run()).alerted).toBeGreaterThanOrEqual(1);
     const level = async () =>
-      (await q<{ l: number }>(sql`select deadline_alert_level as l from payments.disputes where id = ${disputeId}`))[0]?.l;
+      (
+        await q<{ l: number }>(
+          sql`select deadline_alert_level as l from payments.disputes where id = ${disputeId}`,
+        )
+      )[0]?.l;
     expect(await level()).toBe(1);
     await run();
     expect(await level()).toBe(1);
@@ -703,11 +836,13 @@ describe('dispute queue, deadline alerts and evidence (M3.10c)', () => {
       sql`select count(*)::int as n from platform.domain_events where type = 'payments.dispute_deadline_approaching' and aggregate_id = ${disputeId}`,
     );
     expect(events[0]?.n).toBe(2);
-    expect(
-      await refusal(executeCommand(alertDisputeDeadlinesCommand, {}, a.ctx(), ports)),
-    ).toMatchObject({ code: 'forbidden' });
+    expect(await refusal(executeCommand(alertDisputeDeadlinesCommand, {}, a.ctx(), ports))).toMatchObject({
+      code: 'forbidden',
+    });
     const memory = memoryNotifier();
-    await drain(disputeDeadlineNotifier({ notifier: memory.notifier }), ['payments.dispute_deadline_approaching']);
+    await drain(disputeDeadlineNotifier({ notifier: memory.notifier }), [
+      'payments.dispute_deadline_approaching',
+    ]);
     const mine = memory.members.filter((m) => m.dedupeKey?.startsWith(`dispute-deadline:${disputeId}`));
     expect(mine.map((m) => m.dedupeKey).sort()).toEqual([
       `dispute-deadline:${disputeId}:1`,
@@ -739,27 +874,44 @@ describe('support macros (M3.10c)', () => {
       name: 'Resend and note',
       subject: 'Your tickets for {{event_name}}',
       body: 'Hi {{buyer_name}}, we sent your {{ticket_count}} tickets again (order {{order_ref}}).',
-      actions: ['resend_tickets', 'email_buyer', 'add_note'] as ('resend_tickets' | 'email_buyer' | 'add_note')[],
+      actions: ['resend_tickets', 'email_buyer', 'add_note'] as (
+        | 'resend_tickets'
+        | 'email_buyer'
+        | 'add_note'
+      )[],
     };
     expect(
-      await refusal(executeCommand(saveSupportMacroCommand, { ...base, body: 'Hi {{first_name}}' }, manager(), ports)),
+      await refusal(
+        executeCommand(saveSupportMacroCommand, { ...base, body: 'Hi {{first_name}}' }, manager(), ports),
+      ),
     ).toMatchObject({ code: 'validation_failed', details: { reason: 'unknown_merge_field', field: 'body' } });
     const m = await executeCommand(saveSupportMacroCommand, base, manager(), ports);
     macroId = m.id;
     expect(m.actions).toEqual(['email_buyer', 'add_note', 'resend_tickets']);
     expect(
-      await refusal(executeCommand(saveSupportMacroCommand, { ...base, name: 'RESEND AND NOTE' }, a.ctx(), ports)),
+      await refusal(
+        executeCommand(saveSupportMacroCommand, { ...base, name: 'RESEND AND NOTE' }, a.ctx(), ports),
+      ),
     ).toMatchObject({ details: { reason: 'name_taken' } });
     expect(await refusal(executeCommand(saveSupportMacroCommand, base, viewer(), ports))).toMatchObject({
       code: 'forbidden',
     });
-    expect(await refusal(executeQuery(supportMacrosQuery, {}, viewer(), ports))).toMatchObject({ code: 'forbidden' });
-    expect((await executeQuery(supportMacrosQuery, {}, b.ctx(), ports)).some((x) => x.id === macroId)).toBe(false);
+    expect(await refusal(executeQuery(supportMacrosQuery, {}, viewer(), ports))).toMatchObject({
+      code: 'forbidden',
+    });
+    expect((await executeQuery(supportMacrosQuery, {}, b.ctx(), ports)).some((x) => x.id === macroId)).toBe(
+      false,
+    );
   });
 
   it('runs on an order: the reply filled in, a note, the tickets resent; idempotent; on the timeline', async () => {
     order = await buy('macro@example.test', 2);
-    const preview = await executeQuery(previewSupportMacroQuery, { orderId: order.orderId, macroId }, manager(), ports);
+    const preview = await executeQuery(
+      previewSupportMacroQuery,
+      { orderId: order.orderId, macroId },
+      manager(),
+      ports,
+    );
     expect(preview.subject).toBe('Your tickets for Support Night');
     expect(preview.body).toMatch(/^Hi Buyer macro, we sent your 2 tickets again \(order [0-9A-F]{8}\)\.$/);
     const k = key();
@@ -776,15 +928,24 @@ describe('support macros (M3.10c)', () => {
       ports,
     );
     expect(r2.runId).toBe(r1.runId);
-    expect(r1).toMatchObject({ ticketsResent: 2, subject: preview.subject, body: preview.body, transfer: null });
-    const notes = await q<{ body: string }>(sql`select body from orders.order_notes where order_id = ${order.orderId}`);
+    expect(r1).toMatchObject({
+      ticketsResent: 2,
+      subject: preview.subject,
+      body: preview.body,
+      transfer: null,
+    });
+    const notes = await q<{ body: string }>(
+      sql`select body from orders.order_notes where order_id = ${order.orderId}`,
+    );
     expect(notes.map((n) => n.body)).toEqual([`Resend and note: ${preview.body}`]);
     const resends = await q<{ n: number }>(
       sql`select count(*)::int as n from platform.domain_events where type = 'ticket.resend_requested' and aggregate_id = ${r1.runId}`,
     );
     expect(resends[0]?.n).toBe(1);
     const memory = memoryNotifier();
-    await drain(supportReplyMailer({ notifier: memory.notifier, appOrigin: 'https://app.test' }), ['order.support_reply']);
+    await drain(supportReplyMailer({ notifier: memory.notifier, appOrigin: 'https://app.test' }), [
+      'order.support_reply',
+    ]);
     expect(memory.sent.filter((m) => m.orderId === order.orderId)).toEqual([
       expect.objectContaining({
         kind: 'orders.support-reply',
@@ -823,7 +984,12 @@ describe('support macros (M3.10c)', () => {
     );
     expect(
       await refusal(
-        executeCommand(runSupportMacroCommand, { orderId: order.orderId, macroId: m.id }, a.ctx({ idempotencyKey: key() }), ports),
+        executeCommand(
+          runSupportMacroCommand,
+          { orderId: order.orderId, macroId: m.id },
+          a.ctx({ idempotencyKey: key() }),
+          ports,
+        ),
       ),
     ).toMatchObject({ code: 'validation_failed', details: { reason: 'transfer_required' } });
     const r = await executeCommand(
@@ -845,7 +1011,11 @@ describe('support macros (M3.10c)', () => {
       await refusal(
         executeCommand(
           runSupportMacroCommand,
-          { orderId: order.orderId, macroId: m.id, transfer: { ticketId: order.ticketIds[1] ?? '', toName: 'X', toEmail: 'x@example.test' } },
+          {
+            orderId: order.orderId,
+            macroId: m.id,
+            transfer: { ticketId: order.ticketIds[1] ?? '', toName: 'X', toEmail: 'x@example.test' },
+          },
           a.ctx({ idempotencyKey: key() }),
           ports,
         ),
@@ -853,7 +1023,12 @@ describe('support macros (M3.10c)', () => {
     ).toMatchObject({ code: 'not_found' });
     expect(
       await refusal(
-        executeCommand(runSupportMacroCommand, { orderId: order.orderId, macroId }, b.ctx({ idempotencyKey: key() }), ports),
+        executeCommand(
+          runSupportMacroCommand,
+          { orderId: order.orderId, macroId },
+          b.ctx({ idempotencyKey: key() }),
+          ports,
+        ),
       ),
     ).toMatchObject({ code: 'not_found' });
   });

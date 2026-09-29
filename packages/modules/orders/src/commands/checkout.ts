@@ -35,6 +35,7 @@ import {
 } from '@yayatoh/ticketing';
 import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { policySnapshot } from '../domain/refund-policy.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
@@ -48,7 +49,6 @@ import {
   type WaitlistClaim,
   waitlistReserveTx,
 } from '../waitlist.ts';
-import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { applyCreditTx, lockCreditByCodeTx, reclaimCreditTx, releaseCreditTx } from './credit-notes.ts';
 import { refundPolicyTx } from './refunds.ts';
 

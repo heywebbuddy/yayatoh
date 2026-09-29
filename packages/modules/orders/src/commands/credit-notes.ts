@@ -196,7 +196,9 @@ async function appliedByNoteTx(tx: TenantTx, ids: readonly string[]) {
       n: sql<string>`sum(${creditNoteApplications.amountMinor})::text`,
     })
     .from(creditNoteApplications)
-    .where(and(inArray(creditNoteApplications.creditNoteId, [...ids]), isNull(creditNoteApplications.releasedAt)))
+    .where(
+      and(inArray(creditNoteApplications.creditNoteId, [...ids]), isNull(creditNoteApplications.releasedAt)),
+    )
     .groupBy(creditNoteApplications.creditNoteId);
   return new Map(rows.map((r) => [r.id, Number(r.n)]));
 }
@@ -331,8 +333,11 @@ export async function applyCreditTx(
     .set({ balanceMinor: sql`${creditNotes.balanceMinor} - ${amountMinor}`, updatedAt: ctx.now })
     .where(and(eq(creditNotes.id, note.id), sql`${creditNotes.balanceMinor} >= ${amountMinor}`))
     .returning({ id: creditNotes.id });
-  if (!u) throw new DomainError('conflict', 'The store credit changed meanwhile', { reason: 'credit_changed' });
-  await tx.insert(creditNoteApplications).values({ orgId: requireOrg(ctx), creditNoteId: note.id, orderId, amountMinor });
+  if (!u)
+    throw new DomainError('conflict', 'The store credit changed meanwhile', { reason: 'credit_changed' });
+  await tx
+    .insert(creditNoteApplications)
+    .values({ orgId: requireOrg(ctx), creditNoteId: note.id, orderId, amountMinor });
 }
 
 /** An order that lapsed unpaid gives its store credit back to the note. */

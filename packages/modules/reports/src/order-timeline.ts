@@ -208,13 +208,18 @@ export const orderTimelineQuery = tenantQuery({
     // credit it was bought with (and given back if it lapsed), and support macros run on it.
     const credit = await creditTimelineTx(tx, order.id);
     for (const c of credit.issued)
-      items.push(item(c.at, 'credit_note_issued', { amountMinor: c.amountMinor, code: c.disposition, text: c.label }));
+      items.push(
+        item(c.at, 'credit_note_issued', { amountMinor: c.amountMinor, code: c.disposition, text: c.label }),
+      );
     for (const a of credit.applied) {
       items.push(item(a.at, 'credit_applied', { amountMinor: a.amountMinor, text: a.label }));
-      if (a.releasedAt) items.push(item(a.releasedAt, 'credit_released', { amountMinor: a.amountMinor, text: a.label }));
+      if (a.releasedAt)
+        items.push(item(a.releasedAt, 'credit_released', { amountMinor: a.amountMinor, text: a.label }));
     }
     for (const r of await macroRunsForOrderTx(tx, order.id))
-      items.push(item(r.createdAt, 'macro_run', { text: r.macroName, code: r.actions.join(','), who: r.ranBy }));
+      items.push(
+        item(r.createdAt, 'macro_run', { text: r.macroName, code: r.actions.join(','), who: r.ranBy }),
+      );
     return { timezone: event.timezone, currency: order.currency, items: sortTimeline(items) };
   },
 });

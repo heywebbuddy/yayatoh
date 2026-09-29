@@ -728,7 +728,9 @@ export const supportMacros = tenantTable(
     archivedAt: ts('archived_at'),
   },
   (t) => [
-    uniqueIndex('support_macros_org_name_key').on(t.orgId, sql`lower(${t.name})`).where(sql`archived_at is null`),
+    uniqueIndex('support_macros_org_name_key')
+      .on(t.orgId, sql`lower(${t.name})`)
+      .where(sql`archived_at is null`),
     check('support_macros_name_check', sql`length(name) between 2 and 80`),
     check('support_macros_subject_check', sql`length(subject) between 1 and 200`),
     check('support_macros_body_check', sql`length(body) between 1 and 5000`),

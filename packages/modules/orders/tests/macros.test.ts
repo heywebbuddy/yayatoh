@@ -14,7 +14,10 @@ const values: MergeValues = {
 describe('support macro merge fields (M3.10c)', () => {
   it('fills every known field, with or without spaces inside the braces', () => {
     expect(
-      renderMacro('Hi {{buyer_name}}, your {{ ticket_count }} tickets for {{event_name}} ({{order_ref}}).', values),
+      renderMacro(
+        'Hi {{buyer_name}}, your {{ ticket_count }} tickets for {{event_name}} ({{order_ref}}).',
+        values,
+      ),
     ).toBe('Hi Amina Diallo, your 2 tickets for Lakeside Jazz Night (AB12CD34).');
     expect(renderMacro('{{recipient_name}} now holds it; doors {{event_date}}.', values)).toBe(
       'Noor Haddad now holds it; doors Oct 14, 2027, 7:00 PM.',

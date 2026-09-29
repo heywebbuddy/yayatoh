@@ -1,7 +1,7 @@
 import { normalizeEmail } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { type Ctx, type DomainEvent, DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { signLinkToken, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -131,9 +131,15 @@ export async function startTransferTx(
     .update(ticketClaims)
     .set({ revokedAt: ctx.now, updatedAt: ctx.now })
     .where(
-      and(eq(ticketClaims.ticketId, row.t.id), isNull(ticketClaims.claimedAt), isNull(ticketClaims.revokedAt)),
+      and(
+        eq(ticketClaims.ticketId, row.t.id),
+        isNull(ticketClaims.claimedAt),
+        isNull(ticketClaims.revokedAt),
+      ),
     );
-  const expiresAt = new Date(Math.min(ctx.now.getTime() + TRANSFER_CLAIM_DAYS * 86_400_000, ev.endsAt.getTime()));
+  const expiresAt = new Date(
+    Math.min(ctx.now.getTime() + TRANSFER_CLAIM_DAYS * 86_400_000, ev.endsAt.getTime()),
+  );
   const [claim] = await tx
     .insert(ticketClaims)
     .values({ orgId, ticketId: row.t.id, recipientEmail: toEmail, expiresAt, createdBy: actorName(ctx) })
@@ -219,7 +225,13 @@ export async function completeTransferTx(
   });
 }
 
-async function cancelTransferTx(tx: TenantTx, ctx: Ctx, emit: Emit, transferId: string, holderEmail?: string) {
+async function cancelTransferTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: Emit,
+  transferId: string,
+  holderEmail?: string,
+) {
   const [t] = await tx.select().from(ticketTransfers).where(eq(ticketTransfers.id, transferId)).for('update');
   if (!t || (holderEmail && normalizeEmail(t.fromEmail) !== holderEmail))
     throw new DomainError('not_found', 'Transfer not found');
@@ -232,7 +244,9 @@ async function cancelTransferTx(tx: TenantTx, ctx: Ctx, emit: Emit, transferId: 
   await tx
     .update(ticketClaims)
     .set({ revokedAt: ctx.now, updatedAt: ctx.now })
-    .where(and(eq(ticketClaims.id, t.claimId), isNull(ticketClaims.claimedAt), isNull(ticketClaims.revokedAt)));
+    .where(
+      and(eq(ticketClaims.id, t.claimId), isNull(ticketClaims.claimedAt), isNull(ticketClaims.revokedAt)),
+    );
   emit({
     type: 'ticket.transfer_cancelled',
     version: 1,
@@ -279,7 +293,11 @@ export const cancelTransferCommand = tenantCommand({
     await cancelTransferTx(tx, ctx, emit, input.transferId);
     return { ok: true };
   },
-  audit: (input) => ({ action: 'ticket.transfer_cancel', targetType: 'ticket_transfer', targetId: input.transferId }),
+  audit: (input) => ({
+    action: 'ticket.transfer_cancel',
+    targetType: 'ticket_transfer',
+    targetId: input.transferId,
+  }),
 });
 
 async function liveHolderLinkTx(tx: TenantTx, ctx: Ctx, linkId: string) {
@@ -291,7 +309,11 @@ async function liveHolderLinkTx(tx: TenantTx, ctx: Ctx, linkId: string) {
 /** Holder (their tickets page): transfer one of their tickets by name and email. */
 export const startHolderTransferCommand = tenantCommand({
   name: 'ticketing.startHolderTransfer',
-  input: TransferInput.extend({ linkId: z.uuid(), ticketId: z.uuid(), acceptFee: z.boolean().default(false) }),
+  input: TransferInput.extend({
+    linkId: z.uuid(),
+    ticketId: z.uuid(),
+    acceptFee: z.boolean().default(false),
+  }),
   output: StartedTransferDto,
   entitlement: 'ticketing',
   permission: 'public:holder',
@@ -336,7 +358,11 @@ export const cancelHolderTransferCommand = tenantCommand({
     await cancelTransferTx(tx, ctx, emit, input.transferId, l.emailNorm);
     return { ok: true };
   },
-  audit: (input) => ({ action: 'ticket.transfer_cancel', targetType: 'ticket_transfer', targetId: input.transferId }),
+  audit: (input) => ({
+    action: 'ticket.transfer_cancel',
+    targetType: 'ticket_transfer',
+    targetId: input.transferId,
+  }),
 });
 
 function stateOf(
@@ -350,7 +376,11 @@ function stateOf(
   return claim.expiresAt <= now ? 'expired' : 'pending';
 }
 
-async function transfersWhereTx(tx: TenantTx, now: Date, where: ReturnType<typeof eq>): Promise<TransferDto[]> {
+async function transfersWhereTx(
+  tx: TenantTx,
+  now: Date,
+  where: ReturnType<typeof eq>,
+): Promise<TransferDto[]> {
   const rows = await tx
     .select({
       t: ticketTransfers,

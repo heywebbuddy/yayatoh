@@ -54,7 +54,10 @@ describe('transfer rules (M3.10c)', () => {
 
   it('lets organizers transfer past the holder rules, for free, until the event ends', () => {
     const strict = rules({ transfersAllowed: false, transferCutoffHours: 72, transferFeeMinor: 500 });
-    expect(decideTransfer(strict, at('2027-10-14T20:00:00Z', 'organizer'))).toEqual({ ok: true, feeMinor: 0 });
+    expect(decideTransfer(strict, at('2027-10-14T20:00:00Z', 'organizer'))).toEqual({
+      ok: true,
+      feeMinor: 0,
+    });
     expect(decideTransfer(strict, at('2027-10-14T23:00:00Z', 'organizer'))).toEqual({
       ok: false,
       reason: 'event_ended',
@@ -70,7 +73,11 @@ describe('transfer rules (M3.10c)', () => {
 });
 
 describe('store credit allocation on a cart (M3.10c)', () => {
-  const line = (unitNetMinor: number, quantity: number, eligible = true) => ({ unitNetMinor, quantity, eligible });
+  const line = (unitNetMinor: number, quantity: number, eligible = true) => ({
+    unitNetMinor,
+    quantity,
+    eligible,
+  });
 
   it('takes the same amount off every ticket of a line and never more than the budget', () => {
     expect(allocateCredit([line(2500, 3)], 1000)).toEqual([333]);
@@ -91,6 +98,6 @@ describe('store credit allocation on a cart (M3.10c)', () => {
   it('leaves what cannot be split evenly (the rest stays on the note)', () => {
     const units = allocateCredit([line(900, 4)], 10);
     expect(units).toEqual([2]);
-    expect(10 - units[0] * 4).toBe(2);
+    expect(10 - (units[0] ?? 0) * 4).toBe(2);
   });
 });

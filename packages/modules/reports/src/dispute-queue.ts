@@ -81,7 +81,8 @@ export const disputeQueueQuery = tenantQuery({
       items,
       counts: {
         open: all.filter((d) => isOpen(d.status)).length,
-        dueSoon: all.filter((d) => d.status === 'open' && disputeAlertLevel(d.evidenceDueBy, ctx.now) > 0).length,
+        dueSoon: all.filter((d) => d.status === 'open' && disputeAlertLevel(d.evidenceDueBy, ctx.now) > 0)
+          .length,
         closed: all.filter((d) => !isOpen(d.status)).length,
       },
     };

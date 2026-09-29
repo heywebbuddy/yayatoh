@@ -414,7 +414,13 @@ export function evidenceDocument(
                 id: 'tickets',
                 title: l('transfers'),
                 table: {
-                  head: [l('serial'), l('transferFrom'), l('transferTo'), l('transferState'), l('transferClaimed')],
+                  head: [
+                    l('serial'),
+                    l('transferFrom'),
+                    l('transferTo'),
+                    l('transferState'),
+                    l('transferClaimed'),
+                  ],
                   body: e.transfers.map((t) => [
                     `#${t.serial}`,
                     t.fromName,

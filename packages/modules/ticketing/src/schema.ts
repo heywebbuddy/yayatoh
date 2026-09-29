@@ -341,9 +341,7 @@ export const walletPasses = tenantTable(
   (t) => [
     uniqueIndex('wallet_passes_org_ticket_rev_key').on(t.orgId, t.ticketId, t.rev),
     uniqueIndex('wallet_passes_org_serial_key').on(t.orgId, t.serial),
-    uniqueIndex('wallet_passes_org_ticket_active_key')
-      .on(t.orgId, t.ticketId)
-      .where(sql`status = 'active'`),
+    uniqueIndex('wallet_passes_org_ticket_active_key').on(t.orgId, t.ticketId).where(sql`status = 'active'`),
     foreignKey({
       name: 'wallet_passes_ticket_fk',
       columns: [t.orgId, t.ticketId],

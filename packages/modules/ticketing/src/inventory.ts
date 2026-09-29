@@ -150,7 +150,11 @@ export async function quoteTx(
   }
   // M3.10c: store credit comes off after the promo, the same amount off each ticket of a line.
   const credit = allocateCredit(
-    drafts.map((d) => ({ unitNetMinor: d.face - d.discount, quantity: d.quantity, eligible: !d.r.isDonation })),
+    drafts.map((d) => ({
+      unitNetMinor: d.face - d.discount,
+      quantity: d.quantity,
+      eligible: !d.r.isDonation,
+    })),
     opts.creditBudgetMinor ?? 0,
   );
   for (const [i, { r, quantity, face, discount: promoDiscount }] of drafts.entries()) {

@@ -120,7 +120,11 @@ export const archiveSupportMacroCommand = tenantCommand({
     if (rows.length === 0) throw new DomainError('not_found', 'Macro not found');
     return { ok: true };
   },
-  audit: (input) => ({ action: 'support_macro.archive', targetType: 'support_macro', targetId: input.macroId }),
+  audit: (input) => ({
+    action: 'support_macro.archive',
+    targetType: 'support_macro',
+    targetId: input.macroId,
+  }),
 });
 
 /** The org's live macros, by name. */
@@ -237,7 +241,11 @@ export const runSupportMacroCommand = tenantCommand({
         reason: 'transfer_required',
         field: 'transfer',
       });
-    const { values, order, liveTicketIds } = await mergeValuesTx(tx, input.orderId, input.transfer?.toName ?? '');
+    const { values, order, liveTicketIds } = await mergeValuesTx(
+      tx,
+      input.orderId,
+      input.transfer?.toName ?? '',
+    );
     if (actions.includes('resend_tickets') && liveTicketIds.length === 0)
       throw new DomainError('invalid_state', 'This order has no valid tickets to resend', {
         reason: 'no_live_tickets',

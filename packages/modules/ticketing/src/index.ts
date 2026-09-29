@@ -37,6 +37,14 @@ export {
   revokeClaimLinkCommand,
   TicketClaimDto,
 } from './distribution.ts';
+export { allocateCredit } from './domain/credit.ts';
+export {
+  decideTransfer,
+  type TransferDecision,
+  type TransferRefusal,
+  type TransferRules,
+  transferDeadline,
+} from './domain/transfer-rules.ts';
 export {
   eraseTicketsDsarTx,
   purgeHolderLinksTx,
@@ -109,14 +117,6 @@ export {
   ticketTypeStatsTx,
 } from './stats.ts';
 export { claimLinkMailer, holderLinkMailer, transferMailer } from './subscribers.ts';
-export { allocateCredit } from './domain/credit.ts';
-export {
-  decideTransfer,
-  type TransferDecision,
-  type TransferRefusal,
-  type TransferRules,
-  transferDeadline,
-} from './domain/transfer-rules.ts';
 export {
   cancelHolderTransferCommand,
   cancelTransferCommand,
@@ -134,8 +134,8 @@ export {
   type FakeWalletPush,
   fakeWalletPassProvider,
   orderWalletPassesQuery,
-  type WalletPassProvider,
   WalletPassDto,
+  type WalletPassProvider,
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
