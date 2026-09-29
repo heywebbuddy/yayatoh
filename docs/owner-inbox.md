@@ -178,6 +178,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Branch protection on `main`**: the change-management export flags merged PRs without an
   independent approval. If build sessions open PRs under your account, add a second reviewer (the
   contracted backup) or accept and document the exception in `docs/decisions.md`.
+- [ ] **Evidence workflow defaults, pending owner** (M5.11a, label: `infra`): runs Mondays 06:17 UTC and
+  on demand; 90-day audit window; artifacts kept 90 days. Optionally add a fine-grained token with
+  admin *read* on the repository as a secret so the workflow can export collaborators and branch
+  protection itself (today it records them as unavailable and runbook step 2 covers them).
 
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
