@@ -12,24 +12,33 @@ import { devPassword, expectAccessible } from './helpers.ts';
  * refused with the maintenance message (and nothing is saved), the public pages and the public API
  * keep answering, and everything works again once it ends.
  */
-const admin = adminClient();
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const tenantSite = (slug: string) => `http://${slug}.yayatoh.events:${PORT}`;
 
 async function freeze(orgId: string, on: boolean, expectedEndAt: string | null = null) {
-  await admin.begin(async (tx) => {
-    await tx`select pg_advisory_xact_lock(hashtext('e2e:read_only_freeze'))`;
-    const [row] = await tx<{ ids: string[] | null; end: string | null }[]>`
+  // A client per call: with fullyParallel a worker may run afterAll and then another test here.
+  const admin = adminClient();
+  try {
+    await admin.begin(async (tx) => {
+      await tx`select pg_advisory_xact_lock(hashtext('e2e:read_only_freeze'))`;
+      const [row] = await tx<{ ids: string[] | null; end: string | null }[]>`
       select array(select jsonb_array_elements_text(value->'orgIds')) as ids, value->>'expectedEndAt' as end
       from platform.ops_flags where key = 'read_only_freeze' and value->>'scope' = 'orgs'`;
-    const ids = new Set(row?.ids ?? []);
-    if (on) ids.add(orgId);
-    else ids.delete(orgId);
-    const value = ids.size
-      ? JSON.stringify({ scope: 'orgs', orgIds: [...ids], expectedEndAt: expectedEndAt ?? row?.end ?? null })
-      : null;
-    await tx`select platform.set_ops_flag('read_only_freeze', ${value}::text::jsonb, 'e2e: maintenance spec', 'e2e')`;
-  });
+      const ids = new Set(row?.ids ?? []);
+      if (on) ids.add(orgId);
+      else ids.delete(orgId);
+      const value = ids.size
+        ? JSON.stringify({
+            scope: 'orgs',
+            orgIds: [...ids],
+            expectedEndAt: expectedEndAt ?? row?.end ?? null,
+          })
+        : null;
+      await tx`select platform.set_ops_flag('read_only_freeze', ${value}::text::jsonb, 'e2e: maintenance spec', 'e2e')`;
+    });
+  } finally {
+    await admin.end();
+  }
 }
 
 async function newOrg(page: Page, opts: { twoFactor?: boolean } = {}) {
@@ -47,7 +56,6 @@ async function newOrg(page: Page, opts: { twoFactor?: boolean } = {}) {
 const banner = (page: Page, label = 'Maintenance') => page.getByRole('region', { name: label });
 
 test.afterAll(async () => {
-  await admin.end();
   await closePools();
 });
 

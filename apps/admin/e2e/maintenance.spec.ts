@@ -21,11 +21,22 @@ import {
  * history and the access log. The freeze is one platform-wide flag: only the desktop project
  * switches it (for its own org, never platform-wide), the others check the page and its refusals.
  */
-const db = adminClient();
 test.afterAll(async () => {
-  await db.end();
   await closePools();
 });
+
+/** Changes recorded with this reason (a client per call: workers may reuse this file after afterAll). */
+async function changesWithReason(reason: string): Promise<number> {
+  const db = adminClient();
+  try {
+    const [r] = await db<
+      { n: number }[]
+    >`select count(*)::int as n from platform.ops_flag_changes where reason = ${reason}`;
+    return r?.n ?? 0;
+  } finally {
+    await db.end();
+  }
+}
 
 const START = 'Start or change the read-only freeze';
 const END = 'End the read-only freeze';
@@ -66,9 +77,7 @@ test('admin staff freeze one organization by keyboard with step-up; the organize
   await expect(
     page.getByRole('alert').filter({ hasText: "That password or code isn't right." }),
   ).toBeVisible();
-  expect(
-    (await db`select count(*)::int as n from platform.ops_flag_changes where reason = ${reason}`)[0]?.n,
-  ).toBe(0);
+  expect(await changesWithReason(reason)).toBe(0);
 
   await fillStart(page, { orgs: slug, reason, password: devPassword() });
   await expect(page.getByText(/^Read-only freeze is on\./)).toBeVisible();
@@ -157,8 +166,6 @@ test('refusals that change nothing: unknown address, unconfirmed platform-wide, 
     password: devPassword(),
   });
   await expect(support).toHaveURL(/\/not-staff$/);
-  expect(
-    (await db`select count(*)::int as n from platform.ops_flag_changes where reason = ${reason}`)[0]?.n,
-  ).toBe(0);
+  expect(await changesWithReason(reason)).toBe(0);
   await support.close();
 });
