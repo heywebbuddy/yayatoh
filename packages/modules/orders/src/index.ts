@@ -20,6 +20,19 @@ export {
   recordCheckoutBlockCommand,
   startCheckoutCommand,
 } from './commands/checkout.ts';
+export {
+  BuyerCreditNoteDto,
+  buyerCreditNotesTx,
+  CreditNoteDocumentDto,
+  CreditNoteDto,
+  CreditNoteTotalsDto,
+  creditNoteDocumentQuery,
+  creditNotesQuery,
+  creditNoteTotalsQuery,
+  creditTimelineTx,
+  IssuedCreditNoteDto,
+  issueCreditNoteCommand,
+} from './commands/credit-notes.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
 export {
   CancellationPreviewDto,
@@ -70,7 +83,26 @@ export {
   startPolicyOverrideRefundCommand,
   startRefundCommand,
 } from './commands/refunds.ts';
+export {
+  archiveSupportMacroCommand,
+  MacroPreviewDto,
+  MacroRunDto,
+  macroRunsForOrderTx,
+  previewSupportMacroQuery,
+  runSupportMacroCommand,
+  SupportMacroDto,
+  saveSupportMacroCommand,
+  supportMacrosQuery,
+} from './commands/support-macros.ts';
+export {
+  creditableMinor,
+  creditNoteAmount,
+  formatCreditNoteNumber,
+  newCreditCode,
+  parseCreditCode,
+} from './domain/credit-notes.ts';
 export { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from './domain/lifecycle.ts';
+export { MERGE_FIELDS, type MergeField, orderRef, renderMacro, unknownMergeFields } from './domain/macros.ts';
 export {
   type CancellationPreview,
   cancellationPreview,
@@ -228,17 +260,22 @@ export {
   MASS_REFUND_STATUSES,
   ORDER_STATUSES,
   REFUND_REASONS,
+  CREDIT_NOTE_DISPOSITIONS,
+  CREDIT_NOTE_KINDS,
+  MACRO_ACTIONS,
   REFUND_REQUEST_STATUSES,
   REFUND_STATUSES,
   WAITLIST_ENTRY_STATUSES,
 } from './schema.ts';
 export {
+  creditNoteMailer,
   postponementMailer,
   REMINDER_LEAD_MS,
   refundDeclineMailer,
   refundMailer,
   refundRequestNotifier,
   reminderRescheduler,
+  supportReplyMailer,
   ticketMailer,
 } from './subscribers.ts';
 export {

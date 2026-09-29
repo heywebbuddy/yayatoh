@@ -64,7 +64,13 @@ export const privateColumns = columnPrivacy('orders', {
     actions: 'vocab',
     updated_by: internal(),
   },
-  support_macro_runs: { macro_name: internal(), actions: 'vocab', ran_by: internal() },
+  support_macro_runs: {
+    macro_name: internal(),
+    actions: 'vocab',
+    reply_subject: holder(),
+    reply_body: holder(),
+    ran_by: internal(),
+  },
   refund_policies: { kind: 'vocab', updated_by: internal() },
   // Guest email verification per event (M1.5f): who last changed it (a user id or actor type).
   checkout_settings: { updated_by: internal() },

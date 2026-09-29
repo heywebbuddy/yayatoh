@@ -108,4 +108,34 @@ export {
   ticketsDistributedTx,
   ticketTypeStatsTx,
 } from './stats.ts';
-export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';
+export { claimLinkMailer, holderLinkMailer, transferMailer } from './subscribers.ts';
+export { allocateCredit } from './domain/credit.ts';
+export {
+  decideTransfer,
+  type TransferDecision,
+  type TransferRefusal,
+  type TransferRules,
+  transferDeadline,
+} from './domain/transfer-rules.ts';
+export {
+  cancelHolderTransferCommand,
+  cancelTransferCommand,
+  orderTransfersQuery,
+  StartedTransferDto,
+  startHolderTransferCommand,
+  startTransferCommand,
+  startTransferTx,
+  TRANSFER_CLAIM_DAYS,
+  TRANSFER_STATES,
+  TransferDto,
+  transfersForOrderTx,
+} from './transfers.ts';
+export {
+  type FakeWalletPush,
+  fakeWalletPassProvider,
+  orderWalletPassesQuery,
+  type WalletPassProvider,
+  WalletPassDto,
+  walletPassSync,
+  walletSerial,
+} from './wallet.ts';

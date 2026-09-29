@@ -750,6 +750,9 @@ export const supportMacroRuns = tenantTable(
     orderId: uuid('order_id').notNull(),
     macroName: text('macro_name').notNull(),
     actions: text('actions').array().notNull(),
+    /** The reply as it was sent (merge fields filled). */
+    replySubject: text('reply_subject').notNull(),
+    replyBody: text('reply_body').notNull(),
     ranBy: text('ran_by').notNull(),
   },
   (t) => [

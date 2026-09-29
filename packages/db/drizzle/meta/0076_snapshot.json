@@ -1,5 +1,5 @@
 {
-  "id": "af7cb191-c6f8-4118-ab86-6bc319b5fb77",
+  "id": "abb8effb-2853-4e14-91b4-6361ca67bcbf",
   "prevId": "15d14c05-c6de-4e1e-b45d-08868c3a5a4f",
   "version": "7",
   "dialect": "postgresql",
@@ -17628,6 +17628,18 @@
         "actions": {
           "name": "actions",
           "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reply_subject": {
+          "name": "reply_subject",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reply_body": {
+          "name": "reply_body",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },

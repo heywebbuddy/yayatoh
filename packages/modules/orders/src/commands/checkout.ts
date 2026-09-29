@@ -48,6 +48,8 @@ import {
   type WaitlistClaim,
   waitlistReserveTx,
 } from '../waitlist.ts';
+import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
+import { applyCreditTx, lockCreditByCodeTx, reclaimCreditTx, releaseCreditTx } from './credit-notes.ts';
 import { refundPolicyTx } from './refunds.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -144,7 +146,16 @@ export const startCheckoutCommand = tenantCommand({
     if (event?.status !== 'published' || (event.visibility === 'private' && !grant?.unlocksEvent)) {
       throw new DomainError('not_found', 'Event not found');
     }
-    const promo = input.promoCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
+    // M3.10c: the code box also takes store credit codes (CR-XXXX-XXXX) from this org's credit notes.
+    const creditCode = input.promoCode ? parseCreditCode(input.promoCode) : null;
+    const credit = creditCode ? await lockCreditByCodeTx(tx, creditCode) : null;
+    if (creditCode && !credit)
+      throw new DomainError('validation_failed', 'This store credit code is not valid', {
+        reason: 'credit_invalid',
+        field: 'promoCode',
+      });
+    const promo =
+      input.promoCode && !creditCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
     // Seated events: the chosen seats are held under the order's id and decide the quantities of
     // their ticket types; a seated ticket type cannot be bought without choosing seats.
     const orderId = uuidv7(ctx.now.getTime());
@@ -206,7 +217,13 @@ export const startCheckoutCommand = tenantCommand({
       includeHidden: new Set([...(grant?.ticketTypeIds ?? []), ...(offer ? [offer.ticketTypeId] : [])]),
       promo,
       occurrenceId,
+      creditBudgetMinor: credit && credit.currency === event.currency ? credit.balanceMinor : 0,
     });
+    if (credit && quote.creditMinor === 0)
+      throw new DomainError('validation_failed', 'This store credit cannot be used on these tickets', {
+        reason: 'credit_not_applicable',
+        field: 'promoCode',
+      });
     if (!offer)
       await holdInventoryTx(
         tx,
@@ -254,7 +271,7 @@ export const startCheckoutCommand = tenantCommand({
         subtotalMinor: quote.subtotalMinor,
         discountMinor: quote.discountMinor,
         promoCodeId: quote.promoCodeId,
-        promoCode: promo?.code ?? null,
+        promoCode: promo?.code ?? (credit ? formatCreditNoteNumber(credit.number) : null),
         feeMinor: quote.feeMinor,
         totalMinor: quote.totalMinor,
         fundsFlow: flow.fundsFlow,
@@ -269,6 +286,7 @@ export const startCheckoutCommand = tenantCommand({
       })
       .returning();
     if (!order) throw new DomainError('internal');
+    if (credit) await applyCreditTx(tx, ctx, credit, order.id, quote.creditMinor);
     await submitResponseTx(tx, ctx, {
       kind: 'checkout_questions',
       subjectType: 'event',
@@ -458,6 +476,7 @@ export const applyProviderEventCommand = tenantCommand({
           });
         // The buyer paid the discounted price, so the use counts again if there is one left.
         if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);
+        await reclaimCreditTx(tx, ctx, order.id);
       } catch {
         // The seats went to someone else: give back the stock this attempt took.
         if (stockHeld) await releaseHoldTx(tx, lines(order.items));
@@ -527,6 +546,7 @@ export const expireOrdersCommand = tenantCommand({
       if (!(await keepOfferHoldTx(tx, order, ctx.now))) await releaseHoldTx(tx, lines(order.items));
       if (order.seatUuids.length) await releaseSeatHoldTx(tx, ctx, order.id);
       if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
+      await releaseCreditTx(tx, ctx, order.id);
       await setStatus(tx, order, 'expire', ctx.now);
       emit({
         type: 'order.expired',

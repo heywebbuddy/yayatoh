@@ -64,6 +64,8 @@ CREATE TABLE "orders"."support_macro_runs" (
 	"order_id" uuid NOT NULL,
 	"macro_name" text NOT NULL,
 	"actions" text[] NOT NULL,
+	"reply_subject" text NOT NULL,
+	"reply_body" text NOT NULL,
 	"ran_by" text NOT NULL,
 	CONSTRAINT "support_macro_runs_org_id_id_key" UNIQUE("org_id","id")
 );

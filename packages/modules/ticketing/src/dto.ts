@@ -35,6 +35,10 @@ export const TicketTypeDto = z.object({
   accessDates: z.array(AccessDateDto),
   /** Multi-date events: the dates this type sells for; empty = every date. */
   occurrenceIds: z.array(z.uuid()),
+  /** M3.10c transfer rules: holders may transfer, until N hours before the start, for a fee. */
+  transfersAllowed: z.boolean(),
+  transferCutoffHours: z.int().nullable(),
+  transferFeeMinor: z.int(),
   /** Per-ticket price the buyer sees now (face + passed-on fees; early-bird while it runs). */
   allInMinor: z.int(),
   feeMinor: z.int(),
@@ -89,6 +93,10 @@ const Fields = z.object({
     .max(366)
     .default([])
     .transform((a) => [...new Set(a)]),
+  /** M3.10c transfer rules (organizers always transfer, for free). */
+  transfersAllowed: z.boolean().default(true),
+  transferCutoffHours: z.int().min(0).max(8760).nullable().default(null),
+  transferFeeMinor: z.int().min(0).max(100_000_000).default(0),
 });
 
 /** Early-bird and donation rules on the merged ticket type (create input, or current row + update). */
