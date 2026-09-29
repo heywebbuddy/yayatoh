@@ -19,3 +19,6 @@ export async function currentRole(sql: MigratorSql): Promise<string> {
   const [row] = await sql<{ role: string }[]>`select current_user as role`;
   return row?.role ?? '';
 }
+
+/** The schema migrations folder (drizzle journal): the cutover pre-flight compares it to what ran. */
+export { MIGRATIONS_FOLDER } from './migrate.ts';

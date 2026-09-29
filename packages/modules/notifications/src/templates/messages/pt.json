@@ -146,5 +146,53 @@
       "intro": "Como pediu, a sua conta Yayatoh foi eliminada. A sessão foi terminada em todo o lado e os seus dados de acesso e a verificação em dois passos foram removidos. Os organizadores a quem comprou mantêm os registos das encomendas, como a lei exige.\n\nSe não foi você que pediu, responda a este e-mail de imediato."
     },
     "sentBy": "Enviado pela Yayatoh sobre a sua conta."
+  },
+  "cutover": {
+    "cta": "Status da manutenção",
+    "sentBy": "Enviado pela Yayatoh sobre a mudança para a nova plataforma.",
+    "organizer": {
+      "t14": {
+        "subject": "A Yayatoh muda para a nova plataforma em {start}",
+        "intro": "Em {start} a Yayatoh muda para a sua nova plataforma. Por cerca de 45 minutos, até {end}, seu painel e a venda de ingressos ficam pausados; o check-in na entrada continua funcionando e os ingressos já vendidos continuam válidos.\n\nSeus eventos, pedidos, repasses e equipe vêm junto, e você entra com o mesmo e-mail e senha. Você não precisa fazer nada: vamos escrever de novo dois dias antes e quando terminar."
+      },
+      "t2": {
+        "subject": "Lembrete: manutenção da Yayatoh em {start}",
+        "intro": "Um lembrete: em {start}, até cerca de {end}, a Yayatoh fica somente leitura enquanto mudamos para a nova plataforma. Não programe uma abertura de vendas nem uma campanha de ingressos nesse período. O check-in na entrada continua funcionando e os ingressos vendidos continuam válidos."
+      },
+      "freezeStart": {
+        "subject": "A manutenção da Yayatoh começou",
+        "intro": "A Yayatoh está somente leitura enquanto mudamos para a nova plataforma, até cerca de {end}. Você ainda pode ver seus eventos e escanear ingressos na entrada; salvar alterações, novas vendas e reembolsos estão pausados. Vamos avisar por e-mail quando terminar."
+      },
+      "freezeEnd": {
+        "subject": "A Yayatoh está na nova plataforma",
+        "intro": "A mudança terminou e a Yayatoh voltou a funcionar. Entre como sempre com o mesmo e-mail e senha: seus eventos, pedidos e repasses estão todos lá, e os ingressos já vendidos continuam válidos. Se você usa o app da Yayatoh, atualize-o na loja de apps."
+      },
+      "rollback": {
+        "subject": "A Yayatoh voltou para a versão anterior",
+        "intro": "Voltamos a Yayatoh para a versão anterior enquanto corrigimos um problema da nova plataforma. Vendas e alterações feitas desde {start} foram mantidas, e os ingressos continuam válidos. Entre como antes; vamos informar a nova data da mudança."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Seus ingressos continuam válidos durante a nossa mudança em {start}",
+        "intro": "Em {start} a Yayatoh muda para a sua nova plataforma. Por cerca de 45 minutos, até {end}, você não poderá comprar ingressos nem alterar pedidos, mas seus ingressos continuam válidos e são escaneados na entrada como sempre.\n\nDepois você entra com o mesmo e-mail e senha. Se você usa o app da Yayatoh, atualize-o quando avisarmos que a mudança terminou."
+      },
+      "t2": {
+        "subject": "Lembrete: breve manutenção da Yayatoh em {start}",
+        "intro": "Um lembrete: em {start}, até cerca de {end}, você não poderá comprar ingressos nem alterar pedidos na Yayatoh. Seus ingressos continuam válidos e funcionam na entrada."
+      },
+      "freezeStart": {
+        "subject": "A manutenção da Yayatoh começou",
+        "intro": "A venda de ingressos e as alterações de pedidos na Yayatoh estão pausadas até cerca de {end} enquanto mudamos para a nova plataforma. Seus ingressos continuam válidos e são escaneados na entrada como sempre."
+      },
+      "freezeEnd": {
+        "subject": "A Yayatoh está de volta",
+        "intro": "A mudança terminou: você pode comprar ingressos e gerenciar seus pedidos de novo. Seus ingressos continuam válidos, e você entra com o mesmo e-mail e senha. Se você usa o app da Yayatoh, atualize-o na loja de apps."
+      },
+      "rollback": {
+        "subject": "A Yayatoh voltou para a versão anterior",
+        "intro": "Voltamos a Yayatoh para a versão anterior enquanto corrigimos um problema. Os ingressos que você comprou desde {start} continuam válidos. Se precisamos reembolsar algum pedido seu, você vai receber um e-mail separado com o valor. Entre como antes."
+      }
+    }
   }
 }

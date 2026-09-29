@@ -146,5 +146,53 @@
       "intro": "Wie gewünscht wurde Ihr Yayatoh-Konto gelöscht. Sie wurden überall abgemeldet, und Ihre Anmeldedaten sowie die Bestätigung in zwei Schritten wurden entfernt. Veranstalter, bei denen Sie gekauft haben, behalten ihre Bestellunterlagen, wie es das Gesetz verlangt.\n\nWenn Sie das nicht veranlasst haben, antworten Sie sofort auf diese E-Mail."
     },
     "sentBy": "Von Yayatoh zu Ihrem Konto gesendet."
+  },
+  "cutover": {
+    "cta": "Wartungsstatus",
+    "sentBy": "Von Yayatoh gesendet zum Umzug auf die neue Plattform.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh zieht am {start} auf die neue Plattform um",
+        "intro": "Am {start} zieht Yayatoh auf seine neue Plattform um. Etwa 45 Minuten lang, bis {end}, sind Ihr Dashboard und der Ticketverkauf pausiert; der Einlass funktioniert weiter und bereits verkaufte Tickets bleiben gültig.\n\nIhre Events, Bestellungen, Auszahlungen und Ihr Team kommen mit, und Sie melden sich mit derselben E-Mail-Adresse und demselben Passwort an. Sie müssen nichts tun: Wir schreiben Ihnen zwei Tage vorher und wenn alles erledigt ist."
+      },
+      "t2": {
+        "subject": "Erinnerung: Yayatoh-Wartung am {start}",
+        "intro": "Zur Erinnerung: Am {start}, bis etwa {end}, ist Yayatoh schreibgeschützt, während wir auf die neue Plattform umziehen. Bitte planen Sie in diesem Zeitraum keinen Vorverkaufsstart und keine Ticketaktion. Der Einlass funktioniert weiter und verkaufte Tickets bleiben gültig."
+      },
+      "freezeStart": {
+        "subject": "Die Yayatoh-Wartung hat begonnen",
+        "intro": "Yayatoh ist bis etwa {end} schreibgeschützt, während wir auf die neue Plattform umziehen. Sie können Ihre Events weiterhin ansehen und Tickets am Einlass scannen; Speichern, neue Verkäufe und Erstattungen sind pausiert. Wir schreiben Ihnen, sobald alles erledigt ist."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh läuft auf der neuen Plattform",
+        "intro": "Der Umzug ist abgeschlossen und Yayatoh funktioniert wieder. Melden Sie sich wie gewohnt mit derselben E-Mail-Adresse und demselben Passwort an: Ihre Events, Bestellungen und Auszahlungen sind alle da, und verkaufte Tickets bleiben gültig. Wenn Sie die Yayatoh-App nutzen, aktualisieren Sie sie im App-Store."
+      },
+      "rollback": {
+        "subject": "Yayatoh läuft wieder auf der vorherigen Version",
+        "intro": "Wir haben Yayatoh auf die vorherige Version zurückgestellt, während wir ein Problem der neuen Plattform beheben. Verkäufe und Änderungen seit dem {start} bleiben erhalten, und Tickets bleiben gültig. Melden Sie sich wie bisher an; wir nennen Ihnen den neuen Termin für den Umzug."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Ihre Tickets bleiben während unseres Umzugs am {start} gültig",
+        "intro": "Am {start} zieht Yayatoh auf seine neue Plattform um. Etwa 45 Minuten lang, bis {end}, können Sie keine Tickets kaufen und keine Bestellungen ändern, aber Ihre Tickets bleiben gültig und werden am Einlass wie gewohnt gescannt.\n\nDanach melden Sie sich mit derselben E-Mail-Adresse und demselben Passwort an. Wenn Sie die Yayatoh-App nutzen, aktualisieren Sie sie, sobald wir das Ende des Umzugs melden."
+      },
+      "t2": {
+        "subject": "Erinnerung: kurze Yayatoh-Wartung am {start}",
+        "intro": "Zur Erinnerung: Am {start}, bis etwa {end}, können Sie auf Yayatoh keine Tickets kaufen und keine Bestellungen ändern. Ihre Tickets bleiben gültig und funktionieren am Einlass."
+      },
+      "freezeStart": {
+        "subject": "Die Yayatoh-Wartung hat begonnen",
+        "intro": "Ticketverkauf und Bestelländerungen auf Yayatoh sind bis etwa {end} pausiert, während wir auf die neue Plattform umziehen. Ihre Tickets bleiben gültig und werden am Einlass wie gewohnt gescannt."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh ist zurück",
+        "intro": "Der Umzug ist abgeschlossen: Sie können wieder Tickets kaufen und Ihre Bestellungen verwalten. Ihre Tickets bleiben gültig, und Sie melden sich mit derselben E-Mail-Adresse und demselben Passwort an. Wenn Sie die Yayatoh-App nutzen, aktualisieren Sie sie im App-Store."
+      },
+      "rollback": {
+        "subject": "Yayatoh läuft wieder auf der vorherigen Version",
+        "intro": "Wir haben Yayatoh auf die vorherige Version zurückgestellt, während wir ein Problem beheben. Tickets, die Sie seit dem {start} gekauft haben, bleiben gültig. Falls wir eine Ihrer Bestellungen erstatten mussten, erhalten Sie eine separate E-Mail mit dem Betrag. Melden Sie sich wie bisher an."
+      }
+    }
   }
 }

@@ -171,7 +171,10 @@ describe('reverse ETL (M2.5a)', () => {
     expect(dry.pass).toBe(true);
     expect(dry.counts.orders).toEqual({ eligible: 2, written: 2 });
     expect(await count()).toBe(before);
-    const refs = await staging(`select count(*)::int as n from legacy.reverse_ref where instance = 'yay'`);
+    const refs = await staging(
+      `select count(*)::int as n from legacy.reverse_ref where instance = 'yay' and new_id = any($1::text[])`,
+      [[...orderA.tickets, ...orderB.tickets].map((t) => t.id)],
+    );
     expect(refs[0]?.n).toBe(0);
   });
 

@@ -163,7 +163,7 @@ export async function reverseEtl(opts: ReverseOptions): Promise<ReverseReport> {
       join events.events e on e.id = o.event_id
       where o.created_at >= {cutover} and o.status in ('paid', 'partially_refunded', 'refunded')
         and not exists (select 1 from legacy.ref r where r.new_id = o.event_id and r.entity = 'events')
-        and exists (select 1 from legacy.ref r where r.instance = {inst} and r.entity = 'orgs' and r.new_id = o.org_id);
+        and exists (select 1 from legacy.ref r where r.instance = {inst} and r.org_id = o.org_id);
 
       drop table if exists r_units;
       create temp table r_units as
@@ -443,12 +443,12 @@ async function reconcile(
   }>(`
     select (select count(*) from r_orders)::int as eligible,
            (select count(*) from r_orders where skip is null)::int as written,
-           (select count(*) from legacy.reverse_ref where instance = {inst} and entity = 'bookings')::int as bookings,
-           (select count(*) from legacy.reverse_ref where instance = {inst} and entity = 'attendees')::int as attendees,
-           (select count(*) from legacy.reverse_ref where instance = {inst} and entity = 'transactions')::int as transactions,
-           (select count(*) from legacy.reverse_ref where instance = {inst} and entity = 'commissions')::int as commissions,
-           (select count(*) from legacy.reverse_ref where instance = {inst} and entity = 'users')::int as users,
-           (select count(*) from {s}.checkins c join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'checkins' and r.legacy_id = c.id)::int as checkins,
+           (select count(*) from r_units u join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'bookings' and r.new_id = u.ticket_id::text)::int as bookings,
+           (select count(*) from r_units u join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'attendees' and r.new_id = u.ticket_id::text)::int as attendees,
+           (select count(*) from r_paid p join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'transactions' and r.new_id = p.new_id)::int as transactions,
+           (select count(*) from r_comm c join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'commissions' and r.new_id = c.new_id)::int as commissions,
+           (select count(distinct r.legacy_id) from r_buyers b join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'users' and r.new_id = legacy.email_norm(b.buyer_email))::int as users,
+           (select count(*) from r_adm a join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'checkins' and r.new_id = a.new_id)::int as checkins,
            (select count(*) from r_undone)::int as removed,
            (select count(*) from r_units)::int as units,
            (select count(*) from r_paid)::int as paid`);
@@ -493,11 +493,14 @@ async function reconcile(
       coalesce((select sum(allin) from r_units u where u.currency = cur.currency), 0) as new_tickets,
       coalesce((select sum(round(b.net_price * 100)) from {s}.bookings b
                 join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'bookings' and r.legacy_id = b.id
+                join r_units u on u.ticket_id::text = r.new_id
                 where b.currency = cur.currency), 0) as legacy_bookings,
       coalesce((select sum(u.allin) from r_units u where u.currency = cur.currency
                 and exists (select 1 from r_refund_tickets rt where rt.ticket_id = u.ticket_id)), 0) as new_refunded,
       coalesce((select sum(round(b.net_price * 100)) from {s}.bookings b
                 join legacy.reverse_ref r on r.instance = {inst} and r.entity = 'bookings' and r.legacy_id = b.id
+                join r_units u on u.ticket_id::text = r.new_id
+                join r_refund_tickets rt on rt.ticket_id = u.ticket_id
                 where b.currency = cur.currency and b.booking_cancel = 3), 0) as legacy_cancelled
     from cur order by 1`))
     money[m.currency] = {

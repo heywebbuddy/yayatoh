@@ -1,3 +1,13 @@
+export {
+  eventsNearWindow,
+  instanceOrgIds,
+  latestRun,
+  migrationStatus,
+  opsFlags,
+  rehearsalTarget,
+  setOpsFlag,
+  smokeTargets,
+} from './cutover-ops.ts';
 export { demoHandles } from './demo.ts';
 export { FREEZE_WRITE_TABLES, type FreezeProbeResult, legacyFreezeProbe } from './freeze-probe.ts';
 export {

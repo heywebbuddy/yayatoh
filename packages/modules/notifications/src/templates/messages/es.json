@@ -146,5 +146,53 @@
       "intro": "Como pediste, tu cuenta de Yayatoh se ha eliminado. Se cerró tu sesión en todas partes y se borraron tus datos de acceso y la verificación en dos pasos. Los organizadores a los que compraste conservan sus registros de pedidos, como exige la ley.\n\nSi no lo pediste tú, responde a este correo de inmediato."
     },
     "sentBy": "Enviado por Yayatoh sobre tu cuenta."
+  },
+  "cutover": {
+    "cta": "Estado del mantenimiento",
+    "sentBy": "Enviado por Yayatoh sobre el paso a su nueva plataforma.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh pasa a su nueva plataforma el {start}",
+        "intro": "El {start} Yayatoh pasa a su nueva plataforma. Durante unos 45 minutos, hasta las {end}, tu panel y la venta de entradas quedan en pausa; el control de acceso en la puerta sigue funcionando y las entradas ya vendidas siguen siendo válidas.\n\nTus eventos, pedidos, pagos y equipo vienen contigo, y entras con el mismo correo y contraseña. No tienes que hacer nada: te escribiremos dos días antes y cuando esté hecho."
+      },
+      "t2": {
+        "subject": "Recordatorio: mantenimiento de Yayatoh el {start}",
+        "intro": "Un recordatorio: el {start}, hasta aproximadamente las {end}, Yayatoh estará en modo solo lectura mientras pasamos a la nueva plataforma. No programes una salida a la venta ni una campaña de entradas en ese intervalo. El control de acceso sigue funcionando y las entradas vendidas siguen siendo válidas."
+      },
+      "freezeStart": {
+        "subject": "Ha comenzado el mantenimiento de Yayatoh",
+        "intro": "Yayatoh está en modo solo lectura mientras pasamos a la nueva plataforma, hasta aproximadamente las {end}. Puedes seguir viendo tus eventos y escanear entradas en la puerta; guardar cambios, las nuevas ventas y los reembolsos están en pausa. Te escribiremos cuando esté hecho."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh ya funciona en su nueva plataforma",
+        "intro": "El traslado ha terminado y Yayatoh vuelve a funcionar. Entra como siempre con el mismo correo y contraseña: tus eventos, pedidos y pagos están ahí y las entradas vendidas siguen siendo válidas. Si usas la app de Yayatoh, actualízala desde tu tienda de apps."
+      },
+      "rollback": {
+        "subject": "Yayatoh vuelve a la versión anterior",
+        "intro": "Hemos devuelto Yayatoh a la versión anterior mientras solucionamos un problema de la nueva plataforma. Las ventas y los cambios hechos desde el {start} se han conservado y las entradas siguen siendo válidas. Entra como antes; te diremos la nueva fecha del traslado."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Tus entradas siguen siendo válidas durante nuestro traslado el {start}",
+        "intro": "El {start} Yayatoh pasa a su nueva plataforma. Durante unos 45 minutos, hasta las {end}, no podrás comprar entradas ni cambiar pedidos, pero tus entradas siguen siendo válidas y se escanean en la puerta como siempre.\n\nDespués entrarás con el mismo correo y contraseña. Si usas la app de Yayatoh, actualízala cuando te avisemos de que el traslado ha terminado."
+      },
+      "t2": {
+        "subject": "Recordatorio: breve mantenimiento de Yayatoh el {start}",
+        "intro": "Un recordatorio: el {start}, hasta aproximadamente las {end}, no podrás comprar entradas ni cambiar pedidos en Yayatoh. Tus entradas siguen siendo válidas y funcionan en la puerta."
+      },
+      "freezeStart": {
+        "subject": "Ha comenzado el mantenimiento de Yayatoh",
+        "intro": "La venta de entradas y los cambios de pedidos en Yayatoh están en pausa hasta aproximadamente las {end} mientras pasamos a la nueva plataforma. Tus entradas siguen siendo válidas y se escanean en la puerta como siempre."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh ya está de vuelta",
+        "intro": "El traslado ha terminado: puedes volver a comprar entradas y gestionar tus pedidos. Tus entradas siguen siendo válidas y entras con el mismo correo y contraseña. Si usas la app de Yayatoh, actualízala desde tu tienda de apps."
+      },
+      "rollback": {
+        "subject": "Yayatoh vuelve a la versión anterior",
+        "intro": "Hemos devuelto Yayatoh a la versión anterior mientras solucionamos un problema. Las entradas que compraste desde el {start} siguen siendo válidas. Si tuvimos que reembolsar alguno de tus pedidos, recibirás un correo aparte con el importe. Entra como antes."
+      }
+    }
   }
 }

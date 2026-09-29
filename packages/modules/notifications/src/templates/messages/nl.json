@@ -146,5 +146,53 @@
       "intro": "Zoals je vroeg, is je Yayatoh-account verwijderd. Je bent overal uitgelogd en je inloggegevens en tweestapsverificatie zijn verwijderd. Organisatoren bij wie je kocht, bewaren hun bestelgegevens, zoals de wet vereist.\n\nHeb jij dit niet gevraagd? Beantwoord deze e-mail dan meteen."
     },
     "sentBy": "Verzonden door Yayatoh over je account."
+  },
+  "cutover": {
+    "cta": "Status van het onderhoud",
+    "sentBy": "Verzonden door Yayatoh over de overstap naar het nieuwe platform.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh stapt op {start} over naar het nieuwe platform",
+        "intro": "Op {start} stapt Yayatoh over naar het nieuwe platform. Ongeveer 45 minuten lang, tot {end}, zijn je dashboard en de ticketverkoop gepauzeerd; de toegangscontrole blijft werken en al verkochte tickets blijven geldig.\n\nJe evenementen, bestellingen, uitbetalingen en team gaan mee, en je logt in met hetzelfde e-mailadres en wachtwoord. Je hoeft niets te doen: we mailen je twee dagen van tevoren opnieuw en wanneer het klaar is."
+      },
+      "t2": {
+        "subject": "Herinnering: onderhoud van Yayatoh op {start}",
+        "intro": "Een herinnering: op {start}, tot ongeveer {end}, is Yayatoh alleen-lezen terwijl we overstappen naar het nieuwe platform. Plan in die periode geen start van de verkoop of ticketactie. De toegangscontrole blijft werken en verkochte tickets blijven geldig."
+      },
+      "freezeStart": {
+        "subject": "Het onderhoud van Yayatoh is begonnen",
+        "intro": "Yayatoh is alleen-lezen terwijl we overstappen naar het nieuwe platform, tot ongeveer {end}. Je kunt je evenementen nog bekijken en tickets bij de ingang scannen; wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn gepauzeerd. We mailen je wanneer het klaar is."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh draait op het nieuwe platform",
+        "intro": "De overstap is klaar en Yayatoh werkt weer. Log zoals altijd in met hetzelfde e-mailadres en wachtwoord: je evenementen, bestellingen en uitbetalingen staan er allemaal, en verkochte tickets blijven geldig. Gebruik je de Yayatoh-app, werk hem dan bij via je appwinkel."
+      },
+      "rollback": {
+        "subject": "Yayatoh draait weer op de vorige versie",
+        "intro": "We hebben Yayatoh teruggezet naar de vorige versie terwijl we een probleem met het nieuwe platform oplossen. Verkopen en wijzigingen sinds {start} zijn bewaard, en tickets blijven geldig. Log in zoals voorheen; we laten je de nieuwe datum van de overstap weten."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Je tickets blijven geldig tijdens onze overstap op {start}",
+        "intro": "Op {start} stapt Yayatoh over naar het nieuwe platform. Ongeveer 45 minuten lang, tot {end}, kun je geen tickets kopen of bestellingen wijzigen, maar je tickets blijven geldig en worden zoals altijd bij de ingang gescand.\n\nDaarna log je in met hetzelfde e-mailadres en wachtwoord. Gebruik je de Yayatoh-app, werk hem dan bij zodra we laten weten dat de overstap klaar is."
+      },
+      "t2": {
+        "subject": "Herinnering: kort onderhoud van Yayatoh op {start}",
+        "intro": "Een herinnering: op {start}, tot ongeveer {end}, kun je op Yayatoh geen tickets kopen of bestellingen wijzigen. Je tickets blijven geldig en werken bij de ingang."
+      },
+      "freezeStart": {
+        "subject": "Het onderhoud van Yayatoh is begonnen",
+        "intro": "Ticketverkoop en wijzigingen van bestellingen op Yayatoh zijn gepauzeerd tot ongeveer {end} terwijl we overstappen naar het nieuwe platform. Je tickets blijven geldig en worden zoals altijd bij de ingang gescand."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh is terug",
+        "intro": "De overstap is klaar: je kunt weer tickets kopen en je bestellingen beheren. Je tickets blijven geldig en je logt in met hetzelfde e-mailadres en wachtwoord. Gebruik je de Yayatoh-app, werk hem dan bij via je appwinkel."
+      },
+      "rollback": {
+        "subject": "Yayatoh draait weer op de vorige versie",
+        "intro": "We hebben Yayatoh teruggezet naar de vorige versie terwijl we een probleem oplossen. Tickets die je sinds {start} hebt gekocht, blijven geldig. Als we een bestelling van je moesten terugbetalen, krijg je een aparte e-mail met het bedrag. Log in zoals voorheen."
+      }
+    }
   }
 }
