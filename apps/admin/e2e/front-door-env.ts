@@ -1,7 +1,6 @@
 /**
- * The front door (M2.4a) in the e2e servers: two test hosts forward to the local legacy stub
- * (e2e/legacy-stub.ts), never to a live site. apps/admin/e2e/front-door-env.ts is its twin (keep
- * the two in step).
+ * The front door (M2.4a) in the admin suite's web server: the same two test hosts and stub as
+ * apps/web/e2e/front-door-env.ts (apps can't import each other: keep the two in step).
  */
 export const LEGACY_STUB_PORT = Number(process.env.LEGACY_STUB_PORT ?? 3390);
 export const FD_YAY_HOST = 'yay.frontdoor.localhost';
@@ -20,9 +19,9 @@ export const frontDoorEnv: Record<string, string> = {
   FRONT_DOOR_TIMEOUT_MS: '3000',
 };
 
-/** The stub as a Playwright web server (reused when already running). */
+/** The web app's stub (apps/web/e2e/legacy-stub.ts) as a Playwright web server. */
 export const legacyStubServer = (cwd: string) => ({
-  command: `node e2e/legacy-stub.ts`,
+  command: `node ../web/e2e/legacy-stub.ts`,
   cwd,
   url: `http://127.0.0.1:${LEGACY_STUB_PORT}/__stub/log`,
   reuseExistingServer: true,

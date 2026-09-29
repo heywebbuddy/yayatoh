@@ -239,7 +239,15 @@ describe('what crosses the boundary', () => {
       ctx,
     );
     const names = [...h.keys()];
-    for (const n of ['connection', 'keep-alive', 'x-custom-hop', 'upgrade', 'te', 'transfer-encoding', 'expect'])
+    for (const n of [
+      'connection',
+      'keep-alive',
+      'x-custom-hop',
+      'upgrade',
+      'te',
+      'transfer-encoding',
+      'expect',
+    ])
       expect(names).not.toContain(n);
     expect(names).not.toContain('proxy-authorization');
     expect(names).not.toContain('x-middleware-subrequest');

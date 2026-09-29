@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { expect, type Page, test } from '@playwright/test';
-import { FD_YAY_HOST } from '../../web/e2e/front-door-env.ts';
+import { FD_YAY_HOST } from './front-door-env.ts';
 import {
   devPassword,
   expectAccessible,

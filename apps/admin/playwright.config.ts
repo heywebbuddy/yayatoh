@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
-import { frontDoorEnv, legacyStubServer } from '../web/e2e/front-door-env.ts';
+import { frontDoorEnv, legacyStubServer } from './e2e/front-door-env.ts';
 
 const PORT = Number(process.env.E2E_ADMIN_PORT ?? 3101);
 const WEB_PORT = Number(process.env.E2E_PORT ?? 3100);
@@ -51,6 +51,6 @@ export default defineConfig({
           // M2.4a: the front-door hosts, as in apps/web/playwright.config.ts.
           env: frontDoorEnv,
         },
-        legacyStubServer(fileURLToPath(new URL('../web/', import.meta.url))),
+        legacyStubServer(fileURLToPath(new URL('.', import.meta.url))),
       ],
 });

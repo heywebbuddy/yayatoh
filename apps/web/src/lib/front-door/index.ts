@@ -6,7 +6,6 @@ import {
   type FlagStates,
   type FrontDoorConfig,
   type FrontDoorDecision,
-  forwardRequestHeaders,
   frontDoorConfig,
   LEGACY_COOKIE,
   stripFrontDoorLocale,
