@@ -1,5 +1,10 @@
 export { EARLY_ENTRY_MS, eventDay, LATE_ENTRY_MS, ruleResult } from '@yayatoh/checkin-engine';
 export {
+  checkpointNamesTx,
+  deviceLabelsTx,
+  queueStaffPushTx,
+} from './assistance-support.ts';
+export {
   CheckpointDto,
   createCheckpointCommand,
   INVALID_BURST,
@@ -65,7 +70,9 @@ export {
   SCAN_RESULTS,
   type ScanResult,
   STAFF_ALERT_KINDS,
+  STAFF_PUSH_KINDS,
   type StaffAlertKind,
+  type StaffPushKind,
 } from './schema.ts';
 export {
   DetectionSettingsDto,

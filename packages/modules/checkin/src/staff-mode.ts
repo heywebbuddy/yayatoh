@@ -638,9 +638,11 @@ export const StaffPushInput = z.object({
     auth: z.string().regex(/^[A-Za-z0-9_-]{22}$/),
   }),
   locale: z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/),
-  copy: z.object(
-    Object.fromEntries(STAFF_ALERT_KINDS.map((k) => [k, Copy])) as Record<StaffAlertKind, typeof Copy>,
-  ),
+  copy: z.object({
+    ...(Object.fromEntries(STAFF_ALERT_KINDS.map((k) => [k, Copy])) as Record<StaffAlertKind, typeof Copy>),
+    // M3.3b: help requests. Optional, so a PWA installed before it still subscribes.
+    assistance: Copy.optional(),
+  }),
 });
 
 /**
