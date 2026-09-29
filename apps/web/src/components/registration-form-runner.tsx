@@ -7,6 +7,7 @@ import { useActionState, useEffect, useId, useRef, useState } from 'react';
 import type { RegistrationStartState } from '@/app/[locale]/events/[slug]/registration-form/actions.ts';
 import type { RespondState } from '@/app/[locale]/registration-form/[token]/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 const CONTROL = 'min-h-10 w-full rounded-pill border bg-white px-4 text-body text-zinc-900';
 const AREA = 'w-full rounded-card border bg-white px-4 py-2.5 text-body text-zinc-900';
@@ -58,7 +59,7 @@ export function RegistrationStartForm({
   const err = (f: string) =>
     state.code === 'validation_failed' && state.field === f ? t(`errors.start_${f}`) : undefined;
   return (
-    <form action={formAction} className="flex flex-col gap-5" noValidate>
+    <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-5" noValidate>
       <fieldset
         className="flex flex-col gap-2"
         aria-describedby={err('type') ? `${id}-type-error` : undefined}
@@ -191,7 +192,7 @@ export function RegistrationFormRunner({
           </Alert>
         ) : null}
       </div>
-      <form action={formAction} className="flex flex-col gap-5" noValidate>
+      <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-5" noValidate>
         {visible.map((f) => {
           const fid = fieldId(f.key);
           const err = errorFor(f.key);
@@ -371,18 +372,19 @@ export function RegistrationFormRunner({
             </div>
           );
         })}
+        {/* Continue first: Enter in a field submits the first button, so it must never be Back. */}
         <div className="flex flex-wrap items-center gap-3">
-          {!first ? (
-            <Button type="submit" name="intent" value="back" variant="secondary" disabled={pending}>
-              {t('back')}
-            </Button>
-          ) : null}
           <Button type="submit" name="intent" value="next" disabled={pending}>
             {last ? t('submit') : t('continue')}
           </Button>
           <Button type="submit" name="intent" value="email" variant="ghost" disabled={pending}>
             {t('saveForLater')}
           </Button>
+          {!first ? (
+            <Button type="submit" name="intent" value="back" variant="secondary" disabled={pending}>
+              {t('back')}
+            </Button>
+          ) : null}
         </div>
       </form>
     </section>

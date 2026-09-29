@@ -34,8 +34,16 @@ function reasonOf(message: string | undefined): string {
  * Every change publishes a new immutable version (respondents who started keep theirs). The
  * definition is checked here first so the builder can say why a change is refused.
  */
-async function edit(org: string, event: string, change: (pages: Page[]) => Page[]): Promise<FormState> {
+async function edit(
+  org: string,
+  event: string,
+  form: FormData,
+  change: (pages: Page[]) => Page[],
+): Promise<FormState> {
   const { data, event: ev } = await loadEvent(org, event);
+  // The version the builder showed: a publish from an older one is refused (another editor won).
+  const seen = Number(form.get('version'));
+  const expectedVersion = Number.isInteger(seen) && seen >= 0 ? seen : undefined;
   try {
     const current = await executeQuery(getRegistrationFormQuery, { eventId: ev.id }, data.ctx, ports);
     const pages = change(structuredClone(current?.definition.pages ?? []));
@@ -110,7 +118,7 @@ export async function addPageAction(org: string, event: string, _prev: FormState
   const title = String(form.get('title') ?? '').trim();
   if (!title) return { ok: false, code: 'validation_failed', fields: ['title'] } satisfies FormState;
   const t = await getTranslations('registrationForm');
-  return edit(org, event, (pages) => [
+  return edit(org, event, form, (pages) => [
     ...pages,
     {
       key: keyFor(title, allKeys(pages), 'page'),
@@ -154,7 +162,7 @@ export async function updatePageAction(
   const types = await typesFrom(org, event, form);
   if (types === 'invalid') return invalid('types');
   let bad = false;
-  const r = await edit(org, event, (pages) =>
+  const r = await edit(org, event, form, (pages) =>
     pages.map((p) => {
       if (p.key !== pageKey) return p;
       const showIf = conditionFrom(form, before(pages, pageKey));
@@ -189,8 +197,9 @@ export async function movePageAction(
   pageKey: string,
   by: -1 | 1,
   _prev: FormState,
+  form: FormData,
 ): Promise<FormState> {
-  return edit(org, event, (pages) => moveIn(pages, pageKey, by));
+  return edit(org, event, form, (pages) => moveIn(pages, pageKey, by));
 }
 
 export async function removePageAction(
@@ -198,8 +207,9 @@ export async function removePageAction(
   event: string,
   pageKey: string,
   _prev: FormState,
+  form: FormData,
 ): Promise<FormState> {
-  return edit(org, event, (pages) => pages.filter((p) => p.key !== pageKey));
+  return edit(org, event, form, (pages) => pages.filter((p) => p.key !== pageKey));
 }
 
 const CHOICE = new Set(['select', 'multi_select']);
@@ -228,7 +238,7 @@ export async function addFieldAction(
   const types = await typesFrom(org, event, form);
   if (types === 'invalid') return invalid('types');
   let bad = false;
-  const r = await edit(org, event, (pages) =>
+  const r = await edit(org, event, form, (pages) =>
     pages.map((p) => {
       if (p.key !== pageKey) return p;
       const showIf = conditionFrom(form, [...before(pages, pageKey), ...p.fields]);
@@ -274,7 +284,7 @@ export async function updateFieldAction(
   const types = await typesFrom(org, event, form);
   if (types === 'invalid') return invalid('types');
   let bad = false;
-  const r = await edit(org, event, (pages) =>
+  const r = await edit(org, event, form, (pages) =>
     pages.map((p) => {
       if (p.key !== pageKey) return p;
       const i = p.fields.findIndex((f) => f.key === fieldKey);
@@ -305,8 +315,9 @@ export async function moveFieldAction(
   fieldKey: string,
   by: -1 | 1,
   _prev: FormState,
+  form: FormData,
 ): Promise<FormState> {
-  return edit(org, event, (pages) =>
+  return edit(org, event, form, (pages) =>
     pages.map((p) => (p.key === pageKey ? { ...p, fields: moveIn(p.fields, fieldKey, by) } : p)),
   );
 }
@@ -317,8 +328,9 @@ export async function removeFieldAction(
   pageKey: string,
   fieldKey: string,
   _prev: FormState,
+  form: FormData,
 ): Promise<FormState> {
-  return edit(org, event, (pages) =>
+  return edit(org, event, form, (pages) =>
     pages.map((p) => (p.key === pageKey ? { ...p, fields: p.fields.filter((f) => f.key !== fieldKey) } : p)),
   );
 }

@@ -5453,7 +5453,8 @@
       "submitted": "你已经提交过此表单。",
       "resume_limit": "我们已多次向你发送链接。请使用最新的邮件。",
       "no_form": "此活动没有报名表。",
-      "no_questions": "此报名类型还没有问题。"
+      "no_questions": "此报名类型还没有问题。",
+      "stale_version": "在此期间其他人修改了此表单。请刷新页面查看最新版本。"
     },
     "startMetaTitle": "报名",
     "startTitle": "报名",

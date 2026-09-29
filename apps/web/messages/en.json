@@ -5453,7 +5453,8 @@
       "submitted": "You already submitted this form.",
       "resume_limit": "We already emailed your link several times. Use the latest email.",
       "no_form": "This event has no registration form.",
-      "no_questions": "There are no questions for this registration type yet."
+      "no_questions": "There are no questions for this registration type yet.",
+      "stale_version": "Someone else changed this form meanwhile. Reload the page to see the latest version."
     },
     "startMetaTitle": "Register",
     "startTitle": "Register",

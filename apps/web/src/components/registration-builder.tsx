@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 import { fromLogic, opsFor, type SimpleCondition, valueLabel } from '@/lib/registration-conditions.ts';
 
 /** A question as the builder offers it to conditions and the preview. */
@@ -47,18 +48,21 @@ function Status({ state, saved }: { state: FormState; saved?: string }) {
 /** A one-button form (move, remove) whose refusal shows next to it. */
 export function BuilderButton({
   action,
+  version,
   label,
   ariaLabel,
   disabled,
 }: {
-  action: (prev: FormState) => Promise<FormState>;
+  action: Action;
+  version: number;
   label: string;
   ariaLabel: string;
   disabled?: boolean;
 }) {
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
-    <form action={formAction} className="flex flex-col items-end">
+    <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col items-end">
+      <input type="hidden" name="version" value={version} />
       <Button type="submit" variant="ghost" size="sm" disabled={disabled || pending} aria-label={ariaLabel}>
         {label}
       </Button>
@@ -248,7 +252,7 @@ function ConditionFields({
   );
 }
 
-export function AddPageForm({ action }: { action: Action }) {
+export function AddPageForm({ action, version }: { action: Action; version: number }) {
   const t = useTranslations('registrationForm');
   const id = useId();
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
@@ -258,6 +262,7 @@ export function AddPageForm({ action }: { action: Action }) {
   }, [state]);
   return (
     <form ref={ref} action={formAction} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <input type="hidden" name="version" value={version} />
       <Input
         id={`${id}-title`}
         name="title"
@@ -279,6 +284,7 @@ export function AddPageForm({ action }: { action: Action }) {
 
 export function PageSettingsForm({
   action,
+  version,
   title,
   description,
   types,
@@ -287,6 +293,7 @@ export function PageSettingsForm({
   condition,
 }: {
   action: Action;
+  version: number;
   title: string;
   description: string | null;
   types: readonly TypeOption[];
@@ -298,7 +305,8 @@ export function PageSettingsForm({
   const id = useId();
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4">
+      <input type="hidden" name="version" value={version} />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Input
           id={`${id}-title`}
@@ -328,6 +336,7 @@ export function PageSettingsForm({
 
 export function QuestionSettingsForm({
   action,
+  version,
   types,
   initialTypes,
   questions,
@@ -336,6 +345,7 @@ export function QuestionSettingsForm({
   canRequire,
 }: {
   action: Action;
+  version: number;
   types: readonly TypeOption[];
   initialTypes: readonly string[] | null;
   questions: readonly BuilderQuestion[];
@@ -346,7 +356,8 @@ export function QuestionSettingsForm({
   const t = useTranslations('registrationForm');
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4">
+      <input type="hidden" name="version" value={version} />
       {canRequire ? (
         <label className="flex min-h-6 items-center gap-2.5 text-body">
           <input
@@ -371,11 +382,13 @@ export function QuestionSettingsForm({
 
 export function AddQuestionForm({
   action,
+  version,
   types,
   questions,
   terms,
 }: {
   action: Action;
+  version: number;
   types: readonly TypeOption[];
   questions: readonly BuilderQuestion[];
   terms: readonly { readonly key: string; readonly label: string }[];
@@ -395,7 +408,13 @@ export function AddQuestionForm({
   const choice = type === 'select' || type === 'multi_select';
   const consent = type === 'consent';
   return (
-    <form key={round} action={formAction} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <form
+      key={round}
+      action={formAction}
+      onSubmit={keepValues(formAction)}
+      className="grid grid-cols-1 gap-4 md:grid-cols-2"
+    >
+      <input type="hidden" name="version" value={version} />
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`${id}-type`} className={CAPTION}>
           {tr('questionType')}
@@ -501,7 +520,7 @@ export function JobTitlesForm({ action, titles }: { action: Action; titles: read
   const id = useId();
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
-    <form action={formAction} className="flex flex-col gap-3">
+    <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-3">
       <label htmlFor={`${id}-titles`} className={CAPTION}>
         {t('jobTitlesLabel')}
       </label>

@@ -5453,7 +5453,8 @@
       "submitted": "Vous avez déjà envoyé ce formulaire.",
       "resume_limit": "Nous vous avons déjà envoyé le lien plusieurs fois. Utilisez le dernier e-mail.",
       "no_form": "Cet événement n’a pas de formulaire d’inscription.",
-      "no_questions": "Il n’y a pas encore de questions pour ce type d’inscription."
+      "no_questions": "Il n’y a pas encore de questions pour ce type d’inscription.",
+      "stale_version": "Quelqu’un d’autre a modifié ce formulaire entre-temps. Rechargez la page pour voir la dernière version."
     },
     "startMetaTitle": "S’inscrire",
     "startTitle": "S’inscrire",

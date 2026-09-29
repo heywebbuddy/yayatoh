@@ -86,6 +86,7 @@ export default async function RegistrationFormPage({
   const audience = (list: readonly string[] | null) =>
     list === null ? t('forAll') : t('forSome', { types: list.map(typeName).join(', ') });
   const terms = CONSENT_TERM_KEYS.map((key) => ({ key, label: t(`terms.${key}`) }));
+  const version = form?.version ?? 0;
   const bind = <A extends unknown[], R>(fn: (org: string, event: string, ...a: A) => R) =>
     fn.bind(null, org, event) as (...a: A) => R;
 
@@ -141,18 +142,21 @@ export default async function RegistrationFormPage({
                       {canWrite ? (
                         <div className="flex gap-1">
                           <BuilderButton
+                            version={version}
                             action={bind(movePageAction).bind(null, p.key, -1)}
                             label="↑"
                             ariaLabel={t('movePageUp', { title: p.title })}
                             disabled={pi === 0}
                           />
                           <BuilderButton
+                            version={version}
                             action={bind(movePageAction).bind(null, p.key, 1)}
                             label="↓"
                             ariaLabel={t('movePageDown', { title: p.title })}
                             disabled={pi === pages.length - 1}
                           />
                           <BuilderButton
+                            version={version}
                             action={bind(removePageAction).bind(null, p.key)}
                             label={t('remove')}
                             ariaLabel={t('removePage', { title: p.title })}
@@ -185,18 +189,21 @@ export default async function RegistrationFormPage({
                             {canWrite ? (
                               <span className="flex gap-1">
                                 <BuilderButton
+                                  version={version}
                                   action={bind(moveFieldAction).bind(null, p.key, f.key, -1)}
                                   label="↑"
                                   ariaLabel={t('moveQuestionUp', { label: f.label })}
                                   disabled={fi === 0}
                                 />
                                 <BuilderButton
+                                  version={version}
                                   action={bind(moveFieldAction).bind(null, p.key, f.key, 1)}
                                   label="↓"
                                   ariaLabel={t('moveQuestionDown', { label: f.label })}
                                   disabled={fi === p.fields.length - 1}
                                 />
                                 <BuilderButton
+                                  version={version}
                                   action={bind(removeFieldAction).bind(null, p.key, f.key)}
                                   label={t('remove')}
                                   ariaLabel={t('removeQuestion', { label: f.label })}
@@ -211,6 +218,7 @@ export default async function RegistrationFormPage({
                               </summary>
                               <div className="pt-3">
                                 <QuestionSettingsForm
+                                  version={version}
                                   action={bind(updateFieldAction).bind(null, p.key, f.key)}
                                   types={types}
                                   initialTypes={f.registrationTypes}
@@ -233,6 +241,7 @@ export default async function RegistrationFormPage({
                           </summary>
                           <div className="pt-3">
                             <PageSettingsForm
+                              version={version}
                               action={bind(updatePageAction).bind(null, p.key)}
                               title={p.title}
                               description={p.description}
@@ -249,6 +258,7 @@ export default async function RegistrationFormPage({
                           </summary>
                           <div className="pt-3">
                             <AddQuestionForm
+                              version={version}
                               action={bind(addFieldAction).bind(null, p.key)}
                               types={types}
                               questions={[...earlier, ...p.fields].map(q)}
@@ -267,7 +277,7 @@ export default async function RegistrationFormPage({
         {canWrite ? (
           <Card className="flex flex-col gap-3">
             <h3 className="text-section">{t('addPageTitle')}</h3>
-            <AddPageForm action={bind(addPageAction)} />
+            <AddPageForm version={version} action={bind(addPageAction)} />
           </Card>
         ) : null}
       </section>

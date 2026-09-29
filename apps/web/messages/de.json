@@ -5453,7 +5453,8 @@
       "submitted": "Sie haben dieses Formular bereits abgeschickt.",
       "resume_limit": "Wir haben Ihnen den Link schon mehrmals geschickt. Verwenden Sie die neueste E-Mail.",
       "no_form": "Diese Veranstaltung hat kein Anmeldeformular.",
-      "no_questions": "Für diesen Anmeldetyp gibt es noch keine Fragen."
+      "no_questions": "Für diesen Anmeldetyp gibt es noch keine Fragen.",
+      "stale_version": "Jemand anderes hat das Formular inzwischen geändert. Laden Sie die Seite neu, um die neueste Version zu sehen."
     },
     "startMetaTitle": "Anmelden",
     "startTitle": "Anmelden",

@@ -5453,7 +5453,8 @@
       "submitted": "你已經提交過此表單。",
       "resume_limit": "我們已多次向你傳送連結。請使用最新的郵件。",
       "no_form": "此活動沒有報名表。",
-      "no_questions": "此報名類型還沒有問題。"
+      "no_questions": "此報名類型還沒有問題。",
+      "stale_version": "在此期間其他人修改了此表單。請重新整理頁面查看最新版本。"
     },
     "startMetaTitle": "報名",
     "startTitle": "報名",

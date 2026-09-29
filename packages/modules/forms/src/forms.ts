@@ -111,6 +111,8 @@ export async function writeVersionTx(
   ctx: Ctx,
   subject: { kind: (typeof ALL_FORM_KINDS)[number]; subjectType: Subject['subjectType']; subjectId: string },
   definition: object,
+  /** Refuse the write unless the form is still at this version (0: not created yet). */
+  expectedVersion?: number,
 ): Promise<{ version: number; formId: string; versionId: string }> {
   const orgId = requireOrg(ctx);
   await tx
@@ -130,6 +132,8 @@ export async function writeVersionTx(
     )
     .for('update');
   if (!form) throw new DomainError('internal');
+  if (expectedVersion !== undefined && form.currentVersion !== expectedVersion)
+    throw new DomainError('conflict', 'The form changed meanwhile', { reason: 'stale_version' });
   const version = form.currentVersion + 1;
   const [row] = await tx
     .insert(formVersions)

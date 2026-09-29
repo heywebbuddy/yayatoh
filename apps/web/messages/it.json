@@ -5453,7 +5453,8 @@
       "submitted": "Hai già inviato questo modulo.",
       "resume_limit": "Ti abbiamo già inviato il link più volte. Usa l’email più recente.",
       "no_form": "Questo evento non ha un modulo di registrazione.",
-      "no_questions": "Non ci sono ancora domande per questo tipo di registrazione."
+      "no_questions": "Non ci sono ancora domande per questo tipo di registrazione.",
+      "stale_version": "Qualcun altro ha modificato il modulo nel frattempo. Ricarica la pagina per vedere l’ultima versione."
     },
     "startMetaTitle": "Registrati",
     "startTitle": "Registrati",

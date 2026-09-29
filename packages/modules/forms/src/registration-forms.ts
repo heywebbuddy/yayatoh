@@ -72,12 +72,25 @@ const EventRef = z.object({ eventId: z.uuid() });
  */
 export const publishRegistrationFormCommand = tenantCommand({
   name: 'forms.publishRegistrationForm',
-  input: EventRef.extend({ definition: RegistrationFormDefinition }),
+  input: EventRef.extend({
+    definition: RegistrationFormDefinition,
+    /**
+     * The version the editor started from (0: no form yet). A publish from an older version is a
+     * `conflict` (`stale_version`), so two editors never silently overwrite each other.
+     */
+    expectedVersion: z.int().min(0).optional(),
+  }),
   output: z.object({ version: z.int() }),
   entitlement: 'registration',
   permission: 'events:write',
   handler: async ({ input, ctx, tx }) => {
-    const r = await writeVersionTx(tx, ctx, subjectOf(input.eventId), input.definition);
+    const r = await writeVersionTx(
+      tx,
+      ctx,
+      subjectOf(input.eventId),
+      input.definition,
+      input.expectedVersion,
+    );
     return { version: r.version, formId: r.formId };
   },
   audit: (input, r) => ({

@@ -5453,7 +5453,8 @@
       "submitted": "Je hebt dit formulier al verzonden.",
       "resume_limit": "We hebben je de link al een paar keer gestuurd. Gebruik de nieuwste e-mail.",
       "no_form": "Dit evenement heeft geen registratieformulier.",
-      "no_questions": "Er zijn nog geen vragen voor dit registratietype."
+      "no_questions": "Er zijn nog geen vragen voor dit registratietype.",
+      "stale_version": "Iemand anders heeft dit formulier intussen gewijzigd. Laad de pagina opnieuw om de nieuwste versie te zien."
     },
     "startMetaTitle": "Registreren",
     "startTitle": "Registreren",

@@ -207,6 +207,26 @@ describe('registration form definitions (M5.1b)', () => {
     );
   });
 
+  it('refuses a publish from a stale version (two editors never overwrite each other)', async () => {
+    const current = await executeQuery(getRegistrationFormQuery, { eventId }, a.ctx(), ports);
+    const v = current?.version ?? 0;
+    const next = await executeCommand(
+      publishRegistrationFormCommand,
+      { eventId, definition: DEFINITION, expectedVersion: v },
+      a.ctx(),
+      ports,
+    );
+    expect(next.version).toBe(v + 1);
+    await expect(
+      executeCommand(
+        publishRegistrationFormCommand,
+        { eventId, definition: DEFINITION, expectedVersion: v },
+        a.ctx(),
+        ports,
+      ),
+    ).rejects.toMatchObject({ code: 'conflict', details: { reason: 'stale_version' } });
+  });
+
   it('refuses invalid definitions (conditions on later questions, required consent)', async () => {
     await expect(
       executeCommand(
