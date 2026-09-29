@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "团队邀请",
+        "event-invitation": "活动团队邀请",
         "staff-access": "工作人员访问",
         "org-status": "组织状态"
       },

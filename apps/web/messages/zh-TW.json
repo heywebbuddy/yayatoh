@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "團隊邀請",
+        "event-invitation": "活動團隊邀請",
         "staff-access": "工作人員存取",
         "org-status": "組織狀態"
       },

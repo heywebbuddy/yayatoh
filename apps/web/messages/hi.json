@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "टीम निमंत्रण",
+        "event-invitation": "इवेंट टीम का निमंत्रण",
         "staff-access": "स्टाफ़ की पहुँच",
         "org-status": "संगठन की स्थिति"
       },

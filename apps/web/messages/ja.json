@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "チームへの招待",
+        "event-invitation": "イベントチームへの招待",
         "staff-access": "スタッフのアクセス",
         "org-status": "組織のステータス"
       },

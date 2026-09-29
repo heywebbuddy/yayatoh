@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "دعوة إلى الفريق",
+        "event-invitation": "دعوة إلى فريق الفعالية",
         "staff-access": "وصول الموظفين",
         "org-status": "حالة المؤسسة"
       },

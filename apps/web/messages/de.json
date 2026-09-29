@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "Teameinladung",
+        "event-invitation": "Einladung ins Veranstaltungsteam",
         "staff-access": "Zugriff durch Mitarbeitende",
         "org-status": "Status der Organisation"
       },
