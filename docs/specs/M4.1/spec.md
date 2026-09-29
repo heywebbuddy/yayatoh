@@ -1,7 +1,7 @@
 # Spec: M4.1 — Guests, parties and RSVP
 
 - **Milestone:** M4.1 (roadmap §10 Phase 4, "M4.1 Guests, parties and RSVP (L)"; Phase 4 plan `docs/plans/phase-4.md`, Wave A; decisions 2026-09-28 P4-1…P4-8)
-- **Status:** M4.1a built (2026-09-28); M4.1b–f to follow
+- **Status:** M4.1a built (2026-09-28); M4.1b built (2026-09-29); M4.1c–f to follow
 - **Risk tags:** `db-migration`, `tenancy`
 - **Related ADRs:** 0018 (tokens only)
 
@@ -130,3 +130,121 @@ Behind the `guests` entitlement and the wedding profile (P4-1: built in developm
 
 ### 16. Owner tasks
 See `docs/owner-inbox.md` → Phase 4: who sees private answers, gala guests, limits, data requests/retention; legal copy for guests entered by a host.
+
+## M4.1b — guest list import (done)
+
+### 1. Goal and users
+A host (or a co-host or planner on their event) brings an existing guest list in from wherever it
+lives: pasted from a spreadsheet, a CSV or Excel file, or a Google Sheet shared by link (P4-7). The
+list is checked before anything is added: columns are matched (guessed first), rows are grouped
+into parties by household, and every row that can't be imported says why.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` Wave A (M4.1b: "Fixture files in all three formats import the same parties"); decisions P4-3 (guest data privacy) and P4-7 (Google Sheet by shared link, no OAuth).
+- **Roadmap:** §5.1 `guests`; M4.1 "import (paste, CSV, XLSX, Google Sheets)".
+- **Reused:** M1.8 staging and `@yayatoh/csv` (`parseCsv` with delimiter sniffing, `csvRow` formula-safe writer); the M1.x bulk-operation runner (inline for small lists, the worker for the rest, with progress); the SSRF guard (`@yayatoh/platform/ssrf`); `recordHistoryTx` and the sealed `private_ciphertext` from M4.1a.
+
+### 3. Scope
+**In (built):**
+- **Four sources, one pipeline** (`readGuestTable` → `guests.stageImport` → `guests.validateImport` → `guests.startImport` bulk job):
+  - **Paste**: tab-separated (from Excel, Numbers, Google Sheets) or comma/semicolon text.
+  - **CSV**: `decodeText` (new in `@yayatoh/csv`) reads a BOM (UTF-8/UTF-16), else UTF-8, else Windows-1252; delimiter sniffed by `parseCsv`.
+  - **XLSX**: `parseXlsx` (new in `@yayatoh/csv`), a read-only cell-values reader on **fflate 0.8.3** (MIT, maintained, no known advisories): shared/inline/rich strings (phonetic runs dropped), numbers, booleans and a formula cell's **cached** value; formulas are never evaluated and nothing else in the package is opened (macros, external links). First sheet, or the one the host names; the other sheet names are shown. Limits: 5 MB file, 2,000 zip entries, each read part inflated into a buffer of its declared size (≤ 60 MB, ≤ 100 MB together, so a lying zip bomb can't grow), 5,000 rows, 50 columns, 1,000 characters a cell. A legacy `.xls` is refused with "save as .xlsx or CSV".
+  - **Google Sheet** (`@yayatoh/guests/sheet`, server-only): only `https://docs.google.com/spreadsheets/d/<id>` links (the tab from `gid`); the CSV export is fetched **once** through the SSRF guard (public addresses only, pinned, 10 s, 5 MB); redirects only to `*.googleusercontent.com` (each hop re-checked); a sign-in redirect, 401/403 or an HTML answer is "the sheet is private"; 404 "not found". No OAuth, no token, the link is not stored.
+- **Staging and mapping:** `guests.import_batches` + `guests.import_rows` hold the header and every row **sealed** with the org's key vault. The mapping is guessed from headers in the 13 console languages (household/party, full/first/last name, age, meal, side, VIP, tags, email, phone, dietary, accessibility, address, plus one) and the host fixes it on the page (the first rows are shown as read). A name column is required; each column maps once.
+- **Grouping into parties:** by the household column (case/space-insensitive; the first occurrence names the party; side, VIP and tags merge); a row without one is a party of one named after the guest. A plus-one column (yes/x/+1… or a name) adds a placeholder (or named) plus-one on the row's guest; a marker row ("+1", "Plus one", "Guest of Luis", "Invitado de Ana"…) attaches to the named guest or the guest above it. The first named adult is the primary contact. Ages: words in 13 languages or years (< 2 infant, < 13 child).
+- **Whole parties only:** a party is rejected whole when any of its rows has a problem, it would pass 20 guests (plus-ones count), the event already has a party of that name, or the event's 1,000 parties / 3,000 guests would be passed. The check runs again at import time (a party added by hand since the check, or an event that filled up).
+- **Preview and rejected rows:** the page shows how many parties and guests will be created, the first 20 parties with their guests and plus-ones, the rejected rows with their reason, and counts per reason. **Download rejected rows**: the host's own columns plus a "Problem" column in their language, formula-safe (`csvRow`), UTF-8 with BOM.
+- **Import:** a bulk operation (`guests.import`, 50 parties a chunk): small lists finish inline before the page reloads; large ones continue on the worker with a progress bar (auto-refresh). Each planned party gets its id at the check and is created with that id exactly once (the idempotency key per batch); a second start is refused (`already_imported`), and a chunk run again creates nothing twice. Every created party and guest writes `rsvp_history` with source **`import`**, the member who started the import as actor and `{ batchId }` (plus `hostGuestId` for plus-ones).
+- **Privacy (P4-3):** dietary, accessibility and address columns (and email/phone) are sealed into `private_ciphertext`; staged rows are sealed; imported rows lose their cells at once; rejected rows at expiry (72 h after staging; `guests.purgeImports` in the daily worker retention pass, also run on each new staging). No CRM contacts, consents, audience members or domain events (other than the bulk job's own); audit rows carry ids and counts only; nothing from the rows is logged.
+- **Page** `/o/{org}/e/{event}/guests/import` (an "Import guests" link on the Guests page for `guests:write`): three native forms (paste, upload, sheet link), a mapping form, preview, rejected-row table and download, import button, progress/result; errors are named per reason; tokens only, logical CSS, 13 locales, Arabic right to left, strict CSP (no inline styles). The Guests page shows imported email and phone with the other private answers.
+- Permissions: every step `guests:write` with entitlement `guests` (hosts, co-hosts and planners on their events); a viewer sees "You can't import guests" and no forms, and the server refuses their actions and the download.
+
+**Later / not yet:**
+- Google OAuth (private sheets) — P4-7, after Google verification (before M6.4).
+- Mapping sub-events/invitations, RSVP answers, meal menu choices and tables from the file (M4.1c–e, M4.3).
+- Updating existing parties from a file (the import only adds new parties; a clashing name is rejected).
+- An "undo import" (the M1.8 attendee import has one; guests can be removed per party today).
+- Date cells in XLSX are read as their serial numbers (no date columns are mapped).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/csv/{package.json,src/decode.ts,src/xlsx.ts,src/parse.ts,src/index.ts,tests/xlsx.test.ts}   # fflate 0.8.3
+  - packages/modules/guests/{package.json,MODULE.md}
+  - packages/modules/guests/src/{imports.ts,sheet.ts,domain/import.ts}                        # new
+  - packages/modules/guests/src/{schema.ts,private-columns.ts,index.ts}                         # appended
+  - packages/modules/guests/src/{guests.ts,dto.ts}   # `seal` exported; email/phone kept in the sealed JSON and in GuestDto
+  - packages/modules/guests/tests/import.test.ts
+  - packages/db/drizzle/0082_legal_tag.sql (+ meta)
+  - packages/testing/{src/fixtures.ts,src/ports.ts,fixtures/guest-import/*,tests/guest-import.int.test.ts}
+  - apps/worker/{package.json,src/bulk.ts,src/retention.ts}
+  - apps/web/src/server/bulk.ts
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/{page.tsx,import/**}
+  - apps/web/messages/*.json                     # `guestImport.*`, `parties.email`, `parties.phone`
+  - apps/web/e2e/guest-import.spec.ts
+  - docs/specs/M4.1/spec.md, docs/owner-inbox.md
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `guests.import_batches` | new | `(org_id, event_id)` → `events.events` cascade (hand-written); source, file name (never a sheet link), sheet(s), sealed header, column count, mapping, status `staged → validated → importing → imported`, planned/imported counts, `expires_at` (72 h), `purged_at` |
+| `guests.import_rows` | new | `(org_id, batch_id)` → batches cascade; unique `(org_id, batch_id, row_no)`; sealed cells (null once imported or purged), `error_code`, `planned_party_id` (the party's id to be), `imported_at` |
+
+**RLS notes:**
+- [x] `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, composite FKs)
+- [x] Fixture rows for both orgs (a pasted list staged, checked and imported with a rejected row; a second list left staged)
+- [x] Every text/jsonb/text[] column in `src/private-columns.ts` (`headers_ciphertext`, `cells_ciphertext` as `personal('sealed-json')`)
+
+**Migration:** `0082_legal_tag.sql` (to be renumbered at merge): two new tables (expand only). Hand-written block: the `import_batches_event_fk` composite foreign key to `events.events` (cascade).
+
+### 6. API diff
+- **`/v1`:** none. **`/api/v2`:** none.
+- **Commands** (`tenantCommand`, entitlement `guests`, permission `guests:write`, audited with counts only): `guests.stageImport`, `guests.validateImport`, `guests.startImport` (bulk start; `guests.importStatus` for progress). System: `guests.purgeImports` (`platform:guests.purgeImports`, worker retention). Queries: `guests.importSummary`, `guests.importRejected` (export category: refused while staff impersonate).
+- **Route:** `GET /o/{org}/e/{event}/guests/import/{batch}/rejected` (CSV).
+
+### 7. Events
+None of its own (the bulk runner's `bulk.requested` / `bulk.completed`). Nothing feeds marketing.
+
+### 8. Entitlements and flags
+`guests` module (wedding profile's Guests page). No new flag.
+
+### 9. ELT impact
+None.
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.1b-01 | The same list as paste, CSV (Windows-1252, semicolons), XLSX and a Google Sheet (fake network) imports the same parties and guests | `packages/testing/tests/guest-import.int.test.ts` ("paste, CSV, XLSX and a Google Sheet…"); fixtures `packages/testing/fixtures/guest-import/` |
+| AC-M4.1b-02 | Column guessing on guest headers in several languages; household grouping; plus-one markers; whole-party rejection at the limits; Sheet URL validation | `packages/modules/guests/tests/import.test.ts` |
+| AC-M4.1b-03 | XLSX: shared/inline/rich strings, cached formula values, chosen sheet, no macros, entry/expansion/row/column/cell limits, a lying zip bomb stays small; encoding detection | `packages/csv/tests/xlsx.test.ts` |
+| AC-M4.1b-04 | Rejected rows carry a reason per row and download as formula-safe CSV in the host's language | int ("rejected rows…"); e2e "a host pastes a list…" (download checked) |
+| AC-M4.1b-05 | Nothing is imported until the host confirms; the import runs once (second start refused, chunk rerun creates nothing twice) | int ("paste, CSV…", "runs once…") |
+| AC-M4.1b-06 | Every created party and guest has history with source `import`, the batch id and the starting member | int ("writes history…"); e2e history check |
+| AC-M4.1b-07 | Private fields sealed; staged rows sealed and purged (imported rows at once, the rest at expiry); audit and history hold no list data | int ("seals private columns…") |
+| AC-M4.1b-08 | No CRM contact, consent, attendee or domain event is written | int ("never creates CRM contacts…") |
+| AC-M4.1b-09 | The SSRF guard refuses non-Google and private-network addresses and foreign redirects; private/missing/oversized sheets are named | int ("Google Sheet reader…") |
+| AC-M4.1b-10 | Co-hosts/planners import on their event; viewers, anonymous, other events and other orgs cannot; module off refuses | int ("co-hosts and planners…"); isolation suite; e2e "a viewer cannot import…" |
+| AC-M4.1b-11 | A party that no longer fits at import time (name added by hand) is rejected whole; parties over 20 are rejected | int ("rejects a whole party…") |
+| AC-M4.1b-12 | Paste a list, fix a mapping, preview the parties, import, download the rejected rows, see the parties (and their history) on the Guests page; reload keeps the result | e2e `apps/web/e2e/guest-import.spec.ts` ("a host pastes a list…") |
+| AC-M4.1b-13 | Upload the XLSX fixture (every column guessed; a missing sheet and an old `.xls` named) | e2e ("upload the XLSX fixture…") |
+| AC-M4.1b-14 | Keyboard only; axe on every new screen and state; Arabic right to left | e2e ("keyboard only…", "Arabic…"; `expectAccessible` throughout) |
+
+### 11. Security and privacy
+- P4-3: sealed staging, sealed private answers, purge at import/expiry, no marketing data, counts-only audit.
+- P4-7: no OAuth; Google links only; one read through the SSRF guard with pinned public addresses, timeouts and a size cap; the link is not stored or logged.
+- Uploads are parsed in memory within fixed limits; XLSX is cell values only (no formulas evaluated, no macros opened).
+
+### 12. Performance budget
+A 5,000-row list stages in one request (per-row sealing, 1,000-row inserts); the check reads and groups every row once; the import runs 50 parties per transaction (3 s inline, the worker for the rest).
+
+### 13. Rollout
+Behind the `guests` entitlement and the wedding profile.
+
+### 15. Demo checklist (M4.1b)
+- [ ] As `pani@lakeside.test`, create a Wedding, open **Guests → Import guests**.
+- [ ] Paste the rows of `packages/testing/fixtures/guest-import/guests.txt`, press **Read the pasted list**, then **Check the list**: 3 parties with 7 guests, 1 row rejected.
+- [ ] **Download rejected rows**, then **Import 3 parties**; open the guest list and a party's history (source "Import").
+- [ ] Upload `guests.xlsx` on another wedding; try a Google Sheet link shared as "anyone with the link".
+
