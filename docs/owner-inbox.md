@@ -12,6 +12,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
 ## Design
+- [ ] **Speaker portal defaults and the speaker release, pending owner** (M5.3a; labels: `auth`, `tenancy`, `db-migration`, `legal-copy`). Built with these defaults; say if any should change:
+  - **Speaker release wording (`legal-copy`):** the "Accept an agreement" task is prefilled with placeholder text ("[Placeholder — pending legal review] I allow the organizer to record my session and to use my name, photo, bio and the recording…") in all 13 locales. Counsel provides the release; organizers can edit the text per task.
+  - **Invitation lifetime:** a portal invitation link keeps working until the event ends + 90 days (P5-7); the organizer ends one sooner by re-inviting (reissue) or removing access. Sessions last 7 days.
+  - **Reminders:** a scheduled reminder 48 hours before a task is due, plus the organizer's "remind whoever is missing it" (transactional email). Overdue tasks emit an event every minute's sweep (for future alert rules).
+  - **Files:** PDF, PowerPoint (.pptx), Word (.docx), JPEG, PNG or WebP, up to 25 MB; proposed photos up to 4 MB. Not counted toward the org's image quota yet.
 - [ ] **Metrics pipeline defaults, pending owner** (M3.1a; labels: `db-migration`). Built with these defaults; say if any should change:
   - **Devices online** counts a check-in device whose last heartbeat is within **90 seconds** (the roadmap's "offline alert within 90 s"). Until M3.3 adds a sweep, the value is as of the last device event (each value carries its `asOf`).
   - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).

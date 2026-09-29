@@ -106,7 +106,7 @@ export async function pendingPortalChallenge(): Promise<string | null> {
  */
 export const loadSpeakerPortal = cache(async () => {
   const principal = await currentPortalPrincipal();
-  if (!principal || principal.role !== 'speaker') return null;
+  if (principal?.role !== 'speaker') return null;
   const ctx = await portalRequestCtx(principal);
   const data = await executeQuery(speakerPortalQuery, {}, ctx, ports);
   return { principal, data };
