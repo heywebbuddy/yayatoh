@@ -392,7 +392,7 @@ function CampaignsBody({ d, c }: { d: Campaigns; c: Ctx }) {
                   <tr key={x.key} className="border-b border-zinc-100 last:border-0">
                     <th scope="row" className="px-2 py-1.5 text-start font-normal">
                       <Link
-                        href={`${orgBase}/marketing-analytics/campaigns/${encodeURIComponent(x.key)}`}
+                        href={`${orgBase}/marketing-analytics/campaign?key=${encodeURIComponent(x.key)}`}
                         className="inline-flex min-h-6 items-center underline underline-offset-2"
                       >
                         {name(x)}

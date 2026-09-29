@@ -26,15 +26,17 @@ export default async function CampaignAnalyticsPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ locale: string; org: string; key: string }>;
-  searchParams: Promise<{ from?: string; to?: string }>;
+  params: Promise<{ locale: string; org: string }>;
+  searchParams: Promise<{ key?: string; from?: string; to?: string }>;
 }) {
-  const { locale, org, key: rawKey } = await params;
+  const { locale, org } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
   const data = await loadConsole(org);
   if (!data.modules.has('marketing') || !roleCan(data.role, 'marketing:read')) notFound();
-  const key = decodeURIComponent(rawKey);
+  // The key travels as a query parameter: campaign keys contain dots (`c.{id}`, UTM values).
+  const key = typeof sp.key === 'string' && sp.key.length >= 2 && sp.key.length <= 120 ? sp.key : null;
+  if (!key) notFound();
   const t = await getTranslations('marketingAnalytics');
   const load = (from?: string, to?: string) =>
     executeQuery(campaignDetailQuery, { key, from, to }, data.ctx, ports);
@@ -74,12 +76,13 @@ export default async function CampaignAnalyticsPage({
         {t('detail.back')}
       </Link>
       <RangeForm
-        action={`${prefix}${base}/campaigns/${encodeURIComponent(key)}`}
+        action={`${prefix}${base}/campaign`}
         from={error ? (sp.from ?? d.fromDay) : d.fromDay}
         to={error ? (sp.to ?? d.toDay) : d.toDay}
         timeZone={d.timeZone}
         currency={d.currency}
         error={error}
+        hidden={{ key }}
       />
       <FigureTiles
         figures={d.figures}

@@ -194,7 +194,7 @@ export default async function DeliverabilityPage({
               header: t('campaign'),
               cell: (r) => (
                 <Link
-                  href={`/o/${org}/marketing-analytics/campaigns/${encodeURIComponent(`c.${r.campaignId}`)}`}
+                  href={`/o/${org}/marketing-analytics/campaign?key=c.${r.campaignId}`}
                   className="inline-flex min-h-6 items-center underline"
                 >
                   {r.name ?? t('unnamedCampaign')}

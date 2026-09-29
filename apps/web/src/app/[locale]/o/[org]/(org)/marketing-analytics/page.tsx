@@ -126,7 +126,7 @@ export default async function MarketingAnalyticsPage({
           locale={locale}
           href={(r) =>
             r.kind === 'campaign' || r.kind === 'utm'
-              ? `${base}/campaigns/${encodeURIComponent(r.key)}?${new URLSearchParams({ from: report.fromDay, to: report.toDay }).toString()}`
+              ? `${base}/campaign?${new URLSearchParams({ key: r.key, from: report.fromDay, to: report.toDay }).toString()}`
               : null
           }
         />

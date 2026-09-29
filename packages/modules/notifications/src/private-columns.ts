@@ -40,8 +40,9 @@ export const privateColumns = columnPrivacy('notifications', {
     // M3.5b: the adapter that sent it, and why a fallback replaced an earlier channel.
     provider: 'vocab',
     fallback_reason: 'vocab',
-    // M3.8b: the domain an email went out from (the org's sending domain is public DNS data).
-    sender_domain: internal(),
+    // M3.8b: the domain an email went out from — a lowercase hostname seen in every From header
+    // (public DNS data, CHECK-constrained), never an address.
+    sender_domain: 'vocab',
   },
   // Provider delivery reports (M1.10d).
   message_events: {

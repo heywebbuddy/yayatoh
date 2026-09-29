@@ -20,7 +20,7 @@ test.afterAll(async () => {
  * door staff.
  */
 async function orgWithCampaigns(page: Page): Promise<{ slug: string; s: MarketingScenario }> {
-  const owner = await newUser(page, { org: true, twoFactor: true });
+  const owner = await newUser(page, { org: true, twoFactor: true, event: 'published' });
   const slug = owner.orgSlug as string;
   const org = await resolveOrgSlug(slug);
   if (!org) throw new Error(`no org ${slug}`);
@@ -144,17 +144,17 @@ test.describe('marketing analytics (M3.8b)', () => {
     await expectAccessible(page);
 
     // A range that ends before it starts: the error, the dates kept.
-    await page.getByLabel('From').fill('2026-03-02');
-    await page.getByLabel('To').fill('2026-03-01');
+    await page.getByLabel('From', { exact: true }).fill('2026-03-02');
+    await page.getByLabel('To', { exact: true }).fill('2026-03-01');
     await page.getByRole('button', { name: 'Apply' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByRole('alert')).toHaveText('The start date must be on or before the end date.');
-    await expect(page.getByLabel('From')).toHaveValue('2026-03-02');
-    await expect(page.getByLabel('From')).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByLabel('From', { exact: true })).toHaveValue('2026-03-02');
+    await expect(page.getByLabel('From', { exact: true })).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
     // A past range: nothing sent, clicked or sold; the links still listed with zeros.
-    await page.getByLabel('From').fill('2025-01-01');
-    await page.getByLabel('To').fill('2025-01-31');
+    await page.getByLabel('From', { exact: true }).fill('2025-01-01');
+    await page.getByLabel('To', { exact: true }).fill('2025-01-31');
     await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByTestId('figure-lastRevenue')).toContainText('$0.00');
     await expect(page.getByTestId('figure-sends')).toContainText('—');
@@ -282,14 +282,14 @@ test.describe('marketing analytics (M3.8b)', () => {
     for (const path of [
       'marketing-analytics',
       'marketing-analytics/deliverability',
-      `marketing-analytics/campaigns/u.spring-social`,
+      'marketing-analytics/campaign?key=u.spring-social',
     ]) {
       const r = await scanner.goto(`/o/${slug}/${path}`);
       expect(r?.status()).toBe(404);
     }
     expect((await scanner.request.get(`/o/${slug}/marketing-analytics/export`)).status()).toBe(404);
     // An unknown campaign is a 404 for the owner too.
-    const unknown = await page.goto(`/o/${slug}/marketing-analytics/campaigns/u.never-used`);
+    const unknown = await page.goto(`/o/${slug}/marketing-analytics/campaign?key=u.never-used`);
     expect(unknown?.status()).toBe(404);
   });
 });
