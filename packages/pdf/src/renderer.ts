@@ -21,13 +21,12 @@ export function gotenbergRenderer(opts: {
     async merge(pdfs) {
       const form = new FormData();
       // Gotenberg merges in file-name order: zero-padded sequence numbers keep ours.
-      pdfs.forEach((pdf, i) =>
+      for (const [i, pdf] of pdfs.entries())
         form.append(
           'files',
           new Blob([new Uint8Array(pdf)], { type: 'application/pdf' }),
           `${String(i).padStart(6, '0')}.pdf`,
-        ),
-      );
+        );
       const res = await doFetch(mergeEndpoint, {
         method: 'POST',
         body: form,

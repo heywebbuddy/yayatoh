@@ -355,7 +355,7 @@ export async function batchFileByLink(
       .from(batches)
       .where(eq(batches.id, ref.batchId)),
   );
-  if (!b || b.status !== 'done' || !b.fileKey || b.expiresAt <= now) return null;
+  if (b?.status !== 'done' || !b.fileKey || b.expiresAt <= now) return null;
   const bytes = await (opts.store ?? mediaStore()).get(ref.orgId, b.fileKey);
   return bytes ? { bytes, eventId: b.eventId } : null;
 }
