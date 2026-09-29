@@ -992,6 +992,24 @@ describe('support macros (M3.10c)', () => {
         ),
       ),
     ).toMatchObject({ code: 'validation_failed', details: { reason: 'transfer_required' } });
+    // Staff acting as a member never move a ticket, through a macro either.
+    expect(
+      await refusal(
+        executeCommand(
+          runSupportMacroCommand,
+          {
+            orderId: order.orderId,
+            macroId: m.id,
+            transfer: { ticketId: order.ticketIds[1] ?? '', toName: 'X', toEmail: 'x@example.test' },
+          },
+          a.ctx({
+            idempotencyKey: key(),
+            impersonatedBy: { staffUserId: uuidv7(), impersonationId: uuidv7() },
+          }),
+          ports,
+        ),
+      ),
+    ).toMatchObject({ code: 'impersonation_blocked' });
     const r = await executeCommand(
       runSupportMacroCommand,
       {

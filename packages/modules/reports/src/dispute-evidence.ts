@@ -335,6 +335,25 @@ export function evidenceDocument(
     timeZone: e.event.timezone,
   });
   const cur = e.dispute.currency;
+  // M3.10c: the refund terms the buyer saw at purchase, as rows of the refund policy section.
+  const snap = e.policySnapshot;
+  const terms = snap
+    ? {
+        rows: [
+          [
+            l('termsAtPurchase'),
+            snap.kind === 'until'
+              ? l('termsUntil', { days: snap.daysBefore ?? 0 })
+              : snap.kind === 'none'
+                ? l('termsNone')
+                : snap.kind === 'always'
+                  ? l('termsAlways')
+                  : l('termsUnset'),
+          ] as Row,
+          ...(snap.retainedMinor > 0 ? [[l('termsKept'), money(snap.retainedMinor, cur)] as Row] : []),
+        ],
+      }
+    : {};
   return {
     lang: opts.locale,
     title: l('title', { id: e.dispute.id.slice(-8) }),
@@ -406,32 +425,25 @@ export function evidenceDocument(
               t.admittedAt.length ? t.admittedAt.map((d) => at.format(d)).join('; ') : l('notAdmitted'),
             ]),
           },
-          ...(e.ticketsOmitted > 0 ? { note: l('omitted', { n: e.ticketsOmitted }) } : {}),
+          ...(e.ticketsOmitted > 0 || e.transfers.length
+            ? {
+                note: [
+                  ...(e.ticketsOmitted > 0 ? [l('omitted', { n: e.ticketsOmitted })] : []),
+                  // M3.10c: tickets passed on to someone else, in the same section (left out with it).
+                  ...(e.transfers.length
+                    ? [
+                        `${l('transfers')}: ${e.transfers
+                          .map(
+                            (t) =>
+                              `#${t.serial} ${l('transferFrom')} ${t.fromName} ${l('transferTo')} ${t.toName} (${t.state}${t.claimedAt ? `, ${l('transferClaimed')} ${at.format(t.claimedAt)}` : ''})`,
+                          )
+                          .join('; ')}`,
+                      ]
+                    : []),
+                ].join(' '),
+              }
+            : {}),
         },
-        ...(e.transfers.length
-          ? [
-              {
-                id: 'tickets',
-                title: l('transfers'),
-                table: {
-                  head: [
-                    l('serial'),
-                    l('transferFrom'),
-                    l('transferTo'),
-                    l('transferState'),
-                    l('transferClaimed'),
-                  ],
-                  body: e.transfers.map((t) => [
-                    `#${t.serial}`,
-                    t.fromName,
-                    t.toName,
-                    t.state,
-                    t.claimedAt ? at.format(t.claimedAt) : '—',
-                  ]),
-                },
-              },
-            ]
-          : []),
         e.scans.length
           ? {
               id: 'accessLog',
@@ -476,33 +488,11 @@ export function evidenceDocument(
           ? {
               id: 'refundPolicy',
               title: l('refundPolicy'),
+              ...terms,
               text: e.refundPolicy.body,
               note: l('policyUpdated', { date: at.format(e.refundPolicy.updatedAt) }),
             }
-          : { id: 'refundPolicy', title: l('refundPolicy'), text: l('noPolicy') },
-        ...(e.policySnapshot
-          ? [
-              {
-                id: 'refundPolicy',
-                title: l('termsAtPurchase'),
-                rows: [
-                  [
-                    l('termsAtPurchase'),
-                    e.policySnapshot.kind === 'until'
-                      ? l('termsUntil', { days: e.policySnapshot.daysBefore ?? 0 })
-                      : e.policySnapshot.kind === 'none'
-                        ? l('termsNone')
-                        : e.policySnapshot.kind === 'always'
-                          ? l('termsAlways')
-                          : l('termsUnset'),
-                  ] as Row,
-                  ...(e.policySnapshot.retainedMinor > 0
-                    ? [[l('termsKept'), money(e.policySnapshot.retainedMinor, cur)] as Row]
-                    : []),
-                ],
-              },
-            ]
-          : []),
+          : { id: 'refundPolicy', title: l('refundPolicy'), ...terms, text: l('noPolicy') },
       ] satisfies EvidenceDocument['sections'][number][]
     ).filter((sec) => !(e.review.excluded as readonly string[]).includes(sec.id ?? '')),
   };

@@ -428,8 +428,9 @@ test.describe('support tools (M3.10c)', () => {
     await page.keyboard.press('Enter');
     await expect(page.getByRole('heading', { name: 'Respond to a dispute', level: 1 })).toBeVisible();
     const preview = page.getByRole('article', { name: 'Evidence packet' });
-    for (const heading of ['Order', 'Access log (door scans)', 'Refund terms at purchase'])
+    for (const heading of ['Order', 'Access log (door scans)', 'Refund policy shown to buyers'])
       await expect(preview.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+    await expect(preview.getByText('Refund terms at purchase', { exact: true })).toBeVisible();
     const form = page.getByRole('region', { name: 'Your response' });
     await form
       .getByLabel('Your statement')

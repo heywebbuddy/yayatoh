@@ -262,6 +262,8 @@ const TransferInput = z.object({ toName: PersonName, toEmail: Email });
 /** Organizer (order page): transfer one of the order's tickets to someone else. */
 export const startTransferCommand = tenantCommand({
   name: 'ticketing.startTransfer',
+  // A ticket carries value (and holder transfers a fee): refused while staff act as a member.
+  category: 'money',
   input: TransferInput.extend({ orderId: z.uuid(), ticketId: z.uuid() }),
   output: StartedTransferDto,
   entitlement: 'ticketing',
@@ -285,6 +287,8 @@ export const startTransferCommand = tenantCommand({
 /** Organizer: cancel a pending transfer (the claim link stops working). */
 export const cancelTransferCommand = tenantCommand({
   name: 'ticketing.cancelTransfer',
+  // A ticket carries value (and holder transfers a fee): refused while staff act as a member.
+  category: 'money',
   input: z.object({ transferId: z.uuid() }),
   output: z.object({ ok: z.boolean() }),
   entitlement: 'ticketing',
@@ -309,6 +313,8 @@ async function liveHolderLinkTx(tx: TenantTx, ctx: Ctx, linkId: string) {
 /** Holder (their tickets page): transfer one of their tickets by name and email. */
 export const startHolderTransferCommand = tenantCommand({
   name: 'ticketing.startHolderTransfer',
+  // A ticket carries value (and holder transfers a fee): refused while staff act as a member.
+  category: 'money',
   input: TransferInput.extend({
     linkId: z.uuid(),
     ticketId: z.uuid(),
@@ -349,6 +355,8 @@ export const startHolderTransferCommand = tenantCommand({
 /** Holder: cancel their pending transfer before it is claimed. */
 export const cancelHolderTransferCommand = tenantCommand({
   name: 'ticketing.cancelHolderTransfer',
+  // A ticket carries value (and holder transfers a fee): refused while staff act as a member.
+  category: 'money',
   input: z.object({ linkId: z.uuid(), transferId: z.uuid() }),
   output: z.object({ ok: z.boolean() }),
   entitlement: 'ticketing',

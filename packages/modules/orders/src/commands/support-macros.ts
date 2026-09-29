@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { actorId, type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { actorId, type Ctx, DomainError, impersonationRefusal, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { StartedTransferDto, startTransferTx, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, asc, desc, eq, isNull } from 'drizzle-orm';
@@ -236,6 +236,9 @@ export const runSupportMacroCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const m = await liveMacroTx(tx, input.macroId);
     const actions = m.actions as Action[];
+    // A transfer moves a ticket's value: like `ticketing.startTransfer`, never while staff act as a member.
+    const refusal = actions.includes('transfer_ticket') ? impersonationRefusal(ctx, 'money') : null;
+    if (refusal) throw refusal;
     if (actions.includes('transfer_ticket') && !input.transfer)
       throw new DomainError('validation_failed', 'Choose a ticket and who it goes to', {
         reason: 'transfer_required',
