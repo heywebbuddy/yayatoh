@@ -11,7 +11,7 @@ export {
   type SchemaPrivacy,
   secret,
 } from './column-privacy.ts';
-export { isUniqueViolation } from './errors.ts';
+export { isForeignKeyViolation, isUniqueViolation } from './errors.ts';
 export { GLOBAL_TABLES } from './global-tables.ts';
 export { type Listener, listenChannel } from './listen.ts';
 export { appUserRole, ROLE } from './roles.ts';
