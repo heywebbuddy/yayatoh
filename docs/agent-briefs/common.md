@@ -46,8 +46,11 @@ For each user-visible feature write Playwright tests (`apps/web/e2e/*.spec.ts`, 
 
 ## Gate before your final push (all must pass)
 1. `pnpm verify` (lint → check:modules → typecheck → unit → integration)
-2. `pnpm db:bootstrap`, rebuild web (+admin if touched), run your new e2e specs, then the WHOLE web suite: `cd apps/web && npx playwright test --reporter=line`, and the admin suite if you touched admin (`cd apps/admin && npx playwright test --reporter=line`, after the web suite). Fix real failures. If a failure is clearly pre-existing and unrelated, record the exact error in your report.
+2. `pnpm db:bootstrap`, rebuild web (+admin if touched), then run on all three projects: your new e2e specs, plus every existing spec that covers a page, route or module you changed (find them with grep). Run the WHOLE web suite (`cd apps/web && npx playwright test --reporter=line`) only if you changed shared infrastructure: the root/org layouts, navigation, auth/session, `proxy.ts`, the CSP, `helpers.ts`, seed data or fixtures used by other specs. The merge session and CI always run the whole suite, so that is where cross-feature breakage is caught. Run the admin suite if you touched admin. Fix real failures. If a failure is clearly pre-existing and unrelated, record the exact error in your report. (Owner asked for speed on 2026-09-29.)
 3. Add your milestone section to `docs/specs/<milestone>/spec.md` (what was built, "Later"/"Not yet", Acceptance table mapping each criterion to its test file).
+
+## Push early
+Commit and push to `{BRANCH}` after every logical step (normal push), so a platform disconnect loses nothing.
 
 ## Report
 Put the report in your final commit message body: what you built; files/modules touched; migration file name and every hand edit; message keys added; test counts (unit/int/e2e) and gate results; choices pending the owner; anything left open. Then push to `{BRANCH}` and stop.
