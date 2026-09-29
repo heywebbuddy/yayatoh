@@ -17,7 +17,13 @@ export const privateColumns = columnPrivacy('program', {
   // links and sessions are private; a proposed profile is internal until the organizer approves.
   exhibitor_profiles: { links: 'public', categories: 'public' },
   exhibitor_profile_changes: { proposed: internal('json'), status: 'vocab', reason: internal() },
-  exhibitor_members: { email: personal('email'), role: 'vocab', status: 'vocab', link_hash: secret() },
+  exhibitor_members: {
+    email: personal('email'),
+    role: 'vocab',
+    status: 'vocab',
+    // Spent and revoked links are null (a CHECK pairs it with link_expires_at).
+    link_hash: secret('text', { where: 'link_hash is not null' }),
+  },
   portal_sessions: { token_hash: secret() },
   booths: { number: 'public', category: 'public' },
 });

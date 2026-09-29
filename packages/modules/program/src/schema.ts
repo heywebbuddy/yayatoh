@@ -224,7 +224,10 @@ export const exhibitorProfiles = tenantTable(
     uniqueIndex('exhibitor_profiles_org_exhibitor_key').on(t.orgId, t.exhibitorId),
     index('exhibitor_profiles_org_event_idx').on(t.orgId, t.eventId),
     orgFk('exhibitor_profiles_exhibitor_fk', [t.orgId, t.exhibitorId], exhibitors).onDelete('cascade'),
-    check('exhibitor_profiles_allowance_check', sql`staff_allowance is null or staff_allowance between 0 and 500`),
+    check(
+      'exhibitor_profiles_allowance_check',
+      sql`staff_allowance is null or staff_allowance between 0 and 500`,
+    ),
     check('exhibitor_profiles_categories_check', sql`cardinality(categories) <= 5`),
     check('exhibitor_profiles_links_check', sql`jsonb_typeof(links) = 'array'`),
   ],

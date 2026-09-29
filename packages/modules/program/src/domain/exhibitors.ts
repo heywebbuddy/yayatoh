@@ -12,7 +12,10 @@ export type MemberRole = 'exhibitor_admin' | 'exhibitor_staff';
 export type MemberStatus = 'pending' | 'active' | 'revoked';
 
 /** The exhibitor's own allowance when the organizer set one, else the event's default. */
-export function staffAllowance(eventDefault: number | null | undefined, own: number | null | undefined): number {
+export function staffAllowance(
+  eventDefault: number | null | undefined,
+  own: number | null | undefined,
+): number {
   return own ?? eventDefault ?? DEFAULT_STAFF_ALLOWANCE;
 }
 
@@ -56,7 +59,11 @@ export type AssignOutcome =
  * are co-exhibitors unless `primary` is asked, which moves the primary role to them (the old
  * primary stays as a co-exhibitor). Asking again for what is already so changes nothing.
  */
-export function planAssignment(current: readonly Seat[], exhibitorId: string, primary: boolean): AssignOutcome {
+export function planAssignment(
+  current: readonly Seat[],
+  exhibitorId: string,
+  primary: boolean,
+): AssignOutcome {
   const mine = current.find((s) => s.exhibitorId === exhibitorId);
   const head = current.find((s) => s.isPrimary) ?? null;
   if (mine && (mine.isPrimary || !primary)) return { kind: 'already', exhibitorId };
@@ -130,13 +137,19 @@ export function boothWarnings(
     }
   for (const b of sorted) {
     const here = assignments.filter((a) => a.boothId === b.id);
-    if (here.length > 1) out.push({ kind: 'shared_booth', boothId: b.id, otherBoothId: null, exhibitorId: null });
+    if (here.length > 1)
+      out.push({ kind: 'shared_booth', boothId: b.id, otherBoothId: null, exhibitorId: null });
     if (!b.category) continue;
     const want = b.category.toLowerCase();
     for (const a of here) {
       const cats = categoriesOf.get(a.exhibitorId) ?? [];
       if (cats.length > 0 && !cats.some((c) => c.toLowerCase() === want))
-        out.push({ kind: 'category_mismatch', boothId: b.id, otherBoothId: null, exhibitorId: a.exhibitorId });
+        out.push({
+          kind: 'category_mismatch',
+          boothId: b.id,
+          otherBoothId: null,
+          exhibitorId: a.exhibitorId,
+        });
     }
   }
   const byExhibitor = new Map<string, number>();

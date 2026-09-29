@@ -90,6 +90,7 @@ import {
 } from '@yayatoh/payments';
 import {
   ALERTS_CHANNEL,
+  appTokenSecret,
   catchUpSubscriber,
   consumeEvent,
   defineSubscriber,
@@ -98,6 +99,7 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  assignBoothCommand,
   createExhibitorCommand,
   createRoomCommand,
   createSessionCommand,
@@ -105,6 +107,15 @@ import {
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  inviteExhibitorMemberCommand,
+  newPortalSecret,
+  openExhibitorLinkCommand,
+  portalInviteStaffCommand,
+  portalSaveProfileCommand,
+  portalSecretHash,
+  saveBoothCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
 } from '@yayatoh/program';
 import {
   analyticsForwarder,
@@ -1105,9 +1116,82 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const exhibitor = await executeCommand(
     createExhibitorCommand,
     { eventId: event.id, name: `${name} Exhibitor`, boothLabel: 'B1' },
+    ctx(),
+    ports,
+  );
+  // M5.4a: the exhibitor portal (settings, listing, an admin signed in by link, a staff invite, a
+  // pending profile change) and a booth with the exhibitor at it.
+  await executeCommand(
+    saveExhibitorSettingsCommand,
+    { eventId: event.id, defaultStaffAllowance: 3, approvalRequired: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveExhibitorListingCommand,
+    {
+      eventId: event.id,
+      exhibitorId: exhibitor.id,
+      listed: true,
+      categories: ['Software'],
+      links: [{ label: 'Docs', url: 'https://example.com/docs' }],
+      staffAllowance: null,
+    },
+    ctx(),
+    ports,
+  );
+  const portalLink = newPortalSecret();
+  const invited = await executeCommand(
+    inviteExhibitorMemberCommand,
+    {
+      eventId: event.id,
+      exhibitorId: exhibitor.id,
+      email: `admin@${slug}.example`,
+      role: 'exhibitor_admin',
+      linkHash: portalSecretHash(appTokenSecret(), 'link', portalLink),
+    },
+    ctx(),
+    ports,
+  );
+  const exhibitorAdmin = await executeCommand(
+    openExhibitorLinkCommand,
+    {
+      memberId: invited.member.id,
+      linkHash: portalSecretHash(appTokenSecret(), 'link', portalLink),
+      sessionHash: portalSecretHash(appTokenSecret(), 'session', newPortalSecret()),
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  const portalCtx = createCtx({ orgId: org.id });
+  await executeCommand(
+    portalInviteStaffCommand,
+    {
+      principal: exhibitorAdmin,
+      email: `staff@${slug}.example`,
+      linkHash: portalSecretHash(appTokenSecret(), 'link', newPortalSecret()),
+    },
+    portalCtx,
+    ports,
+  );
+  await executeCommand(
+    portalSaveProfileCommand,
+    { principal: exhibitorAdmin, name: `${name} Exhibitor`, description: 'Proposed *copy*.' },
+    portalCtx,
+    ports,
+  );
+  const hall = await executeCommand(
+    saveBoothCommand,
+    { eventId: event.id, number: 'A1', category: 'Software', x: 100, y: 100, width: 300, height: 300 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignBoothCommand,
+    { eventId: event.id, boothId: hall.booths[0]?.id ?? '', exhibitorId: exhibitor.id },
     ctx(),
     ports,
   );

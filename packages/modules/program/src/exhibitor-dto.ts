@@ -121,7 +121,10 @@ export const PortalExhibitorViewDto = z.object({
     .nullable(),
 });
 export type PortalExhibitorViewDto = z.infer<typeof PortalExhibitorViewDto>;
-export const portalExhibitorViewSerializer = defineSerializer('program.portalExhibitorView', PortalExhibitorViewDto);
+export const portalExhibitorViewSerializer = defineSerializer(
+  'program.portalExhibitorView',
+  PortalExhibitorViewDto,
+);
 
 /* ---------------------------------------------------------------------------- booths ---- */
 
@@ -183,4 +186,7 @@ export const PublicExhibitorMapDto = z.object({
   ),
 });
 export type PublicExhibitorMapDto = z.infer<typeof PublicExhibitorMapDto>;
-export const publicExhibitorMapSerializer = defineSerializer('program.publicExhibitorMap', PublicExhibitorMapDto);
+export const publicExhibitorMapSerializer = defineSerializer(
+  'program.publicExhibitorMap',
+  PublicExhibitorMapDto,
+);

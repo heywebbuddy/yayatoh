@@ -14,7 +14,7 @@ import { z } from 'zod';
 import { allowanceUse, type MemberRole, memberExpiry, staffAllowance } from './domain/exhibitors.ts';
 import { sameHash } from './domain/portal-token.ts';
 import {
-  ExhibitorMemberDto,
+  type ExhibitorMemberDto,
   ExhibitorPortalAdminDto,
   ExhibitorSettingsDto,
   InviteResultDto,
@@ -98,7 +98,10 @@ async function exhibitorTx(tx: TenantTx, eventId: string, exhibitorId: string, l
 }
 
 async function profileTx(tx: TenantTx, exhibitorId: string) {
-  const [row] = await tx.select().from(exhibitorProfiles).where(eq(exhibitorProfiles.exhibitorId, exhibitorId));
+  const [row] = await tx
+    .select()
+    .from(exhibitorProfiles)
+    .where(eq(exhibitorProfiles.exhibitorId, exhibitorId));
   return row ?? null;
 }
 
@@ -107,7 +110,9 @@ async function upsertProfileTx(
   ctx: Ctx,
   eventId: string,
   exhibitorId: string,
-  set: Partial<Pick<typeof exhibitorProfiles.$inferInsert, 'links' | 'categories' | 'listed' | 'staffAllowance'>>,
+  set: Partial<
+    Pick<typeof exhibitorProfiles.$inferInsert, 'links' | 'categories' | 'listed' | 'staffAllowance'>
+  >,
 ) {
   await tx
     .insert(exhibitorProfiles)
@@ -118,7 +123,11 @@ async function upsertProfileTx(
     });
 }
 
-const linksOf = (v: unknown) => z.array(z.object({ label: z.string(), url: z.string() })).catch([]).parse(v);
+const linksOf = (v: unknown) =>
+  z
+    .array(z.object({ label: z.string(), url: z.string() }))
+    .catch([])
+    .parse(v);
 
 function currentProfile(
   x: typeof exhibitors.$inferSelect,
@@ -624,7 +633,8 @@ export const decideProfileChangeCommand = tenantCommand({
       .for('update');
     if (!c) throw new DomainError('not_found');
     const status = input.decision === 'approve' ? ('approved' as const) : ('rejected' as const);
-    if (status === 'approved') await applyProfileTx(tx, ctx, c.eventId, c.exhibitorId, ProposalInput.parse(c.proposed));
+    if (status === 'approved')
+      await applyProfileTx(tx, ctx, c.eventId, c.exhibitorId, ProposalInput.parse(c.proposed));
     await tx
       .update(exhibitorProfileChanges)
       .set({ status, decidedAt: ctx.now, reason: input.reason, updatedAt: ctx.now })
@@ -755,7 +765,9 @@ export const exhibitorPortalQuery = tenantQuery({
     const [change] = await tx
       .select()
       .from(exhibitorProfileChanges)
-      .where(and(eq(exhibitorProfileChanges.exhibitorId, x.id), eq(exhibitorProfileChanges.status, 'pending')));
+      .where(
+        and(eq(exhibitorProfileChanges.exhibitorId, x.id), eq(exhibitorProfileChanges.status, 'pending')),
+      );
     const proposed = change ? ProposalInput.safeParse(change.proposed) : null;
     const mine = await tx
       .select({ booth: booths, isPrimary: boothAssignments.isPrimary })
@@ -787,7 +799,10 @@ export const exhibitorPortalQuery = tenantQuery({
       })),
       staff: admin
         ? {
-            allowance: allowanceUse(staffAllowance(settings.defaultStaffAllowance, p?.staffAllowance), people),
+            allowance: allowanceUse(
+              staffAllowance(settings.defaultStaffAllowance, p?.staffAllowance),
+              people,
+            ),
             members: people.map((m) => {
               const { exhibitorId: _x, ...rest } = toMember(m);
               return rest;
@@ -870,7 +885,12 @@ export const portalInviteStaffCommand = tenantCommand({
     action: 'program.exhibitor_member.invite',
     targetType: 'event',
     targetId: input.principal.eventId,
-    data: { exhibitorId: input.principal.subjectId, memberId: r?.member.id, role: 'exhibitor_staff', by: 'exhibitor' },
+    data: {
+      exhibitorId: input.principal.subjectId,
+      memberId: r?.member.id,
+      role: 'exhibitor_staff',
+      by: 'exhibitor',
+    },
   }),
 });
 

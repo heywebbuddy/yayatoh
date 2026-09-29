@@ -50,7 +50,9 @@ export function parsePortalSessionToken(token: string) {
  * email without the visitor naming a tenant. Signed: a changed org or event fails.
  */
 export function portalSiteToken(appSecret: string, orgId: string, eventId: string): string {
-  const mac = createHmac('sha256', appSecret).update(`exhibitor-portal:site:${orgId}:${eventId}`).digest('hex');
+  const mac = createHmac('sha256', appSecret)
+    .update(`exhibitor-portal:site:${orgId}:${eventId}`)
+    .digest('hex');
   return `${orgId}.${eventId}.${mac}`;
 }
 

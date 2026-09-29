@@ -194,22 +194,36 @@ export const assignBoothCommand = tenantCommand({
       .from(exhibitors)
       .where(and(eq(exhibitors.id, input.exhibitorId), eq(exhibitors.eventId, input.eventId)));
     if (!x)
-      throw new DomainError('validation_failed', 'Unknown exhibitor', { field: 'exhibitorId', reason: 'unknown' });
-    const current = await tx.select().from(boothAssignments).where(eq(boothAssignments.boothId, input.boothId));
+      throw new DomainError('validation_failed', 'Unknown exhibitor', {
+        field: 'exhibitorId',
+        reason: 'unknown',
+      });
+    const current = await tx
+      .select()
+      .from(boothAssignments)
+      .where(eq(boothAssignments.boothId, input.boothId));
     const plan = planAssignment(current, input.exhibitorId, input.primary);
     if (plan.kind === 'already')
-      throw new DomainError('conflict', 'Already at this booth', { field: 'exhibitorId', reason: 'already_assigned' });
+      throw new DomainError('conflict', 'Already at this booth', {
+        field: 'exhibitorId',
+        reason: 'already_assigned',
+      });
     if (plan.demote)
       await tx
         .update(boothAssignments)
         .set({ isPrimary: false, updatedAt: ctx.now })
-        .where(and(eq(boothAssignments.boothId, input.boothId), eq(boothAssignments.exhibitorId, plan.demote)));
+        .where(
+          and(eq(boothAssignments.boothId, input.boothId), eq(boothAssignments.exhibitorId, plan.demote)),
+        );
     if (plan.existing)
       await tx
         .update(boothAssignments)
         .set({ isPrimary: plan.primary, updatedAt: ctx.now })
         .where(
-          and(eq(boothAssignments.boothId, input.boothId), eq(boothAssignments.exhibitorId, input.exhibitorId)),
+          and(
+            eq(boothAssignments.boothId, input.boothId),
+            eq(boothAssignments.exhibitorId, input.exhibitorId),
+          ),
         );
     else
       await tx.insert(boothAssignments).values({
@@ -241,7 +255,9 @@ export const unassignBoothCommand = tenantCommand({
     await boothTx(tx, input.eventId, input.boothId, true);
     const [gone] = await tx
       .delete(boothAssignments)
-      .where(and(eq(boothAssignments.boothId, input.boothId), eq(boothAssignments.exhibitorId, input.exhibitorId)))
+      .where(
+        and(eq(boothAssignments.boothId, input.boothId), eq(boothAssignments.exhibitorId, input.exhibitorId)),
+      )
       .returning();
     if (!gone) throw new DomainError('not_found');
     const rest = await tx.select().from(boothAssignments).where(eq(boothAssignments.boothId, input.boothId));
