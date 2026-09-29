@@ -7,7 +7,7 @@ import { venueTimezoneRows } from './time.ts';
  * credentials, and the SQL twins of src/ids.ts and src/time.ts. Idempotent and versioned: every
  * run re-applies it (`CREATE … IF NOT EXISTS`, `CREATE OR REPLACE`).
  */
-export const CONTROL_VERSION = 1;
+export const CONTROL_VERSION = 2;
 
 const DDL = `
 create schema if not exists legacy;
@@ -152,6 +152,57 @@ create or replace function legacy.media_key(inst text, path text) returns text
 language sql immutable parallel safe as $$
   select left('legacy/' || inst || '/storage/' || regexp_replace(regexp_replace(path, '^/+', ''), '^storage/', ''), 500)
 $$;
+
+-- M2.5a reverse ETL (rollback before the point of no return, roadmap §7.5): what the new platform
+-- wrote after the cutover, copied back into the legacy shape. reverse_runs: one row per run with its
+-- reconciliation report. reverse_ref: every legacy row the reverse ETL inserted (new id ↔ legacy
+-- id; legacy ids from 10,000,000 so they never meet the legacy app's own). reverse_updates: every
+-- change it made to a migrated legacy row (a refund, a check-in). rollback_refunds: refunds the
+-- rollback script made at the provider for post-cutover platform (SCT) orders.
+create table if not exists legacy.reverse_runs (
+  id bigserial primary key,
+  instance text not null check (instance in ('yay', 'abc')),
+  cutover_at timestamptz not null,
+  started_at timestamptz not null default now(),
+  finished_at timestamptz,
+  status text not null default 'running' check (status in ('running', 'succeeded', 'failed', 'dry_run')),
+  report jsonb
+);
+alter table legacy.reverse_runs drop constraint if exists reverse_runs_status_check;
+alter table legacy.reverse_runs add constraint reverse_runs_status_check
+  check (status in ('running', 'succeeded', 'failed', 'dry_run'));
+create table if not exists legacy.reverse_ref (
+  instance text not null,
+  entity text not null,
+  new_id text not null,
+  legacy_id bigint not null check (legacy_id >= 10000000),
+  run_id bigint not null,
+  primary key (instance, entity, new_id)
+);
+create unique index if not exists reverse_ref_legacy_idx on legacy.reverse_ref (instance, entity, legacy_id);
+create table if not exists legacy.reverse_updates (
+  instance text not null,
+  source text not null,
+  new_id text not null,
+  legacy_table text not null,
+  legacy_id bigint not null,
+  change jsonb not null,
+  run_id bigint not null,
+  primary key (instance, source, new_id, legacy_table, legacy_id)
+);
+create table if not exists legacy.rollback_refunds (
+  instance text not null,
+  order_id uuid not null,
+  org_id uuid not null,
+  provider_payment_id text not null,
+  provider_refund_id text,
+  amount_minor bigint not null check (amount_minor > 0),
+  currency text not null,
+  status text not null check (status in ('succeeded', 'pending', 'failed')),
+  refunded_by text not null,
+  created_at timestamptz not null default now(),
+  primary key (instance, order_id)
+);
 
 create table if not exists legacy.venue_tz (
   country text not null,

@@ -46,3 +46,7 @@ zap/zap.yaml
 
 # migrate:legacy:demo handles for the e2e suite (synthetic, throwaway database)
 apps/web/e2e/.generated/
+
+# Cutover orchestrator state and rehearsal reports (M2.5a)
+/.cutover/
+/reports/

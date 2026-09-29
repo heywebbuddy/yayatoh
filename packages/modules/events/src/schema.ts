@@ -44,6 +44,9 @@ export const EVENT_ROLES = [
   'sponsor_contact',
   'kiosk_operator',
   'venue_viewer',
+  // M4.2a (P4-8): an event's co-host (the couple, the gala chair) and planner.
+  'co_host',
+  'planner',
 ] as const;
 
 const inList = (col: string, values: readonly string[]) =>

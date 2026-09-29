@@ -179,7 +179,7 @@ export const setFinderSettingsCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), publicMap: z.boolean(), mode: z.enum(FINDER_MODES) }),
   output: FinderSettingsDto,
   entitlement: 'seat_finder',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const [row] = await tx
       .update(eventLayouts)

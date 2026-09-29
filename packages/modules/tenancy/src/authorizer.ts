@@ -22,6 +22,13 @@ export async function memberRole(ctx: Ctx): Promise<OrgRole | null> {
 /** Event roles of the actor for one event; implemented by the events module (a port: tier 1 can't read tier 2). */
 export type EventRoleResolver = (ctx: Ctx, eventId: string) => Promise<readonly string[]>;
 
+/**
+ * Permissions an API key scope carries beyond its own name. M4.2a split `seating:write` out of
+ * `events:write` for member roles; a key's `events:write` scope keeps seating (the /v1 bulk seat
+ * assignment), so no existing key loses a power (/v1 is additive only).
+ */
+const SCOPE_FOR: Readonly<Record<string, string>> = { 'seating:write': 'events:write' };
+
 const eventIdOf = (input: unknown): string | null => {
   const id = (input as { eventId?: unknown } | null)?.eventId;
   return typeof id === 'string' ? id : null;
@@ -46,8 +53,10 @@ export function createOrgAuthorizer(
       if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
       if (ctx.actor.type === 'system') return true;
       // An org API key may do exactly what its live scopes list, in its own org only.
-      if (ctx.actor.type === 'api_key')
-        return (await apiKeyScopes(ctx, ctx.actor.keyId)).includes(permission);
+      if (ctx.actor.type === 'api_key') {
+        const scopes = await apiKeyScopes(ctx, ctx.actor.keyId);
+        return scopes.includes(permission) || scopes.includes(SCOPE_FOR[permission] ?? permission);
+      }
       const role = await memberRole(ctx);
       if (role === null) return false;
       if (roleCan(role, permission)) return true;

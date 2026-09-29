@@ -16,7 +16,7 @@ export async function GET(
 ) {
   const { org, event, orderId, disputeId } = await params;
   if (!z.uuid().safeParse(disputeId).success) return new Response('Not found', { status: 404 });
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   if (!roleCan(data.role, 'finance:read')) return new Response('Not found', { status: 404 });
   let evidence: Awaited<ReturnType<typeof load>>;
   const load = () => executeQuery(disputeEvidencePacketQuery, { disputeId }, data.ctx, ports);

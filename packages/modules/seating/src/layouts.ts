@@ -72,7 +72,7 @@ export const saveLayoutCommand = tenantCommand({
   input: z.object({ id: z.uuid().optional(), name: z.string().trim().min(1).max(120), doc: z.unknown() }),
   output: LayoutSummaryDto,
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const { doc, checksum } = validDoc(input.doc, requireOrg(ctx));
     const values = { name: input.name, doc, checksum, seatCount: seatCount(doc), updatedAt: ctx.now };
@@ -90,7 +90,9 @@ export const saveLayoutCommand = tenantCommand({
 
 export const listLayoutsQuery = tenantQuery({
   name: 'seating.listLayouts',
-  input: z.object({}),
+  // `eventId` (optional) scopes the authorization to that event: a planner picking a floor plan
+  // for their event reads the org's plans through their event role (M4.2a).
+  input: z.object({ eventId: z.uuid().optional() }),
   output: z.array(LayoutSummaryDto),
   entitlement: 'seating',
   permission: 'events:read',
@@ -105,7 +107,7 @@ export const listLayoutsQuery = tenantQuery({
 
 export const getLayoutQuery = tenantQuery({
   name: 'seating.getLayout',
-  input: z.object({ id: z.uuid() }),
+  input: z.object({ id: z.uuid(), eventId: z.uuid().optional() }),
   output: LayoutSummaryDto.extend({ doc: FloorplanDoc }),
   entitlement: 'seating',
   permission: 'events:read',
@@ -155,7 +157,7 @@ export const setEventLayoutCommand = tenantCommand({
     }),
   output: z.object({ eventId: z.uuid(), seatCount: z.int(), status: z.enum(EVENT_LAYOUT_STATUSES) }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
@@ -241,7 +243,7 @@ export const publishEventLayoutCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), occurrenceId: DateInput }),
   output: z.object({ status: z.enum(EVENT_LAYOUT_STATUSES) }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const current = await eventLayoutTx(tx, input.eventId, key, true);
@@ -284,7 +286,7 @@ export const assignSeatCategoryCommand = tenantCommand({
   input: Selection.extend({ ticketTypeId: z.uuid().nullable() }),
   output: z.object({ updated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx
@@ -308,7 +310,7 @@ export const blockSeatsCommand = tenantCommand({
   input: Selection.extend({ reason: z.enum(BLOCK_REASONS).nullable() }),
   output: z.object({ updated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = input.reason
@@ -545,7 +547,7 @@ export const giveDateOwnChartCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid() }),
   output: z.object({ occurrenceId: z.uuid(), seatCount: z.int(), status: z.enum(EVENT_LAYOUT_STATUSES) }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const occ = await findOccurrenceTx(tx, input.occurrenceId);
@@ -678,7 +680,7 @@ export const removeDateChartCommand = tenantCommand({
   input: z.object({ eventId: z.uuid(), occurrenceId: z.uuid() }),
   output: z.object({ occurrenceId: z.uuid(), unseated: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, tx }) => {
     const chart = await eventLayoutTx(tx, input.eventId, input.occurrenceId, true);
     if (!chart) throw new DomainError('not_found', 'This date has no chart of its own');

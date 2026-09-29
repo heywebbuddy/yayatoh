@@ -1,6 +1,5 @@
 import { currencyExponent, executeQuery } from '@yayatoh/kernel';
 import { eventReportQuery } from '@yayatoh/reports';
-import { roleCan } from '@yayatoh/tenancy';
 import { BarChart, Card, ChartTable, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
@@ -25,10 +24,10 @@ export default async function AnalysisPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'analysis');
   const t = await getTranslations();
   const base = `/o/${org}/e/${event}/analysis`;
-  if (!data.modules.has('reports') || !roleCan(data.role, 'orders:read')) {
+  if (!data.modules.has('reports') || !can('orders:read')) {
     return (
       <>
         <PageHeader title={t('reports.title')} description={ev.name} />
@@ -37,7 +36,7 @@ export default async function AnalysisPage({
     );
   }
   const r = await executeQuery(eventReportQuery, { eventId: ev.id }, data.ctx, ports);
-  const finance = roleCan(data.role, 'finance:read');
+  const finance = can('finance:read');
   const m = r.metrics;
   const n = (v: number) => formatNumber(v, locale);
   const money = (minor: number, currency: string) => fmtMoney(minor, currency, locale);

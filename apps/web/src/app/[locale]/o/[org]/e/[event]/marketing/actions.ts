@@ -56,7 +56,7 @@ export async function composerAction(
   _prev: ComposerState,
   form: FormData,
 ): Promise<ComposerState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   const values: ComposerValues = {
     subject: String(form.get('subject') ?? ''),
     body: String(form.get('body') ?? ''),

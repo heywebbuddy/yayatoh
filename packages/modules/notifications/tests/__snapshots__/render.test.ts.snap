@@ -6201,6 +6201,240 @@ Amina Diallo，您好：
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · ar 1`] = `
+{
+  "subject": "أنت مدعو للمساعدة في Amina & Tomas",
+  "text": "أنت مدعو للمساعدة في Amina & Tomas
+
+مرحبًا،
+
+دعاك Lakeside Events إلى Amina & Tomas بصفة منسق. سترى هذه المناسبة فقط.
+
+قبول الدعوة: https://app.yayatoh.test/invite/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · de 1`] = `
+{
+  "subject": "Sie sind zu Amina & Tomas eingeladen",
+  "text": "Sie sind zu Amina & Tomas eingeladen
+
+Hallo,
+
+Lakeside Events hat Sie zu Amina & Tomas als Planer eingeladen. Sie sehen nur diese Veranstaltung.
+
+Einladung annehmen: https://app.yayatoh.test/invite/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · en 1`] = `
+{
+  "subject": "You're invited to help with Amina & Tomas",
+  "text": "You're invited to help with Amina & Tomas
+
+Hello,
+
+Lakeside Events invited you to Amina & Tomas as planner. You'll see this event only.
+
+Accept the invitation: https://app.yayatoh.test/invite/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · es 1`] = `
+{
+  "subject": "Te invitan a colaborar en Amina & Tomas",
+  "text": "Te invitan a colaborar en Amina & Tomas
+
+Hola:
+
+Lakeside Events te invitó a Amina & Tomas como planificador. Solo verás este evento.
+
+Aceptar la invitación: https://app.yayatoh.test/invite/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · fr 1`] = `
+{
+  "subject": "Vous êtes invité à participer à Amina & Tomas",
+  "text": "Vous êtes invité à participer à Amina & Tomas
+
+Bonjour,
+
+Lakeside Events vous a invité à Amina & Tomas en tant que planificateur. Vous ne verrez que cet événement.
+
+Accepter l'invitation: https://app.yayatoh.test/invite/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · hi 1`] = `
+{
+  "subject": "आपको Amina & Tomas में मदद के लिए आमंत्रित किया गया है",
+  "text": "आपको Amina & Tomas में मदद के लिए आमंत्रित किया गया है
+
+नमस्ते,
+
+Lakeside Events ने आपको Amina & Tomas में योजनाकार के रूप में आमंत्रित किया है। आपको केवल यही इवेंट दिखेगा।
+
+आमंत्रण स्वीकार करें: https://app.yayatoh.test/invite/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · it 1`] = `
+{
+  "subject": "Sei invitato a collaborare a Amina & Tomas",
+  "text": "Sei invitato a collaborare a Amina & Tomas
+
+Ciao,
+
+Lakeside Events ti ha invitato a Amina & Tomas come planner. Vedrai solo questo evento.
+
+Accetta l'invito: https://app.yayatoh.test/invite/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · ja 1`] = `
+{
+  "subject": "Amina & Tomas へのご招待",
+  "text": "Amina & Tomas へのご招待
+
+こんにちは。
+
+Lakeside Events から Amina & Tomas のプランナーとして招待されました。表示されるのはこのイベントのみです。
+
+招待を承諾する: https://app.yayatoh.test/invite/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · nl 1`] = `
+{
+  "subject": "Je bent uitgenodigd voor Amina & Tomas",
+  "text": "Je bent uitgenodigd voor Amina & Tomas
+
+Hallo,
+
+Lakeside Events heeft je uitgenodigd voor Amina & Tomas als planner. Je ziet alleen dit evenement.
+
+Uitnodiging accepteren: https://app.yayatoh.test/invite/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · pt 1`] = `
+{
+  "subject": "Você foi convidado para ajudar em Amina & Tomas",
+  "text": "Você foi convidado para ajudar em Amina & Tomas
+
+Olá!
+
+Lakeside Events convidou você para Amina & Tomas como planejador. Você verá apenas este evento.
+
+Aceitar o convite: https://app.yayatoh.test/invite/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · ru 1`] = `
+{
+  "subject": "Вас пригласили помочь с событием «Amina & Tomas»",
+  "text": "Вас пригласили помочь с событием «Amina & Tomas»
+
+Здравствуйте!
+
+Lakeside Events пригласил вас в «Amina & Tomas» в роли: планировщик. Вы увидите только это событие.
+
+Принять приглашение: https://app.yayatoh.test/invite/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · zh-CN 1`] = `
+{
+  "subject": "邀请您参与 Amina & Tomas",
+  "text": "邀请您参与 Amina & Tomas
+
+您好：
+
+Lakeside Events 邀请您以策划人身份参与 Amina & Tomas。您只会看到这个活动。
+
+接受邀请: https://app.yayatoh.test/invite/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation · zh-TW 1`] = `
+{
+  "subject": "邀請您參與 Amina & Tomas",
+  "text": "邀請您參與 Amina & Tomas
+
+您好：
+
+Lakeside Events 邀請您以策劃人身分參與 Amina & Tomas。您只會看到這個活動。
+
+接受邀請: https://app.yayatoh.test/invite/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · ar 1`] = `
 {
   "subject": "دعوة للانضمام إلى Lakeside Events على Yayatoh",

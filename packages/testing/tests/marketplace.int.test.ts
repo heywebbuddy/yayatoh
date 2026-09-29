@@ -382,4 +382,22 @@ describe('legacy redirects (M1.11b)', () => {
     );
     expect(row?.hits).toBe(1);
   });
+
+  it('never answers with a chain: stored chains collapse to one hop, loops to none (M2.4a)', async () => {
+    await add(a, {
+      host: 'yayatoh.com',
+      source: `/organiser-${tag}`,
+      match: 'prefix',
+      target: `/org-${tag}x`,
+      status: 301,
+    });
+    await add(a, { host: 'yayatoh.com', source: `/org-${tag}x/harbor`, target: `/o/${a.org.slug}` });
+    expect(await matchLegacyRedirect('yayatoh.com', `/organiser-${tag}/harbor?ref=1`)).toEqual({
+      location: `/o/${a.org.slug}?ref=1`,
+      status: 301,
+    });
+    await add(a, { host: 'yayatoh.com', source: `/loop-a-${tag}`, target: `/loop-b-${tag}` });
+    await add(a, { host: 'yayatoh.com', source: `/loop-b-${tag}`, target: `/loop-a-${tag}` });
+    expect(await matchLegacyRedirect('yayatoh.com', `/loop-a-${tag}`)).toBeNull();
+  });
 });

@@ -20,7 +20,7 @@ export async function saveDoorStaffAction(
   prev: DoorStaffFormState,
   form: FormData,
 ): Promise<DoorStaffFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const seq = seqOf(prev);
   const userId = String(form.get('userId') ?? '');
   if (!userId) return { kind: 'error', code: 'validation_failed', field: 'userId', seq };
@@ -36,7 +36,7 @@ export async function saveDoorStaffAction(
 }
 
 export async function removeDoorStaffAction(org: string, event: string, userId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   await executeCommand(removeDoorStaffCommand, { eventId: ev.id, userId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/onsite`, 'layout');
 }

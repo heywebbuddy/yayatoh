@@ -149,14 +149,14 @@ export default async function AttendeesPage({
   const checkedIn = oneOf(CHECKED_IN_FILTERS, sp.checkin);
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
-  const { data, event: real } = await loadEvent(org, event);
+  const { data, event: real, can } = await loadEvent(org, event, 'attendees');
   const t = await getTranslations();
   const profile = isProfileKey(real.profile) ? real.profile : 'other';
   const needle = q.trim().toLowerCase();
   // Real attendees (created at ticket issue) win; seeded showcase events without any keep a demo list.
   const list = (extra: Record<string, unknown>) =>
     executeQuery(attendeeListQuery, { eventId: real.id, ...extra }, data.ctx, ports);
-  const overall = roleCan(data.role, 'attendees:read') ? await list({ limit: 1 }) : { items: [], total: 0 };
+  const overall = can('attendees:read') ? await list({ limit: 1 }) : { items: [], total: 0 };
   const hasReal = overall.total > 0;
   const live = hasReal
     ? await list({
@@ -173,12 +173,13 @@ export default async function AttendeesPage({
   const labelCounts = hasReal
     ? await executeQuery(attendeeLabelsQuery, { eventId: real.id }, data.ctx, ports)
     : [];
-  const canWrite = roleCan(data.role, 'attendees:write');
-  const canExport = roleCan(data.role, 'attendees:export');
+  const canWrite = can('attendees:write');
+  const canExport = can('attendees:export');
   const ticketing = data.modules.has('ticketing');
   const canResend = canWrite && ticketing;
+  // Cancelling refunds the order (order-keyed commands): org roles only.
   const canCancel = roleCan(data.role, 'orders:refund') && ticketing;
-  const canSeat = roleCan(data.role, 'events:write') && data.modules.has('seating');
+  const canSeat = can('events:write') && data.modules.has('seating');
   const canBulk = hasReal && (canWrite || canExport || canCancel || canSeat);
   const ticketTypes =
     hasReal && ticketing

@@ -33,11 +33,24 @@ export {
 } from './commands/impersonation.ts';
 export {
   acceptInvitation,
+  createEventInvitationTx,
+  type EventRoleGranter,
+  eventInvitationsTx,
   inviteMemberCommand,
   lookupInvitation,
+  removeIdleCollaboratorTx,
+  revokeEventInvitationTx,
   revokeInvitationCommand,
 } from './commands/invitations.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
+export {
+  completeOnboardingCommand,
+  markOnboardingStepTx,
+  ONBOARDING_COMPLETED,
+  type Onboarding,
+  OnboardingDto,
+  onboardingQuery,
+} from './commands/onboarding.ts';
 export {
   ORG_STATUS_CHANGED,
   OrgStatusChangeDto,
@@ -54,6 +67,8 @@ export {
   createOrganizationCommand,
   hashSignupCode,
   NewSignupCodeInput,
+  openSignupEnabled,
+  platformFlagTx,
   randomSignupCode,
   SignUpOrganizationInput,
   signUpOrganization,
@@ -87,6 +102,15 @@ export {
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {
+  initialOrgStatus,
+  limitedRefusal,
+  missingOnboardingSteps,
+  type OnboardingStep,
+  REQUIRED_ONBOARDING_STEPS,
+  type SignupMode,
+  signupPath,
+} from './domain/onboarding.ts';
+export {
   isOrgLive,
   nextOrgStatus,
   type OrgStatus,
@@ -97,13 +121,18 @@ export {
 } from './domain/org-status.ts';
 export {
   EVENT_ROLE_PERMISSIONS,
+  EVENT_ROLE_SECTIONS,
   eventRoleCan,
+  eventRolesOpenSection,
+  GRANTABLE_ORG_ROLES,
   type OrgRole,
   PERMISSIONS,
   type Permission,
   ROLE_PERMISSIONS,
   roleCan,
   roleRequiresTwoFactor,
+  TEAM_EVENT_ROLES,
+  type TeamEventRole,
   TWO_FACTOR_ROLES,
 } from './domain/permissions.ts';
 export {
@@ -152,11 +181,13 @@ export {
   DOMAIN_STATUSES,
   LEGAL_PAGE_KINDS,
   type LegalPageKind,
+  ONBOARDING_STEPS,
   ORG_KINDS,
   ORG_ROLES,
   ORG_STATUS_ACTIONS,
   ORG_STATUS_CHANGE_ACTIONS,
   ORG_STATUSES,
+  SIGNUP_MODES,
   SUSPENSION_KINDS,
   TEST_KEY_SCOPES,
 } from './schema.ts';

@@ -36,6 +36,11 @@
       "intro": "{orgName} invited you to join their team as {role}.",
       "cta": "Accept the invitation"
     },
+    "tenancy.event-invitation": {
+      "subject": "You're invited to help with {eventName}",
+      "intro": "{orgName} invited you to {eventName} as {role}. You'll see this event only.",
+      "cta": "Accept the invitation"
+    },
     "ticketing.claim-link": {
       "subject": "A ticket for {eventName} is waiting for you",
       "intro": "Someone passed you a ticket for {eventName}. Claim it to get your own QR code.",
@@ -180,7 +185,10 @@
     "marketing": "marketing",
     "box_office": "box office",
     "scanner": "scanner",
-    "viewer": "viewer"
+    "viewer": "viewer",
+    "co_host": "co-host",
+    "planner": "planner",
+    "collaborator": "event collaborator"
   },
   "account": {
     "deleted": {
@@ -188,5 +196,53 @@
       "intro": "As you asked, your Yayatoh account has been deleted. You've been signed out everywhere, and your sign-in details and two-step verification were removed. Organizers you bought from keep their order records, as the law requires.\n\nIf you didn't ask for this, reply to this email at once."
     },
     "sentBy": "Sent by Yayatoh about your account."
+  },
+  "cutover": {
+    "cta": "Maintenance status",
+    "sentBy": "Sent by Yayatoh about the move to its new platform.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh moves to its new platform on {start}",
+        "intro": "On {start} Yayatoh moves to its new platform. For about 45 minutes, until {end}, your dashboard and ticket sales are paused; check-in at the door keeps working and tickets already sold stay valid.\n\nYour events, orders, payouts and team come with you, and you sign in with the same email and password. There is nothing you need to do: we'll write again two days before and when it's done."
+      },
+      "t2": {
+        "subject": "Reminder: Yayatoh maintenance on {start}",
+        "intro": "A reminder: on {start}, until about {end}, Yayatoh is read-only while we move to the new platform. Please don't plan an on-sale or a ticket push in that window. Check-in at the door keeps working and tickets already sold stay valid."
+      },
+      "freezeStart": {
+        "subject": "Yayatoh maintenance has started",
+        "intro": "Yayatoh is read-only while we move to the new platform, until about {end}. You can still look at your events and scan tickets at the door; saving changes, new sales and refunds are paused. We'll email you when it's done."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh is back on its new platform",
+        "intro": "The move is done and Yayatoh works again. Sign in as usual with the same email and password: your events, orders and payouts are all there, and tickets already sold stay valid. If you use the Yayatoh app, update it from your app store."
+      },
+      "rollback": {
+        "subject": "Yayatoh is back on the previous version",
+        "intro": "We moved Yayatoh back to the previous version while we fix a problem with the new platform. Sales and changes made since {start} have been kept, and tickets stay valid. Sign in as before; we'll tell you the new date for the move."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Your tickets stay valid during our move on {start}",
+        "intro": "On {start} Yayatoh moves to its new platform. For about 45 minutes, until {end}, you can't buy tickets or change orders, but the tickets you have stay valid and are scanned at the door as usual.\n\nAfterwards you sign in with the same email and password. If you use the Yayatoh app, update it once we tell you the move is done."
+      },
+      "t2": {
+        "subject": "Reminder: short Yayatoh maintenance on {start}",
+        "intro": "A reminder: on {start}, until about {end}, you can't buy tickets or change orders on Yayatoh. Your tickets stay valid and work at the door."
+      },
+      "freezeStart": {
+        "subject": "Yayatoh maintenance has started",
+        "intro": "Ticket sales and order changes on Yayatoh are paused until about {end} while we move to the new platform. Your tickets stay valid and are scanned at the door as usual."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh is back",
+        "intro": "The move is done: you can buy tickets and manage your orders again. Your tickets stay valid, and you sign in with the same email and password. If you use the Yayatoh app, update it from your app store."
+      },
+      "rollback": {
+        "subject": "Yayatoh is back on the previous version",
+        "intro": "We moved Yayatoh back to the previous version while we fix a problem. Tickets you bought since {start} stay valid. If we had to refund one of your orders, you'll get a separate email with the amount. Sign in as before."
+      }
+    }
   }
 }

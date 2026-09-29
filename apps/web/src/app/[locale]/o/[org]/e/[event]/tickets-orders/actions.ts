@@ -49,7 +49,7 @@ export async function createTicketTypeAction(
   _prev: TicketFormState,
   form: FormData,
 ): Promise<TicketFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const get = (k: string) => String(form.get(k) ?? '').trim();
   try {
     await executeCommand(
@@ -87,7 +87,7 @@ export async function archiveTicketTypeAction(
   event: string,
   ticketTypeId: string,
 ): Promise<void> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   await executeCommand(archiveTicketTypeCommand, { ticketTypeId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
 }
@@ -98,7 +98,7 @@ export async function createPromoCodeAction(
   _prev: TicketFormState,
   form: FormData,
 ): Promise<TicketFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const get = (k: string) => String(form.get(k) ?? '').trim();
   const kind = get('kind') === 'amount' ? 'amount' : 'percent';
   const value = get('value').replace(',', '.');
@@ -130,7 +130,7 @@ export async function setPromoCodeActiveAction(
   promoCodeId: string,
   active: boolean,
 ): Promise<void> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   await executeCommand(setPromoCodeActiveCommand, { promoCodeId, active }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
 }
@@ -141,7 +141,7 @@ async function editQuestions(
   event: string,
   change: (fields: FieldDefinition[]) => FieldDefinition[] | Record<string, unknown>[],
 ): Promise<TicketFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const subject = { kind: 'checkout_questions', subjectType: 'event', subjectId: ev.id } as const;
   try {
     const current = await executeQuery(getFormQuery, subject, data.ctx, ports);
@@ -247,7 +247,7 @@ export async function boxOfficeSaleAction(
   _prev: BoxOfficeState,
   form: FormData,
 ): Promise<BoxOfficeState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const items = [...form.entries()]
     .filter(([k]) => k.startsWith('qty:'))
     .map(([k, v]) => ({ ticketTypeId: k.slice(4), quantity: Number(v) }))
@@ -298,7 +298,7 @@ export async function setRefundPolicyAction(
   _prev: RefundPolicyFormState,
   form: FormData,
 ): Promise<RefundPolicyFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const kind = String(form.get('kind') ?? 'unset');
   let retainedMinor = 0;
   try {
@@ -339,7 +339,7 @@ export async function setCheckoutVerificationAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   try {
     await executeCommand(
       setCheckoutSettingsCommand,

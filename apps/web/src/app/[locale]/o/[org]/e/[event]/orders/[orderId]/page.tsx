@@ -44,7 +44,7 @@ export default async function OrderPage({
   const { locale, org, event, orderId } = await params;
   setRequestLocale(locale);
   if (!z.uuid().safeParse(orderId).success) notFound();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   if (!roleCan(data.role, 'orders:read')) notFound();
   const t = await getTranslations();
   let order: Awaited<ReturnType<typeof loadOrder>>;

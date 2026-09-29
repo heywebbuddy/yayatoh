@@ -9,24 +9,36 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { payoutAccountQuery } from '@yayatoh/payments';
 import {
-  agreementsQuery,
   legalPagesQuery,
   listInvitationsQuery,
   listMembersQuery,
+  onboardingQuery,
   roleCan,
   suspensionsQuery,
 } from '@yayatoh/tenancy';
 import { sellsPaidTicketsQuery } from '@yayatoh/ticketing';
-import { buttonClass, Card, EmptyState, Label, PageHeader, Skeleton, StatusDot } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  EmptyState,
+  Label,
+  PageHeader,
+  Skeleton,
+  StatusDot,
+} from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type ReactNode, Suspense } from 'react';
+import { MyTeamEvents } from '@/components/my-team-events.tsx';
 import { OrgSales } from '@/components/org-sales.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { eventPhase, greetingKey } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { resolvePeriod } from '@/lib/period.ts';
-import { loadConsole } from '@/server/console.ts';
+import { loadConsole, loadConsoleBase } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { completeOnboardingAction } from './onboarding-actions.ts';
 
 const STATUS_DOT = {
   draft: 'neutral',
@@ -49,12 +61,16 @@ export default async function OrgHome({
     series?: string;
     category?: string;
     tag?: string;
+    /** M3.11a: the outcome of "Finish setup". */
+    onboarding?: string;
   }>;
 }) {
   const { locale, org } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const data = await loadConsole(org);
+  const data = await loadConsoleBase(org);
+  // M4.2a: someone invited to specific events lands on a console listing just those events.
+  if (data.role === 'collaborator') return <MyTeamEvents data={data} org={org} locale={locale} />;
   const t = await getTranslations();
   const firstName = data.session.name.split(' ')[0] ?? data.session.name;
   const canWrite = roleCan(data.role, 'events:write');
@@ -82,7 +98,7 @@ export default async function OrgHome({
           <p className="text-caption">{t('suspensions.contact')}</p>
         </div>
       ) : null}
-      {roleCan(data.role, 'org:update') ? <SetupChecklist org={org} /> : null}
+      {roleCan(data.role, 'org:update') ? <SetupChecklist org={org} outcome={sp.onboarding ?? null} /> : null}
       {data.modules.has('reports') && roleCan(data.role, 'orders:read') ? (
         <OrgSales
           data={data}
@@ -294,14 +310,17 @@ async function EventList({
 }
 
 /**
- * Setup checklist (M1.3): what an organizer still needs before selling. Hidden once everything is
- * done. Payouts join the list once the org sells paid tickets.
+ * Setup checklist (M1.3; onboarding M3.11a): what an organizer still needs before selling, each
+ * item linking to where it is done. Progress persists: a step once done stays done (recorded by
+ * the command that did it), whatever changes later; the terms follow the current version.
+ * Payouts join the list once the org sells paid tickets. A self-serve org in setup mode
+ * (`limited`) also sees the required steps and "Finish setup". Hidden once everything is done.
  */
-async function SetupChecklist({ org }: { org: string }) {
+async function SetupChecklist({ org, outcome }: { org: string; outcome: string | null }) {
   const data = await loadConsole(org);
   const t = await getTranslations('setup');
-  const [agreements, legal, events, members, invitations, sells, payouts] = await Promise.all([
-    executeQuery(agreementsQuery, {}, data.ctx, ports),
+  const [onboarding, legal, events, members, invitations, sells, payouts] = await Promise.all([
+    executeQuery(onboardingQuery, {}, data.ctx, ports),
     executeQuery(legalPagesQuery, {}, data.ctx, ports),
     executeQuery(listEventsQuery, {}, data.ctx, ports),
     executeQuery(listMembersQuery, {}, data.ctx, ports),
@@ -311,25 +330,86 @@ async function SetupChecklist({ org }: { org: string }) {
       : { paid: false },
     executeQuery(payoutAccountQuery, {}, data.ctx, ports),
   ]);
+  const step = onboarding.steps;
+  const settings = `/o/${org}/settings`;
   const items = [
-    { key: 'terms', done: agreements.every((a) => a.acceptedAt !== null), href: `/o/${org}/settings` },
+    { key: 'terms', done: onboarding.termsCurrent, href: `${settings}#agreements-heading` },
     {
       key: 'legal',
       done: ['privacy', 'refund'].every((k) => legal.some((p) => p.kind === k)),
-      href: `/o/${org}/settings`,
+      href: `${settings}#legal-heading`,
     },
-    { key: 'brand', done: data.org.brandColor !== null, href: `/o/${org}/settings` },
-    { key: 'event', done: events.length > 0, href: `/o/${org}/events/new/guided` },
-    { key: 'team', done: members.length > 1 || invitations.length > 0, href: `/o/${org}/team` },
-    ...(sells.paid ? [{ key: 'payouts', done: payouts.state === 'active', href: `/o/${org}/payouts` }] : []),
+    {
+      key: 'brand',
+      done: step.brand !== null || data.org.brandColor !== null,
+      href: `${settings}#brand-heading`,
+    },
+    { key: 'event', done: step.event !== null || events.length > 0, href: `/o/${org}/events/new/guided` },
+    {
+      key: 'team',
+      done: step.team !== null || members.length > 1 || invitations.length > 0,
+      href: `/o/${org}/team`,
+    },
+    ...(sells.paid
+      ? [
+          {
+            key: 'payouts',
+            done: step.payouts !== null || payouts.state === 'active',
+            href: `/o/${org}/payouts`,
+          },
+        ]
+      : []),
   ];
+  const setupMode = onboarding.tracked && onboarding.status === 'limited' && !onboarding.completedAt;
   const doneCount = items.filter((i) => i.done).length;
-  if (doneCount === items.length) return null;
+  const notice =
+    outcome === 'done' && !setupMode ? (
+      <Alert tone="info" title={t('finished')} />
+    ) : outcome === 'incomplete' || outcome === 'failed' ? (
+      <Alert title={t(outcome === 'incomplete' ? 'incomplete' : 'finishFailed')} />
+    ) : null;
+  if (doneCount === items.length && !setupMode) return notice ? <div aria-live="polite">{notice}</div> : null;
+  const requiredHref: Record<string, string> = {
+    terms: `${settings}#agreements-heading`,
+    privacy: `${settings}#legal-privacy`,
+    event: `/o/${org}/events/new/guided`,
+  };
   return (
     <section aria-labelledby="setup-heading" className="flex flex-col gap-3">
       <h2 id="setup-heading" className="text-section">
         {t('title', { done: doneCount, total: items.length })}
       </h2>
+      <div aria-live="polite">{notice}</div>
+      {setupMode ? (
+        <Card className="flex flex-col gap-3">
+          <h3 className="text-body font-semibold">{t('setupMode')}</h3>
+          <p className="text-body text-zinc-600">{t('setupModeBody')}</p>
+          <ul aria-label={t('requiredList')} className="flex list-none flex-col gap-1 p-0">
+            {onboarding.required.map((k) => {
+              const done = !onboarding.missing.includes(k);
+              return (
+                <li key={k} className="flex min-h-11 items-center gap-3">
+                  <StatusDot status={done ? 'success' : 'neutral'} label={done ? t('done') : t('todo')} />
+                  {done ? (
+                    <span className="text-zinc-500 line-through">{t(`required.${k}`)}</span>
+                  ) : (
+                    <Link href={requiredHref[k] ?? settings} className="underline underline-offset-2">
+                      {t(`required.${k}`)}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          {onboarding.missing.length === 0 ? (
+            <form action={completeOnboardingAction.bind(null, org)}>
+              <Button type="submit">{t('finish')}</Button>
+            </form>
+          ) : (
+            <p className="text-caption text-zinc-600">{t('finishLater')}</p>
+          )}
+        </Card>
+      ) : null}
       <Card className="flex flex-col">
         <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
           {items.map((i) => (

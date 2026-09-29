@@ -13,6 +13,7 @@ describe('mail to an erased address (M1.14e)', () => {
     expect(cls('seating.finder-code')).toBe('order');
     expect(cls('messaging.reply')).toBe('order');
     expect(cls('tenancy.invitation')).toBe('account');
+    expect(cls('tenancy.event-invitation')).toBe('account');
     expect(cls('sales.order_paid')).toBe('account');
     expect(cls('payments.destination-changed')).toBe('account');
     expect(cls('events.reminder')).toBe('org');

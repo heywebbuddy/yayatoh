@@ -10,7 +10,8 @@ let humanCheck: HumanCheck | null | undefined;
  * (`HUMAN_CHECK_PROVIDER=turnstile`, owner account), otherwise the fake checkbox in dev, preview
  * and CI. Production without Turnstile has no challenge (null): the rate limits still apply.
  * Used by the seat finder (M1.7e), sign-in after failed attempts, emailed sign-in codes (which
- * create accounts), password resets and the venue quote form (M1.2f). Verified server-side.
+ * create accounts), password resets, the venue quote form (M1.2f) and open signup (M3.11a).
+ * Verified server-side.
  */
 export function getHumanCheck(): HumanCheck | null {
   if (humanCheck !== undefined) return humanCheck;

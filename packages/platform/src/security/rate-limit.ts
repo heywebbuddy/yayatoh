@@ -278,6 +278,20 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 30, windowMs: 10 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** "Was this helpful?" answers on help articles (M3.11b; one answer per browser per article is
+   * kept, this caps the writes). */
+  helpFeedback: {
+    device: { limit: 20, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
+  /** Contact / sales requests from the marketing site (M3.11b); identity = the sender's email. */
+  contactRequest: {
+    device: { limit: 3, windowMs: 10 * MIN },
+    anonymousIp: { limit: 10, windowMs: 10 * MIN },
+    identity: { limit: 3, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
   /** Webhook calls that fail signature verification (valid deliveries are never limited). */
   webhookAbuse: {
     device: { limit: 30, windowMs: 10 * MIN },
@@ -298,6 +312,14 @@ export const RATE_LIMIT_POLICIES = {
     device: { limit: 30, windowMs: 10 * MIN },
     anonymousIp: { limit: 60, windowMs: 10 * MIN },
     ipCeiling: { limit: 600, windowMs: 10 * MIN },
+  },
+  /** Self-serve organization signup (M3.11a): each attempt may create an org; identity = the
+   * account, so one person can't mass-create orgs from many devices. */
+  openSignup: {
+    device: { limit: 5, windowMs: 60 * MIN },
+    anonymousIp: { limit: 5, windowMs: 60 * MIN },
+    identity: { limit: 3, windowMs: 24 * 60 * MIN },
+    ipCeiling: { limit: 20, windowMs: 60 * MIN },
   },
   /** CSP violation reports. */
   cspReport: {

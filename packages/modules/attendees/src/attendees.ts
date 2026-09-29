@@ -125,6 +125,7 @@ export async function attendeesByIdsTx(tx: TenantTx, ids: readonly string[]) {
       status: attendees.status,
       ticketId: attendees.ticketId,
       name: attendees.name,
+      contactId: attendees.contactId,
     })
     .from(attendees)
     .where(inArray(attendees.id, [...ids]));

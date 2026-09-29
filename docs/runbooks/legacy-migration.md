@@ -196,7 +196,9 @@ select * from payments.legacy_settlements where kind = 'opening_balance' order b
 ## 5. Rollback
 
 Before go-live, a failed or unwanted rehearsal is undone by restoring the database snapshot taken
-before the run (rehearsal databases are disposable). The migration never deletes or edits rows it did
+before the run (rehearsal databases are disposable). After go-live and before the point of no
+return, the reverse ETL copies the new platform's writes back (`pnpm migrate:legacy:reverse`,
+M2.5a): see [cutover.md](cutover.md) §5. The migration never deletes or edits rows it did
 not create, and it never overwrites a password set on the new platform.
 
 ## 6. Synthetic data (development and CI)

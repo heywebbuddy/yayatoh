@@ -14,6 +14,8 @@ import { ports } from '@/server/ports.ts';
 export interface ActionState {
   readonly ok: boolean;
   readonly code: string | null;
+  /** M4.2a: `pending_invitation` when the address already has one pending in this org. */
+  readonly reason?: string;
 }
 
 /** Server Actions share the command pipeline with /v1: authz, audit and outbox happen in the command. */

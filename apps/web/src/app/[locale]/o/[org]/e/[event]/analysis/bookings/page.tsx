@@ -2,7 +2,6 @@ import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { BOOKING_FILTERS, type BookingFilter, bookingSearchQuery } from '@yayatoh/orders';
 import type { BulkOperationDto } from '@yayatoh/platform';
 import { bookingsExportBulk } from '@yayatoh/reports';
-import { roleCan } from '@yayatoh/tenancy';
 import { Button, buttonClass, EmptyState, Input, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
@@ -33,10 +32,10 @@ export default async function BookingsPage({
   const { locale, org, event } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'analysis');
   const t = await getTranslations();
   const base = `/o/${org}/e/${event}/analysis`;
-  if (!roleCan(data.role, 'orders:read') || !data.modules.has('ticketing')) {
+  if (!can('orders:read') || !data.modules.has('ticketing')) {
     return (
       <>
         <PageHeader title={t('reports.tabs.bookings')} description={ev.name} />
@@ -60,7 +59,7 @@ export default async function BookingsPage({
     timeStyle: 'short',
   });
   const n = (v: number) => formatNumber(v, locale);
-  const canExport = roleCan(data.role, 'attendees:export') && data.modules.has('reports');
+  const canExport = can('attendees:export') && data.modules.has('reports');
   // The export the page was sent back to (progress, then the download).
   let op: BulkOperationDto | null = null;
   if (canExport && sp.op && /^[0-9a-f-]{36}$/.test(sp.op)) {
@@ -77,7 +76,7 @@ export default async function BookingsPage({
   return (
     <>
       <PageHeader title={t('reports.tabs.bookings')} description={ev.name} />
-      <ReportTabs base={base} current="bookings" finance={roleCan(data.role, 'finance:read')} />
+      <ReportTabs base={base} current="bookings" finance={can('finance:read')} />
       <form method="get" className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="flex-1">
           <Input

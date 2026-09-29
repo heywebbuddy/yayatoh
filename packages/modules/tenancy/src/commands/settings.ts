@@ -12,6 +12,7 @@ import {
   legalPages,
   organizations,
 } from '../schema.ts';
+import { markOnboardingStepTx } from './onboarding.ts';
 import { activeSuspensionsTx } from './suspensions.ts';
 
 export const LegalPageDto = z.object({
@@ -49,6 +50,7 @@ export const setLegalPageCommand = tenantCommand({
           updatedAt: ctx.now,
         },
       });
+    if (input.kind === 'privacy') await markOnboardingStepTx(tx, 'privacy', ctx.now);
     return { kind: input.kind, removed: false };
   },
   audit: (input) => ({ action: 'legal_page.set', targetType: 'legal_page', targetId: input.kind }),
@@ -182,6 +184,7 @@ export const acceptAgreementCommand = tenantCommand({
         acceptedAt: ctx.now,
       })
       .onConflictDoNothing();
+    if (input.document === 'platform_tos') await markOnboardingStepTx(tx, 'terms', ctx.now);
     return { accepted: true };
   },
   audit: (input) => ({

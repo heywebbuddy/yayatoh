@@ -1,0 +1,34 @@
+{
+  "name": "@yayatoh/cutover",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "cutover": "./cli.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/legacy-migrate": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

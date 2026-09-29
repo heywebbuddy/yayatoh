@@ -16,6 +16,11 @@ export const ERROR_STATUS = {
   idempotency_key_reused: 422,
   rate_limited: 429,
   internal: 500,
+  /**
+   * The platform (or this org) is in read-only freeze during a cutover or rollback (M2.5a): every
+   * write is refused until it ends; reads, offline check-in scans and public pages keep working.
+   */
+  read_only_freeze: 503,
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_STATUS;

@@ -14,6 +14,7 @@ const TITLES: Record<ErrorCode, string> = {
   idempotency_key_reused: 'Idempotency key reused',
   rate_limited: 'Too many requests',
   internal: 'Internal error',
+  read_only_freeze: 'Read-only maintenance',
 };
 
 export interface Problem {
@@ -46,6 +47,17 @@ export function problemFor(err: unknown): Problem {
 export function problemResponse(p: Problem): Response {
   return new Response(JSON.stringify(p), {
     status: p.status,
-    headers: { 'content-type': 'application/problem+json', 'cache-control': 'no-store' },
+    headers: {
+      'content-type': 'application/problem+json',
+      'cache-control': 'no-store',
+      ...problemHeaders(p),
+    },
   });
+}
+
+/** Extra headers a problem carries: `Retry-After` on a read-only freeze (M2.5a, roadmap §7.8). */
+export function problemHeaders(p: Problem): Record<string, string> {
+  if (p.code !== 'read_only_freeze') return {};
+  const s = Number(p.details?.retryAfterSeconds);
+  return { 'retry-after': String(Number.isFinite(s) && s > 0 ? Math.ceil(s) : 300) };
 }

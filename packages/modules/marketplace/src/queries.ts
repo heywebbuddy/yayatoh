@@ -3,7 +3,7 @@ import { checkoutTarget } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import { organizationPublicTx, resolveOrgSlug } from '@yayatoh/tenancy';
 import { asc, count, gt, sql } from 'drizzle-orm';
-import { type RedirectRule, redirectLocation } from './domain/redirects.ts';
+import { followRedirectChain, type RedirectRule } from './domain/redirects.ts';
 import { dayRange, escapeLike, PAGE_SIZE, pageCount, type SearchParams } from './domain/search.ts';
 import {
   type ListingDto,
@@ -167,25 +167,30 @@ export async function publicOrganizer(slug: string): Promise<PublicOrganizer | n
   return found ? publicOrganizerById(found.orgId) : null;
 }
 
-/**
- * The legacy redirect for a request (roadmap §7.7), through the SECURITY DEFINER
- * `marketplace.match_redirect`, which also counts the hit. A rule for the exact host wins over
- * a `*` rule. Returns the Location and status, or null.
- */
-export async function matchLegacyRedirect(
-  host: string,
-  pathWithQuery: string,
-): Promise<{ location: string; status: number } | null> {
-  const path = pathWithQuery.split('?')[0] ?? '/';
+async function matchOne(host: string, path: string): Promise<RedirectRule | null> {
   const rows = await withoutTenant((tx) =>
     tx.execute<{ source: string; match: 'exact' | 'prefix'; target: string; status: number }>(
       sql`select source, match, target, status from marketplace.match_redirect(${host.toLowerCase()}, ${path})`,
     ),
   );
   const r = rows[0];
-  if (!r) return null;
-  const rule: RedirectRule = { source: r.source, match: r.match, target: r.target, status: Number(r.status) };
-  return { location: redirectLocation(rule, pathWithQuery), status: rule.status };
+  return r ? { source: r.source, match: r.match, target: r.target, status: Number(r.status) } : null;
+}
+
+/**
+ * The legacy redirect for a request (roadmap §7.7), through the SECURITY DEFINER
+ * `marketplace.match_redirect`, which also counts the hit. A rule for the exact host wins over
+ * a `*` rule. Returns the Location and status, or null.
+ *
+ * Never a chain (M2.4a): when the target is itself a legacy URL on the same host (rules written
+ * at different times, `/organiser/x` → `/x` → `/o/x`), the chain is followed here and the client
+ * gets one redirect straight to the final URL, with the first rule's status. A loop answers null.
+ */
+export async function matchLegacyRedirect(
+  host: string,
+  pathWithQuery: string,
+): Promise<{ location: string; status: number } | null> {
+  return followRedirectChain((path) => matchOne(host, path), pathWithQuery);
 }
 
 /**

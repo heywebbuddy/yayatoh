@@ -20,7 +20,7 @@ export async function exportBookingsAction(
   form: FormData,
 ): Promise<{ code: string } | undefined> {
   const locale = await getLocale();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'analysis');
   const q = String(form.get('q') ?? '')
     .trim()
     .slice(0, 200);

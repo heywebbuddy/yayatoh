@@ -1,7 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventSeatingQuery, listLayoutsQuery } from '@yayatoh/seating';
-import { roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -41,17 +40,17 @@ export default async function SeatingPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'seating')) notFound();
   const t = await getTranslations('seating');
-  const canWrite = roleCan(data.role, 'events:write');
+  const canWrite = can('seating:write');
   // Per-date charts (M1.7g): `?date=` shows the chart that date uses.
   const { dates, date } = await seatingDates(data, ev.id, sp.date);
   const dateId = date?.id ?? null;
   const [seating, layouts, types] = await Promise.all([
     executeQuery(eventSeatingQuery, { eventId: ev.id, occurrenceId: dateId }, data.ctx, ports),
-    executeQuery(listLayoutsQuery, {}, data.ctx, ports),
+    executeQuery(listLayoutsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
   const labelled = (id: string, label: string, control: React.ReactNode) => (

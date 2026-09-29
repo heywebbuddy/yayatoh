@@ -32,7 +32,7 @@ export async function evidenceAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   const included = new Set(form.getAll('include').map(String));
   const input = {
     disputeId,

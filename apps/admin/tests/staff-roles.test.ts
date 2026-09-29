@@ -9,6 +9,12 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('support', 'impersonate')).toBe(false);
   });
 
+  it('only admins see or flip the open-signup switch (the launch decision, M3.11a)', () => {
+    expect(staffCan('admin', 'openSignup')).toBe(true);
+    expect(staffCan('support', 'openSignup')).toBe(false);
+    expect(staffCan('finance', 'openSignup')).toBe(false);
+  });
+
   it('admins and support hand out signup codes; finance does not', () => {
     expect(staffCan('admin', 'signupCodes')).toBe(true);
     expect(staffCan('support', 'signupCodes')).toBe(true);
@@ -21,5 +27,18 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('finance', 'payouts')).toBe(true);
     expect(staffCan('finance', 'fees')).toBe(true);
     expect(staffCan('support', 'entitlements')).toBe(false);
+  });
+
+  it('M3.11b: admins and support post status-page incidents; finance does not', () => {
+    expect(staffCan('admin', 'incidents')).toBe(true);
+    expect(staffCan('support', 'incidents')).toBe(true);
+    expect(staffCan('finance', 'incidents')).toBe(false);
+  });
+
+  it('only admins move routes between legacy and the new app (M2.4a)', () => {
+    expect(staffCan('admin', 'frontDoor')).toBe(true);
+    expect(staffCan('support', 'frontDoor')).toBe(false);
+    expect(staffCan('finance', 'frontDoor')).toBe(false);
+    expect(staffCan('finance', 'view')).toBe(true);
   });
 });

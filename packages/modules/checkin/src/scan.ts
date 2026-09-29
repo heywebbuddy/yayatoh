@@ -72,6 +72,8 @@ const summary = (t: ScannableTicket | null) =>
 
 export const scanTicketCommand = tenantCommand({
   name: 'checkin.scanTicket',
+  // Doors stay open during a read-only freeze (M2.5a): scans are never refused by it.
+  duringFreeze: 'allowed',
   input: z.object({
     eventId: z.uuid(),
     code: z.string().trim().min(1).max(400),
@@ -242,6 +244,8 @@ export const scanTicketCommand = tenantCommand({
 
 export const undoAdmissionCommand = tenantCommand({
   name: 'checkin.undoAdmission',
+  // Doors stay open during a read-only freeze (M2.5a): scans are never refused by it.
+  duringFreeze: 'allowed',
   // The event scopes the permission (event door staff) and must own the admission.
   input: z.object({ eventId: z.uuid(), admissionId: z.uuid() }),
   output: z.object({ undone: z.boolean() }),

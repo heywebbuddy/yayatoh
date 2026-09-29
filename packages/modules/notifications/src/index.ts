@@ -209,6 +209,15 @@ export {
   PUSH_PLATFORMS,
 } from './schema.ts';
 export {
+  CUTOVER_AUDIENCES,
+  CUTOVER_MOMENTS,
+  type CutoverAudience,
+  type CutoverMoment,
+  type CutoverNoticeInput,
+  renderCutoverNotice,
+  renderCutoverSet,
+} from './templates/cutover.ts';
+export {
   EMAIL_MESSAGES,
   emailLocale,
   type OrgBrand,

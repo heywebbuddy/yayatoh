@@ -26,6 +26,7 @@ export const ORG_ROLES = [
   'box_office',
   'scanner',
   'viewer',
+  'collaborator',
 ] as const;
 
 const inList = (col: string, values: readonly string[]) =>
@@ -102,6 +103,13 @@ export const invitations = tenantTable(
     acceptedAt: timestamp('accepted_at', { withTimezone: true }),
     acceptedBy: uuid('accepted_by'),
     revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    /**
+     * M4.2a: an event invitation (co-host or planner of one event). The invitee joins the org as
+     * `collaborator` unless already a member, and gets `event_role` on that event. The composite
+     * FK to events.events is hand-written in the migration (tier 1 can't import tier 2).
+     */
+    eventId: uuid('event_id'),
+    eventRole: text('event_role'),
   },
   (t) => [
     uniqueIndex('invitations_org_email_pending_key')
@@ -114,6 +122,11 @@ export const invitations = tenantTable(
     }).onDelete('cascade'),
     check('invitations_role_check', inList('role', ORG_ROLES)),
     check('invitations_email_lower_check', sql`email = lower(email)`),
+    check(
+      'invitations_event_role_check',
+      sql`(event_id is null and event_role is null) or (event_id is not null and event_role in ('co_host', 'planner'))`,
+    ),
+    index('invitations_org_event_idx').on(t.orgId, t.eventId),
   ],
 );
 
@@ -373,6 +386,42 @@ export const orgRelationships = tenantTable(
     foreignKey({
       name: 'org_relationships_child_fk',
       columns: [t.childOrgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** How an org was created (M3.11a): an invite code, open self-serve signup, or directly (staff, tools). */
+export const SIGNUP_MODES = ['code', 'open', 'direct'] as const;
+export const ONBOARDING_STEPS = ['terms', 'privacy', 'brand', 'event', 'payouts', 'team'] as const;
+
+/**
+ * Onboarding progress (M3.11a), one row per org created from this increment on. Each step keeps
+ * the moment it was first done, set in the transaction of the command that does it (so progress
+ * persists even if, say, the teammate later leaves). Open-signup orgs start `limited` and leave
+ * it through `tenancy.completeOnboarding` once the required steps are done (`completed_at`).
+ */
+export const orgOnboarding = tenantTable(
+  tenancy,
+  'org_onboarding',
+  {
+    signupMode: text('signup_mode').notNull(),
+    termsAt: timestamp('terms_at', { withTimezone: true }),
+    privacyAt: timestamp('privacy_at', { withTimezone: true }),
+    brandAt: timestamp('brand_at', { withTimezone: true }),
+    eventAt: timestamp('event_at', { withTimezone: true }),
+    payoutsAt: timestamp('payouts_at', { withTimezone: true }),
+    teamAt: timestamp('team_at', { withTimezone: true }),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+    completedBy: text('completed_by'),
+  },
+  (t) => [
+    uniqueIndex('org_onboarding_org_key').on(t.orgId),
+    check('org_onboarding_signup_mode_check', inList('signup_mode', SIGNUP_MODES)),
+    check('org_onboarding_completed_check', sql`(completed_at is null) = (completed_by is null)`),
+    foreignKey({
+      name: 'org_onboarding_org_fk',
+      columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
   ],

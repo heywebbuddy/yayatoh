@@ -1,6 +1,5 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { listSurveysQuery, surveyTargetsQuery } from '@yayatoh/surveys';
-import { roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -24,14 +23,14 @@ export default async function SurveysPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
-  if (!data.modules.has('messaging') || !roleCan(data.role, 'messages:read')) notFound();
+  const { data, event: ev, can } = await loadEvent(org, event, 'marketing');
+  if (!data.modules.has('messaging') || !can('messages:read')) notFound();
   const t = await getTranslations('surveys');
   const [list, targets] = await Promise.all([
     executeQuery(listSurveysQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(surveyTargetsQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
-  const canSend = roleCan(data.role, 'messages:send');
+  const canSend = can('messages:send');
   const base = `/o/${org}/e/${event}/marketing/surveys`;
   const open = targets.sessions.filter((s) => s.surveyId === null);
   return (

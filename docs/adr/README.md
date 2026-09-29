@@ -26,3 +26,4 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0017](0017-pdf-engine.md) | PDF engine: Gotenberg (Chromium) behind `packages/pdf` (spike done) | §3.1 |
 | [0018](0018-design-system-superpower-style.md) | Design system: Superpower style | §3.1 |
 | [0019](0019-typescript-6-until-tooling-supports-7.md) | TypeScript 6.0 until tooling supports 7 | §3.1 |
+| [0020](0020-coexistence-front-door.md) | Coexistence front door: proxy.ts decides and forwards with `fetch`; Cloudflare Worker only as fallback (proposed, M2.4a) | §7.4 |

@@ -533,6 +533,48 @@
       "when": 1790650165047,
       "tag": "0075_ancient_dazzler",
       "breakpoints": true
+    },
+    {
+      "idx": 76,
+      "version": "7",
+      "when": 1790697842567,
+      "tag": "0076_slimy_gunslinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "7",
+      "when": 1790698348863,
+      "tag": "0077_blue_wolfsbane",
+      "breakpoints": true
+    },
+    {
+      "idx": 78,
+      "version": "7",
+      "when": 1790698776465,
+      "tag": "0078_first_lord_tyger",
+      "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "7",
+      "when": 1790699264294,
+      "tag": "0079_pale_molten_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 80,
+      "version": "7",
+      "when": 1790701254987,
+      "tag": "0080_ambiguous_wrecking_crew",
+      "breakpoints": true
+    },
+    {
+      "idx": 81,
+      "version": "7",
+      "when": 1790701945495,
+      "tag": "0081_early_emma_frost",
+      "breakpoints": true
     }
   ]
 }

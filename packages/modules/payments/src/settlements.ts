@@ -326,6 +326,9 @@ export async function eventTransferTx(tx: TenantTx, eventId: string): Promise<st
  */
 export const recordTransferReversalCommand = tenantCommand({
   name: 'payments.recordTransferReversal',
+  // Records what the provider already did (a refund or reversal in flight when a read-only
+  // freeze started, M2.5a): refusing it would leave the money moved and the order pending.
+  duringFreeze: 'allowed',
   category: 'money',
   input: z.object({
     refundId: z.uuid(),

@@ -59,7 +59,7 @@ export default async function OnsitePage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'onsite');
   // Same gate as other sections: only when the profile's nav shows it and the org is entitled.
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'onsite')) notFound();
@@ -78,7 +78,7 @@ export default async function OnsitePage({
   const status = await executeQuery(checkinStatusQuery, { eventId: ev.id }, data.ctx, ports);
   const devices = manageDevices ? await executeQuery(listDevicesQuery, {}, data.ctx, ports) : [];
   // Setting up the venue is event management; picking where you stand is for every scanner.
-  const manageCheckpoints = roleCan(data.role, 'events:write');
+  const manageCheckpoints = can('events:write');
   const checkpoints = await executeQuery(
     listCheckpointsQuery,
     { eventId: ev.id, includeArchived: manageCheckpoints },

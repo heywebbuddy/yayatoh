@@ -12,7 +12,7 @@ export default async function EventMediaPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'media');
   const t = await getTranslations('eventMedia');
   const [cover, gallery] = await Promise.all([
     mediaPanel(data, 'event', ev.id, 'cover'),

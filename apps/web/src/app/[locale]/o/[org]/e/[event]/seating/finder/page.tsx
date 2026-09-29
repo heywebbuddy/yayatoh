@@ -1,7 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { finderSettingsQuery } from '@yayatoh/seating';
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -23,7 +22,7 @@ export default async function SeatFinderSettingsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (
     !composeNav(profile, data.modules).some((i) => i.path === 'seating') ||
@@ -33,7 +32,7 @@ export default async function SeatFinderSettingsPage({
   const t = await getTranslations('seating');
   const base = `/o/${org}/e/${event}/seating`;
   const settings = await executeQuery(finderSettingsQuery, { eventId: ev.id }, data.ctx, ports);
-  const canWrite = roleCan(data.role, 'events:write');
+  const canWrite = can('seating:write');
   const origin = (process.env.BETTER_AUTH_URL ?? 'http://localhost:3000').replace(/\/$/, '');
   const publicPath = `/events/${ev.slug}/seat-finder`;
   return (
@@ -136,7 +135,7 @@ export default async function SeatFinderSettingsPage({
                 <Link href={`${publicPath}/poster`} className={buttonClass('primary', 'sm')}>
                   {t('finder.poster')}
                 </Link>
-                {roleCan(data.role, 'attendees:read') ? (
+                {can('attendees:read') ? (
                   <Link href={`/o/${org}/seat-poster/${event}`} className={buttonClass('secondary', 'sm')}>
                     {t('finder.namePoster')}
                   </Link>

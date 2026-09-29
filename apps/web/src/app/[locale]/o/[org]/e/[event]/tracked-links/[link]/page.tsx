@@ -27,7 +27,7 @@ export default async function TrackedLinkPage({
 }) {
   const { locale, org, event, link } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'trackedLinks');
   if (!data.modules.has('marketing') || !roleCan(data.role, 'marketing:read') || !UUID.test(link)) notFound();
   const t = await getTranslations('trackedLinks');
   const tr = await getTranslations();

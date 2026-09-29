@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "团队邀请",
+        "event-invitation": "活动团队邀请",
         "staff-access": "工作人员访问",
         "org-status": "组织状态"
       },
@@ -267,7 +268,10 @@
     "trackedLinks": "追踪链接",
     "messagingHealth": "消息发送限制",
     "audiences": "受众",
-    "refundRequests": "退款申请"
+    "refundRequests": "退款申请",
+    "helpCenter": "帮助中心",
+    "marketingSite": "营销网站",
+    "tablesSponsors": "桌位与赞助商"
   },
   "vocab": {
     "attendee": "参会者",
@@ -281,7 +285,11 @@
     "registration": "报名",
     "rsvp": "回复确认",
     "ticket": "门票",
-    "tickets": "门票"
+    "tickets": "门票",
+    "organizer": "主办方",
+    "organizers": "主办方",
+    "host": "主人",
+    "hosts": "主人"
   },
   "roles": {
     "owner": "所有者",
@@ -291,7 +299,8 @@
     "marketing": "营销",
     "box_office": "售票处",
     "scanner": "检票员",
-    "viewer": "只读"
+    "viewer": "只读",
+    "collaborator": "活动协作者"
   },
   "profiles": {
     "wedding": "婚礼",
@@ -352,7 +361,8 @@
     "ownerOnly": "只有所有者可以更改所有者",
     "errors": {
       "last_owner": "组织至少需要一名所有者。",
-      "owner_only": "只有所有者才能将他人设为所有者或更改所有者。"
+      "owner_only": "只有所有者才能将他人设为所有者或更改所有者。",
+      "pending_invitation": "此地址已有一份待处理的邀请。请先撤回，或等待对方接受。"
     }
   },
   "dashboard": {
@@ -431,7 +441,13 @@
     "datesUpcoming": "有即将到来的日期",
     "ticketsCreated": "已创建门票",
     "agendaAdded": "已添加日程",
-    "speakersAdded": "已添加演讲嘉宾"
+    "speakersAdded": "已添加演讲嘉宾",
+    "comingSoon": "即将推出",
+    "guestsAdded": "已添加宾客名单",
+    "rsvpDeadlineSet": "已设置回复截止日期",
+    "floorPlanChosen": "已选择平面图",
+    "guestSitePublished": "已发布宾客网站",
+    "tablesSponsors": "已设置桌位和赞助商"
   },
   "segments": {
     "all": "全部",
@@ -608,7 +624,8 @@
     "internal": "我们这边出了点问题。",
     "reference": "参考编号：{id}",
     "rateLimitedRetry": "尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
-    "impersonation_blocked": "以成员身份操作的工作人员无法执行此操作：退款、付款、导出、删除和身份确认均已关闭。"
+    "impersonation_blocked": "以成员身份操作的工作人员无法执行此操作：退款、付款、导出、删除和身份确认均已关闭。",
+    "read_only_freeze": "计划维护期间更改已暂停。未保存任何内容；请在维护结束后重试。"
   },
   "notFound": {
     "title": "页面未找到",
@@ -697,7 +714,9 @@
       "revoked": "此邀请已被撤回。",
       "expired": "此邀请已过期，请申请新的邀请。",
       "unavailable": "该组织目前不可用。"
-    }
+    },
+    "eventTitle": "协助 {event}",
+    "joinEvent": "您将以{role}身份加入 {event}（{org}）。您只会看到这个活动。"
   },
   "eventStatus": {
     "draft": "草稿",
@@ -1384,7 +1403,20 @@
       "event": "创建你的第一个活动",
       "team": "邀请团队成员",
       "payouts": "设置收款"
-    }
+    },
+    "finished": "设置完成。您的组织已完全启用。",
+    "incomplete": "请先完成必需的步骤。",
+    "finishFailed": "无法完成设置。请重试。",
+    "setupMode": "您的组织处于设置模式",
+    "setupModeBody": "您现在就可以创建活动和售票。完成这些步骤后，即可向嘉宾群发消息（电子邮件、公告、调查）。",
+    "requiredList": "必需的步骤",
+    "required": {
+      "terms": "接受服务条款",
+      "privacy": "发布隐私声明",
+      "event": "创建您的第一个活动"
+    },
+    "finish": "完成设置",
+    "finishLater": "完成必需的步骤即可解锁嘉宾消息。"
   },
   "signup": {
     "eyebrow": "开始使用",
@@ -1411,7 +1443,17 @@
       "other": "从简单开始，按需开启功能。"
     },
     "terms": "我代表本组织同意<tos>服务条款</tos>和<dpa>数据处理附录</dpa>。",
-    "submit": "创建组织"
+    "submit": "创建组织",
+    "openDescription": "几分钟内创建您的主办方账户和组织。",
+    "comingSoon": "自助注册即将开放",
+    "comingSoonBody": "我们正在准备向所有主办方开放 Yayatoh。在此之前，新组织需通过邀请加入。",
+    "joinWaitlist": "加入等候名单",
+    "useCode": "使用此代码",
+    "seePricing": "查看价格和费用",
+    "openNote": "您的组织将以设置模式开始：接受条款、发布隐私声明并创建第一个活动后，即可向嘉宾发送消息。<pricing>查看价格和费用</pricing>。",
+    "closedNow": "目前仅限受邀注册。请输入您的注册代码。",
+    "verifyEmail": "请先确认您的电子邮件地址。",
+    "humanCheck": "请确认您是真人。"
   },
   "payouts": {
     "title": "收款",
@@ -3252,7 +3294,9 @@
       "eyebrow": "Yayatoh",
       "title": "发现你的下一场活动。",
       "lede": "音乐会、晚宴、会议和社区活动，所有费用均已含在价格中。",
-      "demoCta": "打开演示控制台"
+      "demoCta": "打开演示控制台",
+      "organizersTitle": "主办方为何选择 Yayatoh",
+      "organizersMore": "查看全部功能"
     },
     "events": {
       "title": "全部活动"
@@ -3270,7 +3314,13 @@
       "events": "{org} 的活动",
       "emptyTitle": "暂无即将举行的活动",
       "emptyDescription": "{org} 目前没有在售内容，请稍后再来看看。"
-    }
+    },
+    "pricing": "价格",
+    "features": "功能",
+    "help": "帮助",
+    "helpCenter": "帮助中心",
+    "contact": "联系我们",
+    "status": "系统状态"
   },
   "widget": {
     "title": "门票：{event}",
@@ -3432,7 +3482,12 @@
       "ticketsCreated": "至少创建一种门票类型。",
       "agendaAdded": "向日程添加第一个环节。",
       "speakersAdded": "添加第一位演讲嘉宾。",
-      "published": "一切就绪后,在活动主页发布活动。"
+      "published": "一切就绪后,在活动主页发布活动。",
+      "guestsAdded": "添加宾客及其同行人。",
+      "rsvpDeadlineSet": "选择回复截止的日期。",
+      "floorPlanChosen": "为场地选择平面图，或按数量生成一个。",
+      "guestSitePublished": "发布宾客打开的密码保护网站。",
+      "tablesSponsors": "为桌位和赞助商命名。"
     }
   },
   "program": {
@@ -5323,5 +5378,549 @@
         "not_on_sale": "此通行证或场次未在销售。"
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "面向主办方",
+    "title": "价格和费用",
+    "description": "在 Yayatoh 上售票的成本，数字一目了然。",
+    "currencies": "货币",
+    "feeHeading": "平台费（{currency}）",
+    "feeNone": "目前每张门票不收取平台费",
+    "feePercent": "每张付费门票 {percent}",
+    "feeFixed": "每张付费门票 {fixed}",
+    "feeBoth": "每张付费门票 {percent} + {fixed}",
+    "freeTickets": "免费门票和出席回复永不收费。",
+    "noSubscription": "无订阅、无开通费：仅在售出时付费。",
+    "allInHeading": "全包价格",
+    "allInBody": "从第一个页面到结账，购票者始终看到含费用的完整价格。结账时没有意外。",
+    "passOnExplained": "由购票者承担费用：购票者支付票价加费用，您收到全部票价。",
+    "absorbExplained": "由您承担费用：购票者支付票价，费用从您的收入中扣除。",
+    "exampleCaption": "示例：一张 {face} 的门票",
+    "passOn": "购票者承担",
+    "absorb": "主办方承担",
+    "col": {
+      "mode": "费用承担方式",
+      "face": "票价",
+      "fee": "平台费",
+      "buyerPays": "购票者支付",
+      "youReceive": "您收到"
+    },
+    "exampleNote": "示例仅显示平台费。费用以门票的货币收取。",
+    "unavailable": "价格暂时无法显示。",
+    "startHeading": "开始售票",
+    "startBody": "创建您的组织，准备好第一个活动，准备就绪后即可发布。",
+    "startCta": "创建您的组织"
+  },
+  "help": {
+    "breadcrumbs": "面包屑导航",
+    "title": "帮助中心",
+    "lede": "为主办方和购票者解答问题：创建活动、销售门票、签到、退款等。",
+    "emptyTitle": "暂无帮助文章",
+    "emptyDescription": "文章发布后会立即显示在这里。",
+    "articleCount": "{count, plural, =0 {暂无文章} other {# 篇文章}}",
+    "articlesIn": "{category}中的文章",
+    "related": "相关文章",
+    "updated": "更新于 {date}",
+    "notTranslated": "本文暂无你所用语言的版本，因此以英文显示。",
+    "audience": {
+      "organizers": "面向主办方",
+      "buyers": "面向购票者"
+    },
+    "meta": {
+      "title": "帮助中心 · Yayatoh",
+      "description": "为 Yayatoh 上的主办方和购票者解答问题。",
+      "category": "{category} · Yayatoh 帮助中心",
+      "search": "“{query}” · Yayatoh 帮助中心"
+    },
+    "search": {
+      "label": "搜索帮助中心",
+      "field": "搜索帮助文章",
+      "placeholder": "例如：为门票退款",
+      "submit": "搜索",
+      "title": "搜索",
+      "resultsFor": "“{query}”的搜索结果",
+      "count": "{count, plural, =0 {未找到文章} other {找到 # 篇文章}}",
+      "prompt": "输入几个词来搜索帮助中心。",
+      "results": "搜索结果",
+      "emptyTitle": "没有符合搜索条件的结果",
+      "emptyDescription": "请尝试其他关键词，或浏览帮助中心的分类。"
+    },
+    "feedback": {
+      "question": "这篇文章有帮助吗？",
+      "yes": "是",
+      "no": "否",
+      "reasonLegend": "哪里有问题？（可选）",
+      "reason": {
+        "unclear": "难以理解",
+        "incomplete": "缺少内容",
+        "outdated": "内容已过时",
+        "other": "其他原因"
+      },
+      "sendReason": "发送",
+      "thanksYes": "感谢你的反馈。",
+      "thanksNo": "谢谢。我们会根据你的反馈改进这篇文章。",
+      "rateLimited": "此设备提交的反馈过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "主办方功能 · Yayatoh",
+      "title": "举办活动所需的一切",
+      "lede": "门票、座位、签到、消息和结算，尽在一处。",
+      "emptyTitle": "功能介绍即将推出",
+      "emptyDescription": "本页面正在编写中。在此期间，请联系我们。",
+      "contactCta": "联系我们",
+      "helpCta": "访问帮助中心"
+    },
+    "contact": {
+      "metaTitle": "联系与销售 · Yayatoh",
+      "title": "联系我们",
+      "lede": "对 Yayatoh 有疑问、想预约演示，或想了解活动的价格？给我们留言，我们会通过电子邮件回复。",
+      "formTitle": "发送消息",
+      "fields": {
+        "topic": "主题",
+        "name": "你的姓名",
+        "email": "电子邮件",
+        "company": "组织",
+        "message": "消息"
+      },
+      "topics": {
+        "sales": "销售与演示",
+        "support": "账户帮助",
+        "partnership": "合作伙伴",
+        "other": "其他"
+      },
+      "optional": "可选",
+      "messageHint": "至少 10 个字符。",
+      "privacy": "你的信息仅用于回复此消息。",
+      "submit": "发送消息",
+      "sentTitle": "谢谢，你的消息已发送。",
+      "sentBody": "我们会尽快回复到你的电子邮件地址。",
+      "fixErrors": "请检查突出显示的字段。",
+      "rateLimited": "此设备发送的消息过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+      "errors": {
+        "name": "请输入你的姓名。",
+        "email": "请输入有效的电子邮件地址。",
+        "company": "最多 160 个字符。",
+        "message": "请输入 10 至 4,000 个字符的消息。",
+        "human": "请确认你是真人。"
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "服务状态",
+      "incident": "我们遇到了问题：{title}",
+      "maintenance": "正在维护：{title}",
+      "others": "{count, plural, other {另有 # 项。}}",
+      "link": "查看状态页面"
+    },
+    "page": {
+      "metaTitle": "系统状态 · Yayatoh",
+      "title": "系统状态",
+      "lede": "Yayatoh 各项服务的当前状态及近期事件。时间均为 UTC。",
+      "unavailableTitle": "无法获取状态",
+      "unavailableBody": "目前无法显示服务状态。请过几分钟再试。",
+      "checked": "检查于 {time}",
+      "components": "服务",
+      "open": "当前事件",
+      "noOpen": "目前没有事件。",
+      "past": "过去 14 天",
+      "noPast": "过去 14 天内没有事件。"
+    },
+    "overall": {
+      "operational": "所有系统运行正常",
+      "maintenance": "正在维护",
+      "degraded": "部分系统性能下降",
+      "partial_outage": "部分中断",
+      "major_outage": "重大中断"
+    },
+    "componentStatus": {
+      "operational": "正常运行",
+      "maintenance": "维护中",
+      "degraded": "性能下降",
+      "partial_outage": "部分中断",
+      "major_outage": "重大中断"
+    },
+    "impact": {
+      "minor": "轻微影响",
+      "major": "重大影响",
+      "critical": "严重影响",
+      "maintenance": "维护"
+    },
+    "incidentStatus": {
+      "investigating": "调查中",
+      "identified": "已确定原因",
+      "monitoring": "监控中",
+      "resolved": "已解决",
+      "scheduled": "已计划",
+      "in_progress": "进行中",
+      "completed": "已完成"
+    },
+    "components": {
+      "marketplace": "活动页面与市场",
+      "checkout": "结账",
+      "console": "主办方控制台",
+      "checkin": "签到与扫码",
+      "payments": "支付与结算",
+      "messaging": "电子邮件与消息",
+      "api": "API"
+    },
+    "affects": "影响范围：{components}",
+    "updates": "{title}的最新进展"
+  },
+  "helpConsole": {
+    "title": "帮助中心",
+    "description": "公开帮助中心的文章和分类。草稿在发布前保持私密。",
+    "tabsLabel": "帮助中心栏目",
+    "tabs": {
+      "articles": "文章",
+      "categories": "分类"
+    },
+    "newArticle": "新建文章",
+    "newArticleDescription": "发布前为草稿。要翻译文章，请用相同的地址以另一种语言再次创建。",
+    "createArticle": "创建草稿",
+    "back": "返回帮助中心",
+    "categoryCreated": "分类已创建。",
+    "emptyArticlesTitle": "暂无文章",
+    "emptyArticlesDescription": "为主办方或购票者撰写第一篇文章。",
+    "emptyNeedsCategory": "请先创建分类，再在其中撰写文章。",
+    "emptyCategoriesTitle": "暂无分类",
+    "emptyCategoriesDescription": "分类用于归类面向主办方或购票者的文章。",
+    "newCategory": "新建分类",
+    "createCategory": "创建分类",
+    "columns": {
+      "category": "分类",
+      "helpful": "有帮助"
+    },
+    "helpfulCounts": "{yes} 是 · {no} 否",
+    "fields": {
+      "category": "分类",
+      "locale": "语言",
+      "title": "标题",
+      "slug": "地址",
+      "summary": "摘要",
+      "body": "正文",
+      "keywords": "搜索关键词",
+      "position": "排序",
+      "audience": "受众",
+      "categoryTitle": "名称",
+      "description": "描述"
+    },
+    "titleError": "请输入标题。",
+    "slugFrozen": "已发布文章的地址无法更改。",
+    "slugHint": "留空则根据标题自动生成。翻译版本使用英文文章的地址。",
+    "keywordsHint": "用逗号分隔用户可能搜索的词语。",
+    "positionHint": "数字越小越靠前。",
+    "positionError": "请输入 0 至 10,000 之间的整数。",
+    "audience": {
+      "organizers": "主办方",
+      "buyers": "购票者"
+    },
+    "slugReserved": "此地址已被保留。请另选一个。",
+    "categorySlugHint": "留空则根据名称自动生成。之后无法更改。",
+    "translations": "其他语言的名称",
+    "translationsError": "请检查翻译后的名称。",
+    "categoryHasArticles": "请先移动或删除此分类中的文章。"
+  },
+  "siteConsole": {
+    "title": "营销网站",
+    "description": "首页、功能页和联系页的各个栏目，以及通过联系表单发送的消息。",
+    "tabsLabel": "营销网站栏目",
+    "tabs": {
+      "sections": "栏目",
+      "requests": "联系请求"
+    },
+    "newSection": "新建栏目",
+    "newSectionDescription": "发布前为草稿。要翻译栏目，请用相同的键以另一种语言再次创建。",
+    "createSection": "创建草稿",
+    "back": "返回营销网站",
+    "noSections": "此页面暂无栏目。",
+    "placement": {
+      "home": "首页：为何选择 Yayatoh",
+      "features": "功能页",
+      "contact": "联系页"
+    },
+    "fields": {
+      "placement": "页面",
+      "locale": "语言",
+      "eyebrow": "标题上方的标签",
+      "heading": "标题",
+      "slug": "键",
+      "body": "正文",
+      "ctaLabel": "按钮文字",
+      "ctaHref": "按钮链接",
+      "position": "排序"
+    },
+    "optional": "可选",
+    "headingError": "请输入标题。",
+    "slugHint": "留空则根据标题自动生成。翻译版本使用英文栏目的键。",
+    "ctaLegend": "按钮（可选）",
+    "ctaLabelError": "请输入按钮文字（最多 40 个字符）及其链接。",
+    "ctaHrefHint": "本站的页面（如 /contact）或 https:// 地址。",
+    "ctaHrefError": "请使用本站的页面（以 / 开头）或 https:// 地址。",
+    "positionHint": "数字越小越靠前。",
+    "positionError": "请输入 0 至 10,000 之间的整数。",
+    "noRequestsTitle": "暂无联系请求",
+    "noRequestsDescription": "通过联系页面发送的消息会显示在这里。",
+    "requestStatus": {
+      "new": "新",
+      "handled": "已处理"
+    },
+    "topics": {
+      "sales": "销售与演示",
+      "support": "账户帮助",
+      "partnership": "合作伙伴",
+      "other": "其他"
+    },
+    "markHandled": "标记为已处理"
+  },
+  "parties": {
+    "subtitle": "宾客组（情侣、家庭、住户）及每组的宾客。饮食、无障碍需求和地址仅对你的团队可见。",
+    "viewerNotice": "你可以查看宾客名单。只有有编辑权限的主办方可以修改。",
+    "summary": "概览",
+    "counts": {
+      "parties": "宾客组",
+      "guests": "宾客",
+      "adults": "成人",
+      "children": "儿童",
+      "infants": "婴儿",
+      "plusOnesPending": "待填姓名的同伴"
+    },
+    "vipCount": "{count, plural, other {# 个 VIP 组}}",
+    "addParty": "添加宾客组",
+    "addPartyHint": "宾客组是一起受邀的人，例如一对情侣或一个家庭。之后再添加组内宾客。",
+    "partyAdded": "已添加宾客组。",
+    "parties": "宾客组",
+    "filters": "筛选宾客组",
+    "search": "按姓名搜索",
+    "side": "所属方",
+    "sideHint": "属于哪一方，例如新娘方、新郎方或双方。",
+    "anySide": "所有方",
+    "tag": "标签",
+    "anyTag": "所有标签",
+    "vip": "VIP",
+    "vipLegend": "优先级",
+    "vipAny": "不限 VIP",
+    "vipOnly": "仅 VIP",
+    "vipNot": "非 VIP",
+    "apply": "应用",
+    "clear": "清除筛选",
+    "matching": "{count, plural, =0 {没有匹配的宾客组} other {# 个宾客组匹配}}",
+    "showing": "{count, plural, other {# 个宾客组}}",
+    "emptyTitle": "还没有宾客",
+    "emptyDescription": "先在上方添加第一个宾客组，再添加组内宾客。",
+    "emptyViewer": "主办方还没有添加宾客。",
+    "noMatchTitle": "没有匹配的宾客组",
+    "noMatchDescription": "换个姓名试试，或清除筛选。",
+    "partyName": "组名",
+    "partyNameHint": "你对他们的称呼，例如加西亚一家。",
+    "envelopeName": "信封称呼",
+    "envelopeHint": "请柬上的写法，例如路易斯·加西亚先生及夫人。",
+    "tags": "标签",
+    "tagsHint": "用逗号分隔标签，例如家人, 外地。",
+    "notes": "备注",
+    "notesHint": "只有你的团队能看到备注。",
+    "source": "录入来源",
+    "sourceHint": "录入宾客寄来的纸质回复时，请选择纸质回复。",
+    "sources": {
+      "manual": "团队录入",
+      "paper": "纸质回复（代宾客录入）",
+      "import": "导入",
+      "collector": "联系表单",
+      "rsvp": "回复"
+    },
+    "sideValue": "所属方：{side}",
+    "guestCount": "{count, plural, =0 {没有宾客} other {# 位宾客}}",
+    "envelopeValue": "信封：{name}",
+    "noGuestsInParty": "这个宾客组还没有宾客。",
+    "guestsOf": "{party}的宾客",
+    "guestOf": "{name}的同伴",
+    "primary": "主要联系人",
+    "primaryLegend": "联系人",
+    "ages": {
+      "adult": "成人",
+      "child": "儿童",
+      "infant": "婴儿"
+    },
+    "plusOne": "同伴",
+    "plusOnePending": "待填姓名的同伴",
+    "meal": "餐食",
+    "mealHint": "餐食选择，例如鱼。",
+    "dietary": "饮食需求",
+    "accessibility": "无障碍需求",
+    "address": "家庭住址",
+    "privateHint": "私密：加密存储，仅你的团队可见。",
+    "firstName": "名",
+    "lastName": "姓",
+    "ageClass": "年龄段",
+    "plusOneNameHint": "知道姓名前可以留空。",
+    "linkedEntry": "宾客名单条目",
+    "linkedEntryHint": "关联到已在本活动宾客名单中的人。",
+    "notLinked": "未关联",
+    "editNamed": "编辑{name}",
+    "save": "保存",
+    "saved": "已保存。",
+    "addPlusOneFor": "为{name}添加同伴",
+    "plusOneAdded": "已添加同伴。",
+    "moveTo": "将{name}移到",
+    "moveHintPlusOne": "同伴会一起移动。",
+    "choosePartyOption": "选择宾客组",
+    "move": "移动",
+    "moved": "已移动。",
+    "removeNamed": "移除{name}",
+    "removeWithPlusOne": "移除{name}及其同伴",
+    "removed": "已移除。",
+    "addGuestTo": "向{party}添加宾客",
+    "addGuest": "添加宾客",
+    "guestAdded": "已添加宾客。",
+    "removeParty": "{count, plural, =0 {移除{name}} other {移除{name}及其 # 位宾客}}",
+    "historyOf": "{party}的记录",
+    "showHistory": "查看{party}的记录",
+    "hideHistory": "隐藏记录",
+    "actions": {
+      "party_created": "添加了宾客组",
+      "party_updated": "编辑了宾客组",
+      "party_removed": "移除了宾客组",
+      "guest_added": "添加了宾客",
+      "guest_updated": "编辑了宾客",
+      "guest_removed": "移除了宾客",
+      "guest_moved": "移动了宾客",
+      "plus_one_added": "添加了同伴",
+      "plus_one_named": "填写了同伴姓名"
+    },
+    "actors": {
+      "you": "由你",
+      "member": "由团队成员",
+      "system": "由系统"
+    },
+    "pagination": "分页",
+    "previous": "上一页",
+    "next": "下一页",
+    "pageOf": "第 {page} 页，共 {pages} 页",
+    "errors": {
+      "name": "请输入组名（最多 120 个字符）。",
+      "envelopeName": "信封称呼最多 200 个字符。",
+      "side": "所属方最多 40 个字符。",
+      "tags": "最多 20 个标签，每个最多 40 个字符。",
+      "notes": "备注最多 2,000 个字符。",
+      "firstName": "请输入名（最多 80 个字符）。",
+      "lastName": "姓最多 80 个字符。",
+      "meal": "餐食最多 80 个字符。",
+      "private": "最多 500 个字符。",
+      "attendeeId": "请从本活动的宾客名单中选择。",
+      "attendeeTaken": "该条目已关联到其他宾客。",
+      "toPartyId": "请选择另一个宾客组。",
+      "isPrimary": "同伴不能作为主要联系人。",
+      "partyFull": "该宾客组已满（最多 20 位宾客）。",
+      "tooMany": "本活动的宾客人数已达上限。",
+      "hasPlusOne": "此人已有同伴。",
+      "plusOneOfPlusOne": "同伴不能再带同伴。",
+      "plusOneMoves": "同伴会随带他来的宾客一起移动。"
+    }
+  },
+  "eventRoles": {
+    "co_host": "联合主办人",
+    "planner": "策划人"
+  },
+  "eventTeam": {
+    "title": "活动团队",
+    "subtitle": "联合主办人和策划人只负责这个活动，永远看不到其他活动、付款或组织设置。",
+    "rolesTitle": "谁能做什么",
+    "explain": {
+      "co_host": "这个活动的一切：宾客、回复、座位、网站、相册、消息、当天安排和门票。可以邀请团队其他成员。",
+      "planner": "宾客、回复、座位、网站、相册、消息和当天安排。不含付款、退款或财务报告。"
+    },
+    "inviteTitle": "邀请加入此活动",
+    "emptyTitle": "还没有联合主办人或策划人",
+    "emptyDescription": "通过电子邮件邀请他人。对方只能访问这个活动。",
+    "revokeFor": "撤回发给 {email} 的邀请"
+  },
+  "myEvents": {
+    "title": "您的活动",
+    "description": "您在 {org} 协助的活动。",
+    "emptyTitle": "暂无活动",
+    "emptyDescription": "有人邀请您参加活动后，它会显示在这里。",
+    "open": "打开 {name}"
+  },
+  "starters": {
+    "title": "入门模板",
+    "label": "入门",
+    "yours": "您的模板",
+    "use": "从{name}创建活动",
+    "sections": "板块：{list}",
+    "checklist": "清单：{list}",
+    "wedding": {
+      "name": "婚礼",
+      "description": "宾客、回复、座位、私密宾客网站、相册、消息和婚礼当天。从不公开展示。"
+    },
+    "gala": {
+      "name": "晚宴",
+      "description": "门票、桌位与赞助商、座位、捐款和现场签到。"
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "宾客开始回复后，回复和座位会显示在这里。"
+      },
+      "details": {
+        "attendanceHint": "线上和混合活动请在“访问”中添加参加链接。只有您的宾客能看到。"
+      },
+      "dates": {
+        "capacityHint": "可选。此日期最多可接待的宾客人数。"
+      },
+      "copy": {
+        "description": "重复使用此活动。副本会带上设置、问题和平面图——绝不包括宾客、回复、签到或付款。"
+      },
+      "announcements": {
+        "pushHint": "推送会发给开启了通知的宾客；其他人会收到电子邮件。",
+        "smsHint": "短信只发送给提供了手机号并同意接收短信的宾客；其他人会显示为未发送，并注明原因。"
+      },
+      "eventAnnouncements": {
+        "explainer": "公开公告显示在活动页面；仅限宾客的公告显示在宾客的页面上。",
+        "emptyDescription": "为宾客发布新闻、时间变更或提醒。",
+        "audienceHolders": "仅限宾客",
+        "holdersOnly": "仅限宾客"
+      },
+      "access": {
+        "subtitle": "给宾客的私密信息、线上参加链接和访问码。"
+      },
+      "privateInfo": {
+        "explainer": "只有经过验证的宾客能看到。绝不会出现在公开的活动页面上。",
+        "body": "给宾客的信息"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "访问码让您的宾客打开私密活动页面。"
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "这个活动的一切：宾客、回复、座位、网站、相册、消息和当天安排。可以邀请团队其他成员。"
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "重复使用此活动。副本会带上设置、票种、下单问题和平面图——绝不包括订单、宾客、门票、签到或付款。"
+      },
+      "announcements": {
+        "pushHint": "推送会发给在订单页面或应用中开启了通知的宾客；其他人会收到电子邮件。",
+        "smsHint": "短信只发送给提供了手机号并同意接收短信的宾客；其他人会显示为未发送，并注明原因。"
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "为宾客发布新闻、时间变更或提醒。"
+      }
+    }
+  },
+  "frontDoor": {
+    "slowTitle": "此页面加载时间过长",
+    "downTitle": "此页面暂时无法访问",
+    "body": "请稍后再试。"
+  },
+  "maintenance": {
+    "label": "维护",
+    "title": "计划维护：更改已暂停",
+    "body": "我们正在迁移到新平台，Yayatoh 处于只读维护中。你仍可以查看所有内容、下载导出文件并在入口扫描门票，公开页面也保持在线。保存更改、新的销售和退款将暂停，直到维护结束。",
+    "bodyUntil": "我们正在迁移到新平台，Yayatoh 处于只读维护中，预计持续到 {until} 左右。你仍可以查看所有内容、下载导出文件并在入口扫描门票，公开页面也保持在线。在此之前，保存更改、新的销售和退款将暂停。"
   }
 }

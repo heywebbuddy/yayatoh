@@ -1,12 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import {
-  continueToPayment,
-  expectAccessible,
-  OPEN_HOUSE,
-  signIn,
-  WEDDING,
-  WEDDING_OWNER,
-} from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn, WEDDING_OWNER } from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const LAKESIDE = `http://lakeside-events.yayatoh.events:${PORT}`;
@@ -304,7 +297,16 @@ test.describe('tracked links', () => {
 
   test('empty states, and the attribution window is saved and kept after a reload', async ({ page }) => {
     await signIn(page, WEDDING_OWNER);
-    await page.goto(`${WEDDING}/tracked-links`);
+    // An event of Rosewood's own with nothing tracked yet (batch 3c merge: M4.2a's route sweep
+    // refuses tracked links on the seeded wedding, whose profile shows no marketing pages).
+    await page.goto('/o/rosewood-weddings/events/new');
+    await page.getByLabel('Event name', { exact: true }).fill(`Untracked ${stamp()}`);
+    await page.getByLabel('Event type').selectOption('other');
+    await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
+    await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
+    await page.getByRole('button', { name: 'Create draft' }).click();
+    await expect(page).toHaveURL(/\/o\/rosewood-weddings\/e\/untracked-[0-9a-z-]+$/);
+    await page.goto(`${new URL(page.url()).pathname}/tracked-links`);
     await expect(page.getByText('No tracked links yet.')).toBeVisible();
     await expect(page.getByText('No orders from UTM tags alone yet.')).toBeVisible();
     const windowField = page.getByLabel('Attribution window (days)', { exact: true });
