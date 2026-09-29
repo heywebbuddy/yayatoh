@@ -11,17 +11,22 @@ function fakeWorld(opts: { failElt?: number; clockStepMs?: number } = {}) {
   let t = Date.parse('2026-11-04T07:00:00Z');
   let eltFailures = opts.failElt ?? 0;
   const flags: Record<string, unknown> = {};
+  /** Log the call, answer the value. */
+  const call = <T>(name: string, value: T): T => {
+    calls.push(name);
+    return value;
+  };
   const deps: CutoverDeps = {
     now: () => {
       t += opts.clockStepMs ?? 1000;
       return new Date(t);
     },
-    migrationStatus: async () => (calls.push('migrationStatus'), { files: 70, applied: 70, pending: 0 }),
-    latestRun: async () => (calls.push('latestRun'), { id: 1, pass: true, mode: 'rehearsal' }),
-    eventsNearWindow: async () => (calls.push('eventsNearWindow'), []),
-    hostRoutes: async () => (calls.push('hostRoutes'), {}),
-    commsReady: async () => (calls.push('commsReady'), { kinds: 10, locales: 13, missing: [] }),
-    prepareDump: async () => (calls.push('prepareDump'), '/tmp/synthetic.sql.gz'),
+    migrationStatus: async () => call('migrationStatus', { files: 70, applied: 70, pending: 0 }),
+    latestRun: async () => call('latestRun', { id: 1, pass: true, mode: 'rehearsal' }),
+    eventsNearWindow: async () => call('eventsNearWindow', []),
+    hostRoutes: async () => call('hostRoutes', {}),
+    commsReady: async () => call('commsReady', { kinds: 10, locales: 13, missing: [] }),
+    prepareDump: async () => call('prepareDump', '/tmp/synthetic.sql.gz'),
     runElt: async () => {
       calls.push('runElt');
       if (eltFailures > 0) {
@@ -30,9 +35,9 @@ function fakeWorld(opts: { failElt?: number; clockStepMs?: number } = {}) {
       }
       return { pass: true, summary: 'ok', runId: 7, totalMs: 1200 };
     },
-    revalidate: async () => (calls.push('revalidate'), { pass: true, summary: 'ok' }),
-    freezeProbe: async () => (calls.push('freezeProbe'), { pass: true, tables: {} }),
-    instanceOrgIds: async () => (calls.push('instanceOrgIds'), ['01900000-0000-7000-8000-000000000001']),
+    revalidate: async () => call('revalidate', { pass: true, summary: 'ok' }),
+    freezeProbe: async () => call('freezeProbe', { pass: true, tables: {} }),
+    instanceOrgIds: async () => call('instanceOrgIds', ['01900000-0000-7000-8000-000000000001']),
     setFreeze: async (value) => {
       calls.push(`setFreeze:${value ? value.scope : 'off'}`);
       flags.read_only_freeze = value;
@@ -41,14 +46,14 @@ function fakeWorld(opts: { failElt?: number; clockStepMs?: number } = {}) {
       calls.push(`setHostRoute:${host}:${target}`);
       flags[`host_route:${host}`] = target;
     },
-    smoke: async () => (calls.push('smoke'), { checks: [{ name: 'x', ok: true, detail: '' }] }),
-    reverseEtl: async () => (calls.push('reverseEtl'), { pass: true, summary: 'ok', report: {} }),
-    rollbackSql: async () => (calls.push('rollbackSql'), '-- sql'),
-    rollbackRefunds: async (_i, _c, orderIds) => (
-      calls.push(`rollbackRefunds:${orderIds?.join(',') ?? 'plan'}`),
-      { items: (orderIds ?? []).map((orderId) => ({ orderId, status: 'succeeded', amountMinor: 100 })) }
-    ),
-    simulatePostCutover: async () => (calls.push('simulate'), { orderIds: ['o1'], scans: 1 }),
+    smoke: async () => call('smoke', { checks: [{ name: 'x', ok: true, detail: '' }] }),
+    reverseEtl: async () => call('reverseEtl', { pass: true, summary: 'ok', report: {} }),
+    rollbackSql: async () => call('rollbackSql', '-- sql'),
+    rollbackRefunds: async (_i, _c, orderIds) =>
+      call(`rollbackRefunds:${orderIds?.join(',') ?? 'plan'}`, {
+        items: (orderIds ?? []).map((orderId) => ({ orderId, status: 'succeeded', amountMinor: 100 })),
+      }),
+    simulatePostCutover: async () => call('simulate', { orderIds: ['o1'], scans: 1 }),
     writeFile: async (path) => void calls.push(`writeFile:${path}`),
   };
   return { deps, calls, flags };
@@ -156,19 +161,22 @@ describe('cutover orchestrator (M2.5a)', () => {
     const w = fakeWorld();
     const ctx = ctxFor(w.deps);
     const stopAt: Confirm = async (step) => (step.id === 'switch_routing' ? 'stop' : 'run');
-    let saved: CutoverState | null = null;
+    const snapshots: CutoverState[] = [];
     const out = await runTrack({
       steps: FORWARD_STEPS,
       ctx,
       track: 'forward',
       dryRun: false,
       confirm: stopAt,
-      save: async (s) => void (saved = structuredClone(s)),
+      save: async (s) => {
+        snapshots.push(structuredClone(s));
+      },
     });
     expect(out).toEqual({ status: 'paused', stoppedAt: 'switch_routing' });
     expect(w.calls.some((c) => c.startsWith('setHostRoute'))).toBe(false);
+    const saved = snapshots.at(-1);
     expect(saved?.tracks.forward.go_no_go_2?.status).toBe('done');
-    const resumed = ctxFor(w.deps, 'yay', saved ?? undefined);
+    const resumed = ctxFor(w.deps, 'yay', saved);
     expect(
       await runTrack({
         steps: FORWARD_STEPS,

@@ -62,7 +62,8 @@ export async function runTrack(opts: {
   }
   const states = ctx.state.tracks[track];
   for (const [i, step] of steps.entries()) {
-    const st: StepState = (states[step.id] ??= { status: 'pending', attempts: 0 });
+    const st: StepState = states[step.id] ?? { status: 'pending', attempts: 0 };
+    states[step.id] = st;
     if (st.status === 'done') {
       ctx.log(`${String(i + 1).padStart(2)}. ${step.id}: done earlier (${st.summary ?? ''})`);
       continue;
