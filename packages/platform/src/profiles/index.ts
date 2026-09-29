@@ -272,6 +272,8 @@ export const PROFILE_INDEPENDENT_SECTIONS = [
   'dates',
   'copy',
   'team',
+  // M3.2a: the Command Center (its widgets follow the profile themselves).
+  'commandCenter',
 ] as const;
 
 /**

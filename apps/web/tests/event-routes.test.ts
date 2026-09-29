@@ -48,6 +48,8 @@ const SECTION_OF: Record<string, string> = {
   'tracked-links': 'trackedLinks',
   // Cancel or postpone the event is an action of the event home (its button lives there).
   cancel: 'home',
+  // Batch 3d merge: M3.2a's Command Center (every profile).
+  'command-center': 'commandCenter',
 };
 
 describe('event console route sweep (M4.2a)', () => {

@@ -1,6 +1,7 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
+import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner } from '@yayatoh/media';
@@ -80,8 +81,15 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
-    metricsProjector(),
+    // M3.2: each projected change pings the event's Command Center (no figures on the channel).
+    metricsProjector({
+      onChange: async (orgId, eventId, tx) => {
+        if (eventId) await publishMetricsChangedTx(tx, orgId, eventId, new Date());
+      },
+    }),
     analyticsForwarder(postgresAnalyticsSink),
+    // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
+    deviceBoardPublisher(),
   ];
 }
 

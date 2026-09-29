@@ -271,7 +271,8 @@
     "refundRequests": "Erstattungsanfragen",
     "helpCenter": "Hilfecenter",
     "marketingSite": "Marketing-Website",
-    "tablesSponsors": "Tische & Sponsoren"
+    "tablesSponsors": "Tische & Sponsoren",
+    "commandCenter": "Command Center"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -5922,5 +5923,141 @@
     "title": "Geplante Wartung: Änderungen sind pausiert",
     "body": "Yayatoh ist im schreibgeschützten Wartungsmodus, während wir auf die neue Plattform umziehen. Sie können weiterhin alles ansehen, Exporte herunterladen und Tickets am Einlass scannen, und Ihre öffentlichen Seiten bleiben online. Speichern, neue Verkäufe und Erstattungen sind bis zum Ende pausiert.",
     "bodyUntil": "Yayatoh ist im schreibgeschützten Wartungsmodus, während wir auf die neue Plattform umziehen, bis etwa {until}. Sie können weiterhin alles ansehen, Exporte herunterladen und Tickets am Einlass scannen, und Ihre öffentlichen Seiten bleiben online. Speichern, neue Verkäufe und Erstattungen sind bis dahin pausiert."
+  },
+  "commandCenter": {
+    "title": "Command Center",
+    "widgets": "Widgets",
+    "overviewTitle": "Command Center",
+    "overviewDescription": "Veranstaltungen, die live sind, bald beginnen, geplant werden oder nachbereitet werden. Live zuerst.",
+    "overviewTruncated": "Die ersten {shown} von {total} Veranstaltungen (live zuerst).",
+    "overviewEmpty": {
+      "title": "Gerade gibt es nichts zu beobachten",
+      "description": "Veranstaltungen erscheinen hier während der Planung, am Tag selbst und eine Woche danach."
+    },
+    "columns": {
+      "event": "Veranstaltung",
+      "mode": "Modus",
+      "starts": "Beginn",
+      "readiness": "Bereitschaft"
+    },
+    "manual": "Manuell gesetzt",
+    "role": {
+      "owner": "Ansicht Inhaber",
+      "ops": "Ansicht Betrieb",
+      "finance": "Ansicht Finanzen",
+      "door": "Ansicht Einlass",
+      "marketing": "Ansicht Marketing"
+    },
+    "mode": {
+      "label": "Modus",
+      "planning": "Planung",
+      "pre_show": "Vorabend",
+      "live": "Live",
+      "wrap": "Nachbereitung"
+    },
+    "next": {
+      "planning": "Zurück zur Planung {time}",
+      "pre_show": "Vorabend beginnt {time}",
+      "live": "Live-Modus beginnt {time}",
+      "wrap": "Nachbereitung beginnt {time}",
+      "none": "Nachbereitung endet {time}",
+      "settled": "Diese Veranstaltung ist vorbei."
+    },
+    "override": {
+      "label": "Modus festlegen",
+      "automatic": "Automatisch ({mode})",
+      "submit": "Modus festlegen",
+      "saved": "Modus aktualisiert.",
+      "manualNote": "Manuell gesetzt. Automatisch wäre: {mode}.",
+      "autoNote": "Zeiten folgen der Zeitzone der Veranstaltung ({timeZone})."
+    },
+    "customize": "Layout anpassen",
+    "done": "Fertig",
+    "reset": "Auf Standard zurücksetzen",
+    "resetDone": "Layout auf Standard zurückgesetzt.",
+    "saveFailed": "Das Layout konnte nicht gespeichert werden. Bitte erneut versuchen.",
+    "moveUp": "{widget} nach oben",
+    "moveDown": "{widget} nach unten",
+    "hide": "{widget} ausblenden",
+    "show": "{widget} einblenden",
+    "drag": "{widget} zum Sortieren ziehen",
+    "hiddenTitle": "Ausgeblendete Widgets",
+    "hiddenNone": "Keine ausgeblendeten Widgets.",
+    "moved": "{widget} an Position {position} verschoben. Layout gespeichert.",
+    "hiddenMsg": "{widget} ausgeblendet. Layout gespeichert.",
+    "shownMsg": "{widget} eingeblendet. Layout gespeichert.",
+    "live": {
+      "live": "Live-Aktualisierung an",
+      "connecting": "Verbinde…",
+      "offline": "Offline, neuer Versuch…",
+      "polling": "Aktualisierung alle 30 Sekunden"
+    },
+    "loading": "Wird geladen…",
+    "unavailable": "Dieses Widget konnte nicht geladen werden.",
+    "noAccess": {
+      "title": "Kein Command Center für deine Rolle",
+      "description": "Bitte eine Inhaberin oder einen Admin um Zugriff auf diese Veranstaltung."
+    },
+    "empty": {
+      "title": "Keine Widgets sichtbar",
+      "description": "Passe das Layout an, um Widgets anzuzeigen."
+    },
+    "meter": "{value} von {max}",
+    "widget": {
+      "readiness": {
+        "title": "Bereitschaft",
+        "score": "Bereitschaft {score} %",
+        "blocking": "Blockiert",
+        "todo": "Außerdem zu tun",
+        "allDone": "Startklar."
+      },
+      "sales": {
+        "title": "Verkäufe",
+        "today": "Heute: {amount}",
+        "refunds": "Erstattet: {amount}",
+        "orders": "{count, plural, one {# Bestellung} other {# Bestellungen}}"
+      },
+      "tickets": {
+        "title": "Verkaufte Tickets",
+        "ofCapacity": "von {capacity}",
+        "noCapacity": "Noch keine Tickets im Verkauf",
+        "comps": "{count, plural, one {# Freiticket} other {# Freitickets}}"
+      },
+      "checkins": {
+        "title": "Check-ins",
+        "today": "heute eingecheckt",
+        "total": "{total} von {valid} Tickets eingecheckt"
+      },
+      "seatFill": {
+        "title": "Sitzbelegung",
+        "ofSeats": "{occupied} von {total} Plätzen belegt",
+        "noSeats": "Noch kein Sitzplan"
+      },
+      "devices": {
+        "title": "Geräte online",
+        "ofEnrolled": "{count, plural, one {von # registrierten Gerät} other {von # registrierten Geräten}}",
+        "lowBattery": "{count, plural, one {# Gerät mit schwachem Akku} other {# Geräte mit schwachem Akku}}",
+        "none": "Noch keine Check-in-Geräte"
+      },
+      "timeline": {
+        "title": "Als Nächstes",
+        "empty": "Sonst ist nichts geplant.",
+        "kind": {
+          "preShow": "Vorabend beginnt",
+          "live": "Live-Modus beginnt",
+          "start": "Veranstaltung beginnt",
+          "end": "Veranstaltung endet",
+          "wrap": "Nachbereitung beginnt",
+          "wrapEnd": "Nachbereitung endet",
+          "date": "Nächster Termin",
+          "session": "Programmpunkt: {title}"
+        }
+      },
+      "alerts": {
+        "title": "Warnungen",
+        "pending": "Warnungen erscheinen hier, sobald Warnregeln aktiviert sind.",
+        "none": "Keine offenen Warnungen."
+      }
+    }
   }
 }

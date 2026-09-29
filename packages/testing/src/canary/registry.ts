@@ -4,6 +4,7 @@ import { privateColumns as audiences } from '@yayatoh/audiences';
 import { privateColumns as billing } from '@yayatoh/billing';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
+import { privateColumns as commandCenter } from '@yayatoh/command-center';
 import { privateColumns as crm } from '@yayatoh/crm';
 import type { CanarySeed, ColumnRule, PrivateClass, PrivateColumn, SchemaPrivacy } from '@yayatoh/db';
 import { privateColumns as events } from '@yayatoh/events';
@@ -40,6 +41,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   billing,
   checkin,
   cms,
+  commandCenter,
   crm,
   events,
   forms,

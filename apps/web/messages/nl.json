@@ -271,7 +271,8 @@
     "refundRequests": "Terugbetalingsverzoeken",
     "helpCenter": "Helpcentrum",
     "marketingSite": "Marketingsite",
-    "tablesSponsors": "Tafels & sponsors"
+    "tablesSponsors": "Tafels & sponsors",
+    "commandCenter": "Commandocentrum"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -5922,5 +5923,141 @@
     "title": "Gepland onderhoud: wijzigingen zijn gepauzeerd",
     "body": "Yayatoh is in alleen-lezen onderhoud terwijl we naar het nieuwe platform overstappen. U kunt nog steeds alles bekijken, exports downloaden en tickets bij de ingang scannen, en uw openbare pagina’s blijven online. Wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn gepauzeerd tot het klaar is.",
     "bodyUntil": "Yayatoh is in alleen-lezen onderhoud terwijl we naar het nieuwe platform overstappen, tot ongeveer {until}. U kunt nog steeds alles bekijken, exports downloaden en tickets bij de ingang scannen, en uw openbare pagina’s blijven online. Wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn tot dan gepauzeerd."
+  },
+  "commandCenter": {
+    "title": "Commandocentrum",
+    "widgets": "Widgets",
+    "overviewTitle": "Commandocentrum",
+    "overviewDescription": "Evenementen die live zijn, bijna beginnen, worden gepland of worden afgerond. Live eerst.",
+    "overviewTruncated": "De eerste {shown} van {total} evenementen (live eerst).",
+    "overviewEmpty": {
+      "title": "Nu niets te volgen",
+      "description": "Evenementen staan hier tijdens de planning, op de dag zelf en een week erna."
+    },
+    "columns": {
+      "event": "Evenement",
+      "mode": "Modus",
+      "starts": "Begint",
+      "readiness": "Gereedheid"
+    },
+    "manual": "Handmatig ingesteld",
+    "role": {
+      "owner": "Weergave eigenaar",
+      "ops": "Weergave operatie",
+      "finance": "Weergave financiën",
+      "door": "Weergave deur",
+      "marketing": "Weergave marketing"
+    },
+    "mode": {
+      "label": "Modus",
+      "planning": "Planning",
+      "pre_show": "Voorbereiding",
+      "live": "Live",
+      "wrap": "Afronding"
+    },
+    "next": {
+      "planning": "Terug naar planning {time}",
+      "pre_show": "Voorbereiding begint {time}",
+      "live": "Livemodus begint {time}",
+      "wrap": "Afronding begint {time}",
+      "none": "Afronding eindigt {time}",
+      "settled": "Dit evenement is voorbij."
+    },
+    "override": {
+      "label": "Modus instellen",
+      "automatic": "Automatisch ({mode})",
+      "submit": "Modus instellen",
+      "saved": "Modus bijgewerkt.",
+      "manualNote": "Handmatig ingesteld. Automatisch zou het zijn: {mode}.",
+      "autoNote": "Tijden volgen de tijdzone van het evenement ({timeZone})."
+    },
+    "customize": "Indeling aanpassen",
+    "done": "Klaar",
+    "reset": "Standaard herstellen",
+    "resetDone": "Indeling hersteld naar standaard.",
+    "saveFailed": "De indeling kon niet worden opgeslagen. Probeer het opnieuw.",
+    "moveUp": "{widget} omhoog",
+    "moveDown": "{widget} omlaag",
+    "hide": "{widget} verbergen",
+    "show": "{widget} tonen",
+    "drag": "Sleep {widget} om te verplaatsen",
+    "hiddenTitle": "Verborgen widgets",
+    "hiddenNone": "Geen verborgen widgets.",
+    "moved": "{widget} verplaatst naar positie {position}. Indeling opgeslagen.",
+    "hiddenMsg": "{widget} verborgen. Indeling opgeslagen.",
+    "shownMsg": "{widget} getoond. Indeling opgeslagen.",
+    "live": {
+      "live": "Live-updates aan",
+      "connecting": "Verbinden…",
+      "offline": "Offline, opnieuw proberen…",
+      "polling": "Elke 30 seconden bijgewerkt"
+    },
+    "loading": "Laden…",
+    "unavailable": "Deze widget kon niet worden geladen.",
+    "noAccess": {
+      "title": "Geen commandocentrum voor jouw rol",
+      "description": "Vraag een eigenaar of beheerder om toegang tot dit evenement."
+    },
+    "empty": {
+      "title": "Geen widgets zichtbaar",
+      "description": "Pas de indeling aan om widgets te tonen."
+    },
+    "meter": "{value} van {max}",
+    "widget": {
+      "readiness": {
+        "title": "Gereedheid",
+        "score": "Gereedheid {score}%",
+        "blocking": "Blokkerend",
+        "todo": "Ook nog te doen",
+        "allDone": "Klaar om te beginnen."
+      },
+      "sales": {
+        "title": "Verkoop",
+        "today": "Vandaag: {amount}",
+        "refunds": "Terugbetaald: {amount}",
+        "orders": "{count, plural, one {# bestelling} other {# bestellingen}}"
+      },
+      "tickets": {
+        "title": "Verkochte tickets",
+        "ofCapacity": "van {capacity}",
+        "noCapacity": "Nog geen tickets te koop",
+        "comps": "{count, plural, one {# vrijkaart} other {# vrijkaarten}}"
+      },
+      "checkins": {
+        "title": "Check-ins",
+        "today": "vandaag ingecheckt",
+        "total": "{total} van {valid} tickets ingecheckt"
+      },
+      "seatFill": {
+        "title": "Stoelbezetting",
+        "ofSeats": "{occupied} van {total} stoelen bezet",
+        "noSeats": "Nog geen zaalplan"
+      },
+      "devices": {
+        "title": "Apparaten online",
+        "ofEnrolled": "{count, plural, one {van # geregistreerd apparaat} other {van # geregistreerde apparaten}}",
+        "lowBattery": "{count, plural, one {# apparaat met bijna lege batterij} other {# apparaten met bijna lege batterij}}",
+        "none": "Nog geen check-in-apparaten"
+      },
+      "timeline": {
+        "title": "Binnenkort",
+        "empty": "Verder niets gepland.",
+        "kind": {
+          "preShow": "Voorbereiding begint",
+          "live": "Livemodus begint",
+          "start": "Evenement begint",
+          "end": "Evenement eindigt",
+          "wrap": "Afronding begint",
+          "wrapEnd": "Afronding eindigt",
+          "date": "Volgende datum",
+          "session": "Sessie: {title}"
+        }
+      },
+      "alerts": {
+        "title": "Meldingen",
+        "pending": "Meldingen verschijnen hier zodra meldingsregels aan staan.",
+        "none": "Geen open meldingen."
+      }
+    }
   }
 }

@@ -271,7 +271,8 @@
     "refundRequests": "Solicitudes de reembolso",
     "helpCenter": "Centro de ayuda",
     "marketingSite": "Sitio de marketing",
-    "tablesSponsors": "Mesas y patrocinadores"
+    "tablesSponsors": "Mesas y patrocinadores",
+    "commandCenter": "Centro de mando"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -5922,5 +5923,141 @@
     "title": "Mantenimiento programado: los cambios están en pausa",
     "body": "Yayatoh está en mantenimiento de solo lectura mientras pasamos a la nueva plataforma. Puedes seguir viéndolo todo, descargar exportaciones y escanear entradas en la puerta, y tus páginas públicas siguen en línea. Guardar cambios, las nuevas ventas y los reembolsos quedan en pausa hasta que termine.",
     "bodyUntil": "Yayatoh está en mantenimiento de solo lectura mientras pasamos a la nueva plataforma, hasta aproximadamente {until}. Puedes seguir viéndolo todo, descargar exportaciones y escanear entradas en la puerta, y tus páginas públicas siguen en línea. Guardar cambios, las nuevas ventas y los reembolsos quedan en pausa hasta entonces."
+  },
+  "commandCenter": {
+    "title": "Centro de mando",
+    "widgets": "Widgets",
+    "overviewTitle": "Centro de mando",
+    "overviewDescription": "Eventos en vivo, a punto de empezar, en planificación o en cierre. Primero los que están en vivo.",
+    "overviewTruncated": "Se muestran los primeros {shown} de {total} eventos (primero en vivo).",
+    "overviewEmpty": {
+      "title": "Nada que vigilar ahora mismo",
+      "description": "Los eventos aparecen aquí mientras se planifican, el mismo día y durante una semana después."
+    },
+    "columns": {
+      "event": "Evento",
+      "mode": "Modo",
+      "starts": "Empieza",
+      "readiness": "Preparación"
+    },
+    "manual": "Fijado a mano",
+    "role": {
+      "owner": "Vista de propietario",
+      "ops": "Vista de operaciones",
+      "finance": "Vista de finanzas",
+      "door": "Vista de acceso",
+      "marketing": "Vista de marketing"
+    },
+    "mode": {
+      "label": "Modo",
+      "planning": "Planificación",
+      "pre_show": "Previa",
+      "live": "En vivo",
+      "wrap": "Cierre"
+    },
+    "next": {
+      "planning": "Vuelve a planificación {time}",
+      "pre_show": "La previa empieza {time}",
+      "live": "El modo en vivo empieza {time}",
+      "wrap": "El cierre empieza {time}",
+      "none": "El cierre termina {time}",
+      "settled": "Este evento ha terminado."
+    },
+    "override": {
+      "label": "Fijar el modo",
+      "automatic": "Automático ({mode})",
+      "submit": "Fijar modo",
+      "saved": "Modo actualizado.",
+      "manualNote": "Fijado a mano. El automático sería: {mode}.",
+      "autoNote": "Las horas siguen la zona horaria del evento ({timeZone})."
+    },
+    "customize": "Personalizar diseño",
+    "done": "Listo",
+    "reset": "Restablecer predeterminado",
+    "resetDone": "Diseño restablecido.",
+    "saveFailed": "No se pudo guardar el diseño. Inténtalo de nuevo.",
+    "moveUp": "Subir {widget}",
+    "moveDown": "Bajar {widget}",
+    "hide": "Ocultar {widget}",
+    "show": "Mostrar {widget}",
+    "drag": "Arrastra {widget} para reordenar",
+    "hiddenTitle": "Widgets ocultos",
+    "hiddenNone": "No hay widgets ocultos.",
+    "moved": "{widget} movido a la posición {position}. Diseño guardado.",
+    "hiddenMsg": "{widget} oculto. Diseño guardado.",
+    "shownMsg": "{widget} visible. Diseño guardado.",
+    "live": {
+      "live": "Actualización en vivo activa",
+      "connecting": "Conectando…",
+      "offline": "Sin conexión, reintentando…",
+      "polling": "Se actualiza cada 30 segundos"
+    },
+    "loading": "Cargando…",
+    "unavailable": "No se pudo cargar este widget.",
+    "noAccess": {
+      "title": "Tu rol no tiene centro de mando",
+      "description": "Pide acceso a este evento a un propietario o administrador."
+    },
+    "empty": {
+      "title": "No hay widgets visibles",
+      "description": "Personaliza el diseño para mostrar widgets."
+    },
+    "meter": "{value} de {max}",
+    "widget": {
+      "readiness": {
+        "title": "Preparación",
+        "score": "Preparación {score} %",
+        "blocking": "Bloqueante",
+        "todo": "También pendiente",
+        "allDone": "Todo listo."
+      },
+      "sales": {
+        "title": "Ventas",
+        "today": "Hoy: {amount}",
+        "refunds": "Reembolsado: {amount}",
+        "orders": "{count, plural, one {# pedido} other {# pedidos}}"
+      },
+      "tickets": {
+        "title": "Entradas vendidas",
+        "ofCapacity": "de {capacity}",
+        "noCapacity": "Aún no hay entradas a la venta",
+        "comps": "{count, plural, one {# de cortesía} other {# de cortesía}}"
+      },
+      "checkins": {
+        "title": "Registros de entrada",
+        "today": "registrados hoy",
+        "total": "{total} de {valid} entradas registradas"
+      },
+      "seatFill": {
+        "title": "Ocupación de asientos",
+        "ofSeats": "{occupied} de {total} asientos ocupados",
+        "noSeats": "Aún no hay plano de asientos"
+      },
+      "devices": {
+        "title": "Dispositivos en línea",
+        "ofEnrolled": "{count, plural, one {de # dispositivo registrado} other {de # dispositivos registrados}}",
+        "lowBattery": "{count, plural, one {# dispositivo con poca batería} other {# dispositivos con poca batería}}",
+        "none": "Aún no hay dispositivos de acceso"
+      },
+      "timeline": {
+        "title": "Próximamente",
+        "empty": "No hay nada más programado.",
+        "kind": {
+          "preShow": "Empieza la previa",
+          "live": "Empieza el modo en vivo",
+          "start": "Empieza el evento",
+          "end": "Termina el evento",
+          "wrap": "Empieza el cierre",
+          "wrapEnd": "Termina el cierre",
+          "date": "Próxima fecha",
+          "session": "Sesión: {title}"
+        }
+      },
+      "alerts": {
+        "title": "Alertas",
+        "pending": "Las alertas aparecerán aquí cuando se activen las reglas de alerta.",
+        "none": "No hay alertas abiertas."
+      }
+    }
   }
 }

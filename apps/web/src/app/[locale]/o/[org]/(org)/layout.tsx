@@ -8,6 +8,7 @@ import { loadConsoleBase } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
+  { key: 'commandCenter', path: 'command-center', group: 'overview', module: 'core', icon: 'gauge' },
   { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
   { key: 'audiences', path: 'audiences', group: 'overview', module: 'marketing', icon: 'megaphone' },
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
@@ -35,6 +36,7 @@ const CONTENT_ORG_ONLY = new Set(['helpCenter', 'marketingSite']);
 
 /** Items only some roles may open (the pages refuse everyone else too). */
 const NEEDS: Readonly<Record<string, string>> = {
+  commandCenter: 'events:read',
   messages: 'messages:read',
   messagingHealth: 'messages:read',
   audiences: 'messages:read',

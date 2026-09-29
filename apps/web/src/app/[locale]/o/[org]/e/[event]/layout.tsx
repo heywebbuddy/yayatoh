@@ -18,6 +18,15 @@ const TRACKED_LINKS: NavItem = {
   icon: 'link',
 };
 
+/** M3.2a: the event's Command Center, right after the home page (every profile). */
+const COMMAND_CENTER: NavItem = {
+  key: 'commandCenter',
+  path: 'command-center',
+  group: 'overview',
+  module: 'core',
+  icon: 'gauge',
+};
+
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
@@ -50,7 +59,7 @@ export default async function EventLayout({
   const phase = eventPhase(ev.startsAt.toISOString(), ev.endsAt.toISOString());
   // M4.2a: only the sections this person may open (profile routes, team roles, permissions).
   const items = [
-    ...composeNav(profile, data.modules),
+    ...composeNav(profile, data.modules).flatMap((i) => (i.key === 'home' ? [i, COMMAND_CENTER] : [i])),
     ...(data.modules.has('marketing') ? [TRACKED_LINKS] : []),
     ...COPY_NAV,
   ].filter((i) => opens(i.key) && (!NEEDS[i.key] || can(NEEDS[i.key] as string)));

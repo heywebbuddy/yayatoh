@@ -271,7 +271,8 @@
     "refundRequests": "Refund requests",
     "helpCenter": "Help center",
     "marketingSite": "Marketing site",
-    "tablesSponsors": "Tables & Sponsors"
+    "tablesSponsors": "Tables & Sponsors",
+    "commandCenter": "Command Center"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -5922,5 +5923,141 @@
     "title": "Scheduled maintenance: changes are paused",
     "body": "Yayatoh is in read-only maintenance while we move to the new platform. You can still look at everything, download exports, scan tickets at the door, and your public pages stay online. Saving changes, new sales and refunds are paused until it ends.",
     "bodyUntil": "Yayatoh is in read-only maintenance while we move to the new platform, until about {until}. You can still look at everything, download exports, scan tickets at the door, and your public pages stay online. Saving changes, new sales and refunds are paused until then."
+  },
+  "commandCenter": {
+    "title": "Command Center",
+    "widgets": "Widgets",
+    "overviewTitle": "Command Center",
+    "overviewDescription": "Events that are live, about to start, being planned or wrapping up. Live first.",
+    "overviewTruncated": "Showing the first {shown} of {total} events (live first).",
+    "overviewEmpty": {
+      "title": "Nothing to watch right now",
+      "description": "Events show up here while they're being planned, on the day and for a week after."
+    },
+    "columns": {
+      "event": "Event",
+      "mode": "Mode",
+      "starts": "Starts",
+      "readiness": "Readiness"
+    },
+    "manual": "Set by hand",
+    "role": {
+      "owner": "Owner view",
+      "ops": "Operations view",
+      "finance": "Finance view",
+      "door": "Door view",
+      "marketing": "Marketing view"
+    },
+    "mode": {
+      "label": "Mode",
+      "planning": "Planning",
+      "pre_show": "Pre-show",
+      "live": "Live",
+      "wrap": "Wrap-up"
+    },
+    "next": {
+      "planning": "Back to planning {time}",
+      "pre_show": "Pre-show starts {time}",
+      "live": "Live mode starts {time}",
+      "wrap": "Wrap-up starts {time}",
+      "none": "Wrap-up ends {time}",
+      "settled": "This event is over."
+    },
+    "override": {
+      "label": "Set the mode",
+      "automatic": "Automatic ({mode})",
+      "submit": "Set mode",
+      "saved": "Mode updated.",
+      "manualNote": "Set by hand. Automatic would be: {mode}.",
+      "autoNote": "Times follow the event's time zone ({timeZone})."
+    },
+    "customize": "Customize layout",
+    "done": "Done",
+    "reset": "Reset to default",
+    "resetDone": "Layout reset to default.",
+    "saveFailed": "Couldn't save the layout. Try again.",
+    "moveUp": "Move {widget} up",
+    "moveDown": "Move {widget} down",
+    "hide": "Hide {widget}",
+    "show": "Show {widget}",
+    "drag": "Drag {widget} to reorder",
+    "hiddenTitle": "Hidden widgets",
+    "hiddenNone": "No hidden widgets.",
+    "moved": "{widget} moved to position {position}. Layout saved.",
+    "hiddenMsg": "{widget} hidden. Layout saved.",
+    "shownMsg": "{widget} shown. Layout saved.",
+    "live": {
+      "live": "Live updates on",
+      "connecting": "Connecting…",
+      "offline": "Offline, retrying…",
+      "polling": "Updates every 30 seconds"
+    },
+    "loading": "Loading…",
+    "unavailable": "This widget couldn't load.",
+    "noAccess": {
+      "title": "No Command Center for your role",
+      "description": "Ask an owner or admin for access to this event."
+    },
+    "empty": {
+      "title": "No widgets shown",
+      "description": "Customize the layout to show widgets."
+    },
+    "meter": "{value} of {max}",
+    "widget": {
+      "readiness": {
+        "title": "Readiness",
+        "score": "Readiness {score}%",
+        "blocking": "Blocking",
+        "todo": "Also to do",
+        "allDone": "Ready to go."
+      },
+      "sales": {
+        "title": "Sales",
+        "today": "Today: {amount}",
+        "refunds": "Refunded: {amount}",
+        "orders": "{count, plural, one {# order} other {# orders}}"
+      },
+      "tickets": {
+        "title": "Tickets sold",
+        "ofCapacity": "of {capacity}",
+        "noCapacity": "No tickets on sale yet",
+        "comps": "{count, plural, one {# complimentary} other {# complimentary}}"
+      },
+      "checkins": {
+        "title": "Check-ins",
+        "today": "checked in today",
+        "total": "{total} of {valid} tickets checked in"
+      },
+      "seatFill": {
+        "title": "Seat fill",
+        "ofSeats": "{occupied} of {total} seats filled",
+        "noSeats": "No seating chart yet"
+      },
+      "devices": {
+        "title": "Devices online",
+        "ofEnrolled": "{count, plural, one {of # enrolled device} other {of # enrolled devices}}",
+        "lowBattery": "{count, plural, one {# device low on battery} other {# devices low on battery}}",
+        "none": "No check-in devices yet"
+      },
+      "timeline": {
+        "title": "Coming up",
+        "empty": "Nothing else scheduled.",
+        "kind": {
+          "preShow": "Pre-show starts",
+          "live": "Live mode starts",
+          "start": "Event starts",
+          "end": "Event ends",
+          "wrap": "Wrap-up starts",
+          "wrapEnd": "Wrap-up ends",
+          "date": "Next date",
+          "session": "Session: {title}"
+        }
+      },
+      "alerts": {
+        "title": "Alerts",
+        "pending": "Alerts will appear here once alert rules are switched on.",
+        "none": "No open alerts."
+      }
+    }
   }
 }

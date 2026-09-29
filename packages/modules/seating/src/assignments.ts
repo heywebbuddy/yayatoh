@@ -118,6 +118,19 @@ export async function seatsOccupiedTx(tx: TenantTx, eventId: string): Promise<nu
 }
 
 /**
+ * Seat fill of one event (M3.2 Command Center): occupied seats (as `seatsOccupiedTx`) and all
+ * seats of its charts. Counts only.
+ */
+export async function seatFillTx(
+  tx: TenantTx,
+  eventId: string,
+): Promise<{ occupied: number; total: number }> {
+  const [r] = await tx.execute<{ total: number }>(sql`
+    select count(*)::int as total from seating.event_seats s where s.event_id = ${eventId}::uuid`);
+  return { occupied: await seatsOccupiedTx(tx, eventId), total: Number(r?.total ?? 0) };
+}
+
+/**
  * Seat people at a table or row (M1.7d). Without `seatUuid` they take the first free seats there
  * (accessible seats last); with it, one person takes that exact seat, even one blocked for a
  * channel or accessibility, and a guest who was placed there automatically moves to another
