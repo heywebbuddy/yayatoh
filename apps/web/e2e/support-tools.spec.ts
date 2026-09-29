@@ -148,7 +148,8 @@ test.describe('support tools (M3.10c)', () => {
     await expect(again.getByText('This ticket has already been claimed')).toBeVisible();
 
     // At the door: the buyer's old code for that ticket is refused, the recipient's admits.
-    const kept = await codesOn(await (async () => (await guest.reload(), guest))());
+    await guest.reload();
+    const kept = await codesOn(guest);
     const oldCode = before.find((c) => !kept.includes(c)) ?? '';
     expect(oldCode).not.toBe('');
     expect(newCode).not.toBe(oldCode);
