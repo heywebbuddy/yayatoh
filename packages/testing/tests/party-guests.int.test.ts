@@ -7,6 +7,7 @@ import {
   addPartyGuestCommand,
   addPlusOneCommand,
   createPartyCommand,
+  guestCountQuery,
   guestListQuery,
   moveGuestCommand,
   partyHistoryQuery,
@@ -94,6 +95,15 @@ describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     expect(plus).toMatchObject({ kind: 'plus_one', hostGuestId: luis.id, firstName: null, isPrimary: false });
 
     const list = await executeQuery(guestListQuery, { eventId: ev.id }, a.ctx(), ports);
+    // The setup checklist's count (batch 3c merge) agrees with the list; the other org sees none.
+    expect(await executeQuery(guestCountQuery, { eventId: ev.id }, a.ctx(), ports)).toEqual({
+      parties: 1,
+      guests: 3,
+    });
+    expect(await executeQuery(guestCountQuery, { eventId: ev.id }, b.ctx(), ports)).toEqual({
+      parties: 0,
+      guests: 0,
+    });
     expect(list.counts).toMatchObject({
       parties: 1,
       vipParties: 1,

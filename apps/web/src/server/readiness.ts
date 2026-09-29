@@ -1,6 +1,6 @@
 import 'server-only';
 import { eventDetailsQuery, eventSectionsQuery, listOccurrencesQuery } from '@yayatoh/events';
-import { guestListQuery } from '@yayatoh/guests';
+import { guestCountQuery } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, PROFILES } from '@yayatoh/platform';
 import { programCountsQuery } from '@yayatoh/program';
@@ -29,7 +29,7 @@ export const loadReadiness = cache(async (orgSlug: string, eventSlug: string): P
       : Promise.resolve(null),
     // M4.1a: the guest list's count (the checklist's "add your guests", for those who may read it).
     checklist.includes('guestsAdded') && data.modules.has('guests') && can('guests:read')
-      ? executeQuery(guestListQuery, { eventId: ev.id, limit: 1 }, data.ctx, ports)
+      ? executeQuery(guestCountQuery, { eventId: ev.id }, data.ctx, ports)
       : Promise.resolve(null),
   ]);
   const now = new Date();
@@ -50,7 +50,7 @@ export const loadReadiness = cache(async (orgSlug: string, eventSlug: string): P
     nav,
     checklist,
     floorPlan: seating !== null,
-    guests: guestList?.counts.guests ?? 0,
+    guests: guestList?.guests ?? 0,
     now,
   });
 });

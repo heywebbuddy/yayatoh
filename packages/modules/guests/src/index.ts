@@ -20,6 +20,7 @@ export {
   addPlusOneCommand,
   createPartyCommand,
   GuestListInput,
+  guestCountQuery,
   guestListQuery,
   MAX_GUESTS_PER_EVENT,
   MAX_GUESTS_PER_PARTY,

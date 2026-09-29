@@ -88,6 +88,11 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
   test('a host builds the list: parties, a child, a plus-one; edits, moves, history and persistence', async ({
     page,
   }) => {
+    // About 25 page loads and Server Actions in one flow. Merged with batch 3b/3c, every console
+    // render also reads the status-page banner, the freeze banner and the setup checklist, so
+    // under the parallel suite this runs past the default 30 s (batch 3c merge; measured 26-29 s
+    // with two workers on the same test).
+    test.setTimeout(90_000);
     const s = stamp();
     await signIn(page);
     const base = await createWedding(page, `Garcia Kim Wedding ${s}`);

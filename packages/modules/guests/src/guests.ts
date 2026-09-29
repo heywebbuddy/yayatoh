@@ -776,6 +776,25 @@ export const guestListQuery = tenantQuery({
   },
 });
 
+/**
+ * How many parties and guests (placeholder plus-ones included) an event has: the setup checklist's
+ * "add your guests" item (batch 3c merge), without loading the list or opening sealed answers.
+ */
+export const guestCountQuery = tenantQuery({
+  name: 'guests.guestCount',
+  input: z.object({ eventId: z.uuid() }),
+  output: z.object({ parties: z.int(), guests: z.int() }),
+  entitlement: 'guests',
+  permission: 'guests:read',
+  handler: async ({ input, tx }) => {
+    const [p, g] = await Promise.all([
+      countOf(tx, eq(parties.eventId, input.eventId), parties),
+      countOf(tx, eq(guests.eventId, input.eventId), guests),
+    ]);
+    return { parties: p, guests: g };
+  },
+});
+
 /** A party's change history, newest first (moves out of the party included). */
 export const partyHistoryQuery = tenantQuery({
   name: 'guests.partyHistory',
