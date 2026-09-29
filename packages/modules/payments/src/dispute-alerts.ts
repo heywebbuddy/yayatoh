@@ -1,7 +1,7 @@
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, type Notifier, tenantCommand } from '@yayatoh/platform';
-import { and, asc, eq, isNotNull, lt, sql } from 'drizzle-orm';
+import { and, asc, eq, isNotNull, lt, lte } from 'drizzle-orm';
 import { z } from 'zod';
 import { disputes } from './schema.ts';
 
@@ -45,7 +45,7 @@ export const alertDisputeDeadlinesCommand = tenantCommand({
           eq(disputes.status, 'open'),
           isNotNull(disputes.evidenceDueBy),
           lt(disputes.deadlineAlertLevel, 2),
-          sql`${disputes.evidenceDueBy} <= ${soon}`,
+          lte(disputes.evidenceDueBy, soon),
         ),
       )
       .orderBy(asc(disputes.evidenceDueBy))
@@ -53,7 +53,7 @@ export const alertDisputeDeadlinesCommand = tenantCommand({
       .for('update', { skipLocked: true });
     let alerted = 0;
     for (const d of due) {
-      const level = disputeAlertLevel(d.evidenceDueBy ? new Date(d.evidenceDueBy) : null, ctx.now);
+      const level = disputeAlertLevel(d.evidenceDueBy, ctx.now);
       if (level <= d.deadlineAlertLevel) continue;
       const [u] = await tx
         .update(disputes)
@@ -61,7 +61,7 @@ export const alertDisputeDeadlinesCommand = tenantCommand({
         .where(and(eq(disputes.id, d.id), lt(disputes.deadlineAlertLevel, level)))
         .returning({ id: disputes.id });
       if (!u) continue;
-      const dueBy = new Date(d.evidenceDueBy as unknown as string | Date);
+      const dueBy = d.evidenceDueBy ?? ctx.now;
       emit({
         type: 'payments.dispute_deadline_approaching',
         version: 1,

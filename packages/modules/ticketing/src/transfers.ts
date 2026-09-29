@@ -3,7 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, type DomainEvent, DomainError, requireOrg } from '@yayatoh/kernel';
 import { signLinkToken, tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { decideTransfer, type TransferRefusal, transferDeadline } from './domain/transfer-rules.ts';
 import { holderLinks, ticketClaims, tickets, ticketTransfers, ticketTypes } from './schema.ts';
@@ -66,19 +66,18 @@ function refuse(reason: TransferRefusal, deadline?: Date): never {
 }
 
 async function ticketForTransferTx(tx: TenantTx, ticketId: string) {
-  const [row] = await tx
+  const [t] = await tx.select().from(tickets).where(eq(tickets.id, ticketId)).for('update');
+  if (!t) return null;
+  const [rules] = await tx
     .select({
-      t: tickets,
       transfersAllowed: ticketTypes.transfersAllowed,
       transferCutoffHours: ticketTypes.transferCutoffHours,
       transferFeeMinor: ticketTypes.transferFeeMinor,
       currency: ticketTypes.currency,
     })
-    .from(tickets)
-    .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
-    .where(eq(tickets.id, ticketId))
-    .for('update', { of: tickets });
-  return row ?? null;
+    .from(ticketTypes)
+    .where(eq(ticketTypes.id, t.ticketTypeId));
+  return rules ? { t, ...rules } : null;
 }
 
 /**
@@ -428,7 +427,7 @@ export async function holderTransferOptionsTx(
         inArray(ticketTransfers.ticketId, [...ticketIds]),
         eq(ticketTransfers.status, 'pending'),
         isNull(ticketClaims.revokedAt),
-        sql`${ticketClaims.expiresAt} > ${now}`,
+        gt(ticketClaims.expiresAt, now),
       ),
     );
   const open = new Map(pending.map((p) => [p.ticketId, p]));
