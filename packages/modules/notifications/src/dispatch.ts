@@ -1,3 +1,4 @@
+import { RTL_LOCALES } from '@yayatoh/contracts';
 import { consentRegivenSinceTx, normalizeEmail } from '@yayatoh/crm';
 import { isForeignKeyViolation, type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
@@ -21,7 +22,14 @@ import {
   suppressions,
   templateOverrides,
 } from './schema.ts';
-import { emailLocale, renderMessage, smsText } from './templates/render.ts';
+import { renderStoredContent, type StoredContent, storedContentTx } from './stored-content.ts';
+import {
+  EMAIL_MESSAGES,
+  emailLocale,
+  type RenderedMessage,
+  renderMessage,
+  smsText,
+} from './templates/render.ts';
 import { PLATFORM_SENDER, type PushTransport, type Transports } from './transports.ts';
 import { pushTopic, type Urgency } from './web-push.ts';
 
@@ -115,6 +123,17 @@ export async function dispatchDueTx(
     )
     .filter((e): e is string => Boolean(e));
   const erased = batchEmails.length ? await erasedAddressesTx(tx, batchEmails) : new Map();
+
+  const contents = new Map<string, Promise<StoredContent | null>>();
+  const storedContentOf = (id: string) => {
+    if (!/^[0-9a-f-]{36}$/.test(id)) return Promise.resolve(null);
+    let p = contents.get(id);
+    if (!p) {
+      p = storedContentTx(tx, id);
+      contents.set(id, p);
+    }
+    return p;
+  };
 
   const update = (row: Row, set: Partial<Row>) =>
     tx
@@ -258,16 +277,44 @@ export async function dispatchDueTx(
       const href = typeof params._href === 'string' && params._href ? params._href : null;
       // Member alerts link into the console: their button uses the same link as push (M1.9e).
       const consoleLink = href ? `${deps.appOrigin}/o/${org.slug}${href}` : null;
-      const rendered = renderMessage({
-        kind: row.kind as MessageKind,
-        locale,
-        params: consoleLink && !params.url ? { ...params, url: consoleLink } : params,
-        // The brand kit logo (M1.4e) as an absolute URL on the app origin (email clients fetch it).
-        org: { ...org, logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null },
-        recipientName: row.recipientName,
-        unsubscribeUrl: unsub?.page ?? null,
-        override: override ?? null,
-      });
+      // Stored content (M3.6b campaigns): the campaign's rendered email, filled for this recipient.
+      const contentId = typeof params._content === 'string' && params._content ? params._content : null;
+      const stored = contentId ? await storedContentOf(contentId) : null;
+      if (contentId && !stored) {
+        await update(row, { status: 'failed', reason: 'no_content', attempts: row.attempts + 1 });
+        result.failed += 1;
+        continue;
+      }
+      const filled = stored
+        ? renderStoredContent(stored, {
+            name: row.recipientName,
+            email,
+            orgName: org.name,
+            unsubscribeUrl: unsub?.page ?? null,
+            origin: deps.appOrigin,
+          })
+        : null;
+      const storedLang = stored ? emailLocale(stored.locale) : null;
+      const rendered: RenderedMessage =
+        filled && storedLang
+          ? {
+              subject: filled.subject,
+              html: filled.html,
+              text: filled.text,
+              lang: storedLang,
+              dir: RTL_LOCALES.has(storedLang) ? 'rtl' : 'ltr',
+              preview: filled.preview,
+            }
+          : renderMessage({
+              kind: row.kind as MessageKind,
+              locale,
+              params: consoleLink && !params.url ? { ...params, url: consoleLink } : params,
+              // The brand kit logo (M1.4e) as an absolute URL on the app origin (email clients fetch it).
+              org: { ...org, logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null },
+              recipientName: row.recipientName,
+              unsubscribeUrl: unsub?.page ?? null,
+              override: override ?? null,
+            });
       // The message's own link: its page (tickets, order), the conversation (announcements,
       // replies) or, for member notifications, the console page.
       const link =
@@ -279,7 +326,12 @@ export async function dispatchDueTx(
       let providerMessageId: string;
       let segments: number | null = null;
       const textBody = () =>
-        smsText(rendered, { orgName: org.name, category: def.category, body: params.body, link });
+        filled?.sms
+          ? [
+              `${org.name}: ${filled.sms}`,
+              ...(optional ? [EMAIL_MESSAGES[rendered.lang].common.smsStop] : []),
+            ].join('\n')
+          : smsText(rendered, { orgName: org.name, category: def.category, body: params.body, link });
       if (row.channel === 'email') {
         if (!email) {
           await update(row, { status: 'failed', reason: 'no_address', attempts: row.attempts + 1 });

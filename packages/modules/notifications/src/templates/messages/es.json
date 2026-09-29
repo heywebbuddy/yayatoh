@@ -170,6 +170,10 @@
       "subject": "{eventName} se ha aplazado",
       "intro": "{eventName} se ha aplazado. Tus entradas siguen siendo válidas para la nueva fecha. Si no puedes asistir, puedes pedir un reembolso desde la página de tu pedido según la política de reembolso del organizador.",
       "cta": "Ver mi pedido"
+    },
+    "campaigns.test": {
+      "subject": "[Prueba] {subject}",
+      "intro": "Un envío de prueba de tu campaña."
     }
   },
   "roles": {
@@ -188,5 +192,10 @@
       "intro": "Como pediste, tu cuenta de Yayatoh se ha eliminado. Se cerró tu sesión en todas partes y se borraron tus datos de acceso y la verificación en dos pasos. Los organizadores a los que compraste conservan sus registros de pedidos, como exige la ley.\n\nSi no lo pediste tú, responde a este correo de inmediato."
     },
     "sentBy": "Enviado por Yayatoh sobre tu cuenta."
+  },
+  "campaigns": {
+    "testBanner": "Correo de prueba: solo tu equipo lo ha recibido. Los campos combinados muestran su valor alternativo.",
+    "eventCta": "Ver el evento",
+    "testSubject": "[Prueba] {subject}"
   }
 }

@@ -119,6 +119,7 @@ export {
 } from './policy/console.ts';
 export {
   createGateState,
+  orgQuotaLimitsTx,
   type GateFacts,
   type GateState,
   POLICY_RULES,
@@ -172,6 +173,16 @@ export {
   storeEmailPreviewCommand,
 } from './previews.ts';
 export { privateColumns } from './private-columns.ts';
+export {
+  cancelQueuedByPrefixTx,
+  marketingSuppressionsTx,
+  queuedSinceByPrefixTx,
+  renderStoredContent,
+  type StoredContent,
+  sendOutcomesTx,
+  storeContentTx,
+  storedContentTx,
+} from './stored-content.ts';
 export {
   DeviceLabel,
   endpointRef,

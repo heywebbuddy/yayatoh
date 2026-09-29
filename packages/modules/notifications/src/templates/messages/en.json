@@ -170,6 +170,10 @@
       "subject": "{eventName} is postponed",
       "intro": "{eventName} has been postponed. Your tickets stay valid for the new date. If you can’t make it, you can ask for a refund from your order page under the organizer’s refund policy.",
       "cta": "View my order"
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "A test send of your campaign."
     }
   },
   "roles": {
@@ -188,5 +192,10 @@
       "intro": "As you asked, your Yayatoh account has been deleted. You've been signed out everywhere, and your sign-in details and two-step verification were removed. Organizers you bought from keep their order records, as the law requires.\n\nIf you didn't ask for this, reply to this email at once."
     },
     "sentBy": "Sent by Yayatoh about your account."
+  },
+  "campaigns": {
+    "testBanner": "Test email: only your team received this. Merge fields show their fallbacks.",
+    "eventCta": "View the event",
+    "testSubject": "[Test] {subject}"
   }
 }

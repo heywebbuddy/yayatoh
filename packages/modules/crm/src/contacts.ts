@@ -188,3 +188,74 @@ export async function setContactPhoneTx(
 ): Promise<void> {
   await tx.update(contacts).set({ phoneE164, updatedAt: ctx.now }).where(eq(contacts.id, contactId));
 }
+
+export interface MarketingReach {
+  readonly contactId: string;
+  readonly email: string;
+  readonly name: string | null;
+  readonly phone: string | null;
+  /** The latest marketing consent for the channel (null: none recorded, which means no consent). */
+  readonly consent: ConsentInput['status'] | null;
+  /** When that consent row was captured. */
+  readonly consentAt: Date | null;
+}
+
+/**
+ * Addresses and the latest marketing consent on one channel for many contacts at once (a
+ * campaign's recipient snapshot, M3.6b). Merged contacts are left out (they have no reach of
+ * their own). One statement per 5,000 contacts.
+ */
+export async function marketingReachTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+  channel: ConsentInput['channel'],
+): Promise<MarketingReach[]> {
+  const out: MarketingReach[] = [];
+  for (let i = 0; i < contactIds.length; i += 5_000) {
+    const part = contactIds.slice(i, i + 5_000);
+    const rows = await tx.execute<{
+      id: string;
+      email: string;
+      name: string | null;
+      phone_e164: string | null;
+      status: string | null;
+      captured_at: string | Date | null;
+    }>(sql`
+      select c.id, c.email, c.name, c.phone_e164, lc.status, lc.captured_at
+      from crm.contacts c
+      left join lateral (
+        select k.status, k.captured_at from crm.consents k
+        where k.org_id = c.org_id and k.contact_id = c.id and k.channel = ${channel} and k.purpose = 'marketing'
+        order by k.captured_at desc, k.id desc
+        limit 1
+      ) lc on true
+      where c.id = any(ARRAY[${sql.join(
+        part.map((id) => sql`${id}`),
+        sql`, `,
+      )}]::uuid[])
+        and c.merged_into is null`);
+    for (const r of rows)
+      out.push({
+        contactId: r.id,
+        email: r.email,
+        name: r.name,
+        phone: r.phone_e164,
+        consent: (r.status as ConsentInput['status'] | null) ?? null,
+        consentAt: r.captured_at === null ? null : new Date(r.captured_at),
+      });
+  }
+  return out;
+}
+
+/** Names and addresses of contacts (a campaign releasing its next recipients, M3.6b). */
+export async function contactsForSendTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, { email: string; name: string | null; phone: string | null }>> {
+  if (contactIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: contacts.id, email: contacts.email, name: contacts.name, phone: contacts.phoneE164 })
+    .from(contacts)
+    .where(inArray(contacts.id, [...contactIds]));
+  return new Map(rows.map((r) => [r.id, { email: r.email, name: r.name, phone: r.phone }]));
+}

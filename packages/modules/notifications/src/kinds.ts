@@ -242,6 +242,15 @@ export const KINDS = {
     whatsapp: 'marketing',
     params: ['subject', 'body', 'name'],
   },
+  // A campaign test send (M3.6b) to up to five addresses the sender typed: clearly marked, never
+  // counted in the campaign's results, sent at once (the sender is waiting for it). The body is
+  // the campaign's stored content; transactional so the consent gate (marketing) doesn't apply.
+  'campaigns.test': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['subject'],
+  },
   // The org's complaint rate went over the limit and optional messaging paused itself (M3.5a).
   'messaging.auto_paused': {
     category: 'transactional',

@@ -170,6 +170,10 @@
       "subject": "{eventName} is uitgesteld",
       "intro": "{eventName} is uitgesteld. Je tickets blijven geldig voor de nieuwe datum. Kun je niet komen, dan kun je op je bestelpagina om terugbetaling vragen volgens het terugbetalingsbeleid van de organisator.",
       "cta": "Mijn bestelling bekijken"
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "Een testverzending van je campagne."
     }
   },
   "roles": {
@@ -188,5 +192,10 @@
       "intro": "Zoals je vroeg, is je Yayatoh-account verwijderd. Je bent overal uitgelogd en je inloggegevens en tweestapsverificatie zijn verwijderd. Organisatoren bij wie je kocht, bewaren hun bestelgegevens, zoals de wet vereist.\n\nHeb jij dit niet gevraagd? Beantwoord deze e-mail dan meteen."
     },
     "sentBy": "Verzonden door Yayatoh over je account."
+  },
+  "campaigns": {
+    "testBanner": "Testmail: alleen je team heeft deze ontvangen. Samenvoegvelden tonen hun standaardwaarde.",
+    "eventCta": "Bekijk het evenement",
+    "testSubject": "[Test] {subject}"
   }
 }

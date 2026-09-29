@@ -170,6 +170,10 @@
       "subject": "{eventName} wurde verschoben",
       "intro": "{eventName} wurde verschoben. Deine Tickets bleiben für den neuen Termin gültig. Wenn du nicht kommen kannst, kannst du auf deiner Bestellseite nach der Erstattungsrichtlinie des Veranstalters eine Erstattung anfragen.",
       "cta": "Meine Bestellung ansehen"
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "Ein Testversand deiner Kampagne."
     }
   },
   "roles": {
@@ -188,5 +192,10 @@
       "intro": "Wie gewünscht wurde Ihr Yayatoh-Konto gelöscht. Sie wurden überall abgemeldet, und Ihre Anmeldedaten sowie die Bestätigung in zwei Schritten wurden entfernt. Veranstalter, bei denen Sie gekauft haben, behalten ihre Bestellunterlagen, wie es das Gesetz verlangt.\n\nWenn Sie das nicht veranlasst haben, antworten Sie sofort auf diese E-Mail."
     },
     "sentBy": "Von Yayatoh zu Ihrem Konto gesendet."
+  },
+  "campaigns": {
+    "testBanner": "Test-E-Mail: Nur dein Team hat sie erhalten. Platzhalter zeigen ihren Ersatzwert.",
+    "eventCta": "Veranstaltung ansehen",
+    "testSubject": "[Test] {subject}"
   }
 }

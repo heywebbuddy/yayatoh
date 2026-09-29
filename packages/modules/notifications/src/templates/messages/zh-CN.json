@@ -170,6 +170,10 @@
       "subject": "{eventName} 已延期",
       "intro": "{eventName} 已延期。您的门票在新日期仍然有效。如无法参加，可根据主办方的退款政策在订单页面申请退款。",
       "cta": "查看我的订单"
+    },
+    "campaigns.test": {
+      "subject": "[测试] {subject}",
+      "intro": "你的营销活动的测试发送。"
     }
   },
   "roles": {
@@ -188,5 +192,10 @@
       "intro": "按照你的要求，你的 Yayatoh 账户已删除。你已在所有设备上退出登录，登录信息和两步验证也已移除。你购票的主办方会依法保留其订单记录。\n\n如果这不是你本人的操作，请立即回复此邮件。"
     },
     "sentBy": "由 Yayatoh 就你的账户发送。"
+  },
+  "campaigns": {
+    "testBanner": "测试邮件：只有你的团队收到。合并字段显示其备用值。",
+    "eventCta": "查看活动",
+    "testSubject": "[测试] {subject}"
   }
 }

@@ -170,6 +170,10 @@
       "subject": "{eventName} est reporté",
       "intro": "{eventName} a été reporté. Vos billets restent valables pour la nouvelle date. Si vous ne pouvez pas venir, vous pouvez demander un remboursement depuis la page de votre commande, selon la politique de remboursement de l’organisateur.",
       "cta": "Voir ma commande"
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "Un envoi de test de votre campagne."
     }
   },
   "roles": {
@@ -188,5 +192,10 @@
       "intro": "Comme vous l'avez demandé, votre compte Yayatoh a été supprimé. Vous avez été déconnecté partout, et vos identifiants ainsi que la validation en deux étapes ont été supprimés. Les organisateurs auprès de qui vous avez acheté conservent leurs commandes, comme la loi l'exige.\n\nSi vous n'êtes pas à l'origine de cette demande, répondez immédiatement à cet e-mail."
     },
     "sentBy": "Envoyé par Yayatoh au sujet de votre compte."
+  },
+  "campaigns": {
+    "testBanner": "E-mail de test : seule votre équipe l’a reçu. Les champs de fusion affichent leur valeur par défaut.",
+    "eventCta": "Voir l’événement",
+    "testSubject": "[Test] {subject}"
   }
 }
