@@ -1,6 +1,5 @@
 import { eventDetailsQuery, shortLinksQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, PageHeader } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -17,12 +16,12 @@ export default async function EventDetailsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'details');
   const t = await getTranslations('details');
-  const canWrite = roleCan(data.role, 'events:write');
+  const canWrite = can('events:write');
   const [details, venues, links] = await Promise.all([
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
-    executeQuery(listVenuesQuery, {}, data.ctx, ports),
+    executeQuery(listVenuesQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(shortLinksQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
   // The picked venue stays listed even if it was archived since.

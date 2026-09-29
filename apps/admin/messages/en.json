@@ -55,7 +55,11 @@
     "people": "Privacy requests",
     "passkeys": "Passkeys",
     "messaging": "Auto-paused messaging",
-    "messagingCount": "Auto-paused messaging ({count})"
+    "messagingCount": "Auto-paused messaging ({count})",
+    "openSignup": "Open signup",
+    "incidents": "Incidents",
+    "frontDoor": "Front door",
+    "maintenance": "Maintenance"
   },
   "tenants": {
     "title": "Tenants",
@@ -636,6 +640,254 @@
       "validation_failed": "Check the values: a whole number and a reason of at least 3 characters.",
       "forbidden": "Your staff role can't do that.",
       "internal": "Something went wrong."
+    }
+  },
+  "openSignup": {
+    "title": "Open signup",
+    "description": "Whether anyone can create an organizer account and organization without a signup code. Off until the public launch.",
+    "current": "Current state",
+    "state": {
+      "on": "Open: anyone can sign up",
+      "off": "Closed: signup codes only"
+    },
+    "explain": {
+      "on": "Anyone with a verified email can create an organization under the current fee model. New organizations start in setup mode (no guest messaging) until their required onboarding steps are done. Signup codes keep working.",
+      "off": "The public signup page says self-serve signup is coming soon. Organizations are created only with a signup code."
+    },
+    "since": "Last changed {date} (UTC)",
+    "reason": "Reason",
+    "reasonHint": "Kept in the history and the access log (3–500 characters).",
+    "confirm": "I understand that anyone will be able to create an organization, and that this is the public launch decision.",
+    "open": "Open signup",
+    "close": "Close signup",
+    "done": {
+      "opened": "Signup is open.",
+      "closed": "Signup is closed.",
+      "unchanged": "Nothing changed: the switch was already in that state."
+    },
+    "error": {
+      "reason": "Give a reason of 3 to 500 characters.",
+      "confirm": "Tick the box to confirm opening signup."
+    },
+    "history": "Changes",
+    "noHistory": "No changes yet.",
+    "col": {
+      "when": "When (UTC)",
+      "change": "Change",
+      "who": "Who",
+      "reason": "Reason"
+    },
+    "change": {
+      "on": "Opened",
+      "off": "Closed"
+    }
+  },
+  "incidents": {
+    "title": "Status incidents",
+    "descriptionFake": "Post and update incidents on the status page. The public status page, the console and the marketplace show them at once. This is the development status page; production uses the status page provider.",
+    "descriptionProvider": "Incidents are posted in the status page provider.",
+    "providerNote": "This environment uses the status page provider: post and update incidents there (see the on-call runbook).",
+    "list": "Recent incidents",
+    "empty": "No incidents in the last 14 days.",
+    "started": "started {date} UTC",
+    "new": {
+      "title": "Post an incident",
+      "titleField": "Title (shown publicly)",
+      "impact": "Impact",
+      "components": "Affected components",
+      "body": "First update (shown publicly)",
+      "submit": "Post incident",
+      "posted": "Incident posted. It is on the status page now."
+    },
+    "update": {
+      "label": "Update {title}",
+      "status": "New status",
+      "body": "Update (shown publicly)",
+      "submit": "Post update"
+    },
+    "errors": {
+      "summary": "Check the highlighted fields.",
+      "title": "Give the incident a title (up to 160 characters).",
+      "body": "Write the update (up to 2,000 characters).",
+      "closed": "This incident is already closed."
+    },
+    "impact": {
+      "minor": "Minor (degraded)",
+      "major": "Major (partial outage)",
+      "critical": "Critical (major outage)",
+      "maintenance": "Maintenance"
+    },
+    "status": {
+      "investigating": "Investigating",
+      "identified": "Identified",
+      "monitoring": "Monitoring",
+      "resolved": "Resolved",
+      "scheduled": "Scheduled",
+      "in_progress": "In progress",
+      "completed": "Completed"
+    },
+    "component": {
+      "marketplace": "Event pages and marketplace",
+      "checkout": "Checkout",
+      "console": "Organizer console",
+      "checkin": "Check-in and scanning",
+      "payments": "Payments and payouts",
+      "messaging": "Email and messaging",
+      "api": "API"
+    }
+  },
+  "frontDoor": {
+    "title": "Front door",
+    "description": "During the move from the legacy site, the new app answers every request on yayatoh.com and abc.yayatoh.com and sends anything it doesn't serve yet to the legacy site. Move read pages one route and one host at a time.",
+    "summary": "Route table version {version}. Counters cover the last {days, plural, one {# day} other {# days}} (UTC).",
+    "done": "Route updated. It applies to new requests within a few seconds.",
+    "errors": {
+      "invalid": "Choose a host and a route that exists for it.",
+      "reason": "Give a reason (3 to 500 characters).",
+      "step_up": "That code or password isn't right. Nothing changed.",
+      "rate_limited": "Too many attempts. Wait a few minutes and try again.",
+      "method": "Set up an authenticator or a password on your account to confirm it's you before moving routes."
+    },
+    "hosts": {
+      "title": "Legacy hosts",
+      "configured": "Legacy origin set: front door on",
+      "off": "No legacy origin: front door off"
+    },
+    "instance": {
+      "yay": "yayatoh.com instance",
+      "abc": "abc.yayatoh.com instance"
+    },
+    "routes": {
+      "title": "Moved routes",
+      "description": "Read pages that can move to the new app. Anything not listed here stays on the legacy site."
+    },
+    "col": {
+      "host": "Host",
+      "route": "Route",
+      "stage": "Stage",
+      "state": "Served by",
+      "requests": "Requests",
+      "notFound": "404s",
+      "proxyErrors": "Proxy errors",
+      "upstream5xx": "Legacy 5xx",
+      "latency": "Latency (avg / max)",
+      "changed": "Last change",
+      "servedBy": "Served by",
+      "path": "Path",
+      "count": "Count"
+    },
+    "state": {
+      "legacy": "Legacy",
+      "canary": "Canary (yy_canary cookie only)",
+      "next": "New app"
+    },
+    "servedBy": {
+      "legacy": "Legacy",
+      "next": "New app"
+    },
+    "bucket": {
+      "legacy": "Everything else (legacy)",
+      "platform": "New app's own pages"
+    },
+    "latency": "{avg} / {max}",
+    "ms": "{ms} ms",
+    "none": "–",
+    "never": "Never changed",
+    "changedBy": "{who}, {date}",
+    "change": {
+      "title": "Move a route",
+      "adminsOnly": "Only admins can move routes.",
+      "description": "Choose the host, the route and who serves it. Canary serves the new app only to browsers with the yy_canary=next cookie. Anyone with yy_legacy=1 always gets the legacy site.",
+      "host": "Host",
+      "route": "Route",
+      "routeOption": "{key} ({shape}){only, select, yay { · yayatoh.com only} abc { · abc only} other {}}",
+      "state": "Served by",
+      "stateHelp": "Legacy is the default. Move back to legacy at any time.",
+      "reason": "Reason",
+      "code": "Authenticator code",
+      "password": "Your password",
+      "submit": "Move route"
+    },
+    "other": {
+      "title": "Other traffic",
+      "description": "Requests outside the moved routes: pages the legacy site still serves, and the new app's own paths.",
+      "empty": "No requests recorded yet."
+    },
+    "notFound": {
+      "title": "404 top list",
+      "description": "The most requested missing pages over the last {days, plural, one {# day} other {# days}}, by who served them.",
+      "empty": "No 404s recorded."
+    },
+    "changes": {
+      "title": "Recent changes",
+      "empty": "No route has been moved yet.",
+      "item": "{host}: {route} from {from} to {to}",
+      "meta": "{who}, {date}: {reason}"
+    }
+  },
+  "maintenance": {
+    "title": "Maintenance",
+    "description": "The read-only freeze of the new platform and the cutover host routes (runbook: “Cutover”). Starting or ending a freeze needs a reason and you confirming it's you; both are logged.",
+    "reason": "Reason (kept in the change history and the access log)",
+    "password": "Your password (confirm it's you)",
+    "code": "Code from your authenticator app (confirm it's you)",
+    "done": {
+      "started": "Read-only freeze is on. Every write is refused until you end it; scans and public pages keep working.",
+      "ended": "Read-only freeze ended. Writes work again."
+    },
+    "errors": {
+      "reason": "Give a reason of at least 3 characters: it is kept in the change history.",
+      "scope": "Choose platform-wide or listed organizations.",
+      "orgs": "List the organizations' addresses, separated by commas (at most 100).",
+      "orgs_unknown": "No organization has these addresses: {slugs}.",
+      "expected_end": "The expected end must be a time in the future.",
+      "confirm_platform": "Tick the box to confirm a platform-wide freeze.",
+      "step_up": "That password or code isn't right. Confirm it's you and try again.",
+      "step_up_rate_limited": "Too many tries. Wait a few minutes before confirming it's you again.",
+      "step_up_method": "Set a password or an authenticator app on your account first: a freeze needs you to confirm it's you.",
+      "generic": "That didn't work ({code})."
+    },
+    "freeze": {
+      "title": "Read-only freeze",
+      "off": "Off: writes work normally",
+      "onPlatform": "On for the whole platform",
+      "onOrgs": "On for listed organizations",
+      "since": "Since {when} UTC, by {by}",
+      "until": "expected to end {when} UTC",
+      "frozenOrgs": "Frozen organizations",
+      "reason": "Reason: {reason}",
+      "effect": "While it is on, every change is refused with a maintenance message (saving, sales, refunds, invitations, imports, API writes) and organizers see a banner in their language. Reads, exports, check-in scans (online and offline) and public pages keep working. Refunds already sent to the payment provider still complete."
+    },
+    "start": {
+      "form": "Start or change the read-only freeze",
+      "scope": "Who is frozen",
+      "scopeOrgs": "Listed organizations",
+      "scopePlatform": "The whole platform",
+      "orgs": "Organization addresses, separated by commas (for listed organizations)",
+      "confirmPlatform": "I understand a platform-wide freeze stops every organizer's changes and every sale.",
+      "expectedEnd": "Expected end, UTC (optional; shown in the banner and used for Retry-After)",
+      "submit": "Start read-only freeze",
+      "update": "Change read-only freeze"
+    },
+    "end": {
+      "form": "End the read-only freeze",
+      "submit": "End read-only freeze"
+    },
+    "routes": {
+      "title": "Host routing",
+      "description": "Where each host's traffic goes during a cutover. The cutover tool flips these (runbook step “Switch host routing”); a host with no entry is served by the new platform.",
+      "empty": "No host is routed: every host is served by the new platform.",
+      "next": "new platform",
+      "legacy": "legacy app",
+      "by": "set by {by}, {when} UTC"
+    },
+    "history": {
+      "title": "Change history",
+      "empty": "Nothing has been changed yet.",
+      "freezeOn": "Read-only freeze on ({summary})",
+      "freezeOff": "Read-only freeze off",
+      "route": "Host {host} → {summary}",
+      "meta": "{who} · {when} UTC · {reason}"
     }
   }
 }

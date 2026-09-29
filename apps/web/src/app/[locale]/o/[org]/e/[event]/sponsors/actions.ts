@@ -30,7 +30,7 @@ export async function createTierAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sponsors');
   try {
     await executeCommand(
       createSponsorTierCommand,
@@ -56,7 +56,7 @@ export async function deleteTierAction(
   tierId: string,
   _prev: ProgramFormState,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sponsors');
   try {
     await executeCommand(deleteSponsorTierCommand, { eventId: ev.id, tierId }, data.ctx, ports);
   } catch (err) {
@@ -72,7 +72,7 @@ export async function createSponsorAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sponsors');
   try {
     await executeCommand(createSponsorCommand, { eventId: ev.id, ...fields(form) }, data.ctx, ports);
   } catch (err) {
@@ -89,7 +89,7 @@ export async function updateSponsorAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sponsors');
   try {
     await executeCommand(
       updateSponsorCommand,
@@ -105,7 +105,7 @@ export async function updateSponsorAction(
 }
 
 export async function deleteSponsorAction(org: string, event: string, sponsorId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sponsors');
   await executeCommand(deleteSponsorCommand, { eventId: ev.id, sponsorId }, data.ctx, ports);
   // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
   await purgeDeletedProgramMedia(data.org.id);

@@ -1,4 +1,6 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
+import { frontDoorEnv, legacyStubServer } from './e2e/front-door-env.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 
@@ -35,16 +37,23 @@ export default defineConfig({
   ],
   webServer: process.env.E2E_NO_SERVER
     ? undefined
-    : {
-        // Run next directly (a pnpm wrapper would not forward the stop signal) and bound the
-        // shutdown so a lingering connection pool can never hang the run.
-        command: `pnpm exec next start -p ${PORT}`,
-        port: PORT,
-        reuseExistingServer: true,
-        timeout: 120_000,
-        gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
-        // M1.4g: the marketplace's own /blogs and /pages show this org's content (the platform
-        // content org in production); the e2e uses a seeded org.
-        env: { MARKETPLACE_CONTENT_ORG: process.env.MARKETPLACE_CONTENT_ORG ?? 'harbor-arts' },
-      },
+    : [
+        // M2.4a: the stand-in legacy origins the front-door hosts forward to.
+        legacyStubServer(fileURLToPath(new URL('.', import.meta.url))),
+        {
+          // Run next directly (a pnpm wrapper would not forward the stop signal) and bound the
+          // shutdown so a lingering connection pool can never hang the run.
+          command: `pnpm exec next start -p ${PORT}`,
+          port: PORT,
+          reuseExistingServer: true,
+          timeout: 120_000,
+          gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
+          // M1.4g: the marketplace's own /blogs and /pages show this org's content (the platform
+          // content org in production); the e2e uses a seeded org.
+          env: {
+            MARKETPLACE_CONTENT_ORG: process.env.MARKETPLACE_CONTENT_ORG ?? 'harbor-arts',
+            ...frontDoorEnv,
+          },
+        },
+      ],
 });

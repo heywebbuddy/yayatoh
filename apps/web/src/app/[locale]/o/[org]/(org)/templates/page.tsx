@@ -1,12 +1,13 @@
 import { executeQuery } from '@yayatoh/kernel';
-import { listTemplatesQuery } from '@yayatoh/templates';
+import { composeNav, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { listTemplatesQuery, STARTER_KEYS, STARTER_TEMPLATES } from '@yayatoh/templates';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm } from '@/components/copy-forms.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { createFromTemplateAction, deleteTemplateAction } from './actions.ts';
+import { createFromStarterAction, createFromTemplateAction, deleteTemplateAction } from './actions.ts';
 
 /** M1.4b: the org's event templates; each creates a new draft event (never with sales data). */
 export default async function TemplatesPage({
@@ -23,6 +24,54 @@ export default async function TemplatesPage({
   return (
     <>
       <PageHeader title={t('templates.title')} description={t('templates.description')} />
+      {/* M4.2a: starter templates. The profile presets modules, navigation and the checklist. */}
+      <section aria-labelledby="starters-heading" className="flex flex-col gap-3">
+        <h2 id="starters-heading" className="text-section">
+          {t('starters.title')}
+        </h2>
+        <ul className="grid list-none grid-cols-1 gap-3.5 p-0 md:grid-cols-2">
+          {STARTER_KEYS.map((key) => {
+            const profile = STARTER_TEMPLATES[key].profile;
+            const nav = composeNav(profile, data.modules).filter((i) => i.group !== 'overview');
+            const checklist = PROFILES[profile].checklist ?? [];
+            return (
+              <li key={key} data-starter={key}>
+                <Card className="flex h-full flex-col gap-3">
+                  <Label>{t('starters.label')}</Label>
+                  <h3 className="text-section">{t(`starters.${key}.name`)}</h3>
+                  <p className="text-body text-zinc-600">{t(`starters.${key}.description`)}</p>
+                  <p className="text-caption text-zinc-500">
+                    {t('starters.sections', {
+                      list: nav.map((i) => t(navLabelKey(profile, i))).join(', '),
+                    })}
+                  </p>
+                  <p className="text-caption text-zinc-500">
+                    {t('starters.checklist', {
+                      list: checklist.map((k) => t(`readiness.${k}`)).join(', '),
+                    })}
+                  </p>
+                  {canWrite ? (
+                    <details className="group">
+                      <summary className="flex min-h-10 cursor-pointer list-none items-center text-body underline [&::-webkit-details-marker]:hidden">
+                        {t('starters.use', { name: t(`starters.${key}.name`) })}
+                      </summary>
+                      <div className="pt-3">
+                        <CopyEventForm
+                          idPrefix={`starter-${key}`}
+                          action={createFromStarterAction.bind(null, org, key)}
+                          defaults={{ name: '', startsAt: '' }}
+                          submitLabel={t('templates.createEvent')}
+                        />
+                      </div>
+                    </details>
+                  ) : null}
+                </Card>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <h2 className="text-section">{t('starters.yours')}</h2>
       {templates.length === 0 ? (
         <EmptyState title={t('templates.emptyTitle')} description={t('templates.emptyDescription')} />
       ) : (

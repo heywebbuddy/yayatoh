@@ -3,6 +3,11 @@ name: Legacy migration rehearsal
 # Roadmap §7.5 step 6: nightly rehearsals of the legacy migration (M2.2c).
 # - synthetic: always on. Generates the large synthetic dumps of both instances (tools/legacy-migrate)
 #   and runs the full pipeline, V1–V12, the order-link dry run and the timings.
+# - cutover (M2.5a): a cutover rehearsal (tools/cutover) on the synthetic dataset: both instances
+#   through every roadmap §7.8 step (yay, then abc), then the yay rollback with the reverse ETL and
+#   an SCT refund through the fake provider. Timed reports (freeze window ≤ 45 min, rollback ≤ 15)
+#   as artifacts. Nightly: R3 at the large scale; on pull requests that touch the migration or
+#   cutover tooling: R2 at the demo scale; on demand: any of R2, R3, R4.
 # - masked: disabled until the owner provides masked dumps (docs/owner-inbox.md, "Masked dumps for
 #   nightly rehearsals"). It turns on when the repository variable LEGACY_MASKED_DUMPS_READY is
 #   'true' and the dumps' location and key are configured as secrets. Never production data: only
@@ -15,10 +20,20 @@ on:
       scale:
         description: Synthetic scale (small | demo | large)
         default: large
+      rehearsal:
+        description: Cutover rehearsal (R2 | R3 | R4)
+        default: R3
+  pull_request:
+    paths:
+      - tools/cutover/**
+      - tools/legacy-migrate/**
+      - packages/platform/src/freeze.ts
+      - packages/kernel/src/command.ts
+      - .github/workflows/legacy-rehearsal.yml
 
 concurrency:
-  group: legacy-rehearsal
-  cancel-in-progress: false
+  group: legacy-rehearsal-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -26,6 +41,7 @@ permissions:
 jobs:
   synthetic:
     name: synthetic rehearsal (yay + abc, V1–V12)
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
@@ -83,9 +99,73 @@ jobs:
           path: reports
           retention-days: 30
 
+
+  cutover:
+    name: cutover rehearsal (yay + abc, rollback with SCT refund)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: yayatoh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30 --shm-size=256mb
+    env:
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Throwaway roles, secrets and migrations
+        run: |
+          MIG=$(openssl rand -hex 12); APP=$(openssl rand -hex 12); PR=$(openssl rand -hex 12)
+          KMS=$(openssl rand -hex 32); FAKE=$(openssl rand -hex 24)
+          echo "::add-mask::$KMS"; echo "::add-mask::$FAKE"
+          {
+            echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
+            echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
+            echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
+            echo "LOCAL_KMS_KEY=$KMS"
+            echo "FAKE_PAYMENTS_SECRET=$FAKE"
+          } >> "$GITHUB_ENV"
+          export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
+          export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
+          export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          pnpm db:bootstrap && pnpm db:migrate
+      - name: Rehearse (local target only; fake payment provider; nothing is sent)
+        env:
+          EVENT: ${{ github.event_name }}
+          IN_REHEARSAL: ${{ github.event.inputs.rehearsal }}
+          IN_SCALE: ${{ github.event.inputs.scale }}
+        run: |
+          case "$EVENT" in
+            pull_request) R=R2; SCALE=demo ;;
+            workflow_dispatch) R="${IN_REHEARSAL:-R3}"; SCALE="${IN_SCALE:-large}" ;;
+            *) R=R3; SCALE=large ;;
+          esac
+          case "$R" in R2|R3|R4) ;; *) echo "::error::rehearsal must be R2, R3 or R4"; exit 2 ;; esac
+          case "$SCALE" in small|demo|large) ;; *) echo "::error::scale must be small, demo or large"; exit 2 ;; esac
+          pnpm cutover rehearse --rehearsal="$R" --scale="$SCALE" --target=local --yes --out reports/cutover
+      - name: Summary
+        if: always()
+        run: test -f reports/cutover/README.md && cat reports/cutover/README.md >> "$GITHUB_STEP_SUMMARY" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cutover-rehearsal
+          path: reports/cutover
+          retention-days: 30
+
   masked:
     name: masked rehearsal (disabled until masked dumps exist)
-    if: ${{ vars.LEGACY_MASKED_DUMPS_READY == 'true' }}
+    if: ${{ vars.LEGACY_MASKED_DUMPS_READY == 'true' && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     environment: legacy-ref

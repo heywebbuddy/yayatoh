@@ -15,7 +15,7 @@ export async function createTrackedLinkAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'trackedLinks');
   try {
     await executeCommand(
       createTrackedLinkCommand,
@@ -46,7 +46,7 @@ export async function setAttributionWindowAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'trackedLinks');
   try {
     await executeCommand(
       setAttributionWindowCommand,

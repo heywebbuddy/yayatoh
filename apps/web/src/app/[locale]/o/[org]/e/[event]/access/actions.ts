@@ -16,7 +16,7 @@ export async function savePrivateInfoAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'access');
   try {
     await executeCommand(
       setPrivateInfoCommand,
@@ -42,7 +42,7 @@ export async function createAccessCodeAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'access');
   const expires = String(form.get('expiresAt') ?? '').trim();
   let expiresAt: Date | null = null;
   try {
@@ -79,7 +79,7 @@ export async function setAccessCodeActiveAction(
   accessCodeId: string,
   active: boolean,
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'access');
   await executeCommand(setAccessCodeActiveCommand, { eventId: ev.id, accessCodeId, active }, data.ctx, ports);
   done(org, event);
 }

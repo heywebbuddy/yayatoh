@@ -39,6 +39,9 @@ export async function marketplaceContentOrg(): Promise<PublicOrganizer | null> {
 
 const isContentOrg = (o: PublicOrganizer) => process.env.MARKETPLACE_CONTENT_ORG?.trim() === o.slug;
 
+/** Is this org (by slug) the marketplace content org, whose console edits the help center and marketing site? */
+export const isPlatformContentOrg = (slug: string) => process.env.MARKETPLACE_CONTENT_ORG?.trim() === slug;
+
 /**
  * Where an org's pages and posts are canonical (roadmap §4.2, as for events): the marketplace
  * apex for the marketplace content org; the org's tenant site when it runs one; else its

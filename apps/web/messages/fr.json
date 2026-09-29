@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "Invitation à l’équipe",
+        "event-invitation": "Invitation à l'équipe de l'événement",
         "staff-access": "Accès du personnel",
         "org-status": "Statut de l’organisation"
       },
@@ -267,7 +268,10 @@
     "trackedLinks": "Liens suivis",
     "messagingHealth": "Limites d'envoi",
     "audiences": "Audiences",
-    "refundRequests": "Demandes de remboursement"
+    "refundRequests": "Demandes de remboursement",
+    "helpCenter": "Centre d'aide",
+    "marketingSite": "Site marketing",
+    "tablesSponsors": "Tables et sponsors"
   },
   "vocab": {
     "attendee": "Participant",
@@ -281,7 +285,11 @@
     "registration": "Inscription",
     "rsvp": "RSVP",
     "ticket": "Billet",
-    "tickets": "Billets"
+    "tickets": "Billets",
+    "organizer": "Organisateur",
+    "organizers": "Organisateurs",
+    "host": "Hôte",
+    "hosts": "Hôtes"
   },
   "roles": {
     "owner": "Propriétaire",
@@ -291,7 +299,8 @@
     "marketing": "Marketing",
     "box_office": "Billetterie",
     "scanner": "Contrôle d’accès",
-    "viewer": "Lecteur"
+    "viewer": "Lecteur",
+    "collaborator": "Collaborateur d'événement"
   },
   "profiles": {
     "wedding": "Mariage",
@@ -352,7 +361,8 @@
     "ownerOnly": "Seuls les propriétaires peuvent modifier les propriétaires",
     "errors": {
       "last_owner": "Une organisation doit avoir au moins un propriétaire.",
-      "owner_only": "Seul un propriétaire peut nommer un propriétaire ou modifier un propriétaire."
+      "owner_only": "Seul un propriétaire peut nommer un propriétaire ou modifier un propriétaire.",
+      "pending_invitation": "Une invitation est déjà en attente pour cette adresse. Retirez-la d'abord ou attendez qu'elle soit acceptée."
     }
   },
   "dashboard": {
@@ -431,7 +441,13 @@
     "datesUpcoming": "Une date à venir",
     "ticketsCreated": "Billets créés",
     "agendaAdded": "Programme ajouté",
-    "speakersAdded": "Intervenants ajoutés"
+    "speakersAdded": "Intervenants ajoutés",
+    "comingSoon": "Bientôt disponible",
+    "guestsAdded": "Liste des invités ajoutée",
+    "rsvpDeadlineSet": "Date limite des RSVP fixée",
+    "floorPlanChosen": "Plan de salle choisi",
+    "guestSitePublished": "Site des invités publié",
+    "tablesSponsors": "Tables et sponsors configurés"
   },
   "segments": {
     "all": "Tous",
@@ -608,7 +624,8 @@
     "internal": "Une erreur s’est produite de notre côté.",
     "reference": "Référence : {id}",
     "rateLimitedRetry": "Trop de tentatives. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
-    "impersonation_blocked": "Un membre du personnel agissant en tant que membre ne peut pas faire cela : remboursements, versements, exports, suppressions et confirmations sont désactivés."
+    "impersonation_blocked": "Un membre du personnel agissant en tant que membre ne peut pas faire cela : remboursements, versements, exports, suppressions et confirmations sont désactivés.",
+    "read_only_freeze": "Les modifications sont suspendues pendant la maintenance programmée. Rien n’a été enregistré ; réessayez à la fin."
   },
   "notFound": {
     "title": "Page introuvable",
@@ -697,7 +714,9 @@
       "revoked": "Cette invitation a été retirée.",
       "expired": "Cette invitation a expiré. Demandez-en une nouvelle.",
       "unavailable": "Cette organisation n’est pas disponible pour le moment."
-    }
+    },
+    "eventTitle": "Participer à {event}",
+    "joinEvent": "Vous rejoindrez {event} ({org}) en tant que {role}. Vous ne verrez que cet événement."
   },
   "eventStatus": {
     "draft": "Brouillon",
@@ -1384,7 +1403,20 @@
       "event": "Créer votre premier événement",
       "team": "Inviter un membre de l’équipe",
       "payouts": "Configurer les versements"
-    }
+    },
+    "finished": "Configuration terminée. Votre organisation est pleinement active.",
+    "incomplete": "Terminez d'abord les étapes obligatoires.",
+    "finishFailed": "Nous n'avons pas pu terminer la configuration. Veuillez réessayer.",
+    "setupMode": "Votre organisation est en mode configuration",
+    "setupModeBody": "Vous pouvez déjà créer des événements et vendre des billets. Les envois groupés aux invités (e-mails, annonces, enquêtes) s'ouvrent une fois ces étapes terminées.",
+    "requiredList": "Étapes obligatoires",
+    "required": {
+      "terms": "Accepter les conditions d'utilisation",
+      "privacy": "Publier une politique de confidentialité",
+      "event": "Créer votre premier événement"
+    },
+    "finish": "Terminer la configuration",
+    "finishLater": "Terminez les étapes obligatoires pour débloquer les messages aux invités."
   },
   "signup": {
     "eyebrow": "Commencer",
@@ -1411,7 +1443,17 @@
       "other": "Commencez simplement et activez ce dont vous avez besoin."
     },
     "terms": "J’accepte les <tos>Conditions d’utilisation</tos> et l’<dpa>Accord de traitement des données</dpa> au nom de cette organisation.",
-    "submit": "Créer l’organisation"
+    "submit": "Créer l’organisation",
+    "openDescription": "Créez votre compte organisateur et votre organisation en quelques minutes.",
+    "comingSoon": "L'inscription libre arrive bientôt",
+    "comingSoonBody": "Nous préparons l'ouverture de Yayatoh à tous les organisateurs. D'ici là, les nouvelles organisations nous rejoignent sur invitation.",
+    "joinWaitlist": "Rejoindre la liste d'attente",
+    "useCode": "Utiliser ce code",
+    "seePricing": "Voir les tarifs et les frais",
+    "openNote": "Votre organisation démarre en mode configuration : acceptez les conditions, publiez une politique de confidentialité et créez votre premier événement pour pouvoir écrire à vos invités. <pricing>Voir les tarifs et les frais</pricing>.",
+    "closedNow": "L'inscription se fait uniquement sur invitation pour le moment. Saisissez votre code d'inscription.",
+    "verifyEmail": "Confirmez d'abord votre adresse e-mail.",
+    "humanCheck": "Veuillez confirmer que vous êtes une personne."
   },
   "payouts": {
     "title": "Versements",
@@ -3252,7 +3294,9 @@
       "eyebrow": "Yayatoh",
       "title": "Trouvez votre prochain événement.",
       "lede": "Concerts, galas, conférences et événements associatifs, tous frais compris dans le prix.",
-      "demoCta": "Ouvrir la console de démonstration"
+      "demoCta": "Ouvrir la console de démonstration",
+      "organizersTitle": "Pourquoi les organisateurs choisissent Yayatoh",
+      "organizersMore": "Voir toutes les fonctionnalités"
     },
     "events": {
       "title": "Tous les événements"
@@ -3270,7 +3314,13 @@
       "events": "Événements de {org}",
       "emptyTitle": "Aucun événement à venir",
       "emptyDescription": "{org} n'a rien en vente pour le moment. Revenez bientôt."
-    }
+    },
+    "pricing": "Tarifs",
+    "features": "Fonctionnalités",
+    "help": "Aide",
+    "helpCenter": "Centre d'aide",
+    "contact": "Nous contacter",
+    "status": "État des systèmes"
   },
   "widget": {
     "title": "Billets : {event}",
@@ -3432,7 +3482,12 @@
       "ticketsCreated": "Créez au moins un type de billet.",
       "agendaAdded": "Ajoutez la première session au programme.",
       "speakersAdded": "Ajoutez le premier intervenant.",
-      "published": "Publiez l'événement depuis sa page d'accueil quand tout est prêt."
+      "published": "Publiez l'événement depuis sa page d'accueil quand tout est prêt.",
+      "guestsAdded": "Ajoutez vos invités et leurs groupes.",
+      "rsvpDeadlineSet": "Choisissez la date de clôture des RSVP.",
+      "floorPlanChosen": "Choisissez un plan de salle, ou créez-en un à partir de chiffres.",
+      "guestSitePublished": "Publiez le site protégé par mot de passe que vos invités consultent.",
+      "tablesSponsors": "Nommez vos tables et leurs sponsors."
     }
   },
   "program": {
@@ -5323,5 +5378,549 @@
         "not_on_sale": "Ce pass ou cette date n’est pas en vente."
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Pour les organisateurs",
+    "title": "Tarifs et frais",
+    "description": "Ce que coûte la vente de billets sur Yayatoh, en chiffres clairs.",
+    "currencies": "Devise",
+    "feeHeading": "Frais de plateforme ({currency})",
+    "feeNone": "Aucuns frais de plateforme par billet pour le moment",
+    "feePercent": "{percent} par billet payant",
+    "feeFixed": "{fixed} par billet payant",
+    "feeBoth": "{percent} + {fixed} par billet payant",
+    "freeTickets": "Les billets gratuits et les réponses aux invitations ne sont jamais facturés.",
+    "noSubscription": "Ni abonnement ni frais de mise en service : vous ne payez que lorsque vous vendez.",
+    "allInHeading": "Prix tout compris",
+    "allInBody": "Les acheteurs voient toujours le prix complet, frais inclus, du premier écran jusqu'au paiement. Aucune surprise à la fin.",
+    "passOnExplained": "Répercuter les frais : l'acheteur paie le prix du billet plus les frais, et vous recevez le prix complet du billet.",
+    "absorbExplained": "Absorber les frais : l'acheteur paie le prix du billet, et les frais sont déduits de ce que vous recevez.",
+    "exampleCaption": "Exemple : un billet à {face}",
+    "passOn": "Frais répercutés",
+    "absorb": "Frais absorbés",
+    "col": {
+      "mode": "Traitement des frais",
+      "face": "Prix du billet",
+      "fee": "Frais de plateforme",
+      "buyerPays": "L'acheteur paie",
+      "youReceive": "Vous recevez"
+    },
+    "exampleNote": "L'exemple ne montre que les frais de plateforme. Les frais sont facturés dans la devise du billet.",
+    "unavailable": "Les tarifs ne sont pas disponibles pour le moment.",
+    "startHeading": "Commencer à vendre",
+    "startBody": "Créez votre organisation, préparez votre premier événement et publiez-le quand vous êtes prêt.",
+    "startCta": "Créer votre organisation"
+  },
+  "help": {
+    "breadcrumbs": "Fil d'Ariane",
+    "title": "Centre d'aide",
+    "lede": "Des réponses pour les organisateurs et les acheteurs de billets : créer un événement, vendre des billets, gérer l'enregistrement, les remboursements et plus encore.",
+    "emptyTitle": "Aucun article d'aide pour l'instant",
+    "emptyDescription": "Les articles apparaissent ici dès leur publication.",
+    "articleCount": "{count, plural, =0 {Aucun article} one {# article} other {# articles}}",
+    "articlesIn": "Articles dans {category}",
+    "related": "Articles associés",
+    "updated": "Mis à jour le {date}",
+    "notTranslated": "Cet article n'est pas encore disponible dans votre langue ; il est donc affiché en anglais.",
+    "audience": {
+      "organizers": "Pour les organisateurs",
+      "buyers": "Pour les acheteurs de billets"
+    },
+    "meta": {
+      "title": "Centre d'aide · Yayatoh",
+      "description": "Des réponses pour les organisateurs et les acheteurs de billets sur Yayatoh.",
+      "category": "{category} · Centre d'aide Yayatoh",
+      "search": "« {query} » · Centre d'aide Yayatoh"
+    },
+    "search": {
+      "label": "Rechercher dans le centre d'aide",
+      "field": "Rechercher des articles d'aide",
+      "placeholder": "Par exemple : rembourser un billet",
+      "submit": "Rechercher",
+      "title": "Recherche",
+      "resultsFor": "Résultats pour « {query} »",
+      "count": "{count, plural, =0 {Aucun article trouvé} one {# article trouvé} other {# articles trouvés}}",
+      "prompt": "Saisissez quelques mots pour rechercher dans le centre d'aide.",
+      "results": "Résultats de recherche",
+      "emptyTitle": "Aucun résultat pour votre recherche",
+      "emptyDescription": "Essayez d'autres mots ou parcourez les catégories du centre d'aide."
+    },
+    "feedback": {
+      "question": "Cet article vous a-t-il été utile ?",
+      "yes": "Oui",
+      "no": "Non",
+      "reasonLegend": "Quel était le problème ? (facultatif)",
+      "reason": {
+        "unclear": "Il était difficile à comprendre",
+        "incomplete": "Il manquait quelque chose",
+        "outdated": "Il n'est plus à jour",
+        "other": "Autre chose"
+      },
+      "sendReason": "Envoyer",
+      "thanksYes": "Merci pour votre retour.",
+      "thanksNo": "Merci. Votre réponse nous aidera à améliorer cet article.",
+      "rateLimited": "Trop de réponses depuis cet appareil. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "Fonctionnalités pour les organisateurs · Yayatoh",
+      "title": "Tout ce qu'il vous faut pour gérer vos événements",
+      "lede": "Billets, placement, enregistrement, messagerie et versements au même endroit.",
+      "emptyTitle": "Les fonctionnalités arrivent bientôt",
+      "emptyDescription": "Cette page est en cours de rédaction. En attendant, contactez-nous.",
+      "contactCta": "Parlons-en",
+      "helpCta": "Consulter le centre d'aide"
+    },
+    "contact": {
+      "metaTitle": "Contact et ventes · Yayatoh",
+      "title": "Nous contacter",
+      "lede": "Des questions sur Yayatoh, une démo ou des tarifs pour vos événements ? Envoyez-nous un message et nous vous répondrons par e-mail.",
+      "formTitle": "Envoyer un message",
+      "fields": {
+        "topic": "Sujet",
+        "name": "Votre nom",
+        "email": "E-mail",
+        "company": "Organisation",
+        "message": "Message"
+      },
+      "topics": {
+        "sales": "Ventes et démos",
+        "support": "Aide sur mon compte",
+        "partnership": "Partenariats",
+        "other": "Autre chose"
+      },
+      "optional": "Facultatif",
+      "messageHint": "Au moins 10 caractères.",
+      "privacy": "Nous utilisons vos coordonnées uniquement pour répondre à ce message.",
+      "submit": "Envoyer le message",
+      "sentTitle": "Merci, votre message a été envoyé.",
+      "sentBody": "Nous vous répondrons par e-mail dès que possible.",
+      "fixErrors": "Vérifiez les champs signalés.",
+      "rateLimited": "Trop de messages depuis cet appareil. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+      "errors": {
+        "name": "Saisissez votre nom.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "company": "Utilisez 160 caractères au maximum.",
+        "message": "Rédigez un message de 10 à 4 000 caractères.",
+        "human": "Confirmez que vous êtes une personne."
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "État du service",
+      "incident": "Nous rencontrons un problème : {title}",
+      "maintenance": "Maintenance en cours : {title}",
+      "others": "{count, plural, one {Et # autre.} other {Et # autres.}}",
+      "link": "Voir la page d'état"
+    },
+    "page": {
+      "metaTitle": "État des systèmes · Yayatoh",
+      "title": "État des systèmes",
+      "lede": "L'état actuel des services Yayatoh et les incidents récents. Les heures sont en UTC.",
+      "unavailableTitle": "État indisponible",
+      "unavailableBody": "Nous ne pouvons pas afficher l'état du service pour le moment. Veuillez réessayer dans quelques minutes.",
+      "checked": "Vérifié {time}",
+      "components": "Services",
+      "open": "Incidents en cours",
+      "noOpen": "Aucun incident en ce moment.",
+      "past": "14 derniers jours",
+      "noPast": "Aucun incident au cours des 14 derniers jours."
+    },
+    "overall": {
+      "operational": "Tous les systèmes sont opérationnels",
+      "maintenance": "Maintenance en cours",
+      "degraded": "Certains systèmes sont dégradés",
+      "partial_outage": "Panne partielle",
+      "major_outage": "Panne majeure"
+    },
+    "componentStatus": {
+      "operational": "Opérationnel",
+      "maintenance": "Maintenance",
+      "degraded": "Dégradé",
+      "partial_outage": "Panne partielle",
+      "major_outage": "Panne majeure"
+    },
+    "impact": {
+      "minor": "Impact mineur",
+      "major": "Impact majeur",
+      "critical": "Impact critique",
+      "maintenance": "Maintenance"
+    },
+    "incidentStatus": {
+      "investigating": "Analyse en cours",
+      "identified": "Identifié",
+      "monitoring": "Sous surveillance",
+      "resolved": "Résolu",
+      "scheduled": "Planifié",
+      "in_progress": "En cours",
+      "completed": "Terminé"
+    },
+    "components": {
+      "marketplace": "Pages d'événement et place de marché",
+      "checkout": "Paiement de la commande",
+      "console": "Console organisateur",
+      "checkin": "Enregistrement et scan",
+      "payments": "Paiements et versements",
+      "messaging": "E-mail et messagerie",
+      "api": "API"
+    },
+    "affects": "Concerne : {components}",
+    "updates": "Mises à jour sur {title}"
+  },
+  "helpConsole": {
+    "title": "Centre d'aide",
+    "description": "Articles et catégories du centre d'aide public. Les brouillons restent privés jusqu'à leur publication.",
+    "tabsLabel": "Sections du centre d'aide",
+    "tabs": {
+      "articles": "Articles",
+      "categories": "Catégories"
+    },
+    "newArticle": "Nouvel article",
+    "newArticleDescription": "Un brouillon jusqu'à sa publication. Pour traduire un article, créez-le à nouveau avec la même adresse dans une autre langue.",
+    "createArticle": "Créer le brouillon",
+    "back": "Retour au centre d'aide",
+    "categoryCreated": "Catégorie créée.",
+    "emptyArticlesTitle": "Aucun article pour l'instant",
+    "emptyArticlesDescription": "Rédigez le premier article pour les organisateurs ou les acheteurs de billets.",
+    "emptyNeedsCategory": "Créez d'abord une catégorie, puis rédigez-y des articles.",
+    "emptyCategoriesTitle": "Aucune catégorie pour l'instant",
+    "emptyCategoriesDescription": "Les catégories regroupent les articles destinés aux organisateurs ou aux acheteurs de billets.",
+    "newCategory": "Nouvelle catégorie",
+    "createCategory": "Créer la catégorie",
+    "columns": {
+      "category": "Catégorie",
+      "helpful": "Utile"
+    },
+    "helpfulCounts": "{yes} oui · {no} non",
+    "fields": {
+      "category": "Catégorie",
+      "locale": "Langue",
+      "title": "Titre",
+      "slug": "Adresse",
+      "summary": "Résumé",
+      "body": "Texte",
+      "keywords": "Mots-clés de recherche",
+      "position": "Ordre",
+      "audience": "Public",
+      "categoryTitle": "Nom",
+      "description": "Description"
+    },
+    "titleError": "Saisissez un titre.",
+    "slugFrozen": "L'adresse d'un article publié ne peut pas être modifiée.",
+    "slugHint": "Laissez vide pour la générer à partir du titre. Une traduction utilise l'adresse de l'article anglais.",
+    "keywordsHint": "Mots séparés par des virgules que les gens pourraient rechercher.",
+    "positionHint": "Les nombres les plus petits apparaissent en premier.",
+    "positionError": "Utilisez un nombre entier de 0 à 10 000.",
+    "audience": {
+      "organizers": "Organisateurs",
+      "buyers": "Acheteurs de billets"
+    },
+    "slugReserved": "Cette adresse est réservée. Choisissez-en une autre.",
+    "categorySlugHint": "Laissez vide pour la générer à partir du nom. Elle ne pourra plus être modifiée.",
+    "translations": "Nom dans d'autres langues",
+    "translationsError": "Vérifiez les noms traduits.",
+    "categoryHasArticles": "Déplacez ou supprimez d'abord les articles de cette catégorie."
+  },
+  "siteConsole": {
+    "title": "Site marketing",
+    "description": "Les sections de la page d'accueil, de la page des fonctionnalités et de la page de contact, ainsi que les messages envoyés via le formulaire de contact.",
+    "tabsLabel": "Sections du site marketing",
+    "tabs": {
+      "sections": "Sections",
+      "requests": "Demandes de contact"
+    },
+    "newSection": "Nouvelle section",
+    "newSectionDescription": "Un brouillon jusqu'à sa publication. Pour traduire une section, créez-la à nouveau avec la même clé dans une autre langue.",
+    "createSection": "Créer le brouillon",
+    "back": "Retour au site marketing",
+    "noSections": "Aucune section sur cette page pour l'instant.",
+    "placement": {
+      "home": "Page d'accueil : pourquoi Yayatoh",
+      "features": "Page des fonctionnalités",
+      "contact": "Page de contact"
+    },
+    "fields": {
+      "placement": "Page",
+      "locale": "Langue",
+      "eyebrow": "Libellé au-dessus du titre",
+      "heading": "Titre",
+      "slug": "Clé",
+      "body": "Texte",
+      "ctaLabel": "Texte du bouton",
+      "ctaHref": "Lien du bouton",
+      "position": "Ordre"
+    },
+    "optional": "Facultatif",
+    "headingError": "Saisissez un titre.",
+    "slugHint": "Laissez vide pour la générer à partir du titre. Une traduction utilise la clé de la section anglaise.",
+    "ctaLegend": "Bouton (facultatif)",
+    "ctaLabelError": "Saisissez le texte du bouton (40 caractères au maximum) avec son lien.",
+    "ctaHrefHint": "Une page de ce site, comme /contact, ou une adresse https://.",
+    "ctaHrefError": "Utilisez une page de ce site (commençant par /) ou une adresse https://.",
+    "positionHint": "Les nombres les plus petits apparaissent en premier.",
+    "positionError": "Utilisez un nombre entier de 0 à 10 000.",
+    "noRequestsTitle": "Aucune demande de contact",
+    "noRequestsDescription": "Les messages envoyés depuis la page de contact apparaissent ici.",
+    "requestStatus": {
+      "new": "Nouveau",
+      "handled": "Traité"
+    },
+    "topics": {
+      "sales": "Ventes et démos",
+      "support": "Aide sur le compte",
+      "partnership": "Partenariats",
+      "other": "Autre"
+    },
+    "markHandled": "Marquer comme traité"
+  },
+  "parties": {
+    "subtitle": "Les groupes (couples, familles, foyers) et leurs invités. Les régimes, besoins d'accessibilité et adresses restent privés pour votre équipe.",
+    "viewerNotice": "Vous pouvez consulter la liste des invités. Seuls les organisateurs autorisés peuvent la modifier.",
+    "summary": "Résumé",
+    "counts": {
+      "parties": "Groupes",
+      "guests": "Invités",
+      "adults": "Adultes",
+      "children": "Enfants",
+      "infants": "Bébés",
+      "plusOnesPending": "Accompagnants à nommer"
+    },
+    "vipCount": "{count, plural, one {# groupe VIP} other {# groupes VIP}}",
+    "addParty": "Ajouter un groupe",
+    "addPartyHint": "Un groupe réunit les personnes invitées ensemble, comme un couple ou une famille. Ajoutez ensuite ses invités.",
+    "partyAdded": "Groupe ajouté.",
+    "parties": "Groupes",
+    "filters": "Filtrer les groupes",
+    "search": "Rechercher par nom",
+    "side": "Côté",
+    "sideHint": "De quel côté ils sont, p. ex. Mariée, Marié ou Les deux.",
+    "anySide": "Tous les côtés",
+    "tag": "Étiquette",
+    "anyTag": "Toutes les étiquettes",
+    "vip": "VIP",
+    "vipLegend": "Priorité",
+    "vipAny": "VIP ou non",
+    "vipOnly": "VIP uniquement",
+    "vipNot": "Non VIP",
+    "apply": "Appliquer",
+    "clear": "Effacer les filtres",
+    "matching": "{count, plural, =0 {Aucun groupe ne correspond} one {# groupe correspond} other {# groupes correspondent}}",
+    "showing": "{count, plural, one {# groupe} other {# groupes}}",
+    "emptyTitle": "Aucun invité pour l'instant",
+    "emptyDescription": "Ajoutez votre premier groupe ci-dessus, puis ses invités.",
+    "emptyViewer": "Les organisateurs n'ont encore ajouté aucun invité.",
+    "noMatchTitle": "Aucun groupe ne correspond",
+    "noMatchDescription": "Essayez un autre nom ou effacez les filtres.",
+    "partyName": "Nom du groupe",
+    "partyNameHint": "Comment vous les appelez, p. ex. Les Garcia.",
+    "envelopeName": "Nom sur l'enveloppe",
+    "envelopeHint": "Tel qu'écrit sur l'invitation, p. ex. M. et Mme Luis Garcia.",
+    "tags": "Étiquettes",
+    "tagsHint": "Séparez les étiquettes par des virgules, p. ex. Famille, Hors de la ville.",
+    "notes": "Notes",
+    "notesHint": "Seule votre équipe voit les notes.",
+    "source": "Saisi depuis",
+    "sourceHint": "Choisissez réponse papier quand vous saisissez une réponse envoyée sur papier.",
+    "sources": {
+      "manual": "Saisi par l'équipe",
+      "paper": "Réponse papier (saisie pour l'invité)",
+      "import": "Import",
+      "collector": "Formulaire de contact",
+      "rsvp": "RSVP"
+    },
+    "sideValue": "Côté : {side}",
+    "guestCount": "{count, plural, =0 {Aucun invité} one {# invité} other {# invités}}",
+    "envelopeValue": "Enveloppe : {name}",
+    "noGuestsInParty": "Aucun invité dans ce groupe pour l'instant.",
+    "guestsOf": "Invités de {party}",
+    "guestOf": "Accompagnant de {name}",
+    "primary": "Contact principal",
+    "primaryLegend": "Contact",
+    "ages": {
+      "adult": "Adulte",
+      "child": "Enfant",
+      "infant": "Bébé"
+    },
+    "plusOne": "Accompagnant",
+    "plusOnePending": "Accompagnant à nommer",
+    "meal": "Repas",
+    "mealHint": "Son choix de repas, p. ex. Poisson.",
+    "dietary": "Régime alimentaire",
+    "accessibility": "Besoins d'accessibilité",
+    "address": "Adresse postale",
+    "privateHint": "Privé : stocké chiffré et visible uniquement par votre équipe.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "ageClass": "Âge",
+    "plusOneNameHint": "Laissez vide tant que vous ne connaissez pas son nom.",
+    "linkedEntry": "Entrée de la liste d'invités",
+    "linkedEntryHint": "Liez à une personne déjà inscrite sur la liste de cet événement.",
+    "notLinked": "Non lié",
+    "editNamed": "Modifier {name}",
+    "save": "Enregistrer",
+    "saved": "Enregistré.",
+    "addPlusOneFor": "Ajouter un accompagnant pour {name}",
+    "plusOneAdded": "Accompagnant ajouté.",
+    "moveTo": "Déplacer {name} vers",
+    "moveHintPlusOne": "Son accompagnant le suit.",
+    "choosePartyOption": "Choisissez un groupe",
+    "move": "Déplacer",
+    "moved": "Déplacé.",
+    "removeNamed": "Retirer {name}",
+    "removeWithPlusOne": "Retirer {name} et son accompagnant",
+    "removed": "Retiré.",
+    "addGuestTo": "Ajouter un invité à {party}",
+    "addGuest": "Ajouter l'invité",
+    "guestAdded": "Invité ajouté.",
+    "removeParty": "{count, plural, =0 {Retirer {name}} one {Retirer {name} et son invité} other {Retirer {name} et ses # invités}}",
+    "historyOf": "Historique de {party}",
+    "showHistory": "Voir l'historique de {party}",
+    "hideHistory": "Masquer l'historique",
+    "actions": {
+      "party_created": "Groupe ajouté",
+      "party_updated": "Groupe modifié",
+      "party_removed": "Groupe retiré",
+      "guest_added": "Invité ajouté",
+      "guest_updated": "Invité modifié",
+      "guest_removed": "Invité retiré",
+      "guest_moved": "Invité déplacé",
+      "plus_one_added": "Accompagnant ajouté",
+      "plus_one_named": "Accompagnant nommé"
+    },
+    "actors": {
+      "you": "par vous",
+      "member": "par un membre de l'équipe",
+      "system": "par le système"
+    },
+    "pagination": "Pages",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {page} sur {pages}",
+    "errors": {
+      "name": "Saisissez un nom de groupe (120 caractères max.).",
+      "envelopeName": "Le nom sur l'enveloppe est limité à 200 caractères.",
+      "side": "Le côté est limité à 40 caractères.",
+      "tags": "Utilisez au plus 20 étiquettes de 40 caractères chacune.",
+      "notes": "Les notes sont limitées à 2 000 caractères.",
+      "firstName": "Saisissez un prénom (80 caractères max.).",
+      "lastName": "Le nom est limité à 80 caractères.",
+      "meal": "Le repas est limité à 80 caractères.",
+      "private": "Ce champ est limité à 500 caractères.",
+      "attendeeId": "Choisissez une entrée de la liste d'invités de cet événement.",
+      "attendeeTaken": "Cette entrée est déjà liée à un autre invité.",
+      "toPartyId": "Choisissez un autre groupe de destination.",
+      "isPrimary": "Un accompagnant ne peut pas être le contact principal.",
+      "partyFull": "Ce groupe est complet (20 invités au maximum).",
+      "tooMany": "Cet événement a atteint sa limite d'invités.",
+      "hasPlusOne": "Cette personne a déjà un accompagnant.",
+      "plusOneOfPlusOne": "Un accompagnant ne peut pas amener d'accompagnant.",
+      "plusOneMoves": "Un accompagnant suit l'invité qui l'amène."
+    }
+  },
+  "eventRoles": {
+    "co_host": "Co-hôte",
+    "planner": "Planificateur"
+  },
+  "eventTeam": {
+    "title": "Équipe de l'événement",
+    "subtitle": "Les co-hôtes et les planificateurs travaillent sur cet événement uniquement. Ils ne voient jamais les autres événements, les versements ni les paramètres de l'organisation.",
+    "rolesTitle": "Qui peut faire quoi",
+    "explain": {
+      "co_host": "Tout ce qui concerne cet événement : invités, RSVP, placement, site web, galerie, messages, jour J et billets. Peut inviter le reste de l'équipe.",
+      "planner": "Invités, RSVP, placement, site web, galerie, messages et jour J. Pas de versements, de remboursements ni de rapports financiers."
+    },
+    "inviteTitle": "Inviter à cet événement",
+    "emptyTitle": "Aucun co-hôte ni planificateur pour le moment",
+    "emptyDescription": "Invitez quelqu'un par e-mail. Il n'aura accès qu'à cet événement.",
+    "revokeFor": "Retirer l'invitation de {email}"
+  },
+  "myEvents": {
+    "title": "Vos événements",
+    "description": "Les événements auxquels vous participez chez {org}.",
+    "emptyTitle": "Aucun événement pour le moment",
+    "emptyDescription": "Quand quelqu'un vous invite à un événement, il apparaît ici.",
+    "open": "Ouvrir {name}"
+  },
+  "starters": {
+    "title": "Modèles de départ",
+    "label": "Modèle de départ",
+    "yours": "Vos modèles",
+    "use": "Créer un événement à partir de {name}",
+    "sections": "Sections : {list}",
+    "checklist": "Liste de contrôle : {list}",
+    "wedding": {
+      "name": "Mariage",
+      "description": "Invités, RSVP, placement, site privé pour les invités, galerie, messages et le jour J. Jamais listé publiquement."
+    },
+    "gala": {
+      "name": "Gala",
+      "description": "Billets, tables et sponsors, placement, dons et enregistrement sur place."
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "Les RSVP et le placement apparaissent ici dès que vos invités répondent."
+      },
+      "details": {
+        "attendanceHint": "Pour les événements en ligne et hybrides, ajoutez le lien sous Accès. Seuls vos invités le voient."
+      },
+      "dates": {
+        "capacityHint": "Facultatif. Le nombre maximal d'invités que cette date peut accueillir."
+      },
+      "copy": {
+        "description": "Réutilisez cet événement. Une copie reprend ses paramètres, questions et plan de salle — jamais ses invités, RSVP, enregistrements ni versements."
+      },
+      "announcements": {
+        "pushHint": "Les notifications push atteignent les invités qui les ont activées ; les autres reçoivent l'e-mail.",
+        "smsHint": "Les SMS ne partent qu'aux invités qui ont donné un numéro de mobile et accepté les SMS ; les autres sont indiqués comme non envoyés, avec la raison."
+      },
+      "eventAnnouncements": {
+        "explainer": "Les annonces publiques apparaissent sur la page de l'événement ; celles réservées aux invités apparaissent sur leurs pages.",
+        "emptyDescription": "Publiez des nouvelles, des changements d'horaire ou des rappels pour vos invités.",
+        "audienceHolders": "Invités uniquement",
+        "holdersOnly": "Invités uniquement"
+      },
+      "access": {
+        "subtitle": "Informations privées pour vos invités, le lien de connexion en ligne et les codes d'accès."
+      },
+      "privateInfo": {
+        "explainer": "Seuls vos invités vérifiés voient ceci. Cela n'apparaît jamais sur la page publique de l'événement.",
+        "body": "Informations pour les invités"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "Les codes d'accès permettent à vos invités d'ouvrir la page privée de l'événement."
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "Tout ce qui concerne cet événement : invités, RSVP, placement, site web, galerie, messages et jour J. Peut inviter le reste de l'équipe."
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "Réutilisez cet événement. Une copie reprend ses paramètres, types de billets, questions de commande et plan de salle — jamais ses commandes, invités, billets, enregistrements ni versements."
+      },
+      "announcements": {
+        "pushHint": "Les notifications push atteignent les invités qui les ont activées sur leur page de commande ou dans l'app ; les autres reçoivent l'e-mail.",
+        "smsHint": "Les SMS ne partent qu'aux invités qui ont donné un numéro de mobile et accepté les SMS ; les autres sont indiqués comme non envoyés, avec la raison."
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "Publiez des nouvelles, des changements d'horaire ou des rappels pour vos invités."
+      }
+    }
+  },
+  "frontDoor": {
+    "slowTitle": "Cette page met trop de temps à répondre",
+    "downTitle": "Cette page n'est pas disponible pour le moment",
+    "body": "Veuillez réessayer dans un instant."
+  },
+  "maintenance": {
+    "label": "Maintenance",
+    "title": "Maintenance programmée : les modifications sont suspendues",
+    "body": "Yayatoh est en maintenance en lecture seule pendant notre passage à la nouvelle plateforme. Vous pouvez toujours tout consulter, télécharger des exports et scanner les billets à l’entrée, et vos pages publiques restent en ligne. L’enregistrement des modifications, les nouvelles ventes et les remboursements sont suspendus jusqu’à la fin.",
+    "bodyUntil": "Yayatoh est en maintenance en lecture seule pendant notre passage à la nouvelle plateforme, jusqu’à {until} environ. Vous pouvez toujours tout consulter, télécharger des exports et scanner les billets à l’entrée, et vos pages publiques restent en ligne. L’enregistrement des modifications, les nouvelles ventes et les remboursements sont suspendus jusque-là."
   }
 }

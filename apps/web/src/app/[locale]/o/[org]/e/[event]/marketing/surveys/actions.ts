@@ -35,7 +35,7 @@ export async function createSurveyAction(
   form: FormData,
 ): Promise<FormState> {
   const locale = await getLocale();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   const t = await getTranslations('surveys');
   const kind = form.get('kind') === 'session_feedback' ? 'session_feedback' : 'post_event';
   let subject = ev.name;
@@ -86,7 +86,7 @@ export async function updateSurveyAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   const title = String(form.get('title') ?? '').trim();
   if (!title) return invalid('title');
   try {
@@ -110,7 +110,7 @@ async function editQuestions(
   surveyId: string,
   change: (fields: FieldDefinition[]) => FieldDefinition[] | Record<string, unknown>[],
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   try {
     const current = await executeQuery(surveyQuery, { eventId: ev.id, surveyId }, data.ctx, ports);
     const fields = change([...current.definition.fields]);
@@ -221,7 +221,7 @@ export async function sendSurveyAction(
   _prev: SendState,
   form: FormData,
 ): Promise<SendState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   const reminderDays = whole(String(form.get('reminderDays') ?? '').trim(), 1, 30);
   const linkDays = whole(String(form.get('linkDays') ?? '').trim(), 1, 90);
   const bad = [
@@ -258,7 +258,7 @@ export async function setSurveyClosedAction(
   closed: boolean,
   _prev: FormState,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   try {
     await executeCommand(setSurveyClosedCommand, { eventId: ev.id, surveyId, closed }, data.ctx, ports);
   } catch (err) {
@@ -279,7 +279,7 @@ export async function exportSurveyAction(
   _form: FormData,
 ): Promise<{ code: string } | undefined> {
   const locale = await getLocale();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'marketing');
   const t = await getTranslations('surveys');
   const back = `${base(org, event)}/${surveyId}`;
   let operationId: string;

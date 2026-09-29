@@ -80,7 +80,7 @@ export function erasedMailClass(
   kind: string,
   def: { readonly category: string; readonly audience?: readonly string[] },
 ): ErasedMailClass {
-  if (kind === 'tenancy.invitation' || def.audience) return 'account';
+  if (kind === 'tenancy.invitation' || kind === 'tenancy.event-invitation' || def.audience) return 'account';
   return def.category === 'transactional' ? 'order' : 'org';
 }
 

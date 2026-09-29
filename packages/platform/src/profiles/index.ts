@@ -15,7 +15,15 @@ export const PROFILE_KEYS = [
 ] as const;
 export type ProfileKey = (typeof PROFILE_KEYS)[number];
 
-export const VOCAB_TERMS = ['attendee', 'attendees', 'registration', 'ticket', 'tickets'] as const;
+export const VOCAB_TERMS = [
+  'attendee',
+  'attendees',
+  'registration',
+  'ticket',
+  'tickets',
+  'organizer',
+  'organizers',
+] as const;
 export type VocabTerm = (typeof VOCAB_TERMS)[number];
 /** Overlay: base term → profile term. Both are i18n keys under `vocab.*`. */
 export type Vocabulary = Readonly<Partial<Record<VocabTerm, string>>>;
@@ -40,6 +48,17 @@ export interface Profile {
   readonly defaultModules: readonly ModuleKey[];
   readonly nav: readonly NavItem[];
   readonly vocabulary: Vocabulary;
+  /**
+   * M4.2a: event pages outside this profile's navigation are refused (404), not only hidden.
+   * On for the social profiles (wedding, gala); the others keep reachable-but-unlisted pages
+   * (seating on a concert, say) until their own route sweep.
+   */
+  readonly strictRoutes?: boolean;
+  /**
+   * M4.2a: the profile's own onboarding checklist items (readiness rule keys), added to the
+   * common ones (details, venue, dates, published…). The web's readiness engine defines each.
+   */
+  readonly checklist?: readonly string[];
 }
 
 const item = (key: string, group: NavGroup, module: ModuleKey, icon: string, term?: VocabTerm): NavItem => ({
@@ -91,7 +110,15 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('messages', 'build', 'messaging', 'message'),
       item('dayOf', 'run', 'checkin', 'calendar-check'),
     ]),
-    vocabulary: { attendee: 'guest', attendees: 'guests', registration: 'rsvp' },
+    vocabulary: {
+      attendee: 'guest',
+      attendees: 'guests',
+      registration: 'rsvp',
+      organizer: 'host',
+      organizers: 'hosts',
+    },
+    strictRoutes: true,
+    checklist: ['guestsAdded', 'rsvpDeadlineSet', 'floorPlanChosen', 'guestSitePublished'],
   },
   gala: {
     key: 'gala',
@@ -113,11 +140,15 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       ticketsOrders,
       attendees,
       seating,
+      // M4.2b fills it in (hosted tables with sponsor names); a placeholder until then.
+      item('tablesSponsors', 'build', 'seating', 'award'),
       item('donations', 'build', 'donations', 'heart'),
       marketing,
       onsite,
     ]),
-    vocabulary: { attendee: 'guest', attendees: 'guests' },
+    vocabulary: { attendee: 'guest', attendees: 'guests', organizer: 'host', organizers: 'hosts' },
+    strictRoutes: true,
+    checklist: ['tablesSponsors', 'floorPlanChosen'],
   },
   concert: {
     key: 'concert',
@@ -225,4 +256,43 @@ export function navIncludes(profile: ProfileKey, effective: ReadonlySet<string>,
 
 export function isProfileKey(v: string): v is ProfileKey {
   return (PROFILE_KEYS as readonly string[]).includes(v);
+}
+
+/**
+ * Event console sections every profile has, whatever its navigation (M1.4b–e, M4.2a): the event
+ * home, its setup guide, details, content, media, access, dates, copies and team.
+ */
+export const PROFILE_INDEPENDENT_SECTIONS = [
+  'home',
+  'setupGuide',
+  'details',
+  'content',
+  'media',
+  'access',
+  'dates',
+  'copy',
+  'team',
+] as const;
+
+/**
+ * Whether an event section (a nav key) may be opened for this profile (M4.2a route sweep). Strict
+ * profiles refuse anything their navigation doesn't show; reviews follow tickets there.
+ */
+export function profileOpensSection(
+  profile: ProfileKey,
+  effective: ReadonlySet<string>,
+  key: string,
+): boolean {
+  if (!PROFILES[profile].strictRoutes) return true;
+  if (key === 'reviews') return navIncludes(profile, effective, 'ticketsOrders');
+  if ((PROFILE_INDEPENDENT_SECTIONS as readonly string[]).includes(key)) return true;
+  return navIncludes(profile, effective, key);
+}
+
+/**
+ * Terms a profile's screens must never show (M4.2a vocabulary sweep): the base words its overlay
+ * replaces. A wedding says guest, RSVP and host, never attendee, registration or organizer.
+ */
+export function forbiddenTerms(profile: ProfileKey): string[] {
+  return Object.keys(PROFILES[profile].vocabulary);
 }

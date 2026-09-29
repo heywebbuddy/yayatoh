@@ -8,11 +8,13 @@ import type { ConsoleData } from '@/server/console.ts';
 import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
 import { ImpersonationBanner } from './impersonation-banner.tsx';
+import { MaintenanceBanner } from './maintenance-banner.tsx';
 import { MediaPicture } from './media-picture.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { OrgStatusBanner } from './org-status-banner.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
+import { IncidentBanner } from './status/incident-banner.tsx';
 import { StepUpProvider } from './step-up.tsx';
 
 export interface ShellNav {
@@ -90,9 +92,12 @@ async function SidebarContent({
         </div>
       ))}
       <div className="mt-auto flex items-center gap-2.5 px-2.5 py-2">
-        <Avatar initials={data.session.initials} label={data.session.name} />
+        {/* An account made with an emailed code may have no name yet: the address stands in. */}
+        <Avatar initials={data.session.initials} label={data.session.name || data.session.email} />
         <div className="flex min-w-0 flex-col">
-          <span className="truncate text-[13px] text-zinc-900">{data.session.name}</span>
+          <span className="truncate text-[13px] text-zinc-900">
+            {data.session.name || data.session.email}
+          </span>
           <span className="text-[12px] text-zinc-500">{t(`roles.${data.role}`)}</span>
         </div>
         {data.session.impersonation ? null : (
@@ -147,7 +152,9 @@ export async function ConsoleShell({
       </nav>
       <div className="flex min-w-0 flex-1 flex-col">
         <ImpersonationBanner session={data.session} locale={data.ctx.locale} timeZone={data.org.timezone} />
+        <MaintenanceBanner orgId={data.org.id} locale={data.ctx.locale} timeZone={data.org.timezone} />
         <OrgStatusBanner status={data.org.status} />
+        <IncidentBanner variant="console" />
         <header className="flex flex-wrap items-center gap-3 px-4 pt-4 md:px-8 md:pt-[26px]">
           <details className="lg:hidden">
             <summary className="flex size-10 cursor-pointer list-none items-center justify-center rounded-pill border border-zinc-200 bg-white [&::-webkit-details-marker]:hidden">

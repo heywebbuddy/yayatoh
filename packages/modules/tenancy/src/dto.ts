@@ -116,5 +116,8 @@ export const InvitationDto = z.object({
   acceptedAt: z.date().nullable(),
   revokedAt: z.date().nullable(),
   createdAt: z.date(),
+  /** M4.2a: set for an event invitation (co-host or planner of that event). */
+  eventId: z.uuid().nullable(),
+  eventRole: z.enum(['co_host', 'planner']).nullable(),
 });
 export type InvitationDto = z.infer<typeof InvitationDto>;

@@ -38,7 +38,7 @@ export async function refundAction(
   _prev: RefundState,
   form: FormData,
 ): Promise<RefundState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const reason = String(form.get('reason') ?? '') as RefundReason;
   if (!REFUND_REASONS.includes(reason)) return { ok: false, code: 'validation_failed' };
   const mode = form.get('mode') === 'amount' ? 'amount' : 'tickets';
@@ -94,7 +94,7 @@ export async function reissueLinkAction(
   form: FormData,
 ): Promise<ReissueState> {
   if (form.get('confirm') !== 'yes') return { ok: false, code: 'validation_failed' };
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   try {
     const order = await executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
     if (order.eventId !== ev.id) return { ok: false, code: 'not_found' };
@@ -119,7 +119,7 @@ export async function approveRequestAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const [request] = (await executeQuery(refundRequestsQuery, { orderId }, data.ctx, ports)).filter(
     (r) => r.id === requestId,
   );
@@ -166,7 +166,7 @@ export async function declineRequestAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   try {
     await executeCommand(
       declineRefundRequestCommand,
@@ -189,7 +189,7 @@ export async function addNoteAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
   try {
     await executeCommand(
       addOrderNoteCommand,

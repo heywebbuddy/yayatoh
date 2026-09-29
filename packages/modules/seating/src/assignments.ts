@@ -146,7 +146,7 @@ export const assignSeatsCommand = tenantCommand({
     }),
   output: z.object({ itemLabel: z.string(), seated: z.array(AssignedDto), warnings: z.array(RuleHitDto) }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const ids = [...new Set(input.attendeeIds)];
@@ -394,7 +394,7 @@ export const unassignSeatsCommand = tenantCommand({
   }),
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
-  permission: 'events:write',
+  permission: 'seating:write',
   handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx

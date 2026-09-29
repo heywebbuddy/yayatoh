@@ -145,7 +145,9 @@ export const setVenueArchivedCommand = tenantCommand({
 
 export const listVenuesQuery = tenantQuery({
   name: 'venues.listVenues',
-  input: z.object({ includeArchived: z.boolean().default(false) }),
+  // `eventId` (optional) scopes the authorization to that event: a co-host picking their event's
+  // venue reads the org's venues through their event role (M4.2a).
+  input: z.object({ includeArchived: z.boolean().default(false), eventId: z.uuid().optional() }),
   output: z.array(VenueDto),
   entitlement: 'core',
   permission: 'events:read',

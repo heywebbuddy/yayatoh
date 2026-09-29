@@ -17,6 +17,7 @@ import { Markdown } from '@/components/markdown.tsx';
 import { SectionForm, type SectionValues } from '@/components/section-form.tsx';
 import { SectionList } from '@/components/section-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { profileT } from '@/lib/profile-copy.ts';
 import { aiDrafter } from '@/server/ai.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -58,16 +59,21 @@ export default async function ContentPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can, profile } = await loadEvent(org, event, 'content');
   const t = await getTranslations();
-  const canWrite = roleCan(data.role, 'events:write');
+  // M4.2a: a wedding's announcements go to guests, not ticket holders.
+  const tp = profileT(t, profile);
+  const canWrite = can('events:write');
   const [sections, announcements] = await Promise.all([
     executeQuery(eventSectionsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(announcementsQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
-  // M1.4f: AI drafting for writers of orgs with the `ai` module.
+  // M1.4f: AI drafting for writers of orgs with the `ai` module. The credits are the org's: people
+  // with only an event role (M4.2a co-hosts) write without AI drafts.
   const ai =
-    canWrite && data.modules.has('ai') ? await executeQuery(creditBalanceQuery, {}, data.ctx, ports) : null;
+    canWrite && data.modules.has('ai') && roleCan(data.role, 'events:read')
+      ? await executeQuery(creditBalanceQuery, {}, data.ctx, ports)
+      : null;
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
     timeStyle: 'short',
@@ -171,11 +177,11 @@ export default async function ContentPage({
         <h2 id="announcements-heading" className="text-section">
           {t('eventAnnouncements.heading')}
         </h2>
-        <p className="text-body text-zinc-500">{t('eventAnnouncements.explainer')}</p>
+        <p className="text-body text-zinc-500">{tp('eventAnnouncements.explainer')}</p>
         {announcements.length === 0 ? (
           <EmptyState
             title={t('eventAnnouncements.emptyTitle')}
-            description={t('eventAnnouncements.emptyDescription')}
+            description={tp('eventAnnouncements.emptyDescription')}
           />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
@@ -188,7 +194,7 @@ export default async function ContentPage({
                     </Label>
                     <Label>
                       {a.audience === 'holders'
-                        ? t('eventAnnouncements.holdersOnly')
+                        ? tp('eventAnnouncements.holdersOnly')
                         : t('eventAnnouncements.public')}
                     </Label>
                     {a.pinned ? <Label>{t('eventAnnouncements.pinned')}</Label> : null}

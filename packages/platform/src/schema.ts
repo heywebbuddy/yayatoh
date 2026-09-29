@@ -414,3 +414,210 @@ export const realtimeMessages = tenantTable(
     check('realtime_messages_data_size', sql`pg_column_size(data) <= 16384`),
   ],
 );
+
+/** Platform switches staff flip from the console (M3.11a). Only these keys exist. */
+export const PLATFORM_FLAGS = ['open_signup'] as const;
+export type PlatformFlag = (typeof PLATFORM_FLAGS)[number];
+
+/**
+ * Platform switches (M3.11a): `open_signup` lets anyone create an organizer account and org
+ * (default off until the owner launches, D28). Global; no app_user privileges: the app reads a
+ * switch through the SECURITY DEFINER `platform.flag_enabled`, and staff change it only through
+ * `platform.set_flag` (platform_reader), which also writes `flag_changes`.
+ */
+export const platformFlags = platform.table(
+  'flags',
+  {
+    key: text('key').primaryKey(),
+    enabled: boolean('enabled').notNull().default(false),
+    updatedBy: text('updated_by').notNull(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+  },
+  () => [check('flags_key_check', sql.raw(`key in (${PLATFORM_FLAGS.map((k) => `'${k}'`).join(', ')})`))],
+);
+
+/** Every change of a platform switch: who, when, why (append-only; staff console history). */
+export const platformFlagChanges = platform.table(
+  'flag_changes',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    key: text('key').notNull(),
+    enabled: boolean('enabled').notNull(),
+    changedBy: text('changed_by').notNull(),
+    reason: text('reason').notNull(),
+    at: tsz('at').notNull().defaultNow(),
+  },
+  (t) => [
+    index('flag_changes_key_at_idx').on(t.key, t.at),
+    check('flag_changes_reason_length', sql`length(reason) between 3 and 500`),
+  ],
+);
+
+/**
+ * Front-door route flags (M2.4a, ADR 0020): per public host × route key of the versioned route
+ * table (`@yayatoh/platform/front-door`), who serves it: `legacy` (the default when there is no
+ * row), `canary` or `next`. Global (hosts are platform infrastructure, not tenant data). No
+ * app_user privileges: the web reads the states through the SECURITY DEFINER
+ * `platform.front_door_flags()`; staff change them only through `platform.set_front_door_flag`,
+ * which needs a recent step-up and appends to `front_door_flag_changes` in the same statement.
+ */
+export const frontDoorFlags = platform.table(
+  'front_door_flags',
+  {
+    host: text('host').notNull(),
+    route: text('route').notNull(),
+    state: text('state').notNull(),
+    tableVersion: integer('table_version').notNull(),
+    updatedBy: text('updated_by').notNull(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ name: 'front_door_flags_pkey', columns: [t.host, t.route] }),
+    check('front_door_flags_state_check', sql`state in ('legacy', 'canary', 'next')`),
+    check('front_door_flags_lengths', sql`length(host) <= 253 and length(route) <= 60`),
+  ],
+);
+
+/** Append-only audit of every front-door flag change: who, when, why, from what, after a step-up. */
+export const frontDoorFlagChanges = platform.table(
+  'front_door_flag_changes',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    host: text('host').notNull(),
+    route: text('route').notNull(),
+    fromState: text('from_state').notNull(),
+    toState: text('to_state').notNull(),
+    tableVersion: integer('table_version').notNull(),
+    actor: text('actor').notNull(),
+    reason: text('reason').notNull(),
+    steppedUpAt: tsz('stepped_up_at').notNull(),
+    at: tsz('at').notNull().defaultNow(),
+  },
+  (t) => [
+    index('front_door_flag_changes_at_idx').on(t.at),
+    check('front_door_flag_changes_reason_check', sql`length(reason) between 3 and 500`),
+  ],
+);
+
+/**
+ * The fake status-page provider's incidents (M3.11b; the `StatusPage` port's development, preview
+ * and CI adapter). The real provider (Better Stack, owner account) keeps its own. Global (the
+ * platform's status is no tenant's data); no app_user table privileges: the web reads through
+ * `platform.status_fake_recent`, staff post and update through `platform.status_fake_post` /
+ * `platform.status_fake_update` (platform_reader, audited in the access log).
+ * `updates` is the timeline: `[{ "status", "body", "at" }]`, oldest first.
+ */
+export const statusFakeIncidents = platform.table(
+  'status_fake_incidents',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    title: text('title').notNull(),
+    impact: text('impact').notNull(),
+    status: text('status').notNull(),
+    components: text('components').array().notNull().default(sql`'{}'::text[]`),
+    updates: jsonb('updates').notNull().default(sql`'[]'::jsonb`),
+    createdBy: text('created_by').notNull(),
+    startedAt: tsz('started_at').notNull().defaultNow(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+    resolvedAt: tsz('resolved_at'),
+  },
+  (t) => [
+    index('status_fake_incidents_started_idx').on(t.startedAt),
+    check('status_fake_incidents_title_check', sql`char_length(title) between 1 and 160`),
+    check('status_fake_incidents_impact_check', sql`impact in ('minor', 'major', 'critical', 'maintenance')`),
+    check(
+      'status_fake_incidents_status_check',
+      sql`status in ('investigating', 'identified', 'monitoring', 'resolved', 'scheduled', 'in_progress', 'completed')`,
+    ),
+    check('status_fake_incidents_updates_check', sql`jsonb_typeof(updates) = 'array'`),
+    check(
+      'status_fake_incidents_resolved_check',
+      sql`(status in ('resolved', 'completed')) = (resolved_at is not null)`,
+    ),
+  ],
+);
+
+/**
+ * Front-door counters (M2.4a "watch"): per UTC day × host × route × who served it, the requests,
+ * 404s, proxy errors (the front door's own 502/504), legacy 5xx and the forwarding latency (time
+ * to the legacy response's headers). No path, user, IP or tenant. Incremented only through the
+ * SECURITY DEFINER `platform.record_front_door`; read by staff (platform_reader).
+ */
+export const frontDoorStats = platform.table(
+  'front_door_stats',
+  {
+    day: date('day', { mode: 'string' }).notNull(),
+    host: text('host').notNull(),
+    route: text('route').notNull(),
+    servedBy: text('served_by').notNull(),
+    requests: bigint('requests', { mode: 'number' }).notNull().default(0),
+    notFound: bigint('not_found', { mode: 'number' }).notNull().default(0),
+    proxyErrors: bigint('proxy_errors', { mode: 'number' }).notNull().default(0),
+    upstream5xx: bigint('upstream_5xx', { mode: 'number' }).notNull().default(0),
+    latencyCount: bigint('latency_count', { mode: 'number' }).notNull().default(0),
+    latencyMsSum: bigint('latency_ms_sum', { mode: 'number' }).notNull().default(0),
+    latencyMsMax: integer('latency_ms_max').notNull().default(0),
+  },
+  (t) => [
+    primaryKey({ name: 'front_door_stats_pkey', columns: [t.day, t.host, t.route, t.servedBy] }),
+    check('front_door_stats_served_by_check', sql`served_by in ('next', 'legacy')`),
+  ],
+);
+
+/**
+ * The daily 404 top list (roadmap §7.7 "daily 404 report"): path (no query) × host × who served
+ * it. Paths are what clients asked for, so they are capped at 300 characters; nothing else is kept.
+ */
+export const frontDoorNotFound = platform.table(
+  'front_door_not_found',
+  {
+    day: date('day', { mode: 'string' }).notNull(),
+    host: text('host').notNull(),
+    path: text('path').notNull(),
+    servedBy: text('served_by').notNull(),
+    count: bigint('count', { mode: 'number' }).notNull().default(0),
+  },
+  (t) => [
+    primaryKey({ name: 'front_door_not_found_pkey', columns: [t.day, t.host, t.path, t.servedBy] }),
+    check('front_door_not_found_served_by_check', sql`served_by in ('next', 'legacy')`),
+    check('front_door_not_found_path_check', sql`length(path) <= 300`),
+  ],
+);
+
+/**
+ * Platform operations flags (M2.5a, roadmap §7.8): the read-only freeze of the new app
+ * (`read_only_freeze`: every write command refused, platform-wide or for listed orgs) and the
+ * cutover host routing (`host_route:<host>`: `next` or `legacy`). One row per key; every change is
+ * appended to `ops_flag_changes` in the same statement. No app_user privileges: the apps read
+ * through the SECURITY DEFINER `platform.read_only_freeze()` / `platform.host_route()`, staff and
+ * the cutover tool write through `platform.set_ops_flag` (platform_reader / migrator).
+ */
+export const opsFlags = platform.table(
+  'ops_flags',
+  {
+    key: text('key').primaryKey(),
+    value: jsonb('value').notNull(),
+    reason: text('reason').notNull().default(''),
+    updatedBy: text('updated_by').notNull(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+  },
+  () => [
+    check('ops_flags_key_check', sql`key = 'read_only_freeze' or key ~ '^host_route:[a-z0-9.-]{1,253}$'`),
+    check('ops_flags_reason_check', sql`length(reason) <= 500`),
+  ],
+);
+
+/** Append-only history of `ops_flags` (who changed what, when and why); written by the function. */
+export const opsFlagChanges = platform.table(
+  'ops_flag_changes',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    key: text('key').notNull(),
+    /** The new value; null when the flag was cleared. */
+    value: jsonb('value'),
+    reason: text('reason').notNull().default(''),
+    actor: text('actor').notNull(),
+    at: tsz('at').notNull().defaultNow(),
+  },
+  (t) => [index('ops_flag_changes_key_at_idx').on(t.key, t.at)],
+);

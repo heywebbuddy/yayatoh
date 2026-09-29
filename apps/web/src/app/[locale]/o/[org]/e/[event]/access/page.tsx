@@ -1,12 +1,12 @@
 import { eventDetailsQuery, listAccessCodesQuery, privateInfoQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AccessCodeForm } from '@/components/access-code-form.tsx';
 import { PrivateInfoForm } from '@/components/private-info-form.tsx';
 import { formatNumber } from '@/lib/format.ts';
+import { profileT } from '@/lib/profile-copy.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { createAccessCodeAction, savePrivateInfoAction, setAccessCodeActiveAction } from './actions.ts';
@@ -18,10 +18,12 @@ export default async function AccessPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can, profile } = await loadEvent(org, event, 'access');
   const t = await getTranslations();
-  const canWrite = roleCan(data.role, 'events:write');
-  const title = <PageHeader title={t('access.title')} description={t('access.subtitle')} />;
+  // M4.2a: a wedding's private information is for its guests, not ticket holders.
+  const tp = profileT(t, profile);
+  const canWrite = can('events:write');
+  const title = <PageHeader title={t('access.title')} description={tp('access.subtitle')} />;
   // Private info and codes are secrets: people who can't edit the event don't see them at all.
   if (!canWrite)
     return (
@@ -55,7 +57,7 @@ export default async function AccessPage({
         <h2 id="private-info-heading" className="text-section">
           {t('privateInfo.heading')}
         </h2>
-        <p className="text-body text-zinc-500">{t('privateInfo.explainer')}</p>
+        <p className="text-body text-zinc-500">{tp('privateInfo.explainer')}</p>
         <Card size="panel">
           <PrivateInfoForm
             action={savePrivateInfoAction.bind(null, org, event)}

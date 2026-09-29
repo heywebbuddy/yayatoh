@@ -74,9 +74,15 @@ export function MemberControls({
   canOwn,
   changeRole,
   remove,
+  roles: offered = ROLES,
+  labels = 'roles',
 }: {
   name: string;
   role: string;
+  /** The roles to choose from (M4.2a: an event team offers co-host and planner). */
+  roles?: readonly string[];
+  /** The message namespace of the role names (`roles`, or `eventRoles` for an event team). */
+  labels?: 'roles' | 'eventRoles';
   /** The viewer is an owner: may make owners and change or remove them. */
   canOwn: boolean;
   changeRole: (prev: MemberState, form: FormData) => Promise<MemberState>;
@@ -110,7 +116,9 @@ export function MemberControls({
   );
   const [roleState, roleAction, rolePending, roleForm] = useStepUpActionState(changeAndTell, INITIAL);
   const [removeState, removeAction, removePending, removeForm] = useStepUpActionState(removeAndTell, INITIAL);
-  const roles = canOwn ? ROLES : ROLES.filter((r) => r !== 'owner');
+  // A collaborator (M4.2a, event-only) keeps their role listed so the select shows it.
+  const listed = offered.includes(role) ? offered : [...offered, role];
+  const roles = canOwn ? listed : listed.filter((r) => r !== 'owner');
 
   // Focus follows the confirmation: into it when it opens, back to "Remove" when cancelled.
   const refocus = useRef(false);
@@ -146,7 +154,7 @@ export function MemberControls({
           >
             {roles.map((r) => (
               <option key={r} value={r}>
-                {t(`roles.${r}`)}
+                {t(`${labels}.${r}`)}
               </option>
             ))}
           </select>

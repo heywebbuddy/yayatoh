@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { frameAncestors, normalizeOrigin } from '../src/domain/embed.ts';
 import { canonicalHostFor, isListable, isOnMarketplace } from '../src/domain/listing.ts';
-import { normalizePath, pickRedirect, redirectLocation } from '../src/domain/redirects.ts';
+import {
+  followRedirectChain,
+  MAX_REDIRECT_HOPS,
+  normalizePath,
+  pickRedirect,
+  type RedirectRule,
+  redirectLocation,
+} from '../src/domain/redirects.ts';
 import { dayRange, escapeLike, pageCount, parseSearchParams } from '../src/domain/search.ts';
 
 const source = (
@@ -131,5 +138,54 @@ describe('embed origins (M1.11c)', () => {
     expect(frameAncestors(['https://a.com', 'https://b.com'])).toBe(
       "frame-ancestors 'self' https://a.com https://b.com",
     );
+  });
+});
+
+describe('redirect chains (M2.4a: one hop, never a chain)', () => {
+  const rules: RedirectRule[] = [
+    { source: '/organiser', match: 'prefix', target: '/org', status: 301 },
+    { source: '/org/harbor', match: 'exact', target: '/o/harbor-arts', status: 308 },
+    { source: '/old-events', match: 'prefix', target: '/events', status: 308 },
+    { source: '/loop-a', match: 'exact', target: '/loop-b', status: 308 },
+    { source: '/loop-b', match: 'exact', target: '/loop-a', status: 308 },
+    { source: '/away', match: 'exact', target: 'https://app.yayatoh.com/o/x', status: 308 },
+    { source: '/h1', match: 'exact', target: '/h2', status: 301 },
+    { source: '/h2', match: 'exact', target: '/h3', status: 308 },
+    { source: '/h3', match: 'exact', target: '/h4', status: 308 },
+    { source: '/h4', match: 'exact', target: '/h5', status: 308 },
+    { source: '/h5', match: 'exact', target: '/h6', status: 308 },
+    { source: '/h6', match: 'exact', target: '/h7', status: 308 },
+  ];
+  const match = (path: string) => pickRedirect(rules, path);
+
+  it('follows a stored chain to the final URL with the first status and the query', async () => {
+    expect(await followRedirectChain(match, '/organiser/harbor?utm=x')).toEqual({
+      location: '/o/harbor-arts?utm=x',
+      status: 301,
+    });
+    expect(await followRedirectChain(match, '/old-events/gala/')).toEqual({
+      location: '/events/gala',
+      status: 308,
+    });
+  });
+
+  it('stops at an absolute URL, at a loop (no redirect) and after the hop limit', async () => {
+    expect(await followRedirectChain(match, '/away')).toEqual({
+      location: 'https://app.yayatoh.com/o/x',
+      status: 308,
+    });
+    expect(await followRedirectChain(match, '/loop-a')).toBeNull();
+    expect(await followRedirectChain(match, '/h1')).toEqual({
+      location: `/h${1 + MAX_REDIRECT_HOPS}`,
+      status: 301,
+    });
+    expect(await followRedirectChain(match, '/nothing')).toBeNull();
+  });
+
+  it('a single rule stays a single redirect', async () => {
+    expect(await followRedirectChain(match, '/org/harbor')).toEqual({
+      location: '/o/harbor-arts',
+      status: 308,
+    });
   });
 });

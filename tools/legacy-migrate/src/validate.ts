@@ -188,7 +188,10 @@ export async function validate(
       where r.instance = $1 and r.entity = 'events' group by r.legacy_id
     ), nr as (
       select r.legacy_id as legacy_event, sum(f.amount_minor) as refunds
-      from legacy.ref r join orders.orders o on o.event_id = r.new_id join orders.refunds f on f.order_id = o.id
+      -- What the migration wrote (like gross above): refunds on the platform after the cutover
+      -- are the platform's, not the legacy money this check compares.
+      from legacy.ref r join orders.orders o on o.event_id = r.new_id and o.created_via = 'legacy'
+      join orders.refunds f on f.order_id = o.id and f.requested_by = 'legacy:' || r.instance
       where r.instance = $1 and r.entity = 'events' group by r.legacy_id
     ), ns as (
       select r.legacy_id as legacy_event, sum(s.commission_minor) as commission, sum(s.organizer_earning_minor) as earning, sum(s.open_minor) as open

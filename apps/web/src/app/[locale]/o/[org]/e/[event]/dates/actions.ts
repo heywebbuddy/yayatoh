@@ -65,7 +65,7 @@ export async function addDateAction(
   _prev: DateFormState,
   form: FormData,
 ): Promise<DateFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'dates');
   const get = (k: string) => String(form.get(k) ?? '').trim();
   try {
     if (!get('startsAt'))
@@ -118,7 +118,7 @@ export async function recurrenceAction(
   _prev: RecurrenceState,
   form: FormData,
 ): Promise<RecurrenceState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'dates');
   const rule = ruleFrom(form);
   const capacity = capacityOf(String(form.get('capacity') ?? '').trim());
   try {
@@ -166,7 +166,7 @@ export async function updateDateAction(
   _prev: DateFormState,
   form: FormData,
 ): Promise<DateFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'dates');
   const get = (k: string) => String(form.get(k) ?? '').trim();
   const capacity = capacityOf(get('capacity'));
   try {
@@ -211,7 +211,7 @@ export async function updateDateAction(
 }
 
 export async function cancelDateAction(org: string, event: string, occurrenceId: string): Promise<void> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'dates');
   await executeCommand(cancelOccurrenceCommand, { occurrenceId }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
   redirect({ href: `/o/${org}/e/${event}/dates?cancelled=1`, locale: await getLocale() });
@@ -223,7 +223,7 @@ export async function setSeriesAction(
   _prev: DateFormState,
   form: FormData,
 ): Promise<DateFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'dates');
   const seriesId = String(form.get('seriesId') ?? '') || null;
   try {
     await executeCommand(setEventSeriesCommand, { eventId: ev.id, seriesId }, data.ctx, ports);

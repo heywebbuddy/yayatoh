@@ -164,3 +164,17 @@ export {
   setEventSeriesCommand,
   updateSeriesCommand,
 } from './series.ts';
+export {
+  changeTeamRoleCommand,
+  eventTeamQuery,
+  grantTeamRoleTx,
+  invitationEvent,
+  inviteTeamMemberCommand,
+  MyEventDto,
+  myTeamEventsQuery,
+  removeTeamMemberCommand,
+  revokeTeamInvitationCommand,
+  TeamInvitationDto,
+  TeamMemberDto,
+  teamEventBySlugQuery,
+} from './team.ts';

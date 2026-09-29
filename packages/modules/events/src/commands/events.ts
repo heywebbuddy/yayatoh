@@ -1,7 +1,7 @@
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
-import { assertNotPausedTx, hasAcceptedTermsTx } from '@yayatoh/tenancy';
+import { assertNotPausedTx, hasAcceptedTermsTx, markOnboardingStepTx } from '@yayatoh/tenancy';
 import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from '../domain/lifecycle.ts';
@@ -42,6 +42,8 @@ export const createEventCommand = tenantCommand({
       if (!row) throw new DomainError('internal');
       // M1.4d: every event gets its automatic `/e/{code}` short link.
       await ensureAutoShortLinkTx(tx, orgId, row.id);
+      // M3.11a: the org's first event is an onboarding step.
+      await markOnboardingStepTx(tx, 'event', ctx.now);
       emit({
         type: 'event.created',
         version: 1,

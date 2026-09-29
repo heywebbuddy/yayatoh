@@ -35,7 +35,7 @@ export async function createSpeakerAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'speakers');
   try {
     await executeCommand(createSpeakerCommand, { eventId: ev.id, ...fields(form) }, data.ctx, ports);
   } catch (err) {
@@ -52,7 +52,7 @@ export async function updateSpeakerAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'speakers');
   try {
     await executeCommand(
       updateSpeakerCommand,
@@ -68,7 +68,7 @@ export async function updateSpeakerAction(
 }
 
 export async function deleteSpeakerAction(org: string, event: string, speakerId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'speakers');
   await executeCommand(deleteSpeakerCommand, { eventId: ev.id, speakerId }, data.ctx, ports);
   // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
   await purgeDeletedProgramMedia(data.org.id);

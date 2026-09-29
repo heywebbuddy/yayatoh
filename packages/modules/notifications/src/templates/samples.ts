@@ -41,6 +41,12 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     role: 'manager',
     orgName: 'Lakeside Events',
   },
+  'tenancy.event-invitation': {
+    url: 'https://app.yayatoh.test/invite/sample',
+    role: 'planner',
+    orgName: 'Lakeside Events',
+    eventName: 'Amina & Tomas',
+  },
   'ticketing.claim-link': { url: 'https://app.yayatoh.test/claim/sample', eventName: 'Lakeside Jazz Night' },
   'ticketing.holder-link': {
     url: 'https://app.yayatoh.test/my-tickets/sample',

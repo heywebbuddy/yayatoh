@@ -3,7 +3,6 @@ import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { dateChartsQuery, publicSeatMap } from '@yayatoh/seating';
-import { roleCan } from '@yayatoh/tenancy';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -43,7 +42,7 @@ export default async function TicketsPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
   const t = await getTranslations();
   const types = await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports);
   // Multi-date events (M1.4b): ticket types may be limited to dates; the box office sells one date.
@@ -64,12 +63,12 @@ export default async function TicketsPage({
   const saleDates = dateOptions.filter(
     (o) => (dates.find((d) => d.id === o.id)?.endsAt.getTime() ?? 0) > nowMs,
   );
-  const canWrite = roleCan(data.role, 'events:write');
-  const orders = roleCan(data.role, 'orders:read')
+  const canWrite = can('events:write');
+  const orders = can('orders:read')
     ? await executeQuery(listOrdersQuery, { eventId: ev.id, limit: 50 }, data.ctx, ports)
     : null;
   const promos = await executeQuery(listPromoCodesQuery, { eventId: ev.id }, data.ctx, ports);
-  const canSell = roleCan(data.role, 'orders:sell') && ev.status === 'published' && types.length > 0;
+  const canSell = can('orders:sell') && ev.status === 'published' && types.length > 0;
   // Per-date charts (M1.7g): with dates that have their own chart, the box office picks the date
   // first (`?date=`) and sells that date's seats; without one chosen, the dates on the event plan.
   const ownCharts =
@@ -131,7 +130,7 @@ export default async function TicketsPage({
   return (
     <>
       <PageHeader title={t('nav.ticketsOrders')} description={t('tickets.subtitle')} />
-      {roleCan(data.role, 'orders:support') ? (
+      {can('orders:support') ? (
         <p>
           <Link
             href={`/o/${org}/e/${event}/tickets-orders/waitlists`}

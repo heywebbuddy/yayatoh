@@ -1,5 +1,6 @@
 'use server';
 
+import { grantTeamRoleTx } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import { acceptInvitation } from '@yayatoh/tenancy';
 import { getLocale } from 'next-intl/server';
@@ -17,6 +18,8 @@ export async function acceptInviteAction(token: string): Promise<void> {
     token,
     { email: session.user.email, emailVerified: session.user.emailVerified },
     ports,
+    // M4.2a: an event invitation grants its co-host or planner role (events module, a port).
+    { grantEventRole: grantTeamRoleTx },
   );
   return redirect({ href: '/o', locale });
 }

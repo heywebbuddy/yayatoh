@@ -110,6 +110,7 @@ describe('isolation suite', () => {
       'platform.domain_events',
       'platform.processed_events',
       'ai.credit_ledger',
+      'guests.rsvp_history',
     ]) {
       await expect(
         withTenant(createCtx({ orgId: a.org.id }), (tx) => tx.execute(sql`delete from ${ident(t)}`)),

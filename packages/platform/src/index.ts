@@ -42,6 +42,24 @@ export {
   normalizeAddress,
 } from './erased-addresses.ts';
 export {
+  FREEZE_DEFAULT_RETRY_SECONDS,
+  type FreezeState,
+  FreezeValue,
+  freezeCovers,
+  freezeGate,
+  freezeRefusal,
+  HostTarget,
+  hostRoute,
+  readOnlyFreeze,
+  readOnlyFreezeTx,
+} from './freeze.ts';
+export {
+  type FrontDoorNotFoundRow,
+  type FrontDoorStatRow,
+  frontDoorFlags,
+  recordFrontDoor,
+} from './front-door-store.ts';
+export {
   FAKE_HUMAN_FAIL_TOKEN,
   FAKE_HUMAN_TOKEN,
   fakeHumanCheck,
@@ -81,15 +99,18 @@ export {
 export { privateColumns } from './private-columns.ts';
 export {
   composeNav,
+  forbiddenTerms,
   isProfileKey,
   type NavGroup,
   type NavItem,
   navIncludes,
   navLabelKey,
+  PROFILE_INDEPENDENT_SECTIONS,
   PROFILE_KEYS,
   PROFILES,
   type Profile,
   type ProfileKey,
+  profileOpensSection,
   term,
   VOCAB_TERMS,
   type VocabTerm,
@@ -166,5 +187,39 @@ export {
   StreamLimits,
   sseStream,
 } from './realtime-sse.ts';
-export { STAFF_ROLES } from './schema.ts';
+export { PLATFORM_FLAGS, type PlatformFlag, STAFF_ROLES } from './schema.ts';
+export {
+  betterStackImpact,
+  betterStackSnapshot,
+  betterStackStatusPage,
+  COMPONENT_STATUSES,
+  type ComponentStatus,
+  type FakeIncidentRow,
+  fakeIncident,
+  fakeStatusPage,
+  INCIDENT_IMPACTS,
+  INCIDENT_STATUSES,
+  type IncidentBanner,
+  type IncidentImpact,
+  type IncidentStatus,
+  type IncidentUpdate,
+  impactStatus,
+  incidentBanner,
+  mapBetterStackStatus,
+  PostIncidentInput,
+  postFakeIncident,
+  postFakeIncidentSql,
+  STATUS_COMPONENTS,
+  STATUS_HISTORY_DAYS,
+  type StatusComponent,
+  type StatusComponentKey,
+  type StatusIncident,
+  type StatusPage,
+  type StatusSnapshot,
+  snapshotFromIncidents,
+  UpdateIncidentInput,
+  updateFakeIncident,
+  updateFakeIncidentSql,
+  worstStatus,
+} from './status-page.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

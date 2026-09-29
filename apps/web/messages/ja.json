@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "チームへの招待",
+        "event-invitation": "イベントチームへの招待",
         "staff-access": "スタッフのアクセス",
         "org-status": "組織のステータス"
       },
@@ -267,7 +268,10 @@
     "trackedLinks": "トラッキングリンク",
     "messagingHealth": "メッセージ送信の上限",
     "audiences": "オーディエンス",
-    "refundRequests": "返金リクエスト"
+    "refundRequests": "返金リクエスト",
+    "helpCenter": "ヘルプセンター",
+    "marketingSite": "マーケティングサイト",
+    "tablesSponsors": "テーブルとスポンサー"
   },
   "vocab": {
     "attendee": "参加者",
@@ -281,7 +285,11 @@
     "registration": "登録",
     "rsvp": "出欠確認",
     "ticket": "チケット",
-    "tickets": "チケット"
+    "tickets": "チケット",
+    "organizer": "主催者",
+    "organizers": "主催者",
+    "host": "ホスト",
+    "hosts": "ホスト"
   },
   "roles": {
     "owner": "オーナー",
@@ -291,7 +299,8 @@
     "marketing": "マーケティング",
     "box_office": "チケット窓口",
     "scanner": "入場スキャン担当",
-    "viewer": "閲覧のみ"
+    "viewer": "閲覧のみ",
+    "collaborator": "イベント協力者"
   },
   "profiles": {
     "wedding": "結婚式",
@@ -352,7 +361,8 @@
     "ownerOnly": "オーナーを変更できるのはオーナーだけです",
     "errors": {
       "last_owner": "組織には少なくとも 1 人のオーナーが必要です。",
-      "owner_only": "オーナーを任命・変更できるのはオーナーだけです。"
+      "owner_only": "オーナーを任命・変更できるのはオーナーだけです。",
+      "pending_invitation": "このアドレスには保留中の招待がすでにあります。先に取り消すか、承諾されるまでお待ちください。"
     }
   },
   "dashboard": {
@@ -431,7 +441,13 @@
     "datesUpcoming": "今後の日程あり",
     "ticketsCreated": "チケット作成済み",
     "agendaAdded": "プログラム追加済み",
-    "speakersAdded": "登壇者追加済み"
+    "speakersAdded": "登壇者追加済み",
+    "comingSoon": "近日公開",
+    "guestsAdded": "ゲストリストを追加済み",
+    "rsvpDeadlineSet": "出欠の締め切りを設定済み",
+    "floorPlanChosen": "フロアプランを選択済み",
+    "guestSitePublished": "ゲスト用サイトを公開済み",
+    "tablesSponsors": "テーブルとスポンサーを設定済み"
   },
   "segments": {
     "all": "すべて",
@@ -608,7 +624,8 @@
     "internal": "システム側で問題が発生しました。",
     "reference": "参照番号: {id}",
     "rateLimitedRetry": "試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
-    "impersonation_blocked": "メンバーとして操作中のスタッフはこれを実行できません。返金・支払い・エクスポート・削除・本人確認は無効です。"
+    "impersonation_blocked": "メンバーとして操作中のスタッフはこれを実行できません。返金・支払い・エクスポート・削除・本人確認は無効です。",
+    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。"
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -697,7 +714,9 @@
       "revoked": "この招待は取り消されました。",
       "expired": "この招待は有効期限が切れています。新しい招待を依頼してください。",
       "unavailable": "この組織は現在利用できません。"
-    }
+    },
+    "eventTitle": "{event} のお手伝い",
+    "joinEvent": "{event}（{org}）に{role}として参加します。表示されるのはこのイベントだけです。"
   },
   "eventStatus": {
     "draft": "下書き",
@@ -1384,7 +1403,20 @@
       "event": "最初のイベントを作成する",
       "team": "チームメンバーを招待する",
       "payouts": "入金を設定する"
-    }
+    },
+    "finished": "セットアップが完了しました。組織は完全に有効です。",
+    "incomplete": "先に必須のステップを完了してください。",
+    "finishFailed": "セットアップを完了できませんでした。もう一度お試しください。",
+    "setupMode": "組織はセットアップモードです",
+    "setupModeBody": "イベントの作成とチケット販売はすでに可能です。ゲストへの一斉メッセージ（メール、お知らせ、アンケート）は、これらのステップの完了後に利用できます。",
+    "requiredList": "必須のステップ",
+    "required": {
+      "terms": "利用規約に同意する",
+      "privacy": "プライバシー通知を公開する",
+      "event": "最初のイベントを作成する"
+    },
+    "finish": "セットアップを完了",
+    "finishLater": "必須のステップを完了すると、ゲストへのメッセージが利用できます。"
   },
   "signup": {
     "eyebrow": "はじめる",
@@ -1411,7 +1443,17 @@
       "other": "シンプルに始めて、必要な機能を有効にできます。"
     },
     "terms": "この組織を代表して、<tos>利用規約</tos>および<dpa>データ処理補足契約</dpa>に同意します。",
-    "submit": "組織を作成"
+    "submit": "組織を作成",
+    "openDescription": "主催者アカウントと組織を数分で作成できます。",
+    "comingSoon": "セルフサインアップはまもなく開始します",
+    "comingSoonBody": "Yayatoh をすべての主催者に公開する準備を進めています。それまでは、新しい組織は招待制で参加できます。",
+    "joinWaitlist": "ウェイトリストに登録",
+    "useCode": "このコードを使う",
+    "seePricing": "料金と手数料を見る",
+    "openNote": "組織はセットアップモードで始まります。規約に同意し、プライバシー通知を公開し、最初のイベントを作成すると、ゲストへのメッセージ送信が可能になります。<pricing>料金と手数料を見る</pricing>",
+    "closedNow": "現在、サインアップは招待制です。サインアップコードを入力してください。",
+    "verifyEmail": "まずメールアドレスを確認してください。",
+    "humanCheck": "人間であることを確認してください。"
   },
   "payouts": {
     "title": "入金",
@@ -3252,7 +3294,9 @@
       "eyebrow": "Yayatoh",
       "title": "次のイベントを見つけよう。",
       "lede": "コンサート、ガラ、カンファレンス、コミュニティイベント。手数料はすべて価格に含まれています。",
-      "demoCta": "デモコンソールを開く"
+      "demoCta": "デモコンソールを開く",
+      "organizersTitle": "主催者が Yayatoh を選ぶ理由",
+      "organizersMore": "すべての機能を見る"
     },
     "events": {
       "title": "すべてのイベント"
@@ -3270,7 +3314,13 @@
       "events": "{org} のイベント",
       "emptyTitle": "今後のイベントはありません",
       "emptyDescription": "{org} は現在販売中のものがありません。また後でご確認ください。"
-    }
+    },
+    "pricing": "料金",
+    "features": "機能",
+    "help": "ヘルプ",
+    "helpCenter": "ヘルプセンター",
+    "contact": "お問い合わせ",
+    "status": "システムステータス"
   },
   "widget": {
     "title": "チケット：{event}",
@@ -3432,7 +3482,12 @@
       "ticketsCreated": "チケットの種類を少なくとも1つ作成してください。",
       "agendaAdded": "プログラムに最初のセッションを追加してください。",
       "speakersAdded": "最初の登壇者を追加してください。",
-      "published": "準備が整ったら、イベントのホームから公開してください。"
+      "published": "準備が整ったら、イベントのホームから公開してください。",
+      "guestsAdded": "ゲストとそのグループを追加します。",
+      "rsvpDeadlineSet": "出欠の受付を締め切る日を選びます。",
+      "floorPlanChosen": "会場のフロアプランを選ぶか、数値から作成します。",
+      "guestSitePublished": "ゲストが開くパスワード保護されたサイトを公開します。",
+      "tablesSponsors": "テーブルとスポンサーに名前を付けます。"
     }
   },
   "program": {
@@ -5323,5 +5378,549 @@
         "not_on_sale": "このパスまたは日程は販売されていません。"
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "主催者向け",
+    "title": "料金と手数料",
+    "description": "Yayatoh でチケットを販売する費用を、わかりやすい数字で。",
+    "currencies": "通貨",
+    "feeHeading": "プラットフォーム手数料（{currency}）",
+    "feeNone": "現在、チケットごとのプラットフォーム手数料はありません",
+    "feePercent": "有料チケット1枚につき {percent}",
+    "feeFixed": "有料チケット1枚につき {fixed}",
+    "feeBoth": "有料チケット1枚につき {percent} + {fixed}",
+    "freeTickets": "無料チケットと出欠の回答には手数料はかかりません。",
+    "noSubscription": "サブスクリプションも初期費用もなし。売れたときだけお支払いいただきます。",
+    "allInHeading": "総額表示",
+    "allInBody": "購入者には最初の画面から決済まで、手数料込みの総額が常に表示されます。最後に驚くことはありません。",
+    "passOnExplained": "手数料を購入者負担にする：購入者はチケット価格と手数料を支払い、主催者はチケット価格を全額受け取ります。",
+    "absorbExplained": "手数料を主催者負担にする：購入者はチケット価格を支払い、手数料は主催者の受取額から差し引かれます。",
+    "exampleCaption": "例：{face} のチケット1枚",
+    "passOn": "購入者負担",
+    "absorb": "主催者負担",
+    "col": {
+      "mode": "手数料の扱い",
+      "face": "チケット価格",
+      "fee": "プラットフォーム手数料",
+      "buyerPays": "購入者の支払額",
+      "youReceive": "主催者の受取額"
+    },
+    "exampleNote": "この例はプラットフォーム手数料のみを示しています。手数料はチケットの通貨で請求されます。",
+    "unavailable": "現在、料金を表示できません。",
+    "startHeading": "販売を始める",
+    "startBody": "組織を作成し、最初のイベントを準備して、準備ができたら公開しましょう。",
+    "startCta": "組織を作成"
+  },
+  "help": {
+    "breadcrumbs": "パンくずリスト",
+    "title": "ヘルプセンター",
+    "lede": "主催者とチケット購入者のための回答集：イベントの設定、チケット販売、チェックイン、返金など。",
+    "emptyTitle": "ヘルプ記事はまだありません",
+    "emptyDescription": "記事は公開されるとすぐにここに表示されます。",
+    "articleCount": "{count, plural, =0 {記事はありません} other {# 件の記事}}",
+    "articlesIn": "{category}の記事",
+    "related": "関連記事",
+    "updated": "{date}に更新",
+    "notTranslated": "この記事はまだお使いの言語に対応していないため、英語で表示しています。",
+    "audience": {
+      "organizers": "主催者向け",
+      "buyers": "チケット購入者向け"
+    },
+    "meta": {
+      "title": "ヘルプセンター · Yayatoh",
+      "description": "Yayatoh の主催者とチケット購入者のための回答集。",
+      "category": "{category} · Yayatoh ヘルプセンター",
+      "search": "「{query}」 · Yayatoh ヘルプセンター"
+    },
+    "search": {
+      "label": "ヘルプセンターを検索",
+      "field": "ヘルプ記事を検索",
+      "placeholder": "例：チケットを返金する",
+      "submit": "検索",
+      "title": "検索",
+      "resultsFor": "「{query}」の検索結果",
+      "count": "{count, plural, =0 {記事が見つかりませんでした} other {# 件の記事が見つかりました}}",
+      "prompt": "キーワードを入力してヘルプセンターを検索してください。",
+      "results": "検索結果",
+      "emptyTitle": "検索に一致する結果はありません",
+      "emptyDescription": "別のキーワードを試すか、ヘルプセンターのカテゴリから探してください。"
+    },
+    "feedback": {
+      "question": "この記事は役に立ちましたか？",
+      "yes": "はい",
+      "no": "いいえ",
+      "reasonLegend": "どこに問題がありましたか？（任意）",
+      "reason": {
+        "unclear": "わかりにくかった",
+        "incomplete": "情報が不足していた",
+        "outdated": "情報が古い",
+        "other": "その他"
+      },
+      "sendReason": "送信",
+      "thanksYes": "ご回答ありがとうございます。",
+      "thanksNo": "ありがとうございます。いただいた回答は記事の改善に役立てます。",
+      "rateLimited": "このデバイスからの回答が多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。"
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "主催者向けの機能 · Yayatoh",
+      "title": "イベント運営に必要なすべてを",
+      "lede": "チケット、座席、チェックイン、メッセージ、支払いをひとつの場所で。",
+      "emptyTitle": "機能紹介は近日公開予定です",
+      "emptyDescription": "このページは現在準備中です。それまではお問い合わせください。",
+      "contactCta": "相談する",
+      "helpCta": "ヘルプセンターへ"
+    },
+    "contact": {
+      "metaTitle": "お問い合わせ・営業 · Yayatoh",
+      "title": "お問い合わせ",
+      "lede": "Yayatoh についてのご質問、デモのご依頼、イベントの料金に関するご相談など、メッセージをお送りください。メールでご返信します。",
+      "formTitle": "メッセージを送信",
+      "fields": {
+        "topic": "件名",
+        "name": "お名前",
+        "email": "メールアドレス",
+        "company": "組織名",
+        "message": "メッセージ"
+      },
+      "topics": {
+        "sales": "営業・デモ",
+        "support": "アカウントに関するサポート",
+        "partnership": "パートナーシップ",
+        "other": "その他"
+      },
+      "optional": "任意",
+      "messageHint": "10 文字以上で入力してください。",
+      "privacy": "ご入力いただいた情報は、このメッセージへの返信にのみ使用します。",
+      "submit": "メッセージを送信",
+      "sentTitle": "ありがとうございます。メッセージを送信しました。",
+      "sentBody": "できるだけ早くご登録のメールアドレスにご返信します。",
+      "fixErrors": "強調表示された項目を確認してください。",
+      "rateLimited": "このデバイスからのメッセージが多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。",
+      "errors": {
+        "name": "お名前を入力してください。",
+        "email": "有効なメールアドレスを入力してください。",
+        "company": "160 文字以内で入力してください。",
+        "message": "メッセージは 10～4,000 文字で入力してください。",
+        "human": "人間であることを確認してください。"
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "サービスステータス",
+      "incident": "問題が発生しています：{title}",
+      "maintenance": "メンテナンス中：{title}",
+      "others": "{count, plural, other {ほか # 件。}}",
+      "link": "ステータスページを見る"
+    },
+    "page": {
+      "metaTitle": "システムステータス · Yayatoh",
+      "title": "システムステータス",
+      "lede": "Yayatoh のサービスの現在の状態と最近のインシデントです。時刻は UTC で表示しています。",
+      "unavailableTitle": "ステータスを表示できません",
+      "unavailableBody": "現在、サービスステータスを表示できません。数分後にもう一度お試しください。",
+      "checked": "{time}に確認",
+      "components": "サービス",
+      "open": "発生中のインシデント",
+      "noOpen": "現在インシデントはありません。",
+      "past": "過去 14 日間",
+      "noPast": "過去 14 日間にインシデントはありません。"
+    },
+    "overall": {
+      "operational": "すべてのシステムが正常に稼働しています",
+      "maintenance": "メンテナンス中",
+      "degraded": "一部のシステムでパフォーマンスが低下しています",
+      "partial_outage": "部分的な障害",
+      "major_outage": "大規模な障害"
+    },
+    "componentStatus": {
+      "operational": "正常",
+      "maintenance": "メンテナンス",
+      "degraded": "パフォーマンス低下",
+      "partial_outage": "部分的な障害",
+      "major_outage": "大規模な障害"
+    },
+    "impact": {
+      "minor": "軽微な影響",
+      "major": "大きな影響",
+      "critical": "重大な影響",
+      "maintenance": "メンテナンス"
+    },
+    "incidentStatus": {
+      "investigating": "調査中",
+      "identified": "原因特定済み",
+      "monitoring": "監視中",
+      "resolved": "解決済み",
+      "scheduled": "予定",
+      "in_progress": "実施中",
+      "completed": "完了"
+    },
+    "components": {
+      "marketplace": "イベントページとマーケットプレイス",
+      "checkout": "決済手続き",
+      "console": "主催者コンソール",
+      "checkin": "チェックインとスキャン",
+      "payments": "支払いと入金",
+      "messaging": "メールとメッセージ",
+      "api": "API"
+    },
+    "affects": "影響範囲：{components}",
+    "updates": "{title}の最新情報"
+  },
+  "helpConsole": {
+    "title": "ヘルプセンター",
+    "description": "公開ヘルプセンターの記事とカテゴリです。下書きは公開するまで非公開のままです。",
+    "tabsLabel": "ヘルプセンターのセクション",
+    "tabs": {
+      "articles": "記事",
+      "categories": "カテゴリ"
+    },
+    "newArticle": "新しい記事",
+    "newArticleDescription": "公開するまでは下書きです。記事を翻訳するには、同じアドレスで別の言語の記事を作成してください。",
+    "createArticle": "下書きを作成",
+    "back": "ヘルプセンターに戻る",
+    "categoryCreated": "カテゴリを作成しました。",
+    "emptyArticlesTitle": "記事はまだありません",
+    "emptyArticlesDescription": "主催者またはチケット購入者向けの最初の記事を書きましょう。",
+    "emptyNeedsCategory": "まずカテゴリを作成してから、その中に記事を書いてください。",
+    "emptyCategoriesTitle": "カテゴリはまだありません",
+    "emptyCategoriesDescription": "カテゴリは主催者向けまたはチケット購入者向けの記事をまとめます。",
+    "newCategory": "新しいカテゴリ",
+    "createCategory": "カテゴリを作成",
+    "columns": {
+      "category": "カテゴリ",
+      "helpful": "役に立った"
+    },
+    "helpfulCounts": "はい {yes} · いいえ {no}",
+    "fields": {
+      "category": "カテゴリ",
+      "locale": "言語",
+      "title": "タイトル",
+      "slug": "アドレス",
+      "summary": "概要",
+      "body": "本文",
+      "keywords": "検索キーワード",
+      "position": "表示順",
+      "audience": "対象",
+      "categoryTitle": "名前",
+      "description": "説明"
+    },
+    "titleError": "タイトルを入力してください。",
+    "slugFrozen": "公開済みの記事のアドレスは変更できません。",
+    "slugHint": "空欄にするとタイトルから自動生成されます。翻訳版には英語の記事のアドレスを使用します。",
+    "keywordsHint": "検索に使われそうな語をカンマ区切りで入力します。",
+    "positionHint": "数字が小さいほど先に表示されます。",
+    "positionError": "0～10,000 の整数を入力してください。",
+    "audience": {
+      "organizers": "主催者",
+      "buyers": "チケット購入者"
+    },
+    "slugReserved": "このアドレスは予約されています。別のアドレスを選んでください。",
+    "categorySlugHint": "空欄にすると名前から自動生成されます。後から変更することはできません。",
+    "translations": "他の言語での名前",
+    "translationsError": "翻訳された名前を確認してください。",
+    "categoryHasArticles": "先にこのカテゴリの記事を移動または削除してください。"
+  },
+  "siteConsole": {
+    "title": "マーケティングサイト",
+    "description": "ホームページ、機能ページ、お問い合わせページのセクションと、お問い合わせフォームから送信されたメッセージです。",
+    "tabsLabel": "マーケティングサイトのセクション",
+    "tabs": {
+      "sections": "セクション",
+      "requests": "お問い合わせ"
+    },
+    "newSection": "新しいセクション",
+    "newSectionDescription": "公開するまでは下書きです。セクションを翻訳するには、同じキーで別の言語のセクションを作成してください。",
+    "createSection": "下書きを作成",
+    "back": "マーケティングサイトに戻る",
+    "noSections": "このページにはまだセクションがありません。",
+    "placement": {
+      "home": "ホームページ：Yayatoh を選ぶ理由",
+      "features": "機能ページ",
+      "contact": "お問い合わせページ"
+    },
+    "fields": {
+      "placement": "ページ",
+      "locale": "言語",
+      "eyebrow": "見出しの上のラベル",
+      "heading": "見出し",
+      "slug": "キー",
+      "body": "本文",
+      "ctaLabel": "ボタンのテキスト",
+      "ctaHref": "ボタンのリンク",
+      "position": "表示順"
+    },
+    "optional": "任意",
+    "headingError": "見出しを入力してください。",
+    "slugHint": "空欄にすると見出しから自動生成されます。翻訳版には英語のセクションのキーを使用します。",
+    "ctaLegend": "ボタン（任意）",
+    "ctaLabelError": "ボタンのテキスト（40 文字以内）とリンクを入力してください。",
+    "ctaHrefHint": "このサイトのページ（/contact など）または https:// で始まるアドレス。",
+    "ctaHrefError": "このサイトのページ（/ で始まる）または https:// で始まるアドレスを使用してください。",
+    "positionHint": "数字が小さいほど先に表示されます。",
+    "positionError": "0～10,000 の整数を入力してください。",
+    "noRequestsTitle": "お問い合わせはありません",
+    "noRequestsDescription": "お問い合わせページから送信されたメッセージがここに表示されます。",
+    "requestStatus": {
+      "new": "新規",
+      "handled": "対応済み"
+    },
+    "topics": {
+      "sales": "営業・デモ",
+      "support": "アカウントのサポート",
+      "partnership": "パートナーシップ",
+      "other": "その他"
+    },
+    "markHandled": "対応済みにする"
+  },
+  "parties": {
+    "subtitle": "グループ（カップル、家族、世帯）と各グループのゲスト。食事制限、アクセシビリティ、住所はチーム内だけで共有されます。",
+    "viewerNotice": "ゲストリストを閲覧できます。変更できるのは編集権限のある主催者だけです。",
+    "summary": "概要",
+    "counts": {
+      "parties": "グループ",
+      "guests": "ゲスト",
+      "adults": "大人",
+      "children": "子ども",
+      "infants": "乳幼児",
+      "plusOnesPending": "名前未定の同伴者"
+    },
+    "vipCount": "{count, plural, other {VIPグループ #件}}",
+    "addParty": "グループを追加",
+    "addPartyHint": "グループは、カップルや家族など一緒に招待する人たちです。そのあとゲストを追加します。",
+    "partyAdded": "グループを追加しました。",
+    "parties": "グループ",
+    "filters": "グループを絞り込む",
+    "search": "名前で検索",
+    "side": "側",
+    "sideHint": "どちら側のゲストか。例：新婦側、新郎側、両方。",
+    "anySide": "すべての側",
+    "tag": "タグ",
+    "anyTag": "すべてのタグ",
+    "vip": "VIP",
+    "vipLegend": "優先度",
+    "vipAny": "VIPかどうかを問わない",
+    "vipOnly": "VIPのみ",
+    "vipNot": "VIP以外",
+    "apply": "適用",
+    "clear": "絞り込みを解除",
+    "matching": "{count, plural, =0 {一致するグループはありません} other {一致するグループ #件}}",
+    "showing": "{count, plural, other {#件のグループ}}",
+    "emptyTitle": "まだゲストがいません",
+    "emptyDescription": "上で最初のグループを追加し、そのゲストを追加してください。",
+    "emptyViewer": "主催者はまだゲストを追加していません。",
+    "noMatchTitle": "一致するグループはありません",
+    "noMatchDescription": "別の名前を試すか、絞り込みを解除してください。",
+    "partyName": "グループ名",
+    "partyNameHint": "呼び方。例：ガルシア家。",
+    "envelopeName": "封筒の宛名",
+    "envelopeHint": "招待状に書く宛名。例：ルイス・ガルシア様ご夫妻。",
+    "tags": "タグ",
+    "tagsHint": "タグはカンマで区切ります。例：家族, 遠方。",
+    "notes": "メモ",
+    "notesHint": "メモはチームだけが見られます。",
+    "source": "入力元",
+    "sourceHint": "ゲストが紙で送った返信を入力するときは「紙の返信」を選びます。",
+    "sources": {
+      "manual": "チームが入力",
+      "paper": "紙の返信（ゲストの代わりに入力）",
+      "import": "インポート",
+      "collector": "連絡先フォーム",
+      "rsvp": "出欠確認"
+    },
+    "sideValue": "側：{side}",
+    "guestCount": "{count, plural, =0 {ゲストなし} other {ゲスト#人}}",
+    "envelopeValue": "宛名：{name}",
+    "noGuestsInParty": "このグループにはまだゲストがいません。",
+    "guestsOf": "{party}のゲスト",
+    "guestOf": "{name}の同伴者",
+    "primary": "代表連絡先",
+    "primaryLegend": "連絡先",
+    "ages": {
+      "adult": "大人",
+      "child": "子ども",
+      "infant": "乳幼児"
+    },
+    "plusOne": "同伴者",
+    "plusOnePending": "名前未定の同伴者",
+    "meal": "料理",
+    "mealHint": "料理の選択。例：魚。",
+    "dietary": "食事の制限",
+    "accessibility": "アクセシビリティの要望",
+    "address": "自宅住所",
+    "privateHint": "非公開：暗号化して保存され、チームだけが見られます。",
+    "firstName": "名",
+    "lastName": "姓",
+    "ageClass": "年齢区分",
+    "plusOneNameHint": "名前がわかるまで空欄のままにしてください。",
+    "linkedEntry": "ゲストリストの登録",
+    "linkedEntryHint": "このイベントのゲストリストに登録済みの人と紐付けます。",
+    "notLinked": "紐付けなし",
+    "editNamed": "{name}を編集",
+    "save": "保存",
+    "saved": "保存しました。",
+    "addPlusOneFor": "{name}の同伴者を追加",
+    "plusOneAdded": "同伴者を追加しました。",
+    "moveTo": "{name}の移動先",
+    "moveHintPlusOne": "同伴者も一緒に移動します。",
+    "choosePartyOption": "グループを選択",
+    "move": "移動",
+    "moved": "移動しました。",
+    "removeNamed": "{name}を削除",
+    "removeWithPlusOne": "{name}と同伴者を削除",
+    "removed": "削除しました。",
+    "addGuestTo": "{party}にゲストを追加",
+    "addGuest": "ゲストを追加",
+    "guestAdded": "ゲストを追加しました。",
+    "removeParty": "{count, plural, =0 {{name}を削除} other {{name}とゲスト#人を削除}}",
+    "historyOf": "{party}の履歴",
+    "showHistory": "{party}の履歴を表示",
+    "hideHistory": "履歴を閉じる",
+    "actions": {
+      "party_created": "グループを追加",
+      "party_updated": "グループを編集",
+      "party_removed": "グループを削除",
+      "guest_added": "ゲストを追加",
+      "guest_updated": "ゲストを編集",
+      "guest_removed": "ゲストを削除",
+      "guest_moved": "ゲストを移動",
+      "plus_one_added": "同伴者を追加",
+      "plus_one_named": "同伴者の名前を登録"
+    },
+    "actors": {
+      "you": "あなた",
+      "member": "チームのメンバー",
+      "system": "システム"
+    },
+    "pagination": "ページ",
+    "previous": "前へ",
+    "next": "次へ",
+    "pageOf": "{page} / {pages}ページ",
+    "errors": {
+      "name": "グループ名を入力してください（120文字以内）。",
+      "envelopeName": "宛名は200文字以内にしてください。",
+      "side": "側は40文字以内にしてください。",
+      "tags": "タグは20個まで、各40文字以内にしてください。",
+      "notes": "メモは2,000文字以内にしてください。",
+      "firstName": "名を入力してください（80文字以内）。",
+      "lastName": "姓は80文字以内にしてください。",
+      "meal": "料理は80文字以内にしてください。",
+      "private": "500文字以内にしてください。",
+      "attendeeId": "このイベントのゲストリストから選んでください。",
+      "attendeeTaken": "その登録はすでに別のゲストに紐付いています。",
+      "toPartyId": "移動先に別のグループを選んでください。",
+      "isPrimary": "同伴者は代表連絡先にできません。",
+      "partyFull": "このグループは満員です（最大20人）。",
+      "tooMany": "このイベントのゲスト数が上限に達しました。",
+      "hasPlusOne": "すでに同伴者がいます。",
+      "plusOneOfPlusOne": "同伴者はさらに同伴者を連れて来られません。",
+      "plusOneMoves": "同伴者は連れて来たゲストと一緒に移動します。"
+    }
+  },
+  "eventRoles": {
+    "co_host": "共同ホスト",
+    "planner": "プランナー"
+  },
+  "eventTeam": {
+    "title": "イベントチーム",
+    "subtitle": "共同ホストとプランナーはこのイベントだけを担当します。他のイベント、入金、組織の設定は表示されません。",
+    "rolesTitle": "できること",
+    "explain": {
+      "co_host": "このイベントのすべて: ゲスト、出欠、座席、ウェブサイト、ギャラリー、メッセージ、当日、チケット。チームの他のメンバーを招待できます。",
+      "planner": "ゲスト、出欠、座席、ウェブサイト、ギャラリー、メッセージ、当日。入金、返金、財務レポートは対象外です。"
+    },
+    "inviteTitle": "このイベントに招待",
+    "emptyTitle": "共同ホストやプランナーはまだいません",
+    "emptyDescription": "メールで招待してください。このイベントにだけアクセスできます。",
+    "revokeFor": "{email} への招待を取り消す"
+  },
+  "myEvents": {
+    "title": "あなたのイベント",
+    "description": "{org} であなたが手伝っているイベントです。",
+    "emptyTitle": "現在イベントはありません",
+    "emptyDescription": "イベントに招待されると、ここに表示されます。",
+    "open": "{name} を開く"
+  },
+  "starters": {
+    "title": "スターターテンプレート",
+    "label": "スターター",
+    "yours": "あなたのテンプレート",
+    "use": "{name} からイベントを作成",
+    "sections": "セクション: {list}",
+    "checklist": "チェックリスト: {list}",
+    "wedding": {
+      "name": "結婚式",
+      "description": "ゲスト、出欠、座席、ゲスト専用の非公開サイト、ギャラリー、メッセージ、当日。一般には掲載されません。"
+    },
+    "gala": {
+      "name": "ガラ",
+      "description": "チケット、テーブルとスポンサー、座席、寄付、会場でのチェックイン。"
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "ゲストの回答が始まると、出欠と座席がここに表示されます。"
+      },
+      "details": {
+        "attendanceHint": "オンラインやハイブリッドのイベントでは、参加リンクを「アクセス」に追加します。表示されるのはゲストだけです。"
+      },
+      "dates": {
+        "capacityHint": "任意。この日程で迎えられるゲストの上限です。"
+      },
+      "copy": {
+        "description": "このイベントを再利用します。コピーには設定、質問、フロアプランが引き継がれます。ゲスト、出欠、チェックイン、入金は引き継がれません。"
+      },
+      "announcements": {
+        "pushHint": "プッシュ通知は通知をオンにしたゲストに届きます。それ以外の方にはメールが届きます。",
+        "smsHint": "SMSは携帯番号を登録し、SMSの受信に同意したゲストにのみ届きます。それ以外の方は理由付きで「未送信」と表示されます。"
+      },
+      "eventAnnouncements": {
+        "explainer": "公開のお知らせはイベントページに、ゲスト限定のお知らせはゲストのページに表示されます。",
+        "emptyDescription": "ゲストに向けてニュース、時間の変更、リマインダーを投稿します。",
+        "audienceHolders": "ゲストのみ",
+        "holdersOnly": "ゲストのみ"
+      },
+      "access": {
+        "subtitle": "ゲスト向けの非公開情報、オンライン参加リンク、アクセスコード。"
+      },
+      "privateInfo": {
+        "explainer": "確認済みのゲストだけが表示できます。公開イベントページには表示されません。",
+        "body": "ゲスト向けの情報"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "アクセスコードでゲストは非公開のイベントページを開けます。"
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "このイベントのすべて: ゲスト、出欠、座席、ウェブサイト、ギャラリー、メッセージ、当日。チームの他のメンバーを招待できます。"
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "このイベントを再利用します。コピーには設定、チケットの種類、注文時の質問、フロアプランが引き継がれます。注文、ゲスト、チケット、チェックイン、入金は引き継がれません。"
+      },
+      "announcements": {
+        "pushHint": "プッシュ通知は注文ページやアプリで通知をオンにしたゲストに届きます。それ以外の方にはメールが届きます。",
+        "smsHint": "SMSは携帯番号を登録し、SMSの受信に同意したゲストにのみ届きます。それ以外の方は理由付きで「未送信」と表示されます。"
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "ゲストに向けてニュース、時間の変更、リマインダーを投稿します。"
+      }
+    }
+  },
+  "frontDoor": {
+    "slowTitle": "このページの表示に時間がかかっています",
+    "downTitle": "このページは現在ご利用いただけません",
+    "body": "しばらくしてからもう一度お試しください。"
+  },
+  "maintenance": {
+    "label": "メンテナンス",
+    "title": "定期メンテナンス：変更は一時停止中です",
+    "body": "新しいプラットフォームへの移行中、Yayatoh は読み取り専用のメンテナンス中です。すべての閲覧、エクスポートのダウンロード、入口でのチケットのスキャンは引き続き可能で、公開ページもオンラインのままです。変更の保存、新規販売、返金は終了まで一時停止しています。",
+    "bodyUntil": "新しいプラットフォームへの移行中、Yayatoh は {until} 頃まで読み取り専用のメンテナンス中です。すべての閲覧、エクスポートのダウンロード、入口でのチケットのスキャンは引き続き可能で、公開ページもオンラインのままです。変更の保存、新規販売、返金はそれまで一時停止しています。"
   }
 }

@@ -1,6 +1,6 @@
 import { AUDIENCE_EXPORT_COLUMNS, audienceExportBulk, catchUpParticipation } from '@yayatoh/audiences';
 import { enrollDeviceCommand } from '@yayatoh/checkin';
-import { createEntryCommand } from '@yayatoh/cms';
+import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand } from '@yayatoh/cms';
 import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
@@ -12,7 +12,12 @@ import { auditExportBulk, consumeEvent, keyVault, recentEventsTx } from '@yayato
 import { dsarExportBulk } from '@yayatoh/privacy';
 import { attendeeExportBulk, BOOKING_EXPORT_COLUMNS, bookingsExportBulk } from '@yayatoh/reports';
 import { hideReviewCommand } from '@yayatoh/reviews';
-import { API_KEY_SCOPES, createApiKeyCommand } from '@yayatoh/tenancy';
+import {
+  API_KEY_SCOPES,
+  completeOnboardingCommand,
+  createApiKeyCommand,
+  setLegalPageCommand,
+} from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { createOrgFixture, EXPORT_PARAMS, systemCtx, userCtx } from '../fixtures.ts';
 import { ports, runBulk } from '../ports.ts';
@@ -157,6 +162,24 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
     ctx(),
     ports,
   );
+  // M3.11b: a draft help article and a draft marketing section (private until published).
+  const [helpCategory] = await admin.unsafe(
+    `select id::text as id from cms.help_categories where org_id = $1 limit 1`,
+    [orgId],
+  );
+  if (!helpCategory) throw new Error('canary: the fixture has no help category');
+  await executeCommand(
+    createHelpArticleCommand,
+    { categoryId: helpCategory.id as string, title: 'Draft help article', body: 'Not yet.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createSiteSectionCommand,
+    { placement: 'features', heading: 'Draft section', body: 'Not yet.' },
+    ctx(),
+    ports,
+  );
   const [review] = await admin.unsafe(
     `select id::text as id, event_id::text as event_id from reviews.reviews where org_id = $1 limit 1`,
     [orgId],
@@ -177,6 +200,15 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
     tx.execute(sql`insert into ticketing.signing_keys (org_id, kid, public_key, private_key_ciphertext, active)
       select org_id, 65535, public_key, ${sealed}, false from ticketing.signing_keys where active limit 1`),
   );
+  // M3.11a: a finished onboarding (a privacy notice, then Finish setup), so who finished it is
+  // recorded and covered.
+  await executeCommand(
+    setLegalPageCommand,
+    { kind: 'privacy', body: 'Canary privacy notice.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(completeOnboardingCommand, {}, ctx(), ports);
   // An unpaid direct-charge order (organizer_mor), so the connected account column holds a value.
   await admin.unsafe(
     `insert into orders.orders

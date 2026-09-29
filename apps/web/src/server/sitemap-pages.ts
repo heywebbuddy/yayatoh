@@ -1,5 +1,5 @@
 import 'server-only';
-import { sitemapEntries } from '@yayatoh/cms';
+import { helpSitemapEntries, publicSiteSections, sitemapEntries } from '@yayatoh/cms';
 import { publicOrganizerById, sitemapListings } from '@yayatoh/marketplace';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import type { SitemapPage } from '@/lib/seo/sitemap.ts';
@@ -14,6 +14,24 @@ async function contentPages(orgId: string, base: string): Promise<SitemapPage[]>
   return [
     ...(posts.length > 0 ? [{ path: `${base}/blogs`, lastmod: latestPost }] : []),
     ...entries.map((e) => ({ path: `${base}${entryPath(e.kind, e.slug)}`, lastmod: e.updatedAt })),
+  ];
+}
+
+/**
+ * The platform CMS pages of the marketplace (M3.11b): the help center, its categories and
+ * articles, the features and contact pages (when they have published sections) and the status page.
+ */
+async function platformPages(orgId: string): Promise<SitemapPage[]> {
+  const help = await helpSitemapEntries(orgId);
+  const latest = help.articles.reduce<Date | null>((m, a) => (!m || a.updatedAt > m ? a.updatedAt : m), null);
+  const features = await publicSiteSections(orgId, 'features', 'en');
+  return [
+    ...(help.articles.length > 0 ? [{ path: '/help', lastmod: latest }] : []),
+    ...help.categories.map((c) => ({ path: `/help/${c.slug}`, lastmod: c.updatedAt })),
+    ...help.articles.map((a) => ({ path: `/help/${a.categorySlug}/${a.slug}`, lastmod: a.updatedAt })),
+    ...(features.length > 0 ? [{ path: '/features', lastmod: null }] : []),
+    { path: '/contact', lastmod: null },
+    { path: '/status', lastmod: null },
   ];
 }
 
@@ -45,7 +63,9 @@ export async function sitemapPages(site: HostSite): Promise<SitemapPage[] | null
   }
   const content: SitemapPage[] = [];
   const contentOrg = await marketplaceContentOrg();
-  if (contentOrg) content.push(...(await contentPages(contentOrg.orgId, '')));
+  if (contentOrg) {
+    content.push(...(await contentPages(contentOrg.orgId, '')), ...(await platformPages(contentOrg.orgId)));
+  }
   for (const slug of orgs.keys()) {
     if (slug === contentOrg?.slug) continue;
     const found = await resolveOrgSlug(slug);

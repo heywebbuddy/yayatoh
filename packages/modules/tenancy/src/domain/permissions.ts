@@ -48,6 +48,16 @@ export const PERMISSIONS = [
   'audit:read',
   /** Data-subject requests: find, export and erase a person's data (M1.14c). Owners and admins. */
   'privacy:manage',
+  /** Change an event's seating (plans, assignments, rules, seat finder). Event-scoped for planners (M4.2a). */
+  'seating:write',
+  /** See an event's team (co-hosts, planners, pending event invitations) (M4.2a). */
+  'event_team:read',
+  /** Invite, change and remove an event's co-hosts and planners (M4.2a). */
+  'event_team:manage',
+  /** See an event's parties and guests, with their private answers (M4.1a guests module). */
+  'guests:read',
+  /** Add, change, move and remove parties and guests (M4.1a). Event-scoped for co-hosts and planners. */
+  'guests:write',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -60,12 +70,16 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'members:read',
     'events:read',
     'events:write',
+    'seating:write',
+    'event_team:read',
     'orders:read',
     'orders:sell',
     'orders:support',
     'orders:note',
     'attendees:read',
+    'guests:read',
     'attendees:write',
+    'guests:write',
     'attendees:export',
     'contacts:read',
     'marketing:read',
@@ -104,13 +118,42 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'orders:support',
     'orders:note',
     'attendees:read',
+    'guests:read',
     'attendees:write',
+    'guests:write',
     'checkin:scan',
     'messages:read',
   ],
   scanner: ['org:read', 'checkin:scan'],
-  viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read', 'marketing:read'],
+  viewer: [
+    'org:read',
+    'members:read',
+    'events:read',
+    'orders:read',
+    'attendees:read',
+    'guests:read',
+    'marketing:read',
+    'event_team:read',
+  ],
+  /**
+   * M4.2a: someone who works on specific events only (a co-host or planner invited to one event).
+   * Org-wide they may only read the org's name; everything else comes from their event roles, for
+   * those events alone. The console shows them just their events.
+   */
+  collaborator: ['org:read'],
 };
+
+/** Org roles an admin can grant directly (a collaborator comes only from an event invitation). */
+export const GRANTABLE_ORG_ROLES = [
+  'owner',
+  'admin',
+  'manager',
+  'finance',
+  'marketing',
+  'box_office',
+  'scanner',
+  'viewer',
+] as const satisfies readonly OrgRole[];
 
 /** Platform permissions are not granted by org roles; they need a platform actor. */
 export const PLATFORM_PERMISSIONS = [
@@ -148,11 +191,15 @@ export function roleCan(role: OrgRole, permission: string): boolean {
 /**
  * What an event-scoped role (events.event_role_assignments) adds, for that one event only. It
  * applies on top of the member's org role; it never reaches other events or org-level actions.
+ *
+ * Entries are exact permissions or a `module:*` wildcard, so permissions a later module adds
+ * (`guests:read`, `rsvp:write`, …) map to co-hosts and planners by name with no change here.
  */
 export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>> = {
   event_manager: [
     'events:read',
     'events:write',
+    'seating:write',
     'orders:read',
     'orders:sell',
     'orders:support',
@@ -166,8 +213,84 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
   ],
   door_staff: ['events:read', 'checkin:scan'],
   session_scanner: ['checkin:scan'],
+  /**
+   * M4.2a (P4-8), the couple or the gala chair: everything about their event, including tickets,
+   * refunds and the event's own reports, and its team. Never org settings, payouts, billing,
+   * members, API keys, the audit log or another event.
+   */
+  co_host: [
+    'events:*',
+    'seating:*',
+    'orders:read',
+    'orders:sell',
+    'orders:support',
+    'orders:refund',
+    'attendees:*',
+    'contacts:read',
+    'checkin:*',
+    'messages:*',
+    'marketing:write',
+    'finance:read',
+    'event_team:*',
+    'guests:*',
+    'rsvp:*',
+    'website:*',
+    'gallery:*',
+    'dayof:*',
+    'tickets:*',
+    'tables:*',
+  ],
+  /**
+   * M4.2a (P4-8): guests, RSVP, seating, website, gallery, messages and day-of for that event.
+   * No orders, refunds, payouts, finance reports, exports or settings.
+   */
+  planner: [
+    'events:read',
+    'seating:*',
+    'attendees:read',
+    'attendees:write',
+    'checkin:scan',
+    'messages:read',
+    'messages:send',
+    'guests:*',
+    'rsvp:*',
+    'website:*',
+    'gallery:*',
+    'dayof:*',
+  ],
 };
 
+/** Event roles that can be given by invitation from an event's Team page (M4.2a). */
+export const TEAM_EVENT_ROLES = ['co_host', 'planner'] as const;
+export type TeamEventRole = (typeof TEAM_EVENT_ROLES)[number];
+
+/** Permissions that no event role ever grants, whatever its wildcards (defence in depth). */
+const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|audit|privacy|org):/;
+
+function grants(entry: string, permission: string): boolean {
+  if (entry === permission) return true;
+  return entry.endsWith(':*') && permission.startsWith(entry.slice(0, -1));
+}
+
 export function eventRoleCan(roles: readonly string[], permission: string): boolean {
-  return roles.some((r) => EVENT_ROLE_PERMISSIONS[r]?.includes(permission) ?? false);
+  if (NEVER_EVENT_SCOPED.test(permission)) return false;
+  return roles.some((r) => EVENT_ROLE_PERMISSIONS[r]?.some((e) => grants(e, permission)) ?? false);
+}
+
+/**
+ * Event console sections (nav keys) each team role may open (M4.2a). `null` = every section the
+ * event's profile shows. Members with an org role keep what their org role gives.
+ */
+export const EVENT_ROLE_SECTIONS: Readonly<Record<TeamEventRole, readonly string[] | null>> = {
+  co_host: null,
+  planner: ['home', 'guests', 'rsvp', 'seating', 'seatFinder', 'website', 'gallery', 'messages', 'dayOf'],
+};
+
+/** Whether event roles open a console section: any team role that lists it (or lists all). */
+export function eventRolesOpenSection(roles: readonly string[], section: string): boolean {
+  return roles.some((r) => {
+    if (!(TEAM_EVENT_ROLES as readonly string[]).includes(r)) return false;
+    const s = EVENT_ROLE_SECTIONS[r as TeamEventRole];
+    return s === null || s.includes(section);
+  });
 }

@@ -40,7 +40,7 @@ export default async function WaitlistsPage({
   const { locale, org, event } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   if (!roleCan(data.role, 'orders:support')) notFound();
   const t = await getTranslations('waitlist.console');
   const tb = await getTranslations('bulk');

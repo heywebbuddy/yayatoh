@@ -462,6 +462,9 @@ async function reopenRequestTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$i
  */
 export const completeRefundCommand = tenantCommand({
   name: 'orders.completeRefund',
+  // Records what the provider already did (a refund or reversal in flight when a read-only
+  // freeze started, M2.5a): refusing it would leave the money moved and the order pending.
+  duringFreeze: 'allowed',
   category: 'money',
   input: z.object({
     refundId: z.uuid(),

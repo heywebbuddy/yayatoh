@@ -7,6 +7,7 @@ import { connection } from 'next/server';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { MaintenanceBanner } from '@/components/maintenance-banner.tsx';
 import { routing } from '@/i18n/routing.ts';
 import '../globals.css';
 
@@ -41,6 +42,8 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-dvh bg-zinc-50 text-zinc-900 antialiased">
+        {/* Platform-wide read-only freeze (M2.5a): on every page, public ones included. */}
+        <MaintenanceBanner locale={locale} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

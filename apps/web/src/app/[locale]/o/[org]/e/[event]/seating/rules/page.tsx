@@ -1,7 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { adaReleaseAt, seatingLiveAccessQuery, seatingRulesQuery } from '@yayatoh/seating';
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
@@ -24,7 +23,7 @@ export default async function SeatingRulesPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'seating')) notFound();
   const t = await getTranslations('seating');
@@ -35,7 +34,7 @@ export default async function SeatingRulesPage({
     () => false,
   );
   const rules = hasPlan ? await executeQuery(seatingRulesQuery, { eventId: ev.id }, data.ctx, ports) : [];
-  const canWrite = roleCan(data.role, 'events:write');
+  const canWrite = can('seating:write');
   const when = (d: Date) =>
     format.dateTime(d, { dateStyle: 'medium', timeStyle: 'short', timeZone: ev.timezone });
   return (

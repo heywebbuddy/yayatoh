@@ -86,6 +86,7 @@
       },
       "tenancy": {
         "invitation": "Teamuitnodiging",
+        "event-invitation": "Uitnodiging voor het evenemententeam",
         "staff-access": "Toegang door medewerkers",
         "org-status": "Status van de organisatie"
       },
@@ -267,7 +268,10 @@
     "trackedLinks": "Trackinglinks",
     "messagingHealth": "Verzendlimieten",
     "audiences": "Doelgroepen",
-    "refundRequests": "Terugbetalingsverzoeken"
+    "refundRequests": "Terugbetalingsverzoeken",
+    "helpCenter": "Helpcentrum",
+    "marketingSite": "Marketingsite",
+    "tablesSponsors": "Tafels & sponsors"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -281,7 +285,11 @@
     "registration": "Registratie",
     "rsvp": "RSVP",
     "ticket": "Ticket",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "organizer": "Organisator",
+    "organizers": "Organisatoren",
+    "host": "Gastheer",
+    "hosts": "Gastheren"
   },
   "roles": {
     "owner": "Eigenaar",
@@ -291,7 +299,8 @@
     "marketing": "Marketing",
     "box_office": "Kassa",
     "scanner": "Scanner",
-    "viewer": "Alleen lezen"
+    "viewer": "Alleen lezen",
+    "collaborator": "Evenementmedewerker"
   },
   "profiles": {
     "wedding": "Bruiloft",
@@ -352,7 +361,8 @@
     "ownerOnly": "Alleen eigenaren kunnen eigenaren wijzigen",
     "errors": {
       "last_owner": "Een organisatie heeft minstens één eigenaar nodig.",
-      "owner_only": "Alleen een eigenaar kan iemand eigenaar maken of een eigenaar wijzigen."
+      "owner_only": "Alleen een eigenaar kan iemand eigenaar maken of een eigenaar wijzigen.",
+      "pending_invitation": "Er staat al een uitnodiging open voor dit adres. Trek die eerst in of wacht tot ze is geaccepteerd."
     }
   },
   "dashboard": {
@@ -431,7 +441,13 @@
     "datesUpcoming": "Een komende datum",
     "ticketsCreated": "Tickets aangemaakt",
     "agendaAdded": "Programma toegevoegd",
-    "speakersAdded": "Sprekers toegevoegd"
+    "speakersAdded": "Sprekers toegevoegd",
+    "comingSoon": "Binnenkort",
+    "guestsAdded": "Gastenlijst toegevoegd",
+    "rsvpDeadlineSet": "RSVP-deadline ingesteld",
+    "floorPlanChosen": "Plattegrond gekozen",
+    "guestSitePublished": "Gastenwebsite gepubliceerd",
+    "tablesSponsors": "Tafels en sponsors ingericht"
   },
   "segments": {
     "all": "Alle",
@@ -608,7 +624,8 @@
     "internal": "Er ging bij ons iets mis.",
     "reference": "Referentie: {id}",
     "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
-    "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit."
+    "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit.",
+    "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Er is niets opgeslagen; probeer het opnieuw als het klaar is."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -697,7 +714,9 @@
       "revoked": "Deze uitnodiging is ingetrokken.",
       "expired": "Deze uitnodiging is verlopen. Vraag om een nieuwe.",
       "unavailable": "Deze organisatie is momenteel niet beschikbaar."
-    }
+    },
+    "eventTitle": "Help mee met {event}",
+    "joinEvent": "Je sluit je aan bij {event} ({org}) als {role}. Je ziet alleen dit evenement."
   },
   "eventStatus": {
     "draft": "Concept",
@@ -1384,7 +1403,20 @@
       "event": "Maak je eerste evenement aan",
       "team": "Nodig een teamlid uit",
       "payouts": "Stel uitbetalingen in"
-    }
+    },
+    "finished": "Opstarten voltooid. Je organisatie is volledig actief.",
+    "incomplete": "Rond eerst de verplichte stappen af.",
+    "finishFailed": "We konden het opstarten niet afronden. Probeer het opnieuw.",
+    "setupMode": "Je organisatie staat in de opstartmodus",
+    "setupModeBody": "Je kunt nu al evenementen maken en tickets verkopen. Bulkberichten aan gasten (e-mails, aankondigingen, enquêtes) gaan open zodra deze stappen klaar zijn.",
+    "requiredList": "Verplichte stappen",
+    "required": {
+      "terms": "Accepteer de gebruiksvoorwaarden",
+      "privacy": "Publiceer een privacyverklaring",
+      "event": "Maak je eerste evenement aan"
+    },
+    "finish": "Opstarten afronden",
+    "finishLater": "Rond de verplichte stappen af om berichten aan gasten te ontgrendelen."
   },
   "signup": {
     "eyebrow": "Aan de slag",
@@ -1411,7 +1443,17 @@
       "other": "Begin eenvoudig en zet aan wat je nodig hebt."
     },
     "terms": "Ik ga namens deze organisatie akkoord met de <tos>Servicevoorwaarden</tos> en de <dpa>Verwerkersovereenkomst</dpa>.",
-    "submit": "Organisatie aanmaken"
+    "submit": "Organisatie aanmaken",
+    "openDescription": "Maak in een paar minuten je organisatoraccount en je organisatie aan.",
+    "comingSoon": "Zelf aanmelden komt binnenkort",
+    "comingSoonBody": "We bereiden ons voor om Yayatoh voor alle organisatoren open te stellen. Tot die tijd komen nieuwe organisaties erbij op uitnodiging.",
+    "joinWaitlist": "Op de wachtlijst",
+    "useCode": "Deze code gebruiken",
+    "seePricing": "Bekijk prijzen en kosten",
+    "openNote": "Je organisatie begint in de opstartmodus: accepteer de voorwaarden, publiceer een privacyverklaring en maak je eerste evenement aan om gasten berichten te kunnen sturen. <pricing>Bekijk prijzen en kosten</pricing>.",
+    "closedNow": "Aanmelden kan op dit moment alleen op uitnodiging. Vul je aanmeldcode in.",
+    "verifyEmail": "Bevestig eerst je e-mailadres.",
+    "humanCheck": "Bevestig dat je een mens bent."
   },
   "payouts": {
     "title": "Uitbetalingen",
@@ -3252,7 +3294,9 @@
       "eyebrow": "Yayatoh",
       "title": "Vind je volgende evenement.",
       "lede": "Concerten, gala's, congressen en gemeenschapsevenementen, met alle kosten inbegrepen in de prijs.",
-      "demoCta": "Democonsole openen"
+      "demoCta": "Democonsole openen",
+      "organizersTitle": "Waarom organisatoren voor Yayatoh kiezen",
+      "organizersMore": "Bekijk alle functies"
     },
     "events": {
       "title": "Alle evenementen"
@@ -3270,7 +3314,13 @@
       "events": "Evenementen van {org}",
       "emptyTitle": "Geen komende evenementen",
       "emptyDescription": "{org} heeft nu niets in de verkoop. Kom snel terug."
-    }
+    },
+    "pricing": "Prijzen",
+    "features": "Functies",
+    "help": "Hulp",
+    "helpCenter": "Helpcentrum",
+    "contact": "Neem contact op",
+    "status": "Systeemstatus"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -3432,7 +3482,12 @@
       "ticketsCreated": "Maak minstens één tickettype aan.",
       "agendaAdded": "Voeg de eerste sessie toe aan het programma.",
       "speakersAdded": "Voeg de eerste spreker toe.",
-      "published": "Publiceer het evenement vanaf de startpagina als alles klaar is."
+      "published": "Publiceer het evenement vanaf de startpagina als alles klaar is.",
+      "guestsAdded": "Voeg je gasten en hun gezelschappen toe.",
+      "rsvpDeadlineSet": "Kies de datum waarop RSVP’s sluiten.",
+      "floorPlanChosen": "Kies een plattegrond voor de zaal of maak er een op basis van aantallen.",
+      "guestSitePublished": "Publiceer de met een wachtwoord beveiligde website voor je gasten.",
+      "tablesSponsors": "Geef je tafels en hun sponsors een naam."
     }
   },
   "program": {
@@ -5323,5 +5378,549 @@
         "not_on_sale": "Deze pas of datum is niet te koop."
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Voor organisatoren",
+    "title": "Prijzen en kosten",
+    "description": "Wat het kost om tickets te verkopen op Yayatoh, in heldere cijfers.",
+    "currencies": "Valuta",
+    "feeHeading": "Platformkosten ({currency})",
+    "feeNone": "Op dit moment geen platformkosten per ticket",
+    "feePercent": "{percent} per betaald ticket",
+    "feeFixed": "{fixed} per betaald ticket",
+    "feeBoth": "{percent} + {fixed} per betaald ticket",
+    "freeTickets": "Gratis tickets en aanmeldingen zijn altijd zonder kosten.",
+    "noSubscription": "Geen abonnement en geen opstartkosten: je betaalt alleen als je verkoopt.",
+    "allInHeading": "Allesomvattende prijzen",
+    "allInBody": "Kopers zien altijd de volledige prijs, inclusief kosten, van het eerste scherm tot het afrekenen. Geen verrassingen aan het eind.",
+    "passOnExplained": "Kosten doorberekenen: de koper betaalt de ticketprijs plus de kosten, en jij ontvangt de volledige ticketprijs.",
+    "absorbExplained": "Kosten zelf dragen: de koper betaalt de ticketprijs, en de kosten gaan af van wat jij ontvangt.",
+    "exampleCaption": "Voorbeeld: één ticket van {face}",
+    "passOn": "Kosten doorberekend",
+    "absorb": "Kosten zelf gedragen",
+    "col": {
+      "mode": "Hoe de kosten worden verwerkt",
+      "face": "Ticketprijs",
+      "fee": "Platformkosten",
+      "buyerPays": "Koper betaalt",
+      "youReceive": "Jij ontvangt"
+    },
+    "exampleNote": "Het voorbeeld toont alleen de platformkosten. Kosten worden berekend in de valuta van het ticket.",
+    "unavailable": "Prijzen zijn op dit moment niet beschikbaar.",
+    "startHeading": "Begin met verkopen",
+    "startBody": "Maak je organisatie aan, zet je eerste evenement klaar en publiceer wanneer je er klaar voor bent.",
+    "startCta": "Maak je organisatie aan"
+  },
+  "help": {
+    "breadcrumbs": "Kruimelpad",
+    "title": "Helpcentrum",
+    "lede": "Antwoorden voor organisatoren en ticketkopers: evenementen opzetten, tickets verkopen, inchecken, terugbetalingen en meer.",
+    "emptyTitle": "Nog geen helpartikelen",
+    "emptyDescription": "Artikelen verschijnen hier zodra ze zijn gepubliceerd.",
+    "articleCount": "{count, plural, =0 {Geen artikelen} one {# artikel} other {# artikelen}}",
+    "articlesIn": "Artikelen in {category}",
+    "related": "Gerelateerde artikelen",
+    "updated": "Bijgewerkt op {date}",
+    "notTranslated": "Dit artikel is nog niet beschikbaar in jouw taal en wordt daarom in het Engels getoond.",
+    "audience": {
+      "organizers": "Voor organisatoren",
+      "buyers": "Voor ticketkopers"
+    },
+    "meta": {
+      "title": "Helpcentrum · Yayatoh",
+      "description": "Antwoorden voor organisatoren en ticketkopers op Yayatoh.",
+      "category": "{category} · Yayatoh-helpcentrum",
+      "search": "‘{query}’ · Yayatoh-helpcentrum"
+    },
+    "search": {
+      "label": "Zoeken in het helpcentrum",
+      "field": "Helpartikelen doorzoeken",
+      "placeholder": "Bijvoorbeeld: ticket terugbetalen",
+      "submit": "Zoeken",
+      "title": "Zoeken",
+      "resultsFor": "Resultaten voor ‘{query}’",
+      "count": "{count, plural, =0 {Geen artikelen gevonden} one {# artikel gevonden} other {# artikelen gevonden}}",
+      "prompt": "Typ een paar woorden om het helpcentrum te doorzoeken.",
+      "results": "Zoekresultaten",
+      "emptyTitle": "Niets gevonden voor je zoekopdracht",
+      "emptyDescription": "Probeer andere woorden of blader door de categorieën in het helpcentrum."
+    },
+    "feedback": {
+      "question": "Was dit artikel nuttig?",
+      "yes": "Ja",
+      "no": "Nee",
+      "reasonLegend": "Wat klopte er niet? (optioneel)",
+      "reason": {
+        "unclear": "Het was moeilijk te begrijpen",
+        "incomplete": "Er ontbrak iets",
+        "outdated": "Het is verouderd",
+        "other": "Iets anders"
+      },
+      "sendReason": "Versturen",
+      "thanksYes": "Bedankt voor je reactie.",
+      "thanksNo": "Bedankt. We gebruiken je antwoord om dit artikel te verbeteren.",
+      "rateLimited": "Te veel antwoorden vanaf dit apparaat. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "Functies voor organisatoren · Yayatoh",
+      "title": "Alles wat je nodig hebt om je evenementen te organiseren",
+      "lede": "Tickets, zitplaatsen, inchecken, berichten en uitbetalingen op één plek.",
+      "emptyTitle": "Functies volgen binnenkort",
+      "emptyDescription": "Aan deze pagina wordt nog gewerkt. Neem in de tussentijd contact met ons op.",
+      "contactCta": "Praat met ons",
+      "helpCta": "Ga naar het helpcentrum"
+    },
+    "contact": {
+      "metaTitle": "Contact en sales · Yayatoh",
+      "title": "Neem contact op",
+      "lede": "Vragen over Yayatoh, een demo of prijzen voor je evenementen? Stuur ons een bericht en we antwoorden per e-mail.",
+      "formTitle": "Stuur een bericht",
+      "fields": {
+        "topic": "Onderwerp",
+        "name": "Je naam",
+        "email": "E-mail",
+        "company": "Organisatie",
+        "message": "Bericht"
+      },
+      "topics": {
+        "sales": "Sales en demo's",
+        "support": "Hulp met mijn account",
+        "partnership": "Partnerschappen",
+        "other": "Iets anders"
+      },
+      "optional": "Optioneel",
+      "messageHint": "Minimaal 10 tekens.",
+      "privacy": "We gebruiken je gegevens alleen om dit bericht te beantwoorden.",
+      "submit": "Bericht versturen",
+      "sentTitle": "Bedankt, je bericht is verstuurd.",
+      "sentBody": "We antwoorden zo snel mogelijk op je e-mailadres.",
+      "fixErrors": "Controleer de gemarkeerde velden.",
+      "rateLimited": "Te veel berichten vanaf dit apparaat. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+      "errors": {
+        "name": "Vul je naam in.",
+        "email": "Vul een geldig e-mailadres in.",
+        "company": "Gebruik maximaal 160 tekens.",
+        "message": "Schrijf een bericht van 10 tot 4.000 tekens.",
+        "human": "Bevestig dat je een mens bent."
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "Servicestatus",
+      "incident": "Er is een probleem: {title}",
+      "maintenance": "Onderhoud bezig: {title}",
+      "others": "{count, plural, one {En nog #.} other {En nog #.}}",
+      "link": "Bekijk de statuspagina"
+    },
+    "page": {
+      "metaTitle": "Systeemstatus · Yayatoh",
+      "title": "Systeemstatus",
+      "lede": "De huidige status van de diensten van Yayatoh en recente incidenten. Tijden zijn in UTC.",
+      "unavailableTitle": "Status is niet beschikbaar",
+      "unavailableBody": "We kunnen de servicestatus nu niet tonen. Probeer het over een paar minuten opnieuw.",
+      "checked": "Gecontroleerd {time}",
+      "components": "Diensten",
+      "open": "Huidige incidenten",
+      "noOpen": "Momenteel geen incidenten.",
+      "past": "Afgelopen 14 dagen",
+      "noPast": "Geen incidenten in de afgelopen 14 dagen."
+    },
+    "overall": {
+      "operational": "Alle systemen werken normaal",
+      "maintenance": "Onderhoud bezig",
+      "degraded": "Sommige systemen werken verminderd",
+      "partial_outage": "Gedeeltelijke storing",
+      "major_outage": "Grote storing"
+    },
+    "componentStatus": {
+      "operational": "Operationeel",
+      "maintenance": "Onderhoud",
+      "degraded": "Verminderd",
+      "partial_outage": "Gedeeltelijke storing",
+      "major_outage": "Grote storing"
+    },
+    "impact": {
+      "minor": "Kleine impact",
+      "major": "Grote impact",
+      "critical": "Kritieke impact",
+      "maintenance": "Onderhoud"
+    },
+    "incidentStatus": {
+      "investigating": "In onderzoek",
+      "identified": "Vastgesteld",
+      "monitoring": "Wordt gevolgd",
+      "resolved": "Opgelost",
+      "scheduled": "Gepland",
+      "in_progress": "Bezig",
+      "completed": "Voltooid"
+    },
+    "components": {
+      "marketplace": "Evenementpagina's en marktplaats",
+      "checkout": "Afrekenen",
+      "console": "Organisatorconsole",
+      "checkin": "Inchecken en scannen",
+      "payments": "Betalingen en uitbetalingen",
+      "messaging": "E-mail en berichten",
+      "api": "API"
+    },
+    "affects": "Betreft: {components}",
+    "updates": "Updates over {title}"
+  },
+  "helpConsole": {
+    "title": "Helpcentrum",
+    "description": "Artikelen en categorieën van het openbare helpcentrum. Concepten blijven privé tot je ze publiceert.",
+    "tabsLabel": "Onderdelen van het helpcentrum",
+    "tabs": {
+      "articles": "Artikelen",
+      "categories": "Categorieën"
+    },
+    "newArticle": "Nieuw artikel",
+    "newArticleDescription": "Een concept tot je het publiceert. Om een artikel te vertalen, maak je het opnieuw aan met hetzelfde adres in een andere taal.",
+    "createArticle": "Concept maken",
+    "back": "Terug naar het helpcentrum",
+    "categoryCreated": "Categorie aangemaakt.",
+    "emptyArticlesTitle": "Nog geen artikelen",
+    "emptyArticlesDescription": "Schrijf het eerste artikel voor organisatoren of ticketkopers.",
+    "emptyNeedsCategory": "Maak eerst een categorie aan en schrijf daarna artikelen in die categorie.",
+    "emptyCategoriesTitle": "Nog geen categorieën",
+    "emptyCategoriesDescription": "Categorieën groeperen artikelen voor organisatoren of voor ticketkopers.",
+    "newCategory": "Nieuwe categorie",
+    "createCategory": "Categorie maken",
+    "columns": {
+      "category": "Categorie",
+      "helpful": "Nuttig"
+    },
+    "helpfulCounts": "{yes} ja · {no} nee",
+    "fields": {
+      "category": "Categorie",
+      "locale": "Taal",
+      "title": "Titel",
+      "slug": "Adres",
+      "summary": "Samenvatting",
+      "body": "Tekst",
+      "keywords": "Zoekwoorden",
+      "position": "Volgorde",
+      "audience": "Doelgroep",
+      "categoryTitle": "Naam",
+      "description": "Beschrijving"
+    },
+    "titleError": "Vul een titel in.",
+    "slugFrozen": "Het adres van een gepubliceerd artikel kan niet worden gewijzigd.",
+    "slugHint": "Laat leeg om het van de titel af te leiden. Een vertaling gebruikt het adres van het Engelse artikel.",
+    "keywordsHint": "Woorden waarop mensen kunnen zoeken, gescheiden door komma's.",
+    "positionHint": "Lagere nummers komen eerst.",
+    "positionError": "Gebruik een heel getal van 0 tot 10.000.",
+    "audience": {
+      "organizers": "Organisatoren",
+      "buyers": "Ticketkopers"
+    },
+    "slugReserved": "Dit adres is gereserveerd. Kies een ander adres.",
+    "categorySlugHint": "Laat leeg om het van de naam af te leiden. Het kan later niet meer worden gewijzigd.",
+    "translations": "Naam in andere talen",
+    "translationsError": "Controleer de vertaalde namen.",
+    "categoryHasArticles": "Verplaats of verwijder eerst de artikelen in deze categorie."
+  },
+  "siteConsole": {
+    "title": "Marketingsite",
+    "description": "De onderdelen van de homepage, de functiepagina en de contactpagina, en de berichten die via het contactformulier zijn verstuurd.",
+    "tabsLabel": "Onderdelen van de marketingsite",
+    "tabs": {
+      "sections": "Onderdelen",
+      "requests": "Contactaanvragen"
+    },
+    "newSection": "Nieuw onderdeel",
+    "newSectionDescription": "Een concept tot je het publiceert. Om een onderdeel te vertalen, maak je het opnieuw aan met dezelfde sleutel in een andere taal.",
+    "createSection": "Concept maken",
+    "back": "Terug naar de marketingsite",
+    "noSections": "Nog geen onderdelen op deze pagina.",
+    "placement": {
+      "home": "Homepage: waarom Yayatoh",
+      "features": "Functiepagina",
+      "contact": "Contactpagina"
+    },
+    "fields": {
+      "placement": "Pagina",
+      "locale": "Taal",
+      "eyebrow": "Label boven de kop",
+      "heading": "Kop",
+      "slug": "Sleutel",
+      "body": "Tekst",
+      "ctaLabel": "Knoptekst",
+      "ctaHref": "Knoplink",
+      "position": "Volgorde"
+    },
+    "optional": "Optioneel",
+    "headingError": "Vul een kop in.",
+    "slugHint": "Laat leeg om de sleutel van de kop af te leiden. Een vertaling gebruikt de sleutel van het Engelse onderdeel.",
+    "ctaLegend": "Knop (optioneel)",
+    "ctaLabelError": "Vul de knoptekst (maximaal 40 tekens) en de bijbehorende link in.",
+    "ctaHrefHint": "Een pagina van deze site, zoals /contact, of een https://-adres.",
+    "ctaHrefError": "Gebruik een pagina van deze site (beginnend met /) of een https://-adres.",
+    "positionHint": "Lagere nummers komen eerst.",
+    "positionError": "Gebruik een heel getal van 0 tot 10.000.",
+    "noRequestsTitle": "Geen contactaanvragen",
+    "noRequestsDescription": "Berichten die via de contactpagina zijn verstuurd, verschijnen hier.",
+    "requestStatus": {
+      "new": "Nieuw",
+      "handled": "Afgehandeld"
+    },
+    "topics": {
+      "sales": "Sales en demo's",
+      "support": "Accounthulp",
+      "partnership": "Partnerschappen",
+      "other": "Overig"
+    },
+    "markHandled": "Markeren als afgehandeld"
+  },
+  "parties": {
+    "subtitle": "Groepen (stellen, gezinnen, huishoudens) en hun gasten. Dieet, toegankelijkheid en adres zijn alleen zichtbaar voor je team.",
+    "viewerNotice": "Je kunt de gastenlijst bekijken. Alleen organisatoren met bewerkrechten kunnen hem wijzigen.",
+    "summary": "Overzicht",
+    "counts": {
+      "parties": "Groepen",
+      "guests": "Gasten",
+      "adults": "Volwassenen",
+      "children": "Kinderen",
+      "infants": "Baby's",
+      "plusOnesPending": "Introducés zonder naam"
+    },
+    "vipCount": "{count, plural, one {# VIP-groep} other {# VIP-groepen}}",
+    "addParty": "Groep toevoegen",
+    "addPartyHint": "Een groep is iedereen die samen wordt uitgenodigd, zoals een stel of een gezin. Voeg daarna de gasten toe.",
+    "partyAdded": "Groep toegevoegd.",
+    "parties": "Groepen",
+    "filters": "Groepen filteren",
+    "search": "Zoeken op naam",
+    "side": "Kant",
+    "sideHint": "Van wiens kant ze zijn, bijv. Bruid, Bruidegom of Beide.",
+    "anySide": "Alle kanten",
+    "tag": "Label",
+    "anyTag": "Alle labels",
+    "vip": "VIP",
+    "vipLegend": "Prioriteit",
+    "vipAny": "VIP of niet",
+    "vipOnly": "Alleen VIP",
+    "vipNot": "Geen VIP",
+    "apply": "Toepassen",
+    "clear": "Filters wissen",
+    "matching": "{count, plural, =0 {Geen groepen gevonden} one {# groep gevonden} other {# groepen gevonden}}",
+    "showing": "{count, plural, one {# groep} other {# groepen}}",
+    "emptyTitle": "Nog geen gasten",
+    "emptyDescription": "Voeg hierboven je eerste groep toe en daarna de gasten.",
+    "emptyViewer": "De organisatoren hebben nog geen gasten toegevoegd.",
+    "noMatchTitle": "Geen groepen gevonden",
+    "noMatchDescription": "Probeer een andere naam of wis de filters.",
+    "partyName": "Groepsnaam",
+    "partyNameHint": "Hoe je ze noemt, bijv. Familie García.",
+    "envelopeName": "Naam op de envelop",
+    "envelopeHint": "Zoals op de uitnodiging, bijv. Dhr. en mevr. Luis García.",
+    "tags": "Labels",
+    "tagsHint": "Scheid labels met komma's, bijv. Familie, Van buiten de stad.",
+    "notes": "Notities",
+    "notesHint": "Alleen je team ziet notities.",
+    "source": "Ingevoerd via",
+    "sourceHint": "Kies papieren antwoord als je een antwoord overneemt dat een gast op papier stuurde.",
+    "sources": {
+      "manual": "Ingevoerd door het team",
+      "paper": "Papieren antwoord (voor de gast ingevoerd)",
+      "import": "Import",
+      "collector": "Contactformulier",
+      "rsvp": "RSVP"
+    },
+    "sideValue": "Kant: {side}",
+    "guestCount": "{count, plural, =0 {Geen gasten} one {# gast} other {# gasten}}",
+    "envelopeValue": "Envelop: {name}",
+    "noGuestsInParty": "Deze groep heeft nog geen gasten.",
+    "guestsOf": "Gasten in {party}",
+    "guestOf": "Introducé van {name}",
+    "primary": "Hoofdcontact",
+    "primaryLegend": "Contact",
+    "ages": {
+      "adult": "Volwassene",
+      "child": "Kind",
+      "infant": "Baby"
+    },
+    "plusOne": "Introducé",
+    "plusOnePending": "Introducé zonder naam",
+    "meal": "Maaltijd",
+    "mealHint": "Hun maaltijdkeuze, bijv. Vis.",
+    "dietary": "Dieetwensen",
+    "accessibility": "Toegankelijkheidswensen",
+    "address": "Woonadres",
+    "privateHint": "Privé: versleuteld opgeslagen en alleen zichtbaar voor je team.",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "ageClass": "Leeftijd",
+    "plusOneNameHint": "Laat leeg tot je de naam weet.",
+    "linkedEntry": "Vermelding op de gastenlijst",
+    "linkedEntryHint": "Koppel aan iemand die al op de gastenlijst van dit evenement staat.",
+    "notLinked": "Niet gekoppeld",
+    "editNamed": "{name} bewerken",
+    "save": "Opslaan",
+    "saved": "Opgeslagen.",
+    "addPlusOneFor": "Introducé toevoegen voor {name}",
+    "plusOneAdded": "Introducé toegevoegd.",
+    "moveTo": "{name} verplaatsen naar",
+    "moveHintPlusOne": "Hun introducé gaat mee.",
+    "choosePartyOption": "Kies een groep",
+    "move": "Verplaatsen",
+    "moved": "Verplaatst.",
+    "removeNamed": "{name} verwijderen",
+    "removeWithPlusOne": "{name} en introducé verwijderen",
+    "removed": "Verwijderd.",
+    "addGuestTo": "Gast toevoegen aan {party}",
+    "addGuest": "Gast toevoegen",
+    "guestAdded": "Gast toegevoegd.",
+    "removeParty": "{count, plural, =0 {{name} verwijderen} one {{name} en de gast verwijderen} other {{name} en # gasten verwijderen}}",
+    "historyOf": "Geschiedenis van {party}",
+    "showHistory": "Geschiedenis van {party} tonen",
+    "hideHistory": "Geschiedenis verbergen",
+    "actions": {
+      "party_created": "Groep toegevoegd",
+      "party_updated": "Groep bewerkt",
+      "party_removed": "Groep verwijderd",
+      "guest_added": "Gast toegevoegd",
+      "guest_updated": "Gast bewerkt",
+      "guest_removed": "Gast verwijderd",
+      "guest_moved": "Gast verplaatst",
+      "plus_one_added": "Introducé toegevoegd",
+      "plus_one_named": "Introducé benoemd"
+    },
+    "actors": {
+      "you": "door jou",
+      "member": "door een teamlid",
+      "system": "door het systeem"
+    },
+    "pagination": "Pagina's",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "pageOf": "Pagina {page} van {pages}",
+    "errors": {
+      "name": "Vul een groepsnaam in (max. 120 tekens).",
+      "envelopeName": "De envelopnaam mag maximaal 200 tekens zijn.",
+      "side": "De kant mag maximaal 40 tekens zijn.",
+      "tags": "Gebruik maximaal 20 labels van elk maximaal 40 tekens.",
+      "notes": "Notities mogen maximaal 2.000 tekens zijn.",
+      "firstName": "Vul een voornaam in (max. 80 tekens).",
+      "lastName": "De achternaam mag maximaal 80 tekens zijn.",
+      "meal": "De maaltijd mag maximaal 80 tekens zijn.",
+      "private": "Maximaal 500 tekens.",
+      "attendeeId": "Kies een vermelding van de gastenlijst van dit evenement.",
+      "attendeeTaken": "Die vermelding is al gekoppeld aan een andere gast.",
+      "toPartyId": "Kies een andere groep om naartoe te verplaatsen.",
+      "isPrimary": "Een introducé kan geen hoofdcontact zijn.",
+      "partyFull": "Die groep is vol (maximaal 20 gasten).",
+      "tooMany": "Dit evenement heeft zijn gastenlimiet bereikt.",
+      "hasPlusOne": "Deze persoon heeft al een introducé.",
+      "plusOneOfPlusOne": "Een introducé kan geen introducé meenemen.",
+      "plusOneMoves": "Een introducé verhuist mee met de gast die hem meeneemt."
+    }
+  },
+  "eventRoles": {
+    "co_host": "Medegastheer",
+    "planner": "Planner"
+  },
+  "eventTeam": {
+    "title": "Evenementteam",
+    "subtitle": "Medegastheren en planners werken alleen aan dit evenement. Ze zien nooit andere evenementen, uitbetalingen of organisatie-instellingen.",
+    "rolesTitle": "Wie mag wat",
+    "explain": {
+      "co_host": "Alles over dit evenement: gasten, RSVP, plaatsen, website, galerij, berichten, de grote dag en tickets. Kan de rest van het team uitnodigen.",
+      "planner": "Gasten, RSVP, plaatsen, website, galerij, berichten en de grote dag. Geen uitbetalingen, terugbetalingen of financiële rapporten."
+    },
+    "inviteTitle": "Uitnodigen voor dit evenement",
+    "emptyTitle": "Nog geen medegastheren of planners",
+    "emptyDescription": "Nodig iemand uit per e-mail. Diegene krijgt alleen toegang tot dit evenement.",
+    "revokeFor": "Uitnodiging voor {email} intrekken"
+  },
+  "myEvents": {
+    "title": "Jouw evenementen",
+    "description": "De evenementen waar je bij {org} aan meehelpt.",
+    "emptyTitle": "Op dit moment geen evenementen",
+    "emptyDescription": "Als iemand je uitnodigt voor een evenement, verschijnt het hier.",
+    "open": "{name} openen"
+  },
+  "starters": {
+    "title": "Startsjablonen",
+    "label": "Startsjabloon",
+    "yours": "Jouw sjablonen",
+    "use": "Evenement maken vanuit {name}",
+    "sections": "Onderdelen: {list}",
+    "checklist": "Checklist: {list}",
+    "wedding": {
+      "name": "Bruiloft",
+      "description": "Gasten, RSVP, plaatsen, een privé-gastenwebsite, galerij, berichten en de grote dag. Nooit openbaar vermeld."
+    },
+    "gala": {
+      "name": "Gala",
+      "description": "Tickets, tafels en sponsors, plaatsen, donaties en inchecken ter plaatse."
+    }
+  },
+  "profileCopy": {
+    "wedding": {
+      "dashboard": {
+        "noSalesDescription": "RSVP’s en plaatsen verschijnen hier zodra je gasten antwoorden."
+      },
+      "details": {
+        "attendanceHint": "Voor online en hybride evenementen voeg je de link toe onder Toegang. Alleen je gasten zien hem."
+      },
+      "dates": {
+        "capacityHint": "Optioneel. Het maximale aantal gasten dat deze datum kan ontvangen."
+      },
+      "copy": {
+        "description": "Hergebruik dit evenement. Een kopie neemt instellingen, vragen en plattegrond over — nooit gasten, RSVP’s, check-ins of uitbetalingen."
+      },
+      "announcements": {
+        "pushHint": "Push bereikt gasten die meldingen hebben aangezet; alle anderen krijgen de e-mail.",
+        "smsHint": "Sms'jes gaan alleen naar gasten die een mobiel nummer gaven en sms'jes toestonden; de anderen staan als niet verzonden, met de reden."
+      },
+      "eventAnnouncements": {
+        "explainer": "Openbare mededelingen staan op de evenementpagina; mededelingen alleen voor gasten op de pagina’s van je gasten.",
+        "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten.",
+        "audienceHolders": "Alleen gasten",
+        "holdersOnly": "Alleen gasten"
+      },
+      "access": {
+        "subtitle": "Privé-informatie voor je gasten, de online link en toegangscodes."
+      },
+      "privateInfo": {
+        "explainer": "Alleen je geverifieerde gasten zien dit. Het verschijnt nooit op de openbare evenementpagina.",
+        "body": "Informatie voor gasten"
+      },
+      "accessCodes": {
+        "noHiddenPasses": "Met toegangscodes openen je gasten de privé-evenementpagina."
+      },
+      "eventTeam": {
+        "explain": {
+          "co_host": "Alles over dit evenement: gasten, RSVP, plaatsen, website, galerij, berichten en de grote dag. Kan de rest van het team uitnodigen."
+        }
+      }
+    },
+    "gala": {
+      "copy": {
+        "description": "Hergebruik dit evenement. Een kopie neemt instellingen, tickettypen, bestelvragen en plattegrond over — nooit bestellingen, gasten, tickets, check-ins of uitbetalingen."
+      },
+      "announcements": {
+        "pushHint": "Push bereikt gasten die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail.",
+        "smsHint": "Sms'jes gaan alleen naar gasten die een mobiel nummer gaven en sms'jes toestonden; de anderen staan als niet verzonden, met de reden."
+      },
+      "eventAnnouncements": {
+        "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten."
+      }
+    }
+  },
+  "frontDoor": {
+    "slowTitle": "Deze pagina doet er te lang over",
+    "downTitle": "Deze pagina is nu niet beschikbaar",
+    "body": "Probeer het zo meteen opnieuw."
+  },
+  "maintenance": {
+    "label": "Onderhoud",
+    "title": "Gepland onderhoud: wijzigingen zijn gepauzeerd",
+    "body": "Yayatoh is in alleen-lezen onderhoud terwijl we naar het nieuwe platform overstappen. U kunt nog steeds alles bekijken, exports downloaden en tickets bij de ingang scannen, en uw openbare pagina’s blijven online. Wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn gepauzeerd tot het klaar is.",
+    "bodyUntil": "Yayatoh is in alleen-lezen onderhoud terwijl we naar het nieuwe platform overstappen, tot ongeveer {until}. U kunt nog steeds alles bekijken, exports downloaden en tickets bij de ingang scannen, en uw openbare pagina’s blijven online. Wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn tot dan gepauzeerd."
   }
 }
