@@ -103,6 +103,11 @@ const DEFINITION = {
 const viewer = () => userCtx(a.viewerId, a.org.id);
 const anon = (orgId = a.org.id, now?: Date): Ctx => createCtx({ orgId, ...(now ? { now } : {}) });
 const eventName = async () => 'Summit';
+const idOf = async (token: string) => {
+  const ref = await respondentRef(token);
+  if (!ref) throw new Error('unknown respondent link');
+  return ref.respondentId;
+};
 
 async function start(type: string, who: string, onEvent = eventId, orgId = a.org.id) {
   const r = await executeCommand(
@@ -344,7 +349,7 @@ describe('server authority', () => {
     });
     // Nothing was stored by the refused calls.
     const [row] = await admin<{ answers: object }[]>`
-      select answers from forms.respondents where id = ${(await respondentRef(token))?.respondentId}`;
+      select answers from forms.respondents where id = ${await idOf(token)}`;
     expect(row?.answers).toEqual({});
   });
 
@@ -358,7 +363,7 @@ describe('server authority', () => {
     await submit(token, 'membership', {});
     const [row] = await admin<{ answers: Record<string, unknown> }[]>`
       select fr.answers from forms.form_responses fr
-      where fr.respondent_type = 'form_respondent' and fr.respondent_id = ${(await respondentRef(token))?.respondentId}`;
+      where fr.respondent_type = 'form_respondent' and fr.respondent_id = ${await idOf(token)}`;
     expect(row?.answers).toEqual({ company: 'Acme', workshops: false, member_no: 'M-2' });
   });
 
@@ -366,7 +371,7 @@ describe('server authority', () => {
     const token = await start(EXHIBITOR, 'Sec');
     await save(token, 'about', { company: 'Acme' });
     await save(token, 'booth', { booth_size: 's', access: 'Step-free please' }, 'stay');
-    const id = (await respondentRef(token))?.respondentId;
+    const id = await idOf(token);
     const [draft] = await admin<{ answers: object; sensitive_ciphertext: string | null }[]>`
       select answers, sensitive_ciphertext from forms.respondents where id = ${id}`;
     expect(JSON.stringify(draft?.answers)).not.toContain('Step-free');
@@ -401,7 +406,7 @@ describe('server authority', () => {
     await submit(token, 'membership', { member_no: 'M-9' });
     const [row] = await admin<{ version: number }[]>`
       select v.version from forms.form_responses r join forms.form_versions v on v.id = r.form_version_id
-      where r.respondent_type = 'form_respondent' and r.respondent_id = ${(await respondentRef(token))?.respondentId}`;
+      where r.respondent_type = 'form_respondent' and r.respondent_id = ${await idOf(token)}`;
     expect(row?.version).toBe(version - 1);
   });
 });
