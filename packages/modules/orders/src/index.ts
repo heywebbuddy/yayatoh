@@ -21,7 +21,6 @@ export {
   startCheckoutCommand,
 } from './commands/checkout.ts';
 export {
-  BuyerCreditNoteDto,
   buyerCreditNotesTx,
   CreditNoteDocumentDto,
   CreditNoteDto,

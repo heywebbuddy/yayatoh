@@ -78,7 +78,9 @@
         "refund-declined": "Refund request declined",
         "waitlist-joined": "Waitlist confirmation",
         "waitlist-offer": "Waitlist offer",
-        "waitlist-expired": "Waitlist offer expired"
+        "waitlist-expired": "Waitlist offer expired",
+        "credit-note": "Credit note",
+        "support-reply": "Support reply"
       },
       "events": {
         "reminder": "Event reminder",
@@ -93,7 +95,10 @@
         "claim-link": "Ticket claim link",
         "holder-link": "Link to tickets",
         "tickets-resent": "Tickets resent",
-        "ticket-cancelled": "Ticket cancelled"
+        "ticket-cancelled": "Ticket cancelled",
+        "transfer-offered": "Ticket transfer",
+        "transfer-completed": "Ticket transferred",
+        "transfer-received": "Transferred ticket"
       },
       "attendees": {
         "message": "Message from the organizer"
@@ -114,7 +119,8 @@
         "finder-code": "Seat finder code"
       },
       "payments": {
-        "destination-changed": "Payout account change"
+        "destination-changed": "Payout account change",
+        "dispute-deadline": "Dispute deadline alert"
       },
       "surveys": {
         "invite": "Survey invitation",
@@ -267,7 +273,9 @@
     "trackedLinks": "Tracked links",
     "messagingHealth": "Messaging limits",
     "audiences": "Audiences",
-    "refundRequests": "Refund requests"
+    "refundRequests": "Refund requests",
+    "disputes": "Disputes",
+    "supportMacros": "Support macros"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -830,7 +838,9 @@
     "dateSoldOut": "This date just sold out. Choose another date.",
     "dateUnavailable": "This date is no longer available. Choose another date.",
     "orgUnavailable": "This organizer isn't selling tickets right now. Tickets already bought stay valid.",
-    "riskBlocked": "We couldn’t take this order. Please contact the organizer."
+    "riskBlocked": "We couldn’t take this order. Please contact the organizer.",
+    "creditInvalid": "That store credit code isn't valid or has been spent.",
+    "creditNotApplicable": "That store credit can't be used on these tickets."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1682,7 +1692,18 @@
     "noMessages": "No messages were sent to the buyer about this order.",
     "message": "Message",
     "channel": "Channel",
-    "trimmed": "{n, plural, one {# more row left out} other {# more rows left out}} to stay within the card networks’ page limit."
+    "trimmed": "{n, plural, one {# more row left out} other {# more rows left out}} to stay within the card networks’ page limit.",
+    "termsAtPurchase": "Refund terms at purchase",
+    "termsUnset": "No refund policy was shown",
+    "termsNone": "No refunds",
+    "termsUntil": "Refunds until {days} days before the event",
+    "termsAlways": "Refunds at any time before the event",
+    "termsKept": "Kept per ticket",
+    "transfers": "Ticket transfers",
+    "transferFrom": "From",
+    "transferTo": "To",
+    "transferState": "State",
+    "transferClaimed": "Claimed"
   },
   "boxOffice": {
     "title": "Box office",
@@ -5040,7 +5061,11 @@
         "dispute_evidence_submitted": "Chargeback evidence submitted",
         "dispute_won": "Chargeback won",
         "dispute_lost": "Chargeback lost",
-        "note": "Note"
+        "note": "Note",
+        "credit_note_issued": "Credit note issued",
+        "credit_applied": "Store credit used",
+        "credit_released": "Store credit given back",
+        "macro_run": "Support macro run"
       }
     },
     "notes": {
@@ -5322,6 +5347,239 @@
         "not_enough_stock": "Not enough tickets are free for this offer.",
         "not_on_sale": "This pass or date is not on sale."
       }
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "This person already holds the ticket.",
+      "fee_not_accepted": "Tick the box to agree to the transfer fee.",
+      "fee_required": "This ticket has a transfer fee: transfer it by name instead.",
+      "not_allowed": "This ticket type can't be transferred.",
+      "deadline_passed": "Transfers for this ticket have closed.",
+      "event_ended": "The event has ended.",
+      "ticket_void": "This ticket is no longer valid.",
+      "amount_required": "Enter an amount of at least 0.01.",
+      "amount_too_large": "That's more than what can still be credited on this order.",
+      "nothing_to_credit": "Nothing is left to credit on this order.",
+      "order_not_paid": "Only paid orders can be credited.",
+      "unknown_merge_field": "The reply uses a merge field that doesn't exist. Use only the fields listed.",
+      "name_taken": "You already have a macro with this name.",
+      "transfer_required": "This macro transfers a ticket: choose the ticket and who it goes to.",
+      "no_live_tickets": "This order has no valid tickets to resend."
+    },
+    "transfers": {
+      "title": "Transfers",
+      "description": "Pass a ticket to someone else. They get a link to claim it with their email address; when they do, the old QR code, short code and wallet pass stop working and the ticket is reissued to them.",
+      "empty": "No tickets of this order have been transferred.",
+      "wallet": "Wallet pass",
+      "walletLive": "Updated",
+      "walletPending": "Updating",
+      "from": "From",
+      "to": "To",
+      "by": "Started by",
+      "initiatedBy": {
+        "organizer": "Your team",
+        "holder": "The holder"
+      },
+      "fee": "fee {amount}",
+      "state": {
+        "pending": "Waiting to be claimed",
+        "claimed": "Claimed",
+        "cancelled": "Cancelled",
+        "expired": "Link expired"
+      },
+      "until": "Link open until {date}",
+      "actions": "Actions",
+      "cancel": "Cancel transfer",
+      "cancelled": "Transfer cancelled.",
+      "ticket": "Ticket",
+      "toName": "New holder's name",
+      "toEmail": "New holder's email",
+      "toEmailHint": "They claim the ticket with this address.",
+      "toNameInvalid": "Enter the new holder's name.",
+      "toEmailInvalid": "Enter a valid email address.",
+      "started": "Transfer started. {name} was emailed a link to claim the ticket.",
+      "link": "Claim link (shown once)",
+      "submit": "Transfer ticket"
+    },
+    "credit": {
+      "title": "Credit notes",
+      "empty": "No credit notes on this order.",
+      "number": "Number",
+      "dispositionCol": "Settled as",
+      "disposition": {
+        "store_credit": "Store credit",
+        "refunded": "Refunded"
+      },
+      "codeEnding": "Code ending {last4}",
+      "balance": "Credit left",
+      "document": "Document",
+      "pdf": "{label} (PDF)",
+      "creditable": "Up to {amount} can still be credited on this order.",
+      "kindLegend": "How much",
+      "kind": {
+        "partial": "Part of the order",
+        "full": "Everything left on the order"
+      },
+      "amount": "Amount ({currency})",
+      "dispositionLegend": "Settle it as",
+      "reason": "Reason",
+      "reasonHint": "Shown on the credit note and to the buyer (3–500 characters).",
+      "issued": "Credit note {label} issued. The buyer was emailed it.",
+      "codeOnce": "Store credit code (shown once; the buyer was emailed it)",
+      "reasonInvalid": "Write a reason of 3 to 500 characters.",
+      "amountInvalid": "Enter an amount of at least 0.01.",
+      "submit": "Issue credit note",
+      "financeTitle": "Credit notes",
+      "financeEmpty": "No credit notes yet.",
+      "financeTotals": "Credit notes by currency",
+      "financeRecent": "Latest credit notes",
+      "currency": "Currency",
+      "count": "Notes",
+      "issuedTotal": "Issued",
+      "applied": "Spent",
+      "outstanding": "Left to spend",
+      "issuedOn": "Issued on",
+      "buyer": "Buyer",
+      "amountCol": "Amount"
+    },
+    "macros": {
+      "title": "Support macros",
+      "description": "Saved replies and the actions that go with them, run from an order in one step. Merge fields fill in the order's details.",
+      "newTitle": "New macro",
+      "listTitle": "Your macros",
+      "noneTitle": "No macros yet",
+      "noneDescription": "Create one above: for example “Resend tickets” that emails the buyer, adds a note and resends their tickets.",
+      "manage": "Create a macro",
+      "runTitle": "Run a macro",
+      "choose": "Macro",
+      "preview": "What this macro does",
+      "does": "Does: {actions}",
+      "action": {
+        "email_buyer": "Email the buyer",
+        "add_note": "Add a team note",
+        "resend_tickets": "Resend the tickets",
+        "transfer_ticket": "Transfer a ticket"
+      },
+      "transferLegend": "Transfer",
+      "ticket": "Ticket",
+      "toName": "New holder's name",
+      "toEmail": "New holder's email",
+      "ran": "Macro “{name}” ran.",
+      "link": "Claim link (shown once)",
+      "transferRequired": "Choose the ticket and who it goes to.",
+      "run": "Run macro",
+      "name": "Name",
+      "subject": "Email subject",
+      "body": "Reply",
+      "fieldsHint": "Merge fields:",
+      "actionsLegend": "Actions",
+      "saved": "Macro saved.",
+      "nameInvalid": "Give the macro a name of 2 to 80 characters.",
+      "actionsInvalid": "Choose at least one action.",
+      "subjectInvalid": "Write a subject.",
+      "bodyInvalid": "Write the reply.",
+      "update": "Save changes",
+      "create": "Create macro",
+      "archive": "Archive {name}",
+      "archived": "Macro archived."
+    },
+    "holder": {
+      "title": "Transfer this ticket",
+      "pending": "Waiting for {name} to claim it.",
+      "cancel": "Cancel transfer",
+      "cancelled": "Transfer cancelled.",
+      "until": "Transfers close {date}",
+      "fee": "transfer fee {fee}",
+      "refused": {
+        "not_allowed": "This ticket can't be transferred.",
+        "deadline_passed": "Transfers for this ticket have closed.",
+        "event_ended": "The event has ended.",
+        "ticket_void": "This ticket is no longer valid."
+      },
+      "toName": "Their name",
+      "toEmail": "Their email",
+      "acceptFee": "I agree to pay the {fee} transfer fee.",
+      "sent": "Sent. {name} was emailed a link to claim the ticket.",
+      "toNameInvalid": "Enter their name.",
+      "toEmailInvalid": "Enter a valid email address.",
+      "submit": "Send transfer"
+    },
+    "rules": {
+      "title": "Transfer rules",
+      "description": "Whether ticket holders may transfer tickets of each type themselves, until how long before the event, and for what fee. Your team can always transfer from an order.",
+      "column": "Transfers",
+      "summaryAllowed": "Allowed",
+      "summaryCutoff": "until {hours} h before",
+      "summaryFee": "fee {fee}",
+      "summaryOff": "Not allowed",
+      "formLabel": "Transfer rules for {name}",
+      "allowed": "Holders may transfer",
+      "cutoff": "Close (hours before)",
+      "cutoffHint": "Empty: at the start.",
+      "fee": "Fee ({currency})",
+      "feeHint": "Empty: free.",
+      "save": "Save rules",
+      "saved": "Rules saved.",
+      "cutoffInvalid": "Enter whole hours (0–8760).",
+      "feeInvalid": "Enter an amount, or leave it empty."
+    },
+    "disputes": {
+      "title": "Disputes",
+      "description": "Chargebacks on your orders with their evidence deadlines. Build the evidence from the order and submit it before the deadline.",
+      "summary": "{open, plural, =0 {No open disputes} one {# open dispute} other {# open disputes}} · {soon, plural, =0 {none due within 3 days} one {# due within 3 days} other {# due within 3 days}}",
+      "tabsLabel": "Dispute status",
+      "tabs": {
+        "open": "Open ({count})",
+        "closed": "Closed ({count})"
+      },
+      "empty": {
+        "open": "No open disputes.",
+        "closed": "No closed disputes."
+      },
+      "caption": {
+        "open": "Open disputes, soonest deadline first",
+        "closed": "Closed disputes, newest first"
+      },
+      "buyer": "Buyer",
+      "amount": "Amount",
+      "reason": "Reason",
+      "status": "Status",
+      "deadline": "Evidence due",
+      "action": "Action",
+      "respond": "Build and submit evidence",
+      "submitted": "Evidence submitted",
+      "noDeadline": "No deadline",
+      "overdue": "Past the deadline",
+      "hoursLeft": "{hours, plural, =0 {Less than an hour left} one {# hour left} other {# hours left}}",
+      "daysLeft": "{days, plural, one {# day left} other {# days left}}"
+    },
+    "claim": {
+      "intro": "{from} is transferring this ticket to {to}. Claim it with the email address it was sent to: you get your own QR code and the old one stops working.",
+      "emailHint": "The address this transfer was sent to.",
+      "emailMismatch": "Use the email address this ticket was sent to."
+    },
+    "buyer": {
+      "title": "Credit notes",
+      "storeCredit": "Store credit left: {balance}. Use this code at checkout on a future order:",
+      "refunded": "This amount was refunded to you."
+    },
+    "pdf": {
+      "title": "Credit note {label}",
+      "number": "Credit note number",
+      "issued": "Issued",
+      "billedTo": "Customer",
+      "event": "Event",
+      "order": "Order",
+      "orderTotal": "Order total",
+      "kind": "Covers",
+      "settlement": "Settled as",
+      "balance": "Credit left",
+      "reason": "Reason",
+      "amount": "Credit amount",
+      "storeCreditNote": "This credit can be spent on a future order with the same organizer using the store credit code sent to the customer.",
+      "refundedNote": "This amount was refunded to the customer.",
+      "footer": "Issued by {seller} through Yayatoh."
     }
   }
 }

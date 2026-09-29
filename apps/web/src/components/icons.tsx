@@ -34,12 +34,14 @@ import {
   ScanLine,
   Search,
   Settings,
+  ShieldAlert,
   ShieldCheck,
   Star,
   Store,
   Ticket,
   Undo2,
   Users,
+  Zap,
 } from 'lucide-react';
 
 /** Icon names used by the profiles registry (packages/platform/src/profiles). */
@@ -84,6 +86,8 @@ const ICONS: Record<string, LucideIcon> = {
   link: Link2,
   star: Star,
   undo: Undo2,
+  'shield-alert': ShieldAlert,
+  zap: Zap,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

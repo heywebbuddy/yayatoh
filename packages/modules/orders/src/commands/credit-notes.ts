@@ -10,6 +10,7 @@ import {
   formatCreditNoteNumber,
   newCreditCode,
 } from '../domain/credit-notes.ts';
+import { BuyerCreditNoteDto } from '../dto.ts';
 import {
   CREDIT_NOTE_DISPOSITIONS,
   CREDIT_NOTE_KINDS,
@@ -403,18 +404,6 @@ export async function creditTimelineTx(tx: TenantTx, orderId: string) {
     })),
   };
 }
-
-export const BuyerCreditNoteDto = z.object({
-  label: z.string(),
-  amountMinor: z.int(),
-  balanceMinor: z.int(),
-  currency: z.string(),
-  disposition: z.enum(CREDIT_NOTE_DISPOSITIONS),
-  reason: z.string(),
-  /** Store credit: the code to use at checkout (the buyer's own). */
-  code: z.string().nullable(),
-  createdAt: z.date(),
-});
 
 /** The buyer's credit notes on their order page (manage link). */
 export async function buyerCreditNotesTx(tx: TenantTx, orderId: string) {

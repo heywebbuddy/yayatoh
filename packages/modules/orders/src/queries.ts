@@ -9,6 +9,7 @@ import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
+import { buyerCreditNotesTx } from './commands/credit-notes.ts';
 import { orderRefundPolicyTx } from './commands/refund-policy.ts';
 import { buyerRefundPanelTx } from './commands/refund-requests.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer, RefundPolicyDto } from './dto.ts';
@@ -167,6 +168,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         messages: await buyerOrderMessagesTx(tx, ref.order_id, o.buyerEmail),
         refundPolicy: await orderRefundPolicyTx(tx, o),
         refundRequest: await buyerRefundPanelTx(tx, ctx, o),
+        creditNotes: await buyerCreditNotesTx(tx, o.id),
       };
     });
     return publicOrderSerializer.serialize(order);
