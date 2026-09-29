@@ -348,12 +348,30 @@ test('the respondent pages render right-to-left in Arabic', async ({ browser }) 
   await expectAccessible(page);
 });
 
-test('the builder in Arabic, and a viewer who cannot edit it', async ({ page, browser }) => {
+test('the builder in Arabic, a stale tab refused, and a viewer who cannot edit it', async ({
+  page,
+  browser,
+}) => {
   await signIn(page);
   await page.goto(`/ar${base}/registration-form`);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.getByRole('heading', { name: 'نموذج التسجيل', level: 1 })).toBeVisible();
   await expectAccessible(page);
+
+  // Two tabs: the one showing an older version cannot overwrite the newer one.
+  await page.goto(`${base}/registration-form`);
+  const other = await page.context().newPage();
+  await other.goto(`${base}/registration-form`);
+  await other.getByRole('button', { name: 'Move page Workshops up' }).click();
+  await expect(pageCard(other, 2, 'Workshops')).toBeVisible();
+  await page.getByRole('button', { name: 'Move page Membership up' }).click();
+  await expect(
+    page.getByText('Someone else changed this form meanwhile. Reload the page to see the latest version.'),
+  ).toBeVisible();
+  await page.reload();
+  await expect(pageCard(page, 2, 'Workshops')).toBeVisible();
+  await expect(pageCard(page, 3, 'Membership')).toBeVisible();
+  await other.close();
 
   const viewer = await (await browser.newContext()).newPage();
   await signIn(viewer, VIEWER);

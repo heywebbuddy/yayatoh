@@ -151,6 +151,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Who sees it:** new `marketing:read` permission for owners, admins, managers, marketing, finance and viewers (viewers see revenue per link, as they already see orders). Creating links and the window: `marketing:write`. Door staff and scanners see nothing.
   - **Bots and floods** (link-preview fetchers, crawlers, HTTP tools, over 30 clicks per device per 10 minutes) are redirected but not counted.
 
+- [ ] **Registration forms: consent wording and defaults, pending owner** (M5.1b; labels: `legal-copy`, `db-migration`, `tenancy`). Built with these; say if any should change (`docs/specs/M5.1/spec.md`):
+  - **Consent wording (legal-copy, for counsel):** the exhibitor email-sharing checkbox (P5-8) shows placeholder text, version 1: "Exhibitors may receive my email address when I let them scan my badge." (13 locales, `registrationForm.consentText.exhibitor_email_sharing_v1`). Approved wording ships as **version 2** (a new version, never an edit), so consents already given keep the version they saw.
+  - **Drafts** live 14 days after the last save, then are deleted; a person can ask for the resume email at most 5 times.
+  - **Company suggestions** offer a company only once **two** registrants named it (plus the event's exhibitors and sponsors), so one person's answer is never shown to others.
+  - **Job titles** are one list per organization, shared by all its events.
+  - Until M5.1a merges, the event's **ticket types stand in for registration types** in the builder and on the public start page.
+
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
 - [ ] **Upstash Redis** for the rate limiter (label: `infra`): create a database, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Doppler/Vercel. Until then counters live in Postgres (`platform.rate_limits`).

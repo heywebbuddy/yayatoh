@@ -45,7 +45,7 @@ export async function respondAction(
   const ref = await respondentRef(token);
   if (!ref) return { code: 'not_found', stamp };
   const view = await publicRespondent(token, { eventName: eventNameOf });
-  if (!view || view.state !== 'open' || view.page?.key !== pageKey) {
+  if (view?.state !== 'open' || view.page?.key !== pageKey) {
     // Another tab moved on or submitted: show the current state.
     refresh();
     return {

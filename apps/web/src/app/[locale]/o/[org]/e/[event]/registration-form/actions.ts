@@ -52,7 +52,11 @@ async function edit(
       return { ok: false, code: 'validation_failed', reason: reasonOf(checked.error.issues[0]?.message) };
     await executeCommand(
       publishRegistrationFormCommand,
-      { eventId: ev.id, definition: { pages } },
+      {
+        eventId: ev.id,
+        definition: { pages },
+        ...(expectedVersion === undefined ? {} : { expectedVersion }),
+      },
       data.ctx,
       ports,
     );
