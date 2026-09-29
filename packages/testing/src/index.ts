@@ -4,6 +4,7 @@ export {
   type AudienceScenario,
   audienceScenario,
 } from './audiences.ts';
+export { type CampaignContactSeed, campaignScenario } from './campaigns.ts';
 export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './canary/org.ts';
 export {
   createOrgFixture,

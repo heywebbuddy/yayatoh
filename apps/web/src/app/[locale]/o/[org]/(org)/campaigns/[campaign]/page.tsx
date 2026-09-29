@@ -68,12 +68,12 @@ export default async function CampaignPage({
   searchParams,
 }: {
   params: Promise<Params>;
-  searchParams: Promise<{ created?: string }>;
+  searchParams: Promise<{ created?: string; done?: string }>;
 }) {
   const { locale, org, campaign: id } = await params;
   setRequestLocale(locale);
   const { data, campaign: c } = await load(org, id);
-  const { created } = await searchParams;
+  const { created, done } = await searchParams;
   const t = await getTranslations('campaigns');
   const tn = await getTranslations('notifications.reasons');
   const canWrite = roleCan(data.role, 'marketing:write');
@@ -128,6 +128,9 @@ export default async function CampaignPage({
         }
       />
       {created ? <Alert tone="info" title={t('created')} /> : null}
+      {done && ['unschedule', 'pause', 'resume', 'cancel'].includes(done) ? (
+        <Alert tone="info" title={t(`done.${done as 'pause'}`)} />
+      ) : null}
       {c.failureReason ? (
         <Alert
           title={t('failed', {

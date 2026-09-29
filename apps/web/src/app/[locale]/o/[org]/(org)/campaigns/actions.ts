@@ -313,6 +313,8 @@ export async function lifecycleAction(
     return failure(err);
   }
   revalidate(org, campaignId);
+  // The controls change with the state (unschedule and cancel remove them): the page says what happened.
+  redirect({ href: `/o/${org}/campaigns/${campaignId}?done=${op}`, locale: await getLocale() });
   return { ok: true, code: null, message: op };
 }
 

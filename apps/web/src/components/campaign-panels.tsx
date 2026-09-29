@@ -306,7 +306,7 @@ export function LifecyclePanel({
   const [confirmCancel, setConfirmCancel] = useState(false);
   return (
     <form action={formAction} className="flex flex-col gap-3" aria-label={t('controlsTitle')}>
-      <Outcome state={state} success={state.ok && state.message ? t(`done.${state.message}`) : null} />
+      <Outcome state={state} />
       <div className="flex flex-wrap gap-2">
         {ops
           .filter((op) => op !== 'cancel')
