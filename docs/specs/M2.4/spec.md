@@ -90,4 +90,4 @@ Roadmap M2.4: "Front-door spike; A0–A2 per §7.4. Acceptance: one-week soak wi
 - **The console is English-only** (existing owner-inbox item); its layout is checked mirrored.
 
 ### Gate (M2.4a)
-See the final commit message of the M2.4a branch for the counts.
+`pnpm verify` green: lint, check:modules, typecheck, unit 1259, integration 854. Whole web e2e suite 1331 passed, 52 skipped, 0 failed (front-door spec: 21 passed, 18 request-level repeats skipped by design). Whole admin suite 60 passed (front-door console: 6).
