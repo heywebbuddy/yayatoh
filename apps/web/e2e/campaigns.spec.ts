@@ -71,8 +71,14 @@ async function createDraft(page: Page, slug: string, name: string) {
 async function fillAndSave(page: Page) {
   const editor = page.getByRole('form', { name: 'Campaign content' });
   await editor.getByLabel('Subject', { exact: true }).fill('Spring season for {{first_name|you}}');
-  await editor.getByRole('group', { name: 'Block 2: Text' }).getByLabel('Text', { exact: true }).fill('Our spring season opens soon.');
-  await editor.getByRole('group', { name: /Footer$/ }).getByLabel('Postal address').fill('1 Lake St, Chicago IL');
+  await editor
+    .getByRole('group', { name: 'Block 2: Text' })
+    .getByLabel('Text', { exact: true })
+    .fill('Our spring season opens soon.');
+  await editor
+    .getByRole('group', { name: /Footer$/ })
+    .getByLabel('Postal address')
+    .fill('1 Lake St, Chicago IL');
   await editor.getByRole('button', { name: 'Save draft' }).click();
   await expect(page.getByText('Draft saved.')).toBeVisible();
 }
@@ -88,7 +94,9 @@ async function chooseEveryone(page: Page) {
 test.describe('campaigns (M3.6b)', () => {
   test.describe.configure({ timeout: 180_000 });
 
-  test('build with blocks by keyboard, pick an audience, test send, send and see the results', async ({ page }) => {
+  test('build with blocks by keyboard, pick an audience, test send, send and see the results', async ({
+    page,
+  }) => {
     const { slug, people, stamp } = await orgWithSubscribers(page);
     await page.goto(`/o/${slug}`);
     await expect(page.locator(`nav a[href$="/${slug}/campaigns"]`).first()).toBeAttached();
@@ -108,7 +116,10 @@ test.describe('campaigns (M3.6b)', () => {
 
     // Validation: an empty subject, empty text and an unknown merge field are refused by field.
     await editor.getByLabel('Subject', { exact: true }).fill('');
-    await editor.getByRole('group', { name: 'Block 2: Text' }).getByLabel('Text', { exact: true }).fill('Hi {{nickname}}');
+    await editor
+      .getByRole('group', { name: 'Block 2: Text' })
+      .getByLabel('Text', { exact: true })
+      .fill('Hi {{nickname}}');
     await editor.getByRole('button', { name: 'Save draft' }).click();
     await expect(page.getByText('Fix the highlighted fields and save again.')).toBeVisible();
     await expect(editor.getByLabel('Subject', { exact: true })).toHaveAttribute('aria-invalid', 'true');
@@ -142,16 +153,26 @@ test.describe('campaigns (M3.6b)', () => {
     await expect(editor.getByRole('group', { name: 'Block 5: Footer' })).toBeVisible();
 
     await editor.getByLabel('Subject', { exact: true }).fill('Spring season for {{first_name|you}}');
-    await editor.getByRole('group', { name: 'Block 3: Text' }).getByLabel('Text', { exact: true }).fill('Our spring season opens soon.');
-    await editor.getByRole('group', { name: 'Block 5: Footer' }).getByLabel('Postal address').fill('1 Lake St, Chicago IL');
+    await editor
+      .getByRole('group', { name: 'Block 3: Text' })
+      .getByLabel('Text', { exact: true })
+      .fill('Our spring season opens soon.');
+    await editor
+      .getByRole('group', { name: 'Block 5: Footer' })
+      .getByLabel('Postal address')
+      .fill('1 Lake St, Chicago IL');
     await editor.getByRole('button', { name: 'Save draft' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Draft saved.')).toBeVisible();
 
     // Persisted after a reload.
     await page.reload();
-    await expect(editor.getByRole('group', { name: 'Block 2: Button' }).getByLabel('Button text')).toHaveValue('Get tickets');
-    await expect(editor.getByLabel('Subject', { exact: true })).toHaveValue('Spring season for {{first_name|you}}');
+    await expect(
+      editor.getByRole('group', { name: 'Block 2: Button' }).getByLabel('Button text'),
+    ).toHaveValue('Get tickets');
+    await expect(editor.getByLabel('Subject', { exact: true })).toHaveValue(
+      'Spring season for {{first_name|you}}',
+    );
 
     // Preview: desktop and mobile frames of the email.
     await page.getByRole('button', { name: 'Update preview' }).click();
@@ -159,7 +180,10 @@ test.describe('campaigns (M3.6b)', () => {
     await expect(page.locator('iframe[title="Email preview (Desktop)"]')).toBeVisible();
     await page.getByRole('button', { name: 'Mobile' }).click();
     await expect(page.getByRole('button', { name: 'Mobile' })).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('iframe[title="Email preview (Mobile)"]')).toHaveAttribute('data-frame', 'mobile');
+    await expect(page.locator('iframe[title="Email preview (Mobile)"]')).toHaveAttribute(
+      'data-frame',
+      'mobile',
+    );
 
     // Audience: the count and who is left out are shown before sending.
     await chooseEveryone(page);
