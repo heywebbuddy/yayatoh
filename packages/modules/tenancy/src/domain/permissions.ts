@@ -38,6 +38,13 @@ export const PERMISSIONS = [
   'marketing:read',
   'marketing:write',
   'checkin:scan',
+  /**
+   * Door supervisor (M3.4a): every device of the org in the Scan PWA, force a sync, switch a
+   * device's entrance, revoke a device (step-up), and receive device alerts.
+   */
+  'checkin:supervise',
+  /** Put a device into kiosk mode (self check-in locked to one entrance, PIN to exit; M3.4a). */
+  'checkin:kiosk',
   /** Create and revoke org API keys (/v1). */
   'api_keys:manage',
   /** Read the organizer inbox (conversations with customers) and the announcement log. */
@@ -71,6 +78,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'marketing:read',
     'marketing:write',
     'checkin:scan',
+    'checkin:supervise',
+    'checkin:kiosk',
     'messages:read',
     'messages:send',
   ],
@@ -106,6 +115,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'attendees:read',
     'attendees:write',
     'checkin:scan',
+    'checkin:kiosk',
     'messages:read',
   ],
   scanner: ['org:read', 'checkin:scan'],
@@ -161,11 +171,15 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'attendees:write',
     'attendees:export',
     'checkin:scan',
+    'checkin:supervise',
+    'checkin:kiosk',
     'messages:read',
     'messages:send',
   ],
   door_staff: ['events:read', 'checkin:scan'],
   session_scanner: ['checkin:scan'],
+  /** Starts and stops kiosk mode on the event's devices (M3.4a); scans nothing themselves. */
+  kiosk_operator: ['checkin:kiosk'],
 };
 
 export function eventRoleCan(roles: readonly string[], permission: string): boolean {
