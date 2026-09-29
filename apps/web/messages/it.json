@@ -5874,7 +5874,8 @@
         "description": "Riutilizza questo evento. Una copia prende impostazioni, domande e planimetria — mai ospiti, RSVP, check-in o pagamenti."
       },
       "announcements": {
-        "pushHint": "Le notifiche push raggiungono gli ospiti che le hanno attivate; tutti gli altri ricevono l'email."
+        "pushHint": "Le notifiche push raggiungono gli ospiti che le hanno attivate; tutti gli altri ricevono l'email.",
+        "smsHint": "Gli SMS arrivano solo agli ospiti che hanno indicato un cellulare e accettato gli SMS; gli altri risultano non inviati, con il motivo."
       },
       "eventAnnouncements": {
         "explainer": "Gli annunci pubblici compaiono nella pagina dell'evento; quelli solo per ospiti compaiono nelle pagine dei tuoi ospiti.",
@@ -5903,7 +5904,8 @@
         "description": "Riutilizza questo evento. Una copia prende impostazioni, tipi di biglietto, domande d'acquisto e planimetria — mai ordini, ospiti, biglietti, check-in o pagamenti."
       },
       "announcements": {
-        "pushHint": "Le notifiche push raggiungono gli ospiti che le hanno attivate nella pagina dell'ordine o nell'app; tutti gli altri ricevono l'email."
+        "pushHint": "Le notifiche push raggiungono gli ospiti che le hanno attivate nella pagina dell'ordine o nell'app; tutti gli altri ricevono l'email.",
+        "smsHint": "Gli SMS arrivano solo agli ospiti che hanno indicato un cellulare e accettato gli SMS; gli altri risultano non inviati, con il motivo."
       },
       "eventAnnouncements": {
         "emptyDescription": "Pubblica novità, cambi di orario o promemoria per i tuoi ospiti."

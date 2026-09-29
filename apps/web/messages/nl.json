@@ -5874,7 +5874,8 @@
         "description": "Hergebruik dit evenement. Een kopie neemt instellingen, vragen en plattegrond over — nooit gasten, RSVP’s, check-ins of uitbetalingen."
       },
       "announcements": {
-        "pushHint": "Push bereikt gasten die meldingen hebben aangezet; alle anderen krijgen de e-mail."
+        "pushHint": "Push bereikt gasten die meldingen hebben aangezet; alle anderen krijgen de e-mail.",
+        "smsHint": "Sms'jes gaan alleen naar gasten die een mobiel nummer gaven en sms'jes toestonden; de anderen staan als niet verzonden, met de reden."
       },
       "eventAnnouncements": {
         "explainer": "Openbare mededelingen staan op de evenementpagina; mededelingen alleen voor gasten op de pagina’s van je gasten.",
@@ -5903,7 +5904,8 @@
         "description": "Hergebruik dit evenement. Een kopie neemt instellingen, tickettypen, bestelvragen en plattegrond over — nooit bestellingen, gasten, tickets, check-ins of uitbetalingen."
       },
       "announcements": {
-        "pushHint": "Push bereikt gasten die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail."
+        "pushHint": "Push bereikt gasten die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail.",
+        "smsHint": "Sms'jes gaan alleen naar gasten die een mobiel nummer gaven en sms'jes toestonden; de anderen staan als niet verzonden, met de reden."
       },
       "eventAnnouncements": {
         "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten."

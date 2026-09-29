@@ -107,12 +107,16 @@ test.describe('starter templates (M4.2a)', () => {
     for (const key of ['guestsAdded', 'rsvpDeadlineSet', 'floorPlanChosen', 'guestSitePublished'])
       await expect(guide.locator(`[data-rule="${key}"]`)).toBeVisible();
     await expect(guide.locator('[data-rule="ticketsCreated"]')).toHaveCount(0);
-    // Not built yet: "coming soon", linking to the placeholder page (never a broken link).
+    // Built since the batch 3c merge (M4.1a): the guest list item counts and opens the Guests page.
     const guests = guide.locator('[data-rule="guestsAdded"]');
-    await expect(guests.getByText('Coming soon')).toBeVisible();
+    await expect(guests.getByText('Coming soon')).toHaveCount(0);
+    await expect(guests.getByRole('link')).toHaveAttribute('href', new RegExp(`${wedding}/guests$`));
+    // Not built yet: "coming soon", linking to the placeholder page (never a broken link).
+    const rsvp = guide.locator('[data-rule="rsvpDeadlineSet"]');
+    await expect(rsvp.getByText('Coming soon')).toBeVisible();
     await expect(guide.locator('[data-rule="floorPlanChosen"]').getByText('Coming soon')).toHaveCount(0);
-    await guests.getByRole('link').click();
-    await expect(page).toHaveURL(new RegExp(`${wedding}/guests$`));
+    await rsvp.getByRole('link').click();
+    await expect(page).toHaveURL(new RegExp(`${wedding}/rsvp$`));
     await expect(page.getByText('This area is being built')).toBeVisible();
     await expectAccessible(page);
 

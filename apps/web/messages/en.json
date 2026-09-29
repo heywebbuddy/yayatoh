@@ -5874,7 +5874,8 @@
         "description": "Reuse this event. A copy takes its settings, questions and floor plan — never its guests, RSVPs, check-ins or payouts."
       },
       "announcements": {
-        "pushHint": "Push reaches guests who turned on notifications; everyone else gets the email."
+        "pushHint": "Push reaches guests who turned on notifications; everyone else gets the email.",
+        "smsHint": "Texts go only to guests who gave a mobile number and agreed to texts; the others are listed as not sent, with the reason."
       },
       "eventAnnouncements": {
         "explainer": "Public announcements appear on the event page; guests-only ones appear on your guests' pages.",
@@ -5903,7 +5904,8 @@
         "description": "Reuse this event. A copy takes its settings, ticket types, checkout questions and floor plan — never its orders, guests, tickets, check-ins or payouts."
       },
       "announcements": {
-        "pushHint": "Push reaches guests who turned on notifications on their order page or in the app; everyone else gets the email."
+        "pushHint": "Push reaches guests who turned on notifications on their order page or in the app; everyone else gets the email.",
+        "smsHint": "Texts go only to guests who gave a mobile number and agreed to texts; the others are listed as not sent, with the reason."
       },
       "eventAnnouncements": {
         "emptyDescription": "Post news, schedule changes or reminders for your guests."

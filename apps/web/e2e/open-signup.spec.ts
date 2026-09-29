@@ -1,5 +1,12 @@
 import { expect, type Page, test } from '@playwright/test';
-import { codeForKey, expectAccessible, lastEmailedCode, ownClientIp, withOpenSignup } from './helpers.ts';
+import {
+  codeForKey,
+  expectAccessible,
+  lastEmailedCode,
+  ownClientIp,
+  passHumanCheck,
+  withOpenSignup,
+} from './helpers.ts';
 
 /**
  * Self-serve signup (M3.11a). The switch is platform-wide and off until the owner launches:
@@ -53,6 +60,8 @@ test.describe('self-serve signup', () => {
       await expect(page).toHaveURL(/\/sign-in\?next=%2Fsignup/);
       await page.getByRole('button', { name: 'Use a one-time code instead' }).click();
       await page.getByLabel('Email', { exact: true }).fill(email);
+      // M1.2f (base): an emailed code, which can create an account, needs the person check.
+      await passHumanCheck(page);
       await page.getByRole('button', { name: 'Email me a code' }).click();
       await page.getByLabel('6-digit code', { exact: true }).fill(await lastEmailedCode(page, email));
       await page.getByRole('button', { name: 'Verify and sign in' }).click();

@@ -5874,7 +5874,8 @@
         "description": "Reutilize este evento. Uma cópia leva configurações, perguntas e planta — nunca convidados, RSVPs, check-ins ou repasses."
       },
       "announcements": {
-        "pushHint": "As notificações push chegam aos convidados que as ativaram; os demais recebem o e-mail."
+        "pushHint": "As notificações push chegam aos convidados que as ativaram; os demais recebem o e-mail.",
+        "smsHint": "SMS só vão para convidados que informaram um celular e aceitaram receber SMS; os demais aparecem como não enviados, com o motivo."
       },
       "eventAnnouncements": {
         "explainer": "Anúncios públicos aparecem na página do evento; os exclusivos para convidados aparecem nas páginas dos seus convidados.",
@@ -5903,7 +5904,8 @@
         "description": "Reutilize este evento. Uma cópia leva configurações, tipos de ingresso, perguntas do pedido e planta — nunca pedidos, convidados, ingressos, check-ins ou repasses."
       },
       "announcements": {
-        "pushHint": "As notificações push chegam aos convidados que as ativaram na página do pedido ou no app; os demais recebem o e-mail."
+        "pushHint": "As notificações push chegam aos convidados que as ativaram na página do pedido ou no app; os demais recebem o e-mail.",
+        "smsHint": "SMS só vão para convidados que informaram um celular e aceitaram receber SMS; os demais aparecem como não enviados, com o motivo."
       },
       "eventAnnouncements": {
         "emptyDescription": "Publique novidades, mudanças de horário ou lembretes para seus convidados."

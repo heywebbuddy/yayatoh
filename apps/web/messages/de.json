@@ -5874,7 +5874,8 @@
         "description": "Diese Veranstaltung wiederverwenden. Eine Kopie übernimmt Einstellungen, Fragen und Raumplan — nie ihre Gäste, Zusagen, Check-ins oder Auszahlungen."
       },
       "announcements": {
-        "pushHint": "Push erreicht Gäste, die Benachrichtigungen eingeschaltet haben; alle anderen bekommen die E-Mail."
+        "pushHint": "Push erreicht Gäste, die Benachrichtigungen eingeschaltet haben; alle anderen bekommen die E-Mail.",
+        "smsHint": "SMS gehen nur an Gäste, die eine Mobilnummer angegeben und SMS zugestimmt haben; alle anderen erscheinen als nicht gesendet, mit Grund."
       },
       "eventAnnouncements": {
         "explainer": "Öffentliche Mitteilungen erscheinen auf der Veranstaltungsseite; solche nur für Gäste auf den Seiten Ihrer Gäste.",
@@ -5903,7 +5904,8 @@
         "description": "Diese Veranstaltung wiederverwenden. Eine Kopie übernimmt Einstellungen, Ticketarten, Bestellfragen und Raumplan — nie ihre Bestellungen, Gäste, Tickets, Check-ins oder Auszahlungen."
       },
       "announcements": {
-        "pushHint": "Push erreicht Gäste, die Benachrichtigungen auf ihrer Bestellseite oder in der App eingeschaltet haben; alle anderen bekommen die E-Mail."
+        "pushHint": "Push erreicht Gäste, die Benachrichtigungen auf ihrer Bestellseite oder in der App eingeschaltet haben; alle anderen bekommen die E-Mail.",
+        "smsHint": "SMS gehen nur an Gäste, die eine Mobilnummer angegeben und SMS zugestimmt haben; alle anderen erscheinen als nicht gesendet, mit Grund."
       },
       "eventAnnouncements": {
         "emptyDescription": "Veröffentlichen Sie Neuigkeiten, Zeitänderungen oder Erinnerungen für Ihre Gäste."

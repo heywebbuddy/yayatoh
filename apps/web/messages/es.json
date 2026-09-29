@@ -5874,7 +5874,8 @@
         "description": "Reutiliza este evento. Una copia toma su configuración, preguntas y plano — nunca sus invitados, RSVP, registros de entrada ni pagos."
       },
       "announcements": {
-        "pushHint": "Las notificaciones push llegan a los invitados que las activaron; los demás reciben el correo."
+        "pushHint": "Las notificaciones push llegan a los invitados que las activaron; los demás reciben el correo.",
+        "smsHint": "Los SMS solo llegan a los invitados que dieron un número de móvil y aceptaron recibirlos; los demás aparecen como no enviados, con el motivo."
       },
       "eventAnnouncements": {
         "explainer": "Los anuncios públicos aparecen en la página del evento; los de solo invitados aparecen en las páginas de tus invitados.",
@@ -5903,7 +5904,8 @@
         "description": "Reutiliza este evento. Una copia toma su configuración, tipos de entrada, preguntas de compra y plano — nunca sus pedidos, invitados, entradas, registros de entrada ni pagos."
       },
       "announcements": {
-        "pushHint": "Las notificaciones push llegan a los invitados que las activaron en su página de pedido o en la app; los demás reciben el correo."
+        "pushHint": "Las notificaciones push llegan a los invitados que las activaron en su página de pedido o en la app; los demás reciben el correo.",
+        "smsHint": "Los SMS solo llegan a los invitados que dieron un número de móvil y aceptaron recibirlos; los demás aparecen como no enviados, con el motivo."
       },
       "eventAnnouncements": {
         "emptyDescription": "Publica noticias, cambios de horario o recordatorios para tus invitados."

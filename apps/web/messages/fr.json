@@ -5874,7 +5874,8 @@
         "description": "Réutilisez cet événement. Une copie reprend ses paramètres, questions et plan de salle — jamais ses invités, RSVP, enregistrements ni versements."
       },
       "announcements": {
-        "pushHint": "Les notifications push atteignent les invités qui les ont activées ; les autres reçoivent l'e-mail."
+        "pushHint": "Les notifications push atteignent les invités qui les ont activées ; les autres reçoivent l'e-mail.",
+        "smsHint": "Les SMS ne partent qu'aux invités qui ont donné un numéro de mobile et accepté les SMS ; les autres sont indiqués comme non envoyés, avec la raison."
       },
       "eventAnnouncements": {
         "explainer": "Les annonces publiques apparaissent sur la page de l'événement ; celles réservées aux invités apparaissent sur leurs pages.",
@@ -5903,7 +5904,8 @@
         "description": "Réutilisez cet événement. Une copie reprend ses paramètres, types de billets, questions de commande et plan de salle — jamais ses commandes, invités, billets, enregistrements ni versements."
       },
       "announcements": {
-        "pushHint": "Les notifications push atteignent les invités qui les ont activées sur leur page de commande ou dans l'app ; les autres reçoivent l'e-mail."
+        "pushHint": "Les notifications push atteignent les invités qui les ont activées sur leur page de commande ou dans l'app ; les autres reçoivent l'e-mail.",
+        "smsHint": "Les SMS ne partent qu'aux invités qui ont donné un numéro de mobile et accepté les SMS ; les autres sont indiqués comme non envoyés, avec la raison."
       },
       "eventAnnouncements": {
         "emptyDescription": "Publiez des nouvelles, des changements d'horaire ou des rappels pour vos invités."
