@@ -4,6 +4,7 @@ import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from 
 import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
+import { catchUpMetrics, rebuildOrgMetrics } from '@yayatoh/reports';
 import {
   assignSeatCategoryCommand,
   publishEventLayoutCommand,
@@ -405,6 +406,11 @@ for (const d of DEMO_EVENTS) {
   for (const o of SEED_ORGS) {
     const found = await resolveOrgSlug(o.slug);
     if (found) console.info(`seed: ${await catchUpListings(found.orgId)} listing event(s) for ${o.slug}`);
+    // M3.1 metric projections: apply the outbox, then rebuild from the sources (seeded rows too).
+    if (found) {
+      await catchUpMetrics(found.orgId);
+      await rebuildOrgMetrics(found.orgId);
+    }
   }
 }
 // A directory venue (M1.4c) so /venues has something to show; not attached to any seeded event.

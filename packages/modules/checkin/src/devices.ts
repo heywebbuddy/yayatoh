@@ -14,7 +14,7 @@ import {
   scopeMessage,
   zoneAllows,
 } from '@yayatoh/checkin-engine';
-import { withoutTenant } from '@yayatoh/db';
+import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
@@ -27,7 +27,7 @@ import {
   ticketForLegacyCodeTx,
   ticketForScanTx,
 } from '@yayatoh/ticketing';
-import { and, eq, isNull, sql } from 'drizzle-orm';
+import { and, eq, gte, isNull, lte, sql } from 'drizzle-orm';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
@@ -63,6 +63,33 @@ export async function deviceContext(token: string): Promise<{ ctx: Ctx; wipe: bo
   };
 }
 
+/** Device lifecycle events carry no label, token or member: only which device changed. */
+const deviceEvent = (type: string, orgId: string, deviceId: string) => ({
+  type,
+  version: 1,
+  aggregateType: 'device',
+  aggregateId: deviceId,
+  payload: { orgId, deviceId },
+});
+
+/** How recently a device must have sent a heartbeat to count as online. */
+export const DEVICE_ONLINE_WINDOW_MS = 90_000;
+
+/** Devices not revoked whose last heartbeat is within the window before `now` (metrics). */
+export async function devicesOnlineTx(tx: TenantTx, now: Date): Promise<number> {
+  const [r] = await tx
+    .select({ n: sql<number>`count(*)::int` })
+    .from(devices)
+    .where(
+      and(
+        isNull(devices.revokedAt),
+        gte(devices.lastSeenAt, new Date(now.getTime() - DEVICE_ONLINE_WINDOW_MS)),
+        lte(devices.lastSeenAt, now),
+      ),
+    );
+  return r?.n ?? 0;
+}
+
 export const enrollDeviceCommand = tenantCommand({
   name: 'checkin.enrollDevice',
   input: z.object({
@@ -74,7 +101,7 @@ export const enrollDeviceCommand = tenantCommand({
   output: z.object({ deviceId: z.uuid(), token: z.string() }),
   entitlement: 'checkin',
   permission: 'checkin:scan',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     if (input.assignedUserId && (await memberRoleTx(tx, input.assignedUserId)) === null)
       throw new DomainError('validation_failed', 'Not a member of this organization', {
         field: 'assignedUserId',
@@ -91,6 +118,7 @@ export const enrollDeviceCommand = tenantCommand({
       })
       .returning({ id: devices.id });
     if (!d) throw new DomainError('internal');
+    emit(deviceEvent('device.enrolled', requireOrg(ctx), d.id));
     return { deviceId: d.id, token };
   },
   audit: (input, r) => ({
@@ -107,7 +135,7 @@ export const setDeviceStateCommand = tenantCommand({
   output: z.object({ ok: z.boolean() }),
   entitlement: 'checkin',
   permission: 'checkin:scan',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const rows = await tx
       .update(devices)
       .set(
@@ -118,6 +146,7 @@ export const setDeviceStateCommand = tenantCommand({
       .where(eq(devices.id, input.deviceId))
       .returning({ id: devices.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    emit(deviceEvent('device.state_changed', requireOrg(ctx), input.deviceId));
     return { ok: true };
   },
   audit: (input) => ({ action: `device.${input.action}`, targetType: 'device', targetId: input.deviceId }),
@@ -133,13 +162,15 @@ export const heartbeatCommand = tenantCommand({
   output: z.object({ serverTime: z.date(), commands: z.array(z.enum(['wipe'])) }),
   entitlement: 'checkin',
   permission: 'checkin:device',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const [d] = await tx
       .update(devices)
       .set({ ...input, lastSeenAt: ctx.now, updatedAt: ctx.now })
       .where(and(eq(devices.id, deviceIdOf(ctx)), isNull(devices.revokedAt)))
       .returning({ wipe: devices.wipeRequestedAt });
     if (!d) throw new DomainError('forbidden', 'Device revoked');
+    // Devices-online and the device board (M3.1/M3.3) follow heartbeats through the outbox.
+    emit(deviceEvent('device.heartbeat', requireOrg(ctx), deviceIdOf(ctx)));
     return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [] };
   },
 });
@@ -456,6 +487,21 @@ export const syncScansCommand = tenantCommand({
           .returning({ id: admissions.id });
         if (adm) {
           admissionId = adm.id;
+          emit({
+            type: 'ticket.admitted',
+            version: 1,
+            aggregateType: 'ticket',
+            aggregateId: ticket.id,
+            payload: {
+              orgId,
+              eventId: event.id,
+              ticketId: ticket.id,
+              admissionId: adm.id,
+              day,
+              admittedAt: at.toISOString(),
+              offline: true,
+            },
+          });
         } else {
           const [live] = await tx
             .select()
@@ -482,6 +528,21 @@ export const syncScansCommand = tenantCommand({
               .returning({ id: scans.id });
             duplicatesOffline += flipped.length;
             admissionId = live.id;
+            // The admission now dates from this earlier scan (per-minute check-in counts follow).
+            emit({
+              type: 'ticket.admission_moved',
+              version: 1,
+              aggregateType: 'ticket',
+              aggregateId: ticket.id,
+              payload: {
+                orgId,
+                eventId: event.id,
+                ticketId: ticket.id,
+                admissionId: live.id,
+                fromAdmittedAt: live.admittedAt.toISOString(),
+                admittedAt: at.toISOString(),
+              },
+            });
             if (flipped.length) {
               emit({
                 type: 'checkin.duplicate_offline',

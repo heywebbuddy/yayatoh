@@ -22,16 +22,27 @@ export async function consumeEvent(subscriber: Subscriber, event: PublishedEvent
       .onConflictDoNothing()
       .returning({ id: processedEvents.id });
     if (inserted.length === 0) return false;
-    if (subscriber.acceptsReplayed !== true) {
-      const [row] = await tx
-        .select({ replayed: domainEvents.replayed })
-        .from(domainEvents)
-        .where(eq(domainEvents.id, event.id));
-      if (event.replayed || row?.replayed) return false;
-    }
-    await subscriber.handle(tx, event);
+    const full = await withEventMetaTx(tx, event);
+    if (full.replayed && subscriber.acceptsReplayed !== true) return false;
+    await subscriber.handle(tx, full);
     return true;
   });
+}
+
+/**
+ * The relay's job payload has no write time, and the replay flag is always read from the outbox
+ * row itself (an event handed over without it is still treated as history).
+ */
+async function withEventMetaTx(tx: TenantTx, event: PublishedEvent): Promise<PublishedEvent> {
+  const [row] = await tx
+    .select({ createdAt: domainEvents.createdAt, replayed: domainEvents.replayed })
+    .from(domainEvents)
+    .where(eq(domainEvents.id, event.id));
+  return {
+    ...event,
+    occurredAt: event.occurredAt ?? row?.createdAt.toISOString() ?? new Date().toISOString(),
+    replayed: event.replayed === true || row?.replayed === true,
+  };
 }
 
 /**
@@ -74,6 +85,7 @@ export async function catchUpSubscriber(subscriber: Subscriber, orgId: string): 
       aggregateId: e.aggregateId,
       payload: e.payload,
       logSeq: e.logSeq ?? 0,
+      occurredAt: e.createdAt.toISOString(),
       replayed: e.replayed,
     });
     if (done) n += 1;

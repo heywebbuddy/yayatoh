@@ -71,7 +71,7 @@ Roadmap: M1.12 ("Metric registry with `as_of`. Organizer and event totals, net r
   - Support staff and organizer accounts are refused.
 
 ## Later / not yet
-- Materialized/projected metrics (L1/L2, `metric_snapshots`, realtime tiles) and a Redis cache with tag invalidation: M3.1/M3.2 Command Center. Today every report reads live (L0), so `as_of` is always "now".
+- ~~Materialized/projected metrics (`metric_snapshots`)~~: done in M3.1a (`docs/specs/M3.1/spec.md`); the event home tiles read the projection, the full report still reads live (L0). Realtime tiles and a Redis cache with tag invalidation: M3.1b/M3.2.
 - Sales-velocity, pace-vs-comparable, conversion funnel, AOV, refund rate: M3.2/M6.2.
 - The report queries run in the default READ COMMITTED transaction. A REPEATABLE READ snapshot would give perfectly consistent totals under concurrent writes; this needs a `withTenant` option.
 - CSV exports of the summary tables (by day, type, channel) and XLSX/PDF: later (M6.2 scheduled reports).

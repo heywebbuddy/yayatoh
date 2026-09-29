@@ -141,7 +141,14 @@ export const scanTicketCommand = tenantCommand({
           version: 1,
           aggregateType: 'ticket',
           aggregateId: ticket.id,
-          payload: { orgId, eventId: event.id, ticketId: ticket.id, admissionId: adm.id, day },
+          payload: {
+            orgId,
+            eventId: event.id,
+            ticketId: ticket.id,
+            admissionId: adm.id,
+            day,
+            admittedAt: ctx.now.toISOString(),
+          },
         });
       } else {
         result = 'duplicate';
@@ -229,7 +236,7 @@ export const undoAdmissionCommand = tenantCommand({
   output: z.object({ undone: z.boolean() }),
   entitlement: 'checkin',
   permission: 'checkin:scan',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const rows = await tx
       .update(admissions)
       .set({
@@ -244,8 +251,22 @@ export const undoAdmissionCommand = tenantCommand({
           isNull(admissions.undoneAt),
         ),
       )
-      .returning({ id: admissions.id });
-    if (rows.length === 0) throw new DomainError('not_found', 'Admission not found or already undone');
+      .returning({ id: admissions.id, ticketId: admissions.ticketId, admittedAt: admissions.admittedAt });
+    const [undone] = rows;
+    if (!undone) throw new DomainError('not_found', 'Admission not found or already undone');
+    emit({
+      type: 'ticket.admission_undone',
+      version: 1,
+      aggregateType: 'ticket',
+      aggregateId: undone.ticketId,
+      payload: {
+        orgId: requireOrg(ctx),
+        eventId: input.eventId,
+        ticketId: undone.ticketId,
+        admissionId: undone.id,
+        admittedAt: undone.admittedAt.toISOString(),
+      },
+    });
     return { undone: true };
   },
   audit: (input) => ({ action: 'checkin.undo', targetType: 'admission', targetId: input.admissionId }),

@@ -118,6 +118,8 @@ export function listingsProjector(deps: { onChange?: (orgId: string) => Promise<
   return defineSubscriber({
     name: 'marketplace.listings',
     events: [...EVENT_LISTING_EVENTS, ...ORG_LISTING_EVENTS, ...ORG_STATUS_EVENTS],
+    // A projection: backfilled history converges it too (only the cache revalidation is a side effect).
+    acceptsReplayed: true,
     handle: async (tx, event) => {
       const key = `${event.type}@${event.version}`;
       if ((ORG_STATUS_EVENTS as readonly string[]).includes(key)) {
@@ -128,7 +130,7 @@ export function listingsProjector(deps: { onChange?: (orgId: string) => Promise<
         const p = EventPayload.parse(event.payload);
         await refreshListingTx(tx, event.orgId, p.eventId);
       }
-      await deps.onChange?.(event.orgId);
+      if (!event.replayed) await deps.onChange?.(event.orgId);
     },
   });
 }

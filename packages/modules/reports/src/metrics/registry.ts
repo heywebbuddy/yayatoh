@@ -223,6 +223,10 @@ export interface MetricFacts {
   readonly tickets?: { readonly capacity: number; readonly valid: number };
 }
 
+/** Checked-in tickets ÷ valid tickets in basis points, capped at 100 % (0 with no valid tickets). */
+export const checkinRateBps = (checkedIn: number, valid: number) =>
+  valid > 0 ? Math.min(10_000, Math.round((checkedIn * 10_000) / valid)) : 0;
+
 const sum = <T>(xs: readonly T[], f: (x: T) => number) => xs.reduce((a, x) => a + f(x), 0);
 
 /** Pure: facts → metric values (one per currency for money), in `keys` order. */
@@ -272,7 +276,7 @@ export function deriveMetrics(facts: MetricFacts, keys: readonly MetricKey[], as
     'tickets.capacity': facts.tickets?.capacity ?? 0,
     'tickets.valid': valid,
     'checkins.tickets': facts.checkins.tickets,
-    'checkins.rate': valid > 0 ? Math.min(10_000, Math.round((facts.checkins.tickets * 10_000) / valid)) : 0,
+    'checkins.rate': checkinRateBps(facts.checkins.tickets, valid),
   };
   const byCurrency = new Map(facts.currencies.map((c) => [c, money(c)]));
   return keys.flatMap((key): MetricValue[] => {

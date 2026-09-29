@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
-import { and, asc, eq, sql } from 'drizzle-orm';
-import { tickets, ticketTypes } from './schema.ts';
+import { and, asc, eq, isNotNull, sql } from 'drizzle-orm';
+import { ticketClaims, tickets, ticketTypes } from './schema.ts';
 
 export interface TicketTypeStats {
   readonly ticketTypeId: string;
@@ -42,6 +42,24 @@ export async function ticketTypeStatsTx(tx: TenantTx, eventId: string): Promise<
       valid: r.valid,
       archived: r.archived,
     }));
+}
+
+/**
+ * Tickets handed on (M3.1 metrics): active tickets of one event that someone claimed through a
+ * claim link. Counts only; no ticket or holder rows.
+ */
+export async function ticketsDistributedTx(tx: TenantTx, eventId: string): Promise<number> {
+  const [r] = await tx
+    .select({ n: sql<number>`count(distinct ${tickets.id})::int` })
+    .from(tickets)
+    .innerJoin(
+      ticketClaims,
+      and(eq(ticketClaims.ticketId, tickets.id), eq(ticketClaims.orgId, tickets.orgId)),
+    )
+    .where(
+      and(eq(tickets.eventId, eventId), eq(tickets.status, 'active'), isNotNull(ticketClaims.claimedAt)),
+    );
+  return r?.n ?? 0;
 }
 
 /** The orders holding a ticket with this printed short code at one event (booking search). */

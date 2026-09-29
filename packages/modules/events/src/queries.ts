@@ -95,6 +95,12 @@ export async function publicEventBySlug(
 }
 
 /** For lower-tier callers inside their own tenant transaction (e.g. ticketing). */
+/** Every event id of the org (metric rebuilds walk them). Ids only. */
+export async function eventIdsTx(tx: TenantTx): Promise<string[]> {
+  const rows = await tx.select({ id: events.id }).from(events).orderBy(events.id);
+  return rows.map((r) => r.id);
+}
+
 export async function findEventTx(tx: TenantTx, eventId: string): Promise<EventDto | null> {
   const [row] = await tx.select().from(events).where(eq(events.id, eventId));
   return row ? EventDto.parse(row) : null;

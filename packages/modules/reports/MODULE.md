@@ -1,8 +1,13 @@
 # reports (tier 5)
 
-Exports and (from M1.12) reports that read across modules. Owns no tables: it reads other
-modules only through their exported functions and writes files through the platform bulk
-framework.
+Exports and (from M1.12) reports that read across modules, and (from M3.1a) the metric
+projections and the analytics sink. It reads other modules only through their exported
+functions, writes files through the platform bulk framework, and owns four tables in the
+`reports` schema: `metric_snapshots`, `metric_timeseries`, `projector_lag` and
+`analytics_events`. The projections live here, not in a new module, because they materialize the
+registry's metrics from the same exported facts (`gatherFactsTx`), so a projected number and a
+report number are one definition; a separate module would have to sit at tier 6 and then the
+reports module (tier 5) could not read it for the dashboard tiles.
 
 **Invariants**
 - Every export is an allowlist of columns. Contact ids, tokens, answers marked sensitive and payment data never leave.
@@ -14,3 +19,7 @@ framework.
 - Reports read other modules only through their exported read functions (`*FactsTx`, `salesBy*Tx`, …) inside the caller's tenant transaction; they never import another module's schema.
 - Finance figures (platform fees, disputes, net revenue) need `finance:read`; sales and counts need `orders:read`.
 - **Attendee list (M1.8f):** `reports.attendeeList` adds ticket-type and check-in (today in the event's time zone / any day / never) filters to the attendees module's own, as subqueries from ticketing and check-in. Exports and "everything matching" selections (`reports.matchingAttendeeIds`) use the same filter.
+- Metric projections (M3.1) are projections, never the system of record: `rebuildEventMetricsTx` recomputes them from the sources and must give the same values the projector converges to (property test).
+- Every projected value is recomputed from its sources after taking its advisory lock (event snapshot → counter shards ascending → series lock → series buckets sorted), never incremented, so replays, duplicates and out-of-order deliveries converge. Hot counters (check-ins) spread over `COUNTER_SHARDS` shards keyed by the ticket id's last byte, summed on read.
+- Backfilled (`replayed`) events update projections but record no lag sample and call no `onChange`.
+- The analytics sink takes only `AnalyticsEvent` (a Zod allowlist): no names, emails, phone numbers, free text or ids of people. `analytics_events` is append-only for the runtime role.

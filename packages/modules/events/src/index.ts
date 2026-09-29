@@ -126,6 +126,7 @@ export {
   checkoutTarget,
   type EventRoleGrant,
   eventIdsEndedBeforeTx,
+  eventIdsTx,
   eventRoleGrantsTx,
   eventRolesOf,
   eventStaffTx,
