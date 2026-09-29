@@ -111,6 +111,10 @@
       "intro": "لم تُجب بعد: لا يزال {org} يودّ معرفة رأيك في {eventName}.",
       "cta": "أجب عن الاستبيان"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "بخصوص {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} هو رمز تأكيد بريدك الإلكتروني",
       "intro": "أدخل {code} لتأكيد بريدك الإلكتروني وإتمام طلبك لدى {org}. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة."

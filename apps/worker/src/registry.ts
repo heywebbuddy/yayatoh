@@ -1,5 +1,6 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
+import { journeySubscribers } from '@yayatoh/automations';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
@@ -30,6 +31,7 @@ import {
 } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
+import { journeyJob } from './journeys.ts';
 
 export const heartbeat = defineJob({
   name: 'platform.heartbeat',
@@ -39,7 +41,7 @@ export const heartbeat = defineJob({
 });
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
-export const JOBS = [heartbeat] as const;
+export const JOBS = [heartbeat, journeyJob()] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
@@ -76,6 +78,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
+    // M3.7a: journeys enroll on purchase and check-in, follow date changes and cancellations.
+    ...journeySubscribers(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

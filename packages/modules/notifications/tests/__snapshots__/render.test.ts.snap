@@ -273,6 +273,266 @@ Please use Lot C on Harbor Street.
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > automations.message · ar 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+مرحبًا Amina Diallo،
+
+بخصوص Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك رسالة التذكير هذه لأن لديك تذاكر من Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · de 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hallo Amina Diallo,
+
+Zu Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst diese Erinnerung, weil du Tickets von Lakeside Events hast.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · en 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hi Amina Diallo,
+
+About Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this reminder because you have tickets from Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · es 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hola, Amina Diallo:
+
+Sobre Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes este recordatorio porque tienes entradas de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · fr 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Bonjour Amina Diallo,
+
+À propos de Lakeside Jazz Night :
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce rappel car vous avez des billets de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · hi 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+नमस्ते Amina Diallo,
+
+Lakeside Jazz Night के बारे में:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह रिमाइंडर इसलिए मिला क्योंकि आपके पास Lakeside Events के टिकट हैं।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · it 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Ciao Amina Diallo,
+
+A proposito di Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo promemoria perché hai biglietti di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · ja 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Amina Diallo 様
+
+Lakeside Jazz Night について:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のチケットをお持ちのため、このリマインダーをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · nl 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hoi Amina Diallo,
+
+Over Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt deze herinnering omdat je tickets van Lakeside Events hebt.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · pt 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Olá, Amina Diallo!
+
+Sobre Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe este lembrete porque tem ingressos de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · ru 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Здравствуйте, Amina Diallo!
+
+О событии Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это напоминание, потому что у вас есть билеты от Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · zh-CN 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Amina Diallo，您好：
+
+关于 Lakeside Jazz Night：
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此提醒，是因为您持有 Lakeside Events 的门票。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · zh-TW 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Amina Diallo，您好：
+
+關於 Lakeside Jazz Night：
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此提醒，是因為您持有 Lakeside Events 的票券。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > events.postponed · ar 1`] = `
 {
   "subject": "تأجيل Lakeside Jazz Night",

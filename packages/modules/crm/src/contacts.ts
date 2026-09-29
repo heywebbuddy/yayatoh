@@ -166,6 +166,36 @@ export async function contactByIdTx(
   return row ?? null;
 }
 
+/** Contacts' names and emails by id (journey run history, M3.7a). Unknown ids are left out. */
+export async function contactsByIdsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, { email: string; name: string | null }>> {
+  if (contactIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: contacts.id, email: contacts.email, name: contacts.name })
+    .from(contacts)
+    .where(inArray(contacts.id, [...new Set(contactIds)]));
+  return new Map(rows.map((r) => [r.id, { email: r.email, name: r.name }]));
+}
+
+/**
+ * Ids of contacts whose email or name contains the text (case-insensitive, literal; a history
+ * filter, M3.7a). Bounded.
+ */
+export async function contactIdsMatchingTx(tx: TenantTx, text: string, limit = 1000): Promise<string[]> {
+  const q = text.trim().toLowerCase();
+  if (!q) return [];
+  const rows = await tx
+    .select({ id: contacts.id })
+    .from(contacts)
+    .where(
+      sql`position(${q} in lower(${contacts.email})) > 0 or position(${q} in lower(coalesce(${contacts.name}, ''))) > 0`,
+    )
+    .limit(limit);
+  return rows.map((r) => r.id);
+}
+
 /** Contacts' phone numbers (texts to attendees, M3.5a). */
 export async function contactPhonesTx(
   tx: TenantTx,

@@ -120,6 +120,9 @@
         "invite": "Survey invitation",
         "reminder": "Survey reminder"
       },
+      "automations": {
+        "message": "Journey message"
+      },
       "guest": {
         "checkout-code": "Checkout email code",
         "sign-in": "My tickets sign-in",
@@ -267,6 +270,7 @@
     "trackedLinks": "Tracked links",
     "messagingHealth": "Messaging limits",
     "audiences": "Audiences",
+    "journeys": "Journeys",
     "refundRequests": "Refund requests"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "Unknown (imported)",
         "none": "Not given"
       }
+    }
+  },
+  "journeys": {
+    "title": "Journeys",
+    "description": "Automations for one event or series: a trigger puts a person on the journey, and each step waits, checks an optional condition and does one thing.",
+    "new": "New journey",
+    "emptyTitle": "No journeys yet",
+    "emptyDescription": "Start from the vision journey: a confirmation, reminders by email and text, an event-day push and the survey.",
+    "emptyReadOnly": "Nobody has set up a journey yet.",
+    "caption": "Journeys",
+    "name": "Name",
+    "scope": "Event or series",
+    "trigger": "Trigger",
+    "status": "Status",
+    "steps": "Steps",
+    "runs": "People",
+    "updated": "Updated",
+    "on": "On",
+    "off": "Off",
+    "seriesScope": "Series: {name}",
+    "triggers": {
+      "order_paid": "Buys a ticket",
+      "checked_in": "Checks in",
+      "event_time": "Time relative to the event"
+    },
+    "newTitle": "New journey",
+    "newDescription": "Pick the event (or series) and how people join. You can edit every step before you switch it on.",
+    "form": {
+      "name": "Journey name",
+      "scope": "Event or series",
+      "pickScope": "Choose an event or series",
+      "events": "Events",
+      "series": "Series",
+      "eventOption": "{name} ({date})",
+      "trigger": "People join when they…",
+      "start": "Start from",
+      "vision": "The vision journey",
+      "visionHint": "Confirmation at purchase · reminder 7 days before · text the day before · push on the event day · survey the morning after",
+      "blank": "A blank journey",
+      "blankHint": "Choose the trigger and add your own steps.",
+      "create": "Create journey",
+      "errors": {
+        "name": "Enter a name (up to 120 characters).",
+        "scope": "Choose an event or series."
+      }
+    },
+    "vision": {
+      "name": "Vision journey",
+      "confirmation": {
+        "subject": "You're in: {event}",
+        "body": "Hi {name}, thanks for your order. We'll see you at {event} on {when}."
+      },
+      "week": {
+        "subject": "One week to go: {event}",
+        "body": "{event} is one week away ({when}). Your tickets are in your confirmation email."
+      },
+      "day": {
+        "subject": "Tomorrow: {event}",
+        "body": "See you tomorrow at {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Today: {event}",
+        "body": "It's the day! {event} starts {when}. Have your tickets ready."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Trigger: {trigger}",
+      "enable": "Switch on",
+      "disable": "Switch off",
+      "enableFor": "Switch on {name}",
+      "disableFor": "Switch off {name}",
+      "enabledSince": "On since {when}",
+      "created": "Journey created. Check the steps, then switch it on.",
+      "saved": "Journey saved.",
+      "enabledDone": "Journey switched on. People who join from now on get its steps.",
+      "disabledDone": "{count, plural, =0 {Journey switched off.} one {Journey switched off. # waiting step was cancelled.} other {Journey switched off. # waiting steps were cancelled.}}",
+      "deleted": "Journey deleted.",
+      "delete": "Delete",
+      "deleteFor": "Delete {name}",
+      "editOff": "Switch the journey off to edit its steps.",
+      "stepsTitle": "Steps",
+      "noSteps": "No steps yet. Add one below.",
+      "stepCounts": "{done} done · {pending} waiting · {skipped} skipped",
+      "errors": {
+        "no_steps": "Add at least one step before switching the journey on.",
+        "anchor_needs_trigger": "A step waits from the trigger, but this journey starts at a time relative to the event."
+      }
+    },
+    "editor": {
+      "step": "Step {n}",
+      "anchor": "Measured from",
+      "anchors": {
+        "trigger": "When they join",
+        "event_start": "The event start",
+        "event_end": "The event end"
+      },
+      "direction": "Before or after",
+      "before": "Before",
+      "after": "After",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "atTime": "At a time of day",
+      "atTimeHint": "Optional, in the event's time zone.",
+      "action": "Do",
+      "actions": {
+        "email": "Send an email",
+        "sms": "Send an SMS",
+        "whatsapp": "Send a WhatsApp message",
+        "push": "Send a push notification",
+        "label": "Add a label",
+        "survey": "Invite to the survey"
+      },
+      "condition": "Only if",
+      "conditions": {
+        "none": "Always",
+        "checked_in": "They checked in",
+        "not_checked_in": "They have not checked in",
+        "has_seat": "They have a seat",
+        "no_seat": "They have no seat",
+        "answered_survey": "They answered the survey",
+        "not_answered_survey": "They have not answered the survey"
+      },
+      "subject": "Subject",
+      "title": "Title",
+      "body": "Message",
+      "placeholders": "You can use {name}, {event} and {when}.",
+      "label": "Label",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove",
+      "moveUpFor": "Move step {n} up",
+      "moveDownFor": "Move step {n} down",
+      "removeFor": "Remove step {n}",
+      "add": "Add step",
+      "max": "A journey has at most {max} steps.",
+      "save": "Save journey",
+      "errors": {
+        "required": "Fill this in.",
+        "anchor": "This journey has no join moment: measure from the event start or end.",
+        "direction": "Days and hours must go the same way.",
+        "offset": "Check the number of days.",
+        "step": "Check step {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "Right away",
+      "afterTrigger": "{offset} after they join",
+      "atStart": "When the event starts",
+      "beforeStart": "{offset} before the event starts",
+      "afterStart": "{offset} after the event starts",
+      "atEnd": "When the event ends",
+      "beforeEnd": "{offset} before the event ends",
+      "afterEnd": "{offset} after the event ends",
+      "dayTrigger": "{dir, select, same {The day they join} other {{days, plural, one {# day after they join} other {# days after they join}}}}, at {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# day before the event day} other {# days before the event day}}} after {{days, plural, one {# day after the event day} other {# days after the event day}}} other {On the event day}}, at {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# day before the last day} other {# days before the last day}}} after {{days, plural, one {# day after the event ends} other {# days after the event ends}}} other {On the last day}}, at {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} earlier} other {{offset} later}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# day} other {# days}}",
+      "hours": "{count, plural, one {# hour} other {# hours}}",
+      "minutes": "{count, plural, one {# minute} other {# minutes}}"
+    },
+    "history": {
+      "title": "Run history",
+      "caption": "People on this journey",
+      "person": "Person",
+      "email": "Email",
+      "unknown": "Unknown person",
+      "joined": "Joined",
+      "status": "Status",
+      "progress": "Steps",
+      "progressCounts": "{done} of {total} done",
+      "next": "Next step",
+      "searchLabel": "Find a person by name or email",
+      "search": "Search",
+      "clear": "Clear",
+      "empty": "Nobody has joined yet.",
+      "emptySearch": "Nobody matches “{q}”.",
+      "older": "Older people",
+      "runStatus": {
+        "active": "In progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "run": {
+      "metaTitle": "Journey history",
+      "event": "Event",
+      "trigger": "Trigger",
+      "caption": "Steps for this person",
+      "step": "Step",
+      "planned": "Planned for",
+      "result": "Result",
+      "at": "Done at",
+      "actionStatus": {
+        "pending": "Waiting",
+        "done": "Done",
+        "skipped": "Skipped",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "outcomes": {
+      "queued": "Message sent to the queue",
+      "already_queued": "Already sent",
+      "label_added": "Label added",
+      "invited": "Survey invitation sent",
+      "too_late": "Its time had passed",
+      "condition_not_met": "Condition not met",
+      "no_phone": "No phone number",
+      "no_device": "No device for push",
+      "no_address": "No email address",
+      "not_attending": "Not on the event's list",
+      "too_many_labels": "Too many labels",
+      "no_survey": "The event has no survey",
+      "closed": "The survey is closed",
+      "no_questions": "The survey has no questions",
+      "already_invited": "Already invited",
+      "order_refunded": "Order refunded",
+      "ticket_cancelled": "Ticket cancelled",
+      "event_cancelled": "Event cancelled",
+      "event_postponed": "Event postponed",
+      "journey_disabled": "Journey switched off",
+      "step_removed": "Step removed",
+      "run_ended": "Journey ended",
+      "event_missing": "Event not found",
+      "error": "Failed after several tries",
+      "other": "Other"
     }
   },
   "refundOps": {

@@ -120,6 +120,9 @@
         "invite": "アンケートのご案内",
         "reminder": "アンケートのリマインダー"
       },
+      "automations": {
+        "message": "ジャーニーのメッセージ"
+      },
       "guest": {
         "checkout-code": "購入時のメール確認コード",
         "sign-in": "マイチケットのサインイン",
@@ -267,6 +270,7 @@
     "trackedLinks": "トラッキングリンク",
     "messagingHealth": "メッセージ送信の上限",
     "audiences": "オーディエンス",
+    "journeys": "ジャーニー",
     "refundRequests": "返金リクエスト"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "不明（インポート）",
         "none": "なし"
       }
+    }
+  },
+  "journeys": {
+    "title": "ジャーニー",
+    "description": "1 つのイベントまたはシリーズの自動化です。トリガーで参加者がジャーニーに入り、各ステップは待機し、任意の条件を確認して 1 つのアクションを実行します。",
+    "new": "新しいジャーニー",
+    "emptyTitle": "ジャーニーはまだありません",
+    "emptyDescription": "ビジョンのジャーニーから始めましょう: 確認メール、メールと SMS のリマインダー、当日のプッシュ通知、アンケート。",
+    "emptyReadOnly": "まだジャーニーは設定されていません。",
+    "caption": "ジャーニー",
+    "name": "名前",
+    "scope": "イベントまたはシリーズ",
+    "trigger": "トリガー",
+    "status": "状態",
+    "steps": "ステップ",
+    "runs": "人数",
+    "updated": "更新日",
+    "on": "オン",
+    "off": "オフ",
+    "seriesScope": "シリーズ: {name}",
+    "triggers": {
+      "order_paid": "チケットを購入したとき",
+      "checked_in": "チェックインしたとき",
+      "event_time": "イベントを基準にした時刻"
+    },
+    "newTitle": "新しいジャーニー",
+    "newDescription": "イベント (またはシリーズ) と参加のきっかけを選びます。オンにする前にすべてのステップを編集できます。",
+    "form": {
+      "name": "ジャーニー名",
+      "scope": "イベントまたはシリーズ",
+      "pickScope": "イベントまたはシリーズを選択",
+      "events": "イベント",
+      "series": "シリーズ",
+      "eventOption": "{name} ({date})",
+      "trigger": "参加のきっかけ",
+      "start": "開始方法",
+      "vision": "ビジョンのジャーニー",
+      "visionHint": "購入時の確認 · 7 日前のリマインダー · 前日の SMS · 当日のプッシュ · 翌朝のアンケート",
+      "blank": "空のジャーニー",
+      "blankHint": "トリガーを選び、独自のステップを追加します。",
+      "create": "ジャーニーを作成",
+      "errors": {
+        "name": "名前を入力してください (120 文字以内)。",
+        "scope": "イベントまたはシリーズを選んでください。"
+      }
+    },
+    "vision": {
+      "name": "ビジョンのジャーニー",
+      "confirmation": {
+        "subject": "ご参加が確定しました: {event}",
+        "body": "{name} 様、ご注文ありがとうございます。{when} に {event} でお会いしましょう。"
+      },
+      "week": {
+        "subject": "あと 1 週間: {event}",
+        "body": "{event} まであと 1 週間です ({when})。チケットは確認メールにあります。"
+      },
+      "day": {
+        "subject": "明日: {event}",
+        "body": "明日 {event} でお会いしましょう。{when}。"
+      },
+      "eventDay": {
+        "subject": "本日: {event}",
+        "body": "いよいよ本日です。{event} は {when} に始まります。チケットをご準備ください。"
+      }
+    },
+    "detail": {
+      "summary": "{scope} · トリガー: {trigger}",
+      "enable": "オンにする",
+      "disable": "オフにする",
+      "enableFor": "{name} をオンにする",
+      "disableFor": "{name} をオフにする",
+      "enabledSince": "{when} からオン",
+      "created": "ジャーニーを作成しました。ステップを確認してからオンにしてください。",
+      "saved": "ジャーニーを保存しました。",
+      "enabledDone": "ジャーニーをオンにしました。今後参加する人にステップが届きます。",
+      "disabledDone": "{count, plural, =0 {ジャーニーをオフにしました。} other {ジャーニーをオフにしました。待機中のステップ # 件をキャンセルしました。}}",
+      "deleted": "ジャーニーを削除しました。",
+      "delete": "削除",
+      "deleteFor": "{name} を削除",
+      "editOff": "ステップを編集するにはジャーニーをオフにしてください。",
+      "stepsTitle": "ステップ",
+      "noSteps": "ステップはまだありません。下で追加してください。",
+      "stepCounts": "完了 {done} · 待機中 {pending} · スキップ {skipped}",
+      "errors": {
+        "no_steps": "ジャーニーをオンにする前にステップを 1 つ以上追加してください。",
+        "anchor_needs_trigger": "トリガーから待機するステップがありますが、このジャーニーはイベントを基準にした時刻で始まります。"
+      }
+    },
+    "editor": {
+      "step": "ステップ {n}",
+      "anchor": "基準",
+      "anchors": {
+        "trigger": "参加した時点",
+        "event_start": "イベントの開始",
+        "event_end": "イベントの終了"
+      },
+      "direction": "前か後か",
+      "before": "前",
+      "after": "後",
+      "days": "日",
+      "hours": "時間",
+      "minutes": "分",
+      "atTime": "指定の時刻",
+      "atTimeHint": "任意。イベントのタイムゾーンです。",
+      "action": "アクション",
+      "actions": {
+        "email": "メールを送信",
+        "sms": "SMS を送信",
+        "whatsapp": "WhatsApp メッセージを送信",
+        "push": "プッシュ通知を送信",
+        "label": "ラベルを追加",
+        "survey": "アンケートに招待"
+      },
+      "condition": "条件",
+      "conditions": {
+        "none": "常に",
+        "checked_in": "チェックイン済み",
+        "not_checked_in": "未チェックイン",
+        "has_seat": "座席あり",
+        "no_seat": "座席なし",
+        "answered_survey": "アンケート回答済み",
+        "not_answered_survey": "アンケート未回答"
+      },
+      "subject": "件名",
+      "title": "タイトル",
+      "body": "メッセージ",
+      "placeholders": "{name}、{event}、{when} を使えます。",
+      "label": "ラベル",
+      "moveUp": "上へ",
+      "moveDown": "下へ",
+      "remove": "削除",
+      "moveUpFor": "ステップ {n} を上へ移動",
+      "moveDownFor": "ステップ {n} を下へ移動",
+      "removeFor": "ステップ {n} を削除",
+      "add": "ステップを追加",
+      "max": "ジャーニーのステップは最大 {max} 件です。",
+      "save": "ジャーニーを保存",
+      "errors": {
+        "required": "入力してください。",
+        "anchor": "このジャーニーには参加時点がありません。イベントの開始または終了を基準にしてください。",
+        "direction": "日と時間は同じ向きにしてください。",
+        "offset": "日数を確認してください。",
+        "step": "ステップ {n} を確認してください。"
+      }
+    },
+    "wait": {
+      "atTrigger": "すぐに",
+      "afterTrigger": "参加の {offset} 後",
+      "atStart": "イベント開始時",
+      "beforeStart": "イベント開始の {offset} 前",
+      "afterStart": "イベント開始の {offset} 後",
+      "atEnd": "イベント終了時",
+      "beforeEnd": "イベント終了の {offset} 前",
+      "afterEnd": "イベント終了の {offset} 後",
+      "dayTrigger": "{dir, select, same {参加した日} other {参加の {days} 日後}} の {time}",
+      "dayStart": "{dir, select, before {イベント当日の {days} 日前} after {イベント当日の {days} 日後} other {イベント当日}} の {time}",
+      "dayEnd": "{dir, select, before {最終日の {days} 日前} after {イベント終了の {days} 日後} other {最終日}} の {time}",
+      "thenOffset": "{base}、その {offset}{dir, select, before {前} other {後}}"
+    },
+    "duration": {
+      "days": "{count, plural, other {# 日}}",
+      "hours": "{count, plural, other {# 時間}}",
+      "minutes": "{count, plural, other {# 分}}"
+    },
+    "history": {
+      "title": "履歴",
+      "caption": "このジャーニーの参加者",
+      "person": "参加者",
+      "email": "メール",
+      "unknown": "不明な参加者",
+      "joined": "参加日時",
+      "status": "状態",
+      "progress": "ステップ",
+      "progressCounts": "{total} 件中 {done} 件完了",
+      "next": "次のステップ",
+      "searchLabel": "名前またはメールで参加者を検索",
+      "search": "検索",
+      "clear": "クリア",
+      "empty": "まだ誰も参加していません。",
+      "emptySearch": "「{q}」に一致する人はいません。",
+      "older": "以前の参加者",
+      "runStatus": {
+        "active": "進行中",
+        "completed": "完了",
+        "cancelled": "キャンセル"
+      }
+    },
+    "run": {
+      "metaTitle": "ジャーニーの履歴",
+      "event": "イベント",
+      "trigger": "トリガー",
+      "caption": "この参加者のステップ",
+      "step": "ステップ",
+      "planned": "予定日時",
+      "result": "結果",
+      "at": "実行日時",
+      "actionStatus": {
+        "pending": "待機中",
+        "done": "完了",
+        "skipped": "スキップ",
+        "failed": "失敗",
+        "cancelled": "キャンセル"
+      }
+    },
+    "outcomes": {
+      "queued": "メッセージを送信キューに追加",
+      "already_queued": "送信済み",
+      "label_added": "ラベルを追加",
+      "invited": "アンケートの招待を送信",
+      "too_late": "予定時刻を過ぎていました",
+      "condition_not_met": "条件を満たしていません",
+      "no_phone": "電話番号がありません",
+      "no_device": "プッシュ通知用の端末がありません",
+      "no_address": "メールアドレスがありません",
+      "not_attending": "イベントのリストにいません",
+      "too_many_labels": "ラベルが多すぎます",
+      "no_survey": "イベントにアンケートがありません",
+      "closed": "アンケートは終了しています",
+      "no_questions": "アンケートに質問がありません",
+      "already_invited": "招待済み",
+      "order_refunded": "注文が返金されました",
+      "ticket_cancelled": "チケットがキャンセルされました",
+      "event_cancelled": "イベントが中止されました",
+      "event_postponed": "イベントが延期されました",
+      "journey_disabled": "ジャーニーがオフになりました",
+      "step_removed": "ステップが削除されました",
+      "run_ended": "ジャーニーが終了しました",
+      "event_missing": "イベントが見つかりません",
+      "error": "何度か試しましたが失敗しました",
+      "other": "その他"
     }
   },
   "refundOps": {

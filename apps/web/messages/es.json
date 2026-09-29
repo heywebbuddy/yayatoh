@@ -120,6 +120,9 @@
         "invite": "Invitación a encuesta",
         "reminder": "Recordatorio de encuesta"
       },
+      "automations": {
+        "message": "Mensaje de recorrido"
+      },
       "guest": {
         "checkout-code": "Código de correo en el pago",
         "sign-in": "Acceso a Mis entradas",
@@ -267,6 +270,7 @@
     "trackedLinks": "Enlaces rastreados",
     "messagingHealth": "Límites de mensajería",
     "audiences": "Audiencias",
+    "journeys": "Recorridos",
     "refundRequests": "Solicitudes de reembolso"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "Desconocido (importado)",
         "none": "No otorgado"
       }
+    }
+  },
+  "journeys": {
+    "title": "Recorridos",
+    "description": "Automatizaciones para un evento o una serie: un disparador añade a una persona al recorrido y cada paso espera, comprueba una condición opcional y hace una cosa.",
+    "new": "Nuevo recorrido",
+    "emptyTitle": "Aún no hay recorridos",
+    "emptyDescription": "Empieza con el recorrido de la visión: una confirmación, recordatorios por correo y SMS, un aviso push el día del evento y la encuesta.",
+    "emptyReadOnly": "Nadie ha configurado un recorrido todavía.",
+    "caption": "Recorridos",
+    "name": "Nombre",
+    "scope": "Evento o serie",
+    "trigger": "Disparador",
+    "status": "Estado",
+    "steps": "Pasos",
+    "runs": "Personas",
+    "updated": "Actualizado",
+    "on": "Activo",
+    "off": "Inactivo",
+    "seriesScope": "Serie: {name}",
+    "triggers": {
+      "order_paid": "Compra una entrada",
+      "checked_in": "Hace check-in",
+      "event_time": "Hora relativa al evento"
+    },
+    "newTitle": "Nuevo recorrido",
+    "newDescription": "Elige el evento (o la serie) y cómo entran las personas. Puedes editar cada paso antes de activarlo.",
+    "form": {
+      "name": "Nombre del recorrido",
+      "scope": "Evento o serie",
+      "pickScope": "Elige un evento o una serie",
+      "events": "Eventos",
+      "series": "Series",
+      "eventOption": "{name} ({date})",
+      "trigger": "Las personas entran cuando…",
+      "start": "Empezar desde",
+      "vision": "El recorrido de la visión",
+      "visionHint": "Confirmación al comprar · recordatorio 7 días antes · SMS el día anterior · push el día del evento · encuesta a la mañana siguiente",
+      "blank": "Un recorrido en blanco",
+      "blankHint": "Elige el disparador y añade tus propios pasos.",
+      "create": "Crear recorrido",
+      "errors": {
+        "name": "Escribe un nombre (hasta 120 caracteres).",
+        "scope": "Elige un evento o una serie."
+      }
+    },
+    "vision": {
+      "name": "Recorrido de la visión",
+      "confirmation": {
+        "subject": "Ya tienes tu lugar: {event}",
+        "body": "Hola {name}, gracias por tu pedido. Nos vemos en {event} el {when}."
+      },
+      "week": {
+        "subject": "Falta una semana: {event}",
+        "body": "{event} es dentro de una semana ({when}). Tus entradas están en el correo de confirmación."
+      },
+      "day": {
+        "subject": "Mañana: {event}",
+        "body": "Nos vemos mañana en {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Hoy: {event}",
+        "body": "¡Llegó el día! {event} empieza {when}. Ten tus entradas a mano."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Disparador: {trigger}",
+      "enable": "Activar",
+      "disable": "Desactivar",
+      "enableFor": "Activar {name}",
+      "disableFor": "Desactivar {name}",
+      "enabledSince": "Activo desde {when}",
+      "created": "Recorrido creado. Revisa los pasos y luego actívalo.",
+      "saved": "Recorrido guardado.",
+      "enabledDone": "Recorrido activado. Quienes entren a partir de ahora recibirán sus pasos.",
+      "disabledDone": "{count, plural, =0 {Recorrido desactivado.} one {Recorrido desactivado. Se canceló # paso en espera.} other {Recorrido desactivado. Se cancelaron # pasos en espera.}}",
+      "deleted": "Recorrido eliminado.",
+      "delete": "Eliminar",
+      "deleteFor": "Eliminar {name}",
+      "editOff": "Desactiva el recorrido para editar sus pasos.",
+      "stepsTitle": "Pasos",
+      "noSteps": "Todavía no hay pasos. Añade uno abajo.",
+      "stepCounts": "{done} hechos · {pending} en espera · {skipped} omitidos",
+      "errors": {
+        "no_steps": "Añade al menos un paso antes de activar el recorrido.",
+        "anchor_needs_trigger": "Un paso espera desde el disparador, pero este recorrido empieza a una hora relativa al evento."
+      }
+    },
+    "editor": {
+      "step": "Paso {n}",
+      "anchor": "Contado desde",
+      "anchors": {
+        "trigger": "Cuando entran",
+        "event_start": "El inicio del evento",
+        "event_end": "El final del evento"
+      },
+      "direction": "Antes o después",
+      "before": "Antes",
+      "after": "Después",
+      "days": "Días",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "atTime": "A una hora del día",
+      "atTimeHint": "Opcional, en la zona horaria del evento.",
+      "action": "Hacer",
+      "actions": {
+        "email": "Enviar un correo",
+        "sms": "Enviar un SMS",
+        "whatsapp": "Enviar un WhatsApp",
+        "push": "Enviar una notificación push",
+        "label": "Añadir una etiqueta",
+        "survey": "Invitar a la encuesta"
+      },
+      "condition": "Solo si",
+      "conditions": {
+        "none": "Siempre",
+        "checked_in": "Hizo check-in",
+        "not_checked_in": "No ha hecho check-in",
+        "has_seat": "Tiene asiento",
+        "no_seat": "No tiene asiento",
+        "answered_survey": "Respondió la encuesta",
+        "not_answered_survey": "No ha respondido la encuesta"
+      },
+      "subject": "Asunto",
+      "title": "Título",
+      "body": "Mensaje",
+      "placeholders": "Puedes usar {name}, {event} y {when}.",
+      "label": "Etiqueta",
+      "moveUp": "Subir",
+      "moveDown": "Bajar",
+      "remove": "Quitar",
+      "moveUpFor": "Subir el paso {n}",
+      "moveDownFor": "Bajar el paso {n}",
+      "removeFor": "Quitar el paso {n}",
+      "add": "Añadir paso",
+      "max": "Un recorrido tiene como máximo {max} pasos.",
+      "save": "Guardar recorrido",
+      "errors": {
+        "required": "Completa este campo.",
+        "anchor": "Este recorrido no tiene momento de entrada: cuenta desde el inicio o el final del evento.",
+        "direction": "Los días y las horas deben ir en la misma dirección.",
+        "offset": "Revisa el número de días.",
+        "step": "Revisa el paso {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "De inmediato",
+      "afterTrigger": "{offset} después de entrar",
+      "atStart": "Cuando empieza el evento",
+      "beforeStart": "{offset} antes de que empiece el evento",
+      "afterStart": "{offset} después de que empiece el evento",
+      "atEnd": "Cuando termina el evento",
+      "beforeEnd": "{offset} antes de que termine el evento",
+      "afterEnd": "{offset} después de que termine el evento",
+      "dayTrigger": "{dir, select, same {El día en que entran} other {{days, plural, one {# día después de entrar} other {# días después de entrar}}}}, a las {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# día antes del día del evento} other {# días antes del día del evento}}} after {{days, plural, one {# día después del día del evento} other {# días después del día del evento}}} other {El día del evento}}, a las {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# día antes del último día} other {# días antes del último día}}} after {{days, plural, one {# día después de que termine el evento} other {# días después de que termine el evento}}} other {El último día}}, a las {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} antes} other {{offset} después}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# día} other {# días}}",
+      "hours": "{count, plural, one {# hora} other {# horas}}",
+      "minutes": "{count, plural, one {# minuto} other {# minutos}}"
+    },
+    "history": {
+      "title": "Historial",
+      "caption": "Personas en este recorrido",
+      "person": "Persona",
+      "email": "Correo",
+      "unknown": "Persona desconocida",
+      "joined": "Entró",
+      "status": "Estado",
+      "progress": "Pasos",
+      "progressCounts": "{done} de {total} hechos",
+      "next": "Siguiente paso",
+      "searchLabel": "Buscar a una persona por nombre o correo",
+      "search": "Buscar",
+      "clear": "Borrar",
+      "empty": "Todavía no ha entrado nadie.",
+      "emptySearch": "Nadie coincide con «{q}».",
+      "older": "Personas anteriores",
+      "runStatus": {
+        "active": "En curso",
+        "completed": "Completado",
+        "cancelled": "Cancelado"
+      }
+    },
+    "run": {
+      "metaTitle": "Historial del recorrido",
+      "event": "Evento",
+      "trigger": "Disparador",
+      "caption": "Pasos de esta persona",
+      "step": "Paso",
+      "planned": "Previsto para",
+      "result": "Resultado",
+      "at": "Hecho el",
+      "actionStatus": {
+        "pending": "En espera",
+        "done": "Hecho",
+        "skipped": "Omitido",
+        "failed": "Fallido",
+        "cancelled": "Cancelado"
+      }
+    },
+    "outcomes": {
+      "queued": "Mensaje puesto en cola",
+      "already_queued": "Ya enviado",
+      "label_added": "Etiqueta añadida",
+      "invited": "Invitación a la encuesta enviada",
+      "too_late": "Su hora ya había pasado",
+      "condition_not_met": "No se cumplió la condición",
+      "no_phone": "Sin número de teléfono",
+      "no_device": "Sin dispositivo para push",
+      "no_address": "Sin correo electrónico",
+      "not_attending": "No está en la lista del evento",
+      "too_many_labels": "Demasiadas etiquetas",
+      "no_survey": "El evento no tiene encuesta",
+      "closed": "La encuesta está cerrada",
+      "no_questions": "La encuesta no tiene preguntas",
+      "already_invited": "Ya invitado",
+      "order_refunded": "Pedido reembolsado",
+      "ticket_cancelled": "Entrada cancelada",
+      "event_cancelled": "Evento cancelado",
+      "event_postponed": "Evento aplazado",
+      "journey_disabled": "Recorrido desactivado",
+      "step_removed": "Paso eliminado",
+      "run_ended": "Recorrido terminado",
+      "event_missing": "Evento no encontrado",
+      "error": "Falló tras varios intentos",
+      "other": "Otro"
     }
   },
   "refundOps": {

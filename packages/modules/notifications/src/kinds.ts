@@ -183,6 +183,15 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'title'],
   },
+  // Journeys (M3.7a): a step's message, written by the organizer (subject and body), sent on the
+  // step's own channel (email, SMS, WhatsApp or push) to one person about one event. Reminders:
+  // the person can switch them off, texts need informational consent, quiet hours apply.
+  'automations.message': {
+    category: 'reminders',
+    channels: ['email'],
+    urgent: false,
+    params: ['subject', 'body', 'name', 'eventName'],
+  },
   'sales.order_paid': {
     category: 'sales',
     channels: ['in_app', 'email', 'push'],

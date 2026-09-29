@@ -120,6 +120,9 @@
         "invite": "सर्वे का न्योता",
         "reminder": "सर्वे रिमाइंडर"
       },
+      "automations": {
+        "message": "जर्नी संदेश"
+      },
       "guest": {
         "checkout-code": "चेकआउट ईमेल कोड",
         "sign-in": "मेरे टिकट साइन-इन",
@@ -267,6 +270,7 @@
     "trackedLinks": "ट्रैक किए गए लिंक",
     "messagingHealth": "मैसेजिंग सीमाएँ",
     "audiences": "ऑडियंस",
+    "journeys": "जर्नी",
     "refundRequests": "रिफ़ंड अनुरोध"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "अज्ञात (आयातित)",
         "none": "नहीं दी गई"
       }
+    }
+  },
+  "journeys": {
+    "title": "जर्नी",
+    "description": "किसी एक इवेंट या सीरीज़ के लिए ऑटोमेशन: ट्रिगर किसी व्यक्ति को जर्नी में जोड़ता है, और हर चरण इंतज़ार करता है, एक वैकल्पिक शर्त जाँचता है और एक काम करता है।",
+    "new": "नई जर्नी",
+    "emptyTitle": "अभी कोई जर्नी नहीं है",
+    "emptyDescription": "विज़न जर्नी से शुरू करें: पुष्टि, ईमेल और SMS से रिमाइंडर, इवेंट के दिन पुश और सर्वे।",
+    "emptyReadOnly": "अभी तक किसी ने जर्नी सेट नहीं की है।",
+    "caption": "जर्नी",
+    "name": "नाम",
+    "scope": "इवेंट या सीरीज़",
+    "trigger": "ट्रिगर",
+    "status": "स्थिति",
+    "steps": "चरण",
+    "runs": "लोग",
+    "updated": "अपडेट किया गया",
+    "on": "चालू",
+    "off": "बंद",
+    "seriesScope": "सीरीज़: {name}",
+    "triggers": {
+      "order_paid": "टिकट खरीदता है",
+      "checked_in": "चेक-इन करता है",
+      "event_time": "इवेंट के सापेक्ष समय"
+    },
+    "newTitle": "नई जर्नी",
+    "newDescription": "इवेंट (या सीरीज़) चुनें और तय करें कि लोग कैसे जुड़ते हैं। चालू करने से पहले आप हर चरण बदल सकते हैं।",
+    "form": {
+      "name": "जर्नी का नाम",
+      "scope": "इवेंट या सीरीज़",
+      "pickScope": "कोई इवेंट या सीरीज़ चुनें",
+      "events": "इवेंट",
+      "series": "सीरीज़",
+      "eventOption": "{name} ({date})",
+      "trigger": "लोग तब जुड़ते हैं जब वे…",
+      "start": "यहाँ से शुरू करें",
+      "vision": "विज़न जर्नी",
+      "visionHint": "खरीद पर पुष्टि · 7 दिन पहले रिमाइंडर · एक दिन पहले SMS · इवेंट के दिन पुश · अगली सुबह सर्वे",
+      "blank": "खाली जर्नी",
+      "blankHint": "ट्रिगर चुनें और अपने चरण जोड़ें।",
+      "create": "जर्नी बनाएँ",
+      "errors": {
+        "name": "नाम दर्ज करें (120 अक्षरों तक)।",
+        "scope": "कोई इवेंट या सीरीज़ चुनें।"
+      }
+    },
+    "vision": {
+      "name": "विज़न जर्नी",
+      "confirmation": {
+        "subject": "आपकी जगह पक्की: {event}",
+        "body": "नमस्ते {name}, आपके ऑर्डर के लिए धन्यवाद। {when} को {event} में मिलते हैं।"
+      },
+      "week": {
+        "subject": "एक हफ़्ता बाकी: {event}",
+        "body": "{event} एक हफ़्ते बाद है ({when})। आपके टिकट पुष्टि ईमेल में हैं।"
+      },
+      "day": {
+        "subject": "कल: {event}",
+        "body": "कल {event} में मिलते हैं, {when}।"
+      },
+      "eventDay": {
+        "subject": "आज: {event}",
+        "body": "आज का दिन आ गया! {event} {when} शुरू होगा। अपने टिकट तैयार रखें।"
+      }
+    },
+    "detail": {
+      "summary": "{scope} · ट्रिगर: {trigger}",
+      "enable": "चालू करें",
+      "disable": "बंद करें",
+      "enableFor": "{name} चालू करें",
+      "disableFor": "{name} बंद करें",
+      "enabledSince": "{when} से चालू",
+      "created": "जर्नी बन गई। चरण जाँचें, फिर इसे चालू करें।",
+      "saved": "जर्नी सहेजी गई।",
+      "enabledDone": "जर्नी चालू हो गई। अब से जुड़ने वालों को इसके चरण मिलेंगे।",
+      "disabledDone": "{count, plural, =0 {जर्नी बंद हो गई।} one {जर्नी बंद हो गई। # प्रतीक्षारत चरण रद्द हुआ।} other {जर्नी बंद हो गई। # प्रतीक्षारत चरण रद्द हुए।}}",
+      "deleted": "जर्नी हटा दी गई।",
+      "delete": "हटाएँ",
+      "deleteFor": "{name} हटाएँ",
+      "editOff": "चरण बदलने के लिए जर्नी बंद करें।",
+      "stepsTitle": "चरण",
+      "noSteps": "अभी कोई चरण नहीं है। नीचे एक जोड़ें।",
+      "stepCounts": "{done} पूरे · {pending} प्रतीक्षारत · {skipped} छोड़े गए",
+      "errors": {
+        "no_steps": "जर्नी चालू करने से पहले कम से कम एक चरण जोड़ें।",
+        "anchor_needs_trigger": "एक चरण ट्रिगर से गिना जाता है, लेकिन यह जर्नी इवेंट के सापेक्ष समय पर शुरू होती है।"
+      }
+    },
+    "editor": {
+      "step": "चरण {n}",
+      "anchor": "यहाँ से गिनें",
+      "anchors": {
+        "trigger": "जुड़ने का समय",
+        "event_start": "इवेंट की शुरुआत",
+        "event_end": "इवेंट का अंत"
+      },
+      "direction": "पहले या बाद",
+      "before": "पहले",
+      "after": "बाद",
+      "days": "दिन",
+      "hours": "घंटे",
+      "minutes": "मिनट",
+      "atTime": "दिन के किसी समय पर",
+      "atTimeHint": "वैकल्पिक, इवेंट के टाइम ज़ोन में।",
+      "action": "काम",
+      "actions": {
+        "email": "ईमेल भेजें",
+        "sms": "SMS भेजें",
+        "whatsapp": "WhatsApp संदेश भेजें",
+        "push": "पुश सूचना भेजें",
+        "label": "लेबल जोड़ें",
+        "survey": "सर्वे के लिए आमंत्रित करें"
+      },
+      "condition": "केवल तब जब",
+      "conditions": {
+        "none": "हमेशा",
+        "checked_in": "चेक-इन किया है",
+        "not_checked_in": "चेक-इन नहीं किया है",
+        "has_seat": "सीट है",
+        "no_seat": "सीट नहीं है",
+        "answered_survey": "सर्वे का जवाब दिया है",
+        "not_answered_survey": "सर्वे का जवाब नहीं दिया है"
+      },
+      "subject": "विषय",
+      "title": "शीर्षक",
+      "body": "संदेश",
+      "placeholders": "आप {name}, {event} और {when} इस्तेमाल कर सकते हैं।",
+      "label": "लेबल",
+      "moveUp": "ऊपर ले जाएँ",
+      "moveDown": "नीचे ले जाएँ",
+      "remove": "हटाएँ",
+      "moveUpFor": "चरण {n} को ऊपर ले जाएँ",
+      "moveDownFor": "चरण {n} को नीचे ले जाएँ",
+      "removeFor": "चरण {n} हटाएँ",
+      "add": "चरण जोड़ें",
+      "max": "एक जर्नी में अधिकतम {max} चरण होते हैं।",
+      "save": "जर्नी सहेजें",
+      "errors": {
+        "required": "इसे भरें।",
+        "anchor": "इस जर्नी में जुड़ने का कोई समय नहीं है: इवेंट की शुरुआत या अंत से गिनें।",
+        "direction": "दिन और घंटे एक ही दिशा में होने चाहिए।",
+        "offset": "दिनों की संख्या जाँचें।",
+        "step": "चरण {n} जाँचें।"
+      }
+    },
+    "wait": {
+      "atTrigger": "तुरंत",
+      "afterTrigger": "जुड़ने के {offset} बाद",
+      "atStart": "इवेंट शुरू होने पर",
+      "beforeStart": "इवेंट शुरू होने से {offset} पहले",
+      "afterStart": "इवेंट शुरू होने के {offset} बाद",
+      "atEnd": "इवेंट ख़त्म होने पर",
+      "beforeEnd": "इवेंट ख़त्म होने से {offset} पहले",
+      "afterEnd": "इवेंट ख़त्म होने के {offset} बाद",
+      "dayTrigger": "{dir, select, same {जुड़ने वाले दिन} other {जुड़ने के {days, plural, one {# दिन} other {# दिन}} बाद}}, {time} बजे",
+      "dayStart": "{dir, select, before {इवेंट के दिन से {days, plural, one {# दिन} other {# दिन}} पहले} after {इवेंट के दिन के {days, plural, one {# दिन} other {# दिन}} बाद} other {इवेंट वाले दिन}}, {time} बजे",
+      "dayEnd": "{dir, select, before {आख़िरी दिन से {days, plural, one {# दिन} other {# दिन}} पहले} after {इवेंट ख़त्म होने के {days, plural, one {# दिन} other {# दिन}} बाद} other {आख़िरी दिन}}, {time} बजे",
+      "thenOffset": "{base}, {dir, select, before {{offset} पहले} other {{offset} बाद}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# दिन} other {# दिन}}",
+      "hours": "{count, plural, one {# घंटा} other {# घंटे}}",
+      "minutes": "{count, plural, one {# मिनट} other {# मिनट}}"
+    },
+    "history": {
+      "title": "इतिहास",
+      "caption": "इस जर्नी के लोग",
+      "person": "व्यक्ति",
+      "email": "ईमेल",
+      "unknown": "अज्ञात व्यक्ति",
+      "joined": "जुड़े",
+      "status": "स्थिति",
+      "progress": "चरण",
+      "progressCounts": "{total} में से {done} पूरे",
+      "next": "अगला चरण",
+      "searchLabel": "नाम या ईमेल से व्यक्ति खोजें",
+      "search": "खोजें",
+      "clear": "साफ़ करें",
+      "empty": "अभी तक कोई नहीं जुड़ा है।",
+      "emptySearch": "“{q}” से कोई मेल नहीं खाता।",
+      "older": "पहले के लोग",
+      "runStatus": {
+        "active": "जारी",
+        "completed": "पूरी हुई",
+        "cancelled": "रद्द"
+      }
+    },
+    "run": {
+      "metaTitle": "जर्नी का इतिहास",
+      "event": "इवेंट",
+      "trigger": "ट्रिगर",
+      "caption": "इस व्यक्ति के चरण",
+      "step": "चरण",
+      "planned": "निर्धारित समय",
+      "result": "नतीजा",
+      "at": "पूरा हुआ",
+      "actionStatus": {
+        "pending": "प्रतीक्षारत",
+        "done": "पूरा",
+        "skipped": "छोड़ा गया",
+        "failed": "विफल",
+        "cancelled": "रद्द"
+      }
+    },
+    "outcomes": {
+      "queued": "संदेश कतार में डाला गया",
+      "already_queued": "पहले ही भेजा जा चुका",
+      "label_added": "लेबल जोड़ा गया",
+      "invited": "सर्वे का आमंत्रण भेजा गया",
+      "too_late": "इसका समय निकल चुका था",
+      "condition_not_met": "शर्त पूरी नहीं हुई",
+      "no_phone": "फ़ोन नंबर नहीं है",
+      "no_device": "पुश के लिए कोई डिवाइस नहीं",
+      "no_address": "ईमेल पता नहीं है",
+      "not_attending": "इवेंट की सूची में नहीं",
+      "too_many_labels": "बहुत ज़्यादा लेबल",
+      "no_survey": "इवेंट का कोई सर्वे नहीं है",
+      "closed": "सर्वे बंद है",
+      "no_questions": "सर्वे में कोई प्रश्न नहीं है",
+      "already_invited": "पहले ही आमंत्रित",
+      "order_refunded": "ऑर्डर का रिफ़ंड हुआ",
+      "ticket_cancelled": "टिकट रद्द हुआ",
+      "event_cancelled": "इवेंट रद्द हुआ",
+      "event_postponed": "इवेंट स्थगित हुआ",
+      "journey_disabled": "जर्नी बंद की गई",
+      "step_removed": "चरण हटाया गया",
+      "run_ended": "जर्नी समाप्त हुई",
+      "event_missing": "इवेंट नहीं मिला",
+      "error": "कई कोशिशों के बाद विफल",
+      "other": "अन्य"
     }
   },
   "refundOps": {

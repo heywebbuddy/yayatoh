@@ -1,6 +1,7 @@
 import 'server-only';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
+import { journeySubscribers, runDueActions } from '@yayatoh/automations';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
@@ -31,9 +32,9 @@ import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yaya
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
-// The composition root registers the key vault (message params and manage links are encrypted).
-import './ports.ts';
 import { deliveryAdapter, ingestDeliveryEvents } from './delivery-webhooks.ts';
+// The composition root registers the key vault (message params and manage links are encrypted).
+import { ports } from './ports.ts';
 import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
@@ -71,6 +72,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     fraudSignalAlerts({ notifier }),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
+    // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
+    ...journeySubscribers(),
   ];
 }
 
@@ -90,14 +93,19 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
   let consumed = 0;
   // Subscribers may emit events other subscribers consume (fraud signals → alerts, M1.9e): run
   // until a pass consumes nothing new (bounded).
-  for (let pass = 0; pass < 3; pass++) {
+  let journeySteps = 0;
+  for (let pass = 0; pass < 4; pass++) {
     const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
     let fresh = 0;
     for (const event of events) {
       for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
     }
     consumed += fresh;
-    if (fresh === 0) break;
+    // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
+    // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
+    const steps = await runDueActions(orgId, { notifier }, ports);
+    journeySteps += steps.done + steps.skipped + steps.failed;
+    if (fresh === 0 && steps.done === 0) break;
   }
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
@@ -126,5 +134,5 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
       const verified = adapter.verify(d.body, new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }));
       reports += (await ingestDeliveryEvents(adapter.name, verified)).recorded;
     }
-  return { consumed, sent, reports };
+  return { consumed, journeySteps, sent, reports };
 }

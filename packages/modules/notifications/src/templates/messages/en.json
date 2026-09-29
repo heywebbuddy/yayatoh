@@ -111,6 +111,10 @@
       "intro": "You haven't answered yet: {org} would still like to hear how {eventName} went for you.",
       "cta": "Answer the survey"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "About {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} is your code to confirm your email",
       "intro": "Enter {code} to confirm your email and finish your order with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."

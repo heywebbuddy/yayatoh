@@ -40,6 +40,7 @@ import {
   Ticket,
   Undo2,
   Users,
+  Workflow,
 } from 'lucide-react';
 
 /** Icon names used by the profiles registry (packages/platform/src/profiles). */
@@ -52,6 +53,7 @@ const ICONS: Record<string, LucideIcon> = {
   ticket: Ticket,
   armchair: Armchair,
   megaphone: Megaphone,
+  workflow: Workflow,
   scan: ScanLine,
   library: Library,
   clipboard: ClipboardList,

@@ -150,6 +150,12 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     timeZone: 'America/Chicago',
   },
   'tenancy.org-status': { url: 'https://app.yayatoh.test/o/lakeside-events', status: 'suspended' },
+  'automations.message': {
+    subject: 'One week to go',
+    body: 'Lakeside Jazz Night is next Friday. Doors open at 7 pm.',
+    name: 'Amina Diallo',
+    eventName: 'Lakeside Jazz Night',
+  },
   'marketing.message': {
     subject: 'Early-bird tickets are back',
     body: 'Save 20% on the autumn season until Friday.',

@@ -120,6 +120,9 @@
         "invite": "دعوة إلى استبيان",
         "reminder": "تذكير بالاستبيان"
       },
+      "automations": {
+        "message": "رسالة مسار"
+      },
       "guest": {
         "checkout-code": "رمز البريد عند الدفع",
         "sign-in": "تسجيل الدخول إلى تذاكري",
@@ -267,6 +270,7 @@
     "trackedLinks": "الروابط المتتبَّعة",
     "messagingHealth": "حدود المراسلة",
     "audiences": "الجماهير",
+    "journeys": "المسارات",
     "refundRequests": "طلبات الاسترداد"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "غير معروفة (مستوردة)",
         "none": "غير ممنوحة"
       }
+    }
+  },
+  "journeys": {
+    "title": "المسارات",
+    "description": "أتمتة لفعالية واحدة أو سلسلة: يضيف المُشغِّل الشخص إلى المسار، وكل خطوة تنتظر ثم تتحقق من شرط اختياري وتنفّذ إجراءً واحدًا.",
+    "new": "مسار جديد",
+    "emptyTitle": "لا توجد مسارات بعد",
+    "emptyDescription": "ابدأ بمسار الرؤية: تأكيد، وتذكيرات بالبريد والرسائل النصية، وإشعار في يوم الفعالية، ثم الاستبيان.",
+    "emptyReadOnly": "لم يُعِدّ أحد مسارًا بعد.",
+    "caption": "المسارات",
+    "name": "الاسم",
+    "scope": "الفعالية أو السلسلة",
+    "trigger": "المُشغِّل",
+    "status": "الحالة",
+    "steps": "الخطوات",
+    "runs": "الأشخاص",
+    "updated": "آخر تحديث",
+    "on": "مفعّل",
+    "off": "متوقف",
+    "seriesScope": "السلسلة: {name}",
+    "triggers": {
+      "order_paid": "يشتري تذكرة",
+      "checked_in": "يسجّل الدخول عند البوابة",
+      "event_time": "وقت نسبةً إلى الفعالية"
+    },
+    "newTitle": "مسار جديد",
+    "newDescription": "اختر الفعالية (أو السلسلة) وطريقة دخول الأشخاص. يمكنك تعديل كل خطوة قبل تفعيله.",
+    "form": {
+      "name": "اسم المسار",
+      "scope": "الفعالية أو السلسلة",
+      "pickScope": "اختر فعالية أو سلسلة",
+      "events": "الفعاليات",
+      "series": "السلاسل",
+      "eventOption": "{name} ({date})",
+      "trigger": "يدخل الأشخاص المسار عندما…",
+      "start": "البدء من",
+      "vision": "مسار الرؤية",
+      "visionHint": "تأكيد عند الشراء · تذكير قبل ٧ أيام · رسالة نصية في اليوم السابق · إشعار في يوم الفعالية · استبيان في صباح اليوم التالي",
+      "blank": "مسار فارغ",
+      "blankHint": "اختر المُشغِّل وأضف خطواتك.",
+      "create": "إنشاء المسار",
+      "errors": {
+        "name": "أدخل اسمًا (حتى ١٢٠ حرفًا).",
+        "scope": "اختر فعالية أو سلسلة."
+      }
+    },
+    "vision": {
+      "name": "مسار الرؤية",
+      "confirmation": {
+        "subject": "تم تأكيد حضورك: {event}",
+        "body": "مرحبًا {name}، شكرًا على طلبك. نراك في {event} في {when}."
+      },
+      "week": {
+        "subject": "بقي أسبوع: {event}",
+        "body": "{event} بعد أسبوع ({when}). تذاكرك في رسالة التأكيد."
+      },
+      "day": {
+        "subject": "غدًا: {event}",
+        "body": "نراك غدًا في {event}، {when}."
+      },
+      "eventDay": {
+        "subject": "اليوم: {event}",
+        "body": "لقد حان اليوم! يبدأ {event} {when}. جهّز تذاكرك."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · المُشغِّل: {trigger}",
+      "enable": "تفعيل",
+      "disable": "إيقاف",
+      "enableFor": "تفعيل {name}",
+      "disableFor": "إيقاف {name}",
+      "enabledSince": "مفعّل منذ {when}",
+      "created": "تم إنشاء المسار. راجع الخطوات ثم فعّله.",
+      "saved": "تم حفظ المسار.",
+      "enabledDone": "تم تفعيل المسار. من يدخل من الآن يتلقى خطواته.",
+      "disabledDone": "{count, plural, =0 {تم إيقاف المسار.} zero {تم إيقاف المسار.} one {تم إيقاف المسار. أُلغيت خطوة منتظرة واحدة.} two {تم إيقاف المسار. أُلغيت خطوتان منتظرتان.} few {تم إيقاف المسار. أُلغيت # خطوات منتظرة.} many {تم إيقاف المسار. أُلغيت # خطوة منتظرة.} other {تم إيقاف المسار. أُلغيت # خطوة منتظرة.}}",
+      "deleted": "تم حذف المسار.",
+      "delete": "حذف",
+      "deleteFor": "حذف {name}",
+      "editOff": "أوقف المسار لتعديل خطواته.",
+      "stepsTitle": "الخطوات",
+      "noSteps": "لا توجد خطوات بعد. أضف خطوة أدناه.",
+      "stepCounts": "منفّذة: {done} · منتظرة: {pending} · متجاوزة: {skipped}",
+      "errors": {
+        "no_steps": "أضف خطوة واحدة على الأقل قبل تفعيل المسار.",
+        "anchor_needs_trigger": "تنتظر إحدى الخطوات من لحظة المُشغِّل، لكن هذا المسار يبدأ في وقت نسبةً إلى الفعالية."
+      }
+    },
+    "editor": {
+      "step": "الخطوة {n}",
+      "anchor": "يُحسب من",
+      "anchors": {
+        "trigger": "لحظة الدخول",
+        "event_start": "بداية الفعالية",
+        "event_end": "نهاية الفعالية"
+      },
+      "direction": "قبل أو بعد",
+      "before": "قبل",
+      "after": "بعد",
+      "days": "الأيام",
+      "hours": "الساعات",
+      "minutes": "الدقائق",
+      "atTime": "في وقت محدد من اليوم",
+      "atTimeHint": "اختياري، بتوقيت الفعالية.",
+      "action": "الإجراء",
+      "actions": {
+        "email": "إرسال بريد إلكتروني",
+        "sms": "إرسال رسالة نصية",
+        "whatsapp": "إرسال رسالة واتساب",
+        "push": "إرسال إشعار",
+        "label": "إضافة وسم",
+        "survey": "دعوة إلى الاستبيان"
+      },
+      "condition": "فقط إذا",
+      "conditions": {
+        "none": "دائمًا",
+        "checked_in": "سجّل الدخول",
+        "not_checked_in": "لم يسجّل الدخول بعد",
+        "has_seat": "لديه مقعد",
+        "no_seat": "ليس لديه مقعد",
+        "answered_survey": "أجاب عن الاستبيان",
+        "not_answered_survey": "لم يُجب عن الاستبيان"
+      },
+      "subject": "الموضوع",
+      "title": "العنوان",
+      "body": "الرسالة",
+      "placeholders": "يمكنك استخدام {name} و{event} و{when}.",
+      "label": "الوسم",
+      "moveUp": "نقل لأعلى",
+      "moveDown": "نقل لأسفل",
+      "remove": "إزالة",
+      "moveUpFor": "نقل الخطوة {n} لأعلى",
+      "moveDownFor": "نقل الخطوة {n} لأسفل",
+      "removeFor": "إزالة الخطوة {n}",
+      "add": "إضافة خطوة",
+      "max": "يضم المسار {max} خطوة على الأكثر.",
+      "save": "حفظ المسار",
+      "errors": {
+        "required": "املأ هذا الحقل.",
+        "anchor": "ليس لهذا المسار لحظة دخول: احسب من بداية الفعالية أو نهايتها.",
+        "direction": "يجب أن تكون الأيام والساعات في الاتجاه نفسه.",
+        "offset": "تحقق من عدد الأيام.",
+        "step": "تحقق من الخطوة {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "فورًا",
+      "afterTrigger": "بعد {offset} من الدخول",
+      "atStart": "عند بدء الفعالية",
+      "beforeStart": "قبل بدء الفعالية بـ{offset}",
+      "afterStart": "بعد بدء الفعالية بـ{offset}",
+      "atEnd": "عند انتهاء الفعالية",
+      "beforeEnd": "قبل انتهاء الفعالية بـ{offset}",
+      "afterEnd": "بعد انتهاء الفعالية بـ{offset}",
+      "dayTrigger": "{dir, select, same {في يوم الدخول} other {بعد {days, plural, zero {٠ يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}} من الدخول}}، الساعة {time}",
+      "dayStart": "{dir, select, before {قبل يوم الفعالية بـ{days, plural, zero {٠ يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}} after {بعد يوم الفعالية بـ{days, plural, zero {٠ يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}} other {في يوم الفعالية}}، الساعة {time}",
+      "dayEnd": "{dir, select, before {قبل اليوم الأخير بـ{days, plural, zero {٠ يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}} after {بعد انتهاء الفعالية بـ{days, plural, zero {٠ يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}} other {في اليوم الأخير}}، الساعة {time}",
+      "thenOffset": "{base}، {dir, select, before {قبلها بـ{offset}} other {بعدها بـ{offset}}}"
+    },
+    "duration": {
+      "days": "{count, plural, zero {٠ يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}",
+      "hours": "{count, plural, zero {٠ ساعة} one {ساعة واحدة} two {ساعتان} few {# ساعات} many {# ساعة} other {# ساعة}}",
+      "minutes": "{count, plural, zero {٠ دقيقة} one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}}"
+    },
+    "history": {
+      "title": "السجل",
+      "caption": "الأشخاص في هذا المسار",
+      "person": "الشخص",
+      "email": "البريد الإلكتروني",
+      "unknown": "شخص غير معروف",
+      "joined": "دخل في",
+      "status": "الحالة",
+      "progress": "الخطوات",
+      "progressCounts": "{done} من {total} منفّذة",
+      "next": "الخطوة التالية",
+      "searchLabel": "ابحث عن شخص بالاسم أو البريد الإلكتروني",
+      "search": "بحث",
+      "clear": "مسح",
+      "empty": "لم يدخل أحد بعد.",
+      "emptySearch": "لا أحد يطابق «{q}».",
+      "older": "أشخاص سابقون",
+      "runStatus": {
+        "active": "قيد التنفيذ",
+        "completed": "مكتمل",
+        "cancelled": "ملغى"
+      }
+    },
+    "run": {
+      "metaTitle": "سجل المسار",
+      "event": "الفعالية",
+      "trigger": "المُشغِّل",
+      "caption": "خطوات هذا الشخص",
+      "step": "الخطوة",
+      "planned": "مجدولة في",
+      "result": "النتيجة",
+      "at": "نُفّذت في",
+      "actionStatus": {
+        "pending": "منتظرة",
+        "done": "منفّذة",
+        "skipped": "متجاوزة",
+        "failed": "فشلت",
+        "cancelled": "ملغاة"
+      }
+    },
+    "outcomes": {
+      "queued": "أُضيفت الرسالة إلى قائمة الإرسال",
+      "already_queued": "أُرسلت من قبل",
+      "label_added": "أُضيف الوسم",
+      "invited": "أُرسلت دعوة الاستبيان",
+      "too_late": "كان موعدها قد فات",
+      "condition_not_met": "الشرط غير متحقق",
+      "no_phone": "لا يوجد رقم هاتف",
+      "no_device": "لا يوجد جهاز للإشعارات",
+      "no_address": "لا يوجد بريد إلكتروني",
+      "not_attending": "ليس في قائمة الفعالية",
+      "too_many_labels": "وسوم كثيرة جدًا",
+      "no_survey": "لا يوجد استبيان للفعالية",
+      "closed": "الاستبيان مغلق",
+      "no_questions": "لا توجد أسئلة في الاستبيان",
+      "already_invited": "تمت دعوته من قبل",
+      "order_refunded": "استُرد الطلب",
+      "ticket_cancelled": "أُلغيت التذكرة",
+      "event_cancelled": "أُلغيت الفعالية",
+      "event_postponed": "أُجّلت الفعالية",
+      "journey_disabled": "أُوقف المسار",
+      "step_removed": "أُزيلت الخطوة",
+      "run_ended": "انتهى المسار",
+      "event_missing": "لم يُعثر على الفعالية",
+      "error": "فشلت بعد عدة محاولات",
+      "other": "أخرى"
     }
   },
   "refundOps": {

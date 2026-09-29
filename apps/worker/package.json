@@ -20,6 +20,7 @@
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
+    "@yayatoh/automations": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/db": "workspace:*",

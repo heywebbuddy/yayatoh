@@ -120,6 +120,9 @@
         "invite": "問卷邀請",
         "reminder": "問卷提醒"
       },
+      "automations": {
+        "message": "旅程訊息"
+      },
       "guest": {
         "checkout-code": "結帳電子郵件驗證碼",
         "sign-in": "我的票券登入",
@@ -267,6 +270,7 @@
     "trackedLinks": "追蹤連結",
     "messagingHealth": "訊息傳送限制",
     "audiences": "受眾",
+    "journeys": "旅程",
     "refundRequests": "退款申請"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "未知（匯入）",
         "none": "未同意"
       }
+    }
+  },
+  "journeys": {
+    "title": "旅程",
+    "description": "針對一個活動或系列的自動化：觸發條件將某人加入旅程，每個步驟等待、檢查選填條件並執行一項操作。",
+    "new": "新建旅程",
+    "emptyTitle": "還沒有旅程",
+    "emptyDescription": "從願景旅程開始：確認郵件、郵件和簡訊提醒、活動當天推播以及問卷。",
+    "emptyReadOnly": "還沒有人設定旅程。",
+    "caption": "旅程",
+    "name": "名稱",
+    "scope": "活動或系列",
+    "trigger": "觸發條件",
+    "status": "狀態",
+    "steps": "步驟",
+    "runs": "人數",
+    "updated": "更新時間",
+    "on": "已開啟",
+    "off": "已關閉",
+    "seriesScope": "系列：{name}",
+    "triggers": {
+      "order_paid": "購買門票",
+      "checked_in": "簽到入場",
+      "event_time": "相對活動的時間"
+    },
+    "newTitle": "新建旅程",
+    "newDescription": "選擇活動（或系列）以及加入方式。開啟前可以編輯每個步驟。",
+    "form": {
+      "name": "旅程名稱",
+      "scope": "活動或系列",
+      "pickScope": "選擇活動或系列",
+      "events": "活動",
+      "series": "系列",
+      "eventOption": "{name}（{date}）",
+      "trigger": "加入時機",
+      "start": "起點",
+      "vision": "願景旅程",
+      "visionHint": "購買時確認 · 提前 7 天提醒 · 前一天簡訊 · 活動當天推播 · 次日上午問卷",
+      "blank": "空白旅程",
+      "blankHint": "選擇觸發條件並新增自己的步驟。",
+      "create": "建立旅程",
+      "errors": {
+        "name": "請輸入名稱（最多 120 個字元）。",
+        "scope": "請選擇活動或系列。"
+      }
+    },
+    "vision": {
+      "name": "願景旅程",
+      "confirmation": {
+        "subject": "報名成功：{event}",
+        "body": "{name}，您好！感謝您的訂單。{when}，{event} 見。"
+      },
+      "week": {
+        "subject": "還有一週：{event}",
+        "body": "{event} 還有一週（{when}）。門票在確認郵件中。"
+      },
+      "day": {
+        "subject": "明天：{event}",
+        "body": "明天 {event} 見，{when}。"
+      },
+      "eventDay": {
+        "subject": "今天：{event}",
+        "body": "就是今天！{event} 將於 {when} 開始。請準備好門票。"
+      }
+    },
+    "detail": {
+      "summary": "{scope} · 觸發條件：{trigger}",
+      "enable": "開啟",
+      "disable": "關閉",
+      "enableFor": "開啟 {name}",
+      "disableFor": "關閉 {name}",
+      "enabledSince": "自 {when} 起開啟",
+      "created": "旅程已建立。請檢查步驟，然後開啟。",
+      "saved": "旅程已儲存。",
+      "enabledDone": "旅程已開啟。從現在起加入的人會收到其步驟。",
+      "disabledDone": "{count, plural, =0 {旅程已關閉。} other {旅程已關閉。已取消 # 個等待中的步驟。}}",
+      "deleted": "旅程已刪除。",
+      "delete": "刪除",
+      "deleteFor": "刪除 {name}",
+      "editOff": "關閉旅程後才能編輯步驟。",
+      "stepsTitle": "步驟",
+      "noSteps": "還沒有步驟。請在下方新增。",
+      "stepCounts": "已完成 {done} · 等待中 {pending} · 已略過 {skipped}",
+      "errors": {
+        "no_steps": "開啟旅程前請至少新增一個步驟。",
+        "anchor_needs_trigger": "有步驟從觸發時刻開始等待，但此旅程在相對活動的時間開始。"
+      }
+    },
+    "editor": {
+      "step": "步驟 {n}",
+      "anchor": "計時起點",
+      "anchors": {
+        "trigger": "加入時",
+        "event_start": "活動開始",
+        "event_end": "活動結束"
+      },
+      "direction": "之前或之後",
+      "before": "之前",
+      "after": "之後",
+      "days": "天",
+      "hours": "小時",
+      "minutes": "分鐘",
+      "atTime": "在某個時刻",
+      "atTimeHint": "選填，依活動時區。",
+      "action": "操作",
+      "actions": {
+        "email": "傳送郵件",
+        "sms": "傳送簡訊",
+        "whatsapp": "傳送 WhatsApp 訊息",
+        "push": "傳送推播通知",
+        "label": "新增標籤",
+        "survey": "邀請填寫問卷"
+      },
+      "condition": "僅當",
+      "conditions": {
+        "none": "一律",
+        "checked_in": "已簽到",
+        "not_checked_in": "未簽到",
+        "has_seat": "有座位",
+        "no_seat": "無座位",
+        "answered_survey": "已填寫問卷",
+        "not_answered_survey": "未填寫問卷"
+      },
+      "subject": "主旨",
+      "title": "標題",
+      "body": "訊息",
+      "placeholders": "可以使用 {name}、{event} 和 {when}。",
+      "label": "標籤",
+      "moveUp": "上移",
+      "moveDown": "下移",
+      "remove": "移除",
+      "moveUpFor": "上移步驟 {n}",
+      "moveDownFor": "下移步驟 {n}",
+      "removeFor": "移除步驟 {n}",
+      "add": "新增步驟",
+      "max": "一個旅程最多 {max} 個步驟。",
+      "save": "儲存旅程",
+      "errors": {
+        "required": "請填寫此項。",
+        "anchor": "此旅程沒有加入時刻：請從活動開始或結束計時。",
+        "direction": "天數和小時必須同一方向。",
+        "offset": "請檢查天數。",
+        "step": "請檢查步驟 {n}。"
+      }
+    },
+    "wait": {
+      "atTrigger": "立即",
+      "afterTrigger": "加入後 {offset}",
+      "atStart": "活動開始時",
+      "beforeStart": "活動開始前 {offset}",
+      "afterStart": "活動開始後 {offset}",
+      "atEnd": "活動結束時",
+      "beforeEnd": "活動結束前 {offset}",
+      "afterEnd": "活動結束後 {offset}",
+      "dayTrigger": "{dir, select, same {加入當天} other {加入後第 {days} 天}} {time}",
+      "dayStart": "{dir, select, before {活動日前 {days} 天} after {活動日後 {days} 天} other {活動當天}} {time}",
+      "dayEnd": "{dir, select, before {最後一天前 {days} 天} after {活動結束後 {days} 天} other {最後一天}} {time}",
+      "thenOffset": "{base}，{dir, select, before {提前 {offset}} other {延後 {offset}}}"
+    },
+    "duration": {
+      "days": "{count, plural, other {# 天}}",
+      "hours": "{count, plural, other {# 小時}}",
+      "minutes": "{count, plural, other {# 分鐘}}"
+    },
+    "history": {
+      "title": "執行紀錄",
+      "caption": "此旅程中的人",
+      "person": "人員",
+      "email": "電子郵件",
+      "unknown": "未知人員",
+      "joined": "加入時間",
+      "status": "狀態",
+      "progress": "步驟",
+      "progressCounts": "已完成 {done}/{total}",
+      "next": "下一步",
+      "searchLabel": "依姓名或電子郵件尋找人員",
+      "search": "搜尋",
+      "clear": "清除",
+      "empty": "還沒有人加入。",
+      "emptySearch": "沒有人符合“{q}”。",
+      "older": "更早的人員",
+      "runStatus": {
+        "active": "進行中",
+        "completed": "已完成",
+        "cancelled": "已取消"
+      }
+    },
+    "run": {
+      "metaTitle": "旅程紀錄",
+      "event": "活動",
+      "trigger": "觸發條件",
+      "caption": "此人的步驟",
+      "step": "步驟",
+      "planned": "計畫時間",
+      "result": "結果",
+      "at": "完成時間",
+      "actionStatus": {
+        "pending": "等待中",
+        "done": "已完成",
+        "skipped": "已略過",
+        "failed": "失敗",
+        "cancelled": "已取消"
+      }
+    },
+    "outcomes": {
+      "queued": "訊息已加入傳送佇列",
+      "already_queued": "已傳送過",
+      "label_added": "已新增標籤",
+      "invited": "已傳送問卷邀請",
+      "too_late": "時間已過",
+      "condition_not_met": "條件不符合",
+      "no_phone": "沒有電話號碼",
+      "no_device": "沒有可推播的設備",
+      "no_address": "沒有電子郵件地址",
+      "not_attending": "不在活動名單中",
+      "too_many_labels": "標籤過多",
+      "no_survey": "活動沒有問卷",
+      "closed": "問卷已關閉",
+      "no_questions": "問卷沒有問題",
+      "already_invited": "已邀請過",
+      "order_refunded": "訂單已退款",
+      "ticket_cancelled": "門票已取消",
+      "event_cancelled": "活動已取消",
+      "event_postponed": "活動已延期",
+      "journey_disabled": "旅程已關閉",
+      "step_removed": "步驟已移除",
+      "run_ended": "旅程已結束",
+      "event_missing": "找不到活動",
+      "error": "多次尝試後失敗",
+      "other": "其他"
     }
   },
   "refundOps": {

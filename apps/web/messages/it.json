@@ -120,6 +120,9 @@
         "invite": "Invito al sondaggio",
         "reminder": "Promemoria del sondaggio"
       },
+      "automations": {
+        "message": "Messaggio del percorso"
+      },
       "guest": {
         "checkout-code": "Codice email al pagamento",
         "sign-in": "Accesso a I miei biglietti",
@@ -267,6 +270,7 @@
     "trackedLinks": "Link tracciati",
     "messagingHealth": "Limiti di invio",
     "audiences": "Pubblici",
+    "journeys": "Percorsi",
     "refundRequests": "Richieste di rimborso"
   },
   "vocab": {
@@ -5006,6 +5010,236 @@
         "unknown_legacy": "Sconosciuto (importato)",
         "none": "Non dato"
       }
+    }
+  },
+  "journeys": {
+    "title": "Percorsi",
+    "description": "Automazioni per un evento o una serie: un attivatore inserisce una persona nel percorso e ogni passaggio attende, verifica una condizione facoltativa e fa una cosa.",
+    "new": "Nuovo percorso",
+    "emptyTitle": "Ancora nessun percorso",
+    "emptyDescription": "Parti dal percorso della visione: una conferma, promemoria via email e SMS, una notifica push il giorno dell’evento e il sondaggio.",
+    "emptyReadOnly": "Nessuno ha ancora creato un percorso.",
+    "caption": "Percorsi",
+    "name": "Nome",
+    "scope": "Evento o serie",
+    "trigger": "Attivatore",
+    "status": "Stato",
+    "steps": "Passaggi",
+    "runs": "Persone",
+    "updated": "Aggiornato",
+    "on": "Attivo",
+    "off": "Disattivato",
+    "seriesScope": "Serie: {name}",
+    "triggers": {
+      "order_paid": "Acquista un biglietto",
+      "checked_in": "Fa il check-in",
+      "event_time": "Orario relativo all’evento"
+    },
+    "newTitle": "Nuovo percorso",
+    "newDescription": "Scegli l’evento (o la serie) e come entrano le persone. Puoi modificare ogni passaggio prima di attivarlo.",
+    "form": {
+      "name": "Nome del percorso",
+      "scope": "Evento o serie",
+      "pickScope": "Scegli un evento o una serie",
+      "events": "Eventi",
+      "series": "Serie",
+      "eventOption": "{name} ({date})",
+      "trigger": "Le persone entrano quando…",
+      "start": "Parti da",
+      "vision": "Il percorso della visione",
+      "visionHint": "Conferma all’acquisto · promemoria 7 giorni prima · SMS il giorno prima · push il giorno dell’evento · sondaggio la mattina dopo",
+      "blank": "Un percorso vuoto",
+      "blankHint": "Scegli l’attivatore e aggiungi i tuoi passaggi.",
+      "create": "Crea percorso",
+      "errors": {
+        "name": "Inserisci un nome (massimo 120 caratteri).",
+        "scope": "Scegli un evento o una serie."
+      }
+    },
+    "vision": {
+      "name": "Percorso della visione",
+      "confirmation": {
+        "subject": "Ci sei: {event}",
+        "body": "Ciao {name}, grazie per il tuo ordine. Ci vediamo a {event} il {when}."
+      },
+      "week": {
+        "subject": "Manca una settimana: {event}",
+        "body": "{event} è tra una settimana ({when}). I tuoi biglietti sono nell’email di conferma."
+      },
+      "day": {
+        "subject": "Domani: {event}",
+        "body": "Ci vediamo domani a {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Oggi: {event}",
+        "body": "Ci siamo! {event} inizia {when}. Tieni pronti i biglietti."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Attivatore: {trigger}",
+      "enable": "Attiva",
+      "disable": "Disattiva",
+      "enableFor": "Attiva {name}",
+      "disableFor": "Disattiva {name}",
+      "enabledSince": "Attivo dal {when}",
+      "created": "Percorso creato. Controlla i passaggi, poi attivalo.",
+      "saved": "Percorso salvato.",
+      "enabledDone": "Percorso attivato. Chi entra da ora riceve i suoi passaggi.",
+      "disabledDone": "{count, plural, =0 {Percorso disattivato.} one {Percorso disattivato. # passaggio in attesa è stato annullato.} other {Percorso disattivato. # passaggi in attesa sono stati annullati.}}",
+      "deleted": "Percorso eliminato.",
+      "delete": "Elimina",
+      "deleteFor": "Elimina {name}",
+      "editOff": "Disattiva il percorso per modificarne i passaggi.",
+      "stepsTitle": "Passaggi",
+      "noSteps": "Ancora nessun passaggio. Aggiungine uno qui sotto.",
+      "stepCounts": "{done} fatti · {pending} in attesa · {skipped} saltati",
+      "errors": {
+        "no_steps": "Aggiungi almeno un passaggio prima di attivare il percorso.",
+        "anchor_needs_trigger": "Un passaggio attende dall’attivatore, ma questo percorso inizia a un orario relativo all’evento."
+      }
+    },
+    "editor": {
+      "step": "Passaggio {n}",
+      "anchor": "Calcolato da",
+      "anchors": {
+        "trigger": "Il loro ingresso",
+        "event_start": "L’inizio dell’evento",
+        "event_end": "La fine dell’evento"
+      },
+      "direction": "Prima o dopo",
+      "before": "Prima",
+      "after": "Dopo",
+      "days": "Giorni",
+      "hours": "Ore",
+      "minutes": "Minuti",
+      "atTime": "A un’ora del giorno",
+      "atTimeHint": "Facoltativo, nel fuso orario dell’evento.",
+      "action": "Azione",
+      "actions": {
+        "email": "Invia un’email",
+        "sms": "Invia un SMS",
+        "whatsapp": "Invia un messaggio WhatsApp",
+        "push": "Invia una notifica push",
+        "label": "Aggiungi un’etichetta",
+        "survey": "Invita al sondaggio"
+      },
+      "condition": "Solo se",
+      "conditions": {
+        "none": "Sempre",
+        "checked_in": "Ha fatto il check-in",
+        "not_checked_in": "Non ha fatto il check-in",
+        "has_seat": "Ha un posto",
+        "no_seat": "Non ha un posto",
+        "answered_survey": "Ha risposto al sondaggio",
+        "not_answered_survey": "Non ha risposto al sondaggio"
+      },
+      "subject": "Oggetto",
+      "title": "Titolo",
+      "body": "Messaggio",
+      "placeholders": "Puoi usare {name}, {event} e {when}.",
+      "label": "Etichetta",
+      "moveUp": "Sposta su",
+      "moveDown": "Sposta giù",
+      "remove": "Rimuovi",
+      "moveUpFor": "Sposta su il passaggio {n}",
+      "moveDownFor": "Sposta giù il passaggio {n}",
+      "removeFor": "Rimuovi il passaggio {n}",
+      "add": "Aggiungi passaggio",
+      "max": "Un percorso ha al massimo {max} passaggi.",
+      "save": "Salva percorso",
+      "errors": {
+        "required": "Compila questo campo.",
+        "anchor": "Questo percorso non ha un momento di ingresso: calcola dall’inizio o dalla fine dell’evento.",
+        "direction": "Giorni e ore devono andare nella stessa direzione.",
+        "offset": "Controlla il numero di giorni.",
+        "step": "Controlla il passaggio {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "Subito",
+      "afterTrigger": "{offset} dopo l’ingresso",
+      "atStart": "Quando inizia l’evento",
+      "beforeStart": "{offset} prima dell’inizio dell’evento",
+      "afterStart": "{offset} dopo l’inizio dell’evento",
+      "atEnd": "Quando finisce l’evento",
+      "beforeEnd": "{offset} prima della fine dell’evento",
+      "afterEnd": "{offset} dopo la fine dell’evento",
+      "dayTrigger": "{dir, select, same {Il giorno dell’ingresso} other {{days, plural, one {# giorno dopo l’ingresso} other {# giorni dopo l’ingresso}}}}, alle {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# giorno prima del giorno dell’evento} other {# giorni prima del giorno dell’evento}}} after {{days, plural, one {# giorno dopo il giorno dell’evento} other {# giorni dopo il giorno dell’evento}}} other {Il giorno dell’evento}}, alle {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# giorno prima dell’ultimo giorno} other {# giorni prima dell’ultimo giorno}}} after {{days, plural, one {# giorno dopo la fine dell’evento} other {# giorni dopo la fine dell’evento}}} other {L’ultimo giorno}}, alle {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} prima} other {{offset} dopo}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# giorno} other {# giorni}}",
+      "hours": "{count, plural, one {# ora} other {# ore}}",
+      "minutes": "{count, plural, one {# minuto} other {# minuti}}"
+    },
+    "history": {
+      "title": "Cronologia",
+      "caption": "Persone in questo percorso",
+      "person": "Persona",
+      "email": "Email",
+      "unknown": "Persona sconosciuta",
+      "joined": "Entrata",
+      "status": "Stato",
+      "progress": "Passaggi",
+      "progressCounts": "{done} di {total} fatti",
+      "next": "Prossimo passaggio",
+      "searchLabel": "Trova una persona per nome o email",
+      "search": "Cerca",
+      "clear": "Cancella",
+      "empty": "Nessuno è ancora entrato.",
+      "emptySearch": "Nessuno corrisponde a «{q}».",
+      "older": "Persone precedenti",
+      "runStatus": {
+        "active": "In corso",
+        "completed": "Completato",
+        "cancelled": "Annullato"
+      }
+    },
+    "run": {
+      "metaTitle": "Cronologia del percorso",
+      "event": "Evento",
+      "trigger": "Attivatore",
+      "caption": "Passaggi per questa persona",
+      "step": "Passaggio",
+      "planned": "Previsto per",
+      "result": "Risultato",
+      "at": "Fatto il",
+      "actionStatus": {
+        "pending": "In attesa",
+        "done": "Fatto",
+        "skipped": "Saltato",
+        "failed": "Non riuscito",
+        "cancelled": "Annullato"
+      }
+    },
+    "outcomes": {
+      "queued": "Messaggio messo in coda",
+      "already_queued": "Già inviato",
+      "label_added": "Etichetta aggiunta",
+      "invited": "Invito al sondaggio inviato",
+      "too_late": "L’orario era già passato",
+      "condition_not_met": "Condizione non soddisfatta",
+      "no_phone": "Nessun numero di telefono",
+      "no_device": "Nessun dispositivo per il push",
+      "no_address": "Nessun indirizzo email",
+      "not_attending": "Non è nella lista dell’evento",
+      "too_many_labels": "Troppe etichette",
+      "no_survey": "L’evento non ha un sondaggio",
+      "closed": "Il sondaggio è chiuso",
+      "no_questions": "Il sondaggio non ha domande",
+      "already_invited": "Già invitato",
+      "order_refunded": "Ordine rimborsato",
+      "ticket_cancelled": "Biglietto annullato",
+      "event_cancelled": "Evento annullato",
+      "event_postponed": "Evento rinviato",
+      "journey_disabled": "Percorso disattivato",
+      "step_removed": "Passaggio rimosso",
+      "run_ended": "Percorso terminato",
+      "event_missing": "Evento non trovato",
+      "error": "Non riuscito dopo diversi tentativi",
+      "other": "Altro"
     }
   },
   "refundOps": {
