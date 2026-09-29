@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { mergeProblems } from '@yayatoh/notifications/merge';
+import { z } from 'zod';
 
 /**
  * The campaign block editor's document (M3.6b). A campaign is an ordered list of blocks; the
@@ -121,7 +121,8 @@ export function linkedEventIds(content: Pick<CampaignContent, 'blocks'>): string
 /** Blocks that need a tracked link (buttons and event cards), in document order. */
 export function linkBlocks(content: Pick<CampaignContent, 'blocks'>) {
   return content.blocks.filter(
-    (b): b is Extract<Block, { type: 'button' | 'eventCard' }> => b.type === 'button' || b.type === 'eventCard',
+    (b): b is Extract<Block, { type: 'button' | 'eventCard' }> =>
+      b.type === 'button' || b.type === 'eventCard',
   );
 }
 
@@ -135,7 +136,11 @@ export function newBlockId(existing: readonly { id: string }[]): string {
 }
 
 /** Move a block up or down (the keyboard alternative to dragging). The footer stays last. */
-export function moveBlock<B extends { id: string; type: string }>(blocks: readonly B[], id: string, dir: -1 | 1): B[] {
+export function moveBlock<B extends { id: string; type: string }>(
+  blocks: readonly B[],
+  id: string,
+  dir: -1 | 1,
+): B[] {
   const i = blocks.findIndex((b) => b.id === id);
   const j = i + dir;
   if (i < 0 || j < 0 || j >= blocks.length) return [...blocks];

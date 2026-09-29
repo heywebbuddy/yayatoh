@@ -2,8 +2,8 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { campaignClicksTx } from '@yayatoh/marketing';
-import { applyMerge } from '@yayatoh/notifications/merge';
 import { deliveryReasonsTx, sendOutcomesTx } from '@yayatoh/notifications';
+import { applyMerge } from '@yayatoh/notifications/merge';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationBrandTx } from '@yayatoh/tenancy';
 import { count, eq } from 'drizzle-orm';
@@ -12,7 +12,12 @@ import { loadCampaignTx } from './campaigns.ts';
 import { CampaignContent, linkBlocks } from './domain/blocks.ts';
 import { EXCLUSION_REASONS, type ExclusionReason } from './domain/lifecycle.ts';
 import { renderCampaign } from './domain/render.ts';
-import { type CampaignResultsDto, CampaignResultsDto as ResultsSchema, campaignResultsSerializer, PreviewDto } from './dto.ts';
+import {
+  type CampaignResultsDto,
+  campaignResultsSerializer,
+  PreviewDto,
+  CampaignResultsDto as ResultsSchema,
+} from './dto.ts';
 import { campaignLinks, campaignRecipients } from './schema.ts';
 import { sendPrefix } from './send.ts';
 
@@ -101,7 +106,9 @@ export const campaignPreviewQuery = tenantQuery({
   permission: 'marketing:read',
   handler: async ({ input, ctx, tx }) => {
     const row = await loadCampaignTx(tx, input.campaignId);
-    const parsed = input.content ? { success: true as const, data: input.content } : CampaignContent.safeParse(row.content);
+    const parsed = input.content
+      ? { success: true as const, data: input.content }
+      : CampaignContent.safeParse(row.content);
     if (!parsed.success)
       throw new DomainError('invalid_state', 'The campaign needs fixing', { reason: 'content_invalid' });
     const content = parsed.data;
@@ -111,7 +118,10 @@ export const campaignPreviewQuery = tenantQuery({
     const stored = await tx.select().from(campaignLinks).where(eq(campaignLinks.campaignId, row.id));
     const codes = new Map(stored.map((l) => [l.blockId, l.code]));
     const links = new Map<string, string>();
-    const events = new Map<string, { name: string; startsAt: Date; timezone: string; venue: string | null }>();
+    const events = new Map<
+      string,
+      { name: string; startsAt: Date; timezone: string; venue: string | null }
+    >();
     for (const b of linkBlocks(content)) {
       const e = await findEventTx(tx, b.eventId);
       if (!e) continue;

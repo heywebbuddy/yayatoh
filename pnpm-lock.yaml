@@ -441,6 +441,9 @@ importers:
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing
+      '@yayatoh/campaigns':
+        specifier: workspace:*
+        version: link:../../packages/modules/campaigns
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin

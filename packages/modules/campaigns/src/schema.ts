@@ -43,10 +43,7 @@ export const campaigns = tenantTable(
     segmentId: uuid('segment_id'),
     templateKey: text('template_key'),
     templateEventId: uuid('template_event_id'),
-    templateTicketTypeIds: uuid('template_ticket_type_ids')
-      .array()
-      .notNull()
-      .default(sql`'{}'::uuid[]`),
+    templateTicketTypeIds: uuid('template_ticket_type_ids').array().notNull().default(sql`'{}'::uuid[]`),
     scheduledAt: tsz('scheduled_at'),
     startedAt: tsz('started_at'),
     pausedAt: tsz('paused_at'),
@@ -72,7 +69,10 @@ export const campaigns = tenantTable(
     check('campaigns_status_check', inList('status', CAMPAIGN_STATUSES)),
     check('campaigns_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
     check('campaigns_content_check', sql`jsonb_typeof(content) = 'object'`),
-    check('campaigns_audience_kind_check', sql`audience_kind is null or ${inList('audience_kind', AUDIENCE_KINDS)}`),
+    check(
+      'campaigns_audience_kind_check',
+      sql`audience_kind is null or ${inList('audience_kind', AUDIENCE_KINDS)}`,
+    ),
     check(
       'campaigns_audience_check',
       sql`(audience_kind is null) or (audience_kind = 'segment' and segment_id is not null) or (audience_kind = 'template' and template_key is not null and template_event_id is not null)`,

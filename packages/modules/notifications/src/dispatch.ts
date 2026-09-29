@@ -310,7 +310,10 @@ export async function dispatchDueTx(
               locale,
               params: consoleLink && !params.url ? { ...params, url: consoleLink } : params,
               // The brand kit logo (M1.4e) as an absolute URL on the app origin (email clients fetch it).
-              org: { ...org, logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null },
+              org: {
+                ...org,
+                logoUrl: org.logoPath ? `${deps.appOrigin.replace(/\/$/, '')}${org.logoPath}` : null,
+              },
               recipientName: row.recipientName,
               unsubscribeUrl: unsub?.page ?? null,
               override: override ?? null,

@@ -5,7 +5,13 @@ import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { CAMPAIGN_CHANNELS, type CampaignChannel, CampaignContent, linkedEventIds, starterContent } from './domain/blocks.ts';
+import {
+  CAMPAIGN_CHANNELS,
+  type CampaignChannel,
+  CampaignContent,
+  linkedEventIds,
+  starterContent,
+} from './domain/blocks.ts';
 import { type CampaignStatus, campaignLifecycle } from './domain/lifecycle.ts';
 import {
   type AudienceChoice,
@@ -133,7 +139,10 @@ export const createCampaignCommand = tenantCommand({
 async function assertEventsTx(tx: TenantTx, content: CampaignContent) {
   for (const id of linkedEventIds(content)) {
     if (!(await findEventTx(tx, id)))
-      throw new DomainError('validation_failed', 'Event not found', { field: 'blocks', reason: 'event_not_found' });
+      throw new DomainError('validation_failed', 'Event not found', {
+        field: 'blocks',
+        reason: 'event_not_found',
+      });
   }
 }
 

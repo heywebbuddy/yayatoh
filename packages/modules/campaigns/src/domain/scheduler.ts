@@ -50,7 +50,9 @@ export function allocate(lanes: readonly OrgLane[], opts: SchedulerOptions): All
     orgId: l.orgId,
     budget: Math.floor(l.budget),
     next: 0,
-    campaigns: l.campaigns.filter((c) => c.pending > 0).map((c) => ({ ...c, pending: Math.floor(c.pending) })),
+    campaigns: l.campaigns
+      .filter((c) => c.pending > 0)
+      .map((c) => ({ ...c, pending: Math.floor(c.pending) })),
   }));
   const out = new Map<string, { orgId: string; campaignId: string; size: number }>();
   let progress = true;

@@ -1,5 +1,7 @@
 import { saveSegmentCommand } from '@yayatoh/audiences';
 import {
+  campaignPreviewQuery,
+  campaignResultsQuery,
   cancelCampaignCommand,
   createCampaignCommand,
   estimateReachQuery,
@@ -15,8 +17,6 @@ import {
   setAudienceCommand,
   testSendCommand,
   unscheduleCampaignCommand,
-  campaignPreviewQuery,
-  campaignResultsQuery,
 } from '@yayatoh/campaigns';
 import { recordConsentTx, setContactPhoneTx, upsertContactTx } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
@@ -69,12 +69,28 @@ async function person(
 ) {
   const ctx = systemCtx(org.org.id);
   return withTenant(ctx, async (tx) => {
-    const { id } = await upsertContactTx(tx, ctx, { email, name: opts.name ?? 'Rae Contact', source: 'manual' });
+    const { id } = await upsertContactTx(tx, ctx, {
+      email,
+      name: opts.name ?? 'Rae Contact',
+      source: 'manual',
+    });
     if (consent)
-      await recordConsentTx(tx, ctx, { contactId: id, channel: 'email', purpose: 'marketing', status: consent, evidence: 'test' });
+      await recordConsentTx(tx, ctx, {
+        contactId: id,
+        channel: 'email',
+        purpose: 'marketing',
+        status: consent,
+        evidence: 'test',
+      });
     if (opts.phone) await setContactPhoneTx(tx, ctx, id, opts.phone);
     if (opts.sms)
-      await recordConsentTx(tx, ctx, { contactId: id, channel: 'sms', purpose: 'marketing', status: opts.sms, evidence: 'test' });
+      await recordConsentTx(tx, ctx, {
+        contactId: id,
+        channel: 'sms',
+        purpose: 'marketing',
+        status: opts.sms,
+        evidence: 'test',
+      });
     return id;
   });
 }
@@ -83,7 +99,10 @@ async function person(
 async function everyone(org: OrgFixture) {
   return executeCommand(
     saveSegmentCommand,
-    { name: `Everyone ${tag()}`, definition: { version: 1, root: { type: 'group', op: 'and', conditions: [] } } },
+    {
+      name: `Everyone ${tag()}`,
+      definition: { version: 1, root: { type: 'group', op: 'and', conditions: [] } },
+    },
     org.ctx(),
     ports,
   );
@@ -130,7 +149,12 @@ async function campaign(org: OrgFixture, opts: { channel?: 'email' | 'sms'; smsB
 }
 
 const sendNow = (org: OrgFixture, campaignId: string, now?: Date) =>
-  executeCommand(sendNowCommand, { campaignId }, org.ctx({ idempotencyKey: `send-${campaignId}`, ...(now ? { now } : {}) }), ports);
+  executeCommand(
+    sendNowCommand,
+    { campaignId },
+    org.ctx({ idempotencyKey: `send-${campaignId}`, ...(now ? { now } : {}) }),
+    ports,
+  );
 
 async function recipients(org: OrgFixture, campaignId: string) {
   return withTenant(systemCtx(org.org.id), (tx) =>
@@ -142,7 +166,15 @@ async function recipients(org: OrgFixture, campaignId: string) {
 
 async function messagesOf(org: OrgFixture, prefix: string) {
   return withTenant(systemCtx(org.org.id), (tx) =>
-    tx.execute<{ dedupe_key: string; status: string; reason: string | null; contact_id: string | null; recipient_email: string | null; kind: string; channel: string }>(
+    tx.execute<{
+      dedupe_key: string;
+      status: string;
+      reason: string | null;
+      contact_id: string | null;
+      recipient_email: string | null;
+      kind: string;
+      channel: string;
+    }>(
       sql`select dedupe_key, status, reason, contact_id, recipient_email, kind, channel from notifications.messages where dedupe_key like ${`${prefix}%`}`,
     ),
   );
@@ -226,7 +258,13 @@ describe('consent enforcement at the snapshot', () => {
     const c = await campaign(a);
     await sendNow(a, c.id);
     await withTenant(systemCtx(a.org.id), (tx) =>
-      recordConsentTx(tx, systemCtx(a.org.id), { contactId: id, channel: 'email', purpose: 'marketing', status: 'withdrawn', evidence: 'test' }),
+      recordConsentTx(tx, systemCtx(a.org.id), {
+        contactId: id,
+        channel: 'email',
+        purpose: 'marketing',
+        status: 'withdrawn',
+        evidence: 'test',
+      }),
     );
     await runOrgCampaigns(a.org.id, ports, { now: NOON });
     const mem = memoryTransports();
@@ -245,7 +283,7 @@ describe('consent enforcement at the snapshot', () => {
 describe('exactly once per recipient under job retries', () => {
   it('concurrent and repeated releases, a crashed job and repeated dispatches send each person one message', async () => {
     const t = tag();
-    const ids = [];
+    const ids: string[] = [];
     for (let i = 0; i < 12; i++) ids.push(await person(b, `once${i}+${t}@x.test`, 'granted'));
     const c = await campaign(b);
     await sendNow(b, c.id);
@@ -293,7 +331,12 @@ describe('pause, resume, cancel and per-org quotas', () => {
   it("releases within the org's per-minute rate from its quota; pause stops, resume continues, cancel drops the rest", async () => {
     const staff = createCtx({ orgId: a.org.id, actor: { type: 'system', name: 'staff:ops' } });
     // A 300-email monthly quota → 30 per minute.
-    await executeCommand(setQuotaLimitCommand, { channel: 'email', monthlyLimit: 300, reason: 'test rate' }, staff, ports);
+    await executeCommand(
+      setQuotaLimitCommand,
+      { channel: 'email', monthlyLimit: 300, reason: 'test rate' },
+      staff,
+      ports,
+    );
     try {
       const t = tag();
       for (let i = 0; i < 70; i++) await person(a, `rate${i}+${t}@x.test`, 'granted');
@@ -307,9 +350,9 @@ describe('pause, resume, cancel and per-org quotas', () => {
       expect((await rel(2)).released).toBe(0); // the minute's budget is spent
       await executeCommand(pauseCampaignCommand, { campaignId: c.id }, a.ctx({ now: at(3) }), ports);
       expect((await rel(70)).released).toBe(0); // paused: nothing more goes out
-      expect(await refusal(executeCommand(pauseCampaignCommand, { campaignId: c.id }, a.ctx(), ports))).toMatch(
-        /^invalid_state/,
-      );
+      expect(
+        await refusal(executeCommand(pauseCampaignCommand, { campaignId: c.id }, a.ctx(), ports)),
+      ).toMatch(/^invalid_state/);
       await executeCommand(resumeCampaignCommand, { campaignId: c.id }, a.ctx({ now: at(80) }), ports);
       expect((await rel(81)).released).toBe(30);
       const before = await executeQuery(campaignResultsQuery, { campaignId: c.id }, a.ctx(), ports);
@@ -324,7 +367,12 @@ describe('pause, resume, cancel and per-org quotas', () => {
       const rows = await recipients(a, c.id);
       expect(rows.filter((r) => r.status === 'cancelled').length).toBe(before.pending);
     } finally {
-      await executeCommand(setQuotaLimitCommand, { channel: 'email', monthlyLimit: null, reason: 'test reset' }, staff, ports);
+      await executeCommand(
+        setQuotaLimitCommand,
+        { channel: 'email', monthlyLimit: null, reason: 'test reset' },
+        staff,
+        ports,
+      );
     }
   }, 180_000);
 
@@ -335,7 +383,12 @@ describe('pause, resume, cancel and per-org quotas', () => {
     const c = await campaign(b);
     await sendNow(b, c.id);
     await runOrgCampaigns(b.org.id, ports, { now: NOON });
-    await executeCommand(setQuotaLimitCommand, { channel: 'email', monthlyLimit: 1, reason: 'test quota' }, staff, ports);
+    await executeCommand(
+      setQuotaLimitCommand,
+      { channel: 'email', monthlyLimit: 1, reason: 'test quota' },
+      staff,
+      ports,
+    );
     try {
       const mem = memoryTransports();
       await drain(b, mem.transports, new Date('2030-07-17T17:00:00Z'));
@@ -343,7 +396,12 @@ describe('pause, resume, cancel and per-org quotas', () => {
       expect(waiting.length).toBeGreaterThan(0);
       expect(waiting.every((m) => m.reason === 'quota_reached')).toBe(true);
     } finally {
-      await executeCommand(setQuotaLimitCommand, { channel: 'email', monthlyLimit: null, reason: 'test reset' }, staff, ports);
+      await executeCommand(
+        setQuotaLimitCommand,
+        { channel: 'email', monthlyLimit: null, reason: 'test reset' },
+        staff,
+        ports,
+      );
     }
   }, 60_000);
 });
@@ -354,31 +412,64 @@ describe('schedules in the org timezone', () => {
     const c = await campaign(a);
     const now = new Date('2030-07-16T12:00:00Z');
     expect(
-      await refusal(executeCommand(scheduleCampaignCommand, { campaignId: c.id, at: '2030-07-16T06:00' }, a.ctx({ now }), ports)),
+      await refusal(
+        executeCommand(
+          scheduleCampaignCommand,
+          { campaignId: c.id, at: '2030-07-16T06:00' },
+          a.ctx({ now }),
+          ports,
+        ),
+      ),
     ).toBe('validation_failed:in_past');
     // 09:00 in Chicago (CDT, UTC−5) is 14:00 UTC.
-    const s = await executeCommand(scheduleCampaignCommand, { campaignId: c.id, at: '2030-07-16T09:00' }, a.ctx({ now }), ports);
+    const s = await executeCommand(
+      scheduleCampaignCommand,
+      { campaignId: c.id, at: '2030-07-16T09:00' },
+      a.ctx({ now }),
+      ports,
+    );
     expect(s.status).toBe('scheduled');
     expect(s.scheduledAt?.toISOString()).toBe('2030-07-16T14:00:00.000Z');
     // Drafts only are edited: a scheduled campaign is refused until unscheduled.
     expect(
       await refusal(
-        executeCommand(saveCampaignCommand, { campaignId: c.id, name: c.name, locale: 'en', content: s.content as never }, a.ctx(), ports),
+        executeCommand(
+          saveCampaignCommand,
+          { campaignId: c.id, name: c.name, locale: 'en', content: s.content as never },
+          a.ctx(),
+          ports,
+        ),
       ),
     ).toBe('invalid_state:not_draft');
     await runOrgCampaigns(a.org.id, ports, { now: new Date('2030-07-16T13:59:00Z') });
-    expect((await executeQuery(getCampaignQuery, { campaignId: c.id }, a.ctx(), ports)).status).toBe('scheduled');
+    expect((await executeQuery(getCampaignQuery, { campaignId: c.id }, a.ctx(), ports)).status).toBe(
+      'scheduled',
+    );
     await runOrgCampaigns(a.org.id, ports, { now: new Date('2030-07-16T14:00:30Z') });
-    expect((await executeQuery(getCampaignQuery, { campaignId: c.id }, a.ctx(), ports)).status).toMatch(/sending|sent/);
+    expect((await executeQuery(getCampaignQuery, { campaignId: c.id }, a.ctx(), ports)).status).toMatch(
+      /sending|sent/,
+    );
 
     // Unschedule goes back to draft.
     const d = await campaign(a);
-    await executeCommand(scheduleCampaignCommand, { campaignId: d.id, at: '2030-07-16T09:00' }, a.ctx({ now }), ports);
-    expect((await executeCommand(unscheduleCampaignCommand, { campaignId: d.id }, a.ctx({ now }), ports)).status).toBe('draft');
+    await executeCommand(
+      scheduleCampaignCommand,
+      { campaignId: d.id, at: '2030-07-16T09:00' },
+      a.ctx({ now }),
+      ports,
+    );
+    expect(
+      (await executeCommand(unscheduleCampaignCommand, { campaignId: d.id }, a.ctx({ now }), ports)).status,
+    ).toBe('draft');
 
     // An SMS campaign nobody consented to by text: when due, it is cancelled with the reason.
     const sms = await campaign(a, { channel: 'sms', smsBody: 'Spring season opens Friday.' });
-    await executeCommand(scheduleCampaignCommand, { campaignId: sms.id, at: '2030-07-16T10:00' }, a.ctx({ now }), ports);
+    await executeCommand(
+      scheduleCampaignCommand,
+      { campaignId: sms.id, at: '2030-07-16T10:00' },
+      a.ctx({ now }),
+      ports,
+    );
     await runOrgCampaigns(a.org.id, ports, { now: new Date('2030-07-16T15:01:00Z') });
     const failed = await executeQuery(getCampaignQuery, { campaignId: sms.id }, a.ctx(), ports);
     expect(failed).toMatchObject({ status: 'cancelled', failureReason: 'no_recipients' });
@@ -401,7 +492,11 @@ describe('SMS campaigns', () => {
     await runOrgCampaigns(b.org.id, ports, { now: new Date('2030-07-18T17:00:00Z') });
     const mem = memoryTransports();
     // 03:00 in Chicago: held for quiet hours.
-    await dispatchDue(b.org.id, { transports: mem.transports, appOrigin: ORIGIN, now: () => new Date('2030-07-19T08:00:00Z') }, 200);
+    await dispatchDue(
+      b.org.id,
+      { transports: mem.transports, appOrigin: ORIGIN, now: () => new Date('2030-07-19T08:00:00Z') },
+      200,
+    );
     expect(mem.sms.filter((m) => m.to === '+13125550142')).toHaveLength(0);
     const all = await messagesOf(b, `campaign:${c.id}:`);
     const [held] = all.filter((m) => m.contact_id === text);
@@ -418,10 +513,20 @@ describe('test sends', () => {
   it('go to up to five addresses, clearly marked, not counted, limited per hour', async () => {
     const c = await campaign(a);
     const addresses = ['t1@x.test', 't2@x.test'];
-    expect((await executeCommand(testSendCommand, { campaignId: c.id, addresses }, a.ctx(), ports)).queued).toBe(2);
+    expect(
+      (await executeCommand(testSendCommand, { campaignId: c.id, addresses }, a.ctx(), ports)).queued,
+    ).toBe(2);
     expect(
       await refusal(
-        executeCommand(testSendCommand, { campaignId: c.id, addresses: ['1@x.test', '2@x.test', '3@x.test', '4@x.test', '5@x.test', '6@x.test'] }, a.ctx(), ports),
+        executeCommand(
+          testSendCommand,
+          {
+            campaignId: c.id,
+            addresses: ['1@x.test', '2@x.test', '3@x.test', '4@x.test', '5@x.test', '6@x.test'],
+          },
+          a.ctx(),
+          ports,
+        ),
       ),
     ).toMatch(/^validation_failed/);
     const mem = memoryTransports();
@@ -438,7 +543,9 @@ describe('test sends', () => {
     for (const list of [five, five, five, five.slice(0, 3)])
       await executeCommand(testSendCommand, { campaignId: c.id, addresses: list }, a.ctx(), ports);
     expect(
-      await refusal(executeCommand(testSendCommand, { campaignId: c.id, addresses: ['z@x.test'] }, a.ctx(), ports)),
+      await refusal(
+        executeCommand(testSendCommand, { campaignId: c.id, addresses: ['z@x.test'] }, a.ctx(), ports),
+      ),
     ).toBe('rate_limited:test_limit');
   }, 60_000);
 });
@@ -453,7 +560,9 @@ describe('results', () => {
     await runOrgCampaigns(b.org.id, ports, { now: NOON });
     const mem = memoryTransports();
     await drain(b, mem.transports);
-    const sent = (await messagesOf(b, `campaign:${c.id}:`)).filter((m) => m.recipient_email?.endsWith(`+${t}@x.test`));
+    const sent = (await messagesOf(b, `campaign:${c.id}:`)).filter((m) =>
+      m.recipient_email?.endsWith(`+${t}@x.test`),
+    );
     expect(sent).toHaveLength(2);
     const ids = await withTenant(systemCtx(b.org.id), (tx) =>
       tx.execute<{ id: string; recipient_email: string }>(
@@ -467,7 +576,13 @@ describe('results', () => {
         provider: 'fake',
         events: [
           { id: `d1-${t}`, messageId: mid(`r1+${t}@x.test`), type: 'delivered', occurredAt: NOON },
-          { id: `b1-${t}`, messageId: mid(`r2+${t}@x.test`), type: 'bounced', bounceType: 'hard', occurredAt: NOON },
+          {
+            id: `b1-${t}`,
+            messageId: mid(`r2+${t}@x.test`),
+            type: 'bounced',
+            bounceType: 'hard',
+            occurredAt: NOON,
+          },
         ],
       },
       sys(b.org.id),
@@ -486,31 +601,66 @@ describe('permissions and isolation', () => {
     const viewer = userCtx(a.viewerId, a.org.id);
     expect((await executeQuery(listCampaignsQuery, {}, viewer, ports)).map((x) => x.id)).toContain(c.id);
     expect((await executeQuery(campaignResultsQuery, { campaignId: c.id }, viewer, ports)).sent).toBe(0);
-    expect(await refusal(executeCommand(createCampaignCommand, { name: `V ${tag()}` }, viewer, ports))).toMatch(/^forbidden/);
-    expect(await refusal(executeCommand(sendNowCommand, { campaignId: c.id }, { ...viewer, idempotencyKey: tag() }, ports))).toMatch(/^forbidden/);
-    expect(await refusal(executeCommand(testSendCommand, { campaignId: c.id, addresses: ['v@x.test'] }, viewer, ports))).toMatch(/^forbidden/);
+    expect(
+      await refusal(executeCommand(createCampaignCommand, { name: `V ${tag()}` }, viewer, ports)),
+    ).toMatch(/^forbidden/);
+    expect(
+      await refusal(
+        executeCommand(sendNowCommand, { campaignId: c.id }, { ...viewer, idempotencyKey: tag() }, ports),
+      ),
+    ).toMatch(/^forbidden/);
+    expect(
+      await refusal(
+        executeCommand(testSendCommand, { campaignId: c.id, addresses: ['v@x.test'] }, viewer, ports),
+      ),
+    ).toMatch(/^forbidden/);
     const boxOffice = uuidv7();
     const marketer = uuidv7();
     await executeCommand(addMemberCommand, { userId: boxOffice, role: 'box_office' }, a.ctx(), ports);
     await executeCommand(addMemberCommand, { userId: marketer, role: 'marketing' }, a.ctx(), ports);
-    expect(await refusal(executeQuery(listCampaignsQuery, {}, userCtx(boxOffice, a.org.id), ports))).toMatch(/^forbidden/);
-    const m = await executeCommand(createCampaignCommand, { name: `M ${tag()}` }, userCtx(marketer, a.org.id), ports);
+    expect(await refusal(executeQuery(listCampaignsQuery, {}, userCtx(boxOffice, a.org.id), ports))).toMatch(
+      /^forbidden/,
+    );
+    const m = await executeCommand(
+      createCampaignCommand,
+      { name: `M ${tag()}` },
+      userCtx(marketer, a.org.id),
+      ports,
+    );
     expect(m.status).toBe('draft');
-    const preview = await executeQuery(campaignPreviewQuery, { campaignId: c.id, origin: ORIGIN }, viewer, ports);
+    const preview = await executeQuery(
+      campaignPreviewQuery,
+      { campaignId: c.id, origin: ORIGIN },
+      viewer,
+      ports,
+    );
     expect(preview.html).toContain('Hello there');
     expect(preview.html).toContain(`${ORIGIN}/unsubscribe/preview`);
   }, 60_000);
 
   it("another org can't read, change or send an org's campaign, nor point it at its audience", async () => {
     const c = await campaign(a);
-    expect(await refusal(executeQuery(getCampaignQuery, { campaignId: c.id }, b.ctx(), ports))).toMatch(/^not_found/);
-    expect(await refusal(executeQuery(campaignResultsQuery, { campaignId: c.id }, b.ctx(), ports))).toMatch(/^not_found/);
+    expect(await refusal(executeQuery(getCampaignQuery, { campaignId: c.id }, b.ctx(), ports))).toMatch(
+      /^not_found/,
+    );
+    expect(await refusal(executeQuery(campaignResultsQuery, { campaignId: c.id }, b.ctx(), ports))).toMatch(
+      /^not_found/,
+    );
     expect(await refusal(sendNow(b, c.id))).toMatch(/^not_found/);
-    expect(await refusal(executeCommand(cancelCampaignCommand, { campaignId: c.id }, b.ctx(), ports))).toMatch(/^not_found/);
+    expect(
+      await refusal(executeCommand(cancelCampaignCommand, { campaignId: c.id }, b.ctx(), ports)),
+    ).toMatch(/^not_found/);
     expect((await executeQuery(listCampaignsQuery, {}, b.ctx(), ports)).map((x) => x.id)).not.toContain(c.id);
     const bSeg = await everyone(b);
     expect(
-      await refusal(executeCommand(setAudienceCommand, { campaignId: c.id, audience: { kind: 'segment', segmentId: bSeg.id } }, a.ctx(), ports)),
+      await refusal(
+        executeCommand(
+          setAudienceCommand,
+          { campaignId: c.id, audience: { kind: 'segment', segmentId: bSeg.id } },
+          a.ctx(),
+          ports,
+        ),
+      ),
     ).toMatch(/^not_found/);
     // A button pointing at another org's event is refused.
     const d = await executeCommand(createCampaignCommand, { name: `X ${tag()}` }, a.ctx(), ports);

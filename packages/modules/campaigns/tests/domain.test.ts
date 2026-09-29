@@ -20,14 +20,19 @@ describe('merge fields', () => {
 
   it('escapes recipient values in HTML, never the organizer fallback twice', () => {
     const v = recipientValues({ name: '<script>x</script>', email: null, orgName: 'O' });
-    expect(applyMerge('<p>{{first_name|friend}}</p>', v, { html: true })).toBe('<p>&lt;script&gt;x&lt;/script&gt;</p>');
-    expect(applyMerge('<p>{{first_name|Tom &amp; Jo}}</p>', recipientValues({ orgName: 'O' }), { html: true })).toBe(
-      '<p>Tom &amp; Jo</p>',
+    expect(applyMerge('<p>{{first_name|friend}}</p>', v, { html: true })).toBe(
+      '<p>&lt;script&gt;x&lt;/script&gt;</p>',
     );
+    expect(
+      applyMerge('<p>{{first_name|Tom &amp; Jo}}</p>', recipientValues({ orgName: 'O' }), { html: true }),
+    ).toBe('<p>Tom &amp; Jo</p>');
   });
 
   it('does not re-expand tokens inside values', () => {
-    const v = { ...recipientValues({ name: '{{@unsubscribe}}', orgName: 'O' }), system: { unsubscribe: 'U' } };
+    const v = {
+      ...recipientValues({ name: '{{@unsubscribe}}', orgName: 'O' }),
+      system: { unsubscribe: 'U' },
+    };
     expect(applyMerge('{{first_name}} {{@unsubscribe}}', v)).toBe('{{@unsubscribe}} U');
   });
 
@@ -66,7 +71,10 @@ describe('blocks', () => {
     expect(CampaignContent.safeParse(noFooter).success).toBe(false);
     const footerFirst = { ...valid, blocks: [valid.blocks[3], ...valid.blocks.slice(0, 3)] };
     expect(CampaignContent.safeParse(footerFirst).success).toBe(false);
-    const noAddress = { ...valid, blocks: [...valid.blocks.slice(0, 3), { id: 'b9', type: 'footer', postalAddress: '' }] };
+    const noAddress = {
+      ...valid,
+      blocks: [...valid.blocks.slice(0, 3), { id: 'b9', type: 'footer', postalAddress: '' }],
+    };
     expect(CampaignContent.safeParse(noAddress).success).toBe(false);
   });
 
@@ -75,7 +83,9 @@ describe('blocks', () => {
       CampaignContent.safeParse({ ...valid, blocks: [...blocks, valid.blocks[3]] }).success;
     expect(bad([{ id: 'b1', type: 'text', text: 'Hi {{nickname}}' }])).toBe(false);
     expect(bad([{ id: 'b1', type: 'button', label: 'Go', eventId: E, path: '//evil.test' }])).toBe(false);
-    expect(bad([{ id: 'b1', type: 'button', label: 'Go', eventId: E, path: '/events/../admin' }])).toBe(false);
+    expect(bad([{ id: 'b1', type: 'button', label: 'Go', eventId: E, path: '/events/../admin' }])).toBe(
+      false,
+    );
     expect(bad([{ id: 'b1', type: 'button', label: 'Go', eventId: E, path: '/events/spring' }])).toBe(true);
     expect(bad([{ id: 'b1', type: 'image', src: 'javascript:alert(1)', alt: 'x' }])).toBe(false);
     expect(bad([{ id: 'b1', type: 'image', src: 'http://x.test/a.png', alt: 'x' }])).toBe(false);
@@ -115,7 +125,13 @@ describe('lifecycle and snapshot rules', () => {
     expect(campaignLifecycle.next('paused', 'resume')).toBe('sending');
   });
 
-  const ok: ReachFacts = { address: 'a@x.test', consent: 'granted', suppressed: false, unsubscribed: false, erased: false };
+  const ok: ReachFacts = {
+    address: 'a@x.test',
+    consent: 'granted',
+    suppressed: false,
+    unsubscribed: false,
+    erased: false,
+  };
   it('only express marketing consent for the channel counts', () => {
     expect(exclusionReason(ok)).toBeNull();
     expect(exclusionReason({ ...ok, consent: null })).toBe('consent_missing');
@@ -173,8 +189,18 @@ describe('fair scheduler', () => {
   });
 
   it('gives nothing to an org without budget or pending recipients', () => {
-    expect(allocate([{ orgId: 'a', budget: 0, campaigns: [{ campaignId: 'a1', pending: 5 }] }], { capacity: 10, chunk: 5 })).toEqual([]);
-    expect(allocate([{ orgId: 'a', budget: 9, campaigns: [{ campaignId: 'a1', pending: 0 }] }], { capacity: 10, chunk: 5 })).toEqual([]);
+    expect(
+      allocate([{ orgId: 'a', budget: 0, campaigns: [{ campaignId: 'a1', pending: 5 }] }], {
+        capacity: 10,
+        chunk: 5,
+      }),
+    ).toEqual([]);
+    expect(
+      allocate([{ orgId: 'a', budget: 9, campaigns: [{ campaignId: 'a1', pending: 0 }] }], {
+        capacity: 10,
+        chunk: 5,
+      }),
+    ).toEqual([]);
   });
 
   it('50,000 vs 100 (time-compressed): org B finishes within its fair share while org A keeps going', () => {
@@ -234,7 +260,17 @@ describe('render', () => {
   const input = {
     content,
     brand: { name: 'Lakeside', brandColor: '#1d4ed8', logoUrl: null, logoAlt: null, poweredByVisible: true },
-    events: new Map([[E, { name: 'Jazz Night', startsAt: new Date('2027-05-01T23:00:00Z'), timezone: 'America/Chicago', venue: 'Pavilion' }]]),
+    events: new Map([
+      [
+        E,
+        {
+          name: 'Jazz Night',
+          startsAt: new Date('2027-05-01T23:00:00Z'),
+          timezone: 'America/Chicago',
+          venue: 'Pavilion',
+        },
+      ],
+    ]),
     links: new Map([
       ['b4', '{{@origin}}/r/abcdefgh'],
       ['b5', '{{@origin}}/r/bcdefghj'],

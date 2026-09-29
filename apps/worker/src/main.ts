@@ -45,7 +45,9 @@ const payments = fakeSecret
 
 const SUBSCRIBERS = subscribers();
 // Mass refunds (M3.10b) need the payment provider.
-const jobs = payments ? [...JOBS, campaignReleaseJob, massRefundJob(payments)] : [...JOBS, campaignReleaseJob];
+const jobs = payments
+  ? [...JOBS, campaignReleaseJob, massRefundJob(payments)]
+  : [...JOBS, campaignReleaseJob];
 const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 

@@ -55,7 +55,11 @@ async function subscribersCampaign(org: OrgFixture, name: string) {
       name: `Subscribers ${name}`,
       definition: {
         version: 1,
-        root: { type: 'group', op: 'and', conditions: [{ type: 'consent', channel: 'email', granted: true }] },
+        root: {
+          type: 'group',
+          op: 'and',
+          conditions: [{ type: 'consent', channel: 'email', granted: true }],
+        },
       },
     },
     org.ctx(),
@@ -82,8 +86,18 @@ async function subscribersCampaign(org: OrgFixture, name: string) {
     org.ctx(),
     ports,
   );
-  await executeCommand(setAudienceCommand, { campaignId: c.id, audience: { kind: 'segment', segmentId: seg.id } }, org.ctx(), ports);
-  return executeCommand(sendNowCommand, { campaignId: c.id }, org.ctx({ idempotencyKey: `fair-${c.id}`, now: BASE }), ports);
+  await executeCommand(
+    setAudienceCommand,
+    { campaignId: c.id, audience: { kind: 'segment', segmentId: seg.id } },
+    org.ctx(),
+    ports,
+  );
+  return executeCommand(
+    sendNowCommand,
+    { campaignId: c.id },
+    org.ctx({ idempotencyKey: `fair-${c.id}`, now: BASE }),
+    ports,
+  );
 }
 
 beforeAll(async () => {
@@ -128,10 +142,20 @@ describe('fair scheduling across tenants', () => {
           }),
         );
       // The dispatcher's tick: up to 100 messages per org (as the worker does).
-      for (const org of [a, b]) await dispatchDue(org.org.id, { transports: mem.transports, appOrigin: 'https://app.test', now: () => now }, 100);
-      if (bDoneTick === null && sentTo('@fans.test') > 0 && mem.emails.filter((e) => /^b\d+@fans\.test$/.test(e.to)).length === 100)
+      for (const org of [a, b])
+        await dispatchDue(
+          org.org.id,
+          { transports: mem.transports, appOrigin: 'https://app.test', now: () => now },
+          100,
+        );
+      if (
+        bDoneTick === null &&
+        sentTo('@fans.test') > 0 &&
+        mem.emails.filter((e) => /^b\d+@fans\.test$/.test(e.to)).length === 100
+      )
         bDoneTick = tick;
-      if (bTransactionalTick === null && mem.emails.some((e) => e.to === 'invitee-fair@b.test')) bTransactionalTick = tick;
+      if (bTransactionalTick === null && mem.emails.some((e) => e.to === 'invitee-fair@b.test'))
+        bTransactionalTick = tick;
     }
     // B: 100 recipients, released in the first tick (its half of the 500 capacity covers them) and
     // delivered as soon as its dispatcher share allows (100 per tick).

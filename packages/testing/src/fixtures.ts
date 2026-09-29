@@ -7,6 +7,7 @@ import {
   validateImportCommand,
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
+import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   createCampaignCommand,
   runOrgCampaigns,
@@ -14,7 +15,6 @@ import {
   sendNowCommand,
   setAudienceCommand,
 } from '@yayatoh/campaigns';
-import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   chatReportSignals,
   createCheckpointCommand,
@@ -1184,7 +1184,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // M3.6b campaigns: a sent campaign (recipient snapshot, tracked link, stored content) to the
   // org's email subscribers (the fixture buyer opted in), released by the scheduler (isolation coverage).
-  const campaign = await executeCommand(createCampaignCommand, { name: `Fixture news ${slug}` }, ctx(), ports);
+  const campaign = await executeCommand(
+    createCampaignCommand,
+    { name: `Fixture news ${slug}` },
+    ctx(),
+    ports,
+  );
   await executeCommand(
     saveCampaignCommand,
     {
@@ -1212,7 +1217,11 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       name: 'Email subscribers',
       definition: {
         version: 1,
-        root: { type: 'group', op: 'and', conditions: [{ type: 'consent', channel: 'email', granted: true }] },
+        root: {
+          type: 'group',
+          op: 'and',
+          conditions: [{ type: 'consent', channel: 'email', granted: true }],
+        },
       },
     },
     ctx(),

@@ -85,7 +85,12 @@ export async function campaignTick(opts: CampaignTickOptions) {
   let started = 0;
   for (const d of due) {
     try {
-      const r = await executeCommand(startScheduledCommand, { campaignId: d.campaignId }, systemCtx(d.orgId, opts.now), ports);
+      const r = await executeCommand(
+        startScheduledCommand,
+        { campaignId: d.campaignId },
+        systemCtx(d.orgId, opts.now),
+        ports,
+      );
       if (r.status === 'sending') started += 1;
     } catch (err) {
       console.error('campaigns.start', d.campaignId, err);
@@ -109,7 +114,12 @@ export async function campaignTick(opts: CampaignTickOptions) {
   ).filter((d) => keep(d.orgId));
   let finalized = 0;
   for (const d of done) {
-    const r = await executeCommand(finalizeCampaignCommand, { campaignId: d.campaignId }, systemCtx(d.orgId, opts.now), ports);
+    const r = await executeCommand(
+      finalizeCampaignCommand,
+      { campaignId: d.campaignId },
+      systemCtx(d.orgId, opts.now),
+      ports,
+    );
     if (r.finalized) finalized += 1;
   }
   return { started, allocations, finalized };

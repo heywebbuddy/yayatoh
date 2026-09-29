@@ -2,7 +2,7 @@ import { compileForOrgTx, segmentDefinitionTx, templateDefinition } from '@yayat
 import { contactsForSendTx, marketingReachTx, normalizeEmail, segmentContactIdsTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { type Ctx, type DomainEvent, DomainError, requireOrg, uuidv7, zonedTimeToUtc } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, requireOrg, uuidv7, zonedTimeToUtc } from '@yayatoh/kernel';
 import { createTrackedLinkTx } from '@yayatoh/marketing';
 import {
   cancelQueuedByPrefixTx,
@@ -15,15 +15,10 @@ import {
 } from '@yayatoh/notifications';
 import { erasedAddressesTx, normalizeAddress, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { assertNotPausedTx, organizationBrandTx } from '@yayatoh/tenancy';
-import { and, asc, count, eq, gt, sql } from 'drizzle-orm';
+import { and, asc, count, eq, gt } from 'drizzle-orm';
 import { z } from 'zod';
 import { audienceOf, type CampaignRow, loadCampaignTx, toCampaignDto, transitionTx } from './campaigns.ts';
-import {
-  type CampaignChannel,
-  CampaignContent,
-  linkBlocks,
-  MAX_TEST_ADDRESSES,
-} from './domain/blocks.ts';
+import { type CampaignChannel, CampaignContent, linkBlocks, MAX_TEST_ADDRESSES } from './domain/blocks.ts';
 import { EXCLUSION_REASONS, type ExclusionReason, exclusionReason } from './domain/lifecycle.ts';
 import { type CampaignEventInfo, ORIGIN_TOKEN, renderCampaign } from './domain/render.ts';
 import { ratePerMinute } from './domain/scheduler.ts';
@@ -45,7 +40,8 @@ const notifier = createNotifier();
 
 function contentOrThrow(row: CampaignRow): CampaignContent {
   const c = CampaignContent.safeParse(row.content);
-  if (!c.success) throw new DomainError('invalid_state', 'The campaign needs fixing', { reason: 'content_invalid' });
+  if (!c.success)
+    throw new DomainError('invalid_state', 'The campaign needs fixing', { reason: 'content_invalid' });
   if (row.channel !== 'email' && !c.data.smsBody)
     throw new DomainError('validation_failed', 'A text message is required', {
       field: 'smsBody',
@@ -117,7 +113,10 @@ export function summarizeReach(rows: readonly { reason: ExclusionReason | null }
   return {
     total: rows.length,
     eligible: rows.filter((r) => !r.reason).length,
-    excluded: EXCLUSION_REASONS.filter((k) => by.has(k)).map((reason) => ({ reason, count: by.get(reason) ?? 0 })),
+    excluded: EXCLUSION_REASONS.filter((k) => by.has(k)).map((reason) => ({
+      reason,
+      count: by.get(reason) ?? 0,
+    })),
   };
 }
 
@@ -257,7 +256,11 @@ export const testSendCommand = tenantCommand({
     if (row.channel !== 'email')
       throw new DomainError('invalid_state', 'Test sends are by email', { reason: 'test_email_only' });
     const content = contentOrThrow(row);
-    const recent = await queuedSinceByPrefixTx(tx, testPrefix(row.id), new Date(ctx.now.getTime() - 3_600_000));
+    const recent = await queuedSinceByPrefixTx(
+      tx,
+      testPrefix(row.id),
+      new Date(ctx.now.getTime() - 3_600_000),
+    );
     if (recent + input.addresses.length > TEST_SENDS_PER_HOUR)
       throw new DomainError('rate_limited', 'Too many test sends', { reason: 'test_limit' });
     const { contentId, subject } = await storeRenderedTx(tx, ctx, row, content, { test: true });
@@ -358,7 +361,9 @@ async function startSendTx(tx: TenantTx, ctx: Ctx, row: CampaignRow, emit: Emit)
 
 function campaignLifecycleGuard(row: CampaignRow, e: 'start') {
   if (row.status !== 'draft' && row.status !== 'scheduled')
-    throw new DomainError('invalid_state', `campaign: cannot ${e} from ${row.status}`, { reason: 'not_startable' });
+    throw new DomainError('invalid_state', `campaign: cannot ${e} from ${row.status}`, {
+      reason: 'not_startable',
+    });
 }
 
 const CampaignRef = z.object({ campaignId: z.uuid() });
@@ -392,16 +397,22 @@ export const scheduleCampaignCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const row = await loadCampaignTx(tx, input.campaignId, true);
     contentOrThrow(row);
-    if (!audienceOf(row)) throw new DomainError('invalid_state', 'Choose an audience first', { reason: 'no_audience' });
+    if (!audienceOf(row))
+      throw new DomainError('invalid_state', 'Choose an audience first', { reason: 'no_audience' });
     const org = await organizationBrandTx(tx, requireOrg(ctx));
     const at = zonedTimeToUtc(input.at, org?.timezone ?? 'UTC');
     if (Number.isNaN(at.getTime()))
       throw new DomainError('validation_failed', 'Invalid date', { field: 'at', reason: 'invalid_date' });
     if (at.getTime() < ctx.now.getTime() + MIN_SCHEDULE_LEAD_MS)
-      throw new DomainError('validation_failed', 'Pick a time in the future', { field: 'at', reason: 'in_past' });
+      throw new DomainError('validation_failed', 'Pick a time in the future', {
+        field: 'at',
+        reason: 'in_past',
+      });
     if (at.getTime() > ctx.now.getTime() + MAX_SCHEDULE_AHEAD_MS)
       throw new DomainError('validation_failed', 'Too far ahead', { field: 'at', reason: 'too_far' });
-    return toCampaignDto(await transitionTx(tx, row, 'schedule', { scheduledAt: at, failureReason: null }, ctx.now));
+    return toCampaignDto(
+      await transitionTx(tx, row, 'schedule', { scheduledAt: at, failureReason: null }, ctx.now),
+    );
   },
   audit: (input) => ({
     action: 'campaign.schedule',
@@ -617,7 +628,10 @@ export const finalizeCampaignCommand = tenantCommand({
     if (row.status !== 'sent' || row.finalizedAt) return { finalized: false };
     const o = await sendOutcomesTx(tx, sendPrefix(row.id));
     if (o.queued > 0) return { finalized: false };
-    await tx.update(campaigns).set({ finalizedAt: ctx.now, updatedAt: ctx.now }).where(eq(campaigns.id, row.id));
+    await tx
+      .update(campaigns)
+      .set({ finalizedAt: ctx.now, updatedAt: ctx.now })
+      .where(eq(campaigns.id, row.id));
     const orgId = requireOrg(ctx);
     emit(
       event('campaigns.send_completed', row.id, {

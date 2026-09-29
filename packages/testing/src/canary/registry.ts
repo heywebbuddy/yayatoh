@@ -1,8 +1,8 @@
 import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as audiences } from '@yayatoh/audiences';
-import { privateColumns as campaigns } from '@yayatoh/campaigns';
 import { privateColumns as billing } from '@yayatoh/billing';
+import { privateColumns as campaigns } from '@yayatoh/campaigns';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
 import { privateColumns as crm } from '@yayatoh/crm';

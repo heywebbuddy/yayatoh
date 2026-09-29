@@ -101,7 +101,12 @@ export async function runOrgCampaigns(
   );
   let started = 0;
   for (const c of due) {
-    const r = await executeCommand(startScheduledCommand, { campaignId: c.id }, systemCtx(orgId, opts.now), ports);
+    const r = await executeCommand(
+      startScheduledCommand,
+      { campaignId: c.id },
+      systemCtx(orgId, opts.now),
+      ports,
+    );
     if (r.status === 'sending') started += 1;
   }
   let released = 0;
@@ -128,7 +133,12 @@ export async function runOrgCampaigns(
       .where(and(eq(campaigns.status, 'sent'), isNull(campaigns.finalizedAt))),
   );
   for (const c of done) {
-    const r = await executeCommand(finalizeCampaignCommand, { campaignId: c.id }, systemCtx(orgId, opts.now), ports);
+    const r = await executeCommand(
+      finalizeCampaignCommand,
+      { campaignId: c.id },
+      systemCtx(orgId, opts.now),
+      ports,
+    );
     if (r.finalized) finalized += 1;
   }
   return { started, released, finalized };

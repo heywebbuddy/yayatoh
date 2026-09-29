@@ -119,9 +119,9 @@ export {
 } from './policy/console.ts';
 export {
   createGateState,
-  orgQuotaLimitsTx,
   type GateFacts,
   type GateState,
+  orgQuotaLimitsTx,
   POLICY_RULES,
   type PolicyPhase,
   type PolicyRule,
@@ -174,16 +174,6 @@ export {
 } from './previews.ts';
 export { privateColumns } from './private-columns.ts';
 export {
-  cancelQueuedByPrefixTx,
-  marketingSuppressionsTx,
-  queuedSinceByPrefixTx,
-  renderStoredContent,
-  type StoredContent,
-  sendOutcomesTx,
-  storeContentTx,
-  storedContentTx,
-} from './stored-content.ts';
-export {
   DeviceLabel,
   endpointRef,
   fakePushAllowed,
@@ -219,6 +209,16 @@ export {
   PUSH_DELIVERY_STATUSES,
   PUSH_PLATFORMS,
 } from './schema.ts';
+export {
+  cancelQueuedByPrefixTx,
+  marketingSuppressionsTx,
+  queuedSinceByPrefixTx,
+  renderStoredContent,
+  type StoredContent,
+  sendOutcomesTx,
+  storeContentTx,
+  storedContentTx,
+} from './stored-content.ts';
 export {
   EMAIL_MESSAGES,
   emailLocale,
