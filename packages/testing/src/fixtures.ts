@@ -553,7 +553,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   }
   // Staff mode (M3.4a): the door device reports in at the main gate, opts in to staff alerts,
   // and is taken by the owner as a supervisor's phone; a capacity alert is queued for it.
-  const deviceCtx = createCtx({ orgId: org.id, actor: { type: 'system', name: `device:${door.deviceId}` } });
+  // Dated at event time, so the fixture device doesn't count as online now (devices.online metric).
+  const deviceCtx = createCtx({
+    orgId: org.id,
+    actor: { type: 'system', name: `device:${door.deviceId}` },
+    now: new Date('2027-10-14T14:55:00Z'),
+  });
   await executeCommand(
     heartbeatCommand,
     { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0, eventId: event.id, checkpointId: mainGate },
