@@ -36,6 +36,12 @@ import {
 import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
+import {
+  attributeOrderCommand,
+  createTrackedLinkCommand,
+  recordClickCommand,
+  setAttributionWindowCommand,
+} from '@yayatoh/marketing';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { uploadLogo, uploadMedia, uploadProgramImage } from '@yayatoh/media';
 import {
@@ -306,6 +312,20 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // One paid order (fake provider) so orders, order items and provider events are covered.
   await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx(), ports);
+  // M3.8a: a tracked link and one click on it from the buyer's device, before the order.
+  const link = await executeCommand(
+    createTrackedLinkCommand,
+    { eventId: event.id, source: 'newsletter', medium: 'email', campaign: `fixture-${slug}` },
+    ctx(),
+    ports,
+  );
+  const buyerDevice = `fixture-device-${slug}`.padEnd(16, 'x');
+  await executeCommand(
+    recordClickCommand,
+    { linkId: link.id, deviceId: buyerDevice, ip: '203.0.113.7' },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
   const checkout = await executeCommand(
     startCheckoutCommand,
     {
@@ -339,6 +359,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // M3.8a: the order's attribution record (first and last touch: the click above) and settings.
+  await executeCommand(
+    attributeOrderCommand,
+    { orderId: checkout.order.id, deviceId: buyerDevice },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  await executeCommand(setAttributionWindowCommand, { windowDays: 30 }, ctx(), ports);
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],

@@ -19,6 +19,7 @@ import {
   Landmark,
   Layers,
   Library,
+  Link2,
   ListChecks,
   Lock,
   type LucideIcon,
@@ -77,6 +78,7 @@ const ICONS: Record<string, LucideIcon> = {
   building: Building2,
   history: History,
   shield: ShieldCheck,
+  link: Link2,
   star: Star,
 };
 

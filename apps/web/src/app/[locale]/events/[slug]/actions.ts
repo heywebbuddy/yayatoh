@@ -29,6 +29,7 @@ import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import type { FormState } from '@/lib/form-state.ts';
+import { recordCheckoutAttribution } from '@/server/attribution.ts';
 import { failure, success } from '@/server/form.ts';
 import { emailVerifiedHere, guestLimits, rememberVerifiedEmail, sendGuestEmail } from '@/server/guest.ts';
 import { getCheckoutRisk, getPaymentProvider } from '@/server/payments.ts';
@@ -287,6 +288,8 @@ export async function checkoutAction(
     throw err;
   }
   const { order, manageToken, payment: flow } = result;
+  // M3.8a: where the order came from (tracked-link click or UTM landing); never blocks checkout.
+  await recordCheckoutAttribution(target.orgId, order.id);
   const orderPath = `/orders/${manageToken}`;
   if (order.status === 'paid') return redirect({ href: orderPath, locale });
 

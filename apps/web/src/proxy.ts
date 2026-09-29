@@ -14,6 +14,7 @@ import { resolveHost } from '@yayatoh/tenancy';
 import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing.ts';
+import { captureLanding } from './lib/attribution-capture.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
@@ -108,11 +109,20 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
   forwarded.set('content-security-policy', headers['content-security-policy'] as string);
   // The noindex guard: never-indexed hosts and private pages say so on every response.
   const robots = robotsHeader(kind, stripLocale(path, routing.locales));
+  // A first visit gets its device id now, and the request carries it on, so the page or route
+  // (e.g. the tracked-link redirector, M3.8a) sees the same id the response sets.
+  const newDevice = isDeviceId(req.cookies.get(DEVICE_COOKIE)?.value) ? null : newDeviceId();
+  if (newDevice) {
+    const cookie = req.headers.get('cookie');
+    forwarded.set('cookie', `${cookie ? `${cookie}; ` : ''}${DEVICE_COOKIE}=${newDevice}`);
+  }
+  let landing = false;
   const secure = (res: NextResponse) => {
     for (const [k, v] of Object.entries(headers)) res.headers.set(k, v);
     if (robots) res.headers.set('x-robots-tag', robots);
-    if (!isDeviceId(req.cookies.get(DEVICE_COOKIE)?.value))
-      res.cookies.set(DEVICE_COOKIE, newDeviceId(), {
+    if (landing && !res.headers.has('location')) captureLanding(req, res, { https });
+    if (newDevice)
+      res.cookies.set(DEVICE_COOKIE, newDevice, {
         httpOnly: true,
         sameSite: 'lax',
         secure: https,
@@ -180,6 +190,24 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
   // Central login (M1.2d): a tenant host's "Sign in" starts a handoff to the app host.
   if (orgId && rest === '/sign-in')
     return secure(rewrite(req, forwarded, res, `/${locale}/auth/start`, locale));
+
+  // Tracked links (M3.8a): on a tenant host the host's org is the route param (only its links
+  // resolve); elsewhere any org's. The redirect sets its own click cookie, so no landing capture.
+  const tracked = /^\/r\/([^/]+)\/?$/.exec(rest);
+  if (tracked) {
+    const code = tracked[1] ?? '';
+    return secure(
+      rewrite(
+        req,
+        forwarded,
+        res,
+        orgId ? `/${locale}/t/${orgId}/r/${code}` : `/${locale}/r/${code}`,
+        locale,
+      ),
+    );
+  }
+  // Landing capture (M3.8a): a signed click id or UTM values in a page URL become cookies.
+  landing = true;
 
   if (orgId) {
     if (rest === '/') return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}`, locale));
