@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 
 /**
  * M3.1a: the event home's key numbers now come from the metric projection (metric_snapshots,
@@ -58,7 +58,7 @@ async function guestBuys(
   await guest.getByLabel(`Quantity — ${opts.pass}`).selectOption(opts.qty);
   await guest.getByLabel('Full name').fill(opts.name);
   await guest.getByLabel('Email for your tickets').fill(opts.email);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, opts.email);
   if (opts.outcome === 'free') {
     await expect(guest).toHaveURL(/\/orders\//);
     return { guest, amount: 0 };

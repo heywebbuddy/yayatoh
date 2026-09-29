@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  OPEN_HOUSE,
+  signIn,
+  WEDDING,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const LAKESIDE = `http://lakeside-events.yayatoh.events:${PORT}`;
@@ -50,10 +57,9 @@ async function codeOf(page: Page, label: string): Promise<string> {
 async function buy(guest: Page, pass: string, name: string, paid: boolean) {
   await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
   await guest.getByLabel('Full name').fill(name);
-  await guest
-    .getByLabel('Email for your tickets')
-    .fill(`${name.replace(/\W+/g, '.').toLowerCase()}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  const email = `${name.replace(/\W+/g, '.').toLowerCase()}@example.test`;
+  await guest.getByLabel('Email for your tickets').fill(email);
+  await continueToPayment(guest, email);
   if (paid) {
     await expect(guest.getByRole('heading', { name: 'Pay for your order' })).toBeVisible();
     await guest.getByRole('button', { name: 'Pay now (test)' }).click();

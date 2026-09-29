@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
 import { seatedGala, unique } from './seating-helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
@@ -49,7 +49,7 @@ async function doorsEvent(page: Page, browser: Browser, n = 2) {
   await guest.getByLabel('Quantity — Door pass').selectOption(String(n));
   await guest.getByLabel('Full name').fill(`Lia ${s}`);
   await guest.getByLabel('Email for your tickets').fill(`lia+${s}@example.test`);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, `lia+${s}@example.test`);
   await expect(guest).toHaveURL(/\/orders\//);
   const codes = (await guest.locator('.tracking-\\[0\\.2em\\]').allTextContents()).map((c) => c.trim());
   expect(codes).toHaveLength(n);

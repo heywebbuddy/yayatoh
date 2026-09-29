@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
 
 /**
  * M3.10b refund operations in the browser: buyers ask for refunds from their order page and the
@@ -65,7 +65,7 @@ async function buy(browser: Browser, slug: string, pass: string, buyer: string, 
   await guest.getByLabel(`Quantity — ${pass}`).selectOption(String(quantity));
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(email);
-  await guest.getByRole('button', { name: 'Continue to payment' }).click();
+  await continueToPayment(guest, email);
   await guest.getByRole('button', { name: /^Pay/ }).click();
   await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
   return guest;
