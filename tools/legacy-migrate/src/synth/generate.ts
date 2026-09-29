@@ -662,7 +662,12 @@ export async function generateDump(target: Writable, opts: SynthOptions): Promis
       // Created before the snapshot (the anchor): an event far ahead was still set up in the past.
       created:
         spec.created ??
-        wall(Math.min(Date.parse(`${spec.startDate}T12:00:00Z`) - R.int(30, 200) * 86_400_000, anchorMs - 86_400_000)),
+        wall(
+          Math.min(
+            Date.parse(`${spec.startDate}T12:00:00Z`) - R.int(30, 200) * 86_400_000,
+            anchorMs - 86_400_000,
+          ),
+        ),
       tickets: [],
       city: place.city,
       state: place.state,
