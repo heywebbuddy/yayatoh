@@ -1,5 +1,7 @@
+import { AUDIENCE_EXPORT_COLUMNS, audienceExportBulk, catchUpParticipation } from '@yayatoh/audiences';
 import { enrollDeviceCommand } from '@yayatoh/checkin';
 import { createEntryCommand } from '@yayatoh/cms';
+import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -38,7 +40,7 @@ export interface CanaryAdmin {
 
 export interface CanaryFile {
   readonly name: string;
-  readonly kind: 'attendees' | 'bookings' | 'dsar' | 'audit';
+  readonly kind: 'attendees' | 'bookings' | 'dsar' | 'audit' | 'audience';
   readonly content: string;
 }
 
@@ -363,6 +365,28 @@ async function generateExports(
         ports,
       ),
     (operationId) => executeQuery(auditExportBulk.file, { operationId }, ctx(), ports),
+  );
+  // M3.6a: everyone in the org as an audience (contacts and their profiles, canaries included).
+  await catchUpParticipation(orgId);
+  await run(
+    'audience',
+    () =>
+      executeCommand(
+        audienceExportBulk.start,
+        {
+          selection: { filter: { definition: emptySegment() } },
+          params: {
+            headers: Object.fromEntries(AUDIENCE_EXPORT_COLUMNS.map((c) => [c, c])) as Record<
+              (typeof AUDIENCE_EXPORT_COLUMNS)[number],
+              string
+            >,
+            consent: { granted: 'Given', withdrawn: 'Withdrawn', unknown_legacy: 'Unknown', none: 'No' },
+          },
+        },
+        ctx(),
+        ports,
+      ),
+    (operationId) => executeQuery(audienceExportBulk.file, { operationId }, ctx(), ports),
   );
   return out;
 }

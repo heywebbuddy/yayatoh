@@ -212,7 +212,7 @@ export const setEventLayoutCommand = tenantCommand({
         })),
       );
     // Guests keep seats that still exist (and follow them to their table); others are unseated.
-    await reconcileAssignmentsTx(tx, input.eventId, key);
+    await reconcileAssignmentsTx(tx, input.eventId, key, ctx);
     const values = {
       doc,
       checksum,

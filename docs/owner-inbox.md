@@ -17,6 +17,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).
   - **Retention:** projector lag samples 7 days; the Postgres analytics sink 13 months (dropped by monthly partition once partitioned, M6.2 picks ClickHouse or Tinybird per P3-4).
   - **Deploy step:** after the M3.1a migration, run `pnpm --filter @yayatoh/worker metrics:rebuild` once per environment so events that existed before get their projections and history. Until then their dashboards read live (same numbers).
+- [ ] **Audiences defaults, pending owner** (M3.6a, labels: `tenancy`, `db-migration`). Built with these defaults; say if any should change:
+  - "People who attended last year's event" means **checked in** at the previous edition of the series. Organizers can change the template's condition to "registered" in the builder.
+  - "Last year's event" is the **previous edition** of the series (the series event that started last before the chosen one), not a calendar year.
+  - Exporting an audience (CSV of contacts) needs `attendees:export` (owners, admins, managers); the marketing role can build, preview and save audiences but not export them.
+  - A person holding both a seated and an unseated ticket at an event counts as seated.
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.

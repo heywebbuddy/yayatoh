@@ -489,6 +489,7 @@ export const syncScansCommand = tenantCommand({
         if (adm) {
           admissionId = adm.id;
           newAdmissions += 1;
+          // An offline admission is an admission: same event as a live scan (M3.6 audiences).
           emit({
             type: 'ticket.admitted',
             version: 1,

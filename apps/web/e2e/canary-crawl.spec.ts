@@ -197,7 +197,13 @@ test.describe('canary leak crawl (roadmap §9)', () => {
 
   test('export files show only their allowlisted columns; outbound messages no secret or internal data', () => {
     const c = canary();
-    expect(c.exports.map((e) => e.kind).sort()).toEqual(['attendees', 'audit', 'bookings', 'dsar']);
+    expect(c.exports.map((e) => e.kind).sort()).toEqual([
+      'attendees',
+      'audience',
+      'audit',
+      'bookings',
+      'dsar',
+    ]);
     const leaks = [
       ...c.exports.flatMap((e) =>
         leaksIn(`export:${e.kind} (${e.name})`, e.content, { kind: 'scoped', allow: EXPORT_ALLOW[e.kind] }),

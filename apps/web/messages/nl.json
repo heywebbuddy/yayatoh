@@ -256,7 +256,8 @@
     "sponsors": "Sponsors",
     "media": "Afbeeldingen",
     "trackedLinks": "Trackinglinks",
-    "messagingHealth": "Verzendlimieten"
+    "messagingHealth": "Verzendlimieten",
+    "audiences": "Doelgroepen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -4816,6 +4817,185 @@
       "phone_required": "Voeg een mobiel nummer toe om sms of WhatsApp te ontvangen.",
       "not_found": "Deze link werkt niet meer.",
       "internal": "Er ging iets mis. Probeer het opnieuw."
+    }
+  },
+  "audiences": {
+    "title": "Doelgroepen",
+    "description": "Groepen mensen op basis van wat al in Yayatoh is gebeurd: tickets, stoelen, check-ins, bestedingen, labels en toestemming.",
+    "new": "Nieuwe doelgroep",
+    "emptyTitle": "Nog geen opgeslagen doelgroepen",
+    "emptyDescription": "Stel er een samen met voorwaarden, of begin hieronder met een sjabloon.",
+    "caption": "Opgeslagen doelgroepen",
+    "name": "Naam",
+    "people": "Personen",
+    "countUnavailable": "Controle nodig",
+    "updated": "Bijgewerkt",
+    "newTitle": "Nieuwe doelgroep",
+    "newDescription": "Voeg voorwaarden en groepen toe. Het aantal en de eerste treffers worden direct bijgewerkt.",
+    "delete": "Verwijderen",
+    "deleteFor": "{name} verwijderen",
+    "eventOption": "{name} ({date})",
+    "templates": {
+      "title": "Beginnen met een sjabloon",
+      "description": "Elk sjabloon vult de editor met voorwaarden die u nog kunt aanpassen.",
+      "pick": "Sjabloon",
+      "event": "Evenement",
+      "thisYearsEvent": "Evenement van dit jaar",
+      "noEvents": "Nog geen evenementen",
+      "ticketTypes": "Tickettypen",
+      "noTicketTypes": "Dit evenement heeft geen tickettypen.",
+      "use": "Sjabloon gebruiken",
+      "used": "Sjabloon toegepast: {name}",
+      "start": "Beginnen",
+      "startFor": "Beginnen met {name}",
+      "vipsWithoutSeats": {
+        "name": "VIP's zonder stoel",
+        "description": "Kochten de gekozen tickettypen maar hebben nog geen stoel."
+      },
+      "lastYearNotThisYear": {
+        "name": "Vorig jaar, niet dit jaar",
+        "description": "Ingecheckt bij de vorige editie van de reeks, niet aangemeld voor deze."
+      },
+      "registeredNotCheckedIn": {
+        "name": "Aangemeld, niet ingecheckt",
+        "description": "Op de lijst van het evenement maar nog niet ingecheckt."
+      }
+    },
+    "builder": {
+      "title": "Voorwaarden",
+      "incomplete": "Maak de gemarkeerde voorwaarden af om te zien wie overeenkomt.",
+      "rootGroup": "Iedereen die overeenkomt",
+      "group": "Groep {n}",
+      "match": "Overeenkomen met",
+      "all": "al deze",
+      "any": "een van deze",
+      "emptyGroup": "Geen voorwaarden: iedereen komt overeen.",
+      "remove": "Verwijderen",
+      "removeGroup": "Groep {n} verwijderen",
+      "removeCondition": "Voorwaarde {n} verwijderen",
+      "conditionType": "Nieuwe voorwaarde",
+      "addCondition": "Voorwaarde toevoegen",
+      "addGroup": "Groep toevoegen",
+      "condition": "Voorwaarde {n}: {type}",
+      "types": {
+        "participation": "Deelgenomen aan een evenement",
+        "spend": "Besteding",
+        "consent": "Marketingtoestemming",
+        "label": "Label",
+        "totals": "Totalen",
+        "seen": "Eerst of laatst gezien"
+      },
+      "did": "Regel",
+      "didYes": "Wel",
+      "didNo": "Niet",
+      "role": "Als",
+      "roles": {
+        "attendee": "Deelnemer",
+        "buyer": "Koper"
+      },
+      "seated": "Heeft een stoel",
+      "checkedIn": "Ingecheckt",
+      "tri": {
+        "any": "Maakt niet uit",
+        "yes": "Ja",
+        "no": "Nee"
+      },
+      "registeredFrom": "Aangemeld vanaf",
+      "registeredTo": "Aangemeld tot",
+      "ticketTypes": "Tickettypen (een van)",
+      "currency": "Valuta",
+      "comparison": "Vergelijking",
+      "amount": "Bedrag",
+      "ops": {
+        "gte": "minstens",
+        "gt": "meer dan",
+        "lte": "hoogstens",
+        "lt": "minder dan",
+        "eq": "precies"
+      },
+      "channel": "Kanaal",
+      "channels": {
+        "email": "E-mail",
+        "sms": "Sms"
+      },
+      "consentState": "Toestemming",
+      "consentGranted": "Gegeven",
+      "consentNotGranted": "Niet gegeven",
+      "hadLabel": "Had het label",
+      "neverHadLabel": "Had het label nooit",
+      "label": "Label",
+      "metric": "Totaal",
+      "metrics": {
+        "events": "Aangemelde evenementen",
+        "eventsAttended": "Bezochte evenementen",
+        "tickets": "Tickets in bezit",
+        "orders": "Geplaatste bestellingen"
+      },
+      "value": "Aantal",
+      "which": "Gezien",
+      "firstSeen": "Eerst gezien",
+      "lastSeen": "Laatst gezien",
+      "from": "Vanaf",
+      "to": "Tot",
+      "scope": "Evenementen",
+      "event": "Evenement",
+      "editionOf": "Editie vóór",
+      "series": "Reeks",
+      "noSeries": "Nog geen reeksen"
+    },
+    "scopes": {
+      "any": "Elk evenement",
+      "event": "Eén evenement",
+      "series": "Elk evenement in een reeks",
+      "previousEdition": "Vorige editie (reeks)",
+      "eventsBetween": "Evenementen tussen datums"
+    },
+    "preview": {
+      "title": "Wie overeenkomt",
+      "waiting": "Het aantal verschijnt zodra alle voorwaarden compleet zijn.",
+      "counting": "Tellen…",
+      "count": "{count, plural, one {# persoon komt overeen} other {# personen komen overeen}}",
+      "caption": "{shown, plural, one {De eerste treffer} other {De eerste # treffers}}",
+      "name": "Naam",
+      "email": "E-mail",
+      "events": "Evenementen",
+      "attended": "Bezocht",
+      "lastSeen": "Laatst gezien",
+      "noName": "(geen naam)"
+    },
+    "save": {
+      "title": "Opslaan",
+      "name": "Naam van de doelgroep",
+      "update": "Wijzigingen opslaan",
+      "submit": "Doelgroep opslaan",
+      "done": "Doelgroep opgeslagen.",
+      "errors": {
+        "taken": "Er bestaat al een doelgroep met deze naam.",
+        "name": "Voer een naam in van maximaal 120 tekens."
+      }
+    },
+    "export": {
+      "start": "CSV exporteren",
+      "ready": "{count, plural, one {Export klaar: # persoon} other {Export klaar: # personen}}",
+      "running": "Exporteren: {processed} van {total}",
+      "download": "CSV downloaden"
+    },
+    "exportColumns": {
+      "name": "Naam",
+      "email": "E-mail",
+      "events": "Aangemelde evenementen",
+      "eventsAttended": "Bezochte evenementen",
+      "tickets": "Tickets",
+      "firstSeen": "Eerst gezien",
+      "lastSeen": "Laatst gezien",
+      "emailConsent": "Toestemming e-mailmarketing",
+      "smsConsent": "Toestemming sms-marketing",
+      "consent": {
+        "granted": "Gegeven",
+        "withdrawn": "Ingetrokken",
+        "unknown_legacy": "Onbekend (geïmporteerd)",
+        "none": "Niet gegeven"
+      }
     }
   }
 }

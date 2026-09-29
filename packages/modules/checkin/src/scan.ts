@@ -267,9 +267,11 @@ export const undoAdmissionCommand = tenantCommand({
         ticketId: admissions.ticketId,
         admittedAt: admissions.admittedAt,
         checkpointId: admissions.checkpointId,
+        day: admissions.day,
       });
     const [undone] = rows;
     if (!undone) throw new DomainError('not_found', 'Admission not found or already undone');
+    // Projections that count check-ins (M3.1 metrics, M3.6 audiences) follow the undo.
     emit({
       type: 'ticket.admission_undone',
       version: 1,
@@ -281,6 +283,7 @@ export const undoAdmissionCommand = tenantCommand({
         ticketId: undone.ticketId,
         admissionId: undone.id,
         admittedAt: undone.admittedAt.toISOString(),
+        day: undone.day,
       },
     });
     // Door screens follow along (M3.1b): delivered after commit, no ticket or holder in it.

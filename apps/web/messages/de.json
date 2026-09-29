@@ -256,7 +256,8 @@
     "sponsors": "Sponsoren",
     "media": "Bilder",
     "trackedLinks": "Tracking-Links",
-    "messagingHealth": "Versandlimits"
+    "messagingHealth": "Versandlimits",
+    "audiences": "Zielgruppen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -4816,6 +4817,185 @@
       "phone_required": "Fügen Sie eine Mobilnummer hinzu, um SMS oder WhatsApp zu erhalten.",
       "not_found": "Dieser Link funktioniert nicht mehr.",
       "internal": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    }
+  },
+  "audiences": {
+    "title": "Zielgruppen",
+    "description": "Personengruppen aus dem, was in Yayatoh bereits passiert ist: Tickets, Sitzplätze, Check-ins, Ausgaben, Labels und Einwilligungen.",
+    "new": "Neue Zielgruppe",
+    "emptyTitle": "Noch keine gespeicherten Zielgruppen",
+    "emptyDescription": "Erstellen Sie eine aus Bedingungen oder beginnen Sie unten mit einer Vorlage.",
+    "caption": "Gespeicherte Zielgruppen",
+    "name": "Name",
+    "people": "Personen",
+    "countUnavailable": "Prüfung nötig",
+    "updated": "Aktualisiert",
+    "newTitle": "Neue Zielgruppe",
+    "newDescription": "Fügen Sie Bedingungen und Gruppen hinzu. Anzahl und erste Treffer werden laufend aktualisiert.",
+    "delete": "Löschen",
+    "deleteFor": "{name} löschen",
+    "eventOption": "{name} ({date})",
+    "templates": {
+      "title": "Mit einer Vorlage beginnen",
+      "description": "Jede Vorlage füllt den Editor mit Bedingungen, die Sie weiter ändern können.",
+      "pick": "Vorlage",
+      "event": "Veranstaltung",
+      "thisYearsEvent": "Veranstaltung dieses Jahres",
+      "noEvents": "Noch keine Veranstaltungen",
+      "ticketTypes": "Ticketarten",
+      "noTicketTypes": "Diese Veranstaltung hat keine Ticketarten.",
+      "use": "Vorlage verwenden",
+      "used": "Vorlage angewendet: {name}",
+      "start": "Starten",
+      "startFor": "Mit {name} beginnen",
+      "vipsWithoutSeats": {
+        "name": "VIPs ohne Sitzplatz",
+        "description": "Haben die gewählten Ticketarten gekauft, aber noch keinen Sitzplatz."
+      },
+      "lastYearNotThisYear": {
+        "name": "Letztes Jahr, nicht dieses Jahr",
+        "description": "Bei der vorherigen Ausgabe der Reihe eingecheckt, für diese nicht angemeldet."
+      },
+      "registeredNotCheckedIn": {
+        "name": "Angemeldet, nicht eingecheckt",
+        "description": "Auf der Liste der Veranstaltung, aber noch nicht eingecheckt."
+      }
+    },
+    "builder": {
+      "title": "Bedingungen",
+      "incomplete": "Vervollständigen Sie die markierten Bedingungen, um die Treffer zu sehen.",
+      "rootGroup": "Alle, die zutreffen",
+      "group": "Gruppe {n}",
+      "match": "Treffer bei",
+      "all": "allen Bedingungen",
+      "any": "einer der Bedingungen",
+      "emptyGroup": "Keine Bedingungen: Alle treffen zu.",
+      "remove": "Entfernen",
+      "removeGroup": "Gruppe {n} entfernen",
+      "removeCondition": "Bedingung {n} entfernen",
+      "conditionType": "Neue Bedingung",
+      "addCondition": "Bedingung hinzufügen",
+      "addGroup": "Gruppe hinzufügen",
+      "condition": "Bedingung {n}: {type}",
+      "types": {
+        "participation": "Teilnahme an einer Veranstaltung",
+        "spend": "Ausgaben",
+        "consent": "Marketing-Einwilligung",
+        "label": "Label",
+        "totals": "Gesamtwerte",
+        "seen": "Zuerst oder zuletzt gesehen"
+      },
+      "did": "Regel",
+      "didYes": "Ja",
+      "didNo": "Nein",
+      "role": "Als",
+      "roles": {
+        "attendee": "Teilnehmer",
+        "buyer": "Käufer"
+      },
+      "seated": "Hat einen Sitzplatz",
+      "checkedIn": "Eingecheckt",
+      "tri": {
+        "any": "Egal",
+        "yes": "Ja",
+        "no": "Nein"
+      },
+      "registeredFrom": "Angemeldet ab",
+      "registeredTo": "Angemeldet bis",
+      "ticketTypes": "Ticketarten (eine davon)",
+      "currency": "Währung",
+      "comparison": "Vergleich",
+      "amount": "Betrag",
+      "ops": {
+        "gte": "mindestens",
+        "gt": "mehr als",
+        "lte": "höchstens",
+        "lt": "weniger als",
+        "eq": "genau"
+      },
+      "channel": "Kanal",
+      "channels": {
+        "email": "E-Mail",
+        "sms": "SMS"
+      },
+      "consentState": "Einwilligung",
+      "consentGranted": "Erteilt",
+      "consentNotGranted": "Nicht erteilt",
+      "hadLabel": "Hatte das Label",
+      "neverHadLabel": "Hatte das Label nie",
+      "label": "Label",
+      "metric": "Summe",
+      "metrics": {
+        "events": "Angemeldete Veranstaltungen",
+        "eventsAttended": "Besuchte Veranstaltungen",
+        "tickets": "Gehaltene Tickets",
+        "orders": "Aufgegebene Bestellungen"
+      },
+      "value": "Anzahl",
+      "which": "Gesehen",
+      "firstSeen": "Zuerst gesehen",
+      "lastSeen": "Zuletzt gesehen",
+      "from": "Ab",
+      "to": "Bis",
+      "scope": "Veranstaltungen",
+      "event": "Veranstaltung",
+      "editionOf": "Ausgabe vor",
+      "series": "Reihe",
+      "noSeries": "Noch keine Reihen"
+    },
+    "scopes": {
+      "any": "Beliebige Veranstaltung",
+      "event": "Eine Veranstaltung",
+      "series": "Beliebige Veranstaltung einer Reihe",
+      "previousEdition": "Vorherige Ausgabe (Reihe)",
+      "eventsBetween": "Veranstaltungen zwischen Daten"
+    },
+    "preview": {
+      "title": "Wer zutrifft",
+      "waiting": "Die Anzahl erscheint, sobald alle Bedingungen vollständig sind.",
+      "counting": "Wird gezählt…",
+      "count": "{count, plural, one {# Person trifft zu} other {# Personen treffen zu}}",
+      "caption": "{shown, plural, one {Der erste Treffer} other {Die ersten # Treffer}}",
+      "name": "Name",
+      "email": "E-Mail",
+      "events": "Veranstaltungen",
+      "attended": "Besucht",
+      "lastSeen": "Zuletzt gesehen",
+      "noName": "(kein Name)"
+    },
+    "save": {
+      "title": "Speichern",
+      "name": "Name der Zielgruppe",
+      "update": "Änderungen speichern",
+      "submit": "Zielgruppe speichern",
+      "done": "Zielgruppe gespeichert.",
+      "errors": {
+        "taken": "Es gibt bereits eine Zielgruppe mit diesem Namen.",
+        "name": "Geben Sie einen Namen mit bis zu 120 Zeichen ein."
+      }
+    },
+    "export": {
+      "start": "CSV exportieren",
+      "ready": "{count, plural, one {Export bereit: # Person} other {Export bereit: # Personen}}",
+      "running": "Export läuft: {processed} von {total}",
+      "download": "CSV herunterladen"
+    },
+    "exportColumns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "events": "Angemeldete Veranstaltungen",
+      "eventsAttended": "Besuchte Veranstaltungen",
+      "tickets": "Tickets",
+      "firstSeen": "Zuerst gesehen",
+      "lastSeen": "Zuletzt gesehen",
+      "emailConsent": "Einwilligung E-Mail-Marketing",
+      "smsConsent": "Einwilligung SMS-Marketing",
+      "consent": {
+        "granted": "Erteilt",
+        "withdrawn": "Widerrufen",
+        "unknown_legacy": "Unbekannt (importiert)",
+        "none": "Nicht erteilt"
+      }
     }
   }
 }

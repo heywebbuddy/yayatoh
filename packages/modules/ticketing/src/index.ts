@@ -83,6 +83,7 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   CreatePromoCodeInput,

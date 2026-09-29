@@ -1,4 +1,5 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
+import { participationProjector } from '@yayatoh/audiences';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
@@ -62,6 +63,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     fraudSignalAlerts({ notifier }),
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
+    // M3.6a: contact × event participation and contact profiles for audiences.
+    participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     metricsProjector(),

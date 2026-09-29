@@ -1,5 +1,6 @@
 import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as attendees } from '@yayatoh/attendees';
+import { privateColumns as audiences } from '@yayatoh/audiences';
 import { privateColumns as billing } from '@yayatoh/billing';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
@@ -34,6 +35,7 @@ import { privateColumns as venues } from '@yayatoh/venues';
 export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   ai,
   attendees,
+  audiences,
   billing,
   checkin,
   cms,

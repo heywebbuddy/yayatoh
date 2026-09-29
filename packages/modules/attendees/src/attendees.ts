@@ -5,6 +5,7 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, inArray, or, type SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { AttendeeDto, attendeeSerializer } from './dto.ts';
+import { attendeePairsTx, emitAttendeesChangedTx } from './participation.ts';
 import { ATTENDEE_SOURCES, ATTENDEE_STATUSES, attendees } from './schema.ts';
 
 export interface NewAttendee {
@@ -29,6 +30,7 @@ export async function createAttendeesTx(
     .values(rows.map((r) => ({ orgId, ...r, ticketId: r.ticketId ?? null })))
     .returning({ id: attendees.id, ticketId: attendees.ticketId });
   if (out.length !== rows.length) throw new DomainError('internal');
+  await emitAttendeesChangedTx(tx, ctx, rows);
   return out;
 }
 
@@ -42,12 +44,15 @@ export async function reassignAttendeeTx(
   attendeeId: string,
   to: { contactId: string; name: string; email: string },
 ): Promise<void> {
+  const before = await attendeePairsTx(tx, [attendeeId]);
   const rows = await tx
     .update(attendees)
     .set({ contactId: to.contactId, name: to.name, email: to.email, updatedAt: ctx.now })
     .where(eq(attendees.id, attendeeId))
-    .returning({ id: attendees.id });
+    .returning({ id: attendees.id, eventId: attendees.eventId, contactId: attendees.contactId });
   if (rows.length === 0) throw new DomainError('not_found', 'Attendee not found');
+  // Both people's participation changes: the ticket left one and reached the other.
+  await emitAttendeesChangedTx(tx, ctx, [...before, ...rows]);
 }
 
 /** Tickets were voided (refund, cancellation): their attendees leave the list; records stay. */
@@ -57,10 +62,12 @@ export async function cancelAttendeesTx(
   attendeeIds: readonly string[],
 ): Promise<void> {
   if (attendeeIds.length === 0) return;
-  await tx
+  const rows = await tx
     .update(attendees)
     .set({ status: 'cancelled', updatedAt: ctx.now })
-    .where(inArray(attendees.id, [...attendeeIds]));
+    .where(inArray(attendees.id, [...attendeeIds]))
+    .returning({ eventId: attendees.eventId, contactId: attendees.contactId });
+  await emitAttendeesChangedTx(tx, ctx, rows);
 }
 
 /**
@@ -323,8 +330,9 @@ export const setAttendeeLabelsCommand = tenantCommand({
       .update(attendees)
       .set({ labels: next, updatedAt: ctx.now })
       .where(and(eq(attendees.eventId, input.eventId), inArray(attendees.id, ids)))
-      .returning({ id: attendees.id });
+      .returning({ id: attendees.id, eventId: attendees.eventId, contactId: attendees.contactId });
     if (rows.length !== ids.length) throw new DomainError('not_found', 'Attendee not found');
+    await emitAttendeesChangedTx(tx, ctx, rows);
     return { updated: rows.length };
   },
   audit: (input, r) => ({

@@ -256,7 +256,8 @@
     "sponsors": "Sponsors",
     "media": "Images",
     "trackedLinks": "Liens suivis",
-    "messagingHealth": "Limites d'envoi"
+    "messagingHealth": "Limites d'envoi",
+    "audiences": "Audiences"
   },
   "vocab": {
     "attendee": "Participant",
@@ -4816,6 +4817,185 @@
       "phone_required": "Ajoutez un numéro de mobile pour recevoir des SMS ou WhatsApp.",
       "not_found": "Ce lien ne fonctionne plus.",
       "internal": "Une erreur est survenue. Réessayez."
+    }
+  },
+  "audiences": {
+    "title": "Audiences",
+    "description": "Des groupes de personnes construits à partir de ce qui s'est déjà passé dans Yayatoh : billets, places, enregistrements, dépenses, étiquettes et consentement.",
+    "new": "Nouvelle audience",
+    "emptyTitle": "Aucune audience enregistrée",
+    "emptyDescription": "Créez-en une à partir de conditions, ou commencez par un modèle ci-dessous.",
+    "caption": "Audiences enregistrées",
+    "name": "Nom",
+    "people": "Personnes",
+    "countUnavailable": "À vérifier",
+    "updated": "Mise à jour",
+    "newTitle": "Nouvelle audience",
+    "newDescription": "Ajoutez des conditions et des groupes. Le nombre et les premiers résultats se mettent à jour au fur et à mesure.",
+    "delete": "Supprimer",
+    "deleteFor": "Supprimer {name}",
+    "eventOption": "{name} ({date})",
+    "templates": {
+      "title": "Commencer avec un modèle",
+      "description": "Chaque modèle remplit l'éditeur avec des conditions que vous pouvez encore modifier.",
+      "pick": "Modèle",
+      "event": "Événement",
+      "thisYearsEvent": "Événement de cette année",
+      "noEvents": "Aucun événement",
+      "ticketTypes": "Types de billets",
+      "noTicketTypes": "Cet événement n'a aucun type de billet.",
+      "use": "Utiliser le modèle",
+      "used": "Modèle appliqué : {name}",
+      "start": "Commencer",
+      "startFor": "Commencer avec {name}",
+      "vipsWithoutSeats": {
+        "name": "VIP sans place",
+        "description": "Ont acheté les types de billets choisis mais n'ont pas encore de place."
+      },
+      "lastYearNotThisYear": {
+        "name": "L'an dernier, pas cette année",
+        "description": "Enregistrés à l'édition précédente de la série, non inscrits à celle-ci."
+      },
+      "registeredNotCheckedIn": {
+        "name": "Inscrits, non enregistrés",
+        "description": "Sur la liste de l'événement mais pas encore enregistrés à l'entrée."
+      }
+    },
+    "builder": {
+      "title": "Conditions",
+      "incomplete": "Complétez les conditions signalées pour voir qui correspond.",
+      "rootGroup": "Toutes les personnes qui correspondent",
+      "group": "Groupe {n}",
+      "match": "Correspondre à",
+      "all": "toutes ces conditions",
+      "any": "l'une de ces conditions",
+      "emptyGroup": "Aucune condition : tout le monde correspond.",
+      "remove": "Retirer",
+      "removeGroup": "Retirer le groupe {n}",
+      "removeCondition": "Retirer la condition {n}",
+      "conditionType": "Nouvelle condition",
+      "addCondition": "Ajouter une condition",
+      "addGroup": "Ajouter un groupe",
+      "condition": "Condition {n} : {type}",
+      "types": {
+        "participation": "A participé à un événement",
+        "spend": "Dépenses",
+        "consent": "Consentement marketing",
+        "label": "Étiquette",
+        "totals": "Totaux cumulés",
+        "seen": "Vu pour la première ou dernière fois"
+      },
+      "did": "Règle",
+      "didYes": "Oui",
+      "didNo": "Non",
+      "role": "En tant que",
+      "roles": {
+        "attendee": "Participant",
+        "buyer": "Acheteur"
+      },
+      "seated": "A une place",
+      "checkedIn": "Enregistré à l'entrée",
+      "tri": {
+        "any": "Peu importe",
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "registeredFrom": "Inscrit depuis",
+      "registeredTo": "Inscrit jusqu'au",
+      "ticketTypes": "Types de billets (l'un de)",
+      "currency": "Devise",
+      "comparison": "Comparaison",
+      "amount": "Montant",
+      "ops": {
+        "gte": "au moins",
+        "gt": "plus de",
+        "lte": "au plus",
+        "lt": "moins de",
+        "eq": "exactement"
+      },
+      "channel": "Canal",
+      "channels": {
+        "email": "E-mail",
+        "sms": "SMS"
+      },
+      "consentState": "Consentement",
+      "consentGranted": "Donné",
+      "consentNotGranted": "Non donné",
+      "hadLabel": "A eu l'étiquette",
+      "neverHadLabel": "N'a jamais eu l'étiquette",
+      "label": "Étiquette",
+      "metric": "Total",
+      "metrics": {
+        "events": "Événements inscrits",
+        "eventsAttended": "Événements fréquentés",
+        "tickets": "Billets détenus",
+        "orders": "Commandes passées"
+      },
+      "value": "Nombre",
+      "which": "Vu",
+      "firstSeen": "Vu pour la première fois",
+      "lastSeen": "Vu pour la dernière fois",
+      "from": "Du",
+      "to": "Au",
+      "scope": "Événements",
+      "event": "Événement",
+      "editionOf": "Édition précédant",
+      "series": "Série",
+      "noSeries": "Aucune série"
+    },
+    "scopes": {
+      "any": "N'importe quel événement",
+      "event": "Un événement",
+      "series": "N'importe quel événement d'une série",
+      "previousEdition": "Édition précédente (série)",
+      "eventsBetween": "Événements entre deux dates"
+    },
+    "preview": {
+      "title": "Qui correspond",
+      "waiting": "Le nombre apparaît une fois toutes les conditions complétées.",
+      "counting": "Comptage…",
+      "count": "{count, plural, one {# personne correspond} other {# personnes correspondent}}",
+      "caption": "{shown, plural, one {Le premier résultat} other {Les # premiers résultats}}",
+      "name": "Nom",
+      "email": "E-mail",
+      "events": "Événements",
+      "attended": "Présences",
+      "lastSeen": "Vu pour la dernière fois",
+      "noName": "(sans nom)"
+    },
+    "save": {
+      "title": "Enregistrer",
+      "name": "Nom de l'audience",
+      "update": "Enregistrer les modifications",
+      "submit": "Enregistrer l'audience",
+      "done": "Audience enregistrée.",
+      "errors": {
+        "taken": "Une audience porte déjà ce nom.",
+        "name": "Saisissez un nom de 120 caractères maximum."
+      }
+    },
+    "export": {
+      "start": "Exporter en CSV",
+      "ready": "{count, plural, one {Export prêt : # personne} other {Export prêt : # personnes}}",
+      "running": "Export en cours : {processed} sur {total}",
+      "download": "Télécharger le CSV"
+    },
+    "exportColumns": {
+      "name": "Nom",
+      "email": "E-mail",
+      "events": "Événements inscrits",
+      "eventsAttended": "Événements fréquentés",
+      "tickets": "Billets",
+      "firstSeen": "Vu pour la première fois",
+      "lastSeen": "Vu pour la dernière fois",
+      "emailConsent": "Consentement marketing par e-mail",
+      "smsConsent": "Consentement marketing par SMS",
+      "consent": {
+        "granted": "Donné",
+        "withdrawn": "Retiré",
+        "unknown_legacy": "Inconnu (importé)",
+        "none": "Non donné"
+      }
     }
   }
 }

@@ -256,7 +256,8 @@
     "sponsors": "赞助商",
     "media": "图片",
     "trackedLinks": "追踪链接",
-    "messagingHealth": "消息发送限制"
+    "messagingHealth": "消息发送限制",
+    "audiences": "受众"
   },
   "vocab": {
     "attendee": "参会者",
@@ -4816,6 +4817,185 @@
       "phone_required": "请添加手机号以接收短信或 WhatsApp。",
       "not_found": "此链接已失效。",
       "internal": "出了点问题，请重试。"
+    }
+  },
+  "audiences": {
+    "title": "受众",
+    "description": "根据 Yayatoh 中已有的数据（门票、座位、签到、消费、标签和同意）组成的人群。",
+    "new": "新建受众",
+    "emptyTitle": "还没有保存的受众",
+    "emptyDescription": "用条件创建一个，或从下方的模板开始。",
+    "caption": "已保存的受众",
+    "name": "名称",
+    "people": "人数",
+    "countUnavailable": "需要检查",
+    "updated": "更新时间",
+    "newTitle": "新建受众",
+    "newDescription": "添加条件和分组。人数和前几个匹配结果会随时更新。",
+    "delete": "删除",
+    "deleteFor": "删除 {name}",
+    "eventOption": "{name}（{date}）",
+    "templates": {
+      "title": "从模板开始",
+      "description": "每个模板都会在构建器中填入可继续修改的条件。",
+      "pick": "模板",
+      "event": "活动",
+      "thisYearsEvent": "今年的活动",
+      "noEvents": "还没有活动",
+      "ticketTypes": "票种",
+      "noTicketTypes": "此活动没有票种。",
+      "use": "使用模板",
+      "used": "已应用模板：{name}",
+      "start": "开始",
+      "startFor": "从 {name} 开始",
+      "vipsWithoutSeats": {
+        "name": "未选座的 VIP",
+        "description": "购买了所选票种但还没有座位。"
+      },
+      "lastYearNotThisYear": {
+        "name": "去年来过，今年未报名",
+        "description": "在系列上一届签到过，但未报名本届。"
+      },
+      "registeredNotCheckedIn": {
+        "name": "已报名，未签到",
+        "description": "在活动名单中但还未签到。"
+      }
+    },
+    "builder": {
+      "title": "条件",
+      "incomplete": "完成标出的条件即可查看匹配的人。",
+      "rootGroup": "所有匹配的人",
+      "group": "分组 {n}",
+      "match": "匹配",
+      "all": "全部条件",
+      "any": "任一条件",
+      "emptyGroup": "没有条件：所有人都匹配。",
+      "remove": "移除",
+      "removeGroup": "移除分组 {n}",
+      "removeCondition": "移除条件 {n}",
+      "conditionType": "新条件",
+      "addCondition": "添加条件",
+      "addGroup": "添加分组",
+      "condition": "条件 {n}：{type}",
+      "types": {
+        "participation": "参加过活动",
+        "spend": "消费",
+        "consent": "营销同意",
+        "label": "标签",
+        "totals": "累计数据",
+        "seen": "首次或最近出现"
+      },
+      "did": "规则",
+      "didYes": "是",
+      "didNo": "否",
+      "role": "身份",
+      "roles": {
+        "attendee": "参与者",
+        "buyer": "购买者"
+      },
+      "seated": "有座位",
+      "checkedIn": "已签到",
+      "tri": {
+        "any": "不限",
+        "yes": "是",
+        "no": "否"
+      },
+      "registeredFrom": "报名起始",
+      "registeredTo": "报名截止",
+      "ticketTypes": "票种（任一）",
+      "currency": "货币",
+      "comparison": "比较",
+      "amount": "金额",
+      "ops": {
+        "gte": "至少",
+        "gt": "多于",
+        "lte": "至多",
+        "lt": "少于",
+        "eq": "等于"
+      },
+      "channel": "渠道",
+      "channels": {
+        "email": "电子邮件",
+        "sms": "短信"
+      },
+      "consentState": "同意",
+      "consentGranted": "已同意",
+      "consentNotGranted": "未同意",
+      "hadLabel": "有过该标签",
+      "neverHadLabel": "从未有过该标签",
+      "label": "标签",
+      "metric": "累计项",
+      "metrics": {
+        "events": "报名的活动",
+        "eventsAttended": "参加的活动",
+        "tickets": "持有的门票",
+        "orders": "下的订单"
+      },
+      "value": "数量",
+      "which": "出现",
+      "firstSeen": "首次出现",
+      "lastSeen": "最近出现",
+      "from": "从",
+      "to": "至",
+      "scope": "活动",
+      "event": "活动",
+      "editionOf": "此前一届",
+      "series": "系列",
+      "noSeries": "还没有系列"
+    },
+    "scopes": {
+      "any": "任意活动",
+      "event": "单个活动",
+      "series": "系列中的任意活动",
+      "previousEdition": "上一届（系列）",
+      "eventsBetween": "日期之间的活动"
+    },
+    "preview": {
+      "title": "匹配的人",
+      "waiting": "所有条件完成后显示人数。",
+      "counting": "正在统计…",
+      "count": "{count, plural, other {# 人匹配}}",
+      "caption": "{shown, plural, other {前 # 个匹配}}",
+      "name": "姓名",
+      "email": "电子邮件",
+      "events": "活动",
+      "attended": "参加",
+      "lastSeen": "最近出现",
+      "noName": "（无姓名）"
+    },
+    "save": {
+      "title": "保存",
+      "name": "受众名称",
+      "update": "保存更改",
+      "submit": "保存受众",
+      "done": "受众已保存。",
+      "errors": {
+        "taken": "已存在同名受众。",
+        "name": "请输入不超过 120 个字符的名称。"
+      }
+    },
+    "export": {
+      "start": "导出 CSV",
+      "ready": "{count, plural, other {导出完成：# 人}}",
+      "running": "正在导出：{processed}/{total}",
+      "download": "下载 CSV"
+    },
+    "exportColumns": {
+      "name": "姓名",
+      "email": "电子邮件",
+      "events": "报名的活动",
+      "eventsAttended": "参加的活动",
+      "tickets": "门票",
+      "firstSeen": "首次出现",
+      "lastSeen": "最近出现",
+      "emailConsent": "电子邮件营销同意",
+      "smsConsent": "短信营销同意",
+      "consent": {
+        "granted": "已同意",
+        "withdrawn": "已撤回",
+        "unknown_legacy": "未知（导入）",
+        "none": "未同意"
+      }
     }
   }
 }

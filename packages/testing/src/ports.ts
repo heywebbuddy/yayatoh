@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
+import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
 import { eventRolesOf } from '@yayatoh/events';
 import { ticketCancelAction } from '@yayatoh/orders';
@@ -43,6 +44,7 @@ export const BULK_ACTIONS = [
   ticketResendAction,
   ticketCancelAction,
   surveyExportAction,
+  audienceExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

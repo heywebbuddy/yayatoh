@@ -148,6 +148,7 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   listOrdersQuery,

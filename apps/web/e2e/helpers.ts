@@ -70,6 +70,8 @@ export async function newUser(
     password?: boolean;
     signIn?: boolean;
     name?: string;
+    /** With `org`: terms accepted and one published event (see /api/dev/user `event=published`). */
+    event?: 'published';
   } = {},
 ): Promise<TestUser> {
   const form = new URLSearchParams();
@@ -79,6 +81,7 @@ export async function newUser(
   if (opts.password === false) form.set('password', '0');
   if (opts.signIn === false) form.set('signIn', '0');
   if (opts.name) form.set('name', opts.name);
+  if (opts.event) form.set('event', opts.event);
   const res = await page.request.post('/api/dev/user', {
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: form.toString(),

@@ -11,6 +11,7 @@ import {
   nextLabels,
   type TicketFilterExtension,
 } from './attendees.ts';
+import { attendeePairsTx, emitAttendeesChangedTx } from './participation.ts';
 import { attendees } from './schema.ts';
 
 /**
@@ -85,10 +86,15 @@ export const attendeeLabelAction = defineBulkAction({
     const found = new Map(before.map((b) => [b.id, b]));
     const allowed = before.filter((b) => !b.over).map((b) => b.id);
     if (allowed.length)
-      await tx
-        .update(attendees)
-        .set({ labels: next, updatedAt: ctx.now })
-        .where(inArray(attendees.id, allowed));
+      await emitAttendeesChangedTx(
+        tx,
+        ctx,
+        await tx
+          .update(attendees)
+          .set({ labels: next, updatedAt: ctx.now })
+          .where(inArray(attendees.id, allowed))
+          .returning({ eventId: attendees.eventId, contactId: attendees.contactId }),
+      );
     return {
       results: ids.map((id) => {
         const b = found.get(id);
@@ -106,6 +112,14 @@ export const attendeeLabelAction = defineBulkAction({
         .set({ labels: prev.labels, updatedAt: ctx.now })
         .where(eq(attendees.id, i.id));
     }
+    await emitAttendeesChangedTx(
+      tx,
+      ctx,
+      await attendeePairsTx(
+        tx,
+        items.map((i) => i.id),
+      ),
+    );
   },
 });
 

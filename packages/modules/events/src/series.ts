@@ -2,7 +2,7 @@ import { defineSerializer, Slug } from '@yayatoh/contracts';
 import { isUniqueViolation, type TenantTx, withoutTenant } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, gte, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { slugify } from './domain/lifecycle.ts';
 import { events, series, seriesEvents } from './schema.ts';
@@ -242,4 +242,35 @@ export async function publicSeriesBySlug(
       })),
     });
   });
+}
+
+/** The events of a series with their start times, earliest first (M3.6 audience scopes). */
+export async function seriesEditionsTx(tx: TenantTx, seriesId: string) {
+  return tx
+    .select({ eventId: events.id, startsAt: events.startsAt })
+    .from(seriesEvents)
+    .innerJoin(events, and(eq(events.orgId, seriesEvents.orgId), eq(events.id, seriesEvents.eventId)))
+    .where(eq(seriesEvents.seriesId, seriesId))
+    .orderBy(asc(events.startsAt), asc(events.id));
+}
+
+/**
+ * The edition of the event's series that started last before it ("last year's"), or null when
+ * the event is in no series or is its first edition.
+ */
+export async function previousEditionTx(tx: TenantTx, eventId: string): Promise<string | null> {
+  const seriesId = await seriesOfEventTx(tx, eventId);
+  if (!seriesId) return null;
+  const editions = await seriesEditionsTx(tx, seriesId);
+  const at = editions.findIndex((e) => e.eventId === eventId);
+  return at > 0 ? (editions[at - 1]?.eventId ?? null) : null;
+}
+
+/** Events starting in [from, to) (M3.6 audience scopes: "events between two dates"). */
+export async function eventIdsStartingBetweenTx(tx: TenantTx, from: Date, to: Date): Promise<string[]> {
+  const rows = await tx
+    .select({ id: events.id })
+    .from(events)
+    .where(and(gte(events.startsAt, from), lt(events.startsAt, to)));
+  return rows.map((r) => r.id);
 }

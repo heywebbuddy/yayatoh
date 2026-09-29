@@ -2,13 +2,14 @@ import { attendeesByIdsTx, eventAttendeesTx } from '@yayatoh/attendees';
 import type { TenantTx } from '@yayatoh/db';
 import { FloorplanDoc } from '@yayatoh/floorplan';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
-import { defineSubscriber, emitEvents, tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { defineSubscriber, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { type ChartKey, chartKeyTx, onChart } from './chart.ts';
 import { ASSIGN_SEAT_STATES, assignSeatState, pickSeats } from './domain/assign.ts';
 import { activeAdaRule } from './domain/rules.ts';
 import type { SeatStatus } from './domain/seat-state.ts';
+import { emitAssignmentsChangedTx } from './participation.ts';
 import { checkSeatRulesTx, RuleHitDto, ruleStartTx, seatingRulesTx } from './rules.ts';
 import {
   ASSIGNABLE_BLOCKS,
@@ -42,7 +43,7 @@ async function layoutDocTx(tx: TenantTx, eventId: string, key: ChartKey) {
  */
 export async function releaseAttendeeSeatsTx(
   tx: TenantTx,
-  _ctx: Ctx,
+  ctx: Ctx,
   attendeeIds: readonly string[],
   /** Only their seats on this chart (M1.7g); without it, every seat they have at the event. */
   chart?: { readonly eventId: string; readonly key: ChartKey },
@@ -57,7 +58,12 @@ export async function releaseAttendeeSeatsTx(
         chart ? onChart(seatAssignments, chart.eventId, chart.key) : undefined,
       ),
     )
-    .returning({ id: seatAssignments.id });
+    .returning({
+      id: seatAssignments.id,
+      eventId: seatAssignments.eventId,
+      attendeeId: seatAssignments.attendeeId,
+    });
+  await emitAssignmentsChangedTx(tx, ctx, gone);
   return gone.length;
 }
 
@@ -65,16 +71,28 @@ export async function releaseAttendeeSeatsTx(
  * The floor plan changed: assignments whose seat no longer exists are dropped, and the rest
  * follow their seat's table or row (seats keep their ids across edits).
  */
-export async function reconcileAssignmentsTx(tx: TenantTx, eventId: string, key: ChartKey): Promise<void> {
+export async function reconcileAssignmentsTx(
+  tx: TenantTx,
+  eventId: string,
+  key: ChartKey,
+  ctx?: Ctx,
+): Promise<void> {
   const chart = key ? sql`a.occurrence_id = ${key}` : sql`a.occurrence_id is null`;
-  await tx.execute(sql`
+  const gone = await tx.execute<{ attendee_id: string }>(sql`
     delete from ${seatAssignments} a
     where a.event_id = ${eventId} and ${chart}
       and not exists (
         select 1 from ${eventSeats} s
         where s.event_id = a.event_id and s.occurrence_id is not distinct from a.occurrence_id
           and s.seat_uuid = a.seat_uuid
-      )`);
+      )
+    returning a.attendee_id`);
+  if (ctx && gone.length)
+    await emitAssignmentsChangedTx(
+      tx,
+      ctx,
+      gone.map((g) => ({ eventId, attendeeId: g.attendee_id })),
+    );
   await tx.execute(sql`
     update ${seatAssignments} a set item_id = s.item_id
     from ${eventSeats} s
@@ -84,26 +102,6 @@ export async function reconcileAssignmentsTx(tx: TenantTx, eventId: string, key:
 }
 
 const AssignedDto = z.object({ attendeeId: z.uuid(), seatUuid: z.uuid(), seatLabel: z.string() });
-
-/**
- * Seat people at a table or row (M1.7d). Without `seatUuid` they take the first free seats there
- * (accessible seats last); with it, one person takes that exact seat, even one blocked for a
- * channel or accessibility, and a guest who was placed there automatically moves to another
- * free seat at the same table. Anyone already seated elsewhere moves ("Move to…", M1.7f). Seats
- * taken this way are blocked (`assigned`), so they are off sale; held, sold and killed seats
- * can't be assigned, and ticket holders who chose a seat when buying are already seated by their
- * ticket. Seating rules (M1.7f): while accessible seats are kept back, a guest placed in one is
- * a warning; when the rule is enforced, automatic placement skips them and choosing one needs
- * `overrideRules` ("this guest needs an accessible seat", audited).
- */
-/** Seats given or taken back by the organizer (the occupied-seats metric follows it). */
-const assignmentsChanged = (orgId: string, eventId: string) => ({
-  type: 'seating.assignments_changed',
-  version: 1,
-  aggregateType: 'event',
-  aggregateId: eventId,
-  payload: { orgId, eventId },
-});
 
 /**
  * Occupied seats of one event (M3.1 metrics): seats sold with a ticket plus seats the organizer
@@ -119,6 +117,17 @@ export async function seatsOccupiedTx(tx: TenantTx, eventId: string): Promise<nu
   return Number(r?.n ?? 0);
 }
 
+/**
+ * Seat people at a table or row (M1.7d). Without `seatUuid` they take the first free seats there
+ * (accessible seats last); with it, one person takes that exact seat, even one blocked for a
+ * channel or accessibility, and a guest who was placed there automatically moves to another
+ * free seat at the same table. Anyone already seated elsewhere moves ("Move to…", M1.7f). Seats
+ * taken this way are blocked (`assigned`), so they are off sale; held, sold and killed seats
+ * can't be assigned, and ticket holders who chose a seat when buying are already seated by their
+ * ticket. Seating rules (M1.7f): while accessible seats are kept back, a guest placed in one is
+ * a warning; when the rule is enforced, automatic placement skips them and choosing one needs
+ * `overrideRules` ("this guest needs an accessible seat", audited).
+ */
 export const assignSeatsCommand = tenantCommand({
   name: 'seating.assign',
   input: z
@@ -138,7 +147,7 @@ export const assignSeatsCommand = tenantCommand({
   output: z.object({ itemLabel: z.string(), seated: z.array(AssignedDto), warnings: z.array(RuleHitDto) }),
   entitlement: 'seating',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx, emit }) => {
+  handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const ids = [...new Set(input.attendeeIds)];
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
@@ -337,6 +346,11 @@ export const assignSeatsCommand = tenantCommand({
           priorBlock: prior.get(w.seatUuid) ?? null,
         })),
       );
+      await emitAssignmentsChangedTx(
+        tx,
+        ctx,
+        wanted.map((w) => ({ eventId: input.eventId, attendeeId: w.attendeeId })),
+      );
     }
     const labelOf = new Map(seatRows.map((s) => [s.seatUuid, s.label]));
     const finalSeat = new Map([
@@ -346,7 +360,6 @@ export const assignSeatsCommand = tenantCommand({
       }),
       ...wanted.map((w) => [w.attendeeId, w.seatUuid] as const),
     ]);
-    emit(assignmentsChanged(orgId, input.eventId));
     return {
       itemLabel: item.label,
       seated: ids.map((id) => {
@@ -382,7 +395,7 @@ export const unassignSeatsCommand = tenantCommand({
   output: z.object({ released: z.int() }),
   entitlement: 'seating',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx, emit }) => {
+  handler: async ({ input, ctx, tx }) => {
     const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
     const rows = await tx
       .select({ attendeeId: seatAssignments.attendeeId })
@@ -399,7 +412,6 @@ export const unassignSeatsCommand = tenantCommand({
       rows.map((r) => r.attendeeId),
       { eventId: input.eventId, key },
     );
-    if (released > 0) emit(assignmentsChanged(requireOrg(ctx), input.eventId));
     return { released };
   },
   audit: (input, r) => ({
@@ -547,8 +559,8 @@ export function releaseCancelledSeats() {
     handle: async (tx, event) => {
       const p = CancelledPayload.parse(event.payload);
       const ctx = createCtx({ orgId: p.orgId, actor: { type: 'system', name: 'seating.release-cancelled' } });
-      const released = await releaseAttendeeSeatsTx(tx, ctx, [p.attendeeId]);
-      if (released > 0) await emitEvents(tx, ctx, [assignmentsChanged(p.orgId, p.eventId)]);
+      // releaseAttendeeSeatsTx announces seating.assignments_changed@1 (M3.1 metrics, M3.6 audiences).
+      await releaseAttendeeSeatsTx(tx, ctx, [p.attendeeId]);
     },
   });
 }

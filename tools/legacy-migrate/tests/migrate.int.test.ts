@@ -7,6 +7,7 @@ import { migratorSql } from '@yayatoh/db/migration';
 import { adminClient, schemaGuard } from '@yayatoh/db/testing';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { orderByManageToken } from '@yayatoh/orders';
+import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { ports } from '@yayatoh/testing';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { demoHandles } from '../src/demo.ts';
@@ -15,6 +16,11 @@ import { type RunResult, revalidate, runMigration } from '../src/run.ts';
 import { DEMO, generateDumpFile, SYNTH_PASSWORD_HASH } from '../src/synth/generate.ts';
 import { checkinInstant, wallToInstant } from '../src/time.ts';
 import { v7Golden } from '../src/validate-extra.ts';
+
+// Both legacy suites migrate the same synthetic orgs (deterministic ids) into the shared test
+// database, so they seal and open those orgs' ticket keys under one fixed test vault, whichever
+// suite runs first (@yayatoh/testing registers a random vault per file).
+setKeyVault(localKeyVault('5e'.repeat(32)));
 
 const dir = mkdtempSync(join(tmpdir(), 'legacy-int-'));
 const dumps = { yay: join(dir, 'yay.sql'), abc: join(dir, 'abc.sql') };
@@ -419,7 +425,10 @@ describe('T5 check-ins and the legacy QR', () => {
     const r = await one(
       sql()<{ scans: number; kinds: string; dup: number }[]>`
         select count(*)::int as scans, string_agg(distinct code_kind || '/' || result, ',') as kinds,
-               (select count(*)::int from (select ticket_id, day from checkin.admissions group by 1, 2 having count(*) > 1) x) as dup
+               -- Tickets with imported scans only: other test files share this database (live undo + re-admit).
+               (select count(*)::int from (select a.ticket_id, a.day from checkin.admissions a
+                  where exists (select 1 from checkin.scans l where l.ticket_id = a.ticket_id and l.client_scan_id like 'legacy:%')
+                  group by 1, 2 having count(*) > 1) x) as dup
         from checkin.scans where client_scan_id like 'legacy:%'`,
     );
     expect(r.scans).toBeGreaterThan(10);

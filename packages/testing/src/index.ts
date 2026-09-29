@@ -1,3 +1,9 @@
+export {
+  AUDIENCE_EDITIONS,
+  type AudiencePerson,
+  type AudienceScenario,
+  audienceScenario,
+} from './audiences.ts';
 export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './canary/org.ts';
 export {
   createOrgFixture,

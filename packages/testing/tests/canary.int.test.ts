@@ -95,7 +95,13 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
   });
 
   it('exports made after the fill carry personal data only where their allowlist says, never secrets', () => {
-    expect(canary.exports.map((e) => e.kind).sort()).toEqual(['attendees', 'audit', 'bookings', 'dsar']);
+    expect(canary.exports.map((e) => e.kind).sort()).toEqual([
+      'attendees',
+      'audience',
+      'audit',
+      'bookings',
+      'dsar',
+    ]);
     const leaks = canary.exports.flatMap((e) =>
       leaksIn(`export:${e.kind}`, e.content, { kind: 'scoped', allow: EXPORT_ALLOW[e.kind] }),
     );
@@ -105,6 +111,9 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
     expect(findCanaries(attendees?.content ?? '').map((h) => h.column)).toContain(
       'attendees.attendees.email',
     );
+    // The audience export (M3.6a) holds the org's contacts too.
+    const audience = canary.exports.find((e) => e.kind === 'audience');
+    expect(findCanaries(audience?.content ?? '').map((h) => h.column)).toContain('crm.contacts.email');
   });
 
   it('outbound messages (fake transports) never carry secrets or internal data', () => {
