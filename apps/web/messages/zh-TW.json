@@ -6649,6 +6649,7 @@
       "sent": "求助請求 #{number} 已送出。",
       "offline": "你目前離線。裝置恢復連線後請再試一次。",
       "invalid": "請選擇你需要什麼。"
-    }
+    },
+    "guestLine": "{name} · 票券 {ticket}"
   }
 }

@@ -6649,6 +6649,7 @@
       "sent": "求助请求 #{number} 已发送。",
       "offline": "你处于离线状态。设备恢复在线后请重试。",
       "invalid": "请选择你需要什么。"
-    }
+    },
+    "guestLine": "{name} · 门票 {ticket}"
   }
 }

@@ -105,7 +105,9 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
                     </span>
                     <SlaTimer dueAt={r.dueAt} running={r.state === 'new'} />
                   </span>
-                  {r.guest ? <span className="text-caption text-zinc-700">{t('guest', r.guest)}</span> : null}
+                  {r.guest ? (
+                    <span className="text-caption text-zinc-700">{t('guestLine', r.guest)}</span>
+                  ) : null}
                   {where(r) ? <span className="text-caption text-zinc-700">{where(r)}</span> : null}
                   {r.note ? <span className="text-body">{r.note}</span> : null}
                   <span className="flex flex-wrap gap-2 pt-1">

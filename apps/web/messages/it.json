@@ -6649,6 +6649,7 @@
       "sent": "Richiesta di aiuto n. {number} inviata.",
       "offline": "Sei offline. Riprova quando il dispositivo torna online.",
       "invalid": "Scegli di cosa hai bisogno."
-    }
+    },
+    "guestLine": "{name} · biglietto {ticket}"
   }
 }

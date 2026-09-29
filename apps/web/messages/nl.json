@@ -6649,6 +6649,7 @@
       "sent": "Hulpvraag #{number} verstuurd.",
       "offline": "Je bent offline. Probeer het opnieuw als het apparaat weer online is.",
       "invalid": "Kies wat je nodig hebt."
-    }
+    },
+    "guestLine": "{name} · ticket {ticket}"
   }
 }

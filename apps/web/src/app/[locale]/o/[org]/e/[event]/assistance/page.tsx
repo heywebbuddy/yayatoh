@@ -142,7 +142,7 @@ export default async function AssistancePage({
                       assigneeText(r),
                     ].join(' · ')}
                   </p>
-                  {r.guest ? <p className="text-body">{t('guest', r.guest)}</p> : null}
+                  {r.guest ? <p className="text-body">{t('guestLine', r.guest)}</p> : null}
                   {where.length ? <p className="text-body">{where.join(' · ')}</p> : null}
                   {r.note ? (
                     <blockquote className="border-s-2 border-zinc-200 ps-3 text-body">{r.note}</blockquote>

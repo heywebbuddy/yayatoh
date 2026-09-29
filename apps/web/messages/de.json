@@ -6649,6 +6649,7 @@
       "sent": "Hilfeanfrage #{number} gesendet.",
       "offline": "Du bist offline. Versuche es erneut, wenn das Gerät wieder online ist.",
       "invalid": "Wähle, was du brauchst."
-    }
+    },
+    "guestLine": "{name} · Ticket {ticket}"
   }
 }
