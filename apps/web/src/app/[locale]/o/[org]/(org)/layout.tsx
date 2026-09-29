@@ -3,10 +3,13 @@ import { roleCan } from '@yayatoh/tenancy';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
+import { openAlertCount } from '@/server/alerts.ts';
 import { loadConsole } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
+  // M3.2b: the alert engine's alerts, with the open count as the badge.
+  { key: 'alerts', path: 'alerts', group: 'overview', module: 'core', icon: 'bell' },
   { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
   { key: 'audiences', path: 'audiences', group: 'overview', module: 'marketing', icon: 'megaphone' },
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
@@ -29,6 +32,7 @@ const ORG_NAV: readonly NavItem[] = [
 
 /** Items only some roles may open (the pages refuse everyone else too). */
 const NEEDS: Readonly<Record<string, string>> = {
+  alerts: 'events:read',
   messages: 'messages:read',
   messagingHealth: 'messages:read',
   audiences: 'messages:read',
@@ -49,6 +53,7 @@ export default async function OrgLayout({
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('shell');
+  const openAlerts = await openAlertCount(data);
   return (
     <ConsoleShell
       data={data}
@@ -59,6 +64,7 @@ export default async function OrgLayout({
         items: ORG_NAV.filter(
           (i) => data.modules.has(i.module) && (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)),
         ),
+        badges: openAlerts > 0 ? { alerts: String(openAlerts) } : {},
       }}
     >
       {children}

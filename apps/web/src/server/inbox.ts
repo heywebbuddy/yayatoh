@@ -1,6 +1,6 @@
 import 'server-only';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { type InboxItemDto, inboxQuery } from '@yayatoh/notifications';
+import { countWords, type InboxItemDto, inboxQuery } from '@yayatoh/notifications';
 import { getTranslations } from 'next-intl/server';
 import type { ConsoleData } from './console.ts';
 import { ports } from './ports.ts';
@@ -44,6 +44,8 @@ export async function loadInbox(
       p.amount = formatMoney(money(p.amountMinor, p.currency), locale);
     if (typeof p.holdUntil === 'string') p.until = fmt.format(new Date(p.holdUntil));
     else if (typeof p.until === 'string') p.until = fmt.format(new Date(p.until));
+    // Alerts (M3.2b): small counts spelled out per the locale's rule, as in the email.
+    if (typeof p.count === 'number') p.countWords = countWords(p.count, locale);
     if (typeof p.rateBps === 'number')
       p.rate = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(
         p.rateBps / 10_000,

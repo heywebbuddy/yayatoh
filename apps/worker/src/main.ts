@@ -2,6 +2,8 @@ import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
+import { createNotifier } from '@yayatoh/notifications';
+import { sweepAlerts } from './alerts.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
@@ -193,6 +195,24 @@ const retain = () => {
 };
 setTimeout(retain, 10 * 60_000).unref();
 setInterval(retain, 24 * 3_600_000).unref();
+
+// Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
+const alertDeps = { notifier: createNotifier() };
+let sweepingAlerts = false;
+let alertTicks = 0;
+setInterval(() => {
+  if (!release || stopping || sweepingAlerts) return;
+  sweepingAlerts = true;
+  const full = alertTicks++ % 10 === 0;
+  sweepAlerts(alertDeps, { full })
+    .then((r) => {
+      if (r.changes) console.info(JSON.stringify({ job: 'alerts.sweep', full, ...r }));
+    })
+    .catch((err) => console.error('alerts sweep', err))
+    .finally(() => {
+      sweepingAlerts = false;
+    });
+}, 30_000).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

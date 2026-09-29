@@ -1,3 +1,4 @@
+import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
@@ -82,6 +83,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     metricsProjector(),
     analyticsForwarder(postgresAnalyticsSink),
+    // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
+    alertEvaluator({ notifier }),
   ];
 }
 
