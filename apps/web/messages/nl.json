@@ -5908,5 +5908,10 @@
         "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten."
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Deze pagina doet er te lang over",
+    "downTitle": "Deze pagina is nu niet beschikbaar",
+    "body": "Probeer het zo meteen opnieuw."
   }
 }

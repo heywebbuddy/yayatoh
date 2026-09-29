@@ -561,6 +561,13 @@
       "when": 1790699264294,
       "tag": "0079_pale_molten_man",
       "breakpoints": true
+    },
+    {
+      "idx": 80,
+      "version": "7",
+      "when": 1790701254987,
+      "tag": "0080_ambiguous_wrecking_crew",
+      "breakpoints": true
     }
   ]
 }

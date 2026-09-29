@@ -5908,5 +5908,10 @@
         "emptyDescription": "为宾客发布新闻、时间变更或提醒。"
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "此页面加载时间过长",
+    "downTitle": "此页面暂时无法访问",
+    "body": "请稍后再试。"
   }
 }

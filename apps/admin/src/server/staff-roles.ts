@@ -15,7 +15,8 @@ export type StaffAction =
   | 'messaging'
   | 'quotas'
   | 'openSignup'
-  | 'incidents';
+  | 'incidents'
+  | 'frontDoor';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -31,6 +32,9 @@ export type StaffAction =
  *   decision (D28), so only admins see or flip it (pending owner).
  * - `incidents` (M3.11b): post and update status-page incidents (the fake provider; Better Stack
  *   in production). Whoever is on call: admin and support (pending owner).
+ * - `frontDoor` (M2.4a): moving a route between the legacy site and the new app changes what
+ *   every visitor of yayatoh.com or abc.yayatoh.com gets, so only admins do it (with a step-up).
+ *   Every staff member can see the route table and its counters (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -48,6 +52,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'quotas',
     'openSignup',
     'incidents',
+    'frontDoor',
   ],
   support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents'],
   finance: ['view', 'payouts', 'fees', 'quotas'],

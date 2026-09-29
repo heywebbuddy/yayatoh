@@ -34,4 +34,11 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('support', 'incidents')).toBe(true);
     expect(staffCan('finance', 'incidents')).toBe(false);
   });
+
+  it('only admins move routes between legacy and the new app (M2.4a)', () => {
+    expect(staffCan('admin', 'frontDoor')).toBe(true);
+    expect(staffCan('support', 'frontDoor')).toBe(false);
+    expect(staffCan('finance', 'frontDoor')).toBe(false);
+    expect(staffCan('finance', 'view')).toBe(true);
+  });
 });

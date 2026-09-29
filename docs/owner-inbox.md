@@ -11,6 +11,15 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [x] **Install the Claude GitHub App** on `Pani-Digital-Services-LLC`, for the `yayatoh` and `yayatoh-legacy` repos only. See `docs/cloud-environment.md` §1.
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
+- [ ] **Front door, pending owner** (M2.4a; labels: `infra`, `db-migration`, `auth`). Built with these defaults; say if any should change:
+  - **ADR 0020 (proposed):** the new app's proxy forwards to Laravel with `fetch` (full control of cookies, headers and counters) instead of the platform rewrite or a Cloudflare Worker. Needs your Vercel preview for the spike (25 MB upload, 150 s response, 60 MB stream) before any DNS change; the Worker stays the fallback.
+  - **Who moves routes:** admins only, with a password or authenticator step-up and a reason; support and finance see the page read-only.
+  - **Route states:** Legacy / Canary (browsers with the `yy_canary=next` cookie) / New app. No percentage rollout yet; say if you want one.
+  - **Uploads** through the front door are limited to 64 MiB (413 above); legacy dashboard uploads are expected to be far smaller.
+  - **Laravel changes for your developer** (runbook `docs/runbooks/front-door.md` §0): nginx secret header on `origin-yay.` / `origin-abc.yayatoh.com`, `TrustProxies`, `SESSION_DOMAIN` unset, no cookie names starting with `yy`.
+  - **New public pages in the route table (batch 3c merge, table version 2):** `/pricing`, `/features`, `/contact`, `/help…` and `/status` are moved routes on yayatoh.com (not abc, whose tenant host 404s them), starting on **legacy** like every route; move them in the console when you want the new pages live there. If legacy has no page at one of them (likely `/pricing`, `/help`, `/status`), it 404s on legacy until moved.
+  - **Legacy route list:** confirm no legacy page lives under `/auth`, `/sign-in`, `/signup`, `/my-tickets`, `/claim`, `/invite`, `/survey`, `/embed` or `/sub-processors` (the new app keeps those paths).
+
 ## Design
 - [ ] **Metrics pipeline defaults, pending owner** (M3.1a; labels: `db-migration`). Built with these defaults; say if any should change:
   - **Devices online** counts a check-in device whose last heartbeat is within **90 seconds** (the roadmap's "offline alert within 90 s"). Until M3.3 adds a sweep, the value is as of the last device event (each value carries its `asOf`).

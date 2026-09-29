@@ -62,6 +62,9 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
           <Link href="/api-usage" className="underline-offset-2 hover:underline">
             {t('apiUsage')}
           </Link>
+          <Link href="/front-door" className="underline-offset-2 hover:underline">
+            {t('frontDoor')}
+          </Link>
           <Link href="/security" className="underline-offset-2 hover:underline">
             {t('passkeys')}
           </Link>

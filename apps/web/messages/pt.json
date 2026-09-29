@@ -5908,5 +5908,10 @@
         "emptyDescription": "Publique novidades, mudanças de horário ou lembretes para seus convidados."
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Esta página está demorando demais",
+    "downTitle": "Esta página não está disponível agora",
+    "body": "Tente novamente em instantes."
   }
 }

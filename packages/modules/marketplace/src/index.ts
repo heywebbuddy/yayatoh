@@ -2,7 +2,14 @@ export { addLegacyRedirectCommand, LegacyRedirectDto, LegacyRedirectInput } from
 export { siteSettingsQuery, updateSiteSettingsCommand } from './commands/settings.ts';
 export { frameAncestors, MAX_EMBED_ORIGINS, normalizeOrigin } from './domain/embed.ts';
 export { canonicalHostFor, isListable, isOnMarketplace, type ListingSource } from './domain/listing.ts';
-export { normalizePath, pickRedirect, type RedirectRule, redirectLocation } from './domain/redirects.ts';
+export {
+  followRedirectChain,
+  MAX_REDIRECT_HOPS,
+  normalizePath,
+  pickRedirect,
+  type RedirectRule,
+  redirectLocation,
+} from './domain/redirects.ts';
 export {
   CATEGORIES,
   dayRange,

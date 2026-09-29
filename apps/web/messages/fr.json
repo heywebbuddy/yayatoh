@@ -5908,5 +5908,10 @@
         "emptyDescription": "Publiez des nouvelles, des changements d'horaire ou des rappels pour vos invités."
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Cette page met trop de temps à répondre",
+    "downTitle": "Cette page n'est pas disponible pour le moment",
+    "body": "Veuillez réessayer dans un instant."
   }
 }

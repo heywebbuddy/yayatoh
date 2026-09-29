@@ -5908,5 +5908,10 @@
         "emptyDescription": "Pubblica novità, cambi di orario o promemoria per i tuoi ospiti."
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Questa pagina sta impiegando troppo tempo",
+    "downTitle": "Questa pagina non è disponibile al momento",
+    "body": "Riprova tra un momento."
   }
 }

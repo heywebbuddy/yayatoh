@@ -5908,5 +5908,10 @@
         "emptyDescription": "為賓客發布消息、時間變更或提醒。"
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "此頁面載入時間過長",
+    "downTitle": "此頁面暫時無法使用",
+    "body": "請稍後再試。"
   }
 }

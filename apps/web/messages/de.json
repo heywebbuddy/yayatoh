@@ -5908,5 +5908,10 @@
         "emptyDescription": "Veröffentlichen Sie Neuigkeiten, Zeitänderungen oder Erinnerungen für Ihre Gäste."
       }
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Diese Seite braucht zu lange",
+    "downTitle": "Diese Seite ist gerade nicht verfügbar",
+    "body": "Bitte versuche es gleich noch einmal."
   }
 }
