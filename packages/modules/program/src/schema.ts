@@ -256,7 +256,10 @@ export const sessionDetails = tenantTable(
     ),
     check('session_details_capacity_check', sql`capacity is null or capacity >= 1`),
     check('session_details_group_optional_check', sql`group_id is null or admission = 'optional'`),
-    check('session_details_import_key_check', sql`import_key is null or char_length(import_key) between 1 and 80`),
+    check(
+      'session_details_import_key_check',
+      sql`import_key is null or char_length(import_key) between 1 and 80`,
+    ),
   ],
 );
 

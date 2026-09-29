@@ -98,13 +98,19 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  claimSessionPlaceTx,
   createExhibitorCommand,
   createRoomCommand,
   createSessionCommand,
+  createSessionGroupCommand,
+  createSessionTypeCommand,
   createSpeakerCommand,
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  publishAgendaCommand,
+  recordGroupPickTx,
+  setSessionAgendaCommand,
 } from '@yayatoh/program';
 import {
   analyticsForwarder,
@@ -1123,6 +1129,63 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M5.2a: agenda model v2 on the weekly event (so the launch event's agenda stays live): a
+  // session type, a pick-one group with an optional workshop in it, one claimed place and one
+  // group pick, a speaker with an email (the CSV import's match key), and a published agenda.
+  const workshopType = await executeCommand(
+    createSessionTypeCommand,
+    { eventId: weekly.id, name: 'Workshop' },
+    ctx(),
+    ports,
+  );
+  const pickOne = await executeCommand(
+    createSessionGroupCommand,
+    { eventId: weekly.id, name: 'Pick one' },
+    ctx(),
+    ports,
+  );
+  const workshop = await executeCommand(
+    createSessionCommand,
+    {
+      eventId: weekly.id,
+      title: 'Hands-on workshop',
+      startsAt: weekly.startsAt,
+      endsAt: new Date(weekly.startsAt.getTime() + 3_600_000),
+      capacity: 30,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setSessionAgendaCommand,
+    {
+      eventId: weekly.id,
+      sessionId: workshop.session.id,
+      typeId: workshopType.id,
+      admission: 'optional',
+      groupId: pickOne.id,
+    },
+    ctx(),
+    ports,
+  );
+  const weeklySpeaker = await executeCommand(
+    createSpeakerCommand,
+    { eventId: weekly.id, name: `${name} Host` },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await claimSessionPlaceTx(tx, workshop.session.id);
+    await recordGroupPickTx(tx, systemCtx(org.id), {
+      groupId: pickOne.id,
+      sessionId: workshop.session.id,
+      registrantId: uuidv7(),
+    });
+    await tx.execute(
+      sql`insert into program.speaker_contacts (org_id, event_id, speaker_id, email) values (${org.id}, ${weekly.id}, ${weeklySpeaker.id}, ${`host@${slug}.test`})`,
+    );
+  });
+  await executeCommand(publishAgendaCommand, { eventId: weekly.id }, ctx(), ports);
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
   // M1.4g: a published page (linked from the tenant site's navigation) and a published post; a
   // review by the fixture buyer after the event ended, and one report of it.
