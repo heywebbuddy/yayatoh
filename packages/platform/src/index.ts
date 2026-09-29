@@ -166,5 +166,5 @@ export {
   StreamLimits,
   sseStream,
 } from './realtime-sse.ts';
-export { STAFF_ROLES } from './schema.ts';
+export { PLATFORM_FLAGS, type PlatformFlag, STAFF_ROLES } from './schema.ts';
 export { appTokenSecret, signLinkToken, verifyLinkToken } from './tokens.ts';

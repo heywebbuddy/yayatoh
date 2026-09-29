@@ -1384,7 +1384,20 @@
       "event": "建立你的第一個活動",
       "team": "邀請團隊成員",
       "payouts": "設定收款"
-    }
+    },
+    "finished": "設定完成。您的組織已完全啟用。",
+    "incomplete": "請先完成必要的步驟。",
+    "finishFailed": "無法完成設定。請再試一次。",
+    "setupMode": "您的組織處於設定模式",
+    "setupModeBody": "您現在就可以建立活動和售票。完成這些步驟後，即可向賓客群發訊息（電子郵件、公告、問卷）。",
+    "requiredList": "必要的步驟",
+    "required": {
+      "terms": "接受服務條款",
+      "privacy": "發布隱私權聲明",
+      "event": "建立您的第一個活動"
+    },
+    "finish": "完成設定",
+    "finishLater": "完成必要的步驟即可解鎖賓客訊息。"
   },
   "signup": {
     "eyebrow": "開始使用",
@@ -1411,7 +1424,17 @@
       "other": "從簡單開始，依需要開啟功能。"
     },
     "terms": "我代表本組織同意<tos>服務條款</tos>和<dpa>資料處理附錄</dpa>。",
-    "submit": "建立組織"
+    "submit": "建立組織",
+    "openDescription": "幾分鐘內建立您的主辦方帳戶和組織。",
+    "comingSoon": "自助註冊即將開放",
+    "comingSoonBody": "我們正在準備向所有主辦方開放 Yayatoh。在此之前，新組織需透過邀請加入。",
+    "joinWaitlist": "加入候補名單",
+    "useCode": "使用此代碼",
+    "seePricing": "查看價格與費用",
+    "openNote": "您的組織將以設定模式開始：接受條款、發布隱私權聲明並建立第一個活動後，即可傳訊息給賓客。<pricing>查看價格與費用</pricing>。",
+    "closedNow": "目前僅限受邀註冊。請輸入您的註冊代碼。",
+    "verifyEmail": "請先確認您的電子郵件地址。",
+    "humanCheck": "請確認您是真人。"
   },
   "payouts": {
     "title": "收款",
@@ -3270,7 +3293,8 @@
       "events": "{org} 的活動",
       "emptyTitle": "沒有即將舉行的活動",
       "emptyDescription": "{org} 目前沒有販售中的項目，請稍後再來看看。"
-    }
+    },
+    "pricing": "價格"
   },
   "widget": {
     "title": "門票：{event}",
@@ -5323,5 +5347,37 @@
         "not_on_sale": "此通行證或場次未在販售。"
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "給主辦方",
+    "title": "價格與費用",
+    "description": "在 Yayatoh 上售票的成本，數字一目了然。",
+    "currencies": "貨幣",
+    "feeHeading": "平台費（{currency}）",
+    "feeNone": "目前每張票券不收取平台費",
+    "feePercent": "每張付費票券 {percent}",
+    "feeFixed": "每張付費票券 {fixed}",
+    "feeBoth": "每張付費票券 {percent} + {fixed}",
+    "freeTickets": "免費票券和出席回覆永不收費。",
+    "noSubscription": "無訂閱、無開通費：只在售出時付費。",
+    "allInHeading": "全包價格",
+    "allInBody": "從第一個頁面到結帳，購票者始終看到含費用的完整價格。結帳時沒有意外。",
+    "passOnExplained": "由購票者負擔費用：購票者支付票價加費用，您收到全部票價。",
+    "absorbExplained": "由您負擔費用：購票者支付票價，費用從您的收入中扣除。",
+    "exampleCaption": "範例：一張 {face} 的票券",
+    "passOn": "購票者負擔",
+    "absorb": "主辦方負擔",
+    "col": {
+      "mode": "費用負擔方式",
+      "face": "票價",
+      "fee": "平台費",
+      "buyerPays": "購票者支付",
+      "youReceive": "您收到"
+    },
+    "exampleNote": "範例僅顯示平台費。費用以票券的貨幣收取。",
+    "unavailable": "價格暫時無法顯示。",
+    "startHeading": "開始售票",
+    "startBody": "建立您的組織，準備好第一個活動，準備就緒後即可發布。",
+    "startCta": "建立您的組織"
   }
 }

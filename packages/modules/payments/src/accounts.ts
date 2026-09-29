@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { organizationBrandTx } from '@yayatoh/tenancy';
+import { markOnboardingStepTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import type { FundsFlow } from './port.ts';
@@ -262,6 +262,8 @@ export const applyAccountEventCommand = tenantCommand({
       .returning();
     const before = stateOf(a);
     const after = stateOf(b);
+    // M3.11a: payouts that can pay out complete that onboarding step.
+    if (after === 'active') await markOnboardingStepTx(tx, 'payouts', ctx.now);
     if (before !== after)
       emit({
         type: 'payouts.account_updated',

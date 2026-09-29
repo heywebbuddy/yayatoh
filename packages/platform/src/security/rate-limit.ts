@@ -299,6 +299,14 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 60, windowMs: 10 * MIN },
     ipCeiling: { limit: 600, windowMs: 10 * MIN },
   },
+  /** Self-serve organization signup (M3.11a): each attempt may create an org; identity = the
+   * account, so one person can't mass-create orgs from many devices. */
+  openSignup: {
+    device: { limit: 5, windowMs: 60 * MIN },
+    anonymousIp: { limit: 5, windowMs: 60 * MIN },
+    identity: { limit: 3, windowMs: 24 * 60 * MIN },
+    ipCeiling: { limit: 20, windowMs: 60 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },

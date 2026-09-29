@@ -10,29 +10,35 @@ import {
   requireOrg,
   uuidv7,
 } from '@yayatoh/kernel';
-import { tenantCommand } from '@yayatoh/platform';
+import { type PlatformFlag, tenantCommand } from '@yayatoh/platform';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { AGREEMENT_DOCUMENTS, PLATFORM_AGREEMENTS } from '../domain/agreements.ts';
+import { initialOrgStatus, type SignupMode, signupPath } from '../domain/onboarding.ts';
 import { CreateOrganizationInput, OrganizationDto, UpdateOrganizationInput } from '../dto.ts';
 import { agreementAcceptances, memberships, organizations } from '../schema.ts';
 import { ensureManagedDomainTx } from './domains.ts';
+import { markOnboardingStepTx, startOnboardingTx } from './onboarding.ts';
 
 type Emit = (e: DomainEvent) => void;
 
-/** The org row (id = the context's new org id) and, for a person, their owner membership. */
+/**
+ * The org row (id = the context's new org id), its onboarding progress (M3.11a) and, for a
+ * person, their owner membership. Self-serve (`open`) orgs start `limited`.
+ */
 async function insertOrganizationTx(
   tx: TenantTx,
   ctx: Ctx,
   input: z.output<typeof CreateOrganizationInput>,
   emit: Emit,
+  mode: SignupMode = 'direct',
 ) {
   const id = requireOrg(ctx);
   let row: typeof organizations.$inferSelect | undefined;
   try {
     [row] = await tx
       .insert(organizations)
-      .values({ id, orgId: id, ...input })
+      .values({ id, orgId: id, ...input, status: initialOrgStatus(mode) })
       .returning();
   } catch (err) {
     if (isUniqueViolation(err, 'organizations_slug_key')) {
@@ -41,6 +47,7 @@ async function insertOrganizationTx(
     throw err;
   }
   if (!row) throw new DomainError('internal');
+  await startOnboardingTx(tx, id, mode, ctx.now);
   if (ctx.actor.type === 'user') {
     await tx.insert(memberships).values({ orgId: id, userId: ctx.actor.userId, role: 'owner' });
   }
@@ -92,16 +99,35 @@ export async function signupCodeValid(code: string): Promise<boolean> {
   return r?.ok === true;
 }
 
+/** Is a platform switch on (M3.11a)? Read through the SECURITY DEFINER `platform.flag_enabled`. */
+export async function platformFlagTx(tx: TenantTx, key: PlatformFlag): Promise<boolean> {
+  const [r] = await tx.execute<{ on: boolean }>(sql`select platform.flag_enabled(${key}) as on`);
+  return r?.on === true;
+}
+
+/** Is open self-serve signup switched on (M3.11a; staff console, default off)? */
+export function openSignupEnabled(): Promise<boolean> {
+  return withoutTenant((tx) => platformFlagTx(tx, 'open_signup'));
+}
+
 export const SignUpOrganizationInput = CreateOrganizationInput.extend({
-  code: z.string().trim().min(6).max(64),
+  /** An invitation code; optional only while open signup is on (M3.11a). */
+  code: z.preprocess(
+    (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+    z.string().trim().min(6).max(64).optional(),
+  ),
   /** Click-wrap: the platform's current Terms of Service and DPA. */
   acceptTerms: z.literal(true),
 });
 
 /**
- * Invite-only signup (M1.3): a signed-in person with a valid signup code creates an organization
- * and becomes its owner, accepting the platform terms in the same transaction. One code use is
- * claimed atomically; a failed signup (e.g. a taken address) gives the use back (rollback).
+ * Signup (M1.3 invite-only; M3.11a self-serve). A signed-in person (an account proves its email
+ * address with a one-time code) creates an organization and becomes its owner, accepting the
+ * platform terms in the same transaction.
+ * - With a code: one use is claimed atomically; a failed signup (e.g. a taken address) gives the
+ *   use back (rollback). The org starts `active`.
+ * - Without a code: only while staff have switched open signup on, read inside this transaction
+ *   (closed → `forbidden` / `signup_closed`). The org starts `limited` until onboarding is done.
  */
 export const signUpOrganizationCommand = tenantCommand({
   name: 'tenancy.signUpOrganization',
@@ -111,16 +137,28 @@ export const signUpOrganizationCommand = tenantCommand({
   permission: 'platform:org.create',
   handler: async ({ input, ctx, tx, emit }) => {
     if (ctx.actor.type !== 'user') throw new DomainError('forbidden', 'Sign in to create an organization');
-    const [claim] = await tx.execute<{ ok: boolean }>(
-      sql`select platform.claim_signup_code(${hashSignupCode(input.code)}) as ok`,
-    );
-    if (!claim?.ok)
-      throw new DomainError('validation_failed', 'This signup code is not valid', {
+    const path = signupPath({
+      code: input.code,
+      openSignup: input.code ? false : await platformFlagTx(tx, 'open_signup'),
+    });
+    if (path === 'closed')
+      throw new DomainError('forbidden', 'Signup is by invitation only for now', {
         field: 'code',
-        reason: 'invalid_code',
+        reason: 'signup_closed',
       });
+    if (path === 'code') {
+      const [claim] = await tx.execute<{ ok: boolean }>(
+        sql`select platform.claim_signup_code(${hashSignupCode(input.code ?? '')}) as ok`,
+      );
+      if (!claim?.ok)
+        throw new DomainError('validation_failed', 'This signup code is not valid', {
+          field: 'code',
+          reason: 'invalid_code',
+        });
+    }
     const { code: _code, acceptTerms: _terms, ...org } = input;
-    const row = await insertOrganizationTx(tx, ctx, org, emit);
+    const row = await insertOrganizationTx(tx, ctx, org, emit, path);
+    await markOnboardingStepTx(tx, 'terms', ctx.now);
     for (const document of AGREEMENT_DOCUMENTS)
       await tx.insert(agreementAcceptances).values({
         orgId: row.id,
@@ -131,7 +169,12 @@ export const signUpOrganizationCommand = tenantCommand({
       });
     return row;
   },
-  audit: (_input, row) => ({ action: 'organization.signup', targetType: 'organization', targetId: row.id }),
+  audit: (input, row) => ({
+    action: 'organization.signup',
+    targetType: 'organization',
+    targetId: row.id,
+    data: { mode: input.code ? 'code' : 'open', status: row.status },
+  }),
 });
 
 /** Sign up an organization (allocates the new org id as the tenant context, like createOrganization). */
@@ -173,6 +216,7 @@ export const updateOrganizationCommand = tenantCommand({
       .where(eq(organizations.id, id))
       .returning();
     if (!row) throw new DomainError('not_found');
+    if (input.brandColor) await markOnboardingStepTx(tx, 'brand', ctx.now);
     emit({
       type: 'organization.updated',
       version: 1,

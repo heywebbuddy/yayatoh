@@ -9,6 +9,12 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('support', 'impersonate')).toBe(false);
   });
 
+  it('only admins see or flip the open-signup switch (the launch decision, M3.11a)', () => {
+    expect(staffCan('admin', 'openSignup')).toBe(true);
+    expect(staffCan('support', 'openSignup')).toBe(false);
+    expect(staffCan('finance', 'openSignup')).toBe(false);
+  });
+
   it('admins and support hand out signup codes; finance does not', () => {
     expect(staffCan('admin', 'signupCodes')).toBe(true);
     expect(staffCan('support', 'signupCodes')).toBe(true);

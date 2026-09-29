@@ -13,7 +13,8 @@ export type StaffAction =
   | 'signupCodes'
   | 'privacy'
   | 'messaging'
-  | 'quotas';
+  | 'quotas'
+  | 'openSignup';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -25,6 +26,8 @@ export type StaffAction =
  *   people's requests; finance has no reason to see or erase personal data (pending owner).
  * - `messaging` (M3.5a): see and lift complaint-rate auto-pauses (admin, support); `quotas`: set
  *   messaging quotas (admin, finance).
+ * - `openSignup` (M3.11a): the platform switch for self-serve signup is the public launch
+ *   decision (D28), so only admins see or flip it (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -40,6 +43,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'privacy',
     'messaging',
     'quotas',
+    'openSignup',
   ],
   support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging'],
   finance: ['view', 'payouts', 'fees', 'quotas'],

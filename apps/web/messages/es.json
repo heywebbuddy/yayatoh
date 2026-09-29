@@ -1384,7 +1384,20 @@
       "event": "Crear tu primer evento",
       "team": "Invitar a un compañero",
       "payouts": "Configurar los pagos recibidos"
-    }
+    },
+    "finished": "Configuración completa. Tu organización está totalmente activa.",
+    "incomplete": "Primero completa los pasos obligatorios.",
+    "finishFailed": "No pudimos completar la configuración. Inténtalo de nuevo.",
+    "setupMode": "Tu organización está en modo de configuración",
+    "setupModeBody": "Ya puedes crear eventos y vender entradas. Los mensajes masivos a invitados (correos, anuncios, encuestas) se habilitan cuando completes estos pasos.",
+    "requiredList": "Pasos obligatorios",
+    "required": {
+      "terms": "Aceptar los términos del servicio",
+      "privacy": "Publicar un aviso de privacidad",
+      "event": "Crear tu primer evento"
+    },
+    "finish": "Completar configuración",
+    "finishLater": "Completa los pasos obligatorios para habilitar los mensajes a invitados."
   },
   "signup": {
     "eyebrow": "Empieza",
@@ -1411,7 +1424,17 @@
       "other": "Empieza con lo básico y activa lo que necesites."
     },
     "terms": "Acepto los <tos>Términos del servicio</tos> y el <dpa>Acuerdo de tratamiento de datos</dpa> en nombre de esta organización.",
-    "submit": "Crear organización"
+    "submit": "Crear organización",
+    "openDescription": "Crea tu cuenta de organizador y tu organización en unos minutos.",
+    "comingSoon": "El registro abierto llegará pronto",
+    "comingSoonBody": "Nos estamos preparando para abrir Yayatoh a todos los organizadores. Hasta entonces, las nuevas organizaciones se unen por invitación.",
+    "joinWaitlist": "Unirme a la lista de espera",
+    "useCode": "Usar este código",
+    "seePricing": "Ver precios y comisiones",
+    "openNote": "Tu organización empieza en modo de configuración: acepta los términos, publica un aviso de privacidad y crea tu primer evento para poder enviar mensajes a los invitados. <pricing>Ver precios y comisiones</pricing>.",
+    "closedNow": "Por ahora, el registro es solo por invitación. Introduce tu código de registro.",
+    "verifyEmail": "Primero confirma tu dirección de correo electrónico.",
+    "humanCheck": "Confirma que eres una persona."
   },
   "payouts": {
     "title": "Pagos recibidos",
@@ -3270,7 +3293,8 @@
       "events": "Eventos de {org}",
       "emptyTitle": "No hay próximos eventos",
       "emptyDescription": "{org} no tiene nada a la venta ahora mismo. Vuelve pronto."
-    }
+    },
+    "pricing": "Precios"
   },
   "widget": {
     "title": "Entradas: {event}",
@@ -5323,5 +5347,37 @@
         "not_on_sale": "Este pase o fecha no está a la venta."
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Para organizadores",
+    "title": "Precios y comisiones",
+    "description": "Lo que cuesta vender entradas en Yayatoh, con números claros.",
+    "currencies": "Moneda",
+    "feeHeading": "Comisión de la plataforma ({currency})",
+    "feeNone": "Sin comisión de plataforma por entrada por ahora",
+    "feePercent": "{percent} por entrada pagada",
+    "feeFixed": "{fixed} por entrada pagada",
+    "feeBoth": "{percent} + {fixed} por entrada pagada",
+    "freeTickets": "Las entradas gratuitas y las confirmaciones nunca tienen comisión.",
+    "noSubscription": "Sin suscripción ni cuota de alta: solo pagas cuando vendes.",
+    "allInHeading": "Precio final",
+    "allInBody": "Los compradores siempre ven el precio completo, con comisiones incluidas, desde la primera pantalla hasta el pago. Sin sorpresas al final.",
+    "passOnExplained": "Trasladar la comisión: el comprador paga el precio de la entrada más la comisión y tú recibes el precio completo.",
+    "absorbExplained": "Asumir la comisión: el comprador paga el precio de la entrada y la comisión se descuenta de lo que recibes.",
+    "exampleCaption": "Ejemplo: una entrada de {face}",
+    "passOn": "Comisión trasladada",
+    "absorb": "Comisión asumida",
+    "col": {
+      "mode": "Cómo se aplica la comisión",
+      "face": "Precio de la entrada",
+      "fee": "Comisión de la plataforma",
+      "buyerPays": "Paga el comprador",
+      "youReceive": "Recibes"
+    },
+    "exampleNote": "El ejemplo muestra solo la comisión de la plataforma. Las comisiones se cobran en la moneda de la entrada.",
+    "unavailable": "Los precios no están disponibles en este momento.",
+    "startHeading": "Empieza a vender",
+    "startBody": "Crea tu organización, prepara tu primer evento y publícalo cuando estés listo.",
+    "startCta": "Crear tu organización"
   }
 }

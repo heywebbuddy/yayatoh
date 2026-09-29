@@ -1,5 +1,6 @@
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { markOnboardingStepTx } from '@yayatoh/tenancy';
 import { and, asc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { slugify } from './domain/lifecycle.ts';
@@ -84,6 +85,7 @@ export async function insertEventCopyTx(
         return r;
       });
       if (!row) throw new DomainError('internal');
+      await markOnboardingStepTx(tx, 'event', ctx.now);
       return EventDto.parse(row);
     } catch (err) {
       if (!isUniqueViolation(err, 'events_slug_key')) throw err;

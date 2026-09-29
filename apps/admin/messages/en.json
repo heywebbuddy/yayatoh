@@ -55,7 +55,8 @@
     "people": "Privacy requests",
     "passkeys": "Passkeys",
     "messaging": "Auto-paused messaging",
-    "messagingCount": "Auto-paused messaging ({count})"
+    "messagingCount": "Auto-paused messaging ({count})",
+    "openSignup": "Open signup"
   },
   "tenants": {
     "title": "Tenants",
@@ -636,6 +637,46 @@
       "validation_failed": "Check the values: a whole number and a reason of at least 3 characters.",
       "forbidden": "Your staff role can't do that.",
       "internal": "Something went wrong."
+    }
+  },
+  "openSignup": {
+    "title": "Open signup",
+    "description": "Whether anyone can create an organizer account and organization without a signup code. Off until the public launch.",
+    "current": "Current state",
+    "state": {
+      "on": "Open: anyone can sign up",
+      "off": "Closed: signup codes only"
+    },
+    "explain": {
+      "on": "Anyone with a verified email can create an organization under the current fee model. New organizations start in setup mode (no guest messaging) until their required onboarding steps are done. Signup codes keep working.",
+      "off": "The public signup page says self-serve signup is coming soon. Organizations are created only with a signup code."
+    },
+    "since": "Last changed {date} (UTC)",
+    "reason": "Reason",
+    "reasonHint": "Kept in the history and the access log (3–500 characters).",
+    "confirm": "I understand that anyone will be able to create an organization, and that this is the public launch decision.",
+    "open": "Open signup",
+    "close": "Close signup",
+    "done": {
+      "opened": "Signup is open.",
+      "closed": "Signup is closed.",
+      "unchanged": "Nothing changed: the switch was already in that state."
+    },
+    "error": {
+      "reason": "Give a reason of 3 to 500 characters.",
+      "confirm": "Tick the box to confirm opening signup."
+    },
+    "history": "Changes",
+    "noHistory": "No changes yet.",
+    "col": {
+      "when": "When (UTC)",
+      "change": "Change",
+      "who": "Who",
+      "reason": "Reason"
+    },
+    "change": {
+      "on": "Opened",
+      "off": "Closed"
     }
   }
 }

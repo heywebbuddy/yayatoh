@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { appTokenSecret, verifyInvitationToken } from '../domain/invitation-token.ts';
 import { InvitationDto, MembershipDto } from '../dto.ts';
 import { invitations, memberships, ORG_ROLES } from '../schema.ts';
+import { markOnboardingStepTx } from './onboarding.ts';
 
 const INVITE_TTL_DAYS = 7;
 
@@ -41,6 +42,7 @@ export const inviteMemberCommand = tenantCommand({
         })
         .returning();
       if (!row) throw new DomainError('internal');
+      await markOnboardingStepTx(tx, 'team', ctx.now);
       emit({
         type: 'invitation.created',
         version: 1,
@@ -137,6 +139,7 @@ const acceptCommand = tenantCommand({
     try {
       const [m] = await tx.insert(memberships).values({ orgId, userId, role: inv.role }).returning();
       if (!m) throw new DomainError('internal');
+      await markOnboardingStepTx(tx, 'team', ctx.now);
       emit({
         type: 'membership.added',
         version: 1,

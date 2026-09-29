@@ -1384,7 +1384,20 @@
       "event": "Erstes Event erstellen",
       "team": "Teammitglied einladen",
       "payouts": "Auszahlungen einrichten"
-    }
+    },
+    "finished": "Einrichtung abgeschlossen. Ihre Organisation ist voll aktiv.",
+    "incomplete": "Erledigen Sie zuerst die erforderlichen Schritte.",
+    "finishFailed": "Die Einrichtung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
+    "setupMode": "Ihre Organisation ist im Einrichtungsmodus",
+    "setupModeBody": "Sie können schon jetzt Veranstaltungen anlegen und Tickets verkaufen. Sammelnachrichten an Gäste (E-Mails, Ankündigungen, Umfragen) sind möglich, sobald diese Schritte erledigt sind.",
+    "requiredList": "Erforderliche Schritte",
+    "required": {
+      "terms": "Nutzungsbedingungen akzeptieren",
+      "privacy": "Datenschutzhinweis veröffentlichen",
+      "event": "Erste Veranstaltung erstellen"
+    },
+    "finish": "Einrichtung abschließen",
+    "finishLater": "Erledigen Sie die erforderlichen Schritte, um Nachrichten an Gäste freizuschalten."
   },
   "signup": {
     "eyebrow": "Los geht’s",
@@ -1411,7 +1424,17 @@
       "other": "Starte einfach und schalte zu, was du brauchst."
     },
     "terms": "Ich stimme den <tos>Allgemeinen Geschäftsbedingungen</tos> und dem <dpa>Auftragsverarbeitungsvertrag</dpa> im Namen dieser Organisation zu.",
-    "submit": "Organisation erstellen"
+    "submit": "Organisation erstellen",
+    "openDescription": "Erstellen Sie Ihr Veranstalterkonto und Ihre Organisation in wenigen Minuten.",
+    "comingSoon": "Die Selbstregistrierung kommt bald",
+    "comingSoonBody": "Wir bereiten uns darauf vor, Yayatoh für alle Veranstalter zu öffnen. Bis dahin kommen neue Organisationen per Einladung dazu.",
+    "joinWaitlist": "Auf die Warteliste",
+    "useCode": "Diesen Code verwenden",
+    "seePricing": "Preise und Gebühren ansehen",
+    "openNote": "Ihre Organisation startet im Einrichtungsmodus: Akzeptieren Sie die Bedingungen, veröffentlichen Sie einen Datenschutzhinweis und erstellen Sie Ihre erste Veranstaltung, um Nachrichten an Gäste freizuschalten. <pricing>Preise und Gebühren ansehen</pricing>.",
+    "closedNow": "Die Registrierung ist derzeit nur mit Einladung möglich. Geben Sie Ihren Registrierungscode ein.",
+    "verifyEmail": "Bestätigen Sie zuerst Ihre E-Mail-Adresse.",
+    "humanCheck": "Bitte bestätigen Sie, dass Sie ein Mensch sind."
   },
   "payouts": {
     "title": "Auszahlungen",
@@ -3270,7 +3293,8 @@
       "events": "Veranstaltungen von {org}",
       "emptyTitle": "Keine kommenden Veranstaltungen",
       "emptyDescription": "{org} hat gerade nichts im Verkauf. Schauen Sie bald wieder vorbei."
-    }
+    },
+    "pricing": "Preise"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -5323,5 +5347,37 @@
         "not_on_sale": "Dieser Pass oder Termin ist nicht im Verkauf."
       }
     }
+  },
+  "pricingPage": {
+    "eyebrow": "Für Veranstalter",
+    "title": "Preise und Gebühren",
+    "description": "Was der Ticketverkauf auf Yayatoh kostet, in klaren Zahlen.",
+    "currencies": "Währung",
+    "feeHeading": "Plattformgebühr ({currency})",
+    "feeNone": "Derzeit keine Plattformgebühr pro Ticket",
+    "feePercent": "{percent} pro bezahltem Ticket",
+    "feeFixed": "{fixed} pro bezahltem Ticket",
+    "feeBoth": "{percent} + {fixed} pro bezahltem Ticket",
+    "freeTickets": "Kostenlose Tickets und Zusagen sind immer gebührenfrei.",
+    "noSubscription": "Kein Abo und keine Einrichtungsgebühr: Sie zahlen nur, wenn Sie verkaufen.",
+    "allInHeading": "Endpreise",
+    "allInBody": "Käufer sehen vom ersten Bildschirm bis zur Kasse immer den vollen Preis inklusive Gebühren. Keine Überraschungen am Ende.",
+    "passOnExplained": "Gebühr weitergeben: Der Käufer zahlt den Ticketpreis plus Gebühr, und Sie erhalten den vollen Ticketpreis.",
+    "absorbExplained": "Gebühr übernehmen: Der Käufer zahlt den Ticketpreis, und die Gebühr wird von Ihrem Erlös abgezogen.",
+    "exampleCaption": "Beispiel: ein Ticket zu {face}",
+    "passOn": "Gebühr weitergegeben",
+    "absorb": "Gebühr übernommen",
+    "col": {
+      "mode": "Umgang mit der Gebühr",
+      "face": "Ticketpreis",
+      "fee": "Plattformgebühr",
+      "buyerPays": "Käufer zahlt",
+      "youReceive": "Sie erhalten"
+    },
+    "exampleNote": "Das Beispiel zeigt nur die Plattformgebühr. Gebühren werden in der Währung des Tickets berechnet.",
+    "unavailable": "Preise sind gerade nicht verfügbar.",
+    "startHeading": "Jetzt verkaufen",
+    "startBody": "Erstellen Sie Ihre Organisation, richten Sie Ihre erste Veranstaltung ein und veröffentlichen Sie, wenn Sie bereit sind.",
+    "startCta": "Organisation erstellen"
   }
 }

@@ -29,6 +29,10 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
+  'platform.flags':
+    'Platform switches such as open signup (M3.11a); no app_user privileges, only the SECURITY DEFINER platform.flag_enabled; changed by staff through platform.set_flag (platform_reader).',
+  'platform.flag_changes':
+    'History of platform switch changes (who, when, why); written only by platform.set_flag; platform_reader SELECT.',
   'platform.staff':
     'Platform staff (owner-approved list); platform_reader SELECT only, written through a SECURITY DEFINER function.',
   'platform.rate_limit_windows':

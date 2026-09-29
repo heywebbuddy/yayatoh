@@ -15,4 +15,12 @@ export {
   priceBreakdown,
   setFeeOverrideCommand,
 } from './fees.ts';
+export {
+  countryCurrency,
+  type PublicFee,
+  PublicFeeDto,
+  pricingCurrency,
+  pricingExample,
+  publicFeeSchedules,
+} from './pricing.ts';
 export { privateColumns } from './private-columns.ts';

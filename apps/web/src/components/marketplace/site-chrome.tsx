@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 
-/** The public site's header: wordmark (home), browse and organizer links. */
+/** The public site's header: wordmark (home), browse, pricing (M3.11a) and organizer links. */
 export async function SiteHeader({ name, browse = true }: { name?: string; browse?: boolean }) {
   const t = await getTranslations('market');
   return (
@@ -26,6 +26,14 @@ export async function SiteHeader({ name, browse = true }: { name?: string; brows
               </Link>
             </li>
           ) : null}
+          <li>
+            <Link
+              href="/pricing"
+              className="inline-flex min-h-10 items-center underline-offset-4 hover:underline"
+            >
+              {t('pricing')}
+            </Link>
+          </li>
           <li>
             <Link
               href="/sign-in"

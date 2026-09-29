@@ -414,3 +414,41 @@ export const realtimeMessages = tenantTable(
     check('realtime_messages_data_size', sql`pg_column_size(data) <= 16384`),
   ],
 );
+
+/** Platform switches staff flip from the console (M3.11a). Only these keys exist. */
+export const PLATFORM_FLAGS = ['open_signup'] as const;
+export type PlatformFlag = (typeof PLATFORM_FLAGS)[number];
+
+/**
+ * Platform switches (M3.11a): `open_signup` lets anyone create an organizer account and org
+ * (default off until the owner launches, D28). Global; no app_user privileges: the app reads a
+ * switch through the SECURITY DEFINER `platform.flag_enabled`, and staff change it only through
+ * `platform.set_flag` (platform_reader), which also writes `flag_changes`.
+ */
+export const platformFlags = platform.table(
+  'flags',
+  {
+    key: text('key').primaryKey(),
+    enabled: boolean('enabled').notNull().default(false),
+    updatedBy: text('updated_by').notNull(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+  },
+  () => [check('flags_key_check', sql.raw(`key in (${PLATFORM_FLAGS.map((k) => `'${k}'`).join(', ')})`))],
+);
+
+/** Every change of a platform switch: who, when, why (append-only; staff console history). */
+export const platformFlagChanges = platform.table(
+  'flag_changes',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    key: text('key').notNull(),
+    enabled: boolean('enabled').notNull(),
+    changedBy: text('changed_by').notNull(),
+    reason: text('reason').notNull(),
+    at: tsz('at').notNull().defaultNow(),
+  },
+  (t) => [
+    index('flag_changes_key_at_idx').on(t.key, t.at),
+    check('flag_changes_reason_length', sql`length(reason) between 3 and 500`),
+  ],
+);
