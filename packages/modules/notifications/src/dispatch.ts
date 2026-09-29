@@ -1,5 +1,5 @@
 import { consentRegivenSinceTx, normalizeEmail } from '@yayatoh/crm';
-import { type TenantTx, withTenant } from '@yayatoh/db';
+import { isForeignKeyViolation, type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
 import { erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
@@ -481,29 +481,42 @@ async function sendPushTx(
             : ('rejected' as const);
     const providerMessageId = 'providerMessageId' in r ? r.providerMessageId.slice(0, 200) : null;
     const httpStatus = 'error' in r ? (r.status ?? null) : null;
-    await tx
-      .insert(pushDeliveries)
-      .values({
-        orgId,
-        messageId: row.id,
-        pushTokenId: d.id,
-        platform: d.platform,
-        status,
-        httpStatus,
-        providerMessageId,
-        sentAt: status === 'sent' ? now : null,
-      })
-      .onConflictDoUpdate({
-        target: [pushDeliveries.orgId, pushDeliveries.messageId, pushDeliveries.pushTokenId],
-        set: {
-          status,
-          httpStatus,
-          providerMessageId,
-          sentAt: status === 'sent' ? now : null,
-          attempts: (prior?.attempts ?? 0) + 1,
-          updatedAt: now,
-        },
-      });
+    const delivery = {
+      orgId,
+      messageId: row.id,
+      platform: d.platform,
+      status,
+      httpStatus,
+      providerMessageId,
+      sentAt: status === 'sent' ? now : null,
+    };
+    // The device list was read before the send, and its owner may remove the device meanwhile
+    // (another tab, account erasure). The attempt is still logged, with the reference cleared as
+    // ON DELETE SET NULL would have done: in a savepoint, so the FK violation cannot abort the
+    // tenant transaction and the rest of the batch (other devices, other messages) goes on.
+    try {
+      await tx.transaction((sp) =>
+        sp
+          .insert(pushDeliveries)
+          .values({ ...delivery, pushTokenId: d.id })
+          .onConflictDoUpdate({
+            target: [pushDeliveries.orgId, pushDeliveries.messageId, pushDeliveries.pushTokenId],
+            set: {
+              status,
+              httpStatus,
+              providerMessageId,
+              sentAt: status === 'sent' ? now : null,
+              attempts: (prior?.attempts ?? 0) + 1,
+              updatedAt: now,
+            },
+          }),
+      );
+    } catch (err) {
+      if (!isForeignKeyViolation(err, 'push_deliveries_token_fk')) throw err;
+      await tx
+        .insert(pushDeliveries)
+        .values({ ...delivery, pushTokenId: null, attempts: (prior?.attempts ?? 0) + 1 });
+    }
     // Gone for good (FCM UNREGISTERED, APNs 410, web push 404/410): prune the subscription.
     if (status === 'expired')
       await tx.update(pushTokens).set({ disabledAt: now, updatedAt: now }).where(eq(pushTokens.id, d.id));

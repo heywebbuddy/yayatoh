@@ -65,11 +65,12 @@ type Browser = ReturnType<typeof browser>;
  * An RFC 8030 push service in memory: checks the VAPID JWT, answers with the scripted statuses
  * (201 by default) and keeps what it accepted so tests can decrypt it with the browser's keys.
  */
-function pushService(opts: { delayMs?: number } = {}) {
+function pushService(opts: { delayMs?: number; onSend?: (endpoint: string) => Promise<void> } = {}) {
   const accepted: Array<{ endpoint: string; body: Uint8Array; headers: Record<string, string> }> = [];
   const script = new Map<string, number[]>();
   const fetch = async (url: string, init: RequestInit) => {
     if (opts.delayMs) await new Promise((r) => setTimeout(r, opts.delayMs));
+    await opts.onSend?.(url);
     const headers = init.headers as Record<string, string>;
     const claims = verifyVapidAuthorization(headers.Authorization ?? null, {
       publicKey: vapid.keys.publicKey,
@@ -458,6 +459,67 @@ describe('web push: announcements', () => {
     expect(await deliveries(row?.id ?? '')).toEqual([
       expect.objectContaining({ status: 'sent', push_token_id: null }),
     ]);
+  });
+});
+
+describe('web push: a device removed during the send', () => {
+  it('logs the vanished device with the reference cleared and still delivers to the others', async () => {
+    const token = await buyer('race@example.test');
+    const phone = browser();
+    const laptop = browser();
+    const { deviceId: phoneId } = await optIn(token, phone);
+    const { deviceId: laptopId } = await optIn(token, laptop);
+    // Another buyer's message in the same batch must go out too.
+    const bystanderToken = await buyer('race.bystander@example.test');
+    const bystander = browser();
+    await optIn(bystanderToken, bystander);
+    const sent = await announce('Mid-send removal', ['push']);
+    await fanOut();
+    // The dispatcher has read the buyer's devices; while it talks to the push service the buyer
+    // removes the device from another tab (its own transaction, committed at once).
+    const removed = new Map([
+      [phone.endpoint, phoneId],
+      [laptop.endpoint, laptopId],
+    ]);
+    let removedId: string | null = null;
+    const svc = pushService({
+      onSend: async (url) => {
+        const id = removed.get(url);
+        if (!id || removedId) return;
+        removedId = id;
+        await executeCommand(
+          removeOrderPushCommand,
+          { token, deviceId: id },
+          createCtx({ orgId: a.org.id }),
+          ports,
+        );
+      },
+    });
+    await expect(
+      dispatchDue(a.org.id, { transports: svc.transports, appOrigin: ORIGIN, now: NOON }),
+    ).resolves.toMatchObject({ failed: 0 });
+    expect(removedId).not.toBeNull();
+
+    const rows = await pushRows(`announcement:${sent.id}:`, [
+      'race@example.test',
+      'race.bystander@example.test',
+    ]);
+    expect(rows.map((r) => [r.recipient_email, r.status])).toEqual([
+      ['race.bystander@example.test', 'sent'],
+      ['race@example.test', 'sent'],
+    ]);
+    expect(svc.read(phone)).toHaveLength(1);
+    expect(svc.read(laptop)).toHaveLength(1);
+    expect(svc.read(bystander)).toHaveLength(1);
+    const kept = removedId === phoneId ? laptopId : phoneId;
+    const log = await deliveries(rows.find((r) => r.recipient_email === 'race@example.test')?.id ?? '');
+    expect(log.map((d) => [d.status, d.push_token_id]).sort()).toEqual(
+      [
+        ['sent', kept],
+        ['sent', null],
+      ].sort(),
+    );
+    expect(await orderPushDevices(token)).toEqual([expect.objectContaining({ id: kept })]);
   });
 });
 
