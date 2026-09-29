@@ -2,6 +2,8 @@ import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, type EventDto, eventRoleGrantsTx } from '@yayatoh/events';
 import { type Ctx, createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { listMediaQuery, uploadExhibitorLogoFromPortal } from '@yayatoh/media';
+import { testPng } from '@yayatoh/media/testing';
 import { appTokenSecret, recentEventsTx } from '@yayatoh/platform';
 import {
   assignBoothCommand,
@@ -834,6 +836,54 @@ describe('booths on the floor plan', () => {
     const userId = grants[0]?.userId ?? '';
     await rejects(
       executeQuery(boothPlanQuery, { eventId: ev.id }, userCtx(userId, a.org.id), ports),
+      'forbidden',
+    );
+  });
+});
+
+describe('the exhibitor logo from the portal', () => {
+  it('an admin replaces their own logo; staff and other exhibitors are refused', async () => {
+    const x = await executeCommand(
+      createExhibitorCommand,
+      { eventId: ev.id, name: 'Logo Co' },
+      a.ctx(),
+      ports,
+    );
+    const admin = await signedIn(a, ev.id, x.id, 'boss@logo.example');
+    const first = await uploadExhibitorLogoFromPortal(
+      portal(a.org.id),
+      { principal: admin.principal, alt: 'Logo Co logo', file: await testPng() },
+      ports,
+    );
+    expect(first.asset).toMatchObject({ ownerType: 'exhibitor', ownerId: x.id, slot: 'logo' });
+    const second = await uploadExhibitorLogoFromPortal(
+      portal(a.org.id),
+      { principal: admin.principal, alt: 'New logo', file: await testPng() },
+      ports,
+    );
+    expect(second.replacedAssetId).toBe(first.asset.id);
+    const list = await executeQuery(
+      listMediaQuery,
+      { ownerType: 'exhibitor', ownerId: x.id },
+      a.ctx(),
+      ports,
+    );
+    expect(list.map((m) => m.alt)).toEqual(['New logo']);
+    const staff = await signedIn(a, ev.id, x.id, 'staff@logo.example', 'exhibitor_staff');
+    await rejects(
+      uploadExhibitorLogoFromPortal(
+        portal(a.org.id),
+        { principal: staff.principal, alt: 'nope', file: await testPng() },
+        ports,
+      ),
+      'forbidden',
+    );
+    await rejects(
+      uploadExhibitorLogoFromPortal(
+        portal(a.org.id),
+        { principal: { ...admin.principal, subjectId: acme.id }, alt: 'nope', file: await testPng() },
+        ports,
+      ),
       'forbidden',
     );
   });

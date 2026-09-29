@@ -68,6 +68,16 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     site: 'Lakeside Events',
   },
   'guest.waitlist-code': { code: '305117', minutes: 10, eventName: 'Lakeside Jazz Night' },
+  'portal.exhibitor-invite': {
+    url: 'https://app.yayatoh.test/exhibitor/join/sample',
+    eventName: 'Midwest Leadership Summit',
+    exhibitorName: 'Acme Robotics',
+  },
+  'portal.exhibitor-sign-in': {
+    url: 'https://app.yayatoh.test/exhibitor/join/sample',
+    eventName: 'Midwest Leadership Summit',
+    minutes: 30,
+  },
   'orders.waitlist-joined': {
     url: 'https://app.yayatoh.test/waitlist/sample',
     name: 'Amina Diallo',

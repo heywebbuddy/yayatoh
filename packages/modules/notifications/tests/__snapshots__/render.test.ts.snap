@@ -5005,6 +5005,474 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · ar 1`] = `
+{
+  "subject": "دعوة إلى بوابة العارضين في Midwest Leadership Summit",
+  "text": "دعوة إلى بوابة العارضين في Midwest Leadership Summit
+
+مرحبًا،
+
+دعاك Lakeside Events لإدارة Acme Robotics في Midwest Leadership Summit: ملفك وشعارك وجناحك وفريقك. يسجّل الزر أدناه دخولك؛ ويعمل مرة واحدة ويبقى صالحًا حتى 90 يومًا بعد الفعالية. إذا لم تكن تتوقع هذه الرسالة، يمكنك تجاهلها.
+
+فتح بوابة العارضين: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · de 1`] = `
+{
+  "subject": "Einladung zum Ausstellerportal von Midwest Leadership Summit",
+  "text": "Einladung zum Ausstellerportal von Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events hat Sie eingeladen, Acme Robotics bei Midwest Leadership Summit zu verwalten: Profil, Logo, Stand und Team. Die Schaltfläche unten meldet Sie an; sie funktioniert einmal und gilt bis 90 Tage nach der Veranstaltung. Wenn Sie das nicht erwartet haben, können Sie diese E-Mail ignorieren.
+
+Ausstellerportal öffnen: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · en 1`] = `
+{
+  "subject": "You're invited to the Midwest Leadership Summit exhibitor portal",
+  "text": "You're invited to the Midwest Leadership Summit exhibitor portal
+
+Hello,
+
+Lakeside Events invited you to manage Acme Robotics at Midwest Leadership Summit: your profile, logo, booth and staff. The button below signs you in; it works once and stays valid until 90 days after the event. If you weren't expecting this, you can ignore this email.
+
+Open the exhibitor portal: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · es 1`] = `
+{
+  "subject": "Invitación al portal de expositores de Midwest Leadership Summit",
+  "text": "Invitación al portal de expositores de Midwest Leadership Summit
+
+Hola:
+
+Lakeside Events te invitó a gestionar Acme Robotics en Midwest Leadership Summit: perfil, logotipo, stand y equipo. El botón de abajo inicia tu sesión; funciona una vez y es válido hasta 90 días después del evento. Si no lo esperabas, puedes ignorar este correo.
+
+Abrir el portal de expositores: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · fr 1`] = `
+{
+  "subject": "Invitation au portail exposants de Midwest Leadership Summit",
+  "text": "Invitation au portail exposants de Midwest Leadership Summit
+
+Bonjour,
+
+Lakeside Events vous invite à gérer Acme Robotics pour Midwest Leadership Summit : profil, logo, stand et équipe. Le bouton ci-dessous vous connecte ; il fonctionne une fois et reste valable jusqu’à 90 jours après l’événement. Si vous ne vous y attendiez pas, ignorez cet e-mail.
+
+Ouvrir le portail exposants: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के प्रदर्शक पोर्टल का निमंत्रण",
+  "text": "Midwest Leadership Summit के प्रदर्शक पोर्टल का निमंत्रण
+
+नमस्ते,
+
+Lakeside Events ने आपको Midwest Leadership Summit में Acme Robotics को संभालने के लिए आमंत्रित किया है: प्रोफ़ाइल, लोगो, बूथ और स्टाफ़। नीचे दिया बटन आपको साइन इन करता है; यह एक बार काम करता है और कार्यक्रम के 90 दिन बाद तक मान्य है। अगर आपको इसकी उम्मीद नहीं थी, तो इस ईमेल को अनदेखा करें।
+
+प्रदर्शक पोर्टल खोलें: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · it 1`] = `
+{
+  "subject": "Invito al portale espositori di Midwest Leadership Summit",
+  "text": "Invito al portale espositori di Midwest Leadership Summit
+
+Ciao,
+
+Lakeside Events ti ha invitato a gestire Acme Robotics a Midwest Leadership Summit: profilo, logo, stand e staff. Il pulsante qui sotto ti fa accedere; funziona una volta ed è valido fino a 90 giorni dopo l’evento. Se non te lo aspettavi, puoi ignorare questa email.
+
+Apri il portale espositori: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitの出展者ポータルへの招待",
+  "text": "Midwest Leadership Summitの出展者ポータルへの招待
+
+こんにちは。
+
+Lakeside Eventsから、Midwest Leadership SummitにおけるAcme Roboticsの管理（プロフィール、ロゴ、ブース、スタッフ）に招待されました。下のボタンでサインインできます。1回限り有効で、イベント終了後90日まで使えます。心当たりがない場合は、このメールを無視してください。
+
+出展者ポータルを開く: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · nl 1`] = `
+{
+  "subject": "Uitnodiging voor het exposantenportaal van Midwest Leadership Summit",
+  "text": "Uitnodiging voor het exposantenportaal van Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events heeft je uitgenodigd om Acme Robotics te beheren op Midwest Leadership Summit: profiel, logo, stand en team. Met de knop hieronder log je in; hij werkt één keer en blijft geldig tot 90 dagen na het evenement. Verwachtte je dit niet, dan kun je deze e-mail negeren.
+
+Exposantenportaal openen: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · pt 1`] = `
+{
+  "subject": "Convite para o portal de expositores de Midwest Leadership Summit",
+  "text": "Convite para o portal de expositores de Midwest Leadership Summit
+
+Olá!
+
+Lakeside Events convidou você para gerenciar Acme Robotics em Midwest Leadership Summit: perfil, logotipo, estande e equipe. O botão abaixo faz o seu login; ele funciona uma vez e vale até 90 dias após o evento. Se você não esperava por isso, pode ignorar este e-mail.
+
+Abrir o portal de expositores: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · ru 1`] = `
+{
+  "subject": "Приглашение в портал экспонентов Midwest Leadership Summit",
+  "text": "Приглашение в портал экспонентов Midwest Leadership Summit
+
+Здравствуйте!
+
+Lakeside Events приглашает вас управлять Acme Robotics на Midwest Leadership Summit: профиль, логотип, стенд и сотрудники. Кнопка ниже выполняет вход; она действует один раз и остаётся в силе до 90 дней после мероприятия. Если вы этого не ожидали, просто проигнорируйте это письмо.
+
+Открыть портал экспонентов: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · zh-CN 1`] = `
+{
+  "subject": "Midwest Leadership Summit 参展商门户邀请",
+  "text": "Midwest Leadership Summit 参展商门户邀请
+
+您好：
+
+Lakeside Events 邀请你管理 Acme Robotics 在 Midwest Leadership Summit 的资料、标志、展位和工作人员。点击下方按钮即可登录；该按钮仅可使用一次，有效期至活动结束后 90 天。如果这不是你预期的邮件，可以忽略。
+
+打开参展商门户: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-invite · zh-TW 1`] = `
+{
+  "subject": "Midwest Leadership Summit 參展商入口邀請",
+  "text": "Midwest Leadership Summit 參展商入口邀請
+
+您好：
+
+Lakeside Events 邀請你管理 Acme Robotics 在 Midwest Leadership Summit 的資料、標誌、攤位和工作人員。點選下方按鈕即可登入；該按鈕僅能使用一次，有效期限至活動結束後 90 天。如果這不是你預期的郵件，可以忽略。
+
+開啟參展商入口: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · ar 1`] = `
+{
+  "subject": "رابط تسجيل الدخول إلى بوابة العارضين في Midwest Leadership Summit",
+  "text": "رابط تسجيل الدخول إلى بوابة العارضين في Midwest Leadership Summit
+
+مرحبًا،
+
+استخدم الزر أدناه لتسجيل الدخول إلى بوابة العارضين في Midwest Leadership Summit. يعمل مرة واحدة وتنتهي صلاحيته خلال 30 دقيقة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+تسجيل الدخول: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · de 1`] = `
+{
+  "subject": "Ihr Anmeldelink für das Ausstellerportal von Midwest Leadership Summit",
+  "text": "Ihr Anmeldelink für das Ausstellerportal von Midwest Leadership Summit
+
+Hallo,
+
+Melden Sie sich mit der Schaltfläche unten im Ausstellerportal von Midwest Leadership Summit an. Sie funktioniert einmal und läuft in 30 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+Anmelden: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · en 1`] = `
+{
+  "subject": "Your sign-in link for the Midwest Leadership Summit exhibitor portal",
+  "text": "Your sign-in link for the Midwest Leadership Summit exhibitor portal
+
+Hello,
+
+Use the button below to sign in to the exhibitor portal of Midwest Leadership Summit. It works once and expires in 30 minutes. If you didn't ask for it, you can ignore this email.
+
+Sign in: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · es 1`] = `
+{
+  "subject": "Tu enlace de acceso al portal de expositores de Midwest Leadership Summit",
+  "text": "Tu enlace de acceso al portal de expositores de Midwest Leadership Summit
+
+Hola:
+
+Usa el botón de abajo para entrar al portal de expositores de Midwest Leadership Summit. Funciona una vez y caduca en 30 minutos. Si no lo pediste, puedes ignorar este correo.
+
+Iniciar sesión: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · fr 1`] = `
+{
+  "subject": "Votre lien de connexion au portail exposants de Midwest Leadership Summit",
+  "text": "Votre lien de connexion au portail exposants de Midwest Leadership Summit
+
+Bonjour,
+
+Utilisez le bouton ci-dessous pour vous connecter au portail exposants de Midwest Leadership Summit. Il fonctionne une fois et expire dans 30 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail.
+
+Se connecter: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit प्रदर्शक पोर्टल के लिए आपका साइन-इन लिंक",
+  "text": "Midwest Leadership Summit प्रदर्शक पोर्टल के लिए आपका साइन-इन लिंक
+
+नमस्ते,
+
+Midwest Leadership Summit के प्रदर्शक पोर्टल में साइन इन करने के लिए नीचे दिया बटन इस्तेमाल करें। यह एक बार काम करता है और 30 मिनट में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+साइन इन करें: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · it 1`] = `
+{
+  "subject": "Il tuo link di accesso al portale espositori di Midwest Leadership Summit",
+  "text": "Il tuo link di accesso al portale espositori di Midwest Leadership Summit
+
+Ciao,
+
+Usa il pulsante qui sotto per accedere al portale espositori di Midwest Leadership Summit. Funziona una volta e scade tra 30 minuti. Se non l’hai richiesto, puoi ignorare questa email.
+
+Accedi: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summit出展者ポータルのサインインリンク",
+  "text": "Midwest Leadership Summit出展者ポータルのサインインリンク
+
+こんにちは。
+
+下のボタンからMidwest Leadership Summitの出展者ポータルにサインインしてください。1回限り有効で、30分後に失効します。心当たりがない場合は、このメールを無視してください。
+
+サインイン: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · nl 1`] = `
+{
+  "subject": "Je inloglink voor het exposantenportaal van Midwest Leadership Summit",
+  "text": "Je inloglink voor het exposantenportaal van Midwest Leadership Summit
+
+Hallo,
+
+Gebruik de knop hieronder om in te loggen op het exposantenportaal van Midwest Leadership Summit. Hij werkt één keer en verloopt over 30 minuten. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
+
+Inloggen: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · pt 1`] = `
+{
+  "subject": "Seu link de acesso ao portal de expositores de Midwest Leadership Summit",
+  "text": "Seu link de acesso ao portal de expositores de Midwest Leadership Summit
+
+Olá!
+
+Use o botão abaixo para entrar no portal de expositores de Midwest Leadership Summit. Ele funciona uma vez e expira em 30 minutos. Se você não pediu, pode ignorar este e-mail.
+
+Entrar: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · ru 1`] = `
+{
+  "subject": "Ссылка для входа в портал экспонентов Midwest Leadership Summit",
+  "text": "Ссылка для входа в портал экспонентов Midwest Leadership Summit
+
+Здравствуйте!
+
+Нажмите кнопку ниже, чтобы войти в портал экспонентов Midwest Leadership Summit. Она действует один раз и истекает через 30 минут. Если вы её не запрашивали, просто проигнорируйте это письмо.
+
+Войти: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · zh-CN 1`] = `
+{
+  "subject": "Midwest Leadership Summit 参展商门户登录链接",
+  "text": "Midwest Leadership Summit 参展商门户登录链接
+
+您好：
+
+点击下方按钮登录 Midwest Leadership Summit 的参展商门户。该链接仅可使用一次，将在 30 分钟后失效。如果你没有申请，可以忽略这封邮件。
+
+登录: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.exhibitor-sign-in · zh-TW 1`] = `
+{
+  "subject": "Midwest Leadership Summit 參展商入口登入連結",
+  "text": "Midwest Leadership Summit 參展商入口登入連結
+
+您好：
+
+點選下方按鈕登入 Midwest Leadership Summit 的參展商入口。該連結僅能使用一次，將在 30 分鐘後失效。如果你沒有申請，可以忽略這封郵件。
+
+登入: https://app.yayatoh.test/exhibitor/join/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > sales.order_paid · ar 1`] = `
 {
   "subject": "طلب جديد: Amina Diallo",

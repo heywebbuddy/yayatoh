@@ -124,6 +124,16 @@
       "subject": "{code} is your code to join the waitlist",
       "intro": "Enter {code} to confirm your email and join the waitlist for {eventName} with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
     },
+    "portal.exhibitor-invite": {
+      "subject": "You're invited to the {eventName} exhibitor portal",
+      "intro": "{org} invited you to manage {exhibitorName} at {eventName}: your profile, logo, booth and staff. The button below signs you in; it works once and stays valid until 90 days after the event. If you weren't expecting this, you can ignore this email.",
+      "cta": "Open the exhibitor portal"
+    },
+    "portal.exhibitor-sign-in": {
+      "subject": "Your sign-in link for the {eventName} exhibitor portal",
+      "intro": "Use the button below to sign in to the exhibitor portal of {eventName}. It works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email.",
+      "cta": "Sign in"
+    },
     "orders.waitlist-joined": {
       "subject": "You're on the waitlist for {eventName}",
       "intro": "You're number {position} in line for {count, plural, one {# {passName} ticket} other {# {passName} tickets}} to {eventName}. If tickets free up, we'll email you an offer to check out; it holds the tickets for a limited time. Use the link below to see your place or leave the waitlist.",

@@ -125,6 +125,19 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'minutes', 'eventName'],
   },
+  /** M5.4a: exhibitor portal invitation and sign-in links, sent at once by the web app. */
+  'portal.exhibitor-invite': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'eventName', 'exhibitorName'],
+  },
+  'portal.exhibitor-sign-in': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'eventName', 'minutes'],
+  },
   'orders.waitlist-joined': {
     category: 'transactional',
     channels: ['email'],

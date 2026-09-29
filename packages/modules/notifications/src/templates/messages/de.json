@@ -124,6 +124,16 @@
       "subject": "{code} ist Ihr Code für die Warteliste",
       "intro": "Geben Sie {code} ein, um Ihre E-Mail zu bestätigen und sich bei {org} auf die Warteliste für {eventName} zu setzen. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
     },
+    "portal.exhibitor-invite": {
+      "subject": "Einladung zum Ausstellerportal von {eventName}",
+      "intro": "{org} hat Sie eingeladen, {exhibitorName} bei {eventName} zu verwalten: Profil, Logo, Stand und Team. Die Schaltfläche unten meldet Sie an; sie funktioniert einmal und gilt bis 90 Tage nach der Veranstaltung. Wenn Sie das nicht erwartet haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Ausstellerportal öffnen"
+    },
+    "portal.exhibitor-sign-in": {
+      "subject": "Ihr Anmeldelink für das Ausstellerportal von {eventName}",
+      "intro": "Melden Sie sich mit der Schaltfläche unten im Ausstellerportal von {eventName} an. Sie funktioniert einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Anmelden"
+    },
     "orders.waitlist-joined": {
       "subject": "Sie stehen auf der Warteliste für {eventName}",
       "intro": "Sie sind Nummer {position} in der Warteschlange für {count, plural, one {# {passName}-Ticket} other {# {passName}-Tickets}} für {eventName}. Werden Tickets frei, schicken wir Ihnen per E-Mail ein Angebot zum Bestellen; es hält die Tickets für begrenzte Zeit für Sie bereit. Über den Link unten sehen Sie Ihren Platz oder verlassen die Warteliste.",

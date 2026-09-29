@@ -43,6 +43,11 @@ export {
 export { MediaRejected, type RejectReason } from './pipeline/process.ts';
 export { ACCEPT_MIME, sniff } from './pipeline/sniff.ts';
 export { sanitizeSvg } from './pipeline/svg.ts';
+export {
+  portalExhibitorLogoCommand,
+  portalExhibitorLogoQuery,
+  uploadExhibitorLogoFromPortal,
+} from './portal.ts';
 export { privateColumns } from './private-columns.ts';
 export { OWNER_TYPES, type OwnerType, SLOTS, type Slot } from './schema.ts';
 export { mediaStore, mediaStoreFromEnv, setMediaStore } from './storage/config.ts';

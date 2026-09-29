@@ -124,6 +124,16 @@
       "subject": "{code} is je code om op de wachtlijst te komen",
       "intro": "Voer {code} in om je e-mail te bevestigen en bij {org} op de wachtlijst voor {eventName} te komen. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."
     },
+    "portal.exhibitor-invite": {
+      "subject": "Uitnodiging voor het exposantenportaal van {eventName}",
+      "intro": "{org} heeft je uitgenodigd om {exhibitorName} te beheren op {eventName}: profiel, logo, stand en team. Met de knop hieronder log je in; hij werkt één keer en blijft geldig tot 90 dagen na het evenement. Verwachtte je dit niet, dan kun je deze e-mail negeren.",
+      "cta": "Exposantenportaal openen"
+    },
+    "portal.exhibitor-sign-in": {
+      "subject": "Je inloglink voor het exposantenportaal van {eventName}",
+      "intro": "Gebruik de knop hieronder om in te loggen op het exposantenportaal van {eventName}. Hij werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
+      "cta": "Inloggen"
+    },
     "orders.waitlist-joined": {
       "subject": "Je staat op de wachtlijst voor {eventName}",
       "intro": "Je bent nummer {position} in de rij voor {count, plural, one {# {passName}-ticket} other {# {passName}-tickets}} voor {eventName}. Komen er tickets vrij, dan mailen we je een aanbod om af te rekenen; dat houdt de tickets een beperkte tijd voor je vast. Gebruik de link hieronder om je plek te zien of de wachtlijst te verlaten.",

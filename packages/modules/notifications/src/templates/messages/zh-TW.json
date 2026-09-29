@@ -124,6 +124,16 @@
       "subject": "{code} 是您加入候補名單的驗證碼",
       "intro": "輸入 {code} 以確認您的電子郵件並加入 {org} 的 {eventName} 候補名單。驗證碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。"
     },
+    "portal.exhibitor-invite": {
+      "subject": "{eventName} 參展商入口邀請",
+      "intro": "{org} 邀請你管理 {exhibitorName} 在 {eventName} 的資料、標誌、攤位和工作人員。點選下方按鈕即可登入；該按鈕僅能使用一次，有效期限至活動結束後 90 天。如果這不是你預期的郵件，可以忽略。",
+      "cta": "開啟參展商入口"
+    },
+    "portal.exhibitor-sign-in": {
+      "subject": "{eventName} 參展商入口登入連結",
+      "intro": "點選下方按鈕登入 {eventName} 的參展商入口。該連結僅能使用一次，將在 {minutes} 分鐘後失效。如果你沒有申請，可以忽略這封郵件。",
+      "cta": "登入"
+    },
     "orders.waitlist-joined": {
       "subject": "您已加入 {eventName} 的候補名單",
       "intro": "您正在排隊等候 {eventName} 的 {count, plural, other {# 張}} {passName} 票券，目前排在第 {position} 位。如有票券釋出，我們會透過電子郵件向您發送結帳邀請；票券將為您保留一段時間。使用下方連結查看您的排位或退出候補名單。",

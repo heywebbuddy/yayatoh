@@ -45,6 +45,7 @@ import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
+import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
 import { cachedReviews } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { openVenueMap } from '@/server/seat-finder.ts';
@@ -121,6 +122,11 @@ export async function PublicEventView({
         await publicProgramMedia(contentTarget.orgId, contentTarget.eventId, { privateOk: unlockedPrivate }),
       )
     : {};
+  // M5.4a: the exhibitor map page exists once the event has booths.
+  const exhibitorMap =
+    contentTarget && fullProgram.exhibitors.length > 0
+      ? (await cachedExhibitorMap(contentTarget)) !== null
+      : false;
   const program: PublicProgramDto = chosen
     ? {
         ...fullProgram,
@@ -565,6 +571,7 @@ export async function PublicEventView({
         locale={locale}
         timeZone={ev.timezone}
         images={programImages}
+        exhibitorMap={exhibitorMap}
       />
 
       {reviews ? <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} /> : null}

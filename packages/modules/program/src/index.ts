@@ -54,6 +54,7 @@ export {
   PORTAL_SESSION_MS,
   PORTAL_SIGN_IN_LINK_MS,
   portalInviteStaffCommand,
+  portalMemberTx,
   portalPrincipalBySession,
   portalRevokeStaffCommand,
   portalSaveProfileCommand,

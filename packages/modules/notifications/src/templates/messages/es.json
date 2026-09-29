@@ -124,6 +124,16 @@
       "subject": "{code} es tu código para unirte a la lista de espera",
       "intro": "Introduce {code} para confirmar tu correo y unirte a la lista de espera de {eventName} con {org}. El código se usa una sola vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo."
     },
+    "portal.exhibitor-invite": {
+      "subject": "Invitación al portal de expositores de {eventName}",
+      "intro": "{org} te invitó a gestionar {exhibitorName} en {eventName}: perfil, logotipo, stand y equipo. El botón de abajo inicia tu sesión; funciona una vez y es válido hasta 90 días después del evento. Si no lo esperabas, puedes ignorar este correo.",
+      "cta": "Abrir el portal de expositores"
+    },
+    "portal.exhibitor-sign-in": {
+      "subject": "Tu enlace de acceso al portal de expositores de {eventName}",
+      "intro": "Usa el botón de abajo para entrar al portal de expositores de {eventName}. Funciona una vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo.",
+      "cta": "Iniciar sesión"
+    },
     "orders.waitlist-joined": {
       "subject": "Estás en la lista de espera de {eventName}",
       "intro": "Eres el número {position} en la fila para {count, plural, one {# entrada {passName}} other {# entradas {passName}}} de {eventName}. Si se liberan entradas, te enviaremos por correo una oferta para completar la compra; reserva las entradas durante un tiempo limitado. Usa el enlace de abajo para ver tu lugar o salir de la lista de espera.",

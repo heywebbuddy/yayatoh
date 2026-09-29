@@ -150,7 +150,7 @@ interface StoreArgs {
  * the files to the store and the rows, and (for a replacement) delete the old rows. The old files
  * are purged by the caller after commit (`uploadMedia`).
  */
-async function storeUploadTx(
+export async function storeUploadTx(
   a: StoreArgs,
 ): Promise<{ asset: MediaAssetDto; replacedAssetId: string | null }> {
   const orgId = requireOrg(a.ctx);
@@ -580,7 +580,7 @@ export async function uploadProgramImage(
   );
 }
 
-async function runUpload(
+export async function runUpload(
   ctx: Ctx,
   run: (assetId: string) => Promise<UploadResultDto>,
 ): Promise<UploadResultDto> {
