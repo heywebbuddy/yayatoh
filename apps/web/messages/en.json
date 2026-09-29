@@ -4612,5 +4612,10 @@
       "refunded": "Refunded",
       "awaiting_payment": "Awaiting payment"
     }
+  },
+  "frontDoor": {
+    "slowTitle": "This page is taking too long",
+    "downTitle": "This page isn't available right now",
+    "body": "Please try again in a moment."
   }
 }

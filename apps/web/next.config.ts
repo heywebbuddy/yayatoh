@@ -20,6 +20,30 @@ const baseline = [
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
 ];
 
+/**
+ * Front-door hosts (M2.4a, ADR 0020): responses forwarded from the legacy app pass through
+ * without the new app's baseline (its opener policy would break legacy popups), so the baseline
+ * skips the legacy hosts whose origin is configured. Same env as `frontDoorConfig`.
+ */
+const legacyHosts = [
+  ...(process.env.LEGACY_ORIGIN_URL
+    ? (process.env.LEGACY_YAY_HOSTS ?? 'yayatoh.com,www.yayatoh.com').split(',')
+    : []),
+  ...(process.env.LEGACY_ABC_ORIGIN_URL
+    ? (process.env.LEGACY_ABC_HOSTS ?? 'abc.yayatoh.com').split(',')
+    : []),
+]
+  .map((h) => h.trim().toLowerCase())
+  .filter((h) => /^[a-z0-9.-]+$/.test(h));
+const notLegacyHost = legacyHosts.length
+  ? [
+      {
+        type: 'host' as const,
+        value: `^(?!(${legacyHosts.map((h) => h.replaceAll('.', '\\.')).join('|')})$).*$`,
+      },
+    ]
+  : undefined;
+
 const config: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
@@ -47,7 +71,7 @@ const config: NextConfig = {
   experimental: { taint: true, serverActions: { allowedOrigins } },
   async headers() {
     return [
-      { source: '/:path*', headers: baseline },
+      { source: '/:path*', headers: baseline, ...(notLegacyHost ? { has: notLegacyHost } : {}) },
       // The push service worker (M1.10e): browsers must see a new version at once.
       { source: '/push-sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
       {

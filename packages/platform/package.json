@@ -12,7 +12,8 @@
     "./testing": "./src/testing.ts",
     "./http": "./src/http.ts",
     "./security": "./src/security/index.ts",
-    "./ssrf": "./src/security/ssrf.ts"
+    "./ssrf": "./src/security/ssrf.ts",
+    "./front-door": "./src/front-door/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

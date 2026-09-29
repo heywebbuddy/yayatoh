@@ -45,3 +45,32 @@ export function pickRedirect(rules: readonly RedirectRule[], path: string): Redi
     .sort((a, b) => b.source.length - a.source.length);
   return prefixes[0] ?? null;
 }
+
+/** The most rules a chain is followed through before the final URL is sent. */
+export const MAX_REDIRECT_HOPS = 5;
+
+/**
+ * One redirect for a request, never a chain (M2.4a): when a rule's target is itself a legacy URL on
+ * the same host (rules written at different times: `/organiser/x` → `/x` → `/o/x`), the chain is
+ * followed and the client is sent straight to the final URL with the first rule's status. A loop
+ * answers null (better a legacy page than a redirect loop).
+ */
+export async function followRedirectChain(
+  match: (path: string) => RedirectRule | null | Promise<RedirectRule | null>,
+  pathWithQuery: string,
+  maxHops = MAX_REDIRECT_HOPS,
+): Promise<{ location: string; status: number } | null> {
+  const first = await match(normalizePath(pathWithQuery));
+  if (!first) return null;
+  const seen = new Set([normalizePath(pathWithQuery)]);
+  let location = redirectLocation(first, pathWithQuery);
+  for (let hop = 1; hop < maxHops && location.startsWith('/'); hop++) {
+    const path = normalizePath(location);
+    if (seen.has(path)) return null;
+    seen.add(path);
+    const next = await match(path);
+    if (!next) break;
+    location = redirectLocation(next, location);
+  }
+  return { location, status: first.status };
+}

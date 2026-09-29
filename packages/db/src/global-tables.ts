@@ -39,6 +39,14 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Request counts per day × /v1 route × client × app version (no tenant, user or IP); incremented through a SECURITY DEFINER function, read by platform_reader.',
   'platform.erased_addresses':
     'Platform-wide erased-address suppression (SHA-256 of the normalized email, never the address); no app_user privileges, only the SECURITY DEFINER platform.erased_address_* functions; platform_reader SELECT.',
+  'platform.front_door_flags':
+    'Front-door route owner per public host × route key (M2.4a; hosts are platform infrastructure); no app_user privileges, read through the SECURITY DEFINER platform.front_door_flags(), changed only through platform.set_front_door_flag (step-up, platform_reader).',
+  'platform.front_door_flag_changes':
+    'Append-only audit of front-door flag changes (staff actor, reason, step-up time); written only by platform.set_front_door_flag; platform_reader SELECT.',
+  'platform.front_door_stats':
+    'Front-door counters per day × host × route × served-by (no path, user, IP or tenant); incremented through the SECURITY DEFINER platform.record_front_door; platform_reader SELECT.',
+  'platform.front_door_not_found':
+    'Daily 404 top list per host × path (no query) × served-by; incremented through platform.record_front_door; platform_reader SELECT.',
   'privacy.account_requests':
     'Controller-side DSAR record for Yayatoh accounts (hashed subject, masked hint, actor, reason); no app_user privileges, only the SECURITY DEFINER privacy.record_account_request; platform_reader SELECT.',
   'orders.guest_challenges':

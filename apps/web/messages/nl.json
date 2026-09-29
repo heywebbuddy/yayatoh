@@ -4612,5 +4612,10 @@
       "refunded": "Terugbetaald",
       "awaiting_payment": "Wacht op betaling"
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Deze pagina doet er te lang over",
+    "downTitle": "Deze pagina is nu niet beschikbaar",
+    "body": "Probeer het zo meteen opnieuw."
   }
 }

@@ -4612,5 +4612,10 @@
       "refunded": "已退款",
       "awaiting_payment": "待付款"
     }
+  },
+  "frontDoor": {
+    "slowTitle": "此頁面載入時間過長",
+    "downTitle": "此頁面暫時無法使用",
+    "body": "請稍後再試。"
   }
 }

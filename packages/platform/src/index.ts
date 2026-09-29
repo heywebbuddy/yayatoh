@@ -42,6 +42,12 @@ export {
   normalizeAddress,
 } from './erased-addresses.ts';
 export {
+  type FrontDoorNotFoundRow,
+  type FrontDoorStatRow,
+  frontDoorFlags,
+  recordFrontDoor,
+} from './front-door-store.ts';
+export {
   FAKE_HUMAN_FAIL_TOKEN,
   FAKE_HUMAN_TOKEN,
   fakeHumanCheck,

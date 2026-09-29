@@ -10,9 +10,10 @@ import {
   stripLocale,
 } from '@yayatoh/platform/security';
 import { resolveHost } from '@yayatoh/tenancy';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing.ts';
+import { FRONT_DOOR_ROUTE_HEADER, frontDoor } from './lib/front-door/index.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
@@ -26,6 +27,8 @@ import { TtlCache } from './lib/ttl-cache.ts';
  * Every response gets request protection (M1.14a): a fresh CSP nonce (Next reads it from the
  * request's CSP header and stamps its own scripts), the security headers for its page type, and a
  * device cookie that the rate limiter keys on (so people sharing an IP don't share limits).
+ * First of all, on a legacy host during coexistence (M2.4a, ADR 0020), the front door decides who
+ * serves the request: legacy responses pass through untouched by the new app's headers.
  */
 const intl = createMiddleware(routing);
 const FILE = /\/[^/]*\.[^/]+$/;
@@ -89,7 +92,9 @@ function languageSwitch(req: NextRequest, code: string, host: string) {
   return res;
 }
 
-export default async function proxy(req: NextRequest): Promise<NextResponse> {
+export default async function proxy(req: NextRequest, event?: NextFetchEvent): Promise<Response> {
+  const door = await frontDoor(req, (p) => event?.waitUntil(p));
+  if (door?.kind === 'response') return door.response;
   const host = bareHost(req.headers.get('host'));
   const kind = classifyHost(host);
   const path = req.nextUrl.pathname;
@@ -102,11 +107,15 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
   });
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);
+  // Marks a front-door request for the not-found page's 404 beacon; a client never sets it.
+  forwarded.delete(FRONT_DOOR_ROUTE_HEADER);
+  if (door) forwarded.set(FRONT_DOOR_ROUTE_HEADER, door.route);
   forwarded.set('content-security-policy', headers['content-security-policy'] as string);
   // The noindex guard: never-indexed hosts and private pages say so on every response.
   const robots = robotsHeader(kind, stripLocale(path, routing.locales));
   const secure = (res: NextResponse) => {
     for (const [k, v] of Object.entries(headers)) res.headers.set(k, v);
+    if (door) res.headers.set('x-front-door', 'next');
     if (robots) res.headers.set('x-robots-tag', robots);
     if (!isDeviceId(req.cookies.get(DEVICE_COOKIE)?.value))
       res.cookies.set(DEVICE_COOKIE, newDeviceId(), {
@@ -150,7 +159,9 @@ export default async function proxy(req: NextRequest): Promise<NextResponse> {
     orgId = site.orgId;
   }
 
-  if (kind !== 'app' && (req.method === 'GET' || req.method === 'HEAD')) {
+  // On a front-door host the front door already looked the URL up (and kept legacy URLs whose new
+  // home is still on legacy there).
+  if (!door && kind !== 'app' && (req.method === 'GET' || req.method === 'HEAD')) {
     const key = `${host}|${path}`;
     let hit = redirects.get(key);
     if (hit === undefined) {

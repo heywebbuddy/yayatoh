@@ -4612,5 +4612,10 @@
       "refunded": "Rimborsato",
       "awaiting_payment": "In attesa di pagamento"
     }
+  },
+  "frontDoor": {
+    "slowTitle": "Questa pagina sta impiegando troppo tempo",
+    "downTitle": "Questa pagina non è disponibile al momento",
+    "body": "Riprova tra un momento."
   }
 }
