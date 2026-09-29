@@ -45,7 +45,6 @@ import {
 import { consumeEvent, emitEvents, type Notifier, recentEventsTx, subscribes } from '@yayatoh/platform';
 import { createSurveyCommand, surveyMailer } from '@yayatoh/surveys';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
-import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 

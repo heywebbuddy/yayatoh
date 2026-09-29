@@ -173,29 +173,31 @@ export default async function JourneyPage({
         <h2 id="history-heading" className="text-section">
           {t('history.title')}
         </h2>
-        <form method="get" className="flex flex-wrap items-end gap-2" role="search">
-          <div className="min-w-56 flex-1">
-            <label htmlFor="journey-q" className="text-caption text-zinc-600">
-              {t('history.searchLabel')}
-            </label>
-            <input
-              id="journey-q"
-              name="q"
-              type="search"
-              defaultValue={q}
-              maxLength={200}
-              className="min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            />
-          </div>
-          <Button type="submit" variant="secondary">
-            {t('history.search')}
-          </Button>
-          {q ? (
-            <Link href={base} className={buttonClass('ghost')}>
-              {t('history.clear')}
-            </Link>
-          ) : null}
-        </form>
+        <search aria-label={t('history.searchLabel')}>
+          <form method="get" className="flex flex-wrap items-end gap-2">
+            <div className="min-w-56 flex-1">
+              <label htmlFor="journey-q" className="text-caption text-zinc-600">
+                {t('history.searchLabel')}
+              </label>
+              <input
+                id="journey-q"
+                name="q"
+                type="search"
+                defaultValue={q}
+                maxLength={200}
+                className="min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body"
+              />
+            </div>
+            <Button type="submit" variant="secondary">
+              {t('history.search')}
+            </Button>
+            {q ? (
+              <Link href={base} className={buttonClass('ghost')}>
+                {t('history.clear')}
+              </Link>
+            ) : null}
+          </form>
+        </search>
         {runs.rows.length === 0 ? (
           <EmptyState title={q ? t('history.emptySearch', { q }) : t('history.empty')} />
         ) : (

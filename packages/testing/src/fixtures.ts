@@ -384,7 +384,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       eventId: event.id,
       trigger: 'order_paid',
       steps: [
-        { anchor: 'event_start', offsetDays: -2, action: 'email', subject: 'Soon: {event}', body: 'Hi {name}!' },
+        {
+          anchor: 'event_start',
+          offsetDays: -2,
+          action: 'email',
+          subject: 'Soon: {event}',
+          body: 'Hi {name}!',
+        },
         { anchor: 'event_start', offsetDays: -1, action: 'label', label: 'Reminded' },
       ],
     },

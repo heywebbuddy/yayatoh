@@ -22,6 +22,12 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - "Last year's event" is the **previous edition** of the series (the series event that started last before the chosen one), not a calendar year.
   - Exporting an audience (CSV of contacts) needs `attendees:export` (owners, admins, managers); the marketing role can build, preview and save audiences but not export them.
   - A person holding both a seated and an unseated ticket at an event counts as seated.
+- [ ] **Journey defaults, pending owner** (M3.7a; labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - Journey messages are the new kind `automations.message`, category **reminders** (the person can switch reminders off or unsubscribe; quiet hours apply; texts need informational consent in the crm ledger). Confirmations are organizer copy, not the platform's transactional tickets email, which still goes out on its own.
+  - The vision template's times: confirmation at purchase, reminder **7 days before at the start's wall-clock time**, SMS **1 day before** (same wall-clock time, so 23 or 25 h across a DST change), push on the event day at **09:00**, survey the morning after the event ends at **10:00** (event's time zone). Organizers can change every step.
+  - Steps are edited only while a journey is **off**; switching it off cancels every waiting step. People are never enrolled retroactively when a journey is switched on. A step whose time has already passed when someone joins is skipped ("too late"), except steps that run when they join.
+  - A failed step is retried after 1, 5, 15 and 60 minutes and marked failed after 5 attempts; the failure goes out as `automations.journey_step_failed@1` for the M3.2b alert engine's "automation failures" rule (wiring the rule is the alert engine's side).
+  - Reads need `marketing:read` (viewers and finance can look), building needs `marketing:write` (owners, admins, managers, marketing).
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
