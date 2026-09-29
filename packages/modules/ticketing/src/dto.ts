@@ -1,6 +1,6 @@
 import { defineSerializer, partialNoDefaults } from '@yayatoh/contracts';
 import { z } from 'zod';
-import { FEE_MODES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
+import { FEE_MODES, TICKET_TYPE_MANAGERS, TICKET_TYPE_VISIBILITIES } from './schema.ts';
 
 /** Days a multi-day pass admits: unique ISO dates, sorted, each with a short name. */
 export const AccessDates = z
@@ -38,6 +38,8 @@ export const TicketTypeDto = z.object({
   /** Per-ticket price the buyer sees now (face + passed-on fees; early-bird while it runs). */
   allInMinor: z.int(),
   feeMinor: z.int(),
+  /** M5.1a: set when another module (registration) sells this pass; edit it there. */
+  managedBy: z.enum(TICKET_TYPE_MANAGERS).nullable(),
 });
 export type TicketTypeDto = z.infer<typeof TicketTypeDto>;
 
@@ -124,3 +126,6 @@ export const UpdateTicketTypeInput = partialNoDefaults(Fields)
   .extend({ ticketTypeId: z.uuid() })
   .refine(orderedWindow, { message: 'salesEndAt must be after salesStartAt', path: ['salesEndAt'] })
   .refine(orderedLimits, { message: 'maxPerOrder must be ≥ minPerOrder', path: ['maxPerOrder'] });
+
+export type CreateTicketTypeInput = z.infer<typeof CreateTicketTypeInput>;
+export type UpdateTicketTypeInput = z.infer<typeof UpdateTicketTypeInput>;

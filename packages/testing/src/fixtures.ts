@@ -107,6 +107,13 @@ import {
   createTrackCommand,
 } from '@yayatoh/program';
 import {
+  createRegistrationTypeCommand,
+  registrationSetupQuery,
+  seedRegistrationDefaultsCommand,
+  setCellCommand,
+  startRegistrationCommand,
+} from '@yayatoh/registration';
+import {
   analyticsForwarder,
   attendeeExportBulk,
   catchUpMetrics,
@@ -1124,6 +1131,59 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M5.1a registration: the default types and items (activating the conference pack), a code-only
+  // and a domain-only type, one cell per type, and one free registration (a capacity claim).
+  await executeCommand(seedRegistrationDefaultsCommand, { eventId: event.id, names: {} }, ctx(), ports);
+  const regSetup = await executeQuery(registrationSetupQuery, { eventId: event.id }, ctx(), ports);
+  const fullPass = regSetup.items.find((i) => i.key === 'full_pass');
+  const member = regSetup.types.find((t) => t.key === 'member');
+  const press = await executeCommand(
+    createRegistrationTypeCommand,
+    {
+      eventId: event.id,
+      name: 'Press',
+      eligibility: 'access_code',
+      accessCode: `PRESS-${slug}`.slice(0, 32).toUpperCase(),
+    },
+    ctx(),
+    ports,
+  );
+  const staff = await executeCommand(
+    createRegistrationTypeCommand,
+    {
+      eventId: event.id,
+      name: 'Staff',
+      eligibility: 'email_domain',
+      emailDomains: ['example.test'],
+      capacity: 10,
+    },
+    ctx(),
+    ports,
+  );
+  if (fullPass && member) {
+    for (const [typeId, priceMinor] of [
+      [member.id, 0],
+      [press.id, 0],
+      [staff.id, 2500],
+    ] as const)
+      await executeCommand(
+        setCellCommand,
+        { eventId: event.id, registrationTypeId: typeId, admissionItemId: fullPass.id, priceMinor },
+        ctx(),
+        ports,
+      );
+    await executeCommand(
+      startRegistrationCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: member.id,
+        itemIds: [fullPass.id],
+        buyer: { email: `member+${slug}@example.test`, name: 'Fixture Member' },
+      },
+      createCtx({ orgId: org.id }),
+      ports,
+    );
+  }
   // M1.4g: a published page (linked from the tenant site's navigation) and a published post; a
   // review by the fixture buyer after the event ended, and one report of it.
   const page = await executeCommand(

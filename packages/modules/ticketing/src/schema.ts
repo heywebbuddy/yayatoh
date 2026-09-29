@@ -24,6 +24,9 @@ export interface AccessDate {
 
 export const TICKET_TYPE_VISIBILITIES = ['public', 'hidden'] as const;
 export const FEE_MODES = ['pass_on', 'absorb'] as const;
+/** Modules that may manage ticket types (M5.1a, ADR 0021). */
+export const TICKET_TYPE_MANAGERS = ['registration'] as const;
+export type TicketTypeManager = (typeof TICKET_TYPE_MANAGERS)[number];
 
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
@@ -56,6 +59,11 @@ export const ticketTypes = tenantTable(
     accessDates: jsonb('access_dates').$type<AccessDate[]>().notNull().default(sql`'[]'::jsonb`),
     /** Multi-date events (M1.4b): the occurrences this type sells for; empty = every date. */
     occurrenceIds: uuid('occurrence_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    /**
+     * M5.1a (ADR 0021): a ticket type another module sells for itself (a registration type ×
+     * admission item cell). Only that module may quote, edit or archive it; null = ordinary pass.
+     */
+    managedBy: text('managed_by'),
   },
   (t) => [
     index('ticket_types_org_event_idx').on(t.orgId, t.eventId, t.sortOrder),
@@ -78,6 +86,7 @@ export const ticketTypes = tenantTable(
     ),
     check('ticket_types_donation_check', sql`not is_donation or early_price_minor is null`),
     check('ticket_types_access_dates_check', sql`jsonb_typeof(access_dates) = 'array'`),
+    check('ticket_types_managed_by_check', sql`managed_by is null or managed_by in ('registration')`),
   ],
 );
 

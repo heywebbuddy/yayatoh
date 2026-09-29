@@ -18,6 +18,7 @@ import { privateColumns as payments } from '@yayatoh/payments';
 import { privateColumns as platform } from '@yayatoh/platform';
 import { privateColumns as privacy } from '@yayatoh/privacy';
 import { privateColumns as program } from '@yayatoh/program';
+import { privateColumns as registration } from '@yayatoh/registration';
 import { privateColumns as reports } from '@yayatoh/reports';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
@@ -52,6 +53,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   platform,
   privacy,
   program,
+  registration,
   reports,
   reviews,
   seating,

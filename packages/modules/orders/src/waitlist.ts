@@ -18,6 +18,7 @@ import {
   holdInventoryTx,
   quoteTx,
   releaseHoldTx,
+  type TicketTypeManager,
   ticketTypeStockTx,
   validForOccurrence,
 } from '@yayatoh/ticketing';
@@ -149,7 +150,7 @@ export async function waitlistHeldBack(orgId: string, eventId: string): Promise<
 async function listForTx(
   tx: TenantTx,
   ctx: Ctx,
-  input: { eventId: string; ticketTypeId: string; occurrenceId: string | null },
+  input: { eventId: string; ticketTypeId: string; occurrenceId: string | null; managed?: boolean },
 ): Promise<ListRow> {
   const orgId = requireOrg(ctx);
   const where = and(
@@ -168,6 +169,8 @@ async function listForTx(
       ticketTypeId: input.ticketTypeId,
       occurrenceId: input.occurrenceId,
       offerMinutes: DEFAULT_OFFER_MINUTES,
+      // M5.1a: a managed pass's line is offered by its module (per-type capacity), never the sweeper.
+      autoOffer: !input.managed,
       updatedBy: 'system',
     })
     .onConflictDoNothing();
@@ -216,50 +219,101 @@ export const JoinWaitlistResultDto = z.object({
  * limits; and only while the public can't buy that many (sold out, or all kept for the line).
  * Joining again with the same address returns the place already held.
  */
-export const joinWaitlistCommand = tenantCommand({
-  name: 'orders.joinWaitlist',
-  input: JoinWaitlistInput,
-  output: JoinWaitlistResultDto,
-  entitlement: 'ticketing',
-  permission: 'public:waitlist',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const orgId = requireOrg(ctx);
-    const event = await findEventTx(tx, input.eventId);
-    if (event?.status !== 'published' || event.visibility === 'private')
-      throw new DomainError('not_found', 'Event not found');
-    const stock = await ticketTypeStockTx(tx, input.ticketTypeId);
-    if (!stock || stock.eventId !== event.id || stock.archivedAt || stock.visibility !== 'public')
-      throw new DomainError('not_found', 'Ticket type not found');
-    if (stock.isDonation || (await seatedTicketTypesTx(tx, event.id)).has(stock.id))
-      throw new DomainError('invalid_state', 'This pass has no waitlist', { reason: 'no_waitlist' });
-    if (stock.salesEndAt && stock.salesEndAt <= ctx.now)
-      throw new DomainError('invalid_state', 'Sales have ended', { reason: 'sales_ended' });
-    if (stock.salesStartAt && stock.salesStartAt > ctx.now)
-      throw new DomainError('invalid_state', 'Not on sale yet', { reason: 'not_yet_on_sale' });
-    if (input.quantity < stock.minPerOrder || input.quantity > stock.maxPerOrder)
-      throw new DomainError('validation_failed', 'Quantity outside the per-order limits', {
-        field: 'quantity',
-        min: stock.minPerOrder,
-        max: stock.maxPerOrder,
+/**
+ * Join a line inside the caller's transaction: the command below, or the module managing the
+ * pass (`manager`, M5.1a), which has checked its own capacity and eligibility first.
+ */
+export async function joinWaitlistTx(
+  {
+    input,
+    ctx,
+    tx,
+    emit,
+  }: { input: z.output<typeof JoinWaitlistInput>; ctx: Ctx; tx: TenantTx; emit: (e: DomainEvent) => void },
+  opts: { manager?: TicketTypeManager } = {},
+) {
+  const orgId = requireOrg(ctx);
+  const event = await findEventTx(tx, input.eventId);
+  if (event?.status !== 'published' || event.visibility === 'private')
+    throw new DomainError('not_found', 'Event not found');
+  const stock = await ticketTypeStockTx(tx, input.ticketTypeId);
+  const managed = stock?.managedBy != null && stock.managedBy === opts.manager;
+  if (
+    !stock ||
+    stock.eventId !== event.id ||
+    stock.archivedAt ||
+    (stock.managedBy !== null && !managed) ||
+    (stock.visibility !== 'public' && !managed)
+  )
+    throw new DomainError('not_found', 'Ticket type not found');
+  if (stock.isDonation || (await seatedTicketTypesTx(tx, event.id)).has(stock.id))
+    throw new DomainError('invalid_state', 'This pass has no waitlist', { reason: 'no_waitlist' });
+  if (stock.salesEndAt && stock.salesEndAt <= ctx.now)
+    throw new DomainError('invalid_state', 'Sales have ended', { reason: 'sales_ended' });
+  if (stock.salesStartAt && stock.salesStartAt > ctx.now)
+    throw new DomainError('invalid_state', 'Not on sale yet', { reason: 'not_yet_on_sale' });
+  if (input.quantity < stock.minPerOrder || input.quantity > stock.maxPerOrder)
+    throw new DomainError('validation_failed', 'Quantity outside the per-order limits', {
+      field: 'quantity',
+      min: stock.minPerOrder,
+      max: stock.maxPerOrder,
+    });
+  const occurrenceId = input.occurrenceId ?? null;
+  if (occurrenceId) {
+    const occ = await findOccurrenceTx(tx, occurrenceId);
+    if (!occ || occ.eventId !== event.id) throw new DomainError('not_found', 'Date not found');
+    if (occ.status !== 'scheduled' || occ.endsAt <= ctx.now)
+      throw new DomainError('invalid_state', 'This date is not on sale', { reason: 'date_closed' });
+    if (!validForOccurrence(stock, occurrenceId))
+      throw new DomainError('invalid_state', 'This ticket is not for the chosen date', {
+        reason: 'wrong_date',
       });
-    const occurrenceId = input.occurrenceId ?? null;
-    if (occurrenceId) {
-      const occ = await findOccurrenceTx(tx, occurrenceId);
-      if (!occ || occ.eventId !== event.id) throw new DomainError('not_found', 'Date not found');
-      if (occ.status !== 'scheduled' || occ.endsAt <= ctx.now)
-        throw new DomainError('invalid_state', 'This date is not on sale', { reason: 'date_closed' });
-      if (!validForOccurrence(stock, occurrenceId))
-        throw new DomainError('invalid_state', 'This ticket is not for the chosen date', {
-          reason: 'wrong_date',
-        });
-    } else if (await hasOccurrencesTx(tx, event.id)) {
-      throw new DomainError('validation_failed', 'Choose a date', {
-        reason: 'choose_date',
-        field: 'occurrenceId',
-      });
-    }
-    const list = await listForTx(tx, ctx, { eventId: event.id, ticketTypeId: stock.id, occurrenceId });
-    const [already] = await tx
+  } else if (await hasOccurrencesTx(tx, event.id)) {
+    throw new DomainError('validation_failed', 'Choose a date', {
+      reason: 'choose_date',
+      field: 'occurrenceId',
+    });
+  }
+  const list = await listForTx(tx, ctx, { eventId: event.id, ticketTypeId: stock.id, occurrenceId, managed });
+  const [already] = await tx
+    .select()
+    .from(waitlistEntries)
+    .where(
+      and(
+        eq(waitlistEntries.waitlistId, list.id),
+        eq(waitlistEntries.email, input.email),
+        inArray(waitlistEntries.status, ['waiting', 'offered']),
+      ),
+    );
+  if (already) return { entryId: already.id, position: await positionTx(tx, already), alreadyJoined: true };
+  // A managed pass's module decided it is full (its own capacity); ticket stock says nothing.
+  if (!managed && (await publicRoomTx(tx, stock.id, occurrenceId)) >= input.quantity)
+    throw new DomainError('invalid_state', 'Tickets are still on sale', { reason: 'not_sold_out' });
+  let entry: EntryRow | undefined;
+  try {
+    [entry] = await tx.transaction((sp) =>
+      sp
+        .insert(waitlistEntries)
+        .values({
+          orgId,
+          waitlistId: list.id,
+          eventId: event.id,
+          ticketTypeId: stock.id,
+          occurrenceId,
+          name: input.name,
+          email: input.email,
+          quantity: input.quantity,
+          locale: input.locale,
+          positionAt: ctx.now,
+          createdAt: ctx.now,
+          updatedAt: ctx.now,
+        })
+        .returning(),
+    );
+  } catch (err) {
+    // The same address joined in parallel: that place is theirs.
+    if (!isUniqueViolation(err)) throw err;
+    const [row] = await tx
       .select()
       .from(waitlistEntries)
       .where(
@@ -269,56 +323,27 @@ export const joinWaitlistCommand = tenantCommand({
           inArray(waitlistEntries.status, ['waiting', 'offered']),
         ),
       );
-    if (already) return { entryId: already.id, position: await positionTx(tx, already), alreadyJoined: true };
-    if ((await publicRoomTx(tx, stock.id, occurrenceId)) >= input.quantity)
-      throw new DomainError('invalid_state', 'Tickets are still on sale', { reason: 'not_sold_out' });
-    let entry: EntryRow | undefined;
-    try {
-      [entry] = await tx.transaction((sp) =>
-        sp
-          .insert(waitlistEntries)
-          .values({
-            orgId,
-            waitlistId: list.id,
-            eventId: event.id,
-            ticketTypeId: stock.id,
-            occurrenceId,
-            name: input.name,
-            email: input.email,
-            quantity: input.quantity,
-            locale: input.locale,
-            positionAt: ctx.now,
-            createdAt: ctx.now,
-            updatedAt: ctx.now,
-          })
-          .returning(),
-      );
-    } catch (err) {
-      // The same address joined in parallel: that place is theirs.
-      if (!isUniqueViolation(err)) throw err;
-      const [row] = await tx
-        .select()
-        .from(waitlistEntries)
-        .where(
-          and(
-            eq(waitlistEntries.waitlistId, list.id),
-            eq(waitlistEntries.email, input.email),
-            inArray(waitlistEntries.status, ['waiting', 'offered']),
-          ),
-        );
-      if (!row) throw err;
-      return { entryId: row.id, position: await positionTx(tx, row), alreadyJoined: true };
-    }
-    if (!entry) throw new DomainError('internal');
-    emit({
-      type: 'waitlist.joined',
-      version: 1,
-      aggregateType: 'waitlist_entry',
-      aggregateId: entry.id,
-      payload: { orgId, entryId: entry.id, eventId: event.id },
-    });
-    return { entryId: entry.id, position: await positionTx(tx, entry), alreadyJoined: false };
-  },
+    if (!row) throw err;
+    return { entryId: row.id, position: await positionTx(tx, row), alreadyJoined: true };
+  }
+  if (!entry) throw new DomainError('internal');
+  emit({
+    type: 'waitlist.joined',
+    version: 1,
+    aggregateType: 'waitlist_entry',
+    aggregateId: entry.id,
+    payload: { orgId, entryId: entry.id, eventId: event.id },
+  });
+  return { entryId: entry.id, position: await positionTx(tx, entry), alreadyJoined: false };
+}
+
+export const joinWaitlistCommand = tenantCommand({
+  name: 'orders.joinWaitlist',
+  input: JoinWaitlistInput,
+  output: JoinWaitlistResultDto,
+  entitlement: 'ticketing',
+  permission: 'public:waitlist',
+  handler: (args) => joinWaitlistTx(args),
   audit: (input, r) => ({
     action: 'waitlist.join',
     targetType: 'waitlist_entry',
@@ -500,9 +525,26 @@ export const sweepWaitlistsCommand = tenantCommand({
 // ---------------------------------------------------------------------------------------------
 // The person's link: leave, decline, rejoin
 
-async function releaseOfferTx(tx: TenantTx, e: EntryRow) {
-  if (e.status === 'offered' && e.offeredQuantity)
+/**
+ * An open offer ends early (left, declined, removed): its stock goes back at once, and
+ * `waitlist.offer_released@1` tells a managing module (M5.1a) to offer the place again.
+ */
+async function releaseOfferTx(
+  tx: TenantTx,
+  e: EntryRow,
+  emit: ((e: DomainEvent) => void) | null,
+  reason: 'left' | 'declined' | 'removed' | 'erased',
+) {
+  if (e.status !== 'offered') return;
+  if (e.offeredQuantity)
     await releaseHoldTx(tx, [{ ticketTypeId: e.ticketTypeId, quantity: e.offeredQuantity }]);
+  emit?.({
+    type: 'waitlist.offer_released',
+    version: 1,
+    aggregateType: 'waitlist_entry',
+    aggregateId: e.id,
+    payload: { orgId: e.orgId, entryId: e.id, eventId: e.eventId, ticketTypeId: e.ticketTypeId, reason },
+  });
 }
 
 const TokenInput = z.object({ token: z.string().min(10).max(200) });
@@ -515,10 +557,10 @@ export const leaveWaitlistCommand = tenantCommand({
   output: EntryStateDto,
   entitlement: 'ticketing',
   permission: 'public:waitlist',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const e = await entryByTokenTx(tx, input.token);
     if (!isActive(e.status)) return { status: e.status as EntryStatus, entryId: e.id };
-    await releaseOfferTx(tx, e);
+    await releaseOfferTx(tx, e, emit, 'left');
     await tx
       .update(waitlistEntries)
       .set({ status: 'left', endedAt: ctx.now, updatedAt: ctx.now })
@@ -540,11 +582,11 @@ export const declineWaitlistOfferCommand = tenantCommand({
   output: EntryStateDto,
   entitlement: 'ticketing',
   permission: 'public:waitlist',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const e = await entryByTokenTx(tx, input.token);
     if (e.status !== 'offered')
       throw new DomainError('invalid_state', 'There is no open offer', { reason: e.status });
-    await releaseOfferTx(tx, e);
+    await releaseOfferTx(tx, e, emit, 'declined');
     await tx
       .update(waitlistEntries)
       .set({ status: 'declined', endedAt: ctx.now, updatedAt: ctx.now })
@@ -942,29 +984,49 @@ async function lockedListOfTx(tx: TenantTx, entryId: string) {
  * The organizer offers to one person now, out of line order if they choose (auto-offers paused
  * or not). The stock must be free, the line's reserve aside: this is the organizer's call.
  */
+/**
+ * Offer to one waiting person inside the caller's transaction. A managed pass's line (M5.1a) is
+ * offered only by its module (`manager`), which has claimed its own capacity for the offer.
+ */
+export async function offerWaitlistEntryTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: (e: DomainEvent) => void,
+  entryId: string,
+  manager: TicketTypeManager | null = null,
+): Promise<{ offerExpiresAt: Date; entryId: string }> {
+  const { list, entry } = await lockedListOfTx(tx, entryId);
+  if (((await ticketTypeStockTx(tx, list.ticketTypeId))?.managedBy ?? null) !== manager)
+    throw new DomainError('invalid_state', 'This line is offered from the Registration page', {
+      reason: 'managed',
+    });
+  if (entry.status !== 'waiting')
+    throw new DomainError('invalid_state', 'Only someone waiting can get an offer', {
+      reason: entry.status,
+    });
+  const room = await offerRoomTx(tx, list, ctx.now);
+  if (room === null)
+    throw new DomainError('invalid_state', 'This pass or date is not on sale', { reason: 'not_on_sale' });
+  if (room < entry.quantity)
+    throw new DomainError('conflict', 'Not enough tickets free for this offer', {
+      reason: 'not_enough_stock',
+      free: room,
+    });
+  const row = await makeOfferTx(tx, ctx, emit, entry, list, manager ? 'auto' : 'manual');
+  return { offerExpiresAt: row.offerExpiresAt as Date, entryId: entry.id };
+}
+
+/**
+ * The organizer offers to one person now, out of line order if they choose (auto-offers paused
+ * or not). The stock must be free, the line's reserve aside: this is the organizer's call.
+ */
 export const offerWaitlistEntryCommand = tenantCommand({
   name: 'orders.offerWaitlistEntry',
   input: z.object({ entryId: z.uuid() }),
   output: z.object({ offerExpiresAt: z.date() }),
   entitlement: 'ticketing',
   permission: 'orders:support',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const { list, entry } = await lockedListOfTx(tx, input.entryId);
-    if (entry.status !== 'waiting')
-      throw new DomainError('invalid_state', 'Only someone waiting can get an offer', {
-        reason: entry.status,
-      });
-    const room = await offerRoomTx(tx, list, ctx.now);
-    if (room === null)
-      throw new DomainError('invalid_state', 'This pass or date is not on sale', { reason: 'not_on_sale' });
-    if (room < entry.quantity)
-      throw new DomainError('conflict', 'Not enough tickets free for this offer', {
-        reason: 'not_enough_stock',
-        free: room,
-      });
-    const row = await makeOfferTx(tx, ctx, emit, entry, list, 'manual');
-    return { offerExpiresAt: row.offerExpiresAt as Date, entryId: entry.id };
-  },
+  handler: ({ input, ctx, tx, emit }) => offerWaitlistEntryTx(tx, ctx, emit, input.entryId),
   present: (r) => ({ offerExpiresAt: r.offerExpiresAt }),
   audit: (input) => ({ action: 'waitlist.offer', targetType: 'waitlist_entry', targetId: input.entryId }),
 });
@@ -981,6 +1043,13 @@ export const updateWaitlistCommand = tenantCommand({
   entitlement: 'ticketing',
   permission: 'orders:support',
   handler: async ({ input, ctx, tx }) => {
+    if (input.autoOffer) {
+      const [list] = await tx.select().from(waitlists).where(eq(waitlists.id, input.waitlistId));
+      if (list && (await ticketTypeStockTx(tx, list.ticketTypeId))?.managedBy)
+        throw new DomainError('invalid_state', 'This line is offered from the Registration page', {
+          reason: 'managed',
+        });
+    }
     const [row] = await tx
       .update(waitlists)
       .set({
@@ -1011,12 +1080,12 @@ export const removeWaitlistEntriesCommand = tenantCommand({
   permission: 'orders:support',
   // Taking people off a list is a deletion for staff acting as a member (M1.2e).
   category: 'delete',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     let removed = 0;
     for (const id of [...new Set(input.entryIds)].sort()) {
       const { entry } = await lockedListOfTx(tx, id);
       if (!isActive(entry.status)) continue;
-      await releaseOfferTx(tx, entry);
+      await releaseOfferTx(tx, entry, emit, 'removed');
       await tx
         .update(waitlistEntries)
         .set({ status: 'removed', endedAt: ctx.now, updatedAt: ctx.now })
@@ -1230,7 +1299,72 @@ export async function eraseWaitlistDsarTx(tx: TenantTx, emailNorm: string): Prom
     .from(waitlistEntries)
     .where(eq(waitlistEntries.email, emailNorm))
     .for('update');
-  for (const r of rows) await releaseOfferTx(tx, r);
+  // Erasure runs outside a command (no outbox here): the line's module re-offers on its next trigger.
+  for (const r of rows) await releaseOfferTx(tx, r, null, 'erased');
   if (rows.length) await tx.delete(waitlistEntries).where(eq(waitlistEntries.email, emailNorm));
   return rows.length;
+}
+
+// ---------------------------------------------------------------------------------------------
+// For a module managing its own passes (M5.1a registration types, ADR 0021)
+
+/** Places people wait for and places open offers hold, per ticket type (all their lines). */
+export async function waitlistDemandTx(
+  tx: TenantTx,
+  ticketTypeIds: readonly string[],
+): Promise<{ waiting: number; offered: number }> {
+  if (ticketTypeIds.length === 0) return { waiting: 0, offered: 0 };
+  const [r] = await tx
+    .select({
+      waiting: sql<number>`coalesce(sum(${waitlistEntries.quantity}) filter (where ${waitlistEntries.status} = 'waiting'), 0)::int`,
+      offered: sql<number>`coalesce(sum(${waitlistEntries.offeredQuantity}) filter (where ${waitlistEntries.status} = 'offered'), 0)::int`,
+    })
+    .from(waitlistEntries)
+    .where(
+      and(
+        inArray(waitlistEntries.ticketTypeId, [...ticketTypeIds]),
+        inArray(waitlistEntries.status, ['waiting', 'offered']),
+      ),
+    );
+  return { waiting: r?.waiting ?? 0, offered: r?.offered ?? 0 };
+}
+
+/** The people waiting on these ticket types' lines, in one queue (joined first goes first). */
+export async function waitingEntriesTx(
+  tx: TenantTx,
+  ticketTypeIds: readonly string[],
+  limit = 50,
+): Promise<{ id: string; ticketTypeId: string; quantity: number }[]> {
+  if (ticketTypeIds.length === 0) return [];
+  return tx
+    .select({
+      id: waitlistEntries.id,
+      ticketTypeId: waitlistEntries.ticketTypeId,
+      quantity: waitlistEntries.quantity,
+    })
+    .from(waitlistEntries)
+    .where(
+      and(inArray(waitlistEntries.ticketTypeId, [...ticketTypeIds]), eq(waitlistEntries.status, 'waiting')),
+    )
+    .orderBy(asc(waitlistEntries.positionAt), asc(waitlistEntries.id))
+    .limit(limit);
+}
+
+/** The entry behind a waitlist link (no lock; the checkout validates the offer itself). */
+export async function waitlistEntryByTokenTx(
+  tx: TenantTx,
+  token: string,
+): Promise<{ id: string; ticketTypeId: string; eventId: string; status: string } | null> {
+  const id = verifyLinkToken(WAITLIST_PURPOSE, token);
+  if (!id) return null;
+  const [row] = await tx
+    .select({
+      id: waitlistEntries.id,
+      ticketTypeId: waitlistEntries.ticketTypeId,
+      eventId: waitlistEntries.eventId,
+      status: waitlistEntries.status,
+    })
+    .from(waitlistEntries)
+    .where(eq(waitlistEntries.id, id));
+  return row ?? null;
 }

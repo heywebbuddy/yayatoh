@@ -4,7 +4,7 @@ import { DomainError, money } from '@yayatoh/kernel';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { validForOccurrence } from './occurrences.ts';
 import { type PromoRow, promoDiscountMinor } from './promo.ts';
-import { ticketTypes } from './schema.ts';
+import { type TicketTypeManager, ticketTypes } from './schema.ts';
 
 export interface LineRequest {
   readonly ticketTypeId: string;
@@ -63,6 +63,11 @@ export async function quoteTx(
     promo?: PromoRow | null;
     /** Multi-date events: the chosen date; each ticket type must sell for it (M1.4b). */
     occurrenceId?: string | null;
+    /**
+     * M5.1a (ADR 0021): the module selling its own managed ticket types. A managed type is
+     * refused (as not found) to every other caller, whatever else unlocks it.
+     */
+    manager?: TicketTypeManager;
   },
 ): Promise<Quote> {
   const merged = new Map<string, number>();
@@ -97,8 +102,13 @@ export async function quoteTx(
   const lines: QuotedLine[] = [];
   for (const r of rows) {
     const quantity = merged.get(r.id) as number;
+    // A managed pass (M5.1a) is sold only by its manager, which may sell it although it is hidden.
+    if (r.managedBy !== null && r.managedBy !== opts.manager)
+      throw new DomainError('not_found', 'Ticket type not found');
     const hiddenOk =
-      opts.includeHidden === true || (opts.includeHidden !== false && opts.includeHidden.has(r.id));
+      r.managedBy !== null ||
+      opts.includeHidden === true ||
+      (opts.includeHidden !== false && opts.includeHidden.has(r.id));
     if (!hiddenOk && r.visibility !== 'public') throw new DomainError('not_found', 'Ticket type not found');
     if (opts.occurrenceId && !validForOccurrence(r, opts.occurrenceId))
       throw new DomainError('invalid_state', 'This ticket is not for the chosen date', {
@@ -256,6 +266,7 @@ export async function ticketTypeStockTx(tx: TenantTx, ticketTypeId: string, forU
       archivedAt: ticketTypes.archivedAt,
       isDonation: ticketTypes.isDonation,
       occurrenceIds: ticketTypes.occurrenceIds,
+      managedBy: ticketTypes.managedBy,
     })
     .from(ticketTypes)
     .where(eq(ticketTypes.id, ticketTypeId));

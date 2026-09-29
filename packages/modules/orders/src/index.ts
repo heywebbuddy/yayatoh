@@ -19,6 +19,7 @@ export {
   hashManageToken,
   recordCheckoutBlockCommand,
   startCheckoutCommand,
+  startCheckoutTx,
 } from './commands/checkout.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
 export {
@@ -210,6 +211,7 @@ export {
   orderDetailQuery,
   orderHolderTarget,
   orderHoldingTx,
+  orderStockTx,
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';
@@ -247,9 +249,11 @@ export {
   JoinWaitlistInput,
   JoinWaitlistResultDto,
   joinWaitlistCommand,
+  joinWaitlistTx,
   leaveWaitlistCommand,
   listWaitlistsQuery,
   offerWaitlistEntryCommand,
+  offerWaitlistEntryTx,
   PublicWaitlistEntryDto,
   publicWaitlistEntry,
   rejoinWaitlistCommand,
@@ -259,8 +263,11 @@ export {
   WAITLIST_PURPOSE,
   WaitlistEntryDto,
   WaitlistSummaryDto,
+  waitingEntriesTx,
+  waitlistDemandTx,
   waitlistDsarTx,
   waitlistEntriesQuery,
+  waitlistEntryByTokenTx,
   waitlistExportAction,
   waitlistExportBulk,
   waitlistHeldBack,

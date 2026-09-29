@@ -28,6 +28,7 @@ export const privateColumns = columnPrivacy('ticketing', {
     currency: 'vocab',
     fee_mode: 'vocab',
     visibility: 'vocab',
+    managed_by: 'vocab',
     access_dates: 'public',
   },
   tickets: {

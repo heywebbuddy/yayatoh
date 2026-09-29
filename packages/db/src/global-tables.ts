@@ -26,6 +26,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'auth.security_events':
     'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',
+  'billing.addons':
+    'Add-on catalog (event add-ons such as conference_pack: modules, price, per-event quotas); reference data written only by migrations (app_user: SELECT).',
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
