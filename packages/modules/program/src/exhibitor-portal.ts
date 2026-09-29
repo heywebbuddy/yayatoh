@@ -946,3 +946,16 @@ export async function exhibitorCategoriesTx(tx: TenantTx, eventId: string): Prom
     .where(eq(exhibitorProfiles.eventId, eventId));
   return new Map(rows.map((r) => [r.id, r.categories]));
 }
+
+/**
+ * Before an exhibitor is deleted (its people cascade with it): end its people's event roles, so
+ * no live portal assignment outlives its member.
+ */
+export async function endExhibitorRolesTx(tx: TenantTx, exhibitorId: string): Promise<void> {
+  const people = await tx
+    .select()
+    .from(exhibitorMembers)
+    .where(and(eq(exhibitorMembers.exhibitorId, exhibitorId), ne(exhibitorMembers.status, 'revoked')));
+  for (const m of people)
+    await removeEventRoleTx(tx, { eventId: m.eventId, userId: m.accountId, role: m.role as MemberRole });
+}

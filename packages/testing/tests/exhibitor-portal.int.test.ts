@@ -11,6 +11,7 @@ import {
   createExhibitorCommand,
   decideProfileChangeCommand,
   deleteBoothCommand,
+  deleteExhibitorCommand,
   type ExhibitorDto,
   endPortalSession,
   exhibitorPortalAdminQuery,
@@ -886,5 +887,29 @@ describe('the exhibitor logo from the portal', () => {
       ),
       'forbidden',
     );
+  });
+});
+
+describe('deleting an exhibitor', () => {
+  it('ends its people’s sessions and event roles', async () => {
+    const x = await executeCommand(
+      createExhibitorCommand,
+      { eventId: ev.id, name: 'Gone Co' },
+      a.ctx(),
+      ports,
+    );
+    const admin = await signedIn(a, ev.id, x.id, 'boss@gone.example');
+    const userId = await withTenant(systemCtx(a.org.id), async (tx) => {
+      const rows = await tx.execute<{ user_id: string }>(
+        sql`select user_id from events.event_role_assignments where id = ${admin.principal.eventRoleAssignmentId}`,
+      );
+      return rows[0]?.user_id ?? '';
+    });
+    await executeCommand(deleteExhibitorCommand, { eventId: ev.id, exhibitorId: x.id }, a.ctx(), ports);
+    expect(await portalPrincipalBySession(a.org.id, admin.sessionHash)).toBeNull();
+    const grants = await withTenant(systemCtx(a.org.id), (tx) =>
+      eventRoleGrantsTx(tx, ev.id, userId, new Date()),
+    );
+    expect(grants).toEqual([]);
   });
 });
