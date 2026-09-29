@@ -274,7 +274,7 @@ export function RunMacroForm({
         </select>
       </div>
       {macro ? (
-        <div
+        <section
           className="flex flex-col gap-1 rounded-card border border-zinc-200 p-3"
           aria-label={t('preview')}
         >
@@ -287,7 +287,7 @@ export function RunMacroForm({
               <p className="whitespace-pre-line break-words text-body">{macro.body}</p>
             </>
           ) : null}
-        </div>
+        </section>
       ) : null}
       {transfers ? (
         <fieldset className="flex flex-col gap-3">
