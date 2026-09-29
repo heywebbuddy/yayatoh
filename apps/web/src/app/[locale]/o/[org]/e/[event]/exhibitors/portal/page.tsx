@@ -169,7 +169,8 @@ function ExhibitorCard({
           <h4 id={`change-${id}`} className="text-body font-medium">
             {t('pendingChange', { name: x.name })}
           </h4>
-          <div className="overflow-x-auto">
+          {/* biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1) */}
+          <section tabIndex={0} aria-label={t('diffCaption', { name: x.name })} className="overflow-x-auto">
             <table className="w-full text-start text-caption">
               <caption className="sr-only">{t('diffCaption', { name: x.name })}</caption>
               <thead>
@@ -197,7 +198,7 @@ function ExhibitorCard({
                 ))}
               </tbody>
             </table>
-          </div>
+          </section>
           {canWrite ? (
             <div className="flex flex-wrap items-start gap-4">
               <ProgramForm

@@ -87,7 +87,8 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
         <h2 id="map-booths-heading" className="text-section">
           {t('boothsHeading')}
         </h2>
-        <div className="overflow-x-auto">
+        {/* biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1) */}
+        <section tabIndex={0} aria-label={t('boothsCaption')} className="overflow-x-auto">
           <table className="w-full text-start text-body">
             <caption className="sr-only">{t('boothsCaption')}</caption>
             <thead>
@@ -117,7 +118,7 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </section>
       </section>
     </main>
   );
