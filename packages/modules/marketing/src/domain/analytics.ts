@@ -166,6 +166,9 @@ export function aggregate(input: AggregateInput): { rows: AnalyticsRow[]; totals
     a.deliveries = (a.deliveries ?? 0) + delivered;
   };
 
+  // Every link's row exists (a link nobody clicked yet still shows, with zeros).
+  for (const l of input.links) at(linkKey(input.dimension, l));
+
   for (const s of input.sends) {
     if (input.dimension === 'campaign') addSends(at(`c.${s.campaignId}`), s.sent, s.delivered);
     if (input.dimension === 'channel') addSends(at(`m.${s.channel}`), s.sent, s.delivered);
