@@ -75,7 +75,10 @@
         "refund": "Erstattung",
         "order-link": "Bestelllink",
         "refund-requested": "Erstattungsanfrage",
-        "refund-declined": "Erstattungsanfrage abgelehnt"
+        "refund-declined": "Erstattungsanfrage abgelehnt",
+        "waitlist-joined": "Bestätigung der Warteliste",
+        "waitlist-offer": "Angebot von der Warteliste",
+        "waitlist-expired": "Angebot von der Warteliste abgelaufen"
       },
       "events": {
         "reminder": "Veranstaltungserinnerung",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "Link zum Abholen eines Tickets",
-        "holder-link": "Link zu den Tickets"
+        "holder-link": "Link zu den Tickets",
+        "tickets-resent": "Tickets erneut gesendet",
+        "ticket-cancelled": "Ticket storniert"
       },
       "attendees": {
         "message": "Nachricht vom Veranstalter"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "E-Mail-Code beim Bezahlen",
-        "sign-in": "Anmeldung bei Meine Tickets"
+        "sign-in": "Anmeldung bei Meine Tickets",
+        "waitlist-code": "E-Mail-Code für die Warteliste"
       },
       "security": {
         "fraud_signal": "Betrugswarnung"

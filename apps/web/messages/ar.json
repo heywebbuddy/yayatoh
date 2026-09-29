@@ -75,7 +75,10 @@
         "refund": "استرداد",
         "order-link": "رابط الطلب",
         "refund-requested": "طلب استرداد",
-        "refund-declined": "رُفض طلب الاسترداد"
+        "refund-declined": "رُفض طلب الاسترداد",
+        "waitlist-joined": "تأكيد الانضمام إلى قائمة الانتظار",
+        "waitlist-offer": "عرض من قائمة الانتظار",
+        "waitlist-expired": "انتهاء عرض قائمة الانتظار"
       },
       "events": {
         "reminder": "تذكير بالفعالية",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "رابط استلام تذكرة",
-        "holder-link": "رابط التذاكر"
+        "holder-link": "رابط التذاكر",
+        "tickets-resent": "إعادة إرسال التذاكر",
+        "ticket-cancelled": "إلغاء التذكرة"
       },
       "attendees": {
         "message": "رسالة من المنظم"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "رمز البريد عند الدفع",
-        "sign-in": "تسجيل الدخول إلى تذاكري"
+        "sign-in": "تسجيل الدخول إلى تذاكري",
+        "waitlist-code": "رمز البريد لقائمة الانتظار"
       },
       "security": {
         "fraud_signal": "تنبيه احتيال"

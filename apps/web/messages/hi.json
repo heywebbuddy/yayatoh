@@ -75,7 +75,10 @@
         "refund": "रिफ़ंड",
         "order-link": "ऑर्डर लिंक",
         "refund-requested": "रिफ़ंड अनुरोध",
-        "refund-declined": "रिफ़ंड अनुरोध अस्वीकृत"
+        "refund-declined": "रिफ़ंड अनुरोध अस्वीकृत",
+        "waitlist-joined": "प्रतीक्षा सूची की पुष्टि",
+        "waitlist-offer": "प्रतीक्षा सूची ऑफ़र",
+        "waitlist-expired": "प्रतीक्षा सूची ऑफ़र की अवधि समाप्त"
       },
       "events": {
         "reminder": "इवेंट रिमाइंडर",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "टिकट क्लेम लिंक",
-        "holder-link": "टिकटों का लिंक"
+        "holder-link": "टिकटों का लिंक",
+        "tickets-resent": "टिकट दोबारा भेजे गए",
+        "ticket-cancelled": "टिकट रद्द"
       },
       "attendees": {
         "message": "आयोजक का संदेश"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "चेकआउट ईमेल कोड",
-        "sign-in": "मेरे टिकट साइन-इन"
+        "sign-in": "मेरे टिकट साइन-इन",
+        "waitlist-code": "प्रतीक्षा सूची ईमेल कोड"
       },
       "security": {
         "fraud_signal": "धोखाधड़ी अलर्ट"

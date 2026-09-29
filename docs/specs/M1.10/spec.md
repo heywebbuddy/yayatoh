@@ -129,6 +129,21 @@ Standard Web Push needs no provider account, so this increment ships a real adap
 | e2e: member opt-in on settings and inbox, test push decrypted, device list, remove by keyboard, reload, Arabic, axe | `web-push.spec.ts` "a member turns push on…" |
 | e2e: a viewer cannot send announcements; the fake push service refuses unsigned pushes | `web-push.spec.ts` |
 
+## Fix — missing kind labels on the Emails page (done)
+Owner-reported: `/o/{org}/emails` threw next-intl `MISSING_MESSAGE` for six kinds added after the
+labels (`ticketing.tickets-resent`, `ticketing.ticket-cancelled`, `guest.waitlist-code`,
+`orders.waitlist-joined`, `orders.waitlist-offer`, `orders.waitlist-expired`).
+- Labels added under `notifications.kinds.*` in `en.json` and translated into the 12 other locales.
+- A unit gate now requires a label for every kind in `MESSAGE_KINDS` (a superset of `EMAIL_KINDS`,
+  and what the messaging log and order timelines render) in all 13 locales, so a new kind can no
+  longer ship without one.
+
+### Acceptance (fix)
+| Criterion | Test |
+|---|---|
+| Every message/email kind has a label in all 13 locales | `apps/web/tests/notification-kinds.test.ts` |
+| The Emails page shows a label for every kind in /en and /ar (RTL), no MISSING_MESSAGE in the console, keyboard open, axe | e2e `apps/web/e2e/email-kind-labels.spec.ts` |
+
 ## Later / not yet
 - Real adapters: SES v2 (with Tenants in M3.5), Twilio SMS (toll-free + 10DLC), the WhatsApp template gateway, FCM HTTP v1 and APNs (web push shipped in M1.10e; production VAPID keys are the owner's).
 - Provider webhooks for SES/Twilio (the port, fake adapter, `message_events` and suppression landed in M1.10d), fallbacks (WhatsApp → SMS, push → email), segment counting, frequency caps and state quiet-hour rules (M3.5 policy gate).
