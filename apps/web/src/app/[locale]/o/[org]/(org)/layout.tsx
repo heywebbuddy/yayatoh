@@ -29,6 +29,7 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
   { key: 'emails', path: 'emails', group: 'build', module: 'core', icon: 'mail-check' },
   { key: 'messagingHealth', path: 'messaging', group: 'build', module: 'messaging', icon: 'gauge' },
+  { key: 'sendingSetup', path: 'sending', group: 'build', module: 'core', icon: 'send' },
   { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
   { key: 'activity', path: 'activity', group: 'build', module: 'core', icon: 'history' },
   { key: 'privacy', path: 'privacy', group: 'build', module: 'core', icon: 'shield' },

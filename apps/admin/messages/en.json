@@ -59,7 +59,8 @@
     "openSignup": "Open signup",
     "incidents": "Incidents",
     "frontDoor": "Front door",
-    "maintenance": "Maintenance"
+    "maintenance": "Maintenance",
+    "providers": "Messaging providers"
   },
   "tenants": {
     "title": "Tenants",
@@ -633,14 +634,47 @@
     "done": {
       "lifted": "The auto-pause was lifted. Messaging resumed.",
       "quota": "The quota was saved.",
-      "quota_reset": "The quota is back to the default."
+      "quota_reset": "The quota is back to the default.",
+      "sender": "The sender was saved.",
+      "sender_cleared": "The tenant is back on the shared sender."
     },
     "errors": {
       "not_paused": "This organization is not auto-paused.",
       "validation_failed": "Check the values: a whole number and a reason of at least 3 characters.",
       "forbidden": "Your staff role can't do that.",
-      "internal": "Something went wrong."
-    }
+      "internal": "Something went wrong.",
+      "sid": "Enter a Messaging Service SID: MG followed by 32 hexadecimal characters.",
+      "number": "Enter the number in international format, for example +13125550100.",
+      "phone_number_id": "The Cloud API needs the phone number id (digits).",
+      "gateway_sender": "The gateway sender is letters, digits, - and _ only.",
+      "sender_taken": "That sender belongs to another tenant.",
+      "unavailable": "Twilio isn't set up yet, so the 10DLC status can't be checked."
+    },
+    "sendersTitle": "Dedicated senders",
+    "sendersDescription": "The tenant's own text senders. Without one, texts use Yayatoh's shared number and WhatsApp uses the default route. SMS uses a dedicated Messaging Service only once its 10DLC campaign is verified.",
+    "smsShared": "SMS: Yayatoh's shared number.",
+    "smsDedicated": "SMS: Messaging Service ending {hint}, 10DLC campaign {status}.",
+    "campaignStatus": {
+      "verified": "verified",
+      "pending": "in review",
+      "failed": "rejected",
+      "not_registered": "not registered"
+    },
+    "smsForm": "Dedicated SMS sender",
+    "smsSid": "Messaging Service SID (MG…)",
+    "displayNumber": "Number people see (optional, +1…)",
+    "smsSave": "Save and check 10DLC status",
+    "smsClear": "Use the shared number",
+    "waDefault": "WhatsApp: the default route.",
+    "waCloud": "WhatsApp: Cloud API, phone number id ending {hint}.",
+    "waGateway": "WhatsApp: the owner's gateway.",
+    "waForm": "WhatsApp route",
+    "waRoute": "Route",
+    "routeCloud": "WhatsApp Cloud API",
+    "routeGateway": "Pani WhatsApp gateway",
+    "waRef": "Phone number id (Cloud API) or gateway sender (optional)",
+    "waSave": "Save the WhatsApp route",
+    "waClear": "Use the default route"
   },
   "openSignup": {
     "title": "Open signup",
@@ -888,6 +922,71 @@
       "freezeOff": "Read-only freeze off",
       "route": "Host {host} → {summary}",
       "meta": "{who} · {when} UTC · {reason}"
+    }
+  },
+  "providers": {
+    "title": "Messaging providers",
+    "description": "Each provider: whether it is live, its last webhook, sends and errors over the last 24 hours, and the steps to switch it on. Config is checked by name only.",
+    "tableCaption": "Provider health, last 24 hours",
+    "columns": {
+      "provider": "Provider",
+      "mode": "Mode",
+      "lastWebhook": "Last webhook",
+      "webhooks": "Webhooks (24 h)",
+      "sends": "Sends (24 h)",
+      "errorRate": "Error rate",
+      "lastError": "Last error"
+    },
+    "names": {
+      "ses": "Amazon SES (email)",
+      "twilio": "Twilio (SMS)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_gateway": "Pani WhatsApp gateway",
+      "fake": "Fake email provider (development)",
+      "dev": "Dev mailbox (development)",
+      "memory": "Test transports"
+    },
+    "mode": {
+      "live": "Live",
+      "ready": "Configured, not switched on",
+      "off": "Not set up",
+      "fake": "Development fake"
+    },
+    "never": "Never",
+    "webhooksValue": "{ok} verified, {refused} refused",
+    "sendsValue": "{sent} sent, {errors} errors",
+    "noSends": "No sends",
+    "checklistTitle": "Switch-on checklist: {provider}",
+    "ownerStep": "Owner's step",
+    "done": "Done",
+    "todo": "To do",
+    "missing": "Missing: {names}",
+    "items": {
+      "env": "Config names are set in the environment (values in Doppler, never in the repo)",
+      "ses": {
+        "production": "SES production access granted (out of the sandbox) in the owner's AWS account",
+        "domain": "mail.yayatoh.com verified in SES with Easy DKIM, a custom MAIL FROM and DMARC",
+        "configurationSet": "Configuration set with an SNS event destination (delivery, bounce, complaint) subscribed to /api/webhooks/email/ses",
+        "webhook": "A verified SNS notification has arrived",
+        "switch": "EMAIL_PROVIDER=ses"
+      },
+      "twilio": {
+        "registration": "Toll-free verification and the 10DLC brand and campaign approved",
+        "service": "Messaging Service with Advanced Opt-Out on and its inbound webhook at /api/webhooks/sms/twilio/inbound",
+        "webhook": "A verified status callback or inbound message has arrived",
+        "switch": "SMS_PROVIDER=twilio"
+      },
+      "cloud": {
+        "business": "Meta business verification, the WhatsApp Business Account and its phone number",
+        "templates": "Templates yayatoh_update (utility), yayatoh_news (marketing) and yayatoh_code (authentication) approved in 13 languages",
+        "webhook": "Webhook subscribed (messages field) at /api/webhooks/whatsapp/cloud and a verified delivery has arrived",
+        "switch": "WHATSAPP_PROVIDER includes cloud"
+      },
+      "gateway": {
+        "contract": "The gateway's API contract and signing key from the owner (whatsapp.panitechnologies.com)",
+        "webhook": "Callbacks configured to /api/webhooks/whatsapp/gateway and a verified one has arrived",
+        "switch": "WHATSAPP_PROVIDER includes gateway"
+      }
     }
   }
 }

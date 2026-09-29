@@ -171,7 +171,10 @@
       "whatsapp_marketing_us": "Geblokkeerd: WhatsApp-marketing naar Amerikaanse nummers is niet toegestaan",
       "state_quiet_hours": "Wacht op de beltijden van de staat (bijvoorbeeld zondag in Texas vóór 12 uur)",
       "frequency_cap": "Wacht of overgeslagen: deze persoon kreeg recent veel berichten",
-      "quota_reached": "Wacht: het quotum van deze maand is op"
+      "quota_reached": "Wacht: het quotum van deze maand is op",
+      "not_on_whatsapp": "Niet op WhatsApp",
+      "invalid_number": "Het nummer kan geen sms ontvangen",
+      "opted_out": "Onderdrukt: de ontvanger antwoordde STOP"
     },
     "channels": {
       "email": "E-mail",
@@ -281,7 +284,8 @@
     "marketingSite": "Marketingsite",
     "tablesSponsors": "Tafels & sponsors",
     "commandCenter": "Commandocentrum",
-    "alerts": "Meldingen"
+    "alerts": "Meldingen",
+    "sendingSetup": "Verzendinstellingen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -4844,7 +4848,8 @@
     "suppressionReason": {
       "hard_bounce": "Gebounced (adres bestaat niet)",
       "soft_bounce": "Herhaaldelijk gebounced (mailbox vol of niet beschikbaar)",
-      "complaint": "Als spam gemarkeerd"
+      "complaint": "Als spam gemarkeerd",
+      "opt_out": "Antwoordde STOP"
     },
     "liftNote": "Waarom opheffen voor {address}?",
     "lift": "Opheffen",
@@ -4869,7 +4874,8 @@
     "saveCaps": "Limieten opslaan",
     "capsSaved": "Limieten opgeslagen.",
     "maxInvalid": "Vul een heel getal van 1 tot 20 in.",
-    "windowInvalid": "Vul een heel aantal uren van 1 tot 720 in."
+    "windowInvalid": "Vul een heel aantal uren van 1 tot 720 in.",
+    "personOnly": "Alleen de persoon zelf kan dit opheffen, door START te antwoorden"
   },
   "preferenceCenter": {
     "metaTitle": "Je berichtvoorkeuren",
@@ -6356,5 +6362,102 @@
     "pinLocked": "Te vaak een verkeerde pincode. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
     "unlock": "Ontgrendelen",
     "cancel": "Annuleren"
+  },
+  "sendingSetup": {
+    "title": "Verzendinstellingen",
+    "description": "Waar je e-mails en sms-berichten vandaan komen, en wat er gebeurt als een bericht niet via zijn kanaal kan worden bezorgd.",
+    "domainTitle": "Verzenddomein voor e-mail",
+    "noDomain": "Je e-mails worden verzonden vanaf notifications@mail.yayatoh.com met de naam van je organisatie. Voeg je eigen domein toe zodat ze van jouw adres komen.",
+    "unavailable": "Verzenddomeinen zijn nog niet beschikbaar.",
+    "readOnly": "Alleen eigenaren en beheerders kunnen dit wijzigen.",
+    "addTitle": "Een verzenddomein toevoegen",
+    "domainLabel": "Verzenddomein",
+    "domainHint": "Gebruik een subdomein waarvandaan je geen andere mail verstuurt, zoals mail.jouwdomein.nl.",
+    "add": "Domein toevoegen",
+    "errors": {
+      "required": "Voer een domein in.",
+      "invalid": "Voer een domeinnaam in zoals mail.jouwdomein.nl (geen Yayatoh-adres).",
+      "already_set": "Je organisatie heeft al een verzenddomein. Verwijder dat eerst.",
+      "domain_taken": "Een andere organisatie gebruikt dit domein al.",
+      "unavailable": "Verzenddomeinen zijn nog niet beschikbaar.",
+      "forbidden": "Alleen eigenaren en beheerders kunnen dit wijzigen.",
+      "internal": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "status": {
+      "verified": "Geverifieerd",
+      "pending": "Wacht op DNS",
+      "failed": "Mislukt"
+    },
+    "sendingFrom": "Je e-mails komen nu van {address}.",
+    "notYet": "Zodra DKIM en SPF geverifieerd zijn, komen je e-mails van {address}. Tot die tijd komen ze van het adres van Yayatoh met de naam van je organisatie.",
+    "checksCaption": "DNS-controles voor {domain}",
+    "check": "Controle",
+    "statusHeader": "Status",
+    "checks": {
+      "dkim": "DKIM (handtekening)",
+      "spf": "SPF (bouncedomein)",
+      "dmarc": "DMARC (beleid)"
+    },
+    "checkStatus": {
+      "verified": "Geverifieerd",
+      "pending": "Wachtend",
+      "failed": "Mislukt",
+      "missing": "Ontbreekt"
+    },
+    "dmarcPolicy": "Gevonden (p={policy})",
+    "recordsIntro": "Publiceer deze records bij je DNS-provider en controleer daarna opnieuw. DNS-wijzigingen kunnen tot 48 uur duren.",
+    "recordsCaption": "DNS-records voor {domain}",
+    "recordType": "Type",
+    "recordName": "Naam",
+    "recordValue": "Waarde",
+    "recordFor": "Voor",
+    "lastChecked": "Laatst gecontroleerd {when}",
+    "checkNow": "DNS nu controleren",
+    "checkForm": "Het verzenddomein controleren",
+    "remove": "Domein verwijderen",
+    "removeForm": "Het verzenddomein verwijderen",
+    "done": {
+      "added": "Het domein is toegevoegd. Publiceer de DNS-records hieronder.",
+      "checked": "DNS gecontroleerd.",
+      "removed": "Het verzenddomein is verwijderd. E-mails komen weer van het adres van Yayatoh.",
+      "forbidden": "Alleen eigenaren en beheerders kunnen dit wijzigen.",
+      "error": "Dat is niet gelukt. Probeer het opnieuw."
+    },
+    "textsTitle": "Tekstberichten",
+    "smsSender": "Sms",
+    "ownNumber": "Je eigen nummer {number}",
+    "ending": "eindigend op {hint}",
+    "sharedNumber": "Gedeeld nummer van Yayatoh",
+    "campaign": "10DLC-campagne",
+    "campaignStatus": {
+      "verified": "Geverifieerd",
+      "pending": "In beoordeling",
+      "failed": "Afgewezen",
+      "not_registered": "Niet geregistreerd"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "Je WhatsApp Business-nummer (Cloud API)",
+      "gateway": "WhatsApp-gateway van Pani",
+      "default": "WhatsApp-nummer van Yayatoh"
+    },
+    "textsNote": "Yayatoh-support stelt eigen nummers in. Iedereen kan op elke sms STOP antwoorden om zich af te melden, of HELP voor hulp.",
+    "campaignPending": "Je eigen nummer wordt gebruikt zodra de 10DLC-campagne geverifieerd is; tot die tijd gebruiken sms-berichten het gedeelde nummer van Yayatoh.",
+    "fallbackTitle": "Terugvalkanalen",
+    "fallbackDescription": "Als een bericht iemand niet via zijn kanaal bereikt (geen WhatsApp-account, een nummer zonder sms, een provider die het weigerde), gaat het één keer via het volgende kanaal. Eigen keuzes van mensen (afmeldingen) gaan nooit naar een ander kanaal.",
+    "fallbackCaption": "Volgorde van terugvalkanalen per berichttype",
+    "category": "Berichten",
+    "chain": "Volgorde",
+    "arrow": " → ",
+    "noFallback": "Geen terugval",
+    "categories": {
+      "transactional": "Tickets en bestelberichten",
+      "reminders": "Herinneringen",
+      "event_updates": "Evenementupdates",
+      "marketing": "Nieuws en aanbiedingen",
+      "sales": "Verkoopmeldingen voor je team",
+      "messages": "Klantberichten voor je team",
+      "security": "Beveiligingsmeldingen voor je team"
+    }
   }
 }

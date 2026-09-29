@@ -3,6 +3,7 @@ export {
   consentSummaryTx,
   contactByIdTx,
   contactIdByEmailTx,
+  contactIdsByPhoneTx,
   contactPhonesTx,
   contactUserIdsTx,
   currentConsentTx,

@@ -179,6 +179,12 @@ export async function contactPhonesTx(
   return new Map(rows.filter((r) => r.phone).map((r) => [r.id, r.phone as string]));
 }
 
+/** The org's contacts with this E.164 number (a text keyword such as STOP applies to each, M3.5b). */
+export async function contactIdsByPhoneTx(tx: TenantTx, phoneE164: string): Promise<string[]> {
+  const rows = await tx.select({ id: contacts.id }).from(contacts).where(eq(contacts.phoneE164, phoneE164));
+  return rows.map((r) => r.id);
+}
+
 /** Set (or clear) a contact's E.164 phone number. */
 export async function setContactPhoneTx(
   tx: TenantTx,

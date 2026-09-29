@@ -175,6 +175,13 @@ describe('who serves a request', () => {
       '/api/v2/events',
       '/api/v2',
       '/api/v1/orgs/x',
+      // Batch 3d merge: M3.5b's provider webhooks and M3.4a's staff mode endpoints.
+      '/api/webhooks/email/ses',
+      '/api/webhooks/sms/twilio',
+      '/api/webhooks/sms/twilio/inbound',
+      '/api/webhooks/whatsapp/whatsapp_cloud',
+      '/api/scan/staff',
+      '/api/command-center/org/event/sales',
       '/_next/static/chunk.js',
       '/media/org/file.webp',
       '/embed/gala',

@@ -6,6 +6,7 @@ import {
   devMailboxTransports,
   dispatchDue,
   fakeDeliverySecret,
+  liveTransports,
   type Transports,
   vapidConfig,
   withWebPush,
@@ -13,23 +14,28 @@ import {
 import { sql } from 'drizzle-orm';
 
 /**
- * The channel adapters for this environment. Real providers (SES, Twilio, FCM v1, APNs, VAPID)
- * arrive with the owner's accounts (docs/owner-inbox.md). Until then development and preview
- * write to the dev mailbox; production refuses to pretend and leaves messages queued.
+ * The channel adapters for this environment (M3.5b): the live providers (SES, Twilio, the
+ * WhatsApp Cloud API and the owner's gateway), chosen by config names once the owner's accounts
+ * exist (docs/owner-inbox.md); every other channel writes to the dev mailbox in development and
+ * preview. Production refuses to pretend: without a live email provider it leaves messages
+ * queued, and a channel without a live provider fails over to the category's next channel.
  */
 export function workerTransports(
   env: NodeJS.ProcessEnv = process.env,
   appOrigin = env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000',
 ): Transports | null {
-  if (env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production') return null;
+  const production = env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production';
   // The fake provider's delivery reports wait in the mailbox for the dev drain (M1.10d). Web push
   // (M1.10e) uses the real adapter with the dev VAPID keys; with dev auth on, the fake push service
   // on the app's origin is reachable too.
-  return withWebPush(devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) }), {
-    vapid: vapidConfig(env),
-    appOrigin,
-    fakeOrigin: env.YAYATOH_DEV_AUTH === '1' ? appOrigin : null,
-  });
+  const base = production
+    ? null
+    : withWebPush(devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) }), {
+        vapid: vapidConfig(env),
+        appOrigin,
+        fakeOrigin: env.YAYATOH_DEV_AUTH === '1' ? appOrigin : null,
+      });
+  return liveTransports(env, appOrigin, base);
 }
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>

@@ -1,9 +1,11 @@
 import * as ai from '@yayatoh/ai';
+import * as alerts from '@yayatoh/alerts';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
 import * as billing from '@yayatoh/billing';
 import * as checkin from '@yayatoh/checkin';
 import * as cms from '@yayatoh/cms';
+import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withoutTenant } from '@yayatoh/db';
 import { adminClient, closePools } from '@yayatoh/db/testing';
@@ -50,12 +52,16 @@ import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
  */
 const MODULES = {
   ai,
+  // Batch 3d merge: M3.2b's alert engine and M3.2a's Command Center (M3.4a and M3.5b grew
+  // checkin and notifications, already listed).
+  alerts,
   attendees,
   // Batch 3c merge: the modules of batch 3b (audiences, marketing) and 3c (guests; cms grew).
   audiences,
   billing,
   checkin,
   cms,
+  commandCenter,
   crm,
   events,
   forms,

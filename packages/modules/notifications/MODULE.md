@@ -53,3 +53,21 @@ key) inside their own transaction; this module records, gates, renders and sends
   auto-pause) switches
   on the org's `pause_messaging` suspension and records `auto_pauses`; only staff lift it (audited).
 - Frequency caps count by `recipient_key` (an HMAC of channel and address), never a readable phone.
+- Provider adapters (M3.5b, `src/providers/`) are chosen by config names only: SES (SigV4,
+  `node:crypto`), Twilio, the WhatsApp Cloud API and the owner's gateway behind the same ports,
+  each live only when switched on and fully configured (`providerMode`). Every webhook is verified
+  on the raw body (SNS certificate host + signature + topic + age; `X-Twilio-Signature` over the
+  URL and form; `X-Hub-Signature-256`; the gateway's timestamped HMAC) before anything is
+  recorded, and each event's org comes from our message id, never from the payload.
+- Fallback chains per category (`src/fallback.ts`): a message that can't reach the person on its
+  channel for a reachability reason goes to the next channel **once** (same dedupe key, so the
+  `(org, channel, dedupe_key)` unique makes it idempotent across providers, retries and
+  webhooks); never for consent, opt-outs, unsubscribes or holds; marketing never falls back.
+- Inbound STOP/START/HELP (`src/inbound.ts`) apply once per provider message id and org: STOP
+  withdraws that channel's consent in the crm ledger (with evidence) and suppresses the number
+  (`opt_out`, lifted only by START); the org comes from the dedicated sender reached, else every org
+  that texted the number from the shared sender (by `recipient_key`, never a readable number).
+- Provider health (`notifications.provider_health`) is a platform table of counters only (no org,
+  address or id), written through a SECURITY DEFINER function after the tenant transaction.
+- A sending domain belongs to one org platform-wide; mail uses it only while DKIM and SPF are
+  verified. A dedicated SMS Messaging Service is used only once its 10DLC campaign is verified.

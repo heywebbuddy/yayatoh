@@ -5,6 +5,7 @@ import { erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/pla
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { and, asc, desc, eq, inArray, isNull, lte, or } from 'drizzle-orm';
 import { erasedAddressAllows, erasedMailClass, suppressedReason } from './delivery-rules.ts';
+import { fallbackTx, isFallbackReason } from './fallback.ts';
 import { kindOf, type MessageKind, whatsappCategoryOf } from './kinds.ts';
 import { decryptParams } from './notifier.ts';
 import type { QuotaChannel } from './policy/config.ts';
@@ -12,15 +13,19 @@ import { createGateState, type GateFacts, runPolicyPhase } from './policy/gate.t
 import type { Verdict } from './policy/rules.ts';
 import { smsSegments } from './policy/sms-segments.ts';
 import { preferenceEnabledTx } from './preferences.ts';
+import { type HealthTick, recordProviderHealth } from './provider-health.ts';
+import { errorProvider, isProviderRejection, type RejectionCode } from './providers/types.ts';
 import { isValidTimeZone, quietHoursRelease } from './quiet-hours.ts';
 import {
   addressSuppressions,
+  MESSAGE_PROVIDERS,
   messages,
   pushDeliveries,
   pushTokens,
   suppressions,
   templateOverrides,
 } from './schema.ts';
+import { orgSendersTx } from './senders.ts';
 import { emailLocale, renderMessage, smsText } from './templates/render.ts';
 import { PLATFORM_SENDER, type PushTransport, type Transports } from './transports.ts';
 import { pushTopic, type Urgency } from './web-push.ts';
@@ -63,6 +68,19 @@ export function unsubscribeUrls(appOrigin: string, messageId: string, locale = '
 
 type Row = typeof messages.$inferSelect;
 
+/** A provider's permanent refusal as the message log's reason (M3.5b). */
+export const REJECTION_REASONS: Readonly<Record<RejectionCode, string>> = {
+  not_on_channel: 'not_on_whatsapp',
+  invalid_address: 'invalid_number',
+  opted_out: 'opted_out',
+  rejected: 'provider_error',
+};
+
+const providerOf = (name: string | null | undefined) =>
+  name && (MESSAGE_PROVIDERS as readonly string[]).includes(name)
+    ? (name as (typeof MESSAGE_PROVIDERS)[number])
+    : null;
+
 /**
  * Send this org's due messages. Rows are claimed with FOR UPDATE SKIP LOCKED inside the tenant
  * transaction, so two dispatchers running at once (a duplicated job, two worker machines) never
@@ -76,6 +94,8 @@ export async function dispatchDueTx(
   orgId: string,
   deps: DispatchDeps,
   limit = 50,
+  /** Provider health counts, recorded by the caller after the transaction (M3.5b). */
+  health: HealthTick[] = [],
 ): Promise<DispatchResult> {
   const now = deps.now?.() ?? new Date();
   const result: DispatchResult = { sent: 0, held: 0, suppressed: 0, failed: 0 };
@@ -92,6 +112,8 @@ export async function dispatchDueTx(
   const org = await organizationBrandTx(tx, orgId);
   if (!org) return result;
   const paused = (await activeSuspensionsTx(tx)).has('pause_messaging');
+  // The org's own senders (M3.5b): verified sending domain, active 10DLC service, WhatsApp route.
+  const senders = await orgSendersTx(tx);
   // Policy gate v2 (M3.5a): quotas and caps loaded once for this org's batch.
   const gate = createGateState(orgId, org.timezone, now);
   const needEmails = due.filter((r) => r.channel === 'email' && !r.recipientEmail && r.recipientUserId);
@@ -127,9 +149,20 @@ export async function dispatchDueTx(
       .update(messages)
       .set({ ...set, updatedAt: now })
       .where(eq(messages.id, row.id));
+  // A message that can't reach the person on its channel for a reachability reason goes to the
+  // category's next channel in this same transaction (M3.5b fallback chains).
+  const fallBack = async (row: Row, reason: string) => {
+    if (isFallbackReason(reason)) await fallbackTx(tx, orgId, row, reason, now);
+  };
   const suppress = async (row: Row, reason: string) => {
     await update(row, { status: 'suppressed', reason });
     result.suppressed += 1;
+    await fallBack(row, reason);
+  };
+  const fail = async (row: Row, reason: string, set: Partial<Row> = {}) => {
+    await update(row, { status: 'failed', reason, attempts: row.attempts + 1, ...set });
+    result.failed += 1;
+    await fallBack(row, reason);
   };
   const apply = async (row: Row, verdict: Verdict) => {
     if (verdict.action === 'block') await suppress(row, verdict.reason);
@@ -283,13 +316,13 @@ export async function dispatchDueTx(
             ? params.replyUrl
             : consoleLink;
       let providerMessageId: string;
+      let provider: string | undefined;
       let segments: number | null = null;
       const textBody = () =>
         smsText(rendered, { orgName: org.name, category: def.category, body: params.body, link });
       if (row.channel === 'email') {
         if (!email) {
-          await update(row, { status: 'failed', reason: 'no_address', attempts: row.attempts + 1 });
-          result.failed += 1;
+          await fail(row, 'no_address');
           continue;
         }
         const headers: Record<string, string> = { 'X-Yayatoh-Message': row.id };
@@ -298,7 +331,7 @@ export async function dispatchDueTx(
           headers['List-Unsubscribe'] = `<${unsub.oneClick}>`;
           headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
         }
-        ({ providerMessageId } = await deps.transports.email.send({
+        ({ providerMessageId, provider } = await deps.transports.email.send({
           from: { name: org.name, address: PLATFORM_SENDER },
           to: email,
           subject: rendered.subject,
@@ -306,7 +339,10 @@ export async function dispatchDueTx(
           text: rendered.text,
           headers,
           idempotencyKey: row.id,
+          sender: senders.email,
+          orgId,
         }));
+        provider ??= deps.transports.email.name;
       } else if (row.channel === 'push') {
         const push = deps.transports.push;
         if (!push) throw new Error('no push adapter configured');
@@ -345,43 +381,46 @@ export async function dispatchDueTx(
           continue;
         }
         if (outcome.kind === 'rejected') {
-          await update(row, {
-            status: 'failed',
-            reason: 'provider_error',
-            attempts: row.attempts + 1,
-            lastError: 'push: refused by the push service',
-          });
-          result.failed += 1;
+          await fail(row, 'provider_error', { lastError: 'push: refused by the push service' });
           continue;
         }
         providerMessageId = outcome.providerMessageId;
+        provider = push.name;
       } else if (row.channel === 'whatsapp') {
         const wa = deps.transports.whatsapp;
         const phone = typeof params._phone === 'string' ? params._phone : null;
         if (!wa) throw new Error('no WhatsApp adapter configured');
         if (!phone) {
-          await update(row, { status: 'failed', reason: 'no_address', attempts: row.attempts + 1 });
-          result.failed += 1;
+          await fail(row, 'no_address');
           continue;
         }
-        ({ providerMessageId } = await wa.send({
+        ({ providerMessageId, provider } = await wa.send({
           to: phone,
           body: textBody(),
           category: whatsappCategoryOf(row.kind),
           idempotencyKey: row.id,
+          locale,
+          orgName: org.name,
+          sender: senders.whatsapp,
         }));
+        provider ??= wa.name;
       } else {
         const sms = deps.transports.sms;
         const phone = typeof params._phone === 'string' ? params._phone : null;
         if (!sms) throw new Error('no SMS adapter configured');
         if (!phone) {
-          await update(row, { status: 'failed', reason: 'no_address', attempts: row.attempts + 1 });
-          result.failed += 1;
+          await fail(row, 'no_address');
           continue;
         }
         const body = textBody();
         segments = smsSegments(body).segments;
-        ({ providerMessageId } = await sms.send({ to: phone, body, idempotencyKey: row.id }));
+        ({ providerMessageId, provider } = await sms.send({
+          to: phone,
+          body,
+          idempotencyKey: row.id,
+          sender: senders.sms,
+        }));
+        provider ??= sms.name;
       }
       await update(row, {
         status: 'sent',
@@ -393,11 +432,34 @@ export async function dispatchDueTx(
         reason: null,
         lastError: null,
         segments,
+        provider: providerOf(provider),
       });
+      if (provider && row.channel !== 'push') health.push({ provider, kind: 'send' });
       // Usage metering (M3.5a): SMS by segment, everything else by message.
       await gate.meter(tx, row.channel as QuotaChannel, segments ?? 1);
       result.sent += 1;
     } catch (err) {
+      const channelProvider =
+        errorProvider(err) ??
+        (row.channel === 'email'
+          ? deps.transports.email.name
+          : row.channel === 'sms'
+            ? deps.transports.sms?.name
+            : row.channel === 'whatsapp'
+              ? deps.transports.whatsapp?.name
+              : deps.transports.push?.name);
+      // A provider's permanent refusal (M3.5b): final at once; reachability refusals fall back.
+      if (isProviderRejection(err)) {
+        if (channelProvider)
+          health.push({
+            provider: channelProvider,
+            kind: 'send_error',
+            error: `${err.code} ${err.providerCode ?? ''}`.trim(),
+          });
+        await fail(row, REJECTION_REASONS[err.code], { lastError: err.message.slice(0, 500) });
+        continue;
+      }
+      if (channelProvider) health.push({ provider: channelProvider, kind: 'send_error', error: 'error' });
       const attempts = row.attempts + 1;
       const final = attempts >= MAX_ATTEMPTS;
       await update(row, {
@@ -407,8 +469,10 @@ export async function dispatchDueTx(
           ? { status: 'failed', reason: 'provider_error' }
           : { sendAfter: new Date(now.getTime() + 2 ** attempts * 60_000), reason: 'retrying' }),
       });
-      if (final) result.failed += 1;
-      else result.held += 1;
+      if (final) {
+        result.failed += 1;
+        await fallBack(row, 'provider_error');
+      } else result.held += 1;
     }
   }
   return result;
@@ -587,8 +651,14 @@ async function sendPushTx(
   return pushRowOutcome(results);
 }
 
-/** One org's dispatch in its own tenant transaction (worker tick, dev drain). */
-export function dispatchDue(orgId: string, deps: DispatchDeps, limit = 50): Promise<DispatchResult> {
+/**
+ * One org's dispatch in its own tenant transaction (worker tick, dev drain); provider health is
+ * counted after it commits (M3.5b).
+ */
+export async function dispatchDue(orgId: string, deps: DispatchDeps, limit = 50): Promise<DispatchResult> {
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'notifications.dispatcher' } });
-  return withTenant(ctx, (tx) => dispatchDueTx(tx, orgId, deps, limit));
+  const health: HealthTick[] = [];
+  const result = await withTenant(ctx, (tx) => dispatchDueTx(tx, orgId, deps, limit, health));
+  await recordProviderHealth(health);
+  return result;
 }

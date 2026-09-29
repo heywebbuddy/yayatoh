@@ -171,7 +171,10 @@
       "whatsapp_marketing_us": "已拦截：不允许向美国号码发送 WhatsApp 营销消息",
       "state_quiet_hours": "等待州规定的通话时间（例如得克萨斯州周日中午前）",
       "frequency_cap": "等待或已跳过：此人最近收到了很多消息",
-      "quota_reached": "等待中：本月配额已用完"
+      "quota_reached": "等待中：本月配额已用完",
+      "not_on_whatsapp": "未使用 WhatsApp",
+      "invalid_number": "该号码无法接收短信",
+      "opted_out": "已屏蔽：收件人回复了 STOP"
     },
     "channels": {
       "email": "电子邮件",
@@ -281,7 +284,8 @@
     "marketingSite": "营销网站",
     "tablesSponsors": "桌位与赞助商",
     "commandCenter": "指挥中心",
-    "alerts": "提醒"
+    "alerts": "提醒",
+    "sendingSetup": "发送设置"
   },
   "vocab": {
     "attendee": "参会者",
@@ -4844,7 +4848,8 @@
     "suppressionReason": {
       "hard_bounce": "退信（地址不存在）",
       "soft_bounce": "多次退信（邮箱已满或不可用）",
-      "complaint": "被标记为垃圾邮件"
+      "complaint": "被标记为垃圾邮件",
+      "opt_out": "回复了 STOP"
     },
     "liftNote": "为什么要解除 {address} 的停止？",
     "lift": "解除",
@@ -4869,7 +4874,8 @@
     "saveCaps": "保存上限",
     "capsSaved": "上限已保存。",
     "maxInvalid": "请输入 1 到 20 的整数。",
-    "windowInvalid": "请输入 1 到 720 的整数小时数。"
+    "windowInvalid": "请输入 1 到 720 的整数小时数。",
+    "personOnly": "只有本人回复 START 才能解除"
   },
   "preferenceCenter": {
     "metaTitle": "你的消息偏好",
@@ -6356,5 +6362,102 @@
     "pinLocked": "PIN 码错误次数过多。请在 {seconds, plural, other {# 秒}}后重试。",
     "unlock": "解锁",
     "cancel": "取消"
+  },
+  "sendingSetup": {
+    "title": "发送设置",
+    "description": "你的邮件和短信从哪里发出，以及消息无法通过其渠道送达时会怎样。",
+    "domainTitle": "邮件发送域名",
+    "noDomain": "你的邮件以组织名称从 notifications@mail.yayatoh.com 发出。添加你自己的域名，让邮件从你的地址发出。",
+    "unavailable": "发送域名尚不可用。",
+    "readOnly": "只有所有者和管理员可以更改。",
+    "addTitle": "添加发送域名",
+    "domainLabel": "发送域名",
+    "domainHint": "请使用不发送其他邮件的子域名，例如 mail.yourdomain.com。",
+    "add": "添加域名",
+    "errors": {
+      "required": "请输入域名。",
+      "invalid": "请输入类似 mail.yourdomain.com 的域名（不能是 Yayatoh 地址）。",
+      "already_set": "你的组织已有发送域名，请先移除。",
+      "domain_taken": "其他组织已在使用此域名。",
+      "unavailable": "发送域名尚不可用。",
+      "forbidden": "只有所有者和管理员可以更改。",
+      "internal": "出了点问题，请重试。"
+    },
+    "status": {
+      "verified": "已验证",
+      "pending": "等待 DNS",
+      "failed": "失败"
+    },
+    "sendingFrom": "你的邮件现在从 {address} 发出。",
+    "notYet": "DKIM 和 SPF 验证通过后，你的邮件将从 {address} 发出。在此之前，邮件以你的组织名称从 Yayatoh 的地址发出。",
+    "checksCaption": "{domain} 的 DNS 检查",
+    "check": "检查项",
+    "statusHeader": "状态",
+    "checks": {
+      "dkim": "DKIM（签名）",
+      "spf": "SPF（退信域名）",
+      "dmarc": "DMARC（策略）"
+    },
+    "checkStatus": {
+      "verified": "已验证",
+      "pending": "等待中",
+      "failed": "失败",
+      "missing": "缺失"
+    },
+    "dmarcPolicy": "已找到（p={policy}）",
+    "recordsIntro": "请在你的 DNS 服务商处发布这些记录，然后再次检查。DNS 更改最多可能需要 48 小时生效。",
+    "recordsCaption": "{domain} 的 DNS 记录",
+    "recordType": "类型",
+    "recordName": "名称",
+    "recordValue": "值",
+    "recordFor": "用途",
+    "lastChecked": "上次检查 {when}",
+    "checkNow": "立即检查 DNS",
+    "checkForm": "检查发送域名",
+    "remove": "移除域名",
+    "removeForm": "移除发送域名",
+    "done": {
+      "added": "已添加域名。请发布下方的 DNS 记录。",
+      "checked": "DNS 已检查。",
+      "removed": "已移除发送域名。邮件重新从 Yayatoh 的地址发出。",
+      "forbidden": "只有所有者和管理员可以更改。",
+      "error": "操作未成功，请重试。"
+    },
+    "textsTitle": "短信",
+    "smsSender": "短信",
+    "ownNumber": "你自己的号码 {number}",
+    "ending": "尾号 {hint}",
+    "sharedNumber": "Yayatoh 共享号码",
+    "campaign": "10DLC 活动",
+    "campaignStatus": {
+      "verified": "已验证",
+      "pending": "审核中",
+      "failed": "已拒绝",
+      "not_registered": "未注册"
+    },
+    "whatsappSender": "WhatsApp",
+    "route": {
+      "cloud": "你的 WhatsApp Business 号码（Cloud API）",
+      "gateway": "Pani WhatsApp 网关",
+      "default": "Yayatoh 的 WhatsApp 号码"
+    },
+    "textsNote": "专用号码由 Yayatoh 支持团队设置。任何人都可以回复任意短信 STOP 以退订，或回复 HELP 获取帮助。",
+    "campaignPending": "你自己的号码在其 10DLC 活动验证通过后使用；在此之前短信使用 Yayatoh 共享号码。",
+    "fallbackTitle": "备用渠道",
+    "fallbackDescription": "当消息无法通过其渠道送达某人时（没有 WhatsApp 账户、号码无法接收短信、服务商拒绝），会通过下一个渠道发送一次。用户自己的选择（退订）永远不会转到其他渠道。",
+    "fallbackCaption": "各类消息的备用渠道顺序",
+    "category": "消息",
+    "chain": "顺序",
+    "arrow": " → ",
+    "noFallback": "无备用渠道",
+    "categories": {
+      "transactional": "门票和订单消息",
+      "reminders": "提醒",
+      "event_updates": "活动动态",
+      "marketing": "新闻和优惠",
+      "sales": "团队的销售提醒",
+      "messages": "团队的客户消息",
+      "security": "团队的安全提醒"
+    }
   }
 }

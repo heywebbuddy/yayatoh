@@ -63,4 +63,6 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     "Guest email codes and magic links (M1.5f; codes, links and browsers as HMACs; the address until the row is pruned a day after expiry); a guest proving an address is no tenant's data yet and marketplace sign-in spans orgs; reached only through @yayatoh/orders (app_user; platform_reader has no access).",
   'orders.guest_sessions':
     'Attendee "My tickets" sessions (M1.5f; token HMAC, host-bound, org or marketplace scope); reached only through @yayatoh/orders (app_user; platform_reader has no access).',
+  'notifications.provider_health':
+    'Messaging provider health per provider × UTC hour (M3.5b: sends, send errors, verified and refused webhooks, last error code; no org, address or message id); no app_user privileges, only the SECURITY DEFINER notifications.record_provider_health; platform_reader SELECT.',
 };

@@ -48,6 +48,8 @@ export const ALERT_TRIGGER_EVENTS = [
   'domain.primary_changed@1',
   'payouts.account_updated@1',
   'messaging.auto_paused@1',
+  // Batch 3d merge: bounces and complaints reported by a provider webhook (M3.5b).
+  'messaging.delivery_problems@1',
   'org.suspension_changed@1',
   'bulk.completed@1',
 ] as const;
