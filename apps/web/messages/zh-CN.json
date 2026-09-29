@@ -78,7 +78,9 @@
         "refund-declined": "退款申请被拒",
         "waitlist-joined": "候补名单确认",
         "waitlist-offer": "候补名单购票邀请",
-        "waitlist-expired": "候补名单购票邀请已过期"
+        "waitlist-expired": "候补名单购票邀请已过期",
+        "credit-note": "贷记单",
+        "support-reply": "客服回复"
       },
       "events": {
         "reminder": "活动提醒",
@@ -93,7 +95,10 @@
         "claim-link": "门票领取链接",
         "holder-link": "门票链接",
         "tickets-resent": "门票重新发送",
-        "ticket-cancelled": "门票已取消"
+        "ticket-cancelled": "门票已取消",
+        "transfer-offered": "门票转让",
+        "transfer-completed": "门票已转让",
+        "transfer-received": "收到的转让门票"
       },
       "attendees": {
         "message": "主办方消息"
@@ -114,7 +119,8 @@
         "finder-code": "座位查找代码"
       },
       "payments": {
-        "destination-changed": "收款账户变更"
+        "destination-changed": "收款账户变更",
+        "dispute-deadline": "争议截止提醒"
       },
       "surveys": {
         "invite": "问卷邀请",
@@ -267,7 +273,9 @@
     "trackedLinks": "追踪链接",
     "messagingHealth": "消息发送限制",
     "audiences": "受众",
-    "refundRequests": "退款申请"
+    "refundRequests": "退款申请",
+    "disputes": "争议",
+    "supportMacros": "客服宏"
   },
   "vocab": {
     "attendee": "参会者",
@@ -830,7 +838,9 @@
     "dateSoldOut": "此场次刚刚售罄，请选择其他场次。",
     "dateUnavailable": "此场次已不可用，请选择其他场次。",
     "orgUnavailable": "该主办方目前未在售票。已购买的门票仍然有效。",
-    "riskBlocked": "我们无法接受此订单。请联系主办方。"
+    "riskBlocked": "我们无法接受此订单。请联系主办方。",
+    "creditInvalid": "该店铺余额代码无效或已用完。",
+    "creditNotApplicable": "该店铺余额不能用于这些门票。"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -1682,7 +1692,18 @@
     "noMessages": "没有就此订单向购票者发送任何消息。",
     "message": "消息",
     "channel": "渠道",
-    "trimmed": "为符合卡组织的页数限制，{n, plural, other {另有 # 行未列出}}。"
+    "trimmed": "为符合卡组织的页数限制，{n, plural, other {另有 # 行未列出}}。",
+    "termsAtPurchase": "购买时的退款条款",
+    "termsUnset": "当时未显示退款政策",
+    "termsNone": "不退款",
+    "termsUntil": "活动前 {days} 天内可退款",
+    "termsAlways": "活动前任何时间可退款",
+    "termsKept": "每张门票扣留",
+    "transfers": "门票转让",
+    "transferFrom": "转出",
+    "transferTo": "转入",
+    "transferState": "状态",
+    "transferClaimed": "领取时间"
   },
   "boxOffice": {
     "title": "票务窗口",
@@ -5040,7 +5061,11 @@
         "dispute_evidence_submitted": "已提交拒付证据",
         "dispute_won": "拒付胜诉",
         "dispute_lost": "拒付败诉",
-        "note": "备注"
+        "note": "备注",
+        "credit_note_issued": "开具贷记单",
+        "credit_applied": "使用店铺余额",
+        "credit_released": "退回店铺余额",
+        "macro_run": "运行客服宏"
       }
     },
     "notes": {
@@ -5322,6 +5347,239 @@
         "not_enough_stock": "空余门票不足，无法发出此邀请。",
         "not_on_sale": "此通行证或场次未在销售。"
       }
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "此人已持有这张门票。",
+      "fee_not_accepted": "请勾选以同意转让费。",
+      "fee_required": "这张门票有转让费:请按姓名转让。",
+      "not_allowed": "此票种不能转让。",
+      "deadline_passed": "这张门票的转让已关闭。",
+      "event_ended": "活动已结束。",
+      "ticket_void": "这张门票已失效。",
+      "amount_required": "请输入至少 0.01 的金额。",
+      "amount_too_large": "超出了此订单还能开具的金额。",
+      "nothing_to_credit": "此订单已没有可开具的金额。",
+      "order_not_paid": "只能为已付款的订单开具贷记单。",
+      "unknown_merge_field": "回复中使用了不存在的合并字段。请只使用列出的字段。",
+      "name_taken": "已有同名宏。",
+      "transfer_required": "此宏会转让门票:请选择门票和接收人。",
+      "no_live_tickets": "此订单没有可重新发送的有效门票。"
+    },
+    "transfers": {
+      "title": "转让",
+      "description": "把门票转给他人。对方会收到用自己的邮箱领取的链接;领取后,原来的二维码、短码和钱包卡券失效,门票以对方名义重新签发。",
+      "empty": "此订单的门票没有被转让过。",
+      "wallet": "钱包卡券",
+      "walletLive": "已更新",
+      "walletPending": "更新中",
+      "from": "转出",
+      "to": "转入",
+      "by": "发起方",
+      "initiatedBy": {
+        "organizer": "你的团队",
+        "holder": "持票人"
+      },
+      "fee": "转让费 {amount}",
+      "state": {
+        "pending": "等待领取",
+        "claimed": "已领取",
+        "cancelled": "已取消",
+        "expired": "链接已过期"
+      },
+      "until": "链接有效期至 {date}",
+      "actions": "操作",
+      "cancel": "取消转让",
+      "cancelled": "转让已取消。",
+      "ticket": "门票",
+      "toName": "新持票人姓名",
+      "toEmail": "新持票人邮箱",
+      "toEmailHint": "用此邮箱领取门票。",
+      "toNameInvalid": "请输入新持票人的姓名。",
+      "toEmailInvalid": "请输入有效的邮箱地址。",
+      "started": "转让已发起。已向 {name} 发送领取门票的链接。",
+      "link": "领取链接(仅显示一次)",
+      "submit": "转让门票"
+    },
+    "credit": {
+      "title": "贷记单",
+      "empty": "此订单没有贷记单。",
+      "number": "编号",
+      "dispositionCol": "结算方式",
+      "disposition": {
+        "store_credit": "店铺余额",
+        "refunded": "已退款"
+      },
+      "codeEnding": "代码尾号 {last4}",
+      "balance": "剩余余额",
+      "document": "文件",
+      "pdf": "{label}(PDF)",
+      "creditable": "此订单最多还可开具 {amount}。",
+      "kindLegend": "金额范围",
+      "kind": {
+        "partial": "订单的一部分",
+        "full": "订单剩余的全部"
+      },
+      "amount": "金额({currency})",
+      "dispositionLegend": "结算方式",
+      "reason": "原因",
+      "reasonHint": "显示在贷记单上,买家也能看到(3–500 个字符)。",
+      "issued": "贷记单 {label} 已开具,并已发送给买家。",
+      "codeOnce": "店铺余额代码(仅显示一次;已通过邮件发给买家)",
+      "reasonInvalid": "请填写 3 到 500 个字符的原因。",
+      "amountInvalid": "请输入至少 0.01 的金额。",
+      "submit": "开具贷记单",
+      "financeTitle": "贷记单",
+      "financeEmpty": "还没有贷记单。",
+      "financeTotals": "按币种统计的贷记单",
+      "financeRecent": "最近的贷记单",
+      "currency": "币种",
+      "count": "数量",
+      "issuedTotal": "已开具",
+      "applied": "已使用",
+      "outstanding": "未使用",
+      "issuedOn": "开具日期",
+      "buyer": "买家",
+      "amountCol": "金额"
+    },
+    "macros": {
+      "title": "客服宏",
+      "description": "保存的回复及其配套操作,在订单页一步执行。合并字段会自动填入订单信息。",
+      "newTitle": "新建宏",
+      "listTitle": "你的宏",
+      "noneTitle": "还没有宏",
+      "noneDescription": "在上方创建一个:例如“重新发送门票”,它会给买家发邮件、添加备注并重新发送门票。",
+      "manage": "创建宏",
+      "runTitle": "运行宏",
+      "choose": "宏",
+      "preview": "此宏的作用",
+      "does": "操作:{actions}",
+      "action": {
+        "email_buyer": "给买家发邮件",
+        "add_note": "添加团队备注",
+        "resend_tickets": "重新发送门票",
+        "transfer_ticket": "转让门票"
+      },
+      "transferLegend": "转让",
+      "ticket": "门票",
+      "toName": "新持票人姓名",
+      "toEmail": "新持票人邮箱",
+      "ran": "宏“{name}”已运行。",
+      "link": "领取链接(仅显示一次)",
+      "transferRequired": "请选择门票和接收人。",
+      "run": "运行宏",
+      "name": "名称",
+      "subject": "邮件主题",
+      "body": "回复",
+      "fieldsHint": "合并字段:",
+      "actionsLegend": "操作",
+      "saved": "宏已保存。",
+      "nameInvalid": "宏名称需为 2 到 80 个字符。",
+      "actionsInvalid": "请至少选择一个操作。",
+      "subjectInvalid": "请填写主题。",
+      "bodyInvalid": "请填写回复。",
+      "update": "保存更改",
+      "create": "创建宏",
+      "archive": "归档 {name}",
+      "archived": "宏已归档。"
+    },
+    "holder": {
+      "title": "转让这张门票",
+      "pending": "等待 {name} 领取。",
+      "cancel": "取消转让",
+      "cancelled": "转让已取消。",
+      "until": "转让截止于 {date}",
+      "fee": "转让费 {fee}",
+      "refused": {
+        "not_allowed": "这张门票不能转让。",
+        "deadline_passed": "这张门票的转让已关闭。",
+        "event_ended": "活动已结束。",
+        "ticket_void": "这张门票已失效。"
+      },
+      "toName": "对方姓名",
+      "toEmail": "对方邮箱",
+      "acceptFee": "我同意支付 {fee} 的转让费。",
+      "sent": "已发送。已向 {name} 发送领取门票的链接。",
+      "toNameInvalid": "请输入对方姓名。",
+      "toEmailInvalid": "请输入有效的邮箱地址。",
+      "submit": "发送转让"
+    },
+    "rules": {
+      "title": "转让规则",
+      "description": "设置各票种的持票人能否自行转让、活动开始前多久截止以及收取多少费用。你的团队随时可以在订单页转让。",
+      "column": "转让",
+      "summaryAllowed": "允许",
+      "summaryCutoff": "提前 {hours} 小时截止",
+      "summaryFee": "费用 {fee}",
+      "summaryOff": "不允许",
+      "formLabel": "{name} 的转让规则",
+      "allowed": "允许持票人转让",
+      "cutoff": "截止(提前小时数)",
+      "cutoffHint": "留空:开始时截止。",
+      "fee": "费用({currency})",
+      "feeHint": "留空:免费。",
+      "save": "保存规则",
+      "saved": "规则已保存。",
+      "cutoffInvalid": "请输入整数小时(0–8760)。",
+      "feeInvalid": "请输入金额或留空。"
+    },
+    "disputes": {
+      "title": "争议",
+      "description": "你的订单上的拒付及其证据截止时间。从订单整理证据,并在截止前提交。",
+      "summary": "{open, plural, =0 {没有未结争议} other {# 个未结争议}} · {soon, plural, =0 {3 天内无到期} other {# 个 3 天内到期}}",
+      "tabsLabel": "争议状态",
+      "tabs": {
+        "open": "未结({count})",
+        "closed": "已结({count})"
+      },
+      "empty": {
+        "open": "没有未结争议。",
+        "closed": "没有已结争议。"
+      },
+      "caption": {
+        "open": "未结争议,截止时间最近的在前",
+        "closed": "已结争议,最新的在前"
+      },
+      "buyer": "买家",
+      "amount": "金额",
+      "reason": "原因",
+      "status": "状态",
+      "deadline": "证据截止",
+      "action": "操作",
+      "respond": "整理并提交证据",
+      "submitted": "证据已提交",
+      "noDeadline": "无截止时间",
+      "overdue": "已过截止时间",
+      "hoursLeft": "{hours, plural, =0 {剩余不到 1 小时} other {剩余 # 小时}}",
+      "daysLeft": "{days, plural, other {剩余 # 天}}"
+    },
+    "claim": {
+      "intro": "{from} 正在把这张门票转让给 {to}。请用接收该门票的邮箱领取:你将获得自己的二维码,原来的二维码随即失效。",
+      "emailHint": "此转让发送到的邮箱地址。",
+      "emailMismatch": "请使用接收这张门票的邮箱地址。"
+    },
+    "buyer": {
+      "title": "贷记单",
+      "storeCredit": "店铺余额剩余:{balance}。下次下单结账时输入此代码:",
+      "refunded": "此金额已退还给你。"
+    },
+    "pdf": {
+      "title": "贷记单 {label}",
+      "number": "贷记单编号",
+      "issued": "开具日期",
+      "billedTo": "客户",
+      "event": "活动",
+      "order": "订单",
+      "orderTotal": "订单总额",
+      "kind": "范围",
+      "settlement": "结算方式",
+      "balance": "剩余余额",
+      "reason": "原因",
+      "amount": "贷记金额",
+      "storeCreditNote": "客户可凭发送给其的店铺余额代码,在同一主办方的下一笔订单中使用此余额。",
+      "refundedNote": "此金额已退还给客户。",
+      "footer": "由 {seller} 通过 Yayatoh 开具。"
     }
   }
 }

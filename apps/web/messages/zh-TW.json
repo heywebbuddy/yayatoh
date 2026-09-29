@@ -78,7 +78,9 @@
         "refund-declined": "退款申請遭拒",
         "waitlist-joined": "候補名單確認",
         "waitlist-offer": "候補名單購票邀請",
-        "waitlist-expired": "候補名單購票邀請已逾期"
+        "waitlist-expired": "候補名單購票邀請已逾期",
+        "credit-note": "折讓單",
+        "support-reply": "客服回覆"
       },
       "events": {
         "reminder": "活動提醒",
@@ -93,7 +95,10 @@
         "claim-link": "票券領取連結",
         "holder-link": "票券連結",
         "tickets-resent": "票券重新寄送",
-        "ticket-cancelled": "票券已取消"
+        "ticket-cancelled": "票券已取消",
+        "transfer-offered": "票券轉讓",
+        "transfer-completed": "票券已轉讓",
+        "transfer-received": "收到的轉讓票券"
       },
       "attendees": {
         "message": "主辦單位訊息"
@@ -114,7 +119,8 @@
         "finder-code": "座位查詢代碼"
       },
       "payments": {
-        "destination-changed": "撥款帳戶變更"
+        "destination-changed": "撥款帳戶變更",
+        "dispute-deadline": "爭議截止提醒"
       },
       "surveys": {
         "invite": "問卷邀請",
@@ -267,7 +273,9 @@
     "trackedLinks": "追蹤連結",
     "messagingHealth": "訊息傳送限制",
     "audiences": "受眾",
-    "refundRequests": "退款申請"
+    "refundRequests": "退款申請",
+    "disputes": "爭議",
+    "supportMacros": "客服巨集"
   },
   "vocab": {
     "attendee": "參加者",
@@ -830,7 +838,9 @@
     "dateSoldOut": "此場次剛剛售完，請選擇其他場次。",
     "dateUnavailable": "此場次已無法購買，請選擇其他場次。",
     "orgUnavailable": "該主辦方目前未在售票。已購買的票券仍然有效。",
-    "riskBlocked": "我們無法接受此訂單。請聯絡主辦單位。"
+    "riskBlocked": "我們無法接受此訂單。請聯絡主辦單位。",
+    "creditInvalid": "此商店餘額代碼無效或已用完。",
+    "creditNotApplicable": "此商店餘額不能用於這些票券。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1682,7 +1692,18 @@
     "noMessages": "沒有就此訂單向購票者傳送任何訊息。",
     "message": "訊息",
     "channel": "管道",
-    "trimmed": "為符合卡組織的頁數限制，{n, plural, other {另有 # 列未列出}}。"
+    "trimmed": "為符合卡組織的頁數限制，{n, plural, other {另有 # 列未列出}}。",
+    "termsAtPurchase": "購買時的退款條款",
+    "termsUnset": "當時未顯示退款政策",
+    "termsNone": "不退款",
+    "termsUntil": "活動前 {days} 天內可退款",
+    "termsAlways": "活動前任何時間可退款",
+    "termsKept": "每張票券扣留",
+    "transfers": "票券轉讓",
+    "transferFrom": "轉出",
+    "transferTo": "轉入",
+    "transferState": "狀態",
+    "transferClaimed": "領取時間"
   },
   "boxOffice": {
     "title": "售票處",
@@ -5040,7 +5061,11 @@
         "dispute_evidence_submitted": "已提交爭議款證據",
         "dispute_won": "爭議款勝訴",
         "dispute_lost": "爭議款敗訴",
-        "note": "備註"
+        "note": "備註",
+        "credit_note_issued": "開立折讓單",
+        "credit_applied": "使用商店餘額",
+        "credit_released": "退回商店餘額",
+        "macro_run": "執行客服巨集"
       }
     },
     "notes": {
@@ -5322,6 +5347,239 @@
         "not_enough_stock": "空餘票券不足，無法發出此邀請。",
         "not_on_sale": "此通行證或場次未在販售。"
       }
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "此人已持有這張票券。",
+      "fee_not_accepted": "請勾選以同意轉讓費。",
+      "fee_required": "這張票券有轉讓費:請改用姓名轉讓。",
+      "not_allowed": "此票種不能轉讓。",
+      "deadline_passed": "這張票券的轉讓已關閉。",
+      "event_ended": "活動已結束。",
+      "ticket_void": "這張票券已失效。",
+      "amount_required": "請輸入至少 0.01 的金額。",
+      "amount_too_large": "超過此訂單還能折讓的金額。",
+      "nothing_to_credit": "此訂單已沒有可折讓的金額。",
+      "order_not_paid": "只能為已付款的訂單開立折讓單。",
+      "unknown_merge_field": "回覆中使用了不存在的合併欄位。請只使用列出的欄位。",
+      "name_taken": "已有同名的巨集。",
+      "transfer_required": "此巨集會轉讓票券:請選擇票券和接收人。",
+      "no_live_tickets": "此訂單沒有可重新寄送的有效票券。"
+    },
+    "transfers": {
+      "title": "轉讓",
+      "description": "把票券轉給他人。對方會收到以自己的電子郵件領取的連結;領取後,原本的 QR 碼、短碼和錢包票券會失效,票券以對方名義重新開立。",
+      "empty": "此訂單的票券沒有轉讓紀錄。",
+      "wallet": "錢包票券",
+      "walletLive": "已更新",
+      "walletPending": "更新中",
+      "from": "轉出",
+      "to": "轉入",
+      "by": "發起者",
+      "initiatedBy": {
+        "organizer": "你的團隊",
+        "holder": "持票人"
+      },
+      "fee": "轉讓費 {amount}",
+      "state": {
+        "pending": "等待領取",
+        "claimed": "已領取",
+        "cancelled": "已取消",
+        "expired": "連結已過期"
+      },
+      "until": "連結有效至 {date}",
+      "actions": "操作",
+      "cancel": "取消轉讓",
+      "cancelled": "已取消轉讓。",
+      "ticket": "票券",
+      "toName": "新持票人姓名",
+      "toEmail": "新持票人電子郵件",
+      "toEmailHint": "以此地址領取票券。",
+      "toNameInvalid": "請輸入新持票人的姓名。",
+      "toEmailInvalid": "請輸入有效的電子郵件地址。",
+      "started": "已開始轉讓。已寄送領取票券的連結給 {name}。",
+      "link": "領取連結(只顯示一次)",
+      "submit": "轉讓票券"
+    },
+    "credit": {
+      "title": "折讓單",
+      "empty": "此訂單沒有折讓單。",
+      "number": "編號",
+      "dispositionCol": "結算方式",
+      "disposition": {
+        "store_credit": "商店餘額",
+        "refunded": "已退款"
+      },
+      "codeEnding": "代碼末四碼 {last4}",
+      "balance": "剩餘餘額",
+      "document": "文件",
+      "pdf": "{label}(PDF)",
+      "creditable": "此訂單最多還能折讓 {amount}。",
+      "kindLegend": "金額範圍",
+      "kind": {
+        "partial": "訂單的一部分",
+        "full": "訂單剩餘的全部"
+      },
+      "amount": "金額({currency})",
+      "dispositionLegend": "結算方式",
+      "reason": "原因",
+      "reasonHint": "會顯示在折讓單上,買家也看得到(3–500 個字元)。",
+      "issued": "已開立折讓單 {label},並寄送給買家。",
+      "codeOnce": "商店餘額代碼(只顯示一次;已寄送給買家)",
+      "reasonInvalid": "請填寫 3 到 500 個字元的原因。",
+      "amountInvalid": "請輸入至少 0.01 的金額。",
+      "submit": "開立折讓單",
+      "financeTitle": "折讓單",
+      "financeEmpty": "尚無折讓單。",
+      "financeTotals": "依幣別統計的折讓單",
+      "financeRecent": "最近的折讓單",
+      "currency": "幣別",
+      "count": "數量",
+      "issuedTotal": "已開立",
+      "applied": "已使用",
+      "outstanding": "未使用",
+      "issuedOn": "開立日期",
+      "buyer": "買家",
+      "amountCol": "金額"
+    },
+    "macros": {
+      "title": "客服巨集",
+      "description": "儲存的回覆及其搭配的操作,在訂單頁一步執行。合併欄位會自動填入訂單資訊。",
+      "newTitle": "新增巨集",
+      "listTitle": "你的巨集",
+      "noneTitle": "尚無巨集",
+      "noneDescription": "在上方建立一個:例如「重新寄送票券」,會寄信給買家、新增備註並重新寄送票券。",
+      "manage": "建立巨集",
+      "runTitle": "執行巨集",
+      "choose": "巨集",
+      "preview": "此巨集的作用",
+      "does": "操作:{actions}",
+      "action": {
+        "email_buyer": "寄信給買家",
+        "add_note": "新增團隊備註",
+        "resend_tickets": "重新寄送票券",
+        "transfer_ticket": "轉讓票券"
+      },
+      "transferLegend": "轉讓",
+      "ticket": "票券",
+      "toName": "新持票人姓名",
+      "toEmail": "新持票人電子郵件",
+      "ran": "已執行巨集「{name}」。",
+      "link": "領取連結(只顯示一次)",
+      "transferRequired": "請選擇票券和接收人。",
+      "run": "執行巨集",
+      "name": "名稱",
+      "subject": "郵件主旨",
+      "body": "回覆",
+      "fieldsHint": "合併欄位:",
+      "actionsLegend": "操作",
+      "saved": "已儲存巨集。",
+      "nameInvalid": "巨集名稱需為 2 到 80 個字元。",
+      "actionsInvalid": "請至少選擇一項操作。",
+      "subjectInvalid": "請填寫主旨。",
+      "bodyInvalid": "請填寫回覆。",
+      "update": "儲存變更",
+      "create": "建立巨集",
+      "archive": "封存 {name}",
+      "archived": "已封存巨集。"
+    },
+    "holder": {
+      "title": "轉讓這張票券",
+      "pending": "等待 {name} 領取。",
+      "cancel": "取消轉讓",
+      "cancelled": "已取消轉讓。",
+      "until": "轉讓截止於 {date}",
+      "fee": "轉讓費 {fee}",
+      "refused": {
+        "not_allowed": "這張票券不能轉讓。",
+        "deadline_passed": "這張票券的轉讓已關閉。",
+        "event_ended": "活動已結束。",
+        "ticket_void": "這張票券已失效。"
+      },
+      "toName": "對方姓名",
+      "toEmail": "對方電子郵件",
+      "acceptFee": "我同意支付 {fee} 的轉讓費。",
+      "sent": "已送出。已寄送領取票券的連結給 {name}。",
+      "toNameInvalid": "請輸入對方姓名。",
+      "toEmailInvalid": "請輸入有效的電子郵件地址。",
+      "submit": "送出轉讓"
+    },
+    "rules": {
+      "title": "轉讓規則",
+      "description": "設定各票種的持票人能否自行轉讓、活動開始前多久截止,以及收取多少費用。你的團隊隨時可以從訂單轉讓。",
+      "column": "轉讓",
+      "summaryAllowed": "允許",
+      "summaryCutoff": "提前 {hours} 小時截止",
+      "summaryFee": "費用 {fee}",
+      "summaryOff": "不允許",
+      "formLabel": "{name} 的轉讓規則",
+      "allowed": "允許持票人轉讓",
+      "cutoff": "截止(提前小時數)",
+      "cutoffHint": "留空:開始時截止。",
+      "fee": "費用({currency})",
+      "feeHint": "留空:免費。",
+      "save": "儲存規則",
+      "saved": "已儲存規則。",
+      "cutoffInvalid": "請輸入整數小時(0–8760)。",
+      "feeInvalid": "請輸入金額或留空。"
+    },
+    "disputes": {
+      "title": "爭議",
+      "description": "你的訂單上的退單及其證據截止時間。從訂單整理證據,並在截止前提交。",
+      "summary": "{open, plural, =0 {沒有未結爭議} other {# 件未結爭議}} · {soon, plural, =0 {3 天內無到期} other {# 件 3 天內到期}}",
+      "tabsLabel": "爭議狀態",
+      "tabs": {
+        "open": "未結({count})",
+        "closed": "已結({count})"
+      },
+      "empty": {
+        "open": "沒有未結爭議。",
+        "closed": "沒有已結爭議。"
+      },
+      "caption": {
+        "open": "未結爭議,截止時間最近的在前",
+        "closed": "已結爭議,最新的在前"
+      },
+      "buyer": "買家",
+      "amount": "金額",
+      "reason": "原因",
+      "status": "狀態",
+      "deadline": "證據截止",
+      "action": "操作",
+      "respond": "整理並提交證據",
+      "submitted": "證據已提交",
+      "noDeadline": "無截止時間",
+      "overdue": "已過截止時間",
+      "hoursLeft": "{hours, plural, =0 {剩不到 1 小時} other {剩 # 小時}}",
+      "daysLeft": "{days, plural, other {剩 # 天}}"
+    },
+    "claim": {
+      "intro": "{from} 正在將這張票券轉讓給 {to}。請用收到票券的電子郵件地址領取:你會取得自己的 QR 碼,原本的 QR 碼隨即失效。",
+      "emailHint": "此轉讓寄送到的電子郵件地址。",
+      "emailMismatch": "請使用收到這張票券的電子郵件地址。"
+    },
+    "buyer": {
+      "title": "折讓單",
+      "storeCredit": "商店餘額剩餘:{balance}。下次訂購結帳時輸入此代碼:",
+      "refunded": "此金額已退還給你。"
+    },
+    "pdf": {
+      "title": "折讓單 {label}",
+      "number": "折讓單編號",
+      "issued": "開立日期",
+      "billedTo": "客戶",
+      "event": "活動",
+      "order": "訂單",
+      "orderTotal": "訂單總額",
+      "kind": "範圍",
+      "settlement": "結算方式",
+      "balance": "剩餘餘額",
+      "reason": "原因",
+      "amount": "折讓金額",
+      "storeCreditNote": "客戶可憑寄送給其的商店餘額代碼,在同一主辦單位的下一筆訂單使用此餘額。",
+      "refundedNote": "此金額已退還給客戶。",
+      "footer": "由 {seller} 透過 Yayatoh 開立。"
     }
   }
 }
