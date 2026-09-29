@@ -71,6 +71,23 @@ async function activeRegistration(): Promise<ServiceWorkerRegistration> {
   return reg;
 }
 
+/**
+ * This site's notification permission, from the Permissions API when the browser has it. The static
+ * `Notification.permission` can disagree with the real grant: browsers without a notification
+ * platform (for example Chromium's headless shell) report `denied` while the permission is granted
+ * and push subscriptions work, which would hide the opt-in behind a false "blocked".
+ */
+async function notificationPermission(): Promise<NotificationPermission> {
+  try {
+    const { state } = await navigator.permissions.query({ name: 'notifications' });
+    if (state === 'granted' || state === 'denied') return state;
+    if (state === 'prompt') return 'default';
+  } catch {
+    // No Permissions API (or no `notifications` name): fall back to the static value.
+  }
+  return Notification.permission;
+}
+
 function supported(): boolean {
   return (
     typeof window !== 'undefined' &&
@@ -118,12 +135,13 @@ export function WebPushControl({
   const check = useCallback(async () => {
     if (!supported()) return setStatus('unsupported');
     if (!publicKey) return setStatus('unavailable');
-    if (Notification.permission === 'denied') return setStatus('blocked');
+    const permission = await notificationPermission();
+    if (permission === 'denied') return setStatus('blocked');
     const reg = await navigator.serviceWorker.getRegistration(SCOPE);
     const sub = await reg?.pushManager.getSubscription();
     const ref = sub ? await endpointRef(sub.endpoint) : null;
     setThisRef(ref);
-    setStatus(ref && refs.split(',').includes(ref) && Notification.permission === 'granted' ? 'on' : 'off');
+    setStatus(ref && refs.split(',').includes(ref) && permission === 'granted' ? 'on' : 'off');
   }, [publicKey, refs]);
 
   useEffect(() => {
