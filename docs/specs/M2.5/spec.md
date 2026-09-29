@@ -145,7 +145,8 @@ ever sent.
 | R2 (demo) | abc | 5.1 s | 21.1 min | — | pass |
 | R3 (large) | yay | 6.44 min (ELT 5.7 min) | 27.1 min (60 % of 45) | 1.1 s (7.0 min) | pass |
 | R3 (large) | abc | 2.01 min (ELT 1.8 min) | 22.9 min (51 %) | — | pass |
-| R4 (large, regenerated snapshot) | see below | | | | |
+| R4 (large, regenerated snapshot) | yay | 6.44 min | 27.1 min (60 %) | 1.1 s (7.0 min) | pass |
+| R4 (large, regenerated snapshot) | abc | 2.06 min | 23.0 min (51 %) | — | pass |
 
 ### Changes to earlier milestones
 - **T4 (M2.2b):** the inventory reset (`quantity_sold` = migrated active tickets) now covers every
