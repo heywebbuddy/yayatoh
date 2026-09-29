@@ -174,6 +174,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Gala guests.** Only the wedding profile has a Guests tab; the gala profile keeps its ticket-based guest list (M4.2b adds table claims). The page appears for any profile whose navigation lists `guests`, so adding it to gala is a one-line profile change.
   - **Limits** (placeholders): 1,000 parties and 3,000 guests per event, 20 guests per party, one plus-one per guest.
   - **Data requests and retention for guests.** A person's guest rows are not yet included in data-subject exports or erasure (M1.14c) and follow the event's lifetime; this lands with the retention default for social events (P4-3 e).
+- [ ] **M4.1c sub-events and invitations: defaults pending owner** (label: `db-migration`). Built with these defaults; say if any should change:
+  - **Each sub-event can have its own seating chart** (your "go with all your recommendations", 2026-09-29): a same-day ceremony in rows and a reception at tables need different drawings. A sub-event uses its own chart; else the chart of the event date it is linked to (M1.7g); else the event plan. For now the sub-event's chart is a drawing (a copy of the chart it used, or of a saved floor plan); guests are seated on it with M4.3a, and nothing is ever sold on it.
+  - **"Everyone invited"** on a sub-event invites the whole guest list, including parties added later (by hand or by the M4.1b import). Turning it off keeps everyone invited (each guest gets an invitation), and the host then takes people out.
+  - **Plus-ones follow their host** to every sub-event; a plus-one can't be invited on their own.
+  - **Uninviting clears the answer** (the guest's and their plus-one's) for that sub-event, recorded in the history; removing a sub-event with recorded answers asks for a confirmation.
+  - **Limit** (placeholder): 20 sub-events per event.
+  - **The history of a removed sub-event** keeps its actions but not its name (history rows hold field names and ids only, never values).
 - [ ] **Legal copy (M4.1, `legal-copy`):** the privacy notice for guests whose details a host enters (already listed in the Phase 4 plan §4).
 
 ## Security, privacy and ops readiness (M1.14)
