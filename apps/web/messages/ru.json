@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Поддержка Yayatoh действует от имени {member} до {until}",
         "org-status": "{status, select, suspended {Yayatoh приостановил эту организацию} reactivated {Эта организация снова в сети} other {Yayatoh закрыл эту организацию}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} other {Оповещение}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} other {Оповещение}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "Новости и предложения"
+      },
+      "alerts": {
+        "alert": "Оповещение",
+        "alert-text": "SMS-оповещение"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "Справочный центр",
     "marketingSite": "Маркетинговый сайт",
     "tablesSponsors": "Столы и спонсоры",
-    "commandCenter": "Командный центр"
+    "commandCenter": "Командный центр",
+    "alerts": "Оповещения"
   },
   "vocab": {
     "attendee": "Участник",
@@ -489,6 +498,11 @@
       "today": "Прошли сегодня",
       "any": "Прошли (в любой день)",
       "never": "Не прошли"
+    },
+    "distribution": "Передача",
+    "anyDistribution": "Любая передача",
+    "distributionFilter": {
+      "pending": "Ждут передачи"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "Оповещения появятся здесь, когда будут включены правила оповещений.",
         "none": "Открытых оповещений нет."
       }
+    }
+  },
+  "alerts": {
+    "title": "Оповещения",
+    "description": "Что требует внимания на ваших мероприятиях, и страница, где это исправить.",
+    "settingsLink": "Настройки оповещений",
+    "statusLabel": "Показать оповещения",
+    "active": "Активные",
+    "resolved": "Решённые",
+    "eventLabel": "Мероприятие",
+    "allEvents": "Все мероприятия",
+    "orgWide": "Вся организация",
+    "apply": "Показать",
+    "live": {
+      "live": "Обновления в реальном времени",
+      "connecting": "Подключение…",
+      "offline": "Обновления приостановлены"
+    },
+    "empty": {
+      "activeTitle": "Сейчас оповещений нет",
+      "activeDescription": "Когда на одном из мероприятий что-то потребует внимания, это появится здесь, и команда получит уведомление.",
+      "resolvedTitle": "Решённых оповещений пока нет",
+      "resolvedDescription": "Оповещения закрываются сами, когда проблема исправлена."
+    },
+    "severity": {
+      "info": "Инфо",
+      "warning": "Предупреждение",
+      "critical": "Критично"
+    },
+    "state": {
+      "open": "Открыто",
+      "acknowledged": "Принято",
+      "snoozed": "Отложено до {until}",
+      "resolved": "Решено {when}"
+    },
+    "reopened": "Повторилось",
+    "since": "С {when}",
+    "acknowledge": "Принять",
+    "acknowledgeLabel": "Принять «{title}»",
+    "snoozeLabel": "Отложить на",
+    "snooze": "Отложить",
+    "snoozeButtonLabel": "Отложить «{title}»",
+    "snoozeFor": {
+      "m60": "1 час",
+      "m240": "4 часа",
+      "m1440": "1 день"
+    },
+    "done": {
+      "acknowledged": "Оповещение принято. Оно останется на этой странице, пока проблема не будет исправлена.",
+      "snoozed": "Оповещение отложено до {until}."
+    },
+    "errors": {
+      "forbidden": "Вы не можете менять оповещения. Обратитесь к владельцу, администратору или менеджеру.",
+      "conflict": "Оповещение уже изменилось. Обновите страницу и попробуйте снова.",
+      "notFound": "Этого оповещения больше нет.",
+      "invalid": "Выберите, на сколько отложить."
+    },
+    "history": {
+      "title": "История",
+      "fired": "Сработало ({count})",
+      "updated": "Изменилось на {count}",
+      "acknowledged": "Принято участником команды",
+      "acknowledgedYou": "Принято вами",
+      "snoozed": "Отложено участником команды",
+      "snoozedYou": "Отложено вами",
+      "woke": "Откладывание закончилось",
+      "ack_expired": "Продолжается после принятия",
+      "resolved": "Решено",
+      "reopened": "Повторилось ({count})",
+      "notified": "Команда уведомлена"
+    },
+    "fix": {
+      "unseated": "Рассадить",
+      "undistributed": "Раздать билеты",
+      "paymentsFailed": "Проверить неудачные платежи",
+      "paymentsStuck": "Проверить ожидающие платежи",
+      "refundSurge": "Проверить возвраты",
+      "devicesOffline": "Проверить устройства",
+      "devicesLowBattery": "Проверить устройства",
+      "devicesBacklog": "Проверить устройства",
+      "capacityNear": "Открыть экран входа",
+      "capacityFull": "Открыть экран входа",
+      "sellOut": "Управлять билетами",
+      "salesPace": "Открыть анализ продаж",
+      "readiness": "Открыть руководство по настройке",
+      "domain": "Исправить домены",
+      "payoutsPastDue": "Обновить счёт выплат",
+      "deliverability": "Открыть состояние рассылок",
+      "automationFailed": "Открыть состояние рассылок"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}",
+      "undistributed": "{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}",
+      "paymentsFailed": "{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}",
+      "paymentsStuck": "{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}",
+      "refundSurge": "{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}",
+      "devicesOffline": "{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}",
+      "devicesLowBattery": "{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}",
+      "devicesBacklog": "{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}",
+      "capacityNear": "Площадка заполнена на {count} %",
+      "capacityFull": "Площадка заполнена полностью ({count} %)",
+      "sellOut": "Продано {count} % билетов",
+      "salesPace": "Продажи билетов идут на {count} % от целевого темпа",
+      "readiness": "{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}",
+      "domain": "{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}",
+      "payoutsPastDue": "{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}",
+      "deliverability": "Доставляемость писем требует внимания",
+      "automationFailed": "{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}"
+    },
+    "widget": {
+      "title": "Оповещения",
+      "viewAll": "Все оповещения",
+      "none": "Сейчас для этого мероприятия оповещений нет."
+    },
+    "settings": {
+      "title": "Настройки оповещений",
+      "description": "Кто узнаёт о каких оповещениях и куда приходят ваши SMS-оповещения.",
+      "back": "Назад к оповещениям",
+      "phone": {
+        "title": "Ваши SMS-оповещения",
+        "label": "Мобильный номер для SMS-оповещений",
+        "hint": "Международный формат, например +7 912 345-67-89. В тихие часы (21:00–08:00) SMS ждут до 8:00. Оставьте пустым, чтобы отключить SMS.",
+        "save": "Сохранить номер",
+        "saved": "Номер для оповещений сохранён.",
+        "cleared": "SMS-оповещения отключены.",
+        "invalid": "Используйте международный формат, например +7 912 345-67-89."
+      },
+      "routing": {
+        "title": "Кто о чём узнаёт",
+        "description": "Каждая роль узнаёт только об оповещениях, которые ей можно видеть. Все видят свои оповещения на странице оповещений.",
+        "readOnly": "Изменять это могут только владельцы и администраторы.",
+        "save": "Сохранить маршрутизацию",
+        "saved": "Маршрутизация сохранена.",
+        "cell": "{channel}: оповещения «{group}» для роли «{role}»",
+        "group": "Группа оповещений"
+      },
+      "targets": {
+        "title": "Цели продаж",
+        "description": "Задайте цель по билетам для мероприятия: если продажи идут на 70 % или меньше от нужного темпа, придёт оповещение.",
+        "label": "Цель по билетам для «{event}»",
+        "save": "Сохранить цель",
+        "saveFor": "Сохранить цель для «{event}»",
+        "saved": "Цель продаж сохранена.",
+        "cleared": "Цель продаж удалена.",
+        "invalid": "Введите целое число билетов или оставьте поле пустым.",
+        "none": "Предстоящих мероприятий нет."
+      }
+    },
+    "groups": {
+      "attendees": "Участники и рассадка",
+      "payments": "Платежи и выплаты",
+      "door": "Вход и устройства",
+      "sales": "Продажи",
+      "setup": "Настройка и домены",
+      "messaging": "Рассылки"
+    },
+    "channels": {
+      "in_app": "В приложении",
+      "email": "Эл. почта",
+      "sms": "SMS",
+      "push": "Push"
     }
   }
 }

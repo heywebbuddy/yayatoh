@@ -15,6 +15,8 @@ export {
   attendeeListQuery,
   CHECKED_IN_FILTERS,
   type CheckedInFilter,
+  DISTRIBUTION_FILTERS,
+  type DistributionFilter,
   matchingAttendeeIdsQuery,
   resolveAttendeeListIdsTx,
 } from './attendee-list.ts';

@@ -100,9 +100,15 @@ export async function dispatchDueTx(
     memberIds.length && deps.userEmails ? await deps.userEmails(memberIds) : new Map<string, string>();
   // Member notifications (no address of their own) render in the member's language, looked up at
   // send time so a change applies to messages already queued.
+  // Every member row (email, push, and texts to members' own numbers, M3.2b) is looked up.
+  const localeIds = [
+    ...new Set(
+      due.filter((r) => !r.recipientEmail && r.recipientUserId).map((r) => r.recipientUserId as string),
+    ),
+  ];
   const locales =
-    memberIds.length && deps.userLocales
-      ? await deps.userLocales(memberIds)
+    localeIds.length && deps.userLocales
+      ? await deps.userLocales(localeIds)
       : new Map<string, string | null>();
 
   // The platform-wide erased-address list (M1.14e), looked up once for this batch.

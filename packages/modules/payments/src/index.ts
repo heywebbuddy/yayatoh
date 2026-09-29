@@ -10,6 +10,7 @@ export {
   payoutAccountIdQuery,
   payoutAccountQuery,
   payoutDestinationMailer,
+  payoutRequirementsPastDueTx,
   recordPayoutAccountCommand,
   setPayoutHoldCommand,
 } from './accounts.ts';

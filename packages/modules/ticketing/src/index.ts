@@ -107,5 +107,7 @@ export {
   type TicketTypeStats,
   ticketsDistributedTx,
   ticketTypeStatsTx,
+  undistributedTicketIdsSql,
+  undistributedTicketsTx,
 } from './stats.ts';
 export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';

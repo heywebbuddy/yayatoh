@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "O suporte da Yayatoh está atuando como {member} até {until}",
         "org-status": "{status, select, suspended {A Yayatoh suspendeu esta organização} reactivated {Esta organização está online novamente} other {A Yayatoh encerrou esta organização}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}} undistributed {{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}} paymentsFailed {{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}} paymentsStuck {{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}} refundSurge {{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}} devicesOffline {{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}} devicesLowBattery {{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}} devicesBacklog {{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}} capacityNear {O local está {count}% cheio} capacityFull {O local está lotado ({count}%)} sellOut {{count}% dos ingressos foram vendidos} salesPace {As vendas de ingressos estão em {count}% do ritmo da meta} readiness {{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}} domain {{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}} payoutsPastDue {{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}} deliverability {A entregabilidade de e-mails precisa de atenção} automationFailed {{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}} other {Alerta}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}} undistributed {{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}} paymentsFailed {{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}} paymentsStuck {{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}} refundSurge {{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}} devicesOffline {{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}} devicesLowBattery {{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}} devicesBacklog {{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}} capacityNear {O local está {count}% cheio} capacityFull {O local está lotado ({count}%)} sellOut {{count}% dos ingressos foram vendidos} salesPace {As vendas de ingressos estão em {count}% do ritmo da meta} readiness {{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}} domain {{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}} payoutsPastDue {{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}} deliverability {A entregabilidade de e-mails precisa de atenção} automationFailed {{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}} other {Alerta}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "Novidades e ofertas"
+      },
+      "alerts": {
+        "alert": "Alerta",
+        "alert-text": "SMS de alerta"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "Central de ajuda",
     "marketingSite": "Site de marketing",
     "tablesSponsors": "Mesas e patrocinadores",
-    "commandCenter": "Centro de comando"
+    "commandCenter": "Centro de comando",
+    "alerts": "Alertas"
   },
   "vocab": {
     "attendee": "Participante",
@@ -489,6 +498,11 @@
       "today": "Fizeram check-in hoje",
       "any": "Fizeram check-in (qualquer dia)",
       "never": "Sem check-in"
+    },
+    "distribution": "Distribuição",
+    "anyDistribution": "Qualquer distribuição",
+    "distributionFilter": {
+      "pending": "Aguardando repasse"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "Os alertas aparecerão aqui quando as regras de alerta forem ativadas.",
         "none": "Nenhum alerta aberto."
       }
+    }
+  },
+  "alerts": {
+    "title": "Alertas",
+    "description": "O que precisa de atenção nos seus eventos e a página que resolve cada coisa.",
+    "settingsLink": "Configurações de alertas",
+    "statusLabel": "Mostrar alertas",
+    "active": "Ativos",
+    "resolved": "Resolvidos",
+    "eventLabel": "Evento",
+    "allEvents": "Todos os eventos",
+    "orgWide": "Toda a organização",
+    "apply": "Mostrar",
+    "live": {
+      "live": "Atualizações ao vivo ligadas",
+      "connecting": "Conectando…",
+      "offline": "Atualizações pausadas"
+    },
+    "empty": {
+      "activeTitle": "Nenhum alerta agora",
+      "activeDescription": "Quando algo precisar de atenção em um dos seus eventos, aparece aqui e sua equipe é avisada.",
+      "resolvedTitle": "Ainda não há alertas resolvidos",
+      "resolvedDescription": "Os alertas se resolvem sozinhos quando o problema é corrigido."
+    },
+    "severity": {
+      "info": "Info",
+      "warning": "Aviso",
+      "critical": "Crítico"
+    },
+    "state": {
+      "open": "Aberto",
+      "acknowledged": "Reconhecido",
+      "snoozed": "Adiado até {until}",
+      "resolved": "Resolvido {when}"
+    },
+    "reopened": "Voltou",
+    "since": "Desde {when}",
+    "acknowledge": "Reconhecer",
+    "acknowledgeLabel": "Reconhecer “{title}”",
+    "snoozeLabel": "Adiar por",
+    "snooze": "Adiar",
+    "snoozeButtonLabel": "Adiar “{title}”",
+    "snoozeFor": {
+      "m60": "1 hora",
+      "m240": "4 horas",
+      "m1440": "1 dia"
+    },
+    "done": {
+      "acknowledged": "Alerta reconhecido. Ele fica nesta página até o problema ser corrigido.",
+      "snoozed": "Alerta adiado até {until}."
+    },
+    "errors": {
+      "forbidden": "Você não pode alterar alertas. Peça a um proprietário, administrador ou gerente.",
+      "conflict": "O alerta mudou nesse meio-tempo. Recarregue e tente novamente.",
+      "notFound": "Esse alerta não existe mais.",
+      "invalid": "Escolha por quanto tempo adiar."
+    },
+    "history": {
+      "title": "Histórico",
+      "fired": "Disparado ({count})",
+      "updated": "Mudou para {count}",
+      "acknowledged": "Reconhecido por alguém da equipe",
+      "acknowledgedYou": "Reconhecido por você",
+      "snoozed": "Adiado por alguém da equipe",
+      "snoozedYou": "Adiado por você",
+      "woke": "Adiamento terminou",
+      "ack_expired": "Continua acontecendo após o reconhecimento",
+      "resolved": "Resolvido",
+      "reopened": "Voltou ({count})",
+      "notified": "Equipe avisada"
+    },
+    "fix": {
+      "unseated": "Atribuir lugares",
+      "undistributed": "Distribuir ingressos",
+      "paymentsFailed": "Ver pagamentos com falha",
+      "paymentsStuck": "Ver pagamentos pendentes",
+      "refundSurge": "Ver reembolsos",
+      "devicesOffline": "Verificar os dispositivos",
+      "devicesLowBattery": "Verificar os dispositivos",
+      "devicesBacklog": "Verificar os dispositivos",
+      "capacityNear": "Abrir a tela da entrada",
+      "capacityFull": "Abrir a tela da entrada",
+      "sellOut": "Gerenciar ingressos",
+      "salesPace": "Abrir a análise de vendas",
+      "readiness": "Abrir o guia de configuração",
+      "domain": "Corrigir domínios",
+      "payoutsPastDue": "Atualizar a conta de repasses",
+      "deliverability": "Abrir a saúde das mensagens",
+      "automationFailed": "Abrir a saúde das mensagens"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}",
+      "undistributed": "{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}",
+      "paymentsFailed": "{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}",
+      "paymentsStuck": "{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}",
+      "refundSurge": "{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}",
+      "devicesOffline": "{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}",
+      "devicesLowBattery": "{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}",
+      "devicesBacklog": "{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}",
+      "capacityNear": "O local está {count}% cheio",
+      "capacityFull": "O local está lotado ({count}%)",
+      "sellOut": "{count}% dos ingressos foram vendidos",
+      "salesPace": "As vendas de ingressos estão em {count}% do ritmo da meta",
+      "readiness": "{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}",
+      "domain": "{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}",
+      "payoutsPastDue": "{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}",
+      "deliverability": "A entregabilidade de e-mails precisa de atenção",
+      "automationFailed": "{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}"
+    },
+    "widget": {
+      "title": "Alertas",
+      "viewAll": "Ver todos os alertas",
+      "none": "Nenhum alerta para este evento agora."
+    },
+    "settings": {
+      "title": "Configurações de alertas",
+      "description": "Quem fica sabendo de quais alertas e para onde vão seus SMS de alerta.",
+      "back": "Voltar aos alertas",
+      "phone": {
+        "title": "Seus SMS de alerta",
+        "label": "Número de celular para SMS de alerta",
+        "hint": "Formato internacional, como +55 11 91234 5678. No horário de silêncio (21:00–08:00), os SMS esperam até as 8:00. Deixe vazio para desligar os SMS.",
+        "save": "Salvar número",
+        "saved": "Seu número de alertas foi salvo.",
+        "cleared": "Os SMS de alerta estão desligados.",
+        "invalid": "Use o formato internacional, como +55 11 91234 5678."
+      },
+      "routing": {
+        "title": "Quem fica sabendo do quê",
+        "description": "Cada função só fica sabendo dos alertas que pode ver. Todos veem seus alertas na página de alertas.",
+        "readOnly": "Só proprietários e administradores podem alterar isto.",
+        "save": "Salvar distribuição",
+        "saved": "Distribuição salva.",
+        "cell": "{channel}: alertas de {group} para {role}",
+        "group": "Grupo de alertas"
+      },
+      "targets": {
+        "title": "Metas de vendas",
+        "description": "Defina uma meta de ingressos para um evento: quando as vendas estiverem em 70% ou menos do ritmo necessário, você recebe um alerta.",
+        "label": "Meta de ingressos para {event}",
+        "save": "Salvar meta",
+        "saveFor": "Salvar a meta de {event}",
+        "saved": "Meta de vendas salva.",
+        "cleared": "Meta de vendas removida.",
+        "invalid": "Informe um número inteiro de ingressos ou deixe vazio.",
+        "none": "Nenhum evento futuro."
+      }
+    },
+    "groups": {
+      "attendees": "Participantes e lugares",
+      "payments": "Pagamentos e repasses",
+      "door": "Entrada e dispositivos",
+      "sales": "Vendas",
+      "setup": "Configuração e domínios",
+      "messaging": "Mensagens"
+    },
+    "channels": {
+      "in_app": "No app",
+      "email": "E-mail",
+      "sms": "SMS",
+      "push": "Push"
     }
   }
 }

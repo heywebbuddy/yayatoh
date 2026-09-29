@@ -257,7 +257,7 @@ export const ALERTS_CHANNEL = defineRealtimeChannel({
     alert: z.object({
       alertId: z.uuid(),
       eventId: z.uuid().nullable(),
-      state: z.enum(['open', 'acknowledged', 'resolved']),
+      state: z.enum(['open', 'acknowledged', 'snoozed', 'resolved']),
       severity: z.enum(['info', 'warning', 'critical']),
       at: isoTime,
     }),

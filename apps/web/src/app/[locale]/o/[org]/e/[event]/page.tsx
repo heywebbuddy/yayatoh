@@ -2,10 +2,12 @@ import { type EventTransition, eventLifecycle } from '@yayatoh/events';
 import { Button, buttonClass, Card, PageHeader, ProgressRing } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AlertsList } from '@/components/alerts-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { greetingKey } from '@/lib/event-status.ts';
 import { type FormatCtx, formatEventDateRange } from '@/lib/format.ts';
 import { readinessPercent } from '@/lib/readiness.ts';
+import { eventAlertItems } from '@/server/alerts.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { loadReadiness } from '@/server/readiness.ts';
@@ -53,6 +55,8 @@ export default async function EventDashboard({
     ['published', 'postponed', 'cancelled', 'completed'].includes(ev.status) && ev.visibility !== 'private';
   const place = [ev.venueName, ev.city].filter(Boolean).join(', ');
   const base = `/o/${org}/e/${event}`;
+  // M3.2b: this event's active alerts (the Command Center's Alerts widget renders the same list).
+  const alertItems = demo ? null : await eventAlertItems(data, org, locale, ev.id, data.org.timezone);
 
   return (
     <>
@@ -95,6 +99,15 @@ export default async function EventDashboard({
         <DemoSections demo={demo} base={base} locale={locale} f={f} />
       ) : data.modules.has('reports') && can('orders:read') && opens('ticketsOrders') ? (
         <EventKpis eventId={ev.id} base={base} locale={locale} ctx={data.ctx} finance={can('finance:read')} />
+      ) : null}
+
+      {alertItems && alertItems.length > 0 ? (
+        <AlertsList
+          title={t('alerts.widget.title')}
+          items={alertItems}
+          emptyText={t('alerts.widget.none')}
+          viewAll={{ href: `/o/${org}/alerts?event=${ev.id}`, label: t('alerts.widget.viewAll') }}
+        />
       ) : null}
 
       {rules.length === 0 ? null : (

@@ -1,3 +1,4 @@
+import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
@@ -90,6 +91,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     analyticsForwarder(postgresAnalyticsSink),
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
+    // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
+    alertEvaluator({ notifier }),
   ];
 }
 

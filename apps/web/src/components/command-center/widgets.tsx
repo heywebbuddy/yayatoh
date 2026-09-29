@@ -2,10 +2,12 @@
 
 import type { WidgetKey } from '@yayatoh/command-center/client';
 import { formatMoney, money } from '@yayatoh/kernel';
-import { ProgressRing } from '@yayatoh/ui';
+import { countWords } from '@yayatoh/notifications/numbers';
+import { ProgressRing, StatusDot } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
+import { SEVERITY_DOT } from '../alerts-list.tsx';
 
 /** Widget bodies (M3.2a). Each renders one loader's allowlisted DTO; nothing else reaches them. */
 interface Ctx {
@@ -29,7 +31,15 @@ type Devices = { online: number; enrolled: number; lowBattery: number };
 type Timeline = { timeZone: string; items: { kind: string; at: string; title: string | null }[] };
 type Alerts = {
   engine: 'pending' | 'ready';
-  alerts: { id: string; severity: string; message: string; href: string | null; at: string }[];
+  alerts: {
+    id: string;
+    rule: string;
+    severity: 'info' | 'warning' | 'critical';
+    state: string;
+    count: number;
+    href: string | null;
+    at: string;
+  }[];
 };
 
 const num = (n: number, locale: string) => new Intl.NumberFormat(locale).format(n);
@@ -193,23 +203,30 @@ function TimelineBody({ d, c }: { d: Timeline; c: Ctx }) {
   );
 }
 
-function AlertsBody({ d }: { d: Alerts }) {
+function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.alerts');
+  const ta = useTranslations('alerts');
   if (d.engine === 'pending') return <p className="text-body text-zinc-600">{t('pending')}</p>;
   if (d.alerts.length === 0) return <p className="text-body text-zinc-600">{t('none')}</p>;
+  // Alert fix paths are org-relative (M3.2b); the board's base is the event's.
+  const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
   return (
     <ul className="flex list-none flex-col gap-1.5 p-0">
-      {d.alerts.map((a) => (
-        <li key={a.id} className="text-body">
-          {a.href ? (
-            <Link href={a.href} className="underline underline-offset-2">
-              {a.message}
-            </Link>
-          ) : (
-            a.message
-          )}
-        </li>
-      ))}
+      {d.alerts.map((a) => {
+        const title = ta(`rules.${a.rule}`, { count: a.count, countWords: countWords(a.count, c.locale) });
+        return (
+          <li key={a.id} className="flex flex-wrap items-baseline gap-x-2 text-body">
+            <StatusDot status={SEVERITY_DOT[a.severity]} label={ta(`severity.${a.severity}`)} />
+            {a.href ? (
+              <Link href={`${orgBase}${a.href}`} className="underline underline-offset-2">
+                {title}
+              </Link>
+            ) : (
+              title
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -231,6 +248,6 @@ export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unk
     case 'timeline':
       return <TimelineBody d={data as Timeline} c={ctx} />;
     case 'alerts':
-      return <AlertsBody d={data as Alerts} />;
+      return <AlertsBody d={data as Alerts} c={ctx} />;
   }
 }

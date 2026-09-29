@@ -1,9 +1,14 @@
 import 'server-only';
+import { listAlertsQuery, RULES } from '@yayatoh/alerts';
 import {
+  AlertsWidgetDto,
   COMMAND_CENTER_WIDGETS,
+  defineWidget,
   isWidgetKey,
+  WIDGET_META,
   type WidgetKey,
   type WidgetRegistry,
+  withWidget,
 } from '@yayatoh/command-center';
 import { eventRolesOf, getEventBySlugQuery } from '@yayatoh/events';
 import { type Ctx, createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
@@ -34,7 +39,42 @@ import { getSession } from './session.ts';
  * engine replaces the `alerts` slot with `withWidget`), the dev clock, and the realtime channels a
  * member may follow.
  */
-export const WIDGETS: WidgetRegistry = COMMAND_CENTER_WIDGETS;
+export const WIDGETS: WidgetRegistry = withWidget(COMMAND_CENTER_WIDGETS, alertsEngineWidget());
+
+/**
+ * The Alerts widget filled by the M3.2b alert engine (batch 3d merge): the event's active alerts
+ * the member's org role may see (the engine's own rule), and for the door layout only the door's
+ * alerts (devices, capacity): never payments or sales, so the door sees no revenue here either.
+ */
+function alertsEngineWidget() {
+  return defineWidget(WIDGET_META.alerts, AlertsWidgetDto, async ({ tx, ctx, scope }) => {
+    const list = await listAlertsQuery.handler({
+      input: { status: 'active', eventId: scope.event.id, limit: 20 },
+      ctx,
+      tx,
+    });
+    return {
+      engine: 'ready' as const,
+      alerts: list
+        .filter((a) => scope.role !== 'door' || RULES[a.rule].category === 'door')
+        .flatMap((a) =>
+          a.state === 'resolved'
+            ? []
+            : [
+                {
+                  id: a.id,
+                  rule: a.rule,
+                  severity: a.severity,
+                  state: a.state,
+                  count: a.count,
+                  href: a.fixPath,
+                  at: a.openedAt.toISOString(),
+                },
+              ],
+        ),
+    };
+  });
+}
 
 /**
  * Dev-only clock (e2e "mode changes with a mocked clock"): the `yy_dev_clock_offset` cookie moves

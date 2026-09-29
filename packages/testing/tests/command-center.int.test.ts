@@ -217,9 +217,10 @@ describe('widget loaders refuse what the registry does not allow', () => {
     await expect(load(alertsSlotWidget, a.event.id)).resolves.toEqual({ engine: 'pending', alerts: [] });
     const alert = {
       id: uuidv7(),
+      rule: 'unseated',
       severity: 'warning' as const,
       state: 'open' as const,
-      message: '37 attendees do not have seats',
+      count: 37,
       href: null,
       at: new Date().toISOString(),
     };

@@ -35,6 +35,16 @@ describe('org roles', () => {
     expect(ORG_ROLES.filter((r) => roleCan(r, 'members:manage')).sort()).toEqual(['admin', 'owner']);
   });
 
+  it('viewers and scanners cannot acknowledge alerts; the teams that act on them can (M3.2b)', () => {
+    expect(ORG_ROLES.filter((r) => roleCan(r, 'alerts:manage')).sort()).toEqual([
+      'admin',
+      'box_office',
+      'finance',
+      'manager',
+      'owner',
+    ]);
+  });
+
   it('owners hold every permission', () => {
     for (const p of PERMISSIONS) expect(roleCan('owner', p)).toBe(true);
   });

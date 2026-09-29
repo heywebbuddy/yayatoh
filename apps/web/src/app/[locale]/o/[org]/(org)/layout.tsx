@@ -3,12 +3,15 @@ import { roleCan } from '@yayatoh/tenancy';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
+import { openAlertCount } from '@/server/alerts.ts';
 import { isPlatformContentOrg } from '@/server/cms.ts';
 import { loadConsoleBase } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
   { key: 'commandCenter', path: 'command-center', group: 'overview', module: 'core', icon: 'gauge' },
+  // M3.2b: the alert engine's alerts, with the open count as the badge.
+  { key: 'alerts', path: 'alerts', group: 'overview', module: 'core', icon: 'bell' },
   { key: 'messages', path: 'messages', group: 'overview', module: 'messaging', icon: 'message' },
   { key: 'audiences', path: 'audiences', group: 'overview', module: 'marketing', icon: 'megaphone' },
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
@@ -37,6 +40,7 @@ const CONTENT_ORG_ONLY = new Set(['helpCenter', 'marketingSite']);
 /** Items only some roles may open (the pages refuse everyone else too). */
 const NEEDS: Readonly<Record<string, string>> = {
   commandCenter: 'events:read',
+  alerts: 'events:read',
   messages: 'messages:read',
   messagingHealth: 'messages:read',
   audiences: 'messages:read',
@@ -58,6 +62,7 @@ export default async function OrgLayout({
   // The org home serves collaborators too (their events); every other org page refuses them.
   const data = await loadConsoleBase(org);
   const t = await getTranslations('shell');
+  const openAlerts = await openAlertCount(data);
   return (
     <ConsoleShell
       data={data}
@@ -72,6 +77,7 @@ export default async function OrgLayout({
             (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)) &&
             (!CONTENT_ORG_ONLY.has(i.key) || isPlatformContentOrg(data.org.slug)),
         ),
+        badges: openAlerts > 0 ? { alerts: String(openAlerts) } : {},
       }}
     >
       {children}

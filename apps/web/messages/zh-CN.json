@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Yayatoh 支持人员正以 {member} 的身份操作，直到 {until}",
         "org-status": "{status, select, suspended {Yayatoh 已暂停此组织} reactivated {此组织已恢复上线} other {Yayatoh 已关闭此组织}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "新闻和优惠"
+      },
+      "alerts": {
+        "alert": "提醒",
+        "alert-text": "提醒短信"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "帮助中心",
     "marketingSite": "营销网站",
     "tablesSponsors": "桌位与赞助商",
-    "commandCenter": "指挥中心"
+    "commandCenter": "指挥中心",
+    "alerts": "提醒"
   },
   "vocab": {
     "attendee": "参会者",
@@ -489,6 +498,11 @@
       "today": "今天已签到",
       "any": "已签到（任意一天）",
       "never": "未签到"
+    },
+    "distribution": "分发",
+    "anyDistribution": "任何分发状态",
+    "distributionFilter": {
+      "pending": "等待转交"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "启用提醒规则后，提醒会显示在这里。",
         "none": "没有未处理的提醒。"
       }
+    }
+  },
+  "alerts": {
+    "title": "提醒",
+    "description": "你的活动中需要关注的事项，以及处理它们的页面。",
+    "settingsLink": "提醒设置",
+    "statusLabel": "显示提醒",
+    "active": "进行中",
+    "resolved": "已解决",
+    "eventLabel": "活动",
+    "allEvents": "所有活动",
+    "orgWide": "整个组织",
+    "apply": "显示",
+    "live": {
+      "live": "实时更新已开启",
+      "connecting": "正在连接…",
+      "offline": "实时更新已暂停"
+    },
+    "empty": {
+      "activeTitle": "目前没有提醒",
+      "activeDescription": "当你的某个活动需要关注时，会显示在这里并通知你的团队。",
+      "resolvedTitle": "还没有已解决的提醒",
+      "resolvedDescription": "问题解决后，提醒会自动变为已解决。"
+    },
+    "severity": {
+      "info": "信息",
+      "warning": "警告",
+      "critical": "严重"
+    },
+    "state": {
+      "open": "未处理",
+      "acknowledged": "已确认",
+      "snoozed": "暂缓至 {until}",
+      "resolved": "{when}已解决"
+    },
+    "reopened": "再次出现",
+    "since": "自 {when}",
+    "acknowledge": "确认",
+    "acknowledgeLabel": "确认“{title}”",
+    "snoozeLabel": "暂缓时长",
+    "snooze": "暂缓",
+    "snoozeButtonLabel": "暂缓“{title}”",
+    "snoozeFor": {
+      "m60": "1 小时",
+      "m240": "4 小时",
+      "m1440": "1 天"
+    },
+    "done": {
+      "acknowledged": "已确认提醒。问题解决前它会一直留在此页面。",
+      "snoozed": "提醒已暂缓至 {until}。"
+    },
+    "errors": {
+      "forbidden": "你无法更改提醒。请联系所有者、管理员或经理。",
+      "conflict": "提醒已在此期间发生变化。请重新加载后再试。",
+      "notFound": "该提醒已不存在。",
+      "invalid": "请选择暂缓时长。"
+    },
+    "history": {
+      "title": "历史",
+      "fired": "触发（{count}）",
+      "updated": "变为 {count}",
+      "acknowledged": "团队成员已确认",
+      "acknowledgedYou": "你已确认",
+      "snoozed": "团队成员已暂缓",
+      "snoozedYou": "你已暂缓",
+      "woke": "暂缓结束",
+      "ack_expired": "确认后仍在发生",
+      "resolved": "已解决",
+      "reopened": "再次出现（{count}）",
+      "notified": "已通知团队"
+    },
+    "fix": {
+      "unseated": "分配座位",
+      "undistributed": "分发门票",
+      "paymentsFailed": "查看失败的付款",
+      "paymentsStuck": "查看待处理的付款",
+      "refundSurge": "查看退款",
+      "devicesOffline": "检查设备",
+      "devicesLowBattery": "检查设备",
+      "devicesBacklog": "检查设备",
+      "capacityNear": "打开入场屏幕",
+      "capacityFull": "打开入场屏幕",
+      "sellOut": "管理门票",
+      "salesPace": "打开销售分析",
+      "readiness": "打开设置指南",
+      "domain": "修复域名",
+      "payoutsPastDue": "更新收款账户",
+      "deliverability": "打开消息健康状况",
+      "automationFailed": "打开消息健康状况"
+    },
+    "rules": {
+      "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
+      "undistributed": "{count, plural, other {{countWords} 张已购门票尚未分发}}",
+      "paymentsFailed": "{count, plural, other {{countWords} 笔付款失败}}",
+      "paymentsStuck": "{count, plural, other {{countWords} 笔付款卡住了}}",
+      "refundSurge": "{count, plural, other {过去一小时内有 {countWords} 笔退款}}",
+      "devicesOffline": "{count, plural, other {{countWords} 台签到设备离线}}",
+      "devicesLowBattery": "{count, plural, other {{countWords} 台签到设备电量不足}}",
+      "devicesBacklog": "{count, plural, other {{countWords} 台签到设备有待同步的扫描}}",
+      "capacityNear": "场地已满 {count}%",
+      "capacityFull": "场地已满员（{count}%）",
+      "sellOut": "已售出 {count}% 的门票",
+      "salesPace": "门票销售达到目标进度的 {count}%",
+      "readiness": "{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}",
+      "domain": "{count, plural, other {{countWords} 个自定义域名有问题}}",
+      "payoutsPastDue": "{count, plural, other {收款账户有 {countWords} 项要求已逾期}}",
+      "deliverability": "电子邮件送达率需要关注",
+      "automationFailed": "{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}"
+    },
+    "widget": {
+      "title": "提醒",
+      "viewAll": "查看所有提醒",
+      "none": "此活动目前没有提醒。"
+    },
+    "settings": {
+      "title": "提醒设置",
+      "description": "谁会收到哪些提醒，以及你自己的提醒短信发送到哪里。",
+      "back": "返回提醒",
+      "phone": {
+        "title": "你的提醒短信",
+        "label": "接收提醒短信的手机号",
+        "hint": "国际格式，例如 +86 138 0013 8000。免打扰时段（21:00–08:00）的短信会等到 8:00 再发送。留空即关闭短信。",
+        "save": "保存号码",
+        "saved": "提醒号码已保存。",
+        "cleared": "提醒短信已关闭。",
+        "invalid": "请使用国际格式，例如 +86 138 0013 8000。"
+      },
+      "routing": {
+        "title": "谁会收到什么",
+        "description": "每个角色只会收到它有权查看的提醒。所有人都能在提醒页面看到自己的提醒。",
+        "readOnly": "只有所有者和管理员可以更改此项。",
+        "save": "保存分发规则",
+        "saved": "分发规则已保存。",
+        "cell": "{channel}：{role} 的{group}提醒",
+        "group": "提醒分组"
+      },
+      "targets": {
+        "title": "销售目标",
+        "description": "为活动设置门票目标：当销售进度不到所需速度的 70% 时，你会收到提醒。",
+        "label": "{event} 的门票目标",
+        "save": "保存目标",
+        "saveFor": "保存 {event} 的目标",
+        "saved": "销售目标已保存。",
+        "cleared": "销售目标已移除。",
+        "invalid": "请输入整数门票数，或留空。",
+        "none": "没有即将举行的活动。"
+      }
+    },
+    "groups": {
+      "attendees": "参会者和座位",
+      "payments": "付款和结算",
+      "door": "入场和设备",
+      "sales": "销售",
+      "setup": "设置和域名",
+      "messaging": "消息"
+    },
+    "channels": {
+      "in_app": "应用内",
+      "email": "电子邮件",
+      "sms": "短信",
+      "push": "推送"
     }
   }
 }

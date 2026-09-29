@@ -587,3 +587,15 @@ export const listBulkOperationsQuery = tenantQuery({
     return rows.map((r) => baseDto(r, ctx.now));
   },
 });
+
+/**
+ * Alert engine (M3.2b, "automation failures"): bulk actions and exports of the org that failed
+ * outright, or finished with failed items, since `since`. A count only.
+ */
+export async function failedBulkOperationsTx(tx: TenantTx, since: Date): Promise<number> {
+  const [r] = await tx.execute<{ n: number }>(sql`
+    select count(*)::int as n from platform.bulk_operations
+    where (status = 'failed' or (status = 'done' and failed > 0))
+      and coalesce(finished_at, updated_at) >= ${since.toISOString()}::timestamptz`);
+  return Number(r?.n ?? 0);
+}

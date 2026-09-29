@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Yayatoh सहायता {until} तक {member} के रूप में काम कर रही है",
         "org-status": "{status, select, suspended {Yayatoh ने इस संगठन को निलंबित किया} reactivated {यह संगठन फिर से ऑनलाइन है} other {Yayatoh ने इस संगठन को बंद किया}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} other {अलर्ट}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "खबरें और ऑफ़र"
+      },
+      "alerts": {
+        "alert": "अलर्ट",
+        "alert-text": "अलर्ट SMS"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "सहायता केंद्र",
     "marketingSite": "मार्केटिंग साइट",
     "tablesSponsors": "टेबल और प्रायोजक",
-    "commandCenter": "कमांड सेंटर"
+    "commandCenter": "कमांड सेंटर",
+    "alerts": "अलर्ट"
   },
   "vocab": {
     "attendee": "प्रतिभागी",
@@ -489,6 +498,11 @@
       "today": "आज चेक-इन किया",
       "any": "चेक-इन किया (किसी भी दिन)",
       "never": "चेक-इन नहीं किया"
+    },
+    "distribution": "वितरण",
+    "anyDistribution": "कोई भी वितरण",
+    "distributionFilter": {
+      "pending": "आगे देने के इंतज़ार में"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "अलर्ट नियम चालू होने पर अलर्ट यहाँ दिखेंगे।",
         "none": "कोई खुला अलर्ट नहीं।"
       }
+    }
+  },
+  "alerts": {
+    "title": "अलर्ट",
+    "description": "आपके इवेंट में किस चीज़ पर ध्यान देना है, और वह पेज जो उसे ठीक करता है।",
+    "settingsLink": "अलर्ट सेटिंग",
+    "statusLabel": "अलर्ट दिखाएँ",
+    "active": "सक्रिय",
+    "resolved": "हल हुए",
+    "eventLabel": "इवेंट",
+    "allEvents": "सभी इवेंट",
+    "orgWide": "पूरा संगठन",
+    "apply": "दिखाएँ",
+    "live": {
+      "live": "लाइव अपडेट चालू",
+      "connecting": "कनेक्ट हो रहा है…",
+      "offline": "लाइव अपडेट रुके हुए हैं"
+    },
+    "empty": {
+      "activeTitle": "अभी कोई अलर्ट नहीं",
+      "activeDescription": "जब आपके किसी इवेंट में किसी चीज़ पर ध्यान देना होगा, तो वह यहाँ दिखेगी और आपकी टीम को बताया जाएगा।",
+      "resolvedTitle": "अभी तक कोई हल हुआ अलर्ट नहीं",
+      "resolvedDescription": "समस्या ठीक होते ही अलर्ट अपने आप हल हो जाते हैं।"
+    },
+    "severity": {
+      "info": "जानकारी",
+      "warning": "चेतावनी",
+      "critical": "गंभीर"
+    },
+    "state": {
+      "open": "खुला",
+      "acknowledged": "स्वीकार किया गया",
+      "snoozed": "{until} तक स्नूज़",
+      "resolved": "हल हुआ {when}"
+    },
+    "reopened": "फिर से आया",
+    "since": "{when} से",
+    "acknowledge": "स्वीकार करें",
+    "acknowledgeLabel": "“{title}” स्वीकार करें",
+    "snoozeLabel": "इतनी देर स्नूज़ करें",
+    "snooze": "स्नूज़ करें",
+    "snoozeButtonLabel": "“{title}” स्नूज़ करें",
+    "snoozeFor": {
+      "m60": "1 घंटा",
+      "m240": "4 घंटे",
+      "m1440": "1 दिन"
+    },
+    "done": {
+      "acknowledged": "अलर्ट स्वीकार किया गया। समस्या ठीक होने तक यह इस पेज पर रहेगा।",
+      "snoozed": "अलर्ट {until} तक स्नूज़ किया गया।"
+    },
+    "errors": {
+      "forbidden": "आप अलर्ट नहीं बदल सकते। किसी मालिक, एडमिन या मैनेजर से कहें।",
+      "conflict": "इस बीच अलर्ट बदल गया। पेज फिर से लोड करके दोबारा कोशिश करें।",
+      "notFound": "वह अलर्ट अब मौजूद नहीं है।",
+      "invalid": "चुनें कि कितनी देर स्नूज़ करना है।"
+    },
+    "history": {
+      "title": "इतिहास",
+      "fired": "उठाया गया ({count})",
+      "updated": "{count} में बदला",
+      "acknowledged": "टीम के किसी सदस्य ने स्वीकार किया",
+      "acknowledgedYou": "आपने स्वीकार किया",
+      "snoozed": "टीम के किसी सदस्य ने स्नूज़ किया",
+      "snoozedYou": "आपने स्नूज़ किया",
+      "woke": "स्नूज़ खत्म हुआ",
+      "ack_expired": "स्वीकार करने के बाद भी जारी है",
+      "resolved": "हल हुआ",
+      "reopened": "फिर से आया ({count})",
+      "notified": "टीम को सूचित किया गया"
+    },
+    "fix": {
+      "unseated": "सीट दें",
+      "undistributed": "टिकट बाँटें",
+      "paymentsFailed": "विफल भुगतान देखें",
+      "paymentsStuck": "लंबित भुगतान देखें",
+      "refundSurge": "रिफ़ंड देखें",
+      "devicesOffline": "डिवाइस जाँचें",
+      "devicesLowBattery": "डिवाइस जाँचें",
+      "devicesBacklog": "डिवाइस जाँचें",
+      "capacityNear": "प्रवेश स्क्रीन खोलें",
+      "capacityFull": "प्रवेश स्क्रीन खोलें",
+      "sellOut": "टिकट प्रबंधित करें",
+      "salesPace": "बिक्री विश्लेषण खोलें",
+      "readiness": "सेटअप गाइड खोलें",
+      "domain": "डोमेन ठीक करें",
+      "payoutsPastDue": "भुगतान खाता अपडेट करें",
+      "deliverability": "मैसेजिंग स्थिति खोलें",
+      "automationFailed": "मैसेजिंग स्थिति खोलें"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}",
+      "undistributed": "{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}",
+      "paymentsFailed": "{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}",
+      "paymentsStuck": "{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}",
+      "refundSurge": "{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}",
+      "devicesOffline": "{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}",
+      "devicesLowBattery": "{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}",
+      "devicesBacklog": "{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}",
+      "capacityNear": "स्थल {count}% भर चुका है",
+      "capacityFull": "स्थल पूरी तरह भर गया है ({count}%)",
+      "sellOut": "{count}% टिकट बिक चुके हैं",
+      "salesPace": "टिकट बिक्री लक्ष्य गति के {count}% पर है",
+      "readiness": "{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}",
+      "domain": "{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}",
+      "payoutsPastDue": "{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}",
+      "deliverability": "ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है",
+      "automationFailed": "{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}"
+    },
+    "widget": {
+      "title": "अलर्ट",
+      "viewAll": "सभी अलर्ट देखें",
+      "none": "अभी इस इवेंट के लिए कोई अलर्ट नहीं।"
+    },
+    "settings": {
+      "title": "अलर्ट सेटिंग",
+      "description": "किसे कौन-से अलर्ट मिलते हैं, और आपके अपने अलर्ट SMS कहाँ जाते हैं।",
+      "back": "अलर्ट पर वापस जाएँ",
+      "phone": {
+        "title": "आपके अलर्ट SMS",
+        "label": "अलर्ट SMS के लिए मोबाइल नंबर",
+        "hint": "अंतरराष्ट्रीय फ़ॉर्मैट, जैसे +91 98765 43210। शांत समय (21:00–08:00) में SMS 8:00 तक रुकते हैं। SMS बंद करने के लिए खाली छोड़ें।",
+        "save": "नंबर सहेजें",
+        "saved": "आपका अलर्ट नंबर सहेजा गया।",
+        "cleared": "अलर्ट SMS बंद हैं।",
+        "invalid": "अंतरराष्ट्रीय फ़ॉर्मैट इस्तेमाल करें, जैसे +91 98765 43210।"
+      },
+      "routing": {
+        "title": "किसे क्या पता चलता है",
+        "description": "हर भूमिका को सिर्फ़ वही अलर्ट मिलते हैं जो वह देख सकती है। सभी अपने अलर्ट अलर्ट पेज पर देखते हैं।",
+        "readOnly": "इसे सिर्फ़ मालिक और एडमिन बदल सकते हैं।",
+        "save": "रूटिंग सहेजें",
+        "saved": "रूटिंग सहेजी गई।",
+        "cell": "{channel}: {role} के लिए {group} अलर्ट",
+        "group": "अलर्ट समूह"
+      },
+      "targets": {
+        "title": "बिक्री लक्ष्य",
+        "description": "किसी इवेंट के लिए टिकट लक्ष्य तय करें: जब बिक्री ज़रूरी गति के 70% या उससे कम पर हो, तो आपको अलर्ट मिलेगा।",
+        "label": "{event} के लिए टिकट लक्ष्य",
+        "save": "लक्ष्य सहेजें",
+        "saveFor": "{event} का लक्ष्य सहेजें",
+        "saved": "बिक्री लक्ष्य सहेजा गया।",
+        "cleared": "बिक्री लक्ष्य हटाया गया।",
+        "invalid": "टिकटों की पूरी संख्या डालें, या खाली छोड़ें।",
+        "none": "कोई आगामी इवेंट नहीं।"
+      }
+    },
+    "groups": {
+      "attendees": "उपस्थित लोग और सीटें",
+      "payments": "भुगतान और पेआउट",
+      "door": "प्रवेश और डिवाइस",
+      "sales": "बिक्री",
+      "setup": "सेटअप और डोमेन",
+      "messaging": "मैसेजिंग"
+    },
+    "channels": {
+      "in_app": "ऐप में",
+      "email": "ईमेल",
+      "sms": "SMS",
+      "push": "पुश"
     }
   }
 }

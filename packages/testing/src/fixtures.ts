@@ -1,6 +1,14 @@
 import { createECDH } from 'node:crypto';
 import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
 import {
+  acknowledgeAlertCommand,
+  evaluateEventAlertsTx,
+  listAlertsQuery,
+  setAlertRoutingCommand,
+  setMyAlertPhoneCommand,
+  setSalesTargetCommand,
+} from '@yayatoh/alerts';
+import {
   attendeeImportBulk,
   attendeeLabelBulk,
   stageImportCommand,
@@ -1329,6 +1337,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);
   await catchUpSubscriber(analyticsForwarder(postgresAnalyticsSink), org.id);
+  // M3.2b alert engine: the fixture event's unseated ticket holders raise an alert (evaluated as
+  // the worker would, a day before the event), the owner acknowledges it; one routing row, the
+  // owner's alert number and a sales target (isolation coverage of every alerts table).
+  const alertCtx = { ...systemCtx(org.id), now: new Date(event.startsAt.getTime() - 86_400_000 * 3) };
+  await withTenant(alertCtx, (tx) =>
+    evaluateEventAlertsTx(tx, alertCtx, event.id, { notifier: createNotifier() }),
+  );
+  const [fixtureAlert] = await executeQuery(listAlertsQuery, { eventId: event.id }, ctx(), ports);
+  if (!fixtureAlert) throw new Error('fixture: the fixture event raised no alert');
+  await executeCommand(acknowledgeAlertCommand, { alertId: fixtureAlert.id }, ctx(), ports);
+  await executeCommand(
+    setAlertRoutingCommand,
+    { cells: [{ role: 'viewer', category: 'door', channels: ['in_app'] }] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
+  await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
   return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
 }
 

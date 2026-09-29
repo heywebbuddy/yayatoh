@@ -121,9 +121,7 @@ test.describe('Command Center (M3.2a)', () => {
       'href',
       `${base}/details`,
     );
-    await expect(page.getByTestId('cc-widget-alerts')).toContainText(
-      'Alerts will appear here once alert rules are switched on.',
-    );
+    await expect(page.getByTestId('cc-widget-alerts')).toContainText('No open alerts.');
     await expect(page.getByTestId('cc-widget-timeline')).toContainText('Pre-show starts');
     await expectAccessible(page);
 

@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Yayatoh-support handelt tot {until} als {member}",
         "org-status": "{status, select, suspended {Yayatoh heeft deze organisatie opgeschort} reactivated {Deze organisatie is weer online} other {Yayatoh heeft deze organisatie gesloten}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "Nieuws en aanbiedingen"
+      },
+      "alerts": {
+        "alert": "Melding",
+        "alert-text": "Meldings-sms"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "Helpcentrum",
     "marketingSite": "Marketingsite",
     "tablesSponsors": "Tafels & sponsors",
-    "commandCenter": "Commandocentrum"
+    "commandCenter": "Commandocentrum",
+    "alerts": "Meldingen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -489,6 +498,11 @@
       "today": "Vandaag ingecheckt",
       "any": "Ingecheckt (op welke dag ook)",
       "never": "Niet ingecheckt"
+    },
+    "distribution": "Doorgeven",
+    "anyDistribution": "Elk doorgeven",
+    "distributionFilter": {
+      "pending": "Wacht op doorgeven"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "Meldingen verschijnen hier zodra meldingsregels aan staan.",
         "none": "Geen open meldingen."
       }
+    }
+  },
+  "alerts": {
+    "title": "Meldingen",
+    "description": "Wat aandacht nodig heeft bij je evenementen, en de pagina die het oplost.",
+    "settingsLink": "Meldingsinstellingen",
+    "statusLabel": "Meldingen tonen",
+    "active": "Actief",
+    "resolved": "Opgelost",
+    "eventLabel": "Evenement",
+    "allEvents": "Alle evenementen",
+    "orgWide": "Hele organisatie",
+    "apply": "Tonen",
+    "live": {
+      "live": "Live-updates aan",
+      "connecting": "Verbinden…",
+      "offline": "Live-updates gepauzeerd"
+    },
+    "empty": {
+      "activeTitle": "Nu geen meldingen",
+      "activeDescription": "Als iets aandacht nodig heeft bij een van je evenementen, verschijnt het hier en krijgt je team bericht.",
+      "resolvedTitle": "Nog geen opgeloste meldingen",
+      "resolvedDescription": "Meldingen lossen zichzelf op zodra het probleem is verholpen."
+    },
+    "severity": {
+      "info": "Info",
+      "warning": "Waarschuwing",
+      "critical": "Kritiek"
+    },
+    "state": {
+      "open": "Open",
+      "acknowledged": "Bevestigd",
+      "snoozed": "Gesluimerd tot {until}",
+      "resolved": "Opgelost {when}"
+    },
+    "reopened": "Teruggekomen",
+    "since": "Sinds {when}",
+    "acknowledge": "Bevestigen",
+    "acknowledgeLabel": "“{title}” bevestigen",
+    "snoozeLabel": "Sluimeren voor",
+    "snooze": "Sluimeren",
+    "snoozeButtonLabel": "“{title}” laten sluimeren",
+    "snoozeFor": {
+      "m60": "1 uur",
+      "m240": "4 uur",
+      "m1440": "1 dag"
+    },
+    "done": {
+      "acknowledged": "Melding bevestigd. Ze blijft op deze pagina tot het probleem is opgelost.",
+      "snoozed": "Melding gesluimerd tot {until}."
+    },
+    "errors": {
+      "forbidden": "Je kunt meldingen niet wijzigen. Vraag het een eigenaar, beheerder of manager.",
+      "conflict": "De melding is intussen veranderd. Laad opnieuw en probeer het nog eens.",
+      "notFound": "Die melding bestaat niet meer.",
+      "invalid": "Kies hoe lang je wilt sluimeren."
+    },
+    "history": {
+      "title": "Geschiedenis",
+      "fired": "Gemeld ({count})",
+      "updated": "Gewijzigd naar {count}",
+      "acknowledged": "Bevestigd door een teamlid",
+      "acknowledgedYou": "Bevestigd door jou",
+      "snoozed": "Gesluimerd door een teamlid",
+      "snoozedYou": "Gesluimerd door jou",
+      "woke": "Sluimeren voorbij",
+      "ack_expired": "Speelt nog na de bevestiging",
+      "resolved": "Opgelost",
+      "reopened": "Teruggekomen ({count})",
+      "notified": "Team op de hoogte gebracht"
+    },
+    "fix": {
+      "unseated": "Plaatsen toewijzen",
+      "undistributed": "Tickets verdelen",
+      "paymentsFailed": "Mislukte betalingen bekijken",
+      "paymentsStuck": "Openstaande betalingen bekijken",
+      "refundSurge": "Terugbetalingen bekijken",
+      "devicesOffline": "Apparaten controleren",
+      "devicesLowBattery": "Apparaten controleren",
+      "devicesBacklog": "Apparaten controleren",
+      "capacityNear": "Deurscherm openen",
+      "capacityFull": "Deurscherm openen",
+      "sellOut": "Tickets beheren",
+      "salesPace": "Verkoopanalyse openen",
+      "readiness": "Instellingsgids openen",
+      "domain": "Domeinen herstellen",
+      "payoutsPastDue": "Uitbetalingsaccount bijwerken",
+      "deliverability": "Berichtenstatus openen",
+      "automationFailed": "Berichtenstatus openen"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
+      "undistributed": "{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}",
+      "paymentsFailed": "{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}",
+      "paymentsStuck": "{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}",
+      "refundSurge": "{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}",
+      "devicesOffline": "{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}",
+      "devicesLowBattery": "{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}",
+      "devicesBacklog": "{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}",
+      "capacityNear": "De locatie is voor {count}% vol",
+      "capacityFull": "De locatie is vol ({count}%)",
+      "sellOut": "{count}% van de tickets is verkocht",
+      "salesPace": "De ticketverkoop ligt op {count}% van het beoogde tempo",
+      "readiness": "{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}",
+      "domain": "{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}",
+      "payoutsPastDue": "{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}",
+      "deliverability": "De bezorgbaarheid van e-mail vraagt aandacht",
+      "automationFailed": "{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}"
+    },
+    "widget": {
+      "title": "Meldingen",
+      "viewAll": "Alle meldingen bekijken",
+      "none": "Nu geen meldingen voor dit evenement."
+    },
+    "settings": {
+      "title": "Meldingsinstellingen",
+      "description": "Wie welke meldingen krijgt, en waar je eigen meldings-sms’jes heen gaan.",
+      "back": "Terug naar meldingen",
+      "phone": {
+        "title": "Je meldings-sms’jes",
+        "label": "Mobiel nummer voor meldings-sms’jes",
+        "hint": "Internationaal formaat, bijvoorbeeld +31 6 12345678. Tijdens de stille uren (21:00–08:00) wachten sms’jes tot 8:00. Laat leeg om sms’jes uit te zetten.",
+        "save": "Nummer opslaan",
+        "saved": "Je meldingsnummer is opgeslagen.",
+        "cleared": "Meldings-sms’jes staan uit.",
+        "invalid": "Gebruik het internationale formaat, bijvoorbeeld +31 6 12345678."
+      },
+      "routing": {
+        "title": "Wie hoort wat",
+        "description": "Elke rol hoort alleen over meldingen die hij mag zien. Iedereen ziet zijn meldingen op de meldingenpagina.",
+        "readOnly": "Alleen eigenaren en beheerders kunnen dit wijzigen.",
+        "save": "Verdeling opslaan",
+        "saved": "Verdeling opgeslagen.",
+        "cell": "{channel}: meldingen over {group} voor {role}",
+        "group": "Meldingsgroep"
+      },
+      "targets": {
+        "title": "Verkoopdoelen",
+        "description": "Stel een ticketdoel in voor een evenement: loopt de verkoop op 70% of minder van het benodigde tempo, dan krijg je een melding.",
+        "label": "Ticketdoel voor {event}",
+        "save": "Doel opslaan",
+        "saveFor": "Doel voor {event} opslaan",
+        "saved": "Verkoopdoel opgeslagen.",
+        "cleared": "Verkoopdoel verwijderd.",
+        "invalid": "Vul een heel aantal tickets in, of laat het leeg.",
+        "none": "Geen komende evenementen."
+      }
+    },
+    "groups": {
+      "attendees": "Deelnemers en plaatsen",
+      "payments": "Betalingen en uitbetalingen",
+      "door": "Deur en apparaten",
+      "sales": "Verkoop",
+      "setup": "Instellingen en domeinen",
+      "messaging": "Berichten"
+    },
+    "channels": {
+      "in_app": "In de app",
+      "email": "E-mail",
+      "sms": "Sms",
+      "push": "Push"
     }
   }
 }

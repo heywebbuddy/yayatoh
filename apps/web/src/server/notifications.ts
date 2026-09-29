@@ -1,4 +1,5 @@
 import 'server-only';
+import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
@@ -71,6 +72,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     fraudSignalAlerts({ notifier }),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
+    alertEvaluator({ notifier }),
   ];
 }
 
@@ -99,6 +101,8 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     consumed += fresh;
     if (fresh === 0) break;
   }
+  // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now.
+  await evaluateOrgNow(orgId, { notifier });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
     // it may reach besides real push services are the fake push service on this origin.

@@ -126,15 +126,21 @@ export const TimelineWidgetDto = z.object({
   items: z.array(z.object({ kind: z.enum(TIMELINE_KINDS), at: iso, title: z.string().nullable() })),
 });
 
-/** Placeholder until the M3.2b alert engine registers the real loader. */
+/**
+ * The Alerts widget (M3.2b's engine fills it through `withWidget`; the slot below says "pending").
+ * Data only: the board words each alert in the reader's language from its rule and count.
+ */
 export const AlertsWidgetDto = z.object({
   engine: z.enum(['pending', 'ready']),
   alerts: z.array(
     z.object({
       id: z.uuid(),
+      /** The alert rule's key (`alerts.rules.<rule>` in the web messages). */
+      rule: z.string(),
       severity: z.enum(['info', 'warning', 'critical']),
-      state: z.enum(['open', 'acknowledged', 'resolved']),
-      message: z.string(),
+      state: z.enum(['open', 'acknowledged', 'snoozed']),
+      count: Count,
+      /** Org-relative console path of the page that fixes it. */
       href: z.string().nullable(),
       at: iso,
     }),

@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Der Yayatoh-Support handelt bis {until} als {member}",
         "org-status": "{status, select, suspended {Yayatoh hat diese Organisation gesperrt} reactivated {Diese Organisation ist wieder online} other {Yayatoh hat diese Organisation geschlossen}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} other {Warnung}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} other {Warnung}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "Neuigkeiten und Angebote"
+      },
+      "alerts": {
+        "alert": "Warnung",
+        "alert-text": "Warnungs-SMS"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "Hilfecenter",
     "marketingSite": "Marketing-Website",
     "tablesSponsors": "Tische & Sponsoren",
-    "commandCenter": "Command Center"
+    "commandCenter": "Command Center",
+    "alerts": "Warnungen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -489,6 +498,11 @@
       "today": "Heute eingelassen",
       "any": "Eingelassen (an irgendeinem Tag)",
       "never": "Nicht eingelassen"
+    },
+    "distribution": "Weitergabe",
+    "anyDistribution": "Jede Weitergabe",
+    "distributionFilter": {
+      "pending": "Wartet auf Weitergabe"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "Warnungen erscheinen hier, sobald Warnregeln aktiviert sind.",
         "none": "Keine offenen Warnungen."
       }
+    }
+  },
+  "alerts": {
+    "title": "Warnungen",
+    "description": "Was bei Ihren Veranstaltungen Aufmerksamkeit braucht, und die Seite, die es behebt.",
+    "settingsLink": "Warnungseinstellungen",
+    "statusLabel": "Warnungen anzeigen",
+    "active": "Aktiv",
+    "resolved": "Behoben",
+    "eventLabel": "Veranstaltung",
+    "allEvents": "Alle Veranstaltungen",
+    "orgWide": "Gesamte Organisation",
+    "apply": "Anzeigen",
+    "live": {
+      "live": "Live-Updates an",
+      "connecting": "Verbindung wird hergestellt…",
+      "offline": "Live-Updates pausiert"
+    },
+    "empty": {
+      "activeTitle": "Gerade keine Warnungen",
+      "activeDescription": "Wenn bei einer Ihrer Veranstaltungen etwas Aufmerksamkeit braucht, erscheint es hier und Ihr Team wird informiert.",
+      "resolvedTitle": "Noch keine behobenen Warnungen",
+      "resolvedDescription": "Warnungen erledigen sich von selbst, sobald das Problem behoben ist."
+    },
+    "severity": {
+      "info": "Info",
+      "warning": "Warnung",
+      "critical": "Kritisch"
+    },
+    "state": {
+      "open": "Offen",
+      "acknowledged": "Bestätigt",
+      "snoozed": "Stumm bis {until}",
+      "resolved": "Behoben {when}"
+    },
+    "reopened": "Wieder aufgetreten",
+    "since": "Seit {when}",
+    "acknowledge": "Bestätigen",
+    "acknowledgeLabel": "„{title}“ bestätigen",
+    "snoozeLabel": "Stummschalten für",
+    "snooze": "Stummschalten",
+    "snoozeButtonLabel": "„{title}“ stummschalten",
+    "snoozeFor": {
+      "m60": "1 Stunde",
+      "m240": "4 Stunden",
+      "m1440": "1 Tag"
+    },
+    "done": {
+      "acknowledged": "Warnung bestätigt. Sie bleibt auf dieser Seite, bis das Problem behoben ist.",
+      "snoozed": "Warnung stumm bis {until}."
+    },
+    "errors": {
+      "forbidden": "Sie können Warnungen nicht ändern. Fragen Sie eine Inhaberin, einen Admin oder eine Managerin.",
+      "conflict": "Die Warnung hat sich inzwischen geändert. Laden Sie neu und versuchen Sie es erneut.",
+      "notFound": "Diese Warnung gibt es nicht mehr.",
+      "invalid": "Wählen Sie, wie lange stummgeschaltet werden soll."
+    },
+    "history": {
+      "title": "Verlauf",
+      "fired": "Ausgelöst ({count})",
+      "updated": "Geändert auf {count}",
+      "acknowledged": "Von einem Teammitglied bestätigt",
+      "acknowledgedYou": "Von Ihnen bestätigt",
+      "snoozed": "Von einem Teammitglied stummgeschaltet",
+      "snoozedYou": "Von Ihnen stummgeschaltet",
+      "woke": "Stummschaltung beendet",
+      "ack_expired": "Besteht nach der Bestätigung weiter",
+      "resolved": "Behoben",
+      "reopened": "Wieder aufgetreten ({count})",
+      "notified": "Team benachrichtigt"
+    },
+    "fix": {
+      "unseated": "Plätze zuweisen",
+      "undistributed": "Tickets verteilen",
+      "paymentsFailed": "Fehlgeschlagene Zahlungen prüfen",
+      "paymentsStuck": "Offene Zahlungen prüfen",
+      "refundSurge": "Erstattungen prüfen",
+      "devicesOffline": "Geräte prüfen",
+      "devicesLowBattery": "Geräte prüfen",
+      "devicesBacklog": "Geräte prüfen",
+      "capacityNear": "Einlassbildschirm öffnen",
+      "capacityFull": "Einlassbildschirm öffnen",
+      "sellOut": "Tickets verwalten",
+      "salesPace": "Verkaufsanalyse öffnen",
+      "readiness": "Einrichtungsleitfaden öffnen",
+      "domain": "Domains korrigieren",
+      "payoutsPastDue": "Auszahlungskonto aktualisieren",
+      "deliverability": "Nachrichtenstatus öffnen",
+      "automationFailed": "Nachrichtenstatus öffnen"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}",
+      "undistributed": "{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}",
+      "paymentsFailed": "{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}",
+      "paymentsStuck": "{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}",
+      "refundSurge": "{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}",
+      "devicesOffline": "{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}",
+      "devicesLowBattery": "{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}",
+      "devicesBacklog": "{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}",
+      "capacityNear": "Der Veranstaltungsort ist zu {count} % voll",
+      "capacityFull": "Der Veranstaltungsort ist voll ({count} %)",
+      "sellOut": "{count} % der Tickets sind verkauft",
+      "salesPace": "Der Ticketverkauf liegt bei {count} % des Zieltempos",
+      "readiness": "{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}",
+      "domain": "{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}",
+      "payoutsPastDue": "{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}",
+      "deliverability": "Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit",
+      "automationFailed": "{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}"
+    },
+    "widget": {
+      "title": "Warnungen",
+      "viewAll": "Alle Warnungen ansehen",
+      "none": "Gerade keine Warnungen für diese Veranstaltung."
+    },
+    "settings": {
+      "title": "Warnungseinstellungen",
+      "description": "Wer von welchen Warnungen erfährt und wohin Ihre eigenen Warnungs-SMS gehen.",
+      "back": "Zurück zu den Warnungen",
+      "phone": {
+        "title": "Ihre Warnungs-SMS",
+        "label": "Mobilnummer für Warnungs-SMS",
+        "hint": "Internationales Format, z. B. +49 30 1234567. In der Ruhezeit (21:00–08:00) warten SMS bis 8:00. Leer lassen, um SMS auszuschalten.",
+        "save": "Nummer speichern",
+        "saved": "Ihre Warnungsnummer ist gespeichert.",
+        "cleared": "Warnungs-SMS sind aus.",
+        "invalid": "Verwenden Sie das internationale Format, z. B. +49 30 1234567."
+      },
+      "routing": {
+        "title": "Wer erfährt wovon",
+        "description": "Jede Rolle erfährt nur von Warnungen, die sie sehen darf. Alle sehen ihre Warnungen auf der Warnungsseite.",
+        "readOnly": "Nur Inhaber und Admins können das ändern.",
+        "save": "Verteilung speichern",
+        "saved": "Verteilung gespeichert.",
+        "cell": "{channel}: Warnungen zu {group} für {role}",
+        "group": "Warnungsgruppe"
+      },
+      "targets": {
+        "title": "Verkaufsziele",
+        "description": "Legen Sie ein Ticketziel für eine Veranstaltung fest: Liegt der Verkauf bei 70 % oder weniger des nötigen Tempos, erhalten Sie eine Warnung.",
+        "label": "Ticketziel für {event}",
+        "save": "Ziel speichern",
+        "saveFor": "Ziel für {event} speichern",
+        "saved": "Verkaufsziel gespeichert.",
+        "cleared": "Verkaufsziel entfernt.",
+        "invalid": "Geben Sie eine ganze Zahl an Tickets ein oder lassen Sie das Feld leer.",
+        "none": "Keine bevorstehenden Veranstaltungen."
+      }
+    },
+    "groups": {
+      "attendees": "Teilnehmende und Sitzplätze",
+      "payments": "Zahlungen und Auszahlungen",
+      "door": "Einlass und Geräte",
+      "sales": "Verkauf",
+      "setup": "Einrichtung und Domains",
+      "messaging": "Nachrichten"
+    },
+    "channels": {
+      "in_app": "In der App",
+      "email": "E-Mail",
+      "sms": "SMS",
+      "push": "Push"
     }
   }
 }

@@ -2,7 +2,7 @@ import { KeysetAfter } from '@yayatoh/contracts';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, gt, inArray, isNull, lt, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, gte, inArray, isNull, lt, lte, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { type EVENT_ROLES, eventRoleAssignments, events } from './schema.ts';
@@ -98,6 +98,30 @@ export async function publicEventBySlug(
 /** Every event id of the org (metric rebuilds walk them). Ids only. */
 export async function eventIdsTx(tx: TenantTx): Promise<string[]> {
   const rows = await tx.select({ id: events.id }).from(events).orderBy(events.id);
+  return rows.map((r) => r.id);
+}
+
+/**
+ * Alert engine (M3.2b): the org's events that are still ahead or running, i.e. not cancelled,
+ * completed or archived and ending after `endsAfter`, starting before `startsBefore`.
+ */
+export async function upcomingEventIdsTx(
+  tx: TenantTx,
+  endsAfter: Date,
+  startsBefore: Date,
+): Promise<string[]> {
+  const rows = await tx
+    .select({ id: events.id })
+    .from(events)
+    .where(
+      and(
+        inArray(events.status, ['draft', 'published', 'postponed']),
+        gte(events.endsAt, endsAfter),
+        lte(events.startsAt, startsBefore),
+      ),
+    )
+    .orderBy(events.startsAt, events.id)
+    .limit(200);
   return rows.map((r) => r.id);
 }
 

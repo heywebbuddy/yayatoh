@@ -101,6 +101,8 @@ export {
   autoPauseQuery,
   CapDto,
   CapInput,
+  type DeliverabilityFacts,
+  deliverabilityFactsTx,
   deliveryReasonsTx,
   evaluateComplaintRateTx,
   frequencyCapsQuery,
@@ -217,6 +219,7 @@ export {
   renderCutoverNotice,
   renderCutoverSet,
 } from './templates/cutover.ts';
+export { countWords } from './templates/numbers.ts';
 export {
   EMAIL_MESSAGES,
   emailLocale,

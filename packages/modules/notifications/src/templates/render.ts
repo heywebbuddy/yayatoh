@@ -17,6 +17,7 @@ import pt from './messages/pt.json' with { type: 'json' };
 import ru from './messages/ru.json' with { type: 'json' };
 import zhCN from './messages/zh-CN.json' with { type: 'json' };
 import zhTW from './messages/zh-TW.json' with { type: 'json' };
+import { countWords } from './numbers.ts';
 
 type Catalog = typeof en;
 export const EMAIL_MESSAGES: Readonly<Record<Locale, Catalog>> = {
@@ -120,6 +121,8 @@ function values(input: RenderInput, locale: Locale, cat: Catalog): Record<string
       timeZone: tz,
     }).format(new Date(until));
   }
+  // Alert copy (M3.2b): small counts spelled out per the locale's rule.
+  if (typeof p.count === 'number') out.countWords = countWords(p.count, locale);
   if (typeof p.role === 'string') out.role = cat.roles[p.role as keyof Catalog['roles']] ?? p.role;
   // A rate in basis points (the complaint-rate auto-pause, M3.5a) as a percentage.
   if (typeof p.rateBps === 'number')

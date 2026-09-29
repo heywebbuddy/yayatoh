@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Le support Yayatoh agit en tant que {member} jusqu'à {until}",
         "org-status": "{status, select, suspended {Yayatoh a suspendu cette organisation} reactivated {Cette organisation est de nouveau en ligne} other {Yayatoh a fermé cette organisation}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} other {Alerte}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} other {Alerte}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "Actualités et offres"
+      },
+      "alerts": {
+        "alert": "Alerte",
+        "alert-text": "SMS d’alerte"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "Centre d'aide",
     "marketingSite": "Site marketing",
     "tablesSponsors": "Tables et sponsors",
-    "commandCenter": "Centre de commande"
+    "commandCenter": "Centre de commande",
+    "alerts": "Alertes"
   },
   "vocab": {
     "attendee": "Participant",
@@ -489,6 +498,11 @@
       "today": "Enregistrés aujourd’hui",
       "any": "Enregistrés (n’importe quel jour)",
       "never": "Pas encore enregistrés"
+    },
+    "distribution": "Distribution",
+    "anyDistribution": "Toute distribution",
+    "distributionFilter": {
+      "pending": "En attente de transmission"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "Les alertes apparaîtront ici dès que les règles d’alerte seront activées.",
         "none": "Aucune alerte ouverte."
       }
+    }
+  },
+  "alerts": {
+    "title": "Alertes",
+    "description": "Ce qui demande votre attention dans vos événements, et la page qui le règle.",
+    "settingsLink": "Paramètres des alertes",
+    "statusLabel": "Afficher les alertes",
+    "active": "Actives",
+    "resolved": "Résolues",
+    "eventLabel": "Événement",
+    "allEvents": "Tous les événements",
+    "orgWide": "Toute l’organisation",
+    "apply": "Afficher",
+    "live": {
+      "live": "Mises à jour en direct",
+      "connecting": "Connexion…",
+      "offline": "Mises à jour en pause"
+    },
+    "empty": {
+      "activeTitle": "Aucune alerte pour le moment",
+      "activeDescription": "Quand quelque chose demande votre attention dans un événement, il apparaît ici et votre équipe est prévenue.",
+      "resolvedTitle": "Aucune alerte résolue pour l’instant",
+      "resolvedDescription": "Les alertes se résolvent d’elles-mêmes une fois le problème réglé."
+    },
+    "severity": {
+      "info": "Info",
+      "warning": "Avertissement",
+      "critical": "Critique"
+    },
+    "state": {
+      "open": "Ouverte",
+      "acknowledged": "Prise en charge",
+      "snoozed": "En pause jusqu’à {until}",
+      "resolved": "Résolue {when}"
+    },
+    "reopened": "Réapparue",
+    "since": "Depuis {when}",
+    "acknowledge": "Prendre en charge",
+    "acknowledgeLabel": "Prendre en charge « {title} »",
+    "snoozeLabel": "Mettre en pause pour",
+    "snooze": "Mettre en pause",
+    "snoozeButtonLabel": "Mettre en pause « {title} »",
+    "snoozeFor": {
+      "m60": "1 heure",
+      "m240": "4 heures",
+      "m1440": "1 jour"
+    },
+    "done": {
+      "acknowledged": "Alerte prise en charge. Elle reste sur cette page jusqu’à ce que le problème soit réglé.",
+      "snoozed": "Alerte en pause jusqu’à {until}."
+    },
+    "errors": {
+      "forbidden": "Vous ne pouvez pas modifier les alertes. Demandez à un propriétaire, un administrateur ou un responsable.",
+      "conflict": "L’alerte a changé entre-temps. Rechargez et réessayez.",
+      "notFound": "Cette alerte n’existe plus.",
+      "invalid": "Choisissez la durée de la pause."
+    },
+    "history": {
+      "title": "Historique",
+      "fired": "Déclenchée ({count})",
+      "updated": "Passée à {count}",
+      "acknowledged": "Prise en charge par un membre de l’équipe",
+      "acknowledgedYou": "Prise en charge par vous",
+      "snoozed": "Mise en pause par un membre de l’équipe",
+      "snoozedYou": "Mise en pause par vous",
+      "woke": "Fin de la pause",
+      "ack_expired": "Toujours en cours après la prise en charge",
+      "resolved": "Résolue",
+      "reopened": "Réapparue ({count})",
+      "notified": "Équipe prévenue"
+    },
+    "fix": {
+      "unseated": "Les placer",
+      "undistributed": "Distribuer les billets",
+      "paymentsFailed": "Voir les paiements échoués",
+      "paymentsStuck": "Voir les paiements en attente",
+      "refundSurge": "Voir les remboursements",
+      "devicesOffline": "Vérifier les appareils",
+      "devicesLowBattery": "Vérifier les appareils",
+      "devicesBacklog": "Vérifier les appareils",
+      "capacityNear": "Ouvrir l’écran d’accueil",
+      "capacityFull": "Ouvrir l’écran d’accueil",
+      "sellOut": "Gérer les billets",
+      "salesPace": "Ouvrir l’analyse des ventes",
+      "readiness": "Ouvrir le guide de configuration",
+      "domain": "Corriger les domaines",
+      "payoutsPastDue": "Mettre à jour le compte de versement",
+      "deliverability": "Ouvrir l’état de la messagerie",
+      "automationFailed": "Ouvrir l’état de la messagerie"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}",
+      "undistributed": "{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}",
+      "paymentsFailed": "{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}",
+      "paymentsStuck": "{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}",
+      "refundSurge": "{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}",
+      "devicesOffline": "{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}",
+      "devicesLowBattery": "{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}",
+      "devicesBacklog": "{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}",
+      "capacityNear": "Le lieu est rempli à {count} %",
+      "capacityFull": "Le lieu est complet ({count} %)",
+      "sellOut": "{count} % des billets sont vendus",
+      "salesPace": "Les ventes de billets sont à {count} % du rythme visé",
+      "readiness": "{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}",
+      "domain": "{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}",
+      "payoutsPastDue": "{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}",
+      "deliverability": "La délivrabilité des e-mails demande votre attention",
+      "automationFailed": "{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}"
+    },
+    "widget": {
+      "title": "Alertes",
+      "viewAll": "Voir toutes les alertes",
+      "none": "Aucune alerte pour cet événement pour le moment."
+    },
+    "settings": {
+      "title": "Paramètres des alertes",
+      "description": "Qui est prévenu de quelles alertes, et où vont vos SMS d’alerte.",
+      "back": "Retour aux alertes",
+      "phone": {
+        "title": "Vos SMS d’alerte",
+        "label": "Numéro de mobile pour les SMS d’alerte",
+        "hint": "Format international, par exemple +33 6 12 34 56 78. Pendant les heures calmes (21:00–08:00), les SMS attendent 8:00. Laissez vide pour désactiver les SMS.",
+        "save": "Enregistrer le numéro",
+        "saved": "Votre numéro d’alerte est enregistré.",
+        "cleared": "Les SMS d’alerte sont désactivés.",
+        "invalid": "Utilisez le format international, par exemple +33 6 12 34 56 78."
+      },
+      "routing": {
+        "title": "Qui est prévenu de quoi",
+        "description": "Chaque rôle n’est prévenu que des alertes qu’il peut voir. Chacun voit ses alertes sur la page des alertes.",
+        "readOnly": "Seuls les propriétaires et administrateurs peuvent modifier ceci.",
+        "save": "Enregistrer la répartition",
+        "saved": "Répartition enregistrée.",
+        "cell": "{channel} : alertes {group} pour {role}",
+        "group": "Groupe d’alertes"
+      },
+      "targets": {
+        "title": "Objectifs de vente",
+        "description": "Fixez un objectif de billets pour un événement : si les ventes tournent à 70 % ou moins du rythme nécessaire, vous recevez une alerte.",
+        "label": "Objectif de billets pour {event}",
+        "save": "Enregistrer l’objectif",
+        "saveFor": "Enregistrer l’objectif pour {event}",
+        "saved": "Objectif de vente enregistré.",
+        "cleared": "Objectif de vente supprimé.",
+        "invalid": "Saisissez un nombre entier de billets, ou laissez vide.",
+        "none": "Aucun événement à venir."
+      }
+    },
+    "groups": {
+      "attendees": "Participants et placement",
+      "payments": "Paiements et versements",
+      "door": "Accueil et appareils",
+      "sales": "Ventes",
+      "setup": "Configuration et domaines",
+      "messaging": "Messagerie"
+    },
+    "channels": {
+      "in_app": "Dans l’app",
+      "email": "E-mail",
+      "sms": "SMS",
+      "push": "Push"
     }
   }
 }

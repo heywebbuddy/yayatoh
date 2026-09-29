@@ -1,3 +1,4 @@
+export { ALERT_FIXTURE, type AlertScenario, alertScenario } from './alerts.ts';
 export {
   AUDIENCE_EDITIONS,
   type AudiencePerson,

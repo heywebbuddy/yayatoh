@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Yayatoh 支援人員正以 {member} 的身分操作，直到 {until}",
         "org-status": "{status, select, suspended {Yayatoh 已暫停此組織} reactivated {此組織已恢復上線} other {Yayatoh 已關閉此組織}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}"
       }
     },
     "kinds": {
@@ -131,6 +135,10 @@
       },
       "marketing": {
         "message": "新聞與優惠"
+      },
+      "alerts": {
+        "alert": "警示",
+        "alert-text": "警示簡訊"
       }
     },
     "status": {
@@ -272,7 +280,8 @@
     "helpCenter": "說明中心",
     "marketingSite": "行銷網站",
     "tablesSponsors": "桌位與贊助商",
-    "commandCenter": "指揮中心"
+    "commandCenter": "指揮中心",
+    "alerts": "警示"
   },
   "vocab": {
     "attendee": "參加者",
@@ -489,6 +498,11 @@
       "today": "今天已報到",
       "any": "已報到（任一天）",
       "never": "未報到"
+    },
+    "distribution": "分發",
+    "anyDistribution": "任何分發狀態",
+    "distributionFilter": {
+      "pending": "等待轉交"
     }
   },
   "attendeeStatus": {
@@ -6058,6 +6072,167 @@
         "pending": "啟用提醒規則後，提醒會顯示在這裡。",
         "none": "沒有未處理的提醒。"
       }
+    }
+  },
+  "alerts": {
+    "title": "警示",
+    "description": "你的活動中需要注意的事項，以及處理它們的頁面。",
+    "settingsLink": "警示設定",
+    "statusLabel": "顯示警示",
+    "active": "進行中",
+    "resolved": "已解決",
+    "eventLabel": "活動",
+    "allEvents": "所有活動",
+    "orgWide": "整個組織",
+    "apply": "顯示",
+    "live": {
+      "live": "即時更新已開啟",
+      "connecting": "連線中…",
+      "offline": "即時更新已暫停"
+    },
+    "empty": {
+      "activeTitle": "目前沒有警示",
+      "activeDescription": "當你的某個活動需要注意時，會顯示在這裡並通知你的團隊。",
+      "resolvedTitle": "還沒有已解決的警示",
+      "resolvedDescription": "問題解決後，警示會自動變為已解決。"
+    },
+    "severity": {
+      "info": "資訊",
+      "warning": "警告",
+      "critical": "嚴重"
+    },
+    "state": {
+      "open": "未處理",
+      "acknowledged": "已確認",
+      "snoozed": "暫緩至 {until}",
+      "resolved": "{when}已解決"
+    },
+    "reopened": "再次出現",
+    "since": "自 {when}",
+    "acknowledge": "確認",
+    "acknowledgeLabel": "確認「{title}」",
+    "snoozeLabel": "暫緩時間",
+    "snooze": "暫緩",
+    "snoozeButtonLabel": "暫緩「{title}」",
+    "snoozeFor": {
+      "m60": "1 小時",
+      "m240": "4 小時",
+      "m1440": "1 天"
+    },
+    "done": {
+      "acknowledged": "已確認警示。問題解決前它會一直留在此頁面。",
+      "snoozed": "警示已暫緩至 {until}。"
+    },
+    "errors": {
+      "forbidden": "你無法變更警示。請聯絡擁有者、管理員或經理。",
+      "conflict": "警示已在此期間變更。請重新載入後再試。",
+      "notFound": "這則警示已不存在。",
+      "invalid": "請選擇暫緩時間。"
+    },
+    "history": {
+      "title": "歷史",
+      "fired": "觸發（{count}）",
+      "updated": "變為 {count}",
+      "acknowledged": "團隊成員已確認",
+      "acknowledgedYou": "你已確認",
+      "snoozed": "團隊成員已暫緩",
+      "snoozedYou": "你已暫緩",
+      "woke": "暫緩結束",
+      "ack_expired": "確認後仍在發生",
+      "resolved": "已解決",
+      "reopened": "再次出現（{count}）",
+      "notified": "已通知團隊"
+    },
+    "fix": {
+      "unseated": "分配座位",
+      "undistributed": "分發票券",
+      "paymentsFailed": "查看失敗的付款",
+      "paymentsStuck": "查看待處理的付款",
+      "refundSurge": "查看退款",
+      "devicesOffline": "檢查裝置",
+      "devicesLowBattery": "檢查裝置",
+      "devicesBacklog": "檢查裝置",
+      "capacityNear": "開啟入場畫面",
+      "capacityFull": "開啟入場畫面",
+      "sellOut": "管理票券",
+      "salesPace": "開啟銷售分析",
+      "readiness": "開啟設定指南",
+      "domain": "修正網域",
+      "payoutsPastDue": "更新收款帳戶",
+      "deliverability": "開啟訊息狀態",
+      "automationFailed": "開啟訊息狀態"
+    },
+    "rules": {
+      "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
+      "undistributed": "{count, plural, other {{countWords} 張已購票券尚未分發}}",
+      "paymentsFailed": "{count, plural, other {{countWords} 筆付款失敗}}",
+      "paymentsStuck": "{count, plural, other {{countWords} 筆付款卡住了}}",
+      "refundSurge": "{count, plural, other {過去一小時內有 {countWords} 筆退款}}",
+      "devicesOffline": "{count, plural, other {{countWords} 台報到裝置離線}}",
+      "devicesLowBattery": "{count, plural, other {{countWords} 台報到裝置電量不足}}",
+      "devicesBacklog": "{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}",
+      "capacityNear": "場地已滿 {count}%",
+      "capacityFull": "場地已額滿（{count}%）",
+      "sellOut": "已售出 {count}% 的票券",
+      "salesPace": "票券銷售達到目標進度的 {count}%",
+      "readiness": "{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}",
+      "domain": "{count, plural, other {{countWords} 個自訂網域有問題}}",
+      "payoutsPastDue": "{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}",
+      "deliverability": "電子郵件送達率需要注意",
+      "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}"
+    },
+    "widget": {
+      "title": "警示",
+      "viewAll": "查看所有警示",
+      "none": "此活動目前沒有警示。"
+    },
+    "settings": {
+      "title": "警示設定",
+      "description": "誰會收到哪些警示，以及你自己的警示簡訊傳送到哪裡。",
+      "back": "返回警示",
+      "phone": {
+        "title": "你的警示簡訊",
+        "label": "接收警示簡訊的手機號碼",
+        "hint": "國際格式，例如 +886 912 345 678。安靜時段（21:00–08:00）的簡訊會等到 8:00 再傳送。留空即關閉簡訊。",
+        "save": "儲存號碼",
+        "saved": "警示號碼已儲存。",
+        "cleared": "警示簡訊已關閉。",
+        "invalid": "請使用國際格式，例如 +886 912 345 678。"
+      },
+      "routing": {
+        "title": "誰會收到什麼",
+        "description": "每個角色只會收到有權查看的警示。所有人都能在警示頁面看到自己的警示。",
+        "readOnly": "只有擁有者和管理員可以變更此項。",
+        "save": "儲存分派規則",
+        "saved": "分派規則已儲存。",
+        "cell": "{channel}：{role} 的{group}警示",
+        "group": "警示分組"
+      },
+      "targets": {
+        "title": "銷售目標",
+        "description": "為活動設定票券目標：當銷售進度不到所需速度的 70% 時，你會收到警示。",
+        "label": "{event} 的票券目標",
+        "save": "儲存目標",
+        "saveFor": "儲存 {event} 的目標",
+        "saved": "銷售目標已儲存。",
+        "cleared": "銷售目標已移除。",
+        "invalid": "請輸入整數票券數，或留空。",
+        "none": "沒有即將舉行的活動。"
+      }
+    },
+    "groups": {
+      "attendees": "參加者與座位",
+      "payments": "付款與撥款",
+      "door": "入場與裝置",
+      "sales": "銷售",
+      "setup": "設定與網域",
+      "messaging": "訊息"
+    },
+    "channels": {
+      "in_app": "應用程式內",
+      "email": "電子郵件",
+      "sms": "簡訊",
+      "push": "推播"
     }
   }
 }

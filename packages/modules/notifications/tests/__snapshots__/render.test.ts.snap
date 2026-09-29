@@ -1,5 +1,421 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · ar 1`] = `
+{
+  "subject": "37 حاضرًا ليس لديهم مقاعد",
+  "text": "37 حاضرًا ليس لديهم مقاعد
+
+مرحبًا،
+
+هناك ما يحتاج إلى انتباه في Lakeside Jazz Night. يفتح الزر الصفحة التي تعالجه.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · de 1`] = `
+{
+  "subject": "37 Teilnehmende haben keinen Sitzplatz",
+  "text": "37 Teilnehmende haben keinen Sitzplatz
+
+Hallo,
+
+Bei Lakeside Jazz Night braucht etwas Aufmerksamkeit. Die Schaltfläche öffnet die Seite, die es behebt.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · en 1`] = `
+{
+  "subject": "37 attendees do not have seats",
+  "text": "37 attendees do not have seats
+
+Hello,
+
+This needs attention at Lakeside Jazz Night. The button opens the page that fixes it.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · es 1`] = `
+{
+  "subject": "37 asistentes no tienen asiento",
+  "text": "37 asistentes no tienen asiento
+
+Hola:
+
+Algo necesita atención en Lakeside Jazz Night. El botón abre la página que lo soluciona.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · fr 1`] = `
+{
+  "subject": "37 participants n’ont pas de place",
+  "text": "37 participants n’ont pas de place
+
+Bonjour,
+
+Quelque chose demande votre attention pour Lakeside Jazz Night. Le bouton ouvre la page qui le règle.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · hi 1`] = `
+{
+  "subject": "37 उपस्थित लोगों के पास सीट नहीं है",
+  "text": "37 उपस्थित लोगों के पास सीट नहीं है
+
+नमस्ते,
+
+Lakeside Jazz Night में किसी चीज़ पर ध्यान देने की ज़रूरत है। बटन वह पेज खोलता है जो इसे ठीक करता है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · it 1`] = `
+{
+  "subject": "37 partecipanti non hanno un posto",
+  "text": "37 partecipanti non hanno un posto
+
+Ciao,
+
+Qualcosa richiede attenzione per Lakeside Jazz Night. Il pulsante apre la pagina che lo risolve.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · ja 1`] = `
+{
+  "subject": "37人の参加者に座席がありません",
+  "text": "37人の参加者に座席がありません
+
+こんにちは。
+
+Lakeside Jazz Nightで対応が必要なことがあります。ボタンから解決するページを開けます。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · nl 1`] = `
+{
+  "subject": "37 deelnemers hebben geen plaats",
+  "text": "37 deelnemers hebben geen plaats
+
+Hallo,
+
+Er vraagt iets aandacht bij Lakeside Jazz Night. De knop opent de pagina die het oplost.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · pt 1`] = `
+{
+  "subject": "37 participantes não têm lugar",
+  "text": "37 participantes não têm lugar
+
+Olá!
+
+Algo precisa de atenção em Lakeside Jazz Night. O botão abre a página que resolve isso.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · ru 1`] = `
+{
+  "subject": "37 участников без мест",
+  "text": "37 участников без мест
+
+Здравствуйте!
+
+На мероприятии «Lakeside Jazz Night» что-то требует внимания. Кнопка откроет страницу, где это можно исправить.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · zh-CN 1`] = `
+{
+  "subject": "37 位参会者没有座位",
+  "text": "37 位参会者没有座位
+
+您好：
+
+Lakeside Jazz Night 有需要关注的事项。点击按钮打开处理页面。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert · zh-TW 1`] = `
+{
+  "subject": "37 位參加者沒有座位",
+  "text": "37 位參加者沒有座位
+
+您好：
+
+Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · ar 1`] = `
+{
+  "subject": "3 أجهزة تسجيل دخول غير متصلة",
+  "text": "3 أجهزة تسجيل دخول غير متصلة
+
+مرحبًا،
+
+هناك ما يحتاج إلى انتباه في Lakeside Jazz Night. يفتح الزر الصفحة التي تعالجه.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · de 1`] = `
+{
+  "subject": "Drei Check-in-Geräte sind offline",
+  "text": "Drei Check-in-Geräte sind offline
+
+Hallo,
+
+Bei Lakeside Jazz Night braucht etwas Aufmerksamkeit. Die Schaltfläche öffnet die Seite, die es behebt.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · en 1`] = `
+{
+  "subject": "Three check-in devices are offline",
+  "text": "Three check-in devices are offline
+
+Hello,
+
+This needs attention at Lakeside Jazz Night. The button opens the page that fixes it.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · es 1`] = `
+{
+  "subject": "Tres dispositivos de control de acceso están sin conexión",
+  "text": "Tres dispositivos de control de acceso están sin conexión
+
+Hola:
+
+Algo necesita atención en Lakeside Jazz Night. El botón abre la página que lo soluciona.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · fr 1`] = `
+{
+  "subject": "Trois appareils de contrôle sont hors ligne",
+  "text": "Trois appareils de contrôle sont hors ligne
+
+Bonjour,
+
+Quelque chose demande votre attention pour Lakeside Jazz Night. Le bouton ouvre la page qui le règle.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · hi 1`] = `
+{
+  "subject": "तीन चेक-इन डिवाइस ऑफ़लाइन हैं",
+  "text": "तीन चेक-इन डिवाइस ऑफ़लाइन हैं
+
+नमस्ते,
+
+Lakeside Jazz Night में किसी चीज़ पर ध्यान देने की ज़रूरत है। बटन वह पेज खोलता है जो इसे ठीक करता है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · it 1`] = `
+{
+  "subject": "Tre dispositivi di check-in sono offline",
+  "text": "Tre dispositivi di check-in sono offline
+
+Ciao,
+
+Qualcosa richiede attenzione per Lakeside Jazz Night. Il pulsante apre la pagina che lo risolve.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · ja 1`] = `
+{
+  "subject": "3台のチェックイン端末がオフラインです",
+  "text": "3台のチェックイン端末がオフラインです
+
+こんにちは。
+
+Lakeside Jazz Nightで対応が必要なことがあります。ボタンから解決するページを開けます。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · nl 1`] = `
+{
+  "subject": "Drie check-inapparaten zijn offline",
+  "text": "Drie check-inapparaten zijn offline
+
+Hallo,
+
+Er vraagt iets aandacht bij Lakeside Jazz Night. De knop opent de pagina die het oplost.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · pt 1`] = `
+{
+  "subject": "3 dispositivos de check-in estão offline",
+  "text": "3 dispositivos de check-in estão offline
+
+Olá!
+
+Algo precisa de atenção em Lakeside Jazz Night. O botão abre a página que resolve isso.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · ru 1`] = `
+{
+  "subject": "3 устройства регистрации не в сети",
+  "text": "3 устройства регистрации не в сети
+
+Здравствуйте!
+
+На мероприятии «Lakeside Jazz Night» что-то требует внимания. Кнопка откроет страницу, где это можно исправить.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · zh-CN 1`] = `
+{
+  "subject": "3 台签到设备离线",
+  "text": "3 台签到设备离线
+
+您好：
+
+Lakeside Jazz Night 有需要关注的事项。点击按钮打开处理页面。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · zh-TW 1`] = `
+{
+  "subject": "3 台報到裝置離線",
+  "text": "3 台報到裝置離線
+
+您好：
+
+Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > attendees.message · ar 1`] = `
 {
   "subject": "Parking update",
