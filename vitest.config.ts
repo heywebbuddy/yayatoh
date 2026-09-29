@@ -11,6 +11,7 @@ import { BaseSequencer, type TestSpecification } from 'vitest/node';
 const LEGACY_FIRST = [
   'tools/legacy-migrate/tests/migrate.int.test.ts',
   'tools/legacy-migrate/tests/m22c.int.test.ts',
+  'tools/legacy-migrate/tests/m22d.int.test.ts',
 ];
 
 class LegacyFirstSequencer extends BaseSequencer {
