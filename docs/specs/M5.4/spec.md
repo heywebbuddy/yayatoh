@@ -127,3 +127,6 @@ Behind the `exhibitors` module key (conference profile). No data backfill: exist
 
 ### 16. Owner tasks
 See `docs/owner-inbox.md` ("Exhibitor portal defaults, pending owner").
+
+### 17. Gate (2026-09-29)
+`pnpm verify` green (lint, check:modules, typecheck, 1508 unit, 970 integration). E2E on 375/768/1280: `exhibitor-portal.spec.ts` (4 tests × 3), plus `program`, `program-media`, `events`, `media`, `door-staff`, `email-kind-labels`, `security`, `seating` and `canary-crawl` specs, all passing.
