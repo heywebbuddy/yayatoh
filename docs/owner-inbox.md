@@ -17,6 +17,15 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).
   - **Retention:** projector lag samples 7 days; the Postgres analytics sink 13 months (dropped by monthly partition once partitioned, M6.2 picks ClickHouse or Tinybird per P3-4).
   - **Deploy step:** after the M3.1a migration, run `pnpm --filter @yayatoh/worker metrics:rebuild` once per environment so events that existed before get their projections and history. Until then their dashboards read live (same numbers).
+- [ ] **Campaign defaults, pending owner** (M3.6b; labels: `db-migration`, `tenancy`, `legal-copy`). Built with these defaults; say if any should change (details in `docs/specs/M3.6/spec.md` §M3.6b):
+  - **Who gets a campaign:** only contacts whose latest email (or SMS / WhatsApp) **marketing** consent in the crm ledger is `granted`; `unknown_legacy` counts as no consent. Bounced/complained addresses, marketing unsubscribes and erased addresses are left out with their reason; the dispatcher's policy gate checks consent, suppressions, quiet hours, caps and quotas again at send time.
+  - **Send rate per org:** a tenth of the org's monthly quota for the channel per minute, between 30 and 2,000 (email 10,000/month → 1,000/min; SMS 500 → 50/min). The leader hands out at most **500 recipients per 2-second tick** across all orgs, round-robin in chunks of 50.
+  - **Test sends:** up to 5 addresses per send and 20 test recipients per campaign per hour; they are transactional (no consent needed, never held by quiet hours), marked "[Test]" with a banner, and not counted.
+  - **Pausing** stops the release of further recipients; at most one chunk already handed to the dispatcher still goes out. **Cancelling** also cancels messages still waiting in the queue.
+  - **Postal address:** the footer's address is typed per campaign (new campaigns start from the org's last one); orgs have no postal address field yet. The footer always carries the unsubscribe link and the "you subscribed to news from {org}" line.
+  - **Opens** are not tracked (no tracking pixel; results show "Not tracked"). Clicks come from the M3.8a tracked links each button and event card goes through.
+  - **Mailbox in e2e:** browser tests read emails from the dev mailbox (`/api/dev/mailbox`), as every other spec does, not Mailpit.
+  - **Deploy step:** the worker must run the new `campaigns.release` pg-boss queue and the 2-second campaign tick (both registered in `apps/worker/src/main.ts`).
 - [ ] **Audiences defaults, pending owner** (M3.6a, labels: `tenancy`, `db-migration`). Built with these defaults; say if any should change:
   - "People who attended last year's event" means **checked in** at the previous edition of the series. Organizers can change the template's condition to "registered" in the builder.
   - "Last year's event" is the **previous edition** of the series (the series event that started last before the chosen one), not a calendar year.
