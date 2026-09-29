@@ -334,7 +334,8 @@ export default async function RegistrationPage({
             // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be reachable by keyboard (axe scrollable-region-focusable)
             tabIndex={0}
             aria-label={t('matrixCaption')}
-            className="overflow-x-auto rounded-card border border-zinc-200 bg-white"
+            // `relative`: absolutely positioned sr-only labels are clipped by the scroller too.
+            className="relative overflow-x-auto rounded-card border border-zinc-200 bg-white"
           >
             <table className="w-full border-collapse text-start">
               <caption className="sr-only">{t('matrixCaption')}</caption>

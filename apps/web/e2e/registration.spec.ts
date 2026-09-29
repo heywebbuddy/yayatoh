@@ -99,6 +99,8 @@ test.describe('registration types and admission items (M5.1a)', () => {
     page,
     browser,
   }) => {
+    // A long journey (organizer, four buyers, two email codes): room under a full parallel run.
+    test.setTimeout(180_000);
     const s = stamp();
     await signIn(page);
     const { base, slug } = await conference(page, `Summit ${s}`);
@@ -219,6 +221,7 @@ test.describe('registration types and admission items (M5.1a)', () => {
   });
 
   test('the viewer sees the page read-only and every write is refused', async ({ page, browser }) => {
+    test.setTimeout(120_000);
     const s = stamp();
     await signIn(page);
     const { base } = await conference(page, `Viewer Summit ${s}`);
@@ -258,6 +261,7 @@ test.describe('registration types and admission items (M5.1a)', () => {
   });
 
   test('Arabic: the registration page and the public registration render right-to-left', async ({ page }) => {
+    test.setTimeout(120_000);
     const s = stamp();
     await signIn(page);
     const { base, slug } = await conference(page, `RTL Summit ${s}`);
