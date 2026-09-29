@@ -575,6 +575,13 @@
       "when": 1790701945495,
       "tag": "0081_early_emma_frost",
       "breakpoints": true
+    },
+    {
+      "idx": 82,
+      "version": "7",
+      "when": 1790715934620,
+      "tag": "0082_legal_tag",
+      "breakpoints": true
     }
   ]
 }

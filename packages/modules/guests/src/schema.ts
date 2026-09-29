@@ -5,9 +5,11 @@ import {
   check,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgSchema,
   text,
+  timestamp,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
@@ -166,5 +168,94 @@ export const rsvpHistory = tenantTable(
     index('rsvp_history_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
     check('rsvp_history_action_check', inList('action', HISTORY_ACTIONS)),
     check('rsvp_history_source_check', inList('source', GUEST_SOURCES)),
+  ],
+);
+
+/* ------------------------------------------------------------------- M4.1b: imports ---- */
+
+/** Where an imported list came from: pasted text, a CSV or XLSX file, or a Google Sheet link. */
+export const IMPORT_SOURCES = ['paste', 'csv', 'xlsx', 'sheet'] as const;
+export type ImportSource = (typeof IMPORT_SOURCES)[number];
+/** staged → validated (mapping checked, parties planned) → importing → imported. */
+export const IMPORT_STATUSES = ['staged', 'validated', 'importing', 'imported'] as const;
+export type ImportStatus = (typeof IMPORT_STATUSES)[number];
+
+/**
+ * One guest-list import (M4.1b). The header row is sealed like the rows (a pasted list without a
+ * header puts a guest there). Nothing reaches the guest list until the host checks the mapping
+ * and confirms. A Google Sheet's link is never stored.
+ */
+export const importBatches = tenantTable(
+  guestsSchema,
+  'import_batches',
+  {
+    eventId: uuid('event_id').notNull(),
+    source: text('source').notNull(),
+    /** The uploaded file's name; empty for a pasted list or a sheet. */
+    fileName: text('file_name').notNull().default(''),
+    /** XLSX: the sheet read. */
+    sheet: text('sheet'),
+    /** XLSX: every sheet of the workbook. */
+    sheets: text('sheets').array().notNull().default(sql`'{}'::text[]`),
+    /** Sealed JSON `{ headers }` (key vault, org-scoped); null once purged. */
+    headersCiphertext: text('headers_ciphertext'),
+    columnCount: integer('column_count').notNull(),
+    /** field → column index (`GuestMapping`). */
+    mapping: jsonb('mapping').$type<Record<string, number>>().notNull().default({}),
+    rowCount: integer('row_count').notNull(),
+    status: text('status').notNull().default('staged'),
+    partiesPlanned: integer('parties_planned').notNull().default(0),
+    guestsPlanned: integer('guests_planned').notNull().default(0),
+    partiesImported: integer('parties_imported').notNull().default(0),
+    guestsImported: integer('guests_imported').notNull().default(0),
+    validatedAt: timestamp('validated_at', { withTimezone: true, mode: 'date' }),
+    importedAt: timestamp('imported_at', { withTimezone: true, mode: 'date' }),
+    /** Staged rows (and the rejected ones after the import) are purged at this time. */
+    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+    purgedAt: timestamp('purged_at', { withTimezone: true, mode: 'date' }),
+    uploadedBy: uuid('uploaded_by'),
+  },
+  (t) => [
+    index('import_batches_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('import_batches_org_expiry_idx').on(t.orgId, t.expiresAt).where(sql`purged_at is null`),
+    check('import_batches_source_check', inList('source', IMPORT_SOURCES)),
+    check('import_batches_status_check', inList('status', IMPORT_STATUSES)),
+    check('import_batches_file_name_length', sql`length(file_name) <= 200`),
+    check('import_batches_sheet_length', sql`sheet is null or length(sheet) between 1 and 200`),
+    check('import_batches_sheets_check', sql`cardinality(sheets) <= 100`),
+    check('import_batches_columns_check', sql`column_count between 1 and 50`),
+  ],
+);
+
+/**
+ * A staged row of an import: its cells sealed (P4-3: dietary, accessibility and address columns
+ * are in there), the reason it can't be imported, and the party it becomes part of. The planned
+ * party id is the import's idempotency key: a party is created with that id once. Imported rows
+ * lose their cells at once; rejected rows keep them (for the download) until the batch expires.
+ */
+export const importRows = tenantTable(
+  guestsSchema,
+  'import_rows',
+  {
+    batchId: uuid('batch_id').notNull(),
+    /** 1-based data row number (the header is row 0), as the host sees it in their sheet. */
+    rowNo: integer('row_no').notNull(),
+    /** Sealed JSON `{ cells }`; null once imported or purged. */
+    cellsCiphertext: text('cells_ciphertext'),
+    errorCode: text('error_code'),
+    plannedPartyId: uuid('planned_party_id'),
+    importedAt: timestamp('imported_at', { withTimezone: true, mode: 'date' }),
+  },
+  (t) => [
+    uniqueIndex('import_rows_org_batch_row_key').on(t.orgId, t.batchId, t.rowNo),
+    index('import_rows_org_planned_idx')
+      .on(t.orgId, t.plannedPartyId)
+      .where(sql`planned_party_id is not null`),
+    check('import_rows_error_length', sql`error_code is null or length(error_code) between 1 and 40`),
+    foreignKey({
+      name: 'import_rows_batch_fk',
+      columns: [t.orgId, t.batchId],
+      foreignColumns: [importBatches.orgId, importBatches.id],
+    }).onDelete('cascade'),
   ],
 );
