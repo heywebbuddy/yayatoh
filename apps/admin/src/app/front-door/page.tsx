@@ -146,11 +146,11 @@ export default async function FrontDoorPage({
           >
             <p className="text-caption text-zinc-600">{t('change.description')}</p>
             <div className="flex flex-wrap gap-3">
-              <div className="flex flex-col gap-1.5">
+              <div className="flex min-w-0 max-w-full flex-col gap-1.5">
                 <label htmlFor="fd-host" className="text-caption text-zinc-600">
                   {t('change.host')}
                 </label>
-                <select id="fd-host" name="host" required className={field}>
+                <select id="fd-host" name="host" required className={`${field} w-full max-w-full`}>
                   {hosts.map((h) => (
                     <option key={h.host} value={h.host}>
                       {h.host}
@@ -158,11 +158,11 @@ export default async function FrontDoorPage({
                   ))}
                 </select>
               </div>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex min-w-0 max-w-full flex-col gap-1.5">
                 <label htmlFor="fd-route" className="text-caption text-zinc-600">
                   {t('change.route')}
                 </label>
-                <select id="fd-route" name="route" required className={field}>
+                <select id="fd-route" name="route" required className={`${field} w-full max-w-full`}>
                   {FRONT_DOOR_ROUTES.map((r) => (
                     <option key={r.key} value={r.key}>
                       {t('change.routeOption', {
