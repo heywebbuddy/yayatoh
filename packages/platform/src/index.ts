@@ -42,6 +42,18 @@ export {
   normalizeAddress,
 } from './erased-addresses.ts';
 export {
+  FREEZE_DEFAULT_RETRY_SECONDS,
+  type FreezeState,
+  FreezeValue,
+  freezeCovers,
+  freezeGate,
+  freezeRefusal,
+  HostTarget,
+  hostRoute,
+  readOnlyFreeze,
+  readOnlyFreezeTx,
+} from './freeze.ts';
+export {
   type FrontDoorNotFoundRow,
   type FrontDoorStatRow,
   frontDoorFlags,

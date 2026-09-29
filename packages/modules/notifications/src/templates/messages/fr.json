@@ -196,5 +196,53 @@
       "intro": "Comme vous l'avez demandé, votre compte Yayatoh a été supprimé. Vous avez été déconnecté partout, et vos identifiants ainsi que la validation en deux étapes ont été supprimés. Les organisateurs auprès de qui vous avez acheté conservent leurs commandes, comme la loi l'exige.\n\nSi vous n'êtes pas à l'origine de cette demande, répondez immédiatement à cet e-mail."
     },
     "sentBy": "Envoyé par Yayatoh au sujet de votre compte."
+  },
+  "cutover": {
+    "cta": "État de la maintenance",
+    "sentBy": "Envoyé par Yayatoh au sujet du passage à sa nouvelle plateforme.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh passe à sa nouvelle plateforme le {start}",
+        "intro": "Le {start}, Yayatoh passe à sa nouvelle plateforme. Pendant environ 45 minutes, jusqu’à {end}, votre tableau de bord et la vente de billets sont suspendus ; le contrôle à l’entrée continue de fonctionner et les billets déjà vendus restent valables.\n\nVos événements, commandes, versements et équipe vous suivent, et vous vous connectez avec la même adresse e-mail et le même mot de passe. Vous n’avez rien à faire : nous vous écrirons deux jours avant et une fois l’opération terminée."
+      },
+      "t2": {
+        "subject": "Rappel : maintenance de Yayatoh le {start}",
+        "intro": "Petit rappel : le {start}, jusqu’à {end} environ, Yayatoh sera en lecture seule pendant notre passage à la nouvelle plateforme. Évitez de prévoir une ouverture des ventes ou une campagne de billets sur ce créneau. Le contrôle à l’entrée continue de fonctionner et les billets vendus restent valables."
+      },
+      "freezeStart": {
+        "subject": "La maintenance de Yayatoh a commencé",
+        "intro": "Yayatoh est en lecture seule pendant notre passage à la nouvelle plateforme, jusqu’à {end} environ. Vous pouvez toujours consulter vos événements et scanner les billets à l’entrée ; l’enregistrement des modifications, les nouvelles ventes et les remboursements sont suspendus. Nous vous écrirons une fois l’opération terminée."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh fonctionne sur sa nouvelle plateforme",
+        "intro": "Le passage est terminé et Yayatoh fonctionne à nouveau. Connectez-vous comme d’habitude avec la même adresse e-mail et le même mot de passe : vos événements, commandes et versements sont là, et les billets déjà vendus restent valables. Si vous utilisez l’app Yayatoh, mettez-la à jour depuis votre boutique d’applications."
+      },
+      "rollback": {
+        "subject": "Yayatoh revient à la version précédente",
+        "intro": "Nous avons remis Yayatoh sur la version précédente le temps de corriger un problème de la nouvelle plateforme. Les ventes et modifications faites depuis le {start} ont été conservées et les billets restent valables. Connectez-vous comme avant ; nous vous communiquerons la nouvelle date du passage."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Vos billets restent valables pendant notre passage le {start}",
+        "intro": "Le {start}, Yayatoh passe à sa nouvelle plateforme. Pendant environ 45 minutes, jusqu’à {end}, vous ne pourrez ni acheter de billets ni modifier vos commandes, mais vos billets restent valables et sont scannés à l’entrée comme d’habitude.\n\nEnsuite, vous vous connectez avec la même adresse e-mail et le même mot de passe. Si vous utilisez l’app Yayatoh, mettez-la à jour quand nous vous annoncerons la fin de l’opération."
+      },
+      "t2": {
+        "subject": "Rappel : courte maintenance de Yayatoh le {start}",
+        "intro": "Petit rappel : le {start}, jusqu’à {end} environ, vous ne pourrez ni acheter de billets ni modifier vos commandes sur Yayatoh. Vos billets restent valables et fonctionnent à l’entrée."
+      },
+      "freezeStart": {
+        "subject": "La maintenance de Yayatoh a commencé",
+        "intro": "La vente de billets et les modifications de commandes sur Yayatoh sont suspendues jusqu’à {end} environ, pendant notre passage à la nouvelle plateforme. Vos billets restent valables et sont scannés à l’entrée comme d’habitude."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh est de retour",
+        "intro": "Le passage est terminé : vous pouvez à nouveau acheter des billets et gérer vos commandes. Vos billets restent valables et vous vous connectez avec la même adresse e-mail et le même mot de passe. Si vous utilisez l’app Yayatoh, mettez-la à jour depuis votre boutique d’applications."
+      },
+      "rollback": {
+        "subject": "Yayatoh revient à la version précédente",
+        "intro": "Nous avons remis Yayatoh sur la version précédente le temps de corriger un problème. Les billets achetés depuis le {start} restent valables. Si nous avons dû rembourser l’une de vos commandes, vous recevrez un e-mail séparé avec le montant. Connectez-vous comme avant."
+      }
+    }
   }
 }

@@ -231,12 +231,23 @@ export interface FrontDoorOverrides {
 }
 
 export type FrontDoorDecision =
-  | { readonly owner: 'next'; readonly route: string; readonly reason: 'platform' | 'flag' | 'canary' }
+  | {
+      readonly owner: 'next';
+      readonly route: string;
+      readonly reason: 'platform' | 'flag' | 'canary' | 'cutover';
+    }
   | {
       readonly owner: 'legacy';
       readonly route: string;
-      readonly reason: 'unowned' | 'flag' | 'override';
+      readonly reason: 'unowned' | 'flag' | 'override' | 'cutover';
     };
+
+/**
+ * The cutover host route (M2.5a, `platform.ops_flags` `host_route:<host>`, set by the cutover
+ * tool): `next` moves the whole host to the new app (the flip, no DNS change), `legacy` sends the
+ * whole host back (the rollback before the point of no return). Null: the route table decides.
+ */
+export type HostRouteTarget = 'next' | 'legacy' | null;
 
 /**
  * Who serves a request on a coexistence host. Pure: the caller supplies the flags (cached) and the
@@ -249,11 +260,24 @@ export function decideFrontDoor(input: {
   readonly query: URLSearchParams;
   readonly flags: FlagStates;
   readonly overrides: FrontDoorOverrides;
+  /** The host's cutover route (M2.5a); it overrides the per-route flags for the whole host. */
+  readonly hostRoute?: HostRouteTarget;
 }): FrontDoorDecision {
   const { rest } = stripFrontDoorLocale(input.path);
   if (isPlatformPath(input.path) || isPlatformPath(rest))
     return { owner: 'next', route: PLATFORM_ROUTE, reason: 'platform' };
   const route = matchFrontDoorRoute(input.instance, rest, input.query);
+  // Batch 3c merge: M2.5a's host-wide cutover switch over M2.4a's per-route table. The cookies
+  // keep letting testers see the other side (`yy_canary=next`, `yy_legacy=1`).
+  const key = route?.key ?? LEGACY_ROUTE;
+  if (input.hostRoute === 'next')
+    return input.overrides.legacy
+      ? { owner: 'legacy', route: key, reason: 'override' }
+      : { owner: 'next', route: key, reason: 'cutover' };
+  if (input.hostRoute === 'legacy')
+    return input.overrides.canary
+      ? { owner: 'next', route: key, reason: 'canary' }
+      : { owner: 'legacy', route: key, reason: 'cutover' };
   if (!route) return { owner: 'legacy', route: LEGACY_ROUTE, reason: 'unowned' };
   if (input.overrides.legacy) return { owner: 'legacy', route: route.key, reason: 'override' };
   const state = input.flags.get(flagKey(input.host, route.key)) ?? 'legacy';
@@ -261,4 +285,19 @@ export function decideFrontDoor(input: {
   if (state === 'canary' && input.overrides.canary)
     return { owner: 'next', route: route.key, reason: 'canary' };
   return { owner: 'legacy', route: route.key, reason: 'flag' };
+}
+
+/**
+ * A host routed back to legacy (M2.5a) that has no legacy origin configured: the front door
+ * answers 503 (maintenance) instead of letting the new app pretend to be legacy. The new app's
+ * own paths keep working, and `yy_canary=next` still shows testers the new app.
+ */
+export function cutoverUnavailable(input: {
+  readonly hostRoute: HostRouteTarget;
+  readonly path: string;
+  readonly canary: boolean;
+}): boolean {
+  if (input.hostRoute !== 'legacy' || input.canary) return false;
+  const { rest } = stripFrontDoorLocale(input.path);
+  return !isPlatformPath(input.path) && !isPlatformPath(rest);
 }

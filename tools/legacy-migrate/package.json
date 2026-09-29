@@ -21,6 +21,7 @@
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/legacy-mask": "workspace:*",
     "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",

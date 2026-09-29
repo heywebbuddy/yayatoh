@@ -41,6 +41,10 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Audit of platform_reader use; append-only through a SECURITY DEFINER function (platform_reader).',
   'platform.api_usage':
     'Request counts per day × /v1 route × client × app version (no tenant, user or IP); incremented through a SECURITY DEFINER function, read by platform_reader.',
+  'platform.ops_flags':
+    'Platform operations flags (M2.5a: read-only freeze, cutover host routing); no app_user privileges, read through SECURITY DEFINER platform.read_only_freeze()/host_route(), written only through platform.set_ops_flag (platform_reader, migrator).',
+  'platform.ops_flag_changes':
+    'Append-only history of platform.ops_flags (key, value, reason, actor); written only by platform.set_ops_flag; platform_reader SELECT.',
   'platform.erased_addresses':
     'Platform-wide erased-address suppression (SHA-256 of the normalized email, never the address); no app_user privileges, only the SECURITY DEFINER platform.erased_address_* functions; platform_reader SELECT.',
   'platform.front_door_flags':

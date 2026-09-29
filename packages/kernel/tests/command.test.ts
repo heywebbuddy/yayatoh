@@ -132,6 +132,46 @@ describe('executeCommand', () => {
     expect(refused.log.some((l) => l.startsWith('outbox') || l.startsWith('audit'))).toBe(false);
   });
 
+  it('the read-only freeze refuses before validation and writes nothing; allowed commands skip it (M2.5a)', async () => {
+    const frozen = fakePorts({
+      freeze: {
+        check: async (_c, command) => {
+          frozen.log.push(`freeze:${command.name}`);
+          throw new DomainError('read_only_freeze', 'maintenance', { retryAfterSeconds: 60 });
+        },
+      },
+    });
+    // Even an invalid input gets the freeze refusal first (a 503, not a 400).
+    await expect(executeCommand(rename, { name: '' }, ctx, frozen.ports)).rejects.toMatchObject({
+      code: 'read_only_freeze',
+      status: 503,
+    });
+    expect(frozen.log).toEqual(['freeze:tenancy.renameOrganization']);
+
+    const allowed = defineCommand<
+      { name: string },
+      { id: string; name: string },
+      Record<string, string>,
+      FakeTx
+    >({
+      ...rename,
+      name: 'checkin.scanTicket',
+      duringFreeze: 'allowed',
+    });
+    const ran = fakePorts({
+      freeze: {
+        check: async () => {
+          throw new DomainError('read_only_freeze');
+        },
+      },
+    });
+    await expect(executeCommand(allowed, { name: 'Acme' }, ctx, ran.ports)).resolves.toEqual({
+      id: 'o1',
+      name: 'Acme',
+    });
+    expect(ran.log).toContain('tx:commit');
+  });
+
   it('serializes through the allowlist and never returns extra fields', async () => {
     const { ports } = fakePorts();
     const out = await executeCommand(rename, { name: 'Acme' }, ctx, ports);

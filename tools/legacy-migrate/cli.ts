@@ -3,11 +3,16 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { closePools } from '@yayatoh/db';
+import { fakePaymentProvider } from '@yayatoh/payments';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { demoHandles, resetDemoOwner } from './src/demo.ts';
+import { legacyFreezeProbe } from './src/freeze-probe.ts';
 import { orderLinkReport } from './src/order-links.ts';
+import { reverseEtl, rollbackSql, summarizeReverse } from './src/reverse-etl.ts';
+import { rollbackRefunds } from './src/rollback-refunds.ts';
 import { revalidate, runMigration } from './src/run.ts';
 import { generateDumpFile, SCALES } from './src/synth/generate.ts';
+import { checkTarget, TargetRefused } from './src/target.ts';
 
 /**
  * Legacy migration (roadmap §7.5; runbook docs/runbooks/legacy-migration.md). Runs as `migrator`.
@@ -19,6 +24,11 @@ import { generateDumpFile, SCALES } from './src/synth/generate.ts';
  *   pnpm migrate:legacy:validate --instance=yay|abc [--report report.json]
  *   pnpm migrate:legacy:synth --instance=yay|abc --out <file.sql[.gz]> [--scale=small|demo|large] [--seed=N] [--demo]
  *   pnpm migrate:legacy:demo      (synthetic yay + abc → migrated; writes the e2e handles)
+ *   pnpm migrate:legacy:reverse --instance=yay|abc --cutover-at=<ISO> [--apply --target=local|staging]
+ *        [--report r.json] [--mysql rollback.sql]   (M2.5a; default: dry run, nothing written)
+ *   pnpm migrate:legacy:rollback-refunds --instance=… --cutover-at=<ISO> [--order <id>[,<id>]]
+ *        [--apply --target=local|staging]   (M2.5a; fake provider only; default: plan)
+ *   pnpm migrate:legacy:freeze-probe --instance=… --freeze-at=<ISO>   (M2.5a; read-only)
  *
  * Exit codes: 0 pass, 1 validation or quarantine breach, 2 usage or runtime error.
  */
@@ -43,6 +53,23 @@ function instanceArg(): 'yay' | 'abc' {
   const i = args.get('instance');
   if (i !== 'yay' && i !== 'abc') fail('--instance=yay|abc is required');
   return i;
+}
+
+function instantArg(name: string): Date {
+  const v = args.get(name);
+  if (!v || Number.isNaN(Date.parse(v))) fail(`--${name}=<ISO instant> is required`);
+  return new Date(v);
+}
+
+/** A write needs an allowlisted target (tools/legacy-migrate/src/target.ts). */
+function guardTarget() {
+  try {
+    const d = checkTarget(args.get('target'), process.env);
+    console.info(`target ${d.target}: database host(s) ${d.hosts.join(', ')}`);
+  } catch (err) {
+    if (err instanceof TargetRefused) fail(err.message);
+    throw err;
+  }
 }
 
 function keyVaultFromEnv() {
@@ -149,8 +176,62 @@ async function main(): Promise<number> {
       console.info(`migrate:legacy:demo handles written to ${out}`);
       return ok ? 0 : 1;
     }
+    case 'reverse': {
+      const instance = instanceArg();
+      const cutoverAt = instantArg('cutover-at');
+      const apply = args.has('apply');
+      if (apply) guardTarget();
+      const r = await reverseEtl({ instance, cutoverAt, dryRun: !apply });
+      writeReport(r);
+      console.info(summarizeReverse(r));
+      const mysqlOut = args.get('mysql');
+      if (mysqlOut) {
+        if (!apply) fail('--mysql needs --apply (the script is built from the rows written)');
+        mkdirSync(dirname(resolve(mysqlOut)), { recursive: true });
+        writeFileSync(resolve(mysqlOut), await rollbackSql(instance));
+        console.info(`reverse ETL MySQL script written to ${mysqlOut} (review it; nothing was run on MySQL)`);
+      }
+      return r.pass ? 0 : 1;
+    }
+    case 'rollback-refunds': {
+      const instance = instanceArg();
+      const cutoverAt = instantArg('cutover-at');
+      const apply = args.has('apply');
+      if (apply) guardTarget();
+      const provider = args.get('provider') ?? 'fake';
+      // Real Stripe refunds are a reviewed runbook step the owner runs (pending owner): never here.
+      if (provider !== 'fake')
+        fail('--provider=fake only (a Stripe refund is run by the owner, runbook "cutover")');
+      const secret = process.env.FAKE_PAYMENTS_SECRET;
+      if (!secret) fail('FAKE_PAYMENTS_SECRET is not set');
+      const orders = args.get('order')?.split(',').filter(Boolean);
+      const r = await rollbackRefunds({
+        instance,
+        cutoverAt,
+        provider: fakePaymentProvider({ secret, appOrigin: 'http://localhost' }),
+        ...(apply && orders?.length ? { orderIds: orders } : {}),
+        actor: `cli:${process.env.USER ?? 'unknown'}`,
+      });
+      writeReport(r);
+      console.info(
+        `migrate:legacy:rollback-refunds ${instance}${r.dryRun ? ' (plan: nothing refunded)' : ''}: ${r.eligible} eligible; ${r.items
+          .map((i) => `${i.orderId} ${i.status} ${i.amountMinor} ${i.currency}`)
+          .join('; ')}`,
+      );
+      return r.items.some((i) => i.status === 'failed') ? 1 : 0;
+    }
+    case 'freeze-probe': {
+      const r = await legacyFreezeProbe(instanceArg(), instantArg('freeze-at'));
+      writeReport(r);
+      console.info(
+        `migrate:legacy:freeze-probe ${r.instance} at ${r.freezeAt}: ${r.pass ? 'PASS (no writes after the freeze)' : 'FAIL'} ${JSON.stringify(r.tables)}`,
+      );
+      return r.pass ? 0 : 1;
+    }
     default:
-      fail('commands: run | validate | synth | demo | order-links');
+      fail(
+        'commands: run | validate | synth | demo | order-links | reverse | rollback-refunds | freeze-probe',
+      );
   }
 }
 

@@ -65,6 +65,11 @@ export interface CommandDefinition<I, O, R, Tx> {
   readonly stepUp?: boolean;
   /** What kind of thing this command does (money, export, delete): see CommandCategory. */
   readonly category?: CommandCategory;
+  /**
+   * `allowed`: the command keeps running during a read-only freeze (M2.5a). Only for writes the
+   * freeze must not stop: check-in scans (doors stay open) and the freeze switch itself.
+   */
+  readonly duringFreeze?: 'allowed';
   /** Require an Idempotency-Key and replay the stored result on retry. Default: false. */
   readonly idempotent?: boolean;
   /** Tenant-scoped commands run in `withTenant`; platform commands need `orgId === null` explicitly. */
@@ -107,6 +112,12 @@ export interface CommandPorts<Tx> {
    * its members). Runs inside the tenant transaction, before the handler, for tenant commands.
    */
   readonly orgGate?: { check(tx: Tx, ctx: Ctx, command: OrgGateSubject): Promise<void> };
+  /**
+   * The read-only freeze (M2.5a, roadmap §7.8): throws `read_only_freeze` while the platform or
+   * the context's org is frozen. Runs before validation for every command that does not
+   * declare `duringFreeze: 'allowed'`.
+   */
+  readonly freeze?: { check(ctx: Ctx, command: OrgGateSubject): Promise<void> };
 }
 
 /** What the org gate sees of a command. */
@@ -155,7 +166,7 @@ function reviveAt(root: unknown, path: readonly PropertyKey[]): void {
 
 /**
  * The single write pipeline. Steps run in this order, always:
- * (impersonation refusal) · 1 validate · 2 entitlement · 3 authorize · 4 step-up · 5 idempotency ·
+ * (impersonation refusal) · (read-only freeze) · 1 validate · 2 entitlement · 3 authorize · 4 step-up · 5 idempotency ·
  * 6 tenant transaction · 7 handler · 8 outbox · 9 audit · 10 serialize.
  */
 export async function executeCommand<I, O, R, Tx>(
@@ -168,6 +179,11 @@ export async function executeCommand<I, O, R, Tx>(
   // the member's role, before anything else runs.
   const refusal = impersonationRefusal(ctx, command.category);
   if (refusal) throw refusal;
+
+  // The read-only freeze (M2.5a) refuses every write it does not explicitly allow, whatever the
+  // input, before anything else runs.
+  if (ports.freeze && command.duringFreeze !== 'allowed')
+    await ports.freeze.check(ctx, { name: command.name, category: command.category });
 
   // 1. Validate
   const parsed = command.input.safeParse(rawInput);

@@ -18,6 +18,9 @@ export const writeProblems = {
   ...problems,
   409: p('Conflict, invalid state, or the same Idempotency-Key is in flight'),
   422: p('The Idempotency-Key was used with a different request (`idempotency_key_reused`)'),
+  503: p(
+    'Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds',
+  ),
 };
 export const publicProblems = { 400: problems[400], 404: problems[404], 429: problems[429] };
 /** Conditional GETs (`If-None-Match` matched the `ETag`). */

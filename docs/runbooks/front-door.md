@@ -53,6 +53,12 @@ Never within ±72 h of an event with sales or check-ins (ADR 0006 freeze rules).
 - **Everything:** unset `LEGACY_ORIGIN_URL` / `LEGACY_ABC_ORIGIN_URL` and redeploy: the new app stops forwarding and serves only its own pages, so this is only right after DNS is back on the Laravel box. **Fastest full rollback: point DNS back at the Laravel box** (TTL 60 s) — the front door is then out of the path.
 - Legacy unreachable: visitors get the front door's "not available right now" page (502/504); check nginx and the secret header first.
 
+### The whole host at cutover (M2.5)
+The cutover tool's `host_route:<host>` (`platform.ops_flags`, Maintenance page) overrides every route
+flag for that host: `next` serves the whole host here (the flip), `legacy` forwards the whole host to
+its origin (the rollback before PONR; 503 maintenance when the host has no origin configured). Clear
+it to hand control back to the per-route flags. See docs/runbooks/cutover.md.
+
 ## 6. Troubleshooting
 | Symptom | Check |
 |---|---|

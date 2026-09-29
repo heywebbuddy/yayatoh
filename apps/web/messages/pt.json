@@ -624,7 +624,8 @@
     "internal": "Algo deu errado do nosso lado.",
     "reference": "Referência: {id}",
     "rateLimitedRetry": "Demasiadas tentativas. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}.",
-    "impersonation_blocked": "A equipe atuando como membro não pode fazer isso: reembolsos, pagamentos, exportações, exclusões e confirmações estão desativados."
+    "impersonation_blocked": "A equipe atuando como membro não pode fazer isso: reembolsos, pagamentos, exportações, exclusões e confirmações estão desativados.",
+    "read_only_freeze": "As alterações estão pausadas durante a manutenção programada. Nada foi salvo; tente novamente quando terminar."
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -5913,5 +5914,11 @@
     "slowTitle": "Esta página está demorando demais",
     "downTitle": "Esta página não está disponível agora",
     "body": "Tente novamente em instantes."
+  },
+  "maintenance": {
+    "label": "Manutenção",
+    "title": "Manutenção programada: as alterações estão pausadas",
+    "body": "A Yayatoh está em manutenção somente leitura enquanto migramos para a nova plataforma. Você ainda pode ver tudo, baixar exportações e escanear ingressos na entrada, e suas páginas públicas continuam no ar. Salvar alterações, novas vendas e reembolsos ficam pausados até o fim.",
+    "bodyUntil": "A Yayatoh está em manutenção somente leitura enquanto migramos para a nova plataforma, até cerca de {until}. Você ainda pode ver tudo, baixar exportações e escanear ingressos na entrada, e suas páginas públicas continuam no ar. Salvar alterações, novas vendas e reembolsos ficam pausados até lá."
   }
 }

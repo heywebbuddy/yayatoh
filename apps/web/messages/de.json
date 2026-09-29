@@ -624,7 +624,8 @@
     "internal": "Bei uns ist etwas schiefgelaufen.",
     "reference": "Referenz: {id}",
     "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
-    "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht: Erstattungen, Auszahlungen, Exporte, Löschungen und Bestätigungen sind aus."
+    "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht: Erstattungen, Auszahlungen, Exporte, Löschungen und Bestätigungen sind aus.",
+    "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Nichts wurde gespeichert; versuchen Sie es nach dem Ende erneut."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -5913,5 +5914,11 @@
     "slowTitle": "Diese Seite braucht zu lange",
     "downTitle": "Diese Seite ist gerade nicht verfügbar",
     "body": "Bitte versuche es gleich noch einmal."
+  },
+  "maintenance": {
+    "label": "Wartung",
+    "title": "Geplante Wartung: Änderungen sind pausiert",
+    "body": "Yayatoh ist im schreibgeschützten Wartungsmodus, während wir auf die neue Plattform umziehen. Sie können weiterhin alles ansehen, Exporte herunterladen und Tickets am Einlass scannen, und Ihre öffentlichen Seiten bleiben online. Speichern, neue Verkäufe und Erstattungen sind bis zum Ende pausiert.",
+    "bodyUntil": "Yayatoh ist im schreibgeschützten Wartungsmodus, während wir auf die neue Plattform umziehen, bis etwa {until}. Sie können weiterhin alles ansehen, Exporte herunterladen und Tickets am Einlass scannen, und Ihre öffentlichen Seiten bleiben online. Speichern, neue Verkäufe und Erstattungen sind bis dahin pausiert."
   }
 }

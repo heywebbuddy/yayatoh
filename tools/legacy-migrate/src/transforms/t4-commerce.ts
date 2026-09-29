@@ -392,10 +392,15 @@ export async function t4Commerce(ctx: StepContext): Promise<void> {
     where coalesce(o.refunded, 0) > 0
     on conflict (id) do nothing;
 
-    -- Inventory: sold = migrated active tickets (capacity raised if the legacy data oversold).
-    update ticketing.ticket_types tt set quantity_sold = x.sold, quantity_total = greatest(tt.quantity_total, x.sold)
-    from (select ticket_type_id, count(*) filter (where status = 'active') as sold from t4_units group by ticket_type_id) x
-    where tt.id = x.ticket_type_id;
+    -- Inventory: sold = migrated active tickets (capacity raised if the legacy data oversold), for
+    -- every migrated ticket type, those with no migrated ticket too (0), so a rerun reproduces it.
+    update ticketing.ticket_types tt set quantity_sold = coalesce(x.sold, 0),
+      quantity_total = greatest(tt.quantity_total, coalesce(x.sold, 0))
+    from legacy.ref r
+    left join (select ticket_type_id, count(*) filter (where status = 'active') as sold from t4_units group by ticket_type_id) x
+      on x.ticket_type_id = r.new_id
+    where r.instance = {inst} and r.entity = 'tickets' and tt.id = r.new_id
+      and tt.quantity_sold is distinct from coalesce(x.sold, 0);
 
     -- Promo redemptions carry over.
     update ticketing.promo_codes pc set redeemed_count = x.n,

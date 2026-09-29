@@ -583,3 +583,41 @@ export const frontDoorNotFound = platform.table(
     check('front_door_not_found_path_check', sql`length(path) <= 300`),
   ],
 );
+
+/**
+ * Platform operations flags (M2.5a, roadmap §7.8): the read-only freeze of the new app
+ * (`read_only_freeze`: every write command refused, platform-wide or for listed orgs) and the
+ * cutover host routing (`host_route:<host>`: `next` or `legacy`). One row per key; every change is
+ * appended to `ops_flag_changes` in the same statement. No app_user privileges: the apps read
+ * through the SECURITY DEFINER `platform.read_only_freeze()` / `platform.host_route()`, staff and
+ * the cutover tool write through `platform.set_ops_flag` (platform_reader / migrator).
+ */
+export const opsFlags = platform.table(
+  'ops_flags',
+  {
+    key: text('key').primaryKey(),
+    value: jsonb('value').notNull(),
+    reason: text('reason').notNull().default(''),
+    updatedBy: text('updated_by').notNull(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+  },
+  () => [
+    check('ops_flags_key_check', sql`key = 'read_only_freeze' or key ~ '^host_route:[a-z0-9.-]{1,253}$'`),
+    check('ops_flags_reason_check', sql`length(reason) <= 500`),
+  ],
+);
+
+/** Append-only history of `ops_flags` (who changed what, when and why); written by the function. */
+export const opsFlagChanges = platform.table(
+  'ops_flag_changes',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    key: text('key').notNull(),
+    /** The new value; null when the flag was cleared. */
+    value: jsonb('value'),
+    reason: text('reason').notNull().default(''),
+    actor: text('actor').notNull(),
+    at: tsz('at').notNull().defaultNow(),
+  },
+  (t) => [index('ops_flag_changes_key_at_idx').on(t.key, t.at)],
+);

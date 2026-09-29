@@ -16,7 +16,8 @@ export type StaffAction =
   | 'quotas'
   | 'openSignup'
   | 'incidents'
-  | 'frontDoor';
+  | 'frontDoor'
+  | 'maintenance';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -35,6 +36,7 @@ export type StaffAction =
  * - `frontDoor` (M2.4a): moving a route between the legacy site and the new app changes what
  *   every visitor of yayatoh.com or abc.yayatoh.com gets, so only admins do it (with a step-up).
  *   Every staff member can see the route table and its counters (pending owner).
+ * - `maintenance` (M2.5a): the read-only freeze stops every organizer's writes: admins only.
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -53,6 +55,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'openSignup',
     'incidents',
     'frontDoor',
+    'maintenance',
   ],
   support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents'],
   finance: ['view', 'payouts', 'fees', 'quotas'],

@@ -624,7 +624,8 @@
     "internal": "Une erreur s’est produite de notre côté.",
     "reference": "Référence : {id}",
     "rateLimitedRetry": "Trop de tentatives. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
-    "impersonation_blocked": "Un membre du personnel agissant en tant que membre ne peut pas faire cela : remboursements, versements, exports, suppressions et confirmations sont désactivés."
+    "impersonation_blocked": "Un membre du personnel agissant en tant que membre ne peut pas faire cela : remboursements, versements, exports, suppressions et confirmations sont désactivés.",
+    "read_only_freeze": "Les modifications sont suspendues pendant la maintenance programmée. Rien n’a été enregistré ; réessayez à la fin."
   },
   "notFound": {
     "title": "Page introuvable",
@@ -5913,5 +5914,11 @@
     "slowTitle": "Cette page met trop de temps à répondre",
     "downTitle": "Cette page n'est pas disponible pour le moment",
     "body": "Veuillez réessayer dans un instant."
+  },
+  "maintenance": {
+    "label": "Maintenance",
+    "title": "Maintenance programmée : les modifications sont suspendues",
+    "body": "Yayatoh est en maintenance en lecture seule pendant notre passage à la nouvelle plateforme. Vous pouvez toujours tout consulter, télécharger des exports et scanner les billets à l’entrée, et vos pages publiques restent en ligne. L’enregistrement des modifications, les nouvelles ventes et les remboursements sont suspendus jusqu’à la fin.",
+    "bodyUntil": "Yayatoh est en maintenance en lecture seule pendant notre passage à la nouvelle plateforme, jusqu’à {until} environ. Vous pouvez toujours tout consulter, télécharger des exports et scanner les billets à l’entrée, et vos pages publiques restent en ligne. L’enregistrement des modifications, les nouvelles ventes et les remboursements sont suspendus jusque-là."
   }
 }

@@ -3,7 +3,8 @@ import { getTranslations } from 'next-intl/server';
 
 /**
  * The front door's own answer when the legacy site can't be reached (502) or is too slow (504)
- * (M2.4a). proxy.ts rewrites to `/api/front-door/unavailable/{status}/{locale}`; plain HTML in the visitor's language, never cached.
+ * (M2.4a), or when a host is routed back to legacy with no origin configured (503, the M2.5a
+ * cutover rollback; batch 3c merge). proxy.ts rewrites to `/api/front-door/unavailable/{status}/{locale}`; plain HTML in the visitor's language, never cached.
  */
 interface Ctx {
   params: Promise<{ status: string; locale: string }>;
@@ -11,7 +12,7 @@ interface Ctx {
 
 async function page(_req: Request, { params }: Ctx): Promise<Response> {
   const p = await params;
-  const status = p.status === '504' ? 504 : 502;
+  const status = p.status === '504' ? 504 : p.status === '503' ? 503 : 502;
   const asked = p.locale;
   const locale: Locale = (LOCALES as readonly string[]).includes(asked) ? (asked as Locale) : 'en';
   const t = await getTranslations({ locale, namespace: 'frontDoor' });
@@ -27,7 +28,7 @@ async function page(_req: Request, { params }: Ctx): Promise<Response> {
     headers: {
       'content-type': 'text/html; charset=utf-8',
       'cache-control': 'no-store',
-      'retry-after': '30',
+      'retry-after': status === 503 ? '300' : '30',
       'x-front-door': 'legacy',
     },
   });

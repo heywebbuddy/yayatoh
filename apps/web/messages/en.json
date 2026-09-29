@@ -624,7 +624,8 @@
     "internal": "Something went wrong on our side.",
     "reference": "Reference: {id}",
     "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
-    "impersonation_blocked": "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off."
+    "impersonation_blocked": "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off.",
+    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends."
   },
   "notFound": {
     "title": "Page not found",
@@ -5913,5 +5914,11 @@
     "slowTitle": "This page is taking too long",
     "downTitle": "This page isn't available right now",
     "body": "Please try again in a moment."
+  },
+  "maintenance": {
+    "label": "Maintenance",
+    "title": "Scheduled maintenance: changes are paused",
+    "body": "Yayatoh is in read-only maintenance while we move to the new platform. You can still look at everything, download exports, scan tickets at the door, and your public pages stay online. Saving changes, new sales and refunds are paused until it ends.",
+    "bodyUntil": "Yayatoh is in read-only maintenance while we move to the new platform, until about {until}. You can still look at everything, download exports, scan tickets at the door, and your public pages stay online. Saving changes, new sales and refunds are paused until then."
   }
 }

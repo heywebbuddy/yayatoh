@@ -56,6 +56,11 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
               {t('incidents')}
             </Link>
           ) : null}
+          {staff.can('maintenance') ? (
+            <Link href="/maintenance" className="underline-offset-2 hover:underline">
+              {t('maintenance')}
+            </Link>
+          ) : null}
           <Link href="/access-log" className="underline-offset-2 hover:underline">
             {t('accessLog')}
           </Link>
