@@ -2,6 +2,7 @@ import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,
+  boolean,
   check,
   foreignKey,
   index,
@@ -10,6 +11,7 @@ import {
   pgSchema,
   text,
   timestamp,
+  unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
@@ -173,5 +175,159 @@ export const sponsors = tenantTable(
     orgFk('sponsors_tier_fk', [t.orgId, t.tierId], sponsorTiers),
     check('sponsors_name_length_check', sql`char_length(name) between 1 and 120`),
     check('sponsors_website_check', sql`website_url is null or website_url ~ '^https?://'`),
+  ],
+);
+
+/* ------------------------------------------------------------ M5.2a: agenda model v2 ---- */
+
+/** Kinds of session an organizer names per event ("Keynote", "Workshop", "Break", …). */
+export const sessionTypes = tenantTable(
+  programSchema,
+  'session_types',
+  {
+    eventId: uuid('event_id').notNull(),
+    name: text('name').notNull(),
+    position: integer('position').notNull().default(0),
+  },
+  (t) => [
+    uniqueIndex('session_types_org_event_name_key').on(t.orgId, t.eventId, sql`lower(name)`),
+    index('session_types_org_event_position_idx').on(t.orgId, t.eventId, t.position),
+    check('session_types_name_length_check', sql`char_length(name) between 1 and 60`),
+    check('session_types_position_check', sql`position between 0 and 999`),
+  ],
+);
+
+/**
+ * A "pick one" group: optional sessions in overlapping slots of which a registrant may hold at
+ * most one (M5.2a; enforced by M5.2b through `session_group_picks`).
+ */
+export const sessionGroups = tenantTable(
+  programSchema,
+  'session_groups',
+  {
+    eventId: uuid('event_id').notNull(),
+    name: text('name').notNull(),
+  },
+  (t) => [
+    uniqueIndex('session_groups_org_event_name_key').on(t.orgId, t.eventId, sql`lower(name)`),
+    check('session_groups_name_length_check', sql`char_length(name) between 1 and 80`),
+  ],
+);
+
+/**
+ * One row per session (created by a trigger on `program.sessions`): its type, whether it is
+ * included or optional (P5-9), its pick-one group, and the capacity counter. `capacity` mirrors
+ * `sessions.capacity` (same trigger); `enrolled` only moves through `claimSessionPlaceTx` /
+ * `releaseSessionPlaceTx`, and the CHECK makes `enrolled > capacity` impossible (like
+ * ticketing's inventory CHECK).
+ */
+export const sessionDetails = tenantTable(
+  programSchema,
+  'session_details',
+  {
+    eventId: uuid('event_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    typeId: uuid('type_id'),
+    admission: text('admission').notNull().default('included'),
+    groupId: uuid('group_id'),
+    capacity: integer('capacity'),
+    enrolled: integer('enrolled').notNull().default(0),
+    enrollmentOpen: boolean('enrollment_open').notNull().default(true),
+    /** The CSV import's row key (optional `key` column): re-importing matches on it. */
+    importKey: text('import_key'),
+  },
+  (t) => [
+    uniqueIndex('session_details_org_session_key').on(t.orgId, t.sessionId),
+    // The target of the pick-one guard's composite key (a constraint, created with the table).
+    unique('session_details_org_session_group_key').on(t.orgId, t.sessionId, t.groupId),
+    uniqueIndex('session_details_org_event_import_key')
+      .on(t.orgId, t.eventId, t.importKey)
+      .where(sql`import_key is not null`),
+    index('session_details_org_event_idx').on(t.orgId, t.eventId),
+    index('session_details_org_type_idx').on(t.orgId, t.typeId),
+    index('session_details_org_group_idx').on(t.orgId, t.groupId),
+    orgFk('session_details_session_fk', [t.orgId, t.sessionId], sessions).onDelete('cascade'),
+    orgFk('session_details_type_fk', [t.orgId, t.typeId], sessionTypes),
+    orgFk('session_details_group_fk', [t.orgId, t.groupId], sessionGroups),
+    check('session_details_admission_check', sql`admission in ('included', 'optional')`),
+    check(
+      'session_details_enrolled_check',
+      sql`enrolled >= 0 and (capacity is null or enrolled <= capacity)`,
+    ),
+    check('session_details_capacity_check', sql`capacity is null or capacity >= 1`),
+    check('session_details_group_optional_check', sql`group_id is null or admission = 'optional'`),
+    check('session_details_import_key_check', sql`import_key is null or char_length(import_key) between 1 and 80`),
+  ],
+);
+
+/**
+ * The DB guard for "pick one" groups (prepared for M5.2b): a registrant holds at most one session
+ * per group (unique), and the session must be in that group (the composite key into
+ * `session_details (org_id, session_id, group_id)`). `registrant_id` names a registration row of
+ * the higher-tier `registration` module, so it has no foreign key here.
+ */
+export const sessionGroupPicks = tenantTable(
+  programSchema,
+  'session_group_picks',
+  {
+    groupId: uuid('group_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    registrantId: uuid('registrant_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('session_group_picks_org_group_registrant_key').on(t.orgId, t.groupId, t.registrantId),
+    index('session_group_picks_org_session_idx').on(t.orgId, t.sessionId),
+    foreignKey({
+      name: 'session_group_picks_session_group_fk',
+      columns: [t.orgId, t.sessionId, t.groupId],
+      foreignColumns: [sessionDetails.orgId, sessionDetails.sessionId, sessionDetails.groupId],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * An event's agenda publishing state (M5.2a). No row: the agenda is **live** (M1.4f: every
+ * change shows at once). `draft`: nothing public. `published`: the public agenda serves
+ * `snapshot`; "changed since publish" is derived by comparing `snapshot_hash` with the current
+ * agenda's hash.
+ */
+export const agendaPublications = tenantTable(
+  programSchema,
+  'agenda_publications',
+  {
+    eventId: uuid('event_id').notNull(),
+    state: text('state').notNull().default('draft'),
+    version: integer('version').notNull().default(0),
+    /** The public agenda's sessions as published (the allowlisted `PublicSessionDto` shape). */
+    snapshot: jsonb('snapshot'),
+    snapshotHash: text('snapshot_hash'),
+    publishedAt: ts('published_at'),
+    publishedBy: text('published_by'),
+  },
+  (t) => [
+    uniqueIndex('agenda_publications_org_event_key').on(t.orgId, t.eventId),
+    check('agenda_publications_state_check', sql`state in ('draft', 'published')`),
+    check('agenda_publications_version_check', sql`version >= 0`),
+    check(
+      'agenda_publications_snapshot_check',
+      sql`state <> 'published' or (snapshot is not null and snapshot_hash is not null and published_at is not null)`,
+    ),
+  ],
+);
+
+/** A speaker's email (M5.2a): the CSV import matches speakers by it. One per speaker. */
+export const speakerContacts = tenantTable(
+  programSchema,
+  'speaker_contacts',
+  {
+    eventId: uuid('event_id').notNull(),
+    speakerId: uuid('speaker_id').notNull(),
+    email: text('email').notNull(),
+  },
+  (t) => [
+    uniqueIndex('speaker_contacts_org_speaker_key').on(t.orgId, t.speakerId),
+    uniqueIndex('speaker_contacts_org_event_email_key').on(t.orgId, t.eventId, t.email),
+    orgFk('speaker_contacts_speaker_fk', [t.orgId, t.speakerId], speakers).onDelete('cascade'),
+    check('speaker_contacts_email_check', sql`email = lower(email) and email like '%_@_%'`),
   ],
 );
