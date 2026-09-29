@@ -502,6 +502,47 @@ describe('batch PDF', () => {
     expect(v).toMatchObject({ ok: true, ticketId: t.id });
   });
 
+  it('prints the org logo embedded in the document (the renderer fetches nothing)', async () => {
+    const withLogo = {
+      ...tpl.design,
+      front: [
+        ...tpl.design.front,
+        {
+          ...defaultDesign('fold_4x3').front[0],
+          id: 'logo',
+          kind: 'logo' as const,
+          x: 70,
+          y: 4,
+          w: 25,
+          h: 12,
+        },
+      ],
+    };
+    tpl = await executeCommand(
+      saveTemplateCommand,
+      {
+        eventId: ev.id,
+        templateId: tpl.id,
+        name: 'Attendee',
+        design: withLogo as never,
+        baseVersion: tpl.version,
+      },
+      a.ctx(),
+      ports,
+    );
+    const [t] = await withTenant(a.ctx(), (tx) => badgeTicketsTx(tx, { eventId: ev.id }));
+    const one = await executeQuery(
+      singleBadgeQuery,
+      { eventId: ev.id, ticketId: t?.id ?? '' },
+      a.ctx(),
+      ports,
+    );
+    expect(one.html).toMatch(
+      /<img class="logo" [^>]*src="data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+" alt="[^"]+ logo">/,
+    );
+    expect(one.html).not.toMatch(/src="(https?:)?\/\//);
+  });
+
   it('a voided ticket is left out of its chunk', async () => {
     const batch = await start(a.ctx(), {});
     const [first] = await withTenant(a.ctx(), (tx) =>
