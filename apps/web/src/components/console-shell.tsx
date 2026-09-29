@@ -146,7 +146,7 @@ export async function ConsoleShell({
       </a>
       <nav
         aria-label={t('navigation')}
-        className="sticky top-0 hidden h-dvh w-[248px] shrink-0 border-e border-zinc-200 bg-white px-3 py-[18px] lg:block"
+        className="sticky top-0 hidden h-dvh w-[248px] shrink-0 overflow-y-auto border-e border-zinc-200 bg-white px-3 py-[18px] lg:block"
       >
         {sidebar}
       </nav>
