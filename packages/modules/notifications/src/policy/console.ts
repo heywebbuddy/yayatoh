@@ -563,3 +563,56 @@ export async function autoPausedOrgsTx(tx: TenantTx): Promise<AutoPausedOrgDto[]
     }),
   );
 }
+
+/** Deliverability of the org's email for the alert engine (M3.2b). Counts only. */
+export interface DeliverabilityFacts {
+  /** Emails sent in the window (every category). */
+  readonly sent: number;
+  readonly bounced: number;
+  readonly complained: number;
+  /** Optional messaging is paused automatically (complaint rate) right now. */
+  readonly autoPaused: boolean;
+  /** Messages (any channel) that failed to send in the window. */
+  readonly failed: number;
+}
+
+export async function deliverabilityFactsTx(
+  tx: TenantTx,
+  now: Date,
+  windowMs: number,
+): Promise<DeliverabilityFacts> {
+  const since = new Date(now.getTime() - windowMs);
+  const sentInWindow = and(
+    eq(messages.channel, 'email'),
+    eq(messages.status, 'sent'),
+    gte(messages.sentAt, since),
+  );
+  const [sent] = await tx.select({ n: count() }).from(messages).where(sentInWindow);
+  const [events] = await tx
+    .select({
+      bounced: sql<number>`count(distinct ${messageEvents.messageId}) filter (where ${messageEvents.type} = 'bounced')::int`,
+      complained: sql<number>`count(distinct ${messageEvents.messageId}) filter (where ${messageEvents.type} = 'complained')::int`,
+    })
+    .from(messageEvents)
+    .innerJoin(
+      messages,
+      and(eq(messages.orgId, messageEvents.orgId), eq(messages.id, messageEvents.messageId)),
+    )
+    .where(sentInWindow);
+  const [paused] = await tx
+    .select({ id: autoPauses.id })
+    .from(autoPauses)
+    .where(isNull(autoPauses.liftedAt))
+    .limit(1);
+  const [failed] = await tx
+    .select({ n: count() })
+    .from(messages)
+    .where(and(eq(messages.status, 'failed'), gte(messages.updatedAt, since)));
+  return {
+    sent: sent?.n ?? 0,
+    bounced: events?.bounced ?? 0,
+    complained: events?.complained ?? 0,
+    autoPaused: Boolean(paused),
+    failed: failed?.n ?? 0,
+  };
+}

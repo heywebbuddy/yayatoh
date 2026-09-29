@@ -230,3 +230,36 @@ export async function organizationLogoTx(
     .where(eq(organizations.id, orgId));
   return row?.path && row.alt ? { path: row.path, alt: row.alt } : null;
 }
+
+/**
+ * Alert engine (M3.2b): the org's custom domains in trouble. `failed` domains (DNS conflict or a
+ * provider error) and live domains still without a certificate `sslGraceMs` after going live.
+ * `primary` says whether one of them is a primary host. Counts only; no hostnames.
+ */
+export async function domainProblemsTx(
+  tx: TenantTx,
+  now: Date,
+  sslGraceMs: number,
+): Promise<{ readonly failed: number; readonly sslPending: number; readonly primary: boolean }> {
+  const grace = new Date(now.getTime() - sslGraceMs).toISOString();
+  const rows = await tx
+    .select({
+      status: orgDomains.status,
+      ssl: orgDomains.sslStatus,
+      primary: orgDomains.isPrimary,
+      activatedAt: orgDomains.activatedAt,
+    })
+    .from(orgDomains)
+    .where(eq(orgDomains.managed, false));
+  let failed = 0;
+  let sslPending = 0;
+  let primary = false;
+  for (const r of rows) {
+    const bad = r.status === 'failed';
+    const ssl = r.status === 'active' && r.ssl !== 'issued' && (r.activatedAt?.toISOString() ?? '') < grace;
+    if (bad) failed += 1;
+    if (ssl) sslPending += 1;
+    if ((bad || ssl) && r.primary) primary = true;
+  }
+  return { failed, sslPending, primary };
+}

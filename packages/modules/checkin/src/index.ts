@@ -11,6 +11,7 @@ export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,
   deviceContext,
+  deviceHealthTx,
   deviceIdOf,
   deviceManifestQuery,
   devicesOnlineTx,

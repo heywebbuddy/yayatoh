@@ -101,6 +101,8 @@ export {
   autoPauseQuery,
   CapDto,
   CapInput,
+  type DeliverabilityFacts,
+  deliverabilityFactsTx,
   deliveryReasonsTx,
   evaluateComplaintRateTx,
   frequencyCapsQuery,
@@ -208,6 +210,7 @@ export {
   PUSH_DELIVERY_STATUSES,
   PUSH_PLATFORMS,
 } from './schema.ts';
+export { countWords } from './templates/numbers.ts';
 export {
   EMAIL_MESSAGES,
   emailLocale,

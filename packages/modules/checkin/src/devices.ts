@@ -90,6 +90,35 @@ export async function devicesOnlineTx(tx: TenantTx, now: Date): Promise<number> 
   return r?.n ?? 0;
 }
 
+/**
+ * Device health for the alert engine (M3.2b): devices in use (not revoked or being wiped, seen
+ * within `inUseWindowMs`) that went quiet (no heartbeat within the online window), and online ones
+ * with a low battery or a queue of scans waiting to sync. Counts only; no labels or tokens.
+ */
+export async function deviceHealthTx(
+  tx: TenantTx,
+  now: Date,
+  opts: { readonly inUseWindowMs: number; readonly lowBatteryPct: number; readonly backlogScans: number },
+): Promise<{ readonly offline: number; readonly lowBattery: number; readonly backlog: number }> {
+  const online = new Date(now.getTime() - DEVICE_ONLINE_WINDOW_MS).toISOString();
+  const inUse = new Date(now.getTime() - opts.inUseWindowMs).toISOString();
+  const [r] = await tx.execute<{ offline: number; low: number; backlog: number }>(sql`
+    select
+      count(*) filter (where last_seen_at < ${online}::timestamptz)::int as offline,
+      count(*) filter (where last_seen_at >= ${online}::timestamptz
+        and battery_pct is not null and battery_pct <= ${opts.lowBatteryPct})::int as low,
+      count(*) filter (where last_seen_at >= ${online}::timestamptz
+        and queue_depth is not null and queue_depth >= ${opts.backlogScans})::int as backlog
+    from checkin.devices
+    where revoked_at is null and wipe_requested_at is null
+      and last_seen_at >= ${inUse}::timestamptz and last_seen_at <= ${now.toISOString()}::timestamptz + interval '5 minutes'`);
+  return {
+    offline: Number(r?.offline ?? 0),
+    lowBattery: Number(r?.low ?? 0),
+    backlog: Number(r?.backlog ?? 0),
+  };
+}
+
 export const enrollDeviceCommand = tenantCommand({
   name: 'checkin.enrollDevice',
   input: z.object({

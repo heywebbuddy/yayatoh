@@ -156,5 +156,12 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     name: 'Amina Diallo',
   },
   'messaging.auto_paused': { rateBps: 42 },
+  'alerts.alert': { rule: 'unseated', count: 37, severity: 'warning', eventName: 'Lakeside Jazz Night' },
+  'alerts.alert-text': {
+    rule: 'devicesOffline',
+    count: 3,
+    severity: 'critical',
+    eventName: 'Lakeside Jazz Night',
+  },
   'notifications.test': {},
 };

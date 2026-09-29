@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "Yayatoh サポートが {until} まで {member} として操作しています",
         "org-status": "{status, select, suspended {Yayatoh がこの組織を停止しました} reactivated {この組織が再開しました} other {Yayatoh がこの組織を閉鎖しました}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}"
       }
     },
     "kinds": {
@@ -124,6 +128,10 @@
       },
       "marketing": {
         "message": "お知らせとオファー"
+      },
+      "alerts": {
+        "alert": "アラート",
+        "alert-text": "アラートSMS"
       }
     },
     "status": {
@@ -261,7 +269,8 @@
     "trackedLinks": "トラッキングリンク",
     "messagingHealth": "メッセージ送信の上限",
     "audiences": "オーディエンス",
-    "refundRequests": "返金リクエスト"
+    "refundRequests": "返金リクエスト",
+    "alerts": "アラート"
   },
   "vocab": {
     "attendee": "参加者",
@@ -466,6 +475,11 @@
       "today": "本日チェックイン済み",
       "any": "チェックイン済み（日付を問わない）",
       "never": "未チェックイン"
+    },
+    "distribution": "配布",
+    "anyDistribution": "すべての配布状況",
+    "distributionFilter": {
+      "pending": "譲渡待ち"
     }
   },
   "attendeeStatus": {
@@ -5316,6 +5330,167 @@
         "not_enough_stock": "このご案内に必要な空きチケットが足りません。",
         "not_on_sale": "このパスまたは日程は販売されていません。"
       }
+    }
+  },
+  "alerts": {
+    "title": "アラート",
+    "description": "イベントで対応が必要なことと、それを解決するページ。",
+    "settingsLink": "アラート設定",
+    "statusLabel": "アラートを表示",
+    "active": "対応中",
+    "resolved": "解決済み",
+    "eventLabel": "イベント",
+    "allEvents": "すべてのイベント",
+    "orgWide": "組織全体",
+    "apply": "表示",
+    "live": {
+      "live": "ライブ更新オン",
+      "connecting": "接続中…",
+      "offline": "ライブ更新停止中"
+    },
+    "empty": {
+      "activeTitle": "現在アラートはありません",
+      "activeDescription": "イベントで対応が必要なことが起きると、ここに表示され、チームに通知されます。",
+      "resolvedTitle": "解決済みのアラートはまだありません",
+      "resolvedDescription": "問題が解決すると、アラートは自動的に解決済みになります。"
+    },
+    "severity": {
+      "info": "情報",
+      "warning": "警告",
+      "critical": "重大"
+    },
+    "state": {
+      "open": "未対応",
+      "acknowledged": "確認済み",
+      "snoozed": "{until}までスヌーズ",
+      "resolved": "{when}に解決"
+    },
+    "reopened": "再発",
+    "since": "{when}から",
+    "acknowledge": "確認",
+    "acknowledgeLabel": "「{title}」を確認",
+    "snoozeLabel": "スヌーズ期間",
+    "snooze": "スヌーズ",
+    "snoozeButtonLabel": "「{title}」をスヌーズ",
+    "snoozeFor": {
+      "m60": "1時間",
+      "m240": "4時間",
+      "m1440": "1日"
+    },
+    "done": {
+      "acknowledged": "アラートを確認しました。問題が解決するまでこのページに残ります。",
+      "snoozed": "アラートを{until}までスヌーズしました。"
+    },
+    "errors": {
+      "forbidden": "アラートを変更する権限がありません。オーナー、管理者、マネージャーに依頼してください。",
+      "conflict": "アラートがその間に変更されました。再読み込みしてもう一度お試しください。",
+      "notFound": "このアラートはもう存在しません。",
+      "invalid": "スヌーズする期間を選んでください。"
+    },
+    "history": {
+      "title": "履歴",
+      "fired": "発生（{count}）",
+      "updated": "{count}に変化",
+      "acknowledged": "チームメンバーが確認",
+      "acknowledgedYou": "あなたが確認",
+      "snoozed": "チームメンバーがスヌーズ",
+      "snoozedYou": "あなたがスヌーズ",
+      "woke": "スヌーズ終了",
+      "ack_expired": "確認後も継続中",
+      "resolved": "解決",
+      "reopened": "再発（{count}）",
+      "notified": "チームに通知"
+    },
+    "fix": {
+      "unseated": "座席を割り当てる",
+      "undistributed": "チケットを配布する",
+      "paymentsFailed": "失敗した支払いを確認",
+      "paymentsStuck": "保留中の支払いを確認",
+      "refundSurge": "返金を確認",
+      "devicesOffline": "端末を確認",
+      "devicesLowBattery": "端末を確認",
+      "devicesBacklog": "端末を確認",
+      "capacityNear": "入場画面を開く",
+      "capacityFull": "入場画面を開く",
+      "sellOut": "チケットを管理",
+      "salesPace": "販売分析を開く",
+      "readiness": "設定ガイドを開く",
+      "domain": "ドメインを修正",
+      "payoutsPastDue": "受取アカウントを更新",
+      "deliverability": "メッセージ状況を開く",
+      "automationFailed": "メッセージ状況を開く"
+    },
+    "rules": {
+      "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
+      "undistributed": "{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}",
+      "paymentsFailed": "{count, plural, other {{countWords}件の支払いが失敗しました}}",
+      "paymentsStuck": "{count, plural, other {{countWords}件の支払いが止まっています}}",
+      "refundSurge": "{count, plural, other {直近1時間で{countWords}件の返金}}",
+      "devicesOffline": "{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}",
+      "devicesLowBattery": "{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}",
+      "devicesBacklog": "{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}",
+      "capacityNear": "会場は{count}%埋まっています",
+      "capacityFull": "会場は満員です（{count}%）",
+      "sellOut": "チケットの{count}%が売れました",
+      "salesPace": "チケット販売は目標ペースの{count}%です",
+      "readiness": "{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}",
+      "domain": "{count, plural, other {{countWords}件のカスタムドメインに問題があります}}",
+      "payoutsPastDue": "{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}",
+      "deliverability": "メールの到達率に注意が必要です",
+      "automationFailed": "{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}"
+    },
+    "widget": {
+      "title": "アラート",
+      "viewAll": "すべてのアラートを見る",
+      "none": "現在このイベントのアラートはありません。"
+    },
+    "settings": {
+      "title": "アラート設定",
+      "description": "誰がどのアラートを受け取るか、そしてあなたのアラートSMSの送信先。",
+      "back": "アラートに戻る",
+      "phone": {
+        "title": "アラートSMS",
+        "label": "アラートSMS用の携帯電話番号",
+        "hint": "国際形式（例: +81 90 1234 5678）。静かな時間帯（21:00〜08:00）のSMSは8:00まで待機します。空欄にするとSMSはオフになります。",
+        "save": "番号を保存",
+        "saved": "アラート用の番号を保存しました。",
+        "cleared": "アラートSMSはオフです。",
+        "invalid": "国際形式で入力してください（例: +81 90 1234 5678）。"
+      },
+      "routing": {
+        "title": "誰に何を知らせるか",
+        "description": "各ロールには、閲覧できるアラートだけが届きます。全員がアラートページで自分のアラートを確認できます。",
+        "readOnly": "これを変更できるのはオーナーと管理者だけです。",
+        "save": "ルーティングを保存",
+        "saved": "ルーティングを保存しました。",
+        "cell": "{channel}: {role}向けの{group}アラート",
+        "group": "アラートグループ"
+      },
+      "targets": {
+        "title": "販売目標",
+        "description": "イベントのチケット目標を設定します。販売が必要なペースの70%以下になるとアラートが届きます。",
+        "label": "{event}のチケット目標",
+        "save": "目標を保存",
+        "saveFor": "{event}の目標を保存",
+        "saved": "販売目標を保存しました。",
+        "cleared": "販売目標を削除しました。",
+        "invalid": "チケット数を整数で入力するか、空欄のままにしてください。",
+        "none": "今後のイベントはありません。"
+      }
+    },
+    "groups": {
+      "attendees": "参加者と座席",
+      "payments": "支払いと入金",
+      "door": "入場と端末",
+      "sales": "販売",
+      "setup": "設定とドメイン",
+      "messaging": "メッセージ"
+    },
+    "channels": {
+      "in_app": "アプリ内",
+      "email": "メール",
+      "sms": "SMS",
+      "push": "プッシュ"
     }
   }
 }

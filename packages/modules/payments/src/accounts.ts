@@ -62,6 +62,17 @@ async function holdNewDestinationTx(
   return until;
 }
 
+/**
+ * Alert engine (M3.2b): the payout account has requirements past due. Stripe folds `past_due`
+ * into `requirements_due`; an account that was onboarded (details submitted) but has lost charges
+ * or payouts while requirements are due is past due. The count of due requirements only.
+ */
+export async function payoutRequirementsPastDueTx(tx: TenantTx): Promise<number> {
+  const [a] = await tx.select().from(paymentAccounts).limit(1);
+  if (!a || stateOf(a) !== 'restricted') return 0;
+  return a.requirementsDue.length;
+}
+
 /** The funds flow for new orders of this org (roadmap §5.3). */
 export async function fundsFlowTx(tx: TenantTx): Promise<{ fundsFlow: FundsFlow; accountId: string | null }> {
   const [a] = await tx.select().from(paymentAccounts).limit(1);

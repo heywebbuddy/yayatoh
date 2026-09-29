@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "دعم Yayatoh يتصرف بصفة {member} حتى {until}",
         "org-status": "{status, select, suspended {علّقت Yayatoh هذه المؤسسة} reactivated {عادت هذه المؤسسة إلى العمل} other {أغلقت Yayatoh هذه المؤسسة}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} other {تنبيه}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} other {تنبيه}}"
       }
     },
     "kinds": {
@@ -124,6 +128,10 @@
       },
       "marketing": {
         "message": "أخبار وعروض"
+      },
+      "alerts": {
+        "alert": "تنبيه",
+        "alert-text": "رسالة تنبيه نصية"
       }
     },
     "status": {
@@ -261,7 +269,8 @@
     "trackedLinks": "الروابط المتتبَّعة",
     "messagingHealth": "حدود المراسلة",
     "audiences": "الجماهير",
-    "refundRequests": "طلبات الاسترداد"
+    "refundRequests": "طلبات الاسترداد",
+    "alerts": "التنبيهات"
   },
   "vocab": {
     "attendee": "حاضر",
@@ -466,6 +475,11 @@
       "today": "سجّلوا الدخول اليوم",
       "any": "سجّلوا الدخول (في أي يوم)",
       "never": "لم يسجّلوا الدخول"
+    },
+    "distribution": "التوزيع",
+    "anyDistribution": "أي توزيع",
+    "distributionFilter": {
+      "pending": "بانتظار التسليم"
     }
   },
   "attendeeStatus": {
@@ -5316,6 +5330,167 @@
         "not_enough_stock": "لا تتوفر تذاكر كافية لهذا العرض.",
         "not_on_sale": "هذا التصريح أو الموعد غير معروض للبيع."
       }
+    }
+  },
+  "alerts": {
+    "title": "التنبيهات",
+    "description": "ما يحتاج إلى انتباه في فعالياتك، والصفحة التي تعالجه.",
+    "settingsLink": "إعدادات التنبيهات",
+    "statusLabel": "عرض التنبيهات",
+    "active": "النشطة",
+    "resolved": "المحلولة",
+    "eventLabel": "الفعالية",
+    "allEvents": "كل الفعاليات",
+    "orgWide": "المؤسسة بأكملها",
+    "apply": "عرض",
+    "live": {
+      "live": "التحديثات المباشرة مفعّلة",
+      "connecting": "جارٍ الاتصال…",
+      "offline": "التحديثات المباشرة متوقفة"
+    },
+    "empty": {
+      "activeTitle": "لا توجد تنبيهات الآن",
+      "activeDescription": "عندما يحتاج شيء إلى انتباه في إحدى فعالياتك، يظهر هنا ويُبلَّغ فريقك.",
+      "resolvedTitle": "لا توجد تنبيهات محلولة بعد",
+      "resolvedDescription": "تُحل التنبيهات من تلقاء نفسها بمجرد معالجة المشكلة."
+    },
+    "severity": {
+      "info": "معلومة",
+      "warning": "تحذير",
+      "critical": "حرج"
+    },
+    "state": {
+      "open": "مفتوح",
+      "acknowledged": "تم الإقرار",
+      "snoozed": "مؤجل حتى {until}",
+      "resolved": "حُل {when}"
+    },
+    "reopened": "عاد مجددًا",
+    "since": "منذ {when}",
+    "acknowledge": "إقرار",
+    "acknowledgeLabel": "إقرار «{title}»",
+    "snoozeLabel": "تأجيل لمدة",
+    "snooze": "تأجيل",
+    "snoozeButtonLabel": "تأجيل «{title}»",
+    "snoozeFor": {
+      "m60": "ساعة واحدة",
+      "m240": "4 ساعات",
+      "m1440": "يوم واحد"
+    },
+    "done": {
+      "acknowledged": "تم الإقرار بالتنبيه. سيبقى في هذه الصفحة حتى تُعالج المشكلة.",
+      "snoozed": "تم تأجيل التنبيه حتى {until}."
+    },
+    "errors": {
+      "forbidden": "لا يمكنك تغيير التنبيهات. اطلب ذلك من مالك أو مسؤول أو مدير.",
+      "conflict": "تغيّر التنبيه في هذه الأثناء. أعد التحميل وحاول مجددًا.",
+      "notFound": "لم يعد هذا التنبيه موجودًا.",
+      "invalid": "اختر مدة التأجيل."
+    },
+    "history": {
+      "title": "السجل",
+      "fired": "صدر ({count})",
+      "updated": "تغيّر إلى {count}",
+      "acknowledged": "أقرّ به أحد أعضاء الفريق",
+      "acknowledgedYou": "أقررت به أنت",
+      "snoozed": "أجّله أحد أعضاء الفريق",
+      "snoozedYou": "أجّلته أنت",
+      "woke": "انتهى التأجيل",
+      "ack_expired": "لا يزال قائمًا بعد الإقرار",
+      "resolved": "حُل",
+      "reopened": "عاد مجددًا ({count})",
+      "notified": "تم إبلاغ الفريق"
+    },
+    "fix": {
+      "unseated": "خصّص المقاعد",
+      "undistributed": "وزّع التذاكر",
+      "paymentsFailed": "راجع المدفوعات الفاشلة",
+      "paymentsStuck": "راجع المدفوعات المعلقة",
+      "refundSurge": "راجع الاستردادات",
+      "devicesOffline": "افحص الأجهزة",
+      "devicesLowBattery": "افحص الأجهزة",
+      "devicesBacklog": "افحص الأجهزة",
+      "capacityNear": "افتح شاشة الدخول",
+      "capacityFull": "افتح شاشة الدخول",
+      "sellOut": "إدارة التذاكر",
+      "salesPace": "افتح تحليل المبيعات",
+      "readiness": "افتح دليل الإعداد",
+      "domain": "أصلح النطاقات",
+      "payoutsPastDue": "حدّث حساب الدفعات",
+      "deliverability": "افتح حالة المراسلة",
+      "automationFailed": "افتح حالة المراسلة"
+    },
+    "rules": {
+      "unseated": "{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}",
+      "undistributed": "{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}",
+      "paymentsFailed": "{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}",
+      "paymentsStuck": "{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}",
+      "refundSurge": "{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}",
+      "devicesOffline": "{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}",
+      "devicesLowBattery": "{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}",
+      "devicesBacklog": "{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}",
+      "capacityNear": "المكان ممتلئ بنسبة {count}٪",
+      "capacityFull": "بلغ المكان سعته القصوى ({count}٪)",
+      "sellOut": "بيع {count}٪ من التذاكر",
+      "salesPace": "مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة",
+      "readiness": "{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}",
+      "domain": "{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}",
+      "payoutsPastDue": "{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}",
+      "deliverability": "قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام",
+      "automationFailed": "{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}"
+    },
+    "widget": {
+      "title": "التنبيهات",
+      "viewAll": "عرض كل التنبيهات",
+      "none": "لا توجد تنبيهات لهذه الفعالية الآن."
+    },
+    "settings": {
+      "title": "إعدادات التنبيهات",
+      "description": "من يُبلَّغ بأي تنبيهات، وإلى أين تذهب رسائل التنبيه النصية الخاصة بك.",
+      "back": "العودة إلى التنبيهات",
+      "phone": {
+        "title": "رسائل التنبيه النصية",
+        "label": "رقم الجوال لرسائل التنبيه النصية",
+        "hint": "بالتنسيق الدولي، مثل +971 50 123 4567. في ساعات الهدوء (21:00–08:00) تنتظر الرسائل حتى 8:00. اتركه فارغًا لإيقاف الرسائل.",
+        "save": "حفظ الرقم",
+        "saved": "تم حفظ رقم التنبيهات.",
+        "cleared": "رسائل التنبيه النصية متوقفة.",
+        "invalid": "استخدم التنسيق الدولي، مثل +971 50 123 4567."
+      },
+      "routing": {
+        "title": "من يُبلَّغ بماذا",
+        "description": "لا يُبلَّغ كل دور إلا بالتنبيهات التي يحق له رؤيتها. يرى الجميع تنبيهاتهم في صفحة التنبيهات.",
+        "readOnly": "لا يمكن تغيير هذا إلا للمالكين والمسؤولين.",
+        "save": "حفظ التوجيه",
+        "saved": "تم حفظ التوجيه.",
+        "cell": "{channel}: تنبيهات {group} لدور {role}",
+        "group": "مجموعة التنبيهات"
+      },
+      "targets": {
+        "title": "أهداف المبيعات",
+        "description": "حدّد هدفًا للتذاكر لفعالية: إذا كانت المبيعات عند 70٪ أو أقل من الوتيرة اللازمة، يصلك تنبيه.",
+        "label": "هدف التذاكر لـ {event}",
+        "save": "حفظ الهدف",
+        "saveFor": "حفظ هدف {event}",
+        "saved": "تم حفظ هدف المبيعات.",
+        "cleared": "تمت إزالة هدف المبيعات.",
+        "invalid": "أدخل عددًا صحيحًا من التذاكر، أو اتركه فارغًا.",
+        "none": "لا توجد فعاليات قادمة."
+      }
+    },
+    "groups": {
+      "attendees": "الحضور والمقاعد",
+      "payments": "المدفوعات والتحويلات",
+      "door": "الدخول والأجهزة",
+      "sales": "المبيعات",
+      "setup": "الإعداد والنطاقات",
+      "messaging": "المراسلة"
+    },
+    "channels": {
+      "in_app": "داخل التطبيق",
+      "email": "البريد الإلكتروني",
+      "sms": "رسالة نصية",
+      "push": "إشعار"
     }
   }
 }

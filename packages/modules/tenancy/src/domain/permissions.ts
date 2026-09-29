@@ -48,6 +48,8 @@ export const PERMISSIONS = [
   'audit:read',
   /** Data-subject requests: find, export and erase a person's data (M1.14c). Owners and admins. */
   'privacy:manage',
+  /** Acknowledge and snooze Command Center alerts (M3.2b). Viewers and scanners only see them. */
+  'alerts:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -73,6 +75,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'checkin:scan',
     'messages:read',
     'messages:send',
+    'alerts:manage',
   ],
   finance: [
     'org:read',
@@ -86,6 +89,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'disputes:respond',
     'payouts:manage',
     'marketing:read',
+    'alerts:manage',
   ],
   marketing: [
     'org:read',
@@ -107,6 +111,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'attendees:write',
     'checkin:scan',
     'messages:read',
+    'alerts:manage',
   ],
   scanner: ['org:read', 'checkin:scan'],
   viewer: ['org:read', 'members:read', 'events:read', 'orders:read', 'attendees:read', 'marketing:read'],

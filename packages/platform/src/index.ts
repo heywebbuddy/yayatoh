@@ -23,6 +23,7 @@ export {
   bulkOperationRequesterTx,
   bulkStepCommand,
   defineBulkAction,
+  failedBulkOperationsTx,
   listBulkOperationsQuery,
   MAX_BULK_ITEMS,
   markBulkFailedCommand,

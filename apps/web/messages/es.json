@@ -67,6 +67,10 @@
       "tenancy": {
         "staff-access": "El soporte de Yayatoh actúa como {member} hasta {until}",
         "org-status": "{status, select, suspended {Yayatoh suspendió esta organización} reactivated {Esta organización vuelve a estar en línea} other {Yayatoh cerró esta organización}}"
+      },
+      "alerts": {
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} other {Alerta}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} other {Alerta}}"
       }
     },
     "kinds": {
@@ -124,6 +128,10 @@
       },
       "marketing": {
         "message": "Novedades y ofertas"
+      },
+      "alerts": {
+        "alert": "Alerta",
+        "alert-text": "SMS de alerta"
       }
     },
     "status": {
@@ -261,7 +269,8 @@
     "trackedLinks": "Enlaces rastreados",
     "messagingHealth": "Límites de mensajería",
     "audiences": "Audiencias",
-    "refundRequests": "Solicitudes de reembolso"
+    "refundRequests": "Solicitudes de reembolso",
+    "alerts": "Alertas"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -466,6 +475,11 @@
       "today": "Entraron hoy",
       "any": "Entraron (cualquier día)",
       "never": "No han entrado"
+    },
+    "distribution": "Distribución",
+    "anyDistribution": "Cualquier distribución",
+    "distributionFilter": {
+      "pending": "Pendiente de transferir"
     }
   },
   "attendeeStatus": {
@@ -5316,6 +5330,167 @@
         "not_enough_stock": "No hay suficientes entradas libres para esta oferta.",
         "not_on_sale": "Este pase o fecha no está a la venta."
       }
+    }
+  },
+  "alerts": {
+    "title": "Alertas",
+    "description": "Lo que necesita atención en tus eventos y la página que lo soluciona.",
+    "settingsLink": "Ajustes de alertas",
+    "statusLabel": "Mostrar alertas",
+    "active": "Activas",
+    "resolved": "Resueltas",
+    "eventLabel": "Evento",
+    "allEvents": "Todos los eventos",
+    "orgWide": "Toda la organización",
+    "apply": "Mostrar",
+    "live": {
+      "live": "Actualizaciones en vivo",
+      "connecting": "Conectando…",
+      "offline": "Actualizaciones en pausa"
+    },
+    "empty": {
+      "activeTitle": "No hay alertas ahora",
+      "activeDescription": "Cuando algo necesite atención en uno de tus eventos, aparecerá aquí y se avisará a tu equipo.",
+      "resolvedTitle": "Todavía no hay alertas resueltas",
+      "resolvedDescription": "Las alertas se resuelven solas cuando se soluciona el problema."
+    },
+    "severity": {
+      "info": "Info",
+      "warning": "Advertencia",
+      "critical": "Crítica"
+    },
+    "state": {
+      "open": "Abierta",
+      "acknowledged": "Atendida",
+      "snoozed": "Pospuesta hasta {until}",
+      "resolved": "Resuelta {when}"
+    },
+    "reopened": "Reapareció",
+    "since": "Desde {when}",
+    "acknowledge": "Atender",
+    "acknowledgeLabel": "Atender «{title}»",
+    "snoozeLabel": "Posponer durante",
+    "snooze": "Posponer",
+    "snoozeButtonLabel": "Posponer «{title}»",
+    "snoozeFor": {
+      "m60": "1 hora",
+      "m240": "4 horas",
+      "m1440": "1 día"
+    },
+    "done": {
+      "acknowledged": "Alerta atendida. Sigue en esta página hasta que se solucione el problema.",
+      "snoozed": "Alerta pospuesta hasta {until}."
+    },
+    "errors": {
+      "forbidden": "No puedes cambiar las alertas. Pídeselo a una persona propietaria, administradora o gerente.",
+      "conflict": "La alerta cambió mientras tanto. Recarga e inténtalo de nuevo.",
+      "notFound": "Esa alerta ya no existe.",
+      "invalid": "Elige cuánto tiempo posponerla."
+    },
+    "history": {
+      "title": "Historial",
+      "fired": "Activada ({count})",
+      "updated": "Cambió a {count}",
+      "acknowledged": "Atendida por alguien del equipo",
+      "acknowledgedYou": "Atendida por ti",
+      "snoozed": "Pospuesta por alguien del equipo",
+      "snoozedYou": "Pospuesta por ti",
+      "woke": "Terminó el aplazamiento",
+      "ack_expired": "Sigue ocurriendo después de atenderla",
+      "resolved": "Resuelta",
+      "reopened": "Reapareció ({count})",
+      "notified": "Equipo avisado"
+    },
+    "fix": {
+      "unseated": "Asignar asientos",
+      "undistributed": "Distribuir entradas",
+      "paymentsFailed": "Revisar pagos fallidos",
+      "paymentsStuck": "Revisar pagos pendientes",
+      "refundSurge": "Revisar reembolsos",
+      "devicesOffline": "Revisar los dispositivos",
+      "devicesLowBattery": "Revisar los dispositivos",
+      "devicesBacklog": "Revisar los dispositivos",
+      "capacityNear": "Abrir la pantalla de acceso",
+      "capacityFull": "Abrir la pantalla de acceso",
+      "sellOut": "Gestionar entradas",
+      "salesPace": "Abrir el análisis de ventas",
+      "readiness": "Abrir la guía de configuración",
+      "domain": "Corregir dominios",
+      "payoutsPastDue": "Actualizar la cuenta de pagos",
+      "deliverability": "Abrir el estado de mensajería",
+      "automationFailed": "Abrir el estado de mensajería"
+    },
+    "rules": {
+      "unseated": "{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}",
+      "undistributed": "{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}",
+      "paymentsFailed": "{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}",
+      "paymentsStuck": "{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}",
+      "refundSurge": "{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}",
+      "devicesOffline": "{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}",
+      "devicesLowBattery": "{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}",
+      "devicesBacklog": "{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}",
+      "capacityNear": "El recinto está al {count} % de su capacidad",
+      "capacityFull": "El recinto está lleno ({count} %)",
+      "sellOut": "El {count} % de las entradas está vendido",
+      "salesPace": "La venta de entradas va al {count} % del ritmo objetivo",
+      "readiness": "{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}",
+      "domain": "{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}",
+      "payoutsPastDue": "{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}",
+      "deliverability": "La entregabilidad del correo necesita atención",
+      "automationFailed": "{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}"
+    },
+    "widget": {
+      "title": "Alertas",
+      "viewAll": "Ver todas las alertas",
+      "none": "No hay alertas para este evento ahora."
+    },
+    "settings": {
+      "title": "Ajustes de alertas",
+      "description": "Quién se entera de qué alertas y a dónde van tus propios SMS de alerta.",
+      "back": "Volver a alertas",
+      "phone": {
+        "title": "Tus SMS de alerta",
+        "label": "Número móvil para SMS de alerta",
+        "hint": "Formato internacional, por ejemplo +34 612 345 678. En horas de descanso (21:00–08:00), los SMS esperan hasta las 8:00. Déjalo vacío para desactivar los SMS.",
+        "save": "Guardar número",
+        "saved": "Tu número de alertas está guardado.",
+        "cleared": "Los SMS de alerta están desactivados.",
+        "invalid": "Usa el formato internacional, por ejemplo +34 612 345 678."
+      },
+      "routing": {
+        "title": "Quién se entera de qué",
+        "description": "Cada rol solo se entera de las alertas que puede ver. Todos ven sus alertas en la página de alertas.",
+        "readOnly": "Solo las personas propietarias y administradoras pueden cambiarlo.",
+        "save": "Guardar reparto",
+        "saved": "Reparto guardado.",
+        "cell": "{channel}: alertas de {group} para {role}",
+        "group": "Grupo de alertas"
+      },
+      "targets": {
+        "title": "Objetivos de venta",
+        "description": "Fija un objetivo de entradas para un evento: si las ventas van al 70 % o menos del ritmo necesario, recibirás una alerta.",
+        "label": "Objetivo de entradas para {event}",
+        "save": "Guardar objetivo",
+        "saveFor": "Guardar el objetivo de {event}",
+        "saved": "Objetivo de venta guardado.",
+        "cleared": "Objetivo de venta eliminado.",
+        "invalid": "Escribe un número entero de entradas o déjalo vacío.",
+        "none": "No hay eventos próximos."
+      }
+    },
+    "groups": {
+      "attendees": "Asistentes y asientos",
+      "payments": "Pagos y liquidaciones",
+      "door": "Acceso y dispositivos",
+      "sales": "Ventas",
+      "setup": "Configuración y dominios",
+      "messaging": "Mensajería"
+    },
+    "channels": {
+      "in_app": "En la app",
+      "email": "Correo",
+      "sms": "SMS",
+      "push": "Push"
     }
   }
 }

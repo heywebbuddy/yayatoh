@@ -16,6 +16,7 @@ import {
   attendeeListQuery,
   CHECKED_IN_FILTERS,
   contactTimelineQuery,
+  DISTRIBUTION_FILTERS,
 } from '@yayatoh/reports';
 import {
   activeAdaRule,
@@ -132,6 +133,7 @@ export default async function AttendeesPage({
     status?: string;
     type?: string;
     checkin?: string;
+    distribution?: string;
     page?: string;
     op?: string;
     opk?: string;
@@ -147,6 +149,8 @@ export default async function AttendeesPage({
   const status = oneOf(ATTENDEE_STATUSES, sp.status);
   const ticketTypeId = sp.type && /^[0-9a-f-]{36}$/.test(sp.type) ? sp.type : undefined;
   const checkedIn = oneOf(CHECKED_IN_FILTERS, sp.checkin);
+  // M3.2b: the undistributed-tickets alert links here (tickets waiting to be passed on).
+  const distribution = oneOf(DISTRIBUTION_FILTERS, sp.distribution);
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
   const { data, event: real } = await loadEvent(org, event);
@@ -166,6 +170,7 @@ export default async function AttendeesPage({
         status,
         ticketTypeIds: ticketTypeId ? [ticketTypeId] : [],
         checkedIn,
+        distribution,
         limit: PAGE_SIZE,
         offset: (page - 1) * PAGE_SIZE,
       })
@@ -339,6 +344,7 @@ export default async function AttendeesPage({
       status,
       type: ticketTypeId,
       checkin: checkedIn,
+      distribution,
       page: page > 1 ? String(page) : undefined,
       ...p,
     };
@@ -367,7 +373,9 @@ export default async function AttendeesPage({
       ? await executeQuery(contactTimelineQuery, { attendeeId: selectedRecord.id }, data.ctx, ports)
       : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
-  const filtered = Boolean(needle || labels.length || source || status || ticketTypeId || checkedIn);
+  const filtered = Boolean(
+    needle || labels.length || source || status || ticketTypeId || checkedIn || distribution,
+  );
   const from = live.total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const to = Math.min(live.total, page * PAGE_SIZE);
 
@@ -517,6 +525,22 @@ export default async function AttendeesPage({
                         </option>
                       ))}
                     </select>
+                    <label htmlFor="attendee-distribution" className="sr-only">
+                      {t('attendees.distribution')}
+                    </label>
+                    <select
+                      id="attendee-distribution"
+                      name="distribution"
+                      defaultValue={distribution ?? ''}
+                      className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                    >
+                      <option value="">{t('attendees.anyDistribution')}</option>
+                      {DISTRIBUTION_FILTERS.map((x) => (
+                        <option key={x} value={x}>
+                          {t(`attendees.distributionFilter.${x}`)}
+                        </option>
+                      ))}
+                    </select>
                   </>
                 ) : null}
               </>
@@ -655,6 +679,7 @@ export default async function AttendeesPage({
             <input type="hidden" name="f_status" value={status ?? ''} />
             <input type="hidden" name="f_type" value={ticketTypeId ?? ''} />
             <input type="hidden" name="f_checkin" value={checkedIn ?? ''} />
+            <input type="hidden" name="f_distribution" value={distribution ?? ''} />
             <fieldset className="flex flex-wrap items-center gap-x-4 gap-y-1">
               <legend className="sr-only">{t('bulk.applyTo')}</legend>
               <label className="flex min-h-6 items-center gap-2 text-body">

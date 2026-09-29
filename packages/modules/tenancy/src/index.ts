@@ -131,6 +131,7 @@ export {
 } from './hosting/recheck.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  domainProblemsTx,
   getOrganizationQuery,
   listInvitationsQuery,
   listMembersQuery,

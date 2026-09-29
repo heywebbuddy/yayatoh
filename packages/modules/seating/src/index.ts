@@ -1,3 +1,4 @@
+export { unseatedAttendeesTx } from './alert-facts.ts';
 export {
   assignSeatsCommand,
   MAX_ASSIGN,

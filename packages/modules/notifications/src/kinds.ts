@@ -250,6 +250,21 @@ export const KINDS = {
     audience: ['owner', 'admin'],
     params: ['rateBps'],
   },
+  // M3.2b: Command Center alerts, sent to the members the alerts module's per-role routing
+  // reaches. In-app, email and push go out at once; a text goes to the member's own alert number
+  // as `alerts.alert-text`, which waits out quiet hours.
+  'alerts.alert': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: true,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
+  'alerts.alert-text': {
+    category: 'transactional',
+    channels: ['sms'],
+    urgent: false,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],
