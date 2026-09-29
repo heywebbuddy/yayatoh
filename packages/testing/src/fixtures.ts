@@ -7,6 +7,7 @@ import {
   validateImportCommand,
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
+import { saveLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   chatReportSignals,
@@ -1175,6 +1176,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M3.2a Command Center: the owner's own layout and a manual mode (isolation coverage).
+  await executeCommand(
+    saveLayoutCommand,
+    { eventId: event.id, order: ['sales', 'readiness'], hidden: ['timeline'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setModeOverrideCommand, { eventId: event.id, mode: 'pre_show' }, ctx(), ports);
   // M3.1a: the metrics projector (snapshots, sharded counter, time series, lag samples) and the
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);

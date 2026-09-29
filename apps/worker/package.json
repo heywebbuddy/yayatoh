@@ -22,6 +22,7 @@
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/command-center": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
