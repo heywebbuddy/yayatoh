@@ -12,3 +12,12 @@ The lightweight event program (M1.4f): tracks, rooms, sessions, speakers, exhibi
 - Public reads (`publicProgram`, `publicSpeaker`) go through allowlist serializers: no capacities, no org internals.
 - Entitlements: `sessions` (tracks, rooms, sessions), `speakers`, `exhibitors`, `sponsors`. Reading the program needs `events:read`; every write `events:write`.
 - Events emitted (M1.4h): `program.speaker_deleted@1`, `program.exhibitor_deleted@1`, `program.sponsor_deleted@1` (`{ kind, eventId, id }`); media removes the row's photo/logo. `programOwnerTx` lets media check an image owner under RLS.
+
+**M5.4a — exhibitor portal and booths**
+- Exhibitor people (`exhibitor_members`) are admins or staff of one exhibitor at one event, bound to an event-role assignment (`exhibitor_admin`/`exhibitor_staff`) that expires with the event + 90 days. They are never org members. Links and sessions are stored as HMACs only; a link is spent on use; revoking ends links, sessions and the event role.
+- Portal commands (`public:exhibitor_portal`) re-check the portal principal in their transaction (`portalMemberTx`: same org, active unexpired member, the named assignment live, admin where needed) and act only on the principal's own exhibitor.
+- Staff invites stop at the allowance (the exhibitor's own, else the event default, else 5): pending and active staff hold places, revoked free them; the exhibitor row is locked before counting.
+- With approval on, an admin's edit is the exhibitor's single pending change until the organizer approves (applied) or rejects it.
+- Booths: numbers unique per event (case-insensitive); at most one primary per booth (the first by default; removing the primary promotes the longest-standing co-exhibitor). Overlaps, shared booths, several booths and category mismatches are warnings.
+- Public reads (`publicExhibitorMap`, `publicProgram`) leave out unlisted exhibitors and go through allowlist serializers.
+- Events: `program.exhibitor.staff_invited@1`, `program.booth.assigned@1`.
