@@ -113,3 +113,6 @@ No new tables (the isolation suite already covers both tables for both orgs). `e
 
 ### 16. Owner tasks
 - [ ] Confirm the co-host/planner defaults (docs/owner-inbox.md, M4.2a).
+
+### Gate (2026-09-29)
+`pnpm verify` green (lint, check:modules, typecheck, 1298 unit, 801 integration); `pnpm contracts:check` green; the whole web e2e suite at 375/768/1280: 1228 passed, 32 skipped (existing skips), 0 failed. New tests: `event-team.int.test.ts` (15), `social-workspace.spec.ts` (7 × 3 viewports), unit additions in `permissions.test.ts`, `profiles.test.ts`, `readiness.test.ts`, `event-routes.test.ts`.
