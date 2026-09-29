@@ -100,6 +100,7 @@ export function transferMailer(deps: { notifier: Notifier; appOrigin: string }) 
             eventName,
           },
           dedupeKey: `transfer-offered:${t.id}`,
+          orderId: t.orderId,
           eventId: p.eventId,
         });
         return;
@@ -110,6 +111,7 @@ export function transferMailer(deps: { notifier: Notifier; appOrigin: string }) 
         to: { email: t.fromEmail, name: t.fromName, timeZone },
         params: { name: t.fromName, toName: t.toName, eventName },
         dedupeKey: `transfer-completed:${t.id}`,
+        orderId: t.orderId,
         eventId: p.eventId,
       });
       const link = await issueHolderLinkTx(tx, ctx, p.eventId, t.toEmail);
@@ -123,6 +125,7 @@ export function transferMailer(deps: { notifier: Notifier; appOrigin: string }) 
           eventName,
         },
         dedupeKey: `transfer-received:${t.id}`,
+        orderId: t.orderId,
         eventId: p.eventId,
       });
     },
