@@ -1,6 +1,6 @@
 import { AUDIENCE_EXPORT_COLUMNS, audienceExportBulk, catchUpParticipation } from '@yayatoh/audiences';
 import { enrollDeviceCommand } from '@yayatoh/checkin';
-import { createEntryCommand } from '@yayatoh/cms';
+import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand } from '@yayatoh/cms';
 import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
@@ -159,6 +159,24 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
   await executeCommand(
     createEntryCommand,
     { kind: 'page', title: 'Draft page', body: 'Not yet.', authorName: 'Canary Owner' },
+    ctx(),
+    ports,
+  );
+  // M3.11b: a draft help article and a draft marketing section (private until published).
+  const [helpCategory] = await admin.unsafe(
+    `select id::text as id from cms.help_categories where org_id = $1 limit 1`,
+    [orgId],
+  );
+  if (!helpCategory) throw new Error('canary: the fixture has no help category');
+  await executeCommand(
+    createHelpArticleCommand,
+    { categoryId: helpCategory.id as string, title: 'Draft help article', body: 'Not yet.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createSiteSectionCommand,
+    { placement: 'features', heading: 'Draft section', body: 'Not yet.' },
     ctx(),
     ports,
   );

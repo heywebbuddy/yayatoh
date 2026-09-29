@@ -267,7 +267,9 @@
     "trackedLinks": "Enlaces rastreados",
     "messagingHealth": "Límites de mensajería",
     "audiences": "Audiencias",
-    "refundRequests": "Solicitudes de reembolso"
+    "refundRequests": "Solicitudes de reembolso",
+    "helpCenter": "Centro de ayuda",
+    "marketingSite": "Sitio de marketing"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -3275,7 +3277,9 @@
       "eyebrow": "Yayatoh",
       "title": "Encuentra tu próximo evento.",
       "lede": "Conciertos, galas, conferencias y eventos comunitarios, con todas las comisiones incluidas en el precio.",
-      "demoCta": "Abrir la consola de demostración"
+      "demoCta": "Abrir la consola de demostración",
+      "organizersTitle": "Por qué los organizadores eligen Yayatoh",
+      "organizersMore": "Ver todas las funciones"
     },
     "events": {
       "title": "Todos los eventos"
@@ -3294,7 +3298,12 @@
       "emptyTitle": "No hay próximos eventos",
       "emptyDescription": "{org} no tiene nada a la venta ahora mismo. Vuelve pronto."
     },
-    "pricing": "Precios"
+    "pricing": "Precios",
+    "features": "Funciones",
+    "help": "Ayuda",
+    "helpCenter": "Centro de ayuda",
+    "contact": "Contacto",
+    "status": "Estado del sistema"
   },
   "widget": {
     "title": "Entradas: {event}",
@@ -5379,5 +5388,269 @@
     "startHeading": "Empieza a vender",
     "startBody": "Crea tu organización, prepara tu primer evento y publícalo cuando estés listo.",
     "startCta": "Crear tu organización"
+  },
+  "help": {
+    "breadcrumbs": "Ruta de navegación",
+    "title": "Centro de ayuda",
+    "lede": "Respuestas para organizadores y compradores de entradas: configurar eventos, vender entradas, check-in, reembolsos y más.",
+    "emptyTitle": "Aún no hay artículos de ayuda",
+    "emptyDescription": "Los artículos aparecen aquí en cuanto se publican.",
+    "articleCount": "{count, plural, =0 {Ningún artículo} one {# artículo} other {# artículos}}",
+    "articlesIn": "Artículos en {category}",
+    "related": "Artículos relacionados",
+    "updated": "Actualizado el {date}",
+    "notTranslated": "Este artículo aún no está disponible en su idioma, por eso se muestra en inglés.",
+    "audience": {
+      "organizers": "Para organizadores",
+      "buyers": "Para compradores de entradas"
+    },
+    "meta": {
+      "title": "Centro de ayuda · Yayatoh",
+      "description": "Respuestas para organizadores y compradores de entradas en Yayatoh.",
+      "category": "{category} · Centro de ayuda de Yayatoh",
+      "search": "«{query}» · Centro de ayuda de Yayatoh"
+    },
+    "search": {
+      "label": "Buscar en el centro de ayuda",
+      "field": "Buscar artículos de ayuda",
+      "placeholder": "Por ejemplo: reembolsar una entrada",
+      "submit": "Buscar",
+      "title": "Búsqueda",
+      "resultsFor": "Resultados para «{query}»",
+      "count": "{count, plural, =0 {No se encontraron artículos} one {# artículo encontrado} other {# artículos encontrados}}",
+      "prompt": "Escriba algunas palabras para buscar en el centro de ayuda.",
+      "results": "Resultados de la búsqueda",
+      "emptyTitle": "No hay resultados para su búsqueda",
+      "emptyDescription": "Pruebe con otras palabras o explore las categorías del centro de ayuda."
+    },
+    "feedback": {
+      "question": "¿Le resultó útil este artículo?",
+      "yes": "Sí",
+      "no": "No",
+      "reasonLegend": "¿Qué falló? (opcional)",
+      "reason": {
+        "unclear": "Era difícil de entender",
+        "incomplete": "Faltaba algo",
+        "outdated": "Está desactualizado",
+        "other": "Otra cosa"
+      },
+      "sendReason": "Enviar",
+      "thanksYes": "Gracias por su respuesta.",
+      "thanksNo": "Gracias. Usaremos su respuesta para mejorar este artículo.",
+      "rateLimited": "Demasiadas respuestas desde este dispositivo. Vuelva a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}."
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "Funciones para organizadores · Yayatoh",
+      "title": "Todo lo necesario para gestionar sus eventos",
+      "lede": "Entradas, asientos, check-in, mensajes y pagos a organizadores en un solo lugar.",
+      "emptyTitle": "Las funciones llegarán pronto",
+      "emptyDescription": "Esta página se está redactando. Mientras tanto, contáctenos.",
+      "contactCta": "Hable con nosotros",
+      "helpCta": "Ir al centro de ayuda"
+    },
+    "contact": {
+      "metaTitle": "Contacto y ventas · Yayatoh",
+      "title": "Contacto",
+      "lede": "¿Preguntas sobre Yayatoh, una demostración o precios para sus eventos? Envíenos un mensaje y le responderemos por correo electrónico.",
+      "formTitle": "Enviar un mensaje",
+      "fields": {
+        "topic": "Tema",
+        "name": "Su nombre",
+        "email": "Correo electrónico",
+        "company": "Organización",
+        "message": "Mensaje"
+      },
+      "topics": {
+        "sales": "Ventas y demostraciones",
+        "support": "Ayuda con mi cuenta",
+        "partnership": "Alianzas",
+        "other": "Otra cosa"
+      },
+      "optional": "Opcional",
+      "messageHint": "Al menos 10 caracteres.",
+      "privacy": "Usamos sus datos solo para responder a este mensaje.",
+      "submit": "Enviar mensaje",
+      "sentTitle": "Gracias, su mensaje se ha enviado.",
+      "sentBody": "Responderemos a su dirección de correo electrónico lo antes posible.",
+      "fixErrors": "Revise los campos resaltados.",
+      "rateLimited": "Demasiados mensajes desde este dispositivo. Vuelva a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
+      "errors": {
+        "name": "Introduzca su nombre.",
+        "email": "Introduzca una dirección de correo electrónico válida.",
+        "company": "Use 160 caracteres como máximo.",
+        "message": "Escriba un mensaje de entre 10 y 4000 caracteres.",
+        "human": "Confirme que es una persona."
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "Estado del servicio",
+      "incident": "Tenemos un problema: {title}",
+      "maintenance": "Mantenimiento en curso: {title}",
+      "others": "{count, plural, one {Y # más.} other {Y # más.}}",
+      "link": "Ver la página de estado"
+    },
+    "page": {
+      "metaTitle": "Estado del sistema · Yayatoh",
+      "title": "Estado del sistema",
+      "lede": "El estado actual de los servicios de Yayatoh y los incidentes recientes. Las horas están en UTC.",
+      "unavailableTitle": "Estado no disponible",
+      "unavailableBody": "No podemos mostrar el estado del servicio en este momento. Vuelva a intentarlo en unos minutos.",
+      "checked": "Comprobado {time}",
+      "components": "Servicios",
+      "open": "Incidentes actuales",
+      "noOpen": "No hay incidentes en este momento.",
+      "past": "Últimos 14 días",
+      "noPast": "No hubo incidentes en los últimos 14 días."
+    },
+    "overall": {
+      "operational": "Todos los sistemas funcionan",
+      "maintenance": "Mantenimiento en curso",
+      "degraded": "Algunos sistemas tienen un rendimiento reducido",
+      "partial_outage": "Interrupción parcial",
+      "major_outage": "Interrupción grave"
+    },
+    "componentStatus": {
+      "operational": "Operativo",
+      "maintenance": "Mantenimiento",
+      "degraded": "Rendimiento reducido",
+      "partial_outage": "Interrupción parcial",
+      "major_outage": "Interrupción grave"
+    },
+    "impact": {
+      "minor": "Impacto menor",
+      "major": "Impacto importante",
+      "critical": "Impacto crítico",
+      "maintenance": "Mantenimiento"
+    },
+    "incidentStatus": {
+      "investigating": "En investigación",
+      "identified": "Identificado",
+      "monitoring": "En observación",
+      "resolved": "Resuelto",
+      "scheduled": "Programado",
+      "in_progress": "En curso",
+      "completed": "Completado"
+    },
+    "components": {
+      "marketplace": "Páginas de eventos y marketplace",
+      "checkout": "Pago",
+      "console": "Consola del organizador",
+      "checkin": "Check-in y escaneo",
+      "payments": "Pagos y liquidaciones",
+      "messaging": "Correo electrónico y mensajes",
+      "api": "API"
+    },
+    "affects": "Afecta a: {components}",
+    "updates": "Actualizaciones sobre {title}"
+  },
+  "helpConsole": {
+    "title": "Centro de ayuda",
+    "description": "Artículos y categorías del centro de ayuda público. Los borradores son privados hasta que los publique.",
+    "tabsLabel": "Secciones del centro de ayuda",
+    "tabs": {
+      "articles": "Artículos",
+      "categories": "Categorías"
+    },
+    "newArticle": "Nuevo artículo",
+    "newArticleDescription": "Es un borrador hasta que lo publique. Para traducir un artículo, vuelva a crearlo con la misma dirección en otro idioma.",
+    "createArticle": "Crear borrador",
+    "back": "Volver al centro de ayuda",
+    "categoryCreated": "Categoría creada.",
+    "emptyArticlesTitle": "Aún no hay artículos",
+    "emptyArticlesDescription": "Escriba el primer artículo para organizadores o compradores de entradas.",
+    "emptyNeedsCategory": "Primero cree una categoría y luego escriba artículos en ella.",
+    "emptyCategoriesTitle": "Aún no hay categorías",
+    "emptyCategoriesDescription": "Las categorías agrupan artículos para organizadores o para compradores de entradas.",
+    "newCategory": "Nueva categoría",
+    "createCategory": "Crear categoría",
+    "columns": {
+      "category": "Categoría",
+      "helpful": "Útil"
+    },
+    "helpfulCounts": "{yes} sí · {no} no",
+    "fields": {
+      "category": "Categoría",
+      "locale": "Idioma",
+      "title": "Título",
+      "slug": "Dirección",
+      "summary": "Resumen",
+      "body": "Texto",
+      "keywords": "Palabras clave de búsqueda",
+      "position": "Orden",
+      "audience": "Público",
+      "categoryTitle": "Nombre",
+      "description": "Descripción"
+    },
+    "titleError": "Introduzca un título.",
+    "slugFrozen": "La dirección de un artículo publicado no se puede cambiar.",
+    "slugHint": "Déjelo vacío para generarla a partir del título. Una traducción usa la dirección del artículo en inglés.",
+    "keywordsHint": "Palabras separadas por comas que la gente podría buscar.",
+    "positionHint": "Los números más bajos aparecen primero.",
+    "positionError": "Use un número entero de 0 a 10 000.",
+    "audience": {
+      "organizers": "Organizadores",
+      "buyers": "Compradores de entradas"
+    },
+    "slugReserved": "Esta dirección está reservada. Elija otra.",
+    "categorySlugHint": "Déjelo vacío para generarla a partir del nombre. No se puede cambiar después.",
+    "translations": "Nombre en otros idiomas",
+    "translationsError": "Revise los nombres traducidos.",
+    "categoryHasArticles": "Primero mueva o elimine los artículos de esta categoría."
+  },
+  "siteConsole": {
+    "title": "Sitio de marketing",
+    "description": "Las secciones de la página de inicio, la página de funciones y la página de contacto, y los mensajes enviados desde el formulario de contacto.",
+    "tabsLabel": "Secciones del sitio de marketing",
+    "tabs": {
+      "sections": "Secciones",
+      "requests": "Solicitudes de contacto"
+    },
+    "newSection": "Nueva sección",
+    "newSectionDescription": "Es un borrador hasta que la publique. Para traducir una sección, vuelva a crearla con la misma clave en otro idioma.",
+    "createSection": "Crear borrador",
+    "back": "Volver al sitio de marketing",
+    "noSections": "Aún no hay secciones en esta página.",
+    "placement": {
+      "home": "Página de inicio: por qué Yayatoh",
+      "features": "Página de funciones",
+      "contact": "Página de contacto"
+    },
+    "fields": {
+      "placement": "Página",
+      "locale": "Idioma",
+      "eyebrow": "Etiqueta sobre el encabezado",
+      "heading": "Encabezado",
+      "slug": "Clave",
+      "body": "Texto",
+      "ctaLabel": "Texto del botón",
+      "ctaHref": "Enlace del botón",
+      "position": "Orden"
+    },
+    "optional": "Opcional",
+    "headingError": "Introduzca un encabezado.",
+    "slugHint": "Déjelo vacío para generarla a partir del encabezado. Una traducción usa la clave de la sección en inglés.",
+    "ctaLegend": "Botón (opcional)",
+    "ctaLabelError": "Introduzca el texto del botón (hasta 40 caracteres) con su enlace.",
+    "ctaHrefHint": "Una página de este sitio, como /contact, o una dirección https://.",
+    "ctaHrefError": "Use una página de este sitio (que empiece por /) o una dirección https://.",
+    "positionHint": "Los números más bajos aparecen primero.",
+    "positionError": "Use un número entero de 0 a 10 000.",
+    "noRequestsTitle": "No hay solicitudes de contacto",
+    "noRequestsDescription": "Los mensajes enviados desde la página de contacto aparecen aquí.",
+    "requestStatus": {
+      "new": "Nueva",
+      "handled": "Atendida"
+    },
+    "topics": {
+      "sales": "Ventas y demostraciones",
+      "support": "Ayuda con la cuenta",
+      "partnership": "Alianzas",
+      "other": "Otro"
+    },
+    "markHandled": "Marcar como atendida"
   }
 }

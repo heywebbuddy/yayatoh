@@ -56,7 +56,8 @@
     "passkeys": "Passkeys",
     "messaging": "Auto-paused messaging",
     "messagingCount": "Auto-paused messaging ({count})",
-    "openSignup": "Open signup"
+    "openSignup": "Open signup",
+    "incidents": "Incidents"
   },
   "tenants": {
     "title": "Tenants",
@@ -677,6 +678,60 @@
     "change": {
       "on": "Opened",
       "off": "Closed"
+    }
+  },
+  "incidents": {
+    "title": "Status incidents",
+    "descriptionFake": "Post and update incidents on the status page. The public status page, the console and the marketplace show them at once. This is the development status page; production uses the status page provider.",
+    "descriptionProvider": "Incidents are posted in the status page provider.",
+    "providerNote": "This environment uses the status page provider: post and update incidents there (see the on-call runbook).",
+    "list": "Recent incidents",
+    "empty": "No incidents in the last 14 days.",
+    "started": "started {date} UTC",
+    "new": {
+      "title": "Post an incident",
+      "titleField": "Title (shown publicly)",
+      "impact": "Impact",
+      "components": "Affected components",
+      "body": "First update (shown publicly)",
+      "submit": "Post incident",
+      "posted": "Incident posted. It is on the status page now."
+    },
+    "update": {
+      "label": "Update {title}",
+      "status": "New status",
+      "body": "Update (shown publicly)",
+      "submit": "Post update"
+    },
+    "errors": {
+      "summary": "Check the highlighted fields.",
+      "title": "Give the incident a title (up to 160 characters).",
+      "body": "Write the update (up to 2,000 characters).",
+      "closed": "This incident is already closed."
+    },
+    "impact": {
+      "minor": "Minor (degraded)",
+      "major": "Major (partial outage)",
+      "critical": "Critical (major outage)",
+      "maintenance": "Maintenance"
+    },
+    "status": {
+      "investigating": "Investigating",
+      "identified": "Identified",
+      "monitoring": "Monitoring",
+      "resolved": "Resolved",
+      "scheduled": "Scheduled",
+      "in_progress": "In progress",
+      "completed": "Completed"
+    },
+    "component": {
+      "marketplace": "Event pages and marketplace",
+      "checkout": "Checkout",
+      "console": "Organizer console",
+      "checkin": "Check-in and scanning",
+      "payments": "Payments and payouts",
+      "messaging": "Email and messaging",
+      "api": "API"
     }
   }
 }

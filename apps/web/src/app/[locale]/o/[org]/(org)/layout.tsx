@@ -3,6 +3,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
+import { isPlatformContentOrg } from '@/server/cms.ts';
 import { loadConsole } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
@@ -17,6 +18,8 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
   { key: 'publicSite', path: 'site', group: 'build', module: 'core', icon: 'store' },
   { key: 'siteContent', path: 'content', group: 'build', module: 'core', icon: 'file-text' },
+  { key: 'helpCenter', path: 'help-center', group: 'build', module: 'core', icon: 'life-buoy' },
+  { key: 'marketingSite', path: 'marketing', group: 'build', module: 'core', icon: 'megaphone' },
   { key: 'payouts', path: 'payouts', group: 'build', module: 'core', icon: 'landmark' },
   { key: 'finance', path: 'finance', group: 'build', module: 'core', icon: 'scale' },
   { key: 'settings', path: 'settings', group: 'build', module: 'core', icon: 'settings' },
@@ -26,6 +29,9 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'activity', path: 'activity', group: 'build', module: 'core', icon: 'history' },
   { key: 'privacy', path: 'privacy', group: 'build', module: 'core', icon: 'shield' },
 ];
+
+/** M3.11b: the platform CMS (help center, marketing site) lives in the marketplace content org only. */
+const CONTENT_ORG_ONLY = new Set(['helpCenter', 'marketingSite']);
 
 /** Items only some roles may open (the pages refuse everyone else too). */
 const NEEDS: Readonly<Record<string, string>> = {
@@ -57,7 +63,10 @@ export default async function OrgLayout({
         base: `/o/${org}`,
         profile: data.profile,
         items: ORG_NAV.filter(
-          (i) => data.modules.has(i.module) && (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)),
+          (i) =>
+            data.modules.has(i.module) &&
+            (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)) &&
+            (!CONTENT_ORG_ONLY.has(i.key) || isPlatformContentOrg(data.org.slug)),
         ),
       }}
     >

@@ -267,7 +267,9 @@
     "trackedLinks": "追蹤連結",
     "messagingHealth": "訊息傳送限制",
     "audiences": "受眾",
-    "refundRequests": "退款申請"
+    "refundRequests": "退款申請",
+    "helpCenter": "說明中心",
+    "marketingSite": "行銷網站"
   },
   "vocab": {
     "attendee": "參加者",
@@ -3275,7 +3277,9 @@
       "eyebrow": "Yayatoh",
       "title": "找到你的下一場活動。",
       "lede": "音樂會、晚宴、研討會與社群活動，所有費用皆已含在價格中。",
-      "demoCta": "開啟示範主控台"
+      "demoCta": "開啟示範主控台",
+      "organizersTitle": "主辦單位為何選擇 Yayatoh",
+      "organizersMore": "查看所有功能"
     },
     "events": {
       "title": "所有活動"
@@ -3294,7 +3298,12 @@
       "emptyTitle": "沒有即將舉行的活動",
       "emptyDescription": "{org} 目前沒有販售中的項目，請稍後再來看看。"
     },
-    "pricing": "價格"
+    "pricing": "價格",
+    "features": "功能",
+    "help": "說明",
+    "helpCenter": "說明中心",
+    "contact": "聯絡我們",
+    "status": "系統狀態"
   },
   "widget": {
     "title": "門票：{event}",
@@ -5379,5 +5388,269 @@
     "startHeading": "開始售票",
     "startBody": "建立您的組織，準備好第一個活動，準備就緒後即可發布。",
     "startCta": "建立您的組織"
+  },
+  "help": {
+    "breadcrumbs": "導覽路徑",
+    "title": "說明中心",
+    "lede": "為主辦單位與購票者解答問題：設定活動、販售票券、報到、退款等。",
+    "emptyTitle": "尚無說明文章",
+    "emptyDescription": "文章發布後會立即顯示在這裡。",
+    "articleCount": "{count, plural, =0 {尚無文章} other {# 篇文章}}",
+    "articlesIn": "{category}中的文章",
+    "related": "相關文章",
+    "updated": "更新於 {date}",
+    "notTranslated": "本文尚未提供你使用的語言版本，因此以英文顯示。",
+    "audience": {
+      "organizers": "主辦單位適用",
+      "buyers": "購票者適用"
+    },
+    "meta": {
+      "title": "說明中心 · Yayatoh",
+      "description": "為 Yayatoh 上的主辦單位與購票者解答問題。",
+      "category": "{category} · Yayatoh 說明中心",
+      "search": "「{query}」 · Yayatoh 說明中心"
+    },
+    "search": {
+      "label": "搜尋說明中心",
+      "field": "搜尋說明文章",
+      "placeholder": "例如：票券退款",
+      "submit": "搜尋",
+      "title": "搜尋",
+      "resultsFor": "「{query}」的搜尋結果",
+      "count": "{count, plural, =0 {找不到文章} other {找到 # 篇文章}}",
+      "prompt": "輸入幾個字詞來搜尋說明中心。",
+      "results": "搜尋結果",
+      "emptyTitle": "沒有符合搜尋條件的結果",
+      "emptyDescription": "請嘗試其他字詞，或瀏覽說明中心的類別。"
+    },
+    "feedback": {
+      "question": "這篇文章對你有幫助嗎？",
+      "yes": "是",
+      "no": "否",
+      "reasonLegend": "哪裡有問題？（選填）",
+      "reason": {
+        "unclear": "難以理解",
+        "incomplete": "缺少內容",
+        "outdated": "內容已過時",
+        "other": "其他原因"
+      },
+      "sendReason": "送出",
+      "thanksYes": "感謝你的回饋。",
+      "thanksNo": "謝謝。我們會根據你的回饋改善這篇文章。",
+      "rateLimited": "此裝置送出的回饋過多。請在 {minutes, plural, other {# 分鐘}}後再試一次。"
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "主辦單位功能 · Yayatoh",
+      "title": "舉辦活動所需的一切",
+      "lede": "票券、座位、報到、訊息與撥款，全都集中在一處。",
+      "emptyTitle": "功能介紹即將推出",
+      "emptyDescription": "本頁面正在撰寫中。在此期間，請與我們聯絡。",
+      "contactCta": "與我們聯絡",
+      "helpCta": "前往說明中心"
+    },
+    "contact": {
+      "metaTitle": "聯絡與業務 · Yayatoh",
+      "title": "聯絡我們",
+      "lede": "對 Yayatoh 有疑問、想預約示範，或想了解活動的價格？請留言給我們，我們會以電子郵件回覆。",
+      "formTitle": "傳送訊息",
+      "fields": {
+        "topic": "主題",
+        "name": "你的姓名",
+        "email": "電子郵件",
+        "company": "組織",
+        "message": "訊息"
+      },
+      "topics": {
+        "sales": "業務與示範",
+        "support": "帳戶相關協助",
+        "partnership": "合作夥伴",
+        "other": "其他"
+      },
+      "optional": "選填",
+      "messageHint": "至少 10 個字元。",
+      "privacy": "你的資料僅用於回覆此訊息。",
+      "submit": "傳送訊息",
+      "sentTitle": "謝謝，你的訊息已傳送。",
+      "sentBody": "我們會盡快回覆至你的電子郵件地址。",
+      "fixErrors": "請檢查醒目標示的欄位。",
+      "rateLimited": "此裝置傳送的訊息過多。請在 {minutes, plural, other {# 分鐘}}後再試一次。",
+      "errors": {
+        "name": "請輸入你的姓名。",
+        "email": "請輸入有效的電子郵件地址。",
+        "company": "最多 160 個字元。",
+        "message": "請輸入 10 至 4,000 個字元的訊息。",
+        "human": "請確認你是真人。"
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "服務狀態",
+      "incident": "我們遇到了問題：{title}",
+      "maintenance": "正在維護：{title}",
+      "others": "{count, plural, other {另有 # 項。}}",
+      "link": "查看狀態頁面"
+    },
+    "page": {
+      "metaTitle": "系統狀態 · Yayatoh",
+      "title": "系統狀態",
+      "lede": "Yayatoh 各項服務的目前狀態與近期事件。時間皆為 UTC。",
+      "unavailableTitle": "無法取得狀態",
+      "unavailableBody": "目前無法顯示服務狀態。請過幾分鐘再試一次。",
+      "checked": "檢查於 {time}",
+      "components": "服務",
+      "open": "目前事件",
+      "noOpen": "目前沒有事件。",
+      "past": "過去 14 天",
+      "noPast": "過去 14 天內沒有事件。"
+    },
+    "overall": {
+      "operational": "所有系統運作正常",
+      "maintenance": "正在維護",
+      "degraded": "部分系統效能降低",
+      "partial_outage": "部分中斷",
+      "major_outage": "重大中斷"
+    },
+    "componentStatus": {
+      "operational": "運作正常",
+      "maintenance": "維護中",
+      "degraded": "效能降低",
+      "partial_outage": "部分中斷",
+      "major_outage": "重大中斷"
+    },
+    "impact": {
+      "minor": "輕微影響",
+      "major": "重大影響",
+      "critical": "嚴重影響",
+      "maintenance": "維護"
+    },
+    "incidentStatus": {
+      "investigating": "調查中",
+      "identified": "已找出原因",
+      "monitoring": "監控中",
+      "resolved": "已解決",
+      "scheduled": "已排定",
+      "in_progress": "進行中",
+      "completed": "已完成"
+    },
+    "components": {
+      "marketplace": "活動頁面與市集",
+      "checkout": "結帳",
+      "console": "主辦單位主控台",
+      "checkin": "報到與掃描",
+      "payments": "付款與撥款",
+      "messaging": "電子郵件與訊息",
+      "api": "API"
+    },
+    "affects": "影響範圍：{components}",
+    "updates": "{title}的最新消息"
+  },
+  "helpConsole": {
+    "title": "說明中心",
+    "description": "公開說明中心的文章與類別。草稿在發布前會保持不公開。",
+    "tabsLabel": "說明中心區段",
+    "tabs": {
+      "articles": "文章",
+      "categories": "類別"
+    },
+    "newArticle": "新增文章",
+    "newArticleDescription": "發布前為草稿。若要翻譯文章，請使用相同的網址以另一種語言再建立一次。",
+    "createArticle": "建立草稿",
+    "back": "返回說明中心",
+    "categoryCreated": "已建立類別。",
+    "emptyArticlesTitle": "尚無文章",
+    "emptyArticlesDescription": "為主辦單位或購票者撰寫第一篇文章。",
+    "emptyNeedsCategory": "請先建立類別，再於其中撰寫文章。",
+    "emptyCategoriesTitle": "尚無類別",
+    "emptyCategoriesDescription": "類別用來將主辦單位或購票者的文章分組。",
+    "newCategory": "新增類別",
+    "createCategory": "建立類別",
+    "columns": {
+      "category": "類別",
+      "helpful": "有幫助"
+    },
+    "helpfulCounts": "{yes} 是 · {no} 否",
+    "fields": {
+      "category": "類別",
+      "locale": "語言",
+      "title": "標題",
+      "slug": "網址",
+      "summary": "摘要",
+      "body": "內文",
+      "keywords": "搜尋關鍵字",
+      "position": "排序",
+      "audience": "對象",
+      "categoryTitle": "名稱",
+      "description": "說明"
+    },
+    "titleError": "請輸入標題。",
+    "slugFrozen": "已發布文章的網址無法變更。",
+    "slugHint": "留空即根據標題自動產生。翻譯版本會使用英文文章的網址。",
+    "keywordsHint": "以逗號分隔使用者可能搜尋的字詞。",
+    "positionHint": "數字越小越前面。",
+    "positionError": "請輸入 0 至 10,000 之間的整數。",
+    "audience": {
+      "organizers": "主辦單位",
+      "buyers": "購票者"
+    },
+    "slugReserved": "此網址已保留。請另選一個。",
+    "categorySlugHint": "留空即根據名稱自動產生。之後無法變更。",
+    "translations": "其他語言的名稱",
+    "translationsError": "請檢查翻譯後的名稱。",
+    "categoryHasArticles": "請先移動或刪除此類別中的文章。"
+  },
+  "siteConsole": {
+    "title": "行銷網站",
+    "description": "首頁、功能頁面與聯絡頁面的區段，以及透過聯絡表單傳送的訊息。",
+    "tabsLabel": "行銷網站區段",
+    "tabs": {
+      "sections": "區段",
+      "requests": "聯絡請求"
+    },
+    "newSection": "新增區段",
+    "newSectionDescription": "發布前為草稿。若要翻譯區段，請使用相同的鍵值以另一種語言再建立一次。",
+    "createSection": "建立草稿",
+    "back": "返回行銷網站",
+    "noSections": "此頁面尚無區段。",
+    "placement": {
+      "home": "首頁：為何選擇 Yayatoh",
+      "features": "功能頁面",
+      "contact": "聯絡頁面"
+    },
+    "fields": {
+      "placement": "頁面",
+      "locale": "語言",
+      "eyebrow": "標題上方的標籤",
+      "heading": "標題",
+      "slug": "鍵值",
+      "body": "內文",
+      "ctaLabel": "按鈕文字",
+      "ctaHref": "按鈕連結",
+      "position": "排序"
+    },
+    "optional": "選填",
+    "headingError": "請輸入標題。",
+    "slugHint": "留空即根據標題自動產生。翻譯版本會使用英文區段的鍵值。",
+    "ctaLegend": "按鈕（選填）",
+    "ctaLabelError": "請輸入按鈕文字（最多 40 個字元）及其連結。",
+    "ctaHrefHint": "本網站的頁面（例如 /contact）或 https:// 網址。",
+    "ctaHrefError": "請使用本網站的頁面（以 / 開頭）或 https:// 網址。",
+    "positionHint": "數字越小越前面。",
+    "positionError": "請輸入 0 至 10,000 之間的整數。",
+    "noRequestsTitle": "尚無聯絡請求",
+    "noRequestsDescription": "透過聯絡頁面傳送的訊息會顯示在這裡。",
+    "requestStatus": {
+      "new": "新",
+      "handled": "已處理"
+    },
+    "topics": {
+      "sales": "業務與示範",
+      "support": "帳戶協助",
+      "partnership": "合作夥伴",
+      "other": "其他"
+    },
+    "markHandled": "標示為已處理"
   }
 }

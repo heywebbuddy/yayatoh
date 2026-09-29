@@ -14,7 +14,8 @@ export type StaffAction =
   | 'privacy'
   | 'messaging'
   | 'quotas'
-  | 'openSignup';
+  | 'openSignup'
+  | 'incidents';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -28,6 +29,8 @@ export type StaffAction =
  *   messaging quotas (admin, finance).
  * - `openSignup` (M3.11a): the platform switch for self-serve signup is the public launch
  *   decision (D28), so only admins see or flip it (pending owner).
+ * - `incidents` (M3.11b): post and update status-page incidents (the fake provider; Better Stack
+ *   in production). Whoever is on call: admin and support (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -44,8 +47,9 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'messaging',
     'quotas',
     'openSignup',
+    'incidents',
   ],
-  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging'],
+  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents'],
   finance: ['view', 'payouts', 'fees', 'quotas'],
 };
 

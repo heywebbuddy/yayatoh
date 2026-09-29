@@ -540,6 +540,13 @@
       "when": 1790697842567,
       "tag": "0076_slimy_gunslinger",
       "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "7",
+      "when": 1790698348863,
+      "tag": "0077_blue_wolfsbane",
+      "breakpoints": true
     }
   ]
 }

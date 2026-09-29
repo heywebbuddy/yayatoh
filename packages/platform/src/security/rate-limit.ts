@@ -278,6 +278,20 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 30, windowMs: 10 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** "Was this helpful?" answers on help articles (M3.11b; one answer per browser per article is
+   * kept, this caps the writes). */
+  helpFeedback: {
+    device: { limit: 20, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
+  /** Contact / sales requests from the marketing site (M3.11b); identity = the sender's email. */
+  contactRequest: {
+    device: { limit: 3, windowMs: 10 * MIN },
+    anonymousIp: { limit: 10, windowMs: 10 * MIN },
+    identity: { limit: 3, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
   /** Webhook calls that fail signature verification (valid deliveries are never limited). */
   webhookAbuse: {
     device: { limit: 30, windowMs: 10 * MIN },

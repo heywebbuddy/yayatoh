@@ -28,4 +28,10 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('finance', 'fees')).toBe(true);
     expect(staffCan('support', 'entitlements')).toBe(false);
   });
+
+  it('M3.11b: admins and support post status-page incidents; finance does not', () => {
+    expect(staffCan('admin', 'incidents')).toBe(true);
+    expect(staffCan('support', 'incidents')).toBe(true);
+    expect(staffCan('finance', 'incidents')).toBe(false);
+  });
 });

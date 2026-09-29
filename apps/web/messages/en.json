@@ -267,7 +267,9 @@
     "trackedLinks": "Tracked links",
     "messagingHealth": "Messaging limits",
     "audiences": "Audiences",
-    "refundRequests": "Refund requests"
+    "refundRequests": "Refund requests",
+    "helpCenter": "Help center",
+    "marketingSite": "Marketing site"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -3275,7 +3277,9 @@
       "eyebrow": "Yayatoh",
       "title": "Find your next event.",
       "lede": "Concerts, galas, conferences and community events, with every fee included in the price.",
-      "demoCta": "Open the demo console"
+      "demoCta": "Open the demo console",
+      "organizersTitle": "Why organizers choose Yayatoh",
+      "organizersMore": "See all features"
     },
     "events": {
       "title": "All events"
@@ -3294,7 +3298,12 @@
       "emptyTitle": "No upcoming events",
       "emptyDescription": "{org} has nothing on sale right now. Check back soon."
     },
-    "pricing": "Pricing"
+    "pricing": "Pricing",
+    "features": "Features",
+    "help": "Help",
+    "helpCenter": "Help center",
+    "contact": "Contact us",
+    "status": "System status"
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -5379,5 +5388,269 @@
     "startHeading": "Start selling",
     "startBody": "Create your organization, set up your first event and publish when you're ready.",
     "startCta": "Create your organization"
+  },
+  "help": {
+    "breadcrumbs": "Breadcrumbs",
+    "title": "Help center",
+    "lede": "Answers for organizers and ticket buyers: setting up events, selling tickets, check-in, refunds and more.",
+    "emptyTitle": "No help articles yet",
+    "emptyDescription": "Articles appear here as soon as they are published.",
+    "articleCount": "{count, plural, =0 {No articles} one {# article} other {# articles}}",
+    "articlesIn": "Articles in {category}",
+    "related": "Related articles",
+    "updated": "Updated {date}",
+    "notTranslated": "This article isn't available in your language yet, so it's shown in English.",
+    "audience": {
+      "organizers": "For organizers",
+      "buyers": "For ticket buyers"
+    },
+    "meta": {
+      "title": "Help center · Yayatoh",
+      "description": "Answers for organizers and ticket buyers on Yayatoh.",
+      "category": "{category} · Yayatoh help center",
+      "search": "“{query}” · Yayatoh help center"
+    },
+    "search": {
+      "label": "Search the help center",
+      "field": "Search help articles",
+      "placeholder": "For example: refund a ticket",
+      "submit": "Search",
+      "title": "Search",
+      "resultsFor": "Results for “{query}”",
+      "count": "{count, plural, =0 {No articles found} one {# article found} other {# articles found}}",
+      "prompt": "Type a few words to search the help center.",
+      "results": "Search results",
+      "emptyTitle": "Nothing matches your search",
+      "emptyDescription": "Try other words, or browse the categories in the help center."
+    },
+    "feedback": {
+      "question": "Was this article helpful?",
+      "yes": "Yes",
+      "no": "No",
+      "reasonLegend": "What was wrong? (optional)",
+      "reason": {
+        "unclear": "It was hard to understand",
+        "incomplete": "Something was missing",
+        "outdated": "It's out of date",
+        "other": "Something else"
+      },
+      "sendReason": "Send",
+      "thanksYes": "Thanks for letting us know.",
+      "thanksNo": "Thanks. We'll use your answer to improve this article.",
+      "rateLimited": "Too many answers from this device. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+    }
+  },
+  "marketing": {
+    "features": {
+      "metaTitle": "Features for organizers · Yayatoh",
+      "title": "Everything you need to run your events",
+      "lede": "Tickets, seating, check-in, messaging and payouts in one place.",
+      "emptyTitle": "Features are coming soon",
+      "emptyDescription": "This page is being written. Contact us in the meantime.",
+      "contactCta": "Talk to us",
+      "helpCta": "Visit the help center"
+    },
+    "contact": {
+      "metaTitle": "Contact and sales · Yayatoh",
+      "title": "Contact us",
+      "lede": "Questions about Yayatoh, a demo, or pricing for your events? Send us a message and we'll reply by email.",
+      "formTitle": "Send a message",
+      "fields": {
+        "topic": "Topic",
+        "name": "Your name",
+        "email": "Email",
+        "company": "Organization",
+        "message": "Message"
+      },
+      "topics": {
+        "sales": "Sales and demos",
+        "support": "Help with my account",
+        "partnership": "Partnerships",
+        "other": "Something else"
+      },
+      "optional": "Optional",
+      "messageHint": "At least 10 characters.",
+      "privacy": "We use your details only to answer this message.",
+      "submit": "Send message",
+      "sentTitle": "Thanks, your message was sent.",
+      "sentBody": "We'll reply to your email address as soon as we can.",
+      "fixErrors": "Check the highlighted fields.",
+      "rateLimited": "Too many messages from this device. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "errors": {
+        "name": "Enter your name.",
+        "email": "Enter a valid email address.",
+        "company": "Use at most 160 characters.",
+        "message": "Write a message of 10 to 4,000 characters.",
+        "human": "Confirm that you're a person."
+      }
+    }
+  },
+  "status": {
+    "banner": {
+      "label": "Service status",
+      "incident": "We're having an issue: {title}",
+      "maintenance": "Maintenance in progress: {title}",
+      "others": "{count, plural, one {And # more.} other {And # more.}}",
+      "link": "See the status page"
+    },
+    "page": {
+      "metaTitle": "System status · Yayatoh",
+      "title": "System status",
+      "lede": "The current state of Yayatoh's services and recent incidents. Times are in UTC.",
+      "unavailableTitle": "Status is unavailable",
+      "unavailableBody": "We can't show the service status right now. Please try again in a few minutes.",
+      "checked": "Checked {time}",
+      "components": "Services",
+      "open": "Current incidents",
+      "noOpen": "No incidents right now.",
+      "past": "Past 14 days",
+      "noPast": "No incidents in the past 14 days."
+    },
+    "overall": {
+      "operational": "All systems operational",
+      "maintenance": "Maintenance in progress",
+      "degraded": "Some systems are degraded",
+      "partial_outage": "Partial outage",
+      "major_outage": "Major outage"
+    },
+    "componentStatus": {
+      "operational": "Operational",
+      "maintenance": "Maintenance",
+      "degraded": "Degraded",
+      "partial_outage": "Partial outage",
+      "major_outage": "Major outage"
+    },
+    "impact": {
+      "minor": "Minor impact",
+      "major": "Major impact",
+      "critical": "Critical impact",
+      "maintenance": "Maintenance"
+    },
+    "incidentStatus": {
+      "investigating": "Investigating",
+      "identified": "Identified",
+      "monitoring": "Monitoring",
+      "resolved": "Resolved",
+      "scheduled": "Scheduled",
+      "in_progress": "In progress",
+      "completed": "Completed"
+    },
+    "components": {
+      "marketplace": "Event pages and marketplace",
+      "checkout": "Checkout",
+      "console": "Organizer console",
+      "checkin": "Check-in and scanning",
+      "payments": "Payments and payouts",
+      "messaging": "Email and messaging",
+      "api": "API"
+    },
+    "affects": "Affects: {components}",
+    "updates": "Updates on {title}"
+  },
+  "helpConsole": {
+    "title": "Help center",
+    "description": "Articles and categories of the public help center. Drafts stay private until you publish them.",
+    "tabsLabel": "Help center sections",
+    "tabs": {
+      "articles": "Articles",
+      "categories": "Categories"
+    },
+    "newArticle": "New article",
+    "newArticleDescription": "A draft until you publish it. To translate an article, create it again with the same address in another language.",
+    "createArticle": "Create draft",
+    "back": "Back to the help center",
+    "categoryCreated": "Category created.",
+    "emptyArticlesTitle": "No articles yet",
+    "emptyArticlesDescription": "Write the first article for organizers or ticket buyers.",
+    "emptyNeedsCategory": "Create a category first, then write articles in it.",
+    "emptyCategoriesTitle": "No categories yet",
+    "emptyCategoriesDescription": "Categories group articles for organizers or for ticket buyers.",
+    "newCategory": "New category",
+    "createCategory": "Create category",
+    "columns": {
+      "category": "Category",
+      "helpful": "Helpful"
+    },
+    "helpfulCounts": "{yes} yes · {no} no",
+    "fields": {
+      "category": "Category",
+      "locale": "Language",
+      "title": "Title",
+      "slug": "Address",
+      "summary": "Summary",
+      "body": "Text",
+      "keywords": "Search keywords",
+      "position": "Order",
+      "audience": "Audience",
+      "categoryTitle": "Name",
+      "description": "Description"
+    },
+    "titleError": "Enter a title.",
+    "slugFrozen": "The address of a published article can't change.",
+    "slugHint": "Leave empty to derive it from the title. A translation uses the English article's address.",
+    "keywordsHint": "Comma-separated words people might search for.",
+    "positionHint": "Lower numbers come first.",
+    "positionError": "Use a whole number from 0 to 10,000.",
+    "audience": {
+      "organizers": "Organizers",
+      "buyers": "Ticket buyers"
+    },
+    "slugReserved": "This address is reserved. Choose another.",
+    "categorySlugHint": "Leave empty to derive it from the name. It can't change later.",
+    "translations": "Name in other languages",
+    "translationsError": "Check the translated names.",
+    "categoryHasArticles": "Move or delete this category's articles first."
+  },
+  "siteConsole": {
+    "title": "Marketing site",
+    "description": "The sections of the home page, the features page and the contact page, and the messages sent from the contact form.",
+    "tabsLabel": "Marketing site sections",
+    "tabs": {
+      "sections": "Sections",
+      "requests": "Contact requests"
+    },
+    "newSection": "New section",
+    "newSectionDescription": "A draft until you publish it. To translate a section, create it again with the same key in another language.",
+    "createSection": "Create draft",
+    "back": "Back to the marketing site",
+    "noSections": "No sections on this page yet.",
+    "placement": {
+      "home": "Home page: why Yayatoh",
+      "features": "Features page",
+      "contact": "Contact page"
+    },
+    "fields": {
+      "placement": "Page",
+      "locale": "Language",
+      "eyebrow": "Label above the heading",
+      "heading": "Heading",
+      "slug": "Key",
+      "body": "Text",
+      "ctaLabel": "Button text",
+      "ctaHref": "Button link",
+      "position": "Order"
+    },
+    "optional": "Optional",
+    "headingError": "Enter a heading.",
+    "slugHint": "Leave empty to derive it from the heading. A translation uses the English section's key.",
+    "ctaLegend": "Button (optional)",
+    "ctaLabelError": "Enter the button text (up to 40 characters) with its link.",
+    "ctaHrefHint": "A page of this site, such as /contact, or an https:// address.",
+    "ctaHrefError": "Use a page of this site (starting with /) or an https:// address.",
+    "positionHint": "Lower numbers come first.",
+    "positionError": "Use a whole number from 0 to 10,000.",
+    "noRequestsTitle": "No contact requests",
+    "noRequestsDescription": "Messages sent from the contact page appear here.",
+    "requestStatus": {
+      "new": "New",
+      "handled": "Handled"
+    },
+    "topics": {
+      "sales": "Sales and demos",
+      "support": "Account help",
+      "partnership": "Partnerships",
+      "other": "Other"
+    },
+    "markHandled": "Mark as handled"
   }
 }

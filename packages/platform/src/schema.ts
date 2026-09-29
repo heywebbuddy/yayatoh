@@ -452,3 +452,41 @@ export const platformFlagChanges = platform.table(
     check('flag_changes_reason_length', sql`length(reason) between 3 and 500`),
   ],
 );
+
+/**
+ * The fake status-page provider's incidents (M3.11b; the `StatusPage` port's development, preview
+ * and CI adapter). The real provider (Better Stack, owner account) keeps its own. Global (the
+ * platform's status is no tenant's data); no app_user table privileges: the web reads through
+ * `platform.status_fake_recent`, staff post and update through `platform.status_fake_post` /
+ * `platform.status_fake_update` (platform_reader, audited in the access log).
+ * `updates` is the timeline: `[{ "status", "body", "at" }]`, oldest first.
+ */
+export const statusFakeIncidents = platform.table(
+  'status_fake_incidents',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    title: text('title').notNull(),
+    impact: text('impact').notNull(),
+    status: text('status').notNull(),
+    components: text('components').array().notNull().default(sql`'{}'::text[]`),
+    updates: jsonb('updates').notNull().default(sql`'[]'::jsonb`),
+    createdBy: text('created_by').notNull(),
+    startedAt: tsz('started_at').notNull().defaultNow(),
+    updatedAt: tsz('updated_at').notNull().defaultNow(),
+    resolvedAt: tsz('resolved_at'),
+  },
+  (t) => [
+    index('status_fake_incidents_started_idx').on(t.startedAt),
+    check('status_fake_incidents_title_check', sql`char_length(title) between 1 and 160`),
+    check('status_fake_incidents_impact_check', sql`impact in ('minor', 'major', 'critical', 'maintenance')`),
+    check(
+      'status_fake_incidents_status_check',
+      sql`status in ('investigating', 'identified', 'monitoring', 'resolved', 'scheduled', 'in_progress', 'completed')`,
+    ),
+    check('status_fake_incidents_updates_check', sql`jsonb_typeof(updates) = 'array'`),
+    check(
+      'status_fake_incidents_resolved_check',
+      sql`(status in ('resolved', 'completed')) = (resolved_at is not null)`,
+    ),
+  ],
+);

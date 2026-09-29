@@ -15,7 +15,17 @@ import {
   scanTicketCommand,
   setDetectionSettingsCommand,
 } from '@yayatoh/checkin';
-import { createEntryCommand, setEntryStatusCommand } from '@yayatoh/cms';
+import {
+  createEntryCommand,
+  createHelpArticleCommand,
+  createHelpCategoryCommand,
+  createSiteSectionCommand,
+  setEntryStatusCommand,
+  setHelpArticleStatusCommand,
+  setSiteSectionStatusCommand,
+  submitContactRequestCommand,
+  submitHelpFeedbackCommand,
+} from '@yayatoh/cms';
 import { withTenant } from '@yayatoh/db';
 import {
   addRecurringOccurrencesCommand,
@@ -1146,6 +1156,55 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setEntryStatusCommand, { entryId: post.id, action: 'publish' }, ctx(), ports);
   await executeCommand(updateSiteSettingsCommand, { navPageIds: [page.id] }, ctx(), ports);
+  // M3.11b: a help category with a published article and one "helpful" answer, a published
+  // marketing section and a contact request.
+  const helpCategory = await executeCommand(
+    createHelpCategoryCommand,
+    { audience: 'organizers', title: `${name} basics` },
+    ctx(),
+    ports,
+  );
+  const helpArticle = await executeCommand(
+    createHelpArticleCommand,
+    { categoryId: helpCategory.id, title: `Getting started with ${name}`, body: 'Fixture article.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setHelpArticleStatusCommand,
+    { articleId: helpArticle.id, action: 'publish' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitHelpFeedbackCommand,
+    { slug: helpArticle.slug, locale: 'en', helpful: true, voterKey: 'f'.repeat(64) },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  const section = await executeCommand(
+    createSiteSectionCommand,
+    { placement: 'home', heading: `Why ${name}`, body: 'Fixture section.' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setSiteSectionStatusCommand,
+    { sectionId: section.id, action: 'publish' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitContactRequestCommand,
+    {
+      topic: 'sales',
+      name: 'Fixture Buyer',
+      email: `sales-${slug}@example.test`,
+      message: 'We would like a demo please.',
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
   const afterEvent = new Date('2027-10-20T12:00:00Z');
   await executeCommand(
     submitReviewCommand,
