@@ -1,4 +1,3 @@
-import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AgendaImport } from '@/components/agenda-import.tsx';
