@@ -625,6 +625,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../../packages/modules/guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel

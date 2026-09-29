@@ -3,6 +3,7 @@ import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '
 import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
 import { eventRolesOf } from '@yayatoh/events';
+import { guestImportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import {
   auditExportAction,
@@ -46,6 +47,7 @@ export const BULK_ACTIONS = [
   surveyExportAction,
   audienceExportAction,
   waitlistExportAction,
+  guestImportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

@@ -26,7 +26,7 @@ export interface SheetFetchOptions {
 export const SHEET_ERRORS = [
   'sheet_url',
   'sheet_private',
-  'sheet_not_found',
+  'sheet_missing',
   'sheet_unavailable',
   'sheet_blocked',
   'too_large',
@@ -78,7 +78,7 @@ export async function fetchGoogleSheetCsv(raw: string, opts: SheetFetchOptions =
       continue;
     }
     if (res.status === 401 || res.status === 403) return fail('sheet_private');
-    if (res.status === 404 || res.status === 400 || res.status === 410) return fail('sheet_not_found');
+    if (res.status === 404 || res.status === 400 || res.status === 410) return fail('sheet_missing');
     if (res.status !== 200) return fail('sheet_unavailable');
     // A sign-in or error page instead of the export.
     if (/text\/html/i.test(res.headers['content-type'] ?? '')) return fail('sheet_private');
