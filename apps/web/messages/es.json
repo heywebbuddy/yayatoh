@@ -5324,6 +5324,7 @@
     "widgets": "Widgets",
     "overviewTitle": "Centro de mando",
     "overviewDescription": "Eventos en vivo, a punto de empezar, en planificación o en cierre. Primero los que están en vivo.",
+    "overviewTruncated": "Se muestran los primeros {shown} de {total} eventos (primero en vivo).",
     "overviewEmpty": {
       "title": "Nada que vigilar ahora mismo",
       "description": "Los eventos aparecen aquí mientras se planifican, el mismo día y durante una semana después."

@@ -5324,6 +5324,7 @@
     "widgets": "Widgets",
     "overviewTitle": "Commandocentrum",
     "overviewDescription": "Evenementen die live zijn, bijna beginnen, worden gepland of worden afgerond. Live eerst.",
+    "overviewTruncated": "De eerste {shown} van {total} evenementen (live eerst).",
     "overviewEmpty": {
       "title": "Nu niets te volgen",
       "description": "Evenementen staan hier tijdens de planning, op de dag zelf en een week erna."

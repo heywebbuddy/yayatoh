@@ -5324,6 +5324,7 @@
     "widgets": "Widget",
     "overviewTitle": "Centro di comando",
     "overviewDescription": "Eventi in corso, in partenza, in pianificazione o in chiusura. Prima quelli in corso.",
+    "overviewTruncated": "Mostrati i primi {shown} di {total} eventi (prima quelli in corso).",
     "overviewEmpty": {
       "title": "Niente da seguire al momento",
       "description": "Gli eventi compaiono qui durante la pianificazione, il giorno stesso e per una settimana dopo."

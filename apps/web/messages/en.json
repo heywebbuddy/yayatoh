@@ -5324,6 +5324,7 @@
     "widgets": "Widgets",
     "overviewTitle": "Command Center",
     "overviewDescription": "Events that are live, about to start, being planned or wrapping up. Live first.",
+    "overviewTruncated": "Showing the first {shown} of {total} events (live first).",
     "overviewEmpty": {
       "title": "Nothing to watch right now",
       "description": "Events show up here while they're being planned, on the day and for a week after."

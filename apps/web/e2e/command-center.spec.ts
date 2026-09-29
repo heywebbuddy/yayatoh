@@ -22,14 +22,22 @@ function chicago(offsetH: number): string {
 const stamp = () => `${Date.now()}${test.info().project.name.split('-')[0]}`;
 
 /** A Chicago event from `startH` to `endH` hours from now, published, with a free pass (and `n` sold). */
-async function newEvent(page: Page, browser: Browser, name: string, startH: number, endH: number, n = 0) {
-  await page.goto('/o/lakeside-events/events/new');
+async function newEvent(
+  page: Page,
+  browser: Browser,
+  name: string,
+  startH: number,
+  endH: number,
+  n = 0,
+  org = 'lakeside-events',
+) {
+  await page.goto(`/o/${org}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption('America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(startH));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(endH));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+  await expect(page).toHaveURL(new RegExp(`/o/${org}/e/[a-z0-9-]+$`));
   const base = new URL(page.url()).pathname;
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
@@ -267,8 +275,10 @@ test.describe('Command Center (M3.2a)', () => {
     context,
   }) => {
     const name = `CC Clock ${stamp()}`;
-    await signIn(page);
-    const { base } = await newEvent(page, browser, name, 30, 34);
+    // A fresh org, so its overview lists only this test's events.
+    const owner = await newUser(page, { org: true, twoFactor: true, event: 'published' });
+    const org = owner.orgSlug as string;
+    const { base } = await newEvent(page, browser, name, 30, 34, 0, org);
     await openCommandCenter(page, base);
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');
     const panel = page.locator('[data-next-change]');
@@ -315,7 +325,7 @@ test.describe('Command Center (M3.2a)', () => {
     await expectAccessible(page);
 
     // The org overview lists it as live, set by hand; it links to its Command Center.
-    await page.goto('/o/lakeside-events/command-center');
+    await page.goto(`/o/${org}/command-center`);
     await expect(page.getByRole('heading', { level: 1, name: 'Command Center' })).toBeVisible();
     const row = page.getByRole('row').filter({ hasText: name });
     await expect(row.getByTestId('cc-overview-mode')).toContainText('Live');
@@ -332,7 +342,7 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(page.getByText(/^Set by hand/)).toHaveCount(0);
 
     // The overview in Arabic, right to left.
-    await page.goto('/ar/o/lakeside-events/command-center');
+    await page.goto(`/ar/o/${org}/command-center`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { level: 1, name: 'مركز القيادة' })).toBeVisible();
     await expectAccessible(page);

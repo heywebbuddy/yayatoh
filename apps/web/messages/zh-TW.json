@@ -5324,6 +5324,7 @@
     "widgets": "小工具",
     "overviewTitle": "指揮中心",
     "overviewDescription": "正在進行、即將開始、規劃中或收尾中的活動。進行中的排在最前。",
+    "overviewTruncated": "顯示 {total} 個活動中的前 {shown} 個（進行中的在前）。",
     "overviewEmpty": {
       "title": "目前沒有需要關注的活動",
       "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。"

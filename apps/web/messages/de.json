@@ -5324,6 +5324,7 @@
     "widgets": "Widgets",
     "overviewTitle": "Command Center",
     "overviewDescription": "Veranstaltungen, die live sind, bald beginnen, geplant werden oder nachbereitet werden. Live zuerst.",
+    "overviewTruncated": "Die ersten {shown} von {total} Veranstaltungen (live zuerst).",
     "overviewEmpty": {
       "title": "Gerade gibt es nichts zu beobachten",
       "description": "Veranstaltungen erscheinen hier während der Planung, am Tag selbst und eine Woche danach."

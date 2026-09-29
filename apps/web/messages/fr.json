@@ -5324,6 +5324,7 @@
     "widgets": "Widgets",
     "overviewTitle": "Centre de commande",
     "overviewDescription": "Les événements en direct, sur le point de commencer, en préparation ou en clôture. Le direct d’abord.",
+    "overviewTruncated": "Les {shown} premiers événements sur {total} (le direct d’abord).",
     "overviewEmpty": {
       "title": "Rien à surveiller pour l’instant",
       "description": "Les événements apparaissent ici pendant leur préparation, le jour J et la semaine qui suit."

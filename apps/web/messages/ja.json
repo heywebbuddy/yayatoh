@@ -5324,6 +5324,7 @@
     "widgets": "ウィジェット",
     "overviewTitle": "コマンドセンター",
     "overviewDescription": "開催中、まもなく開始、計画中、または終了処理中のイベント。開催中が先頭です。",
+    "overviewTruncated": "{total} 件中、最初の {shown} 件を表示（開催中を先頭）。",
     "overviewEmpty": {
       "title": "今は見守るものがありません",
       "description": "イベントは計画中、当日、そして終了後1週間ここに表示されます。"

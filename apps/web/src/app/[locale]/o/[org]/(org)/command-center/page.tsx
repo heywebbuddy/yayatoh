@@ -41,6 +41,11 @@ export default async function CommandCenterOverviewPage({
   return (
     <>
       <PageHeader title={t('overviewTitle')} description={t('overviewDescription')} />
+      {overview.total > overview.events.length ? (
+        <p className="text-caption text-zinc-600">
+          {t('overviewTruncated', { shown: overview.events.length, total: overview.total })}
+        </p>
+      ) : null}
       {overview.events.length === 0 ? (
         <EmptyState title={t('overviewEmpty.title')} description={t('overviewEmpty.description')} />
       ) : (

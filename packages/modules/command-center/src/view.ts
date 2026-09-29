@@ -149,11 +149,13 @@ export const OverviewEventDto = z.object({
 export const OrgOverviewDto = z.object({
   role: z.enum(CC_ROLES),
   events: z.array(OverviewEventDto),
+  /** Events in a mode before the list was cut at its limit (live first). */
+  total: z.int().min(0),
 });
 export type OrgOverviewDto = z.infer<typeof OrgOverviewDto>;
 
 const MODE_ORDER: Readonly<Record<EventMode, number>> = { live: 0, pre_show: 1, planning: 2, wrap: 3 };
-const OVERVIEW_LIMIT = 30;
+const OVERVIEW_LIMIT = 50;
 
 /**
  * The multi-event overview (M3.2): the org's events that are live, in pre-show, being planned or
@@ -199,6 +201,10 @@ export const orgOverviewQuery = tenantQuery({
       });
     }
     rows.sort((a, b) => MODE_ORDER[a.mode] - MODE_ORDER[b.mode] || a.startsAt.localeCompare(b.startsAt));
-    return { role: org.role, events: rows.slice(0, OVERVIEW_LIMIT).map(({ settled: _, ...r }) => r) };
+    return {
+      role: org.role,
+      events: rows.slice(0, OVERVIEW_LIMIT).map(({ settled: _, ...r }) => r),
+      total: rows.length,
+    };
   },
 });

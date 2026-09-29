@@ -5324,6 +5324,7 @@
     "widgets": "小组件",
     "overviewTitle": "指挥中心",
     "overviewDescription": "正在进行、即将开始、计划中或收尾中的活动。进行中的排在最前。",
+    "overviewTruncated": "显示 {total} 个活动中的前 {shown} 个（进行中的在前）。",
     "overviewEmpty": {
       "title": "目前没有需要关注的活动",
       "description": "活动在筹备期间、活动当天及之后一周内显示在这里。"

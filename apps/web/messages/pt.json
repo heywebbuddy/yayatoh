@@ -5324,6 +5324,7 @@
     "widgets": "Widgets",
     "overviewTitle": "Centro de comando",
     "overviewDescription": "Eventos ao vivo, prestes a começar, em planejamento ou em encerramento. Ao vivo primeiro.",
+    "overviewTruncated": "Mostrando os primeiros {shown} de {total} eventos (ao vivo primeiro).",
     "overviewEmpty": {
       "title": "Nada para acompanhar agora",
       "description": "Os eventos aparecem aqui durante o planejamento, no dia e por uma semana depois."
