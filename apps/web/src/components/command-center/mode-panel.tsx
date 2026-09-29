@@ -54,7 +54,10 @@ export function ModePanel({
           ? t('next.none', { time: when(mode.nextChangeAt) })
           : null;
   return (
-    <Card className="flex flex-wrap items-end justify-between gap-4">
+    <Card
+      className="flex flex-wrap items-end justify-between gap-4"
+      data-next-change={mode.nextChangeAt ?? ''}
+    >
       <div className="flex flex-col gap-1.5">
         <Label>{t('mode.label')}</Label>
         <p className="flex items-center gap-2 text-section" data-testid="cc-mode">
