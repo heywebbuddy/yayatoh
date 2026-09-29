@@ -11,7 +11,8 @@
       "event_updates": "Você recebe isto porque está na lista de convidados de um evento de {org}.",
       "marketing": "Você recebe isto porque assinou as novidades de {org}."
     },
-    "reply": "Responder a {org}"
+    "reply": "Responder a {org}",
+    "smsStop": "Responda STOP para cancelar."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Alerta de fraude: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}",
       "intro": "Um sinal de gravidade alta precisa de atenção em {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {o mesmo bilhete em duas entradas} impossible_travel {um percurso impossível entre pontos de controlo} device_velocity {um leitor a ler depressa demais} invalid_burst {uma série de códigos inválidos} rejected_burst {uma série de leituras recusadas} purchase_velocity {muitas encomendas do mesmo comprador} country_mismatch {um comprador noutro país} checkout_blocked {um pagamento bloqueado} card_testing {possível teste de cartões} chat_abuse {uma conversa denunciada} other {um sinal de fraude}}. Abra-o para confirmar ou descartar.",
       "cta": "Rever o sinal"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Novidades de {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Mensagens pausadas para {org}",
+      "intro": "As reclamações sobre os e-mails de {org} chegaram a {rate}, acima do limite de 0,3%, então a Yayatoh pausou seus lembretes, novidades e marketing. Ingressos, recibos e respostas continuam sendo enviados. O suporte da Yayatoh vai revisar isso com você antes de retomar os envios."
     }
   },
   "roles": {

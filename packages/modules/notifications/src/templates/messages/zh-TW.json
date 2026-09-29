@@ -11,7 +11,8 @@
       "event_updates": "您收到此郵件，是因為您在 {org} 某活動的賓客名單上。",
       "marketing": "您收到此郵件，是因為您訂閱了 {org} 的消息。"
     },
-    "reply": "回覆 {org}"
+    "reply": "回覆 {org}",
+    "smsStop": "回覆 STOP 取消訂閱。"
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "詐欺警示：{signal, select, two_entrances {同一張票出現在兩個入口} impossible_travel {檢查點之間不可能的移動} device_velocity {掃描過快的掃描裝置} invalid_burst {一連串無效代碼} rejected_burst {一連串被拒絕的掃描} purchase_velocity {同一買家的大量訂單} country_mismatch {買家位於其他國家} checkout_blocked {被攔截的結帳} card_testing {疑似盜刷測試} chat_abuse {被檢舉的對話} other {詐欺訊號}}",
       "intro": "{org}{eventName, select, none {} other {（{eventName}）}}有一個高嚴重性訊號需要查看：{signal, select, two_entrances {同一張票出現在兩個入口} impossible_travel {檢查點之間不可能的移動} device_velocity {掃描過快的掃描裝置} invalid_burst {一連串無效代碼} rejected_burst {一連串被拒絕的掃描} purchase_velocity {同一買家的大量訂單} country_mismatch {買家位於其他國家} checkout_blocked {被攔截的結帳} card_testing {疑似盜刷測試} chat_abuse {被檢舉的對話} other {詐欺訊號}}。開啟以確認或忽略。",
       "cta": "查看訊號"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "來自 {org} 的消息："
+    },
+    "messaging.auto_paused": {
+      "subject": "{org} 的訊息傳送已暫停",
+      "intro": "針對 {org} 電子郵件的投訴率達到 {rate}，超過 0.3% 的上限，因此 Yayatoh 已暫停你的提醒、動態和行銷訊息。門票、收據和回覆仍會照常傳送。恢復傳送前，Yayatoh 支援團隊會與你一起檢視。"
     }
   },
   "roles": {

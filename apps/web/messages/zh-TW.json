@@ -51,7 +51,8 @@
         "order_paid": "新訂單：{name} 購買了 {count, plural, other {# 張}} {eventName} 票券（{amount}）"
       },
       "messaging": {
-        "contact_replied": "{name} 就 {eventName} 傳訊息給您"
+        "contact_replied": "{name} 就 {eventName} 傳訊息給您",
+        "auto_paused": "訊息已暫停：投訴率達到 {rate}。門票和收據仍會傳送。"
       },
       "notifications": {
         "test": "測試通知：通知功能正常"
@@ -92,7 +93,8 @@
       "messaging": {
         "announcement": "公告",
         "reply": "回覆",
-        "contact_replied": "新訊息"
+        "contact_replied": "新訊息",
+        "auto_paused": "訊息暫停通知"
       },
       "sales": {
         "order_paid": "新訂單提醒"
@@ -116,6 +118,9 @@
       },
       "security": {
         "fraud_signal": "詐欺警示"
+      },
+      "marketing": {
+        "message": "新聞與優惠"
       }
     },
     "status": {
@@ -142,13 +147,20 @@
       "event_postponed": "活動延期期間暫緩",
       "answered": "收件人已回答過",
       "survey_closed": "問卷已關閉",
-      "erased": "未寄送：此人的資料已應其要求刪除"
+      "erased": "未寄送：此人的資料已應其要求刪除",
+      "consent_missing": "已封鎖：沒有接收同意",
+      "consent_withdrawn": "已封鎖：收件人撤回了同意",
+      "whatsapp_marketing_us": "已封鎖：不允許向美國號碼傳送 WhatsApp 行銷訊息",
+      "state_quiet_hours": "等待州規定的通話時間（例如德州週日中午前）",
+      "frequency_cap": "等待或已略過：此人最近收到很多訊息",
+      "quota_reached": "等待中：本月配額已用完"
     },
     "channels": {
       "email": "電子郵件",
       "sms": "簡訊",
       "push": "推播",
-      "in_app": "應用程式內"
+      "in_app": "應用程式內",
+      "whatsapp": "WhatsApp"
     },
     "log": {
       "title": "訊息",
@@ -243,7 +255,8 @@
     "speakers": "演講嘉賓",
     "sponsors": "贊助商",
     "media": "圖片",
-    "trackedLinks": "追蹤連結"
+    "trackedLinks": "追蹤連結",
+    "messagingHealth": "訊息傳送限制"
   },
   "vocab": {
     "attendee": "參加者",
@@ -2894,7 +2907,8 @@
     "confirm": "取消訂閱",
     "done": "您已取消訂閱來自 {org} 的{what}。",
     "resubscribe": "重新訂閱",
-    "transactionalNote": "您仍會收到必要的郵件，例如票券、收據與退款。"
+    "transactionalNote": "您仍會收到必要的郵件，例如票券、收據與退款。",
+    "managePreferences": "管理你在 {org} 的所有偏好"
   },
   "devMailbox": {
     "eyebrow": "開發",
@@ -2917,7 +2931,8 @@
     "channels": "傳送方式",
     "channel": {
       "email": "電子郵件",
-      "push": "推播通知"
+      "push": "推播通知",
+      "sms": "簡訊（SMS）"
     },
     "pushHint": "推播會傳送給在訂單頁面或應用程式中開啟通知的參加者；其他人會收到電子郵件。",
     "preview": "預覽",
@@ -2939,7 +2954,14 @@
       "channelRequired": "請至少選擇一種傳送方式。",
       "no_recipients": "此活動尚無參加者，沒有可傳送的對象。",
       "messaging_paused": "Yayatoh 支援團隊已暫停您組織的訊息傳送。"
-    }
+    },
+    "smsHint": "簡訊只會傳給提供手機號碼並同意接收簡訊的參加者；其他人會顯示為未傳送，並註明原因。",
+    "smsPreviewTitle": "簡訊",
+    "smsCount": "{characters, plural, other {# 個字元}} · {segments, plural, other {# 段}}（{encoding}）",
+    "smsReach": "{count, plural, =0 {還沒有參加者提供手機號碼。} other {# 位參加者有手機號碼。}}",
+    "quotaReached": "{channels} 的本月配額已用完：這些訊息會等到配額重設或 Yayatoh 提高你的上限。",
+    "reasonsLabel": "未傳送原因",
+    "reasonLine": "{channel}：{reason}（{count}）"
   },
   "eventAnnouncements": {
     "heading": "公告",
@@ -4695,5 +4717,105 @@
     "lastTouch": "最後接觸點",
     "viaClick": "追蹤連結點擊",
     "viaUtm": "UTM 標籤"
+  },
+  "messagingHealth": {
+    "title": "訊息傳送限制",
+    "description": "本月用量和配額、被規則暫緩或封鎖的訊息、已停止的地址，以及同一個人能多頻繁收到你的訊息。",
+    "autoPaused": "訊息已暫停：投訴率達到 {rate}（{sent} 封郵件中有 {complaints} 封），超過 0.3% 的上限。",
+    "autoPausedBody": "自 {since} 起，提醒、動態和行銷訊息都在等待。門票、收據和回覆仍會傳送。Yayatoh 支援團隊會與你一起檢視並恢復傳送。",
+    "staffPaused": "Yayatoh 支援團隊暫停了你組織的訊息傳送。門票、收據和回覆仍會傳送。",
+    "usageTitle": "本月",
+    "usageCaption": "本月用量和配額",
+    "channel": "管道",
+    "used": "已用",
+    "limit": "每月上限",
+    "status": "狀態",
+    "waiting": "等待中",
+    "usedOf": "{used} / {limit}",
+    "units": {
+      "email": "封郵件",
+      "sms": "段",
+      "whatsapp": "則訊息",
+      "push": "則通知"
+    },
+    "ok": "未超過配額",
+    "reached": "已達配額",
+    "quotaReachedTitle": "{channels, plural, other {配額已用完}}：{list}。",
+    "quotaReachedBody": "選用訊息會等待（不會捨棄），直到 {resets} 或 Yayatoh 提高你的上限。門票和收據仍會傳送。",
+    "resets": "配額將於 {date} 重設。",
+    "smsSegmentsNote": "簡訊以段計算：160 個字元（阿拉伯文或日文等文字為 70 個），內容較長時每段字元更少。",
+    "logTitle": "暫緩和封鎖",
+    "logCaption": "被訊息規則暫緩或封鎖的訊息",
+    "logEmpty": "沒有暫緩或封鎖的訊息。",
+    "when": "時間",
+    "message": "訊息",
+    "to": "傳送給",
+    "reason": "原因",
+    "held": "暫緩",
+    "blocked": "已封鎖",
+    "noAddress": "簡訊或應用程式",
+    "suppressionsTitle": "已停止的地址",
+    "suppressionsCaption": "不會傳送訊息的地址",
+    "suppressionsEmpty": "沒有已停止的地址。",
+    "address": "地址",
+    "since": "開始時間",
+    "action": "動作",
+    "suppressionReason": {
+      "hard_bounce": "退信（地址不存在）",
+      "soft_bounce": "多次退信（信箱已滿或無法使用）",
+      "complaint": "被標記為垃圾郵件"
+    },
+    "liftNote": "為什麼要解除 {address} 的停止？",
+    "lift": "解除",
+    "liftLabel": "解除 {address} 的停止",
+    "supportOnly": "只有 Yayatoh 支援團隊可以解除。",
+    "lifted": "已解除停止。傳到該地址的訊息會恢復傳送。",
+    "noteRequired": "請新增至少 3 個字元的備註。",
+    "capsTitle": "傳送頻率上限",
+    "capsDescription": "同一個人在一個管道上從你這裡最多收到的訊息數。超過上限的動態和提醒會等待；超過上限的優惠會被略過。",
+    "capsCaption": "每人傳送頻率上限",
+    "scope": {
+      "reminders": "提醒",
+      "event_updates": "活動動態",
+      "marketing": "新聞與優惠",
+      "all": "所有選用訊息"
+    },
+    "maxMessages": "{scope}：最多訊息數",
+    "windowHours": "{scope}：每幾小時",
+    "capValue": "每 {hours, plural, other {# 小時}} {max, plural, other {# 則訊息}}",
+    "default": "預設",
+    "custom": "自訂",
+    "saveCaps": "儲存上限",
+    "capsSaved": "上限已儲存。",
+    "maxInvalid": "請輸入 1 到 20 的整數。",
+    "windowInvalid": "請輸入 1 到 720 的整數小時數。"
+  },
+  "preferenceCenter": {
+    "metaTitle": "你的訊息偏好",
+    "eyebrow": "訊息偏好",
+    "title": "來自 {org} 的訊息",
+    "description": "選擇 {org} 傳送給你的內容與方式。門票、收據和你要求的回覆一律透過電子郵件送達。",
+    "emailLegend": "透過電子郵件傳送到 {email}",
+    "category": {
+      "reminders": "活動前的提醒",
+      "event_updates": "你參加的活動動態",
+      "marketing": "新聞與優惠"
+    },
+    "phoneLabel": "手機號碼",
+    "phoneHint": "請包含國碼，例如 +1 212 555 0100。",
+    "phoneCurrent": "目前為 {phone}。留空則維持不變。",
+    "smsLegend": "簡訊（SMS）",
+    "whatsappLegend": "WhatsApp",
+    "informational": "你參加的活動的提醒和動態",
+    "marketingText": "新聞與優惠",
+    "disclosure": "勾選簡訊或 WhatsApp，即表示你同意在此號碼接收來自 {org} 的定期自動訊息。同意並非任何購買的條件。傳送頻率不定；可能產生簡訊和數據費用。回覆 STOP 取消或回覆 HELP 取得協助，也可以隨時回到這裡。",
+    "save": "儲存我的偏好",
+    "saved": "你的偏好已儲存。",
+    "errors": {
+      "invalid_phone": "請輸入包含國碼的號碼，例如 +1 212 555 0100。",
+      "phone_required": "請新增手機號碼以接收簡訊或 WhatsApp。",
+      "not_found": "此連結已失效。",
+      "internal": "發生錯誤，請再試一次。"
+    }
   }
 }

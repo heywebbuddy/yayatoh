@@ -330,6 +330,7 @@ describe('delivery events and suppression', () => {
       duplicate: 0,
       unknown: 0,
       suppressed: 1,
+      autoPaused: false,
     });
     // The provider retries the webhook: deduplicated by its event id.
     expect(await record(a.org.id, [bounce])).toEqual({
@@ -337,6 +338,7 @@ describe('delivery events and suppression', () => {
       duplicate: 1,
       unknown: 0,
       suppressed: 0,
+      autoPaused: false,
     });
     expect((await ticketsOf(a.org.id, first.order.id)).delivery).toBe('bounced');
     const log = await executeQuery(orderMessagesQuery, { orderId: first.order.id }, a.ctx(), ports);

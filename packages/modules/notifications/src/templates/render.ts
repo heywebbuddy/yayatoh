@@ -121,6 +121,11 @@ function values(input: RenderInput, locale: Locale, cat: Catalog): Record<string
     }).format(new Date(until));
   }
   if (typeof p.role === 'string') out.role = cat.roles[p.role as keyof Catalog['roles']] ?? p.role;
+  // A rate in basis points (the complaint-rate auto-pause, M3.5a) as a percentage.
+  if (typeof p.rateBps === 'number')
+    out.rate = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(
+      p.rateBps / 10_000,
+    );
   return out;
 }
 
@@ -316,4 +321,28 @@ ${paragraphs}
     dir,
     preview: intro.length > 180 ? `${intro.slice(0, 177)}…` : intro,
   };
+}
+
+/**
+ * The text-message version of a rendered message (SMS and WhatsApp, M3.5a): the org's name first
+ * (a sender must identify itself), the subject, the message itself (or the opening line), the
+ * link, and for optional categories how to opt out. Metering and the composer count its segments.
+ */
+export function smsText(
+  rendered: RenderedMessage,
+  input: {
+    readonly orgName: string;
+    readonly category: Category;
+    readonly body?: string | number | null;
+    readonly link?: string | null;
+  },
+): string {
+  const cat = EMAIL_MESSAGES[rendered.lang];
+  const body = typeof input.body === 'string' && input.body.trim() ? input.body.trim() : rendered.preview;
+  return [
+    `${input.orgName}: ${rendered.subject}`,
+    body,
+    ...(input.link ? [input.link] : []),
+    ...(input.category === 'transactional' ? [] : [cat.common.smsStop]),
+  ].join('\n');
 }

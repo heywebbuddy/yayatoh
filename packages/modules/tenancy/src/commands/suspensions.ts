@@ -16,6 +16,41 @@ export async function activeSuspensionsTx(tx: TenantTx): Promise<Set<SuspensionK
   return new Set(rows.map((r) => r.kind as SuspensionKind));
 }
 
+/**
+ * Pause a capability from inside another module's command (M3.5a: the complaint-rate auto-pause).
+ * Same row as a staff pause; `createdBy` names the system rule. Returns whether it changed; the
+ * caller emits `org.suspension_changed@1` from its own command.
+ */
+export async function pauseCapabilityTx(
+  tx: TenantTx,
+  orgId: string,
+  kind: SuspensionKind,
+  reason: string,
+  createdBy: string,
+): Promise<boolean> {
+  const rows = await tx
+    .insert(orgSuspensions)
+    .values({ orgId, kind, reason, createdBy })
+    .onConflictDoNothing()
+    .returning({ id: orgSuspensions.id });
+  return rows.length > 0;
+}
+
+/** Lift a capability pause from inside another module's (audited, staff-only) command. */
+export async function liftCapabilityTx(
+  tx: TenantTx,
+  kind: SuspensionKind,
+  liftedBy: string,
+  now: Date,
+): Promise<boolean> {
+  const rows = await tx
+    .update(orgSuspensions)
+    .set({ liftedAt: now, liftedBy, updatedAt: now })
+    .where(and(eq(orgSuspensions.kind, kind), isNull(orgSuspensions.liftedAt)))
+    .returning({ id: orgSuspensions.id });
+  return rows.length > 0;
+}
+
 const PAUSED_REASON: Record<SuspensionKind, string> = {
   pause_checkout: 'checkout_paused',
   pause_publishing: 'publishing_paused',

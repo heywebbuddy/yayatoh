@@ -51,7 +51,8 @@
         "order_paid": "新しい注文：{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）"
       },
       "messaging": {
-        "contact_replied": "{name} さんから {eventName} についてメッセージが届きました"
+        "contact_replied": "{name} さんから {eventName} についてメッセージが届きました",
+        "auto_paused": "送信を一時停止しました: 苦情率が{rate}に達しました。チケットと領収書は引き続き送信されます。"
       },
       "notifications": {
         "test": "テスト通知：通知は正常に動作しています"
@@ -92,7 +93,8 @@
       "messaging": {
         "announcement": "お知らせ",
         "reply": "返信",
-        "contact_replied": "新しいメッセージ"
+        "contact_replied": "新しいメッセージ",
+        "auto_paused": "送信一時停止のお知らせ"
       },
       "sales": {
         "order_paid": "新規注文のお知らせ"
@@ -116,6 +118,9 @@
       },
       "security": {
         "fraud_signal": "不正アラート"
+      },
+      "marketing": {
+        "message": "お知らせとオファー"
       }
     },
     "status": {
@@ -142,13 +147,20 @@
       "event_postponed": "イベントの延期中は保留",
       "answered": "受信者はすでに回答済みでした",
       "survey_closed": "アンケートが終了しました",
-      "erased": "送信せず: 本人の依頼によりこの人のデータは消去されました"
+      "erased": "送信せず: 本人の依頼によりこの人のデータは消去されました",
+      "consent_missing": "ブロック: 受信の同意がありません",
+      "consent_withdrawn": "ブロック: 受信者が同意を取り消しました",
+      "whatsapp_marketing_us": "ブロック: 米国の番号へのWhatsAppマーケティングは許可されていません",
+      "state_quiet_hours": "州の通話可能時間まで保留(例: テキサス州の日曜正午前)",
+      "frequency_cap": "保留またはスキップ: この方は最近多くのメッセージを受け取っています",
+      "quota_reached": "待機中: 今月の上限に達しました"
     },
     "channels": {
       "email": "メール",
       "sms": "SMS",
       "push": "プッシュ",
-      "in_app": "アプリ内"
+      "in_app": "アプリ内",
+      "whatsapp": "WhatsApp"
     },
     "log": {
       "title": "メッセージ",
@@ -243,7 +255,8 @@
     "speakers": "登壇者",
     "sponsors": "スポンサー",
     "media": "画像",
-    "trackedLinks": "トラッキングリンク"
+    "trackedLinks": "トラッキングリンク",
+    "messagingHealth": "メッセージ送信の上限"
   },
   "vocab": {
     "attendee": "参加者",
@@ -2894,7 +2907,8 @@
     "confirm": "配信停止",
     "done": "{org} からの{what}の配信を停止しました。",
     "resubscribe": "再度購読する",
-    "transactionalNote": "チケット、領収書、返金など必要なメールは引き続き届きます。"
+    "transactionalNote": "チケット、領収書、返金など必要なメールは引き続き届きます。",
+    "managePreferences": "{org}のすべての設定を管理"
   },
   "devMailbox": {
     "eyebrow": "開発",
@@ -2917,7 +2931,8 @@
     "channels": "送信方法",
     "channel": {
       "email": "メール",
-      "push": "プッシュ通知"
+      "push": "プッシュ通知",
+      "sms": "テキストメッセージ(SMS)"
     },
     "pushHint": "プッシュ通知は、注文ページまたはアプリで通知をオンにした参加者に届きます。それ以外の人にはメールが届きます。",
     "preview": "プレビュー",
@@ -2939,7 +2954,14 @@
       "channelRequired": "送信方法を 1 つ以上選んでください。",
       "no_recipients": "このイベントにはまだ参加者がいないため、送信先がありません。",
       "messaging_paused": "Yayatoh サポートがあなたの組織の配信を一時停止しています。"
-    }
+    },
+    "smsHint": "SMSは携帯番号を登録し、SMSの受信に同意した参加者にのみ届きます。それ以外の方は理由付きで「未送信」と表示されます。",
+    "smsPreviewTitle": "テキストメッセージ",
+    "smsCount": "{characters, plural, other {#文字}} · {segments, plural, other {#セグメント}}({encoding})",
+    "smsReach": "{count, plural, =0 {携帯番号を登録した参加者はまだいません。} other {#人の参加者が携帯番号を登録しています。}}",
+    "quotaReached": "{channels}の今月の上限に達しました。これらのメッセージは上限のリセットまたはYayatohによる上限引き上げまで待機します。",
+    "reasonsLabel": "未送信の理由",
+    "reasonLine": "{channel}: {reason}({count})"
   },
   "eventAnnouncements": {
     "heading": "お知らせ",
@@ -4695,5 +4717,105 @@
     "lastTouch": "ラストタッチ",
     "viaClick": "トラッキングリンクのクリック",
     "viaUtm": "UTM タグ"
+  },
+  "messagingHealth": {
+    "title": "メッセージ送信の上限",
+    "description": "今月の利用量と上限、ルールで保留またはブロックされたメッセージ、停止中のアドレス、1人にメッセージを送れる頻度。",
+    "autoPaused": "送信を一時停止中です: 苦情率が{rate}({sent}通中{complaints}通)に達し、上限の0.3%を超えました。",
+    "autoPausedBody": "{since}から、リマインダー、お知らせ、マーケティングは待機しています。チケット、領収書、返信は引き続き送信されます。Yayatohサポートが一緒に確認し、送信を再開します。",
+    "staffPaused": "Yayatohサポートが組織のメッセージ送信を一時停止しました。チケット、領収書、返信は引き続き送信されます。",
+    "usageTitle": "今月",
+    "usageCaption": "今月の利用量と上限",
+    "channel": "チャネル",
+    "used": "利用量",
+    "limit": "月間上限",
+    "status": "状態",
+    "waiting": "待機中",
+    "usedOf": "{limit}中{used}",
+    "units": {
+      "email": "通のメール",
+      "sms": "セグメント",
+      "whatsapp": "件のメッセージ",
+      "push": "件の通知"
+    },
+    "ok": "上限内",
+    "reached": "上限に到達",
+    "quotaReachedTitle": "{channels, plural, other {上限に達しています}}: {list}。",
+    "quotaReachedBody": "任意のメッセージは{resets}まで、またはYayatohが上限を引き上げるまで待機します(破棄はされません)。チケットと領収書は引き続き送信されます。",
+    "resets": "上限は{date}にリセットされます。",
+    "smsSegmentsNote": "SMSはセグメント単位で数えます: 160文字(アラビア語や日本語などは70文字)。長い文章ではセグメントあたりの文字数が減ります。",
+    "logTitle": "保留とブロック",
+    "logCaption": "送信ルールで保留またはブロックされたメッセージ",
+    "logEmpty": "保留またはブロックされたものはありません。",
+    "when": "日時",
+    "message": "メッセージ",
+    "to": "宛先",
+    "reason": "理由",
+    "held": "保留",
+    "blocked": "ブロック",
+    "noAddress": "SMSまたはアプリ",
+    "suppressionsTitle": "停止中のアドレス",
+    "suppressionsCaption": "メッセージを送信しないアドレス",
+    "suppressionsEmpty": "停止中のアドレスはありません。",
+    "address": "アドレス",
+    "since": "開始",
+    "action": "操作",
+    "suppressionReason": {
+      "hard_bounce": "バウンス(アドレスが存在しません)",
+      "soft_bounce": "繰り返しバウンス(受信箱がいっぱいまたは利用不可)",
+      "complaint": "迷惑メールとして報告"
+    },
+    "liftNote": "{address}の停止を解除する理由",
+    "lift": "解除",
+    "liftLabel": "{address}の停止を解除",
+    "supportOnly": "これはYayatohサポートのみが解除できます。",
+    "lifted": "停止を解除しました。このアドレスへのメッセージは再び送信されます。",
+    "noteRequired": "3文字以上のメモを入力してください。",
+    "capsTitle": "送信頻度の上限",
+    "capsDescription": "1人が1つのチャネルで受け取るメッセージの最大数。上限を超えたお知らせやリマインダーは待機し、オファーはスキップされます。",
+    "capsCaption": "1人あたりの送信頻度の上限",
+    "scope": {
+      "reminders": "リマインダー",
+      "event_updates": "イベントのお知らせ",
+      "marketing": "お知らせとオファー",
+      "all": "すべての任意メッセージ"
+    },
+    "maxMessages": "{scope}: 最大メッセージ数",
+    "windowHours": "{scope}: 何時間あたり",
+    "capValue": "{hours, plural, other {#時間}}あたり{max, plural, other {#件}}",
+    "default": "標準",
+    "custom": "カスタム",
+    "saveCaps": "上限を保存",
+    "capsSaved": "上限を保存しました。",
+    "maxInvalid": "1から20までの整数を入力してください。",
+    "windowInvalid": "1から720までの整数(時間)を入力してください。"
+  },
+  "preferenceCenter": {
+    "metaTitle": "メッセージの受信設定",
+    "eyebrow": "メッセージ設定",
+    "title": "{org}からのメッセージ",
+    "description": "{org}から届く内容と方法を選べます。チケット、領収書、依頼した返信は必ずメールで届きます。",
+    "emailLegend": "{email}へのメール",
+    "category": {
+      "reminders": "イベント前のリマインダー",
+      "event_updates": "参加するイベントのお知らせ",
+      "marketing": "お知らせとオファー"
+    },
+    "phoneLabel": "携帯番号",
+    "phoneHint": "国番号付きで入力してください(例: +1 212 555 0100)。",
+    "phoneCurrent": "現在の番号: {phone}。変更しない場合は空欄のままにしてください。",
+    "smsLegend": "テキストメッセージ(SMS)",
+    "whatsappLegend": "WhatsApp",
+    "informational": "参加するイベントのリマインダーとお知らせ",
+    "marketingText": "お知らせとオファー",
+    "disclosure": "SMSまたはWhatsAppにチェックを入れると、この番号で{org}から定期的な自動メッセージを受け取ることに同意したものとみなされます。同意は購入の条件ではありません。送信頻度は変動し、メッセージ・通信料がかかる場合があります。停止はSTOP、ヘルプはHELPと返信するか、いつでもこのページに戻ってください。",
+    "save": "設定を保存",
+    "saved": "設定を保存しました。",
+    "errors": {
+      "invalid_phone": "国番号付きで番号を入力してください(例: +1 212 555 0100)。",
+      "phone_required": "SMSまたはWhatsAppを受け取るには携帯番号を追加してください。",
+      "not_found": "このリンクは使用できなくなりました。",
+      "internal": "問題が発生しました。もう一度お試しください。"
+    }
   }
 }

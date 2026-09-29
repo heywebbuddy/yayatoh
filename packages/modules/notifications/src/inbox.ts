@@ -147,7 +147,7 @@ export const sendTestNotificationCommand = tenantCommand({
 export const MessageLogDto = z.object({
   id: z.uuid(),
   kind: z.enum(MESSAGE_KINDS as [string, ...string[]]),
-  channel: z.enum(['email', 'sms', 'push']),
+  channel: z.enum(['email', 'sms', 'whatsapp', 'push']),
   status: z.enum(['queued', 'scheduled', 'sent', 'suppressed', 'failed', 'canceled']),
   reason: z.string().nullable(),
   /** The provider's latest delivery report (M1.10d), for sent messages. */
@@ -161,7 +161,7 @@ export type MessageLogDto = z.infer<typeof MessageLogDto>;
 const toLog = (now: Date) => (r: typeof messages.$inferSelect) => ({
   id: r.id,
   kind: r.kind,
-  channel: r.channel as 'email' | 'sms' | 'push',
+  channel: r.channel as 'email' | 'sms' | 'whatsapp' | 'push',
   status:
     r.status === 'queued' && r.sendAfter.getTime() > now.getTime()
       ? ('scheduled' as const)

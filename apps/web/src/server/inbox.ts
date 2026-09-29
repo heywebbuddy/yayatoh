@@ -44,6 +44,10 @@ export async function loadInbox(
       p.amount = formatMoney(money(p.amountMinor, p.currency), locale);
     if (typeof p.holdUntil === 'string') p.until = fmt.format(new Date(p.holdUntil));
     else if (typeof p.until === 'string') p.until = fmt.format(new Date(p.until));
+    if (typeof p.rateBps === 'number')
+      p.rate = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(
+        p.rateBps / 10_000,
+      );
     return t.has(i.kind) ? t(i.kind, p) : t('other');
   };
   return {

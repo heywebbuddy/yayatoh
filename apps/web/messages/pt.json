@@ -51,7 +51,8 @@
         "order_paid": "Novo pedido: {name} comprou {count, plural, one {# ingresso} other {# ingressos}} para {eventName} ({amount})"
       },
       "messaging": {
-        "contact_replied": "{name} enviou uma mensagem sobre {eventName}"
+        "contact_replied": "{name} enviou uma mensagem sobre {eventName}",
+        "auto_paused": "Envios pausados: as reclamações chegaram a {rate}. Ingressos e recibos continuam sendo enviados."
       },
       "notifications": {
         "test": "Notificação de teste: as notificações estão funcionando"
@@ -92,7 +93,8 @@
       "messaging": {
         "announcement": "Anúncio",
         "reply": "Resposta",
-        "contact_replied": "Nova mensagem"
+        "contact_replied": "Nova mensagem",
+        "auto_paused": "Aviso de envios pausados"
       },
       "sales": {
         "order_paid": "Alerta de novo pedido"
@@ -116,6 +118,9 @@
       },
       "security": {
         "fraud_signal": "Alerta de fraude"
+      },
+      "marketing": {
+        "message": "Novidades e ofertas"
       }
     },
     "status": {
@@ -142,13 +147,20 @@
       "event_postponed": "Em espera enquanto o evento está adiado",
       "answered": "A pessoa já tinha respondido",
       "survey_closed": "A pesquisa foi encerrada",
-      "erased": "Não enviado: os dados desta pessoa foram apagados a pedido dela"
+      "erased": "Não enviado: os dados desta pessoa foram apagados a pedido dela",
+      "consent_missing": "Bloqueado: sem consentimento para receber isto",
+      "consent_withdrawn": "Bloqueado: a pessoa retirou o consentimento",
+      "whatsapp_marketing_us": "Bloqueado: marketing por WhatsApp não é permitido para números dos EUA",
+      "state_quiet_hours": "Aguardando o horário de ligações do estado (por exemplo, domingos no Texas antes do meio-dia)",
+      "frequency_cap": "Aguardando ou ignorado: esta pessoa recebeu muitas mensagens recentemente",
+      "quota_reached": "Aguardando: a cota deste mês acabou"
     },
     "channels": {
       "email": "E-mail",
       "sms": "SMS",
       "push": "Push",
-      "in_app": "No app"
+      "in_app": "No app",
+      "whatsapp": "WhatsApp"
     },
     "log": {
       "title": "Mensagens",
@@ -243,7 +255,8 @@
     "speakers": "Palestrantes",
     "sponsors": "Patrocinadores",
     "media": "Imagens",
-    "trackedLinks": "Links rastreados"
+    "trackedLinks": "Links rastreados",
+    "messagingHealth": "Limites de envio"
   },
   "vocab": {
     "attendee": "Participante",
@@ -2894,7 +2907,8 @@
     "confirm": "Cancelar inscrição",
     "done": "Você não receberá mais {what} de {org}.",
     "resubscribe": "Inscrever-se novamente",
-    "transactionalNote": "Você continuará recebendo os e-mails necessários, como ingressos, recibos e reembolsos."
+    "transactionalNote": "Você continuará recebendo os e-mails necessários, como ingressos, recibos e reembolsos.",
+    "managePreferences": "Gerencie todas as suas preferências para {org}"
   },
   "devMailbox": {
     "eyebrow": "Desenvolvimento",
@@ -2917,7 +2931,8 @@
     "channels": "Enviar por",
     "channel": {
       "email": "E-mail",
-      "push": "Notificação push"
+      "push": "Notificação push",
+      "sms": "Mensagem de texto (SMS)"
     },
     "pushHint": "As notificações push chegam aos participantes que as ativaram na página do pedido ou no app; os demais recebem o e-mail.",
     "preview": "Pré-visualizar",
@@ -2939,7 +2954,14 @@
       "channelRequired": "Escolha pelo menos uma forma de envio.",
       "no_recipients": "Ninguém participa deste evento ainda, então não há para quem enviar.",
       "messaging_paused": "O suporte da Yayatoh pausou as mensagens da sua organização."
-    }
+    },
+    "smsHint": "SMS só vão para participantes que informaram um celular e aceitaram receber SMS; os demais aparecem como não enviados, com o motivo.",
+    "smsPreviewTitle": "Mensagem de texto",
+    "smsCount": "{characters, plural, one {# caractere} other {# caracteres}} · {segments, plural, one {# segmento} other {# segmentos}} ({encoding})",
+    "smsReach": "{count, plural, =0 {Nenhum participante tem celular ainda.} one {# participante tem celular.} other {# participantes têm celular.}}",
+    "quotaReached": "A cota deste mês para {channels} acabou: essas mensagens vão aguardar a renovação ou a Yayatoh aumentar seu limite.",
+    "reasonsLabel": "Motivo do não envio",
+    "reasonLine": "{channel}: {reason} ({count})"
   },
   "eventAnnouncements": {
     "heading": "Avisos",
@@ -4695,5 +4717,105 @@
     "lastTouch": "Último contato",
     "viaClick": "Clique em link rastreado",
     "viaUtm": "Tags UTM"
+  },
+  "messagingHealth": {
+    "title": "Limites de envio",
+    "description": "Uso e cotas do mês, mensagens retidas ou bloqueadas pelas regras, endereços suprimidos e com que frequência uma pessoa pode receber mensagens suas.",
+    "autoPaused": "Os envios estão pausados: as reclamações chegaram a {rate} ({complaints} de {sent} e-mails), acima do limite de 0,3%.",
+    "autoPausedBody": "Desde {since}, lembretes, novidades e marketing aguardam. Ingressos, recibos e respostas continuam sendo enviados. O suporte da Yayatoh vai revisar com você e retomar os envios.",
+    "staffPaused": "O suporte da Yayatoh pausou os envios da sua organização. Ingressos, recibos e respostas continuam sendo enviados.",
+    "usageTitle": "Este mês",
+    "usageCaption": "Uso e cotas deste mês",
+    "channel": "Canal",
+    "used": "Usado",
+    "limit": "Limite mensal",
+    "status": "Status",
+    "waiting": "Aguardando",
+    "usedOf": "{used} de {limit}",
+    "units": {
+      "email": "e-mails",
+      "sms": "segmentos",
+      "whatsapp": "mensagens",
+      "push": "notificações"
+    },
+    "ok": "Dentro da cota",
+    "reached": "Cota atingida",
+    "quotaReachedTitle": "{channels, plural, one {Uma cota acabou} other {Cotas acabaram}}: {list}.",
+    "quotaReachedBody": "Mensagens opcionais aguardam (nenhuma é descartada) até {resets} ou até a Yayatoh aumentar seu limite. Ingressos e recibos continuam sendo enviados.",
+    "resets": "As cotas são renovadas em {date}.",
+    "smsSegmentsNote": "SMS são contados em segmentos: 160 caracteres (70 em escritas como árabe ou japonês), menos por segmento quando o texto é mais longo.",
+    "logTitle": "Retidas e bloqueadas",
+    "logCaption": "Mensagens retidas ou bloqueadas pelas regras de envio",
+    "logEmpty": "Nada retido ou bloqueado.",
+    "when": "Quando",
+    "message": "Mensagem",
+    "to": "Para",
+    "reason": "Motivo",
+    "held": "Retida",
+    "blocked": "Bloqueada",
+    "noAddress": "SMS ou app",
+    "suppressionsTitle": "Endereços suprimidos",
+    "suppressionsCaption": "Endereços para os quais não se enviam mensagens",
+    "suppressionsEmpty": "Nenhum endereço suprimido.",
+    "address": "Endereço",
+    "since": "Desde",
+    "action": "Ação",
+    "suppressionReason": {
+      "hard_bounce": "Devolvido (o endereço não existe)",
+      "soft_bounce": "Devolvido várias vezes (caixa cheia ou indisponível)",
+      "complaint": "Marcado como spam"
+    },
+    "liftNote": "Por que remover para {address}?",
+    "lift": "Remover",
+    "liftLabel": "Remover a supressão de {address}",
+    "supportOnly": "Somente o suporte da Yayatoh pode remover isto.",
+    "lifted": "A supressão foi removida. As mensagens para esse endereço voltam a ser enviadas.",
+    "noteRequired": "Adicione uma nota com pelo menos 3 caracteres.",
+    "capsTitle": "Limites de frequência",
+    "capsDescription": "O máximo de mensagens que uma pessoa recebe de você em um canal. Acima do limite, novidades e lembretes aguardam; ofertas são ignoradas.",
+    "capsCaption": "Limites de frequência por pessoa",
+    "scope": {
+      "reminders": "Lembretes",
+      "event_updates": "Novidades do evento",
+      "marketing": "Novidades e ofertas",
+      "all": "Todas as mensagens opcionais"
+    },
+    "maxMessages": "{scope}: máximo de mensagens",
+    "windowHours": "{scope}: a cada quantas horas",
+    "capValue": "{max, plural, one {# mensagem} other {# mensagens}} a cada {hours, plural, one {# hora} other {# horas}}",
+    "default": "Padrão",
+    "custom": "Seu",
+    "saveCaps": "Salvar limites",
+    "capsSaved": "Limites salvos.",
+    "maxInvalid": "Digite um número inteiro de 1 a 20.",
+    "windowInvalid": "Digite um número inteiro de horas de 1 a 720."
+  },
+  "preferenceCenter": {
+    "metaTitle": "Suas preferências de mensagens",
+    "eyebrow": "Preferências de mensagens",
+    "title": "Mensagens de {org}",
+    "description": "Escolha o que {org} envia para você e como. Ingressos, recibos e respostas que você pediu sempre chegam por e-mail.",
+    "emailLegend": "Por e-mail para {email}",
+    "category": {
+      "reminders": "Lembretes antes dos eventos",
+      "event_updates": "Novidades dos eventos em que você vai",
+      "marketing": "Novidades e ofertas"
+    },
+    "phoneLabel": "Número de celular",
+    "phoneHint": "Com o código do país, por exemplo +1 212 555 0100.",
+    "phoneCurrent": "Atualmente {phone}. Deixe em branco para manter.",
+    "smsLegend": "Mensagens de texto (SMS)",
+    "whatsappLegend": "WhatsApp",
+    "informational": "Lembretes e novidades dos eventos em que você vai",
+    "marketingText": "Novidades e ofertas",
+    "disclosure": "Ao marcar uma opção de SMS ou WhatsApp, você concorda em receber mensagens automáticas recorrentes de {org} neste número. O consentimento não é condição para nenhuma compra. A frequência varia; podem ser cobradas tarifas de mensagens e dados. Responda STOP para cancelar ou HELP para ajuda, ou volte aqui quando quiser.",
+    "save": "Salvar minhas preferências",
+    "saved": "Suas preferências foram salvas.",
+    "errors": {
+      "invalid_phone": "Digite o número com o código do país, por exemplo +1 212 555 0100.",
+      "phone_required": "Adicione um celular para receber SMS ou WhatsApp.",
+      "not_found": "Este link não funciona mais.",
+      "internal": "Algo deu errado. Tente novamente."
+    }
   }
 }

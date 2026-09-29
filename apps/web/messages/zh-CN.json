@@ -51,7 +51,8 @@
         "order_paid": "新订单：{name} 购买了 {count, plural, other {# 张}} {eventName} 门票（{amount}）"
       },
       "messaging": {
-        "contact_replied": "{name} 就 {eventName} 给您发了消息"
+        "contact_replied": "{name} 就 {eventName} 给您发了消息",
+        "auto_paused": "消息已暂停：投诉率达到 {rate}。门票和收据仍会发送。"
       },
       "notifications": {
         "test": "测试通知：通知功能正常"
@@ -92,7 +93,8 @@
       "messaging": {
         "announcement": "公告",
         "reply": "回复",
-        "contact_replied": "新消息"
+        "contact_replied": "新消息",
+        "auto_paused": "消息暂停提醒"
       },
       "sales": {
         "order_paid": "新订单提醒"
@@ -116,6 +118,9 @@
       },
       "security": {
         "fraud_signal": "欺诈警报"
+      },
+      "marketing": {
+        "message": "新闻和优惠"
       }
     },
     "status": {
@@ -142,13 +147,20 @@
       "event_postponed": "活动延期期间暂缓",
       "answered": "收件人已经回答过",
       "survey_closed": "问卷已关闭",
-      "erased": "未发送：此人的数据已应其要求删除"
+      "erased": "未发送：此人的数据已应其要求删除",
+      "consent_missing": "已拦截：没有接收同意",
+      "consent_withdrawn": "已拦截：收件人撤回了同意",
+      "whatsapp_marketing_us": "已拦截：不允许向美国号码发送 WhatsApp 营销消息",
+      "state_quiet_hours": "等待州规定的通话时间（例如得克萨斯州周日中午前）",
+      "frequency_cap": "等待或已跳过：此人最近收到了很多消息",
+      "quota_reached": "等待中：本月配额已用完"
     },
     "channels": {
       "email": "电子邮件",
       "sms": "短信",
       "push": "推送",
-      "in_app": "应用内"
+      "in_app": "应用内",
+      "whatsapp": "WhatsApp"
     },
     "log": {
       "title": "消息",
@@ -243,7 +255,8 @@
     "speakers": "演讲嘉宾",
     "sponsors": "赞助商",
     "media": "图片",
-    "trackedLinks": "追踪链接"
+    "trackedLinks": "追踪链接",
+    "messagingHealth": "消息发送限制"
   },
   "vocab": {
     "attendee": "参会者",
@@ -2894,7 +2907,8 @@
     "confirm": "退订",
     "done": "您已退订来自 {org} 的{what}。",
     "resubscribe": "重新订阅",
-    "transactionalNote": "您仍会收到必要的邮件，例如门票、收据和退款。"
+    "transactionalNote": "您仍会收到必要的邮件，例如门票、收据和退款。",
+    "managePreferences": "管理你在 {org} 的所有偏好"
   },
   "devMailbox": {
     "eyebrow": "开发",
@@ -2917,7 +2931,8 @@
     "channels": "发送方式",
     "channel": {
       "email": "电子邮件",
-      "push": "推送通知"
+      "push": "推送通知",
+      "sms": "短信（SMS）"
     },
     "pushHint": "推送会发送给在订单页面或应用中开启了通知的参与者；其他人会收到电子邮件。",
     "preview": "预览",
@@ -2939,7 +2954,14 @@
       "channelRequired": "请至少选择一种发送方式。",
       "no_recipients": "此活动还没有参加者，暂无可发送的对象。",
       "messaging_paused": "Yayatoh 支持团队已暂停您组织的消息发送。"
-    }
+    },
+    "smsHint": "短信只发送给提供了手机号并同意接收短信的参会者；其他人会显示为未发送，并注明原因。",
+    "smsPreviewTitle": "短信",
+    "smsCount": "{characters, plural, other {# 个字符}} · {segments, plural, other {# 段}}（{encoding}）",
+    "smsReach": "{count, plural, =0 {还没有参会者提供手机号。} other {# 位参会者有手机号。}}",
+    "quotaReached": "{channels} 的本月配额已用完：这些消息会等到配额重置或 Yayatoh 提高你的上限。",
+    "reasonsLabel": "未发送原因",
+    "reasonLine": "{channel}：{reason}（{count}）"
   },
   "eventAnnouncements": {
     "heading": "公告",
@@ -4695,5 +4717,105 @@
     "lastTouch": "最后触点",
     "viaClick": "追踪链接点击",
     "viaUtm": "UTM 标签"
+  },
+  "messagingHealth": {
+    "title": "消息发送限制",
+    "description": "本月用量和配额、被规则暂缓或拦截的消息、被停止的地址，以及同一个人能多频繁地收到你的消息。",
+    "autoPaused": "消息已暂停：投诉率达到 {rate}（{sent} 封邮件中有 {complaints} 封），超过 0.3% 的上限。",
+    "autoPausedBody": "自 {since} 起，提醒、动态和营销消息都在等待。门票、收据和回复仍会发送。Yayatoh 支持团队会与你一起核查并恢复发送。",
+    "staffPaused": "Yayatoh 支持团队暂停了你组织的消息发送。门票、收据和回复仍会发送。",
+    "usageTitle": "本月",
+    "usageCaption": "本月用量和配额",
+    "channel": "渠道",
+    "used": "已用",
+    "limit": "每月上限",
+    "status": "状态",
+    "waiting": "等待中",
+    "usedOf": "{used} / {limit}",
+    "units": {
+      "email": "封邮件",
+      "sms": "段",
+      "whatsapp": "条消息",
+      "push": "条通知"
+    },
+    "ok": "未超配额",
+    "reached": "已达配额",
+    "quotaReachedTitle": "{channels, plural, other {配额已用完}}：{list}。",
+    "quotaReachedBody": "可选消息会等待（不会丢弃），直到 {resets} 或 Yayatoh 提高你的上限。门票和收据仍会发送。",
+    "resets": "配额将于 {date} 重置。",
+    "smsSegmentsNote": "短信按段计数：160 个字符（阿拉伯文或日文等文字为 70 个），内容较长时每段字符更少。",
+    "logTitle": "暂缓和拦截",
+    "logCaption": "被消息规则暂缓或拦截的消息",
+    "logEmpty": "没有暂缓或拦截的消息。",
+    "when": "时间",
+    "message": "消息",
+    "to": "发送给",
+    "reason": "原因",
+    "held": "暂缓",
+    "blocked": "已拦截",
+    "noAddress": "短信或应用",
+    "suppressionsTitle": "已停止的地址",
+    "suppressionsCaption": "不会发送消息的地址",
+    "suppressionsEmpty": "没有已停止的地址。",
+    "address": "地址",
+    "since": "开始时间",
+    "action": "操作",
+    "suppressionReason": {
+      "hard_bounce": "退信（地址不存在）",
+      "soft_bounce": "多次退信（邮箱已满或不可用）",
+      "complaint": "被标记为垃圾邮件"
+    },
+    "liftNote": "为什么要解除 {address} 的停止？",
+    "lift": "解除",
+    "liftLabel": "解除 {address} 的停止",
+    "supportOnly": "只有 Yayatoh 支持团队可以解除。",
+    "lifted": "已解除停止。发往该地址的消息会恢复发送。",
+    "noteRequired": "请添加至少 3 个字符的备注。",
+    "capsTitle": "发送频率上限",
+    "capsDescription": "同一个人在一个渠道上从你这里最多收到的消息数。超过上限的动态和提醒会等待；超过上限的优惠会被跳过。",
+    "capsCaption": "每人发送频率上限",
+    "scope": {
+      "reminders": "提醒",
+      "event_updates": "活动动态",
+      "marketing": "新闻和优惠",
+      "all": "所有可选消息"
+    },
+    "maxMessages": "{scope}：最多消息数",
+    "windowHours": "{scope}：每多少小时",
+    "capValue": "每 {hours, plural, other {# 小时}} {max, plural, other {# 条消息}}",
+    "default": "默认",
+    "custom": "自定义",
+    "saveCaps": "保存上限",
+    "capsSaved": "上限已保存。",
+    "maxInvalid": "请输入 1 到 20 的整数。",
+    "windowInvalid": "请输入 1 到 720 的整数小时数。"
+  },
+  "preferenceCenter": {
+    "metaTitle": "你的消息偏好",
+    "eyebrow": "消息偏好",
+    "title": "来自 {org} 的消息",
+    "description": "选择 {org} 给你发送什么以及如何发送。门票、收据和你请求的回复始终通过邮件送达。",
+    "emailLegend": "通过邮件发送到 {email}",
+    "category": {
+      "reminders": "活动前的提醒",
+      "event_updates": "你参加的活动的动态",
+      "marketing": "新闻和优惠"
+    },
+    "phoneLabel": "手机号",
+    "phoneHint": "请包含国家代码，例如 +1 212 555 0100。",
+    "phoneCurrent": "当前为 {phone}。留空则保持不变。",
+    "smsLegend": "短信（SMS）",
+    "whatsappLegend": "WhatsApp",
+    "informational": "你参加的活动的提醒和动态",
+    "marketingText": "新闻和优惠",
+    "disclosure": "勾选短信或 WhatsApp，即表示你同意在此号码接收来自 {org} 的定期自动消息。同意并非任何购买的条件。发送频率不定；可能产生短信和流量费用。回复 STOP 取消或回复 HELP 获取帮助，也可以随时回到这里。",
+    "save": "保存我的偏好",
+    "saved": "你的偏好已保存。",
+    "errors": {
+      "invalid_phone": "请输入包含国家代码的号码，例如 +1 212 555 0100。",
+      "phone_required": "请添加手机号以接收短信或 WhatsApp。",
+      "not_found": "此链接已失效。",
+      "internal": "出了点问题，请重试。"
+    }
   }
 }

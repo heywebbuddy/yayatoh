@@ -17,8 +17,12 @@ import {
 export const crmSchema = pgSchema('crm');
 
 export const CONTACT_SOURCES = ['checkout', 'ticket', 'import', 'manual', 'legacy'] as const;
-export const CONSENT_CHANNELS = ['email', 'sms'] as const;
-export const CONSENT_PURPOSES = ['marketing'] as const;
+export const CONSENT_CHANNELS = ['email', 'sms', 'whatsapp'] as const;
+/**
+ * `marketing`: promotional messages (express written consent for texts). `informational`:
+ * reminders and event updates by text (M3.5a); marketing consent also covers them.
+ */
+export const CONSENT_PURPOSES = ['marketing', 'informational'] as const;
 export const CONSENT_STATUSES = ['granted', 'withdrawn', 'unknown_legacy'] as const;
 
 /** Org-scoped people (roadmap §4.1): there is never a global attendee record. */
@@ -64,8 +68,8 @@ export const consents = tenantTable(
       columns: [t.orgId, t.contactId],
       foreignColumns: [contacts.orgId, contacts.id],
     }).onDelete('cascade'),
-    check('consents_channel_check', sql`channel in ('email', 'sms')`),
-    check('consents_purpose_check', sql`purpose in ('marketing')`),
+    check('consents_channel_check', sql`channel in ('email', 'sms', 'whatsapp')`),
+    check('consents_purpose_check', sql`purpose in ('marketing', 'informational')`),
     check('consents_status_check', sql`status in ('granted', 'withdrawn', 'unknown_legacy')`),
   ],
 );

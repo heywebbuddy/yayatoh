@@ -53,7 +53,9 @@
     "signupCodes": "Signup codes",
     "reports": "Messaging reports",
     "people": "Privacy requests",
-    "passkeys": "Passkeys"
+    "passkeys": "Passkeys",
+    "messaging": "Auto-paused messaging",
+    "messagingCount": "Auto-paused messaging ({count})"
   },
   "tenants": {
     "title": "Tenants",
@@ -301,7 +303,8 @@
       "amounts": "Ledger {ledger} · provider {provider}",
       "note": "Resolution note",
       "resolve": "Resolve"
-    }
+    },
+    "messagingLink": "Messaging: auto-pause and quotas"
   },
   "accessLog": {
     "title": "Access log",
@@ -584,5 +587,55 @@
     "addFailed": "The passkey wasn't added. Try again.",
     "notFresh": "For your security, sign in again (in the last 10 minutes) before adding a passkey.",
     "deleted": "Passkey removed."
+  },
+  "messagingPolicy": {
+    "title": "Auto-paused messaging",
+    "description": "Organizations whose reminders, updates and marketing paused themselves because complaints went over 0.3%. Review each with the organizer, then lift it on its messaging page.",
+    "empty": "No organization is auto-paused.",
+    "org": "Organization",
+    "since": "Paused since",
+    "rate": "Complaint rate",
+    "rateValue": "{rate} ({complaints, plural, one {# complaint} other {# complaints}} in {sent} emails)",
+    "tenantTitle": "Tenant messaging",
+    "tenantHeading": "Messaging: {org}",
+    "tenantDescription": "Complaint-rate auto-pause and this month's usage against the organization's quotas. Every change is audited.",
+    "back": "Back to {org}",
+    "pauseTitle": "Complaint-rate auto-pause",
+    "pausedSince": "Auto-paused since {since}",
+    "notPaused": "Not auto-paused",
+    "liftedAt": "Not auto-paused (last lifted {at})",
+    "liftNote": "Why lift it (what was reviewed)",
+    "lift": "Lift the auto-pause",
+    "quotaTitle": "Usage and quotas ({period})",
+    "quotaCaption": "Usage against monthly quotas",
+    "channel": "Channel",
+    "used": "Used",
+    "limit": "Monthly limit",
+    "status": "Status",
+    "default": "default",
+    "ok": "Within quota",
+    "reached": "Reached ({waiting} waiting)",
+    "channels": {
+      "email": "Email",
+      "sms": "SMS (segments)",
+      "whatsapp": "WhatsApp",
+      "push": "Push"
+    },
+    "quotaForm": "{channel} quota",
+    "limitLabel": "{channel} monthly limit (default {fallback})",
+    "reasonLabel": "Reason for the {channel} change",
+    "setLimit": "Set the {channel} limit",
+    "resetLimit": "Reset {channel} to the default",
+    "done": {
+      "lifted": "The auto-pause was lifted. Messaging resumed.",
+      "quota": "The quota was saved.",
+      "quota_reset": "The quota is back to the default."
+    },
+    "errors": {
+      "not_paused": "This organization is not auto-paused.",
+      "validation_failed": "Check the values: a whole number and a reason of at least 3 characters.",
+      "forbidden": "Your staff role can't do that.",
+      "internal": "Something went wrong."
+    }
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Button } from '@yayatoh/ui';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { ComposerState } from '@/app/[locale]/o/[org]/e/[event]/marketing/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -25,6 +25,7 @@ export function AnnouncementComposer({
   const t = useTranslations('announcements');
   const tr = useTranslations();
   const [state, formAction, pending] = useActionState(action, INITIAL);
+  const locale = useLocale();
   const v = state.values;
   const hidden = (
     <>
@@ -44,6 +45,33 @@ export function AnnouncementComposer({
         <div role="status" className="text-body font-medium">
           {t('willReach', { count: state.preview.recipients })}
         </div>
+        {state.preview.quotaReached.length ? (
+          <Alert
+            title={t('quotaReached', {
+              channels: new Intl.ListFormat(locale, { type: 'conjunction' }).format(
+                state.preview.quotaReached.map((c) => t(`channel.${c}`)),
+              ),
+            })}
+          />
+        ) : null}
+        {state.preview.sms ? (
+          <section aria-labelledby="sms-preview-heading" className="flex flex-col gap-2">
+            <h3 id="sms-preview-heading" className="text-body font-medium">
+              {t('smsPreviewTitle')}
+            </h3>
+            <p className="whitespace-pre-line rounded-card border border-zinc-200 bg-zinc-50 px-4 py-3 text-body">
+              {state.preview.sms.text}
+            </p>
+            <p className="text-caption text-zinc-600">
+              {t('smsCount', {
+                characters: state.preview.sms.characters,
+                segments: state.preview.sms.segments,
+                encoding: state.preview.sms.encoding,
+              })}{' '}
+              {t('smsReach', { count: state.preview.sms.withPhone })}
+            </p>
+          </section>
+        ) : null}
         <iframe
           title={t('previewFrame', { subject: state.preview.subject })}
           src={state.preview.src}
@@ -119,7 +147,7 @@ export function AnnouncementComposer({
       >
         <legend className="text-caption text-zinc-600">{t('channels')}</legend>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
-          {(['email', 'push'] as const).map((c) => (
+          {(['email', 'push', 'sms'] as const).map((c) => (
             <label key={c} className="flex min-h-6 items-center gap-2 text-body">
               <input
                 type="checkbox"
@@ -133,6 +161,7 @@ export function AnnouncementComposer({
           ))}
         </div>
         <p className="text-caption text-zinc-500">{t('pushHint')}</p>
+        <p className="text-caption text-zinc-500">{t('smsHint')}</p>
         {err.channels ? (
           <p id="announcement-channels-error" className="text-caption text-pink-700">
             {t('errors.channelRequired')}

@@ -1,8 +1,10 @@
+import { contactIdByEmailTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { keyVault, type NotificationChannel, type Notifier } from '@yayatoh/platform';
 import { memberUserIdsTx } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { kindOf } from './kinds.ts';
+import { recipientKey } from './policy/gate.ts';
 import { preferenceEnabledTx } from './preferences.ts';
 import { hasPushDeviceTx } from './push.ts';
 import { inboxItems, messages } from './schema.ts';
@@ -78,7 +80,7 @@ export function createNotifier(): Notifier {
         (c): c is Exclude<NotificationChannel, 'in_app'> => {
           if (c === 'email') return Boolean(intent.to.email || intent.to.userId);
           if (c === 'push') return canPush;
-          if (c === 'sms') return Boolean(intent.to.phone);
+          if (c === 'sms' || c === 'whatsapp') return Boolean(intent.to.phone);
           return false;
         },
       );
@@ -98,6 +100,17 @@ export function createNotifier(): Notifier {
         ...intent.params,
         ...(intent.to.phone ? { _phone: intent.to.phone } : {}),
       });
+      // M3.5a: the contact (consent ledger), the address's region (state rules) and the caps key.
+      const email = intent.to.email?.trim() || null;
+      const contactId = intent.to.contactId ?? (email ? await contactIdByEmailTx(tx, email) : null);
+      const region =
+        intent.to.region && /^[A-Z]{2}-[A-Z0-9]{1,3}$/.test(intent.to.region) ? intent.to.region : null;
+      const keyOf = (channel: string) =>
+        channel === 'email'
+          ? recipientKey('email', email ?? (intent.to.userId ? `user:${intent.to.userId}` : null))
+          : channel === 'push'
+            ? recipientKey('push', intent.to.userId)
+            : recipientKey(channel, intent.to.phone);
       for (const channel of channels) {
         const rows = await tx
           .insert(messages)
@@ -115,6 +128,9 @@ export function createNotifier(): Notifier {
             orderId: intent.orderId ?? null,
             eventId: intent.eventId ?? null,
             occurrenceId: intent.occurrenceId ?? null,
+            contactId,
+            recipientRegion: region,
+            recipientKey: keyOf(channel),
             paramsCiphertext,
             ...(intent.sendAfter ? { sendAfter: intent.sendAfter } : {}),
           })
@@ -147,7 +163,10 @@ export function createNotifier(): Notifier {
         const paramsCiphertext = await encryptParams(orgId, { ...intent.params, _href: intent.href ?? '' });
         for (const channel of channels) {
           // Skip rows the member switched off (or push with no device); the dispatcher checks again.
-          if (!(await preferenceEnabledTx(tx, m.userId, def.category, channel))) continue;
+          if (
+            !(await preferenceEnabledTx(tx, m.userId, def.category, channel === 'whatsapp' ? 'sms' : channel))
+          )
+            continue;
           if (channel === 'push' && !(await hasPushDeviceTx(tx, { userId: m.userId }))) continue;
           const rows = await tx
             .insert(messages)

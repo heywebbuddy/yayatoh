@@ -26,6 +26,9 @@ export const privateColumns = columnPrivacy('notifications', {
     provider_message_id: secret(),
     subject: personal(),
     delivery: 'vocab',
+    // M3.5a: the state for quiet-hour rules, and a keyed hash of (channel, address) for caps.
+    recipient_region: 'vocab',
+    recipient_key: secret(),
   },
   // Provider delivery reports (M1.10d).
   message_events: {
@@ -54,6 +57,14 @@ export const privateColumns = columnPrivacy('notifications', {
     time_zone: 'vocab',
   },
   suppressions: { email_norm: personal('email'), category: 'vocab', source: 'vocab' },
+  // Messaging policy (M3.5a): usage meters, staff-set quotas, frequency caps and auto-pauses.
+  usage_counters: { period: 'vocab', channel: 'vocab' },
+  quota_limits: { channel: 'vocab', reason: internal(), set_by: internal() },
+  frequency_caps: { scope: 'vocab', updated_by: internal() },
+  auto_pauses: {
+    lifted_by: internal(undefined, { where: 'lifted_at is not null' }),
+    lift_note: internal(undefined, { where: 'lifted_at is not null' }),
+  },
   template_overrides: {
     kind: 'vocab',
     locale: 'vocab',

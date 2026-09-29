@@ -11,7 +11,8 @@
       "event_updates": "{org} のイベントのゲストリストに登録されているため、このメールをお送りしています。",
       "marketing": "{org} のお知らせを購読されているため、このメールをお送りしています。"
     },
-    "reply": "{org} に返信"
+    "reply": "{org} に返信",
+    "smsStop": "配信停止はSTOPと返信してください。"
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "不正アラート: {signal, select, two_entrances {同じチケットが2つの入口で使用} impossible_travel {チェックポイント間のありえない移動} device_velocity {スキャンが速すぎるスキャナー} invalid_burst {無効なコードの連続} rejected_burst {拒否されたスキャンの連続} purchase_velocity {同じ購入者からの多数の注文} country_mismatch {別の国の購入者} checkout_blocked {ブロックされた決済} card_testing {カードテストの可能性} chat_abuse {報告された会話} other {不正シグナル}}",
       "intro": "{org}{eventName, select, none {} other {（{eventName}）}}で重要度の高いシグナルの確認が必要です: {signal, select, two_entrances {同じチケットが2つの入口で使用} impossible_travel {チェックポイント間のありえない移動} device_velocity {スキャンが速すぎるスキャナー} invalid_burst {無効なコードの連続} rejected_burst {拒否されたスキャンの連続} purchase_velocity {同じ購入者からの多数の注文} country_mismatch {別の国の購入者} checkout_blocked {ブロックされた決済} card_testing {カードテストの可能性} chat_abuse {報告された会話} other {不正シグナル}}。開いて対応済みにするか却下してください。",
       "cta": "シグナルを確認"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "{org}からのお知らせ:"
+    },
+    "messaging.auto_paused": {
+      "subject": "{org}のメッセージ送信を一時停止しました",
+      "intro": "{org}のメールへの苦情が{rate}に達し、上限の0.3%を超えたため、Yayatohはリマインダー、お知らせ、マーケティングの送信を一時停止しました。チケット、領収書、返信は引き続き送信されます。送信を再開する前に、Yayatohサポートが一緒に確認します。"
     }
   },
   "roles": {

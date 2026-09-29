@@ -11,7 +11,8 @@
       "event_updates": "您收到此邮件，是因为您在 {org} 某活动的嘉宾名单上。",
       "marketing": "您收到此邮件，是因为您订阅了 {org} 的资讯。"
     },
-    "reply": "回复 {org}"
+    "reply": "回复 {org}",
+    "smsStop": "回复 STOP 退订。"
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "欺诈警报：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}",
       "intro": "{org}{eventName, select, none {} other {（{eventName}）}}有一个高严重性信号需要查看：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}。打开它以确认或忽略。",
       "cta": "查看信号"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "来自 {org} 的消息："
+    },
+    "messaging.auto_paused": {
+      "subject": "{org} 的消息发送已暂停",
+      "intro": "针对 {org} 邮件的投诉率达到 {rate}，超过 0.3% 的上限，因此 Yayatoh 已暂停你的提醒、动态和营销消息。门票、收据和回复仍会照常发送。恢复发送前，Yayatoh 支持团队会与你一起核查。"
     }
   },
   "roles": {

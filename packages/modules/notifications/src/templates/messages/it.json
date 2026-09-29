@@ -11,7 +11,8 @@
       "event_updates": "Ricevi questo messaggio perché sei nella lista ospiti di un evento di {org}.",
       "marketing": "Ricevi questo messaggio perché sei iscritto alle novità di {org}."
     },
-    "reply": "Rispondi a {org}"
+    "reply": "Rispondi a {org}",
+    "smsStop": "Rispondi STOP per annullare l'iscrizione."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Avviso di frode: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}",
       "intro": "Un segnale di gravità alta va controllato presso {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}. Aprilo per prenderlo in carico o archiviarlo.",
       "cta": "Controlla il segnale"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Novità da {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messaggi in pausa per {org}",
+      "intro": "I reclami sulle email di {org} hanno raggiunto il {rate}, oltre il limite dello 0,3%, quindi Yayatoh ha messo in pausa promemoria, aggiornamenti e marketing. Biglietti, ricevute e risposte continuano a partire. Il supporto Yayatoh verificherà con te prima di riprendere gli invii."
     }
   },
   "roles": {

@@ -11,7 +11,9 @@ export type StaffAction =
   | 'impersonate'
   | 'status'
   | 'signupCodes'
-  | 'privacy';
+  | 'privacy'
+  | 'messaging'
+  | 'quotas';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -21,6 +23,8 @@ export type StaffAction =
  * - Admins and support hand out signup codes (onboarding is a support task); finance doesn't.
  * - `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
  *   people's requests; finance has no reason to see or erase personal data (pending owner).
+ * - `messaging` (M3.5a): see and lift complaint-rate auto-pauses (admin, support); `quotas`: set
+ *   messaging quotas (admin, finance).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -34,9 +38,11 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'status',
     'signupCodes',
     'privacy',
+    'messaging',
+    'quotas',
   ],
-  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy'],
-  finance: ['view', 'payouts', 'fees'],
+  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging'],
+  finance: ['view', 'payouts', 'fees', 'quotas'],
 };
 
 export function staffCan(role: StaffRole, action: StaffAction): boolean {

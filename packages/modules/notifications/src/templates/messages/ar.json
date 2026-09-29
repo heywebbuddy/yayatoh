@@ -11,7 +11,8 @@
       "event_updates": "تصلك هذه الرسالة لأنك على قائمة ضيوف فعالية تنظمها {org}.",
       "marketing": "تصلك هذه الرسالة لأنك اشتركت في أخبار {org}."
     },
-    "reply": "الرد على {org}"
+    "reply": "الرد على {org}",
+    "smsStop": "أرسل STOP لإلغاء الاشتراك."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "تنبيه احتيال: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}",
       "intro": "توجد إشارة عالية الخطورة تحتاج إلى مراجعة في {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {التذكرة نفسها عند مدخلين} impossible_travel {تنقّل مستحيل بين نقاط التفتيش} device_velocity {ماسح يمسح بسرعة كبيرة} invalid_burst {دفعة من الرموز غير الصالحة} rejected_burst {دفعة من عمليات المسح المرفوضة} purchase_velocity {طلبات كثيرة من مشترٍ واحد} country_mismatch {مشترٍ في بلد آخر} checkout_blocked {عملية دفع محظورة} card_testing {اختبار بطاقات محتمل} chat_abuse {محادثة تم الإبلاغ عنها} other {إشارة احتيال}}. افتحها لتأكيدها أو تجاهلها.",
       "cta": "مراجعة الإشارة"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "أخبار من {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "تم إيقاف الرسائل مؤقتًا لـ {org}",
+      "intro": "بلغت الشكاوى من رسائل {org} الإلكترونية {rate}، وهو أعلى من الحد 0.3%، لذا أوقفت Yayatoh التذكيرات والتحديثات والتسويق مؤقتًا. ما زالت التذاكر والإيصالات والردود تُرسل. سيراجع دعم Yayatoh الأمر معك قبل استئناف الإرسال."
     }
   },
   "roles": {

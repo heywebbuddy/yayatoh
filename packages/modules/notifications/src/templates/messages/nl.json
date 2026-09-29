@@ -11,7 +11,8 @@
       "event_updates": "Je krijgt dit omdat je op de gastenlijst staat van een evenement van {org}.",
       "marketing": "Je krijgt dit omdat je je hebt aangemeld voor nieuws van {org}."
     },
-    "reply": "{org} antwoorden"
+    "reply": "{org} antwoorden",
+    "smsStop": "Antwoord STOP om je af te melden."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Fraudemelding: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}",
       "intro": "Een signaal met hoge ernst bij {org}{eventName, select, none {} other { ({eventName})}} moet bekeken worden: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}. Open het om het op te pakken of te negeren.",
       "cta": "Signaal bekijken"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Nieuws van {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Berichten gepauzeerd voor {org}",
+      "intro": "Klachten over de e-mails van {org} bereikten {rate}, boven de grens van 0,3%, dus Yayatoh heeft je herinneringen, updates en marketing gepauzeerd. Tickets, bonnen en antwoorden gaan nog steeds uit. Yayatoh-support bekijkt het met je voordat het versturen weer start."
     }
   },
   "roles": {

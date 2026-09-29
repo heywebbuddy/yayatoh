@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { autoPausedOrgs } from '@/server/messaging-policy.ts';
 import type { Staff } from '@/server/staff.ts';
 import { SignOutButton } from './sign-out-button.tsx';
 
 /** The console frame: product name, sections, who is signed in and as what. */
 export async function Shell({ staff, children }: { staff: Staff; children: ReactNode }) {
   const t = await getTranslations('shell');
+  // Staff hear about complaint-rate auto-pauses here (M3.5a): the count sits in the header.
+  const paused = staff.can('messaging') ? (await autoPausedOrgs(staff)).length : 0;
   return (
     <div className="flex min-h-dvh flex-col">
       <a href="#main" className="sr-only focus:not-sr-only">
@@ -36,6 +39,11 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
           {staff.can('privacy') ? (
             <Link href="/people" className="underline-offset-2 hover:underline">
               {t('people')}
+            </Link>
+          ) : null}
+          {staff.can('messaging') ? (
+            <Link href="/messaging" className="underline-offset-2 hover:underline">
+              {paused ? t('messagingCount', { count: paused }) : t('messaging')}
             </Link>
           ) : null}
           <Link href="/access-log" className="underline-offset-2 hover:underline">

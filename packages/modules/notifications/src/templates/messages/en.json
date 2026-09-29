@@ -11,7 +11,8 @@
       "event_updates": "You're getting this because you're on the guest list for an event by {org}.",
       "marketing": "You're getting this because you subscribed to news from {org}."
     },
-    "reply": "Reply to {org}"
+    "reply": "Reply to {org}",
+    "smsStop": "Reply STOP to opt out."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Fraud alert: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}",
       "intro": "A high-severity signal needs a look at {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}. Open it to acknowledge or dismiss it.",
       "cta": "Review the signal"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "News from {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messaging paused for {org}",
+      "intro": "Complaints about {org}'s emails reached {rate}, above the 0.3% limit, so Yayatoh paused your reminders, updates and marketing. Tickets, receipts and replies still go out. Yayatoh support will review it with you before messaging resumes."
     }
   },
   "roles": {

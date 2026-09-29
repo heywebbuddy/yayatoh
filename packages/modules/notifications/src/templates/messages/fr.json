@@ -11,7 +11,8 @@
       "event_updates": "Vous recevez ce message car vous êtes sur la liste des invités d’un événement de {org}.",
       "marketing": "Vous recevez ce message car vous êtes abonné aux actualités de {org}."
     },
-    "reply": "Répondre à {org}"
+    "reply": "Répondre à {org}",
+    "smsStop": "Répondez STOP pour vous désabonner."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Alerte fraude : {signal, select, two_entrances {le même billet à deux entrées} impossible_travel {un trajet impossible entre points de contrôle} device_velocity {un scanner trop rapide} invalid_burst {une rafale de codes invalides} rejected_burst {une rafale de scans refusés} purchase_velocity {de nombreuses commandes d’un même acheteur} country_mismatch {un acheteur dans un autre pays} checkout_blocked {un paiement bloqué} card_testing {un possible test de cartes} chat_abuse {une conversation signalée} other {un signal de fraude}}",
       "intro": "Un signal de gravité élevée est à examiner chez {org}{eventName, select, none {} other { ({eventName})}} : {signal, select, two_entrances {le même billet à deux entrées} impossible_travel {un trajet impossible entre points de contrôle} device_velocity {un scanner trop rapide} invalid_burst {une rafale de codes invalides} rejected_burst {une rafale de scans refusés} purchase_velocity {de nombreuses commandes d’un même acheteur} country_mismatch {un acheteur dans un autre pays} checkout_blocked {un paiement bloqué} card_testing {un possible test de cartes} chat_abuse {une conversation signalée} other {un signal de fraude}}. Ouvrez-le pour le prendre en charge ou l’écarter.",
       "cta": "Examiner le signal"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Des nouvelles de {org} :"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messages suspendus pour {org}",
+      "intro": "Les plaintes concernant les e-mails de {org} ont atteint {rate}, au-delà de la limite de 0,3 %, donc Yayatoh a suspendu vos rappels, actualités et envois marketing. Les billets, reçus et réponses partent toujours. Le support Yayatoh examinera la situation avec vous avant la reprise des envois."
     }
   },
   "roles": {

@@ -17,7 +17,7 @@ export const messagingSchema = pgSchema('messaging');
 
 const tsz = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
-export const ANNOUNCEMENT_CHANNELS = ['email', 'push'] as const;
+export const ANNOUNCEMENT_CHANNELS = ['email', 'push', 'sms'] as const;
 export const REPORT_REASONS = ['spam', 'abuse', 'other'] as const;
 /** `open` until platform staff resolve (acted on) or dismiss (no action) it (M1.10d). */
 export const REPORT_STATUSES = ['open', 'resolved', 'dismissed'] as const;
@@ -40,7 +40,7 @@ export const announcements = tenantTable(
     check('announcements_body_length', sql`length(body) between 1 and 5000`),
     check(
       'announcements_channels_check',
-      sql`channels <@ array['email', 'push']::text[] and cardinality(channels) > 0`,
+      sql`channels <@ array['email', 'push', 'sms']::text[] and cardinality(channels) > 0`,
     ),
   ],
 );

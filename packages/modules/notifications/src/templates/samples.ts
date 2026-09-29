@@ -114,5 +114,11 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     timeZone: 'America/Chicago',
   },
   'tenancy.org-status': { url: 'https://app.yayatoh.test/o/lakeside-events', status: 'suspended' },
+  'marketing.message': {
+    subject: 'Early-bird tickets are back',
+    body: 'Save 20% on the autumn season until Friday.',
+    name: 'Amina Diallo',
+  },
+  'messaging.auto_paused': { rateBps: 42 },
   'notifications.test': {},
 };

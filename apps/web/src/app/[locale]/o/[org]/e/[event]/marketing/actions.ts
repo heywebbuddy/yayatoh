@@ -25,7 +25,21 @@ export type ComposerState =
       readonly step: 'preview';
       readonly values: ComposerValues;
       /** `src`: the stored preview's same-origin URL (served with its own CSP, M1.10d). */
-      readonly preview: { readonly recipients: number; readonly subject: string; readonly src: string };
+      readonly preview: {
+        readonly recipients: number;
+        readonly subject: string;
+        readonly src: string;
+        /** The text message and its segments, when SMS is chosen (M3.5a). */
+        readonly sms: {
+          readonly text: string;
+          readonly characters: number;
+          readonly segments: number;
+          readonly encoding: string;
+          readonly withPhone: number;
+        } | null;
+        /** Chosen channels whose monthly quota is used up. */
+        readonly quotaReached: readonly string[];
+      };
       readonly key: string;
     };
 
@@ -81,6 +95,8 @@ export async function composerAction(
         recipients: preview.recipients,
         subject: preview.subject,
         src: `/api/email-preview/${data.org.slug}/${stored.id}`,
+        sms: preview.sms,
+        quotaReached: preview.quotaReached,
       },
       key: crypto.randomUUID(),
     };

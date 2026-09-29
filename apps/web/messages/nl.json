@@ -51,7 +51,8 @@
         "order_paid": "Nieuwe bestelling: {name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})"
       },
       "messaging": {
-        "contact_replied": "{name} stuurde je een bericht over {eventName}"
+        "contact_replied": "{name} stuurde je een bericht over {eventName}",
+        "auto_paused": "Verzenden gepauzeerd: klachten bereikten {rate}. Tickets en bonnen gaan nog steeds uit."
       },
       "notifications": {
         "test": "Testmelding: meldingen werken"
@@ -92,7 +93,8 @@
       "messaging": {
         "announcement": "Aankondiging",
         "reply": "Antwoord",
-        "contact_replied": "Nieuw bericht"
+        "contact_replied": "Nieuw bericht",
+        "auto_paused": "Melding: verzenden gepauzeerd"
       },
       "sales": {
         "order_paid": "Melding nieuwe bestelling"
@@ -116,6 +118,9 @@
       },
       "security": {
         "fraud_signal": "Fraudemelding"
+      },
+      "marketing": {
+        "message": "Nieuws en aanbiedingen"
       }
     },
     "status": {
@@ -142,13 +147,20 @@
       "event_postponed": "In de wacht zolang het evenement is uitgesteld",
       "answered": "De ontvanger had al geantwoord",
       "survey_closed": "De enquête is gesloten",
-      "erased": "Niet verzonden: de gegevens van deze persoon zijn op diens verzoek gewist"
+      "erased": "Niet verzonden: de gegevens van deze persoon zijn op diens verzoek gewist",
+      "consent_missing": "Geblokkeerd: geen toestemming om dit te ontvangen",
+      "consent_withdrawn": "Geblokkeerd: de ontvanger heeft toestemming ingetrokken",
+      "whatsapp_marketing_us": "Geblokkeerd: WhatsApp-marketing naar Amerikaanse nummers is niet toegestaan",
+      "state_quiet_hours": "Wacht op de beltijden van de staat (bijvoorbeeld zondag in Texas vóór 12 uur)",
+      "frequency_cap": "Wacht of overgeslagen: deze persoon kreeg recent veel berichten",
+      "quota_reached": "Wacht: het quotum van deze maand is op"
     },
     "channels": {
       "email": "E-mail",
       "sms": "Sms",
       "push": "Push",
-      "in_app": "In de app"
+      "in_app": "In de app",
+      "whatsapp": "WhatsApp"
     },
     "log": {
       "title": "Berichten",
@@ -243,7 +255,8 @@
     "speakers": "Sprekers",
     "sponsors": "Sponsors",
     "media": "Afbeeldingen",
-    "trackedLinks": "Trackinglinks"
+    "trackedLinks": "Trackinglinks",
+    "messagingHealth": "Verzendlimieten"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -2894,7 +2907,8 @@
     "confirm": "Afmelden",
     "done": "Je ontvangt geen {what} van {org} meer.",
     "resubscribe": "Opnieuw aanmelden",
-    "transactionalNote": "Je blijft de e-mails krijgen die je nodig hebt, zoals tickets, bonnen en terugbetalingen."
+    "transactionalNote": "Je blijft de e-mails krijgen die je nodig hebt, zoals tickets, bonnen en terugbetalingen.",
+    "managePreferences": "Beheer al je voorkeuren voor {org}"
   },
   "devMailbox": {
     "eyebrow": "Ontwikkeling",
@@ -2917,7 +2931,8 @@
     "channels": "Versturen via",
     "channel": {
       "email": "E-mail",
-      "push": "Pushmelding"
+      "push": "Pushmelding",
+      "sms": "Sms"
     },
     "pushHint": "Push bereikt deelnemers die meldingen hebben aangezet op hun bestelpagina of in de app; alle anderen krijgen de e-mail.",
     "preview": "Voorbeeld",
@@ -2939,7 +2954,14 @@
       "channelRequired": "Kies minstens één manier om te versturen.",
       "no_recipients": "Nog niemand bezoekt dit evenement, dus er is niemand om het naar te sturen.",
       "messaging_paused": "Yayatoh-support heeft berichten van je organisatie gepauzeerd."
-    }
+    },
+    "smsHint": "Sms'jes gaan alleen naar deelnemers die een mobiel nummer gaven en sms'jes toestonden; de anderen staan als niet verzonden, met de reden.",
+    "smsPreviewTitle": "Sms",
+    "smsCount": "{characters, plural, one {# teken} other {# tekens}} · {segments, plural, one {# segment} other {# segmenten}} ({encoding})",
+    "smsReach": "{count, plural, =0 {Nog geen deelnemer heeft een mobiel nummer.} one {# deelnemer heeft een mobiel nummer.} other {# deelnemers hebben een mobiel nummer.}}",
+    "quotaReached": "Het quotum van deze maand voor {channels} is op: die berichten wachten tot het vernieuwt of Yayatoh je limiet verhoogt.",
+    "reasonsLabel": "Reden niet verzonden",
+    "reasonLine": "{channel}: {reason} ({count})"
   },
   "eventAnnouncements": {
     "heading": "Mededelingen",
@@ -4695,5 +4717,105 @@
     "lastTouch": "Laatste contact",
     "viaClick": "Klik op trackinglink",
     "viaUtm": "UTM-tags"
+  },
+  "messagingHealth": {
+    "title": "Verzendlimieten",
+    "description": "Gebruik en quota van deze maand, berichten die de regels vasthielden of blokkeerden, onderdrukte adressen en hoe vaak één persoon van je mag horen.",
+    "autoPaused": "Verzenden is gepauzeerd: klachten bereikten {rate} ({complaints} van {sent} e-mails), boven de grens van 0,3%.",
+    "autoPausedBody": "Sinds {since} wachten herinneringen, updates en marketing. Tickets, bonnen en antwoorden gaan nog steeds uit. Yayatoh-support bekijkt het met je en hervat het verzenden.",
+    "staffPaused": "Yayatoh-support heeft het verzenden voor je organisatie gepauzeerd. Tickets, bonnen en antwoorden gaan nog steeds uit.",
+    "usageTitle": "Deze maand",
+    "usageCaption": "Gebruik en quota deze maand",
+    "channel": "Kanaal",
+    "used": "Gebruikt",
+    "limit": "Maandlimiet",
+    "status": "Status",
+    "waiting": "Wachtend",
+    "usedOf": "{used} van {limit}",
+    "units": {
+      "email": "e-mails",
+      "sms": "segmenten",
+      "whatsapp": "berichten",
+      "push": "meldingen"
+    },
+    "ok": "Binnen quotum",
+    "reached": "Quotum bereikt",
+    "quotaReachedTitle": "{channels, plural, one {Een quotum is op} other {Quota zijn op}}: {list}.",
+    "quotaReachedBody": "Optionele berichten wachten (er gaat niets verloren) tot {resets} of tot Yayatoh je limiet verhoogt. Tickets en bonnen gaan nog steeds uit.",
+    "resets": "De quota vernieuwen op {date}.",
+    "smsSegmentsNote": "Sms'jes tellen in segmenten: 160 tekens (70 in schriften zoals Arabisch of Japans), minder per segment als een tekst langer is.",
+    "logTitle": "Vastgehouden en geblokkeerd",
+    "logCaption": "Berichten vastgehouden of geblokkeerd door de verzendregels",
+    "logEmpty": "Niets vastgehouden of geblokkeerd.",
+    "when": "Wanneer",
+    "message": "Bericht",
+    "to": "Aan",
+    "reason": "Reden",
+    "held": "Vastgehouden",
+    "blocked": "Geblokkeerd",
+    "noAddress": "Sms of app",
+    "suppressionsTitle": "Onderdrukte adressen",
+    "suppressionsCaption": "Adressen waar geen berichten heen gaan",
+    "suppressionsEmpty": "Geen onderdrukte adressen.",
+    "address": "Adres",
+    "since": "Sinds",
+    "action": "Actie",
+    "suppressionReason": {
+      "hard_bounce": "Gebounced (adres bestaat niet)",
+      "soft_bounce": "Herhaaldelijk gebounced (mailbox vol of niet beschikbaar)",
+      "complaint": "Als spam gemarkeerd"
+    },
+    "liftNote": "Waarom opheffen voor {address}?",
+    "lift": "Opheffen",
+    "liftLabel": "De onderdrukking voor {address} opheffen",
+    "supportOnly": "Alleen Yayatoh-support kan dit opheffen.",
+    "lifted": "De onderdrukking is opgeheven. Berichten naar dat adres gaan weer uit.",
+    "noteRequired": "Voeg een notitie van minstens 3 tekens toe.",
+    "capsTitle": "Frequentielimieten",
+    "capsDescription": "Het maximale aantal berichten dat één persoon via één kanaal van je krijgt. Updates en herinneringen boven de limiet wachten; aanbiedingen worden overgeslagen.",
+    "capsCaption": "Frequentielimieten per persoon",
+    "scope": {
+      "reminders": "Herinneringen",
+      "event_updates": "Evenementupdates",
+      "marketing": "Nieuws en aanbiedingen",
+      "all": "Alle optionele berichten"
+    },
+    "maxMessages": "{scope}: maximaal aantal berichten",
+    "windowHours": "{scope}: per hoeveel uur",
+    "capValue": "{max, plural, one {# bericht} other {# berichten}} per {hours, plural, one {# uur} other {# uur}}",
+    "default": "Standaard",
+    "custom": "Eigen",
+    "saveCaps": "Limieten opslaan",
+    "capsSaved": "Limieten opgeslagen.",
+    "maxInvalid": "Vul een heel getal van 1 tot 20 in.",
+    "windowInvalid": "Vul een heel aantal uren van 1 tot 720 in."
+  },
+  "preferenceCenter": {
+    "metaTitle": "Je berichtvoorkeuren",
+    "eyebrow": "Berichtvoorkeuren",
+    "title": "Berichten van {org}",
+    "description": "Kies wat {org} je stuurt en hoe. Tickets, bonnen en antwoorden waar je om vroeg komen altijd per e-mail.",
+    "emailLegend": "Per e-mail naar {email}",
+    "category": {
+      "reminders": "Herinneringen vóór evenementen",
+      "event_updates": "Updates over evenementen waar je naartoe gaat",
+      "marketing": "Nieuws en aanbiedingen"
+    },
+    "phoneLabel": "Mobiel nummer",
+    "phoneHint": "Met landcode, bijvoorbeeld +1 212 555 0100.",
+    "phoneCurrent": "Nu {phone}. Laat leeg om het te houden.",
+    "smsLegend": "Sms",
+    "whatsappLegend": "WhatsApp",
+    "informational": "Herinneringen en updates over evenementen waar je naartoe gaat",
+    "marketingText": "Nieuws en aanbiedingen",
+    "disclosure": "Door een sms- of WhatsApp-vakje aan te vinken, ga je akkoord met terugkerende geautomatiseerde berichten van {org} op dit nummer. Toestemming is geen voorwaarde voor een aankoop. De frequentie varieert; er kunnen bericht- en datakosten gelden. Antwoord STOP om te stoppen of HELP voor hulp, of kom hier op elk moment terug.",
+    "save": "Mijn voorkeuren opslaan",
+    "saved": "Je voorkeuren zijn opgeslagen.",
+    "errors": {
+      "invalid_phone": "Vul het nummer met landcode in, bijvoorbeeld +1 212 555 0100.",
+      "phone_required": "Voeg een mobiel nummer toe om sms of WhatsApp te ontvangen.",
+      "not_found": "Deze link werkt niet meer.",
+      "internal": "Er ging iets mis. Probeer het opnieuw."
+    }
   }
 }

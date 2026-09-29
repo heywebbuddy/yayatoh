@@ -11,7 +11,8 @@
       "event_updates": "Du erhältst dies, weil du auf der Gästeliste einer Veranstaltung von {org} stehst.",
       "marketing": "Du erhältst dies, weil du Neuigkeiten von {org} abonniert hast."
     },
-    "reply": "{org} antworten"
+    "reply": "{org} antworten",
+    "smsStop": "Antworten Sie STOP zum Abmelden."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Betrugswarnung: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}",
       "intro": "Ein Signal mit hohem Schweregrad bei {org}{eventName, select, none {} other { ({eventName})}} muss geprüft werden: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}. Öffne es, um es zu übernehmen oder zu verwerfen.",
       "cta": "Signal prüfen"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Neuigkeiten von {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Nachrichten für {org} pausiert",
+      "intro": "Beschwerden über die E-Mails von {org} erreichten {rate} und damit mehr als die Grenze von 0,3 %. Yayatoh hat daher Erinnerungen, Neuigkeiten und Marketing pausiert. Tickets, Belege und Antworten werden weiter versendet. Der Yayatoh-Support prüft das mit Ihnen, bevor der Versand wieder startet."
     }
   },
   "roles": {

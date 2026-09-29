@@ -11,7 +11,8 @@
       "event_updates": "Recibes esto porque estás en la lista de invitados de un evento de {org}.",
       "marketing": "Recibes esto porque te suscribiste a las novedades de {org}."
     },
-    "reply": "Responder a {org}"
+    "reply": "Responder a {org}",
+    "smsStop": "Responde STOP para darte de baja."
   },
   "kinds": {
     "orders.tickets": {
@@ -128,6 +129,14 @@
       "subject": "Alerta de fraude: {signal, select, two_entrances {la misma entrada en dos accesos} impossible_travel {un recorrido imposible entre puntos de control} device_velocity {un escáner que escanea demasiado rápido} invalid_burst {una ráfaga de códigos no válidos} rejected_burst {una ráfaga de escaneos rechazados} purchase_velocity {muchos pedidos de un mismo comprador} country_mismatch {un comprador en otro país} checkout_blocked {un pago bloqueado} card_testing {posible prueba de tarjetas} chat_abuse {una conversación denunciada} other {una señal de fraude}}",
       "intro": "Una señal de gravedad alta requiere revisión en {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {la misma entrada en dos accesos} impossible_travel {un recorrido imposible entre puntos de control} device_velocity {un escáner que escanea demasiado rápido} invalid_burst {una ráfaga de códigos no válidos} rejected_burst {una ráfaga de escaneos rechazados} purchase_velocity {muchos pedidos de un mismo comprador} country_mismatch {un comprador en otro país} checkout_blocked {un pago bloqueado} card_testing {posible prueba de tarjetas} chat_abuse {una conversación denunciada} other {una señal de fraude}}. Ábrela para confirmarla o descartarla.",
       "cta": "Revisar la señal"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Novedades de {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Mensajes en pausa para {org}",
+      "intro": "Las quejas sobre los correos de {org} llegaron al {rate}, por encima del límite del 0,3 %, así que Yayatoh pausó tus recordatorios, novedades y marketing. Las entradas, los recibos y las respuestas se siguen enviando. El soporte de Yayatoh lo revisará contigo antes de reanudar los mensajes."
     }
   },
   "roles": {

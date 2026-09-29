@@ -465,7 +465,9 @@ test.describe('delivery reports and suppression', () => {
 
     // The webhook endpoint: unsigned or forged deliveries are refused; a signed one is recorded
     // once however often the provider retries it.
-    const [okMail] = await mailbox(page, ok);
+    // The tickets email itself (a parallel run's scheduled drain may also have sent this buyer's
+    // reminder, which would be the newest message to the address).
+    const okMail = (await mailbox(page, ok)).find((m) => m.subject === `Your tickets for Bounce ${tag}`);
     const messageId = okMail?.headers['X-Yayatoh-Message'] ?? '';
     const forged = await page.request.post('/api/webhooks/email/fake', {
       data: JSON.stringify({
