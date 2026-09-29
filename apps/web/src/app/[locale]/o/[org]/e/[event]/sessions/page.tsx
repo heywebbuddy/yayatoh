@@ -1,10 +1,18 @@
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
-import { groupByDay, type SessionDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { agendaQuery, groupByDay, type SessionDto } from '@yayatoh/program';
+import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import {
+  AgendaPublishing,
+  AgendaWarnings,
+  SessionAgendaForm,
+  SessionAgendaLine,
+  TypesAndGroups,
+} from '@/components/agenda-console.tsx';
 import { type FieldSpec, ProgramForm, ScheduleWarning } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { agendaWarningMessages } from '@/server/agenda.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage, warningMessages } from '@/server/program.ts';
 import {
@@ -35,6 +43,9 @@ export default async function SessionsPage({
   const dates = (await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports)).filter(
     (d) => d.status === 'scheduled',
   );
+  // M5.2a: agenda v2 (types, included/optional, groups, capacity counter, publishing).
+  const agenda = await executeQuery(agendaQuery, { eventId: ev.id }, data.ctx, ports);
+  const agendaMessages = await agendaWarningMessages(agenda.warnings, program, agenda);
   const tz = ev.timezone;
   const time = new Intl.DateTimeFormat(locale, { timeZone: tz, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
@@ -153,17 +164,34 @@ export default async function SessionsPage({
         title={t('nav.sessions')}
         description={tp('sessionsSubtitle')}
         actions={
-          isPublic ? (
-            <Link
-              href={`/events/${ev.slug}#agenda`}
-              className="inline-flex min-h-10 items-center underline underline-offset-2"
-            >
-              {t('dashboard.previewPage')}
-            </Link>
+          isPublic || canWrite ? (
+            <div className="flex flex-wrap items-center gap-3">
+              {canWrite ? (
+                <Link href={`/o/${org}/e/${event}/sessions/import`} className={buttonClass('secondary')}>
+                  {t('agenda.import.link')}
+                </Link>
+              ) : null}
+              {isPublic ? (
+                <Link
+                  href={`/events/${ev.slug}#agenda`}
+                  className="inline-flex min-h-10 items-center underline underline-offset-2"
+                >
+                  {t('dashboard.previewPage')}
+                </Link>
+              ) : null}
+            </div>
           ) : undefined
         }
       />
       {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <AgendaPublishing
+        org={org}
+        event={event}
+        agenda={agenda}
+        locale={locale}
+        timeZone={tz}
+        canWrite={canWrite}
+      />
       {program.warnings.length > 0 ? (
         <section aria-labelledby="conflicts-heading" className="flex flex-col gap-2">
           <h2 id="conflicts-heading" className="text-section">
@@ -178,6 +206,7 @@ export default async function SessionsPage({
           </ul>
         </section>
       ) : null}
+      <AgendaWarnings messages={agendaMessages} />
       <section aria-labelledby="agenda-heading" className="flex flex-col gap-3">
         <h2 id="agenda-heading" className="text-section">
           {tp('agenda')}
@@ -212,6 +241,13 @@ export default async function SessionsPage({
                         <p className="text-caption text-zinc-600">
                           {[room, track, people.join(', ')].filter(Boolean).join(' · ') || tp('noDetails')}
                         </p>
+                        <SessionAgendaLine
+                          details={agenda.sessions.find((d) => d.sessionId === s.id)}
+                          agenda={agenda}
+                          roomTooSmall={agenda.warnings.some(
+                            (w) => w.kind === 'room_too_small' && w.sessionId === s.id,
+                          )}
+                        />
                         {canWrite ? (
                           <details className="border-t border-zinc-100 pt-2">
                             <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
@@ -225,6 +261,14 @@ export default async function SessionsPage({
                                 submitLabel={tp('saveSession')}
                                 successLabel={tp('sessionSaved')}
                                 errors={errors}
+                              />
+                              <SessionAgendaForm
+                                org={org}
+                                event={event}
+                                sessionId={s.id}
+                                title={s.title}
+                                details={agenda.sessions.find((d) => d.sessionId === s.id)}
+                                agenda={agenda}
                               />
                               <form action={deleteSessionAction.bind(null, org, event, s.id)}>
                                 <Button type="submit" variant="ghost" size="sm">
@@ -335,6 +379,7 @@ export default async function SessionsPage({
           </section>
         ))}
       </div>
+      <TypesAndGroups org={org} event={event} agenda={agenda} program={program} canWrite={canWrite} />
     </>
   );
 }

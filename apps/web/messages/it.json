@@ -5323,5 +5323,147 @@
         "not_on_sale": "Questo pass o questa data non è in vendita."
       }
     }
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "Programma pubblico",
+      "badge": {
+        "live": "In diretta",
+        "draft": "Bozza",
+        "published": "Pubblicato",
+        "changed": "Modificato dopo la pubblicazione"
+      },
+      "state": {
+        "live": "Ogni modifica appare subito sulla pagina pubblica. Pubblica il programma per rivedere le modifiche prima che diventino pubbliche.",
+        "draft": "La pagina pubblica non mostra sessioni finché non pubblichi il programma.",
+        "published": "Versione {version}, pubblicata il {date}. La pagina pubblica mostra questa versione.",
+        "changed": "Hai modificato il programma dopo la versione {version} ({date}). La pagina pubblica mostra quella versione finché non pubblichi di nuovo."
+      },
+      "publish": "Pubblica il programma",
+      "publishChanges": "Pubblica le modifiche",
+      "unpublish": "Ritira il programma",
+      "toDraft": "Passa a bozza"
+    },
+    "warningsHeading": "{count, plural, one {# avviso sul programma} many {# avvisi sul programma} other {# avvisi sul programma}}",
+    "warnings": {
+      "room_too_small": "{room} ospita {roomCapacity} persone, ma «{session}» ne ammette {sessionCapacity}.",
+      "group_not_overlapping": "«{session}» in {group} si svolge in un orario diverso dalle altre sessioni del gruppo."
+    },
+    "roomTooSmallLabel": "Sala troppo piccola",
+    "included": "Inclusa",
+    "optional": "Facoltativa",
+    "enrollmentClosed": "Iscrizioni chiuse",
+    "placesTaken": "{enrolled} posti occupati su {capacity}",
+    "settings": {
+      "summary": "Tipo, accesso e gruppo di {title}",
+      "type": "Tipo di sessione",
+      "noType": "Nessun tipo",
+      "admission": "Accesso",
+      "includedOption": "Inclusa nella registrazione",
+      "optionalOption": "Facoltativa: con iscrizione",
+      "admissionHint": "Le sessioni incluse non richiedono mai l'iscrizione. Quelle facoltative con capienza la richiederanno.",
+      "group": "Gruppo a scelta unica",
+      "noGroup": "Nessun gruppo",
+      "groupHint": "Ogni persona sceglie una sessione del gruppo. Solo le sessioni facoltative possono farne parte.",
+      "enrollment": "Iscrizioni",
+      "open": "Aperte",
+      "closed": "Chiuse",
+      "save": "Salva le impostazioni",
+      "saved": "Impostazioni del programma salvate."
+    },
+    "types": {
+      "heading": "Tipi di sessione",
+      "empty": "Ancora nessun tipo di sessione.",
+      "name": "Nome del tipo",
+      "add": "Aggiungi tipo",
+      "added": "Tipo aggiunto.",
+      "addStandard": "Aggiungi i tipi standard",
+      "standardHint": "Keynote, intervento, workshop, tavola rotonda e pausa.",
+      "standard": {
+        "keynote": "Keynote",
+        "talk": "Intervento",
+        "workshop": "Workshop",
+        "panel": "Tavola rotonda",
+        "break": "Pausa"
+      }
+    },
+    "groups": {
+      "heading": "Gruppi a scelta unica",
+      "intro": "Un gruppo riunisce sessioni facoltative che si svolgono insieme. Ogni persona ne sceglie una.",
+      "empty": "Ancora nessun gruppo.",
+      "name": "Nome del gruppo",
+      "add": "Aggiungi gruppo",
+      "added": "Gruppo aggiunto.",
+      "deleted": "Gruppo eliminato.",
+      "sessions": "{count, plural, =0 {Ancora nessuna sessione} one {# sessione} many {# sessioni} other {# sessioni}}"
+    },
+    "errors": {
+      "group_needs_optional": "Solo le sessioni facoltative possono entrare in un gruppo a scelta unica.",
+      "has_enrollments": "Alcune persone hanno già un posto o una scelta in questa sessione, quindi non può cambiare.",
+      "group_in_use": "Alcune persone hanno scelto una sessione di questo gruppo, quindi non può essere eliminato."
+    },
+    "import": {
+      "link": "Importa programma (CSV)",
+      "title": "Importa programma",
+      "description": "Aggiungi o aggiorna sessioni da un file CSV. Controlla prima il file: nulla cambia finché non importi.",
+      "back": "Torna alle sessioni",
+      "noAccessTitle": "Non puoi importare il programma",
+      "noAccessDescription": "Chiedi a un proprietario o amministratore dell'organizzazione di importarlo o di darti un ruolo che può modificare gli eventi.",
+      "columnsHeading": "Cosa serve nel file",
+      "columnsRequired": "Colonne obbligatorie: title, starts, ends. Facoltative: key, type, admission, capacity, room, track, group, speakers, description.",
+      "columnsTimes": "Scrivi gli orari come AAAA-MM-GG HH:MM nel fuso orario dell'evento ({timezone}).",
+      "columnsSpeakers": "Indica i relatori per email, separati da punto e virgola. Per un nuovo relatore aggiungi il nome: Ada Lovelace '<ada@example.org>'.",
+      "columnsMatch": "admission è included o optional. Le righe con key vengono riconosciute tramite essa alla prossima importazione; le altre per titolo e ora di inizio. Importare due volte lo stesso file non cambia nulla.",
+      "file": "File CSV",
+      "check": "Controlla il file",
+      "checked": "{file} controllato",
+      "summary": "{create} da aggiungere, {update} da aggiornare, {unchanged} invariate, {error} con problemi.",
+      "applied": "Importazione completata: {create} aggiunte, {update} aggiornate, {unchanged} invariate, {error} saltate.",
+      "apply": "{count, plural, one {Importa # riga} many {Importa # righe} other {Importa # righe}}",
+      "nothingToApply": "Niente da importare: ogni riga è invariata o ha un problema.",
+      "rows": "Righe del file",
+      "line": "Riga",
+      "sessionTitle": "Titolo",
+      "result": "Esito",
+      "action": {
+        "create": "Verrà aggiunta",
+        "update": "Verrà aggiornata",
+        "unchanged": "Nessuna modifica",
+        "error": "Non importabile"
+      },
+      "done": {
+        "create": "Aggiunta",
+        "update": "Aggiornata",
+        "unchanged": "Nessuna modifica",
+        "error": "Saltata"
+      },
+      "rowError": {
+        "missing_title": "Il titolo è vuoto.",
+        "too_long": "Un valore è troppo lungo.",
+        "formula": "Una cella inizia con =, +, - o @ (una formula del foglio di calcolo).",
+        "invalid_starts": "L'ora di inizio non è nel formato AAAA-MM-GG HH:MM.",
+        "invalid_ends": "L'ora di fine non è nel formato AAAA-MM-GG HH:MM.",
+        "ends_before_starts": "La sessione finisce prima di iniziare.",
+        "invalid_admission": "admission deve essere included o optional.",
+        "invalid_capacity": "La capienza deve essere un numero intero di almeno 1.",
+        "group_needs_optional": "Solo le sessioni facoltative possono entrare in un gruppo.",
+        "invalid_speaker": "Un relatore non è un indirizzo email.",
+        "unknown_speaker": "Un relatore è nuovo: indica il nome come Nome '<email>'.",
+        "duplicate_key": "La key compare due volte nel file.",
+        "duplicate_row": "Lo stesso titolo e la stessa ora di inizio compaiono due volte.",
+        "outside_date": "La sessione uscirebbe dalla sua data.",
+        "has_enrollments": "Alcune persone hanno un posto in questa sessione: gruppo, accesso e capienza non possono cambiare."
+      },
+      "fileError": {
+        "no_file": "Scegli un file CSV.",
+        "too_large": "Il file supera 1 MB.",
+        "empty": "Il file non ha righe.",
+        "too_many_rows": "Il file ha più di 500 righe.",
+        "too_many_columns": "Il file ha troppe colonne.",
+        "cell_too_long": "Una cella è troppo lunga.",
+        "unterminated_quote": "Un valore tra virgolette non si chiude mai. Controlla le virgolette del file.",
+        "missing_columns": "Il file deve avere le colonne title, starts ed ends."
+      }
+    }
   }
 }

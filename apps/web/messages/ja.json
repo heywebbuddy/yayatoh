@@ -5323,5 +5323,147 @@
         "not_on_sale": "このパスまたは日程は販売されていません。"
       }
     }
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "公開アジェンダ",
+      "badge": {
+        "live": "ライブ",
+        "draft": "下書き",
+        "published": "公開済み",
+        "changed": "公開後に変更あり"
+      },
+      "state": {
+        "live": "変更はすぐに公開ページに反映されます。公開前に変更を確認するには、アジェンダを公開してください。",
+        "draft": "アジェンダを公開するまで、公開ページにセッションは表示されません。",
+        "published": "バージョン {version}（{date} に公開）。公開ページにはこのバージョンが表示されます。",
+        "changed": "バージョン {version}（{date}）の公開後にアジェンダを変更しました。再度公開するまで、公開ページにはそのバージョンが表示されます。"
+      },
+      "publish": "アジェンダを公開",
+      "publishChanges": "変更を公開",
+      "unpublish": "アジェンダを非公開にする",
+      "toDraft": "下書きに切り替え"
+    },
+    "warningsHeading": "{count, plural, other {アジェンダの注意 #件}}",
+    "warnings": {
+      "room_too_small": "{room} の定員は {roomCapacity} 人ですが、「{session}」は {sessionCapacity} 人まで受け付けます。",
+      "group_not_overlapping": "{group} の「{session}」は、グループの他のセッションと時間が重なっていません。"
+    },
+    "roomTooSmallLabel": "部屋が小さい",
+    "included": "参加費に含む",
+    "optional": "選択制",
+    "enrollmentClosed": "申込終了",
+    "placesTaken": "{capacity} 席中 {enrolled} 席が埋まっています",
+    "settings": {
+      "summary": "{title} の種類・参加方法・グループ",
+      "type": "セッションの種類",
+      "noType": "種類なし",
+      "admission": "参加方法",
+      "includedOption": "登録に含む",
+      "optionalOption": "選択制：申込が必要",
+      "admissionHint": "登録に含むセッションは申込不要です。定員のある選択制セッションは申込が必要になります。",
+      "group": "択一グループ",
+      "noGroup": "グループなし",
+      "groupHint": "グループから各自 1 つのセッションを選びます。選択制のセッションだけが入れます。",
+      "enrollment": "申込",
+      "open": "受付中",
+      "closed": "終了",
+      "save": "アジェンダ設定を保存",
+      "saved": "アジェンダ設定を保存しました。"
+    },
+    "types": {
+      "heading": "セッションの種類",
+      "empty": "セッションの種類はまだありません。",
+      "name": "種類の名前",
+      "add": "種類を追加",
+      "added": "種類を追加しました。",
+      "addStandard": "標準の種類を追加",
+      "standardHint": "基調講演、講演、ワークショップ、パネル、休憩。",
+      "standard": {
+        "keynote": "基調講演",
+        "talk": "講演",
+        "workshop": "ワークショップ",
+        "panel": "パネル",
+        "break": "休憩"
+      }
+    },
+    "groups": {
+      "heading": "択一グループ",
+      "intro": "グループには同じ時間帯の選択制セッションが入ります。各自 1 つを選びます。",
+      "empty": "グループはまだありません。",
+      "name": "グループ名",
+      "add": "グループを追加",
+      "added": "グループを追加しました。",
+      "deleted": "グループを削除しました。",
+      "sessions": "{count, plural, =0 {セッションはまだありません} other {セッション #件}}"
+    },
+    "errors": {
+      "group_needs_optional": "択一グループに入れるのは選択制のセッションだけです。",
+      "has_enrollments": "このセッションにはすでに席や選択を持つ人がいるため、変更できません。",
+      "group_in_use": "このグループのセッションを選んだ人がいるため、削除できません。"
+    },
+    "import": {
+      "link": "アジェンダをインポート（CSV）",
+      "title": "アジェンダのインポート",
+      "description": "CSV ファイルからセッションを追加・更新します。まずファイルを確認してください。インポートするまで何も変わりません。",
+      "back": "セッションに戻る",
+      "noAccessTitle": "アジェンダをインポートできません",
+      "noAccessDescription": "この組織のオーナーまたは管理者にインポートを依頼するか、イベントを編集できるロールを付与してもらってください。",
+      "columnsHeading": "ファイルに必要なもの",
+      "columnsRequired": "必須の列：title、starts、ends。任意：key、type、admission、capacity、room、track、group、speakers、description。",
+      "columnsTimes": "時刻はイベントのタイムゾーン（{timezone}）で YYYY-MM-DD HH:MM と書きます。",
+      "columnsSpeakers": "スピーカーはメールアドレスをセミコロンで区切って書きます。新しいスピーカーには名前も付けます：Ada Lovelace '<ada@example.org>'。",
+      "columnsMatch": "admission は included または optional です。key のある行は次回のインポートで key により照合され、それ以外はタイトルと開始時刻で照合されます。同じファイルを 2 回インポートしても何も変わりません。",
+      "file": "CSV ファイル",
+      "check": "ファイルを確認",
+      "checked": "{file} を確認しました",
+      "summary": "追加 {create}、更新 {update}、変更なし {unchanged}、問題あり {error}。",
+      "applied": "インポート完了：追加 {create}、更新 {update}、変更なし {unchanged}、スキップ {error}。",
+      "apply": "{count, plural, other {# 行をインポート}}",
+      "nothingToApply": "インポートするものはありません。すべての行が変更なしか、問題があります。",
+      "rows": "ファイルの行",
+      "line": "行",
+      "sessionTitle": "タイトル",
+      "result": "結果",
+      "action": {
+        "create": "追加されます",
+        "update": "更新されます",
+        "unchanged": "変更なし",
+        "error": "インポートできません"
+      },
+      "done": {
+        "create": "追加済み",
+        "update": "更新済み",
+        "unchanged": "変更なし",
+        "error": "スキップ"
+      },
+      "rowError": {
+        "missing_title": "タイトルが空です。",
+        "too_long": "値が長すぎます。",
+        "formula": "セルが =、+、-、@ で始まっています（表計算の数式）。",
+        "invalid_starts": "開始時刻が YYYY-MM-DD HH:MM ではありません。",
+        "invalid_ends": "終了時刻が YYYY-MM-DD HH:MM ではありません。",
+        "ends_before_starts": "セッションが始まる前に終わっています。",
+        "invalid_admission": "admission は included または optional にしてください。",
+        "invalid_capacity": "定員は 1 以上の整数にしてください。",
+        "group_needs_optional": "グループに入れるのは選択制のセッションだけです。",
+        "invalid_speaker": "スピーカーがメールアドレスではありません。",
+        "unknown_speaker": "新しいスピーカーです。名前 '<メール>' の形で名前を書いてください。",
+        "duplicate_key": "key がファイル内で 2 回使われています。",
+        "duplicate_row": "同じタイトルと開始時刻が 2 回あります。",
+        "outside_date": "セッションが日程の外に出てしまいます。",
+        "has_enrollments": "このセッションには席を持つ人がいます。グループ・参加方法・定員は変更できません。"
+      },
+      "fileError": {
+        "no_file": "CSV ファイルを選んでください。",
+        "too_large": "ファイルが 1 MB を超えています。",
+        "empty": "ファイルに行がありません。",
+        "too_many_rows": "ファイルが 500 行を超えています。",
+        "too_many_columns": "ファイルの列が多すぎます。",
+        "cell_too_long": "セルが長すぎます。",
+        "unterminated_quote": "引用符で囲んだ値が閉じていません。ファイルの引用符を確認してください。",
+        "missing_columns": "ファイルには title、starts、ends の列が必要です。"
+      }
+    }
   }
 }

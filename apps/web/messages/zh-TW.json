@@ -5323,5 +5323,147 @@
         "not_on_sale": "此通行證或場次未在販售。"
       }
     }
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "公開議程",
+      "badge": {
+        "live": "即時",
+        "draft": "草稿",
+        "published": "已發布",
+        "changed": "發布後有變更"
+      },
+      "state": {
+        "live": "每次變更都會立即顯示在公開頁面上。發布議程後，可以先審核變更再公開。",
+        "draft": "在你發布議程之前，公開頁面不會顯示任何場次。",
+        "published": "第 {version} 版，發布於 {date}。公開頁面顯示此版本。",
+        "changed": "你在發布第 {version} 版（{date}）後變更了議程。再次發布前，公開頁面仍顯示該版本。"
+      },
+      "publish": "發布議程",
+      "publishChanges": "發布變更",
+      "unpublish": "取消發布議程",
+      "toDraft": "切換為草稿"
+    },
+    "warningsHeading": "{count, plural, other {# 則議程提醒}}",
+    "warnings": {
+      "room_too_small": "{room} 可容納 {roomCapacity} 人，但「{session}」允許 {sessionCapacity} 人。",
+      "group_not_overlapping": "{group} 中的「{session}」與群組內其他場次不在同一時間。"
+    },
+    "roomTooSmallLabel": "場地太小",
+    "included": "已包含",
+    "optional": "選修",
+    "enrollmentClosed": "報名已關閉",
+    "placesTaken": "已佔 {enrolled}/{capacity} 個名額",
+    "settings": {
+      "summary": "{title} 的類型、參加方式和群組",
+      "type": "場次類型",
+      "noType": "無類型",
+      "admission": "參加方式",
+      "includedOption": "包含在報名中",
+      "optionalOption": "選修：需要登記",
+      "admissionHint": "包含的場次無需登記。有名額限制的選修場次將需要登記。",
+      "group": "單選群組",
+      "noGroup": "無群組",
+      "groupHint": "每人從群組中選擇一個場次。只有選修場次可以加入。",
+      "enrollment": "登記",
+      "open": "開放",
+      "closed": "關閉",
+      "save": "儲存議程設定",
+      "saved": "議程設定已儲存。"
+    },
+    "types": {
+      "heading": "場次類型",
+      "empty": "還沒有場次類型。",
+      "name": "類型名稱",
+      "add": "新增類型",
+      "added": "類型已新增。",
+      "addStandard": "新增標準類型",
+      "standardHint": "主題演講、演講、工作坊、座談和休息。",
+      "standard": {
+        "keynote": "主題演講",
+        "talk": "演講",
+        "workshop": "工作坊",
+        "panel": "座談",
+        "break": "休息"
+      }
+    },
+    "groups": {
+      "heading": "單選群組",
+      "intro": "一個群組包含同一時間進行的選修場次。每人選擇一個。",
+      "empty": "還沒有群組。",
+      "name": "群組名稱",
+      "add": "新增群組",
+      "added": "群組已新增。",
+      "deleted": "群組已刪除。",
+      "sessions": "{count, plural, =0 {還沒有場次} other {# 個場次}}"
+    },
+    "errors": {
+      "group_needs_optional": "只有選修場次可以加入單選群組。",
+      "has_enrollments": "已有人在此場次中佔有名額或做出選擇，因此無法變更。",
+      "group_in_use": "已有人選擇了此群組中的場次，因此無法刪除。"
+    },
+    "import": {
+      "link": "匯入議程（CSV）",
+      "title": "匯入議程",
+      "description": "從 CSV 檔案新增或更新場次。請先檢查檔案：匯入前不會有任何變更。",
+      "back": "返回場次",
+      "noAccessTitle": "你無法匯入議程",
+      "noAccessDescription": "請該組織的擁有者或管理員匯入，或為你指派可編輯活動的角色。",
+      "columnsHeading": "檔案需要包含的內容",
+      "columnsRequired": "必填欄位：title、starts、ends。選填：key、type、admission、capacity、room、track、group、speakers、description。",
+      "columnsTimes": "時間請依活動時區（{timezone}）寫成 YYYY-MM-DD HH:MM。",
+      "columnsSpeakers": "用電子郵件列出講者，以分號分隔。新講者請附上姓名：Ada Lovelace '<ada@example.org>'。",
+      "columnsMatch": "admission 為 included 或 optional。含 key 的列在下次匯入時依 key 比對，其他列依標題和開始時間比對。同一檔案匯入兩次不會有任何變更。",
+      "file": "CSV 檔案",
+      "check": "檢查檔案",
+      "checked": "已檢查 {file}",
+      "summary": "新增 {create}，更新 {update}，未變更 {unchanged}，有問題 {error}。",
+      "applied": "匯入完成：新增 {create}，更新 {update}，未變更 {unchanged}，略過 {error}。",
+      "apply": "{count, plural, other {匯入 # 列}}",
+      "nothingToApply": "沒有可匯入的內容：每一列都未變更或有問題。",
+      "rows": "檔案中的列",
+      "line": "列",
+      "sessionTitle": "標題",
+      "result": "結果",
+      "action": {
+        "create": "將新增",
+        "update": "將更新",
+        "unchanged": "無變更",
+        "error": "無法匯入"
+      },
+      "done": {
+        "create": "已新增",
+        "update": "已更新",
+        "unchanged": "無變更",
+        "error": "已略過"
+      },
+      "rowError": {
+        "missing_title": "標題是空的。",
+        "too_long": "某個值太長。",
+        "formula": "某個儲存格以 =、+、- 或 @ 開頭（試算表公式）。",
+        "invalid_starts": "開始時間不是 YYYY-MM-DD HH:MM 格式。",
+        "invalid_ends": "結束時間不是 YYYY-MM-DD HH:MM 格式。",
+        "ends_before_starts": "場次在開始前就結束了。",
+        "invalid_admission": "admission 必須為 included 或 optional。",
+        "invalid_capacity": "名額必須是不小於 1 的整數。",
+        "group_needs_optional": "只有選修場次可以加入群組。",
+        "invalid_speaker": "某位講者不是電子郵件地址。",
+        "unknown_speaker": "某位講者是新的：請以 姓名 '<電子郵件>' 的形式填寫姓名。",
+        "duplicate_key": "key 在檔案中出現了兩次。",
+        "duplicate_row": "相同的標題和開始時間出現了兩次。",
+        "outside_date": "場次將超出其所屬日期。",
+        "has_enrollments": "已有人佔有此場次的名額：其群組、參加方式和名額無法變更。"
+      },
+      "fileError": {
+        "no_file": "請選擇一個 CSV 檔案。",
+        "too_large": "檔案超過 1 MB。",
+        "empty": "檔案沒有任何列。",
+        "too_many_rows": "檔案超過 500 列。",
+        "too_many_columns": "檔案的欄位太多。",
+        "cell_too_long": "某個儲存格太長。",
+        "unterminated_quote": "某個加引號的值沒有結束。請檢查檔案中的引號。",
+        "missing_columns": "檔案需要 title、starts 和 ends 欄位。"
+      }
+    }
   }
 }

@@ -5323,5 +5323,147 @@
         "not_on_sale": "Dieser Pass oder Termin ist nicht im Verkauf."
       }
     }
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "Öffentliche Agenda",
+      "badge": {
+        "live": "Live",
+        "draft": "Entwurf",
+        "published": "Veröffentlicht",
+        "changed": "Seit Veröffentlichung geändert"
+      },
+      "state": {
+        "live": "Jede Änderung erscheint sofort auf der öffentlichen Seite. Veröffentlichen Sie die Agenda, um Änderungen vorher zu prüfen.",
+        "draft": "Die öffentliche Seite zeigt keine Sessions, bis Sie die Agenda veröffentlichen.",
+        "published": "Version {version}, veröffentlicht am {date}. Die öffentliche Seite zeigt diese Version.",
+        "changed": "Sie haben die Agenda nach Version {version} ({date}) geändert. Die öffentliche Seite zeigt diese Version, bis Sie erneut veröffentlichen."
+      },
+      "publish": "Agenda veröffentlichen",
+      "publishChanges": "Änderungen veröffentlichen",
+      "unpublish": "Veröffentlichung zurückziehen",
+      "toDraft": "Zum Entwurf wechseln"
+    },
+    "warningsHeading": "{count, plural, one {# Agenda-Hinweis} other {# Agenda-Hinweise}}",
+    "warnings": {
+      "room_too_small": "{room} fasst {roomCapacity} Personen, aber „{session}“ erlaubt {sessionCapacity}.",
+      "group_not_overlapping": "„{session}“ in {group} läuft zu einer anderen Zeit als die übrigen Sessions der Gruppe."
+    },
+    "roomTooSmallLabel": "Raum zu klein",
+    "included": "Inklusive",
+    "optional": "Optional",
+    "enrollmentClosed": "Anmeldung geschlossen",
+    "placesTaken": "{enrolled} von {capacity} Plätzen belegt",
+    "settings": {
+      "summary": "Typ, Teilnahme und Gruppe für {title}",
+      "type": "Session-Typ",
+      "noType": "Kein Typ",
+      "admission": "Teilnahme",
+      "includedOption": "In der Registrierung enthalten",
+      "optionalOption": "Optional: Anmeldung nötig",
+      "admissionHint": "Enthaltene Sessions brauchen nie eine Anmeldung. Optionale Sessions mit Kapazität schon.",
+      "group": "Auswahlgruppe",
+      "noGroup": "Keine Gruppe",
+      "groupHint": "Aus einer Gruppe wählt jede Person eine Session. Nur optionale Sessions können beitreten.",
+      "enrollment": "Anmeldung",
+      "open": "Offen",
+      "closed": "Geschlossen",
+      "save": "Agenda-Einstellungen speichern",
+      "saved": "Agenda-Einstellungen gespeichert."
+    },
+    "types": {
+      "heading": "Session-Typen",
+      "empty": "Noch keine Session-Typen.",
+      "name": "Name des Typs",
+      "add": "Typ hinzufügen",
+      "added": "Typ hinzugefügt.",
+      "addStandard": "Standardtypen hinzufügen",
+      "standardHint": "Keynote, Vortrag, Workshop, Podium und Pause.",
+      "standard": {
+        "keynote": "Keynote",
+        "talk": "Vortrag",
+        "workshop": "Workshop",
+        "panel": "Podium",
+        "break": "Pause"
+      }
+    },
+    "groups": {
+      "heading": "Auswahlgruppen",
+      "intro": "Eine Gruppe enthält optionale Sessions, die gleichzeitig stattfinden. Jede Person wählt eine.",
+      "empty": "Noch keine Gruppen.",
+      "name": "Name der Gruppe",
+      "add": "Gruppe hinzufügen",
+      "added": "Gruppe hinzugefügt.",
+      "deleted": "Gruppe gelöscht.",
+      "sessions": "{count, plural, =0 {Noch keine Sessions} one {# Session} other {# Sessions}}"
+    },
+    "errors": {
+      "group_needs_optional": "Nur optionale Sessions können einer Auswahlgruppe beitreten.",
+      "has_enrollments": "Personen haben bereits Plätze oder eine Auswahl in dieser Session, daher ist das nicht änderbar.",
+      "group_in_use": "Personen haben eine Session dieser Gruppe gewählt, daher kann sie nicht gelöscht werden."
+    },
+    "import": {
+      "link": "Agenda importieren (CSV)",
+      "title": "Agenda importieren",
+      "description": "Sessions aus einer CSV-Datei hinzufügen oder aktualisieren. Prüfen Sie die Datei zuerst: Erst der Import ändert etwas.",
+      "back": "Zurück zu den Sessions",
+      "noAccessTitle": "Sie können die Agenda nicht importieren",
+      "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation um den Import oder um eine Rolle, die Events bearbeiten darf.",
+      "columnsHeading": "Was die Datei braucht",
+      "columnsRequired": "Pflichtspalten: title, starts, ends. Optional: key, type, admission, capacity, room, track, group, speakers, description.",
+      "columnsTimes": "Zeiten als JJJJ-MM-TT HH:MM in der Zeitzone des Events ({timezone}).",
+      "columnsSpeakers": "Speaker per E-Mail, getrennt durch Semikolons. Für neue Speaker auch den Namen: Ada Lovelace '<ada@example.org>'.",
+      "columnsMatch": "admission ist included oder optional. Zeilen mit key werden beim nächsten Import daran erkannt, andere an Titel und Startzeit. Dieselbe Datei zweimal zu importieren ändert nichts.",
+      "file": "CSV-Datei",
+      "check": "Datei prüfen",
+      "checked": "{file} geprüft",
+      "summary": "{create} neu, {update} zu aktualisieren, {unchanged} unverändert, {error} mit Problemen.",
+      "applied": "Import fertig: {create} hinzugefügt, {update} aktualisiert, {unchanged} unverändert, {error} übersprungen.",
+      "apply": "{count, plural, one {# Zeile importieren} other {# Zeilen importieren}}",
+      "nothingToApply": "Nichts zu importieren: Jede Zeile ist unverändert oder hat ein Problem.",
+      "rows": "Zeilen der Datei",
+      "line": "Zeile",
+      "sessionTitle": "Titel",
+      "result": "Ergebnis",
+      "action": {
+        "create": "Wird hinzugefügt",
+        "update": "Wird aktualisiert",
+        "unchanged": "Keine Änderung",
+        "error": "Nicht importierbar"
+      },
+      "done": {
+        "create": "Hinzugefügt",
+        "update": "Aktualisiert",
+        "unchanged": "Keine Änderung",
+        "error": "Übersprungen"
+      },
+      "rowError": {
+        "missing_title": "Der Titel ist leer.",
+        "too_long": "Ein Wert ist zu lang.",
+        "formula": "Eine Zelle beginnt mit =, +, - oder @ (eine Tabellenformel).",
+        "invalid_starts": "Die Startzeit hat nicht das Format JJJJ-MM-TT HH:MM.",
+        "invalid_ends": "Die Endzeit hat nicht das Format JJJJ-MM-TT HH:MM.",
+        "ends_before_starts": "Die Session endet, bevor sie beginnt.",
+        "invalid_admission": "admission muss included oder optional sein.",
+        "invalid_capacity": "Die Kapazität muss eine ganze Zahl ab 1 sein.",
+        "group_needs_optional": "Nur optionale Sessions können einer Gruppe beitreten.",
+        "invalid_speaker": "Ein Speaker ist keine E-Mail-Adresse.",
+        "unknown_speaker": "Ein Speaker ist neu: Geben Sie den Namen als Name '<E-Mail>' an.",
+        "duplicate_key": "Der key kommt in der Datei zweimal vor.",
+        "duplicate_row": "Derselbe Titel mit derselben Startzeit kommt zweimal vor.",
+        "outside_date": "Die Session würde ihren Termin verlassen.",
+        "has_enrollments": "Personen haben Plätze in dieser Session: Gruppe, Teilnahme und Kapazität bleiben unverändert."
+      },
+      "fileError": {
+        "no_file": "Wählen Sie eine CSV-Datei.",
+        "too_large": "Die Datei ist größer als 1 MB.",
+        "empty": "Die Datei hat keine Zeilen.",
+        "too_many_rows": "Die Datei hat mehr als 500 Zeilen.",
+        "too_many_columns": "Die Datei hat zu viele Spalten.",
+        "cell_too_long": "Eine Zelle ist zu lang.",
+        "unterminated_quote": "Ein Wert in Anführungszeichen endet nie. Prüfen Sie die Anführungszeichen.",
+        "missing_columns": "Die Datei braucht die Spalten title, starts und ends."
+      }
+    }
   }
 }
