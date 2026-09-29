@@ -58,8 +58,6 @@ export const FALLBACK_REASONS = [
   'invalid_number',
   'provider_error',
   'undelivered',
-  'consent_missing',
-  'whatsapp_marketing_us',
   'no_device',
   'bounced',
 ] as const;

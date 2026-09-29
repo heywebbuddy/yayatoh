@@ -37,13 +37,13 @@ export const REJECTION_CODES = ['not_on_channel', 'invalid_address', 'opted_out'
 export type RejectionCode = (typeof REJECTION_CODES)[number];
 
 export class ProviderRejection extends Error {
-  constructor(
-    readonly code: RejectionCode,
-    readonly providerCode: string | null,
-    message = `refused by the provider (${code}${providerCode ? ` ${providerCode}` : ''})`,
-  ) {
-    super(message);
+  readonly code: RejectionCode;
+  readonly providerCode: string | null;
+  constructor(code: RejectionCode, providerCode: string | null, message?: string) {
+    super(message ?? `refused by the provider (${code}${providerCode ? ` ${providerCode}` : ''})`);
     this.name = 'ProviderRejection';
+    this.code = code;
+    this.providerCode = providerCode;
   }
 }
 
@@ -93,12 +93,11 @@ export type WebhookFailure = (typeof WEBHOOK_FAILURES)[number];
 
 /** A webhook that failed verification (400 at the endpoint; counted in provider health). */
 export class WebhookVerificationError extends Error {
-  constructor(
-    readonly failure: WebhookFailure,
-    message: string = failure,
-  ) {
-    super(message);
+  readonly failure: WebhookFailure;
+  constructor(failure: WebhookFailure, message?: string) {
+    super(message ?? failure);
     this.name = 'WebhookVerificationError';
+    this.failure = failure;
   }
 }
 

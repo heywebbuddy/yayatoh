@@ -87,14 +87,14 @@ export async function providerHealthTx(
   env: Readonly<Record<string, string | undefined>> = process.env,
   now = new Date(),
 ): Promise<ProviderHealthDto[]> {
-  const since = new Date(now.getTime() - 24 * 3_600_000);
+  const since = new Date(now.getTime() - 24 * 3_600_000).toISOString();
   const rows = await tx.execute<HealthRow>(sql`
     select provider,
       max(last_webhook_at) as last_webhook_at,
-      coalesce(sum(sends) filter (where hour >= ${since}), 0)::int as sends,
-      coalesce(sum(send_errors) filter (where hour >= ${since}), 0)::int as send_errors,
-      coalesce(sum(webhooks) filter (where hour >= ${since}), 0)::int as webhooks,
-      coalesce(sum(webhooks_rejected) filter (where hour >= ${since}), 0)::int as webhooks_rejected,
+      coalesce(sum(sends) filter (where hour >= ${since}::timestamptz), 0)::int as sends,
+      coalesce(sum(send_errors) filter (where hour >= ${since}::timestamptz), 0)::int as send_errors,
+      coalesce(sum(webhooks) filter (where hour >= ${since}::timestamptz), 0)::int as webhooks,
+      coalesce(sum(webhooks_rejected) filter (where hour >= ${since}::timestamptz), 0)::int as webhooks_rejected,
       (array_agg(last_error order by last_error_at desc nulls last))[1] as last_error,
       max(last_error_at) as last_error_at
     from notifications.provider_health

@@ -66,9 +66,9 @@ export async function handleWebhook(
     return new Response(null, { status: 400 });
   }
   if (adapter.name === 'twilio' && new URL(req.url).pathname.endsWith('/inbound')) {
-    const help = out.help
-      ? `<Message>${xml(helpReply(out.help.sender, `${appOrigin()}/help`))}</Message>`
-      : '';
+    // Where people get help (`MESSAGING_HELP_URL`, pending the owner; else the app's home page).
+    const helpUrl = process.env.MESSAGING_HELP_URL || appOrigin();
+    const help = out.help ? `<Message>${xml(helpReply(out.help.sender, helpUrl))}</Message>` : '';
     return new Response(`<?xml version="1.0" encoding="UTF-8"?><Response>${help}</Response>`, {
       headers: TWIML,
     });

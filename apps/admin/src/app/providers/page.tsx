@@ -28,7 +28,8 @@ export default async function ProvidersPage() {
     <Shell staff={staff}>
       <PageHeader title={t('title')} description={t('description')} />
       <Card className="p-0">
-        <div className="overflow-x-auto">
+        {/* biome-ignore lint/a11y/noNoninteractiveTabindex: a scroll container must be focusable (axe scrollable-region-focusable) */}
+        <section className="overflow-x-auto" tabIndex={0} aria-label={t('tableCaption')}>
           <table className="w-full text-start text-caption">
             <caption className="sr-only">{t('tableCaption')}</caption>
             <thead className="text-zinc-500">
@@ -70,7 +71,7 @@ export default async function ProvidersPage() {
               ))}
             </tbody>
           </table>
-        </div>
+        </section>
       </Card>
 
       {rows

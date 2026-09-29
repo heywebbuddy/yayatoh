@@ -711,22 +711,30 @@
     "missing": "Missing: {names}",
     "items": {
       "env": "Config names are set in the environment (values in Doppler, never in the repo)",
-      "ses.production": "SES production access granted (out of the sandbox) in the owner's AWS account",
-      "ses.domain": "mail.yayatoh.com verified in SES with Easy DKIM, a custom MAIL FROM and DMARC",
-      "ses.configurationSet": "Configuration set with an SNS event destination (delivery, bounce, complaint) subscribed to /api/webhooks/email/ses",
-      "ses.webhook": "A verified SNS notification has arrived",
-      "ses.switch": "EMAIL_PROVIDER=ses",
-      "twilio.registration": "Toll-free verification and the 10DLC brand and campaign approved",
-      "twilio.service": "Messaging Service with Advanced Opt-Out on and its inbound webhook at /api/webhooks/sms/twilio/inbound",
-      "twilio.webhook": "A verified status callback or inbound message has arrived",
-      "twilio.switch": "SMS_PROVIDER=twilio",
-      "cloud.business": "Meta business verification, the WhatsApp Business Account and its phone number",
-      "cloud.templates": "Templates yayatoh_update (utility), yayatoh_news (marketing) and yayatoh_code (authentication) approved in 13 languages",
-      "cloud.webhook": "Webhook subscribed (messages field) at /api/webhooks/whatsapp/cloud and a verified delivery has arrived",
-      "cloud.switch": "WHATSAPP_PROVIDER includes cloud",
-      "gateway.contract": "The gateway's API contract and signing key from the owner (whatsapp.panitechnologies.com)",
-      "gateway.webhook": "Callbacks configured to /api/webhooks/whatsapp/gateway and a verified one has arrived",
-      "gateway.switch": "WHATSAPP_PROVIDER includes gateway"
+      "ses": {
+        "production": "SES production access granted (out of the sandbox) in the owner's AWS account",
+        "domain": "mail.yayatoh.com verified in SES with Easy DKIM, a custom MAIL FROM and DMARC",
+        "configurationSet": "Configuration set with an SNS event destination (delivery, bounce, complaint) subscribed to /api/webhooks/email/ses",
+        "webhook": "A verified SNS notification has arrived",
+        "switch": "EMAIL_PROVIDER=ses"
+      },
+      "twilio": {
+        "registration": "Toll-free verification and the 10DLC brand and campaign approved",
+        "service": "Messaging Service with Advanced Opt-Out on and its inbound webhook at /api/webhooks/sms/twilio/inbound",
+        "webhook": "A verified status callback or inbound message has arrived",
+        "switch": "SMS_PROVIDER=twilio"
+      },
+      "cloud": {
+        "business": "Meta business verification, the WhatsApp Business Account and its phone number",
+        "templates": "Templates yayatoh_update (utility), yayatoh_news (marketing) and yayatoh_code (authentication) approved in 13 languages",
+        "webhook": "Webhook subscribed (messages field) at /api/webhooks/whatsapp/cloud and a verified delivery has arrived",
+        "switch": "WHATSAPP_PROVIDER includes cloud"
+      },
+      "gateway": {
+        "contract": "The gateway's API contract and signing key from the owner (whatsapp.panitechnologies.com)",
+        "webhook": "Callbacks configured to /api/webhooks/whatsapp/gateway and a verified one has arrived",
+        "switch": "WHATSAPP_PROVIDER includes gateway"
+      }
     }
   }
 }

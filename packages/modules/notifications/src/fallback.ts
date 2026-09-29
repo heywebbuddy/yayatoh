@@ -9,10 +9,12 @@ import { FALLBACK_REASONS, messages } from './schema.ts';
 
 /**
  * Fallback chains (M3.5b). When a message can't reach the person on its channel for a
- * *reachability* reason (no number, not on WhatsApp, an invalid or undeliverable number, a
- * provider that refused it for good, no consent on that channel), the category's next channel
- * gets the same message. Never for the person's own choices (unsubscribed, preferences, consent
- * withdrawn, STOP, complaints, erasure) or holds (quiet hours, caps, quotas, pauses).
+ * *reachability* reason (no number, not on WhatsApp, an invalid or undeliverable number, a bounced
+ * address, no push device, a provider that refused it for good), the category's next channel gets
+ * the same message. Never for the person's own choices or the rules (no consent on that channel,
+ * unsubscribed, preferences, STOP, complaints, erasure, WhatsApp category rules) or holds (quiet
+ * hours, caps, quotas, pauses): an organizer's SMS-only announcement to someone who never agreed to
+ * texts stays blocked with its reason rather than turning into an email.
  *
  * Never double-sends: the next channel's row uses the message's own dedupe key, so the unique
  * `(org, channel, dedupe_key)` inserts it once however many retries, webhooks or workers race;

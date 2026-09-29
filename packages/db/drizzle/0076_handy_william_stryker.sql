@@ -117,7 +117,7 @@ ALTER TABLE "notifications"."address_suppressions" ADD CONSTRAINT "address_suppr
 ALTER TABLE "notifications"."address_suppressions" VALIDATE CONSTRAINT "address_suppressions_address_check";--> statement-breakpoint
 ALTER TABLE "notifications"."messages" ADD CONSTRAINT "messages_provider_check" CHECK (provider is null or provider in ('ses', 'twilio', 'whatsapp_cloud', 'whatsapp_gateway', 'fake', 'dev', 'memory', 'webpush')) NOT VALID;--> statement-breakpoint
 ALTER TABLE "notifications"."messages" VALIDATE CONSTRAINT "messages_provider_check";--> statement-breakpoint
-ALTER TABLE "notifications"."messages" ADD CONSTRAINT "messages_fallback_check" CHECK ((fallback_of is null and fallback_reason is null) or (fallback_of is not null and fallback_reason in ('no_address', 'not_on_whatsapp', 'invalid_number', 'provider_error', 'undelivered', 'consent_missing', 'whatsapp_marketing_us', 'no_device', 'bounced'))) NOT VALID;--> statement-breakpoint
+ALTER TABLE "notifications"."messages" ADD CONSTRAINT "messages_fallback_check" CHECK ((fallback_of is null and fallback_reason is null) or (fallback_of is not null and fallback_reason in ('no_address', 'not_on_whatsapp', 'invalid_number', 'provider_error', 'undelivered', 'no_device', 'bounced'))) NOT VALID;--> statement-breakpoint
 ALTER TABLE "notifications"."messages" VALIDATE CONSTRAINT "messages_fallback_check";--> statement-breakpoint
 ALTER TABLE "notifications"."messages" ADD CONSTRAINT "messages_fallback_fk" FOREIGN KEY ("org_id","fallback_of") REFERENCES "notifications"."messages"("org_id","id") ON DELETE no action ON UPDATE no action NOT VALID;--> statement-breakpoint
 ALTER TABLE "notifications"."messages" VALIDATE CONSTRAINT "messages_fallback_fk";--> statement-breakpoint

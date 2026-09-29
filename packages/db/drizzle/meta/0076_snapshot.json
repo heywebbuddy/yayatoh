@@ -13857,7 +13857,7 @@
         },
         "messages_fallback_check": {
           "name": "messages_fallback_check",
-          "value": "(fallback_of is null and fallback_reason is null) or (fallback_of is not null and fallback_reason in ('no_address', 'not_on_whatsapp', 'invalid_number', 'provider_error', 'undelivered', 'consent_missing', 'whatsapp_marketing_us', 'no_device', 'bounced'))"
+          "value": "(fallback_of is null and fallback_reason is null) or (fallback_of is not null and fallback_reason in ('no_address', 'not_on_whatsapp', 'invalid_number', 'provider_error', 'undelivered', 'no_device', 'bounced'))"
         }
       },
       "isRLSEnabled": true

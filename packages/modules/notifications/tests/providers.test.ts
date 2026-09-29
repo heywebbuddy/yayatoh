@@ -5,6 +5,13 @@ import { FALLBACK_CHAINS, isFallbackReason, planFallback } from '../src/fallback
 import { missingEnv, providerMode, switchedOn, whatsappRoutes } from '../src/providers/config.ts';
 import { helpReply, parseKeyword } from '../src/providers/keywords.ts';
 import {
+  identityPortFromEnv,
+  liveTransports,
+  liveWebhookAdapter,
+  senderStatusFromEnv,
+  whatsappVerifyToken,
+} from '../src/providers/select.ts';
+import {
   checkDmarc,
   fakeIdentityPort,
   fakeResolveTxt,
@@ -43,6 +50,7 @@ import {
   whatsappGatewayWebhookAdapter,
   whatsappTemplate,
 } from '../src/providers/whatsapp.ts';
+import { memoryTransports } from '../src/transports.ts';
 
 /**
  * M3.5b provider adapters against recorded, synthetic payloads (made up for these tests; no real
@@ -919,11 +927,13 @@ describe('fallback chains', () => {
     expect(planFallback({ category: 'transactional', channel: 'email', reason: 'bounced' })).toBeNull();
     expect(planFallback({ category: 'transactional', channel: 'push', reason: 'no_device' })).toBeNull();
   });
-  it("never for the person's own choices or for holds", () => {
+  it("never for the person's own choices, the rules or holds", () => {
     for (const reason of [
       'unsubscribed',
       'preference',
+      'consent_missing',
       'consent_withdrawn',
+      'whatsapp_marketing_us',
       'opted_out',
       'complained',
       'erased',
@@ -940,8 +950,7 @@ describe('fallback chains', () => {
       'invalid_number',
       'provider_error',
       'undelivered',
-      'consent_missing',
-      'whatsapp_marketing_us',
+      'no_device',
       'bounced',
     ])
       expect(isFallbackReason(reason)).toBe(true);
@@ -971,5 +980,64 @@ describe('provider config', () => {
     expect(whatsappRoutes(env)).toEqual(['gateway', 'cloud']);
     expect(switchedOn('whatsapp_cloud', env)).toBe(true);
     expect(switchedOn('twilio', {})).toBe(false);
+  });
+});
+
+describe('provider selection by config names', () => {
+  const ses = {
+    EMAIL_PROVIDER: 'ses',
+    AWS_SES_REGION: 'us-east-1',
+    AWS_SES_ACCESS_KEY_ID: 'x',
+    AWS_SES_SECRET_ACCESS_KEY: 'x',
+    SES_CONFIGURATION_SET: 'set',
+    SES_SNS_TOPIC_ARN: 'arn:aws:sns:us-east-1:1:t',
+  };
+  const twilio = {
+    SMS_PROVIDER: 'twilio',
+    TWILIO_ACCOUNT_SID: 'AC1',
+    TWILIO_API_KEY_SID: 'SK1',
+    TWILIO_API_KEY_SECRET: 's',
+    TWILIO_AUTH_TOKEN: 't',
+    TWILIO_MESSAGING_SERVICE_SID: 'MG1',
+  };
+  const wa = {
+    WHATSAPP_PROVIDER: 'gateway,cloud',
+    WHATSAPP_CLOUD_ACCESS_TOKEN: 't',
+    WHATSAPP_CLOUD_PHONE_NUMBER_ID: '1',
+    WHATSAPP_CLOUD_APP_SECRET: 's',
+    WHATSAPP_CLOUD_VERIFY_TOKEN: 'v',
+    WHATSAPP_GATEWAY_URL: 'https://gw.test',
+    WHATSAPP_GATEWAY_KEY_ID: 'k',
+    WHATSAPP_GATEWAY_SECRET: 's',
+  };
+  it('only live providers replace the fallback transports, channel by channel', () => {
+    const base = memoryTransports().transports;
+    expect(liveTransports({}, 'https://app.test', base)).toMatchObject({ email: base.email, sms: base.sms });
+    const live = liveTransports({ ...ses, ...twilio, ...wa }, 'https://app.test', base);
+    expect(live?.email.name).toBe('ses');
+    expect(live?.sms?.name).toBe('twilio');
+    expect(live?.whatsapp?.name).toBe('whatsapp_router');
+    expect(live?.push).toBe(base.push);
+    // Production without a live email provider sends nothing.
+    expect(liveTransports({ ...twilio }, 'https://app.test', null)).toBeNull();
+  });
+  it('webhook endpoints answer only for live providers', () => {
+    expect(liveWebhookAdapter('email', 'ses', {})).toBeNull();
+    expect(liveWebhookAdapter('email', 'ses', ses)?.name).toBe('ses');
+    expect(liveWebhookAdapter('sms', 'twilio', twilio)?.name).toBe('twilio');
+    expect(liveWebhookAdapter('sms', 'twilio', { ...twilio, TWILIO_AUTH_TOKEN: '' })).toBeNull();
+    expect(liveWebhookAdapter('whatsapp', 'cloud', wa)?.name).toBe('whatsapp_cloud');
+    expect(liveWebhookAdapter('whatsapp', 'gateway', wa)?.name).toBe('whatsapp_gateway');
+    expect(liveWebhookAdapter('whatsapp', 'other', wa)).toBeNull();
+    expect(whatsappVerifyToken(wa)).toBe('v');
+    expect(whatsappVerifyToken({})).toBeNull();
+  });
+  it('identities and 10DLC status: real when live, fakes outside production, none in production', () => {
+    expect(identityPortFromEnv(ses)?.name).toBe('ses');
+    expect(identityPortFromEnv({})?.name).toBe('fake');
+    expect(identityPortFromEnv({ VERCEL_ENV: 'production' })).toBeNull();
+    expect(senderStatusFromEnv(twilio)?.name).toBe('twilio');
+    expect(senderStatusFromEnv({ NODE_ENV: 'production' })).toBeNull();
+    expect(senderStatusFromEnv({ NODE_ENV: 'production', YAYATOH_DEV_AUTH: '1' })?.name).toBe('fake');
   });
 });

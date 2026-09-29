@@ -1,8 +1,8 @@
 # Spec: M3.5 — Messaging platform and compliance
 
 - **Milestone:** M3.5 (roadmap §8 Phase 3 "M3.5 Messaging platform and compliance", §6.4 messaging pipeline, §10)
-- **Status:** M3.5a built (owner approved the Phase 3 plan, 2026-09-28); M3.5b (provider adapters) later
-- **Risk tags:** `db-migration`, `tenancy`, `legal-copy` (text-consent disclosure; state rules pending TCPA counsel)
+- **Status:** M3.5a built (owner approved the Phase 3 plan, 2026-09-28); M3.5b (provider adapters) built 2026-09-29 — real providers switch on with the owner's accounts
+- **Risk tags:** `db-migration`, `tenancy`, `legal-copy` (text-consent disclosure; state rules pending TCPA counsel; M3.5b HELP reply and STOP handling), `infra` (M3.5b provider accounts and webhooks)
 - **Related ADRs / decisions:** D16 (sender of record; WhatsApp utility-only in the US; quotas until M6.6), 2026-09-28 "WhatsApp: one port, two adapters", 2026-09-28 "Messaging quotas per organization until paid plans"; M1.10 spec (dispatcher, categories, federal quiet hours, unsubscribe, suppressions, delivery events)
 
 ## M3.5a — policy gate v2 (built)
@@ -99,3 +99,78 @@ All new tables: `tenantTable()` (FORCE RLS, NULLIF policy, org-leading indexes),
 - Staff lifting complaint suppressions; staff alerts routed by email/Slack (the alert engine, M3.2b, consumes `messaging.auto_paused@1`).
 - Holiday rules (states that ban holiday calls), and a full NANPA area-code table (only the rule states' codes are listed).
 - A contact-address field in crm (the gate reads `to.region` when a sender knows it).
+
+## M3.5b — provider adapters (built)
+
+Migration: `packages/db/drizzle/0076_handy_william_stryker.sql` (to be renumbered at merge): three new tenant tables and one platform table in `notifications`, three columns on `notifications.messages`, widened CHECKs on `notifications.address_suppressions` (hand-written block below).
+
+### 1. Goal and users
+Messages leave through the real providers the moment the owner's accounts exist, with nothing faked in between: organizers send email from their own domain, texts go through a 10DLC-ready Twilio service, WhatsApp goes through the Cloud API for new tenants and the owner's gateway for existing flows (decision P3-2). Every provider report is verified and counted once; a message that can't reach someone on one channel reaches them on the next, once; a STOP is honoured in the consent ledger; staff see each provider's health and what is left to switch it on.
+
+### 2. What was built
+**Adapters** (`packages/modules/notifications/src/providers/`, `node:crypto` only, an injected `fetch`; selected by config names in `.env.example`, live only when switched on **and** fully configured — `providerMode`; `select.ts` builds the worker's transports and the web's webhook adapters):
+
+| Provider | Sends | Webhook verification | Maps |
+|---|---|---|---|
+| Amazon SES v2 (`ses.ts`, `sigv4.ts`) | `SendEmail` signed with SigV4 (the AWS test-suite vectors reproduce), configuration set, message tags `yayatoh-message` (our id) and `yayatoh-org`, List-Unsubscribe headers kept; the org's verified domain as From | SNS (`sns.ts`): certificate URL must be HTTPS on `sns.<region>.amazonaws.com` and end `.pem`, certificate issued to `sns.amazonaws.com` and valid (cached per URL), signature v1 SHA1withRSA / v2 SHA256withRSA over the canonical string, topic in `SES_SNS_TOPIC_ARN`, older than 1 h refused (replay); SubscriptionConfirmation visited only on an SNS host | Delivery → delivered; Bounce Permanent → hard, Transient/Undetermined → soft; Complaint → complained; other event types and untagged mail ignored. Event id = SNS MessageId |
+| Twilio (`twilio.ts`) | Messages API through a Messaging Service (the org's verified 10DLC service, else the platform's), `StatusCallback` = `/api/webhooks/sms/twilio?m=<our id>`; 21211/21614 → invalid number, 21610 → opted out, other 4xx → refused, 429/5xx → retry | `X-Twilio-Signature`: base64 HMAC-SHA1 of the public URL (query included) + sorted form fields of the raw body (Twilio's documented example reproduces); JSON bodies via `bodySHA256` | delivered; undelivered/failed → hard (21211, 21614, 21610, 30004–30006) or soft; sender-side errors (30007, 30032–30036: 10DLC/filtering) produce no event (the number is not at fault). Event id = `sid:status` (a replay is a duplicate) |
+| WhatsApp Cloud API (`whatsapp.ts`) | Template messages (`yayatoh_update` utility, `yayatoh_news` marketing, `yayatoh_code` authentication; body params = org name, text; 13 languages mapped), `biz_opaque_callback_data` = our id; the org's phone number id or the platform's; 131026 → not on WhatsApp | `X-Hub-Signature-256` (HMAC-SHA256 of the raw body with the app secret); GET subscription check answers only the verify token | delivered/read → delivered (one event); failed 131026 → hard, template/account/limit errors → none, others → soft; inbound text/button STOP/START/HELP → keywords |
+| Owner's gateway (`whatsapp.ts`) | `POST {WHATSAPP_GATEWAY_URL}/v1/messages` with `reference` = our id, signed `x-pani-key` / `x-pani-timestamp` / `x-pani-signature: v1=HMAC-SHA256(secret, "ts.body")` (contract pending the owner) | the same signature on callbacks, ±5 minutes (replay), key id checked | delivered/read, failed (`not_on_whatsapp`/`invalid_number` hard), inbound keywords |
+
+`routedWhatsAppTransport` is the one WhatsApp port: the org's route (staff-set) else the first of `WHATSAPP_PROVIDER`. Fakes stay: `memoryTransports` (tests; now able to refuse numbers like 131026/21614 and to fail a channel) and the dev mailbox (dev/CI).
+
+**One webhook pipeline** (`webhooks.ts` → `handleProviderWebhook`): verify on the raw body (256 KB cap) → count in provider health (verified / refused with the failure kind) → each delivery event recorded in **its org from our message id** (SECURITY DEFINER `message_org`) by `recordDeliveryEventsCommand` (dedup by `(org, provider, provider event id)`) → inbound keywords. Web endpoints (`apps/web/src/server/delivery-webhooks.ts`): `POST /api/webhooks/email/{ses|fake}`, `POST /api/webhooks/sms/twilio` and `/sms/twilio/inbound` (TwiML back; HELP gets the help text), `GET|POST /api/webhooks/whatsapp/{cloud|gateway}`; anything not live is a 404; failed verifications are rate-limited (M1.14 `webhookAbuse`). The public URL Twilio signs is built from `BETTER_AUTH_URL`, never a Host header. The dev drain posts the fake provider's reports through the same pipeline.
+
+**Fallback chains** (`fallback.ts`, per category, pending the owner): transactional, reminders, event updates: WhatsApp → SMS → email; marketing: none; team alerts: push → email. Triggers are reachability only: `no_address`, `not_on_whatsapp`, `invalid_number`, `bounced` (a suppressed address), `no_device`, `provider_error` (a permanent refusal or the fifth failure), `undelivered` (a text's failed delivery webhook). Never for consent, opt-outs, unsubscribes, preferences, erasure or holds — an SMS-only announcement to someone without text consent stays blocked (M3.5a). The next channel's row reuses the dedupe key (so the unique `(org, channel, dedupe_key)` makes it idempotent across providers, retries, concurrent dispatchers and webhook replays), records `fallback_of` and `fallback_reason`, and runs the whole policy gate again; a channel that already has the message ends the chain; unreachable channels are skipped (SMS rows find the email through the crm contact). A failure and its fallback commit in one transaction.
+
+**Inbound keywords** (`inbound.ts`, `keywords.ts`): STOP, STOPALL, QUIT, END, REVOKE, OPT OUT, CANCEL, UNSUBSCRIBE (alone, any case) / START, UNSTOP, YES / HELP, INFO; Twilio's `OptOutType` wins. The orgs come from `notifications.inbound_orgs` (SECURITY DEFINER): the org whose dedicated sender was reached, else every org without its own number that texted that number (matched by `recipient_key`, the HMAC the caps use). Per org, once per provider message (`inbound_keywords`): STOP withdraws marketing and informational consent on that channel for every contact with the number (evidence `keyword:STOP:{provider}:{id}`) and suppresses the number (`opt_out`, every text including transactional; organizers can't lift it: "Only the person can lift this, by replying START"); START lifts it and restores informational consent only; HELP answers "{Org} via Yayatoh: event messages. … Reply STOP to opt out. Help: {MESSAGING_HELP_URL}". Audited without the number. A dispatch refused with 21610 is `failed/opted_out` (no fallback).
+
+**Sending setup** (`senders.ts`; organizer page `/o/{org}/sending`, nav "Sending setup"): the org's email sending domain (one per org, one org per domain platform-wide; reserved Yayatoh hosts refused): add → the identity port creates the SES identity (Easy DKIM, custom MAIL FROM `bounce.{domain}`) and DMARC is looked up (the domain, then its organizational domain); the page shows DKIM / SPF / DMARC (with the policy), the DNS records to publish (a suggested `p=none` DMARC record when missing), "Check DNS now", "Remove domain". Mail uses `notifications@{domain}` only while DKIM and SPF are verified. Text senders (read-only for the org): the SMS sender (shared, or the org's number with its 10DLC campaign status: verified / in review / rejected / not registered) and the WhatsApp route; the fallback table. Everyone with `org:read` sees it; `org:update` changes it (viewers see it read-only and are refused). Development uses the fake identity port (`fail` label → DKIM failed, `pending` → stays pending, `nodmarc` → no DMARC).
+
+**Staff console**: **Messaging providers** (`/providers`, staff `admin`/`support`): per provider the mode (live / configured but not switched on / not set up / development fake), last webhook, 24-hour verified and refused webhooks, sends and errors with the error rate, the last error code; then each real provider's switch-on checklist (config names — names only — webhook seen, switched on, and the owner's steps). Read through platform_reader (access-logged). Tenant → Messaging → **Dedicated senders**: a Twilio Messaging Service SID (saved with its 10DLC status as Twilio reports it now; fake in dev: a SID ending `f` failed, `e` in review) and a display number; the WhatsApp route (Cloud API with a phone number id, or the gateway); back to shared. `setChannelSenderCommand` (`platform:messaging.senders`, audited `messaging.sender.set` with the last four characters only).
+
+**Provider health** (`provider-health.ts`): `notifications.provider_health` counters per provider × UTC hour, written through `notifications.record_provider_health` after the tenant transaction (so a hot hour row never serializes orgs); the dispatcher records `messages.provider` for every send.
+
+### 3. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `notifications.sending_domains` | new tenant table | unique `(org)` and `(domain)` (platform-wide, like `tenancy.org_domains`); statuses per check; `verified` iff DKIM and SPF verified (CHECK); records = public DNS data |
+| `notifications.channel_senders` | new tenant table | unique `(org, channel)`; unique `(provider, sender_ref)` platform-wide (inbound routing); CHECK: SMS = Twilio + `MG…` + campaign status, WhatsApp = cloud + numeric id or gateway |
+| `notifications.inbound_keywords` | new tenant table | unique `(org, provider, provider_event_id)`; the number only as `recipient_key` |
+| `notifications.provider_health` | new **platform** table (GLOBAL_TABLES) | PK `(provider, hour)`; no app_user privileges; platform_reader SELECT |
+| `notifications.messages` | `provider`, `fallback_of` (self composite FK), `fallback_reason`; indexes `(org, fallback_of)` and `(recipient_key, org)` for texts | CHECKs on provider and fallback reason |
+| `notifications.address_suppressions` | channel `whatsapp`; reason `opt_out`; numbers for SMS and WhatsApp | |
+
+Fixture rows for both orgs in `createOrgFixture` (a verified sending domain, dedicated SMS and WhatsApp senders derived from the org id, an inbound STOP). Column privacy: `sending_domains.domain`/`records` public (they appear in every From line / public DNS), `channel_senders.sender_ref` secret (never in a DTO but its last four characters), `inbound_keywords.provider_event_id`/`recipient_key` secret; `address_suppressions.address_norm` is personal for email rows (text rows are shown masked).
+
+#### Hand-written SQL (migration 0076, between `-- hand-written: begin/end`)
+1. CHECKs and the FK on existing tables re-added `NOT VALID`, then `VALIDATE CONSTRAINT`: `address_suppressions_channel_check`, `address_suppressions_reason_check`, `address_suppressions_address_check`, `messages_provider_check`, `messages_fallback_check`, `messages_fallback_fk` (drizzle-kit generated the matching `DROP CONSTRAINT`s above the block; its plain `ADD CONSTRAINT`s were moved into the block).
+2. `REVOKE ALL ON notifications.provider_health FROM app_user, platform_reader`; `GRANT SELECT … TO platform_reader`.
+3. `notifications.record_provider_health(text, text, text)` SECURITY DEFINER → `app_user` (upsert of the hour's counters).
+4. `notifications.inbound_orgs(text, text, text, text)` SECURITY DEFINER → `app_user` (org ids only).
+The two new indexes on `notifications.messages` are built in the migration transaction (fine before launch; after launch they would be `CONCURRENTLY` in their own migration, as noted in 0064).
+
+### 4. Acceptance
+| Criterion | Test |
+|---|---|
+| Provider webhooks verified (incl. wrong / missing / replayed) | unit `packages/modules/notifications/tests/providers.test.ts`: SNS v1/v2, wrong key, tampered, missing, >1 h replay, foreign topic, certificate host/subject/expiry, SubscribeURL host; Twilio documented vector, wrong token, missing, re-targeted URL, tampered, JSON `bodySHA256`; Meta `X-Hub-Signature-256` wrong/missing/malformed/tampered and the verify-token challenge; gateway wrong/missing/other key/>5 min replay |
+| …and deduplicated | int `packages/testing/tests/providers.int.test.ts`: SES bounce delivered 4× (3 concurrent) records once; Twilio callback ×4 concurrent records once and falls back once; WhatsApp status ×3 falls back once; inbound STOP retried applies once |
+| Webhook → delivery status / suppression / consent | int: SES hard bounce → `bounced` + suppressed, next ticket suppressed; complaint; Twilio undelivered 30006 → hard suppression; WhatsApp 131026 → WhatsApp suppression and later messages fall back at once; STOP → consent withdrawn with evidence, `opt_out`, ticket texts suppressed `opted_out`, not liftable by the org; START → informational back, marketing still withdrawn; HELP names the org on its own number, not on the shared one |
+| Fallback decisions and idempotent fallback | unit (chains, triggers, never for consent/opt-outs/holds, marketing none); int: WhatsApp → SMS under three concurrent dispatchers sends one SMS; a channel already queued ends the chain; WhatsApp → SMS → email with reasons recorded; provider outage falls back after the fifth attempt; marketing never escalates |
+| SES / Twilio / WhatsApp send adapters and error mapping | unit (SigV4 AWS vectors, SES request/tags/From/RFC 2047, refusals vs throttling, identities + MAIL FROM, DMARC lookup; Twilio request/service/callback and codes; Cloud API templates/ids/codes; gateway signing; routing) |
+| Config-only switch-on | unit "provider selection by config names"; e2e `sending-setup.spec.ts` "provider webhooks answer only for configured providers" |
+| Org sending-domain settings (keyboard, validation, persistence, axe, Arabic RTL, viewer denied) | e2e `apps/web/e2e/sending-setup.spec.ts` (add/check/remove from the keyboard, DKIM/SPF/DMARC, records, mail then from the org's domain, failing DKIM, a domain taken by another org, viewer read-only + replayed action refused, Arabic); int "sending domains and dedicated senders" |
+| Staff provider health and switch-on checklist; dedicated senders | e2e `apps/admin/e2e/providers.spec.ts` (health from real dev traffic, checklists, access log, keyboard, axe; SID validation, 10DLC status, WhatsApp route, the organizer's view in English and Arabic; finance staff and signed-out refused); `apps/worker/tests/provider-health.int.test.ts` (counts, access log, config names only, app_user has no table access) |
+| Tenant isolation | `packages/testing/tests/isolation.int.test.ts` (fixture rows in both orgs for the three new tenant tables); int: events and suppressions stay in their org; a STOP to one org's number leaves the other org alone |
+
+### 5. Pending the owner
+- Accounts and switch-on per provider (SES production access and `mail.yayatoh.com`; Twilio toll-free + 10DLC; Meta business verification, templates; the gateway's API contract): `docs/owner-inbox.md` "Messaging providers".
+- The fallback chains per category and the triggers (reachability only); STOP semantics (per org answered, or every org on the shared number; transactional texts blocked too; START restores informational only); the HELP text and `MESSAGING_HELP_URL`.
+- The gateway's contract: the signing scheme implemented is our proposal.
+
+### 6. Later / not yet
+- Embedded Signup (tenants connecting their own WABA and tokens); SES tenants (per-org reputation isolation) and per-tenant configuration sets; a scheduled re-check of pending sending domains and 10DLC campaigns (today on "Check DNS now" / staff save).
+- WhatsApp HELP replies (a session message needs the 24-hour window); push → email fallback for buyers (push rows exist only for opted-in devices).
+- An index on `crm.contacts (org_id, phone_e164)` if STOP lookups grow; a platform-wide opt-out list across orgs on the shared number.
+- The organizer's per-order message log showing the fallback chain ("sent by SMS after WhatsApp failed"); today it lists both rows with their reasons.
+
