@@ -1,4 +1,6 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
+import { frontDoorEnv, legacyStubServer } from '../web/e2e/front-door-env.ts';
 
 const PORT = Number(process.env.E2E_ADMIN_PORT ?? 3101);
 const WEB_PORT = Number(process.env.E2E_PORT ?? 3100);
@@ -37,7 +39,8 @@ export default defineConfig({
           reuseExistingServer: true,
           timeout: 120_000,
           gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
-          env: { ADMIN_AUTH_URL: `http://localhost:${PORT}` },
+          // The console lists the same front-door hosts as the web server forwards (M2.4a).
+          env: { ADMIN_AUTH_URL: `http://localhost:${PORT}`, ...frontDoorEnv },
         },
         {
           command: `pnpm --dir ../web exec next start -p ${WEB_PORT}`,
@@ -45,6 +48,9 @@ export default defineConfig({
           reuseExistingServer: true,
           timeout: 120_000,
           gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
+          // M2.4a: the front-door hosts, as in apps/web/playwright.config.ts.
+          env: frontDoorEnv,
         },
+        legacyStubServer(fileURLToPath(new URL('../web/', import.meta.url))),
       ],
 });

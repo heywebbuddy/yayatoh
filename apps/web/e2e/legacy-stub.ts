@@ -107,6 +107,7 @@ function handler(instance: 'yay' | 'abc', port: number) {
       return;
     }
     if (p === '/stub/500') return json(500);
+    if (p === '/stub/echo') return json(200);
     if (p.startsWith('/missing')) return json(404);
     if (req.method === 'HEAD') {
       res.writeHead(200, { 'x-legacy-stub': instance, 'content-type': 'text/html' });
