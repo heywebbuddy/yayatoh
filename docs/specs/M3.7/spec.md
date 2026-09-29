@@ -1,7 +1,7 @@
 # Spec: M3.7 — Automations and journeys
 
 - **Milestone:** M3.7 (roadmap §10 Phase 3, "M3.7 Automations and journeys (M)"; Phase 3 plan `docs/plans/phase-3.md`, Wave C)
-- **Status:** M3.7a built (2026-09-29)
+- **Status:** M3.7a built (2026-09-29); local gate green (`pnpm verify`, journeys e2e 12/12, web suite 1426 passed + 1 load timeout that passes on rerun)
 - **Risk tags:** `db-migration`, `tenancy`
 - **Related ADRs:** 0008 (outbox, `replayed` history never fires side effects), 0015 (event times in the event's zone), 0018 (tokens only)
 
