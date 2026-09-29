@@ -453,6 +453,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../../packages/modules/crm
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -622,6 +625,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../../packages/modules/forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel

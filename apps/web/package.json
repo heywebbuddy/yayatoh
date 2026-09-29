@@ -23,6 +23,7 @@
     "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/cms": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",

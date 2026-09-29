@@ -149,7 +149,11 @@ describe('path computation', () => {
 
   it('opens a page from an answer on an earlier page (cross-page condition)', () => {
     expect(keys(computePath(def, EXHIBITOR, { workshops: true }))).toEqual(['details', 'sessions']);
-    expect(keys(computePath(def, MEMBER, { workshops: true }))).toEqual(['details', 'membership', 'sessions']);
+    expect(keys(computePath(def, MEMBER, { workshops: true }))).toEqual([
+      'details',
+      'membership',
+      'sessions',
+    ]);
     expect(keys(computePath(def, MEMBER, { workshops: false }))).toEqual(['details', 'membership']);
   });
 
@@ -189,9 +193,9 @@ describe('server validation (registration kind)', () => {
       checkRegistrationAnswers(def, { ...ok, school: 'State U' }, { registrationTypeId: STUDENT }).path,
     ).toHaveLength(1);
     // Saving a draft enforces nothing required.
-    expect(checkRegistrationAnswers(def, {}, { registrationTypeId: MEMBER, requirePages: [] }).answers).toEqual(
-      {},
-    );
+    expect(
+      checkRegistrationAnswers(def, {}, { registrationTypeId: MEMBER, requirePages: [] }).answers,
+    ).toEqual({});
   });
 
   it('rejects (never drops) answers on hidden pages and questions, naming the question', () => {
@@ -243,10 +247,18 @@ describe('server validation (registration kind)', () => {
 
   it('maps checked consent boxes to their ledger term and version; unchecked maps to nothing', () => {
     const base = { ...ok, workshops: true, track: 'b' };
-    const yes = checkRegistrationAnswers(def, { ...base, share_email: 'on' }, { registrationTypeId: EXHIBITOR });
+    const yes = checkRegistrationAnswers(
+      def,
+      { ...base, share_email: 'on' },
+      { registrationTypeId: EXHIBITOR },
+    );
     expect(yes.consents).toEqual([{ key: 'share_email', term: 'exhibitor_email_sharing', version: 1 }]);
     expect(yes.answers.share_email).toBe(true);
-    const no = checkRegistrationAnswers(def, { ...base, share_email: false }, { registrationTypeId: EXHIBITOR });
+    const no = checkRegistrationAnswers(
+      def,
+      { ...base, share_email: false },
+      { registrationTypeId: EXHIBITOR },
+    );
     expect(no.consents).toEqual([]);
     const unanswered = checkRegistrationAnswers(def, base, { registrationTypeId: EXHIBITOR });
     expect(unanswered.consents).toEqual([]);
@@ -271,11 +283,12 @@ describe('respondent page payload', () => {
     expect(respondentPage(def, EXHIBITOR, {}, 'membership')).toBeNull();
     expect(respondentPage(def, EXHIBITOR, {}, 'sessions')).toBeNull();
     const details = respondentPage(def, MEMBER, {}, 'details');
-    expect(details?.fields.map((f) => f.key)).toEqual(['company', 'job', 'workshops', 'badge_name']);
+    if (!details) throw new Error('details page missing');
+    expect(details.fields.map((f) => f.key)).toEqual(['company', 'job', 'workshops', 'badge_name']);
     // The same-page condition stays for the browser to evaluate.
-    expect(details?.fields[3]?.showIf).not.toBeNull();
-    expect(visibleOnPage(details!, { workshops: false }).map((f) => f.key)).not.toContain('badge_name');
-    expect(visibleOnPage(details!, { workshops: true }).map((f) => f.key)).toContain('badge_name');
+    expect(details.fields[3]?.showIf).not.toBeNull();
+    expect(visibleOnPage(details, { workshops: false }).map((f) => f.key)).not.toContain('badge_name');
+    expect(visibleOnPage(details, { workshops: true }).map((f) => f.key)).toContain('badge_name');
   });
 
   it('decides conditions on earlier pages on the server and sends the context they read', () => {
@@ -301,10 +314,11 @@ describe('respondent page payload', () => {
     const hidden = respondentPage(d, MEMBER, { a: false }, 'two');
     expect(hidden?.fields.map((f) => f.key)).toEqual(['c', 'd']);
     const shown = respondentPage(d, MEMBER, { a: true }, 'two');
-    expect(shown?.fields.map((f) => f.key)).toEqual(['b', 'c', 'd']);
-    expect(shown?.fields[0]?.showIf).toBeNull();
-    expect(shown?.context).toEqual({ a: true });
-    expect(visibleOnPage(shown!, { c: true }).map((f) => f.key)).toEqual(['b', 'c', 'd']);
+    if (!shown) throw new Error('page two missing');
+    expect(shown.fields.map((f) => f.key)).toEqual(['b', 'c', 'd']);
+    expect(shown.fields[0]?.showIf).toBeNull();
+    expect(shown.context).toEqual({ a: true });
+    expect(visibleOnPage(shown, { c: true }).map((f) => f.key)).toEqual(['b', 'c', 'd']);
   });
 });
 
@@ -347,7 +361,13 @@ describe('property: the server path equals the client path', () => {
           label: key,
           showIf: cond(),
           registrationTypes: t && t.length > 0 ? t : null,
-          options: type === 'select' ? [{ value: 'x', label: 'X' }, { value: 'y', label: 'Y' }] : [],
+          options:
+            type === 'select'
+              ? [
+                  { value: 'x', label: 'X' },
+                  { value: 'y', label: 'Y' },
+                ]
+              : [],
         });
         earlier.push({ key, type });
       }
@@ -374,19 +394,29 @@ describe('property: the server path equals the client path', () => {
         for (const f of p.fields) {
           if (r() < 0.3) continue;
           raw[f.key] =
-            f.type === 'checkbox' ? r() < 0.5 : f.type === 'select' ? pick(r, ['x', 'y']) : Math.floor(r() * 6);
+            f.type === 'checkbox'
+              ? r() < 0.5
+              : f.type === 'select'
+                ? pick(r, ['x', 'y'])
+                : Math.floor(r() * 6);
         }
       const client = computePath(d, typeId, raw);
       // The client submits only what its path shows.
       const shown = new Set(client.flatMap((p) => p.fields.map((f) => f.key)));
       const submitted = Object.fromEntries(Object.entries(raw).filter(([k]) => shown.has(k)));
       const server = checkRegistrationAnswers(d, submitted, { registrationTypeId: typeId, requirePages: [] });
-      expect(server.path).toEqual(client.map((p) => ({ page: p.page.key, fields: p.fields.map((f) => f.key) })));
+      expect(server.path).toEqual(
+        client.map((p) => ({ page: p.page.key, fields: p.fields.map((f) => f.key) })),
+      );
       // Anything the client did not show is refused when it carries an answer.
       const hidden = Object.entries(raw).find(([k, v]) => !shown.has(k) && v !== false);
       if (hidden)
         expect(() =>
-          checkRegistrationAnswers(d, { ...submitted, [hidden[0]]: hidden[1] }, { registrationTypeId: typeId }),
+          checkRegistrationAnswers(
+            d,
+            { ...submitted, [hidden[0]]: hidden[1] },
+            { registrationTypeId: typeId },
+          ),
         ).toThrow('Not on your path');
     }
   });

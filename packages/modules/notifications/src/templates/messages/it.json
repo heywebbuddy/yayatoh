@@ -170,6 +170,11 @@
       "subject": "{eventName} è rinviato",
       "intro": "{eventName} è stato rinviato. I tuoi biglietti restano validi per la nuova data. Se non puoi partecipare, puoi chiedere un rimborso dalla pagina del tuo ordine secondo la politica di rimborso dell’organizzatore.",
       "cta": "Vedi il mio ordine"
+    },
+    "forms.resume": {
+      "subject": "Continua la tua registrazione a {eventName}",
+      "intro": "Ecco il tuo link per riprendere la registrazione a {eventName} da dove l'avevi lasciata. Funziona per {days, plural, one {# giorno} other {# giorni}} dall'ultimo salvataggio e solo per te, quindi non inoltrarlo. Se non l'hai richiesto, puoi ignorare questa email.",
+      "cta": "Continua la registrazione"
     }
   },
   "roles": {

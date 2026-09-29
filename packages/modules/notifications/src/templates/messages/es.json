@@ -170,6 +170,11 @@
       "subject": "{eventName} se ha aplazado",
       "intro": "{eventName} se ha aplazado. Tus entradas siguen siendo válidas para la nueva fecha. Si no puedes asistir, puedes pedir un reembolso desde la página de tu pedido según la política de reembolso del organizador.",
       "cta": "Ver mi pedido"
+    },
+    "forms.resume": {
+      "subject": "Continúa tu inscripción a {eventName}",
+      "intro": "Este es tu enlace para retomar tu inscripción a {eventName} donde la dejaste. Funciona durante {days, plural, one {# día} other {# días}} después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.",
+      "cta": "Continuar mi inscripción"
     }
   },
   "roles": {

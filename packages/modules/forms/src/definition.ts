@@ -78,7 +78,9 @@ export function evaluate(l: Logic, answers: Answers): unknown {
   }
 }
 
-export const FieldKey = z.string().regex(/^[a-z][a-z0-9_]{0,39}$/, 'Keys are lower-case letters, digits and _');
+export const FieldKey = z
+  .string()
+  .regex(/^[a-z][a-z0-9_]{0,39}$/, 'Keys are lower-case letters, digits and _');
 export const Option = z.object({
   value: z.string().trim().min(1).max(80),
   label: z.string().trim().min(1).max(120),

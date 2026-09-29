@@ -4,6 +4,7 @@ import { getUsersByIds } from '@yayatoh/auth';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import {
@@ -70,6 +71,11 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
     surveyMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
   ];
 }

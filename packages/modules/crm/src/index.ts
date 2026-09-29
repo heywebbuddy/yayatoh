@@ -38,3 +38,11 @@ export {
   segmentPageTx,
 } from './segments/compile.ts';
 export * from './segments/dsl.ts';
+export {
+  CONSENT_TERM_KEYS,
+  CONSENT_TERMS,
+  type ConsentTerm,
+  currentTermVersion,
+  isConsentTerm,
+  recordTermConsentTx,
+} from './terms.ts';

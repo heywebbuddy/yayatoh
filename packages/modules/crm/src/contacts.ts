@@ -77,6 +77,8 @@ export interface ConsentInput {
   readonly purpose: (typeof CONSENT_PURPOSES)[number];
   readonly status: (typeof CONSENT_STATUSES)[number];
   readonly evidence: string;
+  /** The wording version agreed to, for versioned terms (`CONSENT_TERMS`). */
+  readonly version?: number | null;
 }
 
 export async function recordConsentTx(tx: TenantTx, ctx: Ctx, input: ConsentInput): Promise<void> {

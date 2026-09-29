@@ -14,4 +14,4 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
-export { BULK_ACTIONS, bulkStep, ports, runBulk } from './ports.ts';
+export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';

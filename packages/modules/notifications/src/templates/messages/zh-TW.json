@@ -170,6 +170,11 @@
       "subject": "{eventName} 已延期",
       "intro": "{eventName} 已延期。您的票券在新日期仍然有效。如無法參加，可依主辦單位的退款政策在訂單頁面申請退款。",
       "cta": "查看我的訂單"
+    },
+    "forms.resume": {
+      "subject": "繼續您的 {eventName} 報名",
+      "intro": "這是您的連結，可從上次中斷的地方繼續 {eventName} 的報名。它在您最後一次儲存後 {days, plural, other {# 天}} 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。",
+      "cta": "繼續我的報名"
     }
   },
   "roles": {

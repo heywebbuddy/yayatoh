@@ -170,6 +170,11 @@
       "subject": "{eventName} is uitgesteld",
       "intro": "{eventName} is uitgesteld. Je tickets blijven geldig voor de nieuwe datum. Kun je niet komen, dan kun je op je bestelpagina om terugbetaling vragen volgens het terugbetalingsbeleid van de organisator.",
       "cta": "Mijn bestelling bekijken"
+    },
+    "forms.resume": {
+      "subject": "Ga verder met je registratie voor {eventName}",
+      "intro": "Hier is je link om je registratie voor {eventName} te hervatten waar je gebleven was. Hij werkt {days, plural, one {# dag} other {# dagen}} na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
+      "cta": "Verder met mijn registratie"
     }
   },
   "roles": {

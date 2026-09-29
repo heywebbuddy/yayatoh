@@ -8,3 +8,16 @@ export {
   RATING_MAX,
   SURVEY_FIELD_TYPES,
 } from './definition.ts';
+export {
+  computePath,
+  isEmptyAnswer,
+  logicVars,
+  REGISTRATION_FIELD_TYPES,
+  type RegistrationField,
+  type RegistrationFieldType,
+  type RegistrationFormDefinition,
+  type RegistrationPage,
+  type RespondentPage,
+  typeAllows,
+  visibleOnPage,
+} from './registration.ts';

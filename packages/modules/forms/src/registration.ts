@@ -87,7 +87,8 @@ export const RegistrationField = z
     if (f.type === 'consent') {
       if (!f.consent) c.addIssue({ code: 'custom', message: 'Choose a consent term', path: ['consent'] });
       // Consent is freely given: never required, never pre-checked, never hidden in the envelope.
-      if (f.required) c.addIssue({ code: 'custom', message: 'Consent cannot be required', path: ['required'] });
+      if (f.required)
+        c.addIssue({ code: 'custom', message: 'Consent cannot be required', path: ['required'] });
       if (f.sensitive)
         c.addIssue({ code: 'custom', message: 'Consent cannot be private', path: ['sensitive'] });
     } else if (f.consent) {
@@ -346,10 +347,7 @@ export function respondentPage(
  * Which of a page's questions show right now in the browser (same-page conditions, typed
  * answers), given the context the server sent.
  */
-export function visibleOnPage(
-  page: RespondentPage,
-  values: Answers,
-): readonly RegistrationField[] {
+export function visibleOnPage(page: RespondentPage, values: Answers): readonly RegistrationField[] {
   const seen: Record<string, unknown> = { ...page.context };
   const out: RegistrationField[] = [];
   for (const f of page.fields) {

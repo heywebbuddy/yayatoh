@@ -2,6 +2,7 @@ import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -75,6 +76,11 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     fraudSignalAlerts({ notifier }),
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),

@@ -170,6 +170,11 @@
       "subject": "{eventName} 已延期",
       "intro": "{eventName} 已延期。您的门票在新日期仍然有效。如无法参加，可根据主办方的退款政策在订单页面申请退款。",
       "cta": "查看我的订单"
+    },
+    "forms.resume": {
+      "subject": "继续您的 {eventName} 报名",
+      "intro": "这是您的链接，可从上次中断的地方继续 {eventName} 的报名。它在您最后一次保存后 {days, plural, other {# 天}} 内有效，且仅供您本人使用，请勿转发。如果您没有请求此邮件，可以忽略。",
+      "cta": "继续我的报名"
     }
   },
   "roles": {

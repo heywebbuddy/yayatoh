@@ -143,6 +143,13 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'passName'],
   },
+  // Registration form save and resume (M5.1b): the person asked for their link.
+  'forms.resume': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'days'],
+  },
   'orders.order-link': {
     category: 'transactional',
     channels: ['email'],

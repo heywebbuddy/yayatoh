@@ -1,1 +1,1 @@
-export { formResponses, forms, formVersions } from './schema.ts';
+export { companies, formResponses, forms, formVersions, jobTitles, respondents } from './schema.ts';
