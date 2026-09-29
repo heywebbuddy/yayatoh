@@ -6,7 +6,7 @@ import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yayatoh/platform';
 import { eventRoleCan, memberRoleTx, memberUserIdsTx, ORG_ROLES, roleCan } from '@yayatoh/tenancy';
 import { ticketsByIdsTx } from '@yayatoh/ticketing';
-import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   ACTIVITY_KINDS,
@@ -675,7 +675,7 @@ export async function assistanceOverdueTx(
       urgent: sql<number>`count(*) filter (where ${requests.priority} = 'urgent')::int`,
     })
     .from(requests)
-    .where(and(eq(requests.eventId, eventId), eq(requests.state, 'new'), sql`${requests.dueAt} < ${now}`));
+    .where(and(eq(requests.eventId, eventId), eq(requests.state, 'new'), lt(requests.dueAt, now)));
   return { overdue: r?.overdue ?? 0, urgent: r?.urgent ?? 0 };
 }
 

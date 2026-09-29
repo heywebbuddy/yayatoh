@@ -1,5 +1,5 @@
 {
-  "id": "0f5adda2-b4b6-4694-afcb-d7789c218515",
+  "id": "e32fc391-d0ff-4ee0-977f-3cf270346e24",
   "prevId": "4d9d4d54-b8db-43bf-85d9-eb78554b96c3",
   "version": "7",
   "dialect": "postgresql",
@@ -5151,7 +5151,7 @@
       "checkConstraints": {
         "alerts_rule_check": {
           "name": "alerts_rule_check",
-          "value": "rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed')"
+          "value": "rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed')"
         },
         "alerts_category_check": {
           "name": "alerts_category_check",

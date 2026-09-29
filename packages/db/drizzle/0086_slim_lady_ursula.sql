@@ -56,6 +56,7 @@ CREATE TABLE "assistance"."requests" (
 --> statement-breakpoint
 ALTER TABLE "assistance"."requests" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "assistance"."requests" FORCE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "alerts"."alerts" DROP CONSTRAINT "alerts_rule_check";--> statement-breakpoint
 ALTER TABLE "checkin"."staff_alert_pushes" DROP CONSTRAINT "staff_alert_pushes_kind_check";--> statement-breakpoint
 ALTER TABLE "assistance"."activity" ADD CONSTRAINT "activity_request_fk" FOREIGN KEY ("org_id","request_id") REFERENCES "assistance"."requests"("org_id","id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "activity_org_id_idx" ON "assistance"."activity" USING btree ("org_id");--> statement-breakpoint
@@ -66,7 +67,12 @@ CREATE INDEX "requests_org_event_state_idx" ON "assistance"."requests" USING btr
 CREATE INDEX "requests_org_ticket_idx" ON "assistance"."requests" USING btree ("org_id","ticket_id") WHERE ticket_id is not null;--> statement-breakpoint
 CREATE INDEX "requests_org_open_due_idx" ON "assistance"."requests" USING btree ("org_id","due_at") WHERE state = 'new';--> statement-breakpoint
 -- hand-written: begin
--- The widened kind check on an existing table: added NOT VALID (no long lock), validated below.
+-- A widened CHECK on an existing table: added NOT VALID (no long lock), then validated.
+ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_rule_check" CHECK (rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed')) NOT VALID;--> statement-breakpoint
+ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_rule_check";--> statement-breakpoint
+-- hand-written: end
+-- hand-written: begin
+-- A widened CHECK on an existing table: added NOT VALID (no long lock), then validated.
 ALTER TABLE "checkin"."staff_alert_pushes" ADD CONSTRAINT "staff_alert_pushes_kind_check" CHECK (kind in ('device_offline', 'device_low_battery', 'device_backlog', 'capacity_near', 'assistance')) NOT VALID;--> statement-breakpoint
 ALTER TABLE "checkin"."staff_alert_pushes" VALIDATE CONSTRAINT "staff_alert_pushes_kind_check";--> statement-breakpoint
 -- hand-written: end
