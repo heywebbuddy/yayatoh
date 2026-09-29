@@ -46,6 +46,13 @@ import {
 } from '@yayatoh/events';
 import { buildRow } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
+import {
+  addPartyGuestCommand,
+  addPlusOneCommand,
+  createPartyCommand,
+  moveGuestCommand,
+  updatePartyGuestCommand,
+} from '@yayatoh/guests';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -1134,6 +1141,81 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
+  // an unnamed plus-one; then an edit and a move, so every history action has rows.
+  const party = await executeCommand(
+    createPartyCommand,
+    {
+      eventId: event.id,
+      name: `${name} Family`,
+      envelopeName: `The ${name} Family`,
+      side: 'Both',
+      vip: true,
+      tags: ['Family'],
+      notes: 'Fixture notes.',
+    },
+    ctx(),
+    ports,
+  );
+  const [linked] = await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from attendees.attendees where event_id = ${event.id} order by created_at limit 1`,
+    ),
+  );
+  const host = await executeCommand(
+    addPartyGuestCommand,
+    {
+      eventId: event.id,
+      partyId: party.id,
+      firstName: 'Fixture',
+      lastName: 'Guest',
+      meal: 'Fish',
+      dietary: 'No nuts',
+      accessibility: 'Step-free seat',
+      address: '1 Fixture Lane',
+      attendeeId: linked?.id ?? null,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    addPartyGuestCommand,
+    {
+      eventId: event.id,
+      partyId: party.id,
+      firstName: 'Kid',
+      lastName: 'Guest',
+      ageClass: 'child',
+      source: 'paper',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(addPlusOneCommand, { eventId: event.id, hostGuestId: host.id }, ctx(), ports);
+  const second = await executeCommand(
+    createPartyCommand,
+    { eventId: event.id, name: `${name} Friends`, side: 'Work' },
+    ctx(),
+    ports,
+  );
+  const friend = await executeCommand(
+    addPartyGuestCommand,
+    { eventId: event.id, partyId: second.id, firstName: 'Friend', lastName: 'Guest' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    updatePartyGuestCommand,
+    { eventId: event.id, guestId: friend.id, firstName: 'Friend', lastName: 'Guest', meal: 'Vegetarian' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    moveGuestCommand,
+    { eventId: event.id, guestId: friend.id, toPartyId: party.id },
+    ctx(),
+    ports,
+  );
   // M1.4g: a published page (linked from the tenant site's navigation) and a published post; a
   // review by the fixture buyer after the event ended, and one report of it.
   const page = await executeCommand(

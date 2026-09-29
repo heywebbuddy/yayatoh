@@ -547,6 +547,13 @@
       "when": 1790698348863,
       "tag": "0077_blue_wolfsbane",
       "breakpoints": true
+    },
+    {
+      "idx": 78,
+      "version": "7",
+      "when": 1790698776465,
+      "tag": "0078_first_lord_tyger",
+      "breakpoints": true
     }
   ]
 }

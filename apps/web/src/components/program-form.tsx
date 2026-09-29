@@ -21,6 +21,8 @@ export type FieldSpec =
       readonly kind: 'text' | 'url' | 'number' | 'datetime-local';
       readonly defaultValue?: string;
       readonly maxLength?: number;
+      /** Completions offered while typing (a datalist). */
+      readonly suggestions?: readonly string[];
     })
   | (Base & { readonly kind: 'textarea'; readonly defaultValue?: string; readonly rows?: number })
   | (Base & {
@@ -174,7 +176,7 @@ export function ProgramForm({
               ) : null}
             </fieldset>
           );
-        return (
+        const input = (
           <Input
             key={f.name}
             id={id(f.name)}
@@ -187,7 +189,20 @@ export function ProgramForm({
             defaultValue={f.defaultValue}
             error={error}
             {...(f.kind === 'number' ? { min: 1, inputMode: 'numeric' as const } : {})}
+            {...(f.suggestions?.length ? { list: `${id(f.name)}-list`, autoComplete: 'off' } : {})}
           />
+        );
+        return f.suggestions?.length ? (
+          <div key={f.name}>
+            {input}
+            <datalist id={`${id(f.name)}-list`}>
+              {f.suggestions.map((v) => (
+                <option key={v} value={v} />
+              ))}
+            </datalist>
+          </div>
+        ) : (
+          input
         );
       })}
       <div aria-live="polite" className="flex flex-col gap-2">
