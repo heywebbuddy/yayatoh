@@ -438,6 +438,9 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@yayatoh/badges':
+        specifier: workspace:*
+        version: link:../../packages/modules/badges
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing

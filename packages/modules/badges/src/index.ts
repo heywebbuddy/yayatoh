@@ -23,7 +23,7 @@ export * from './client.ts';
 export { LINK_TTL_MS, signBatchLink, verifyBatchLink } from './link.ts';
 export { privateColumns } from './private-columns.ts';
 export { type BadgesHtmlInput, badgesHtml } from './render.ts';
-export { samplePreviewQuery, sampleRows } from './sample.ts';
+export { samplePreviewQuery } from './sample.ts';
 export { BATCH_STATUSES, type BatchStatus } from './schema.ts';
 export {
   AssignmentDto,

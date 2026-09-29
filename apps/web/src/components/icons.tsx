@@ -15,6 +15,7 @@ import {
   Heart,
   History,
   House,
+  IdCard,
   Image,
   KeyRound,
   Landmark,
@@ -84,6 +85,7 @@ const ICONS: Record<string, LucideIcon> = {
   link: Link2,
   star: Star,
   undo: Undo2,
+  'id-card': IdCard,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

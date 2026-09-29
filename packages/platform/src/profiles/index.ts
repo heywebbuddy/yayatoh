@@ -153,6 +153,8 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('exhibitors', 'build', 'exhibitors', 'store'),
       item('sponsors', 'build', 'sponsors', 'award'),
       marketing,
+      // M5.5a: badge templates and batch PDFs, before the door.
+      item('badges', 'run', 'badges', 'id-card'),
       onsite,
       libraries,
     ]),

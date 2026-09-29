@@ -32,6 +32,7 @@ export {
 export { splitName, surnameSortKey } from './domain/names.ts';
 export { pruneRibbons, ribbonFor } from './domain/ribbons.ts';
 export { BadgeRow, type BadgeSource, badgeRow, companyOf, placedKinds } from './domain/row.ts';
+export { SAMPLE_CODE, sampleRows } from './domain/samples.ts';
 export {
   BADGE_SIZES,
   type BadgeSize,
