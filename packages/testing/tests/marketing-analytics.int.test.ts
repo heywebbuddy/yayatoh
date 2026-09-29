@@ -12,7 +12,12 @@ import {
   createTrackedLinkCommand,
   deliverabilityReportQuery,
 } from '@yayatoh/marketing';
-import { createNotifier, dispatchDue, evaluateComplaintRateTx, memoryTransports } from '@yayatoh/notifications';
+import {
+  createNotifier,
+  dispatchDue,
+  evaluateComplaintRateTx,
+  memoryTransports,
+} from '@yayatoh/notifications';
 import { addMemberCommand } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -112,13 +117,17 @@ describe('campaign → registrations and revenue', () => {
 
   it('per channel (UTM medium, with the campaign’s sends on its message channel) and per link', async () => {
     const ch = await report({ dimension: 'channel' });
-    expect(ch.rows.map((x) => [x.name, x.sends, x.clicks, x.firstTouch.orders, x.lastTouch.revenueMinor])).toEqual([
+    expect(
+      ch.rows.map((x) => [x.name, x.sends, x.clicks, x.firstTouch.orders, x.lastTouch.revenueMinor]),
+    ).toEqual([
       ['email', 120, 4, 2, 5000],
       ['social', null, 2, 0, 2500],
       ['audio', null, 0, 1, 2500],
     ]);
     const links = await report({ dimension: 'link' });
-    expect(links.rows.map((x) => [x.name, x.link?.medium, x.clicks, x.uniqueClickers, x.lastTouch.orders])).toEqual([
+    expect(
+      links.rows.map((x) => [x.name, x.link?.medium, x.clicks, x.uniqueClickers, x.lastTouch.orders]),
+    ).toEqual([
       [F.campaignName, 'email', 4, 3, 1],
       [F.socialLabel, 'social', 2, 2, 1],
     ]);
@@ -155,7 +164,14 @@ describe('campaign → registrations and revenue', () => {
       kind: 'campaign',
       name: F.campaignName,
       figures: { clicks: 4, sends: 120, lastTouch: { orders: 1, revenueMinor: 5000 } },
-      delivery: { channels: ['email'], sent: 120, delivered: 112, bounced: 8, bounceBps: 666, complaintBps: 0 },
+      delivery: {
+        channels: ['email'],
+        sent: 120,
+        delivered: 112,
+        bounced: 8,
+        bounceBps: 666,
+        complaintBps: 0,
+      },
     });
     expect(d.links.map((l) => l.link?.id)).toEqual([s.campaignLinkId]);
     expect(Object.fromEntries(d.orders.map((o) => [o.orderId, o.touch]))).toEqual({
@@ -208,7 +224,12 @@ describe('deliverability', () => {
   it('rates per org, sending domain and campaign against the alert thresholds', async () => {
     const d = await executeQuery(deliverabilityReportQuery, {}, m.ctx(), ports);
     expect(d.thresholds).toEqual({ minSent: 100, bounceBps: 500, complaintBps: 10, windowDays: 7 });
-    expect(d.org).toMatchObject({ sent: F.orgSent, bounced: 8, bounceBps: F.orgBounceBps, bounceOver: false });
+    expect(d.org).toMatchObject({
+      sent: F.orgSent,
+      bounced: 8,
+      bounceBps: F.orgBounceBps,
+      bounceOver: false,
+    });
     expect(d.domains.map((x) => [x.domain, x.platform, x.sent, x.bounceBps, x.bounceOver])).toEqual([
       ['mail.yayatoh.com', true, 200, 0, false],
       [s.senderDomain, false, 120, F.campaignBounceBps, true],
@@ -306,7 +327,9 @@ describe('deliverability', () => {
     };
     // The fixture org has a verified sending domain (M3.5b); the bare org sends from the platform.
     const [verified] = await withTenant(systemCtx(b.org.id), (tx) =>
-      tx.execute<{ domain: string }>(sql`select domain from notifications.sending_domains where status = 'verified'`),
+      tx.execute<{ domain: string }>(
+        sql`select domain from notifications.sending_domains where status = 'verified'`,
+      ),
     );
     expect(await domainOf(b.org.id)).toEqual([verified?.domain ?? 'mail.yayatoh.com']);
     // (a separate bare org: the fixture's numbers stay exact)
@@ -325,7 +348,8 @@ describe('deliverability', () => {
 
 describe('Command Center tiles', () => {
   const tile = (ctx = m.ctx()) => executeQuery(campaignsWidget.loader, { eventId: s.eventId }, ctx, ports);
-  const mail = (ctx = m.ctx()) => executeQuery(deliverabilityWidget.loader, { eventId: s.eventId }, ctx, ports);
+  const mail = (ctx = m.ctx()) =>
+    executeQuery(deliverabilityWidget.loader, { eventId: s.eventId }, ctx, ports);
 
   it('the campaigns tile shows the event’s exact figures to the marketing role', async () => {
     const t = await tile(userCtx(marketerId, m.orgId));
@@ -410,7 +434,9 @@ describe('permissions and isolation', () => {
     // A's owner acting in B's org is not a member there.
     await expect(report({}, userCtx(m.ownerId, b.org.id))).rejects.toMatchObject({ code: 'forbidden' });
     const [row] = await withTenant(createCtx({ orgId: b.org.id }), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from notifications.messages where dedupe_key like ${`campaign:${s.campaignId}:%`}`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from notifications.messages where dedupe_key like ${`campaign:${s.campaignId}:%`}`,
+      ),
     );
     expect(row?.n).toBe(0);
   });

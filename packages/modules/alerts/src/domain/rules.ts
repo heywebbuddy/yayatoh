@@ -1,6 +1,6 @@
+import { deliverabilityVerdict } from '@yayatoh/notifications/deliverability';
 import { type EventMode, eventMode, type RuleKey, THRESHOLDS } from './config.ts';
 import type { Firing } from './lifecycle.ts';
-import { deliverabilityVerdict } from '@yayatoh/notifications/deliverability';
 
 export type Thresholds = typeof THRESHOLDS;
 
@@ -159,13 +159,12 @@ export function evaluateOrgRules(f: OrgFacts, t: Thresholds = THRESHOLDS): Parti
     bounceBps: t.bounceBps,
     complaintBps: t.complaintBps,
   };
-  const org = deliverabilityVerdict(
-    { sent: f.emailsSent, bounced: f.bounced, complained: f.complained },
-    th,
-  );
+  const org = deliverabilityVerdict({ sent: f.emailsSent, bounced: f.bounced, complained: f.complained }, th);
   const scopes = f.emailScopes ?? [];
   const domainsOver = scopes.filter((s) => s.kind === 'domain' && deliverabilityVerdict(s, th).over).length;
-  const campaignsOver = scopes.filter((s) => s.kind === 'campaign' && deliverabilityVerdict(s, th).over).length;
+  const campaignsOver = scopes.filter(
+    (s) => s.kind === 'campaign' && deliverabilityVerdict(s, th).over,
+  ).length;
   if (f.messagingAutoPaused || org.over || domainsOver > 0 || campaignsOver > 0)
     out.deliverability = fire(f.messagingAutoPaused ? 'critical' : 'warning', f.bounced + f.complained, {
       bounceBps: org.bounceBps,

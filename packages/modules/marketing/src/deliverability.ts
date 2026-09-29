@@ -68,7 +68,11 @@ export async function deliverabilityReportTx(tx: TenantTx, ctx: Ctx): Promise<De
   const names = new Map<string, string>();
   if (ids.length)
     for (const l of await tx
-      .select({ campaignId: trackingLinks.campaignId, label: trackingLinks.label, utm: trackingLinks.utmCampaign })
+      .select({
+        campaignId: trackingLinks.campaignId,
+        label: trackingLinks.label,
+        utm: trackingLinks.utmCampaign,
+      })
       .from(trackingLinks)
       .where(inArray(trackingLinks.campaignId, ids))
       .orderBy(desc(trackingLinks.createdAt)))
@@ -85,9 +89,19 @@ export async function deliverabilityReportTx(tx: TenantTx, ctx: Ctx): Promise<De
     },
     org: rates(b.org),
     domains: b.domains.map((d) => ({ ...rates(d), domain: d.domain, platform: d.platform })),
-    campaigns: b.campaigns.map((c) => ({ ...rates(c), campaignId: c.campaignId, name: names.get(c.campaignId) ?? null })),
+    campaigns: b.campaigns.map((c) => ({
+      ...rates(c),
+      campaignId: c.campaignId,
+      name: names.get(c.campaignId) ?? null,
+    })),
     autoPause: pause
-      ? { active: pause.active, since: pause.since, rateBps: pause.rateBps, complaints: pause.complaints, sent: pause.sent }
+      ? {
+          active: pause.active,
+          since: pause.since,
+          rateBps: pause.rateBps,
+          complaints: pause.complaints,
+          sent: pause.sent,
+        }
       : null,
   });
 }

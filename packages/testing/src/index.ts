@@ -1,12 +1,5 @@
 export { ALERT_FIXTURE, type AlertScenario, alertScenario } from './alerts.ts';
 export {
-  bareOrg,
-  MARKETING_FIXTURE,
-  type MarketingScenario,
-  marketingScenario,
-  seedEmails,
-} from './marketing.ts';
-export {
   AUDIENCE_EDITIONS,
   type AudiencePerson,
   type AudienceScenario,
@@ -22,4 +15,11 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
+export {
+  bareOrg,
+  MARKETING_FIXTURE,
+  type MarketingScenario,
+  marketingScenario,
+  seedEmails,
+} from './marketing.ts';
 export { BULK_ACTIONS, bulkStep, ports, runBulk } from './ports.ts';

@@ -439,7 +439,8 @@ export async function dispatchDueTx(
         lastError: null,
         segments,
         provider: providerOf(provider),
-        senderDomain: row.channel === 'email' ? senderDomainOf(senders.email?.address ?? PLATFORM_SENDER) : null,
+        senderDomain:
+          row.channel === 'email' ? senderDomainOf(senders.email?.address ?? PLATFORM_SENDER) : null,
       });
       if (provider && row.channel !== 'push') health.push({ provider, kind: 'send' });
       // Usage metering (M3.5a): SMS by segment, everything else by message.

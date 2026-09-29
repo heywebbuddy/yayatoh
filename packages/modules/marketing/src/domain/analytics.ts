@@ -252,7 +252,8 @@ const addDays = (day: string, n: number) => {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 };
-const validDay = (day: string) => DAY.test(day) && new Date(`${day}T00:00:00Z`).toISOString().slice(0, 10) === day;
+const validDay = (day: string) =>
+  DAY.test(day) && new Date(`${day}T00:00:00Z`).toISOString().slice(0, 10) === day;
 
 export type RangeProblem = 'invalid_date' | 'from_after_to' | 'range_too_long';
 
@@ -280,10 +281,14 @@ export function dayRange(
 }
 
 /** Parse a campaign key from a URL (`c.{uuid}` or `u.{utm campaign}`). */
-export function parseCampaignKey(key: string): { kind: 'campaign'; id: string } | { kind: 'utm'; campaign: string } | null {
+export function parseCampaignKey(
+  key: string,
+): { kind: 'campaign'; id: string } | { kind: 'utm'; campaign: string } | null {
   if (key.startsWith('c.')) {
     const id = key.slice(2);
-    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id) ? { kind: 'campaign', id } : null;
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id)
+      ? { kind: 'campaign', id }
+      : null;
   }
   if (key.startsWith('u.') && key.length <= 102) return { kind: 'utm', campaign: key.slice(2) };
   return null;

@@ -36,7 +36,14 @@ export interface SendTally {
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
-type Row = { k: string | null; channel: string; sent: number; delivered: number; bounced: number; complained: number };
+type Row = {
+  k: string | null;
+  channel: string;
+  sent: number;
+  delivered: number;
+  bounced: number;
+  complained: number;
+};
 
 async function tallyTx(tx: TenantTx, key: SQL, where: SQL): Promise<Row[]> {
   const rows = await tx.execute<Row>(sql`
@@ -78,7 +85,9 @@ export async function campaignSendStatsTx(
   range: { readonly from: Date; readonly to: Date },
 ): Promise<Array<SendTally & { readonly campaignId: string; readonly channel: string }>> {
   const rows = await tallyTx(tx, campaignKey, sql`${isCampaign} and ${sentBetween(range.from, range.to)}`);
-  return rows.flatMap((r) => (r.k && UUID.test(r.k) ? [{ campaignId: r.k, channel: r.channel, ...tally(r) }] : []));
+  return rows.flatMap((r) =>
+    r.k && UUID.test(r.k) ? [{ campaignId: r.k, channel: r.channel, ...tally(r) }] : [],
+  );
 }
 
 export interface DeliverabilityBreakdown {

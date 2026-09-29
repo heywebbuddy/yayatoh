@@ -1,4 +1,10 @@
 export {
+  eraseSubjectPushDevicesTx,
+  eraseUserNotificationsTx,
+  sendAccountNotice,
+  userPreferencesTx,
+} from './account-data.ts';
+export {
   CAMPAIGN_DEDUPE_PREFIX,
   campaignDedupeKey,
   campaignSendStatsTx,
@@ -11,12 +17,6 @@ export {
   rateBps,
   type SendTally,
 } from './deliverability.ts';
-export {
-  eraseSubjectPushDevicesTx,
-  eraseUserNotificationsTx,
-  sendAccountNotice,
-  userPreferencesTx,
-} from './account-data.ts';
 export {
   DELIVERY_SIGNATURE_TOLERANCE_S,
   DeliveryEvent,

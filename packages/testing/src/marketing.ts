@@ -101,7 +101,8 @@ export async function bareOrg(
   name: string,
 ): Promise<{ orgId: string; ownerId: string; ctx: () => Ctx }> {
   const ownerId = uuidv7();
-  const owner = (orgId: string | null = null) => createCtx({ orgId, actor: { type: 'user', userId: ownerId }, stepUpAt: new Date() });
+  const owner = (orgId: string | null = null) =>
+    createCtx({ orgId, actor: { type: 'user', userId: ownerId }, stepUpAt: new Date() });
   const org = await createOrganization(owner(), { slug, name, defaultProfile: 'concert' }, ports);
   for (const document of AGREEMENT_DOCUMENTS)
     await executeCommand(

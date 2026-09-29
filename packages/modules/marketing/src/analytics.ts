@@ -14,8 +14,8 @@ import {
   type AttributionFact,
   aggregate,
   type ClickTally,
-  DIMENSIONS,
   type DayRange,
+  DIMENSIONS,
   type Dimension,
   dayRange,
   parseCampaignKey,
@@ -106,7 +106,10 @@ interface Facts {
   attributions: AttributionFact[];
   orders: Map<string, OrderOutcomeFact>;
   sends: SendFact[];
-  sendsByCampaign: Map<string, { sent: number; delivered: number; bounced: number; complained: number; channels: Set<string> }>;
+  sendsByCampaign: Map<
+    string,
+    { sent: number; delivered: number; bounced: number; complained: number; channels: Set<string> }
+  >;
 }
 
 /** Gather the facts for a range (optionally one event's links, or a set of links). */
@@ -126,8 +129,7 @@ async function factsTx(
     .orderBy(desc(trackingLinks.createdAt), desc(trackingLinks.id))
     .limit(MAX_LINKS);
   const linkIds = links.map((l) => l.id);
-  const inRange = (col: typeof linkClicks.clickedAt) =>
-    and(gte(col, range.from), lt(col, range.to)) as SQL;
+  const inRange = (col: typeof linkClicks.clickedAt) => and(gte(col, range.from), lt(col, range.to)) as SQL;
 
   const clickRows = linkIds.length
     ? await tx
@@ -176,7 +178,8 @@ async function factsTx(
   const campaignIds = new Set(links.flatMap((l) => (l.campaignId ? [l.campaignId] : [])));
   const allSends = await campaignSendStatsTx(tx, range);
   // With an event (or link) scope, only the campaigns that link there count their sends.
-  const sendRows = opts.eventId || opts.linkWhere ? allSends.filter((s) => campaignIds.has(s.campaignId)) : allSends;
+  const sendRows =
+    opts.eventId || opts.linkWhere ? allSends.filter((s) => campaignIds.has(s.campaignId)) : allSends;
   const sendsByCampaign: Facts['sendsByCampaign'] = new Map();
   for (const s of sendRows) {
     const c = sendsByCampaign.get(s.campaignId) ?? {
@@ -195,7 +198,11 @@ async function factsTx(
   }
   return {
     links,
-    clicks: clickRows.map((r) => ({ linkId: r.linkId, visitor: String(r.visitor), clicks: Number(r.clicks) })),
+    clicks: clickRows.map((r) => ({
+      linkId: r.linkId,
+      visitor: String(r.visitor),
+      clicks: Number(r.clicks),
+    })),
     attributions: scoped,
     orders,
     sends: sendRows.map((s) => ({
@@ -225,13 +232,7 @@ async function eventNamesTx(tx: TenantTx, ids: Iterable<string>) {
   return out;
 }
 
-async function rowsFor(
-  tx: TenantTx,
-  dimension: Dimension,
-  facts: Facts,
-  currency: string,
-  range: DayRange,
-) {
+async function rowsFor(tx: TenantTx, dimension: Dimension, facts: Facts, currency: string, range: DayRange) {
   const { rows, totals } = aggregate({
     dimension,
     currency,
@@ -376,7 +377,10 @@ export const campaignDetailQuery = tenantQuery({
     const linkWhere =
       parsed.kind === 'campaign'
         ? eq(trackingLinks.campaignId, parsed.id)
-        : (and(eq(trackingLinks.utmCampaign, parsed.campaign), sql`${trackingLinks.campaignId} is null`) as SQL);
+        : (and(
+            eq(trackingLinks.utmCampaign, parsed.campaign),
+            sql`${trackingLinks.campaignId} is null`,
+          ) as SQL);
     const facts = await factsTx(tx, range, { linkWhere });
     if (parsed.kind === 'utm') {
       // UTM-only orders of this UTM campaign join the links' records.
@@ -396,7 +400,10 @@ export const campaignDetailQuery = tenantQuery({
           and(
             eq(attributions.model, 'utm'),
             parsed.campaign
-              ? or(eq(attributions.utmCampaign, parsed.campaign), eq(attributions.firstUtmCampaign, parsed.campaign))
+              ? or(
+                  eq(attributions.utmCampaign, parsed.campaign),
+                  eq(attributions.firstUtmCampaign, parsed.campaign),
+                )
               : sql`(${attributions.utmCampaign} is null or ${attributions.firstUtmCampaign} is null)`,
             gte(attributions.createdAt, new Date(range.from.getTime() - SLACK_MS)),
             lt(attributions.createdAt, new Date(range.to.getTime() + SLACK_MS)),
@@ -423,7 +430,13 @@ export const campaignDetailQuery = tenantQuery({
       otherCurrencyOrders: 0,
       conversionBps: 0,
     };
-    const { key: _k, kind: _kind, name: _n, link: _l, ...figures } = row ?? { ...zero, key: '', kind: 'utm', name: null, link: null };
+    const {
+      key: _k,
+      kind: _kind,
+      name: _n,
+      link: _l,
+      ...figures
+    } = row ?? { ...zero, key: '', kind: 'utm', name: null, link: null };
     const links = (await rowsFor(tx, 'link', facts, currency, range)).rows;
 
     // The orders it touched in the range (first, last or both).
@@ -584,4 +597,3 @@ export function analyticsCsv(
   out += line(label.total, report.totals, null);
   return out;
 }
-
