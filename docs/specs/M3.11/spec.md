@@ -46,6 +46,9 @@ The help center and the marketing pages live on the **platform CMS**: tenant tab
 - Subscribing to status updates by email; component uptime history bars; posting incidents to Better Stack from the admin console (the admin page links to the provider instead).
 - Turnstile in the public CSP (owner inbox) before the contact form's challenge can load in production.
 
+### Gate results (M3.11b, 2026-09-29)
+`pnpm verify` green (lint, check:modules, typecheck, 1,197 unit and 803 integration tests). After `pnpm db:bootstrap` and fresh web + admin builds: the whole web e2e suite 1,244 passed / 34 skipped / 0 failed (3 viewports), the whole admin suite 49 passed / 1 skipped / 0 failed. No pre-existing failures seen.
+
 ### Acceptance (M3.11b)
 | ID | Criterion | Test |
 |---|---|---|
