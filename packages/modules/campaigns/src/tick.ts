@@ -25,7 +25,7 @@ export async function dueScheduledCampaignsTx(
 ): Promise<{ orgId: string; campaignId: string }[]> {
   const rows = await tx.execute<{ org_id: string; id: string }>(sql`
     select org_id, id from campaigns.campaigns
-    where status = 'scheduled' and scheduled_at <= ${now}
+    where status = 'scheduled' and scheduled_at <= ${now.toISOString()}::timestamptz
     order by scheduled_at, id limit ${limit}`);
   return rows.map((r) => ({ orgId: r.org_id, campaignId: r.id }));
 }
@@ -45,7 +45,7 @@ export async function campaignLanesTx(tx: TenantTx, now: Date): Promise<OrgLane[
   if (rows.length === 0) return [];
   const recent = await tx.execute<{ org_id: string; n: number }>(sql`
     select org_id, count(*)::int as n from campaigns.campaign_recipients
-    where released_at > ${new Date(now.getTime() - 60_000)}
+    where released_at > ${new Date(now.getTime() - 60_000).toISOString()}::timestamptz
       and org_id = any(ARRAY[${sql.join(
         [...new Set(rows.map((r) => r.org_id))].map((id) => sql`${id}`),
         sql`, `,
