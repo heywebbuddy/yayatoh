@@ -241,6 +241,8 @@ export {
   orderByManageToken,
   orderDetailQuery,
   orderHolderTarget,
+  orderHeadlinesTx,
+  orderPolicySnapshotTx,
   orderHoldingTx,
   ordersForContactTx,
   searchOrdersQuery,

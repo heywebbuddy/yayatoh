@@ -170,6 +170,34 @@
       "subject": "{eventName} перенесено",
       "intro": "{eventName} перенесено. Ваши билеты остаются действительными на новую дату. Если вы не сможете прийти, запросите возврат на странице заказа по правилам возврата организатора.",
       "cta": "Открыть мой заказ"
+    },
+    "orders.credit-note": {
+      "subject": "Кредит-нота {number} для {eventName}",
+      "intro": "{org} выставил кредит-ноту {number} на {amount} по вашему заказу на {eventName}. {storeCredit, select, yes {Введите код {code} при оплате, чтобы использовать её в следующем заказе у {org}.} other {Эта сумма вам возвращена.}}",
+      "cta": "Посмотреть заказ"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Сообщение от {org} о вашем заказе на {eventName}:",
+      "cta": "Посмотреть заказ"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Скоро срок доказательств по спору: {eventName}",
+      "intro": "Доказательства по спору на {amount} по заказу на {eventName} нужно отправить через {hours, plural, =0 {менее часа} one {# час} few {# часа} many {# часов} other {# часа}}. Проверьте и отправьте их до срока."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} отправил(а) вам билет на {eventName}",
+      "intro": "{fromName} передаёт вам билет на {eventName}. Получите его с этим адресом электронной почты, чтобы получить собственный QR-код.",
+      "cta": "Получить билет"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Ваш билет на {eventName} передан",
+      "intro": "{toName} получил(а) билет на {eventName}, который вы передали. Ваш старый QR-код больше не действует."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Ваш билет на {eventName}",
+      "intro": "Вы получили билет на {eventName}, который отправил(а) {fromName}. Ваш собственный QR-код готов.",
+      "cta": "Посмотреть билет"
     }
   },
   "roles": {

@@ -170,6 +170,34 @@
       "subject": "{eventName} se ha aplazado",
       "intro": "{eventName} se ha aplazado. Tus entradas siguen siendo válidas para la nueva fecha. Si no puedes asistir, puedes pedir un reembolso desde la página de tu pedido según la política de reembolso del organizador.",
       "cta": "Ver mi pedido"
+    },
+    "orders.credit-note": {
+      "subject": "Nota de crédito {number} para {eventName}",
+      "intro": "{org} emitió la nota de crédito {number} por {amount} en tu pedido para {eventName}. {storeCredit, select, yes {Usa el código {code} al pagar para gastarla en un próximo pedido con {org}.} other {Este importe se te ha reembolsado.}}",
+      "cta": "Ver mi pedido"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Un mensaje de {org} sobre tu pedido para {eventName}:",
+      "cta": "Ver mi pedido"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Pruebas de disputa por vencer: {eventName}",
+      "intro": "Las pruebas de una disputa de {amount} sobre un pedido para {eventName} vencen en {hours, plural, =0 {menos de una hora} one {# hora} other {# horas}}. Revísalas y envíalas antes del plazo."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} te envió una entrada para {eventName}",
+      "intro": "{fromName} te está transfiriendo una entrada para {eventName}. Reclámala con esta dirección de correo para obtener tu propio código QR.",
+      "cta": "Reclamar mi entrada"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Tu entrada para {eventName} fue transferida",
+      "intro": "{toName} reclamó la entrada que transferiste para {eventName}. Tu código QR anterior ya no funciona."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Tu entrada para {eventName}",
+      "intro": "Reclamaste la entrada que {fromName} te envió para {eventName}. Tu propio código QR está listo.",
+      "cta": "Ver mi entrada"
     }
   },
   "roles": {

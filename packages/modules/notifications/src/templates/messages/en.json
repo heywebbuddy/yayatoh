@@ -170,6 +170,34 @@
       "subject": "{eventName} is postponed",
       "intro": "{eventName} has been postponed. Your tickets stay valid for the new date. If you can’t make it, you can ask for a refund from your order page under the organizer’s refund policy.",
       "cta": "View my order"
+    },
+    "orders.credit-note": {
+      "subject": "Credit note {number} for {eventName}",
+      "intro": "{org} issued credit note {number} for {amount} on your order for {eventName}. {storeCredit, select, yes {Use the code {code} at checkout to spend it on a future order with {org}.} other {This amount was refunded to you.}}",
+      "cta": "View my order"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "A message from {org} about your order for {eventName}:",
+      "cta": "View my order"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Dispute evidence due soon: {eventName}",
+      "intro": "The evidence for a {amount} dispute on an order for {eventName} is due in {hours, plural, =0 {less than an hour} one {# hour} other {# hours}}. Review it and submit it before the deadline."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} sent you a ticket for {eventName}",
+      "intro": "{fromName} is transferring a ticket for {eventName} to you. Claim it with this email address to get your own QR code.",
+      "cta": "Claim my ticket"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Your ticket for {eventName} was transferred",
+      "intro": "{toName} claimed the ticket you transferred for {eventName}. Your old QR code no longer works."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Your ticket for {eventName}",
+      "intro": "You claimed the ticket {fromName} sent you for {eventName}. Your own QR code is ready.",
+      "cta": "View my ticket"
     }
   },
   "roles": {

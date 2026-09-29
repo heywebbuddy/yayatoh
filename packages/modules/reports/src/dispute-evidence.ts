@@ -2,10 +2,11 @@ import { admissionsForTicketsTx, scanLogForTicketsTx } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { orderMessagesQuery } from '@yayatoh/notifications';
-import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
+import { orderDetailQuery, orderPolicySnapshotTx, orderRefundsQuery } from '@yayatoh/orders';
 import { disputeTx, EVIDENCE_OPTIONAL_SECTIONS } from '@yayatoh/payments';
 import { tenantQuery } from '@yayatoh/platform';
 import { legalPageTx, organizationNameTx } from '@yayatoh/tenancy';
+import { transfersForOrderTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
 
 /** Bounded so the packet stays under the card networks' limits (4.5 MB / 19 pages). */
@@ -55,6 +56,28 @@ export const DisputeEvidenceDto = z.object({
     z.object({ amountMinor: z.int(), status: z.string(), createdAt: z.date(), reason: z.string() }),
   ),
   refundPolicy: z.object({ body: z.string(), updatedAt: z.date() }).nullable(),
+  /** M3.10c: the refund terms the buyer saw at purchase (the order's snapshot; null before M3.10b). */
+  policySnapshot: z
+    .object({
+      kind: z.enum(['unset', 'none', 'until', 'always']),
+      daysBefore: z.int().nullable(),
+      retainedMinor: z.int(),
+    })
+    .nullable()
+    .default(null),
+  /** M3.10c: tickets passed on to someone else (who held them, who claimed them, when). */
+  transfers: z
+    .array(
+      z.object({
+        serial: z.int(),
+        fromName: z.string(),
+        toName: z.string(),
+        state: z.string(),
+        at: z.date(),
+        claimedAt: z.date().nullable(),
+      }),
+    )
+    .default([]),
   /** M1.6e: every door scan of these tickets (the access log), rejections included. */
   scans: z.array(
     z.object({
@@ -158,6 +181,15 @@ export const disputeEvidenceQuery = tenantQuery({
         reason: r.reason,
       })),
       refundPolicy: await legalPageTx(tx, 'refund'),
+      policySnapshot: await orderPolicySnapshotTx(tx, d.orderId),
+      transfers: (await transfersForOrderTx(tx, d.orderId, ctx.now)).map((t) => ({
+        serial: t.ticketSerial,
+        fromName: t.fromName,
+        toName: t.toName,
+        state: t.state,
+        at: t.createdAt,
+        claimedAt: t.claimedAt,
+      })),
       scans: log.map((l) => ({
         serial: serialOf.get(l.ticketId ?? '') ?? 0,
         at: l.scannedAt,
@@ -251,6 +283,17 @@ export const EVIDENCE_LABELS = [
   'message',
   'channel',
   'trimmed',
+  'termsAtPurchase',
+  'termsUnset',
+  'termsNone',
+  'termsUntil',
+  'termsAlways',
+  'termsKept',
+  'transfers',
+  'transferFrom',
+  'transferTo',
+  'transferState',
+  'transferClaimed',
 ] as const;
 export type EvidenceLabel = (typeof EVIDENCE_LABELS)[number];
 
@@ -365,6 +408,24 @@ export function evidenceDocument(
           },
           ...(e.ticketsOmitted > 0 ? { note: l('omitted', { n: e.ticketsOmitted }) } : {}),
         },
+        ...(e.transfers.length
+          ? [
+              {
+                id: 'tickets',
+                title: l('transfers'),
+                table: {
+                  head: [l('serial'), l('transferFrom'), l('transferTo'), l('transferState'), l('transferClaimed')],
+                  body: e.transfers.map((t) => [
+                    `#${t.serial}`,
+                    t.fromName,
+                    t.toName,
+                    t.state,
+                    t.claimedAt ? at.format(t.claimedAt) : '—',
+                  ]),
+                },
+              },
+            ]
+          : []),
         e.scans.length
           ? {
               id: 'accessLog',
@@ -413,6 +474,29 @@ export function evidenceDocument(
               note: l('policyUpdated', { date: at.format(e.refundPolicy.updatedAt) }),
             }
           : { id: 'refundPolicy', title: l('refundPolicy'), text: l('noPolicy') },
+        ...(e.policySnapshot
+          ? [
+              {
+                id: 'refundPolicy',
+                title: l('termsAtPurchase'),
+                rows: [
+                  [
+                    l('termsAtPurchase'),
+                    e.policySnapshot.kind === 'until'
+                      ? l('termsUntil', { days: e.policySnapshot.daysBefore ?? 0 })
+                      : e.policySnapshot.kind === 'none'
+                        ? l('termsNone')
+                        : e.policySnapshot.kind === 'always'
+                          ? l('termsAlways')
+                          : l('termsUnset'),
+                  ] as Row,
+                  ...(e.policySnapshot.retainedMinor > 0
+                    ? [[l('termsKept'), money(e.policySnapshot.retainedMinor, cur)] as Row]
+                    : []),
+                ],
+              },
+            ]
+          : []),
       ] satisfies EvidenceDocument['sections'][number][]
     ).filter((sec) => !(e.review.excluded as readonly string[]).includes(sec.id ?? '')),
   };

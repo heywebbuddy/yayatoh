@@ -305,3 +305,22 @@ export async function orderHoldingTx(
     liveTicketEnds,
   };
 }
+
+/** Buyer and event of some orders (M3.10c dispute queue): ids in, headline fields out. */
+export async function orderHeadlinesTx(tx: TenantTx, orderIds: readonly string[]) {
+  if (orderIds.length === 0) return new Map<string, { buyerName: string; buyerEmail: string; eventId: string }>();
+  const rows = await tx
+    .select({ id: orders.id, buyerName: orders.buyerName, buyerEmail: orders.buyerEmail, eventId: orders.eventId })
+    .from(orders)
+    .where(inArray(orders.id, [...orderIds]));
+  return new Map(rows.map((r) => [r.id, r]));
+}
+
+/** The refund terms shown when the order was bought (M3.10b snapshot; null before M3.10b). */
+export async function orderPolicySnapshotTx(tx: TenantTx, orderId: string) {
+  const [r] = await tx
+    .select({ s: orders.refundPolicySnapshot })
+    .from(orders)
+    .where(eq(orders.id, orderId));
+  return r?.s ?? null;
+}

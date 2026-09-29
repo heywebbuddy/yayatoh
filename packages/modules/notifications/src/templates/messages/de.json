@@ -170,6 +170,34 @@
       "subject": "{eventName} wurde verschoben",
       "intro": "{eventName} wurde verschoben. Deine Tickets bleiben für den neuen Termin gültig. Wenn du nicht kommen kannst, kannst du auf deiner Bestellseite nach der Erstattungsrichtlinie des Veranstalters eine Erstattung anfragen.",
       "cta": "Meine Bestellung ansehen"
+    },
+    "orders.credit-note": {
+      "subject": "Gutschrift {number} für {eventName}",
+      "intro": "{org} hat die Gutschrift {number} über {amount} zu deiner Bestellung für {eventName} ausgestellt. {storeCredit, select, yes {Löse den Code {code} an der Kasse ein, um ihn bei einer künftigen Bestellung bei {org} zu nutzen.} other {Dieser Betrag wurde dir erstattet.}}",
+      "cta": "Meine Bestellung ansehen"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Eine Nachricht von {org} zu deiner Bestellung für {eventName}:",
+      "cta": "Meine Bestellung ansehen"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Nachweise für Rückbuchung bald fällig: {eventName}",
+      "intro": "Die Nachweise für eine Rückbuchung über {amount} zu einer Bestellung für {eventName} sind in {hours, plural, =0 {weniger als einer Stunde} one {# Stunde} other {# Stunden}} fällig. Prüfe sie und reiche sie vor Fristende ein."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} hat dir ein Ticket für {eventName} geschickt",
+      "intro": "{fromName} überträgt dir ein Ticket für {eventName}. Fordere es mit dieser E-Mail-Adresse an, um deinen eigenen QR-Code zu erhalten.",
+      "cta": "Mein Ticket anfordern"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Dein Ticket für {eventName} wurde übertragen",
+      "intro": "{toName} hat das Ticket angenommen, das du für {eventName} übertragen hast. Dein alter QR-Code gilt nicht mehr."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Dein Ticket für {eventName}",
+      "intro": "Du hast das Ticket angenommen, das dir {fromName} für {eventName} geschickt hat. Dein eigener QR-Code ist bereit.",
+      "cta": "Mein Ticket ansehen"
     }
   },
   "roles": {

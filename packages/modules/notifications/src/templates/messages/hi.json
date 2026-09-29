@@ -170,6 +170,34 @@
       "subject": "{eventName} स्थगित",
       "intro": "{eventName} स्थगित कर दिया गया है। आपके टिकट नई तारीख के लिए मान्य रहेंगे। अगर आप नहीं आ सकते, तो आयोजक की रिफ़ंड नीति के अनुसार अपने ऑर्डर पेज से रिफ़ंड माँग सकते हैं।",
       "cta": "मेरा ऑर्डर देखें"
+    },
+    "orders.credit-note": {
+      "subject": "{eventName} के लिए क्रेडिट नोट {number}",
+      "intro": "{org} ने {eventName} के आपके ऑर्डर पर {amount} का क्रेडिट नोट {number} जारी किया है। {storeCredit, select, yes {{org} के साथ अगले ऑर्डर में इसका उपयोग करने के लिए चेकआउट पर कोड {code} डालें।} other {यह राशि आपको वापस कर दी गई है।}}",
+      "cta": "मेरा ऑर्डर देखें"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "{eventName} के आपके ऑर्डर के बारे में {org} का संदेश:",
+      "cta": "मेरा ऑर्डर देखें"
+    },
+    "payments.dispute-deadline": {
+      "subject": "विवाद के साक्ष्य की समय-सीमा निकट: {eventName}",
+      "intro": "{eventName} के एक ऑर्डर पर {amount} के विवाद के साक्ष्य {hours, plural, =0 {एक घंटे से कम} one {# घंटे} other {# घंटे}} में देय हैं। समय-सीमा से पहले इनकी समीक्षा करके जमा करें।"
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} ने आपको {eventName} का टिकट भेजा है",
+      "intro": "{fromName} आपको {eventName} का एक टिकट ट्रांसफ़र कर रहे हैं। अपना QR कोड पाने के लिए इसी ईमेल पते से इसे क्लेम करें।",
+      "cta": "मेरा टिकट क्लेम करें"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "{eventName} का आपका टिकट ट्रांसफ़र हो गया",
+      "intro": "{toName} ने {eventName} का वह टिकट क्लेम कर लिया जो आपने ट्रांसफ़र किया था। आपका पुराना QR कोड अब काम नहीं करता।"
+    },
+    "ticketing.transfer-received": {
+      "subject": "{eventName} का आपका टिकट",
+      "intro": "आपने {eventName} का वह टिकट क्लेम कर लिया जो {fromName} ने भेजा था। आपका अपना QR कोड तैयार है।",
+      "cta": "मेरा टिकट देखें"
     }
   },
   "roles": {

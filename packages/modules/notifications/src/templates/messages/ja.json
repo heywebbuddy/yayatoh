@@ -170,6 +170,34 @@
       "subject": "{eventName} は延期されました",
       "intro": "{eventName} は延期されました。チケットは新しい日程でも有効です。参加できない場合は、主催者の返金ポリシーに従い、注文ページから返金をリクエストできます。",
       "cta": "注文を見る"
+    },
+    "orders.credit-note": {
+      "subject": "{eventName} のクレジットノート {number}",
+      "intro": "{org} が {eventName} のご注文に対して {amount} のクレジットノート {number} を発行しました。{storeCredit, select, yes {{org} での今後のご注文で、お支払い時にコード {code} を入力してご利用ください。} other {この金額は返金済みです。}}",
+      "cta": "注文を見る"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "{eventName} のご注文について {org} からのメッセージ:",
+      "cta": "注文を見る"
+    },
+    "payments.dispute-deadline": {
+      "subject": "異議申し立ての証拠期限が近づいています: {eventName}",
+      "intro": "{eventName} の注文に対する {amount} の異議申し立ての証拠提出期限まで {hours, plural, =0 {1時間未満} other {#時間}} です。期限までに確認して提出してください。"
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} さんから {eventName} のチケットが届きました",
+      "intro": "{fromName} さんが {eventName} のチケットをあなたに譲渡しようとしています。このメールアドレスで受け取ると、あなた専用の QR コードが発行されます。",
+      "cta": "チケットを受け取る"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "{eventName} のチケットが譲渡されました",
+      "intro": "{toName} さんが、あなたが譲渡した {eventName} のチケットを受け取りました。以前の QR コードは使えなくなりました。"
+    },
+    "ticketing.transfer-received": {
+      "subject": "{eventName} のチケット",
+      "intro": "{fromName} さんから届いた {eventName} のチケットを受け取りました。あなた専用の QR コードの準備ができています。",
+      "cta": "チケットを見る"
     }
   },
   "roles": {

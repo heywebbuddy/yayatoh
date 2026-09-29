@@ -57,6 +57,46 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'name', 'eventName', 'reason'],
   },
+  // M3.10c support tools: a credit note (store credit code or recorded refund), a support macro's
+  // reply, an approaching dispute evidence deadline (finance), and ticket transfers (the claim link
+  // to the recipient, then the outcome to both sides).
+  'orders.credit-note': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'storeCredit', 'code'],
+  },
+  'orders.support-reply': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'subject', 'body'],
+  },
+  'payments.dispute-deadline': {
+    category: 'sales',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin', 'finance'],
+    params: ['eventName', 'amountMinor', 'currency', 'hours'],
+  },
+  'ticketing.transfer-offered': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'fromName', 'eventName'],
+  },
+  'ticketing.transfer-completed': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['name', 'toName', 'eventName'],
+  },
+  'ticketing.transfer-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'fromName', 'eventName'],
+  },
   'events.postponed': {
     category: 'transactional',
     channels: ['email'],

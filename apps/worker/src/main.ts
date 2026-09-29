@@ -12,7 +12,7 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import { alertDisputeDeadlines, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { startWorker } from './worker.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
@@ -75,6 +75,12 @@ setInterval(() => {
     .then(() => sweepWaitlists())
     .catch((err) => console.error('waitlist sweeper', err));
 }, 30_000).unref();
+
+// Dispute evidence deadline alerts (M3.10c): hourly (leader only); each level is raised once.
+setInterval(() => {
+  if (!release || stopping) return;
+  alertDisputeDeadlines().catch((err) => console.error('dispute alerts', err));
+}, 3_600_000).unref();
 
 // Staff impersonations end after an hour (M1.2e): record the end in the org's audit log (leader only).
 setInterval(() => {
