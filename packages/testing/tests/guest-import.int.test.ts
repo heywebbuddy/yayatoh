@@ -392,7 +392,8 @@ describe('guest import (M4.1b)', () => {
     ]);
     expect(new Set(h.map((e) => e.source))).toEqual(new Set(['import']));
     expect(new Set(h.map((e) => e.detail.batchId))).toEqual(new Set([staged.batchId]));
-    expect(h.every((e) => e.actor === `user:${a.ownerId}`)).toBe(false); // the runner acts as the system
+    // The member who started the import, not the job runner.
+    expect(new Set(h.map((e) => e.actor))).toEqual(new Set([`user:${a.ownerId}`]));
     const luis = h.find((e) => e.action === 'guest_added' && e.fields.includes('dietary'));
     expect(luis?.fields).toEqual(
       expect.arrayContaining([

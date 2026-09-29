@@ -2,7 +2,14 @@ import { CsvError, csvRow, decodeText, parseCsv, parseXlsx } from '@yayatoh/csv'
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
-import { bulkCommands, defineBulkAction, keyVault, tenantCommand, tenantQuery } from '@yayatoh/platform';
+import {
+  bulkCommands,
+  bulkOperationRequesterTx,
+  defineBulkAction,
+  keyVault,
+  tenantCommand,
+  tenantQuery,
+} from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull, isNull, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { fullName, type GuestLike, nextPrimary } from './domain/guests.ts';
@@ -606,8 +613,11 @@ export const guestImportAction = defineBulkAction({
       .where(eq(importBatches.id, b.id));
     return ids.map((i) => i.pid as string);
   },
-  run: async (tx, ctx, ids) => {
+  run: async (tx, runner, ids, _params, meta) => {
     if (ids.length === 0) return { results: [] };
+    // The runner is a system actor; the history names the member who started the import.
+    const by = await bulkOperationRequesterTx(tx, meta.operationId);
+    const ctx: Ctx = by ? { ...runner, actor: { type: 'user', userId: by } } : runner;
     const orgId = requireOrg(ctx);
     const [one] = await tx
       .select({ batchId: importRows.batchId })
@@ -725,7 +735,9 @@ async function createPartyTx(tx: TenantTx, ctx: Ctx, b: BatchRow, partyId: strin
     tags: [...p.tags],
     source: 'import',
   });
-  const ids = p.guests.map(() => uuidv7());
+  // Ids in list order (the list sorts a party's guests by creation, then id; they share a time).
+  const t0 = Date.now();
+  const ids = p.guests.map((_, i) => uuidv7(t0 + i));
   const like: GuestLike[] = p.guests.map((g, i) => ({
     id: ids[i] as string,
     kind: g.kind,
