@@ -425,23 +425,31 @@ test.describe('venue map and seat finder (M1.7e)', () => {
     await expect(guest.getByTestId('venue-map').locator('[data-highlight]')).toHaveCount(1);
     await expectAccessible(guest);
 
-    // Past 30 lookups a minute from this device: a challenge instead of a block.
+    // Past 30 lookups a minute from this device: a challenge instead of a block. The limit counts
+    // in fixed windows aligned to the minute (platform rate-limit): start early in one, so the
+    // window can't roll over between reaching the limit and proving it (CI run 36574854587: the
+    // lookup after the challenge landed in a new window and was rightly answered).
+    const second = new Date().getSeconds();
+    if (second > 25) await guest.waitForTimeout((60 - second) * 1000 + 250);
     const challenge = guest.getByRole('group', { name: "Please confirm you're a person" });
+    const answered = () => guest.waitForResponse((r) => r.request().method() === 'POST');
     let tries = 2;
     while (!(await challenge.isVisible()) && tries < 70) {
       await field.fill(`Nobody ${tries}`);
-      await Promise.all([guest.waitForResponse((r) => r.request().method() === 'POST'), find.click()]);
+      await Promise.all([answered(), find.click()]);
       tries++;
     }
     await expect(challenge).toBeVisible();
     expect(tries).toBeGreaterThan(30);
     await expectAccessible(guest);
+    // Each assertion below reads the server's answer, never the form still showing "Checking…".
     await field.fill(zed);
-    await find.click();
+    await Promise.all([answered(), find.click()]);
+    await expect(find).toHaveText('Find my seat');
     await expect(challenge).toBeVisible();
     await expect(guest.getByRole('region', { name: 'Your seat', exact: true })).toHaveCount(0);
     await challenge.getByLabel("I'm a person (test check)").check();
-    await find.click();
+    await Promise.all([answered(), find.click()]);
     await expect(guest.getByRole('region', { name: 'Your seat', exact: true })).toContainText(
       'Table 1 · Seat 1',
     );

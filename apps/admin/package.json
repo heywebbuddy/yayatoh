@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
-    "start": "next start --port 3001",
+    "start": "next start --port 3001 --keepAliveTimeout 75000",
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test"
   },

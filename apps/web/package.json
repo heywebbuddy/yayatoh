@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node scripts/copy-zxing.ts && next dev --port 3000",
     "build": "node scripts/copy-zxing.ts && next build",
-    "start": "next start",
+    "start": "next start --keepAliveTimeout 75000",
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test",
     "seed": "node scripts/seed.ts",

@@ -3,6 +3,15 @@ import { defineConfig, devices } from '@playwright/test';
 import { frontDoorEnv, legacyStubServer } from './e2e/front-door-env.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
+/**
+ * Idle keep-alive sockets stay open this long (batch 3d root cause of the ECONNRESET flakes, CI runs
+ * 36573133566 and 36597004367). Node closes an idle keep-alive socket after `keepAliveTimeout`
+ * (5 s, plus Node 24's 1 s buffer); Playwright's request agent keeps sockets with no idle limit of
+ * its own, so a `page.request` call sent as the server closes its socket (easier under CI load, when
+ * the runner's event loop is late to see the FIN) is reset. Here the server outlives any test, so
+ * the client always closes first.
+ */
+const KEEP_ALIVE_MS = 600_000;
 
 /**
  * Accessibility and journey checks at 375 / 768 / 1280 px (roadmap §9 CI gates).
@@ -43,7 +52,7 @@ export default defineConfig({
         {
           // Run next directly (a pnpm wrapper would not forward the stop signal) and bound the
           // shutdown so a lingering connection pool can never hang the run.
-          command: `pnpm exec next start -p ${PORT}`,
+          command: `pnpm exec next start -p ${PORT} --keepAliveTimeout ${KEEP_ALIVE_MS}`,
           port: PORT,
           reuseExistingServer: true,
           timeout: 120_000,
