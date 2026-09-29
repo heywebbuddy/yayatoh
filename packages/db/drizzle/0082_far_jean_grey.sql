@@ -77,7 +77,7 @@ ALTER TABLE "guests"."rsvp_history" ADD CONSTRAINT "rsvp_history_action_check" C
 ALTER TABLE "guests"."rsvp_history" VALIDATE CONSTRAINT "rsvp_history_action_check";--> statement-breakpoint
 CREATE POLICY "invitations_tenant_isolation" ON "guests"."invitations" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
 CREATE POLICY "sub_event_responses_tenant_isolation" ON "guests"."sub_event_responses" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
-CREATE POLICY "sub_events_tenant_isolation" ON "guests"."sub_events" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));;--> statement-breakpoint
+CREATE POLICY "sub_events_tenant_isolation" ON "guests"."sub_events" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
 -- hand-written: begin
 -- M4.1c cross-module composite FKs (guests is tier 3; events tier 2, venues tier 1). A sub-event,
 -- an invitation and a response belong to one event of the org; the event takes them with it.
