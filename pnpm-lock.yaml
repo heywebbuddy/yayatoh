@@ -426,6 +426,9 @@ importers:
       '@yayatoh/ai':
         specifier: workspace:*
         version: link:../../packages/modules/ai
+      '@yayatoh/alerts':
+        specifier: workspace:*
+        version: link:../../packages/modules/alerts
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1
@@ -601,6 +604,9 @@ importers:
 
   apps/worker:
     dependencies:
+      '@yayatoh/alerts':
+        specifier: workspace:*
+        version: link:../../packages/modules/alerts
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../../packages/modules/attendees
@@ -2174,6 +2180,9 @@ importers:
       '@yayatoh/ai':
         specifier: workspace:*
         version: link:../modules/ai
+      '@yayatoh/alerts':
+        specifier: workspace:*
+        version: link:../modules/alerts
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../modules/attendees

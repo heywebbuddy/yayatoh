@@ -16,6 +16,7 @@
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/api-v1": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/alerts": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
