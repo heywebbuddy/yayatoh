@@ -75,7 +75,10 @@
         "refund": "Refund",
         "order-link": "Order link",
         "refund-requested": "Refund request",
-        "refund-declined": "Refund request declined"
+        "refund-declined": "Refund request declined",
+        "waitlist-joined": "Waitlist confirmation",
+        "waitlist-offer": "Waitlist offer",
+        "waitlist-expired": "Waitlist offer expired"
       },
       "events": {
         "reminder": "Event reminder",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "Ticket claim link",
-        "holder-link": "Link to tickets"
+        "holder-link": "Link to tickets",
+        "tickets-resent": "Tickets resent",
+        "ticket-cancelled": "Ticket cancelled"
       },
       "attendees": {
         "message": "Message from the organizer"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "Checkout email code",
-        "sign-in": "My tickets sign-in"
+        "sign-in": "My tickets sign-in",
+        "waitlist-code": "Waitlist email code"
       },
       "security": {
         "fraud_signal": "Fraud alert"

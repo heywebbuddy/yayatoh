@@ -75,7 +75,10 @@
         "refund": "退款",
         "order-link": "订单链接",
         "refund-requested": "退款申请",
-        "refund-declined": "退款申请被拒"
+        "refund-declined": "退款申请被拒",
+        "waitlist-joined": "候补名单确认",
+        "waitlist-offer": "候补名单购票邀请",
+        "waitlist-expired": "候补名单购票邀请已过期"
       },
       "events": {
         "reminder": "活动提醒",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "门票领取链接",
-        "holder-link": "门票链接"
+        "holder-link": "门票链接",
+        "tickets-resent": "门票重新发送",
+        "ticket-cancelled": "门票已取消"
       },
       "attendees": {
         "message": "主办方消息"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "结账邮箱验证码",
-        "sign-in": "我的门票登录"
+        "sign-in": "我的门票登录",
+        "waitlist-code": "候补名单邮箱验证码"
       },
       "security": {
         "fraud_signal": "欺诈警报"

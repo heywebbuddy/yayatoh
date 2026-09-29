@@ -75,7 +75,10 @@
         "refund": "Reembolso",
         "order-link": "Enlace del pedido",
         "refund-requested": "Solicitud de reembolso",
-        "refund-declined": "Solicitud de reembolso rechazada"
+        "refund-declined": "Solicitud de reembolso rechazada",
+        "waitlist-joined": "Confirmación de la lista de espera",
+        "waitlist-offer": "Oferta de la lista de espera",
+        "waitlist-expired": "Oferta de la lista de espera vencida"
       },
       "events": {
         "reminder": "Recordatorio del evento",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "Enlace para reclamar entrada",
-        "holder-link": "Enlace a las entradas"
+        "holder-link": "Enlace a las entradas",
+        "tickets-resent": "Entradas reenviadas",
+        "ticket-cancelled": "Entrada cancelada"
       },
       "attendees": {
         "message": "Mensaje del organizador"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "Código de correo en el pago",
-        "sign-in": "Acceso a Mis entradas"
+        "sign-in": "Acceso a Mis entradas",
+        "waitlist-code": "Código de correo de la lista de espera"
       },
       "security": {
         "fraud_signal": "Alerta de fraude"

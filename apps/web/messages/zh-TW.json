@@ -75,7 +75,10 @@
         "refund": "退款",
         "order-link": "訂單連結",
         "refund-requested": "退款申請",
-        "refund-declined": "退款申請遭拒"
+        "refund-declined": "退款申請遭拒",
+        "waitlist-joined": "候補名單確認",
+        "waitlist-offer": "候補名單購票邀請",
+        "waitlist-expired": "候補名單購票邀請已逾期"
       },
       "events": {
         "reminder": "活動提醒",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "票券領取連結",
-        "holder-link": "票券連結"
+        "holder-link": "票券連結",
+        "tickets-resent": "票券重新寄送",
+        "ticket-cancelled": "票券已取消"
       },
       "attendees": {
         "message": "主辦單位訊息"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "結帳電子郵件驗證碼",
-        "sign-in": "我的票券登入"
+        "sign-in": "我的票券登入",
+        "waitlist-code": "候補名單電子郵件驗證碼"
       },
       "security": {
         "fraud_signal": "詐欺警示"

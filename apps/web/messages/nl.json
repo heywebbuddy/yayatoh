@@ -75,7 +75,10 @@
         "refund": "Terugbetaling",
         "order-link": "Bestellink",
         "refund-requested": "Terugbetalingsverzoek",
-        "refund-declined": "Terugbetalingsverzoek afgewezen"
+        "refund-declined": "Terugbetalingsverzoek afgewezen",
+        "waitlist-joined": "Bevestiging wachtlijst",
+        "waitlist-offer": "Aanbod van de wachtlijst",
+        "waitlist-expired": "Aanbod van de wachtlijst verlopen"
       },
       "events": {
         "reminder": "Herinnering evenement",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "Link om ticket te claimen",
-        "holder-link": "Link naar tickets"
+        "holder-link": "Link naar tickets",
+        "tickets-resent": "Tickets opnieuw verzonden",
+        "ticket-cancelled": "Ticket geannuleerd"
       },
       "attendees": {
         "message": "Bericht van de organisator"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "E-mailcode bij afrekenen",
-        "sign-in": "Inloggen bij Mijn tickets"
+        "sign-in": "Inloggen bij Mijn tickets",
+        "waitlist-code": "E-mailcode voor de wachtlijst"
       },
       "security": {
         "fraud_signal": "Fraudemelding"

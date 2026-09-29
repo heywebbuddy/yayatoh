@@ -75,7 +75,10 @@
         "refund": "返金",
         "order-link": "注文リンク",
         "refund-requested": "返金リクエスト",
-        "refund-declined": "返金リクエストのお断り"
+        "refund-declined": "返金リクエストのお断り",
+        "waitlist-joined": "キャンセル待ち登録の確認",
+        "waitlist-offer": "キャンセル待ちの購入案内",
+        "waitlist-expired": "キャンセル待ちの購入案内の期限切れ"
       },
       "events": {
         "reminder": "イベントのリマインダー",
@@ -88,7 +91,9 @@
       },
       "ticketing": {
         "claim-link": "チケット受け取りリンク",
-        "holder-link": "チケットへのリンク"
+        "holder-link": "チケットへのリンク",
+        "tickets-resent": "チケットの再送",
+        "ticket-cancelled": "チケットのキャンセル"
       },
       "attendees": {
         "message": "主催者からのメッセージ"
@@ -117,7 +122,8 @@
       },
       "guest": {
         "checkout-code": "購入時のメール確認コード",
-        "sign-in": "マイチケットのサインイン"
+        "sign-in": "マイチケットのサインイン",
+        "waitlist-code": "キャンセル待ちのメール確認コード"
       },
       "security": {
         "fraud_signal": "不正アラート"
