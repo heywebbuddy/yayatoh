@@ -28,6 +28,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
@@ -71,6 +72,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     fraudSignalAlerts({ notifier }),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
+    // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
+    registrationCapacity(),
   ];
 }
 

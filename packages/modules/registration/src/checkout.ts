@@ -112,8 +112,12 @@ export const startRegistrationCommand = tenantCommand({
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
     const type = await liveTypeForBuyerTx(tx, event.id, input.registrationTypeId);
-    assertEligible(type, { email: input.buyer.email, accessCode: input.accessCode });
     const offered = await offeredItemsTx(tx, type.id);
+    // A waitlist offer was made to an eligible person (checked when they joined); orders checks
+    // that the offer is open and bought by the address it was made to.
+    const entry = input.waitlistToken ? await waitlistEntryByTokenTx(tx, input.waitlistToken) : null;
+    const offerCell = entry && [...offered.values()].some((c) => c.ticketTypeId === entry.ticketTypeId);
+    if (!offerCell) assertEligible(type, { email: input.buyer.email, accessCode: input.accessCode });
     const kinds = new Map([...offered].map(([id, c]) => [id, c.kind]));
     const problem = selectionProblem(input.itemIds, kinds);
     if (problem)
@@ -123,7 +127,6 @@ export const startRegistrationCommand = tenantCommand({
       });
     const admission = input.itemIds.find((id) => kinds.get(id) === 'admission') as string;
     if (input.waitlistToken) {
-      const entry = await waitlistEntryByTokenTx(tx, input.waitlistToken);
       if (!entry || entry.ticketTypeId !== offered.get(admission)?.ticketTypeId || input.itemIds.length !== 1)
         throw new DomainError('validation_failed', 'Only the offered pass can be bought', {
           reason: 'offer_items',

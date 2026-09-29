@@ -501,6 +501,9 @@ importers:
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../../packages/modules/program
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../../packages/modules/registration
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
@@ -652,6 +655,9 @@ importers:
       '@yayatoh/privacy':
         specifier: workspace:*
         version: link:../../packages/modules/privacy
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../../packages/modules/registration
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
