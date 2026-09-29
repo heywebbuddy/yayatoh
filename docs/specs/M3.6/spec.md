@@ -290,5 +290,11 @@ Other modules gained read/write helpers (down the tiers): crm `marketingReachTx`
   through the API shape), an org-level postal address setting.
 - Pausing does not pull back the (at most one) chunk already handed to the dispatcher.
 
-### 7. Gate results (M3.6b)
-See the final commit message (report) for the counts of this run.
+### 7. Gate results (M3.6b, 2026-09-29)
+- `pnpm verify`: green. Lint, check:modules, typecheck; unit 1502/1502 (134 files); integration 969/969 (113 files).
+- New tests: unit 20 (`packages/modules/campaigns/tests/domain.test.ts`); integration 14
+  (`packages/testing/tests/campaigns.int.test.ts` 13, `apps/worker/tests/campaigns.int.test.ts` 1, the
+  50k fairness test); e2e 4 specs × 3 viewports = 12 (`apps/web/e2e/campaigns.spec.ts`), all passing.
+- Full web e2e: 1425 passed, 34 skipped, 2 failed: `widget.spec.ts:100` and `:110` (desktop), both
+  an axe `page.evaluate` timeout (30 s) on the public-site settings page under full-suite load; the
+  whole `widget.spec.ts` passes when re-run alone (25/25). Admin not touched (not run).
