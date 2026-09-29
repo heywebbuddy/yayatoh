@@ -296,6 +296,9 @@ export function normalizeRegistration(f: RegistrationField, raw: unknown): unkno
   }
 }
 
+/** A question as sent to the respondent: no registration type list (other types stay unseen). */
+export type RespondentField = Omit<RegistrationField, 'registrationTypes'>;
+
 export interface RespondentPage {
   readonly key: string;
   readonly title: string;
@@ -305,7 +308,7 @@ export interface RespondentPage {
    * earlier pages are already decided (hidden ones are left out); a condition on an earlier
    * question of the same page is kept for the browser to evaluate as the person types.
    */
-  readonly fields: readonly RegistrationField[];
+  readonly fields: readonly RespondentField[];
   /** Earlier answers the kept conditions read (the respondent's own). */
   readonly context: Readonly<Record<string, unknown>>;
 }
@@ -347,9 +350,9 @@ export function respondentPage(
  * Which of a page's questions show right now in the browser (same-page conditions, typed
  * answers), given the context the server sent.
  */
-export function visibleOnPage(page: RespondentPage, values: Answers): readonly RegistrationField[] {
+export function visibleOnPage(page: RespondentPage, values: Answers): readonly RespondentField[] {
   const seen: Record<string, unknown> = { ...page.context };
-  const out: RegistrationField[] = [];
+  const out: RespondentField[] = [];
   for (const f of page.fields) {
     if (f.showIf !== null && !evaluate(f.showIf as Logic, seen)) continue;
     out.push(f);

@@ -421,6 +421,17 @@ export const startRegistrationFormCommand = tenantCommand({
 
 type Mode = 'draft' | 'next' | 'submit';
 
+/** A stable reason for each answer problem (the respondent's page localizes it). */
+function answerReason(message: string): string {
+  if (message === 'Not on your path') return 'hidden_answer';
+  if (message === 'Required') return 'required';
+  if (message === 'Unknown question') return 'unknown_question';
+  if (message === 'Too long') return 'too_long';
+  if (/^(Number expected|Whole number|At least|At most)/.test(message)) return 'number';
+  if (/^Choose/.test(message)) return 'choose';
+  return 'form_invalid';
+}
+
 /**
  * Load the respondent behind a link (locked), merge what they sent with their draft and let the
  * server recompute the path. What they send may answer any question on their path; anything off
@@ -460,7 +471,7 @@ async function applyAnswersTx(
   } catch (err) {
     if (err instanceof AnswerError)
       throw new DomainError('validation_failed', err.message, {
-        reason: err.message === 'Not on your path' ? 'hidden_answer' : 'form_invalid',
+        reason: answerReason(err.message),
         field: err.field,
       });
     throw err;
@@ -677,4 +688,26 @@ export async function purgeExpiredDraftsTx(tx: TenantTx, now: Date): Promise<num
     .where(and(isNull(respondents.submittedAt), lte(respondents.expiresAt, now)))
     .returning({ id: respondents.id });
   return rows.length;
+}
+
+/** The event a respondent's form belongs to, after their own link resolved the org. */
+export async function respondentEventId(ref: {
+  orgId: string;
+  respondentId: string;
+}): Promise<string | null> {
+  const ctx = createCtx({ orgId: ref.orgId, actor: { type: 'system', name: 'forms.respondent' } });
+  return withTenant(ctx, async (tx) => {
+    const [row] = await tx
+      .select({ eventId: forms.subjectId })
+      .from(respondents)
+      .innerJoin(forms, eq(forms.id, respondents.formId))
+      .where(eq(respondents.id, ref.respondentId));
+    return row?.eventId ?? null;
+  });
+}
+
+/** Whether a published event has a registration form (the public start page). */
+export async function hasRegistrationForm(orgId: string, eventId: string): Promise<boolean> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'forms.public' } });
+  return withTenant(ctx, async (tx) => (await currentRegistrationFormTx(tx, eventId)) !== null);
 }

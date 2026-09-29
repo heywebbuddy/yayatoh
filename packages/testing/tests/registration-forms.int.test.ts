@@ -290,7 +290,7 @@ describe('the fixture path for three registration types', () => {
     const token = await start(STUDENT, 'Req');
     await expect(save(token, 'about', { company: 'Acme' })).rejects.toMatchObject({
       code: 'validation_failed',
-      details: { reason: 'form_invalid', field: 'school' },
+      details: { reason: 'required', field: 'school' },
     });
     // Saving without moving on keeps the draft, required or not.
     await save(token, 'about', { company: 'Acme' }, 'stay');
@@ -320,7 +320,7 @@ describe('server authority', () => {
       details: { reason: 'page_not_on_path' },
     });
     await expect(save(token, 'about', { nope: 1 })).rejects.toMatchObject({
-      details: { reason: 'form_invalid', field: 'nope' },
+      details: { reason: 'unknown_question', field: 'nope' },
     });
     // Nothing was stored by the refused calls.
     const [row] = await admin<{ answers: object }[]>`

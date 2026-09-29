@@ -17,6 +17,7 @@ export {
   type RegistrationFieldType,
   type RegistrationFormDefinition,
   type RegistrationPage,
+  type RespondentField,
   type RespondentPage,
   typeAllows,
   visibleOnPage,
