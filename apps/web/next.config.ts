@@ -44,6 +44,12 @@ const notLegacyHost = legacyHosts.length
     ]
   : undefined;
 
+const maxBodyBytes = Number(process.env.FRONT_DOOR_MAX_BODY);
+const frontDoorMaxBody =
+  Number.isFinite(maxBodyBytes) && maxBodyBytes >= 1024 * 1024 && maxBodyBytes <= 256 * 1024 * 1024
+    ? maxBodyBytes
+    : 64 * 1024 * 1024;
+
 const config: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
@@ -68,7 +74,13 @@ const config: NextConfig = {
   ],
   // sharp (media re-encoding) loads its native libvips build at runtime.
   serverExternalPackages: ['postgres', '@node-rs/argon2', 'sharp'],
-  experimental: { taint: true, serverActions: { allowedOrigins } },
+  experimental: {
+    taint: true,
+    serverActions: { allowedOrigins },
+    // The front door (M2.4a) forwards legacy uploads from proxy.ts, which sees a buffered copy of
+    // the body up to this size: the same limit as FRONT_DOOR_MAX_BODY (bigger bodies get a 413).
+    proxyClientMaxBodySize: frontDoorMaxBody,
+  },
   async headers() {
     return [
       { source: '/:path*', headers: baseline, ...(notLegacyHost ? { has: notLegacyHost } : {}) },

@@ -187,7 +187,9 @@ describe('configuration', () => {
     expect(both.hosts.get('abc.yayatoh.com')?.origin).toBe('https://origin-abc.yayatoh.com');
     expect(both.secret).toBe('s3cret');
     expect(both.timeoutMs).toBe(150_000);
-    expect(both.maxBufferedBody).toBe(4 * 1024 * 1024);
+    expect(both.maxBody).toBe(64 * 1024 * 1024);
+    expect(frontDoorConfig({ FRONT_DOOR_MAX_BODY: '10' }).maxBody).toBe(64 * 1024 * 1024);
+    expect(frontDoorConfig({ FRONT_DOOR_MAX_BODY: String(30 * 1024 * 1024) }).maxBody).toBe(30 * 1024 * 1024);
     expect(frontDoorHostList({ LEGACY_ABC_ORIGIN_URL: 'https://o.test' })).toEqual([
       { host: 'yayatoh.com', instance: 'yay', configured: false },
       { host: 'www.yayatoh.com', instance: 'yay', configured: false },
@@ -221,6 +223,7 @@ describe('what crosses the boundary', () => {
         'x-custom-hop': '1',
         upgrade: 'websocket',
         te: 'trailers',
+        expect: '100-continue',
         'transfer-encoding': 'chunked',
         'proxy-authorization': 'Basic x',
         'x-forwarded-for': '6.6.6.6',
@@ -236,7 +239,7 @@ describe('what crosses the boundary', () => {
       ctx,
     );
     const names = [...h.keys()];
-    for (const n of ['connection', 'keep-alive', 'x-custom-hop', 'upgrade', 'te', 'transfer-encoding'])
+    for (const n of ['connection', 'keep-alive', 'x-custom-hop', 'upgrade', 'te', 'transfer-encoding', 'expect'])
       expect(names).not.toContain(n);
     expect(names).not.toContain('proxy-authorization');
     expect(names).not.toContain('x-middleware-subrequest');

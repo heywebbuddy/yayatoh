@@ -16,7 +16,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { bareHost, classifyHost } from '../hosts.ts';
 import { TtlCache } from '../ttl-cache.ts';
 import { flushInterval } from './constants.ts';
-import { edgeClientIp, forwardToLegacy } from './forward.ts';
+import { forwardToLegacy } from './forward.ts';
 import { FrontDoorMeter } from './meter.ts';
 
 /**
@@ -166,29 +166,6 @@ export async function frontDoor(
   // Legacy has no locale prefixes: `/ar/events/x` is `/events/x` there.
   const forwardPath = stripFrontDoorLocale(path).locale ? stripFrontDoorLocale(path).rest : path;
   const pathAndQuery = `${forwardPath}${req.nextUrl.search}`;
-  const length = Number(req.headers.get('content-length') ?? Number.NaN);
-  const streamed =
-    method !== 'GET' &&
-    method !== 'HEAD' &&
-    (!Number.isFinite(length) || length > cfg.maxBufferedBody || req.headers.has('transfer-encoding'));
-  if (streamed) {
-    // Large or unsized uploads stream through the platform's own rewrite (no buffering here). The
-    // same request headers go out; the response can't be inspected, so it is counted without a
-    // status, and legacy must send host-only cookies (runbook: SESSION_DOMAIN unset).
-    frontDoorMeter.record({ host, route: decision.route, servedBy: 'legacy' });
-    flush();
-    const headers = forwardRequestHeaders(req.headers, {
-      host,
-      hostHeader: req.headers.get('host') ?? host,
-      proto: req.nextUrl.protocol === 'https:' ? 'https' : 'http',
-      clientIp: edgeClientIp(req.headers),
-      secret: cfg.secret,
-    });
-    const res = NextResponse.rewrite(new URL(pathAndQuery, site.origin), { request: { headers } });
-    res.headers.set('x-front-door', 'legacy');
-    return { kind: 'response', response: res };
-  }
-
   const f = await forwardToLegacy(req, { origin: site.origin, pathAndQuery, host }, cfg);
   frontDoorMeter.record({
     host,
@@ -201,6 +178,14 @@ export async function frontDoor(
   });
   flush();
   if (f.response) return { kind: 'response', response: f.response };
+  if (f.failure === 'too_large')
+    return {
+      kind: 'response',
+      response: new Response(null, {
+        status: 413,
+        headers: { 'x-front-door': 'legacy', 'cache-control': 'no-store' },
+      }),
+    };
   // Legacy is down or too slow: a localized error page from the new app, with 502/504.
   const locale = stripFrontDoorLocale(path).locale ?? req.cookies.get('NEXT_LOCALE')?.value ?? 'en';
   const safeLocale = /^[a-zA-Z-]{2,5}$/.test(locale) ? locale : 'en';

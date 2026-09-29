@@ -11,11 +11,15 @@ export interface Forwarded {
   readonly status: number;
   /** Time to the legacy response's headers. */
   readonly latencyMs: number;
-  /** `timeout` (504) or `unreachable` (502) when the front door has to answer itself. */
-  readonly failure: 'timeout' | 'unreachable' | null;
+  /**
+   * When the front door answers itself: `timeout` (504), `unreachable` (502), or `too_large`
+   * (413: the body is over the limit the runtime buffers, so it would reach legacy cut short).
+   */
+  readonly failure: 'timeout' | 'unreachable' | 'too_large' | null;
 }
 
 const NO_BODY = new Set([101, 204, 205, 304]);
+const TRUNCATION_MARGIN = 256 * 1024;
 
 /** The client IP as the hosting edge reports it (Vercel sets `x-real-ip` / `x-forwarded-for`). */
 export function edgeClientIp(h: Headers): string | null {
@@ -30,8 +34,9 @@ export function edgeClientIp(h: Headers): string | null {
  * removed; `X-Forwarded-*` and the origin secret added), redirects not followed (their Location is
  * put back on the public host), `Set-Cookie` scoped to the exact public host. Only the wait for the
  * response's headers is bounded (`timeoutMs`); the body then streams for as long as it takes.
- * Bodies are buffered here, so callers send only bodies up to `maxBufferedBody` (larger ones take
- * the platform rewrite, see proxy.ts).
+ * Request bodies arrive buffered (Next hands proxy.ts a copy of at most `proxyClientMaxBodySize`,
+ * next.config.ts, the same `FRONT_DOOR_MAX_BODY`); one that reaches the limit may have been cut
+ * short, so it is refused with 413 rather than forwarded incomplete (ADR 0020).
  */
 export async function forwardToLegacy(
   req: NextRequest,
@@ -48,7 +53,19 @@ export async function forwardToLegacy(
     secret: config.secret,
   });
   const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
+  const declared = Number(req.headers.get('content-length') ?? Number.NaN);
+  if (hasBody && Number.isFinite(declared) && declared > config.maxBody)
+    return { response: null, status: 413, latencyMs: 0, failure: 'too_large' };
   const body = hasBody ? await req.arrayBuffer() : undefined;
+  // The runtime stops copying at a chunk boundary just under the limit, so an unsized body that
+  // gets that close may have been cut short.
+  if (
+    body &&
+    (Number.isFinite(declared)
+      ? body.byteLength !== declared
+      : body.byteLength > config.maxBody - TRUNCATION_MARGIN)
+  )
+    return { response: null, status: 413, latencyMs: 0, failure: 'too_large' };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), config.timeoutMs);
   const started = performance.now();

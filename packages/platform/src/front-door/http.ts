@@ -18,8 +18,11 @@ export interface FrontDoorConfig {
   readonly secret: string | null;
   /** Time to the legacy response's headers; the body then streams without a limit. */
   readonly timeoutMs: number;
-  /** Bodies up to this size are forwarded by the front door itself; larger ones are rewritten. */
-  readonly maxBufferedBody: number;
+  /**
+   * The largest request body forwarded (`FRONT_DOOR_MAX_BODY`, default 64 MiB). The runtime
+   * buffers bodies for proxy.ts up to this size (next.config.ts `proxyClientMaxBodySize`).
+   */
+  readonly maxBody: number;
 }
 
 type Env = Record<string, string | undefined>;
@@ -48,6 +51,11 @@ const num = (v: string | undefined, fallback: number, min: number, max: number) 
   return Number.isFinite(n) && n >= min && n <= max ? Math.floor(n) : fallback;
 };
 
+/** `FRONT_DOOR_MAX_BODY` in bytes (1 MiB to 256 MiB; default 64 MiB). */
+export function frontDoorMaxBody(env: Env = process.env): number {
+  return num(env.FRONT_DOOR_MAX_BODY, 64 * 1024 * 1024, 1024 * 1024, 256 * 1024 * 1024);
+}
+
 /**
  * The front door is on for an instance only when its origin is configured:
  * - `LEGACY_ORIGIN_URL` for the yayatoh.com instance, hosts `LEGACY_YAY_HOSTS`
@@ -69,7 +77,7 @@ export function frontDoorConfig(env: Env = process.env): FrontDoorConfig {
     hosts,
     secret: env.LEGACY_ORIGIN_SECRET?.trim() || null,
     timeoutMs: num(env.FRONT_DOOR_TIMEOUT_MS, 170_000, 100, 800_000),
-    maxBufferedBody: num(env.FRONT_DOOR_MAX_BUFFERED_BODY, 4 * 1024 * 1024, 0, 64 * 1024 * 1024),
+    maxBody: frontDoorMaxBody(env),
   };
 }
 
@@ -93,8 +101,12 @@ export function frontDoorHostList(
   ];
 }
 
-/** RFC 9110 §7.6.1 connection-specific headers, plus framing the runtime recomputes. */
+/**
+ * RFC 9110 §7.6.1 connection-specific headers, plus framing the runtime recomputes and `expect`
+ * (100-continue is between the client and us; the body has already arrived).
+ */
 const HOP_BY_HOP = new Set([
+  'expect',
   'connection',
   'keep-alive',
   'proxy-authenticate',
