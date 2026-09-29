@@ -9,7 +9,7 @@ import {
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventRoleCan } from '@yayatoh/tenancy';
+import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -63,7 +63,7 @@ export default async function OnsitePage({
   if (!composeNav(profile, data.modules).some((i) => i.path === 'onsite')) notFound();
   const t = await getTranslations();
   // Org roles scan every event; event-scoped door staff scan this one. Devices are org-level.
-  const manageDevices = can('checkin:scan');
+  const manageDevices = roleCan(data.role, 'checkin:scan');
   const canScan = manageDevices || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'checkin:scan');
   if (!canScan) {
     return (
@@ -93,7 +93,7 @@ export default async function OnsitePage({
     (c) => !c.archived && (scope.checkpointIds === null || scope.checkpointIds.includes(c.id)),
   );
   const doorStaff =
-    manageDevices && can('events:read')
+    manageDevices && roleCan(data.role, 'events:read')
       ? (await executeQuery(doorStaffQuery, { eventId: ev.id }, data.ctx, ports)).staff
       : [];
   const people = await getUsersByIds([
@@ -192,7 +192,7 @@ export default async function OnsitePage({
               </li>
             ))}
         </ul>
-        {can('events:read') ? (
+        {roleCan(data.role, 'events:read') ? (
           <Link href={`${base}/staff`} className={buttonClass('secondary', 'sm', 'self-start')}>
             {t('doorStaff.manage')}
           </Link>

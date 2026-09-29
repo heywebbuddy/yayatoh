@@ -8,6 +8,7 @@ import {
   formatScheduleText,
 } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
+import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AiDraftPanel } from '@/components/ai-draft-panel.tsx';
@@ -67,9 +68,12 @@ export default async function ContentPage({
     executeQuery(eventSectionsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(announcementsQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
-  // M1.4f: AI drafting for writers of orgs with the `ai` module.
+  // M1.4f: AI drafting for writers of orgs with the `ai` module. The credits are the org's: people
+  // with only an event role (M4.2a co-hosts) write without AI drafts.
   const ai =
-    canWrite && data.modules.has('ai') ? await executeQuery(creditBalanceQuery, {}, data.ctx, ports) : null;
+    canWrite && data.modules.has('ai') && roleCan(data.role, 'events:read')
+      ? await executeQuery(creditBalanceQuery, {}, data.ctx, ports)
+      : null;
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
     timeStyle: 'short',

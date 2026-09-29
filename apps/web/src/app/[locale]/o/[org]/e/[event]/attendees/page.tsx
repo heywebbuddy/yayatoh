@@ -24,6 +24,7 @@ import {
   seatGroupsQuery,
   seatingRulesQuery,
 } from '@yayatoh/seating';
+import { roleCan } from '@yayatoh/tenancy';
 import {
   listClaimLinksQuery,
   listTicketTypesQuery,
@@ -174,7 +175,8 @@ export default async function AttendeesPage({
   const canExport = can('attendees:export');
   const ticketing = data.modules.has('ticketing');
   const canResend = canWrite && ticketing;
-  const canCancel = can('orders:refund') && ticketing;
+  // Cancelling refunds the order (order-keyed commands): org roles only.
+  const canCancel = roleCan(data.role, 'orders:refund') && ticketing;
   const canSeat = can('events:write') && data.modules.has('seating');
   const canBulk = hasReal && (canWrite || canExport || canCancel || canSeat);
   const ticketTypes =
@@ -329,7 +331,7 @@ export default async function AttendeesPage({
   const openClaim = claims.find((c) => c.state === 'open');
   const selectedRecord = selectedId ? liveById.get(selectedId) : undefined;
   const timeline =
-    selectedRecord && can('contacts:read')
+    selectedRecord && roleCan(data.role, 'contacts:read')
       ? await executeQuery(contactTimelineQuery, { attendeeId: selectedRecord.id }, data.ctx, ports)
       : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });

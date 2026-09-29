@@ -10,7 +10,7 @@ import {
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventRoleCan } from '@yayatoh/tenancy';
+import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -42,12 +42,12 @@ export default async function SignalsPage({
   const { locale, org, event } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
-  const { data, event: ev, can } = await loadEvent(org, event, 'onsite');
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'onsite')) notFound();
   const t = await getTranslations();
   const roles = await eventRolesOf(data.ctx, ev.id);
-  const canRead = can('checkin:scan') || eventRoleCan(roles, 'checkin:scan');
+  const canRead = roleCan(data.role, 'checkin:scan') || eventRoleCan(roles, 'checkin:scan');
   if (!canRead) {
     return (
       <>
@@ -56,7 +56,7 @@ export default async function SignalsPage({
       </>
     );
   }
-  const canTriage = can('events:write') || eventRoleCan(roles, 'events:write');
+  const canTriage = roleCan(data.role, 'events:write') || eventRoleCan(roles, 'events:write');
   const kind = pick<FraudSignalKind>(FRAUD_SIGNAL_KINDS, sp.kind);
   const severity = pick<FraudSeverity>(FRAUD_SEVERITIES, sp.severity);
   const status: StatusFilter = pick(STATUSES, sp.status) ?? 'all';
@@ -158,8 +158,14 @@ export default async function SignalsPage({
                   signal={s}
                   timeZone={ev.timezone}
                   people={Object.fromEntries([...people].map(([id, u]) => [id, u.name]))}
-                  orderHref={s.orderId && can('orders:read') ? `${base}/orders/${s.orderId}` : null}
-                  threadHref={s.threadId && can('messages:read') ? `/o/${org}/messages/${s.threadId}` : null}
+                  orderHref={
+                    s.orderId && roleCan(data.role, 'orders:read') ? `${base}/orders/${s.orderId}` : null
+                  }
+                  threadHref={
+                    s.threadId && roleCan(data.role, 'messages:read')
+                      ? `/o/${org}/messages/${s.threadId}`
+                      : null
+                  }
                   action={canTriage ? resolveSignalAction.bind(null, org, event, s.id) : null}
                 />
               </li>

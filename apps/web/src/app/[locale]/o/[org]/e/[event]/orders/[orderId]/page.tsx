@@ -5,7 +5,7 @@ import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel
 import { orderMessagesQuery } from '@yayatoh/notifications';
 import { orderDetailQuery, orderRefundsQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
-import { eventRoleCan } from '@yayatoh/tenancy';
+import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
 import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -29,8 +29,8 @@ export default async function OrderPage({
   const { locale, org, event, orderId } = await params;
   setRequestLocale(locale);
   if (!z.uuid().safeParse(orderId).success) notFound();
-  const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
-  if (!can('orders:read')) notFound();
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
+  if (!roleCan(data.role, 'orders:read')) notFound();
   const t = await getTranslations();
   let order: Awaited<ReturnType<typeof loadOrder>>;
   async function loadOrder() {
@@ -45,12 +45,15 @@ export default async function OrderPage({
   if (order.eventId !== ev.id) notFound();
   const refunds = await executeQuery(orderRefundsQuery, { orderId }, data.ctx, ports);
   const messages = await executeQuery(orderMessagesQuery, { orderId }, data.ctx, ports);
-  const disputes = can('finance:read') ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports) : [];
+  const disputes = roleCan(data.role, 'finance:read')
+    ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
+    : [];
   const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
   // M1.9e order timeline: fraud signals about the order and its tickets, oldest first.
   const signals = await executeQuery(orderSignalsQuery, { orderId }, data.ctx, ports);
   const scanners = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
-  const canTriage = can('events:write') || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'events:write');
+  const canTriage =
+    roleCan(data.role, 'events:write') || eventRoleCan(await eventRolesOf(data.ctx, ev.id), 'events:write');
   const tp = await getTranslations('refundPolicy');
   const fmt = (minor: number) => formatMoney(money(minor, order.currency), locale);
   const when = new Intl.DateTimeFormat(locale, {
@@ -60,7 +63,7 @@ export default async function OrderPage({
   });
   // Organizer-collected money is refunded in person, not through the payment provider.
   const canRefund =
-    can('orders:refund') &&
+    roleCan(data.role, 'orders:refund') &&
     order.collectedBy === 'platform' &&
     ['paid', 'partially_refunded'].includes(order.status) &&
     order.totalMinor > 0;
@@ -105,7 +108,7 @@ export default async function OrderPage({
         ) : null}
       </Card>
 
-      {can('orders:support') ? (
+      {roleCan(data.role, 'orders:support') ? (
         <section aria-labelledby="order-link-heading" className="flex flex-col gap-3">
           <h2 id="order-link-heading" className="text-section">
             {t('orderLinks.organizerTitle')}
@@ -262,7 +265,7 @@ export default async function OrderPage({
                   >
                     {t('disputes.evidence')}
                   </a>
-                  {d.status === 'open' && can('disputes:respond') ? (
+                  {d.status === 'open' && roleCan(data.role, 'disputes:respond') ? (
                     <Link
                       href={`/o/${org}/e/${event}/orders/${orderId}/disputes/${d.id}`}
                       className="text-caption underline underline-offset-2"
@@ -367,7 +370,7 @@ export default async function OrderPage({
               action={refundAction.bind(null, org, event, orderId)}
               currency={order.currency}
               timeZone={ev.timezone}
-              canOverride={can('orders:refund_override')}
+              canOverride={roleCan(data.role, 'orders:refund_override')}
               tickets={active.map((tk) => ({
                 id: tk.id,
                 label: `#${tk.serial} · ${tk.itemName} · ${tk.holderName}`,

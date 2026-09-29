@@ -21,9 +21,9 @@ async function fromStarter(
   page: Page,
   starter: 'wedding' | 'gala',
   name: string,
-  opts: { keyboard?: boolean } = {},
+  opts: { keyboard?: boolean; org?: string } = {},
 ) {
-  await page.goto(`${ORG}/templates`);
+  await page.goto(`${opts.org ?? ORG}/templates`);
   const card = page.locator(`[data-starter="${starter}"]`);
   if (opts.keyboard) {
     await card.locator('summary').focus();
@@ -57,11 +57,12 @@ async function status(page: Page, path: string): Promise<number> {
   return res?.status() ?? 0;
 }
 
-async function inviteLink(page: Page, email: string): Promise<string> {
+/** The emailed invitation link (delivers the org's messages: only for a test's own org). */
+async function inviteLink(page: Page, org: string, email: string): Promise<string> {
   let link = '';
   await expect
     .poll(async () => {
-      await page.request.post('/api/dev/outbox/drain', { form: { org: 'rosewood-weddings' } });
+      await page.request.post('/api/dev/outbox/drain', { form: { org: org.replace('/o/', '') } });
       const res = await page.request.get(`/api/dev/mailbox?to=${encodeURIComponent(email)}`);
       const mail = ((await res.json()) as Captured[]).find((m) => /invited to help/.test(m.subject));
       link = /href="(https?:\/\/[^"]+\/invite\/[^"]+)"/.exec(mail?.html ?? '')?.[1] ?? '';
@@ -239,9 +240,11 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     const cohostPage = await (await browser.newContext()).newPage();
     const cohost = await newUser(cohostPage, { name: 'Casey Cohost' });
 
-    await signIn(page, WEDDING_OWNER);
-    const wedding = await fromStarter(page, 'wedding', `Team wedding ${stamp()}`);
-    const other = await fromStarter(page, 'wedding', `Other wedding ${stamp()}`);
+    // The owner of an org of their own (its mail is delivered here, nobody else's).
+    const owner = await newUser(page, { org: true, twoFactor: true, name: 'Olive Owner' });
+    const ORG = `/o/${owner.orgSlug}`;
+    const wedding = await fromStarter(page, 'wedding', `Team wedding ${stamp()}`, { org: ORG });
+    const other = await fromStarter(page, 'wedding', `Other wedding ${stamp()}`, { org: ORG });
     await page.goto(`${wedding}/team`);
     await expect(page.getByRole('heading', { name: 'Event team' })).toBeVisible();
     await expect(page.getByText('No co-hosts or planners yet')).toBeVisible();
@@ -268,7 +271,7 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await expectAccessible(page);
 
     // The planner accepts and lands on a console listing just their event.
-    await plannerPage.goto(await inviteLink(page, planner.email));
+    await plannerPage.goto(await inviteLink(page, ORG, planner.email));
     await expect(plannerPage.getByRole('heading', { name: /^Help with Team wedding/ })).toBeVisible();
     await expect(plannerPage.getByText(/as Planner\. You'll see this event only\./)).toBeVisible();
     await expectAccessible(plannerPage);
@@ -321,12 +324,25 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await plannerPage.goto(`/en${ORG}`);
 
     // The co-host accepts: the whole event, with its team; still no org pages.
-    await cohostPage.goto(await inviteLink(page, cohost.email));
+    await cohostPage.goto(await inviteLink(page, ORG, cohost.email));
     await cohostPage.getByRole('button', { name: 'Accept invitation' }).click();
     await expect(cohostPage.getByRole('heading', { name: 'Your events' })).toBeVisible();
     await cohostPage.goto(wedding);
     const cohostNav = await navLabels(cohostPage);
     for (const label of ['Setup guide', 'Guests', 'Details', 'Team']) expect(cohostNav).toContain(label);
+    // Every page the co-host is shown opens (no error page) and nothing outside their event leaks.
+    const cohostLinks = await sidebar(cohostPage)
+      .locator('a')
+      .evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).pathname));
+    for (const p of [...new Set(cohostLinks)].filter((x) => x.startsWith(wedding))) {
+      expect(await status(cohostPage, p), p).toBe(200);
+      await expect(cohostPage.getByRole('button', { name: 'Try again' }), p).toHaveCount(0);
+    }
+    // And the planner's pages.
+    for (const p of ['', '/seating', '/seat-finder', '/guests', '/day-of'].map((x) => `${wedding}${x}`)) {
+      expect(await status(plannerPage, p), p).toBe(200);
+      await expect(plannerPage.getByRole('button', { name: 'Try again' }), p).toHaveCount(0);
+    }
     expect(await status(cohostPage, `${ORG}/payouts`)).toBe(404);
     expect(await status(cohostPage, other)).toBe(404);
     await cohostPage.goto(`${wedding}/team`);
@@ -343,6 +359,8 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await expect(page.getByText("Pat Planner's role was changed.")).toBeVisible();
     await plannerPage.goto(wedding);
     expect(await navLabels(plannerPage)).toContain('Team');
+    // Back to planner (from a fresh page, so the notice below is this change's).
+    await page.reload();
     await page
       .getByRole('table', { name: 'Event team' })
       .getByLabel('Role for Pat Planner', { exact: true })
@@ -386,10 +404,11 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
   test('a withdrawn invitation cannot be used', async ({ page, browser }) => {
     const p = await (await browser.newContext()).newPage();
     const guest = await newUser(p, { name: 'Wes Withdrawn' });
-    await signIn(page, WEDDING_OWNER);
-    const wedding = await fromStarter(page, 'wedding', `Withdrawn ${stamp()}`);
+    const owner = await newUser(page, { org: true, twoFactor: true });
+    const ORG = `/o/${owner.orgSlug}`;
+    const wedding = await fromStarter(page, 'wedding', `Withdrawn ${stamp()}`, { org: ORG });
     await invite(page, wedding, guest.email, 'Planner');
-    const link = await inviteLink(page, guest.email);
+    const link = await inviteLink(page, ORG, guest.email);
     await page.goto(`${wedding}/team`);
     await page.getByRole('button', { name: `Withdraw the invitation for ${guest.email}` }).click();
     await expect(page.getByText(guest.email)).toHaveCount(0);

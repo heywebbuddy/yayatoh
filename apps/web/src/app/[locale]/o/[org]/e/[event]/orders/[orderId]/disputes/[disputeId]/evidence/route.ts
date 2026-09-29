@@ -1,5 +1,6 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { disputeEvidencePacketQuery } from '@yayatoh/reports';
+import { roleCan } from '@yayatoh/tenancy';
 import { z } from 'zod';
 import { loadEvent } from '@/server/console.ts';
 import { evidencePacketDocument, renderEvidencePdf } from '@/server/evidence.ts';
@@ -15,8 +16,8 @@ export async function GET(
 ) {
   const { org, event, orderId, disputeId } = await params;
   if (!z.uuid().safeParse(disputeId).success) return new Response('Not found', { status: 404 });
-  const { data, can } = await loadEvent(org, event, 'ticketsOrders');
-  if (!can('finance:read')) return new Response('Not found', { status: 404 });
+  const { data } = await loadEvent(org, event, 'ticketsOrders');
+  if (!roleCan(data.role, 'finance:read')) return new Response('Not found', { status: 404 });
   let evidence: Awaited<ReturnType<typeof load>>;
   const load = () => executeQuery(disputeEvidencePacketQuery, { disputeId }, data.ctx, ports);
   try {

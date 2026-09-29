@@ -1,5 +1,6 @@
 import { listOccurrencesQuery, listSeriesQuery, type OccurrenceDto } from '@yayatoh/events';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
+import { roleCan } from '@yayatoh/tenancy';
 import { occurrenceSalesQuery } from '@yayatoh/ticketing';
 import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -43,7 +44,10 @@ export default async function DatesPage({
         ])
       : [],
   );
-  const series = await executeQuery(listSeriesQuery, {}, data.ctx, ports);
+  // Series are org-level: a co-host (event role only) sees this event's dates without them.
+  const series = roleCan(data.role, 'events:read')
+    ? await executeQuery(listSeriesQuery, {}, data.ctx, ports)
+    : [];
   const currentSeries = series.find((s) => s.eventIds.includes(ev.id))?.id ?? null;
   const base = `/o/${org}/e/${event}`;
   const when = new Intl.DateTimeFormat(locale, {

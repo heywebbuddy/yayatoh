@@ -21,7 +21,7 @@ export default async function EventDetailsPage({
   const canWrite = can('events:write');
   const [details, venues, links] = await Promise.all([
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
-    executeQuery(listVenuesQuery, {}, data.ctx, ports),
+    executeQuery(listVenuesQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(shortLinksQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
   // The picked venue stays listed even if it was archived since.
