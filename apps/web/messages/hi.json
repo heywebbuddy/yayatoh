@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "खबरें और ऑफ़र"
+      },
+      "portal": {
+        "invite": "पोर्टल आमंत्रण",
+        "sign-in": "पोर्टल साइन-इन कोड"
+      },
+      "program": {
+        "task-reminder": "कार्य रिमाइंडर"
       }
     },
     "status": {

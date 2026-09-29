@@ -9,6 +9,7 @@ import {
   vapidConfig,
   withWebPush,
 } from '@yayatoh/notifications';
+import { emitOverdueTasks } from '@yayatoh/program';
 import { sql } from 'drizzle-orm';
 
 /**
@@ -51,4 +52,21 @@ export async function dispatchNotifications(deps: DispatchDeps): Promise<number>
   let sent = 0;
   for (const { org_id } of orgs) sent += (await dispatchDue(org_id, deps, 100)).sent;
   return sent;
+}
+
+/**
+ * M5.3a: report overdue portal tasks (`program.speaker_task.overdue@1`, once per assignee) for the
+ * orgs that have any, found through a SECURITY DEFINER function (ids only).
+ */
+export async function sweepOverdueTasks(now = new Date()): Promise<number> {
+  const orgs = await withPlatformReader(
+    { actor: 'system:program', reason: 'find orgs with overdue portal tasks' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(
+        sql`select org_id from program.orgs_with_overdue_tasks(${now.toISOString()}::timestamptz, 100)`,
+      ),
+  );
+  let n = 0;
+  for (const { org_id } of orgs) n += await emitOverdueTasks(org_id, now);
+  return n;
 }

@@ -6,7 +6,13 @@ import { runDueBulkOperations } from './bulk.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
-import { dispatchNotifications, userEmails, userLocales, workerTransports } from './notifications.ts';
+import {
+  dispatchNotifications,
+  sweepOverdueTasks,
+  userEmails,
+  userLocales,
+  workerTransports,
+} from './notifications.ts';
 import { runReconciliation } from './reconciliation.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
@@ -80,6 +86,12 @@ setInterval(() => {
 setInterval(() => {
   if (!release || stopping) return;
   endExpiredImpersonations().catch((err) => console.error('impersonations', err));
+}, 60_000).unref();
+
+// Overdue portal tasks (M5.3a): once a minute, one event per overdue assignee (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  sweepOverdueTasks().catch((err) => console.error('overdue tasks', err));
 }, 60_000).unref();
 
 // Bulk actions and exports (M1.8b): keep unfinished operations moving (leader only).

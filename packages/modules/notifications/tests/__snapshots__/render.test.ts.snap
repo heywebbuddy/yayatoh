@@ -5005,6 +5005,708 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > portal.invite · ar 1`] = `
+{
+  "subject": "دعوة إلى بوابة Midwest Leadership Summit",
+  "text": "دعوة إلى بوابة Midwest Leadership Summit
+
+مرحبًا،
+
+دعتك Lakeside Events إلى بوابة Midwest Leadership Summit بصفة متحدث. هناك يمكنك رؤية جلساتك وتحديث ملفك الشخصي وإنجاز مهامك. سيطلب الزر رمز دخول يُرسل إلى هذا العنوان.
+
+فتح البوابة: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · de 1`] = `
+{
+  "subject": "Einladung zum Portal von Midwest Leadership Summit",
+  "text": "Einladung zum Portal von Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events hat Sie als Speaker zum Portal von Midwest Leadership Summit eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.
+
+Portal öffnen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · en 1`] = `
+{
+  "subject": "You're invited to the Midwest Leadership Summit portal",
+  "text": "You're invited to the Midwest Leadership Summit portal
+
+Hello,
+
+Lakeside Events invited you to the portal for Midwest Leadership Summit as speaker. There you can see your sessions, update your profile and complete your tasks. The button asks for a sign-in code sent to this address.
+
+Open the portal: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · es 1`] = `
+{
+  "subject": "Te invitan al portal de Midwest Leadership Summit",
+  "text": "Te invitan al portal de Midwest Leadership Summit
+
+Hola:
+
+Lakeside Events te invitó al portal de Midwest Leadership Summit como ponente. Allí puedes ver tus sesiones, actualizar tu perfil y completar tus tareas. El botón pide un código de acceso que se envía a esta dirección.
+
+Abrir el portal: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · fr 1`] = `
+{
+  "subject": "Invitation au portail de Midwest Leadership Summit",
+  "text": "Invitation au portail de Midwest Leadership Summit
+
+Bonjour,
+
+Lakeside Events vous a invité au portail de Midwest Leadership Summit en tant que intervenant. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.
+
+Ouvrir le portail: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit पोर्टल के लिए आमंत्रण",
+  "text": "Midwest Leadership Summit पोर्टल के लिए आमंत्रण
+
+नमस्ते,
+
+Lakeside Events ने आपको Midwest Leadership Summit के पोर्टल में वक्ता के रूप में आमंत्रित किया है। वहाँ आप अपने सत्र देख सकते हैं, अपनी प्रोफ़ाइल अपडेट कर सकते हैं और अपने कार्य पूरे कर सकते हैं। बटन इस पते पर भेजा गया साइन-इन कोड माँगेगा।
+
+पोर्टल खोलें: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · it 1`] = `
+{
+  "subject": "Sei invitato al portale di Midwest Leadership Summit",
+  "text": "Sei invitato al portale di Midwest Leadership Summit
+
+Ciao,
+
+Lakeside Events ti ha invitato al portale di Midwest Leadership Summit come relatore. Lì puoi vedere le tue sessioni, aggiornare il profilo e completare le attività. Il pulsante chiede un codice di accesso inviato a questo indirizzo.
+
+Apri il portale: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitのポータルへの招待",
+  "text": "Midwest Leadership Summitのポータルへの招待
+
+こんにちは。
+
+Lakeside EventsからMidwest Leadership Summitのポータルに登壇者として招待されました。セッションの確認、プロフィールの更新、タスクの完了ができます。ボタンを押すと、このアドレスに送られるサインインコードの入力を求められます。
+
+ポータルを開く: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · nl 1`] = `
+{
+  "subject": "Uitnodiging voor het portaal van Midwest Leadership Summit",
+  "text": "Uitnodiging voor het portaal van Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events heeft je als spreker uitgenodigd voor het portaal van Midwest Leadership Summit. Daar zie je je sessies, werk je je profiel bij en rond je je taken af. De knop vraagt om een inlogcode die naar dit adres wordt gestuurd.
+
+Portaal openen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · pt 1`] = `
+{
+  "subject": "Convite para o portal de Midwest Leadership Summit",
+  "text": "Convite para o portal de Midwest Leadership Summit
+
+Olá!
+
+Lakeside Events convidou você para o portal de Midwest Leadership Summit como palestrante. Lá você vê suas sessões, atualiza seu perfil e conclui suas tarefas. O botão pede um código de acesso enviado para este endereço.
+
+Abrir o portal: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · ru 1`] = `
+{
+  "subject": "Приглашение в портал «Midwest Leadership Summit»",
+  "text": "Приглашение в портал «Midwest Leadership Summit»
+
+Здравствуйте!
+
+Lakeside Events приглашает вас в портал мероприятия «Midwest Leadership Summit» в роли: спикер. Там вы увидите свои сессии, обновите профиль и выполните задачи. Кнопка запросит код входа, который придёт на этот адрес.
+
+Открыть портал: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · zh-CN 1`] = `
+{
+  "subject": "邀请您加入Midwest Leadership Summit门户",
+  "text": "邀请您加入Midwest Leadership Summit门户
+
+您好：
+
+Lakeside Events邀请您以演讲者身份加入Midwest Leadership Summit门户。您可以在那里查看自己的场次、更新个人资料并完成任务。点击按钮后需要输入发送到此邮箱的登录验证码。
+
+打开门户: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · zh-TW 1`] = `
+{
+  "subject": "邀請您加入Midwest Leadership Summit入口網站",
+  "text": "邀請您加入Midwest Leadership Summit入口網站
+
+您好：
+
+Lakeside Events邀請您以講者身分加入Midwest Leadership Summit入口網站。您可以在那裡查看自己的場次、更新個人檔案並完成任務。點選按鈕後需要輸入寄到此信箱的登入驗證碼。
+
+開啟入口網站: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ar 1`] = `
+{
+  "subject": "305117 هو رمز الدخول إلى Midwest Leadership Summit",
+  "text": "305117 هو رمز الدخول إلى Midwest Leadership Summit
+
+مرحبًا،
+
+أدخل 305117 لتسجيل الدخول إلى بوابة Midwest Leadership Summit، أو استخدم الزر أدناه في المتصفح نفسه. صلاحية الرمز: 10 د. صلاحية الزر: 15 د. يعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+الدخول إلى البوابة: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · de 1`] = `
+{
+  "subject": "305117 ist Ihr Anmeldecode für Midwest Leadership Summit",
+  "text": "305117 ist Ihr Anmeldecode für Midwest Leadership Summit
+
+Hallo,
+
+Geben Sie 305117 ein, um sich im Portal von Midwest Leadership Summit anzumelden, oder nutzen Sie die Schaltfläche unten im selben Browser. Code gültig: 10 Min. Schaltfläche gültig: 15 Min. Beide funktionieren einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail.
+
+Im Portal anmelden: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · en 1`] = `
+{
+  "subject": "305117 is your sign-in code for Midwest Leadership Summit",
+  "text": "305117 is your sign-in code for Midwest Leadership Summit
+
+Hello,
+
+Enter 305117 to sign in to the Midwest Leadership Summit portal, or use the button below in the same browser. Code valid for: 10 min. Button valid for: 15 min. Each works once. If you didn't ask for it, you can ignore this email.
+
+Sign in to the portal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · es 1`] = `
+{
+  "subject": "305117 es tu código de acceso para Midwest Leadership Summit",
+  "text": "305117 es tu código de acceso para Midwest Leadership Summit
+
+Hola:
+
+Introduce 305117 para entrar en el portal de Midwest Leadership Summit o usa el botón de abajo en el mismo navegador. Código válido: 10 min. Botón válido: 15 min. Cada uno funciona una vez. Si no lo pediste, ignora este correo.
+
+Entrar al portal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · fr 1`] = `
+{
+  "subject": "305117 est votre code de connexion pour Midwest Leadership Summit",
+  "text": "305117 est votre code de connexion pour Midwest Leadership Summit
+
+Bonjour,
+
+Saisissez 305117 pour vous connecter au portail de Midwest Leadership Summit, ou utilisez le bouton ci-dessous dans le même navigateur. Code valable : 10 min. Bouton valable : 15 min. Chacun ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.
+
+Se connecter au portail: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए आपका साइन-इन कोड 305117 है",
+  "text": "Midwest Leadership Summit के लिए आपका साइन-इन कोड 305117 है
+
+नमस्ते,
+
+Midwest Leadership Summit पोर्टल में साइन इन करने के लिए 305117 दर्ज करें, या इसी ब्राउज़र में नीचे दिया बटन इस्तेमाल करें। कोड की वैधता: 10 मिनट। बटन की वैधता: 15 मिनट। हर एक केवल एक बार काम करता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+पोर्टल में साइन इन करें: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · it 1`] = `
+{
+  "subject": "305117 è il tuo codice di accesso per Midwest Leadership Summit",
+  "text": "305117 è il tuo codice di accesso per Midwest Leadership Summit
+
+Ciao,
+
+Inserisci 305117 per accedere al portale di Midwest Leadership Summit, oppure usa il pulsante qui sotto nello stesso browser. Codice valido: 10 min. Pulsante valido: 15 min. Ciascuno funziona una volta. Se non l’hai richiesto, ignora questa email.
+
+Accedi al portale: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitのサインインコードは305117です",
+  "text": "Midwest Leadership Summitのサインインコードは305117です
+
+こんにちは。
+
+305117を入力してMidwest Leadership Summitのポータルにサインインするか、同じブラウザーで下のボタンを使ってください。コードの有効時間：10分。ボタンの有効時間：15分。それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。
+
+ポータルにサインイン: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · nl 1`] = `
+{
+  "subject": "305117 is je inlogcode voor Midwest Leadership Summit",
+  "text": "305117 is je inlogcode voor Midwest Leadership Summit
+
+Hallo,
+
+Voer 305117 in om in te loggen op het portaal van Midwest Leadership Summit, of gebruik de knop hieronder in dezelfde browser. Code geldig: 10 min. Knop geldig: 15 min. Elk werkt één keer. Heb je dit niet aangevraagd, negeer deze e-mail dan.
+
+Inloggen op het portaal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · pt 1`] = `
+{
+  "subject": "305117 é seu código de acesso para Midwest Leadership Summit",
+  "text": "305117 é seu código de acesso para Midwest Leadership Summit
+
+Olá!
+
+Digite 305117 para entrar no portal de Midwest Leadership Summit ou use o botão abaixo no mesmo navegador. Código válido: 10 min. Botão válido: 15 min. Cada um funciona uma vez. Se você não pediu, ignore este e-mail.
+
+Entrar no portal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ru 1`] = `
+{
+  "subject": "305117 — ваш код входа для «Midwest Leadership Summit»",
+  "text": "305117 — ваш код входа для «Midwest Leadership Summit»
+
+Здравствуйте!
+
+Введите 305117, чтобы войти в портал «Midwest Leadership Summit», или нажмите кнопку ниже в том же браузере. Код действует: 10 мин. Кнопка действует: 15 мин. Каждый срабатывает один раз. Если вы его не запрашивали, проигнорируйте это письмо.
+
+Войти в портал: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-CN 1`] = `
+{
+  "subject": "305117 是您的Midwest Leadership Summit登录验证码",
+  "text": "305117 是您的Midwest Leadership Summit登录验证码
+
+您好：
+
+输入 305117 登录Midwest Leadership Summit门户，或在同一浏览器中使用下面的按钮。验证码有效期：10 分钟。按钮有效期：15 分钟。每个只能使用一次。如果不是您本人申请，请忽略此邮件。
+
+登录门户: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-TW 1`] = `
+{
+  "subject": "305117 是您的Midwest Leadership Summit登入驗證碼",
+  "text": "305117 是您的Midwest Leadership Summit登入驗證碼
+
+您好：
+
+輸入 305117 登入Midwest Leadership Summit入口網站，或在同一個瀏覽器中使用下方按鈕。驗證碼有效時間：10 分鐘。按鈕有效時間：15 分鐘。每個只能使用一次。如果不是您本人申請，請忽略此郵件。
+
+登入入口網站: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ar 1`] = `
+{
+  "subject": "تذكير: Upload your slides لـ Midwest Leadership Summit",
+  "text": "تذكير: Upload your slides لـ Midwest Leadership Summit
+
+مرحبًا،
+
+ما زالت Lakeside Events بانتظار «Upload your slides» لـ Midwest Leadership Summit. الموعد النهائي: 10‏/05‏/2027، 12:00 م.
+
+فتح مهامي: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · de 1`] = `
+{
+  "subject": "Erinnerung: Upload your slides für Midwest Leadership Summit",
+  "text": "Erinnerung: Upload your slides für Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events wartet noch auf „Upload your slides“ für Midwest Leadership Summit. Fällig: 10.05.2027, 12:00.
+
+Meine Aufgaben öffnen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · en 1`] = `
+{
+  "subject": "Reminder: Upload your slides for Midwest Leadership Summit",
+  "text": "Reminder: Upload your slides for Midwest Leadership Summit
+
+Hello,
+
+Lakeside Events is still waiting for “Upload your slides” for Midwest Leadership Summit. Due: May 10, 2027, 12:00 PM.
+
+Open my tasks: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · es 1`] = `
+{
+  "subject": "Recordatorio: Upload your slides para Midwest Leadership Summit",
+  "text": "Recordatorio: Upload your slides para Midwest Leadership Summit
+
+Hola:
+
+Lakeside Events sigue esperando «Upload your slides» para Midwest Leadership Summit. Vence: 10 may 2027, 12:00.
+
+Abrir mis tareas: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · fr 1`] = `
+{
+  "subject": "Rappel : Upload your slides pour Midwest Leadership Summit",
+  "text": "Rappel : Upload your slides pour Midwest Leadership Summit
+
+Bonjour,
+
+Lakeside Events attend toujours « Upload your slides » pour Midwest Leadership Summit. Échéance : 10 mai 2027, 12:00.
+
+Ouvrir mes tâches: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · hi 1`] = `
+{
+  "subject": "याद दिलाना: Midwest Leadership Summit के लिए Upload your slides",
+  "text": "याद दिलाना: Midwest Leadership Summit के लिए Upload your slides
+
+नमस्ते,
+
+Lakeside Events को Midwest Leadership Summit के लिए अभी भी “Upload your slides” का इंतज़ार है। अंतिम तिथि: 10 मई 2027, 12:00 pm।
+
+मेरे कार्य खोलें: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · it 1`] = `
+{
+  "subject": "Promemoria: Upload your slides per Midwest Leadership Summit",
+  "text": "Promemoria: Upload your slides per Midwest Leadership Summit
+
+Ciao,
+
+Lakeside Events attende ancora «Upload your slides» per Midwest Leadership Summit. Scadenza: 10 mag 2027, 12:00.
+
+Apri le mie attività: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ja 1`] = `
+{
+  "subject": "リマインダー：Midwest Leadership SummitのUpload your slides",
+  "text": "リマインダー：Midwest Leadership SummitのUpload your slides
+
+こんにちは。
+
+Lakeside EventsはMidwest Leadership Summitの「Upload your slides」をまだお待ちしています。期限：2027/05/10 12:00。
+
+タスクを開く: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · nl 1`] = `
+{
+  "subject": "Herinnering: Upload your slides voor Midwest Leadership Summit",
+  "text": "Herinnering: Upload your slides voor Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events wacht nog op ‘Upload your slides’ voor Midwest Leadership Summit. Uiterlijk: 10 mei 2027, 12:00.
+
+Mijn taken openen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · pt 1`] = `
+{
+  "subject": "Lembrete: Upload your slides para Midwest Leadership Summit",
+  "text": "Lembrete: Upload your slides para Midwest Leadership Summit
+
+Olá!
+
+Lakeside Events ainda aguarda “Upload your slides” para Midwest Leadership Summit. Prazo: 10 de mai. de 2027, 12:00.
+
+Abrir minhas tarefas: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ru 1`] = `
+{
+  "subject": "Напоминание: Upload your slides для «Midwest Leadership Summit»",
+  "text": "Напоминание: Upload your slides для «Midwest Leadership Summit»
+
+Здравствуйте!
+
+Lakeside Events всё ещё ждёт «Upload your slides» для «Midwest Leadership Summit». Срок: 10 мая 2027 г., 12:00.
+
+Открыть мои задачи: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · zh-CN 1`] = `
+{
+  "subject": "提醒：Midwest Leadership Summit的Upload your slides",
+  "text": "提醒：Midwest Leadership Summit的Upload your slides
+
+您好：
+
+Lakeside Events仍在等待您提交Midwest Leadership Summit的“Upload your slides”。截止时间：2027年5月10日 12:00。
+
+打开我的任务: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · zh-TW 1`] = `
+{
+  "subject": "提醒：Midwest Leadership Summit的Upload your slides",
+  "text": "提醒：Midwest Leadership Summit的Upload your slides
+
+您好：
+
+Lakeside Events仍在等待您提交Midwest Leadership Summit的「Upload your slides」。截止時間：2027年5月10日 中午12:00。
+
+開啟我的任務: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > sales.order_paid · ar 1`] = `
 {
   "subject": "طلب جديد: Amina Diallo",

@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "新聞與優惠"
+      },
+      "portal": {
+        "invite": "入口網站邀請",
+        "sign-in": "入口網站登入驗證碼"
+      },
+      "program": {
+        "task-reminder": "任務提醒"
       }
     },
     "status": {

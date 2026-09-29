@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "お知らせとオファー"
+      },
+      "portal": {
+        "invite": "ポータルへの招待",
+        "sign-in": "ポータルのサインインコード"
+      },
+      "program": {
+        "task-reminder": "タスクのリマインダー"
       }
     },
     "status": {

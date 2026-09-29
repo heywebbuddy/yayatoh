@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "أخبار وعروض"
+      },
+      "portal": {
+        "invite": "دعوة إلى البوابة",
+        "sign-in": "رمز الدخول إلى البوابة"
+      },
+      "program": {
+        "task-reminder": "تذكير بمهمة"
       }
     },
     "status": {

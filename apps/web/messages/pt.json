@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "Novidades e ofertas"
+      },
+      "portal": {
+        "invite": "Convite para o portal",
+        "sign-in": "Código de acesso ao portal"
+      },
+      "program": {
+        "task-reminder": "Lembrete de tarefa"
       }
     },
     "status": {

@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "新闻和优惠"
+      },
+      "portal": {
+        "invite": "门户邀请",
+        "sign-in": "门户登录验证码"
+      },
+      "program": {
+        "task-reminder": "任务提醒"
       }
     },
     "status": {

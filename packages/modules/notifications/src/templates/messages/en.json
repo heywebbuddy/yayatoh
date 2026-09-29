@@ -170,6 +170,21 @@
       "subject": "{eventName} is postponed",
       "intro": "{eventName} has been postponed. Your tickets stay valid for the new date. If you can’t make it, you can ask for a refund from your order page under the organizer’s refund policy.",
       "cta": "View my order"
+    },
+    "portal.invite": {
+      "subject": "You're invited to the {eventName} portal",
+      "intro": "{org} invited you to the portal for {eventName} as {role}. There you can see your sessions, update your profile and complete your tasks. The button asks for a sign-in code sent to this address.",
+      "cta": "Open the portal"
+    },
+    "portal.sign-in": {
+      "subject": "{code} is your sign-in code for {eventName}",
+      "intro": "Enter {code} to sign in to the {eventName} portal, or use the button below in the same browser. Code valid for: {minutes} min. Button valid for: {linkMinutes} min. Each works once. If you didn't ask for it, you can ignore this email.",
+      "cta": "Sign in to the portal"
+    },
+    "program.task-reminder": {
+      "subject": "Reminder: {title} for {eventName}",
+      "intro": "{org} is still waiting for “{title}” for {eventName}. Due: {until}.",
+      "cta": "Open my tasks"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "marketing",
     "box_office": "box office",
     "scanner": "scanner",
-    "viewer": "viewer"
+    "viewer": "viewer",
+    "speaker": "speaker",
+    "exhibitor_admin": "exhibitor admin",
+    "exhibitor_staff": "exhibitor staff",
+    "sponsor_contact": "sponsor contact"
   },
   "account": {
     "deleted": {

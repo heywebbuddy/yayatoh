@@ -170,6 +170,21 @@
       "subject": "{eventName} foi adiado",
       "intro": "{eventName} foi adiado. Seus ingressos continuam válidos para a nova data. Se não puder ir, você pode pedir um reembolso na página do seu pedido, conforme a política de reembolso do organizador.",
       "cta": "Ver meu pedido"
+    },
+    "portal.invite": {
+      "subject": "Convite para o portal de {eventName}",
+      "intro": "{org} convidou você para o portal de {eventName} como {role}. Lá você vê suas sessões, atualiza seu perfil e conclui suas tarefas. O botão pede um código de acesso enviado para este endereço.",
+      "cta": "Abrir o portal"
+    },
+    "portal.sign-in": {
+      "subject": "{code} é seu código de acesso para {eventName}",
+      "intro": "Digite {code} para entrar no portal de {eventName} ou use o botão abaixo no mesmo navegador. Código válido: {minutes} min. Botão válido: {linkMinutes} min. Cada um funciona uma vez. Se você não pediu, ignore este e-mail.",
+      "cta": "Entrar no portal"
+    },
+    "program.task-reminder": {
+      "subject": "Lembrete: {title} para {eventName}",
+      "intro": "{org} ainda aguarda “{title}” para {eventName}. Prazo: {until}.",
+      "cta": "Abrir minhas tarefas"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "marketing",
     "box_office": "bilheteria",
     "scanner": "leitor de ingressos",
-    "viewer": "visualizador"
+    "viewer": "visualizador",
+    "speaker": "palestrante",
+    "exhibitor_admin": "administrador do expositor",
+    "exhibitor_staff": "equipe do expositor",
+    "sponsor_contact": "contato do patrocinador"
   },
   "account": {
     "deleted": {

@@ -170,6 +170,21 @@
       "subject": "{eventName} è rinviato",
       "intro": "{eventName} è stato rinviato. I tuoi biglietti restano validi per la nuova data. Se non puoi partecipare, puoi chiedere un rimborso dalla pagina del tuo ordine secondo la politica di rimborso dell’organizzatore.",
       "cta": "Vedi il mio ordine"
+    },
+    "portal.invite": {
+      "subject": "Sei invitato al portale di {eventName}",
+      "intro": "{org} ti ha invitato al portale di {eventName} come {role}. Lì puoi vedere le tue sessioni, aggiornare il profilo e completare le attività. Il pulsante chiede un codice di accesso inviato a questo indirizzo.",
+      "cta": "Apri il portale"
+    },
+    "portal.sign-in": {
+      "subject": "{code} è il tuo codice di accesso per {eventName}",
+      "intro": "Inserisci {code} per accedere al portale di {eventName}, oppure usa il pulsante qui sotto nello stesso browser. Codice valido: {minutes} min. Pulsante valido: {linkMinutes} min. Ciascuno funziona una volta. Se non l’hai richiesto, ignora questa email.",
+      "cta": "Accedi al portale"
+    },
+    "program.task-reminder": {
+      "subject": "Promemoria: {title} per {eventName}",
+      "intro": "{org} attende ancora «{title}» per {eventName}. Scadenza: {until}.",
+      "cta": "Apri le mie attività"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "marketing",
     "box_office": "biglietteria",
     "scanner": "controllo accessi",
-    "viewer": "lettore"
+    "viewer": "lettore",
+    "speaker": "relatore",
+    "exhibitor_admin": "amministratore espositore",
+    "exhibitor_staff": "staff espositore",
+    "sponsor_contact": "referente sponsor"
   },
   "account": {
     "deleted": {

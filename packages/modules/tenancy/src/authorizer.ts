@@ -43,6 +43,11 @@ export function createOrgAuthorizer(
       if (permission === 'invitation:accept') return ctx.actor.type === 'user';
       // Public commands (checkout) are open to anyone; the command itself enforces what may be bought.
       if (permission.startsWith('public:')) return true;
+      // M5.3a portal accounts (P5-7): only `portal:{their role}`, never anything a member can do.
+      // The command re-checks the account (live, its event and its subject) in its transaction.
+      if (permission.startsWith('portal:'))
+        return ctx.actor.type === 'portal' && permission === `portal:${ctx.actor.role}`;
+      if (ctx.actor.type === 'portal') return false;
       if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
       if (ctx.actor.type === 'system') return true;
       // An org API key may do exactly what its live scopes list, in its own org only.

@@ -8,3 +8,4 @@ export {
   eventTags,
   shortLinks,
 } from './schema-content.ts';
+export { portalAccounts, portalChallenges, portalSessions } from './schema-portal.ts';

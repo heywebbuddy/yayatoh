@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "Nieuws en aanbiedingen"
+      },
+      "portal": {
+        "invite": "Portaaluitnodiging",
+        "sign-in": "Inlogcode portaal"
+      },
+      "program": {
+        "task-reminder": "Taakherinnering"
       }
     },
     "status": {

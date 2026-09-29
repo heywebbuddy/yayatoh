@@ -170,6 +170,21 @@
       "subject": "{eventName} est reporté",
       "intro": "{eventName} a été reporté. Vos billets restent valables pour la nouvelle date. Si vous ne pouvez pas venir, vous pouvez demander un remboursement depuis la page de votre commande, selon la politique de remboursement de l’organisateur.",
       "cta": "Voir ma commande"
+    },
+    "portal.invite": {
+      "subject": "Invitation au portail de {eventName}",
+      "intro": "{org} vous a invité au portail de {eventName} en tant que {role}. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.",
+      "cta": "Ouvrir le portail"
+    },
+    "portal.sign-in": {
+      "subject": "{code} est votre code de connexion pour {eventName}",
+      "intro": "Saisissez {code} pour vous connecter au portail de {eventName}, ou utilisez le bouton ci-dessous dans le même navigateur. Code valable : {minutes} min. Bouton valable : {linkMinutes} min. Chacun ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.",
+      "cta": "Se connecter au portail"
+    },
+    "program.task-reminder": {
+      "subject": "Rappel : {title} pour {eventName}",
+      "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
+      "cta": "Ouvrir mes tâches"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "marketing",
     "box_office": "billetterie",
     "scanner": "contrôleur",
-    "viewer": "lecteur"
+    "viewer": "lecteur",
+    "speaker": "intervenant",
+    "exhibitor_admin": "administrateur exposant",
+    "exhibitor_staff": "équipe exposant",
+    "sponsor_contact": "contact sponsor"
   },
   "account": {
     "deleted": {

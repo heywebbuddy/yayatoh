@@ -170,6 +170,21 @@
       "subject": "{eventName} 已延期",
       "intro": "{eventName} 已延期。您的票券在新日期仍然有效。如無法參加，可依主辦單位的退款政策在訂單頁面申請退款。",
       "cta": "查看我的訂單"
+    },
+    "portal.invite": {
+      "subject": "邀請您加入{eventName}入口網站",
+      "intro": "{org}邀請您以{role}身分加入{eventName}入口網站。您可以在那裡查看自己的場次、更新個人檔案並完成任務。點選按鈕後需要輸入寄到此信箱的登入驗證碼。",
+      "cta": "開啟入口網站"
+    },
+    "portal.sign-in": {
+      "subject": "{code} 是您的{eventName}登入驗證碼",
+      "intro": "輸入 {code} 登入{eventName}入口網站，或在同一個瀏覽器中使用下方按鈕。驗證碼有效時間：{minutes} 分鐘。按鈕有效時間：{linkMinutes} 分鐘。每個只能使用一次。如果不是您本人申請，請忽略此郵件。",
+      "cta": "登入入口網站"
+    },
+    "program.task-reminder": {
+      "subject": "提醒：{eventName}的{title}",
+      "intro": "{org}仍在等待您提交{eventName}的「{title}」。截止時間：{until}。",
+      "cta": "開啟我的任務"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "行銷",
     "box_office": "售票處",
     "scanner": "驗票員",
-    "viewer": "檢視者"
+    "viewer": "檢視者",
+    "speaker": "講者",
+    "exhibitor_admin": "參展商管理員",
+    "exhibitor_staff": "參展商工作人員",
+    "sponsor_contact": "贊助商聯絡人"
   },
   "account": {
     "deleted": {

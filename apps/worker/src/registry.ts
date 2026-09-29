@@ -1,9 +1,9 @@
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { listingsProjector } from '@yayatoh/marketplace';
-import { programMediaCleaner } from '@yayatoh/media';
+import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
@@ -18,6 +18,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { taskReminderMailer } from '@yayatoh/program';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -74,6 +75,10 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     chatReportSignals(),
     fraudSignalAlerts({ notifier }),
     programMediaCleaner(),
+    // M5.3a speaker portal: invitations, task reminders, approved photos.
+    portalInviteMailer({ notifier, appOrigin }),
+    taskReminderMailer({ notifier, appOrigin }),
+    speakerPhotoApprover(),
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
     // M3.6a: contact × event participation and contact profiles for audiences.

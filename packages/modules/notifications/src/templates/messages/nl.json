@@ -170,6 +170,21 @@
       "subject": "{eventName} is uitgesteld",
       "intro": "{eventName} is uitgesteld. Je tickets blijven geldig voor de nieuwe datum. Kun je niet komen, dan kun je op je bestelpagina om terugbetaling vragen volgens het terugbetalingsbeleid van de organisator.",
       "cta": "Mijn bestelling bekijken"
+    },
+    "portal.invite": {
+      "subject": "Uitnodiging voor het portaal van {eventName}",
+      "intro": "{org} heeft je als {role} uitgenodigd voor het portaal van {eventName}. Daar zie je je sessies, werk je je profiel bij en rond je je taken af. De knop vraagt om een inlogcode die naar dit adres wordt gestuurd.",
+      "cta": "Portaal openen"
+    },
+    "portal.sign-in": {
+      "subject": "{code} is je inlogcode voor {eventName}",
+      "intro": "Voer {code} in om in te loggen op het portaal van {eventName}, of gebruik de knop hieronder in dezelfde browser. Code geldig: {minutes} min. Knop geldig: {linkMinutes} min. Elk werkt één keer. Heb je dit niet aangevraagd, negeer deze e-mail dan.",
+      "cta": "Inloggen op het portaal"
+    },
+    "program.task-reminder": {
+      "subject": "Herinnering: {title} voor {eventName}",
+      "intro": "{org} wacht nog op ‘{title}’ voor {eventName}. Uiterlijk: {until}.",
+      "cta": "Mijn taken openen"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "marketing",
     "box_office": "kassa",
     "scanner": "scanner",
-    "viewer": "lezer"
+    "viewer": "lezer",
+    "speaker": "spreker",
+    "exhibitor_admin": "exposantbeheerder",
+    "exhibitor_staff": "exposantmedewerker",
+    "sponsor_contact": "sponsorcontact"
   },
   "account": {
     "deleted": {

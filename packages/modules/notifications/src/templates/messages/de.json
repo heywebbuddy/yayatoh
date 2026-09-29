@@ -170,6 +170,21 @@
       "subject": "{eventName} wurde verschoben",
       "intro": "{eventName} wurde verschoben. Deine Tickets bleiben für den neuen Termin gültig. Wenn du nicht kommen kannst, kannst du auf deiner Bestellseite nach der Erstattungsrichtlinie des Veranstalters eine Erstattung anfragen.",
       "cta": "Meine Bestellung ansehen"
+    },
+    "portal.invite": {
+      "subject": "Einladung zum Portal von {eventName}",
+      "intro": "{org} hat Sie als {role} zum Portal von {eventName} eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.",
+      "cta": "Portal öffnen"
+    },
+    "portal.sign-in": {
+      "subject": "{code} ist Ihr Anmeldecode für {eventName}",
+      "intro": "Geben Sie {code} ein, um sich im Portal von {eventName} anzumelden, oder nutzen Sie die Schaltfläche unten im selben Browser. Code gültig: {minutes} Min. Schaltfläche gültig: {linkMinutes} Min. Beide funktionieren einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail.",
+      "cta": "Im Portal anmelden"
+    },
+    "program.task-reminder": {
+      "subject": "Erinnerung: {title} für {eventName}",
+      "intro": "{org} wartet noch auf „{title}“ für {eventName}. Fällig: {until}.",
+      "cta": "Meine Aufgaben öffnen"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "Marketing",
     "box_office": "Abendkasse",
     "scanner": "Einlass",
-    "viewer": "Leser"
+    "viewer": "Leser",
+    "speaker": "Speaker",
+    "exhibitor_admin": "Aussteller-Admin",
+    "exhibitor_staff": "Aussteller-Team",
+    "sponsor_contact": "Sponsor-Kontakt"
   },
   "account": {
     "deleted": {

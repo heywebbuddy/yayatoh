@@ -130,6 +130,13 @@
       },
       "marketing": {
         "message": "News and offers"
+      },
+      "portal": {
+        "invite": "Portal invitation",
+        "sign-in": "Portal sign-in code"
+      },
+      "program": {
+        "task-reminder": "Task reminder"
       }
     },
     "status": {

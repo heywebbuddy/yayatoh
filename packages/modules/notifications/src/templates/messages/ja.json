@@ -170,6 +170,21 @@
       "subject": "{eventName} は延期されました",
       "intro": "{eventName} は延期されました。チケットは新しい日程でも有効です。参加できない場合は、主催者の返金ポリシーに従い、注文ページから返金をリクエストできます。",
       "cta": "注文を見る"
+    },
+    "portal.invite": {
+      "subject": "{eventName}のポータルへの招待",
+      "intro": "{org}から{eventName}のポータルに{role}として招待されました。セッションの確認、プロフィールの更新、タスクの完了ができます。ボタンを押すと、このアドレスに送られるサインインコードの入力を求められます。",
+      "cta": "ポータルを開く"
+    },
+    "portal.sign-in": {
+      "subject": "{eventName}のサインインコードは{code}です",
+      "intro": "{code}を入力して{eventName}のポータルにサインインするか、同じブラウザーで下のボタンを使ってください。コードの有効時間：{minutes}分。ボタンの有効時間：{linkMinutes}分。それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。",
+      "cta": "ポータルにサインイン"
+    },
+    "program.task-reminder": {
+      "subject": "リマインダー：{eventName}の{title}",
+      "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
+      "cta": "タスクを開く"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "マーケティング",
     "box_office": "ボックスオフィス",
     "scanner": "スキャナー",
-    "viewer": "閲覧者"
+    "viewer": "閲覧者",
+    "speaker": "登壇者",
+    "exhibitor_admin": "出展者管理者",
+    "exhibitor_staff": "出展者スタッフ",
+    "sponsor_contact": "スポンサー担当者"
   },
   "account": {
     "deleted": {

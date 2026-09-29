@@ -170,6 +170,21 @@
       "subject": "{eventName} se ha aplazado",
       "intro": "{eventName} se ha aplazado. Tus entradas siguen siendo válidas para la nueva fecha. Si no puedes asistir, puedes pedir un reembolso desde la página de tu pedido según la política de reembolso del organizador.",
       "cta": "Ver mi pedido"
+    },
+    "portal.invite": {
+      "subject": "Te invitan al portal de {eventName}",
+      "intro": "{org} te invitó al portal de {eventName} como {role}. Allí puedes ver tus sesiones, actualizar tu perfil y completar tus tareas. El botón pide un código de acceso que se envía a esta dirección.",
+      "cta": "Abrir el portal"
+    },
+    "portal.sign-in": {
+      "subject": "{code} es tu código de acceso para {eventName}",
+      "intro": "Introduce {code} para entrar en el portal de {eventName} o usa el botón de abajo en el mismo navegador. Código válido: {minutes} min. Botón válido: {linkMinutes} min. Cada uno funciona una vez. Si no lo pediste, ignora este correo.",
+      "cta": "Entrar al portal"
+    },
+    "program.task-reminder": {
+      "subject": "Recordatorio: {title} para {eventName}",
+      "intro": "{org} sigue esperando «{title}» para {eventName}. Vence: {until}.",
+      "cta": "Abrir mis tareas"
     }
   },
   "roles": {
@@ -180,7 +195,11 @@
     "marketing": "marketing",
     "box_office": "taquilla",
     "scanner": "escáner",
-    "viewer": "lector"
+    "viewer": "lector",
+    "speaker": "ponente",
+    "exhibitor_admin": "administrador de expositor",
+    "exhibitor_staff": "personal de expositor",
+    "sponsor_contact": "contacto de patrocinador"
   },
   "account": {
     "deleted": {
