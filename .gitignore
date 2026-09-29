@@ -12,6 +12,8 @@
 .env.*
 !.env.example
 *.pem
+# Synthetic, self-signed public test certificates (no keys; see the fixtures README)
+!packages/modules/notifications/tests/fixtures/synthetic-*-cert.pem
 *.p12
 *.p8
 *.key

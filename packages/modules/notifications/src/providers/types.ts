@@ -51,6 +51,21 @@ export function isProviderRejection(err: unknown): err is ProviderRejection {
   return err instanceof ProviderRejection;
 }
 
+/**
+ * Which provider an error came from, when the transport that threw routes between several (the
+ * WhatsApp router): provider health counts the error against the real provider, not the router.
+ */
+const ERROR_PROVIDER = new WeakMap<object, ProviderName>();
+
+export function tagErrorProvider<E>(err: E, provider: ProviderName): E {
+  if (err !== null && typeof err === 'object') ERROR_PROVIDER.set(err, provider);
+  return err;
+}
+
+export function errorProvider(err: unknown): ProviderName | undefined {
+  return err !== null && typeof err === 'object' ? ERROR_PROVIDER.get(err) : undefined;
+}
+
 /** A webhook request as the endpoint received it: the raw body is what signatures cover. */
 export interface WebhookRequest {
   readonly rawBody: string;

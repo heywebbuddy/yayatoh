@@ -10,6 +10,7 @@ import {
   ProviderRejection,
   type ProviderWebhookAdapter,
   safeEqual,
+  tagErrorProvider,
 } from './types.ts';
 
 /**
@@ -409,9 +410,15 @@ export function routedWhatsAppTransport(routes: {
     name: 'whatsapp_router' as const,
     async send(m: OutboundWhatsApp) {
       const route = m.sender?.route ?? routes.defaultRoute;
+      const provider = route === 'gateway' ? 'whatsapp_gateway' : 'whatsapp_cloud';
       const t = route === 'gateway' ? routes.gateway : routes.cloud;
-      if (!t) throw new Error(`no WhatsApp ${route} adapter configured`);
-      return t.send(m);
+      if (!t) throw tagErrorProvider(new Error(`no WhatsApp ${route} adapter configured`), provider);
+      try {
+        const sent = await t.send(m);
+        return { ...sent, provider: sent.provider ?? provider };
+      } catch (err) {
+        throw tagErrorProvider(err, provider);
+      }
     },
   };
 }

@@ -14,7 +14,7 @@ import type { Verdict } from './policy/rules.ts';
 import { smsSegments } from './policy/sms-segments.ts';
 import { preferenceEnabledTx } from './preferences.ts';
 import { type HealthTick, recordProviderHealth } from './provider-health.ts';
-import { isProviderRejection, type RejectionCode } from './providers/types.ts';
+import { errorProvider, isProviderRejection, type RejectionCode } from './providers/types.ts';
 import { isValidTimeZone, quietHoursRelease } from './quiet-hours.ts';
 import {
   addressSuppressions,
@@ -434,13 +434,14 @@ export async function dispatchDueTx(
       result.sent += 1;
     } catch (err) {
       const channelProvider =
-        row.channel === 'email'
+        errorProvider(err) ??
+        (row.channel === 'email'
           ? deps.transports.email.name
           : row.channel === 'sms'
             ? deps.transports.sms?.name
             : row.channel === 'whatsapp'
               ? deps.transports.whatsapp?.name
-              : deps.transports.push?.name;
+              : deps.transports.push?.name);
       // A provider's permanent refusal (M3.5b): final at once; reachability refusals fall back.
       if (isProviderRejection(err)) {
         if (channelProvider)

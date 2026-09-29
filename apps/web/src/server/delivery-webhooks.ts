@@ -73,5 +73,15 @@ export async function handleWebhook(
       headers: TWIML,
     });
   }
-  return Response.json({ ...out.result, confirmed: out.confirmed ?? false });
+  // The M1.10d counts (email endpoints answer exactly these); texts add fallbacks and keywords;
+  // `confirmed` only when an SNS subscription was confirmed.
+  const r = out.result;
+  return Response.json({
+    recorded: r?.recorded ?? 0,
+    duplicate: r?.duplicate ?? 0,
+    unknown: r?.unknown ?? 0,
+    suppressed: r?.suppressed ?? 0,
+    ...(channel === 'email' ? {} : { fellBack: r?.fellBack ?? 0, keywords: r?.keywords ?? 0 }),
+    ...(out.confirmed ? { confirmed: true } : {}),
+  });
 }

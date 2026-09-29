@@ -37,7 +37,12 @@ import {
   twilioSmsTransport,
   twilioWebhookAdapter,
 } from '../src/providers/twilio.ts';
-import { ProviderRejection, WebhookVerificationError } from '../src/providers/types.ts';
+import {
+  errorProvider,
+  isProviderRejection,
+  ProviderRejection,
+  WebhookVerificationError,
+} from '../src/providers/types.ts';
 import {
   cloudStatusToEvent,
   gatewaySignature,
@@ -870,12 +875,35 @@ describe("the owner's WhatsApp gateway", () => {
       defaultRoute: 'cloud',
     });
     const m = { to: '+1', body: 'x', category: 'utility' as const, idempotencyKey: MSG };
-    await router.send(m);
-    await router.send({ ...m, sender: { route: 'gateway' } });
+    expect((await router.send(m)).provider).toBe('whatsapp_cloud');
+    expect((await router.send({ ...m, sender: { route: 'gateway' } })).provider).toBe('whatsapp_gateway');
     expect(seen).toEqual(['cloud', 'gateway']);
     await expect(routedWhatsAppTransport({ cloud: null, defaultRoute: 'cloud' }).send(m)).rejects.toThrow(
       /no WhatsApp cloud/,
     );
+  });
+
+  it('attributes a routed send error to the real provider (provider health), not the router', async () => {
+    const refused = new ProviderRejection('not_on_channel', '131026');
+    const router = routedWhatsAppTransport({
+      cloud: { send: async () => ({ providerMessageId: 'c' }) },
+      gateway: {
+        send: async () => {
+          throw refused;
+        },
+      },
+      defaultRoute: 'gateway',
+    });
+    const m = { to: '+1', body: 'x', category: 'utility' as const, idempotencyKey: MSG };
+    const err = await router.send(m).catch((e: unknown) => e);
+    expect(err).toBe(refused);
+    expect(isProviderRejection(err)).toBe(true);
+    expect(errorProvider(err)).toBe('whatsapp_gateway');
+    const missing = await routedWhatsAppTransport({ defaultRoute: 'cloud' })
+      .send(m)
+      .catch((e: unknown) => e);
+    expect(errorProvider(missing)).toBe('whatsapp_cloud');
+    expect(errorProvider(new Error('plain'))).toBeUndefined();
   });
 });
 
