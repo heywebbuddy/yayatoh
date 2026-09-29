@@ -8,6 +8,7 @@ import {
 import type { TenantTx } from '@yayatoh/db';
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { type Ctx, DomainError, type Query, utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
+import { analyticsReportTx, deliverabilityReportTx } from '@yayatoh/marketing';
 import { navIncludes, tenantQuery } from '@yayatoh/platform';
 import { programQuery } from '@yayatoh/program';
 import { eventMetricsQuery, eventTimeseriesQuery, type ProjectedKey } from '@yayatoh/reports';
@@ -179,6 +180,53 @@ export const AlertsWidgetDto = z.object({
       at: iso,
     }),
   ),
+});
+
+/** M3.8b: this event's marketing results (org currency, integer minor units). Money. */
+export const CampaignsWidgetDto = z.object({
+  currency: z.string(),
+  fromDay: z.string(),
+  toDay: z.string(),
+  totals: z.object({
+    sends: Count.nullable(),
+    clicks: Count,
+    uniqueClickers: Count,
+    orders: Count,
+    revenueMinor: z.int(),
+    firstTouchOrders: Count,
+    firstTouchRevenueMinor: z.int(),
+    conversionBps: Count,
+  }),
+  /** The top campaigns (by last-touch revenue), five at most. */
+  campaigns: z.array(
+    z.object({
+      key: z.string(),
+      kind: z.enum(['campaign', 'utm']),
+      name: z.string().nullable(),
+      sends: Count.nullable(),
+      clicks: Count,
+      orders: Count,
+      revenueMinor: z.int(),
+      firstTouchOrders: Count,
+      firstTouchRevenueMinor: z.int(),
+      conversionBps: Count,
+    }),
+  ),
+  more: Count,
+});
+
+/** M3.8b: the org's email deliverability over the alert window, and the auto-pause. */
+export const DeliverabilityWidgetDto = z.object({
+  sent: Count,
+  bounceBps: Count,
+  complaintBps: Count,
+  bounceOver: z.boolean(),
+  complaintOver: z.boolean(),
+  /** Sending domains and campaigns over a threshold. */
+  domainsOver: Count,
+  campaignsOver: Count,
+  paused: z.boolean(),
+  windowDays: Count,
 });
 
 // --- Loaders ---------------------------------------------------------------------------------
@@ -366,6 +414,75 @@ export const deviceBoardWidget = defineWidget(
   },
 );
 
+/** How far back the event's campaign tile looks (the attribution window's maximum). */
+export const CAMPAIGNS_WIDGET_DAYS = 90;
+
+export const campaignsWidget = defineWidget(
+  WIDGET_META.campaigns,
+  CampaignsWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const from = new Date(ctx.now.getTime() - (CAMPAIGNS_WIDGET_DAYS - 1) * 86_400_000);
+    const day = (d: Date) => utcToZonedInput(d, scope.event.timezone).slice(0, 10);
+    const r = await analyticsReportTx(tx, ctx, {
+      dimension: 'campaign',
+      eventId: scope.event.id,
+      from: day(from),
+      to: day(ctx.now),
+    });
+    const campaigns = r.rows.filter(
+      (x): x is typeof x & { kind: 'campaign' | 'utm' } => x.kind === 'campaign' || x.kind === 'utm',
+    );
+    return {
+      currency: r.currency,
+      fromDay: r.fromDay,
+      toDay: r.toDay,
+      totals: {
+        sends: r.totals.sends,
+        clicks: r.totals.clicks,
+        uniqueClickers: r.totals.uniqueClickers,
+        orders: r.totals.lastTouch.orders,
+        revenueMinor: r.totals.lastTouch.revenueMinor,
+        firstTouchOrders: r.totals.firstTouch.orders,
+        firstTouchRevenueMinor: r.totals.firstTouch.revenueMinor,
+        conversionBps: r.totals.conversionBps,
+      },
+      campaigns: campaigns.slice(0, 5).map((c) => ({
+        key: c.key,
+        kind: c.kind,
+        name: c.name,
+        sends: c.sends,
+        clicks: c.clicks,
+        orders: c.lastTouch.orders,
+        revenueMinor: c.lastTouch.revenueMinor,
+        firstTouchOrders: c.firstTouch.orders,
+        firstTouchRevenueMinor: c.firstTouch.revenueMinor,
+        conversionBps: c.conversionBps,
+      })),
+      more: Math.max(0, campaigns.length - 5),
+    };
+  },
+);
+
+export const deliverabilityWidget = defineWidget(
+  WIDGET_META.deliverability,
+  DeliverabilityWidgetDto,
+  async ({ tx, ctx }) => {
+    const d = await deliverabilityReportTx(tx, ctx);
+    const over = (x: { bounceOver: boolean; complaintOver: boolean }) => x.bounceOver || x.complaintOver;
+    return {
+      sent: d.org.sent,
+      bounceBps: d.org.bounceBps,
+      complaintBps: d.org.complaintBps,
+      bounceOver: d.org.bounceOver,
+      complaintOver: d.org.complaintOver,
+      domainsOver: d.domains.filter(over).length,
+      campaignsOver: d.campaigns.filter(over).length,
+      paused: d.autoPause?.active ?? false,
+      windowDays: d.thresholds.windowDays,
+    };
+  },
+);
+
 /** The alerts slot until M3.2b registers its engine (`withWidget(registry, alertsWidget)`). */
 export const alertsSlotWidget = defineWidget(WIDGET_META.alerts, AlertsWidgetDto, async () => ({
   engine: 'pending' as const,
@@ -383,4 +500,6 @@ export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   alertsSlotWidget,
   entrancesWidget,
   deviceBoardWidget,
+  campaignsWidget,
+  deliverabilityWidget,
 ]);

@@ -16,6 +16,10 @@ export {
 } from './view.ts';
 export {
   AlertsWidgetDto,
+  CampaignsWidgetDto,
+  campaignsWidget,
+  DeliverabilityWidgetDto,
+  deliverabilityWidget,
   type AnyWidgetDef,
   alertsSlotWidget,
   CheckinsWidgetDto,

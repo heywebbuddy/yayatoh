@@ -1266,6 +1266,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/marketing':
+        specifier: workspace:*
+        version: link:../marketing
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
@@ -1442,6 +1445,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1451,12 +1457,18 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

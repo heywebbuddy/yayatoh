@@ -20,6 +20,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/marketing": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/program": "workspace:*",
     "@yayatoh/reports": "workspace:*",

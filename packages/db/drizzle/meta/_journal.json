@@ -603,6 +603,13 @@
       "when": 1790717461926,
       "tag": "0085_handy_william_stryker",
       "breakpoints": true
+    },
+    {
+      "idx": 86,
+      "version": "7",
+      "when": 1790721856315,
+      "tag": "0086_naive_scorpion",
+      "breakpoints": true
     }
   ]
 }

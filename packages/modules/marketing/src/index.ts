@@ -28,3 +28,29 @@ export {
 } from './links.ts';
 export { privateColumns } from './private-columns.ts';
 export { linkDetailQuery, linkReportQuery, utmOnlyReportQuery } from './reports.ts';
+export {
+  ANALYTICS_CSV_COLUMNS,
+  type AnalyticsCsvColumn,
+  AnalyticsCsvRow,
+  AnalyticsInput,
+  AnalyticsReportDto,
+  AnalyticsRowDto,
+  analyticsCsv,
+  analyticsCsvSerializer,
+  analyticsReportQuery,
+  analyticsReportTx,
+  bpsToPct,
+  CampaignDetailDto,
+  campaignDetailQuery,
+  FiguresDto,
+} from './analytics.ts';
+export {
+  campaignKeyOf,
+  DEFAULT_RANGE_DAYS,
+  DIMENSIONS,
+  type Dimension,
+  dayRange,
+  MAX_RANGE_DAYS,
+  parseCampaignKey,
+} from './domain/analytics.ts';
+export { DeliverabilityDto, deliverabilityReportQuery, deliverabilityReportTx } from './deliverability.ts';

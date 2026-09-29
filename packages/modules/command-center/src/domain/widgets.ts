@@ -20,6 +20,9 @@ export const WIDGET_KEYS = [
   // Batch 3d merge: M3.4a's staff views (the Scan PWA's staff mode) on the Command Center.
   'entrances',
   'deviceBoard',
+  // M3.8b marketing analytics: campaign → registrations and revenue, and email deliverability.
+  'campaigns',
+  'deliverability',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -146,6 +149,30 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     size: 'lg',
     channel: 'event.devices',
   },
+  // M3.8b: this event's campaigns, channels and links → orders and revenue (first and last touch).
+  // Money: never on the door layout.
+  campaigns: {
+    key: 'campaigns',
+    module: 'marketing',
+    permission: 'marketing:read',
+    roles: ['owner', 'marketing'],
+    profiles: SELLING,
+    modes: ALL_MODES,
+    size: 'lg',
+    channel: null,
+    revenue: true,
+  },
+  // M3.8b: the org's email bounce and complaint rates (7 days), the auto-pause and the alert.
+  deliverability: {
+    key: 'deliverability',
+    module: 'marketing',
+    permission: 'messages:read',
+    roles: ['owner', 'marketing'],
+    profiles: 'all',
+    modes: ALL_MODES,
+    size: 'md',
+    channel: 'org.alerts',
+  },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {
     key: 'alerts',
@@ -189,10 +216,10 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
     wrap: ['checkins', 'timeline'],
   },
   marketing: {
-    planning: ['readiness', 'tickets', 'alerts', 'timeline'],
-    pre_show: ['tickets', 'readiness', 'alerts', 'timeline'],
-    live: ['tickets', 'alerts', 'timeline'],
-    wrap: ['tickets', 'timeline'],
+    planning: ['campaigns', 'readiness', 'tickets', 'deliverability', 'alerts', 'timeline'],
+    pre_show: ['campaigns', 'tickets', 'readiness', 'deliverability', 'alerts', 'timeline'],
+    live: ['tickets', 'campaigns', 'alerts', 'timeline'],
+    wrap: ['campaigns', 'tickets', 'deliverability', 'timeline'],
   },
 };
 

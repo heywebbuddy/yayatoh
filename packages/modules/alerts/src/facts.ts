@@ -1,7 +1,7 @@
 import { checkinFactsTx, deviceHealthTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, findEventTx } from '@yayatoh/events';
-import { deliverabilityFactsTx } from '@yayatoh/notifications';
+import { deliverabilityBreakdownTx, deliverabilityFactsTx } from '@yayatoh/notifications';
 import { paymentAlertFactsTx } from '@yayatoh/orders';
 import { payoutRequirementsPastDueTx } from '@yayatoh/payments';
 import { failedBulkOperationsTx } from '@yayatoh/platform';
@@ -73,10 +73,11 @@ export async function eventFactsTx(
 /** Gather the org-level facts (domains, payout account, email deliverability, failures). */
 export async function orgFactsTx(tx: TenantTx, now: Date): Promise<OrgFacts> {
   const since = new Date(now.getTime() - THRESHOLDS.automationWindowMs);
-  const [domains, due, mail, lastDay, bulk] = await Promise.all([
+  const [domains, due, mail, breakdown, lastDay, bulk] = await Promise.all([
     domainProblemsTx(tx, now, THRESHOLDS.sslGraceMs),
     payoutRequirementsPastDueTx(tx),
     deliverabilityFactsTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
+    deliverabilityBreakdownTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
     deliverabilityFactsTx(tx, now, THRESHOLDS.automationWindowMs),
     failedBulkOperationsTx(tx, since),
   ]);
@@ -89,6 +90,10 @@ export async function orgFactsTx(tx: TenantTx, now: Date): Promise<OrgFacts> {
     bounced: mail.bounced,
     complained: mail.complained,
     messagingAutoPaused: mail.autoPaused,
+    emailScopes: [
+      ...breakdown.domains.map((d) => ({ kind: 'domain' as const, ...d })),
+      ...breakdown.campaigns.map((c) => ({ kind: 'campaign' as const, ...c })),
+    ],
     failedMessages: lastDay.failed,
     failedBulkActions: bulk,
   };
