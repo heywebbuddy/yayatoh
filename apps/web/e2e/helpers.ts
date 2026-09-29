@@ -38,8 +38,8 @@ export function devPassword(): string {
 export const personaCode = (email = OWNER) =>
   totp(secretKey(devPersonaTotpSecret(email, devPassword())), Date.now());
 
-/** The current authenticator code for a setup key, as an app would show it. */
-export const codeForKey = (setupKey: string) => totp(base32Decode(setupKey), Date.now());
+/** The authenticator code for a setup key (now, or at `at`), as an app would show it. */
+export const codeForKey = (setupKey: string, at = Date.now()) => totp(base32Decode(setupKey), at);
 
 /** A code that is certainly wrong right now (not the current one, nor one step either side). */
 export function wrongCode(right: (at: number) => string): string {

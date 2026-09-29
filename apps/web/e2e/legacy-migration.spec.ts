@@ -1,4 +1,4 @@
-import { closeSync, existsSync, openSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { codeForKey, expectAccessible } from './helpers.ts';
 
@@ -112,6 +112,40 @@ function claimSetUp(): boolean {
     return false;
   }
 }
+const codeLockFile = () => new URL(`./.generated/legacy-owner-2fa-${runTag()}.code-lock`, import.meta.url);
+const stepFile = () => new URL(`./.generated/legacy-owner-2fa-${runTag()}.step`, import.meta.url);
+const TOTP_STEP_MS = 30_000;
+const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Answers a two-step challenge for the shared owner with an authenticator code. The server takes
+ * each time step once, and only a step after the last one used (replay protection), so the
+ * projects take turns (an exclusive lock file) and each uses a step no project used before;
+ * `answer` enters the code and waits until the server has taken it.
+ */
+async function withFreshCode(key: string, answer: (code: string) => Promise<void>): Promise<void> {
+  for (;;) {
+    try {
+      closeSync(openSync(codeLockFile(), 'wx'));
+      break;
+    } catch {
+      await pause(200);
+    }
+  }
+  try {
+    const last = existsSync(stepFile()) ? Number(readFileSync(stepFile(), 'utf8')) : -1;
+    let step = Math.floor(Date.now() / TOTP_STEP_MS);
+    if (step <= last) {
+      step = last + 1;
+      await pause(step * TOTP_STEP_MS - Date.now() + 100);
+    }
+    writeFileSync(stepFile(), String(step));
+    await answer(codeForKey(key, step * TOTP_STEP_MS));
+  } finally {
+    unlinkSync(codeLockFile());
+  }
+}
+
 async function setUpKey(): Promise<string> {
   for (let i = 0; i < 120; i++) {
     if (existsSync(keyFile())) return readFileSync(keyFile(), 'utf8');
@@ -148,7 +182,8 @@ test.describe('legacy migration — the migrated organizer', () => {
   });
 
   test('signs in with their legacy password and lands in their migrated org', async () => {
-    test.setTimeout(90_000);
+    // The last project to answer may wait two authenticator steps (60 s) for a fresh code.
+    test.setTimeout(150_000);
     const first = claimSetUp();
     // The others sign in once the first project has turned two-step verification on.
     const known = first ? null : await setUpKey();
@@ -163,18 +198,23 @@ test.describe('legacy migration — the migrated organizer', () => {
         .getByRole('button', { name: 'Set up authenticator app' })
         .click();
       const key = (await page.getByTestId('setup-key').textContent()) ?? '';
-      await page.getByLabel('6-digit code').fill(codeForKey(key));
-      await page.getByRole('button', { name: 'Verify and turn on' }).click();
-      await expect(
-        page.getByRole('status').filter({ hasText: 'Two-step verification is on.' }),
-      ).toBeVisible();
+      await withFreshCode(key, async (code) => {
+        await page.getByLabel('6-digit code').fill(code);
+        await page.getByRole('button', { name: 'Verify and turn on' }).click();
+        await expect(
+          page.getByRole('status').filter({ hasText: 'Two-step verification is on.' }),
+        ).toBeVisible();
+      });
       await page.getByRole('button', { name: "I've saved my codes" }).click();
       writeFileSync(keyFile(), key);
       await page.goto(`/o/${h.org.slug}`);
     } else {
       // Two-step verification is on: the legacy password, then a code from the app.
-      await page.getByLabel('6-digit code').fill(codeForKey(known ?? ''));
-      await page.getByRole('button', { name: 'Verify and sign in' }).click();
+      await withFreshCode(known ?? '', async (code) => {
+        await page.getByLabel('6-digit code').fill(code);
+        await page.getByRole('button', { name: 'Verify and sign in' }).click();
+        await expect(page).toHaveURL(new RegExp(`/o/${h.org.slug}$`));
+      });
     }
     await expect(page).toHaveURL(new RegExp(`/o/${h.org.slug}$`));
     await expect(page.getByRole('heading', { level: 1 })).toContainText(h.owner.name.split(' ')[0] as string);

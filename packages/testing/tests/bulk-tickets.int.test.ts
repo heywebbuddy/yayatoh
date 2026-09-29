@@ -32,7 +32,10 @@ import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { EXPORT_PARAMS, type OrgFixture, ports, runBulk, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 
-const RUN = uuidv7().slice(-8);
+// Digits only: buyers' emails carry it, and a letter pair like "ad" would match the name searches.
+const RUN = uuidv7()
+  .slice(-8)
+  .replace(/[a-f]/g, (c) => String(c.charCodeAt(0) - 97));
 const DURING = new Date('2029-06-01T20:00:00Z');
 const NEXT_DAY = new Date('2029-06-02T20:00:00Z');
 let a: OrgFixture;

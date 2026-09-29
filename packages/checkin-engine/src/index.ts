@@ -1,4 +1,5 @@
 export { legacyPayloadHash, legacyQrPayload } from '@yayatoh/ticket-crypto';
+export { clockOffsetMs } from './clock.ts';
 export {
   admittedKey,
   legacyIndex,

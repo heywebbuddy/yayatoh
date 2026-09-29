@@ -1,5 +1,6 @@
 import {
   admittedKey,
+  clockOffsetMs,
   eventDay,
   legacyIndex,
   MANIFEST_VERSION,
@@ -91,7 +92,7 @@ export class ScanClient {
   /** Migrated tickets by their legacy QR payload hashes (M1.9e). */
   private byLegacy = new Map<string, ManifestRow>();
   private admitted = new Set<string>();
-  /** server time − device time, measured at each sync. */
+  /** server time − device time, measured at each sync (within the manifest request's round trip). */
   clockOffsetMs = 0;
   /** Where this device stands (an entrance or zone), or null for the whole event. */
   checkpointId: string | null = null;
@@ -188,10 +189,12 @@ export class ScanClient {
     }
     let first = true;
     let header: ManifestHeader | null = null;
+    let offset = 0;
     for (;;) {
       const qs = new URLSearchParams({ limit: '2000' });
       if (cursor) qs.set('cursor', cursor);
       if (cursor && first) qs.set('overlap', 'true');
+      const sentAt = Date.now();
       const res = await fetch(`/api/v1/events/${this.config.eventId}/manifest?${qs}`, this.api);
       if (res.status === 403) throw new ScanSyncError('not_assigned');
       if (!res.ok) throw new Error(`manifest ${res.status}`);
@@ -202,6 +205,11 @@ export class ScanClient {
         complete: boolean;
       };
       header = page.header;
+      offset = clockOffsetMs({
+        serverTime: new Date(page.header.serverTime).getTime(),
+        sentAt,
+        receivedAt: Date.now(),
+      });
       for (const r of page.rows) {
         // A reissued (claimed) ticket gets a new short code: forget the old one, so it stops
         // working offline too.
@@ -217,7 +225,7 @@ export class ScanClient {
     if (!header) return;
     // The scope is signed with the org's key: a manifest whose scope doesn't verify is not used.
     if (!(await verifyManifestScope(header))) throw new ScanSyncError('bad_scope');
-    this.clockOffsetMs = new Date(header.serverTime).getTime() - Date.now();
+    this.clockOffsetMs = offset;
     await kvSet('clockOffsetMs', this.clockOffsetMs);
     this.snapshot = {
       header,
