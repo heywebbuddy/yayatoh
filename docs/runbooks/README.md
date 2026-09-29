@@ -14,6 +14,8 @@ approved by the owner step by step.
 | [key-rotation.md](key-rotation.md) | Scheduled rotation, a leaked secret, a departing person |
 | [webhook-replay.md](webhook-replay.md) | Payments or other provider events were missed or failed |
 | [restore-terminated-org.md](restore-terminated-org.md) | An org was terminated by mistake and the platform owner approved restoring it |
+| [legacy-migration.md](legacy-migration.md) | Migrating a legacy instance's data (ELT, rehearsals) |
+| [cutover.md](cutover.md) | Moving an instance to the new platform (M2.5 tooling), the read-only freeze, and the rollback before PONR |
 
 **Conventions**
 - Commands are copy-paste ready and marked **(local/staging)** or **(production, owner)**.
