@@ -19,6 +19,9 @@ Each branch's last commit message is its report (migrations, hand edits, owner i
 - When two branches implement the same thing differently, keep one coherent version and say which.
 - Never weaken, skip or delete a test or gate to get green. Fix interaction failures honestly (product code or test data setup) and explain.
 
+## Known intermittent failure to root-cause in this batch
+CI run 36573133566 (head f4e4fcc, docs-only commit), shard 2/6: `[mobile-375] e2e/realtime.spec.ts:244 "a dropped connection resumes from its last message and misses nothing"` failed with `apiRequestContext.post: read ECONNRESET` on `POST /api/dev/seat-streams` (line 256). It passed on runs 101, 102 and 104. `dropRealtimeStreams()` (apps/web/src/server/realtime.ts) closes every open stream of the process, so the three projects running in parallel drop each other's streams, and the reset may hit the POST's own keep-alive socket. Find the real cause (product or test data setup), fix it properly (for example scope the dev drop to the caller's streams or org, or make the request robust in a way that still proves the resume), prove it with `--repeat-each=5` on all three projects on the headless shell, and list it in your report. Never weaken or skip the test.
+
 ## Environment setup
 1. `node --version` v24, `pnpm --version` 12.x, else `bash .claude/cloud-setup.sh`.
 2. If `docker ps` fails: `(dockerd > /tmp/dockerd.log 2>&1 &)`, wait, then `docker compose up -d postgres gotenberg mailpit`.
