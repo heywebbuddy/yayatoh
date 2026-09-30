@@ -95,7 +95,11 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
  * still holds: consumers dedupe through processed_events and deliveries through their dedupe keys,
  * so a real worker running at the same time changes nothing.
  */
-export async function drainOrgMessages(orgId: string, appOrigin: string, opts: { scheduled?: boolean } = {}) {
+export async function drainOrgMessages(
+  orgId: string,
+  appOrigin: string,
+  opts: { scheduled?: boolean; sweep?: boolean } = {},
+) {
   const subs = messageSubscribers(appOrigin);
   const types = [...new Set(subs.flatMap((s) => s.events.map((e) => e.split('@')[0] as string)))];
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'dev.drain' } });
@@ -111,8 +115,12 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     consumed += fresh;
     if (fresh === 0) break;
   }
-  // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now.
-  await evaluateOrgNow(orgId, { notifier });
+  // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
+  // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
+  // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged
+  // alerts, which in a shared e2e org (hundreds of events, never acknowledged) made every other
+  // suite's drain dispatch that backlog (batch 3d merge).
+  if (opts.sweep) await evaluateOrgNow(orgId, { notifier });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
     // it may reach besides real push services are the fake push service on this origin.

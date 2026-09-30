@@ -38,7 +38,7 @@ const card = (page: Page, title: string) =>
 
 /** What the worker does every few seconds: the outbox through the subscribers, then the sweep. */
 async function drain(page: Page, slug: string) {
-  const res = await page.request.post('/api/dev/outbox/drain', { form: { org: slug } });
+  const res = await page.request.post('/api/dev/outbox/drain', { form: { org: slug, sweep: '1' } });
   expect(res.status()).toBe(200);
 }
 
