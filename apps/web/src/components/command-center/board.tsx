@@ -118,13 +118,19 @@ export function CommandCenterBoard({
   const size = new Map(slots.map((s) => [s.key, s.size]));
   const title = (k: WidgetKey) => t(`widget.${k}.title`);
 
+  // Only the latest re-read of a widget lands (a slow one started before a filter change never
+  // overwrites the newer answer).
+  const latest = useRef(new Map<string, number>());
   const refetch = useCallback(
     async (key: WidgetKey, p?: Params) => {
       const qs = new URLSearchParams(Object.entries(p ?? paramsRef.current[key] ?? {})).toString();
+      const seq = (latest.current.get(key) ?? 0) + 1;
+      latest.current.set(key, seq);
       try {
         const res = await fetch(`${widgetUrl}/${key}${qs ? `?${qs}` : ''}`, { cache: 'no-store' });
-        if (!res.ok) return;
+        if (!res.ok || latest.current.get(key) !== seq) return;
         const body = (await res.json()) as { data: unknown };
+        if (latest.current.get(key) !== seq) return;
         setData((d) => ({ ...d, [key]: body.data }));
       } catch {
         // Offline for a moment: the next message or poll re-reads.
@@ -265,6 +271,7 @@ export function CommandCenterBoard({
   const controls = (k: WidgetKey) => ({
     params: params[k] ?? {},
     setParams: (next: Params) => {
+      paramsRef.current = { ...paramsRef.current, [k]: next };
       setParamsState((m) => ({ ...m, [k]: next }));
       void refetch(k, next);
     },

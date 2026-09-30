@@ -237,7 +237,8 @@ function SpeedTable({
 }) {
   const t = useTranslations('commandCenter.widget.checkinSpeed');
   return (
-    <div className="overflow-x-auto">
+    // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1)
+    <section className="overflow-x-auto" aria-label={caption} tabIndex={0}>
       <table className="w-full border-collapse text-body" data-testid={testId}>
         <caption className="text-start text-caption font-medium text-zinc-700">{caption}</caption>
         <thead>
@@ -273,7 +274,7 @@ function SpeedTable({
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }
 
@@ -453,7 +454,8 @@ export function CapacityBody({ d, c }: { d: Capacity; c: Ctx }) {
         </p>
       </div>
       {d.areas.length > 0 ? (
-        <div className="overflow-x-auto">
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1)
+        <section className="overflow-x-auto" aria-label={t('areas')} tabIndex={0}>
           <table className="w-full border-collapse text-body" data-testid="cc-capacity-areas">
             <caption className="text-start text-caption font-medium text-zinc-700">{t('areas')}</caption>
             <thead>
@@ -490,7 +492,7 @@ export function CapacityBody({ d, c }: { d: Capacity; c: Ctx }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </section>
       ) : null}
     </div>
   );
