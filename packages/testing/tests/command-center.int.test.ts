@@ -102,7 +102,15 @@ describe('role layouts', () => {
         .filter((s) => !s.hidden)
         .map((s) => s.key);
     expect(await view('finance')).toEqual(['sales', 'tickets', 'alerts', 'timeline']);
-    expect(await view('marketing')).toEqual(['tickets', 'readiness', 'alerts', 'timeline']);
+    // M3.8b: the marketing layout leads with the campaign results and email deliverability tiles.
+    expect(await view('marketing')).toEqual([
+      'campaigns',
+      'tickets',
+      'readiness',
+      'deliverability',
+      'alerts',
+      'timeline',
+    ]);
     expect(await view('manager')).toEqual([
       'readiness',
       'alerts',
