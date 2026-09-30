@@ -2,7 +2,7 @@
 
 import { Alert, Button } from '@yayatoh/ui';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ScanClient, StaffView } from '@/scan/client.ts';
 import { StaffHelp } from './scan-help.tsx';
 
@@ -58,8 +58,13 @@ export function StaffPanel({
   const [data, setData] = useState<Loaded | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // The latest read wins: an older, slower read (started before going offline) never overwrites it.
+  const seq = useRef(0);
   const load = useCallback(async () => {
-    setData(await client.staffOverview());
+    const mine = ++seq.current;
+    const next = await client.staffOverview();
+    if (mine !== seq.current) return;
+    setData(next);
     setLoading(false);
   }, [client]);
 

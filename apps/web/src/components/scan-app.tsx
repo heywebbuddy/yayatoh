@@ -228,7 +228,16 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
       }),
       // M3.3b: help requests raised, taken or closed re-read the staff screen's queue.
       ...(channels.assistance
-        ? [followChannel({ channel: channels.assistance, token: client.token, onMessage: bump })]
+        ? [
+            followChannel({
+              channel: channels.assistance,
+              token: client.token,
+              // Only a request that changed: the stream's own (re)connect snapshot changes nothing.
+              onMessage: (event) => {
+                if (event === 'request') bump();
+              },
+            }),
+          ]
         : []),
     ];
     return () => {
