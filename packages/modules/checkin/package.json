@@ -1,0 +1,37 @@
+{
+  "name": "@yayatoh/checkin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 4
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts",
+    "./routes": "./src/routes.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "catalog:",
+    "@yayatoh/checkin-engine": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticket-crypto": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

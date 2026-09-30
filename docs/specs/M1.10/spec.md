@@ -1,0 +1,187 @@
+# M1.10 — Notifications and messaging core
+
+Roadmap: M1.10 ("Platform senders: SES, Twilio toll-free/10DLC, WhatsApp as legacy does. FCM v1 and APNs with migrated tokens; web push. React Email templates with org and locale overrides. In-app inbox and preferences. Announcement push. Organizer↔customer messaging. 1:1 chat at parity, with report and block. Per-order message log; reminder idempotency; one-click unsubscribe. Acceptance: all templates render in 13 locales, RTL included; a duplicated job sends once; a migrated token receives push."). Roadmap §5.2 (message states), §6.4 (messaging pipeline, policy gate), §4.4 (platform sender), CLAUDE.md → Time (quiet hours in the recipient's timezone).
+
+Delivered in five increments. **Risk tags:** `db-migration`, `tenancy` (new tenant tables, SECURITY DEFINER functions). All providers are owner accounts, so every channel runs behind a port with a fake adapter (see "Pending the owner").
+
+Migration: `packages/db/drizzle/0039_melodic_adam_destine.sql` (new schemas `notifications` and `messaging`, 10 tenant tables; hand-written block listed below).
+
+## M1.10a — notification core (done)
+- **Platform port** (`packages/platform/src/notifier.ts`): `Notifier.enqueue(tx, intent)` and `Notifier.notifyMembers(tx, intent)`. An intent is roadmap §6.4's `MessageIntent`: kind, recipient (email, user, name, locale, timezone, phone), params, dedupe key, optional channels, order/event links and `sendAfter`. Modules depend on the port only (tenancy is tier 1 and cannot import a tier-2 module); the worker and web inject the implementation. The old `Mailer` port (`consoleMailer`/`memoryMailer`) is gone; tests use `memoryNotifier()`.
+- **Module `@yayatoh/notifications` (tier 2**, depends on crm, tenancy, platform): owns schema `notifications`.
+  - **Kinds registry** (`src/kinds.ts`): `orders.tickets`, `orders.refund`, `events.reminder`, `tenancy.invitation`, `ticketing.claim-link`, `ticketing.holder-link`, `attendees.message`, `messaging.announcement`, `messaging.reply`, `sales.order_paid` (member alert), `messaging.contact_replied` (member alert), `notifications.test`. Each kind fixes its category, default channels, required params and whether it is urgent (urgent kinds ignore quiet hours).
+  - **Categories:** `transactional` (never suppressed), `reminders`, `event_updates`, `marketing`, and the member categories `sales` and `messages`.
+  - **Deliveries** (`notifications.messages`): one row per `(org, channel, dedupe_key)`; `INSERT … ON CONFLICT DO NOTHING`, so a replayed or duplicated event queues nothing new. Params are stored **encrypted** with the org key envelope (they carry manage-link and invitation tokens). States: `queued` (with `send_after`; shown as *Scheduled* when in the future) → `sent` | `suppressed` | `failed` | `canceled`, with a `reason` (`quiet_hours`, `messaging_paused`, `unsubscribed`, `preference`, `no_device`, `no_address`, `provider_error`, `retrying`).
+  - **Dispatcher** (`dispatchDueTx`): claims due rows with `SELECT … FOR UPDATE SKIP LOCKED` inside the tenant transaction, so concurrent dispatchers (a duplicated job, two worker machines) never hand the same row to a provider. Policy gate per row, in order: the staff kill switch `pause_messaging` (optional categories wait 15 min), unsubscribes, the recipient's preferences, then **quiet hours 21:00–08:00 in the recipient's timezone** (theirs, else the event's, else the org's) for non-urgent kinds. Provider errors retry with exponential backoff; the fifth failure is final. The worker ticks every 2 s (leader only) via `notifications.orgs_with_due_messages` (SECURITY DEFINER, `platform_reader`).
+  - **Templates** (`src/templates/`): the repo's existing template approach (the escaped `html` tagged template from `@yayatoh/pdf`, ADR 0017), not React Email: the worker runs TypeScript natively with no JSX transform. Table layout for mail clients, logical properties, `lang` + `dir` (Arabic RTL), org name and brand colour (text colour picked for contrast), "Powered by" honoured, plain-text part, preview text. Copy lives in `src/templates/messages/<locale>.json` for all 13 locales with ICU plurals per locale. Money is formatted in the recipient's locale; event times in the event's timezone.
+  - **Org overrides** (`notifications.template_overrides`): subject and opening paragraph per kind and locale, validated as ICU with only the kind's placeholders (`setTemplateOverrideCommand`, `org:update`; `previewTemplateQuery`). No console editor yet (see Later).
+  - **Unsubscribe (RFC 8058):** every optional email carries `List-Unsubscribe: <…/api/unsubscribe/{token}>` and `List-Unsubscribe-Post: List-Unsubscribe=One-Click`, plus a footer link to the page `/unsubscribe/{token}` in the recipient's language. The token is an HMAC of the message id (nothing stored); `notifications.message_org` (SECURITY DEFINER) resolves the org. Unsubscribing writes `notifications.suppressions` per email and category (and a withdrawn marketing consent in the crm ledger for marketing); members' own notifications flip their email preference instead. "Subscribe again" undoes it. Transactional mail has no unsubscribe link and always sends.
+  - **Reminders:** a paid order queues `events.reminder` for 24 h before the start under `event-reminder:{event}:{email}`: one reminder per buyer and event however many orders they place. Not queued when the event starts within 24 h.
+  - **Push:** `notifications.push_tokens` (fcm, apns, webpush). `importLegacyPushTokensTx` imports legacy device rows with their real platform (the legacy app sent APNs tokens through FCM). A provider's `invalid_token` disables the token.
+  - **Channel adapters** (`src/transports.ts`): `EmailTransport`, `SmsTransport`, `PushTransport`. Development, preview and CI use `devMailboxTransports()` (JSON files read by the dev mailbox); tests use `memoryTransports()`. Production refuses to pretend: with no real adapter the worker leaves messages queued. Sender: `notifications@mail.yayatoh.com` with the org's display name (roadmap §4.4).
+- **Existing sends moved onto the core** (same subscriber names, so processed-event history carries over): order tickets (`orders.ticket-mailer`, now also the reminder and the sales alert), invitations, claim links, holder links, guest-list emails (M1.8e). New: refund emails (`orders.refund-mailer` on `order.refunded@1`).
+- **Per-order message log:** `orderMessagesQuery` (`orders:read`) on the organizer's order page ("Messages": when, message and subject, recipient, channel, status and reason); `buyerOrderMessagesTx` adds "Emails sent" to the buyer's order page (emails to the buyer's address only).
+- **Dev tooling** (dev auth only, 404 otherwise, never in production): `POST /api/dev/outbox/drain` (runs an org's recent message events through the same subscribers as the worker and sends what is due, including quiet-hours holds, to the dev mailbox), `GET /api/dev/mailbox?to=`, and the page `/dev/mailbox`. e2e reads captured emails through these.
+
+## M1.10b — in-app inbox and preferences (done)
+- **Inbox** (`notifications.inbox_items`, per user, dedupe per user): `inboxQuery` (keyset paging), `inboxCountQuery`, `markInboxReadCommand` (ids or all; only the caller's items), `sendTestNotificationCommand`. The user always comes from the session, never from input; a system actor is refused.
+- **Member alerts:** `notifyMembers` fans out by role per category (sales: owner, admin, manager, finance, box office; messages: owner, admin, manager, marketing, box office; viewers get neither). In-app is immediate; email and push go through the dispatcher and the member's preferences. Member emails resolve through the identity port (`getUsersByIds`).
+- **Bell** (console header, `components/inbox-bell.tsx`): unread badge, accessible name "Notifications, N unread", native popover with the latest items, per-item "mark as read" and "mark all as read", links to the page and settings. Polls every 30 s while visible (Ably arrives later); a polite live region announces new counts. Keyboard: the bell opens with Enter, Escape closes.
+- **Pages:** `/o/{org}/notifications` (all items, 20 per page, no-JS forms) and `/o/{org}/notifications/preferences` (sales, messages and "News from Yayatoh" × in-app, email, SMS, push; native checkboxes in fieldsets; "Send me a test notification"). Defaults: in-app on; email and push on for messages; SMS off; marketing off everywhere (consent is never invented).
+
+## M1.10c — announcements and organizer↔customer messaging (done)
+- **Module `@yayatoh/messaging` (tier 3**, depends on attendees, events, crm, notifications, tenancy): owns schema `messaging` (`announcements`, `threads`, `thread_messages`, `reports`).
+- **Permissions** (tenancy): `messages:read` (owner, admin, manager, marketing, box office; event managers) and `messages:send` (owner, admin, manager, marketing; event managers). Viewers have neither.
+- **Announcements** (event → Marketing, `/o/{org}/e/{event}/marketing`): compose (subject, message, email and/or push) → preview (the email as attendees see it and how many people it reaches) → "Send to N people" → sent log with delivery counts (sent · pending · not sent). `sendAnnouncementCommand` is idempotent (the key is minted at preview, so a double submit sends once), refused with no recipients or while messaging is paused. The worker fans out one message per address under `announcement:{id}:{email}`; people who blocked the organizer are skipped; push goes to attendees whose contact has an account.
+- **Conversations:** one thread per org and contact email. Every announcement and reply links to `/messages/{token}` (HMAC of the thread id; `messaging.thread_org` resolves the org). The contact reads the history and writes back (max 10 messages an hour); the org's messages team gets an inbox alert. The organizer inbox (`/o/{org}/messages`: all / unread / blocked) and thread page (history, reply by email, block/unblock, report to Yayatoh). The contact can block the organizer (no more replies, and the org's event updates to that address stop via a suppression) and report. Public output is allowlisted (no staff names or internal ids).
+
+## M1.10d — messaging leftovers (done)
+Migration: `packages/db/drizzle/0052_illegal_karnak.sql` (renumbered at merge from `0046_eminent_gorilla_man.sql`) (3 new tenant tables in `notifications`; new columns on `notifications.messages`, `messaging.reports` and `auth.users`; hand-written block listed below). Risk tags: `db-migration`, `tenancy`, `auth` (a column on the global users table).
+
+- **CSP-safe email previews (a regression found at merge).** Under M1.14's strict CSP an `srcdoc` frame inherits the page policy (`style-src-attr 'none'`), so emails (inline styles) rendered unstyled. Previews are now served from a same-origin URL with their own policy: `default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; frame-ancestors 'self'; base-uri 'none'; form-action 'none'; sandbox`, `nosniff`, `X-Frame-Options: SAMEORIGIN`, `no-store` (`PREVIEW_HEADERS`).
+  - The draft never travels in the URL: `storeEmailPreviewCommand` keeps the rendered HTML in `notifications.email_previews` (tenant table, 10-minute TTL, 512 KB cap, purged on the next store) and `GET /api/email-preview/{org}/{id}` serves it to its creator only (org from the path, session membership, 404 for anyone else or after expiry). The dev mailbox frames `GET /api/dev/mailbox/{id}` (dev auth only) with the same headers.
+  - Both routes are excluded from `next.config.ts`'s blanket `/api/*` policy (two CSP headers would both apply). Console pages gain exactly one directive, `frame-src 'self'` (other page types still `frame-src 'none'`); styles stay nonce-only with `style-src-attr 'none'`. Frames stay `sandbox=""` and titled.
+- **Template override editor** (`/o/{org}/emails`, nav "Email templates"): pick the email and language (GET form, in the URL); subject and opening paragraph with the default copy shown under each field and the allowed placeholders listed; live preview (debounced, the CSP-safe frame) with validation as you type (ICU syntax, placeholders, length) that blocks the preview and the save; save; reset to default; the org's customized emails listed. Viewers (org:read) see and preview read-only; saving needs `org:update`.
+- **Reminders follow reschedules.** Reminders are now the day before at the same wall-clock time in the event's timezone (`reminderTime`: 23/25 h across DST; gaps move forward, overlaps take the earlier instant). Multi-date orders (M1.4b) get one reminder per buyer and **date** (`messages.occurrence_id`, dedupe `event-reminder:{event}:{date}:{email}`) at that date's start (before, a dated order was reminded at the event's first date). `orders.reminder-rescheduler` (worker and dev drain) listens to `event.updated`, `event.rescheduled`, `event.postponed`, `event.cancelled`, `event.occurrences_updated` and `event.occurrence_cancelled` and runs `rescheduleRemindersTx`: every queued reminder of the event is re-planned from the **current** start (never from the payload), so duplicates, replays and out-of-order events converge; params are re-encrypted with the new time, so the email shows it in the event's timezone. Passed reminder time but event ahead → sent now; started → `canceled/event_started`; cancelled event or date → `canceled/event_cancelled`; postponed → parked (`canceled/event_postponed`) and queued again when rescheduled.
+- **Member email locale.** `auth.users.locale` (CHECK: the 13 locales), set by the person on Notifications → preferences → "Email language" (`setUserLocale`, the session's own user only; there is no separate account page yet). The dispatcher looks members' languages up at send time (`DispatchDeps.userLocales`), so it applies to messages already queued; the sent row records the language used.
+- **Delivery events and suppression.**
+  - Port: `DeliveryWebhookAdapter.verify(rawBody, headers) → DeliveryEvent[]`. The fake adapter signs `t=<unix>,v1=<HMAC-SHA256("t.body")>` (`x-fake-email-signature`, 5-minute tolerance; secret `FAKE_EMAIL_WEBHOOK_SECRET` or derived from `APP_TOKEN_SECRET`). SES and Twilio signature formats are adapters behind the same port (owner accounts).
+  - Endpoint `POST /api/webhooks/email/{provider}`: 404 for unknown providers (and the fake one in production), raw-body verification, 400 + M1.14 `webhookAbuse` rate limit on failures (signed deliveries never limited). Each event's org comes from **our** message id (`notifications.message_org`, SECURITY DEFINER), never from the payload; then `recordDeliveryEventsCommand` (platform actor, audited) per org.
+  - `notifications.message_events` (append-only for app_user) keeps each provider event once (`(org, provider, provider_event_id)` unique); the event must name a sent message whose provider id matches. `messages.delivery` keeps the worst news (complained > bounced > soft bounced > delivered; a retried soft bounce becomes delivered).
+  - Suppression rules (`suppressionFor`, pure): hard bounce and complaint at once; soft bounces on the third within 14 days with no delivery in between. `notifications.address_suppressions` (per org, email or SMS) is honoured by the dispatcher for **every** category: such messages become `suppressed` with reason `bounced` or `complained`.
+  - The fake provider reports by address like SES's simulator (`bounce@` hard, `softbounce@` soft, `complaint@` delivered then complained, anything else delivered). The dev mailbox transport leaves the signed reports in `delivery-events/`; the dev drain posts them through the same verification and ingestion (`POST /api/dev/outbox/drain` also takes `scheduled=1` to send reminders that are not yet due).
+  - The organizer's order page shows delivery under the status (Delivered · Bounced · Bounced for now · Marked as spam) and why a message was not sent.
+- **Staff review of messaging reports** (`apps/admin` → "Messaging reports", staff roles admin and support): open and closed lists across every org via `reportsForReviewTx` inside `withPlatformReader` (each list read lands in the access log first). Allowlisted: org name/slug, reporter side, reason, reporter's note, and an excerpt (the 6 messages before the report, 280 characters each, labelled contact/organizer, announcements by subject); never addresses, staff names or internal ids. Resolve or dismiss with a required note: `reviewReportCommand` (a `platform:` permission, the report's org, audited as `messaging.report.resolve|dismiss` under `staff:<id>`; a second review is refused). Report statuses are now `open | resolved | dismissed` with `reviewed_by`, `reviewed_at`, `review_note`.
+
+### Hand-written SQL (migration 0046, between `-- hand-written: begin/end`)
+1. Reports in the retired `reviewed` state become `resolved` (with a system note) before the new CHECKs.
+2. CHECKs on existing tables added `NOT VALID`, then `VALIDATE CONSTRAINT`: `auth.users.users_locale_check`, `messaging.reports.reports_review_check`, `reports_review_note_length`, `reports_status_check`, `notifications.messages.messages_delivery_check`.
+3. `REVOKE UPDATE, DELETE, TRUNCATE ON notifications.message_events FROM app_user` (the delivery log is permanent).
+
+### Later / not yet (M1.10d)
+- SES (SNS-signed) and Twilio (`X-Twilio-Signature`) delivery adapters; SES message tags carrying our message id; a platform-wide layer over the per-org suppression list.
+- Lifting a suppression from the console or support tools; showing suppressions on the buyer's order page.
+- Start/end editing of a single-date event in the console (only dates, the API and lifecycle transitions change times today; reminders follow all of them).
+- A dedicated account settings page (the email language lives on the notification preferences page).
+- CSP for `apps/admin` (M1.14 Later) now that it lists user-written text.
+
+## M1.10e — web push and announcement push (done)
+Migration: `packages/db/drizzle/0054_material_dreadnoughts.sql` (to be renumbered at merge) (1 new tenant table `notifications.push_deliveries`; new columns on `notifications.push_tokens`; a widened CHECK on `notifications.messages`; hand-written block listed below). Risk tags: `db-migration`, `tenancy`.
+
+Standard Web Push needs no provider account, so this increment ships a real adapter (the FCM/APNs adapters still wait for the owner's accounts).
+
+- **Protocol, with `node:crypto` only** (`packages/modules/notifications/src/web-push.ts`, no push library):
+  - RFC 8292 VAPID: an ES256 JWT (`aud` = the push service's origin, `exp` 12 h, `sub` mailto:/https:) in `Authorization: vapid t=…, k=…`.
+  - RFC 8291 encryption with the `aes128gcm` content coding (RFC 8188): ECDH P-256 + HKDF + AES-128-GCM, one 4096-byte record (plaintext ≤ 3993 bytes). The Appendix A test vector reproduces byte for byte.
+  - RFC 8030 headers: `TTL` (clamped to 28 days; announcements 24 h, member alerts 4 h, reminders 12 h, the test notification 5 min), `Urgency` (`high` for urgent kinds, else `normal`), `Topic` (32 base64url characters of sha256(message id), so the push service collapses a retried send).
+  - Responses: 201 sent (the `Location` is the provider id); 404/410 → the subscription is pruned (`disabled_at`); 429/5xx/network → retry, honouring `Retry-After` (never sooner than the dispatcher's exponential backoff); 400/401/403/413 → refused for good.
+  - **SSRF guard:** endpoints come from browsers, so the adapter (and registration) only accept https on known push services (FCM, Mozilla autopush, Apple, WNS). Dev/CI also allow the fake push service on the app's own origin.
+- **Keys** (`vapidConfig`): `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (names in `.env.example`; a mismatched pair refuses to start). Development and CI derive a stable pair from `APP_TOKEN_SECRET`; production without keys offers no opt-in. `pnpm vapid:generate` prints a new pair (production keys: `docs/owner-inbox.md`).
+- **Devices** (`notifications.push_tokens`): web push rows keep the endpoint as the token plus `p256dh`, `auth_secret`, a `label` ("Chrome · Android", from the User-Agent, never the endpoint) and the browser's IANA `time_zone`. A device belongs to a member (`user_id`) **or** to a guest buyer (`email_norm`, CHECK: exactly one). At most 10 active devices per person and org; the same browser subscribing again reuses its row.
+  - Members: `registerPushTokenCommand` (now a union: `fcm`/`apns` token, or a `webpush` subscription), `removePushTokenCommand` (by id or endpoint; someone else's device is `not_found`), `myPushDevicesQuery`.
+  - Guest buyers (orders module, the manage token is the credential): `registerOrderPushCommand`, `removeOrderPushCommand` (permission `public:order-push`; the token is re-verified under the org's RLS in the handler), `orderPushDevices(token)`. They store through the same `upsertWebPushTx` as the member command.
+  - Output is allowlisted (`PushDeviceDto`: id, platform, label, since, last seen, and `ref` = a hash of the endpoint so a browser can mark "this device"); endpoints and keys never leave the server.
+- **Dispatch** (`dispatchDueTx`): a push message goes to each of the recipient's active devices (members by user, buyers by email). Every attempt is recorded in **`notifications.push_deliveries`** (one row per message and device: `sent`, `expired`, `rejected`, `retrying`, HTTP status, attempts). When one device is rate limited the message is retried later and devices it already reached are skipped, so nobody gets it twice. All devices expired → `suppressed/no_device`; all refused → `failed/provider_error`. Removing a device keeps its log rows (the reference is cleared by `ON DELETE SET NULL (push_token_id)`).
+  - Policy gate as for email: `pause_messaging` holds optional push; **quiet hours use the device's timezone** (the most recently seen device), else the event's, else the org's; unsubscribes and a contact's block of the organizer (per address and category) now stop push to that address too; member preferences apply per channel.
+  - Push payload (`WebPushPayload`, strict allowlist): `title`, `body` (the announcement's text, else the template's preview), `url` (only on our origin, else dropped), `tag`, `lang`, `dir`. No names, emails or ids beyond what the notification shows.
+- **Queueing:** the notifier queues a push row only when the recipient has an active device at that moment (members by account, buyers by email): a buyer without opt-in gets nothing and the log shows no "no device" noise. Push rows now carry the recipient's email (the `messages_address_check` accepts push with a user **or** an email).
+- **Announcement push:** the organizer ticks "Push" in the composer (its hint now says push reaches people who turned notifications on); `announcement.sent@1` fans out as before under `announcement:{id}:{email}` per channel, so a duplicated job or relay sends once per person; the push opens the person's conversation link.
+- **Member notifications:** kinds with a push channel (`sales.order_paid`, `messaging.contact_replied`) now also reach opted-in members' browsers; "Send me a test notification" pushes to the member's devices too (`notifications.test` gains the push channel).
+- **Web app:**
+  - `public/push-sw.js`: shows the notification (allowlisted fields, RTL for Arabic), a click opens the link (same origin only, else the site root) or focuses a tab already on it. Registered with the scope `/push/` so it controls no page and never replaces the scanner's worker at `/`. Served `Cache-Control: no-cache` under the page CSP; `worker-src 'self' blob:` was already in the builder (now asserted by a unit test and e2e).
+  - `WebPushControl` (client): support and permission checks, "Turn on notifications" / "Turn off on this device" (native buttons, polite status region), clear messages for blocked, not allowed, unsupported and unavailable, the device list with "Remove {label}" (no-JS forms) and "(this device)".
+  - Buyer order page (`/orders/{token}`): a "Push notifications" section. Member: notification settings (with the device list) and the inbox page (opt-in only). Strings in the `webPush` namespace, 13 locales.
+  - Dev/CI: `POST /api/dev/push-service/{id}` is a fake RFC 8030 push service (dev auth only, 404 otherwise): it verifies the VAPID JWT (401 without), keeps the encrypted body and answers 201; ids starting `gone-` answer 410, `busy-` 429. `GET` returns what it received. The dev drain and the worker send web push through the real adapter.
+
+### At merge (with M1.14e and M1.2e)
+- Migration renumbered to `0061_bumpy_thundra.sql`.
+- The M1.14e erased-address gate also covers push to a buyer's devices (addressed by email): same classes as mail, reason `erased`. A DSAR erasure (`privacy.eraseSubject`) deletes the buyer's push devices in that org (`eraseSubjectPushDevicesTx`); the delivery log keeps its rows with the device cleared.
+- `notifications.removePushToken` and `orders.removePush` carry `category: 'delete'` (refused while impersonating, M1.2e).
+- Column privacy: `push_tokens.token` (url-shaped canary), `p256dh`, `auth_secret` secret; `email_norm` personal (guest rows); `label`, `push_deliveries.provider_message_id` internal.
+
+### Hand-written SQL (migration 0054 → 0061, between `-- hand-written: begin/end`)
+1. CHECKs on existing tables added `NOT VALID`, then `VALIDATE CONSTRAINT`: `notifications.messages.messages_address_check` (widened: push with a user or an email), `notifications.push_tokens.push_tokens_owner_check`, `push_tokens_email_norm_check`, `push_tokens_webpush_check`, `push_tokens_label_length`, `push_tokens_time_zone_length`.
+2. `notifications.push_deliveries.push_deliveries_token_fk`: composite FK `(org_id, push_token_id)` → `push_tokens (org_id, id)` `ON DELETE SET NULL (push_token_id)` (drizzle cannot express the column list).
+
+### Later / not yet (M1.10e)
+- FCM HTTP v1 and APNs adapters (owner accounts); the production worker transports (it has none until SES).
+- `pushsubscriptionchange` (a browser rotating its subscription) re-registering from the service worker; today the person turns notifications on again.
+- Reminders reach a buyer's browser only if they opted in before the reminder was queued (at purchase); re-planning queued reminders for devices added later.
+- A push column in the organizer's announcement log (sent · pending · not sent counts include push rows today) and a per-device delivery view.
+- Real browser push services in CI (headless Chromium has none, so e2e replaces `PushManager.subscribe` with a subscription pointing at the fake push service; everything after that is real).
+
+### Acceptance (M1.10e)
+| Criterion | Test |
+|---|---|
+| VAPID JWT (ES256, aud/exp/sub), verification refuses other keys, audiences, expiry, forgeries | `packages/modules/notifications/tests/web-push.test.ts` "RFC 8292 VAPID" |
+| RFC 8291 test vectors (intermediates, encrypt byte for byte, decrypt), tampering, sizes | `web-push.test.ts` "RFC 8291 message encryption" |
+| TTL / Urgency / Topic headers; 201 / 404 / 410 / 413 / 429 (Retry-After) rules; endpoint allowlist; payload allowlist | `web-push.test.ts` "push request headers and responses", "the web push adapter", "push rules for a message" |
+| Service worker: allowlisted notification, RTL, off-site links refused, click opens/focuses | `apps/web/tests/push-sw.test.ts` |
+| CSP `worker-src 'self'` on every profile | `packages/platform/tests/csp.test.ts`; e2e `web-push.spec.ts` (viewer test) |
+| Buyer opt-in stored, allowlisted list, bad token/keys/endpoint (SSRF) refused, cross-org refused, 10-device cap, remove own only | `packages/testing/tests/web-push.int.test.ts` "guest buyers opt in" |
+| A duplicated job sends once (duplicated relay + three concurrent dispatchers → one push, decrypted) | `web-push.int.test.ts` "fans out once per opted-in person…" |
+| Quiet hours in the device's timezone; pause_messaging holds; unsubscribe/block stops push | `web-push.int.test.ts` |
+| 410 prunes; 429 retries later without repeating other devices; delivery log kept after removal | `web-push.int.test.ts` |
+| Members: opt-in, test push, member alerts by push, own devices only; system actor refused | `web-push.int.test.ts` "members" |
+| Isolation of `push_deliveries` and the new device rows | `packages/testing/tests/isolation.int.test.ts` (fixture: a browser device, a test push and its delivery row in both orgs); `web-push.int.test.ts` "isolation" |
+| e2e: opt-in from the order page (keyboard, axe, Arabic RTL, reload), a sent announcement arrives at the fake push service (decrypted), a duplicated drain sends nothing more, turn off, the next announcement doesn't arrive | `apps/web/e2e/web-push.spec.ts` "a buyer opts in…" |
+| e2e: a buyer who blocks notifications is told how to allow them and gets nothing | `web-push.spec.ts` |
+| e2e: member opt-in on settings and inbox, test push decrypted, device list, remove by keyboard, reload, Arabic, axe | `web-push.spec.ts` "a member turns push on…" |
+| e2e: a viewer cannot send announcements; the fake push service refuses unsigned pushes | `web-push.spec.ts` |
+
+## Fix — missing kind labels on the Emails page (done)
+Owner-reported: `/o/{org}/emails` threw next-intl `MISSING_MESSAGE` for six kinds added after the
+labels (`ticketing.tickets-resent`, `ticketing.ticket-cancelled`, `guest.waitlist-code`,
+`orders.waitlist-joined`, `orders.waitlist-offer`, `orders.waitlist-expired`).
+- Labels added under `notifications.kinds.*` in `en.json` and translated into the 12 other locales.
+- A unit gate now requires a label for every kind in `MESSAGE_KINDS` (a superset of `EMAIL_KINDS`,
+  and what the messaging log and order timelines render) in all 13 locales, so a new kind can no
+  longer ship without one.
+
+### Acceptance (fix)
+| Criterion | Test |
+|---|---|
+| Every message/email kind has a label in all 13 locales | `apps/web/tests/notification-kinds.test.ts` |
+| The Emails page shows a label for every kind in /en and /ar (RTL), no MISSING_MESSAGE in the console, keyboard open, axe | e2e `apps/web/e2e/email-kind-labels.spec.ts` |
+
+## Later / not yet
+- Real adapters: SES v2 (with Tenants in M3.5), Twilio SMS (toll-free + 10DLC), the WhatsApp template gateway, FCM HTTP v1 and APNs (web push shipped in M1.10e; production VAPID keys are the owner's).
+- Provider webhooks for SES/Twilio (the port, fake adapter, `message_events` and suppression landed in M1.10d), fallbacks (WhatsApp → SMS, push → email), segment counting, frequency caps and state quiet-hour rules (M3.5 policy gate).
+- Realtime inbox counts over Ably; the attendee app inbox (M1.15) and a `/v1` inbox API.
+- Legacy migration of notifications, chats, reports and blocks (roadmap §7).
+
+## Pending the owner
+- Provider accounts (SES production access and DKIM; Twilio toll-free verification and 10DLC; Meta business verification for WhatsApp; FCM service account; APNs key; VAPID keys) — `docs/owner-inbox.md`.
+- Quiet hours default 21:00–08:00 (federal TCPA window) for email too, not only SMS. Recommended default applied; confirm or narrow to SMS/push.
+- The kill switch `pause_messaging` holds everything except transactional mail (tickets, refunds, invitations, links, replies the customer asked for). Recommended default applied; confirm.
+- The React Email choice (roadmap) is replaced by the existing escaped-HTML template approach because the worker runs TypeScript without a JSX step. Recorded here; confirm.
+
+## Hand-written SQL (migration 0039, between `-- hand-written: begin/end`)
+1. `REVOKE DELETE, TRUNCATE ON notifications.messages FROM app_user` (the message log is permanent).
+2. `notifications.message_org(uuid)` SECURITY DEFINER → `app_user` (unsubscribe links).
+3. `notifications.orgs_with_due_messages(integer)` SECURITY DEFINER → `platform_reader` (dispatcher).
+4. `messaging.announcements` composite FK `(org_id, event_id)` → `events.events (org_id, id)`.
+5. `REVOKE DELETE, TRUNCATE ON messaging.announcements FROM app_user` (the sent log is permanent).
+6. `messaging.thread_org(uuid)` SECURITY DEFINER → `app_user` (reply links).
+
+## Acceptance
+| Criterion | Test |
+|---|---|
+| All templates render in 13 locales, RTL included | `packages/modules/notifications/tests/render.test.ts` (every kind × 13 locales, snapshots, `dir="rtl"` for Arabic, plurals, escaping, overrides) |
+| A duplicated job sends once | `packages/testing/tests/notifications.int.test.ts` → "a duplicated job sends once" (three concurrent duplicate events → one row; three concurrent dispatchers with a slow provider → one send); messaging fan-out replay in `messaging.int.test.ts` |
+| A migrated token receives push | `notifications.int.test.ts` → "a migrated legacy token receives push on its real platform" |
+| Per-order message log (organizer and buyer) | `notifications.int.test.ts`; e2e `apps/web/e2e/notifications.spec.ts` (purchase → drain → "Emails sent" and "Messages"; empty log) |
+| Reminder idempotency | `notifications.int.test.ts` → "one reminder per buyer and event" |
+| One-click unsubscribe; transactional still sends | `notifications.int.test.ts` (headers, suppress, resubscribe, forged tokens); e2e `notifications.spec.ts` (captured email → page → one-click POST → Arabic → forged 404) |
+| Quiet hours in the recipient's timezone; kill switch; retries | `packages/modules/notifications/tests/quiet-hours.test.ts`; `notifications.int.test.ts` "policy gate" |
+| In-app inbox and preferences | `notifications.int.test.ts` "member inbox and preferences"; e2e `apps/web/e2e/inbox.spec.ts` (bell count, keyboard, mark read/all, inbox page, preferences persist, Arabic, cross-org 404) |
+| Announcements (preview, confirmation, sent log, validation, viewer denied) | `packages/testing/tests/messaging.int.test.ts`; e2e `apps/web/e2e/messaging.spec.ts` |
+| Organizer↔customer messaging with report and block | `messaging.int.test.ts` "conversations"; e2e `messaging.spec.ts` |
+| Tenant isolation of every new table | `packages/testing/tests/isolation.int.test.ts` (fixture rows for all 10 tables in both orgs) |
+| CSP-safe previews: styled under the strict CSP, page CSP unchanged, draft not in the URL, creator only | `packages/platform/tests/csp.test.ts`; `messaging-followups.int.test.ts` "stored email previews"; e2e `apps/web/e2e/messaging-followups.spec.ts` "email previews under the strict CSP" (composer and dev mailbox: computed heading styles, headers, viewer/anon 404, no CSP violations, keyboard, axe, Arabic) |
+| Template editor: save, reset, validation, viewer read-only | e2e `messaging-followups.spec.ts` "email template editor" (live ICU/placeholder errors, save by Enter, reload, reset, list, viewer, axe, Arabic); command rules in `notifications.int.test.ts` |
+| Reminders follow reschedules (DST, idempotent, new time in the email) | `packages/modules/notifications/tests/reminder-time.test.ts`; `packages/testing/tests/messaging-followups.int.test.ts` "reminders follow reschedules" (event, dates, cancel, postpone/reschedule, replays, isolation); e2e "moving a date moves its reminder" (drain, log, dev mailbox) |
+| Member email locale | `messaging-followups.int.test.ts` "member email locale"; e2e "a member chooses Spanish" |
+| Delivery events: verification, dedupe by provider event id, suppression honoured, log status | `packages/modules/notifications/tests/delivery.test.ts` (rules, signatures, fake outcomes); `messaging-followups.int.test.ts` "delivery events and suppression" (dedupe, transactional suppressed in the log, per-org, foreign/unknown/mismatched events, platform actor only, append-only); e2e "a bounced address is suppressed" (forged 400, unknown provider 404, signed replay deduplicated, Arabic) |
+| Staff review of messaging reports, audited through platform_reader | `apps/worker/tests/messaging-reports.int.test.ts` (allowlist, access log, resolve/dismiss, audit rows, refusals, isolation); admin e2e `apps/admin/e2e/admin.spec.ts` "staff review a messaging report", "an organizer account cannot open messaging reports" |
+| Isolation of the new tables | `packages/testing/tests/isolation.int.test.ts` (fixture rows for `message_events`, `address_suppressions`, `email_previews` in both orgs) |

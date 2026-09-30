@@ -1,0 +1,248 @@
+{
+  "common": {
+    "greeting": "Hoi {name},",
+    "greetingNoName": "Hallo,",
+    "sentBy": "Verzonden door {org} met Yayatoh.",
+    "poweredBy": "Mogelijk gemaakt door Yayatoh",
+    "linkFallback": "Werkt de knop niet? Kopieer deze link naar je browser:",
+    "unsubscribe": "Afmelden",
+    "why": {
+      "reminders": "Je krijgt deze herinnering omdat je tickets van {org} hebt.",
+      "event_updates": "Je krijgt dit omdat je op de gastenlijst staat van een evenement van {org}.",
+      "marketing": "Je krijgt dit omdat je je hebt aangemeld voor nieuws van {org}."
+    },
+    "reply": "{org} antwoorden",
+    "smsStop": "Antwoord STOP om je af te melden."
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Je tickets voor {eventName}",
+      "intro": "{count, plural, =0 {Je bestelling is bevestigd.} one {Je ticket staat klaar.} other {Je # tickets staan klaar.}} Bewaar deze e-mail: met de knop hieronder open je ze altijd.",
+      "cta": "Mijn tickets bekijken"
+    },
+    "orders.refund": {
+      "subject": "Je terugbetaling voor {eventName}",
+      "intro": "{fully, select, yes {Je bestelling is volledig terugbetaald:} other {Een deel van je bestelling is terugbetaald:}} {amount}. Het kan 5–10 werkdagen duren.",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "events.reminder": {
+      "subject": "Morgen: {eventName}",
+      "intro": "Een herinnering: {eventName} begint op {when}.",
+      "venue": "Waar: {venue}",
+      "cta": "Mijn tickets openen"
+    },
+    "tenancy.invitation": {
+      "subject": "Uitnodiging voor {orgName} op Yayatoh",
+      "intro": "{orgName} nodigt je uit voor hun team als {role}.",
+      "cta": "Uitnodiging accepteren"
+    },
+    "tenancy.event-invitation": {
+      "subject": "Je bent uitgenodigd voor {eventName}",
+      "intro": "{orgName} heeft je uitgenodigd voor {eventName} als {role}. Je ziet alleen dit evenement.",
+      "cta": "Uitnodiging accepteren"
+    },
+    "ticketing.claim-link": {
+      "subject": "Er wacht een ticket voor {eventName} op je",
+      "intro": "Iemand heeft je een ticket voor {eventName} gegeven. Claim het voor je eigen QR-code.",
+      "cta": "Mijn ticket claimen"
+    },
+    "ticketing.holder-link": {
+      "subject": "Je link naar je tickets voor {eventName}",
+      "intro": "Hier is de link die je vroeg. Hij opent je tickets voor {eventName}.",
+      "cta": "Mijn tickets openen"
+    },
+    "ticketing.tickets-resent": {
+      "subject": "Je ticket voor {eventName}",
+      "intro": "De organisator van {eventName} heeft je ticket {code} opnieuw gestuurd. Met de knop hieronder open je je tickets wanneer je wilt.",
+      "cta": "Mijn tickets openen"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Je ticket voor {eventName} is geannuleerd",
+      "intro": "De organisator van {eventName} heeft je ticket {code} geannuleerd. Het geeft geen toegang meer. Heb je vragen, antwoord dan de organisator."
+    },
+    "seating.finder-code": {
+      "subject": "{code} is je code voor de plaatszoeker van {eventName}",
+      "intro": "Voer {code} in bij de plaatszoeker om je plaats te zien. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren.",
+      "cta": "Plaatszoeker openen"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "Een bericht van de organisator van {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "Nieuws over {eventName}:",
+      "cta": "De organisator antwoorden"
+    },
+    "messaging.reply": {
+      "subject": "Nieuw antwoord van {org}",
+      "intro": "{org} heeft op je bericht geantwoord:",
+      "cta": "Lezen en antwoorden"
+    },
+    "sales.order_paid": {
+      "subject": "Nieuwe bestelling: {name}",
+      "intro": "{name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "Nieuw bericht van {name}",
+      "intro": "{name} schreef je over {eventName}."
+    },
+    "payments.destination-changed": {
+      "subject": "Nieuwe uitbetalingsrekening voor {org}",
+      "intro": "{reason, select, bank_changed {De bankrekening waarop {org} uitbetalingen ontvangt, is gewijzigd.} other {Er is een uitbetalingsrekening gekoppeld aan {org}.}} Voor je veiligheid wordt er vóór {until} geen geld naar overgemaakt. Heb je deze wijziging niet zelf gedaan? Neem dan meteen contact op met Yayatoh-support.",
+      "cta": "Uitbetalingen bekijken"
+    },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh-support handelt als {member} in {org}",
+      "intro": "Een medewerker van Yayatoh handelt nu als {member} in {org} om te helpen. Reden: {reason}. Deze toegang eindigt uiterlijk {until}. Zolang die duurt, kan niets worden terugbetaald, uitbetaald, geëxporteerd of verwijderd, en alles wat er gebeurt staat in je activiteitenlog. Had je dit niet verwacht? Neem dan direct contact op met Yayatoh-support.",
+      "cta": "Activiteit bekijken"
+    },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh heeft {org} opgeschort} reactivated {{org} is weer online} other {Yayatoh heeft {org} gesloten}}",
+      "intro": "{status, select, suspended {Yayatoh-support heeft {org} opgeschort. De openbare pagina's en de ticketverkoop zijn offline en de console is alleen-lezen. Al verkochte tickets blijven geldig en kunnen nog steeds bij de ingang worden gescand. Neem contact op met Yayatoh-support voor meer informatie.} reactivated {Yayatoh-support heeft {org} weer geactiveerd. De openbare pagina's, vermeldingen en ticketverkoop zijn terug en de console werkt zoals voorheen.} other {Yayatoh-support heeft {org} gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je de organisatie nog openen en je gegevens downloaden. Neem contact op met Yayatoh-support als je denkt dat dit een vergissing is.}}",
+      "cta": "Console openen"
+    },
+    "notifications.test": {
+      "subject": "Testmelding",
+      "intro": "Meldingen werken."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} hoort graag hoe je {eventName} vond. Het duurt ongeveer twee minuten.",
+      "cta": "Vul de enquête in"
+    },
+    "surveys.reminder": {
+      "subject": "Herinnering: {title}",
+      "intro": "Je hebt nog niet geantwoord: {org} hoort nog steeds graag hoe je {eventName} vond.",
+      "cta": "Vul de enquête in"
+    },
+    "guest.checkout-code": {
+      "subject": "{code} is je code om je e-mail te bevestigen",
+      "intro": "Voer {code} in om je e-mail te bevestigen en je bestelling bij {org} af te ronden. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."
+    },
+    "guest.sign-in": {
+      "subject": "{code} is je code voor Mijn tickets",
+      "intro": "Voer {code} in om je tickets op {site} te zien, of gebruik de knop hieronder in dezelfde browser. De code verloopt over {minutes, plural, one {# minuut} other {# minuten}} en de knop over {linkMinutes, plural, one {# minuut} other {# minuten}}; elk werkt één keer. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
+      "cta": "Mijn tickets openen"
+    },
+    "guest.waitlist-code": {
+      "subject": "{code} is je code om op de wachtlijst te komen",
+      "intro": "Voer {code} in om je e-mail te bevestigen en bij {org} op de wachtlijst voor {eventName} te komen. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Je staat op de wachtlijst voor {eventName}",
+      "intro": "Je bent nummer {position} in de rij voor {count, plural, one {# {passName}-ticket} other {# {passName}-tickets}} voor {eventName}. Komen er tickets vrij, dan mailen we je een aanbod om af te rekenen; dat houdt de tickets een beperkte tijd voor je vast. Gebruik de link hieronder om je plek te zien of de wachtlijst te verlaten.",
+      "cta": "Mijn plek in de rij bekijken"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Tickets vrij voor {eventName}: reken af vóór {until}",
+      "intro": "Goed nieuws: {org} houdt {count, plural, one {# {passName}-ticket} other {# {passName}-tickets}} voor {eventName} tot {until} voor je vast. Reken vóór die tijd af; daarna gaan de tickets naar de volgende in de rij.",
+      "cta": "Nu afrekenen"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Je aanbod voor {eventName} is verlopen",
+      "intro": "De tijd om je {passName}-tickets voor {eventName} af te rekenen is verstreken, dus ze zijn naar de volgende in de rij gegaan. Via de link hieronder kun je je opnieuw achteraan op de wachtlijst zetten.",
+      "cta": "Opnieuw op de wachtlijst"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Je nieuwe link naar je bestelling voor {eventName}} other {Je link naar je bestelling voor {eventName}}}",
+      "intro": "{reason, select, reissued {De organisator heeft de link naar je bestelling voor {eventName} vervangen. De oude link werkt niet meer; gebruik deze.} other {Hier is de link waar je om vroeg. Hij opent je bestelling en tickets voor {eventName}.}}",
+      "cta": "Mijn bestelling openen"
+    },
+    "security.fraud_signal": {
+      "subject": "Fraudemelding: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}",
+      "intro": "Een signaal met hoge ernst bij {org}{eventName, select, none {} other { ({eventName})}} moet bekeken worden: {signal, select, two_entrances {hetzelfde ticket bij twee ingangen} impossible_travel {een onmogelijke verplaatsing tussen controlepunten} device_velocity {een scanner die te snel scant} invalid_burst {een reeks ongeldige codes} rejected_burst {een reeks geweigerde scans} purchase_velocity {veel bestellingen van één koper} country_mismatch {een koper in een ander land} checkout_blocked {een geblokkeerde betaling} card_testing {mogelijk testen van kaarten} chat_abuse {een gemeld gesprek} other {een fraudesignaal}}. Open het om het op te pakken of te negeren.",
+      "cta": "Signaal bekijken"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Nieuws van {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Berichten gepauzeerd voor {org}",
+      "intro": "Klachten over de e-mails van {org} bereikten {rate}, boven de grens van 0,3%, dus Yayatoh heeft je herinneringen, updates en marketing gepauzeerd. Tickets, bonnen en antwoorden gaan nog steeds uit. Yayatoh-support bekijkt het met je voordat het versturen weer start."
+    },
+    "orders.refund-requested": {
+      "subject": "Terugbetalingsverzoek: {name}",
+      "intro": "{name} vroeg om terugbetaling van {count, plural, =0 {de bestelling} one {# ticket} other {# tickets}} voor {eventName}. Beantwoord het binnen 5 werkdagen."
+    },
+    "orders.refund-declined": {
+      "subject": "Je terugbetalingsverzoek voor {eventName}",
+      "intro": "De organisator van {eventName} heeft je terugbetalingsverzoek afgewezen: ‘{reason}’ Je tickets blijven geldig.",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "events.postponed": {
+      "subject": "{eventName} is uitgesteld",
+      "intro": "{eventName} is uitgesteld. Je tickets blijven geldig voor de nieuwe datum. Kun je niet komen, dan kun je op je bestelpagina om terugbetaling vragen volgens het terugbetalingsbeleid van de organisator.",
+      "cta": "Mijn bestelling bekijken"
+    }
+  },
+  "roles": {
+    "owner": "eigenaar",
+    "admin": "beheerder",
+    "manager": "manager",
+    "finance": "financiën",
+    "marketing": "marketing",
+    "box_office": "kassa",
+    "scanner": "scanner",
+    "viewer": "lezer",
+    "co_host": "medegastheer",
+    "planner": "planner",
+    "collaborator": "evenementmedewerker"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Je Yayatoh-account is verwijderd",
+      "intro": "Zoals je vroeg, is je Yayatoh-account verwijderd. Je bent overal uitgelogd en je inloggegevens en tweestapsverificatie zijn verwijderd. Organisatoren bij wie je kocht, bewaren hun bestelgegevens, zoals de wet vereist.\n\nHeb jij dit niet gevraagd? Beantwoord deze e-mail dan meteen."
+    },
+    "sentBy": "Verzonden door Yayatoh over je account."
+  },
+  "cutover": {
+    "cta": "Status van het onderhoud",
+    "sentBy": "Verzonden door Yayatoh over de overstap naar het nieuwe platform.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh stapt op {start} over naar het nieuwe platform",
+        "intro": "Op {start} stapt Yayatoh over naar het nieuwe platform. Ongeveer 45 minuten lang, tot {end}, zijn je dashboard en de ticketverkoop gepauzeerd; de toegangscontrole blijft werken en al verkochte tickets blijven geldig.\n\nJe evenementen, bestellingen, uitbetalingen en team gaan mee, en je logt in met hetzelfde e-mailadres en wachtwoord. Je hoeft niets te doen: we mailen je twee dagen van tevoren opnieuw en wanneer het klaar is."
+      },
+      "t2": {
+        "subject": "Herinnering: onderhoud van Yayatoh op {start}",
+        "intro": "Een herinnering: op {start}, tot ongeveer {end}, is Yayatoh alleen-lezen terwijl we overstappen naar het nieuwe platform. Plan in die periode geen start van de verkoop of ticketactie. De toegangscontrole blijft werken en verkochte tickets blijven geldig."
+      },
+      "freezeStart": {
+        "subject": "Het onderhoud van Yayatoh is begonnen",
+        "intro": "Yayatoh is alleen-lezen terwijl we overstappen naar het nieuwe platform, tot ongeveer {end}. Je kunt je evenementen nog bekijken en tickets bij de ingang scannen; wijzigingen opslaan, nieuwe verkopen en terugbetalingen zijn gepauzeerd. We mailen je wanneer het klaar is."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh draait op het nieuwe platform",
+        "intro": "De overstap is klaar en Yayatoh werkt weer. Log zoals altijd in met hetzelfde e-mailadres en wachtwoord: je evenementen, bestellingen en uitbetalingen staan er allemaal, en verkochte tickets blijven geldig. Gebruik je de Yayatoh-app, werk hem dan bij via je appwinkel."
+      },
+      "rollback": {
+        "subject": "Yayatoh draait weer op de vorige versie",
+        "intro": "We hebben Yayatoh teruggezet naar de vorige versie terwijl we een probleem met het nieuwe platform oplossen. Verkopen en wijzigingen sinds {start} zijn bewaard, en tickets blijven geldig. Log in zoals voorheen; we laten je de nieuwe datum van de overstap weten."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Je tickets blijven geldig tijdens onze overstap op {start}",
+        "intro": "Op {start} stapt Yayatoh over naar het nieuwe platform. Ongeveer 45 minuten lang, tot {end}, kun je geen tickets kopen of bestellingen wijzigen, maar je tickets blijven geldig en worden zoals altijd bij de ingang gescand.\n\nDaarna log je in met hetzelfde e-mailadres en wachtwoord. Gebruik je de Yayatoh-app, werk hem dan bij zodra we laten weten dat de overstap klaar is."
+      },
+      "t2": {
+        "subject": "Herinnering: kort onderhoud van Yayatoh op {start}",
+        "intro": "Een herinnering: op {start}, tot ongeveer {end}, kun je op Yayatoh geen tickets kopen of bestellingen wijzigen. Je tickets blijven geldig en werken bij de ingang."
+      },
+      "freezeStart": {
+        "subject": "Het onderhoud van Yayatoh is begonnen",
+        "intro": "Ticketverkoop en wijzigingen van bestellingen op Yayatoh zijn gepauzeerd tot ongeveer {end} terwijl we overstappen naar het nieuwe platform. Je tickets blijven geldig en worden zoals altijd bij de ingang gescand."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh is terug",
+        "intro": "De overstap is klaar: je kunt weer tickets kopen en je bestellingen beheren. Je tickets blijven geldig en je logt in met hetzelfde e-mailadres en wachtwoord. Gebruik je de Yayatoh-app, werk hem dan bij via je appwinkel."
+      },
+      "rollback": {
+        "subject": "Yayatoh draait weer op de vorige versie",
+        "intro": "We hebben Yayatoh teruggezet naar de vorige versie terwijl we een probleem oplossen. Tickets die je sinds {start} hebt gekocht, blijven geldig. Als we een bestelling van je moesten terugbetalen, krijg je een aparte e-mail met het bedrag. Log in zoals voorheen."
+      }
+    }
+  }
+}

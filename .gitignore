@@ -1,6 +1,9 @@
 # Legacy code and data never enter this repo (reference lives in the private yayatoh-legacy repo)
-legacy/
+/legacy/
 *.sql
+!packages/db/drizzle/*.sql
+# Invented test data for the masking tool (a test enforces the SYNTHETIC marker and example domains)
+!tools/legacy-mask/tests/fixtures/*.sql
 *.sql.gz
 *.dump
 
@@ -35,3 +38,15 @@ test-results/
 
 # Claude Code local settings
 .claude/settings.local.json
+next-env.d.ts
+blob-report/
+k6/.data/
+zap/zap-report.*
+zap/zap.yaml
+
+# migrate:legacy:demo handles for the e2e suite (synthetic, throwaway database)
+apps/web/e2e/.generated/
+
+# Cutover orchestrator state and rehearsal reports (M2.5a)
+/.cutover/
+/reports/

@@ -1,0 +1,248 @@
+{
+  "common": {
+    "greeting": "Ciao {name},",
+    "greetingNoName": "Ciao,",
+    "sentBy": "Inviato da {org} con Yayatoh.",
+    "poweredBy": "Con tecnologia Yayatoh",
+    "linkFallback": "Se il pulsante non funziona, copia questo link nel browser:",
+    "unsubscribe": "Annulla iscrizione",
+    "why": {
+      "reminders": "Ricevi questo promemoria perché hai biglietti di {org}.",
+      "event_updates": "Ricevi questo messaggio perché sei nella lista ospiti di un evento di {org}.",
+      "marketing": "Ricevi questo messaggio perché sei iscritto alle novità di {org}."
+    },
+    "reply": "Rispondi a {org}",
+    "smsStop": "Rispondi STOP per annullare l'iscrizione."
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "I tuoi biglietti per {eventName}",
+      "intro": "{count, plural, =0 {Il tuo ordine è confermato.} one {Il tuo biglietto è pronto.} other {I tuoi # biglietti sono pronti.}} Conserva questa email: il pulsante qui sotto li apre in qualsiasi momento.",
+      "cta": "Vedi i miei biglietti"
+    },
+    "orders.refund": {
+      "subject": "Il tuo rimborso per {eventName}",
+      "intro": "{fully, select, yes {Il tuo ordine è stato rimborsato per intero:} other {Una parte del tuo ordine è stata rimborsata:}} {amount}. Possono servire 5–10 giorni lavorativi.",
+      "cta": "Vedi il mio ordine"
+    },
+    "events.reminder": {
+      "subject": "Domani: {eventName}",
+      "intro": "Ti ricordiamo che {eventName} inizia il {when}.",
+      "venue": "Dove: {venue}",
+      "cta": "Apri i miei biglietti"
+    },
+    "tenancy.invitation": {
+      "subject": "Sei invitato a unirti a {orgName} su Yayatoh",
+      "intro": "{orgName} ti ha invitato a unirti al team come {role}.",
+      "cta": "Accetta l’invito"
+    },
+    "tenancy.event-invitation": {
+      "subject": "Sei invitato a collaborare a {eventName}",
+      "intro": "{orgName} ti ha invitato a {eventName} come {role}. Vedrai solo questo evento.",
+      "cta": "Accetta l'invito"
+    },
+    "ticketing.claim-link": {
+      "subject": "Un biglietto per {eventName} ti aspetta",
+      "intro": "Qualcuno ti ha passato un biglietto per {eventName}. Riscattalo per avere il tuo codice QR.",
+      "cta": "Riscatta il biglietto"
+    },
+    "ticketing.holder-link": {
+      "subject": "Il link ai tuoi biglietti per {eventName}",
+      "intro": "Ecco il link che hai richiesto. Apre i tuoi biglietti per {eventName}.",
+      "cta": "Apri i miei biglietti"
+    },
+    "ticketing.tickets-resent": {
+      "subject": "Il tuo biglietto per {eventName}",
+      "intro": "L'organizzatore di {eventName} ti ha inviato di nuovo il biglietto {code}. Il pulsante qui sotto apre i tuoi biglietti in qualsiasi momento.",
+      "cta": "Apri i miei biglietti"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Il tuo biglietto per {eventName} è stato annullato",
+      "intro": "L'organizzatore di {eventName} ha annullato il tuo biglietto {code}. Non dà più accesso all'evento. Per domande, rispondi all'organizzatore."
+    },
+    "seating.finder-code": {
+      "subject": "{code} è il tuo codice per trovare il posto a {eventName}",
+      "intro": "Inserisci {code} nella ricerca del posto per vedere il tuo posto. Il codice vale una sola volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, puoi ignorare questa email.",
+      "cta": "Apri la ricerca del posto"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "Un messaggio dall’organizzatore di {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "Aggiornamenti su {eventName}:",
+      "cta": "Rispondi all’organizzatore"
+    },
+    "messaging.reply": {
+      "subject": "Nuova risposta da {org}",
+      "intro": "{org} ha risposto al tuo messaggio:",
+      "cta": "Leggi e rispondi"
+    },
+    "sales.order_paid": {
+      "subject": "Nuovo ordine: {name}",
+      "intro": "{name} ha acquistato {count, plural, one {# biglietto} other {# biglietti}} per {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "Nuovo messaggio da {name}",
+      "intro": "{name} ti ha scritto su {eventName}."
+    },
+    "payments.destination-changed": {
+      "subject": "Nuovo conto per i pagamenti di {org}",
+      "intro": "{reason, select, bank_changed {Il conto bancario che riceve i pagamenti di {org} è stato modificato.} other {È stato collegato un conto per i pagamenti a {org}.}} Per sicurezza, non verrà inviato denaro prima del {until}. Se non hai effettuato tu questa modifica, contatta subito l'assistenza Yayatoh.",
+      "cta": "Controlla i pagamenti"
+    },
+    "tenancy.staff-access": {
+      "subject": "Il supporto Yayatoh sta agendo come {member} in {org}",
+      "intro": "Un membro dello staff di Yayatoh ha iniziato ad agire come {member} in {org} per aiutare. Motivo: {reason}. Questo accesso termina entro il {until}. Nel frattempo non è possibile rimborsare, pagare, esportare o eliminare nulla, e tutto ciò che viene fatto compare nel registro attività. Se non te lo aspettavi, contatta subito il supporto Yayatoh.",
+      "cta": "Vedi attività"
+    },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh ha sospeso {org}} reactivated {{org} è di nuovo online} other {Yayatoh ha chiuso {org}}}",
+      "intro": "{status, select, suspended {Il supporto Yayatoh ha sospeso {org}. Le pagine pubbliche e la vendita dei biglietti sono offline e la console è in sola lettura. I biglietti già venduti restano validi e possono ancora essere scansionati all’ingresso. Contatta il supporto Yayatoh per saperne di più.} reactivated {Il supporto Yayatoh ha riattivato {org}. Le pagine pubbliche, gli annunci e la vendita dei biglietti sono tornati e la console funziona come prima.} other {Il supporto Yayatoh ha chiuso {org}. Le pagine pubbliche sono offline e non può più essere modificata. Come proprietario puoi ancora aprirla e scaricare i tuoi dati. Contatta il supporto Yayatoh se pensi che sia un errore.}}",
+      "cta": "Apri la console"
+    },
+    "notifications.test": {
+      "subject": "Notifica di prova",
+      "intro": "Le notifiche funzionano."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} vorrebbe sapere com’è andato {eventName} per te. Ci vogliono circa due minuti.",
+      "cta": "Rispondi al sondaggio"
+    },
+    "surveys.reminder": {
+      "subject": "Promemoria: {title}",
+      "intro": "Non hai ancora risposto: {org} vorrebbe ancora sapere com’è andato {eventName} per te.",
+      "cta": "Rispondi al sondaggio"
+    },
+    "guest.checkout-code": {
+      "subject": "{code} è il tuo codice per confermare l'email",
+      "intro": "Inserisci {code} per confermare la tua email e completare l'ordine con {org}. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, ignora questa email."
+    },
+    "guest.sign-in": {
+      "subject": "{code} è il tuo codice per I miei biglietti",
+      "intro": "Inserisci {code} per vedere i tuoi biglietti su {site}, oppure usa il pulsante qui sotto nello stesso browser. Il codice scade tra {minutes, plural, one {# minuto} other {# minuti}} e il pulsante tra {linkMinutes, plural, one {# minuto} other {# minuti}}; ciascuno vale una volta. Se non l'hai richiesto, ignora questa email.",
+      "cta": "Apri I miei biglietti"
+    },
+    "guest.waitlist-code": {
+      "subject": "{code} è il tuo codice per entrare nella lista d'attesa",
+      "intro": "Inserisci {code} per confermare la tua email ed entrare nella lista d'attesa di {eventName} con {org}. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, ignora questa email."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Sei nella lista d'attesa di {eventName}",
+      "intro": "Sei il numero {position} in coda per {count, plural, one {# biglietto {passName}} other {# biglietti {passName}}} di {eventName}. Se si liberano biglietti, ti invieremo via email un'offerta per completare l'acquisto; i biglietti restano riservati per un tempo limitato. Usa il link qui sotto per vedere la tua posizione o lasciare la lista d'attesa.",
+      "cta": "Vedi la mia posizione in coda"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Biglietti disponibili per {eventName}: completa l'acquisto entro {until}",
+      "intro": "Buone notizie: {org} tiene da parte per te {count, plural, one {# biglietto {passName}} other {# biglietti {passName}}} per {eventName} fino a {until}. Completa l'acquisto entro quel momento; dopo, i biglietti passeranno alla persona successiva in coda.",
+      "cta": "Acquista ora"
+    },
+    "orders.waitlist-expired": {
+      "subject": "La tua offerta per {eventName} è scaduta",
+      "intro": "Il tempo per acquistare i tuoi biglietti {passName} per {eventName} è scaduto, quindi sono passati alla persona successiva in coda. Puoi rientrare nella lista d'attesa, in fondo alla coda, dal link qui sotto.",
+      "cta": "Rientra nella lista d'attesa"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Il tuo nuovo link all'ordine per {eventName}} other {Il tuo link all'ordine per {eventName}}}",
+      "intro": "{reason, select, reissued {L'organizzatore ha sostituito il link al tuo ordine per {eventName}. Il vecchio link non funziona più; usa questo.} other {Ecco il link che hai richiesto. Apre il tuo ordine e i biglietti per {eventName}.}}",
+      "cta": "Apri il mio ordine"
+    },
+    "security.fraud_signal": {
+      "subject": "Avviso di frode: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}",
+      "intro": "Un segnale di gravità alta va controllato presso {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {lo stesso biglietto a due ingressi} impossible_travel {un percorso impossibile tra punti di controllo} device_velocity {uno scanner troppo veloce} invalid_burst {una raffica di codici non validi} rejected_burst {una raffica di scansioni rifiutate} purchase_velocity {molti ordini dallo stesso acquirente} country_mismatch {un acquirente in un altro paese} checkout_blocked {un checkout bloccato} card_testing {possibile test di carte} chat_abuse {una conversazione segnalata} other {un segnale di frode}}. Aprilo per prenderlo in carico o archiviarlo.",
+      "cta": "Controlla il segnale"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Novità da {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messaggi in pausa per {org}",
+      "intro": "I reclami sulle email di {org} hanno raggiunto il {rate}, oltre il limite dello 0,3%, quindi Yayatoh ha messo in pausa promemoria, aggiornamenti e marketing. Biglietti, ricevute e risposte continuano a partire. Il supporto Yayatoh verificherà con te prima di riprendere gli invii."
+    },
+    "orders.refund-requested": {
+      "subject": "Richiesta di rimborso: {name}",
+      "intro": "{name} ha chiesto il rimborso di {count, plural, =0 {il suo ordine} one {# biglietto} other {# biglietti}} per {eventName}. Rispondi entro 5 giorni lavorativi."
+    },
+    "orders.refund-declined": {
+      "subject": "La tua richiesta di rimborso per {eventName}",
+      "intro": "L’organizzatore di {eventName} ha rifiutato la tua richiesta di rimborso: «{reason}» I tuoi biglietti restano validi.",
+      "cta": "Vedi il mio ordine"
+    },
+    "events.postponed": {
+      "subject": "{eventName} è rinviato",
+      "intro": "{eventName} è stato rinviato. I tuoi biglietti restano validi per la nuova data. Se non puoi partecipare, puoi chiedere un rimborso dalla pagina del tuo ordine secondo la politica di rimborso dell’organizzatore.",
+      "cta": "Vedi il mio ordine"
+    }
+  },
+  "roles": {
+    "owner": "proprietario",
+    "admin": "amministratore",
+    "manager": "gestore",
+    "finance": "finanza",
+    "marketing": "marketing",
+    "box_office": "biglietteria",
+    "scanner": "controllo accessi",
+    "viewer": "lettore",
+    "co_host": "co-organizzatore",
+    "planner": "planner",
+    "collaborator": "collaboratore dell'evento"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Il tuo account Yayatoh è stato eliminato",
+      "intro": "Come richiesto, il tuo account Yayatoh è stato eliminato. Sei stato disconnesso ovunque e i tuoi dati di accesso e la verifica in due passaggi sono stati rimossi. Gli organizzatori da cui hai acquistato conservano i loro ordini, come richiesto dalla legge.\n\nSe non l'hai chiesto tu, rispondi subito a questa email."
+    },
+    "sentBy": "Inviato da Yayatoh riguardo al tuo account."
+  },
+  "cutover": {
+    "cta": "Stato della manutenzione",
+    "sentBy": "Inviato da Yayatoh sul passaggio alla sua nuova piattaforma.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh passa alla nuova piattaforma il {start}",
+        "intro": "Il {start} Yayatoh passa alla sua nuova piattaforma. Per circa 45 minuti, fino alle {end}, la tua dashboard e la vendita dei biglietti saranno in pausa; il controllo all’ingresso continua a funzionare e i biglietti già venduti restano validi.\n\nI tuoi eventi, ordini, pagamenti e il tuo team vengono con te, e accedi con la stessa email e la stessa password. Non devi fare nulla: ti scriveremo due giorni prima e a lavoro finito."
+      },
+      "t2": {
+        "subject": "Promemoria: manutenzione di Yayatoh il {start}",
+        "intro": "Un promemoria: il {start}, fino alle {end} circa, Yayatoh sarà in sola lettura mentre passiamo alla nuova piattaforma. Evita di programmare un’apertura delle vendite o una promozione di biglietti in quella fascia. Il controllo all’ingresso continua a funzionare e i biglietti venduti restano validi."
+      },
+      "freezeStart": {
+        "subject": "La manutenzione di Yayatoh è iniziata",
+        "intro": "Yayatoh è in sola lettura mentre passiamo alla nuova piattaforma, fino alle {end} circa. Puoi ancora vedere i tuoi eventi e scansionare i biglietti all’ingresso; salvataggio delle modifiche, nuove vendite e rimborsi sono in pausa. Ti scriveremo a lavoro finito."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh è sulla nuova piattaforma",
+        "intro": "Il passaggio è concluso e Yayatoh funziona di nuovo. Accedi come sempre con la stessa email e la stessa password: eventi, ordini e pagamenti sono tutti lì e i biglietti già venduti restano validi. Se usi l’app Yayatoh, aggiornala dal tuo store."
+      },
+      "rollback": {
+        "subject": "Yayatoh torna alla versione precedente",
+        "intro": "Abbiamo riportato Yayatoh alla versione precedente mentre risolviamo un problema della nuova piattaforma. Vendite e modifiche fatte dal {start} sono state conservate e i biglietti restano validi. Accedi come prima; ti comunicheremo la nuova data del passaggio."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "I tuoi biglietti restano validi durante il nostro passaggio del {start}",
+        "intro": "Il {start} Yayatoh passa alla sua nuova piattaforma. Per circa 45 minuti, fino alle {end}, non potrai acquistare biglietti né modificare ordini, ma i tuoi biglietti restano validi e vengono scansionati all’ingresso come sempre.\n\nDopo accederai con la stessa email e la stessa password. Se usi l’app Yayatoh, aggiornala quando ti diremo che il passaggio è concluso."
+      },
+      "t2": {
+        "subject": "Promemoria: breve manutenzione di Yayatoh il {start}",
+        "intro": "Un promemoria: il {start}, fino alle {end} circa, non potrai acquistare biglietti né modificare ordini su Yayatoh. I tuoi biglietti restano validi e funzionano all’ingresso."
+      },
+      "freezeStart": {
+        "subject": "La manutenzione di Yayatoh è iniziata",
+        "intro": "La vendita di biglietti e le modifiche agli ordini su Yayatoh sono in pausa fino alle {end} circa mentre passiamo alla nuova piattaforma. I tuoi biglietti restano validi e vengono scansionati all’ingresso come sempre."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh è di nuovo attivo",
+        "intro": "Il passaggio è concluso: puoi di nuovo acquistare biglietti e gestire i tuoi ordini. I tuoi biglietti restano validi e accedi con la stessa email e la stessa password. Se usi l’app Yayatoh, aggiornala dal tuo store."
+      },
+      "rollback": {
+        "subject": "Yayatoh torna alla versione precedente",
+        "intro": "Abbiamo riportato Yayatoh alla versione precedente mentre risolviamo un problema. I biglietti acquistati dal {start} restano validi. Se abbiamo dovuto rimborsare un tuo ordine, riceverai un’email a parte con l’importo. Accedi come prima."
+      }
+    }
+  }
+}

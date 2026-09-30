@@ -1,0 +1,13 @@
+# openapi-generator config for the future Kotlin (Android) client (roadmap §6.1, §8.3). Not built
+# in CI: mobile apps are deferred. Run scripts/generate-mobile.sh to produce it locally.
+generatorName: kotlin
+inputSpec: /local/apps/api/openapi.json
+outputDir: /local/packages/sdk/mobile/out/kotlin
+additionalProperties:
+  packageName: com.yayatoh.api
+  groupId: com.yayatoh
+  artifactId: yayatoh-api
+  library: jvm-ktor
+  serializationLibrary: kotlinx_serialization
+  dateLibrary: java8
+  enumPropertyNaming: UPPERCASE

@@ -1,0 +1,43 @@
+{
+  "name": "@yayatoh/api-v1",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "catalog:",
+    "@scalar/api-reference": "1.72.1",
+    "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/media": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/seating": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "typescript": "catalog:"
+  }
+}

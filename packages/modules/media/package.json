@@ -1,0 +1,36 @@
+{
+  "name": "@yayatoh/media",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 4
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "fixtures": "node scripts/make-fixtures.ts",
+    "golden:update": "node scripts/make-fixtures.ts --golden"
+  },
+  "dependencies": {
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "sharp": "0.35.4",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

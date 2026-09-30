@@ -1,0 +1,170 @@
+import { tenantTable } from '@yayatoh/db';
+import { type SQL, sql } from 'drizzle-orm';
+import {
+  boolean,
+  check,
+  foreignKey,
+  index,
+  jsonb,
+  pgSchema,
+  text,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
+
+export const guestsSchema = pgSchema('guests');
+
+/**
+ * How a change reached the guest list (roadmap §5.1 "paper/manual entry recorded with its
+ * source"). `manual`: the host typed it; `paper`: the host typed a paper reply on the guest's
+ * behalf. `import`, `collector` and `rsvp` arrive with M4.1b, M4.1f and M4.1d.
+ */
+export const GUEST_SOURCES = ['manual', 'paper', 'import', 'collector', 'rsvp'] as const;
+export type GuestSource = (typeof GUEST_SOURCES)[number];
+/** What the console lets a host pick today. */
+export const ENTRY_SOURCES = ['manual', 'paper'] as const satisfies readonly GuestSource[];
+
+export const AGE_CLASSES = ['adult', 'child', 'infant'] as const;
+export type AgeClass = (typeof AGE_CLASSES)[number];
+
+/** A named guest of the party, or a plus-one slot ("Guest of …") that may be named later. */
+export const GUEST_KINDS = ['guest', 'plus_one'] as const;
+export type GuestKind = (typeof GUEST_KINDS)[number];
+
+export const HISTORY_ACTIONS = [
+  'party_created',
+  'party_updated',
+  'party_removed',
+  'guest_added',
+  'guest_updated',
+  'guest_removed',
+  'guest_moved',
+  'plus_one_added',
+  'plus_one_named',
+] as const;
+export type HistoryAction = (typeof HISTORY_ACTIONS)[number];
+
+const inList = (column: string, values: readonly string[]): SQL =>
+  sql.raw(`${column} in (${values.map((v) => `'${v}'`).join(', ')})`);
+
+/**
+ * A party (household, envelope): the unit a wedding invites and seats together. Belongs to one
+ * event: `(org_id, event_id)` references `events.events` (a lower tier) through a hand-written
+ * foreign key in the migration, cascading on event delete.
+ */
+export const parties = tenantTable(
+  guestsSchema,
+  'parties',
+  {
+    eventId: uuid('event_id').notNull(),
+    /** How the host refers to the household ("The Garcias"). */
+    name: text('name').notNull(),
+    /** The name on the envelope ("Mr. and Mrs. Luis Garcia"), when different. */
+    envelopeName: text('envelope_name'),
+    /** Host-defined side ("Bride", "Groom", "Both", "Work"), free text. */
+    side: text('side'),
+    vip: boolean('vip').notNull().default(false),
+    tags: text('tags').array().notNull().default(sql`'{}'::text[]`),
+    /** Host-only notes. */
+    notes: text('notes').notNull().default(''),
+    source: text('source').notNull().default('manual'),
+  },
+  (t) => [
+    index('parties_org_event_idx').on(t.orgId, t.eventId, t.name),
+    check('parties_name_length', sql`length(name) between 1 and 120`),
+    check('parties_envelope_length', sql`envelope_name is null or length(envelope_name) between 1 and 200`),
+    check('parties_side_length', sql`side is null or length(side) between 1 and 40`),
+    check('parties_tags_check', sql`cardinality(tags) <= 20`),
+    check('parties_notes_length', sql`length(notes) <= 2000`),
+    check('parties_source_check', inList('source', GUEST_SOURCES)),
+  ],
+);
+
+/**
+ * A guest in a party. `plus_one` rows are "Guest of <host>" slots: a name is optional until the
+ * host (or, from M4.1d, the party) names them. Dietary and accessibility answers and the home
+ * address are sealed together in `private_ciphertext` (the org's key vault; P4-3).
+ * `(org_id, attendee_id)` and `(org_id, contact_id)` reference `attendees.attendees` and
+ * `crm.contacts` (lower tiers) through hand-written foreign keys that clear the link when the
+ * record goes.
+ */
+export const guests = tenantTable(
+  guestsSchema,
+  'guests',
+  {
+    eventId: uuid('event_id').notNull(),
+    partyId: uuid('party_id').notNull(),
+    kind: text('kind').notNull().default('guest'),
+    /** The guest whose plus-one this is (same party), for `plus_one` rows. */
+    hostGuestId: uuid('host_guest_id'),
+    firstName: text('first_name'),
+    lastName: text('last_name'),
+    ageClass: text('age_class').notNull().default('adult'),
+    /** Free text until RSVP questions (M4.1e) offer the host's menu. */
+    meal: text('meal'),
+    /** Sealed JSON `{ dietary?, accessibility?, address? }` (key vault, org-scoped). */
+    privateCiphertext: text('private_ciphertext'),
+    attendeeId: uuid('attendee_id'),
+    contactId: uuid('contact_id'),
+    isPrimary: boolean('is_primary').notNull().default(false),
+  },
+  (t) => [
+    index('guests_org_party_idx').on(t.orgId, t.partyId, t.createdAt),
+    index('guests_org_event_idx').on(t.orgId, t.eventId),
+    // One primary contact per party; one plus-one per host.
+    uniqueIndex('guests_org_party_primary_key').on(t.orgId, t.partyId).where(sql`is_primary`),
+    uniqueIndex('guests_org_host_key').on(t.orgId, t.hostGuestId).where(sql`host_guest_id is not null`),
+    uniqueIndex('guests_org_attendee_key').on(t.orgId, t.attendeeId).where(sql`attendee_id is not null`),
+    index('guests_org_contact_idx').on(t.orgId, t.contactId).where(sql`contact_id is not null`),
+    check('guests_kind_check', inList('kind', GUEST_KINDS)),
+    check('guests_age_class_check', inList('age_class', AGE_CLASSES)),
+    check(
+      'guests_kind_shape',
+      sql`(kind = 'guest' and host_guest_id is null and first_name is not null) or (kind = 'plus_one' and host_guest_id is not null and not is_primary)`,
+    ),
+    check('guests_first_name_length', sql`first_name is null or length(first_name) between 1 and 80`),
+    check('guests_last_name_length', sql`last_name is null or length(last_name) between 1 and 80`),
+    check('guests_meal_length', sql`meal is null or length(meal) between 1 and 80`),
+    check('guests_not_own_host', sql`host_guest_id is null or host_guest_id <> id`),
+    foreignKey({
+      name: 'guests_party_fk',
+      columns: [t.orgId, t.partyId],
+      foreignColumns: [parties.orgId, parties.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'guests_host_fk',
+      columns: [t.orgId, t.hostGuestId],
+      foreignColumns: [t.orgId, t.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * Every change to a party or guest, with its source and actor (roadmap §5.1). Append-only for the
+ * runtime role (the migration revokes UPDATE and DELETE). `party_id` and `guest_id` carry no
+ * foreign key so the history outlives the rows it describes; the event foreign key
+ * (hand-written) removes it with the event. RSVP states (M4.1d) add actions, not columns.
+ */
+export const rsvpHistory = tenantTable(
+  guestsSchema,
+  'rsvp_history',
+  {
+    eventId: uuid('event_id').notNull(),
+    partyId: uuid('party_id').notNull(),
+    guestId: uuid('guest_id'),
+    action: text('action').notNull(),
+    source: text('source').notNull(),
+    /** `user:<id>`, `api_key:<id>` or `system:<name>` (kernel `actorId`). */
+    actor: text('actor').notNull(),
+    /** Names of the fields that changed (never their values: some are sealed). */
+    fields: text('fields').array().notNull().default(sql`'{}'::text[]`),
+    /** Structural facts only, e.g. `{ fromPartyId }` for a move. */
+    detail: jsonb('detail').$type<Record<string, string | number>>().notNull().default({}),
+  },
+  (t) => [
+    index('rsvp_history_org_party_idx').on(t.orgId, t.partyId, t.createdAt),
+    index('rsvp_history_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    check('rsvp_history_action_check', inList('action', HISTORY_ACTIONS)),
+    check('rsvp_history_source_check', inList('source', GUEST_SOURCES)),
+  ],
+);

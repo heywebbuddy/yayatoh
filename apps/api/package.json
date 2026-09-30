@@ -1,0 +1,42 @@
+{
+  "name": "@yayatoh/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/app.ts"
+  },
+  "scripts": {
+    "dev": "node --watch src/server.ts",
+    "start": "node src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "openapi:write": "node scripts/openapi.ts write",
+    "openapi:check": "node scripts/openapi.ts check",
+    "openapi:lint": "spectral lint openapi.json --ruleset spectral/.spectral.yaml --fail-severity warn --format text"
+  },
+  "dependencies": {
+    "@hono/node-server": "catalog:",
+    "@hono/zod-openapi": "catalog:",
+    "@yayatoh/api-v1": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
+    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@stoplight/spectral-cli": "6.16.3",
+    "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

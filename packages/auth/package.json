@@ -1,0 +1,39 @@
+{
+  "name": "@yayatoh/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./compat": "./src/compat/index.ts",
+    "./testing": "./src/testing.ts",
+    "./totp": "./src/totp.ts",
+    "./passkey-client": "./src/passkey-client.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@better-auth/passkey": "1.7.6",
+    "@node-rs/argon2": "2.2.1",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "bcryptjs": "3.0.3",
+    "better-auth": "1.7.6",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "next": "^16.0.0",
+    "react": "^19.3.0"
+  }
+}

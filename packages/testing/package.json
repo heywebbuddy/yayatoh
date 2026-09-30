@@ -1,0 +1,57 @@
+{
+  "name": "@yayatoh/testing",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./canary": "./src/canary/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/ai": "workspace:*",
+    "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/audiences": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
+    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/checkin-engine": "workspace:*",
+    "@yayatoh/cms": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/floorplan": "workspace:*",
+    "@yayatoh/forms": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/marketing": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/media": "workspace:*",
+    "@yayatoh/messaging": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/pdf": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/privacy": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/reports": "workspace:*",
+    "@yayatoh/reviews": "workspace:*",
+    "@yayatoh/seating": "workspace:*",
+    "@yayatoh/surveys": "workspace:*",
+    "@yayatoh/templates": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticket-crypto": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

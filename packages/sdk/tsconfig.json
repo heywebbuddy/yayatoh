@@ -1,0 +1,5 @@
+{
+  "extends": "@yayatoh/config/tsconfig/library.json",
+  "compilerOptions": { "lib": ["ES2024", "DOM"] },
+  "include": ["src", "tests", "scripts"]
+}

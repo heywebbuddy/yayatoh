@@ -1,0 +1,248 @@
+{
+  "common": {
+    "greeting": "{name} 様",
+    "greetingNoName": "こんにちは。",
+    "sentBy": "{org} が Yayatoh から送信しました。",
+    "poweredBy": "Powered by Yayatoh",
+    "linkFallback": "ボタンが使えない場合は、このリンクをブラウザにコピーしてください:",
+    "unsubscribe": "配信停止",
+    "why": {
+      "reminders": "{org} のチケットをお持ちのため、このリマインダーをお送りしています。",
+      "event_updates": "{org} のイベントのゲストリストに登録されているため、このメールをお送りしています。",
+      "marketing": "{org} のお知らせを購読されているため、このメールをお送りしています。"
+    },
+    "reply": "{org} に返信",
+    "smsStop": "配信停止はSTOPと返信してください。"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "{eventName} のチケット",
+      "intro": "{count, plural, =0 {ご注文が確定しました。} other {チケット # 枚の準備ができました。}}このメールは保存しておいてください。下のボタンからいつでも開けます。",
+      "cta": "チケットを見る"
+    },
+    "orders.refund": {
+      "subject": "{eventName} の返金",
+      "intro": "{fully, select, yes {ご注文は全額返金されました:} other {ご注文の一部が返金されました:}} {amount}。口座への反映まで 5〜10 営業日かかる場合があります。",
+      "cta": "注文を見る"
+    },
+    "events.reminder": {
+      "subject": "明日: {eventName}",
+      "intro": "{eventName} は {when} に始まります。",
+      "venue": "会場: {venue}",
+      "cta": "チケットを開く"
+    },
+    "tenancy.invitation": {
+      "subject": "Yayatoh で {orgName} に招待されました",
+      "intro": "{orgName} から {role} としてチームへの招待が届いています。",
+      "cta": "招待を承諾する"
+    },
+    "tenancy.event-invitation": {
+      "subject": "{eventName} へのご招待",
+      "intro": "{orgName} から {eventName} の{role}として招待されました。表示されるのはこのイベントのみです。",
+      "cta": "招待を承諾する"
+    },
+    "ticketing.claim-link": {
+      "subject": "{eventName} のチケットが届いています",
+      "intro": "{eventName} のチケットが譲渡されました。受け取ると自分専用の QR コードが発行されます。",
+      "cta": "チケットを受け取る"
+    },
+    "ticketing.holder-link": {
+      "subject": "{eventName} のチケットへのリンク",
+      "intro": "ご依頼のリンクです。{eventName} のチケットが開きます。",
+      "cta": "チケットを開く"
+    },
+    "ticketing.tickets-resent": {
+      "subject": "{eventName} のチケット",
+      "intro": "{eventName} の主催者がチケット {code} を再送しました。下のボタンからいつでもチケットを開けます。",
+      "cta": "チケットを開く"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "{eventName} のチケットがキャンセルされました",
+      "intro": "{eventName} の主催者がチケット {code} をキャンセルしました。このチケットでは入場できません。ご質問は主催者に返信してください。"
+    },
+    "seating.finder-code": {
+      "subject": "{eventName}の座席検索コードは{code}です",
+      "intro": "座席検索に{code}を入力すると座席が表示されます。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。",
+      "cta": "座席検索を開く"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "{eventName} の主催者からのメッセージ:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "{eventName} からのお知らせ:",
+      "cta": "主催者に返信する"
+    },
+    "messaging.reply": {
+      "subject": "{org} から新しい返信",
+      "intro": "{org} があなたのメッセージに返信しました:",
+      "cta": "読んで返信する"
+    },
+    "sales.order_paid": {
+      "subject": "新しい注文: {name}",
+      "intro": "{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）。"
+    },
+    "messaging.contact_replied": {
+      "subject": "{name} さんから新しいメッセージ",
+      "intro": "{name} さんから {eventName} についてメッセージが届きました。"
+    },
+    "payments.destination-changed": {
+      "subject": "{org} の新しい振込先口座",
+      "intro": "{reason, select, bank_changed {{org} の振込先の銀行口座が変更されました。} other {{org} に振込先口座が接続されました。}}安全のため、{until} より前にこの口座へ送金されることはありません。この変更に心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。",
+      "cta": "振込を確認"
+    },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh サポートが {org} で {member} として操作しています",
+      "intro": "Yayatoh のスタッフが、サポートのために {org} で {member} として操作を開始しました。理由：{reason}。このアクセスは {until} までに終了します。この間、返金・支払い・エクスポート・削除は一切できず、行われた操作はすべてアクティビティログに記録されます。心当たりがない場合は、すぐに Yayatoh サポートにご連絡ください。",
+      "cta": "アクティビティを見る"
+    },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh が {org} を停止しました} reactivated {{org} が再開しました} other {Yayatoh が {org} を閉鎖しました}}",
+      "intro": "{status, select, suspended {Yayatoh サポートが {org} を停止しました。公開ページとチケット販売は停止中で、コンソールは閲覧のみです。販売済みのチケットは引き続き有効で、入口でスキャンできます。詳しくは Yayatoh サポートにお問い合わせください。} reactivated {Yayatoh サポートが {org} を再開しました。公開ページ、掲載、チケット販売が戻り、コンソールも以前どおり使えます。} other {Yayatoh サポートが {org} を閉鎖しました。公開ページは停止され、今後は変更できません。オーナーは引き続き開いてデータをダウンロードできます。誤りだと思われる場合は Yayatoh サポートにお問い合わせください。}}",
+      "cta": "コンソールを開く"
+    },
+    "notifications.test": {
+      "subject": "テスト通知",
+      "intro": "通知は正常に動作しています。"
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org}より：{eventName}のご感想をお聞かせください。所要時間は2分ほどです。",
+      "cta": "アンケートに回答する"
+    },
+    "surveys.reminder": {
+      "subject": "リマインダー：{title}",
+      "intro": "まだご回答いただいていません。{org}は{eventName}のご感想をお待ちしています。",
+      "cta": "アンケートに回答する"
+    },
+    "guest.checkout-code": {
+      "subject": "メール確認コードは{code}です",
+      "intro": "{code}を入力してメールアドレスを確認し、{org}でのご注文を完了してください。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。"
+    },
+    "guest.sign-in": {
+      "subject": "マイチケットのコードは{code}です",
+      "intro": "{code}を入力すると{site}でチケットを確認できます。同じブラウザーなら下のボタンも使えます。コードは{minutes}分後、ボタンは{linkMinutes}分後に失効し、それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。",
+      "cta": "マイチケットを開く"
+    },
+    "guest.waitlist-code": {
+      "subject": "キャンセル待ち登録コードは{code}です",
+      "intro": "{code}を入力してメールアドレスを確認し、{org}の{eventName}のキャンセル待ちに登録してください。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。"
+    },
+    "orders.waitlist-joined": {
+      "subject": "{eventName}のキャンセル待ちに登録されました",
+      "intro": "{eventName}の{passName}チケット{count, plural, other {# 枚}}のキャンセル待ちで、現在{position}番目です。チケットに空きが出たら、購入手続きのご案内をメールでお送りします。ご案内のチケットは一定時間お取り置きされます。順番の確認やキャンセル待ちの取り消しは、下のリンクから行えます。",
+      "cta": "順番を確認する"
+    },
+    "orders.waitlist-offer": {
+      "subject": "{eventName}のチケットに空きが出ました: {until}までにご購入ください",
+      "intro": "朗報です。{org}が{eventName}の{passName}チケット{count, plural, other {# 枚}}を{until}までお取り置きしています。それまでに購入手続きを完了してください。期限を過ぎると、チケットは次の順番の方に回ります。",
+      "cta": "今すぐ購入する"
+    },
+    "orders.waitlist-expired": {
+      "subject": "{eventName}のご案内の期限が終了しました",
+      "intro": "{eventName}の{passName}チケットの購入手続きの期限が過ぎたため、チケットは次の順番の方に回りました。下のリンクから、最後尾でキャンセル待ちに再登録できます。",
+      "cta": "キャンセル待ちに再登録する"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {{eventName}のご注文への新しいリンク} other {{eventName}のご注文へのリンク}}",
+      "intro": "{reason, select, reissued {主催者が{eventName}のご注文へのリンクを差し替えました。以前のリンクは使えません。こちらをご利用ください。} other {ご依頼のリンクです。{eventName}のご注文とチケットを開けます。}}",
+      "cta": "注文を開く"
+    },
+    "security.fraud_signal": {
+      "subject": "不正アラート: {signal, select, two_entrances {同じチケットが2つの入口で使用} impossible_travel {チェックポイント間のありえない移動} device_velocity {スキャンが速すぎるスキャナー} invalid_burst {無効なコードの連続} rejected_burst {拒否されたスキャンの連続} purchase_velocity {同じ購入者からの多数の注文} country_mismatch {別の国の購入者} checkout_blocked {ブロックされた決済} card_testing {カードテストの可能性} chat_abuse {報告された会話} other {不正シグナル}}",
+      "intro": "{org}{eventName, select, none {} other {（{eventName}）}}で重要度の高いシグナルの確認が必要です: {signal, select, two_entrances {同じチケットが2つの入口で使用} impossible_travel {チェックポイント間のありえない移動} device_velocity {スキャンが速すぎるスキャナー} invalid_burst {無効なコードの連続} rejected_burst {拒否されたスキャンの連続} purchase_velocity {同じ購入者からの多数の注文} country_mismatch {別の国の購入者} checkout_blocked {ブロックされた決済} card_testing {カードテストの可能性} chat_abuse {報告された会話} other {不正シグナル}}。開いて対応済みにするか却下してください。",
+      "cta": "シグナルを確認"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "{org}からのお知らせ:"
+    },
+    "messaging.auto_paused": {
+      "subject": "{org}のメッセージ送信を一時停止しました",
+      "intro": "{org}のメールへの苦情が{rate}に達し、上限の0.3%を超えたため、Yayatohはリマインダー、お知らせ、マーケティングの送信を一時停止しました。チケット、領収書、返信は引き続き送信されます。送信を再開する前に、Yayatohサポートが一緒に確認します。"
+    },
+    "orders.refund-requested": {
+      "subject": "返金リクエスト：{name}",
+      "intro": "{name} さんが {eventName} の{count, plural, =0 {注文} other {チケット # 枚}}の返金をリクエストしました。5 営業日以内に対応してください。"
+    },
+    "orders.refund-declined": {
+      "subject": "{eventName} の返金リクエストについて",
+      "intro": "{eventName} の主催者が返金リクエストをお断りしました：「{reason}」チケットは引き続き有効です。",
+      "cta": "注文を見る"
+    },
+    "events.postponed": {
+      "subject": "{eventName} は延期されました",
+      "intro": "{eventName} は延期されました。チケットは新しい日程でも有効です。参加できない場合は、主催者の返金ポリシーに従い、注文ページから返金をリクエストできます。",
+      "cta": "注文を見る"
+    }
+  },
+  "roles": {
+    "owner": "オーナー",
+    "admin": "管理者",
+    "manager": "マネージャー",
+    "finance": "経理",
+    "marketing": "マーケティング",
+    "box_office": "ボックスオフィス",
+    "scanner": "スキャナー",
+    "viewer": "閲覧者",
+    "co_host": "共同ホスト",
+    "planner": "プランナー",
+    "collaborator": "イベント協力者"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Yayatoh のアカウントを削除しました",
+      "intro": "ご依頼のとおり、Yayatoh のアカウントを削除しました。すべての端末でサインアウトされ、サインイン情報と 2 段階認証は削除されました。購入先の主催者は、法律に従って注文の記録を保持します。\n\nお心当たりがない場合は、すぐにこのメールに返信してください。"
+    },
+    "sentBy": "お客様のアカウントについて Yayatoh から送信しました。"
+  },
+  "cutover": {
+    "cta": "メンテナンス状況",
+    "sentBy": "新しいプラットフォームへの移行について Yayatoh から送信しています。",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh は {start} に新しいプラットフォームへ移行します",
+        "intro": "{start} に Yayatoh は新しいプラットフォームへ移行します。約 45 分間（{end} まで）、ダッシュボードとチケット販売は一時停止します。入口でのチェックインは引き続き使え、販売済みのチケットも有効です。\n\nイベント、注文、支払い、チームはそのまま引き継がれ、同じメールアドレスとパスワードでサインインできます。対応は不要です。2 日前と完了時に改めてご連絡します。"
+      },
+      "t2": {
+        "subject": "リマインダー：{start} に Yayatoh のメンテナンス",
+        "intro": "リマインダーです：{start} から {end} 頃まで、新しいプラットフォームへの移行中は Yayatoh が読み取り専用になります。この時間帯に販売開始やチケットのプロモーションを予定しないでください。入口でのチェックインは引き続き使え、販売済みのチケットも有効です。"
+      },
+      "freezeStart": {
+        "subject": "Yayatoh のメンテナンスを開始しました",
+        "intro": "新しいプラットフォームへの移行中、{end} 頃まで Yayatoh は読み取り専用です。イベントの閲覧と入口でのチケットのスキャンはできますが、変更の保存、新規販売、返金は一時停止しています。完了したらメールでお知らせします。"
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh は新しいプラットフォームで稼働しています",
+        "intro": "移行が完了し、Yayatoh は再びご利用いただけます。いつもどおり同じメールアドレスとパスワードでサインインしてください。イベント、注文、支払いはすべてそのまま残り、販売済みのチケットも有効です。Yayatoh アプリをお使いの場合は、アプリストアから更新してください。"
+      },
+      "rollback": {
+        "subject": "Yayatoh を以前のバージョンに戻しました",
+        "intro": "新しいプラットフォームの問題を修正するまで、Yayatoh を以前のバージョンに戻しました。{start} 以降の販売と変更は保持され、チケットも有効です。これまでどおりサインインしてください。移行の新しい日程は改めてお知らせします。"
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "{start} の移行中もチケットは有効です",
+        "intro": "{start} に Yayatoh は新しいプラットフォームへ移行します。約 45 分間（{end} まで）はチケットの購入や注文の変更ができませんが、お持ちのチケットは有効で、入口でいつもどおりスキャンされます。\n\nその後も同じメールアドレスとパスワードでサインインできます。Yayatoh アプリをお使いの場合は、移行完了のお知らせ後に更新してください。"
+      },
+      "t2": {
+        "subject": "リマインダー：{start} に Yayatoh の短いメンテナンス",
+        "intro": "リマインダーです：{start} から {end} 頃まで、Yayatoh でチケットの購入や注文の変更ができません。お持ちのチケットは有効で、入口で使えます。"
+      },
+      "freezeStart": {
+        "subject": "Yayatoh のメンテナンスを開始しました",
+        "intro": "新しいプラットフォームへの移行中、{end} 頃まで Yayatoh でのチケット販売と注文の変更を一時停止しています。お持ちのチケットは有効で、入口でいつもどおりスキャンされます。"
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh が再開しました",
+        "intro": "移行が完了しました。チケットの購入と注文の管理が再びできます。お持ちのチケットは有効で、同じメールアドレスとパスワードでサインインできます。Yayatoh アプリをお使いの場合は、アプリストアから更新してください。"
+      },
+      "rollback": {
+        "subject": "Yayatoh を以前のバージョンに戻しました",
+        "intro": "問題を修正するまで、Yayatoh を以前のバージョンに戻しました。{start} 以降に購入したチケットは有効です。ご注文の返金が必要になった場合は、金額を記載した別のメールをお送りします。これまでどおりサインインしてください。"
+      }
+    }
+  }
+}

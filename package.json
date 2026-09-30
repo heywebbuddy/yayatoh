@@ -1,0 +1,45 @@
+{
+  "name": "yayatoh",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "turbo run typecheck",
+    "test": "vitest run --project unit",
+    "test:int": "vitest run --project integration",
+    "test:isolation": "vitest run --project integration -t isolation",
+    "test:canary": "pnpm --filter @yayatoh/web exec playwright test canary-crawl --project=desktop-1280",
+    "check:modules": "node tools/check-modules/cli.ts",
+    "db:bootstrap": "pnpm --filter @yayatoh/db bootstrap",
+    "db:generate": "pnpm --filter @yayatoh/db generate",
+    "db:migrate": "pnpm --filter @yayatoh/db migrate",
+    "seed": "pnpm --filter @yayatoh/web seed",
+    "migrate:legacy": "node tools/legacy-migrate/cli.ts run",
+    "migrate:legacy:validate": "node tools/legacy-migrate/cli.ts validate",
+    "migrate:legacy:synth": "node tools/legacy-migrate/cli.ts synth",
+    "migrate:legacy:demo": "node tools/legacy-migrate/cli.ts demo",
+    "migrate:legacy:order-links": "node tools/legacy-migrate/cli.ts order-links",
+    "migrate:legacy:reverse": "node tools/legacy-migrate/cli.ts reverse",
+    "migrate:legacy:rollback-refunds": "node tools/legacy-migrate/cli.ts rollback-refunds",
+    "migrate:legacy:freeze-probe": "node tools/legacy-migrate/cli.ts freeze-probe",
+    "cutover": "node tools/cutover/cli.ts",
+    "cutover:rehearse": "node tools/cutover/cli.ts rehearse",
+    "vapid:generate": "node packages/modules/notifications/scripts/generate-vapid-keys.ts",
+    "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/api openapi:lint && pnpm --filter @yayatoh/sdk generate:check",
+    "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/node": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

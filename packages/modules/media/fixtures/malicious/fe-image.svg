@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><filter id="f"><feImage href="https://evil.example/x.png"/></filter><rect width="10" height="10" filter="url(#f)"/></svg>

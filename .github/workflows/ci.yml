@@ -1,0 +1,242 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  merge_group:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # next build type-checks the whole web app in one process; the default ~2 GB heap ran out
+  # once M1.4e–M1.6e landed. Runners have 16 GB.
+  NODE_OPTIONS: --max-old-space-size=6144
+
+jobs:
+  checks:
+    name: lint · boundaries · typecheck · unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm check:modules
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: OpenAPI spec is up to date
+        run: pnpm contracts:check
+
+  gate-canaries:
+    name: gate self-test (canaries must fail)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Each canary must be rejected by check-modules
+        run: |
+          set +e
+          for c in tools/check-modules/canaries/*/; do
+            node tools/check-modules/cli.ts --root "$c" > /dev/null 2>&1
+            if [ $? -eq 0 ]; then echo "::error::canary $c was NOT rejected"; exit 1; fi
+            echo "ok: $c rejected"
+          done
+
+  legacy-mask:
+    name: legacy masking — masked dump imports into MySQL 8
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: synthetic-only
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd "mysqladmin ping -uroot -psynthetic-only" --health-interval 3s --health-retries 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Mask the synthetic legacy fixture, verify, and load both into MySQL
+        env:
+          MYSQL: mysql -h127.0.0.1 -P3306 -uroot -psynthetic-only
+        run: |
+          set -euo pipefail
+          node tools/legacy-mask/cli.ts keygen --out "$RUNNER_TEMP/mask.key"
+          node tools/legacy-mask/cli.ts mask --in tools/legacy-mask/tests/fixtures/legacy-synthetic.sql --out "$RUNNER_TEMP/masked.sql" --key-file "$RUNNER_TEMP/mask.key"
+          node tools/legacy-mask/cli.ts verify --original tools/legacy-mask/tests/fixtures/legacy-synthetic.sql --masked "$RUNNER_TEMP/masked.sql"
+          tools/legacy-mask/scripts/import-check.sh tools/legacy-mask/tests/fixtures/legacy-synthetic.sql "$RUNNER_TEMP/masked.sql"
+
+  integration:
+    name: integration + isolation (Postgres 18)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+    env:
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:int
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+  e2e:
+    # Sharded: the suite outgrew one 20-minute runner (M1.11), then three (M1.2c–M2.2b). Each shard
+    # gets its own database and seed, so shards never share state. 30 minutes since batch 3b
+    # (M3.x): shard 6 also runs the staff console suite and passed 20 minutes.
+    name: e2e + axe · shard ${{ matrix.shard }}/6
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: yayatoh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+      gotenberg:
+        # Ticket PDFs (ADR 0017); same pinned image as docker-compose.yml.
+        image: gotenberg/gotenberg:8.37.0
+        ports: ["3300:3000"]
+    env:
+      # CI-only throwaway database; role passwords are generated per run.
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
+      YAYATOH_DEV_AUTH: "1"
+      GOTENBERG_URL: http://localhost:3300
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Database roles, migrations and seed
+        run: |
+          APP=$(openssl rand -hex 12); MIG=$(openssl rand -hex 12); PR=$(openssl rand -hex 12)
+          SECRET=$(openssl rand -hex 32); PERSONA=$(openssl rand -hex 12)
+          TOKEN=$(openssl rand -hex 32); FAKE=$(openssl rand -hex 32); KMS=$(openssl rand -hex 32)
+          # Per-run throwaway values, still masked so they never appear in logs.
+          for v in "$SECRET" "$PERSONA" "$TOKEN" "$FAKE" "$KMS"; do echo "::add-mask::$v"; done
+          {
+            echo "BETTER_AUTH_SECRET=$SECRET"
+            echo "BETTER_AUTH_URL=http://localhost:3100"
+            echo "APP_TOKEN_SECRET=$TOKEN"
+            echo "FAKE_PAYMENTS_SECRET=$FAKE"
+            echo "LOCAL_KMS_KEY=$KMS"
+            echo "DEV_PERSONA_PASSWORD=$PERSONA"
+            echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
+            echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
+            echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
+          } >> "$GITHUB_ENV"
+          export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
+          export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
+          export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          export BETTER_AUTH_SECRET=$SECRET DEV_PERSONA_PASSWORD=$PERSONA APP_TOKEN_SECRET=$TOKEN FAKE_PAYMENTS_SECRET=$FAKE LOCAL_KMS_KEY=$KMS
+          pnpm db:bootstrap && pnpm db:migrate && pnpm seed
+      - run: pnpm --filter @yayatoh/web build
+      - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
+      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/6
+      # Staff console (M1.3e): after the web tests on the same runner, because it pauses checkout
+      # on a seed org of that runner's database.
+      - name: Staff console e2e
+        if: matrix.shard == 6
+        run: |
+          pnpm --filter @yayatoh/worker staff -- --email omar@yayatoh.test --role admin
+          pnpm --filter @yayatoh/admin build
+          pnpm --filter @yayatoh/admin e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-report-${{ matrix.shard }}
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+            apps/admin/playwright-report
+            apps/admin/test-results
+          retention-days: 14
+
+  e2e-all:
+    # The check name branch protection and reviewers know: green only when every shard is green.
+    name: e2e + axe (375/768/1280, en + ar)
+    needs: e2e
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: All e2e shards passed
+        run: |
+          if [ "${{ needs.e2e.result }}" != "success" ]; then
+            echo "::error::e2e shards: ${{ needs.e2e.result }}"; exit 1
+          fi
+
+  openapi-breaking:
+    name: oasdiff (/v1 additive only)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Base spec
+        run: |
+          git show "origin/${{ github.base_ref }}:apps/api/openapi.json" > .oasdiff-base.json 2>/dev/null \
+            || echo '{"openapi":"3.1.0","info":{"title":"base","version":"0"},"paths":{}}' > .oasdiff-base.json
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.21
+        with:
+          base: .oasdiff-base.json
+          revision: apps/api/openapi.json
+          fail-on: ERR
+
+  secrets:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Scan history for secrets
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.28.0 git /repo --redact --no-banner -v

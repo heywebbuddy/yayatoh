@@ -1,0 +1,240 @@
+# M1.9 — Check-in and onsite v1
+
+Roadmap: M1.9 (Scan PWA). ADR 0011 (QR format and offline check-in). This milestone is delivered in increments.
+
+## M1.9a — online check-in engine and door screen (done)
+- **`checkin` module (tier 4):**
+  - `admissions`: one live admission per ticket per event day (partial unique index); undo marks it undone and never deletes it.
+  - `scans`: an append-only log of every attempt. `client_scan_id` makes retries idempotent.
+- **Codes:**
+  - yy1 codes are verified with the org's Ed25519 public keys, and the ticket's current `rev` must match (a reissued ticket's old codes fail).
+  - Ticket short codes are accepted in any case.
+  - Anything else is `invalid`. Another org's codes fail signature verification.
+- **Rules**, in order:
+  - The ticket is known → `invalid` otherwise.
+  - It belongs to this event → `wrong_event` otherwise; nothing about the other event's ticket is returned.
+  - It isn't void → `void` otherwise.
+  - Now is inside the event window (6 h before start to 6 h after end) → `outside_window` otherwise.
+  - Today, in the event timezone, is one of the pass's access dates, if it has any → `not_today` otherwise.
+  - Then it's `admitted`, or `duplicate` with the first admission time.
+- **Permissions:** `checkin:scan` (owner, admin, manager, box office, scanner); viewers can't scan. Event-scoped `door_staff` assignments apply once device enrollment lands (M1.9b).
+- **Door screen** (`/o/{org}/e/{event}/onsite`):
+  - The code field stays focused for USB/Bluetooth scanners and typed short codes.
+  - A large result panel is announced politely.
+  - Shows today's progress (checked in of issued) and recent scans with undo.
+  - Strings are in 13 locales.
+- **Migration 0017:** the `checkin` schema; hand-written FKs down to `ticketing.tickets` and `events.events`.
+
+### Acceptance (M1.9a)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A signed code is admitted once per event day; the second scan is a duplicate with the first time; a new day admits again | `packages/testing/tests/checkin.int.test.ts` |
+| AC2 | Short codes work in any case; tampered, foreign-org and unknown codes are invalid | `checkin.int.test.ts` |
+| AC3 | Another event of the same org is refused without describing the ticket | `checkin.int.test.ts` |
+| AC4 | The event window and access dates are enforced in the event timezone | `checkin.int.test.ts` |
+| AC5 | A retried scan (same client id) returns its first outcome; undo reopens the ticket; status counts live admissions | `checkin.int.test.ts` |
+| AC6 | Scanners can scan, viewers can't, another org can't scan into these events; the fixture covers both tables | `checkin.int.test.ts`, `isolation.int.test.ts` |
+| AC7 | End to end: door staff admit a guest's ticket by typed code, see the duplicate, undo, and reject a bad code | `e2e/checkin.spec.ts` |
+
+## M1.9b1 — offline engine, devices, manifest and sync (done)
+- **`@yayatoh/checkin-engine` (universal):**
+  - The shared rules (event window, access dates, void, wrong event) moved here from the `checkin` module, so server and devices decide the same way.
+  - `offlineVerdict` implements the ADR 0011 table: admit, duplicate on this device, superseded (lower `rev`), unknown ticket → provisional only if **issued after the last sync** (the UUIDv7 ticket id carries its issue time; otherwise invalid), and bad signature → invalid.
+  - `lookupHash`: per-event salted SHA-256 of the normalized email.
+- **Devices (`checkin.devices`):**
+  - Enrolled from the door screen; the `yyd_…` token is shown once and stored only as SHA-256.
+  - `checkin.device_by_token` (SECURITY DEFINER) resolves the token to (org, device), so the org always comes from the token. Revoked devices and suspended orgs resolve to nothing.
+  - Heartbeats record battery, queue depth and clock offset, and deliver a pending wipe. Device commands use the `checkin:device` permission, which no user role has.
+- **Manifest:**
+  - Paged by an `(updated_at, id)` cursor compared at millisecond precision (Postgres keeps microseconds).
+  - `overlap=true` on a sync's first page re-sends the last minute, so a change committed out of timestamp order isn't missed.
+  - Rows carry id, short code, rev, status, pass, access dates, holder name and the email hash, never the email. The header carries public keys, the event window, the salt and the unknown-ticket policy.
+  - Deviation from roadmap §5.4: a timestamp cursor instead of a `ticket_changes` seq feed (M1.8 adds the feed with transfers).
+- **Sync (`POST /v1/scans/batch`):**
+  - Up to 500 scans, idempotent by `scanId`, processed in corrected-time order (`device_ts + clock_offset`).
+  - Server truth decides each scan. Admissions are first-wins by corrected time: an earlier scan arriving later takes over and flips the previous winner to `duplicate_offline`.
+  - Every offline duplicate emits `checkin.duplicate_offline@1` in the sync transaction (the alert source).
+- **`/v1` endpoints** (bearer device token): `GET /events/{id}/manifest`, `POST /scans/batch`, `POST /devices/heartbeat`. OpenAPI is updated (additive).
+- **Door screen:** a scanner devices section (add, key shown once, last seen/battery/queue, wipe, revoke). Strings are in 13 locales.
+- **Fixes found on the way:**
+  - Event creation is idempotent per form (a request key), so a double submit no longer shows "name already taken".
+  - The PDF adapter retries once on a timeout or 5xx, and the PDF route answers 503 with `Retry-After` instead of 500.
+- **Migrations:**
+  - 0018: devices; widened scan results via add NOT VALID → validate → drop old; device FKs.
+  - 0019: the manifest paging index. It's a plain `CREATE INDEX`, fine before launch; after launch, indexes on existing tables must be built `CONCURRENTLY`.
+
+### Acceptance (M1.9b1)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Every row of the ADR 0011 offline verdict table, plus the shared rules and short codes | `packages/checkin-engine/tests/offline.test.ts` |
+| AC2 | Drill (scaled): 3 offline devices with skewed clocks, 33 scans including same-device repeats, 4 cross-device duplicates and 2 bad codes → one live admission per ticket at the earliest corrected time, all 4 flagged `duplicate_offline` with alert events, and re-sync is idempotent | `packages/testing/tests/devices.int.test.ts` |
+| AC3 | Tokens are stored hashed; revoked tokens stop resolving; wipe is delivered by heartbeat; users can't call device commands | `devices.int.test.ts` |
+| AC4 | The manifest pages completely and holds no emails; another org's device gets 404 | `devices.int.test.ts`, `apps/api/tests/scanner.int.test.ts` |
+| AC5 | `/v1` needs a device token (problem+json 401, whatever org header is sent); batch sync is idempotent over HTTP | `apps/api/tests/scanner.int.test.ts` |
+| AC6 | End to end: add a device (key shown once) and revoke it from the door screen | `e2e/checkin.spec.ts` |
+
+## M1.9b2 — Scan PWA (done)
+- **One router, two mounts:** the scanner endpoints now live in `@yayatoh/checkin/routes` (a module's `./routes` surface). `apps/api` serves them at `/v1`, and the web app at `/api/v1`, so the PWA calls its own origin. Problem+json formatting is shared in `@yayatoh/platform/http`.
+- **`/scan` (web):**
+  - Set up from the link shown at enrollment (`/scan#e=<event>&k=<key>`). The key rides in the URL fragment, so it never reaches a server log, and it leaves the address bar once stored.
+  - IndexedDB keeps the config, the scan queue and the manifest. The manifest is AES-GCM sealed with a key derived from the device token: obfuscation only, as §5.4 accepts for a PWA.
+  - The manifest expires 24 h after the event ends.
+- **Scanning:**
+  - Every scan gets an instant local verdict from `checkin-engine` (the same rules as the server) and goes into the queue.
+  - When online the queue flushes immediately, so the server's answer, including cross-device first-wins, replaces the local one: "Confirmed by the server".
+  - Offline, scans wait ("n scans waiting to sync") and flush on the browser's `online` event. The header shows online/offline, tickets on the device, the queue and the last update.
+- **Heartbeat** every 30 s reports battery, queue depth and clock offset. A server `wipe` command, or a revoked key (401), deletes the whole local database.
+- **Camera:** uses `BarcodeDetector` where the browser has it (Chrome/Android), and otherwise the zxing-wasm reader (M1.9c2b).
+- **Service worker** (`/scan-sw.js`) caches only `/scan` pages (network first) and Next's hashed static assets (cache first), so the scanner reopens without a network. Everything else passes through. A web app manifest makes the PWA installable.
+- **Strings** are in 13 locales.
+
+### Acceptance (M1.9b2)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A device set up from its link downloads the event's tickets, and the key leaves the address bar | `e2e/scan-pwa.spec.ts` |
+| AC2 | Online scans are admitted and confirmed by the server | `e2e/scan-pwa.spec.ts` |
+| AC3 | Offline, scanning continues from the local list, repeats are local duplicates, and scans queue | `e2e/scan-pwa.spec.ts` |
+| AC4 | On reconnect the queue drains, and the door screen counts the offline admission | `e2e/scan-pwa.spec.ts` |
+| AC5 | The shared router behaves identically on both mounts (401 problem+json, manifest, idempotent batch) | `apps/api/tests/scanner.int.test.ts` |
+
+Manual, per release: install the PWA on a phone, open it in airplane mode (service worker shell), and scan with the camera.
+
+## M1.9c1 — event-scoped door staff, live door screen, offline-duplicate alerts (done)
+- **Event-scoped roles in the authorizer:**
+  - `createOrgAuthorizer({ eventRoles })`: when a member's org role doesn't grant a permission, and the command is about one event (`input.eventId`), their live event roles for that event are checked (`EVENT_ROLE_PERMISSIONS`: `door_staff` and `session_scanner` → `checkin:scan`; `event_manager` → read/write, orders, attendees, check-in).
+  - Expired assignments grant nothing.
+  - The resolver is a port implemented by `events.eventRolesOf` (tenancy is tier 1 and can't read tier 2), composed in web, api and tests.
+- **Door staff** scan and undo on their event only. Device management stays org-level. `undoAdmission` now takes `eventId`, which must own the admission.
+- **Door screen:**
+  - Refreshes every 10 s while visible (the polling fallback until Ably, §6.4).
+  - Shows an alert panel with the tickets two devices let in while offline (`duplicate_offline`): time, holder, short code.
+  - Strings are in 13 locales.
+- Door staff are members (e.g. viewers) with an event role. Non-member event staff arrive with the invitation flow for event roles (M1.8).
+
+### Acceptance (M1.9c1)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A viewer who is door staff on event A can scan A, can't scan event B, can't enroll devices, and loses access when the assignment expires | `packages/testing/tests/checkin.int.test.ts` |
+| AC2 | Offline duplicates from the drill appear as door-screen alerts with the holder | `packages/testing/tests/devices.int.test.ts` |
+
+## M1.9c2a — entrances, zones and fraud signals (done)
+- **Checkpoints** (`checkin.checkpoints`, managed with `events:write`) belong to one event. Names are unique per event.
+  - An **entrance** admits to the event. There is still one admission per ticket per event day, whichever entrance is used. The admission and the scan record the entrance.
+  - A **zone** (a VIP lounge, backstage) admits nobody. It checks that the pass includes the zone: `ticket_type_ids` lists the allowed types, and an empty list means every type. The result is `granted` or `no_access`. Event rules (void, window, access dates) still come first, and re-entry is fine.
+  - Archiving hides a checkpoint from scanners. Scans at an archived checkpoint are refused (`not_found`) online. Offline scans made there before archiving still sync, and past counts keep it.
+  - Scanners choose "Scanning at" on the door screen and in the Scan PWA. The choice persists on the device. "Whole event" keeps the M1.9a behaviour.
+- **Offline:** manifest rows carry `ticketTypeId`, and the header lists live checkpoints. `offlineVerdict(state, code, now, checkpointId)` applies the zone rule locally. An unknown-but-signed pass only gets into an all-types zone. Batch scans carry `checkpointId`. All `/v1` changes are additive.
+- **Fraud signals** (`checkin.fraud_signals`, event `checkin.fraud_signal@1`, shown on the door screen):
+  - `two_entrances`: a ticket shown at a different entrance within 5 minutes of its admission (online, and on sync by corrected time).
+  - `invalid_burst`: the 5th invalid code from one signed-in scanner within 60 s raises one signal per burst.
+  - Device velocity, signature-failure trends, transfer churn and checkout velocity are later work (M3.3).
+- **Door screen:** shows today's count per entrance and a "things to check" panel. Managers get an Entrances and zones section with create and archive/restore.
+- **Not yet:** event-role scope by checkpoint — done in M1.9d.
+
+### Acceptance (M1.9c2a)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Entrances and zones: unique names; types must belong to the event; entrances list no types; door staff can't create them | `packages/testing/tests/checkpoints.int.test.ts` |
+| AC2 | Entrances admit once a day whichever gate is used; counts per entrance | `checkpoints.int.test.ts`, `e2e/checkpoints.spec.ts` |
+| AC3 | Zones grant listed types repeatedly, refuse others and admit nobody, online and offline (engine unit tests + sync) | `checkpoints.int.test.ts`, `packages/checkin-engine/tests/offline.test.ts` |
+| AC4 | The same ticket at a second entrance within 5 minutes raises exactly one `two_entrances` signal plus an outbox event; later or same-gate repeats don't | `checkpoints.int.test.ts`, `e2e/checkpoints.spec.ts` |
+| AC5 | Five invalid codes in a minute raise one `invalid_burst` | `checkpoints.int.test.ts` |
+| AC6 | Archived checkpoints leave the scanner list and refuse scans; isolation holds | `checkpoints.int.test.ts`, isolation suite |
+
+## M1.9c2b — camera fallback for iOS Safari (done)
+- Without `BarcodeDetector` (iOS Safari, desktop Linux/Windows), the Scan PWA decodes camera frames with **zxing-wasm 3.1.4** (MIT, reader build, ~950 KB). It loads only when the camera is first used, and frames are scaled to at most 960 px wide.
+- The wasm is served **from our own origin** under a content-hashed name, `/scan-zxing-<sha256[0:16]>.wasm`. `scripts/copy-zxing.ts` copies it before `dev` and `build`, and the file is gitignored. The client derives the name from `ZXING_WASM_SHA256`. The service worker caches it cache-first (a `/scan*` path), so the camera works offline after one online use. No CDN is involved.
+- If the camera can't start (no permission, no device), the scanner says so and typing still works.
+
+### Acceptance (M1.9c2b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The QR codes we print and show (139-char yy1 and short codes) decode exactly with zxing-wasm | `packages/pdf/tests/qr-decode.test.ts` |
+| AC2 | With `BarcodeDetector` removed, a fake camera showing a ticket QR admits it, and the decoder is fetched from our origin | `apps/web/e2e/scan-camera.spec.ts` |
+
+Manual, per release: iPhone Safari, camera scan in daylight and low light.
+
+## M1.9d — checkpoint-scoped door staff, device velocity signals, drill runbook (done)
+- **Checkpoint-scoped door staff:**
+  - A door-staff assignment can list checkpoints: `events.event_role_assignments.checkpoint_ids` (empty = the whole event). `checkin.setDoorStaff` / `checkin.removeDoorStaff` (`members:manage`, audited as `event.door_staff.set|remove`) validate the member and that every checkpoint is a live one of the event; the events module stores it (`upsertEventRoleTx`, a tier-2 function called down the tiers).
+  - Scope resolution (`userScanScopeTx`): an org role that scans (owner, admin, manager, box office, scanner) is never scoped; otherwise the live `door_staff`/`session_scanner` assignments decide (any unscoped one, or an `event_manager` role, = anywhere; else the union of their checkpoints). Expired or removed assignments grant nothing (the authorizer already refuses).
+  - Online (`checkin.scanTicket`): outside the scope, including "whole event", the verdict is **`wrong_checkpoint`**: nothing admitted, no ticket described, the scan logged without a ticket id.
+  - Devices can be **handed to** a member at enrollment (`devices.assigned_user_id`); the device then follows that member's scope. Unassigned devices scan anywhere (as before).
+  - **Manifest v2**: the header lists only the device's checkpoints and carries `scope: { eventId, deviceId, checkpointIds | null, signature }`, signed with the org's Ed25519 ticket key over a domain-separated statement (`signStatement`/`verifyStatement` in `ticket-crypto`, tag `checkin-scope-v1`). `offlineVerdict` returns `wrong_checkpoint` outside the scope. The Scan PWA verifies the signature before using a manifest and refetches a v1 snapshot in full on its next sync; until then an old snapshot keeps scanning offline and the **server enforces the scope on sync** (old app versions included). A device handed to someone with no role at the event gets 403 on the manifest ("This device isn't assigned to this event").
+  - **Staff screen** (`/o/{org}/e/{event}/onsite/staff`): lists door staff and where each scans; owners/admins add a member and tick checkpoints (native checkboxes: a keyboard multi-select; none ticked = the whole event), edit and remove, with success and error messages. Anyone with `events:read` sees it read-only.
+  - **Door screen:** "Door staff by checkpoint" (the whole event first, then each live checkpoint), a "Handed to" choice when adding a device, and scoped staff see only their checkpoints under "Scanning at" with "Choose your checkpoint" instead of "Whole event".
+- **Device velocity signals** (same `checkin.fraud_signals` table and `checkin.fraud_signal@1` event, extended):
+  - Pure rules in `checkin-engine` (`detectVelocity`, unit-tested with fixed clocks): `device_velocity` (more than N scans in any 60 s from one device or signed-in scanner; N per event, default 40), `rejected_burst` (8 refused scans within 2 minutes from one device), `impossible_travel` (two successful scans of one ticket at located checkpoints ≥ 50 m apart, faster than the event's km/h, default 12, within 30 minutes; haversine distance).
+  - The server runs them after every online scan and after every synced offline batch, over the log by corrected time; re-running over the same log raises nothing twice (bursts deduplicated per source and window, travel per scan pair).
+  - Checkpoints get an optional location (latitude/longitude, both or neither).
+  - Per-event **detection rules** (`checkin.detection_settings`: scans per minute 2–600, km/h 1–200; `events:write`, audited).
+  - Every signal now stores a **severity** (two entrances and travel high; velocity and invalid bursts medium; refused bursts low) and a **status**: open → acknowledged or dismissed (`checkin.resolveFraudSignal`, `events:write`, audited as `fraud_signal.acknowledge|dismiss`, once).
+  - The door screen shows open signals with severity and what tripped them; the **fraud list** (`/onsite/signals`) shows all, open first by severity, with Acknowledge/Dismiss and the detection rules. Door staff can read it; viewers without an event role can't. Details leave through an allowlist of numbers.
+- **Drill:** `docs/runbooks/checkin-drill.md` and `pnpm --filter @yayatoh/worker drill-tickets -- --org <slug>` (dev/staging with the fake provider only): an event with 2 entrances and a zone, 265 valid tickets and 5 paid-then-refunded (void, the drill's "unpaid"), a 300-scan plan (CSV), printable QR cards and a results template.
+- **Migration 0041** (`0041_curved_mole_man.sql`): new `checkin.detection_settings` (RLS forced, FK to events); new columns on `checkpoints` (location), `devices` (assigned user), `fraud_signals` (severity, status, resolved at/by) and `events.event_role_assignments` (checkpoint ids); checks on existing tables added `NOT VALID` then validated; the kind and result checks widened by add-v2 → validate → drop → rename; existing `two_entrances` signals backfilled to `high`.
+- **`/v1` (additive):** the manifest header gains `version` and `scope`; the manifest may answer 403; batch results may say `wrong_checkpoint`. Strings in 13 locales.
+
+### Acceptance (M1.9d)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Velocity rules: rate over a sliding minute (one signal per burst), refused bursts, haversine distances and impossible travel with time windows, idempotent over the same log | `packages/checkin-engine/tests/velocity.test.ts` |
+| AC2 | The scope is signed and verified (widened, re-targeted or foreign-key scopes fail); scoped devices refuse elsewhere offline; v1 manifests still work | `packages/checkin-engine/tests/scope.test.ts` |
+| AC3 | Assignments validate member and checkpoints, are audited, and only `members:manage` can change them; another org can't | `packages/testing/tests/door-scope.int.test.ts` |
+| AC4 | Online verdicts: scoped staff admit at their checkpoint and get `wrong_checkpoint` elsewhere (no ticket leaked); org roles unscoped; widening, expiry and removal behave | `door-scope.int.test.ts` |
+| AC5 | Manifests: a device handed to scoped staff gets only their checkpoints with a verifiable scope; unassigned devices get all; unassigned-to-event → 403; sync enforces the scope for old devices | `door-scope.int.test.ts` |
+| AC6 | Signals from online scans and from synced offline logs (corrected time), once per burst and re-sync-idempotent; severity; outbox events | `packages/testing/tests/velocity.int.test.ts` |
+| AC7 | Fraud list ordering and allowlisted details; acknowledge/dismiss audited, once; viewers, door staff and other orgs refused; the door screen shows open ones only; detection rules validated and audited; the new table is in the isolation suite | `velocity.int.test.ts`, `isolation.int.test.ts` |
+| AC8 | End to end: assign by keyboard; the member's door screen and Scan PWA refuse elsewhere and admit at the gate; the door screen lists staff per checkpoint; read-only for the member; widen and remove; Arabic RTL; axe; no sideways scroll at 375 | `apps/web/e2e/door-staff.spec.ts` |
+| AC9 | End to end: rules validation; rapid scans raise a velocity signal on the door screen and fraud list; bursts; acknowledge (keyboard) and dismiss persist; viewer denied; checkpoint location validation; Arabic RTL; axe | `apps/web/e2e/velocity-signals.spec.ts` |
+| AC10 | The drill (3 devices, 300 scans) on real hardware | **Owner** — `docs/runbooks/checkin-drill.md` (not automated) |
+
+### Later / not yet
+- Legacy QR payloads (needs the owner's legacy corpus) and Ably realtime (owner account) remain.
+- Signals on the order timeline (roadmap M1.9 "surfaced … on the order timeline") and alert delivery (push/email) arrive with M1.10 notifications; signature-failure trends, transfer churn and checkout velocity stay in M3.3.
+- Scoped *devices* follow their member's scope; a device-only scope (without a member) is not offered.
+- The Scan PWA doesn't show fraud signals; the door screen and fraud list do.
+
+## M1.9e — fraud signals from every source, order timeline, alerts, offline legacy payloads (done)
+- **One signal model** (`checkin.fraud_signals`, extended expand-only; see MODULE.md): kind, severity, subject (ticket, order, device or signed-in scanner, contact and conversation), allowlisted evidence, and status open → acknowledged | dismissed **with a note**. New columns: `source` (`checkin` | `checkout` | `chat`), `source_event_id` (unique per org: a source event raises at most one signal), `order_id` (FK to the org's order), `contact_id`, `thread_id`, `resolution_note`, `alerted_at`; `event_id` may be null only for a chat report about a conversation with no event.
+- **Sources through the outbox** (subscribers in the `checkin` module, run by the worker and the dev drain):
+  - Checkout risk (M1.6e): the checkout now emits `order.risk_flagged@1` for a reviewed order (rule ids and the CRM contact, never the email). A review with an order-velocity rule is `purchase_velocity` (high), otherwise `country_mismatch` (medium).
+  - Blocked checkouts: the checkout action records the refusal through the new `orders.recordCheckoutBlock` command (`public:checkout`, audited as `order.checkout_blocked`; it resolves the contact and emits `order.checkout_blocked@1` with the rule ids and counts). A payment-failure rule makes it `card_testing`, otherwise `checkout_blocked` (both high); repeats by the same buyer at the same event within an hour join one signal. The buyer's answer is unchanged.
+  - Chat reports (M1.10): both report commands emit `messaging.report_filed@1` (ids and enums only, never the note). Reports the organizer's team files become `chat_abuse` about the contact on the conversation's latest event (abuse high, spam medium, other low). A contact's report about the organizer raises nothing for the organizer (it could expose the reporter; Yayatoh staff review it).
+  - Door signals (M1.9c2a/M1.9d) keep being raised in the scan transaction and announced as `checkin.fraud_signal@1`, which every new signal now also emits.
+- **Alerts:** a new member notification kind `security.fraud_signal` in a new category **Fraud and security alerts** (`security`: in-app, email, push; preferences page row; defaults in-app/email/push on, SMS off). Owners, admins and managers. High severity only; one alert per subject (ticket > order > contact > thread > device > user > event) and event per hour (`alerted_at` under an advisory lock on the subject). Not urgent: email waits out quiet hours; in-app is immediate. The email's button (and push) opens the order, the event's Signals list, or the conversation. Email copy in 13 locales (ICU select per kind); member alert emails now get a button when their kind has one (the dispatcher passes the console link as `url`).
+- **Order timeline v0:** the organizer order page has a **Signals** section: the order's signals and its tickets' door signals, oldest first, with severity, source (at the door / at checkout / chat report), status, what tripped them and the triage note. `checkin.orderSignals` needs `orders:read` (viewers read it). Members with `events:write` (org or event role) get a note field with Acknowledge and Dismiss; Enter in the note acknowledges; a dismissal without a reason is refused in the field. Viewers see no controls, and a replayed triage request from a viewer is refused (`forbidden`).
+- **Signals list** (`/o/{org}/e/{event}/onsite/signals`, the M1.9d fraud list): every source, filtered by kind, severity and status with a GET form (native selects, keyboard, the filter in the URL, "Clear filters", its own empty state), links to the order (with `orders:read`) or the conversation (with `messages:read`), and the same triage form.
+- **Scanner banner:** online scans (`checkin.scanTicket`) and every synced batch result (`/v1/scans/batch`, additive `openSignals`) carry the count of open high-severity signals about the scanned ticket or its order; 0 when the scan describes no ticket (wrong event or checkpoint). The door screen and the Scan PWA show "N open high-severity signals on this ticket — ask a supervisor before letting them in" (a count only; no buyer details). The door screen's "things to check" panel keeps showing door signals only.
+- **Offline legacy payloads:** manifest rows of migrated tickets carry their payloads as hashes, never the payload: `SHA-256("legacy:" + salt + ":" + payload)`, case-sensitive and per event. At merge this was unified with M2.2c, which had shipped the same feature first: the wire field stays M2.2c's `legacyCodes` (already on `/v1`), and its values are now these domain-separated, case-sensitive hashes instead of the case-insensitive email lookup hash. `offlineVerdict` looks a non-yy1 code up by its hash **before** short codes (the server's order); `legacyQrPayload` moved to `@yayatoh/ticket-crypto` so devices and server normalise the same way (raw or JSON `order_number`). **Fix found on the way:** batch sync resolved only yy1 and short codes, so a legacy payload scanned offline synced as `invalid`; it now resolves legacy payloads (raw code, case-sensitive) and logs `code_kind = legacy`. The cross-device duplicate on reconnect is flagged as before (regression-tested end to end with the synthetic migrated tickets).
+- **Dev drain:** runs subscribers until a pass consumes nothing (signals → alerts), and `recentEventsTx` hands over the newest 500 events (oldest first) instead of the oldest 500, so a busy org's latest events are never cut off.
+- **Migration** `0054_wet_lake.sql` (renumbered at merge to `0060_icy_carmella_unuscione.sql`). Hand-written between `-- hand-written: begin/end`: the new checks on `fraud_signals` (source, event-or-chat, note length) added `NOT VALID` then validated; the kind check and the `notifications.messages`/`preferences` category checks widened by add v2 `NOT VALID` → validate → drop → rename; the order FK `NOT VALID` then validated. The `alerted_at` column was added to the generated SQL and snapshot by hand after generation.
+- **`/v1` (additive):** manifest rows keep M2.2c's optional `legacyCodes` (see above); batch results gain optional `openSignals`. `apps/api/openapi.json` and the SDK regenerated.
+- **Strings:** namespace `fraudSignals` plus new kinds under `checkpoints.signal`, rules under `risk.rules`, the alert under `notifications.items|kinds.security`, and the preferences category, in 13 locales (Arabic zero/one/two/few/many/other, Russian one/few/many/other).
+
+### Acceptance (M1.9e)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Signal mapping (checkout review/block, card testing, chat reasons, contact reports ignored), severity rules, subjects, the alert window | `packages/modules/checkin/tests/fraud-rules.test.ts` |
+| AC2 | Each source raises its signal once (replays and a fresh consumer add nothing); no buyer email on the outbox; blocked repeats join one signal; block audited; bad rule ids refused | `packages/testing/tests/fraud-signals.int.test.ts` ("checkout risk → signals") |
+| AC3 | Alerts: high only, owner and manager (not viewers), one per subject per hour, another subject alerts; preferences (email off → in-app only) and quiet hours in the event's timezone; the email button opens the console | `fraud-signals.int.test.ts` ("alerts are deduplicated…", "alerts: preferences and quiet hours") |
+| AC4 | Chat reports: organizer abuse → high signal about the contact with the conversation, reason only; spam medium; contact reports nothing; an org-level signal resolved without an event | `fraud-signals.int.test.ts` ("chat reports → signals") |
+| AC5 | Order timeline and triage: viewers read, can't resolve; a dismissal needs a note (length checked); audited with the note; once; another org not found; list filters by kind, severity and status; door staff read only their event | `fraud-signals.int.test.ts` ("door signals…", "the Signals list filters…"), `velocity.int.test.ts` |
+| AC6 | The door's count: two entrances and a risky order's tickets show open high signals online and in sync results until handled; refusals describe nothing | `fraud-signals.int.test.ts`, `door-scope.int.test.ts` |
+| AC7 | Offline legacy payloads: hashed in the manifest only; offline verdicts (raw/JSON, case, void, duplicates, unknown); sync resolves them; a cross-device duplicate is flagged with its alert event | `packages/checkin-engine/tests/legacy.test.ts`, `fraud-signals.int.test.ts` ("migrated tickets offline") |
+| AC8 | Isolation: the fixture has chat-sourced signals in both orgs | `isolation.int.test.ts` |
+| AC9 | E2E: a risky checkout alerts, opens the order timeline, dismissal validation, keyboard acknowledge with a note that persists; the viewer sees no controls and a replayed action is refused; axe; Arabic RTL; the empty timeline | `apps/web/e2e/fraud-signals.spec.ts` |
+| AC10 | E2E: the door screen and Scan PWA banner for a flagged ticket (none for a clean one; no buyer email); Arabic RTL; axe | `fraud-signals.spec.ts` |
+| AC11 | E2E: chat abuse report → alert → Signals list; filters by keyboard, empty filtered state, clear; dismiss with a note; viewer denied; preferences row; Arabic RTL; axe | `fraud-signals.spec.ts` |
+| AC12 | E2E regression: two offline devices admit the same migrated ticket by its legacy QR; on reconnect the duplicate is flagged on the device and the door screen within 60 s | `apps/web/e2e/legacy-migration.spec.ts` |
+| AC13 | Dismissal needs a note on the fraud list (door signals) | `apps/web/e2e/velocity-signals.spec.ts` |
+
+### Later / not yet (M1.9e)
+- Signal-derived flags in the offline manifest (the banner needs the server's answer; offline scans show it once synced).
+- A console view for org-level signals (a chat report on a conversation with no event): they alert and link to the conversation, but only event pages list signals.
+- Transfer churn and signature-failure trends (M3.3); duplicate-offline scans as signals (they stay a door-screen alert).
+- Ably realtime (owner account) instead of the door screen's 10 s refresh.
+
+## Remaining M1.9 increments
+- legacy QR payloads against the owner's real corpus (offline support is built and proven on synthetic migrated tickets, M1.9e)
+- Ably realtime (owner account)
+- the 3-device / 300-scan drill on real hardware (owner; runbook ready)

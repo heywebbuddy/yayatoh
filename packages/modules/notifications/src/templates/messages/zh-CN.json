@@ -1,0 +1,248 @@
+{
+  "common": {
+    "greeting": "{name}，您好：",
+    "greetingNoName": "您好：",
+    "sentBy": "由 {org} 通过 Yayatoh 发送。",
+    "poweredBy": "由 Yayatoh 提供支持",
+    "linkFallback": "如果按钮无法使用，请将此链接复制到浏览器：",
+    "unsubscribe": "退订",
+    "why": {
+      "reminders": "您收到此提醒，是因为您持有 {org} 的门票。",
+      "event_updates": "您收到此邮件，是因为您在 {org} 某活动的嘉宾名单上。",
+      "marketing": "您收到此邮件，是因为您订阅了 {org} 的资讯。"
+    },
+    "reply": "回复 {org}",
+    "smsStop": "回复 STOP 退订。"
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "您的 {eventName} 门票",
+      "intro": "{count, plural, =0 {您的订单已确认。} other {您的 # 张门票已就绪。}}请保留此邮件：点击下方按钮可随时打开门票。",
+      "cta": "查看我的门票"
+    },
+    "orders.refund": {
+      "subject": "您的 {eventName} 退款",
+      "intro": "{fully, select, yes {您的订单已全额退款：} other {您的订单已部分退款：}}{amount}。到账可能需要 5–10 个工作日。",
+      "cta": "查看我的订单"
+    },
+    "events.reminder": {
+      "subject": "明天：{eventName}",
+      "intro": "提醒您：{eventName} 将于 {when} 开始。",
+      "venue": "地点：{venue}",
+      "cta": "打开我的门票"
+    },
+    "tenancy.invitation": {
+      "subject": "邀请您加入 Yayatoh 上的 {orgName}",
+      "intro": "{orgName} 邀请您以{role}身份加入团队。",
+      "cta": "接受邀请"
+    },
+    "tenancy.event-invitation": {
+      "subject": "邀请您参与 {eventName}",
+      "intro": "{orgName} 邀请您以{role}身份参与 {eventName}。您只会看到这个活动。",
+      "cta": "接受邀请"
+    },
+    "ticketing.claim-link": {
+      "subject": "有一张 {eventName} 的门票在等您",
+      "intro": "有人转给您一张 {eventName} 的门票。领取后即可获得您自己的二维码。",
+      "cta": "领取门票"
+    },
+    "ticketing.holder-link": {
+      "subject": "您的 {eventName} 门票链接",
+      "intro": "这是您请求的链接，可打开您的 {eventName} 门票。",
+      "cta": "打开我的门票"
+    },
+    "ticketing.tickets-resent": {
+      "subject": "您的 {eventName} 门票",
+      "intro": "{eventName} 的主办方重新向您发送了门票 {code}。点击下方按钮可随时打开您的门票。",
+      "cta": "打开我的门票"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "您的 {eventName} 门票已取消",
+      "intro": "{eventName} 的主办方已取消您的门票 {code}，该门票已无法入场。如有疑问，请回复主办方。"
+    },
+    "seating.finder-code": {
+      "subject": "{code} 是您在 {eventName} 的座位查询码",
+      "intro": "在座位查询中输入 {code} 即可查看您的座位。此代码仅可使用一次，{minutes} 分钟后失效。如果这不是您本人的请求，请忽略此邮件。",
+      "cta": "打开座位查询"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "来自 {eventName} 主办方的消息："
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "{eventName} 的最新消息：",
+      "cta": "回复主办方"
+    },
+    "messaging.reply": {
+      "subject": "{org} 的新回复",
+      "intro": "{org} 回复了您的消息：",
+      "cta": "阅读并回复"
+    },
+    "sales.order_paid": {
+      "subject": "新订单：{name}",
+      "intro": "{name} 购买了 {count, plural, other {# 张}} {eventName} 门票（{amount}）。"
+    },
+    "messaging.contact_replied": {
+      "subject": "来自 {name} 的新消息",
+      "intro": "{name} 就 {eventName} 给您发了消息。"
+    },
+    "payments.destination-changed": {
+      "subject": "{org} 的新收款账户",
+      "intro": "{reason, select, bank_changed {{org} 接收付款的银行账户已更改。} other {已为 {org} 关联收款账户。}}为了您的安全，在 {until} 之前不会向该账户转账。如果这不是您本人所做的更改，请立即联系 Yayatoh 支持。",
+      "cta": "查看付款"
+    },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh 支持人员正在以 {member} 的身份操作 {org}",
+      "intro": "一名 Yayatoh 工作人员已开始以 {member} 的身份在 {org} 中操作，以提供帮助。原因：{reason}。此访问将在 {until} 前结束。在此期间，无法进行任何退款、付款、导出或删除，所有操作都会记录在你的活动日志中。如果这不在你的预期之内，请立即联系 Yayatoh 支持。",
+      "cta": "查看活动"
+    },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh 已暂停 {org}} reactivated {{org} 已恢复上线} other {Yayatoh 已关闭 {org}}}",
+      "intro": "{status, select, suspended {Yayatoh 支持团队已暂停 {org}。其公开页面和售票已下线，控制台为只读。已售出的门票仍然有效，仍可在入口扫描。如需了解详情，请联系 Yayatoh 支持。} reactivated {Yayatoh 支持团队已恢复 {org}。公开页面、活动列表和售票已恢复，控制台照常使用。} other {Yayatoh 支持团队已关闭 {org}。其公开页面已下线，且无法再进行更改。作为所有者，你仍可打开它并下载你的数据。如果你认为这是错误，请联系 Yayatoh 支持。}}",
+      "cta": "打开控制台"
+    },
+    "notifications.test": {
+      "subject": "测试通知",
+      "intro": "通知功能正常。"
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} 想了解你对 {eventName} 的感受，大约只需两分钟。",
+      "cta": "填写问卷"
+    },
+    "surveys.reminder": {
+      "subject": "提醒：{title}",
+      "intro": "你还没有填写：{org} 仍希望了解你对 {eventName} 的感受。",
+      "cta": "填写问卷"
+    },
+    "guest.checkout-code": {
+      "subject": "{code} 是您的邮箱确认码",
+      "intro": "输入 {code} 以确认您的邮箱并完成在 {org} 的订单。验证码仅可使用一次，{minutes} 分钟后失效。如果这不是您本人的请求，请忽略此邮件。"
+    },
+    "guest.sign-in": {
+      "subject": "{code} 是您的“我的门票”验证码",
+      "intro": "输入 {code} 即可在 {site} 查看您的门票，也可以在同一浏览器中使用下方按钮。验证码 {minutes} 分钟后失效，按钮 {linkMinutes} 分钟后失效；每个仅可使用一次。如果这不是您本人的请求，请忽略此邮件。",
+      "cta": "打开我的门票"
+    },
+    "guest.waitlist-code": {
+      "subject": "{code} 是您加入候补名单的验证码",
+      "intro": "输入 {code} 以确认您的邮箱并加入 {org} 的 {eventName} 候补名单。验证码仅可使用一次，{minutes} 分钟后失效。如果这不是您本人的请求，请忽略此邮件。"
+    },
+    "orders.waitlist-joined": {
+      "subject": "您已加入 {eventName} 的候补名单",
+      "intro": "您正在排队等候 {eventName} 的 {count, plural, other {# 张}} {passName} 门票，当前排在第 {position} 位。如有门票释出，我们会通过邮件向您发送结账邀请；门票将为您保留一段时间。使用下方链接查看您的排位或退出候补名单。",
+      "cta": "查看我的排位"
+    },
+    "orders.waitlist-offer": {
+      "subject": "{eventName} 有门票释出：请在 {until} 前结账",
+      "intro": "好消息：{org} 为您保留了 {eventName} 的 {count, plural, other {# 张}} {passName} 门票，保留至 {until}。请在此之前完成结账；逾期后，门票将转给下一位排队者。",
+      "cta": "立即结账"
+    },
+    "orders.waitlist-expired": {
+      "subject": "您的 {eventName} 购票邀请已结束",
+      "intro": "您的 {eventName} {passName} 门票结账时间已过，门票已转给下一位排队者。您可以通过下方链接重新加入候补名单，排在队尾。",
+      "cta": "重新加入候补名单"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {您在 {eventName} 的订单新链接} other {您在 {eventName} 的订单链接}}",
+      "intro": "{reason, select, reissued {主办方已更换您在 {eventName} 的订单链接。旧链接已失效，请使用此链接。} other {这是您请求的链接，可打开您在 {eventName} 的订单和门票。}}",
+      "cta": "打开我的订单"
+    },
+    "security.fraud_signal": {
+      "subject": "欺诈警报：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}",
+      "intro": "{org}{eventName, select, none {} other {（{eventName}）}}有一个高严重性信号需要查看：{signal, select, two_entrances {同一张票出现在两个入口} impossible_travel {检查点之间不可能的移动} device_velocity {扫描过快的扫描设备} invalid_burst {一连串无效代码} rejected_burst {一连串被拒绝的扫描} purchase_velocity {同一买家的大量订单} country_mismatch {买家位于其他国家} checkout_blocked {被拦截的结账} card_testing {疑似盗刷测试} chat_abuse {被举报的对话} other {欺诈信号}}。打开它以确认或忽略。",
+      "cta": "查看信号"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "来自 {org} 的消息："
+    },
+    "messaging.auto_paused": {
+      "subject": "{org} 的消息发送已暂停",
+      "intro": "针对 {org} 邮件的投诉率达到 {rate}，超过 0.3% 的上限，因此 Yayatoh 已暂停你的提醒、动态和营销消息。门票、收据和回复仍会照常发送。恢复发送前，Yayatoh 支持团队会与你一起核查。"
+    },
+    "orders.refund-requested": {
+      "subject": "退款申请：{name}",
+      "intro": "{name} 申请退还 {eventName} 的{count, plural, =0 {订单} other {# 张门票}}。请在 5 个工作日内处理。"
+    },
+    "orders.refund-declined": {
+      "subject": "您对 {eventName} 的退款申请",
+      "intro": "{eventName} 的主办方拒绝了您的退款申请：“{reason}”您的门票仍然有效。",
+      "cta": "查看我的订单"
+    },
+    "events.postponed": {
+      "subject": "{eventName} 已延期",
+      "intro": "{eventName} 已延期。您的门票在新日期仍然有效。如无法参加，可根据主办方的退款政策在订单页面申请退款。",
+      "cta": "查看我的订单"
+    }
+  },
+  "roles": {
+    "owner": "所有者",
+    "admin": "管理员",
+    "manager": "经理",
+    "finance": "财务",
+    "marketing": "市场",
+    "box_office": "售票处",
+    "scanner": "检票员",
+    "viewer": "查看者",
+    "co_host": "联合主办人",
+    "planner": "策划人",
+    "collaborator": "活动协作者"
+  },
+  "account": {
+    "deleted": {
+      "subject": "你的 Yayatoh 账户已删除",
+      "intro": "按照你的要求，你的 Yayatoh 账户已删除。你已在所有设备上退出登录，登录信息和两步验证也已移除。你购票的主办方会依法保留其订单记录。\n\n如果这不是你本人的操作，请立即回复此邮件。"
+    },
+    "sentBy": "由 Yayatoh 就你的账户发送。"
+  },
+  "cutover": {
+    "cta": "维护状态",
+    "sentBy": "由 Yayatoh 就迁移到新平台一事发送。",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh 将于 {start} 迁移到新平台",
+        "intro": "Yayatoh 将于 {start} 迁移到新平台。大约 45 分钟内（到 {end} 为止），你的控制台和门票销售将暂停；入口签到照常进行，已售出的门票仍然有效。\n\n你的活动、订单、结算和团队都会一并迁移，你仍使用同一邮箱和密码登录。你无需做任何事：我们会在两天前以及完成时再次通知你。"
+      },
+      "t2": {
+        "subject": "提醒：Yayatoh 将于 {start} 进行维护",
+        "intro": "提醒：{start} 至大约 {end}，在迁移到新平台期间，Yayatoh 将处于只读状态。请不要在这段时间安排开售或门票推广。入口签到照常进行，已售出的门票仍然有效。"
+      },
+      "freezeStart": {
+        "subject": "Yayatoh 维护已开始",
+        "intro": "在迁移到新平台期间，Yayatoh 处于只读状态，大约到 {end}。你仍可以查看活动并在入口扫描门票；保存更改、新的销售和退款已暂停。完成后我们会发邮件通知你。"
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh 已在新平台上运行",
+        "intro": "迁移已完成，Yayatoh 恢复使用。请照常使用同一邮箱和密码登录：你的活动、订单和结算都在，已售出的门票仍然有效。如果你使用 Yayatoh 应用，请在应用商店更新。"
+      },
+      "rollback": {
+        "subject": "Yayatoh 已恢复到之前的版本",
+        "intro": "在修复新平台的问题期间，我们已将 Yayatoh 恢复到之前的版本。自 {start} 起的销售和更改均已保留，门票仍然有效。请照常登录；我们会告知新的迁移日期。"
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "{start} 迁移期间你的门票仍然有效",
+        "intro": "Yayatoh 将于 {start} 迁移到新平台。大约 45 分钟内（到 {end} 为止），你无法购买门票或更改订单，但你的门票仍然有效，并会在入口照常扫描。\n\n之后你仍使用同一邮箱和密码登录。如果你使用 Yayatoh 应用，请在我们通知迁移完成后更新。"
+      },
+      "t2": {
+        "subject": "提醒：Yayatoh 将于 {start} 短暂维护",
+        "intro": "提醒：{start} 至大约 {end}，你无法在 Yayatoh 上购买门票或更改订单。你的门票仍然有效，可在入口使用。"
+      },
+      "freezeStart": {
+        "subject": "Yayatoh 维护已开始",
+        "intro": "在迁移到新平台期间，Yayatoh 的门票销售和订单更改已暂停，大约到 {end}。你的门票仍然有效，并会在入口照常扫描。"
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh 已恢复",
+        "intro": "迁移已完成：你可以再次购买门票和管理订单。你的门票仍然有效，并使用同一邮箱和密码登录。如果你使用 Yayatoh 应用，请在应用商店更新。"
+      },
+      "rollback": {
+        "subject": "Yayatoh 已恢复到之前的版本",
+        "intro": "在修复问题期间，我们已将 Yayatoh 恢复到之前的版本。你自 {start} 起购买的门票仍然有效。如果我们需要为你的某个订单退款，你会另外收到一封注明金额的邮件。请照常登录。"
+      }
+    }
+  }
+}

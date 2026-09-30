@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><iframe src="https://evil.example"/><embed src="x.swf"/><object data="x"/><handler type="text/javascript">alert(1)</handler><rect width="10" height="10"/></svg>

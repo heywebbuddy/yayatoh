@@ -1,0 +1,6 @@
+{
+  "name": "@yayatoh/web",
+  "dependencies": {
+    "@yayatoh/db": "workspace:*"
+  }
+}

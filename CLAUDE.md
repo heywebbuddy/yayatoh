@@ -14,7 +14,48 @@ Claude Code builds it; the owner (Pani Digital Services, LLC) is product owner a
 **Precedence when documents disagree:** owner decisions (`docs/decisions.md`, roadmap §1.4) > accepted ADRs (`docs/adr/`) > `docs/roadmap.md` > `docs/research/`.
 
 ## Current phase
-**Phase 0 — Discovery and foundations.** The repo currently holds docs only. M0.5 bootstraps the monorepo (Turborepo + pnpm, `apps/*`, `packages/*`, CI gates), and this file gains a **Commands** section at that point.
+**Phase 0 — Discovery and foundations.** M0.5 bootstrapped the monorepo (Turborepo + pnpm 12, Node 24, TypeScript 6.0 per ADR 0019).
+
+## Commands
+Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Redis 7, Mailpit). Setup: `docs/local-development.md`.
+
+| Command | What it does |
+|---|---|
+| `pnpm verify` | **The local gate.** lint → check:modules → typecheck → unit → integration. Run before every PR. |
+| `pnpm dev` | All apps in watch mode (web :3000, api :4000, worker) |
+| `pnpm lint` / `pnpm format` | Biome check / Biome autofix |
+| `pnpm check:modules` | Boundary gate: public exports only, no raw DB client outside `packages/db`, `platform_reader` only in admin/worker, tables only via `tenantTable()`, tiers, raw colours |
+| `pnpm typecheck` | `tsc --noEmit` in every package (turbo) |
+| `pnpm test` | Unit tests (`*.test.ts`) |
+| `pnpm test:int` | Integration + isolation on real Postgres 18 (`*.int.test.ts`). Creates `yayatoh_test` from zero with random role passwords. Needs `ADMIN_DATABASE_URL` (local superuser; defaults to the compose service) |
+| `pnpm test:isolation` | Only the isolation tests |
+| `pnpm build` | Build every app |
+| `pnpm db:generate` | drizzle-kit generate + FORCE RLS post-step. **Never `drizzle-kit push`.** |
+| `pnpm db:bootstrap` / `pnpm db:migrate` | Create roles (local/CI only) / apply migrations as `migrator` |
+| `pnpm seed` | Deterministic seed data |
+| `pnpm contracts:check` | `apps/api/openapi.json` is current (CI also runs oasdiff against the base branch) |
+
+**Where things live**
+- `packages/kernel`: `Ctx`, `DomainError`, `Money`, `defineCommand` / `executeCommand` (universal: no `node:*`).
+- `packages/db`: the only place with raw clients. `tenantTable()`, `withTenant()`, roles, the schema guard. `@yayatoh/db/platform` is admin/worker only.
+- `packages/contracts`: Zod DTOs and `defineSerializer` (allowlists).
+- `packages/ui`: ADR 0018 tokens (`tokens.ts` + `styles.css`) and components.
+- `packages/platform` (tier 0): outbox + subscribers, command ports (`createCommandPorts`), `tenantCommand`/`tenantQuery`, module keys, profiles registry + `composeNav`.
+- `packages/modules/*`: one package per bounded context with a `MODULE.md` (invariants) and `yayatoh.tier` in package.json. `tenancy` and `billing` are tier 1.
+- `packages/modules/marketplace` (tier 6): the `public_listings` projection (fed by the outbox), site settings (enrollment, tenant site, widget origins), `legacy_redirects`. Public caching only through `apps/web/src/server/public-cache.ts` (org-scoped keys and tags; check-modules `cache-scope`).
+- `packages/modules/program` (tier 3, M1.4f): tracks, rooms, sessions, speakers, exhibitors, sponsors; pure conflict checks in `domain/schedule.ts`. Pages appear only for profiles whose nav lists them (`navIncludes`).
+- `packages/modules/audiences` (tier 5, M3.6a): the `audiences.participation` projector (keeps `crm.event_participation` and `crm.contact_profile` current from the outbox), saved segments, the vision templates and the audience export. The segment DSL and its SQL compiler live in `crm` (`@yayatoh/crm/client` for the browser).
+- `packages/modules/ai` (tier 6, M1.4f): the `AiDrafter` port (fake in dev/CI) and the per-org credits ledger (append-only; the account row is the lock).
+- Coexistence front door (M2.4a, ADR 0020): the versioned route table and forwarding rules in `@yayatoh/platform/front-door`; proxy.ts runs `apps/web/src/lib/front-door` first on legacy hosts (off unless `LEGACY_ORIGIN_URL`/`LEGACY_ABC_ORIGIN_URL` is set). Flags and counters are global `platform.front_door_*` tables behind SECURITY DEFINER functions; staff move routes at admin `/front-door`. Bump `ROUTE_TABLE_VERSION` when the table changes.
+- `packages/testing`: `twoOrgs()` fixture, the composed `ports`, the isolation suite. **Every new tenant table must get rows for both orgs in `createOrgFixture`** — the isolation suite fails otherwise.
+- `packages/api-v1`: the `/v1` router (`createV1`), mounted by `apps/api` at `/v1` and by the web at `/api/v1`. Org resources under `/v1/orgs/{org}`; wire allowlists in `src/resources.ts`. Content reads (M1.13d) in `src/routes/content.ts` (keyset `pageByKey`, `cachedJson` ETags); mark a route `deprecated()` for `Deprecation`/`Sunset` headers. `pnpm contracts:check` also runs Spectral (`apps/api/spectral/`): every operation needs an `operationId`, tags and descriptions, and every enum a `.openapi('Name')`. `packages/sdk`: the generated TypeScript client (`pnpm --filter @yayatoh/sdk generate` after `/v1` changes).
+- `apps/web` (Next.js), `apps/api` (Hono `/v1`), `apps/worker` (pg-boss + the single-leader outbox relay), `tools/check-modules` (with gate canaries).
+- `tools/cutover` (M2.5a, `pnpm cutover`): the §7.8 cutover orchestrator and rehearsals R2–R4 (dry run unless `--target=local|staging`; runbook `docs/runbooks/cutover.md`). Its database side lives in `tools/legacy-migrate` (reverse ETL, freeze probe, ops flags). The read-only freeze (`platform.ops_flags`) refuses every command unless it declares `duringFreeze: 'allowed'` (scans, provider completions only).
+
+**Recipes**
+- New tenant table: `tenantTable(schema, name, cols, extra)` in the module's `src/schema.ts` → `pnpm db:generate` → add fixture rows → declare every text/jsonb/text[] column in the module's `src/private-columns.ts` (public, vocab or a private class; the canary coverage test names the line) → `pnpm test:int`.
+- Cross-tenant reads (slug → org, "my orgs") only through SECURITY DEFINER functions granted in a migration; they return allowlisted columns.
+- New command: `tenantCommand({ name, input, output, entitlement, permission, handler, audit })`; run with `executeCommand(cmd, input, ctx, ports)`.
 
 ## Non-negotiable rules (all phases)
 
@@ -68,7 +109,7 @@ Claude Code builds it; the owner (Pani Digital Services, LLC) is product owner a
 ## Safety
 - **No secrets in the repo.** Use `.env.example` names only; real values live in Doppler or cloud-environment credentials.
 - **No production credentials, production data or production writes.** Development uses masked snapshots only. Production actions go through reviewed runbook scripts that the owner runs or approves step by step.
-- The legacy code (`legacy/` locally, `yayatoh-legacy` on GitHub) is **reference only**. Eventmie Pro is commercially licensed: read it to write specs and test vectors, never copy its code, templates or assets.
+- The legacy code (`legacy/` locally, `heywebbuddy/yayatoh-legacy` on GitHub) is **reference only**. Eventmie Pro is commercially licensed: read it to write specs and test vectors, never copy its code, templates or assets.
 - Migrations: expand/contract only, `lock_timeout`, concurrent indexes. The owner approves destructive steps.
 - Never weaken or skip a test or CI gate to get green.
 

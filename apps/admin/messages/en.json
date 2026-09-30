@@ -1,0 +1,893 @@
+{
+  "meta": {
+    "title": "Yayatoh staff console"
+  },
+  "signIn": {
+    "eyebrow": "Staff only",
+    "title": "Sign in to the staff console",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "invalid": "That email and password don't match.",
+    "challenge": {
+      "title": "Two-step verification",
+      "explainTotp": "Enter the 6-digit code from your authenticator app.",
+      "explainBackup": "Enter one of your backup codes. Each code works once.",
+      "totpLabel": "6-digit code",
+      "backupLabel": "Backup code",
+      "verify": "Verify and sign in",
+      "useBackup": "Use a backup code instead",
+      "useTotp": "Use your authenticator app instead",
+      "startOver": "Sign in again",
+      "errors": {
+        "invalid_code": "That code didn't work. Try again.",
+        "too_many_attempts": "Too many wrong codes. Sign in again to get another try.",
+        "locked": "Too many failed attempts. Try again in 15 minutes.",
+        "expired": "This sign-in has expired. Sign in again."
+      }
+    },
+    "passkey": "Sign in with a passkey",
+    "or": "or",
+    "passkeyFailed": "That passkey didn't work. Try again, or sign in with your password."
+  },
+  "notStaff": {
+    "title": "Not a staff account",
+    "description": "This account is not on the Yayatoh staff list, or can't do that. Ask the platform owner if you need access.",
+    "signOut": "Sign out"
+  },
+  "shell": {
+    "skip": "Skip to content",
+    "product": "Yayatoh staff",
+    "nav": "Staff console",
+    "tenants": "Tenants",
+    "accessLog": "Access log",
+    "signedInAs": "{name} · {role}",
+    "signOut": "Sign out",
+    "roles": {
+      "admin": "Admin",
+      "support": "Support",
+      "finance": "Finance"
+    },
+    "commission": "Commission",
+    "apiUsage": "API usage",
+    "signupCodes": "Signup codes",
+    "reports": "Messaging reports",
+    "people": "Privacy requests",
+    "passkeys": "Passkeys",
+    "messaging": "Auto-paused messaging",
+    "messagingCount": "Auto-paused messaging ({count})",
+    "openSignup": "Open signup",
+    "incidents": "Incidents",
+    "frontDoor": "Front door",
+    "maintenance": "Maintenance"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "description": "Every organization on the platform. Each view is recorded in the access log.",
+    "search": "Search by name or address",
+    "searchButton": "Search",
+    "empty": "No organizations match.",
+    "held": "Payouts on hold",
+    "col": {
+      "name": "Organization",
+      "status": "Status",
+      "members": "Members",
+      "payouts": "Payouts",
+      "paused": "Paused",
+      "created": "Created"
+    },
+    "status": {
+      "active": "Active",
+      "limited": "Limited",
+      "suspended": "Suspended",
+      "terminated": "Terminated"
+    },
+    "payout": {
+      "none": "Not set up",
+      "pending": "Onboarding",
+      "restricted": "Restricted",
+      "active": "Active"
+    },
+    "pause": {
+      "pause_checkout": "Checkout",
+      "pause_publishing": "Publishing",
+      "pause_messaging": "Messaging"
+    }
+  },
+  "tenant": {
+    "reason": "Reason (kept in the audit log)",
+    "error": "That didn't work ({code}).",
+    "done": {
+      "paused": "Paused. It applies to the organizer's next request.",
+      "resumed": "Resumed.",
+      "held": "Payouts are on hold.",
+      "released": "Payout hold released.",
+      "fee": "Fee override saved.",
+      "entitlement": "Entitlement override saved.",
+      "evidence": "Evidence submitted.",
+      "impersonation_ended": "Acting as the member ended.",
+      "status_suspend": "Suspended. Its public pages and ticket sales are offline and its console is read-only.",
+      "status_reactivate": "Reactivated. Its public pages, listings and ticket sales are back.",
+      "status_terminate": "Terminated. Its public pages are offline for good; its owners can still export their data.",
+      "status_restore": "Organization restored to the status it had before it was terminated. Its owners are told.",
+      "reconciled": "Reconciliation difference resolved."
+    },
+    "field": {
+      "status": "Status",
+      "kind": "Kind",
+      "country": "Country",
+      "currency": "Currency",
+      "timezone": "Time zone",
+      "members": "Members",
+      "profile": "Profile"
+    },
+    "switches": {
+      "title": "Kill switches",
+      "description": "Pausing takes effect on the organizer's next request. The organizer sees what is paused, not your reason.",
+      "on": "Paused",
+      "off": "Running",
+      "pause": "Pause {what}",
+      "resume": "Resume {what}",
+      "history": "History",
+      "kind": {
+        "pause_checkout": "Ticket sales",
+        "pause_publishing": "Publishing",
+        "pause_messaging": "Guest messaging"
+      }
+    },
+    "payouts": {
+      "title": "Payouts (Connect)",
+      "state": {
+        "none": "No payout account",
+        "pending": "Onboarding started",
+        "restricted": "Restricted: information due",
+        "active": "Active"
+      },
+      "flow": {
+        "platform_mor": "Orders are charged by the platform (platform_mor).",
+        "organizer_mor": "Orders are charged on the connected account (organizer_mor)."
+      },
+      "due": "Due: {keys}",
+      "held": "Payouts on hold",
+      "notHeld": "Payouts not held",
+      "hold": "Hold payouts",
+      "release": "Release hold"
+    },
+    "fees": {
+      "title": "Platform fee",
+      "current": "{currency}: {percent}% + {fixed} (minor units)",
+      "override": "Org override",
+      "plan": "From the plan",
+      "currency": "Currency",
+      "bps": "Percent (basis points)",
+      "fixed": "Fixed (minor units)",
+      "save": "Save fee override"
+    },
+    "entitlements": {
+      "title": "Entitlements",
+      "current": "Modules on:",
+      "module": "Module",
+      "effect": "Effect",
+      "grant": "Grant",
+      "revoke": "Revoke",
+      "save": "Save override"
+    },
+    "domains": {
+      "title": "Domains",
+      "primary": "primary",
+      "wallets": "wallets ready"
+    },
+    "ledger": {
+      "title": "Ledger",
+      "empty": "No journals yet.",
+      "account": "Account",
+      "balance": "Balance (minor units)",
+      "note": "Debits are positive. Organizer payables are negative: money owed to the organizer."
+    },
+    "disputes": {
+      "title": "Disputes",
+      "empty": "No disputes.",
+      "status": {
+        "open": "Open",
+        "evidence_submitted": "Evidence submitted",
+        "won": "Won",
+        "lost": "Lost"
+      },
+      "due": "Evidence due {date}",
+      "packet": "Evidence packet",
+      "summary": "Summary for the card network (what was bought, that it was delivered or used)",
+      "reviewed": "I reviewed the evidence packet",
+      "submit": "Submit evidence"
+    },
+    "impersonate": {
+      "title": "Act as a member",
+      "description": "Open the organizer console as one of this org's members to help them, for at most one hour. Refunds, payouts, exports, deletions and confirmations stay off. The org's owners are told at once, and everything you do is in their activity log with your name.",
+      "member": "Member",
+      "choose": "Choose a member",
+      "option": "{name} ({email}) · {role}",
+      "reason": "Reason (shown to the org's owners)",
+      "reasonHint": "For example the support ticket and what you will check. Required.",
+      "start": "Start acting as member",
+      "adminsOnly": "Only admin staff can act as a member.",
+      "history": "Recent staff access",
+      "empty": "No staff have acted as a member of this org.",
+      "entry": "{staff} as {member}: {reason}",
+      "until": "until {at}",
+      "endedHow": {
+        "ended": "ended {at}",
+        "expired": "expired {at}"
+      },
+      "open": "Active",
+      "closed": "Ended",
+      "end": "End",
+      "endFor": "End acting as {member}",
+      "errors": {
+        "reason_required": "Give a reason: the org's owners see it.",
+        "member_required": "Choose the member to act as.",
+        "self": "You can't act as yourself.",
+        "staff_target": "Platform staff can't be acted as.",
+        "not_found": "That person isn't a member of this org."
+      }
+    },
+    "status": {
+      "title": "Organization status",
+      "current": "Status: {status}",
+      "value": {
+        "active": "Active",
+        "limited": "Limited",
+        "suspended": "Suspended",
+        "terminated": "Terminated"
+      },
+      "explain": {
+        "active": "Public pages, listings and ticket sales are on.",
+        "limited": "Public pages, listings and ticket sales are on, with limits.",
+        "suspended": "Public pages, listings, the widget and ticket sales are offline and the console is read-only for its members. Tickets already sold stay valid and still scan.",
+        "terminated": "Closed. Public pages are offline, nothing can be changed, and only its owners can still open the console to export their data. No data was deleted."
+      },
+      "form": {
+        "suspend": "Suspend this organization",
+        "reactivate": "Reactivate this organization",
+        "terminate": "Terminate this organization"
+      },
+      "effect": {
+        "suspend": "Takes its public pages, marketplace listings, tenant site, widget and checkout offline at once and makes its console read-only. Existing orders stay valid and tickets still scan. The owners are told (without your reason).",
+        "reactivate": "Brings its public pages, listings and checkout back and makes its console writable again. The owners are told.",
+        "terminate": "Closes it for good: public pages go offline, ticket scanning stops and members lose the console, except owners, who can still export their data. Only the reviewed restore (runbook, with the platform owner's approval) can undo it. Nothing is deleted."
+      },
+      "confirm": {
+        "suspend": "I understand its public pages go offline and its console becomes read-only.",
+        "reactivate": "I understand its public pages and checkout come back."
+      },
+      "typeSlug": "Type its address ({slug}) to confirm",
+      "submit": {
+        "suspend": "Suspend organization",
+        "reactivate": "Reactivate organization",
+        "terminate": "Terminate organization"
+      },
+      "adminsOnly": "Only admins can change an organization's status.",
+      "final": "Terminated organizations can't be reactivated with these forms. A mistaken termination is restored with the reviewed restore below.",
+      "history": "Status history",
+      "empty": "No status changes yet.",
+      "entry": "{when} · {action} by {who} · “{reason}”",
+      "did": {
+        "suspend": "Suspended",
+        "reactivate": "Reactivated",
+        "terminate": "Terminated",
+        "restore": "Restored"
+      },
+      "errors": {
+        "status_reason": "Give a reason of at least 3 characters: it is kept in the audit log.",
+        "status_confirm": "Tick the box to confirm.",
+        "status_slug": "Type the organization's address exactly to confirm.",
+        "restore_step_up": "That password or code isn't right. Confirm it's you and try again.",
+        "restore_rate_limited": "Too many tries. Wait a few minutes before confirming it's you again.",
+        "restore_method": "Set a password or an authenticator app on your account first: restoring needs you to confirm it's you."
+      }
+    },
+    "restore": {
+      "title": "Restore a terminated organization",
+      "description": "Only for a termination that was a mistake, after the platform owner approved restoring it in writing (runbook: “Restore a terminated organization”). Put the approval's reference in the reason.",
+      "effect": "Puts back the status it had when it was terminated: {status}. Nothing else changes: kill switches, payout holds, API keys, devices, domains and members stay as they are. Its owners are told (without your reason).",
+      "noRecord": "No termination is recorded for this organization, so there is no status to put back. Don't change it by hand: escalate as the runbook says.",
+      "form": "Restore this organization",
+      "password": "Your password (confirm it's you)",
+      "code": "Code from your authenticator app (confirm it's you)",
+      "submit": "Restore organization",
+      "adminsOnly": "Only admins can restore an organization."
+    },
+    "reconciliation": {
+      "title": "Reconciliation",
+      "description": "Open differences between this tenant's ledger and the payment provider's balance transactions (daily run). Resolve with a note once explained; the note is audited.",
+      "empty": "No open differences.",
+      "kind": {
+        "missing_at_provider": "Not at the provider",
+        "missing_in_ledger": "Not in the ledger",
+        "amount_mismatch": "Amounts differ"
+      },
+      "amounts": "Ledger {ledger} · provider {provider}",
+      "note": "Resolution note",
+      "resolve": "Resolve"
+    },
+    "messagingLink": "Messaging: auto-pause and quotas"
+  },
+  "accessLog": {
+    "title": "Access log",
+    "description": "Every cross-tenant read by staff and the worker, newest first (latest 200).",
+    "at": "When (UTC)",
+    "actor": "Who",
+    "reason": "Why"
+  },
+  "evidence": {
+    "title": "Dispute evidence · {id}",
+    "subtitle": "Prepared for the card network by {seller} and Yayatoh",
+    "footer": "Generated from Yayatoh records: orders, tickets and check-in scans. Reviewed by a person before submission.",
+    "dispute": "Dispute",
+    "reason": "Reason",
+    "amount": "Amount",
+    "opened": "Opened",
+    "dueBy": "Evidence due",
+    "seller": "Seller",
+    "sellerName": "Organizer",
+    "soldBy": "Merchant of record",
+    "soldByOrganizer": "The organizer (charged on their account)",
+    "soldByPlatform": "Pani Digital Services, LLC (Yayatoh), on behalf of the organizer",
+    "event": "Event",
+    "eventName": "Name",
+    "starts": "Starts",
+    "ends": "Ends",
+    "venue": "Venue",
+    "order": "Order",
+    "orderId": "Order number",
+    "placed": "Placed",
+    "paid": "Paid",
+    "buyer": "Buyer",
+    "total": "Total charged",
+    "fees": "Of which fees",
+    "status": "Status",
+    "items": "Item",
+    "qty": "Qty",
+    "price": "Price each",
+    "tickets": "Tickets and check-in",
+    "serial": "Ticket",
+    "code": "Code",
+    "holder": "Holder",
+    "admitted": "Admitted at the door",
+    "notAdmitted": "Not scanned",
+    "omitted": "{n} more tickets not listed",
+    "refunds": "Refunds",
+    "noRefunds": "No refunds were requested for this order.",
+    "refundPolicy": "Refund policy shown to buyers",
+    "noPolicy": "The organizer has not published a refund policy.",
+    "policyUpdated": "Last updated {date}",
+    "statement": "Statement from the seller",
+    "accessLog": "Access log (door scans)",
+    "noScans": "No door scans were recorded for these tickets.",
+    "time": "Time",
+    "entrance": "Entrance",
+    "result": "Result",
+    "offline": "offline",
+    "messages": "Messages sent to the buyer",
+    "noMessages": "No messages were sent to the buyer about this order.",
+    "message": "Message",
+    "channel": "Channel",
+    "trimmed": "{n, plural, one {# more row left out} other {# more rows left out}} to stay within the card networks’ page limit."
+  },
+  "commission": {
+    "title": "Commission",
+    "description": "Platform fees per organization and currency, from the ledger: fees on sales (online and box office) minus fees given back by refunds. Days are in UTC.",
+    "from": "From",
+    "to": "To",
+    "apply": "Show",
+    "badRange": "The end date is before the start date. Showing this month instead.",
+    "badDate": "Pick both dates. Showing this month instead.",
+    "range": "{from} to {to} (UTC)",
+    "totals": "Totals by currency",
+    "totalIn": "Net commission, {currency}",
+    "col": {
+      "org": "Organization",
+      "currency": "Currency",
+      "sales": "Sales",
+      "charged": "Fees charged",
+      "refunded": "Fees refunded",
+      "net": "Net commission"
+    },
+    "empty": "No platform fees in this period."
+  },
+  "apiUsage": {
+    "title": "API usage by app version",
+    "description": "Requests to /v1 per route, client and app version over the last 7 days (UTC). No organization or person is recorded.",
+    "summary": "{versions, plural, =0 {No client versions seen yet.} one {# client version seen.} other {# client versions seen.}}",
+    "route": "Route",
+    "client": "Client",
+    "version": "App version",
+    "requests": "Requests",
+    "lastDay": "Last seen (UTC)",
+    "empty": "No /v1 requests recorded in the last 7 days."
+  },
+  "signupCodes": {
+    "title": "Signup codes",
+    "description": "Signup is invite-only: a code lets someone create an organization. Give each code a note so you know who it's for.",
+    "list": "Signup codes",
+    "empty": "No signup codes yet.",
+    "noNote": "(no note)",
+    "col": {
+      "note": "Note",
+      "state": "State",
+      "usesLeft": "Uses left",
+      "expires": "Expires (UTC)",
+      "createdBy": "Created by",
+      "actions": "Actions"
+    },
+    "state": {
+      "active": "Active",
+      "used_up": "Used up",
+      "expired": "Expired",
+      "revoked": "Revoked"
+    },
+    "usesLeft": "{left} of {max}",
+    "revoke": "Revoke",
+    "revokeFor": "Revoke the code “{note}”",
+    "revokedBy": "Revoked by {who} on {date}",
+    "done": {
+      "revoked": "Code revoked. It no longer works for new signups.",
+      "already_revoked": "That code was already revoked."
+    },
+    "create": {
+      "title": "Create a signup code",
+      "uses": "Uses",
+      "days": "Valid for (days)",
+      "note": "Note",
+      "noteHint": "Who it's for, e.g. the organizer's name. Kept in the access log.",
+      "submit": "Create code"
+    },
+    "created": {
+      "label": "New signup code",
+      "intro": "Here is the new code. Copy it now: it won't be shown again.",
+      "expires": "It works until {date} (UTC)."
+    },
+    "errors": {
+      "summary": "Some details need fixing.",
+      "maxUses": "Uses must be a whole number from 1 to 1000.",
+      "days": "Days must be a whole number from 1 to 365.",
+      "note": "Add a note of up to 200 characters."
+    }
+  },
+  "reports": {
+    "title": "Messaging reports",
+    "description": "Conversations that organizers or their contacts reported to Yayatoh. Resolve (you acted on it) or dismiss (no action needed) with a note for the record.",
+    "tabsLabel": "Report status",
+    "tabs": {
+      "open": "Open",
+      "closed": "Closed"
+    },
+    "heading": "{org} · {reason}",
+    "meta": "Reported by the {reporter} · {at} UTC ·",
+    "tenantLink": "Tenant {slug}",
+    "reporter": {
+      "organizer": "organizer",
+      "contact": "contact"
+    },
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Abuse",
+      "other": "Other"
+    },
+    "note": "Reporter’s note:",
+    "excerpt": "Conversation excerpt",
+    "noMessages": "No messages before the report.",
+    "from": {
+      "contact": "Contact",
+      "organizer": "Organizer"
+    },
+    "announcement": "announcement",
+    "reviewLabel": "Review this report",
+    "reviewNote": "Note (kept in the audit log)",
+    "resolve": "Resolve",
+    "dismiss": "Dismiss",
+    "status": {
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "done": {
+      "resolved": "Report resolved.",
+      "dismissed": "Report dismissed."
+    },
+    "errors": {
+      "note_required": "Add a note before resolving or dismissing a report.",
+      "note_too_long": "Keep the note under 1,000 characters.",
+      "already_reviewed": "Someone already reviewed this report.",
+      "not_found": "That report does not exist.",
+      "other": "Something went wrong ({code})."
+    },
+    "empty": {
+      "open": "No open reports",
+      "closed": "No reviewed reports yet"
+    },
+    "emptyDescription": "Reports from organizers and contacts show up here."
+  },
+  "people": {
+    "metaTitle": "Privacy requests · Yayatoh staff",
+    "title": "Privacy requests",
+    "description": "Requests from people about their Yayatoh account (Yayatoh is the controller): find what the platform holds about an email, export it, or erase it. Every lookup is in the access log; every export and erasure is recorded with your reason.",
+    "reasonHint": "Recorded with the request, e.g. the support ticket and how you checked who is asking (10–500 characters).",
+    "find": {
+      "title": "Find a person",
+      "hint": "Searches accounts, staff, team invitations, orders, signup codes and security events. The address is sent in the request body, never in a link.",
+      "email": "Email address",
+      "submit": "Find"
+    },
+    "result": {
+      "title": "What Yayatoh holds about {email}",
+      "account": "Account",
+      "accountSince": "{name}, since {date}",
+      "noAccount": "No account",
+      "staff": "Staff role",
+      "twoFactor": "Two-step verification",
+      "sessions": "Active sessions",
+      "securityEvents": "Security events",
+      "orders": "Orders as a buyer (all organizers)",
+      "signupCodes": "Signup codes (created or mentioned)",
+      "deletedAccounts": "Earlier deleted accounts",
+      "erasedList": "On the erased-address list since",
+      "memberships": "Organizations",
+      "membership": "{org} · {role}",
+      "invitations": "Team invitations",
+      "invitation": "{org} · {role} · {status}",
+      "none": "None",
+      "yes": "Yes",
+      "no": "No",
+      "nothing": "Nothing found for this email.",
+      "requests": "Earlier requests about this address",
+      "request": "{kind} · {actor} · {date}",
+      "self": "the person",
+      "kinds": {
+        "access": "Access (export)",
+        "erasure": "Erasure"
+      },
+      "erasedSince": "On the erased-address list since {date}."
+    },
+    "export": {
+      "title": "Export (access request)",
+      "hint": "The same JSON file the person can download from their account page: profile, sessions, security events, organizations and roles, orders and tickets, notification choices, consents and invitations. No passwords, codes or other secrets.",
+      "reason": "Reason for this export",
+      "submit": "Export data (JSON)",
+      "download": "Download the file"
+    },
+    "erase": {
+      "title": "Erase (deletion request)",
+      "what": "Their account is anonymised: signed out everywhere, password and two-step verification removed, name cleared and the email replaced by a hash.",
+      "kept": "They leave every organization. Organizers keep orders and tickets (legal hold), unlinked from the account.",
+      "suppression": "The address goes on the platform-wide erased list: no organizer can mail it or import it to a list again unless the person comes back.",
+      "final": "This can't be undone. A confirmation email goes to the address first.",
+      "reason": "Reason for this erasure",
+      "confirm": "Type {email} to confirm",
+      "submit": "Erase this person",
+      "done": "Erased. {orgs, plural, =0 {No organization} one {# organization} other {# organizations}} updated, {sessions, plural, =0 {no sessions} one {# session} other {# sessions}} ended. Request {id}."
+    },
+    "errors": {
+      "invalid_email": "Enter a valid email address.",
+      "reason_required": "Give a reason of 10 to 500 characters.",
+      "confirm_mismatch": "That doesn't match. Type the same email address to confirm.",
+      "last_owner": "They are the only owner of these organizations. Another owner must be added (or the organization closed) first:",
+      "is_staff": "This person is active staff. Revoke their staff role first (owner CLI).",
+      "not_found": "Nothing is held about this email.",
+      "forbidden": "You can't do that.",
+      "internal": "Something went wrong. Try again."
+    }
+  },
+  "passkeys": {
+    "metaTitle": "Passkeys",
+    "title": "Passkeys",
+    "description": "Sign in to the staff console with a passkey on this device or a security key. A passkey that asks for your PIN or fingerprint counts as both sign-in steps.",
+    "none": "No passkeys yet.",
+    "unnamed": "Passkey",
+    "added_on": "Added {date}",
+    "remove": "Remove",
+    "removeNamed": "Remove {name}",
+    "nameLabel": "Name (optional)",
+    "nameHint": "For example: Work laptop",
+    "add": "Add a passkey",
+    "added": "Passkey added. Next time, choose “Sign in with a passkey”.",
+    "addFailed": "The passkey wasn't added. Try again.",
+    "notFresh": "For your security, sign in again (in the last 10 minutes) before adding a passkey.",
+    "deleted": "Passkey removed."
+  },
+  "messagingPolicy": {
+    "title": "Auto-paused messaging",
+    "description": "Organizations whose reminders, updates and marketing paused themselves because complaints went over 0.3%. Review each with the organizer, then lift it on its messaging page.",
+    "empty": "No organization is auto-paused.",
+    "org": "Organization",
+    "since": "Paused since",
+    "rate": "Complaint rate",
+    "rateValue": "{rate} ({complaints, plural, one {# complaint} other {# complaints}} in {sent} emails)",
+    "tenantTitle": "Tenant messaging",
+    "tenantHeading": "Messaging: {org}",
+    "tenantDescription": "Complaint-rate auto-pause and this month's usage against the organization's quotas. Every change is audited.",
+    "back": "Back to {org}",
+    "pauseTitle": "Complaint-rate auto-pause",
+    "pausedSince": "Auto-paused since {since}",
+    "notPaused": "Not auto-paused",
+    "liftedAt": "Not auto-paused (last lifted {at})",
+    "liftNote": "Why lift it (what was reviewed)",
+    "lift": "Lift the auto-pause",
+    "quotaTitle": "Usage and quotas ({period})",
+    "quotaCaption": "Usage against monthly quotas",
+    "channel": "Channel",
+    "used": "Used",
+    "limit": "Monthly limit",
+    "status": "Status",
+    "default": "default",
+    "ok": "Within quota",
+    "reached": "Reached ({waiting} waiting)",
+    "channels": {
+      "email": "Email",
+      "sms": "SMS (segments)",
+      "whatsapp": "WhatsApp",
+      "push": "Push"
+    },
+    "quotaForm": "{channel} quota",
+    "limitLabel": "{channel} monthly limit (default {fallback})",
+    "reasonLabel": "Reason for the {channel} change",
+    "setLimit": "Set the {channel} limit",
+    "resetLimit": "Reset {channel} to the default",
+    "done": {
+      "lifted": "The auto-pause was lifted. Messaging resumed.",
+      "quota": "The quota was saved.",
+      "quota_reset": "The quota is back to the default."
+    },
+    "errors": {
+      "not_paused": "This organization is not auto-paused.",
+      "validation_failed": "Check the values: a whole number and a reason of at least 3 characters.",
+      "forbidden": "Your staff role can't do that.",
+      "internal": "Something went wrong."
+    }
+  },
+  "openSignup": {
+    "title": "Open signup",
+    "description": "Whether anyone can create an organizer account and organization without a signup code. Off until the public launch.",
+    "current": "Current state",
+    "state": {
+      "on": "Open: anyone can sign up",
+      "off": "Closed: signup codes only"
+    },
+    "explain": {
+      "on": "Anyone with a verified email can create an organization under the current fee model. New organizations start in setup mode (no guest messaging) until their required onboarding steps are done. Signup codes keep working.",
+      "off": "The public signup page says self-serve signup is coming soon. Organizations are created only with a signup code."
+    },
+    "since": "Last changed {date} (UTC)",
+    "reason": "Reason",
+    "reasonHint": "Kept in the history and the access log (3–500 characters).",
+    "confirm": "I understand that anyone will be able to create an organization, and that this is the public launch decision.",
+    "open": "Open signup",
+    "close": "Close signup",
+    "done": {
+      "opened": "Signup is open.",
+      "closed": "Signup is closed.",
+      "unchanged": "Nothing changed: the switch was already in that state."
+    },
+    "error": {
+      "reason": "Give a reason of 3 to 500 characters.",
+      "confirm": "Tick the box to confirm opening signup."
+    },
+    "history": "Changes",
+    "noHistory": "No changes yet.",
+    "col": {
+      "when": "When (UTC)",
+      "change": "Change",
+      "who": "Who",
+      "reason": "Reason"
+    },
+    "change": {
+      "on": "Opened",
+      "off": "Closed"
+    }
+  },
+  "incidents": {
+    "title": "Status incidents",
+    "descriptionFake": "Post and update incidents on the status page. The public status page, the console and the marketplace show them at once. This is the development status page; production uses the status page provider.",
+    "descriptionProvider": "Incidents are posted in the status page provider.",
+    "providerNote": "This environment uses the status page provider: post and update incidents there (see the on-call runbook).",
+    "list": "Recent incidents",
+    "empty": "No incidents in the last 14 days.",
+    "started": "started {date} UTC",
+    "new": {
+      "title": "Post an incident",
+      "titleField": "Title (shown publicly)",
+      "impact": "Impact",
+      "components": "Affected components",
+      "body": "First update (shown publicly)",
+      "submit": "Post incident",
+      "posted": "Incident posted. It is on the status page now."
+    },
+    "update": {
+      "label": "Update {title}",
+      "status": "New status",
+      "body": "Update (shown publicly)",
+      "submit": "Post update"
+    },
+    "errors": {
+      "summary": "Check the highlighted fields.",
+      "title": "Give the incident a title (up to 160 characters).",
+      "body": "Write the update (up to 2,000 characters).",
+      "closed": "This incident is already closed."
+    },
+    "impact": {
+      "minor": "Minor (degraded)",
+      "major": "Major (partial outage)",
+      "critical": "Critical (major outage)",
+      "maintenance": "Maintenance"
+    },
+    "status": {
+      "investigating": "Investigating",
+      "identified": "Identified",
+      "monitoring": "Monitoring",
+      "resolved": "Resolved",
+      "scheduled": "Scheduled",
+      "in_progress": "In progress",
+      "completed": "Completed"
+    },
+    "component": {
+      "marketplace": "Event pages and marketplace",
+      "checkout": "Checkout",
+      "console": "Organizer console",
+      "checkin": "Check-in and scanning",
+      "payments": "Payments and payouts",
+      "messaging": "Email and messaging",
+      "api": "API"
+    }
+  },
+  "frontDoor": {
+    "title": "Front door",
+    "description": "During the move from the legacy site, the new app answers every request on yayatoh.com and abc.yayatoh.com and sends anything it doesn't serve yet to the legacy site. Move read pages one route and one host at a time.",
+    "summary": "Route table version {version}. Counters cover the last {days, plural, one {# day} other {# days}} (UTC).",
+    "done": "Route updated. It applies to new requests within a few seconds.",
+    "errors": {
+      "invalid": "Choose a host and a route that exists for it.",
+      "reason": "Give a reason (3 to 500 characters).",
+      "step_up": "That code or password isn't right. Nothing changed.",
+      "rate_limited": "Too many attempts. Wait a few minutes and try again.",
+      "method": "Set up an authenticator or a password on your account to confirm it's you before moving routes."
+    },
+    "hosts": {
+      "title": "Legacy hosts",
+      "configured": "Legacy origin set: front door on",
+      "off": "No legacy origin: front door off"
+    },
+    "instance": {
+      "yay": "yayatoh.com instance",
+      "abc": "abc.yayatoh.com instance"
+    },
+    "routes": {
+      "title": "Moved routes",
+      "description": "Read pages that can move to the new app. Anything not listed here stays on the legacy site."
+    },
+    "col": {
+      "host": "Host",
+      "route": "Route",
+      "stage": "Stage",
+      "state": "Served by",
+      "requests": "Requests",
+      "notFound": "404s",
+      "proxyErrors": "Proxy errors",
+      "upstream5xx": "Legacy 5xx",
+      "latency": "Latency (avg / max)",
+      "changed": "Last change",
+      "servedBy": "Served by",
+      "path": "Path",
+      "count": "Count"
+    },
+    "state": {
+      "legacy": "Legacy",
+      "canary": "Canary (yy_canary cookie only)",
+      "next": "New app"
+    },
+    "servedBy": {
+      "legacy": "Legacy",
+      "next": "New app"
+    },
+    "bucket": {
+      "legacy": "Everything else (legacy)",
+      "platform": "New app's own pages"
+    },
+    "latency": "{avg} / {max}",
+    "ms": "{ms} ms",
+    "none": "–",
+    "never": "Never changed",
+    "changedBy": "{who}, {date}",
+    "change": {
+      "title": "Move a route",
+      "adminsOnly": "Only admins can move routes.",
+      "description": "Choose the host, the route and who serves it. Canary serves the new app only to browsers with the yy_canary=next cookie. Anyone with yy_legacy=1 always gets the legacy site.",
+      "host": "Host",
+      "route": "Route",
+      "routeOption": "{key} ({shape}){only, select, yay { · yayatoh.com only} abc { · abc only} other {}}",
+      "state": "Served by",
+      "stateHelp": "Legacy is the default. Move back to legacy at any time.",
+      "reason": "Reason",
+      "code": "Authenticator code",
+      "password": "Your password",
+      "submit": "Move route"
+    },
+    "other": {
+      "title": "Other traffic",
+      "description": "Requests outside the moved routes: pages the legacy site still serves, and the new app's own paths.",
+      "empty": "No requests recorded yet."
+    },
+    "notFound": {
+      "title": "404 top list",
+      "description": "The most requested missing pages over the last {days, plural, one {# day} other {# days}}, by who served them.",
+      "empty": "No 404s recorded."
+    },
+    "changes": {
+      "title": "Recent changes",
+      "empty": "No route has been moved yet.",
+      "item": "{host}: {route} from {from} to {to}",
+      "meta": "{who}, {date}: {reason}"
+    }
+  },
+  "maintenance": {
+    "title": "Maintenance",
+    "description": "The read-only freeze of the new platform and the cutover host routes (runbook: “Cutover”). Starting or ending a freeze needs a reason and you confirming it's you; both are logged.",
+    "reason": "Reason (kept in the change history and the access log)",
+    "password": "Your password (confirm it's you)",
+    "code": "Code from your authenticator app (confirm it's you)",
+    "done": {
+      "started": "Read-only freeze is on. Every write is refused until you end it; scans and public pages keep working.",
+      "ended": "Read-only freeze ended. Writes work again."
+    },
+    "errors": {
+      "reason": "Give a reason of at least 3 characters: it is kept in the change history.",
+      "scope": "Choose platform-wide or listed organizations.",
+      "orgs": "List the organizations' addresses, separated by commas (at most 100).",
+      "orgs_unknown": "No organization has these addresses: {slugs}.",
+      "expected_end": "The expected end must be a time in the future.",
+      "confirm_platform": "Tick the box to confirm a platform-wide freeze.",
+      "step_up": "That password or code isn't right. Confirm it's you and try again.",
+      "step_up_rate_limited": "Too many tries. Wait a few minutes before confirming it's you again.",
+      "step_up_method": "Set a password or an authenticator app on your account first: a freeze needs you to confirm it's you.",
+      "generic": "That didn't work ({code})."
+    },
+    "freeze": {
+      "title": "Read-only freeze",
+      "off": "Off: writes work normally",
+      "onPlatform": "On for the whole platform",
+      "onOrgs": "On for listed organizations",
+      "since": "Since {when} UTC, by {by}",
+      "until": "expected to end {when} UTC",
+      "frozenOrgs": "Frozen organizations",
+      "reason": "Reason: {reason}",
+      "effect": "While it is on, every change is refused with a maintenance message (saving, sales, refunds, invitations, imports, API writes) and organizers see a banner in their language. Reads, exports, check-in scans (online and offline) and public pages keep working. Refunds already sent to the payment provider still complete."
+    },
+    "start": {
+      "form": "Start or change the read-only freeze",
+      "scope": "Who is frozen",
+      "scopeOrgs": "Listed organizations",
+      "scopePlatform": "The whole platform",
+      "orgs": "Organization addresses, separated by commas (for listed organizations)",
+      "confirmPlatform": "I understand a platform-wide freeze stops every organizer's changes and every sale.",
+      "expectedEnd": "Expected end, UTC (optional; shown in the banner and used for Retry-After)",
+      "submit": "Start read-only freeze",
+      "update": "Change read-only freeze"
+    },
+    "end": {
+      "form": "End the read-only freeze",
+      "submit": "End read-only freeze"
+    },
+    "routes": {
+      "title": "Host routing",
+      "description": "Where each host's traffic goes during a cutover. The cutover tool flips these (runbook step “Switch host routing”); a host with no entry is served by the new platform.",
+      "empty": "No host is routed: every host is served by the new platform.",
+      "next": "new platform",
+      "legacy": "legacy app",
+      "by": "set by {by}, {when} UTC"
+    },
+    "history": {
+      "title": "Change history",
+      "empty": "Nothing has been changed yet.",
+      "freezeOn": "Read-only freeze on ({summary})",
+      "freezeOff": "Read-only freeze off",
+      "route": "Host {host} → {summary}",
+      "meta": "{who} · {when} UTC · {reason}"
+    }
+  }
+}

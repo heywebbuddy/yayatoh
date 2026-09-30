@@ -1,0 +1,312 @@
+import type { TenantTx } from '@yayatoh/db';
+import { actorId, type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { and, desc, eq, inArray, sql } from 'drizzle-orm';
+import { z } from 'zod';
+import { balanceTx, type Posting, postJournalTx } from './ledger.ts';
+import type { FundsFlow } from './port.ts';
+import { DISPUTE_STATUSES, disputes } from './schema.ts';
+
+type Row = typeof disputes.$inferSelect;
+
+/**
+ * A dispute opened (roadmap §5.3). platform_mor: the provider takes the disputed amount from the
+ * platform balance at once, so the organizer's share is held back: the event's held funds first,
+ * then the event's reserve, then a receivable. organizer_mor: the dispute is on the organizer's own
+ * account; the platform books nothing. Idempotent per provider dispute.
+ */
+export async function openDisputeTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  d: {
+    orderId: string;
+    eventId: string;
+    fundsFlow: FundsFlow;
+    provider: 'fake' | 'stripe';
+    providerDisputeId: string;
+    amountMinor: number;
+    currency: string;
+    reason: string;
+    evidenceDueBy: Date | null;
+  },
+): Promise<{ row: Row; created: boolean }> {
+  const [row] = await tx
+    .insert(disputes)
+    .values({ orgId: requireOrg(ctx), ...d, reason: d.reason.slice(0, 100) })
+    .onConflictDoNothing()
+    .returning();
+  if (!row) {
+    const [existing] = await tx
+      .select()
+      .from(disputes)
+      .where(and(eq(disputes.provider, d.provider), eq(disputes.providerDisputeId, d.providerDisputeId)));
+    if (!existing) throw new DomainError('internal');
+    return { row: existing, created: false };
+  }
+  if (d.fundsFlow === 'platform_mor') {
+    const c = d.currency;
+    const held = Math.max(0, -(await balanceTx(tx, 'org:payable_held', c, d.eventId)));
+    const fromHeld = Math.min(d.amountMinor, held);
+    const reserve = Math.max(0, -(await balanceTx(tx, 'org:reserve', c, d.eventId)));
+    const fromReserve = Math.min(d.amountMinor - fromHeld, reserve);
+    const receivable = d.amountMinor - fromHeld - fromReserve;
+    await postJournalTx(tx, ctx, {
+      key: `dispute:${row.id}`,
+      kind: 'dispute',
+      refType: 'order',
+      refId: d.orderId,
+      eventId: d.eventId,
+      memo: { disputeId: row.id, providerDisputeId: d.providerDisputeId },
+      postings: [
+        { account: 'platform:stripe_cash', amountMinor: -d.amountMinor, currency: c },
+        { account: 'org:payable_held', amountMinor: fromHeld, currency: c },
+        { account: 'org:reserve', amountMinor: fromReserve, currency: c },
+        { account: 'org:receivable', amountMinor: receivable, currency: c },
+      ],
+    });
+  }
+  return { row, created: true };
+}
+
+/**
+ * A dispute closed. Won: the provider returns the money, and the hold is undone exactly (the
+ * dispute journal reversed). Lost: the money stays with the buyer. Idempotent.
+ */
+export async function closeDisputeTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  d: { provider: 'fake' | 'stripe'; providerDisputeId: string; outcome: 'won' | 'lost' },
+): Promise<{ row: Row; changed: boolean }> {
+  const [row] = await tx
+    .select()
+    .from(disputes)
+    .where(and(eq(disputes.provider, d.provider), eq(disputes.providerDisputeId, d.providerDisputeId)))
+    .for('update');
+  if (!row) throw new DomainError('not_found', 'Dispute not found');
+  if (row.status === 'won' || row.status === 'lost') return { row, changed: false };
+  const [updated] = await tx
+    .update(disputes)
+    .set({ status: d.outcome, closedAt: ctx.now, updatedAt: ctx.now })
+    .where(eq(disputes.id, row.id))
+    .returning();
+  if (!updated) throw new DomainError('internal');
+  if (d.outcome === 'won' && row.fundsFlow === 'platform_mor') {
+    const lines = await tx.execute<{ account: string; amount_minor: string; currency: string }>(sql`
+      select p.account, p.amount_minor::text, p.currency from payments.postings p
+      join payments.journal_entries j on j.id = p.journal_id
+      where j.idempotency_key = ${`dispute:${row.id}`}`);
+    await postJournalTx(tx, ctx, {
+      key: `dispute_won:${row.id}`,
+      kind: 'dispute_won',
+      refType: 'order',
+      refId: row.orderId,
+      eventId: row.eventId,
+      memo: { disputeId: row.id },
+      postings: lines.map(
+        (l) =>
+          ({ account: l.account, amountMinor: -Number(l.amount_minor), currency: l.currency }) as Posting,
+      ),
+    });
+  }
+  return { row: updated, changed: true };
+}
+
+export const DisputeDto = z.object({
+  id: z.uuid(),
+  /** The provider's dispute id (staff submit evidence against it). */
+  providerDisputeId: z.string(),
+  orderId: z.uuid(),
+  eventId: z.uuid(),
+  fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
+  status: z.enum(DISPUTE_STATUSES),
+  reason: z.string(),
+  amountMinor: z.int(),
+  currency: z.string(),
+  evidenceDueBy: z.date().nullable(),
+  evidenceSubmittedAt: z.date().nullable(),
+  createdAt: z.date(),
+  closedAt: z.date().nullable(),
+  /** M1.6e: the reviewer's statement and the packet sections they left out. */
+  evidenceSummary: z.string().nullable(),
+  evidenceExcluded: z.array(z.string()),
+});
+const present = (r: Row) => DisputeDto.parse({ ...r, fundsFlow: r.fundsFlow as FundsFlow, status: r.status });
+
+/** Packet sections a reviewer may leave out; the dispute, seller, event and order always stay. */
+export const EVIDENCE_OPTIONAL_SECTIONS = [
+  'tickets',
+  'accessLog',
+  'refunds',
+  'messages',
+  'refundPolicy',
+] as const;
+/** Stripe accepts up to 20 000 characters of text evidence. */
+export const EVIDENCE_SUMMARY_MAX = 20_000;
+
+/** Disputes of the org, or of one order (finance and staff). */
+export const disputesQuery = tenantQuery({
+  name: 'payments.disputes',
+  input: z.object({ orderId: z.uuid().optional() }),
+  output: z.array(DisputeDto),
+  entitlement: null,
+  permission: 'finance:read',
+  handler: async ({ input, tx }) =>
+    (
+      await tx
+        .select()
+        .from(disputes)
+        .where(input.orderId ? eq(disputes.orderId, input.orderId) : undefined)
+        .orderBy(desc(disputes.createdAt))
+        .limit(200)
+    ).map(present),
+});
+
+/** Look up one dispute for evidence (the reports module builds the packet). */
+export async function disputeTx(tx: TenantTx, id: string): Promise<z.infer<typeof DisputeDto> | null> {
+  const [r] = await tx.select().from(disputes).where(eq(disputes.id, id));
+  return r ? present(r) : null;
+}
+
+/**
+ * Staff reviewed the evidence packet and the provider accepted it (platform_mor: Yayatoh is the
+ * merchant, so staff submit; a human always reviews first).
+ */
+export const markEvidenceSubmittedCommand = tenantCommand({
+  name: 'payments.markEvidenceSubmitted',
+  category: 'money',
+  input: z.object({ disputeId: z.uuid() }),
+  output: DisputeDto,
+  entitlement: null,
+  permission: 'platform:disputes.submit',
+  handler: async ({ input, ctx, tx }) => {
+    const [r] = await tx.select().from(disputes).where(eq(disputes.id, input.disputeId)).for('update');
+    if (!r) throw new DomainError('not_found', 'Dispute not found');
+    if (r.status !== 'open') throw new DomainError('invalid_state', 'This dispute is not open');
+    const [u] = await tx
+      .update(disputes)
+      .set({
+        status: 'evidence_submitted',
+        evidenceSubmittedAt: ctx.now,
+        evidenceSubmittedBy: actorId(ctx.actor),
+        updatedAt: ctx.now,
+      })
+      .where(eq(disputes.id, r.id))
+      .returning();
+    if (!u) throw new DomainError('internal');
+    return present(u);
+  },
+  audit: (input) => ({
+    action: 'dispute.evidence_submitted',
+    targetType: 'dispute',
+    targetId: input.disputeId,
+  }),
+});
+
+const EvidenceDraft = z.object({
+  disputeId: z.uuid(),
+  summary: z.string().trim().max(EVIDENCE_SUMMARY_MAX),
+  excluded: z.array(z.enum(EVIDENCE_OPTIONAL_SECTIONS)).max(EVIDENCE_OPTIONAL_SECTIONS.length).default([]),
+});
+
+async function openDisputeForUpdateTx(tx: TenantTx, id: string) {
+  const [r] = await tx.select().from(disputes).where(eq(disputes.id, id)).for('update');
+  if (!r) throw new DomainError('not_found', 'Dispute not found');
+  if (r.status !== 'open')
+    throw new DomainError('invalid_state', 'This dispute is no longer open', { reason: 'dispute_not_open' });
+  return r;
+}
+
+/**
+ * The organizer's review of the evidence packet (M1.6e): their statement and the optional
+ * sections to leave out. Saved while the dispute is open; submission is a separate, reviewed step.
+ */
+export const saveEvidenceDraftCommand = tenantCommand({
+  name: 'payments.saveEvidenceDraft',
+  input: EvidenceDraft,
+  output: DisputeDto,
+  entitlement: null,
+  permission: 'disputes:respond',
+  handler: async ({ input, ctx, tx }) => {
+    const r = await openDisputeForUpdateTx(tx, input.disputeId);
+    const [u] = await tx
+      .update(disputes)
+      .set({
+        evidenceSummary: input.summary || null,
+        evidenceExcluded: [...new Set(input.excluded)],
+        updatedAt: ctx.now,
+      })
+      .where(eq(disputes.id, r.id))
+      .returning();
+    if (!u) throw new DomainError('internal');
+    return present(u);
+  },
+  audit: (input) => ({
+    action: 'dispute.evidence_draft',
+    targetType: 'dispute',
+    targetId: input.disputeId,
+    data: { excluded: input.excluded, summaryLength: input.summary.length },
+  }),
+});
+
+/**
+ * The organizer reviewed the packet and the provider accepted it (M1.6e): recorded once, with the
+ * statement that was sent. The caller asks the provider first (outside the transaction), on the
+ * connected account for organizer_mor.
+ */
+export const markOrgEvidenceSubmittedCommand = tenantCommand({
+  name: 'payments.markOrgEvidenceSubmitted',
+  category: 'money',
+  input: EvidenceDraft.extend({ summary: z.string().trim().min(10).max(EVIDENCE_SUMMARY_MAX) }),
+  output: DisputeDto,
+  entitlement: null,
+  permission: 'disputes:respond',
+  handler: async ({ input, ctx, tx }) => {
+    const r = await openDisputeForUpdateTx(tx, input.disputeId);
+    const [u] = await tx
+      .update(disputes)
+      .set({
+        status: 'evidence_submitted',
+        evidenceSummary: input.summary,
+        evidenceExcluded: [...new Set(input.excluded)],
+        evidenceSubmittedAt: ctx.now,
+        evidenceSubmittedBy: actorId(ctx.actor),
+        updatedAt: ctx.now,
+      })
+      .where(eq(disputes.id, r.id))
+      .returning();
+    if (!u) throw new DomainError('internal');
+    return present(u);
+  },
+  audit: (input) => ({
+    action: 'dispute.evidence_submitted',
+    targetType: 'dispute',
+    targetId: input.disputeId,
+    data: { by: 'organizer', excluded: input.excluded, summaryLength: input.summary.length },
+  }),
+});
+
+/** Dispute statuses where the charge is still contested (the money may yet go back to the buyer). */
+export const OPEN_DISPUTE_STATUSES = ['open', 'evidence_submitted'] as const;
+
+/**
+ * Orders with a dispute still open (M3.10b): a mass refund skips them, since refunding a disputed
+ * charge would pay the buyer twice. One event, or the given orders.
+ */
+export async function openDisputeOrderIdsTx(
+  tx: TenantTx,
+  scope: { eventId: string } | { orderIds: readonly string[] },
+): Promise<Set<string>> {
+  if ('orderIds' in scope && scope.orderIds.length === 0) return new Set();
+  const rows = await tx
+    .select({ orderId: disputes.orderId })
+    .from(disputes)
+    .where(
+      and(
+        inArray(disputes.status, [...OPEN_DISPUTE_STATUSES]),
+        'eventId' in scope
+          ? eq(disputes.eventId, scope.eventId)
+          : inArray(disputes.orderId, [...scope.orderIds]),
+      ),
+    );
+  return new Set(rows.map((r) => r.orderId));
+}

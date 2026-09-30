@@ -1,0 +1,248 @@
+{
+  "common": {
+    "greeting": "Hi {name},",
+    "greetingNoName": "Hello,",
+    "sentBy": "Sent by {org} with Yayatoh.",
+    "poweredBy": "Powered by Yayatoh",
+    "linkFallback": "If the button doesn't work, copy this link into your browser:",
+    "unsubscribe": "Unsubscribe",
+    "why": {
+      "reminders": "You're getting this reminder because you have tickets from {org}.",
+      "event_updates": "You're getting this because you're on the guest list for an event by {org}.",
+      "marketing": "You're getting this because you subscribed to news from {org}."
+    },
+    "reply": "Reply to {org}",
+    "smsStop": "Reply STOP to opt out."
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Your tickets for {eventName}",
+      "intro": "{count, plural, =0 {Your order is confirmed.} one {Your ticket is ready.} other {Your # tickets are ready.}} Keep this email: the button below opens them anytime.",
+      "cta": "View my tickets"
+    },
+    "orders.refund": {
+      "subject": "Your refund for {eventName}",
+      "intro": "{fully, select, yes {Your order was refunded in full:} other {Part of your order was refunded:}} {amount}. It can take 5–10 business days to reach your account.",
+      "cta": "View my order"
+    },
+    "events.reminder": {
+      "subject": "Tomorrow: {eventName}",
+      "intro": "A reminder that {eventName} starts {when}.",
+      "venue": "Where: {venue}",
+      "cta": "Open my tickets"
+    },
+    "tenancy.invitation": {
+      "subject": "You're invited to join {orgName} on Yayatoh",
+      "intro": "{orgName} invited you to join their team as {role}.",
+      "cta": "Accept the invitation"
+    },
+    "tenancy.event-invitation": {
+      "subject": "You're invited to help with {eventName}",
+      "intro": "{orgName} invited you to {eventName} as {role}. You'll see this event only.",
+      "cta": "Accept the invitation"
+    },
+    "ticketing.claim-link": {
+      "subject": "A ticket for {eventName} is waiting for you",
+      "intro": "Someone passed you a ticket for {eventName}. Claim it to get your own QR code.",
+      "cta": "Claim my ticket"
+    },
+    "ticketing.holder-link": {
+      "subject": "Your link to your tickets for {eventName}",
+      "intro": "Here is the link you asked for. It opens your tickets for {eventName}.",
+      "cta": "Open my tickets"
+    },
+    "ticketing.tickets-resent": {
+      "subject": "Your ticket for {eventName}",
+      "intro": "The organizer of {eventName} sent you your ticket {code} again. The button below opens your tickets anytime.",
+      "cta": "Open my tickets"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Your ticket for {eventName} was cancelled",
+      "intro": "The organizer of {eventName} cancelled your ticket {code}. It no longer admits you. If you have questions, reply to the organizer."
+    },
+    "seating.finder-code": {
+      "subject": "{code} is your seat finder code for {eventName}",
+      "intro": "Enter {code} on the seat finder to see your seat. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email.",
+      "cta": "Open the seat finder"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "A message from the organizer of {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "An update about {eventName}:",
+      "cta": "Reply to the organizer"
+    },
+    "messaging.reply": {
+      "subject": "New reply from {org}",
+      "intro": "{org} replied to your message:",
+      "cta": "Read and reply"
+    },
+    "sales.order_paid": {
+      "subject": "New order: {name}",
+      "intro": "{name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "New message from {name}",
+      "intro": "{name} wrote to you about {eventName}."
+    },
+    "payments.destination-changed": {
+      "subject": "A new payout account for {org}",
+      "intro": "{reason, select, bank_changed {The bank account that receives {org}'s payouts was changed.} other {A payout account was connected to {org}.}} For your security, no money is sent to it before {until}. If you didn't make this change, contact Yayatoh support right away.",
+      "cta": "Review payouts"
+    },
+    "tenancy.staff-access": {
+      "subject": "Yayatoh support is acting as {member} in {org}",
+      "intro": "A Yayatoh staff member started acting as {member} in {org} to help. Reason: {reason}. This access ends by {until}. While it lasts, nothing can be refunded, paid out, exported or deleted, and everything done appears in your activity log. If you didn't expect this, contact Yayatoh support right away.",
+      "cta": "View activity"
+    },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh suspended {org}} reactivated {{org} is back online} other {Yayatoh closed {org}}}",
+      "intro": "{status, select, suspended {Yayatoh support suspended {org}. Its public pages and ticket sales are offline and the console is read-only. Tickets already sold stay valid and can still be scanned at the door. Contact Yayatoh support to find out more.} reactivated {Yayatoh support reactivated {org}. Its public pages, listings and ticket sales are back, and the console works as before.} other {Yayatoh support closed {org}. Its public pages are offline and it can't be changed any more. As an owner you can still open it and download your data. Contact Yayatoh support if you think this is a mistake.}}",
+      "cta": "Open the console"
+    },
+    "notifications.test": {
+      "subject": "Test notification",
+      "intro": "Notifications are working."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} would like to hear how {eventName} went for you. It takes about two minutes.",
+      "cta": "Answer the survey"
+    },
+    "surveys.reminder": {
+      "subject": "Reminder: {title}",
+      "intro": "You haven't answered yet: {org} would still like to hear how {eventName} went for you.",
+      "cta": "Answer the survey"
+    },
+    "guest.checkout-code": {
+      "subject": "{code} is your code to confirm your email",
+      "intro": "Enter {code} to confirm your email and finish your order with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
+    },
+    "guest.sign-in": {
+      "subject": "{code} is your code for My tickets",
+      "intro": "Enter {code} to see your tickets on {site}, or use the button below in the same browser. The code expires in {minutes, plural, one {# minute} other {# minutes}} and the button in {linkMinutes, plural, one {# minute} other {# minutes}}; each works once. If you didn't ask for it, you can ignore this email.",
+      "cta": "Open My tickets"
+    },
+    "guest.waitlist-code": {
+      "subject": "{code} is your code to join the waitlist",
+      "intro": "Enter {code} to confirm your email and join the waitlist for {eventName} with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
+    },
+    "orders.waitlist-joined": {
+      "subject": "You're on the waitlist for {eventName}",
+      "intro": "You're number {position} in line for {count, plural, one {# {passName} ticket} other {# {passName} tickets}} to {eventName}. If tickets free up, we'll email you an offer to check out; it holds the tickets for a limited time. Use the link below to see your place or leave the waitlist.",
+      "cta": "See my place in line"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Tickets are free for {eventName}: check out by {until}",
+      "intro": "Good news: {org} is holding {count, plural, one {# {passName} ticket} other {# {passName} tickets}} to {eventName} for you until {until}. Check out before then; after that, the tickets go to the next person in line.",
+      "cta": "Check out now"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Your offer for {eventName} has ended",
+      "intro": "The time to check out your {passName} tickets to {eventName} ran out, so they went to the next person in line. You can rejoin the waitlist at the back of the line from the link below.",
+      "cta": "Rejoin the waitlist"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Your new link to your order for {eventName}} other {Your link to your order for {eventName}}}",
+      "intro": "{reason, select, reissued {The organizer replaced the link to your order for {eventName}. The old link no longer works; use this one.} other {Here is the link you asked for. It opens your order and tickets for {eventName}.}}",
+      "cta": "Open my order"
+    },
+    "security.fraud_signal": {
+      "subject": "Fraud alert: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}",
+      "intro": "A high-severity signal needs a look at {org}{eventName, select, none {} other { ({eventName})}}: {signal, select, two_entrances {the same ticket at two entrances} impossible_travel {impossible travel between checkpoints} device_velocity {a scanner scanning too fast} invalid_burst {a burst of invalid codes} rejected_burst {a burst of refused scans} purchase_velocity {many orders from one buyer} country_mismatch {a buyer in another country} checkout_blocked {a blocked checkout} card_testing {possible card testing} chat_abuse {a reported conversation} other {a fraud signal}}. Open it to acknowledge or dismiss it.",
+      "cta": "Review the signal"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "News from {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Messaging paused for {org}",
+      "intro": "Complaints about {org}'s emails reached {rate}, above the 0.3% limit, so Yayatoh paused your reminders, updates and marketing. Tickets, receipts and replies still go out. Yayatoh support will review it with you before messaging resumes."
+    },
+    "orders.refund-requested": {
+      "subject": "Refund request: {name}",
+      "intro": "{name} asked for a refund of {count, plural, =0 {their order} one {# ticket} other {# tickets}} for {eventName}. Answer it within 5 business days."
+    },
+    "orders.refund-declined": {
+      "subject": "Your refund request for {eventName}",
+      "intro": "The organizer of {eventName} declined your refund request: “{reason}” Your tickets stay valid.",
+      "cta": "View my order"
+    },
+    "events.postponed": {
+      "subject": "{eventName} is postponed",
+      "intro": "{eventName} has been postponed. Your tickets stay valid for the new date. If you can’t make it, you can ask for a refund from your order page under the organizer’s refund policy.",
+      "cta": "View my order"
+    }
+  },
+  "roles": {
+    "owner": "owner",
+    "admin": "admin",
+    "manager": "manager",
+    "finance": "finance",
+    "marketing": "marketing",
+    "box_office": "box office",
+    "scanner": "scanner",
+    "viewer": "viewer",
+    "co_host": "co-host",
+    "planner": "planner",
+    "collaborator": "event collaborator"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Your Yayatoh account was deleted",
+      "intro": "As you asked, your Yayatoh account has been deleted. You've been signed out everywhere, and your sign-in details and two-step verification were removed. Organizers you bought from keep their order records, as the law requires.\n\nIf you didn't ask for this, reply to this email at once."
+    },
+    "sentBy": "Sent by Yayatoh about your account."
+  },
+  "cutover": {
+    "cta": "Maintenance status",
+    "sentBy": "Sent by Yayatoh about the move to its new platform.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh moves to its new platform on {start}",
+        "intro": "On {start} Yayatoh moves to its new platform. For about 45 minutes, until {end}, your dashboard and ticket sales are paused; check-in at the door keeps working and tickets already sold stay valid.\n\nYour events, orders, payouts and team come with you, and you sign in with the same email and password. There is nothing you need to do: we'll write again two days before and when it's done."
+      },
+      "t2": {
+        "subject": "Reminder: Yayatoh maintenance on {start}",
+        "intro": "A reminder: on {start}, until about {end}, Yayatoh is read-only while we move to the new platform. Please don't plan an on-sale or a ticket push in that window. Check-in at the door keeps working and tickets already sold stay valid."
+      },
+      "freezeStart": {
+        "subject": "Yayatoh maintenance has started",
+        "intro": "Yayatoh is read-only while we move to the new platform, until about {end}. You can still look at your events and scan tickets at the door; saving changes, new sales and refunds are paused. We'll email you when it's done."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh is back on its new platform",
+        "intro": "The move is done and Yayatoh works again. Sign in as usual with the same email and password: your events, orders and payouts are all there, and tickets already sold stay valid. If you use the Yayatoh app, update it from your app store."
+      },
+      "rollback": {
+        "subject": "Yayatoh is back on the previous version",
+        "intro": "We moved Yayatoh back to the previous version while we fix a problem with the new platform. Sales and changes made since {start} have been kept, and tickets stay valid. Sign in as before; we'll tell you the new date for the move."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Your tickets stay valid during our move on {start}",
+        "intro": "On {start} Yayatoh moves to its new platform. For about 45 minutes, until {end}, you can't buy tickets or change orders, but the tickets you have stay valid and are scanned at the door as usual.\n\nAfterwards you sign in with the same email and password. If you use the Yayatoh app, update it once we tell you the move is done."
+      },
+      "t2": {
+        "subject": "Reminder: short Yayatoh maintenance on {start}",
+        "intro": "A reminder: on {start}, until about {end}, you can't buy tickets or change orders on Yayatoh. Your tickets stay valid and work at the door."
+      },
+      "freezeStart": {
+        "subject": "Yayatoh maintenance has started",
+        "intro": "Ticket sales and order changes on Yayatoh are paused until about {end} while we move to the new platform. Your tickets stay valid and are scanned at the door as usual."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh is back",
+        "intro": "The move is done: you can buy tickets and manage your orders again. Your tickets stay valid, and you sign in with the same email and password. If you use the Yayatoh app, update it from your app store."
+      },
+      "rollback": {
+        "subject": "Yayatoh is back on the previous version",
+        "intro": "We moved Yayatoh back to the previous version while we fix a problem. Tickets you bought since {start} stay valid. If we had to refund one of your orders, you'll get a separate email with the amount. Sign in as before."
+      }
+    }
+  }
+}

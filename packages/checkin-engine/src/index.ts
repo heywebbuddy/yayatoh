@@ -1,0 +1,47 @@
+export { legacyPayloadHash, legacyQrPayload } from '@yayatoh/ticket-crypto';
+export { clockOffsetMs } from './clock.ts';
+export {
+  admittedKey,
+  legacyIndex,
+  lookupHash,
+  MANIFEST_VERSION,
+  type ManifestCheckpoint,
+  type ManifestHeader,
+  type ManifestOccurrence,
+  type ManifestRow,
+  type ManifestScope,
+  type OfflineState,
+  type OfflineVerdict,
+  offlineVerdict,
+  SCOPE_TAG,
+  scopeAllows,
+  scopeMessage,
+  uuidv7Time,
+  verifyManifestScope,
+  zoneAllows,
+} from './offline.ts';
+export {
+  EARLY_ENTRY_MS,
+  type EventWindow,
+  eventDay,
+  LATE_ENTRY_MS,
+  type RuleOccurrence,
+  type RuleTicket,
+  type RuleVerdict,
+  ruleResult,
+} from './rules.ts';
+export {
+  DEFAULT_VELOCITY_RULES,
+  detectVelocity,
+  distanceMeters,
+  type GeoPoint,
+  MIN_TRAVEL_DISTANCE_M,
+  OK_RESULTS,
+  outcomeOf,
+  RATE_WINDOW_MS,
+  TRAVEL_WINDOW_MS,
+  type VelocityFinding,
+  type VelocityOutcome,
+  type VelocityRules,
+  type VelocityScan,
+} from './velocity.ts';

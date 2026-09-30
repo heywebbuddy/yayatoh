@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "@yayatoh/ui/styles.css";
+
+@source "../../../../packages/ui/src";
+
+/* Printed pages (the seat-finder poster): let the printer pick A4 or Letter, with a small margin. */
+@page {
+  margin: 12mm;
+}

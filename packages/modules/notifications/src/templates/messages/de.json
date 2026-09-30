@@ -1,0 +1,248 @@
+{
+  "common": {
+    "greeting": "Hallo {name},",
+    "greetingNoName": "Hallo,",
+    "sentBy": "Gesendet von {org} mit Yayatoh.",
+    "poweredBy": "Bereitgestellt von Yayatoh",
+    "linkFallback": "Falls die Schaltfläche nicht funktioniert, kopiere diesen Link in deinen Browser:",
+    "unsubscribe": "Abmelden",
+    "why": {
+      "reminders": "Du erhältst diese Erinnerung, weil du Tickets von {org} hast.",
+      "event_updates": "Du erhältst dies, weil du auf der Gästeliste einer Veranstaltung von {org} stehst.",
+      "marketing": "Du erhältst dies, weil du Neuigkeiten von {org} abonniert hast."
+    },
+    "reply": "{org} antworten",
+    "smsStop": "Antworten Sie STOP zum Abmelden."
+  },
+  "kinds": {
+    "orders.tickets": {
+      "subject": "Deine Tickets für {eventName}",
+      "intro": "{count, plural, =0 {Deine Bestellung ist bestätigt.} one {Dein Ticket ist bereit.} other {Deine # Tickets sind bereit.}} Bewahre diese E-Mail auf: Über die Schaltfläche unten öffnest du sie jederzeit.",
+      "cta": "Meine Tickets ansehen"
+    },
+    "orders.refund": {
+      "subject": "Deine Erstattung für {eventName}",
+      "intro": "{fully, select, yes {Deine Bestellung wurde vollständig erstattet:} other {Ein Teil deiner Bestellung wurde erstattet:}} {amount}. Es kann 5–10 Werktage dauern, bis der Betrag ankommt.",
+      "cta": "Meine Bestellung ansehen"
+    },
+    "events.reminder": {
+      "subject": "Morgen: {eventName}",
+      "intro": "Zur Erinnerung: {eventName} beginnt am {when}.",
+      "venue": "Ort: {venue}",
+      "cta": "Meine Tickets öffnen"
+    },
+    "tenancy.invitation": {
+      "subject": "Einladung zu {orgName} auf Yayatoh",
+      "intro": "{orgName} lädt dich ein, dem Team als {role} beizutreten.",
+      "cta": "Einladung annehmen"
+    },
+    "tenancy.event-invitation": {
+      "subject": "Sie sind zu {eventName} eingeladen",
+      "intro": "{orgName} hat Sie zu {eventName} als {role} eingeladen. Sie sehen nur diese Veranstaltung.",
+      "cta": "Einladung annehmen"
+    },
+    "ticketing.claim-link": {
+      "subject": "Ein Ticket für {eventName} wartet auf dich",
+      "intro": "Jemand hat dir ein Ticket für {eventName} weitergegeben. Hol es dir, um deinen eigenen QR-Code zu erhalten.",
+      "cta": "Mein Ticket abholen"
+    },
+    "ticketing.holder-link": {
+      "subject": "Dein Link zu deinen Tickets für {eventName}",
+      "intro": "Hier ist der angeforderte Link. Er öffnet deine Tickets für {eventName}.",
+      "cta": "Meine Tickets öffnen"
+    },
+    "ticketing.tickets-resent": {
+      "subject": "Dein Ticket für {eventName}",
+      "intro": "Der Veranstalter von {eventName} hat dir dein Ticket {code} erneut geschickt. Über die Schaltfläche unten öffnest du deine Tickets jederzeit.",
+      "cta": "Meine Tickets öffnen"
+    },
+    "ticketing.ticket-cancelled": {
+      "subject": "Dein Ticket für {eventName} wurde storniert",
+      "intro": "Der Veranstalter von {eventName} hat dein Ticket {code} storniert. Es gewährt keinen Einlass mehr. Bei Fragen antworte dem Veranstalter."
+    },
+    "seating.finder-code": {
+      "subject": "{code} ist dein Code für die Platzsuche bei {eventName}",
+      "intro": "Gib {code} in der Platzsuche ein, um deinen Platz zu sehen. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn du ihn nicht angefordert hast, kannst du diese E-Mail ignorieren.",
+      "cta": "Platzsuche öffnen"
+    },
+    "attendees.message": {
+      "subject": "{subject}",
+      "intro": "Eine Nachricht vom Veranstalter von {eventName}:"
+    },
+    "messaging.announcement": {
+      "subject": "{subject}",
+      "intro": "Neuigkeiten zu {eventName}:",
+      "cta": "Dem Veranstalter antworten"
+    },
+    "messaging.reply": {
+      "subject": "Neue Antwort von {org}",
+      "intro": "{org} hat auf deine Nachricht geantwortet:",
+      "cta": "Lesen und antworten"
+    },
+    "sales.order_paid": {
+      "subject": "Neue Bestellung: {name}",
+      "intro": "{name} hat {count, plural, one {# Ticket} other {# Tickets}} für {eventName} gekauft ({amount})."
+    },
+    "messaging.contact_replied": {
+      "subject": "Neue Nachricht von {name}",
+      "intro": "{name} hat dir zu {eventName} geschrieben."
+    },
+    "payments.destination-changed": {
+      "subject": "Neues Auszahlungskonto für {org}",
+      "intro": "{reason, select, bank_changed {Das Bankkonto, auf das {org} Auszahlungen erhält, wurde geändert.} other {Ein Auszahlungskonto wurde mit {org} verbunden.}} Zu deiner Sicherheit wird vor dem {until} kein Geld darauf überwiesen. Wenn du diese Änderung nicht vorgenommen hast, wende dich sofort an den Yayatoh-Support.",
+      "cta": "Auszahlungen prüfen"
+    },
+    "tenancy.staff-access": {
+      "subject": "Der Yayatoh-Support handelt als {member} in {org}",
+      "intro": "Ein Mitarbeiter von Yayatoh handelt jetzt als {member} in {org}, um zu helfen. Grund: {reason}. Dieser Zugriff endet spätestens {until}. Solange er besteht, kann nichts erstattet, ausgezahlt, exportiert oder gelöscht werden, und alles Getane erscheint in deinem Aktivitätsprotokoll. Wenn du das nicht erwartet hast, wende dich sofort an den Yayatoh-Support.",
+      "cta": "Aktivität ansehen"
+    },
+    "tenancy.org-status": {
+      "subject": "{status, select, suspended {Yayatoh hat {org} gesperrt} reactivated {{org} ist wieder online} other {Yayatoh hat {org} geschlossen}}",
+      "intro": "{status, select, suspended {Der Yayatoh-Support hat {org} gesperrt. Die öffentlichen Seiten und der Ticketverkauf sind offline, und die Konsole ist schreibgeschützt. Bereits verkaufte Tickets bleiben gültig und können weiterhin am Eingang gescannt werden. Wende dich an den Yayatoh-Support, um mehr zu erfahren.} reactivated {Der Yayatoh-Support hat {org} wieder freigeschaltet. Öffentliche Seiten, Einträge und Ticketverkauf sind zurück, und die Konsole funktioniert wie zuvor.} other {Der Yayatoh-Support hat {org} geschlossen. Die öffentlichen Seiten sind offline, und die Organisation kann nicht mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen. Wende dich an den Yayatoh-Support, wenn du das für einen Fehler hältst.}}",
+      "cta": "Konsole öffnen"
+    },
+    "notifications.test": {
+      "subject": "Testbenachrichtigung",
+      "intro": "Benachrichtigungen funktionieren."
+    },
+    "surveys.invite": {
+      "subject": "{title}",
+      "intro": "{org} möchte gern wissen, wie Ihnen {eventName} gefallen hat. Es dauert etwa zwei Minuten.",
+      "cta": "Zur Umfrage"
+    },
+    "surveys.reminder": {
+      "subject": "Erinnerung: {title}",
+      "intro": "Sie haben noch nicht geantwortet: {org} möchte weiterhin wissen, wie Ihnen {eventName} gefallen hat.",
+      "cta": "Zur Umfrage"
+    },
+    "guest.checkout-code": {
+      "subject": "{code} ist Ihr Code zur Bestätigung Ihrer E-Mail",
+      "intro": "Geben Sie {code} ein, um Ihre E-Mail zu bestätigen und Ihre Bestellung bei {org} abzuschließen. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
+    },
+    "guest.sign-in": {
+      "subject": "{code} ist Ihr Code für Meine Tickets",
+      "intro": "Geben Sie {code} ein, um Ihre Tickets auf {site} zu sehen, oder nutzen Sie die Schaltfläche unten im selben Browser. Der Code läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab, die Schaltfläche in {linkMinutes, plural, one {# Minute} other {# Minuten}}; beide gelten einmal. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Meine Tickets öffnen"
+    },
+    "guest.waitlist-code": {
+      "subject": "{code} ist Ihr Code für die Warteliste",
+      "intro": "Geben Sie {code} ein, um Ihre E-Mail zu bestätigen und sich bei {org} auf die Warteliste für {eventName} zu setzen. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
+    },
+    "orders.waitlist-joined": {
+      "subject": "Sie stehen auf der Warteliste für {eventName}",
+      "intro": "Sie sind Nummer {position} in der Warteschlange für {count, plural, one {# {passName}-Ticket} other {# {passName}-Tickets}} für {eventName}. Werden Tickets frei, schicken wir Ihnen per E-Mail ein Angebot zum Bestellen; es hält die Tickets für begrenzte Zeit für Sie bereit. Über den Link unten sehen Sie Ihren Platz oder verlassen die Warteliste.",
+      "cta": "Meinen Platz ansehen"
+    },
+    "orders.waitlist-offer": {
+      "subject": "Tickets für {eventName} frei: bis {until} bestellen",
+      "intro": "Gute Nachricht: {org} hält {count, plural, one {# {passName}-Ticket} other {# {passName}-Tickets}} für {eventName} bis {until} für Sie bereit. Schließen Sie Ihre Bestellung vorher ab; danach gehen die Tickets an die nächste Person in der Warteschlange.",
+      "cta": "Jetzt bestellen"
+    },
+    "orders.waitlist-expired": {
+      "subject": "Ihr Angebot für {eventName} ist abgelaufen",
+      "intro": "Die Zeit zum Bestellen Ihrer {passName}-Tickets für {eventName} ist abgelaufen, daher gingen sie an die nächste Person in der Warteschlange. Über den Link unten können Sie sich erneut am Ende der Warteliste eintragen.",
+      "cta": "Erneut auf die Warteliste"
+    },
+    "orders.order-link": {
+      "subject": "{reason, select, reissued {Ihr neuer Link zu Ihrer Bestellung für {eventName}} other {Ihr Link zu Ihrer Bestellung für {eventName}}}",
+      "intro": "{reason, select, reissued {Der Veranstalter hat den Link zu Ihrer Bestellung für {eventName} ersetzt. Der alte Link funktioniert nicht mehr; verwenden Sie diesen.} other {Hier ist der angeforderte Link. Er öffnet Ihre Bestellung und Tickets für {eventName}.}}",
+      "cta": "Meine Bestellung öffnen"
+    },
+    "security.fraud_signal": {
+      "subject": "Betrugswarnung: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}",
+      "intro": "Ein Signal mit hohem Schweregrad bei {org}{eventName, select, none {} other { ({eventName})}} muss geprüft werden: {signal, select, two_entrances {dasselbe Ticket an zwei Eingängen} impossible_travel {eine unmögliche Strecke zwischen Kontrollpunkten} device_velocity {ein Scanner, der zu schnell scannt} invalid_burst {eine Häufung ungültiger Codes} rejected_burst {eine Häufung abgelehnter Scans} purchase_velocity {viele Bestellungen von einer Person} country_mismatch {eine Käuferin oder ein Käufer in einem anderen Land} checkout_blocked {ein blockierter Checkout} card_testing {möglicher Kartentest} chat_abuse {ein gemeldetes Gespräch} other {ein Betrugssignal}}. Öffne es, um es zu übernehmen oder zu verwerfen.",
+      "cta": "Signal prüfen"
+    },
+    "marketing.message": {
+      "subject": "{subject}",
+      "intro": "Neuigkeiten von {org}:"
+    },
+    "messaging.auto_paused": {
+      "subject": "Nachrichten für {org} pausiert",
+      "intro": "Beschwerden über die E-Mails von {org} erreichten {rate} und damit mehr als die Grenze von 0,3 %. Yayatoh hat daher Erinnerungen, Neuigkeiten und Marketing pausiert. Tickets, Belege und Antworten werden weiter versendet. Der Yayatoh-Support prüft das mit Ihnen, bevor der Versand wieder startet."
+    },
+    "orders.refund-requested": {
+      "subject": "Erstattungsanfrage: {name}",
+      "intro": "{name} hat die Erstattung {count, plural, =0 {der Bestellung} one {von # Ticket} other {von # Tickets}} für {eventName} angefragt. Bitte innerhalb von 5 Werktagen beantworten."
+    },
+    "orders.refund-declined": {
+      "subject": "Deine Erstattungsanfrage für {eventName}",
+      "intro": "Der Veranstalter von {eventName} hat deine Erstattungsanfrage abgelehnt: „{reason}“ Deine Tickets bleiben gültig.",
+      "cta": "Meine Bestellung ansehen"
+    },
+    "events.postponed": {
+      "subject": "{eventName} wurde verschoben",
+      "intro": "{eventName} wurde verschoben. Deine Tickets bleiben für den neuen Termin gültig. Wenn du nicht kommen kannst, kannst du auf deiner Bestellseite nach der Erstattungsrichtlinie des Veranstalters eine Erstattung anfragen.",
+      "cta": "Meine Bestellung ansehen"
+    }
+  },
+  "roles": {
+    "owner": "Inhaber",
+    "admin": "Admin",
+    "manager": "Manager",
+    "finance": "Finanzen",
+    "marketing": "Marketing",
+    "box_office": "Abendkasse",
+    "scanner": "Einlass",
+    "viewer": "Leser",
+    "co_host": "Co-Gastgeber",
+    "planner": "Planer",
+    "collaborator": "Veranstaltungsmitarbeiter"
+  },
+  "account": {
+    "deleted": {
+      "subject": "Ihr Yayatoh-Konto wurde gelöscht",
+      "intro": "Wie gewünscht wurde Ihr Yayatoh-Konto gelöscht. Sie wurden überall abgemeldet, und Ihre Anmeldedaten sowie die Bestätigung in zwei Schritten wurden entfernt. Veranstalter, bei denen Sie gekauft haben, behalten ihre Bestellunterlagen, wie es das Gesetz verlangt.\n\nWenn Sie das nicht veranlasst haben, antworten Sie sofort auf diese E-Mail."
+    },
+    "sentBy": "Von Yayatoh zu Ihrem Konto gesendet."
+  },
+  "cutover": {
+    "cta": "Wartungsstatus",
+    "sentBy": "Von Yayatoh gesendet zum Umzug auf die neue Plattform.",
+    "organizer": {
+      "t14": {
+        "subject": "Yayatoh zieht am {start} auf die neue Plattform um",
+        "intro": "Am {start} zieht Yayatoh auf seine neue Plattform um. Etwa 45 Minuten lang, bis {end}, sind Ihr Dashboard und der Ticketverkauf pausiert; der Einlass funktioniert weiter und bereits verkaufte Tickets bleiben gültig.\n\nIhre Events, Bestellungen, Auszahlungen und Ihr Team kommen mit, und Sie melden sich mit derselben E-Mail-Adresse und demselben Passwort an. Sie müssen nichts tun: Wir schreiben Ihnen zwei Tage vorher und wenn alles erledigt ist."
+      },
+      "t2": {
+        "subject": "Erinnerung: Yayatoh-Wartung am {start}",
+        "intro": "Zur Erinnerung: Am {start}, bis etwa {end}, ist Yayatoh schreibgeschützt, während wir auf die neue Plattform umziehen. Bitte planen Sie in diesem Zeitraum keinen Vorverkaufsstart und keine Ticketaktion. Der Einlass funktioniert weiter und verkaufte Tickets bleiben gültig."
+      },
+      "freezeStart": {
+        "subject": "Die Yayatoh-Wartung hat begonnen",
+        "intro": "Yayatoh ist bis etwa {end} schreibgeschützt, während wir auf die neue Plattform umziehen. Sie können Ihre Events weiterhin ansehen und Tickets am Einlass scannen; Speichern, neue Verkäufe und Erstattungen sind pausiert. Wir schreiben Ihnen, sobald alles erledigt ist."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh läuft auf der neuen Plattform",
+        "intro": "Der Umzug ist abgeschlossen und Yayatoh funktioniert wieder. Melden Sie sich wie gewohnt mit derselben E-Mail-Adresse und demselben Passwort an: Ihre Events, Bestellungen und Auszahlungen sind alle da, und verkaufte Tickets bleiben gültig. Wenn Sie die Yayatoh-App nutzen, aktualisieren Sie sie im App-Store."
+      },
+      "rollback": {
+        "subject": "Yayatoh läuft wieder auf der vorherigen Version",
+        "intro": "Wir haben Yayatoh auf die vorherige Version zurückgestellt, während wir ein Problem der neuen Plattform beheben. Verkäufe und Änderungen seit dem {start} bleiben erhalten, und Tickets bleiben gültig. Melden Sie sich wie bisher an; wir nennen Ihnen den neuen Termin für den Umzug."
+      }
+    },
+    "buyer": {
+      "t14": {
+        "subject": "Ihre Tickets bleiben während unseres Umzugs am {start} gültig",
+        "intro": "Am {start} zieht Yayatoh auf seine neue Plattform um. Etwa 45 Minuten lang, bis {end}, können Sie keine Tickets kaufen und keine Bestellungen ändern, aber Ihre Tickets bleiben gültig und werden am Einlass wie gewohnt gescannt.\n\nDanach melden Sie sich mit derselben E-Mail-Adresse und demselben Passwort an. Wenn Sie die Yayatoh-App nutzen, aktualisieren Sie sie, sobald wir das Ende des Umzugs melden."
+      },
+      "t2": {
+        "subject": "Erinnerung: kurze Yayatoh-Wartung am {start}",
+        "intro": "Zur Erinnerung: Am {start}, bis etwa {end}, können Sie auf Yayatoh keine Tickets kaufen und keine Bestellungen ändern. Ihre Tickets bleiben gültig und funktionieren am Einlass."
+      },
+      "freezeStart": {
+        "subject": "Die Yayatoh-Wartung hat begonnen",
+        "intro": "Ticketverkauf und Bestelländerungen auf Yayatoh sind bis etwa {end} pausiert, während wir auf die neue Plattform umziehen. Ihre Tickets bleiben gültig und werden am Einlass wie gewohnt gescannt."
+      },
+      "freezeEnd": {
+        "subject": "Yayatoh ist zurück",
+        "intro": "Der Umzug ist abgeschlossen: Sie können wieder Tickets kaufen und Ihre Bestellungen verwalten. Ihre Tickets bleiben gültig, und Sie melden sich mit derselben E-Mail-Adresse und demselben Passwort an. Wenn Sie die Yayatoh-App nutzen, aktualisieren Sie sie im App-Store."
+      },
+      "rollback": {
+        "subject": "Yayatoh läuft wieder auf der vorherigen Version",
+        "intro": "Wir haben Yayatoh auf die vorherige Version zurückgestellt, während wir ein Problem beheben. Tickets, die Sie seit dem {start} gekauft haben, bleiben gültig. Falls wir eine Ihrer Bestellungen erstatten mussten, erhalten Sie eine separate E-Mail mit dem Betrag. Melden Sie sich wie bisher an."
+      }
+    }
+  }
+}
