@@ -79,8 +79,7 @@ async function upsertPresenceTx(
  */
 export const reportPresenceCommand = tenantCommand({
   name: 'checkin.reportPresence',
-  // Doors stay open during a read-only freeze (M2.5a).
-  duringFreeze: 'allowed',
+  // Not a door write: during a read-only freeze (M2.5a) presence simply isn't refreshed.
   input: z.object({ eventId: z.uuid(), checkpointId: z.uuid().nullable().default(null) }),
   output: z.object({ ok: z.literal(true) }),
   entitlement: 'checkin',
