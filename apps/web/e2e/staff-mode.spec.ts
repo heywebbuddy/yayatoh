@@ -430,9 +430,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
       'Nearly full: 100% of expected guests are in',
     );
     const drain = async () =>
-      expect(
-        (await page.request.post('/api/dev/outbox/drain', { form: { org } })).ok(),
-      ).toBe(true);
+      expect((await page.request.post('/api/dev/outbox/drain', { form: { org } })).ok()).toBe(true);
     await drain();
     await expect.poll(async () => (await received(page, fake)).length, { timeout: 15_000 }).toBe(1);
     await drain();
