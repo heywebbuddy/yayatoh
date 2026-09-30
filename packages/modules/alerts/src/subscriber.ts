@@ -179,11 +179,12 @@ export async function evaluateOrgNow(
 export async function watchQuietDevices(
   orgId: string,
   deps: AlertDeps,
-  opts: { now?: Date } = {},
+  /** `evaluate: false` when the caller evaluates the org right after anyway (the dev drain). */
+  opts: { now?: Date; evaluate?: boolean } = {},
 ): Promise<{ quiet: number; changes: AlertChange[] }> {
   const base: Ctx = createCtx({ orgId, actor: { type: 'system', name: 'alerts.device-watchdog' } });
   const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
   const quiet = await withTenant(ctx, (tx) => markQuietDevicesTx(tx, ctx, DEVICE_ONLINE_WINDOW_MS));
-  if (quiet.length === 0) return { quiet: 0, changes: [] };
+  if (quiet.length === 0 || opts.evaluate === false) return { quiet: quiet.length, changes: [] };
   return { quiet: quiet.length, changes: await evaluateOrgNow(orgId, deps, { now: ctx.now, full: false }) };
 }

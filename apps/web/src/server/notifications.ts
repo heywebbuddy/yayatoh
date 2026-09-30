@@ -113,7 +113,7 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
   }
   // The live device watchdog (M3.3a) and the alert engine's scheduled pass (M3.2b), as the
   // worker would run them now.
-  await watchQuietDevices(orgId, { notifier });
+  await watchQuietDevices(orgId, { notifier }, { evaluate: false });
   await evaluateOrgNow(orgId, { notifier });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
