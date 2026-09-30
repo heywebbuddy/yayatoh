@@ -2,7 +2,7 @@
 
 import { Alert, Button } from '@yayatoh/ui';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ScanClient, StaffView } from '@/scan/client.ts';
 
 type Loaded = { view: StaffView; fetchedAt: string; fresh: boolean };
@@ -57,8 +57,14 @@ export function StaffPanel({
   const [data, setData] = useState<Loaded | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Only the latest read applies: one still in flight when the network drops must not bring back
+  // a "fresh" answer after the offline read fell back to the cache (batch 3d merge, e2e race).
+  const latest = useRef(0);
   const load = useCallback(async () => {
-    setData(await client.staffOverview());
+    const seq = ++latest.current;
+    const next = await client.staffOverview();
+    if (seq !== latest.current) return;
+    setData(next);
     setLoading(false);
   }, [client]);
 
@@ -88,7 +94,7 @@ export function StaffPanel({
         <span>
           {t('lastUpdated', { time: format.dateTime(new Date(data.fetchedAt), { timeStyle: 'medium' }) })}
         </span>
-        <span>{data.fresh ? (live ? t('live') : t('refreshing')) : t('stale')}</span>
+        <span>{data.fresh && online ? (live ? t('live') : t('refreshing')) : t('stale')}</span>
       </p>
 
       <section aria-labelledby="staff-counts" className="flex flex-col gap-3">
