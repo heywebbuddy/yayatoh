@@ -55,13 +55,21 @@ export function Scanner({
   const [scanId, setScanId] = useState(newScanId);
   const input = useRef<HTMLInputElement>(null);
   // While the door screen is open, report presence now, every 30 s and when the entrance changes.
+  // The action is re-bound on every server render (each scan revalidates the page): keep the
+  // latest in a ref so a re-render never fires an extra ping on top of the scan.
+  const presenceRef = useRef(presence);
+  presenceRef.current = presence;
+  const hasPresence = Boolean(presence);
   useEffect(() => {
-    if (!presence) return;
-    const ping = () => void presence(stand || null).catch(() => undefined);
-    ping();
+    if (!hasPresence) return;
+    const ping = () => void presenceRef.current?.(stand || null).catch(() => undefined);
+    const first = setTimeout(ping, 1_000);
     const id = setInterval(ping, PRESENCE_PING_MS);
-    return () => clearInterval(id);
-  }, [presence, stand]);
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
+  }, [hasPresence, stand]);
   useEffect(() => {
     if (state.kind === 'idle') return;
     setScanId(newScanId());
