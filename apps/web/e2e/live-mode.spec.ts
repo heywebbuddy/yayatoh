@@ -2,7 +2,7 @@ import { type Browser, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
-import { quietDevice } from '@yayatoh/testing';
+import { quietDevice, revokeDevice } from '@yayatoh/testing';
 import { continueToPayment, expectAccessible, newUser, signIn } from './helpers.ts';
 
 /**
@@ -117,7 +117,8 @@ async function openCommandCenter(page: Page, base: string) {
   await expect(page.getByTestId('command-center')).toHaveAttribute('data-mode', 'live');
 }
 
-const feed = (page: Page) => page.getByTestId('cc-feed').getByRole('listitem');
+/** The feed's scan and device entries (the shared org's alerts for the event show there too). */
+const feed = (page: Page) => page.getByTestId('cc-feed').locator('li:not([data-kind="alert"])');
 const shown = (page: Page) =>
   page
     .getByTestId('command-center')
@@ -151,9 +152,11 @@ test.describe('Command Center live mode (M3.3a)', () => {
     ]);
     await expect(page.getByTestId('cc-live')).toHaveAttribute('data-live', 'live', { timeout: 15_000 });
     const feedWidget = page.getByTestId('cc-widget-liveFeed');
-    await expect(feedWidget).toContainText(
-      'Nothing yet. Scans, devices and alerts show up here as they happen.',
-    );
+    // No scans yet (alerts about the event may already be listed); a filter shows its empty state.
+    await expect(feed(page)).toHaveCount(0);
+    await feedWidget.getByLabel('Outcome').selectOption('reentry');
+    await expect(feedWidget).toContainText('Nothing matches these filters yet.');
+    await feedWidget.getByLabel('Outcome').selectOption('');
     // Setting up the entrances on the door screen counted as being at the doors (the whole event).
     await expect(page.getByTestId('cc-presence')).toContainText('On the door screen · Whole event');
     await expect(page.getByTestId('cc-widget-assistance')).toContainText(
@@ -297,10 +300,7 @@ test.describe('Command Center live mode (M3.3a)', () => {
     ).toBeVisible();
 
     // Revoke the device so the org's other tests don't count it.
-    await page.goto(`${base}/onsite`);
-    page.once('dialog', (d) => d.accept());
-    const revoke = page.getByRole('button', { name: `Revoke ${label}` });
-    if (await revoke.count()) await revoke.click();
+    expect(await revokeDevice(org?.orgId as string, label)).toBe(1);
   });
 
   test('TV mode: a display link opens the read-only board without a session, updates, and stops when turned off', async ({

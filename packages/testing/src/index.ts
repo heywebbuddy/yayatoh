@@ -15,5 +15,5 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
-export { quietDevice } from './live.ts';
+export { quietDevice, revokeDevice } from './live.ts';
 export { BULK_ACTIONS, bulkStep, ports, runBulk } from './ports.ts';

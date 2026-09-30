@@ -14,3 +14,12 @@ export async function quietDevice(orgId: string, label: string, seconds: number)
   );
   return rows.length;
 }
+
+/** M3.3a e2e clean-up: revoke a test's device so the shared org's other tests don't count it. */
+export async function revokeDevice(orgId: string, label: string): Promise<number> {
+  const rows = await withTenant(systemCtx(orgId), (tx) =>
+    tx.execute<{ id: string }>(sql`
+      update checkin.devices set revoked_at = now() where label = ${label} and revoked_at is null returning id`),
+  );
+  return rows.length;
+}
