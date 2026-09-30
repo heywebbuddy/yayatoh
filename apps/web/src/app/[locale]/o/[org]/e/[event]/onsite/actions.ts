@@ -3,7 +3,6 @@
 import {
   createCheckpointCommand,
   enrollDeviceCommand,
-  reportPresenceCommand,
   type ScanOutcomeDto,
   scanTicketCommand,
   setCheckpointArchivedCommand,
@@ -161,21 +160,4 @@ export async function checkpointArchivedAction(
     ports,
   );
   revalidatePath(`/o/${org}/e/${event}/onsite`);
-}
-
-/**
- * The door screen reports its member's presence (M3.3a staff presence), every 30 s while open.
- * Quiet on failure: the next ping tries again.
- */
-export async function reportPresenceAction(
-  org: string,
-  event: string,
-  checkpointId: string | null,
-): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event, 'onsite');
-  try {
-    await executeCommand(reportPresenceCommand, { eventId: ev.id, checkpointId }, data.ctx, ports);
-  } catch (err) {
-    if (!isDomainError(err)) throw err;
-  }
 }

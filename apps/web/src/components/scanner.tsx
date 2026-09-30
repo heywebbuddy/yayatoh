@@ -37,11 +37,11 @@ export function Scanner({
   timeZone,
   checkpoints,
   scoped = false,
-  presence,
+  presenceUrl,
 }: {
   action: (prev: ScanState, form: FormData) => Promise<ScanState>;
-  /** M3.3a staff presence: tells the Command Center this member is at the doors (and where). */
-  presence?: (checkpointId: string | null) => Promise<void>;
+  /** M3.3a staff presence: where to tell the Command Center this member is at the doors. */
+  presenceUrl?: string;
   timeZone: string;
   /** Live entrances and zones; the choice stays put between scans. */
   checkpoints: readonly { id: string; name: string }[];
@@ -54,22 +54,23 @@ export function Scanner({
   const stand = checkpoints.some((c) => c.id === checkpointId) ? checkpointId : '';
   const [scanId, setScanId] = useState(newScanId);
   const input = useRef<HTMLInputElement>(null);
-  // While the door screen is open, report presence now, every 30 s and when the entrance changes.
-  // The action is re-bound on every server render (each scan revalidates the page): keep the
-  // latest in a ref so a re-render never fires an extra ping on top of the scan.
-  const presenceRef = useRef(presence);
-  presenceRef.current = presence;
-  const hasPresence = Boolean(presence);
+  // While the door screen is open, report presence soon, every 30 s and when the entrance changes.
+  // A plain request (not a server action), so it never interleaves with the scan form's action.
   useEffect(() => {
-    if (!hasPresence) return;
-    const ping = () => void presenceRef.current?.(stand || null).catch(() => undefined);
+    if (!presenceUrl) return;
+    const ping = () =>
+      void fetch(presenceUrl, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ checkpointId: stand || null }),
+      }).catch(() => undefined);
     const first = setTimeout(ping, 1_000);
     const id = setInterval(ping, PRESENCE_PING_MS);
     return () => {
       clearTimeout(first);
       clearInterval(id);
     };
-  }, [hasPresence, stand]);
+  }, [presenceUrl, stand]);
   useEffect(() => {
     if (state.kind === 'idle') return;
     setScanId(newScanId());

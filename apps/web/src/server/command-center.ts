@@ -1,6 +1,7 @@
 import 'server-only';
 import { listAlertsQuery, RULES } from '@yayatoh/alerts';
 import { getUsersByIds } from '@yayatoh/auth';
+import { reportPresenceCommand } from '@yayatoh/checkin';
 import {
   AlertsWidgetDto,
   COMMAND_CENTER_WIDGETS,
@@ -16,7 +17,7 @@ import {
   withWidget,
 } from '@yayatoh/command-center';
 import { eventRolesOf, getEventBySlugQuery } from '@yayatoh/events';
-import { type Ctx, createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { type Ctx, createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
   ALERTS_CHANNEL,
   CHECKINS_CHANNEL,
@@ -201,9 +202,40 @@ export async function widgetResponse(
   widget: string,
   params: Record<string, string> = {},
 ): Promise<WidgetResponse> {
+  if (!isWidgetKey(widget) || !WIDGETS[widget]) {
+    if (!(await getSession())) return { status: 401, body: { error: 'unauthenticated' } };
+    return { status: 404, body: { error: 'not_found' } };
+  }
+  return asMember(orgSlug, eventSlug, async (ctx, eventId) => ({
+    status: 200,
+    body: { widget, data: await loadWidget(widget, eventId, ctx, params) },
+  }));
+}
+
+/**
+ * `POST /api/command-center/{org}/{event}/presence`: the door screen reports its member at the
+ * doors (M3.3a staff presence). A plain request, not a server action, so a ping never queues
+ * behind or in front of the scan form's action.
+ */
+export async function presenceResponse(
+  orgSlug: string,
+  eventSlug: string,
+  checkpointId: string | null,
+): Promise<WidgetResponse> {
+  return asMember(orgSlug, eventSlug, async (ctx, eventId) => {
+    await executeCommand(reportPresenceCommand, { eventId, checkpointId }, ctx, ports);
+    return { status: 200, body: { ok: true } };
+  });
+}
+
+/** Run `fn` as the signed-in member of the org in the path, for one of its events. */
+async function asMember(
+  orgSlug: string,
+  eventSlug: string,
+  fn: (ctx: Ctx, eventId: string) => Promise<WidgetResponse>,
+): Promise<WidgetResponse> {
   const session = await getSession();
   if (!session) return { status: 401, body: { error: 'unauthenticated' } };
-  if (!isWidgetKey(widget) || !WIDGETS[widget]) return { status: 404, body: { error: 'not_found' } };
   const resolved = await resolveOrgSlug(orgSlug);
   const imp = session.impersonation;
   if (!resolved || (imp && imp.orgId !== resolved.orgId))
@@ -221,7 +253,7 @@ export async function widgetResponse(
   const ctx = await commandCenterCtx(base);
   try {
     const ev = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, ctx, ports);
-    return { status: 200, body: { widget, data: await loadWidget(widget, ev.id, ctx, params) } };
+    return await fn(ctx, ev.id);
   } catch (err) {
     if (!isDomainError(err)) throw err;
     if (err.code === 'forbidden') return { status: 403, body: { error: 'forbidden' } };

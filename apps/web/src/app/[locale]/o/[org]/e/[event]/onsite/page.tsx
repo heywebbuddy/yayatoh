@@ -30,7 +30,6 @@ import {
   createCheckpointAction,
   deviceStateAction,
   enrollDeviceAction,
-  reportPresenceAction,
   scanAction,
   undoAction,
 } from './actions.ts';
@@ -144,7 +143,7 @@ export default async function OnsitePage({
         timeZone={ev.timezone}
         checkpoints={standable.map((c) => ({ id: c.id, name: c.name }))}
         scoped={scope.checkpointIds !== null}
-        presence={reportPresenceAction.bind(null, org, event)}
+        presenceUrl={`/api/command-center/${org}/${event}/presence`}
       />
       {status.signals.length > 0 ? (
         <section
