@@ -6,6 +6,7 @@ import {
   confirmStepUp,
   continueToPayment,
   expectAccessible,
+  newUser,
   personaCode,
   signIn,
 } from './helpers.ts';
@@ -40,16 +41,24 @@ interface Setup {
 }
 
 /** An event happening now with North and South gates and `tickets` bought by one guest. */
-async function eventNow(page: Page, browser: Browser, prefix: string, tickets: number): Promise<Setup> {
+async function eventNow(
+  page: Page,
+  browser: Browser,
+  prefix: string,
+  tickets: number,
+  /** An org whose owner is already signed in on `page` (default: the seeded Lakeside owner). */
+  org?: string,
+): Promise<Setup> {
   const name = `${prefix} ${stamp()}`;
-  await signIn(page);
-  await page.goto('/o/lakeside-events/events/new');
+  if (!org) await signIn(page);
+  const slug = org ?? 'lakeside-events';
+  await page.goto(`/o/${slug}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
   await page.getByLabel('Time zone').selectOption('America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+  await expect(page).toHaveURL(new RegExp(`/o/${slug}/e/[a-z0-9-]+$`));
   const base = new URL(page.url()).pathname;
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
@@ -190,8 +199,9 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     await expect(resultPanel(d.page)).toContainText('Already checked in');
     await expect(d.page.getByTestId('scan-queue')).toHaveText('4 scans waiting to sync');
     // Feedback from the local verdict: every scan under 300 ms (the real-device check is the drill).
+    // The measure is taken on the frame after the verdict is painted: wait for the fourth.
+    await expect.poll(async () => (await feedbackTimes(d.page)).length).toBeGreaterThanOrEqual(4);
     const times = await feedbackTimes(d.page);
-    expect(times.length).toBeGreaterThanOrEqual(4);
     for (const ms of times) expect(ms).toBeLessThan(300);
 
     // Back online: the queue drains; asking again (online events racing) sends nothing twice.
@@ -396,7 +406,12 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     page,
     browser,
   }) => {
-    const ev = await eventNow(page, browser, 'Staff push', 1);
+    // Its own org (batch 3d merge): the drain below then sends only this org's messages. In the
+    // shared Lakeside org it also dispatched the whole suite's backlog (alert emails for every
+    // upcoming e2e event since M3.2b), which outran the test's time under a full run.
+    const owner = await newUser(page, { org: true, twoFactor: true, event: 'published' });
+    const org = owner.orgSlug as string;
+    const ev = await eventNow(page, browser, 'Staff push', 1, org);
     const link = await addDevice(page, ev.base, 'Alert phone');
     const fake = fakeBrowser();
     const context = await pushContext(browser, fake);
@@ -416,7 +431,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     );
     const drain = async () =>
       expect(
-        (await page.request.post('/api/dev/outbox/drain', { form: { org: 'lakeside-events' } })).ok(),
+        (await page.request.post('/api/dev/outbox/drain', { form: { org } })).ok(),
       ).toBe(true);
     await drain();
     await expect.poll(async () => (await received(page, fake)).length, { timeout: 15_000 }).toBe(1);
