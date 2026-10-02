@@ -18,4 +18,6 @@ export const privateColumns = columnPrivacy('seating', {
   seating_rules: { kind: 'vocab', severity: 'vocab', params: internal() },
   // A sub-event's own drawing (M4.1c): the host's, shown to nobody outside the console yet.
   sub_event_charts: { doc: internal(), checksum: 'vocab' },
+  // M6.11a: the organizer's section scores rank best available; never shown to buyers.
+  selection_settings: { section_scores: internal() },
 });

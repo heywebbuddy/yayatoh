@@ -16,9 +16,12 @@ const field = 'min-h-10 w-24 rounded-pill border border-zinc-200 bg-white px-4 t
  */
 export function SeatingRulesForm({
   rules,
+  companions = false,
   action,
 }: {
   rules: readonly SeatingRule[];
+  /** M6.11a: the org has advanced seating, so the companion-seat rule can be set. */
+  companions?: boolean;
   action: (prev: RulesState, form: FormData) => Promise<RulesState>;
 }) {
   const t = useTranslations('seating.rules');
@@ -26,6 +29,7 @@ export function SeatingRulesForm({
   const [state, formAction, pending] = useActionState(action, { ok: false, code: null });
   const ada = rules.find((r) => r.kind === 'ada_reserved');
   const cap = rules.find((r) => r.kind === 'max_per_order_seats');
+  const companion = rules.find((r) => r.kind === 'ada_companion');
   // Keep what was typed when the server refuses a value.
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +59,7 @@ export function SeatingRulesForm({
       ))}
     </fieldset>
   );
-  const invalid = (f: 'adaDays' | 'capMax') => state.field === f;
+  const invalid = (f: 'adaDays' | 'capMax' | 'companionMax') => state.field === f;
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
       <fieldset className="flex flex-col gap-3">
@@ -92,6 +96,46 @@ export function SeatingRulesForm({
         </div>
         {severity('adaSeverity', ada?.severity)}
       </fieldset>
+
+      {companions ? (
+        <fieldset className="flex flex-col gap-3">
+          <legend className="mb-1 text-body font-medium">{t('companion.title')}</legend>
+          <input type="hidden" name="companionShown" value="1" />
+          <label className="flex min-h-6 items-center gap-2 text-body">
+            <input type="checkbox" name="companion" defaultChecked={Boolean(companion)} className="size-5" />
+            {t('companion.on')}
+          </label>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="rules-companion-max" className="text-caption text-zinc-600">
+              {t('companion.max')}
+            </label>
+            <input
+              id="rules-companion-max"
+              name="companionMax"
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={3}
+              defaultValue={companion?.kind === 'ada_companion' ? companion.params.maxPerAccessible : 1}
+              aria-invalid={invalid('companionMax') || undefined}
+              aria-describedby={
+                invalid('companionMax') ? 'rules-companion-max-error' : 'rules-companion-max-hint'
+              }
+              className={field}
+            />
+            {invalid('companionMax') ? (
+              <p id="rules-companion-max-error" className="text-caption font-medium text-pink-700">
+                {t('companion.maxError')}
+              </p>
+            ) : (
+              <p id="rules-companion-max-hint" className="text-caption text-zinc-600">
+                {t('companion.maxHint')}
+              </p>
+            )}
+          </div>
+          {severity('companionSeverity', companion?.severity)}
+        </fieldset>
+      ) : null}
 
       <fieldset className="flex flex-col gap-3">
         <legend className="mb-1 text-body font-medium">{t('cap.title')}</legend>

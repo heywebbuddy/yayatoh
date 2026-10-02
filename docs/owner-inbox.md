@@ -252,6 +252,12 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
 - [ ] Accounts: Svix, Nango, Mux, Meilisearch Cloud, Tinybird (only when volume needs it), Anthropic API key for production AI.
 - [ ] Prices: subscription tiers (D22, with launch data), agency commission defaults (P6-8), streaming markup (D24).
 - [ ] Legal (`legal-copy`): API terms, DPA and subprocessor list, integration privacy disclosures, agency agreement terms, CE certificate wording.
+- [ ] **M6.11a best available and ADA — defaults to confirm (pending owner, 2026-10-02):**
+  - The buyer's accessible-seat statement is **self-declared** ("Someone in my party uses a wheelchair and needs an accessible seat"; staff tick it at the box office). No proof is asked (the usual practice under the US ADA ticketing rules); it is recorded in the audit row.
+  - Companion seats per accessible seat: the organizer chooses 1–3 per event (the rule's default is **1**; US rules allow up to 3).
+  - Companion seats are **released together with the accessible seats** (the `ada_reserved` release); without that rule the companion rule always applies.
+  - Best available is **off per event** until the organizer turns it on, and holds the found seats for **10 minutes** before checkout.
+  - The `advanced_seating` module is **free in beta** (granted to today's plan, P6-13).
 
 ## Phase 4 (weddings and galas)
 - [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:

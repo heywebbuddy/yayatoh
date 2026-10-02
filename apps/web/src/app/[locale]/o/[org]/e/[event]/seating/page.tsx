@@ -186,7 +186,13 @@ export default async function SeatingPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs base={base} active="plan" finder={data.modules.has('seat_finder')} date={dateId} />
+      <SeatingTabs
+        base={base}
+        active="plan"
+        finder={data.modules.has('seat_finder')}
+        selection={data.modules.has('advanced_seating')}
+        date={dateId}
+      />
       <SeatingDatePicker base={base} dates={dates} selected={dateId} timeZone={ev.timezone} locale={locale} />
       {date ? (
         <Card className="flex flex-col gap-3">

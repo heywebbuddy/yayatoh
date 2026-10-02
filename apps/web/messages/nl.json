@@ -893,9 +893,15 @@
         "capReached": "Meer kan niet in één bestelling: {max} plaatsen.",
         "adaChosen": "{count, plural, one {{seats} is een toegankelijke plaats} other {{seats} zijn toegankelijke plaatsen}}, vrijgehouden voor gasten die ze nodig hebben. Kies {count, plural, one {hem} other {ze}} alleen als het nodig is.",
         "overCap": "{count} plaatsen gekozen: de organisator vraagt om maximaal {max} per bestelling.",
-        "keptUntil": "Vrijgehouden tot {date}"
+        "keptUntil": "Vrijgehouden tot {date}",
+        "companionWarn": "Begeleidersplaatsen zijn voor gasten die met een rolstoelgebruiker komen: tot {max} per toegankelijke plaats.",
+        "companionEnforced": "Begeleidersplaatsen worden alleen verkocht met een toegankelijke plaats: tot {max} per toegankelijke plaats.",
+        "companionChosen": "Begeleidersplaatsen zonder toegankelijke plaats: {seats}. Ze zijn voor gasten die met een rolstoelgebruiker komen (tot {max} per toegankelijke plaats).",
+        "companionRefused": "Begeleidersplaatsen zonder toegankelijke plaats: {seats}. Ze worden alleen verkocht met een toegankelijke plaats (tot {max} per plaats): voeg er een toe of kies andere plaatsen.",
+        "adaEnforcedBest": "Toegankelijke plaatsen zijn tot {date} gereserveerd voor gasten die ze nodig hebben. Heb je er een nodig? Vink ‘Iemand in mijn gezelschap gebruikt een rolstoel’ aan en gebruik ‘Beste plaatsen’."
       },
-      "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}"
+      "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}",
+      "companion": "Begeleidersplaats"
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",
@@ -905,7 +911,39 @@
     "orgUnavailable": "Deze organisator verkoopt op dit moment geen tickets. Al gekochte tickets blijven geldig.",
     "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator.",
     "creditInvalid": "Die tegoedcode is niet geldig of al gebruikt.",
-    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt."
+    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt.",
+    "seatRuleCompanion": "Begeleidersplaatsen worden alleen verkocht met een toegankelijke plaats. Kies ook een toegankelijke plaats, of andere plaatsen.",
+    "best": {
+      "title": "Beste plaatsen",
+      "modeLegend": "Hoe wil je plaatsen kiezen?",
+      "mode": {
+        "best": "Beste plaatsen: wij zoeken de beste plaatsen naast elkaar",
+        "pick": "Zelf plaatsen kiezen"
+      },
+      "need": "Iemand in mijn gezelschap gebruikt een rolstoel en heeft een toegankelijke plaats nodig",
+      "needStaff": "De koper heeft een rolstoelplaats nodig",
+      "needHint": "Toegankelijke plaatsen en de begeleidersplaatsen ernaast zijn gereserveerd voor gasten die ze nodig hebben.",
+      "price": "Prijs",
+      "onePrice": "Prijs: {price}",
+      "quantity": "Aantal plaatsen",
+      "find": "Plaatsen zoeken",
+      "findAgain": "Opnieuw zoeken",
+      "accessibleHint": "We zoeken een rolstoelplaats met begeleidersplaatsen ernaast.",
+      "together": "{count, plural, one {Je plaats:} other {# plaatsen naast elkaar:}}",
+      "split": "We konden je gezelschap van {count} niet samen plaatsen, dus je plaatsen liggen op verschillende plekken (groepen: {pieces}). Je kunt ook zelf plaatsen kiezen.",
+      "seatsLabel": "Je plaatsen",
+      "seatAccessible": "{seat} (rolstoelplaats)",
+      "seatCompanion": "{seat} (begeleidersplaats)",
+      "heldFor": "{minutes} minuten voor je vastgehouden terwijl je afrekent.",
+      "clear": "Deze plaatsen vrijgeven",
+      "notEnough": "Niet genoeg vrije plaatsen tegen deze prijs voor {count}. Probeer minder plaatsen of een andere prijs, of kies zelf je plaatsen.",
+      "noAccessible": "Er is geen rolstoelplaats vrij tegen deze prijs. Probeer een andere prijs of neem contact op met de organisator.",
+      "taken": "Die plaatsen zijn net bezet. Probeer het opnieuw.",
+      "ruleRefused": "De plaatsingsregels van de organisator staan deze keuze niet toe.",
+      "off": "‘Beste plaatsen’ wordt voor dit evenement niet meer aangeboden. Kies zelf je plaatsen.",
+      "findFirst": "Zoek eerst je plaatsen: kies hoeveel en druk op ‘Plaatsen zoeken’.",
+      "expired": "Je plaatsen werden 10 minuten vastgehouden en zijn vrijgegeven. Zoek opnieuw."
+    }
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1933,7 +1971,8 @@
       "plan": "Plattegrond",
       "assign": "Gasten plaatsen",
       "finder": "Plaatszoeker",
-      "rules": "Regels"
+      "rules": "Regels",
+      "selection": "Beste plaatsen"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -2070,7 +2109,8 @@
       "none": "Geen regels: kopers kunnen elke vrije plaats kiezen.",
       "summary": {
         "ada": "Toegankelijke plaatsen vrijgehouden voor gasten die ze nodig hebben tot {days, plural, =0 {het begin} one {# dag voor het evenement} other {# dagen voor het evenement}} ({date}) · {severity}",
-        "cap": "Maximaal {max, plural, one {# plaats} other {# plaatsen}} per bestelling · {severity}"
+        "cap": "Maximaal {max, plural, one {# plaats} other {# plaatsen}} per bestelling · {severity}",
+        "companion": "Begeleidersplaatsen alleen met een toegankelijke plaats, tot {max} per plaats · {severity}"
       },
       "severityShort": {
         "warn": "waarschuwt",
@@ -2103,7 +2143,14 @@
       },
       "save": "Regels opslaan",
       "saved": "Zaalregels opgeslagen.",
-      "fixErrors": "Corrigeer het gemarkeerde veld."
+      "fixErrors": "Corrigeer het gemarkeerde veld.",
+      "companion": {
+        "title": "Begeleidersplaatsen",
+        "on": "Begeleidersplaatsen alleen verkopen met een toegankelijke plaats",
+        "max": "Begeleidersplaatsen per toegankelijke plaats",
+        "maxHint": "Van 1 tot 3. Ze worden samen met de toegankelijke plaatsen vrijgegeven.",
+        "maxError": "Vul een geheel getal van 1 tot 3 in."
+      }
     },
     "groups": {
       "title": "Groepsblokken",
@@ -2132,6 +2179,42 @@
         "forbidden": "Je kunt de groepen zien, maar niet wijzigen.",
         "noMembers": "Nog niemand op de lijst heeft het label {label}."
       }
+    },
+    "selection": {
+      "title": "Beste plaatsen en begeleidersplaatsen",
+      "description": "Laat kopers en de kassa om de beste plaatsen vragen in plaats van ze zelf te kiezen, en houd begeleidersplaatsen vrij naast toegankelijke plaatsen.",
+      "noPlan": "Dit evenement heeft nog geen zaalplan. Maak er eerst een en stel hier daarna ‘Beste plaatsen’ in.",
+      "readOnly": "Je kunt deze instellingen zien, maar niet wijzigen.",
+      "bestTitle": "Beste plaatsen",
+      "bestOn": "‘Beste plaatsen’ aanbieden aan kopers en de kassa",
+      "bestHint": "Kopers geven aan hoeveel plaatsen ze willen tegen welke prijs en krijgen de beste vrije plaatsen naast elkaar. Ze kunnen ook zelf plaatsen kiezen.",
+      "scoresTitle": "Scores per vak",
+      "scoresHint": "Van 0 tot 100: hogere scores worden eerst aangeboden. Laat een vak leeg om het te rangschikken op afstand tot het podium.",
+      "scoreLabel": "Score voor {section}",
+      "scoreError": "Vul een geheel getal van 0 tot 100 in, of laat het leeg.",
+      "noSections": "Dit plan heeft geen vakken: plaatsen worden gerangschikt op afstand tot het podium, daarna op rij en op hoe centraal ze liggen.",
+      "saveBest": "Beste plaatsen opslaan",
+      "savedBest": "Instellingen voor ‘Beste plaatsen’ opgeslagen.",
+      "fixErrors": "Corrigeer het gemarkeerde veld.",
+      "bestOnSummary": "‘Beste plaatsen’ wordt aangeboden aan kopers en de kassa.",
+      "bestOffSummary": "‘Beste plaatsen’ staat uit: kopers kiezen zelf hun plaatsen.",
+      "companionsTitle": "Begeleidersplaatsen",
+      "companionsDescription": "Begeleidersplaatsen liggen naast toegankelijke plaatsen, voor mensen die met een rolstoelgebruiker komen.",
+      "rulesLink": "Stel de regel voor begeleidersplaatsen in op het tabblad Regels",
+      "noAccessible": "Dit plan heeft nog geen toegankelijke plaatsen. Markeer ze in het plan en kies hier daarna de begeleidersplaatsen.",
+      "suggest": "Vink de plaatsen naast toegankelijke plaatsen aan",
+      "group": {
+        "row": "Rij {label}",
+        "table": "Tafel {label}"
+      },
+      "seatAccessible": "Plaats {seat} · toegankelijk",
+      "seatCompanion": "Plaats {seat}",
+      "suggested": "naast een toegankelijke plaats",
+      "saveCompanions": "Begeleidersplaatsen opslaan",
+      "savedCompanions": "Begeleidersplaatsen opgeslagen: {count}.",
+      "companionError": "Een begeleidersplaats moet in een rij of aan een tafel met een toegankelijke plaats liggen en mag zelf geen toegankelijke plaats zijn.",
+      "companionList": "Begeleidersplaatsen ({count}): {seats}",
+      "companionNone": "Nog geen begeleidersplaatsen."
     }
   },
   "venueMap": {

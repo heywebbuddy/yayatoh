@@ -13,6 +13,7 @@ export {
 } from './domain/live.ts';
 export {
   activeAdaRule,
+  activeCompanionRule,
   adaReleaseAt,
   blockingHits,
   evaluateSeatRules,

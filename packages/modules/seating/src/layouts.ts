@@ -7,6 +7,7 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull, isNull, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { reconcileAssignmentsTx } from './assignments.ts';
+import { companionSeatsTx, selectionSettingsTx } from './best-available.ts';
 import { type ChartKey, chartKeyTx, onChart, publicDoc } from './chart.ts';
 import { LIVE_SEAT_STATES, liveSeatState, publicAvailability, seatCounts } from './domain/live.ts';
 import { activeAdaRule } from './domain/rules.ts';
@@ -419,8 +420,12 @@ export const PublicSeatMapDto = z.object({
       ticketTypeId: z.uuid(),
       available: z.boolean(),
       accessible: z.boolean(),
+      /** A companion seat (M6.11a, with advanced seating): kept for people coming with a wheelchair user. */
+      companion: z.boolean().optional(),
     }),
   ),
+  /** M6.11a (with advanced seating): buyers may ask for the best available seats instead. */
+  bestAvailable: z.boolean().optional(),
 });
 
 /**
@@ -441,6 +446,8 @@ export async function publicSeatMap(
     readonly audience?: 'buyer' | 'staff';
     /** The date chosen (M1.7g): its own chart when it has one, else the event plan. */
     readonly occurrenceId?: string | null;
+    /** The org has the `advanced_seating` module (M6.11a): companion seats, best available. */
+    readonly advancedSeating?: boolean;
   } = {},
 ): Promise<z.infer<typeof PublicSeatMapDto> | null> {
   const now = opts.now ?? new Date();
@@ -469,17 +476,22 @@ export async function publicSeatMap(
       seats.map((s) => ({ ...s, status: s.status as SeatStatus })),
       { accessibleKeptBack: keptBack },
     );
+    // M6.11a: companion seats and best available (when the org has advanced seating).
+    const advanced = opts.advancedSeating ?? false;
+    const companions = advanced ? await companionSeatsTx(tx, eventId) : new Set<string>();
     return PublicSeatMapDto.parse({
       doc: publicDoc(layout.doc),
       startsAt,
-      rules,
+      rules: advanced ? rules : rules.filter((r) => r.kind !== 'ada_companion'),
       seats: seats.map((s) => ({
         seatUuid: s.seatUuid,
         label: s.label,
         ticketTypeId: s.ticketTypeId,
         available: available.get(s.seatUuid) ?? false,
         accessible: s.accessible,
+        ...(advanced ? { companion: companions.has(s.seatUuid) } : {}),
       })),
+      ...(advanced ? { bestAvailable: (await selectionSettingsTx(tx, eventId)).bestAvailable } : {}),
     });
   });
 }

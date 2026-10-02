@@ -893,9 +893,15 @@
         "capReached": "C’est le maximum pour une commande : {max} places.",
         "adaChosen": "{count, plural, one {{seats} est une place accessible} other {{seats} sont des places accessibles}}, réservée{count, plural, one {} other {s}} aux personnes qui en ont besoin. Ne {count, plural, one {la} other {les}} choisissez que si nécessaire.",
         "overCap": "{count} places choisies : l’organisateur demande au plus {max} par commande.",
-        "keptUntil": "Réservée jusqu’au {date}"
+        "keptUntil": "Réservée jusqu’au {date}",
+        "companionWarn": "Les places d’accompagnateur sont destinées aux personnes qui viennent avec un utilisateur de fauteuil roulant : jusqu’à {max} par place accessible.",
+        "companionEnforced": "Les places d’accompagnateur ne sont vendues qu’avec une place accessible : jusqu’à {max} par place accessible.",
+        "companionChosen": "Places d’accompagnateur sans place accessible : {seats}. Elles sont destinées aux personnes qui viennent avec un utilisateur de fauteuil roulant (jusqu’à {max} par place accessible).",
+        "companionRefused": "Places d’accompagnateur sans place accessible : {seats}. Elles ne sont vendues qu’avec une place accessible (jusqu’à {max} chacune) : ajoutez-en une ou choisissez d’autres places.",
+        "adaEnforcedBest": "Les places accessibles sont réservées aux personnes qui en ont besoin jusqu’au {date}. Si vous en avez besoin, cochez « Une personne de mon groupe utilise un fauteuil roulant » et utilisez « Meilleures places »."
       },
-      "groupSummary": "{group} — {free} sur {total} libres{chosen, plural, =0 {} one { · # choisie} other { · # choisies}}"
+      "groupSummary": "{group} — {free} sur {total} libres{chosen, plural, =0 {} one { · # choisie} other { · # choisies}}",
+      "companion": "Place d’accompagnateur"
     },
     "seatRuleCap": "C’est plus de places qu’une commande ne peut en compter. Veuillez en choisir moins.",
     "seatRuleAda": "Les places accessibles sont pour l’instant réservées aux personnes qui en ont besoin. Veuillez choisir d’autres places.",
@@ -905,7 +911,39 @@
     "orgUnavailable": "Cet organisateur ne vend pas de billets pour le moment. Les billets déjà achetés restent valables.",
     "riskBlocked": "Nous ne pouvons pas accepter cette commande. Contactez l’organisateur.",
     "creditInvalid": "Ce code de crédit boutique n’est pas valide ou a déjà été utilisé.",
-    "creditNotApplicable": "Ce crédit boutique ne peut pas être utilisé pour ces billets."
+    "creditNotApplicable": "Ce crédit boutique ne peut pas être utilisé pour ces billets.",
+    "seatRuleCompanion": "Les places d’accompagnateur ne sont vendues qu’avec une place accessible. Choisissez aussi une place accessible, ou d’autres places.",
+    "best": {
+      "title": "Meilleures places",
+      "modeLegend": "Comment souhaitez-vous choisir vos places ?",
+      "mode": {
+        "best": "Meilleures places : nous trouvons les meilleures places côte à côte",
+        "pick": "Choisir mes places"
+      },
+      "need": "Une personne de mon groupe utilise un fauteuil roulant et a besoin d’une place accessible",
+      "needStaff": "L’acheteur a besoin d’une place pour fauteuil roulant",
+      "needHint": "Les places accessibles et les places d’accompagnateur voisines sont réservées aux personnes qui en ont besoin.",
+      "price": "Prix",
+      "onePrice": "Prix : {price}",
+      "quantity": "Nombre de places",
+      "find": "Trouver des places",
+      "findAgain": "Chercher à nouveau",
+      "accessibleHint": "Nous chercherons une place pour fauteuil roulant avec des places d’accompagnateur à côté.",
+      "together": "{count, plural, one {Votre place :} many {# places côte à côte :} other {# places côte à côte :}}",
+      "split": "Nous n’avons pas pu placer ensemble votre groupe de {count} : vos places sont à des endroits différents (groupes : {pieces}). Vous pouvez aussi choisir vos places.",
+      "seatsLabel": "Vos places",
+      "seatAccessible": "{seat} (pour fauteuil roulant)",
+      "seatCompanion": "{seat} (place d’accompagnateur)",
+      "heldFor": "Réservées pour vous pendant {minutes} minutes le temps de payer.",
+      "clear": "Rendre ces places",
+      "notEnough": "Pas assez de places libres à ce prix pour {count}. Essayez moins de places ou un autre prix, ou choisissez vos places.",
+      "noAccessible": "Aucune place pour fauteuil roulant n’est libre à ce prix. Essayez un autre prix ou contactez l’organisateur.",
+      "taken": "Ces places viennent d’être prises. Veuillez réessayer.",
+      "ruleRefused": "Les règles de placement de l’organisateur ne permettent pas ce choix.",
+      "off": "« Meilleures places » n’est plus proposé pour cet événement. Choisissez vos places.",
+      "findFirst": "Trouvez d’abord vos places : choisissez combien, puis appuyez sur « Trouver des places ».",
+      "expired": "Vos places étaient réservées 10 minutes et ont été libérées. Veuillez chercher à nouveau."
+    }
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -1933,7 +1971,8 @@
       "plan": "Plan",
       "assign": "Placer les invités",
       "finder": "Trouver sa place",
-      "rules": "Règles"
+      "rules": "Règles",
+      "selection": "Meilleures places"
     },
     "assign": {
       "title": "Placer les invités",
@@ -2070,7 +2109,8 @@
       "none": "Aucune règle : les acheteurs peuvent choisir n’importe quelle place libre.",
       "summary": {
         "ada": "Places accessibles réservées aux personnes qui en ont besoin jusqu’à {days, plural, =0 {l’ouverture} one {# jour avant l’événement} other {# jours avant l’événement}} ({date}) · {severity}",
-        "cap": "Au plus {max, plural, one {# place} other {# places}} par commande · {severity}"
+        "cap": "Au plus {max, plural, one {# place} other {# places}} par commande · {severity}",
+        "companion": "Places d’accompagnateur vendues uniquement avec une place accessible, jusqu’à {max} chacune · {severity}"
       },
       "severityShort": {
         "warn": "avertit",
@@ -2103,7 +2143,14 @@
       },
       "save": "Enregistrer les règles",
       "saved": "Règles de placement enregistrées.",
-      "fixErrors": "Veuillez corriger le champ signalé."
+      "fixErrors": "Veuillez corriger le champ signalé.",
+      "companion": {
+        "title": "Places d’accompagnateur",
+        "on": "Vendre les places d’accompagnateur uniquement avec une place accessible",
+        "max": "Places d’accompagnateur par place accessible",
+        "maxHint": "De 1 à 3. Elles sont libérées en même temps que les places accessibles.",
+        "maxError": "Saisissez un nombre entier de 1 à 3."
+      }
     },
     "groups": {
       "title": "Blocs de groupe",
@@ -2132,6 +2179,42 @@
         "forbidden": "Vous pouvez voir les groupes, mais pas les modifier.",
         "noMembers": "Personne sur la liste n’a encore l’étiquette {label}."
       }
+    },
+    "selection": {
+      "title": "Meilleures places et places d’accompagnateur",
+      "description": "Permettez aux acheteurs et à la billetterie de demander les meilleures places au lieu de les choisir, et gardez des places d’accompagnateur à côté des places accessibles.",
+      "noPlan": "Cet événement n’a pas encore de plan de salle. Créez-en un d’abord, puis configurez ici les meilleures places.",
+      "readOnly": "Vous pouvez voir ces réglages, mais pas les modifier.",
+      "bestTitle": "Meilleures places",
+      "bestOn": "Proposer « Meilleures places » aux acheteurs et à la billetterie",
+      "bestHint": "Les acheteurs indiquent combien de places ils veulent et à quel prix, et reçoivent les meilleures places libres côte à côte. Ils peuvent toujours choisir eux-mêmes.",
+      "scoresTitle": "Notes des zones",
+      "scoresHint": "De 0 à 100 : les notes les plus hautes sont proposées en premier. Laissez une zone vide pour la classer selon sa distance à la scène.",
+      "scoreLabel": "Note de {section}",
+      "scoreError": "Saisissez un nombre entier de 0 à 100, ou laissez vide.",
+      "noSections": "Ce plan n’a pas de zones : les places sont classées selon leur distance à la scène, puis par rang et selon leur position centrale.",
+      "saveBest": "Enregistrer les meilleures places",
+      "savedBest": "Réglages des meilleures places enregistrés.",
+      "fixErrors": "Veuillez corriger le champ signalé.",
+      "bestOnSummary": "« Meilleures places » est proposé aux acheteurs et à la billetterie.",
+      "bestOffSummary": "« Meilleures places » est désactivé : les acheteurs choisissent leurs places.",
+      "companionsTitle": "Places d’accompagnateur",
+      "companionsDescription": "Les places d’accompagnateur se trouvent à côté des places accessibles, pour les personnes qui viennent avec un utilisateur de fauteuil roulant.",
+      "rulesLink": "Définir la règle des places d’accompagnateur dans l’onglet Règles",
+      "noAccessible": "Ce plan n’a pas encore de places accessibles. Indiquez-les sur le plan, puis choisissez ici les places d’accompagnateur.",
+      "suggest": "Cocher les places à côté des places accessibles",
+      "group": {
+        "row": "Rang {label}",
+        "table": "Table {label}"
+      },
+      "seatAccessible": "Place {seat} · accessible",
+      "seatCompanion": "Place {seat}",
+      "suggested": "à côté d’une place accessible",
+      "saveCompanions": "Enregistrer les places d’accompagnateur",
+      "savedCompanions": "Places d’accompagnateur enregistrées : {count}.",
+      "companionError": "Une place d’accompagnateur doit se trouver dans un rang ou à une table avec une place accessible, et ne peut pas être elle-même accessible.",
+      "companionList": "Places d’accompagnateur ({count}) : {seats}",
+      "companionNone": "Aucune place d’accompagnateur pour l’instant."
     }
   },
   "venueMap": {

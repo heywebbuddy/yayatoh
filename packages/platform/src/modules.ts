@@ -30,6 +30,8 @@ export const MODULE_KEYS = [
   'badges',
   'gallery',
   'website',
+  // Phase 6 (P6-13): free in beta, priced later with no code change.
+  'advanced_seating',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 
