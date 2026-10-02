@@ -6,40 +6,7 @@ import { useActionState, useId } from 'react';
 import type { FindState, OpenState } from '@/app/[locale]/o/[org]/(org)/privacy/actions.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
-
-/** Module keys with a label (`privacy.modules.*`); others show their key. */
-export const PRIVACY_MODULES = [
-  'crm',
-  'orders',
-  'ticketing',
-  'attendees',
-  'forms',
-  'checkin',
-  'tenancy',
-  'notifications',
-  'seating',
-  'alerts',
-  'guests',
-  'messaging',
-  'assistance',
-  'program',
-  'events',
-  'media',
-  'cms',
-  'venues',
-  'reviews',
-  'payments',
-  'surveys',
-  'registration',
-  'badges',
-  'automations',
-  'campaigns',
-  'audiences',
-  'marketing',
-  'reports',
-  'privacy',
-  'platform',
-] as const;
+import { PRIVACY_MODULES } from '@/lib/privacy-modules.ts';
 
 export function useModuleLabel() {
   const t = useTranslations('privacy.modules');

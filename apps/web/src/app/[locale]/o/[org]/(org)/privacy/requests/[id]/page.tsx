@@ -5,12 +5,13 @@ import { Alert, buttonClass, Card, EmptyState, PageHeader, StatusPill, Table } f
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
-import { PRIVACY_MODULES } from '@/components/privacy-console.tsx';
+
 import {
   PrivacyCancelForm,
   PrivacyEraseForm,
   PrivacyExportForm,
 } from '@/components/privacy-request-actions.tsx';
+import { PRIVACY_MODULES } from '@/lib/privacy-modules.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { cancelRequestAction, eraseRequestAction, exportRequestAction } from '../../actions.ts';

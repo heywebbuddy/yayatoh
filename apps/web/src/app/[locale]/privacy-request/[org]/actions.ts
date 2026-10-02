@@ -49,10 +49,10 @@ export async function selfRequestAction(
     };
   }
   if (prev.step === 'code' && form.get('intent') === 'restart') return { step: 'start' };
-  const email = DsarEmail.safeParse(prev.step === 'code' ? prev.email : form.get('email'));
-  if (!email.success) return { step: 'start', code: 'invalid_email' };
   const kindRaw = prev.step === 'code' ? prev.kind : form.get('kind');
   if (kindRaw !== 'access' && kindRaw !== 'erasure') return { step: 'start', code: 'kind_required' };
+  const email = DsarEmail.safeParse(prev.step === 'code' ? prev.email : form.get('email'));
+  if (!email.success) return { step: 'start', code: 'invalid_email' };
   const r = await sendRequestCode(org.orgId, normalizeGuestEmail(email.data), kindRaw);
   if (r.status === 'rate_limited')
     return { step: 'start', code: 'rate_limited', retryMinutes: minutes(r.retryAfterMs) };
