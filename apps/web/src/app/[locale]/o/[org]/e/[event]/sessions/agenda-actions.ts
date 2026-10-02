@@ -27,13 +27,13 @@ import { ports } from '@/server/ports.ts';
 const done = (org: string, event: string) => revalidatePath(`/o/${org}/e/${event}/sessions`);
 
 export async function publishAgendaAction(org: string, event: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   await executeCommand(publishAgendaCommand, { eventId: ev.id }, data.ctx, ports);
   done(org, event);
 }
 
 export async function unpublishAgendaAction(org: string, event: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   await executeCommand(unpublishAgendaCommand, { eventId: ev.id }, data.ctx, ports);
   done(org, event);
 }
@@ -44,7 +44,7 @@ export async function createSessionTypeAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     await executeCommand(
       createSessionTypeCommand,
@@ -61,7 +61,7 @@ export async function createSessionTypeAction(
 
 /** The standard types, named in the organizer's language. */
 export async function addStandardTypesAction(org: string, event: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   const t = await getTranslations('agenda.types.standard');
   const names = (['keynote', 'talk', 'workshop', 'panel', 'break'] as const).map((k) => t(k));
   await executeCommand(addStandardSessionTypesCommand, { eventId: ev.id, names }, data.ctx, ports);
@@ -69,7 +69,7 @@ export async function addStandardTypesAction(org: string, event: string): Promis
 }
 
 export async function deleteSessionTypeAction(org: string, event: string, typeId: string): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   await executeCommand(deleteSessionTypeCommand, { eventId: ev.id, typeId }, data.ctx, ports);
   done(org, event);
 }
@@ -80,7 +80,7 @@ export async function createSessionGroupAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     await executeCommand(
       createSessionGroupCommand,
@@ -102,7 +102,7 @@ export async function deleteSessionGroupAction(
   _prev: ProgramFormState,
   _form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     await executeCommand(deleteSessionGroupCommand, { eventId: ev.id, groupId }, data.ctx, ports);
   } catch (err) {
@@ -119,7 +119,7 @@ export async function setSessionAgendaAction(
   _prev: ProgramFormState,
   form: FormData,
 ): Promise<ProgramFormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   const admission = String(form.get('admission') ?? 'included');
   try {
     const res = await executeCommand(

@@ -40,7 +40,7 @@ export async function checkAgendaImportAction(
   const file = form.get('file');
   if (!(file instanceof File) || file.size === 0) return { ok: false, error: 'no_file', stamp: Date.now() };
   if (file.size > MAX_BYTES) return { ok: false, error: 'too_large', stamp: Date.now() };
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   const csv = await file.text();
   try {
     const result = await executeQuery(agendaImportPreviewQuery, { eventId: ev.id, csv }, data.ctx, ports);
@@ -60,7 +60,7 @@ export async function applyAgendaImportAction(
   const csv = String(form.get('csv') ?? '');
   if (!csv) return { ok: false, error: 'no_file', stamp: Date.now() };
   if (csv.length > MAX_BYTES) return { ok: false, error: 'too_large', stamp: Date.now() };
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
   try {
     const result = await executeCommand(importAgendaCommand, { eventId: ev.id, csv }, data.ctx, ports);
     revalidatePath(`/o/${org}/e/${event}/sessions`);
