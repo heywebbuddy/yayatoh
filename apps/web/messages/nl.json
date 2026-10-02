@@ -1457,7 +1457,8 @@
       "ownerOnly": "Een eigenaar of beheerder moet dit accepteren."
     },
     "activityLink": "Activiteitenlogboek",
-    "privacyLink": "Privacyverzoeken"
+    "privacyLink": "Privacyverzoeken",
+    "planLink": "Abonnement en modules"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -9039,5 +9040,118 @@
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
     },
     "elements": "Elementen aan deze kant"
+  },
+  "billingPlan": {
+    "title": "Abonnement en modules",
+    "subtitle": "Je abonnement, de modules die erbij horen en hoe kosten per ticket gelden.",
+    "noAccessTitle": "Alleen eigenaren, beheerders en financiën zien het abonnement",
+    "noAccessDescription": "Vraag een eigenaar van deze organisatie om de details van het abonnement.",
+    "dormantTitle": "Abonnementen staan nog niet aan",
+    "dormantBody": "Je organisatie blijft op haar huidige abonnement en houdt alle modules van vandaag. Er verandert niets tot de abonnementen starten.",
+    "inactiveTitle": "Facturering is niet actief voor deze organisatie",
+    "inactiveBody": "Je organisatie blijft op haar huidige abonnement en houdt alle modules van vandaag. Er verandert niets tot de facturering is ingesteld.",
+    "updatedTitle": "Abonnementswijziging ontvangen",
+    "updatedBody": "De factureringsprovider heeft de wijziging bevestigd. De modules hieronder zijn bijgewerkt.",
+    "currentPlan": "Huidig abonnement",
+    "pricePerMonth": "{price} per maand",
+    "pricePerYear": "{price} per jaar",
+    "priceQuote": "Offerte op maat",
+    "renews": "Wordt verlengd op {date}",
+    "endsOn": "Eindigt op {date}",
+    "source": {
+      "subscription": "Abonnement",
+      "plan": "Inbegrepen pakket"
+    },
+    "status": {
+      "active": "Actief",
+      "trialing": "Proefperiode",
+      "past_due": "Betaling achterstallig",
+      "canceled": "Opgezegd",
+      "unpaid": "Onbetaald",
+      "paused": "Gepauzeerd",
+      "incomplete": "Onvolledig",
+      "incomplete_expired": "Verlopen"
+    },
+    "fees": {
+      "title": "Kosten per ticket",
+      "grandfathered": "Je eerdere kosten per ticket blijven gelden. Een abonnementswijziging verandert ze nooit.",
+      "plan": "De kosten per ticket volgen het abonnement {plan}."
+    },
+    "modules": {
+      "title": "Je modules",
+      "description": "Wat je organisatie nu kan gebruiken.",
+      "count": "{count, plural, one {# module} other {# modules}}"
+    },
+    "catalog": {
+      "title": "Abonnementen",
+      "description": "Voorlopige abonnementen: de prijzen zijn niet definitief en er is nog niets te koop.",
+      "empty": "Nog geen abonnementen.",
+      "plan": "Abonnement",
+      "price": "Prijs",
+      "modules": "Modules",
+      "status": "Status",
+      "onSale": "Te koop",
+      "notOnSale": "Nog niet te koop"
+    },
+    "test": {
+      "title": "Testfacturering (alleen ontwikkeling)",
+      "body": "Simuleer een abonnementswijziging via de test-factureringsprovider. Die stuurt dezelfde webhooks als de echte provider.",
+      "open": "Testportaal voor facturering openen"
+    },
+    "planName": {
+      "launch_standard": "Lancering standaard",
+      "tier_free": "Gratis",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Bureau",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Basis",
+      "events": "Evenementen",
+      "ticketing": "Ticketverkoop",
+      "orders": "Bestellingen",
+      "attendees": "Deelnemers",
+      "checkin": "Toegang",
+      "seating": "Zitplaatsen",
+      "seat_finder": "Plaatszoeker",
+      "guests": "Gastenlijst",
+      "rsvp": "Reacties",
+      "distribution": "Distributie",
+      "access_codes": "Toegangscodes",
+      "marketing": "Marketing",
+      "messaging": "Berichten",
+      "reports": "Rapporten",
+      "whitelabel": "White label",
+      "ai": "AI-assistent",
+      "chat": "Chat",
+      "donations": "Donaties",
+      "registration": "Registratie",
+      "sessions": "Sessies",
+      "speakers": "Sprekers",
+      "exhibitors": "Exposanten",
+      "sponsors": "Sponsors",
+      "badges": "Badges",
+      "gallery": "Galerij",
+      "website": "Website",
+      "api_access": "API-toegang",
+      "integrations": "Integraties",
+      "enterprise": "SSO en SCIM",
+      "agency": "Bureau",
+      "virtual": "Virtuele evenementen",
+      "advanced_seating": "Geavanceerde zitplaatsen",
+      "ai_seating": "Zitplaatsen met AI",
+      "analytics_pro": "Geavanceerde analyses"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Testfacturering",
+    "title": "Kies een abonnement",
+    "description": "Alleen voor ontwikkeling. Deze pagina vervangt het portaal van de factureringsprovider en stuurt dezelfde webhooks.",
+    "planLegend": "Abonnement",
+    "switch": "Abonnement wijzigen",
+    "cancel": "Abonnement opzeggen",
+    "back": "Terug zonder wijzigingen",
+    "chooseError": "Kies het abonnement waarnaar je wilt overstappen."
   }
 }

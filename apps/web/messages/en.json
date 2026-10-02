@@ -1457,7 +1457,8 @@
       "ownerOnly": "An owner or admin needs to accept this."
     },
     "activityLink": "Activity log",
-    "privacyLink": "Privacy requests"
+    "privacyLink": "Privacy requests",
+    "planLink": "Plan and modules"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -9039,5 +9040,118 @@
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
     }
+  },
+  "billingPlan": {
+    "title": "Plan and modules",
+    "subtitle": "Your plan, the modules it includes and how per-ticket fees apply.",
+    "noAccessTitle": "Only owners, admins and finance can see the plan",
+    "noAccessDescription": "Ask an owner of this organization if you need the plan details.",
+    "dormantTitle": "Subscriptions aren't switched on yet",
+    "dormantBody": "Your organization stays on its current plan and keeps every module it has today. Nothing changes until subscriptions launch.",
+    "inactiveTitle": "Billing isn't active for this organization",
+    "inactiveBody": "Your organization stays on its current plan and keeps every module it has today. Nothing changes until billing is set up for it.",
+    "updatedTitle": "Plan change received",
+    "updatedBody": "The billing provider confirmed the change. The modules below are up to date.",
+    "currentPlan": "Current plan",
+    "pricePerMonth": "{price} a month",
+    "pricePerYear": "{price} a year",
+    "priceQuote": "Custom quote",
+    "renews": "Renews on {date}",
+    "endsOn": "Ends on {date}",
+    "source": {
+      "subscription": "Subscription",
+      "plan": "Included plan"
+    },
+    "status": {
+      "active": "Active",
+      "trialing": "Trial",
+      "past_due": "Payment overdue",
+      "canceled": "Canceled",
+      "unpaid": "Unpaid",
+      "paused": "Paused",
+      "incomplete": "Incomplete",
+      "incomplete_expired": "Expired"
+    },
+    "fees": {
+      "title": "Per-ticket fees",
+      "grandfathered": "Your legacy per-ticket fees are kept. A plan change never changes them.",
+      "plan": "Per-ticket fees follow the {plan} plan."
+    },
+    "modules": {
+      "title": "Your modules",
+      "description": "What your organization can use right now.",
+      "count": "{count, plural, one {# module} other {# modules}}"
+    },
+    "catalog": {
+      "title": "Plans",
+      "description": "Placeholder plans: prices are not final and nothing is on sale yet.",
+      "empty": "No plans yet.",
+      "plan": "Plan",
+      "price": "Price",
+      "modules": "Modules",
+      "status": "Status",
+      "onSale": "On sale",
+      "notOnSale": "Not on sale yet"
+    },
+    "test": {
+      "title": "Test billing (development only)",
+      "body": "Simulate a plan change through the test billing provider. It sends the same webhooks the real provider would.",
+      "open": "Open the test billing portal"
+    },
+    "planName": {
+      "launch_standard": "Launch standard",
+      "tier_free": "Free",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Agency",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Core",
+      "events": "Events",
+      "ticketing": "Ticketing",
+      "orders": "Orders",
+      "attendees": "Attendees",
+      "checkin": "Check-in",
+      "seating": "Seating",
+      "seat_finder": "Seat finder",
+      "guests": "Guest list",
+      "rsvp": "RSVP",
+      "distribution": "Distribution",
+      "access_codes": "Access codes",
+      "marketing": "Marketing",
+      "messaging": "Messaging",
+      "reports": "Reports",
+      "whitelabel": "White label",
+      "ai": "AI assistant",
+      "chat": "Chat",
+      "donations": "Donations",
+      "registration": "Registration",
+      "sessions": "Sessions",
+      "speakers": "Speakers",
+      "exhibitors": "Exhibitors",
+      "sponsors": "Sponsors",
+      "badges": "Badges",
+      "gallery": "Gallery",
+      "website": "Website",
+      "api_access": "API access",
+      "integrations": "Integrations",
+      "enterprise": "SSO and SCIM",
+      "agency": "Agency",
+      "virtual": "Virtual events",
+      "advanced_seating": "Advanced seating",
+      "ai_seating": "AI seating",
+      "analytics_pro": "Advanced analytics"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Test billing",
+    "title": "Choose a plan",
+    "description": "Development only. This page stands in for the billing provider's portal and sends the same webhooks it would.",
+    "planLegend": "Plan",
+    "switch": "Switch plan",
+    "cancel": "Cancel subscription",
+    "back": "Back without changes",
+    "chooseError": "Choose a plan to switch to."
   }
 }

@@ -1457,7 +1457,8 @@
       "ownerOnly": "Un propriétaire ou un administrateur doit l’accepter."
     },
     "activityLink": "Journal d’activité",
-    "privacyLink": "Demandes de confidentialité"
+    "privacyLink": "Demandes de confidentialité",
+    "planLink": "Offre et modules"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -9039,5 +9040,118 @@
       "questionNotAllowed": "Cette question ne peut pas être imprimée sur les badges."
     },
     "elements": "Éléments de cette face"
+  },
+  "billingPlan": {
+    "title": "Offre et modules",
+    "subtitle": "Votre offre, les modules inclus et l’application des frais par billet.",
+    "noAccessTitle": "Seuls les propriétaires, les admins et la finance voient l’offre",
+    "noAccessDescription": "Demandez les détails de l’offre à un propriétaire de cette organisation.",
+    "dormantTitle": "Les abonnements ne sont pas encore activés",
+    "dormantBody": "Votre organisation garde son offre actuelle et tous les modules qu’elle a aujourd’hui. Rien ne change avant le lancement des abonnements.",
+    "inactiveTitle": "La facturation n’est pas active pour cette organisation",
+    "inactiveBody": "Votre organisation garde son offre actuelle et tous les modules qu’elle a aujourd’hui. Rien ne change tant que sa facturation n’est pas configurée.",
+    "updatedTitle": "Changement d’offre reçu",
+    "updatedBody": "Le prestataire de facturation a confirmé le changement. Les modules ci-dessous sont à jour.",
+    "currentPlan": "Offre actuelle",
+    "pricePerMonth": "{price} par mois",
+    "pricePerYear": "{price} par an",
+    "priceQuote": "Devis sur mesure",
+    "renews": "Renouvellement le {date}",
+    "endsOn": "Se termine le {date}",
+    "source": {
+      "subscription": "Abonnement",
+      "plan": "Offre incluse"
+    },
+    "status": {
+      "active": "Actif",
+      "trialing": "Essai",
+      "past_due": "Paiement en retard",
+      "canceled": "Résilié",
+      "unpaid": "Impayé",
+      "paused": "En pause",
+      "incomplete": "Incomplet",
+      "incomplete_expired": "Expiré"
+    },
+    "fees": {
+      "title": "Frais par billet",
+      "grandfathered": "Vos anciens frais par billet sont conservés. Un changement d’offre ne les modifie jamais.",
+      "plan": "Les frais par billet suivent l’offre {plan}."
+    },
+    "modules": {
+      "title": "Vos modules",
+      "description": "Ce que votre organisation peut utiliser maintenant.",
+      "count": "{count, plural, one {# module} other {# modules}}"
+    },
+    "catalog": {
+      "title": "Offres",
+      "description": "Offres provisoires : les prix ne sont pas définitifs et rien n’est encore en vente.",
+      "empty": "Aucune offre pour l’instant.",
+      "plan": "Offre",
+      "price": "Prix",
+      "modules": "Modules",
+      "status": "Statut",
+      "onSale": "En vente",
+      "notOnSale": "Pas encore en vente"
+    },
+    "test": {
+      "title": "Facturation de test (développement uniquement)",
+      "body": "Simulez un changement d’offre avec le prestataire de facturation de test. Il envoie les mêmes webhooks que le vrai prestataire.",
+      "open": "Ouvrir le portail de facturation de test"
+    },
+    "planName": {
+      "launch_standard": "Standard de lancement",
+      "tier_free": "Gratuit",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Agence",
+      "tier_enterprise": "Entreprise"
+    },
+    "module": {
+      "core": "Socle",
+      "events": "Événements",
+      "ticketing": "Billetterie",
+      "orders": "Commandes",
+      "attendees": "Participants",
+      "checkin": "Contrôle d’accès",
+      "seating": "Placement",
+      "seat_finder": "Recherche de place",
+      "guests": "Liste d’invités",
+      "rsvp": "Réponses",
+      "distribution": "Distribution",
+      "access_codes": "Codes d’accès",
+      "marketing": "Marketing",
+      "messaging": "Messagerie",
+      "reports": "Rapports",
+      "whitelabel": "Marque blanche",
+      "ai": "Assistant IA",
+      "chat": "Chat",
+      "donations": "Dons",
+      "registration": "Inscription",
+      "sessions": "Sessions",
+      "speakers": "Intervenants",
+      "exhibitors": "Exposants",
+      "sponsors": "Sponsors",
+      "badges": "Badges",
+      "gallery": "Galerie",
+      "website": "Site web",
+      "api_access": "Accès à l’API",
+      "integrations": "Intégrations",
+      "enterprise": "SSO et SCIM",
+      "agency": "Agence",
+      "virtual": "Événements virtuels",
+      "advanced_seating": "Placement avancé",
+      "ai_seating": "Placement par IA",
+      "analytics_pro": "Analyses avancées"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Facturation de test",
+    "title": "Choisir une offre",
+    "description": "Développement uniquement. Cette page remplace le portail du prestataire de facturation et envoie les mêmes webhooks.",
+    "planLegend": "Offre",
+    "switch": "Changer d’offre",
+    "cancel": "Résilier l’abonnement",
+    "back": "Revenir sans changement",
+    "chooseError": "Choisissez l’offre vers laquelle passer."
   }
 }

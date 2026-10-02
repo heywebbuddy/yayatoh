@@ -72,6 +72,11 @@ export default async function SettingsPage({
                 {t('settings.privacyLink')}
               </Link>
             ) : null}
+            {roleCan(data.role, 'billing:read') ? (
+              <Link href={`/o/${org}/plan`} className={buttonClass('secondary', 'sm')}>
+                {t('settings.planLink')}
+              </Link>
+            ) : null}
           </>
         }
       />

@@ -1457,7 +1457,8 @@
       "ownerOnly": "需要所有者或管理员接受。"
     },
     "activityLink": "活动日志",
-    "privacyLink": "隐私请求"
+    "privacyLink": "隐私请求",
+    "planLink": "套餐和模块"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -9039,5 +9040,118 @@
       "questionNotAllowed": "该问题不能打印在胸卡上。"
     },
     "elements": "此面的元素"
+  },
+  "billingPlan": {
+    "title": "套餐和模块",
+    "subtitle": "您的套餐、包含的模块以及每张门票手续费的计算方式。",
+    "noAccessTitle": "只有所有者、管理员和财务可以查看套餐",
+    "noAccessDescription": "如需套餐详情，请联系此组织的所有者。",
+    "dormantTitle": "订阅尚未开启",
+    "dormantBody": "您的组织保持当前套餐，并保留现有的全部模块。订阅上线前一切不变。",
+    "inactiveTitle": "此组织尚未启用计费",
+    "inactiveBody": "您的组织保持当前套餐，并保留现有的全部模块。计费设置完成前一切不变。",
+    "updatedTitle": "已收到套餐变更",
+    "updatedBody": "计费服务商已确认变更。下方模块已是最新。",
+    "currentPlan": "当前套餐",
+    "pricePerMonth": "每月 {price}",
+    "pricePerYear": "每年 {price}",
+    "priceQuote": "定制报价",
+    "renews": "将于 {date} 续订",
+    "endsOn": "将于 {date} 结束",
+    "source": {
+      "subscription": "订阅",
+      "plan": "附带套餐"
+    },
+    "status": {
+      "active": "有效",
+      "trialing": "试用",
+      "past_due": "付款逾期",
+      "canceled": "已取消",
+      "unpaid": "未付款",
+      "paused": "已暂停",
+      "incomplete": "未完成",
+      "incomplete_expired": "已过期"
+    },
+    "fees": {
+      "title": "每张门票手续费",
+      "grandfathered": "您原有的每张门票手续费保持不变。更换套餐不会改变它们。",
+      "plan": "每张门票手续费按 {plan} 套餐计算。"
+    },
+    "modules": {
+      "title": "您的模块",
+      "description": "您的组织现在可以使用的功能。",
+      "count": "{count, plural, other {# 个模块}}"
+    },
+    "catalog": {
+      "title": "套餐",
+      "description": "暂定套餐：价格尚未确定，目前没有在售。",
+      "empty": "暂无套餐。",
+      "plan": "套餐",
+      "price": "价格",
+      "modules": "模块",
+      "status": "状态",
+      "onSale": "在售",
+      "notOnSale": "尚未开售"
+    },
+    "test": {
+      "title": "测试计费（仅限开发环境）",
+      "body": "通过测试计费服务商模拟套餐变更。它发送与真实服务商相同的 Webhook。",
+      "open": "打开测试计费门户"
+    },
+    "planName": {
+      "launch_standard": "上线标准版",
+      "tier_free": "免费版",
+      "tier_starter": "入门版",
+      "tier_pro": "专业版",
+      "tier_agency": "代理版",
+      "tier_enterprise": "企业版"
+    },
+    "module": {
+      "core": "基础",
+      "events": "活动",
+      "ticketing": "票务",
+      "orders": "订单",
+      "attendees": "参与者",
+      "checkin": "签到",
+      "seating": "座位",
+      "seat_finder": "座位查找",
+      "guests": "宾客名单",
+      "rsvp": "回复邀请",
+      "distribution": "分销",
+      "access_codes": "访问码",
+      "marketing": "营销",
+      "messaging": "消息",
+      "reports": "报表",
+      "whitelabel": "白标",
+      "ai": "AI 助手",
+      "chat": "聊天",
+      "donations": "捐款",
+      "registration": "报名",
+      "sessions": "分会场",
+      "speakers": "演讲嘉宾",
+      "exhibitors": "参展商",
+      "sponsors": "赞助商",
+      "badges": "胸牌",
+      "gallery": "相册",
+      "website": "网站",
+      "api_access": "API 访问",
+      "integrations": "集成",
+      "enterprise": "SSO 和 SCIM",
+      "agency": "代理",
+      "virtual": "线上活动",
+      "advanced_seating": "高级座位",
+      "ai_seating": "AI 排座",
+      "analytics_pro": "高级分析"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "测试计费",
+    "title": "选择套餐",
+    "description": "仅限开发环境。此页面代替计费服务商的门户，并发送相同的 Webhook。",
+    "planLegend": "套餐",
+    "switch": "更换套餐",
+    "cancel": "取消订阅",
+    "back": "不做更改并返回",
+    "chooseError": "请选择要更换到的套餐。"
   }
 }

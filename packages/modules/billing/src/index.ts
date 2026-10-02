@@ -40,6 +40,7 @@ export {
   fakeBillingCatalog,
   fakeBillingProvider,
   fakeCustomerId,
+  fakePortalSignature,
   fakeSubscriptionId,
   signFakeBillingEvent,
 } from './provider/fake.ts';

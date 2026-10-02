@@ -1,5 +1,10 @@
 import 'server-only';
-import { type BillingProvider, billingProviderFromEnv, processBillingWebhook } from '@yayatoh/billing';
+import {
+  type BillingProvider,
+  billingEnabled,
+  billingProviderFromEnv,
+  processBillingWebhook,
+} from '@yayatoh/billing';
 import { tooManyRequests } from '@yayatoh/platform/security';
 import { ports } from '@/server/ports.ts';
 import { limitRequest } from '@/server/rate-limit.ts';
@@ -35,4 +40,16 @@ export async function handleBillingWebhook(req: Request, expected: string): Prom
   return out.body
     ? Response.json(out.body, { status: out.status })
     : new Response(null, { status: out.status });
+}
+
+/**
+ * The test billing portal (M6.6a) stands in for the provider's portal in development and CI only:
+ * billing switched on, the fake provider, dev sign-in, never production. Otherwise its page is a
+ * 404 and the plan page shows no way to it.
+ */
+export function testBillingSecret(): string | null {
+  if (!billingEnabled() || process.env.VERCEL_ENV === 'production' || process.env.YAYATOH_DEV_AUTH !== '1')
+    return null;
+  if (getBillingProvider().name !== 'fake') return null;
+  return process.env.FAKE_PAYMENTS_SECRET ?? null;
 }

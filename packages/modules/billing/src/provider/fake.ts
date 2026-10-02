@@ -112,3 +112,11 @@ export function signFakeBillingEvent(
     headers: { 'content-type': 'application/json', [FAKE_BILLING_SIGNATURE_HEADER]: sign(secret, body) },
   };
 }
+
+/**
+ * The fake billing portal's link signature (dev only): the portal page acts on the customer only
+ * when the link was minted by the plan page for that customer and return path.
+ */
+export function fakePortalSignature(secret: string, customerId: string, returnPath: string): string {
+  return short(secret, `portal:${customerId}:${returnPath}`, 32);
+}

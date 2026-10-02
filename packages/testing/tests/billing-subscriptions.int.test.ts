@@ -42,7 +42,10 @@ async function deliver(body: string, headers: Record<string, string>) {
 }
 
 let clock = Date.now();
-const tick = () => new Date((clock += 1000));
+const tick = () => {
+  clock += 1000;
+  return new Date(clock);
+};
 
 /** The provider moves the customer to `planKey`: the subscription event, then the entitlement summary. */
 async function changePlan(f: OrgFixture, planKey: string, status: 'active' | 'canceled' = 'active') {

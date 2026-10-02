@@ -1457,7 +1457,8 @@
       "ownerOnly": "Un propietario o administrador debe aceptarlo."
     },
     "activityLink": "Registro de actividad",
-    "privacyLink": "Solicitudes de privacidad"
+    "privacyLink": "Solicitudes de privacidad",
+    "planLink": "Plan y módulos"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -9039,5 +9040,118 @@
       "questionNotAllowed": "Esa pregunta no se puede imprimir en las credenciales."
     },
     "elements": "Elementos de este lado"
+  },
+  "billingPlan": {
+    "title": "Plan y módulos",
+    "subtitle": "Tu plan, los módulos que incluye y cómo se aplican las comisiones por entrada.",
+    "noAccessTitle": "Solo propietarios, administradores y finanzas pueden ver el plan",
+    "noAccessDescription": "Pide los detalles del plan a un propietario de esta organización.",
+    "dormantTitle": "Las suscripciones aún no están activadas",
+    "dormantBody": "Tu organización sigue en su plan actual y conserva todos los módulos que tiene hoy. Nada cambia hasta que se lancen las suscripciones.",
+    "inactiveTitle": "La facturación no está activa para esta organización",
+    "inactiveBody": "Tu organización sigue en su plan actual y conserva todos los módulos que tiene hoy. Nada cambia hasta que se configure su facturación.",
+    "updatedTitle": "Cambio de plan recibido",
+    "updatedBody": "El proveedor de facturación confirmó el cambio. Los módulos de abajo están al día.",
+    "currentPlan": "Plan actual",
+    "pricePerMonth": "{price} al mes",
+    "pricePerYear": "{price} al año",
+    "priceQuote": "Presupuesto a medida",
+    "renews": "Se renueva el {date}",
+    "endsOn": "Termina el {date}",
+    "source": {
+      "subscription": "Suscripción",
+      "plan": "Plan incluido"
+    },
+    "status": {
+      "active": "Activa",
+      "trialing": "Prueba",
+      "past_due": "Pago vencido",
+      "canceled": "Cancelada",
+      "unpaid": "Impagada",
+      "paused": "En pausa",
+      "incomplete": "Incompleta",
+      "incomplete_expired": "Caducada"
+    },
+    "fees": {
+      "title": "Comisiones por entrada",
+      "grandfathered": "Se mantienen tus comisiones por entrada anteriores. Un cambio de plan nunca las modifica.",
+      "plan": "Las comisiones por entrada siguen el plan {plan}."
+    },
+    "modules": {
+      "title": "Tus módulos",
+      "description": "Lo que tu organización puede usar ahora.",
+      "count": "{count, plural, one {# módulo} other {# módulos}}"
+    },
+    "catalog": {
+      "title": "Planes",
+      "description": "Planes provisionales: los precios no son definitivos y aún no hay nada a la venta.",
+      "empty": "Aún no hay planes.",
+      "plan": "Plan",
+      "price": "Precio",
+      "modules": "Módulos",
+      "status": "Estado",
+      "onSale": "A la venta",
+      "notOnSale": "Aún no a la venta"
+    },
+    "test": {
+      "title": "Facturación de prueba (solo desarrollo)",
+      "body": "Simula un cambio de plan con el proveedor de facturación de prueba. Envía los mismos webhooks que el proveedor real.",
+      "open": "Abrir el portal de facturación de prueba"
+    },
+    "planName": {
+      "launch_standard": "Estándar de lanzamiento",
+      "tier_free": "Gratis",
+      "tier_starter": "Inicial",
+      "tier_pro": "Pro",
+      "tier_agency": "Agencia",
+      "tier_enterprise": "Empresa"
+    },
+    "module": {
+      "core": "Base",
+      "events": "Eventos",
+      "ticketing": "Venta de entradas",
+      "orders": "Pedidos",
+      "attendees": "Asistentes",
+      "checkin": "Acceso",
+      "seating": "Asientos",
+      "seat_finder": "Buscador de asiento",
+      "guests": "Lista de invitados",
+      "rsvp": "Confirmaciones",
+      "distribution": "Distribución",
+      "access_codes": "Códigos de acceso",
+      "marketing": "Marketing",
+      "messaging": "Mensajería",
+      "reports": "Informes",
+      "whitelabel": "Marca blanca",
+      "ai": "Asistente de IA",
+      "chat": "Chat",
+      "donations": "Donaciones",
+      "registration": "Inscripción",
+      "sessions": "Sesiones",
+      "speakers": "Ponentes",
+      "exhibitors": "Expositores",
+      "sponsors": "Patrocinadores",
+      "badges": "Acreditaciones",
+      "gallery": "Galería",
+      "website": "Sitio web",
+      "api_access": "Acceso a la API",
+      "integrations": "Integraciones",
+      "enterprise": "SSO y SCIM",
+      "agency": "Agencia",
+      "virtual": "Eventos virtuales",
+      "advanced_seating": "Asientos avanzados",
+      "ai_seating": "Asientos con IA",
+      "analytics_pro": "Analítica avanzada"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Facturación de prueba",
+    "title": "Elige un plan",
+    "description": "Solo para desarrollo. Esta página sustituye al portal del proveedor de facturación y envía los mismos webhooks.",
+    "planLegend": "Plan",
+    "switch": "Cambiar de plan",
+    "cancel": "Cancelar la suscripción",
+    "back": "Volver sin cambios",
+    "chooseError": "Elige el plan al que quieres cambiar."
   }
 }

@@ -1457,7 +1457,8 @@
       "ownerOnly": "オーナーまたは管理者の同意が必要です。"
     },
     "activityLink": "アクティビティログ",
-    "privacyLink": "プライバシー請求"
+    "privacyLink": "プライバシー請求",
+    "planLink": "プランとモジュール"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -9039,5 +9040,118 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "billingPlan": {
+    "title": "プランとモジュール",
+    "subtitle": "ご利用のプラン、含まれるモジュール、チケットごとの手数料の扱い。",
+    "noAccessTitle": "プランを表示できるのはオーナー、管理者、経理のみです",
+    "noAccessDescription": "プランの詳細が必要な場合は、この組織のオーナーにお問い合わせください。",
+    "dormantTitle": "サブスクリプションはまだ有効になっていません",
+    "dormantBody": "組織は現在のプランのまま、今あるすべてのモジュールを使えます。サブスクリプションの開始まで何も変わりません。",
+    "inactiveTitle": "この組織では請求が有効になっていません",
+    "inactiveBody": "組織は現在のプランのまま、今あるすべてのモジュールを使えます。請求が設定されるまで何も変わりません。",
+    "updatedTitle": "プラン変更を受信しました",
+    "updatedBody": "請求プロバイダーが変更を確認しました。下のモジュールは最新です。",
+    "currentPlan": "現在のプラン",
+    "pricePerMonth": "月額 {price}",
+    "pricePerYear": "年額 {price}",
+    "priceQuote": "個別見積もり",
+    "renews": "{date} に更新",
+    "endsOn": "{date} に終了",
+    "source": {
+      "subscription": "サブスクリプション",
+      "plan": "付属のプラン"
+    },
+    "status": {
+      "active": "有効",
+      "trialing": "トライアル",
+      "past_due": "支払い遅延",
+      "canceled": "解約済み",
+      "unpaid": "未払い",
+      "paused": "一時停止",
+      "incomplete": "未完了",
+      "incomplete_expired": "期限切れ"
+    },
+    "fees": {
+      "title": "チケットごとの手数料",
+      "grandfathered": "従来のチケット手数料はそのまま維持されます。プランを変更しても変わりません。",
+      "plan": "チケットごとの手数料は {plan} プランに従います。"
+    },
+    "modules": {
+      "title": "ご利用のモジュール",
+      "description": "組織が今使える機能です。",
+      "count": "{count, plural, other {# 個のモジュール}}"
+    },
+    "catalog": {
+      "title": "プラン",
+      "description": "仮のプランです。価格は確定しておらず、まだ販売していません。",
+      "empty": "プランはまだありません。",
+      "plan": "プラン",
+      "price": "価格",
+      "modules": "モジュール",
+      "status": "状態",
+      "onSale": "販売中",
+      "notOnSale": "未販売"
+    },
+    "test": {
+      "title": "テスト請求（開発環境のみ）",
+      "body": "テスト用の請求プロバイダーでプラン変更をシミュレーションします。本物のプロバイダーと同じ Webhook を送信します。",
+      "open": "テスト請求ポータルを開く"
+    },
+    "planName": {
+      "launch_standard": "ローンチ標準",
+      "tier_free": "フリー",
+      "tier_starter": "スターター",
+      "tier_pro": "プロ",
+      "tier_agency": "エージェンシー",
+      "tier_enterprise": "エンタープライズ"
+    },
+    "module": {
+      "core": "基本",
+      "events": "イベント",
+      "ticketing": "チケット販売",
+      "orders": "注文",
+      "attendees": "参加者",
+      "checkin": "チェックイン",
+      "seating": "座席",
+      "seat_finder": "座席検索",
+      "guests": "ゲストリスト",
+      "rsvp": "出欠確認",
+      "distribution": "販売チャネル",
+      "access_codes": "アクセスコード",
+      "marketing": "マーケティング",
+      "messaging": "メッセージ",
+      "reports": "レポート",
+      "whitelabel": "ホワイトラベル",
+      "ai": "AI アシスタント",
+      "chat": "チャット",
+      "donations": "寄付",
+      "registration": "参加登録",
+      "sessions": "セッション",
+      "speakers": "登壇者",
+      "exhibitors": "出展者",
+      "sponsors": "スポンサー",
+      "badges": "バッジ",
+      "gallery": "ギャラリー",
+      "website": "ウェブサイト",
+      "api_access": "API アクセス",
+      "integrations": "連携",
+      "enterprise": "SSO と SCIM",
+      "agency": "エージェンシー",
+      "virtual": "オンラインイベント",
+      "advanced_seating": "高度な座席",
+      "ai_seating": "AI 座席配置",
+      "analytics_pro": "高度な分析"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "テスト請求",
+    "title": "プランを選択",
+    "description": "開発環境のみ。このページは請求プロバイダーのポータルの代わりとなり、同じ Webhook を送信します。",
+    "planLegend": "プラン",
+    "switch": "プランを変更",
+    "cancel": "サブスクリプションを解約",
+    "back": "変更せずに戻る",
+    "chooseError": "変更先のプランを選択してください。"
   }
 }
