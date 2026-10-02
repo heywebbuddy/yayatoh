@@ -9,6 +9,8 @@ import {
   checkSeatRulesTx,
   holdSeatsTx,
   RuleHitDto,
+  recordChannelOrderTx,
+  resolveSaleChannelTx,
   seatedTicketTypesTx,
 } from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
@@ -91,6 +93,11 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     const seatItems = new Map<string, number>();
     let warnings: Awaited<ReturnType<typeof checkSeatRulesTx>> = [];
     let seatIds: readonly string[] = input.seats;
+    // M6.11b: the box office sells through the event's box office channel (when it has one).
+    const channel =
+      input.seats.length || input.seatHold
+        ? await resolveSaleChannelTx(tx, event.id, { via: 'box_office' })
+        : null;
     if (input.seats.length || input.seatHold) {
       const expiresAt = new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000);
       // M6.11a: seats best available holds for this sale move to the order's hold.
@@ -101,6 +108,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
             token: input.seatHold,
             holdId: orderId,
             expiresAt,
+            channelId: channel?.id ?? null,
           })
         : await holdSeatsTx(tx, ctx, {
             eventId: event.id,
@@ -108,6 +116,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
             seatUuids: input.seats,
             holdId: orderId,
             expiresAt,
+            channelId: channel?.id ?? null,
           });
       seatIds = held.map((s) => s.seatUuid);
       for (const s of held) {
@@ -177,6 +186,12 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       })
       .returning();
     if (!order) throw new DomainError('internal');
+    await recordChannelOrderTx(tx, ctx, {
+      eventId: event.id,
+      orderId: order.id,
+      channelId: channel?.id ?? null,
+      seats: order.seatUuids.length,
+    });
     const items = await tx
       .insert(orderItems)
       .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))

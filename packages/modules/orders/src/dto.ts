@@ -164,6 +164,11 @@ export const StartCheckoutInput = z.object({
     .optional(),
   /** M6.11a: the buyer says someone in the party needs a wheelchair-accessible seat. */
   accessibleNeed: z.boolean().default(false),
+  /**
+   * M6.11b: a sponsor's or promoter's sales code (their link carries it): seated orders go through
+   * that channel and may take its allotted seats. An unknown code is refused.
+   */
+  channelCode: z.string().trim().max(40).optional(),
   /** Multi-date events (M1.4b): the chosen date; required when the event has dates. */
   occurrenceId: z.uuid().optional(),
   buyer: z.object({

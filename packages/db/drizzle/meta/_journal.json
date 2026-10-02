@@ -722,6 +722,13 @@
       "when": 1790970731453,
       "tag": "0102_shocking_husk",
       "breakpoints": true
+    },
+    {
+      "idx": 103,
+      "version": "7",
+      "when": 1790979860757,
+      "tag": "0103_powerful_richard_fisk",
+      "breakpoints": true
     }
   ]
 }

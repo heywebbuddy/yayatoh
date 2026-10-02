@@ -18,7 +18,10 @@ import {
   extendSeatHoldTx,
   heldSeatsTx,
   holdSeatsTx,
+  orderChannelTx,
+  recordChannelOrderTx,
   releaseSeatHoldTx,
+  resolveSaleChannelTx,
   seatedTicketTypesTx,
   sellSeatsTx,
 } from '@yayatoh/seating';
@@ -178,6 +181,11 @@ export async function startCheckoutTx(
       reason: 'choose_seats',
     });
   let seatIds: readonly string[] = input.seats;
+  // M6.11b: seats are sold online through the buyer's sales code, else the public channel.
+  const channel =
+    input.seats.length || input.seatHold
+      ? await resolveSaleChannelTx(tx, event.id, { via: 'online', code: input.channelCode ?? null })
+      : null;
   if (input.seats.length || input.seatHold) {
     // M6.11a: seats best available already holds for this buyer move to the order's hold.
     const held = input.seatHold
@@ -187,6 +195,7 @@ export async function startCheckoutTx(
           token: input.seatHold,
           holdId: orderId,
           expiresAt,
+          channelId: channel?.id ?? null,
         })
       : await holdSeatsTx(tx, ctx, {
           eventId: event.id,
@@ -194,6 +203,7 @@ export async function startCheckoutTx(
           seatUuids: input.seats,
           holdId: orderId,
           expiresAt,
+          channelId: channel?.id ?? null,
         });
     seatIds = held.map((s) => s.seatUuid);
     for (const s of held) {
@@ -312,6 +322,12 @@ export async function startCheckoutTx(
     })
     .returning();
   if (!order) throw new DomainError('internal');
+  await recordChannelOrderTx(tx, ctx, {
+    eventId: event.id,
+    orderId: order.id,
+    channelId: channel?.id ?? null,
+    seats: order.seatUuids.length,
+  });
   if (credit) await applyCreditTx(tx, ctx, credit, order.id, quote.creditMinor);
   await submitResponseTx(tx, ctx, {
     kind: 'checkout_questions',
@@ -410,6 +426,7 @@ export const startCheckoutCommand = tenantCommand({
       items: input.items.length,
       ...(input.seatHold ? { bestAvailable: true } : {}),
       ...(input.accessibleNeed ? { accessibleNeed: true } : {}),
+      ...(input.channelCode ? { channelCode: true } : {}),
     },
   }),
 });
@@ -513,6 +530,8 @@ export const applyProviderEventCommand = tenantCommand({
             seatUuids: order.seatUuids,
             holdId: order.id,
             expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+            // M6.11b: through the channel the order was sold through.
+            channelId: await orderChannelTx(tx, order.id),
           });
         // The buyer paid the discounted price, so the use counts again if there is one left.
         if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);
