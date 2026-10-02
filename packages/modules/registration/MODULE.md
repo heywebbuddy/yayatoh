@@ -71,3 +71,6 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
 - **+1:** a type of `kind = 'guest'` is never sold directly or listed publicly; a confirmed host adds guests from
   their own link (up to `guests_per_host`), paid by the host in its own order, linked by `host_registrant_id`.
 - **Events:** `registration.registrant.{applied,approved,denied,confirmed,substituted}@1` (ids only).
+
+**M5.1d: pay later by invoice**
+- Per type (`pay_later`, `po_number` off/optional/required; `registration.setPayLater`, `events:write`); never for approval or +1 types. `registration.startCheckout` with `payLater` checks the type and the PO rule (`pay_later_off`, `po_required`), then invoices the order in the same transaction (`issueInvoiceTx`): the place counts as sold and the registrant is confirmed at once; the balance is the invoice's business. `order.voided@1` releases the claim and cancels the registrant.

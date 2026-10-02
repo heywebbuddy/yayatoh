@@ -43,3 +43,4 @@ journey) and `scheduled_actions` (the work queue, one row per run and step).
 - Execution: the worker's leader finds orgs with due work through
   `automations.orgs_with_journey_work()` (SECURITY DEFINER, ids only, platform_reader) and queues
   the pg-boss job `automations.run-due` (exclusive per org); the dev drain runs the same pass.
+- **Invoice reminders (M5.1d):** trigger `invoice_issued` (`order.invoiced@1`, the buyer) and wait anchor `invoice_due` (the run's `due_at`, the start of the invoice's due day in the event's timezone; unaffected by event reschedules). `order.paid@1` / `order.voided@1` cancel the order's `invoice_issued` runs (`invoice_paid` / `invoice_void`); a due step on a settled invoice is skipped (`invoice_settled`). Messages may use `{invoice}`, `{balance}`, `{due}` and `{link}` (`RunnerDeps.appOrigin`). Template `invoice_reminders` (−7 d, due, +7 d at 09:00).

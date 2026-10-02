@@ -458,3 +458,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
 - **M5.1c decision emails (`legal-copy`, pending owner):** the approval and denial email wording (13 locales) and the defaults chosen per the roadmap: substitution closes 24 h before the start (per type, 0–720 h), one +1 guest per host (1–10), member lists up to 5,000 addresses. Review when convenient.
+
+## M5.1d — invoices, PO and pay later (2026-10-02, pending owner)
+- [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
+- [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
+- [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.

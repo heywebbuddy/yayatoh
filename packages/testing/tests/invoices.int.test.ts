@@ -851,3 +851,65 @@ describe('isolation', () => {
     expect(await code(publicInvoice(a.org.id, c.eventId, `${uuidv7()}~${'0'.repeat(43)}`))).toBe('not_found');
   });
 });
+
+describe('balance due at the badge desk', () => {
+  it('one badge prints only with an audited override; batches leave such tickets out', async () => {
+    const { createTemplateCommand, overrideBalanceDueCommand, singleBadgeQuery, startBatchCommand } =
+      await import('@yayatoh/badges');
+    const c = await conference(a, { daysOut: 30 });
+    await executeCommand(
+      createTemplateCommand,
+      { eventId: c.eventId, name: 'Attendee', size: 'fold_4x3' },
+      a.ctx(),
+      ports,
+    );
+    const r = await register(c, 'badge@corp.test');
+    const [t] = await ticketsOf(r.order.id);
+    const print = (overrideToken?: string) =>
+      executeQuery(
+        singleBadgeQuery,
+        { eventId: c.eventId, ticketId: t?.id as string, ...(overrideToken ? { overrideToken } : {}) },
+        a.ctx(),
+        ports,
+      );
+    expect(await code(print())).toBe('invalid_state:balance_due');
+    expect(
+      await code(
+        executeCommand(
+          overrideBalanceDueCommand,
+          { eventId: c.eventId, ticketId: t?.id as string, note: 'Speaker' },
+          viewer(),
+          ports,
+        ),
+      ),
+    ).toBe('forbidden');
+    const { token } = await executeCommand(
+      overrideBalanceDueCommand,
+      { eventId: c.eventId, ticketId: t?.id as string, note: 'Speaker on stage at 9.' },
+      a.ctx(),
+      ports,
+    );
+    expect((await print(token)).holderName).toBe('Buyer badge');
+    // A forged or other-ticket token does not print.
+    expect(await code(print(`${Date.now() + 60_000}_${t?.id}~${'x'.repeat(43)}`))).toBe(
+      'invalid_state:balance_due',
+    );
+    const [audit] = await withTenant(sys(), (tx) =>
+      tx.execute<{ data: Record<string, unknown> }>(sql`
+        select data from platform.audit_events where action = 'badges.balance_override'
+        and target_id = ${t?.id} order by seq desc limit 1`),
+    );
+    expect(audit?.data).toMatchObject({ note: 'Speaker on stage at 9.' });
+    // A batch skips the balance-due registration (nothing else to print here).
+    expect(
+      await code(
+        executeCommand(
+          startBatchCommand,
+          { eventId: c.eventId, requestKey: `batch-${uuidv7()}`, sort: 'last_name' },
+          a.ctx(),
+          ports,
+        ),
+      ),
+    ).toBe('invalid_state:nothing_to_print');
+  });
+});

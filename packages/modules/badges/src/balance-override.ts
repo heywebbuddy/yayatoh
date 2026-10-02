@@ -11,13 +11,16 @@ import { z } from 'zod';
 const PURPOSE = 'badges.balance-override';
 export const OVERRIDE_MINUTES = 10;
 
+/** `<expiry ms>_<ticketId>~<hmac>`: the expiry is part of what is signed (the purpose). */
+const sign = (ticketId: string, exp: number) => `${exp}_${signLinkToken(`${PURPOSE}:${exp}`, ticketId)}`;
+
 /** Does `token` allow printing this ticket now? */
 export function overrideAllows(token: string | undefined, ticketId: string, now: Date): boolean {
   if (!token) return false;
-  const id = verifyLinkToken(PURPOSE, token);
-  if (!id) return false;
-  const [tid, exp] = id.split('_');
-  return tid === ticketId && Number(exp) > now.getTime();
+  const sep = token.indexOf('_');
+  const exp = Number(token.slice(0, sep));
+  if (sep <= 0 || !Number.isSafeInteger(exp) || exp <= now.getTime()) return false;
+  return verifyLinkToken(`${PURPOSE}:${exp}`, token.slice(sep + 1)) === ticketId;
 }
 
 export const overrideBalanceDueCommand = tenantCommand({
@@ -32,7 +35,7 @@ export const overrideBalanceDueCommand = tenantCommand({
     if (!t.paymentDue)
       throw new DomainError('invalid_state', 'Nothing is due on this ticket', { reason: 'no_balance_due' });
     const exp = ctx.now.getTime() + OVERRIDE_MINUTES * 60_000;
-    return { token: signLinkToken(PURPOSE, `${t.id}_${exp}`) };
+    return { token: sign(t.id, exp) };
   },
   audit: (input) => ({
     action: 'badges.balance_override',
