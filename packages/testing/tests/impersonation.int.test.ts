@@ -205,6 +205,9 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'payments.recordTransfer',
         'payments.recordTransferReversal',
         'payments.releaseDueSettlements',
+        // M5.1d: recording an invoice payment, voiding an invoice.
+        'orders.recordInvoicePayment',
+        'orders.voidInvoice',
       ]),
     );
     expect(flagged.filter((c) => c.category === 'delete').map((c) => c.name)).toEqual(

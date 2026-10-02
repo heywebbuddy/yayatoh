@@ -175,6 +175,8 @@ describe('read-only freeze (M2.5a)', () => {
     // (M5.5a's badge batch PDF, the first module-level one; bulk exports are built per module).
     expect([...categories].sort()).toEqual(['delete', 'export', 'money', 'write']);
     expect([...ALLOWED].sort()).toEqual([
+      // M5.1d: admitting a ticket with a balance due (an audited override) is a door action too.
+      'checkin.admitBalanceDue',
       'checkin.heartbeat',
       'checkin.scanTicket',
       'checkin.syncScans',
