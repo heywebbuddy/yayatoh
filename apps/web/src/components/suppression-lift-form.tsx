@@ -31,7 +31,7 @@ export function SuppressionLiftForm({
   return (
     <form action={formAction} noValidate className="flex flex-wrap items-start gap-2">
       <div className="flex flex-col gap-1">
-        <label htmlFor={inputId} className="text-caption text-zinc-600">
+        <label htmlFor={inputId} className="text-[13px] font-bold text-ink">
           {t('liftNote', { address })}
         </label>
         <input
@@ -41,10 +41,10 @@ export function SuppressionLiftForm({
           maxLength={500}
           aria-invalid={message ? true : undefined}
           aria-describedby={message ? `${inputId}-error` : undefined}
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          className="field"
         />
         {message ? (
-          <p id={`${inputId}-error`} role="alert" className="text-caption text-pink-700">
+          <p id={`${inputId}-error`} role="alert" className="text-caption text-danger">
             {message}
           </p>
         ) : null}

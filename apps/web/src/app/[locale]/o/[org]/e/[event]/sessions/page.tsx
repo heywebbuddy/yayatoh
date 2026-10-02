@@ -183,7 +183,7 @@ export default async function SessionsPage({
           ) : undefined
         }
       />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <AgendaPublishing
         org={org}
         event={event}
@@ -211,7 +211,7 @@ export default async function SessionsPage({
         <h2 id="agenda-heading" className="text-section">
           {tp('agenda')}
         </h2>
-        <p className="text-caption text-zinc-500">{tp('timesIn', { timezone: tz.replace(/_/g, ' ') })}</p>
+        <p className="text-caption text-ink-2">{tp('timesIn', { timezone: tz.replace(/_/g, ' ') })}</p>
         {days.length === 0 ? (
           <EmptyState title={tp('emptySessionsTitle')} description={tp('emptySessionsDescription')} />
         ) : (
@@ -232,13 +232,13 @@ export default async function SessionsPage({
                     <li key={s.id}>
                       <Card className="flex flex-col gap-2" data-session={s.title}>
                         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                          <span className="font-mono text-caption text-zinc-600">
+                          <span className="font-mono text-caption text-ink-2">
                             {time.format(s.startsAt)}–{time.format(s.endsAt)}
                           </span>
                           <h4 className="text-body font-medium">{s.title}</h4>
                           {mine.length > 0 ? <Label>{tp('conflictLabel')}</Label> : null}
                         </div>
-                        <p className="text-caption text-zinc-600">
+                        <p className="text-caption text-ink-2">
                           {[room, track, people.join(', ')].filter(Boolean).join(' · ') || tp('noDetails')}
                         </p>
                         <SessionAgendaLine
@@ -249,8 +249,8 @@ export default async function SessionsPage({
                           )}
                         />
                         {canWrite ? (
-                          <details className="border-t border-zinc-100 pt-2">
-                            <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                          <details className="border-t border-line pt-2">
+                            <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                               {tp('editSession', { title: s.title })}
                             </summary>
                             <div className="flex flex-col gap-3 pt-3">
@@ -317,18 +317,18 @@ export default async function SessionsPage({
               {tp(kind)}
             </h2>
             {list.length === 0 ? (
-              <p className="text-body text-zinc-500">{tp(`${kind}Empty`)}</p>
+              <p className="text-body text-ink-2">{tp(`${kind}Empty`)}</p>
             ) : (
               <ul className="flex list-none flex-col gap-1 p-0">
                 {list.map((x) => (
                   <li
                     key={x.id}
-                    className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 py-1"
+                    className="flex flex-wrap items-center justify-between gap-2 border-b border-line py-1"
                   >
                     <span className="text-body">
                       {x.name}
                       {'capacity' in x && x.capacity ? (
-                        <span className="text-caption text-zinc-500">
+                        <span className="text-caption text-ink-2">
                           {' '}
                           · {tp('seats', { count: x.capacity })}
                         </span>

@@ -55,7 +55,7 @@ export default async function DisputesPage({
             href={s === 'open' ? `/o/${org}/disputes` : `/o/${org}/disputes?tab=${s}`}
             aria-current={s === tab ? 'page' : undefined}
             className={`inline-flex min-h-10 items-center rounded-pill border px-4 text-body ${
-              s === tab ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white'
+              s === tab ? 'border-ink bg-tag text-white' : 'border-line bg-surface'
             }`}
           >
             {t(`tabs.${s}`, { count: s === 'open' ? queue.counts.open : queue.counts.closed })}
@@ -81,7 +81,7 @@ export default async function DisputesPage({
                   >
                     {d.buyerName}
                   </Link>
-                  <span className="text-caption text-zinc-500">{d.eventName}</span>
+                  <span className="text-caption text-ink-2">{d.eventName}</span>
                 </span>
               ),
             },
@@ -138,7 +138,7 @@ export default async function DisputesPage({
                     {t('respond')}
                   </Link>
                 ) : d.status === 'evidence_submitted' ? (
-                  <span className="text-caption text-zinc-600">{t('submitted')}</span>
+                  <span className="text-caption text-ink-2">{t('submitted')}</span>
                 ) : null,
             },
           ]}

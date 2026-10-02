@@ -37,7 +37,7 @@ export function WaitlistSettingsForm({
           name="autoOffer"
           value="1"
           defaultChecked={autoOffer}
-          className="mt-0.5 size-5 shrink-0 accent-ink"
+          className="mt-0.5 size-5 shrink-0 accent-primary"
         />
         <span>{t('autoOffer')}</span>
       </label>
@@ -81,7 +81,7 @@ export function WaitlistRowAction({
       <Button type="submit" variant="secondary" size="sm" disabled={pending} aria-label={srLabel}>
         {label}
       </Button>
-      <span aria-live="assertive" className="text-caption text-pink-700">
+      <span aria-live="assertive" className="text-caption text-danger">
         {error}
       </span>
     </form>

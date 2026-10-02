@@ -23,7 +23,7 @@ export default async function DevLogin({ params }: { params: Promise<{ locale: s
               <Avatar initials={initialsOf(p.name)} label={p.name} />
               <div className="flex min-w-0 flex-1 flex-col">
                 <span>{p.name}</span>
-                <span className="text-caption text-zinc-500">
+                <span className="text-caption text-ink-2">
                   {t(`roles.${p.role}`)} · {p.orgSlug}
                 </span>
               </div>

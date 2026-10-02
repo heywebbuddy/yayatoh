@@ -65,7 +65,7 @@ export default async function SponsorsPage({
   return (
     <>
       <PageHeader title={t('nav.sponsors')} description={tp('sponsorsSubtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="tiers-heading" className="flex flex-col gap-3">
         <h2 id="tiers-heading" className="text-section">
           {tp('tiers')}
@@ -82,7 +82,7 @@ export default async function SponsorsPage({
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="text-body font-medium">
                         {tier.name}{' '}
-                        <span className="text-caption text-zinc-500">
+                        <span className="text-caption text-ink-2">
                           · {tp('order', { position: tier.position })}
                         </span>
                       </h3>
@@ -98,22 +98,22 @@ export default async function SponsorsPage({
                       ) : null}
                     </div>
                     {inTier.length === 0 ? (
-                      <p className="text-caption text-zinc-500">{tp('noSponsorsInTier')}</p>
+                      <p className="text-caption text-ink-2">{tp('noSponsorsInTier')}</p>
                     ) : (
                       <ul className="flex list-none flex-col gap-2 p-0">
                         {inTier.map((s) => (
-                          <li key={s.id} className="flex flex-col gap-1 border-t border-zinc-100 pt-2">
+                          <li key={s.id} className="flex flex-col gap-1 border-t border-line pt-2">
                             <span className="flex items-center gap-3">
                               <ProgramThumb item={logos.get(s.id)?.items[0]} />
                               <span className="text-body">{s.name}</span>
                             </span>
                             {s.websiteUrl ? (
-                              <span className="text-caption text-zinc-600">{s.websiteUrl}</span>
+                              <span className="text-caption text-ink-2">{s.websiteUrl}</span>
                             ) : null}
                             {s.description ? <Markdown source={s.description} /> : null}
                             {canWrite ? (
                               <details>
-                                <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                                <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                                   {tp('editNamed', { name: s.name })}
                                 </summary>
                                 <div className="flex flex-col gap-3 pt-3">
@@ -202,7 +202,7 @@ export default async function SponsorsPage({
                     errors={errors}
                     reset
                   />
-                  <p className="text-caption text-zinc-500">{tp('logoAfterSave')}</p>
+                  <p className="text-caption text-ink-2">{tp('logoAfterSave')}</p>
                 </Card>
               </section>
             ) : null}

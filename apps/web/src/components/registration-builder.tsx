@@ -22,9 +22,9 @@ export interface TypeOption {
 }
 type Action = (prev: FormState, form: FormData) => Promise<FormState>;
 
-const SELECT = 'min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body';
-const TEXTAREA = 'rounded-card border border-zinc-200 bg-white px-4 py-2.5 text-body';
-const CAPTION = 'text-caption text-zinc-600';
+const SELECT = 'field w-full';
+const TEXTAREA = 'rounded-card border border-line bg-surface px-4 py-2.5 text-body';
+const CAPTION = 'text-caption text-ink-2';
 
 /** Saved / refused, announced politely next to the form that caused it. */
 function Status({ state, saved }: { state: FormState; saved?: string }) {
@@ -85,7 +85,7 @@ function TypeFields({ types, initial }: { types: readonly TypeOption[]; initial:
           value="all"
           checked={!some}
           onChange={() => setSome(false)}
-          className="size-5 accent-ink"
+          className="size-5 accent-primary"
         />
         {t('allTypes')}
       </label>
@@ -97,11 +97,11 @@ function TypeFields({ types, initial }: { types: readonly TypeOption[]; initial:
           checked={some}
           disabled={types.length === 0}
           onChange={() => setSome(true)}
-          className="size-5 accent-ink"
+          className="size-5 accent-primary"
         />
         {t('someTypes')}
       </label>
-      {types.length === 0 ? <p className="text-caption text-zinc-500">{t('noTypes')}</p> : null}
+      {types.length === 0 ? <p className="text-caption text-ink-2">{t('noTypes')}</p> : null}
       {some ? (
         <fieldset className="flex flex-col gap-1 ps-7">
           <legend className="sr-only">{t('typesGroup')}</legend>
@@ -112,7 +112,7 @@ function TypeFields({ types, initial }: { types: readonly TypeOption[]; initial:
                 name="types"
                 value={ty.id}
                 defaultChecked={initial?.includes(ty.id) ?? false}
-                className="size-5 accent-ink"
+                className="size-5 accent-primary"
               />
               {ty.name}
             </label>
@@ -158,14 +158,12 @@ function ConditionFields({
             checked={when === v}
             disabled={v === 'if' && questions.length === 0}
             onChange={() => setWhen(v)}
-            className="size-5 accent-ink"
+            className="size-5 accent-primary"
           />
           {label}
         </label>
       ))}
-      {questions.length === 0 ? (
-        <p className="text-caption text-zinc-500">{t('noEarlierQuestions')}</p>
-      ) : null}
+      {questions.length === 0 ? <p className="text-caption text-ink-2">{t('noEarlierQuestions')}</p> : null}
       {when === 'if' && q ? (
         <div className="grid grid-cols-1 gap-3 ps-7 md:grid-cols-3">
           <div className="flex flex-col gap-1.5">
@@ -242,7 +240,7 @@ function ConditionFields({
                 type={q.type === 'number' || q.type === 'count' ? 'number' : 'text'}
                 defaultValue={value}
                 maxLength={200}
-                className={`${SELECT} text-zinc-900`}
+                className={`${SELECT} text-ink`}
               />
             )}
           </div>
@@ -365,7 +363,7 @@ export function QuestionSettingsForm({
             name="required"
             value="1"
             defaultChecked={required}
-            className="size-5 accent-ink"
+            className="size-5 accent-primary"
           />
           {t('required')}
         </label>
@@ -445,7 +443,7 @@ export function AddQuestionForm({
               </option>
             ))}
           </select>
-          <p id={`${id}-term-hint`} className="text-caption text-zinc-500">
+          <p id={`${id}-term-hint`} className="text-caption text-ink-2">
             {tr('consentHint')}
           </p>
         </div>
@@ -473,7 +471,7 @@ export function AddQuestionForm({
             aria-describedby={`${id}-options-hint`}
             className={TEXTAREA}
           />
-          <p id={`${id}-options-hint`} className="text-caption text-zinc-500">
+          <p id={`${id}-options-hint`} className="text-caption text-ink-2">
             {t('questions.optionsHint')}
           </p>
         </div>
@@ -482,19 +480,24 @@ export function AddQuestionForm({
         <Input id={`${id}-max`} name="max" type="number" min={0} max={100000} label={t('questions.max')} />
       ) : null}
       {type === 'company' || type === 'job_title' ? (
-        <p className="text-caption text-zinc-500 md:col-span-2">{tr(`typeHints.${type}`)}</p>
+        <p className="text-caption text-ink-2 md:col-span-2">{tr(`typeHints.${type}`)}</p>
       ) : null}
       {!consent ? (
         <div className="flex flex-col gap-2 md:col-span-2">
           <label className="flex min-h-6 items-center gap-2.5 text-body">
-            <input type="checkbox" name="required" value="1" className="size-5 accent-ink" />
+            <input type="checkbox" name="required" value="1" className="size-5 accent-primary" />
             {tr('required')}
           </label>
           <label className="flex min-h-6 items-start gap-2.5 text-body">
-            <input type="checkbox" name="sensitive" value="1" className="mt-0.5 size-5 shrink-0 accent-ink" />
+            <input
+              type="checkbox"
+              name="sensitive"
+              value="1"
+              className="mt-0.5 size-5 shrink-0 accent-primary"
+            />
             <span>
               {t('questions.sensitive')}
-              <span className="block text-caption text-zinc-500">{t('questions.sensitiveHint')}</span>
+              <span className="block text-caption text-ink-2">{t('questions.sensitiveHint')}</span>
             </span>
           </label>
         </div>
@@ -533,7 +536,7 @@ export function JobTitlesForm({ action, titles }: { action: Action; titles: read
         aria-describedby={`${id}-titles-hint`}
         className={TEXTAREA}
       />
-      <p id={`${id}-titles-hint`} className="text-caption text-zinc-500">
+      <p id={`${id}-titles-hint`} className="text-caption text-ink-2">
         {t('jobTitlesHint')}
       </p>
       <Status state={state} saved={t('jobTitlesSaved')} />
@@ -592,7 +595,7 @@ export function RegistrationPreview({
     .filter((p) => typeAllows(p.registrationTypes, typeId))
     .map((p) => ({ ...p, fields: p.fields.filter((f) => typeAllows(f.registrationTypes, typeId)) }))
     .filter((p) => p.fields.length > 0);
-  if (types.length === 0) return <p className="text-body text-zinc-600">{t('noTypes')}</p>;
+  if (types.length === 0) return <p className="text-body text-ink-2">{t('noTypes')}</p>;
   return (
     <div className="flex flex-col gap-3">
       <div className="flex max-w-sm flex-col gap-1.5">
@@ -614,23 +617,21 @@ export function RegistrationPreview({
       </div>
       <div aria-live="polite">
         {reach.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('previewEmpty')}</p>
+          <p className="text-body text-ink-2">{t('previewEmpty')}</p>
         ) : (
           <ol
             aria-label={t('previewList', { type: types.find((x) => x.id === typeId)?.name ?? '' })}
             className="flex list-none flex-col gap-3 p-0"
           >
             {reach.map((p, i) => (
-              <li key={p.key} className="rounded-card border border-zinc-200 p-4">
+              <li key={p.key} className="rounded-card border border-line p-4">
                 <p className="text-section">{t('pageNumbered', { n: i + 1, title: p.title })}</p>
-                {describe(p.showIf) ? (
-                  <p className="text-caption text-zinc-600">{describe(p.showIf)}</p>
-                ) : null}
+                {describe(p.showIf) ? <p className="text-caption text-ink-2">{describe(p.showIf)}</p> : null}
                 <ul className="mt-2 flex list-disc flex-col gap-1 ps-5">
                   {p.fields.map((f) => (
                     <li key={f.key} className="text-body">
                       {f.label}
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {' · '}
                         {[t(`types.${f.type}`), f.required ? t('requiredBadge') : null, describe(f.showIf)]
                           .filter(Boolean)

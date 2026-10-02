@@ -1,6 +1,7 @@
 import { openSignupEnabled, signupCodeValid } from '@yayatoh/tenancy';
 import { buttonClass, Card, Input, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AuthBar } from '@/components/auth-bar.tsx';
 import { SignupForm } from '@/components/signup-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { humanCheckWidget } from '@/server/human-check.ts';
@@ -37,80 +38,86 @@ export default async function SignupPage({
   const selfServe = !code && open;
   const waitlist = waitlistUrl();
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col justify-center gap-6 px-6 py-16">
-      <PageHeader
-        eyebrow={<Label>{t('signup.eyebrow')}</Label>}
-        title={t('signup.title')}
-        description={selfServe ? t('signup.openDescription') : t('signup.description')}
-      />
-      <Card size="panel" className="flex flex-col gap-4">
-        {!code && !open ? (
-          <section aria-labelledby="coming-soon" className="flex flex-col gap-4">
-            <h2 id="coming-soon" className="text-section">
-              {t('signup.comingSoon')}
-            </h2>
-            <p className="text-body text-zinc-600">{t('signup.comingSoonBody')}</p>
-            {waitlist ? (
-              <a href={waitlist} className={buttonClass('primary', 'md', 'self-start')}>
-                {t('signup.joinWaitlist')}
-              </a>
-            ) : null}
-            <p className="text-body text-zinc-600">{t('signup.needCode')}</p>
-            <form method="get" className="flex flex-wrap items-end gap-3">
-              <Input
-                name="code"
-                required
-                minLength={6}
-                maxLength={64}
-                autoComplete="off"
-                spellCheck={false}
-                label={t('signup.code')}
-              />
-              <button type="submit" className={buttonClass('secondary')}>
-                {t('signup.useCode')}
-              </button>
-            </form>
-            <Link href="/pricing" className="self-start text-body underline underline-offset-2">
-              {t('signup.seePricing')}
-            </Link>
-          </section>
-        ) : code && !valid ? (
-          <p className="text-body text-zinc-600">{t('signup.invalidCode')}</p>
-        ) : !session ? (
-          <>
-            <p className="text-body text-zinc-600">{t('signup.verifyFirst')}</p>
-            <Link
-              href={`/sign-in?next=${encodeURIComponent(here)}`}
-              className={buttonClass('primary', 'md', 'self-start')}
-            >
-              {t('signup.continueWithEmail')}
-            </Link>
-          </>
-        ) : (
-          <>
-            <p className="text-caption text-zinc-600">
-              {t('signup.signedInAs', { email: session.user.email })}
-            </p>
-            {selfServe ? (
-              <p className="text-body text-zinc-600">
-                {t.rich('signup.openNote', {
-                  pricing: (chunks) => (
-                    <Link href="/pricing" className="underline underline-offset-2">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
+    <>
+      <AuthBar />
+      <main
+        id="main"
+        className="mx-auto flex min-h-[calc(100dvh-5rem)] max-w-xl flex-col justify-center gap-6 px-6 py-16"
+      >
+        <PageHeader
+          eyebrow={<Label>{t('signup.eyebrow')}</Label>}
+          title={t('signup.title')}
+          description={selfServe ? t('signup.openDescription') : t('signup.description')}
+        />
+        <Card size="panel" className="flex flex-col gap-4">
+          {!code && !open ? (
+            <section aria-labelledby="coming-soon" className="flex flex-col gap-4">
+              <h2 id="coming-soon" className="text-section">
+                {t('signup.comingSoon')}
+              </h2>
+              <p className="text-body text-ink-2">{t('signup.comingSoonBody')}</p>
+              {waitlist ? (
+                <a href={waitlist} className={buttonClass('primary', 'md', 'self-start')}>
+                  {t('signup.joinWaitlist')}
+                </a>
+              ) : null}
+              <p className="text-body text-ink-2">{t('signup.needCode')}</p>
+              <form method="get" className="flex flex-wrap items-end gap-3">
+                <Input
+                  name="code"
+                  required
+                  minLength={6}
+                  maxLength={64}
+                  autoComplete="off"
+                  spellCheck={false}
+                  label={t('signup.code')}
+                />
+                <button type="submit" className={buttonClass('secondary')}>
+                  {t('signup.useCode')}
+                </button>
+              </form>
+              <Link href="/pricing" className="self-start text-body underline underline-offset-2">
+                {t('signup.seePricing')}
+              </Link>
+            </section>
+          ) : code && !valid ? (
+            <p className="text-body text-ink-2">{t('signup.invalidCode')}</p>
+          ) : !session ? (
+            <>
+              <p className="text-body text-ink-2">{t('signup.verifyFirst')}</p>
+              <Link
+                href={`/sign-in?next=${encodeURIComponent(here)}`}
+                className={buttonClass('primary', 'md', 'self-start')}
+              >
+                {t('signup.continueWithEmail')}
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="text-caption text-ink-2">
+                {t('signup.signedInAs', { email: session.user.email })}
               </p>
-            ) : null}
-            <SignupForm
-              action={signupAction}
-              code={code}
-              open={selfServe}
-              humanCheck={selfServe ? humanCheckWidget() : null}
-            />
-          </>
-        )}
-      </Card>
-    </main>
+              {selfServe ? (
+                <p className="text-body text-ink-2">
+                  {t.rich('signup.openNote', {
+                    pricing: (chunks) => (
+                      <Link href="/pricing" className="underline underline-offset-2">
+                        {chunks}
+                      </Link>
+                    ),
+                  })}
+                </p>
+              ) : null}
+              <SignupForm
+                action={signupAction}
+                code={code}
+                open={selfServe}
+                humanCheck={selfServe ? humanCheckWidget() : null}
+              />
+            </>
+          )}
+        </Card>
+      </main>
+    </>
   );
 }

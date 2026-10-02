@@ -1,5 +1,5 @@
 import type { ExhibitorDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
@@ -62,23 +62,22 @@ export default async function ExhibitorsPage({
   ];
   return (
     <>
-      <PageHeader title={t('nav.exhibitors')} description={tp('exhibitorsSubtitle')} />
-      {/* M5.4a: the exhibitor portal (people, approvals) and booths on the floor plan. */}
-      <nav aria-label={tx('subnav')} className="flex flex-wrap gap-4">
-        <Link
-          href={`/o/${org}/e/${event}/exhibitors/portal`}
-          className="inline-flex min-h-6 items-center text-body underline underline-offset-2"
-        >
-          {tx('portalLink')}
-        </Link>
-        <Link
-          href={`/o/${org}/e/${event}/exhibitors/booths`}
-          className="inline-flex min-h-6 items-center text-body underline underline-offset-2"
-        >
-          {tx('boothsLink')}
-        </Link>
-      </nav>
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <PageHeader
+        title={t('nav.exhibitors')}
+        description={tp('exhibitorsSubtitle')}
+        actions={
+          // M5.4a: the exhibitor portal (people, approvals) and booths on the floor plan.
+          <nav aria-label={tx('subnav')} className="flex flex-wrap gap-2.5">
+            <Link href={`/o/${org}/e/${event}/exhibitors/portal`} className={buttonClass('secondary')}>
+              {tx('portalLink')}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/exhibitors/booths`} className={buttonClass('secondary')}>
+              {tx('boothsLink')}
+            </Link>
+          </nav>
+        }
+      />
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="exhibitors-heading" className="flex flex-col gap-3">
         <h2 id="exhibitors-heading" className="text-section">
           {tp('exhibitorList', { count: program.exhibitors.length })}
@@ -94,15 +93,15 @@ export default async function ExhibitorsPage({
                     <ProgramThumb item={logos.get(x.id)?.items[0]} />
                     <h3 className="text-body font-medium">{x.name}</h3>
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {[x.boothLabel ? tp('boothNamed', { booth: x.boothLabel }) : null, x.websiteUrl]
                       .filter(Boolean)
                       .join(' · ')}
                   </p>
                   {x.description ? <Markdown source={x.description} /> : null}
                   {canWrite ? (
-                    <details className="border-t border-zinc-100 pt-2">
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <details className="border-t border-line pt-2">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {tp('editNamed', { name: x.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -152,7 +151,7 @@ export default async function ExhibitorsPage({
                 errors={errors}
                 reset
               />
-              <p className="text-caption text-zinc-500">{tp('logoAfterSave')}</p>
+              <p className="text-caption text-ink-2">{tp('logoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

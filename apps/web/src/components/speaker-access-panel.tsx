@@ -33,11 +33,11 @@ export async function SpeakerAccessPanel({
   return (
     <section
       aria-label={t('headingNamed', { name: speakerName })}
-      className="flex flex-col gap-2 border-t border-zinc-100 pt-2"
+      className="flex flex-col gap-2 border-t border-line pt-2"
     >
-      <h4 className="text-caption font-medium text-zinc-700">{t('heading')}</h4>
+      <h4 className="text-caption font-medium text-ink-2">{t('heading')}</h4>
       {accounts.length === 0 ? (
-        <p className="text-caption text-zinc-500">{t('none')}</p>
+        <p className="text-caption text-ink-2">{t('none')}</p>
       ) : (
         <ul className="flex list-none flex-col gap-2 p-0">
           {accounts.map((a) => (

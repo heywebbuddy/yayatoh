@@ -44,7 +44,7 @@ export default async function AgendaImportPage({
         <h2 id="agenda-columns-heading" className="text-section">
           {t('columnsHeading')}
         </h2>
-        <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-zinc-600">
+        <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-ink-2">
           <li>{t('columnsRequired')}</li>
           <li>{t('columnsTimes', { timezone: ev.timezone.replace(/_/g, ' ') })}</li>
           <li>{t('columnsSpeakers')}</li>
@@ -53,7 +53,7 @@ export default async function AgendaImportPage({
         <pre
           // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable example must be reachable by keyboard
           tabIndex={0}
-          className="overflow-x-auto rounded-card border border-zinc-200 bg-zinc-50 p-3 font-mono text-caption"
+          className="overflow-x-auto rounded-card border border-line bg-surface-2 p-3 font-mono text-caption"
           dir="ltr"
         >
           {

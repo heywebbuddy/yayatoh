@@ -1,7 +1,7 @@
 import { formatLinksText } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { type SpeakerDto, speakerAccessQuery, speakerChangesQuery } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
@@ -93,23 +93,17 @@ export default async function SpeakersPage({
         title={t('nav.speakers')}
         description={tp('speakersSubtitle')}
         actions={
-          <nav aria-label={ts('portalNav')} className="flex flex-wrap gap-2">
-            <Link
-              href={`/o/${org}/e/${event}/speakers/changes`}
-              className="inline-flex min-h-10 items-center rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            >
+          <nav aria-label={ts('portalNav')} className="flex flex-wrap gap-2.5">
+            <Link href={`/o/${org}/e/${event}/speakers/changes`} className={buttonClass('secondary')}>
               {ts('changesLink', { count: changes.pending.length })}
             </Link>
-            <Link
-              href={`/o/${org}/e/${event}/speakers/tasks`}
-              className="inline-flex min-h-10 items-center rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            >
+            <Link href={`/o/${org}/e/${event}/speakers/tasks`} className={buttonClass('secondary')}>
               {ts('tasksLink')}
             </Link>
           </nav>
         }
       />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="speakers-heading" className="flex flex-col gap-3">
         <h2 id="speakers-heading" className="text-section">
           {tp('speakerList', { count: program.speakers.length })}
@@ -125,7 +119,7 @@ export default async function SpeakersPage({
                     <ProgramThumb item={photos.get(p.id)?.items[0]} round />
                     <h3 className="text-body font-medium">{p.name}</h3>
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {[p.title, p.company].filter(Boolean).join(' · ')}
                     {[p.title, p.company].some(Boolean) ? ' · ' : ''}
                     {tp('sessionCount', { count: sessionsOf(p.id) })}
@@ -140,8 +134,8 @@ export default async function SpeakersPage({
                     canWrite={canWrite}
                   />
                   {canWrite ? (
-                    <details className="border-t border-zinc-100 pt-2">
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <details className="border-t border-line pt-2">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {tp('editNamed', { name: p.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -193,7 +187,7 @@ export default async function SpeakersPage({
                 errors={errors}
                 reset
               />
-              <p className="text-caption text-zinc-500">{tp('photoAfterSave')}</p>
+              <p className="text-caption text-ink-2">{tp('photoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

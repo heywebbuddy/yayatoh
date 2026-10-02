@@ -46,12 +46,12 @@ export function AlertsList({
       {items.length === 0 ? (
         <EmptyState title={emptyText} />
       ) : (
-        <ul className="flex list-none flex-col divide-y divide-zinc-200 p-0">
+        <ul className="flex list-none flex-col divide-y divide-line p-0">
           {items.map((a) => (
             <li key={a.id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
               <span className="flex min-w-0 flex-col gap-0.5">
-                <span className="text-body text-zinc-900">{a.title}</span>
-                <span className="flex flex-wrap items-center gap-x-3 text-caption text-zinc-600">
+                <span className="text-body text-ink">{a.title}</span>
+                <span className="flex flex-wrap items-center gap-x-3 text-caption text-ink-2">
                   <StatusDot status={SEVERITY_DOT[a.severity]} label={a.severityLabel} />
                   <span>{a.context}</span>
                   <span>{a.stateLabel}</span>

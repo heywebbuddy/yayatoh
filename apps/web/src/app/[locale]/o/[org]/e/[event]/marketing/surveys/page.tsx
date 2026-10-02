@@ -50,7 +50,7 @@ export default async function SurveysPage({
             <div className="flex flex-col gap-2">
               <h3 className="text-body font-medium">{t('kind.post_event')}</h3>
               {targets.postEvent ? (
-                <p className="text-body text-zinc-600">{t('postEventExists')}</p>
+                <p className="text-body text-ink-2">{t('postEventExists')}</p>
               ) : (
                 <CreatePostEventForm action={createSurveyAction.bind(null, org, event)} />
               )}
@@ -58,9 +58,9 @@ export default async function SurveysPage({
             <div className="flex flex-col gap-2">
               <h3 className="text-body font-medium">{t('kind.session_feedback')}</h3>
               {targets.sessions.length === 0 ? (
-                <p className="text-body text-zinc-600">{t('noSessions')}</p>
+                <p className="text-body text-ink-2">{t('noSessions')}</p>
               ) : open.length === 0 ? (
-                <p className="text-body text-zinc-600">{t('allSessionsHaveSurveys')}</p>
+                <p className="text-body text-ink-2">{t('allSessionsHaveSurveys')}</p>
               ) : (
                 <CreateSessionForm action={createSurveyAction.bind(null, org, event)} sessions={open} />
               )}
@@ -86,7 +86,7 @@ export default async function SurveysPage({
                   <Link href={`${base}/${s.id}`} className="underline underline-offset-2">
                     {s.title}
                   </Link>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {s.kind === 'session_feedback' && s.sessionTitle
                       ? t('kindSession', { session: s.sessionTitle })
                       : t(`kind.${s.kind}`)}
