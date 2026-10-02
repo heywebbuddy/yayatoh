@@ -270,6 +270,7 @@ export const deleteSandboxCommand = tenantCommand({
   entitlement: 'core',
   permission: 'sandbox:manage',
   stepUp: true,
+  category: 'delete',
   handler: async ({ input, ctx, tx }) => {
     const [row] = await tx
       .update(sandboxOrgs)

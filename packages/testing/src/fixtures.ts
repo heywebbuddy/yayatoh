@@ -246,6 +246,7 @@ import {
   createApiKeyCommand,
   createOrganization,
   createSandboxOrg,
+  deleteSandboxOrg,
   inviteMemberCommand,
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
@@ -728,7 +729,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // M6.3a: one day of the key's usage, and a sandbox org linked to this org (isolation coverage).
   await recordApiKeyUsage({ orgId: org.id, keyId: apiKeyId, status: 200 });
-  await createSandboxOrg(ctx(), { name: `Sandbox of ${name}` }, ports);
+  // The sandbox is deleted again (a closed sandbox keeps its link row), so the owner's memberships
+  // stay exactly the fixture's own.
+  const sandbox = await createSandboxOrg(ctx(), { name: `Sandbox of ${name}` }, ports);
+  await deleteSandboxOrg(ctx(), { sandboxId: sandbox.id }, ports);
   const { key: testKey } = await executeCommand(
     createApiKeyCommand,
     { name: `Sandbox ${slug}`, scopes: ['org:read', 'events:read'], mode: 'test' },
