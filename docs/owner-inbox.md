@@ -468,3 +468,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+
+## M4.1e — RSVP questions (2026-10-02, pending owner)
+- [ ] One meal question per event (one `guests.meal` per guest). Weddings with a rehearsal-dinner menu and a reception menu would need a second meal per guest: say if you want it.
+- [ ] Private answers (dietary, accessibility, private questions) are never shown back on the guest's RSVP page; leaving one blank keeps the earlier answer, and only the hosts can clear it. Confirm.
+- [ ] Exporting answers needs `attendees:export` (owners, admins, managers, event managers, co-hosts); the private columns need the new `attendees:export_private` (owners, admins, co-hosts). Managers export without private columns; planners can't export. Confirm or widen.
