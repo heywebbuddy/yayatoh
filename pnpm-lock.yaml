@@ -265,6 +265,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../../packages/modules/donations
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel

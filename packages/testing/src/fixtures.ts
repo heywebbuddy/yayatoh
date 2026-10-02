@@ -58,6 +58,10 @@ import { withTenant } from '@yayatoh/db';
 import {
   createCampaignCommand as createGivingCampaignCommand,
   createLevelCommand as createGivingLevelCommand,
+  issueReceiptTx,
+  saveCharityProfileCommand,
+  setFairValueCommand,
+  verifyCharityCommand,
 } from '@yayatoh/donations';
 import {
   addRecurringOccurrencesCommand,
@@ -2085,6 +2089,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
   );
   await donationRows(org.id, event.id, slug, ctx);
+  await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
   return {
     org,
     ownerId,
@@ -2140,6 +2145,57 @@ async function donationRows(orgId: string, eventId: string, slug: string, ctx: (
       values (${giftId}, ${orgId}, ${eventId}, ${campaign.id}, ${level.id}, ${orderId}, 'expired', 100000,
       2000, 'USD', 'Fixture Donor', ${`donor+${slug}@example.test`}, 'anonymous', 'Fixture Corp',
       'memory', 'Grandma Ada', 'The Ada family', 'In loving memory.')`);
+  });
+}
+
+/**
+ * M4.8b receipts (isolation coverage of the charity profile, fair-market values, receipts, the
+ * receipt counter and year-end statements): a staff-verified charity profile, a fair-market value
+ * on the fixture's ticket type, the receipt of the fixture's paid order (plain: it was paid under
+ * the platform's funds flow), and a year-end statement written as the yearly pass leaves one.
+ */
+async function receiptRows(
+  orgId: string,
+  eventId: string,
+  ticketTypeId: string,
+  orderId: string,
+  ctx: (o?: Partial<Ctx>) => Ctx,
+) {
+  const profile = await executeCommand(
+    saveCharityProfileCommand,
+    { legalName: 'Fixture Charity Inc', ein: '23-4567891', exemptKind: '501c3', address: '1 Pier Way' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    verifyCharityCommand,
+    {
+      version: profile.version,
+      irs: {
+        ein: '23-4567891',
+        name: 'FIXTURE CHARITY INC',
+        city: 'BOSTON',
+        state: 'MA',
+        subsection: '03',
+        deductibility: '1',
+        status: '01',
+      },
+    },
+    systemCtx(orgId),
+    ports,
+  );
+  await executeCommand(
+    setFairValueCommand,
+    { eventId, ticketTypeId, fmvMinor: 1000, description: 'Lunch' },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(orgId), async (tx) => {
+    await issueReceiptTx(tx, orgId, orderId, new Date());
+    await tx.execute(sql`insert into donations.year_end_statements (org_id, tax_year, donor_email, donor_name,
+      currency, receipt_count, amount_minor, fmv_minor, deductible_minor, charity_name, charity_ein,
+      copy_version) values (${orgId}, 2026, 'fixture-donor@example.test', 'Fixture Donor', 'USD', 1, 10000, 0,
+      10000, 'Fixture Charity Inc', '23-4567891', 'fixture')`);
   });
 }
 
