@@ -152,7 +152,6 @@ export {
   QuestionAnswersInput,
   RsvpQuestionsDto,
   removeMenuOptionCommand,
-  rsvpAnswerSummaryQuery,
   rsvpAnswersExportAction,
   rsvpAnswersExportBulk,
   rsvpAnswersPrivateExportAction,

@@ -622,29 +622,6 @@ export const mealCountsQuery = tenantQuery({
   },
 });
 
-/** How many guests answered the current questions (the answers page's summary). */
-export const rsvpAnswerSummaryQuery = tenantQuery({
-  name: 'guests.rsvpAnswerSummary',
-  input: z.object({ eventId: z.uuid() }),
-  output: z.object({ version: z.int(), questions: z.int(), guests: z.int(), answered: z.int() }),
-  entitlement: 'guests',
-  permission: 'guests:read',
-  handler: async ({ input, ctx, tx }) => {
-    await eventOfTx(tx, input.eventId);
-    const f = await currentRsvpFormTx(tx, input.eventId);
-    const ids = (
-      await tx.select({ id: guests.id }).from(guests).where(eq(guests.eventId, input.eventId))
-    ).map((g) => g.id);
-    const responses = f ? await rsvpResponsesTx(tx, ctx, input.eventId, ids, { secret: false }) : new Map();
-    return {
-      version: f?.version ?? 0,
-      questions: f?.definition.questions.length ?? 0,
-      guests: ids.length,
-      answered: responses.size,
-    };
-  },
-});
-
 /* ---------------------------------------------------------------------------------- export ---- */
 
 const Head = z.string().trim().min(1).max(60);

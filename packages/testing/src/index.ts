@@ -18,3 +18,8 @@ export {
 } from './fixtures.ts';
 export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';
 export { type RsvpParty, type RsvpScenario, rsvpScenario } from './rsvp.ts';
+export {
+  type RsvpQuestionsScenario,
+  rsvpQuestionsScenario,
+  standardRsvpQuestions,
+} from './rsvp-questions.ts';
