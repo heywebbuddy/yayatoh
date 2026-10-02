@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "任务提醒"
+      },
+      "privacy": {
+        "request-code": "隐私请求验证码",
+        "archive-ready": "个人数据存档已就绪",
+        "erasure-done": "删除收据"
       }
     },
     "status": {

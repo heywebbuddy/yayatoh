@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "कार्य रिमाइंडर"
+      },
+      "privacy": {
+        "request-code": "गोपनीयता अनुरोध कोड",
+        "archive-ready": "निजी डेटा संग्रह तैयार",
+        "erasure-done": "मिटाने की रसीद"
       }
     },
     "status": {

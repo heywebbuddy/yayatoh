@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "Promemoria attività"
+      },
+      "privacy": {
+        "request-code": "Codice richiesta privacy",
+        "archive-ready": "Archivio dati personali pronto",
+        "erasure-done": "Ricevuta di cancellazione"
       }
     },
     "status": {

@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "Recordatorio de tarea"
+      },
+      "privacy": {
+        "request-code": "Código de solicitud de privacidad",
+        "archive-ready": "Archivo de datos personales listo",
+        "erasure-done": "Recibo de supresión"
       }
     },
     "status": {

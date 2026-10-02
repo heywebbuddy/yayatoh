@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "タスクのリマインダー"
+      },
+      "privacy": {
+        "request-code": "プライバシーリクエストのコード",
+        "archive-ready": "個人データのアーカイブ準備完了",
+        "erasure-done": "消去の受領書"
       }
     },
     "status": {

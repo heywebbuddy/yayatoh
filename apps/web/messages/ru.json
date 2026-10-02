@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "Напоминание о задаче"
+      },
+      "privacy": {
+        "request-code": "Код запроса о данных",
+        "archive-ready": "Архив персональных данных готов",
+        "erasure-done": "Квитанция об удалении"
       }
     },
     "status": {

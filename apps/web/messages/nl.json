@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "Taakherinnering"
+      },
+      "privacy": {
+        "request-code": "Code voor privacyverzoek",
+        "archive-ready": "Archief met persoonsgegevens klaar",
+        "erasure-done": "Bewijs van wissing"
       }
     },
     "status": {

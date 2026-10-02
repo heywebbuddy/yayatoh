@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "تذكير بمهمة"
+      },
+      "privacy": {
+        "request-code": "رمز طلب الخصوصية",
+        "archive-ready": "أرشيف البيانات الشخصية جاهز",
+        "erasure-done": "إيصال المحو"
       }
     },
     "status": {

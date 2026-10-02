@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "任務提醒"
+      },
+      "privacy": {
+        "request-code": "隱私請求驗證碼",
+        "archive-ready": "個人資料封存檔已就緒",
+        "erasure-done": "刪除收據"
       }
     },
     "status": {

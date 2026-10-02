@@ -170,6 +170,11 @@
       },
       "program": {
         "task-reminder": "Task reminder"
+      },
+      "privacy": {
+        "request-code": "Privacy request code",
+        "archive-ready": "Personal data archive ready",
+        "erasure-done": "Erasure receipt"
       }
     },
     "status": {
